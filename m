@@ -1,73 +1,73 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D158245A2B2
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A654F4D05
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790292709; cv=none; b=n/A6HCokC5lOwE8DOBU52ywDhiVj+GKODaLoS997cJo3SB7pnRAwk1la2mfs2kUXvLOkz60kQ8waYr5ip0RPJ4mPxPHJ2Bji1kMzrZ6E6WTYIzKhz5GZW7P+b6b03GVEn3JBVtJXpsyfnjldSTcP2Xed1rwdI1DqoY0iRHLDG8Y=
+	t=1790292712; cv=none; b=iPDTju+KS6kqyFOxvlxQ3c1v3wlw1C6AZQu1L3tsq4dtKq37ZEthV75VxyI7ONiQo0jPOarFqjYxeGI4m9wFKBj1REs6J1yZjuPFJBBHFEf/SWg22Jgk3bKcx+PYVaWBwB4lYwa1fkwimt+mxhH2kF40P0DfogrXor1rsd2t/us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790292709; c=relaxed/simple;
-	bh=9Lkw/7CAFlDSNb17rAx0WTaEzFhkuf6OJhgX0toWUbI=;
+	s=arc-20240116; t=1790292712; c=relaxed/simple;
+	bh=IVfMuRzxGDmCVTIheJm/qnDr+P6oJYEYAlWF+pK3pCo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ht2t2XFeDWeqnkGbjsfaf+7hJ93mxHNtUYLo++BUqONpvo981PklK+Lu3IR50m3W9moxeoPjVt48N5TQsJDruKJRxatw7/G7RepDmX89vWlaPennr42m/sKhJUvMdixRjhkXC10yP4t5syoBY8Vabp3AEN+rj2gfXZjeQNpYrEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rliuLauA; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=jJADn0KP16ZVmhM6g8ma/gaWIQNq9AaA9efIK27OC1jTkeIsqnzD1Q9WRBysejRcDMm/q+/KANrlZoRl+iZrnes9uWuuqUMbyhYkx1v2hSENnRKVWWizEaHWfdh1mkPKG52ED4uTb/wN6pYR0AllarAVKoyIDsJZTM6arHMPBnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E5GIbNWl; arc=none smtp.client-ip=74.125.228.40
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rliuLauA"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed9866so2072785ad.2
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:31:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E5GIbNWl"
+Received: by mail-pz2-f40.google.com with SMTP id d2e1a72fcca58-8748f34b1f2so194925b3a.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:31:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790292707; x=1790897507; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790292711; x=1790897511; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=K11NGpyST4JQKnhovY+q9p0SS4LCdKDiLAJEQUQB8hA=;
-        b=rliuLauAbowFaWkAyagcF5RXatH8senUMmKk0OO+Lq6qUBtb4g0J4ErnB7co7fbhbw
-         03GEr9zdi3dbbea137qgZPHSpfl03pCRfjovGCkWQXETPRPtQAtERwsWvB/ECXpm96OZ
-         syZv6NazQqRxKU9CHhOidU12DaiWVXfz9KnfE2355W4iJgK7R5h4bNm7jeDz7r3Dnsbr
-         dzCvvfdU9KBZjl+GtCLwG3DMtxSDod6OBguexXFs2oECNgmm7a2+soQMHnnxmqq9gUbO
-         Vt9skwDMAIMH6ltG/i0pn8v1XPddo/7nXM8irygOlcPCFTbMW5wHFdcpy8cFwvj86LyS
-         PqwQ==
+        bh=NZRW+3amvJncC3g3cvagPKWDH9UB3H/FxtAo+Q6e5kY=;
+        b=E5GIbNWlPCN/GGwV5Isxli1K5QHVyIMS8elb+QKeCrO2jVOMC8fxlbwo7mMszl7BlR
+         gHPzdxPJrA1+hRjhVZrAFa9ST7E+xAWRAWxctMVXhYpVA/jgF0TF4xINgTWJtQC9FZSL
+         0fW+tjtZbkID8aUeSFRu/o14dqpntwv4+Emh8DVNj+ss5PyQF//qGA4B5VYrLmaa7E8a
+         +LNr5bh1JQvNq0v36N5GWaGkBGDi4RnKT2D0ZgsIoJ+fsnr23b4RiqBKsjiE4xslKW0E
+         XuEWkV3mX/i32o7OVDxH5VPoxeWO/VrvAvoDOljjRJH7lu7FlsXGnyMRZ5A3ZNerYtWv
+         +Y5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790292707; x=1790897507;
+        d=1e100.net; s=20260707; t=1790292711; x=1790897511;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=K11NGpyST4JQKnhovY+q9p0SS4LCdKDiLAJEQUQB8hA=;
-        b=T1bsc5vdvxZgYaJfni5tKawQFnfY+JWyC8hXMxQXsA7qwTIseswNJCYhwQbsxLU7oa
-         rm3dIorUX//TDIri+n/LaBDTVfk2vmD9/OpYEM+1rwq/AqHQQVh3EGO/bVLWT2M6klqz
-         7NTvSzCwAbSJNzxWHZfj4kG4cTWyKphlKlOoo7uTh/LfO6VjClophWKrifCCLEzkV3S8
-         XA5/fUKwpbJeB78KRDtwY80EHJT7fwD6cbYPno1B+AP8V4DC9HDuLu0jX+9ZkErSdug3
-         Ld6WayGUorqFUFoqNOjTXy3VEizM4zDaR7DVz2V3wHS+UsZdjtgec0rtyCzeor3PKuTc
-         EcLA==
-X-Gm-Message-State: AFuF++lSKi8hZy0iDWOChxanc8r+OQzZ4GUEWkkG+GMpYsIlux/AWKNc
-	uOhX/+y8O2zN4aF4PSTQi1NtdG6heB793JS3Lw5J3sW6Qu1JtpEoequCK9gtHg==
-X-Gm-Gg: AYBFou2YpEf8k8xZsSsTUniw0MWDkXobKRN13OunbI9Sylxf1k9iMajNdaYZv/gabD1
-	ec2iYKdGkmHW0RUaD+H1n+3B4IJ8pPHmxaL9J617Fm2arb8adcVNYjST+8SgAzmNWk321Xf7Lbg
-	ShfPCm+jw1Uk7+8rS5z/let1mfOPw3fOaNvXxDQTEtCZEeF3vZJLlfCKthySP6kiz1Xao6Qa2W8
-	ZFpei1+j/DBG5P7F6l56xGGM5j8HuFLx8JePTysVI/yu/F204b92lHvyHdtigU4/oHzfcbVFfBG
-	eygU81dL12uAWNJYXBssqcpT9Vt+5ICABFB65uk7JiAieUZzpD0J/0Rn1bctQcFxS3zwrXkaGy8
-	kT9ZSalUmewrwvga6nHF5DlDdj3elbeVO8efFgaBQD62CV52WKTW9xt5jAHjJLCl4QhP6pKbxzH
-	Qr2wLYzit/bU93ibtQeNUgPGGGx+s8RVaJKD+4uHrgjA7wSRtZ936sAUx3yNmfRHdlreTNvj5WF
-	fW1S/5Fx0xRC4csZVdZhSZAqf5QpRhV7nW+o9pSIDLMIL4SHWp1p5rEluIopdsC6QTUeMustipK
-	P446b9kB1eKrBdFY5E3bPrm2LPa3dEDNGwsqkEWj2K1gR6xBIRC/j/g=
-X-Received: by 2002:a17:903:1aa5:b0:2da:f1b1:56c4 with SMTP id d9443c01a7336-2df7da5d7abmr33269385ad.3.1790292707009;
-        Thu, 24 Sep 2026 16:31:47 -0700 (PDT)
+        bh=NZRW+3amvJncC3g3cvagPKWDH9UB3H/FxtAo+Q6e5kY=;
+        b=FSu4E2sYzX6qZukpyP3OrE0TP2LZ4AteM0KBcIjt7dWLY7dt0OHYptRlrgE4TU+FY9
+         vHIobrg4fR2Ux52SFU6Txf7+cSR6t8JfIzy14w/WBMBWsLyzCstRj1I0scVGRCaAm1UZ
+         NKHe8/FiT7kCFKGr5Z+rxAH8JW8Z8JpqRcKSxsptJerlgFZ8IYBjwq8epp9M6NcGBLUp
+         FZ5ft1qkD94X7K5lkjCt5vF+u9ya7EOK1CvWDscGNSZz7LjFNnc6UoLc21MnFDrgUDkf
+         LIcx2p0Fd8+UABnlvLVyIe+PLMqNk63gPES5EqIa+hqE81FzFS62fFyK9GeRvmZ3jNLQ
+         OOzw==
+X-Gm-Message-State: AFuF++lAmOuQSY+DxdcXVG19FAn2++GOm0NidD5OM1cupyrR63VWPSwc
+	423IgAGN6GF4uGstUlwtAbW97tyVIZFgCi+iqSl3djXePxEK1aJtN5Eus0OuSw==
+X-Gm-Gg: AYBFou18heuUylNIMs0L4rIS9LqxGslAR8cu9Egs0Lr/KgLmlWE7Kaqzx6G/mGjWqiW
+	szmJwiw7jWg1KbtoiBE3W6rXfD1HlP+mi3wPfqU9Pwa6KyXGPa/SUGuCO35qjQiDYgaAj2/UzfL
+	L/FsmXWbDA4WZCaqtg6KLXJyvf3sD/xiRaysNwvmMkk14pFv1DZk7FcRkB3pxiAJbJRoyDFRvAL
+	m0VTv10/6Cwy74z3nZ6P3/z6S3JRnlm1tDFXZb1ta3+SCOCJr8ElmHj1NxHW92IeHLjwUBAy5tf
+	kkX/DSIgJW3PTbVwt0wSjw/WgTnLfxJJr7RXq0QN7dPmeTe34SfteKccPXZ/XdNv4D861JQJ1Lg
+	eyUM+qSdrq1sA9sIlguzJyZegSCRNQOprv3Ye5E9f0WZSimTB1R1kh42N5/d2DSxMxML9WQitMA
+	U8pfWY1bfSLZRSemELIJa71mCr3SwAmw8grRQxaCN01YO36lyHNqnhJ9t6P7aoYMdzGqxfTFyq9
+	Tbv0GTn5OfT6z8JECnS7qdcQA7qqcP5p4QtuicYyQ9HpXHAwEk0z+5yvnYby7GNXn7CFmOq5Ibz
+	AHWq7X1xpi0pH1iPsJSlO1QzdoNYp1dqayQk0fVJw8Q=
+X-Received: by 2002:a05:6a00:8005:b0:878:34e7:9a36 with SMTP id d2e1a72fcca58-87e9b995d09mr3609252b3a.47.1790292710383;
+        Thu, 24 Sep 2026 16:31:50 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df91475206sm1927665ad.82.2026.09.24.16.31.46
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87fea8894d7sm254726b3a.26.2026.09.24.16.31.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 16:31:46 -0700 (PDT)
+        Thu, 24 Sep 2026 16:31:49 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 4/8] selftests/bpf: Add tests for pc-relative insn copied into its own patch
-Date: Thu, 24 Sep 2026 23:31:26 +0000
-Message-ID: <20260924233130.1213812-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 5/8] bpf: Fix overflow of jump offset in may_goto expansion
+Date: Thu, 24 Sep 2026 23:31:27 +0000
+Message-ID: <20260924233130.1213812-6-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260924233130.1213812-1-alexei.starovoitov@gmail.com>
 References: <20260924233130.1213812-1-alexei.starovoitov@gmail.com>
@@ -81,192 +81,128 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Add tests for may_goto in a subprog that starts with a call or with
-ld_imm64 of a func located in front of it, and for nospec inserted
-in front of such call.
+may_goto is expanded into 'if AX == 0 goto off + 5' when it's timed,
+off + 2 when it's not and off - 1 when it jumps backward. The sum is
+stored into 16-bit off without a range check, so may_goto +32763
+turns into:
 
+  if r12 == 0x0 goto pc-32768
+
+and the prog jumps backward when may_goto expires.
+
+Emit 'if AX != 0 goto +1; gotol' when the offset doesn't fit and
+compute the offset from the number of insns in the expansion.
+JITs that don't support gotol will reject such prog.
+
+Fixes: 011832b97b31 ("bpf: Introduce may_goto instruction")
+Fixes: e723608bf428 ("bpf: Add verifier support for timed may_goto")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_may_goto_1.c | 121 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_unpriv.c     |  37 ++++++
- 2 files changed, 158 insertions(+)
+ kernel/bpf/fixups.c | 68 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 44 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index db7e30da234f..faf9eec0a63e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -173,4 +173,125 @@ __naked void timed_may_goto_preserves_regs(void)
- 	: __clobber_all);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index ae9713d292df..e9c2d6c06218 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1690,6 +1690,30 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+ 	return 0;
  }
  
-+__used __naked static void mg_ret1(void)
-+{
-+	asm volatile (
-+	"r0 = 1;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+__used __naked static void mg_ret2(void)
-+{
-+	asm volatile (
-+	"r0 = 2;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+__used __naked static void mg_call_first(void)
-+{
-+	asm volatile (
-+	"call mg_ret1;"
-+	"r1 = 0;"
-+"1:"
-+	".8byte %[may_goto];"
-+	"r1 += 1;"
-+	"if r1 < 10 goto 1b;"
-+	"exit;"
-+	:
-+	: __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 2, 0))
-+	: __clobber_all);
-+}
-+
 +/*
-+ * mg_ret1 and mg_ret2 are placed in front of mg_call_first,
-+ * so the offset of its call is negative.
++ * Expand may_goto: load the count from the stack, jump to the target of
++ * may_goto when it is zero, then the tail that updates the count.
++ * Use gotol when the target is too far for 16-bit offset of a conditional jump.
 + */
-+SEC("socket")
-+__description("may_goto in subprog that starts with a call")
-+__success
-+__retval(1)
-+__naked void may_goto_subprog_call_first(void)
++static int may_goto_expand(struct bpf_insn *insn_buf, int off, int stack_off,
++			   const struct bpf_insn *tail, int tail_cnt)
 +{
-+	asm volatile (
-+	"call mg_ret1;"
-+	"call mg_ret2;"
-+	"call mg_call_first;"
-+	"exit;"
-+	::: __clobber_all);
++	int cnt = 0;
++
++	/* Forward jump has to step over the tail */
++	off = off >= 0 ? off + tail_cnt : off - 1;
++
++	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
++	if (off == (s16)off) {
++		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
++	} else {
++		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
++		insn_buf[cnt++] = BPF_JMP32_A(off >= 0 ? off : off - 1);
++	}
++	memcpy(insn_buf + cnt, tail, tail_cnt * sizeof(*tail));
++	return cnt + tail_cnt;
 +}
 +
-+__used __naked static void mg_cb_stop(void)
-+{
-+	asm volatile (
-+	"r0 = 1;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+__used __naked static void mg_cb_cont(void)
-+{
-+	asm volatile (
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* r1 is zero, but not a constant, so that bpf_loop() is not inlined */
-+__used __naked static void mg_func_first(void)
-+{
-+	asm volatile (
-+	"r2 = %[mg_cb_stop] ll;"
-+	"r4 = r1;"
-+	"r1 = 2;"
-+	"r3 = 0;"
-+	"call %[bpf_loop];"
-+	"r1 = 0;"
-+"1:"
-+	".8byte %[may_goto];"
-+	"r1 += 1;"
-+	"if r1 < 10 goto 1b;"
-+	"exit;"
-+	:
-+	: __imm_addr(mg_cb_stop),
-+	  __imm(bpf_loop),
-+	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 2, 0))
-+	: __clobber_all);
-+}
-+
-+/*
-+ * mg_cb_stop stops bpf_loop() after the first iteration,
-+ * mg_cb_cont lets it do both.
-+ */
-+SEC("socket")
-+__description("may_goto in subprog that starts with ld_imm64 of a func")
-+__success
-+__retval(1)
-+__naked void may_goto_subprog_func_first(void)
-+{
-+	asm volatile (
-+	"r1 = 1;"
-+	"r2 = %[mg_cb_stop] ll;"
-+	"r3 = 0;"
-+	"r4 = 0;"
-+	"call %[bpf_loop];"
-+	"r1 = 1;"
-+	"r2 = %[mg_cb_cont] ll;"
-+	"r3 = 0;"
-+	"r4 = 0;"
-+	"call %[bpf_loop];"
-+	"call %[bpf_ktime_get_ns];"
-+	"r1 = r0;"
-+	"r1 >>= 63;"
-+	"call mg_func_first;"
-+	"exit;"
-+	:
-+	: __imm_addr(mg_cb_stop),
-+	  __imm_addr(mg_cb_cont),
-+	  __imm(bpf_loop),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index 3069e70fbcbd..a54b5a58b945 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -1035,4 +1035,41 @@ __naked void stack_write_nospec_slot_index(void)
- "	::: __clobber_all);
- }
+ /* Do various post-verification rewrites in a single program pass.
+  * These rewrites simplify JIT and interpreter implementations.
+  */
+@@ -1967,6 +1991,18 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
  
-+__noinline int nospec_global_func(int x)
-+{
-+	return x + 1;
-+}
-+
-+__used __naked static void nospec_call_subprog(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = 0;						\
-+	if r0 < 0x100 goto l0_%=;			\
-+	/* executed only speculatively */		\
-+	r1 = r10;					\
-+l0_%=:	call nospec_global_func;			\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* nospec_global_func is placed in front of nospec_call_subprog */
-+SEC("socket")
-+__description("unpriv: nospec in front of a call")
-+__success __success_unpriv
-+__caps_unpriv(CAP_BPF)
-+__retval(1)
-+__naked void nospec_backward_call(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	call nospec_global_func;			\
-+	call nospec_call_subprog;			\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+ 		if (bpf_is_may_goto_insn(insn) && bpf_jit_supports_timed_may_goto()) {
+ 			int stack_off_cnt = -stack_depth - 16;
++			/*
++			 * AX is used as an argument to pass in stack_off_cnt
++			 * (to add to r10/fp), and also as the return value of
++			 * the call to arch_bpf_timed_may_goto.
++			 */
++			struct bpf_insn tail[] = {
++				BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1),
++				BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2),
++				BPF_MOV64_IMM(BPF_REG_AX, stack_off_cnt),
++				BPF_EMIT_CALL(arch_bpf_timed_may_goto),
++				BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off_cnt),
++			};
+ 
+ 			/*
+ 			 * Two 8 byte slots, depth-16 stores the count, and
+@@ -1983,22 +2019,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			 * after subtraction, rinse and repeat.
+ 			 */
+ 			stack_depth_extra = 16;
+-			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off_cnt);
+-			if (insn->off >= 0)
+-				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off + 5);
+-			else
+-				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off - 1);
+-			insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
+-			insn_buf[3] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2);
+-			/*
+-			 * AX is used as an argument to pass in stack_off_cnt
+-			 * (to add to r10/fp), and also as the return value of
+-			 * the call to arch_bpf_timed_may_goto.
+-			 */
+-			insn_buf[4] = BPF_MOV64_IMM(BPF_REG_AX, stack_off_cnt);
+-			insn_buf[5] = BPF_EMIT_CALL(arch_bpf_timed_may_goto);
+-			insn_buf[6] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off_cnt);
+-			cnt = 7;
++			cnt = may_goto_expand(insn_buf, insn->off, stack_off_cnt,
++					      tail, ARRAY_SIZE(tail));
+ 
+ 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 			if (!new_prog)
+@@ -2010,16 +2032,14 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			goto next_insn;
+ 		} else if (bpf_is_may_goto_insn(insn)) {
+ 			int stack_off = -stack_depth - 8;
++			struct bpf_insn tail[] = {
++				BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1),
++				BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off),
++			};
+ 
+ 			stack_depth_extra = 8;
+-			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
+-			if (insn->off >= 0)
+-				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off + 2);
+-			else
+-				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off - 1);
+-			insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
+-			insn_buf[3] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off);
+-			cnt = 4;
++			cnt = may_goto_expand(insn_buf, insn->off, stack_off,
++					      tail, ARRAY_SIZE(tail));
+ 
+ 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 			if (!new_prog)
 -- 
 2.55.0
 
