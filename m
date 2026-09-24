@@ -1,66 +1,66 @@
-Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564D645517F
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:57:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57F940801D
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790243824; cv=none; b=of367e+tWCfNpwzySu3uWRM5nwKK4tD5frK5kQQkLxLRHuptDt4DADSqzDB5IJCrqvnI2FEqCmwn5rVIft3L3Ko+ifYuba20RGRWMyjqgfKJHK/sSYvrYUYWaTERlQdCF1uEdmo3DDXfk2mZLILqi1SQKGrta/0Tw5g9gRlGdt4=
+	t=1790243864; cv=none; b=aX8Sxi4kM24kozgDhM91W1RGIYZ6FTgjmqYzb88BmMCm75kuNJ6YDlDuuSIfO3jTjXS2hqPA5q47H2scd2hCBGYy7PdZ1RACAvRpSbCFZPjp028oLr34kiOyy1nq53/vbQbP4gr2KEXneu6XdHnFQ7PySqiGd71nzu2+ZjT3Cjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790243824; c=relaxed/simple;
-	bh=Owbu+59iTry2YEZlQRoz+Eor72nCGDC101ywKxSYQwQ=;
+	s=arc-20240116; t=1790243864; c=relaxed/simple;
+	bh=2rz/17vZuOHmiKXaBqpqzYOGMtn+Xb2Zo1vU+QoMqnw=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=CZM54kwDESIGFQIZA6480iePLD72XtYjBNZd4fLYaJl39RaliX94Y+m8mE1DrKn3j5NoC9T9uC9UKxWjdusj70+Yky3i5PA5znrwQu7VzqDHZD3VkqAZvGKbUTnp8FR98p9JZ7c3dh27lih6UcOhiX1gyCsZADfbdmWu9DoIFjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I5e3aPPk; arc=none smtp.client-ip=74.125.225.135
+	 References:In-Reply-To; b=WfmHY6U3GBiIqM+3PNrtVyUcJjuqrCUNdiAZzqFwu2c1l4UisYI4yfHTIaG61UkoNEGOl27NiYYtm3wwAIgWaw1myhDp5gScglxv2draen41v6RyqpdogrgTTJCgBg3GWeeF4z3T2wl4Jo7prQ6YWbxImjqcI8boHFFFfa2cHBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXcm9m8o; arc=none smtp.client-ip=74.125.225.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I5e3aPPk"
-Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-49fd76faff2so645355e9.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:57:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXcm9m8o"
+Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-49b0dd21eb8so3621925e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790243818; x=1790848618; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790243850; x=1790848650; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=unMgVo+Xk/SrgqihvCluTSzZ7l8LbE/LQXb8te5c+ro=;
-        b=I5e3aPPkaVm4DYzuAipE6AxWc6+1SWfeRuNwd9ZkpL9KQub1BTDy0luLLmKisA+rR3
-         Z+hkG+8eviPloTZ8rd2uUB6PfSntd0hpMKwO89vmzv9am5O8RgxkJkmybsQzonMT6Yxn
-         kEDsoTCDvVUNzwXW4kzT5HfGVewmOSKKrMjVtdbVoN2dKP8jul95L53LgkOYVpTDtgEB
-         mbrVFYEDBomUMu1kIPmXsFEl6HJtxlxSKblkfKwXVXPbM7CXeyoemzwH8crx4cf57kis
-         3dTBvKtU6q7B+gr2OzI0oct+UZRSnDtA5C+0o/01fTSZGPAa4tWoOCLT0Fwp9tMhKYpv
-         aAfg==
+        bh=vGnipRVR7Y0TJOKbZVhzmzpn/FDe89AQsrMT71eL7Hs=;
+        b=DXcm9m8oua++Dw2spMeL3VGIYx2vKdhajhjgtMK9xmIQ4RqZ8sCWLXANpZoYq4742K
+         z2JlxovNYTcA7iPlOG8rUO4FAV3Vg+1sVBpw7fBGEJKwhuRKeVXUuN2Gwtx5Wa6vTAaS
+         BnRMdiD/vAWD3r7fwuIGmryaoBKl0kyvN3n3s3ujbliMXpt2SsQ7aWLda0zx3rAP0u6M
+         lhPDePzlcE9Z+usXE4P/mQVgtdfI8wLlEjgE/zfWVyGVCryPMjQ/GTRrzFbgmsJmAHhU
+         lmQSfDYI+UqMU4+CvFj8tSVXI4EAhi0QGd3ubk5Hbv1kkDRNPYhhFfeiEi6DXEUKJYVD
+         rOBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790243818; x=1790848618;
+        d=1e100.net; s=20260707; t=1790243850; x=1790848650;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=unMgVo+Xk/SrgqihvCluTSzZ7l8LbE/LQXb8te5c+ro=;
-        b=I5/GnG9HKtxnd4J7oH3hpx80I2k2pgNGsa3vgFiRE4nz1DeykJBRjpPqP2+j0M4d8+
-         PlA4pD2GfVPISNfQy3R1RtXmcS/hHqORnQCdYG1mE6LFbj1eQSOzM0yJ8+VrEru29myv
-         VMpJMIlKf+25pQSEmsEP9aHbAL0G6zP+fAC6MGHLAo6u5a9VkijAd4mNDupXgUP2pKWK
-         TEBCVC7Pb1cXGLGfA29g5ZLjXXNLyJp6zl+nB4wwiCmuZs93ouzj7t6PGgJy54I27Sn4
-         KPkgxbk4ZpH6OCdTaEqxb0+YStKyJx9mOFuodTqwdkXWlwQ+5pAzMLAOdDnfh6r8waLq
-         qBxQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz5JL725UdtREuvT5I+zVjk1O+7aWmCQkX/JDJiFt76NnbbYu6rYnIAQ7vd/d0PQJOhPdM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lbXMnuys+zOS0BlVtaJmeiD4XB1ghpf+D+rE3wxUAbgQgn1Dr0
-	07rAmRBT/srCkCJqydPGV/1drytlJWj0ImkJt6v41K2fkXc8ZPvbvjp1
-X-Gm-Gg: AYBFou017ITxEGwQ6E05zI0Gyj+4wAwCt9I44l45qNKaVAZM+oqWQFpSRHtYuikbQRI
-	PCvkYp1kfY+bbd0DiSZBQUCNMpP+v2NxjocBiQbb/TlqAWKuq0n6hW8F+qH1gQJS2YB72vScG3u
-	vcTa3pA4mlUZMXOw7Q1YsRN0SeoUlavo0C5Omn2T6WwJji0nj6T0uQpRG/nxgOqIOIvE0ZVmSUD
-	ct7r4tu+1Xxk1OjzSW2m93PuUBnry3T6KHvEfvH9mpFZrCs/QgoV/+ie8YQrEkRZWvDZ1rXRDL8
-	FWVH+ZTk993MeYie78RWM0p96rkBdNlT1BCMQrZRGmdP5N0IT996pU62ClJifrb2qD3DA7SCh1P
-	47wR5hfSmwdy5/y06Llxq8MdzxwPZECm45Mtnl6PHEiFvGFaZYi2d5ILWzGEDHybeX3oZDpS/z6
-	yG4jcb/f1jYJ/9wWm+ckJFTXLtMpRrvglICxOnOXbepwN47xnmANJt/8Lo/O2A6l5tJl1cQ4m6D
-	53vDx6hy6/GkJz7cm9J8M+WJAzfBhFoqpKAcVhPuRunqCRidrKqZaqM9+R6Y9Y08YAw0EnHxKcY
-	r8W9pALK+ghb/RRNcNazzmXHXrvddmEkOmtNdXE=
-X-Received: by 2002:a05:600c:3b01:b0:49f:ce79:7a8d with SMTP id 5b1f17b1804b1-49fe670b3e3mr31861305e9.17.1790243817984;
-        Thu, 24 Sep 2026 02:56:57 -0700 (PDT)
+        bh=vGnipRVR7Y0TJOKbZVhzmzpn/FDe89AQsrMT71eL7Hs=;
+        b=m6M8daFW2RUhlvK59Zf+TNIKOyz70SFWUCJuvfcZQsCbtsZ53LE8OwFVem5x15uobQ
+         q8lND8EWQc1GiQynJTcjLvCx4qaanbXEjcIaVZo4o7fG9b+kzpga3UoozVPWkIy517mK
+         OSaczI8FmMoYXN8OC8XmCVq422dH/v3jebdk5xvX/5rtfLwbb9b/aZW5HHZwRiXOC6vf
+         vYECPB3GWVgzqmrwVMnRJyhcNc/hjOLHmgb4KmMZmrum12mQC0AMpVe+BUjN32AHERni
+         kLOoqjZVmXNT58iBQMmAsZ7dbc1zhSdCIOAgoBLsTbUWalk+vXiihWq4AUJJBJdGxR+I
+         cpVQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzNE/Ce+2D2Um3xuRstOBUZRcACgm0hTOedM8rmDGQ7UzoG6i1kRrHztj/kV2UBLBcJyS0=@vger.kernel.org
+X-Gm-Message-State: AFuF++nKSygo4RKjG6hHXAXXKi2IEuQGXUkEjTbQwEwCPMF77Hnx15ZX
+	Wvm6/4dSoGIQuEhxR2IT/NzEM3VbJPQ71/uc+xCk5TxnEulLjBDi5ISb
+X-Gm-Gg: AYBFou1zWDFEGc6mW+/bvwyWKpYPJDH+Cu8zPQMrhZSHkfL+35VQy6heWCc1xSdk+ay
+	pzldHDh2Kq48N0R9aXmLyTxnSNIdunwMLmXV7lZBnBjNXS/SZAynKZNA7XgqNr5o6NmeInF5xii
+	EtkirKbpTQg8ojCl4F+XlbflF8QHDt4lbJnfFAVB/RP1/g+j2vstqdgZWrb04MxBHhGsZTCXX+x
+	k0WziWu6muri3JRkRFF9QFnnOkwEZck7zLTQSf8SlOfhO17yGe5r4U5PDa8EXVofeQcA2iTCS4O
+	CihOpRu3siYTil5kzr98VOubdegs0nChYTTfluKYJLbHVGInPHtrE0eiFJuPwk5NGlgENaoz0uo
+	oXABdRwVECHfaKMyqBWl1h8Vh0YRwhrBzcD6XGD9my68H3fKRL8RBb4ZtUvJvs5HNBqSPkkaSeI
+	XQmEFREYeOX/LYPWLLowDQAqM7JYmbLyWfcGOMaokEmx4czMxi3hcELAmw83/V76V4iSb5h9ZUK
+	bRjo1NeJwhhHx8vHlB832//QEkyiyNf83uaKyXDLylaJ24O5sUnhh5Cx1PcBFyVcgCtZij0eSLV
+	9irh/OeL7NcZNfTtumO22NZN86pGXPzqKVQ1iQ==
+X-Received: by 2002:a05:600c:6098:b0:49e:7cc2:e6c2 with SMTP id 5b1f17b1804b1-49fe66fd482mr37541735e9.27.1790243849642;
+        Thu, 24 Sep 2026 02:57:29 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5bb9891sm49224735e9.6.2026.09.24.02.56.56
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5bb9891sm49258605e9.6.2026.09.24.02.57.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 02:56:57 -0700 (PDT)
+        Thu, 24 Sep 2026 02:57:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,119 +69,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 11:56:56 +0200
-Message-Id: <DLNGGVPEO7RM.P2G3TKXBCGCT@gmail.com>
+Date: Thu, 24 Sep 2026 11:57:28 +0200
+Message-Id: <DLNGHABXA6V3.2MT1ETDTEP36D@gmail.com>
 Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
  <eddyz87@gmail.com>, <emil@etsalapatis.com>, <tj@kernel.org>,
  <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
  <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2 15/18] selftests/bpf: Give the 512-byte
- stack boundary tests a 2 KiB twin
+Subject: Re: [PATCH bpf-next v2 16/18] bpf, x86: Allow programs 2 KiB of
+ stack
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
-References: <20260924082607.2695649-16-memxor@gmail.com>
- <24dfe7fd22d578517f54fb854f4d76ebfa4414ec48b2fcc751b2045f88a624ae@mail.kernel.org>
-In-Reply-To: <24dfe7fd22d578517f54fb854f4d76ebfa4414ec48b2fcc751b2045f88a624ae@mail.kernel.org>
+References: <20260924082607.2695649-17-memxor@gmail.com>
+ <61fbaeed4b3968122da9da2b7ac83e193a0058de88466d6f79fe0a446853d500@mail.kernel.org>
+In-Reply-To: <61fbaeed4b3968122da9da2b7ac83e193a0058de88466d6f79fe0a446853d500@mail.kernel.org>
 
 On Thu Sep 24, 2026 at 11:13 AM CEST, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b=
-/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
->> index af1f9305da37..e39202902be4 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+>> diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf=
+_design_QA.rst
+>> index eb19c945f4d5..be5fc4ac00d6 100644
+>> --- a/Documentation/bpf/bpf_design_QA.rst
+>> +++ b/Documentation/bpf/bpf_design_QA.rst
 >
 > [ ... ]
 >
->> @@ -589,13 +589,58 @@ static unsigned long use_stack_304(void)
->>  	);
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 9fbef7504e51..e2e531dd1e0b 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+>> @@ -4520,6 +4520,18 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+>>  	return true;
 >>  }
 >>
->> +
->> +/* Four 480-byte frames, deeper than any budget together with their cal=
-ler */
->> +__naked __noinline __used
->> +static unsigned long use_stack_480_0(void)
+>> +/*
+>> + * Frame sizes are 32-bit immediates in the prologue, epilogue and tail=
+ call
+>> + * sequences, a tail call pops the caller's frame and lands in the targ=
+et's
+>> + * prologue before the target allocates its own, and private stacks are
+>> + * allocated from the program's own depth, so MAX_BPF_STACK_JIT frames =
+need
+>> + * nothing special.
+>> + */
+>> +bool bpf_jit_supports_large_stack(void)
 >> +{
->> +	asm volatile (
->> +		"r0 =3D 0;"
->> +		"*(u64 *)(r10 - 480) =3D r0;"
->> +		"exit;"
->> +	);
+>> +	return true;
 >> +}
 >> +
->> +__naked __noinline __used
->> +static unsigned long use_stack_480_1(void)
->> +{
->> +	asm volatile (
->> +		"r0 =3D 0;"
->> +		"*(u64 *)(r10 - 480) =3D r0;"
->> +		"call use_stack_480_0;"
->> +		"exit;"
->> +	);
->> +}
->> +
->> +__naked __noinline __used
->> +static unsigned long use_stack_480_2(void)
->> +{
->> +	asm volatile (
->> +		"r0 =3D 0;"
->> +		"*(u64 *)(r10 - 480) =3D r0;"
->> +		"call use_stack_480_1;"
->> +		"exit;"
->> +	);
->> +}
->> +
->> +__naked __noinline __used
->> +static unsigned long use_stack_480_3(void)
->> +{
->> +	asm volatile (
->> +		"r0 =3D 0;"
->> +		"*(u64 *)(r10 - 480) =3D r0;"
->> +		"call use_stack_480_2;"
->> +		"exit;"
->> +	);
->> +}
->> +
->>  /* stack of all possible callees is accounted */
->>  SEC("socket")
->> -__failure __msg("combined stack size of 2 calls is")
->> +__failure __msg("combined stack size of {{[0-9]+}} calls is")
->>  __naked void callx_rodata_stack_depth(void)
->>  {
->>  	asm volatile (
->> -		FUNC_TABLE2(tbl, ret0, use_stack_304)
->> +		FUNC_TABLE2(tbl, ret0, use_stack_480_3)
->>  		"r0 =3D 0;"
->>  		"*(u64 *)(r10 - 304) =3D r0;"
->>  		"call %[bpf_get_prandom_u32];"
->> @@ -613,11 +658,11 @@ __naked void callx_rodata_stack_depth(void)
->>
->>  /* stack of a callback that is read from the data is accounted too */
->>  SEC("socket")
->> -__failure __msg("combined stack size of 2 calls is")
->> +__failure __msg("combined stack size of {{[0-9]+}} calls is")
->>  __naked void callx_rodata_callback_stack_depth(void)
->>  {
->>  	asm volatile (
->> -		FUNC_TABLE2(tbl, use_stack_304, ret0)
->> +		FUNC_TABLE2(tbl, use_stack_480_3, ret0)
->>  		"r0 =3D 0;"
->>  		"*(u64 *)(r10 - 304) =3D r0;"
->>  		"r6 =3D tbl_%=3D ll;"
 >
-> This isn't a bug, but now that callx_rodata_stack_depth() and
-> callx_rodata_callback_stack_depth() both use the use_stack_480_*
-> chain, is use_stack_304() still needed in this file?
+> Can a sched_cls or lwt_xmit program overflow the kernel stack through
+> bpf_clone_redirect() recursion?
 >
-> In verifier_callx.c the function is still used by callx_stack_depth_ok(),
-> but in verifier_callx_rodata.c nothing references it anymore. Could it be
-> removed along with the extra blank line after it?
+> A TC egress program on device X that calls bpf_clone_redirect(skb,
+> X_ifindex, 0) redirects the packet back to itself. The redirect happens
+> while the calling program's frame is on the stack:
+>
+>   bpf_clone_redirect()
+>     __bpf_redirect()
+>       __bpf_redirect_common()
+>         __bpf_tx_skb()
+>           dev_queue_xmit()
+>             __dev_queue_xmit()
+>               sch_handle_egress()
+>                 tcx_run()
+>                   bpf_prog_run() -> (same or another tc egress program)
+>
+> The guard in __bpf_tx_skb() (net/core/filter.c) only fails when the
+> counter exceeds XMIT_RECURSION_LIMIT (8):
+>
+>   if (dev_xmit_recursion()) {
+>       net_crit_ratelimited("bpf: recursion limit reached on datapath, bug=
+gy bpf program?\n");
+>       kfree_skb(skb);
+>       return -ENETDOWN;
+>   }
+>
+> So dev_xmit_recursion() allows values 0 through 8 before it fails, which
+> means the program runs at nesting levels 0 through 9. That puts ten of
+> its frames on the stack at once.
+>
+> sched_cls programs never get a private stack:
+>
+>   kernel/bpf/verifier.c:bpf_enable_priv_stack() returns NO_PRIV_STACK
+>   for them
+>
+> so their frames live on the task or IRQ stack. On x86-64 without KASAN
+> that stack is 16 KiB (THREAD_SIZE_ORDER =3D IRQ_STACK_ORDER =3D 2).
+>
+> With this patch, a single 2048-byte frame is accepted. The BPF frames
+> alone then take 10 x 2048 =3D 20 KiB, before any kernel frames in each
+> round. That exceeds 16 KiB, so the stack overflows.
+>
+> Before this patch the same program was capped at 10 x 512 =3D 5 KiB of BP=
+F
+> frames, which fit. The recursion limit was meant to stop a buggy program
+> from crashing the kernel.
+>
+> The commit message says nested programs "are not accounted against each
+> other before or after this change; each level of nesting may now add up
+> to 1.5 KiB more." It does not bound how many levels there can be. Here
+> the kernel allows up to 10, which adds about 15 KiB compared to before.
+>
+> The same construction works through lwt_xmit programs, which also get
+> bpf_clone_redirect(). Triggering the overflow needs CAP_BPF and
+> CAP_NET_ADMIN to attach.
+>
 >
 
-Dropped the unused use_stack_304() from verifier_callx_rodata.c for v3.
+ Right, thanks; for v3 a program that calls bpf_clone_redirect() keeps the
+ 512-byte budget, since it can run ten frames deep through the datapath's
+ recursion limit, and tests cover both bpf_clone_redirect() and bpf_redirec=
+t().
 
->
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a =
 bug.
