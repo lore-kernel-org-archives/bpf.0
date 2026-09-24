@@ -1,64 +1,64 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E25409281
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63A33F54AA
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790267539; cv=none; b=gtjhqFhHxParMh/HgRXf261et7KBo12YtwsWlAew5Uzkl6w5f4fqETv0gD2zBr/QuDYHcD+buxru6QYSTJe7TPmDNPYFXIhOPdjH8hj3usc4MfDmXUkfvzArV1NZVXdE9tvBfLBxXqrqdyUGyZbDi+XrJ9bcPzJW6JU6jzvzjs0=
+	t=1790267541; cv=none; b=gHmM5vRYnArkibfQ4mDbukncSiJHD3/SeFHGT37tr+tg0Jbhc39vpcp2dxTlM1cdEgqjuElgDYk2BvjcFyKugKdv//SR74kccE7wlO0iNGzwGxSWhJcSPNzBVlBjAj0sXNrnPAhWaIte5n8xIRjpj8KM8Oe0h4IgMASZB0TH4MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790267539; c=relaxed/simple;
-	bh=W4RRDR4YWPIU74MfUi8DWR0v9/aTvVfwjKIvCLkvZiI=;
+	s=arc-20240116; t=1790267541; c=relaxed/simple;
+	bh=quYMvWUwO7boIXLxbD55gR9zkLwNS/IB5roYLQCyGmk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LbygmFnCL6atygh1iJEOLKU6iKWcUoeuRxlCvClVYaYOCNIJmbaEZTO23y0EDF29vU7kMbP9Ot4qH3+WU4GDu4wVQAtqV45aIB67wqjo7ALwfVBUSihRHQapYRxNyDy4l6tKg02tGhibgmE8IfGDYh1vrrJRvn99nvV6numZeoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KrktE/lo; arc=none smtp.client-ip=74.125.225.75
+	 MIME-Version; b=FPSsNUdBFDOOZp2J/GGrQRZTkIV4Dh1rfnOk/3KvyeLmxkjeW5MU9QsUM44OGE+ax6IdOZdG3UOfXLOHfqYK74sscBtqTNjLl+pTMwJ2oC8WKgTStRFHxH3d9YS/8D5NcCwMx8z7hYyKt1nfSK97AiRFIKZXvnKCxvRy53yM+HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WHWaj/ZJ; arc=none smtp.client-ip=74.125.225.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KrktE/lo"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-486e4e15deaso1547f8f.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:32:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WHWaj/ZJ"
+Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-484392e3450so1263f8f.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:32:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790267536; x=1790872336; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790267538; x=1790872338; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pJun+8vNtKJWH8E0VzNnl0taFjyUTcjZ14T5SYWywBY=;
-        b=KrktE/loQrfmiLK/AryXYDRRI5KgXrmDsP1726O8cwVKnfMK6WkO6kwV5RnRF5/lPM
-         JbuLS/TtlCegn5+hfuDVFZ9y/NVvD2ZFYAGMeSLWE7zYUUEhA1YwR1ewAF9MN2WNW40y
-         gi+YmMBaPavlhRAxWhKyC/kuxVEl3YGUlKMqmviVS1/r/ZlDrUXRhCSObddycR0HP0T4
-         PVUYx90O0h0suV2OvyviyFEvNoaKx/nub6DckrSuwvjeBh+32oYxWN1wm/yz3cBQqRxJ
-         cIa2mGFwhw99r/xpdf2U7joxRk0crJBWiYwfEjTrskVfoPQbZcNHdyQUsszsmTrzLEVe
-         kv2Q==
+        bh=eVQ8JEms7POvUUEQGlzf25XejAcIwzrSpES6KFXciMA=;
+        b=WHWaj/ZJ1JryYtzrITvDONDWRcozJELw6zFNRM/e+Qk6IJ82JKgZKPQFzcsf0TEBvT
+         SERwNXkhDDYx1dd+EPL4AzHNAuEEhCIwk+Sy2mD17gMd9ErO6Y8BAqA3yTfLIxJYsNCA
+         YmAiPO8bvZYylhttsMD6lOzIJKMG1p78ckeoCZ2I/HMAZafd7ku7gqVra2lnXhsD4SiA
+         39EF8unFIeEV23IhnJCswk7lk0IQ1jJVnQL1dCBkJiGqnPUOtsaJ+rvYo4itPBNHPeKg
+         bmynGUWDhXvg8oKqyXhBO7ybc+zkHY/KkVdKnnoTGIhgkf11JRCPBdbs77W1jLt0jAOo
+         M8+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790267536; x=1790872336;
+        d=1e100.net; s=20260707; t=1790267538; x=1790872338;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pJun+8vNtKJWH8E0VzNnl0taFjyUTcjZ14T5SYWywBY=;
-        b=TAFFcCnKLGhB92pG9RKe8zQlyvTAjRvDm3MqUdIE/QIUdGfL62rJDCJATiES4w6AKZ
-         2sO+01/Leqhg9V1y9aOZtpSBN2jZAM17N6/Wyf4UBS1wbEaqd68xIu+89ABCqTzfFkBw
-         S3sj0kKrlHrlYzVEUISzjGhc7c2hhvLUuaB3mT187A7pwQsV5LEqXHif2d9fP3d47LJ/
-         lue25wJUnn2rsoS0stskupGGMITq+sZ1y4ogG9NwGtBCJaSf8Y0fs/yWCu+1ExX4YCog
-         bSux/+DDKYPO70NLfpP34mklu5DJEOWTmiQcFvW/Q/Tr/XjDQSXu+6tkXxRP1dKpHwbI
-         MiUw==
-X-Gm-Message-State: AFuF++kX6ifswng3ezHZu2zLYXnwOn2opGD060280XYmOdGx4hEg2Apa
-	LIuFL85/Uu5jqkBfJug3OnNTsoMUteSyn5SHW39kZKktwBWn6H6L7yOFnGeKXB+W
-X-Gm-Gg: AYBFou26phAMddmE6yNXD6ObJME7DIK50L2zHA9EgxwLCyaTMRsGQCbxDffIcTQkZwF
-	UkkTQMy7FlsKRkLPj7Jyo+b1e2m3aoJ4Xavze3CB9bNt8puTykLq03Q9ABQxuD6a3Avlk1b7cFc
-	P7T+NRBwAs1xEWppMJ0g8TqSS+ZKuewAC7IC87HHYWRVv3wmRQtbAmB8qfxrTLv0GB6JfTejfw2
-	iQNhfl9YzI3xFSv2fa7TEQXtWpeAviKeziJq9u0eFaI3syOuKPr/H2N+AREMbkrZMj3el1Ez1Kb
-	JeWaktFgAP9UDvmo+Q2ILtjfEy1B06R4FWk9GSDr71EZ7QrbhAc2gEfXS2Lw4I3zknLIpEpZ8c9
-	2HPeYYHjqHaWSm+oqMKMfshgTWgdpcqmjUDxNcPDh2kRK2gsDWxBnayJviNxqkM6+L/usasuCxy
-	FkWPGecAdE1Z5fSv7EYLEX9MPMAD6LfMi2rTTXtcpcnrkgIVKZgTeAqXy/UscAzi8AhXN9u+n+t
-	1prTeONgbY7Qy2MmdVayhD5Dv0SHuQhzzuph6ersvWAqY8eDQhTIHrnVdT4j39XPgGwy4A2Sl3Z
-	FzciC8K35rOyO/LZIiEETfo+s8u02Gle2X7duQ==
-X-Received: by 2002:a05:6000:2406:b0:487:27f6:a4d0 with SMTP id ffacd0b85a97d-488716a5f55mr5714013f8f.32.1790267536340;
-        Thu, 24 Sep 2026 09:32:16 -0700 (PDT)
+        bh=eVQ8JEms7POvUUEQGlzf25XejAcIwzrSpES6KFXciMA=;
+        b=Is17+OVp/wA+AyRKFLAiuhb/En9uv27bR9TEtDsxaeS8OAOSfCr7pM54WiXMSLKW7+
+         8/uxIo3J6TWklux17SbyAYah5ay6L22rCSwEy/Z2/a+soHiv28g7dKTaimD2tHl2u2U6
+         u9dvzo+dPmPMjNasLOAtquOZvjMXOBi2p7CMWG+0KR71zc2oCz6+QSOfS1AHUXVwCCu+
+         tDhdrlrmMtSEv6A/2zrMGmk6vaI+mjFIIOgzqakWa13Fx9gM7BG91QELhpaHt2em7BCc
+         AHkUw0+H7q7j3Bi5jBHwIC1OPyatEAaHyxMxT0/0SQbab10T24oAF7JkZdgSA71DbonX
+         S57w==
+X-Gm-Message-State: AFuF++k3vgGjt7nUixODANA5y8bQ/SmGDn9QtyKji5mTcD4DnUWMjtBn
+	k4sJ+Ol9AzB7fR/OFCFwP4K7c6QRuRItzeLRs09+mBrcED2lO4Zyox8+piAL/ghq
+X-Gm-Gg: AYBFou16+zuJBKRZlPXCp1kKYKNADPqK67eWX8Qg+rHNgRcbjPwwrU11+fitdix1C2T
+	VxYEU/7d3znEl3gaph9/2Qu0GrxSpjljoaHygL2w8sO7t6Qe/y0m5xqkx8MnrY847xd1GnesCu0
+	sV0wN9J0YeEtsMq65zdNYqgtj2z1QEz4wDch59uRQ5tqmGaDhGeNAT7nTPVjY3UwJSoohJNv13B
+	KJ1yOXCjLJuUCYB98hJwYrvc9V5hR/zW/opGbinj4ojfOzatpPEWh5CQXJHkNNmwfmi4z2dQBga
+	nbUxI2ZrNglg6+IPGYhceiYgYEn6ey3kUqf+oSGsf0bYHxe8LUY4Qp88F7GEkmPy56WJtU0BRC8
+	tklrCqM+Ee8xdx7fORmdwekTRzsYw1hXHJIPqGHVQ77D/sVwQJJ3gjFGxmV4fEsXd/MnJunJdw5
+	DAc//aF+q55ZvEr+6DSOX33jHR6+AWpeRPOns4XXVJqrSRTtZKFXXL0w3rhxVyObNBTC+OrVKc6
+	MSbg2pmglL5+N6eXh2feyTxYfiMiO5tQ3fWEJPc371YV2I7ty8i9n4RZtWNL81wXs2ZBeTWXT6V
+	Lhkxn/P9jWsm4p5H1MUwGql8OOuGY+a659ecBg==
+X-Received: by 2002:a05:600c:c1d7:20b0:49f:e897:b62b with SMTP id 5b1f17b1804b1-49fe897b890mr32580155e9.14.1790267538198;
+        Thu, 24 Sep 2026 09:32:18 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a349731sm176273f8f.12.2026.09.24.09.32.15
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fee915f3dsm173315e9.1.2026.09.24.09.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:32:15 -0700 (PDT)
+        Thu, 24 Sep 2026 09:32:17 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 16/18] bpf, x86: Allow programs 2 KiB of stack
-Date: Thu, 24 Sep 2026 18:31:30 +0200
-Message-ID: <20260924163144.1945455-17-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 17/18] bpf, arm64: Allow programs 2 KiB of stack
+Date: Thu, 24 Sep 2026 18:31:31 +0200
+Message-ID: <20260924163144.1945455-18-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924163144.1945455-1-memxor@gmail.com>
 References: <20260924163144.1945455-1-memxor@gmail.com>
@@ -81,92 +81,70 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4010; i=memxor@gmail.com; h=from:subject; bh=W4RRDR4YWPIU74MfUi8DWR0v9/aTvVfwjKIvCLkvZiI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWur77vqSW+ZRDurBGrU2refXD9z7+4TGv7M9sWPDkYuK NjuePduRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbykp3hn85uRhPnnOD5glWc PhfqKhLEW2W+11bURZ2xZRXI6VrCxchw/NfErMn/Pv46qxdsad1hb+Xy+c7Smb90Ig4tD3FmOx/ DCAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2964; i=memxor@gmail.com; h=from:subject; bh=quYMvWUwO7boIXLxbD55gR9zkLwNS/IB5roYLQCyGmk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWur7zu39n8zFEsn3nWY8+Jk9nl23sOzZdXaupPP7J+30 jq8QMCro5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABNx3sLwz6B9QXT0TXNf7Q8O e78UTPdo5Pgbw7pRnfPk+sDQ+jcLjzMyPHlltEvAmKvbpCm0f3Io641sR72Mpimm1prr1z3hF3n OAQA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The x86-64 JIT encodes frame sizes as 32-bit immediates in its
-prologue, epilogue and tail call sequences, a tail call pops the frame
-of the program making it and lands in the target's prologue before the
-target allocates its own frame, and private stacks are allocated from
-each program's depth, so nothing in it depends on frames staying within
-512 bytes. Report bpf_jit_supports_large_stack(), which raises the
-budget of JITed programs to MAX_BPF_STACK_JIT: 2 KiB combined over a
-call chain, or per frame on a private stack, with no separate limit on
-a single frame. Interpreted programs keep 512 bytes.
+The arm64 JIT sets up a frame with an add/sub immediate, which encodes
+up to 4 KiB directly, addresses the BPF stack relative to SP or the
+private stack pointer with offsets that fall back to a scratch register
+when they do not fit the load/store immediate, and a tail call pops the
+current frame and lands in the target's prologue before the target
+sets up its own. The exception callback reuses the frame record of the
+main program and does not depend on its size. Report
+bpf_jit_supports_large_stack() to give JITed programs the same 2 KiB
+budget as on x86-64.
 
-The worst case kernel stack use of a chain of tail calls grows
-accordingly: the callers of a tail call may still leave at most 256
-bytes on the stack, so 33 programs can accumulate 8 KiB of dead frames
-below the last one, which may now use 2 KiB instead of 512 bytes, for
-a little over 10 KiB in total on a 16 KiB kernel stack. The per-cpu
-memory behind a private stack grows in proportion to the frames a
-program asks for, up to 2 KiB plus guards per frame.
-
-The budget does not depend on the privileges of the loader: an
-unprivileged program cannot call other BPF functions, so a tail call
-from one leaves no frame behind and its worst case is a single 2 KiB
-frame. Programs nested through helpers or attach points, such as a
-tracing program entered from a helper of a networking program, are not
-accounted against each other before or after this change; each level
-of nesting may now add up to 1.5 KiB more. The one nesting a program
-can force on itself, bpf_clone_redirect() to its own device, keeps that
-program at 512 bytes.
-
-The verifier state of a frame grows with the stack it uses, up to four
-times as many stack slots as before; the allocation is on demand, so
-only programs using deep frames pay for them.
+Tested on an emulated arm64 guest with programs loaded and run through
+the raw bpf() syscall: a 2 KiB frame, a 2 KiB frame with may_goto, a
+chain of four 512-byte frames, and a tail call from a program with a
+2 KiB frame into another one; a 2056-byte frame and five 512-byte frames
+are rejected. The selftest suite was not run on arm64.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- Documentation/bpf/bpf_design_QA.rst | 10 +++++++---
- arch/x86/net/bpf_jit_comp.c         | 12 ++++++++++++
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ Documentation/bpf/bpf_design_QA.rst | 11 ++++++-----
+ arch/arm64/net/bpf_jit_comp.c       |  5 +++++
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-index eb19c945f4d5..be5fc4ac00d6 100644
+index be5fc4ac00d6..98d70b8a2533 100644
 --- a/Documentation/bpf/bpf_design_QA.rst
 +++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -221,9 +221,13 @@ newer kernels. BPF programs need to change accordingly when this happens.
- 
- Q: How much stack space a BPF program uses?
+@@ -223,11 +223,12 @@ Q: How much stack space a BPF program uses?
  -------------------------------------------
--A: Currently all program types are limited to 512 bytes of stack
--space, but the verifier computes the actual amount of stack used
--and both interpreter and most JITed code consume necessary amount.
-+A: A program may use up to 2 KiB of stack, combined over its call
-+chain, when the JIT of the architecture reports support for large
-+stacks (currently x86-64); a single function may use all of it, and
-+every frame of a program running on a private stack gets the whole
-+amount. Elsewhere, and whenever the interpreter is used, the limit is
-+512 bytes. The verifier computes the actual amount of stack used and
-+both interpreter and most JITed code consume necessary amount.
+ A: A program may use up to 2 KiB of stack, combined over its call
+ chain, when the JIT of the architecture reports support for large
+-stacks (currently x86-64); a single function may use all of it, and
+-every frame of a program running on a private stack gets the whole
+-amount. Elsewhere, and whenever the interpreter is used, the limit is
+-512 bytes. The verifier computes the actual amount of stack used and
+-both interpreter and most JITed code consume necessary amount.
++stacks (currently x86-64 and arm64); a single function may use all of
++it, and every frame of a program running on a private stack gets the
++whole amount. Elsewhere, and for programs verified for the interpreter,
++the limit is 512 bytes; the interpreter itself never runs a frame
++larger than that. The verifier computes the actual amount of stack
++used and both interpreter and most JITed code consume necessary amount.
  
  Q: Can BPF be offloaded to HW?
  ------------------------------
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 9fbef7504e51..e2e531dd1e0b 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -4520,6 +4520,18 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 9544b2f483e5..2b2d6d178ea1 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2501,6 +2501,11 @@ bool bpf_jit_supports_callx(void)
  	return true;
  }
  
-+/*
-+ * Frame sizes are 32-bit immediates in the prologue, epilogue and tail call
-+ * sequences, a tail call pops the caller's frame and lands in the target's
-+ * prologue before the target allocates its own, and private stacks are
-+ * allocated from the program's own depth, so MAX_BPF_STACK_JIT frames need
-+ * nothing special.
-+ */
 +bool bpf_jit_supports_large_stack(void)
 +{
 +	return true;
 +}
 +
- bool bpf_jit_supports_percpu_insn(void)
- {
- 	return true;
+ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *node,
+ 			    int bargs_off, int retval_off, int run_ctx_off,
+ 			    bool save_ret)
 -- 
 2.53.0
 
