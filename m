@@ -1,77 +1,93 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6621F7916
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:33:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC7D348C75
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790227997; cv=none; b=PKzuoefBaekUBp9Au6EsWosF+QqJ6yuQ5LPyXVCKinTqyOyMxjJ/6WmawNcW5ctgAD6XPoOEpY1ecOxRHqDCjLbIowrVr8FemZAn4Mmvg65+p9tqG0n0BVn2Ixsp4pzX7UFHVgk/O01pAsUsDXi8GW03aNHsA7s+c69vOTU1W5E=
+	t=1790228155; cv=none; b=RyvZ1oZKBW+IpHAP9Nzn/nTd/GAzUDx4lQ6SKxWiDxXzIZLVMl1lIl+NnNWGfhb8E4tAmGNwfCnj7COr6oXTzWOWTQrYlSssdrF932FSqLYR3kIILA68bvdKBFkGvs+gWW9qzZk+eyE5eQLq/LBvbS1IB8zed+mbPRKtvmbunlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790227997; c=relaxed/simple;
-	bh=u6Y9/dCLmQox4L/nbUTgkvBWZsHKNrgUxU+OM7N4QdY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=T6urVAiUVygqwOOAB5GsggwIZP3SnNcDe8b1Sh8YEbejlQrj9+cNS7S/rJJWbT9odBMAeu+I4QR23baNJKss0A6R5SdCTh6DVgrrINzKjpeejNC5NGitFt+/UuY2TPl+qVEHvBApr7Phvpk7YZcoHxatCB5o5Qf4VQf8HZXvg7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XFKhc028; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1790228155; c=relaxed/simple;
+	bh=S7YCobBC+HtmpFNk+7TFsgHmGtIoWTkcQMy5z7Dbx1w=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=E0oysY/fbCYEhXzWSfPcuMGwyVCIGQJg8dxfa+byDMy2I0sij0RcfFZS7188LxeRVLu0tIVS4DCKwfb1OfnN8I0uy8r57LfBk73+9ls7Wo/6gXhJw6CtSuEUaKO56nK8khXg/15rpYqH7hnagtGhQKFYnmOZjf2wAt/utQKsli4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ON6pdYdQ; arc=none smtp.client-ip=74.125.228.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XFKhc028"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb752so894329a91.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:33:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ON6pdYdQ"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469f204f6so843360b3a.2
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790227995; x=1790832795; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=MUWnwYnt77FHWIx1aRGTB1yKqNYWNGX8KhdqfYRsPvs=;
-        b=XFKhc0280YC/0MlHvlAiJ0w2dJle3XJp64cOU8ikyjRch776gUr9/KxtHXNtKxLCDl
-         V7wv4xFWI+VnGPgvxiEBP8xdY6rMH83nL8ap44CH99CY18fJTxEgLcli/zPjnmyDYXAR
-         lVp7N0JYHkoZSn4ebHzAQ49VPo+P+zvETSiJCSk1mkcvHm+laaLYJVuHG1hGliW7EUpC
-         1MgzcTAdcYqyGvVVrGuYj4K5ZeoyrGest7YN/vpUsJwStXFwDYxPSIDZw2429IZeLYyt
-         Glu2J65evxDjQbL61a+ru3iDPGco3hjh6Hjl71MdCiukGu0Nuz4BrFng4P5xwGFSUjQN
-         OE2w==
+        d=gmail.com; s=20251104; t=1790228154; x=1790832954; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZgV+zt06A+GVhiZtJGM9pKXkNiudT+kcv0q8qPUw5Lk=;
+        b=ON6pdYdQqqkchV/gy0fNyvMY/t3qbVvF2RCoGW60etofLkHLVcI/fvv44FqDq2csJI
+         gT4nQpxv6Y0EQB7ieG7ozL4vfxlogTG+5dOTIrzRukhaCTP8Dsn75Z1wIAhcroDhrO9G
+         M4Y/5f6g0QS8M5i8vk0zbPz+STp9EH2D3IMQNgu+J7svAkvV2yYjcqxl8MLHCetwsB45
+         dh7ZuqNYalTYdLPXaVo/MGxpwLUoqJ/Mv51BCpHTj+lP9igMj0XviNQLOndxBg1JT3ss
+         9AjLf0L892WOrJ6+8foJLelB59CnTxI01cPP9s/k+y6SiG4AnsmI+DMOlzXCmFbQ+7Le
+         SJGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790227995; x=1790832795;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1790228154; x=1790832954;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MUWnwYnt77FHWIx1aRGTB1yKqNYWNGX8KhdqfYRsPvs=;
-        b=y+We/bwYLTR4vjjot+ac/Bd6wYKGZFQhJ/jMSpV8wSmtOdW4r90Dex/bMOTADxu8Hn
-         mqt9qZ1nCuxLpdC/BLirV6tadHR+0NO+hsbnZoCYc4Y8xBQh7ebL1rWWqFR1A/D5dw2y
-         xMZ3mATR+k6M1fvEh+HK9m0N3dytsQLx8XpenEPmKfv5CLXSbJqROosSkc4s7dP+AYG6
-         1cERR6+83U+dJ117FxbyNbnS9Yz8pXcqWIYmMHc2ci96WgP3cO5+neo/1XykYwEIFmFc
-         OG8v0djs6+L5Lp8O0i8vAmJXhEumpCU/KB11BZ0wJSM+Dr6UgY5HG5BJXMK+ExWD90Ho
-         Edkg==
-X-Forwarded-Encrypted: i=1; AKwUvBxidsPQnxedwDK1IjqEtFNPOCraKRWU15WXentYOdN6tb2qxk3XocKMsUDkwqp1eiutrj8=@vger.kernel.org
-X-Gm-Message-State: AFuF++mu4wQ8J7Y3Hc8A32APdWnbIERaIMPF6YIDn7cohMMhBcmZ2xQJ
-	JApHlo3QQm+w8R1dKTU/jPwdbncfE6q+1MVbZnFz0/74E2i6dG6DVhW7tuE/7g==
-X-Gm-Gg: AYBFou244KsYRk6eBUujXsNeglv+IIomBRfGAPY6lJ3UtMcllwFVywSCaYlTUjcrm4o
-	Estq2YZoGEbK0QAV8zZlIQ3FZo5K5byUCysplXQDo7gD4Bz6q0EPCyVrb4TM5E7CVMWdlUOAscJ
-	sNFMbcZ5fzfXswZLNfhbeKZ/d6AajuAUToRar88Ys7qp8lOEk5kIpmiLYvlOc8zO/NS6lovgl/T
-	31pTCYv5HRqeDlyymha5K/raAlR6EYpU4mf8UaRtdv6ys2wWOEka8lvaKDezTapuDn0DZNkpAaS
-	V/A0I66/P8yH89RKSOrZ9MHvuQX4/JeftD+L+oTKJ/GShtBQ9iDSN2/tOBxiQJmNbet54FH/Bgy
-	RzPsSPQt4hXrgCYkpji3xft4gHe6tuYEuCpw98oaF4RicigLCpjalTp59EdWOAR3rpEyk3GijHv
-	FbySpaIalacibkHdGVUyjQ45/oURtrYIRzlvLHKFfwXRng6n4/nSYRgJnQQEFcCPhh464XGATfd
-	lHaydJ5VH4LygkSbfz1EMX/H4bBO3O5mJewfg==
-X-Received: by 2002:a17:90b:57c6:b0:3a0:22bd:6ef6 with SMTP id 98e67ed59e1d1-3a09853a6cdmr1024345a91.2.1790227995593;
-        Wed, 23 Sep 2026 22:33:15 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0972efa0bsm2609931a91.8.2026.09.23.22.33.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 22:33:15 -0700 (PDT)
-Message-ID: <fff46b2598a74aa51a8d686829522b6f490aa677.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 07/17] bpf, x86: Add JIT support for callx
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Date: Wed, 23 Sep 2026 22:33:12 -0700
-In-Reply-To: <20260924031042.1690890-8-alexei.starovoitov@gmail.com>
-References: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
-	 <20260924031042.1690890-8-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        bh=ZgV+zt06A+GVhiZtJGM9pKXkNiudT+kcv0q8qPUw5Lk=;
+        b=qUS64CksFGuP3mpHDZ0LT9iyIhDYBeEV06wYZNeYFs2eGUCEa4GkBNV2Yxkq5Ft0cr
+         Hrn+TPh0GptgqC168nifUubjR2FKxek5Q3T0IfjWhoPXcTmys2WBOQHY8lV3Bpknhd1u
+         +DY75RQc20VhrpbE6q/TwFEVJvJTf8iNlP0Ck1Wsc/0/Z+17qis2Rs7U8Y/Trk8o9JhN
+         5Jo9X4Msx71VTzae/b2FPQHDpZ39K4LwCQOK+T2rTcWAmHHS3IRxRzNB60UBjhBCwe6/
+         egCW7EMkrosaoF9wb28PHaotbmyLk8Vne/lkNhnzR1Na4vN/BddzjK1TJEqRNjxAWPG2
+         obEg==
+X-Forwarded-Encrypted: i=1; AKwUvBxGeylT+/Vtq3do6WVbOHEWTkLn3mb2bu2qI9jdQuJEE5zXDRgCHCMZMv7PbsbqTbH9InY=@vger.kernel.org
+X-Gm-Message-State: AFuF++l1mRoM2K0vc2eTfixtLIwBSkBez+HzGcKQJYumt6lNHaggc4ud
+	sHvimWED5Hn1GZeeIRk574MF11kEYsRb+OsU28lE25T85gu0wPlVd6jO
+X-Gm-Gg: AYBFou3rfQ8uqkiRAwRefyZpOvpYZWY96wiNKY9RtSbecf7N0iXV6wOVABcmLyRoK2Q
+	yQav9esuLS+uKSpdR7wjrAozH+D+6g9HMJQ+/ovwXVAoxVI9zt6719ljPMUoNe8gH+XRZ9SJ7RE
+	OMjRcrtl79d4yaAwOGLfT30ih9PAzZGky07BP524JvzOKGDedp7f6JRU61orlHJstiNVoj/0Os9
+	Z4qwelYVrFsym5H4jrA8gKLn+pvAotWv2WAzBpV2icgpfIrUpG0KZMUuxxxVRDy4uPjQ1R4alFc
+	AtNI1bxkI89CNmguOgS7IuzhsFQYkTUpLXmzr12SRHLfVOFbeiuteHp16aJhb82EppU7cb4uacj
+	dPPO0hOJhBn0RT8PF1sqByp988DLutptpEcQRGxI6JSSUYV18a7dJrjH1wDGSfR2cke1MfTDthI
+	iCKekXkYo2hAWs4F0G9jBrxsaTbLt5HeLILrng+bscIZxflJehcMeK30kMv0GzR1qkjS4d7AFHb
+	9eLLsb9jveU4byanBCTVaXfooETVK2Tif2BsU0O8HlUkvlxKpqrPpM0eFVB5CT7lGBm7ZQXxPVv
+	Y9s=
+X-Received: by 2002:a05:6a00:330c:b0:86b:43f6:67c3 with SMTP id d2e1a72fcca58-87e99087d5cmr1123543b3a.18.1790228153413;
+        Wed, 23 Sep 2026 22:35:53 -0700 (PDT)
+Received: from localhost ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1d5bfc87sm2268080b3a.25.2026.09.23.22.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2026 22:35:53 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 05:35:52 +0000
+Message-Id: <DLNAWZH4J2VL.35H5TXY9SPLM8@gmail.com>
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next 2/2] samples/bpf: Add memcg async reclaim
+ example
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Hui Zhu" <hui.zhu@linux.dev>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "JP Kobryn" <inwardvessel@gmail.com>, "Shakeel
+ Butt" <shakeel.butt@linux.dev>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
+ <shuah@kernel.org>, "David Hildenbrand" <david@kernel.org>, "Barry Song"
+ <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>
+In-Reply-To: <de7adb6bafa3b808e29c0630f7ed9a2003e5e447.1790222105.git.zhuhui@kylinos.cn>
+References: <cover.1790222105.git.zhuhui@kylinos.cn> <de7adb6bafa3b808e29c0630f7ed9a2003e5e447.1790222105.git.zhuhui@kylinos.cn>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,111 +95,22 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2026-09-24 at 03:10 +0000, Alexei Starovoitov wrote:
+On Thu, Sep 24, 2026 at 12:04 PM Hui Zhu <hui.zhu@linux.dev> wrote:
+> Add an example of BPF-driven async proactive reclaim, keeping the
+> complex monitoring scenario out of the selftests. A BPF program arms a
+> bpf_wq/timer chain that watches the workingset refaults (file and anon)
+> of a monitor cgroup; when they grow past a threshold, a round of
+> bpf_proactive_reclaim() batches reclaims a target cgroup, re-arming the
+> work queue until the round budget is spent.
+[...]
+>  samples/bpf/memcg_async_reclaim.bpf.c  |  349 ++++++++
+>  samples/bpf/memcg_async_reclaim.h      |   39 +
+>  samples/bpf/memcg_async_reclaim_user.c | 1141 ++++++++++++++++++++++++
+>  5 files changed, 1539 insertions(+), 1 deletion(-)
 
-...
+No. We're not adding new samples to samples/bpf.
+1200 lines were overkill as a selftest. 1500 lines as a sample
+are not better.
+samples/bpf/ are dead. We do not add new things there.
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index d4a980140b48..9fbef7504e51 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -749,6 +749,46 @@ static void emit_indirect_jump(u8 **pprog, int bpf_r=
-eg, u8 *ip)
->  	*pprog =3D prog;
->  }
-> =20
-> +static void __emit_indirect_call(u8 **pprog, int reg, bool ereg)
-> +{
-> +	u8 *prog =3D *pprog;
-> +
-> +	if (ereg)
-> +		EMIT1(0x41);
-> +
-> +	EMIT2(0xFF, 0xD0 + reg);
-> +
-> +	*pprog =3D prog;
-> +}
-> +
-> +/* call *bpf_reg */
-> +static int emit_indirect_call(u8 **pprog, int bpf_reg, u8 *ip)
-> +{
-> +	u8 *prog =3D *pprog;
-> +	int reg =3D reg2hex[bpf_reg];
-> +	bool ereg =3D is_ereg(bpf_reg);
-> +	int err =3D 0;
-> +
-> +	if (cpu_feature_enabled(X86_FEATURE_INDIRECT_THUNK_ITS)) {
-> +		OPTIMIZER_HIDE_VAR(reg);
-
-This is quite unexpected. LLM points to [1].
-A comment would be nice.
-
-[1] commit be8a096521ca ("x86,bpf: Avoid IBT objtool warning")
-
-> +		err =3D emit_call(&prog, its_static_thunk(reg + 8*ereg), ip);
-> +	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
-> +		EMIT_LFENCE();
-> +		__emit_indirect_call(&prog, reg, ereg);
-> +	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
-> +		OPTIMIZER_HIDE_VAR(reg);
-> +		if (cpu_feature_enabled(X86_FEATURE_CALL_DEPTH))
-> +			err =3D emit_call(&prog, &__x86_indirect_call_thunk_array[reg + 8*ere=
-g], ip);
-> +		else
-> +			err =3D emit_call(&prog, &__x86_indirect_thunk_array[reg + 8*ereg], i=
-p);
-> +	} else {
-> +		__emit_indirect_call(&prog, reg, ereg);
-> +	}
-> +
-> +	*pprog =3D prog;
-> +	return err;
-> +}
-> +
->  static void emit_return(u8 **pprog, u8 *ip)
->  {
->  	u8 *prog =3D *pprog;
-> @@ -2941,6 +2981,24 @@ static int do_jit(struct bpf_verifier_env *env, st=
-ruct bpf_prog *bpf_prog, int *
->  			break;
->  		}
-> =20
-> +			/* callx: call of a bpf subprog whose address is in dst_reg */
-> +		case BPF_JMP | BPF_CALL | BPF_X:
-> +			/*
-> +			 * The verifier makes sure that callees of callx are
-> +			 * not tail call reachable, hence unlike a direct call
-> +			 * of a subprog there is no need to pass
-> +			 * tail_call_cnt_ptr in rax.
-> +			 */
-> +			if (priv_frame_ptr) {
-> +				push_r9(&prog);
-> +				ip +=3D 2;
-
-LLM tells me the following:
-
-  This matters when emit_indirect_call() emits a relative call to a mitigat=
-ion thunk:
-        =20
-    displacement =3D thunk_address - (call_address + 5)
-
-  Without ip +=3D 2, that displacement would be calculated from the
-  push=E2=80=99s address, and the call would land two bytes past the intend=
-ed
-  target.
-
-Which is not obvious at all.
-Is it the reason for +=3D 2?
-
-> +			}
-> +			if (emit_indirect_call(&prog, insn->dst_reg, ip))
-> +				return -EINVAL;
-> +			if (priv_frame_ptr)
-> +				pop_r9(&prog);
-> +			break;
-> +
->  		case BPF_JMP | BPF_TAIL_CALL:
->  			if (imm32)
->  				emit_bpf_tail_call_direct(bpf_prog,
-
-...
+pw-bot: cr
