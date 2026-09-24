@@ -1,64 +1,64 @@
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDDB3F54AA
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D17A45FFCB
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790267532; cv=none; b=qpO5lrqcoi669uMwg+k1fIdC0adZbdUOCg1o+zt+NRryBUrLUxBjQoVmVznpRN2vw4xZn8QJBhyO7N0zRpfBc3HhrVzxZu8HWxMfTZ8HtkK2mVxGHodk7KxIG7DDVsg+NyJCBKuKQWMPI+4ver6oHnjqhQ9RFFl/wzIuvxDnptI=
+	t=1790267535; cv=none; b=WKx53hqs1gdEHXVT9x/hdd36SMnnLD7RphJwWnBaqn0TdsPAe1VyIC56wTZeAqVJruccdcDvRzJwvVsNCDyFcQ7bo54apXmRSTkwHmH3DHAIKISvBT5mLRN6vceHsKu0nKYBSv4rNCb1SBTu8PRGqlkfotwkePvzUD/DSiWt904=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790267532; c=relaxed/simple;
-	bh=yGmfcRQuAlDYjHOZ6G4NvmEXiBdGzwlI0QgSn6u2M50=;
+	s=arc-20240116; t=1790267535; c=relaxed/simple;
+	bh=EpWCTiql6Spq91zn8gNDMTUon3VT9ZdA/KpGVn+Qgsk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gtxirmtd2718ATDKQCdoOHIu60PfsyDKnmxQ1R3e+h62cSdmXUD8ZW44szXFali9oHB1+LMH8GNF3C9BTWX3zXy4/cS9YJBqhjP517ChlDwavdbXGkpG3zt1JO0A/SBoQ/eDLYt7HHuCz5DkCprKUa8xxvdsVlxkN4WziujWMz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J70ERq0x; arc=none smtp.client-ip=74.125.225.139
+	 MIME-Version; b=LItnVs3AQbsGWC6fg4gvIfEeJMpAVe2zCUoF3xjWNwuuDxzrSkTxFYlSD93OI7K9R5MNObaXD0smCbhPcTnEBCDD3DGeTaVUhxGQp+eJkhhWUGqndphMijDwnz2qSngn+zW5g4xx62lvnXfcbIQunfOlVDGXGN2jF8pVZqF+3oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UVhTle71; arc=none smtp.client-ip=74.125.225.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J70ERq0x"
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49cfcf2548aso205265e9.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:32:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UVhTle71"
+Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-49e667e3c45so44505e9.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790267529; x=1790872329; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790267531; x=1790872331; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=aOZooNKgByCZbfoaTR2XRTj1QZk5JOJf8u0u9P8k5ts=;
-        b=J70ERq0x73ato3kvx2tjLxdkXLCuHBhXuve8rEl6iwFRSaemWq1MDomqxZ8Z0voRAb
-         zXcznU7wxvOLE4cnybLgp+Rx+OOFCg5vLlWbT3P66StpiHZlPOLLNH4FcAkx3j19pORN
-         H3mKHr59A9L0ZPY56eo2Gig+GvMOhu1XBF60V73/oiVP+3pINBFiGLYn61zeYS2fQaYO
-         SgbXkPhohC97yuGlQOamCx/NsCpcyAxtBYlDdArZ1cyMg+DH1bagc6KvnnJfPq7wS924
-         qy80i3yoxU4yx58vSQNHwBq9govGqKmRzN9FGXfBFxfqYWLGBgbVK8Hwqgt0K9agImkC
-         8o6A==
+        bh=o7xOs5G97q23Z21TCTJP754YDWR48cuVYvjR0e+H1bA=;
+        b=UVhTle71ORsIk3YtsTv0rEn1y0lOoIhppptIus5nZie/e9/vlC0dbTqJX2NbYGKv3H
+         +iINRmhS/mVbjHSsUqkTaShc2H2DAhwUo1rpFMrlZ/VGNWdg+srgYMJbT86RYaBsXNZU
+         udGTY4SGqhIZRNaU9Nf4S0h2/AqbZbe0XAcTZLmzS8siFMEYoAbZN+jHMr+bUS7WmveB
+         4MgiWZG8ukViil0cluq4DFRMWyiefcTiKWOFyLZDM1C98+34LHz1t6fnJZQwLxP4ZJKg
+         T0vi2tk3VyYZozJbxp5WQLmywGtvp8fpK0MIh79Rym6IfONLnMGEgDynPMNfAhYc37hR
+         GYlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790267529; x=1790872329;
+        d=1e100.net; s=20260707; t=1790267531; x=1790872331;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=aOZooNKgByCZbfoaTR2XRTj1QZk5JOJf8u0u9P8k5ts=;
-        b=Fh44xtHpqHNf8/EgdREEed5JYgaF3p6jmpw8E+umOrcohCK0HCb4PXR6gsjQszlxF2
-         8Z0Qmxy6xfHFuNrnoqN7fySe12UnHe6ST84nVodt9/HGfH2b60Vyzb0yuRalB4G4x+1A
-         E+W+wzL75SJaLgzQ1H4+R3BAou3pFTz4oRedyaQJCNmqzbQWpm9ngCWAohd3o/qYNmbF
-         +uECxvoD5WmqzsRv+4zIKM97vqbrdONXrqoGh/Zm9XRNw8R/f1dCheO1w6ILVpbVj2Na
-         yR0aSOSBAcO+2KWvJWM2R61RYGQymog2HZYj0EeEH2K8CKyJ5dU1JEk+sRdRXnf2v6eN
-         MRGQ==
-X-Gm-Message-State: AFuF++nhPajHy03AfimERE8u12+tcjvoMi2gS7lir61UTohv0t+lMe5H
-	Obrd55LPjh0slc1VJJNRifibxDLZfpsImpV90K8y+J2Y3Eaejqo1B5setQMIfOpC
-X-Gm-Gg: AYBFou1Z3Vpb673nvpec1F4XweqeK0wNddcA92NexwmuWf7d8aU8EPaEWV9+Pm2LUUE
-	Sam5XvJ0HF6B0T6jcZ8b8RzYOqaDzEmJCj83V3EcNpvAl4U+GBQcoPLASXtVJj8hOFBuNu9iJSR
-	mA53qWK8MOskZ3xsEnNXpDBHrlghLkinar/7CagW/AUkg05yIL7iaig7IDfgBQm2XvQWrWr2Lfx
-	5o/iXKWdXCEFejQHGhMpsxkRVOFcn900YSFccYv37GNJ0YRmDFne69Ij5cf1NMEvHECIPnxsXT2
-	9/RZd70e4z4NDIYb4j0mJyjWmh5DmfKtQ01hSZkfEzPeSGdr8Ga2OV4LiTsfpxLYqsh06KOaYrV
-	GJZQSeae3tHiIPqo5dDx2ZiuEqrkDFjM6YhOolHQZdWCGYm00OPjSlTKY327IhumiA4FbTr948z
-	CW7TREg5zNdDZnzxyy82A12xL4mjRlhh76eI/HrREsjMfZGt/MMa49VkcRyAXP5arPfA+aQYuWA
-	AwWYHm9O2OjXP0Ku3eKPHWIehaDvf5EEHWnTyVulvP+4XM5+s9Q4Q0BHJohustTv+6vGTYhBbdo
-	q0MGyqpDLO2RJ9KudZahULkpdm9j8BnJY5nd/1JUwZL+mcAP
-X-Received: by 2002:a05:600c:6287:b0:49d:827:e5b6 with SMTP id 5b1f17b1804b1-49fe7babaadmr44365295e9.20.1790267528985;
-        Thu, 24 Sep 2026 09:32:08 -0700 (PDT)
+        bh=o7xOs5G97q23Z21TCTJP754YDWR48cuVYvjR0e+H1bA=;
+        b=GlPeR3xMk/L560YVqfDUIeLc4KJv0I9uWuM/SuVJmCFK1BBF90ZBYGZ34EwKQWlSwd
+         FScVEj71M3Yx3SRdQN8lWxkTT8Xrv2R/nv4F6HxMVpq6L3v/5AK6GQlBUJRm+pI/btEC
+         fnaIyVF7A1NeUINRbCmjO6JVBFV/wxSs/DN9F07ozhRCpzslEROsMJTxidKY2/57K6Sb
+         QqLS2owyXUtHnHXkYDGeWC8fgrLCLg9RbGUSGZwQKVsShmG0HSNPYmTgVn9P/FmWIIqY
+         mBzdWlCmT+6wqBViYOlEyiXaTIwyv1xMuNILC8xekStgaCE+7l8HG7xi50zGODbl7ubf
+         ovDg==
+X-Gm-Message-State: AFuF++kXk0TR9yJyz+tydvsM41Mv2rLXNQ3S0bWt46jJMZSmWfwmuDsl
+	Opxd9XS+pOkuflHZCRgDLQzBr18J6THBzP7auDbC+WDfYm35GMQYsl4og4rTheWf
+X-Gm-Gg: AYBFou0HRtQAWCGZdNdwhWeyutQlWz8uHaotebkD+SOGRzjuzjBY9L/BW0ZtBMILzN4
+	oiXrlMn75Id05kjH6WHGf9fobCEv4bYSAv71+07dsxUKJxR6YIQ0hUrCZ2dqvqOHeE9wyCquxzN
+	fOhfDwvSATODq21Lp8ZZ2gvSubY0/S7ytW26hHm46WE3g31/pKfZnj32IwmgEapfGw7vE5wiG+a
+	xcuGbBesrudcU/uvhT4aDceJbU1Ly/MM1kutSbeK+EROTqV4SD65SnfZJdbuMEzUQ81l5cmY2VW
+	oBexkRzxsBT2TpU6aiGo31R3F+wgb5XY+zfAQkyIFxrZIL+iXIFpFh5AgMUS3GfFuA4eBbGET5d
+	cV69ZrSHjVdN7zInydzXZ4N/VAyp/SBwiLjNINEqKhfim23+80mfw/Lt0Y6QALyVlmaS3b6JmaZ
+	VEBs+D4ZfxiW9w8n4yBJdTUEz3/LyEu82OfPtnZ3QMqy15QugtgGb7ZP6eiDS/tSaSUSS8weavK
+	mjk0SZsb/7x0IBr5gbCBTWqNYy/rxTRfbiubtRF5NKJhtZ39FCPkqPirOgkBr/KWX7CcjXGbj2X
+	/abNipSQ+3OkWfq7RYMlhLBi8Dl3WJw4AeKkKkxO5w3PsDTp
+X-Received: by 2002:a05:600c:6092:b0:49e:645e:2616 with SMTP id 5b1f17b1804b1-49fe66c5275mr47822755e9.5.1790267531001;
+        Thu, 24 Sep 2026 09:32:11 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a34a314sm174744f8f.6.2026.09.24.09.32.08
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cd4271sm120099965e9.5.2026.09.24.09.32.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:32:08 -0700 (PDT)
+        Thu, 24 Sep 2026 09:32:10 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 12/18] bpf: Size the per-frame verifier structures for a 2 KiB stack
-Date: Thu, 24 Sep 2026 18:31:26 +0200
-Message-ID: <20260924163144.1945455-13-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 13/18] bpf: Bound program stack use by a per-program limit
+Date: Thu, 24 Sep 2026 18:31:27 +0200
+Message-ID: <20260924163144.1945455-14-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924163144.1945455-1-memxor@gmail.com>
 References: <20260924163144.1945455-1-memxor@gmail.com>
@@ -81,176 +81,432 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8672; i=memxor@gmail.com; h=from:subject; bh=yGmfcRQuAlDYjHOZ6G4NvmEXiBdGzwlI0QgSn6u2M50=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWur75uW0ge7nKbEMO3UmdLwdMvmjmMVTR2pv4KvCTe88 Au0Sv7XUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgImk8TEyfL+7w8tb/txtlQ1W ER3pcvcKHyyw9NOutK/a6cGTFLq8iZFhbfuZkKpnK+PlRFQ2Wq503MnzwrXYZ/0sVwWT93YK7dv YAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=20329; i=memxor@gmail.com; h=from:subject; bh=EpWCTiql6Spq91zn8gNDMTUon3VT9ZdA/KpGVn+Qgsk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWur71ud5QcVN4UxnWLm6ZN6ePtV26eyQ527JA5slHZfW rTIfpVNRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTAG5yAiND5+ZA3f2yTX3nZ84P nNhyYKViQKj0wQ/HG6K39P69o1BSy/BX/l3L6cKm/c/397//87jU9Ab72va13x2PfubZYnjojZA bFwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The verifier keeps a few structures whose size follows the deepest
-frame a program may have: the backtracking and scratched-slot bitmaps,
-the jump history slot index and the clamp of the liveness masks. They
-are all expressed through MAX_BPF_STACK_SLOTS, which derives from
-MAX_BPF_STACK, the frame size of the interpreter.
+The verifier checks every stack access and the combined depth of a call
+chain against MAX_BPF_STACK, which is also the frame size of the
+interpreter and the frame that JITs without subprogram tail call
+support set up for tail-call targets. A JIT that lays out frames of any
+size and lets a tail-called program set up its own frame does not need
+that limit; it only needs the verifier to bound how much stack a
+program uses in total.
 
-Introduce MAX_BPF_STACK_JIT, the stack budget a program may get on a
-JIT that can lay out frames of any size, and derive those structures
-from it so that a frame may be as deep as that budget. Nothing grants
-the budget yet, so no program verifies differently; the only visible
-change is that the liveness log prints a whole-frame read up to the new
-depth, so the three selftests matching such reads are updated.
+Add bpf_jit_supports_large_stack() for a JIT to claim that, and give
+each program its budget through bpf_prog_stack_limit(): MAX_BPF_STACK_JIT
+when the JIT is requested, the program is not offloaded and the JIT
+supports large stacks as well as tail calls from subprograms,
+MAX_BPF_STACK otherwise. The latter is what lets a tail-called program
+set up its own frame: without it, do_misc_fixups() gives every program
+with tail calls a MAX_BPF_STACK frame, which a deeper frame verified
+against the larger budget would overrun. The verifier keeps the budget
+in env->stack_limit and uses it for the bounds of fixed and variable
+offset stack accesses, for unprivileged stack pointer arithmetic and its
+speculation limit, and for the combined and private stack depth checks.
+A frame may use any part of its program's budget. The interpreter paths
+keep MAX_BPF_STACK: a program whose main frame is deeper falls back to
+the JIT-required path of bpf_prog_select_runtime() and one with deeper
+subprogram frames is rejected when patching calls for the interpreter.
+The extra stack that may_goto and the timed may_goto instrumentation
+add below a frame is, as before, not counted against the budget of a
+JITed program and rejected past MAX_BPF_STACK for an interpreted one.
 
-The spill tracker of the liveness analysis keeps a table entry per
-instruction and tracked slot, so it follows more than the 64 slots of a
-MAX_BPF_STACK frame only while that table stays within what 64 slots
-need for the largest program; a subprog of a million instructions keeps
-64, one of a quarter million may track all 256. This bounds the table
-at its old worst case of 640 MiB instead of letting a single deep store
-push it past what kvmalloc() serves.
+Stack liveness treats a read through a pointer of unknown offset, or a
+call passing a frame pointer to a subprogram, as reaching the whole
+frame, and widens the masks of that frame to the deepest half-slot such
+a read can cover. Bound that by the program's budget too: no access
+past it is accepted, so a program kept at MAX_BPF_STACK carries masks
+of two words for such frames, as before, instead of the eight that
+MAX_BPF_STACK_JIT needs. The three selftests matching a whole-frame
+read in the liveness log accept either depth.
 
-The backtracking and scratched-slot bitmaps grow from one to four
-words per frame, a fixed few hundred bytes per verifier environment.
-tmp_str_buf, which formats a frame's slot list for the log, grows from
-320 to 1408 bytes so that all 256 slots still fit, and the log's line
-buffer from 1 to 2 KiB so that a line built from it is not cut; the
-environment stays within its 64 KiB allocation. The liveness masks are
-only as wide as the stack a frame uses, so most frames cost the same as
-before; a frame that is read as a whole, through a pointer of unknown
-offset or by bpf_loop() with two callbacks, now carries masks of eight
-words, 192 bytes per instruction per frame instead of 48. Measured over
-the 5075 selftest programs, that is 0.2% of the total peak verifier
-memory: strobemeta_bpf_loop and pyperf600_bpf_loop grow by 11% (1.2 MiB
-and 0.6 MiB), a few dozen small programs by 40 to 100 KiB each,
-everything else is unchanged. The next patch bounds such reads by the
-program's budget, so this cost is only paid once a JIT grants it.
+bpf_clone_redirect() transmits from inside the program, and a tc egress
+or lwt_xmit program that redirects to its own device runs again on top
+of its own frame until the datapath's recursion limit drops the packet,
+ten frames deep. Ten MAX_BPF_STACK frames fit the kernel stack as they
+always did; ten MAX_BPF_STACK_JIT frames would not, so a program that
+calls bpf_clone_redirect() keeps MAX_BPF_STACK. The redirect helpers
+that transmit after the program has returned leave no frame behind and
+do not affect the budget. Nesting through other attach points is not
+accounted, as before.
+
+The spill tracker of the liveness analysis follows no slot past the
+budget either.
+
+The capability is a boolean and the budget a single constant, in the
+style of the other bpf_jit_supports_*() queries, rather than a per JIT
+size: the budget is meant to be the same everywhere it is raised, so
+that programs verify identically across those architectures.
+
+No JIT declares support yet, so every program keeps its 512-byte budget.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h                  | 26 ++++++++++++-------
- include/linux/filter.h                        |  5 ++++
- kernel/bpf/liveness.c                         | 17 ++++++++++--
- .../selftests/bpf/progs/verifier_live_stack.c |  6 ++---
- 4 files changed, 39 insertions(+), 15 deletions(-)
+ include/linux/bpf_verifier.h                  | 20 ++++++++
+ include/linux/filter.h                        |  1 +
+ kernel/bpf/core.c                             | 13 +++++
+ kernel/bpf/liveness.c                         | 51 +++++++++++--------
+ kernel/bpf/verifier.c                         | 46 +++++++++++++----
+ .../selftests/bpf/progs/verifier_live_stack.c |  6 +--
+ 6 files changed, 102 insertions(+), 35 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 3ff1d4f753d3..f7964410f330 100644
+index f7964410f330..f151feeaf3a5 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -19,11 +19,12 @@
-  * that converting umax_value to int cannot overflow.
-  */
- #define BPF_MAX_VAR_SIZ	(1 << 29)
--/* size of tmp_str_buf in bpf_verifier.
-- * we need at least 306 bytes to fit full stack mask representation
-- * (in the "-8,-16,...,-512" form)
-+/*
-+ * size of tmp_str_buf in bpf_verifier.
-+ * we need at least 1399 bytes to fit full stack mask representation
-+ * (in the "-8,-16,...,-2048" form)
-  */
--#define TMP_STR_BUF_LEN 320
-+#define TMP_STR_BUF_LEN 1408
- /* Patch buffer size */
- #define INSN_BUF_SIZE 32
- 
-@@ -243,12 +244,13 @@ enum bpf_stack_slot_type {
- #define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
- 
- /*
-- * Largest number of BPF_REG_SIZE stack slots a single frame can have. A frame
-- * may use any part of the MAX_BPF_STACK budget; check_max_stack_depth()
-- * enforces the bound on the combined depth of frames sharing the kernel stack
-- * and on each frame using a private stack.
-+ * Largest number of BPF_REG_SIZE stack slots a single frame can have, sized
-+ * for the largest stack budget any JIT supports. A frame may use any part of
-+ * its program's budget; check_max_stack_depth() enforces the budget on the
-+ * combined depth of frames sharing the kernel stack and on each frame using
-+ * a private stack.
-  */
--#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK / BPF_REG_SIZE)
-+#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK_JIT / BPF_REG_SIZE)
- 
- /* 4-byte stack slot granularity for liveness analysis */
- #define BPF_HALF_REG_SIZE	4
-@@ -717,7 +719,11 @@ struct bpf_insn_aux_data {
- #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
- #define MAX_USED_BTFS 64 /* max number of BTFs accessed by one BPF program */
- 
--#define BPF_VERIFIER_TMP_LOG_SIZE	1024
-+/*
-+ * Longest line the verifier log can carry: a full stack mask of
-+ * MAX_BPF_STACK_SLOTS slots, see TMP_STR_BUF_LEN, plus its prefix.
-+ */
-+#define BPF_VERIFIER_TMP_LOG_SIZE	2048
- 
- struct bpf_verifier_log {
- 	/* Logical start and end positions of a "log window" of the verifier log.
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 4f0662e42897..fe72e71984e5 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -98,6 +98,11 @@ struct ctl_table_header;
- 
- /* BPF program can access up to 512 bytes of stack space. */
- #define MAX_BPF_STACK	512
-+/*
-+ * Stack budget of a program on a JIT that lays out frames of that size.
-+ * The interpreter and JITs without such support keep MAX_BPF_STACK.
-+ */
-+#define MAX_BPF_STACK_JIT	2048
- 
- /* Helper macros for filter block array initializers. */
- 
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 1d83a4cf6ec5..25e95387e0e1 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -15,7 +15,7 @@
-  * Half-slot 0 covers [fp-4, fp), half-slot 1 covers [fp-8, fp-4), and so on,
-  * hence FRAME_HALF_SPIS - 1 is the deepest half-slot a frame can have.
-  */
--#define FRAME_HALF_SPIS		(MAX_BPF_STACK / BPF_HALF_REG_SIZE)
-+#define FRAME_HALF_SPIS		(MAX_BPF_STACK_JIT / BPF_HALF_REG_SIZE)
- #define FRAME_MAX_WORDS		BITS_TO_LONGS(FRAME_HALF_SPIS)
- 
- /* Masks tracked for each instruction of a frame */
-@@ -1021,6 +1021,19 @@ static void arg_padd(struct arg_track *at, s64 delta)
- 	}
+@@ -1019,6 +1019,8 @@ struct bpf_verifier_env {
+ 	u32 prev_jmps_processed, jmps_processed;
+ 	/* maximum combined stack depth */
+ 	u32 max_stack_depth;
++	/* stack budget of the program, see bpf_prog_stack_limit() */
++	u32 stack_limit;
+ 	/* total verification time */
+ 	u64 verification_time;
+ 	/* maximum number of verifier states kept in 'branching' instructions */
+@@ -1278,6 +1280,24 @@ static inline int bpf_get_spi(s32 off)
+ 	return (-off - 1) / BPF_REG_SIZE;
  }
  
 +/*
-+ * Slots the spill tracker may follow for a subprog of @len instructions
-+ * without its per-instruction tables costing more than they could for the
-+ * largest program while every frame stayed within MAX_BPF_STACK: as many
-+ * entries as 64 slots need for BPF_COMPLEXITY_LIMIT_INSNS instructions.
++ * Stack a program may use in total: combined over the frames of a call
++ * chain on the kernel stack, or per frame on a private stack. Any single
++ * frame may reach that deep. Only a JIT that lays out such frames may go
++ * beyond MAX_BPF_STACK, the interpreter's frame size, and only one whose
++ * tail calls let the target set up its own frame: without subprogram
++ * tail calls, do_misc_fixups() gives every program with tail calls a
++ * MAX_BPF_STACK frame, which a deeper frame would overrun.
 + */
-+static u32 spill_slots_affordable(int len)
++static inline u32 bpf_prog_stack_limit(const struct bpf_prog *prog)
 +{
-+	u32 base = MAX_BPF_STACK / BPF_REG_SIZE;
-+
-+	return max_t(u32, base, base * BPF_COMPLEXITY_LIMIT_INSNS / len);
++	/* an offloaded program never runs on the host JIT, whatever it supports */
++	if (prog->jit_requested && !bpf_prog_is_offloaded(prog->aux) &&
++	    bpf_jit_supports_large_stack() && bpf_jit_supports_subprog_tailcalls())
++		return MAX_BPF_STACK_JIT;
++	return MAX_BPF_STACK;
 +}
 +
+ static inline struct bpf_func_state *bpf_func(struct bpf_verifier_env *env,
+ 					      const struct bpf_reg_state *reg)
+ {
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index fe72e71984e5..e42eccb0990e 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1252,6 +1252,7 @@ bool bpf_jit_supports_ptr_xchg(void);
+ bool bpf_jit_supports_arena(void);
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
+ bool bpf_jit_supports_private_stack(void);
++bool bpf_jit_supports_large_stack(void);
+ bool bpf_jit_supports_timed_may_goto(void);
+ bool bpf_jit_supports_fsession(void);
+ 
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 273f74068068..a09aa0082393 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3483,6 +3483,19 @@ bool __weak bpf_jit_supports_private_stack(void)
+ 	return false;
+ }
+ 
++/*
++ * Return TRUE if the JIT lays out frames of up to MAX_BPF_STACK_JIT bytes.
++ * Its prologue, epilogue and tail call sequences must encode such frame
++ * sizes and a private stack must be sized from the program's depth. The
++ * budget is only granted alongside bpf_jit_supports_subprog_tailcalls(),
++ * whose tail calls land before the target sets up its own frame; see
++ * bpf_prog_stack_limit().
++ */
++bool __weak bpf_jit_supports_large_stack(void)
++{
++	return false;
++}
++
+ void __weak arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie)
+ {
+ }
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 25e95387e0e1..16fb7dc43726 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -36,9 +36,9 @@ enum {
+  * relative index @i is at &bits[(i * FM_MASK_CNT + kind) * words]. A
+  * half-slot at or past @words * BITS_PER_LONG is never read by this frame,
+  * hence never live. An instruction that may read the whole frame, such as a
+- * call passing a frame pointer to another subprog, widens the array to
+- * FRAME_MAX_WORDS, so that the read cannot lose half-slots to a later
+- * widening.
++ * call passing a frame pointer to another subprog, widens the array to the
++ * program's stack budget, the deepest an accepted program can reach, so
++ * that the read cannot lose half-slots to a later widening.
+  */
+ struct frame_masks {
+ 	u32 words;
+@@ -264,12 +264,17 @@ static int mark_stack_write(struct func_instance *instance, u32 frame, u32 insn_
+ 
  /*
+  * Mark every half-slot of @frame as possibly read by @insn_idx. This widens
+- * the masks to the maximum width: a full read recorded at a narrower width
+- * would leave the bits added by a later widening clear and lose part of it.
++ * the masks to the program's stack budget: a full read recorded at a narrower
++ * width would leave the bits added by a later widening clear and lose part of
++ * it. No verifier state holds a slot past the budget, so no liveness query
++ * reaches beyond it; an access past the budget in unreachable code may still
++ * widen a frame's masks further, which is harmless.
+  */
+-static int mark_stack_read_all(struct func_instance *instance, u32 frame, u32 insn_idx)
++static int mark_stack_read_all(struct bpf_verifier_env *env, struct func_instance *instance,
++			       u32 frame, u32 insn_idx)
+ {
+-	return mark_stack_read(instance, frame, insn_idx, 0, FRAME_HALF_SPIS - 1);
++	return mark_stack_read(instance, frame, insn_idx, 0,
++			       env->stack_limit / BPF_HALF_REG_SIZE - 1);
+ }
+ 
+ /* Accumulate @src, a mask @src_words wide, into may_read of @frame at @insn_idx */
+@@ -1038,10 +1043,10 @@ static u32 spill_slots_affordable(int len)
   * Number of 8-byte spill slots to track for the instructions in [@start, @end):
   * the 64 slots of a MAX_BPF_STACK frame, which the tracker has always
-@@ -1793,7 +1806,7 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
- 	int end = env->subprog_info[subprog + 1].start;
- 	int po_end = env->subprog_info[subprog + 1].postorder_start;
- 	int len = end - start;
--	u32 nslots = subprog_spill_slots(env, start, end);
-+	u32 nslots = min(subprog_spill_slots(env, start, end), spill_slots_affordable(len));
- 	struct arg_track (*at_in)[MAX_AT_TRACK_REGS] = NULL;
- 	struct arg_track at_out[MAX_AT_TRACK_REGS];
- 	struct arg_track *at_stack_in = NULL;
+  * followed, or the deepest 8-byte stack access made directly through R10 when
+- * that reaches further. Spills and fills are compiled as direct R10 accesses,
+- * so the count covers them whatever the frame size; a fill through a derived
+- * pointer that reaches past it is treated as imprecise, as one past the frame
+- * always was.
++ * that reaches further, up to the program's stack budget. Spills and fills are
++ * compiled as direct R10 accesses, so the count covers them whatever the frame
++ * size; a fill through a derived pointer that reaches past it is treated as
++ * imprecise, as one past the frame always was.
+  */
+ static u32 subprog_spill_slots(struct bpf_verifier_env *env, int start, int end)
+ {
+@@ -1064,7 +1069,8 @@ static u32 subprog_spill_slots(struct bpf_verifier_env *env, int start, int end)
+ 		if (base == BPF_REG_FP && insn->off < 0)
+ 			deepest = max(deepest, -insn->off);
+ 	}
+-	return clamp_t(u32, DIV_ROUND_UP(deepest, 8), MAX_BPF_STACK / BPF_REG_SIZE, MAX_BPF_STACK_SLOTS);
++	return clamp_t(u32, DIV_ROUND_UP(deepest, 8), MAX_BPF_STACK / BPF_REG_SIZE,
++		       env->stack_limit / BPF_REG_SIZE);
+ }
+ 
+ /*
+@@ -1456,7 +1462,7 @@ static int record_stack_access_off(struct func_instance *instance, s64 fp_off,
+  * 'arg' is FP-derived argument to helper/kfunc or load/store that
+  * reads (positive) or writes (negative) 'access_bytes' into 'use' or 'def'.
+  */
+-static int record_stack_access(struct func_instance *instance,
++static int record_stack_access(struct bpf_verifier_env *env, struct func_instance *instance,
+ 			       const struct arg_track *arg,
+ 			       s64 access_bytes, u32 frame, u32 insn_idx)
+ {
+@@ -1466,7 +1472,7 @@ static int record_stack_access(struct func_instance *instance,
+ 		return 0;
+ 	if (arg->off_cnt == 0) {
+ 		if (access_bytes > 0 || access_bytes == S64_MIN)
+-			return mark_stack_read_all(instance, frame, insn_idx);
++			return mark_stack_read_all(env, instance, frame, insn_idx);
+ 		return 0;
+ 	}
+ 	if (access_bytes != S64_MIN && access_bytes < 0 && arg->off_cnt != 1)
+@@ -1485,7 +1491,8 @@ static int record_stack_access(struct func_instance *instance,
+  * When a pointer is ARG_IMPRECISE, conservatively mark every frame in
+  * the bitmask as fully used.
+  */
+-static int record_imprecise(struct func_instance *instance, u32 mask, u32 insn_idx)
++static int record_imprecise(struct bpf_verifier_env *env, struct func_instance *instance,
++			    u32 mask, u32 insn_idx)
+ {
+ 	int depth = instance->depth;
+ 	int f, err;
+@@ -1494,7 +1501,7 @@ static int record_imprecise(struct func_instance *instance, u32 mask, u32 insn_i
+ 		if (!(mask & 1))
+ 			continue;
+ 		if (f <= depth) {
+-			err = mark_stack_read_all(instance, f, insn_idx);
++			err = mark_stack_read_all(env, instance, f, insn_idx);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -1563,9 +1570,9 @@ static int record_load_store_access(struct bpf_verifier_env *env,
+ 	}
+ 
+ 	if (ptr->frame >= 0 && ptr->frame <= depth)
+-		return record_stack_access(instance, ptr, sz, ptr->frame, insn_idx);
++		return record_stack_access(env, instance, ptr, sz, ptr->frame, insn_idx);
+ 	if (ptr->frame == ARG_IMPRECISE)
+-		return record_imprecise(instance, ptr->mask, insn_idx);
++		return record_imprecise(env, instance, ptr->mask, insn_idx);
+ 	/* ARG_NONE: not derived from any frame pointer, skip */
+ 	return 0;
+ }
+@@ -1590,7 +1597,7 @@ static int record_arg_access(struct bpf_verifier_env *env,
+ 		bytes = bpf_kfunc_stack_access_bytes(env, insn, arg_idx, insn_idx);
+ 	} else {
+ 		for (int f = 0; f <= depth; f++) {
+-			err = mark_stack_read_all(instance, f, insn_idx);
++			err = mark_stack_read_all(env, instance, f, insn_idx);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -1600,9 +1607,9 @@ static int record_arg_access(struct bpf_verifier_env *env,
+ 		return 0;
+ 
+ 	if (frame >= 0 && frame <= depth)
+-		err = record_stack_access(instance, at, bytes, frame, insn_idx);
++		err = record_stack_access(env, instance, at, bytes, frame, insn_idx);
+ 	else if (frame == ARG_IMPRECISE)
+-		err = record_imprecise(instance, at->mask, insn_idx);
++		err = record_imprecise(env, instance, at->mask, insn_idx);
+ 	return err;
+ }
+ 
+@@ -2124,7 +2131,7 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 				if (info[subprog].at_in[j][caller_reg].frame == ARG_NONE)
+ 					continue;
+ 				for (int f = 0; f <= depth; f++) {
+-					err = mark_stack_read_all(instance, f, idx);
++					err = mark_stack_read_all(env, instance, f, idx);
+ 					if (err)
+ 						goto out_free;
+ 				}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0a8796a12f1a..2c495f66dc34 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3665,7 +3665,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	int hist_spi = spi, hist_frame = state->frameno;
+ 	struct bpf_stack_state *ss = bpf_stack_slot(state, spi);
+ 
+-	/* caller checked that off % size == 0 and -MAX_BPF_STACK <= off < 0,
++	/*
++	 * caller checked that off % size == 0 and -env->stack_limit <= off < 0,
+ 	 * so it's aligned access and [off, off + size) are within stack limits
+ 	 */
+ 	if (!env->allow_ptr_leaks &&
+@@ -5524,7 +5525,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 	if (subprog[idx].priv_stack_mode == PRIV_STACK_ADAPTIVE) {
+ 		if (subprog_depth > env->max_stack_depth)
+ 			env->max_stack_depth = subprog_depth;
+-		if (subprog_depth > MAX_BPF_STACK) {
++		if (subprog_depth > env->stack_limit) {
+ 			verbose(env, "stack size of subprog %d is %d. Too large\n",
+ 				idx, subprog_depth);
+ 			return -EACCES;
+@@ -5533,7 +5534,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 		depth += subprog_depth;
+ 		if (depth > env->max_stack_depth)
+ 			env->max_stack_depth = depth;
+-		if (depth > MAX_BPF_STACK) {
++		if (depth > env->stack_limit) {
+ 			total = 0;
+ 			for (tmp = idx; tmp >= 0; tmp = dinfo[tmp].caller)
+ 				total++;
+@@ -6534,10 +6535,11 @@ static int check_ptr_to_map_access(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
+-/* Check that the stack access at the given offset is within bounds. The
++/*
++ * Check that the stack access at the given offset is within bounds. The
+  * maximum valid offset is -1.
+  *
+- * The minimum valid offset is -MAX_BPF_STACK for writes, and
++ * The minimum valid offset is -env->stack_limit for writes, and
+  * -state->allocated_stack for reads.
+  */
+ static int check_stack_slot_within_bounds(struct bpf_verifier_env *env,
+@@ -6548,7 +6550,7 @@ static int check_stack_slot_within_bounds(struct bpf_verifier_env *env,
+ 	int min_valid_off;
+ 
+ 	if (t == BPF_WRITE || env->allow_uninit_stack)
+-		min_valid_off = -MAX_BPF_STACK;
++		min_valid_off = -(int)env->stack_limit;
+ 	else
+ 		min_valid_off = -state->allocated_stack;
+ 
+@@ -15190,7 +15192,8 @@ enum {
+ 	REASON_STACK	= -5,
+ };
+ 
+-static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
++static int retrieve_ptr_limit(const struct bpf_verifier_env *env,
++			      const struct bpf_reg_state *ptr_reg,
+ 			      u32 *alu_limit, bool mask_to_left)
+ {
+ 	u32 max = 0, ptr_limit = 0;
+@@ -15202,7 +15205,7 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 		 * offset where we would need to deal with min/max bounds is
+ 		 * currently prohibited for unprivileged.
+ 		 */
+-		max = MAX_BPF_STACK + mask_to_left;
++		max = env->stack_limit + mask_to_left;
+ 		ptr_limit = -ptr_reg->var_off.value;
+ 		break;
+ 	case PTR_TO_MAP_VALUE:
+@@ -15322,7 +15325,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 				     (opcode == BPF_SUB && !off_is_neg);
+ 	}
+ 
+-	err = retrieve_ptr_limit(ptr_reg, &alu_limit, info->mask_to_left);
++	err = retrieve_ptr_limit(env, ptr_reg, &alu_limit, info->mask_to_left);
+ 	if (err < 0)
+ 		return err;
+ 
+@@ -15452,7 +15455,7 @@ static int check_stack_access_for_ptr_arithmetic(
+ 		return -EACCES;
+ 	}
+ 
+-	if (off >= 0 || off < -MAX_BPF_STACK) {
++	if (off >= 0 || off < -(int)env->stack_limit) {
+ 		verbose(env, "R%d stack pointer arithmetic goes out of range, "
+ 			"prohibited for !root; off=%d\n", regno, off);
+ 		return -EACCES;
+@@ -22283,6 +22286,26 @@ static int bpf_prog_verify_signature(struct bpf_verifier_env *env,
+ 	return err;
+ }
+ 
++/*
++ * bpf_clone_redirect() transmits from inside the program, so a tc egress or
++ * lwt_xmit program that redirects to its own device runs again on top of its
++ * own frame, and again from there, until the datapath's recursion limit drops
++ * the packet: ten frames deep. Ten MAX_BPF_STACK frames fit the kernel stack
++ * as they always did; ten MAX_BPF_STACK_JIT frames would not, so a program
++ * calling it keeps the smaller budget. The redirect helpers that transmit
++ * after the program has returned leave no frame behind.
++ */
++static bool bpf_prog_reenters_datapath(const struct bpf_prog *prog)
++{
++	const struct bpf_insn *insn = prog->insnsi;
++	int i;
++
++	for (i = 0; i < prog->len; i++, insn++)
++		if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_clone_redirect)
++			return true;
++	return false;
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	      struct bpf_log_attr *attr_log)
+ {
+@@ -22307,6 +22330,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	env->bt.env = env;
+ 	env->prog = *prog;
+ 	env->ops = bpf_verifier_ops[env->prog->type];
++	env->stack_limit = bpf_prog_stack_limit(env->prog);
++	if (bpf_prog_reenters_datapath(env->prog))
++		env->stack_limit = MAX_BPF_STACK;
+ 
+ 	env->allow_ptr_leaks = bpf_allow_ptr_leaks(env->prog->aux->token);
+ 	env->allow_uninit_stack = bpf_allow_uninit_stack(env->prog->aux->token);
 diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index c3b08089fef1..a916d4049a0b 100644
+index a916d4049a0b..4736bcca55da 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
 @@ -1953,7 +1953,7 @@ static __used __naked void fwd_parent_key_to_helper(void)
  SEC("socket")
  __log_level(2)
  __success
--__msg("call bpf_map_update_elem{{.*}}; use: fp1-8..-512 fp0-8")
-+__msg("call bpf_map_update_elem{{.*}}; use: fp1-8..-2048 fp0-8")
+-__msg("call bpf_map_update_elem{{.*}}; use: fp1-8..-2048 fp0-8")
++__msg("call bpf_map_update_elem{{.*}}; use: fp1-8..-{{(512|2048)}} fp0-8")
  __naked void helper_arg_fallback_keeps_scanning(void)
  {
  	asm volatile (
@@ -258,8 +514,8 @@ index c3b08089fef1..a916d4049a0b 100644
  SEC("socket")
  __log_level(2)
  __success
--__msg("call bpf_loop#181            ; use: fp2-8..-512 fp1-8..-512 fp0-8..-512")
-+__msg("call bpf_loop#181            ; use: fp2-8..-2048 fp1-8..-2048 fp0-8..-2048")
+-__msg("call bpf_loop#181            ; use: fp2-8..-2048 fp1-8..-2048 fp0-8..-2048")
++__msg("call bpf_loop#181            ; use: fp2-8..-{{(512|2048)}} fp1-8..-{{(512|2048)}} fp0-8..-{{(512|2048)}}")
  __naked void bpf_loop_two_callbacks(void)
  {
  	asm volatile (
@@ -267,8 +523,8 @@ index c3b08089fef1..a916d4049a0b 100644
  SEC("socket")
  __log_level(2)
  __msg("stack use/def subprog#{{[0-9]+}} merge_read_all_callee (d2,cs{{[0-9]+}}):")
--__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8..-512")
-+__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8..-2048")
+-__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8..-2048")
++__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8..-{{(512|2048)}}")
  __naked void merge_keeps_whole_frame_read(void)
  {
  	asm volatile (
