@@ -1,487 +1,139 @@
-Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FF83E7BCC
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988B24C8C5A
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790292723; cv=none; b=JSohVFsACrFZCeHAuooVyaiE2x3nLJF41SaM6zJBg/aCQCX+pKNcLSRePA8IAybItdCGt6muq8fJvG3/MTcfUA8ELIQwI0YkkTHbSH490cqmoLxkuMA05yeZhujj64PgJ+PITEXj+JImB6ZsqcDKQotg+MooyOCPr3I2XJzIjqc=
+	t=1790293206; cv=none; b=HTgloftxGfQv4OsPoW6y7xRnI537ld2XTzSmqP+0PGHLwA6NOpZ0tsS2bwIQVhq2UUergUDMbiuJK3WzjCVGNzV/hslacJyyy9Pv903abGW0M+VvIBwVBFZBt7xH/1kFTa6U8uZ/xfFL5W01NNn1fXMCJ4Jr429QMUuUKOiEEJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790292723; c=relaxed/simple;
-	bh=J/gl4HNYCgcgN3mJR+mayUfUSdXK9C4ANdbOQNv/NFQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F+wJNVImD0gFZ5mR9t5D/Zd8Z7j76cCPlQcsV0mne3wGqwjf4+TN7CUa7ApgCROs1nKKiI5NiQxgDpKguPki+R2xHWGGpon09vTL6/vfGZryOH6BMWIcuRkmdt1UClAxwnvIBx1qXJVkt4o8CnDyCQi0gQ7Dj69dh1rmNFZb6Ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DBGLH0r0; arc=none smtp.client-ip=74.125.227.169
+	s=arc-20240116; t=1790293206; c=relaxed/simple;
+	bh=4h4cpDObZqi2JEPN69eOCH4YBG2slYUeYHjBIAENU48=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=oZ2W8gwYU4JSWesAgNW+foxNpmKs58gJvZ0xANX0ygqtwMLFAV/l80Mv592g3fpq/0cydnbTFRoFkWlfkXFzB7mqbR3cxX72lgZsm2El8GlF1cYrUIIy+Q5NNXphRvd1n/9pwQqfsE6mAeqYW3H3vDurezBCpUSXBVog9ZmXM1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZGFYs1jG; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DBGLH0r0"
-Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a0abca97c0so218506a91.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:32:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZGFYs1jG"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2db1ca069c8so1214635ad.3
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:40:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790292721; x=1790897521; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JV1G64jlM7k7FgiKfPYnBihRHbWXyo9sJN03uL9D80Y=;
-        b=DBGLH0r0fU9ymvgo5USBGwsFoF3IWl/mykY3T91RuLYM6kvjh+VQ/b9Y7me8RSq4PT
-         kMpeIHz79hNSQIBQd0n6/poF6WgjSwBGikNHUpRf+jumZACC6qDq7WwI9p34lJnd4BSQ
-         iqQKnyEIQYH8S2PggmpdvIrpPzkQ3MvS3hQ1NNg+v3GOCqi50faEAHL5N9SyzP6sO3cw
-         aEyqPmeY69GcIQU4uo0vQxU2oN6eKkCOc7pubBlajhr/iVU6EnssmInyIHHgLRPHmE9C
-         A/WerZd5MVfDTvJn1zmz2bdaqjMDv9QLaDD3WXz81ziBLTxs6FvEBL8HQyrYS9kWPMQ+
-         Szew==
+        d=gmail.com; s=20251104; t=1790293204; x=1790898004; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gn5dD1CJfoor6GODqvLgahaKF8S1PUZ5xI0XuIL5LIc=;
+        b=ZGFYs1jG/Xr4uwPy2133K5sF0poGH1omJ0ns5UwD8enApwiJPDDFi1gLMSA+UY+qrO
+         6lyZmvL2zJXgrS4urBwMTV3vFSBosNfxEeAHC2L0cHJkMBE9Oj9QKSvAuXGCWTgwH0c7
+         yWYOAFlZXJt9BDXnhQUwZElM3+pKqDf9ymR/77Qjhm4q2k9A8H7TmnWzDJf4Vw1zQ8Vz
+         HgO06YL+sF+7Efo+udo1jYXz4T5XB+sMNcQcYJJG3eDGSkCa/UybsOWnOQ+yWqiUaJ9C
+         yc+2TaftdirQziHgwjLgiQLYNZ+cgLnH7mjbZhOQnbR+1/zQ5qgml8qc2Dm7Da1OEro+
+         myTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790292721; x=1790897521;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JV1G64jlM7k7FgiKfPYnBihRHbWXyo9sJN03uL9D80Y=;
-        b=AmGL2S4DqJ2YPMl9tKppdI5YYcn+4ZFLoCPih88svcsxV0Oq45bTPj1GaBaU2Y2LAB
-         OhhFnu/itumIPEB+0EivHDupd7UQbYeqUCRsU7bABNUlzXJxKL91bjCp8jEBgoUEAnpV
-         dKrAjbDtK1zv9HAUBU1wCbok9xRrFMNwZeizbWcaoU5cd5HE2sYczPfTNpXoC3LupJdf
-         u9fkh2udpMPAgvhTwEORrZxII1xnSLpcN1wgI4HhxtosKPBU6QeSyBf284rJuUXdSehd
-         QlL86Up5bkQYaPZo+oLMiWr6a0xUngflN6LJvI8RlYDNttcAkIPRK9aYQ4+zqqX2FItO
-         LXZA==
-X-Gm-Message-State: AFuF++myuCY4afNRn7fv927sBqZL4/w82n68KLzpuROrc+ZltbzCPgmH
-	S3PcN2qRgDywI/QSMvDLH1+OdC6TRPuPWLI+Tj6mDI1WpHTJWHqmnGuBeCvbng==
-X-Gm-Gg: AYBFou2Ovk3R/GjvccGtSy5FUabZCov1FD88aGTyKxny6yEgrZfUwdIcRiTTVsskhIi
-	TzjqjX+HkV0TNkdX7Yd1DvhXfYoUtZ8aeqfPUYjqwsqhr+/1kyVkPSUrnfMQJrv4mJQC5cxIYve
-	yaAVEJ+2QmKkYcTdRwLPXvCIcqbzX7Fg5elboaApgBzckIRxT8rPFbUwhn20k+D8nTwloQ+Y7qc
-	j2r6yEdEahZDF1v2X0U6sqFUCd3lwYHDA9r5GPDCFlvNc6gxHtVnxrimBkD6JzNlvl95jcTJM1B
-	Rfm1IBzj7Y3C3V4uk6BjwqVhVZriNMBhn2xPou5JkcRKgUD3mmzpGle4401ndPGV7w6BGOF0/Vp
-	Ti0LQ2hASVGRpduRWf1S7N8F30WgxYdJPkO7WwJQPnd3TVXS8cdc5S5Jz/vlkhNZuD5oOmP8jwY
-	y/Bbdb/Fh/9zkiuJCqkAGR6/OUTtfdqxxHsafpTpfFBTsk+d4QnEzsag6zdjDaceJ8zPqFgA99u
-	CvC6pZwVWcvHyXdhYu65bPw9hlaLbrdKOSee59+8LPbBb5IaKoYWj5yEeyxqNLTg0yoNALw9tfd
-	yFa4f2dc+qCtgyjCU5/n7yVxDJ5Nh33WJ5MoO8x+7J4pNOO+ssqakjE=
-X-Received: by 2002:a17:90b:917:b0:39e:6c69:7777 with SMTP id 98e67ed59e1d1-3a0989866e6mr2428188a91.32.1790292720522;
-        Thu, 24 Sep 2026 16:32:00 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0affe2cd4sm1957532a91.1.2026.09.24.16.31.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 16:31:59 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next 8/8] selftests/bpf: Add tests for iterator created anew in its loop
-Date: Thu, 24 Sep 2026 23:31:30 +0000
-Message-ID: <20260924233130.1213812-9-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260924233130.1213812-1-alexei.starovoitov@gmail.com>
-References: <20260924233130.1213812-1-alexei.starovoitov@gmail.com>
+        d=1e100.net; s=20260707; t=1790293204; x=1790898004;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gn5dD1CJfoor6GODqvLgahaKF8S1PUZ5xI0XuIL5LIc=;
+        b=FOnyMrCmiY3SxnCCPFsSb0eLFUlu//ScOtFs7FsA/mZf9T90wK/ybTh7eCx13urgx5
+         1M3IxhT6pt+8Tz8FOeS/Zv5BajR7GJlXvxKkAnzxry3LUjpEHgy+xsp9rczEkeP/qRai
+         F4DkB5HCBfL5rLIWAF/giT8M2mlQqEDWhckJpHxUgI7LKeAarVXIWwlb1Yw+Y4yZmOqa
+         5WhltlMIp+P12cxToGCC3civYyPRDEtwdzhDUXWddYF0gCxjB/XpMPlIy5kD65mn29/V
+         5cinKMWnEcjhmH/PNSLwOii41ldH38/XiGxXUTXCYk1wnCBb2pW8kUfODB+fAR+fQOKP
+         nCBA==
+X-Forwarded-Encrypted: i=1; AKwUvBxofyxkpdhSfAyojvISrZ24dp9tPi9zeP7fy+w9yqIMutmKNFNbFuhLlJNxmxh1jrMC3jc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lHNM/xvNdP2kJokcSfy01OBYo0L4oMTTfvZm9jteCgsv+WebX/
+	9oD5/nxi0s85AY6eb6WFX5lhaXIm+9qG4GpVg5PaAlzCLcSUYBPYbAOU
+X-Gm-Gg: AYBFou3I3HgJoovoYsxGqnJBjtVaiDr6KoUBIs9dBQ+gHsaJd1DbXnQLsasr4EF6S4z
+	JHuD4Q6SbO1PNPVqiyJcaohKJNauVTDFcOS3Aj+ix7LioQPBnA/hc9p5RXKQFFHOsio6IQPCetd
+	2FAmx1N2hhYkp/slwT/cZMKSNUQBIkuq4kwBw2QDHiWWMYyqQn6B0E8jpgPVMVane3YWq3rXjou
+	TzRTZP3dh2dZA0HcCJvyHlxksftei+CdSRdwhJZTpvZgqMK1/XtHA28k/WB0cImcKjKu08F4/XS
+	KUOjej23in3jPpYAwHadCaWR0aaChYVelnGSwWlJa4ds+bIY+gHxDL0SFfjK5S1shu4Kpenpr1S
+	D836g1fPAAZIlYx+k8ga1oyQcYzgqDCz/l2M3tsJtg4S47jqIqIgPdyPDwgPy/Iw5/MTj/MOXO5
+	bp21Z6h3PTOEIvjm3YSUMPl/aekxhAwcMK+sATroghyKo3js9TeePppZwLSY5LhdR6/3AdIKKf1
+	j8/9KhvUU5zBMsVH40ugc2QYKJwI4GsbHNxmiPcDaHbyXAxFw5DqG9yEYNeeBY1xUr8lG6gCciw
+	PXw=
+X-Received: by 2002:a17:90b:1648:b0:39e:6c69:34d8 with SMTP id 98e67ed59e1d1-3a098fc574cmr3554656a91.60.1790293203799;
+        Thu, 24 Sep 2026 16:40:03 -0700 (PDT)
+Received: from localhost ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b8efaeb3sm909723a91.2.2026.09.24.16.40.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 16:40:03 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 23:40:01 +0000
+Message-Id: <DLNXZ2WK7TPD.2RZBUNRS4FA4L@gmail.com>
+Cc: "Leon Hwang" <leon.hwang@linux.dev>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+ <llvm@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+ <bpf@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, "Ben Cressey" <ben@cressey.dev>, "Florent
+ Revest (Anthropic)" <florent.revest@linux.dev>
+Subject: Re: [PATCH v2 6/9] arm64: cfi: Use
+ CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nsc@kernel.org>, "Nick Desaulniers"
+ <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, "Justin
+ Stitt" <justinstitt@google.com>, "Catalin Marinas"
+ <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Puranjay
+ Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Ard
+ Biesheuvel" <ardb@kernel.org>, "Ilias Apalodimas"
+ <ilias.apalodimas@linaro.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun
+ Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Daniel Almeida"
+ <daniel.almeida@collabora.com>, "Tamir Duberstein" <tamird@kernel.org>,
+ "Alexandre Courbot" <acourbot@nvidia.com>, =?utf-8?q?Onur_=C3=96zkan?=
+ <work@onurozkan.dev>, "Sami Tolvanen" <samitolvanen@google.com>, "Kees
+ Cook" <kees@kernel.org>
+In-Reply-To: <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
+References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev> <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Thu, Sep 24, 2026 at 10:35 PM Jose Fernandez (Anthropic) <jose.fernandez@linux.dev> wrote:
+>  static inline void emit_kcfi(u32 hash, struct jit_ctx *ctx)
+>  {
+> -	if (IS_ENABLED(CONFIG_CFI))
+> -		emit_u32_data(hash, ctx);
+> +	if (!IS_ENABLED(CONFIG_CFI))
+> +		return;
+> +
+> +	emit_u32_data(hash, ctx);
+> +	for (int i = 0; i < CONFIG_ARM64_FUNCTION_PREFIX_NOPS; i++)
+> +		emit(A64_NOP, ctx);
+>  }
 
-Add progs that destroy and create the iterator inside its loop with
-and without a prune point in front of bpf_iter_num_next(). All of them
-should be rejected. Nested bpf_for() loops, where the inner iterator is
-created in every iteration of the outer loop, should load.
+For the series:
+Acked-by: Alexei Starovoitov <ast@kernel.org>
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- tools/testing/selftests/bpf/progs/iters.c | 382 ++++++++++++++++++++++
- 1 file changed, 382 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index 65d4c6e01f93..ae845ad747bf 100644
---- a/tools/testing/selftests/bpf/progs/iters.c
-+++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -2188,4 +2188,386 @@ __naked void loop_counter_precision_2nd_iter(void)
- 	);
- }
- 
-+/*
-+ * An iterator that is destroyed and created again inside its loop starts from
-+ * the beginning and the loop never ends. In the first four progs the first
-+ * prune point after bpf_iter_num_new() is the call of bpf_iter_num_next().
-+ */
-+SEC("socket")
-+__description("iter: remake in the loop, jump to next")
-+__failure __msg("infinite loop detected")
-+__naked void iter_remake_jmp(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+"1:"
-+	"call %[bpf_ktime_get_ns];"
-+	"if r0 != 0 goto 3f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+"2:"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 != 0 goto 1b;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+"3:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"goto 2b;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+__used __naked static void iter_remake(void)
-+{
-+	asm volatile (
-+	"r6 = r1;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r6;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_destroy)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("iter: remake in a callee, jump to next")
-+__failure __msg("infinite loop detected")
-+__naked void iter_remake_callee_jmp(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+"1:"
-+	"call %[bpf_ktime_get_ns];"
-+	"if r0 != 0 goto 3f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+"2:"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 != 0 goto 1b;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+"3:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call iter_remake;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"goto 2b;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("iter: remake after next, jump to next")
-+__failure __msg("infinite loop detected")
-+__naked void iter_remake_after_next_jmp(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+"1:"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 == 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"goto 1b;"
-+"2:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("iter: two iterators, remake each after its next")
-+__failure __msg("infinite loop detected")
-+__naked void iter_remake_two_jmp(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r1 = r10;"
-+	"r1 += -16;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+"1:"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 == 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r1 = r10;"
-+	"r1 += -16;"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 == 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -16;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -16;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"goto 1b;"
-+"2:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -16;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+/* Same loops with a prune point in front of bpf_iter_num_next() */
-+SEC("socket")
-+__description("iter: remake in the loop")
-+__failure __msg("infinite loop detected")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void iter_remake_inline(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+"1:"
-+	"call %[bpf_ktime_get_ns];"
-+	"if r0 == 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+"2:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 != 0 goto 1b;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("iter: remake in a callee")
-+__failure __msg("infinite loop detected")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void iter_remake_callee(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+"1:"
-+	"call %[bpf_ktime_get_ns];"
-+	"if r0 == 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call iter_remake;"
-+"2:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 != 0 goto 1b;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("iter: remake after next")
-+__failure __msg("infinite loop detected")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void iter_remake_after_next(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+"1:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 == 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"goto 1b;"
-+"2:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("iter: remake when drained")
-+__failure __msg("infinite loop detected")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void iter_remake_drained(void)
-+{
-+	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+"1:"
-+	"call %[bpf_ktime_get_ns];"
-+	"if r0 == 119 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_next];"
-+	"if r0 != 0 goto 1b;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 10;"
-+	"call %[bpf_iter_num_new];"
-+	"goto 1b;"
-+"2:"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy),
-+	  __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+/* The inner iterator is created in every iteration of the outer loop */
-+SEC("socket")
-+__description("iter: nested loops")
-+__success __retval(12)
-+int iter_nested_remake(void *ctx)
-+{
-+	int i, j, sum = 0;
-+
-+	bpf_for(i, 0, 3) {
-+		bpf_for(j, 0, 4)
-+			sum++;
-+	}
-+	return sum;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+unrelated minor issue:
+ctx.offset[] is counted from ro_image, but bpf_prog_fill_jited_linfo()
+adds it to prog->bpf_func which is ro_image + cfi_get_offset().
+So with CFI jited_line_info is already off by one insn.
+After this patch it will be off by 4 or 6.
+s390 does
+	jit.addrs[i] -= cfi_get_offset();
+before the call.
+Would be great to send a follow up eventually.
 
