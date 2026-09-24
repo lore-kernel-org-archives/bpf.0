@@ -1,130 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1E3442397
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7448EADC
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790241331; cv=none; b=C0sZrMByGQ6JKPmKZmBMXc3BYVUYYtOkPsWD/YbUvk5DfSVJU7S6oOBb7jJNJVc9peY2un2gXeJjxzdlSNf3yMLvlLJdDi8eKKwiaDyT91UgjL+fZiXslJ7sTT1JBrVx9zQ8uxXPIVzBusVJexq3JHB6rzZZ1jcdxSZVrSZJIvc=
+	t=1790242186; cv=none; b=fOw2rLZJVO1lB92FnV1bbNU6UHKis6xWCgzh96AwMkWo6nm7mOmZLdXt7gTWYt48af0auwILaNI7pt0Ec1PLgE09YS8TlyRksbHovgKQtvrAJ75HqNuEAZBJK/wm5v1EDp7mcqDmj3MrfRKAd6+ysjPH1ivbSGRtPzwdo6Gj0lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790241331; c=relaxed/simple;
-	bh=RHDCCkVs8tDCGLl7VdbnSLmy7AOHiT7IxMoar3pGZTw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=S3sRb6Nt30gFA6VFZpsz/SpGbyI36qwwAMdIMDJM6nSsS2ONW4DSYzl8L937F1rKzksmxSRBDrjkD/1AGlqOKKxXfTYqxYWyP2vm7pRt1zpR1aoNPL6fOEuyM+k9e+cLWBVatgLlH5Zbtr7tQeCvfHvr38w4g3Kk+Z+N3lo5SYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VOSv2Z6U; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790242186; c=relaxed/simple;
+	bh=fXVV5/tuy864p+6xlb+ifF36KN+G7i+/Zbt7HrbIRdk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X7lqSHIAcbIBlbUED88Wr7KwYkNcEBy9nXeAg9rnapKKkcEnLbDsOZQX5S4GGwNoFvX/u2jYH3mL8mjbu7qaYC27csu9tiS3sh9ZSd2QlNoDrM6drQSWVe5i2mz65eRlVYKqSR+wpHSRNfxwwdgdRXxoT3J7isHD8Az0D74rCuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nH37BUl5; arc=none smtp.client-ip=74.125.225.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VOSv2Z6U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9131F000FF;
-	Thu, 24 Sep 2026 09:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790241330;
-	bh=Q/AIhdNFIA82q4Ft2e+e3NKhPdXqvcnDww5ec9HB/SQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VOSv2Z6UMo+4Mhutw3Eudc0/Up37fQ4ZaSNZvXF+N2Z6d8GGpryAkvPwWn+t8FtFD
-	 GTWmmBr9golgF+yXlycm/OGj9y1vg+O7JJSZMgshyM+tcsraSQSpL+ZXvyOfSuxboJ
-	 ZuEzkfZRXAU2RMPlToHlpGiMWtZBnHMNFXhnI3biGhDBQkt11+TybIU9BUsNlXAXV5
-	 nsFT39tgQ6BD5vy8MDO1ITNKklb65rROggqnC1xBYD7YtUafB22H/wmO+GUcg+PDKS
-	 Ey1rjt1r/rG7zbNZ2vFEf2f0XA2qZYJSqRW2RhWhCbmdkoGKFSrau2Fq2u9XSFJkyK
-	 DPA0Mklq0EVpA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3] net: stmmac: fix rx Scatter-Gather support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260923-stmmac-rx-sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com>
-References: <20260923-stmmac-rx-sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 24 Sep 2026 09:15:29 +0000
-Message-Id: <20260924091530.0D9131F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nH37BUl5"
+Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-49e667e3c45so3266825e9.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790242183; x=1790846983; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KLfxilP5rarlm4dCVN1SqcmnDVgyEQL0fFgZklpGicA=;
+        b=nH37BUl5H0LSmebUd6Q3EBuy90MbOoTelwx8rzVdCJKqKq0hXLUUwuuCC1XsvcKXf1
+         77RvolV2Oq1+MGqN+luJov81SokUMKrwiXD26cAMiDr8fSPlYJFAMFxiY74jdNSSpQD2
+         3rH3mLNMzAJ3sU8EygWw1HnC4dsU6UIKpsXQ17zF+hxQcI6M4kmoWk4FVLtY9vt/eppF
+         QuKkFtVfJ6EkIM5yzVnxTCKX7cCxIiJzJQDWleADFls9naNAr4cohwIIWEDCfcxVlRhJ
+         AtD3uHzBmmewbaYE+GotJEIVuxM+b7gerwzTorPm5RkbShFqvH95d5eiGrl6zpmZZDTZ
+         krrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790242183; x=1790846983;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KLfxilP5rarlm4dCVN1SqcmnDVgyEQL0fFgZklpGicA=;
+        b=E6b34g2vtnbfyoIewibYF5h8UzRksvXeps5Cj6xSJGGhHaU/+4cwzrO8pfsSBa0XEi
+         ypXq/Fb7r+LEDQdBwbz/EaMNh+ggb4BqplYdDgrfN8bHbw2txzgp6Hh6lvUsrmSexIST
+         Iau/ksI5pkUua+SRSUL9Emp3spURD/QbMYIGpPLGCWcfTlvgc/UEmdFipoovTydxbXpy
+         dW+rUW2vdILEinMWEUDgUn/j118d/VHDfYqtmVrbXQJrHZG7KYmdOOOWAaD9jkcMEHoK
+         rMr/EZvTO1psKfwvy7TB/oMcp196LlmWQQRGdeTJPKxNGxD5EVamV+lW86PXeI0OKwCq
+         4UPA==
+X-Gm-Message-State: AFuF++mrb75HaDd6PX7MLEGLpBSdFmr9f9Y4SGFS9w3VTMt965Jm+Aos
+	C8jqvv58Hm8RHMdVv443QSERJ706mWdueYdUxpBhVIeGWPctZ/Hx0SJ/w6PSq0LF
+X-Gm-Gg: AYBFou3Ae1v26+6nigwPEEU1mL2Lq8c4mUcxBq3BwWJfxo0iJuZ5KmxEu5iaQGfBWk+
+	bo9t1lV70SPU+txDkxWu2hngToqg51ROO0MzQSX00kk1zc6qvBCKIvUM20UHQnCiSTc4LeSQFRF
+	LQpqUnhP64Lz0hkQ4LOguY8EJSaBrpEO62qO5JnnGsdl5fUHS+G7/CLvaCcacZKU+fMTOdQNq58
+	0jfFd35dkt+iN9TotTaern825irOsPRiQy4gLiu0zWT3nPb172nMdfcdwiF7sQYCFUEYnhDkRgK
+	SiiyVecJn5nowtiGF+JHbDWXKlMhk/2YEc2kMNkAZxcMX83q7zkR3/+ECXnzRCmVJuSVNOX5cUs
+	PTC47zrrXCXRGQXYF/F92BV66lk2lEXyd1nVcpZHzkey0JMJ19DiE+NJvy5CMV03D8Eu4hNpS+6
+	x9IasDDCq8TpTABwtxb/9EGnJ5xam6LmqaaHs4ioZou/OFgOyHEgvzF4ziqXiJltS+x08dV03ag
+	fVok0+CKmSVSmxhieAmSxsGfMhJJTOTLdtnomB9rmOF7uD9YtE1pWHiK7n5SuMKB10ew1PGqcYG
+	aaHucvT9w5I5yWfRSE6MaCw82drh2+oH/ajhew==
+X-Received: by 2002:a05:600c:1546:b0:49c:fa20:cc00 with SMTP id 5b1f17b1804b1-49fe66f4f59mr31846215e9.23.1790242183048;
+        Thu, 24 Sep 2026 02:29:43 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cd4d12sm49669605e9.4.2026.09.24.02.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 02:29:42 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/7] Follow ups for verifier errors set
+Date: Thu, 24 Sep 2026 11:29:29 +0200
+Message-ID: <20260924092941.3174809-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3369; i=memxor@gmail.com; h=from:subject; bh=fXVV5/tuy864p+6xlb+ifF36KN+G7i+/Zbt7HrbIRdk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvL2+wnosw6xdP7L3ZuK7sWuG5dW2hvA+/R3xOMgo9G3 /sd2V7YUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm4T2b4p+Ei13vsu0m1vPun yWlTS0WvVe451G8U0KXYmbjRbX2jDcP/kqID78ztd1v9EfEtuH4xVdecrzuu61pe98E6P6OSxmQ uAA==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] net: stmmac: data corruption in multi-descriptor frames with XDP o=
-n legacy MACs
---
+Some follow up changes based on comments from Eduard, Sashiko, and BPF
+CI Bot. See commits for details.
 
-commit bffa481d7cb386a04b24759408cee45add543fcd
-Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Changelog:
+----------
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260816015746.2632990-1-memxor@gmail.com
 
-net: stmmac: fix rx Scatter-Gather support
+ * Drop v1 patches 3, 5-7, 11, and 13-14 because they are already present
+   in bpf-next.
+ * Use instruction-neutral wording for variable-offset stack accesses
+   rather than inferring an atomic operation from value_regno == -1. (Eduard)
+ * Update the variable-offset assertions and cover the retained
+   uninitialized stack-read diagnostic through the existing CAP_PERFMON-less
+   read inside the allocated stack. (BPF CI)
+ * Keep v1 patch 4 unchanged after confirming that the write filter is
+   reachable for lineage-preserving ALU operations with unchanged
+   diagnostic snapshots; only its spill arm is impossible. Say so in the
+   commit message. (Eduard)
+ * Consider active critical sections only for sleepable programs and let
+   non-sleepable programs reach the existing no-active-context fallback
+   instead of adding an early branch. A non-sleepable program can still
+   hold RCU, preempt, IRQ, or lock state, so the fallback alone would
+   keep blaming the region. Keep the "non-sleepable prog" description.
+   (Eduard, BPF CI)
+ * Select the helper and global-function suggestions by cause, matching
+   the kfunc site. (BPF CI)
+ * Split the kfunc coverage into a non-sleepable program case and a
+   sleepable program inside an RCU read-side critical section. (Eduard)
+ * Scan subprogram properties with nested loops and drop the partial
+   recursive-edge details together with their assertion. (Eduard)
+ * Reject CO-RE relocations targeting a truncated final LD_IMM64 before
+   applying them, since BTF validation now runs before the subprogram
+   layout check, and add raw CO-RE coverage for the rejection. Add the
+   Fixes tag. (BPF CI)
+ * Rebase on the current bpf-next/master and let the new property scan
+   also set the callx marker that check_subprogs() collects upstream.
 
-This commit enables scatter-gather for non-SPH frames on GMAC4/XGMAC cores =
-to
-address an SMMU translation fault on oversized frames overflowing the buffe=
-r. It
-also updates FCS trimming to use pskb_trim() on the assembled skb instead of
-subtracting it from individual buffers.
+Kumar Kartikeya Dwivedi (7):
+  bpf: Correct verifier diagnostic attribution for stack reads
+  selftests/bpf: Test verifier stack-read diagnostic attribution
+  bpf: Drop dead spill diagnostic condition
+  bpf: Report non-sleepable kfunc programs accurately
+  selftests/bpf: Test non-sleepable kfunc context
+  bpf: Correct Program Structure diagnostic context
+  selftests/bpf: Test Program Structure diagnostic context
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+ kernel/bpf/cfg.c                              |   6 +-
+ kernel/bpf/check_btf.c                        |  15 +-
+ kernel/bpf/diagnostics.c                      |  24 +--
+ kernel/bpf/verifier.c                         | 179 ++++++++++++------
+ .../selftests/bpf/prog_tests/core_reloc_raw.c | 172 +++++++++++------
+ .../testing/selftests/bpf/progs/dynptr_fail.c |   3 +
+ tools/testing/selftests/bpf/progs/irq.c       |  13 ++
+ .../selftests/bpf/progs/iters_state_safety.c  |   3 +
+ .../selftests/bpf/progs/preempt_lock.c        |  26 +++
+ .../selftests/bpf/progs/verifier_cfg.c        |  40 ++++
+ .../selftests/bpf/progs/verifier_gotox.c      |   2 +
+ .../selftests/bpf/progs/verifier_spill_fill.c |   2 +
+ .../selftests/bpf/progs/verifier_xadd.c       |  27 +++
+ 13 files changed, 376 insertions(+), 136 deletions(-)
 
-[ ... ]
 
-> @@ -5809,24 +5814,25 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
-t limit, u32 queue)
->  		len +=3D buf2_len;
-> =20
->  		/* ACS is disabled; strip manually. */
-> -		if (likely(!(status & rx_not_ls))) {
-> -			if (buf2_len) {
-> -				buf2_len -=3D ETH_FCS_LEN;
-> -				len -=3D ETH_FCS_LEN;
-> -			} else if (buf1_len) {
-> -				buf1_len -=3D ETH_FCS_LEN;
-> -				len -=3D ETH_FCS_LEN;
-> -			}
-> -		}
-> +		if (likely(!(status & rx_not_ls)))
-> +			len -=3D ETH_FCS_LEN;
-> =20
->  		if (!skb) {
->  			unsigned int pre_len, sync_len;
-> =20
-> +			/* Each frame starts here: reset the FCS handling */
-> +			fcs_stripped =3D false;
-> +
->  			dma_sync_single_for_cpu(priv->device, buf->addr,
->  						buf1_len, dma_dir);
->  			net_prefetch(page_address(buf->page) +
->  				     buf->page_offset);
-> =20
-> +			if (stmmac_xdp_is_enabled(priv) && !buf2_len) {
-> +				buf1_len -=3D ETH_FCS_LEN;
-> +				fcs_stripped =3D true;
-> +			}
+base-commit: 24629aac43d2884109ae47a993fd51b504e2b09b
+-- 
+2.53.0
 
-[Severity: High]
-Does this incorrectly strip the FCS from the first descriptor of a
-multi-descriptor frame on legacy MACs?
-
-On legacy MACs, buffer2 is not used, so buf2_len is always 0. When a scatte=
-red
-(multi-descriptor) frame is received with XDP enabled, this condition evalu=
-ates
-to true on the first descriptor.
-
-Because there is no check for whether this is the last descriptor
-(!(status & rx_not_ls)), it incorrectly subtracts 4 bytes (ETH_FCS_LEN) fro=
-m the
-payload in the first descriptor, corrupting the packet data.
-
-Additionally, because fcs_stripped is set to true, the actual FCS at the en=
-d of
-the frame will not be removed when the final descriptor is processed.
-
-> +
->  			xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
->  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
->  					 buf->page_offset, buf1_len, true);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923-stmmac-rx-=
-sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com?part=3D1
