@@ -1,214 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D937235B65D;
-	Thu, 24 Sep 2026 05:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6621F7916
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790226141; cv=none; b=ga2ZUkpUXp1wbjfzhAcV1vnzoA1EvV3BF+CvTaMD/Sau98Hqa9YquGi9Gb1mGP3wbcFMsukqfxhAlM0fNmGb1lg9g9IUALHxu3vVW/V/r4huKtla6l9eRgjkQttn3T77BaeLW6CKqPED7P+vYcUcxp+Y/h4YpFNDHI4V0M71Qbk=
+	t=1790227997; cv=none; b=PKzuoefBaekUBp9Au6EsWosF+QqJ6yuQ5LPyXVCKinTqyOyMxjJ/6WmawNcW5ctgAD6XPoOEpY1ecOxRHqDCjLbIowrVr8FemZAn4Mmvg65+p9tqG0n0BVn2Ixsp4pzX7UFHVgk/O01pAsUsDXi8GW03aNHsA7s+c69vOTU1W5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790226141; c=relaxed/simple;
-	bh=K1hcWWB0zjvRZpRPrDgIq6rMyz19jNWik4SrurUft+A=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=AiV8N0AUKAJRrY/4HRVQLdkyRYojsHvsx81kaauqpjpP/PoYij1aQg8D+nC0B+o+3hOicqXQKTAtVSi9ETpCVhIdXvEtoPjLUH98RBNi2PJ1UPXZNhk0ICVy2zla0BxKsL3WVhD43otfpramDI7bmWf3qLqeudbva1TNxQD68R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiI1am/1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790227997; c=relaxed/simple;
+	bh=u6Y9/dCLmQox4L/nbUTgkvBWZsHKNrgUxU+OM7N4QdY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=T6urVAiUVygqwOOAB5GsggwIZP3SnNcDe8b1Sh8YEbejlQrj9+cNS7S/rJJWbT9odBMAeu+I4QR23baNJKss0A6R5SdCTh6DVgrrINzKjpeejNC5NGitFt+/UuY2TPl+qVEHvBApr7Phvpk7YZcoHxatCB5o5Qf4VQf8HZXvg7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XFKhc028; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiI1am/1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19541F000FF;
-	Thu, 24 Sep 2026 05:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790226139;
-	bh=lXNEueqMCRREz5N5CQfkfW8XWDi10Z7xuAbrRSHchSQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kiI1am/1zZpTnT6AGoHTLhMiXC9JBLSCbNvSU5M7JPO8QoiKdxRBHH9YblcEcPN5j
-	 56TaAjcDpskHwyVNwfaSHxwsxMHxoRvSgjFKAs0dheI7GyjamX7uMKE2Swzx9c6b35
-	 +pePpMV4ml5Pc7sJfMUExEFkuiQTjdQory2R8r2U0miBbitqNf9w2joN7AwPzc6ot/
-	 v8V0SGQhBg5ljmk3BKRFu1JMFzkfS2+ZjhQ+hX8RKYslPiymizgIHX0GhPyNuY2ZU+
-	 N8ay4u5jKbWI5Cbq/O8Rr7f1VoBMgc30zH0KuGIjKZ0lcO9N2CAaY69AtsaeL6GC/4
-	 Q2C75UwjOrJNA==
-Content-Type: multipart/mixed; boundary="===============5311084438262854122=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XFKhc028"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb752so894329a91.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790227995; x=1790832795; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=MUWnwYnt77FHWIx1aRGTB1yKqNYWNGX8KhdqfYRsPvs=;
+        b=XFKhc0280YC/0MlHvlAiJ0w2dJle3XJp64cOU8ikyjRch776gUr9/KxtHXNtKxLCDl
+         V7wv4xFWI+VnGPgvxiEBP8xdY6rMH83nL8ap44CH99CY18fJTxEgLcli/zPjnmyDYXAR
+         lVp7N0JYHkoZSn4ebHzAQ49VPo+P+zvETSiJCSk1mkcvHm+laaLYJVuHG1hGliW7EUpC
+         1MgzcTAdcYqyGvVVrGuYj4K5ZeoyrGest7YN/vpUsJwStXFwDYxPSIDZw2429IZeLYyt
+         Glu2J65evxDjQbL61a+ru3iDPGco3hjh6Hjl71MdCiukGu0Nuz4BrFng4P5xwGFSUjQN
+         OE2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790227995; x=1790832795;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MUWnwYnt77FHWIx1aRGTB1yKqNYWNGX8KhdqfYRsPvs=;
+        b=y+We/bwYLTR4vjjot+ac/Bd6wYKGZFQhJ/jMSpV8wSmtOdW4r90Dex/bMOTADxu8Hn
+         mqt9qZ1nCuxLpdC/BLirV6tadHR+0NO+hsbnZoCYc4Y8xBQh7ebL1rWWqFR1A/D5dw2y
+         xMZ3mATR+k6M1fvEh+HK9m0N3dytsQLx8XpenEPmKfv5CLXSbJqROosSkc4s7dP+AYG6
+         1cERR6+83U+dJ117FxbyNbnS9Yz8pXcqWIYmMHc2ci96WgP3cO5+neo/1XykYwEIFmFc
+         OG8v0djs6+L5Lp8O0i8vAmJXhEumpCU/KB11BZ0wJSM+Dr6UgY5HG5BJXMK+ExWD90Ho
+         Edkg==
+X-Forwarded-Encrypted: i=1; AKwUvBxidsPQnxedwDK1IjqEtFNPOCraKRWU15WXentYOdN6tb2qxk3XocKMsUDkwqp1eiutrj8=@vger.kernel.org
+X-Gm-Message-State: AFuF++mu4wQ8J7Y3Hc8A32APdWnbIERaIMPF6YIDn7cohMMhBcmZ2xQJ
+	JApHlo3QQm+w8R1dKTU/jPwdbncfE6q+1MVbZnFz0/74E2i6dG6DVhW7tuE/7g==
+X-Gm-Gg: AYBFou244KsYRk6eBUujXsNeglv+IIomBRfGAPY6lJ3UtMcllwFVywSCaYlTUjcrm4o
+	Estq2YZoGEbK0QAV8zZlIQ3FZo5K5byUCysplXQDo7gD4Bz6q0EPCyVrb4TM5E7CVMWdlUOAscJ
+	sNFMbcZ5fzfXswZLNfhbeKZ/d6AajuAUToRar88Ys7qp8lOEk5kIpmiLYvlOc8zO/NS6lovgl/T
+	31pTCYv5HRqeDlyymha5K/raAlR6EYpU4mf8UaRtdv6ys2wWOEka8lvaKDezTapuDn0DZNkpAaS
+	V/A0I66/P8yH89RKSOrZ9MHvuQX4/JeftD+L+oTKJ/GShtBQ9iDSN2/tOBxiQJmNbet54FH/Bgy
+	RzPsSPQt4hXrgCYkpji3xft4gHe6tuYEuCpw98oaF4RicigLCpjalTp59EdWOAR3rpEyk3GijHv
+	FbySpaIalacibkHdGVUyjQ45/oURtrYIRzlvLHKFfwXRng6n4/nSYRgJnQQEFcCPhh464XGATfd
+	lHaydJ5VH4LygkSbfz1EMX/H4bBO3O5mJewfg==
+X-Received: by 2002:a17:90b:57c6:b0:3a0:22bd:6ef6 with SMTP id 98e67ed59e1d1-3a09853a6cdmr1024345a91.2.1790227995593;
+        Wed, 23 Sep 2026 22:33:15 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0972efa0bsm2609931a91.8.2026.09.23.22.33.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 22:33:15 -0700 (PDT)
+Message-ID: <fff46b2598a74aa51a8d686829522b6f490aa677.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 07/17] bpf, x86: Add JIT support for callx
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Date: Wed, 23 Sep 2026 22:33:12 -0700
+In-Reply-To: <20260924031042.1690890-8-alexei.starovoitov@gmail.com>
+References: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
+	 <20260924031042.1690890-8-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <99204600993999e8ff4929b758720dafe0a6c2b4c2d5c1e03ede485e9d2e9747@mail.kernel.org>
-In-Reply-To: <de7adb6bafa3b808e29c0630f7ed9a2003e5e447.1790222105.git.zhuhui@kylinos.cn>
-References: <de7adb6bafa3b808e29c0630f7ed9a2003e5e447.1790222105.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next 2/2] samples/bpf: Add memcg async reclaim example
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,david@kernel.org,baohua@kernel.org,geliang@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org
-Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 24 Sep 2026 05:02:15 +0000 (UTC)
 
---===============5311084438262854122==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, 2026-09-24 at 03:10 +0000, Alexei Starovoitov wrote:
 
-> diff --git a/samples/bpf/memcg_async_reclaim.h b/samples/bpf/memcg_async_reclaim.h
-> new file mode 100644
-> index 000000000000..96fe03d12912
-> --- /dev/null
-> +++ b/samples/bpf/memcg_async_reclaim.h
-> @@ -0,0 +1,39 @@
+...
 
-[ ... ]
-
-> +struct reclaim_cfg {
-> +	/* Cgroup whose refaults are watched, i.e. the one under pressure. */
-> +	__u64 monitor_cgroup_id;
-> +	/* Cgroup that gets reclaimed from when the monitor refaults. */
-> +	__u64 target_cgroup_id;
-> +	/* Refault delta per tick that starts a reclaim round. */
-> +	__u64 refault_threshold;
-> +	/* Monitor tick period, in nanoseconds. */
-> +	__u64 interval_ns;
-> +	/* Bytes requested per bpf_wq callback. */
-> +	__u64 batch_bytes;
-> +	/* Callbacks per reclaim round. */
-> +	__u64 max_batches;
-                ^^^^
-
-Does this comment accurately describe max_batches? The BPF side does not
-count callbacks. It uses max_batches only to size a byte budget and keeps
-requeueing until that budget is spent:
-
-samples/bpf/memcg_async_reclaim.bpf.c:reclaim_work_fn() {
-    elem->remaining = elem->max_batches * elem->batch_bytes;
-    ...
-    if (nr >= elem->remaining)
-        elem->remaining = 0;
-    else
-        elem->remaining -= nr;
-    if (elem->remaining)
-        bpf_wq_start(&elem->work, 0);
-}
-
-bpf_proactive_reclaim() limits each pass to MEMCG_CHARGE_BATCH (64 pages),
-which is 256 KiB with 4K pages.
-
-With --batch 1M --max-batches 32 each callback reclaims at most about 256
-KiB, so the round runs at least 128 callbacks, not 32. A partial reclaim
-also adds callbacks. An overshoot, or a zero return that ends the round,
-gives fewer.
-
-Two other comments in the same patch describe it correctly: the .bpf.c
-comment says "a clamped batch only means a round needs more callbacks,
-because remaining is decremented by the bytes actually reclaimed", and the
-loader says "One round budgets max_batches * batch_bytes". The header,
-which documents the BPF/userspace interface, contradicts both.
-
-The same wording is in the --max-batches help text in
-memcg_async_reclaim_user.c.
-
-Suggested wording: "Round budget, in units of batch_bytes."
-
-> diff --git a/samples/bpf/memcg_async_reclaim_user.c b/samples/bpf/memcg_async_reclaim_user.c
-> new file mode 100644
-> index 000000000000..d5296fd0fab1
-> --- /dev/null
-> +++ b/samples/bpf/memcg_async_reclaim_user.c
-> @@ -0,0 +1,1141 @@
-
-[ ... ]
-
-> +static void session_stop(struct session *s)
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index d4a980140b48..9fbef7504e51 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -749,6 +749,46 @@ static void emit_indirect_jump(u8 **pprog, int bpf_r=
+eg, u8 *ip)
+>  	*pprog =3D prog;
+>  }
+> =20
+> +static void __emit_indirect_call(u8 **pprog, int reg, bool ereg)
 > +{
-> +	unsigned long long failures, last_err;
+> +	u8 *prog =3D *pprog;
 > +
-> +	if (!s->skel)
-> +		return;
+> +	if (ereg)
+> +		EMIT1(0x41);
 > +
-> +	ring_buffer__free(s->rb);
-> +	s->rb = NULL;
-                ^^^^
-
-In bench mode the reclaim_events ring buffer is never consumed, so the
-event counters and --verbose output do not work there. s->called,
-s->skipped_dying and s->target_gone are only updated from
-on_reclaim_event(), and that callback only runs from ring_buffer__poll().
-
-The only caller of ring_buffer__poll() is session_poll(), and the only
-caller of session_poll() is do_watch().
-
-do_bench() goes session_start() -> run_workload() -> session_stop(), and
-session_stop() calls ring_buffer__free(s->rb) without a final
-ring_buffer__consume().
-
-So every bench run prints "events: called=0 skipped_dying=0 target_gone=0"
-even when the "total:" line read from .bss shows calls=N > 0.
-
-> +	failures = s->skel->bss->timer_failures;
-> +	last_err = s->skel->bss->last_reclaim_err;
+> +	EMIT2(0xFF, 0xD0 + reg);
 > +
-> +	printf("\nran for %.1fs\n", now_sec() - s->start);
-> +	print_counters(s, "total:");
-> +	printf("events: called=%llu skipped_dying=%llu target_gone=%llu\n",
-> +	       s->called, s->skipped_dying, s->target_gone);
-> +	if (failures)
-> +		printf("WARNING: monitor timer rearm failed %llu time(s), reclaim stopped early\n",
-> +		       failures);
-> +	if (last_err)
-> +		printf("WARNING: bpf_proactive_reclaim() last failed with -%llu\n",
-> +		       last_err);
-
-The -v option, which usage() lists under "Common options" as "print every
-reclaim event", prints nothing in bench mode.
-
-The same missing final drain also drops any watch-mode events that arrive
-between the last session_poll() and session_stop().
-
-Should do_bench() poll or consume the ring buffer while the workload runs,
-or should session_stop() call ring_buffer__consume(s->rb) before freeing
-it?
-
-[ ... ]
-
-> +static int do_watch(struct options *o)
+> +	*pprog =3D prog;
+> +}
+> +
+> +/* call *bpf_reg */
+> +static int emit_indirect_call(u8 **pprog, int bpf_reg, u8 *ip)
 > +{
-> +	struct session s = {};
-> +	__u64 monitor_id, target_id;
-> +	double next_stats, deadline = 0;
-> +	int ret = 1;
-
-[ ... ]
-
-> +	while (!READ_ONCE(exiting)) {
-> +		double now = now_sec();
-> +		int wait_ms;
+> +	u8 *prog =3D *pprog;
+> +	int reg =3D reg2hex[bpf_reg];
+> +	bool ereg =3D is_ereg(bpf_reg);
+> +	int err =3D 0;
 > +
-> +		if (deadline && now >= deadline)
+> +	if (cpu_feature_enabled(X86_FEATURE_INDIRECT_THUNK_ITS)) {
+> +		OPTIMIZER_HIDE_VAR(reg);
+
+This is quite unexpected. LLM points to [1].
+A comment would be nice.
+
+[1] commit be8a096521ca ("x86,bpf: Avoid IBT objtool warning")
+
+> +		err =3D emit_call(&prog, its_static_thunk(reg + 8*ereg), ip);
+> +	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
+> +		EMIT_LFENCE();
+> +		__emit_indirect_call(&prog, reg, ereg);
+> +	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
+> +		OPTIMIZER_HIDE_VAR(reg);
+> +		if (cpu_feature_enabled(X86_FEATURE_CALL_DEPTH))
+> +			err =3D emit_call(&prog, &__x86_indirect_call_thunk_array[reg + 8*ere=
+g], ip);
+> +		else
+> +			err =3D emit_call(&prog, &__x86_indirect_thunk_array[reg + 8*ereg], i=
+p);
+> +	} else {
+> +		__emit_indirect_call(&prog, reg, ereg);
+> +	}
+> +
+> +	*pprog =3D prog;
+> +	return err;
+> +}
+> +
+>  static void emit_return(u8 **pprog, u8 *ip)
+>  {
+>  	u8 *prog =3D *pprog;
+> @@ -2941,6 +2981,24 @@ static int do_jit(struct bpf_verifier_env *env, st=
+ruct bpf_prog *bpf_prog, int *
+>  			break;
+>  		}
+> =20
+> +			/* callx: call of a bpf subprog whose address is in dst_reg */
+> +		case BPF_JMP | BPF_CALL | BPF_X:
+> +			/*
+> +			 * The verifier makes sure that callees of callx are
+> +			 * not tail call reachable, hence unlike a direct call
+> +			 * of a subprog there is no need to pass
+> +			 * tail_call_cnt_ptr in rax.
+> +			 */
+> +			if (priv_frame_ptr) {
+> +				push_r9(&prog);
+> +				ip +=3D 2;
+
+LLM tells me the following:
+
+  This matters when emit_indirect_call() emits a relative call to a mitigat=
+ion thunk:
+        =20
+    displacement =3D thunk_address - (call_address + 5)
+
+  Without ip +=3D 2, that displacement would be calculated from the
+  push=E2=80=99s address, and the call would land two bytes past the intend=
+ed
+  target.
+
+Which is not obvious at all.
+Is it the reason for +=3D 2?
+
+> +			}
+> +			if (emit_indirect_call(&prog, insn->dst_reg, ip))
+> +				return -EINVAL;
+> +			if (priv_frame_ptr)
+> +				pop_r9(&prog);
 > +			break;
 > +
-> +		wait_ms = (int)((next_stats - now) * 1000);
-> +		if (wait_ms < 0)
-> +			wait_ms = 0;
-> +
-> +		if (session_poll(&s, wait_ms)) {
-                    ^^^^
+>  		case BPF_JMP | BPF_TAIL_CALL:
+>  			if (imm32)
+>  				emit_bpf_tail_call_direct(bpf_prog,
 
-The --duration option is only checked once per statistics interval, so
-watch mode can run well past the requested time.
-
-wait_ms is computed only from next_stats and is never clamped to the
-deadline. session_poll() keeps calling ring_buffer__poll() in 200 ms
-slices until the whole wait_ms is used up, and it only returns early on a
-signal or an error.
-
-For example, with the default --stats 10 and --duration 3, nothing is
-checked until about 10 s have passed on an idle system, so the program runs
-for about 10 s instead of 3 s. With -s 60 -D 5 it runs for about 60 s.
-
-usage() says "-D, --duration SEC    stop after SEC seconds".
-
-Should wait_ms be limited to min(next_stats, deadline) - now?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35955613591
---===============5311084438262854122==--
+...
