@@ -1,73 +1,73 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A654F4D05
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4F44E06E1
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790292712; cv=none; b=iPDTju+KS6kqyFOxvlxQ3c1v3wlw1C6AZQu1L3tsq4dtKq37ZEthV75VxyI7ONiQo0jPOarFqjYxeGI4m9wFKBj1REs6J1yZjuPFJBBHFEf/SWg22Jgk3bKcx+PYVaWBwB4lYwa1fkwimt+mxhH2kF40P0DfogrXor1rsd2t/us=
+	t=1790292716; cv=none; b=LA1/TzNmAI3kUHfao8jZKFj4fuf8p/daHmLtMgRu499U5Y8uvbRlGUgOemi26U9ApYPTvyz2A8wzswpJeGEga9nLtMDyFmCLG7gA3ZezrG1ApFoemM+UJrpA9AiVK9kf35/sG43Roqkx0YbQsWkmp8WkYn+DyE8e2QbY8BgXCzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790292712; c=relaxed/simple;
-	bh=IVfMuRzxGDmCVTIheJm/qnDr+P6oJYEYAlWF+pK3pCo=;
+	s=arc-20240116; t=1790292716; c=relaxed/simple;
+	bh=8UXlR2GW9kltXCMw+7En8oeHk3qgDGTTG9i+sNtjgQ4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jJADn0KP16ZVmhM6g8ma/gaWIQNq9AaA9efIK27OC1jTkeIsqnzD1Q9WRBysejRcDMm/q+/KANrlZoRl+iZrnes9uWuuqUMbyhYkx1v2hSENnRKVWWizEaHWfdh1mkPKG52ED4uTb/wN6pYR0AllarAVKoyIDsJZTM6arHMPBnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E5GIbNWl; arc=none smtp.client-ip=74.125.228.40
+	 MIME-Version; b=lyRszKrsr5iJnipwEXtNVHRtMQMq8fhvNwTTCBPiX5FG2Np7LETTZmycAWQHXXrduRYzOK+EMufUWdtlvysDv7Bt/ZIXQhVVfp+Cbivoh8WWQALMWzALr9GelcS6j8YKktHN7L4pgtIzIu8Smg34pNxWtguMEw48FG/srLZQ7kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zpr5vJnm; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E5GIbNWl"
-Received: by mail-pz2-f40.google.com with SMTP id d2e1a72fcca58-8748f34b1f2so194925b3a.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:31:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zpr5vJnm"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccda24a3so279579a91.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790292711; x=1790897511; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790292714; x=1790897514; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NZRW+3amvJncC3g3cvagPKWDH9UB3H/FxtAo+Q6e5kY=;
-        b=E5GIbNWlPCN/GGwV5Isxli1K5QHVyIMS8elb+QKeCrO2jVOMC8fxlbwo7mMszl7BlR
-         gHPzdxPJrA1+hRjhVZrAFa9ST7E+xAWRAWxctMVXhYpVA/jgF0TF4xINgTWJtQC9FZSL
-         0fW+tjtZbkID8aUeSFRu/o14dqpntwv4+Emh8DVNj+ss5PyQF//qGA4B5VYrLmaa7E8a
-         +LNr5bh1JQvNq0v36N5GWaGkBGDi4RnKT2D0ZgsIoJ+fsnr23b4RiqBKsjiE4xslKW0E
-         XuEWkV3mX/i32o7OVDxH5VPoxeWO/VrvAvoDOljjRJH7lu7FlsXGnyMRZ5A3ZNerYtWv
-         +Y5g==
+        bh=miMw08SQyTCte99qbb+OZkJNkGFzKVJzDGDGE/zoiUU=;
+        b=Zpr5vJnmm86CcZsOujCcEubcp7MWRy1Ak3D4+TqxNbvPC7Oa0oHEdHy2qekaA2ZhIS
+         Ir7SySf/dQ092yqp67awW5hj915ZPgIhEECjc1xZsUilPjLSlelQmz4FPE6rKnETQDFK
+         8ID6nvaFHMVzpiS4GOPtxVVEGSTpBgkzvnp8lc6HGy7TRGDpxaO7p7fTBMXD2kNk7egR
+         TkdCxV0TxKeVLsbHGEi7Be0rHj/fYklYcbr+8djP5bnTQpyihHM9flZhNc/w+LXfwht0
+         kY9Vct4mHsitIbI4c8i/5b9t1+8uXjC8mkCeEQRUzCh8fRYLmGI7LjnVPSt1UsiJwH0U
+         HclQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790292711; x=1790897511;
+        d=1e100.net; s=20260707; t=1790292714; x=1790897514;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NZRW+3amvJncC3g3cvagPKWDH9UB3H/FxtAo+Q6e5kY=;
-        b=FSu4E2sYzX6qZukpyP3OrE0TP2LZ4AteM0KBcIjt7dWLY7dt0OHYptRlrgE4TU+FY9
-         vHIobrg4fR2Ux52SFU6Txf7+cSR6t8JfIzy14w/WBMBWsLyzCstRj1I0scVGRCaAm1UZ
-         NKHe8/FiT7kCFKGr5Z+rxAH8JW8Z8JpqRcKSxsptJerlgFZ8IYBjwq8epp9M6NcGBLUp
-         FZ5ft1qkD94X7K5lkjCt5vF+u9ya7EOK1CvWDscGNSZz7LjFNnc6UoLc21MnFDrgUDkf
-         LIcx2p0Fd8+UABnlvLVyIe+PLMqNk63gPES5EqIa+hqE81FzFS62fFyK9GeRvmZ3jNLQ
-         OOzw==
-X-Gm-Message-State: AFuF++lAmOuQSY+DxdcXVG19FAn2++GOm0NidD5OM1cupyrR63VWPSwc
-	423IgAGN6GF4uGstUlwtAbW97tyVIZFgCi+iqSl3djXePxEK1aJtN5Eus0OuSw==
-X-Gm-Gg: AYBFou18heuUylNIMs0L4rIS9LqxGslAR8cu9Egs0Lr/KgLmlWE7Kaqzx6G/mGjWqiW
-	szmJwiw7jWg1KbtoiBE3W6rXfD1HlP+mi3wPfqU9Pwa6KyXGPa/SUGuCO35qjQiDYgaAj2/UzfL
-	L/FsmXWbDA4WZCaqtg6KLXJyvf3sD/xiRaysNwvmMkk14pFv1DZk7FcRkB3pxiAJbJRoyDFRvAL
-	m0VTv10/6Cwy74z3nZ6P3/z6S3JRnlm1tDFXZb1ta3+SCOCJr8ElmHj1NxHW92IeHLjwUBAy5tf
-	kkX/DSIgJW3PTbVwt0wSjw/WgTnLfxJJr7RXq0QN7dPmeTe34SfteKccPXZ/XdNv4D861JQJ1Lg
-	eyUM+qSdrq1sA9sIlguzJyZegSCRNQOprv3Ye5E9f0WZSimTB1R1kh42N5/d2DSxMxML9WQitMA
-	U8pfWY1bfSLZRSemELIJa71mCr3SwAmw8grRQxaCN01YO36lyHNqnhJ9t6P7aoYMdzGqxfTFyq9
-	Tbv0GTn5OfT6z8JECnS7qdcQA7qqcP5p4QtuicYyQ9HpXHAwEk0z+5yvnYby7GNXn7CFmOq5Ibz
-	AHWq7X1xpi0pH1iPsJSlO1QzdoNYp1dqayQk0fVJw8Q=
-X-Received: by 2002:a05:6a00:8005:b0:878:34e7:9a36 with SMTP id d2e1a72fcca58-87e9b995d09mr3609252b3a.47.1790292710383;
-        Thu, 24 Sep 2026 16:31:50 -0700 (PDT)
+        bh=miMw08SQyTCte99qbb+OZkJNkGFzKVJzDGDGE/zoiUU=;
+        b=AtPfcXctqhk8oSwKGvunXU9lCig8BNI7qFKte0j40xXdHZEjapE7TPlzoYAIVPFr3S
+         nqL4wPNOJ9IeHEK6eYhiGPXgp4cQ0fZw1RvRBCf5qUP+XI3cl2EF58+rjWAAb2hYmpKc
+         G/KcXKuhUtq6M9dJ0iSgBwmIX/VXAIEtwXp+cqwOZkF76SQ21qVFBT2i73ivF4D/2lP5
+         KPLiMQ5WiB0WtQ2wnqjQ/ZDjJgjgJcj5DAw7t+g9txYt8uOTOkiJCqjcjIZpRuwqi/1i
+         QChUIZZQh7conYxC7efrm6ngCm52NcTFTrpwI/v4lf9vyw4REqFuSp6GD4uV8usvLtfb
+         nhIA==
+X-Gm-Message-State: AFuF++mc1SVJZxjyJpCIfpPgbGyJmhppKHoIs0E5z7KZhBc682zEg3/F
+	jwfahhOyDjnSKLTcr5Au/hiflls/tdLrVFfLjHTwBF3R+FCWOx6ErCdmMZypLQ==
+X-Gm-Gg: AYBFou0gCmoF9thiM7k7zO98NEDaZG9q+8MCq/3brICehM6qGmmddiqR3+iYpbV0v/+
+	OUbhaF+CR5UpxusPKSW/yQEKIogTGLY3JTkD5FN15CwrdU+S5gFXkYy+KHbSBI1i4o4G/9En5cs
+	EIW6/E1g67McNsByQu3YD/k0k3vJ1AmEMln3TSMZoH6z20ge2AIQ39a9l6Ymk5mC0EmJcskONB3
+	pF02JSPjsw8EmPVD0AQlowvYzoBChZ2IBbJfNVQvdiGmuhipL6+eREkcJO7jq3qJJjmvx2NHYn+
+	2jlddr7KJM3PLnKENVxxlT9duwjGyNxEyDt5luhBRoh453zETqvvOTCRKGOvo3boRialqBllneM
+	VW/SAoEJo7EgQ6logJ5O1agddVga7rjkj3LdysqPs6wEKSALQr7m5Co3u+NxYp7MnW1FXzqsZzi
+	AWurCRM4Rbm4rHvGyeuzuhXifY+3sazoSXdRgcPEoRKU79Tcl8jm63L2PuahS5OP5lRwaostrmK
+	JO8/qhNSCHfUWlHmgSMj7sbupci+XbHICNqS69VD+Da9J0/DtCx1NL6D4t44AEskXstkLgn09W2
+	t8Nx8RWn83QxO6LnMAUvj94QXEIiFXcopb0YX8OxSIlj
+X-Received: by 2002:a17:90b:4c82:b0:39e:6c68:1552 with SMTP id 98e67ed59e1d1-3a09896ee0fmr3297950a91.26.1790292713643;
+        Thu, 24 Sep 2026 16:31:53 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87fea8894d7sm254726b3a.26.2026.09.24.16.31.49
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b9356f48sm895785a91.6.2026.09.24.16.31.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 16:31:49 -0700 (PDT)
+        Thu, 24 Sep 2026 16:31:52 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 5/8] bpf: Fix overflow of jump offset in may_goto expansion
-Date: Thu, 24 Sep 2026 23:31:27 +0000
-Message-ID: <20260924233130.1213812-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 6/8] selftests/bpf: Add tests for may_goto with far target
+Date: Thu, 24 Sep 2026 23:31:28 +0000
+Message-ID: <20260924233130.1213812-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260924233130.1213812-1-alexei.starovoitov@gmail.com>
 References: <20260924233130.1213812-1-alexei.starovoitov@gmail.com>
@@ -81,128 +81,114 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-may_goto is expanded into 'if AX == 0 goto off + 5' when it's timed,
-off + 2 when it's not and off - 1 when it jumps backward. The sum is
-stored into 16-bit off without a range check, so may_goto +32763
-turns into:
+Generate syscall progs with may_goto that jumps up to 32767 insns
+forward and 32768 insns backward. The prog loops until may_goto expires
+and returns 0 when it lands on the target.
 
-  if r12 == 0x0 goto pc-32768
-
-and the prog jumps backward when may_goto expires.
-
-Emit 'if AX != 0 goto +1; gotol' when the offset doesn't fit and
-compute the offset from the number of insns in the expansion.
-JITs that don't support gotol will reject such prog.
-
-Fixes: 011832b97b31 ("bpf: Introduce may_goto instruction")
-Fixes: e723608bf428 ("bpf: Add verifier support for timed may_goto")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/fixups.c | 68 +++++++++++++++++++++++++++++----------------
- 1 file changed, 44 insertions(+), 24 deletions(-)
+ .../selftests/bpf/prog_tests/may_goto_far.c   | 92 +++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/may_goto_far.c
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index ae9713d292df..e9c2d6c06218 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1690,6 +1690,30 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
- 	return 0;
- }
- 
-+/*
-+ * Expand may_goto: load the count from the stack, jump to the target of
-+ * may_goto when it is zero, then the tail that updates the count.
-+ * Use gotol when the target is too far for 16-bit offset of a conditional jump.
-+ */
-+static int may_goto_expand(struct bpf_insn *insn_buf, int off, int stack_off,
-+			   const struct bpf_insn *tail, int tail_cnt)
+diff --git a/tools/testing/selftests/bpf/prog_tests/may_goto_far.c b/tools/testing/selftests/bpf/prog_tests/may_goto_far.c
+new file mode 100644
+index 000000000000..8d0ff30bd068
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/may_goto_far.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <linux/filter.h>
++
++#define MAY_GOTO(off)	BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0)
++#define FILL_CNT	33000
++
++static struct bpf_insn *fill(struct bpf_insn *insn, int cnt, int reg)
 +{
-+	int cnt = 0;
-+
-+	/* Forward jump has to step over the tail */
-+	off = off >= 0 ? off + tail_cnt : off - 1;
-+
-+	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
-+	if (off == (s16)off) {
-+		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
-+	} else {
-+		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
-+		insn_buf[cnt++] = BPF_JMP32_A(off >= 0 ? off : off - 1);
-+	}
-+	memcpy(insn_buf + cnt, tail, tail_cnt * sizeof(*tail));
-+	return cnt + tail_cnt;
++	while (cnt--)
++		*insn++ = BPF_MOV64_REG(BPF_REG_0, reg);
++	return insn;
 +}
 +
- /* Do various post-verification rewrites in a single program pass.
-  * These rewrites simplify JIT and interpreter implementations.
-  */
-@@ -1967,6 +1991,18 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 
- 		if (bpf_is_may_goto_insn(insn) && bpf_jit_supports_timed_may_goto()) {
- 			int stack_off_cnt = -stack_depth - 16;
-+			/*
-+			 * AX is used as an argument to pass in stack_off_cnt
-+			 * (to add to r10/fp), and also as the return value of
-+			 * the call to arch_bpf_timed_may_goto.
-+			 */
-+			struct bpf_insn tail[] = {
-+				BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1),
-+				BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2),
-+				BPF_MOV64_IMM(BPF_REG_AX, stack_off_cnt),
-+				BPF_EMIT_CALL(arch_bpf_timed_may_goto),
-+				BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off_cnt),
-+			};
- 
- 			/*
- 			 * Two 8 byte slots, depth-16 stores the count, and
-@@ -1983,22 +2019,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			 * after subtraction, rinse and repeat.
- 			 */
- 			stack_depth_extra = 16;
--			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off_cnt);
--			if (insn->off >= 0)
--				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off + 5);
--			else
--				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off - 1);
--			insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
--			insn_buf[3] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2);
--			/*
--			 * AX is used as an argument to pass in stack_off_cnt
--			 * (to add to r10/fp), and also as the return value of
--			 * the call to arch_bpf_timed_may_goto.
--			 */
--			insn_buf[4] = BPF_MOV64_IMM(BPF_REG_AX, stack_off_cnt);
--			insn_buf[5] = BPF_EMIT_CALL(arch_bpf_timed_may_goto);
--			insn_buf[6] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off_cnt);
--			cnt = 7;
-+			cnt = may_goto_expand(insn_buf, insn->off, stack_off_cnt,
-+					      tail, ARRAY_SIZE(tail));
- 
- 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
-@@ -2010,16 +2032,14 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			goto next_insn;
- 		} else if (bpf_is_may_goto_insn(insn)) {
- 			int stack_off = -stack_depth - 8;
-+			struct bpf_insn tail[] = {
-+				BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1),
-+				BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off),
-+			};
- 
- 			stack_depth_extra = 8;
--			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
--			if (insn->off >= 0)
--				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off + 2);
--			else
--				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off - 1);
--			insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
--			insn_buf[3] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off);
--			cnt = 4;
-+			cnt = may_goto_expand(insn_buf, insn->off, stack_off,
-+					      tail, ARRAY_SIZE(tail));
- 
- 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
++/*
++ * Syscall prog that loops until may_goto expires. Its target is 'off' insns
++ * away:
++ *
++ *	r6 = r7 = 0, but not a constant for the verifier
++ *	r8 = 2
++ *	r9 = 0
++ *	r0 = r8		x FILL_CNT or 1
++ * 1:	if r6 == r9 goto +1
++ *	exit
++ *	r6 = r8
++ *	r0 = r9		x N when off is negative
++ *	if r7 != r9 goto 3f
++ * 2:	may_goto off	(1b or 4f)
++ *	goto 2b
++ * 3:	r0 = r8		x N when off is positive
++ * 4:	exit
++ *
++ * The prog returns 0 when may_goto jumps to its target and 2 when
++ * it lands in one of 'r0 = r8' areas. There are no constants between
++ * may_goto and its target to keep the distance when constants are blinded.
++ */
++static void test_far(int off)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags = BPF_F_SLEEPABLE);
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int front = off < 0 ? 1 : FILL_CNT;
++	int mid = off < 0 ? -off - 5 : 1;
++	int back = off < 0 ? FILL_CNT : off - 1;
++	struct bpf_insn *insns, *insn;
++	int fd, err;
++
++	insns = calloc(front + mid + back + 16, sizeof(*insns));
++	if (!ASSERT_OK_PTR(insns, "calloc"))
++		return;
++
++	insn = insns;
++	*insn++ = BPF_EMIT_CALL(BPF_FUNC_ktime_get_ns);
++	*insn++ = BPF_MOV64_REG(BPF_REG_6, BPF_REG_0);
++	*insn++ = BPF_ALU64_IMM(BPF_RSH, BPF_REG_6, 63);
++	*insn++ = BPF_MOV64_REG(BPF_REG_7, BPF_REG_0);
++	*insn++ = BPF_ALU64_IMM(BPF_RSH, BPF_REG_7, 63);
++	*insn++ = BPF_MOV64_IMM(BPF_REG_8, 2);
++	*insn++ = BPF_MOV64_IMM(BPF_REG_9, 0);
++	insn = fill(insn, front, BPF_REG_8);
++	*insn++ = BPF_JMP_REG(BPF_JEQ, BPF_REG_6, BPF_REG_9, 1);
++	*insn++ = BPF_EXIT_INSN();
++	*insn++ = BPF_MOV64_REG(BPF_REG_6, BPF_REG_8);
++	insn = fill(insn, mid, BPF_REG_9);
++	*insn++ = BPF_JMP_REG(BPF_JNE, BPF_REG_7, BPF_REG_9, 2);
++	*insn++ = MAY_GOTO(off);
++	*insn++ = BPF_JMP_A(-2);
++	insn = fill(insn, back, BPF_REG_8);
++	*insn++ = BPF_EXIT_INSN();
++
++	fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", insns, insn - insns, &opts);
++	free(insns);
++	if (!ASSERT_GE(fd, 0, "prog_load"))
++		return;
++
++	err = bpf_prog_test_run_opts(fd, &topts);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(topts.retval, 0, "retval");
++	close(fd);
++}
++
++void test_may_goto_far(void)
++{
++	if (test__start_subtest("32762"))
++		test_far(32762);
++	if (test__start_subtest("32767"))
++		test_far(32767);
++	if (test__start_subtest("-32767"))
++		test_far(-32767);
++	if (test__start_subtest("-32768"))
++		test_far(-32768);
++}
 -- 
 2.55.0
 
