@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB4E46D0AD
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0C445D5C2
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790267350; cv=none; b=Q8PCi0I014/IOkTQCHdCH0lnboq+pXmCsyrKs/W7P7vGRWK9zsX/ICqyMntU7ySfoUopcXoLu6+rbCWDfL8lBYX0Hi1l8LmiUVERSa//C+4ia9s4YVdNP6P5pHiYrVkqu3KxR4c5hOgZT2C/d3YU7+aEcFdvjC545CMYncldv6A=
+	t=1790267353; cv=none; b=rb4w3zNnW+U1dlZbXmA/PhW7xcWKRoPzkQUQrI6TxmpWWMeh6o7vY2h+6UnhkiJ4ZXvorI4G2biPeFTOhiTNcsTLywkPB9vu0880SqVuGDJW1gkfb2zcHrBhxos4Xhtr0i7Hc3yOOpn51AXnP3JCalUKfMRrZ1hgTSO7uO0wEac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790267350; c=relaxed/simple;
-	bh=lw4u2JXa2q54QaAW65v3/Ap/sdbhtBFq9RUX2spt+uU=;
+	s=arc-20240116; t=1790267353; c=relaxed/simple;
+	bh=FnPznJwKOgqoaoWWh+PudvnETplDvzf+D3uz5b1tWwc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qPWqhViRDoMRNSockQhcv0GI+x+i57QltWqlLmBsQcz3WChq4QZnC70s+raRhivPAxBzm9/DyQOjNLvOXCVOmDStPn1+i3nVibj9zNBhwk6yKbUJmXi6Ztq9EKfjVVTn5Mv1uUQSptY18SYXuSf/r8+hEEIb+zuN2l3sotTdfMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7Ht7SMS; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=YDrAMPzOOo4H5RTKRVUeIKIT6kLBJGhv1HR+CtzAwHAOZ8LVRRKouii0zhq4KYNi8KD4pu8Al17qD+jUzuFsY6PIDc1tPf8QAcEgMzg7IPKTm6n5wZ/pmNtvSCa/Pr8akDC3s7SJlUvQ1qxMdYOso7kUQ8c6Qz4cVrkjdCMwcQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W9Axjnj3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7Ht7SMS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE44B1F000FF;
-	Thu, 24 Sep 2026 16:29:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W9Axjnj3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297231F000FF;
+	Thu, 24 Sep 2026 16:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790267348;
-	bh=7XgvilLlUmLqFs0KdkrUfPA1Oq4fHguTCiMxh8XiDiU=;
+	s=k20260515; t=1790267351;
+	bh=sq6uFpmY4flZkumzVCf8Sto3GYK1M1p5kPRppolF3gc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=U7Ht7SMStLdA0biI7GT9eS6PESxqwo5wi8uEH3vJRYrti0RdO141d42a31T0ioGo2
-	 OenHHbWEvOuB4Mcebu14Ho0N8eTuyb6zMkKBu/J4RzGp1mqwibyOESeSyfDVnCu/jB
-	 p+TmjsgbHXboeH3PQs+hQOKUvgOX3dgcZwEaO//z7ztIJnLnvLdkKYN5Yel7mt92Hv
-	 mzAWUIjygDmrHxPaZeRGI07xJi748M02jwXYUb7mUEe8B7jLynLaY940foOB32Oc6V
-	 a3fFRN2/a1FwU9Yvj9n5BBcWML+/oJ6yYVMX1oQ0jQKZlzIVM7bO/Z4+IUoxPAU4tv
-	 aOGQbiyDZzWLA==
+	b=W9Axjnj3HPL3nZ/NYP5Mi9gNSTWJs5LEMiLg7agSIosWkLykAvT1Bq4qaWzP+cMYs
+	 JFWFHCzI0DkZnxjx8ZhbJpmtIIOo1neC5HX4awzZE3jRm7FQQQBKyLB42wjhgMUFOc
+	 v09ZX3ZeGC+epO9bAEWE73hVllURRtLw4PNWkYW88kV5TP/d3boaxQ2wwYFHejT5j8
+	 PK2BBtwKT3CUQOYrWc6cS6adppVHnQWuzXFQWnJBVIGQBuUKO/En2qSZY34WD1cWeF
+	 4DjSbx4ego4/SAQVm0OOTBrXT0tJiM45f/I2HWxopjbWmeycMMcElckQdiy727xM+s
+	 byLoHDBVUqxiQ==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
 	"Song Liu" <song@kernel.org>,
 	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next 1/2] bpf: Support bpf_rcu_head in hash and LRU hash maps
-Date: Thu, 24 Sep 2026 09:28:56 -0700
-Message-ID: <20260924162858.2435106-2-puranjay@kernel.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add bpf_call_rcu tests for hash and LRU hash maps
+Date: Thu, 24 Sep 2026 09:28:57 -0700
+Message-ID: <20260924162858.2435106-3-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924162858.2435106-1-puranjay@kernel.org>
 References: <20260924162858.2435106-1-puranjay@kernel.org>
@@ -51,497 +51,613 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_call_rcu() is restricted to arrays because an array element is never
-freed while the map is alive. Hash elements are recycled, and an RCU
-callback cannot be cancelled, so a delete racing a queued callback would
-hand the element back to the allocator underneath it.
+Each of these checks the element a callback was armed on is still the one
+it runs on, by the value it sees.
 
-Keep the element alive until the callback has run. Before releasing an
-element the map calls bpf_rcu_head_claim(), which marks the head dead and
-reports whether a callback is queued or running. If one is, the element is
-unlinked but not returned to the allocator; the callback does that through
-a new map_release_elem(), since only the map knows whether that is a
-freelist push or bpf_mem_cache_free(). The dead bit stops it being armed
-again, so there is a definite last callback. Timers and friends in the
-same value are still cancelled on delete.
+hash_delete arms, deletes, then inserts another key, which would be handed
+the freed element straight back off the freelist. hash_np does the same on
+a BPF_F_NO_PREALLOC map, which frees to bpf_mem_alloc instead.
+hash_replace replaces the key twice, which is how a preallocated map
+recycles through its per-CPU spare. reuse arms an element that has already
+been deleted and recycled. lru_evict floods a two-entry map and checks the
+armed element was not evicted. hash_chain checks a re-arm from the callback
+of a deleted element is refused.
 
-The head and the element are busy for different spans: RCU dequeues a head
-before invoking it, so it can be re-armed from inside the callback, while
-the element has to live until the callback returns. ARMED covers the head,
-RUNNING the element, and whoever clears the last of the two releases a dead
-element. RUNNING is dropped under the read locks, so only one callback runs
-on a head at a time.
-
-The dead bit lives in the element, so alloc_htab_elem() and
-prealloc_lru_pop() reset the head when they hand one out.
-
-A preallocated htab stashes the old element in a per-CPU spare on update
-rather than freeing it, which cannot be done to one with a queued callback,
-so maps carrying a head take the freelist path instead.
-
-For LRU the eviction path asks bpf_rcu_head_busy() and declines, leaving
-the element in the map.
+stress hammers arm and delete on overlapping keys from several CPUs and
+checks every arm ran.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- include/linux/bpf.h  |   5 ++
- kernel/bpf/hashtab.c | 104 +++++++++++++++++++++++++++++++++-----
- kernel/bpf/helpers.c | 117 ++++++++++++++++++++++++++++++++++++++-----
- kernel/bpf/syscall.c |  14 +++++-
- 4 files changed, 214 insertions(+), 26 deletions(-)
+ .../selftests/bpf/prog_tests/call_rcu.c       | 254 +++++++++++++++-
+ tools/testing/selftests/bpf/progs/call_rcu.c  | 274 ++++++++++++++++++
+ 2 files changed, 526 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1e1ce2afe2ed8..91eee1d066a32 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -111,6 +111,8 @@ struct bpf_map_ops {
- 	void *(*map_lookup_elem)(struct bpf_map *map, void *key);
- 	long (*map_update_elem)(struct bpf_map *map, void *key, void *value, u64 flags);
- 	long (*map_delete_elem)(struct bpf_map *map, void *key);
-+	/* Release an element a bpf_rcu_head callback was holding. */
-+	void (*map_release_elem)(struct bpf_map *map, void *value);
- 	long (*map_push_elem)(struct bpf_map *map, void *value, u64 flags);
- 	long (*map_pop_elem)(struct bpf_map *map, void *value);
- 	long (*map_peek_elem)(struct bpf_map *map, void *value);
-@@ -665,6 +667,9 @@ void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,
- void bpf_timer_cancel_and_free(void *timer);
- void bpf_wq_cancel_and_free(void *timer);
- void bpf_task_work_cancel_and_free(void *timer);
-+bool bpf_rcu_head_claim(struct bpf_map *map, void *value);
-+bool bpf_rcu_head_busy(struct bpf_map *map, void *value);
-+void bpf_rcu_head_reset(struct bpf_map *map, void *value);
- void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 			struct bpf_spin_lock *spin_lock);
- void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index f744a42bb8139..5e2f4cbe9d0f2 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -188,6 +188,11 @@ static inline void *htab_elem_value(struct htab_elem *l, u32 key_size)
- 	return l->key + round_up(key_size, 8);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/call_rcu.c b/tools/testing/selftests/bpf/prog_tests/call_rcu.c
+index e4d271d43d878..b60220cdf318c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/call_rcu.c
++++ b/tools/testing/selftests/bpf/prog_tests/call_rcu.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+ #include <test_progs.h>
++#include <pthread.h>
+ #include "call_rcu.skel.h"
+ #include "call_rcu_fail.skel.h"
  
-+static inline struct htab_elem *htab_elem_from_value(void *value, u32 key_size)
-+{
-+	return value - round_up(key_size, 8) - offsetof(struct htab_elem, key);
-+}
-+
- static inline void htab_elem_set_ptr(struct htab_elem *l, u32 key_size,
- 				     void __percpu *pptr)
- {
-@@ -310,6 +315,7 @@ static struct htab_elem *prealloc_lru_pop(struct bpf_htab *htab, void *key,
- 		bpf_map_inc_elem_count(&htab->map);
- 		l = container_of(node, struct htab_elem, lru_node);
- 		memcpy(l->key, key, htab->map.key_size);
-+		bpf_rcu_head_reset(&htab->map, htab_elem_value(l, htab->map.key_size));
- 		return l;
- 	}
- 
-@@ -904,6 +910,11 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
- 	int ret;
- 
- 	tgt_l = container_of(node, struct htab_elem, lru_node);
-+
-+	/* An element a callback still needs cannot be evicted. */
-+	if (bpf_rcu_head_busy(&htab->map, htab_elem_value(tgt_l, htab->map.key_size)))
-+		return false;
-+
- 	b = __select_bucket(htab, tgt_l->hash);
- 	head = &b->head;
- 
-@@ -914,15 +925,24 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
- 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
- 		if (l == tgt_l) {
- 			hlist_nulls_del_rcu(&l->hash_node);
--			bpf_map_dec_elem_count(&htab->map);
- 			break;
- 		}
- 
- 	htab_unlock_bucket(b, flags);
- 
--	if (l == tgt_l)
--		check_and_cancel_fields(htab, l);
--	return l == tgt_l;
-+	if (l != tgt_l)
-+		return false;
-+
-+	/*
-+	 * An arm can land after the check above. The element is already unlinked
-+	 * by now, so map_release_elem() finishes the handoff to the free list.
-+	 */
-+	if (bpf_rcu_head_claim(&htab->map, htab_elem_value(l, htab->map.key_size)))
-+		return false;
-+
-+	bpf_map_dec_elem_count(&htab->map);
-+	check_and_cancel_fields(htab, l);
-+	return true;
- }
- 
- /* Called from syscall */
-@@ -1032,7 +1052,7 @@ static void dec_elem_count(struct bpf_htab *htab)
- 		atomic_dec(&htab->count);
- }
- 
--static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
-+static void __free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
- {
- 	htab_put_fd_value(htab, l);
- 
-@@ -1046,6 +1066,25 @@ static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
- 	}
- }
- 
-+/* The element is already unlinked; only the return to the allocator is left. */
-+static void htab_map_release_elem(struct bpf_map *map, void *value)
-+{
-+	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
-+
-+	__free_htab_elem(htab, htab_elem_from_value(value, htab->map.key_size));
-+}
-+
-+static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
-+{
-+	if (bpf_rcu_head_claim(&htab->map, htab_elem_value(l, htab->map.key_size))) {
-+		/* The element outlives the delete; its timer and friends do not. */
-+		check_and_cancel_fields(htab, l);
-+		return;
-+	}
-+
-+	__free_htab_elem(htab, l);
-+}
-+
- static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
- 			    void *value, bool onallcpus, u64 map_flags)
- {
-@@ -1107,6 +1146,17 @@ static bool fd_htab_map_needs_adjust(const struct bpf_htab *htab)
- 	return is_fd_htab(htab) && BITS_PER_LONG == 64;
+@@ -163,6 +164,158 @@ static void test_call_rcu_teardown(void)
+ 	call_rcu__destroy(skel);
  }
  
 +/*
-+ * On update a preallocated htab stashes the old element in this CPU's spare
-+ * instead of freeing it. An element with a queued callback cannot be reused
-+ * that way, so those maps release it through free_htab_elem() instead.
++ * A hash element armed and then deleted: the element must stay alive until the
++ * callback has run, and the callback must still see its value.
 + */
-+static bool htab_stashes_old_elem(const struct bpf_htab *htab)
++static void test_call_rcu_hash_delete(void)
 +{
-+	return htab_is_prealloc(htab) &&
-+	       !btf_record_has_field(htab->map.record, BPF_RCU_HEAD);
-+}
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct call_rcu *skel;
++	int i;
 +
- static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
- 					 void *value, u32 key_size, u32 hash,
- 					 bool percpu, bool onallcpus,
-@@ -1118,7 +1168,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
- 	void __percpu *pptr;
- 
- 	if (prealloc) {
--		if (old_elem) {
-+		if (old_elem && htab_stashes_old_elem(htab)) {
- 			/* if we're updating the existing element,
- 			 * use per-cpu extra elems to avoid freelist_pop/push
- 			 */
-@@ -1129,9 +1179,18 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
- 			struct pcpu_freelist_node *l;
- 
- 			l = __pcpu_freelist_pop(&htab->freelist);
--			if (!l)
--				return ERR_PTR(-E2BIG);
--			l_new = container_of(l, struct htab_elem, fnode);
-+			if (l) {
-+				l_new = container_of(l, struct htab_elem, fnode);
-+			} else {
-+				/* Spend the spare; freeing old_elem refills the freelist. */
-+				if (!old_elem)
-+					return ERR_PTR(-E2BIG);
-+				pl_new = this_cpu_ptr(htab->extra_elems);
-+				l_new = *pl_new;
-+				if (!l_new)
-+					return ERR_PTR(-E2BIG);
-+				*pl_new = NULL;
-+			}
- 			bpf_map_inc_elem_count(&htab->map);
- 		}
- 	} else {
-@@ -1152,6 +1211,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
- 	}
- 
- 	memcpy(l_new->key, key, key_size);
-+	bpf_rcu_head_reset(&htab->map, htab_elem_value(l_new, key_size));
- 	if (percpu) {
- 		if (prealloc) {
- 			pptr = htab_elem_get_ptr(l_new, key_size);
-@@ -1293,11 +1353,11 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		/* l_old has already been stashed in htab->extra_elems, cancel
- 		 * its reusable special fields before it is available for reuse.
- 		 */
--		if (htab_is_prealloc(htab))
-+		if (htab_stashes_old_elem(htab))
- 			check_and_cancel_fields(htab, l_old);
- 	}
- 	htab_unlock_bucket(b, flags);
--	if (l_old && !htab_is_prealloc(htab))
-+	if (l_old && !htab_stashes_old_elem(htab))
- 		free_htab_elem(htab, l_old);
- 	return 0;
- err:
-@@ -1305,13 +1365,31 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	return ret;
- }
- 
--static void htab_lru_push_free(struct bpf_htab *htab, struct htab_elem *elem)
-+static void __htab_lru_push_free(struct bpf_htab *htab, struct htab_elem *elem)
- {
- 	check_and_cancel_fields(htab, elem);
- 	bpf_map_dec_elem_count(&htab->map);
- 	bpf_lru_push_free(&htab->lru, &elem->lru_node);
- }
- 
-+static void htab_lru_map_release_elem(struct bpf_map *map, void *value)
-+{
-+	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
-+
-+	__htab_lru_push_free(htab, htab_elem_from_value(value, htab->map.key_size));
-+}
-+
-+static void htab_lru_push_free(struct bpf_htab *htab, struct htab_elem *elem)
-+{
-+	if (bpf_rcu_head_claim(&htab->map, htab_elem_value(elem, htab->map.key_size))) {
-+		/* The element outlives the delete; its timer and friends do not. */
-+		check_and_cancel_fields(htab, elem);
++	skel = call_rcu__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
 +		return;
++
++	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm_hash_then_delete),
++					      &opts), "test_run"))
++		goto out;
++	if (!ASSERT_EQ(opts.retval, 0, "retval") ||
++	    !ASSERT_EQ(skel->bss->arm_err, 0, "arm_err"))
++		goto out;
++
++	kern_sync_rcu();
++	for (i = 0; i < 3000; i++) {
++		if (__atomic_load_n(&skel->bss->hash_callbacks, __ATOMIC_ACQUIRE) >= 1)
++			break;
++		usleep(10000);
 +	}
 +
-+	__htab_lru_push_free(htab, elem);
++	ASSERT_EQ(skel->bss->hash_callbacks, 1, "hash_callbacks");
++	ASSERT_EQ(skel->bss->hash_cb_val, 0xbadc0de, "hash_cb_val");
++out:
++	call_rcu__destroy(skel);
 +}
 +
- static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
- 				     u64 map_flags)
- {
-@@ -2399,6 +2477,7 @@ const struct bpf_map_ops htab_map_ops = {
- 	.map_lookup_elem = htab_map_lookup_elem,
- 	.map_lookup_and_delete_elem = htab_map_lookup_and_delete_elem,
- 	.map_update_elem = htab_map_update_elem,
-+	.map_release_elem = htab_map_release_elem,
- 	.map_delete_elem = htab_map_delete_elem,
- 	.map_gen_lookup = htab_map_gen_lookup,
- 	.map_seq_show_elem = htab_map_seq_show_elem,
-@@ -2422,6 +2501,7 @@ const struct bpf_map_ops htab_lru_map_ops = {
- 	.map_lookup_and_delete_elem = htab_lru_map_lookup_and_delete_elem,
- 	.map_lookup_elem_sys_only = htab_lru_map_lookup_elem_sys,
- 	.map_update_elem = htab_lru_map_update_elem,
-+	.map_release_elem = htab_lru_map_release_elem,
- 	.map_delete_elem = htab_lru_map_delete_elem,
- 	.map_gen_lookup = htab_lru_map_gen_lookup,
- 	.map_seq_show_elem = htab_map_seq_show_elem,
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 301b35bd85c8a..07bd782f38b9c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4807,15 +4807,30 @@ __bpf_kfunc int bpf_task_work_schedule_resume(struct task_struct *task, struct b
- 
- typedef int (*bpf_rcu_callback_t)(struct bpf_map *map, void *key, void *value);
- 
-+/* ARMED covers the head, RUNNING the element; a re-arming callback holds both. */
-+#define RCU_HEAD_DEAD		BIT(0)		/* element is being released */
-+#define RCU_HEAD_ARMED		BIT(1)		/* head is queued */
-+#define RCU_HEAD_RUNNING	BIT(2)		/* callback has not returned */
-+#define RCU_HEAD_BUSY		(RCU_HEAD_ARMED | RCU_HEAD_RUNNING)
-+
- /* Actual type for struct bpf_rcu_head */
- struct bpf_rcu_head_kern {
- 	struct rcu_head rcu;
- 	bpf_callback_t callback_fn;
- 	struct bpf_map *map;
- 	struct bpf_prog *prog;
--	u32 armed;
-+	atomic_t state;
- } __aligned(8);
- 
-+/* The record test also keeps the offset off a percpu map's pointer slot. */
-+static struct bpf_rcu_head_kern *bpf_rcu_head_of(struct bpf_map *map, void *value)
++/* A hash callback which re-arms, with the element deleted mid-chain. */
++static void test_call_rcu_hash_chain(void)
 +{
-+	if (!btf_record_has_field(map->record, BPF_RCU_HEAD))
-+		return NULL;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct call_rcu *skel;
++	int i;
 +
-+	return value + map->record->rcu_head_off;
++	skel = call_rcu__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		return;
++
++	skel->bss->hash_chain = 3;
++	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm_hash_then_delete),
++					      &opts), "test_run") ||
++	    !ASSERT_EQ(opts.retval, 0, "retval"))
++		goto out;
++
++	kern_sync_rcu();
++	for (i = 0; i < 3000; i++) {
++		if (__atomic_load_n(&skel->bss->hash_callbacks, __ATOMIC_ACQUIRE) >= 1)
++			break;
++		usleep(10000);
++	}
++
++	/*
++	 * The delete lands before the first callback, so the chain is cut:
++	 * re-arming a dead head fails and the element is released once.
++	 */
++	ASSERT_EQ(skel->bss->hash_chain_err, -EBUSY, "chain_refused");
++
++	/* A re-arm that slipped through would land within a grace period. */
++	kern_sync_rcu();
++	usleep(100000);
++	ASSERT_EQ(skel->bss->hash_callbacks, 1, "hash_callbacks");
++out:
++	call_rcu__destroy(skel);
 +}
 +
- static void bpf_rcu_run_callback(struct rcu_head *rcu)
- {
- 	struct bpf_rcu_head_kern *rh = container_of(rcu, struct bpf_rcu_head_kern, rcu);
-@@ -4823,26 +4838,96 @@ static void bpf_rcu_run_callback(struct rcu_head *rcu)
- 	struct bpf_prog *prog = rh->prog;
- 	struct bpf_map *map = rh->map;
- 	void *value, *key;
-+	int old, state;
- 	u32 idx;
- 
- 	value = (void *)rh - map->record->rcu_head_off;
- 	key = map_key_from_value(map, value, &idx);
- 
--	/* Pairs with the arming cmpxchg(): rh may be re-armed as soon as this store lands. */
--	smp_store_release(&rh->armed, 0);
-+	/*
-+	 * Take RUNNING first, so a claim racing this always sees one of the two.
-+	 * rh may be re-armed, and its fields overwritten, once ARMED is dropped.
-+	 */
-+	old = atomic_fetch_or(RCU_HEAD_RUNNING, &rh->state);
-+	WARN_ON_ONCE(old & RCU_HEAD_RUNNING);
-+	atomic_andnot(RCU_HEAD_ARMED, &rh->state);
- 
-+	/*
-+	 * Drop RUNNING under the read locks, or a re-arm could be invoked while
-+	 * this callback is still on the element. The callback picks the flavour,
-+	 * so both locks are needed.
-+	 */
-+	rcu_read_lock_trace();
- 	rcu_read_lock_dont_migrate();
- 	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
-+	state = atomic_fetch_andnot(RCU_HEAD_RUNNING, &rh->state) & ~RCU_HEAD_RUNNING;
- 	rcu_read_unlock_migrate();
-+	rcu_read_unlock_trace();
++/* An LRU element evicted under pressure while its callback is queued. */
++static void test_call_rcu_lru_evict(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct call_rcu *skel;
++	int i;
 +
-+	/* A live element is never dead, so this only fires after a claim. */
-+	if (!(state & RCU_HEAD_BUSY) && (state & RCU_HEAD_DEAD))
-+		map->ops->map_release_elem(map, value);
++	skel = call_rcu__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		return;
++
++	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm_lru_then_evict),
++					      &opts), "test_run") ||
++	    !ASSERT_EQ(opts.retval, 0, "retval") ||
++	    !ASSERT_EQ(skel->bss->arm_err, 0, "arm_err"))
++		goto out;
++
++	kern_sync_rcu();
++	for (i = 0; i < 3000; i++) {
++		if (__atomic_load_n(&skel->bss->lru_callbacks, __ATOMIC_ACQUIRE) >= 1)
++			break;
++		usleep(10000);
++	}
++
++	ASSERT_EQ(skel->bss->lru_still_present, 1, "lru_still_present");
++	ASSERT_EQ(skel->bss->lru_callbacks, 1, "lru_callbacks");
++	ASSERT_EQ(skel->bss->lru_cb_val, 0xfeedface, "lru_cb_val");
++out:
++	call_rcu__destroy(skel);
++}
++
++static void *stress_thread(void *arg)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int i, err, prog_fd = *(int *)arg;
++
++	for (i = 0; i < 200; i++) {
++		err = bpf_prog_test_run_opts(prog_fd, &opts);
++		if (!ASSERT_OK(err, "test_run"))
++			break;
++	}
++
++	return NULL;
++}
++
++/* Concurrent arm and delete on overlapping keys from several CPUs. */
++static void test_call_rcu_stress(void)
++{
++	pthread_t thread[8];
++	struct call_rcu *skel;
++	int i, err, prog_fd;
++
++	skel = call_rcu__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		return;
++
++	prog_fd = bpf_program__fd(skel->progs.stress_hash);
++	for (i = 0; i < ARRAY_SIZE(thread); i++) {
++		err = pthread_create(&thread[i], NULL, stress_thread, &prog_fd);
++		if (!ASSERT_OK(err, "pthread_create"))
++			break;
++	}
++	while (i--)
++		pthread_join(thread[i], NULL);
++
++	for (i = 0; i < 3000; i++) {
++		if (__atomic_load_n(&skel->bss->stress_callbacks, __ATOMIC_ACQUIRE) >=
++		    skel->bss->stress_arms)
++			break;
++		kern_sync_rcu();
++		usleep(10000);
++	}
++
++	/* Every arm must have run, and the run must not have stalled early. */
++	ASSERT_GT(skel->bss->stress_arms, 1000, "stress_arms");
++	ASSERT_EQ(skel->bss->stress_callbacks, skel->bss->stress_arms, "stress_callbacks");
++
++	call_rcu__destroy(skel);
++}
++
+ static void test_call_rcu_bad_map(void)
+ {
+ 	LIBBPF_OPTS(bpf_map_create_opts, opts);
+@@ -177,9 +330,9 @@ static void test_call_rcu_bad_map(void)
+ 	opts.btf_key_type_id = bpf_map__btf_key_type_id(skel->maps.arr);
+ 	opts.btf_value_type_id = bpf_map__btf_value_type_id(skel->maps.arr);
  
- 	bpf_prog_put(prog);
+-	fd = bpf_map_create(BPF_MAP_TYPE_HASH, "rcu_hash", sizeof(__u32),
++	fd = bpf_map_create(BPF_MAP_TYPE_PERCPU_HASH, "rcu_pcpu", sizeof(__u32),
+ 			    bpf_map__value_size(skel->maps.arr), 1, &opts);
+-	ASSERT_EQ(fd, -EOPNOTSUPP, "hash_rejected");
++	ASSERT_EQ(fd, -EOPNOTSUPP, "percpu_hash_rejected");
+ 	if (fd >= 0)
+ 		close(fd);
+ 
+@@ -253,6 +406,89 @@ static void test_call_rcu_two_heads(void)
+ 	call_rcu__destroy(skel);
  }
  
-+/**
-+ * bpf_rcu_head_claim - hand an element over to a queued callback, if any
-+ * @map: map owning @value
-+ * @value: the element being released
-+ *
-+ * An RCU callback cannot be cancelled, so an element with one outstanding has
-+ * to stay alive until it has run; the callback releases it through
-+ * map_release_elem(). Marking it dead also stops it being armed again.
-+ *
-+ * Return: true when a callback owns @value and the caller must not release it.
-+ */
-+bool bpf_rcu_head_claim(struct bpf_map *map, void *value)
++static void test_call_rcu_hash_replace(void)
 +{
-+	struct bpf_rcu_head_kern *rhk = bpf_rcu_head_of(map, value);
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct call_rcu *skel;
++	int i;
 +
-+	return rhk && (atomic_fetch_or(RCU_HEAD_DEAD, &rhk->state) & RCU_HEAD_BUSY);
++	skel = call_rcu__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
++
++	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm_then_replace),
++					      &opts), "run"))
++		goto out;
++	if (!ASSERT_EQ(opts.retval, 0, "retval"))
++		goto out;
++	ASSERT_OK(skel->bss->arm_err, "arm_err");
++
++	kern_sync_rcu();
++	for (i = 0; i < 3000; i++) {
++		if (__atomic_load_n(&skel->bss->hash_callbacks, __ATOMIC_ACQUIRE) >= 1)
++			break;
++		usleep(10000);
++	}
++	if (!ASSERT_EQ(skel->bss->hash_callbacks, 1, "hash_callbacks"))
++		goto out;
++
++	/*
++	 * The value the callback saw tells us which element it ran on: the one
++	 * that was armed, not one handed back out to a later update.
++	 */
++	ASSERT_EQ(skel->bss->hash_cb_val, 0xbadc0de, "hash_cb_val");
++out:
++	call_rcu__destroy(skel);
 +}
 +
-+/**
-+ * bpf_rcu_head_busy - is a callback still using @value?
-+ * @map: map owning @value
-+ * @value: the element being looked at
-+ *
-+ * Unlike bpf_rcu_head_claim() this takes nothing, so a caller that can leave
-+ * the element alone asks with this first.
-+ *
-+ * Return: true when a callback is queued on @value or running on it.
-+ */
-+bool bpf_rcu_head_busy(struct bpf_map *map, void *value)
++static void test_call_rcu_reuse(void)
 +{
-+	struct bpf_rcu_head_kern *rhk = bpf_rcu_head_of(map, value);
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct call_rcu *skel;
 +
-+	return rhk && (atomic_read(&rhk->state) & RCU_HEAD_BUSY);
++	skel = call_rcu__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
++	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm_after_reuse), &opts),
++		       "run"))
++		goto out;
++	ASSERT_EQ(opts.retval, 0, "retval");
++	ASSERT_OK(skel->bss->reuse_arm2, "arm_after_reuse");
++out:
++	call_rcu__destroy(skel);
 +}
 +
-+/**
-+ * bpf_rcu_head_reset - give a recycled element a clean head
-+ * @map: map owning @value
-+ * @value: the element being handed out again
-+ *
-+ * The dead bit lives in the element, so it outlasts the callback that set it.
-+ * Without this a recycled element would refuse every later bpf_call_rcu().
-+ */
-+void bpf_rcu_head_reset(struct bpf_map *map, void *value)
++static void test_call_rcu_hash_np(void)
 +{
-+	struct bpf_rcu_head_kern *rhk = bpf_rcu_head_of(map, value);
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct call_rcu *skel;
++	int i;
 +
-+	if (rhk)
-+		atomic_set(&rhk->state, 0);
++	skel = call_rcu__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
++
++	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm_delete_reinsert),
++					      &opts), "run"))
++		goto out;
++	if (!ASSERT_EQ(opts.retval, 0, "retval"))
++		goto out;
++	ASSERT_OK(skel->bss->arm_err, "arm_err");
++
++	kern_sync_rcu();
++	for (i = 0; i < 3000; i++) {
++		if (__atomic_load_n(&skel->bss->hash_callbacks, __ATOMIC_ACQUIRE) >= 1)
++			break;
++		usleep(10000);
++	}
++	if (!ASSERT_EQ(skel->bss->hash_callbacks, 1, "hash_callbacks"))
++		goto out;
++
++	ASSERT_EQ(skel->bss->hash_cb_val, 0xbadc0de, "hash_cb_val");
++out:
++	call_rcu__destroy(skel);
 +}
 +
- static int __bpf_call_rcu(struct bpf_rcu_head *rh, struct bpf_map *map, void *callback,
- 			  struct bpf_prog_aux *aux, bool trace)
+ void test_call_rcu(void)
  {
- 	struct bpf_rcu_head_kern *rhk = (void *)rh;
- 	struct bpf_prog *prog;
-+	int old;
+ 	if (test__start_subtest("run"))
+@@ -265,6 +501,20 @@ void test_call_rcu(void)
+ 		test_call_rcu_two_heads();
+ 	if (test__start_subtest("teardown"))
+ 		test_call_rcu_teardown();
++	if (test__start_subtest("hash_delete"))
++		test_call_rcu_hash_delete();
++	if (test__start_subtest("hash_chain"))
++		test_call_rcu_hash_chain();
++	if (test__start_subtest("lru_evict"))
++		test_call_rcu_lru_evict();
++	if (test__start_subtest("hash_replace"))
++		test_call_rcu_hash_replace();
++	if (test__start_subtest("hash_np"))
++		test_call_rcu_hash_np();
++	if (test__start_subtest("reuse"))
++		test_call_rcu_reuse();
++	if (test__start_subtest("stress"))
++		test_call_rcu_stress();
+ 	if (test__start_subtest("bad_map"))
+ 		test_call_rcu_bad_map();
+ 	if (test__start_subtest("iter"))
+diff --git a/tools/testing/selftests/bpf/progs/call_rcu.c b/tools/testing/selftests/bpf/progs/call_rcu.c
+index 505008647fd6f..f3ad927298005 100644
+--- a/tools/testing/selftests/bpf/progs/call_rcu.c
++++ b/tools/testing/selftests/bpf/progs/call_rcu.c
+@@ -20,6 +20,31 @@ struct {
+ 	__type(value, struct elem);
+ } arr SEC(".maps");
  
- 	BUILD_BUG_ON(sizeof(struct bpf_rcu_head_kern) > sizeof(struct bpf_rcu_head));
- 	BUILD_BUG_ON(__alignof__(struct bpf_rcu_head_kern) != __alignof__(struct bpf_rcu_head));
-@@ -4852,14 +4937,18 @@ static int __bpf_call_rcu(struct bpf_rcu_head *rh, struct bpf_map *map, void *ca
- 	if (!atomic64_read(&map->usercnt))
- 		return -EPERM;
- 
--	if (cmpxchg(&rhk->armed, 0, 1))
--		return -EBUSY;
--
-+	/* Before arming, so a failure here leaves the head alone. */
- 	prog = bpf_prog_inc_not_zero(aux->prog);
--	if (IS_ERR(prog)) {
--		WRITE_ONCE(rhk->armed, 0);
-+	if (IS_ERR(prog))
- 		return -EBADF;
--	}
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 16384);
++	__type(key, __u32);
++	__type(value, struct elem);
++} hash SEC(".maps");
 +
-+	old = atomic_read(&rhk->state);
-+	do {
-+		if (old & (RCU_HEAD_ARMED | RCU_HEAD_DEAD)) {
-+			bpf_prog_put(prog);
-+			return -EBUSY;
-+		}
-+	} while (!atomic_try_cmpxchg(&rhk->state, &old, old | RCU_HEAD_ARMED));
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 8);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, __u32);
++	__type(value, struct elem);
++} hash_np SEC(".maps");
++
++int hash_cb_val;
++int hash_callbacks;
++int hash_chain;		/* set by userspace: re-arms from the hash callback */
++int hash_chain_err;
++int lru_callbacks;
++int lru_still_present;
++int lru_cb_val;
++int stress_callbacks;
++int stress_arms;
++
+ __u32 cb_key;
+ __u64 cb_keys;
+ __u64 cb_val;
+@@ -103,6 +128,255 @@ int arm_trace(void *ctx)
+ 	return 0;
+ }
  
- 	rhk->callback_fn = (bpf_callback_t)callback;
- 	rhk->map = map;
-@@ -4878,8 +4967,9 @@ static int __bpf_call_rcu(struct bpf_rcu_head *rh, struct bpf_map *map, void *ca
-  * @callback: BPF subprogram, invoked as callback(map, key, value) for the value holding @rh
-  * @aux: bpf_prog_aux of the caller, implicitly set by the verifier
-  *
-- * Return: 0, -EBUSY if @rh is already queued, -EPERM if @map is held by neither a process
-- * nor bpffs, or -EBADF if the calling program is going away.
-+ * Return: 0, -EBUSY if @rh is already queued or its element is being released,
-+ * -EPERM if @map is held by neither a process nor bpffs, or -EBADF if the
-+ * calling program is going away.
-  */
- __bpf_kfunc int bpf_call_rcu(struct bpf_rcu_head *rh, void *map__const_map,
- 			     bpf_rcu_callback_t callback, struct bpf_prog_aux *aux)
-@@ -4896,8 +4986,9 @@ __bpf_kfunc int bpf_call_rcu(struct bpf_rcu_head *rh, void *map__const_map,
-  *
-  * Waits for sleepable BPF programs too.  The callback itself is not sleepable either way.
-  *
-- * Return: 0, -EBUSY if @rh is already queued, -EPERM if @map is held by neither a process
-- * nor bpffs, or -EBADF if the calling program is going away.
-+ * Return: 0, -EBUSY if @rh is already queued or its element is being released,
-+ * -EPERM if @map is held by neither a process nor bpffs, or -EBADF if the
-+ * calling program is going away.
-  */
- __bpf_kfunc int bpf_call_rcu_tasks_trace(struct bpf_rcu_head *rh, void *map__const_map,
- 					 bpf_rcu_callback_t callback, struct bpf_prog_aux *aux)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 74496fd716d3b..10c6575c53cee 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1326,7 +1326,19 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
- 				}
- 				break;
- 			case BPF_RCU_HEAD:
--				if (map->map_type != BPF_MAP_TYPE_ARRAY) {
-+				if (map->map_type != BPF_MAP_TYPE_HASH &&
-+				    map->map_type != BPF_MAP_TYPE_LRU_HASH &&
-+				    map->map_type != BPF_MAP_TYPE_ARRAY) {
-+					ret = -EOPNOTSUPP;
-+					goto free_map_tab;
-+				}
-+				/*
-+				 * Array elements are never released, so they are never
-+				 * claimed either. Any other map has to be able to take
-+				 * one back from a callback.
-+				 */
-+				if (map->map_type != BPF_MAP_TYPE_ARRAY &&
-+				    !map->ops->map_release_elem) {
- 					ret = -EOPNOTSUPP;
- 					goto free_map_tab;
- 				}
++static int hash_reclaim(struct bpf_map *map, void *key, void *value)
++{
++	struct elem *e = value;
++
++	hash_cb_val = e->val;
++
++	if (hash_chain > 0) {
++		hash_chain--;
++		hash_chain_err = bpf_call_rcu(&e->rh, &hash, hash_reclaim);
++	}
++
++	__sync_fetch_and_add(&hash_callbacks, 1);
++	return 0;
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_LRU_HASH);
++	__uint(max_entries, 2);
++	__type(key, __u32);
++	__type(value, struct elem);
++} lru SEC(".maps");
++
++static int lru_reclaim(struct bpf_map *map, void *key, void *value)
++{
++	struct elem *e = value;
++
++	lru_cb_val = e->val;
++	__sync_fetch_and_add(&lru_callbacks, 1);
++	return 0;
++}
++
++/*
++ * Arm an LRU element, then push enough traffic through the map to evict it
++ * while the callback is still queued.
++ */
++SEC("syscall")
++int arm_lru_then_evict(void *ctx)
++{
++	struct elem init = {};
++	__u32 key = 100;
++	struct elem *e;
++	int i;
++
++	init.val = 0xfeedface;
++	if (bpf_map_update_elem(&lru, &key, &init, BPF_ANY))
++		return 1;
++
++	e = bpf_map_lookup_elem(&lru, &key);
++	if (!e)
++		return 2;
++
++	arm_err = bpf_call_rcu(&e->rh, &lru, lru_reclaim);
++	if (arm_err)
++		return 3;
++
++	/* max_entries is 2, so this would evict the armed element. */
++	init.val = 0;
++	bpf_for(i, 0, 64) {
++		__u32 k = 200 + i;
++
++		bpf_map_update_elem(&lru, &k, &init, BPF_ANY);
++	}
++
++	/* The callback still needs it, so the eviction must have been declined. */
++	lru_still_present = !!bpf_map_lookup_elem(&lru, &key);
++	return 0;
++}
++
++static int stress_reclaim(struct bpf_map *map, void *key, void *value)
++{
++	__sync_fetch_and_add(&stress_callbacks, 1);
++	return 0;
++}
++
++/*
++ * Hammer arm and delete on overlapping keys from several CPUs at once, to
++ * exercise the window where a delete lands while a callback is running.
++ */
++SEC("syscall")
++int stress_hash(void *ctx)
++{
++	struct elem init = {};
++	struct elem *e;
++	__u32 key;
++	int i;
++
++	init.val = 0xabcd1234;
++
++	bpf_for(i, 0, 16) {
++		key = bpf_get_prandom_u32() & 0xff;
++
++		if (bpf_map_update_elem(&hash, &key, &init, BPF_ANY))
++			continue;
++
++		e = bpf_map_lookup_elem(&hash, &key);
++		if (!e)
++			continue;
++
++		if (!bpf_call_rcu(&e->rh, &hash, stress_reclaim))
++			__sync_fetch_and_add(&stress_arms, 1);
++		bpf_map_delete_elem(&hash, &key);
++	}
++
++	return 0;
++}
++
++/*
++ * Arm a hash element, then replace its key twice. On a preallocated map the
++ * first replace would stash the old element in this CPU's spare and the second
++ * would hand that same element straight back out, so a callback that still
++ * needs it must take it out of circulation instead.
++ */
++SEC("syscall")
++int arm_then_replace(void *ctx)
++{
++	struct elem init = {};
++	__u32 key = 7;
++	struct elem *e;
++
++	init.val = 0xbadc0de;
++	if (bpf_map_update_elem(&hash, &key, &init, BPF_ANY))
++		return 1;
++
++	e = bpf_map_lookup_elem(&hash, &key);
++	if (!e)
++		return 2;
++
++	arm_err = bpf_call_rcu(&e->rh, &hash, hash_reclaim);
++	if (arm_err)
++		return 3;
++
++	init.val = 0xaaaa;
++	if (bpf_map_update_elem(&hash, &key, &init, BPF_ANY))
++		return 4;
++	init.val = 0xbbbb;
++	if (bpf_map_update_elem(&hash, &key, &init, BPF_ANY))
++		return 5;
++
++	return 0;
++}
++
++static int hash_np_reclaim(struct bpf_map *map, void *key, void *value)
++{
++	struct elem *e = value;
++
++	hash_cb_val = e->val;
++	__sync_fetch_and_add(&hash_callbacks, 1);
++	return 0;
++}
++
++/*
++ * Same handover on a map that frees elements to bpf_mem_alloc rather than a
++ * freelist: arm, delete, then insert the key again. The callback must still
++ * see the value it was armed on, not whatever the reinsert wrote.
++ */
++SEC("syscall")
++int arm_delete_reinsert(void *ctx)
++{
++	struct elem init = {};
++	__u32 key = 3;
++	struct elem *e;
++
++	init.val = 0xbadc0de;
++	if (bpf_map_update_elem(&hash_np, &key, &init, BPF_ANY))
++		return 1;
++
++	e = bpf_map_lookup_elem(&hash_np, &key);
++	if (!e)
++		return 2;
++
++	arm_err = bpf_call_rcu(&e->rh, &hash_np, hash_np_reclaim);
++	if (arm_err)
++		return 3;
++
++	if (bpf_map_delete_elem(&hash_np, &key))
++		return 4;
++
++	init.val = 0x1234;
++	if (bpf_map_update_elem(&hash_np, &key, &init, BPF_ANY))
++		return 5;
++
++	return 0;
++}
++
++/* Arm a hash element, then delete it before the callback can run. */
++SEC("syscall")
++int arm_hash_then_delete(void *ctx)
++{
++	struct elem init = {};
++	__u32 key = 7;
++	struct elem *e;
++
++	init.val = 0xbadc0de;
++	if (bpf_map_update_elem(&hash, &key, &init, BPF_ANY))
++		return 1;
++
++	e = bpf_map_lookup_elem(&hash, &key);
++	if (!e)
++		return 2;
++
++	arm_err = bpf_call_rcu(&e->rh, &hash, hash_reclaim);
++	if (arm_err)
++		return 3;
++
++	if (bpf_map_delete_elem(&hash, &key))
++		return 4;
++
++	/* The freelist is LIFO, so this would hand the same element back out. */
++	key = 8;
++	init.val = 0x5678;
++	return bpf_map_update_elem(&hash, &key, &init, BPF_ANY) ? 5 : 0;
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, struct elem);
++} one SEC(".maps");
++
++int reuse_arm1, reuse_arm2;
++
++static int reuse_cb(struct bpf_map *map, void *key, void *value)
++{
++	return 0;
++}
++
++/* Insert, delete without ever arming, reinsert, then arm the recycled element. */
++SEC("syscall")
++int arm_after_reuse(void *ctx)
++{
++	struct elem init = {};
++	__u32 key = 1;
++	struct elem *e;
++
++	if (bpf_map_update_elem(&one, &key, &init, BPF_ANY))
++		return 1;
++	/* No callback is ever armed on this element before the delete. */
++	if (bpf_map_delete_elem(&one, &key))
++		return 3;
++	if (bpf_map_update_elem(&one, &key, &init, BPF_ANY))
++		return 4;
++	e = bpf_map_lookup_elem(&one, &key);
++	if (!e)
++		return 5;
++	reuse_arm2 = bpf_call_rcu(&e->rh, &one, reuse_cb);
++	return 0;
++}
++
+ SEC("iter/bpf_map_elem")
+ int dump(struct bpf_iter__bpf_map_elem *ctx)
+ {
 -- 
 2.53.0-Meta
 
