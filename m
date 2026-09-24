@@ -1,52 +1,52 @@
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8474E8E11;
-	Thu, 24 Sep 2026 19:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CC14CC281;
+	Thu, 24 Sep 2026 19:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790279892; cv=none; b=EomBmbF6n4aOv9Gjgg2xBw4u8H8Pq3qk1vuQiAjuDPR3q9V+JsKsYntXSbNtfAA/tYyKDf/B0SETw1j6EzoDA6xIOyOjSeT55/tSDaL30eYokFRvkuNdkCkDYp0IMLhO62jBcyZ86eF4y6MuhbrT4e4x2PCcy+S1EpLiCGEm7FM=
+	t=1790279895; cv=none; b=Ukhd1wYLBnrXFmlUC0WuakB6J6Mi1MvHeIi7Qps4QsvXLwS9Ku5e9D0jId9QCQzVpFPnu9EPCo5jADSMk9P+n4sA9TEuE9DDXYHi9Z0oVcbVgXR6EMKrnSRfauCAKUFsPzflNUgCZhJCHPpxL5qEh1NbQxcnytDH6k90sKE+oCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790279892; c=relaxed/simple;
-	bh=c5Izg07tkdc5eWh/EbdJlKt5hNZ4OwsKWgWyQGIZoTY=;
+	s=arc-20240116; t=1790279895; c=relaxed/simple;
+	bh=f1Jl7ARCrnbvOaZkK/LjDTX3tw1/5r96ssNQoJplEUQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=VgFNoaGwO3XCGrpsA0+fY4DSH1ELp+h1BaCTCnWxQU6mwCugLrgEBq4deP2XiKEoNkRoamaHusba62wIhJ+njdtKhFosOt9pE72cKbvfvJQErq4xV3NmvzPS+ry/mIS5hMTJeRPkWvpH+T7scuicCzkUaSdRoB3zPJ6TrRIXrYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UwkbL2xV; arc=none smtp.client-ip=68.232.153.233
+	 In-Reply-To:To:CC; b=maq0lo6mtrnDrFAaNM0vsGlsCofBU3VQGxqoqN+7jQXO1g9hgc+IRvKzuQuIVNviZDnn8rn9x26DVmm/umkbQD4wajvNkrpJZmJTBvkXH/ydKAQUMwKeG1pxFtyJ+boOZ2nGSPwNbpf/sMpjvggb/49/4DQB8FzsEZyCNRebLwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=bRpQk9u6; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UwkbL2xV"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="bRpQk9u6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790279894; x=1821815894;
+  t=1790279893; x=1821815893;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=c5Izg07tkdc5eWh/EbdJlKt5hNZ4OwsKWgWyQGIZoTY=;
-  b=UwkbL2xV9inRhhJD812gOgc/z6Tif2Eu+ayY6gC8x+6l+iM4Bnl2/2Wb
-   Ia+BI4Z2k5++utOxT4qw9wUd1LNyWVq6H9iKg3SsAZTTChzd0ntInh3mK
-   CMKzuG3ODSEPJcVog0I5+cZmS7YVJ0nlJ+Bpz7iIVSrjdUHHiwQGiye5M
-   YdoHtYvXjqyIp5XUkFQSI5v99HvbEiKOaFcymV7K/o+qnb8OSN3KrBujQ
-   JC5yxYDmQ/F05ldP6CBxxZ4JzYDy6OXzTjcZIHx3ordBz/FMxkGaJKUHf
-   PYMs7lPnn4efnNdrm5jIYIGbuWxKCpmaG8hAw6f1486DaI2jpbLu4hHax
-   A==;
-X-CSE-ConnectionGUID: gukwD5jJQt2CF3VfsLI/aw==
-X-CSE-MsgGUID: mclnWOHIQvG9DxmhCqkINA==
+  bh=f1Jl7ARCrnbvOaZkK/LjDTX3tw1/5r96ssNQoJplEUQ=;
+  b=bRpQk9u6ZoOfv8jDX4Wz8QHkMWkpfUFyh42u+a5yYyLgwyx6gJyk69G/
+   4Yk5Ru8jgcijGubk5dizcIrhSOA5JMYB8/UQA8EDXGfebkD0TJ8cSkdnC
+   FNAiMi3ub7P625LQN2ZKM5sfwaZ4KhV4Nb2Wv13MaNdKjgRmspjinon2y
+   mZMdzwUBJsGoZAhAk8gHyLDp2EdM69T/6PlOW6zpebbNRcP8eNmwTLKzr
+   lQdJk4bhJSP4EqDqm86TRbZWp4sGqbuC40F5Qa3aDwfYfIfc1lPNpgD0H
+   R1AboEtWVCKMm4vtFlvyuHWUtW9NKbsMvOKPy4xvp6RU9ctAjNTdda39Q
+   Q==;
+X-CSE-ConnectionGUID: t3UEfPi8TTO8/B3fdvd7jA==
+X-CSE-MsgGUID: j6ks3an0QcOcMOgW2tdqPw==
 X-IronPort-AV: E=Sophos;i="6.27,121,1787036400"; 
-   d="scan'208";a="74257273"
+   d="scan'208";a="295533236"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Sep 2026 12:58:09 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Sep 2026 12:58:09 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Thu, 24 Sep 2026 12:58:04 -0700
+ 15.1.2507.58; Thu, 24 Sep 2026 12:58:08 -0700
 Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Thu, 24 Sep 2026 12:58:00 -0700
+ 15.1.2507.58 via Frontend Transport; Thu, 24 Sep 2026 12:58:04 -0700
 From: Daniel Machon <daniel.machon@microchip.com>
-Date: Thu, 24 Sep 2026 21:57:02 +0200
-Subject: [PATCH net-next v8 14/15] misc: lan966x-pci: dts: extend cpu reg
- to cover PCIE DBI space
+Date: Thu, 24 Sep 2026 21:57:03 +0200
+Subject: [PATCH net-next v8 15/15] misc: lan966x-pci: dts: add fdma
+ interrupt to overlay
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260924-lan966x-pci-fdma-v8-14-201c7b707d8b@microchip.com>
+Message-ID: <20260924-lan966x-pci-fdma-v8-15-201c7b707d8b@microchip.com>
 References: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
 In-Reply-To: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
@@ -74,31 +74,32 @@ CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>
 X-Mailer: b4 0.14.3
 
-The ATU outbound windows used by the FDMA engine are programmed through
-registers at offset 0x400000+, which falls outside the current cpu reg
-mapping. Extend the cpu reg size from 0x100000 (1MB) to 0x800000 (8MB)
-to cover the full PCIE DBI and iATU register space.
+Add the fdma interrupt (OIC interrupt 14) to the lan966x PCI device
+tree overlay, enabling FDMA-based frame injection/extraction when
+the switch is connected over PCIe.
 
 Tested-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 Reviewed-by: Simon Horman <horms@kernel.org>
 ---
- drivers/misc/lan966x_pci.dtso | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/lan966x_pci.dtso | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-index 7b196b0a0eb6..7bb726550caf 100644
+index 7bb726550caf..5bb12dbc0843 100644
 --- a/drivers/misc/lan966x_pci.dtso
 +++ b/drivers/misc/lan966x_pci.dtso
-@@ -135,7 +135,7 @@ lan966x_phy1: ethernet-lan966x_phy@2 {
+@@ -141,8 +141,9 @@ switch: switch@e0000000 {
  
- 				switch: switch@e0000000 {
- 					compatible = "microchip,lan966x-switch";
--					reg = <0xe0000000 0x0100000>,
-+					reg = <0xe0000000 0x0800000>,
- 					      <0xe2000000 0x0800000>;
- 					reg-names = "cpu", "gcb";
+ 					interrupt-parent = <&oic>;
+ 					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
++						     <14 IRQ_TYPE_LEVEL_HIGH>,
+ 						     <9 IRQ_TYPE_LEVEL_HIGH>;
+-					interrupt-names = "xtr", "ana";
++					interrupt-names = "xtr", "fdma", "ana";
  
+ 					resets = <&reset 0>;
+ 					reset-names = "switch";
 
 -- 
 2.34.1
