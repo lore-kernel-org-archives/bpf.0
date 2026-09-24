@@ -1,254 +1,103 @@
-Received: from mail-ej2-f7.google.com (mail-ej2-f7.google.com [74.125.228.135])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC804A5EB3
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B6946AEF2
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790266279; cv=none; b=R2qC7PYdQf0bo3QX0ZXhXrZvpGySaN0j4cVCvT26RI79H24M1bUNYpz3iMEFHmvLKj52YK/PEC3K1DCisyS0iZM0bSXadFwwFQWvJhBwAdY8InK4xL+uN2dHbZZ2VByEVxQ21V6Gn1gl36zTJflLePwcII+BH3MMD25ZM0KBaUI=
+	t=1790266280; cv=none; b=qu+RqaqMNU2ypuJ83tXMdfBzzOFMa9aGNWJYXzh0cun+7OgiAM7Xv6i9YEwT8+8H9zM64BkIs36UdHfGkPBqPKYjLB7XjfkMOaBZdXMw6Z92457Lc061fWqSsnKy6iPVNXE/CIiZq8qilAo7gjamnbbZBMozDZkl4+AMBESLs+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790266279; c=relaxed/simple;
-	bh=sjvElm9OzlWd9WrncMVleTTJwLB5hWxvSqnArn7XMfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tl2DXTd4WK9MJaVY1eLFQCU4ATkodF4J68N4OdgQusyZ6Ot1u8UCpsRS1xtaiajMetKntOmFLm2GTHnMSy1NOHDCj8OGHkK+GpNFMO4UVCtAiuSn8Nn03n1iY2f5hPF8yfKXTFmLC0a9Agzr6gs1A9jsk9Yy44K+iKhxDJaqJdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ykjo9Xp1; arc=none smtp.client-ip=74.125.228.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790266280; c=relaxed/simple;
+	bh=mtKjWuOMiCYOuzYe2ycIDDyC0SxSd5jHgz2oW9hduvY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=t4QciadGBfOzc7qFTw7L6r5xk1cmqJXvAwub8Zo23X3pdUxbru8u8vnfeyCYUxzdj//NwtII30AbbbA7/P3TPepQYap6fjFRxE9al4mwfU5ilUatQJOdH9t57TrsbizW41ddQ85JSDHtOFJWH1EsrfxnFBMhDljrxxBOcENLP6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ks1y5McC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ykjo9Xp1"
-Received: by mail-ej2-f7.google.com with SMTP id a640c23a62f3a-c29390fa872so115767766b.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790266271; x=1790871071; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cgVhYRjknEsmYWb58NrczLpY1T7bzz+SkV3E9wrQGs0=;
-        b=Ykjo9Xp1LLHmKT6UYu/N6qA4Q0NG4EcETWl8LgY1MdJ2Pm5gG/ZUw/gXTsOhJqbVs+
-         91eXkFkR11DbUAj5DF/OtVgKuueC5BS6CDBSnwlislsfMfzGiRm6cjYTW4h1cHt0NCFP
-         85TlZG/AdOnT4Ttw5RBD3TM3Wk26xTq4odZZaPoELeB5kS9n22eBkKvkGYz4tMRAxd7j
-         IL/JO5etPD7KqZoHKtRRdHPzRmaQagQPHl573gs2Hi8LftS50IGHUr6KyB12bOyLMdeZ
-         DeMVhXfkX69lN/7FFyCWa4RXHGHoOd5qPsk0sOU4osS5jM70huBcd94QeEtt2Qac3VRY
-         A7ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790266271; x=1790871071;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=cgVhYRjknEsmYWb58NrczLpY1T7bzz+SkV3E9wrQGs0=;
-        b=d6+V+Q4OsGX4cNH3zFaJnwpjlzI56yY37TemAuGi1qcemXj3Yg1XdWa7KFT04rRNbx
-         18nUC25RlbpY0pY49/NWSiz1vNKtGrURneSxhkOtedEtVFJlz1RcIgYfwrArhHpd27Om
-         QBxofpk4/+I3lUEEK2k4aTnipISNm3HZ7twXJYQTVR/e/KPbAHnzutyEaqYbNtrQB3fK
-         9THa6NJRCx7F12ME93PI3WIDZWQrJQlP9VZd16Tck6oE2GZ3o1KIEsx6OKleWUGxtSoA
-         O/BVZFaBR/V+kUcj7mqDwCJFhNocQJflx/8t8akZ0imnCQg1fpXo0cE9KEUFyBqpU+2+
-         YA1A==
-X-Forwarded-Encrypted: i=1; AKwUvBwQJkTRffQBYtj38hYTNK7zfGZfMmkyjSEy5dmocD/iMl7HUpBsve4yQrR+NRBLOG42CwM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nVLQlO5aHOImmiPDy3aeyZRXmmR9AD/nb0mUD8zgN4HTyL4SFe
-	ZFCzdn4ploQoBJCtoWAO7iHGxM2I50BAS615yHYCysFT5835RU8AzB/X
-X-Gm-Gg: AYBFou11sJav2FSHY4sB/5ohjQozX59sQHEN+ps97B6MulcbNShZEjGFUWx3TqC5LPd
-	mG+y5TIOZzznNOjmXftZ3pEAh+arzVV/iAXBzgCu3de21SvUxsrfCQig+Qz3Hai1FjhjciVZQ9J
-	t3OKvdvFvw6Shgsh5usP1XSg+03jLx0T9NoH2qCq5vuPLkzX/Z1kNzXvlwJMNWYJar6pUio+wva
-	fs5VjFOh0FQXBN+zTRiowREOGVu6/AynyTvEt99jsd95ojnnXEOxJCJ6YmX/Ti+F8mqlNPDU6Vn
-	s5sdAdIAsGp18V6obHOVDMIICOMX+WbJANC0cicVIZeD7iJe6cOdk2PURsdnfJt4nKXBTP+WmBd
-	LrJ6Y6iZ/DNJjFHbhJAuwRCT64HweN44oZf9gv5IxsPydIWTgLj8URQA5pOguk1LtFTx0Vv6V4D
-	zjV/3YWPG7Vb4c/xlxRu//MNQmowNcLKTqEobJL8wNGXiLSLGLm+84DVrd4mLHONr4
-X-Received: by 2002:a17:907:cf86:b0:c21:601:6501 with SMTP id a640c23a62f3a-c2ac52c0b98mr216549166b.20.1790266270990;
-        Thu, 24 Sep 2026 09:11:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:49::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2ab3ffbc6dsm297599066b.30.2026.09.24.09.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:11:10 -0700 (PDT)
-Date: Thu, 24 Sep 2026 09:11:04 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, kuniyu@google.com, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 0/9] net: BPF Timestamping 2.0 for TCP
-Message-ID: <arVLfFuu02eS2Txs@devvm7509.cco0.facebook.com>
-References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
- <arF7FGr8rQqDw8Pj@devvm7509.cco0.facebook.com>
- <CAL+tcoDossUOJCVwZ-6U519L_bNMYngnd82e1_oQB-czA6rL3A@mail.gmail.com>
- <arLpc9BBv_W6nw8c@devvm7509.cco0.facebook.com>
- <CAL+tcoCE1MmEQKZRX2ct4zrWxZiSj53ztVuRWU_o1+9AmO7B_g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ks1y5McC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3591F00893;
+	Thu, 24 Sep 2026 16:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790266279;
+	bh=2CO8PBM9qNMplP25BHQarpqdpkPB0B5TWwyK5Y14H8c=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=ks1y5McCa4gtMMAHDqfmLbhc25wLu2yzNSO/QBgUH79/PYkD/CY/0qaYGcizdVsKK
+	 SbWBJj2fixfqbFsBe7R28oV+UqBsvKckr9fD6v07Z+qXzlSv4o2ZPk3O7A1kYFdNCJ
+	 dqu2g9G6U80HlIpnegLMNfEPLPwYKGICsBY5q4cUpegBqVnmW/pipsp6GMY1YjMDda
+	 +SCtG/4bljvQNw/Qr3bUQO0aURB+n+GB0aDJddL/SvzFCgXJfAfjPYS1SRMiIvp2ND
+	 pAQZgV6rxMQFVE6IlsMOtWp0yc3gAAU/12FumM3+sZ8wlKuitUF1UuE3Xkmd+IJnhX
+	 auvopAkN0fLfA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56A0B3A566CD;
+	Thu, 24 Sep 2026 16:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL+tcoCE1MmEQKZRX2ct4zrWxZiSj53ztVuRWU_o1+9AmO7B_g@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 00/11] Support inline functions in BTF
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179026620815.1631477.1701211223849452726.git-patchwork-notify@kernel.org>
+Date: Thu, 24 Sep 2026 16:10:08 +0000
+References: <20260924111428.75957-1-alan.maguire@oracle.com>
+In-Reply-To: <20260924111428.75957-1-alan.maguire@oracle.com>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, qmo@kernel.org,
+ jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
+ yonghong.song@linux.dev, song@kernel.org, martin.lau@linux.dev,
+ memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org, nsc@kernel.org,
+ puranjay@kernel.org, yatsenko@meta.com
 
-On 09/23, Jason Xing wrote:
-> On Wed, Sep 23, 2026 at 4:53 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> >
-> > On 09/22, Jason Xing wrote:
-> > > On Tue, Sep 22, 2026 at 2:45 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> > > >
-> > > > On 09/19, Jason Xing wrote:
-> > > > > From: Jason Xing <kernelxing@gmail.com>
-> > > > >
-> > > > > Greeting,
-> > > > >
-> > > > > It's BPF Timestamping 2.0 that aims to observe the packet latency
-> > > > > more efficiently and simply for different protocols. The current
-> > > > > series is only focused on TCP protocol.
-> > > > >
-> > > > > At Netdev 0x1a/Netconf 2026, the history, background, motivation and
-> > > > > rough implementation of the feature were exhaustively introduced[1].
-> > > > >
-> > > > > History
-> > > > > =======
-> > > > > - In 2009, Patrick Ohly implemented the basic infrastructure
-> > > > > - In 2014, Willem de Bruijn enhanced the TCP latency observation
-> > > > > - In 2024, Jason Xing proposed its lightweight BPF version
-> > > > > Detailed slides from 28 to 32 [1].
-> > > > >
-> > > > > Background
-> > > > > ==========
-> > > > > Even though BPF Timetamping 1.0 is comparatively low-overhead,
-> > > > > transparent, it's still complicated due to a few points inherited
-> > > > > from the design:
-> > > > > - Inflexible/fixed reporting phases (qdisc/driver/ack)
-> > > > >   When we confirm the issue arises from the kernel by using attribution
-> > > > >   ability of timestamping feature, we need to further minimize the scope
-> > > > >   until the issue is fixed. That means, we then have to resort to write
-> > > > >   a few complex BPF progs with the similar functionalities (like skb
-> > > > >   level tag) which should not happen.
-> > > > > - Not enough low-overhead
-> > > > >   Serving the sensitive applications, an always-on latency observation
-> > > > >   platform should mitigate the self-impact as much as possible. As we
-> > > > >   can conclude from BPF Timestamping selftests, there are some blocking
-> > > > >   and time-consuming points like where reading/writing BPF maps happen
-> > > > >   in the extremely hot paths.
-> > > > > - Minor flaws
-> > > > >   There are a few minor flaws inherited from the initial design, like
-> > > > >   missing tagging the last packet[2][3][4].
-> > > > > Detailed slides from 33 to 39 [1].
-> > > > >
-> > > > > Motivation
-> > > > > ==========
-> > > > > During the process of the large scale deployment over the last few years,
-> > > > > we eventually realized timestamping feature doesn't support container
-> > > > > scenario and we need a finer-grained and flexible tracing tool (packet
-> > > > > basis) after a few rounds of attribution of issues.
-> > > > >
-> > > > > Design
-> > > > > ======
-> > > > > - Start time
-> > > > >   For the specific protocol, we need to accurately set the start time of
-> > > > >   each packet first. For TCP, we chose the entry of tcp_sendmsg_locked
-> > > > >   and the driver time as the start point, so that any BPF program is
-> > > > >   capable of computing the delta between start time and current time.
-> > > > > - Simplicity
-> > > > >   Previous BPF program (like selftests) is too complex to implement. The
-> > > > >   core idea is to make everything as simple as possible. And it should be
-> > > > >   decoupled from BPF area and previous timestamping feature as much as
-> > > > >   possible.
-> > > > > - Flexibility
-> > > > >   BPF program hooking any function with skb parameter can get the latency
-> > > > >   value, which means it's no longer bound to the pre-embeded reporting
-> > > > >   phases (see __skb_tstamp_tx)
-> > > > > - Efficiency
-> > > > >   Avoid the previous BPF operations as much as possible. Make sure the
-> > > > >   feature achieves the lowest performance impact, which means only time
-> > > > >   operations remain.
-> > > > > Detailed slides from 40 to 62 [1].
-> > > > >
-> > > > > Implementations
-> > > > > ===============
-> > > > > in-kernel
-> > > > > - Find a suitable place to timestamp for each packet
-> > > > > - Pick the right start time for TCP
-> > > > > - Handle the split skb due to various reasons
-> > > > > BPF prog
-> > > > > - Hook any functions that carry skb parameter
-> > > > > - Read out the start time from the skb
-> > > > > - Generate the current time and then compute the latency
-> > > > >
-> > > > > Discussion?
-> > > > > ===========
-> > > > > - Do we need a kfunc to allow users to reset the start time of each skb?
-> > > > >   What I had in mind is if someone tries to observe the latency between
-> > > > >   two specific functions (rather than tcp_sendmsg_locked).
-> > > > > - Current implementation is real hardware timestamp always wins, which
-> > > > >   means BPF prog possibly gets the hardware time that is not aligned
-> > > > >   with bpf_ktime_get_real_ns.
-> > > > > - After the series, do we need to implement the same logic for
-> > > > >   SYN/FIN/PROBE... As far as I know according to numerous user reports,
-> > > > >   a small handful of issues came from 3-way handshake.
-> > > > > - Reusing the slot of hwtstamp might bring potential problems or make the
-> > > > >   code hard to maintain. Can we add a timestamping specific field in
-> > > > >   skb to deal with the latency observation?
-> > > > > - netdev_data conflict in IGC driver. It seems unavoidable to pollute
-> > > > >   start time when it's enabled. Should V2 feature coexist with hardware
-> > > > >   timestamping?
-> > > > > - Should V2 coexist with net timestamping and BPF timestamping? If not,
-> > > > >   the maintenance should be easier.
-> > > >
-> > > > After netconf discussion, I was under the impressions that no kernel
-> > > > changes are needed, so what changed? Is it hard to track start_time
-> > >
-> > > Ah, you refered to the internal version, right? We wrote a kernel
-> > > module implementing similar logic which differently finds/borrows an
-> > > unused field of socket to store the start time. It's quite similar to
-> > > the series actually.
-> > >
-> > > After deploying it at a small scale in production, I think it's
-> > > meaningful to upstream it. But as you noticed, there are remaining
-> > > discussion points on which I hope we can share opinions, especially
-> > > the future shape.
-> > >
-> > > > from tcp_sendmsg_locked on the bpf side that we need kernel support?
-> >
-> > [..]
-> >
-> > > Sure, we need kernel support that why I'm trying to introduce the
-> > > sk_start_time to help.
-> > > https://lore.kernel.org/all/20260919143732.11772-4-kerneljasonxing@gmail.com/
-> >
-> > Why can you not do this on the bpf side? There is even now a sendmsg_locked
-> > tracepoint with skb/sk argument. Or is it mostly because you can't
-> > distinguish between cgroups? And looking at your example [1] and don't
-> > see why a tracepoint won't be enough. Or is it too much overhead? In this
-> > case, it needs to have some numbers attached...
-> 
-> I understand what you meant. Sure, we can generate the initial time in
-> the tcp_sendmsg_locked() and try to pass it on to each skb in
-> skb_entail(), which means 1) we need at least two hooks, which brings
-> obvious overhead, 2) it's still not that easy to use as I expect it to
-> be super easy to use/write/deploy, 3) I try to decouple it from BPF
-> infra or complex use for the convenience. It looks like we now go back
-> to BPF Timestamping V1.0.
-> 
-> Adding hooks does harm to the performance to those real
-> latency-sensitive users who were actually yelling at us. There are
-> some interesting numbers I collected previously (Sorry, I will not be
-> able to collect more real data because I left that company:( ):
-> 1) The kernel module introduces around 5-15% performance impact in the
-> real workload. After we removed the hook in tcp_sendmsg_locked, even
-> though the module didn't have the full function to calculate the
-> latency, the cost was decreased by ~3-5%.
-> 2) Fentry has ~4% impact on some workloads. It's very similar to what
-> we use netperf on loopback [1].
-> 
-> The crucial idea behind the feature is that we're trying so hard to
-> deploy the latency platform 7x24 without any selective sampling. It
-> now looks like an advanced/21-century tcpdump and it can be
-> _always-on_. If someone is just looking for one-shot tools, of course
-> there are a few alternatives that are not good enough though.
+Hello:
 
-IMO the feature as posted looks very tailored to a specific/narrow
-use case. You save the sendmsg time in the socket and then use
-it during skb allocation (with a few quirks here and there to account
-for fragmentation/tso/cloning/etc).
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-For the very least, If you're looking to turn it into a non-rfc submission, 
-I'd add numbers: tracepoint based implementation vs this kernel
-accelerated path. And then we can discuss how much slower the tracepoints
-are and whether you're using the proper ones... (and have an actual selftest
-example as part of the series)
+On Thu, 24 Sep 2026 12:14:17 +0100 you wrote:
+> This series adds support to facilitate tracing of inline function
+> sites using BPF Type Format (BTF) information. An excellent overview
+> of the problem and proposed solution presented at LSF/MM/BPF is
+> available at [1].
+> 
+> The aim is to produce a compact representation providing sufficient
+> information to a tracer wishing to instrument an inline site via a
+> kprobe.  The challenge to solve is compact representation - my
+> local bpf-next builds show nearly 600,000 inline sites for approximately
+> 100,000 functions.  Any BTF representation should utilize deduplication
+> where possible to minimize overheads.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v4,bpf-next,01/11] btf: Extend UAPI to support BTF location (inline site) info
+    https://git.kernel.org/bpf/bpf-next/c/33c5a3278bdb
+  - [v4,bpf-next,02/11] libbpf: Add support for BTF kinds LOC[_PARAM|_PROTO|SEC]
+    https://git.kernel.org/bpf/bpf-next/c/dad2fcc644dd
+  - [v4,bpf-next,03/11] selftests/bpf: Test helper support for BTF_KIND_LOC[_PARAM|_PROTO|SEC]
+    https://git.kernel.org/bpf/bpf-next/c/0f1de9408e59
+  - [v4,bpf-next,04/11] selftests/bpf: Add LOC_PARAM, LOC_PROTO, LOCSEC to field iter tests
+    https://git.kernel.org/bpf/bpf-next/c/663fa771389d
+  - [v4,bpf-next,05/11] selftests/bpf: Add LOC_PARAM, LOC_PROTO, LOCSEC to dedup split tests
+    https://git.kernel.org/bpf/bpf-next/c/dfb463b07117
+  - [v4,bpf-next,06/11] selftests/bpf: BTF distill tests to ensure LOC[_PARAM|_PROTO] add to split BTF
+    https://git.kernel.org/bpf/bpf-next/c/49a4c23a2234
+  - [v4,bpf-next,07/11] bpftool: Handle multi-split BTF by supporting multiple base BTFs
+    https://git.kernel.org/bpf/bpf-next/c/7890a57356a2
+  - [v4,bpf-next,08/11] bpftool: Document support for multi-split BTF
+    https://git.kernel.org/bpf/bpf-next/c/0ec4caf73ce5
+  - [v4,bpf-next,09/11] bpftool: Add ability to dump LOC_PARAM, LOC_PROTO and LOCSEC
+    https://git.kernel.org/bpf/bpf-next/c/321562c34d5b
+  - [v4,bpf-next,10/11] selftests/bpf: Test bpftool dump of BTF location info
+    https://git.kernel.org/bpf/bpf-next/c/3429e01578b6
+  - [v4,bpf-next,11/11] Documentation/bpf: Describe new location-related BTF kinds
+    https://git.kernel.org/bpf/bpf-next/c/ce2913d959a2
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
