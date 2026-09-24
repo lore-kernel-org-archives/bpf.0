@@ -1,141 +1,81 @@
-Received: from mta0.migadu.com (out-253.mta0.migadu.com [91.218.175.253])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04607374E7F
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 20:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.253
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EF84A4835
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790283268; cv=none; b=uk44Y/pAUHnYyfNoC47ozmlQafgFEHdaet1JaggrEa3liw1p1P9uFGB36hRkG8IVV5hMVbKkaU0NHA/GYEpFUCJhMSDi9VspaNynvmYNYx1A2DQoA0zefG3qLtTbd4n9ak/umDqJYCvrkH6xJsWnRyMnipX65BihNJCo3NdkOzw=
+	t=1790283685; cv=none; b=C3123YXm2WD2Y37b9GHJqdFZER7PooTiacfus0mMijzgJAo3hu/Qf8zqmQ6fVGo4PpptQc3EPG7L9CaPlo2Q84wSC8/XHttN0FBp0Sqw8VY/0LPkgkkNDwxyL1slAHHxxTEci4HVELEf6ommxRk7nixK2c6EKvgPf3/rO2k7/ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790283268; c=relaxed/simple;
-	bh=aXzhg2/sV7JxsC85KbccWxXfTEzFGBgAsvIphQGs6vE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ayZdFW+HxVIy9wk1L/l0EmL9tcX5Wz25U569Tv0QP41BFsExeFCz5KPfXqr6DKBykuV1P0eNS/9+q7LQ8LiXxuXV/qvvGZAUlJV0INrwndk1I7xXHzzf0HyNVjGPZ6twHtYfoYanz1ocKHpHrpwMGMOeEKjHctwGBK0kwNwFTdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gkjEacpF; arc=none smtp.client-ip=91.218.175.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790283685; c=relaxed/simple;
+	bh=ZITk1FR1SyqhHUS9YFPdYDh7/phPW5XWBW4iSAdJ/9Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rZk6KPd8tGw7+TCHeiXjwAHu1tO1K5l7ZXwIL3iZZDAk0Zmep6nVkzs+aRN/6yK6+tMmrjOoiqTtdNzl8nRgRHl2qsJfpJi8sfHgSOtjNVlcXuAbyP1vv++teAwf8AJ1wXiCcOUIVx3gE5oIQVSrc/Z+nWpeTh4j4yHucNcfD84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RaOlfctC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gkjEacpF"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=aXzhg2/sV7JxsC85KbccWxXfTEzFGBgAsvIphQGs6vE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790283264; v=1; x=1790888064;
- b=gkjEacpFgyEZ9Zzs6ZFerUbawFTmsmUOAnMSXsIA/2a49McM16UAFKfcD2SLOjqyWA8sY951
- 2FaPrfQaGl/HBUY76cYYEa18rw8aP+WvxlrgX6J/pZsdpSfqhfCkGJWOBGBhRx/ij7luw0E/5y2
- wCJKnm6RYBKNWz+gxqxnZqCc=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 96f419482a6f5d26;
-	Thu, 24 Sep 2026 20:54:23 +0000
-X-Mizu-Trace-ID: 96f419482a6f5d26
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <75d4a3bb-dbec-42ba-868b-8117de405d3b@linux.dev>
-Date: Thu, 24 Sep 2026 13:54:20 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RaOlfctC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 928901F000FF;
+	Thu, 24 Sep 2026 21:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790283682;
+	bh=8mhgjxDVXDYj0/T8mN3FLR4d4hGlW47GyoJrzHQPbRM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=RaOlfctCF2saH5snFzoIiIfMA1GeKTEltmTWohc8/kQK4hBFQCSvCtMinDfLUArHx
+	 fEeoa27039h8c+GHwV39x11gad6UD9dfpMAUnAiF96vW8DKTTru/D3cKh9yjt0Wwg4
+	 l2dW6GHUVX51t/0WbcAPylsbyVyo1xUUyzQQjTOFT47jra7LEO1Ker3x90Z2g7tBxN
+	 qQn4ymLMYj1rGzfqXT4jGGpBhsTBak/sueNNAGdten4pqbQsr3Z8PyCwWLAFYr6sf5
+	 Z0OUTDVCEq/ee5uyt0Bvx3KEOzs35iW/dUPMQA+0IBou7f05mkJ/PJCKUc8R5J49+y
+	 q2ghoWP9G+fCQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A1E3A566E5;
+	Thu, 24 Sep 2026 21:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH vfs v1] bpf: Allow bpf_d_path() from filp_close_sync()
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260924204226.190315-1-ihor.solodrai@linux.dev>
- <20260924205218.04C4B1F000FF@smtp.kernel.org>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260924205218.04C4B1F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Return the id scratch to a fixed array
+ sized
+ for the stack budget
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179028361142.2197912.11945342962296412428.git-patchwork-notify@kernel.org>
+Date: Thu, 24 Sep 2026 21:00:11 +0000
+References: <20260924193403.3032037-1-memxor@gmail.com>
+In-Reply-To: <20260924193403.3032037-1-memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, tj@kernel.org,
+ kkd@meta.com, kernel-team@meta.com
 
-On 9/24/26 1:52 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] bpf: missing filp_close_sync dependency breaks resolve_btfids and selftest
-> - [Low] bpf: failure to migrate CHECK() to ASSERT_*() when updating selftest
-> --
-> 
-> commit f620a29b55750df4341321e76f9065c834f91fa3
-> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
-> 
-> bpf: Allow bpf_d_path() from filp_close_sync()
-> 
-> The d_path selftest closes its descriptors with close_range() so that
-> its fentry program on filp_close() runs. The vfs commit
-> 46ace7e4dc4b ("fs: make close_range() synchronous") switched
-> close_range() to filp_close_sync(), so the program still attaches but
-> is never called. This commit allows bpf_d_path() from filp_close_sync()
-> and updates the selftest.
-> 
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index 29260951aa871..09a27810ca27f 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -972,6 +972,7 @@ BTF_ID(func, vfs_fallocate)
->>  BTF_ID(func, dentry_open)
->>  BTF_ID(func, vfs_getattr)
->>  BTF_ID(func, filp_close)
->> +BTF_ID(func, filp_close_sync)
-> 
-> [Severity: High]
-> Does filp_close_sync exist in the current tree? Since the referenced VFS commit
-> (46ace7e4dc4b) might not be present yet, adding its BTF ID here will break the
-> kernel build during resolve_btfids due to a missing dependency.
+Hello:
 
-The patch obviously depends on 46ace7e4dc4b ("fs: make close_range() synchronous")
-being in the tree.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
+On Thu, 24 Sep 2026 21:34:01 +0200 you wrote:
+> Commit 9f3d900a69be ("bpf: Grow the verifier id scratch on demand") turned
+> the id map comparing the ids of two states, which also serves as the id
+> stack of release_reference() and as the id set of
+> bpf_clear_singular_ids(), into arrays grown on demand, so that the env
+> would not embed a map sized for 2 KiB frames. That gave the map a way to
+> fail, and with it release_reference() and the iterator destroy path an
+> -ENOMEM to hand up, states_equal() a case where states compare unequal
+> for lack of memory, and bpf_clear_singular_ids() a flag to keep every id
+> when the set could not record them all.
 > 
-> [ ... ]
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
->> index 1a2a2f1abf033..7665e1d28a641 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/d_path.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-> [ ... ]
->> @@ -165,7 +166,7 @@ static void test_d_path_basic(void)
->>  
->>  	if (CHECK(!bss->called_close,
->>  		  "close",
->> -		  "trampoline for filp_close was not called\n"))
->> +		  "trampoline for filp_close_sync was not called\n"))
-> 
-> [Severity: Low]
-> Since this CHECK() macro in test_d_path_basic() is being modified, shouldn't
-> it be migrated to the modern ASSERT_*() macros? BPF subsystem guidelines require
-> replacing deprecated CHECK() macros when updating existing tests.
+> [...]
 
-That's a selftests/bpf nit, not relevant to the issue addressed by the patch.
+Here is the summary with links:
+  - [bpf-next] bpf: Return the id scratch to a fixed array sized for the stack budget
+    https://git.kernel.org/bpf/bpf-next/c/9bf1f086e7dd
 
-> 
->>  		goto cleanup;
->>  
->>  	for (int i = 0; i < MAX_FILES; i++) {
-> 
-> [ ... ]
-> 
->> diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
->> index 561b2f861808e..edb5494a47f74 100644
->> --- a/tools/testing/selftests/bpf/progs/test_d_path.c
->> +++ b/tools/testing/selftests/bpf/progs/test_d_path.c
->> @@ -41,7 +41,7 @@ int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
->>  	return 0;
->>  }
->>  
->> -SEC("fentry/filp_close")
->> +SEC("fentry/filp_close_sync")
-> 
-> [Severity: High]
-> Will the test load fail unconditionally here? Attaching a BPF program to
-> fentry/filp_close_sync when the function doesn't yet exist in the tree will
-> cause an error. Applying this patch without its VFS dependency introduces a
-> cross-tree dependency failure regression.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-See above.
-
-> 
->>  int BPF_PROG(prog_close, struct file *file, void *id)
->>  {
->>  	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-> 
 
