@@ -1,71 +1,71 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-oa2-f35.google.com (mail-oa2-f35.google.com [74.125.231.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410654CA79D
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 17:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D8B4C10FB
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 17:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790271887; cv=none; b=VOz9g1DbClnhYrriXMQzj/J90Y5deC9thVC4ymUWRJt80AXCJxlD0af35wSXI6YQvD0xHSJOhsuFeZ344/zTNmtBpqmcEPwejUWzhhb8VpE2LRQKjKrd9dJ3gRWuFNzS53fG34X8Z8593W4MiM4zW7qkhy/JC9MqV7P+QQ420Fw=
+	t=1790271893; cv=none; b=MhARUKtfK5QpBnEi8AK9OGOef0BG3uSDQlz5BH6YUIqvIQvbFAH7Cy0gdD3zKsrkajip+Wxbjv58agnlQHxY1ksnpY2pq1vK6Rpw6YcZ12P2cIR+GlbRdG5l6+O6pqJlTsL6g5UJ7gkDEGPKLsu76WRuEaKqN/dMtUEQJ0YM788=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790271887; c=relaxed/simple;
-	bh=mZteaWjFlTrdvZhXpeSLJ2aG6DK5laeYUpxIOr+Hy3o=;
+	s=arc-20240116; t=1790271893; c=relaxed/simple;
+	bh=lENjvTcJ6jn6OOtjQT9OxyeXMbXMz3M/XL/BEeU1C48=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DNLxZbZy+QqZNfwhA3mjI+MRqNh//kxCmPnCmWUXhG+ZT9GKFFJNCy8XgmNM7bJvmwnQ5/jNcw5p0GK7UYDSyfqsX6eIGluOFUa9qKReLlWYTFjlmGAIqtUJggU+GKY+11NNwsc/Qo+Areye+byJuvgmz5Vfz3qM4yldQ4K1vlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBdje9So; arc=none smtp.client-ip=74.125.231.76
+	 In-Reply-To:To:Cc; b=nD5XqMmHdSQCxaSJO7UgGme71KK9UBU9EXNxU2N6uy+gigBaN+lhYla6F6h/GsBO2SCw22MkSyxuDANA8OZnwlfjLVtkWSdWmP6Afya3004VMZEsqEE6l0cY68yeB4KHmDnLK2mRRKtrmnJufDmIRMNE8B9XSnAmI22qcng/L04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k5/ocFJo; arc=none smtp.client-ip=74.125.231.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBdje9So"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466cc9b2f1dso68331fac.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:44:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k5/ocFJo"
+Received: by mail-oa2-f35.google.com with SMTP id 586e51a60fabf-4906fabf6deso130243fac.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790271884; x=1790876684; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790271887; x=1790876687; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VeegLINSUVfOlfX4/9rlXB2NUVxrFUlmYGkBGDGCAS8=;
-        b=EBdje9Son6k3N4bSxZLoyABCxp3aamjnHhUBbXiR3J/fSCX1n4GRIsoI2PJVIo2Npr
-         /Cl0nABg9VzieViEolLQsfwMX5BuNEdnq1ti8ar3xBxgdaUdZvy50FQb8Qs1ZI2SAUwB
-         V93lkGThrS2BUJ+XEwPZaiPGBCtQ8Hjeg4gGDCgX5C7kZM0TFn0P2yPyY5FLAdS10m5n
-         TsZpNSI9mFH3iyTML+mLhQ4/PhVF2o5ZlosxZKtN5o/qN79TpmtNnDeimyXviUqQbmNG
-         H6BR8Y1fb9x0ReqLmttsVtbIDRTZqWK4nfqm4ul4Ya3YUTWFZBNh1+xcB9jP783EMNNT
-         EPjw==
+        bh=VrMqc8Q1NW4R8bM+PWgpFGuXOWv8RLSIAwP5mrNvnTc=;
+        b=k5/ocFJo/TqwLLtij4rM8EDgk1dATiT5Fxr9mic6QuxyfVU9JyxzoHPFj6DZNL/REx
+         KempqyQLQxYgqqt0DTDIXx45dc70oJZkfuYEwC2As6rNhLBQ8pfRwm66MUAqGrIIwiTt
+         5TXgUEW5PicfDJFkpzqVfQxxirvAGuVcPSGVcS+VYRWN7W8cCNKLYZKNZIIArYkzfmv9
+         ajETeCZWxQlnaF4x37F2zT4f3G0LVWbPpV/BNBd2W75RuDB6R7GFfz2oZzpUPzAAUb4m
+         leM1LzkNkajv6631vxo6UAFQ6sEVGWE7edTZEkaQyH4LkY3Am+GFO2sdCAlq972csj1A
+         SadA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790271884; x=1790876684;
+        d=1e100.net; s=20260707; t=1790271887; x=1790876687;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VeegLINSUVfOlfX4/9rlXB2NUVxrFUlmYGkBGDGCAS8=;
-        b=oRVNb71Jbxfkd2a/EPhq1drSUkq/zY+LTXmZQHDqp494GNl+LsFl2jMFHfQpdQYKCd
-         oLApSBXCLvsZ5qPogeNCCrH7ny/dk2QFdRXGi80uISBoy6ZH5+DVtg3ziFENgzvl/K2l
-         J+lqkgESLYa88siy2sSu8Q59S+JiOGbMW1yNp1I7FXhvtwh3rwzlsu7FizMQGlWLHDen
-         oyqr7UC9b5AoAD+SvbM24aMpkiwYPXMegPBEHl7Yysw8b7clpslKgamKHkGvy1lXR+kT
-         YNdVQLnUfMPJcZlT5BEsdNK78HqSy72MFBpt69pLiLBYx2Mcj9HImBj85wJ9GAiP+9aU
-         S2wA==
-X-Forwarded-Encrypted: i=1; AKwUvBxEuqUV4+IMiA+YGWEOXOeq/Q26TTKkOEr2IxO6zsnM6zh8qt1oyKQdnQyxOVHjEA4p3Es=@vger.kernel.org
-X-Gm-Message-State: AFuF++lJQZywypM+X9C0iGj0UF4FdBU6TyefpwLr80YbYadbLVIwxggS
-	d0t/zQ7bwIvmFhO0iPR/7Mtw6B1oO5JhPcwK2zd9Fh1iuHAISxNCsfFM
-X-Gm-Gg: AYBFou2wyXUIJlPkYiN9fhSq6Tl6CtwJu2TwXMU2uQojjUuM6QcdVMJN5O9wUle5ShX
-	ZGnsedFrHap1W2YNNLoFxn1aIEvP86iRi+dTJBYIZ8AY2K3CXuuvJdV/nXPQP6Nilh+qgXtZJ5G
-	X+HCJ+C4zTExRsPgn2cNO15hOnx7ssRN0yzW5Yjyey/qJJofhXQS9t9HUXReRRGYst54BPvD+//
-	ZnpdSUQ8p+a7UqaPwcmsApnYr5c8eyVusafawljVxv6WUrjV/uJQRo/eTyEPQ1tKW5UmZae3KD8
-	+022cA/uCL7xU2ukDwMEqt1cB9MQjphawO8xzRLp5Z6FtNHPE/4PmgFEIuuQv+5fv2KhykJx0t1
-	w24iihSqKGGcYCx6NeikHsfUCTIfMva9v+3hoXzBm2HmiDuKJ1LLrmAS5sJDybww7RpvD1nOro7
-	YUA7tIcw2aVB2GBM6R6IdOkUrvhX85lgXrWQIcSGIGz7fVlQ5EbjZyirYUw29qONqp7M4d+qtBX
-	JEksxJl6KwUbV1JuHPaskAkXawdl5aq0vP9cbBMTvewnIBzj9IV6J1U3Rcvuj3KkvRJhfdL6mjB
-	rU58b2p2xSEMCgSdTOPYU+Y1KiqUXVwqPpTDVy3w9ii9lnM6p1x3sw/R2Zs7SUhn1sJat+Dfs/B
-	7tdGeafqnQU9wxdRlE9F3Xg==
-X-Received: by 2002:a05:6871:3325:b0:467:2b0b:d07d with SMTP id 586e51a60fabf-491e9629ecbmr2582163fac.1.1790271884027;
-        Thu, 24 Sep 2026 10:44:44 -0700 (PDT)
+        bh=VrMqc8Q1NW4R8bM+PWgpFGuXOWv8RLSIAwP5mrNvnTc=;
+        b=bXdy+ZoHSOiG9SRPgmFZufLSwEdLurNQF1ed4br8VFaGjjkerQsW3H7amOZpw0THiW
+         MAW+8H8bZYscJip+d7iychI5RO8Y6sGkqpnGLryYImsQuomIF29TW7WkHhQhCMJJUY0p
+         KvKK+liFWyAmXKIeZpFX6D/5uoQcOVwai423fQQYP85krvLPCCj4D66nWW75mvm5+e1j
+         gH3t9kggYlNU4LaWg/4cPredVVT7OppW7Jb/r6WUsZjH5uSlyGvs6gzgARVQnNFO0cQh
+         Aygif0XTf2Xw75t2WEHJHXuZxmq0cFhRY5LjXm3sp3AEres09Ep5qzYim2cJBc3jqagL
+         XgMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzJBPvZtM+DFQy9fULCADviSTdi9RlKWXlsehuQKKh6JUh41E+BGbKmmcEierk9rlFKG9A=@vger.kernel.org
+X-Gm-Message-State: AFuF++nrY5A7ZcA/lXY6LBBky/gR1w/CIdY6nP1SHjPu5vS09CY4cXCF
+	YEqSPxlYrRj/I57ugqFBJTvng2joplITgK6n7/lLOo+IrQc9SRGQeWDo
+X-Gm-Gg: AYBFou1mPKpLFXx0mLH9pFDIS7e+w1Md5DWsw4DQpi9yoGid/Dc9RFkOLJnAmHkHDOA
+	at3Thd2y5lCJ5aZjVCbaBuk3op51RVRKNUDc5P73onHFxFZqeyGzev3C1aGXaX0ZwUDz/8W03/K
+	Xlg7hIRs4b7h9v9ronC+yp/89vP1mRpDVgRrsa2jJJydPG1iBCP37HyF4E1SIpwJ1nVXGUSEkuv
+	G1vB6j8dNU+CZcj1X/QRaBxPQltbQ1PjHRyJmKg6AlpJtaMiEHv7S1DOHqeuAFQkUFL0qjlUfwX
+	5wDSM/kuReK3tMdkADD8dFfJLG87sroRCxJd/snuThBdylw7rHbQdSbuK3hBaFCdw0f2+kfYfaO
+	GTW+vtYo+MrqShvQfC2+ho9H89KULl/nM5nHrwdOu1uV9knLP7n7ZxZW/5Uk21RM3yrkoL3qMUd
+	YS7R0vMIKgOrW4q9JzA/OpeHANrlkNtWTcX5BebDoaFVvgvSovUCC9+uEDMWqH9cvcx7Snzg4YI
+	VpOPp+37YqdFeO5D4++qfgdviFwWg/CclL+DFXd4Io1Qrm5j5xVqZhnYCMzT/14PCwD3UOtCNw2
+	+19Piju7ks96pb6AEYc7WCE3vuCFLjeO+fLhSkzq1ttWcqSLEHlxySzDqokih6D0x7J9kn98Ki7
+	KaU15JJj+vqgZe5jKRApruA==
+X-Received: by 2002:a05:6870:d88f:b0:47c:f956:c7bd with SMTP id 586e51a60fabf-491e4e5f03emr3167632fac.3.1790271887477;
+        Thu, 24 Sep 2026 10:44:47 -0700 (PDT)
 Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-491e8f8d14asm3027802fac.0.2026.09.24.10.44.42
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-491e8f8d14asm3027802fac.0.2026.09.24.10.44.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 10:44:43 -0700 (PDT)
+        Thu, 24 Sep 2026 10:44:47 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 24 Sep 2026 11:44:35 -0600
-Subject: [PATCH net v3 05/10] net: stmmac: unwind partially allocated DMA
- configurations
+Date: Thu, 24 Sep 2026 11:44:37 -0600
+Subject: [PATCH net v3 07/10] net: stmmac: account for failed live XDP
+ reopening
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,7 +74,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260924-submit-stmmac-reset-fixes-v1-v3-5-c031e3f3a282@gmail.com>
+Message-Id: <20260924-submit-stmmac-reset-fixes-v1-v3-7-c031e3f3a282@gmail.com>
 References: <20260924-submit-stmmac-reset-fixes-v1-v3-0-c031e3f3a282@gmail.com>
 In-Reply-To: <20260924-submit-stmmac-reset-fixes-v1-v3-0-c031e3f3a282@gmail.com>
 To: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
@@ -110,152 +110,202 @@ Cc: Richard Genoud <richard.genoud@bootlin.com>,
  Ding Hui <dinghui1111@163.com>, James Hilliard <james.hilliard1@gmail.com>
 X-Mailer: b4 0.15.2
 
-RX and TX allocation failure paths release all configured queues, even
-when the failing queue has not allocated its buffer array or descriptors.
-Only walk buffer arrays and free coherent memory when those allocations
-exist. If TX allocation fails after RX allocation succeeds, release the
-RX resources too.
+The XDP-specific release/open pair bypasses the ordinary datapath
+bookkeeping, and its caller ignores reopen errors. A failed allocation
+therefore leaves the device marked running with NAPI disabled and rings
+released. A later close disables NAPI again. An IRQ-request failure also
+frees descriptors after starting DMA without first stopping it.
 
-Propagate RXQ memory-model registration errors instead of continuing
-with an unusable RXQ. Clear XSK RXQ bindings before the RXQ goes away,
-release any saved partial packet, and clear released resource pointers.
-This also leaves configurations which are reused after close or XDP
-reconfiguration with a consistent empty state.
+Detach and stop phylink while replacing the XDP datapath, update its
+ownership state, and reattach only after successful reopening. Preserve
+the existing PTP registration on success, but release it on failure so a
+DOWN datapath has no residual PTP ownership. Drain transmitters and timer
+producers after freeing IRQs which can restart TX queues, including on
+the ordinary release path.
 
-The MTU transaction added later relies on preparation failures being
-fully unwound without touching the currently active configuration.
+Keep the old program reference until the change has succeeded. On an
+attach failure restore the old program and return the error, allowing the
+core to release the proposed program. Program removal must still succeed
+when the non-XDP datapath cannot restart: BPF link teardown cannot retain
+the detached program. Leave the interface administratively up but detached
+for an ordinary down/up recovery in either failure case.
 
-Fixes: 71fedb0198cb ("net: stmmac: break some functions into RX and TX scopes")
+Fixes: ac746c8520d9 ("net: stmmac: enhance XDP ZC driver level switching performance")
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 49 ++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 47 +++++++++++++++--------
+ drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c  | 31 +++++++++++----
+ 2 files changed, 54 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index f7e91ae21448..3b918cf89806 100644
+index ce598b575763..467f471874cf 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1761,6 +1761,9 @@ static void dma_free_rx_skbufs(struct stmmac_priv *priv,
- 	struct stmmac_rx_queue *rx_q = &dma_conf->rx_queue[queue];
- 	int i;
- 
-+	if (!rx_q->buf_pool)
-+		return;
-+
- 	for (i = 0; i < dma_conf->dma_rx_size; i++)
- 		stmmac_free_rx_buffer(priv, rx_q, i);
- }
-@@ -1884,17 +1887,19 @@ static int __init_dma_rx_desc_rings(struct stmmac_priv *priv,
- 	rx_q->xsk_pool = stmmac_get_xsk_pool(priv, queue);
- 
- 	if (rx_q->xsk_pool) {
--		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
--						   MEM_TYPE_XSK_BUFF_POOL,
--						   NULL));
-+		ret = xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-+						 MEM_TYPE_XSK_BUFF_POOL, NULL);
-+		if (ret)
-+			return ret;
- 		netdev_info(priv->dev,
- 			    "Register MEM_TYPE_XSK_BUFF_POOL RxQ-%d\n",
- 			    queue);
- 		xsk_pool_set_rxq_info(rx_q->xsk_pool, &rx_q->xdp_rxq);
- 	} else {
--		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
--						   MEM_TYPE_PAGE_POOL,
--						   rx_q->page_pool));
-+		ret = xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-+						 MEM_TYPE_PAGE_POOL, rx_q->page_pool);
-+		if (ret)
-+			return ret;
- 		netdev_info(priv->dev,
- 			    "Register MEM_TYPE_PAGE_POOL RxQ-%d\n",
- 			    queue);
-@@ -1956,6 +1961,8 @@ static int init_dma_rx_desc_rings(struct net_device *dev,
- 			dma_free_rx_skbufs(priv, dma_conf, queue);
- 
- 		rx_q->buf_alloc_num = 0;
-+		if (rx_q->xsk_pool)
-+			xsk_pool_set_rxq_info(rx_q->xsk_pool, NULL);
- 		rx_q->xsk_pool = NULL;
- 
- 		queue--;
-@@ -2099,6 +2106,9 @@ static void dma_free_tx_skbufs(struct stmmac_priv *priv,
- 
- 	tx_q->xsk_frames_done = 0;
- 
-+	if (!tx_q->tx_skbuff_dma || !tx_q->tx_skbuff)
-+		return;
-+
- 	for (i = 0; i < dma_conf->dma_tx_size; i++)
- 		stmmac_free_tx_buffer(priv, dma_conf, queue, i);
- 
-@@ -2137,10 +2147,16 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	void *addr;
- 
- 	/* Release the DMA RX socket buffers */
--	if (rx_q->xsk_pool)
-+	if (rx_q->xsk_pool) {
- 		dma_free_rx_xskbufs(priv, dma_conf, queue);
--	else
-+		xsk_pool_set_rxq_info(rx_q->xsk_pool, NULL);
-+	} else {
- 		dma_free_rx_skbufs(priv, dma_conf, queue);
-+	}
-+	if (rx_q->state_saved)
-+		dev_kfree_skb_any(rx_q->state.skb);
-+	rx_q->state.skb = NULL;
-+	rx_q->state_saved = 0;
- 
- 	rx_q->buf_alloc_num = 0;
- 	rx_q->xsk_pool = NULL;
-@@ -2153,7 +2169,8 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
- 
- 	size = stmmac_get_rx_desc_size(priv) * dma_conf->dma_rx_size;
- 
--	dma_free_coherent(priv->device, size, addr, rx_q->dma_rx_phy);
-+	if (addr)
-+		dma_free_coherent(priv->device, size, addr, rx_q->dma_rx_phy);
- 
- 	if (xdp_rxq_info_is_reg(&rx_q->xdp_rxq))
- 		xdp_rxq_info_unreg(&rx_q->xdp_rxq);
-@@ -2161,6 +2178,10 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	kfree(rx_q->buf_pool);
- 	if (rx_q->page_pool)
- 		page_pool_destroy(rx_q->page_pool);
-+	rx_q->buf_pool = NULL;
-+	rx_q->page_pool = NULL;
-+	rx_q->dma_erx = NULL;
-+	rx_q->dma_rx = NULL;
- }
- 
- static void free_dma_rx_desc_resources(struct stmmac_priv *priv,
-@@ -2201,10 +2222,16 @@ static void __free_dma_tx_desc_resources(struct stmmac_priv *priv,
- 
- 	size = stmmac_get_tx_desc_size(priv, tx_q) * dma_conf->dma_tx_size;
- 
--	dma_free_coherent(priv->device, size, addr, tx_q->dma_tx_phy);
-+	if (addr)
-+		dma_free_coherent(priv->device, size, addr, tx_q->dma_tx_phy);
- 
- 	kfree(tx_q->tx_skbuff_dma);
- 	kfree(tx_q->tx_skbuff);
-+	tx_q->tx_skbuff_dma = NULL;
-+	tx_q->tx_skbuff = NULL;
-+	tx_q->dma_etx = NULL;
-+	tx_q->dma_entx = NULL;
-+	tx_q->dma_tx = NULL;
- }
- 
- static void free_dma_tx_desc_resources(struct stmmac_priv *priv,
-@@ -2411,6 +2438,8 @@ static int alloc_dma_desc_resources(struct stmmac_priv *priv,
- 		return ret;
- 
- 	ret = alloc_dma_tx_desc_resources(priv, dma_conf);
-+	if (ret)
-+		free_dma_rx_desc_resources(priv, dma_conf);
- 
+@@ -4314,12 +4314,10 @@ static int stmmac_open(struct net_device *dev)
  	return ret;
+ }
+ 
+-/* Quiesce NAPI and transmit queues without releasing their resources. */
+-static void stmmac_quiesce(struct stmmac_priv *priv)
++static void stmmac_stop_tx_queues(struct stmmac_priv *priv)
+ {
+ 	u8 chan;
+ 
+-	stmmac_disable_all_queues(priv);
+ 	netif_tx_disable(priv->dev);
+ 
+ 	/* A poll function can still arm a timer after napi_complete_done().
+@@ -4332,6 +4330,13 @@ static void stmmac_quiesce(struct stmmac_priv *priv)
+ 		hrtimer_cancel(&priv->dma_conf->tx_queue[chan].txtimer);
+ }
+ 
++/* Quiesce NAPI and transmit queues without releasing their resources. */
++static void stmmac_quiesce(struct stmmac_priv *priv)
++{
++	stmmac_disable_all_queues(priv);
++	stmmac_stop_tx_queues(priv);
++}
++
+ static void __stmmac_release(struct net_device *dev)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+@@ -4350,6 +4355,9 @@ static void __stmmac_release(struct net_device *dev)
+ 	/* Free the IRQ lines */
+ 	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+ 
++	/* TX error IRQs can restart a queue after the first quiescence. */
++	stmmac_stop_tx_queues(priv);
++
+ 	/* Stop TX/RX DMA after draining IRQ handlers which can restart it. */
+ 	stmmac_stop_all_dma(priv);
+ 
+@@ -7244,19 +7252,15 @@ void stmmac_enable_tx_queue(struct stmmac_priv *priv, u32 queue)
+ void stmmac_xdp_release(struct net_device *dev)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+-	u8 chan;
+-
+-	/* Ensure tx function is not running */
+-	netif_tx_disable(dev);
+ 
+-	/* Disable NAPI process */
+-	stmmac_disable_all_queues(priv);
+-
+-	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+-		hrtimer_cancel(&priv->dma_conf->tx_queue[chan].txtimer);
++	netif_device_detach(dev);
++	phylink_stop(priv->phylink);
++	stmmac_quiesce(priv);
++	priv->datapath = STMMAC_DATAPATH_DOWN;
+ 
+ 	/* Free the IRQ lines */
+ 	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
++	stmmac_stop_tx_queues(priv);
+ 
+ 	/* Stop TX/RX DMA channels */
+ 	stmmac_stop_all_dma(priv);
+@@ -7271,7 +7275,13 @@ void stmmac_xdp_release(struct net_device *dev)
+ 	 * watchdogs during reset
+ 	 */
+ 	netif_trans_update(dev);
+-	netif_carrier_off(dev);
++
++	if (stmmac_fpe_supported(priv))
++		ethtool_mmsv_stop(&priv->fpe_cfg.mmsv);
++
++	/* Keep PTP across the immediately following stmmac_xdp_open(). That
++	 * function releases it if reopening fails, before returning DOWN.
++	 */
+ }
+ 
+ int stmmac_xdp_open(struct net_device *dev)
+@@ -7350,19 +7360,22 @@ int stmmac_xdp_open(struct net_device *dev)
+ 
+ 	/* Enable NAPI process*/
+ 	stmmac_enable_all_queues(priv);
+-	netif_carrier_on(dev);
+-	netif_tx_start_all_queues(dev);
+ 	stmmac_enable_all_dma_irq(priv);
++	priv->datapath = STMMAC_DATAPATH_RUNNING;
++	phylink_start(priv->phylink);
++	netif_device_attach(dev);
+ 
+ 	return 0;
+ 
+ irq_error:
+-	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+-		hrtimer_cancel(&priv->dma_conf->tx_queue[chan].txtimer);
++	stmmac_stop_tx_queues(priv);
++	stmmac_stop_all_dma(priv);
++	stmmac_mac_set(priv, priv->ioaddr, false);
+ 
+ init_error:
+ 	free_dma_desc_resources(priv, priv->dma_conf);
+ dma_desc_error:
++	stmmac_release_ptp(priv);
+ 	return ret;
+ }
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+index 909219775507..7ecb7addd2ea 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+@@ -108,6 +108,7 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
+ 	struct bpf_prog *old_prog;
+ 	bool need_update;
+ 	bool if_running;
++	int ret;
+ 
+ 	if_running = priv->datapath == STMMAC_DATAPATH_RUNNING;
+ 
+@@ -119,25 +120,41 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+-	if (!prog)
+-		xdp_features_clear_redirect_target(dev);
+-
+ 	need_update = !!priv->xdp_prog != !!prog;
+ 	if (if_running && need_update)
+ 		stmmac_xdp_release(dev);
+ 
+ 	old_prog = xchg(&priv->xdp_prog, prog);
+-	if (old_prog)
+-		bpf_prog_put(old_prog);
+ 
+ 	/* Disable RX SPH for XDP operation */
+ 	priv->sph_active = priv->sph_capable && !stmmac_xdp_is_enabled(priv);
+ 
+-	if (if_running && need_update)
+-		stmmac_xdp_open(dev);
++	if (if_running && need_update) {
++		ret = stmmac_xdp_open(dev);
++		if (ret) {
++			netdev_err(dev, "failed reopening after XDP change: %pe; interface remains detached\n",
++				   ERR_PTR(ret));
++			if (prog) {
++				/* The core retains the old program on error and drops
++				 * the reference it passed for the proposed program.
++				 */
++				xchg(&priv->xdp_prog, old_prog);
++				priv->sph_active = priv->sph_capable && !old_prog;
++				return ret;
++			}
++			/* Uninstalling a BPF link must release its program even
++			 * if the non-XDP datapath cannot be restarted.
++			 */
++		}
++	}
++
++	if (old_prog)
++		bpf_prog_put(old_prog);
+ 
+ 	if (prog)
+ 		xdp_features_set_redirect_target(dev, false);
++	else
++		xdp_features_clear_redirect_target(dev);
+ 
+ 	return 0;
  }
 
 -- 
