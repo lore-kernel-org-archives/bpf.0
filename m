@@ -1,266 +1,267 @@
-Received: from mail-qv2-f0.google.com (mail-qv2-f0.google.com [74.125.230.128])
+Received: from mail-qv2-f25.google.com (mail-qv2-f25.google.com [74.125.230.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57CBF43F8D9
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.128
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790266562; cv=pass; b=shg+qvo7KLHu/vNK/lwX4N/QtMQOL4ZGfm+QKnvKMOq7cQGvxC9d8Flbj80B+FQEm+x/m4RStmW/YWRuEiT9CnhF3ifkvMQW7em0V6HlE6NkLMIpbLONYR+AFgRJssturfXHI9INReziYvO5JMt0WtlUA6bCDRwU6IuED08HtQE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790266562; c=relaxed/simple;
-	bh=AzxhmYlqJMtI2hGV/3afybSd85lTojyYwdmA+SxmSSU=;
-	h=MIME-Version:From:In-Reply-To:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F64V5GlD+2iFHkNIZ5VGw+iRFxQCFTzSKeA7ZZoVNoeRZsOyMnUH5Aw2xaG2lM0LU80nPwPa8QvkJ8arIbIRSsUFcogXehsBIl6HGdvDcIhZiru+l+3JOF9ciYfomAgptKt/jwd6C7dWJSc3ptVBQaqU34L++jEyxWmP8yl7PE8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lw+2tO42; arc=pass smtp.client-ip=74.125.230.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA8036AB7C
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.153
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790266598; cv=none; b=GwUBWZIJxKLdNN/gmM+aUoi60zVS3Bg0mhxm3LOh/8HXlBYg8ki/MiKJIh7Xun77lVFW7yqIXGW7IWwrvuGdnkJQVV9FImRzQEsdA6WNTnetar477uQ2QPdvApiXdtauJ7ec1h1N0jKXfMrx7trSQVjA3L1VHBpDs9W+L0WOV9Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790266598; c=relaxed/simple;
+	bh=h/Mc3DnI7LfNjyhU40x6a5ht0e04GIAO8atGjdR5AhQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=l8Asgl5HvJ/00Ch0TtCtS/FQJ2+ug+18xSfFJgEe8uqJmET9AI01nXtSzp5ia/WORXLUIrmD/g+r3UIkqBpyg5iDXa750kqFf8rMACRTuIXXINd0ewN3wKEcffCtUKYA15CglXsPf3u1vUYyBYo6h+IJWORN6vK/CjbfpJFvrao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bd7bNVQr; arc=none smtp.client-ip=74.125.230.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lw+2tO42"
-Received: by mail-qv2-f0.google.com with SMTP id 6a1803df08f44-910603aa531so103986d6.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:16:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790266559; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oSKR11nok6DNDP5zsNqn/hROuhluKBcVwxZYLSWg+ZZ+RiCkSRjTcWgPBaeMGrn9FN
-         YROvn81YX8mlyFNBlI0eYSlOuQGlIRQRa6HZor4Y3sv3xGzC3cTI4GWH5VEoJtmJCsMM
-         1nulh0AMGMmcvCzeeQOLZl/RHCEEmY3zWUc3QZxCKNvmPInWf8eWP4toGde9aUynoq78
-         LcK2A7tTDCWCwuECDWxfVK5O+Dbl7wXvZpoKeSA6AXirqxxsEx2Bg0WsZjDYLzVokpLh
-         5myjSxch0jAXDhLV52kww7Op1FLpitxccJL9MBpk6aSKyX8eQGNN5am3esZZlQdE6C0W
-         CsLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:references:in-reply-to:from
-         :mime-version:dkim-signature;
-        bh=8VzKkG9mi98ONJzS+sXNaXBzrMP/Vmv7pjoyvpH11DA=;
-        fh=ZqsbCIb2GN2KOl/EevUDRPKfC3NR8S9fwNdVhf7l2EE=;
-        b=oGEoxWkRmLn33WqkpEhxR9+KdcjjP+u01lGuKcTtMKZC3UClGnT+uHqN7dHnJzqmI0
-         XnsmAguyAWOf8AtKjc79UxrkZJ6GO9/5OXRC22T4rODN56L3cIYNZMwMSLwgrq47iNOR
-         vb6nDrjVy1A566LV2Qje9TAjB8IgHVDHh3UG2vEqnjNN06ijfPqITL2MFs5IbhzKz/np
-         fqDY3oMYBXwMMiN1eABJM47BvUW2HQlQFG5FP2YxUCYsP9ic/RhPVILuvSrDMjaTq0Cr
-         6UHJbfuxf381BE6mIBUqOUgsvx1DNH9SndNlJ+l8rpfLY4784HnwVW4Y0XIlhlK2XkCz
-         EQcw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bd7bNVQr"
+Received: by mail-qv2-f25.google.com with SMTP id 6a1803df08f44-90cdfcb5cb3so330896d6.3
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:16:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790266559; x=1790871359; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
-         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8VzKkG9mi98ONJzS+sXNaXBzrMP/Vmv7pjoyvpH11DA=;
-        b=Lw+2tO424QQg74GQzpY6feq33s82iMeyR8SLSHhYPTNvayhXYkcgxAEsVZFwVeTesa
-         fHnmzWmlSpUPDN56sRA5HUKds1WfbWG95txBn4oW4tijOo+W2FZNpnBBuzYUD/kPCSG3
-         xuaCcs6MazDMbM4N/ZZtcIT9M3mQiQVNju4lCBdpgo+crzvoO+UOAL5OjTyvkv0jxaA8
-         mLq89NNXrwtLxAbWlvNyTI1+IHtYGL3PH3PAEIoXZXyt895C7pOQYt+RMNvhjGjNn3Fy
-         rHIbw69+9zjeIVDOUOiq62pkcAnr2Iy5eF0928IJWzVNwRF6unZ3zHqZ5nAzlR+0yS4G
-         ML1Q==
+        d=gmail.com; s=20251104; t=1790266596; x=1790871396; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=iWigTBtLpsox0Nup25UwaB9x5Gbdt7pmJDm6fm3JuRo=;
+        b=Bd7bNVQrUljey69LHHMhjm45cc4J8s0wvR5fachiR19160Wn12fKLlscKRLQ/wUWRe
+         Z1MySFB8ivJ0C2C/NubyrfY78EVXQI0OUOPj3dh5qxdjSyQ7AoYan6NOVQLxeLe2256O
+         Zmm9IEeW6sAXd5ci8PNgC2G7nc80BREASm30TYENmbrC6MSSdo0b25aPzUb+uM5kECa6
+         x7tgviAX2qUdJs4pBeHkXcS3KA1oZUZT+xd+8se8y0paUqgf4QMbz8lyVe9mPq01jY5X
+         nQpxp/H6nWXWuln+xmElr75CaK40zPpuDGIdMR4GxxeUQH3phIREWemiankVoK08Jt8l
+         LvoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790266559; x=1790871359;
-        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
-         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8VzKkG9mi98ONJzS+sXNaXBzrMP/Vmv7pjoyvpH11DA=;
-        b=Yewiqe9EG45bzdi2uuSovU+ehjUFOSQhJsrshBn636UpZp0qrl16GaSHT9LT3iIxFY
-         Q5a9BFgE6DdJbGNzpMXoTdzXbxIe8c+6LeYrtFT67VOkfpx3IMUYAkzWzOypWg9duADt
-         ZyO6xXFzuxG34mjynbz3/t85O3UXKvUP9t+AdWy49H4aWt8zmCxmeJsWVoMxEofyY6Ah
-         0GWy9D4R3gpZzlhiaJG5YvnCzuK+34Pm3TOOO7jORgTJKEO9RprNQMGxvZcIZ4wyCl3N
-         HctC5BZ7wVWgyP/oRUuvcQMia4HOEoPnsAjbpI4NFOLjSydZ3RNpr85MBiMzlp/hMhXm
-         XsdA==
-X-Forwarded-Encrypted: i=1; AKwUvBySsA+/2pk98RcONTogjsJLhmq/xUY5pkf2wIVFr2tvwEY0qUNoxS8ZYELRhdMF2nILBis=@vger.kernel.org
-X-Gm-Message-State: AFuF++lXLAb842w/VJGd0RJKdkr166lbGaKLPRQzMtR0YUCTUrswHkES
-	trIQcdMOnLEKBZ8Mj73S5kr9k649QOjyB9no3rP+bR2SW1LVZDFn6zuH+kj1dFICHTeleQlYtqd
-	OVVke0tq6jXAJj96GIKpCQXyiFKCHO5I=
-X-Gm-Gg: AYBFou1khqi7PkUa/bzPRxCU06Q/96EMvkYxWxI0F2AwvAWnzDhgl5wAB9aOxJ9J4uh
-	wcXNA8huLgUMDEhqcfej2zKdwef+iwUnntwQVEYi5GYvrCkvhncGy4w1ESUPw1cKUGvclaeYnrx
-	jdSBk7bctfjKsCJLCvH/gt5In/Y1XvTfZg/41VmZf+cG4fM6e5G36Ca6WdVy3GEyRSFA8cpTmx+
-	NHSlIgGhOwSYTneBRVL9y0JYt/pDKDnYLJY2Xnsyby4nZxqfyR9RtqX+d/j4jYZLDcmoO75gJIW
-	eB/gn/CAWAwdTGnZekmsnkhpyf3tVomfN/mY9DPyLPOoUtHOx3QiIg==
-X-Received: by 2002:a05:6214:f0f:b0:913:fa79:99c3 with SMTP id
- 6a1803df08f44-91421f13ba5mr28893306d6.43.1790266558827; Thu, 24 Sep 2026
- 09:15:58 -0700 (PDT)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 24 Sep 2026 09:15:57 -0700
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 24 Sep 2026 09:15:57 -0700
+        d=1e100.net; s=20260707; t=1790266596; x=1790871396;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iWigTBtLpsox0Nup25UwaB9x5Gbdt7pmJDm6fm3JuRo=;
+        b=lrtBQXggigV3gOmKQuxQRo6JvRfPFiL11qKlV09Gur7gRRgW2jCOVJWHL5PdJUHyC/
+         rJ1EftHbBdqDZKWlvSVNFl/3iWxY7OQvoozYk7BUrSM2Xd93Bx8gglefVd0OLT+zgcPm
+         mw4qsAkmDIHcjfbPR3noVEGvCDVnE+53J0ahrN/eonLX8Fi8xzIBr5x1SsHts1VQIc7M
+         9jWb3yD58fwKuzNNV+M3KqvmEXzeacdGsz+hGIifj+1xrwotKAoJ3Osqa4doim0vNdzY
+         /85xBJ4c8VE9hYc7NLOPuGf94dmzEsHxXlkKJd9uw2+MMrbtepRKEPXvkm2z5/aBLbS+
+         Olkg==
+X-Forwarded-Encrypted: i=1; AKwUvBydSfhMow8B3YBYx7ZBsjm5FQw9vIBYh5nITJc3BXcbTNPFEpVUSaRZNI8GY9diiWA61i4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lY1YSv/WmYnxZuSGDcNJmFj2iyew5GKmz3RmbQFBVzsv0xWVjx
+	OGR4IXR8QfUydX1IJHy54dr9OFbOI5KuuVnVI+ZtRX1Y+iGxuwQtz7HU
+X-Gm-Gg: AYBFou1yjxO1swM/ROloEupOHjzlqlkgcWCYeSTG6/q/4cjCY44jzXXjQA3JyQ6kCap
+	cEzcmvSN1X6Lf8913bGuIJ5WkubYMjwMpJC2AcpBCGmM9Yb8FkkSlOfsuZ/sl+lzbhBxpwnX5JG
+	CgZ/to/jEqTITFF5ExlnJgJ7oJc4AmOoG9Xb3AQm+6PN6k05oFZM/LSRfka7SAm6UcypIc4V4YO
+	ewy97bC0JTL44YfFHZyAnyafcM371mSnLqnM3MMa+2XrtK+EeqeZsK6CoJ681QLG+MgWyj/yz9p
+	v8WDyfssTgPFFHhuSy2rwrUpyGGnc/igrBB4YbmIw5P/h+bII2BZVju2MGg+mb4rhC9o0m7a2Uz
+	6IlgSipCwcKftujgenUj6as9aS6xWpTTaNI/IL6Vb5/HT22DJHyms28Uvhdyw1tbKEhkWd086fu
+	eMkcThNvD6RCMdEBrnr1cjBhEhOfUxPG1T0dAo2TiDn1bUncXOKuO1ZXmVnJIND3eucSu3O9o2T
+	2a+s+H7Cfexrg==
+X-Received: by 2002:ad4:5c42:0:b0:912:35a6:3bc5 with SMTP id 6a1803df08f44-91421db4eccmr31821946d6.22.1790266595510;
+        Thu, 24 Sep 2026 09:16:35 -0700 (PDT)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9141e25aa56sm19523796d6.23.2026.09.24.09.16.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 09:16:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: Tianyi Chen <diannaaav@gmail.com>
-In-Reply-To: <44ec5184-5a77-413d-9f42-fd93b0abbf11@kernel.org>
-References: <20260911051053.283421-1-diannaaav@gmail.com> <20260911051053.283421-2-diannaaav@gmail.com>
- <44ec5184-5a77-413d-9f42-fd93b0abbf11@kernel.org>
-Date: Thu, 24 Sep 2026 09:15:57 -0700
-X-Gm-Features: AclHuK9YCtTvd_QbdRbtmViunIHXj9l7XzS8j0CSByJO8XmDbA6NWq1LazlJuiE
-Message-ID: <CACGbirS7z-ND6bBhdd2RMyGhj5kwHi+Nng23Z=qG4+W3uaxd2w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 1/2] bpftool: Add recursive map dumping
-To: Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 12:16:33 -0400
+Message-Id: <DLNOJJD5HT78.FEHRVJW7476B@gmail.com>
+To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
+Cc: <alexanderduyck@fb.com>, <kuba@kernel.org>, <kernel-team@meta.com>,
+ <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+ <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
+ <dimitri.daskalakis1@gmail.com>, <mohsin.bashr@gmail.com>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 2/8] eth: mpnic: add register init for the
+ device
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20260922-linux-mpnic-v1-2-236844f53072@gmail.com>
+ <179021553292.2160803.15849497453510759239@kernel.org>
+In-Reply-To: <179021553292.2160803.15849497453510759239@kernel.org>
 
-Hi Quentin,
+On Wed Sep 23, 2026 at 10:05 PM EDT, netdev-bot+sashiko wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 1 =C2=B7 Low: 0
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwor=
+k
+> know by including "pw-bot: cr" as a separate line at the end of your repl=
+y
+> (one such reply per series is enough).
+>
+> - [High] pci: missing pci_resource_len() check in mpnic_probe() allows
+>   OOB MMIO access
+> - [Medium] The 1 MiB Tx buffer is split between MAC and BMC differently
+>   in TXB and in TQS.
+>
+> --
+>
+> eth: mpnic: add register init for the device
+>
+> This commit adds one-time CSR initialization to mpnic_probe() through a
+> new mpnic_dev_init(). It programs the TXB, RXB, TQS, descriptor SRAM,
+> AXI and relaxed ordering settings, starts the on-chip SRAM
+> initializations and polls until they complete.
+>
+>> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_init.c b/drivers/net/=
+ethernet/meta/mpnic/mpnic_init.c
+>> new file mode 100644
+>> index 0000000000000..f8ebb19766731
+>> --- /dev/null
+>> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_init.c
+>> @@ -0,0 +1,553 @@
+>
+> [ ... ]
+>
+>> +/* A total of 1 MiB worth of Tx credits is available, in units of 128 B=
+.
+>> + * The BMC gets a guaranteed share of them whether or not the host is
+>> + * routing anything its way, everything else goes to MAC TC0.
+>> + */
+>> +#define MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL		800
+>> +#define MPNIC_TXB_P0_MAC_PVT_CRDT_INIT_VAL	\
+>> +	(SZ_1M / 128 - 2 * MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL)
+>
+> [ ... ]
+>
+>> +/* The 1 MiB Tx buffer is partitioned between the MAC and the BMC in un=
+its
+>> + * of 1 KiB. The BMC portion is fixed at 100 KB.
+>> + */
+>> +#define MPNIC_TQS_GLBL_TXB_CRDT_BMC	100
+>> +#define MPNIC_TQS_GLBL_TXB_CRDT_MAC	(SZ_1M / SZ_1K - \
+>> +					 MPNIC_TQS_GLBL_TXB_CRDT_BMC)
+>
+> [ ... ]
+>
+>> +static void mpnic_txb_init(struct mpnic_dev *mpd)
+>> +{
+>> +	int i;
+>> +
+>> +	mpnic_wr64(mpd, MPNIC_TXB_BMC, MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL);
+>> +
+>> +	/* Zero the private credits of every traffic class, then hand the
+>> +	 * unreserved ones to MAC TC0.
+>> +	 */
+>> +	for (i =3D 0; i < MPNIC_TXB_P0_CNT; i++)
+>> +		mpnic_wr64(mpd, MPNIC_TXB_P0(i), 0);
+>> +	mpnic_wr64(mpd, MPNIC_TXB_P0(MPNIC_TXB_TC_IDX_MAC_0),
+>> +		   MPNIC_TXB_P0_MAC_PVT_CRDT_INIT_VAL);
+>> +	mpnic_wr64(mpd, MPNIC_TXB_P0(MPNIC_TXB_TC_IDX_BMC),
+>> +		   MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL);
+>
+> [ ... ]
+>
+>> +static void mpnic_tqs_init(struct mpnic_dev *mpd)
+>> +{
+>
+> [ ... ]
+>
+>> +	/* Only port 0 is used. A single traffic class is in use as well, so
+>> +	 * give all of the Tx buffer credits to TC0.
+>> +	 */
+>> +	mpnic_wr64(mpd, MPNIC_TQS_GLBL_P0_0,
+>> +		   FIELD_PREP(MPNIC_TQS_GLBL_P0_0_TXB_MAX_CRDTS_0,
+>> +			      MPNIC_TQS_GLBL_TXB_CRDT_MAC));
+>> +	mpnic_wr64(mpd, MPNIC_TQS_GLBL_P0_1, 0);
+>> +	mpnic_wr64(mpd, MPNIC_TQS_GLBL_BMC,
+>> +		   FIELD_PREP(MPNIC_TQS_GLBL_BMC_TXB_MAX_CRDTS,
+>> +			      MPNIC_TQS_GLBL_TXB_CRDT_BMC));
+>
+> [Severity: Medium]
+> Do TXB and TQS split the 1 MiB Tx buffer the same way?
+>
+> On the TXB side, mpnic_txb_init() writes MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL
+> (800 x 128 B =3D 100 KiB) to both MPNIC_TXB_BMC and
+> MPNIC_TXB_P0(MPNIC_TXB_TC_IDX_BMC). MAC TC0 then gets:
+>
+>   SZ_1M / 128 - 2 * 800 =3D 6592 credits =3D 824 KiB
+>
+> On the TQS side, mpnic_tqs_init() programs
+> MPNIC_TQS_GLBL_P0_0_TXB_MAX_CRDTS_0 with:
+>
+>   SZ_1M / SZ_1K - 100 =3D 924 (1 KiB units) =3D 924 KiB
+>
+> That lets the scheduler use 100 KiB more for TC0 than TXB reserved as
+> TC0 private credit.
+>
+> Suppose TXB_MAX_CRDTS limits how much data the scheduler can have
+> outstanding in the TC0 TXB pool. Could a Tx burst that fills TC0 then
+> overrun the pool once the Tx datapath is running?
+>
+> If the BMC only needs a single 100 KiB share, as the TQS comment says,
+> does the "2 *" in MPNIC_TXB_P0_MAC_PVT_CRDT_INIT_VAL leave 100 KiB of Tx
+> buffer unused?
+>
+> The TXB comment says "everything else goes to MAC TC0", but the code
+> subtracts the BMC share twice, so the two don't match either.
+>
+> [ ... ]
 
-> break the line after |COMMON_OPTIONS|
+Will fix in v2.
 
-Done.
+>
+>> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c b/drivers/net/e=
+thernet/meta/mpnic/mpnic_pci.c
+>> --- a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+>> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+>> @@ -108,6 +112,10 @@ static int mpnic_probe(struct pci_dev *pdev, const =
+struct pci_device_id *ent)
+>>  	pci_set_master(pdev);
+>>  	pci_save_state(pdev);
+>> =20
+>> +	err =3D mpnic_dev_init(mpd);
+>> +	if (err)
+>> +		goto err_free_mpd;
+>> +
+>>  	return 0;
+>> =20
+>>  err_free_mpd:
+>>
+>
+> [Severity: High]
+> mpnic_dev_init() reaches much further into BAR 0 than anything the
+> driver touched before. Before this patch, the furthest access was
+> MPNIC_BDQ_SPARE in mpnic_rd64(). Now the TXB, RXB, RPC, ROF, TOF and
+> PEMO_WRAPPER blocks are all programmed.
+>
+> The highest one is MPNIC_OB_ATTR_RDE_P in mpnic_ro_init(). It is
+> 0x9a001a in u32 units, so the writeq() lands at byte offset 0x2680068.
+> BAR 0 therefore has to be at least ~38.5 MiB for this sequence to stay
+> inside the mapping.
+>
+> mpnic_probe() maps BAR 0 with pcim_iomap_region(), which accepts
+> whatever length the device advertised. Nothing checks
+> pci_resource_len(pdev, 0) against the register file the driver is
+> about to use. mpnic_wr64() and mpnic_rd64() only test that uc_addr0
+> is non-NULL, then add the register index unconditionally.
+>
+> Suppose a device presents a BAR 0 smaller than that. It could be a
+> misconfigured board, or something spoofing this ID behind
+> Thunderbolt/USB4. Won't the first out-of-range writeq() in
+> mpnic_dev_init() fault on an unmapped address during probe, or
+> scribble over whatever happens to be mapped after the BAR?
+>
+> Could mpnic_probe() reject the device with -ENODEV before calling
+> mpnic_dev_init() when pci_resource_len(pdev, 0) is too small? Does the
+> hardware have a documented BAR 0 size that could serve as the bound?
+> That seems better than deriving one from the highest CSR currently
+> defined in mpnic_csr.h, which will keep moving as more blocks are
+> added.
 
-> I'm not sure we need such a detailed description of the output format
+I don't believe this is necessary. It doesn't seem that common in
+pci based network drivers. In our case, the bar size is static. It will
+always be 64MiB for this pci device id.
 
-Removed the detailed output/error descriptions and JSON-container note.
-The man page now describes recursion and the non-atomic traversal.
-
-> bpftool map dump id 1337 recursive
-
-Changed to this keyword syntax, with per-invocation state and matching
-help, completion and selftests. The global -r/--recursive options are gone.
-
-Sent v7 as a new thread:
-https://lore.kernel.org/r/20260924161434.95116-1-hi@tychen.cc
-
-All 13 map-dump subtests pass. I also checked pinned maps, per-CPU inner
-maps and keyword scope across batch commands after rebasing onto current
-bpf-next.
-
-Thanks,
-Tianyi
-
-
-On Thu, 24 Sep 2026 16:59:35 +0100, Quentin Monnet <qmo@kernel.org> wrote:
-> 2026-09-11 13:10 UTC+0800 ~ Tianyi Chen <diannaaav@gmail.com>
-> > From: Tianyi Chen <hi@tychen.cc>
-> >
-> > Dumping a map-of-maps currently shows inner map IDs without their
-> > contents. Add -r/--recursive to dump referenced inner maps as well,
-> > leaving the default output unchanged. Show the selected maps followed
-> > by distinct discovered inner maps, preserving plain and BTF formatting
-> > and using an array of map objects for JSON output.
-> >
-> > Holding every discovered inner-map FD open would make descriptor use
-> > grow with the number of maps and could exhaust RLIMIT_NOFILE. Keep the
-> > selected map FDs open, queue distinct inner map IDs, and open, dump and
-> > close each queued map in turn. This needs only one additional map FD.
-> > The tradeoff is deferred ID resolution: concurrently removed inner
-> > maps can disappear before they are opened, so the dump is not atomic.
-> >
-> > Report failure when an inner map cannot be opened, retain per-entry
-> > lookup errors, and close JSON containers before returning.
-> >
-> > Link: https://github.com/libbpf/bpftool/issues/58
-> > Assisted-by: LLM
-> > Signed-off-by: Tianyi Chen <hi@tychen.cc>
->
-> Hi, and thanks for working on this!
->
-> Please find some comments below.
->
-> > ---
-> >  .../bpf/bpftool/Documentation/bpftool-map.rst |  22 ++-
-> >  tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
-> >  tools/bpf/bpftool/main.c                      |   7 +-
-> >  tools/bpf/bpftool/main.h                      |   1 +
-> >  tools/bpf/bpftool/map.c                       | 130 ++++++++++++++++--
-> >  5 files changed, 151 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> > index 5daf3de5c74..23faa672685 100644
-> > --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> > +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> > @@ -16,7 +16,8 @@ SYNOPSIS
-> >
-> >  **bpftool** [*OPTIONS*] **map** *COMMAND*
-> >
-> > -*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
-> > +*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } |
-> > +{ **-n** | **--nomount** } | { **-r** | **--recursive** } }
->
-> Nitpick: I'd rather break the line after |COMMON_OPTIONS|, like in
-> bpftool-prog.rst.
->
-> >
-> >  *COMMANDS* :=
-> >  { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
-> > @@ -170,6 +171,25 @@ OPTIONS
-> >      Do not automatically attempt to mount any virtual file system (such as
-> >      tracefs or BPF virtual file system) when necessary.
-> >
-> > +-r, --recursive
-> > +    Also dump the inner maps referenced by **array_of_maps** and **hash_of_maps**
-> > +    entries when running **map dump**. Each map ID is visited once, even if
-> > +    several entries refer to it. Selected maps are followed by their inner maps.
->
-> OK
->
-> > +
-> > +    Plain output includes a header identifying each map. On success, JSON output
-> > +    is always an array of map objects, each containing an **id** and an
-> > +    **elements** array, including when only one map is dumped. Outer map entries
-> > +    retain their **inner_map_id** field, which identifies the corresponding inner
-> > +    map object.
->
-> I'm not sure we need such a detailed description of the output format in
-> the man page. Please remove.
->
-> > +
-> > +    Inner map IDs are resolved when the maps are visited. The dump is not an
-> > +    atomic snapshot: concurrent updates can change map contents or remove a
-> > +    referenced inner map before it is visited. Failure to open a referenced
-> > +    inner map stops the dump and returns a nonzero exit status. Output may
-> > +    contain maps or entries printed before the error.
->
-> Same thing, I'm not sure this is necessary. Maybe just keep the first
-> half (the note about the maps susceptible to change during the dump).
->
-> > +
-> > +    In JSON mode, the enclosing arrays and objects are closed before returning.
->
-> Let's get rid of this, please.
->
-> > +
-> >  EXAMPLES
-> >  ========
-> >  **# bpftool map show**
-> > diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> > index 75cbcb512eb..45c336d63be 100644
-> > --- a/tools/bpf/bpftool/bash-completion/bpftool
-> > +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> > @@ -261,7 +261,7 @@ _bpftool()
-> >
-> >      # Deal with options
-> >      if [[ ${words[cword]} == -* ]]; then
-> > -        local c='--version --json --pretty --bpffs --mapcompat --debug \
-> > +        local c='--version --json --pretty --recursive --bpffs --mapcompat --debug \
-> >              --use-loader --base-btf --sign -i -k'
-> >          COMPREPLY=( $( compgen -W "$c" -- "$cur" ) )
-> >          return 0
-> > diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> > index 5ababd8f7d0..c0f4df10102 100644
-> > --- a/tools/bpf/bpftool/main.c
-> > +++ b/tools/bpf/bpftool/main.c
-> > @@ -26,6 +26,7 @@ static int (*last_do_help)(int argc, char **argv);
-> >  json_writer_t *json_wtr;
-> >  bool pretty_output;
-> >  bool json_output;
-> > +bool recursive_dump;
-> >  bool show_pinned;
-> >  bool block_mount;
-> >  bool verifier_logs;
-> > @@ -456,6 +457,7 @@ int main(int argc, char **argv)
-> >  		{ "json",	no_argument,	NULL,	'j' },
-> >  		{ "help",	no_argument,	NULL,	'h' },
-> >  		{ "pretty",	no_argument,	NULL,	'p' },
-> > +		{ "recursive",	no_argument,	NULL,	'r' },
->
-> The "recursive" option that you add is specific to a single subcommand
-> for "bpftool map". It's true that some other options behave in a similar
-> way, but overall, bpftool tends to use dash-options when it affects the
-> generic behaviour (perfect example: JSON flags), and keywords otherwise.
-> In the current case, given that we don't really have an equivalent use
-> for "recursive" for the other commands, I'd keep it a keyword:
->
->     bpftool map dump id 1337 recursive
->
-> Could you change it, please?
->
-> The code itself looks good to me, thanks for working on this!
->
-> Quentin
+pw-bot: cr
