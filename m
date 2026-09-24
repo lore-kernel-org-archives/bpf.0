@@ -1,126 +1,114 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E92480DFF
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 13:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EC83BB9E1
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 14:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790255663; cv=none; b=RpSiwHnShPP6AA1lneHhO1+GQOJQzGp0Y+Mplfp8oWOldTzqeOh5Sn/OAgwaGuHZhQAGGVqd08L7etttmy23eu9HzD9Hge34Ern1snEJ0kNVU0q5Rc/c+Nrk0UCDLol81Q9frmkT6kSyGzIVYnI/FiNCC10Kn+BifLaYev3Hm7g=
+	t=1790260020; cv=none; b=XAGCL99AFJKeJu/PIx2uN8VxVKVwCUl6N38xM0P1TMtXiExC4w3Tj9ji/qPfe2kuLntuLBM6c4181bjALhfYGZLj4yH7/Tu4PVFQbvtXGIhoM6QZwyxSjYONxOhWqFqI+RcqIEOZV8UeXPQM9GhE1udgHqHYIKXAMonPPgImuv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790255663; c=relaxed/simple;
-	bh=VHHnAvsUiXyMLywhj/CdP4Gc0HCGDFaSO8mlgs/s+2s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nlDhTqiNCXe3QutWlaW/bn/IyR/KLxdWSPBmtO1yu4OWEpe6UImjFr5NHOZo112JV/GqhTyafPEwe6112n8r9N+r8R25vlodrA/81HVETL5vU32c1hha2eOdK6EX2eL873zCNz1ENGgiFVxfjlut1zLkn0zP7MXhai9rcWfARd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nawamyuu; arc=none smtp.client-ip=74.125.225.140
+	s=arc-20240116; t=1790260020; c=relaxed/simple;
+	bh=uUj/7pfRqNTrc58rMcrNWZ1ddSBdy5zDMuW/FvBckfs=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=rKjA1M2moNQAon8aYeDh+0k6TzeK5mo2flVOq4yGwV6g27YRdEl5hJfhMYNWhEV2+1CPy3JkJtL9L1PDRmWP8En3r1i5JYEkXKeQlUALweZKsUBeKIGA9/fIji4sKLvHQtApe3WWtlQIhRdT6YsEina7HIAQJmY1ludghlJ2G8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NIolqGrs; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nawamyuu"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d37b6so11662825e9.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 06:14:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NIolqGrs"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc433d52421so961792a12.3
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 07:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790255659; x=1790860459; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Bq6oXmBjhmxYtZCGZMo9VNKB50nfTEO3RpL1ByCTTS8=;
-        b=Nawamyuuxp6R/ZCGhoyynPFu478UGgjbsee/zrkM4aiErpxBg8oHVk+Pfm8QerQ9a7
-         pgLFOc8I00L3bR3pB/cioBnQK7DJAqGRwPGO8c7zmXOXZu9dgSMZhRWpAUxAMmDByH8o
-         EhkhM5etZM9EobqS+tZtlI1OOkUt9QWqQsO7FGll/r6gF2/hO6urJuBWeF98/0DjsL/D
-         X+x6aUYC7d68i8ELBZQdxdpozWXBTV7Mc+Ac4mchPwrTWhL5XkxJoBpyELfZMra2ux6c
-         BBNEaSa5zlWyg/tcmL+qXd9dWrbwhN/LqRkcfguKilp77A8pjRAleW8qq5ovGopxPUIJ
-         B7og==
+        d=gmail.com; s=20251104; t=1790260015; x=1790864815; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uUj/7pfRqNTrc58rMcrNWZ1ddSBdy5zDMuW/FvBckfs=;
+        b=NIolqGrsxUle2ezYAMv9hMr6r1HrMFs7BaRBtC3ipYoY7HBgZ0dl5O3dyIuufCKcsc
+         zDiAKTtnBYySb4q9KK2NaU+tKf+2aoTDaPDTxlUvefPLQtd6uElbnZUmXVdeFBUKbMhs
+         +Nd449TBjWDf1/DGJnyiqSSKQ1Wxc4tfjvOLxFeY4F0e4fBP5Y2Z6IDmbGCqj1626eyF
+         e7hzi6K2ygBncvU3KaZDfeOUxhpyNiDyOJRZo3/kpbL8OFquopqNJar6W4pTWc8ZM0cr
+         svwj0gNkB7LKgPXMin00R/UekUFqEiX02pEoVAdZLD6h/Pby7sgcCoQq5na0KZDl6ots
+         ktZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790255659; x=1790860459;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Bq6oXmBjhmxYtZCGZMo9VNKB50nfTEO3RpL1ByCTTS8=;
-        b=tD9ZPEB7BrjqkZ8tnCDn8P7CTZVsTXxnFQ4mQnFYvYCnWXQMwog4F3Vgykp2TSG2iI
-         8OMB7biLmm8NaeaMI0pl4x+xaWJjag+/4F4d4UYtTGshz21H0xgN49dL8WCF65jvB5A/
-         HiPzEl1Y12R5B1sxbxR4ZZ+jfA2+WRmDddgcW4tL1yjdmaBFyG9Y83XbT1fg2mBWqyky
-         GYk47pUe2ZaNyvJHNbjDsOuUWDhtMSVi1CfWQPAjWmAvd8EcOSUpYmx2l0WnXpgDtGpj
-         XIJLDj5Yef6HlnrARwoAX+BsGljWCpoLy7xtRgLt90uIK3+ZNletxyNjkRfXrWT+W+Pz
-         N2MA==
-X-Gm-Message-State: AFuF++lm/JN7sCCEM+Pa4fWq+a8x1hytokmb2b8gQ0E14HQweJKz4lai
-	Dy/3c7n7SZw8X+x+inFhn358QrqphgwQm09krEwIV86QHE+0w3wSVZYSmrZM
-X-Gm-Gg: AYBFou09ZOYCfmOFk/QoWuSC4irH6n/Hcy3VknGiwiK704jLJBUQdMvQeKod1P8VQYb
-	O7IVCHmEtvSCh/S2H2Hl9qFLRA8GI+M2ref8AJYM0ujKldZ0OWstRQzHcXvRHuRJlLTjJafgyMY
-	RThXdWezDKKc1kLjb/mGYg2anHjWpi3a4yc5LRXm2ApzzMViEh5osr6JFJgxmsEUPIa3ypn7rad
-	ZQnfcDMlr09KqqwT72HJwxUwrCTan6cFkFsNxOQuXSNO7zQhGXQklQmYHtUPs1sGnz+tkrat59d
-	KpwFocmRapSXQGSNaeu0tyOvZLdCz/iXSh5pBXND0o4SOS67DYzzItS3rc03kF7O4NY6gHSSwwE
-	aqycx7qahvcOkkX/PxzfqLkEHNiitvy79DlIND0v/XeebCSfSOSVBa3p4Z+ofsMxyEWuBiK+NoW
-	6azf0hs9SFAByDuJDolHt7SQlgg52qmEgU+yxyUdm5T9bW8ESwTkTMnn/cRXr0j+XWv8WxRvtxq
-	F2BclqAi8JSy44HUsm0Yl62RiKH0G9thCbT949fpVrwtHYS7lNqYhWyS1al5Gtgoly3WjC5hn4O
-	ZSW4v6G+OQ==
-X-Received: by 2002:a05:600c:4f10:b0:49c:dca4:94c with SMTP id 5b1f17b1804b1-49fe66d09c5mr48279855e9.13.1790255659417;
-        Thu, 24 Sep 2026 06:14:19 -0700 (PDT)
-Received: from ast-epyc5.inf.ethz.ch (ast-epyc5.inf.ethz.ch. [129.132.161.180])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe0c104a6sm123986495e9.0.2026.09.24.06.14.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 06:14:18 -0700 (PDT)
-From: Hao Sun <sunhao.th@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	linux-kernel@vger.kernel.org,
-	sunhao.th@gmail.com
-Subject: [PATCH 2/2] selftests/bpf: Test non-fetch atomic on a narrow stack spill
-Date: Thu, 24 Sep 2026 15:13:42 +0200
-Message-Id: <20260924131342.934290-2-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260924131342.934290-1-sunhao.th@gmail.com>
-References: <20260924131342.934290-1-sunhao.th@gmail.com>
+        d=1e100.net; s=20260707; t=1790260015; x=1790864815;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uUj/7pfRqNTrc58rMcrNWZ1ddSBdy5zDMuW/FvBckfs=;
+        b=P1rskMh9FjJ8s437eXZQZuDrSEhuB1DqPdhwo34BJ0XVAj+uLy7HujPMxVYP0Ay4se
+         dYohORP3yJBNBlu862NnhOXDTTIznvnQBkM9zGvE8ruxCgY6I+vJfOgSxfGa9rn30EvC
+         15Z7Yu/UUEFx+1VRgRt/fUWymQKSDMi7EkhOHjd/8eVbnCPLdCm9QJSkHSulcjWm4MSt
+         ct2YVEijyMFXmVT/wbsMFphJEJDvM/nM/iZ34NZidyy2pAOidDR2IOLibs+tNuPaANii
+         dEh0vhQSPfYhxZBAYCOKL79Ao0HzLdFS4IOqs34aFZ0lfAAQXO+NUgzLVl59E9h8YeKV
+         GU8g==
+X-Forwarded-Encrypted: i=1; AKwUvBzPJ9+T31juOALhvhZZwDu/+UARcc2WU12adVsbUoDeV9a1bQPVshUWaedFw6RNH0zccBY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kFASzZlCwM/K+79rLP/dj2rOWKabrlqI8HCZUtR27oUMVC8iF+
+	kpyk/tdkhvuYJrqGi6jVx3V9aYTwCNzUCpgZpPPsBf6rURa8M22nHDoT
+X-Gm-Gg: AYBFou3T6FQdYVgMSywf1PILMJn70N73UOhmjRlNmypCsIdV6KYRJw5DB8JE7q+ZRgt
+	TgYTkdvrFOJs/Rkb/TRfETUTD6sVd5V5989UQX8fHhnVnYqi8RxFvhnMLy2Ox2c61LGwKzFGtIR
+	oLQjmBqZf1BSlxpu5/BSh3F54Tgtfr7wjmCpPOhDliQHKNNTATGF72RneDVC0HEzL8kqRR+ew/6
+	UDlLlKvQa07AITb6m+5bn8+D7ej0ZhMaFRvjE0NsSALgsVDCMumiOL67QrCeK9r0k3TEO7TTwxb
+	5sBB5rGRGlZwVC2654K1AZ2Cloc8aAhbrKx2d/FKvqFRTii/QvM8OlKlzqgs7wIJ0qpw+IaYIm6
+	mROeHn0o6P+SL5qPZCv2UM3QaeawENrRdLZeKZV+aXkWEquvrAtEw679Z1JJKDUsTFiiXG40v/x
+	m+uPxgrPA8MaZiqK2MJcC50wHYt47IRak8lv+JkB4UZvoCs338DtaqoRNRtmURj4Dvm9Gx6Giif
+	B2UDxj8JppcZbmlbKLATcb4OEEP4ztHmUNR/SPX9Lj1lobhohlTdEFQRp3wXGGz+ahqTiuGaouN
+	nG8=
+X-Received: by 2002:a17:903:1447:b0:2dd:ad74:ac35 with SMTP id d9443c01a7336-2df7e11ca4emr22565155ad.30.1790260014607;
+        Thu, 24 Sep 2026 07:26:54 -0700 (PDT)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a517069sm28507785ad.3.2026.09.24.07.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 07:26:53 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 14:26:52 +0000
+Message-Id: <DLNM7JR51QLJ.13Z4D921BZOJD@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "David S. Miller"
+ <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf v2] bpf: cpumap: fix use-after-free of dev_rx on
+ netdev unregister
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20260924081828.26575-1-jiayuan.chen@linux.dev>
+References: <20260924081828.26575-1-jiayuan.chen@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Spill a 32-bit scalar into an 8-byte stack slot, leaving the other half
-of the slot uninitialized, and apply a non-fetch 64-bit atomic add to the
-slot. With CAP_BPF but without CAP_PERFMON the verifier rejects it.
+On Thu, Sep 24, 2026 at 04:18 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+> The notifier has to ask every entry, a cpumap entry is not tied to a
+> netns and any device can feed it. So an unregister anywhere drains
+> every ring in the system, once per device, with RTNL held. That is
+> bounded: qsize is capped at 16384, each entry consumes at most one
+> ring plus a GRO flush, and the kthreads do it in parallel. Those
+> frames had to be consumed anyway. Nothing changes on the hot path,
+> the kthread reads one field per batch.
 
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
- .../selftests/bpf/progs/verifier_spill_fill.c   | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+The code is the same as in v2. Only the commit log changed.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 39a1766dae3f..d9a4164b6685 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -1344,6 +1344,23 @@ __naked void old_imprecise_scalar32_vs_cur_stack_misc(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("stack_noperfmon: reject non-fetch atomic on narrow spill")
-+__success
-+__caps_unpriv(CAP_BPF)
-+__failure_unpriv __msg_unpriv("invalid read from stack off -8+4 size 8")
-+__naked void stack_noperfmon_reject_atomic_on_narrow_spill(void)
-+{
-+	asm volatile (
-+	"r1 = 1;"
-+	"*(u32 *)(r10 - 8) = r1;"
-+	/* A non-fetch atomic reads all 8 bytes of the slot. */
-+	"lock *(u64 *)(r10 - 8) += r1;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
- SEC("raw_tp")
- __success
- __naked void var_off_write_over_scalar_spill(void)
--- 
-2.34.1
+The number of frames is bounded. The time is not.
+wait_event() has no timeout and sleeps with rtnl held until
+every cpumap kthread in the system gets cpu, including the ones
+with an empty ring.
+flush_all_backlogs() had the same problem. See
+commit 2de79ee27fdb ("net: try to avoid unneeded backlog flush").
+The bug needs a kthread that doesn't get cpu during unregister.
+With this patch such kthread blocks unregister of every netdev
+in every netns while rtnl is held.
 
+pw-bot: cr
