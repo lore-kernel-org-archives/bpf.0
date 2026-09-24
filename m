@@ -1,140 +1,226 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08F345D1BD;
-	Thu, 24 Sep 2026 10:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790244058; cv=none; b=r//11qQYTCpN/aln+dLx8lwz7EgM50i/XRCn3WJWZcP0hZ55wpKV2fYKgL0aILwVFXH8E5wh91zJwrwAQHgFF46Je5AZaKWNV9fCdgvyHFtEfvg8Vr4qtATKu3SlQbtZfw8CqsqYR+C2Xodc0h7FcgnRL5l8Aw653T5s45Lh9iE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790244058; c=relaxed/simple;
-	bh=FFQYnczjBATsnDZ529OE5mhMgnVzXRtQTsOmc4nStHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aSCpLgDx2uo2VC2PUDQ8GeBj4FsGAFI4vnf+UBVhQaFdMiggypFrnype7m8Tqs3SPeHAocnwmhK/rEvupahnaTlyDjJu7s0/iNRUtQFnphF9/eBJj2lIVxNxKvITlSsI7+g/WtF6DivTUxkKdtuQF9HrSHjONbE+DkvAD2g3xYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=L3+eDnBY; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87B7451985
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790244140; cv=pass; b=GGyhSVZSpq+ABcfWLW+nDRctRM/kUSc/bHUNLWFTwkI/s1hajNCkhWl12I3zkbOQLQ7AviKJ7xRh0xeGu/xl/JnXpKr7n5feUUM8vmMe9FzCnbGdjP5ZPdDG5otaQOwwMb3U+lI5i1IwPDzyL83/J88bXIzFZPKvshfDOqI8gcw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790244140; c=relaxed/simple;
+	bh=aF/YUsfn15Am1lyN4UTB4NRsRKQjq3M/wl+L8J2wO2M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Df4L+hR6cHZ90V1xQ2Hb4qWInnqS+zdzXz9ahDdQ9qZ91l/BvXcOZo9LYaF9AbAuO/BZIToeb35SyefknJQhX8fyp1cdzbIMD1ua9Dj98rHuDgo8rJZ5LyiwOhVdGBvmxlTbH8ud9YGZ3ytrpjgELzRD+HCu5StMe+Tfyqew3Pw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nYsq+CSd; arc=pass smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L3+eDnBY"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=xt0MlUmSz2PI0Rs6KjVEiWXP3SZQmqgbE8xNOYhlUnA=; b=L3+eDnBYBrBBegfejLjGVQpoZv
-	/m8mslbFtnH9L8vWjDaNeyXWjMY2P9g87gq/2DlbW6dgm5krE+axEuXWAEQV2AlfQpGYRKnDTmp92
-	cjxKuQekxs8N4Um2Bc8KBI+DqKDG8AQj7skY2Z+kCuIj/TES9CPd4yTVx0CacEtesQsE1v+Buqzi5
-	EtQwx51aV42yiPeg+dNdnQTFfyFh6znXD3qFAVfJtU2Kb1SCcK9JrICp7aTJz5Pj9AmqG3mceluQM
-	8KxA9F1VmJFoDOudBJwMsSZcZAryBqXRjrQNAZk1/7kC091pkZ50wPz275IOnQ4vo4XkiuZy/WDQw
-	MigtAWYw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1x9gFt-0000000FoXH-3bW0;
-	Thu, 24 Sep 2026 10:00:42 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A08433006DD; Thu, 24 Sep 2026 12:00:40 +0200 (CEST)
-Date: Thu, 24 Sep 2026 12:00:40 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
-	mathieu.desnoyers@efficios.com, andrii@kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@meta.com, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE to
- 1024
-Message-ID: <20260924100040.GD4121339@noisy.programming.kicks-ass.net>
-References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
- <20260922225526.1554758-2-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nYsq+CSd"
+Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d43f9b11bso20913297b3.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:02:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790244125; cv=none;
+        d=google.com; s=arc-20260327;
+        b=iVyWKr6qtc6LWut8W13QfT4EddNtrk9yPovw1GZgrEtHGFfZ691y1aYtfRX6be8E+O
+         Rt2rOZYbsTMmcLuMSgstJ3NF9mnajy9y52IKU7ryo1XmPiOSCKlmQ2uExHAzVhU6MNIV
+         /DwBFillZhnMYdVBFLuJH76dLumdDWVn9AOWbyeju13fyqUYJfCj8/cEsgzWmzUjKgXo
+         L66kXj0dmnhfAnmWthA5Ufn/JzxoEOOUD235uI7q+rY10JGtCJzGOAOAlMrlw2HtKS3J
+         vtVj+wcSZTZsrbjhB9cIEm5F5UpuhAEg0T9U3z6WkZVSKnDMJRT6qbFjwBcDoHu/UuVF
+         TC6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Yf2eXBIzfUAyDI8YQcFwCnYg3j6ep9DZNkN0GsU9MPc=;
+        fh=MfBRqzPklBaOzB904Z5NLkTMsvuZO+bQP1pgH3xaVYQ=;
+        b=qOyhB8mrR5TO867DtQSfmhvkEFRcB8lm2Tfed93fnqjK8Fu52/RsFdc7psIvRnZZxm
+         6q9yrphXF1qA2XseNpEynlDCYf0K/QDQoZZv8xgKn99pkBWe51vET9Py8DOazEEbP8SW
+         HGRaMStXESDvAprfNiHErneS+n7QTlWDiclm+tQ2XF2fYoaKkdCBsxGsgMKteKaasfYu
+         6PQLtKQphTqInTwtS8tG5LsTWhKC19lyM3tNCtmCAwPaC1sN3nCwM1uR0/4ylOa7aHZS
+         QnnoX7g451/PrYE6pgKj7CM1+jd5bT8vN3/tlfKt65hT6rgbXyl3PYGGK8xtxA4qlE6M
+         Pp2A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790244125; x=1790848925; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Yf2eXBIzfUAyDI8YQcFwCnYg3j6ep9DZNkN0GsU9MPc=;
+        b=nYsq+CSdFf6UwoKKyCvz6nEEOorVQdkseLHJvEJvXDWZu7/Cd6KiZ3SybDgb2JJNBW
+         o2QWy5B3QwiaPEdZr8GVaw6fjPdEDk4f9S/oNn/COfRmpqT0Z8nQZniv7LJvfs/lzT5T
+         Mwnt7HFz71IsOcsMbZP34yEkgs5WFwIVJVlIZeJC0lQzhA5vG9PJPHfM1Vr1RPxRJdSN
+         /b9T5exi3QnNlLXD+Hx0A/hfNIgJzwnztvyigFStDJBI4Xl7/kajYOvW3F0J7iS1tt/5
+         84osfU5tUFwgk7NzYaNv5fMeiZIkXRVCE4zPO9eXap3NLrTRUe8JiN1JiOAZ19yqSmC+
+         iSZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790244125; x=1790848925;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Yf2eXBIzfUAyDI8YQcFwCnYg3j6ep9DZNkN0GsU9MPc=;
+        b=2Sg4/CuPjk5YIF1wi042ZSFM6ANTe3D47ijjNiQDiyI7hxSvMbUdKKboaAXqsU9uwo
+         HF8g4wAIp4xsGBBvhkHgDtN9J1EaBb5iX+UCU7WGf+hCo9MVq0XUEDGm3/1MhkhfGS22
+         vDMiQ92O32VNua+z7EAKfl3wZ2p/wqdYl5P90Dw/0Cg0IX/nbAZgMD3NszWD6NFcLIRA
+         haGur/Z+3SetsVivmarn/0xRvMDRdEftlULSiZXYWBJ+Jlf/jywY5c8m+XYkuN6gTCIy
+         epE3ZHkHnU86BO4oDaTXiCcWzSezNd+vVb9dpZcMjQiM/g0SjJfKBXgbD/k+F0EG/kBt
+         c20Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxLXBUvt+/E1sQNjw5ZF6Z4MpiHJtFiJHDFCqylwz6Nbpb4L1A5kaeGzdQ64EAwcvnj45g=@vger.kernel.org
+X-Gm-Message-State: AFuF++kgGZC2G7WL3EyblT/t93MoLssdYatbYb1VmFjazkDgeintxBTS
+	u5YiYyJnjcujS55jMFZIgWobD9XfajEIpXNKClca80BJx5jQ5FZs3rc4wVe2ojgKXB2DO/+bG1b
+	ZtceCkExSODq0yQqBsdfBoi3ToZAXBx8=
+X-Gm-Gg: AYBFou2yvUn+vHLBvsXkTeDG50LG/pf3C/nYEkIcSAZutrO+5geYKt0esXw9sXXTG7R
+	eMzBZzwEhK+ZroBkoPcWndkYck6LhPg15jIa6JzGpMbYNZp3wuMd90nIqhzf5GUwWe0xUrFnza5
+	m3Gaz1DP2SkWYcOmaqsSs4JcjYsJ4Sx8+ZVCRhA2Rd2KqUSwuzNUvPg0hpXOdX4GamgM7siS4DW
+	r5tNnS09OeaHwuTGbTpnEVgze3CpF04slYSVJ8irdRsyZ3Tqyx11t5foqVBtRNMH93ErUfEQl6X
+	wocZ33jqNObThxNY6tkIag/VnQ7UW9J8Jed2Fuu6SMYAGhG9vAgyj7CiogBmkjBeVKM1NuBPQgH
+	DuCEkdiv26Dhl6HN1NfWNqBM=
+X-Received: by 2002:a05:690c:e3c3:b0:869:1ab2:33aa with SMTP id
+ 00721157ae682-8a645aae281mr9464687b3.20.1790244124691; Thu, 24 Sep 2026
+ 03:02:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260922225526.1554758-2-vineet.gupta@linux.dev>
+References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
+ <CALOAHbA4EgGw_uWfbXD0Q87exP7ek=z9ENuU_ARgb+DgBgy1kQ@mail.gmail.com> <arPyspcEFNkqfNyr@linux.dev>
+In-Reply-To: <arPyspcEFNkqfNyr@linux.dev>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Thu, 24 Sep 2026 18:01:27 +0800
+X-Gm-Features: AclHuK-I9uw-yPD5uF_5nJaKC0fsPFwXnig4t8YGhNpVyr0Q5duPYTUrOw96ia4
+Message-ID: <CALOAHbDKRw9cPN_GxOYbp9u50cvr7PzPyoGPsSwoPDPAwBCGbA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached struct_ops
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, Michal Koutny <mkoutny@suse.com>, 
+	Amery Hung <ameryhung@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
+	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
+	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 22, 2026 at 03:55:25PM -0700, Vineet Gupta wrote:
-> When ftrace graphing is turned on, all tasks in the system missing
-> return stack page are assigned one. This is done in a simplistic
-> multi-sweep loop of FTRACE_RETSTACK_ALLOC_SIZE (currently 32) tasks
-> at a time as follows:
-> 
->    start_graph_tracing()
-> 	do {
-> 		alloc_retstack_tasklist
-> 	} while (-EAGAIN);
-> 
->    alloc_retstack_tasklist()
-> 	alloc x32           # GFP_KERNEL, may sleep
-> 	rcu_read_lock()     # preempt off
-> 		for_each_process_thread    walk N_total, no cond_resched
->                      t->ret_stack = new_page
-> 	rcu_read_unlock()   # preempt enable but no explicit yield
-> 
-> Each successive iteration of loop invokes for_each_process_thread()
-> which doesn't support cursor based resume and always restarts from the
-> init_task. Thus each successive loop needs to skip the tasks assigned
-> ret_stack in prior sweeps and thus take longer and longer to find the
-> candidate 32 tasks. 
+On Wed, Sep 23, 2026 at 11:47=E2=80=AFPM Shakeel Butt <shakeel.butt@linux.d=
+ev> wrote:
+>
+> Hi Yafang,
+>
+> On Wed, Sep 23, 2026 at 09:07:40PM +0800, Yafang Shao wrote:
+> > On Tue, Sep 22, 2026 at 3:30=E2=80=AFAM Shakeel Butt <shakeel.butt@linu=
+x.dev> wrote:
+> > >
+> [...]
+> > >
+> > > Known open questions
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >
+> > > The semantics of memory.high for remote chargers or kernel threads is=
+ a
+> > > grey area and this series does not aim to resolve that.
+> > >
+> > > Another open question is whether a bound on debt deferral is needed. =
+At
+> > > the moment, we think that rather than putting a limit on deferral for
+> > > memory.high, it will be better to handle that through an async worker=
+ like
+> > > memcg->high_work.  We aim to introduce that later, along with the rig=
+ht CPU
+> > > accounting for that async work.
+> >
+> > Hello Shakeel,
+> >
+> > On the open question of how deferred debt eventually gets paid: would
+> > it make sense for the policy to also notify userspace (e.g. via
+> > ringbuf) when it defers,
+>
+> I think the notification through bpf programs is already possible and a b=
+pf
+> program deciding to bypass memory.high can already do notification via ri=
+ngbuf.
+>
+> > and have a userspace reclaimer do the reclaim
+> > through memory.reclaim?
+> >
+> > I understand one of the concerns for the async worker is CPU
+> > accounting. If the concern is that the kworker's CPU usage is not
+> > charged to the target cgroup, the userspace reclaimer could instead be
+> > spawned with clone3(CLONE_INTO_CGROUP) so it runs inside the target
+> > cgroup, and both its CPU and memory usage get charged there.
+> >
+> > One caveat: intermediate cgroups with the no-internal-process
+> > constraint cannot take processes, so this would only work for leaf
+> > cgroups.
+> >
+> > What do you think?
+>
+> I think all of this is possible without additional code and with this ser=
+ies.
+> With AI, should be very easy to prototype it. Please take a stab and I wi=
+ll look
+> into it as well (time permitting).
 
-Does this work?
+An LLM helped me quickly implement a userspace async memcg reclaimer
+based on your series, and it seems to work quite well.
 
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index ed455b53513b..155dafad474d 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -1036,10 +1036,9 @@ trace_func_graph_ent_t ftrace_graph_entry = ftrace_graph_entry_stub;
- /* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */
- static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
- {
--	int i;
--	int ret = 0;
- 	int start = 0, end = FTRACE_RETSTACK_ALLOC_SIZE;
- 	struct task_struct *g, *t;
-+	int i, ret = 0;
- 
- 	if (WARN_ON_ONCE(!fgraph_stack_cachep))
- 		return -ENOMEM;
-@@ -1054,26 +1053,29 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
- 		}
- 	}
- 
--	rcu_read_lock();
--	for_each_process_thread(g, t) {
--		if (start == end) {
--			ret = -EAGAIN;
--			goto unlock;
--		}
-+	scoped_guard (rcu) {
-+		for_each_process_thread(g, t) {
-+			unsigned long *rs;
-+
-+			if (t->ret_stack)
-+				continue;
-+
-+			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
-+			if (!rs) {
-+				if (start == end)
-+					return -EAGAIN;
-+				rs = ret_stack_list[start++];
-+			}
- 
--		if (t->ret_stack == NULL) {
- 			atomic_set(&t->trace_overrun, 0);
--			ret_stack_init_task_vars(ret_stack_list[start]);
-+			ret_stack_init_task_vars(rs);
- 			t->curr_ret_stack = 0;
- 			t->curr_ret_depth = -1;
- 			/* Make sure the tasks see the 0 first: */
--			smp_wmb();
--			t->ret_stack = ret_stack_list[start++];
-+			smp_store_release(&t->ret_stack, rs);
- 		}
- 	}
- 
--unlock:
--	rcu_read_unlock();
- free:
- 	for (i = start; i < end; i++)
- 		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
+>
+> Thanks for taking a look and also please let me know what other ways you =
+think
+> memcg can be customized through BPF in a beneficial way.
+
+Sure. On our production servers we have been running a set of BPF
+programs to tailor kernel behavior for different workloads =E2=80=94 all of
+them global programs so far =E2=80=94 and I believe they are all good
+candidates for per-cgroup BPF policies now that cgroup-attached
+struct_ops is available. They have been really helpful in our
+Kubernetes production environment. I have sent some of them upstream,
+such as:
+
+  - BPF-THP
+    https://lwn.net/Articles/1039689/
+  - BPF-auto-NUMA
+    https://lwn.net/Articles/1054030/
+
+Perhaps we can revisit both of them and turn them into per-cgroup
+policies =E2=80=94 what do you think?
+
+We are also running some custom BPF programs that have not been sent
+upstream yet, such as:
+
+  - BPF-async-reclaimer
+    We don't care about the CPU accounting of the kworker, so we just
+wake up a kworker to do the async reclaiming.
+  - BPF-fault-around
+
+Both are really beneficial to our workloads, and both are global programs t=
+oday.
+
+We are planning a few more customizations to resolve painful
+production issues, such as:
+
+  - The long-standing inode::lock contention caused by dentries [0].
+    We have not started implementing it yet, but we might introduce a
+memcg->dentry_limit or a memcg->vfs_cache_pressure as BPF policies..
+  - cgroup-level readahead.
+
+So, to answer your question directly: for memcg itself, the beneficial
+customizations for us are the reclaim policy (the async reclaimer
+above), the dentry/vfs cache pressure knobs, and fault-around; the
+rest are per-cgroup MM policies that would need the
+struct_ops-to-cgroup mechanism generalized beyond memcg =E2=80=94 which is =
+why
+I hope these use cases can help make the design more generic.
+
+[0] https://lore.kernel.org/linux-fsdevel/20240511200240.6354-2-torvalds@li=
+nux-foundation.org/
+
+--=20
+Regards
+Yafang
