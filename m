@@ -1,271 +1,273 @@
-Received: from mta0.migadu.com (out-103.mta0.migadu.com [91.218.175.103])
+Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120F73AEF51
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.103
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790291905; cv=none; b=fJ+VySPdLWZY+wRILdtd6BcxOJJvEYFE9Wb/hVDxQsgIGlD9JTjRniLNHvUzugZuwMRCkDxDwcEDZXPEBPrNqaXuxIE+sFJm3+xZ+Y0eBx4xQQ+Jq3l1ID+dxpFQVeNJkh1kxLv2mbMeX+xgStFJ/aLe2b/q32YmmuQ8VRZhXAg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790291905; c=relaxed/simple;
-	bh=1M33bqcpVFqHA/4mDAfYuzXof9ZeZuHj5UucIeyHLLE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uuRAA1IXHQrwiFE8J9mNQ+B9kVYzCMrvkWPZ9EMbXSLEArpLortEKGnuRC4mq5JlamK0HGyHeg/+rnVt0iQGlBt8uHSZ0M6oPawgXcvRHApzOnLY+mfdqDXl/X7xYQaclVdVfFr4wgr9dsltWeJjIvMcRahIX83WzNwEsFFbx9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qyNsE0Su; arc=none smtp.client-ip=91.218.175.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAE341D23C
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790291927; cv=pass; b=BnT5/r4vdJg1a8ZLZP2BmgivybU1mia6pGd/OxHUhkA0l3YRcYfOspJnUYjqwjimcf1g8x8thaBX5z/g1KCp1BOzan6f8PG1EcPxXzGRKqDTfU2w70ZkJnYWsAcV+D6i937H/eDbXKjb/Vw9CwhuT3rmtDNQ/Q9b5PBc9uXPCzo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790291927; c=relaxed/simple;
+	bh=QmhZDh4ySNDX8Q31EACXtFxHKrNArobCfR4y83+VFR8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SQkexPEYS4mWJ52uRyqbzBRJB2qAZbZGeUtYBjjMMw02KE7191s2uhG54sxd90a4p+MaGQVC+Z2kGvsGBLDsu+uR8sosSDJYPECIKw+g7P32BzI7KaHcCiS4R1qKVmUWzWumGPRVDUvJzYjOd3K7eqH1dwQRGQnzhTJQvgrOTI4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h5N9lnl2; arc=pass smtp.client-ip=74.125.227.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qyNsE0Su"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1M33bqcpVFqHA/4mDAfYuzXof9ZeZuHj5UucIeyHLLE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790291901; v=1; x=1790896701;
- b=qyNsE0Suq6acSp01rTOSryknyg7I/9SZjk6uibbLunlhQpi1uHDNCSMBxs5JIk8Y8BQhDl3k
- UJ7VqNA6gmxrBLt7/D77hwGfMKiLladWXUxRhqTu1JPBj0875T0zBDdDB36NOWTUz8zjfEuZB4Q
- Gb0RTGmCLTvG61ElQs1SgFdc=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1427ee8712c01b06;
-	Thu, 24 Sep 2026 23:18:21 +0000
-X-Mizu-Trace-ID: 1427ee8712c01b06
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <6af94251-fc79-4377-b781-f9b413af1223@linux.dev>
-Date: Thu, 24 Sep 2026 16:18:14 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h5N9lnl2"
+Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a0aa9d356eso303714a91.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:18:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790291926; cv=none;
+        d=google.com; s=arc-20260327;
+        b=MORgptGJmSpTZwUNBIpP65hv0CYD50atgK318ECUNkSvfqImtO+Uy0NYyzRGfy7tD0
+         pJl4KtcbZYgqo9WpOg4ykXTRa8z/FbcSfly8hfQihZIln82Nwr96GANjdVuU3j2rg86Q
+         pTS82+Bx//Vyer5m9ZLA53NqY/co9+7f421U70f9nxSV5fUMrWTAkgyJCY80dW9sQ2MM
+         YX79oHVv5ehQfKjMVNq88gWfcvlShrLGyqK41B4JIrk0A86e1fTrF16Ajgq+Wd83JZ07
+         cBa74zAOJ0oAcn6h5odefqg5We5VbgEuFpuQFem0xblXrcFQt8Li3UpzLxxbjjK2m0WR
+         XigQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=uxWc+jeVAMw82z+fQsCIZSxaNCFVi67xsWU3Nh4EvG0=;
+        fh=FLd6JgKJC78bvz9uUBQxoN4rjy641h97g+CnETlClq4=;
+        b=VVe67L+7YSe/75j+YfEpLHaAtKn84lJ8RzpdjI+3abag9a4fMW5spl/CTtExSk0t3k
+         zSI6oKMsSR2oT4vvaK5T2itqdqC7NmNgKx+6kK1LsyyRedTRgDpJZFVHgnhOcW29FVVF
+         nYeB44erfRvfjrJ692/sXO6tSWfP6Q5dQ0anxKvpoGaWJ5/AqyYr1LkG4vwXzjSC6qH9
+         BGzRd9fzcQ07p5st6cM4XIx/NIjsfAlRJhaR9d/LaAZc/JSqAibROMAjM1mCpBD5J0+Q
+         ibiRkVpFclTpJbzlROPFcZzQDnYBNOt0Evk8OpXQY4UKeRNHi7WESb0Z2R7QCMM6KrE+
+         qTHw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790291926; x=1790896726; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uxWc+jeVAMw82z+fQsCIZSxaNCFVi67xsWU3Nh4EvG0=;
+        b=h5N9lnl2x6oKnM5E2a7H8B9GyfppeDDgPOxCEg6NWwpSAvsSgEIOXSv7VNLqhYcT0b
+         BdH1Dyzd2VzNW15Rt3aXixvQf7oJbdQhlrT3FkaWdkWaKJoNJ9wWVEWAA+bkR4IG2e6o
+         87uV9ehiUzd72yyTHgEe2Z64//PzVjlhvdaHYwdq6bo83qWqLS7Y6tL5Y+jIrxO0CY3Z
+         YOlJbrmfFREeLdZ24Q180llBlF1LIV5Hn7f8WGdKkeAQne19TYh5TtWOnnGQxc7L0+Qq
+         dJdGpUXw7OSfEm1Cem/LWS4Rdra1g/WWWm34XgjoVEHWc+18OU7F6ck34tNo9CPEwpTg
+         lcHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790291926; x=1790896726;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uxWc+jeVAMw82z+fQsCIZSxaNCFVi67xsWU3Nh4EvG0=;
+        b=2QyYz2gtXDNDJoMWJ3g3PwvdKwgp4seby8/PE+JSiDcNn1hrVAPcIDNeco+9RDeO+H
+         yxelJQAwt6qcXq4Vy4y+5PA9t/0zB1HiLatNNrx5QhYzsQCTDCKmK+ApHmI/f5DYNCvN
+         Vj4d9NnmFHsV7V/lEweuWsdDRVx4L1DylxfY8Sdtf6NazEDNwhSl1FshskbPwQlH8TUl
+         uckDQo0HEV9wF0ZDhsC2bAY5kaKnzMUt9yM3t3KMrg7gONpx1ABD/Qudx+AWiq+47R2S
+         bbEA+XtCdCldx9V8GxmK1aiK9dhpVmCgdEMsCBUCccCNgHNlKJWFCgG83TPHQ9MAwApf
+         qKaA==
+X-Gm-Message-State: AFuF++ninVQcc7b98KhD3EQq3AoG1s29SdnY3DWAtg4SAh3nvKUXt++j
+	wh7iKpCpH15z22VLM0X6RL+RyceIiIyiFnl9lV/COq42wKD9Bsa06W6aEBJ2wWtqv8PzYmB1p6u
+	9EacFCUCNCwEYSDFVQ39jOcj0ND1z10I=
+X-Gm-Gg: AYBFou01TnFnmP0xYElSebGBF3mlbQ3GWVdhdib6HID+iknwL4I6/zhJ+c+tew/Mvad
+	xAYC62xtzBMzEPglrHbN3kM0feilGc0Um0701HqyzlxfA8+Qdm5DjwVv4+ZDXUtHDtpCd2xhPQE
+	bsAFke9WFgJKXPYuWQCjZDZNDQ2B1ZoqmCkI6+ieuxq6/tExnjgmendM+ZUP/U/HFTZVUca3OcQ
+	mKaWyq08+LFB1uswzwHR0UmYpgbCmRXOiTWsveF8sJl2gg5zF3AvCg5/c3Cwk1zSV5rSUvt0Nec
+	WU2C8bC/LCy0V7ssKFgu/iXHC9698DCyaP4BymZmWPhak5rBsD7aNmQSBVE2CB/vBEpL0KjPG4o
+	3aQGAhn6ask4Akr8vMgSSE6GHwnJOCGDsB0L5
+X-Received: by 2002:a17:90b:3c0f:b0:39d:eda9:febf with SMTP id
+ 98e67ed59e1d1-3a098da4171mr4014390a91.18.1790291925614; Thu, 24 Sep 2026
+ 16:18:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH vfs v1] bpf: Allow bpf_d_path() from filp_close_sync()
-To: bot+bpf-ci@kernel.org, brauner@kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com
-Cc: viro@zeniv.linux.org.uk, jack@suse.cz, neil@brown.name, jolsa@kernel.org,
- broonie@kernel.org, linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com, martin.lau@kernel.org,
- yonghong.song@linux.dev, mason@kernel.org
-References: <20260924204226.190315-1-ihor.solodrai@linux.dev>
- <b3b4cbefd5258ad320205bc708c7864c20a16f39ffd37673fe9cbd534a1ebbca@mail.kernel.org>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <b3b4cbefd5258ad320205bc708c7864c20a16f39ffd37673fe9cbd534a1ebbca@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260923232939.1886328-1-andrey.grodzovsky@crowdstrike.com> <20260923232939.1886328-3-andrey.grodzovsky@crowdstrike.com>
+In-Reply-To: <20260923232939.1886328-3-andrey.grodzovsky@crowdstrike.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 24 Sep 2026 16:18:31 -0700
+X-Gm-Features: AclHuK8sH4PXfH1LTBo5eSHOScrjWP0JmKlgbh9FqaT_UkyfqSDr51wTaVhUOUo
+Message-ID: <CAEf4BzY2vgk3nrEY_0P4y=t7JzCi8+BdDZM4nFO3bxkXP8Ri5A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/8] libbpf: BPF programs manual loading and attaching
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
+	martin.kelly@crowdstrike.com, slava.imameev@crowdstrike.com, 
+	linux-open-source@crowdstrike.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/24/26 2:24 PM, bot+bpf-ci@kernel.org wrote:
->> The d_path selftest closes its descriptors with close_range() so that
->> its fentry program on filp_close() runs. The vfs commit
->> 46ace7e4dc4b ("fs: make close_range() synchronous") switched
->> close_range() to filp_close_sync(), so the program still attaches but
->> is never called:
->>
->>   test_d_path_basic:FAIL:close trampoline for filp_close was not called
->>
->> With that series, close(), close_range() and the closes on exec and
->> exit all go through filp_close_sync(). Few paths still reach
->> filp_close(), dup2() being one of them, so a program on filp_close()
->> no longer sees most file closes.
-> 
-> Can the commit message clarify which exec closes it refers to? At
-> 46ace7e4dc4b, begin_new_exec() calls do_close_on_exec(), which still
-> closes O_CLOEXEC descriptors with filp_close():
-> 
-> fs/file.c:do_close_on_exec() {
->     ...
->     spin_unlock(&files->file_lock);
->     filp_close(file, files);
->     cond_resched();
-> }
-> 
-> So close-on-exec stays on filp_close() rather than moving to
-> filp_close_sync(). Only close(2), __range_close() and close_files()
-> were converted in that series. After this patch, a program moved from
-> filp_close to filp_close_sync would silently stop seeing descriptors
-> closed by exec.
-> 
->>
->> Allow bpf_d_path() from filp_close_sync(). It takes the same arguments
->> as filp_close() and the program runs before the file is flushed and
->> its last reference is dropped, so file->f_path is still valid. Keep
->> filp_close() in the allowlist for existing programs.
-> 
-> This explains why fentry is safe, but does the reasoning hold for fexit
-> as well? The commit message says "the program runs before the file is
-> flushed and its last reference is dropped," but that applies only to
-> entry, not exit. Looking at filp_close_sync() (a546b2ef2120):
-> 
->     retval = filp_flush(filp, id);
->     fput_close_sync(filp);
-> 
-> fput_close_sync() calls __fput() synchronously when this is the last
-> reference. __fput() does:
-> 
->     dput(dentry);
->     mntput(mnt);
->     file_free(file);
-> 
-> So by the time a fexit trampoline runs, the dentry reference is gone
-> and the struct file has gone back to filp_cache (SLAB_TYPESAFE_BY_RCU,
-> reusable immediately). For pipes and sockets (alloc_file_pseudo uses
-> d_alloc_pseudo which sets DCACHE_NORCU), dentry_free() calls __d_free()
-> directly with no RCU delay.
-> 
->>
->> Attach the selftest program to filp_close_sync() and keep triggering
->> it with close_range(), since filp_close_sync() may be inlined into
->> close().
->>
->> Assisted-by: LLM
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index 195f78db9bda..49d5ec983e72 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -972,6 +972,7 @@ BTF_ID(func, vfs_fallocate)
->>  BTF_ID(func, dentry_open)
->>  BTF_ID(func, vfs_getattr)
->>  BTF_ID(func, filp_close)
->> +BTF_ID(func, filp_close_sync)
->>  BTF_SET_END(btf_allowlist_d_path)
-> 
-> Can a fexit program on filp_close_sync() safely call bpf_d_path() on
-> file->f_path that has already been freed? bpf_d_path_allowed() only
-> checks the attach target, not the attach type:
-> 
->     return btf_id_set_contains(&btf_allowlist_d_path,
->                                prog->aux->attach_btf_id);
-> 
-> and check_helper_call() uses only this callback to gate the helper.
-> check_attach_target() accepts BPF_TRACE_FEXIT on any function.
-> 
-> For example: SEC("fexit/filp_close_sync") prog calls
-> bpf_d_path(&file->f_path, buf, sz). close_range() on a pipe fd calls
-> __range_close() -> filp_close_sync() -> fput_close_sync() -> __fput()
-> -> dput() which frees the NORCU dentry, then file_free() frees the
-> file. Then the trampoline runs the fexit prog -> bpf_d_path() ->
-> copy_from_kernel_nofault(&copy, path) reads the freed file ->
-> d_path(&copy) -> path->dentry->d_op->d_dname(path->dentry, ...)
-> which reads freed dentry memory and calls through a function pointer
-> loaded from it.
-> 
-> The existing filp_close entry does not have this problem: fput_close()
-> -> __fput_deferred() queues ____fput with task_work_add(TWA_RESUME), so
-> __fput() runs only on return to user space, after fexit. filp_close_sync
-> is the first allowlist entry that drops the last reference to its own
-> argument.
-> 
-> Would it work to allow bpf_d_path from filp_close_sync only when
-> prog->expected_attach_type == BPF_TRACE_FENTRY?
+On Wed, Sep 23, 2026 at 4:29=E2=80=AFPM Andrey Grodzovsky
+<andrey.grodzovsky@crowdstrike.com> wrote:
+>
+> From: Slava Imameev <slava.imameev@crowdstrike.com>
+>
+> BPF programs designated as manually loaded can be loaded and
+> attached independently after the initial bpf_object loading and
+> attaching.
+>
+> These programs can also be reloaded and reattached multiple times,
+> enabling more flexible management of a resident BPF program set.
+>
+> A key motivation for this feature is to reduce load times for
+> utilities that include hundreds of BPF programs. When the selection
+> of a resident BPF program set cannot be determined at the time of
+> bpf_object loading and attaching, all BPF programs would otherwise
+> need to be marked as autoload, leading to unnecessary overhead.
+> This patch addresses that inefficiency.
+>
+> A manual-strategy program is loaded via bpf_program__load_manually()
+> and unloaded via bpf_program__unload_manually(), gated on
 
-Both claude and codex refuse to build a reproducer for this because they
-"take extra care with some cybersecurity requests".
+forgot to update commit message?
 
-But the issue appears to be real, and bot's suggestion should work
-(pasting a diff at the bottom).
-
-Christian, could you please confirm that allowing filp_close_sync on
-fentry, but not on fexit makes sense? Should I respin with that?
-
-If anyone has ideas for alternative solutions to this bug or original
-issue, I'd be happy to try that as well.
-
-As it stands, many BPF programs attaching to filp_close will probably
-get broken with 46ace7e4dc4b ("fs: make close_range() synchronous")
-reaching the mainline.
-
-Thanks!
-
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 49d5ec983e72..42dc01756f8a 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -972,9 +972,12 @@ BTF_ID(func, vfs_fallocate)
- BTF_ID(func, dentry_open)
- BTF_ID(func, vfs_getattr)
- BTF_ID(func, filp_close)
--BTF_ID(func, filp_close_sync)
- BTF_SET_END(btf_allowlist_d_path)
- 
-+BTF_SET_START(btf_allowlist_d_path_fentry)
-+BTF_ID(func, filp_close_sync)
-+BTF_SET_END(btf_allowlist_d_path_fentry)
-+
- static bool bpf_d_path_allowed(const struct bpf_prog *prog)
- {
-        if (prog->type == BPF_PROG_TYPE_TRACING &&
-@@ -984,8 +987,16 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
-        if (prog->type == BPF_PROG_TYPE_LSM)
-                return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
- 
--       return btf_id_set_contains(&btf_allowlist_d_path,
--                                  prog->aux->attach_btf_id);
-+       if (btf_id_set_contains(&btf_allowlist_d_path,
-+                               prog->aux->attach_btf_id))
-+               return true;
-+
-+       if (btf_id_set_contains(&btf_allowlist_d_path_fentry,
-+                               prog->aux->attach_btf_id))
-+               return prog->expected_attach_type == BPF_TRACE_FENTRY ||
-+                      prog->expected_attach_type == BPF_TRACE_FENTRY_MULTI;
-+
-+       return false;
- }
- 
- BTF_ID_LIST_SINGLE(bpf_d_path_btf_ids, struct, path)
-
-
-> 
->>
->>
->>  static bool bpf_d_path_allowed(const struct bpf_prog *prog)
-> 
-> [ ... ]
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
->> index 1a2a2f1abf03..7665e1d28a64 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/d_path.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
->> @@ -109,8 +109,9 @@ static int trigger_fstat_events(pid_t pid)
->>  	fstat(indicatorfd, &fileStat);
->>
->>  out_close:
->> -	/* sys_close no longer triggers filp_close, but we can
->> -	 * call sys_close_range instead which still does
->> +	/*
->> +	 * filp_close_sync() may be inlined into close(2), so use
->> +	 * close_range(2), which calls it directly.
->>  	 */
->>  	syscall_close(pipefd[0]);
->>  	syscall_close(pipefd[1]);
->> @@ -165,7 +166,7 @@ static void test_d_path_basic(void)
->>
->>  	if (CHECK(!bss->called_close,
->>  		  "close",
->> -		  "trampoline for filp_close was not called\n"))
->> +		  "trampoline for filp_close_sync was not called\n"))
->>  		goto cleanup;
->>
->>  	for (int i = 0; i < MAX_FILES; i++) {
->> diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
->> index 561b2f861808..edb5494a47f7 100644
->> --- a/tools/testing/selftests/bpf/progs/test_d_path.c
->> +++ b/tools/testing/selftests/bpf/progs/test_d_path.c
->> @@ -41,7 +41,7 @@ int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
->>  	return 0;
->>  }
->>
->> -SEC("fentry/filp_close")
->> +SEC("fentry/filp_close_sync")
->>  int BPF_PROG(prog_close, struct file *file, void *id)
->>  {
->>  	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-> 
-> 
+> bpf_object__prepare() having already run (BTF loaded, maps created,
+> relocations applied) rather than requiring a full bpf_object__load().
+> Manual programs are skipped by the object's own autoload pass.
+>
+> Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36058459433
+>  tools/lib/bpf/libbpf.c   | 200 +++++++++++++++++++++++++++++++++------
+>  tools/lib/bpf/libbpf.h   |  32 ++++++-
+>  tools/lib/bpf/libbpf.map |   1 +
+>  3 files changed, 204 insertions(+), 29 deletions(-)
+>
 
+[...]
+
+> -       obj->btf_module_cnt =3D 0;
+> -       obj->btf_module_cap =3D 0;
+> -       obj->btf_modules_loaded =3D false;
+> -       zfree(&obj->btf_modules);
+>
+> -       /* clean up vmlinux BTF */
+> -       btf__free(obj->btf_vmlinux);
+> -       obj->btf_vmlinux =3D NULL;
+> +       /*
+> +        * The btf_vmlinux data is needed for manually loaded programs,
+> +        * so defer freeing it in that case to the end of the object life=
+time.
+> +        */
+> +       if (force || !obj->has_manual_progs) {
+
+
+same condition as if above, why split into two ifs? and really better
+to just exit early if !force || obj->has_manual_progs
+
+
+> +               btf__free(obj->btf_vmlinux);
+> +               obj->btf_vmlinux =3D NULL;
+> +       }
+>  }
+>
+
+[...]
+
+> @@ -15375,10 +15431,69 @@ void bpf_object__destroy_skeleton(struct bpf_ob=
+ject_skeleton *s)
+>
+>  int bpf_program__set_load_strategy(struct bpf_program *prog, enum bpf_pr=
+og_load_strategy strategy)
+>  {
+> -       if (prog->obj->state >=3D OBJ_LOADED)
+> +       struct bpf_object *obj =3D prog->obj;
+> +
+> +       /*
+> +        * has_manual_progs is snapshotted once in bpf_object_prepare_pro=
+gs()
+> +        * and never recomputed; once the object is prepared, no transiti=
+on
+> +        * into or out of MANUAL may change which programs are MANUAL,
+> +        * regardless of direction. AUTO<->DISABLED transitions never tou=
+ch
+> +        * MANUAL and keep the looser, pre-existing OBJ_LOADED gate.
+> +        */
+> +       if (strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL ||
+> +           prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL) {
+> +               if (obj->state >=3D OBJ_PREPARED)
+> +                       return libbpf_err(-EINVAL);
+> +       } else if (obj->state >=3D OBJ_LOADED) {
+> +               return libbpf_err(-EINVAL);
+> +       }
+> +
+> +       if (strategy =3D=3D prog->load_strategy)
+> +               return 0;
+> +
+> +       switch (strategy) {
+> +       case BPF_PROG_LOAD_STRATEGY_DISABLED:
+> +       case BPF_PROG_LOAD_STRATEGY_AUTO:
+> +               if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MAN=
+UAL)
+> +                       prog->autoattach =3D prog->saved_autoattach;
+> +               prog->load_strategy =3D strategy;
+
+not completely follow the whole saved_autoattach thing, and the commit
+message doesn't even mention this aspect... why saving and restoring
+autoattach if we can leave it as is and just ignore if load strategy
+is manual?
+
+> +               break;
+> +       case BPF_PROG_LOAD_STRATEGY_MANUAL:
+> +               /*
+> +                * Manually-loaded programs are not supported for gen_loa=
+der.
+> +                * This is because bpf_object_load_prog is not called for
+> +                * manually-loaded programs, so such programs are not vis=
+ible
+> +                * to gen_loader. For this reason, prevent calling
+> +                * bpf_program__set_load_strategy(MANUAL) when gen_loader=
+ was
+> +                * used to generate a BPF object loader.
+> +                * A gen_loader implementation is being called for autolo=
+aded
+> +                * programs and defines its own model for loading BPF pro=
+grams.
+> +                * To pass a BPF program to gen_loader, set the program's=
+ load strategy
+> +                * to LD_AUTOLOAD.
+
+you are fixing this comment in the next commit
+
+and the comment doesn't have to be that verbose
+
+pw-bot: cr
+
+> +                */
+> +               if (obj->gen_loader)
+> +                       return libbpf_err(-EOPNOTSUPP);
+> +
+> +               /*
+> +                * struct_ops programs are incompatible with manual loadi=
+ng:
+> +                * bpf_map_prepare_vdata() bakes each member's fd into ke=
+rn_vdata
+> +                * automatically during bpf_object__load(), before a MANU=
+AL member
+> +                * could ever be loaded, and nothing re-bakes it afterwar=
+ds.
+> +                */
+> +               if (prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS)
+> +                       return libbpf_err(-EINVAL);
+> +
+> +               if (prog_is_subprog(obj, prog))
+> +                       return libbpf_err(-EINVAL);
+> +
+> +               prog->saved_autoattach =3D prog->autoattach;
+> +               prog->load_strategy =3D BPF_PROG_LOAD_STRATEGY_MANUAL;
+> +               prog->autoattach =3D false;
+
+keep autoattach as is and orthogonal to load strategy? if MANUAL is
+set, there is no auto-attach and user will have to manually attach,
+no?
+
+> +               break;
+> +       default:
+>                 return libbpf_err(-EINVAL);
+> +       }
+>
+> -       prog->load_strategy =3D strategy;
+>         return 0;
+>  }
+>
+
+[...]
