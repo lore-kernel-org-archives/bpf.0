@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E48735E549;
-	Thu, 24 Sep 2026 06:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1413603C0;
+	Thu, 24 Sep 2026 06:46:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790232231; cv=none; b=KYtKw8fk3AYce4z85l0OYwzYM5F9Hg3A065JYXAgQZGJZH6GFO1mwwoFRs6scqcn4yFQyhtP0w5O61fSb1oCjUAOM44s3T3qeH5/p48lttA/duUVQlMJ1CW05xipyCgkf1F6ccEYNgkIET9/vxW1tnnMmow4I49ZLxQp/QRb3Dw=
+	t=1790232385; cv=none; b=FA0lFXCTjKhVysc2peRBuFkyB7uNqSDW2WFabe9XfZaLPSme3XCcV8ja9qr9Ub9aG6i9DRbLKq63XxEDaE6pIpRJ1GSMZh1/Upy8XqH7lRFoIEm0Ly0iiL+viw+QDJKXrtUcHheJ4E2C58OfV1unLKOSYItF88KkRjWIrvbP4U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790232231; c=relaxed/simple;
-	bh=YHalUQcickU79fH74N4hk3gAbubZkhtOKMC6fhDq0pg=;
+	s=arc-20240116; t=1790232385; c=relaxed/simple;
+	bh=+hGZUN0BKiqi0Y3XcVBSdIkGES37WxS6ncO6TFnsZuM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XgiZ0KzQcOWEojA22OCepjO10Wni4f/BgimQ/cnu7LNHXtegpC6s3ZfVTJtUui0OABl4zdoQMNd2mF+wFelgT1RgHCkfvacjqtVrAnxq14ldh+1ragpuLwMqusFMiXNb3nKp5zwqkz6MZk/Rse6hfcl0bJ3EY/oxJwou7S4DeHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVxUBLLE; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=jUrIDpIlb7bz1E4sI9DcU8D5kc9yl9rof9BmDAw4+5dcG29/AQOyIdaLQtHduJP5xMUho9CfsKqoTuHuJfo71omtpnyzJSQZP3RB1MvHuqyPwfUtCaTGv4PIboYitShAGWbzCEfRbVYigBFCF8oo0No1fyIYrLdVKnxsNl06pXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=koWTzwgX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVxUBLLE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1AF01F000FF;
-	Thu, 24 Sep 2026 06:43:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="koWTzwgX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882071F000FF;
+	Thu, 24 Sep 2026 06:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790232230;
-	bh=8+aDnBPe6Fe8ZVXl+yIt16LOFB9XYRmkMboC0hDkoW0=;
+	s=k20260515; t=1790232383;
+	bh=R0wnoOO5pG/STL/OpzTwEdV4fc3ldm12F1eE4DwdDVU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=WVxUBLLEsP97RLZPooJ8iLZlylwhI3IHUEcRwN90QZNfoMLn49qpcrlGtA7/TtLFu
-	 mXifHSgg+0RI0KmPwytBN5yDS39a8uwDkniVYuUzqiR+8TIPsLg8OlWckb4FaGTK6+
-	 G/wVW55tOOSi+zGXFJlrev0sVcekMW3fQ4k328plRClRFnjhQVjvJibIwzf72QHEhB
-	 WRG+d3Dr6KajQzV9cTA6/zhXHgxAFz8KU9/hUgeD2PW0SV1xLb9E26D3FK5uYPDtBN
-	 dnWTZu58Av0FO7t5i937AyYVVtoKjq5bubYxd2nGJYQ2181qwVQDpBJFghdiQ2zDpO
-	 nvRrAxWoyEKFA==
-Date: Thu, 24 Sep 2026 07:43:43 +0100
+	b=koWTzwgXzfK1tsRkEa0NQlX7UtVL0Y2s+v/pZ/J4FNAIbfHcagmjIjvBhoxn6HzBE
+	 cnIqWxAWh8srKT6XAWxK+jPnkL2VBHyWzH24so0+Pv2lyjD5oUyrJ7iLna46XHGyCj
+	 P+NTR8r0f6g1SQLEpb4rEtYT0B4mu3Mr23gJsZQt1IxwD/qQt9cDIXtSFAu0jH3dIQ
+	 EjF/Ug21v5k1kuw8Fpxc3eoZCu5QVrA8ZJsTSOc4X/0b05kKpZEtc7/WXZocn67RTw
+	 6CsIEE2w4gPwBfLoKQMCkzA3nRVCr1gVG2iPDH1cQEv+QW6DJWlWs+ezKydrK4ZWQ4
+	 74MydDOap5AOw==
+Date: Thu, 24 Sep 2026 07:46:17 +0100
 From: Simon Horman <horms@kernel.org>
 To: Daniel Machon <daniel.machon@microchip.com>
 Cc: netdev-bot+sashiko@kernel.org, andrew+netdev@lunn.ch,
@@ -39,137 +39,86 @@ Cc: netdev-bot+sashiko@kernel.org, andrew+netdev@lunn.ch,
 	richardcochran@gmail.com, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v7 11/14] net: lan966x: add PCIe FDMA MTU change
- support
-Message-ID: <20260924064343.GX13925@horms.kernel.org>
-References: <20260918-lan966x-pci-fdma-v7-11-0ecc179c8a2c@microchip.com>
- <179008205354.2160803.17637640817184992984@kernel.org>
- <20260923094622.gmxyw46ligz4rsyd@DEN-DL-M70577.microsemi.net>
- <20260923193929.GW13925@horms.kernel.org>
- <20260923200712.jirfdepdpv5vm45m@DEN-DL-M70577.microsemi.net>
+Subject: Re: [PATCH net-next v7 10/14] net: lan966x: add PCIe FDMA support
+Message-ID: <20260924064617.GY13925@horms.kernel.org>
+References: <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
+ <179008205148.2160803.12818321368571406375@kernel.org>
+ <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
+ <20260923180730.GV13925@horms.kernel.org>
+ <20260923201155.lbbbtx22adz2ilhg@DEN-DL-M70577.microsemi.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260923200712.jirfdepdpv5vm45m@DEN-DL-M70577.microsemi.net>
+In-Reply-To: <20260923201155.lbbbtx22adz2ilhg@DEN-DL-M70577.microsemi.net>
 
-On Wed, Sep 23, 2026 at 10:07:12PM +0200, Daniel Machon wrote:
-> > On Wed, Sep 23, 2026 at 11:46:22AM +0200, Daniel Machon wrote:
-> > > > Thank you for your contribution! Sashiko AI review found 4 potential
-> > > > issue(s) to consider.
+On Wed, Sep 23, 2026 at 10:11:55PM +0200, Daniel Machon wrote:
+> > On Wed, Sep 23, 2026 at 10:45:38AM +0200, Daniel Machon wrote:
+> > 
+> > ...
+> > 
+> > > > [Severity: Medium]
+> > > > Is this path expected to work on a big-endian host?
 > > > >
-> > > > Critical: 0 · High: 2 (2) · Medium: 1 (1) · Low: 1
+> > > > Until now the descriptor producer and the FDMA engine were both on the
+> > > > little-endian SoC, so the native-endian descriptor layout in
+> > > > drivers/net/ethernet/microchip/fdma/fdma_api.h was fine:
 > > > >
-> > > > If you believe none of the issues are legitimate, please reply to each
-> > > > issue of Medium severity or higher and explain why the AI is wrong.
-> > > > If any of them are legitimate and you plan to respin, please let patchwork
-> > > > know by including "pw-bot: cr" as a separate line at the end of your reply
-> > > > (one such reply per series is enough).
+> > > >   struct fdma_db {
+> > > >         u64 dataptr;
+> > > >         u64 status;
+> > > >   };
 > > > >
-> > > > - [High] MTU change during or after PCIe FDMA teardown runs the full
-> > > >   reload on freed/quiesced state: unbounded napi_disable() while holding…
-> > > > - [High] The new resize readiness check publishes lan966x->rx.lan966x
-> > > >   before the PCI FDMA rings exist, so an MTU change can race with ring…
-> > > > - [Medium] The new PCIe resize path retires DMA rings and tears down
-> > > >   their ATU outbound window without ever confirming the hardware is…
-> > > > - [Low] FDMA_PCI_DB_SIZE_MAX / FDMA_PCI_MAX_MTU perform unsigned
-> > > >   arithmetic with no underflow guard and no BUILD_BUG_ON, even though…
+> > > >   struct fdma_dcb {
+> > > >         u64 nextptr;
+> > > >         u64 info;
+> > > >         struct fdma_db db[FDMA_DB_MAX];
+> > > >   };
 > > > >
-> > > > Pre-existing issues:
-> > > > - [High] The hazard the new PCIe reload path documents and avoids is
-> > > >   still live in the sibling platform reload path, which this series…
-> > > > - [High] The two implementers of lan966x_fdma_ops::fdma_resize now
-> > > >   disagree about the 'rings not built yet' precondition, and the…
-> > > > - [Medium] Window in which DEV_MAC_MAXLEN_CFG exceeds the DCB buffer
-> > > >   size, combined with a missing SOF/EOF check in…
+> > > > With PCIe FDMA the descriptors live in host memory and are fetched by the
+> > > > endpoint, so the host and the engine can disagree on byte order. The
+> > > > translated addresses written here, and the status/info words written by
+> > > > __fdma_db_add()/__fdma_dcb_add(), all go out in host byte order, and the
+> > > > HW-written DONE/BLOCKL fields are read back the same way in
+> > > > lan966x_fdma_pci_get_next_dcb() and lan966x_fdma_pci_rx_check_frame().
 > > > >
-> > > > --
+> > > > CONFIG_MCHP_LAN966X_PCI in drivers/misc/Kconfig only has
 > > > >
-> > > > net: lan966x: add PCIe FDMA MTU change support
+> > > >   depends on PCI
+> > > >   depends on OF_OVERLAY
 > > > >
-> > > > This adds MTU change support to the PCIe FDMA path by reallocating the
-> > > > contiguous ATU-mapped RX and TX rings at the new size and falling back to
-> > > > the old buffers on failure.  It also caps the PCIe DCB ring at 256 entries
-> > > > and advertises a derived dev->max_mtu (FDMA_PCI_MAX_MTU) when the FDMA is
-> > > > in use.
-> > > >
-> > > > A few questions below about the new reload path and the new size macros.
-> > > >
-> > > > > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > > > > index 5d6902459f20..940425beec2f 100644
-> > > > > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > > > > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > > > > @@ -358,7 +358,7 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
-> > > > >       lan966x->rx.lan966x = lan966x;
-> > > > >       lan966x->rx.max_mtu = lan966x_fdma_get_max_frame(lan966x);
-> > > > >       rx_fdma->channel_id = FDMA_XTR_CHANNEL;
-> > > > > -     rx_fdma->n_dcbs = FDMA_DCB_MAX;
-> > > > > +     rx_fdma->n_dcbs = FDMA_PCI_DCB_MAX;
-> > > > >       rx_fdma->n_dbs = FDMA_RX_DCB_MAX_DBS;
-> > > > >       rx_fdma->priv = lan966x;
-> > > > >       rx_fdma->db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-> > > >
-> > > > [Severity: High]
-> > > > Can an MTU change race with ring construction here?  lan966x_fdma_pci_init()
-> > > > sets rx.lan966x before it fills in channel_id/n_dcbs/n_dbs/db_size/size and
-> > > > before the two sleeping allocations in lan966x_fdma_pci_rx_alloc() and
-> > > > lan966x_fdma_pci_tx_alloc().
-> > > >
-> > > > The netdevs are already live at that point: lan966x_probe() runs the whole
-> > > > port loop, including lan966x_probe_port()->register_netdev() and
-> > > > lan966x_port_init()->lan966x_fdma_netdev_init()->netif_napi_add()+
-> > > > napi_enable(), and only calls ops->fdma_init() afterwards, without holding
-> > > > RTNL.
-> > > >
-> > > > So an rtnl-held ndo_change_mtu in that window sees rx.lan966x != NULL, passes
-> > > > the new guard in lan966x_fdma_pci_resize(), finds a max_mtu that differs from
-> > > > the partially initialised rx.max_mtu, and enters __lan966x_fdma_pci_reload().
-> > > > Both contexts then write the same lan966x->rx.fdma / lan966x->tx.fdma:
-> > > >
-> > > >   lan966x_fdma_pci_reload()
-> > > >       lan966x_fdma_rx_disable(&lan966x->rx)   /* channel_id still 0 */
-> > > >       lan966x->rx.fdma.atu_region = NULL;     /* under probe's feet */
-> > > >       lan966x_fdma_pci_rx_alloc(&lan966x->rx) /* second ring */
-> > > >
-> > > > Does this leak probe's ring plus its ATU region (only
-> > > > FDMA_PCI_ATU_REGION_MAX == 6 exist), or trip WARN_ON(fdma->atu_region) /
-> > > > -ENOSPC in fdma_pci_atu_region_map()?  And on the failure branch,
-> > > > lan966x_fdma_pci_reset_mem() dereferences tx->fdma.atu_region->base_addr,
-> > > > which is NULL in a snapshot taken before probe allocated it.
+> > > > so a big-endian host (e.g. powerpc) can select it. On such a host, would
+> > > > the engine see byte-swapped nextptr/dataptr and length fields, i.e. would
+> > > > RX/TX not work at all? Should the descriptor fields become explicit
+> > > > little-endian types with accessors at the hardware boundary, or should the
+> > > > Kconfig entry gain a little-endian dependency?
 > > >
-> > > Yes, same issue as adressed in #4. Theres a race because netdevs are registered
-> > > before initialization (in this case FDMA) has happened. The proper fix is a
-> > > reordering of the probe initialization.
+> > > Hmm. Never tested on PowerPC, not this driver nor the DT overlay mechanism it
+> > > relies on for PCI deployment, which has only been exercised on ARM and x86 so
+> > > far (AFAICT) [1].
+> > >
+> > > [1] https://lore.kernel.org/all/20240430183301.46568e35@bootlin.com/
 > > 
-> > Hi Daniel,
+> > I don't think that the baseline expectation is that drivers are tested
+> > on big-endian systems, but rather that reasonable effort is made to ensure
+> > that byte-order usage is correct.
 > > 
-> > I'm wondering if you could expand on this a little. I'm unsure what #4
-> > refers to. And I'm unclear if you are planing the reordering as part
-> > of this patchset.
+> > In this case I suggest that will involve using __le64 instead of u64,
+> > coupled with calling le64_to_cpu() and cpu_to_le64() as appropriate.
+> > 
+> > Sparse can aid with getting this right.
 > 
-> Hi Simon,
+> Ack.
 > 
-> Yes, sorry for being vague here.
-> 
-> #4 refers to patch 4, where I explained that the issue reported there was really
-> due to the existing probe initialization order and netdev registration order.
-> Sashiko seems to report multiple race issues that can happen since the netdevs
-> are registered before the HW is fully initialized. This is real, and something
-> that needs to be fixed, just not in this series, IMHO.
+> I am a little reluctant, when I cant really test it properly. Sashiko gives
+> another solution - adding a LE dependency to the Kconfig of the misc PCI driver,
+> maybe that'll do?
 
-Understood. I think that from the perspective of avoiding scope-creep
-your approach makes sense.
+I think that should be a last resort. I won't hold out on this,
+but I would prefer the approach I suggested.
 
-> For Sparx5 and lan969x, I fixed this not long ago, and made sure that netdevs
-> were registered last in probe, as they should be. Now, lan966x should get the
-> same treatment, as a separate fix series for net. :-)
-
-Reviewed-by: Simon Horman <horms@kernel.org>
-
-
-
+...
