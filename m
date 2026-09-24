@@ -1,146 +1,97 @@
-Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E1D4CC262
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 20:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026614D0A05;
+	Thu, 24 Sep 2026 20:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790282566; cv=none; b=MbbPPT+ZqWerF4DJDqdkBt2+ySf/FuSTXhM5/lcVZO9gjpgS7j+JJfiH9LDhxeln6LJyhsUsHd7lvvIOMwxUFsxxRPUXoBcskuRBVj9FpmAqEqYiDKBfPLtAUjvfF8bwpRXyBPOeS7+FaYuu5E5STGA/N2ivKjmIBNmIf7gWB60=
+	t=1790282728; cv=none; b=SujVNZYfT/m6gCsU4phSZgKun9EnWmi2bk+GHl+EZHrA54U4f1JzTV8T+/8PXfFWvPG/Jd6WuMYrl6rhaMZDmvXzkxBNeOKxmxusFtRRKxgSLyqJxKqHNPyMZOnxH0lgEr6kycxPoVymPwrPy/6nS+BSyioXgpntIBxn6v7mv2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790282566; c=relaxed/simple;
-	bh=Z82U3XRqT23tKBcS4svTG3IWK2zApncZW1pF4pyw0Fw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NWk0paFBLrDQT9AooS6d+Ul59sKYV6334SnT1auYa4jMs+lTbxmdcOwymIOO9GfA3xOW8k25RyR5tJOhjWsY0WMnN48QH9ClR8IBctMqxyekSDit5hV2bcNI7Ng9L/2QCr8twWIP/FIlcfq0Ab3rSvVdKu/t1OBeM9Nr8bnPSFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C4rDtznz; arc=none smtp.client-ip=91.218.175.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790282728; c=relaxed/simple;
+	bh=38fYqY6dAGRKIr9/5pdl5Yw6DqLgAW+T6nJMcP1jCKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V3fqcot3RS1fs2Op/1JHnJNg08zhk57PINgrxHuPnmIkRKOwY3E6507zZmtkMm7qRMq8OgyiDnXyVu3+4XVewwmJeXbwQbtnNhtUM404v9zRSL7EAmW+60k3EbRekT/krhycw/Bkf/kmXu0xJ6XOXkes014RC3KXoo2F+lQt2lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=2pwNg6DB; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C4rDtznz"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Z82U3XRqT23tKBcS4svTG3IWK2zApncZW1pF4pyw0Fw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790282557; v=1; x=1790887357;
- b=C4rDtznzvhC4FzeARRXzWfxa+kcWq0N8oTbppJyImthDnAhfwxivbU/5aoB/14PodEwzmi9B
- RPDJfCW2Il6gK7dj3/ScJgybSMPfIdVLads9qyHwFLFhlmzY9nL/Qko3uVKDfCaJAcByeaG84Bz
- 2rQtnQYlT+BuqjiISiAaS5rc=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 2e7ab4009d700ec9;
-	Thu, 24 Sep 2026 20:42:37 +0000
-X-Mizu-Trace-ID: 2e7ab4009d700ec9
-X-Migadu-Flow: FLOW_OUT
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Christian Brauner <brauner@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	NeilBrown <neil@brown.name>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH vfs v1] bpf: Allow bpf_d_path() from filp_close_sync()
-Date: Thu, 24 Sep 2026 13:42:26 -0700
-Message-ID: <20260924204226.190315-1-ihor.solodrai@linux.dev>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="2pwNg6DB"
+Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 0FEBD80417;
+	Thu, 24 Sep 2026 20:45:18 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id EC9D220010;
+	Thu, 24 Sep 2026 20:45:14 +0000 (UTC)
+Date: Thu, 24 Sep 2026 16:45:12 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: mhiramat@kernel.org, mark.rutland@arm.com,
+ mathieu.desnoyers@efficios.com, andrii@kernel.org, peterz@infradead.org,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 0/2] tracing: fgraph: cut the cost of the shadow stack
+ retry loop
+Message-ID: <20260924164512.451a5d97@fedora>
+In-Reply-To: <20260922225526.1554758-1-vineet.gupta@linux.dev>
+References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: EC9D220010
+X-Stat-Signature: z3dpyr39jfertp6jo1cu5i5gn4i8w35g
+X-Rspamd-Server: rspamout03
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19OzpODMiPSvn327AaP8E0RNzT+Ikvn4OY=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=2Be5KpNzTZXgWlIVsbFsXMkY5/cT+uszS93jLVbttxw=; b=2pwNg6DBAIJuFWO+o9oz4nmzunEkt9Q71HxtoxIr5tmRdatq4N1t8Pp83g8njtQVAZy/xNk6ONIE7w/5N5ay3b9MwJvrSxqX9ZDlJxTS5JXUwlLIxiIwjWJJkNn5S3ulMwsZpZLjdUCpyAWS8W7Fzz2S52z9YWpOcZ5+eYDt2R0=
+X-HE-Tag: 1790282714-384105
+X-HE-Meta: U2FsdGVkX19lZMdW2su9jmPvONBBEJ9KImB270qGajn37ZOKgDzrRGX0Z2G9VfofM5EvanKoDIie9FK3rkJ8RFEpEjpbMCoq41Gl+ryQoKPyt+S7Us4zsRsD/b3kVyWohfkzoFzzJrdPP0o5M6J+Dqhzbpzonk3nnlOQX4msSxRbaMQ7KpODrV+jU7i75iMKGfEXsMLDcK3pjvSOcT9tlyicuNs5AZBj3G9GlNSfc6O3LQV5eleSF2vSfbjB1rrvmHqpN+5rWrMjTxLdUW4TNvJRdzAF52EWkRdxs2zQNxE10YWmM29O3vv3fewTLy+3Z5UHjg0nraPt4Zp/TLremwspSrliXGJN
 
-The d_path selftest closes its descriptors with close_range() so that
-its fentry program on filp_close() runs. The vfs commit
-46ace7e4dc4b ("fs: make close_range() synchronous") switched
-close_range() to filp_close_sync(), so the program still attaches but
-is never called:
 
-  test_d_path_basic:FAIL:close trampoline for filp_close was not called
+Just an FYI. My wife flew into Europe today and I'll be touring Europe
+with her until Oct 3rd. I may get time to look at patches, but it will
+be very limited. And then LPC starts and who knows when I'll get a
+chance.
 
-With that series, close(), close_range() and the closes on exec and
-exit all go through filp_close_sync(). Few paths still reach
-filp_close(), dup2() being one of them, so a program on filp_close()
-no longer sees most file closes.
+Thus I may not be very responsive for the next couple of weeks.
 
-Allow bpf_d_path() from filp_close_sync(). It takes the same arguments
-as filp_close() and the program runs before the file is flushed and
-its last reference is dropped, so file->f_path is still valid. Keep
-filp_close() in the allowlist for existing programs.
+-- Steve
 
-Attach the selftest program to filp_close_sync() and keep triggering
-it with close_range(), since filp_close_sync() may be inlined into
-close().
 
-Assisted-by: LLM
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+On Tue, 22 Sep 2026 15:55:24 -0700
+Vineet Gupta <vineet.gupta@linux.dev> wrote:
 
----
-
-The issue was found by BPF CI when running on linux-next:
-https://github.com/kernel-patches/bpf/actions/runs/35923662147/job/107398237366
----
- kernel/trace/bpf_trace.c                        | 1 +
- tools/testing/selftests/bpf/prog_tests/d_path.c | 7 ++++---
- tools/testing/selftests/bpf/progs/test_d_path.c | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 29260951aa87..09a27810ca27 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -972,6 +972,7 @@ BTF_ID(func, vfs_fallocate)
- BTF_ID(func, dentry_open)
- BTF_ID(func, vfs_getattr)
- BTF_ID(func, filp_close)
-+BTF_ID(func, filp_close_sync)
- BTF_SET_END(btf_allowlist_d_path)
- 
- static bool bpf_d_path_allowed(const struct bpf_prog *prog)
-diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-index 1a2a2f1abf03..7665e1d28a64 100644
---- a/tools/testing/selftests/bpf/prog_tests/d_path.c
-+++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -109,8 +109,9 @@ static int trigger_fstat_events(pid_t pid)
- 	fstat(indicatorfd, &fileStat);
- 
- out_close:
--	/* sys_close no longer triggers filp_close, but we can
--	 * call sys_close_range instead which still does
-+	/*
-+	 * filp_close_sync() may be inlined into close(2), so use
-+	 * close_range(2), which calls it directly.
- 	 */
- 	syscall_close(pipefd[0]);
- 	syscall_close(pipefd[1]);
-@@ -165,7 +166,7 @@ static void test_d_path_basic(void)
- 
- 	if (CHECK(!bss->called_close,
- 		  "close",
--		  "trampoline for filp_close was not called\n"))
-+		  "trampoline for filp_close_sync was not called\n"))
- 		goto cleanup;
- 
- 	for (int i = 0; i < MAX_FILES; i++) {
-diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
-index 561b2f861808..edb5494a47f7 100644
---- a/tools/testing/selftests/bpf/progs/test_d_path.c
-+++ b/tools/testing/selftests/bpf/progs/test_d_path.c
-@@ -41,7 +41,7 @@ int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
- 	return 0;
- }
- 
--SEC("fentry/filp_close")
-+SEC("fentry/filp_close_sync")
- int BPF_PROG(prog_close, struct file *file, void *id)
- {
- 	pid_t pid = bpf_get_current_pid_tgid() >> 32;
--- 
-2.55.0
+> Turning on function-graph tracing, or attaching a kprobe_multi return
+> probe, hands every thread a shadow stack. alloc_retstack_tasklist()
+> does that 32 tasks at a time, and since for_each_process_thread() has
+> no cursor, every sweep restarts from init_task and re-walks the tasks
+> already served. Total work is quadratic O(N^2) on thread count.
+> 
+> On a 60-core Sapphire Rapids machine with 400000 idle threads the 0 -> 1
+> transition takes 227 s, inside a single bpf() syscall for the kprobe_multi
+> case. On Meta fleet this showed up as RCU stalls and softlockup panics.
+> 
+> Patch 1 raises the batch to 1024, dividing the sweeps by 32:
+> 227 s -> 7.2 s at 400000 threads. It helps on every preemption model.
+> 
+> Patch 2 adds a cond_resched() between sweeps. It is supplementary and
+> separable: a no-op on current x86 and arm64, but on !CONFIG_PREEMPTION
+> builds it takes soft lockups from 3-of-3 runs to 0-of-3. Dropping it
+> leaves patch 1 intact.
+> 
+> Neither changes the O(N^2) shape; a cursor-based walk would, but
+> task_struct lifetime makes that considerably more involved.
+> 
+> Vineet Gupta (2):
+>   tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE to 1024
+>   tracing: fgraph: Add a cond_resched() to the shadow stack retry loop
+> 
+>  include/linux/ftrace.h | 7 ++++++-
+>  kernel/trace/fgraph.c  | 8 ++++++++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
 
