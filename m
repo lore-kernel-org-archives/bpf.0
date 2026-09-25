@@ -1,145 +1,255 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFFF4EA368;
-	Fri, 25 Sep 2026 16:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790354593; cv=none; b=jutzZN+3xbwZtK2ZsC7nqWdNJRU+re7Mgjp+7thkpKDX8OpovGxxvKcrXZ8eqzfgWJaQTzhk/DQyfYXUsOB6FBR/odDu3JWWmaNV309ceL1lrSs4rGJO3PzXkOXygLvm3n6sJzXet32G/OQzwZk2OoWTUuXtS3yicTRiClcbGcE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790354593; c=relaxed/simple;
-	bh=P3w6KMXjzLlN6nAljQD/5grUF93zr/UQ9AJoIQbvkpw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=M1SuUK1zkn+K5WCptRsFEkBjjX4pYOAKUvYDhY+In8PFCw9ySt7B0Eu5r2qqzkG9DIjGODkZnjO5Xypwdmsr11lFDTxya3p+8EGPopbgO1M3EU00N+Q1yk5kSv/AIcbjQYuTgNytIJ62eKPWPwBV8oW9AL6HbEoMLzwve5DYCT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QFGDgU7I; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A7E3B05BD;
+	Fri, 25 Sep 2026 17:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790355744; cv=fail; b=GIUNs3URLKsAJMgDlEHgHGw4tiRSLZiZfMl8rIimagHAndt5AomQn6EI1JtGituz6IRpdX7Mip9FypoXzCA5ArkbvnVHFu9b0Vol1Cq87Fscp5qkCAym5zG6QtcnPMjBp0I1kWAs2Ah70z2Fc2xKvlBzadU5PhUAnWnSKzKODLc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790355744; c=relaxed/simple;
+	bh=AnamDZ82V55cplG65p9SoA8UcrBn9gWUaBZbDnlRWdY=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=N1IcXkc+I3TGGh7BSfn3+XsBxp1t9NQpqy1LDbVABjJWPArbILtm8/8B1nhFM4yCFCR4tRKwj1MJf09Wobu6Ju+AMWJyybwwpGSrdg37mUgk7vHGjhARtuSwN4OF2riL8+kElyU27sLBarTji5CEAEmt+jBEIKBoQKEOTgpy7BM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ajhssZC7; arc=fail smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QFGDgU7I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72A31F000FF;
-	Fri, 25 Sep 2026 16:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790354563;
-	bh=Td8d4StGwfViCnmZPo1eb0gqFXmqlEDNpKnck2rJhM8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QFGDgU7IKMnHqdexzNTe0J9OMuvOr7gXytEcQR5jvi5F+E0moIp5uwXVWFrhZuqpA
-	 tQu5zKqPQ9sXNki6y5QXUPclXS4I3jt7QDVjiHziQVh3nobUMaghdYb1NKjVzxUY7r
-	 n56U64tB+OEzMGbGsUmxUP942DJzYitlSB1QzhJCXFLqFzmG/lzBlaFiUSah6kXWdO
-	 upVPFVojzMDT+AjxE0J0H3K2Xqmt3k6nh0zQ9QoHLQ7DP1qdVJALDFCOAP2mzP3pJq
-	 WRORlXemmQjOHARWBTZL+V4DEUHmKzM+6FaHadtiraYtOD4vhhLs+Jz3Z9h3vT21da
-	 MZTP+y+tCnVMA==
-Content-Type: multipart/mixed; boundary="===============6809303146770183891=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ajhssZC7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790355739; x=1821891739;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=AnamDZ82V55cplG65p9SoA8UcrBn9gWUaBZbDnlRWdY=;
+  b=ajhssZC7xdRP+qM9HCv1+gOkZIbknxncmLLzUsi8cf32QMUc4pqvXR/+
+   SW/k9yvr6jbfaiqfmm0AUOg7d82TT0FbPyZO9bi5BUsyEzMIHXI/xMhl9
+   ky5iGFQtxqWUw7XXe6lpHHMetNtwoRIur6GSmSBPnOPMSuKyvw+TrQjfY
+   Y8wDJkIBCi7hoLLwCkvLfXCo6wbNO2D7M4CqN6YOnVKYxUs2/iRSJFlsH
+   mof45Q+DWP1wbyO4JN9/FmpG3iornwkmQKz1o/n4lU6dbuH+AvwhW1mTB
+   seYyDI5UcE/iFDubzYDqeyGiu7ORGXxO2+i5W9nUgVo3QU+uPmmNOoiSy
+   g==;
+X-CSE-ConnectionGUID: odh1wC+aTKaEBokJzNwnsg==
+X-CSE-MsgGUID: v9DYwh8UTyuf+Ack7jj86g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11916"; a="90271813"
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="90271813"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 10:02:15 -0700
+X-CSE-ConnectionGUID: wCHU0GWWQAGLhi0koMolEg==
+X-CSE-MsgGUID: uuRUd8tVRmKSbOWHc8yduA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="277549669"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 10:02:14 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Fri, 25 Sep 2026 10:02:13 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46 via Frontend Transport; Fri, 25 Sep 2026 10:02:13 -0700
+Received: from BYAPR05CU005.outbound.protection.outlook.com (52.101.85.52) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Fri, 25 Sep 2026 10:02:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WkBvh569FnGo+JNE0U2vv5QEtC3pt1nL0Ch8r7Lh07bjbNvbGIqOMtg5n6aCoM9QzhL0e8IKo71DkI8miXPcxa4AWOoNDux1tN/zAJEWzDdOr8RQjdySSeqfqwFr1uDgh1uvLW8QqJdiSGit8ol9JAuxRZxh1+P/4HWIpGgOQM7LglxoQKfVRkZtlBR+JrXDmRYdhze8/3DHU77PRJ9YV5I64U05Z7loA01Z+xfX2CMjErkkeXk1HC0itMtnEkvQkixXhNr1e2R/RvgE9BINa5fzilJNhIkterZD7GMg2SqzQgiRRdfoXuz+ieaqwwVZtbTvbpGU6b4urNEz4MwNiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=marYjy301r+RWV9niKnBnvp+HpT2VWT7L6kC33uxODo=;
+ b=S4yWpG0YokkQApILa4/w7JVvubp9R5uM0G8kWLdkcPF5vryfWHaC2nbi6fPAMzt5Kc5Fsv4BSWLn14vAw2RUjEMB8hsLjgNceUKqxa+pYl7p8nUucc01t8QLoTwQoH1rBvAH5lTtkNZ/HDPz47sTnP4/E3+WZFraHHH9kRXtMbFWDa6jJeTc3AZHe+57Fn3s3my7bMmANAnprNVDCHfgTsyspj225mVwb7zY6ObJEo+isyVu99O30nrurWLCC69gbValG8yw0epfyMdbta/LBG1XgoS7lRENCBFN+a5c2WAwZzpjWPtoNS7zi2oyRbfxxTUGPyAyNSPX74hpKiaOlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ SA3PR11MB992399.namprd11.prod.outlook.com (2603:10b6:806:58b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Fri, 25 Sep
+ 2026 17:02:05 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0451.014; Fri, 25 Sep 2026
+ 17:02:04 +0000
+Date: Fri, 25 Sep 2026 18:59:39 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <anthony.l.nguyen@intel.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <edumazet@google.com>, <andrew+netdev@lunn.ch>,
+	<netdev@vger.kernel.org>, <zhaochenguang@kylinos.cn>,
+	<magnus.karlsson@intel.com>, <jacob.e.keller@intel.com>,
+	<przemyslaw.kitszel@intel.com>, <jbrandeb@kernel.org>, <horms@kernel.org>,
+	<kerneljasonxing@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
+	<bpf@vger.kernel.org>, <sunithax.d.mekala@intel.com>
+Subject: Re: [PATCH net 4/8] i40e: avoid deadlock when calling
+ unregister_netdev()
+Message-ID: <araodXNEfD7JSnp5@boxer>
+References: <20260918212458.550425-5-anthony.l.nguyen@intel.com>
+ <179004067040.2160803.1559812086096525304@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179004067040.2160803.1559812086096525304@kernel.org>
+X-ClientProxiedBy: DU7P251CA0010.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:10:551::27) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6a6f53bff017aa1e0c758a1a87da09ae0165d5523b13e65dc944e3494377e3fd@mail.kernel.org>
-In-Reply-To: <20260925154029.3673513-2-eva.kurchatova@virtuozzo.com>
-References: <20260925154029.3673513-2-eva.kurchatova@virtuozzo.com>
-Subject: Re: [PATCH bpf-next v2 1/1] selftests: bpf: size the map in test_lru_sanity3 to whole refills
-From: bot+bpf-ci@kernel.org
-To: eva.kurchatova@virtuozzo.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,willemb@google.com
-Cc: linux-kernel@vger.kernel.org,eva.kurchatova@virtuozzo.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 25 Sep 2026 16:42:42 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA3PR11MB992399:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ebbac77-d253-41b0-a2b8-08df1b26b95c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|4143699003|10067099003|18002099003|11063799006|22082099003|56012099006;
+X-Microsoft-Antispam-Message-Info: upk2aNfAIwEZojwGef+ewsowulbz/osjv/V9PvdomwNq3utrVtEbWEwyi1rSPYbrPRoWWxZN/oKBtfYj39YEbi0NaEi5bQigDzbFaHoPH5dnRQDSQgs9/ugPojfN1lrDcFmJvF+BJz6J09JReAKBPS+T7sMWDp7Hzy98MqrYs579IGRX+vTLxXf+y9WlRtZKoze9CTz7Nlm7KpISGRxBpPIoz7Cu38Sy5/2PISSqX7sgwsEmeVGKNHY9MwGqPKy1aVxqLYE9ZLMKknQvOsGcuWSI/PYvmbaJVz4pfKph+aF6f2RGD4+Hk28YA6krmcJAYEAAJ1CW3I/+9+8kl4JPCcp4qikLwqbAmX7NB3RXW/tXQB82SU4M5wJb+v/Ym4ivBA/fdSGtxUraYgsOO+dmPua3XLme/PoKpsP1cY0Q5DbVykM90OMjPnwOzsrNdamrP3fgMqVbi8vibiS+ilLmZGcnRtrWCVvJ/e/3B269vN/B6EEkwOjWurHf3DfB5d21ix4DEDYEmoN4QGfRwK+7s69MngWeFMVdsPDMWG98HDdi93u4NrcOJJQkrcMd4MvcF/uQi9p6DZiJokD2MbZl+Q/oY0jLNThCH7LUVftwZpl6SSF6uBDSfO485FxLgT1i
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(4143699003)(10067099003)(18002099003)(11063799006)(22082099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T29CLzdURERaeEl6WG15aXRBMXNRSS9uZE9tSHhadFRsMTFFQWJncFp4Y2lo?=
+ =?utf-8?B?TGU2dzNSaTlrc3JvVnVveHBKNXZEVVFQc0tUUnUvZC94R2NVQVRuTHFqM2ZX?=
+ =?utf-8?B?NUxHTURwbi9XdDM4ZnljMnUrUlNOKzlhaVV5YkVBaUZnanBwNXR0alNzTTcx?=
+ =?utf-8?B?dSs1SUNXUytCOFIrcnhoVjA0d2puZGE5NndnWitwQ21RdlI0c0ZkUHVpSVZN?=
+ =?utf-8?B?TGxZOTJ0N3U2M0g0cmZnaDlnVzFDNG9RNzdTRCtsWUMvM29UWDRoZTIwL0J2?=
+ =?utf-8?B?WUFNSmYwYnRwTTFjWmxtZi9UbzAxcXRBNnM1VWcwelIzbWU2NnU2L3U1QjFk?=
+ =?utf-8?B?S1Ewc1FuK1VoOUpFZy8zdERadHVMd3ZFL0xRdWFRaTU1dThNRlc1SUlUSmVa?=
+ =?utf-8?B?RmVMQjlOUmZsZkQwS0I0a2ZSZ2tidXQyekk2Z1habTEzWGFHTHUybEVlNVdx?=
+ =?utf-8?B?UGM5QTNmKzBRdWNmVE9EeHdrdGhFZWpwMDgybTRvV2RZa082V0JZQm0xcE01?=
+ =?utf-8?B?N1hmcUIySDM5TnNWdVEvaE1KUEJueEk1MS9FR2cyeE51R3VpaXBwQXRwek0y?=
+ =?utf-8?B?aVNsRkZnRFUrM1hYazBMWU5ONlJMVVdHckhhclFMN2YwUjhQbHRMTFZiMG82?=
+ =?utf-8?B?ckpkWlI4eDR3dDRmTWRKS0JkbG91SW9LanAvRFRabnZkckpNS3FqWUhVck5E?=
+ =?utf-8?B?alRKOS9TTitaNkhqWUhUUGc1RFVYNjRSS2poVUlEMTJOSTcrMlBGbEwwamx3?=
+ =?utf-8?B?ejhCQ2tzMGpkUEZFUmcxR3lBS0NpZnZGdU9VKzZIMDRqQlRxekpySUVZZjM0?=
+ =?utf-8?B?TXU1T0Q5dlRCTk5ZQTJ2ZGwrZ0VXdEQ0Mkp3WUxHN3g3M3dXZU10MEw5N0Rr?=
+ =?utf-8?B?NEpZVmY4U0VGTWRyN1FPT0pQNmJTUXVOSVlNdlAyQkM0bVNzelVUbW1NNFg3?=
+ =?utf-8?B?bmg5b0V2dTd3bzNrVjlpTkFzU1JxbGpTNUpwMFdPT0tRa0g3QVd6Nlh2TmJs?=
+ =?utf-8?B?dE9LS0Y4UkY5bEJIc1FXSVI3NnNiN2k0aWp5YWFyR3g2dE1uV09FYWVxbWtz?=
+ =?utf-8?B?cmNoaDdYS1NJeTBwT04xeUhvS0hJSmZrM0crajE4Sms4aVlxQmx0MHMwMVh1?=
+ =?utf-8?B?TWFjbFU1Rk5YZkVwcmcvZlpqVlk4TXBuWXNzcUZPdEJycHF1NFNTOWs3UnUr?=
+ =?utf-8?B?TkYxejVFWTVwck9abzFJSWtnM0hhL1dZWExpTjlBV25KekowZkJOdzJsUnNm?=
+ =?utf-8?B?RnljY0s5amQxU2xWWHgvOXp4WkVNZ1Q3bEV0TjcvZHpLODJDOVZEMXVzU2R1?=
+ =?utf-8?B?T05VWlp0VXJYaktBVDhORVplU1ZKNml5NjVZTVB2Y1Y2YksrS1AwZW5tWXNI?=
+ =?utf-8?B?ODJ0ZjBwZ0Q3Q002K2J4OEZBRm5KRldXMWo5ZjhOSkVhSDc3bmdGaFpYRW90?=
+ =?utf-8?B?OGw3UHcvbkFzemZpUUlKVGE0cnk3R2puLzRNL0pNY2Iwc05OWmw5NTdRTGFs?=
+ =?utf-8?B?Tll2bG44WlpSZExEQzdsMTdoTEdsM1lzN05oSHpRVnhhQllVdStVVzM5K1RZ?=
+ =?utf-8?B?S1I1NHZWVWxJMDJNVkkvSmcvRHBibWg1QkZhVVN4cmVwVGh3bWpuSzl5SmNS?=
+ =?utf-8?B?U1g5YXZPbmwzOGhFQjIwbTl6SVNHcGJLa3ZYMW9KczJxZ0FGeW8yQTFMMkQ0?=
+ =?utf-8?B?cFAwSWlBYjVoazFTaDBYdG14cTYvRVQvQUJ3a1dOSFJwN0ttQXpkTkcrNTBX?=
+ =?utf-8?B?ZHdERWo0U0ZxYUZJUGUxSzVxRlZORzlxWFM1Y2c1SFNYekJaZUFKNHlidS9J?=
+ =?utf-8?B?UzlYak9uWldvSmJJc1h4TlFZMUZ3akVnWFpNNHlseDREY05HRGIva2k4MU5m?=
+ =?utf-8?B?UHhKbVN4a2MvSHYxeDBCNDV2RGV6aWZLWGw0V3RLZHhRQUp5VmdMU2E1b2xV?=
+ =?utf-8?B?Z05PN2M5RXQ1Ri90NEh6RndDRFk3dWZtQVhFbmNFYTZUeVZnZDJ5dVF6OFZm?=
+ =?utf-8?B?S256Mlk5VFIwcWFWbVBQdUxaSERkbktkNWQvVVpEVkRXN01Cc3JrTnc1anFz?=
+ =?utf-8?B?NER4emM2ZUtDSnNPNTFhMXVMZFl5V2YvNEtsR1dpMTlYVTlCVS9rSXFLRmdM?=
+ =?utf-8?B?N2hMRTBWZmcxMktkNkx3TUZWSjcvR2RsYWV5SGkxeHV1bnBCeGVJZXVrdUEv?=
+ =?utf-8?B?Y1VmQndWTUlSb1VkZkQvNndIemtRQUV5T1ozTmZnVnF5cW5QQmp3SWE2dm94?=
+ =?utf-8?B?WVBoM3JtZUFFMWNRc1VBQ1dOdkM4OFRXZUtoMGZaOFVCK1pmQVFld2piQ0JR?=
+ =?utf-8?B?QnVwNWMzQkFjTUJWeHdidTNJVHc0N0p3cm54a2owSUxLQ0hpN3YvM1Z5OWRJ?=
+ =?utf-8?Q?ywW0Wj1ejlm/Tve8=3D?=
+X-Exchange-RoutingPolicyChecked: gQPoNx+KaU0EyD2Sz0TThmBgltacusNxVqlhtSndIj65fA/UbQ3MM8XGYIuVazLFI05nGensJKTmbLQcynWlUi6MiM22VENK55jpvIQ7qe2Vi1bZFt0swavTIrbp7iNE0aHBZUd+chp8SH7rJOaIP3kmJP/DFNJTq3Ap+W3K3YekII/o18tE1N+M9xJ5Ev+bqbokst+Ukm3r6F1FhwSz5Bkx0svvaQtKTWnhApfT/PH3U/TyD8UT1xMDj+slM51/h93RXUcWp/YCmOLFXRAn6kj72X5y/2N7dsSPT0BoMnD3BaRNKH3hAysfIL6k7WqSlzfqWxyjTArQ3IZBk0GyHw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ebbac77-d253-41b0-a2b8-08df1b26b95c
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2026 17:02:04.5148
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wSv78uCs/9nILbgqREY0yrmVcOYO6ipFCHJv/XcIUSldMiHg5VMwdTErmwt0JS8po1idPGLrDrF3t8xO236x4wTw8YqBs6fwJjCrFH1smak=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB992399
+X-OriginatorOrg: intel.com
 
---===============6809303146770183891==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Sep 22, 2026 at 01:31:10AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 1 (1) · Medium: 0 (2) · Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [High] Incomplete fix: the RTNL self-deadlock is only removed from the
+>   i40e_vsi_reinit_setup() arm of i40e_setup_pf_switch().
+> 
+> Pre-existing issues:
+> - [High] Dangling main-VSI references after a failed VSI reinit.
+> - [Medium] NULL pointer dereference when the reinit unwind re-enters
+>   ndo_stop after q_vectors/rings were released.
+> - [Medium] Memory leak in the asymmetric unwind of
+>   i40e_vsi_reinit_setup() as it exists at this commit: the two early…
+> 
+> --
+> 
+> i40e: avoid deadlock when calling unregister_netdev()
+> 
+> This adds a lock_acquired parameter to i40e_vsi_reinit_setup() so the
+> err_netdev unwind uses unregister_netdevice() when RTNL is already held by
+> the rebuild path, and unregister_netdev() otherwise. The caller in
+> i40e_setup_pf_switch() forwards its own lock_acquired flag.
+> 
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > index 65aa50330aac..5ea8731ece08 100644
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> 
+> [ ... ]
 
-> selftests: bpf: size the map in test_lru_sanity3 to whole refills
->
-> test_lru_sanity3 fills a map of tgt_free * 2 elements, and then reads
-> back all but the last few. Whether that passes depends on the cpu
-> count alone; on a machine with six it does not:
->
->   test_lru_sanity3 (map_type:9 map_flags:0x0): test_lru_map.c:463:
->   test_lru_sanity3: Assertion `!bpf_map_lookup_elem_with_ref_bit(
->   lru_map_fd, key, value)' failed.
->
-> The kernel hands elements out in refills of lru->target_free, which is
-> clamp((size / nr_cpus) / 2, 1, LOCAL_FREE_TARGET), that is 128 / nr_cpus
-> rounded down. A refill the global free list cannot satisfy in full
-> calls __bpf_lru_list_shrink() for the remainder, and that evicts live
-> elements. Filling the map therefore evicts nothing only when computed
-> 128 / nr_cpus is a power of two. Any other nr_cpus variation fails.
->
-> batch_size is already __tgt_size(tgt_free), the refill size of a map
-> is __map_size(batch_size) elements, so size the map that way and the
-> fill consumes whole refills. Start the keys of the last insert at
-> map_size + 1, just past the new size.
->
-> Above 128 cpus __tgt_size(tgt_free) is 0 and there is no size to build
-> on. Skip the test there.
+> [Severity: High]
+> Should the other arm of this if/else get the same treatment? Both branches
+> are entered with identical lock state:
+> 
+> i40e_rebuild() {
+> 	...
+> 	if (!lock_acquired)
+> 		rtnl_lock();
+> 	ret = i40e_setup_pf_switch(pf, reinit, true);
+> 	...
+> }
+> 
+> but i40e_vsi_setup() still takes RTNL itself, both on success:
+> 
+> 	ret = register_netdev(vsi->netdev);
+> 	if (ret)
+> 		goto err_dl_port;
+> 	vsi->netdev_registered = true;
+> 
+> and on its unwind, which is the exact pattern this patch just replaced:
+> 
+> err_msix:
+> 	if (vsi->netdev_registered) {
+> 		vsi->netdev_registered = false;
+> 		unregister_netdev(vsi->netdev);
+> 		free_netdev(vsi->netdev);
+> 		vsi->netdev = NULL;
+> 	}
+> 
+> Can the !main_vsi branch be reached with RTNL held? The err_netdev path
+> patched above ends in i40e_vsi_clear(), which sets pf->vsi[vsi->idx] = NULL
+> and kfree()s the VSI without resetting pf->lan_vsi, so
+> i40e_pf_get_main_vsi() returns NULL on the next reset. The following
+> rebuild would then take:
+> 
+> 		if (!main_vsi)
+> 			main_vsi = i40e_vsi_setup(pf, I40E_VSI_MAIN,
+> 						  uplink_seid, 0);
+> 
+> with rtnl_mutex already held, and register_netdev() -> rtnl_lock() would
+> self-deadlock on the non-recursive mutex, which is the failure mode this
+> commit describes fixing.
 
-The changelog states the skip triggers "Above 128 cpus", but the code
-skips from 65 CPUs up. main() passes tgt_free = LOCAL_FREE_TARGET (128),
-and __tgt_size() computes:
+seems i40e_vsi_setup needs the same teaching regarding lock being held
 
-    batch_size = (128 / nr_cpus) / 2 = floor(64 / nr_cpus)
-
-which is 0 for any nr_cpus >= 65 (since 128 / 65 = 1, and 1 / 2 = 0).
-The new `if (!batch_size)` check fires on 65..128 CPU machines, not only
-"above 128 cpus".
-
-The sentence "batch_size is already __tgt_size(tgt_free), the refill
-size of a map is __map_size(batch_size) elements" is also hard to parse.
-The refill size is batch_size (not tgt_free); the map is sized to make
-the kernel's target_free equal batch_size.
-
-Could the last paragraph say "Above 64 cpus", and could the sentence be
-reworded to clarify that batch_size becomes the refill size after the
-map is resized?
-
-> diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
-> index 0921939532c6..84e9a930471a 100644
-> --- a/tools/testing/selftests/bpf/test_lru_map.c
-> +++ b/tools/testing/selftests/bpf/test_lru_map.c
-> @@ -441,8 +441,15 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
->  	assert(sched_next_online(0, &next_cpu) != -1);
->
->  	batch_size = __tgt_size(tgt_free);
-> +	if (!batch_size) {
-> +		/* More cpus than this tgt_free gives a refill for */
-> +		printf("Skip\n");
-> +		return;
-> +	}
-
-A subsystem pattern flags this as potentially concerning: the new skip
-reports with printf("Skip\n") and then returns, so the binary exits 0
-and CI counts it as a pass. The selftests guide asks for skip results to
-go through kselftest.h (ksft_test_result_skip() with a reason string),
-and says skip messages should always include a reason.
-
-test_lru_map.c is a legacy binary that never includes kselftest.h, and
-converting just this line would be inconsistent with the existing
-printf("Pass\n") pattern used elsewhere in the file. The concern is
-narrow: could the message at least say why the test was skipped, for
-example printf("Skip: nr_cpus %d > %u\n", nr_cpus, tgt_free / 2)?
-
-> +
-> +	/* A partial refill shrinks the LRU and evicts live elements */
-> +	map_size = __map_size(batch_size);
->
-> -	map_size = tgt_free * 2;
->  	lru_map_fd = create_map(map_type, map_flags, map_size);
-
-[ ... ]
-
-> @@ -466,7 +473,7 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
->  	}
->
->  	/* Insert new batch_size: replaces the non-referenced elements */
-> -	key = 2 * tgt_free + 1;
-> +	key = 1 + map_size;
->  	end_key = key + batch_size;
->  	for (; key < end_key; key++) {
->  		assert(!bpf_map_update_elem(lru_map_fd, &key, value,
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36157128898
---===============6809303146770183891==--
+> 
+> -- 
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918212458.550425-1-anthony.l.nguyen%40intel.com
