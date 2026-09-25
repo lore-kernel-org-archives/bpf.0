@@ -1,62 +1,62 @@
-Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+Received: from mail-oo2-f37.google.com (mail-oo2-f37.google.com [74.125.231.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBB74F55CC
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C344F6487
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790370786; cv=none; b=Cw9KP6TLkYTsnciMTE2l7BtrbAT3kL61Zi4gYzwJj8aHUI448c+A350zdMOgt4cJEtCqGFTavqeaBqMt/bLvdmMvcYkKRNhC9aZKdxB9o5UrgV+TCvwSabdmVdiP+L4Z0EZfT1FGVOyi0uSfyR6KUdtkDE1MeUjnawTGdX+URKo=
+	t=1790370787; cv=none; b=p4XuqW5PtrPx8jYPLE6xSSWm+EMR4/9BVRe8PJVTeE4UemVxIpCnChn5CYev1NXtk7aI+5cnK8eFroSnx0UUvZ4fsiyr5J+sKzqaitfE5NNgXtNVGJd3V5SZ+oH/SEeOlp6zje09kltK297P6djV+/FokvDBvPEbI20vEHu7QOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790370786; c=relaxed/simple;
-	bh=ijm5lHQWQ9SSokx2rkHGGQZO+6/C/fF2/f2jdr/P/x4=;
+	s=arc-20240116; t=1790370787; c=relaxed/simple;
+	bh=xWKDax6C5940X9AmksDZ7CblyprAQn0RjG9jOxBPgEU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DPq8puv7qJdJB6u7kiiRH/ZWr+svoiyLtcW/9D+k03QK9/LOCd2vkLIBfRk0Rs0+S4sVvQS0OO4x856M/0ym7ILlBGeFomDzVxAhFo0PFLkfgoQtkMjE6Zl3KjWhgnLgRgSu3uP/IFKCdT9UdFoxE7FY6YTpM6oE57sQgLuLe5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hpVjo0tm; arc=none smtp.client-ip=74.125.231.171
+	 MIME-Version; b=ulEdc+LtX5VI93pgvfoGbtk3fjNqKwQRQBGeztIBpLk7rWV8suAM0O6u6IEe4LwyjV3k8my4Jw8MK9TERFefkx+TEkUxuP1I1w1n5VqDvQjzRBNoWKOZFbzMyQWqQ0BqWcJjWDpX483f7itCu4UFnBMfLgW1fWzhrXu01dj7CeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b01Nz6UN; arc=none smtp.client-ip=74.125.231.165
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hpVjo0tm"
-Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6b1ae6f5fc7so941757eaf.3
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 14:13:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b01Nz6UN"
+Received: by mail-oo2-f37.google.com with SMTP id 46e09a7af769-8137b129131so892995a34.2
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 14:13:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790370784; x=1790975584; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790370785; x=1790975585; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uH5QuHAWHRs2PdTMSNLPSw5mEP8ea21+KvBhW/MXRfE=;
-        b=hpVjo0tmmzBCgSMJhJNuafqxUujNd03Z8oM14tIxfYoEy29+sEvJTFveQeHTKB9vwc
-         9YmcM4ZL5cTqp5vSezPYYfU2pHSQtmepezs0dYaSH46qgtnKKAxtQyOrdegUtX9sOFJS
-         T+MuKyA/zwsr8LvIu0+XQc9+8rFx8lWeapw3/ks8GTmDGnD7gnYwELW6fsccLoubKg1H
-         9wpHI2ufpfbEByYv4NB8K66XG9vVmWtuTcx6GfmVwic4kPnqxyECu1Hf182r71T4l1is
-         RbftOxzZZvhRRkmBB4lMZrUSD7XKIvlxV9BVJeeHgZP0N2sd/+a5r9n6aKjqWZDcoScW
-         M4Sw==
+        bh=AdhpD0eLHsutspBR7K8ZwhYWd3RmbhugEm4Rj6g/utQ=;
+        b=b01Nz6UNZWdTEjaeIe/fN8J408L9+GV0aUwUW0HIbCwkns20ub72seXOETnGDDz6Gh
+         Q9LlFXUeNoEDq7D+xyQVc/ycc9lVXnBMU9t+1zE/gOBE+OdmbDnaoZlrGw/aENJCN2qJ
+         TvbQYR/qIZ6F+WRJWa4nic6OecJCiH5/jFMv2Lrb0sIIMJYLQsZlgI8J9CLXCPGJqDQT
+         ii4Z9wDiPXH6juhLPmnuFYhDsSPVOh3dEcmOuKLSDRutzLRZ3Hasbubh+nUUAlmXWZqT
+         6BEh63rt2DDUiP0baU4JOoxLqLQwV6zBeQ2awWFuAMmcEbQjHCZ+ulh5lsI/XdpoEVAT
+         820Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790370784; x=1790975584;
+        d=1e100.net; s=20260707; t=1790370785; x=1790975585;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uH5QuHAWHRs2PdTMSNLPSw5mEP8ea21+KvBhW/MXRfE=;
-        b=f9thvpw1c7MkT/5CeED84fACZ+vkOZqBDYo574JTtKIsIrEcFQGsDbqqIi3h7i3tNV
-         KVpIUDaLiR8NhbdZf6869Q9kyoMitWY5krLupOel8XFWWtLECtT7MQYO7mXsExwLTOyJ
-         QMtZDcOcMXR+g6SuvShnQ3tgvP3M9nbSuph3y5tSTJmGXp7y9hi5q0cuffHa75Rp/Mle
-         hSAhNLvVvihtYvD4BCqcL2vJrwimJSkp7KxUcz82mF0H6SR5T9BeFH1Bj5InNhwson7P
-         iCSA2zUJh+qJusY6bYVtBjRftZTNWWH9be4b+1j1N9clFnMmikGwjKYatNAWSCUwRX45
-         5wZw==
-X-Gm-Message-State: AFuF++keWsEdN7IV4ztVcyt8Er4P9EgYCAaOlqDVs7ngIo94XYqwAtXY
-	9HsI7JJATgt03Bce2si/IzZgm/ZgsFhdJBsBEeK8a341J3wRceP6xGf1mHskeg==
-X-Gm-Gg: AYBFou1nRt+1VmvtLeQQAKdv5XeLO+eMx2yZuWXv515Fq3TgEB0MTqlgmzRQtPsCh6t
-	vqOvBF6QWcHb9RItFOZAtUdicKPzStNG5kzkTWR3Ec37OQt1teI6DUKElDi9bkpB9/URaIqvnma
-	ZCaoF0Jw0c6Fd8Psw0D8K34HB5nowUqKfhq12mUjZo6lze1pzGLC4wKh6SBywXphztGoGvGZC70
-	U2ef/0O/gIm6hr18hgk55dd0ejBdZm7+sZ4SqdPhVAU2vLHfaQbYm8SV+sG+SI9hh+eVOra/zHq
-	snIVaq7X/kYPdUfne8cLesMfEe1Rl7kuP93OoNffJ4ef8gYmnEA7rFg+MjlE2JRLOyp/H9y1AEe
-	ESR198IMJklQ7j9+fbe27atKSEWY/4SpzYXqw5jhjQYTuwtXt/uzBjxXj7jBNefRdUUvMLxevU0
-	YHYZ7Lk4LmkUvXvLWfeHtUFCLs/lFgqEwjNP62cMCM5YWpEJSsp0tv4O6fn6dSZk0=
-X-Received: by 2002:a05:6820:190d:b0:6b1:2f12:6c0c with SMTP id 006d021491bc7-6d43f7a70f0mr6523926eaf.34.1790370784032;
-        Fri, 25 Sep 2026 14:13:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:1c::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-818e6211cedsm3262618a34.3.2026.09.25.14.13.03
+        bh=AdhpD0eLHsutspBR7K8ZwhYWd3RmbhugEm4Rj6g/utQ=;
+        b=Ht2RKtdavtFJQTvTu1UI0zt4l+d169pKiEZgo5b2/qiqt39k/lcXUk/PchxXnPVa8k
+         oAdCGJxGvhofh745YHnQG91cOMc7iEg6NK4VuVNT/V2M07JlZNTox0vzuHcdzF3EWz80
+         sj7UOOzsq9M5M0i7MUYs4ZuDeqzKhEMv40rpSUowphN4BpTWbQMvRh+60zcRQqv6qnkS
+         Zqf6HT9PUml+AEpMyG0m4ZxftMBExIAXFXjrnozvV1F9zxGojfBf5r8ZfQHiFqfi7vVq
+         eNbMLEEg76U7ZOUJTJcylXgKEKusK0cMPqpvVlsjc3+QRxvQLJkS+drBZE+u55XkUp0A
+         M8Dg==
+X-Gm-Message-State: AFuF++m32tGunwP6I+iN4L0PsvVZfq/W/l4n+TOxexrAuXqsidwWa18Q
+	ImqkRVNd7b95Un6INXOgjgFY/jnIKiLx/X9CAih0WQxH+ygqeZhFjL3Kk7q4Sw==
+X-Gm-Gg: AYBFou34jeLqrVfKBep2C45StR4H5uabtEE7n5F06RQ2U5ml5MuruvKXvEk57nW4XEc
+	RbEXyTpCyyrydR0GtJ8tH8UUSN5bgT7sCwkTmh3w5AXhB5ZvY8PbZmi/UWBdJNdOOMx6f22t5sw
+	bs0mfOtxJLd7/cvA3xo4QEgE1ZjBOUG5c7FNv/2kVKxw0muUeDuYPC3UfX5fk7kFC/ndCCJflP3
+	Sy8SGNleJKOy3IEUYcoK9UxVcRpNuQK+yZ6B5P5AKVCk3JNAr3cQv4RZ+onJDoFsnY0RTlSg1dO
+	WYvjEUpWZcZN/QYyVJCsCW9RM0ErUBJp3FZ9K6N45jpVcTAeRmxaNQ8wk9890A6JFnEmy8Dfo/A
+	ducukS/A32fUYyI7VqKlvopElzTc0fObzCq3SpbQQhvtheLIdfGF1Vpvg9EoUIPX3KD/FryHPiJ
+	NIUfFEEnpSUWCpTC/pGQrZ6rjcZgZ+miJAW0Og5SSUPe9zasnk4UqXTdmHJtOicw==
+X-Received: by 2002:a05:6830:630e:b0:813:5e38:12ee with SMTP id 46e09a7af769-8178347c3bdmr8239776a34.25.1790370785171;
+        Fri, 25 Sep 2026 14:13:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:4c::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-818e97abfabsm3677860a34.23.2026.09.25.14.13.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 14:13:03 -0700 (PDT)
+        Fri, 25 Sep 2026 14:13:04 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 04/12] bpf: Check subprog scalar arguments in the common path
-Date: Fri, 25 Sep 2026 14:12:48 -0700
-Message-ID: <20260925211256.1834061-5-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 05/12] bpf: Check global subprog untrusted arguments in the common path
+Date: Fri, 25 Sep 2026 14:12:49 -0700
+Message-ID: <20260925211256.1834061-6-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260925211256.1834061-1-ameryhung@gmail.com>
 References: <20260925211256.1834061-1-ameryhung@gmail.com>
@@ -80,74 +80,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-BPF subprogram scalar arguments are checked separately even though the
-common argument checker enforces the same SCALAR_VALUE requirement.
-Start the migration by routing the scalar branch through check_func_arg()
-and update the verifier-log expectation.
+Global subprogram arguments tagged __arg_untrusted deliberately
+accept any caller value. The callee is verified separately with a
+read-only untrusted pointer, whose accesses use protected probe-read
+instructions.
 
-Use the BTF parameter index for metadata and the ABI slot index for
-register lookup. Route extra slots of by-value aggregates through
-check_arg_extra_slot() so every occupied slot follows the common path.
-
-Following patches can extend this guarded common-check branch as each
-remaining BPF-subprogram-specific implementation is removed.
+Keep the untrusted type in the canonical bpf_subprog_info used to
+prepare the callee state. Represent it as ARG_IGNORE only in the
+temporary bpf_func_proto used for call-site checking, then extend the
+guarded check_func_arg() path to cover it.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c                         | 19 ++++++-------------
- .../selftests/bpf/progs/aggregate_arg_func.c  |  2 +-
- 2 files changed, 7 insertions(+), 14 deletions(-)
+ kernel/bpf/verifier.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 65a1245e4edb..a84143285b3f 100644
+index a84143285b3f..7932d81a5aa9 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -10871,10 +10871,9 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+@@ -10805,9 +10805,18 @@ static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const stru
+ 
+ 	memset(proto, 0, sizeof(*proto));
+ 	for (arg = 0; arg < btf_type_vlen(func_proto); arg++) {
++		enum bpf_arg_type arg_type = sub->args[slot].arg_type;
+ 		const struct btf_type *t;
+ 
+-		proto->arg_type[arg] = sub->args[slot].arg_type;
++		if (arg_type & PTR_UNTRUSTED) {
++			/*
++			 * An __arg_untrusted argument accepts any caller value. The
++			 * callee treats it as read-only and uses probe-read instructions
++			 * to protect against invalid memory access.
++			 */
++			arg_type = ARG_IGNORE;
++		}
++		proto->arg_type[arg] = arg_type;
+ 		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
+ 		slot += btf_arg_slots(t);
+ 	}
+@@ -10870,16 +10879,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+ 		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
  		nslots = btf_arg_slots(t);
  
- 		if (arg_type == ARG_SCALAR) {
--			if (reg->type != SCALAR_VALUE) {
--				bpf_log(log, "%s is not a scalar\n", reg_arg_name(env, argno));
--				return -EINVAL;
--			}
-+			ret = check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
-+			if (ret)
-+				return ret;
- 		} else if (arg_type & PTR_UNTRUSTED) {
- 			/*
- 			 * Anything is allowed for untrusted arguments, as these are
-@@ -10964,15 +10963,9 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 		}
- 
- 		for (k = 1; k < nslots; k++) {
--			argno_t extra_argno = argno_from_arg(slot + k + 1);
--			struct bpf_reg_state *extra_reg;
--
--			extra_reg = get_func_arg_reg(caller, regs, slot + k);
--			if (extra_reg->type != SCALAR_VALUE) {
--				bpf_log(log, "%s is not a scalar\n",
--					reg_arg_name(env, extra_argno));
--				return -EINVAL;
--			}
-+			ret = check_arg_extra_slot(env, caller, slot + k, &meta);
-+			if (ret)
-+				return ret;
- 		}
- 	}
- 
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_func.c b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
-index d0a4f84a6fbf..2132b926a8f0 100644
---- a/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
-+++ b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
-@@ -43,7 +43,7 @@ __naked int aggregate_arg_pair_asm(void)
- }
- 
- SEC("tc")
--__failure __msg("R2 is not a scalar")
-+__failure __msg("R2 type=fp expected=scalar")
- __naked int aggregate_arg_pair_ptr_fail(void)
- {
- 	asm volatile (
+-		if (arg_type == ARG_SCALAR) {
++		if (arg_type == ARG_SCALAR || arg_type == ARG_IGNORE) {
+ 			ret = check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
+ 			if (ret)
+ 				return ret;
+-		} else if (arg_type & PTR_UNTRUSTED) {
+-			/*
+-			 * Anything is allowed for untrusted arguments, as these are
+-			 * read-only and probe read instructions would protect against
+-			 * invalid memory access.
+-			 */
+ 		} else if (arg_type == ARG_PTR_TO_CTX) {
+ 			ret = check_func_arg_reg_off(env, reg, argno, ARG_PTR_TO_CTX);
+ 			if (ret < 0)
 -- 
 2.52.0
 
