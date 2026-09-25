@@ -1,64 +1,64 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450934477E7
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 20:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F904AF691
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 20:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790368793; cv=none; b=Vfa2Z6rENZfjbm/hY40H4lddyc3TE9iDm/5rs5lcRSqUHcmgelAxN3KrZqoBHhUH688wGqt8mPi0DHcP8rMg8aFAZnG0DxcSC8PeJESu1wxhmr2QjqEdIqNm5+2Y56e/hbJjXLJlJgKWtq0tv5OtddsPgb2coLIzHuVGxGDQx5o=
+	t=1790368794; cv=none; b=ozNuycV2vu3ApxKnJ/fQPhu+vWKmtpedKakUEFBwdKwop0ZfyBcl0vElGVTQ0J6KKtPKfpCtkHdbd1t7TicGGk4eAGrSFc3F5Jkwin1cr/dy/JOrT1Djrkx8A6AObqnC4FrZuMDrqrQkSk3pnCSrs3YdJqfrzOaxcqKOjv+ShTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790368793; c=relaxed/simple;
-	bh=KdECoup6vYbef2XN56JKbp4nlL2IvLIVaNIYkco4QFo=;
+	s=arc-20240116; t=1790368794; c=relaxed/simple;
+	bh=9F87oM7BbfsHqmFs37dzNvNMJDdgdtKw+E6HbmCZtlY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YbqeyRhfAmPdSS096kH5547ZkvIO29zLQh4U6JVTyCI45WlXT7JkMwPlKNuzPkWMPS5mqI9OASuC30sp+d8otLk4GXpNNymauqXAucUApfiPGbQz1Vtg7l+pJzPRY50vouymTnDx9kkUSKjsMSd2zsH2+re1OWToUixUYkU7Jqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=awCsvZVT; arc=none smtp.client-ip=74.125.227.171
+	 MIME-Version; b=QIWs2bN7bpv7p2kJilBdi9bOE9ZsfCSlnwFsi+1D66plEfn7NDY6s++iFQ9OycWEAQM2m5OxInR9hSJmr2AxOp7Osv8SUJnqnYWevfo/WXJ8QYnlmPS8lNeABT5m4O+BzQb8+HrZP5Sm26jnkxw3Qbl9Co6TXUFAGuVChIWoJKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Ol8icjgQ; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="awCsvZVT"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccd66bb4so636861a91.1
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 13:39:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Ol8icjgQ"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d91ede8035so11883355ad.3
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 13:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790368790; x=1790973590; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790368792; x=1790973592; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=J6ph3MbFe9q/THpaCmYJQ6SJsHKh26f66//49xd33SE=;
-        b=awCsvZVTd1k6u8G8WW0vkkWN/58PMu/o19MZsMg++9DvKRT9h8uYY1k91Pvu5FXVK0
-         I+9ID5QH3jKYw6WstZ5TK+N9i1jZydtRvHktCPDoch5qmECu8Uc/e8XdvlcTa2j08D5K
-         1t2tERhuLG9p6N6mRod/f7aUfhxz3E1fFTQv+BX2syu63KryaeDVAIkbZIdlfuJ3i2fZ
-         mMdJe1OIjh5ZDOEuu/BCMaTGejM/gxTuZ8Tm6X1OOwn8sMIet++McdUgjzB98/UrpLzN
-         0fv9K4exUjqMNHcTlTg+ykqTB+Jcl+MHzCUjXDtNRBNqEhSyK0EpPYgKt3PW83d3OfQm
-         u7dQ==
+        bh=q+Ns2x+z7vlgfAk1Rkohb7w8QqDjYf0bSI4fAoCUwe4=;
+        b=Ol8icjgQZfnABMfRcuKDpbUv2wHpGbk8dqAqZj7hYNcnvHp6Xs+h+RpIwFMrDyphxl
+         Vc19MAldpqkzr76z/q8S6OLeVEnTywOdnk2aAtMPk3lWG3KMqiBOCYnYVRp+FJJPM5ny
+         H+hdJL8StFlp0M8+rc/NzJf3TMGYh2prgb+FPaW8rU568JeN70L/Y+7PDkk0xQkZTsXm
+         JVt7Pzsh9wbTJE65C+d4EMnudBSuSie/sF88yvK60Uqyx6pZb8BVDE25we+LnnIASN3p
+         JBRswuDZgeA1A4s34VjIfv0Ie9kYyJdYly6x68s9Rgm5on/5c26wxfauma4nGMM1Iwa3
+         6aCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790368790; x=1790973590;
+        d=1e100.net; s=20260707; t=1790368792; x=1790973592;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=J6ph3MbFe9q/THpaCmYJQ6SJsHKh26f66//49xd33SE=;
-        b=tBxT4yVBuVuSjRMzqLaJ8ZeMBwgIpxBHSCbzW4RpJx+UjbH+J7KbVfbm/YEvufxpOG
-         ED5zndEpLV8dD5rjTll0x3vdeTtFAnaoUPHc/qw9H/4Jle3fuTLNeceZ0E0Qf1SXxrWu
-         l8KrF7r+mmkcXOjv4icAZ9Tf9cG1nmruDPovuTXsVLOioQJAH7NqYZg1Vrs6F1JjWiNV
-         M4aOCvtqdnmbPPeAUl85G5vfIIcgjh4Ag9z50WZ/yUncz3TcfwhlCOLHownOFRktSUiQ
-         Hw9so9EtQD/+O886w+mew0ITBZqH1ZyezXGULUw74BTmWENn/CZOVWL3R7X8VfDWJD8j
-         3yDQ==
-X-Gm-Message-State: AFuF++nJ74ZxIlFZCxfTNv9bFWq5w+w1QOjTWivyXRkTMbP2HZAollmu
-	X4OYhbzWlJZ2iXzgnOikrUesse6RDfqtA+xUiUv8xsrXsdPqS4IMJA3ZCGXLSDHRiop4/muwJd4
-	3eSRtXE4=
-X-Gm-Gg: AYBFou0K1B43W9XyqOJw89GJJuIBD9ekrl9FnGPRYXsvCrZEp5WWoR1Td94QWpu5G0/
-	CNvN6H5KIHNZ9YrbjiBu8gIVHzrxbTBiLTAcNWw22F3KlNQYIsLT0oJ7VWWTIw1fsQBX5XrXvsn
-	18qdhal6m08eT9xZkkFn+BBR7HKU+gWE9weKPS7rFcaOvsquWmfT0dGHGw8gvZgO3r/tJhPMGUt
-	zwYd/nivjCy7AvxfwI9tqRAt3eb76WYxohonnP1WQa/807+axS8u9lQMxXcl5w5pq87mB8i3H4y
-	0bDggWrYEPUtaGtpMw2zCwwZfvZjIoXfl9L4dXzEEm/OP9a+vRS2llugh3uDFKet6JKBrnDyiL2
-	tBhiRRQ+zDyCyQRS4mD2GSN6ho/aHEEXIEScat6/gAvvALZHeZC/cipqtkP/RhW8/6jZ4Wa3iiG
-	34PvfqfvduhcOsll0PezTuIeYXIhebogMxAFX/tubiv/39vaSST0HbIqvVaHnB6irfmI2MjRQh9
-	mQF2emP3U8wYenK5hygcfv9LrqtscqrdsXxE+S6Xg==
-X-Received: by 2002:a17:90b:55c3:b0:39e:3559:12df with SMTP id 98e67ed59e1d1-3a098b98d43mr6030677a91.1.1790368790393;
-        Fri, 25 Sep 2026 13:39:50 -0700 (PDT)
+        bh=q+Ns2x+z7vlgfAk1Rkohb7w8QqDjYf0bSI4fAoCUwe4=;
+        b=kpbsf7ZEs0XsekCS/8Uk2R0/aQzDUYLXuGGfLL494GyO8fWCtSaGuBLYq6E6qTG8MB
+         zbjuLJfUK5Z+dhM0dvcsV1NIOH8iZ26S2VvS5U7N1vL8VYfDf0OZFoS70t3ZFIPabBCi
+         CNmmWzR3qLEwvux/wCRiW/SVWl/QSAHqjhv7haYAu/HbW5u2lcflVxQxSUN1a0DrnMJF
+         Z4GxE0bybDiuBeY789g74jaQT2tw2HlK7z2RADHxD0H2fFO5szfKBqkvThLEMTPEx+Lq
+         TxrFyk9pBPbwgt/AIWEZ1R2tUZuQi+djzl1G4/61ymX+78D4abNwWSDlteedZpH5bhxX
+         XDBg==
+X-Gm-Message-State: AFuF++kVZmhBxHYNeFHHIgzv3ZnlqX8wTwVTgyZFSs4PQr7yqFFUIHn9
+	L7Gf49k6OQPf7BTUiInvNwRuxmnoI7/MkL87vIacuTGszf/bKh1vVmXVHeNXSoA4IuWTVyQy7X7
+	nRxpb2qA=
+X-Gm-Gg: AYBFou2kFZTQ7nPrJYBMbNhL3gGN4C18btUGww+YDoJ342C/DekuuwbkirUdgczxK7u
+	QYuENzSj5T7tjAPTiaVfcdgQEXufh3l3VRnCap/ufAXMNhFRLRgW2MgqoDSnTuNtTwpm/cx5Qwl
+	Vt4JvUMyn7CXnTud1Y+QG1Tc8Sq1XYWlEqA8Ch+XmDttR2lVFzvFnQctVZohEz6druf5aHtDyEZ
+	a7tvqzM8XMpLxIBgHvTOvPUGJupVU9Fg+UtFgxh6/sL35/o/obY+lolHlziTMAm0DTFS9y4VLsc
+	Cai34KE3/XOBVQLcFATl0z8x6vzoXIW4uUJWPsVsgjuF/y2WrbCBgqiBlrex/V9pzDKamgK2fpK
+	jpfS/kShepgOAL64DVgdik1jV1Yhr9tDSxYj4s0QmNVomK1dmPjUtTBADLr6IoKRN2C2Z5fnIck
+	NJHehmX4988rCCg0icU55QWsmkpkaizjKv4atM9JTn+jwSdjYcSpH2w6DNx1aZKMBzKNeaUiGWG
+	3lJbL5ftrMKedNnmaMCb5JcVMJBMtkgK8+OmWtnpg==
+X-Received: by 2002:a17:90a:e7d0:b0:39e:6a80:b796 with SMTP id 98e67ed59e1d1-3a0bb60e399mr2824406a91.38.1790368791801;
+        Fri, 25 Sep 2026 13:39:51 -0700 (PDT)
 Received: from alpine05.ht.home (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b9481e17sm5955125a91.8.2026.09.25.13.39.48
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b9481e17sm5955125a91.8.2026.09.25.13.39.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 13:39:49 -0700 (PDT)
+        Fri, 25 Sep 2026 13:39:51 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf v3 6/7] bpf: Support call-site kfunc specialization for far calls
-Date: Fri, 25 Sep 2026 20:39:38 +0000
-Message-ID: <20260925203939.4105-7-emil@etsalapatis.com>
+Subject: [PATCH bpf v3 7/7] selftests/bpf: Test per-call site function specialization
+Date: Fri, 25 Sep 2026 20:39:39 +0000
+Message-ID: <20260925203939.4105-8-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260925203939.4105-1-emil@etsalapatis.com>
 References: <20260925203939.4105-1-emil@etsalapatis.com>
@@ -81,189 +81,236 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Far-call JITs keep the kfunc BTF ID in the call immediate,
-so it cannot distinguish multiple specialized targets for
-the same kfunc and BTF object.
-
-Store the finalized target descriptor index in the call offset.
-Use that index for address and function-model lookup, and keep
-the descriptor table in verification order so the indices remain
-stable.
+Add a test to ensure function call specialization is
+done per-call site. Use bpf_dynptr_from_file that has
+observably different behavior between its sleepable and
+nonsleepable versions. The sleepable path fails in the
+sleepable __kernel_read() call with -EIO, while the
+nonsleepable fails in the page-cache lookup path with
+-EFAULT. Test that whatever the order the nonsleepable
+and sleepable calls are made in the program, both
+call sites use the correct specialized kfunc.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- include/linux/bpf.h          |  4 ++--
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/fixups.c          | 18 ++++++++++++++----
- kernel/bpf/verifier.c        | 35 ++++++++++++++++++++++-------------
- 4 files changed, 40 insertions(+), 19 deletions(-)
+ .../selftests/bpf/prog_tests/file_reader.c    |  15 ++
+ .../testing/selftests/bpf/progs/file_reader.c | 129 ++++++++++++++++++
+ 2 files changed, 144 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7df74e47ecb0..5a9580b1769d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3283,7 +3283,7 @@ const struct btf_func_model *
- bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
- 			 const struct bpf_insn *insn);
- int bpf_get_kfunc_addr(const struct bpf_prog *prog, u32 func_id,
--		       u16 btf_fd_idx, u8 **func_addr);
-+		       u16 desc_idx, u8 **func_addr);
+diff --git a/tools/testing/selftests/bpf/prog_tests/file_reader.c b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+index 48aae7ea0e4b..e59c6c87e9d5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/file_reader.c
++++ b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+@@ -7,10 +7,12 @@
+ #include "file_reader_fail.skel.h"
+ #include <dlfcn.h>
+ #include <sys/mman.h>
++#include <sys/stat.h>
  
- struct bpf_core_ctx {
- 	struct bpf_verifier_log *log;
-@@ -3626,7 +3626,7 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ const char *user_ptr = "hello world";
+ char file_contents[256000];
+ void *addr;
++__u64 beyond_eof_offset;
  
- static inline int
- bpf_get_kfunc_addr(const struct bpf_prog *prog, u32 func_id,
--		   u16 btf_fd_idx, u8 **func_addr)
-+		   u16 desc_idx, u8 **func_addr)
+ void *get_executable_base_addr(void)
  {
- 	return -ENOTSUPP;
- }
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index e36936936418..da219eb0a9cb 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1734,6 +1734,8 @@ struct bpf_kfunc_desc_tab {
- 	 * descriptors used for verifier lookups. Call specialization may append
- 	 * immutable descriptors for additional targets. Near-call JITs look up
- 	 * descriptors by imm and offset after do_misc_fixups() sorts the table.
-+	 * Far-call JITs use the descriptor index stored in the finalized call's
-+	 * off field, so their table remains in verification order.
- 	 *
- 	 * Grown one entry at a time by bpf_add_kfunc_call() and during
- 	 * call specialization.
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 2add8001c3ec..b9f76eee5016 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -140,6 +140,13 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
- 	struct bpf_kfunc_desc_tab *tab;
+@@ -26,12 +28,18 @@ void *get_executable_base_addr(void)
  
- 	tab = prog->aux->kfunc_tab;
-+	if (bpf_jit_supports_far_kfunc_call()) {
-+		if (insn->off < 0 || insn->off >= tab->nr_descs)
-+			return NULL;
-+		res = &tab->descs[insn->off];
-+		return res->func_id == insn->imm ? &res->func_model : NULL;
+ static int initialize_file_contents(void)
+ {
++	struct stat st;
+ 	int fd, page_sz = sysconf(_SC_PAGESIZE);
+ 	ssize_t n = 0, cur;
+ 
+ 	fd = open("/proc/self/exe", O_RDONLY);
+ 	if (!ASSERT_OK_FD(fd, "Open /proc/self/exe\n"))
+ 		return 1;
++	if (!ASSERT_OK(fstat(fd, &st), "fstat /proc/self/exe")) {
++		close(fd);
++		return 1;
 +	}
++	beyond_eof_offset = st.st_size + (1ULL << 30);
+ 
+ 	do {
+ 		cur = read(fd, file_contents + n, sizeof(file_contents) - n);
+@@ -75,6 +83,7 @@ static void run_test(const char *prog_name)
+ 
+ 	memcpy(skel->bss->user_buf, file_contents, sizeof(file_contents));
+ 	skel->bss->pid = getpid();
++	skel->bss->beyond_eof_offset = beyond_eof_offset;
+ 
+ 	err = file_reader__load(skel);
+ 	if (!ASSERT_OK(err, "file_reader__load"))
+@@ -110,6 +119,12 @@ void test_file_reader(void)
+ 	if (test__start_subtest("on_open_validate_file_read"))
+ 		run_test("on_open_validate_file_read");
+ 
++	if (test__start_subtest("on_open_non_sleepable_first"))
++		run_test("on_open_non_sleepable_first");
 +
- 	res = bsearch(&desc, tab->descs, tab->nr_descs,
- 		      sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm_off);
- 
-@@ -2517,11 +2524,14 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 		}
- 	}
- 
--	ret = sort_kfunc_descs_by_imm_off(env);
--	if (ret)
--		return ret;
-+	/*
-+	 * Do not change kfunc desc position into the table for far JIT.
-+	 * because we use the indices in the instructions.
-+	 */
-+	if (bpf_jit_supports_far_kfunc_call())
-+		return 0;
- 
--	return 0;
-+	return sort_kfunc_descs_by_imm_off(env);
++	if (test__start_subtest("on_open_sleepable_first"))
++		run_test("on_open_sleepable_first");
++
+ 	if (test__start_subtest("negative"))
+ 		RUN_TESTS(file_reader_fail);
  }
+diff --git a/tools/testing/selftests/bpf/progs/file_reader.c b/tools/testing/selftests/bpf/progs/file_reader.c
+index aa2c05cce2b3..8b972fd26d73 100644
+--- a/tools/testing/selftests/bpf/progs/file_reader.c
++++ b/tools/testing/selftests/bpf/progs/file_reader.c
+@@ -27,9 +27,14 @@ char tmp_buf[256000];
  
- static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5e7c589991e9..12e33a568a3e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2575,12 +2575,16 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
- }
+ int pid = 0;
+ int err, run_success = 0;
++__u64 beyond_eof_offset;
  
- int bpf_get_kfunc_addr(const struct bpf_prog *prog, u32 func_id,
--		       u16 btf_fd_idx, u8 **func_addr)
-+		       u16 desc_idx, u8 **func_addr)
- {
-+	struct bpf_kfunc_desc_tab *tab;
- 	const struct bpf_kfunc_desc *desc;
+ static int validate_file_read(struct file *file);
+ static int task_work_callback(struct bpf_map *map, void *key, void *value);
++static int sleepable_second_callback(struct bpf_map *map, void *key, void *value);
++
++void bpf_rcu_read_lock(void) __ksym;
++void bpf_rcu_read_unlock(void) __ksym;
  
--	desc = find_kfunc_desc(prog, func_id, btf_fd_idx);
--	if (!desc)
-+	tab = prog->aux->kfunc_tab;
-+	if (desc_idx >= tab->nr_descs)
-+		return -EFAULT;
-+	desc = &tab->descs[desc_idx];
-+	if (desc->func_id != func_id)
- 		return -EFAULT;
- 
- 	*func_addr = (u8 *)desc->addr;
-@@ -21303,7 +21307,8 @@ static int specialize_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_desc
- }
- 
- static int add_kfunc_desc_target(struct bpf_verifier_env *env,
--				 const struct bpf_kfunc_desc *target_desc)
-+				 const struct bpf_kfunc_desc *target_desc,
-+				 u16 *desc_idx)
- {
- 	struct bpf_kfunc_desc desc = *target_desc;
- 	struct bpf_kfunc_desc_tab *new_tab;
-@@ -21316,8 +21321,10 @@ static int add_kfunc_desc_target(struct bpf_verifier_env *env,
- 	for (i = 0; i < tab->nr_descs; i++) {
- 		if (tab->descs[i].func_id == desc.func_id &&
- 		    tab->descs[i].offset == desc.offset &&
--		    tab->descs[i].addr == desc.addr)
-+		    tab->descs[i].addr == desc.addr) {
-+			*desc_idx = i;
- 			return 0;
-+		}
- 	}
- 
- 	if (tab->nr_descs == MAX_KFUNC_CALL_DESCS) {
-@@ -21332,6 +21339,7 @@ static int add_kfunc_desc_target(struct bpf_verifier_env *env,
- 	tab = new_tab;
- 	prog_aux->kfunc_tab = tab;
- 
-+	*desc_idx = tab->nr_descs;
- 	tab->descs[tab->nr_descs++] = desc;
+ SEC("lsm/file_open")
+ int on_open_expect_fault(void *c)
+@@ -81,6 +86,101 @@ int on_open_validate_file_read(void *c)
  	return 0;
  }
-@@ -21359,6 +21367,7 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	struct bpf_kfunc_desc desc_copy;
- 	struct bpf_kfunc_desc *desc;
- 	unsigned long call_imm;
-+	u16 desc_idx;
- 	bool near_call;
- 	int err;
  
-@@ -21381,10 +21390,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	}
- 
- 	near_call = !bpf_jit_supports_far_kfunc_call();
--	if (near_call) {
--		desc_copy = *desc;
--		desc = &desc_copy;
--	}
-+	desc_copy = *desc;
-+	desc = &desc_copy;
- 
- 	err = specialize_kfunc(env, desc, insn_idx);
- 	if (err)
-@@ -21398,12 +21405,14 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			return -EINVAL;
- 		}
- 		insn->imm = call_imm;
--
--		err = add_kfunc_desc_target(env, desc);
--		if (err)
--			return err;
- 	}
- 
-+	err = add_kfunc_desc_target(env, desc, &desc_idx);
-+	if (err)
-+		return err;
-+	if (!near_call)
-+		insn->off = desc_idx;
++/*
++ * Exercise bpf_dynptr_from_file() first from a non-sleepable LSM program and
++ * then from its sleepable task-work callback. Reading beyond EOF makes the two
++ * backing implementations return different errors.
++ */
++SEC("lsm/file_open")
++int on_open_non_sleepable_first(void *c)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct bpf_dynptr dynptr;
++	struct elem *work;
++	struct file *file;
++	int key = 0;
++	int ret;
 +
- 	if (is_bpf_obj_new_kfunc(desc->func_id) || is_bpf_percpu_obj_new_kfunc(desc->func_id)) {
- 		struct btf_struct_meta *kptr_struct_meta = env->insn_aux_data[insn_idx].kptr_struct_meta;
- 		struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struct_meta) };
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	file = bpf_get_task_exe_file(task);
++	if (!file) {
++		err = 1;
++		return 0;
++	}
++
++	/* The non-sleepable reader cannot fault in an uncached folio. */
++	ret = bpf_dynptr_from_file(file, 0, &dynptr);
++	if (!ret)
++		ret = bpf_dynptr_read(tmp_buf, 1, &dynptr, beyond_eof_offset, 0);
++	bpf_dynptr_file_discard(&dynptr);
++	bpf_put_file(file);
++	if (ret != -EFAULT) {
++		err = 2;
++		return 0;
++	}
++
++	work = bpf_map_lookup_elem(&arrmap, &key);
++	if (!work) {
++		err = 3;
++		return 0;
++	}
++
++	ret = bpf_task_work_schedule_signal(task, &work->tw, &arrmap,
++					    sleepable_second_callback);
++	if (ret)
++		err = 4;
++	return 0;
++}
++
++/*
++ * Exercise the opposite fixup order: the first call is made from a sleepable
++ * LSM program, while the RCU read-side section makes the second non-sleepable.
++ */
++SEC("lsm.s/file_open")
++int on_open_sleepable_first(void *c)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct bpf_dynptr dynptr;
++	struct file *file;
++	int ret;
++
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	file = bpf_get_task_exe_file(task);
++	if (!file) {
++		err = 7;
++		return 0;
++	}
++
++	ret = bpf_dynptr_from_file(file, 0, &dynptr);
++	if (!ret)
++		ret = bpf_dynptr_read(tmp_buf, 1, &dynptr, beyond_eof_offset, 0);
++	bpf_dynptr_file_discard(&dynptr);
++	if (ret != -EIO) {
++		err = 8;
++		goto out;
++	}
++
++	bpf_rcu_read_lock();
++	ret = bpf_dynptr_from_file(file, 0, &dynptr);
++	bpf_rcu_read_unlock();
++	if (!ret)
++		ret = bpf_dynptr_read(tmp_buf, 1, &dynptr, beyond_eof_offset, 0);
++	bpf_dynptr_file_discard(&dynptr);
++	if (ret != -EFAULT) {
++		err = 9;
++		goto out;
++	}
++
++	run_success = 1;
++out:
++	bpf_put_file(file);
++	return 0;
++}
++
+ /* Called in a sleepable context, read 256K bytes, cross check with user space read data */
+ static int task_work_callback(struct bpf_map *map, void *key, void *value)
+ {
+@@ -97,6 +197,35 @@ static int task_work_callback(struct bpf_map *map, void *key, void *value)
+ 	return 0;
+ }
+ 
++/* Task-work callbacks are verified as sleepable. */
++static int sleepable_second_callback(struct bpf_map *map, void *key, void *value)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct bpf_dynptr dynptr;
++	struct file *file;
++	int ret;
++
++	file = bpf_get_task_exe_file(task);
++	if (!file) {
++		err = 5;
++		return 0;
++	}
++
++	/* freader_fetch() converts __kernel_read()'s short read at EOF to -EIO. */
++	ret = bpf_dynptr_from_file(file, 0, &dynptr);
++	if (!ret)
++		ret = bpf_dynptr_read(tmp_buf, 1, &dynptr, beyond_eof_offset, 0);
++	bpf_dynptr_file_discard(&dynptr);
++	bpf_put_file(file);
++	if (ret != -EIO) {
++		err = 6;
++		return 0;
++	}
++
++	run_success = 1;
++	return 0;
++}
++
+ static int verify_dynptr_read(struct bpf_dynptr *ptr, u32 off, char *user_buf, u32 len)
+ {
+ 	int i;
 -- 
 2.52.0
 
