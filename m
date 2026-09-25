@@ -1,77 +1,69 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3255C36655C
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33F64F649F;
+	Fri, 25 Sep 2026 21:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790370801; cv=none; b=p03Tcb2pFIsaVxtW6AN30XbdRnAcxsOvPBibBwpGFF3DFWOJNhWV77OvsPUp6/pcQhFPlFCohNrL/PUzBIrcli10qu4wC/G0H7aJZB4WxPOj4Dm8jaHNESMFTIp8V5UP21ez+c2mWI5tbctVSemCFpLwLrqWKfnGDYHyZpZfA2c=
+	t=1790370805; cv=none; b=inI6jUClMl4dZDrrKp5yQ6YLCUawjftKKi55LFh8qIEHF1LrzWevCe8ggs7re1MEJkf3vyubvqxSQdyobS9PKrmvJtihHlRQGyT/EvOhM2iPC/baqK6RXce7Y+5s9UvTsYiWEnHCVeWMVtmMZDkgJ0OAUhUadDepyjIHgrqU75Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790370801; c=relaxed/simple;
-	bh=KpQN+HkidCWCvmNCbyDrRHHsqEVvRLDdixQzAUQW2kQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IZrQ+usRMoWN4ZCuBGtkrg74l+uVSHnoljEbff4jq5eJyiZH5mAXHrCwoI5xC5hblczFk1tV5kLB7vE6849mmqZDh4T0jc3RSp8Mi16YphSSM+O2Wg64KdVF+6rqUVfewbwrthUGcZJgXPtVeChGHShUYvjsgdmjKElGZM31o6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EVqCQ7K0; arc=none smtp.client-ip=74.125.231.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790370805; c=relaxed/simple;
+	bh=i8m/G1bHvKwbpaAYgfFeVg4+XQZ2BtxOj9jKkDBVxyU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QhOuLfAfVEc7+8uLzkmsgTfsFZth22pWW44IoUiVPAxuWrqxHz9kGNM/MtlmMdNbv4ry13LRKq3sMVkexi4reUtY9tWasGF/XeeGtHq+aIUY7VNnpAQV+ropinp0+bWOY2o1NsavAcr1qhbzJxPTiSseVZPsAJIZGL8JA9NloeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=rwCkdxN/; arc=none smtp.client-ip=52.34.181.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVqCQ7K0"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466cc9b4b63so219794fac.1
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 14:13:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="rwCkdxN/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790370799; x=1790975599; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=INnaRrLw2QWrEpuY8HKp5yyV0O3IO1hRUT9DlKA6d8U=;
-        b=EVqCQ7K0A8jQjF6svNjCdB8+Ck5usqtKpiTtExxu+v3Z3XPpgTq/1IJUQK8tdC1Uee
-         LlmUvRzHQavIPqNmJI3jpFJ1Kd0uL4CoAtOnYV3RoyD0gJpMZfT5spMuoX1uSHuGoV/H
-         7qqY/FW2iBkjGh1rA/oPC5Gm5uRDv7ziCVvLIXHBRXpyGEg8B92x7iZny69mBBWwGcgn
-         TrmasGDAj2c347GdgBXD3cyh/gHvnGge4eioMgzTcZDEm58eYuKH1Q7dBnmulMU4PL5M
-         Qo78blCPwihHYN0HG+2iJfAhguzj9hoFoKv7lMPcMM2NI/vRULifn29s/uzsuAHCUzIO
-         yyOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790370799; x=1790975599;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=INnaRrLw2QWrEpuY8HKp5yyV0O3IO1hRUT9DlKA6d8U=;
-        b=NZB4tnk5tGAbY/K2sKE7udTfOajV5Hq6l2BTDy/aP21Hkyvx82undkkZGmxfi7hqKF
-         WkSF2wHsohy4E4ISLV4DqQ87pKDKj/BsC4oYpc7UkFXNQ99qQhY2mC88dkfT93Zv/5f2
-         NhD5uVNv0mRNPEN6uq7M4H5O3sQiOC+p7WWO4sRopGhzeraO8vmBu60Px69fCKTwESuU
-         RW+x8BEYHKIzWuTcum4AK0Li5oVS7Ss/F9xCHTjFOGmJ/67JcT3gzmp843T+lKxYsHms
-         isP6+Wxsm7GsGPh/2n73Q0piaYmB44uTySwijI6wLbRrlNPlf40TGabHstzvQDnmiD7d
-         BreA==
-X-Gm-Message-State: AFuF++mUHSLwKxw0ozgT4ENQwyxfwgV+wnbpGNQy2icASTjM7CNRlbkf
-	eomJK+KE9dfx8Dfh4B2N5YzfZHGElge8nVABqM0FJ6zJwMH02zG2ho3ehNi2Fw==
-X-Gm-Gg: AYBFou2nkrKjE9Vs7eNSXbnb3EqLuZCBkRpSkpXxgPDaPkrLuTVKG1eU8h1YY/xH4/S
-	EcnGFvzzTVe5Esuq+Y+SF3A8+ZKL4ec4g/l6Fz02yQ2GFI34eje/ewb/zPDkcn1Of2J7qMTKOLI
-	cIIkdpsXge9ReQlofd3KJgHJdUT58PIotUPtit65v/grk8IT+Aw946XHhHT5rHDpkb0u+EZYvFC
-	AwnTpGuIzeJR0hCGij7ORb3N5GRB7CNmUirnzfhFA5fqs1kcF8Zhm/8T62rsm33jIysHXf9mg/4
-	vpaNWbjXapY3DwavFDy3GU+Y2sOzq2jyyuQRdgTlhwOjfgQ7KFjvcCmwf7E+rVxfXgIF+Dl+Zru
-	vGm/3QdZhORzvcYYSZFj/u9iPsjsAEX1mbqz+XSFR9THkdsPiLGIjmdeW19TXvugaqgbeVZxIhI
-	TgpYZ+iQVsA8GIUhaPbfypsslejEIXnKvU2Hug3xPhD+zWFf03MICbV4XTJWeObQ==
-X-Received: by 2002:a05:6808:1b91:b0:4a3:cea7:4ab6 with SMTP id 5614622812f47-4d72ae5a4cemr5821830b6e.10.1790370799042;
-        Fri, 25 Sep 2026 14:13:19 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:59::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4dbfa747bc9sm2883131b6e.15.2026.09.25.14.13.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 14:13:18 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 12/12] bpf: Check all subprog arguments in the common path
-Date: Fri, 25 Sep 2026 14:12:56 -0700
-Message-ID: <20260925211256.1834061-13-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260925211256.1834061-1-ameryhung@gmail.com>
-References: <20260925211256.1834061-1-ameryhung@gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1790370803; x=1821906803;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4M9IybI95F4X5+ocCoe/3+V9SQt9LrvgrMiXy1xALYo=;
+  b=rwCkdxN/YaDjswsPcoG+4zyaS6c2VbrivTRUj+7VNyg40bwEeNEw+lI9
+   5z/57TeFIi/2m+Dhw5o7U9XZJCNUOi18cp/fcAflUPI7E0mViiipfLrhi
+   Di8Dfm81vMqXtW35PGrkbgi/seY8BFXUP9rjVlYeDyc58OqkKWvVmhczO
+   k09YCKPfDVwsnKGLBIQmqQzrp0PRc8wzpW8pOHFU4s4/prt6KAWyEMMUh
+   Bzoe+HxL5DO4vhSznsdhr9tAhPnSAZOzLpFSWWacjuXZaVIZajI8K0NIA
+   JlZF6sxuLfMyFNpkGMJma3gyYlPXvp+NPRewGNwLhKV87gCwxTVS/LtEf
+   g==;
+X-CSE-ConnectionGUID: BZtPZxczSSWHEFkFrx+gTA==
+X-CSE-MsgGUID: S2GLXNomR0Wf8mgkH9HHPw==
+X-IronPort-AV: E=Sophos;i="6.27,123,1787011200"; 
+   d="scan'208";a="29660703"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 21:13:23 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.53:11423]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.31.110:2525] with esmtp (Farcaster)
+ id b324db84-06cf-4840-a36a-f958d6926a2a; Fri, 25 Sep 2026 21:13:23 +0000 (UTC)
+X-Farcaster-Flow-ID: b324db84-06cf-4840-a36a-f958d6926a2a
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 25 Sep 2026 21:13:22 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 25 Sep 2026 21:13:22 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
+	<memxor@gmail.com>
+CC: Alan Maguire <alan.maguire@oracle.com>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+	<jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+	<nsc@kernel.org>, <linux-kbuild@vger.kernel.org>, Luis Chamberlain
+	<mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	<linux-modules@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	<linux-kernel@vger.kernel.org>, Hazem Mohamed Abuelfotoh
+	<abuehaze@amazon.com>, Bjoern Doebel <doebel@amazon.de>, Martin Pohlack
+	<mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>
+Subject: [PATCH bpf-next v2 0/9] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+Date: Fri, 25 Sep 2026 21:13:05 +0000
+Message-ID: <20260925211314.5118-1-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,157 +71,353 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D036UWB001.ant.amazon.com (10.13.139.133) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-All supported BPF-subprogram argument types now pass through
-check_func_arg() from one guarded branch in the legacy validation loop.
-Replace that loop and its outgoing-stack validation with
-check_func_args().
+Based on and tested against bpf-next commit b4d936547f5a ("Merge branch
+'bpf-arena-fix-range_tree-consistency-on-allocation-failure'").
 
-The scratch prototype is indexed by BTF parameter and the call metadata
-carries the BTF function prototype. The existing BTF argument iteration
-therefore maps parameters to ABI slots for both kfunc and BPF subprogram
-calls, including additional slots occupied by by-value aggregates.
+This series makes CONFIG_DEBUG_INFO_BTF a tristate, so that it can be
+set to =m.  With =m the vmlinux BTF is carried by a module, btf_vmlinux,
+that the kernel loads the first time anything needs the BTF.  On a
+system where nothing does, that saves ~5.4 MB of RAM with a distribution
+config; on a system that uses BTF, nothing differs from =y.  =y itself
+is untouched.
 
-The common checker can return non-EFAULT errors other than -EINVAL, as
-the existing BTF-ID path already did. This is compatible with subprog
-call handling: only -EFAULT is fatal. Any other error marks BTF
-unreliable. Static subprogs can then fall back to inline verification,
-while global subprogs reject the call.
+Problem
+-------
 
-Remove the caller-register plumbing that the dedicated loop required.
+The vmlinux BTF that CONFIG_DEBUG_INFO_BTF=y builds into the kernel
+image takes ~5.4 MB of memory, resident from boot whether anything uses
+it or not.  On small instances that is not negligible.
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- kernel/bpf/verifier.c | 62 +++++++------------------------------------
- 1 file changed, 10 insertions(+), 52 deletions(-)
+A distribution cannot simply turn it off for the users who do not need
+it: it ships one kernel build for all its users, and BTF is not debug
+info anymore.  CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and
+bpf-lsm all depend on it, so =n takes those away from everyone who does
+use them. 
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 97c125850c7a..d6a94dc5e644 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10846,16 +10846,13 @@ static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const stru
- 	}
- }
- 
--static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
--				    struct btf *btf, struct bpf_reg_state *regs,
-+static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, struct btf *btf,
- 				    struct bpf_call_arg_meta *meta)
- {
- 	struct bpf_subprog_info *sub = subprog_info(env, subprog);
- 	struct bpf_func_state *caller = cur_func(env);
--	const struct btf_param *args, *stack_args;
- 	const struct btf_type *func, *func_proto;
- 	struct bpf_func_proto *fn;
--	u32 arg, slot, nslots;
- 	int ret, err;
- 
- 	memset(meta, 0, sizeof(*meta));
-@@ -10877,63 +10874,24 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 
- 	func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
- 	func_proto = btf_type_by_id(btf, func->type);
--	args = btf_params(func_proto);
--	stack_args = sub->arg_slot_cnt == btf_type_vlen(func_proto) ? args : NULL;
--	ret = check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
--					bpf_subprog_name(env, subprog), btf, stack_args);
--	if (ret)
--		return ret;
- 
- 	fn = &env->bpf_subprog_scratch;
- 	gen_subprog_arg_proto(sub, btf, func_proto, fn);
- 	meta->fn = fn;
- 	meta->func_proto = func_proto;
- 
--	/* check that BTF function arguments match actual types that the
--	 * verifier sees.
--	 */
--	for (arg = 0, slot = 0; arg < btf_type_vlen(func_proto); arg++, slot += nslots) {
--		enum bpf_arg_type arg_type = fn->arg_type[arg];
--		argno_t argno = argno_from_arg(slot + 1);
--		const struct btf_type *t;
--		u32 k;
--
--		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
--		nslots = btf_arg_slots(t);
--
--		if (arg_type == ARG_SCALAR || arg_type == ARG_IGNORE ||
--		    arg_type == ARG_PTR_TO_CTX || arg_type == ARG_PTR_TO_DYNPTR ||
--		    base_type(arg_type) == ARG_PTR_TO_ARENA ||
--		    base_type(arg_type) == ARG_PTR_TO_BTF_ID ||
--		    base_type(arg_type) == ARG_PTR_TO_MEM) {
--			ret = check_func_arg(env, arg, slot, 0, meta, env->insn_idx);
--			if (ret)
--				return ret;
--		} else {
--			verifier_bug(env, "unrecognized %s type %d",
--				     reg_arg_name(env, argno), arg_type);
--			return -EFAULT;
--		}
--
--		for (k = 1; k < nslots; k++) {
--			ret = check_arg_extra_slot(env, caller, slot + k, meta);
--			if (ret)
--				return ret;
--		}
--	}
--
--	return 0;
-+	return check_func_args(env, meta, env->insn_idx);
- }
- 
--/* Compare BTF of a function call with given bpf_reg_state.
-+/*
-+ * Check that call-site argument states match a subprog's BTF signature.
-+ *
-  * Returns:
-  * EFAULT - there is a verifier bug. Abort verification.
-- * EINVAL - there is a type mismatch or BTF is not available.
-+ * Other errors - there is a type mismatch or BTF is not available.
-  * 0 - BTF matches with what bpf_reg_state expects.
-- * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-  */
- static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
--				  struct bpf_reg_state *regs,
- 				  struct bpf_call_arg_meta *meta)
- {
- 	struct bpf_prog *prog = env->prog;
-@@ -10951,7 +10909,7 @@ static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
- 	if (prog->aux->func_info_aux[subprog].unreliable)
- 		return -EINVAL;
- 
--	err = btf_check_func_arg_match(env, subprog, btf, regs, meta);
-+	err = btf_check_func_arg_match(env, subprog, btf, meta);
- 	/* Compiler optimizations can remove arguments from static functions
- 	 * or mismatched type can be passed into a global function.
- 	 * In such cases mark the function as unreliable from BTF point of view.
-@@ -10971,7 +10929,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	int err;
- 
- 	caller = state->frame[state->curframe];
--	err = btf_check_subprog_call(env, subprog, caller->regs, &meta);
-+	err = btf_check_subprog_call(env, subprog, &meta);
- 	if (err == -EFAULT)
- 		return err;
- 
-@@ -11109,7 +11067,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		return -EFAULT;
- 
- 	caller = state->frame[state->curframe];
--	err = btf_check_subprog_call(env, subprog, caller->regs, &meta);
-+	err = btf_check_subprog_call(env, subprog, &meta);
- 	if (err == -EFAULT)
- 		return err;
- 	if (bpf_subprog_is_global(env, subprog)) {
-@@ -11246,7 +11204,7 @@ static int check_func_callx(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 
- 	/* PTR_TO_FUNC is a pointer to a static subprog */
- 	subprog = reg->subprogno;
--	err = btf_check_subprog_call(env, subprog, caller->regs, &meta);
-+	err = btf_check_subprog_call(env, subprog, &meta);
- 	if (err == -EFAULT)
- 		return err;
- 
+Hence this series adds CONFIG_DEBUG_INFO_BTF=m: the BTF becomes an
+on-demand module.
+Users who never use BTF get the memory back; for users who do, the first
+use loads it automatically and everything works as with =y.
+
+Approach
+--------
+
+Do not remove anything, defer it.  The BTF is generated exactly as
+before, but with =m it is not part of the kernel image: it is packed
+into a module, btf_vmlinux.ko, which the kernel loads itself the first
+time anything needs the BTF.  Once loaded, the BTF stays, and nothing
+differs from =y.
+
+Making that work ran into five problems.  The first three are existing
+components that rely on the vmlinux BTF being present from boot, which
+a loadable module cannot provide; the last two follow from the BTF no
+longer being part of the image.
+
+1. Verifier.  Problem: bpf_check() fetched the vmlinux BTF for every
+   program, so the first socket filter at boot would have loaded the
+   module on every system.  Solution: fetch the BTF only where kernel
+   types enter a program (attach_btf, kfunc calls, ksyms, map pointer
+   access, helpers that take or return kernel pointers).  A program
+   using none of these never touches it.
+
+2. Initcall registrations.  Problem: kfunc, dtor kfunc and struct_ops
+   registrations run from initcalls and need the parsed BTF, which
+   would again pull it in at boot.  Solution: queue them and apply the
+   queue when the BTF is parsed, before it is published, so no program
+   can ever see a vmlinux BTF that lacks its kfuncs or struct_ops.
+
+3. Module BTF.  Problem: module BTF is split BTF against the vmlinux
+   BTF and was parsed at module load.  A module loaded before the
+   vmlinux BTF cannot be parsed yet, and the module notifier cannot
+   load btf_vmlinux (that would nest a module load inside a module
+   load).  Solution: keep the module's BTF aside (the same copy
+   btf_parse_module() makes with =y, so module BTF costs the same in
+   both; the saving is the vmlinux BTF only), expose it in
+   /sys/kernel/btf right away, and parse and register it, together with
+   the module's own kfuncs and struct_ops, once the vmlinux BTF arrives.
+   Module BTF thus works regardless of load order, including out-of-tree
+   modules with a .BTF.base, whose sysfs reader waits for the relocation.
+
+4. Trust.  Problem: the verifier treats the BTF as the description of
+   the kernel's types, so a carrier from a different build must be
+   refused even if vermagic lets it load.  Solution: link the size and
+   SHA-256 of the BTF into the image and check them when the module
+   loads.  The linked-in size also lets /sys/kernel/btf/vmlinux report
+   its final size before the load, which tooling expects.
+
+5. Tooling.  Problem: pahole --btf_base for module BTF, bpftool and
+   external module builds read .BTF from the vmlinux ELF.  Solution:
+   keep .BTF in the ELF as a non-loadable section, so it is in the file
+   but not in the image.
+
+CONFIG_BPF_PRELOAD is made unavailable with =m: its preloaded programs
+attach through the vmlinux BTF, so every bpffs mount, which systemd does
+at boot, would load it and defeat the point.
+
+Relation to the inline BTF series
+---------------------------------
+
+Alan's inline BTF series [2] adds inline function information to BTF,
+which is even larger than the BTF itself, and its cover letter leaves
+delivering that information on demand, through a module and sysfs, to a
+follow-up.  When Alexei suggested taking the same route for the vmlinux
+BTF, Alan pointed out where the difficulty would lie [3].
+
+However, that approach cannot be used directly for the vmlinux BTF,
+because of what depends on the data:
+
+1. Boot-time consumers.  Nothing needs inline information at boot, so
+   loading it late only concerns the sysfs file.  The core vmlinux BTF
+   is needed at boot by the verifier, by kfunc and struct_ops
+   registrations, and by every module's BTF.  Therefore we need to make
+   each of those wait for the BTF instead of expecting it at boot: the
+   verifier fetches it only when a program brings kernel types in, and
+   the registrations are queued and replayed once it is parsed.  That
+   is most of this series.
+
+2. Module BTF.  Module BTF is split against the vmlinux BTF, so a module
+   loaded before it has nothing to be parsed against, and the module
+   notifier cannot load btf_vmlinux itself.  Therefore we need to keep
+   the module's BTF aside, create its sysfs file right away, and parse
+   and register it once the vmlinux BTF arrives; the file of a module
+   built against a distilled base (.BTF.base) serves it once relocated,
+   the others serve the raw bytes as they are.  Alan named this as the
+   hard part; it works here regardless of whether the module loads
+   before or after the vmlinux BTF.
+
+The btf_vmlinux module added here could carry the inline information as
+well when that follow-up comes, so both would share one mechanism.
+
+Patches Structure
+-----------------
+
+Patch 1 (refactor, no functional change): btf_parse_module() takes the
+vmlinux BTF as an argument and can adopt an existing copy of the module
+BTF data instead of duplicating it.  Needed so that module BTF kept
+aside at load time can be parsed later without moving the buffer the
+sysfs file points at.
+
+Patch 2 (refactor, no functional change): splits the kfunc, dtor kfunc
+and struct_ops registration functions into "find the BTF for the owner"
+and "add the registration to this BTF", so the second half can be
+replayed on a queued registration.
+
+Patch 3 (verifier): stops fetching the vmlinux BTF up front in
+bpf_check() and fetches it where kernel types enter a program instead.
+Adds bpf_peek_btf_vmlinux() for the helpers that run in program
+context and cannot load anything.  With =y the BTF is parsed at boot
+anyway, so this is invisible there.
+
+Patch 4 (carrier): the runtime side of taking the vmlinux BTF from the
+btf_vmlinux module: request it on first use, copy it out of the module
+in the BTF module notifier after checking size and SHA-256 against
+.BTF.meta, and serve /sys/kernel/btf/vmlinux from the copy with its
+size known from boot.  All under IS_MODULE(CONFIG_DEBUG_INFO_BTF), so
+unreachable until patch 9.
+
+Patch 5 (vmlinux registrations): queues kfunc, dtor kfunc and struct_ops
+registrations for vmlinux made from initcalls and applies them when the
+BTF is parsed, before it is published.
+
+Patch 6 (module BTF): keeps the BTF of modules loaded before the vmlinux
+BTF, with their own queued registrations, and parses, registers and
+publishes it when the vmlinux BTF arrives.
+
+Patch 7 (.BTF.base sysfs): gives such a module with a .BTF.base its
+/sys/kernel/btf file from load, with a reader that waits for the
+relocation.  Patches 5-7 are also unreachable until patch 9.
+
+Patch 8 (preparation, no functional change): the #ifdef and Makefile
+checks of CONFIG_DEBUG_INFO_BTF that must hold for both =y and =m use
+IS_ENABLED() and $(subst m,y,...), in bpf, tracing, netfilter and xfrm.
+
+Patch 9 (kbuild and Kconfig): makes CONFIG_DEBUG_INFO_BTF a tristate;
+with =m links .BTF into vmlinux as a non-loadable section, emits
+.BTF.meta, builds btf_vmlinux.ko with the vmlinux .BTF as its payload,
+strips .BTF from vmlinux (module BTF is generated against
+vmlinux.unstripped), excludes CONFIG_BPF_PRELOAD, and documents the
+option.
+
+Patches 1-3 and 8 are independently useful or neutral; 4-7 are dead code
+until 9 flips the switch, which keeps each bisect step building and
+behaving as before.
+
+Testing
+-------
+
+Tested with 1 GiB of memory, same tree, =y against =m, both with
+CONFIG_DEBUG_INFO_BTF_MODULES=y.  The on-demand behaviour is easy to
+see by hand on an =m kernel:
+
+  # lsmod | grep btf_vmlinux
+      -> nothing: the BTF is not loaded at boot.
+  # ls -la /sys/kernel/btf/vmlinux
+      -> the file exists with its final size (from .BTF.meta), although
+         the BTF behind it is not loaded yet.
+  # modprobe ext4 nf_conntrack
+  # ls /sys/kernel/btf/
+      -> ext4, nf_conntrack, ... appear immediately, although their
+         BTF is only kept aside, not parsed: there is no vmlinux BTF to
+         parse it against yet.
+  # lsmod | grep btf_vmlinux
+      -> still nothing: loading modules does not load the vmlinux BTF.
+  # cat /sys/kernel/btf/ext4 > /dev/null
+  # lsmod | grep btf_vmlinux
+      -> still nothing: a module's BTF file is served from the raw copy,
+         reading it does not need the vmlinux BTF.
+  # grep VmallocUsed /proc/meminfo
+      -> baseline.
+  # cat /sys/kernel/btf/vmlinux > /dev/null
+  # lsmod | grep btf_vmlinux
+      -> btf_vmlinux ... [permanent]: the first use loaded it, and it
+         cannot be unloaded.
+  # grep VmallocUsed /proc/meminfo
+      -> up by ~5.5 MB: the BTF copy, allocated only now.
+  # bpftool btf list
+      -> vmlinux and every loaded module now have BTF ids; the modules
+         loaded before were parsed and registered on the way.
+
+The same with an out-of-tree module (built with M=, so its BTF is split
+against a distilled base, .BTF.base), on a fresh boot:
+
+  # insmod btf_extmod.ko
+  # ls -la /sys/kernel/btf/btf_extmod
+      -> the file exists with its final size, although the BTF behind
+         it is only valid once relocated against the vmlinux BTF.
+  # lsmod | grep btf_vmlinux
+      -> nothing: loading the module does not load the vmlinux BTF.
+  # cat /sys/kernel/btf/btf_extmod > /dev/null
+  # lsmod | grep btf_vmlinux
+      -> btf_vmlinux ... [permanent]: reading this file loaded the
+         vmlinux BTF, relocated the module's BTF and then returned it.
+  # bpftool btf dump file /sys/kernel/btf/btf_extmod
+      -> the module's own types, resolved against the vmlinux BTF.
+  # rmmod btf_extmod
+      -> unloads normally; its file goes away with it.
+
+Any BPF program that uses kernel types (kprobe with
+bpf_get_current_task_btf(), a kfunc call, fentry, a global subprogram
+taking the context, bpf_snprintf_btf(), CO-RE, ...) triggers the same
+load; a plain socket filter does not.
+
+Results:
+
+ - MemTotal is ~5.4 MB higher with =m while the BTF is unused, which is
+   the size of the .BTF section.  Once the BTF is in use, MemFree is the
+   same within run-to-run noise.
+ - Modules loaded before the trigger (ext4, nf_conntrack, which
+   registers kfuncs from its init, xfrm_interface) get BTF ids once the
+   BTF is loaded; a struct_ops map for tcp_congestion_ops and a syscall
+   program calling bpf_task_from_pid() work; nf_nat loaded afterwards
+   takes the usual path.
+ - stat() of /sys/kernel/btf/vmlinux reports the final size before the
+   load; fstat/read/mmap agree afterwards.
+ - A carrier with one byte of .BTF changed is refused with -EINVAL.
+ - With the in-tree bpftool and clang-built programs as the first user
+   on a fresh boot: bpftool btf dump file /sys/kernel/btf/vmlinux,
+   bpftool btf list, a socket filter with a global subprogram taking
+   struct __sk_buff *, a raw_tp program calling bpf_snprintf_btf(), a
+   CO-RE field read, and a program calling a kfunc of an out-of-tree
+   module (distilled .BTF.base, kfunc registered from init, loaded
+   before the vmlinux BTF), and a read of that module's own sysfs file,
+   each load the BTF and work; rmmod of that module afterwards is clean.
+ - lockdep and kmemleak kernels are clean in all of the above.
+ - =y and =n build and behave as before; =m without module BTF works;
+   every patch builds on its own.
+ - The boot image on disk shrinks by the compressed BTF with =m
+   (15.0 MB to 13.2 MB here).
+
+Changes since v1 [4]:
+
+ - Split for review: v1 patch 5 is now patches 5-7 (vmlinux
+   registrations, module BTF, .BTF.base sysfs), v1 patch 6 is now
+   patches 8-9 (preparation of the existing checks, the switch).
+ - Fetch sites added for the program context type table
+   (bpf_ctx_convert: global subprograms taking the context, ctx access
+   of tracing/EXT programs), for bpf_snprintf_btf()/bpf_seq_printf_btf()
+   and for CO-RE candidate lookup, which now fetches before taking
+   cand_cache_mutex (Sashiko, bpf-ci, Jiri).  Without
+   CONFIG_DEBUG_INFO_BTF the new helper check is skipped, so nothing
+   changes there.
+ - Module BTF is published only after its deferred registrations are
+   applied; only modules past MODULE_STATE_LIVE are replayed, with the
+   module pinned; a module still in init has its queue applied at LIVE.
+   Fixes the concurrent registration and COMING-module lifetime issues
+   (Sashiko, bpf-ci).
+ - The sysfs reader of a module with .BTF.base waits for the module's
+   BTF to be relocated instead of serving the raw data (bpf-ci); sysfs
+   files are no longer removed from the deferred parse path, and
+   MODULE_STATE_GOING removes them outside btf_module_mutex.
+ - A module whose deferred BTF fails to parse or get an id keeps the
+   buffer its sysfs file serves; nothing is freed under a reader
+   (Sashiko).
+ - The vmlinux registration queue has its own mutex; no lock is taken
+   under btf_vmlinux_lock that leads back to it (bpf-ci).
+ - A failed parse is not cached with =m (Sashiko).
+ - Only the carrier depends on vmlinux in Makefile.modfinal; POSIX dd
+   instead of head -c (Sashiko).
+ - .BTF stripped from vmlinux with =m, so no boot image carries it,
+   also where the image is an ELF copy of vmlinux; module BTF is
+   generated against vmlinux.unstripped (Alan).
+ - Kconfig help: initramfs note, module BTF accounting (Alan).
+ - btf_struct_ops_add() renamed btf_struct_ops_register() (bpf-ci);
+   its stub only defined where used.
+ - Tests with bpftool/libbpf userspace and an out-of-tree .BTF.base
+   module added (Alan).
+
+[1] https://lore.kernel.org/all/20260917000201.25581-2-wanjay@amazon.com/
+[2] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
+[3] https://lore.kernel.org/all/33592fca-88a8-44aa-8d94-40e1e604554e@oracle.com/
+[4] https://lore.kernel.org/bpf/20260923053948.30617-1-wanjay@amazon.com/
+
+Jay Wang (9):
+  bpf: pass the vmlinux BTF to btf_parse_module() and let it adopt the
+    data
+  bpf: split the kfunc, dtor kfunc and struct_ops registration bodies
+  bpf: fetch the vmlinux BTF where kernel types enter a program
+  bpf: take the vmlinux BTF from the btf_vmlinux module
+  bpf: defer vmlinux kfunc and struct_ops registrations
+  bpf: keep module BTF until the vmlinux BTF is available
+  bpf: expose deferred .BTF.base module BTF in sysfs from module load
+  bpf, trace, net: prepare CONFIG_DEBUG_INFO_BTF checks for a tristate
+  kbuild, bpf: allow building the vmlinux BTF as a module
+
+ Documentation/bpf/btf.rst         |  35 ++
+ Makefile                          |   8 +-
+ include/asm-generic/vmlinux.lds.h |  31 +-
+ include/linux/bpf.h               |   1 +
+ include/linux/btf.h               |   6 +
+ include/linux/btf_ids.h           |   2 +-
+ include/linux/compiler_types.h    |   2 +-
+ include/linux/module.h            |   2 +-
+ include/trace/trace_events.h      |   2 +-
+ kernel/bpf/Makefile               |   6 +-
+ kernel/bpf/bpf_struct_ops.c       |   3 +-
+ kernel/bpf/btf.c                  | 922 ++++++++++++++++++++++++++----
+ kernel/bpf/btf_vmlinux.c          |  23 +
+ kernel/bpf/preload/Kconfig        |   4 +
+ kernel/bpf/syscall.c              |   6 +
+ kernel/bpf/sysfs_btf.c            |  85 ++-
+ kernel/bpf/verifier.c             | 122 +++-
+ kernel/module/main.c              |   4 +-
+ kernel/trace/bpf_trace.c          |   3 +-
+ kernel/trace/trace_syscalls.c     |   6 +-
+ lib/Kconfig.debug                 |  22 +-
+ net/netfilter/Makefile            |   6 +-
+ net/xfrm/Makefile                 |   4 +-
+ scripts/Makefile.modfinal         |  26 +-
+ scripts/Makefile.vmlinux          |   5 +
+ scripts/gen-btf.sh                |  95 ++-
+ scripts/link-vmlinux.sh           |  25 +-
+ 27 files changed, 1300 insertions(+), 156 deletions(-)
+ create mode 100644 kernel/bpf/btf_vmlinux.c
+
+
+base-commit: b4d936547f5a3ca5563f48ee81f153c928336027
 -- 
-2.52.0
+2.47.3
 
