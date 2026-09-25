@@ -1,128 +1,82 @@
-Received: from mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+Received: from out-2z4y-a164.jellyfish.systems (out-2z4y-a164.jellyfish.systems [198.54.127.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF62B4CA77D
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DB34CC281
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790358861; cv=none; b=EoNE4jBbz+eCpegRPNTAf9iR3OMs4ob7ib2rmPWEUB16Yf2FHhWJuhGPQubZmDIA0G69VQtj/BRQ4bg07v0CsnoYzk7VA9BIfvVIR5luLcEKoDBhy4ad/bs+JgsqaYqUAiyDB2AuZX1kxjos9YbxLfFon4o/nBULj3v2KqwENgU=
+	t=1790359120; cv=none; b=B7AVjcCRkyAcEiErBm52eI0+ZooC/kje4Ra1xx1IgMXfRfjRzD3hNmzt140VuH+cIl7fdEYwK25CSTDaORhtnQ39msoKecyj42gUuUBHmYgoMiFMBstjU3fRbmsd7c4T8pf/mSsN7zQzZWk/rq6KrEq+OlcIyeQbGGxt3ihAog4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790358861; c=relaxed/simple;
-	bh=p67gamRmEwkUu95LFXAoYMitz/njw63lJRtWJbeZLy4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=j8mPkeiLBcqAR7kWng8IlHawBeyP6oSFIlV5ujoNvjS/mGVVWeweeru/VFbOkQ/tizUIzH2mpOuvd+bAghUrqI45X5ZH2D2yATufTOJIpbAlk+F6F+mdqzIPLHJwbE7rTjam6iPHpCFWgDjvCLe02VIW0ohCHsH04WdfWrcGtzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QRcboaoz; arc=none smtp.client-ip=95.215.58.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790359120; c=relaxed/simple;
+	bh=ymgShMe8JjE49tDt3/53i+PPVMEinp17pSyo2+BnjRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ECOUmB3HObi53O5ezdCEqFffFJe4AaIKxD9bgPVwAWDh5eP+Yd5zdu0Yk9kcuVCc7ad7qC4a7X5MVB1rxa2iUrNBdbddjspvFGX3Xs7qEsS7PxzVMOnpISNpY/JDfsmmKoAarwE4j4f7Es3Dv0fDzpqanrYtyM7wdcdKGJO3t+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=E5qgvoZL; arc=none smtp.client-ip=198.54.127.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QRcboaoz"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=p67gamRmEwkUu95LFXAoYMitz/njw63lJRtWJbeZLy4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790358846; v=1; x=1790963646;
- b=QRcboaozLKaoxFUSBaCGy4b55IgVhMVaDeRoLzRLhmMlTQCQug7GTvIT4+z9mSLEqs8OWMG0
- b7UxkZBt47DeevV1W8PhHXtOJjSnJ7ZzdxmxC6RaoVn531n9GqYHqKTGUcGNWDcXcfB89QTaqt3
- pN9c9bPZ0ArbNzZxeTkxoG8U=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c0aea6dd7cc8ad8e;
-	Fri, 25 Sep 2026 17:54:06 +0000
-X-Mizu-Trace-ID: c0aea6dd7cc8ad8e
-X-Migadu-Flow: FLOW_OUT
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Date: Fri, 25 Sep 2026 17:53:21 +0000
-Subject: [PATCH bpf] bpf, arm64: Fix jited line info off by kCFI hash
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="E5qgvoZL"
+Received: from 192.168.50.46 (unknown [114.92.81.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hrymT6X6Dz2xDd;
+	Fri, 25 Sep 2026 17:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1790358363;
+	bh=ymgShMe8JjE49tDt3/53i+PPVMEinp17pSyo2+BnjRQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=E5qgvoZLwc4ltJMaQGlmPRSfztoc4kWz2mAFMUczm0hdSzPFx4KqBrp3JusQZKGgJ
+	 10Yjvg64tvjAzfueZvq4TpefqZSPfyIMJW/1a9pY4brPaIG6hcE73Np2H74dTKkrVx
+	 MW3kprjVsRM2OfJK4ioriJsqjQDlhiPwNpYINFMn0fPPihlDGzpWreq3Um38nE8q7l
+	 o2jEgZGjnHsX2XmE9JyySq3ohuzmO1mESIM9nKIIOWAisOyOrGz3w7k0JdiZw6Z2BO
+	 mcDmfM9LJUFliFKrvS/5vaSEYzwYfjGKyvN7CWqW+uJLp3ufX4JHqq2rdgVJGrE2O0
+	 Bt6FDcwacXxag==
+From: Tianyi Chen <hi@tychen.cc>
+To: Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 1/2] bpftool: Add recursive map dumping
+Date: Sat, 26 Sep 2026 02:46:00 +0900
+Message-ID: <179035836017.2029588.7852183060719250433@tychen.cc>
+In-Reply-To: <6ed88738-4e3b-407c-90c2-bf7717f3e653@kernel.org>
+References: <20260924161434.95116-1-hi@tychen.cc>
+ <20260924161434.95116-2-hi@tychen.cc>
+ <6ed88738-4e3b-407c-90c2-bf7717f3e653@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260925-b4-arm64-bpf-linfo-cfi-v1-1-e930ab335170@linux.dev>
-X-B4-Tracking: v=1; b=H4sIABC1tmoC/22NzQ6CMBCEX4Xs2Q2IgOCrGA/tupVVbMnWv4Tw7
- ha8epyZb2YmiKzCEQ7ZBMoviRJ8EttNBtQbf2GUc9JQFmVTdGWNtkKj96ZCOzocxLuA5ARdTbu
- 223NVtASpPCo7+azDR0gonH5mfNor02OZXDBrIqNV46lfrGHMKbyD3ljzNfpzBfP8BektMb+2A
- AAA
-X-Change-ID: 20260925-b4-arm64-bpf-linfo-cfi-f5c3897e408c
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Mark Rutland <mark.rutland@arm.com>, Maxwell Bland <mbland@motorola.com>, 
- Sami Tolvanen <samitolvanen@google.com>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>, 
- "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-X-Mailer: b4 0.15.2
+X-Envelope-From: hi@tychen.cc
 
-With CONFIG_CFI=y, the jited line info of every arm64 BPF program is
-off by one instruction, so tools that use it show the wrong source line.
+Hi Quentin,
 
-The JIT counts ctx.offset[] from ctx.ro_image. Since commit
-710618c760c0 ("arm64/cfi,bpf: Support kCFI + BPF on arm64"),
-prog->bpf_func starts past the 4-byte kCFI hash, and
-bpf_prog_fill_jited_linfo() adds the offsets to prog->bpf_func.
+> Can we align it with what most other subcommands in bpftool do, please?
 
-Subtract cfi_get_offset() from the offsets before the fill, and move
-the fill after bpf_prog_update_insn_ptrs(), which needs the offsets
-relative to ctx.ro_image.
+Done in v8: REQ_ARGS() and map_parse_fds() now handle MAP first, followed
+by a loop over the remaining keywords. Misplacing recursive now reports
+the MAP parser's error, and repeated recursive keywords are accepted.
+Trailing-argument errors go through exit_close to release the selected
+map FDs before freeing the array.
 
-Fixes: 710618c760c0 ("arm64/cfi,bpf: Support kCFI + BPF on arm64")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://lore.kernel.org/all/20260904014748.C04AA1F000E9@smtp.kernel.org/
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Closes: https://lore.kernel.org/all/DLNXZ2WK7TPD.2RZBUNRS4FA4L@gmail.com/
-Assisted-by: LLM
-Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
----
-Tested in an arm64 KVM guest with CONFIG_CFI=y. Without this patch
-every line info entry after a function's first was off by one
-instruction, and with it every entry was correct.
----
- arch/arm64/net/bpf_jit_comp.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+All 13 subtests pass, including the revised argument checks. A syscall
+trace also confirms that both FDs selected by name are closed on error.
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index c5f55d6161fee..cdc98efc1acf0 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2345,14 +2345,21 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 		/* offset[prog->len] is the size of program */
- 		for (i = 0; i <= prog->len; i++)
- 			ctx.offset[i] *= AARCH64_INSN_SIZE;
--		bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
- 		/*
- 		 * The bpf_prog_update_insn_ptrs function expects offsets to
- 		 * point to the first byte of the jitted instruction (unlike
--		 * the bpf_prog_fill_jited_linfo above, which, for historical
-+		 * the bpf_prog_fill_jited_linfo below, which, for historical
- 		 * reasons, expects to point to the next instruction)
- 		 */
- 		bpf_prog_update_insn_ptrs(prog, ctx.offset, ctx.ro_image);
-+		/*
-+		 * Line info is relative to prog->bpf_func, which starts
-+		 * cfi_get_offset() bytes into ro_image. Shift the offsets here,
-+		 * after bpf_prog_update_insn_ptrs(), which needs them unshifted.
-+		 */
-+		for (i = 0; i <= prog->len; i++)
-+			ctx.offset[i] -= cfi_get_offset();
-+		bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
- out_off:
- 		if (!ro_header && priv_stack_ptr) {
- 			free_percpu(priv_stack_ptr);
+v8 is a new thread:
+https://lore.kernel.org/r/20260925174402.2028649-1-hi@tychen.cc
 
----
-base-commit: ad139384ecddb6f3e7e3c3c12765aafae0e39670
-change-id: 20260925-b4-arm64-bpf-linfo-cfi-f5c3897e408c
+I also checked v7's CI failure: it is test_verifier's invalid call insn1
+on s390x (expected R0 !read_ok, got JIT doesn't support callx). The
+for-next_test run has the same failure, while all 13 recursive-dump
+subtests passed on s390x:
+https://github.com/kernel-patches/bpf/actions/runs/36028683139/job/1077369230=
+87
+https://github.com/kernel-patches/bpf/actions/runs/36029092386/job/1077370328=
+90
 
-Best regards,
---  
-Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
-
+Thanks,
+Tianyi
