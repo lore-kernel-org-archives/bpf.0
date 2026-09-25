@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD2B3EC687;
-	Fri, 25 Sep 2026 19:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D42B471437;
+	Fri, 25 Sep 2026 19:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790363522; cv=none; b=Mw8f063Q/ID0yXXpkzWleWxVeUwlkWkcXtfloEwXLQly0WvTn/zSNEc922oTt4bzg5Ksu62LPzi1ZdbAHgOD9YiZ/z0U3AAvXoUTOmyGivUB39VG7Bl8mfbgn2Eo5WoJaVMK1nnp+Si+yI70y+UeftXRnQzrEwkp0MgYeLiW5yc=
+	t=1790363527; cv=none; b=aZvPVv+Vm6EtXq8B3xePXdD9jULt7tMD37P+H3O3B4HIPGx9yuogRl3vtSteGcMN69UcQcivAhxY5soSwegBN84OxtujLgTyrB3dfxcdwHA+kwJoG0m+ZMIZTGsHz2Cz/igAh5+gKhfpgfNjxrtnXraT1c83H+zr1abMi+pVpkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790363522; c=relaxed/simple;
-	bh=MmZzCXTlD9GuDQAliRbMxdUOIEprPz8AXGvgzFZGsQI=;
+	s=arc-20240116; t=1790363527; c=relaxed/simple;
+	bh=rgi29i6UFdCCMsHHSzDcksPAqlD5gB9Z5GMxTeN1104=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=b19Sf67yumONkFK/B99WbuE79EfkN0+8fGjOOHKGemQA3arDIYN2vCmwucebx8vJc/WNVOeQALJTIM6Jx+LbR2z6DTX14Gy1pq7K+LC4TPqz1yq4XB8Zlhr/yMCmbTQgcvE27IiNAUjCH7xrp4U6SHO3fj0lRWQhqSaL16EOGyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZBPALbDX; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=WHfaI5de/8fM9nqe/AAK9gb+YJ37XfV8I8PI0QQ2nS7zo1BiS1cpBocPVZ075Se3Do255bXVilyfRmFOtYxDbqluQYdx3E3cOL6K72qqFOiOl3gi1j6/hLowYlJy3IWot7MclfmlVSEiLeIFwkPKl9fWKw4yd4EWvrJDexnGKjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7bKiq69; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZBPALbDX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A89C1F000FF;
-	Fri, 25 Sep 2026 19:11:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7bKiq69"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819CC1F00893;
+	Fri, 25 Sep 2026 19:11:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790363518;
-	bh=JKQU9QzUaWV5ZjO1MGHsN9TXv8ULJ7zYd/yNb9scKyA=;
+	s=k20260515; t=1790363521;
+	bh=C9PyPbAN1dnOqUxdj85Y3ZzNfk2hgIo1QkMqTiVfzxQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ZBPALbDXeMl+KSlyi8YgU8YsR95vkplh5n0tcSBHzLUDkBySA/O6t2viY7WHL8Avb
-	 fgIPe7xmXkJ5EzCvO9Wt5t5vdNdbnt50rSmrZGNfaAyfq05T8Feez/1aZ6tDb/7Id1
-	 AcUccL3YNYjeKf9Q1U/OvOCpUXK76bIYer50o9fYw3g57+l0LmpJsSFL7Q2Xe01Xck
-	 QbvYWMyYmPP19RHeqKGVSzW0yo4Av1HOYqRiU+pgLbS2kDTYEbabhmlCwQNELZo/Vs
-	 D84XxO3jkU14SFzAEBwEohtmQM4aHfjJcjnkUddomcjbCuR4Lop11pnUVFc+u4txPZ
-	 JTz8p4+qJIbGQ==
-Subject: Re: [PATCH net v3 03/10] net: stmmac: keep datapath state coherent
- after reinitialization failure
+	b=h7bKiq69Q9kCzElLozJ/5BY5UWP8Q+KIyKD0xq2osePiQrhgIBNtztrrg3/zimMu8
+	 IK6nmJkD/58ovcWAA8PgV2WS3e6kzkZWrhrkQHq8497pXuKVjOgvyBAj8+qsWNodDr
+	 j9SIuVbY/mJe5diUJaLi2CPu3EIuBDv3SK6NZosLuzstDk7wL/yIJN+bxK6OyVjIuw
+	 Gw3UAGkegtMwFimKT7TdUmryUp12F+af2Nt2y1pGVhR61yr4qzUzAK1mrabpUKc6iz
+	 AK2bLRBcHn4IQmUu+JGTwplSQzvSJj8V0OoP+JU9ehywi25EXdDjCHzlacIKEv2pqG
+	 r//k6b5H2YAjQ==
+Subject: Re: [PATCH net v3 05/10] net: stmmac: unwind partially allocated DMA
+ configurations
 From: netdev-bot+sashiko@kernel.org
 To: james.hilliard1@gmail.com
 Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
@@ -46,12 +46,12 @@ Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
  zhaojinming@uniontech.com, lorenzo.bianconi@oss.qualcomm.com,
  dinghui1111@163.com
-Date: Fri, 25 Sep 2026 19:11:56 +0000
-Message-ID: <179036351610.2160803.7973266254141491623@kernel.org>
+Date: Fri, 25 Sep 2026 19:11:59 +0000
+Message-ID: <179036351907.2160803.4428772816232476933@kernel.org>
 In-Reply-To:
- <20260924-submit-stmmac-reset-fixes-v1-v3-3-c031e3f3a282@gmail.com>
+ <20260924-submit-stmmac-reset-fixes-v1-v3-5-c031e3f3a282@gmail.com>
 References:
- <20260924-submit-stmmac-reset-fixes-v1-v3-3-c031e3f3a282@gmail.com>
+ <20260924-submit-stmmac-reset-fixes-v1-v3-5-c031e3f3a282@gmail.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,10 +62,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 7 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 3 (2) · Medium: 4 (1) · Low: 0
+Critical: 0 · High: 1 · Medium: 1 · Low: 0 (2)
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -73,460 +73,223 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] stmmac_resume_hw() now returns the error from
-  stmmac_mdio_reset().
-- [High] (Baseline: fixed later in the series.) In this commit,
-  stmmac_xdp_set_prog() gates on priv->datapath == RUNNING, but…
-- [High] (Baseline: fixed later in the series.) In this commit, the
-  irq_error path of stmmac_xdp_open() frees the descriptor rings after…
-- [Medium] stmmac_bpf() calls __stmmac_release() whenever datapath ==
-  STMMAC_DATAPATH_SUSPENDED (and also HALTED at the end of the series).
-- [Medium] In stmmac_suspend(), the early exit on `priv->hw_suspended`
-  (goto suspend_bsp) comes before the new check that rejects suspend…
-- [Medium] After an early resume failure, the new close-time sleep
-  cleanup touches MAC registers without confirming that the hardware's…
-- [Medium] (Baseline: fixed later in the series.) In this commit,
-  stmmac_reinit_queues() and stmmac_reinit_ringparam() call the full…
+- [High] Possible double free of a saved RX skb.
+- [Medium] Baseline decision: discard, because it is resolved later in
+  the series.
 
 Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch adds
-  a guard at this exact spot and the guard does not cover it.
-- [High] (Baseline: preexisting and fixed later in the series.)
-  stmmac_quiesce() cancels the TX coalescing hrtimers before…
-- [Medium] (Baseline: preexisting, not introduced.) If
-  stmmac_pltfr_noirq_resume() fails in pm_runtime_force_resume() or in…
+- [Low] Baseline decision: discard, because it is resolved later in the
+  series.
+- [Low] Baseline decision: discard, because it predates this patch and is
+  resolved later in the series.
 
 --
 
-net: stmmac: keep datapath state coherent after reinitialization failure
+net: stmmac: unwind partially allocated DMA configurations
 
-This adds a datapath ownership state and a hw_suspended flag to
-stmmac_priv. Close, suspend, resume and XDP paths use them to tell which
-IRQ, DMA and NAPI resources are still owned after a failed MTU reopen or
-a failed resume. It splits queue quiescing out of __stmmac_release(),
-serializes suspend and resume with RTNL, and adds guards to the TC,
-debugfs, XDP xmit and reset task paths.
+This commit lets the RX and TX DMA free paths handle partially allocated
+queues, and releases RX resources when TX allocation fails. It propagates
+xdp_rxq_info_reg_mem_model() errors and clears XSK RXQ bindings. It also
+frees any saved partial RX skb and NULLs the released resource pointers.
 
 > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 4f3d452c35036..43a6154fcf6d7 100644
+> index f7e91ae214483..3b918cf898067 100644
 > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -4127,6 +4127,37 @@ stmmac_setup_dma_desc(struct stmmac_priv *priv, unsigned int mtu)
->  	return ERR_PTR(ret);
->  }
+
+[ ... ]
+
+> @@ -1884,17 +1887,19 @@ static int __init_dma_rx_desc_rings(struct stmmac_priv *priv,
+>  	rx_q->xsk_pool = stmmac_get_xsk_pool(priv, queue);
 >  
-> +/* Finish core sleep state even if the platform resume callback failed. */
-> +static int stmmac_resume_hw(struct stmmac_priv *priv)
-> +{
-> +	int ret;
-> +
-> +	if (!priv->hw_suspended)
-> +		return 0;
-> +
-> +	/* Use the state installed by suspend, not a subsequently changed WoL
-> +	 * setting. Clear PMT even when a different device caused the wakeup.
-> +	 */
-> +	if (priv->irq_wake) {
-> +		mutex_lock(&priv->lock);
-> +		stmmac_pmt(priv, priv->hw, 0);
-> +		mutex_unlock(&priv->lock);
-> +		priv->irq_wake = 0;
-> +	} else {
-> +		ret = pinctrl_pm_select_default_state(priv->device);
+>  	if (rx_q->xsk_pool) {
+> -		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
+> -						   MEM_TYPE_XSK_BUFF_POOL,
+> -						   NULL));
+> +		ret = xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
+> +						 MEM_TYPE_XSK_BUFF_POOL, NULL);
 > +		if (ret)
 > +			return ret;
-> +		if (priv->mii) {
-> +			ret = stmmac_mdio_reset(priv->mii);
-> +			if (ret)
-> +				return ret;
+>  		netdev_info(priv->dev,
+>  			    "Register MEM_TYPE_XSK_BUFF_POOL RxQ-%d\n",
+>  			    queue);
+>  		xsk_pool_set_rxq_info(rx_q->xsk_pool, &rx_q->xdp_rxq);
+
+[Severity: Low]
+This problem already existed before this patch, but is the XSK pool bound
+here to an xdp_rxq that is about to be freed?
+
+On the stmmac_open() path, __init_dma_rx_desc_rings() works on the
+temporary dma_conf from stmmac_setup_dma_desc(). __stmmac_open() then
+copies that conf:
+
+	memcpy(&priv->dma_conf, dma_conf, sizeof(*dma_conf));
+
+After that, stmmac_open() calls kfree(dma_conf). Nothing rebinds the pool
+to &priv->dma_conf.rx_queue[queue].xdp_rxq, so the pool's rxq pointers
+seem to point into freed memory.
+
+The next patch in the series, "net: stmmac: keep DMA configurations at
+stable addresses", appears to fix this. It keeps the allocated dma_conf
+and removes the memcpy.
+
+>  	} else {
+> -		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
+> -						   MEM_TYPE_PAGE_POOL,
+> -						   rx_q->page_pool));
+> +		ret = xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
+> +						 MEM_TYPE_PAGE_POOL, rx_q->page_pool);
+> +		if (ret)
+> +			return ret;
+
+[Severity: Medium]
+Now that this error is returned, how do the per-queue callers handle it?
+
+stmmac_enable_rx_queue() returns void. When this call fails, it releases
+the queue and returns:
+
+	ret = __init_dma_rx_desc_rings(priv, &priv->dma_conf, queue, GFP_KERNEL);
+	if (ret) {
+		__free_dma_rx_desc_resources(priv, &priv->dma_conf, queue);
+		netdev_err(priv->dev, "Failed to init RX desc.\n");
+		return;
+	}
+
+With this patch, __free_dma_rx_desc_resources() also sets buf_pool,
+dma_rx, dma_erx and page_pool to NULL. After that,
+stmmac_xdp_enable_pool() and stmmac_xdp_disable_pool() in stmmac_xdp.c
+carry on as usual:
+
+		stmmac_enable_rx_queue(priv, queue);
+		stmmac_enable_tx_queue(priv, queue);
+		napi_enable(&ch->rx_napi);
+		napi_enable(&ch->tx_napi);
+
+Both return 0, so NAPI can run on a released RX queue whose ring pointers
+are NULL. stmmac_xdp_set_prog() also ignores the return value of
+stmmac_xdp_open().
+
+These callers already behaved this way for the -ENOMEM return from
+stmmac_alloc_rx_buffers(). This patch adds a second way to reach it.
+
+Two later patches in the series appear to fix this: "net: stmmac: account
+for failed live XDP reopening" and "net: stmmac: use the tracked datapath
+restart for XSK pool changes". They check the stmmac_xdp_open() result
+and remove the per-queue enable helpers.
+
+[ ... ]
+
+> @@ -2137,10 +2147,16 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
+>  	void *addr;
+>  
+>  	/* Release the DMA RX socket buffers */
+> -	if (rx_q->xsk_pool)
+> +	if (rx_q->xsk_pool) {
+>  		dma_free_rx_xskbufs(priv, dma_conf, queue);
+> -	else
+> +		xsk_pool_set_rxq_info(rx_q->xsk_pool, NULL);
+> +	} else {
+>  		dma_free_rx_skbufs(priv, dma_conf, queue);
+> +	}
+> +	if (rx_q->state_saved)
+> +		dev_kfree_skb_any(rx_q->state.skb);
+> +	rx_q->state.skb = NULL;
+> +	rx_q->state_saved = 0;
 
 [Severity: High]
-On boards that use the snps,reset GPIO, could this return -EBUSY on
-every resume without WoL?
+Can this free an skb that the driver no longer owns?
 
-stmmac_mdio_reset() requests the GPIO each time it runs:
+This free assumes that state_saved means the driver still owns
+rx_q->state.skb. However, stmmac_rx() does not clear the saved state when
+it takes it:
 
-drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c:stmmac_mdio_reset() {
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_rx() {
     ...
-		reset_gpio = devm_gpiod_get_optional(priv->device,
-						     "snps,reset",
-						     GPIOD_OUT_LOW);
-		if (IS_ERR(reset_gpio))
-			return PTR_ERR(reset_gpio);
+		if (!count && rx_q->state_saved) {
+			skb = rx_q->state.skb;
+			error = rx_q->state.error;
+			len = rx_q->state.len;
+		} else {
+			rx_q->state_saved = false;
     ...
 }
 
-The first call happens at probe through __mdiobus_register()->bus->reset().
-Devres then keeps the line requested until unbind. Later calls reach
-gpiod_request_commit(), which returns -EBUSY for a line that is already
-requested, because GPIOD_OUT_LOW is not a nonexclusive request.
+state_saved is only cleared in the else branch, which runs on a later
+iteration with count > 0. With limit == 1, the first iteration can finish
+the restored skb. It can pass it to napi_gro_receive(), or free it on the
+error path:
 
-Before this patch, stmmac_resume() ignored this return value. Now it does:
+		if (unlikely(error)) {
+			dev_kfree_skb(skb);
+			skb = NULL;
+			count++;
+			continue;
+		}
 
-	if (priv->hw_suspended) {
-		ret = stmmac_resume_hw(priv);
-		if (ret)
-			goto out_unlock;
+count is now 1, so the while (count < limit) loop exits. The save block
+after the loop is skipped, because skb is NULL and the last descriptor
+did not have rx_not_ls set:
 
-On this error it skips stmmac_hw_setup(). The datapath stays
-STMMAC_DATAPATH_SUSPENDED, the netdev stays detached and hw_suspended
-stays set.
-
-After that, stmmac_open() calls stmmac_resume_hw() and fails the same
-way, while stmmac_release() only logs the error. Would the interface stay
-unusable until the driver is rebound?
-
-> +		}
-> +	}
-> +	priv->hw_suspended = false;
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
-> @@ -4192,6 +4224,8 @@ static int __stmmac_open(struct net_device *dev,
->  
->  	stmmac_release_ptp(priv);
->  init_error:
-> +	stmmac_stop_all_dma(priv);
-> +	stmmac_mac_set(priv, priv->ioaddr, false);
->  	return ret;
->  }
-
-[Severity: High]
-This stops DMA on the __stmmac_open() failure path. Does stmmac_xdp_open()
-still have the same problem? In this commit its error path is:
-
-irq_error:
-	for (chan = 0; ...)
-		hrtimer_cancel(...);
-init_error:
-	free_dma_desc_resources(priv, &priv->dma_conf);
-
-By this point stmmac_mac_set(priv, priv->ioaddr, true) and
-stmmac_start_all_dma() have already run.
-
-If the IRQ request fails during an XDP reopen, can the running DMA write
-into the freed descriptor rings?
-
-The later commit "net: stmmac: account for failed live XDP reopening" in
-this series adds stmmac_stop_tx_queues(), stmmac_stop_all_dma() and
-stmmac_mac_set(false) to that path.
-
-[ ... ]
-
-> @@ -4246,25 +4284,38 @@ static int stmmac_open(struct net_device *dev)
->  	return ret;
->  }
->  
-> -static void __stmmac_release(struct net_device *dev)
-> +/* Quiesce NAPI and transmit queues without releasing their resources. */
-> +static void stmmac_quiesce(struct stmmac_priv *priv)
->  {
-> -	struct stmmac_priv *priv = netdev_priv(dev);
->  	u8 chan;
->  
-> -	/* Stop and disconnect the PHY */
-> -	phylink_stop(priv->phylink);
-> -
->  	stmmac_disable_all_queues(priv);
->  
->  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
->  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
->  
-> -	netif_tx_disable(dev);
-> +	netif_tx_disable(priv->dev);
-> +}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but stmmac_quiesce() keeps the
-old ordering. It cancels the TX coalescing hrtimers before
-netif_tx_disable(), and it does not drain NAPI poll tails. Can
-stmmac_xmit() or stmmac_napi_poll_tx()->stmmac_tx_timer_arm() re-arm a
-txtimer after its final hrtimer_cancel()?
-
-On the MTU path, __stmmac_open() then copies the new dma_conf over the
-embedded timer. That could overwrite a queued hrtimer.
-
-Later in this series, stmmac_quiesce() uses stmmac_stop_tx_queues(),
-which calls netif_tx_disable() and synchronize_net() before
-hrtimer_cancel(). The commit "net: stmmac: keep DMA configurations at
-stable addresses" also replaces the dma_conf copy with a stable pointer.
-
-[ ... ]
-
-> @@ -4285,6 +4336,15 @@ static void __stmmac_release(struct net_device *dev)
->  static int stmmac_release(struct net_device *dev)
->  {
->  	struct stmmac_priv *priv = netdev_priv(dev);
-> +	int ret;
-> +
-> +	/* Resume may have failed before restoring pins or disabling MAC wake.
-> +	 * Complete that cleanup without restarting the link or the datapath.
-> +	 * If it fails, keep hw_suspended set so a fresh open can retry it.
-> +	 */
-> +	ret = stmmac_resume_hw(priv);
-> +	if (ret)
-> +		netdev_err(dev, "failed to restore hardware sleep state: %d\n", ret);
-
-[Severity: Medium]
-Is it safe to touch MAC registers here after priv->plat->resume() has
-failed? In that case stmmac_resume() returns early and leaves
-hw_suspended set:
-
-	if (priv->plat->resume) {
-		ret = priv->plat->resume(dev, priv->plat->bsp_priv);
-		if (ret)
-			return ret;
+	if (status & rx_not_ls || skb) {
+		rx_q->state_saved = true;
+		rx_q->state.skb = skb;
+		...
 	}
 
-Glue suspend callbacks, such as the one in dwmac-rk, turn off clocks and
-regulators. Only the resume callback that just failed turns them back on.
+state_saved stays set, and state.skb points to an skb that was freed or
+handed to the stack. A later poll that hits a DMA-owned descriptor right
+away breaks before using the skb and saves the same stale pointer again,
+so the stale pointer can survive across polls.
 
-A later close then runs stmmac_release()->stmmac_resume_hw(). That does
-the PMT register write, or the dummy writel() in stmmac_mdio_reset().
-Next, __stmmac_release() runs stmmac_stop_all_dma() and stmmac_mac_set()
-on the retained datapath. Neither step takes pm_runtime_resume_and_get()
-or checks the power state first.
+No privileges are needed to get a budget of 1. The EPIOCSPARAMS ioctl in
+fs/eventpoll.c only requires CAP_NET_ADMIN when busy_poll_budget >
+NAPI_POLL_WEIGHT, and stmmac_napi_poll_rx() passes the budget straight to
+stmmac_rx(). A frame that spans several descriptors needs a jumbo MTU.
 
-Before this patch, the same close hung in napi_disable() before it got
-here. Depending on how far the glue resume got, could this now cause a
-bus abort or silently dropped writes?
+Suppose the interface is then closed (ndo_stop -> free_dma_desc_resources)
+or the XSK pool or XDP program is changed. __free_dma_rx_desc_resources()
+then calls dev_kfree_skb_any() on the stale pointer. Before this patch,
+teardown dropped the stale pointer without freeing it.
+
+The stale state in stmmac_rx() is older than this patch, and so is its
+reuse on the next poll. This patch adds a new path that frees it a second
+time. A later patch in the series copies the same pattern into
+stmmac_reinit_dma_desc(), and stmmac_rx() is still unchanged at the end
+of the series.
+
+Could stmmac_rx() clear rx_q->state_saved and rx_q->state.skb as soon as
+it takes the saved state?
 
 [ ... ]
 
-> @@ -4298,6 +4358,8 @@ static int stmmac_release(struct net_device *dev)
->  	stmmac_legacy_serdes_power_down(priv);
->  	phylink_disconnect_phy(priv->phylink);
->  	pm_runtime_put(priv->device);
-> +	/* Allow a fresh open after a failed MTU reopen or resume. */
-> +	netif_device_attach(dev);
+> @@ -2411,6 +2438,8 @@ static int alloc_dma_desc_resources(struct stmmac_priv *priv,
+>  		return ret;
 >  
->  	return 0;
+>  	ret = alloc_dma_tx_desc_resources(priv, dma_conf);
+> +	if (ret)
+> +		free_dma_rx_desc_resources(priv, dma_conf);
+>  
+>  	return ret;
 >  }
 
-[Severity: Medium]
-How do the ethtool reinit paths behave in this commit?
-stmmac_reinit_queues() and stmmac_reinit_ringparam() still do:
+[Severity: Low]
+This one also predates the patch: stmmac_enable_rx_queue() and
+stmmac_enable_tx_queue() do not unwind in the same way. When
+__alloc_dma_rx_desc_resources() fails:
 
-	if (netif_running(dev))
-		stmmac_release(dev);
-	...
-	if (netif_running(dev))
-		ret = stmmac_open(dev);
+	ret = __alloc_dma_rx_desc_resources(priv, &priv->dma_conf, queue);
+	if (ret) {
+		netdev_err(priv->dev, "Failed to alloc RX desc.\n");
+		return;
+	}
 
-If that stmmac_open() fails, stmmac_release() has already dropped the PHY
-and runtime PM references. IFF_UP is still set and the device is still
-attached.
+Does this leak the page_pool, buf_pool and descriptor memory that were
+already allocated? stmmac_enable_tx_queue() has the same early return,
+which would leak tx_skbuff_dma, tx_skbuff and the TX descriptor memory.
 
-Would the next ndo_stop call pm_runtime_put() a second time and underflow
-the usage count? In that state the netif_device_present() guards in the
-TC callback and the reset task would not fire either.
-
-The later commit "net: stmmac: retain PHY and PM ownership during ethtool
-reopening" changes both functions to use netif_device_detach(),
-__stmmac_release() and stmmac_reopen().
-
-[ ... ]
-
-> @@ -6425,6 +6492,8 @@ static int stmmac_setup_tc_block_cb(enum tc_setup_type type, void *type_data,
->  
->  	if (!tc_cls_can_offload_and_chain0(priv->dev, type_data))
->  		return ret;
-> +	if (!netif_device_present(priv->dev))
-> +		return -ENETDOWN;
->  
->  	__stmmac_disable_all_queues(priv);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this guard cover an
-interface that is administratively down? In that state the device is
-present and NAPI is disabled. That holds for a device that was never
-opened, and stmmac_release() now calls netif_device_attach() explicitly.
-
-Adding a u32 or flower filter in that state still reaches
-__stmmac_disable_all_queues():
-
-	if (queue < rx_queues_cnt)
-		napi_disable(&ch->rx_napi);
-
-napi_disable_locked() then loops forever with RTNL held:
-
-	while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
-		usleep_range(20, 200);
-
-Would checking priv->datapath == STMMAC_DATAPATH_RUNNING here work better
-than netif_device_present()?
-
-[ ... ]
-
-> @@ -6962,6 +7035,18 @@ static int stmmac_bpf(struct net_device *dev, struct netdev_bpf *bpf)
->  {
->  	struct stmmac_priv *priv = netdev_priv(dev);
->  
-> +	if (bpf->command != XDP_SETUP_PROG &&
-> +	    bpf->command != XDP_SETUP_XSK_POOL)
-> +		return -EOPNOTSUPP;
-> +
-> +	/*
-> +	 * Pool removal must succeed even after a failed resume. Release the
-> +	 * suspended rings before their pool or XDP buffer layout can change.
-> +	 * Leave the interface detached until it is closed and reopened.
-> +	 */
-> +	if (priv->datapath == STMMAC_DATAPATH_SUSPENDED)
-> +		__stmmac_release(dev);
-
-[Severity: Medium]
-Can this run in the middle of an ordinary system suspend? The check does
-not look at hw_suspended, so it fires for any suspended datapath. Later in
-the series the same applies to the halted state.
-
-XSK pool teardown runs from xp_release_deferred(). That work is queued with
-schedule_work() on system_wq, which is not frozen during suspend, and it
-takes only RTNL:
-
-	rtnl_lock();
-	xp_clear_dev(pool);
-	rtnl_unlock();
-
-So the work can run after stmmac_suspend() has dropped RTNL and called
-plat->suspend, or after stmmac_pltfr_noirq_suspend(). The noirq callbacks
-also read priv->datapath without RTNL, although the new stmmac_priv
-comment says the field is serialized by RTNL.
-
-Suppose noirq suspend has already done clk_disable_unprepare(clk_ptp_ref)
-and pm_runtime_force_suspend(). __stmmac_release() would then call
-stmmac_free_irq(), stmmac_stop_all_dma() and stmmac_mac_set() on a
-clock-gated MAC. stmmac_release_ptp() would also underflow the clk_ptp_ref
-enable and prepare counts.
-
-[ ... ]
-
-> @@ -8193,34 +8286,41 @@ EXPORT_SYMBOL_GPL(stmmac_dvr_remove);
-
-[ ... ]
-
->  int stmmac_suspend(struct device *dev)
->  {
->  	struct net_device *ndev = dev_get_drvdata(dev);
->  	struct stmmac_priv *priv = netdev_priv(ndev);
-> -	u8 chan;
->  
-> -	if (!ndev || !netif_running(ndev))
-> +	rtnl_lock();
-> +	if (!netif_running(ndev) || priv->hw_suspended) {
-> +		rtnl_unlock();
->  		goto suspend_bsp;
-> +	}
-> +
-> +	/* A failed datapath cannot provide a working MAC wake path. It may
-> +	 * even have released its wake IRQ. Do not silently suspend without WoL.
-> +	 */
-> +	if (priv->wolopts && priv->datapath != STMMAC_DATAPATH_RUNNING) {
-> +		netdev_err(ndev, "cannot suspend failed datapath with MAC WoL enabled\n");
-> +		rtnl_unlock();
-> +		return -EBUSY;
-> +	}
-
-[Severity: Medium]
-Can the hw_suspended shortcut above skip this WoL rejection? Consider
-this sequence:
-
-  1. Suspend with MAC WoL sets irq_wake = 1, sets hw_suspended = true and
-     moves the datapath to STMMAC_DATAPATH_SUSPENDED.
-  2. priv->plat->resume() fails, so stmmac_resume() returns before it
-     clears hw_suspended.
-  3. An XDP program change or AF_XDP pool teardown calls
-     stmmac_bpf()->__stmmac_release(). That frees all IRQs, including the
-     wake IRQ, and sets the datapath to STMMAC_DATAPATH_DOWN.
-  4. On the next system suspend, hw_suspended is still set, so this
-     function jumps straight to suspend_bsp.
-
-The -EBUSY check never runs, and the system suspends with MAC WoL
-configured but no wake IRQ. The commit message says this case is rejected
-"rather than silently losing the configured wake source".
-
-Should the WoL check come before the hw_suspended shortcut?
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> index 6128ed1bd521a..9bd622517389d 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-
-[ ... ]
-
-> @@ -984,12 +985,14 @@ static int __maybe_unused stmmac_pltfr_noirq_resume(struct device *dev)
->  		if (ret)
->  			return ret;
->  
-> -		ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
-> -		if (ret < 0) {
-> -			netdev_warn(priv->dev,
-> -				    "failed to enable PTP reference clock: %pe\n",
-> -				    ERR_PTR(ret));
-> -			return ret;
-> +		if (priv->datapath != STMMAC_DATAPATH_DOWN) {
-> +			ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
-> +			if (ret < 0) {
-> +				netdev_warn(priv->dev,
-> +					    "failed to enable PTP reference clock: %pe\n",
-> +					    ERR_PTR(ret));
-> +				return ret;
-> +			}
->  		}
->  	}
-
-[Severity: Medium]
-This is a pre-existing issue, but consider a failure in
-pm_runtime_force_resume() or clk_prepare_enable(clk_ptp_ref) here. The
-function then returns without holding the PTP clock reference, while the
-datapath is still not STMMAC_DATAPATH_DOWN. Would a later close, through
-stmmac_release_ptp(), or the next noirq suspend then disable clk_ptp_ref
-a second time?
-
-The pre-patch code had the same sequence. The new datapath checks only
-cover the XDP cleanup case.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> index d7e4db7224b0c..909219775507b 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-
-[ ... ]
-
-> @@ -107,7 +109,7 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
->  	bool need_update;
->  	bool if_running;
->  
-> -	if_running = netif_running(dev);
-> +	if_running = priv->datapath == STMMAC_DATAPATH_RUNNING;
->  
->  	if (prog && dev->mtu > ETH_DATA_LEN) {
->  		/* For now, the driver doesn't support XDP functionality with
-
-[Severity: High]
-In this commit, stmmac_xdp_release() and stmmac_xdp_open() never update
-priv->datapath. Further down, the return value of stmmac_xdp_open() is
-ignored:
-
-	if (if_running && need_update)
-		stmmac_xdp_open(dev);
-
-If that reopen fails, NAPI is disabled and the IRQs and rings are freed,
-but the datapath stays STMMAC_DATAPATH_RUNNING.
-
-Would a later close then call stmmac_quiesce() from __stmmac_release() and
-hang in napi_disable() on NAPI that is already disabled? It could also
-free the IRQs and rings a second time. Suspend, AF_XDP pool changes and
-the debugfs ring dump would all trust the stale running state too.
-
-The later commit "net: stmmac: account for failed live XDP reopening" in
-this series fixes this. It sets the datapath to STMMAC_DATAPATH_DOWN in
-stmmac_xdp_release(), sets it to running only when stmmac_xdp_open()
-succeeds, and handles the reopen error in stmmac_xdp_set_prog().
+"net: stmmac: use the tracked datapath restart for XSK pool changes",
+later in the series, removes both helpers. After that, pool changes go
+through stmmac_xdp_open() and alloc_dma_desc_resources().
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924-submit-stmmac-reset-fixes-v1-v3-0-c031e3f3a282%40gmail.com
