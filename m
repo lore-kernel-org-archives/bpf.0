@@ -1,62 +1,64 @@
-Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CD245A288
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 08:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FC2472090
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 08:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790324912; cv=none; b=MzUl+NDxGUfAzgbcJgFijcOrcxnmVaTWJsUfj+UvFnckcYh+5ePa6lRANogSx7uMLzFw6FSDfzeY3BGGZA0gguGFz2rVJbQgQo0fdKJmaufo9JSTPjlTaVPJdhMA2+zQr3vMkzSV5e/PAK7CHfGRk0aM1hrGMAHlXvCgX88aZ+U=
+	t=1790324912; cv=none; b=G1vjghLBU1Dcgz7ZQCSGpDdTiWpexy6T01O113KlbJpHFjywGixDfIXwMMsz85ZodhbfE2NY0+ITRC4omib7/11/6IBFZJyxou9MEcHe+TSFanERlEznwVdHnF837pRNwDlNbmgNvGjefY/6zUG/ljnN7rBJp013E3yrGTJeXvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790324912; c=relaxed/simple;
-	bh=CPuFVDJOTU7OutoWc8dLFxrNzv6cGAYuwyA9tXGeDYs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PiCoLVSWvsHgEtb9I7KFiEf0gjr1snk5I3BnjfHYS3KjOAC9td6XmF/vcdDgeuK6/41s7N3dZR52v/wjFBUAUeIIRvgKh9AGnlZ7Ea/Jdc3kaUJk6AW4LgMXD4VzCLmp7LG0tsDRQhEkzvSdeYVHhQ4n2HakFvPuv/kVGWUuW3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EXD5rFMb; arc=none smtp.client-ip=74.125.225.99
+	bh=KHNLBWYb3Agw7rp5Zo4AMw6jvTmqV7B0MMc5VXWKygI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CxzBwlmYulZhzuKdM0zTLIpAkyHWkNP0Qs6g1Tl0sXnoPTLdD4E+IwV4wT3XEzdMBobiF2GIcacJmn8PPQxHOlDEHqXk9zQY79PgoZOUPogoP/C7qerycvqPNEqnxOaJhkW4InzM+dl83ZZCDmGVQV56J3gdriiTfdTd/tCdfJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M/GszPIW; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EXD5rFMb"
-Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-488780459e2so610350f8f.2
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 01:28:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M/GszPIW"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b91369d18so4204045e9.0
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 01:28:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790324909; x=1790929709; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=E84mITt57JkXmzttmcl0sEhhZTJzUF0ZsCknCmIA9JU=;
-        b=EXD5rFMbQNe7pcE8b5jdly9LaJXppV2x67HjlUeTkUElLlHZWj5Nl1Z20+ishrXGcp
-         lMxxPmOAYDakxKgAe30na3T9TVU+dSDdNfsrrKJD5RfFTSMFFbo7UAJnnlkNMMDLJjou
-         15nIcanHNwyWUSWyh46PTUlL8DUIA7T0GyNudQLobI3k5KsoHaEZ4WLV5y1OwLes2bWi
-         Iimcm9hEJshPtPmVpUDSy1xGC3qYVaLzxZBt50vEeeCvxXY+gWJsl9vwZG7Ad3KcE9Fy
-         KzIhoVuExpdWjRG1VtSzqbGk94gSYUdzHrIneH+H6y+mR3z6j9OaSSgMaDLOM/t8FAOZ
-         5JoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790324909; x=1790929709;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790324910; x=1790929710; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=E84mITt57JkXmzttmcl0sEhhZTJzUF0ZsCknCmIA9JU=;
-        b=oNtL2WxBO+88dY27U87g8SCNJxona1+CpjxiGt7i93JbxjmQlg62hRgPmCcw5BFUuK
-         rZkIfGeiuRN7ED8CGgwop5pgKXh5fee3o4s/6ZU6Dd5NcLnDozvBMbfYLniXYwVxCgQo
-         mYJ7AXu2wyobPUYQhHWxIYNXDhGo+F791H7zKgKypSWkeiGV+OFPsx0UqIi6ciTnhvW1
-         ePifar3S09MXkQZYP+MhF7UzniZjZ6fUEto2olCFP3+BDTsTLkR8bdPArL4lQrMI0r3C
-         qGZ3VF/Su2K+7JlyABGJoewjqa9dP6yzAdT6OiiX2QJJvy6fJ+62JvTVsP00AmBPUh2b
-         LA1g==
-X-Gm-Message-State: AFuF++n9R8nKxBXu7IcLPvEzP82RVzqJUASIBQ1ogTfS0YsFsKDTiCK4
-	/LteZFPEC063qPqx907Cc7GAy7YI499BowlyoRH1I7Z3GJswhz+ZCvja2aWC
-X-Gm-Gg: AYBFou01kGz34ArbyisXRvhuxjeSvX2GtUE/7h5LElsFcKlXqFIEujO2GKmmq8kCZTk
-	jrdmTl0cVwShr4INiFAbrOeDBKyqtPCY7h4ZZGt3N8uJMVVH2NfFerpEOyeO8nmyaHzCrEQLANc
-	e7wqzrxiRDE4As5oH8/dNrGaWdFvwZ87VcleAj2GcslN13jS+lelqfN5CK9dmr6BQvR/Yfjp6TG
-	0CaiWL3m+7S3YX49pMP6bmOm6wbFxjMN/zT6a0xByFQbBnKalcCnGX0pRLgkoiqQRuNfBthOqgG
-	DFiCCGxsuMCinEDLpdMLS394GP/4wWak/zWplm93gDkYHDEZ4Ns9w3XH38PiAJamKuFM0dkgQ2r
-	aTA/h8ujVxaiD/GHR5NfVBk6V9V2jxn3Et8+kUKwRDrfJifnalqdqS/oJTBknqKrmycZWbf/O+T
-	tiD+a7p4BcK0ATU698lMKEAuyVPglebFIxtGv8p0/hzMi45DtvfShvVM+P+L8zCFQEP84DO9LnP
-	zZIs8gXPvq8JxCXH90NmlUypcQolbnXj6pYr/Ty4Wq4TE5Gb+DrEhl1fzUYk6K/vScv8Xi9a5Jb
-	NURw6exFDQ==
-X-Received: by 2002:a5d:5f49:0:b0:487:490:8391 with SMTP id ffacd0b85a97d-488717252c4mr9073653f8f.16.1790324908855;
-        Fri, 25 Sep 2026 01:28:28 -0700 (PDT)
+        bh=nQ3tW+/KlCuB42+pkQvUxoLmJ9H4mJ7fHt/ahNQpmBg=;
+        b=M/GszPIWVOb0+RWzayv0yw5Fw8faIoE+QFtoOcU135DMY8ojUnMYVyoSCXYjDc7yBw
+         YhcJ/AuIW9ALjQu8ZhUu4bB7JD9K/wxyYPjPu/nOVx+8xJ7oJ9JFE1ees5/xT38g19MS
+         g+t8j6H1TuB3tTm8J/+f7rM3ryttrs9Cjq9TffZ4lyrHmylOBotQqUv/RGOOnbBMqlKr
+         qVS22DQAf0ngXPhYyWao5AU11SJFY3EKP87+NScgP+XUPFccPZz9lD/rGnQGylx2/L+N
+         XArYUHfleAOLVieH0X/VOgTJ2iWiQNvmXatlkvHgBevOz5tawNvvUVrPD7v8QzoOyBWJ
+         HZuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790324910; x=1790929710;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nQ3tW+/KlCuB42+pkQvUxoLmJ9H4mJ7fHt/ahNQpmBg=;
+        b=0Pf7Yr0UHVCba1iLXLnC5VzWxG3wdHuJpWC0v07wcxfrgRAWEZjK+WeYUPMeQ/yvD6
+         PUF2ZuuN0vIybLPMqZh/nQRhLevJaCwoeXtNfAczH/CbAviOQHKNKhbpg/EyexshF/Sm
+         l3jq0Qp4tcJBBu2FiCXGo5Il2IjKxeC3yJTBTN0n3GnjaU0LaxGCvp7zP+tHxKPdAWe0
+         uhhVWzLHDlBe/6q7D5wDUKiNcFpuHaW5/EvuzvJWoZbm06b8pYUumpBcDZRsDb9/6E6i
+         wn52i+llF4CW/T/BLtNAXDqTTC0SmeIkV6AAl/5oGaGJ7tIMaPesiWC3AP2nBzBpu9XQ
+         /lEQ==
+X-Gm-Message-State: AFuF++lHtig7sF647O5eBYgzZDanvgtGtHaXkaysL6K51lAyE1PhUSQT
+	0oTjokaSX30uy/4KoFPkhvizcOpm0AxbGomLkikPe06XVkK/2UGS6H61WEMj
+X-Gm-Gg: AYBFou1KM6w7huNz4u+19Efqp122emXdwv5ElX75BUfBZO0gNucNTD6iS5pblL0Rbtx
+	qUXzr0BI/NkygnQmmLfMJ3IJzYVlSwXyx6nerVlsUj6Ayg5PjQFah4it9W77O1SGYisYkZeZM3G
+	jD4lNd1+vMh5Pa98mosJEFnjQ4HFMhXDv7UVZykDGCv93OwFNQ90175JBlZfP1oZiL/HX37f4f+
+	5sc4NmZohX/oRtjiTjEa3N0g59ou1Pp5jbbjUgIJ+UrSvmrvzPe21fu3bSh3kiZklkJUKafpezL
+	mya5HBceJRNflNoq++keCRFp5PrmMF+NK7Mz9VdJnL8lxHfw/VSey4Kc2SYA2hJ80AGdewakFom
+	DgZW5mc/f70F/GLSfheFqqdqMS9PIor3twcRWw46vtH2/SsjIOSguRZu76jNmRt6kCXokDZZX8h
+	VZbbRvF2WPLC+y3bNgEZ8W05j4zsHt195KurFzrg1D6cFapzqq1Gv7+DT+Ru6cbjJs2GvoToUWw
+	gyVhUdW4SJwdIUousKlbtTVxtXKrq3DylUNdE+XOLoSH+LARs5oyy8ZD29ooy9rhy9uk87uxQsA
+	FEyD6JY1zqw+rEf8cB+C
+X-Received: by 2002:a05:600c:4f88:b0:49d:1d6a:4cfb with SMTP id 5b1f17b1804b1-49fe66be085mr81937735e9.1.1790324909517;
+        Fri, 25 Sep 2026 01:28:29 -0700 (PDT)
 Received: from ast-epyc5.inf.ethz.ch (ast-epyc5.inf.ethz.ch. [129.132.161.180])
         by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a36189bsm5142896f8f.21.2026.09.25.01.28.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 01:28:28 -0700 (PDT)
+        Fri, 25 Sep 2026 01:28:29 -0700 (PDT)
 From: Hao Sun <sunhao.th@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -68,10 +70,12 @@ Cc: ast@kernel.org,
 	martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	sunhao.th@gmail.com
-Subject: [PATCH bpf-next 1/2] bpf: Fix uninit read for helper mem args on partially spilled slots
-Date: Fri, 25 Sep 2026 10:28:13 +0200
-Message-Id: <20260925082814.1554771-1-sunhao.th@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Test helper read of a narrow stack spill
+Date: Fri, 25 Sep 2026 10:28:14 +0200
+Message-Id: <20260925082814.1554771-2-sunhao.th@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260925082814.1554771-1-sunhao.th@gmail.com>
+References: <20260925082814.1554771-1-sunhao.th@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,56 +84,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_stack_range_initialized() takes the spilled register path when
-bpf_is_spilled_reg(ss) holds, which, however, only looks at the last
-byte of the slot. Hence, a partially spilled scalar (on the lower part)
-bypasses the check and the following loads:
+Spill a 32-bit scalar into an 8-byte stack slot, leaving the other half
+of the slot uninitialized. With CAP_BPF but without CAP_PERFMON the
+verifier rejects the helper's read.
 
-0: (b7) r1 = 1                        ; R1=1
-1: (63) *(u32 *)(r10 -8) = r1         ; R1=1 R10=fp0 fp-8=????1
-2: (18) r1 = 0x0                      ; R1=map_ptr(map=rb,ks=0,vs=0)
-4: (bf) r2 = r10                      ; R2=fp0 R10=fp0
-5: (07) r2 += -8                      ; R2=fp-8
-6: (b7) r3 = 8                        ; R3=8
-7: (b7) r4 = 0                        ; R4=0
-8: (85) call bpf_ringbuf_output#130
-...
-
-When executed, it dumps the uninit four bytes:
-	RINGBUF: 01 00 00 00 ff ff ff ff
-
-This is the same root cause as the non-fetch atomic case fixed in
-commit 5a84b4424db8 ("bpf: Fix uninit read for non-fetch atomics on
-partially spilled slots").
-
-Fix by only taking the spilled register path for the bytes marked
-STACK_SPILL, so the rest of the slot goes through the usual checks.
-
-Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
-Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Hao Sun <sunhao.th@gmail.com>
 ---
- kernel/bpf/verifier.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c495dc9070de..5c8626215ee6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7484,7 +7484,12 @@ static int check_stack_range_initialized(
- 			goto mark;
- 		}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 04989d08be44..4d1374885f6d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -1363,6 +1363,30 @@ __naked void stack_noperfmon_reject_atomic_on_narrow_spill(void)
+ 	::: __clobber_all);
+ }
  
--		if (bpf_is_spilled_reg(ss) &&
-+		/*
-+		 * Only the bytes marked STACK_SPILL hold the spilled register.
-+		 * The rest of a narrowly spilled slot keeps its previous type
-+		 * and must be initialized on its own.
-+		 */
-+		if (*stype == STACK_SPILL &&
- 		    (ss->spilled_ptr.type == SCALAR_VALUE ||
- 		     env->allow_ptr_leaks)) {
- 			if (clobber) {
++SEC("socket")
++__description("stack_noperfmon: reject helper read of narrow spill")
++__success
++__caps_unpriv(CAP_BPF)
++__failure_unpriv __msg_unpriv("invalid read from stack R2 off -8+4 size 8")
++__naked void stack_noperfmon_reject_helper_read_of_narrow_spill(void)
++{
++	asm volatile (
++	"r1 = 1;"
++	"*(u32 *)(r10 - 8) = r1;"
++	"r1 = %[map_ringbuf] ll;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r3 = 8;"
++	"r4 = 0;"
++	"call %[bpf_ringbuf_output];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ringbuf_output),
++	  __imm_addr(map_ringbuf)
++	: __clobber_all);
++}
++
+ SEC("raw_tp")
+ __success
+ __naked void var_off_write_over_scalar_spill(void)
 -- 
 2.34.1
 
