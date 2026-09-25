@@ -1,35 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f37.google.com (mail-oo2-f37.google.com [74.125.231.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A1C4F6463
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFC03D88E0
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790370686; cv=none; b=hrN5d24pcgQq6qBQZYngGXlLcJdo3lpVMQ4wiXkxJA9Qb/js9KdAX2ZbOFDMUgwUW3+7UO9X8wlMEF2vNamrinFmpkGesUKLtiZBKFhIhgjybj/JEdbGogVD/5ZHas4Y+MEsqfCuRikPukgZOcEh4W3uoRY9ggBA4TaUkmjh7Sw=
+	t=1790370781; cv=none; b=VTXRiJzsnxtEkq8nHORDcE4P/8xy+66fEcXBd20nPjzshfO0QyKkWpJz/kvgFzR97gc57mL5Z0y/9E4MgH8+VQ19bsy7jhv+91yaL+PNW4i9xywpvpMONXr2ciFrU2DUmhA5B2UfgPsh0TR3mlbsWno9fTzGMI5X7+hwjCeNGRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790370686; c=relaxed/simple;
-	bh=2lTqS5M9fuQw/jKoqyDP4FdK4nT/O17rhohY5I/qsuM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ojVLI8zBOVx9Aw9VY2VWaci8UhxDtc6c6eVnRIEcouHPyHSonqDppx8KDLcD4cZyYE/4mSsEm5929/J4fa+VqGR+4BBzQKKEJJiv4UMuA/xahf75t2/BWf56f0Sro5HsAkEY5wKxHegbkEntdQY3GSqPU74kDVAKGZW3NwBGh3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UT8gqwH7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790370781; c=relaxed/simple;
+	bh=ZPYPPKo+SXjxtg8ZkHgdLylgXjKk3ywEmI5a8N49kG8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DUwpIUqWWF0GpqnVWRSUIKe7q0S6cPC4fMm4GD1i7piH7Cip14oENmEFeMmHLuaI5/fS6x+M7cV+MSkzXWt0Ga6htKb2FwAKaaL+GniTzNvKR0wT+TKr/rLtXCPQTvttX7qiaq9UJTX7IJ2eeXYVewnKHmUpPxwuwrk2C7fphoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YcJPYI3L; arc=none smtp.client-ip=74.125.231.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UT8gqwH7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E6B71F00893;
-	Fri, 25 Sep 2026 21:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790370684;
-	bh=EIGxXqzu550sANoiBZtFVwLuWa4VfhqMTWbjBncL9x8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UT8gqwH7pDez/aStvCurc0KHIXOQaessVmgwsbw1HLRBLcQ1C+gqPESY52GcFltUb
-	 cIMQ33MXSRfzPKfriqkga8BhgSPA6TpEzkI4GHCqz+GB/+W2h/Lf6BDloQq6w+Zv2h
-	 cvKdHbDpl0GPMPksQVhEwSEnq4cHS3vc5ErQK+3ZjXfkWjYK4dGJ7IsF6RMGr4K42l
-	 DnhMsifdNrDfAYum55DTQtvkbQ0Bg6+jNuHpb27zEoyvNrKt29ncS55VIiR8bfh1IP
-	 +o1lhLGU+HM7Rz4UXpNWNIG8d1kGGxQwCoHTNUhh/OH8XqYog6aKNpaz8jsRfi8Tb7
-	 eaE6AayScq/HA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56894380820D;
-	Fri, 25 Sep 2026 21:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YcJPYI3L"
+Received: by mail-oo2-f37.google.com with SMTP id 46e09a7af769-7f4f0d1779dso987772a34.2
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 14:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790370778; x=1790975578; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/eJvr+C0gXvAPFnLNCYErzICFs9FzkQc+hmViZZg3JE=;
+        b=YcJPYI3LXKRb3xNG1GyOkyHSn7kJPCfkEEvVFIe80FYTDesn0HQiPXVA0f6XrNp2oo
+         0Ch6D3TskGu+rVKArCMi+ryA2fE7sGdGl0mS9pCwqEvvo3xmsp4OSeFPNfUT/sokCzpV
+         pvRJ0FefnMkGV4+KPWOKrL4FMgsoP5SeqUeNy1dP4w2zMnJ5HWeARqIfqK0h48mb2Zi4
+         pOeFF/VL1EHm7ti6o4KfdtcnD9ciZCgIZTj/a3kkqlm5A9Q9ktwIifYsOgiQ84rGvhOp
+         eRjkTQ8pnc6bq1AMFlaFNI22t+Ve3Hb+0pUrLGBq4sM7nYiB+sxGeunmJhTMfYgolsKD
+         Jdbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790370778; x=1790975578;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/eJvr+C0gXvAPFnLNCYErzICFs9FzkQc+hmViZZg3JE=;
+        b=aQQ5+WsRfiFGLu5g+YV9Ddi3DGXiSXdTV1fupy3QMXfZbShECYffPNtMwKIxw2gDZH
+         BEXEnCTmECvqrzEZ7lDBaBlGZ/8AwEgmiB7VIAU+ru7wMOMmlbJtzoBWl/PHzSpyCNKk
+         e7kt9dKGq3A/GpegFZZyZhN06m2ckrNmCt6LS243UkupNLF7zNeJhjpBB99zrjniJ69/
+         q3I7q/QlpWvpEZvry6gJ3F6Vwq51FWhpF4Bx9JMZFaD31w1Z3So7oAgRx1/38P3CkYwD
+         r8/QnTZKllLP8YICDC6QYwQQAJjky12QloTaTDNz3DbVqEFgBME9+jGYJ+2sg3XDU3mW
+         ARFw==
+X-Gm-Message-State: AFuF++nKpPLGyy+Sn3aOyMloomgUr0eSA219FTjD1ZmazOA8fTvdWwiB
+	rdF+SClERFMFZJ720FGXCif6FAQCYKpwyYlNuFjvkpME+BY8s8fq9EIcGESYMg==
+X-Gm-Gg: AYBFou2GOpZT9rhj+a6lJpAraAa6LxGSVKUZhbtBSel0CDptyDSZVIMpPFud6nPBYFM
+	uLkUFqhMlYzwWZZIXoE7iUZHLCcvvNhIJcckFCA0DK/k++ZjbwOi6ry25+aEOQbydiIMg+OWZuJ
+	yzN5HfXP1ADJUHG2ppT9j46zjLB1fO9xJKLhsAwJrc1gduYax1JKB4/uzoxHByZ80idry6wYiru
+	jaHTA86WMcMXPA9LfLkjYnn4YFBlTCy+z9JaiMzO/++ha8q9yhhHZ8xhMT9YmzPCZYQaOb79Aw1
+	DL+AsRWw2WJhGjxMSaHiJn8ZXZU9QOY6Ezlf0xP7EmdhaPnBJa1MSDK8jbh7wUZmVz7uULDptsP
+	qXBdnutfBNN2Y4LZO84tlIFBNCTbHNbNeWRFgmOfh/ILGYAwKqLpt4O1yoVD/7/eA4aHQaEnde+
+	rRVGmfasTdbSJY80JC079egXVzn0svhLHyijQvU7Zc7EY0WvJcKw/djUe3qXXLeA==
+X-Received: by 2002:a05:6830:3912:b0:7fa:ac4f:7a2 with SMTP id 46e09a7af769-8178317ca28mr8081294a34.30.1790370778347;
+        Fri, 25 Sep 2026 14:12:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:4c::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-818e33f6714sm3370162a34.0.2026.09.25.14.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2026 14:12:58 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 00/12] Unify subprog argument checks
+Date: Fri, 25 Sep 2026 14:12:44 -0700
+Message-ID: <20260925211256.1834061-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,55 +75,55 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/5] File descriptor interface for BPF streams
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179037061189.3153796.7083515358565524632.git-patchwork-notify@kernel.org>
-Date: Fri, 25 Sep 2026 21:10:11 +0000
-References: <20260925045536.1480933-1-memxor@gmail.com>
-In-Reply-To: <20260925045536.1480933-1-memxor@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, tj@kernel.org,
- kkd@meta.com, kernel-team@meta.com
 
-Hello:
+Hi,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Helper and kfunc calls now validate arguments through check_func_args(),
+while subprog calls still duplicate much of the same validation in
+btf_check_func_arg_match(). This makes common argument rules and
+diagnostics easy to change for one call kind without updating the other.
 
-On Fri, 25 Sep 2026 06:55:27 +0200 you wrote:
-> BPF program stdout and stderr streams can currently be consumed only
-> through BPF_PROG_STREAM_READ_BY_FD. This requires repeated bpf() calls and
-> provides no way to block for output or integrate with poll-based event
-> loops.
-> 
-> Add BPF_PROG_STREAM_OPEN to return a read-only, close-on-exec descriptor
-> for a program stream. Reads block by default, with an option for
-> non-blocking mode. poll and epoll report readable data and report hangup
-> when the program is freed, while allowing buffered data to be drained
-> before EOF. Stream descriptors retain the stream storage without retaining
-> the program itself. Waiters are notified through irq_work only when a
-> publication turns an empty stream readable, as bpf_ringbuf does, so a
-> program whose stream nobody drains pays for a single notification.
-> 
-> [...]
+This series builds a temporary helper-style argument prototype from the
+subprog's cached BTF metadata, then moves each supported argument class to
+the common checker. The last patch removes the duplicate loop.
 
-Here is the summary with links:
-  - [bpf-next,v3,1/5] bpf: Skip zero-length stream writes
-    https://git.kernel.org/bpf/bpf-next/c/f17bedcd2951
-  - [bpf-next,v3,2/5] bpf: Add file descriptor interface for program streams
-    https://git.kernel.org/bpf/bpf-next/c/e831ff570908
-  - [bpf-next,v3,3/5] libbpf: Add bpf_prog_stream_open()
-    https://git.kernel.org/bpf/bpf-next/c/9054903ab51b
-  - [bpf-next,v3,4/5] bpftool: Add option to wait for program stream output
-    https://git.kernel.org/bpf/bpf-next/c/0abecacb4bfd
-  - [bpf-next,v3,5/5] selftests/bpf: Test program stream file descriptors
-    https://git.kernel.org/bpf/bpf-next/c/4e1d734651e5
+The series is organized as follows:
 
-You are awesome, thank you!
+- Patch 1 fixes kfunc nullability diagnostics after wide arguments.
+- Patches 2-3 identify subprog calls in common metadata and generate the
+  temporary argument prototype.
+- Patches 4-9 move scalar, untrusted, context, arena, dynptr, and BTF-ID
+  arguments to the common path.
+- Patches 10-11 make packet-change tracking common and move memory
+  arguments to the common path.
+- Patch 12 removes the legacy loop and checks all subprog arguments through
+  check_func_args().
+
+This follows the helper/kfunc argument-checking consolidation:
+https://lore.kernel.org/bpf/20260911220415.1396439-1-ameryhung@gmail.com/
+
+Amery Hung (12):
+  bpf: Fix kfunc nullability diagnostics after wide arguments
+  bpf: Identify subprog calls in argument metadata
+  bpf: Build argument prototypes for subprog calls
+  bpf: Check subprog scalar arguments in the common path
+  bpf: Check global subprog untrusted arguments in the common path
+  bpf: Check subprog context arguments in the common path
+  bpf: Check subprog arena arguments in the common path
+  bpf: Check subprog dynptr arguments in the common path
+  bpf: Check global subprog BTF-ID arguments in the common path
+  bpf: Track packet changes in call metadata
+  bpf: Check global subprog memory arguments in the common path
+  bpf: Check all subprog arguments in the common path
+
+ include/linux/bpf_verifier.h                  |   4 +-
+ kernel/bpf/verifier.c                         | 285 ++++++++----------
+ .../selftests/bpf/progs/aggregate_arg_func.c  |   2 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |  11 +-
+ .../selftests/bpf/progs/test_global_func5.c   |   2 +-
+ .../bpf/progs/verifier_global_ptr_args.c      |   7 +-
+ .../bpf/progs/verifier_global_subprogs.c      |   2 +-
+ 7 files changed, 136 insertions(+), 177 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+2.52.0
