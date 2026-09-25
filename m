@@ -1,195 +1,283 @@
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC56445ACF
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 06:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7372F418346
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 06:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790318817; cv=none; b=iHFu/aQC2mOlpekmlybhvxGVMGCakbmPouM7k9jFFdHdVRgoAGumnE9AFxORQVkdBmXawza50ahAdNpdv09OXnagq9DcR0TIkgBj5DloiksuNCW5fPcvNxZ2o0zmVFcDtOigHKF63ail0Uj9ivFxBBs+hqZ+J6UPvN7QYr4D2qM=
+	t=1790319049; cv=none; b=C9XLT+2Xj07s3vF+5gvp+OzQQWYJavsc3d8uNznl2bcqhxMGgrAOAaWtyeK7PZ++IUakFFWYQtgwGKJXEBHomRAun80ggnzfP84yWmKeo15B8lwcVbVOdDq0svWXhiXYHkMo4DiLf12lBuO/R5ZrxNaYCSKexRZtyEOXgAxFVDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790318817; c=relaxed/simple;
-	bh=ZizJXe4DD9Y+GIELdLKpd3s6POPud7JDUeLz4zjMxx4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I/DJi06D2j0H8E3YoVXjmejcZMcawf/FRTg04qiPJOZmC6D0n3YNsm9FO/xi0570RKdM11OYftAFP5DkyLu9sQ+LCtHAdYLBNle05JdBlee7VMRF4IHV/qFbEFD4Ssm9gtIk1B8q2cML6GuCW06K0cp2Ka9vFfuhhPw5IU7jZFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eV6wtjmE; arc=none smtp.client-ip=74.125.225.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790319049; c=relaxed/simple;
+	bh=FeczuV+9ClcSnOncLxw3rRRba2sQCUM4ISB+vlYw/Kk=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=cMD9GacIODjVDIfc/bf82ssrEsYtIMVrYVGpjnED/NuGS+zz4+ls/h/Gy1oNxzqExVcOnmqFHUAD0MU10PU2EVsbJ19egmf5ZHf2Hb42AaSxFqICFyAbFgtPDUUdORnSbwCLJh1proPBtfL5EPlo1KwpwTo11ajdjOLFYCufhVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=k/YALPvV; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eV6wtjmE"
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49ccea58fe3so1821335e9.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790318814; x=1790923614; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lq5AAJhxDbdupDNmvxVwXvzWlUMDJbyAQMmHZ5uPj10=;
-        b=eV6wtjmE4XeEqAHJFygZxn0PlOay9IixYS0wS+lHia6KKNerelCT+t0EOM3mpxbbP9
-         8ZRY055pMUML1l6heQVJVl7IKfTsFYwdZrJmQ/JyWwK8OFopcNNhtmmqfLVirBy/4UTU
-         deMUnrKJigh3gumFroyN1u7xoHntX7IthXcQVltLN58Iy6mT2ftW0CDDvRG1r1ETNO1E
-         yNQQoxhP/0pOob7HtqIHgKaGki6ISvDpP2+YC8+f/5lbki3wdiSiLVyfKDWF8dwsYN7K
-         HDXGtvW7lTyFgCDvQ5+Z3FoKotWFPABxOLQvqN6k7yOMTL5lhxZ9mEIw2VNAU6XWiwBB
-         47VA==
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="k/YALPvV"
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68P5g7Vk2889391
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:50:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	pps82601-s2048-2026-q3; bh=SoLl4/2lVJBvPujHbLJtwbrkfRJZIRRFViiE1
+	2Jz6H4=; b=k/YALPvVgR/TKxq144tgRcN8g9UNo2A6PNmF2T1jvz/0tcK7k2QC7
+	A8z7Xyabqyb0E1yRLJjpo1RW2SB3DP5EX197AT5h57HgXAUTqKvgZh5Vtcizu67z
+	A7tmC2qlcU0bZTbxFnajaubK4Lu4C8M2s56PHS/32CyaxP6h5isJRhc5rWpEphr+
+	8ydQ6DkBfwTdQhjQgBN4p32LWbQmlEpRH9NR/GcBs1jUsEQgExzVkiSXYy3BDHNT
+	6/CgpForpfyOkPC6znAWbki5TBlADlGjfL9PrRUvw+gQJxsn2CgQaHVsGRMdLBj5
+	JzgI3qoCT4wf9CEAL5sr27As4AqcAqIeQ==
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4gwchftqhc-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:50:45 -0700 (PDT)
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-342138eeff2so219843eec.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:50:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790318814; x=1790923614;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1790319045; x=1790923845;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:newsgroups:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lq5AAJhxDbdupDNmvxVwXvzWlUMDJbyAQMmHZ5uPj10=;
-        b=NSiyeVavttpYCOsQbEHA4ThuV644SSnZc/b7n/pXNogwP2vAWuEmKsf3SiUCQsvD/B
-         r3W9soIwGixuIoUQkJYQyEHl2dCoz4WtSpXDg2Xm/L2VUeYoCN4c6W4yrbq2hq271CFh
-         JDsiLPHVmat2Rdzi58PCtP0rTE2LX8eCV2WUvLBfYRt2/Ak7wjp0Jog8RU5TeKj/m/pZ
-         +NwDAMzgVFuApmDTIfWeT1JihNsmEXfGHqvQxH5uaV502TE/y68DRArD2txHZh+UOvTK
-         YFS20jYbh30GXLLeJwGnV16fJeBlYHjMmmAlb4elAaK6StSJJFXEUoCXOtUfhs9IPKlk
-         rVdw==
-X-Gm-Message-State: AFuF++kpzb2KV0GqN5Yl+n4BzHWl17WSXPaw7JAGYsltylXTZ6Q8dK9Z
-	4X4Mresa5u+kLpLdQnilMgVdhXOoqte8/14+iZgf9WctwNstPb6gTlISFKNpyIFizfM=
-X-Gm-Gg: AYBFou3kjvUKUa6nPjDUjxJ7qwQIIZPpp0bpcUGHByNf78YoBxn4Md+NDqrNmCeOpCs
-	y86DOsStpTSTgohvlGFOJBSNbAV32DSgvS39UAt7noF/WLRVtfcciOC1q6wWnlAJd48GrKQSPqR
-	d+AaXD6y2mhQGmzE1AWtZhKM6d8ru5ypK06LfcF6XtjLxmDZXNYdNphfcmUtJlKKIg4KSw02ec1
-	N1q47fM2ZvR4ACVHH0h5LNpxOk0fLWbVrp2mUByZQ6kH5FFd3DYPM/HaEZq23gEech4BOHAATGD
-	5h58pQXpvTh8aRodVUAQJXHkmyAPi4XTIQ7hIInSyGc/E5kt0KAvcfLci2ZqF8IG9fBcofnd7LN
-	9Ki/BsmtMKriJKoGsl3P1PXNsfbHRe+J62dv/AOFAtk5zVF4gF3i/O2LcF+MjFKvFV2XSdi/Zsy
-	1eTzlu6hBeFewX+LcQ9zyF5JNnoYw0EaQZI2coNzZggVoJUEHXqNCCQ9D2/jIW1AHW9kHquL5WX
-	09HKTd8ZpMJCSCT2G5cGF9UWMTFwaFMcxA9sEHTZ7Mh2/0ukHAHXo38irlOOX7sqXLeIRax5wZn
-	T9AicTacpTC22z7JAXtDjNY0SqDC9KVOV+PGsw==
-X-Received: by 2002:a05:600c:5394:b0:49c:fc6c:be00 with SMTP id 5b1f17b1804b1-49ff06ed6e7mr20100405e9.23.1790318813956;
-        Thu, 24 Sep 2026 23:46:53 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff044422asm34448725e9.2.2026.09.24.23.46.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 23:46:53 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Yuan Chen <chenyuan@kylinos.cn>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf] bpf: Hold map BTF for the memory allocator destructor record
-Date: Fri, 25 Sep 2026 08:46:51 +0200
-Message-ID: <20260925064652.2261885-1-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        bh=SoLl4/2lVJBvPujHbLJtwbrkfRJZIRRFViiE12Jz6H4=;
+        b=rcD/AIKX1SiJrOfv7EAXbbfogMs2ujrUXqMUbwJ8TndyVYLUvR8boXjG81Xs/v4JMs
+         lfvN2tiO0uMawoYlll4881V5uTzr1DgOGdavJ5hsaKeCkmCRdrCNJbDA2iVBb4HRV1Le
+         BjRMWoEnNABJAISANvVhf8LeUKldCe4BRo+OpDLI7KqEDOXf3RrIpAOlVk+++KFt6W3A
+         QNbF0DHfe40qJoDBt3ERpcsDAoP4nYrckyENkxQu2paKO0CZtE+HQWIDw9BvQMYpIRXX
+         IwCmwxXCNAW/MpYMcE1PB5kGzdsfbLgK1STJ1dHqGmGoBTHqhFZu1daJDNDbDRtHzkNx
+         kJDQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzdAhYGffCkpqoPBxz9EDyCXR+kBsQTy5VQouL9zp2KcQMWsNVCX7TnYG9naF1B3KhVXN8=@vger.kernel.org
+X-Gm-Message-State: AFuF++lHWqyYznNDRCj5Yi6GvWCyph+RhisLnljsyOZ5rR4LW+urx6aA
+	AYTM7NiQY/P3qZnPJwQFuhrs3B8n80jKF3MzTOHgImIkGW4vKzKJruhZGUaEzaMuJQ7mgM1hXYK
+	nW0sUc8el0QzXb8SWkCZkybiJFMzFju3LRnAjydU11CGR5KxPBfvX
+X-Gm-Gg: AYBFou1J+Ycg1ykeRTWClqJbZszra2zGHX8WY6uZqe/GQhzs3DPEYNPKCv1dVdLGb4e
+	dfZwFyvYbEscN3e7AGLqdLwhWUu4b4/vPkbuwYj8PZDrxdLyIrSuHOosvzEF9YLfKS8QczRQAmq
+	Nqa+GAkUxbLS+7O9c3XqLjiPecmpRr1TdWowecuK3bV+TODZvFs0t9+9Nxs5B8bdcY8OyS5o7O2
+	3xSNo55C/q868WTONSNjpBrA/s7Teb1yMrpbLqSkwWekiXvztiHSwltMVAz0CHpngXHgvoW4YgZ
+	6IHZ0wACs57P8qqxk4a4yr627jFoWl2x86B+nZ2kfFCr7VlLK0H83baEzhfE8PvjI7MwrU/XTzF
+	W5DsYwuze22ImJ8YNFQd9MnHM6pu3D9vLC33NGxcCFtj1PBl4
+X-Received: by 2002:a05:693c:6205:b0:338:5bf5:d005 with SMTP id 5a478bee46e88-3400687e8ddmr4118593eec.28.1790319044631;
+        Thu, 24 Sep 2026 23:50:44 -0700 (PDT)
+X-Received: by 2002:a05:693c:6205:b0:338:5bf5:d005 with SMTP id 5a478bee46e88-3400687e8ddmr4118563eec.28.1790319043816;
+        Thu, 24 Sep 2026 23:50:43 -0700 (PDT)
+Received: from [192.168.50.189] (c-67-169-75-212.hsd1.ca.comcast.net. [67.169.75.212])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34141d2fe4bsm4388392eec.4.2026.09.24.23.50.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 23:50:43 -0700 (PDT)
+From: Vineet Gupta <gvineet@meta.com>
+X-Google-Original-From: Vineet Gupta <vineet.gupta@linux.dev>
+Message-ID: <19cc4e99-2351-4d8c-8edd-918eaf857d5f@linux.dev>
+Date: Thu, 24 Sep 2026 23:50:39 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4457; i=memxor@gmail.com; h=from:subject; bh=ZizJXe4DD9Y+GIELdLKpd3s6POPud7JDUeLz4zjMxx4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWubxIWmycz3tvp9W1DiYp8lWZLm8K5/xrtfb6Nk+l1eP w2skPfsKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQ2X2H4zbr8Am8M++mD38zO ntzMfv7/v7CTbj6iJy5+Y9+rmTrX6RYjw8e+DRN+1qu+UNgpcSdAwfrY3bNlm2dLBe9iuhsRuUT /EicA
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix build of callx tests with GCC
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+        memxor@gmail.com
+Newsgroups: gmane.linux.kernel.bpf
+References: <20260924182104.261823-1-alexei.starovoitov@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20260924182104.261823-1-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: LshvPE_GqTs4HEtOCVlO3JugL3-5IdBl
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDAyNiBTYWx0ZWRfX1zbExlEbOGhy
+ ipj+ylmOk7d2G94O8lv19Pr2D6F9jkIVGaG+dG/uanhjO0FswIA50PKONNuFfmZML9LJ+mW7wi9
+ T7/ro/1KShraynITDnlb/2xWuke1fwY=
+X-Authority-Analysis: v=2.4 cv=Ccedd7rl c=1 sm=1 tr=0 ts=6ab619c5 cx=c_pps
+ a=wEP8DlPgTf/vqF+yE6f9lg==:117 a=SXzd9FIucRRoOwGiyxtD8g==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22 a=VwQbUJbxAAAA:8
+ a=L9PcOtYBBTW8Szr461wA:9 a=QEXdDO2ut3YA:10 a=bBxd6f-gb0O0v-kibOvt:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDAyNiBTYWx0ZWRfX2fy/W5n37VDh
+ XuO1zZI6gaHFgAuhOWttpVEmOxVNidDGnackQZ6HuWlecy1SQdNOv7Erdk5N6PCIVVE2Aszn3gz
+ Qwp8KBbb5E/l+ntfD04MDFQFOiMGXpbQhkRcbbgMEkhZXmUo+oCziMclvz7ZOu34HHRfGcEIw3p
+ KFyiIXbHtiea5Cb+iSEOk4kHKAIApFoLYGo95UHhVGgzh9ZN8dJSofXBZ8sl3thbQpcAh3cfVhI
+ iRzQOOGZfKH1Yw08xaMTFaewjDBGxjoppJtZ+9ZCvCVTkbQrVXVO4bGtx+pEW1T/LJ5rPPDLJ05
+ Vet9igfA9jjkBrbH02QCKBi5EuS8rnfEP9cbrUlyaoIAGwzggeUTPX/rf5IR+Abn9r5skVlOS0Z
+ ovvvGKOvoxgL3RO43k0gmWMlBtQNNgEQIVsJ47JFptbLIVlOaW8rRB+OtN7gF0/vP16SU8rAorl
+ Je1blSUfWYYS0woRS2w==
+X-Proofpoint-GUID: LshvPE_GqTs4HEtOCVlO3JugL3-5IdBl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-25_02,2026-09-21_02,2025-10-01_01
 
-bpf_ma_set_dtor() duplicates map->record so that the bpf_mem_alloc
-destructor can release the special fields of hash and rhash map elements
-once the allocator frees them for good. btf_record_dup() only acquires
-references on kernel and module BTF. Fields whose types live in the map
-BTF keep pointing into it: a kptr to a local type refers to map->btf,
-and a list_head or rb_root field carries a value_rec owned by the struct
-meta table of map->btf.
+On 9/24/26 11:21 AM, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> GCC doesn't support indirect calls in BPF:
+> 
+>    progs/verifier_callx.c: In function 'apply_op':
+>    progs/verifier_callx.c:977:1: error: indirect call in function, which are not supported by eBPF
+>    progs/verifier_callx_rodata.c: In function 'use_shape':
+>    progs/verifier_callx_rodata.c:746:1: error: indirect call in function, which are not supported by eBPF
 
-That borrowed state can outlive the map. When RCU callbacks are still in
-flight, bpf_mem_alloc_destroy() copies the allocator and defers the final
-drain, together with the destructor context, to a workqueue.
-bpf_map_free() then frees map->record and drops the map's BTF reference
-as soon as map_free() returns. Once the program that loaded the BTF is
-gone as well, the BTF is freed while the worker still uses the
-duplicate. The worker dereferences it through btf_is_kernel() and
-btf_find_struct_meta() in bpf_obj_free_fields() when destroying elements
-that were freed under RCU, and through btf_is_kernel() in
-btf_record_free() when releasing the context itself:
+GCC supports them under -mxbpf but unfortunately even that is broken.
 
-  BUG: KASAN: slab-use-after-free in btf_is_kernel+0x19/0x30
-  Read of size 1 at addr ffff88811505dce8 by task kworker/u16:2/50
-  Workqueue: events_unbound free_mem_alloc_deferred
-  Call Trace:
-   btf_is_kernel+0x19/0x30
-   btf_record_free+0xc7/0xf0
-   htab_dtor_ctx_free+0x1a/0x30
-   free_mem_alloc_no_barrier+0x39/0x230
-   free_mem_alloc_deferred+0x2a/0x40
-   process_scheduled_works+0x5ce/0x9d0
-   worker_thread+0x42a/0x5e0
-   kthread+0x1f5/0x230
-   ret_from_fork+0x1dd/0x390
-   ret_from_fork_asm+0x1a/0x30
 
-  Allocated by task 358:
-   __kmalloc_cache_noprof+0x287/0x510
-   btf_new_fd+0xf7/0x3d0
-   __sys_bpf+0x487/0x840
+> Build verifier_callx, verifier_callx_rodata and callx_rodata progs
+> with clang only. Skip callx_rodata_lskel test when progs are built
+> with GCC.
 
-  Freed by task 0:
-   kfree+0x186/0x560
-   rcu_core+0x6f6/0xd40
+Can we do this slightly differently.
+Following on same theme have been queued up in bpf-next
 
-Freeing a map that still holds more elements than the allocator's high
-watermark is enough to get there, because the bulk free during teardown
-queues the RCU callback that makes bpf_mem_alloc_destroy() defer.
-Non-preallocated hash maps and resizable hash maps both register the
-destructor and are affected alike.
+2026-08-24 48b69cc8825d selftests/bpf: Enable some of the blocked cpuv4 
+instruction tests for bpf-gcc
+2026-08-24 8928f5ffdb65 selftests/bpf: Report placeholder tests as SKIP, 
+not OK
+2026-08-24 b0eeb9e0f548 selftests/bpf: Name the remaining placeholder 
+programs dummy_test
 
-Keep one reference on the map BTF in the destructor context. Every
-non-kernel pointer in the duplicated record is either map->btf or memory
-owned by it, so a single reference covers kptrs, list heads, and rb
-roots, and mirrors what bpf_map_meta_alloc() does for the duplicated
-record of an inner map. Release it only after the duplicated record has
-been freed: the worker is preemptible and not in an RCU read-side
-critical section, so dropping the last reference first would let the
-BTF be freed while btf_record_free() still reads its fields.
+> 
+> Fixes: e9b22d50796d ("selftests/bpf: Add tests for callx")
+> Fixes: b018e998e645 ("selftests/bpf: Add tests for callx through pointers in read-only data")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+>   .../bpf/prog_tests/callx_rodata_lskel.c       |  6 ++++
+>   .../selftests/bpf/progs/callx_rodata.c        | 28 +++++++++++++++++--
+>   .../selftests/bpf/progs/verifier_callx.c      |  3 +-
+>   .../bpf/progs/verifier_callx_rodata.c         |  3 +-
+>   4 files changed, 36 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+> index 96f6179f0492..6a43b880d730 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+> @@ -35,6 +35,12 @@ void test_callx_rodata_lskel(void)
+>   	if (!ASSERT_OK_PTR(skel, "open"))
+>   		return;
+>   
+> +	/* gcc doesn't support indirect calls */
+> +	if (skel->rodata->skip) {
+> +		test__skip();
+> +		goto out;
+> +	}
+> +
 
-Fixes: 1df97a7453ee ("bpf: Register dtor for freeing special fields")
-Reported-by: Yuan Chen <chenyuan@kylinos.cn>
-Link: https://lore.kernel.org/bpf/20260901062845.1379760-3-chenyuan_fl@163.com
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- kernel/bpf/hashtab.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+We now have common skipping machinery using __skip, see further below.
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index f9464e566f10..548eb1cc7c45 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -128,6 +128,7 @@ struct htab_elem {
- 
- struct htab_btf_record {
- 	struct btf_record *record;
-+	struct btf *btf;
- 	u32 key_size;
- };
- 
-@@ -497,8 +498,13 @@ static void htab_dtor_ctx_free(void *ctx)
- {
- 	struct htab_btf_record *hrec = ctx;
- 
-+	/*
-+	 * The duplicated record still points into the map BTF, so free it
-+	 * before dropping the reference that keeps that BTF alive.
-+	 */
- 	btf_record_free(hrec->record);
--	kfree(ctx);
-+	btf_put(hrec->btf);
-+	kfree(hrec);
- }
- 
- static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *ma,
-@@ -521,6 +527,15 @@ static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *ma,
- 		kfree(hrec);
- 		return err;
- 	}
-+	/*
-+	 * btf_record_dup() only acquires kernel and module BTF. Fields whose
-+	 * types live in the map BTF keep pointing into it: kptrs to local
-+	 * types refer to map->btf, and graph roots carry a value record owned
-+	 * by its struct meta table. The context can outlive the map when the
-+	 * allocator defers its teardown, so hold a reference of our own.
-+	 */
-+	hrec->btf = map->btf;
-+	btf_get(hrec->btf);
- 	bpf_mem_alloc_set_dtor(ma, dtor, htab_dtor_ctx_free, hrec);
- 	return 0;
- }
--- 
-2.53.0
+>   	skel->rodata->bias = 7;
+>   
+>   	if (!ASSERT_OK(callx_rodata_lskel__load(skel), "load"))
+> diff --git a/tools/testing/selftests/bpf/progs/callx_rodata.c b/tools/testing/selftests/bpf/progs/callx_rodata.c
+> index 07ae2d1b6b8e..e3f8335f80f8 100644
+> --- a/tools/testing/selftests/bpf/progs/callx_rodata.c
+> +++ b/tools/testing/selftests/bpf/progs/callx_rodata.c
+> @@ -1,16 +1,21 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   /* callx through pointers to functions in .rodata, loaded by light skeleton */
+>   
+> +#include <stdbool.h>
+>   #include <linux/bpf.h>
+>   #include <bpf/bpf_helpers.h>
+>   
+> -typedef int (*op_fn)(int);
+> -
+>   /* set by user space before the programs are loaded, it's in .rodata too */
+>   const volatile int bias = 1;
+>   
+>   int op_idx;
+>   
+> +#ifdef __clang__
 
+It unfortunatete that this doesn't have a compiler feature test macro 
+__BPF_FEATURE_* in clang or gcc. It seems we have existing 
+CAN_USE_BPF_ST and CAN_USE_GOTOL, maybe we can define CAN_USE_CALLX in 
+bpf_misc.h and use that as a gate, keeps one place for all such 
+__clang/gcc workaround definitions instead of them scattered all over. I 
+have a few pending patches which clean things up.
+
+> +
+> +const volatile bool skip = false;
+> +
+> +typedef int (*op_fn)(int);
+> +
+>   static __noinline int add_bias(int x)
+>   {
+>   	return x + bias;
+> @@ -41,6 +46,25 @@ int both_ops(void *ctx)
+>   	return ops[1](ops[0](4));
+>   }
+>   
+> +#else
+> +
+> +/* gcc doesn't support indirect calls */
+> +const volatile bool skip = true;
+> +
+> +SEC("socket")
+> +int select_op(void *ctx)
+> +{
+> +	return 0;
+> +}
+> +
+> +SEC("socket")
+> +int both_ops(void *ctx)
+> +{
+> +	return 0;
+> +}
+> +
+> +#endif
+> +
+
+This can be rewritten using exising skipping machinery as shown in 
+bpf-next patch: 8928f5ffdb65 ("selftests/bpf: Report placeholder tests 
+as SKIP, not OK")
+
+#ifdef CAN_USE_CALLX
+
+llvm_code
+
+#else
+__skip("gcc doesnt support callx")
+int dummy_test(void *ctx)
+{
+     return 0;
+}
+#endif
+
+This avoids the explicit skipping logic.
+
+>   /* no callx here */
+>   SEC("socket")
+>   int read_bias(void *ctx)
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
+> index ea3d3f97da31..bc31d0221f6a 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_callx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
+> @@ -6,7 +6,8 @@
+>   #include "bpf_misc.h"
+>   #include "../../../include/linux/filter.h"
+>   
+> -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+> +/* gcc doesn't support indirect calls */
+> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && defined(__clang__)
+>   
+>   #define CALLX_INSN(DST, SRC, OFF, IMM) \
+>   	BPF_RAW_INSN(BPF_JMP | BPF_CALL | BPF_X, DST, SRC, OFF, IMM)
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+> index 65d34769c8bf..db3169a1ddf6 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+> @@ -6,7 +6,8 @@
+>   #include "bpf_misc.h"
+>   #include "../../../include/linux/filter.h"
+>   
+> -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+> +/* gcc doesn't support indirect calls */
+> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && defined(__clang__)
+
+Instead of __clang scattered all over, CAN_USE_CALLX in bpf_misc.h so 
+its one stop shop to clean things up in future.
+
+BTW this is
+
+Thx,
+-Vineet
