@@ -1,166 +1,130 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5414F55D2
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE23048097B;
+	Fri, 25 Sep 2026 21:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790372198; cv=none; b=AzaWBvgACjnE3vrE+lNNFxi+GwgtsnLfTxpY1IqUk4bok+QMS6ta7qKlWl4A1Ql50X1Eap+ZlrFrNp1i5iYkPqpPmOTBNkn1sb1iuPAuYehwAEAHk0hSRywa8y83dVEtgEYa+wes0RO+mDJWNzQUEXGPKIXGkAfQoX0/K52YWh8=
+	t=1790372564; cv=none; b=Cor14mGP6UxLHQMAta5HCqbkLxIvKw6z95MCKPjkp8aP0crQzwT7xm/iVhTH7ubRrStCKghfv7azTODnSCLQQIkJHOAZco1U7FEtA5Qa1VwxRaMLt+1WtYXMir92mlZRiLMNZ+TPOadkRwDWp14+6BlOLido/UGKpNJoJDX4Qig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790372198; c=relaxed/simple;
-	bh=SCHOqjMPnEQpw5YUJPao6DKOVM3KDmOkhVE0UgSRiyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gM2+SQYXq9bCYyOdNd0EUsx5tmFNdTTWG0RRhup6nd61WDgygbHDpRvkCD6IE8e/4hEeQ40x87GCflOI5jqCvCi51HPw04QMGJV6cNxaIBPiZHRo7tZGbToUA0JK1fQPInEe66uV5hPJs/TQtEuLwN1oH7knJjJnxlKhAbC6/Vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id B92212D343D56B; Fri, 25 Sep 2026 14:36:24 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: [PATCH dwarves 2/2] tests: Add test for parameters described by entry values
-Date: Fri, 25 Sep 2026 14:36:24 -0700
-Message-ID: <20260925213624.2188373-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260925213619.2187751-1-yonghong.song@linux.dev>
-References: <20260925213619.2187751-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1790372564; c=relaxed/simple;
+	bh=6cBTDfXrN3G+VKLi/fzl4YGdODAM1ltZ4omSGjVotvU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RbrWGNokcpRXk7hZgm542cURvXJWJNa/66OWSidwrBJTfjRtsk0FSBSWrvEkD80LJno1uYn7PECOaVFEcz3T0f9EKm5z+tOssIN3MFdCls25beHbWYzzZHARJQTKz7rukQrvJObyhdWkw2iZ3ctfAblS7zOYovIR2HG3Wjuv0jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzfOVELl; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzfOVELl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367201F000FF;
+	Fri, 25 Sep 2026 21:42:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790372562;
+	bh=KoPDG8/do7TX+GsahT3CIdo/LvRtlXhe38jTPslnFZA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jzfOVELlSzFUt5STifeU/d5/o125+hPI7uNyzbaDwrqP2w6184o1iJh52mfAM0TT0
+	 ZNMz/bQhE6bhOccdr/xJFFH3ib8R8YkUIDSb0HqDR/0i6zvxQWFVKJV5AKYefmeQdX
+	 gY54+YqW8IQGjx9vfkFH3LuWIaLR+416bb28HrMLR0HaBA3ta2Uv4i1o7BiOxqxRmU
+	 O9KnOEGkgKl5mlGF9DKCY/fUgmp9MgrEp7N2p7Nd5e9U8W3gK4pNalVd1naR2ktfgi
+	 hHAD2FUHhjrCy0HOQ8mErGHWmyiQ9p7Hq6FOIgOPzrl5FoR5bTzOykpQvYFEOAgc1s
+	 HlH1KfGw69fCQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 3/9] bpf: fetch the vmlinux BTF where kernel
+ types enter a program
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jay Wang" <wanjay@amazon.com>
+Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
+In-Reply-To: <20260925211314.5118-4-wanjay@amazon.com>
+References: <20260925211314.5118-1-wanjay@amazon.com>
+ <20260925211314.5118-4-wanjay@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 25 Sep 2026 21:42:41 +0000
+Message-Id: <20260925214242.367201F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-Cover the case where clang leaves the entry PC out of a parameter's
-location list because the parameter is moved into a callee-saved register
-during the prologue.  f_lazy() reproduces the shape found in the kernel:
-@lazy arrives in RSI, the first location list entry starts past the
-function entry and names the callee-saved register, and only the
-DW_OP_entry_value entries name RSI.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: NULL pointer dereference in process_arg_ptr_to_btf_id due to =
+missing ARG_PTR_TO_BTF_ID_SOCK_COMMON
+--
 
-Without the entry value being preferred, @lazy looks like it is in an
-unexpected register and f_lazy() is dropped from BTF altogether.
+commit 84d2361be82e8cb989ae15ca8d3347130aa3ce1b
+Author: Jay Wang <wanjay@amazon.com>
 
-The test results on x86_64:
-  $ VERBOSE=3D1 ./clang_parm_entry_value.sh
-  Validation of BTF encoding of parameters described by entry values.
-     BTF: bool f_lazy(struct task * p, bool lazy, const struct aux  * aux=
-);
-  Test ./clang_parm_entry_value.sh passed
+bpf: fetch the vmlinux BTF where kernel types enter a program
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tests/clang_parm_entry_value.sh | 84 +++++++++++++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100755 tests/clang_parm_entry_value.sh
+This commit defers fetching the vmlinux BTF in the BPF verifier until
+kernel types are actually needed by a program. This optimization avoids
+loading and parsing BTF data for programs that do not use kernel types,
+such as simple socket filters.
 
-diff --git a/tests/clang_parm_entry_value.sh b/tests/clang_parm_entry_val=
-ue.sh
-new file mode 100755
-index 0000000..9fe81a7
---- /dev/null
-+++ b/tests/clang_parm_entry_value.sh
-@@ -0,0 +1,84 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source "$(dirname "$0")/test_lib.sh"
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of parameters described by entry v=
-alues."
-+
-+entry_value=3D"${outdir}/entry_value"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+arch=3D$(uname -m)
-+if [[ "$arch" !=3D "x86_64" ]]; then
-+	info_log "skip: test is x86_64 only, running on $arch"
-+	test_skip
-+fi
-+
-+# clang can leave the entry PC out of a parameter's location list when t=
-he
-+# parameter is moved into a callee-saved register during the prologue.  =
-The
-+# first location list entry then names that callee-saved register rather=
- than
-+# the ABI argument register, and only the DW_OP_entry_value entries tell=
- which
-+# argument register the parameter really arrived in.  pahole has to use =
-the
-+# entry value, otherwise the parameter looks like it is in an unexpected
-+# register and the whole function is dropped from BTF.
-+cat > ${entry_value}.c << EOF
-+typedef _Bool bool;
-+struct sched;
-+struct aux;
-+struct task { long a; bool lazy; };
-+
-+extern struct sched *get_sched(const struct aux *aux);
-+extern void rcu_lock(void);
-+extern void rcu_unlock(void);
-+extern int on_sched(struct sched *s, struct task *p);
-+
-+__attribute__((noinline)) bool f_lazy(struct task *p, bool lazy, const s=
-truct aux *aux)
-+{
-+	struct sched *sch;
-+
-+	rcu_lock();
-+	sch =3D get_sched(aux);
-+	if (__builtin_expect(!(sch && on_sched(sch, p)), 0)) {
-+		rcu_unlock();
-+		return 0;
-+	}
-+	__atomic_store_n(&p->lazy, lazy, __ATOMIC_RELAXED);
-+	rcu_unlock();
-+	return 1;
-+}
-+
-+bool (*keep[])() =3D { (bool(*)())f_lazy };
-+EOF
-+
-+${CC} -g -O2 -c -o ${entry_value}.o ${entry_value}.c 2>/dev/null
-+if [[ $? -ne 0 ]]; then
-+	info_log "skip: clang could not compile ${entry_value}.c"
-+	test_skip
-+fi
-+
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3Dconsistent_func ${entr=
-y_value}.o
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for ${entry_value}.o"
-+	test_fail
-+fi
-+
-+encoded=3D$(pfunct --all --format_path=3Dbtf ${entry_value}.o | grep " f=
-_lazy(")
-+if [[ -n "$VERBOSE" ]]; then
-+	printf "   BTF: %s\n" "$encoded"
-+fi
-+if [[ -z "$encoded" ]]; then
-+	error_log "f_lazy() is missing from BTF"
-+	test_fail
-+fi
-+
-+test_pass
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a7c9e2d8965d5..f02ecb0dae75c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -11568,6 +11570,24 @@ static int release_reg(struct bpf_verifier_env *=
+env, struct bpf_reg_state *reg,
+>  	return err;
+>  }
+> =20
+> +/* Does calling helper @func_id bring kernel BTF types into the program?=
+ */
+> +static bool helper_uses_vmlinux_btf(enum bpf_func_id func_id,
+> +				    const struct bpf_func_proto *fn)
+> +{
+> +	int i;
+> +
+> +	/* these take the kernel type id in a struct btf_ptr, not in a register=
+ */
+> +	if (func_id =3D=3D BPF_FUNC_snprintf_btf || func_id =3D=3D BPF_FUNC_seq=
+_printf_btf)
+> +		return true;
+> +	if (base_type(fn->ret_type) =3D=3D RET_PTR_TO_BTF_ID)
+> +		return true;
+> +	for (i =3D 0; i < MAX_BPF_FUNC_ARGS; i++) {
+> +		if (base_type(fn->arg_type[i]) =3D=3D ARG_PTR_TO_BTF_ID)
+> +			return true;
+
+[Severity: High]
+Does this logic also need to check for ARG_PTR_TO_BTF_ID_SOCK_COMMON?
+
+If ARG_PTR_TO_BTF_ID_SOCK_COMMON is omitted here, helpers like
+bpf_sk_release() that accept this argument type will skip loading
+btf_vmlinux.
+
+If a program synthesizes a PTR_TO_BTF_ID pointing to a module's BTF using
+ldimm64, btf_vmlinux could remain NULL. Later, in check_func_args(),
+arg_btf is assigned from btf_vmlinux:
+
+check_func_args() {
+    ...
+    case ARG_PTR_TO_BTF_ID:
+    case ARG_PTR_TO_BTF_ID_SOCK_COMMON:
+    {
+        const u32 *arg_btf_id =3D fn->arg_btf_id[arg];
+        const struct btf *arg_btf =3D meta->btf ?: btf_vmlinux;
+    ...
+}
+
+Because btf_vmlinux is NULL, arg_btf becomes NULL. Could this lead to a
+NULL pointer dereference when process_arg_ptr_to_btf_id() unconditionally
+dereferences it?
+
+process_arg_ptr_to_btf_id() {
+    ...
+    arg_t =3D btf_type_skip_modifiers(arg_btf, arg_btf_id, &arg_btf_id);
+    ...
+}
+
+> +	}
+> +	return false;
+> +}
+> +
+
 --=20
-2.53.0-Meta
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925211314.5118=
+-1-wanjay@amazon.com?part=3D3
