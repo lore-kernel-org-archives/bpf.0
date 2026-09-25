@@ -1,129 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC6035E92F
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 22:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD371501F41;
+	Fri, 25 Sep 2026 22:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790377091; cv=none; b=tqiHcKBWCBnG6Lg1VQlcYhhT7DS1jDyEU9WZmUTGvOzQ6yZa6n2MthAtQ6dNWUaTD+VsgJG04obvvqDT6gkkPVa2xYrctpgnHTIG+irSv1cI82C41Z/CJZTM7gV6mC14Ca6jy942hA2lqx+lOwy1seEvzlmRz4q6iFHWsNm+NcQ=
+	t=1790377159; cv=none; b=LOUexnRLVystlI2od9GViCJw1NFbAq9yd42rMzdlqIHIwYnxn9wS1ORJnQ2dh+Wbtb5jyHwmFRnItY/cPl5q0oI+jdg7j53qaMDxuAn822mbdoBknPKdBERCHitdoxFJiYwtyedKUKpyYrGDM3PxqGuYLoxlhpYLosaEJxIf3wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790377091; c=relaxed/simple;
-	bh=mZ7qqlslECHmSa9hxdMyiEWNNe8Xj0FO9uMflelXjmI=;
+	s=arc-20240116; t=1790377159; c=relaxed/simple;
+	bh=xmssPx5AHJgk2ro4YQzWuoezNhdArtrHLBK1GqJuXjY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DDcO4PdEjQpl3LWunSpmqaGU6AtmCKQZNAtumH54GzD5p1xiRMDdRPBtS4CAzpM0auN/B7oZMPqN+y+WUAg16Z0Dy2WFkIYc7d1HrhrVWPtHM3qz0AtDBjTEyL9haWtIXonmtTFx1NJDf9lvJilgoMsDmf7r+2SU/UGQzxqB+go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NpaHqrnl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Fsa/91ySukRy6MOY2o0tXwdIUcGfw6u8ahceqjouCkXdN8viztuXp4YntWhkZzAXgZEnQB12gJ71e/Qfgs3tbBGESqFuInVbbiMdwkTRbLnE3WrhMia26gyOvmY+ARzQzuX4XitesUIxNtGMQstuTP2nP0Nycadu5LcbVF5Jq0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0zI4WTn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpaHqrnl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4AE01F000FF;
-	Fri, 25 Sep 2026 22:58:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0zI4WTn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76BCC1F000FF;
+	Fri, 25 Sep 2026 22:59:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790377089;
-	bh=31Vf6DHWIOvAOFUrVSAuc1udzpuU0pOmM0oxRzbz3V8=;
+	s=k20260515; t=1790377155;
+	bh=L2SQTEzxANunYWA8gTr2sfK/s/6XskpJ04PeS3cLIxg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NpaHqrnlY8hhYNb6YkpAJUSqGDdRdO2lnvYRHGXwUo7iuPehfVS/4d/0/kmcjaHK4
-	 0vqWVYSE0m6NHOApt8h7kh3G6OaUD7UUCVSbNr/FNclvcfeNoxSq63e894ScpozAbm
-	 EP+jOfydlnIF34E1vW2jhf4GJ7wlGmIBSFRdHNpZgKJ15UV56bu6OapoKI1jZhS8aQ
-	 uk5L7Q2PoSqTyk1bp1SyyZxtgH3K0HV9+8AIKjpdghtEtdn9vt3RyWIsuggXSwLHLr
-	 qv8a/gGuzexLNVKCCAWbzFXFg5wivEKurl8xowFjlk2yKbhQO8UydtUIs3Zwsr/vpS
-	 3DTVEKufZPaZA==
+	b=C0zI4WTn615nAmI21GE1oyHMNfxYzR31quvi4lTRNuBmPtRCpn9z/Ii6G7/dx0GJE
+	 Q9fbOKjwRlObLB7ahlYR55g4o3bOLjE5H1WjMWRQKPjwTW09Qx5u7obTc7do3T/oV6
+	 O3LUR09sK/h9AAjvkvornWFGutJXPwSviRX6HpmKb+e6st444M5vJd7HpjhVkIK336
+	 Te/gMUcZLQ88M358WBDfnSItH4KUTRrnEZys9UT5peRelVFEKE+N7iVzhqC1xIFkbN
+	 WlLGb57wsybaSHkvlQ5Ss56HJPOTfCrUaH8GWUFqCPS+DqjjwSul2DPqDUzPm2+THL
+	 BRXUgrO6LrqRQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add linked_externs test for
- externs in allocated sections
+Subject: Re: [PATCH bpf-next v3 6/9] bpf: keep module BTF until the vmlinux
+ BTF is available
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Andrii Nakryiko" <andrii@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260925224631.1490488-2-andrii@kernel.org>
-References: <20260925224631.1490488-1-andrii@kernel.org>
- <20260925224631.1490488-2-andrii@kernel.org>
+To: "Jay Wang" <wanjay@amazon.com>
+Cc: ojeda@kernel.org, linux-modules@vger.kernel.org, gary@garyguo.net, bpf@vger.kernel.org
+In-Reply-To: <20260925224229.1850-7-wanjay@amazon.com>
+References: <20260925224229.1850-1-wanjay@amazon.com>
+ <20260925224229.1850-7-wanjay@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 25 Sep 2026 22:58:09 +0000
-Message-Id: <20260925225809.B4AE01F000FF@smtp.kernel.org>
+Date: Fri, 25 Sep 2026 22:59:15 +0000
+Message-Id: <20260925225915.76BCC1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: TOCTOU and missing error check for mkstemp in test_relink()
-- [Medium] bpf: Missing NULL check for bpf_object__btf() in test_relink()
+- [Low] bpf: memory leak of module BTF data on parse failure for .BTF.base =
+modules
 --
 
-commit 2e7da3dcbd552604f0f6c052dc8cda7a3628ffb8
-Author: Andrii Nakryiko <andrii@kernel.org>
+commit 10719f6f8154699a27d9151dc131b89e1ea34139
+Author: Jay Wang <wanjay@amazon.com>
 
-selftests/bpf: Add linked_externs test for externs in allocated sections
+    bpf: keep module BTF until the vmlinux BTF is available
+   =20
+    Module BTF is split BTF against the vmlinux BTF and is parsed in the
+    module notifier.  With CONFIG_DEBUG_INFO_BTF=3Dm the vmlinux BTF may no=
+t be
+    loaded yet when a module loads, and the notifier cannot load btf_vmlinux
+    (that would nest a module load in a module load).
 
-This commit adds two objects that define an arena global each and declare t=
-he
-other one's as extern, linking them into a single skeleton. It also introdu=
-ces
-a test to drive the libbpf linker directly to verify the relinking process.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/linked_externs.c b/to=
-ols/testing/selftests/bpf/prog_tests/linked_externs.c
-> new file mode 100644
-> index 0000000000000..29358c82dc356
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/linked_externs.c
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 207954b5754a7..1dae1c9b53fed 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 [ ... ]
-> +/* link in1 on its own first, then link the result with in2 */
-> +static void test_relink(const char *in1, const char *in2, const char *se=
-c_name)
+> @@ -9309,6 +9414,101 @@ static int __init btf_module_init(void)
+>  }
+> =20
+>  fs_initcall(btf_module_init);
+> +
+> +#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
+> +/*
+> + * A kept module whose BTF cannot be used after all.  The module is load=
+ed
+> + * and stays, so there is no way to reject it: the entry stays on the li=
+st,
+> + * dead, until the module goes.  A sysfs file it has keeps serving the r=
+aw
+> + * data, which is kept for that.
+> + */
+> +static void btf_module_dead(struct btf_module *btf_mod, const char *what=
+, int err)
 > +{
-> +	char out1[] =3D "/tmp/linked_externs.XXXXXX", out2[] =3D "/tmp/linked_e=
-xterns.XXXXXX";
-> +	const struct btf_var_secinfo *vi;
-> +	struct bpf_object *obj =3D NULL;
-> +	const struct btf_type *t;
-> +	struct btf *btf;
-> +	int i, id, n;
-> +
-> +	close(mkstemp(out1));
-> +	close(mkstemp(out2));
+> +	pr_warn("failed to %s module [%s] BTF: %d\n", what, btf_mod->module->na=
+me, err);
+> +	kvfree(btf_mod->base_data);
+> +	btf_mod->base_data =3D NULL;
+> +	btf_free_deferred_regs(&btf_mod->deferred_regs);
+> +	btf_mod->gone =3D true;
+> +}
 
-[Severity: Medium]
-Could this result in a Time-Of-Check to Time-Of-Use (TOCTOU) race condition
-and silently ignore failures?
+[Severity: Low]
+Does this code leak btf_mod->data when parsing fails for modules with a
+.BTF.base section?
 
-mkstemp() can fail, returning -1 and leaving the template unchanged. Because
-the return value is discarded, could concurrent test runs end up using the
-identical fallback filename "/tmp/linked_externs.XXXXXX" and corrupt each
-other's output?
+If a module with a .BTF.base section is loaded before the vmlinux BTF, and =
+its
+deferred BTF parsing subsequently fails when the vmlinux BTF is loaded, the
+memory btf_mod->data is retained because btf_module_dead() assumes the sysfs
+file will continue to serve the raw data.
 
-Additionally, even on success, does immediately closing the temporary file =
-and
-reopening it by name in a world-writable directory (/tmp) introduce a class=
-ic
-TOCTOU race condition?
-
-> +
-> +	if (!ASSERT_OK(link_objs(out1, in1, NULL), "link_stage1") ||
-> +	    !ASSERT_OK(link_objs(out2, out1, in2), "link_stage2"))
-> +		goto cleanup;
-> +
-> +	obj =3D bpf_object__open_file(out2, NULL);
-> +	if (!ASSERT_OK_PTR(obj, "obj_open"))
-> +		goto cleanup;
-> +
-> +	btf =3D bpf_object__btf(obj);
-> +	id =3D btf__find_by_name_kind(btf, sec_name, BTF_KIND_DATASEC);
-
-[Severity: Medium]
-Does this code dereference a potentially NULL pointer?
-
-bpf_object__btf(obj) can return NULL if the loaded BPF object lacks BTF
-information. The returned btf pointer is then passed to
-btf__find_by_name_kind(), which dereferences it internally (btf->start_id).
-
-Could this lead to a segmentation fault on malformed objects instead of a
-graceful test failure (e.g., via ASSERT_OK_PTR())?
-
-> +	if (!ASSERT_GT(id, 0, "find_datasec"))
-> +		goto cleanup;
+However, for .BTF.base modules, the sysfs file uses
+btf_module_sysfs_read_deferred(), which returns -ENODEV when the module is
+marked as gone. As a result, the memory is inaccessible and uselessly retai=
+ned
+until the module is unloaded.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925224631.1490=
-488-1-andrii@kernel.org?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925224229.1850=
+-1-wanjay@amazon.com?part=3D6
