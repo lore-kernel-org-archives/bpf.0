@@ -1,104 +1,94 @@
-Received: from out-zbxj-a76.jellyfish.systems (out-zbxj-a76.jellyfish.systems [198.54.127.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0763EA942
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A673BBA03
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790358386; cv=none; b=rquvaVA4DJN7tdDkfV5Ucb5h1CW36MMidKvxXXK+nE2SfIGLrEdonuuKtSSZnAsmUi1kKwcksZ2JzuE0cAv3YbWoyb9TRN3ezkod1LWBpnMlDiazUMTpGwzNnyE84cDt6vVSgyqCAGOzdGZvroHNjPZnFmgcK0Bzo8k28N9h/kk=
+	t=1790358776; cv=none; b=Fx402MTrq6el+l5um12mOAhu9AsZr6XSWlzjR0I6xlbTMghzc1AZqtJ4p4sigS808rdT3xks1FcL5vXWNuKdNUNVL7ODemS2co7mRZNEhZ0pCDyffGWRwiOCd2eWW3P1Lv8w7qNCmsnNDsb1IAwtcnJpzZBG9DS+GCbv1Xuczyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790358386; c=relaxed/simple;
-	bh=DIYAPrJdN+Ph9zh8HJGh9ljVIdxBUC9f7wRYKJjFfPo=;
+	s=arc-20240116; t=1790358776; c=relaxed/simple;
+	bh=wVoK5fTqpuPaa7DgJBgo2MlKRv1ZOFxoGpE+MLJFejs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CkuX70c0QFVc+lSSzAIabJiehT7mdo9KtzU+6+QHYAuro9Z8fTVKrrvPdvHs2fexgrCep8c94Ce0D5Xji/dU3QphPK1SNCy0W4hKCXEnv24DR1k1M4pQv8yM6d1/Dl2c6M/xHTpwQfQSPN7XFzcfz/3DEs1/XLxNh0akl7sHkdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=dVFl/27/; arc=none smtp.client-ip=198.54.127.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	 MIME-Version; b=YTh0/caQC4b3Z0g7yoy5lM5BuZWbJwLvS5icJAF2pcXf7K1UJtUAS385bH/bhIQA4sD5gxfjRfikVwRGflHX1IKcY3fu3lwEu4b0EmzXSFapNJv/X97URAx2fjGipg8eRje3wYhjF4U4Y3rxv5ezYsy/qc9m9p9OhRkrdbVvxhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=TmQPeSeL; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="dVFl/27/"
-Received: from 192.168.50.46 (unknown [114.92.81.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hrymW58KBz2xDW;
-	Fri, 25 Sep 2026 17:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1790358366;
-	bh=DIYAPrJdN+Ph9zh8HJGh9ljVIdxBUC9f7wRYKJjFfPo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dVFl/27/lCjsK/dVHQ+rI9LrlVdHZjqSOsAvoDvnAzvIdlNbCB32JPeXTGFPWaSns
-	 VNoZ19x0bDQWq7jRJufMQoZVXDbd5M3QlADflqOFaCKnQ8qdDeeQWy4vX9ZLJGYzqy
-	 HiKvFrwwqvGyEFL19QTxab3dfNrZ9sLu+M9x9bz0OyRMd7r3e+GRk0wJSVya6+R5dj
-	 R8LPPiVVIi21EdMzdkNhg26ZehP4TKn8rztb+Ohm4bIem6Hdd+nNuVnQK0y67bNnko
-	 zKOHlG04msBWp3//05yGD6SN/n8qLWQtp/ECWqLwpM9zoWW6F84scvpiJOOuPI/yHF
-	 UpVs8rKsMjvUQ==
-From: Tianyi Chen <hi@tychen.cc>
-To: Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 1/2] bpftool: Use batch lookups for bounded
- hash map dumps
-Date: Sat, 26 Sep 2026 02:46:00 +0900
-Message-ID: <179035836036.2029588.186416039015053466@tychen.cc>
-In-Reply-To: <d5a5b5e7-4063-4511-acdc-46b2407565a7@kernel.org>
-References: <20260924163403.203491-1-hi@tychen.cc>
- <20260924163403.203491-2-hi@tychen.cc>
- <d5a5b5e7-4063-4511-acdc-46b2407565a7@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="TmQPeSeL"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=MgBRl+AfKtJG9ub4T5qSfrzcN7hQoNLjBNJcCg9UYHA=; b=TmQPeSeLSkvGgGa3f4Q60HZ5Bt
+	DqoG6NnPjJNPnk+OamkGJ0RJN+e1jL3N/McS6vpCh7xxzSUXn/HnErXWV2UX9D3V4hzOwCu49HipI
+	X6W36xcbJLCbeDuYtH2BlKht0W8h0SvwrQdcGs732JzFxR7pPIFA6jt58M3CxOu7WtweR0HY3tptf
+	3o9dooZrvvS53RyuKheKsir1EQJ6voif6doLl+WDkdz/6EU9G7yZ1DM5vHKyHMQFBuweCzrjbJtTH
+	N+GV4JWyCZUEzTXpdKnZenQcOXIqgzFeoZG4oLxDMAgIXM4OMGujESyj2grvVRbze4RwHm8m/pqX8
+	dN+6R4DQ==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xAA6N-000JkZ-0j;
+	Fri, 25 Sep 2026 19:52:51 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: alexei.starovoitov@gmail.com
+Cc: eddyz87@gmail.com,
+	john.fastabend@gmail.com,
+	memxor@gmail.com,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v3 09/16] bpf: Clear the insn array used flag with release semantics
+Date: Fri, 25 Sep 2026 19:52:36 +0200
+Message-ID: <20260925175244.1136329-10-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260925175244.1136329-1-daniel@iogearbox.net>
+References: <20260925175244.1136329-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Envelope-From: hi@tychen.cc
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28134/Fri Sep 25 08:25:58 2026)
 
-Hi Quentin,
+A program that fails after the JIT ran, for example in bpf_check_tail_call(),
+has already stored its jitted offsets and target pointers into the insn array
+maps it uses through bpf_prog_update_insn_ptrs() when release_insn_arrays()
+hands them back by clearing the used flag with a plain atomic_set(). Nothing
+orders those stores before the flag, so on a weakly ordered architecture they
+can still be in flight when the next program takes the map: it is acquired
+with atomic_xchg() in bpf_insn_array_init() and reset there, and the late
+stores then land on top of whatever the new owner has written since, be it
+that reset or the pointers its own JIT stored, leaving entries that point
+into an image which is about to be freed.
 
-Thanks for the review.
+Clear the flag with atomic_set_release() instead, so that everything the
+releasing program stored is visible before the map can be acquired again.
+This pairs with the fully ordered atomic_xchg() on the acquire side.
 
-> Why hash maps only?
+Fixes: b4ce5923e780 ("bpf, x86: add new map type: instructions array")
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ kernel/bpf/bpf_insn_array.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-This was an initial scope choice, not a lack of lookup-batch support for
-LRU_HASH. It uses the same u32 bucket cursor and is a good candidate for
-follow-up coverage, including eviction and concurrent updates. For now,
-other map types retain the existing individual-lookup path.
+diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
+index 5874abd1f743..61d6a076dfdb 100644
+--- a/kernel/bpf/bpf_insn_array.c
++++ b/kernel/bpf/bpf_insn_array.c
+@@ -232,7 +232,8 @@ void bpf_insn_array_release(struct bpf_map *map)
+ {
+ 	struct bpf_insn_array *insn_array = cast_insn_array(map);
+ 
+-	atomic_set(&insn_array->used, 0);
++	/* Paired with atomic_xchg() in bpf_insn_array_init(). */
++	atomic_set_release(&insn_array->used, 0);
+ }
+ 
+ void bpf_insn_array_adjust(struct bpf_map *map, u32 off, u32 len)
+-- 
+2.43.0
 
-> Can you add a comment about
-
-Added a comment tying the u32 cursor to HASH bucket indices, independently
-of the map's key size.
-
-> eligibility would be worth its own function
-
-Done: map_dump_can_batch() is a positive predicate checked by the caller.
-
-> limit for the "buffer" resizing
-
-Yes, the whole-map bound was stricter than necessary. In v6, 4 MiB caps
-the combined key/value batch buffers, not the map's maximum capacity.
-If ENOSPC persists at that cap, individual lookups continue from the last
-emitted key rather than restarting from NULL. If no entries were emitted,
-traversal starts at the beginning. This keeps the existing non-atomic
-iteration semantics.
-
-All 12 subtests pass, including a large sparse map. I also injected
-ENOSPC before and after output, forcing growth to the 4 MiB cap: plain
-and JSON output matched the baseline without missing or repeated entries.
-Initial unsupported-operation fallback and fatal-error handling were
-checked too. Fresh /dev/null timings and methodology are in patch 1.
-
-v6 is a new thread:
-https://lore.kernel.org/r/20260925174412.2028749-1-hi@tychen.cc
-
-The v5 CI failure is the same s390x test_verifier callx diagnostic mismatch
-seen on for-next_test, not a batch-dump failure. All 11 v5 batch subtests
-passed on s390x:
-https://github.com/kernel-patches/bpf/actions/runs/36028683139/job/1077369230=
-87
-https://github.com/kernel-patches/bpf/actions/runs/36040586092/job/1077772962=
-89
-
-Thanks,
-Tianyi
