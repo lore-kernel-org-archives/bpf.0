@@ -1,128 +1,148 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888813C5522
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B2D47F762
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 22:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790373430; cv=none; b=j+j8SRrbfs3GpHxXK0ebZMifeivwBYXhczhaTYPPDEXSYWowIgjM+/LLngOny8kFqCZMB7ma9VtC5fh7IKqg+vHb3N0xut/UOJv/RwKARxKhc6vSKWurSetgqwufWIyGN5aEDFY3m7ZOF1UY521nOpuc6Rfi1UtB42G1Wc5Kjao=
+	t=1790373703; cv=none; b=ea2ETVKhNbGNZq0NnkPvW009mNvqYfAZPjgVijVABkTIhVQ50rhqmX7zBMt8x/+oh2ibSIKdVkIzdpmVWm9eMOOysW8rkApevvLBuDghsLztCL8tUXLDgJBhR2yHs1hxuPaWm1AoGhp5LusFSzAT/rM1AzsgHq9/L56Rlg7+0mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790373430; c=relaxed/simple;
-	bh=XZZtuD3AiMHbsfDSoEgx48YdqoFNpCKxKghr+xutvqw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=HbRUCr4DoHVwyWb+64Xkcz/ZxNDaKB8Zc18ZRHGi8dWUpcLAv/K3B/SH0ukIC5YpLNLSaT4ONn/wWRahMq3x6tID6IuC+7LI9xQlIIvilal7vc2sJ/U5YUU9OrLGvw94legrXWNgnk2TQESScvx9Ee+cAW19t6fmb95I8vQ+JEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ZEdXa0z0; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1790373703; c=relaxed/simple;
+	bh=eR6I640Np5hSVWdetmUeAin19DSdY+ma1K/til9+OXo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WNcUsUo0QecTPxqIJQ80h1d4jDiYXabHBp02DxYTGJy8irXBuspTWp8k1LvnITaMPsH68x0WIFs85bpnMXcG+ql0jaQraPxgvYQ8933RGzKf43iLbGlOknbeLRDHemHzMKLiCI5z+bRKhDfIw8MeCFK2V9QAr3e5PJj7vDxh1OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J61Enlzj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ZEdXa0z0"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccda24a3so844054a91.0
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 14:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790373426; x=1790978226; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=0GMtx0b07qOSOknabE/8SRczIKyF/geWunUef3Vm4k8=;
-        b=ZEdXa0z06LyklGQKgg/miw9iueja6lxEq5ZbDLIJUWfsvOKsatM18ygacHMRT62uCH
-         EpS3ttWz9vQ41afSczdDgqhKF31bU92TxfkiL7aB2kmjcdQh5zr8+0V7S5P4XG3VzEk1
-         gDpMna6F0p74x39pYsQ65FOb3QY3xWxhWTn8woP/lNzkEL2HoJAzgjbAkDfjZRF7CpzP
-         4dkBFz8Jr4oC4OeclckEjOUgDV2UQcxbmpVFs8lr9OPSQh+Lic2OuuRQxortIFPfRAqd
-         wg58i8whu3ogIGfCRQaFDL4ufoTzdwWRomkKfFBH/C7GfVfbLoR3W3uxt5QHrqdPZJ5i
-         81kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790373426; x=1790978226;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0GMtx0b07qOSOknabE/8SRczIKyF/geWunUef3Vm4k8=;
-        b=LzOCblUWjLknAYQ3bP6C1lNzV7T6fxHs5rXuF+IL1z31l0dHr8qOMKtz2ZxToF93Kz
-         yiS1xTZ+UXQR2UN9gWYBn4pIDXzzbOrIbxa3yI4RqYOaN3FloyhrKfwGsDmz7w8/FF0K
-         Hnp8lue8NAVyBI1QY/IzGBy10Sr109gPzwQbZL9Ho+Avpgy3RqtsZerBHk748TA6cDtO
-         ZH25l1//VARg+/d9t465ifLV20btq+Ocadq2jrWjGxCVEEHiYROMmY6IREeQfloozahc
-         WR6xuMkhwemYJ1f7k3/dVwxXJsKj3460trLCznPyguIkoWO9hboK/Jx2Hw2O8atn2FXP
-         HS4g==
-X-Forwarded-Encrypted: i=1; AKwUvByzxxqrkZ+7FOj2YDXmyDrQiJvsk4xniRDYuRqfRbRYJrEh/UfRLaetv84O96+uzCHWHrs=@vger.kernel.org
-X-Gm-Message-State: AFuF++kGzZczujZeeySGhjn8Idl1CMdJCCyJSCOmP798BV3jluozQMA0
-	GDVmIw8cI9GggExYQAGK86R6us4twkkqsjFMcnb+WGDP6Mv96XRHZoScQK8I75+iitw=
-X-Gm-Gg: AYBFou2Ku6DZwJlTOQVySHbXYQ8n9ZNwGVPaUy0cHHbna4bDB7Od8ydZfAFzGUU5TnA
-	6H41DVfU2FYscp57rx5196IPxZz8V8MFtDW0gGmwXy0KEmDpvz/cLJu6dpimst+6txe2Slly7Ld
-	aYOf2ZeJo0SdOZwbKUTyifQLh+aUThUKYxiaL7lDip8X4Lls4OSCyUdtKv8LzXLR1wbfgSpR5dH
-	bXbAZHB69AYsKweuc/3Oz+x06xXzbnWJxyblTrxsdPig8FDGdRqe7jYH3uVk9LR7Uh7ZMWTFU7M
-	vmJgA6VmQNc7hkuxMoN0bVvY+n+6Orte3lFTCoDN6epB2nmZNSwwnXPf5ncDNXLCkU2nNm095Qm
-	G/xZAT6Pq4FD+zouP/rZtCt9dRrM0Moaivl3KcxOVCgRS8s+d+vx8f3uR+TBi/WSN1ZHxstdWNT
-	7erhDuyqFixfbvqSPq8ZP/IalIy1Vb+IR9P6qyoWvT/qlslwtFk3AcoTjo6AwDhWl49UJ9xE5nT
-	YQOSSh72ooenMIoDBzHRnPsR9vimATt3sCyT/E6PQE=
-X-Received: by 2002:a17:90b:52c4:b0:3a0:bdd7:f1f5 with SMTP id 98e67ed59e1d1-3a0bdd7ff10mr2524455a91.13.1790373425534;
-        Fri, 25 Sep 2026 14:57:05 -0700 (PDT)
-Received: from localhost (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0976ca5f9sm12967238a91.14.2026.09.25.14.57.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 14:57:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J61Enlzj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 498CF1F000FF;
+	Fri, 25 Sep 2026 22:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790373702;
+	bh=T6I2fTPRR8RlBIH2cyQVGzNc/Dp12F6wzkJk242K9J8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=J61EnlzjDHujaqSNb12WZpYkN4Tqz37QD6MxHrV3s7vBtn63yLthZ8v4VY4sxhmG3
+	 RzYJlfLjxEa2L0XH6EMTK/AMg95aEZA32+hA5VSFuDizn2m2xWxAOk39yh9Tev42tX
+	 R6IZXf6fs2wABGxeBViZe/RFBKUrsi/bsaXwxQGfp/BN4OBcCaNor3UpCGTfPzX2RX
+	 uGeaGEJDXIyTd1KKVIOQAozvXNnXDuoMkTr8YRaLT6ixbpSIvNS9NscvOKvr28VOCo
+	 ufZ0reMIDGA0m0pi2REJAbJuG43EUyzdGhdGlky291Op1OC2/0L2ttYTkGRyiiswXR
+	 1ymeVye6Y1MAA==
+Content-Type: multipart/mixed; boundary="===============2585481607635438913=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Sep 2026 21:57:04 +0000
-Message-Id: <DLOQESM8SNGA.2ASMGV6KHJ4WB@etsalapatis.com>
-Subject: Re: [PATCH bpf v3 3/7] bpf: Add sleepable arena page allocation
- path
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <daniel@iogearbox.net>
-X-Mailer: aerc 0.21.0
-References: <20260925203939.4105-1-emil@etsalapatis.com>
- <20260925203939.4105-4-emil@etsalapatis.com>
- <DLOPQUOW1A97.1KXFXSEUUNSFT@gmail.com>
-In-Reply-To: <DLOPQUOW1A97.1KXFXSEUUNSFT@gmail.com>
+MIME-Version: 1.0
+Message-Id: <774eb23ef292825f25383caab985de85ec4475aca1f487263a97c0b894e9399c@mail.kernel.org>
+In-Reply-To: <20260925211256.1834061-5-ameryhung@gmail.com>
+References: <20260925211256.1834061-5-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v1 04/12] bpf: Check subprog scalar arguments in the common path
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 25 Sep 2026 22:01:41 +0000 (UTC)
 
-On Fri Sep 25, 2026 at 9:25 PM UTC, Alexei Starovoitov wrote:
-> On Fri, Sep 25, 2026 at 08:39 PM Emil Tsalapatis <emil@etsalapatis.com> w=
-rote:
->> Since allocation now happens before range-tree arbitration, concurrent
->> callers can allocate pages for competing requests. Bound the aggregate
->> number of pages in this pre-arbitration window to the configured maximum
->> size of the arena.
+--===============2585481607635438913==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4b683502c959..0f86feefbeb2 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -10872,10 +10872,9 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+>  		nslots = btf_arg_slots(t);
 >
-> The pages are allocated with __GFP_ACCOUNT. memcg bounds them already.
-> Let's drop nr_pages_inflight. Seems like unnecessary complication.
+>  		if (arg_type == ARG_SCALAR) {
+> -			if (reg->type != SCALAR_VALUE) {
+> -				bpf_log(log, "%s is not a scalar\n", reg_arg_name(env, argno));
+> -				return -EINVAL;
+> -			}
+> +			ret = check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
+> +			if (ret)
+> +				return ret;
+
+Does this change inadvertently create diagnostics on the tolerated path?
+
+For static subprogs, callx targets and callbacks, btf_check_subprog_call()
+failures are tolerated (only -EFAULT is fatal):
+
+    err = btf_check_subprog_call(env, subprog, caller->regs);
+    if (err == -EFAULT)
+        return err;
+
+The comment in btf_check_subprog_call() explains this is because "Compiler
+optimizations can remove arguments from static functions".
+
+Before this patch, such a mismatch only logged the single line "R%d is not
+a scalar". Now the same situation runs through code that writes a full
+diagnostic straight into the verifier log:
+
+- If the register is NOT_INIT (for example, the compiler dropped an
+  argument), __check_reg_arg() calls bpf_diag_unreadable_reg(), which calls
+  bpf_diag_header(env, REGISTER_TYPE_SAFETY, "unreadable register"). That
+  prints "Verification failed: Register Type Safety: Unreadable register"
+  and the suggestion "Initialize R%d on every path before this instruction."
+
+- If the register holds a pointer, check_reg_type() calls
+  bpf_diag_call_arg_fmt() -> bpf_diag_call_type(), which prints
+  "Verification failed: Call Type Safety: Invalid call argument".
+
+Nothing suppresses the output on the tolerated path, so verification
+carries on after the log has already reported a failure.
+
+Example: static __noinline int sub(int x) called with r1 = r10, or called
+after clang removed the argument so that R1 is NOT_INIT. At log_level 2 a
+program that loads successfully has this block in its log. At log_level 1,
+the level libbpf uses when it reloads a failed program to fetch the log,
+pop_stack() only rewinds the log to the push position of the branch being
+resumed. So a block printed by such a call on the path that finally fails
+(for example before its first branch) stays in the log ahead of the real
+error. A user reading the first "Verification failed:" block is sent to a
+harmless call site, with advice to initialize a register the verifier
+deliberately does not require.
+
+The ctx, dynptr and BTF-ID branches could already print diagnostics in this
+tolerated path. This patch adds the same behaviour for scalars, the most
+common static-subprog argument type and the exact case the tolerance was
+written for.
+
+Should diagnostics be muted, or the log rewound, when
+btf_check_subprog_call() fails for a non-global subprog?
+
+>  		} else if (arg_type & PTR_UNTRUSTED) {
+>  			/*
+>  			 * Anything is allowed for untrusted arguments, as these are
+
+[ ... ]
+
+> @@ -10965,15 +10964,9 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+>  		}
 >
+>  		for (k = 1; k < nslots; k++) {
+> -			argno_t extra_argno = argno_from_arg(slot + k + 1);
+> -			struct bpf_reg_state *extra_reg;
+> -
+> -			extra_reg = get_func_arg_reg(caller, regs, slot + k);
+> -			if (extra_reg->type != SCALAR_VALUE) {
+> -				bpf_log(log, "%s is not a scalar\n",
+> -					reg_arg_name(env, extra_argno));
+> -				return -EINVAL;
+> -			}
+> +			ret = check_arg_extra_slot(env, caller, slot + k, &meta);
+> +			if (ret)
+> +				return ret;
 
-The nr_pages_in_flight is there for the edge case where multiple concurrent
-allocations in the arena inflate memcg usage close to the limit, then a non=
--arena
-related allocation fails/triggers OOM. If we're fine with that happy to rem=
-ove
-it since it's a bit of a tacked-on hack.
+This extra-slot routing through check_arg_extra_slot() has the same
+diagnostic behaviour as the scalar branch above.
 
-I'll replace it with __GFP_RETRY_MAYFAIL on alloc_pages() so that the alloc=
-ation
-doesn't accidentally trigger the OOM killer. AFAICT it can do so otherwise.
+[ ... ]
 
->> +out_unmap:
->> +	if (sleepable)
->> +		flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
->>  	range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
->>  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
->> -	if (mapped) {
->> -		flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
->> +	if (mapped || sleepable) {
->> +		if (!sleepable)
->> +			flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
->>  		arena_free_pages(arena, uaddr32, mapped, sleepable);
->>  	}
->
-> v2 leftovers? It doesn't depend on sleepable ?
 
-Yes, I will remove that part.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
->
-> pw-bot: cr
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36191749180
+--===============2585481607635438913==--
