@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7682D4C226C;
-	Fri, 25 Sep 2026 15:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A794D0A03;
+	Fri, 25 Sep 2026 15:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790351757; cv=none; b=LOMOuaSxnufO+QXmE4Da3hdR2/XG0ea0pORg50/nxvsIW3sHGT6To+q2wdG8JZY6Lx4SLdjlIhewX4xJb0RpBraScw6PPHEvchG+1l49LJPAmg6huJdwuSNeXa4SHhSoBt84t3SlYO5HzdkxwoSAJ133spdA14GlyvG0g5uJG/I=
+	t=1790351759; cv=none; b=GApT6pMCKTW4hltUKv5K9Gei+Bp4wL7u5BCqvtqH+LiNWSN9kgZuXtCfTYD0VMFk4sYVsIx79CQsW2uzmZa5NrqXjedriohXlSN3kkFKjOn4gXxOs1zJtZC/X+wWL94k9qZW/uL5AcVGvxo5BYCRgrDYEpfE9kEdY4UrpFpd6dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790351757; c=relaxed/simple;
-	bh=SfDTbJJw7dc2WROcCFWMWBfZVQrV8KomkidIc8Bsjqg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UNrVf+EBWJ4ruYsyD2TDwiD9gdEX2dMrgWbIT8tKKn/8jFKL6I4b9zbUNd9UBtDpz5TPR2c/6B8YOQXP0CwDoOptY5LpAS09E7hrHUFTxN9KQV0KB3oJNcEfuRCpKfFBjImn8WvIeecxdora4cpyzkXFkZ9HlyXX/8Yc/f/gonA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=hQQhUnme; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1790351759; c=relaxed/simple;
+	bh=lfVpM8IpSFrl9WMznW6hrKS42NBa9P3vmWzVF/t/mMg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=D83Mdtle6gH1RVjI7+5ZdQZRVHvj0l0Qg8tzEU6itFKx16xfdFwZStwO+MMpzXodeEpFdsKZKGUBkt5OfraXYOIPETSwEzzcMor8kilgLe/W/1ytzy/ObnuMKvFWFn2+d4h7ZKv2qHJVnYjZ5W4hYSiNwmRZEryt9I9sJwo+0Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=U4+izewm; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="hQQhUnme"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="U4+izewm"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=LHhOcHajl/RCz3aKIy6XLbbprq7ug0zwcg6Z8E4tJtc=; b=hQQhUnmeVDDfIgpemwDWblcib9
-	93ltTzqmepbA7EphiU3aghEH6mCR+MEdoaaknU4j/ZRKggo4pUklzc1PJeGxnIlWj5PI8LJDgI+BD
-	mBKtJxCZ/lC3h570YWUroNSv78qFJtM9xgrmOSd2jo0Q18bnrBUFsZeJewa8CFFkjg881CN9rIE88
-	r+Pt5tAvxN21zdeQd65IOnHETM6GA48yAco1il9Gg4FDpTrtyxb9u1bewJ9lgE1SoiecvL2YIVyU7
-	JcYkF36vz3zPJE15XNiShv09KoYC+XqTWedcg32/GmyjifKaqkV8kpwp+UdamvmKTnnkfKbF6CXeU
-	oo6el0KA==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=3u8gQhNavMLejnFPYpNP2xX9INk7nYDpIUTibp7qRoY=; b=U4+izewmXDHRTOU1zF9MmQHGpo
+	NEX7fFdWzA9JHf+JZ/dLOLELVsbyyX5HyAaIact1j6xeyXeglG7R5eQBMTQKvBZ9cPX2hLw3dtYxL
+	f5rzMRGZiQLh/cP5BAgqJgtnjU02w4SzoXxG2R1DSvGC3cLhzl3tBq35RE45YBXSauAH/s+0yle96
+	VymHGmhUDDo9bbBIJo8drHM1CQ/ztQ2yTV65ZY5rSLwV93Zb3W6LaJ1dtKA+SCuhqyiOEqiTfPxVb
+	cU2f3wtYsNHKUYlmuwgryKBdHPANk5j6q7ewZ3PxVkTxHwKemlCd84MsJDxaf9wapn+2RlnCNebgA
+	Nz9Zd/sQ==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1xA8H3-005Pkx-25;
-	Fri, 25 Sep 2026 15:55:46 +0000
+	id 1xA8HA-005PlE-0z;
+	Fri, 25 Sep 2026 15:55:52 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next 0/6] ipv4,ipv6: convert the getsockopt switches to
- sockopt_t
-Date: Fri, 25 Sep 2026 08:55:15 -0700
-Message-Id: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
+Date: Fri, 25 Sep 2026 08:55:16 -0700
+Subject: [PATCH net-next 1/6] ipv6: reject a negative optlen in
+ do_ipv6_getsockopt()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,10 +44,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGSZtmoC/x3M4QrCIBgF0Ff5uL8nLJEiXyVCnLuVBCrqhjD27
- kHnAc6BxhrZYOVA5R5bzAlWLpMgfHx6U8UVVqBnfZ3v2qiWwzeX7jiKT6vLW3e7VqRZwm3xJtB
- jEpTKVxz/94HErhJHx/M8f/bxwtlxAAAA
-X-Change-ID: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
+Message-Id: <20260925-sockopt_expand_out_v2-v1-1-c3ef2e3bb5c0@debian.org>
+References: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
+In-Reply-To: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -66,104 +65,63 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3739; i=leitao@debian.org;
- h=from:subject:message-id; bh=SfDTbJJw7dc2WROcCFWMWBfZVQrV8KomkidIc8Bsjqg=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqtpl6fHlb65rB+lD0cDbiUFM4wKhokXaziy94Y
- ILKTM8/foeJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaraZegAKCRA1o5Of/Hh3
- bYi9D/9TMhMvycPHY1bo/l+NinvEGVY1oGi7i46LYpniXobAecmH7ZQ7Po8Hf1sKAdrj/4v81HF
- 4zrX/UmX43ma1od+iWkfFs1kgWiW3bsPehORT2YhSA0CN3tWY1BbcAQx03ZnS1jpVzenlWOqyrV
- 6KBrSFEYi4exfD23gadiOXhX6LsCcCywbWwCbL0cA6sGCy3YDq5rFlazbhqfrspwe7XgElAmSPY
- rSYtK4bxOj1af/kY23XZbBpb9Ci/RmHkh+fzXKL6BuZoWbygJWKitF88my9WvjCXt2o4qb5NfWl
- 1UjZ1V2XzLMUVeBjQb4bX8xE5OxOfEPDr4qzh4Q1TnhY77p+pzvDx4gwyxa1ddxsBTohJlL+CLk
- OFTSZft0WBEFUAKGV0KkfXeM6KpydRZg9al45iNXqKCFXplvNr+3e3NGMh2r+Ft20KUALDFEg4n
- XHfLkfFuEocTUmfAwJ5rtbYGlL+6GDfTCnWEX/muOdjf92jI3jnPsj1g9J9rAkPKYCPDo3IHIUv
- pAJ3uDbIwqfrZrgXjzOB704KzIFBRbP9xQ1PD29W3B+hHxBYwRwKEiMtzLSD6Un3p2eH2yOFlCg
- hBfvxQgSHx6cJg0CbYU2w+HUCYHvX/SUmn79TdhuOSv2T+FrJ49WFXQqIUev4o00WJkA6QbIpXX
- ocRmejjQCL0N7GA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1451; i=leitao@debian.org;
+ h=from:subject:message-id; bh=lfVpM8IpSFrl9WMznW6hrKS42NBa9P3vmWzVF/t/mMg=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqtpl6DxssGJpfQP9/LQtRp4EL37kSDNXrV5A6c
+ idTuF8jmV6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaraZegAKCRA1o5Of/Hh3
+ bbZcD/9m/HiC9eumuP0yv7ayS5yvRrvYBFG7LqUCtP4VHnnOTd0u+DT/nlbBPzfFbZM0mKgDcIv
+ x9AESi1zDKdT2wdWJcbaadNfTi9W8MLzRQ/XGe6uyDZ/BVYDCbDTaQ7fw9Le0joF0bulFGG7usF
+ O6NPIZONYzM2P9fpRkiPyh94lrJAmPF7W9dqrcFYPkmQHUXiK3YvDFYrQt4e86aNB11O7AkN4BG
+ Tmzq4A+Ib5sC6HdxhM6YmXHQfvkRO/guf3GT1LBdwey+U/D+SDvYSWqWQ8x49p6v72hR51BPq+D
+ FER4ce9LnMkYO/lwjfNCQPUNL1/ojLl27WGb05mIf9HLBe+6tqNVp0FmX76uk53l34ChU7GEoSX
+ Je8JaBhYDUG83gS/AIj9xL7ayo8MPJ3V5sw6s3/TvxhC2EZk7HKyQQRIKozZGHJsrKXzLPcGrJy
+ 8OaOqLyx0geHAHvjZozBUEln399j2s2jKe6g1pTChMGnxjXzyZuzXKjfdiIYEYFVOdUnXl/SYkL
+ 7Tvhsq0LmO5ANKVF1wFp5rmCIK6HndpLCf2F7vTpPOfWwuOY4YWybMGdS4xXO1lxGXIH4pIgHnK
+ baKJgYE0p94CaTlNYjdraqJZqkvAql4xI/S/db4DbdXC1LkSnzNVEILOM8aAS0cl3UpYs3Y+W8B
+ clxVRjhDy+gpXmw==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-This series continues the migration to sockopt_t, as described in [1].
-do_ip_getsockopt() and do_ipv6_getsockopt() are the last two switches
-still taking a sockptr_t pair, and everything they forward to now takes
-a sockopt_t, so convert them both.
+IPv4's do_ip_getsockopt() rejects a negative optlen right after reading
+it. do_ipv6_getsockopt() never has, and nothing downstream treats it as
+an error either: len is an int, but every consumer compares it unsigned,
+so -1 behaves as a huge value and each site clamps to its own reply
+size.
 
-Patch 1 first rejects a negative optlen on ipv6, which do_ip_getsockopt()
-already does. len is an int, but every consumer compares it unsigned, so
--1 reads as a huge value and each site clamps to its own reply size. The
-conversion cannot carry that.
+	len = min_t(unsigned int, sizeof(int), len);
 
-MCAST_MSFILTER has to move before the switches above it. It is the last
-option with the quirk sockopt_expand_out() was added for [2]: optlen only
-covers the fixed part, and the real reply size comes from the gf_numsrc
-field inside it. Patches 2 and 3 convert it on both families.
+So getsockopt(fd, SOL_IPV6, IPV6_TCLASS, buf, &len) with len set to -1
+answers 4 bytes and reports 4, rather than failing.
 
-Patches 4 and 5 convert the switches themselves. Each wrapper keeps its
-__user prototype and builds the sockopt_t with sockopt_init_user(), so
-the proto layer is untouched. Patch 6 grows the selftest an ip and an
-ipv6 fixture, pinning the returned length and errno.
+This is a bug ready to bite us in the near future, let's get this fixed.
 
-Link: https://lore.kernel.org/all/20260401-getsockopt-v2-0-611df6771aff@debian.org/ [1]
-Link: https://lore.kernel.org/all/20260914-getsockopt_phase6-v2-0-e48befc9602e@debian.org/ [2]
+I've found this because testing the rest of the patch was returning
+inconsistency when optlen = -1.
 
-To: David Ahern <dsahern@kernel.org>
-To: Ido Schimmel <idosch@nvidia.com>
-To: David S. Miller <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Simon Horman <horms@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: david.laight.linux@gmail.com
+Later patches make the check unreachable, since sockopt_init_user() and
+sockptr_to_sockopt() both reject a negative length before the switch
+runs. Keep it as a guard; the fix stands on its own here.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Breno Leitao (6):
-      ipv6: reject a negative optlen in do_ipv6_getsockopt()
-      ipv6: mcast: convert ip6_mc_msfget() to sockopt_t
-      ipv4: igmp: convert ip_mc_gsfget() to sockopt_t
-      ipv4: convert do_ip_getsockopt() to sockopt_t
-      ipv6: convert do_ipv6_getsockopt() to sockopt_t
-      selftests: net: getsockopt_iter: cover ip and ipv6
+ net/ipv6/ipv6_sockglue.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- include/linux/igmp.h                          |   2 +-
- include/linux/mroute.h                        |   4 +-
- include/linux/mroute6.h                       |   5 +-
- include/net/ip.h                              |   3 +-
- include/net/ipv6.h                            |   4 +-
- net/core/filter.c                             |  36 ++-
- net/ipv4/igmp.c                               |  23 +-
- net/ipv4/ip_sockglue.c                        | 118 +++++-----
- net/ipv4/ipmr.c                               |  11 +-
- net/ipv6/ip6mr.c                              |  13 +-
- net/ipv6/ipv6_sockglue.c                      | 111 +++++-----
- net/ipv6/mcast.c                              |  19 +-
- tools/testing/selftests/net/getsockopt_iter.c | 302 ++++++++++++++++++++++++++
- 13 files changed, 494 insertions(+), 157 deletions(-)
----
-base-commit: 42a9fb3382fc2573e92f41d203b095d9a372cfc9
-change-id: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 4b3536571c9804..5c6a0819a2aaff 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -1002,6 +1002,8 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 
+ 	if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 		return -EFAULT;
++	if (len < 0)
++		return -EINVAL;
+ 	switch (optname) {
+ 	case MCAST_MSFILTER:
+ 		if (in_compat_syscall())
 
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.53.0-Meta
 
