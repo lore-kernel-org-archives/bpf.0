@@ -1,150 +1,128 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11144CA29D
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF62B4CA77D
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790358784; cv=none; b=gd7ejJK5TEHlhKWnLoucsFI7uZ4BmgVkuyOZRQywg1Gl2NvsuVlU6mx8828np91KAh5SxQvnV3mbP7dpUdNIM+ri1RyDENR/9xcB6HpGogheoDFJFBK+1Sz3jH7gnH1l/vU0QjHTL/o0arHqxUb/LYSPFtrCQAPP2B3csMI3+cA=
+	t=1790358861; cv=none; b=EoNE4jBbz+eCpegRPNTAf9iR3OMs4ob7ib2rmPWEUB16Yf2FHhWJuhGPQubZmDIA0G69VQtj/BRQ4bg07v0CsnoYzk7VA9BIfvVIR5luLcEKoDBhy4ad/bs+JgsqaYqUAiyDB2AuZX1kxjos9YbxLfFon4o/nBULj3v2KqwENgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790358784; c=relaxed/simple;
-	bh=lLGiMh6ZuNOcXl5z8r9yJLxGoUWmjqVX7H3p5MCPazs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IS3mXSbVPhDhx8ePuG4GsiRcVri8+OhpYzicq2yuqkZ6Xnhrm/qDPgEw2NZiPbSsZLpXc8UVDUKlQomkGmRwJIT6bLTga+qxIU3h5MoKa9ALhf07FIuUfcWD2MdDGTzgwNsBiNpwFC1p5Av3hlGDNEtTforyeWRuOA7qIBd5mwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=BO1KY/2R; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1790358861; c=relaxed/simple;
+	bh=p67gamRmEwkUu95LFXAoYMitz/njw63lJRtWJbeZLy4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=j8mPkeiLBcqAR7kWng8IlHawBeyP6oSFIlV5ujoNvjS/mGVVWeweeru/VFbOkQ/tizUIzH2mpOuvd+bAghUrqI45X5ZH2D2yATufTOJIpbAlk+F6F+mdqzIPLHJwbE7rTjam6iPHpCFWgDjvCLe02VIW0ohCHsH04WdfWrcGtzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QRcboaoz; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BO1KY/2R"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=9YUsW8A74GAH04bD4/VKsrtXYmG2/LHg9+7dzmw4vJA=; b=BO1KY/2RpeKsz9XNmMBYg2kACg
-	d5yAWnq2UbzTDv7e6cInJm+f/EIum3ygOkCRWzsD1QIpzHJcwUU3jXgh1V9b4TSfaETLblSaFcqDb
-	IXcurHuKN+R3oFCODUhkKOhMfeyY4myZaXGbP3r2IXmcbUbyrnwbeIGFLXc0h4CNnj5oKNHllzrua
-	WFmtwD7qPYefot/BamYhqCgt3LxahbVcZbnYfoVMsDHGcvZQ4BWBW12QHYoAQFEMfnHrMLUan5slA
-	+J6+KR6mp4ofVNpaVyf6Hfkx1g3RqGJleQRQPzPZ0B5JxCSWSpmnqK+0lcLSQeXpEKoo49vVWp0Ux
-	uh+uP1zA==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xAA6R-000Jlf-0h;
-	Fri, 25 Sep 2026 19:52:55 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: alexei.starovoitov@gmail.com
-Cc: eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	memxor@gmail.com,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 16/16] selftests/bpf: Add a test for an exception callback behind a dead subprog
-Date: Fri, 25 Sep 2026 19:52:43 +0200
-Message-ID: <20260925175244.1136329-17-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260925175244.1136329-1-daniel@iogearbox.net>
-References: <20260925175244.1136329-1-daniel@iogearbox.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QRcboaoz"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=p67gamRmEwkUu95LFXAoYMitz/njw63lJRtWJbeZLy4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790358846; v=1; x=1790963646;
+ b=QRcboaozLKaoxFUSBaCGy4b55IgVhMVaDeRoLzRLhmMlTQCQug7GTvIT4+z9mSLEqs8OWMG0
+ b7UxkZBt47DeevV1W8PhHXtOJjSnJ7ZzdxmxC6RaoVn531n9GqYHqKTGUcGNWDcXcfB89QTaqt3
+ pN9c9bPZ0ArbNzZxeTkxoG8U=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c0aea6dd7cc8ad8e;
+	Fri, 25 Sep 2026 17:54:06 +0000
+X-Mizu-Trace-ID: c0aea6dd7cc8ad8e
+X-Migadu-Flow: FLOW_OUT
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Date: Fri, 25 Sep 2026 17:53:21 +0000
+Subject: [PATCH bpf] bpf, arm64: Fix jited line info off by kCFI hash
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28134/Fri Sep 25 08:25:58 2026)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260925-b4-arm64-bpf-linfo-cfi-v1-1-e930ab335170@linux.dev>
+X-B4-Tracking: v=1; b=H4sIABC1tmoC/22NzQ6CMBCEX4Xs2Q2IgOCrGA/tupVVbMnWv4Tw7
+ ha8epyZb2YmiKzCEQ7ZBMoviRJ8EttNBtQbf2GUc9JQFmVTdGWNtkKj96ZCOzocxLuA5ARdTbu
+ 223NVtASpPCo7+azDR0gonH5mfNor02OZXDBrIqNV46lfrGHMKbyD3ljzNfpzBfP8BektMb+2A
+ AAA
+X-Change-ID: 20260925-b4-arm64-bpf-linfo-cfi-f5c3897e408c
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Mark Rutland <mark.rutland@arm.com>, Maxwell Bland <mbland@motorola.com>, 
+ Sami Tolvanen <samitolvanen@google.com>
+Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>, 
+ "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+X-Mailer: b4 0.15.2
 
-Add a test where a static subprogram only called from dead code sits in
-front of the exception callback, so that its removal compacts
-subprog_info[] underneath the callback's index.
+With CONFIG_CFI=y, the jited line info of every arm64 BPF program is
+off by one instruction, so tools that use it show the wrong source line.
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t exceptions
-  [...]
-  #129/119 exceptions/exception_cb_behind_dead_subprog:OK
-  #129     exceptions:OK
-  Summary: 1/119 PASSED, 0 SKIPPED, 0/0 FAILED
+The JIT counts ctx.offset[] from ctx.ro_image. Since commit
+710618c760c0 ("arm64/cfi,bpf: Support kCFI + BPF on arm64"),
+prog->bpf_func starts past the 4-byte kCFI hash, and
+bpf_prog_fill_jited_linfo() adds the offsets to prog->bpf_func.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Subtract cfi_get_offset() from the offsets before the fill, and move
+the fill after bpf_prog_update_insn_ptrs(), which needs the offsets
+relative to ctx.ro_image.
+
+Fixes: 710618c760c0 ("arm64/cfi,bpf: Support kCFI + BPF on arm64")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/all/20260904014748.C04AA1F000E9@smtp.kernel.org/
+Reported-by: Alexei Starovoitov <ast@kernel.org>
+Closes: https://lore.kernel.org/all/DLNXZ2WK7TPD.2RZBUNRS4FA4L@gmail.com/
+Assisted-by: LLM
+Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 ---
- .../selftests/bpf/prog_tests/exceptions.c     |  7 ++++
- .../bpf/progs/exceptions_dead_subprog.c       | 40 +++++++++++++++++++
- 2 files changed, 47 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/exceptions_dead_subprog.c
+Tested in an arm64 KVM guest with CONFIG_CFI=y. Without this patch
+every line info entry after a function's first was off by one
+instruction, and with it every entry was correct.
+---
+ arch/arm64/net/bpf_jit_comp.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index 639866ce09a9..3705db18c1bb 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -6,6 +6,7 @@
- #include "exceptions_ext.skel.h"
- #include "exceptions_fail.skel.h"
- #include "exceptions_assert.skel.h"
-+#include "exceptions_dead_subprog.skel.h"
- 
- static char log_buf[1024 * 1024];
- 
-@@ -410,9 +411,15 @@ static void test_exceptions_assertions(void)
- 	RUN_TESTS(exceptions_assert);
- }
- 
-+static void test_exceptions_dead_subprog(void)
-+{
-+	RUN_TESTS(exceptions_dead_subprog);
-+}
-+
- void test_exceptions(void)
- {
- 	test_exceptions_success();
- 	test_exceptions_failure();
- 	test_exceptions_assertions();
-+	test_exceptions_dead_subprog();
- }
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_dead_subprog.c b/tools/testing/selftests/bpf/progs/exceptions_dead_subprog.c
-new file mode 100644
-index 000000000000..4f8b82a85234
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/exceptions_dead_subprog.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+/*
-+ * Read-only and frozen, so the verifier sees a constant zero, while clang
-+ * cannot fold the volatile read and keeps the call below.
-+ */
-+const volatile int never;
-+
-+/* Only called from dead code, hence removed as a whole before the JIT runs. */
-+static __noinline int dead_subprog(struct __sk_buff *ctx)
-+{
-+	return ctx->len;
-+}
-+
-+__noinline int exception_cb_behind_dead_subprog_cb(u64 cookie)
-+{
-+	return 42;
-+}
-+
-+/*
-+ * libbpf appends the exception callback behind the subprograms reached by
-+ * calls, so removing the dead one compacts subprog_info[] underneath the
-+ * callback's index.
-+ */
-+SEC("?tc")
-+__exception_cb(exception_cb_behind_dead_subprog_cb)
-+__success __retval(42)
-+int exception_cb_behind_dead_subprog(struct __sk_buff *ctx)
-+{
-+	if (never)
-+		return dead_subprog(ctx);
-+	bpf_throw(0);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index c5f55d6161fee..cdc98efc1acf0 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2345,14 +2345,21 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 		/* offset[prog->len] is the size of program */
+ 		for (i = 0; i <= prog->len; i++)
+ 			ctx.offset[i] *= AARCH64_INSN_SIZE;
+-		bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
+ 		/*
+ 		 * The bpf_prog_update_insn_ptrs function expects offsets to
+ 		 * point to the first byte of the jitted instruction (unlike
+-		 * the bpf_prog_fill_jited_linfo above, which, for historical
++		 * the bpf_prog_fill_jited_linfo below, which, for historical
+ 		 * reasons, expects to point to the next instruction)
+ 		 */
+ 		bpf_prog_update_insn_ptrs(prog, ctx.offset, ctx.ro_image);
++		/*
++		 * Line info is relative to prog->bpf_func, which starts
++		 * cfi_get_offset() bytes into ro_image. Shift the offsets here,
++		 * after bpf_prog_update_insn_ptrs(), which needs them unshifted.
++		 */
++		for (i = 0; i <= prog->len; i++)
++			ctx.offset[i] -= cfi_get_offset();
++		bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
+ out_off:
+ 		if (!ro_header && priv_stack_ptr) {
+ 			free_percpu(priv_stack_ptr);
+
+---
+base-commit: ad139384ecddb6f3e7e3c3c12765aafae0e39670
+change-id: 20260925-b4-arm64-bpf-linfo-cfi-f5c3897e408c
+
+Best regards,
+--  
+Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
