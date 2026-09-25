@@ -1,170 +1,224 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-15.mta0.migadu.com [91.218.175.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0121E3DA7E4;
-	Fri, 25 Sep 2026 09:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E94E48A8A7
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 10:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790330134; cv=none; b=E+5LTsWscHyD+Pq9GzS/Gi5cprSe8Ujqoy6Rj9E30vHdzk0MWfnhOpIJkRTuMvZP3GiS1tVSzh4jvRVI6bx0GIzazO+loQBxryLG6VQAtbKw9ssrNVBmp2K0px7PTNbrrZXsaYrtNkJK6GuaW0lSeu+SLVi7HRMlbD8a6opCPBQ=
+	t=1790330403; cv=none; b=XfgfpN7zhvTlY8IyF35cGJV79Bs/yX9fb5s08t2pQ6FONXqEQ2FtvQnVQbvOyE+PU4SVBZLjtwmPNsr5KALdAwcgcKTH4m2iAIVNbmJdGFXFjt8kxQrIngqffYqEeqL75cbgtaVxSK0uTU+qXCuyifTq7toloEuOp7Clmh5dob0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790330134; c=relaxed/simple;
-	bh=bbikqsSea9vW+pe3Cgq2a9QL95dQasb87hlFKxy08F8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dkV5/EYkCBQn5pyz+cwsaZfrThofldme4FpFbE6QHNrboKZdxAcFm6jzBRqRdGyd7+GP6QhT6/5EGl46uexq9HfCZRa6bzDCITrX9l9/qVru9cxvoYfj1Df6j8SHtB+oZBE0PE7Erij3fXOAXQezL4GvSfw0VAFA0Ph9kP6JW2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HxJQcEvn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790330403; c=relaxed/simple;
+	bh=oDrTnQSt3rnYXR+E6uqseuk/HuuLa/CRWtEAh3DDTwU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=kWW0QApdC5PUFYM6m9bYNyYo0p6yKCG7DA9Cp7F0k9WHAlaGImYbmofHI5pD9GINvcazGuC1meTSoZZrOQZtaw6w5XBIiHuWGxIfQP6+eN4NM/b50jC/8RukzZmSCx376s68XHYYVA9puHfwKrBAj6Ahlz6ILIkKUIXKSZFAfnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WwDc5QPs; arc=none smtp.client-ip=91.218.175.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HxJQcEvn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C76A1F000FF;
-	Fri, 25 Sep 2026 09:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790330132;
-	bh=wHcL5jPNS47s6Ul8XnEo1uFsA8Y0TKv8vyd/Iuc4jW8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HxJQcEvnuhUOHH3Z6mzmWye1CE1PjDtpVrPBVFbcNDGyG6yBkjOShg1wXTRxmQKyc
-	 TCJMHEkTxA8Sxw4HyLR7LdXQhRJb+9udY3QgV8ET7cug6AZBPLxgIFx/TdmYGQ8bVU
-	 ptEgwP56FVQ2pJrDbYSWaP8xyRORQKPPWrshPWAAjxwWnAwT2YIoJgfyo9wv4EO7c3
-	 7ozDd+omlnSWJmwSq3s1563JOKXMeNxa13jAxu5Ee20miDdmPGzcEIeZWGgnBBy5y6
-	 eWzAFHQy56s+qgvvgTG8xUGQUmf5tQzyaZcP9CgdenUpWl9R2UycwCgDON1sf75KvU
-	 KkanjhxFaUGcw==
-Date: Fri, 25 Sep 2026 10:55:01 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
-	Doug Gilbert <dgilbert@interlog.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, 
-	Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
-Subject: Re: [PATCH v3 05/40] mm/vma: ensure mmap_prepare doesn't set actions
- on a mergeable vma
-Message-ID: <arZE4aXD0yIbXVFU@gremlin>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-5-4583d8a23bca@kernel.org>
- <DLNSM8R8JS9A.1850RMXAG9NSR@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WwDc5QPs"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=oDrTnQSt3rnYXR+E6uqseuk/HuuLa/CRWtEAh3DDTwU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790330398; v=1; x=1790935198;
+ b=WwDc5QPs9jNc3Jp2/HT7frjq2oSUrqQTawXCGhMbFh2HzqsOp0VAt9EKwBA+Le955HKza73N
+ qIT6wZbRmGEeGHAmuRByTZhHv6BFkB9qZ/P/U0L7J1NOfA9VjnPWU0mgoqrr8HSLKqouipXFl5+
+ vVG3PfEAUmNpd0VK1EvKgg/k=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ea20b57e532c7474;
+	Fri, 25 Sep 2026 09:59:58 +0000
+X-Mizu-Trace-ID: ea20b57e532c7474
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DLNSM8R8JS9A.1850RMXAG9NSR@nvidia.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 25 Sep 2026 09:59:53 +0000
+Message-Id: <DLOB5OKRK23X.1VAD9QKRHYJ35@linux.dev>
+Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <kpsingh@kernel.org>, <john.fastabend@gmail.com>, <leon.hwang@linux.dev>,
+ <zirajs7@gmail.com>, <rhkrqnwk98@gmail.com>, <puranjay@kernel.org>,
+ <xukuohai@huaweicloud.com>, <iii@linux.ibm.com>, <hbathini@linux.ibm.com>,
+ <chleroy@kernel.org>, <naveen@kernel.org>, <bjorn@kernel.org>,
+ <pulehui@huawei.com>, <yangtiezhu@loongson.cn>, <hengqi.chen@gmail.com>,
+ <linux-kernel@vger.kernel.org>, <martin.lau@kernel.org>,
+ <eddyz87@gmail.com>, <yonghong.song@linux.dev>, <mason@kernel.org>,
+ <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf v3 3/3] selftests/bpf: Detach a trampoline prog
+ while a task sleeps before it
+From: "Florent Revest" <florent.revest@linux.dev>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20260924170543.1017048-4-florent.revest@linux.dev>
+ <9ff9f911b980da0e9100578ccf6dba5c7a5414e0b0075922e750161220370554@mail.kernel.org>
+In-Reply-To: <9ff9f911b980da0e9100578ccf6dba5c7a5414e0b0075922e750161220370554@mail.kernel.org>
 
-On Thu, Sep 24, 2026 at 03:28:10PM -0400, Zi Yan wrote:
-> On Thu Sep 17, 2026 at 12:22 PM EDT, Lorenzo Stoakes (ARM) wrote:
-> > When a user requests an mmap_action be performed in mmap_prepare, this
-> > involves populating the VMA range with data.
-> >
-> > However, if the VMA is mergeable, it might then mistakenly be merged with
-> > another VMA without having populated the range.
-> >
-> > Every mmap action currently available sets VMA flags such that the VMA
-> > cannot be merged.
-> >
-> > However, to ensure that no future mmap action falls foul of this, assert
-> > that this is the case upon mmap_prepare validation.
-> >
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > ---
-> >  mm/vma.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/mm/vma.c b/mm/vma.c
-> > index d6ed10cefc8f..62f2ce1ad5a1 100644
-> > --- a/mm/vma.c
-> > +++ b/mm/vma.c
-> > @@ -2809,6 +2809,15 @@ static int mmap_validate(unsigned long prev_start, unsigned long prev_end,
-> >  int mmap_prepare_validate(const struct vm_area_desc *prev_desc,
-> >  			  const struct vm_area_desc *desc)
-> >  {
-> > +	/*
-> > +	 * It is not valid to execute mmap actions for VMAs which can be merged,
+On Thu Sep 24, 2026 at 5:53 PM UTC,  wrote:
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_mod_race.c b/to=
+ols/testing/selftests/bpf/prog_tests/bpf_mod_race.c
+> > index ecc3d47919ad..f8497e764beb 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/bpf_mod_race.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_mod_race.c
 >
-> Is it better to say "for VMAs ... after mmap_action_prepare()"? When I
-> first read this, I wonder why the check is done after
-> mmap_action_prepare(), which does some work based on action.type. Then,
-> I realize mmap_action_prepare() changes desc->vma_flags and affect its
-> mergeablitiy.
-
-Ack, good point will update!
-
+> [ ... ]
 >
-> > +	 * as any such merge would leave portions of the mapping incorrectly
-> > +	 * unmapped.
-> > +	 */
-> > +	if (vma_flags_can_merge(&desc->vma_flags) &&
-> > +	    WARN_ON_ONCE(desc->action.type != MMAP_NOTHING))
-> > +		return -EINVAL;
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c=
+ b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+> > new file mode 100644
+> > index 000000000000..002eb4920c91
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+>
+> [ ... ]
+>
+> > +static void test_detach(bool sleepable_fexit, bool victim_fexit)
+> > +{
+> > +	struct tramp_prog_detach *sleepable =3D NULL, *victim =3D NULL;
+> > +	struct pollfd pfd =3D { .events =3D POLLIN };
+> > +	struct uffdio_copy uffd_copy =3D {};
+> > +	struct uffd_msg uffd_msg;
+> > +	void *fault_page, *src_page =3D MAP_FAILED;
+> > +	long page_size =3D getpagesize();
+> > +	bool started =3D false;
+> > +	void *thread_ret;
+> > +	pthread_t thread;
+> > +	int uffd =3D -1;
+>
+> [ ... ]
+>
+> > +	sleepable_prog =3D pick_prog(sleepable, sleepable_fexit, true);
 > > +
-> >  	return mmap_validate(prev_desc->start, prev_desc->end,
-> >  			     desc->start, desc->end,
-> >  			     &prev_desc->vma_flags, &desc->vma_flags);
+> > +	/* Not armed yet so this doesn't block, make sure sleepable runs firs=
+t */
+> > +	if (!ASSERT_OK((long)run_sleepable(NULL), "dry run"))
+> > +		goto out;
+> > +	if (!ASSERT_LT(sleepable->bss->ts, victim->bss->ts, "prog order"))
+> > +		goto out;
+> > +
+> > +	uffd =3D uffd_block_page(fault_page);
+> > +	if (!ASSERT_GE(uffd, 0, "userfaultfd open + register address"))
+> > +		goto out;
 >
->
-> Otherwise, LGTM.
->
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> A subsystem pattern flags this as potentially concerning: uffd_block_page=
+()
+> returns -errno when syscall(__NR_userfaultfd, O_CLOEXEC) fails. On a kern=
+el
+> without CONFIG_USERFAULTFD that is -ENOSYS, and the test then fails throu=
+gh
+> ASSERT_GE() instead of calling test__skip() with a message saying userfau=
+ltfd
+> is not available. While tools/testing/selftests/bpf/config sets
+> CONFIG_USERFAULTFD=3Dy so the BPF CI kernel always has it, and the same
+> ASSERT_GE pattern already exists in bpf_mod_race.c (serial_test_bpf_mod_r=
+ace)
+> from before this commit, is this the intended behavior for environments
+> without userfaultfd support?
 
-Thanks!
+This is the same as bpf_mod_race. CONFIG_USERFAULTFD is in the selftests co=
+nfig
+so I'd just leave it like that.
 
+> > +	sleepable->bss->fault_addr =3D fault_page;
+> > +
+> > +	if (!ASSERT_OK(pthread_create(&thread, NULL, run_sleepable, NULL),
+> > +		       "pthread_create"))
+> > +		goto out;
+> > +	started =3D true;
+> > +
+> > +	/* Wait for the thread to sleep in bpf_copy_from_user() */
+> > +	pfd.fd =3D uffd;
+> > +	if (!ASSERT_EQ(poll(&pfd, 1, 10000), 1, "poll uffd"))
+> > +		goto out;
+> > +	if (!ASSERT_EQ(read(uffd, &uffd_msg, sizeof(uffd_msg)), sizeof(uffd_m=
+sg),
+> > +		       "read uffd"))
+> > +		goto out;
+> > +	if (!ASSERT_EQ(uffd_msg.event, UFFD_EVENT_PAGEFAULT, "uffd pagefault"=
+))
+> > +		goto out;
+> > +
+> > +	/* Detach and unload the victim prog, and make sure it is gone */
+> > +	tramp_prog_detach__destroy(victim);
+> > +	victim =3D NULL;
+> > +	kern_sync_rcu();
+> > +	usleep(100 * 1000);
+> > +	kern_sync_rcu();
 >
->
-> --
-> Best Regards,
-> Yan, Zi
->
+> Does this wait actually ensure the victim prog is gone before the task
+> resumes?
 
---
-Cheers, Lorenzo
+It doesn't anymore. With patch 1 the prog is freed much later, and the test
+passed even without patch 2. v4 waits for the .bss map of the detached prog=
+ to
+go away, which happens when the prog is freed, and the test crashes again w=
+ith
+patch 1 alone. The prog ID can't be used for this, it goes away when the la=
+st
+reference is dropped, before the grace periods.
+
+> The test only catches the use-after-free if the victim prog has actually =
+been
+> freed before UFFDIO_COPY releases the sleeping task. The wait here does n=
+ot
+> guarantee that, and on the kernel this series produces it most likely is =
+not
+> freed yet.
+>
+> Commit 1c2316cf73ba ("bpf: Wait for an RCU tasks grace period before free=
+ing
+> trampoline progs") changed __bpf_prog_put_noref() so that a tramp_linked
+> prog is freed through call_rcu_tasks(&prog->aux->rcu, __bpf_prog_put_rcu_=
+tasks),
+> then call_rcu(), then bpf_prog_free(), which calls schedule_work() for th=
+e
+> final vfree.
+>
+> RCU Tasks callbacks are lazy. call_rcu_tasks_generic() only sets needwake
+> for wakeme_after_rcu (a synchronous waiter) or when the queue reaches
+> rcu_task_lazy_lim. Otherwise it arms lazy_timer with rcu_tasks.lazy_jiffi=
+es
+> =3D DIV_ROUND_UP(HZ, 4) (kernel/rcu/tasks.h:145), which is about 250ms by
+> default.
+>
+> Nothing on the detach path forces a synchronous RCU Tasks wait. Detaching
+> the victim while the sleepable prog stays attached goes through
+> modify_ftrace_direct(), and its tmp_ops is static, so it is not
+> FTRACE_OPS_FL_DYNAMIC and ftrace_shutdown() does not call
+> synchronize_rcu_tasks().
+>
+> The test waits only kern_sync_rcu() + 100ms + kern_sync_rcu().
+> kern_sync_rcu() is membarrier(MEMBARRIER_CMD_SHARED), which is
+> synchronize_rcu() on SMP and a no-op with one CPU online. That is well sh=
+ort
+> of 250ms lazy delay + RCU Tasks GP + RCU GP + workqueue.
+>
+> So when the thread resumes in the old image, the victim's bpf_prog and JI=
+T
+> image are usually still allocated. On a kernel that has 1c2316cf73ba but
+> lacks 2ece3357872c (or breaks it later), the thread would run the victim
+> prog without a KASAN report and the test would pass.
+>
+> Consider waiting well beyond the RCU Tasks lazy period (for example about=
+ 1s,
+> or polling until the victim prog ID is no longer returned by
+> bpf_prog_get_next_id()/bpf_prog_get_fd_by_id()) before releasing the thre=
+ad.
+>
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/360342=
+51810
+
