@@ -1,136 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C5D4D0A1F
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 18:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679302D63E5;
+	Fri, 25 Sep 2026 18:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790359872; cv=none; b=L4zoROcCkA5dmPLLKlZi3kocUzmSEzuDDv7+aPt5IONBW27jRw4GAPDtuY6ol9L0+58bJTTdeKOq6yQDfA5rxyz4cQKG12gHNn6rBL4wd7uJ0VuEXZHU7ZlWj5ZV6N+KapFHEVevoZnLTUesEfhaRx2C4c5Yw8d+Z5VMbimrrO0=
+	t=1790361142; cv=none; b=qvjUvEw7Rn8vDyimF6bQ1PtX78Y/CPtCSCIY05fQrr729GOyH09L97GWJTfhXurLySgCgWgZaULh+I202Qbond07V6MIP2ZIHhi+/+ihEsxjGE3cFdPD55EPjLs3nNwRVqj7Yi2TwLbyqgHSVimHOc3TjyPK6+DlhplFZQFFmT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790359872; c=relaxed/simple;
-	bh=KcD7iV4pneWDQ+xgNiGHiLCV3JCuyg3um0UR0GQVqFA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fgdu3Tr6/0FZj0lBHKw0LtKLhBWpsnjjxM5FyRw1uenDWjYOrQ/nwjx2vmn8ahYGfyRpJUJ8IRBA+UREpEOIebe/8j1SRdq4h3a0lSoMyApEMYPy2WLH1+HMV+8MQNvJ2XNe0oqAYRDpdXATjEEaf/J02h1NEfTtW+y4Xhqzg4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=neN/5pK0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790361142; c=relaxed/simple;
+	bh=Z7pFavOJrEfLFkHVLkF2ggQirU7ln6iZRXVEaXbRtGA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ppWdP2SozI+IF+yLtAwmgirCdaNKda00QVftfRNgRNlBOYq84bXfgvHWH0/3yu5CA4TReszbGMxSa739EROayYefEPW+C8qcx8Y7dN1Ic9E5jvAMuBOVioGnvpL4Vtxm4Tw8ufCf2pKhKiihqC8g8jaBGneorNbl6AyWTl1RNX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtf+VFOh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="neN/5pK0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 249841F000FF;
-	Fri, 25 Sep 2026 18:11:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtf+VFOh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2091F000FF;
+	Fri, 25 Sep 2026 18:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790359870;
-	bh=2uP7EHEE5N1dFydFBjZvCsqXKF5QSyFwU7x1Ew8pguI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=neN/5pK0bsCDk6Jqv+oyoS0B7pnyujZtU72lqa3w6wS4PeNs/l5ResRjuIz02wyrh
-	 i9D8R0ZZzqaRfxpe13fHwNf3c+/BORXAN3u+S67GNxovY4m7pMYqBnsq3fFT3wYwdY
-	 4MztmtUZA9MrMDNFktxyL9dtsbmZjsi1G7P6tIjYD3vi0wz6161vn+KhM9+OODMpeb
-	 bPSPQWoI1u0gSDmPEmGR2Ap9rOxMXERjQNy/vswmuGDHIy63Vskg6Pz5V0vK0k5gBw
-	 GuzbgNYuIW6vqELPT5t/x0llwhpayLMYQFxU70MStwQL91p/BE3gz93cygt9PYCNoa
-	 uibi16DXt+eyQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3 10/10] net: stmmac: retain DMA resources across
- MTU changes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "James Hilliard" <james.hilliard1@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260924-submit-stmmac-reset-fixes-v1-v3-10-c031e3f3a282@gmail.com>
-References: <20260924-submit-stmmac-reset-fixes-v1-v3-0-c031e3f3a282@gmail.com>
- <20260924-submit-stmmac-reset-fixes-v1-v3-10-c031e3f3a282@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 25 Sep 2026 18:11:09 +0000
-Message-Id: <20260925181110.249841F000FF@smtp.kernel.org>
+	s=k20260515; t=1790361141;
+	bh=4DKXGY4W9CJyCP2LsrBPNOjJ9OlDQDusad8clfE8tZ8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=gtf+VFOh6RmrVYsP1Cbn3VuhOZun151Gqyr7/K6XdFrpJWvoBDsP9N/q63ScsYyFz
+	 A2j+ya25+T5XzF0tmvjSoXxA/iKG3FZZiGKdiA2WUjcCNqQ0nhZWmLdLGv8zMtZbRX
+	 IzYkjrg0uC4XxsH/tBLXhsHtKkQCmZPFFudLW3HbXde9LirFikc8lw3BHhHZ0kp/Wa
+	 e2cAeGZAil8gh0qTkNa+flOIjHuU4JJdU4LW22ox6tSHWpWVPjPKLqx/qdkLTWwp7E
+	 d74pn2J+yqCRzPJkdzkGF8LE1sb6tjuODlmp8cBFOMCMKi6fBrRJCoSj9GfBM4SudO
+	 xCIbkqVUxw+GA==
+Content-Type: multipart/mixed; boundary="===============0506911882495437760=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <06229dde91361ba3f8d3c8d5ab0350f4a66643eb72b0c3554b1c146fe8523eac@mail.kernel.org>
+In-Reply-To: <20260925174402.2028649-2-hi@tychen.cc>
+References: <20260925174402.2028649-2-hi@tychen.cc>
+Subject: Re: [PATCH bpf-next v8 1/2] bpftool: Add recursive map dumping
+From: bot+bpf-ci@kernel.org
+To: hi@tychen.cc,bpf@vger.kernel.org
+Cc: qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 25 Sep 2026 18:32:20 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] net: stmmac: Use-After-Free of TX hrtimers during MTU reconfigurat=
-ion
-- [High] net: stmmac: Shared interrupt line disruption via disable_irq()
---
+--===============0506911882495437760==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 3f4df67ed0eaa758c59a612b2b520f3af55b5627
-Author: James Hilliard <james.hilliard1@gmail.com>
-
-net: stmmac: retain DMA resources across MTU changes
-
-Releasing the current datapath before reopening with a new MTU loses the
-working configuration when hardware setup fails. Keep the old rings and
-IRQ registrations until replacement hardware setup succeeds, so an
-ordinary setup error can restore the old MTU without allocating new rings
-or requesting interrupts again.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index d17c68f55caf6..1a552455a633d 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 20d59eab09a1..be338b4fbbea 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
 
 [ ... ]
 
-> @@ -4080,14 +4156,40 @@ static int stmmac_request_irq(struct net_device *=
-dev)
->  	return ret;
->  }
-> =20
-> +/* Balance disable_irq()/enable_irq() for every registered IRQ, including
-> + * shared lines. Unlike freeing and requesting IRQs, this cannot fail.
-> + */
-> +static void stmmac_set_irq_state(struct stmmac_priv *priv, bool enable)
-> +{
-> +	void (*set_state)(unsigned int) =3D enable ? enable_irq : disable_irq;
-> +	struct stmmac_msi *msi =3D priv->msi;
-> +	int irq =3D priv->dev->irq;
-> +	u32 i;
+> @@ -907,21 +960,29 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>
+>  static int do_dump(int argc, char **argv)
+>  {
+> +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts,
+> +		    .open_flags = BPF_F_RDONLY,
+> +	);
+>  	json_writer_t *wtr = NULL, *btf_wtr = NULL;
+>  	struct bpf_map_info info = {};
+> +	struct map_dump_ctx ctx = {};
+> +	bool recursive_dump = false;
+>  	int nb_fds, i = 0;
+>  	__u32 len = sizeof(info);
+>  	int *fds = NULL;
+>  	int err = -1;
+> +	size_t j;
+
+[ ... ]
+
+> +	if (recursive_dump) {
+
+[ ... ]
+
+> +		/* Record the selected maps before discovering any inner maps. */
+> +		for (i = 0; i < nb_fds; i++) {
+> +			len = sizeof(info);
+> +			if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
+> +				p_err("can't get map info: %s", strerror(errno));
+> +				err = -1;
+> +				goto exit_close;
+> +			}
+> +			err = hashmap__add(ctx.seen, info.id, 0);
+> +			if (err) {
+> +				p_err("failed to record map id %u: %s", info.id,
+> +				      strerror(-err));
+> +				err = -1;
+> +				goto exit_close;
+> +			}
+> +		}
+> +	}
+
+Does this pre-loop need to clear info before each bpf_map_get_info_by_fd()
+call?  The kernel's bpf_map_get_info_by_fd() starts by copying the
+userspace buffer, then fills in the fields:
+
+kernel/bpf/syscall.c:bpf_map_get_info_by_fd() {
+    memset(&info, 0, sizeof(info));
+    if (copy_from_user(&info, uinfo, info_len))
+        return -EFAULT;
+    ...
+    if (map->btf) {
+        info.btf_id = btf_obj_id(map->btf);
+        info.btf_key_type_id = map->btf_key_type_id;
+        info.btf_value_type_id = map->btf_value_type_id;
+    }
+
+For maps without BTF, those three fields stay at whatever the userspace
+buffer already contained.  In this loop, if fds[0] has BTF but fds[1]
+doesn't, then info used for fds[1] still carries fds[0]'s BTF ids.  The
+main loop below sees info->btf_value_type_id != 0 for a non-BTF map and
+tries to load the wrong BTF object.
+
+The same problem appears in the pending inner map loop:
+
+> +	for (j = 0; !err && j < ctx.pending_cnt; j++) {
+> +		int fd;
 > +
-> +	set_state(irq);
+> +		fd = bpf_map_get_fd_by_id_opts(ctx.pending_ids[j], &opts);
+> +		if (fd < 0) {
+> +			p_err("can't open inner map id %u: %s",
+> +			      ctx.pending_ids[j], strerror(errno));
+> +			err = -1;
+> +			break;
+> +		}
+> +		len = sizeof(info);
+> +		if (bpf_map_get_info_by_fd(fd, &info, &len)) {
+> +			p_err("can't get map info: %s", strerror(errno));
+> +			err = -1;
+> +		} else {
+> +			if (!wtr)
+> +				printf("\n");
+> +			err = map_dump(fd, &info, wtr, true, &ctx);
+> +		}
+> +		close(fd);
+> +	}
 
-[Severity: High]
-Since dev->irq, priv->wol_irq, and priv->sfty_irq can be registered as
-shared interrupt lines (IRQF_SHARED) in single IRQ mode, does using
-disable_irq() here risk completely disrupting other unrelated devices
-sharing the same interrupt line?
+Should each iteration clear info here too?  When one outer map holds both
+BTF and non-BTF inner maps, or when dumping multiple selected roots that
+reference different inner maps, the inner maps can have different BTF
+states.  Stale btf_id, btf_key_type_id and btf_value_type_id from a
+previous map cause map_dump() to select BTF formatting for a non-BTF map
+and call btf__load_from_kernel_by_id() with the wrong ID.  When the
+key_size or value_size also differs, btf_dumper_type() reads past the end
+of the malloc(info->key_size) and alloc_value(info) buffers.
 
-Could this suppress the interrupt at the controller level and lead to
-system-wide instability or timeouts for those other devices?
+prog.c's do_dump() already does memset(&info, 0, sizeof(info)) before each
+bpf_prog_get_info_by_fd().  Would the same pattern fix this?
 
-[ ... ]
 
-> @@ -6234,6 +6338,113 @@ static void stmmac_set_rx_mode(struct net_device =
-*dev)
->  	stmmac_set_filter(priv, priv->hw, dev);
->  }
-> =20
-> +static int stmmac_reconfigure_mtu(struct net_device *dev, int mtu)
-> +{
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-[ ... ]
-
-> +	/* An IRQ can recover a TX error and restart a queue. Drain handlers
-> +	 * before the final TX stop, and keep the registrations for rollback.
-> +	 */
-> +	stmmac_set_irq_state(priv, false);
-> +	netif_tx_disable(dev);
-> +	synchronize_net();
-> +
-> +	ret =3D stmmac_prepare_rx_buffers(priv);
-
-[Severity: High]
-If a TX error IRQ fires between the initial stmmac_quiesce() and the
-stmmac_set_irq_state(priv, false) call here in stmmac_reconfigure_mtu(),
-the queue can be restarted and stmmac_tx_timer_arm() will re-arm the TX
-hrtimer.
-
-However, this block appears to omit a final stmmac_stop_tx_queues(priv)
-or hrtimer_cancel() call to disarm the TX hrtimers before freeing the
-old configuration.
-
-Does this mean the timer could remain queued when old_conf is freed,
-potentially causing a use-after-free and a kernel panic?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260924-submit-stm=
-mac-reset-fixes-v1-v3-0-c031e3f3a282@gmail.com?part=3D10
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36170286834
+--===============0506911882495437760==--
