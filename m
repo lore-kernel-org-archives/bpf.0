@@ -1,40 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BBD4D98E9;
-	Fri, 25 Sep 2026 15:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8D64E1C9F;
+	Fri, 25 Sep 2026 15:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790351779; cv=none; b=U/jhjTzZrvIU2hOJEtZ5WSUbgThLQgcq7dFFx+i7cleINb4kiMWbbZmE6zhlDQmwqmkPdN2GdYWZhX6DQ/aLC7aCt/BaAl/iiNeGCPRBo2ZwLJHCSTZRgnhyKNNVclXNehMKaCxKWRCM3+JlqhPOaqfHOxO9XkU/nxHa+/tlQ04=
+	t=1790351785; cv=none; b=bRHtWew1Otpg+dDEJiWBFdcZ01gjepiqn4Isff2cpmkL5FuYDy2xIkAeW9y972H8V3OctX6DPMggaA1tr841HXGRUBeihgvAjDIcF75Nu01I8+hTc7khYm+cC58VvGJ/KTBd8tLuWzxM+drtOg0i0d5Yoa5OiV3yIndx9AfHRDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790351779; c=relaxed/simple;
-	bh=rRkn9X8k7Gat4aI3iGkMiLlqCbibek7O3mNWwzNTrsA=;
+	s=arc-20240116; t=1790351785; c=relaxed/simple;
+	bh=oo/olnVSIzYB/d58EvBDtBhxDkF1/f5cqybu9drymSs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Bygy3DwTu1cu0KQoS4RSmxFcxwP73MJdBkaPrb7GXURBhbXwsivLr3jvWD3PbUzzBqcmP3LzZJMqskNLKvogewY+FZ2rVDZOtd/S9U6Y1VWh4Y0LUT2vHyOstR6x95F7DGPr0KiQqFJIRc4KffFKC4ze+g0zN2mbOb/N9xkQci8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=DI5MBJwQ; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=qSphP+MZbBa+jXWkuxXsygDkI9eO+fdRVTYldQcKAUoDIUnM6zL7ff2hGNrF+QAvF11W+CHnMq4/OpmFiwuVLmTL69Rp+5kgKfFcQPXQLdbc4fAaQfHUwFAIwCM8FdMEdO009WjEe2yix2IPoh1KGFdtXvItc/3ehFkWuFlXJnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=QGgTmLOo; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="DI5MBJwQ"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="QGgTmLOo"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=dC9WQwKiLo5Qk66H5SkLxQWdAwibcvRfWkJi+Oz5jHA=; b=DI5MBJwQ4wH0IiW21TZQnWU1vO
-	UtZtajv0ESyDri+qUDWvYsSGfZIx6cGGSfdXuUMSPMFlP6YPW7aAlo0a8y1JjNIDwK5dgsv4Ni75D
-	hzWJqP4TYjhPexOoBk8RC+DddmSu2Ea9JEt0WqO1HV2dVcABWLJPjfnz4OvSU2gRfvxM/BRFNzsjZ
-	eA+XQiM1krUq4YJFBjNjZj6CJ8YLX1sCG6FyOF1wyi3quQIGjywbKgoG/oSNX/oT43rQS2WBuaKuq
-	2m8YuWkWtYWKZZBhFGBvKZ/aEa6qCpVHfEUelsVVOVWJX8aJDH81uQ0TSRn3Tf7N8zhkzPLOHwKjc
-	dPEhNKhQ==;
+	bh=OKP2QY/AaMwR2Z3P6A8XZRlvVFVARae09QOBmwhMqMg=; b=QGgTmLOoC/GZDSno4fsKEIPqVW
+	O8FOJp8y5z2cXTj/QYMPUArj7qSTrDynlxofYXt7Nv8FVNJfcptUAfxALzEpHMzlkAEyN8ZandHmX
+	wI17zl10o9UAAIqHaXZbGRc3ekEVT2U7rjDAbGdjIN9GdBT8zu/wMms2iebPweWH+QkEEvxToPdsv
+	Ss5jMMGAdAnz6ayyE8d1xJVJQ+Rd85NJ1xjl4I4OocUU7Y0VVcPqMTkRZoJvcmlrFK9hM7LwjLYPh
+	+4t8XAzISpfUo8DV+YYrPQqNS/kV5MnsGf+yk31MitR5eb2eyRJKYXPh4YHxscTPCOrib8JN9CLtW
+	ASNuVY+Q==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1xA8HT-005Pm0-0t;
-	Fri, 25 Sep 2026 15:56:11 +0000
+	id 1xA8Ha-005PmK-0f;
+	Fri, 25 Sep 2026 15:56:18 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 25 Sep 2026 08:55:19 -0700
-Subject: [PATCH net-next 4/6] ipv4: convert do_ip_getsockopt() to sockopt_t
+Date: Fri, 25 Sep 2026 08:55:20 -0700
+Subject: [PATCH net-next 5/6] ipv6: convert do_ipv6_getsockopt() to
+ sockopt_t
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,7 +44,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260925-sockopt_expand_out_v2-v1-4-c3ef2e3bb5c0@debian.org>
+Message-Id: <20260925-sockopt_expand_out_v2-v1-5-c3ef2e3bb5c0@debian.org>
 References: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
 In-Reply-To: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
@@ -64,94 +65,94 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10966; i=leitao@debian.org;
- h=from:subject:message-id; bh=rRkn9X8k7Gat4aI3iGkMiLlqCbibek7O3mNWwzNTrsA=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqtpl60/YbciZfm+tLGLz2yCeH1JGSuFq5Yy8gS
- zn0j55bEmGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaraZegAKCRA1o5Of/Hh3
- bZdCD/4xIec1UnG8f2j3lEUvsYOU6oOGX55o5Kjq/Okq8RskSON38s396JapH5grAc7YFPKX7DZ
- i3Mv2zlctDY68V1dG285/KpJ4XvJCaFtWzvh+kQQsgkv+MuT5RhnRScKMVludzgDJyOQhDAmItM
- mI7EoDWccjy9D48X5GIvma+ZECTJbf3HAcLWMfjuV6P3A4eYIC5N/LqeUaieDS0NwEJugH7MtoA
- cR789/IwLqa4hlQT6/K9md/iTU3OGPrBoMNCFsS9RJPuGFmQG8xv5AIvmPPCQqKCduXfl1X7tZO
- Jz7LxwLe3CWOZ1iUeYC4mOgv7aHmvsD4mR8P4V05kDMtxRH+1UFwD7u8O2KtdZIm1ZC8U6WDSTq
- BVY+wbmXihJQ1kxR2zrO9WG9za1yl+61DZfE9rFo+tH+PDajr8uap943HEWDDUCSUYzHXOpfwWL
- ClzsqYy+xUdX5jtLMerHNQHruTDa4aW08LeGfEwdWQieFi17gruAhEVZ5tFHeSas6X04d4xMa+l
- 15rs8oUygqu1S0AKATgRDVQ+/OpyxsRTkvCnxDt2eOwfLLXBtqZkXJoxsUsLsw8Tl0bvAePWDC3
- LLLVQ0/lKVImobCSg+mXeeOiPzrOGnh+aZC+8xm5Sg37PBEfTL710qworHnw3ion93xszsGhU94
- DzpbJ03V+ZXxBPA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10536; i=leitao@debian.org;
+ h=from:subject:message-id; bh=oo/olnVSIzYB/d58EvBDtBhxDkF1/f5cqybu9drymSs=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqtpl6Hsw4PFrxlH68VEcxvWd9NifmidloN376L
+ rfGuqry3UGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaraZegAKCRA1o5Of/Hh3
+ bQn+D/94oHWhFVv1UhXS9391gJVgYki5IjaxK8hm4kXrZ7QLUB/4cIdgKtp0dt6R5qGGyxOhGgM
+ KBBAyyQhKHy26mDplGQ3q00M+K8xZ6M0PoIf8H/E3oZ5dCBtPI4c21DcTP7vW+lKC0Ur8QZVHdB
+ EsdVHQ3NY/wY0mw+43yac7H4HVhenLHbNMbCyEX1sqIhdSLoCgvLwqZWSdCM+gWEexDMWkbaXT1
+ ZovufN5bUQ9pbiEL0GQGfTlG3HI0eGiuL4oza3HRwbsGScDZfccXhm3YlIFfihNlbae41NZdNmr
+ 8QJrgqsBu3ZQIH0g+6Vl9msalqDOzZxuRH9qSEGpzcDgPj8eXvRVq95CO+eLJzrVhIgA9jyGWGi
+ ZIsENCKjNkV88bADfubZjJ9K7t8fydPwf1IKmJQlo3WvsgBiRZsmFIciW3fA2qbNkPb5NKATKjg
+ bmjviWWqE1o/cRH6BeXVv1+kKOqyIO10WEPvSZRxnTZknVIFoMkFL9v+cAw8RGQPdip36DnCX9i
+ JvrpJbvf6d/HGHN1GQG9j7RN1cGzmzti7SjQiEAqPEcLfs8K7iDJ6eqDnuKf+OnOEJx1xGQfkih
+ tEHmHRJjrC69xjg/mEcPw+YrCOeUrIrvyxoTEhFupro23MmDomEmxIITLxvtRL7BT9EGSRTFHIq
+ e6OPc5bPaCRZusg==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Convert the SOL_IP switch and ip_mroute_getsockopt(), its last leaf on
-a sockptr_t pair. The IP_MSFILTER and MCAST_MSFILTER bridges go away.
+Convert the SOL_IPV6 switch and its two remaining sockptr_t leaves,
+ip6_mroute_getsockopt() and ipv6_getsockopt_sticky(). The
+MCAST_MSFILTER bridge goes away.
 
-ip_getsockopt() builds the sockopt_t with sockopt_init_user() and
-writes optlen back unconditionally, because IP_OPTIONS and others
-report a length then fail; ip_mc_msfget() therefore stores its length
-last. IP_PKTOPTIONS takes its buffer off iter_out. The argument is
-sopt, since IP_OPTIONS already has an ip_options local named opt.
+ipv6_getsockopt() builds the sockopt_t with sockopt_init_user() after
+its own level checks, and writes optlen back unconditionally.
+IPV6_2292PKTOPTIONS takes its buffer off iter_out; IPV6_FLOWLABEL_MGR
+reads through iter_in. The argument is sopt, since the sticky options
+already have an ipv6_txoptions local named opt.
 
-Validating optlen now precedes the level check and the MRT_* dispatch,
-so a negative optlen wins over -EOPNOTSUPP there.
+MRT6_* is still dispatched before optlen is validated, so a negative
+optlen there wins over -EOPNOTSUPP.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- include/linux/mroute.h |  4 +--
- include/net/ip.h       |  3 +-
- net/core/filter.c      | 18 ++++++++---
- net/ipv4/igmp.c        |  3 +-
- net/ipv4/ip_sockglue.c | 87 +++++++++++++++++++-------------------------------
- net/ipv4/ipmr.c        | 11 +++----
- 6 files changed, 56 insertions(+), 70 deletions(-)
+ include/linux/mroute6.h  |  5 ++--
+ include/net/ipv6.h       |  2 +-
+ net/core/filter.c        | 18 ++++++++---
+ net/ipv6/ip6mr.c         | 13 +++-----
+ net/ipv6/ipv6_sockglue.c | 78 ++++++++++++++++++++----------------------------
+ 5 files changed, 53 insertions(+), 63 deletions(-)
 
-diff --git a/include/linux/mroute.h b/include/linux/mroute.h
-index 4c5003afee6c51..c1c21e61c81c37 100644
---- a/include/linux/mroute.h
-+++ b/include/linux/mroute.h
-@@ -17,7 +17,7 @@ static inline int ip_mroute_opt(int opt)
+diff --git a/include/linux/mroute6.h b/include/linux/mroute6.h
+index fddafdc168f733..ab4d206fb32065 100644
+--- a/include/linux/mroute6.h
++++ b/include/linux/mroute6.h
+@@ -27,7 +27,7 @@ struct sock;
+ 
+ #ifdef CONFIG_IPV6_MROUTE
+ extern int ip6_mroute_setsockopt(struct sock *, int, sockptr_t, unsigned int);
+-extern int ip6_mroute_getsockopt(struct sock *, int, sockptr_t, sockptr_t);
++int ip6_mroute_getsockopt(struct sock *sk, int optname, sockopt_t *sopt);
+ extern int ip6_mr_input(struct sk_buff *skb);
+ extern int ip6mr_compat_ioctl(struct sock *sk, unsigned int cmd, void __user *arg);
+ extern int ip6_mr_init(void);
+@@ -42,8 +42,7 @@ static inline int ip6_mroute_setsockopt(struct sock *sock, int optname,
  }
  
- int ip_mroute_setsockopt(struct sock *, int, sockptr_t, unsigned int);
--int ip_mroute_getsockopt(struct sock *, int, sockptr_t, sockptr_t);
-+int ip_mroute_getsockopt(struct sock *sk, int optname, sockopt_t *opt);
- int ipmr_ioctl(struct sock *sk, int cmd, void *arg);
- int ipmr_compat_ioctl(struct sock *sk, unsigned int cmd, void __user *arg);
- int ip_mr_init(void);
-@@ -31,7 +31,7 @@ static inline int ip_mroute_setsockopt(struct sock *sock, int optname,
- }
- 
- static inline int ip_mroute_getsockopt(struct sock *sk, int optname,
--				       sockptr_t optval, sockptr_t optlen)
-+				       sockopt_t *opt)
+ static inline
+-int ip6_mroute_getsockopt(struct sock *sock,
+-			  int optname, sockptr_t optval, sockptr_t optlen)
++int ip6_mroute_getsockopt(struct sock *sock, int optname, sockopt_t *sopt)
  {
  	return -ENOPROTOOPT;
  }
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 6f602df72ee621..81aef4b98430bf 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -823,8 +823,7 @@ int do_ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
- 		     unsigned int optlen);
- int ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
- 		  unsigned int optlen);
--int do_ip_getsockopt(struct sock *sk, int level, int optname,
--		     sockptr_t optval, sockptr_t optlen);
-+int do_ip_getsockopt(struct sock *sk, int level, int optname, sockopt_t *sopt);
- int ip_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
- 		  int __user *optlen);
- int ip_ra_control(struct sock *sk, unsigned char on,
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index 9bb68d75890364..a1e1de7da8c70d 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -1142,7 +1142,7 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval
+ int ipv6_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
+ 		    unsigned int optlen);
+ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+-		       sockptr_t optval, sockptr_t optlen);
++		       sockopt_t *sopt);
+ int ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 		    char __user *optval, int __user *optlen);
+ 
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 70dc621672f2e9..9a706ec1f7f122 100644
+index 9a706ec1f7f122..e0b79c78c9a9c8 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -5737,10 +5737,20 @@ static int sol_ip_sockopt(struct sock *sk, int optname,
+@@ -5774,10 +5774,20 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
  		return -EINVAL;
  	}
  
 -	if (getopt)
--		return do_ip_getsockopt(sk, SOL_IP, optname,
--					KERNEL_SOCKPTR(optval),
--					KERNEL_SOCKPTR(optlen));
+-		return do_ipv6_getsockopt(sk, SOL_IPV6, optname,
+-					  KERNEL_SOCKPTR(optval),
+-					  KERNEL_SOCKPTR(optlen));
 +	if (getopt) {
 +		struct kvec kvec;
 +		sockopt_t opt;
@@ -162,81 +163,115 @@ index 70dc621672f2e9..9a706ec1f7f122 100644
 +		if (err)
 +			return err;
 +
-+		err = do_ip_getsockopt(sk, SOL_IP, optname, &opt);
++		err = do_ipv6_getsockopt(sk, SOL_IPV6, optname, &opt);
 +		*optlen = opt.optlen;
 +		return err;
 +	}
  
- 	return do_ip_setsockopt(sk, SOL_IP, optname,
- 				KERNEL_SOCKPTR(optval), *optlen);
-diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
-index d573c5bf8f038b..bf00810cdd7a13 100644
---- a/net/ipv4/igmp.c
-+++ b/net/ipv4/igmp.c
-@@ -2763,12 +2763,13 @@ int ip_mc_msfget(struct sock *sk, struct ip_msfilter *msf, sockopt_t *opt)
- 	if (err)
- 		return err;
+ 	return do_ipv6_setsockopt(sk, SOL_IPV6, optname,
+ 				  KERNEL_SOCKPTR(optval), *optlen);
+diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
+index 36f117ad367081..9513258b95fb88 100644
+--- a/net/ipv6/ip6mr.c
++++ b/net/ipv6/ip6mr.c
+@@ -1893,8 +1893,7 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+  *	Getsock opt support for the multicast routing system.
+  */
  
--	opt->optlen = msf_size;
- 	if (copy_to_iter(msf, IP_MSFILTER_SIZE(0), &opt->iter_out) !=
- 	    IP_MSFILTER_SIZE(0))
+-int ip6_mroute_getsockopt(struct sock *sk, int optname, sockptr_t optval,
+-			  sockptr_t optlen)
++int ip6_mroute_getsockopt(struct sock *sk, int optname, sockopt_t *sopt)
+ {
+ 	int olr;
+ 	int val;
+@@ -1925,16 +1924,12 @@ int ip6_mroute_getsockopt(struct sock *sk, int optname, sockptr_t optval,
+ 		return -ENOPROTOOPT;
+ 	}
+ 
+-	if (copy_from_sockptr(&olr, optlen, sizeof(int)))
+-		return -EFAULT;
+-
+-	olr = min_t(int, olr, sizeof(int));
++	olr = min_t(int, sopt->optlen, sizeof(int));
+ 	if (olr < 0)
+ 		return -EINVAL;
+ 
+-	if (copy_to_sockptr(optlen, &olr, sizeof(int)))
+-		return -EFAULT;
+-	if (copy_to_sockptr(optval, &val, olr))
++	sopt->optlen = olr;
++	if (copy_to_iter(&val, olr, &sopt->iter_out) != olr)
  		return -EFAULT;
- 	if (len && copy_to_iter(psl->sl_addr, len, &opt->iter_out) != len)
- 		return -EFAULT;
-+
-+	opt->optlen = msf_size;
  	return 0;
- done:
- 	return err;
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index 1f452b6ea86e9d..2e78b11d294a9f 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -1509,8 +1509,7 @@ static int compat_ip_get_mcast_msfilter(struct sock *sk, sockopt_t *opt)
+ }
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 1bdb3e001e4fe6..3a43e26234eea3 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -889,7 +889,7 @@ int ipv6_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
+ EXPORT_SYMBOL(ipv6_setsockopt);
+ 
+ static int ipv6_getsockopt_sticky(struct sock *sk, struct ipv6_txoptions *opt,
+-				  int optname, sockptr_t optval, int len)
++				  int optname, sockopt_t *sopt, int len)
+ {
+ 	struct ipv6_opt_hdr *hdr;
+ 
+@@ -917,7 +917,7 @@ static int ipv6_getsockopt_sticky(struct sock *sk, struct ipv6_txoptions *opt,
+ 		return 0;
+ 
+ 	len = min_t(unsigned int, len, ipv6_optlen(hdr));
+-	if (copy_to_sockptr(optval, hdr, len))
++	if (copy_to_iter(hdr, len, &sopt->iter_out) != len)
+ 		return -EFAULT;
+ 	return len;
+ }
+@@ -997,39 +997,23 @@ static int compat_ipv6_get_msfilter(struct sock *sk, sockopt_t *opt)
  	return 0;
  }
  
--int do_ip_getsockopt(struct sock *sk, int level, int optname,
--		     sockptr_t optval, sockptr_t optlen)
-+int do_ip_getsockopt(struct sock *sk, int level, int optname, sockopt_t *sopt)
+-int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+-		       sockptr_t optval, sockptr_t optlen)
++int do_ipv6_getsockopt(struct sock *sk, int level, int optname, sockopt_t *sopt)
  {
- 	struct inet_sock *inet = inet_sk(sk);
- 	bool needs_rtnl = getsockopt_needs_rtnl(optname);
-@@ -1521,10 +1520,9 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
- 		return -EOPNOTSUPP;
+ 	struct ipv6_pinfo *np = inet6_sk(sk);
+ 	int len;
+ 	int val;
  
- 	if (ip_mroute_opt(optname))
--		return ip_mroute_getsockopt(sk, optname, optval, optlen);
-+		return ip_mroute_getsockopt(sk, optname, sopt);
+ 	if (ip6_mroute_opt(optname))
+-		return ip6_mroute_getsockopt(sk, optname, optval, optlen);
++		return ip6_mroute_getsockopt(sk, optname, sopt);
  
 -	if (copy_from_sockptr(&len, optlen, sizeof(int)))
 -		return -EFAULT;
 +	len = sopt->optlen;
  	if (len < 0)
  		return -EINVAL;
- 
-@@ -1620,16 +1618,15 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
- 		rcu_read_unlock();
- 
- 		if (opt->optlen == 0) {
--			len = 0;
--			return copy_to_sockptr(optlen, &len, sizeof(int));
-+			sopt->optlen = 0;
-+			return 0;
- 		}
- 
- 		ip_options_undo(opt);
- 
- 		len = min_t(unsigned int, len, opt->optlen);
--		if (copy_to_sockptr(optlen, &len, sizeof(int)))
--			return -EFAULT;
--		if (copy_to_sockptr(optval, opt->__data, len))
-+		sopt->optlen = len;
-+		if (copy_to_iter(opt->__data, len, &sopt->iter_out) != len)
- 			return -EFAULT;
- 		return 0;
- 	}
-@@ -1653,12 +1650,12 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
+ 	switch (optname) {
+ 	case MCAST_MSFILTER:
+-	{
+-		struct kvec kvec;
+-		sockopt_t opt;
+-		int err;
+-
+-		err = sockptr_to_sockopt(&opt, optval, optlen, &kvec);
+-		if (err)
+-			return err;
+-
+ 		if (in_compat_syscall())
+-			err = compat_ipv6_get_msfilter(sk, &opt);
+-		else
+-			err = ipv6_get_msfilter(sk, &opt);
+-		if (!err && copy_to_sockptr(optlen, &opt.optlen, sizeof(int)))
+-			err = -EFAULT;
+-		return err;
+-	}
++			return compat_ipv6_get_msfilter(sk, sopt);
++		return ipv6_get_msfilter(sk, sopt);
+ 	case IPV6_2292PKTOPTIONS:
+ 	{
+ 		struct msghdr msg;
+@@ -1038,12 +1022,12 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
  		if (sk->sk_type != SOCK_STREAM)
  			return -ENOPROTOOPT;
  
@@ -251,164 +286,112 @@ index 1f452b6ea86e9d..2e78b11d294a9f 100644
 +			msg.msg_control_user = sopt->iter_out.ubuf;
  		}
  		msg.msg_controllen = len;
- 		msg.msg_flags = in_compat_syscall() ? MSG_CMSG_COMPAT : 0;
-@@ -1680,8 +1677,8 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
- 			int tos = READ_ONCE(inet->rcv_tos);
- 			put_cmsg(&msg, SOL_IP, IP_TOS, sizeof(tos), &tos);
+ 		msg.msg_flags = 0;
+@@ -1094,8 +1078,8 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 				put_cmsg(&msg, SOL_IPV6, IPV6_FLOWINFO, sizeof(flowinfo), &flowinfo);
+ 			}
  		}
 -		len -= msg.msg_controllen;
 -		return copy_to_sockptr(optlen, &len, sizeof(int));
 +		sopt->optlen = len - msg.msg_controllen;
 +		return 0;
  	}
- 	case IP_UNICAST_IF:
- 		val = (__force int)htonl((__u32) READ_ONCE(inet->uc_index));
-@@ -1692,9 +1689,8 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
- 		len = min_t(unsigned int, len, sizeof(struct in_addr));
- 		addr.s_addr = READ_ONCE(inet->mc_addr);
- 
--		if (copy_to_sockptr(optlen, &len, sizeof(int)))
--			return -EFAULT;
--		if (copy_to_sockptr(optval, &addr, len))
-+		sopt->optlen = len;
-+		if (copy_to_iter(&addr, len, &sopt->iter_out) != len)
- 			return -EFAULT;
- 		return 0;
- 	}
-@@ -1711,43 +1707,25 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
- 	case IP_MSFILTER:
+ 	case IPV6_MTU:
  	{
- 		struct ip_msfilter msf;
--		struct kvec kvec;
--		sockopt_t opt;
- 
- 		if (len < IP_MSFILTER_SIZE(0)) {
- 			err = -EINVAL;
- 			goto out;
- 		}
--		if (copy_from_sockptr(&msf, optval, IP_MSFILTER_SIZE(0))) {
-+		if (copy_from_iter(&msf, IP_MSFILTER_SIZE(0), &sopt->iter_in) !=
-+		    IP_MSFILTER_SIZE(0)) {
- 			err = -EFAULT;
- 			goto out;
- 		}
--		err = sockptr_to_sockopt(&opt, optval, optlen, &kvec);
--		if (err)
--			goto out;
--
--		err = ip_mc_msfget(sk, &msf, &opt);
--		if (!err && copy_to_sockptr(optlen, &opt.optlen, sizeof(int)))
--			err = -EFAULT;
-+		err = ip_mc_msfget(sk, &msf, sopt);
- 		goto out;
- 	}
- 	case MCAST_MSFILTER:
--	{
--		struct kvec kvec;
--		sockopt_t opt;
--
--		err = sockptr_to_sockopt(&opt, optval, optlen, &kvec);
--		if (err)
--			goto out;
--
- 		if (in_compat_syscall())
--			err = compat_ip_get_mcast_msfilter(sk, &opt);
-+			err = compat_ip_get_mcast_msfilter(sk, sopt);
- 		else
--			err = ip_get_mcast_msfilter(sk, &opt);
--		if (!err && copy_to_sockptr(optlen, &opt.optlen, sizeof(int)))
--			err = -EFAULT;
-+			err = ip_get_mcast_msfilter(sk, sopt);
- 		goto out;
--	}
- 	case IP_PROTOCOL:
- 		val = inet_sk(sk)->inet_num;
- 		break;
-@@ -1759,16 +1737,14 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
- copyval:
- 	if (len < sizeof(int) && len > 0 && val >= 0 && val <= 255) {
- 		unsigned char ucval = (unsigned char)val;
--		len = 1;
--		if (copy_to_sockptr(optlen, &len, sizeof(int)))
--			return -EFAULT;
--		if (copy_to_sockptr(optval, &ucval, 1))
-+
-+		sopt->optlen = 1;
-+		if (copy_to_iter(&ucval, 1, &sopt->iter_out) != 1)
- 			return -EFAULT;
- 	} else {
- 		len = min_t(unsigned int, sizeof(int), len);
--		if (copy_to_sockptr(optlen, &len, sizeof(int)))
--			return -EFAULT;
--		if (copy_to_sockptr(optval, &val, len))
+@@ -1150,12 +1134,13 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 		sockopt_lock_sock(sk);
+ 		opt = rcu_dereference_protected(np->opt,
+ 						lockdep_sock_is_held(sk));
+-		len = ipv6_getsockopt_sticky(sk, opt, optname, optval, len);
++		len = ipv6_getsockopt_sticky(sk, opt, optname, sopt, len);
+ 		sockopt_release_sock(sk);
+ 		/* check if ipv6_getsockopt_sticky() returns err code */
+ 		if (len < 0)
+ 			return len;
+-		return copy_to_sockptr(optlen, &len, sizeof(int));
 +		sopt->optlen = len;
-+		if (copy_to_iter(&val, len, &sopt->iter_out) != len)
- 			return -EFAULT;
++		return 0;
  	}
+ 
+ 	case IPV6_RECVHOPOPTS:
+@@ -1209,9 +1194,8 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 		if (!mtuinfo.ip6m_mtu)
+ 			return -ENOTCONN;
+ 
+-		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+-			return -EFAULT;
+-		if (copy_to_sockptr(optval, &mtuinfo, len))
++		sopt->optlen = len;
++		if (copy_to_iter(&mtuinfo, len, &sopt->iter_out) != len)
+ 			return -EFAULT;
+ 
+ 		return 0;
+@@ -1288,7 +1272,8 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 		if (len < sizeof(freq))
+ 			return -EINVAL;
+ 
+-		if (copy_from_sockptr(&freq, optval, sizeof(freq)))
++		if (copy_from_iter(&freq, sizeof(freq), &sopt->iter_in) !=
++		    sizeof(freq))
+ 			return -EFAULT;
+ 
+ 		if (freq.flr_action != IPV6_FL_A_GET)
+@@ -1303,9 +1288,8 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 		if (val < 0)
+ 			return val;
+ 
+-		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+-			return -EFAULT;
+-		if (copy_to_sockptr(optval, &freq, len))
++		sopt->optlen = len;
++		if (copy_to_iter(&freq, len, &sopt->iter_out) != len)
+ 			return -EFAULT;
+ 
+ 		return 0;
+@@ -1363,9 +1347,8 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 		return -ENOPROTOOPT;
+ 	}
+ 	len = min_t(unsigned int, sizeof(int), len);
+-	if (copy_to_sockptr(optlen, &len, sizeof(int)))
+-		return -EFAULT;
+-	if (copy_to_sockptr(optval, &val, len))
++	sopt->optlen = len;
++	if (copy_to_iter(&val, len, &sopt->iter_out) != len)
+ 		return -EFAULT;
  	return 0;
-@@ -1783,19 +1759,22 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
- int ip_getsockopt(struct sock *sk, int level,
- 		  int optname, char __user *optval, int __user *optlen)
+ }
+@@ -1373,6 +1356,7 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ int ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 		    char __user *optval, int __user *optlen)
  {
-+	sockopt_t opt;
++	sockopt_t sopt;
  	int err;
  
--	err = do_ip_getsockopt(sk, level, optname,
--			       USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
-+	err = sockopt_init_user(&opt, optval, optlen);
+ 	if (level == SOL_IP && sk->sk_type != SOCK_RAW)
+@@ -1381,15 +1365,17 @@ int ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 	if (level != SOL_IPV6)
+ 		return -ENOPROTOOPT;
+ 
+-	err = do_ipv6_getsockopt(sk, level, optname,
+-				 USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
++	err = sockopt_init_user(&sopt, optval, optlen);
 +	if (err)
 +		return err;
 +
-+	err = do_ip_getsockopt(sk, level, optname, &opt);
-+	if (put_user(opt.optlen, optlen))
++	err = do_ipv6_getsockopt(sk, level, optname, &sopt);
++	if (put_user(sopt.optlen, optlen))
 +		return -EFAULT;
- 
  #ifdef CONFIG_NETFILTER
  	/* we need to exclude all possible ENOPROTOOPTs except default case */
- 	if (err == -ENOPROTOOPT && optname != IP_PKTOPTIONS &&
- 			!ip_mroute_opt(optname)) {
+ 	if (err == -ENOPROTOOPT && optname != IPV6_2292PKTOPTIONS) {
 -		int len;
 -
 -		if (get_user(len, optlen))
 -			return -EFAULT;
-+		int len = opt.optlen;
++		int len = sopt.optlen;
  
- 		err = nf_getsockopt(sk, PF_INET, optname, optval, &len);
+ 		err = nf_getsockopt(sk, PF_INET6, optname, optval, &len);
  		if (err >= 0)
-diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
-index e4c51ca473019c..f249569b4bf8b9 100644
---- a/net/ipv4/ipmr.c
-+++ b/net/ipv4/ipmr.c
-@@ -1638,8 +1638,7 @@ int ipmr_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
- }
- 
- /* Getsock opt support for the multicast routing system. */
--int ip_mroute_getsockopt(struct sock *sk, int optname, sockptr_t optval,
--			 sockptr_t optlen)
-+int ip_mroute_getsockopt(struct sock *sk, int optname, sockopt_t *opt)
- {
- 	int olr;
- 	int val;
-@@ -1670,16 +1669,14 @@ int ip_mroute_getsockopt(struct sock *sk, int optname, sockptr_t optval,
- 		return -ENOPROTOOPT;
- 	}
- 
--	if (copy_from_sockptr(&olr, optlen, sizeof(int)))
--		return -EFAULT;
-+	olr = opt->optlen;
- 	if (olr < 0)
- 		return -EINVAL;
- 
- 	olr = min_t(unsigned int, olr, sizeof(int));
- 
--	if (copy_to_sockptr(optlen, &olr, sizeof(int)))
--		return -EFAULT;
--	if (copy_to_sockptr(optval, &val, olr))
-+	opt->optlen = olr;
-+	if (copy_to_iter(&val, olr, &opt->iter_out) != olr)
- 		return -EFAULT;
- 	return 0;
- }
 
 -- 
 2.53.0-Meta
