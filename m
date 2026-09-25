@@ -1,426 +1,169 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0EF4E2F02;
-	Fri, 25 Sep 2026 15:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2314D8DBF;
+	Fri, 25 Sep 2026 15:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790351792; cv=none; b=YuYaJt5pV2d/GdNxS6a90s5kHLKIKeGXvBkUGaojeOiWYqdDcKoU3JWhh2wUKqtD5mXR5df2TgY8ym1Xi7hF9H1GoX4EtQ6k1lujTwHTbIf0XBarVKrRADyVHCnPWs8KiWaHrHIg+nr+dV1uXypDtoQSR+FkcLs9OlZnHoyUaTQ=
+	t=1790351893; cv=none; b=qHD+dTOT0M/zQStAlTPVAr4G6WbIe6uy/it3TAfe/X/qc2IbBOXgHcJOjNZiXHzQKi1Q6mEWlJPyU1lv54fat7OVD96R73KT85U84zM2wPVxbphqS9YDp9nUZqrj4l+3400m8W9PqM3Lba4INNGX+UJ8svIuas2DTKzP8lQ/K/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790351792; c=relaxed/simple;
-	bh=WSlP9Beit+HhNmpFZRkX51X2r42T+utGkwLpdOhYUP0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eZcXEzRlUWbMzDXCtj1nxT+Y0qR35lCnLkSjX9NJ6r6sv5VwiuxcfC7PzpJ63hC8N1JnqLZSrig4US38F2beNsrep4aQPo39T4BPtQsuZwb8YXniImPfoVjQ558G2p5S0R9WoO7xNUUetJbhFbjHqFj3lfd4u3MO7RismC7UXxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=HcsKZQ79; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1790351893; c=relaxed/simple;
+	bh=MVKzKEJ3WrR9RkRUypLAFaWDY0HbmqoWnQ41QYJ/ldo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HKgj7pAzJnd6i1Nz1rwFArWo+EkblXkds0yljXHPFrt7C0iKAIixUoBVnaut/i8hXFkfY7lAGn10GEVKiS/KAj3yVImHC7NffkGeIs0muM+Az7zjK2DEGvO66Slpn0NercgiEq7ybfjypP3uK/aqDB4JEak6DoaBM0ZpbMHRPXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EXHvWtUZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="HcsKZQ79"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=7/u3O+5CofNhzwgV8gLJqqSThYVao22PZEKp33FChtQ=; b=HcsKZQ79Ysp+OlMLBibdiyzQXd
-	MBVLiS8cgkfLA6kLRZX5vegT2M3ejnYOYPFtetMfOID5cY2FdjNvqV/2MCVSkgEZ9q+Ye/aNCrONv
-	COF3I8VT33oPQZZpGgqw3y2H0Uht5PuIf7A2PiUf2Al1OBot5YjBSJeasVWVoYiwMwQRvRKNgwK8l
-	di+q0crmdYATGKUDhJQZjBPsKjqjtdoM75qSh1wcurW1KGEBYtHNUOk4hnS0sPwSt7DHVNcmrEab2
-	OzYgQiMbZK4vBtc6zxqwc5SqCpn68FjuJ/J3jSMVKezU3pGPVXM09g/WHgWxI5g5jw6PSTol311cI
-	Vwg6+dwA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xA8Hh-005Pma-05;
-	Fri, 25 Sep 2026 15:56:25 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 25 Sep 2026 08:55:21 -0700
-Subject: [PATCH net-next 6/6] selftests: net: getsockopt_iter: cover ip and
- ipv6
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EXHvWtUZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9F31F00893;
+	Fri, 25 Sep 2026 15:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790351884;
+	bh=/PxEGuDqoY/L6/XFaAkeVp18LKt6PhiAaiiUWOAHmBc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EXHvWtUZq6uvZGyPQAlgUw/+MOO2N3qcuzCcZGxjplgoqnNthIQ0GydUlUQZHBm5G
+	 AK8fxs0Lb2hl1ieqr2mDh4urpstyOsFgCgWBeAg2ag1RGksuAr516RGdWyuPpdDBY6
+	 7BSUqtobkrqSrU2Qqq5VkRjIvozjpv3jDN2RxP8dVUv89eIGZccqdynnz/3mubp3J8
+	 3LgaKu53kmBOyWCAB6pn8uhEg2CYzGfBjxJ1FNP09cZw5q5NVqSWS6SdEPsdLJf0R3
+	 h6SN4oqwO3jx+NKaeWoFMoVe85Ln6TMANjo+KmsJPNddovm/E1Y8K2mVWzfQQpphM1
+	 eRhrmg7q2HPaQ==
+Date: Fri, 25 Sep 2026 17:57:56 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, viro@zeniv.linux.org.uk, 
+	jack@suse.cz, neil@brown.name, jolsa@kernel.org, broonie@kernel.org, 
+	linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com, martin.lau@kernel.org, yonghong.song@linux.dev, mason@kernel.org
+Subject: Re: [PATCH vfs v1] bpf: Allow bpf_d_path() from filp_close_sync()
+Message-ID: <20260925-skalpell-nanotechnologie-atemschutz-bce8ef8f2f26@brauner>
+References: <20260924204226.190315-1-ihor.solodrai@linux.dev>
+ <b3b4cbefd5258ad320205bc708c7864c20a16f39ffd37673fe9cbd534a1ebbca@mail.kernel.org>
+ <6af94251-fc79-4377-b781-f9b413af1223@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260925-sockopt_expand_out_v2-v1-6-c3ef2e3bb5c0@debian.org>
-References: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
-In-Reply-To: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
-To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8647; i=leitao@debian.org;
- h=from:subject:message-id; bh=WSlP9Beit+HhNmpFZRkX51X2r42T+utGkwLpdOhYUP0=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqtpl6haoSGsEOfWCxMqiAmtXUzCjPNbtA1NXzj
- 5F50/mBuAuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaraZegAKCRA1o5Of/Hh3
- beV/D/9OnYxNiPCM8ZjZBYGJngwWeJblZOos4+Y/dY+k0ZCGgXuRjdvZ6RBTUvFQhcByLFQnr0s
- yLA9nTkvXjkK9/f8HDNP64Npq7jQ5ig0SLiW1moluIAMNfEF2oADkVMpKKic7UcLNGZcbIEn5RC
- tsCMBIh6xuRRDpgnChGj5POeUjZFDr6r+HDjxT/FMts90sp9QpsVlh0ahqjOTUoNFcPT7cSiZvO
- lOoPI7ep1XBgaRAlvePdbTwm1qmHeJyYfLVyia0Qxbm8GjuJlqdVrctdeC/ClIiNhQFEBj9FbcX
- XLazAnwakqoElMzp2digPSjLyVFf/O3kw/ABU9fzPPikZdDcifQb5Rx+jjgjAXRdjvCxXti2UaR
- j2JlgW2hX1jJJYMPeWeJSTgd0ZwC31UdEziWFk6S0I29zPQNE+X/cAqQ8Fq9GIwM5hoys5p1dlL
- 4o0VNC4zo9PAHIFdySIUvJEV1YBm/jvLELWn0BTm1V2J+uiyfFQ4WeCFsHPI8wQaiWQ0Lhm1YT7
- ZpzK8ZauihzyEfytHDEyOyQore7yRX7EC55JH6vNosqUepW2rvfi9aBNxm765PiJUvNNSghy3tW
- R9hh9xTo4ZRacTbHn7SrAnV1LFzkeBa3tosH9RlWA5sxA3FPMgiefbsxyx6UqiC6BRxos0MMWIS
- CTCy8QCoXH8IoeQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6af94251-fc79-4377-b781-f9b413af1223@linux.dev>
 
-Add an ip and an ipv6 fixture, pinning the returned length and errno
-across buffer sizes, the branches that answer empty, an unknown
-optname and the options dispatched before the switch.
+On Thu, Sep 24, 2026 at 04:18:14PM -0700, Ihor Solodrai wrote:
+> On 9/24/26 2:24 PM, bot+bpf-ci@kernel.org wrote:
+> >> The d_path selftest closes its descriptors with close_range() so that
+> >> its fentry program on filp_close() runs. The vfs commit
+> >> 46ace7e4dc4b ("fs: make close_range() synchronous") switched
+> >> close_range() to filp_close_sync(), so the program still attaches but
+> >> is never called:
+> >>
+> >>   test_d_path_basic:FAIL:close trampoline for filp_close was not called
+> >>
+> >> With that series, close(), close_range() and the closes on exec and
+> >> exit all go through filp_close_sync(). Few paths still reach
+> >> filp_close(), dup2() being one of them, so a program on filp_close()
+> >> no longer sees most file closes.
+> > 
+> > Can the commit message clarify which exec closes it refers to? At
+> > 46ace7e4dc4b, begin_new_exec() calls do_close_on_exec(), which still
+> > closes O_CLOEXEC descriptors with filp_close():
+> > 
+> > fs/file.c:do_close_on_exec() {
+> >     ...
+> >     spin_unlock(&files->file_lock);
+> >     filp_close(file, files);
+> >     cond_resched();
+> > }
+> > 
+> > So close-on-exec stays on filp_close() rather than moving to
+> > filp_close_sync(). Only close(2), __range_close() and close_files()
+> > were converted in that series. After this patch, a program moved from
+> > filp_close to filp_close_sync would silently stop seeing descriptors
+> > closed by exec.
+> > 
+> >>
+> >> Allow bpf_d_path() from filp_close_sync(). It takes the same arguments
+> >> as filp_close() and the program runs before the file is flushed and
+> >> its last reference is dropped, so file->f_path is still valid. Keep
+> >> filp_close() in the allowlist for existing programs.
+> > 
+> > This explains why fentry is safe, but does the reasoning hold for fexit
+> > as well? The commit message says "the program runs before the file is
+> > flushed and its last reference is dropped," but that applies only to
+> > entry, not exit. Looking at filp_close_sync() (a546b2ef2120):
+> > 
+> >     retval = filp_flush(filp, id);
+> >     fput_close_sync(filp);
+> > 
+> > fput_close_sync() calls __fput() synchronously when this is the last
+> > reference. __fput() does:
+> > 
+> >     dput(dentry);
+> >     mntput(mnt);
+> >     file_free(file);
+> > 
+> > So by the time a fexit trampoline runs, the dentry reference is gone
+> > and the struct file has gone back to filp_cache (SLAB_TYPESAFE_BY_RCU,
+> > reusable immediately). For pipes and sockets (alloc_file_pseudo uses
+> > d_alloc_pseudo which sets DCACHE_NORCU), dentry_free() calls __d_free()
+> > directly with no RCU delay.
+> > 
+> >>
+> >> Attach the selftest program to filp_close_sync() and keep triggering
+> >> it with close_range(), since filp_close_sync() may be inlined into
+> >> close().
+> >>
+> >> Assisted-by: LLM
+> >> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> >> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> >> index 195f78db9bda..49d5ec983e72 100644
+> >> --- a/kernel/trace/bpf_trace.c
+> >> +++ b/kernel/trace/bpf_trace.c
+> >> @@ -972,6 +972,7 @@ BTF_ID(func, vfs_fallocate)
+> >>  BTF_ID(func, dentry_open)
+> >>  BTF_ID(func, vfs_getattr)
+> >>  BTF_ID(func, filp_close)
+> >> +BTF_ID(func, filp_close_sync)
+> >>  BTF_SET_END(btf_allowlist_d_path)
+> > 
+> > Can a fexit program on filp_close_sync() safely call bpf_d_path() on
+> > file->f_path that has already been freed? bpf_d_path_allowed() only
+> > checks the attach target, not the attach type:
+> > 
+> >     return btf_id_set_contains(&btf_allowlist_d_path,
+> >                                prog->aux->attach_btf_id);
+> > 
+> > and check_helper_call() uses only this callback to gate the helper.
+> > check_attach_target() accepts BPF_TRACE_FEXIT on any function.
+> > 
+> > For example: SEC("fexit/filp_close_sync") prog calls
+> > bpf_d_path(&file->f_path, buf, sz). close_range() on a pipe fd calls
+> > __range_close() -> filp_close_sync() -> fput_close_sync() -> __fput()
+> > -> dput() which frees the NORCU dentry, then file_free() frees the
+> > file. Then the trampoline runs the fexit prog -> bpf_d_path() ->
+> > copy_from_kernel_nofault(&copy, path) reads the freed file ->
+> > d_path(&copy) -> path->dentry->d_op->d_dname(path->dentry, ...)
+> > which reads freed dentry memory and calls through a function pointer
+> > loaded from it.
+> > 
+> > The existing filp_close entry does not have this problem: fput_close()
+> > -> __fput_deferred() queues ____fput with task_work_add(TWA_RESUME), so
+> > __fput() runs only on return to user space, after fexit. filp_close_sync
+> > is the first allowlist entry that drops the last reference to its own
+> > argument.
+> > 
+> > Would it work to allow bpf_d_path from filp_close_sync only when
+> > prog->expected_attach_type == BPF_TRACE_FENTRY?
+> 
+> Both claude and codex refuse to build a reproducer for this because they
+> "take extra care with some cybersecurity requests".
 
-SOL_IP answers a sub-int buffer with one byte where SOL_IPV6 clamps the
-int. IP_PKTOPTIONS and IPV6_2292PKTOPTIONS want a stream socket;
-MRT_*/MRT6_* want a raw one, and skip without CONFIG_IP_MROUTE or
-CONFIG_IPV6_MROUTE, where the switch answers ENOPROTOOPT instead.
+I hate this.
 
-MRT_VERSION and MRT6_VERSION are spelled out; linux/mroute.h does not
-coexist with netinet/in.h here.
+> But the issue appears to be real, and bot's suggestion should work
+> (pasting a diff at the bottom).
+> 
+> Christian, could you please confirm that allowing filp_close_sync on
+> fentry, but not on fexit makes sense? Should I respin with that?
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/net/getsockopt_iter.c | 302 ++++++++++++++++++++++++++
- 1 file changed, 302 insertions(+)
-
-diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-index 6c2408df461232..32b6e0a50f1f9c 100644
---- a/tools/testing/selftests/net/getsockopt_iter.c
-+++ b/tools/testing/selftests/net/getsockopt_iter.c
-@@ -55,6 +55,13 @@
- #ifndef TCP_ULP
- #define TCP_ULP 31
- #endif
-+/* linux/mroute.h does not coexist with netinet/in.h here. */
-+#ifndef MRT_VERSION
-+#define MRT_VERSION 206
-+#endif
-+#ifndef MRT6_VERSION
-+#define MRT6_VERSION 206
-+#endif
- 
- /* ---------- netlink ---------- */
- 
-@@ -492,6 +499,301 @@ TEST_F(rawv6, bad_optname)
- 	ASSERT_EQ(sizeof(val), optlen);
- }
- 
-+/* ---------- ip (SOL_IP) ---------- */
-+
-+FIXTURE(ip)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(ip)
-+{
-+	/* a router alert option, so IP_OPTIONS has something to answer with */
-+	static const unsigned char ipopts[4] = { 0x94, 0x04, 0x00, 0x00 };
-+	int ttl = 42;
-+
-+	self->fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_INET dgram socket: %s", strerror(errno));
-+
-+	if (setsockopt(self->fd, SOL_IP, IP_TTL, &ttl, sizeof(ttl)) < 0)
-+		SKIP(return, "set IP_TTL: %s", strerror(errno));
-+
-+	if (setsockopt(self->fd, SOL_IP, IP_OPTIONS, ipopts,
-+		       sizeof(ipopts)) < 0)
-+		SKIP(return, "set IP_OPTIONS: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(ip)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(ip, ttl_exact)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, &val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(42, val);
-+}
-+
-+TEST_F(ip, ttl_oversize_clamped)
-+{
-+	socklen_t optlen = 64;
-+	char buf[64] = {};
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* SOL_IP answers a sub-int buffer with a single byte when the value fits
-+ * in one, rather than clamping the int down.
-+ */
-+TEST_F(ip, ttl_single_byte)
-+{
-+	unsigned char buf[3] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, buf, &optlen));
-+	ASSERT_EQ(1, optlen);
-+	ASSERT_EQ(42, buf[0]);
-+}
-+
-+TEST_F(ip, ttl_zero_len)
-+{
-+	socklen_t optlen = 0;
-+	int val;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, &val, &optlen));
-+	ASSERT_EQ(0, optlen);
-+}
-+
-+TEST_F(ip, negative_optlen)
-+{
-+	socklen_t optlen = (socklen_t)-1;
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, IP_TTL, &val, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(ip, options_roundtrip)
-+{
-+	unsigned char buf[40] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_OPTIONS, buf, &optlen));
-+	ASSERT_EQ(4, optlen);
-+	ASSERT_EQ(0x94, buf[0]);
-+}
-+
-+TEST_F(ip, options_undersize_clamped)
-+{
-+	unsigned char buf[2] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_OPTIONS, buf, &optlen));
-+	ASSERT_EQ(sizeof(buf), optlen);
-+}
-+
-+/* With no option set the reply is empty and the call still succeeds. */
-+TEST_F(ip, options_absent)
-+{
-+	unsigned char buf[40] = {};
-+	socklen_t optlen = sizeof(buf);
-+	int fd;
-+
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		SKIP(return, "AF_INET dgram socket: %s", strerror(errno));
-+
-+	ASSERT_EQ(0, getsockopt(fd, SOL_IP, IP_OPTIONS, buf, &optlen));
-+	ASSERT_EQ(0, optlen);
-+	close(fd);
-+}
-+
-+TEST_F(ip, multicast_if_oversize_clamped)
-+{
-+	socklen_t optlen = 64;
-+	char buf[64] = {};
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_MULTICAST_IF, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(struct in_addr), optlen);
-+}
-+
-+/* IP_PKTOPTIONS only answers on a stream socket. */
-+TEST_F(ip, pktoptions_wrong_type)
-+{
-+	socklen_t optlen = 64;
-+	char buf[64];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, IP_PKTOPTIONS, buf,
-+				 &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+/* The MRT_* options are dispatched ahead of the rest of the switch and
-+ * want a raw IGMP socket. Without CONFIG_IP_MROUTE they are not
-+ * dispatched at all and the switch answers ENOPROTOOPT instead.
-+ */
-+TEST_F(ip, mroute_wrong_type)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, MRT_VERSION, &val,
-+				 &optlen));
-+	if (errno == ENOPROTOOPT)
-+		SKIP(return, "CONFIG_IP_MROUTE disabled");
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+}
-+
-+TEST_F(ip, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* ---------- ipv6 (SOL_IPV6) ---------- */
-+
-+FIXTURE(ipv6)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(ipv6)
-+{
-+	/* an 8 byte hop-by-hop header, so the sticky options answer */
-+	static const unsigned char hopopt[8] = { 0, 0, 1, 4, 0, 0, 0, 0 };
-+	int hops = 42;
-+
-+	self->fd = socket(AF_INET6, SOCK_DGRAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_INET6 dgram socket: %s", strerror(errno));
-+
-+	if (setsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, &hops,
-+		       sizeof(hops)) < 0)
-+		SKIP(return, "set IPV6_UNICAST_HOPS: %s", strerror(errno));
-+
-+	if (setsockopt(self->fd, SOL_IPV6, IPV6_HOPOPTS, hopopt,
-+		       sizeof(hopopt)) < 0)
-+		SKIP(return, "set IPV6_HOPOPTS: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(ipv6)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(ipv6, hops_exact)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, &val,
-+				&optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(42, val);
-+}
-+
-+TEST_F(ipv6, hops_oversize_clamped)
-+{
-+	socklen_t optlen = 64;
-+	char buf[64] = {};
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+TEST_F(ipv6, hopopts_roundtrip)
-+{
-+	unsigned char buf[64] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_HOPOPTS, buf,
-+				&optlen));
-+	ASSERT_EQ(8, optlen);
-+}
-+
-+TEST_F(ipv6, hopopts_undersize_clamped)
-+{
-+	unsigned char buf[4] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_HOPOPTS, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(buf), optlen);
-+}
-+
-+/* With no header set the reply is empty and the call still succeeds. */
-+TEST_F(ipv6, hopopts_absent)
-+{
-+	unsigned char buf[64] = {};
-+	socklen_t optlen = sizeof(buf);
-+	int fd;
-+
-+	fd = socket(AF_INET6, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		SKIP(return, "AF_INET6 dgram socket: %s", strerror(errno));
-+
-+	ASSERT_EQ(0, getsockopt(fd, SOL_IPV6, IPV6_HOPOPTS, buf, &optlen));
-+	ASSERT_EQ(0, optlen);
-+	close(fd);
-+}
-+
-+/* IPV6_PATHMTU wants room for the whole struct ip6_mtuinfo. */
-+TEST_F(ipv6, pathmtu_undersize)
-+{
-+	socklen_t optlen = 8;
-+	char buf[8];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, IPV6_PATHMTU, buf,
-+				 &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(ipv6, pktoptions_wrong_type)
-+{
-+	socklen_t optlen = 64;
-+	char buf[64];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, IPV6_2292PKTOPTIONS, buf,
-+				 &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+TEST_F(ipv6, mroute_wrong_type)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, MRT6_VERSION, &val,
-+				 &optlen));
-+	if (errno == ENOPROTOOPT)
-+		SKIP(return, "CONFIG_IPV6_MROUTE disabled");
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+}
-+
-+TEST_F(ipv6, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
- /* ---------- tls ---------- */
- 
- FIXTURE(tls)
-
--- 
-2.53.0-Meta
-
+Seems fine to me.
