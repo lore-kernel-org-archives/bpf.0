@@ -1,94 +1,103 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934A54BD378
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 14:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3514B4C680D;
+	Fri, 25 Sep 2026 15:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790348409; cv=fail; b=DVULKiCYOMG/OxN9+IBMmWmT93i+uE4LkWNDrf1xAEkmz8QV0gmJvDtNlo6y+Jz37nVFJKJO1RX0RYwxn3EQLjw5FcZ9Qjw/rbXg+DT+09npfOjCHm0zX+nr+WXlk6Fr/eXdgGhdd5Msbu6RB1qqBoV7SfY9q5DmKaAu6kitb7s=
+	t=1790349437; cv=fail; b=bcwX3mzAu3M3WipaR4A8RR23UO9hO3gHGPcSGXZ/CICQCZK1WbSrfesyQ0Z/F3ziYvk5J2vFDoma8680A+TVNPbjOuRkmLA0U39LSX8/KCyuOwEcCcVL9oZMDnuQEtz90yvfKRqiGeLfof8pOgm2TNCl/31BhBi7BHe1p4Cd4Gk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790348409; c=relaxed/simple;
-	bh=V+J7VNjkdu9O/O6y+MHYfJUkyAo876J9YcwWTRS0r9Y=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hQpjzcjv/wshqJgIDAwm2QZyYlOQE//5ZISPR/op7eRCVU7Si8MZqP0g2ihhZof8ddq/d2BqTexdAoXG2IX05AEZZMNUX4/3WKJmZt+OjXcxWnoMKsNnzv+Wy7KZ6BE3Sh+hzWa8wPFTYKn4mgkip+1arDrwT4Ra/n7+yCKRq+o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=EN7fBfYk; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=DOC70cVH; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1790349437; c=relaxed/simple;
+	bh=+Wz0fd9zRWn9HBctAy/PWe2CIX2LuU9FIsYEMPwdOj4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=hhdqUqHtAWDoL5QT9KS1oB1jp7AROtK8FVqjo/G43Qli2mErf2VIPbe/wpEoAmpOrfe6sPoA84R5Wo2v7lqazVQtjTjJcHLquwI0VvaYyZ836JdCvGuQxqcj5wsLdmgBVyw8Ek64Ri1SZ5zZQvJyYiNmY1/orENI04D2uIAZL78=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WBUSquig; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="EN7fBfYk";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="DOC70cVH"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68PECMYL2933095;
-	Fri, 25 Sep 2026 14:58:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=fq6TyaO48G+3NT+AEWl0RWPhO6qW+CqIclLIAx0aFxg=; b=
-	EN7fBfYkmYaiKToHAviOK8y7rJrSHhgC+I2Wa+m8jVNDTAZWa8hE60RABO4scqxt
-	cZaenigvtkbvta02SaFGy/e30wcZC1FwTcBheCTpkklTdFrTUbD3sd6g96cX4v6w
-	GBP6ZvqHWDeMixjQNgsLQDVK+hkC1ZQMRMEQ0e7vGbCgbRP+SeHyW9Ef9pv8Ixwz
-	Vgu2iBlFZaVHUbQ8s4PjBpPfehiYsUPLWmv7dkZpZ7V1CWNLtPpEKiUag/hVYo7R
-	DKMvAPwecS4NDmth7/tGhqwDDmgFGwmOOg6Dx+Zdb2XQZedI1u0pwPTk5AZvUXC8
-	t3wVa8St9WT4cLZPsss9sA==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk219g73-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Sep 2026 14:58:55 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68PEoRgB020056;
-	Fri, 25 Sep 2026 14:58:54 GMT
-Received: from cy3pr05cu001.outbound.protection.outlook.com (mail-westcentralusazon11013026.outbound.protection.outlook.com [40.93.201.26])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4guf12qcra-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 25 Sep 2026 14:58:54 +0000 (GMT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WBUSquig"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790349427; x=1821885427;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=+Wz0fd9zRWn9HBctAy/PWe2CIX2LuU9FIsYEMPwdOj4=;
+  b=WBUSquig6JeuJ/PvjK9hJoP6EmhtuZ1qQVWFzgyXYMMMMOTsB+of4eZk
+   GGrWrjj/8VHkA+sSXYnyZHLaFeVgxTNC80EbknTLJzLPMtOgjI128k+Pc
+   g5sA+0yZWyPzJIYYEcmNeieXCKoKpoxr9hXXlYHR6ph9jBmVxUU41I4Gq
+   HqCEvpPxoTe0T18WRmBQqvGgjSQVbk/bv11vS3pr2CaeE5waWUNl1KFJl
+   9e4Ic3ZyVdwzYGOOlnaOssYcHSQKhoyn4Vozecq01HlA+/bwmG8LZW36u
+   RrU6tWWd+5u2kPto4VAoI7rnYlMWgF7Sh3gtxuvZYGKH8n8hPFCVTdOUL
+   w==;
+X-CSE-ConnectionGUID: JdRXMiYfSO6Go6cXug11zw==
+X-CSE-MsgGUID: B6+Gl6itSpOajNoe8VNBew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11916"; a="91153628"
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="91153628"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 08:17:04 -0700
+X-CSE-ConnectionGUID: 9e6DvfxrQHa/ptqTVFIPYA==
+X-CSE-MsgGUID: a/Ze0wrNQkO45ju+OwVNAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="277725612"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 08:17:04 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Fri, 25 Sep 2026 08:17:03 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46 via Frontend Transport; Fri, 25 Sep 2026 08:17:03 -0700
+Received: from SA9PR02CU001.outbound.protection.outlook.com (40.93.196.51) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Fri, 25 Sep 2026 08:17:02 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lV83HZlwAj36ssLknXZfQ60Wc99iBWDmhVhM1ZLQl72RHFJURxsgx8F7K2E0B/WliyIiZQ2Gbe1cfBeup7WTgh4ax759BcRDsyVPwI3jEXxShBi6iWNiCeaIiVBCpuuPIPn7HqpxdLJuW/vt9Fmi8veDvwA65RFdZC+02eDe5rxJKLajMSnDMtEnq6NaDoIXSHuOEQm2Kt/V0pQscKE11DTYl0tryxMcssZnTFqasHrk3wKPRZv41bcZrgKmm/899kPMuZ/kxkZjLf6zdOWHtCi6veiktoxsSW1lGOpfe3vRbxqHgXoXmgnQJu9Aw7h6NM1rvqf1HGtYccATbz0Qdw==
+ b=uBgPP/0Q3GYNJR4+cegRk0DL4syA24zmiy09m/PoqJVnUcx+QH1CI0BftxVzeDkUkXsuasamL/A0QgNjKFLXFMeHNeJp38jZhzUqBTJ4rVptkcm/D5AArIshzeXOgXQ/2K2xA/yRUR5MtR2F48WwHAmUYT4ENMo8Igcfb0jfW12u8Bqp89rMmHIHzlPWhR62iCEa1LrFHYT4TPpCg2jixQzo84hZqEcHC8+HFYds+p5EoG4+Sa/+o+pebCmZ2rcPIcH1ldydjOWUPWOx4//IGiD8ByDTATNv3IiU98baG8ETTmZo86KjK3McFv2aA7yeAVZxoKzNCjU5C/CAiqW+CQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fq6TyaO48G+3NT+AEWl0RWPhO6qW+CqIclLIAx0aFxg=;
- b=W9rLDZfEt4g8olm1LbJ7pr1emYMyB70yS+sF3/da/05WtsDEIklC5ocLo246D7ZM+bXcMXq5eKsYm0WL5dyPR9aQarlM5Vq+1FOcEbOzfkhm2tFj8MbUh/qbTRZKKlqbq/mg8axkEE6fc1WPj9gj40Zchggs7QGHwNPAvxvE1O0bRFfu4ntBxMIqmUfBMtq/Gba8bAW5JbufTbZGu/EAL66jo49BlQwaTLmDS9fS38+SOoAsL5g95qLuflcn77H1dxYvg+z66kMrw8CKtJ8VMaqsHOUI+1sDzkttE87ZpH+AADEdSPbLTJLZGVHcmiUJOdcQS4JuD4pb5fEnF4GArw==
+ bh=JlRljh4PNoHRg9wMxf6+v6G/Zb/KSQymdLUa/fNhGYg=;
+ b=BleGgTEb+Erpi4xxOaymSjJKQfd+EBMvKx4FLA7OaYeEuD5vTy5hkXAfeRq10e+DExOltOjeAtxfFlLtDkDBSxkTT/FRXX7vWMNaoDBlBU1kcS3HJognhCvVlB1cL9vd6QUEu6scYccGd1X2nK25bGNwfcVaSpT4PfpKpJ5rOS075gUesF0MxYAShfrc4CpP01Niv0kWtP3q4crSwU2hEVmEO/34jfX8osSqrmqOAeenvfWeRB8SQHqSpMYBTLrjBtZ7sy6Yl/Ho80Y5Zf/hTrlTliSii3UrlQaYz94B9eL+78I7P7qDVDWUdxBRAhxSNainCj5Ah8muFZ4azA5rew==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fq6TyaO48G+3NT+AEWl0RWPhO6qW+CqIclLIAx0aFxg=;
- b=DOC70cVHYaKorI6edDnMwFdbGIUerCGenq5KB378Zyi2+uvGsxjdYY6nMLB05+28yW1XDK6QkOOL8b48t84QdtWwXiArLT847IKtCMbAN1zljlKZJhAUYMwuDJ3MDM1jP6WKU6dooRbuNEBpg42fTC7rjzAHAzU/WwH+1wxqLTM=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oracle.com;
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by BLAPR10MB5188.namprd10.prod.outlook.com (2603:10b6:208:30d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.18; Fri, 25 Sep
- 2026 14:58:49 +0000
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0472.005; Fri, 25 Sep 2026
- 14:58:49 +0000
-Message-ID: <dfcd3080-1d2e-4e04-8e26-dff60638061d@oracle.com>
-Date: Fri, 25 Sep 2026 15:58:43 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/3] bpftool: Update func representation to
- include function signature
-To: Quentin Monnet <qmo@kernel.org>, ast@kernel.org, andrii@kernel.org,
-        eddyz87@gmail.com
-Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
-        yonghong.song@linux.dev, song@kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
-        nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com
-References: <20260925095231.879708-1-alan.maguire@oracle.com>
- <20260925095231.879708-3-alan.maguire@oracle.com>
- <7d2f7cea-1055-4ba4-a44e-14078d6d5ef6@kernel.org>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <7d2f7cea-1055-4ba4-a44e-14078d6d5ef6@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0398.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:cf::16) To BN0PR10MB4901.namprd10.prod.outlook.com
- (2603:10b6:408:126::19)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ CH3PR11MB8436.namprd11.prod.outlook.com (2603:10b6:610:173::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.451.19; Fri, 25 Sep 2026 15:16:54 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0451.014; Fri, 25 Sep 2026
+ 15:16:52 +0000
+Date: Fri, 25 Sep 2026 17:16:38 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <anthony.l.nguyen@intel.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <edumazet@google.com>, <andrew+netdev@lunn.ch>,
+	<netdev@vger.kernel.org>, <zhaochenguang@kylinos.cn>,
+	<magnus.karlsson@intel.com>, <jacob.e.keller@intel.com>,
+	<przemyslaw.kitszel@intel.com>, <jbrandeb@kernel.org>, <horms@kernel.org>,
+	<kerneljasonxing@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
+	<bpf@vger.kernel.org>, <sunithax.d.mekala@intel.com>
+Subject: Re: [PATCH net 3/8] i40e: make ring pointers unreachable before
+ freeing via rcu
+Message-ID: <araQVrNwgbfhPKqe@boxer>
+References: <20260918212458.550425-4-anthony.l.nguyen@intel.com>
+ <179004066858.2160803.3751100830230297898@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179004066858.2160803.3751100830230297898@kernel.org>
+X-ClientProxiedBy: DU2PR04CA0310.eurprd04.prod.outlook.com
+ (2603:10a6:10:2b5::15) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,300 +105,197 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|BLAPR10MB5188:EE_
-X-MS-Office365-Filtering-Correlation-Id: f0b01f01-451e-478f-8a0a-08df1b15815a
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|CH3PR11MB8436:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3380e31d-31fa-43a9-2971-08df1b1806ed
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|23010399003|6133799003|3023799007|10067099003|56012099006|4143699003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	EkE2vV/p+QbmRZWRoPUE0t+4NKYLy0MaWwSEiraUEfoRy9lvPFB99QensJ9ssIMkTcWsecps4eAzJpQ3zly8F7ooVumvWzrTsu7Kitmvz0TQA/nusspXi0ylLbtxlQ2kXnuGxakCbySlRWze03BhuWLRY7XpqsaP62T/oYco/8N740pzbCM8R6PrPTmcT/+ABtK8M/BSZOjFVr7Qi1KIfqBBCgK8PaYt4uEbwOus0CBdnDsYY/k9PW7XRMxD5n0ZNW6jaR/I8XPDVGTf13GB10BEMjUJK7+Pv+3MwjGfwbIZ88MlM93zGguG0ffFdjXIVry4ai6CFvELDFIb84L+hkTZ5BLhFLlDjQJOFb21OU8fN3MScgoIamyranQ6SZScaNPxzQ33MqYeFSUVlxq8z0aFq/PCsKu+8m3I6pgusDOTuLASRohCWrfB4ONn7WTMEBFw2cgtiZkBrVTSzkc+EVMm8qqOUBwymaKt8XwGfnFFA01PgRBCLImkc8KxJGNJigOihzL/tw4SgAwp3pRMfvqelwantMltcqT0rhexdWwxPffuijXFUwKrFiWd1qy0S1GyfOMz60GlJYtrRLDafi5VuO8An82e+c5IP6PMZCJn9HFCFUOvdOdSxa7NZlGOWv8epp6NGLLdriu+juRdD8Jvq0usYxQJ+puvdEXEXXA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(23010399003)(6133799003)(3023799007)(10067099003)(56012099006)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|23010399003|10067099003|5023799004|11063799006|56012099006|4143699003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info: TQ3BgkZXOxwLZaQNkx3fq+b+cv/hS7tZG2OAVDF0ideIoEA+83SiFZ1pjhsmrFEGJQ7CCDARzBC6GVuKQMUiO3lWReKF5AXzFSCB6c/5dE3xhrZm5xdrPrOmSwrDH/mUoFPAXikQmlYssRWbfub3mx9jx9a6ufUhbA2x8B3mQZz5tTZM9nsm4yaJYj5S83zakue82rL7/XvwzFJlV2NyfDq9PcijLknx53gcb8fVXsnU+PdNIwNmFs/K0vKcKphCcSxhSl5QneOdWgPL83/xDpNVawQV0cUwBOdjNAZ5KmcB86s5eF9F+73r00rA/4X4fctI/u03kgStt0WRDsAJF2/xcAExTaI2ggRzKZ8pOBo2r7iFyXCR4jXne4qlKl5xXe4Sk197tvP+jX7qxBf8n9yYPGKWnYTJ+OiLsWQRDm5gKrkbxPKTiaeLIAYGly0GdtGovgBsux5I+xQpH9q5Bqe/ZgOfOH4ioKRB6/D1gOoUNHbTtLDgepJCO4Xm/fjLBMiRNuUhlrN/Rev37QRq3pF5RetLQh8Ms63Xs1QS1QxLuzdJuVzGzCQSPT++z01xGQBSqcVZ35ICTGgsQxhsWO52/vz2xzfwB5BukzB9UpNOJOlsHrxuoyRjJCdgd5Kf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(23010399003)(10067099003)(5023799004)(11063799006)(56012099006)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WGJXUG1YRlBlVVAxNi93bTcwVm43QjVIcE8yNjVHa0tMeEMzd09rUUJ3eHps?=
- =?utf-8?B?N3pBVk16L0x4RHZ6NjdVSWNpK3pndUpjM3pndlcrUHZFd2l6aFlHUkhiUFRD?=
- =?utf-8?B?dmE0Q2pQTndsVWwzSzJMTEtoM1M4anNEcFJITm9XVXEwSFh6UytDNTljUFVj?=
- =?utf-8?B?YkJKcFBENzRaamRSY0x5aXlObGJGd0psTGFzNTdzd3ZORDZiSVloUVFzWkgr?=
- =?utf-8?B?OXFKeldpTlY2VEdXTTB1TU1tcll4QlBMWFRCTmlSYUM2aU5mYTBWSHF0bG16?=
- =?utf-8?B?KzZvSG9HRnZSYXlLS0Zra1NzR2hyOTl2WHRRUXVQY2JjQloxYjVwMk9pZisr?=
- =?utf-8?B?S3haVXZRNU5BUW5IdzFITlFFL203NE0rYWR5a0tLRTJpR1k5WnRTUWw1QVFL?=
- =?utf-8?B?UEJBS3F2R3lXSXdtTklFK0MwUWxuaGd4Z2dHcTlSeWRKdlFrUklSeWZMd1Nw?=
- =?utf-8?B?V25jSmRkaFZ3aXlSZU5LTXdpWmNwVCt4Y1JId3pIK1JjZzBLTHlNeE90RExX?=
- =?utf-8?B?OVNjL2R0WFhIR3lFZE4yd3lkNkRoQkZOQVVGb056Vm4rVEFGVVhuRGttcHBR?=
- =?utf-8?B?Y2ZvMmI2VFVieUxYd3pOMjVha2plSWlzZ2paQnMwVXkvOU5lVkhYRnVUT1Fi?=
- =?utf-8?B?U0Zqd1JOWjdvWXdheG9HN1N0bFdqWlVzeldLK053WUdZQWlhOEY2UlFVY096?=
- =?utf-8?B?RmdlVFlzcmhpY0RENldGcWc0dE5HdGNxd3NWdllEWUNMMjZ4MVBzYUhpdXFH?=
- =?utf-8?B?cmpoOXZ0dlBiejk0ZDk2Q3FjTEwrUG5idFhOOGRjV1JRdmhodnYwRDNySjln?=
- =?utf-8?B?ZkJqNnBWTjJyZUpldXEwdzRQSGlONStXQTBPRjk5V2lTNC9HOXAxMXVHUTdR?=
- =?utf-8?B?NzZib0JNMENoeHhKb2hVQjNqL2JiTnBaT2hhYXh3SWpLd05XcGJWVHJ2QVdS?=
- =?utf-8?B?eVN2SEFNYURrbDhybEd5QndlUWVHV0JQdmc0bWZ0TE93QVd5QWNwK29lSmpU?=
- =?utf-8?B?M3BHako0M1RBYkhvZnJWbjFOeTNzbjQ0TjBkZk1sRnltNUJ2Ukd6SVduQUl6?=
- =?utf-8?B?SzJnVEJFWlhFc1V5cHhFcEMzUEpuUDF5OVVQcitxSFpOWGRpci9lREl2WDB5?=
- =?utf-8?B?RDVFVGw4bWYxTUppWlhzeFhRMmUrM1JrV2lPaEtuVHcxbDk5cEdnb3pYbW5n?=
- =?utf-8?B?SnBNeXRlNTBqVEFvTnZoZXFZcSs3dzI2T3QwMVNCRVM3Wjl0MkFleVdrdkRJ?=
- =?utf-8?B?YkQwTDVWUmwxcG9DODhaMEJiY3RCVnlhOTAzYU5CTnV6a2wxZVNDdXhTSUly?=
- =?utf-8?B?SXJYZU9NTEJyaFNaRTd5L2R0dnFtMEJnMVErYVBydVh3RlZ0ek12WUtHeHhO?=
- =?utf-8?B?Qkh5TVFRTHZvYm5IT2djVEhpcmxreVVnS21ZSkFtTWUzcFpTWnkyWmU2YStM?=
- =?utf-8?B?bHFsdGl3emNuT1BQS21BMWpaVVJwd29ENXRDL2twRFdsemNVMjRqUytIblVi?=
- =?utf-8?B?Nll3SkhCYXYwYzJWckV0d3ZTVGlBQlJxRTNKWENPWklxdDJUWXRVbFA2NEs4?=
- =?utf-8?B?M0RQQ0RYNnowZG45cVVHQUt1WlpkNnNtYWowYmVkTjBBaVJCUFFZbmZqRXNF?=
- =?utf-8?B?MFhENGVQbWhRT1FwZ29IcXczMWlsQk1EQ2dQK3Y0VVJNUkZvR2QvTGlWc0FL?=
- =?utf-8?B?U1pjUFJtSm1XQ3RNU3N2dnRVTjc4WEN1N3N1bkRRMWM0VE9VWkxudDBJbFU1?=
- =?utf-8?B?TXpYMTFhTE00ODBzZ0xKOXB4M3I5VlZJbGFUb21GaDU5MHh1THQ2MllCYmVN?=
- =?utf-8?B?UngyTnpNQzV1L0NqNmZzL0IvM0xzclo4cTZVOWZHaW9NR25DUmRnT1h5ZVha?=
- =?utf-8?B?Szg2UGpta3pCL0QrUDhYcDdlUWJhaUtBQk9MRXdkK1QvRlRPckRtVEIwaDBl?=
- =?utf-8?B?ZTVUd1VqRnRROUt6cSs2bjN4Q0lxSFJvR05zTThVMlp0MllISmFSS1JIYVAv?=
- =?utf-8?B?TVJHN3lvR0dCN1F5S0RkSms5QSswZkVKc2ZrMUgwa1Z1VExnNGQ1c0l0aWp6?=
- =?utf-8?B?YXdKTlZ0b3paTjg3UXVZRFRCTkdxaTdOM3VnL1pmUDA5NEIxQW4vQU5NeTVx?=
- =?utf-8?B?MStZL0t5U2JnQVVQaHlrUTdMU0pWMms0djljWm84dmMyd1QxblVxNGRzYkpF?=
- =?utf-8?B?S0dRU1d6dkprSUt3OFo0U3ZCeU1oellkZDFwa01GaUtuSXVRQjJ6MWtFcndJ?=
- =?utf-8?B?YUp5WW1HR3lpMm1seXU3Q3d6ZVc3L2hMMWVCL0k1WW1lL2xuaWdFalhxb0sr?=
- =?utf-8?B?SnpGZDVneWhYNmFYNXBySmZQUUNVQzFBNVd4QUNsUURFQ0xwZnVzdz09?=
-X-Exchange-RoutingPolicyChecked:
-	09RjXJoHwqCbvm1zvMjd5G3xzwMO0pNKvMuFlBiWps0R8Fb6sp/ORZaLT76H3GsdQJTJF132ybZ83wHUJC6qWau2tKR8VsVGtsMLDSzklU5YUv6ZR63V0zKQtbDlG/2DdG16cwqCC/ig4jiu3z8LEa6nYMkYJ2u+L2oyyk0o2MMkNcQBMUW7VNcXDDXTVPq6bvK4FKVkzadod79jvR/428XKBt9Ji4eLa2iwz8fMC7QFWPEH6uM3oUgHCAT26YwkIAVSERKyfGTYRRUFnjpEUA7wjXorBsNxHKiC+X86q6YPHeAbSiopO0+VF5Oax3t12BRr0ZZg9qTj9IiJ2owlvQ==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	FEdL4qlh/W/NiOiJevMJDkguOwdH+Iho0EoRrrXloaMQ53BZ7VD10ndFfg87m8RBJfSMypmlKsuj9J6xRpBCMWIEpU5mitnQl1G+mowyJtAW6+CPcnm90uFtgMB/7w+aGxjYtaWoHJ7i6Kxtf2lYJdm72O3JKvfWvCV/G4bB+zx14+liH5oRMj0zccZmeDd7NCc4Yk1j9gR+mr+CdZWVp52s5LUPJ3oFGBjs5yGhsqlz9sPaZJPECT7lAc+nTLF9E3u1mH+X7PkRNfuEqNjrrFARpD38nAncFEzzMa+UuoQIx/jS0cBiqrKF4WI1xIiMZ3tV2LlIjLy0d7qrUjz2nbYnGRNDjfPnqMXjeRmP02dlNQ/jpgf7bDdGdhpIUbB640TkfBcjqYoWtUqcpXsvWJFpEQWeyIhaRh0BQrZoSFoR92FUbdTV4VNmuxXGhU3qLN5xewMRrp5lCE8EQgy1q8wzDukFtgdXykXLjcfxsNmnmrj0U67iFPbzHIVXb6T76bZU6OOz7HM4VTzxWBgANVSMsW0L/9qE60Jpd/RM32Oxd3t5mpX5p+NYRlPb6Fwa78GK+r8C4c2HuCtUNLfJ/tgBd85Ym6/vI9vMkeKFHX0=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0b01f01-451e-478f-8a0a-08df1b15815a
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bnc2bVo4SktablM0dzFjdEpwUzgrMmI1SExSVWlqbUU5Y1dTZ2FSM3NQUStP?=
+ =?utf-8?B?cm9JMnA1NkhjR011NWVEaUptNmh6L0xtNlk2QVU1OCtDZGFiaFRiVUY1bzd2?=
+ =?utf-8?B?R0xzMVBleXhCYXdlRThlNFc0RlVUQ0ZqbnRCVXZJUzFOT0RweGsrbWwxMDEz?=
+ =?utf-8?B?SWRBYnJCenJYSUZ1L0RubnZYNUJDR2tyQ3FLNXJ3Y0dlTEJrMFV5ZFNvcG5R?=
+ =?utf-8?B?OEppaTJWdURiSkh1cVNoZDk2YlpzdjhaM1kxQVJ3bjZJWllaZHIySVp5bk5a?=
+ =?utf-8?B?VDB4SEphZTVNNzlTQmQ2VUlZbXM1dG41c3psZHZEa3VUckZ1SjBZSWxibXNQ?=
+ =?utf-8?B?ejVDS1ZvV002eFJKWGI1K2lUL0NDZWdiNWIzVGFScUNUK3NBc1dxZ1FpaUlJ?=
+ =?utf-8?B?UnhlWjFMd3E3V2hUU3F6d1EvUnVkOHNHK2Vta2VHSDFQUlpINXRWbGJIUTBn?=
+ =?utf-8?B?enVxU0w0NlJnZWhYdkdlczdLVHZLTXN5UngxcENJRUFuUUZSL3lrUzI5aWxv?=
+ =?utf-8?B?bzhHUzFPNzkzS3VGYU4weU9NUWdkYzlnTWIrR3psaXRxeHBPcFJhVmZEd1BD?=
+ =?utf-8?B?bVV5ZEp6QkR6clFwT1lUb3dXYUhlQkV1c04xNllRNWZQck1uRmF6NTcvTk5B?=
+ =?utf-8?B?QVVhOXBKNk0zSEl1SnE1NUdZM2FFNUpoWkdnRDE5SEUrSG94RDJ0dUEvQklu?=
+ =?utf-8?B?RUxnYkNLam1oNU0yaDhLaFM2cXZDdE5ONEZvMkgxdlBSZmR2NlVrbUZwQzZR?=
+ =?utf-8?B?TW1Takl0TzBxcWQvbTBzZHZJc014N2ROVjdhU3prc0lBTkZ3enJITkJxelg5?=
+ =?utf-8?B?OFVrVkdKTnFGTnpSNlhxWW56Ty9RWjRYMTJubkoyU2wza0NscjhUQnRFWmtH?=
+ =?utf-8?B?aVZXWU9uRE5SelN5c3FSYjNwNHh1MEVpT2JRMGNDd1hDLzdWckMrWXJ4Rzl0?=
+ =?utf-8?B?VzVvZ1dRdFFucHpJTnZnVzRQcFpnZG5pMjhzRHFCM2U0dzZMWG9Mc0lacmpH?=
+ =?utf-8?B?ZEFkWkxjRkV3MzFyYnEvcENrWk81Zi8ySzdxVUdEQWlCdThvYXVOREpENWhC?=
+ =?utf-8?B?Y0ZmVXhsaVdnaXUxazJ3NElSQnlkdmtObVFHbXd4dVJuSjZSOEZwem9McHBG?=
+ =?utf-8?B?NEtPUEx0OGdHUjJrbDduaFdEVlpWNVRsVHl0a1lhVEE2d0ZjRml5eWd3TmUy?=
+ =?utf-8?B?OS9jclU2cEtWazRJc3FhVVhYdndQblByRHJLdFcwUVBCUTJ2amhmK3hPZ0ll?=
+ =?utf-8?B?aHJ0U2RRdVlUOVNlOXdhSmlaZUVKS2ltZ0xTbmJQZkxOdGIvSXNtU2d2WVpD?=
+ =?utf-8?B?emdHR2sxVHFGbUVNWVIvYndzRUxGeERIdUZTaFBIMHoyRnhCMXdlWkVUdkVZ?=
+ =?utf-8?B?bDE2Qm9hZ1g1RGFEc1J5cFVTaGZmMktEYzlSc1BkaDlaV3ZaSCtvNk1mNXNz?=
+ =?utf-8?B?Z1BMNEZSRzFQeDhySDJvT0RsWnU4QzFGM0dJMVBmUlpWNnJRZlEwaE4vRUxY?=
+ =?utf-8?B?Z0taenNpMjllY1FaSmtscTFORTBFMTcyZTNjTXRCTVhXTUtkMHB6Tm5ENXph?=
+ =?utf-8?B?eTVJemlFZ05wbkp3TWRRdnUzVlhOVnZDS3RZc3FSZ1hVdTlsU0h0NVhlNXdF?=
+ =?utf-8?B?ZkJLT0MyVVFlUGtGTkZ5V0EvcVJaR2lOeGtBRXRUa1pHbjJvdStrWEZJRXNt?=
+ =?utf-8?B?bG5UZnlZY0dvdmN3b3B1MVEzaldHMmFEYUpQMkNhYmx5bmx4aXd2Yk94MVI5?=
+ =?utf-8?B?alJ1UDk4ME5rZkJ6Skp0TUdxY0ZmVW8zM2VPRVBsZEZqZmlYSVBZa0FDTFlI?=
+ =?utf-8?B?azlGbVowa09Gemg5ckpWQVYyd0F6RUt3a3pGVmJjWGY4WG9OVHhza0dBYlRL?=
+ =?utf-8?B?c1hnSURLOGhpSlFvdFg2SUUxTEE0Y2xhZVFzT1JDRDJFQWdxekJWQzQwTkhx?=
+ =?utf-8?B?RmpuRi9WM3dzcGR1VThnSXhtYkZqWTZGcEg5WFBGMVBNL0grelZuTUFhN3hF?=
+ =?utf-8?B?NUNMS2Y4YWY3U1NSYzllMVNSZklYUkZmcVZrb3loYnVmMEI0bzhxZVdPV3Nw?=
+ =?utf-8?B?eG5sWmdhUmlHS1l0OStYeXA3ZkNaaEhzRWhZYzA5Y0NKQ2YzT1Z3ekk0SUdM?=
+ =?utf-8?B?S0xua1RYQTZVaVhRWEZlYjVLamYxdFN2a3BlMVVIbjFSRmZZZWlzSVF2amZh?=
+ =?utf-8?B?Y2twSWRUMDVqa01PYVVEWksvOTQ3dXd2T2J3RkJreDM0V0RyRTZYTGMxRTBq?=
+ =?utf-8?B?SmhjMVBteFVCeWJsM0pCc1BuWTJpL3VhcmpTNHNFdWZZMHZyK3N6cHhNeHpC?=
+ =?utf-8?B?M2k2SlJRSk5oV2lFWWEvNVRiM1lpNWZSNy9KcTNSSjFKdUlGNTUzKzNLZkFR?=
+ =?utf-8?Q?A5JNtQlQiovHKHQ8=3D?=
+X-Exchange-RoutingPolicyChecked: 32KFCogOIqj7PCOLGkDh/ewpXXdGwRbTM5t+TwvmLaPNsLKB2lBbUSQtpRdRxHZgMf9zjZiychdEaqFNpxtdqmiIpiEt4edirstIJw62LuaFUrszIvGkrMu1C9//aXqKkreyZatnwwGS8iVy59Z6gC4qXMItm2HQyaCYK0P2h0fr1pYim78cJROkoWacKC+HzQohIWXor+R/Eog1N2/CU49r08Chh3cpUYv/qDzd14Gshad3QiUZ/D0iz4nAgsRBMFSki/h1szFW4wiskKSYnlBrFHuY1HK05Zjx9qJM1V7eOC2eQnnYAXq+Uj5UzGx6pOs2S7QA3rLR7QZKiOmkvw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3380e31d-31fa-43a9-2971-08df1b1806ed
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2026 14:58:49.1817
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2026 15:16:52.2222
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bzl+LpWV5L34XBExbrMg7ntg3XX4YRDbKJ1LAIBLVbPk5B/C+6B1J5TN0US5aHp11anNVRmFyl1ZPqxbDrEN2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5188
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-25_02,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2609040000 definitions=main-2609250059
-X-Authority-Analysis: v=2.4 cv=APP6TA4N c=1 sm=1 tr=0 ts=6ab68c2f b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=VdqzKS8jKosA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=yPCof4ZbAAAA:8
- a=VwQbUJbxAAAA:8 a=3rytfVO9gtRwcicEPeIA:9 a=QEXdDO2ut3YA:10
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12106
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDA1OSBTYWx0ZWRfXzbMYx2F0QgQr
- 7c1VSznFpeuj8GnTlUIRsuhPYGApTL3Dreull6tDCsZ9bMUcnMiNivLMGCcMJCmnSvgGtN7lK7e
- EsNXI4t2jSerFx+bF7aAZ/x39iGYOuR3uxehkBhKnGAEK5T4FrkG
-X-Proofpoint-ORIG-GUID: 4krNo4DIyYgI9OiIKYBnGzmrKw65Cx0S
-X-Proofpoint-GUID: 4krNo4DIyYgI9OiIKYBnGzmrKw65Cx0S
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDA1OSBTYWx0ZWRfX+OM/a1SMUaxV
- YMwlE1gfLVVrkkheo4Xq6+Ym4BjDLNCulGZaXxMpVndLLc/5VPhqgeKrA1De/5Xtt9CBd3iOi+K
- QtJmtmfV9WA8tV88yGYPSDcgLoBT3uwHDeAjAPA9KfUN0RqThWpOW91yFeUxzjxhxYtdPBZ5BnL
- YT6l1MJDKtrzNLDWXsS4eF7v8u1+CnR9I3C1p+jpE2tQLsKJvCROAKgPwqbR4qnEnIXOkzgNgTi
- EKj0pieXnn2z968fkY8f/EZvlq1wkYD9tZyosfmmFFFV2F/Cw1i8tfLuAi4klik3CW0vbUsYzYg
- cgNYKuPY0Ljk2NUHDstMK2ESa4SbEmMO8Xl2mHBbuoCcmm/PIjIuMo+ZTtmGFiHbSojz2WyWzLd
- YcABrWGnBD7SgGSLKvkv+IY/O5b7/3HKCoyv3757wURl1uYaVyT2OQYjB7kUvw7P6Mr4iP7SyER
- Nv9uG7aE4khxlG40wJCeueZ9qyN39muxQF7iebSI=
+X-MS-Exchange-CrossTenant-UserPrincipalName: ulsSDYOiN3zJhfBTxcXzzi2faWpj9kOwqUUMKawaJi/jLehMNypNfh9Ea2YXcVLUpNE8JYPWixQcunYsnYFUlGT4HZmnu49bwXkufwI4QGk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8436
+X-OriginatorOrg: intel.com
 
-On 25/09/2026 13:07, Quentin Monnet wrote:
-> 2026-09-25 10:52 UTC+0100 ~ Alan Maguire <alan.maguire@oracle.com>
->> Augment func= output for LOCSEC entries to include a mapping from
->> function signature to where parameters are stored; for example:
->>
->> [290179] LOCSEC 'inline.text' vlen=524941
->>         func='task_pid_nr(tsk [reg0])' func_type_id=136691 loc_proto_type_id=136693 offset=2097226
->>         func='get_current()' func_type_id=136694 loc_proto_type_id=136695 offset=2097247
->>         func='arch_static_branch(key [address 0x2e275e8], branch [const 0x0])' func_type_id=136697 loc_proto_type_id=136700 offset=2097296
->>
->> Fixes: 321562c34d5b ("bpftool: Add ability to dump LOC_PARAM, LOC_PROTO and LOCSEC")
->> Suggested-by: Alexei Starovoitov <ast@kernel.org>
->> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->> ---
->>  tools/bpf/bpftool/btf.c | 100 ++++++++++++++++++++++++++++++++++++----
->>  1 file changed, 91 insertions(+), 9 deletions(-)
->>
->> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
->> index e29c8a84e224..6e569ace6add 100644
->> --- a/tools/bpf/bpftool/btf.c
->> +++ b/tools/bpf/bpftool/btf.c
->> @@ -8,6 +8,7 @@
->>  #include <fcntl.h>
->>  #include <linux/err.h>
->>  #include <stdbool.h>
->> +#include <stdarg.h>
->>  #include <stdio.h>
->>  #include <stdlib.h>
->>  #include <string.h>
->> @@ -234,8 +235,10 @@ static void btf_loc_param_str(const struct btf_type *t, char *str, size_t sz)
->>  						(1ULL << bits) - value;
->>  			}
->>  		}
->> -		snprintf(num, sizeof(num), "0x%llx%s", (unsigned long long)value,
->> -			 p->flags & BTF_LOC_PARAM_ADDR ? " (addr)" : "");
->> +		snprintf(num, sizeof(num), "%s0x%llx",
->> +			 p->flags & BTF_LOC_PARAM_ADDR ? "address " :
->> +			 p->flags & BTF_LOC_PARAM_CONST ? "const " : "",
->> +			 (unsigned long long)value);
->>  	}
->>  	if (i != vlen) {
->>  		btf_loc_param_raw_str(p, vlen, str, sz);
+On Tue, Sep 22, 2026 at 01:31:08AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
 > 
+> Critical: 0 · High: 1 · Medium: 0 · Low: 0
 > 
-> Thanks Alan!
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
 > 
-> bpf-ci's comment about "-const 0x16" instead of "const -0x16" seems
-> legit, please take a look.
->
+> - [High] Incomplete RCU teardown: the ring-pointer arrays through which
+>   RCU readers discover the rings are freed with a plain kfree() and…
 
-Yep, will fix, thanks!
- 
-> 
->> @@ -252,6 +255,87 @@ static void btf_loc_param_str(const struct btf_type *t, char *str, size_t sz)
->>  		 p->flags & BTF_LOC_PARAM_DEREF ? ")" : "");
->>  }
->>  
->> +static int btf_locsec_append(char *str, size_t sz, size_t *off,
->> +			      const char *fmt, ...)
->> +{
->> +	va_list args;
->> +	int ret;
->> +
->> +	if (!sz || *off >= sz - 1)
->> +		return -ENOSPC;
->> +
->> +	va_start(args, fmt);
->> +	ret = vsnprintf(str + *off, sz - *off, fmt, args);
-> 
-> 
-> Nit: Do you really need vsnprintf()? It looks like you always
-> concatenate, never format any number, so it's probably not the most
-> efficient. I don't mind much, though.
->
-
-Sure, I'll take a look, might require a few extra append()s but would
-probably be simpler overall.
- 
-> 
->> +	va_end(args);
->> +	if (ret < 0 || (size_t)ret >= sz - *off) {
->> +		*off = sz - 1;
->> +		return -ENOSPC;
-> 
-> 
-> It seems unlikely we'll hit this, but maybe warn that the string is
-> truncated in that case, or replace the last characters with "..." or
-> "[truncated]" or something like this??
-> 
-
-yeah we could replace last few chars with ...
+this rcu'ing rings but not containers always felt a bit incomplete to me
+and while i could say it is a pre-existing issue i think it will be a good
+thing to address...unless it's gonna open up this Pandora's box further :<
 
 > 
->> +	}
->> +	*off += ret;
->> +	return 0;
->> +}
->> +
->> +static void btf_locsec_func_str(const struct btf *btf,
->> +				const struct btf_loc *loc, char *str, size_t sz)
->> +{
->> +	const struct btf_type *func, *func_proto, *loc_proto;
->> +	const struct btf_param *params;
->> +	const __u32 *loc_params;
->> +	const char *name;
->> +	__u32 i, vlen;
->> +	size_t off = 0;
->> +
->> +	if (!sz)
->> +		return;
->> +
->> +	str[0] = '\0';
->> +	func = btf__type_by_id(btf, loc->func);
->> +	if (!func || !btf_is_func(func))
->> +		goto invalid;
->> +
->> +	name = btf_str(btf, func->name_off);
->> +	func_proto = btf__type_by_id(btf, func->type);
->> +	loc_proto = btf__type_by_id(btf, loc->loc_proto);
->> +	if (!func_proto || !btf_is_func_proto(func_proto) ||
->> +	    !loc_proto || !btf_is_loc_proto(loc_proto) ||
->> +	    btf_vlen(func_proto) != btf_vlen(loc_proto))
->> +		goto invalid;
->> +
->> +	params = (const void *)(func_proto + 1);
->> +	loc_params = btf_loc_proto_params(loc_proto);
->> +	vlen = btf_vlen(func_proto);
->> +	if (btf_locsec_append(str, sz, &off, "%s(", name))
->> +		return;
->> +	for (i = 0; i < vlen; i++) {
->> +		const struct btf_type *param_loc;
->> +		char param_str[256] = {};
->> +
->> +		if (!params[i].type) {
->> +			/* Handle varargs func proto, must be last parameter */
->> +			if (i != vlen - 1)
->> +				goto invalid;
->> +			if (btf_locsec_append(str, sz, &off, "%s...", i ? ", " : ""))
->> +				return;
->> +			break;
->> +		} else if (loc_params[i]) {
->> +			param_loc = btf__type_by_id(btf, loc_params[i]);
->> +			btf_loc_param_str(param_loc, param_str, sizeof(param_str));
->> +		} else {
->> +			snprintf(param_str, sizeof(param_str), "<unavailable>");
->> +		}
->> +
->> +		if (btf_locsec_append(str, sz, &off, "%s%s [%s]",
->> +				      i ? ", " : "", btf_str(btf, params[i].name_off),
->> +				      param_str))
->> +			return;
->> +	}
->> +	(void) btf_locsec_append(str, sz, &off, ")");
->> +	return;
->> +
->> +invalid:
->> +	snprintf(str, sz, "<invalid>");
->> +}
->> +
->>  static int dump_btf_type(const struct btf *btf, __u32 id,
->>  			 const struct btf_type *t)
->>  {
->> @@ -617,22 +701,20 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
->>  		}
->>  
->>  		for (i = 0; i < vlen; i++, locs++) {
->> -			const struct btf_type *f = btf__type_by_id(btf, locs->func);
->> -			const char *name = "<invalid>";
->> +			char func_str[1024] = {};
->>  
->> -			if (f && btf_is_func(f))
->> -				name = btf_str(btf, f->name_off);
->> +			btf_locsec_func_str(btf, locs, func_str, sizeof(func_str));
->>  
->>  			if (json_output) {
->>  				jsonw_start_object(w);
->>  				jsonw_uint_field(w, "func_type_id", locs->func);
->> -				jsonw_string_field(w, "name", name);
->> +				jsonw_string_field(w, "func", func_str);
+> --
 > 
+> i40e: make ring pointers unreachable before freeing via rcu
 > 
-> Would it be worth keeping the name, too, in the JSON? So that if
-> somebody wants the name only, they don't have to parse it from "func"?
->
-
-good idea, will do.
- 
+> The patch reorders i40e_vsi_clear_rings() so the published slots in
+> vsi->tx_rings/rx_rings/xdp_rings are cleared before the saved Tx ring
+> pointer is handed to kfree_rcu(). The Tx pointer is saved first because it
+> is the base of the per-queue-pair allocation block.
 > 
->>  				jsonw_uint_field(w, "loc_proto_type_id", locs->loc_proto);
->>  				jsonw_uint_field(w, "offset", locs->offset);
->>  				jsonw_end_object(w);
->>  			} else {
->> -				printf("\n\tname='%s' func_type_id=%u loc_proto_type_id=%u offset=%u",
->> -				       name, locs->func, locs->loc_proto, locs->offset);
->> +				printf("\n\tfunc='%s' func_type_id=%u loc_proto_type_id=%u offset=%u",
->> +				       func_str, locs->func, locs->loc_proto, locs->offset);
->>  			}
->>  		}
->>  		if (json_output)
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > index de4c0737f72e..65aa50330aac 100644
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > @@ -11693,11 +11693,13 @@ static void i40e_vsi_clear_rings(struct i40e_vsi *vsi)
+> >  
+> >  	if (vsi->tx_rings && vsi->tx_rings[0]) {
+> >  		for (i = 0; i < vsi->alloc_queue_pairs; i++) {
+> > -			kfree_rcu(vsi->tx_rings[i], rcu);
+> > +			struct i40e_ring *tx_ring = vsi->tx_rings[i];
+> > +
+> >  			WRITE_ONCE(vsi->tx_rings[i], NULL);
+> >  			WRITE_ONCE(vsi->rx_rings[i], NULL);
+> >  			if (vsi->xdp_rings)
+> >  				WRITE_ONCE(vsi->xdp_rings[i], NULL);
+> > +			kfree_rcu(tx_ring, rcu);
 > 
-
+> [Severity: High]
+> The ring objects are now unpublished before kfree_rcu(), but is the array
+> that readers index through itself RCU protected?
+> 
+> The commit message states that after this change "new readers can no longer
+> discover the ring through vsi->tx_rings/rx_rings/xdp_rings before the object
+> is queued for deferred freeing".  Does that hold on the i40e_vsi_reinit_setup()
+> path, where the arrays are dropped immediately afterwards?
+> 
+> drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_vsi_reinit_setup() {
+> 	i40e_put_lump(pf->qp_pile, vsi->base_queue, vsi->idx);
+> 	i40e_vsi_clear_rings(vsi);
+> 
+> 	i40e_vsi_free_arrays(vsi, false);
+> 	i40e_set_num_rings_in_vsi(vsi);
+> 	ret = i40e_vsi_alloc_arrays(vsi, false);
+> 	...
+> }
+> 
+> and i40e_vsi_free_arrays() uses a plain kfree() plus plain stores, with no
+> grace period:
+> 
+> drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_vsi_free_arrays() {
+> 	...
+> 	kfree(vsi->tx_rings);
+> 	vsi->tx_rings = NULL;
+> 	vsi->rx_rings = NULL;
+> 	vsi->xdp_rings = NULL;
+> }
+> 
+> Meanwhile i40e_get_netdev_stats_struct() (ndo_get_stats64, reached from
+> dev_get_stats() without rtnl) re-evaluates the non-volatile array base on
+> every iteration inside the RCU section, and never checks the rx_rings or
+> xdp_rings bases at all:
+> 
+> drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_get_netdev_stats_struct() {
+> 	if (!vsi->tx_rings)
+> 		return;
+> 
+> 	rcu_read_lock();
+> 	for (i = 0; i < vsi->num_queue_pairs; i++) {
+> 		...
+> 		ring = READ_ONCE(vsi->tx_rings[i]);
+> 		...
+> 		if (i40e_enabled_xdp_vsi(vsi)) {
+> 			ring = READ_ONCE(vsi->xdp_rings[i]);
+> 	...
+> }
+> 
+> i40e_update_vsi_stats() does the same with no base check whatsoever:
+> 
+> drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_update_vsi_stats() {
+> 	rcu_read_lock();
+> 	for (q = 0; q < vsi->num_queue_pairs; q++) {
+> 		/* locate Tx ring */
+> 		p = READ_ONCE(vsi->tx_rings[q]);
+> 	...
+> }
+> 
+> So can a reader that is already past the "if (!vsi->tx_rings)" test, or
+> inside the loop, reload vsi->tx_rings/rx_rings/xdp_rings after
+> i40e_vsi_free_arrays() nulls them and dereference NULL[i]?
+> 
+> And once the pointer-array slab is recycled, for instance by the
+> i40e_vsi_alloc_arrays() call two statements later, or by the SLUB freelist
+> pointer written into the freed object, can the same reader read a non-NULL
+> wild value out of the freed array and dereference it as struct i40e_ring
+> (->syncp, ->stats)?
+> 
+> The __I40E_VSI_DOWN test at the top of both readers is evaluated before
+> rcu_read_lock(), and nothing on this path drains readers that already passed
+> it, so it does not appear to close the window.  Should the arrays be released
+> through kfree_rcu() (or after a synchronize_rcu()), with the base loaded once
+> via rcu_dereference(), for the unpublish ordering established here to actually
+> take effect?
+> 
+> Separately, both readers bound their loops with vsi->num_queue_pairs, which
+> i40e_set_num_rings_in_vsi() changes between i40e_vsi_free_arrays() and
+> i40e_vsi_alloc_arrays().  Can that let a reader index past the end of the
+> freshly allocated array?
+> 
+> >  		}
+> >  	}
+> >  }
+> 
+> -- 
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918212458.550425-1-anthony.l.nguyen%40intel.com
