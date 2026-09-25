@@ -1,89 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0773AEF4C;
-	Fri, 25 Sep 2026 19:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124A24CE668;
+	Fri, 25 Sep 2026 19:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790363932; cv=none; b=JY3w14AFJ7q77vq84ozg7hxim42T8wz58V1GaZuBIAg7C2Me0asXKTVNfL/iczru9vIJL4gReX5fNbaSly3jIlueJecnV5PTdwKRtjIV3EcDtZXuk8fpnQpnABafMqsXAFH3TPqsu0OwiIm9hS6z46aiL+DGjZTsh2ZMG7829TM=
+	t=1790364291; cv=none; b=a9FcPloOUhBqlpH+JTSTK8soHo3bOsxIOM8qs+AJ03qal7KTys9utreNVOcYsJcKRmXL4El4skeZ/vmCDq21DkughNjO1BpAMuuEp6SKgVDtFo6mHXcRRrCl2MBmZd5bawK05j0TSVovbx7TRspzK6pHFgmdChTFdEdU9FmSup4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790363932; c=relaxed/simple;
-	bh=hFxATNbuhTxRaoLB71t3y9FFElpJAR1VeH8p9l5w6yk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CO6MOMIaD89kNKNTQJ3SyQqHdhRPEh7//7TmfUbEo22qT5266u+s0GmY1IBQmmlrTKfAmfwx97xeTx7+PJhzmhPzQqx0AWd4CphTxILubAryOAfnzJu5Jc8/eXNOm2/WrGfS1n1QTpz9pXRbfHfdut7+a2QgkTMTMY6CqSyYPKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dvWQ6e9g; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790364291; c=relaxed/simple;
+	bh=I2enzlvGYXQe6kyfRBqy5/8Z3Rnu2AyLzzPjOKipDm0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bguhto/EUZGq7BCRHx/tVYLAw/iDu35Lqkj76WmEDJGaCkmSKhtxJmEmy6VBgeuZIineBhnJLqjVvDIby2t2LVoh+G+ot4b5/l5AqFjTObYPIJBnvyD4i1lxAxjKpe9WfErqqAoIAEsPOkBS7VY0G0LIA544xz4ur0ER2cy45QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwIpgarw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvWQ6e9g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B0A1F000FF;
-	Fri, 25 Sep 2026 19:18:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwIpgarw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9D91F00898;
+	Fri, 25 Sep 2026 19:24:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790363930;
-	bh=qq7qh2o205/vpx0R6keJ42w1i2FtZ8yCrm4A0MjiE9c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=dvWQ6e9gJMPPr1SIZH7zxq/Xw4Wwc1tEGZtNOKEOP7pcfOPTD/CGS2hKZhjyKgGTA
-	 MiEo76qUoEWW88ycWpq9PAemmFjessIWs1TdrYFGCiXZOKAQ2f156KnOuMSY1uDfoJ
-	 xvV5ccgZ/jg1pcHQPuxOMZHynfAGFrQ8q/zsNX7FJwdHEHS1kMc5ODgk5T1vsOMOYM
-	 Pek/mBR6Kr4ALpNOI50G1XO/btDDs0QyUTkaX42wBNwdLouWySDHJOY2Penjw7b1oK
-	 zftujMGnaDX4TG+OfUQDiSSWS9GX3WNq2Tp3z6HD46HFfLNFybDk0BelGfHXC7e0tA
-	 2rAOnz7D3bxCA==
-Date: Fri, 25 Sep 2026 12:18:49 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "Jakub Sitnicki" <jakub@cloudflare.com>, "Daniel Zahka"
- <daniel.zahka@gmail.com>, <netdev@vger.kernel.org>, "Alexei Starovoitov"
- <ast@kernel.org>, "Kuniyuki Iwashima" <kuniyu@google.com>, "Paolo Abeni"
- <pabeni@redhat.com>, "Stanislav Fomichev" <sdf@fomichev.me>,
- <bpf@vger.kernel.org>, <kernel-team@cloudflare.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Simon Horman"
- <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
- Bruijn" <willemdebruijn.kernel@gmail.com>, "Florian Westphal"
- <fw@strlen.de>, "Jack Wang" <163wangjack@gmail.com>
-Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
- packet scrubbing
-Message-ID: <20260925121849.2ac5150b@kernel.org>
-In-Reply-To: <DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com>
-References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
-	<20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com>
-	<DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com>
-	<87fqyypp67.fsf@cloudflare.com>
-	<DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com>
+	s=k20260515; t=1790364288;
+	bh=gL7KYzC6TKjrTTfyTNoqbbOm0pMEBvmjbknZne8m4es=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=iwIpgarwOLx9qK2A4Zkreez4K6HOXklUndPxV1MUhBh3YBxzKPFyRbdl67fQtOo68
+	 YprHdW6nh3tsY9PKvzU5gblrnQE0pcQCvmBvesa91zuBUCJh5WMKZ4ALC9WKwwZSjl
+	 1ktSZBy26q4YuHJHe4E5QDtHiFcmBxNa9BzNUltyK5alWf+WL128Ui/p/O/7Ckl8aC
+	 T8VIvth6gl3Q9idkuIO9mkMg6BVI2J88+7vTnWzphiFcU9N4mZsILCzBRWVHXG0Hky
+	 6+9WNGEt8GkTZ76XB182wgEvXKoaSjP6v8+8+FIYoljUVx19s4cAOs7xY+X6Qrke/b
+	 imL5wT59DDl7Q==
+Message-ID: <661699fb-456c-4e68-85df-94cb829b2204@kernel.org>
+Date: Fri, 25 Sep 2026 20:24:44 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Fail map dump for maps that
+ can't be iterated
+To: Maxim Skokov <skokovmaksimevg@gmail.com>, bpf@vger.kernel.org,
+ Tianyi Chen <hi@tychen.cc>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, kuba@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260925162031.27259-1-skokovmaksimevg@gmail.com>
+ <20260925162031.27259-2-skokovmaksimevg@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260925162031.27259-2-skokovmaksimevg@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-On Fri, 25 Sep 2026 01:07:47 +0000 Alexei Starovoitov wrote:
-> > I've implemented Alexei's idea of skb-lifecycle tracepoints that run
-> > only when an skb is marked/traced. Currently putting final touches on it
-> > before sending it out for the first round of feedback. You can take
-> > sneak peek at it on GH [1] to see if it meets your needs.
-> >
-> > The CPU overhead is lower compared to the skb extension, at least in my
-> > local runs, and the kernel changes are simpler, so it seems like a win
-> > overall:
-> >
-> > |                  | gated skb tps    | bpf skb ext      |
-> > |------------------|------------------|------------------|
-> > | **busy**         | **+5.44 =C2=B1 3.16** | **+8.01 =C2=B1 4.75** |
-> > | sys              | +2.62 =C2=B1 2.06     | +3.67 =C2=B1 2.76     |
-> > | soft             | +2.89 =C2=B1 1.43     | +3.83 =C2=B1 2.10     |
-> > | ns/pkt @146k pps | **+=E2=89=88 373**       | **+=E2=89=88 549**     =
-  |
-> >
-> > I'll be giving an update on it at LPC [1], if you're attending, and of
-> > course will keep you posted here on the ML. =20
->=20
-> Well, the numbers speak for themselves. I think :)
+2026-09-25 19:20 UTC+0300 ~ Maxim Skokov <skokovmaksimevg@gmail.com>
+> "bpftool map dump" walks the map with bpf_map_get_next_key() and treats
+> ENOENT as the end of the map. Map types that can't be iterated fail that
+> call on the very first key: local storage and ringbuf with ENOTSUPP,
+> bloom filter and arena with EOPNOTSUPP, queue and stack with EINVAL.
+> bpftool then ends the walk without a word and prints what it prints for
+> an empty map, "[]" with BTF or "Found 0 elements" without, and only the
+> exit status tells that the map was not read. On a socket storage map
+> that holds storage for a socket:
+> 
+>   # bpftool map dump pinned /sys/fs/bpf/sk_storage
+>   []
+> 
+> Ask for the first key before printing anything, and when that fails with
+> anything but ENOENT, fail with the map type and the error instead of a
+> dump:
+> 
+>   # bpftool map dump pinned /sys/fs/bpf/sk_storage
+>   Error: can't dump sk_storage map: Unknown error 524
+>   # bpftool -j map dump pinned /sys/fs/bpf/sk_storage
+>   {"error":"can't dump sk_storage map: Unknown error 524"}
+> 
+> An error later in the walk is now reported too, as "bpftool map getnext"
+> reports it, and the element count is printed only after a complete walk.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Maxim Skokov <skokovmaksimevg@gmail.com>
+> ---
+>  tools/bpf/bpftool/map.c | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 20d59eab09..626882f207 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+> @@ -856,6 +856,25 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * Map types that can't be iterated fail on the very first key. Say so
+> +	 * before printing anything, so that the output isn't an empty dump.
+> +	 */
 
-Instead of improving the existing infra we're adding more BPF-specific
-glue and another bit to the skb. Matter of perspective I suppose :/
+
+Or simply:
+
+  /* Fail early to avoid an empty dump if map type cannot be iterated */
+
+But that's a minor nit, the patch looks good to me, thank you!
+
+Acked-by: Quentin Monnet <qmo@kernel.org>
+
+Looks like you need to address Sashiko's findings on patch 2, though.
+
+
+> +	if (bpf_map_get_next_key(fd, NULL, key) && errno != ENOENT) {
+> +		const char *map_type_str;
+> +		int saved_errno = errno;
+> +
+> +		map_type_str = libbpf_bpf_map_type_str(info->type);
+> +		if (map_type_str)
+> +			p_err("can't dump %s map: %s", map_type_str,
+> +			      strerror(saved_errno));
+> +		else
+> +			p_err("can't dump map of type %u: %s", info->type,
+> +			      strerror(saved_errno));
+> +		err = -1;
+> +		goto exit_free;
+> +	}
+
+
+Tianyi, note that this conflicts with your series ("bpftool: Add
+recursive map dumping"), one of you will have to rebase.
+
+
+> +
+>  	if (wtr) {
+>  		err = get_map_kv_btf(info, &btf);
+>  		if (err) {
+> @@ -883,8 +902,11 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>  	while (true) {
+>  		err = bpf_map_get_next_key(fd, prev_key, key);
+>  		if (err) {
+> -			if (errno == ENOENT)
+> +			if (errno == ENOENT) {
+>  				err = 0;
+> +				break;
+> +			}
+> +			p_err("can't get next key: %s", strerror(errno));
+>  			break;
+>  		}
+>  		if (!dump_map_elem(fd, key, value, info, btf, wtr,
+> @@ -897,7 +919,7 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>  		jsonw_end_array(wtr);	/* elements */
+>  		if (show_header)
+>  			jsonw_end_object(wtr);	/* map object */
+> -	} else {
+> +	} else if (!err) {
+>  		printf("Found %u element%s\n", num_elems,
+>  		       num_elems != 1 ? "s" : "");
+>  	}
+
