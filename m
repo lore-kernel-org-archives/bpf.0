@@ -1,64 +1,64 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEB43CB91C
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 04:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0973CCFA8
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 04:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790312155; cv=none; b=dWZ0KQPsumhU8DivJi/RL7n2pL6uDUIcdhxtwipGUk3vtP16yNWLZaBBQ3fTBNDzeU1h37l2VCeqvJXZ2GOXQ3D+EjLp6tIE2u2E6mHm6id3U6ZbqguTlAUyrTuaz55ksYKdQE/tnS5lSrxP02W0BD9ntSS+yFMdHyg4TFC/tzs=
+	t=1790312158; cv=none; b=JrzMO4l1kWCNwpA0u8BpMnuKp0n6pOCw9bIrJ0LGb8dJH9Kbl5aexiS3YSdp8lFyCmCx/vhTQ/VnYAqcWGQnuN4ElGmpqbZOl4HPTmJfelEaJdrzX7XkIUuNCHr7K66CxVOpHDOKJzNFsv2zXkINFd8Z50+21h0zjU2XGjXi/fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790312155; c=relaxed/simple;
-	bh=2HoPBrk1ChjhABWZYhpk1pI1CuLHum8uTkMj1BB7ynE=;
+	s=arc-20240116; t=1790312158; c=relaxed/simple;
+	bh=NfKabUNvYINKkeoVUpcXPk2+dMxpvhZjuIMqUOsPQG8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=odH4jjhPcP5ZHUqakbqJrMZu4W0FIPspJGLSp9kDmrlWXq6HEuxicNrUesNyKymRRc6eIeW28/jBcm5BIEVpkI3CcqryVcM3lJAWz9JgXmzPXQNJ/XfCAPn8kN5dHbZATm+7U1A1ajYZb9CPnRheqFpr23kamgcOlC/Vi0VJnbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RTy7/Byr; arc=none smtp.client-ip=74.125.225.137
+	 MIME-Version; b=hCY0W2vIHJN7oGiD1Cu2CSoY7ZzTpkIhaQUV8VwQ3gIYuq/LCv+6h6OL4rmwsja+bEzE6EdhaKGPh2GMXoms9IJi4zh29SK4G8BmCN55GeeFk/DxwmSKGTubFDiF8GO7vBUdtckLQ1UfMF3pum4k6E+sPALW7twc6asGCspWJb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mnUeVD//; arc=none smtp.client-ip=74.125.225.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RTy7/Byr"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bbf77e8so900965e9.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:55:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mnUeVD//"
+Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-49e66652cc3so3070365e9.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790312151; x=1790916951; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790312154; x=1790916954; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lwV1PwAwbX8W5yHBsZtTTKxTanpBD0gk+rl2xeap38Y=;
-        b=RTy7/Byr7CkBOg/s8HN2yshfRj9K7GKWD00Z9aFD3AdjWkh3qu9q8aLYN5iujqdQwU
-         K7yGKmesFmY/JG3fGZwONFNGm9wHtew/fzdx7hRBISNP8h00/8OAx77+p5sUw1k9AnUp
-         EmhLsT3TQAEX73+gbF2eNeB57EZGB+hjTKMZXiQferjkAHHQskVP1UBGGB79P5uVVawa
-         8wGH0HMeDbrYhG3eH5OzmHyDCnO0MEA69hNCjDJ0GCyMsqvup2gIbq7tThMmENraKVlP
-         Ay6SiMvjIaIWWoaNeGffJpGaSmd/ltWLdCID3SOTacBd4nq7Ff1mExv9cSsN5rLVOp9v
-         liJg==
+        bh=LB0uwCl0W9QtyXQT/2l6PkJ1+tyQNOrHDd6qTfVty4I=;
+        b=mnUeVD//WQmrR+ENBk4NcGwrvpRC+8dm1kVs5GTnvLyDs43sYtNh/JvZqT7qYiv/bn
+         DIdb6RxQAPr/s2OkavvBPPGjgqoafpwkwNu3bTJ7akXNwc2u6O7gysMyTpR8d8bAtpPu
+         ZXnalRDUKotg6KpkTXTRneGSOO0gmx+pyFsEaPrKMDAe6U789a3TaAh5wdyH48cxwUmD
+         dO14v4sZ6Of89zdIDq+VrID3vDmizBL43mirugStudwfIZeHuH2AGjhHNzR78gd9Aj6b
+         Y5I19Mon2/IQxZ9/gP0jlto611ccwFOpJrD8tw39tpsf48lLTVA2WIznMYfCQabFhLrq
+         lJVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790312151; x=1790916951;
+        d=1e100.net; s=20260707; t=1790312154; x=1790916954;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lwV1PwAwbX8W5yHBsZtTTKxTanpBD0gk+rl2xeap38Y=;
-        b=TUfXh+c/M4pITdQwJNxpoZCMzVnLdkpfCHBLEe4R3tcWpwVplJjmqbErLqAjIdCGqd
-         VMJiKpalhOFjJ5ZjC5gYa7aK2P0wmmnTU7BgFap+y28WCXMq2LWGwIo8R5xokEOHFMlf
-         rwoVuvPJgYf+T6qLpjxpPU/IlK9hS/JHGw3z4w22jRe6la187pVPDFl0nMtdyWRV0xH2
-         tIEAU2b78TC7gRAObo3z3wTPx8n4zrPc61D0B64TWokkJKcCvFT/CY55yicQ4nUNWHSe
-         Z+75B8Sj8jI/zTpJKzpBQbzH4e8xi20bgaaqk68q41LJhrSgjGNNrQkrvXLrgpOYPueQ
-         Ww0w==
-X-Gm-Message-State: AFuF++nZCfcdsWMwIkpGVk0XgWTFN3gJhL+RHD+D6dbVXktkx7XZplKg
-	RkpzbeLIPNABIsIjZum1zj0g2nLafuZGXnVgHHCdgdeURyo4hlEeaYJn/WEis7tc5oY=
-X-Gm-Gg: AYBFou3Oly2p0nNCzhHsu7HoYa+jGx9Ebm1mzpywOcl8UATIwsXv38dxUqBlR+3rgRy
-	AZneyJgFq8qO84CkDceACodEn3kHQO7w4L4SWtp90NGj39/eXuklVwH+gaHPhJpF+fRhnIVY7Az
-	2qdqxeEULAOyTNii+QuMwpVC/n3sAIkK5xd/7Vt+kmdwCV9SgU6eB4cAcVO+rhkhSI1GNeQLTD0
-	uDwpzDHfNJfJ0g3/NBXgraPfC+kH8ltU4lR0qC8iK6v6Htz2ho3g06qcl+BfNQCK6fXa3qmu9pN
-	0LS35aj7Z70wQ3wEVsMdqTEbxSQb+oJF8y47jTeKsc5Erd7dFFAEJvt6Goeq+wGF/bUTQOpMZ3f
-	t3yCYfKKyPhWt+uWWk7pHU6bbieDPyD60ntV+moyCTgE8QGX3d9rCRf5f7uW9qWlT8v0OHMSk0F
-	kHYOGusZqPJyI3Hf3iZ2DDTTOoqMbkly7JAeIqbhfOhbs8lk561FRsmc2mVPYvKWMV6HyJcIatl
-	8Efb6V7RmeXfRIumQlntxq8vxv0YWV6Lma3ROGy6lQ56bdMpStQa4vWHM1yymtzlAv/l5R1zbyG
-	/bGusF5tAsvbkYmnszxsTHu1FYQ6lQg29dRizQ==
-X-Received: by 2002:a05:600c:870c:b0:49e:6050:9fbe with SMTP id 5b1f17b1804b1-49fe66d76camr78717875e9.15.1790312151251;
-        Thu, 24 Sep 2026 21:55:51 -0700 (PDT)
+        bh=LB0uwCl0W9QtyXQT/2l6PkJ1+tyQNOrHDd6qTfVty4I=;
+        b=aFMUFxuBsp86x10q0iscGZEkC1L2AoUH2Xe3xc2s5jYAewV8ZqCccI9z17hHxiGcYF
+         eERkJljWu8OpjsyOe/7dIllb+5xLV5OZX0l1EZodnv9lqCL7BaSeTgcWmRZLlc71UO2J
+         PJhri9ApG6HfnZLUmyCkUNnV6meJUyGkfu8FcjXneJBLc7/PjUrqj8vYbCeGhIHK6KzD
+         TQ7nqOKT/V03cjXij4P8sSs2fO9JJyfyviwR2BX9WcGVl3cSv7f5TWqKyEQ+kseMK1t/
+         kBk9DS0bNetUXNozIoDe0efvY1XdJkZGZMIn3iZTvC3AM+zFs9XdZT8FtTS27+8pl1Ss
+         FJvg==
+X-Gm-Message-State: AFuF++lIqqaa22CHQYIivyN+qJFK8H9JBhUZM7K9WrFGmpEC1qZ9qDZz
+	qQhTDQiqefTTQRvW/w5ncKfjEsADd3YjzfklzmhD0QqnzTwMZ6Axhz8W55VXZDTg0cY=
+X-Gm-Gg: AYBFou0hAorS9FKCX7SNEYOrELn4dsb4FpZ18wS69FT0CI2YyvqTt1EaeueaeaKpQ0e
+	+tfb51IaLgO754KJMw/yPeMJZUWCO1sZ6fp98ilzOWTwnz/qYb3CamwDVNsV7FfGS+fjVCeXOqc
+	c04p2ykIvMrmeiX5SnkFx1RFr+rvGCw1tgu8Xa68eOrA8G4CDuyQGQRmpI9ocLDPPC0BpWp2ni2
+	uH5JPa1Owqp2fKepaX+4aMhSTRhIcWilWaNp+PvdCMjXGr1bxNi3O4F5Xa7pNUBgUz6pFdzDG1g
+	reKPiNqP7MmmLAUV1cDymSMCNBiRnSfxzgstkqrd9RY7rfOEJ295ukxAbZSwW1OAEGNTr//M1xC
+	NPqBmqQYtvhJaaLFeRvScwmJOaxXR2LGfrJ+ubEi5G+sS9FhMHnCdiK9DX4gXwQ8EgZcfVWuRGf
+	FkA02K3bSZwvXpd0NS+J/wCSrNXxQR1FwJDoVEvaR82n8xA66qMOS4TLZDsiCDkFOEdc8WckV2f
+	TH7rNv4ScwEJoAGbT/z9dqnjKfQN0An7pUwQ0gG19x7Ou5v2Frgc1btq+2wFbjObG52qLkNUteH
+	MiZXo0qWmjNbKIZ8rzWcBRMe9idRICEACtnzOA==
+X-Received: by 2002:a05:600c:34c6:b0:49e:7cff:f8ca with SMTP id 5b1f17b1804b1-49fe66f4dc9mr91310295e9.29.1790312154540;
+        Thu, 24 Sep 2026 21:55:54 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06d4394sm31072155e9.15.2026.09.24.21.55.48
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06cbd2dsm27945315e9.12.2026.09.24.21.55.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 21:55:49 -0700 (PDT)
+        Thu, 24 Sep 2026 21:55:52 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 4/5] bpftool: Add option to wait for program stream output
-Date: Fri, 25 Sep 2026 06:55:31 +0200
-Message-ID: <20260925045536.1480933-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 5/5] selftests/bpf: Test program stream file descriptors
+Date: Fri, 25 Sep 2026 06:55:32 +0200
+Message-ID: <20260925045536.1480933-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260925045536.1480933-1-memxor@gmail.com>
 References: <20260925045536.1480933-1-memxor@gmail.com>
@@ -81,234 +81,593 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8857; i=memxor@gmail.com; h=from:subject; bh=2HoPBrk1ChjhABWZYhpk1pI1CuLHum8uTkMj1BB7ynE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvrv6mVklFXnZlWP9ktFzm5IsO4jaPV+dCbeatPp3ybN Kdmx/u6jlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEwk8hkjw+p5az4dfC59z/Lu 8hCXF4e2emh7nNywiekb4wv/bcUMr3cwMhy5sW/NpaWt65/NFw63/2ob7sZ57Y9F0NEj12ImRUn LODECAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=17238; i=memxor@gmail.com; h=from:subject; bh=NfKabUNvYINKkeoVUpcXPk2+dMxpvhZjuIMqUOsPQG8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvrv6nR3k49HxP4Tauj17Dq+KQYH97dVpAT48tsIn6qw GLb246OUhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATMTTh+GfPee0dS/bzO5pG/5R 5FJ0ZZdd5nRt+hqe1xMypGt8ojdcZ/ifqXLnvfw/9WxJhq3WpyMOL3n6sGq3/J33Oh8+XDTtODO HHwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-bpftool prog tracelog { stdout | stderr } PROG dumps the output buffered
-in a program stream and exits, which is all BPF_PROG_STREAM_READ_BY_FD
-allows. Waiting for further output means rerunning the command.
+Exercise validation and normal file semantics of BPF_PROG_STREAM_OPEN.
+Cover read-only and close-on-exec state, write and lseek rejection,
+non-blocking reads, partial reads, poll readiness, and a blocking reader
+woken by new stream data. Also check that an empty stream write produces
+neither readable data nor poll readiness.
 
-Add a -w/--wait option that opens the stream with bpf_prog_stream_open()
-in its default blocking mode and keeps printing output as the program
-produces it. Flush each chunk as it arrives so redirected output is not
-held in stdio buffers while the next read blocks. Waiting is opt-in: the
-default dump keeps using BPF_PROG_STREAM_READ_BY_FD and exits once the
-buffered output is drained, so existing scripts behave the same on old and
-new kernels.
+Register the descriptor with EPOLLET, consume the initial data event
+without draining buffered output, then release the program. Require a
+second edge carrying POLLIN and POLLHUP, drain the buffered bytes, and
+verify that poll continues to report HUP before read returns EOF. This
+ensures program teardown notifies edge-triggered loops even when
+readability never transitions.
 
-A stream descriptor does not keep its program alive, so bpftool drops the
-program descriptor once the stream is open. Waiting then ends with EOF
-when the program is unloaded and otherwise runs until interrupted, as
-bpftool prog tracelog already does for the trace pipe. Exit from the
-SIGINT, SIGHUP and SIGTERM handlers like that command does. A flag set by
-the handler and checked before each read would miss a signal that lands
-between the check and the blocking read(), leaving bpftool asleep until the
-next print.
+Notifications are only sent when an empty stream turns readable, so also
+consume the first edge of an edge-triggered descriptor, leave part of the
+output behind while more arrives, drain the stream and require a new edge
+for output published afterwards. This covers the transition that re-arms
+notifications once readers, including partial ones, bring the count back
+to zero.
 
-Waiting requires BPF_PROG_STREAM_OPEN. The bpf() syscall fails with EINVAL
-for an unknown command, which bpftool reports as missing kernel support
-rather than degrading into a dump. Document the option and offer it in the
-bash completion.
+Also block a reader on an empty live stream, release the program, and
+verify that it wakes and returns EOF. This directly covers the teardown
+wait condition and its no-lost-wakeup ordering.
+
+Finally, attach a stream-writing program to a hardware perf event and
+busy-poll its epoll registration until output arrives. This both drives the
+per-thread event into NMI context and directly verifies that the deferred
+irq_work notification reaches epoll, without a separate BSS completion
+handshake.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpftool/Documentation/bpftool-prog.rst    | 12 +++-
- tools/bpf/bpftool/bash-completion/bpftool     |  2 +-
- tools/bpf/bpftool/main.c                      |  7 ++-
- tools/bpf/bpftool/main.h                      |  1 +
- tools/bpf/bpftool/prog.c                      | 62 ++++++++++++++++---
- 5 files changed, 73 insertions(+), 11 deletions(-)
+ .../testing/selftests/bpf/prog_tests/stream.c | 486 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/stream.c    |  20 +
+ 2 files changed, 506 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 90fe8c61bf42..17aa0d560e32 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -18,7 +18,8 @@ SYNOPSIS
+diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/testing/selftests/bpf/prog_tests/stream.c
+index 74bd15c4bfba..ae400dcfbf24 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stream.c
++++ b/tools/testing/selftests/bpf/prog_tests/stream.c
+@@ -1,11 +1,17 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+ #include <test_progs.h>
++#include <linux/perf_event.h>
++#include <poll.h>
++#include <sys/epoll.h>
+ #include <sys/mman.h>
++#include <sys/syscall.h>
  
- *OPTIONS* := { |COMMON_OPTIONS| |
- { **-f** | **--bpffs** } | { **-m** | **--mapcompat** } | { **-n** | **--nomount** } |
--{ **-L** | **--use-loader** } | [ { **-S** | **--sign** } **-k** <private_key.pem> **-i** <certificate.x509> ] }
-+{ **-L** | **--use-loader** } | [ { **-S** | **--sign** } **-k** <private_key.pem> **-i** <certificate.x509> ] |
-+{ **-w** | **--wait** } }
+ #include "stream.skel.h"
+ #include "stream_fail.skel.h"
  
- *COMMANDS* :=
- { **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load** |
-@@ -186,6 +187,11 @@ bpftool prog tracelog { stdout | stderr } *PROG*
-     error messages to the standard error stream. This facility should be used
-     only for debugging purposes.
- 
-+    By default, bpftool prints the output buffered so far and exits. With
-+    **-w** or **--wait**, it keeps printing new output as the program produces
-+    it, until the program is unloaded or <Ctrl+C> is hit. Waiting requires a
-+    kernel that supports opening a stream as a file descriptor.
++#define NMI_TIMEOUT_NS (5ULL * 1000 * 1000 * 1000)
 +
- bpftool prog run *PROG* data_in *FILE* [data_out *FILE* [data_size_out *L*]] [ctx_in *FILE* [ctx_out *FILE* [ctx_size_out *M*]]] [repeat *N*]
-     Run BPF program *PROG* in the kernel testing infrastructure for BPF,
-     meaning that the program works on the data and context provided by the
-@@ -267,6 +273,10 @@ OPTIONS
-     Path to the X.509 certificate file in PEM or DER format, required when
-     signing.
+ void test_stream_failure(void)
+ {
+ 	RUN_TESTS(stream_fail);
+@@ -62,6 +68,486 @@ void test_stream_syscall(void)
+ 	stream__destroy(skel);
+ }
  
-+-w, --wait
-+    When dumping a program stream with **bpftool prog tracelog**, wait for new
-+    output instead of exiting once the buffered output has been printed.
-+
- EXAMPLES
- ========
- **# bpftool prog show**
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 9d9ced270685..a28af31937ad 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -269,7 +269,7 @@ _bpftool()
-     # Deal with options
-     if [[ ${words[cword]} == -* ]]; then
-         local c='--version --json --pretty --bpffs --mapcompat --debug \
--            --use-loader --base-btf --sign -i -k'
-+            --use-loader --base-btf --sign -i -k --wait'
-         COMPREPLY=( $( compgen -W "$c" -- "$cur" ) )
-         return 0
-     fi
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 83884b21e708..d15fec71b64e 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -31,6 +31,7 @@ bool block_mount;
- bool verifier_logs;
- bool relaxed_maps;
- bool use_loader;
-+bool wait_output;
- struct btf *base_btf;
- struct hashmap *refs_table;
- bool sign_progs;
-@@ -462,6 +463,7 @@ int main(int argc, char **argv)
- 		{ "nomount",	no_argument,	NULL,	'n' },
- 		{ "debug",	no_argument,	NULL,	'd' },
- 		{ "use-loader",	no_argument,	NULL,	'L' },
-+		{ "wait",	no_argument,	NULL,	'w' },
- 		{ "sign",	no_argument,	NULL,	'S' },
- 		{ "base-btf",	required_argument, NULL, 'B' },
- 		{ 0 }
-@@ -480,7 +482,7 @@ int main(int argc, char **argv)
- 	bin_name = "bpftool";
- 
- 	opterr = 0;
--	while ((opt = getopt_long(argc, argv, "VhpjfLmndSi:k:B:l",
-+	while ((opt = getopt_long(argc, argv, "VhpjfLmndSi:k:B:lw",
- 				  options, NULL)) >= 0) {
- 		switch (opt) {
- 		case 'V':
-@@ -530,6 +532,9 @@ int main(int argc, char **argv)
- 		case 'L':
- 			use_loader = true;
- 			break;
-+		case 'w':
-+			wait_output = true;
-+			break;
- 		case 'S':
- 			sign_progs = true;
- 			use_loader = true;
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 48eedcb9f6c0..fa2c877a3cbf 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -89,6 +89,7 @@ extern bool block_mount;
- extern bool verifier_logs;
- extern bool relaxed_maps;
- extern bool use_loader;
-+extern bool wait_output;
- extern struct btf *base_btf;
- extern struct hashmap *refs_table;
- extern bool sign_progs;
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 24e40dfab469..5e27b22444f2 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1119,21 +1119,66 @@ enum prog_tracelog_mode {
- 	TRACE_STDERR,
- };
- 
-+static void exit_stream(int signo)
++static bool stream_fd_trigger(struct bpf_program *prog)
 +{
-+	exit(0);
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int ret;
++
++	ret = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++	return ASSERT_OK(ret, "test_run") && ASSERT_OK(opts.retval, "retval");
 +}
 +
-+/* Consumes prog_fd. */
- static int
- prog_tracelog_stream(int prog_fd, enum prog_tracelog_mode mode)
- {
-+	const struct sigaction act = { .sa_handler = exit_stream };
-+	const int signals[] = { SIGHUP, SIGINT, SIGTERM };
- 	FILE *file = mode == TRACE_STDOUT ? stdout : stderr;
- 	int stream_id = mode == TRACE_STDOUT ? 1 : 2;
- 	char buf[512];
--	int ret;
-+	unsigned int i;
++static void test_stream_fd_open(void)
++{
++	LIBBPF_OPTS(bpf_prog_stream_open_opts, opts);
++	struct stream *skel;
++	int fd, prog_fd;
++
++	skel = stream__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
++		return;
++
++	prog_fd = bpf_program__fd(skel->progs.stream_syscall);
++	fd = bpf_prog_stream_open(0, BPF_STREAM_STDOUT, NULL);
++	ASSERT_EQ(fd, -EINVAL, "bad_prog_fd");
++
++	fd = bpf_prog_stream_open(prog_fd, 0, NULL);
++	ASSERT_EQ(fd, -ENOENT, "bad_stream_id");
++
++	opts.flags = BPF_F_RDONLY;
++	fd = bpf_prog_stream_open(prog_fd, BPF_STREAM_STDOUT, &opts);
++	ASSERT_EQ(fd, -EINVAL, "access_flag");
++
++	opts.flags = 1U << 31;
++	fd = bpf_prog_stream_open(prog_fd, BPF_STREAM_STDOUT, &opts);
++	ASSERT_EQ(fd, -EINVAL, "unknown_flag");
++
++	fd = bpf_prog_stream_open(prog_fd, BPF_STREAM_STDERR, NULL);
++	if (ASSERT_OK_FD(fd, "stderr"))
++		close(fd);
++
++	stream__destroy(skel);
++}
++
++static void test_stream_fd_nonblock(void)
++{
++	LIBBPF_OPTS(bpf_prog_stream_open_opts, opts,
++		.flags = BPF_F_STREAM_NONBLOCK,
++	);
++	struct pollfd pfd = { .events = POLLIN | POLLHUP };
++	struct stream *skel;
++	char buf[4] = {};
++	int fd, flags, ret;
++
++	skel = stream__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
++		return;
++
++	fd = bpf_prog_stream_open(bpf_program__fd(skel->progs.stream_syscall),
++				  BPF_STREAM_STDOUT, &opts);
++	if (!ASSERT_OK_FD(fd, "stream_open"))
++		goto out_destroy;
++	pfd.fd = fd;
++
++	flags = fcntl(fd, F_GETFD);
++	ASSERT_GE(flags, 0, "getfd");
++	ASSERT_NEQ(flags & FD_CLOEXEC, 0, "cloexec");
++	flags = fcntl(fd, F_GETFL);
++	ASSERT_GE(flags, 0, "getfl");
++	ASSERT_EQ(flags & O_ACCMODE, O_RDONLY, "readonly");
++	ASSERT_NEQ(flags & O_NONBLOCK, 0, "nonblock");
++
++	ret = write(fd, "x", 1);
++	ASSERT_EQ(ret, -1, "write");
++	ASSERT_EQ(errno, EBADF, "write_errno");
++	ret = lseek(fd, 0, SEEK_SET);
++	ASSERT_EQ(ret, -1, "lseek");
++	ASSERT_EQ(errno, ESPIPE, "lseek_errno");
++
++	ret = poll(&pfd, 1, 0);
++	ASSERT_EQ(ret, 0, "poll_empty");
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, -1, "read_empty");
++	ASSERT_EQ(errno, EAGAIN, "read_empty_errno");
++
++	if (!stream_fd_trigger(skel->progs.stream_syscall))
++		goto out_close;
++	ret = poll(&pfd, 1, 0);
++	ASSERT_EQ(ret, 1, "poll_data");
++	ASSERT_NEQ(pfd.revents & POLLIN, 0, "pollin");
++	ASSERT_EQ(pfd.revents & POLLHUP, 0, "no_pollhup");
++
++	ret = read(fd, buf, 2);
++	ASSERT_EQ(ret, 2, "read_first");
++	ASSERT_OK(memcmp(buf, "fo", 2), "read_first_data");
++	pfd.revents = 0;
++	ret = poll(&pfd, 1, 0);
++	ASSERT_EQ(ret, 1, "poll_partial");
++	ASSERT_NEQ(pfd.revents & POLLIN, 0, "pollin_partial");
++
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, 1, "read_rest");
++	ASSERT_EQ(buf[0], 'o', "read_rest_data");
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, -1, "read_drained");
++	ASSERT_EQ(errno, EAGAIN, "read_drained_errno");
++
++out_close:
++	close(fd);
++out_destroy:
++	stream__destroy(skel);
++}
++
++static void test_stream_fd_empty(void)
++{
++	LIBBPF_OPTS(bpf_prog_stream_open_opts, opts,
++		.flags = BPF_F_STREAM_NONBLOCK,
++	);
++	struct pollfd pfd = { .events = POLLIN | POLLHUP };
++	struct stream *skel;
++	char buf[4];
 +	int fd, ret;
 +
-+	if (!wait_output) {
-+		do {
-+			ret = bpf_prog_stream_read(prog_fd, stream_id, buf, sizeof(buf), NULL);
-+			if (ret > 0)
-+				fwrite(buf, sizeof(buf[0]), ret, file);
-+		} while (ret > 0);
-+		if (ret < 0)
-+			p_err("failed to read stream: %s", strerror(-ret));
-+		close(prog_fd);
++	skel = stream__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
++		return;
++
++	fd = bpf_prog_stream_open(bpf_program__fd(skel->progs.stream_empty),
++				  BPF_STREAM_STDOUT, &opts);
++	if (!ASSERT_OK_FD(fd, "stream_open"))
++		goto out_destroy;
++	pfd.fd = fd;
++
++	/* Empty output produces neither data nor readiness. */
++	if (!stream_fd_trigger(skel->progs.stream_empty))
++		goto out_close;
++	ret = poll(&pfd, 1, 0);
++	ASSERT_EQ(ret, 0, "poll_empty_write");
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, -1, "read_empty_write");
++	ASSERT_EQ(errno, EAGAIN, "read_empty_write_errno");
++
++out_close:
++	close(fd);
++out_destroy:
++	stream__destroy(skel);
++}
++
++struct stream_fd_read_ctx {
++	int fd;
++	ssize_t ret;
++	char buf[4];
++};
++
++static void *stream_fd_read_thread(void *arg)
++{
++	struct stream_fd_read_ctx *ctx = arg;
++
++	ctx->ret = read(ctx->fd, ctx->buf, sizeof(ctx->buf));
++	return NULL;
++}
++
++static int stream_fd_timed_join(pthread_t thread)
++{
++	struct timespec timeout;
++
++	clock_gettime(CLOCK_REALTIME, &timeout);
++	timeout.tv_sec += 5;
++	return pthread_timedjoin_np(thread, NULL, &timeout);
++}
++
++static void test_stream_fd_blocking(void)
++{
++	struct stream_fd_read_ctx ctx = {};
++	struct stream *skel;
++	pthread_t thread;
++	bool thread_live = false;
++	int fd, flags, ret;
++
++	skel = stream__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
++		return;
++
++	fd = bpf_prog_stream_open(bpf_program__fd(skel->progs.stream_syscall),
++				  BPF_STREAM_STDOUT, NULL);
++	if (!ASSERT_OK_FD(fd, "stream_open"))
++		goto out_destroy;
++	ctx.fd = fd;
++
++	flags = fcntl(fd, F_GETFL);
++	ASSERT_GE(flags, 0, "getfl");
++	ASSERT_EQ(flags & O_NONBLOCK, 0, "blocking");
++
++	ret = pthread_create(&thread, NULL, stream_fd_read_thread, &ctx);
++	if (!ASSERT_OK(ret, "pthread_create"))
++		goto out_close;
++	thread_live = true;
++
++	usleep(50000);
++	ret = pthread_tryjoin_np(thread, NULL);
++	if (!ASSERT_EQ(ret, EBUSY, "read_blocks")) {
++		thread_live = ret != 0;
++		goto out_thread;
++	}
++	if (!stream_fd_trigger(skel->progs.stream_syscall))
++		goto out_thread;
++
++	ret = stream_fd_timed_join(thread);
++	if (!ASSERT_OK(ret, "pthread_join"))
++		goto out_thread;
++	thread_live = false;
++	ASSERT_EQ(ctx.ret, 3, "read_len");
++	ASSERT_OK(memcmp(ctx.buf, "foo", 3), "read_data");
++
++	memset(&ctx, 0, sizeof(ctx));
++	ctx.fd = fd;
++	ret = pthread_create(&thread, NULL, stream_fd_read_thread, &ctx);
++	if (!ASSERT_OK(ret, "pthread_create_eof"))
++		goto out_close;
++	thread_live = true;
++
++	usleep(50000);
++	ret = pthread_tryjoin_np(thread, NULL);
++	if (!ASSERT_EQ(ret, EBUSY, "read_eof_blocks")) {
++		thread_live = ret != 0;
++		goto out_thread;
++	}
++
++	stream__destroy(skel);
++	skel = NULL;
++	ret = stream_fd_timed_join(thread);
++	if (!ASSERT_OK(ret, "pthread_join_eof"))
++		goto out_thread;
++	thread_live = false;
++	ASSERT_EQ(ctx.ret, 0, "read_eof");
++
++out_thread:
++	if (thread_live) {
++		stream__destroy(skel);
++		skel = NULL;
++		ret = stream_fd_timed_join(thread);
++		if (ret) {
++			pthread_cancel(thread);
++			pthread_join(thread, NULL);
++		}
++	}
++out_close:
++	close(fd);
++out_destroy:
++	stream__destroy(skel);
++}
++
++static void test_stream_fd_hup(void)
++{
++	LIBBPF_OPTS(bpf_prog_stream_open_opts, opts,
++		.flags = BPF_F_STREAM_NONBLOCK,
++	);
++	struct epoll_event event = {
++		.events = EPOLLIN | EPOLLET,
++	};
++	struct pollfd pfd = { .events = POLLIN | POLLHUP };
++	struct stream *skel;
++	char buf[4] = {};
++	int epfd = -1, fd, ret;
++
++	skel = stream__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
++		return;
++
++	fd = bpf_prog_stream_open(bpf_program__fd(skel->progs.stream_syscall),
++				  BPF_STREAM_STDOUT, &opts);
++	if (!ASSERT_OK_FD(fd, "stream_open"))
++		goto out_destroy;
++	pfd.fd = fd;
++	epfd = epoll_create1(EPOLL_CLOEXEC);
++	if (!ASSERT_OK_FD(epfd, "epoll_create"))
++		goto out_close;
++	event.data.fd = fd;
++	ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &event);
++	if (!ASSERT_OK(ret, "epoll_ctl"))
++		goto out_close;
++
++	if (!stream_fd_trigger(skel->progs.stream_syscall))
++		goto out_close;
++	ret = epoll_wait(epfd, &event, 1, 5000);
++	if (!ASSERT_EQ(ret, 1, "epoll_wait_data"))
++		goto out_close;
++	ASSERT_NEQ(event.events & EPOLLIN, 0, "epollin");
++	ASSERT_EQ(event.events & EPOLLHUP, 0, "no_epollhup");
++
++	stream__destroy(skel);
++	skel = NULL;
++	event.events = 0;
++	ret = epoll_wait(epfd, &event, 1, 5000);
++	if (!ASSERT_EQ(ret, 1, "epoll_wait_hup"))
++		goto out_close;
++	ASSERT_NEQ(event.events & EPOLLIN, 0, "epollin_with_hup");
++	ASSERT_NEQ(event.events & EPOLLHUP, 0, "epollhup");
++
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, 3, "read_buffered");
++	ASSERT_OK(memcmp(buf, "foo", 3), "read_buffered_data");
++	pfd.revents = 0;
++	ret = poll(&pfd, 1, 0);
++	ASSERT_EQ(ret, 1, "poll_drained_hup");
++	ASSERT_EQ(pfd.revents & POLLIN, 0, "no_pollin_after_drain");
++	ASSERT_NEQ(pfd.revents & POLLHUP, 0, "pollhup_after_drain");
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, 0, "read_eof");
++
++out_close:
++	if (epfd >= 0)
++		close(epfd);
++	close(fd);
++out_destroy:
++	stream__destroy(skel);
++}
++
++static void test_stream_fd_edge(void)
++{
++	LIBBPF_OPTS(bpf_prog_stream_open_opts, opts,
++		.flags = BPF_F_STREAM_NONBLOCK,
++	);
++	struct epoll_event event = {
++		.events = EPOLLIN | EPOLLET,
++	};
++	struct stream *skel;
++	char buf[8] = {};
++	int epfd = -1, fd, ret;
++
++	skel = stream__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
++		return;
++
++	fd = bpf_prog_stream_open(bpf_program__fd(skel->progs.stream_syscall),
++				  BPF_STREAM_STDOUT, &opts);
++	if (!ASSERT_OK_FD(fd, "stream_open"))
++		goto out_destroy;
++	epfd = epoll_create1(EPOLL_CLOEXEC);
++	if (!ASSERT_OK_FD(epfd, "epoll_create"))
++		goto out_close;
++	event.data.fd = fd;
++	ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &event);
++	if (!ASSERT_OK(ret, "epoll_ctl"))
++		goto out_close;
++
++	/* Output into an empty stream raises an edge. */
++	if (!stream_fd_trigger(skel->progs.stream_syscall))
++		goto out_close;
++	ret = epoll_wait(epfd, &event, 1, 5000);
++	if (!ASSERT_EQ(ret, 1, "epoll_wait_first"))
++		goto out_close;
++	ASSERT_NEQ(event.events & EPOLLIN, 0, "epollin_first");
++
++	/*
++	 * Leave data behind, add more, then drain everything. Whether output
++	 * into a non-empty stream raises an edge of its own is not part of the
++	 * contract, so discard any pending event before re-arming the stream.
++	 */
++	ret = read(fd, buf, 2);
++	ASSERT_EQ(ret, 2, "read_partial");
++	if (!stream_fd_trigger(skel->progs.stream_syscall))
++		goto out_close;
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, 4, "read_rest");
++	ASSERT_OK(memcmp(buf, "ofoo", 4), "read_rest_data");
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, -1, "read_drained");
++	ASSERT_EQ(errno, EAGAIN, "read_drained_errno");
++	epoll_wait(epfd, &event, 1, 0);
++
++	/* Output into the drained stream raises an edge again. */
++	if (!stream_fd_trigger(skel->progs.stream_syscall))
++		goto out_close;
++	ret = epoll_wait(epfd, &event, 1, 5000);
++	if (!ASSERT_EQ(ret, 1, "epoll_wait_after_drain"))
++		goto out_close;
++	ASSERT_NEQ(event.events & EPOLLIN, 0, "epollin_after_drain");
++
++out_close:
++	if (epfd >= 0)
++		close(epfd);
++	close(fd);
++out_destroy:
++	stream__destroy(skel);
++}
++
++static void test_stream_fd_nmi_epoll(void)
++{
++	LIBBPF_OPTS(bpf_prog_stream_open_opts, opts,
++		.flags = BPF_F_STREAM_NONBLOCK,
++	);
++	struct perf_event_attr attr = {
++		.size = sizeof(attr),
++		.type = PERF_TYPE_HARDWARE,
++		.config = PERF_COUNT_HW_CPU_CYCLES,
++		.freq = 1,
++		.sample_freq = 10,
++	};
++	struct epoll_event event = {
++		.events = EPOLLIN,
++	};
++	struct bpf_link *link = NULL;
++	struct stream *skel;
++	__u64 deadline;
++	char buf[4] = {};
++	int epfd = -1, fd = -1, pmu_fd = -1;
++	int ret;
++
++	skel = stream__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
++		return;
++	fd = bpf_prog_stream_open(bpf_program__fd(skel->progs.stream_nmi),
++				  BPF_STREAM_STDOUT, &opts);
++	if (!ASSERT_OK_FD(fd, "stream_open"))
++		goto out;
++
++	epfd = epoll_create1(EPOLL_CLOEXEC);
++	if (!ASSERT_OK_FD(epfd, "epoll_create"))
++		goto out;
++	event.data.fd = fd;
++	ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &event);
++	if (!ASSERT_OK(ret, "epoll_ctl"))
++		goto out;
++
++	pmu_fd = syscall(__NR_perf_event_open, &attr, 0, -1, -1,
++			 PERF_FLAG_FD_CLOEXEC);
++	if (pmu_fd < 0 && (errno == ENOENT || errno == EOPNOTSUPP)) {
++		printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n", __func__);
++		test__skip();
 +		goto out;
 +	}
- 
--	ret = 0;
--	do {
--		ret = bpf_prog_stream_read(prog_fd, stream_id, buf, sizeof(buf), NULL);
--		if (ret > 0)
--			fwrite(buf, sizeof(buf[0]), ret, file);
--	} while (ret > 0);
-+	fd = bpf_prog_stream_open(prog_fd, stream_id, NULL);
-+	/*
-+	 * The stream descriptor does not keep the program alive. Drop the
-+	 * program reference so that reads return EOF once the program is gone.
-+	 */
-+	close(prog_fd);
-+	if (fd == -EINVAL) {
-+		/* The bpf() syscall rejects unknown commands with EINVAL. */
-+		p_err("waiting for stream output is not supported by this kernel");
-+		return -1;
++	if (!ASSERT_GE(pmu_fd, 0, "perf_event_open"))
++		goto out;
++
++	link = bpf_program__attach_perf_event(skel->progs.stream_nmi, pmu_fd);
++	if (!ASSERT_OK_PTR(link, "attach_perf_event")) {
++		link = NULL;
++		goto out;
 +	}
-+	if (fd < 0) {
-+		p_err("failed to open stream: %s", strerror(-fd));
-+		return -1;
-+	}
- 
-+	/*
-+	 * Exit from the handler like the trace pipe variant does. A flag checked
-+	 * between reads would miss a signal that lands before read() blocks and
-+	 * only end the loop at the next print.
-+	 */
-+	for (i = 0; i < ARRAY_SIZE(signals); i++)
-+		sigaction(signals[i], &act, NULL);
-+	while ((ret = read(fd, buf, sizeof(buf))) > 0) {
-+		fwrite(buf, sizeof(buf[0]), ret, file);
-+		fflush(file);
-+	}
-+	if (ret < 0)
-+		p_err("failed to read stream: %s", strerror(errno));
-+	close(fd);
++	pmu_fd = -1;
++
++	deadline = get_time_ns() + NMI_TIMEOUT_NS;
++	do {
++		ret = epoll_wait(epfd, &event, 1, 0);
++	} while (ret == 0 && get_time_ns() < deadline);
++	if (!ASSERT_EQ(ret, 1, "epoll_wait"))
++		goto out;
++	ASSERT_NEQ(event.events & EPOLLIN, 0, "epollin");
++
++	ret = read(fd, buf, sizeof(buf));
++	ASSERT_EQ(ret, 3, "read_len");
++	ASSERT_OK(memcmp(buf, "nmi", 3), "read_data");
++
 +out:
- 	fflush(file);
- 	return ret ? -1 : 0;
- }
-@@ -2659,7 +2704,8 @@ static int do_help(int argc, char **argv)
- 		"       METRIC := { cycles | instructions | l1d_loads | llc_misses | itlb_misses | dtlb_misses }\n"
- 		"       " HELP_SPEC_OPTIONS " |\n"
- 		"                    {-f|--bpffs} | {-m|--mapcompat} | {-n|--nomount} |\n"
--		"                    {-L|--use-loader} | [ {-S|--sign } {-k} <private_key.pem> {-i} <certificate.x509> ] \n"
-+		"                    {-L|--use-loader} | [ {-S|--sign } {-k} <private_key.pem> {-i} <certificate.x509> ] |\n"
-+		"                    {-w|--wait} }\n"
- 		"",
- 		bin_name, argv[-2]);
++	bpf_link__destroy(link);
++	if (pmu_fd >= 0)
++		close(pmu_fd);
++	if (epfd >= 0)
++		close(epfd);
++	if (fd >= 0)
++		close(fd);
++	stream__destroy(skel);
++}
++
++void test_stream_fd(void)
++{
++	if (test__start_subtest("open"))
++		test_stream_fd_open();
++	if (test__start_subtest("nonblock"))
++		test_stream_fd_nonblock();
++	if (test__start_subtest("empty"))
++		test_stream_fd_empty();
++	if (test__start_subtest("blocking"))
++		test_stream_fd_blocking();
++	if (test__start_subtest("hup"))
++		test_stream_fd_hup();
++	if (test__start_subtest("edge"))
++		test_stream_fd_edge();
++	if (test__start_subtest("nmi_epoll"))
++		test_stream_fd_nmi_epoll();
++}
++
+ void test_stream_oversize(void)
+ {
+ 	LIBBPF_OPTS(bpf_test_run_opts, opts);
+diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
+index 12fc29e45487..1ae015c4e6b4 100644
+--- a/tools/testing/selftests/bpf/progs/stream.c
++++ b/tools/testing/selftests/bpf/progs/stream.c
+@@ -44,6 +44,7 @@ struct {
+ 		  _X64 _X64 _X64 _X64 _X64 _X64 _X64 _X64)
  
+ int size;
++int nmi_stream_prints;
+ u64 fault_addr;
+ void *arena_ptr;
+ 
+@@ -124,6 +125,25 @@ int stream_syscall(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("syscall")
++__success __retval(0)
++int stream_empty(void *ctx)
++{
++	return bpf_stream_printk(BPF_STDOUT, "");
++}
++
++SEC("perf_event")
++int stream_nmi(void *ctx)
++{
++	if (nmi_stream_prints)
++		return 0;
++	/* Retry on a later sample if the write failed, e.g. with -EBUSY. */
++	if (bpf_stream_printk(BPF_STDOUT, "nmi"))
++		return 0;
++	nmi_stream_prints = 1;
++	return 0;
++}
++
+ SEC("syscall")
+ __success __retval(0)
+ int stream_oversize(void *ctx)
 -- 
 2.53.0
 
