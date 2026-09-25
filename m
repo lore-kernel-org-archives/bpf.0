@@ -1,191 +1,135 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4A3449B24
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 07:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790321866; cv=pass; b=sHoHgDtE0+dwcc7ZxGbBxouzPXYf06umJ6aRpxLzKHFaCLofMJHNzuNinxY53i2i32dTHkS0m04vMk/bsjcmAfj8Sbq7eVXWdb+WHIf/JlTHHS/IsKZ6Y+cfY5A8KbJeqahxr5oN5yfci+pHsqTvh8sWutZnrDjFuqH2I5hHuZQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790321866; c=relaxed/simple;
-	bh=4HRCApcqOCblV/nRa/gIhH9hhLpyjFWAyS7KPdKAl2s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pCi3A4rtLUNWFhASk0mqCovRyLOouVzxlu6Qfkl7xA2vs5bBYylQfMjb8klKFpR8EFe7mumKw5vw53CiV3FoG0wxksQ5GZRpxAuJy6PsXBKD6j22pETaeQ14pVjmM2fbjpSdaripnyrL7czdo+TwM9AsKZiBXVeMOVoz2h1NV3A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mQ9vFxFo; arc=pass smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CD245A288
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 08:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790324912; cv=none; b=MzUl+NDxGUfAzgbcJgFijcOrcxnmVaTWJsUfj+UvFnckcYh+5ePa6lRANogSx7uMLzFw6FSDfzeY3BGGZA0gguGFz2rVJbQgQo0fdKJmaufo9JSTPjlTaVPJdhMA2+zQr3vMkzSV5e/PAK7CHfGRk0aM1hrGMAHlXvCgX88aZ+U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790324912; c=relaxed/simple;
+	bh=CPuFVDJOTU7OutoWc8dLFxrNzv6cGAYuwyA9tXGeDYs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PiCoLVSWvsHgEtb9I7KFiEf0gjr1snk5I3BnjfHYS3KjOAC9td6XmF/vcdDgeuK6/41s7N3dZR52v/wjFBUAUeIIRvgKh9AGnlZ7Ea/Jdc3kaUJk6AW4LgMXD4VzCLmp7LG0tsDRQhEkzvSdeYVHhQ4n2HakFvPuv/kVGWUuW3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EXD5rFMb; arc=none smtp.client-ip=74.125.225.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mQ9vFxFo"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6a5f9b036f9so5552a12.1
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 00:37:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790321862; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fwJG+rXUswmPKis2CVfTwnmXbXoyKiGqjQxwxfbZ2jdSiO//NJKeB+f/cmKOArnzHJ
-         3Is1VrOlQGYTZQ1gzoHdYsvpkcqL0SAk9x2m5WcmCkMnrylp99pLHEv5gY0NM6cBLY1Z
-         VKutLqEJ70XexFdh2kwKxslgzpL3upsr3mXf9ce2Ten+x1RMRNcBmVPokDGyHpRPxBdD
-         zrSt92hrQ4o/G/tqHTrftcmE2sSm4c+IH0HcT5ZbKB5+zvQdJxq+5GCDGQFAQeXfDFj5
-         /Z8hDpf1a1QpqCjc2GZAKRABjcTtHJbw2NHuWioNadr+xfaeCTdTJol8hqy5hbHs9lb5
-         IdiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1Oc+jzCqS0Wyq/bTJh2/I4jluChyvqK4NXUNsIigcps=;
-        fh=6BBYc78LUN7F8EZGVt+EohmOPPZap3EQxOTFikY4RcY=;
-        b=TANPl4KdXD5PUmUY98DV626yJYc1OdfG8RQ0Sk66xhku5AqWJDf7Bo4PyXFPfV/Z6k
-         c2fwb2ZwU043aYLxh7SrTbkiZqerQCdmLqkIgB/EPEjMZ5cZR0JiLwqrV/ekDWp6drX6
-         M0sAduUCHFeU1PpB6IHbycrVXLQ13hwQ0Aam7tddkjvk8LX7/syHHZayz5dalCswxaCq
-         +qXnpClryHNsVZIXSKO5PZKnx19g4ZEmvu4NaBcMJHPwv2MVCBmIBkwq6rScjyfG4nOJ
-         rbjctv3ct9hOdrC3n2xYa9R2OBcmSFw3qw5hue1rXYhucY8MQXuHDGLm9u0nGFg0gjQd
-         z19g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EXD5rFMb"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-488780459e2so610350f8f.2
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 01:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790321862; x=1790926662; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=1Oc+jzCqS0Wyq/bTJh2/I4jluChyvqK4NXUNsIigcps=;
-        b=mQ9vFxFoabYALJuAnnXHoi1jXZaav9RmInZt43IwRm/fzvwjOopZ3o7VIc+dy42EPi
-         9HROBxO8UV5pJ3vyakmz2OrfmdMJ5l3k2QVu7h7aN2S0ymf58OD7LXQehwoCCooGWSlJ
-         MvGdJLno+5jm9IW1BGyaIVzD6rp/VRh1mI6TzCU97v5KFsxHRp89wyD14t2ZDP1tEBeD
-         A91+ZQG6N6rJ0BcW3pG13YSmw/G2ukmHBfEkN3uE08LggWf2y9iU8nW5r7knfUMWHZRm
-         YPH0c7LQUfotrpUgKUi9Amtde8tnp230k0vXLvU1SeSceyFG1gck3ElBqcrZJ09QAjWJ
-         kRGQ==
+        d=gmail.com; s=20251104; t=1790324909; x=1790929709; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=E84mITt57JkXmzttmcl0sEhhZTJzUF0ZsCknCmIA9JU=;
+        b=EXD5rFMbQNe7pcE8b5jdly9LaJXppV2x67HjlUeTkUElLlHZWj5Nl1Z20+ishrXGcp
+         lMxxPmOAYDakxKgAe30na3T9TVU+dSDdNfsrrKJD5RfFTSMFFbo7UAJnnlkNMMDLJjou
+         15nIcanHNwyWUSWyh46PTUlL8DUIA7T0GyNudQLobI3k5KsoHaEZ4WLV5y1OwLes2bWi
+         Iimcm9hEJshPtPmVpUDSy1xGC3qYVaLzxZBt50vEeeCvxXY+gWJsl9vwZG7Ad3KcE9Fy
+         KzIhoVuExpdWjRG1VtSzqbGk94gSYUdzHrIneH+H6y+mR3z6j9OaSSgMaDLOM/t8FAOZ
+         5JoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790321862; x=1790926662;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1Oc+jzCqS0Wyq/bTJh2/I4jluChyvqK4NXUNsIigcps=;
-        b=SY33/0ek3NG079Wyy2SOMy3GuT4V32tZMU/xEPRcsIj31wQcmVTAU28N/M4sLbynEO
-         mvk1KdAX65f2DRNSS+IdYBJeU6XsstBwR6ld+j2nQMOzWxSTX8akx2Fst9gBH0pQhdW5
-         s29Vk6NZJarIE3LjlW4x1sqny0Mahys6GKaFSjDzmKByYWdzMtz8Lg1XhXlWAPZLjK48
-         1yeXOyuqWMTT8ikxTIZ42ptrASoL60NLdhpKQhNZK/GUzOezJXJImsTeK1+RIr5qLad2
-         4q/D8kIjLPvqcvZgydduVXSrFTFSXzCKpt5SD9+0rwMzN6O8U+AbRT8OR9M5W4TosWK6
-         QCsQ==
-X-Forwarded-Encrypted: i=1; AKwUvByUOEC4EJYDTEc5IUhj3LOJGWcKMJLTLvotWx0qFbVT2nXaINxac8Dwt3jq7heTodMT0BA=@vger.kernel.org
-X-Gm-Message-State: AFuF++k9sa3f7HMFt5v2BE9X6rCEs/P0zJ+mJTAL4OFyh/xTjoQJ7cdY
-	R8M1lSiQQMFuY/uYoVTV9hfxwM7UihrvLmeZQmoUXHMvti49MYDylzy5MGK2s6OM2PzN54WQ+lL
-	69lmdQHWXubznEc3ZcMcQVFhbFB8lVuCP5xz26Fk2
-X-Gm-Gg: AYBFou0w48UzuYRJ8G+MsIwcVOYDhaiPTdbWPcdqRPTe0e2/YkJTTAHufzenFupUqUC
-	ETLzHiza2gpTcmsh18sW+Szf8IYzj/NWkJCFyfZurcM+iA1Cy135rcrLUxE6CnIVP1vsbLFqHWb
-	7MBLaTbvXQs1Vg1ebd6pC4IepPL0G4ogvqCN2P3ZmRj2Pcz9x7zhuhhYnvLVW9o5iEtuHBKH3Qx
-	WOnMVSji6dPDUlpmMiY7l545P3hRO73x3S+SdoGDSGcRrR9k2KnHTuTQ+HUWGho5GB4kgYnczTM
-	zXPk5oriQlrDvcTx2WM+2U1nz74ixyEIN9a3j/ur1vMC9uRaW4NF/A==
-X-Received: by 2002:a05:6402:2714:b0:6a6:f2a5:1b4f with SMTP id
- 4fb4d7f45d1cf-6aae4729638mr36915a12.4.1790321859803; Fri, 25 Sep 2026
- 00:37:39 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790324909; x=1790929709;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=E84mITt57JkXmzttmcl0sEhhZTJzUF0ZsCknCmIA9JU=;
+        b=oNtL2WxBO+88dY27U87g8SCNJxona1+CpjxiGt7i93JbxjmQlg62hRgPmCcw5BFUuK
+         rZkIfGeiuRN7ED8CGgwop5pgKXh5fee3o4s/6ZU6Dd5NcLnDozvBMbfYLniXYwVxCgQo
+         mYJ7AXu2wyobPUYQhHWxIYNXDhGo+F791H7zKgKypSWkeiGV+OFPsx0UqIi6ciTnhvW1
+         ePifar3S09MXkQZYP+MhF7UzniZjZ6fUEto2olCFP3+BDTsTLkR8bdPArL4lQrMI0r3C
+         qGZ3VF/Su2K+7JlyABGJoewjqa9dP6yzAdT6OiiX2QJJvy6fJ+62JvTVsP00AmBPUh2b
+         LA1g==
+X-Gm-Message-State: AFuF++n9R8nKxBXu7IcLPvEzP82RVzqJUASIBQ1ogTfS0YsFsKDTiCK4
+	/LteZFPEC063qPqx907Cc7GAy7YI499BowlyoRH1I7Z3GJswhz+ZCvja2aWC
+X-Gm-Gg: AYBFou01kGz34ArbyisXRvhuxjeSvX2GtUE/7h5LElsFcKlXqFIEujO2GKmmq8kCZTk
+	jrdmTl0cVwShr4INiFAbrOeDBKyqtPCY7h4ZZGt3N8uJMVVH2NfFerpEOyeO8nmyaHzCrEQLANc
+	e7wqzrxiRDE4As5oH8/dNrGaWdFvwZ87VcleAj2GcslN13jS+lelqfN5CK9dmr6BQvR/Yfjp6TG
+	0CaiWL3m+7S3YX49pMP6bmOm6wbFxjMN/zT6a0xByFQbBnKalcCnGX0pRLgkoiqQRuNfBthOqgG
+	DFiCCGxsuMCinEDLpdMLS394GP/4wWak/zWplm93gDkYHDEZ4Ns9w3XH38PiAJamKuFM0dkgQ2r
+	aTA/h8ujVxaiD/GHR5NfVBk6V9V2jxn3Et8+kUKwRDrfJifnalqdqS/oJTBknqKrmycZWbf/O+T
+	tiD+a7p4BcK0ATU698lMKEAuyVPglebFIxtGv8p0/hzMi45DtvfShvVM+P+L8zCFQEP84DO9LnP
+	zZIs8gXPvq8JxCXH90NmlUypcQolbnXj6pYr/Ty4Wq4TE5Gb+DrEhl1fzUYk6K/vScv8Xi9a5Jb
+	NURw6exFDQ==
+X-Received: by 2002:a5d:5f49:0:b0:487:490:8391 with SMTP id ffacd0b85a97d-488717252c4mr9073653f8f.16.1790324908855;
+        Fri, 25 Sep 2026 01:28:28 -0700 (PDT)
+Received: from ast-epyc5.inf.ethz.ch (ast-epyc5.inf.ethz.ch. [129.132.161.180])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a36189bsm5142896f8f.21.2026.09.25.01.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2026 01:28:28 -0700 (PDT)
+From: Hao Sun <sunhao.th@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	john.fastabend@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	linux-kernel@vger.kernel.org,
+	sunhao.th@gmail.com
+Subject: [PATCH bpf-next 1/2] bpf: Fix uninit read for helper mem args on partially spilled slots
+Date: Fri, 25 Sep 2026 10:28:13 +0200
+Message-Id: <20260925082814.1554771-1-sunhao.th@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-7-4583d8a23bca@kernel.org> <DLNSOBMBHIVC.22QI9YBL1U72E@nvidia.com>
-In-Reply-To: <DLNSOBMBHIVC.22QI9YBL1U72E@nvidia.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 25 Sep 2026 00:37:26 -0700
-X-Gm-Features: AclHuK_RUT9CXNFLpx8ZY_roLEZNzp5S3oNdpNL4cW25fJBFg9wRGnSWohuMdYA
-Message-ID: <CAJuCfpH6AF-hOo4jU6OeNVpd+fgpqLpmcfAGs11J=nPCgAqG_w@mail.gmail.com>
-Subject: Re: [PATCH v3 07/40] mm/vma: tidy up map kernel pages enum values
-To: Zi Yan <ziy@nvidia.com>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
-	Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, 
-	Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, 
-	Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
-	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
-	fuse-devel@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 24, 2026 at 12:31=E2=80=AFPM Zi Yan <ziy@nvidia.com> wrote:
->
-> On Thu Sep 17, 2026 at 12:22 PM EDT, Lorenzo Stoakes (ARM) wrote:
-> > MMAP_MAP_KERNEL_PAGES is a mouthful, discard the MAP_ as that's implied=
- by
-> > MMAP.
-> >
-> > Also while we're here delete useless comments for mmap actions whose na=
-mes
-> > clearly indicate what they are for.
-> >
-> > Also update the userland VMA tests to reflect this change.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > ---
-> >  include/linux/mm.h              | 2 +-
-> >  include/linux/mm_types.h        | 8 ++++----
-> >  mm/util.c                       | 8 ++++----
-> >  tools/testing/vma/include/dup.h | 8 ++++----
-> >  4 files changed, 13 insertions(+), 13 deletions(-)
-> >
-> LGTM.
->
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
+check_stack_range_initialized() takes the spilled register path when
+bpf_is_spilled_reg(ss) holds, which, however, only looks at the last
+byte of the slot. Hence, a partially spilled scalar (on the lower part)
+bypasses the check and the following loads:
 
-Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+0: (b7) r1 = 1                        ; R1=1
+1: (63) *(u32 *)(r10 -8) = r1         ; R1=1 R10=fp0 fp-8=????1
+2: (18) r1 = 0x0                      ; R1=map_ptr(map=rb,ks=0,vs=0)
+4: (bf) r2 = r10                      ; R2=fp0 R10=fp0
+5: (07) r2 += -8                      ; R2=fp-8
+6: (b7) r3 = 8                        ; R3=8
+7: (b7) r4 = 0                        ; R4=0
+8: (85) call bpf_ringbuf_output#130
+...
 
->
-> --
-> Best Regards,
-> Yan, Zi
->
+When executed, it dumps the uninit four bytes:
+	RINGBUF: 01 00 00 00 ff ff ff ff
+
+This is the same root cause as the non-fetch atomic case fixed in
+commit 5a84b4424db8 ("bpf: Fix uninit read for non-fetch atomics on
+partially spilled slots").
+
+Fix by only taking the spilled register path for the bytes marked
+STACK_SPILL, so the rest of the slot goes through the usual checks.
+
+Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
+Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Hao Sun <sunhao.th@gmail.com>
+---
+ kernel/bpf/verifier.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c495dc9070de..5c8626215ee6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7484,7 +7484,12 @@ static int check_stack_range_initialized(
+ 			goto mark;
+ 		}
+ 
+-		if (bpf_is_spilled_reg(ss) &&
++		/*
++		 * Only the bytes marked STACK_SPILL hold the spilled register.
++		 * The rest of a narrowly spilled slot keeps its previous type
++		 * and must be initialized on its own.
++		 */
++		if (*stype == STACK_SPILL &&
+ 		    (ss->spilled_ptr.type == SCALAR_VALUE ||
+ 		     env->allow_ptr_leaks)) {
+ 			if (clobber) {
+-- 
+2.34.1
+
