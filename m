@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865C04F30C9;
-	Fri, 25 Sep 2026 20:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6229A4F798B;
+	Fri, 25 Sep 2026 20:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790369553; cv=none; b=FRmmeHecgA+4tCgVuImanSY8gQRydYBPvEpCrmw9URt7mIjep/5ak+GlkBem1t1bUOUB9sdKlZhb1C215Pn+dTXPcff/5AjS2IZgi3ds2WTf2wn0bFfDeUCcTRhbVSdpR9PX+xNLl1TN6/XDuZb81/1V00O81Cz+ghIj7xShjZ4=
+	t=1790369554; cv=none; b=QCttnpvpnl5+cQLSzuQnuMWeMvQ3iP9tKlUyX78Mj/7D6OMt0plRroXkXySODqFlaQerA0d8AyPNj0z1NN6S9BafgGBSYKPHNWi/qEG0dpnkdy0OGPz/FI9m/lIDrWVQfDpApanokzNggVpcEfgQqRHI2Y0P5IgBMFnUXxYrsMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790369553; c=relaxed/simple;
-	bh=EyUClTCfMWodpc9p35CvyDLpfye+ESA3Yakdbe4gzJk=;
+	s=arc-20240116; t=1790369554; c=relaxed/simple;
+	bh=gAg1llPGBopDeQQs/ZjJ0/jdCMMcu7ZfCmwJyzJgOcA=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Cl1mgq190naOtxAsFqzXrriJ9jnzUqiJNlF/tCHo1YnIoxn5P4vi5Lzsfa/0cVEAXh+743oXySAHehyGG/QC+e5war7D0Q3qYNwCSVsciVK9LsGC9Ytoe0QV/Cu9y/Xrf8D/8S0XiXYjAy/+lXUqZ1GSUXsAJhy4r8sCWxY7RkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K9y1ICp1; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=N1cew4Y8WrsbdMsSFY6m3GHc7/XYHnMyTzsRFWOmHWmp0fLDdnW26m9KzcJTaEaz2PpHhV2sva0QD76Q/2PP/aCosOtE/iBLa3qtyNxvgZ+24LCzISqEPHHUUeYYgdFuDKUCh6Do9+af/0j8xJLnW8r6FkeGXyHwubhqNNJedhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJJFLzyo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K9y1ICp1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B46B81F00893;
-	Fri, 25 Sep 2026 20:52:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJJFLzyo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C811F00898;
+	Fri, 25 Sep 2026 20:52:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790369550;
-	bh=HJBDZZ+S0CHTq5BbIZKIHfblsDf8J6KmFhWf/nYvPDg=;
+	s=k20260515; t=1790369552;
+	bh=YSgAxlXgEc2s9LS1CtbV0rseO6xAilthM544NHvznvs=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=K9y1ICp1Wx60avDD3+tQQexfkUYZlo1dNY7s94IrCYJ854aicgYaW2FVXlp/eYrFY
-	 KmP1jqvwpN3rEMLUed9ff1qbBL1KdFufbvd3bra1Ltp4uUmGlfCLKf5yvaoJMrNb5p
-	 D7fBQmi6GX9IRBA2+94zcSmOwCsEDLDiXp+Ykrl/Vk6nNNTz8/tYWZAk4VF/3SShkm
-	 kiLK09Bn6SD5ixmMI2kpal2UhaWuB4Sskqe2/w0ZV9WcAGmoj12sujiHK7nu+aQSS1
-	 ZyiRxfyeiAAXSwkapsWFs0WfifCXDSg8Vbsldt7JsxBEB0+zdDF3JSLcdD0sXqJ0pq
-	 ePAoTLlcyxe5g==
-Subject: Re: [PATCH net-next v8 11/15] net: lan966x: add PCIe FDMA support
+	b=EJJFLzyoxSuVP7w7t85qn/vxadgtDJ/1XcJ6Zg4vsobe4tKr//MavrE9FrOVIk0d7
+	 0W5YDOfoEJkO9BEL6R0T8nii3o9WmZKPPk9369VX+cB3/J0KIoQnLab+bjL3l8LCTm
+	 mpDhivrdnbtjkX/vaCHp8/Bk7FfZe6ESy7W4POSsmk64XdTnqPSbAGj3F3jMS7Pepc
+	 P/urGlQmDB+9L/dOobnlT/SIz2kJuB+2g/rH+J/A+ptdBiQaCa/LvQz0jvFL6dW2wg
+	 c27StwZl9equGGspME2W1ujdAzBf9z8X+V6e5pTzQnXqaZY9meK6Ra2Tild5WvJ83r
+	 1cGRY1mlqB3jQ==
+Subject:
+ Re: [PATCH net-next v8 12/15] net: lan966x: add PCIe FDMA MTU change support
 From: netdev-bot+sashiko@kernel.org
 To: daniel.machon@microchip.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -38,11 +39,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  richardcochran@gmail.com, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Date: Fri, 25 Sep 2026 20:52:28 +0000
-Message-ID: <179036954826.2160803.4060688622764457742@kernel.org>
-In-Reply-To: <20260924-lan966x-pci-fdma-v8-11-201c7b707d8b@microchip.com>
-References: <20260924-lan966x-pci-fdma-v8-11-201c7b707d8b@microchip.com>
-X-sashiko-severity: Medium
+Date: Fri, 25 Sep 2026 20:52:30 +0000
+Message-ID: <179036955031.2160803.2502756827414954464@kernel.org>
+In-Reply-To: <20260924-lan966x-pci-fdma-v8-12-201c7b707d8b@microchip.com>
+References: <20260924-lan966x-pci-fdma-v8-12-201c7b707d8b@microchip.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,10 +53,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 11 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 6 (1) · Low: 5
+Critical: 0 · High: 2 (1) · Medium: 0 · Low: 1 (1)
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -63,447 +64,290 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] lan966x_fdma_pci_napi_poll() limits RX processing only by the
-  caller's budget and decides which descriptors to re-arm with `while…
-- [Medium] Port netdevs are allocated with NUM_PRIO_QUEUES TX queues
-  (devm_alloc_etherdev_mqs(..., NUM_PRIO_QUEUES, 1)).
-- [Medium] lan966x_fdma_pci_init() sets tx_fdma->n_dcbs = FDMA_DCB_MAX
-  (FDMA_PCI_DCB_MAX at the series end) before allocating the ring.
-- [Medium] lan966x->fdma is set to true, and the port netdevs are
-  registered, before lan966x->ops->fdma_init() runs.
-- [Medium] At this commit, lan966x_fdma_pci_rx_check_frame() reads and
-  validates BLOCKL, but lan966x_fdma_pci_rx_get_frame() re-reads it from…
-- [Medium] lan966x_fdma_pci_get_next_dcb() treats a TX DCB as free when
-  DB0 has DONE set and the DCB is not fdma->last_dcb, and it always…
-- [Low] At this commit the in-tree PCIe overlay
-  (drivers/misc/lan966x_pci.dtso) declares only the "xtr" and "ana"…
-- [Low] The patch adds TARGET_PCIE_DBI at offset 0x400000 in IO range 0
-  ("cpu").
-- [Low] At this commit lan966x_fdma_pci_resize() always returns
-  -EOPNOTSUPP, so lan966x_port_change_mtu() rolls back every MTU change…
-- [Low] In lan966x_fdma_pci_napi_poll(), the FDMA_ERROR case says "No
-  rx_dropped increment here because src_port is invalid".
-- [Low] lan966x_main.h documents FDMA_ERROR as "something went wrong,
-  stop getting more frames", and the platform lan966x_fdma_napi_poll()…
+- [High] lan966x_fdma_pci_resize() skips the resize only while
+  `lan966x->rx.lan966x` is NULL.
+- [High] lan966x_fdma_pci_resize() reads the plain field
+  `lan966x->rx.lan966x` without any synchronization with…
+- [Low] The comment says FDMA_PCI_DB_SIZE_MAX (lan966x_main.h:106) is the
+  'Largest db_size keeping the ATU-padded ring inside one MAX_PAGE_ORDER…
 
 Pre-existing issues:
-- [Medium] __fdma_dcb_add() writes the DB status and dataptr, links the
-  DCB into the live chain (fdma->last_dcb->nextptr = new), and only then…
+- [High] This problem wasn't introduced by this patch, but the patch
+  works around it only on the PCIe path.
+- [Low] lan966x_fdma_pci_reload() frees the old RX/TX coherent rings and
+  unmaps their ATU regions (lines 465-466) after calling…
 
 --
 
-net: lan966x: add PCIe FDMA support
+net: lan966x: add PCIe FDMA MTU change support
 
-This adds a PCIe FDMA backend for lan966x. The backend uses contiguous
-coherent DMA buffers mapped through the endpoint ATU and copies frames with
-memcpy. The patch also maps the PCIe DBI register target, disables PTP on
-the PCIe path and rejects XDP on PCIe instances.
+This commit adds MTU change support to the lan966x PCIe FDMA path. On an
+MTU change it reallocates the contiguous ATU-mapped RX and TX rings at the
+new size, and falls back to the old rings if that fails. It also caps the
+PCIe DCB ring at 256 entries, advertises FDMA_PCI_MAX_MTU in dev->max_mtu
+when the FDMA is in use, and skips the resize until
+lan966x_fdma_pci_init() has run.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> new file mode 100644
-> index 0000000000000..bccd1b8590d74
-> --- /dev/null
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> @@ -0,0 +1,421 @@
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> index 2e8f786d6feec..a7940eca5df31 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> @@ -890,11 +890,7 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
+>  
+>  int lan966x_fdma_get_max_frame(struct lan966x *lan966x)
+>  {
+> -	return lan966x_fdma_get_max_mtu(lan966x) +
+> -	       IFH_LEN_BYTES +
+> -	       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) +
+> -	       VLAN_HLEN * 2 +
+> -	       XDP_PACKET_HEADROOM;
+> +	return lan966x_fdma_get_max_mtu(lan966x) + FDMA_OVERHEAD;
+>  }
 
-[ ... ]
+[Severity: High]
+This isn't a bug introduced by this patch, but the commit message notes
+that the FDMA init "runs after the netdevs register". The platform FDMA
+has the same ordering. Does the platform path need the same guard?
 
-> +static int lan966x_fdma_pci_get_next_dcb(struct fdma *fdma)
-> +{
-> +	struct fdma_db *db;
-> +
-> +	for (int i = 0; i < fdma->n_dcbs; i++) {
-> +		db = fdma_db_get(fdma, i, 0);
-> +
-> +		if (!fdma_db_is_done(db))
-> +			continue;
-> +		if (fdma_is_last(fdma, &fdma->dcbs[i]))
-> +			continue;
-> +
-> +		return i;
-> +	}
-> +
-> +	return -ENOSPC;
-> +}
+lan966x_probe_port() calls register_netdev(). lan966x_fdma_init() runs
+only later, from lan966x_probe() via lan966x->ops->fdma_init(). The
+platform resize callback has no check for that window:
 
-[Severity: Medium]
-Can this hand out the DCB that the TX engine is still parked on?
+lan966x_fdma_change_mtu() {
+	max_mtu = lan966x_fdma_get_max_frame(lan966x);
+	if (max_mtu == lan966x->rx.max_mtu)
+		return 0;
 
-A DCB counts as free here once DB0 has DONE set and it is not
-fdma->last_dcb. The scan always starts at index 0.
-
-Suppose the engine is parked on a completed DCB0 whose NEXTPTR is INVALID:
-
-xmit B
-  lan966x_fdma_pci_get_next_dcb() returns 1
-  __fdma_dcb_add(1): DCB0->nextptr = DCB1, last_dcb = DCB1
-  lan966x_fdma_tx_start() writes CH_RELOAD
-
-xmit C (right after, serialized only by tx_lock)
-  lan966x_fdma_pci_get_next_dcb() returns 0 (DONE, not last)
-  __fdma_dcb_add(0): clears DCB0 DONE, DCB1->nextptr = DCB0,
-                     DCB0->nextptr = INVALID
-
-What if the engine re-reads DCB0.NEXTPTR after the posted RELOAD write
-and after C's stores? Would it then see INVALID and stay parked?
-
-In that case frames B and C would never be sent, and DCB0 and DCB1 would
-never see DONE again. The next xmit would link DCB0 to DCB2 and strand
-them. If this repeats, the ring could drain until xmit returns
-NETDEV_TX_BUSY for good.
-
-This depends on the FDMA RELOAD semantics, which I could not confirm. The
-platform path uses a used flag for similar selection. The same logic
-appears in lan966x_fdma_pci_xmit_xdpf() later in the series.
-
-[ ... ]
-
-> +static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
-> +{
-
-[ ... ]
-
-> +	blockl = fdma_db_len_get(db);
-> +	if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
-> +		return FDMA_ERROR;
-> +
-> +	return FDMA_PASS;
-> +}
-> +
-> +static struct sk_buff *lan966x_fdma_pci_rx_get_frame(struct lan966x_rx *rx,
-> +						     u64 src_port)
-> +{
-
-[ ... ]
-
-> +	/* Get the received frame and create an SKB for it. */
-> +	db = fdma_db_next_get(fdma);
-> +	data_len = fdma_db_len_get(db);
-> +
-> +	skb = napi_alloc_skb(&lan966x->napi, data_len);
-
-[Severity: Medium]
-Is it safe to read BLOCKL a second time here?
-
-lan966x_fdma_pci_rx_check_frame() validates BLOCKL but then drops the
-value. This function reads it again from coherent memory that the device
-can write. The second, unchecked value then drives napi_alloc_skb(),
-memcpy(), skb_put(), skb_pull() and skb_trim().
-
-If the endpoint rewrites BLOCKL between the two loads, could this read
-past the buffer or underflow skb->len?
-
-The later patch "net: lan966x: add PCIe FDMA XDP support" appears to fix
-this. It computes data_len once in rx_check_frame() and passes it into
-rx_get_frame(). The path is also not reachable at this commit, because the
-overlay has no "fdma" irq.
-
-[ ... ]
-
-> +static int lan966x_fdma_pci_xmit(struct sk_buff *skb, __be32 *ifh,
-> +				 struct net_device *dev)
-> +{
-
-[ ... ]
-
-> +	next_to_use = lan966x_fdma_pci_get_next_dcb(fdma);
-> +
-> +	if (next_to_use < 0) {
-> +		netif_stop_queue(dev);
-> +		return NETDEV_TX_BUSY;
-> +	}
-
-[Severity: Medium]
-Does netif_stop_queue() stop the queue this skb came from?
-
-lan966x_probe_port() creates port netdevs with NUM_PRIO_QUEUES TX queues:
-
-    dev = devm_alloc_etherdev_mqs(lan966x->dev,
-                                  sizeof(struct lan966x_port),
-                                  NUM_PRIO_QUEUES, 1);
-
-There is no ndo_select_queue, so traffic is hashed over all 8 queues.
-netif_stop_queue(dev) stops only txq 0. lan966x_fdma_wakeup_netdev(),
-called from the new poll, also checks and wakes only txq 0.
-
-For an skb on txq 1-7, the qdisc requeues it, calls __netif_schedule() and
-retries at once, because that queue was never stopped. Could
-net_tx_action then spin in softirq, contending on tx_lock, until a DCB
-frees up?
-
-The same pattern shows up in lan966x_fdma_pci_xmit_xdpf() later in the
-series.
-
-[ ... ]
-
-> +	/* Order frame write before DCB status write below. */
-> +	dma_wmb();
-> +
-> +	fdma_dcb_add(fdma,
-> +		     next_to_use,
-> +		     0,
-> +		     FDMA_DCB_STATUS_INTR |
-> +		     FDMA_DCB_STATUS_SOF |
-> +		     FDMA_DCB_STATUS_EOF |
-> +		     FDMA_DCB_STATUS_BLOCKO(0) |
-> +		     FDMA_DCB_STATUS_BLOCKL(IFH_LEN_BYTES + skb->len + ETH_FCS_LEN));
-> +
-> +	/* Start the transmission. */
-> +	lan966x_fdma_tx_start(tx);
-
-[Severity: Medium]
-This is a pre-existing issue in __fdma_dcb_add() and was not introduced
-by this patch, but the new PCIe TX and RX re-arm paths depend on it.
-
-__fdma_dcb_add() links the new DCB into the live chain before it has
-finished initializing it, with no barrier in between:
-
-drivers/net/ethernet/microchip/fdma/fdma_api.c:__fdma_dcb_add() {
-    ...
-	fdma->last_dcb->nextptr = cpu_to_le64(nextptr);
-	fdma->last_dcb = dcb;
-	dcb->nextptr = cpu_to_le64(FDMA_DCB_INVALID_DATA);
-	dcb->info = cpu_to_le64(info);
-    ...
+	return __lan966x_fdma_reload(lan966x, max_mtu);
 }
 
-The dma_wmb() here orders only the frame data against the descriptor
-stores. Both callers then issue a CH_RELOAD writel(), which orders the
-earlier stores. That leaves a problem only if the engine follows a
-freshly written nextptr without a RELOAD.
+Before init, rx.max_mtu is still 0, so an MTU change in that window goes
+through:
 
-Can this FDMA do that? If it can, could the device fetch a DCB whose
-nextptr or info is still stale?
+__lan966x_fdma_reload()->lan966x_fdma_reload()->lan966x_fdma_rx_disable()
+
+lan966x_fdma_rx_disable() uses rx->lan966x, which is still NULL at that
+point. If NAPI has not been added yet, napi_disable() on the
+uninitialized napi_struct could crash first.
+
+A udev .link MTUBytes= setting or NetworkManager can apply an MTU at
+netdev registration, which can land in this window.
+
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> index bccd1b8590d74..7185e65dda435 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
 
 [ ... ]
 
-> +static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+> @@ -391,9 +391,156 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
+
+[ ... ]
+
+> +static int lan966x_fdma_pci_reload(struct lan966x *lan966x, int new_mtu)
 > +{
-
-[ ... ]
-
-> +		switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
-> +		case FDMA_PASS:
-> +			break;
-> +		case FDMA_ERROR:
-> +			/* No rx_dropped increment here because src_port is
-> +			 * invalid.
-> +			 */
-> +			fdma_dcb_advance(fdma);
-> +			continue;
-> +		}
-
-[Severity: Low]
-Is this comment accurate? lan966x_fdma_pci_rx_check_frame() also returns
-FDMA_ERROR when BLOCKL fails lan966x_fdma_pci_rx_size_fits(). By that
-point it has already confirmed that src_port is in range and
-ports[src_port] is non-NULL:
-
-	blockl = fdma_db_len_get(db);
-	if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
-		return FDMA_ERROR;
-
-So a frame dropped for its length on a valid port is counted in neither
-rx_dropped nor rx_length_errors. This is still the case at the end of the
-series.
-
-[Severity: Low]
-Should FDMA_ERROR stop the loop here? lan966x_main.h documents it as:
-
- * FDMA_ERROR, something went wrong, stop getting more frames
-
-and lan966x_fdma_napi_poll() on the platform path follows that:
-
-	case FDMA_ERROR:
-		lan966x_fdma_rx_free_page(rx);
-		fdma_dcb_advance(fdma);
-		goto allocate_new;
-
-The PCIe poll instead advances and keeps pulling frames up to the budget.
-The two backends therefore handle the same action code differently. The
-code is unchanged at the end of the series.
-
-> +		skb = lan966x_fdma_pci_rx_get_frame(rx, src_port);
-> +		fdma_dcb_advance(fdma);
-> +		if (!skb) {
-> +			lan966x->ports[src_port]->dev->stats.rx_dropped++;
-> +			continue;
-> +		}
-> +
-> +		napi_gro_receive(&lan966x->napi, skb);
-> +	}
-> +	while (dcb_reload != fdma->dcb_index) {
-> +		old_dcb = dcb_reload;
-> +		dcb_reload++;
-> +		dcb_reload &= fdma->n_dcbs - 1;
-
-[Severity: Medium]
-What happens here when the budget is at least n_dcbs?
-
-The RX loop above is bounded only by weight, not by the ring size. If
-every descriptor is DONE and weight >= n_dcbs, fdma_dcb_advance() wraps
-dcb_index back to where it started. This loop then runs zero times, no DCB
-goes back to the hardware and the DONE bits stay set.
-
-Won't the next poll then deliver the same stale frames again?
-
-With budgets above n_dcbs, descriptors are also revisited within a single
-call, and only the modulo remainder is re-armed.
-
-__napi_busy_loop() passes the busy-poll budget straight to napi->poll().
-SO_BUSY_POLL_BUDGET accepts up to U16_MAX with CAP_NET_ADMIN. n_dcbs is
-512 here and 256 (FDMA_PCI_DCB_MAX) at the end of the series. The platform
-poll has the same pattern.
-
-[ ... ]
-
-> +static int lan966x_fdma_pci_init(struct lan966x *lan966x)
-> +{
-> +	struct fdma *rx_fdma = &lan966x->rx.fdma;
-> +	struct fdma *tx_fdma = &lan966x->tx.fdma;
+> +	struct fdma tx_fdma_old = lan966x->tx.fdma;
+> +	struct fdma rx_fdma_old = lan966x->rx.fdma;
+> +	u32 old_mtu = lan966x->rx.max_mtu;
 > +	int err;
 > +
-> +	if (!lan966x->fdma)
-> +		return 0;
-
-[Severity: Low]
-Can any of the new PCIe FDMA code run at this commit?
-
-lan966x_probe() sets lan966x->fdma only when an "fdma" irq exists. The
-in-tree overlay drivers/misc/lan966x_pci.dtso declares only:
-
-	interrupt-names = "xtr", "ana";
-
-so on PCIe this function returns immediately. The "~620 Mbps" figure in
-the commit message can't be reproduced from this commit alone.
-
-The later patch "misc: lan966x-pci: dts: add fdma interrupt to overlay"
-adds the interrupt, so this is resolved once the series is applied.
+> +	napi_disable(&lan966x->napi);
+> +	lan966x_fdma_tx_disable_netdev(lan966x);
+> +	lan966x_fdma_rx_disable(&lan966x->rx);
+> +	lan966x_fdma_tx_disable(&lan966x->tx);
 
 [ ... ]
 
-> +	lan966x->tx.lan966x = lan966x;
-> +	tx_fdma->channel_id = FDMA_INJ_CHANNEL;
-> +	tx_fdma->n_dcbs = FDMA_DCB_MAX;
-
-[Severity: Medium]
-Can a transmit race with this initialization?
-
-When lan966x_probe() calls lan966x->ops->fdma_init(), lan966x->fdma is
-already true and the port netdevs are already registered.
-
-This function publishes tx_fdma->n_dcbs, db_size and the ops callbacks
-without holding lan966x->tx_lock. It then sleeps in dma_alloc_coherent(),
-via fdma_alloc_coherent_and_map(). Only after that does it set
-tx.fdma.dcbs and atu_region.
-
-A transmit on a port that is up with carrier during that window would
-take this path:
-
-lan966x_port_xmit()
-  spin_lock(&lan966x->tx_lock)
-  lan966x->ops->fdma_xmit()
-    lan966x_fdma_pci_xmit()
-      lan966x_fdma_pci_get_next_dcb()
-        fdma_db_get(fdma, i, 0)   <- dcbs is still NULL
-
-It could also pick a DCB whose DONE bit fdma_dcbs_init() has just set.
-fdma_dcb_add() would then run with a NULL atu_region in
-lan966x_fdma_pci_dataptr_cb().
-
-Before this point n_dcbs is 0 from kzalloc, so the window opens exactly at
-this assignment. The platform backend has the same probe ordering.
-
-[ ... ]
-
-> +	err = lan966x_fdma_pci_rx_alloc(&lan966x->rx);
-> +	if (err)
-> +		return err;
-> +
 > +	err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
 > +	if (err) {
-> +		fdma_free_coherent_and_unmap(lan966x->dma_dev, rx_fdma);
-> +		return err;
+> +		fdma_free_coherent_and_unmap(lan966x->dma_dev,
+> +					     &lan966x->rx.fdma);
+> +		goto restore;
 > +	}
+> +
+> +	/* Free and unmap old memory. */
+> +	fdma_free_coherent_and_unmap(lan966x->dma_dev, &rx_fdma_old);
+> +	fdma_free_coherent_and_unmap(lan966x->dma_dev, &tx_fdma_old);
 
-[Severity: Medium]
-Does this error path leave tx.fdma and rx.fdma in a state that xmit can
-still use?
+[Severity: Low]
+This is a pre-existing issue, but lan966x_fdma_rx_disable() and
+lan966x_fdma_tx_disable() both ignore the return value of their poll on
+FDMA_CH_ACTIVE:
 
-tx_fdma->n_dcbs stays set. tx.fdma.dcbs is then either NULL, if
-dma_alloc_coherent() failed, or points at freed coherent memory, because
-fdma_alloc_coherent_and_map() frees the buffer without clearing the
-pointer:
+	readx_poll_timeout_atomic(lan966x_fdma_channel_active, lan966x,
+				  val, !(val & BIT(fdma->channel_id)),
+				  READL_SLEEP_US, READL_TIMEOUT_US);
 
-	region = fdma_pci_atu_region_map(atu, fdma->dma, fdma->size);
-	if (IS_ERR(region)) {
-		fdma_free_coherent(dev, fdma);
-		return PTR_ERR(region);
-	}
+If a channel never goes idle, the old rings are freed here and their ATU
+regions unmapped while the FDMA could still be using them. Should the
+timeout be propagated, and the free skipped when it fires?
 
-In the same way, rx.fdma.dcbs is left dangling after
-fdma_free_coherent_and_unmap(rx_fdma).
-
-Probe then unwinds through cleanup_ptp, cleanup_fdb and cleanup_ports.
-lan966x->fdma stays true until lan966x_cleanup_ports() unregisters the
-netdevs. Could a transmit on an up port in that window reach
-lan966x_fdma_pci_get_next_dcb() and dereference NULL or read freed memory?
-
-If a stale DONE bit is seen, the memcpy() in lan966x_fdma_pci_xmit() would
-write into the freed buffer. fdma_dcb_add() would then use the NULL
-atu_region.
+The timeout is READL_TIMEOUT_US (100 seconds), so this only matters for a
+wedged engine. The platform lan966x_fdma_reload() and both deinit paths
+already free rings after the same unchecked poll, so this patch just adds
+another caller.
 
 [ ... ]
 
-> +static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
+>  static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
+>  {
+> -	return -EOPNOTSUPP;
+> +	int max_mtu;
+> +
+> +	/* Nothing to resize until fdma_pci_init() has built the rings; it
+> +	 * sizes them from DEV_MAC_MAXLEN_CFG, which the caller already set.
+> +	 */
+> +	if (!lan966x->rx.lan966x)
+> +		return 0;
 
-[Severity: Low]
-With this stub, won't lan966x_port_change_mtu() roll back every MTU
-change on a PCIe FDMA instance?
+[Severity: High]
+Does a non-NULL rx.lan966x really mean the rings have been built?
+lan966x_fdma_pci_init() sets it before either ring is allocated, and it
+is not cleared when init fails:
 
-	err = lan966x->ops->fdma_resize(lan966x);
+lan966x_fdma_pci_init() {
+	...
+	lan966x->rx.lan966x = lan966x;
+	...
+	err = lan966x_fdma_pci_rx_alloc(&lan966x->rx);
+	if (err)
+		return err;
+
+	err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
 	if (err) {
-		...
-		dev->mtu = old_mtu;
+		fdma_free_coherent_and_unmap(lan966x->dma_dev, rx_fdma);
+		return err;
 	}
+	...
+}
 
-The later patch "net: lan966x: add PCIe FDMA MTU change support" replaces
-this stub with a real resize. The PCIe FDMA path also can't be reached at
-this commit, because the overlay has no "fdma" irq.
+lan966x_fdma_pci_deinit() disables NAPI and frees both rings, but it
+does not clear rx.lan966x or rx.max_mtu either.
+
+The netdevs are still registered in both cases. lan966x_remove() calls
+fdma_deinit before lan966x_cleanup_ports(), and it does so without RTNL.
+When fdma_init fails, lan966x_probe() jumps to cleanup_ptp and reaches
+lan966x_cleanup_ports() only later.
+
+An MTU change in either window passes this check. Because rx.max_mtu is
+stale, it then goes into lan966x_fdma_pci_reload().
+
+After deinit, can the unconditional napi_disable() in
+lan966x_fdma_pci_reload() spin forever in napi_disable_locked() while
+holding RTNL? The first disable left SCHED|NPSVC set. lan966x_remove()
+would then block in unregister_netdev() waiting for RTNL. If deinit and
+the reload run at the same time, both would disable NAPI and free the
+same coherent buffers and ATU regions.
+
+After a tx_alloc failure in init, rx.fdma.dcbs still points at the
+freed buffer. The reload copies it into rx_fdma_old and, if the new
+allocation succeeds, frees it a second time with
+fdma_free_coherent_and_unmap(&rx_fdma_old). The new rings are then left
+running with nothing to free them, because the probe error path never
+calls fdma_deinit.
+
+If the reload's own allocation fails instead,
+lan966x_fdma_pci_reset_mem() memsets the freed buffer and dereferences
+the NULL atu_region.
+
+Before this patch the PCIe resize returned -EOPNOTSUPP, so these paths
+could not be reached. The later XDP patch in the series does not change
+this check, init or deinit either.
+
+Would this need a real ring-state flag, with teardown serialized against
+MTU changes?
+
+[Severity: High]
+Can this check also race with lan966x_fdma_pci_init() itself?
+
+lan966x_probe() calls fdma_init after register_netdev(), and without
+RTNL. lan966x_fdma_pci_init() sets rx.lan966x first and tx.lan966x
+later. It then allocates both rings with calls that can sleep
+(dma_alloc_coherent(), the ATU mutex).
+
+An ndo_change_mtu under RTNL can pass this check as soon as rx.lan966x
+is set:
+
+CPU1 (probe)                        CPU2 (RTNL)
+lan966x_fdma_pci_init()
+  lan966x->rx.lan966x = lan966x;
+                                    lan966x_port_change_mtu()
+                                      lan966x_fdma_pci_resize()
+                                        __lan966x_fdma_pci_reload()
+  lan966x_fdma_pci_rx_alloc()             lan966x_fdma_pci_reload()
+                                            copies half-built rx/tx fdma
+                                            allocates new rings
+                                            frees "old" dcbs/ATU region
+
+Both contexts then write the same rx/tx struct fdma. Init can overwrite
+atu_region and dcbs. It can also hit WARN_ON(fdma->atu_region) in
+fdma_alloc_coherent_and_map() and free rx_fdma, which by then may be the
+buffer the reload just started the FDMA on.
+
+Could this end in DMA into freed coherent memory, double frees, or
+leaked ATU regions?
+
+If the probe thread is preempted after setting rx.lan966x but before
+setting tx.lan966x, would lan966x_fdma_tx_disable() and
+lan966x_fdma_pci_tx_alloc() in the reload dereference a NULL
+tx->lan966x?
+
+> +
+> +	max_mtu = lan966x_fdma_get_max_frame(lan966x);
+> +	if (max_mtu == lan966x->rx.max_mtu)
+> +		return 0;
+> +
+> +	return __lan966x_fdma_pci_reload(lan966x, max_mtu);
+>  }
 
 [ ... ]
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> index 024ce9f9916c7..de22027868261 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> @@ -50,6 +50,7 @@ struct lan966x_main_io_resource {
->  static const struct lan966x_main_io_resource lan966x_main_iomap[] =  {
->  	{ TARGET_CPU,                   0xc0000, 0 }, /* 0xe00c0000 */
->  	{ TARGET_FDMA,                  0xc0400, 0 }, /* 0xe00c0400 */
-> +	{ TARGET_PCIE_DBI,             0x400000, 0 }, /* 0xe0400000 */
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+> index 16bc28c8f11f8..1877f1916d716 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+
+[ ... ]
+
+> @@ -87,6 +88,33 @@
+
+[ ... ]
+
+> +/* Largest db_size keeping the ATU-padded ring inside one MAX_PAGE_ORDER
+> + * block and within the 16-bit DCB DATAL field. Inverts ALIGN(x, R) <= L
+> + * into x <= ALIGN_DOWN(L, R) to bound x directly.
+> + */
+> +#define FDMA_PCI_DB_SIZE_MAX						\
+> +	MIN_T(u32,							\
+> +	      (ALIGN_DOWN(PAGE_SIZE << MAX_PAGE_ORDER,			\
+> +			  FDMA_PCI_ATU_REGION_ALIGN) -			\
+> +	       FDMA_PCI_DCB_MAX * sizeof(struct fdma_dcb)) /		\
+> +	      (FDMA_PCI_DCB_MAX * FDMA_RX_DCB_MAX_DBS),			\
+> +	      ALIGN_DOWN(GENMASK(15, 0), FDMA_PCI_DB_ALIGN))
+> +
+> +#define FDMA_PCI_MAX_MTU						\
+> +	(FDMA_PCI_DB_SIZE_MAX - FDMA_OVERHEAD -				\
+> +	 (ETH_HLEN + ETH_FCS_LEN))
 
 [Severity: Low]
-Is range 0 large enough for this offset at this commit?
+Can this arithmetic wrap on builds with a small MAX_PAGE_ORDER?
 
-The in-tree overlay sizes the "cpu" resource at 1 MB:
+sizeof(struct fdma_dcb) is 256, so the subtracted term is 65536. If
+PAGE_SIZE << MAX_PAGE_ORDER is below 64K, the unsigned subtraction
+wraps. MIN_T(u32) truncates the result to 0xFFFFFF00, so the 16-bit
+bound (65408) is picked, even though the ring would then be far larger
+than one MAX_PAGE_ORDER block.
 
-	reg = <0xe0000000 0x0100000>, ...
+At 64K or 128K, FDMA_PCI_DB_SIZE_MAX is 0 or 256. That is below
+FDMA_OVERHEAD, so FDMA_PCI_MAX_MTU wraps to roughly 4G, and
+lan966x_probe_port() writes that value into dev->max_mtu. For blocks
+smaller than about 1MB, the result is below the default MTU of 1500.
 
-lan966x_create_targets() ioremaps only resource_size() and does not check
-the offsets against it. lan966x_fdma_pci_init() passes
-regs[TARGET_PCIE_DBI] to fdma_pci_atu_init(), which writes at
-+0x300000 + 0x200 * idx, so those writes would fall outside the mapping.
+The value is correct for the tested configuration (4K pages,
+MAX_PAGE_ORDER=10). arm32 ARCH_FORCE_MAX_ORDER has no range limit,
+though, so the smaller configurations can be built.
 
-This code runs only when lan966x->fdma is true. The later patch
-"misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space" grows
-the reg to 0x800000 before the "fdma" irq is added, so the out-of-range
-write can't happen at any point in the series.
-
-[ ... ]
+Would a BUILD_BUG_ON() on this formula be worth adding?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924-lan966x-pci-fdma-v8-0-201c7b707d8b%40microchip.com
