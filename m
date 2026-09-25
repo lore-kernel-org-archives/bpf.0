@@ -1,93 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F5F2DF6F4;
-	Fri, 25 Sep 2026 23:04:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2380C3E00B4;
+	Fri, 25 Sep 2026 23:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790377495; cv=none; b=e5ta5+9PfWilDE2t/Vv21LTAJH6UDWhUZ6Q/urGzPFyHFgXkANkD4FVg0IV+vj364jGQfENdTjfWlsCVU8t1BHMlFI2J90ET/l06FwlNGzjKfUkhid8MkIYGMA8yWKNrHdHkB338mC7t55bsLWi5HMd2Yrl/61iW2YiNiE/Lh5I=
+	t=1790377862; cv=none; b=VVxgTXKlddu8CHJZNFpL2K0zY5hYR+cBKIlWo8KRqwgtRBdpVoALuIyd38kRfaHv3seFRgW2p4mOa4dvYlv6Ves5CA6uvLK9NA/AhWZ92BjE59TNhe+3M0foajMVlBT7GT8aZtgunq1RJPTuFmFmTOHTGNP6zxAP6pIqeBLQznQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790377495; c=relaxed/simple;
-	bh=gPgu9rnLTTgzZyYxrou4VP0kKKqtdv8uvlM7X852xPE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=NgIaVvbPkKwmE0oeQVeGTB07VBctBEd3UomR62noSi/DxqW+xjd1JmDkp7Sy6foXu2VEzwvIgjn9bKJT0z6V5OumxXT707LGXO04BTQUaTf3P3d5Cu+3qa9DU152KnffuRreKJmfiEICHVv/rGjmcVQWms2DGcRJsJ9BGsPqHCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=fv/XMh+c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790377862; c=relaxed/simple;
+	bh=j2LCXnq/0nvFxK7djD2qFB1ji+VFRbUMFaTrd2IvSH0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=S0Dr7uIxPlQB11nwcMmU3lOc+D46/4DwyV1FB9NWGIlyAMK+jh6VDQGzv5Qf75fpv2LXFZk8mp0YjMefOVfBbTZDQ0pWHYOVNwYDF1I9z3uiRW0iK3i/RMiU3h057yaht4Kpg+MFWqJLV1ykBx561yKMJU4wdDaBEgmC3yNVDG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJkReceY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="fv/XMh+c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 786071F000FF;
-	Fri, 25 Sep 2026 23:04:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1790377493;
-	bh=/CbPmrir7hvxqhkoRGJquW0lh0N7NUF6YrjVn/tUNMw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=fv/XMh+ciNrkinWE2uBqyZ2g/HbLC9pT6uDzbPPDf4mdTgRykf8To4g7xkYKggnZw
-	 ADGOc6rhFVqm8fli9Kg6FbxUztl7iIXjjFxXe7c5uqSxWDNZNzPSwlssQE70XaQ2lY
-	 E67hvMJX/ROPD8WgGruQCvgAveUmP7zQv+QdGYpk=
-Date: Fri, 25 Sep 2026 16:04:53 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>,
- linux-mm@kvack.org, liam@infradead.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/nommu: Reject wrapping ranges in access_remote_vm()
-Message-Id: <20260925160453.7e7561edb77b5c4152675f7e@linux-foundation.org>
-In-Reply-To: <arZzn0bwWqp7xTE5@gremlin>
-References: <20260909064231.18693-1-tasos.papagiannnis@gmail.com>
-	<arZzn0bwWqp7xTE5@gremlin>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJkReceY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2481F00893;
+	Fri, 25 Sep 2026 23:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790377860;
+	bh=1ApWPVlZwDTKbVzAx8PbdHu0DODCVzXUDaAtYdC6lvc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VJkReceY6W7SlJMCPE/lVl1X6RgtufaOq94Smw1IIhb43INdb4k9HU3Jsx9xFC56l
+	 WEn3COAE9azdAS/i5C1YsEr2HRYBu8WWpKBi1KtDnP9CUpwGTaqaz65U25JsA83a6Q
+	 ok117EV8qR2Lu8dr4dDqvW9sYWsPnPGhhBj2o2+bH6BStzejbrRL5KC71etVeCNAwS
+	 Ziz79hLhuq7ERkSgvwd2yYYWCrf1KZqrgYWf8lHOG8MQxilJk/JaH36uvp/IvGgL3O
+	 vNMdgGMDjCW2BxSEVaVy8QmCFSVcyCttMosYGi4V8B0B1IPWIq/N7EGr2n2vkFL2q1
+	 waA3dBN8BSEQw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 3/9] bpf: fetch the vmlinux BTF where kernel
+ types enter a program
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jay Wang" <wanjay@amazon.com>
+Cc: gary@garyguo.net, bpf@vger.kernel.org, linux-modules@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20260925224229.1850-4-wanjay@amazon.com>
+References: <20260925224229.1850-1-wanjay@amazon.com>
+ <20260925224229.1850-4-wanjay@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 25 Sep 2026 23:10:59 +0000
+Message-Id: <20260925231100.6A2481F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Fri, 25 Sep 2026 14:20:33 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: state-dependent verification failure for BTF-independent prog=
+rams
+--
 
-> BTW always feel free to nag if you're not getting review! Something things
-> get missed. (Though I'd say wait at least a couple weeks before doing
-> that!)
-> 
-> On Wed, Sep 09, 2026 at 09:42:31AM +0300, Anastasios Papagiannis wrote:
-> > The NOMMU implementation of access_process_vm() rejects address ranges
-> > whose end wraps around, but access_remote_vm() bypasses this check even
-> > though both functions delegate to __access_remote_vm().
-> >
-> > Move the wraparound check into __access_remote_vm() so it applies to
-> > both entry points.
-> >
-> > This is originally reported in [1].
-> >
-> > [1] https://lore.kernel.org/bpf/4ef240a5bea36ff84df9589671367832860795159386a4c8fba546a0fa8b786f@mail.kernel.org/
-> 
-> Probably better to drop this big and make this a Link: tag.
+commit f6fc508c855b2ee6adf6ef6d3d2ccfe35410bcf1
+Author: Jay Wang <wanjay@amazon.com>
 
-My scripts (after much recent LLM-driven fancification) made this
-change automatically!  It became
+bpf: fetch the vmlinux BTF where kernel types enter a program
 
-Closes: https://lore.kernel.org/bpf/4ef240a5bea36ff84df9589671367832860795159386a4c8fba546a0fa8b786f@mail.kernel.org/ [1]
+This commit delays fetching the vmlinux BTF until kernel types actually
+enter the verifier state. This prevents unnecessary loading and parsing
+of BTF for BTF-independent programs like socket filters, saving memory
+and parsing overhead.
 
-But scripts didn't figure out how to add a Reported-by: as well.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -22532,10 +22580,10 @@ int bpf_check(struct bpf_prog **prog, union bpf=
+_attr *attr, bpfptr_t uattr,
+> =20
+>  	mark_verifier_state_clean(env);
+> =20
+> -	if (IS_ERR(btf_vmlinux)) {
+> +	if (IS_ERR(bpf_peek_btf_vmlinux())) {
 
-> >
-> > Fixes: f55f199b7d76 ("NOMMU: implement access_remote_vm")
-> 
-> Cc: stable I think?
+[Severity: High]
+Could this introduce a state-dependent verification failure for
+BTF-independent programs?
 
-Well why.
+When a BTF-independent program (like a systemd socket filter) is loaded
+initially, the bpf_peek_btf_vmlinux() helper returns a null pointer and this
+check is bypassed.
 
-I see in [1] "causing memory disclosure or a bus fault".  OK, we care
-about that.  So the changelog should tell people this very important
-info and should explain the circumstances which can lead to the failure.
+If a BTF-dependent program is later loaded under memory pressure, the
+btf_parse_vmlinux() routine could fail with a memory allocation error. When
+the kernel is configured with BTF enabled, bpf_get_btf_vmlinux() permanently
+stores this error pointer in the global btf_vmlinux variable.
 
-> > Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-> 
-> Seems reasonable to me! So:
-> 
-> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Subsequent loads of completely unrelated, BTF-independent programs will now
+see the error pointer returned by bpf_peek_btf_vmlinux() evaluate to true
+and fail with an in-kernel BTF is malformed error in bpf_check().
 
-Cool.
+Will this unintentionally cause transient memory failures during BTF parsing
+to permanently break unrelated critical system services?
 
+>  		/* Either gcc or pahole or kernel are broken. */
+>  		verbose(env, "in-kernel BTF is malformed\n");
+> -		ret =3D PTR_ERR(btf_vmlinux);
+> +		ret =3D PTR_ERR(bpf_peek_btf_vmlinux());
+>  		goto skip_full_check;
+>  	}
+>
 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925224229.1850=
+-1-wanjay@amazon.com?part=3D3
