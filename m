@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB074F93AA;
-	Fri, 25 Sep 2026 20:52:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9144FC8CC;
+	Fri, 25 Sep 2026 20:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790369555; cv=none; b=lbEHdpA4bmFPFUz+nQkQwQXLLYXKxFMwA8q2dMtuXP1zblq31YcqCgkfZU6AjmAuxwx+pAxu0A7/jDPMAWBv3hYm0iAeMRjkySPRNiMfoQV3ZeXmwflsedTXQRIh+y0TZjuiaR+zD3SNDahZjGSwK/ridr8Vcpp5hXYaB3tZZ8M=
+	t=1790369557; cv=none; b=nRrFuKEPKt/oXZ9QPEVU2ITijT6e3VujIuTTvIxAGoYi3uxueeaNsFpYw/tbASUP79FL5Tepb+57Ntpp9uEHTe7r5fUpiEhmpIEIWHjjGmuyRaEVynTYffaGNQkuNoZct/HazjZAaDQQcwDy/JP3i3tABljik+gMglAHeACW9NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790369555; c=relaxed/simple;
-	bh=92CaQW/SWuJ3HsvjPp+dSKs6grcxzMnZUo8mIkU2Bvc=;
+	s=arc-20240116; t=1790369557; c=relaxed/simple;
+	bh=5ORrd5E+6/0AYzsIE4LqdejwdmcCbDjdYqpMoxWtxSk=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ul5ce4Zq+Vcwd+VOGtZHegCs7tYIUnbdoLS4aI81KBWIjETHDQxuHLrO2vQBnwc2vm5vXK2erAlUmU5qP3AT8VVfP66a3BCDtNh97RJsElK32HkTnlMScAhjsQlSkOS4crvUTpH2nfQ2rD2qdqsYSvUmB+GPaDZ79YKB5LuWfPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFWJRVGi; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=Erse49oTyoVR08dvflDkkz9lJcFniNKGEtgXv7YkfCJdj0jL5lPPSCVjVI6UZOTW+qrU6nogtk5D/5vCi02aZ1+UZ5wdnX9hmQWzRXyhsnIqGNwQw1mQ4W3HObm7vmagVW4HcWB5BcsW6a1+Rb/066iZVbn3OwZ88rqD+4acoeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L9g30EiK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFWJRVGi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC081F00899;
-	Fri, 25 Sep 2026 20:52:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L9g30EiK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E481F00893;
+	Fri, 25 Sep 2026 20:52:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790369553;
-	bh=olpUmT6745WQgpGrnkuUQjcDZTD+SVeluiZ5UZmg1LE=;
+	s=k20260515; t=1790369555;
+	bh=YHkMxQooC2tRVfPMnOlsBhSHdC58bg6gLKzsTSxr2+s=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=cFWJRVGi1aXnRoD5Q3gO/qCs4by0qRLMf8NzhqST3889gPAgBujWX6kaigPR4KGJ2
-	 PqY6Xbx43ZAQqvg8XpmBkBCiZcQNm8A+IktZ30MI8hZCZSH+XRr6qFHJKOLljvlU2U
-	 kYkRO76Cr1PVx6ZkKEIGwxR9hhYYl5kqwTw40KDwHfRH+v3/w8DiMzjoO5yftdoyTH
-	 56OG5iXWZ4IqAo4CHJHIq2yrIqBCFOiKnfCYtk00lSw4EbXuB3S9VPW336BKgJLBIc
-	 DAgTKOgc539Uag50aG3HQ6nMAdk6ioI7dB7f1IYje+juGyx7caVhG/Ei3VhKyLc7oP
-	 pVCiUrg+X3gxQ==
-Subject: Re: [PATCH net-next v8 13/15] net: lan966x: add PCIe FDMA XDP support
+	b=L9g30EiK0FsV1GEDudwje+Tetrpiwzw50beq+oi0YICWr46OSAoeWJ6MFaVpl/Y0r
+	 4XNXzTC1Z5qnkYKLWqHdZmDp19kVCsDhKh86HKA7uLlZnf/YPdtojUgKALnAWdqZKF
+	 /6blq7RhqZT429p7ep95OkS2y2dn4LpP+fsU6q5GlH1xeCNv9xV2eP9+2IbjR2De7b
+	 VsIbvWO9zMudZiLENvCyGY2TeplQMUOFS2ZfFg20eh7Gu+c6QfqxESh4Uy3TBFRO+z
+	 P/mEpupt/EL8yY4vNOeQIYqtBOWZ3hy8bRNjmronWoFuGVRiY0NCj6xwamTgTn0J/M
+	 tdb6suPf/2C9Q==
+Subject: Re: [PATCH net-next v8 14/15] misc: lan966x-pci: dts: extend cpu reg
+ to cover PCIE DBI space
 From: netdev-bot+sashiko@kernel.org
 To: daniel.machon@microchip.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -38,11 +39,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  richardcochran@gmail.com, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Date: Fri, 25 Sep 2026 20:52:32 +0000
-Message-ID: <179036955220.2160803.7046320782670912992@kernel.org>
-In-Reply-To: <20260924-lan966x-pci-fdma-v8-13-201c7b707d8b@microchip.com>
-References: <20260924-lan966x-pci-fdma-v8-13-201c7b707d8b@microchip.com>
-X-sashiko-severity: Critical
+Date: Fri, 25 Sep 2026 20:52:34 +0000
+Message-ID: <179036955409.2160803.9449763908060819367@kernel.org>
+In-Reply-To: <20260924-lan966x-pci-fdma-v8-14-201c7b707d8b@microchip.com>
+References: <20260924-lan966x-pci-fdma-v8-14-201c7b707d8b@microchip.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,215 +53,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 1 · High: 0 · Medium: 2 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Critical] Use-after-free and double free on the PCIe RX path when an
-  XDP program shrinks a frame.
-- [Medium] On the PCIe path the driver accepts XDP but cannot handle
-  XDP_REDIRECT, and the bond driver cannot tell.
-- [Medium] In lan966x_fdma_pci_napi_poll(), a poll that consumes all
-  FDMA_PCI_DCB_MAX (256) RX descriptors never re-arms any of them.
+- [Low] Concern: nothing enforces the contract between the DT "cpu" reg
+  size and the driver's hard-coded TARGET_PCIE_DBI offset (0x400000)…
 
 --
 
-net: lan966x: add PCIe FDMA XDP support
+misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
 
-This commit adds basic XDP support (XDP_PASS, XDP_DROP, XDP_TX) to the
-lan966x PCIe FDMA path. The IFH and FCS are stripped before the program
-runs, and the pointer and length from after XDP are passed on to skb
-construction or to a new memcpy-based XDP_TX routine.
-lan966x_xdp_setup() now accepts programs on PCIe and skips the page_pool
-reload there.
+This patch grows the "cpu" reg of the switch node in the lan966x PCI
+overlay from 1MB to 8MB. The FDMA engine programs its ATU outbound windows
+through registers at offset 0x400000 and above, and the old mapping did
+not reach them.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> index 7185e65dda435..216e9cbcd1580 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-
-[ ... ]
-
-> +static int lan966x_xdp_pci_run(struct lan966x_port *port, void *data,
-> +			       u32 data_len, void **xdp_data, u32 *xdp_len)
-> +{
-
-[ ... ]
-
-> +	act = bpf_prog_run_xdp(xdp_prog, &xdp);
-> +
-> +	*xdp_data = xdp.data;
-> +	*xdp_len = xdp.data_end - xdp.data;
-> +
-> +	switch (act) {
-> +	case XDP_PASS:
-> +		return FDMA_PASS;
-> +	case XDP_TX:
-> +		return lan966x_fdma_pci_xmit_xdpf(port, *xdp_data, *xdp_len) ?
-> +		       FDMA_DROP : FDMA_TX;
-> +	default:
-> +		bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
-> +		fallthrough;
-
-[Severity: Medium]
-What happens here when the PCIe port is a bond slave?
-
-The PCIe ports use the same lan966x_port_netdev_ops as the platform
-ports, so both .ndo_bpf and .ndo_xdp_xmit are set. bond_xdp_set() looks
-only at those pointers and never reads xdp_features:
-
-drivers/net/bonding/bond_main.c:bond_xdp_set() {
-    ...
-		if (!slave_dev->netdev_ops->ndo_bpf ||
-		    !slave_dev->netdev_ops->ndo_xdp_xmit) {
-    ...
-}
-
-This patch removes the -EOPNOTSUPP return for PCIe in
-lan966x_xdp_setup(), so a bond with a lan966x PCIe slave can now install
-its program on that slave. For bond slaves, bpf_prog_run_xdp() can then
-turn XDP_TX into XDP_REDIRECT:
-
-net/core/filter.c:xdp_master_redirect() {
-    ...
-	if (slave && slave != xdp->rxq->dev) {
-		ri->tgt_index = slave->ifindex;
-		ri->map_id = INT_MAX;
-		ri->map_type = BPF_MAP_TYPE_UNSPEC;
-		return XDP_REDIRECT;
-    ...
-}
-
-It can also return XDP_ABORTED when the master is down.
-
-This switch has no XDP_REDIRECT case. Would those frames go to the
-default branch, log a "Driver unsupported" warning and be dropped?
-Nothing calls xdp_do_redirect(), so the redirect info set by
-xdp_master_redirect() would never be used.
-
-[ ... ]
-
->  static struct sk_buff *lan966x_fdma_pci_rx_get_frame(struct lan966x_rx *rx,
-> -						     u64 src_port)
-> +						     u64 src_port, void *data,
-> +						     u32 data_len)
->  {
-
-[ ... ]
-
-> -	memcpy(skb->data,
-> -	       fdma_dataptr_virt_addr_contiguous(fdma,
-> -						 fdma->dcb_index,
-> -						 fdma->db_index),
-> -						 data_len);
-> +	memcpy(skb->data, data, data_len);
+> diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
+> index 7b196b0a0eb65..7bb726550cafd 100644
+> --- a/drivers/misc/lan966x_pci.dtso
+> +++ b/drivers/misc/lan966x_pci.dtso
+> @@ -135,7 +135,7 @@ lan966x_phy1: ethernet-lan966x_phy@2 {
 >  
->  	skb_put(skb, data_len);
->  
->  	skb->dev = lan966x->ports[src_port]->dev;
-> -	skb_pull(skb, IFH_LEN_BYTES);
-> -
-> -	skb_trim(skb, skb->len - ETH_FCS_LEN);
->  
->  	skb->protocol = eth_type_trans(skb, skb->dev);
+>  				switch: switch@e0000000 {
+>  					compatible = "microchip,lan966x-switch";
+> -					reg = <0xe0000000 0x0100000>,
+> +					reg = <0xe0000000 0x0800000>,
 
-[Severity: Critical]
-Can this lead to a use-after-free when an XDP program shrinks the frame?
+[Severity: Low]
+This isn't a bug, but the driver only works if the size here is large
+enough, and nothing in the driver checks that.
 
-data_len is now the length from after XDP, returned by
-lan966x_xdp_pci_run(). bpf_xdp_adjust_tail() and bpf_xdp_adjust_head()
-let it shrink to ETH_HLEN. Take a 14-byte frame with h_proto 0x8100
-that returns XDP_PASS. eth_type_trans() then leaves skb->len == 0 and
-skb->protocol == ETH_P_8021Q.
+The driver computes the DBI target from a fixed offset into the "cpu"
+resource:
 
-Now suppose src_port is in bridge_mask and IGMP/MLD redirect is enabled
-in ANA_CPU_FWD_CFG. lan966x_port_mc_set() enables it when multicast
-snooping is on, and snooping is on by default. In that case the code
-after this point reaches:
+drivers/net/ethernet/microchip/lan966x/lan966x_main.c:
+	{ TARGET_PCIE_DBI,             0x400000, 0 }, /* 0xe0400000 */
 
-drivers/net/ethernet/microchip/lan966x/lan966x_main.c:lan966x_hw_offload() {
-    ...
-	if (eth_type_vlan(skb->protocol)) {
-		skb = skb_vlan_untag(skb);
-		if (unlikely(!skb))
-			return false;
-	}
-    ...
-}
+lan966x_create_targets() then adds that offset to the ioremapped base
+without comparing it to resource_size():
 
-pskb_may_pull(skb, VLAN_HLEN + 2) fails in skb_vlan_untag(), so it
-frees the skb with kfree_skb() and returns NULL. lan966x_hw_offload()
-only returns a bool, so the caller still holds the freed pointer:
+	lan966x->regs[iomap->id] = begin[iomap->range] + iomap->offset;
 
-		if (!lan966x_hw_offload(lan966x, src_port, skb))
-			skb->offload_fwd_mark = 0;
-	}
+fdma_pci_atu_addr_get() in drivers/net/ethernet/microchip/fdma/fdma_pci.c
+adds a further FDMA_PCI_ATU_ADDR (0x300000) + idx * 0x200 + offset:
 
-	skb->dev->stats.rx_bytes += skb->len;
+	return addr + FDMA_PCI_ATU_ADDR + FDMA_PCI_ATU_IDX_SIZE * idx + offset;
 
-The freed skb is then returned to lan966x_fdma_pci_napi_poll(), which
-passes it to napi_gro_receive(). Would that be a use-after-free followed
-by a double free?
+With this patch, the in-tree overlay covers the highest register touched
+(about 0x700A18 into the cpu range). The native lan966x.dtsi still uses a
+1MB cpu reg, but it never reaches this path, because lan966x_is_pci() is
+false there and lan966x_shutdown() returns early.
 
-The problem in lan966x_hw_offload() is older. Before this patch it could
-not be reached, because skbs were built from the hardware length and the
-MAC drops runts. The frame contents can also come from the network, for
-example when a decap program uses adjust_head on a minimum-size outer
-frame.
+So there is no in-tree problem. Would it still make sense to check in
+lan966x_create_targets() that TARGET_PCIE_DBI plus the ATU range fits
+within the "cpu" resource on PCI, rather than depending on the DT size
+alone?
 
-[ ... ]
-
-> @@ -312,8 +430,17 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
->  			 */
->  			fdma_dcb_advance(fdma);
->  			continue;
-> +		case FDMA_TX:
-> +			fdma_dcb_advance(fdma);
-> +			continue;
-> +		case FDMA_DROP:
-> +			fdma_dcb_advance(fdma);
-> +			continue;
->  		}
-
-[Severity: Medium]
-What happens if one poll consumes all 256 (FDMA_PCI_DCB_MAX) RX
-descriptors?
-
-Every result path calls fdma_dcb_advance(), which wraps at n_dcbs. After
-256 frames, dcb_index is back at the value saved in dcb_reload. The
-re-arm loop at the end of lan966x_fdma_pci_napi_poll() then runs zero
-times:
-
-	while (dcb_reload != fdma->dcb_index) {
-		old_dcb = dcb_reload;
-		dcb_reload++;
-		dcb_reload &= fdma->n_dcbs - 1;
-
-So none of the consumed DCBs are re-armed, and they all keep
-FDMA_DCB_STATUS_DONE. With a budget above 256, fdma_has_frames() stays
-true and the same frames are processed again in the same call. With a
-budget of exactly 256, the next poll processes them again.
-
-Would this deliver stale frames twice, run XDP on them again, and resend
-the XDP_TX frames?
-
-Only the budget bounds the loop. __napi_busy_loop() passes the socket's
-SO_BUSY_POLL_BUDGET straight to napi_poll(), and that value can be up to
-U16_MAX with CAP_NET_ADMIN. The ring can fill completely, because the
-hardware fills the last DCB before it stops on the invalid nextptr.
-
-This loop was added by the earlier "net: lan966x: add PCIe FDMA support"
-commit in this series. This patch extends it with the XDP_TX and
-XDP_DROP results, and it does not seem to be fixed later in the series.
-The platform lan966x_fdma_napi_poll() has the same pattern with 512
-DCBs.
+>  					      <0xe2000000 0x0800000>;
+>  					reg-names = "cpu", "gcb";
+>
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924-lan966x-pci-fdma-v8-0-201c7b707d8b%40microchip.com
