@@ -1,105 +1,143 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489E93B2D0F
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 20:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4AB4D794C
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 20:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790368529; cv=none; b=rJo1UjPx9UxhwttYXVfH8ebch9PR1XRMx3bxlFKSzkaGPeAppQT/3rgspeJRB4hvN8lwZqW+NR5x3NzU1CL/4TL42+0tAJYHXcYvEO12FDwYYkdTRh4hcbY2UMEddrqzS0JCBPqoUN4NNGAJJSPqrNETz0gIVIJgTks4XwlqJCk=
+	t=1790368785; cv=none; b=L1EupwykD//UScArYo3A7KeVRUF6/7ZJ59BFec8Igs93YDaYSBxjtN4Bx18xuQvk6Z1NWzBhg3eY5AdEvYF7lan/EgFc4Jy5jb0SDTkwQ3FyGAfKuy0Ej8x9xrjwcQAn28Q633ip7Q/09gLMUUzUx58ty9NxyeoqpcCubgJUPmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790368529; c=relaxed/simple;
-	bh=vPHx+JByx8l0TYl+zB7IzwfH+Tmv+iQcsRruU44ePIE=;
-	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:MIME-Version; b=d9zbQjDTjP4ItIw+OdXQYW9DafSsfOsRtxmgSNBBcmuDN68dAXkjCcX3OWmfct0mMv2iRrd6SM11aeb7mcKI4Ux/fJ6By77dXW9aq+mpIrpsJ3sHcOgLh9egV93CcqE/hRqNaXeneZtLWfqQdedlVyAMFIgMw1EAVST76sX0VcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dO/v2G+2; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790368785; c=relaxed/simple;
+	bh=pKXIpeFaErgn2NEiF8MiFKNoe1Q1PfuIcKipDX3mXkU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RwsvH5FnUA9tJSSDYHl4tNoYXmDYkAY1hD5sY6Dr4OE70nvId021F//b7/5BucfqUaPATOJYx8DcMNJblLbRdwNOOP37nxD57Xm6azSkxWXtayCtyVDjBbhV5C1IwS2NLRawqKmsIeQdPwKlz8/cHl3PirUBk6xfnSMRcCMGpoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=czCl4AzL; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dO/v2G+2"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39dacf053eeso708288a91.2
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 13:35:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="czCl4AzL"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747ee1f9bso6689555ad.3
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 13:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790368527; x=1790973327; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RahKXyALpxxJlMog/IoOu/AqxGme9XhkUkuEy+BX9JE=;
-        b=dO/v2G+2+ztAAZlqOWzlZkN0qnFxkIgV+C19Cxp+NIuqfIyg2s2af/qatv3dJ4UBqA
-         zrncEeMdl+y5HDRz4XDjRsnBA2HLVTVDos1pOzGNtqn01xXtioWCZVAY8rOmSCGEW5hL
-         BG7JZNFJd6RUiXu0dFW4hfWAc2rqB9meo2a+cbH1PgVYnNC58wWZPGiZ0DhGSBoXPDMM
-         sD3vx7/QsNmrNy3io0XJpOgr5ydVpTJlWPR2tNimg1wNQQRZQyz/f6eVTIzD4UjUMyc3
-         lnsPBLKprvqa84pdlh9u+ASzyu9LUsI/L3o7z8DRk7GM+Zzo0z3zoTkbh2MEugkD8Nt0
-         B3sg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790368783; x=1790973583; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9QIFuwjRucPgSyZcWSBOkA7RJtb3qls5D8mqQ6di/is=;
+        b=czCl4AzL+iuOJtQ9wxh/sHkg6gAgGo6a5b90o4/pbfia2V9AgWjqj/6ksUjjxpKkgs
+         Sy6ImPNJzM4vz/izIZ3cdJPl1SuxyNYj1o/+X09ASzhOnSdgiaIJG3Qz0EZu2xWpQC2Y
+         K5kHx7Jr+A7EskOLqPxMQoew4tTncNCAhlY+eVSZiXFpkbKPCGv1geKcxzarQRoD95cz
+         y5HdUw6axtHVnBP4VmJy+FoLihyLu2Ym4i2DmE+VF4xarJFs70xnyMZrlUnb85XyJ5fL
+         79zGcA+4YjQYyY0uXbFQvuanh75obi9GXvJE9/5B2OXKT/XH1t9PuOR41klTrKTFUYc/
+         ZUmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790368527; x=1790973327;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RahKXyALpxxJlMog/IoOu/AqxGme9XhkUkuEy+BX9JE=;
-        b=tkSQ1Y4fiM7c13UeVFHNldNxE3ANiGEWqfnEqqcYeWtUa27Odn2tmTBpWTGtiuf95h
-         rwPb0aQFtvMhucZ/+EYwefnYlQun2K5ULOf/E87KT9GU6K4nvBOApz3OAcymSspbsZnD
-         jcmeE0SlnZrNOFVTIRUKUz2GG3oINB07xwv0tou5O+WwC2l1dMD+fqKV260htpcjxsmv
-         qG+GFGs2ZwNp2c9csGH5e++1caaE4JHsraQhNiBCujz2AopS2829314gSRpqlgIGp2wT
-         KlQuWHmPS9vtZWJix71K4sBuoU7KAa0hWRZHajWlSapWrR035jgcOS3mjHdAEB7xg5Rk
-         2ZZA==
-X-Forwarded-Encrypted: i=1; AKwUvByVrvPzhiho1TLq7m7ZgteACMceDCmJNGU2+DZJsvs7wevR/w+zsNZOpXpHbwJVbId0k1M=@vger.kernel.org
-X-Gm-Message-State: AFuF++nnyP7fa/T7fXzuf9lGv9zP3xxwx1RSZJnA7krTbUdeVbHekPML
-	cLL5++3/Bzuz09vxsagKFZVoelsudcfW1j1XW1Lps5kklgHnlXRIFtbn
-X-Gm-Gg: AYBFou0sLJb7rEaeUxYg45txKqoYtgRpjpRkKFMUbTTuzl1iFq6ImrkiJnlLN2F27AY
-	bSmki3nRF341kZ8e/nTKxrvy7HXUynyqWEIGYEUOmwV7NnK2hvlxOKz1Sndv4qQjoiYAKE7IWCX
-	KZPAIhul52Df3N6fNBmgmqbbr41tzA/eDC5tedlhjXrwNWoYsiw9NKxLt1pmoOJ4lrRwbwM3pcv
-	osQ3pcL7+IgjArLOIT4ucPZRzdzjW3n+zGgW4v+CkPUYhvXokAIhuk/ck0WXc64X5M9Q0lg1K/g
-	C9RjWs5ZcJLvavi2Im99stPx6siGzK4dea5aVSn+esjUzpvOt/yiQxu6UMSdUBVXtKCAHAgg02h
-	ZfGzr5UeuBhZcPPA6hRJ8OWDAerrJDsTP0/rXORjkZhiRv14X2ONxPus4vQos1sEX1fn39+avA4
-	qr9FXFn5cCvQ6QaK03ZIGzXldnV1KwAK2B1YGjdLCWjnO9eS9AbXPQlPuyZV5UvjA5kyb5bKQIF
-	rDROJNHP+watuGu/TRq2LElUSmzlU6UY8NHJSZPTVAwCtBMPdhHfKMA+yjNCsqpcRcK5IP9C6fW
-	T+5PSHFMouDNAg==
-X-Received: by 2002:a17:90b:48cf:b0:3a0:c367:4310 with SMTP id 98e67ed59e1d1-3a0c3675098mr1979608a91.52.1790368527400;
-        Fri, 25 Sep 2026 13:35:27 -0700 (PDT)
-Received: from localhost ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b99e5220sm6113368a91.16.2026.09.25.13.35.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 13:35:26 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Sep 2026 20:35:26 +0000
-Message-Id: <DLOOOAHTOMTC.2QEWQ5J60BATG@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Alan Maguire" <alan.maguire@oracle.com>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <qmo@kernel.org>
-Cc: <jolsa@kernel.org>, <daniel@iogearbox.net>, <ihor.solodrai@linux.dev>,
- <yonghong.song@linux.dev>, <song@kernel.org>, <martin.lau@linux.dev>,
- <memxor@gmail.com>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
- <nsc@kernel.org>, <puranjay@kernel.org>, <yatsenko@meta.com>
-Subject: Re: [PATCH v2 bpf-next 1/3] bpf: Verify BTF_KIND_LOC_PARAM vlen,
- flags
-In-Reply-To: <20260925170854.1240637-2-alan.maguire@oracle.com>
-References: <20260925170854.1240637-1-alan.maguire@oracle.com> <20260925170854.1240637-2-alan.maguire@oracle.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1790368783; x=1790973583;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9QIFuwjRucPgSyZcWSBOkA7RJtb3qls5D8mqQ6di/is=;
+        b=uWbdYZzYvwuzGzrks3os6jl925Md1kPyvoJf8Ukfhx2sErrfxMKfHtKGL2mUMSvJ6u
+         EsXOEPB4ac6jv3XQr7/rEJ1Q3p5oTBte3WSK7/Tl7tmu7dht1jytV9cbIlVatrt4Fqm7
+         DYZVJKZgsdzOeNfUKmcjDlwew1GqIXlCp5sEctENqlYQwPbqWCMr2t+YhcYlD9Yu/aOg
+         KdeLJbW4b2tEV28GyhiyyIJJP7D8DV1daIeSeKgchHjLeZLRLSmSi55F2JjKPs3iT6A6
+         5KnNghzVeYT3zJD9822FaZrxWhib4O1kKJ2HACpYW1SeMzIQWbPrPWZuiwJxaNhsVKEm
+         or2g==
+X-Gm-Message-State: AFuF++mjxBctRAz/+YYCi034p97fktrTmBm++3nOyeQLGvtG1HDFrNI0
+	F7gwzXX82HPCBlU1VmQIQqdURv8SCVCWv3CGmteizwhg5/seG7FuviQODuWfn3L0EmSAyB4xhty
+	fthcjg7E=
+X-Gm-Gg: AYBFou0FCOD7YmHhRIhcYBtTt+IN6BM3GfItIeaPhfZAkhNfQcLpMcq86iqWpCQqRMY
+	Mc+HSr/Z1XvMy7o6+ES+GJr/7azarSPZfHj/Ydg1f32Xq1Cgn/hIUX0sK1WIAwafaVVtS6fKngt
+	ysACCVS5IbUZjdfGBL+BBGEn5SIXyA52545Kvkt1Z/3syE6Sa96w9wwUU86rPzpEsh5XPpcFG0u
+	vvrQbWAKGt3M+7LrwbZhuuF8YJbo67rEHBbh8zwo1kMbtfS++l2Uavkxje8XubCmY2yOonB1BAB
+	gmKMlAVscbm09oB1iGdEjOJeRiPlz7EZEIpvJxe3rhF3yM3/8hJKt0AvNmTS7uNcfR9BA6ehzGv
+	2mA4JZPUTi7ohxa7FCWvvk+8LIEURAml8sW6QhwWBaNYN1wkyXknZRc5s6IfS2jo/eXfk0m9uFB
+	usX9nwP7bSEJGHgXPEoV0x85vDAZXixkWsJBsk6QJ0bDLTQMywWas0tnogzDx9UQjkOchemD6ea
+	Bt6iBqVK+e3UJb/+QumE62wqBgs1Z37wzUvV8Cteg==
+X-Received: by 2002:a17:902:f705:b0:2df:8aea:7d99 with SMTP id d9443c01a7336-2df8aea88aemr39511945ad.59.1790368782869;
+        Fri, 25 Sep 2026 13:39:42 -0700 (PDT)
+Received: from alpine05.ht.home (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b9481e17sm5955125a91.8.2026.09.25.13.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2026 13:39:42 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf v3 0/7] Make sleepable arena paths use sleepable alloc_pages
+Date: Fri, 25 Sep 2026 20:39:32 +0000
+Message-ID: <20260925203939.4105-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 25, 2026 at 06:08 PM Alan Maguire <alan.maguire@oracle.com> wrote:
-> +	/* All LOC_PARAMs have vlen of at least 1, none have vlen > 8 */
-> +	if (vlen < 1 || vlen > 8) {
-> +		btf_verifier_log_type(env, t, "Invalid vlen");
-> +		return -EINVAL;
-> +	}
+The arena_alloc_pages() call takes a sleepable argument based on whether
+its caller is a sleepable BPF function. This flag, along with the context
+the kfunc is called in, decides whether the call will try to fulfill the
+allocation using the regular or the _nolock variant of the alloc_pages
+API, by means of bpf_map_alloc_pages().
 
-Why 8? seems arbitrary.
+However, the arena_alloc_pages() call currently only makes allocations
+inside an IRQ-disabled critical section. This forces all allocations to
+use the _nolock() API, which may eagerly fail where the regular variant
+would eventually succeed. There have been reports of this happening for
+sched-ext schedulers.
 
-> +	if (p->flags & ~(BTF_LOC_PARAM_SIGNED | BTF_LOC_PARAM_CONST |
-> +			 BTF_LOC_PARAM_ADDR | BTF_LOC_PARAM_REG |
-> +			 BTF_LOC_PARAM_DEREF | BTF_LOC_PARAM_OFFSET) ||
-> +	    !p->flags) {
-> +		btf_verifier_log_type(env, t, "Invalid flags");
-> +		return -EINVAL;
-> +	}
+Restructure arena_alloc_pages() to use the _nolock() page allocation API
+only when necessary. This requires moving allocations outside of the 
+spinlock critical section for sleepable calls, which in turn requires
+slightly different logic in the allocation path. Make a separate
+sleepable code path that implements this logic within
+arena_alloc_pages().
 
-CONST | REG and DEREF without REG are still accepted it seems.
+Also fix kfunc specialization to not unnecessarily force the nonsleepable version
+of bpf_arena_alloc_pages() for call sites that do not need it. This requires
+making specialization per-call site instead of overwriting the descriptor
+during fixups. 
+
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+v1 -> v2 (https://lore.kernel.org/bpf/20260824082530.47553-1-emil@etsalapatis.com/)
+
+- Keep the sleepable and non-sleepable allocation paths within
+  arena_alloc_pages (Alexei)
+- Incorporate bot feedback on selftests (bot-ci)
+
+v2 -> v3 (https://lore.kernel.org/bpf/20260923191125.5311-1-emil@etsalapatis.com/)
+
+- Remove the intermediate page array allocation in bpf_arena_alloc_pages() and
+  use the pcp_llist pointer instead (Alexei)
+- Fix function specialization to only specialize to the nonsleepable version
+  when necessary
+
+
+Emil Tsalapatis (7):
+  bpf: Use an llist for page allocations
+  bpf: Add sleepable argument to bpf_alloc_pages()
+  bpf: Add sleepable arena page allocation path
+  selftests/bpf: Test large allocations for both sleepable/nonsleepable
+    arena users
+  bpf: Support call-site kfunc specialization for near calls
+  bpf: Support call-site kfunc specialization for far calls
+  selftests/bpf: Test per-call site function specialization
+
+ include/linux/bpf.h                           |  10 +-
+ include/linux/bpf_verifier.h                  |  15 +-
+ kernel/bpf/arena.c                            | 186 +++++++++++-------
+ kernel/bpf/fixups.c                           |  18 +-
+ kernel/bpf/syscall.c                          |  43 ++--
+ kernel/bpf/verifier.c                         |  82 +++++++-
+ .../selftests/bpf/prog_tests/file_reader.c    |  15 ++
+ .../testing/selftests/bpf/progs/file_reader.c | 129 ++++++++++++
+ .../bpf/progs/verifier_arena_large.c          |  64 ++++--
+ 9 files changed, 434 insertions(+), 128 deletions(-)
+
+-- 
+2.52.0
 
