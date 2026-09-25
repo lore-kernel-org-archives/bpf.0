@@ -1,218 +1,236 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36F93E0081;
-	Fri, 25 Sep 2026 18:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778353B8BC7;
+	Fri, 25 Sep 2026 18:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790362401; cv=none; b=To0hga6rqaW3QLqBMVOqTiMTDXMk3i9JDkI+pa0oJ+y9fz12pB4oYsg+bKA15j7qN2b8609BLM3wb20RZ9XBH2FGncanCZ1J2xehrE+WB25RliZ/ebly8pMHELqIJSC5vPVpEot1dBf6WUm2UdmOVc+KZZ/atHm+JubgJsU3hN0=
+	t=1790362561; cv=none; b=GvuE3hsfy9kHcNKbWiko47gvC7hFePp6VjFTyjN4FA9LLgqUv1MYyiGOW8KC2/odjT6Xy3dhpn3o9iH7cO+ip4DyS8+9pmAHpYFaMXNtOS0/A2XNu9hFtLnaVfgFBCWju36sHcBY9WEXfV4P4yyDVSzWHoLN0bIBS2zi/33F0hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790362401; c=relaxed/simple;
-	bh=eOFo7vkzrD0el5bOdTbjS55bPPwevg9xmQIZKgz2wgA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PLLB1ePs7sQfzzeBGRiX76pahAMwt09hXit2XU9nEN1/bNhjQsYfEbfunA9TZaXtmi3pEqh6fmCD1h6s9LX5+7kq0hgLy2rwOm1L6KwJxsijcG9Ouvo+mHK9soOPfmtxsMx6kb0nkXK55dSJFNOj+WmV/SM5SoUIw6U2n7lGv4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=FK022RXA; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1790362561; c=relaxed/simple;
+	bh=iKrd0+yFZiZlM33+Ed6nMS/sF+DBUAb53J99/61lCuQ=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=T12W/GMFUkhtDLRvx/nE+hwxNULK8zDwcKfejsWib95fTKnH6+Kusou0rUpnTFTJN5ZOZoSo1FNfg9VSJv20ITp1rNhhbY1jnnl3L4MWOLHAets5TNGW+GDJShIqUYC9m9sFcdV+j/AhrsDyMzBLxZarENEHtjHOV4gcQEi3sj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=libqQbVl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FK022RXA"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68PECMw52933095;
-	Fri, 25 Sep 2026 18:52:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=ZMqQW
-	gT8dfPpw+gx/6DbP10TU5bM3esrGuk1nVRFX/o=; b=FK022RXAwzpX0ulzFz+dM
-	bLH5QeyQKcE8/S9aQBrTheOWk91hI+2xuEPTeE0XugpQcJ1dear7GVhCPQeZY6tG
-	R2tgX5s2SVayVJMgR2FiDWZK4PZR0xK9xIYWe28kEGHxxL1daBOPbXToIMZDmsMW
-	fNR2sw1GJQFan0r1fgLE/Wg730T8DZ38EJZVFIQUzcwZae0hQKC84OLydTiQRfz6
-	2A93RmUwbegI4mpInqqdOqUI5tbifNNVUin9rs2tClYFqgyj1TUQAoDHkFyU5DTN
-	vEBZwzB5mu+mEOojlqNbfPbI7nPtUi+RnMtKAAGtn5/5eM6m1WZYWEVGa52djpSk
-	g==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk219vep-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Sep 2026 18:52:55 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68PIqCK7038628;
-	Fri, 25 Sep 2026 18:52:54 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gtepthtgw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Sep 2026 18:52:54 +0000 (GMT)
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68PIqQow040536;
-	Fri, 25 Sep 2026 18:52:53 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-81-122.vpn.oracle.com [10.154.81.122])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gtepthsyc-10;
-	Fri, 25 Sep 2026 18:52:53 +0000 (GMT)
-From: Alan Maguire <alan.maguire@oracle.com>
-To: acme@kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
-        qmo@kernel.org
-Cc: dwarves@vger.kernel.org, jolsa@kernel.org, daniel@iogearbox.net,
-        ihor.solodrai@linux.dev, yonghong.song@linux.dev, song@kernel.org,
-        martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
-        bpf@vger.kernel.org, nsc@kernel.org, puranjay@kernel.org,
-        yatsenko@meta.com, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 dwarves 9/9] man-pages: Document --inline_sites option
-Date: Fri, 25 Sep 2026 19:51:58 +0100
-Message-ID: <20260925185200.1318067-10-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260925185200.1318067-1-alan.maguire@oracle.com>
-References: <20260925185200.1318067-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="libqQbVl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99D21F000FF;
+	Fri, 25 Sep 2026 18:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790362560;
+	bh=VZHfcniCQanKr3rg3FuXnJEl8s+jjzU702WD7HYr1Gw=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=libqQbVl5Jb8uMZnW2XTCXteaDRha5HrrqWoxsJ/fYQPpM0G8dF8K/RLU5HFoRJRl
+	 r6Erqy/u4GbXQwKO71+F+k6RXaNzXcS94p++LCdu9sUqESLp+rTyyF8ztegs2Q4siF
+	 vAN32FbDnwOnfd4Olx1uc0ghJqDgj7VmWUUbfkIrif6GHqw8D92dFe10Ei/vmY//26
+	 48L2xt0qwtk+rhX2xn+dIhflw4Z1YyJu39pydXta99nMO6O1dpr4CUS3g4e5Sp3CQv
+	 rPl2uLSa7XSrzRZnGUW/4Ag8qI1JGFk9qIUyQ6SMevpOBJ1hyPY8gmHVkpYA+2BZ4f
+	 GXF6cW5tEWAGQ==
+Subject: Re: [PATCH net-next v8 01/12] gve: add struct gve_device_info to hold
+ device properties
+From: netdev-bot+sashiko@kernel.org
+To: hramamurthy@google.com
+Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com,
+ willemb@google.com, nktgrg@google.com, maolson@google.com, thostet@google.com,
+ jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ przemyslaw.kitszel@intel.com
+Date: Fri, 25 Sep 2026 18:55:58 +0000
+Message-ID: <179036255814.2160803.6358571892223666195@kernel.org>
+In-Reply-To: <20260924185316.2831077-2-hramamurthy@google.com>
+References: <20260924185316.2831077-2-hramamurthy@google.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-25_04,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
- suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2609250075
-X-Authority-Analysis: v=2.4 cv=APP6TA4N c=1 sm=1 tr=0 ts=6ab6c307 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=7Gl3-_t3PgB9XO-mQDs3:22 a=yPCof4ZbAAAA:8 a=ol5OCCR9Ltgci0DkqhUA:9
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13532
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDA3NSBTYWx0ZWRfXzU+fPV9CB0oP
- CbzidJ7PPPofhGiRXr1m24reKFTcqtY8pxWvi61/1YQe6+J/6RKt7W2HBAn1iZqKeedVvJwaies
- C8nTNPiIleGuvLCFHsT0RfeV9kE1YLVQcAAelXU84cXkiW5cuv3E
-X-Proofpoint-ORIG-GUID: 6y1tZGcaN_Gy2HHahwoiW3SXsQV5Z2fk
-X-Proofpoint-GUID: 6y1tZGcaN_Gy2HHahwoiW3SXsQV5Z2fk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDA3NSBTYWx0ZWRfX2TtHonRx7fTg
- k2nqAc8xgA3WWSVTSZe40bV7oFvm0+J64jALbatdvLxNln3/zXxac87yjL0bQGnDkLym3NhINhA
- 79PdXzeWzJiEH2L8xK3l34sf4PrOCcagKpFGMVhbKC8388oGfwHhZh4w97vGlIBWXy2JfuuvpPx
- kcffhshC64BVT1vQZ/e7jTsUHM7GuwVIwPAQE8XASelX8Fa32aqljNl97GxXuGta6DvcmlTrQqV
- rtI3nGsENd2g6iIArTokAQN2KSSTZm2tJ5BEr9W2XetWquQA8LP5JJOkjteNLrhmTOUHNlkxd86
- RPtAH0kFEk56pSCUo7on3moZXHrbS6F7OEWo1AkUPJtpF1Rmbj2NkskCXfrPRwJjn03Cl1sMZ4O
- Fb6NevTOM+hEWXNIFCxNAK/TzGsgL0ENXvM56QU7L4aeVnoXMC/by5bgSjgJOg2JBGcI9w3tH8n
- AcyUI4ZFuQiF/gCIx9jIZQYPho55Ssghc4DerShc=
 
-Ensure it is documented along with -f file, --elf path2elf
-and --running and include example.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- man-pages/pfunct.1 | 74 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 72 insertions(+), 2 deletions(-)
+Low priority / nit picks for your consideration:
 
-diff --git a/man-pages/pfunct.1 b/man-pages/pfunct.1
-index 5ce203b..9935f9d 100644
---- a/man-pages/pfunct.1
-+++ b/man-pages/pfunct.1
-@@ -1,6 +1,6 @@
- .\" Man page for pfunct
- .\" Licensed under version 2 of the GNU General Public License.
--.TH pfunct 1 "September 2, 2026" "dwarves" "dwarves"
-+.TH pfunct 1 "September 20, 2026" "dwarves" "dwarves"
- .\"
- .SH NAME
- pfunct \- Shows function information in debug information.
-@@ -82,7 +82,9 @@ Show just external functions (DWARF only).
- 
- .TP
- .B \-f,\-\-function=FUNCTION
--Show just FUNCTION.
-+Show just FUNCTION. When used with
-+.B \-j,\-\-inline_sites,
-+show only sites for the specified inlined function.
- 
- .TP
- .B \-F, \-\-format_path
-@@ -96,6 +98,16 @@ Use PATH as the base BTF when loading split BTF. If no format path is given,
- this selects BTF loading. This option is not needed for kernel module BTF read
- from /sys/kernel/btf/MODULE, where the vmlinux BTF is selected automatically.
- 
-+.TP
-+.B \-\-running[=OBJECT]
-+Resolve BTF inline-site addresses against the running kernel instead of an ELF
-+companion. OBJECT is vmlinux by default, or the name of a loaded module.
-+For vmlinux, only .text inline sites are shown, using _stext from
-+/proc/kallsyms. For a module, section bases are read from
-+/sys/module/OBJECT/sections. Address visibility is subject to normal kernel
-+permissions, including kptr_restrict. When symbol addresses are visible,
-+pfunct also uses /proc/kallsyms to identify the containing function.
-+
- .TP
- .B \-g,\-\-goto_labels
- Show number of goto labels (DWARF only).
-@@ -112,6 +124,34 @@ Not declared inline, inlined by compiler (DWARF only).
- .B \-i, \-\-inline_expansions
- Show inline expansion stats (DWARF only).
- 
-+.TP
-+.B \-j, \-\-inline_sites
-+Show BTF inline sites encoded in LOCSEC records. If no
-+.B \-\-format_path
-+is specified, this option automatically selects BTF input.
-+
-+Each site includes its address, section-relative offset, inlined function
-+prototype, and parameter locations. Parameter locations are shown as
-+registers, dereferenced registers, constants, addresses, or
-+.B unavailable
-+when location information is absent. Without ELF information, registers use
-+the generic
-+.B regN
-+notation and addresses are section-relative. When the input is an ELF file
-+with embedded BTF, its ELF information is used automatically. For raw or
-+detached BTF, use
-+.B \-\-elf
-+to resolve absolute addresses, enclosing ELF functions, and
-+architecture-specific register names.
-+
-+.TP
-+.B \-\-elf=PATH
-+Use PATH as the ELF companion for
-+.B \-j,\-\-inline_sites.
-+Its section addresses, symbol table, and register names are used to resolve
-+detached or raw BTF inline sites to absolute addresses, their containing
-+functions, and architecture-specific register names.
-+
- .TP
- .B \-l, \-\-decl_info
- Show source code info.
-@@ -204,6 +244,36 @@ $ pfunct --btf_base=vmlinux.btf --all module.btf
- \&...
- .fi
- 
-+.P
-+Show inline BTF sites from a detached BTF file, resolving each site to the
-+containing function in its ELF companion:
-+.PP
-+.nf
-+$ pfunct --inline_sites --elf ./program ./program.btf
-+0x401120 [wrapper+0x0, .text +0x100] add_one(int value [%rdi])
-+\&...
-+.fi
-+
-+.P
-+For an ELF file with embedded BTF, the ELF companion is inferred from the
-+input, so no separate
-+.B \-\-elf
-+option is needed:
-+.PP
-+.nf
-+$ pfunct --inline_sites ./program
-+0x401120 [wrapper+0x0, .text +0x100] add_one(int value [%rdi])
-+\&...
-+.fi
-+
-+.P
-+Limit inline-site output to the inlined function named add_one:
-+.PP
-+.nf
-+$ pfunct --inline_sites --elf ./program -f add_one ./program.btf
-+\&...
-+.fi
-+
- .P
- Show functions that were not declared with "inline" but were inlined:
- .PP
+- [Low] The commit message says the only functional change is that
+  gve_set_mtu() "now also validates" the jumbo-frames MTU.
+- [Low] The refactor leaves unused state and a stale comment behind.
+
+--
+
+gve: add struct gve_device_info to hold device properties
+
+This commit adds struct gve_device_info to hold the properties negotiated
+with the device, in preparation for an upcoming MailboxQ mode.
+gve_adminq_describe_device() now fills this structure. gve_init_priv() then
+copies the values into gve_priv through gve_set_mtu(), gve_set_mac(),
+gve_set_queue_properties() and gve_set_buf_sizes().
+
+> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
+> index c280ff35ee771..021adb9108dff 100644
+> --- a/drivers/net/ethernet/google/gve/gve.h
+> +++ b/drivers/net/ethernet/google/gve/gve.h
+> @@ -797,6 +797,34 @@ struct gve_ptp {
+>  	struct gve_priv *priv;
+>  };
+>  
+> +struct gve_device_info {
+> +	enum gve_queue_format queue_format;
+> +	u16 default_tx_queues;
+> +	u16 default_rx_queues;
+> +	u16 max_tx_queues;
+> +	u16 max_rx_queues;
+
+[Severity: Low]
+This isn't a bug, but gve_fill_device_info() never fills in max_tx_queues
+or max_rx_queues, and nothing reads them.
+
+gve_set_num_queues() still takes its maximums from priv->tx_cfg.max_queues
+and priv->rx_cfg.max_queues, which gve_probe() reads from the register BAR.
+
+Should these fields be dropped until MailboxQ needs them, or should
+gve_set_num_queues() use them?
+
+Along the same lines, struct gve_priv still declares:
+
+	bool default_min_ring_size;
+	...
+	u16 default_num_queues; /* default num queues to set up */
+
+All readers and writers now go through priv->device_info, so these two
+fields are always zero. Can they be removed?
+
+The comment in gve_probe() also still names gve_adminq_describe_device()
+as a place where features may be set:
+
+	/* Set default and supported features.
+	 *
+	 * Features might be set in other locations as well (such as
+	...
+
+This patch moved the last such write (NETIF_F_NTUPLE) into gve_init_priv().
+
+All three of these still seem to be present at the end of the series.
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
+> index f05f4895f4c74..512349c5517f4 100644
+> --- a/drivers/net/ethernet/google/gve/gve_adminq.c
+> +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+
+[ ... ]
+
+> @@ -1097,18 +1129,9 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+>  			 "Driver is running with GQI QPL queue format.\n");
+>  	}
+>  
+> +	gve_fill_device_info(priv, descriptor);
+>  	gve_set_default_rss_sizes(priv);
+>  
+> -	err = gve_set_mtu(priv, descriptor);
+> -	if (err)
+> -		goto free_device_descriptor;
+> -
+> -	priv->num_event_counters = be16_to_cpu(descriptor->counters);
+> -
+> -	gve_set_mac(priv, descriptor);
+> -
+> -	gve_set_queue_properties(priv, descriptor);
+> -
+>  	gve_enable_supported_features(priv, supported_features_mask,
+>  				      dev_op_jumbo_frames, dev_op_dqo_qpl,
+>  				      dev_op_buffer_sizes, dev_op_flow_steering,
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+> index 9cc343a162712..d3882de584e36 100644
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+
+[ ... ]
+
+> -int gve_set_mtu(struct gve_priv *priv,
+> -		struct gve_device_descriptor *descriptor)
+> +static int gve_set_mtu(struct gve_priv *priv)
+>  {
+> +	struct gve_device_info *device_info = &priv->device_info;
+>  	u16 mtu;
+>  
+> -	mtu = be16_to_cpu(descriptor->mtu);
+> +	mtu = device_info->max_mtu;
+>  	if (mtu < ETH_MIN_MTU) {
+>  		dev_err(&priv->pdev->dev, "MTU %d below minimum MTU\n", mtu);
+>  		return -EINVAL;
+>  	}
+>  	priv->dev->max_mtu = mtu;
+> +	priv->dev->mtu = mtu;
+>  
+>  	return 0;
+>  }
+
+[ ... ]
+
+> +static void gve_set_buf_sizes(struct gve_priv *priv)
+> +{
+> +	struct gve_device_info *device_info = &priv->device_info;
+> +
+> +	if (device_info->max_rx_buffer_size)
+> +		priv->max_rx_buffer_size = device_info->max_rx_buffer_size;
+> +
+> +	if (gve_is_dqo(priv) &&
+> +	    priv->max_rx_buffer_size > GVE_DEFAULT_RX_BUFFER_SIZE)
+> +		priv->rx_cfg.packet_buffer_size = priv->max_rx_buffer_size;
+> +
+> +	if (device_info->header_buf_size)
+> +		priv->header_buf_size = device_info->header_buf_size;
+> +}
+
+[Severity: Low]
+The commit message says:
+
+  Most of these changes are refactors only, except for one:
+  with the introduction of the central struct gve_device_info,
+  in AdminQ mode, gve_set_mtu() now also validates the device
+  provided mtu value from jumbo frames device option.
+
+Does this cover all the behaviour changes in the patch?
+
+Before this patch, gve_adminq_describe_device() called
+gve_set_mtu(priv, descriptor) before gve_enable_supported_features(). That
+checked descriptor->mtu against ETH_MIN_MTU. The jumbo frames max_mtu then
+overwrote dev->max_mtu without a check.
+
+After this patch, gve_fill_device_info() stores descriptor->mtu in
+device_info->max_mtu, and gve_enable_supported_features() overwrites it
+with the jumbo value. gve_set_mtu() then checks only that final value.
+
+So when the jumbo frames option is present, descriptor->mtu is not checked
+at all. A device that reports descriptor->mtu below 68 together with a
+valid jumbo max_mtu used to fail probe, and now it probes. Isn't the check
+moved to a different value, rather than added?
+
+There is a second change in gve_set_buf_sizes(). It now copies
+max_rx_buffer_size and header_buf_size only when they are non-zero.
+
+Before, a BUFFER_SIZES option that reported packet_buffer_size == 0 set
+priv->max_rx_buffer_size to 0. Now the field keeps the
+GVE_DEFAULT_RX_BUFFER_SIZE value set in gve_probe(). That changes the
+result of checks like this one in gve_set_rx_buf_len_config():
+
+	if (!gve_is_dqo(priv) || priv->max_rx_buffer_size < SZ_4K) {
+
+The v5 changelog note "honor device provided rx buffer size correctly" is
+below the --- line, so it won't end up in the git history.
+
+Could the commit message describe both of these changes?
+
 -- 
-2.43.5
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924185316.2831077-1-hramamurthy%40google.com
