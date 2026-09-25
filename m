@@ -1,118 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A1F3955EA;
-	Fri, 25 Sep 2026 19:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4824D9F9C
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 19:59:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790366105; cv=none; b=hH3oBJ/66NVM558Hh+FNesaG/7D0neMJnHH7pGEPfXS5d7AppHFAoPSt4hpmMZoeN7V/GXjfckpdOq0JSJkSI02Jr9NuH46jL3f4lihcPWnuv0KXMhlq+PTOkGy7rHHnXQfEuGHkKeool6iU0CptEoDmEPbniGq35wZmnxl+8nc=
+	t=1790366352; cv=none; b=GPvFxbiYNZ506b6SM2lUUpq9iBSZLPfjrLLBpVe3MKKBIWxh6x9F9x3CJ7+SSRa3N2Fdn9fxqpJvmLEf4CT2AcBGXmuCx/cG4nJrO5fETmD7CiIZ58KfY7Dj4FPASXbCq1E7AX0NKFz4TQa3vH+D3u5xIxoG5Ngx37nEO16wZVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790366105; c=relaxed/simple;
-	bh=hKHRq0LhI1zolL4uHSTmSljmnQD+TYC96AymLijR8t8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t46Vdwcuv8930/As8oyFLsa9m2qMMcxbNotxuvWbm0HmZv2lUm6lnNVVkZZCmU41QCTyJ0omVWVnFGEw3AGEfzjIu7KauHR9RQE+6w6LxQpBqu/PwYctykKbcc9MQEybmreZv84Fb2/qqXbHXbsOS86S4ICUHdRyvxmEC2pJXgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQwePNuN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790366352; c=relaxed/simple;
+	bh=rqnfz8R7nkD4RV1WbE8ru95EskJJ4cdcWv/JbHczZ5c=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FPnRxjFv3wHxBXWd3IqkKO64/kyQYyYjuY5IGsUUGNAykdcfvcTgcRF20IVww5Kfvhk/djJ0Q0aATRS9VwmIdJuU73s5R5rDIKvjwzpOLzWQmQV6zIhoPYFjtcEsNbxqfOvYExI5+58qIYPusumrpMQ0Ka+Gc1NqDd9UV1SQfVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvUkuR16; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQwePNuN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 617571F000FF;
-	Fri, 25 Sep 2026 19:55:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvUkuR16"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A70581F0089D;
+	Fri, 25 Sep 2026 19:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790366103;
-	bh=bpVmtn0t5O97jPCAVABKpxtYNMzagCrnZQRLZ6EWAwI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aQwePNuN7Hjw08+dF52gRhhrbdolVFjRkv1u/JVA7OwOPOV3Lz+uJzwDcijIH9NSz
-	 +q4Q69T80dunW+lG7TiwFAsmVsEKZlN5AfLrUEtUCb/nF+pPJ6u1Ys1DwmlAerVsQG
-	 jRa3JkY6HumUrf3Jl0xI0bN8Sl7EI6wrWbZIqgV2fzLG2RsrkjVn15KusXMsTlIc8j
-	 riOpgjhRf65IqqJZGrczBWINPOIKOBkrVaHuvgjolb2rVMV+Ii3mcsIFABcf/W6cj2
-	 lFDLiign3TY3foJZKn1zf31NrEFAKk0UCYhxUEgqzp4gGL4LieTOqIdxCkCxIBnzBk
-	 SXRYkmLgW/DbQ==
-Message-ID: <6fc6245b-5497-40dd-a032-53c323467d2f@kernel.org>
-Date: Fri, 25 Sep 2026 20:55:02 +0100
+	s=k20260515; t=1790366350;
+	bh=Sa905oWtdWOgdpggtKkIhJVmlV+MEI/USaL400D765Q=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KvUkuR163bJ7OQldibUt34t2Cpsf6ViE/IEtFiOv2/M2EpRPiYILotCqpdcqJUQs3
+	 zdLs1YfwvUlqpu0FSp4SSvFWzm/CKyzh3KC+FLYOWrpFUkKNtLIEprTVmOo+V5Xd4M
+	 hymHJ2J6qy/XCEbUF/3bUfLPTv+bhYwrmCwv34mnDansdAnfzdzbm/j8ZZZv7Z+QPh
+	 J5YZK9podzr0pwLVrSnrvnQvUCPfimtPhpKGfs/KYGDBLq7Y3tetsfOcYNsHhD2bQA
+	 rjs1bTeopc8vM7K0Qrb9zHWH73YU/qMm3vn9t2+r9JT9EDRTo9HbOFZZNIoV8JktTy
+	 ng7zX1py0J/ZA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v8 10/15] net: lan966x: add shutdown callback
+ to stop the FDMA on reboot
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Machon" <daniel.machon@microchip.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260924-lan966x-pci-fdma-v8-10-201c7b707d8b@microchip.com>
+References: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
+ <20260924-lan966x-pci-fdma-v8-10-201c7b707d8b@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 25 Sep 2026 19:59:10 +0000
+Message-Id: <20260925195910.A70581F0089D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 bpf-next 2/3] bpftool: Update func representation to
- include function signature
-To: sashiko-reviews@lists.linux.dev, Alan Maguire <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org
-References: <20260925170854.1240637-1-alan.maguire@oracle.com>
- <20260925170854.1240637-3-alan.maguire@oracle.com>
- <20260925171703.5D9EB1F000FF@smtp.kernel.org>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260925171703.5D9EB1F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-2026-09-25 17:17 UTC+0000 ~ sashiko-bot@kernel.org
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] bpf: btf_locsec_append hides truncation marker due to null byte gap
-> --
-> 
-> commit 6f503008243b4dfc886859b905f8a6fa7b657ef2
-> Author: Alan Maguire <alan.maguire@oracle.com>
-> 
-> bpftool: Update func representation to include function signature
-> 
-> This commit augments the func= output for LOCSEC entries to include a mapping
-> from function signature to where parameters are stored. It addresses a feature
-> suggestion to dump LOC_PARAM, LOC_PROTO and LOCSEC more verbosely.
-> 
->> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
->> index e29c8a84e224c..ce4c4036c2796 100644
->> --- a/tools/bpf/bpftool/btf.c
->> +++ b/tools/bpf/bpftool/btf.c
-> 
-> [ ... ]
-> 
->> +static bool btf_locsec_append(char *str, size_t sz, size_t *off,
->> +			      const char *suffix)
->> +{
->> +	size_t len;
->> +
->> +	if (!sz || *off >= sz)
->> +		return false;
->> +
->> +	len = strlen(suffix);
->> +	if (len < sz - *off) {
->> +		memcpy(str + *off, suffix, len + 1);
->> +		*off += len;
->> +		return true;
->> +	}
->> +
->> +	if (sz >= 4) {
->> +		memcpy(str + sz - 4, "...", 4);
->> +	} else if (sz > 1) {
-> 
-> [Severity: Medium]
-> When a string exceeds the buffer size and we hit this fallback path in
-> btf_locsec_append(), is there a risk that the truncation marker is hidden?
-> 
-> The truncation marker ... is unconditionally placed at the very end of the
-> buffer (sz - 4). Because the function fails to copy the prefix of the string
-> that would fit and does not write over the existing null terminator at *off,
-> a gap of null bytes can separate the current end of the string from the
-> truncation marker.
-> 
-> String reading functions like printf or JSON dumpers will terminate at the
-> first null byte, which would completely hide the ... marker and discard the
-> partial data.
-> 
-> This would be triggered when bpftool formats a BTF location string (for 
-> example, a function signature with many parameters) that cumulatively exceeds
-> 1024 characters.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] net: lan966x: missing stats_work cancellation in shutdown causes r=
+eboot hang
+--
 
-Maybe copy whatever we can from the suffix first, overwrite the end with
-the dots after? Something like:
+commit 2e6f47e0410ffe79c3ff982d925010362cdb3723
+Author: Daniel Machon <daniel.machon@microchip.com>
+net: lan966x: add shutdown callback to stop the FDMA on reboot
 
-        if (sz >= 4) {
-                size_t space_left = sz - 1 - *off;
+This commit adds a shutdown callback to properly quiesce the lan966x PCIe
+endpoint during a host reboot. It stops FDMA channels, disables interrupts,
+and unmaps ATU windows to prevent the hardware from continuing to assert
+INTx or access host memory across restarts.
 
-                if (space_left)
-                        memcpy(str + *off, suffix, space_left);
-                memcpy(str + sz - 4, "...", 4);
-        }
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/driv=
+ers/net/ethernet/microchip/lan966x/lan966x_main.c
+> index 259d81e759076..024ce9f9916c7 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+[ ... ]
+> @@ -1324,9 +1324,65 @@ static void lan966x_remove(struct platform_device =
+*pdev)
+[ ... ]
+> +static void lan966x_shutdown(struct platform_device *pdev)
+> +{
+> +	struct lan966x *lan966x =3D platform_get_drvdata(pdev);
+> +
+> +	/* As a PCIe endpoint the switch is not reset by the host reboot, so it
+> +	 * has to be quiesced here:
+> +	 *
+> +	 *   Free the irqs and mask the sources: no source can assert INTx.
+> +	 *   Disable NAPI: the teardown must not race a poll.
+> +	 *   Stop and detach the netdevs: drains xmit, closes ndo_open and MTU.
+> +	 *   Stop the FDMA channels: waits for the engine to go idle.
+> +	 *   Unmap the ATU windows: revokes the engine's access to host memory.
+> +	 */
+> +	if (!lan966x_is_pci(lan966x))
+> +		return;
+> +
+
+[Severity: High]
+Does this code leave the stats_work delayed work running after the PCIe
+endpoint is disabled?
+
+When the system reboots, the new lan966x_shutdown() callback is executed to
+quiesce the hardware. The PCI core subsequently disables the endpoint, but =
+if
+the stats_work background task fires and calls lan966x_stats_update(), it
+will read from the disabled hardware via MMIO.
+
+Accessing memory-mapped PCI registers after the PCI link or memory space has
+been disabled typically results in a completion timeout or Unsupported
+Request. This escalates to a PCIe AER fault or SError (NMI), panicking the
+kernel and hanging the reboot process.
+
+Unlike lan966x_remove(), which explicitly calls
+cancel_delayed_work_sync(&lan966x->stats_work), lan966x_shutdown() appears
+to omit this cancellation. Could the delayed work fire during reboot after
+this shutdown path executes?
+
+> +	if (lan966x->xtr_irq > 0)
+> +		devm_free_irq(lan966x->dev, lan966x->xtr_irq, lan966x);
+> +	if (lan966x->ana_irq > 0)
+> +		devm_free_irq(lan966x->dev, lan966x->ana_irq, lan966x);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260924-lan966x-pc=
+i-fdma-v8-0-201c7b707d8b@microchip.com?part=3D10
