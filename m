@@ -1,108 +1,118 @@
-Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6B24E534B
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 19:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A1F3955EA;
+	Fri, 25 Sep 2026 19:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790365900; cv=none; b=pABhMG/fbPhqMqm3ULNlqodf+WqLmCpvSMNNxsjO9Uii9Tg+gsJCmaTQitGR8jCXIBj2DSt2umYJZ5DoYFzrGhsa4+x4YlX28OxjWUpseny9Umqor5EYBog6jLfC7JpfQiKLQ8jYgXLbWngKqpEnl4S38Djf98+MTVQi2d/2uNM=
+	t=1790366105; cv=none; b=hH3oBJ/66NVM558Hh+FNesaG/7D0neMJnHH7pGEPfXS5d7AppHFAoPSt4hpmMZoeN7V/GXjfckpdOq0JSJkSI02Jr9NuH46jL3f4lihcPWnuv0KXMhlq+PTOkGy7rHHnXQfEuGHkKeool6iU0CptEoDmEPbniGq35wZmnxl+8nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790365900; c=relaxed/simple;
-	bh=Y6XLez4bx8jf7oVVRkIynG6FSaoMuruJLTjDxk8GpOQ=;
-	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:MIME-Version; b=EFHxBiASb6R1Q37B5MzQZK5wdRpi5MfO9z/mUQfG00j53QzvkPjlgIdhwzK7WN0ZSRYKwDGTWr7jLDlOipEldKknPRtTVHZ/oYNxUuNtt+w83XsoGmqHGIoFGthoMqCuCFQXTcU2DFJp776imUfnZGouIlbPpqM5/dqGBXEl3tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qiiwvOi6; arc=none smtp.client-ip=74.125.228.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790366105; c=relaxed/simple;
+	bh=hKHRq0LhI1zolL4uHSTmSljmnQD+TYC96AymLijR8t8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t46Vdwcuv8930/As8oyFLsa9m2qMMcxbNotxuvWbm0HmZv2lUm6lnNVVkZZCmU41QCTyJ0omVWVnFGEw3AGEfzjIu7KauHR9RQE+6w6LxQpBqu/PwYctykKbcc9MQEybmreZv84Fb2/qqXbHXbsOS86S4ICUHdRyvxmEC2pJXgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQwePNuN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qiiwvOi6"
-Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-85469f204f6so662231b3a.2
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 12:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790365898; x=1790970698; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Y6XLez4bx8jf7oVVRkIynG6FSaoMuruJLTjDxk8GpOQ=;
-        b=qiiwvOi6jzS0NI+LPVGohZWQ6BcYCCmp+UkqYgUZJ2b46W5j1uJJAyQQp79O7q+qlN
-         MqaTAcgUVWRAAxINyW/uEXFgMg/Taw8z+C4kdaMiboI1AhBwotmJV0PaelCCLUaySJs+
-         c7ya/xUtbI6W+jf3jSpDGdI6rfyGupCelQ4XD4nmlOCQFXcFilKDPBRDbJzF6M8EwYK1
-         8zPaR8JDmlxQb3o3UYOUpWYGOED8kZhpFKDm3s96ihTrCKo5wcg0pEoCPJDmoBs0q40F
-         p+oQda2rq8HL3FDxXCjQSrmT/A8Kac+qOFF2F9AM+g0WAilWm24myagMQFhnHSo6AgV8
-         Snlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790365898; x=1790970698;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y6XLez4bx8jf7oVVRkIynG6FSaoMuruJLTjDxk8GpOQ=;
-        b=YseQh4cQevNtfvh2AFMayawmytpIZUpn3hNKjRzKqkth7q/yQw0pnEvCYK3tq6LEOB
-         wh2eV7ZaU6cwfzb0ZLM1UexbI1Pf5sym7j/tzexLZKXda+4rKWiIxMHbyYEa0P2+aqnx
-         3UDYLL8ZUm/QIFf5YT0nArmLfYw7dyfXRhHUusdHXhqxbgQZje3bzUjJo/TxJ9oy0xPx
-         6bHCljvDv7NUVNPmJXNcTkpujFM3D5KbGwJdKyGmNI5+8Q9r70fni+0mRQqFHcjYqEWk
-         TcQ0Lap/eHJ7llWIfnim8UyvR/ksoCtlCFCopxbnxG5DtvT4BrvQw6CxG7D/qTftyHDP
-         8qtA==
-X-Forwarded-Encrypted: i=1; AKwUvBxyhi2+ya9v6jsC7VOa3TQBYj8PpCYOuTrh2QrglKr0Tvz3171quovuMPRLKTaIlW8nr44=@vger.kernel.org
-X-Gm-Message-State: AFuF++lMnHytmE+XuW66sizSWNKEOgK6FoUmgXefwJ6BO7Iq7WAmc9ER
-	ZfMw7wW3FpbWQ0pxkQbcbVJ9dWLbB/VQDVF1ikmOURvNWJ8NjpuSlajv
-X-Gm-Gg: AYBFou0pSsyZjXV7Tp82aJ5FyB4I1eRYbCBTkNxgVZ52ecOlHvMsTlqw9YBSkV0ZCL0
-	AtULPUM9PAmrAMXvUrKJaOFBoLbBsU9UkfX/4UmXPtQgu5bOJ4BFFzS9f8XnAGbN+YP3jbpFTj2
-	IyTjZTTkjGEvla9W5c1TaiDvWBTxk9oCsB3Omp6OlNpIqLZXnwBvtidvy9bxnkSn5fzVbTmLTPF
-	4l+ojpCeWrxPwbBA+6OrZ5xQqcoP59WT0qjAwyjd89IoZhtez87hEWVvEaDIZF2W5B6Bm5gETvK
-	Rp5TZFo0EBRzHiPPDCAv+Js7YIzzncQQveJIwoC/AUwxTqE0h91P7vExEDG2jXWg3gGx9YqZwqO
-	FKIaeL3HgtUNJt1MzIQD8QIL1eoaH8sNxo/qwBWu5eUxnZ+3N5nYuh+XqZ03m8o1lMx/fFp7ZBm
-	nqRTWgcKEnlXWXMh4KLJw4uYvHsF56QNi9VnlTGc+Fyvabzuf4MZYRwWq/rdhRbK2Y7AnSew3RW
-	6oa2TvncQgJr5m4/6ZFtqgO8B7W1X2ealURZ42sxBPPyWfkNc1ddYHGwK5EAtBGU96prDjEI45h
-	CN8=
-X-Received: by 2002:a05:6a00:7599:b0:880:47cb:ef05 with SMTP id d2e1a72fcca58-88047cbf251mr1668896b3a.46.1790365898275;
-        Fri, 25 Sep 2026 12:51:38 -0700 (PDT)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87fea19030bsm1668470b3a.11.2026.09.25.12.51.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 12:51:37 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Sep 2026 19:51:37 +0000
-Message-Id: <DLONQQN0RB03.1NVWVFHGRRWV4@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jakub Kicinski" <kuba@kernel.org>
-Cc: "Jakub Sitnicki" <jakub@cloudflare.com>, "Daniel Zahka"
- <daniel.zahka@gmail.com>, <netdev@vger.kernel.org>, "Kuniyuki Iwashima"
- <kuniyu@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, <bpf@vger.kernel.org>,
- <kernel-team@cloudflare.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Simon Horman"
- <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
- Bruijn" <willemdebruijn.kernel@gmail.com>, "Florian Westphal"
- <fw@strlen.de>, "Jack Wang" <163wangjack@gmail.com>
-Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
- packet scrubbing
-In-Reply-To: <20260925121849.2ac5150b@kernel.org>
-References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com> <20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com> <DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com> <DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com> <20260925121849.2ac5150b@kernel.org>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQwePNuN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 617571F000FF;
+	Fri, 25 Sep 2026 19:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790366103;
+	bh=bpVmtn0t5O97jPCAVABKpxtYNMzagCrnZQRLZ6EWAwI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=aQwePNuN7Hjw08+dF52gRhhrbdolVFjRkv1u/JVA7OwOPOV3Lz+uJzwDcijIH9NSz
+	 +q4Q69T80dunW+lG7TiwFAsmVsEKZlN5AfLrUEtUCb/nF+pPJ6u1Ys1DwmlAerVsQG
+	 jRa3JkY6HumUrf3Jl0xI0bN8Sl7EI6wrWbZIqgV2fzLG2RsrkjVn15KusXMsTlIc8j
+	 riOpgjhRf65IqqJZGrczBWINPOIKOBkrVaHuvgjolb2rVMV+Ii3mcsIFABcf/W6cj2
+	 lFDLiign3TY3foJZKn1zf31NrEFAKk0UCYhxUEgqzp4gGL4LieTOqIdxCkCxIBnzBk
+	 SXRYkmLgW/DbQ==
+Message-ID: <6fc6245b-5497-40dd-a032-53c323467d2f@kernel.org>
+Date: Fri, 25 Sep 2026 20:55:02 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 bpf-next 2/3] bpftool: Update func representation to
+ include function signature
+To: sashiko-reviews@lists.linux.dev, Alan Maguire <alan.maguire@oracle.com>
+Cc: bpf@vger.kernel.org
+References: <20260925170854.1240637-1-alan.maguire@oracle.com>
+ <20260925170854.1240637-3-alan.maguire@oracle.com>
+ <20260925171703.5D9EB1F000FF@smtp.kernel.org>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260925171703.5D9EB1F000FF@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 25, 2026 at 12:18 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> Instead of improving the existing infra we're adding more BPF-specific
-> glue and another bit to the skb. Matter of perspective I suppose :/
+2026-09-25 17:17 UTC+0000 ~ sashiko-bot@kernel.org
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] bpf: btf_locsec_append hides truncation marker due to null byte gap
+> --
+> 
+> commit 6f503008243b4dfc886859b905f8a6fa7b657ef2
+> Author: Alan Maguire <alan.maguire@oracle.com>
+> 
+> bpftool: Update func representation to include function signature
+> 
+> This commit augments the func= output for LOCSEC entries to include a mapping
+> from function signature to where parameters are stored. It addresses a feature
+> suggestion to dump LOC_PARAM, LOC_PROTO and LOCSEC more verbosely.
+> 
+>> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+>> index e29c8a84e224c..ce4c4036c2796 100644
+>> --- a/tools/bpf/bpftool/btf.c
+>> +++ b/tools/bpf/bpftool/btf.c
+> 
+> [ ... ]
+> 
+>> +static bool btf_locsec_append(char *str, size_t sz, size_t *off,
+>> +			      const char *suffix)
+>> +{
+>> +	size_t len;
+>> +
+>> +	if (!sz || *off >= sz)
+>> +		return false;
+>> +
+>> +	len = strlen(suffix);
+>> +	if (len < sz - *off) {
+>> +		memcpy(str + *off, suffix, len + 1);
+>> +		*off += len;
+>> +		return true;
+>> +	}
+>> +
+>> +	if (sz >= 4) {
+>> +		memcpy(str + sz - 4, "...", 4);
+>> +	} else if (sz > 1) {
+> 
+> [Severity: Medium]
+> When a string exceeds the buffer size and we hit this fallback path in
+> btf_locsec_append(), is there a risk that the truncation marker is hidden?
+> 
+> The truncation marker ... is unconditionally placed at the very end of the
+> buffer (sz - 4). Because the function fails to copy the prefix of the string
+> that would fit and does not write over the existing null terminator at *off,
+> a gap of null bytes can separate the current end of the string from the
+> truncation marker.
+> 
+> String reading functions like printf or JSON dumpers will terminate at the
+> first null byte, which would completely hide the ... marker and discard the
+> partial data.
+> 
+> This would be triggered when bpftool formats a BTF location string (for 
+> example, a function signature with many parameters) that cumulatively exceeds
+> 1024 characters.
 
-skb_ext version needs a bit too. SKB_EXT_BPF is the 8th id, so it takes
-the last bit of u8 active_extensions.
-skbuff_ext_cache object is sized for all ids, so it also grows by
-BPF_SKB_EXT_SIZE for xfrm, mptcp, psp whether bpf is used or not.
+Maybe copy whatever we can from the suffix first, overwrite the end with
+the dots after? Something like:
 
-As I said earlier skb_ext is fine from bpf pov. If it can be made as
-cheap as bit + tracepoint I don't mind it at all.
-Which part of skb_ext would you improve?
+        if (sz >= 4) {
+                size_t space_left = sz - 1 - *off;
+
+                if (space_left)
+                        memcpy(str + *off, suffix, space_left);
+                memcpy(str + sz - 4, "...", 4);
+        }
