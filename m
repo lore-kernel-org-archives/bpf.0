@@ -1,174 +1,239 @@
-Received: from mail-qv2-f43.google.com (mail-qv2-f43.google.com [74.125.230.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF653A1A3F
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 12:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D586309EE9
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 12:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790337837; cv=none; b=u+4tHN5WVfA/8WpCY19YK3VnuIBuNsIwOYrwp0wkIQX8CvIY315F9KgisbZbEjDgcX0WgktUCqUu8x0a2fCt0bhShhm6mf8d/NyE02q6KllPYT0sosY/lggeHVS4jD8+eX7VDN/VMNm216ngPKF+QUchyURpOfC1TekYM62f6Sk=
+	t=1790338045; cv=none; b=NQGLkz1FDZJ3VSsoLMP6HfLWzK2dEkPTujG1PWJCAkheAj/sGSkEmasaluTBBIWQWIDZW2etnZ5d5H4uRe8FhOJ35sU0fYV1QLfrgTCvy3sufU2IM/69BoCAAakBYXWM3aXeCudInywEZtUURnLB0bm69ega8OQsGhXRzokjuys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790337837; c=relaxed/simple;
-	bh=ixwmkNZ3SWDZVz8mQfPlOlJTV0BDbUAdCzjM6VcNE+M=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=LBSn53FpH6sd61iow1VtEG5MGvH98MryQBNT+rXRnkUE3yVd5fMIaIHUiEPzDCLnAIqbgd8NPHbCelQor/+xBuE93nJ41gcJhzrR+rE650q+r/3WVKbYW6jAGR48fsZbi/RhYJkZ9wkxkXa14gW71zU45xf/s1USuCFpQejiApc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gqwsL1MD; arc=none smtp.client-ip=74.125.230.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790338045; c=relaxed/simple;
+	bh=zRCWzdj8UJRIJ24WNG4h9Yk3bR8w6g39IXfTFLlH36c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EjdsLZKhUS+sw5ZgIVoNc/jYiOrGOp7tFxX4bquxREbS7QBpXEA3g/wx0gREwgzH0DswsiMbEIisKKeI7al9mKVgdQpCauodvdkEGDeJXihXk7iRumREtiWri8AOC1r/m/EdggU24IMfvJQqCO/aeYqYv9X80qJ8tHss/LYkuMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jq5sZqTJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gqwsL1MD"
-Received: by mail-qv2-f43.google.com with SMTP id 6a1803df08f44-91415b09bf9so7178756d6.3
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 05:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790337832; x=1790942632; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=YdWP4IV1+oqFik4nzEL8bohta4om7bbzxqnMeqGI3WY=;
-        b=gqwsL1MDoFSow8VaQWh/J/FH40JCAmn2g94E01++CaTbjhc0kJlAlwgZiGwaVMwRf7
-         HahbO+VCohFpHvjGSiuNzTNhueHhCf0ejva6V7D1wb5dJaJSkbvt05VbNcETbCp3BrVo
-         shLpOa2hmyBYrw+3TSHZicM2qod062VzUcexke5bOw22QNmQ9VXkY0yl+JyXTrZhTubK
-         1eaG8EyW42z176QwOHVTLl/Ul29Nc2t/n7GBffe2vc3Lpl/1u+b0cmGPc+oTU+I8QXds
-         KWD7HWB0jE8XGAdH/XDE8uJMp6pq7Ms0pRlrBRgZpE02BIim73QVjamEacudWsesUfZj
-         i7tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790337832; x=1790942632;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YdWP4IV1+oqFik4nzEL8bohta4om7bbzxqnMeqGI3WY=;
-        b=JJx7rAZpk2QaT5O61N8Y7mtg9Hzi+dZ+fY6oyAU4ITUPxZTobzN5nty/XRqP/9Nqi5
-         S+wsCAUPU2k/MkjL77otQAR6067PQY2AXw+ddguc1R8xzJxLmfQpSKkbb4xrnGSVIurM
-         65S+e8yt0bm23le8khLyQkVdGMWJbJniDVPCh6r/wx0a2O2ScZe8Xg1pFn42Y3npvEkH
-         tDI9WejXBvjtkxTWzdfoFgqBGZVu0g2KEhyVYcA07hK644P9xv/iW0uyoUELjEXA+Wu4
-         zEhEzCg3SxZMSU7c55PP8zsa3FIZ+RYMlrDFI6gC+EgFZACkpp+N246705q8F8VdQIh9
-         PtcA==
-X-Forwarded-Encrypted: i=1; AKwUvBwyqVXlelJqJ6Cfo+3DUusRrEJX/CGZcybtgVBTkBj+S+YbqhksvMT2dAvxNJy2DuiZT5o=@vger.kernel.org
-X-Gm-Message-State: AFuF++ntwAqe9HOrJryliqFLJw77vjkJjp9Cm9kdhl7HPBuC+18iWrXg
-	BinyPLg8snJ4FGQdAP6oJmcJuwgHFaFs/WUjNLgHUF+O1wk270xhrXgj
-X-Gm-Gg: AYBFou18QDI9Njrtkm1H3lZGqyTAWQUx6Yina2D/RRW39P7r3w209l7kYR7eucr9faJ
-	mwgh10qiHnO8H29jW87j9UdQlTXO7kABp3Q5X9Rh6v8ypIHvDil0xxCDoF58F1jOe9iNWhD74qq
-	nCxnePUNI+WHIewTOxsILPDVI79mShlzsiK6sbacQzmU3Gs8KtL2mwEe2L9qV+XjE291I6FOkVG
-	AxIkegj7sFYndULcKdD9m7mW/Ou1YxJdOaVe+yJzfLrBsTJfb1mxAycFSUV3Hnl5HIL6lTySDYF
-	jH5YOe6C1uZNEAVMDyHsl8PRa7jdDqcGTF5Qkf946KQIaJg2a0nCYfwQL65fFH1aVx9F5mWICl/
-	Naq9DergrTpZNy8SsW/SltyAnYrqB33XwMg5J6NAbxJ5EeoPA4zhPu1RQ2AWwuspUb5MQEZ5d0j
-	C1O4WmhN4tazbZQzF1e7sebTBhER/VDS6b4Hg93UV+hAdtLfKAqjmtr0U+8mZTQm1wpiNra7N1l
-	C0=
-X-Received: by 2002:a05:6214:c82:b0:914:15ce:ed88 with SMTP id 6a1803df08f44-9142f664440mr38476586d6.3.1790337831716;
-        Fri, 25 Sep 2026 05:03:51 -0700 (PDT)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91430dacc51sm15231996d6.11.2026.09.25.05.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 05:03:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jq5sZqTJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F861F000FF;
+	Fri, 25 Sep 2026 12:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790338044;
+	bh=Jam8/DDGritLYCkMwflBLWMrEOwdjI6ymDktpAFWgZ0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=jq5sZqTJABZvliUBaYppTL+wu+EdpHJVmWvSV4TSV01H/jv5maAdcq/csF21ClVwP
+	 LZcBoMAIEBM9cOWngl0v1TDe/6aDUhB1uQNsz6FDlt6jpmY5iNQlGYe4R8dUHqM7v3
+	 Ve2gbC0Er4EE57YhXuSGHHBc2srmIST/Ms9CyC4ZUW1lQImv9EY1sJhp4EU3ph1JWz
+	 TtNAjHyvXzJn4KTauyu5xJyHNoQkzivPcgim44OMrqI+ejwLrjO41Ki39y1I4ZqiQi
+	 5HSfq0QlH4y7rgNiOatd+hDt2B6W48WBY6Zs5MmgqN70LW3MtpsKDA5l2U9wuAEr0N
+	 qXyFUqGY922nA==
+Message-ID: <7d2f7cea-1055-4ba4-a44e-14078d6d5ef6@kernel.org>
+Date: Fri, 25 Sep 2026 13:07:20 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/3] bpftool: Update func representation to
+ include function signature
+To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com
+Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
+ yonghong.song@linux.dev, song@kernel.org, martin.lau@linux.dev,
+ memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org, nsc@kernel.org,
+ puranjay@kernel.org, yatsenko@meta.com
+References: <20260925095231.879708-1-alan.maguire@oracle.com>
+ <20260925095231.879708-3-alan.maguire@oracle.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260925095231.879708-3-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Sep 2026 08:03:49 -0400
-Message-Id: <DLODSKPY6ON6.1G6SP3CFFLCPJ@gmail.com>
-Cc: <netdev@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Kuniyuki Iwashima" <kuniyu@google.com>,
- "Paolo Abeni" <pabeni@redhat.com>, "Stanislav Fomichev" <sdf@fomichev.me>,
- <bpf@vger.kernel.org>, <kernel-team@cloudflare.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Simon Horman"
- <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
- Bruijn" <willemdebruijn.kernel@gmail.com>, "Florian Westphal"
- <fw@strlen.de>, "Jack Wang" <163wangjack@gmail.com>
-Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
- packet scrubbing
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Jakub Sitnicki" <jakub@cloudflare.com>, "Daniel Zahka"
- <daniel.zahka@gmail.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com> <20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com> <DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com>
-In-Reply-To: <87fqyypp67.fsf@cloudflare.com>
+Content-Transfer-Encoding: 7bit
 
-On Thu Sep 24, 2026 at 12:52 PM EDT, Jakub Sitnicki wrote:
-> Hi Daniel,
->
-> On Wed, Sep 23, 2026 at 01:46 PM -04, Daniel Zahka wrote:
->> On Thu Sep 10, 2026 at 10:02 AM EDT, Jakub Sitnicki wrote:
->>> skb_scrub_packet() drops all skb extensions unconditionally via
->>> skb_ext_reset(). It runs on tunnel encap/decap (ip_tunnel_rcv, vxlan_rc=
-v,
->>> etc.) and cross-netns forwarding (dev_forward_skb).
->>>
->>> This makes it impossible for a BPF program to pass metadata via bpf_skb=
-_ext
->>> through a tunnel or across a netns boundary. The extension is always lo=
-st
->>> at the scrub point.
->>>
->>> Introduce skb_ext_scrub(), a selective variant of skb_ext_reset(). It
->>> deletes every extension except SKB_EXT_BPF. Scrubbing is safe when the
->>> extension slab is shared with clones: deleting an extension only clears=
- the
->>> per-skb active_extensions bit, and the shared slab payload is released
->>> lazily by __skb_ext_put() once the last reference goes away.
->>>
->>> Replace the skb_ext_reset() call in skb_scrub_packet() with skb_ext_scr=
-ub()
->>> and also switch udp_try_make_stateless() to skb_ext_scrub() as well, so=
- the
->>> BPF metadata survives queueing onto a UDP socket receive queue and stay=
-s
->>> readable there (e.g. for a sockmap verdict program). Only mark the skb
->>> stateless when no extension survives the scrub. Otherwise skb_consume_u=
-dp()
->>> would take the __consume_stateless_skb() fast path, which skips
->>> skb_release_head_state(), and leak the extension slab.
->>>
->>> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
->>> ---
->>
->> Hello Jakub,
->> What are your current plans for this series? This commit solves the same
->> problem I have with wanting to preserve the PSP skb extension across
->> netns forwarding.
->
-> I've implemented Alexei's idea of skb-lifecycle tracepoints that run
-> only when an skb is marked/traced. Currently putting final touches on it
-> before sending it out for the first round of feedback. You can take
-> sneak peek at it on GH [1] to see if it meets your needs.
->
-> The CPU overhead is lower compared to the skb extension, at least in my
-> local runs, and the kernel changes are simpler, so it seems like a win
-> overall:
->
-> |                  | gated skb tps    | bpf skb ext      |
-> |------------------|------------------|------------------|
-> | **busy**         | **+5.44 =C2=B1 3.16** | **+8.01 =C2=B1 4.75** |
-> | sys              | +2.62 =C2=B1 2.06     | +3.67 =C2=B1 2.76     |
-> | soft             | +2.89 =C2=B1 1.43     | +3.83 =C2=B1 2.10     |
-> | ns/pkt @146k pps | **+=E2=89=88 373**       | **+=E2=89=88 549**       =
-|
->
-> I'll be giving an update on it at LPC [1], if you're attending, and of
-> course will keep you posted here on the ML.
->
-> -jkbs
->
-> [1] https://github.com/jsitnicki/linux/commits/gated-skb-tracepoints-2026=
--09-24/
-> [2] https://lpc.events/event/20/contributions/2549/
+2026-09-25 10:52 UTC+0100 ~ Alan Maguire <alan.maguire@oracle.com>
+> Augment func= output for LOCSEC entries to include a mapping from
+> function signature to where parameters are stored; for example:
+> 
+> [290179] LOCSEC 'inline.text' vlen=524941
+>         func='task_pid_nr(tsk [reg0])' func_type_id=136691 loc_proto_type_id=136693 offset=2097226
+>         func='get_current()' func_type_id=136694 loc_proto_type_id=136695 offset=2097247
+>         func='arch_static_branch(key [address 0x2e275e8], branch [const 0x0])' func_type_id=136697 loc_proto_type_id=136700 offset=2097296
+> 
+> Fixes: 321562c34d5b ("bpftool: Add ability to dump LOC_PARAM, LOC_PROTO and LOCSEC")
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/bpf/bpftool/btf.c | 100 ++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 91 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index e29c8a84e224..6e569ace6add 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+> @@ -8,6 +8,7 @@
+>  #include <fcntl.h>
+>  #include <linux/err.h>
+>  #include <stdbool.h>
+> +#include <stdarg.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> @@ -234,8 +235,10 @@ static void btf_loc_param_str(const struct btf_type *t, char *str, size_t sz)
+>  						(1ULL << bits) - value;
+>  			}
+>  		}
+> -		snprintf(num, sizeof(num), "0x%llx%s", (unsigned long long)value,
+> -			 p->flags & BTF_LOC_PARAM_ADDR ? " (addr)" : "");
+> +		snprintf(num, sizeof(num), "%s0x%llx",
+> +			 p->flags & BTF_LOC_PARAM_ADDR ? "address " :
+> +			 p->flags & BTF_LOC_PARAM_CONST ? "const " : "",
+> +			 (unsigned long long)value);
+>  	}
+>  	if (i != vlen) {
+>  		btf_loc_param_raw_str(p, vlen, str, sz);
 
-Very cool. Thanks for sharing. So it seems your new approach will not
-use skb extensions, and this commit will go away :(
 
-I still have a need for this behavior of persisting certain skb
-extensions through scrubbing. I haven't considered all of my options
-yet, but I suspect the approach in this commit will work basically as
-is. If you are going to abandon this commit, would you be ok if I
-included it in a series of my own for PSP? I would, of course, leave you
-as the commit author, or give you whatever other form attribution you
-prefer.
+Thanks Alan!
+
+bpf-ci's comment about "-const 0x16" instead of "const -0x16" seems
+legit, please take a look.
+
+
+> @@ -252,6 +255,87 @@ static void btf_loc_param_str(const struct btf_type *t, char *str, size_t sz)
+>  		 p->flags & BTF_LOC_PARAM_DEREF ? ")" : "");
+>  }
+>  
+> +static int btf_locsec_append(char *str, size_t sz, size_t *off,
+> +			      const char *fmt, ...)
+> +{
+> +	va_list args;
+> +	int ret;
+> +
+> +	if (!sz || *off >= sz - 1)
+> +		return -ENOSPC;
+> +
+> +	va_start(args, fmt);
+> +	ret = vsnprintf(str + *off, sz - *off, fmt, args);
+
+
+Nit: Do you really need vsnprintf()? It looks like you always
+concatenate, never format any number, so it's probably not the most
+efficient. I don't mind much, though.
+
+
+> +	va_end(args);
+> +	if (ret < 0 || (size_t)ret >= sz - *off) {
+> +		*off = sz - 1;
+> +		return -ENOSPC;
+
+
+It seems unlikely we'll hit this, but maybe warn that the string is
+truncated in that case, or replace the last characters with "..." or
+"[truncated]" or something like this??
+
+
+> +	}
+> +	*off += ret;
+> +	return 0;
+> +}
+> +
+> +static void btf_locsec_func_str(const struct btf *btf,
+> +				const struct btf_loc *loc, char *str, size_t sz)
+> +{
+> +	const struct btf_type *func, *func_proto, *loc_proto;
+> +	const struct btf_param *params;
+> +	const __u32 *loc_params;
+> +	const char *name;
+> +	__u32 i, vlen;
+> +	size_t off = 0;
+> +
+> +	if (!sz)
+> +		return;
+> +
+> +	str[0] = '\0';
+> +	func = btf__type_by_id(btf, loc->func);
+> +	if (!func || !btf_is_func(func))
+> +		goto invalid;
+> +
+> +	name = btf_str(btf, func->name_off);
+> +	func_proto = btf__type_by_id(btf, func->type);
+> +	loc_proto = btf__type_by_id(btf, loc->loc_proto);
+> +	if (!func_proto || !btf_is_func_proto(func_proto) ||
+> +	    !loc_proto || !btf_is_loc_proto(loc_proto) ||
+> +	    btf_vlen(func_proto) != btf_vlen(loc_proto))
+> +		goto invalid;
+> +
+> +	params = (const void *)(func_proto + 1);
+> +	loc_params = btf_loc_proto_params(loc_proto);
+> +	vlen = btf_vlen(func_proto);
+> +	if (btf_locsec_append(str, sz, &off, "%s(", name))
+> +		return;
+> +	for (i = 0; i < vlen; i++) {
+> +		const struct btf_type *param_loc;
+> +		char param_str[256] = {};
+> +
+> +		if (!params[i].type) {
+> +			/* Handle varargs func proto, must be last parameter */
+> +			if (i != vlen - 1)
+> +				goto invalid;
+> +			if (btf_locsec_append(str, sz, &off, "%s...", i ? ", " : ""))
+> +				return;
+> +			break;
+> +		} else if (loc_params[i]) {
+> +			param_loc = btf__type_by_id(btf, loc_params[i]);
+> +			btf_loc_param_str(param_loc, param_str, sizeof(param_str));
+> +		} else {
+> +			snprintf(param_str, sizeof(param_str), "<unavailable>");
+> +		}
+> +
+> +		if (btf_locsec_append(str, sz, &off, "%s%s [%s]",
+> +				      i ? ", " : "", btf_str(btf, params[i].name_off),
+> +				      param_str))
+> +			return;
+> +	}
+> +	(void) btf_locsec_append(str, sz, &off, ")");
+> +	return;
+> +
+> +invalid:
+> +	snprintf(str, sz, "<invalid>");
+> +}
+> +
+>  static int dump_btf_type(const struct btf *btf, __u32 id,
+>  			 const struct btf_type *t)
+>  {
+> @@ -617,22 +701,20 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
+>  		}
+>  
+>  		for (i = 0; i < vlen; i++, locs++) {
+> -			const struct btf_type *f = btf__type_by_id(btf, locs->func);
+> -			const char *name = "<invalid>";
+> +			char func_str[1024] = {};
+>  
+> -			if (f && btf_is_func(f))
+> -				name = btf_str(btf, f->name_off);
+> +			btf_locsec_func_str(btf, locs, func_str, sizeof(func_str));
+>  
+>  			if (json_output) {
+>  				jsonw_start_object(w);
+>  				jsonw_uint_field(w, "func_type_id", locs->func);
+> -				jsonw_string_field(w, "name", name);
+> +				jsonw_string_field(w, "func", func_str);
+
+
+Would it be worth keeping the name, too, in the JSON? So that if
+somebody wants the name only, they don't have to parse it from "func"?
+
+
+>  				jsonw_uint_field(w, "loc_proto_type_id", locs->loc_proto);
+>  				jsonw_uint_field(w, "offset", locs->offset);
+>  				jsonw_end_object(w);
+>  			} else {
+> -				printf("\n\tname='%s' func_type_id=%u loc_proto_type_id=%u offset=%u",
+> -				       name, locs->func, locs->loc_proto, locs->offset);
+> +				printf("\n\tfunc='%s' func_type_id=%u loc_proto_type_id=%u offset=%u",
+> +				       func_str, locs->func, locs->loc_proto, locs->offset);
+>  			}
+>  		}
+>  		if (json_output)
+
