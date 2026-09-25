@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778353B8BC7;
-	Fri, 25 Sep 2026 18:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522CF4DE73C;
+	Fri, 25 Sep 2026 18:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790362561; cv=none; b=GvuE3hsfy9kHcNKbWiko47gvC7hFePp6VjFTyjN4FA9LLgqUv1MYyiGOW8KC2/odjT6Xy3dhpn3o9iH7cO+ip4DyS8+9pmAHpYFaMXNtOS0/A2XNu9hFtLnaVfgFBCWju36sHcBY9WEXfV4P4yyDVSzWHoLN0bIBS2zi/33F0hg=
+	t=1790362563; cv=none; b=ObWHBpN4mp8Jy0u5P9BIvDt/XDueVPspJuuPBOYhPunuLzGxl/jaXrk/8vpWYS/SWMpweXbLZfDCApuUOwyhYagQKMzkN1eYQCAgkXQVRFIrfvd6EC43HvcPHG3XckDfwdDM2jzd3hLn6OvqLTYj7NEV2vnrvegZ4v1LgwgTdRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790362561; c=relaxed/simple;
-	bh=iKrd0+yFZiZlM33+Ed6nMS/sF+DBUAb53J99/61lCuQ=;
+	s=arc-20240116; t=1790362563; c=relaxed/simple;
+	bh=KYbYyy/P/SSc49e+mHSVZOBrwgnfinK5f7UwqvB/Mk0=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=T12W/GMFUkhtDLRvx/nE+hwxNULK8zDwcKfejsWib95fTKnH6+Kusou0rUpnTFTJN5ZOZoSo1FNfg9VSJv20ITp1rNhhbY1jnnl3L4MWOLHAets5TNGW+GDJShIqUYC9m9sFcdV+j/AhrsDyMzBLxZarENEHtjHOV4gcQEi3sj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=libqQbVl; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=iBPtZg+29rmd2LYQL0KtDgD18Y0Y1gThFNIxfTj/qyTgwjh7K1ddAIvraWCBoaWte9Ztf2AcO1xLcTnyvjRkJTpWHegGjV83UWmgtY47AXOuMaaYwJHE6dif6ChD4fvDBmI/BQD66bfdpZYMgEB2+wFrqS1iA5Qbz8RfBgWqxRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFcXywDv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="libqQbVl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99D21F000FF;
-	Fri, 25 Sep 2026 18:55:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFcXywDv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C7E1F00893;
+	Fri, 25 Sep 2026 18:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790362560;
-	bh=VZHfcniCQanKr3rg3FuXnJEl8s+jjzU702WD7HYr1Gw=;
+	s=k20260515; t=1790362561;
+	bh=D5t1nNTnRAh6E8zgjsq0UjKW40/ILQljh97iV4gr1JQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=libqQbVl5Jb8uMZnW2XTCXteaDRha5HrrqWoxsJ/fYQPpM0G8dF8K/RLU5HFoRJRl
-	 r6Erqy/u4GbXQwKO71+F+k6RXaNzXcS94p++LCdu9sUqESLp+rTyyF8ztegs2Q4siF
-	 vAN32FbDnwOnfd4Olx1uc0ghJqDgj7VmWUUbfkIrif6GHqw8D92dFe10Ei/vmY//26
-	 48L2xt0qwtk+rhX2xn+dIhflw4Z1YyJu39pydXta99nMO6O1dpr4CUS3g4e5Sp3CQv
-	 rPl2uLSa7XSrzRZnGUW/4Ag8qI1JGFk9qIUyQ6SMevpOBJ1hyPY8gmHVkpYA+2BZ4f
-	 GXF6cW5tEWAGQ==
-Subject: Re: [PATCH net-next v8 01/12] gve: add struct gve_device_info to hold
- device properties
+	b=UFcXywDvWw+gCLeO3p2odx9J+3InPf8kUerQ2OZ0LN4/wzLGoiiKv3IQHaw2bFHq6
+	 JXjqVGRtJ8LHzvpQQjBB3GRxh4Cx/FRFM70XG5U8kWwQdhCp9mKOJ9MfwlHI5Ce7d5
+	 oV8uY0fZH1Pf1xKhV1yetEci+vdCu/+YBBtQhczY0DW1KnU7udb9VcqSq6QuUS28EX
+	 gRHJS8cS7ubUhgH1yA3spvaXaTWlw0jKgzAGKek40zW8jjTPMCopXmvS63SBOk8D/8
+	 EG2zdt8cXCSW6LvJk5E80MJOVPc/ui6XlrAMIeoeppBGhg6jCcmr2jFEetBcTm6df2
+	 zNDEyOiEfTELQ==
+Subject:
+ Re: [PATCH net-next v8 05/12] gve: refactor gve_init_priv for reset path
 From: netdev-bot+sashiko@kernel.org
 To: hramamurthy@google.com
 Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
@@ -38,10 +38,10 @@ Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
  jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  przemyslaw.kitszel@intel.com
-Date: Fri, 25 Sep 2026 18:55:58 +0000
-Message-ID: <179036255814.2160803.6358571892223666195@kernel.org>
-In-Reply-To: <20260924185316.2831077-2-hramamurthy@google.com>
-References: <20260924185316.2831077-2-hramamurthy@google.com>
+Date: Fri, 25 Sep 2026 18:56:00 +0000
+Message-ID: <179036256026.2160803.15321844410832511125@kernel.org>
+In-Reply-To: <20260924185316.2831077-6-hramamurthy@google.com>
+References: <20260924185316.2831077-6-hramamurthy@google.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,179 +58,195 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The commit message says the only functional change is that
-  gve_set_mtu() "now also validates" the jumbo-frames MTU.
-- [Low] The refactor leaves unused state and a stale comment behind.
+- [Low] The commit message says "These changes are only code movement, no
+  functional change".
+- [Low] gve_write_version() is renamed to gve_adminq_write_version(),
+  putting it in the gve_adminq_* namespace.
+
+Pre-existing issues:
+- [Medium] Existing AdminQ leak, fixed later in this series by "gve:
+  simplify reset logic".
+- [Medium] Existing teardown ordering issue, fixed later in this series.
 
 --
 
-gve: add struct gve_device_info to hold device properties
+gve: refactor gve_init_priv for reset path
 
-This commit adds struct gve_device_info to hold the properties negotiated
-with the device, in preparation for an upcoming MailboxQ mode.
-gve_adminq_describe_device() now fills this structure. gve_init_priv() then
-copies the values into gve_priv through gve_set_mtu(), gve_set_mac(),
-gve_set_queue_properties() and gve_set_buf_sizes().
+This commit moves AdminQ setup and device property negotiation out of
+gve_init_priv(). As a result, gve_init_priv() and
+gve_adminq_get_device_properties() run only once, from gve_probe(). A new
+gve_adminq_init() writes the driver version and allocates the AdminQ, a
+new gve_setup_device() handles per-reset device setup, and
+gve_reset_recovery() calls these helpers directly.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
-> index c280ff35ee771..021adb9108dff 100644
-> --- a/drivers/net/ethernet/google/gve/gve.h
-> +++ b/drivers/net/ethernet/google/gve/gve.h
-> @@ -797,6 +797,34 @@ struct gve_ptp {
->  	struct gve_priv *priv;
->  };
->  
-> +struct gve_device_info {
-> +	enum gve_queue_format queue_format;
-> +	u16 default_tx_queues;
-> +	u16 default_rx_queues;
-> +	u16 max_tx_queues;
-> +	u16 max_rx_queues;
+> These changes are only code movement, no functional change.
 
 [Severity: Low]
-This isn't a bug, but gve_fill_device_info() never fills in max_tx_queues
-or max_rx_queues, and nothing reads them.
+Is this accurate? The patch seems to change behaviour in a few places.
 
-gve_set_num_queues() still takes its maximums from priv->tx_cfg.max_queues
-and priv->rx_cfg.max_queues, which gve_probe() reads from the register BAR.
+The driver version is now written from gve_adminq_init():
 
-Should these fields be dropped until MailboxQ needs them, or should
-gve_set_num_queues() use them?
-
-Along the same lines, struct gve_priv still declares:
-
-	bool default_min_ring_size;
+int gve_adminq_init(struct gve_priv *priv)
+{
 	...
-	u16 default_num_queues; /* default num queues to set up */
+	gve_adminq_write_version(&reg_bar->driver_version);
+	return gve_adminq_alloc(priv);
+}
 
-All readers and writers now go through priv->device_info, so these two
-fields are always zero. Can they be removed?
+gve_reset_recovery() also calls gve_adminq_init(), so the version string
+is now written to the device on every reset and resume. Before this
+patch, gve_write_version() was called only once, from gve_probe().
 
-The comment in gve_probe() also still names gve_adminq_describe_device()
-as a place where features may be set:
+The order in gve_probe() also changes. The version write now comes after
+the max_tx_queues/max_rx_queues register reads and after
+alloc_etherdev_mqs(). AdminQ allocation, driver compatibility
+verification and describe device now run before ctrl_ops is set, before
+map_db_bar(), before the workqueue is allocated, and before
+gve_set_probe_in_progress().
 
-	/* Set default and supported features.
-	 *
-	 * Features might be set in other locations as well (such as
-	...
+In gve_reset_recovery(), a gve_open() failure is now handled as:
 
-This patch moved the last such write (NETIF_F_NTUPLE) into gve_init_priv().
+	if (was_up) {
+		err = gve_open(priv->dev);
+		if (err)
+			return err;
+	}
 
-All three of these still seem to be present at the end of the series.
+It no longer does goto err, so the "Reset failed! !!! DISABLING ALL
+QUEUES !!!" message and the gve_turndown() call are skipped.
 
-[ ... ]
+Callers such as gve_handle_reset() ignore the return value of
+gve_reset(). At this commit, then, the reset code does not log a reset
+that fails during queue bring-up.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-> index f05f4895f4c74..512349c5517f4 100644
-> --- a/drivers/net/ethernet/google/gve/gve_adminq.c
-> +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+The only related note is the v3 changelog below the --- line, and that
+text is dropped when the patch is applied.
 
-[ ... ]
+Later in the series, "gve: simplify reset logic" replaces
+gve_reset_recovery() with gve_recover(), which logs "Recover failed!"
+when queue setup fails, so the missing log is fixed there. The version
+rewrite and the probe reordering are still present at the end of the
+series.
 
-> @@ -1097,18 +1129,9 @@ int gve_adminq_describe_device(struct gve_priv *priv)
->  			 "Driver is running with GQI QPL queue format.\n");
->  	}
+Could the commit message describe these changes rather than saying there
+is no functional change?
+
+> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
+> index 1bc5e32b6618e..48cc8a6be186c 100644
+> --- a/drivers/net/ethernet/google/gve/gve.h
+> +++ b/drivers/net/ethernet/google/gve/gve.h
+> @@ -1253,6 +1253,8 @@ static inline bool gve_is_clock_enabled(struct gve_priv *priv)
+>  	return priv->nic_ts_report;
+>  }
 >  
-> +	gve_fill_device_info(priv, descriptor);
->  	gve_set_default_rss_sizes(priv);
->  
-> -	err = gve_set_mtu(priv, descriptor);
-> -	if (err)
-> -		goto free_device_descriptor;
-> -
-> -	priv->num_event_counters = be16_to_cpu(descriptor->counters);
-> -
-> -	gve_set_mac(priv, descriptor);
-> -
-> -	gve_set_queue_properties(priv, descriptor);
-> -
->  	gve_enable_supported_features(priv, supported_features_mask,
->  				      dev_op_jumbo_frames, dev_op_dqo_qpl,
->  				      dev_op_buffer_sizes, dev_op_flow_steering,
+> +void gve_adminq_write_version(u8 __iomem *driver_version_register);
+> +
+
+[Severity: Low]
+This isn't a bug, but the naming and placement here don't quite match.
+The function now has a gve_adminq_* name, but it is still defined in
+gve_main.c. Its prototype goes in gve.h rather than gve_adminq.h, which
+is where gve_adminq_init() and the other gve_adminq_* functions are
+declared.
+
+The only caller is gve_adminq_init() in gve_adminq.c, so the adminq code
+now calls back into gve_main.c. This is probably because
+gve_version_prefix is static in gve_main.c.
+
+Would it be cleaner to keep the old name, or to move the function and its
+declaration next to the rest of the adminq code?
 
 [ ... ]
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 9cc343a162712..d3882de584e36 100644
+> index addfd8dc1a1a2..2fe280cf7e680 100644
 > --- a/drivers/net/ethernet/google/gve/gve_main.c
 > +++ b/drivers/net/ethernet/google/gve/gve_main.c
-
-[ ... ]
-
-> -int gve_set_mtu(struct gve_priv *priv,
-> -		struct gve_device_descriptor *descriptor)
-> +static int gve_set_mtu(struct gve_priv *priv)
->  {
-> +	struct gve_device_info *device_info = &priv->device_info;
->  	u16 mtu;
->  
-> -	mtu = be16_to_cpu(descriptor->mtu);
-> +	mtu = device_info->max_mtu;
->  	if (mtu < ETH_MIN_MTU) {
->  		dev_err(&priv->pdev->dev, "MTU %d below minimum MTU\n", mtu);
->  		return -EINVAL;
->  	}
->  	priv->dev->max_mtu = mtu;
-> +	priv->dev->mtu = mtu;
->  
->  	return 0;
+> @@ -2415,6 +2415,35 @@ static void gve_set_buf_sizes(struct gve_priv *priv)
+>  		priv->header_buf_size = device_info->header_buf_size;
 >  }
+>  
+> +static int gve_setup_device(struct gve_priv *priv)
+> +{
+> +	int err;
+> +
+> +	priv->num_registered_pages = 0;
+> +
+> +	priv->xsk_pools = bitmap_zalloc(priv->rx_cfg.max_queues, GFP_KERNEL);
+> +	if (!priv->xsk_pools) {
+> +		err = -ENOMEM;
+> +		goto err;
+> +	}
+> +
+> +	gve_set_netdev_xdp_features(priv);
+> +	if (!gve_is_gqi(priv))
+> +		priv->dev->xdp_metadata_ops = &gve_xdp_metadata_ops;
+> +
+> +	err = gve_setup_device_resources(priv);
+> +	if (err)
+> +		goto err_free_xsk_bitmap;
+
+[Severity: Medium]
+This is a pre-existing issue, but gve_setup_device_resources() allocates
+the stats report, and every reset frees and reallocates it. Is the
+teardown order for that buffer safe?
+
+gve_free_stats_report() does:
+
+	timer_delete_sync(&priv->stats_report_timer);
+	dma_free_coherent(&priv->pdev->dev, priv->stats_report_len,
+			  priv->stats_report, priv->stats_report_bus);
+
+Nothing drains stats_report_task before this. If gve_stats_report_task()
+is already queued or running, could gve_handle_report_stats() access the
+freed stats_report buffer or the rings during reset, suspend or remove?
+
+"gve: simplify reset logic" later in the series appears to fix this by
+adding cancel_work_sync(&priv->stats_report_task) to
+gve_free_stats_report() and gve_queues_stop().
 
 [ ... ]
 
-> +static void gve_set_buf_sizes(struct gve_priv *priv)
-> +{
-> +	struct gve_device_info *device_info = &priv->device_info;
-> +
-> +	if (device_info->max_rx_buffer_size)
-> +		priv->max_rx_buffer_size = device_info->max_rx_buffer_size;
-> +
-> +	if (gve_is_dqo(priv) &&
-> +	    priv->max_rx_buffer_size > GVE_DEFAULT_RX_BUFFER_SIZE)
-> +		priv->rx_cfg.packet_buffer_size = priv->max_rx_buffer_size;
-> +
-> +	if (device_info->header_buf_size)
-> +		priv->header_buf_size = device_info->header_buf_size;
-> +}
+> @@ -2566,15 +2541,32 @@ static int gve_reset_recovery(struct gve_priv *priv, bool was_up)
+>  {
+>  	int err;
+>  
+> -	err = gve_init_priv(priv, true);
+> -	if (err)
+> +	err = gve_adminq_init(priv);
+> +	if (err) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Failed to alloc admin queue: err=%d\n", err);
+>  		goto err;
+> +	}
 
-[Severity: Low]
-The commit message says:
+[Severity: Medium]
+This isn't a bug introduced by this patch, but does the reset path that
+skips normal teardown leak the previous AdminQ here?
 
-  Most of these changes are refactors only, except for one:
-  with the introduction of the central struct gve_device_info,
-  in AdminQ mode, gve_set_mtu() now also validates the device
-  provided mtu value from jumbo frames device option.
+With gve_reset(priv, false):
 
-Does this cover all the behaviour changes in the patch?
+gve_reset()
+  gve_reset_and_teardown()
+    gve_trigger_reset()
+      gve_adminq_release()
+        gve_clear_admin_queue_ok(priv);
+    gve_teardown_priv_resources()
+      gve_adminq_free()
+        if (!gve_get_admin_queue_ok(priv))
+            return;
 
-Before this patch, gve_adminq_describe_device() called
-gve_set_mtu(priv, descriptor) before gve_enable_supported_features(). That
-checked descriptor->mtu against ETH_MIN_MTU. The jumbo frames max_mtu then
-overwrote dev->max_mtu without a check.
+gve_adminq_free() therefore returns early and never calls
+dma_pool_free() or dma_pool_destroy().
 
-After this patch, gve_fill_device_info() stores descriptor->mtu in
-device_info->max_mtu, and gve_enable_supported_features() overwrites it
-with the jumbo value. gve_set_mtu() then checks only that final value.
+gve_reset_recovery()->gve_adminq_init()->gve_adminq_alloc() then
+overwrites priv->adminq_pool and priv->adminq. The old dma_pool and its
+AdminQ buffer would be lost on each such reset.
 
-So when the jumbo frames option is present, descriptor->mtu is not checked
-at all. A device that reports descriptor->mtu below 68 together with a
-valid jumbo max_mtu used to fail probe, and now it probes. Isn't the check
-moved to a different value, rather than added?
+This seems to be fixed later in the series by "gve: simplify reset
+logic", which removes gve_reset_and_teardown() and gve_trigger_reset().
 
-There is a second change in gve_set_buf_sizes(). It now copies
-max_rx_buffer_size and header_buf_size only when they are non-zero.
-
-Before, a BUFFER_SIZES option that reported packet_buffer_size == 0 set
-priv->max_rx_buffer_size to 0. Now the field keeps the
-GVE_DEFAULT_RX_BUFFER_SIZE value set in gve_probe(). That changes the
-result of checks like this one in gve_set_rx_buf_len_config():
-
-	if (!gve_is_dqo(priv) || priv->max_rx_buffer_size < SZ_4K) {
-
-The v5 changelog note "honor device provided rx buffer size correctly" is
-below the --- line, so it won't end up in the git history.
-
-Could the commit message describe both of these changes?
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924185316.2831077-1-hramamurthy%40google.com
