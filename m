@@ -1,199 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCF83C3792;
-	Fri, 25 Sep 2026 17:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DAF3EAC8B
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790355952; cv=none; b=thSaIJEEjdMpfH2P5Fr/+JgAYJVO1A5wPUMH858b12YIwdjMjQXA5Nju+QN2FxMToJ9nzlAyoMJgq67xQk0/iWjAdZSGymTPPRJG6SNaL8Ri98KWOJ6UCbp/Qf743C6ZSmO+7mE9G5/8VgaSda0HvyZTJTCdpLOq61dzpYR6zvQ=
+	t=1790356180; cv=none; b=IMGqkmPwNGLHCR/dyOngbEyg8j59s9Je0boQeJI6IF/yVzMWQZBH9pJ8SL0ypCk6XXE/1oLsrllU38tCe5BnNttzCMCgcqalV9JfMvrEyTRaQYdSipx55ZSqk+a6/T+II9ssQmLozV4ff0yebELvqnXBba2Gmi09nkYO+Y0WdSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790355952; c=relaxed/simple;
-	bh=pItW0QjKazlH125MEspmJv84EQmK5tGIGB73KMGPaGc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oVwsL9oUmIakvSOCwioslYXvgx11VWSIgGVOA+uDBsHTqZV/TmgOE8EclfFsUMjOYTZ9ykHb8kxiBcicXhf4ndFgo5wgvJO2AC31r99lqspY28LHUQ48gzxdwVjdgtyOedN3DzYWoHeMZKjBxKJsqC+sYQ8cnjNkn9YHrexM29k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkQG3Syo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790356180; c=relaxed/simple;
+	bh=6MY0OlFBwJa7KIJ0TbBIHToHsWd80ykp5iG5n8xY2Fo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O2FlWek55y4A8/d5fdAIeeyl/gW8LLyQIgZFZOQG62jWt2Nv+cUp9V+DhhZXsQds7q7gKHY+Z+CR6pS4WJvgT03XzLGmc/KTYD1E37jTrOO8Piz0x5FyuJKZekxoVQ8M4qNC6FjZvBbyR673lwAEQH0+oHaMw31JKDluSOGGl8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=kcWXS2we; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkQG3Syo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323991F000FF;
-	Fri, 25 Sep 2026 17:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790355945;
-	bh=kyuD9zdgNA7m75jirj+BDhZ0XZ3VoYRe+a/F5wKlrhk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=KkQG3SyogbmhSw/Hmn79pfm0hB5tVJ2cSuhwk+vY8AGGD8JoYHdS8K44cMflRRUK4
-	 Wsdel+UNYyuwj62Di/qewbSSDcqOV9IzCndo51n20pJHCR5fKD9MtscuPDRel68IZu
-	 GiC3p2GoHW2t31bdYL50dFEIkXPWgTuJySLD4+YBn2yE25y9unsM4VcvDXeQ941Jwx
-	 HTDHFRXAzIqLRbh3qjyhHDahUTGffzn2G+SnQVCvfRKyp6B7qNq+EGkGUGqPBwaVTD
-	 n/eGXroQUp/JoKW3lJbXbF/IeKhTK4OF+B3mjQFCr9DN0Q+nr0D0mqSV/DV+rKddBX
-	 LgWd8md956eyg==
-Message-ID: <d5a5b5e7-4063-4511-acdc-46b2407565a7@kernel.org>
-Date: Fri, 25 Sep 2026 18:05:42 +0100
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kcWXS2we"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68PECB343838108;
+	Fri, 25 Sep 2026 17:09:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=eTCt0RVxKFk0I1Siwn9NuMm/YELMs
+	ohoREA1CeghcSA=; b=kcWXS2weKeUNG5RSmdW5wV2LiNkuyIvbFQSO7LiMWy/SJ
+	vwlkM/AZ3klgezaj9yBhb541PZ+o6XkQa4yl4y0D2JldIz+B+Z4aCyR7NvLiIoIm
+	ftPQuctSgQUzsooLegPts7w9jveirmusNKtHm2I4epX0Gc5NQUvof3+KpfiXkpTz
+	i9tDshbc/Fslz9BY+Z4CSn7a7YW0CiEGMQRTYEddeCW5cZAlPxW4yWX2mllic+F5
+	V0/R7073GhwZyt3cp+VsOkmIXtPXDHvIg/aKS8nwI/zoXnd8Ab9yBjsFyVn5pyBK
+	0W3gKkGcQHg/vet0pY/PBahxHQ2s820ZMh7JQwKmg==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk1qhs8b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 25 Sep 2026 17:08:59 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68PGa2b2023120;
+	Fri, 25 Sep 2026 17:08:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gteptetxu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 25 Sep 2026 17:08:58 +0000 (GMT)
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68PH8v8i008030;
+	Fri, 25 Sep 2026 17:08:57 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-81-122.vpn.oracle.com [10.154.81.122])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gteptetwn-1;
+	Fri, 25 Sep 2026 17:08:57 +0000 (GMT)
+From: Alan Maguire <alan.maguire@oracle.com>
+To: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, qmo@kernel.org
+Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
+        yonghong.song@linux.dev, song@kernel.org, martin.lau@linux.dev,
+        memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
+        nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 0/3] BTF inline functionality followups
+Date: Fri, 25 Sep 2026 18:08:51 +0100
+Message-ID: <20260925170854.1240637-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/2] bpftool: Use batch lookups for bounded
- hash map dumps
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20260924163403.203491-1-hi@tychen.cc>
- <20260924163403.203491-2-hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260924163403.203491-2-hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-25_03,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2609250066
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDA2OCBTYWx0ZWRfX7530wWRV/wIq
+ yi3vZ3p1nsZurwWyz5Hz6/NppEDTL9Ot5o7Fvl2SDE9ZvNH1oBa7OyhUThfPkCtUxvNS6SIgeRx
+ MAfnaKAQg39ZA0nMbylgnqW7i9FVnmR6ATuhvVxMNgZJPAo0knE8
+X-Proofpoint-ORIG-GUID: ix0Vx6aYlBXmlwkEaXPKDBjaEo3ADYqr
+X-Proofpoint-GUID: ix0Vx6aYlBXmlwkEaXPKDBjaEo3ADYqr
+X-Authority-Analysis: v=2.4 cv=LIzz05W9 c=1 sm=1 tr=0 ts=6ab6aaab b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=x0eKOSpe3m1H3M0S9YoZ:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
+ a=JyK6LxnfyLyjze5ABqcA:9 a=zZCYzV9kfG8A:10 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13532
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDA2OCBTYWx0ZWRfX5ye1XOGv7MzR
+ rwUqurX2lUab9dHNUAQqp6Ql82B6YpPY52YJrKMhpr+mvuYQPNdnRbabofUoZ47MdfddoWfndQm
+ Y6N7/U8C/dfCJ8l3PQgI8dWPvKDtGW55tpbvhYCjsk8kf1QMzB9javgTM3eQJivJSGHHavNf3M3
+ OJ3maJxIKgFmzomRDIx7t0d3FcshuKxWeUz4i3Bd5fHdWt/oMNDGt/U+VlVpNkZsKh52Iv90BI1
+ F79RrmL1XkO6rH3Rc/0ErEju9mCw3ABNz2vCkO3iySfnUkh4rSau6A0pj8cRZK1ENdGk9nEee8y
+ 9yQ+2FBoCtQw7zQ/l8gq+yw/vdkOfXnis9WHErzKnljvPhkmB9jU4DYn6kN3kQXJTuf7JB8PjS/
+ l+1PSsH669+Mq7P4Gu/gN6eYRDXrAEk5QqQzREM/XlSe1vytmMylTKWBVW91hYi2AZ5ljgDvtBW
+ 4cM4wpLkMUP5pKg+Vi+W1taPFWSRSa4E3JAJyMGg=
 
-2026-09-25 01:34 UTC+0900 ~ Tianyi Chen <hi@tychen.cc>
-> Use BPF_MAP_LOOKUP_BATCH when dumping hash maps to reduce the number
+Include additional vlen/flags verification for BTF_KIND_LOC_PARAM
+(patch 1), and add function signatures to LOCSEC entries (patch 2),
+adjusting test to cover these (patch 3).
 
+Changes since v1 [1]
 
-Thanks for this!
+- Fixed sign to appear after const (bots, patch 2)
+- Simplified loc printing to remove vsnprintf() logic, updated
+  to retain name in json (Quentin, patch 2)
+- For oversized signature strings, append "..." (Quentin, patch 2)
 
-Why hash maps only? I think there are some other types of map that could
-do this too, no? LRU_HASH has a good chance to be highly populated and
-sounds like a good candidate. (It's OK to start just with hash maps, I'm
-only asking to understand if I missed a particular reason to not include
-other types).
+[1] https://lore.kernel.org/bpf/20260925095231.879708-1-alan.maguire@oracle.com/
 
+Alan Maguire (3):
+  bpf: Verify BTF_KIND_LOC_PARAM vlen, flags
+  bpftool: Update func representation to include function signature
+  selftests/bpf: Fix up bpftool btf dump test for signatures
 
-> of BPF syscalls while preserving plain, JSON and BTF formatting.
-> 
-> Compare against the unpatched base using a populated 100,000-entry hash
-> map with 4-byte keys and values, with stdout redirected to /dev/null.
-> In an x86-64 KVM guest running Linux 7.2.5, both builds use GCC 16.2.1
-> and run on one vCPU. After two warm-ups per binary and output mode,
-> alternate baseline and patched runs for 15 untraced samples each:
-> 
->                  baseline       batch       elapsed-time reduction
->   plain          88.165 ms      54.951 ms    37.7%
->   JSON           81.973 ms      48.216 ms    41.2%
+ kernel/bpf/btf.c                              |  12 ++
+ tools/bpf/bpftool/btf.c                       | 118 ++++++++++++++++--
+ .../bpf/prog_tests/bpftool_btf_dump.c         |  14 ++-
+ 3 files changed, 129 insertions(+), 15 deletions(-)
 
+-- 
+2.43.5
 
-That's nicer than the initial numbers, thanks for re-running your tests.
-
-
-> 
-> These are median wall times, including process startup and formatting.
-> Separately, strace counts 200,004 versus 395 BPF syscalls for the plain
-> dump. Complete JSON output is identical for this map. These results are
-> specific to this fixture and guest, not a general speedup guarantee.
-> 
-> Hash batch lookup must fit an entire bucket. Restrict eligibility to
-> maps whose maximum key/value storage fits in 4 MiB, so even a worst-case
-> bucket can fit without restarting a partially printed dump. Start with
-> up to 256 entries and grow on ENOSPC using the same input cursor.
-> 
-> Fall back to individual lookups only when the initial batch operation
-> is unsupported. Restarting after output has begun would duplicate
-> entries. Process the final partial batch on ENOENT, but do not trust
-> count or output buffers after other errors. Keep fatal diagnostics on
-> stderr so JSON element arrays contain only map entries.
-> 
-> Link: https://github.com/libbpf/bpftool/issues/63
-> 
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
-> ---
->  tools/bpf/bpftool/map.c | 117 +++++++++++++++++++++++++++++++++++++---
->  1 file changed, 109 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 20d59eab09a1..b12c06a6f755 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-> @@ -741,15 +741,10 @@ static int do_show(int argc, char **argv)
->  	return errno == ENOENT ? 0 : -1;
->  }
->  
-> -static int dump_map_elem(int fd, void *key, void *value,
-> -			 struct bpf_map_info *map_info, struct btf *btf,
-> -			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
-> +static void print_map_elem(void *key, void *value,
-> +			   struct bpf_map_info *map_info, struct btf *btf,
-> +			   json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
->  {
-> -	if (bpf_map_lookup_elem(fd, key, value)) {
-> -		print_entry_error(map_info, key, errno);
-> -		return -1;
-> -	}
-> -
->  	if (json_output) {
->  		print_entry_json(map_info, key, value, btf, cpu_ids, cpu_cnt);
->  	} else if (btf) {
-> @@ -763,10 +758,112 @@ static int dump_map_elem(int fd, void *key, void *value,
->  	} else {
->  		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
->  	}
-> +}
-> +
-> +static int dump_map_elem(int fd, void *key, void *value,
-> +			 struct bpf_map_info *map_info, struct btf *btf,
-> +			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
-> +{
-> +	if (bpf_map_lookup_elem(fd, key, value)) {
-> +		print_entry_error(map_info, key, errno);
-> +		return -1;
-> +	}
->  
-> +	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
->  	return 0;
->  }
->  
-> +#define MAP_DUMP_BATCH_FALLBACK 1
-> +#define MAP_DUMP_BATCH_SIZE 256U
-> +#define MAP_DUMP_BATCH_MAX_BYTES (4 * 1024 * 1024)
-> +
-> +/* Return MAP_DUMP_BATCH_FALLBACK only before batch traversal starts. */
-> +static int dump_map_batch(int fd, void *key, void *value,
-> +			  struct bpf_map_info *info, struct btf *btf,
-> +			  json_writer_t *wtr, unsigned int *num_elems)
-> +{
-> +	__u32 capacity, count, batch = 0, next_batch = 0, i;
-
-
-__u32 batch: That's the correct size for hash maps, but some other map
-types have different key size so we may have to allocate something of
-size map->key_size instead in the future. Can you add a comment about
-the size being tied to supported map types, please?
-
-
-> +	void *keys = NULL, *values = NULL, *buf;
-> +	bool first = true, can_fallback = true;
-> +	int err;
-> +
-> +	/*
-> +	 * Hash lookup batches must accommodate a whole bucket. Restrict the
-> +	 * optimization to maps whose worst-case bucket fits the memory budget,
-> +	 * so a later ENOSPC never forces a restart after printing some entries.
-> +	 * Division also bounds the allocation multiplications on 32-bit hosts.
-> +	 */
-> +	if (info->type != BPF_MAP_TYPE_HASH || !info->max_entries ||
-> +	    (__u64)info->key_size + info->value_size >
-> +	    MAP_DUMP_BATCH_MAX_BYTES / info->max_entries)
-> +		return MAP_DUMP_BATCH_FALLBACK;
-
-
-(I think eligibility would be worth its own function, don't step into
-dump_map_batch() if we're not eligible. It would also make it clearer
-what are the conditions to be eligible, rather that conditions to _not_
-be eligible in the current form.)
-
-So looking at this, this means we must have:
-
-    info->key_size + info->value_size
-        <= MAP_DUMP_BATCH_MAX_BYTES / info->max_entries
-
-... in order to make the map eligible to batch dump, in other words: the
-bigger the map, the less likely it is to go through batch dump (although
-batch dump precisely becomes interesting for larger maps).
-
-I understand that MAP_DUMP_BATCH_MAX_BYTES mostly bounds the allocation
-we are ready to do; could we make it a limit for the "buffer" resizing,
-rather than eligibility? Or am I missing something?
-
-Quentin
