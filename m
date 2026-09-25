@@ -1,52 +1,52 @@
-Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
+Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1534779A1;
-	Fri, 25 Sep 2026 22:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6884A3CB8E9;
+	Fri, 25 Sep 2026 22:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.77.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790376246; cv=none; b=E7L3vt1TB4d/K+H7L2ToZhHnGP0Czzw+UCruy2FPuBX0vHzEghsB0fOebYOfm95MxJmBD4tE/XIlXbpes2exhu87G9yZzHc+2whwHH6b/YSqu63988/HCyGZmXP2NFvNnLE5GaMj/l2osK4uzTU7DPZi00rTEmD6VHb/SFfCmvw=
+	t=1790376261; cv=none; b=aqoqHHg9hUiCJdu9ZZMB+x/TWX1iHD0mIEHLEdndnurMi65CzPn3ncVWMTNeV5kGg5dUhsFog52mhrhIkNdm200mApyFwQ+wD8jqiGU+vSZJKDpafvHtV/BjFkSjgTZ/y3/KY/NDzFH9j927RGZ5yrlBvAZNjXEFuW5SMlVtulU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790376246; c=relaxed/simple;
-	bh=sj5RNaT7+ccYGcmoBdSrZ3CTRKqj46k95TJG3zQXJ0g=;
+	s=arc-20240116; t=1790376261; c=relaxed/simple;
+	bh=UNTj/m5jaUj/WB1wQ3H45MGf70dLVn2dOJy7o2R2H8w=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LRLdv9PeEdwllBNAL8w973u7WBhul/MWv3SdbA2JrtaPzXD9CMUrPkEJnaN7Hw2HhyUaM0uUwh1Xarzj84ndjSnh81OBmipG6RNtD4TgFXF5jx0qzBzbYoop2mOKS4b9NKisbsCbRKaQ2rFRQPuGUYunHbhDwN5NQpeMCfMBDSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=bACMWOFQ; arc=none smtp.client-ip=52.34.181.151
+	 MIME-Version:Content-Type; b=jhM5fliCxfjlYGZ3Il9TEM6jMDRzy4qT552XcK6Gh3R88y0kHnGT2dtWYJWLqyU6QzYVk/Dylqj+bljgunDQITaI/zwBLai+Rj9kyp+D8boIcH95p3ZeJqRDTf97KMDUxiVWFMu7u8B4GkeJnphSEcY/iUo6RMfm5i1BJOlbDn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=iJdOl9Iv; arc=none smtp.client-ip=44.246.77.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="bACMWOFQ"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="iJdOl9Iv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1790376244; x=1821912244;
+  t=1790376260; x=1821912260;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PswlTvOqKinHpvxN4eGk2lMowDjYCSTTV0FuztYmcSI=;
-  b=bACMWOFQCorZCMNaEI3O8nNQle0yUVtaGFJ/uTGFUFRJS/NPIsUPVUc9
-   wL2ve3cyU0eV7+ZMDuRLJRTCVzVqo1zwBkGJBR3xMNXEu0aYwVPbgcs9A
-   3UJauY7fWJT6m/LXD7q2WeHGe3mjal2M9ggPE/n7euplPtxJGLl6RempU
-   T66FYSETCTi5Ws5/iSjzw+6aY+Q0Tg55YwAgLeWC/rrwu0hjPSarUAKP5
-   uWR0LvoR3jTs/XubGEph7rAXglsuYINgBkM0xxqyxTrHI2+KLtDCT6Mnr
-   WmisFjsx/b2Oog3+phNiHdsuyzLjeGyqH3YHTcg+Qh35UKOq7bP/jfVLF
-   A==;
-X-CSE-ConnectionGUID: LnwdrDhRQIS3XmehYfQxpA==
-X-CSE-MsgGUID: R/fOgX4WRRuaqGrTwOTjNQ==
+  bh=LlKtBjWm1vlOixievJy2+085DomcoTKjXaUoWf6pKvk=;
+  b=iJdOl9Ivt9mq5i38RyEkVlx7sspjz2BgC4kFb1+CuAu7yAPxtfIZdCf6
+   3dFJ0Gt5FEwBHnLOmiLZtydh8fE8rqMRuI2udY5oo9z4GY5kUFwAXx3xG
+   DpIltQsi+uNft5upk/G4XgB0Rer8FJdd/Z+EUE4YMbHW8c5G6EBdF2MH/
+   fm9C6vIRZJ3vDcO/AMc/fLKmHCL+5U4kMBg/gx7Z6yZqxnxkiLLaEIsHU
+   xlUJb59GQrkB9xrvlkTfgUQ8pJfOFUPw0eqBrau5Jl2U6Z+R0jw3seMpz
+   exc0SXGoyyqtNRbHn/nPfNGfGkacz5FgZwSM8xrYEDti9u5H+TlXff3oJ
+   w==;
+X-CSE-ConnectionGUID: HsjZzFo2RaqgFrSlyuiJXw==
+X-CSE-MsgGUID: 3NP0ymeRTu6y649UtDnIhg==
 X-IronPort-AV: E=Sophos;i="6.27,123,1787011200"; 
-   d="scan'208";a="29665544"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 22:44:03 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:4586]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.33.144:2525] with esmtp (Farcaster)
- id 70557bb2-f3cd-4738-b231-52af6f9f6bd1; Fri, 25 Sep 2026 22:44:03 +0000 (UTC)
-X-Farcaster-Flow-ID: 70557bb2-f3cd-4738-b231-52af6f9f6bd1
+   d="scan'208";a="29674646"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 22:44:20 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:13451]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.40.18:2525] with esmtp (Farcaster)
+ id 5545bac1-06d4-40a0-94c7-0c8b35c11a26; Fri, 25 Sep 2026 22:44:19 +0000 (UTC)
+X-Farcaster-Flow-ID: 5545bac1-06d4-40a0-94c7-0c8b35c11a26
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Fri, 25 Sep 2026 22:44:03 +0000
+ Fri, 25 Sep 2026 22:44:19 +0000
 Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Fri, 25 Sep 2026 22:44:03 +0000
+ Fri, 25 Sep 2026 22:44:19 +0000
 From: Jay Wang <wanjay@amazon.com>
 To: <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, "Daniel
  Borkmann" <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
@@ -62,9 +62,9 @@ CC: Alan Maguire <alan.maguire@oracle.com>, Martin KaFai Lau
 	<arnd@arndb.de>, <linux-kernel@vger.kernel.org>, Hazem Mohamed Abuelfotoh
 	<abuehaze@amazon.com>, Bjoern Doebel <doebel@amazon.de>, Martin Pohlack
 	<mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>
-Subject: [PATCH bpf-next v3 6/9] bpf: keep module BTF until the vmlinux BTF is available
-Date: Fri, 25 Sep 2026 22:42:26 +0000
-Message-ID: <20260925224229.1850-7-wanjay@amazon.com>
+Subject: [PATCH bpf-next v3 7/9] bpf: expose deferred .BTF.base module BTF in sysfs from module load
+Date: Fri, 25 Sep 2026 22:42:27 +0000
+Message-ID: <20260925224229.1850-8-wanjay@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260925224229.1850-1-wanjay@amazon.com>
 References: <20260925224229.1850-1-wanjay@amazon.com>
@@ -76,494 +76,248 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D038UWC001.ant.amazon.com (10.13.139.213) To
+X-ClientProxiedBy: EX19D040UWB003.ant.amazon.com (10.13.138.8) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Module BTF is split BTF against the vmlinux BTF and is parsed in the
-module notifier.  With CONFIG_DEBUG_INFO_BTF=m the vmlinux BTF may not be
-loaded yet when a module loads, and the notifier cannot load btf_vmlinux
-(that would nest a module load in a module load).
+A module with a .BTF.base section (built out of tree) that is loaded
+before the vmlinux BTF only gets its /sys/kernel/btf file once the
+vmlinux BTF has been loaded and its BTF relocated, because the raw .BTF
+is only valid against the distilled base and relocation rewrites it in
+place.  Until then the module is missing from /sys/kernel/btf, unlike
+with =y, and reading its file cannot trigger the load.
 
-So a module loaded before the vmlinux BTF keeps a copy of its .BTF and
-.BTF.base and gets a list entry with btf == NULL; its kfunc, dtor kfunc
-and struct_ops registrations wait on that entry.  Without a .BTF.base
-the data is final and is exposed in /sys/kernel/btf right away (the raw
-bytes need no parsing); with one, parsing relocates the data in place,
-so its file is created once parsed, as with =y.  The next patch creates
-that file earlier.
+Create the file at module load instead, with its final size: relocation
+only rewrites type ids and string offsets, never the length.  Its reader,
+btf_module_sysfs_read_deferred(), loads the vmlinux BTF, which parses and
+relocates the kept modules, then waits until this module's BTF is
+published (btf_mod->ready) before serving it, so no unrelocated or
+half-relocated data is ever visible.  If the module goes away or its BTF
+turns out unusable first (btf_mod->gone), the read fails with -ENODEV.
 
-When the vmlinux BTF arrives, btf_parse_deferred_modules() parses the
-kept copies (the copy is the one btf_parse_module() makes anyway, so an
-existing sysfs file keeps pointing at valid data), applies the waiting
-registrations and only then publishes the BTF with an id, so nobody sees
-a module BTF without its kfuncs.  Applying walks the module list
-(btf_check_kfunc_name()) and so happens with btf_module_mutex dropped
-and the module pinned.  A module that is still initializing when the
-vmlinux BTF arrives is only published; its init is still queueing
-registrations, and MODULE_STATE_LIVE applies them once init is done,
-which also keeps a module whose init fails from being touched after it
-is freed.
+Because that reader may itself be the thread running
+btf_parse_deferred_modules(), and removing a sysfs file waits for its
+readers, nothing removes a sysfs file from that path (a failed entry
+stays dead until the module goes, which the previous patch already
+arranged), and MODULE_STATE_GOING removes the file after dropping
+btf_module_mutex, which the reader may need to get there.
 
-A module whose BTF turns out to mismatch at that point is already
-running and keeps running without BTF, with a warning; its entry stays,
-dead, until the module goes, and keeps the raw data a sysfs file may
-serve.  With =y such a module would have been refused at load time
-unless CONFIG_MODULE_ALLOW_BTF_MISMATCH; that check only applies to
-modules loaded after the vmlinux BTF.
-
-Walkers of the module BTF list skip entries whose BTF is not parsed yet.
-With =y the BTF is present from boot and the notifier takes the existing
-path.  Still nothing is reachable until the Kconfig symbol becomes a
-tristate.
+Modules without .BTF.base are unchanged: their data is final and is
+served as is.
 
 Signed-off-by: Jay Wang <wanjay@amazon.com>
 ---
- include/linux/btf.h   |   5 +
- kernel/bpf/btf.c      | 267 +++++++++++++++++++++++++++++++++++++++---
- kernel/bpf/verifier.c |   9 +-
- 3 files changed, 262 insertions(+), 19 deletions(-)
+ kernel/bpf/btf.c | 108 ++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 88 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 81e6c65fe5f6..fea60e36edba 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -603,6 +603,11 @@ const char *btf_name_by_offset(const struct btf *btf, u32 offset);
- const char *btf_str_by_offset(const struct btf *btf, u32 offset);
- struct btf *btf_parse_vmlinux(void);
- void *btf_vmlinux_data(u32 *size, bool load);
-+#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
-+void btf_parse_deferred_modules(void);
-+#else
-+static inline void btf_parse_deferred_modules(void) {}
-+#endif
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
- u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_prog *prog);
- int btf_kfunc_check_flag(const struct btf *btf, u32 kfunc_btf_id, u32 flag);
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 207954b5754a..1dae1c9b53fe 100644
+index 1dae1c9b53fe..64583fb1f380 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -9077,7 +9077,7 @@ enum {
- /*
-  * CONFIG_DEBUG_INFO_BTF=m: a kfunc, dtor kfunc or struct_ops registration
-  * made while the BTF it applies to is not available yet.  Kept until the BTF
-- * arrives, see btf_defer_reg().
-+ * arrives, see btf_defer_reg() and btf_apply_deferred_regs().
-  */
- enum btf_deferred_reg_kind {
- 	BTF_DEFERRED_KFUNC_SET,
-@@ -9102,12 +9102,30 @@ struct btf_deferred_reg {
- };
- 
- #ifdef BTF_MODULE_NOTIFIER
-+static void btf_free_deferred_regs(struct list_head *regs);
-+static void btf_apply_deferred_regs(struct btf *btf, struct list_head *regs);
-+
- struct btf_module {
- 	struct list_head list;
- 	struct module *module;
- 	struct btf *btf;
- 	struct bin_attribute *sysfs_attr;
- 	int flags;
+@@ -9124,17 +9124,27 @@ struct btf_module {
+ 	u32 data_size;
+ 	u32 base_data_size;
+ 	struct list_head deferred_regs;
+-	/* the kept BTF turned out unusable; the entry stays until the module goes */
 +	/*
-+	 * CONFIG_DEBUG_INFO_BTF=m: a module loaded before the vmlinux BTF is
-+	 * available cannot have its BTF parsed yet.  Its .BTF and .BTF.base
-+	 * sections are copied here and parsed once the vmlinux BTF arrives
-+	 * (btf_parse_deferred_modules()); @btf is NULL until then.
-+	 * Registrations of the module's kfuncs, dtor kfuncs and struct_ops
-+	 * wait in @deferred_regs.
++	 * For the sysfs reader of a module whose data is only final once its
++	 * BTF is relocated: @ready once @btf is published, @gone once the
++	 * entry is dead (parse failed or module going).  Both only ever go
++	 * from false to true; waiters sleep on btf_module_wq.
 +	 */
-+	void *data;
-+	void *base_data;
-+	u32 data_size;
-+	u32 base_data_size;
-+	struct list_head deferred_regs;
-+	/* the kept BTF turned out unusable; the entry stays until the module goes */
-+	bool gone;
++	bool ready;
+ 	bool gone;
  };
  
  static LIST_HEAD(btf_modules);
-@@ -9151,8 +9169,14 @@ static void btf_module_free(struct btf_module *btf_mod)
+ static DEFINE_MUTEX(btf_module_mutex);
++static DECLARE_WAIT_QUEUE_HEAD(btf_module_wq);
+ 
+ static void purge_cand_cache(struct btf *btf);
+ 
+ static int btf_module_sysfs_add(struct btf_module *btf_mod, const char *name,
+-				void *data, size_t data_size)
++				void *private, size_t size,
++				ssize_t (*read)(struct file *, struct kobject *,
++						const struct bin_attribute *,
++						char *, loff_t, size_t))
  {
+ 	struct bin_attribute *attr;
+ 	int err;
+@@ -9149,9 +9159,9 @@ static int btf_module_sysfs_add(struct btf_module *btf_mod, const char *name,
+ 	sysfs_bin_attr_init(attr);
+ 	attr->attr.name = name;
+ 	attr->attr.mode = 0444;
+-	attr->size = data_size;
+-	attr->private = data;
+-	attr->read = sysfs_bin_attr_simple_read;
++	attr->size = size;
++	attr->private = private;
++	attr->read = read;
+ 
+ 	err = sysfs_create_bin_file(btf_kobj, attr);
+ 	if (err) {
+@@ -9165,8 +9175,14 @@ static int btf_module_sysfs_add(struct btf_module *btf_mod, const char *name,
+ 	return 0;
+ }
+ 
++/*
++ * Called with btf_module_mutex NOT held: removing the sysfs file waits for
++ * readers to leave, and a deferred reader may need the mutex to get there.
++ */
+ static void btf_module_free(struct btf_module *btf_mod)
+ {
++	WRITE_ONCE(btf_mod->gone, true);
++	wake_up_all(&btf_module_wq);
  	if (btf_mod->sysfs_attr)
  		sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
--	purge_cand_cache(btf_mod->btf);
--	btf_put(btf_mod->btf);
-+	if (btf_mod->btf) {
-+		purge_cand_cache(btf_mod->btf);
-+		btf_put(btf_mod->btf);
-+	} else {
-+		kvfree(btf_mod->data);
-+		kvfree(btf_mod->base_data);
-+	}
-+	btf_free_deferred_regs(&btf_mod->deferred_regs);
- 	kfree(btf_mod->sysfs_attr);
- 	kfree(btf_mod);
- }
-@@ -9196,11 +9220,53 @@ static int btf_vmlinux_module_coming(struct module *mod)
- 	smp_store_release(&btf_vmlinux_raw, data);
+ 	if (btf_mod->btf) {
+@@ -9221,15 +9237,57 @@ static int btf_vmlinux_module_coming(struct module *mod)
  	return 0;
  }
-+
+ 
 +/*
-+ * The vmlinux BTF is not available yet and must not be loaded from the
-+ * module notifier (that would nest a module load into a module load).  Keep
-+ * the module's BTF for btf_parse_deferred_modules().
-+ *
-+ * Without a .BTF.base section the .BTF data is final and can be exposed in
-+ * sysfs right away, it needs no parsing.  With one, parsing relocates the
-+ * data in place against the vmlinux BTF, so the file is created afterwards,
-+ * as with =y where it also only appears once the BTF is parsed.
++ * sysfs reader for a module kept aside with a .BTF.base section: its .BTF is
++ * split against the distilled base and only becomes valid split BTF against
++ * the vmlinux BTF once relocated, which rewrites the buffer in place.  So
++ * first make sure the vmlinux BTF is loaded (which parses and relocates the
++ * kept modules), then wait until this module's BTF is published.  The size
++ * does not change: relocation only rewrites ids and string offsets.
 + */
-+static int btf_module_defer(struct btf_module *btf_mod, struct module *mod)
++static bool btf_module_published(struct btf_module *btf_mod)
 +{
-+	btf_mod->data = kvmemdup(mod->btf_data, mod->btf_data_size,
-+				 GFP_KERNEL | __GFP_NOWARN);
-+	if (!btf_mod->data)
-+		return -ENOMEM;
-+	btf_mod->data_size = mod->btf_data_size;
-+
-+	if (mod->btf_base_data) {
-+		btf_mod->base_data = kvmemdup(mod->btf_base_data,
-+					      mod->btf_base_data_size,
-+					      GFP_KERNEL | __GFP_NOWARN);
-+		if (!btf_mod->base_data) {
-+			kvfree(btf_mod->data);
-+			return -ENOMEM;
-+		}
-+		btf_mod->base_data_size = mod->btf_base_data_size;
-+	} else {
-+		/* not fatal, the module BTF is usable without the sysfs file */
-+		btf_module_sysfs_add(btf_mod, mod->name, btf_mod->data,
-+				     btf_mod->data_size);
-+	}
-+
-+	list_add(&btf_mod->list, &btf_modules);
-+	return 0;
-+}
- #else
- static int btf_vmlinux_module_coming(struct module *mod)
- {
- 	return 0;
- }
-+
-+static int btf_module_defer(struct btf_module *btf_mod, struct module *mod)
-+{
-+	return 0;
-+}
- #endif
- 
- static int btf_module_notify(struct notifier_block *nb, unsigned long op,
-@@ -9232,6 +9298,24 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			goto out;
- 		}
- 		btf_mod->module = module;
-+		INIT_LIST_HEAD(&btf_mod->deferred_regs);
-+
-+		if (IS_MODULE(CONFIG_DEBUG_INFO_BTF)) {
-+			mutex_lock(&btf_module_mutex);
-+			/* Pairs with the publication in bpf_get_btf_vmlinux() */
-+			if (!smp_load_acquire(&btf_vmlinux)) {
-+				err = btf_module_defer(btf_mod, mod);
-+				mutex_unlock(&btf_module_mutex);
-+				if (err) {
-+					pr_warn("failed to keep module [%s] BTF: %d\n",
-+						mod->name, err);
-+					kfree(btf_mod);
-+					err = 0;
-+				}
-+				goto out;
-+			}
-+			mutex_unlock(&btf_module_mutex);
-+		}
- 
- 		btf = btf_parse_module(mod->name, bpf_get_btf_vmlinux(),
- 				       mod->btf_data, mod->btf_data_size, false,
-@@ -9270,6 +9354,26 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 				continue;
- 
- 			btf_mod->flags |= BTF_MODULE_F_LIVE;
-+			if (IS_MODULE(CONFIG_DEBUG_INFO_BTF) && btf_mod->btf &&
-+			    !list_empty(&btf_mod->deferred_regs)) {
-+				/*
-+				 * The vmlinux BTF arrived while this module was
-+				 * initializing: btf_parse_deferred_modules()
-+				 * parsed its BTF but left the registrations its
-+				 * init queued to us, now that init is done and
-+				 * the module is not going anywhere.  Applying
-+				 * them walks btf_modules, so drop the mutex.
-+				 */
-+				LIST_HEAD(regs);
-+
-+				btf = btf_mod->btf;
-+				btf_get(btf);
-+				list_splice_init(&btf_mod->deferred_regs, &regs);
-+				mutex_unlock(&btf_module_mutex);
-+				btf_apply_deferred_regs(btf, &regs);
-+				btf_put(btf);
-+				goto out;
-+			}
- 			break;
- 		}
- 		mutex_unlock(&btf_module_mutex);
-@@ -9286,7 +9390,8 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			 * btf_try_get_module() on such BTFs will fail. This may
- 			 * be called again on btf_put(), but it's ok to do so.
- 			 */
--			btf_free_id(btf_mod->btf);
-+			if (btf_mod->btf)
-+				btf_free_id(btf_mod->btf);
- 			list_del(&btf_mod->list);
- 			btf_module_free(btf_mod);
- 			break;
-@@ -9309,6 +9414,101 @@ static int __init btf_module_init(void)
- }
- 
- fs_initcall(btf_module_init);
-+
-+#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
-+/*
-+ * A kept module whose BTF cannot be used after all.  The module is loaded
-+ * and stays, so there is no way to reject it: the entry stays on the list,
-+ * dead, until the module goes.  A sysfs file it has keeps serving the raw
-+ * data, which is kept for that.
-+ */
-+static void btf_module_dead(struct btf_module *btf_mod, const char *what, int err)
-+{
-+	pr_warn("failed to %s module [%s] BTF: %d\n", what, btf_mod->module->name, err);
-+	kvfree(btf_mod->base_data);
-+	btf_mod->base_data = NULL;
-+	btf_free_deferred_regs(&btf_mod->deferred_regs);
-+	btf_mod->gone = true;
++	/* Pairs with the smp_store_release() of @ready after btf_mod->btf is set */
++	return smp_load_acquire(&btf_mod->ready);
 +}
 +
-+/*
-+ * CONFIG_DEBUG_INFO_BTF=m: the vmlinux BTF has just become available.  Parse
-+ * the BTF of the modules that were loaded before it, and apply the
-+ * registrations that waited for them.  Called from bpf_get_btf_vmlinux()
-+ * once btf_vmlinux is published, with no locks held.
-+ *
-+ * A module's BTF is published (btf_mod->btf set, id allocated) only after
-+ * its queued registrations are applied, so nobody sees a module BTF without
-+ * its kfuncs and struct_ops, as with the vmlinux BTF.  Applying walks
-+ * btf_modules (btf_check_kfunc_name()) and so needs the mutex dropped; the
-+ * module is pinned for that, and the scan restarts afterwards.  A module
-+ * that is still initializing is only published: its init is still queueing
-+ * registrations, and MODULE_STATE_LIVE applies them once it is done.
-+ */
-+void btf_parse_deferred_modules(void)
++static ssize_t btf_module_sysfs_read_deferred(struct file *filp, struct kobject *kobj,
++					      const struct bin_attribute *attr,
++					      char *buf, loff_t off, size_t count)
 +{
-+	/* Pairs with the publication in bpf_get_btf_vmlinux() */
-+	struct btf *vmlinux_btf = smp_load_acquire(&btf_vmlinux);
-+	struct btf_module *btf_mod;
-+	bool parsed = false;
-+	LIST_HEAD(regs);
-+	struct btf *btf;
++	struct btf_module *btf_mod = attr->private;
 +	int err;
 +
-+	if (IS_ERR_OR_NULL(vmlinux_btf))
-+		return;
++	if (IS_ERR_OR_NULL(bpf_get_btf_vmlinux()))
++		return -ENODEV;
 +
-+	mutex_lock(&btf_module_mutex);
-+restart:
-+	list_for_each_entry(btf_mod, &btf_modules, list) {
-+		if (btf_mod->btf || btf_mod->gone)
-+			continue;
++	/*
++	 * Another thread may still be relocating and publishing it; if the
++	 * module goes away or its BTF turns out unusable, btf_module_free()
++	 * or btf_parse_deferred_modules() set @gone and wake us.
++	 */
++	err = wait_event_interruptible(btf_module_wq,
++				       btf_module_published(btf_mod) ||
++				       READ_ONCE(btf_mod->gone));
++	if (err)
++		return err;
++	if (!btf_module_published(btf_mod))
++		return -ENODEV;
 +
-+		btf = btf_parse_module(btf_mod->module->name, vmlinux_btf,
-+				       btf_mod->data, btf_mod->data_size, true,
-+				       btf_mod->base_data, btf_mod->base_data_size);
-+		if (IS_ERR(btf)) {
-+			/* on failure the caller keeps the data */
-+			btf_module_dead(btf_mod, "validate", PTR_ERR(btf));
-+			continue;
-+		}
-+		/* btf->data is btf_mod->data now, the sysfs file keeps pointing at valid data */
-+		kvfree(btf_mod->base_data);
-+		btf_mod->base_data = NULL;
-+
-+		if ((btf_mod->flags & BTF_MODULE_F_LIVE) &&
-+		    try_module_get(btf_mod->module)) {
-+			list_splice_init(&btf_mod->deferred_regs, &regs);
-+			mutex_unlock(&btf_module_mutex);
-+			btf_apply_deferred_regs(btf, &regs);
-+			mutex_lock(&btf_module_mutex);
-+			module_put(btf_mod->module);
-+		}
-+
-+		err = btf_alloc_id(btf);
-+		if (err) {
-+			/* give the data back to the entry, the sysfs file may serve it */
-+			btf->data = NULL;
-+			btf_free(btf);
-+			btf_module_dead(btf_mod, "register", err);
-+			goto restart;
-+		}
-+
-+		/* modules with .BTF.base get their sysfs file now, the data is relocated */
-+		if (!btf_mod->sysfs_attr)
-+			btf_module_sysfs_add(btf_mod, btf->name, btf->data, btf->data_size);
-+		btf_mod->data = NULL;
-+		btf_mod->btf = btf;
-+		parsed = true;
-+		/* the list may have changed while the mutex was dropped */
-+		goto restart;
-+	}
-+	mutex_unlock(&btf_module_mutex);
-+
-+	if (parsed)
-+		purge_cand_cache(NULL);
++	/* sysfs clamps @off and @count to attr->size == btf->data_size */
++	memcpy(buf, btf_mod->btf->data + off, count);
++	return count;
 +}
-+#endif /* IS_MODULE(CONFIG_DEBUG_INFO_BTF) */
- #endif /* BTF_MODULE_NOTIFIER */
- 
- struct module *btf_try_get_module(const struct btf *btf)
-@@ -9361,8 +9561,11 @@ struct btf *btf_get_module_btf(const struct module *module)
- 		if (btf_mod->module != module)
- 			continue;
- 
--		btf_get(btf_mod->btf);
--		btf = btf_mod->btf;
-+		/* NULL while waiting for the vmlinux BTF (CONFIG_DEBUG_INFO_BTF=m) */
-+		if (btf_mod->btf) {
-+			btf_get(btf_mod->btf);
-+			btf = btf_mod->btf;
-+		}
- 		break;
- 	}
- 	mutex_unlock(&btf_module_mutex);
-@@ -9545,7 +9748,8 @@ static int btf_check_kfunc_name(struct btf *btf, const char *func_name, u32 kind
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	guard(mutex)(&btf_module_mutex);
- 	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
--		if (btf_mod->btf == btf)
-+		/* skip ourselves and, with CONFIG_DEBUG_INFO_BTF=m, unparsed BTF */
-+		if (btf_mod->btf == btf || !btf_mod->btf)
- 			continue;
- 		id = btf_find_by_name_kind(btf_mod->btf, func_name, kind);
- 		if (id >= 0) {
-@@ -10788,14 +10992,16 @@ static int btf_struct_ops_register(struct btf *btf, struct bpf_struct_ops *st_op
- #endif
- 
++
  /*
-- * CONFIG_DEBUG_INFO_BTF=m: registrations for vmlinux made before its BTF is
-- * available wait in btf_vmlinux_deferred_regs until btf_parse_vmlinux()
-- * applies them.
-+ * CONFIG_DEBUG_INFO_BTF=m: registrations made before the BTF they apply to
-+ * is available.  Registrations for vmlinux wait in btf_vmlinux_deferred_regs
-+ * until btf_parse_vmlinux() applies them; registrations for a module wait in
-+ * its struct btf_module, under btf_module_mutex, until
-+ * btf_parse_deferred_modules() does.
+  * The vmlinux BTF is not available yet and must not be loaded from the
+  * module notifier (that would nest a module load into a module load).  Keep
+  * the module's BTF for btf_parse_deferred_modules().
+  *
+- * Without a .BTF.base section the .BTF data is final and can be exposed in
+- * sysfs right away, it needs no parsing.  With one, parsing relocates the
+- * data in place against the vmlinux BTF, so the file is created afterwards,
+- * as with =y where it also only appears once the BTF is parsed.
++ * The sysfs file is created right away with its final size, as with =y.
++ * Without a .BTF.base section the .BTF data is final and is served as is;
++ * with one, it is only valid once relocated, so its reader waits for that
++ * (btf_module_sysfs_read_deferred()).
   */
- #ifdef BTF_MODULE_NOTIFIER
- /*
-- * The queue has its own lock: it is drained under btf_vmlinux_lock, and
-- * btf_module_mutex must not nest inside that (purge_cand_cache() takes
-+ * The vmlinux queue has its own lock: it is drained under btf_vmlinux_lock,
-+ * and btf_module_mutex must not nest inside that (purge_cand_cache() takes
-  * cand_cache_mutex under btf_module_mutex, and CO-RE fetches the vmlinux
-  * BTF under cand_cache_mutex).
-  */
-@@ -10807,19 +11013,31 @@ static bool btf_vmlinux_regs_closed;
- /*
-  * Queue @tmpl if the BTF for @owner is not available yet.  Returns 1 if the
-  * registration was queued and is to be considered done, 0 if the caller has
-- * to apply it, or -ENOMEM.  Only vmlinux registrations are queued so far.
-+ * to apply it, or -ENOMEM.
-  */
- static int btf_defer_reg(struct module *owner, const struct btf_deferred_reg *tmpl)
+ static int btf_module_defer(struct btf_module *btf_mod, struct module *mod)
  {
- 	struct list_head *head = NULL;
- 	struct btf_deferred_reg *reg;
-+	struct btf_module *btf_mod;
- 
--	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF) || owner)
-+	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF))
- 		return 0;
- 
--	guard(mutex)(&btf_vmlinux_regs_mutex);
--	if (!btf_vmlinux_regs_closed)
--		head = &btf_vmlinux_deferred_regs;
-+	guard(mutex)(owner ? &btf_module_mutex : &btf_vmlinux_regs_mutex);
-+	if (!owner) {
-+		if (!btf_vmlinux_regs_closed)
-+			head = &btf_vmlinux_deferred_regs;
+@@ -9248,10 +9306,12 @@ static int btf_module_defer(struct btf_module *btf_mod, struct module *mod)
+ 			return -ENOMEM;
+ 		}
+ 		btf_mod->base_data_size = mod->btf_base_data_size;
+-	} else {
+ 		/* not fatal, the module BTF is usable without the sysfs file */
++		btf_module_sysfs_add(btf_mod, mod->name, btf_mod, btf_mod->data_size,
++				     btf_module_sysfs_read_deferred);
 +	} else {
-+		list_for_each_entry(btf_mod, &btf_modules, list) {
-+			if (btf_mod->module != owner)
-+				continue;
-+			/* a dead entry has no BTF to register with, as with =y */
-+			if (!btf_mod->btf && !btf_mod->gone)
-+				head = &btf_mod->deferred_regs;
-+			break;
-+		}
-+	}
- 	if (!head)
- 		return 0;
- 
-@@ -10872,7 +11090,10 @@ static int btf_apply_deferred_reg(struct btf *btf, const struct btf_deferred_reg
- 	return -EINVAL;
- }
- 
--/* Apply and free the registrations in @regs to @btf. */
-+/*
-+ * Apply and free the registrations in @regs to @btf.  For a module BTF the
-+ * caller holds a reference on @btf and makes sure the owning module stays.
-+ */
- static void btf_apply_deferred_regs(struct btf *btf, struct list_head *regs)
- {
- 	struct btf_deferred_reg *reg, *tmp;
-@@ -10888,6 +11109,16 @@ static void btf_apply_deferred_regs(struct btf *btf, struct list_head *regs)
+ 		btf_module_sysfs_add(btf_mod, mod->name, btf_mod->data,
+-				     btf_mod->data_size);
++				     btf_mod->data_size, sysfs_bin_attr_simple_read);
  	}
- }
  
-+static void btf_free_deferred_regs(struct list_head *regs)
-+{
-+	struct btf_deferred_reg *reg, *tmp;
-+
-+	list_for_each_entry_safe(reg, tmp, regs, list) {
-+		list_del(&reg->list);
-+		btf_free_deferred_reg(reg);
-+	}
-+}
-+
+ 	list_add(&btf_mod->list, &btf_modules);
+@@ -9345,7 +9405,8 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 		mutex_unlock(&btf_module_mutex);
+ 
+ 		/* not fatal, the module BTF is usable without the sysfs file */
+-		btf_module_sysfs_add(btf_mod, btf->name, btf->data, btf->data_size);
++		btf_module_sysfs_add(btf_mod, btf->name, btf->data, btf->data_size,
++				     sysfs_bin_attr_simple_read);
+ 		break;
+ 	case MODULE_STATE_LIVE:
+ 		mutex_lock(&btf_module_mutex);
+@@ -9393,8 +9454,10 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 			if (btf_mod->btf)
+ 				btf_free_id(btf_mod->btf);
+ 			list_del(&btf_mod->list);
++			mutex_unlock(&btf_module_mutex);
++			/* off the list, nobody else can find it now */
+ 			btf_module_free(btf_mod);
+-			break;
++			goto out;
+ 		}
+ 		mutex_unlock(&btf_module_mutex);
+ 		break;
+@@ -9419,8 +9482,10 @@ fs_initcall(btf_module_init);
  /*
-  * The vmlinux BTF has just been parsed; apply the registrations that waited
-  * for it.  Runs under btf_vmlinux_lock, before @btf is published, so nothing
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 84968244a10f..7577c6215535 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21925,12 +21925,14 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
- /*
-  * Returns the parsed vmlinux BTF, NULL if the kernel has none, or an ERR_PTR
-  * if it is malformed.  With CONFIG_DEBUG_INFO_BTF=m the BTF lives in the
-- * btf_vmlinux module; the first caller loads it and parses it.  May sleep.
-+ * btf_vmlinux module; the first caller loads it, parses it and then registers
-+ * the BTF of the modules that were loaded before it.  May sleep.
+  * A kept module whose BTF cannot be used after all.  The module is loaded
+  * and stays, so there is no way to reject it: the entry stays on the list,
+- * dead, until the module goes.  A sysfs file it has keeps serving the raw
+- * data, which is kept for that.
++ * dead, until the module goes.  Its sysfs file stays too, its reader, or
++ * the caller of this function, may be inside it right now: a .BTF.base
++ * reader wakes up and fails, a plain one keeps serving the raw data, which
++ * is kept for that.
   */
- struct btf *bpf_get_btf_vmlinux(void)
+ static void btf_module_dead(struct btf_module *btf_mod, const char *what, int err)
  {
- 	/* Pairs with the smp_store_release() on the parse path below. */
- 	struct btf *btf = smp_load_acquire(&btf_vmlinux);
-+	bool parsed = false;
- 	u32 size;
- 
- 	if (btf || !IS_ENABLED(CONFIG_DEBUG_INFO_BTF))
-@@ -21965,8 +21967,13 @@ struct btf *bpf_get_btf_vmlinux(void)
- 		 * on the lockless fast path above.
- 		 */
- 		smp_store_release(&btf_vmlinux, btf);
-+		parsed = true;
- 	}
- 	mutex_unlock(&btf_vmlinux_lock);
-+
-+	if (parsed && IS_MODULE(CONFIG_DEBUG_INFO_BTF))
-+		btf_parse_deferred_modules();
-+
- 	return btf;
+@@ -9428,14 +9493,17 @@ static void btf_module_dead(struct btf_module *btf_mod, const char *what, int er
+ 	kvfree(btf_mod->base_data);
+ 	btf_mod->base_data = NULL;
+ 	btf_free_deferred_regs(&btf_mod->deferred_regs);
+-	btf_mod->gone = true;
++	WRITE_ONCE(btf_mod->gone, true);
++	wake_up_all(&btf_module_wq);
  }
  
+ /*
+  * CONFIG_DEBUG_INFO_BTF=m: the vmlinux BTF has just become available.  Parse
+  * the BTF of the modules that were loaded before it, and apply the
+  * registrations that waited for them.  Called from bpf_get_btf_vmlinux()
+- * once btf_vmlinux is published, with no locks held.
++ * once btf_vmlinux is published, with no locks held -- possibly from the
++ * sysfs reader of one of these modules, which is why no sysfs file is
++ * removed here.
+  *
+  * A module's BTF is published (btf_mod->btf set, id allocated) only after
+  * its queued registrations are applied, so nobody sees a module BTF without
+@@ -9494,11 +9562,11 @@ void btf_parse_deferred_modules(void)
+ 			goto restart;
+ 		}
+ 
+-		/* modules with .BTF.base get their sysfs file now, the data is relocated */
+-		if (!btf_mod->sysfs_attr)
+-			btf_module_sysfs_add(btf_mod, btf->name, btf->data, btf->data_size);
+ 		btf_mod->data = NULL;
+ 		btf_mod->btf = btf;
++		/* Pairs with the smp_load_acquire() in btf_module_sysfs_read_deferred() */
++		smp_store_release(&btf_mod->ready, true);
++		wake_up_all(&btf_module_wq);
+ 		parsed = true;
+ 		/* the list may have changed while the mutex was dropped */
+ 		goto restart;
 -- 
 2.47.3
 
