@@ -1,124 +1,107 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FEC37418C
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 04:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBE71922FD;
+	Fri, 25 Sep 2026 04:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790309566; cv=none; b=HKVTzebVPUIpHgK0ONedae7Sy+oy7GdA8AmwjJteryyunPIiCIJV3ASKilLHGWuZ9DnOqXgpdr4HB6jQlghp2pzxvBTaZDMZZJvfdEkFFBTOVnlSU8JPmM3FdixPP+Tqwedy7oIpoD4IXiSNp+0QbPRXDr6a8Orv30H63ta3aSo=
+	t=1790310955; cv=none; b=jOtSZoFLSS6B/aUYFpgW6ZfTw/bORnwgFHSzGcUkVJX+HpPMduJY9Mk+Ye+dvedlq09peK9wMaZ4W0AogY0tZEqPEDUOqbLvJYxnSDsmImDovrRQYFwdkfPu53FvkJTew4L8yGqZ6FQecBRr51+XOMuDSUJeV8nFoMCIF/I3Gug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790309566; c=relaxed/simple;
-	bh=fsGAtT13nBoh2p5VgiySeOwGY+0SCDfVVoO5fWNZ1Mc=;
-	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:MIME-Version; b=cYx8saXm0jZ+VUWo2pmgEGHm+PEcOVbrUIYPUUpv9J4STUz5SLGdxVVTAIkCHfyMp01c3rPBJ6HKn/M5K7wMRw3lvgqczuitkMfvpWd+xsdwkAKAS1Ylp1SbP6yoWiubGpQ8KyuT0M46C5tF/bkahsUXpPAp2pKWvlA0xDnITfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=efeN0d99; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790310955; c=relaxed/simple;
+	bh=5R/00RgV2CHP3vBjYoIYpHO3TakxBiNZ9JgtvqzTPYs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RxPGde7a/SAH7+fLhHSkUPDGq7x4G+YKJv1cKEb6nvUFi8v4DLU1/hteEFJbs4lwqDxh9crmrGjReAHyVXEz2y94VxuF0tsZFoz7/JqWQu/ZOkio+GylxEDlFwQqx5X8c8Q/QwZZEGhi7n4X678gpDiwPBx8R/R7iaZCJ3We1Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=YpcBVlKO; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efeN0d99"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-398b3b189e0so309958a91.2
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790309565; x=1790914365; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=U4MGTQQsIFwRWN5LVLl2bLnymyqR90tzlWdPdS9c0zU=;
-        b=efeN0d99G7U5taPU3XZ87mUu3XE/4vHapP4Z68Jj0UaoC+0/eiGIfLox7TzkgzC/R6
-         +B1gFL7L55sGNWTuinWv9mKRm+Kj0TWD98XYO+S5Xr2JRmxDCjG4ofxIbK4/zwpPXneV
-         NycNOvqzxNgwW3OwkDnic8thioeLczr1Mu26ZKr3RxAohhYYlzVRQJBVcnxDHkM0ZgSf
-         GOCwG0hIi0QASpLKin6ADawoBu63v6lxVdb+WHngV1iwxPPZ/6IrTztzW4aawFKT+c5r
-         w56xTexYYx8Sqzs4M7Pfmf3ssoua3JDnL/a5kESygfEGmltl1K8PVSJ1TIV+z1EFYSuC
-         IraQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790309565; x=1790914365;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=U4MGTQQsIFwRWN5LVLl2bLnymyqR90tzlWdPdS9c0zU=;
-        b=F2L7n1ngwxtb44geGiwP/c6Bmmwjo4ZOC6i4NHT5afhcY9AY8pAGbamanPE75n8gXy
-         9YfpqGRlp2IPuVK03EzJwng45ShxJZOrl0xF+nWTDGGFqqo2gixyZcW8kPHb2ZxPjdDq
-         StECZWtQNX/pPiAeOx5MVvlJVBmeekwuZuPXqCEjMvXnzxBSXxxv/T4OBNiOlHJqF02k
-         TH9r/aURNzr1delnmADsRO/WI2DVkTeNuLPEQjLY/AaAYDfPkCWfMPIo1EjN0Lb3gfCy
-         cNiU3iPDKubxaWlVUtXo6fZJvKpcTSD/aoARH5kmKH1QVUSGaJJYSTPN92oAJLxgkbo8
-         HDsg==
-X-Forwarded-Encrypted: i=1; AKwUvBxy/z4so1IiopmC0EDXrCIJ13CSm+kWzxofyMtHi+/ODhOITq0RADOyIf01HrSw87xhXQ4=@vger.kernel.org
-X-Gm-Message-State: AFuF++mutgLMpdqgtzA4udVRvc7xVmF/zO6jviBgdSF4rRBd50NvmNi5
-	tuuES8B7IywKIiBtiSHpghXyMHqbjb92qyKJHTUr+95JF+8UXTQz+aeG
-X-Gm-Gg: AYBFou3+ank4qD1/BD0cRjxNzsPdKlmWJqCoH6Rw1d0N1jjHVS9toMmQTAWewkZ8w0I
-	3Ss3TnWbUoX9FM3QxfBkerajYSzUfflgg4U7Acv59GEeG4868AbDhnRdNGVvhu1ksNS0WgxraRA
-	2acYbvjn43uXjL3H55+mUA89w1PYp6FaFb1Zv993uN+OGIvMDLB3Vu/AT2XBfYgaQC2e6i95u1e
-	+IsHDVdbe2nViTcJOX6gqNE1Ubmx70hxLxl8pwkStu5HCBpDtRpiryG10USsbeVgY/wKb0y4l7+
-	6Tv26EFICLNKU6ouKI0Zsq7Ll0ndpVtd6RLW/qdACnvlht8unrxrSaRhefCBwGPgUtU4lL+2Zmx
-	pw87DDoz81uxV+uXTfjd+R6baW3YANz3nFPqQhc81EK0HUnaou3plO25IofdCQwBs1mjEIgI4JO
-	uROqvMXv43zd00Zw8q70rmIav6voTKFNA+tlBdIeYzeU2GqWuVpTPw7DAxPsuDH+8N5gGZgFfsd
-	eCfoDEUE2dLVRse7TYz0RV6Yn99Nry2hG9NEWRkvOp8Yn7O4FNnsN+hmoFYEvc2g7P7+7ReL7cQ
-	Buc8
-X-Received: by 2002:a17:90b:1a8a:b0:3a0:c22d:fbe8 with SMTP id 98e67ed59e1d1-3a0c22e01a7mr228479a91.38.1790309564539;
-        Thu, 24 Sep 2026 21:12:44 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b998e2bdsm1908663a91.13.2026.09.24.21.12.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 21:12:43 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Sep 2026 04:12:43 +0000
-Message-Id: <DLO3RV3IQUOV.21BNLF4QS9T4W@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Karl Mehltretter" <kmehltretter@gmail.com>
-Cc: "Vlastimil Babka" <vbabka@kernel.org>, "Harry Yoo" <harry@kernel.org>,
- "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Hao Li" <hao.li@linux.dev>, "Suren
- Baghdasaryan" <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>,
- "Brendan Jackman" <jackmanb@google.com>, "Amery Hung"
- <ameryhung@gmail.com>, "Swaraj Gaikwad" <swarajgaikwad1925@gmail.com>,
- "Clark Williams" <clrkwllms@kernel.org>, "Steven Rostedt"
- <rostedt@goodmis.org>, <linux-mm@kvack.org>, <bpf@vger.kernel.org>,
- <linux-rt-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] mm: restrict can_spin_trylock() to preemptible
- context on PREEMPT_RT
-In-Reply-To: <arIY0wMQjCCsqidI@gmail.com>
-References: <20260919171443.90512-1-kmehltretter@gmail.com> <DLJHZEZMLW0F.27OPPS218CX9Q@gmail.com> <arIY0wMQjCCsqidI@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="YpcBVlKO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=6S
+	R9jQCvbn4qzh5twTIN9Zz5Q8q2WS36fgkLBJ4vwO8=; b=YpcBVlKODdBzwDoVR8
+	qFub1QQg+cUqq/0janXB6ENoO84mV5FWbHtOh3LxUEA8xoVrTn7VMItHSYj0uk1q
+	+KZ/MFMu3RrtiJpBILnxzIrSV42Z4qpCf8iSieFwMNX4PQtJvTgJbZriWdNphPuO
+	oh/fv4AHGhETjWyKvxXl3JBQo=
+Received: from nec8-i7 (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3__T7+bVqQ0LEAg--.64744S2;
+	Fri, 25 Sep 2026 12:35:09 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	jolsa@kernel.org,
+	leon.hwang@linux.dev,
+	linux-kernel@vger.kernel.org,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH bpf-next] bpf: Roll back freplace link state when bpf_arch_text_poke() fails
+Date: Fri, 25 Sep 2026 12:35:00 +0800
+Message-ID: <20260925043500.28030-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <4669addf.91e8.1a0d2da9b9c.Coremail.chenyuan_fl@163.com>
+References: <4669addf.91e8.1a0d2da9b9c.Coremail.chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3__T7+bVqQ0LEAg--.64744S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF47WF4xZryfJw4Duw1ftFb_yoW8Aw45pF
+	y7JF9xCr4DX34qq34vvw18WFWY93WkWw4xGrWjg397CFs3XrZ5Wry0gwnIvFyFgrs5u3WI
+	qF4a9rn09r17WFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jn8n5UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAh3Fg2q1+f3OaAAA3k
 
-On Tue, Sep 22, 2026 at 08:04 AM Karl Mehltretter <kmehltretter@gmail.com> wrote:
-> a) Change MM so _nolock() allocation remains safe and can still succeed
->    while pi_lock or an rq lock is held. Existing BPF behavior would
->    remain unchanged. Is this feasible, or would it require substantial
->    allocator changes?
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-I don't think it's feasible. On RT the sheaves lock, n->list_lock and
-zone->lock are all rtmutex based. When trylock succeeded and a waiter
-showed up rt_spin_unlock() has to wake it.
+A freplace attach claims the target prog by bumping
+tgt_prog->aux->freplace_link_cnt and setting tr->extension_prog.
+bpf_arch_text_poke() then makes the extension take effect.  If the
+poke fails, the claims are never released: the attach unwinds
+through bpf_link_cleanup(), which clears link->prog, so
+bpf_trampoline_unlink_prog() never runs.
 
-> b) Restore BPF local storage's dedicated allocator, and document, with
->    debug checks if possible, that _nolock() must not be used in those
->    scheduler-lock contexts.
+Drop the link count under ext_mutex on the error path, and set
+tr->extension_prog only after the poke succeeded.  The count is
+still bumped before the poke: it blocks prog_array updates while
+the entry is patched.
 
-No. Local storage is not the only one. bpf_arena_alloc_pages(),
-bpf_stream_vprintk(), bpf_task_work_schedule_*() call kmalloc_nolock()
-as well and the same sched_waking prog can call them.
-bpf_mem_alloc was removed from local storage, because it wastes memory
-on preallocation. Same answer for d).
+Fixes: d6083f040d5d ("bpf: Prevent tailcall infinite loop caused by freplace")
+Suggested-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ kernel/bpf/trampoline.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-> c) Have MM detect those contexts and return NULL. This prevents the
->    deadlock while preserving ordinary raw-lock callers such as arena,
->    but task-storage creation from scheduler tracepoints then fails
->    deterministically.
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index da85bd580ef0..bf4ab0ac264e 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -973,10 +973,17 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_node *node,
+ 		err = bpf_freplace_link_tgt_prog(tgt_prog);
+ 		if (err)
+ 			return err;
++		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_NOP,
++					 BPF_MOD_JUMP, NULL,
++					 node->link->prog->bpf_func);
++		if (err) {
++			/* Undo the claim from bpf_freplace_link_tgt_prog(). */
++			guard(mutex)(&tgt_prog->aux->ext_mutex);
++			tgt_prog->aux->freplace_link_cnt--;
++			return err;
++		}
+ 		tr->extension_prog = node->link->prog;
+-		return bpf_arch_text_poke(tr->func.addr, BPF_MOD_NOP,
+-					  BPF_MOD_JUMP, NULL,
+-					  node->link->prog->bpf_func);
++		return 0;
+ 	}
+ 	err = bpf_trampoline_add_prog(tr, node, cnt);
+ 	if (err)
+-- 
+2.54.0
 
-This one.
-bpf_task_storage_get() with F_CREATE can return NULL and the progs
-have to check for it anyway.
-
-> Are these the right alternatives? In particular, what behavior is
-> intended from the _nolock() API in these scheduler-lock contexts?
-
-It can be called from any context and it can return NULL.
-That's what it does from NMI and hardirq on RT already.
