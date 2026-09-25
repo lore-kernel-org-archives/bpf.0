@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D42B471437;
-	Fri, 25 Sep 2026 19:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F83A470433;
+	Fri, 25 Sep 2026 19:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790363527; cv=none; b=aZvPVv+Vm6EtXq8B3xePXdD9jULt7tMD37P+H3O3B4HIPGx9yuogRl3vtSteGcMN69UcQcivAhxY5soSwegBN84OxtujLgTyrB3dfxcdwHA+kwJoG0m+ZMIZTGsHz2Cz/igAh5+gKhfpgfNjxrtnXraT1c83H+zr1abMi+pVpkM=
+	t=1790363530; cv=none; b=HaOtIszL6m+3bg7/66IGy8xfLocM2dNemqStyOnwAkjCU6PQF72vJviS8xzN6eSpv4H+hdK4rMj7BMER4N/hnv/9OKz7UVVPie6cJrKaiVrtLH3xWK+kTJkS8qVv8K0sf2fViNqmMwZ9CLWpbbzukPzGhrQRs+9YGtdtGMvpPNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790363527; c=relaxed/simple;
-	bh=rgi29i6UFdCCMsHHSzDcksPAqlD5gB9Z5GMxTeN1104=;
+	s=arc-20240116; t=1790363530; c=relaxed/simple;
+	bh=6wH3KcJDmGUKoqXG0jFV73TJG/67bHp9rKc6uzd/gJw=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WHfaI5de/8fM9nqe/AAK9gb+YJ37XfV8I8PI0QQ2nS7zo1BiS1cpBocPVZ075Se3Do255bXVilyfRmFOtYxDbqluQYdx3E3cOL6K72qqFOiOl3gi1j6/hLowYlJy3IWot7MclfmlVSEiLeIFwkPKl9fWKw4yd4EWvrJDexnGKjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7bKiq69; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=nxUUx3Iosk7SCm32hKYJ9q8Aq7VyeS2nhIqB/o91D7imtaGWD+i4DqJOvTSEmT6CdCyOH9RhM1GMICDokVnUHjwVDru9oUGDTVln6YA4sP1eNiS821H4BIyPWlwaEs6a5i8CxIM+jFCqKjJOhJZkqWQ5mgUykiZ/vGG4Q3G+e5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NR7ixijD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7bKiq69"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819CC1F00893;
-	Fri, 25 Sep 2026 19:11:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NR7ixijD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2761F000FF;
+	Fri, 25 Sep 2026 19:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790363521;
-	bh=C9PyPbAN1dnOqUxdj85Y3ZzNfk2hgIo1QkMqTiVfzxQ=;
+	s=k20260515; t=1790363524;
+	bh=j60HMtfGTi5eBikMo7Dlitd6O6BP/MQk73xPGWTZ4lQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=h7bKiq69Q9kCzElLozJ/5BY5UWP8Q+KIyKD0xq2osePiQrhgIBNtztrrg3/zimMu8
-	 IK6nmJkD/58ovcWAA8PgV2WS3e6kzkZWrhrkQHq8497pXuKVjOgvyBAj8+qsWNodDr
-	 j9SIuVbY/mJe5diUJaLi2CPu3EIuBDv3SK6NZosLuzstDk7wL/yIJN+bxK6OyVjIuw
-	 Gw3UAGkegtMwFimKT7TdUmryUp12F+af2Nt2y1pGVhR61yr4qzUzAK1mrabpUKc6iz
-	 AK2bLRBcHn4IQmUu+JGTwplSQzvSJj8V0OoP+JU9ehywi25EXdDjCHzlacIKEv2pqG
-	 r//k6b5H2YAjQ==
-Subject: Re: [PATCH net v3 05/10] net: stmmac: unwind partially allocated DMA
- configurations
+	b=NR7ixijDtlKHhJAOMaQZyckJbqnBNEopUbcqLdZC7vMilmPLijp+YbhOg/KP9csly
+	 3hoehJMj5P8fuFYRLbvDmdCm6+GZVV9GkzdnNyBO9T83GXhorb3iVJomZAHTupTATx
+	 /X3lKaKosaYNwxmU2cJRB8JUlkoe1HRc077mN3Fx4wLelOXm24tYxePD9YDBpFxYv0
+	 Tma7is9IL+UhdJvG5hUI734m8D5Hxa67gldk54YGx7AsH+5+SdJrJBChnESxwfxJax
+	 +X6J1kNDkFpnGCX9zYlctK8SJDwwgYaGUhI4r6jbsz+D5J4scInjWRvnbyR34tGHsJ
+	 QPRZ1PPVXljeg==
+Subject: Re: [PATCH net v3 06/10] net: stmmac: keep DMA configurations at
+ stable addresses
 From: netdev-bot+sashiko@kernel.org
 To: james.hilliard1@gmail.com
 Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
@@ -46,12 +46,12 @@ Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
  zhaojinming@uniontech.com, lorenzo.bianconi@oss.qualcomm.com,
  dinghui1111@163.com
-Date: Fri, 25 Sep 2026 19:11:59 +0000
-Message-ID: <179036351907.2160803.4428772816232476933@kernel.org>
+Date: Fri, 25 Sep 2026 19:12:01 +0000
+Message-ID: <179036352184.2160803.4739778084807600711@kernel.org>
 In-Reply-To:
- <20260924-submit-stmmac-reset-fixes-v1-v3-5-c031e3f3a282@gmail.com>
+ <20260924-submit-stmmac-reset-fixes-v1-v3-6-c031e3f3a282@gmail.com>
 References:
- <20260924-submit-stmmac-reset-fixes-v1-v3-5-c031e3f3a282@gmail.com>
+ <20260924-submit-stmmac-reset-fixes-v1-v3-6-c031e3f3a282@gmail.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,10 +62,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0 (2)
+Critical: 0 · High: 1 · Medium: 3 (1) · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -73,223 +73,264 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Possible double free of a saved RX skb.
-- [Medium] Baseline decision: discard, because it is resolved later in
-  the series.
+- [High] Baseline decision: not confirmed as a remaining issue.
+- [Medium] In drivers/net/ethernet/stmicro/stmmac/stmmac_main.c, the EEE
+  software LPI timer can access a freed DMA configuration.
+- [Medium] In drivers/net/ethernet/stmicro/stmmac/stmmac_main.c,
+  stmmac_features_check() (ndo_features_check) calls…
+- [Medium] Baseline decision: not confirmed as a remaining issue.
 
 Pre-existing issues:
-- [Low] Baseline decision: discard, because it is resolved later in the
-  series.
-- [Low] Baseline decision: discard, because it predates this patch and is
-  resolved later in the series.
+- [Medium] Baseline decision: not confirmed as a remaining issue.
 
 --
 
-net: stmmac: unwind partially allocated DMA configurations
+net: stmmac: keep DMA configurations at stable addresses
 
-This commit lets the RX and TX DMA free paths handle partially allocated
-queues, and releases RX resources when TX allocation fails. It propagates
-xdp_rxq_info_reg_mem_model() errors and clears XSK RXQ bindings. It also
-frees any saved partial RX skb and NULLs the released resource pointers.
+This commit turns priv->dma_conf from an embedded struct into a pointer
+to the allocated DMA configuration. The goal is to keep RXQ metadata
+registered with XDP and AF_XDP at a stable address. Per-queue MSI
+handlers now use priv->channel[] as their cookie. stmmac_quiesce()
+drains transmitters and NAPI with synchronize_net() before cancelling
+the TX hrtimers. On success the open and MTU paths free the old
+configuration, and on failure they restore it.
 
 > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index f7e91ae214483..3b918cf898067 100644
+> index 3b918cf898067..ce598b5757637 100644
 > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
 [ ... ]
 
-> @@ -1884,17 +1887,19 @@ static int __init_dma_rx_desc_rings(struct stmmac_priv *priv,
->  	rx_q->xsk_pool = stmmac_get_xsk_pool(priv, queue);
+> @@ -463,7 +463,7 @@ static bool stmmac_eee_tx_busy(struct stmmac_priv *priv)
 >  
->  	if (rx_q->xsk_pool) {
-> -		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-> -						   MEM_TYPE_XSK_BUFF_POOL,
-> -						   NULL));
-> +		ret = xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-> +						 MEM_TYPE_XSK_BUFF_POOL, NULL);
-> +		if (ret)
-> +			return ret;
->  		netdev_info(priv->dev,
->  			    "Register MEM_TYPE_XSK_BUFF_POOL RxQ-%d\n",
->  			    queue);
->  		xsk_pool_set_rxq_info(rx_q->xsk_pool, &rx_q->xdp_rxq);
-
-[Severity: Low]
-This problem already existed before this patch, but is the XSK pool bound
-here to an xdp_rxq that is about to be freed?
-
-On the stmmac_open() path, __init_dma_rx_desc_rings() works on the
-temporary dma_conf from stmmac_setup_dma_desc(). __stmmac_open() then
-copies that conf:
-
-	memcpy(&priv->dma_conf, dma_conf, sizeof(*dma_conf));
-
-After that, stmmac_open() calls kfree(dma_conf). Nothing rebinds the pool
-to &priv->dma_conf.rx_queue[queue].xdp_rxq, so the pool's rxq pointers
-seem to point into freed memory.
-
-The next patch in the series, "net: stmmac: keep DMA configurations at
-stable addresses", appears to fix this. It keeps the allocated dma_conf
-and removes the memcpy.
-
->  	} else {
-> -		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-> -						   MEM_TYPE_PAGE_POOL,
-> -						   rx_q->page_pool));
-> +		ret = xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-> +						 MEM_TYPE_PAGE_POOL, rx_q->page_pool);
-> +		if (ret)
-> +			return ret;
+>  	/* check if all TX queues have the work finished */
+>  	for (queue = 0; queue < tx_cnt; queue++) {
+> -		struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[queue];
+> +		struct stmmac_tx_queue *tx_q = &priv->dma_conf->tx_queue[queue];
+>  
+>  		if (tx_q->dirty_tx != tx_q->cur_tx)
+>  			return true; /* still unfinished work */
 
 [Severity: Medium]
-Now that this error is returned, how do the per-queue callers handle it?
+Now that dma_conf is a separate allocation that gets freed on reopen,
+can the EEE software LPI timer read a freed configuration here? The
+timer path is:
 
-stmmac_enable_rx_queue() returns void. When this call fails, it releases
-the queue and returns:
+stmmac_eee_ctrl_timer()
+  stmmac_try_to_start_sw_lpi()
+    stmmac_eee_tx_busy()
+      tx_q = &priv->dma_conf->tx_queue[queue];
 
-	ret = __init_dma_rx_desc_rings(priv, &priv->dma_conf, queue, GFP_KERNEL);
-	if (ret) {
-		__free_dma_rx_desc_resources(priv, &priv->dma_conf, queue);
-		netdev_err(priv->dev, "Failed to init RX desc.\n");
-		return;
-	}
+No lock or RCU protects the priv->dma_conf load.
 
-With this patch, __free_dma_rx_desc_resources() also sets buf_pool,
-dma_rx, dma_erx and page_pool to NULL. After that,
-stmmac_xdp_enable_pool() and stmmac_xdp_disable_pool() in stmmac_xdp.c
-carry on as usual:
+__stmmac_release() calls phylink_stop() first, and that reaches
+stmmac_mac_disable_tx_lpi():
 
-		stmmac_enable_rx_queue(priv, queue);
-		stmmac_enable_tx_queue(priv, queue);
-		napi_enable(&ch->rx_napi);
-		napi_enable(&ch->tx_napi);
+    priv->eee_sw_timer_en = false;
+    timer_delete_sync(&priv->eee_ctrl_timer);
 
-Both return 0, so NAPI can run on a released RX queue whose ring pointers
-are NULL. stmmac_xdp_set_prog() also ignores the return value of
-stmmac_xdp_open().
+NAPI is still running at that point. stmmac_tx_clean() checks the flag
+without a lock before it re-arms the timer:
 
-These callers already behaved this way for the -ENOMEM return from
-stmmac_alloc_rx_buffers(). This patch adds a second way to reach it.
+    if (priv->eee_sw_timer_en && !priv->tx_path_in_lpi_mode)
+        stmmac_restart_sw_lpi_timer(priv);
 
-Two later patches in the series appear to fix this: "net: stmmac: account
-for failed live XDP reopening" and "net: stmmac: use the tracked datapath
-restart for XSK pool changes". They check the stmmac_xdp_open() result
-and remove the per-queue enable helpers.
+Suppose that check passes just before the flag is cleared. Then
+mod_timer() can run after timer_delete_sync() has returned. Nothing in
+stmmac_quiesce() cancels eee_ctrl_timer again.
 
-[ ... ]
+Next, suppose the callback loads the old priv->dma_conf before
+__stmmac_open() stores the new one, and is then delayed (for example,
+preempted in the timer softirq thread on PREEMPT_RT). It would then
+dereference tx_queue[] after kfree(old_conf) in stmmac_change_mtu() or
+stmmac_open(). Before this patch the configuration was embedded in
+priv, so the worst case was a stale read.
 
-> @@ -2137,10 +2147,16 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
->  	void *addr;
->  
->  	/* Release the DMA RX socket buffers */
-> -	if (rx_q->xsk_pool)
-> +	if (rx_q->xsk_pool) {
->  		dma_free_rx_xskbufs(priv, dma_conf, queue);
-> -	else
-> +		xsk_pool_set_rxq_info(rx_q->xsk_pool, NULL);
-> +	} else {
->  		dma_free_rx_skbufs(priv, dma_conf, queue);
-> +	}
-> +	if (rx_q->state_saved)
-> +		dev_kfree_skb_any(rx_q->state.skb);
-> +	rx_q->state.skb = NULL;
-> +	rx_q->state_saved = 0;
+Later in the series, stmmac_reconfigure_mtu() adds
+timer_delete_sync(&priv->eee_ctrl_timer) after stmmac_quiesce(). The
+ethtool ring and channel paths still seem to lack it:
 
-[Severity: High]
-Can this free an skb that the driver no longer owns?
+stmmac_reinit_ringparam() / stmmac_reinit_queues()
+  __stmmac_release()
+  stmmac_reopen()
+    __stmmac_open()
+    kfree(old_conf)
 
-This free assumes that state_saved means the driver still owns
-rx_q->state.skb. However, stmmac_rx() does not clear the saved state when
-it takes it:
-
-drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_rx() {
-    ...
-		if (!count && rx_q->state_saved) {
-			skb = rx_q->state.skb;
-			error = rx_q->state.error;
-			len = rx_q->state.len;
-		} else {
-			rx_q->state_saved = false;
-    ...
-}
-
-state_saved is only cleared in the else branch, which runs on a later
-iteration with count > 0. With limit == 1, the first iteration can finish
-the restored skb. It can pass it to napi_gro_receive(), or free it on the
-error path:
-
-		if (unlikely(error)) {
-			dev_kfree_skb(skb);
-			skb = NULL;
-			count++;
-			continue;
-		}
-
-count is now 1, so the while (count < limit) loop exits. The save block
-after the loop is skipped, because skb is NULL and the last descriptor
-did not have rx_not_ls set:
-
-	if (status & rx_not_ls || skb) {
-		rx_q->state_saved = true;
-		rx_q->state.skb = skb;
-		...
-	}
-
-state_saved stays set, and state.skb points to an skb that was freed or
-handed to the stack. A later poll that hits a DMA-owned descriptor right
-away breaks before using the skb and saves the same stale pointer again,
-so the stale pointer can survive across polls.
-
-No privileges are needed to get a budget of 1. The EPIOCSPARAMS ioctl in
-fs/eventpoll.c only requires CAP_NET_ADMIN when busy_poll_budget >
-NAPI_POLL_WEIGHT, and stmmac_napi_poll_rx() passes the budget straight to
-stmmac_rx(). A frame that spans several descriptors needs a jumbo MTU.
-
-Suppose the interface is then closed (ndo_stop -> free_dma_desc_resources)
-or the XSK pool or XDP program is changed. __free_dma_rx_desc_resources()
-then calls dev_kfree_skb_any() on the stale pointer. Before this patch,
-teardown dropped the stale pointer without freeing it.
-
-The stale state in stmmac_rx() is older than this patch, and so is its
-reuse on the next poll. This patch adds a new path that frees it a second
-time. A later patch in the series copies the same pattern into
-stmmac_reinit_dma_desc(), and stmmac_rx() is still unchanged at the end
-of the series.
-
-Could stmmac_rx() clear rx_q->state_saved and rx_q->state.skb as soon as
-it takes the saved state?
+The close/open path also seems to lack it. Should the EEE timer also be
+cancelled on those paths after NAPI is quiesced?
 
 [ ... ]
 
-> @@ -2411,6 +2438,8 @@ static int alloc_dma_desc_resources(struct stmmac_priv *priv,
->  		return ret;
->  
->  	ret = alloc_dma_tx_desc_resources(priv, dma_conf);
-> +	if (ret)
-> +		free_dma_rx_desc_resources(priv, dma_conf);
->  
->  	return ret;
+> @@ -3650,7 +3650,7 @@ static bool stmmac_tso_channel_permitted(struct stmmac_priv *priv,
+>  					 unsigned int chan)
+>  {
+>  	/* TSO and TBS cannot co-exist */
+> -	return !(priv->dma_conf.tx_queue[chan].tbs & STMMAC_TBS_AVAIL);
+> +	return !(priv->dma_conf->tx_queue[chan].tbs & STMMAC_TBS_AVAIL);
 >  }
 
-[Severity: Low]
-This one also predates the patch: stmmac_enable_rx_queue() and
-stmmac_enable_tx_queue() do not unwind in the same way. When
-__alloc_dma_rx_desc_resources() fails:
+[Severity: Medium]
+stmmac_features_check(), the ndo_features_check callback, calls this.
+Can it read priv->dma_conf after the old configuration has been freed?
 
-	ret = __alloc_dma_rx_desc_resources(priv, &priv->dma_conf, queue);
-	if (ret) {
-		netdev_err(priv->dev, "Failed to alloc RX desc.\n");
-		return;
-	}
+netif_skb_features() is called from paths that neither
+netif_device_detach() nor stopped TX queues exclude:
 
-Does this leak the page_pool, buf_pool and descriptor memory that were
-already allocated? stmmac_enable_tx_queue() has the same early return,
-which would leak tx_skbuff_dma, tx_skbuff and the TX descriptor memory.
+- tbf_segment() in net/sched/sch_tbf.c, and similarly taprio, cake,
+  netem and dualpi2
+- ip_finish_output_gso() and its IPv6 counterpart
+- validate_xmit_skb() in sch_direct_xmit(), before the stopped-queue
+  check
 
-"net: stmmac: use the tracked datapath restart for XSK pool changes",
-later in the series, removes both helpers. After that, pool changes go
-through stmmac_xdp_open() and alloc_dma_desc_resources().
+In stmmac_change_mtu(), the only synchronize_net() is the one inside
+__stmmac_release(), and it runs before the pointer swap:
+
+stmmac_change_mtu()
+  netif_device_detach(dev)
+  __stmmac_release(dev)
+    stmmac_quiesce()
+      synchronize_net()
+  __stmmac_open(dev, dma_conf)
+    priv->dma_conf = dma_conf;
+  kfree(old_conf)
+
+A GSO feature check could load the old pointer after that drain and be
+preempted until after kfree(old_conf). It would then read tbs from
+freed memory.
+
+The same ordering seems to remain at the end of the series. In
+stmmac_reconfigure_mtu(), synchronize_net() runs before
+priv->dma_conf = new_conf, followed by kfree(old_conf). stmmac_reopen()
+does the same for ring and channel changes.
+
+Is a grace period needed between publishing the new configuration and
+freeing the old one?
+
+[ ... ]
+
+> @@ -6267,10 +6274,12 @@ static int stmmac_change_mtu(struct net_device *dev, int new_mtu)
+>  			return PTR_ERR(dma_conf);
+>  		}
+>  
+> +		netif_device_detach(dev);
+>  		__stmmac_release(dev);
+>  
+>  		ret = __stmmac_open(dev, dma_conf);
+>  		if (ret) {
+> +			priv->dma_conf = old_conf;
+>  			free_dma_desc_resources(priv, dma_conf);
+>  			kfree(dma_conf);
+>  			/*
+> @@ -6282,9 +6291,10 @@ static int stmmac_change_mtu(struct net_device *dev, int new_mtu)
+>  			return ret;
+>  		}
+>  
+> -		kfree(dma_conf);
+> +		kfree(old_conf);
+
+[Severity: High]
+The commit message says:
+
+  Drain transmitters and NAPI poll tails before cancelling TX timers so
+  a late rearm cannot outlive the configuration containing the timer.
+
+Can a TX hard-error interrupt restart transmitters after that drain?
+__stmmac_release() runs stmmac_quiesce() and frees the IRQs only
+afterwards:
+
+    stmmac_quiesce(priv);
+    ...
+    stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+    stmmac_stop_all_dma(priv);
+    free_dma_desc_resources(priv, priv->dma_conf);
+
+In that window, stmmac_msi_intr_tx() calls stmmac_tx_err(), which ends
+with:
+
+    netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, chan));
+
+Once a queue is woken, stack transmitters can enter stmmac_xmit() or
+stmmac_tso_xmit() again. They would be using the old configuration
+while free_dma_desc_resources() frees its rings, and while this
+kfree(old_conf) frees the struct itself.
+
+Two later commits in the series deal with this:
+
+- "net: stmmac: account for failed live XDP reopening" adds a second
+  stmmac_stop_tx_queues() after stmmac_free_irq() in
+  __stmmac_release().
+- "net: stmmac: retain DMA resources across MTU changes" disables IRQ
+  handling in stmmac_reconfigure_mtu() before replacing the
+  configuration.
+
+At this patch, though, can the old configuration still be in use after
+kfree(old_conf)?
+
+[ ... ]
+
+> @@ -7251,7 +7253,7 @@ void stmmac_xdp_release(struct net_device *dev)
+>  	stmmac_disable_all_queues(priv);
+>  
+>  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+> -		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+> +		hrtimer_cancel(&priv->dma_conf->tx_queue[chan].txtimer);
+>  
+>  	/* Free the IRQ lines */
+>  	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but stmmac_xdp_release()
+still cancels the TX hrtimers right after stmmac_disable_all_queues().
+It does not run the synchronize_net() that stmmac_quiesce() now uses.
+Can a NAPI poll tail re-arm a timer after this cancel?
+
+After napi_complete_done() clears SCHED, stmmac_tx_timer_arm() can see
+napi_is_scheduled() == false and call hrtimer_start(). stmmac_xdp_open()
+then calls hrtimer_setup() on the same txtimer, which could
+re-initialize an armed hrtimer.
+
+Later in the series, "net: stmmac: account for failed live XDP
+reopening" addresses this by making stmmac_xdp_release() call
+stmmac_quiesce().
+
+[ ... ]
+
+> @@ -7382,11 +7382,9 @@ int stmmac_xsk_wakeup(struct net_device *dev, u32 queue, u32 flags)
+>  	    queue >= priv->plat->tx_queues_to_use)
+>  		return -EINVAL;
+>  
+> -	rx_q = &priv->dma_conf.rx_queue[queue];
+> -	tx_q = &priv->dma_conf.tx_queue[queue];
+>  	ch = &priv->channel[queue];
+>  
+> -	if (!rx_q->xsk_pool && !tx_q->xsk_pool)
+> +	if (!test_bit(queue, priv->af_xdp_zc_qps))
+>  		return -EINVAL;
+
+[Severity: Medium]
+Is the af_xdp_zc_qps bit a strong enough guard here? In
+stmmac_xdp_enable_pool(), the sequence is:
+
+    set_bit(queue, priv->af_xdp_zc_qps);
+    ...
+    stmmac_enable_rx_queue(priv, queue);
+    stmmac_enable_tx_queue(priv, queue);
+    napi_enable(&ch->rxtx_napi);
+    err = stmmac_xsk_wakeup(priv->dev, queue, XDP_WAKEUP_RX);
+
+Both enable helpers return void. If they fail, dma_rx, buf_pool and
+xsk_pool are left NULL.
+
+If both queue re-enables fail, the old check returned -EINVAL. The new
+check lets NAPI run stmmac_rx_zc() on a NULL ring and pool.
+
+This seems to go away later in the series with "net: stmmac: use the
+tracked datapath restart for XSK pool changes". That commit switches to
+stmmac_xdp_release()/stmmac_xdp_open() and clears the bit when the
+reopen fails.
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924-submit-stmmac-reset-fixes-v1-v3-0-c031e3f3a282%40gmail.com
