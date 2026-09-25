@@ -1,227 +1,438 @@
-Received: from flow-b8-smtp.messagingengine.com (flow-b8-smtp.messagingengine.com [202.12.124.143])
+Received: from pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.26.1.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1824570E1;
-	Fri, 25 Sep 2026 22:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1877B501F42;
+	Fri, 25 Sep 2026 22:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.26.1.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790374019; cv=none; b=KnF68ceULhHuwl9zGkE4KpadXcCo6dieB5pZxfwwdQhfx5EslvNRRqqmxFUm61zWlvrkq5cvHzh+nhe/R7TNEO8c9DNfZghyHYFtelAJXDWBWnFnOEHVl2jJ5/y+PipPF236SrMZILhlIa2RU+2llb4QyylhhFtBloJ9bPGDfJc=
+	t=1790376156; cv=none; b=KbvpF7TgDWwdwycrflrzwPgInq62mLqNQSwbUjFksUyAvS0WKRM2QGl+7Y/oMdyTo8144YvQRnGLCK3VcoBjGOS2hReegEZPKKZiKukZkdZnoLdEoHxMTnjX4wbLTQrMRiWomye8cRAS9LbnBa/PLMbam5V77539sCyzsaPCrqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790374019; c=relaxed/simple;
-	bh=lS1TxV0OL5XbjJoEVVQOxIs/WZv/eAgyubI3NbbQssI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=qBMOiV8XKYqE2k6LV4zGN+Ym0gNRay1evLw51EiIATao+r3QN1HLgUuNYoQbBZRKgtdG00suqHJJz+Zv+bRDauX/f0jlv9G/IRgVP00uVEiVlZR+Q36ywtU3gzLx0vNyhQ4Hrtw0SPFpKcOD9ivHoE8kPXv9GeTZh5VBN3yN2IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=VV93A+GB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aGXV+YUS; arc=none smtp.client-ip=202.12.124.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1790376156; c=relaxed/simple;
+	bh=BSdIbyuLDo25wZ4m33yl+khXE0Rr0JKhn9dNxFbEsQ4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U3CmsBnpE/uNLtoBwZNx3xTUUotMdhWQA7t8cDQVEDK1XUGM9e2n2/cfjznlRON1jIhooT7xdy/3Y/35CbgRW7tyXXhtqn+iySq2FULn0SgggAYWeI7jqklcBmb1WgcfQyQKPFwV/fI03FJ9L1D4VZcJnwa/NcJQ1mpe+uIJjF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=L+Kmmgq2; arc=none smtp.client-ip=52.26.1.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="VV93A+GB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aGXV+YUS"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.stl.internal (Postfix) with ESMTP id 573C313003B9;
-	Fri, 25 Sep 2026 18:06:52 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Fri, 25 Sep 2026 18:06:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1790374011;
-	 x=1790381211; bh=JrMmm48wWb5nfElfLTql9tnPeB0+8MEVeYNyAgGoaQE=; b=
-	VV93A+GBv2P9/qrRdwAhHm15SknYpPDoE9Rusj/hHzckBkjJVEcdDlJTHlO4p/7E
-	MsStEr6lA9ZZpv80ctYjcMxWtVfeFtMzS2Pz6b48b4mBBrO1C9yPQ1m/yB4jrJsU
-	Txgptg/CZdFHDOAYUVRGXXi1vMAjXp9R2q/zkAVgu2JU57U6eOhopKB9vdNOWomM
-	8KEOhPJEGjfknNt7dRh1N3UcGrPPo322SVDR7u2P7ODyCz9fXvOMVKwB4BGJLV4d
-	p1vZk++EfDAgCFACQelPXp+bGzwficcKO8bwIm5qbPT1tKzqp+6Byy8nrSst/iUF
-	5iM/+XBRXhRzlq/3FdZWSw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1790374011; x=
-	1790381211; bh=JrMmm48wWb5nfElfLTql9tnPeB0+8MEVeYNyAgGoaQE=; b=a
-	GXV+YUSmJZBpt2RL3eFg0yROgDvjwUpne/3aX5qHc2ia1wEVE/khGVzWW2IGsz5l
-	hd3jDKQVGFxsM4ytzm0w/bh9v/Q0fmxggROD5amVZbL2IpyazCJKEmXcfYygtqXQ
-	BNuhNcefmS8wBdPbdpsyQgC85zo4DoYIA7PTlnLy/b0B7TGhHrMTVWAcQVUniEoZ
-	1QJGFj+nGWa8IGhxIs0v/xiIAUYiBM7D6MMeI7Tqf0DCWrqnH693KRkitqw3jAgQ
-	k0QlTsip1+o1bnRtNhMLSAe/LoZeLLRCKWTKQF0vQQ12dvxRPUWAYPzU7TrYn2iP
-	xq/lsXF6iBqKAWrtf+W5Q==
-X-ME-Sender: <xms:cvC2aiSvwM8it39YGAo0r2BFMlajZQzHCF1-wybOlfFNnzuJE4_VgQ>
-    <xme:cvC2aim-IxtOzGmBKYQptfJ-5tq7fGqg-34DIWlZzsqMywgEQ0mR0QgqWq_6cb9JX
-    NjtResFg31PUDdRrYBtL-YJLF1e2pjmDFCJzHcjJRCB_VemwzQ9RdVm>
-X-ME-Proxy-Cause: dmFkZTGWorUwcHDaphCYw8v7P4r6eX5pMArEM2/fjfsVfdD8oh9PHyAFGRqsP8lKRNOvro
-    Ftaux56ZQWBnJufjCK4NoTl5gmyZyS2NrT/mOlvXaJbBgwyJlksfmDxh/T6ep3Q5rP1X5I
-    Gg3BUF69X8e0yxuG8tIsosXhwJWN04kZfd3Hs8hAZ/+JOdcATDpskVHlGuS/IemkueryOR
-    hIuVjhFQk7CePHMlVc9CQ7MECLINzrqb9LdZmsZGkkEkpHSYSPer552CpRSKn34v37USct
-    HhFuvihTiBMck5qt8HqfIL/ioFLlYd+AoG7CwtlhshQQ5QWzjlxpGOjuQuzfN0lyT2CNBA
-    xiE3/XVFoRJUnTcPHXnnP4ULg2/OhUw0cUVTM2Hl8kzEGyQmxm0APQJMTvjFGoCeexOfR/
-    jaxLRyktqvX8daF3L239waW+lQXkj8NIMZ45sRs0hondG/NYNiUtlwijloNURLVJpSRs1n
-    HjrVk8mAadcUojfqUFKMkwbvd1knunWFqf3wFKqO35MyuIsff+Lt3vTDKNneO2MS2loK5e
-    Q/dybw3p42QGSplvXOieL4zZL+ZwpJVbWdxv7+d9YbwYEGdtccmCLCVTEkoohZKIitwDZF
-    bbnjGJjj38fYWu6AOjGxXX1gJyhzi0LUn/N6YtrvJoDdXC/mveLWJ3hmsmrw
-X-ME-Proxy: <xmx:dvC2amzBvlQCAD5sW2JaXm3j0P9ai-oMPjy5v8vXmarN-S8XKRnZUw>
-    <xmx:dvC2auHhsX2b7IMnKKPnB_m7lyGmqEgN3tOfWJI43cbUmyqJIJe9DQ>
-    <xmx:dvC2avqA9un_ie7CCszm4rHR5kIbiuuqJAmgxGMKC0t4LTi-ke-ZMg>
-    <xmx:dvC2avxp2MUpSON7EdEvlibuWv90i4hC2qOqz0DFeopE6Lyo9tYUDA>
-    <xmx:e_C2asxjh4_ZZbt6wpAEkh3al--Q2E5cOHCufEezSsf4Ch9A-LWaZN6L>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 548BB32A0087; Fri, 25 Sep 2026 18:06:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="L+Kmmgq2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1790376153; x=1821912153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8sRlJSBOJF+TRL4sXoqj/j47UPypZ7t8JkGyhFvtC/M=;
+  b=L+Kmmgq2uombu/PRUjH9Z9BfcerJGxYMrJUXGjlV9vClQYIG0mtXivhP
+   NS7wqcQBuIy8kTnYOili/JLrcZ0/sIXYJmlkiZ/Ie2ajBpbeWwBkxBGbb
+   m4Zv8KJ2n+7gsGzcNij1xCYxUriInROiKn/UDAOBPBQZBaMi7H753olOt
+   w2RxiHjKxSmGXPne56SM4L12KIIpuiQAqKTurq2+q3yuIdiTUFzIdr2/6
+   VpOOHoGBD6Dyb4v4JvxjJxyCUgcH4ZrBO6ksMUCGraISzkzzEcc1gFePe
+   LTCwiE3A2uxqqMTtkD/3Yujq9YbIn11TCi5w6Ho9o6E5q0qWLs+V4FtPE
+   g==;
+X-CSE-ConnectionGUID: UkYZBRveT5ySPleuZ3+jXA==
+X-CSE-MsgGUID: vWuZxomBRgiN474y073Dvg==
+X-IronPort-AV: E=Sophos;i="6.27,123,1787011200"; 
+   d="scan'208";a="29713331"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 22:42:30 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:11254]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.59.1:2525] with esmtp (Farcaster)
+ id da5afa80-38aa-43c0-a3b1-94c048e91be5; Fri, 25 Sep 2026 22:42:30 +0000 (UTC)
+X-Farcaster-Flow-ID: da5afa80-38aa-43c0-a3b1-94c048e91be5
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 25 Sep 2026 22:42:30 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 25 Sep 2026 22:42:29 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
+	<memxor@gmail.com>
+CC: Alan Maguire <alan.maguire@oracle.com>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+	<jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+	<nsc@kernel.org>, <linux-kbuild@vger.kernel.org>, Luis Chamberlain
+	<mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+	<samitolvanen@google.com>, <linux-modules@vger.kernel.org>, Miguel Ojeda
+	<ojeda@kernel.org>, <rust-for-linux@vger.kernel.org>, Arnd Bergmann
+	<arnd@arndb.de>, <linux-kernel@vger.kernel.org>, Hazem Mohamed Abuelfotoh
+	<abuehaze@amazon.com>, Bjoern Doebel <doebel@amazon.de>, Martin Pohlack
+	<mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>
+Subject: [PATCH bpf-next v3 0/9] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+Date: Fri, 25 Sep 2026 22:42:20 +0000
+Message-ID: <20260925224229.1850-1-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AJwEWD5WPnhk
-Date: Sat, 26 Sep 2026 00:06:22 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Lorenzo Stoakes" <ljs@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- "Jann Horn" <jannh@google.com>, "Pedro Falcato" <pfalcato@suse.de>,
- "David Hildenbrand (Red Hat)" <david@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>,
- "Suren Baghdasaryan" <surenb@google.com>,
- "Michal Hocko" <mhocko@suse.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>,
- "Jason Gunthorpe" <jgg@ziepe.ca>, "Leon Romanovsky" <leon@kernel.org>,
- "Paul Moore" <paul@paul-moore.com>,
- "Stephen Smalley" <stephen.smalley.work@gmail.com>,
- "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Zi Yan" <ziy@nvidia.com>,
- "Baolin Wang" <baolin.wang@linux.alibaba.com>,
- "Nico Pache" <nico.pache@linux.dev>,
- "Ryan Roberts" <ryan.roberts@arm.com>, "Dev Jain" <dev.jain@arm.com>,
- "Barry Song" <baohua@kernel.org>, "Lance Yang" <lance.yang@linux.dev>,
- "Usama Arif" <usama.arif@linux.dev>,
- "Kirill A. Shutemov" <kas@kernel.org>,
- "Doug Gilbert" <dgilbert@interlog.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <mkp@kernel.org>,
- "Jaya Kumar" <jayalk@intworks.biz>, "Simona Vetter" <simona@ffwll.ch>,
- "Helge Deller" <deller@gmx.de>, "Sebastian Reichel" <sre@kernel.org>,
- "John Hubbard" <jhubbard@nvidia.com>, peterx <peterx@redhat.com>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Oleg Nesterov" <oleg@redhat.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, "Rik van Riel" <riel@surriel.com>,
- "Harry Yoo" <harry@kernel.org>, "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
- "Maxime Ripard" <mripard@kernel.org>,
- "Thomas Zimmermann" <tzimmermann@suse.de>,
- "Dave Airlie" <airlied@gmail.com>, "Will Deacon" <will@kernel.org>,
- "Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Muchun Song" <muchun.song@linux.dev>,
- "Oscar Salvador" <osalvador@suse.de>,
- "Matthew Wilcox" <willy@infradead.org>, "Jan Kara" <jack@suse.cz>,
- "Marc Zyngier" <maz@kernel.org>, "Oliver Upton" <oupton@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Anup Patel" <anup@brainfault.org>, "Paul Walmsley" <pjw@kernel.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Janosch Frank" <frankja@linux.ibm.com>,
- "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>,
- "Matthew Brost" <matthew.brost@intel.com>,
- "Joshua Hahn" <joshua.hahnjy@gmail.com>, "Rakie Kim" <rakie.kim@sk.com>,
- "Byungchul Park" <byungchul@sk.com>, "Gregory Price" <gourry@gourry.net>,
- "Ying Huang" <ying.huang@linux.alibaba.com>,
- "Alistair Popple" <apopple@nvidia.com>, "Chris Li" <chrisl@kernel.org>,
- "Kairui Song" <kasong@tencent.com>,
- "Kemeng Shi" <shikemeng@huaweicloud.com>,
- "Nhat Pham" <nphamcs@gmail.com>, "Baoquan He" <baoquan.he@linux.dev>,
- "Youngjun Park" <youngjun.park@lge.com>,
- "Johannes Weiner" <hannes@cmpxchg.org>, "Qi Zheng" <qi.zheng@linux.dev>,
- "Shakeel Butt" <shakeel.butt@linux.dev>,
- "Axel Rasmussen" <axelrasmussen@google.com>,
- "Yuanchu Xie" <yuanchu@google.com>, "Wei Xu" <weixugc@google.com>,
- "Chengming Zhou" <chengming.zhou@linux.dev>,
- "Michal Hocko" <mhocko@kernel.org>, "Miklos Szeredi" <miklos@szeredi.hu>,
- "Xu Xin" <xu.xin@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-rdma@vger.kernel.org, selinux@vger.kernel.org,
- linux-sound@vger.kernel.org, bpf@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- fuse-devel@lists.linux.dev, "Takashi Iwai" <tiwai@suse.de>,
- "Emil Tsalapatis" <emil@etsalapatis.com>
-Message-Id: <d4d7d4c2-a1d5-41d0-b1c8-8ea0cc5a0397@app.fastmail.com>
-In-Reply-To: 
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
-References: 
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
-Subject: Re: [PATCH v3 00/40] mm: make VMA flag semantics explicit, eliminate
- VM_SPECIAL
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D033UWA001.ant.amazon.com (10.13.139.103) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Thu, Sep 17, 2026, at 18:22, Lorenzo Stoakes (ARM) wrote:
->
->  mm/vma.c                                   | 246 +++++++++++++++++++-------
+Based on and tested against bpf-next commit 6ac134ec9306 ("Merge branch
+'file-descriptor-interface-for-bpf-streams'").
 
-Hi Lorenzo,
+This series makes CONFIG_DEBUG_INFO_BTF a tristate, so that it can be
+set to =m.  With =m the vmlinux BTF is carried by a module, btf_vmlinux,
+that the kernel loads the first time anything needs the BTF.  On a
+system where nothing does, that saves ~5.4 MB of RAM with a distribution
+config; on a system that uses BTF, nothing differs from =y.  =y itself
+is untouched.
 
-I see that in linux-next there is a new build failure in some
-configurations in code that you are changing here:
+Problem
+-------
 
-mm/vma.c: In function '__mmap_region':
-mm/vma.c:3083:1: error: the frame size of 1552 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]
+The vmlinux BTF that CONFIG_DEBUG_INFO_BTF=y builds into the kernel
+image takes ~5.4 MB of memory, resident from boot whether anything uses
+it or not.  On small instances that is not negligible.
 
-I don't immediately see anything that you did that would have introduced
-something bad that wasn't already there, so it's likely just gone from
-just below the limit I was using for my testing to just above. The 1536
-byte limit is what I use on 64-bit builds with KASAN and otherwise
-still has a clean build (with a small number of local fixup patches).
+A distribution cannot simply turn it off for the users who do not need
+it: it ships one kernel build for all its users, and BTF is not debug
+info anymore.  CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and
+bpf-lsm all depend on it, so =n takes those away from everyone who does
+use them. 
 
-What I see is that this function has multiple structures on the
-stack that have nontrivial sizes:
+Hence this series adds CONFIG_DEBUG_INFO_BTF=m: the BTF becomes an
+on-demand module.
+Users who never use BTF get the memory back; for users who do, the first
+use loads it automatically and everything works as with =y.
 
-        VMA_ITERATOR(vmi, mm, addr); /* 104 bytes */
-        MMAP_STATE(map, mm, &vmi, addr, len,...); /* 384 bytes */
-        struct vm_area_desc desc; /* 128 bytes */
+Approach
+--------
 
-The config that caused this is https://pastebin.com/raw/5M95qHy5,
-which is an x86-64 build with CONFIG_KASAN_STACK enabled, and likely
-a few other configuration options that made it a little worse.
-KASAN_STACK tends to double the stack size used by structures
-in order to catch out-of-bounds accesses.
+Do not remove anything, defer it.  The BTF is generated exactly as
+before, but with =m it is not part of the kernel image: it is packed
+into a module, btf_vmlinux.ko, which the kernel loads itself the first
+time anything needs the BTF.  Once loaded, the BTF stays, and nothing
+differs from =y.
 
-If I sprinkle some 'noinline_for_stack' annotations on functions
-called by __mmap_region(), I can get the size down to 1144 in this
-config, but that doesn't sound like a great workaround.
+Making that work ran into five problems.  The first three are existing
+components that rely on the vmlinux BTF being present from boot, which
+a loadable module cannot provide; the last two follow from the BTF no
+longer being part of the image.
 
-The large stack usage is potentially harmful if this ends up
-in call chains that have additional large stack usage (e.g.
-kmalloc() leading to reclaim). Any ideas for how to reduce it here?
+1. Verifier.  Problem: bpf_check() fetched the vmlinux BTF for every
+   program, so the first socket filter at boot would have loaded the
+   module on every system.  Solution: fetch the BTF only where kernel
+   types enter a program (attach_btf, kfunc calls, ksyms, map pointer
+   access, helpers that take or return kernel pointers).  A program
+   using none of these never touches it.
 
-     Arnd
+2. Initcall registrations.  Problem: kfunc, dtor kfunc and struct_ops
+   registrations run from initcalls and need the parsed BTF, which
+   would again pull it in at boot.  Solution: queue them and apply the
+   queue when the BTF is parsed, before it is published, so no program
+   can ever see a vmlinux BTF that lacks its kfuncs or struct_ops.
+
+3. Module BTF.  Problem: module BTF is split BTF against the vmlinux
+   BTF and was parsed at module load.  A module loaded before the
+   vmlinux BTF cannot be parsed yet, and the module notifier cannot
+   load btf_vmlinux (that would nest a module load inside a module
+   load).  Solution: keep the module's BTF aside (the same copy
+   btf_parse_module() makes with =y, so module BTF costs the same in
+   both; the saving is the vmlinux BTF only), expose it in
+   /sys/kernel/btf right away, and parse and register it, together with
+   the module's own kfuncs and struct_ops, once the vmlinux BTF arrives.
+   Module BTF thus works regardless of load order, including out-of-tree
+   modules with a .BTF.base, whose sysfs reader waits for the relocation.
+
+4. Trust.  Problem: the verifier treats the BTF as the description of
+   the kernel's types, so a carrier from a different build must be
+   refused even if vermagic lets it load.  Solution: link the size and
+   SHA-256 of the BTF into the image and check them when the module
+   loads.  The linked-in size also lets /sys/kernel/btf/vmlinux report
+   its final size before the load, which tooling expects.
+
+5. Tooling.  Problem: pahole --btf_base for module BTF, bpftool and
+   external module builds read .BTF from the vmlinux ELF.  Solution:
+   keep .BTF in the ELF as a non-loadable section, so it is in the file
+   but not in the image.
+
+CONFIG_BPF_PRELOAD is made unavailable with =m: its preloaded programs
+attach through the vmlinux BTF, so every bpffs mount, which systemd does
+at boot, would load it and defeat the point.
+
+Relation to the inline BTF series
+---------------------------------
+
+Alan's inline BTF series [2], now in bpf-next, adds inline function
+information to BTF, which is even larger than the BTF itself, and its
+cover letter leaves
+delivering that information on demand, through a module and sysfs, to a
+follow-up.  When Alexei suggested taking the same route for the vmlinux
+BTF, Alan pointed out where the difficulty would lie [3].
+
+However, that approach cannot be used directly for the vmlinux BTF,
+because of what depends on the data:
+
+1. Boot-time consumers.  Nothing needs inline information at boot, so
+   loading it late only concerns the sysfs file.  The core vmlinux BTF
+   is needed at boot by the verifier, by kfunc and struct_ops
+   registrations, and by every module's BTF.  Therefore we need to make
+   each of those wait for the BTF instead of expecting it at boot: the
+   verifier fetches it only when a program brings kernel types in, and
+   the registrations are queued and replayed once it is parsed.  That
+   is most of this series.
+
+2. Module BTF.  Module BTF is split against the vmlinux BTF, so a module
+   loaded before it has nothing to be parsed against, and the module
+   notifier cannot load btf_vmlinux itself.  Therefore we need to keep
+   the module's BTF aside, create its sysfs file right away, and parse
+   and register it once the vmlinux BTF arrives; the file of a module
+   built against a distilled base (.BTF.base) serves it once relocated,
+   the others serve the raw bytes as they are.  Alan named this as the
+   hard part; it works here regardless of whether the module loads
+   before or after the vmlinux BTF.
+
+The btf_vmlinux module added here could carry the inline information as
+well when that follow-up comes, so both would share one mechanism.
+
+Patches Structure
+-----------------
+
+Patch 1 (refactor, no functional change): btf_parse_module() takes the
+vmlinux BTF as an argument and can adopt an existing copy of the module
+BTF data instead of duplicating it.  Needed so that module BTF kept
+aside at load time can be parsed later without moving the buffer the
+sysfs file points at.
+
+Patch 2 (refactor, no functional change): splits the kfunc, dtor kfunc
+and struct_ops registration functions into "find the BTF for the owner"
+and "add the registration to this BTF", so the second half can be
+replayed on a queued registration.
+
+Patch 3 (verifier): stops fetching the vmlinux BTF up front in
+bpf_check() and fetches it where kernel types enter a program instead.
+Adds bpf_peek_btf_vmlinux() for the helpers that run in program
+context and cannot load anything.  With =y the BTF is parsed at boot
+anyway, so this is invisible there.
+
+Patch 4 (carrier): the runtime side of taking the vmlinux BTF from the
+btf_vmlinux module: request it on first use, copy it out of the module
+in the BTF module notifier after checking size and SHA-256 against
+.BTF.meta, and serve /sys/kernel/btf/vmlinux from the copy with its
+size known from boot.  All under IS_MODULE(CONFIG_DEBUG_INFO_BTF), so
+unreachable until patch 9.
+
+Patch 5 (vmlinux registrations): queues kfunc, dtor kfunc and struct_ops
+registrations for vmlinux made from initcalls and applies them when the
+BTF is parsed, before it is published.
+
+Patch 6 (module BTF): keeps the BTF of modules loaded before the vmlinux
+BTF, with their own queued registrations, and parses, registers and
+publishes it when the vmlinux BTF arrives.
+
+Patch 7 (.BTF.base sysfs): gives such a module with a .BTF.base its
+/sys/kernel/btf file from load, with a reader that waits for the
+relocation.  Patches 5-7 are also unreachable until patch 9.
+
+Patch 8 (preparation, no functional change): the #ifdef, Makefile and
+Kconfig checks of CONFIG_DEBUG_INFO_BTF that must hold for both =y and
+=m use IS_ENABLED(), $(subst m,y,...) and DEBUG_INFO_BTF=n, in bpf,
+tracing, netfilter, xfrm, Rust and modules.
+
+Patch 9 (kbuild and Kconfig): makes CONFIG_DEBUG_INFO_BTF a tristate;
+with =m links .BTF into vmlinux as a non-loadable section, emits
+.BTF.meta, builds btf_vmlinux.ko with the vmlinux .BTF as its payload,
+strips .BTF from vmlinux (module BTF is generated against
+vmlinux.unstripped), excludes CONFIG_BPF_PRELOAD, and documents the
+option.
+
+Patches 1-3 and 8 are independently useful or neutral; 4-7 are dead code
+until 9 flips the switch, which keeps each bisect step building and
+behaving as before.
+
+Testing
+-------
+
+Tested with 1 GiB of memory, same tree, =y against =m, both with
+CONFIG_DEBUG_INFO_BTF_MODULES=y.  The on-demand behaviour is easy to
+see by hand on an =m kernel:
+
+  # lsmod | grep btf_vmlinux
+      -> nothing: the BTF is not loaded at boot.
+  # ls -la /sys/kernel/btf/vmlinux
+      -> the file exists with its final size (from .BTF.meta), although
+         the BTF behind it is not loaded yet.
+  # modprobe ext4 nf_conntrack
+  # ls /sys/kernel/btf/
+      -> ext4, nf_conntrack, ... appear immediately, although their
+         BTF is only kept aside, not parsed: there is no vmlinux BTF to
+         parse it against yet.
+  # lsmod | grep btf_vmlinux
+      -> still nothing: loading modules does not load the vmlinux BTF.
+  # cat /sys/kernel/btf/ext4 > /dev/null
+  # lsmod | grep btf_vmlinux
+      -> still nothing: a module's BTF file is served from the raw copy,
+         reading it does not need the vmlinux BTF.
+  # grep VmallocUsed /proc/meminfo
+      -> baseline.
+  # cat /sys/kernel/btf/vmlinux > /dev/null
+  # lsmod | grep btf_vmlinux
+      -> btf_vmlinux ... [permanent]: the first use loaded it, and it
+         cannot be unloaded.
+  # grep VmallocUsed /proc/meminfo
+      -> up by ~5.5 MB: the BTF copy, allocated only now.
+  # bpftool btf list
+      -> vmlinux and every loaded module now have BTF ids; the modules
+         loaded before were parsed and registered on the way.
+
+The same with an out-of-tree module (built with M=, so its BTF is split
+against a distilled base, .BTF.base), on a fresh boot:
+
+  # insmod btf_extmod.ko
+  # ls -la /sys/kernel/btf/btf_extmod
+      -> the file exists with its final size, although the BTF behind
+         it is only valid once relocated against the vmlinux BTF.
+  # lsmod | grep btf_vmlinux
+      -> nothing: loading the module does not load the vmlinux BTF.
+  # cat /sys/kernel/btf/btf_extmod > /dev/null
+  # lsmod | grep btf_vmlinux
+      -> btf_vmlinux ... [permanent]: reading this file loaded the
+         vmlinux BTF, relocated the module's BTF and then returned it.
+  # bpftool btf dump file /sys/kernel/btf/btf_extmod
+      -> the module's own types, resolved against the vmlinux BTF.
+  # rmmod btf_extmod
+      -> unloads normally; its file goes away with it.
+
+Any BPF program that uses kernel types (kprobe with
+bpf_get_current_task_btf(), a kfunc call, fentry, a global subprogram
+taking the context, bpf_snprintf_btf(), CO-RE, ...) triggers the same
+load; a plain socket filter does not.
+
+Results:
+
+ - MemTotal is ~5.4 MB higher with =m while the BTF is unused, which is
+   the size of the .BTF section.  Once the BTF is in use, MemFree is the
+   same within run-to-run noise.
+ - Modules loaded before the trigger (ext4, nf_conntrack, which
+   registers kfuncs from its init, xfrm_interface) get BTF ids once the
+   BTF is loaded; a struct_ops map for tcp_congestion_ops and a syscall
+   program calling bpf_task_from_pid() work; nf_nat loaded afterwards
+   takes the usual path.
+ - stat() of /sys/kernel/btf/vmlinux reports the final size before the
+   load; fstat/read/mmap agree afterwards.
+ - A carrier with one byte of .BTF changed is refused with -EINVAL.
+ - With the in-tree bpftool and clang-built programs as the first user
+   on a fresh boot: bpftool btf dump file /sys/kernel/btf/vmlinux,
+   bpftool btf list, a socket filter with a global subprogram taking
+   struct __sk_buff *, a raw_tp program calling bpf_snprintf_btf(), a
+   CO-RE field read, and a program calling a kfunc of an out-of-tree
+   module (distilled .BTF.base, kfunc registered from init, loaded
+   before the vmlinux BTF), and a read of that module's own sysfs file,
+   each load the BTF and work; rmmod of that module afterwards is clean.
+ - lockdep and kmemleak kernels are clean in all of the above.
+ - =y and =n build and behave as before; =m without module BTF works;
+   every patch builds on its own.
+ - The boot image on disk shrinks by the compressed BTF with =m
+   (15.0 MB to 13.2 MB here).
+
+Changes since v2 [5]:
+
+ - Rebased onto current bpf-next; v2 no longer applied there.
+ - Patch 8: the RUST and GENDWARFKSYMS pahole restrictions, written as
+   "depends on !DEBUG_INFO_BTF", now say DEBUG_INFO_BTF=n, so they
+   still hold with =m (found while checking the Sashiko question on
+   bool options depending on DEBUG_INFO_BTF, which Kconfig handles:
+   a bool whose dependency is m can still be y).
+
+Changes since v1 [4]:
+
+ - Split for review: v1 patch 5 is now patches 5-7 (vmlinux
+   registrations, module BTF, .BTF.base sysfs), v1 patch 6 is now
+   patches 8-9 (preparation of the existing checks, the switch).
+ - Fetch sites added for the program context type table
+   (bpf_ctx_convert: global subprograms taking the context, ctx access
+   of tracing/EXT programs), for bpf_snprintf_btf()/bpf_seq_printf_btf()
+   and for CO-RE candidate lookup, which now fetches before taking
+   cand_cache_mutex (Sashiko, bpf-ci, Jiri).  Without
+   CONFIG_DEBUG_INFO_BTF the new helper check is skipped, so nothing
+   changes there.
+ - Module BTF is published only after its deferred registrations are
+   applied; only modules past MODULE_STATE_LIVE are replayed, with the
+   module pinned; a module still in init has its queue applied at LIVE.
+   Fixes the concurrent registration and COMING-module lifetime issues
+   (Sashiko, bpf-ci).
+ - The sysfs reader of a module with .BTF.base waits for the module's
+   BTF to be relocated instead of serving the raw data (bpf-ci); sysfs
+   files are no longer removed from the deferred parse path, and
+   MODULE_STATE_GOING removes them outside btf_module_mutex.
+ - A module whose deferred BTF fails to parse or get an id keeps the
+   buffer its sysfs file serves; nothing is freed under a reader
+   (Sashiko).
+ - The vmlinux registration queue has its own mutex; no lock is taken
+   under btf_vmlinux_lock that leads back to it (bpf-ci).
+ - A failed parse is not cached with =m (Sashiko).
+ - Only the carrier depends on vmlinux in Makefile.modfinal; POSIX dd
+   instead of head -c (Sashiko).
+ - .BTF stripped from vmlinux with =m, so no boot image carries it,
+   also where the image is an ELF copy of vmlinux; module BTF is
+   generated against vmlinux.unstripped (Alan).
+ - Kconfig help: initramfs note, module BTF accounting (Alan).
+ - btf_struct_ops_add() renamed btf_struct_ops_register() (bpf-ci);
+   its stub only defined where used.
+ - Tests with bpftool/libbpf userspace and an out-of-tree .BTF.base
+   module added (Alan).
+
+[1] https://lore.kernel.org/all/20260917000201.25581-2-wanjay@amazon.com/
+[2] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
+[3] https://lore.kernel.org/all/33592fca-88a8-44aa-8d94-40e1e604554e@oracle.com/
+[4] https://lore.kernel.org/bpf/20260923053948.30617-1-wanjay@amazon.com/
+[5] https://lore.kernel.org/bpf/20260925211314.5118-1-wanjay@amazon.com/
+
+Jay Wang (9):
+  bpf: pass the vmlinux BTF to btf_parse_module() and let it adopt the
+    data
+  bpf: split the kfunc, dtor kfunc and struct_ops registration bodies
+  bpf: fetch the vmlinux BTF where kernel types enter a program
+  bpf: take the vmlinux BTF from the btf_vmlinux module
+  bpf: defer vmlinux kfunc and struct_ops registrations
+  bpf: keep module BTF until the vmlinux BTF is available
+  bpf: expose deferred .BTF.base module BTF in sysfs from module load
+  bpf, trace, net: prepare CONFIG_DEBUG_INFO_BTF checks for a tristate
+  kbuild, bpf: allow building the vmlinux BTF as a module
+
+ Documentation/bpf/btf.rst         |  35 ++
+ Makefile                          |   8 +-
+ include/asm-generic/vmlinux.lds.h |  31 +-
+ include/linux/bpf.h               |   1 +
+ include/linux/btf.h               |   6 +
+ include/linux/btf_ids.h           |   2 +-
+ include/linux/compiler_types.h    |   2 +-
+ include/linux/module.h            |   2 +-
+ include/trace/trace_events.h      |   2 +-
+ init/Kconfig                      |   2 +-
+ kernel/bpf/Makefile               |   6 +-
+ kernel/bpf/bpf_struct_ops.c       |   3 +-
+ kernel/bpf/btf.c                  | 922 ++++++++++++++++++++++++++----
+ kernel/bpf/btf_vmlinux.c          |  23 +
+ kernel/bpf/preload/Kconfig        |   4 +
+ kernel/bpf/syscall.c              |   6 +
+ kernel/bpf/sysfs_btf.c            |  85 ++-
+ kernel/bpf/verifier.c             | 122 +++-
+ kernel/module/Kconfig             |   2 +-
+ kernel/module/main.c              |   4 +-
+ kernel/trace/bpf_trace.c          |   3 +-
+ kernel/trace/trace_syscalls.c     |   6 +-
+ lib/Kconfig.debug                 |  22 +-
+ net/netfilter/Makefile            |   6 +-
+ net/xfrm/Makefile                 |   4 +-
+ scripts/Makefile.modfinal         |  26 +-
+ scripts/Makefile.vmlinux          |   5 +
+ scripts/gen-btf.sh                |  95 ++-
+ scripts/link-vmlinux.sh           |  25 +-
+ 29 files changed, 1302 insertions(+), 158 deletions(-)
+ create mode 100644 kernel/bpf/btf_vmlinux.c
+
+
+base-commit: 6ac134ec930642d5b574b63a72a0e999c2470c64
+-- 
+2.47.3
+
