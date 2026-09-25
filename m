@@ -1,94 +1,194 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B47B40B0E6;
-	Fri, 25 Sep 2026 21:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110914F55D2
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 21:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790371987; cv=none; b=SV67pZjmHCtZiKr4LUnh+HtpzvvECSO5tfY1IuIi9saN+HcXuuKsqh7X+xuV1pbtFOftlTlyuQgH/dskrLoTW1V/4rd160O2U3ZuwtYQp8Mru5iJqHtFWcK5z2qBsqy01gCbI9kW8I90hPiqdDgmJYISW+zS4wMvozDlcmQUqvw=
+	t=1790372195; cv=none; b=Z3sYMK21RedvStEv/hndY36VbF8fYQrypWraalGs9kszOfZbdn0d92Zb/hQnosGc5qSAYbM35+DThlo2VU8VwVhtZRGLTA34Y1duLd7ZawYqKBywSMukwnqfvJeMMw28IfsPvvpsSPkrAoTHy7nMWC5VzuURP8J3S3Vrofpdcqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790371987; c=relaxed/simple;
-	bh=oFzVmRidh8A7hLbK7dnJIflNNaFtAjbE1RmpP4AhD5s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HNmius4jHdT0N01hBlYxujsSkuHyn8m7jyeQMtJuvQ73/V6kvJn/X6/vYljgiRhSjtcOklM0nnTIrNnRXFlaZyhuAOOkek1atOKHOtYUCojXvseECKsBKSSVyT5Pp/wluC1WnlpR7nPe/1y/q5B7c4VPZWj4xqjgliY5jF/RKuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBqWZZBI; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBqWZZBI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C371F000FF;
-	Fri, 25 Sep 2026 21:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790371985;
-	bh=bEyB0hFzcNjqnvyi3s6ue1V4vlnrFUcfpW0f0eI9Kis=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DBqWZZBIplh9zujyJHuJdeHcCaElSJ3iME8q+AsA21EP7TRgsGTHTckuqXSA8tagv
-	 EViwGO+eJHOvd483i1vDwNjWWZQMktSStlq6W6atqdjMLwDs10c+TDFTEnM9lkIDo/
-	 mBy2sOy/fapuYc4p2kpriWrj4aa8Kk9vQOVfqGkBajKqc+q3RHpLGIztNibUQeGFGM
-	 7ftmXZ6HRWaVXN+Nks64E6w8RgzN85vPcIm21Psa6IqJtIBCgx545RTfxID5wUZ7Oy
-	 diPexwfiGnthaNks03LcYqWvOR3UB9L7PodYAkEZA9QW8VbwmlO5xvKtad5pzoDKvS
-	 svczG5CP4IFvA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 9/9] kbuild, bpf: allow building the vmlinux
- BTF as a module
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jay Wang" <wanjay@amazon.com>
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260925211314.5118-10-wanjay@amazon.com>
-References: <20260925211314.5118-1-wanjay@amazon.com>
- <20260925211314.5118-10-wanjay@amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 25 Sep 2026 21:33:05 +0000
-Message-Id: <20260925213305.A7C371F000FF@smtp.kernel.org>
+	s=arc-20240116; t=1790372195; c=relaxed/simple;
+	bh=JZwiaVgiIJbH8gFfFR2g3WyYsOdDfVPB1yeqcE/omyA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gVHpE3OVCWS2W3bbtB9UMrCdEHb8SLTFJgGYmsV4QqlbBfuaWKHFC+m5cfuL+qGlTpjbKnFKpcShcDgArP11b8JVxSgUH6lIxdYLOKgWGdsZmeCaflgSJHKcZSPodn2/OLY2HO+VPKTsCCyE89ULV03Cxcz8wCZKCElTLXEeNec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 9C88F2D343D4DC; Fri, 25 Sep 2026 14:36:19 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	kernel-team@fb.com,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH dwarves 1/2] dwarf_loader: Trust the entry value register over the first location entry
+Date: Fri, 25 Sep 2026 14:36:19 -0700
+Message-ID: <20260925213619.2187751-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] kconfig: turning DEBUG_INFO_BTF into tristate silently disables de=
-pendent bool features
---
+A parameter's location list describes where the parameter lives from each
+entry's start address on, and a producer may leave the entry PC out of th=
+e
+list entirely, as clang does when the parameter is moved into a
+callee-saved register during the prologue.  Here is @lazy, the second
+parameter of a kfunc in a clang 21.1.8 x86-64 vmlinux:
 
-commit f23aaa487601db0500af9e21873fa5fc4f1af7b5
-Author: Jay Wang <wanjay@amazon.com>
+  0x00dcf39e: DW_TAG_subprogram
+                DW_AT_low_pc    (0xffffffff81553d70)
+                DW_AT_high_pc   (0xffffffff81553ee3)
+                ...
+                DW_AT_name      ("scx_bpf_task_set_lazy_resched")
+                DW_AT_decl_file ("kernel/sched/ext/ext.c")
+                ...
 
-kbuild, bpf: allow building the vmlinux BTF as a module
+  0x00dcf3c3:   DW_TAG_formal_parameter
+                  DW_AT_location        (indexed (0x1491) loclist =3D 0x0=
+01e825f:
+                     [0xffffffff81553d8b, 0xffffffff81553e5f): DW_OP_reg6=
+ RBP
+                     [0xffffffff81553e5f, 0xffffffff81553ec8): DW_OP_entr=
+y_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                     [0xffffffff81553ec8, 0xffffffff81553eca): DW_OP_reg6=
+ RBP
+                     [0xffffffff81553eca, 0xffffffff81553ecc): DW_OP_entr=
+y_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                     [0xffffffff81553ecc, 0xffffffff81553ee3): DW_OP_reg6=
+ RBP)
+                  DW_AT_name    ("lazy")
+                  DW_AT_decl_file       ("kernel/sched/ext/ext.c")
+                  DW_AT_decl_line       (9747)
+                  DW_AT_type    (0x00d59515 "bool")
 
-This commit makes CONFIG_DEBUG_INFO_BTF a tristate. It allows the vmlinux
-BTF to be built as a module (btf_vmlinux) that is loaded on demand, saving
-memory when it is not needed.
+@lazy arrives in RSI, but the function starts at 0xffffffff81553d70 while
+the list starts at 0xffffffff81553d8b: the range covering the function
+entry is missing and the first entry present names RBP, the register @laz=
+y
+was moved to.  parameter__decode_location() took the register from that
+first entry and only consulted DW_OP_entry_value when no register had bee=
+n
+found yet, so loc_reg ended up as RBP, the parameter looked like it was i=
+n
+an unexpected register and the whole function was dropped from BTF:
 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 134b15a44625e..418025c5e6577 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -396,7 +396,7 @@ config DEBUG_INFO_SPLIT
->  	  Incompatible with older versions of ccache.
-> =20
->  config DEBUG_INFO_BTF
-> -	bool "Generate BTF type information"
-> +	tristate "Generate BTF type information"
+  scx_bpf_task_set_lazy_resched : skipping BTF encoding of function due t=
+o
+  unexpected register usage for parameter
 
-[Severity: High]
-Does this change cause a regression where dependent boolean features are
-disabled when CONFIG_DEBUG_INFO_BTF is configured as a module?
+which in turn breaks the kernel build for a kfunc, the failure Tejun Heo
+reported:
 
-In Kconfig, when a bool option depends on an expression that evaluates to
-m, its upper bound is restricted. Since a bool cannot hold an m value,
-Kconfig evaluates the option to disabled.
+  WARN: resolve_btfids: no BTF func for kfunc scx_bpf_task_set_lazy_resch=
+ed in scx_kfunc_ids_any
+  WARN: resolve_btfids: unresolved symbol scx_bpf_task_set_lazy_resched
 
-Several major kernel features are boolean options that depend directly on
-CONFIG_DEBUG_INFO_BTF, including CONFIG_SCHED_CLASS_EXT, CONFIG_NET_SCH_BPF,
-CONFIG_DEBUG_INFO_BTF_MODULES, and CONFIG_PROBE_EVENTS_BTF_ARGS.
+DW_OP_entry_value(DW_OP_regN) says the parameter still holds the value re=
+gN
+had on entry to the function, so regN is by definition the register the
+parameter was passed in.  That is better evidence than the first location
+list entry, so prefer it.  Parameters described by DW_OP_piece keep the
+registers the pieces name, since a single entry value register cannot
+describe a multi-register aggregate.
 
-Setting CONFIG_DEBUG_INFO_BTF to m evaluates these dependencies to m,
-which causes these features to be omitted from the build.
+On the vmlinux above this encodes 34 more functions, among them the kfunc=
+,
+and drops none.
 
-Could the dependencies be updated to evaluate to y when BTF is built
-as a module, such as using depends on DEBUG_INFO_BTF !=3D n?
+Reported-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ dwarf_loader.c | 34 +++++++++++++++++++++++++++-------
+ 1 file changed, 27 insertions(+), 7 deletions(-)
 
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 1e5363a..2c6850e 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1736,6 +1736,11 @@ static void parameter__set_loc_reg(struct paramete=
+r *parm, int reg)
+ 		parm->loc_reg =3D reg;
+ }
+=20
++static bool parameter__has_piece_info(const struct parameter *parm)
++{
++	return parm->first_reg_fields || parm->second_reg_fields;
++}
++
+ static void parameter__set_field_bit(unsigned long *fields, int byte_off=
+set)
+ {
+ 	if (byte_offset >=3D 0 && byte_offset < (int)(sizeof(*fields) * 8))
+@@ -1848,6 +1853,7 @@ static void parameter__decode_location(Dwarf_Attrib=
+ute *attr, struct conf_load *
+ 				       struct cu *cu, Dwarf_Die *die,
+ 				       struct parameter *parm)
+ {
++	int entry_value_reg =3D PARAMETER_UNKNOWN_REG;
+ 	Dwarf_Addr base, start, end;
+ 	Dwarf_Op *expr, *entry_ops;
+ 	Dwarf_Attribute entry_attr;
+@@ -1893,15 +1899,34 @@ static void parameter__decode_location(Dwarf_Attr=
+ibute *attr, struct conf_load *
+ 			break;
+ 		case DW_OP_entry_value:
+ 		case DW_OP_GNU_entry_value:
+-			if (dwarf_getlocation_attr(attr, expr, &entry_attr) =3D=3D 0 &&
++			if (entry_value_reg =3D=3D PARAMETER_UNKNOWN_REG &&
++			    dwarf_getlocation_attr(attr, expr, &entry_attr) =3D=3D 0 &&
+ 			    dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) =3D=3D 0 &=
+&
+ 			    entry_len =3D=3D 1 && dwarf_op__is_reg(entry_ops->atom))
+-				parameter__set_loc_reg(parm, entry_ops->atom);
++				entry_value_reg =3D entry_ops->atom;
+ 			break;
+ 		}
+ 	}
+ 	libdw__lock_unlock();
+=20
++	/*
++	 * DW_OP_entry_value(DW_OP_regN) says the parameter still holds the
++	 * value regN had on entry to the function, so regN is the register the
++	 * parameter was passed in.  Prefer it over the register named by the
++	 * first location list entry: that entry only describes where the
++	 * parameter lives from its own start address on, and producers do omit
++	 * the entry PC from the list, as clang does when the parameter is
++	 * moved into a callee-saved register during the prologue: the first
++	 * entry then names that register instead of the argument register,
++	 * making the whole function look like it uses unexpected registers.
++	 *
++	 * Parameters described by pieces keep the register(s) the pieces name;
++	 * a single entry value register cannot describe a multi-register
++	 * aggregate.
++	 */
++	if (entry_value_reg !=3D PARAMETER_UNKNOWN_REG && !parameter__has_piece=
+_info(parm))
++		parm->loc_reg =3D entry_value_reg;
++
+ 	parameter__finish_piece_decode(parm, die, conf, cu);
+ }
+=20
+@@ -3692,11 +3717,6 @@ static int parameter__align_reg_idx(const struct p=
+arameter *parm, int reg_idx,
+ 	return (reg_idx + align - 1) & ~(align - 1);
+ }
+=20
+-static bool parameter__has_piece_info(const struct parameter *parm)
+-{
+-	return parm->first_reg_fields || parm->second_reg_fields;
+-}
+-
+ static bool parameter__uses_full_aggregate(const struct parameter *parm)
+ {
+ 	return parm->first_reg_fields && parm->second_reg_fields;
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925211314.5118=
--1-wanjay@amazon.com?part=3D9
+2.53.0-Meta
+
