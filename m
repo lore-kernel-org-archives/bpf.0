@@ -1,119 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06633FF89B
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 16:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFFF4EA368;
+	Fri, 25 Sep 2026 16:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790353757; cv=none; b=IyB3/mPO/3huibYmJjt/H0zbaFGLNNzbCV+k1hmrx4Ct7hWWY4nu4xaKp3JpnaGuhJcPicHUWr8mLRSjCiw94qtB/zTdY+gqQMi/GvXJi44thoc/l2wU+hbHKyIRvKHS2A9/agABvr9ItoO0X+zXJ7y0kLnQZA2HCoqiHwK9nRs=
+	t=1790354593; cv=none; b=jutzZN+3xbwZtK2ZsC7nqWdNJRU+re7Mgjp+7thkpKDX8OpovGxxvKcrXZ8eqzfgWJaQTzhk/DQyfYXUsOB6FBR/odDu3JWWmaNV309ceL1lrSs4rGJO3PzXkOXygLvm3n6sJzXet32G/OQzwZk2OoWTUuXtS3yicTRiClcbGcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790353757; c=relaxed/simple;
-	bh=TPNs6g47OJRWEYtxkGzlcP2gTN2fVWshq366DOpsdBM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RSZVDPnTkoo9SbNv4n9tZ5//xnUCZrC4fYbenQaxNyzBX0KuLPqzcga+SKlipMFlcLTONOYOALosBSFfBgVvDeyHYqoBKDG7yffy5jWkAQ3TqVMUGK3I8yoObUJLObxQ5qVhyhr8Es0HjF6JCygPNa/QKs5rRYFhgfPf8n1897A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ojb1F7dg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790354593; c=relaxed/simple;
+	bh=P3w6KMXjzLlN6nAljQD/5grUF93zr/UQ9AJoIQbvkpw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=M1SuUK1zkn+K5WCptRsFEkBjjX4pYOAKUvYDhY+In8PFCw9ySt7B0Eu5r2qqzkG9DIjGODkZnjO5Xypwdmsr11lFDTxya3p+8EGPopbgO1M3EU00N+Q1yk5kSv/AIcbjQYuTgNytIJ62eKPWPwBV8oW9AL6HbEoMLzwve5DYCT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QFGDgU7I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ojb1F7dg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB261F000FF;
-	Fri, 25 Sep 2026 16:29:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QFGDgU7I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72A31F000FF;
+	Fri, 25 Sep 2026 16:42:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790353755;
-	bh=d1XQgqQLGtwJ+EYaXw8P4JmHmVg3xYTqpAI9d/6tHfA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ojb1F7dguJ7awQIS+BLz1EKR78Om6XGWAno35m3uAKa1B539YhGv1BUDmSYz1SE/v
-	 GEMHEBKhlmA3GgYrLDBSbQPHajPWgxL0n+BjE9k7eI7XBlb1xyfj7bjWywmcvZVFom
-	 z23T3N5vOOUcqY7zwiNbtNq5PQsZlS3Sbn0exIPy9eWOmQf8wWOhUC0ToYdqlGu7Nv
-	 xz46gEPMufOSeCSa5gr/sTqy10tU96KZ/nef4C421DUACY1mwacYb3vcAOnrIZnXNt
-	 5oFCSmvZueAttKjUuV71bsd2tfs14/u/l0ftNFunG88YO4bflhfRkFQxhQT55XyIO3
-	 gTJUQCqDFEEqQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Check that bpftool map
- dump fails for socket storage
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Maxim Skokov" <skokovmaksimevg@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260925162031.27259-3-skokovmaksimevg@gmail.com>
-References: <20260925162031.27259-1-skokovmaksimevg@gmail.com>
- <20260925162031.27259-3-skokovmaksimevg@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 25 Sep 2026 16:29:14 +0000
-Message-Id: <20260925162915.2CB261F000FF@smtp.kernel.org>
+	s=k20260515; t=1790354563;
+	bh=Td8d4StGwfViCnmZPo1eb0gqFXmqlEDNpKnck2rJhM8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=QFGDgU7IKMnHqdexzNTe0J9OMuvOr7gXytEcQR5jvi5F+E0moIp5uwXVWFrhZuqpA
+	 tQu5zKqPQ9sXNki6y5QXUPclXS4I3jt7QDVjiHziQVh3nobUMaghdYb1NKjVzxUY7r
+	 n56U64tB+OEzMGbGsUmxUP942DJzYitlSB1QzhJCXFLqFzmG/lzBlaFiUSah6kXWdO
+	 upVPFVojzMDT+AjxE0J0H3K2Xqmt3k6nh0zQ9QoHLQ7DP1qdVJALDFCOAP2mzP3pJq
+	 WRORlXemmQjOHARWBTZL+V4DEUHmKzM+6FaHadtiraYtOD4vhhLs+Jz3Z9h3vT21da
+	 MZTP+y+tCnVMA==
+Content-Type: multipart/mixed; boundary="===============6809303146770183891=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <6a6f53bff017aa1e0c758a1a87da09ae0165d5523b13e65dc944e3494377e3fd@mail.kernel.org>
+In-Reply-To: <20260925154029.3673513-2-eva.kurchatova@virtuozzo.com>
+References: <20260925154029.3673513-2-eva.kurchatova@virtuozzo.com>
+Subject: Re: [PATCH bpf-next v2 1/1] selftests: bpf: size the map in test_lru_sanity3 to whole refills
+From: bot+bpf-ci@kernel.org
+To: eva.kurchatova@virtuozzo.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,willemb@google.com
+Cc: linux-kernel@vger.kernel.org,eva.kurchatova@virtuozzo.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 25 Sep 2026 16:42:42 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: missing unlink of pinned map causes permanent test failure
---
+--===============6809303146770183891==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 602b2c7f146f62e2714d566e5a1fb9912bee7425
-Author: Maxim Skokov <skokovmaksimevg@gmail.com>
+> selftests: bpf: size the map in test_lru_sanity3 to whole refills
+>
+> test_lru_sanity3 fills a map of tgt_free * 2 elements, and then reads
+> back all but the last few. Whether that passes depends on the cpu
+> count alone; on a machine with six it does not:
+>
+>   test_lru_sanity3 (map_type:9 map_flags:0x0): test_lru_map.c:463:
+>   test_lru_sanity3: Assertion `!bpf_map_lookup_elem_with_ref_bit(
+>   lru_map_fd, key, value)' failed.
+>
+> The kernel hands elements out in refills of lru->target_free, which is
+> clamp((size / nr_cpus) / 2, 1, LOCAL_FREE_TARGET), that is 128 / nr_cpus
+> rounded down. A refill the global free list cannot satisfy in full
+> calls __bpf_lru_list_shrink() for the remainder, and that evicts live
+> elements. Filling the map therefore evicts nothing only when computed
+> 128 / nr_cpus is a power of two. Any other nr_cpus variation fails.
+>
+> batch_size is already __tgt_size(tgt_free), the refill size of a map
+> is __map_size(batch_size) elements, so size the map that way and the
+> fill consumes whole refills. Start the keys of the last insert at
+> map_size + 1, just past the new size.
+>
+> Above 128 cpus __tgt_size(tgt_free) is 0 and there is no size to build
+> on. Skip the test there.
 
-selftests/bpf: Check that bpftool map dump fails for socket storage
+The changelog states the skip triggers "Above 128 cpus", but the code
+skips from 65 CPUs up. main() passes tgt_free = LOCAL_FREE_TARGET (128),
+and __tgt_size() computes:
 
-This commit adds a test to verify that bpftool fails to dump a socket
-storage map. It creates a map, attaches storage to a socket, pins it,
-and checks various output formats.
+    batch_size = (128 / nr_cpus) / 2 = floor(64 / nr_cpus)
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/=
-tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-> new file mode 100644
-> index 0000000000000..0a0fa8926b239
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-> @@ -0,0 +1,88 @@
-[ ... ]
-> +void test_bpftool_map_dump(void)
-> +{
-> +	int map_fd, sk_fd =3D -1, value =3D 42, ret;
-> +	char output[1024] =3D {};
-> +
-> +	map_fd =3D create_sk_storage_map();
-> +	if (map_fd < 0)
+which is 0 for any nr_cpus >= 65 (since 128 / 65 = 1, and 1 / 2 = 0).
+The new `if (!batch_size)` check fires on 65..128 CPU machines, not only
+"above 128 cpus".
+
+The sentence "batch_size is already __tgt_size(tgt_free), the refill
+size of a map is __map_size(batch_size) elements" is also hard to parse.
+The refill size is batch_size (not tgt_free); the map is sized to make
+the kernel's target_free equal batch_size.
+
+Could the last paragraph say "Above 64 cpus", and could the sentence be
+reworded to clarify that batch_size becomes the refill size after the
+map is resized?
+
+> diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
+> index 0921939532c6..84e9a930471a 100644
+> --- a/tools/testing/selftests/bpf/test_lru_map.c
+> +++ b/tools/testing/selftests/bpf/test_lru_map.c
+> @@ -441,8 +441,15 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
+>  	assert(sched_next_online(0, &next_cpu) != -1);
+>
+>  	batch_size = __tgt_size(tgt_free);
+> +	if (!batch_size) {
+> +		/* More cpus than this tgt_free gives a refill for */
+> +		printf("Skip\n");
 > +		return;
+> +	}
+
+A subsystem pattern flags this as potentially concerning: the new skip
+reports with printf("Skip\n") and then returns, so the binary exits 0
+and CI counts it as a pass. The selftests guide asks for skip results to
+go through kselftest.h (ksft_test_result_skip() with a reason string),
+and says skip messages should always include a reason.
+
+test_lru_map.c is a legacy binary that never includes kselftest.h, and
+converting just this line would be inconsistent with the existing
+printf("Pass\n") pattern used elsewhere in the file. The concern is
+narrow: could the message at least say why the test was skipped, for
+example printf("Skip: nr_cpus %d > %u\n", nr_cpus, tgt_free / 2)?
+
 > +
-> +	sk_fd =3D socket(AF_INET, SOCK_STREAM, 0);
-> +	if (!ASSERT_OK_FD(sk_fd, "socket"))
-> +		goto out;
-> +	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_NOEXIST),
-> +		       "add socket storage"))
-> +		goto out;
-> +	if (!ASSERT_OK(bpf_obj_pin(map_fd, PIN_PATH), "pin map"))
-> +		goto out;
-
-[Severity: Medium]
-Looking at test_bpftool_map_dump() in
-tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c, will this cause a
-permanent test failure on subsequent runs if the pin operation fails, or if=
- the
-test is interrupted early?
-
-If bpf_obj_pin fails and we jump to the out label, the test skips over the
-unlink cleanup. The map then remains pinned, which means the next run will
-encounter EEXIST when it tries to pin the map again.
+> +	/* A partial refill shrinks the LRU and evicts live elements */
+> +	map_size = __map_size(batch_size);
+>
+> -	map_size = tgt_free * 2;
+>  	lru_map_fd = create_map(map_type, map_flags, map_size);
 
 [ ... ]
-> +	ASSERT_HAS_SUBSTR(output, "can't dump sk_storage map",
-> +			  "plain dump explains why on stderr");
-> +
-> +	unlink(PIN_PATH);
-> +out:
-> +	if (sk_fd >=3D 0)
-> +		close(sk_fd);
-> +	close(map_fd);
-> +}
 
-[Severity: Medium]
-Since the out label is positioned after unlink(PIN_PATH), the cleanup is
-bypassed on failure paths.
+> @@ -466,7 +473,7 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
+>  	}
+>
+>  	/* Insert new batch_size: replaces the non-referenced elements */
+> -	key = 2 * tgt_free + 1;
+> +	key = 1 + map_size;
+>  	end_key = key + batch_size;
+>  	for (; key < end_key; key++) {
+>  		assert(!bpf_map_update_elem(lru_map_fd, &key, value,
 
-Should the unlink be moved after the out label so the cleanup is always
-executed?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925162031.2725=
-9-1-skokovmaksimevg@gmail.com?part=3D2
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36157128898
+--===============6809303146770183891==--
