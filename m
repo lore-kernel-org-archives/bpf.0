@@ -1,85 +1,78 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0F1175A5
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 00:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E8020125F
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 00:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790294696; cv=none; b=E1VGZiNce+UJnZFB8UiVnsgqQZF8P/v5BcvIcuNNNTlyms/i4ORk8d4xpxycpXulWlKK77rTUafUFpVrzPKJQ3y1oKnJNXg4ps4yQbeDdYKF7UzoK6rTM5Mtf1/8emYPQiJlAPKN84M0BwzqPucccNbwOFd4tgqQgpO+7sTTHlU=
+	t=1790295112; cv=none; b=R7DFhZ+t0TFvygYSt2HOeZLZrP6fDYMRgEjU31n3nX28/Vgl+hu4t4Rd0wtR9/v2tmKBhbUjJhq48vW3r1EV9CSyxsUVyF8HAUg1RHDGTZbVdhb3KfHLlcRWTr/q7OofPbpj4tn/ii/sOJ5ze2PiCupgn3G/PgGjzmweWXVt9xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790294696; c=relaxed/simple;
-	bh=rAvKWZrxLvgCPTLvJvB1BAkWD9OtTSNteVT1S3SD1g0=;
+	s=arc-20240116; t=1790295112; c=relaxed/simple;
+	bh=UvMDeOommhXZhfMgmvwD9zEfGjf1RgqWgXpX6eI4PyY=;
 	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=tF4NPNGARh7IrENcW9VK/XqQh4Ksl7u1v9O9UE+DBOP/1IxWyQoFajI0ACP1wAdGTGmxuuutCZky0/S3LQT5VMTheFFLmDCo/i87m7/zLDzYHWGhk6cP+V5m5nCw2tSFOMeXf09mB+3l3PXy4BdsSi/CV+tZV/XmMyTGchWeqXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bQ6yhhr8; arc=none smtp.client-ip=74.125.228.40
+	 References:MIME-Version; b=YcsBdH9aVujSKMDM731+WJxF6Z6rEheZ/wiES0xx/msTu9UjJsLIhBK1vZjloN8eIdeHLwsg7Ny5gEt/xaE4f999M1EECvm0lj5ZMELu/vHV7qO4A/7ypx8ueJ++YJCI6qo1a8wyYI/hqksbHqIj2WzcBO/kBHxDWxUooWRe0W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fAv8q6E2; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bQ6yhhr8"
-Received: by mail-pz2-f40.google.com with SMTP id d2e1a72fcca58-880483985aeso7773b3a.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 17:04:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fAv8q6E2"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d91ede8035so2487485ad.3
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 17:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790294694; x=1790899494; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790295110; x=1790899910; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Cigb57ggqvOPpol93ktV2mCf9hAKKRb/9fmR4jwfSd8=;
-        b=bQ6yhhr8xw0JoCSLvi7BjkpyvuEjIGrStgXc0n1xoS6t/I3+KLemh49uEsB+8+0OAa
-         tfpGFsb+EXDi0A1OdD/aZxDKr0bX1sDyEc5Oq1qsxmFc8jzUm64mNZcX0JUZBNreY8oo
-         rD2RIdffhTwpfJWWHSifmgQbpU8QOV6KjH4M4mPe1gA1DpI2Ytpr5DY/msycS4v/gU8D
-         jxspBVCewDMT15V6u9JKCimTEOgVkbKKvtp4J3uOu3V8LU5EZ+9a7rVH9itq7E5fEOO+
-         im8gqmfRqSLozuTzovRDxuwgM78BeWPfrlDqq9X8A2xCed+G726Q1H9UeUbr4aj3TdV8
-         Czvw==
+        bh=1sumhp6TC0oFODPLbstUoLZjfI0b4gRvdtq6iMSnjFg=;
+        b=fAv8q6E2gfeJU/u2GLle6dTC+QcgEen0cVseUq0G22FFSrhjGQFJfO3PAz+7rfHlqy
+         X0V/ZOzfZBczxeBP7lUR0ytNBYnBPQ++csjJX3HgeKwqqn4iz+dz1byp5tgmsqvci3zi
+         yNj8pz2SOK9KPv+JanDXXYB7IfE7xBOxJK69N1X64UhkyoaOKWRhBaVABDCJBAas2fNd
+         TibBen8VuEEpR6NvRkPKoYsggRQXQFPtU1gcwxLAEsDhfh+ft0qPPishx50tttO73RtA
+         EfATYjnevTPh+VQhjWqMKwdVY7Gzzpl9kzjVj02QF2iw9juhy3g9uCbWlCnF1OK+q58x
+         nkyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790294694; x=1790899494;
+        d=1e100.net; s=20260707; t=1790295110; x=1790899910;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Cigb57ggqvOPpol93ktV2mCf9hAKKRb/9fmR4jwfSd8=;
-        b=iHJJjMYgJWymSpPeApGWRXo/76R+YIqHGJbXeopIoWeyCAdXNxDC6pg2/B3R/PjQrx
-         9RSidK2XNzrUs/PpYSYAMF11Ay/rffuzItMztpH/5pxNT+6514vis+F/ZBvVODAcF721
-         NjZyOxdd0YLAOpSgF+t0Ds+WIY4xcAkrU5o2RXNdYwW5/IMIDU0PsVCNFGQQlgCA4dMr
-         zpREFWE7d59ziqswELyeYIasunXpuWLRxlZtqVWVqYyKGtJ8D5iXPwygl8NOhXnQG8m3
-         5SFYKGAhdpC6OnD21Uu+8oVS2lZg7T/6bTzByQ4RueJ9oHl+d6BkqqyRZPa6JavNOrDE
-         q8Vg==
-X-Forwarded-Encrypted: i=1; AKwUvByy0c8KVbltdDYcy7jPSexv4/yJE7O+nDvgUl5lpMNkoL71zw9QLuSe6C2hiduVvSYclgM=@vger.kernel.org
-X-Gm-Message-State: AFuF++l+awmeNvOqMO2+Dqn92U6ahT1RZ+rLEF7iW9Raihh61/BCcRFR
-	dAitLVmHSLp/GHoyfcdvdN2sbl6s3nsjBquBdcC7/3BIPABdrpqJPvqw
-X-Gm-Gg: AYBFou3tC6NeD0lGim8LGOjb4LP6+UrKxyfap03ZZW2ePOQoy/8rATbQrF6mpQtYyup
-	+RhCXfX4Qcsjja/HjjzImipHxL0Dkh85qzAUg/gcN3nngQms1I+Qcq9xLzrUeVfIjqJOmgE51vd
-	maoidUSFYfc0KLS8nnIqBsiEul+eTW/X6aSyv3/3zpFcN2KHSLE2sVXSdMeP7pOrks2gmwDTFxX
-	OcplAaK0uMbn0bjSMIYLOTpJ4wgWut8Tp8Eq/u3zHGMqUFFEU/5wImBJVfBp1o7ZOis0a/jWLIS
-	hbOwmAsHQZoGTW7lwiUzGZ3v5pWp6vkWd9RQEhxgbm0XNJAYYdxvach4nvjFSk76z1UbPt6tqyI
-	KQKrA9gdnR1cCNfH65K8jWAidMSEQLbIGDyrbcWw+i8gUUz7OUB4F+YTdZo5Nf4NRNdOwGnTbOu
-	38FnKYPAUrsm0qGHs/yL4tglnuxGvg1Spu9NFNY13DxrCp/DnUjTVEbYHtWWrepOp8gx6vvZSRh
-	FBXEoZdRJrbNe2sDwpLtNAWpyY2fQZut1bOP+cyXH49rmSUKV7i3qqv5X7XwJ0eNeqQuoZmkfDq
-	S60l
-X-Received: by 2002:a05:6a00:4650:b0:878:34d7:699f with SMTP id d2e1a72fcca58-87e9b79c67fmr3476778b3a.47.1790294694409;
-        Thu, 24 Sep 2026 17:04:54 -0700 (PDT)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87fe82ebc55sm285808b3a.4.2026.09.24.17.04.53
+        bh=1sumhp6TC0oFODPLbstUoLZjfI0b4gRvdtq6iMSnjFg=;
+        b=lNj+JpFVznWUleO1Qu2pkDVRFsmdfTN+yYkiAtxJ4gsAdnCxTJd6leAdKXA188C4MS
+         D/c6S6LEkf4gI1ShThY+XxLBmdbe+17mhCsaVMfBy/R5sOkOVO9IJIymafm3HX9iqiMS
+         uRQX0Fztx/byomPWZj1aufarwmzk8uH4dGc5YOuP2j3CjzIPiKygeZ70Dz1oiCy0iSr9
+         4vewfOwXd5rib+FP+6syCM92563YBlJbLCWIEvjRLXhuI4OskMJ7l29GDN299hWW613j
+         uLTcXKkuEX/fAmWR6FyMFv750nVLRlPZ8HfLVuq7YozGIImNr0YcVDFpJ/Wn8aO4/b3Y
+         1wqw==
+X-Forwarded-Encrypted: i=1; AKwUvBwohOcJWQVf92wDCekm9WEaNxKrFHWWWRMyZwisp5gq69wv15wNYKutFykQh2KCzPuJ1kg=@vger.kernel.org
+X-Gm-Message-State: AFuF++ntWN63tihMKdDwX63A5vOffDALdgzHKOwF5bzIZGU11Pbucdls
+	njK4Q07XJJ1BMkTDHlTDpG3wG8qLAgLMM7SD0cpBHHMprYhTvhhXNzCk
+X-Gm-Gg: AYBFou1c49fKK5yUMj6ZIXSELA0rjQFNJ87+wboFIkJkW29xWXDL5vnx+0OWGHRti5i
+	y8EWO3n49uPuOhlH63Ia0sY7wMfyaLzl2dQZmuRbwkCWsRA2MGnctjS8PUVN9t6Mel8jn/feBEX
+	Z5IGvid9r6Ivow90kBl1OMQ8VB3HN7eU4rFRT6Bs8gwxqLS1svsXDjcQcxLH2m1EKN6XCXRlEh4
+	K3/hHOINtr+7yn29SqLBYomYrN7S7CgQzRgAsqWJPGlhaJZR8NJiZdK1ZErGu1mimY2oc3U+dNU
+	4cn4MSQg09mn1CuVZnAC76F9mZZmYb2aI6PA4ybr8FPD2v3kcFYisO6Qe/iG65ZKv/++hxoS/wK
+	Vfmeoc2T9ABO8tfHsj4wWMmVo5Ii6BDIRPG7qaOSLixP5dG0v0OZft2bzvbHmLekKLAdHgk8gVK
+	tkZ13/cbl5cOu4jRwE16xw5psz16Q+Bbifx/pSncGAUj/nAVZDIXCKx3BuWaSmbopYJ7Hn86MyT
+	66Z9S3UCn8T0AYcpJj5ePIsrbD3FKCgnENNTxxGvpFojNTVkB5cmNDfOSGJdeL/tKvCN3FtRqQY
+	17A=
+X-Received: by 2002:a17:902:ebc7:b0:2ca:e19c:97b with SMTP id d9443c01a7336-2df94901b8dmr3042545ad.5.1790295110023;
+        Thu, 24 Sep 2026 17:11:50 -0700 (PDT)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df90fbac49sm2417745ad.3.2026.09.24.17.11.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 17:04:53 -0700 (PDT)
+        Thu, 24 Sep 2026 17:11:49 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Sep 2026 00:04:53 +0000
-Message-Id: <DLNYI40PF2Q3.1KYC8MHZU2VJ@gmail.com>
-Cc: "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Eric
- Dumazet" <edumazet@google.com>, "Neal Cardwell" <ncardwell@google.com>,
- "Willem de Bruijn" <willemb@google.com>, "Tenzin Ukyab"
- <ukyab@berkeley.edu>, =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?=
- <cleger@meta.com>, "Kuniyuki Iwashima" <kuni1840@gmail.com>,
- <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 3/8] bpf: tcp: Introduce
- bpf_tcp_ops.{enqueue,dequeue}_rcvq().
+Date: Fri, 25 Sep 2026 00:11:48 +0000
+Message-Id: <DLNYNF0A4YCX.2QY0EHNSJZMGA@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
+ <mason@kernel.org>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next 6/8] selftests/bpf: Add tests for may_goto with
+ far target
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kuniyuki Iwashima" <kuniyu@google.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-In-Reply-To: <20260923213719.224838-4-kuniyu@google.com>
-References: <20260923213719.224838-1-kuniyu@google.com> <20260923213719.224838-4-kuniyu@google.com>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+In-Reply-To: <33bcc2451681d52494c3e01a9b968271d55664d3d14bd1c99e7944090c9038cf@mail.kernel.org>
+References: <20260924233130.1213812-7-alexei.starovoitov@gmail.com> <33bcc2451681d52494c3e01a9b968271d55664d3d14bd1c99e7944090c9038cf@mail.kernel.org>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -89,28 +82,22 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, Sep 23, 2026 at 09:35 PM Kuniyuki Iwashima <kuniyu@google.com> wrote:
-> +	/* Call bpf when the TCP stack enqueues/dequeues payload
-> +	 * to/from sk->sk_receive_queue.
-> +	 *
-> +	 * Only bpf_tcp_ops is supported.
-> +	 *
-> +	 * It can be used to adjust sk->sk_rcvlowat and suppress
-> +	 * unnecessary wakeups before sufficient data is available.
-> +	 */
-> +	BPF_SOCK_OPS_RCVQ_CB_FLAG = (1<<7),
->  /* Mask of all currently supported cb flags */
-> -	BPF_SOCK_OPS_ALL_CB_FLAGS       = 0x7F,
-> +	BPF_SOCK_OPS_ALL_CB_FLAGS       = 0xFF,
+On Fri, Sep 25, 2026 at 12:01 AM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
+>> +static void test_far(int off)
+>> +{
+>> +	LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags = BPF_F_SLEEPABLE);
+>> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+>> +	int front = off < 0 ? 1 : FILL_CNT;
+>> +	int mid = off < 0 ? -off - 5 : 1;
+>> +	int back = off < 0 ? FILL_CNT : off - 1;
 
-can we drop the flag ?
-hdr_opt_len() is called for every tx skb without per-socket opt-in.
-The prog in patch 8 already returns when the socket has no
-sk_storage.
+[...]
 
-The flag is one bit per socket shared by all bpf_tcp_ops in the
-cgroup hierarchy. When one prog clears it the others stop getting
-enqueue_rcvq().
+> Could the four offsets (32762, 32767, -32767, -32768) be __naked
+> __retval(0) cases in verifier_may_goto_1.c instead of a new file?
 
-Then sk_is_mptcp() check in the kfunc is enough and there is no need
-to touch bpf_sock_ops_cb_flags_set() and TCP_BPF_SOCK_OPS_CB_FLAGS.
+No. That's four progs of 66k insns each. 2 Mbyte of .rept in
+verifier_may_goto_1.bpf.o and test_loader opens the whole object
+again for every test in the file.
+Here the fill counts are computed from 'off' at run time, like
+bpf_fill_*() do in test_verifier.c.
