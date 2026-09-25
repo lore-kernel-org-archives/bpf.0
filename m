@@ -1,51 +1,51 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F55148A8CD
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 09:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CD237998B
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 09:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790329994; cv=none; b=BMS/MGKUHLW1etyrCr/ENu52aXdSzGWV4VSofUAHbDuWdJ1giyZ4qzSY8BImXxj/lRJqxFThcNu4V0rVG0xfF0JavLR+M4baR7cDzRI4woHhfcMRKPlX/Zka82QZB18zvM6U39vG8HNDilXKtR4rOCsQr3OuZFfhd6taD52Kaos=
+	t=1790329995; cv=none; b=PFwUb7KOjPhE/rshg43CA3+RmjtxuP0jIi3qcuga2x+mEMZAfm2xlG6U66i3D/2fCMel2OHsIQ8mg9BVJGDSKzlzb0v/Pc8UME7WIkboDscP3ZSvOfRcUcT8FdHFTLTd1WKRaAceTyq37LjubYrdXhwKkqHNKzkM2VWuWFSjqLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790329994; c=relaxed/simple;
-	bh=2fIzNWIGOLXmfU55wr1ij9ABm+XoXJ+6cSMmsbO2NBs=;
+	s=arc-20240116; t=1790329995; c=relaxed/simple;
+	bh=1f4Ov4Qov1PZo9EI7fi0zlG9Are4tSxLRfNDia5+wl0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=twbPIv55OICA6SMF2PTMjURlg46W4cNNzox4wFnI3AjQIdLD4ogqQDnfy7siDozhUnCJk1p6UdRoiCxRxz0IWM1FH6/WnCv94BpA1dcZ3GswrudHHzmIeKQNly6Pm0bk7M9s+tzsakziOL2z+5oka5ZO3/du/o8YCPoRAqa5K68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=qqAJmgpt; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=QRQrjUlcl2rpwjWecQkPvBqjNaZklEuPcJcXU16uOJPPekOMJ1apnXAonlaWIGK3TeH0vaDayzMwWCUsyo3+j+rfL1P+O46bpIXz+TjCy146kHq41xrIzhok/4f68VTC9M9cyEAnTo9lzWvqbblSBbR8Cu0fUrzr7l/PFbGQPbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=WdX9YrZ4; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="qqAJmgpt"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68OLMmgn3847269;
-	Fri, 25 Sep 2026 09:52:42 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WdX9YrZ4"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68P2aixH1891261;
+	Fri, 25 Sep 2026 09:52:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=St+4H
-	rRHBecaa2TOEwc5qRWmL5Z2R+Jizea2yLND0F0=; b=qqAJmgptk1EfDCiya4vMZ
-	rKG6svHk3iwwUmkgXqrW2+E/cnXSYGMAyZtI182a8t6bvqZYI+QomssDV1Gg/CTa
-	Kwwowt9htCNuel+QJfuXB8HQqfAklrtreih+wFBNqDLvMPo1F7JTBLqMYxzJ9uTT
-	bE1Mzz4xM1ee9htYnfx7P7dVuPVsoOgOGo6oCxTge1M69mugl7ixlwWOmty3XnAj
-	JIozCFDnkk+OX0ISA4Apm8kgoRp3c0z4w6WFMQ76blFKFT6n20Suz4MSJmvHX7Nz
-	go34ZV8d9LQGvQPyQ9X9j4zcP3B+cLXQi6r/zNY7E/rV/tHFBc/58PQdYK7Q4Rn9
-	Q==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=1COZG
+	6kAhwouvu+qUXiKDZ4MFmowL8FQMaLREvoeCh0=; b=WdX9YrZ43i7dlLbVcVVjG
+	uMrKCE/gu5XKRYm/MepbyTRDvv/OAlJYl8Lkkk1Ks0CGq69fjryo9UqN2uCircP5
+	bjy6TGj3lsCmBmVkatNrDsM/fcyr9P4aZb1K7YLVYu58RbGM/nfcEaUIkSLjhs1N
+	JAUXTx5JNSgfH29sQ2UlsN/jZSIzOgA1J7n0QI58IFtzxkdMB+DnM0R76B6Z0O5w
+	xXpKypvL6kC3Fv00N5GIcJzCZWXR2xY8mCinKfFnfFh1veRTZJJGVcYSCV6KZ9Px
+	kaFN8V3HZtA4schzqN4t2jd2tSFTOh+O3wVj1jpJNsECbY368q/aw/wcLjMD4pKq
+	w==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsjxb95tp-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk0xs3qj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Sep 2026 09:52:41 +0000 (GMT)
+	Fri, 25 Sep 2026 09:52:43 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68P9oQk1004610;
-	Fri, 25 Sep 2026 09:52:40 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68P9oOmu004004;
+	Fri, 25 Sep 2026 09:52:43 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gtept1dq5-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gtept1dr5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Sep 2026 09:52:40 +0000 (GMT)
+	Fri, 25 Sep 2026 09:52:43 +0000 (GMT)
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68P9mZYh001344;
-	Fri, 25 Sep 2026 09:52:40 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68P9mZYj001344;
+	Fri, 25 Sep 2026 09:52:42 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-81-122.vpn.oracle.com [10.154.81.122])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gtept1djn-3;
-	Fri, 25 Sep 2026 09:52:40 +0000 (GMT)
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gtept1djn-4;
+	Fri, 25 Sep 2026 09:52:42 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, qmo@kernel.org
 Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
@@ -53,9 +53,9 @@ Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
         memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
         nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next 2/3] bpftool: Update func representation to include function signature
-Date: Fri, 25 Sep 2026 10:52:30 +0100
-Message-ID: <20260925095231.879708-3-alan.maguire@oracle.com>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Fix up bpftool btf dump test for signatures
+Date: Fri, 25 Sep 2026 10:52:31 +0100
+Message-ID: <20260925095231.879708-4-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20260925095231.879708-1-alan.maguire@oracle.com>
 References: <20260925095231.879708-1-alan.maguire@oracle.com>
@@ -73,182 +73,84 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
  suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999
  lowpriorityscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2609250039
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDAzOSBTYWx0ZWRfXxSgHD9dBSuNd
- isZK1VgVFHSE4u4nPjDbR3S8AV324+t9c759VUIM1/YnSG2z9RQHEgjndsf4ntk9z77Nbghwfb8
- rMoCXcVy8R+x806yttVGrHFGLhWo3/SFMJyD1ptVzRIrQWLa4J5lUHzDMgzYXEPmHeRii3zhn5/
- +4CNIfbsuHY87qcEvAbGtM3KFw2WBi7Oy5NBAepp516PEjTvcHvrqkZyi/FAIng3GMjFGgV04xB
- EjRI+mupmGY9Bli53EeLSz38CRImx44PLPDM27YgHd5EJx+SplxGDSXPSPeMNBWcJ2l6CyfB4pT
- FT3GJdTF34PM1f3bqTfjkLmbooSgZj0Uvg8FyrXWF1EcCs466sd0D2utvP78OiXAJTaQPrTKRAa
- rKKHRMy7B7bTaO1tXXSvd+93Kwd7EOunfigAL/zXcv61yy7tJwV02Suyi+QwGx9o3bvG9veoW7U
- +9nvujJHsjdelRslryxLN1aKCfjGP4lfaGa4JnLI=
-X-Proofpoint-ORIG-GUID: ig5bdjfLa5CuClLvyV___X41o6jNvhJW
-X-Authority-Analysis: v=2.4 cv=UINIjyfy c=1 sm=1 tr=0 ts=6ab6446a b=1 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=F/bC5ahN c=1 sm=1 tr=0 ts=6ab6446b b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
- a=F8pM7ebFtbTfAefDE7YA:9 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22
- cc=ntf awl=host:13532
-X-Proofpoint-GUID: ig5bdjfLa5CuClLvyV___X41o6jNvhJW
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDAzOSBTYWx0ZWRfX1jrQYK1RLjPj
- 3aDjqfzCdRRer5epsMdC43TiT7S5AOELuaZgLxrPuzUrSoWTZg9uGXjPo+XLi0+AOgdHPoHjSk5
- NvweHd+CqRX7mnSMU8XDVDXNPJ4X5Z6Gm/FT7uceaG7mZPtR3n64
+ a=3I1J8UUJPc9JN9BFgKH3:22 a=yPCof4ZbAAAA:8 a=je0B4_M0PToKS-oWA3wA:9
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13532
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDAzOSBTYWx0ZWRfX+FNMM5H6VbnJ
+ kh810g6PSOiv9Gra/EDmHlPKGCNoOWSHaL+1BemfW8xc/q69pRNXqc+uLHSnS8vMjW0KIhV9b2d
+ iqLMcBClajzmN4EuYwUuXi9pNpZCiqoR84iwhOJBskXSYiDO5LCA
+X-Proofpoint-ORIG-GUID: onnRoZTFQY2DuF9v4thdijjsxNLycIyv
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDAzOSBTYWx0ZWRfX6fcd85QTnJmv
+ 52hclaQyKDXWmyBHqy4zKIadrKPhAsqbHkTIQXT/RGHBHbDxr/yQmXQjvS4nI9wMDrkQIQfDjQc
+ mV60BlGxW6m3mbVTZJDF0SdSriuiYgr/XA8vdf38LcO0+q42Aex0RwIotnwZFZUvVCUy8S+1s0O
+ cS8KofCk64dnzcVtjkUJ69009rn+HSLfTNcQ5lyg7uVh8oCFc2AaHRKkr60fpDhxe9SQPW+kK6U
+ Zs/+GHwCnU96CjHlLwSVqSHy9TUL9ABlaS4mnJccYK56hcASWndtBMCV1hTAKlMwuN4IJRvlGoA
+ 2l0eDQVv0bp6kEPWyLaLJ/dg+kohLm4Nd6o4StzAsq6XX1rff02+f0Zbl3c+s0zKKHcr/QlNsIG
+ 06xYghRrDtGMZxMhIViU0Loid3/4dLNDytnL6TzYkda4gNjttW+26YPuOdhJaSdFmpN675GRU9u
+ gBJ/QHfJD+F7pLc8ex+9WdnBg14jIWxN98DAT69Q=
+X-Proofpoint-GUID: onnRoZTFQY2DuF9v4thdijjsxNLycIyv
 
-Augment func= output for LOCSEC entries to include a mapping from
-function signature to where parameters are stored; for example:
-
-[290179] LOCSEC 'inline.text' vlen=524941
-        func='task_pid_nr(tsk [reg0])' func_type_id=136691 loc_proto_type_id=136693 offset=2097226
-        func='get_current()' func_type_id=136694 loc_proto_type_id=136695 offset=2097247
-        func='arch_static_branch(key [address 0x2e275e8], branch [const 0x0])' func_type_id=136697 loc_proto_type_id=136700 offset=2097296
+Now we show a function signature, fix up the test to expect it.
+Also fix the fact that we did not add the right number of parameters
+to the FUNC_PROTO, and ensure consts/addresses are prefixed
+appropriately.
 
 Fixes: 321562c34d5b ("bpftool: Add ability to dump LOC_PARAM, LOC_PROTO and LOCSEC")
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tools/bpf/bpftool/btf.c | 100 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 91 insertions(+), 9 deletions(-)
+ .../selftests/bpf/prog_tests/bpftool_btf_dump.c    | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index e29c8a84e224..6e569ace6add 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -8,6 +8,7 @@
- #include <fcntl.h>
- #include <linux/err.h>
- #include <stdbool.h>
-+#include <stdarg.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -234,8 +235,10 @@ static void btf_loc_param_str(const struct btf_type *t, char *str, size_t sz)
- 						(1ULL << bits) - value;
- 			}
- 		}
--		snprintf(num, sizeof(num), "0x%llx%s", (unsigned long long)value,
--			 p->flags & BTF_LOC_PARAM_ADDR ? " (addr)" : "");
-+		snprintf(num, sizeof(num), "%s0x%llx",
-+			 p->flags & BTF_LOC_PARAM_ADDR ? "address " :
-+			 p->flags & BTF_LOC_PARAM_CONST ? "const " : "",
-+			 (unsigned long long)value);
- 	}
- 	if (i != vlen) {
- 		btf_loc_param_raw_str(p, vlen, str, sz);
-@@ -252,6 +255,87 @@ static void btf_loc_param_str(const struct btf_type *t, char *str, size_t sz)
- 		 p->flags & BTF_LOC_PARAM_DEREF ? ")" : "");
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+index bed506badc75..abc62958b6ed 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+@@ -72,6 +72,7 @@ static struct btf *mk_loc_btf(void)
+ 	btf__add_func_param(btf, "arg3", 1);
+ 	btf__add_func_param(btf, "arg4", 1);
+ 	btf__add_func_param(btf, "arg5", 1);
++	btf__add_func_param(btf, "arg6", 1);
+ 	btf__add_func(btf, "foo", BTF_FUNC_STATIC, 2);
  
-+static int btf_locsec_append(char *str, size_t sz, size_t *off,
-+			      const char *fmt, ...)
-+{
-+	va_list args;
-+	int ret;
-+
-+	if (!sz || *off >= sz - 1)
-+		return -ENOSPC;
-+
-+	va_start(args, fmt);
-+	ret = vsnprintf(str + *off, sz - *off, fmt, args);
-+	va_end(args);
-+	if (ret < 0 || (size_t)ret >= sz - *off) {
-+		*off = sz - 1;
-+		return -ENOSPC;
-+	}
-+	*off += ret;
-+	return 0;
-+}
-+
-+static void btf_locsec_func_str(const struct btf *btf,
-+				const struct btf_loc *loc, char *str, size_t sz)
-+{
-+	const struct btf_type *func, *func_proto, *loc_proto;
-+	const struct btf_param *params;
-+	const __u32 *loc_params;
-+	const char *name;
-+	__u32 i, vlen;
-+	size_t off = 0;
-+
-+	if (!sz)
-+		return;
-+
-+	str[0] = '\0';
-+	func = btf__type_by_id(btf, loc->func);
-+	if (!func || !btf_is_func(func))
-+		goto invalid;
-+
-+	name = btf_str(btf, func->name_off);
-+	func_proto = btf__type_by_id(btf, func->type);
-+	loc_proto = btf__type_by_id(btf, loc->loc_proto);
-+	if (!func_proto || !btf_is_func_proto(func_proto) ||
-+	    !loc_proto || !btf_is_loc_proto(loc_proto) ||
-+	    btf_vlen(func_proto) != btf_vlen(loc_proto))
-+		goto invalid;
-+
-+	params = (const void *)(func_proto + 1);
-+	loc_params = btf_loc_proto_params(loc_proto);
-+	vlen = btf_vlen(func_proto);
-+	if (btf_locsec_append(str, sz, &off, "%s(", name))
-+		return;
-+	for (i = 0; i < vlen; i++) {
-+		const struct btf_type *param_loc;
-+		char param_str[256] = {};
-+
-+		if (!params[i].type) {
-+			/* Handle varargs func proto, must be last parameter */
-+			if (i != vlen - 1)
-+				goto invalid;
-+			if (btf_locsec_append(str, sz, &off, "%s...", i ? ", " : ""))
-+				return;
-+			break;
-+		} else if (loc_params[i]) {
-+			param_loc = btf__type_by_id(btf, loc_params[i]);
-+			btf_loc_param_str(param_loc, param_str, sizeof(param_str));
-+		} else {
-+			snprintf(param_str, sizeof(param_str), "<unavailable>");
-+		}
-+
-+		if (btf_locsec_append(str, sz, &off, "%s%s [%s]",
-+				      i ? ", " : "", btf_str(btf, params[i].name_off),
-+				      param_str))
-+			return;
-+	}
-+	(void) btf_locsec_append(str, sz, &off, ")");
-+	return;
-+
-+invalid:
-+	snprintf(str, sz, "<invalid>");
-+}
-+
- static int dump_btf_type(const struct btf *btf, __u32 id,
- 			 const struct btf_type *t)
+ 	btf__add_loc_param(btf, 4, BTF_LOC_PARAM_REG);
+@@ -230,28 +231,29 @@ static void test_loc_dump(const char *btf_path)
  {
-@@ -617,22 +701,20 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
- 		}
+ 	const char expected[] =
+ 		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED\n"
+-		"[2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=5\n"
++		"[2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=6\n"
+ 		"\t'arg1' type_id=1\n"
+ 		"\t'arg2' type_id=1\n"
+ 		"\t'arg3' type_id=1\n"
+ 		"\t'arg4' type_id=1\n"
+ 		"\t'arg5' type_id=1\n"
++		"\t'arg6' type_id=1\n"
+ 		"[3] FUNC 'foo' type_id=2 linkage=static\n"
+ 		"[4] LOC_PARAM '(anon)' size=4 flags=0x8 vlen=1 values='reg1'\n"
+ 		"[5] LOC_PARAM '(anon)' size=8 flags=0x38 vlen=2 values='*(reg2 + 0x10)'\n"
+ 		"[6] LOC_PARAM '(anon)' size=8 flags=0x29 vlen=2 values='fbreg - 0x10'\n"
+-		"[7] LOC_PARAM '(anon)' size=8 flags=0x6 vlen=2 values='0x123456789abcdef0 (addr)'\n"
+-		"[8] LOC_PARAM '(anon)' size=8 flags=0x2 vlen=2 values='0xdeadbeeffeedface'\n"
++		"[7] LOC_PARAM '(anon)' size=8 flags=0x6 vlen=2 values='address 0x123456789abcdef0'\n"
++		"[8] LOC_PARAM '(anon)' size=8 flags=0x2 vlen=2 values='const 0xdeadbeeffeedface'\n"
+ 		"[9] LOC_PARAM '(anon)' size=8 flags=0x39 vlen=2 values='*(fbreg - 0x20)'\n"
+ 		"[10] LOC_PROTO '(anon)' vlen=6\n"
+ 		"\ttype_id=4 value='reg1'\n"
+ 		"\ttype_id=5 value='*(reg2 + 0x10)'\n"
+ 		"\ttype_id=6 value='fbreg - 0x10'\n"
+-		"\ttype_id=7 value='0x123456789abcdef0 (addr)'\n"
+-		"\ttype_id=8 value='0xdeadbeeffeedface'\n"
++		"\ttype_id=7 value='address 0x123456789abcdef0'\n"
++		"\ttype_id=8 value='const 0xdeadbeeffeedface'\n"
+ 		"\ttype_id=9 value='*(fbreg - 0x20)'\n"
+ 		"[11] LOCSEC 'inline.text' vlen=1\n"
+-		"\tname='foo' func_type_id=3 loc_proto_type_id=10 offset=64\n";
++		"\tfunc='foo(arg1 [reg1], arg2 [*(reg2 + 0x10)], arg3 [fbreg - 0x10], arg4 [address 0x123456789abcdef0], arg5 [const 0xdeadbeeffeedface], arg6 [*(fbreg - 0x20)])' func_type_id=3 loc_proto_type_id=10 offset=64\n";
+ 	char *dump;
  
- 		for (i = 0; i < vlen; i++, locs++) {
--			const struct btf_type *f = btf__type_by_id(btf, locs->func);
--			const char *name = "<invalid>";
-+			char func_str[1024] = {};
- 
--			if (f && btf_is_func(f))
--				name = btf_str(btf, f->name_off);
-+			btf_locsec_func_str(btf, locs, func_str, sizeof(func_str));
- 
- 			if (json_output) {
- 				jsonw_start_object(w);
- 				jsonw_uint_field(w, "func_type_id", locs->func);
--				jsonw_string_field(w, "name", name);
-+				jsonw_string_field(w, "func", func_str);
- 				jsonw_uint_field(w, "loc_proto_type_id", locs->loc_proto);
- 				jsonw_uint_field(w, "offset", locs->offset);
- 				jsonw_end_object(w);
- 			} else {
--				printf("\n\tname='%s' func_type_id=%u loc_proto_type_id=%u offset=%u",
--				       name, locs->func, locs->loc_proto, locs->offset);
-+				printf("\n\tfunc='%s' func_type_id=%u loc_proto_type_id=%u offset=%u",
-+				       func_str, locs->func, locs->loc_proto, locs->offset);
- 			}
- 		}
- 		if (json_output)
+ 	dump = dump_raw(btf_path);
 -- 
 2.43.5
 
