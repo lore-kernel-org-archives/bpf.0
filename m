@@ -1,119 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14DE408602
-	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA6C2931DE
+	for <bpf@vger.kernel.org>; Fri, 25 Sep 2026 17:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790356635; cv=none; b=FWJpj9/AlzAX+e/O53Aow0PAJeodkqbc8RCNagtqOKR3HbCubfM7ZG1hgxXwmKnTDEWPVr8JI1Ku6vAYsWlLe7beDvix+NwJ/sTAycWBMhRNK76o7F/y7eYUTwsVHfuOBDkAgT258vZ+aororuwEbkacU0F1kJ3nh524Yp3DUt0=
+	t=1790357485; cv=none; b=Nd9T1vULUcazvFuiKGfKBByR10EwPV2Vm0Ji6EmSgN3+EAdW1liLzOaVQj6af4u86MtL9s3em/O8JLs2fJ2IgHA2/vvJqyazm+SE8MfZVDU3jUqkYUK03E1I07RpTNLgM85pxkMpeQySH9eiK9XpDm65xGlXTPSchlXwhKnVBpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790356635; c=relaxed/simple;
-	bh=W3u7VD+LvCV94sRp/ERTgjWer0swTa6a177pWsAHW0o=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=goYzk82MlmMCa212iitjabCgtDwFJLL9MseynjhbAzavo1BbTapxfm0axo++3V/xw6DwcvEg12BC/DPc5lp30pTozs996Qb2taisMNVq4LMzzeJE6WpxibC+lzE++gdcHXg0eYSXeiwDq97xIdO5nxaREZ5BaxgemuNFwltcBPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D3DD1222; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790357485; c=relaxed/simple;
+	bh=8DbPAcN3S9cYOxO+OCdaxlzqKFHNMbSCYdnUAz7UqE4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PTwscg+HCAegb3SySaZ91kplD+KCo4Z184COqKGYdfLd6SUckzs1FO4jSnRE/CGe+ReEPtR4Q7VEhTV8+utVlYQfwUXO599I9FBs7u6O1JCcIuNUxLhZy+jc3kbg376dCIYgf41HxEjHjBGT6tvqelZzThOx/egu2nDczM+l9NM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XEV/lM5u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D3DD1222"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9EB1F000FF;
-	Fri, 25 Sep 2026 17:17:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XEV/lM5u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F3B1F000FF;
+	Fri, 25 Sep 2026 17:31:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790356623;
-	bh=zgS/R+697P/1sbytyp5Bh90tbEHWVJAd7qfJ0iDKvvw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D3DD1222Ggjs2j2EtVXX5GO9IygO7p6mM0tmLr1cH//S0k2gYxvJLTFlDIsrT1Ee0
-	 Sv7olSH8nhBpURWy4a4IHGVZ1b1VWpODJN22H9t2W3ZnRY6j7mOQ7mWDa/6yLRfetx
-	 LJ9XZiBe4sRKAlhABMkeEsRauy1CBWYlNk6VgWYz3nY5k5IrSMkstBNBhb1D9Ef/kG
-	 3+reRbVTo7BAPxDuIwBdu+usgmyS6v87APK27dGgpEME2ScZKnL6ByHvTHixtPrxG7
-	 tz2S2mo7Hh6JnUzejX4loVKidrujB/TEJ91cWR20EnclwgASEazyHI8R7QFEJl5Fdq
-	 zz1ILGCFse30Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 2/3] bpftool: Update func representation to
- include function signature
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alan Maguire" <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260925170854.1240637-3-alan.maguire@oracle.com>
-References: <20260925170854.1240637-1-alan.maguire@oracle.com>
- <20260925170854.1240637-3-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 25 Sep 2026 17:17:02 +0000
-Message-Id: <20260925171703.5D9EB1F000FF@smtp.kernel.org>
+	s=k20260515; t=1790357484;
+	bh=qKwwc4G4EWJcE8NmGzf1Jc6rqgv7T017pQlYqkMd//4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=XEV/lM5u5Vv45o0oRqOdZJI9ZnzynrNFuPJYkfbZwK64WT27kCHKgkXYuI+H05+iv
+	 XyAcSRI2kFaiW/fj/FYO0Lz0g9V98poA0hyh/AtZXC4s3OsWDlzvipBblkv1ztopfT
+	 WvdFjCbyBehc79Yt/w7nxz6EkPGGOJeVDd0Ccjpwzt08hYkyxTVxVMlEvzZ3LwrNfJ
+	 TBpbM9D6rTYswaNq+nB3XYwqy1wCVN//U1fo8/xsDUHDRobZJGrKt5phP9lgTeTaES
+	 OjGXBMtORbtqFvi5lSGJMzijUDAlcbxns5LtLEUomUL9FoxVEpm8L3cS5APpHmMCqW
+	 1Z/dfIDWPfmHg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568C1380820D;
+	Fri, 25 Sep 2026 17:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf: Hold map BTF for the memory allocator destructor
+ record
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179035741215.3062647.1669325075936587788.git-patchwork-notify@kernel.org>
+Date: Fri, 25 Sep 2026 17:30:12 +0000
+References: <20260925064652.2261885-1-memxor@gmail.com>
+In-Reply-To: <20260925064652.2261885-1-memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, chenyuan@kylinos.cn, ast@kernel.org,
+ andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+ emil@etsalapatis.com, kkd@meta.com, kernel-team@meta.com
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: btf_locsec_append hides truncation marker due to null byte =
-gap
---
+Hello:
 
-commit 6f503008243b4dfc886859b905f8a6fa7b657ef2
-Author: Alan Maguire <alan.maguire@oracle.com>
+This patch was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-bpftool: Update func representation to include function signature
+On Fri, 25 Sep 2026 08:46:51 +0200 you wrote:
+> bpf_ma_set_dtor() duplicates map->record so that the bpf_mem_alloc
+> destructor can release the special fields of hash and rhash map elements
+> once the allocator frees them for good. btf_record_dup() only acquires
+> references on kernel and module BTF. Fields whose types live in the map
+> BTF keep pointing into it: a kptr to a local type refers to map->btf,
+> and a list_head or rb_root field carries a value_rec owned by the struct
+> meta table of map->btf.
+> 
+> [...]
 
-This commit augments the func=3D output for LOCSEC entries to include a map=
-ping
-from function signature to where parameters are stored. It addresses a feat=
-ure
-suggestion to dump LOC_PARAM, LOC_PROTO and LOCSEC more verbosely.
+Here is the summary with links:
+  - [bpf] bpf: Hold map BTF for the memory allocator destructor record
+    https://git.kernel.org/bpf/bpf/c/ab39974240a0
 
-> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-> index e29c8a84e224c..ce4c4036c2796 100644
-> --- a/tools/bpf/bpftool/btf.c
-> +++ b/tools/bpf/bpftool/btf.c
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[ ... ]
 
-> +static bool btf_locsec_append(char *str, size_t sz, size_t *off,
-> +			      const char *suffix)
-> +{
-> +	size_t len;
-> +
-> +	if (!sz || *off >=3D sz)
-> +		return false;
-> +
-> +	len =3D strlen(suffix);
-> +	if (len < sz - *off) {
-> +		memcpy(str + *off, suffix, len + 1);
-> +		*off +=3D len;
-> +		return true;
-> +	}
-> +
-> +	if (sz >=3D 4) {
-> +		memcpy(str + sz - 4, "...", 4);
-> +	} else if (sz > 1) {
-
-[Severity: Medium]
-When a string exceeds the buffer size and we hit this fallback path in
-btf_locsec_append(), is there a risk that the truncation marker is hidden?
-
-The truncation marker ... is unconditionally placed at the very end of the
-buffer (sz - 4). Because the function fails to copy the prefix of the string
-that would fit and does not write over the existing null terminator at *off,
-a gap of null bytes can separate the current end of the string from the
-truncation marker.
-
-String reading functions like printf or JSON dumpers will terminate at the
-first null byte, which would completely hide the ... marker and discard the
-partial data.
-
-This would be triggered when bpftool formats a BTF location string (for=20
-example, a function signature with many parameters) that cumulatively excee=
-ds
-1024 characters.
-
-> +		memset(str, '.', sz - 1);
-> +		str[sz - 1] =3D '\0';
-> +	}
-> +	*off =3D sz - 1;
-> +	return false;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925170854.1240=
-637-1-alan.maguire@oracle.com?part=3D2
