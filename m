@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7DC4F55C9;
-	Fri, 25 Sep 2026 20:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A1E4F646B;
+	Fri, 25 Sep 2026 20:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790369547; cv=none; b=Xcua3NjXtO5AIaekFuwAxrDKLG1WyRX9MeuBSFxoxLPxPzV/MO0UeWdw9P0rbkDxh8vFNFZFJb2MPfcrPyTVMuUrpWFDNNNGlS3fQ6xX7il2Smd/srrGmGIrrGEQEFBlNFHWAg3NXmiG6dm/SXjbQZegS6JrnoFe9FwsDNbNm24=
+	t=1790369550; cv=none; b=NKZap6KQ/qM376QhLiX/rx5bJFUpXmBEB9OdazIbDmHLd9fsd2FAx0FCm0uU+DJ/3i3LqhKnbcqai0JMsTQ1WVMJAxNSYu3G0Sfhdm1x9+ueGQL2sI5N3Q8QkgpJU1Qu0d7o2XaRSPwetCQFuzTh09ZMO4cQuXMHtZ4w72k/V2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790369547; c=relaxed/simple;
-	bh=9mfmfIPp5G0JrPo8i9Dm0V2CQEwChQ3FzvVWTIlRRXA=;
+	s=arc-20240116; t=1790369550; c=relaxed/simple;
+	bh=mf/mmJ7u8HxiTya7lBW7IjhjwNbf1rcJ1J3EcYPppJE=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SXwlTlhKfTYNx1Oa4Z9JTkbuteHXJnPmo9RQO0TKncgDJ9hPSROcRbQAjqmp4/5Yzom4Dvnzsugqnzq3O49NAumBl/0gCW8lbR7EeSOsDZ2fPRt2fzUZGhP3jLI3HWZOztOewv6r5egUYBn3T5wDewwNnkOeUEO9WCO9zITJiHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kitOV04J; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=ItGiRaKbn3eanPnK7uYeadKsQBeOo8JyCVsehP60QXbA4NeoUoMmOkJpovxNTXhDWdoRyEdpky3pznhlHcAkI+v4AAptFo2czGeapczZ46SNRZRr+VVZUI+Tmyk94rmCLLKcRVprAITyoh06FJr6Vk5CmtFJGH6NPtvMoaaVT8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h25wICG8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kitOV04J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA281F00893;
-	Fri, 25 Sep 2026 20:52:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h25wICG8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C33E91F000FF;
+	Fri, 25 Sep 2026 20:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790369546;
-	bh=353HfQj5FOKGy7pbXaUa1dI43Nsk1+vvyw9cak9tZIo=;
+	s=k20260515; t=1790369548;
+	bh=9e4w1HegrYk5Lp2N7aLikUozmLDaONnQ9sVyram9egM=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kitOV04JdiuVhTuxvXe/x6EzW8iEciA5V9TYYSNJ7SR5beBnjShlCx769bG6MGMXX
-	 NThJuTVDy5Qxq60ZRAkNwMIKIAoDt3Hz0cc4gVMGvb2omlNmacw7XJj8lSsA3wKAFE
-	 EGI+70KRgbQgVtpkpWkhYT7vAt+m+jELOJvUj8wxp5SG5SsdeaAqGYwGb4noW0+bge
-	 v6ulttDg7YKrhxvjGbTlZUKLZ4Y5JVgm+iHf3I0JS24jkB2iH5QXYRRH8AMHBnNQ+u
-	 MJpTG1pYOot3+lW0UBcgkZd5+7kwZaNhsn1eMdQnNV+ntvv5mrMbg3qBiDL8ph2PSh
-	 YAsoKQXDX1fyA==
-Subject: Re: [PATCH net-next v8 09/15] net: lan966x: clear FDMA interrupt
- stickies after switch reset
+	b=h25wICG84BRyEmXhXedEq/yuF0YggA2lBxwDGUVLK9AW9Hg2igJzA028PPCtS+VGe
+	 2nASm30RVCtHPzHYAMJsYOF+VypKmtTGEiWov2+Oteudmp8QQwUhDd8jwkx4vqOfRd
+	 2K/NTAvc7j7AltgUGRkbwPO0aakrznAclhYZkb9Rw8oBctujkhkOq2KQOWsqVbURGE
+	 jodcc9LJsf9NKhEcy5/E07XWuwytjVndmyoZhnw8gnmXwVou+q5sBchqICz2EjIcmr
+	 6OZGHjCb6Lj8K7vJFZFKNtqBnvREyjKZSvA1/09SXy96UlfJ1D8eUovgjMoujFh8bL
+	 B+CHM7PkrOPpA==
+Subject: Re: [PATCH net-next v8 10/15] net: lan966x: add shutdown callback to
+ stop the FDMA on reboot
 From: netdev-bot+sashiko@kernel.org
 To: daniel.machon@microchip.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -39,11 +39,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  richardcochran@gmail.com, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Date: Fri, 25 Sep 2026 20:52:24 +0000
-Message-ID: <179036954445.2160803.16038583471069470630@kernel.org>
-In-Reply-To: <20260924-lan966x-pci-fdma-v8-9-201c7b707d8b@microchip.com>
-References: <20260924-lan966x-pci-fdma-v8-9-201c7b707d8b@microchip.com>
-X-sashiko-severity: Low
+Date: Fri, 25 Sep 2026 20:52:26 +0000
+Message-ID: <179036954633.2160803.10091756742386448294@kernel.org>
+In-Reply-To: <20260924-lan966x-pci-fdma-v8-10-201c7b707d8b@microchip.com>
+References: <20260924-lan966x-pci-fdma-v8-10-201c7b707d8b@microchip.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -53,71 +53,91 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 2 · Medium: 0 · Low: 2
 
-- [Low] The commit message and the new comment in lan966x_reset_switch()
-  (drivers/net/ethernet/microchip/lan966x/lan966x_main.c) describe a…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] Baseline decision: false positive; not reachable at this commit,
+  and closed later in the series.
+- [High] Baseline decision: false positive; not reachable at this commit,
+  and closed later in the series.
+- [Low] The part of lan966x_shutdown() that actually runs on PCIe at this
+  commit fixes behaviour that has existed since PCIe support for lan966x…
+- [Low] Baseline decision: false positive.
 
 --
 
-net: lan966x: clear FDMA interrupt stickies after switch reset
+net: lan966x: add shutdown callback to stop the FDMA on reboot
 
-This commit clears the FDMA_ERRORS, FDMA_INTR_ERR and FDMA_INTR_DB sticky
-registers in lan966x_reset_switch() right after the switch reset. The aim
-is to stop spurious bits that the GCB soft reset latches in PCI mode from
-triggering the FDMA IRQ handler, and its WARN, during probe.
+This adds a .shutdown callback to the lan966x switch driver. The callback
+only acts on the PCIe instantiation, where it frees the xtr, ana and FDMA
+irqs, masks the analyzer interrupt, detaches the netdevs, disables both
+FDMA channels and unmaps the outbound ATU windows.
 
-> When in PCI mode, the GCB soft reset issued by the reset controller
-> can latch spurious bits in the FDMA error stickies. The latched bits
-> sit in FDMA_INTR_ERR until the FDMA IRQ is requested later in probe,
-> at which point the handler fires immediately and WARNs.
+It also restores the full FDMA_INTR_ENA enable in lan966x_fdma_rx_start(),
+because that register persists across a warm reboot.
 
 > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> index 6e6c08bb8eeab..259d81e759076 100644
+> index 259d81e759076..024ce9f9916c7 100644
 > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
 > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> @@ -1067,6 +1067,15 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
->  
->  	reset_control_reset(switch_reset);
->  
-> +	/* When in PCI mode, the GCB soft reset issued by the reset
-> +	 * controller can latch spurious bits in the FDMA error and
-> +	 * data-block stickies. Clear them before request_irq hooks up the
-> +	 * FDMA IRQ line, otherwise the handler fires immediately on probe.
-> +	 */
-
-[Severity: Low]
-This isn't a bug, but can the WARN described in the commit message and in
-this comment actually be hit in PCI mode at this commit?
-
-The PCI overlay describes only two interrupts for the switch node:
-
-drivers/misc/lan966x_pci.dtso:
-	interrupt-names = "xtr", "ana";
-
-lan966x_probe() requests the FDMA IRQ only when an "fdma" interrupt is
-described:
-
-	lan966x->fdma_irq = platform_get_irq_byname(pdev, "fdma");
-	if (lan966x->fdma_irq > 0) {
-		err = devm_request_irq(&pdev->dev, lan966x->fdma_irq,
-				       lan966x_fdma_irq_handler, 0,
-	...
-
-So in PCI mode lan966x_fdma_irq_handler() is never registered, and its
-WARN() cannot fire. That changes only with later patches in the series,
-"net: lan966x: add PCIe FDMA support" and "misc: lan966x-pci: dts: add fdma
-interrupt to overlay", which add "fdma" to the overlay.
-
-The series ordering itself looks fine. Would it be clearer to say that the
-clear is done in preparation for enabling the FDMA IRQ in PCI mode? As
-written, it reads as a fix for a WARN that can be hit today.
+> @@ -1324,9 +1324,65 @@ static void lan966x_remove(struct platform_device *pdev)
+>  	debugfs_remove_recursive(lan966x->debugfs_root);
+>  }
+>
+> +static void lan966x_shutdown(struct platform_device *pdev)
+> +{
+> +	struct lan966x *lan966x = platform_get_drvdata(pdev);
+> +
 
 [ ... ]
+
+> +	if (!lan966x_is_pci(lan966x))
+> +		return;
+> +
+> +	if (lan966x->xtr_irq > 0)
+> +		devm_free_irq(lan966x->dev, lan966x->xtr_irq, lan966x);
+> +	if (lan966x->ana_irq > 0)
+> +		devm_free_irq(lan966x->dev, lan966x->ana_irq, lan966x);
+> +	if (lan966x->fdma_irq > 0)
+> +		devm_free_irq(lan966x->dev, lan966x->fdma_irq, lan966x);
+> +
+> +	lan_wr(0, lan966x, ANA_ANAINTR);
+
+[Severity: Low]
+The code here looks correct, but should this change carry a Fixes: tag?
+
+At this point in the series, the only part of lan966x_shutdown() that runs
+on PCIe is the part that frees the xtr and ana irqs and clears ANA_ANAINTR.
+
+The xtr and ana interrupts were wired up by commit 185686beb464 ("misc: Add
+support for LAN966x PCI device"), in drivers/misc/lan966x_pci.dtso:
+
+    interrupt-names = "xtr", "ana";
+
+Since that commit, a warm host reboot leaves these OIC sources enabled on an
+endpoint that is not reset. The same is true of the analyzer interrupt
+armed by lan966x_init(). This matches what the commit message describes:
+
+  "As a PCIe endpoint, lan966x is not reset by a host reboot: its FDMA
+  channels and interrupt sources stay armed, and the OIC ORs every
+  source into the shared PCIe INTx, asserted before the driver has
+  re-probed."
+
+Could the xtr/ana part be split out as a standalone fix with:
+
+  Fixes: 185686beb464 ("misc: Add support for LAN966x PCI device")
+
+As written, it depends on lan966x_is_pci() and lan966x->dma_dev, which were
+added earlier in this series. That means it can't be identified for stable
+or backported on its own.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924-lan966x-pci-fdma-v8-0-201c7b707d8b%40microchip.com
