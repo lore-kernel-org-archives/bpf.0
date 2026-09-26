@@ -1,64 +1,64 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f40.google.com (mail-pj2-f40.google.com [74.125.227.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C919A438026
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DAA47D477
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790432481; cv=none; b=NWDS29UYCAp6et+X1OWf/zVyAKoSo0bwzPByLqBwrrZGvV3y42cZ6QK6p0VkW7jXqZG1ZrZjLribBxQ65Q3gxcyg3KAuPni5/7CdLF/s8/VD3E4MKZGsjNpbYV4MMQeQCY8qbVpqi90Ae6s99xe714DtrfFkEAJEwzayx+dAaow=
+	t=1790432483; cv=none; b=WS632QtJNN3OGBZArkRhE/6WIYQFL4duike/fptuIkC/PXYLYJtnribZAnQExht0paVCifzF7PmPIKQq3eKzBba5kx00Z49AuqKFs+qmPn+gEZny/O/BvA48Vm4/YXU9NIx2ipLuwz0DAh561xegLw4mulUWku8NWWv26LrvihY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790432481; c=relaxed/simple;
-	bh=/8yxSwy7ObTxuZQ1YRoQtCqpTXBb+PMh6LooNkg7R3I=;
+	s=arc-20240116; t=1790432483; c=relaxed/simple;
+	bh=gNepnKzOoR8wdYKkL4yuFIEMB+2hWw7lMhx5KAHlapA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D9fYeQeOUnHTyzZIAYJ/7ny4B5a9GXz3LM13seU5v/kmAJenYB18jYvaHWHWa3Hw6Vat+gZq092BDtvOe7MC4r01jGaBPcS8UUwOvP4mrf2/STlM3yg946xCLs8N+X72N7yN5jMf/peWrFQa38MWyz3BrxLqVxOrK1tBLNDbh+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mWyOOeHG; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version:Content-Type; b=oJS+DtO9diZp4j+f6bE2S9sGDNfGtBxw+GN9U9Q1IgG84Y6HLYqrYUFG3EyXpfqaC3uslbLqJv8lN99sqI/THCKMz6W+fLv5RisAeQRy4nZ5KOqZVE9GPcpKqNtiPSTq1ZV6Rl83P5oFMAA/lqwyMiIlwlpPdXnGcscrgI8SH7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YNJm1buQ; arc=none smtp.client-ip=74.125.227.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mWyOOeHG"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccb652d7so1154691a91.0
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YNJm1buQ"
+Received: by mail-pj2-f40.google.com with SMTP id 98e67ed59e1d1-3a0e7cbb608so137850a91.2
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790432479; x=1791037279; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790432480; x=1791037280; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=8l0pHciPDKkooF3fqsq1yfSTpu6uZNQacsRoTqPJYcU=;
-        b=mWyOOeHG1Zw7Yl8yYbxN7gK0yW+jlNiwrR1yUBm0rN2zNNLCekesK4O53tVvY85Ds7
-         t//l3Xu4uXkrxkfJYuP4ZgK/Izhsyvb+5kFWrIOXNBslGwazgcM3/qEXr0eWmCSSxvb8
-         EomHcNXrhpRSI0vXvKtEijPcVtqXpRr4hCEDk2qdGHpud6FMiAFp4RTUZr7aO47kyCEW
-         6ZkDX4CrgtrSte5n9MiyCFDIpxXEt9JfKLZTQ0rmLnYaptjM9YkWuashhBFf8a25Vq+w
-         RutzmlKqAkE9IN0xwli+kJTddxipk0lX/0bTuBtAGaCYonSogjkxg61D8aQnT+Yo7+1q
-         MxtA==
+        bh=vnCC7chfBgug6r4aXtdrGnC94622CKxFnw02sRnL3sQ=;
+        b=YNJm1buQGBg5V/7nPI1t8tZpoytb5pmtk8iGDUH3sm7hNu6SBhi05QzJYjoQt3FCnJ
+         Fm+zJbJwewSBdK6xiNYjqKnB1d1c/mo/wn6bLf5yrHjncQn8cJtxJVud2QOD89rH5G15
+         I97/Q4pgoUXnjsAQ+qvqlJ7abSnYw36+XgsfnioYdKqqpZyBiPl56cMqduPMitUd8hxk
+         OIEin/0UrCgSonA8+KTgsKwrli5uVgus/O9esw4AOrhaZx9I9h8sz+j9rKtUpbg8pfxC
+         Rzl3OCHeW6J7zK1ILmVbhc4z9tcDCFzQa2UXnYjvzZlb37hajTwsvVweKSxsXXKewIIv
+         D85A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790432479; x=1791037279;
+        d=1e100.net; s=20260707; t=1790432480; x=1791037280;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8l0pHciPDKkooF3fqsq1yfSTpu6uZNQacsRoTqPJYcU=;
-        b=BYkJZtPqKAUUCooZ4l8qQ8NtCzog7b3Lsy5h/H0BYkLW+zl405Jd7YcFaj2togf2QY
-         HvhaKX02+Nnxr1XsBeOA/sdsC6kx3CTa2ELXP8TdsUG++VvIUa4yl+lnwD13OzMd11cz
-         4XjsQzCoklDwX8/Iji1Sma4AJLzsV2CHjeRFJHXNTZ1YESV9mrkyOms2QPmB7wD6PmZJ
-         atA/ioaxx+w+bivHDjR3+69AGeygPG5V7jPmi5vJCQqjUpulQN3wqgDUVpBRpw+SMFir
-         n4Il3AxoS0iNgCCCgWIrrt80YwiGjEbHAtDAizqF+vtzLYcoRfKz6QJuCChww5FHOg6e
-         Vdew==
-X-Gm-Message-State: AFq9FYIxOQoVcHHLGBFmSkPN+yFJUQgVr8tXPuiAe52qNaHt0Wye+QVp
-	7yGHrut9vxiTvs4RcvF5PLA3KjY7aCKaMxs84BLOp3rLDHEx71a4l+Vm8nNEZ3WfLr8=
-X-Gm-Gg: AYBFou1yx/n03l8OzUdoqTHV5SDSv6IG6EqNsPl5GfVashB3K6B5p/IavUXicYoIS+Y
-	Ds/hEesfL9QNDWonAcNgUP3/OKC1CC/paEFTMJ+cwYDn/lKPxs8Ii+vg8D/7v5W4oGNFxsrpcza
-	GAbW7fR31iZuucYYc5nfPHcrPJxKT/V0LH8NLCYzJ7jtGzTocvIpdsyVJGaaBY13hKh20fdJU79
-	K3OnnoyjzyxvAmGoXTOrdtEchYl45bwYyot+jUsWKI9VTtLqgDB+mlviH5nr+GhwvzSzmptXQOD
-	IE5QFBITn/09RZ/yt6KvVH3ACN0fxThu87rfM6Y+D/oPQA6SW7OmfOlgwxVDNqJkL4WPXshYbfr
-	hJLelv0zyDPS7WT5gM5c5g+vaxCuQ8sbAF14XZBVpMy/chzjcnOmSayxA0UYcb6T8WCbEHoh5Pn
-	Xr796GEeHqR9sbNQ4EWhE0e+R2dIfHeSlRtTQxmU+DlI6nYkMXCeCchXh+vggxu2rligMGnvr+d
-	VzZDzA8EK1zEvYLlcJc4Vo5OLDn3gGZvDT8oOmGsTBi1dNy1vQO
-X-Received: by 2002:a17:90b:53c7:b0:3a0:eeda:39ee with SMTP id 98e67ed59e1d1-3a0eeda3e19mr754263a91.58.1790432478828;
-        Sat, 26 Sep 2026 07:21:18 -0700 (PDT)
+        bh=vnCC7chfBgug6r4aXtdrGnC94622CKxFnw02sRnL3sQ=;
+        b=w3JngQyjdBoQXLnKMedkGSpR50WzXu8XgfB5M6GjGQfRq6uMnZvUcZc9ZUsaeKms5s
+         LnkkMrTuDEuol8HwoLFlkK29mIy+vBMZW7KmO/T6X1tmTJ5/Ou1FUtrKI66ainqjqAj9
+         P00M0Ypfo5zxIkADzAmS/JqyGdOZFhFlAYL1k06eSjmqk++G33sBfO5pKbKtwM1xOnA1
+         Ivuw+P6tFCy+aE/rBXOe+yA+6/u877A5rRATgsPH48EJiA0MuTeBTOqwN4Q5gDavJKEz
+         fm6CthmZKGpnFkBLHTpzLXO8bHAEvSHhw28+WVp/zF9wpTQDRVsT7ck9DO4/SpzzTE0i
+         DhhA==
+X-Gm-Message-State: AFq9FYJ8TvfGa9D8tUhnFASaBSgKXOfCJMZdZn4pxwhaWWXVPRwARHLR
+	tOqxf3Ae9FYXUlhiomNm8NVhRYO6il5Lt645CR6mGfnYX6WVs0dhzcd+3SlrFPNDT1E=
+X-Gm-Gg: AYBFou2zELpX5GuQ0Pdvk4G+n1DZT6oEdM2ZxNWEr2uO5wPaIr+U+DVMPGeGy406yxJ
+	dkDGW9vxotnZTUbt11Esh1cImA18eUs71LxrKdUdHFYtbnheSIb4C+avt0xbf7q6J/clYmyJCZv
+	mNPxs3+N6EsVgY3TSL6/WEbwXO0kuHolZ0zRGV6inaEDM5agM0Cvzbli61N0L7hwzUdFxqCAxQW
+	Kxu3SMzoRlcztrvPijJLydPiJK06aDjA1nfKepqUlMVsiMitrZMvOdauJ2yaGzO823zsSqm4bRx
+	OSgkHasPA6Bp73G71XxVxpwoV7QyTmU/bEZF/N4gknAtCNQj5QJmXeBAayfuQ7pJCYs+M+/2Z7W
+	6KQdmiinyLIuGkJ25Bs+1hsAvxr+A9uklbDDWhYHB3FVYZMvOfJiAWS9zY5zkd23B6+AXdRyYGn
+	E6OlNr2ArpLMxj0LU4lvewh12Bwd7ofi0Chwp1c7n6QOnO+BxD0EyPv1KSpdSJ5atGmTfhsHYld
+	vapTJy0FyzV0XLuOn3eWz9e4fk05Cwv5Gw/QomH8w==
+X-Received: by 2002:a17:90b:4cc2:b0:3a0:e22b:1b2a with SMTP id 98e67ed59e1d1-3a0e22b1d7fmr1188445a91.32.1790432479634;
+        Sat, 26 Sep 2026 07:21:19 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
         by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.21.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 07:21:18 -0700 (PDT)
+        Sat, 26 Sep 2026 07:21:19 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 35/36] selftests/bpf: tests for immediate dominator computation
-Date: Sat, 26 Sep 2026 07:20:33 -0700
-Message-ID: <20260926-scev-minimal-rebase-v1-35-c8e5ab5ba79f@gmail.com>
+Subject: [PATCH bpf-next 36/36] selftests/bpf: cover SCEV analysis and loop widening
+Date: Sat, 26 Sep 2026 07:20:34 -0700
+Message-ID: <20260926-scev-minimal-rebase-v1-36-c8e5ab5ba79f@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
@@ -84,343 +84,913 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Coverage:
-- straight-line code with an ldimm64 in the middle (exercises the
-  bpf_is_ldimm64() skip in compute_predecessors());
-- an asymmetric if-then-else diamond (unequal-depth idoms_intersect());
-- a simple loop, a loop with an if-else body, and nested loops;
-- a loop header with two back edges (three predecessors);
-- an irreducible CFG (fixpoint convergence);
-- immediate dominators across subprogram boundaries, including a callee
-  whose entry instruction is itself a loop header;
-- a self-loop;
-- an indirect jump (gotox) with a two-entry jump table.
+- Computed expression shapes: register and spilled-counter recurrences,
+  substitution at latches, agreeing and conflicting backedge updates,
+  and ALU, extension and byte-swap expression chains.
+
+- Iteration bounds and header-visit counts for:
+  - pre-condition loops using JEQ, JGE and JGT;
+  - post-condition loops using JLT, JLE, JGE, JGT and JNE;
+  - signed post-conditions using JSLT and JSLE;
+  - increasing and decreasing counters, nonzero initial values,
+    immediate and invariant-register bounds, and immediate exits;
+  - additional exits that reduce the minimum iteration count.
+
+- Widening, backedge clamping and state-pruning convergence,
+  including multiple induction variables used for map-value accesses
+  and nonconstant entry values requiring a common alignment.
+
+- Nested and sibling loops, exits to another loop header, exits across
+  multiple nesting levels, and side entries into loop nests.
+  Check conservative summaries for irreducible children while still
+  widening supported reducible descendants.
+
+- Invalidation of stack-slot expressions after indirect stack writes.
+
+- Avoid widening registers used to address stack spills, fills and
+  dynptr constructor arguments, including dependencies through nested
+  loops. Conversely, allow widening addresses of byte-sized stores.
+
+- Conditional assignments joining scalar values and stack pointers,
+  including preservation of a common base and gcd-derived step.
+
+- Conservative fallback for unsupported recurrences, unavailable
+  counter spills and zero computed header counts.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- tools/testing/selftests/bpf/progs/verifier_idoms.c | 390 +++++++++++++++++++++
- 2 files changed, 392 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/verifier.c |    2 +
+ tools/testing/selftests/bpf/progs/verifier_scev.c | 1108 +++++++++++++++++++++
+ 2 files changed, 1110 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index be4fd187ba5f..82b21ec472ba 100644
+index 82b21ec472ba..2bc1ef910c16 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -57,6 +57,7 @@
- #include "verifier_helper_packet_access.skel.h"
- #include "verifier_helper_restricted.skel.h"
- #include "verifier_helper_value_access.skel.h"
-+#include "verifier_idoms.skel.h"
- #include "verifier_int_ptr.skel.h"
- #include "verifier_iterating_callbacks.skel.h"
- #include "verifier_jeq_infer_not_null.skel.h"
-@@ -244,6 +245,7 @@ void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_access_var_
- void test_verifier_helper_packet_access(void) { RUN(verifier_helper_packet_access); }
- void test_verifier_helper_restricted(void)    { RUN(verifier_helper_restricted); }
- void test_verifier_helper_value_access(void)  { RUN(verifier_helper_value_access); }
-+void test_verifier_idoms(void)                { RUN(verifier_idoms); }
- void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
- void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
- void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_idoms.c b/tools/testing/selftests/bpf/progs/verifier_idoms.c
+@@ -107,6 +107,7 @@
+ #include "verifier_ringbuf.skel.h"
+ #include "verifier_runtime_jit.skel.h"
+ #include "verifier_scalar_ids.skel.h"
++#include "verifier_scev.skel.h"
+ #include "verifier_sdiv.skel.h"
+ #include "verifier_search_pruning.skel.h"
+ #include "verifier_sock.skel.h"
+@@ -294,6 +295,7 @@ void test_verifier_regalloc(void)             { RUN(verifier_regalloc); }
+ void test_verifier_ringbuf(void)              { RUN(verifier_ringbuf); }
+ void test_verifier_runtime_jit(void)          { RUN(verifier_runtime_jit); }
+ void test_verifier_scalar_ids(void)           { RUN(verifier_scalar_ids); }
++void test_verifier_scev(void)                 { RUN(verifier_scev); }
+ void test_verifier_sdiv(void)                 { RUN(verifier_sdiv); }
+ void test_verifier_search_pruning(void)       { RUN(verifier_search_pruning); }
+ void test_verifier_sock(void)                 { RUN(verifier_sock); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
 new file mode 100644
-index 000000000000..a29d6332baa4
+index 000000000000..69e9062870ac
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_idoms.c
-@@ -0,0 +1,390 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -0,0 +1,1108 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
 +#include <linux/bpf.h>
++#include <stdbool.h>
 +#include <bpf/bpf_helpers.h>
 +#include "bpf_misc.h"
-+#include "../../../include/linux/filter.h"
++#include "bpf_kfuncs.h"
 +
-+/*
-+ * kernel/bpf/loops.c:bpf_compute_idoms() computes the immediate dominator
-+ * of every instruction (Cooper et al, "A Simple, Fast Dominance Algorithm").
-+ *
-+ * The immediate dominator is printed by log_program() as the numeric column
-+ * immediately before the "<insn#>:" field of every "Program dump" line:
-+ *
-+ *   Program dump (scc? loop_header? idom insn#: live_regs_before):
-+ *            -1   0: ....... (b7) r0 = 0     <- idom(0) = -1 (subprog entry)
-+ *             0   1: ....... (07) r0 += 1    <- idom(1) = 0
-+ *             ^^^^^^
-+ *             idom insn#
-+ *
-+ * The __msg() patterns below wildcard the scc/loop_header/live_regs columns and
-+ * anchor on "<idom>   <insn#>:" followed by the disassembled instruction, so
-+ * they assert the idom value of each instruction.
-+ */
++struct map_val {
++	char foo[1024];
++};
 +
-+/*
-+ * Straight-line code, with an ldimm64 in the middle. Instruction index 2 is
-+ * the second half of the ldimm64 at index 1 and is not a CFG node; the idom of
-+ * index 3 must be 1, not 2. Exercises the bpf_is_ldimm64() skip in both passes
-+ * of compute_predecessors().
-+ */
-+SEC("socket")
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct map_val);
++} map SEC(".maps");
++
++SEC("xdp")
 +__success
 +__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
-+__msg("{{.*}}  0   1: {{.*}} (18) r1 = 0x1122334455667788")
-+__msg("{{.*}}  1   3: {{.*}} (07) r0 += 1")
-+__msg("{{.*}}  3   4: {{.*}} (0f) r0 += r1")
-+__msg("{{.*}}  4   5: {{.*}} (95) exit")
-+__naked void straight_line_ldimm64(void)
++__msg_next("scev at header 1:")
++__msg_next("  r0=(+ r0 1) / (linear r0 1)")
++__naked void simple_loop1(void)
 +{
 +	asm volatile ("					\
 +	r0 = 0;						\
-+	r1 = 0x1122334455667788 ll;			\
++loop_%=:						\
++	if r0 == 10 goto exit_%=;			\
 +	r0 += 1;					\
-+	r0 += r1;					\
++	goto loop_%=;					\
++exit_%=:						\
++	r0 = 0;						\
 +	exit;						\
 +"	::: __clobber_all);
 +}
 +
-+/*
-+ * Asymmetric if-then-else diamond: the "then" arm is 5 instructions long, the
-+ * "else" arm is a single instruction. The merge point (insn 8) is dominated by
-+ * the branch (insn 1), not by either arm. This forces idoms_intersect() to walk
-+ * the two predecessors up unequal postorder depths before they meet.
-+ */
-+SEC("socket")
++SEC("xdp")
 +__success
 +__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
-+__msg("{{.*}}  0   1: {{.*}} (25) if r0 > 0x0 goto pc+5")
-+__msg("{{.*}}  1   2: {{.*}} (b7) r1 = 1")
-+__msg("{{.*}}  2   3: {{.*}} (b7) r1 = 2")
-+__msg("{{.*}}  3   4: {{.*}} (b7) r1 = 3")
-+__msg("{{.*}}  4   5: {{.*}} (b7) r1 = 4")
-+__msg("{{.*}}  5   6: {{.*}} (05) goto pc+1")
-+__msg("{{.*}}  1   7: {{.*}} (b7) r1 = 9")
-+__msg("{{.*}}  1   8: {{.*}} (95) exit")
-+__naked void asymmetric_diamond(void)
++__msg("8: (7b) *(u64 *)(r1 +0) = r0     ; *fp-8 (+ *fp-8 1) -> ?")
++__naked void indirect_write_invalidates_scev(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u64 *)(r10 - 8) = r0;				\
++loop_%=:						\
++	r0 = *(u64 *)(r10 - 8);				\
++	if r0 == 10 goto exit_%=;			\
++	r0 += 1;					\
++	*(u64 *)(r10 - 8) = r0;				\
++	r1 = r10;					\
++	r1 += -8;					\
++	*(u64 *)(r1 + 0) = r0;				\
++	goto loop_%=;					\
++exit_%=:						\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__msg_next("scev at header 2:")
++__msg_next("  *fp-8=(+ *fp-8 1) / (linear *fp-8 1)")
++__msg_next(" scev at latch 3:")
++__msg_next("  r0=*fp-8 / (linear *fp-8 1)")
++__msg_next("  *fp-8=*fp-8 / (linear *fp-8 1)")
++__naked void simple_loop2(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u64 *)(r10 - 8) = r0;				\
++loop_%=:						\
++	r0 = *(u64 *)(r10 - 8);				\
++	if r0 == 10 goto exit_%=;			\
++	r0 = *(u64 *)(r10 - 8);				\
++	r0 += 1;					\
++	*(u64 *)(r10 - 8) = r0;				\
++	goto loop_%=;					\
++exit_%=:						\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__msg_next("scev at header 2:")
++__msg_next("  r1=(+ r1 1) / (linear r1 1)")
++__naked void meet_agrees(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
-+	if r0 > 0 goto 1f;				\
-+	r1 = 1;						\
-+	r1 = 2;						\
-+	r1 = 3;						\
-+	r1 = 4;						\
-+	goto 2f;					\
-+1:	r1 = 9;						\
-+2:	exit;						\
++	r1 = 0;						\
++1:							\
++	if r1 == 2 goto 3f;				\
++	if r0 == 7 goto 2f;				\
++	r1 += 1;					\
++	goto 1b;					\
++2:							\
++	r1 += 1;					\
++	goto 1b;					\
++3:							\
++	r0 = 0;						\
++	exit;						\
 +"	:
 +	: __imm(bpf_get_prandom_u32)
 +	: __clobber_all);
 +}
 +
-+/*
-+ * Simple loop: the header (insn 1) is dominated by the pre-header (insn 0). The
-+ * back edge (insn 2 -> insn 1) must not change idom(1); the back-edge
-+ * predecessor folds up via idoms_intersect().
-+ */
-+SEC("socket")
-+__success
++SEC("xdp")
++__failure
 +__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
-+__msg("{{.*}}  0   1: {{.*}} (07) r0 += 1")
-+__msg("{{.*}}  1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("{{.*}}  2   3: {{.*}} (95) exit")
-+__naked void simple_loop(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/*
-+ * Loop with an if-else in its body. The in-loop merge point (insn 5) is
-+ * dominated by the in-loop branch (insn 3), combining a back-edge intersect
-+ * with a forward-diamond intersect.
-+ */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
-+__msg("{{.*}}  0   1: {{.*}} (07) r0 += 1")
-+__msg("{{.*}}  1   2: {{.*}} (bf) r1 = r0")
-+__msg("{{.*}}  2   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
-+__msg("{{.*}}  3   4: {{.*}} (b7) r1 = 1")
-+__msg("{{.*}}  3   5: {{.*}} (0f) r0 += r1")
-+__msg("{{.*}}  5   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
-+__msg("{{.*}}  6   7: {{.*}} (95) exit")
-+__naked void loop_with_if_else_body(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = r0;					\
-+	if r1 > 5 goto 2f;				\
-+	r1 = 1;						\
-+2:	r0 += r1;					\
-+	if r0 < 100 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/*
-+ * Nested loops: the idom chain runs inner-header -> outer-body -> outer-header
-+ * -> pre-header. Exercises intersect across back edges at two nesting depths.
-+ */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
-+__msg("{{.*}}  0   1: {{.*}} (07) r0 += 1")
-+__msg("{{.*}}  1   2: {{.*}} (b7) r1 = 0")
-+__msg("{{.*}}  2   3: {{.*}} (07) r1 += 1")
-+__msg("{{.*}}  3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
-+__msg("{{.*}}  4   5: {{.*}} (a5) if r0 < 0xa goto pc-5")
-+__msg("{{.*}}  5   6: {{.*}} (95) exit")
-+__naked void nested_loops(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 5 goto 2b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/*
-+ * Loop header (insn 1) with two back edges (from insn 4 and insn 5), i.e. three
-+ * predecessors. Both back edges route through the incrementing header, so the
-+ * loop is bounded and verifies. Repeated idoms_intersect() at the header must
-+ * stay stable and keep idom(1) at the pre-header (insn 0).
-+ */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (b7) r6 = 0")
-+__msg("{{.*}}  0   1: {{.*}} (07) r6 += 1")
-+__msg("{{.*}}  1   2: {{.*}} (25) if r6 > 0xa goto pc+3")
-+__msg("{{.*}}  2   3: {{.*}} (bf) r7 = r6")
-+__msg("{{.*}}  3   4: {{.*}} (a5) if r7 < 0x5 goto pc-4")
-+__msg("{{.*}}  4   5: {{.*}} (05) goto pc-5")
-+__msg("{{.*}}  2   6: {{.*}} (b7) r0 = 0")
-+__msg("{{.*}}  6   7: {{.*}} (95) exit")
-+__naked void multi_backedge_header(void)
++__msg_next("scev at header 1:")
++__msg_next("  r6=(any r6 (+ r6 1)) / ?")
++__naked void meet_disagrees(void)
 +{
 +	asm volatile ("					\
 +	r6 = 0;						\
-+1:	r6 += 1;					\
-+	if r6 > 10 goto 2f;				\
-+	r7 = r6;					\
-+	if r7 < 5 goto 1b;				\
-+	goto 1b;					\
-+2:	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/*
-+ * Irreducible CFG (loop with two entries, insn 3 and insn 5, reached from the
-+ * insn 2 branch). Dominators remain well-defined; this is a convergence test
-+ * for the fixpoint under irreducibility. Note insn 6 is dominated by the branch
-+ * (insn 2), not by either arm.
-+ */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
-+__msg("{{.*}}  0   1: {{.*}} (b7) r1 = 0")
-+__msg("{{.*}}  1   2: {{.*}} (25) if r0 > 0x5 goto pc+2")
-+__msg("{{.*}}  2   3: {{.*}} (b7) r1 = 1")
-+__msg("{{.*}}  3   4: {{.*}} (05) goto pc+1")
-+__msg("{{.*}}  2   5: {{.*}} (b7) r1 = 2")
-+__msg("{{.*}}  2   6: {{.*}} (0f) r0 += r1")
-+__msg("{{.*}}  6   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
-+__msg("{{.*}}  7   8: {{.*}} (95) exit")
-+__naked void irreducible(void)
-+{
-+	asm volatile ("					\
++1:							\
++	if r6 == 2 goto 3f;				\
 +	call %[bpf_get_prandom_u32];			\
-+	r1 = 0;						\
-+	if r0 > 5 goto 2f;				\
-+1:	r1 = 1;						\
-+	goto 3f;					\
-+2:	r1 = 2;						\
-+3:	r0 += r1;					\
-+	if r0 < 16 goto 1b;				\
++	if r0 == 7 goto 1b;				\
++	r6 += 1;					\
++	goto 1b;					\
++3:							\
++	r0 = 0;						\
 +	exit;						\
 +"	:
 +	: __imm(bpf_get_prandom_u32)
 +	: __clobber_all);
 +}
 +
-+/*
-+ * Idoms are computed per subprog. Layout (libbpf preorder) is:
-+ *   main: 0..1, sub: 2..7
-+ * The callee entry (insn 2) must have idom -1 (subprog reset), and idoms inside
-+ * the callee must reference only the callee's instructions, never main's. The
-+ * in-callee merge (insn 7) is dominated by the in-callee branch (insn 3). The
-+ * branch is on a prandom value so it is not constant-folded away.
-+ */
-+static __naked __noinline __used
-+unsigned long idoms_diamond_sub(void)
++SEC("xdp")
++__log_level(2)
++__msg_next("scev at header 1:")
++__msg_next("  r6=(bswap32 (bswap32 (zext32 (- (- (zext32 (+ (>>...) 1))))))) / ?")
++__naked void expr_chain(void)
 +{
 +	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	if r0 > 0 goto 1f;				\
-+	r0 = 1;						\
-+	goto 2f;					\
-+1:	r0 = 2;						\
++	r6 = 0;						\
++1:							\
++	if r6 == 2 goto 2f;				\
++	r6 += 1;					\
++	r6 <<= 32;					\
++	r6 >>= 32;					\
++	w6 += 1;					\
++	r6 = -r6;					\
++	w6 = -w6;					\
++	r6 = bswap32 r6;				\
++	r6 = bswap32 r6;				\
++	goto 1b;					\
++2:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__msg_next("scev at header 1:")
++__msg_next("  r6=(+ r6 1) / (linear r6 1)")
++__msg_next("  r7=?")
++__msg_next(" scev at latch 1:")
++__msg_next("  r6=(+ r6 1) / (linear r6 1)")
++__msg_next("  r7=?")
++__msg_next("scev at header 4:")
++__msg_next("  r7=(+ r7 1) / (linear r7 1)")
++__msg_next(" scev at latch 4:")
++__msg_next("  r7=(+ r7 1) / (linear r7 1)")
++__naked void nested_loop1(void)
++{
++	asm volatile ("					\
++	r6 = 0;						\
++1:							\
++	if r6 == 2 goto 2f;				\
++	r6 += 1;					\
++	r7 = 0;						\
++3:							\
++	if r7 == 2 goto 4f;				\
++	r7 += 1;					\
++	goto 3b;					\
++4:							\
++	goto 1b;					\
++2:							\
++	r0 = r7;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__msg_next("scev at header 1:")
++__msg_next("  r6=(+ r6 1) / (linear r6 1)")
++__msg_next("  r7=?")
++__msg_next(" scev at latch 4:")
++__msg_next("  r7=(+ r7 1) / (linear r7 1)")
++__msg_next("scev at header 4:")
++__msg_next("  r7=(+ r7 1) / (linear r7 1)")
++__msg_next(" scev at latch 4:")
++__msg_next("  r7=(+ r7 1) / (linear r7 1)")
++__msg("loop header at 1, can't widen r7, expr is ?")
++__msg("loop header at 4, widening r7 to 0..2 step 1")
++__log_level(2)
++__naked void nested_loop_hdr_backedge1(void)
++{
++	asm volatile ("					\
++	r6 = 0;						\
++1:							\
++	if r6 == 2 goto 3f;				\
++	r6 += 1;					\
++	  r7 = 0;					\
++2:							\
++	  if r7 == 2 goto 1b;				\
++	  r7 += 1;					\
++	  goto 2b;					\
++3:							\
++	r0 = r7;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 10 post-cond")
++__msg("loop header at 1, widening r0 to 0..9 step 1")
++__msg("processed 5 insns")
++__naked void post_cond_jlt(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	if r0 < 10 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 3, header_count is 8")
++__msg("loop header at 3, widening r0 to 2..9 step 1")
++__msg("3: R0=scalar(smin=umin=smin32=umin32=2,smax=umax=smax32=umax32=9,{{.*}})")
++__msg("processed 6 insns")
++__naked void post_cond_jlt_with_base(void)
++{
++	asm volatile ("					\
++	r7 = 10 ll;	/* ldimm64 for a twist */	\
++	r0 = 2;						\
++1:	r0 += 1;					\
++	if r0 < r7 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 11")
++__msg("loop header at 1, widening r0 to 0..10 step 1")
++__msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=10,{{.*}})")
++__msg("processed 5 insns")
++__naked void post_cond_jle(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	if r0 <= 10 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 10")
++__msg("loop header at 1, widening r0 to 0..9 step 1")
++__msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=9,{{.*}})")
++__msg("processed 6 insns")
++__naked void post_cond_jge(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	if r0 >= 10 goto 2f;				\
++	goto 1b;					\
++2:	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 11")
++__msg("loop header at 1, widening r0 to 0..10 step 1")
++__msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=10,{{.*}})")
++__msg("processed 6 insns")
++__naked void pre_cond_jge(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	if r0 >= 10 goto 2f;				\
++	r0 += 1;					\
++	goto 1b;					\
++2:	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 2 post-cond")
++__naked void post_cond_jgt(void)
++{
++	asm volatile ("					\
++	r0 = 2;						\
++1:	r0 += -1;					\
++	if r0 > 0 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg_next("scev at header 1:")
++__msg_next("  r0=(+ r0 1) / (linear r0 1)")
++__msg_next(" scev at latch 2:")
++__msg_next("  r0=(+ r0 1) / (linear (+ r0 1) 1)")
++__msg("loop header at 1, widening r0")
++__msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,{{.*}})")
++__msg("1: (07) r0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
++__msg("2: (55) if r0 != 0x3 goto pc-2")
++__msg("3: (95) exit")
++__msg("loop header at 1, clamping r0")
++__msg("from 2 to 1: safe")
++__msg("processed 5 insns")
++__naked void post_cond_jne(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	if r0 != 3 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg_next("scev at header 1:")
++__msg_next("  r0=(+ r0 -1) / (linear r0 -1)")
++__msg_next(" scev at latch 2:")
++__msg_next("  r0=(+ r0 -1) / (linear (+ r0 -1) -1)")
++__msg("loop header at 1, header_count is 3 post-cond")
++__msg("loop header at 1, widening r0 to 1..3 step 1")
++__msg("1: R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,var_off=(0x0; 0x3)) loop_stack=1")
++__msg("loop header at 1, clamping r0 to 1..2 step 1")
++__msg("processed 5 insns")
++__naked void post_cond_jne_neg_step(void)
++{
++	asm volatile ("					\
++	r0 = 3;						\
++1:	r0 += -1;					\
++	if r0 != 0 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg_next("scev at header 1:")
++__msg_next("  r0=(+ r0 1) / (linear r0 1)")
++__msg_next(" scev at latch 1:")
++__msg_next("  r0=(+ r0 1) / (linear r0 1)")
++__msg("loop header at 1, widening r0")
++__msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=3,{{.*}})")
++__msg("1: (15) if r0 == 0x3 goto pc+2        ; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,{{.*}})")
++__msg("2: (07) r0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
++__msg("3: (05) goto pc-3")
++__msg("loop header at 1, clamping r0")
++__msg("1: safe")
++__msg("from 1 to 4: R0=3")
++__msg("4: R0=3")
++__msg("4: (95) exit")
++__msg("processed 6 insns")
++__naked void pre_cond_je1(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	if r0 == 3 goto 2f;				\
++	r0 += 1;					\
++	goto 1b;					\
++2:	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is [0..3] post-cond")
++__naked void one_backedge_two_exits(void)
++{
++	asm volatile ("					\
++	r6 = 0;						\
++1:	call %[bpf_get_prandom_u32];			\
++	if r0 == 0 goto 2f;				\
++	r6 += 1;					\
++	if r6 != 3 goto 1b;				\
++2:	r0 = r6;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg_next("scev at header 11:")
++__msg_next("  r0=(+ r0 1) / (linear r0 1)")
++__msg_next("  r1=(+ r1 2) / (linear r1 2)")
++__msg_next(" scev at latch 16:")
++__msg_next("  r0=(+ r0 1) / (linear (+ r0 1) 1)")
++__msg_next("  r1=(+ r1 2) / (linear (+ r1 2) 2)")
++__msg("loop header at 11, widening r0")
++__msg("loop header at 11, widening r1")
++__msg("11: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=7,var_off=(0x0; 0x7)) R1=scalar(smin=smin32=0,smax=umax=smax32=umax32=14,var_off=(0x0; 0xe),step=0+2)")
++/* loop exit */
++__msg("16: (a5) if r0 < 0x8 goto pc-6")
++__msg("exiting loop 11")
++__msg("17: (95) exit")
++/* second iteration */
++__msg("loop header at 11, clamping r0")
++__msg("loop header at 11, clamping r1")
++/* iteration convergence */
++__msg("from 16 to 11: safe")
++__not_msg("{{^}}11:")
++/* map lookup error path */
++__msg("from 7 to 17: safe")
++__naked void correlated_regs(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map] ll;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 2f;				\
++	r6 = r0;					\
++	r0 = 0;						\
++	r1 = 0;						\
++1:	r2 = r6;					\
++	r2 += r1;					\
++	*(u8 *)(r2 + 0) = 1;				\
++	r0 += 1;					\
++	r1 += 2;					\
++	if r0 < 8 goto 1b;				\
 +2:	exit;						\
 +"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map)
++	: __clobber_all);
++}
++
++/*
++ * k = 0
++ * for (i = 0; i < 4; i++):
++ *   for (j = 0; j < 4; j++):
++ *     k += 1
++ *     k <<= 1   // make SCEV construction not possible
++ *     k >>= 1
++ * map[k] = 1    // make k precise
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("19: (72) *(u8 *)(r4 +0) = 1           ; R4=map_value(id={{.*}},map=map,ks=4,vs=1024,imm=16)")
++__not_msg("19: ")
++__msg("processed 106 insns")
++__naked void nested_loops_precise_var1(void)
++{
++	asm volatile ("					\
++	*(u64*)(r10 - 8) = 0;				\
++	r1 = %[map] ll;					\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 3f;				\
++	r1 = 0;						\
++	r3 = 0;						\
++	/* outer loop */				\
++1:	r2 = 0;						\
++	/* inner loop */				\
++2:	r2 += 1;					\
++	r3 += 1;					\
++	r3 <<= 1;					\
++	r3 >>= 1;					\
++	if r2 < 4 goto 2b;				\
++	r1 += 1;					\
++	if r1 < 4 goto 1b;				\
++	r4 = r0;					\
++	r4 += r3;					\
++	*(u8 *)(r4 + 0) = 1;				\
++	r0 = 0;						\
++3:	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 1 pre-cond")
++__naked void pre_cond_jgt(void)
++{
++	asm volatile ("					\
++	r0 = -1;					\
++1:	if r0 > 1 goto 2f;				\
++	r0 += 1;					\
++	goto 1b;					\
++2:	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 2 post-cond")
++__naked void loop_jslt_latch_post(void)
++{
++	asm volatile ("					\
++	r0 = -2;					\
++1:	r0 += 1;					\
++	if r0 s< 0 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 1 post-cond")
++__naked void loop_jslt_latch_post1(void)
++{
++	asm volatile ("					\
++	r0 = -1;					\
++1:	r0 += 1;					\
++	if r0 s< 0 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, 0 iterations count")
++__naked void loop_jslt_latch_post2(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	if r0 s< 0 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 1, header_count is 3 post-cond")
++__naked void loop_jsle_latch_post(void)
++{
++	asm volatile ("					\
++	r0 = -2;					\
++1:	r0 += 1;					\
++	if r0 s<= 0 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__msg("loop header at 2, header_count is 100 post-cond")
++__msg("loop header at 4, header_count is [0..100] post-cond")
++__msg("loop header at 6, header_count is [0..100] post-cond")
++__msg("processed 20 insns")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void nested_loop_with_two_exits(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = 0;						\
++1:	r6 += 1;					\
++	r7 = 0;						\
++2:	r7 += 1;					\
++	r8 = 0;						\
++3:	r8 += 1;					\
++	call %[bpf_get_prandom_u32];			\
++	if r0 == 42 goto +1;				\
++	goto 4f;					\
++	if r8 < 100 goto 3b;				\
++	if r7 < 100 goto 2b;				\
++4:	if r6 < 100 goto 1b;				\
++	exit;						\
++"	:
 +	: __imm(bpf_get_prandom_u32)
 +	: __clobber_all);
 +}
 +
-+SEC("socket")
++SEC("xdp")
 +__success
 +__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (85) call pc+1")
-+__msg("{{.*}}  0   1: {{.*}} (95) exit")
-+__msg("{{.*}} -1   2: {{.*}} (85) call bpf_get_prandom_u32#7")
-+__msg("{{.*}}  2   3: {{.*}} (25) if r0 > 0x0 goto pc+2")
-+__msg("{{.*}}  3   4: {{.*}} (b7) r0 = 1")
-+__msg("{{.*}}  4   5: {{.*}} (05) goto pc+1")
-+__msg("{{.*}}  3   6: {{.*}} (b7) r0 = 2")
-+__msg("{{.*}}  3   7: {{.*}} (95) exit")
-+__naked void multi_subprog(void)
++__naked void exit_loop_into_loop_header(void)
 +{
 +	asm volatile ("					\
-+	call idoms_diamond_sub;				\
++	r1 = 0;						\
++	r2 = 0;						\
++loop_a_%=:						\
++	r1 += 1;					\
++	if r1 < 10 goto loop_a_%=;			\
++loop_b_%=:						\
++	r2 += 1;					\
++	if r2 < 10 goto loop_b_%=;			\
++	r0 = 0;						\
 +	exit;						\
 +"	::: __clobber_all);
 +}
 +
 +/*
-+ * The first instruction of a subprog (insn 3) is itself a loop header, i.e. it
-+ * has an incoming back edge. Its idom must still be -1 (the subprog entry has no
-+ * dominator). Exercises the idoms[start]=0 ... idoms[start]=-1 handling in
-+ * compute_subprog_idoms().
++ * This exercises verifier.c:loop_stack_{pop,push}() implementation,
++ * at 'goto d' loops 'b' and 'a' have to be popped from stack,
++ * while loops 'c' and 'd' have to be pushed to stack.
++ *
++ *   loop a:                  // header 5
++ *     loop b:                // header 6
++ *       if (rand) goto d;    // 8 -> 12, side entry into inner loop d
++ *       ...
++ *   loop c:                  // header 11
++ *     loop d:                // header 12
++ *       ...
 + */
-+static __naked __noinline __used
-+unsigned long idoms_entry_header_sub(void)
++SEC("xdp")
++__log_level(2)
++__msg("loop at 5")
++__msg("loop at 6, nested in 5")
++__msg("loop at 11, irreducible")
++__msg("loop at 12, nested in 11")
++/* entry via if r0 == 5 goto d_%= false branch */
++__msg("loop header at 12, header_count is 3 post-cond")
++__msg("loop header at 12, widening r9 to 0..2 step 1")
++__msg("12: R8=1 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) loop_stack=11,12")
++/* entry via if r0 == 5 goto d_%= true branch */
++__msg("loop header at 12, header_count is 3 post-cond")
++__msg("loop header at 12, widening r9 to 0..2 step 1")
++__msg("from 8 to 12: R8=0 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) R10=fp0 loop_stack=11,12")
++__naked void enter_nested_loop_from_side(void)
 +{
 +	asm volatile ("					\
-+1:	r1 += 1;					\
-+	if r1 < 10 goto 1b;				\
++	call %[bpf_get_prandom_u32];			\
++	r6 = 0;						\
++	r7 = 0;						\
++	r8 = 0;						\
++	r9 = 0;						\
++a_%=:	r6 += 1;					\
++b_%=:	r7 += 1;					\
++	call %[bpf_get_prandom_u32];			\
++	if r0 == 5 goto d_%=;				\
++	if r7 < 3 goto b_%=;				\
++	if r6 < 3 goto a_%=;				\
++c_%=:	r8 += 1;					\
++d_%=:	r9 += 1;					\
++	if r9 < 3 goto d_%=;				\
++	if r8 < 3 goto c_%=;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * Loop A (counter in r6) contains irreducible loop B (header 5),
++ * which contains C (counter in r9).
++ * Entering B at 'body' saves and restores r6, making it appear invariant.
++ * Entering B at 'alternate' skips the save and modifies r6 instead.
++ * Hence A must not infer a SCEV expression for r6.
++ * SCEV expression for r9 in C should still be computed.
++ *
++ *  0: r6 = 0;
++ *     do {                              // A
++ *  1:     r6++;
++ *  2:     r0 = bpf_get_prandom_u32();
++ *  3:     r7 = 0;
++ *  4:     if (r0 > 5) goto alternate;
++ *  5: B:  r8 = r6;                      // B
++ *  6:     goto body;
++ *  7: alternate:
++ *         r8 = r6;
++ *  8:     r8++;
++ *  9: body:
++ *         r6 = r8;
++ * 10:     r9 = 0;
++ *         do {                          // C
++ * 11:         r9++;
++ * 12:     } while (r9 < 3);
++ * 13:     r7++;
++ * 14:     if (r7 < 4) goto B;
++ * 15: } while (r6 < 4);
++ * 16: r0 = 0;
++ * 17: return r0;
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__msg("loop at 1{{$}}")
++__msg("loop at 5, nested in 1, irreducible")
++__msg("loop at 11, nested in 5")
++__msg("scev at header 1:")
++__msg_next("  r6=?")
++__msg("scev at header 11:")
++__msg_next("  r9=(+ r9 1) / (linear r9 1)")
++__msg("loop header at 11, widening r9 to 0..2 step 1")
++__not_msg("loop header at 1, widening r6")
++__naked void nested_irreducible_loop(void)
++{
++	asm volatile ("					\
++	r6 = 0;						\
++a_%=:	r6 += 1;					\
++	call %[bpf_get_prandom_u32];			\
++	r7 = 0;						\
++	if r0 > 5 goto alternate_%=;			\
++b_%=:	r8 = r6;					\
++	goto body_%=;					\
++alternate_%=:						\
++	r8 = r6;					\
++	r8 += 1;					\
++body_%=:						\
++	r6 = r8;					\
++	r9 = 0;						\
++c_%=:	r9 += 1;					\
++	if r9 < 3 goto c_%=;				\
++	r7 += 1;					\
++	if r7 < 4 goto b_%=;				\
++	if r6 < 4 goto a_%=;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * Induction variable seeded from a non-constant value. r7 enters the loop as a
++ * range aligned to 2 (prandom & 0x6 -> {0,2,4,6}) and is incremented by a
++ * non-power-of-2 slope of 6. Since the entry value is not a single point, only
++ * the power-of-two alignment shared by the entry value and the slope can be
++ * guaranteed, so the widened step is 2 - not |slope|=6, which would be unsound
++ * here (a constant entry value would have allowed step 6).
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 4, widening r7 to 0..18 step 2")
++__msg("R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=18,var_off=(0x0; 0x1e),step=0+2)")
++__naked void widen_nonconst_base(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r7 = r0;					\
++	r7 &= 0x6;					\
++	r6 = 0;						\
++1:	r7 += 6;					\
++	r6 += 1;					\
++	if r6 < 3 goto 1b;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * Two nested loops with (1) exiting directly to (2):
++ *
++ *   for (r6 = 0; r6 < 4; r6++) {
++ *     r7 = 0;
++ *     for (; r7 <  3; r7++) {}   // (1)
++ *     for (; r7 != 0; r7--) {}   // (2)
++ *   }
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__msg("loop header at 1, widening r6 to 0..3 step 1")
++__msg("loop header at 2, widening r7 to 0..2 step 1")
++__msg("loop header at 4, widening r7 to 1..3 step 1")
++__naked void sibling_inner_loops(void)
++{
++	asm volatile ("					\
++	r6 = 0;						\
++1:	r7 = 0;						\
++2:	r7 += 1;					\
++	if r7 < 3 goto 2b;				\
++3:	r7 += -1;					\
++	if r7 != 0 goto 3b;				\
++	r6 += 1;					\
++	if r6 < 4 goto 1b;				\
 +	r0 = 0;						\
 +	exit;						\
 +"	::: __clobber_all);
@@ -429,93 +999,262 @@ index 000000000000..a29d6332baa4
 +SEC("socket")
 +__success
 +__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (b7) r1 = 0")
-+__msg("{{.*}}  0   1: {{.*}} (85) call pc+1")
-+__msg("{{.*}}  1   2: {{.*}} (95) exit")
-+__msg("{{.*}} -1   3: {{.*}} (07) r1 += 1")
-+__msg("{{.*}}  3   4: {{.*}} (a5) if r1 < 0xa goto pc-2")
-+__msg("{{.*}}  4   5: {{.*}} (b7) r0 = 0")
-+__msg("{{.*}}  5   6: {{.*}} (95) exit")
-+__naked void entry_is_loop_header(void)
++__msg("loop header at 0, can't compute iterations count")
++__naked void uninit_slot_counter(void)
 +{
 +	asm volatile ("					\
-+	r1 = 0;						\
-+	call idoms_entry_header_sub;			\
++1:	r0 = *(u64 *)(r10 - 8);				\
++	r0 += 1;					\
++	*(u64 *)(r10 - 8) = r0;				\
++	if r0 < 10 goto 1b;				\
++	r0 = 0;						\
 +	exit;						\
 +"	::: __clobber_all);
 +}
 +
 +/*
-+ * Self-loop: insn 1 is its own predecessor. idom(1) must be the pre-header
-+ * (insn 0); the self-edge is ignored (idoms[pred] == -1 on the first pass, then
-+ * idoms_intersect(a == b) short-circuits). Program is rejected later for an
-+ * infinite loop, but the dump (and idoms) are printed before that.
++ * The assignment happens only on the second iteration:
++ *
++ *   r7 = 5;
++ *   for (r6 = 0; r6 < 3; r6++)
++ *           if (r6 == 1)
++ *                   r7 = 10;
++ *   if (r7 != 10)
++ *           invalid_stack_read();
++ *
++ * R7 is always 10 at the real exit. Widening loses the correlation between
++ * R6 and R7, leaving R7 in [5, 10] both at the loop header and after the loop.
++ * The verifier therefore rejects the possible invalid stack read.
 + */
-+SEC("socket")
++SEC("xdp")
 +__failure
 +__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
-+__msg("{{.*}}  0   1: {{.*}} (a5) if r0 < 0xa goto pc-1")
-+__msg("{{.*}}  1   2: {{.*}} (95) exit")
-+__msg("infinite loop detected")
-+__naked void self_loop(void)
++__msg("2: {{.*}}R7=scalar(smin=umin=smin32=umin32=5,smax=umax=smax32=umax32=10,var_off=(0x0; 0xf))")
++__msg("7: R7=scalar(smin=umin=smin32=umin32=5,smax=umax=smax32=umax32=10,var_off=(0x0; 0xf))")
++__msg("invalid read from stack R10 off=0 size=8")
++__naked void conditional_assignment_on_second_iteration(void)
++{
++	asm volatile ("					\
++	r7 = 5;						\
++	r6 = 0;						\
++1:	if r6 >= 3 goto 3f;				\
++	if r6 != 1 goto 2f;				\
++	r7 = 10;					\
++2:	r6 += 1;					\
++	goto 1b;					\
++3:	if r7 == 10 goto 4f;				\
++	r0 = *(u64 *)(r10 + 0);				\
++4:	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * Join two stack pointer offsets via (any r7 r8), with r8 loop-invariant.
++ * The joined range [-16, -8] still points to initialized stack memory,
++ * so dereferencing r7 after the loop is safe.
++ */
++SEC("xdp")
++__success __retval(0)
++__log_level(2)
++__msg("loop header at 7, widening r7 to -16..-8 step 1")
++__msg("7: {{.*}}R7=fp(smin=smin32=-16,smax=smax32=-8,")
++__msg("12: R7=fp(smin=smin32=-16,smax=smax32=-8,")
++__naked void conditional_stack_pointer_assignment(void)
++{
++	asm volatile ("					\
++	*(u64 *)(r10 - 16) = 0;				\
++	*(u64 *)(r10 - 8) = 0;				\
++	r7 = r10;					\
++	r7 += -16;					\
++	r8 = r10;					\
++	r8 += -8;					\
++	r6 = 0;						\
++1:	if r6 >= 3 goto 3f;				\
++	if r6 != 1 goto 2f;				\
++	r7 = r8;					\
++2:	r6 += 1;					\
++	goto 1b;					\
++3:	r0 = *(u64 *)(r7 + 0);				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * r7 starts as 1 + 6*k and invariant r8 as 1 + 9*k (0 <= k <= 3).
++ * The (any r7 r8) union must preserve base 1 and step gcd(6, 9) = 3.
++ */
++SEC("xdp")
++__success __retval(1)
++__log_level(2)
++__msg("r7 += 1 {{.*}}step=1+6)")
++__msg("r8 += 1 {{.*}}step=1+9)")
++__msg("loop header at 9, widening r7 to 1..28 step 3")
++__msg("9: {{.*}}R7=scalar({{.*}},step=1+3)")
++__msg("14: R7=scalar({{.*}},step=1+3)")
++__naked void conditional_scalar_assignment_gcd(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
-+1:	if r0 < 10 goto 1b;				\
++	r0 &= 3;					\
++	r7 = r0;					\
++	r7 *= 6;					\
++	r7 += 1;					\
++	r8 = r0;					\
++	r8 *= 9;					\
++	r8 += 1;					\
++	r6 = 0;						\
++1:	if r6 >= 3 goto 3f;				\
++	if r6 != 1 goto 2f;				\
++	r7 = r8;					\
++2:	r6 += 1;					\
++	goto 1b;					\
++3:	r0 = r7;					\
++	r0 %%= 3;					\
 +	exit;						\
 +"	:
 +	: __imm(bpf_get_prandom_u32)
 +	: __clobber_all);
 +}
 +
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_powerpc)
 +/*
-+ * Indirect jump (gotox) with a two-entry jump table. The gotox (insn 4) has two
-+ * successors (insn 5 and insn 7), so both targets have the gotox as their only
-+ * predecessor and idom. Also re-exercises the ldimm64 skip: insn 2's idom is 0,
-+ * the ldimm64 at index 0 (index 1 is its second half).
++ * A loop induction variable used to compute the base address of a store to the
++ * stack must not be widened: the spill offset would become varying, which the
++ * verifier does not track.
 + */
-+SEC("socket")
++SEC("xdp")
 +__success
 +__log_level(2)
-+__msg("Program dump")
-+__msg("{{.*}} -1   0: {{.*}} (18) r0 = {{0x[0-9a-f]+}}")
-+__msg("{{.*}}  0   2: {{.*}} (07) r0 += 8")
-+__msg("{{.*}}  2   3: {{.*}} (79) r0 = *(u64 *)(r0 +0)")
-+__msg("{{.*}}  3   4: {{.*}} (0d) gotox r0")
-+__msg("{{.*}}  4   5: {{.*}} (b7) r0 = 0")
-+__msg("{{.*}}  5   6: {{.*}} (95) exit")
-+__msg("{{.*}}  4   7: {{.*}} (b7) r0 = 1")
-+__msg("{{.*}}  7   8: {{.*}} (95) exit")
-+__naked void gotox_jump_table(void)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 2, can't widen r2, expr is (+ r2 8), requires exact stack-offset tracking")
++__naked void no_widen_stack_spill(void)
 +{
-+	asm volatile ("						\
-+	.pushsection .jumptables,\"\",@progbits;		\
-+jt0_%=:								\
-+	.quad ret0_%= - socket;					\
-+	.quad ret1_%= - socket;					\
-+	.size jt0_%=, 16;					\
-+	.global jt0_%=;						\
-+	.popsection;						\
-+								\
-+	r0 = jt0_%= ll;						\
-+	r0 += 8;						\
-+	r0 = *(u64 *)(r0 + 0);					\
-+	.8byte %[gotox_r0];					\
-+ret0_%=:							\
-+	r0 = 0;							\
-+	exit;							\
-+ret1_%=:							\
-+	r0 = 1;							\
-+	exit;							\
-+"	:
-+	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_0, 0, 0, 0))
-+	: __clobber_all);
++	asm volatile ("					\
++	r0 = 0;						\
++	r2 = 0;						\
++1:	r3 = r10;					\
++	r3 += -64;					\
++	r3 += r2;					\
++	*(u64 *)(r3 + 0) = r0;				\
++	r0 += 1;					\
++	r2 += 8;					\
++	if r0 < 4 goto 1b;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
 +}
-+#endif
++/*
++ * Same hazard across a loop nest: the outer induction variable r2 addresses a
++ * stack store performed inside the inner loop. The dependency is pulled up from
++ * the inner loop, so the outer loop must not widen r2.
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 2, can't widen r2, expr is (+ r2 8), requires exact stack-offset tracking")
++__msg("loop header at 3, widening r1 to 0..1 step 1")
++__naked void no_widen_stack_spill_nested(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	r2 = 0;						\
++1:	r1 = 0;						\
++2:	r3 = r10;					\
++	r3 += -64;					\
++	r3 += r2;					\
++	*(u64 *)(r3 + 0) = r1;				\
++	r1 += 1;					\
++	if r1 < 2 goto 2b;				\
++	r0 += 1;					\
++	r2 += 8;					\
++	if r0 < 4 goto 1b;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * Complement of no_widen_stack_spill: a sub-register (1-byte) store to the stack
++ * lands as STACK_MISC and carries no tracked value, so the induction variable
++ * addressing it (r2) is still widened.
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("widening r2 to 0..24 step 8")
++__naked void widen_byte_stack_store(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	r2 = 0;						\
++1:	r3 = r10;					\
++	r3 += -64;					\
++	r3 += r2;					\
++	*(u8 *)(r3 + 0) = r0;				\
++	r0 += 1;					\
++	r2 += 8;					\
++	if r0 < 4 goto 1b;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * A fill (BPF_LDX) at a varying stack offset loses precision just like a spill,
++ * so the induction variable computing the load base (r2) must not be widened.
++ * The slots are initialized up front so the fill itself is a valid read.
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("loop header at 6, can't widen r2, expr is (+ r2 8), requires exact stack-offset tracking")
++__naked void no_widen_stack_fill(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u64 *)(r10 - 64) = r0;			\
++	*(u64 *)(r10 - 56) = r0;			\
++	*(u64 *)(r10 - 48) = r0;			\
++	*(u64 *)(r10 - 40) = r0;			\
++	r2 = 0;						\
++1:	r3 = r10;					\
++	r3 += -64;					\
++	r3 += r2;					\
++	r4 = *(u64 *)(r3 + 0);				\
++	r0 += 1;					\
++	r2 += 8;					\
++	if r0 < 4 goto 1b;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * A dynptr/iter/irq/res_spin_lock call initializes a stack object through a
++ * pointer argument, which acts like a spill base: the induction variable
++ * computing that argument's varying stack offset must not be widened, otherwise
++ * the slot can't be resolved. Here each iteration constructs an xdp dynptr at
++ * &dptrs[i].
++ */
++SEC("xdp")
++__success
++__log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("can't widen {{.*}}, requires exact stack-offset tracking")
++int no_widen_dynptr_kfunc_arg(struct xdp_md *ctx)
++{
++	struct bpf_dynptr dptrs[4];
++	int i;
++
++#pragma clang loop unroll(disable)
++	for (i = 0; i < 4; i++)
++		bpf_dynptr_from_xdp(ctx, 0, &dptrs[i]);
++
++	return 0;
++}
 +
 +char _license[] SEC("license") = "GPL";
 
