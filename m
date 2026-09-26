@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D717929B795
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EB033D6ED
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790433759; cv=none; b=P4W2tSe0KttaNMirmEfKghSR/5FuMvocBIUeNEWO6QVwmtbOC8HX2bp1pLiuna0vVFAQkKDJTaEjqY+7paV8mtjlaVfScBEyTKuOUyYvsbl4tWRb0FdVg8QrlNfJk3OsnwFu0rIwPNRU/UGIaWigRaWj1UGCt5eeAQrgn4/Uk0g=
+	t=1790434002; cv=none; b=Brs/lyZ9o9dM6thhZCW4NFDucXbE81Zh6Y9vcVhyRqlUP7Q78xjY558Z30iiiQnb9/ytahSil2KHNbNQSNCMfigddX8cVWQrl7LPwKKf/6u0G98qOORJX4vHItd955vgnTZNm6ExKSmZ7cKsfDuUX1fk06ILJ2OnTfa2Ei8meAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790433759; c=relaxed/simple;
-	bh=8LEJ0YcSxaBKhiCUpJOi/hAe1dmU8zSzi/LqXcGHf9E=;
+	s=arc-20240116; t=1790434002; c=relaxed/simple;
+	bh=ErWTIsYJuOYuiL6Ag2OQxXj6t+P8bGcbq7kY+Re+ufo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Sz+Zvnk2A/GzVAGftyZngGD3Mo9qWjsacN0lV9F3xHujNxb402nPQOljRYAWm0QWnXBdUKKHXklNuuhHSQO8duFtiEo2FkUNxPTJ/IKjMg1Ew/tmdkzOo0a9CQe7juhCNf98tDr+hI+XmafzAdbv8IENOyyDZaJE0PlPPHF2Tvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RzM239tM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=IYxRLoZXBjYjzYfSrw5mrsoMWW0QDN4deooytzLLE5CbUSwl7fy8wwPspriBvaJOOZM6JQFFZ68ek+qnG9KhhvQuDypZMP4IZldWWsJG3DemB4FBhzyAfxwOxX3l3hNazh+kx4Ha6hiPczWkiUvWhvoBRJPy9+Q+JIx99f0AojM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jc9Ek5xX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RzM239tM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 599681F000FF;
-	Sat, 26 Sep 2026 14:42:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jc9Ek5xX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4AFE1F000FF;
+	Sat, 26 Sep 2026 14:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790433758;
-	bh=7kI+MOL7pas7PBw2A2Zw1xrLPdARQxDiljaOCgMxino=;
+	s=k20260515; t=1790434001;
+	bh=OEZoYFSQr0Axh5iOdt9y374HSA/cNeJ4WTQLbYtSnTs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RzM239tMJji6+Y2d49PTFRqCa6ETNWHkFIlaqVeHkvETtF7tS3MsUQ2SnPqlLoBkI
-	 SvA8OrAAJDmiqg6umh7r8XqOcCdVxNBz5tQwSQSa0SnKy7cALJNIDpuhUeGPFMT1Fq
-	 eppU5+Uuw8XaW9DfdQ04L39CtWu0unfr7wnNppLLlUZAj5ODPsn6I/Qge/xldUWxzU
-	 kivNGNNJLXs15RxRwf4KDjFVKAvtJeuV9i2eJKqdpc3nYnJ9txLpmP3ESHIKLmcf27
-	 4UOVOGbeC6qSPMHU8Bxk+RKFtw7dpxKoAZB0JPzkaypxaGRaf2Qv+/zP88VOd7ZTMv
-	 oXSQttI9zqhFg==
+	b=jc9Ek5xXsuowx86OS8zj5pgu4RnRV8rqohlCqtPXMdlUegemp+Tw9kWWn/SC1igGM
+	 GSfkKxuHzCS794sfB/W28FHZLgKBt2TzkocJeB0dPyVl2Cyf4kQoCFy8X4R5cyNL2k
+	 zagSwajtIFyg0QGSB1+2dSWA3X1eeBG44tE37OOt+JZTHZrT8ZlhEQyrwVp1ZY7jFh
+	 Zn608DzpJtLrQP+DTj4YXqJSltpRURoqzl6VTqxqIGV/1UBgmXER2TUuGbbI1zerkX
+	 uzquRb3o22M+48he+vgDgCucG1LUOGS5RMwfAM2SSUVjhseijM7XmAH4KZ3aq4xshG
+	 3E+uOpS2TNMRA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 25/36] bpf: use SCEV to widen bounded loops
+Subject: Re: [PATCH bpf-next 26/36] bpf: avoid widening registers that
+ hinder exact stack-slot tracking
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Eduard Zingerman" <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260926-scev-minimal-rebase-v1-25-c8e5ab5ba79f@gmail.com>
+In-Reply-To: <20260926-scev-minimal-rebase-v1-26-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
- <20260926-scev-minimal-rebase-v1-25-c8e5ab5ba79f@gmail.com>
+ <20260926-scev-minimal-rebase-v1-26-c8e5ab5ba79f@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 14:42:37 +0000
-Message-Id: <20260926144238.599681F000FF@smtp.kernel.org>
+Date: Sat, 26 Sep 2026 14:46:40 +0000
+Message-Id: <20260926144640.C4AFE1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,57 +47,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] bpf: verifier bypass due to signed algebraic inversion of unsi=
-gned loop conditions
+- [Medium] bpf: bpf_needs_fixed_stack_off misses dynptr consumers, rejectin=
+g valid loops
 --
 
-commit 457e66d0b00c63117d606a731e93743130f1e826
+commit a3ca958d64fafcbcf31deb9929c54958bdb72868
 Author: Eduard Zingerman <eddyz87@gmail.com>
-Subject: bpf: use SCEV to widen bounded loops
 
-This commit introduces scalar evolution (SCEV) to the BPF verifier to
-estimate loop iteration bounds and widen induction variables. This allows
-the verifier to support bounded loops with linear latches and bounds.
+bpf: avoid widening registers that hinder exact stack-slot tracking
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+This commit adds logic to prevent loop-widening for registers that are
+used as base addresses for stack access instructions that require exact
+tracking (such as spills, fills, and calls constructing stack objects).
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 9f56ffe09ebac..327bfc00da5f5 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14087,6 +14087,46 @@ static bool kfunc_spin_allowed(struct bpf_verifi=
+er_env *env, s32 func_id, s16 of
 [ ... ]
-> +static bool compute_max_iters(struct bpf_verifier_env *env,
-> +			      struct bpf_func_state *st,
-> +			      struct linear_latch *latch,
-> +			      struct bpf_loop_iters *iters)
+> +bool bpf_needs_fixed_stack_off(struct bpf_verifier_env *env, int insn_id=
+x)
 > +{
-[ ... ]
-> +	if (step =3D=3D 0)
-> +		return false;
-> +	if ((s64)step =3D=3D S64_MIN)
-> +		return false;
-> +	if ((s64)step < 0) {
-> +		/* Multiply both sides of the equation by -1, e.g. -2*i > -3 becomes 2=
-*i < 3 */
-> +		op =3D bpf_flip_opcode(op);
-> +		step =3D -step;
-> +		swap(bound, initial);
+> +	const struct bpf_insn *insn =3D &env->prog->insnsi[insn_idx];
+> +	u32 *flags, btf_id;
+> +
+> +	if (bpf_helper_call(insn)) {
+> +		return insn->imm =3D=3D BPF_FUNC_dynptr_from_mem ||
+> +		       insn->imm =3D=3D BPF_FUNC_ringbuf_reserve_dynptr;
 > +	}
 
-[Severity: Critical]
-Does this logic improperly apply a signed algebraic identity to unsigned
-comparisons?
+[Severity: Medium]
+Does this logic miss helper functions that consume dynptrs (like
+BPF_FUNC_dynptr_read, BPF_FUNC_dynptr_write, or BPF_FUNC_ringbuf_submit_dyn=
+ptr)?
 
-Looking at compute_max_iters() in kernel/bpf/scev.c, if a BPF program
-constructs a loop with an unsigned continuation condition, initializes
-the register to a positive value, and decrements it, the algebraic
-inversion treats the counter as if it crosses into negative space.
+Since process_dynptr_func() relies on dynptr_get_spi(), which in turn
+requires constant stack offsets via stack_slot_obj_get_spi(), wouldn't
+omitting these dynptr consumers here cause a regression? If the verifier
+widens the loop variable used for a dynptr array index, the stack offset
+becomes non-constant and the verifier will erroneously reject valid programs
+that read or write stack-based dynptrs in a loop.
 
-Could this incorrectly calculate a small iteration count, while at runtime
-the unsigned subtraction wraps around to U64_MAX and allows the loop to
-continue?
+> +
+> +	/* vmlinux kfuncs only */
+> +	if (!bpf_pseudo_kfunc_call(insn) || insn->off !=3D 0)
+> +		return false;
+> +	btf_id =3D insn->imm;
+[ ... ]
+> +	if (btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_skb] ||
+> +	    btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_xdp] ||
+> +	    btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_skb_meta] ||
+> +	    btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_file])
+> +		return true;
 
-If this wraps, it appears the verifier might widen the register bounds to a
-narrow range and prune branches targeting the wrapped values as dead code,
-potentially allowing unverified payloads to execute.
+[Severity: Medium]
+Similarly, does this miss kfuncs that consume or clone dynptrs (such as
+KF_bpf_dynptr_clone and KF_bpf_dynptr_slice)?
+
+If a loop variable is used to compute a dynptr address passed to these
+kfuncs, the loop variable will be widened, leading to the same verification
+regression when stack_slot_obj_get_spi() is called with a non-constant stack
+offset.
+
+> +
+> +	return false;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926-scev-minim=
-al-rebase-v1-0-c8e5ab5ba79f@gmail.com?part=3D25
+al-rebase-v1-0-c8e5ab5ba79f@gmail.com?part=3D26
