@@ -1,106 +1,123 @@
-Received: from mail-pz2-f39.google.com (mail-pz2-f39.google.com [74.125.228.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7CD2931D5
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 15:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD27305665
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 15:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790438059; cv=none; b=jyuhX9lagrY9GftvJTdnoEyhEm7SGKkoUiOE1Fhnypcfx1qP7fV6ZegzKbepZeSUMChJ5m9L+JJ56pguXerG6TovT9B61X84qlDUq3P7OmNuH8W/s6Wab6yGK1IoSsRnakqSuLUBTZTsxkIqWC1V0/qWkxbamdxhybeSbgj7z1U=
+	t=1790438192; cv=none; b=UHu/frHoJrGSBsjPh0jsezg35lBOVYc7xdUJ77OWTdFh0ATF32Ic21IUieAc7LmKd8KwNHL2DVGT9bkfVXq9qHFnVlKdl9HimVzGcxZYCX2VX3bYrccGxunjH9kgiJwwK0JeX4mgHPXdLM808Cz+h5mRBNBsKSOMdZn8BSygI24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790438059; c=relaxed/simple;
-	bh=PzBpwvsDbjD2AZMXDO9+maqrqgZZSRE43v8TkDRxLQY=;
-	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:MIME-Version; b=jBVa80W1JaKu7pS/0gNdQ2ej8j+y0sWxu/c7jADRyW94lpiC/yTVsmg9H9vNST6dGmXxfywwXvUEDV1bteM64Wsx1U0mg7qzQ67DGeMdZElUbuz0aFO3o/cW1aaIMw18+KPcLATF/L1mUwz/ClScc064XoixUAu6XaKXlxSmxJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bArLohMM; arc=none smtp.client-ip=74.125.228.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790438192; c=relaxed/simple;
+	bh=CpZ3O71iV2MJWp4DqqTAE0tLfrVg0Ql5qJOK+nO32Xc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=CdbshbH/F3AhNDid3MSRA79ZAAJPM9BqDb/78eKVm9MFf2KmJdPSVIHcMxwn1eyfuMsOj84TcBGHU0xMryhsZoR7tJ13IXvoKzVruMbh4ktRY120a83wctcDlTSpxrTLQ8n2izHhhGQ7fYtgWcp8yGQLRoA27/fbRTDGbqA6a2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebrEgMD8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bArLohMM"
-Received: by mail-pz2-f39.google.com with SMTP id d2e1a72fcca58-88103e47f72so768881b3a.2
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 08:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790438058; x=1791042858; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=z4cyMs2sSLIDwTqCXOHr9G9ZFSBdLPXR3gsGCVRAfxU=;
-        b=bArLohMMda585HTG4VjGp8TZloKrj+VsDgnUL7WNOW5EkPzFHCUQTo73LJ1cAdy9FI
-         /kApGUF4mKubPni4vv8mC+e7bQLvDPG2aGK64UDEpSSVPfQ9xRFXaTgNW+d+mrGFIBIR
-         OCb/Vy7oquHH4jfSyAt1+yZm9iEdYRnVWBA6qM0U1PAJztd0xAvFkWdUIIGSc4pfJqLP
-         UCMZE7atXb4huMhClEuVwKgy1ZT3CHG7jBmoWqNOOzkJKAPqiIurKo8sVgGx15cl4jl9
-         s9bDMBETOL4JSKZE5h2/Yx2yqt4WF7s2nK5/wQWKKN1sblRXuhbD9NI8YUqUIKkbGlYI
-         2UtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790438058; x=1791042858;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=z4cyMs2sSLIDwTqCXOHr9G9ZFSBdLPXR3gsGCVRAfxU=;
-        b=FnxNKUvlUGG3QK3g8YoC8A1TEKGxmeMv+pZEpT/tHov5AvlgXtyAWlvKEmrM7dGcAe
-         1jKnqHk6k3mLpEEJPk5o0Y7X1rE6NzpeC+hWsHpjeOtmruFWdjEVY3dklIBGzLpjXxE8
-         MLRUBi+RIRdvohlXqMXFS19XeU8F57avlShkZ1KXx4eM8o7JSi4XVPq//cAhZvEAdcJI
-         zQOmf8FWn/JwLoQA8ViyhTXtzVsBLLH9hTBuiPa6Karg9zdg+zg6gw6SvWonCvqYLkoX
-         0cP4I760PzdXc9x+mfKdAw8/e/VgW/5afQoYJ5fzqFnW0TB5J6i9UVKSDBuFouI+DwtI
-         JYFg==
-X-Forwarded-Encrypted: i=1; AKwUvBxlQKT83thM14FNABdAtvAi4p0X90hQD4dkBKd5MTYmuONT6WQLPdtMuOO2+9cGrPYImTA=@vger.kernel.org
-X-Gm-Message-State: AFuF++lYbU4rd5xhhIsYdjlXu9bfFnE+8BXQKBmccVfVGuy2jl0aK4Qr
-	OeCmdOdXSLPEG5sbpFrbYb+C4B4jnLTBwhgwZbhrEqM8xbPw2ZPLroIK
-X-Gm-Gg: AYBFou3i3kN6GvLMZZBiR1Uyg9/PQKZPnWbw/XEXR+x5eceeNSm6THAI8sN3cwL4baP
-	GBAy4feQWS38GV2Qlcs6MLcVr5BTx1sIC8CrZ0+OLmKGTB64ConE68pGtjOAaM0QdOfKuUfZVZk
-	NKIcLlzz1aDNZxLtuzp4URqzEhv5925f1DsZ3Lm9HtyyfPLGGhmPFThmdIuG/Seb/yoyNRU3Jda
-	4Ng7TWxFfSNwwNDnp/4LCKZWLIszRMLyVevqNFOvGzKq4ZjVc+HSRZfyHr592923ttJexZQHh5n
-	s1jSIOiuvHS9A2PTDFzDz26Zm0TXKhBYNsFipebAPadD6GS2XVdi59tHE2AonkSAeBAbiVl1T6P
-	E/n/I/POrBtLAsSX+QRhGaumWZcam1XgqZW98nPPoE5ND0S8LFYQBUWlPp34sx9cCo4Z/R0c53I
-	zuG99pOM8yJEExyQ84gtVqXLD/kmOnYHIgJPNCYiFDbZB3J2v6PJbh0PQpiXS1cLwzUmz9FV4BP
-	E3epahCetmIq6z9i9mPnbqpTrJTvqvSOk6+o2lAwOPCA3jD4dih1bTMNqWFfPeE73KhsC+JY4Ms
-	Z8Bh
-X-Received: by 2002:a05:6a21:e10b:b0:3dd:a196:53a6 with SMTP id adf61e73a8af0-3de0e989cf4mr7821009637.72.1790438057731;
-        Sat, 26 Sep 2026 08:54:17 -0700 (PDT)
-Received: from localhost ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc7a3bb2d5asm360342a12.17.2026.09.26.08.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Sep 2026 08:54:16 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 26 Sep 2026 15:54:15 +0000
-Message-Id: <DLPDBJRPGCUI.1R1AW302XC9UT@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
- <andrii@kernel.org>
-Cc: <daniel@iogearbox.net>, <martin.lau@linux.dev>, <kernel-team@fb.com>,
- <yonghong.song@linux.dev>, <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next 18/36] bpf: compute immediate dominators
-In-Reply-To: <20260926-scev-minimal-rebase-v1-18-c8e5ab5ba79f@gmail.com>
-References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com> <20260926-scev-minimal-rebase-v1-18-c8e5ab5ba79f@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebrEgMD8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E6F1F000FF;
+	Sat, 26 Sep 2026 15:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790438191;
+	bh=sFscBNEfEbpA9dAOHkeG7R8CL+lje2+tz9gd8z24yDw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ebrEgMD8sBFblZ8KLhKC8UtUDEQc58ObQuDsQCcb8LPLyeZb3J6ipblcQUPFDsNe2
+	 NozrnP3mIj2rCNIP2dunSFrL71/9t6Qh+x3foHEGgb7uBeS/vlcUcMFGMIV9IBbaxo
+	 Ivmnm+tvMmXuSGUiAU2OtuGj8qYBb/35eEO/RtAzRWXcHC54HcFY2RmyBYc1wPObqx
+	 987JCwNoHl8/Qa89UkrCC/8cRF5wxCILxqQB93PAV88urYvv6hFm5cwOAykhl5FfGM
+	 G05xF5OHcJJZK8KD1Y/UAUXnX1mEYemgVdpSrFVNyZcegJk+7NR9jJHMX/iNEFLrNS
+	 yFrfQlpPKq1MQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 4/6] ipv4: convert do_ip_getsockopt() to
+ sockopt_t
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Breno Leitao" <leitao@debian.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260925-sockopt_expand_out_v2-v1-4-c3ef2e3bb5c0@debian.org>
+References: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
+ <20260925-sockopt_expand_out_v2-v1-4-c3ef2e3bb5c0@debian.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 26 Sep 2026 15:56:30 +0000
+Message-Id: <20260926155631.13E6F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Sat, Sep 26, 2026 at 07:20 AM Eduard Zingerman <eddyz87@gmail.com> wrote:
-> +static int idoms_intersect(struct bpf_verifier_env *env, int a, int b)
-> +{
-> +	int *postorder_nums = env->cfg.postorder_nums;
-> +	int *idoms = env->idoms;
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] net: MCAST_MSFILTER leaks modified optlen to userspace on copy f=
+ailure
+--
+
+commit 28c83ba3c12df5eadd41490e34288c12faadfb4f
+Author: Breno Leitao <leitao@debian.org>
+Subject: ipv4: convert do_ip_getsockopt() to sockopt_t
+
+This commit converts the SOL_IP switch and ip_mroute_getsockopt() to use
+sockopt_t. It updates ip_getsockopt() to write optlen back unconditionally,
+and modifies ip_mc_msfget() to store its length last so it doesn't report
+an updated length if it fails.
+
+> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+> --- a/net/ipv4/ip_sockglue.c
+> +++ b/net/ipv4/ip_sockglue.c
+[ ... ]
+> @@ -1783,19 +1759,22 @@ int do_ip_getsockopt(struct sock *sk, int level, =
+int optname,
+>  int ip_getsockopt(struct sock *sk, int level,
+>  		  int optname, char __user *optval, int __user *optlen)
+>  {
+> +	sockopt_t opt;
+>  	int err;
+> =20
+> -	err =3D do_ip_getsockopt(sk, level, optname,
+> -			       USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
+> +	err =3D sockopt_init_user(&opt, optval, optlen);
+> +	if (err)
+> +		return err;
 > +
-> +	while (a != b) {
-> +		while (postorder_nums[a] < postorder_nums[b]) {
-> +			a = idoms[a];
-> +		}
+> +	err =3D do_ip_getsockopt(sk, level, optname, &opt);
+> +	if (put_user(opt.optlen, optlen))
+> +		return -EFAULT;
 
-This walks the idom chain one insn at a time.
-For a prog that is a long run of
-  if (err) goto out;
-'out' has N predecessors and compute_subprog_idoms() calls this
-for each of them. The k-th call walks back over k branches.
-That's N^2/2 steps, and the outer loop runs at least twice.
-All of it before do_check(), for every prog, loops or not.
-Same issue as Daniel's commit 3852e19cb954 fixed just yesterday.
+[Severity: Medium]
+Since put_user() now unconditionally writes opt.optlen back even if
+do_ip_getsockopt() returns an error, does this leak modified lengths to
+userspace on failure for MCAST_MSFILTER?
 
-SCEV needs dominators only inside loops.
-Can it be computed for insns with scc != 0 only ?
-and probably a bound for a big loop body.
+The commit message notes that ip_mc_msfget() was changed to store its length
+last because of this unconditional writeback. However, the MCAST_MSFILTER
+handlers (ip_get_mcast_msfilter() and compat_ip_get_mcast_msfilter()) still
+set opt->optlen before their final copy_to_iter() calls.
+
+For example, in ip_get_mcast_msfilter():
+
+	opt->optlen =3D gsf_size;
+	/* ip_mc_gsfget() consumed the whole reply; rewind to the fixed part. */
+	iov_iter_revert(&opt->iter_out, gsf_size);
+	if (copy_to_iter(&gsf, size0, &opt->iter_out) !=3D size0)
+		return -EFAULT;
+
+If this final copy fails, do_ip_getsockopt() will return -EFAULT, but the
+updated optlen will still be written to userspace.
+
+A similar pattern exists in compat_ip_get_mcast_msfilter():
+
+	opt->optlen =3D len;
+	/* Rewind to gf_fmode, which gf_numsrc follows. */
+	iov_iter_revert(&opt->iter_out,
+			len - offsetof(struct compat_group_filter, gf_fmode));
+	if (copy_to_iter(&gf.gf_fmode, sizeof(gf32.gf_fmode),
+			 &opt->iter_out) !=3D sizeof(gf32.gf_fmode) ||
+	    copy_to_iter(&gf.gf_numsrc, sizeof(gf32.gf_numsrc),
+			 &opt->iter_out) !=3D sizeof(gf32.gf_numsrc))
+		return -EFAULT;
+
+Should these handlers also be updated to set opt->optlen only after all
+copies have succeeded, matching the change made to ip_mc_msfget()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260925-sockopt_ex=
+pand_out_v2-v1-0-c3ef2e3bb5c0@debian.org?part=3D4
