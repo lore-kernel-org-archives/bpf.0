@@ -1,173 +1,98 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mta0.migadu.com (out-209.mta0.migadu.com [91.218.175.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749273A875D
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1715D45FFA3
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.209
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790429458; cv=none; b=lTVrRISXwnMdFq/HMfA0qw4zWji/3vsW1X8wXLU9xD2jMK5vwMyiCledNXYTDbxvosPF6DpPaDiXzuYyA0BmxJSyELi8tcWd4UScpxmCN3VfrspFCBkTUzPmBx7GpQzPpBezAfCW279yc0dNW5MrzwJB33HVBnL4p8+0RDumOvI=
+	t=1790430777; cv=none; b=gIRbaeD99jg15w0VI/Xh92XzYZjdZHd/oxB+J4MgCq/29H3NyDzUGpESwIpoe7wIp35CsFAoFxUA3urX7+/g5HELmYDO1vJzQQGUsNYDYYEKl/7B9Bm3sIeBGP917LJl8wBpo9YDGmUPxJpzW2TbsF0PCYOtulWtnG+4PXWl9Oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790429458; c=relaxed/simple;
-	bh=THTO3f6tYPhZQddgqGI16d/UpY8Z7CFiTb+sHQvTnSI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZNLUWiuexRc0ieRDG7SY15c5b/8/7wY5i7J1eg10bDGqecIM5o7kfHdZu4Ru3+JU8golHn2oAc3r5vyJpb0aZn3YKFKnZJTiUFCU5Ds5GMuVRwPMjIwnframWiF6JTMr6gFhG96VRtWM8RHJMW2K7wzH92EgujiSpSL4rgMfiBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aGOvfAsn; arc=none smtp.client-ip=74.125.225.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790430777; c=relaxed/simple;
+	bh=nDVeLzpJFTHd5XVtx/oGFPJPrtX7jH3RBOLzMXzveD4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Sn5t6TkEMsEfLPm/pkqZldlEyvotsYEFh/8k54BeE2SODepjrCnsOSJd7WG+/iwuQYGXCI94dUN8kP0135cLrH/fV6Uq6q0gouwoCrbyxkHK9Roi5n9V28nQd2MGjCtoyblvQesK1fMXNSArxWnmbgmO5MeCiptUhm/QosxQ6Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ohm72hcq; arc=none smtp.client-ip=91.218.175.209
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aGOvfAsn"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ffff11265so194985e9.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 06:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790429454; x=1791034254; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=S6wfD9Kh63r+1oPu+xfURlwcqdKMI/8fklfFl1dQPUo=;
-        b=aGOvfAsnnKqx5GETyA1RzyrGqvhDjUH+oJ7w5iWseNiy6V2eTs+WiAGGZL8KH/9cyR
-         nNm/e0gHlC6h83cVv72p40g63iSiieScXF3qWPpkMD7sNrYtckvzb/pZw40CLzsSlDNs
-         O6vSm8nng4u4nD+OIK9vdXCEIJn4kAnnUytVXPHYb0EXcsbRSNBjzQD+lQc2Ee7Lju6O
-         Y7ClsSWTKpXXp4UlU7Soe6hjuE5gYocpuoKfyLQ+7tmjtfoKeRAdWsdnl8LdOkXusBzK
-         fx0lCErMovCnJZVKO1G8VbZQIZXcVHewrH8CBhGn8aJR7KEXPLEqbDOZzxClqDfBt7yO
-         0lEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790429454; x=1791034254;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=S6wfD9Kh63r+1oPu+xfURlwcqdKMI/8fklfFl1dQPUo=;
-        b=cToV+ZLE5SdLiTd2hincoQyzdlMcp8z8UTqeAwufRZfnh0MLFgdmwVU+kXzdsjVieS
-         NYun7U26QGpkhSw58luKcvQ/wssjhp3nplg4QijU5xl2Yih+uKO8qvAZAoNYzMsHyLtA
-         Z7XSbVk4EiuAADHFuz5B45T241MLuSr5ymof6JhFSY7+I723mGhEB3NK0Q2r1OUi+ZC9
-         cTNC9k4iW6JrtkxHek2He2+fIz6WstO0pe79ter4OoOEhJCVqTn/2LHuBEueGfjeF16r
-         z/hD7sIKPTJlcuyP0PhLBtNcBzeR6bile3CrfohyE3X3+gh/nmwcSUBIh5HYECqyn94o
-         P1xA==
-X-Gm-Message-State: AFuF++mXDuQnkY4WOjxyzzbWpATxIGQMuHAapfHbfYtlTArM5MdUltke
-	kbdTtY87x+wW6RqTlyudHCNImvu+BggEayy9IPcNnXBC/eR4UjlWtb4rX67mGzGF
-X-Gm-Gg: AYBFou39ZWln0lb7uTwxP6HqDhbVp0z3Slmrk+zPBxglAuhmpbxMiTNny9v76l8L50x
-	k/sNjKv2vTnaV38EqRu6Zd2EGStc1Gs2sB9HOnD2xf+6IVw50LlTOddaHqs+YPnaJ0FAQsnVdTG
-	C0R+csQDTGNQeEI58VSEE0ZSUaden7THG+cgk9CU70ZBWnx5ELdyReePLI4263M3sq9k81amhgi
-	BEitNVnJLkyXT+2udZdxqgi2CxNLnaRs71LYBcOOngLldxcRjBVFKxh2aV6/Yc22gkm6Ho1/ZFE
-	WtL+iBKz/xpLGegNXPsIPlW6oYMlFobeBaNoxID0Pl2EHy6hRAzKVOwPcHSgOIGztg3SIXQbnCC
-	ftxReiZQEKS93YzpQL2U7c3EeErpl87aZ627iWBKVVtCadxFTQPXf7GB9sM30tBi9arfIcSu5xK
-	orWUYsg7NfQ27Q/ga2Sxb+ByF8XFQ9jbpO486b5ajBABK6ClBuGfUCiBaneIk8UXWO6s513rHa3
-	K5e0vD3TpepAuINW4pP+FtrpOzAPuWD0VRCzd22JRgYmEWgSsECak2N5x7FYXx89RP/ugTYVkG1
-	rz6y/qRK6yvp4/x61YC1AQREdtCyvVLI6eql+pqHyKFKoK5s
-X-Received: by 2002:a05:600c:354e:b0:49e:6e7c:d895 with SMTP id 5b1f17b1804b1-49fe66ef3f5mr153550735e9.26.1790429454482;
-        Sat, 26 Sep 2026 06:30:54 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06d4394sm138690175e9.15.2026.09.26.06.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 06:30:54 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 3/3] selftests/bpf: Test Program Structure diagnostic context
-Date: Sat, 26 Sep 2026 15:30:45 +0200
-Message-ID: <20260926133048.2962553-4-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260926133048.2962553-1-memxor@gmail.com>
-References: <20260926133048.2962553-1-memxor@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ohm72hcq"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nDVeLzpJFTHd5XVtx/oGFPJPrtX7jH3RBOLzMXzveD4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790430771; v=1; x=1791035571;
+ b=Ohm72hcqzRqaK3PwH3FgmuEt3rnE6Jqw9UrZUstJV5xMjWOcYq9V8lGHzg04w1rbI47bxMV6
+ jouarsHhooNkPkD+l0K++p12D9Mard7ptYzVXMqXAoibAS7SA89oER4/l/4GaHEi01PlSwXvmQL
+ GScgOLxuh2t7cX/Ei2RlT5UY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f7f9435df3e225a9;
+	Sat, 26 Sep 2026 13:52:40 +0000
+X-Mizu-Trace-ID: f7f9435df3e225a9
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2917; i=memxor@gmail.com; h=from:subject; bh=THTO3f6tYPhZQddgqGI16d/UpY8Z7CFiTb+sHQvTnSI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv7iSdyfSyL353hU3vv2Sniq8XFutWWX+WagWLd34n3v vNHF/N1lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCL8dQz/rHo9BG9pvJqt/2C5 9Qwe2XAvoyTGk3M3rWYXTl9SXGr5leGf3sddjQznwoovpof8e+WX9TZ+mSw385WM39kywdN3Rcx hAAA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 26 Sep 2026 13:52:35 +0000
+Message-Id: <DLPAQECUALBD.2J6OV9FK2MA87@linux.dev>
+Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <kpsingh@kernel.org>, <john.fastabend@gmail.com>, <leon.hwang@linux.dev>,
+ <zirajs7@gmail.com>, <rhkrqnwk98@gmail.com>, <puranjay@kernel.org>,
+ <xukuohai@huaweicloud.com>, <iii@linux.ibm.com>, <hbathini@linux.ibm.com>,
+ <chleroy@kernel.org>, <naveen@kernel.org>, <bjorn@kernel.org>,
+ <pulehui@huawei.com>, <yangtiezhu@loongson.cn>, <hengqi.chen@gmail.com>,
+ <linux-kernel@vger.kernel.org>, <martin.lau@kernel.org>,
+ <mason@kernel.org>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf v4 2/3] bpf: Skip detached progs in trampoline
+ images that are still in use
+From: "Florent Revest" <florent.revest@linux.dev>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20260925100342.481242-3-florent.revest@linux.dev>
+ <6a6d43e6bada7a1433cd525c9ec31780ed9b2401c8834894defdf671601b2f1d@mail.kernel.org> <DLP46AE97EYD.1I2HDPGBR8GME@gmail.com>
+In-Reply-To: <DLP46AE97EYD.1I2HDPGBR8GME@gmail.com>
 
-Exercise each corrected Program Structure report. Place a
-missing-table gotox after another instruction so its attribution
-differs from the subprogram start.
+On Sat Sep 26, 2026 at 8:44 AM UTC, Alexei Starovoitov wrote:
+> On Fri, Sep 25, 2026 at 10:47 AM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel=
+.org> wrote:
+> >> +	/* nops for move_imm+jirl, patched to skip this prog when it is deta=
+ched */
+> >> +	for (i =3D 0; i < LOONGARCH_LONG_JUMP_NINSNS; i++)
+> >> +		emit_insn(ctx, nop);
+> >
+> > Can a task preempted inside the skip sled resume into half of the new j=
+ump
+> > sequence and jump to a garbage address?
+>
+> [...]
+>
+> > Could the LoongArch skip site use a single instruction instead? For
+> > example, a 'b' to the skip target, which is always within the +/-128MB
+> > range of the same image, patched from nop to 'b'. The rest of the sled
+> > would then be unnecessary.
+>
+> Seems like a real bug. Same issue on riscv.
+>
+> ip_after_call was patched in bpf_tramp_image_put() when the image was
+> already unreachable. Now bpf_trampoline_remove_prog() patches cur_image
+> before bpf_trampoline_update() replaces it, so every call of the traced
+> function goes through the sled while it is rewritten. stop_machine
+> doesn't help the task that it preempted in the middle of the sled.
+>
+> Pls fix and respin.
+> Everything else looks good.
 
-Add malformed subprogram layouts for a branch crossing a subprogram
-boundary and a subprogram that falls through its end. Both cases carry
-BTF line records and assert that their structured reports include the
-corresponding source function and file.
-
-Link: https://lore.kernel.org/bpf/cf2f420c2b21de440a7dc51b1565c0f06d4b539640ee5c03384e5d77bcfb5686@mail.kernel.org/
-Link: https://lore.kernel.org/r/20260924170646.2366016-8-memxor@gmail.com
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/progs/verifier_cfg.c        | 40 +++++++++++++++++++
- .../selftests/bpf/progs/verifier_gotox.c      |  2 +
- 2 files changed, 42 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-index 6379dfc9389b..b429fa7a08f5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-@@ -56,6 +56,46 @@ __naked void out_of_range_jump2(void)
- "	::: __clobber_all);
- }
- 
-+static __naked __noinline __used int cross_subprog_target(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("jump across subprogram boundary")
-+__failure __msg("jump out of range from insn 1")
-+__msg("jump_across_subprog_boundary @ verifier_cfg.c")
-+__naked void jump_across_subprog_boundary(void)
-+{
-+	asm volatile ("					\
-+	call cross_subprog_target;			\
-+	goto +1;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+static __naked __noinline __used int fallthrough_subprog(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("subprogram fallthrough")
-+__failure __msg("last insn is not an exit or jmp")
-+__msg("fallthrough_subprog @ verifier_cfg.c")
-+__naked void subprog_fallthrough(void)
-+{
-+	asm volatile ("					\
-+	call fallthrough_subprog;			\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
- SEC("socket")
- __description("invalid DW LDSX instruction in diagnostics")
- __failure __msg("BUG_ldx_99")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-index f5a9878c7b8d..dc7baa0f2458 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-@@ -101,9 +101,11 @@ __naked void jump_table_terminal_gotox_subprog(void)
-  */
- SEC("socket")
- __failure __msg("no jump tables found for subprog starting at 0")
-+__msg(">>> 1 | (0d) gotox r0")
- __naked void jump_table_no_jump_table(void)
- {
- 	asm volatile ("						\
-+	r0 = 0;							\
- 	.8byte %[gotox_r0];					\
- 	r0 = 1;							\
- 	exit;							\
--- 
-2.53.0
-
+Ok. In v5, on riscv and loongarch, it will emit single nops at skip sites a=
+nd
+patch them with jal or b instructions. They can always reach their target s=
+ince
+they are in the same image. This requires a new arch_bpf_trampoline_skip() =
+hook
+that defaults to bpf_arch_text_poke() on other archs. I tested it in QEMU.
