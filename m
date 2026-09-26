@@ -1,61 +1,63 @@
-Received: from mail-dy2-f42.google.com (mail-dy2-f42.google.com [74.125.229.42])
+Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735883822A3
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 21:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC394A1E00
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 21:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790456889; cv=none; b=t/WdQNnJxC1YeUIFBHhOD6ElUruPYhmyONQbgnacYgxgiTT8zwoNoo7inngWZc8pvCIWdyylF4DBfdSTkltDu++V9JjV4e8x8veWvQHeZj4SSSERDZWkNFwVlVmUrDbBddbTzSyAycZuDcVKbH0WsTR3uu0kfccxg2W8UOqJinQ=
+	t=1790456896; cv=none; b=QvApyFjG9L56JsZzNSPf7l5glL/DtIIbzWed9XBqmBUYd/aKcHXpvxtz4P5z/wKMmSwn2dmTTErqnnMPE+FJgzeV8ZvSVitUsDWAxlrC3I8hA4xYThIR5GI1N1UUaJQgdUzCuhO9Ua0Z8dPFa1WxlrEkSBbbesvWlzoI0a4XWXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790456889; c=relaxed/simple;
-	bh=C3YMcu5q0iV0F9ogNXtdf6o7OAyFurI+nZuPGZOtZ1U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B5Sr+U/vkWFNHcgbz27aM8MH7vVuMZMPrns/Lk1Mv/VQzKkfZveBTqo3uZ3EBoS9DbjlSZ9AH0EjEi7mJX/AW0q9pKzRSvtBIJFQPV7K0SVZDrCbBpFWvP2Eyd4nAJjzs7MaITtMDpryOXwDS9aA4Bj8fhOrp0V75SzC4gRVD6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MwSqAsAN; arc=none smtp.client-ip=74.125.229.42
+	s=arc-20240116; t=1790456896; c=relaxed/simple;
+	bh=JeKRfAmmE91MxprxdKAsQfplBSI9p7Xp46i94pnx2xY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NFd4gEDpzmDsbP2xZUqTsP8/8avi8lZP+ORIiKD3lEXxdm3tyfwOqUXl5223lBZqax/r4j/9wIyXV3R7aF0a1G/IOJAgfcEQZj36mRyECiUmuj9FvDhiydN0l6SwpafLcc1neZdS11EsjxAACgkBMNF+fSUrZtQnMPZrVK0X3gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MC8J7uQ3; arc=none smtp.client-ip=74.125.229.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MwSqAsAN"
-Received: by mail-dy2-f42.google.com with SMTP id 5a478bee46e88-3411e0ace58so2521196eec.0
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:08:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MC8J7uQ3"
+Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-33be7dfcfc1so2691624eec.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790456887; x=1791061687; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Q0yzDFvmiZHgGacRea7moAzFfluUEx604kiUr4xKwA8=;
-        b=MwSqAsAN5NYI4COdAgv2VsFUBtZleKVNdvddE3b3+Fv7HQWikqYtK4DLvXJRq/qyl/
-         ZJ+fRIN37T4kju94BsGFb5XubPXt1TZExV9pV+XUIRm+3+Hy4nrd3Cg5hTBNu0pYCrCw
-         Ys+8p7DlQJavzDD3DAtAXvkg6IRQWf6GWO30m24M/55/NrLJuYJXY/jpWZzSSNHMr5pR
-         whn0KcpcNPAbYKQbRKT1jfUeHycIiJEw+DWFBEEHNSkVE5iMJ08E0DRklTyR/MHxfR33
-         yFRKhO8D3vGPN72EqW/xHpJdAwQLi2kRhSzBUca+1u4cv1H7ZaplfcC+XAjwajAS+nmp
-         X/ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790456887; x=1791061687;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790456894; x=1791061694; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Q0yzDFvmiZHgGacRea7moAzFfluUEx604kiUr4xKwA8=;
-        b=iHASmUEx1CZbIEBC7F1lwLyANtCBdXCkfXZckuUQyIe5s9+niykiwqGGUp+NcnfXOx
-         7m1Xy4nlCz2dLjIJUYbzFUcj5d7aXny/tc2FsC7jOn5h6toK/YZf+cD0h4Sp3D8dnmzA
-         j2ABhmLvETirDGgePK+7dyn3QrvQZ4M8Jz3CmhhZF/Jw5nyRpyVghsR6HMcP5wjjfxXL
-         IlcAZJQeC0nNRddgW7UFKZMc7/kiZde02tEChO101q9I240nzJMRywVbQhl5vK20lCgO
-         nXIgzB1ShZK1wE/KaJEYeNA9aZktI59Vrqx3qNzm4UO56XLOs0NF8ybMFzXDvhKsRGSz
-         6UPA==
-X-Gm-Message-State: AFq9FYJ4mHEqXwTQJdw5OMl1ZImaMfYbQQ6tAe40StdMIbmnZRFPEa9A
-	1xu7IeTlDNMSwoYwM+CZrjq450rb0oS24n9pQ2OQdRO7QyG16zkzfKMvV/T69AhwP0A=
-X-Gm-Gg: AYBFou2X2vM8kIv155DMNEH8EZPuVtexvc+rj5KJf5W45/uSUz6X1SApr+LWcU/38B0
-	IdALZYOVkzcTz5V/RKbB2K89OIOGFO+r7xMjIZnsEf3+ONbzvuV+QBPh5ugWN+vJ46DcvBmfxB8
-	Yznajt6ick7xURSo588dhCMD8DnuiQAHwkA26s8mcTIxvccN7TE1/X8ebj6rDnFR+5jITykAjuU
-	gJBwbSXKkDt0nTUM72U2wEfp8Gs2Tu/Pf43JuAv4HhMZ9mfYQ3+9oBq8M4E7kom6lJb9aWoOq2Q
-	CfCtKBYsLWa+MF/KQW5rVhwEHE8tm2fyuovT7mT+xgO1gLOD7fkCZ+DWUQxPeoTinpJeGiEYU3J
-	8Ix2E7QSuMjkPPvScW0N+I4a3zdp6cPMJ+W+l26EXdMaJQUVZQxOB2QFcZ4WbdGYP0zliYSKPHC
-	fcxkaXQmzmdqLDFdjqp0tEnKgtxSL9Wg9sGhURELILMPxaKKL6omvBKelaylrsbys3L8I0fIkzi
-	rwoe0WWgf87/BB6XRQOMWC+xdS8rgZjAGqaveH4xCo=
-X-Received: by 2002:a05:7300:fa15:b0:33c:fd92:a7c0 with SMTP id 5a478bee46e88-34273848bd2mr4402886eec.39.1790456887407;
-        Sat, 26 Sep 2026 14:08:07 -0700 (PDT)
+        bh=5jLr1UOPOpYPQnBcdUz4e44kGyYHeunrc1rNWkKIT5Y=;
+        b=MC8J7uQ3anLgyydiRrT6l0dvQ1rJ8ok9HMsvX5p4QF3Ije1fNmk64RLyiJwc5aX9OA
+         w95IGFGI/clqXyLduukwYkzTezDtc4JNq+/S0aJ0X0BmNAcmCiE20Z2APu0Wc/NeNy2s
+         sJJTthDMPWXPSASE8XHndeYpSUNWb4LnQmU0TKwvL5Re4NZa6kPTeG+cJUoaGUn7DX37
+         9MKhAr9mI0gzNsD1zuy7TNP3ZbkIbdQZfEmd689NVFQ9EVCY52MyyLCJQHpYYGxGTniq
+         qtf78Wg4XvvEfG7w7j80/wzNkRXbln5HrKRshlq2mIp6dt7Q10fuma2H3UiImDls3KYd
+         jXaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790456894; x=1791061694;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5jLr1UOPOpYPQnBcdUz4e44kGyYHeunrc1rNWkKIT5Y=;
+        b=c5vNskDQ796BxovPsYerzsdqz3KJzK58xMoCZi6fC2eS+EK3JnrtxNRQqqOiue/KoX
+         +L0p0i9JwVNdFgAt0z1cDl5CKvlaAr+mCnKX3UMuusBAPiHl6nN3DoE2U9kIMcsj/Reo
+         JpifsA0b5bHPnslWl/BEmYcjv3comH1acKNxSTKrUbxxsDNmjgXofTfabMBdoBilRhpt
+         JRRC4gLMYlasvUuWHnJTdDltNMUaJLD9+k5HFEI1oJBKDCX1BtEj5bap02aloCXtq7Ma
+         6QkICLAZDL3BGJFfMqyjrEUH/6et201lj/fmUYhfHaJ2dpS8luRm3cAylj9tmCAEzfGq
+         cfoA==
+X-Gm-Message-State: AFq9FYI82wR17V/Lvzk1u5MW9Bvb4e/5QIhkKuErTcDjZFMMzCPvLz3s
+	dyUUEWwHRceCnlSWdk9rbqXS7bWjF2jC/1fc3wcGQXlPc5uc0B1qqw1ERW9xYrLZeXo=
+X-Gm-Gg: AYBFou3wPVJMgkpBJcybmojK8YydPYLnky/8b3xqRALccIIxMaU+2tMXcQfV6kZc4p7
+	MIqdK3ruiMsV1ZTw73tdHy/3MvBeyXaXt3ut2yTD1c2IfZcR6x1qsxvRsWo3Qm0CQONYMuSaL93
+	+TqcRuYuld90KhndM4358UMCSbAii1PHBzMuXqWreoTMGrtI8ehVS11EInfGmrHjztiV4LKvkXG
+	ZDcAfOSZmnwlBhLcYn2O8IhnD2ihcO+WELiebCI9EuG/OPTLzGgrJDND6KQo1AyP/t5hg6Mkc/c
+	cBtmdkWYC4VHVgXTqgEb6QS7h+dweOw0UWNQ21y4mjnh9NSnxlLmDAgRnJGy7HIfOxjkJNgyViU
+	h0SxQelw/oOT7oHajfx/1bJLd4MrurSnCvqouC1KzNe878nVJx1SAijaXnblBPYpqA/XtXWr+Qe
+	kcL44PL/pES4LwF4X3UgZEfjSHRS1093eTvoJ2PymIi53bFYObCUb67kyHEG9qrfu4a2S3qO9Dc
+	bVFlkxGjfphk9dZNxMtHfv1yoUb9LD+
+X-Received: by 2002:a05:7301:b0f:b0:342:451b:c0cc with SMTP id 5a478bee46e88-3426fbbef10mr4318105eec.6.1790456893721;
+        Sat, 26 Sep 2026 14:08:13 -0700 (PDT)
 Received: from build2026.lan (67.230.168.206.16clouds.com. [67.230.168.206])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34145d0fc9fsm17886648eec.25.2026.09.26.14.08.03
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34145d0fc9fsm17886648eec.25.2026.09.26.14.08.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 14:08:06 -0700 (PDT)
+        Sat, 26 Sep 2026 14:08:10 -0700 (PDT)
 From: ThisSeanZhang <thisseanzhang@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ThisSeanZhang <thisseanzhang@gmail.com>,
@@ -67,10 +69,12 @@ Cc: ThisSeanZhang <thisseanzhang@gmail.com>,
 	Nick Hudson <nhudson@akamai.com>,
 	Felix Fietkau <nbd@openwrt.org>,
 	Qingfang Deng <dqfext@gmail.com>
-Subject: [RFC bpf-next 0/3] bpf: Add PPPoE encap/decap support to bpf_skb_adjust_room
-Date: Sat, 26 Sep 2026 17:07:54 -0400
-Message-ID: <20260926210757.2152159-1-thisseanzhang@gmail.com>
+Subject: [RFC bpf-next 1/3] bpf: Add PPPoE encap support to bpf_skb_adjust_room
+Date: Sat, 26 Sep 2026 17:07:55 -0400
+Message-ID: <20260926210757.2152159-2-thisseanzhang@gmail.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260926210757.2152159-1-thisseanzhang@gmail.com>
+References: <20260926210757.2152159-1-thisseanzhang@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,68 +83,154 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello,
-
-This series adds PPPoE session encapsulation and decapsulation support to
-bpf_skb_adjust_room(), allowing TC BPF programs to update packet data and
-skb metadata consistently.
-
-A TC program can currently insert bytes with bpf_skb_adjust_room() and
-fill them with a PPPoE header, but it cannot decapsulate a PPPoE packet or
-update skb->protocol and related header metadata consistently. This prevents
-packets modified by a TC BPF program from using the PPPoE GSO/GRO path
-correctly. The new flags let the helper insert or remove the fixed-size
-header and update the skb metadata, while the BPF program fills in the
-header bytes and the ethertype on encapsulation and restores the
-ethertype on decapsulation.
-
-This series builds on the PPPoE GRO/GSO support merged by commit
-55a5d8fca836 ("net: pppoe: implement GRO/GSO support"). That support is
-available to packets whose skb metadata identifies them as ETH_P_PPP_SES;
-the flags added here make that metadata transition possible from a TC BPF
-program.
-
-Examples:
+Add a new BPF_F_ADJ_ROOM_ENCAP_PPPOE flag to bpf_skb_adjust_room() so
+that a TC BPF program can encapsulate an IPv4 or IPv6 packet into a
+PPPoE session header:
 
     bpf_skb_adjust_room(skb, PPPOE_SES_HLEN, BPF_ADJ_ROOM_MAC,
                         BPF_F_ADJ_ROOM_ENCAP_PPPOE);
-    bpf_skb_adjust_room(skb, -PPPOE_SES_HLEN, BPF_ADJ_ROOM_MAC,
-                        BPF_F_ADJ_ROOM_DECAP_PPPOE);
 
-Encapsulation changes skb->protocol to ETH_P_PPP_SES. Decapsulation accepts
-only packets whose skb->protocol is ETH_P_PPP_SES, reads the PPP protocol
-field, and restores ETH_P_IP or ETH_P_IPV6. Both flags require
-BPF_ADJ_ROOM_MAC and a fixed eight-byte adjustment.
+The flag reserves room for the fixed-size PPPoE session header (the
+6 byte session header plus the 2 byte PPP protocol field) between the
+MAC header and the network header, and updates the skb metadata so
+that the packet is consistent for later consumers: skb->protocol is
+set to ETH_P_PPP_SES and the network header points at the inserted
+PPPoE header. The header content itself, as well as the ethertype in
+the MAC header, is left for the BPF program to fill in, e.g. via
+bpf_skb_store_bytes().
 
-The selftest covers IPv4 and IPv6 round trips, protocol transitions, and
-invalid flag, size, mode, protocol, and truncated-packet cases. The kernel
-and the BPF selftests build cleanly with this series. The selftest also
-passes in a QEMU/KVM boot of the resulting kernel (11/11 subtests).
+So far a TC program could only add the header bytes manually, which
+leaves skb->protocol and friends unchanged, so the skb keeps being
+treated as a plain IP packet. In particular, software GSO can select
+a segmentation handler based on the stale skb->protocol and process
+the encapsulated packet incorrectly.
 
-Questions for reviewers:
+This pairs with the PPPoE GRO/GSO support in the PPPoE layer, which
+registers a GRO/GSO handler for ETH_P_PPP_SES: once skb->protocol is
+set correctly, such packets are segmented via pppoe_gso_segment() on
+egress.
 
-- Is extending bpf_skb_adjust_room() with dedicated PPPoE flags the
-  preferred interface?
-- Should the helper validate more of the PPPoE header (version, type,
-  code, session ID, length)?
-- Should the helper update the Ethernet ethertype during encapsulation
-  and decapsulation, or should that remain the BPF program's
-  responsibility?
+Signed-off-by: ThisSeanZhang <thisseanzhang@gmail.com>
+---
+ include/uapi/linux/bpf.h       | 12 ++++++++++++
+ net/core/filter.c              | 22 ++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h | 12 ++++++++++++
+ 3 files changed, 46 insertions(+)
 
-ThisSeanZhang (3):
-  bpf: Add PPPoE encap support to bpf_skb_adjust_room
-  bpf: Add PPPoE decap support to bpf_skb_adjust_room
-  selftests/bpf: Add a test for the PPPoE encap/decap adjust_room flags
-
- include/uapi/linux/bpf.h                      |  21 ++
- net/core/filter.c                             |  85 +++++-
- tools/include/uapi/linux/bpf.h                |  21 ++
- .../selftests/bpf/prog_tests/tc_pppoe.c       | 249 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/tc_pppoe.c  | 159 +++++++++++
- 5 files changed, 532 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_pppoe.c
- create mode 100644 tools/testing/selftests/bpf/progs/tc_pppoe.c
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 732b35cc0..30481d040 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3036,6 +3036,17 @@ union bpf_attr {
+  *		  Use with BPF_F_ADJ_ROOM_ENCAP_L2 flag to further specify the
+  *		  L2 type as Ethernet.
+  *
++ *		* **BPF_F_ADJ_ROOM_ENCAP_PPPOE**:
++ *		  Encapsulate the packet in a PPPoE session header. Must be
++ *		  used with **BPF_ADJ_ROOM_MAC** mode and *len_diff* equal to
++ *		  the size of the PPPoE session header plus the PPP protocol
++ *		  field (8 bytes in total). The room is inserted between the
++ *		  MAC header and the network header, *skb->protocol* is set
++ *		  to **ETH_P_PPP_SES** and *skb->mac_len* is updated
++ *		  accordingly. The PPPoE header itself and the ethertype of
++ *		  the MAC header are filled in by the BPF program, e.g. via
++ *		  **bpf_skb_store_bytes**.
++ *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
+  *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
+  *		  Indicate the new IP header version after decapsulating the
+@@ -6323,6 +6334,7 @@ enum bpf_adj_room_flags {
+ 	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
+ 	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
+ 	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
++	BPF_F_ADJ_ROOM_ENCAP_PPPOE	= (1ULL << 13),
+ };
+ 
+ enum {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 70dc62167..5b204e316 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -47,6 +47,7 @@
+ #include <linux/ratelimit.h>
+ #include <linux/seccomp.h>
+ #include <linux/if_vlan.h>
++#include <linux/if_pppox.h>
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
+ #include <net/sch_generic.h>
+@@ -3583,6 +3584,7 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
+ 					 BPF_F_ADJ_ROOM_ENCAP_L4_GRE | \
+ 					 BPF_F_ADJ_ROOM_ENCAP_L4_UDP | \
+ 					 BPF_F_ADJ_ROOM_ENCAP_L2_ETH | \
++					 BPF_F_ADJ_ROOM_ENCAP_PPPOE | \
+ 					 BPF_F_ADJ_ROOM_ENCAP_L2( \
+ 					  BPF_ADJ_ROOM_ENCAP_L2_MASK))
+ 
+@@ -3688,6 +3690,14 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+ 			skb_dst_drop(skb);
+ 	}
+ 
++	if (flags & BPF_F_ADJ_ROOM_ENCAP_PPPOE) {
++		/* Network header points at the inserted PPPoE header. */
++		skb->protocol = htons(ETH_P_PPP_SES);
++		skb_reset_mac_len(skb);
++		if (skb_valid_dst(skb))
++			skb_dst_drop(skb);
++	}
++
+ 	if (skb_is_gso(skb)) {
+ 		struct skb_shared_info *shinfo = skb_shinfo(skb);
+ 
+@@ -3874,6 +3884,18 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
+ 		return -ENOTSUPP;
+ 	}
+ 
++	if (flags & BPF_F_ADJ_ROOM_ENCAP_PPPOE) {
++		/* The PPPoE session header has a fixed size and is
++		 * inserted directly after the MAC header.
++		 */
++		if (shrink || mode != BPF_ADJ_ROOM_MAC ||
++		    len_diff != PPPOE_SES_HLEN ||
++		    flags & ((BPF_F_ADJ_ROOM_ENCAP_MASK |
++			      BPF_F_ADJ_ROOM_DECAP_MASK) &
++			     ~BPF_F_ADJ_ROOM_ENCAP_PPPOE))
++			return -EINVAL;
++	}
++
+ 	if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
+ 		u32 len_decap_min = 0;
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 732b35cc0..30481d040 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3036,6 +3036,17 @@ union bpf_attr {
+  *		  Use with BPF_F_ADJ_ROOM_ENCAP_L2 flag to further specify the
+  *		  L2 type as Ethernet.
+  *
++ *		* **BPF_F_ADJ_ROOM_ENCAP_PPPOE**:
++ *		  Encapsulate the packet in a PPPoE session header. Must be
++ *		  used with **BPF_ADJ_ROOM_MAC** mode and *len_diff* equal to
++ *		  the size of the PPPoE session header plus the PPP protocol
++ *		  field (8 bytes in total). The room is inserted between the
++ *		  MAC header and the network header, *skb->protocol* is set
++ *		  to **ETH_P_PPP_SES** and *skb->mac_len* is updated
++ *		  accordingly. The PPPoE header itself and the ethertype of
++ *		  the MAC header are filled in by the BPF program, e.g. via
++ *		  **bpf_skb_store_bytes**.
++ *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
+  *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
+  *		  Indicate the new IP header version after decapsulating the
+@@ -6323,6 +6334,7 @@ enum bpf_adj_room_flags {
+ 	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
+ 	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
+ 	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
++	BPF_F_ADJ_ROOM_ENCAP_PPPOE	= (1ULL << 13),
+ };
+ 
+ enum {
 -- 
 2.47.3
 
