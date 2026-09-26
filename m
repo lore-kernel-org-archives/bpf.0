@@ -1,270 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9EB41F34E;
-	Sat, 26 Sep 2026 13:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6504C175A6C
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790428959; cv=none; b=WW3v1fzi7rfj4wLs5OeWwq9Uc7WjZnPP/IPbetj0bvrsa1f+URRYH5z31klatUY0F/C1Iom2i1Zk0vsd3VKr61GzFITsZehMPlEURYtEH3/hCpPAQL6M/ZQW7BGA3bvESH8zvkve1+eDZj6ZE1oRP3VfeCj/02opgeA44qXyslQ=
+	t=1790429452; cv=none; b=Sa+JgRFizEltSrK4p2MTzxXZKcY5bVFf9cvcy2ep/enV0nOmBDMiz8AnXVBNHmfpl6uMC0D1cLF0i64VPag0jTpfIAQUNhh3up3f97RcpiDaEhBMeJbysz64WxuWT3etJKmMFDHSfOSb0h6/qWvKIPve9uiW902aAWiFLlDfuCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790428959; c=relaxed/simple;
-	bh=ytgc6Ysa5Go78zHXRVtTHpX/QUpJmBMDXx19p/scRAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A82A1SGCy+DX7VqbBf+MM6daTdJLcwBu61VGloCtV/fbone2163TKqYXLtMuk8ZGf05JdZH07uVnwDv6qdAS2mk9QW3m3sAh0FB6juTcbK2fMFPE2u9Q9V8QCblNhQhIp7Abh68hwdue+mcCW07qAdGzLH9regM4RUODbFg1JG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gn1PEczg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790429452; c=relaxed/simple;
+	bh=hSlcltwX/gTUqir1vGAHsYx5mAeS9xhWXRzsm5Im5D4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=teDORnUwQqtz3TM5PB8TW/JN/cHRI9O0M/b9vZv1kS8lOg1vsT4D5KjPgsQdWMCHi4Lb2RmI1Vc3mFflSLDQpwZhFUTp6GYSXeetrGdFmBMezTryzXt7MHx4usOtT3SNe3NYTd46FtOrDd5s0ah82dPNFYKkGmER7B1Eh5GTNzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NnS9oAzZ; arc=none smtp.client-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gn1PEczg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B984F1F000FF;
-	Sat, 26 Sep 2026 13:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790428957;
-	bh=Ho6ODA6dlgcOvdPnhowd9GgmBiom3Zlo2XTvzY/VTW0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gn1PEczgsD5J29kex3G7noDS0spUTsU0srsr+zO1nZZFuyKKVJFH88OWSVdctFAta
-	 v7+cMia70kZ1YiuCIVpgK+S7YUkcgPcfUscXxMIVNy2T0tNen4vpOI9UIX+1BDQbbc
-	 ePRW1SWCr2qEbUMLcslI3kLtHSdkz6HzShrhvUDCAIXM9cTBfN59vnzkvSpAY5sH1A
-	 HiO3kEDoHq52UM6A/hwkWmFG1rbuJuaaijRW4+S7BnYNa61yNGGxIUvVs8xVjcKOaU
-	 2ZsrOuBc7LttfpdBhGRS97sgpAQW2anj2l9mfgb3mnYHtFFH+/VpzMj5GLRW0f0MCb
-	 rDkMkQL9UaUiA==
-Date: Sat, 26 Sep 2026 14:22:06 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	"David Hildenbrand (Red Hat)" <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	"Kirill A. Shutemov" <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
-	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
-	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, peterx <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Dave Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, Takashi Iwai <tiwai@suse.de>, 
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: Re: [PATCH v3 00/40] mm: make VMA flag semantics explicit, eliminate
- VM_SPECIAL
-Message-ID: <arfGmNiEngnO3JKm@gremlin>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <d4d7d4c2-a1d5-41d0-b1c8-8ea0cc5a0397@app.fastmail.com>
- <areSEI5pWBadkqIe@gremlin>
- <408aef6e-5b0a-482f-8ba8-f8c20ee870e5@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NnS9oAzZ"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bbf77e8so2476265e9.0
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 06:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790429449; x=1791034249; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ojBPBkhL5Jc0n5dPNdsgITK4l+rLeg8PO1T1tFs40nU=;
+        b=NnS9oAzZXaIbKqqHROEyvwEpSKdZ00Sucua6ayGopDDN3zS7YxD5BH9BqCFttfy3pG
+         bsGA2Kk7qgWsmIxvUxWMQtCLakc3C6Lp6NzegFQxgIir8nD8gVbgWNoV0l+gNFdXevUv
+         UnOWV47DSyFOABG3C750xQB81r+soVxA/kwCkg78KzbyRFRhO1vYSHyz1pgbL47OmsYY
+         O1aGik2CQ3nnXkw9yVe1Oplluz6+g5fJSFP2q56ZUyXPYRBUuxwYPEF5Uuv0J2xC1gxT
+         C5JUB0cHX3QXTRzBvOiT/KsPplekCrvgnVvmpWt6lNggzcrjCU2dBrj/YhaTrW04quo4
+         V6rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790429449; x=1791034249;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ojBPBkhL5Jc0n5dPNdsgITK4l+rLeg8PO1T1tFs40nU=;
+        b=uy9D/1AeixIUNocUmgVjgXXf+GeaZs1MeGdQjjmlw/5nQypBvVDJjJug8UG8SeoyGv
+         oBpiLbSUXuUuyanFhO66dMb6SL2V4f54evk2bwwWtDEes6O3FZ6P1DO2vCAKZQ1TVLwM
+         ANuvxRsongBH4/EXT99vsLmMWwMtoId4Ym7iBMF14Oul/ivjDmqrE/kk4uIpMFH2VBFe
+         OYz7ZYRcvHpGUSbwClQWdkhWKvu48H0tnyT6jcbX2NC8dkH/fdpuy1wCAnkeXxPhd9zE
+         ansRV2V1K1EeX4uSCE00Agk7itfJ2xlTvWDrK+DVXZ7ZUtrZUe9gx0zYCiQnOhSoey9M
+         kO6A==
+X-Gm-Message-State: AFuF++mZAPNMquCw2JkaJRDXOBYmfUmQkx7An3lB4QbwrGcRkp+1nWcS
+	LXWDMZYZTkBc4ugbkD8+G/CPKQWHbYNKOjA5edrB7dZElUgbRXbW3zE2kAuMlJzw
+X-Gm-Gg: AYBFou0V/G2iUcXCLm1H1g//zYZgi3Tc1za+S5GJ4LIxUwED0hjQ6d/REAFU24aflQO
+	hUD85jgZ5lXhmO1YrVrYL1QZaAjE+K+h1eRfe+AVb9Ia4+UnaaWpNEBm2ytCFgv57Mhst5+iIm5
+	rx0vJ2tMbEI+AAf3SQE/mWD6kKnxJCvsX6XEsGwLfqXE4CXeQR5MciwzuGDqsDyomHGk7Qw497s
+	Srk22Bmfg39vWo80t97hBx2c1CPDzcfgM9JGRWS4GOgyOvOnFqcVVlWjDZUBD/td8b3GLcUOmDm
+	6cd76rgYl50SbFQB8cbGZOJ/AlTRlFFYEAZSUn7foCl3ROPffTdBLP3eFd2UBIxXUgDDWz/y4Lf
+	IwBm+xE5ubB5Qm22a3a8sRESmwLDfTaTdBLFSic3Oruwg2nfQlKVt1sAajlgRY4OUWFc/8dW+kv
+	/8YDAk5h3fXGvl2rqeB1HyL6wH2Q9y2S2vcFu8MKinuts3h1Lasiji7tlR2uKU21lgR0IQeODav
+	geRMmkrQrmKfoZic50Wrj4GQiMbgSUtNnMZYfjyMfHTxUol+A2gu1IeQH9te9IIPHYFvqqMVY8D
+	LfCXHz9xU3d4tKwMWPGLKoFz2b38RT4onFIwJ9I=
+X-Received: by 2002:a05:600c:1f95:b0:49f:ce78:3562 with SMTP id 5b1f17b1804b1-49fe66f1aa8mr149337545e9.19.1790429449237;
+        Sat, 26 Sep 2026 06:30:49 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fef4fc959sm122021985e9.2.2026.09.26.06.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2026 06:30:48 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 0/3] Follow ups for verifier errors set
+Date: Sat, 26 Sep 2026 15:30:42 +0200
+Message-ID: <20260926133048.2962553-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <408aef6e-5b0a-482f-8ba8-f8c20ee870e5@app.fastmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3585; i=memxor@gmail.com; h=from:subject; bh=hSlcltwX/gTUqir1vGAHsYx5mAeS9xhWXRzsm5Im5D4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv7iceZdur9b74E1vOGWD/Luder/uTJnT3Vvk9KFv8tL evnK1vcUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm4WTEyfJqa6/FofRf/ovzb Zz8qyGpt6HpgN9GM/0Z9frvpZt/MOEaGVwIxJxhSlm59xpSxkqlgd9SBOnmFgoIj5gw6W4obtUq ZAQ==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On Sat, Sep 26, 2026 at 03:06:33PM +0200, Arnd Bergmann wrote:
-> On Sat, Sep 26, 2026, at 11:40, Lorenzo Stoakes (ARM) wrote:
-> > On Sat, Sep 26, 2026 at 12:06:22AM +0200, Arnd Bergmann wrote:
-> >>
-> >> mm/vma.c: In function '__mmap_region':
-> >> mm/vma.c:3083:1: error: the frame size of 1552 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]
-> >>
-> >> I don't immediately see anything that you did that would have introduced
-> >> something bad that wasn't already there, so it's likely just gone from
-> >> just below the limit I was using for my testing to just above. The 1536
-> >> byte limit is what I use on 64-bit builds with KASAN and otherwise
-> >> still has a clean build (with a small number of local fixup patches).
-> >
-> > Hmm are you specifying this limit manually somehow?
->
-> It's a Kconfig setting upstream, but the way I'm doing it is to have
-> patch that calculates a sensible default based on other options that
-> is a little smaller than the default (currently 2048 bytes) on x86-64
-> to catch more cases where something sticks out.
+Some follow up changes based on comments from Eduard, Sashiko, and BPF
+CI Bot. See commits for details.
 
-I see.
+Patches 1-4 of v3 were applied to bpf-next. This is the remainder,
+rebased on the current bpf-next/master.
 
-So this is an early warning more or less :)
+Changelog:
+----------
+v3 -> v4
+v3: https://lore.kernel.org/bpf/20260924170646.2366016-1-memxor@gmail.com
 
->
-> >> If I sprinkle some 'noinline_for_stack' annotations on functions
-> >> called by __mmap_region(), I can get the size down to 1144 in this
-> >> config, but that doesn't sound like a great workaround.
-> >>
-> >> The large stack usage is potentially harmful if this ends up
-> >> in call chains that have additional large stack usage (e.g.
-> >> kmalloc() leading to reclaim). Any ideas for how to reduce it here?
-> >
-> > That can never happen :) this call chain is _only_ for an mmap() call.
->
-> I mean more functions called /from/ here, something like
->
->   __mmap_region()
->   __mmap_new_vma()
->   vm_area_alloc()
->   kmem_cache_alloc(..., GFP_KERNEL)
->   slab_alloc_node()
->   allocate_slab()
->   alloc_slab_page()
->   __alloc_pages_slowpath()
->   __alloc_pages_direct_reclaim()
->   __perform_reclaim()
->   try_to_free_pages()
->   shrink_zones()
->   shrink_node()
->   lru_gen_shrink_node()
->   shrink_many()
->   shrink_one()
->   try_to_shrink_lruvec()
->   evict_folios()
->   shrink_folio_list()
->   pageout()
->   shmem_writeout()
->   swap_writeout()
->   swap_add_folio()
->   swap_write_submit()
->   nfs_swap_submit_write()
->   nfs_file_direct_write()
->   nfs_direct_extract_pages()
->   nfs_do_recoalesce()
->   __nfs_pageio_add_request()
->   nfs_pageio_doio()
->   pnfs_generic_pg_writepages()
->   pnfs_do_write()
->   pnfs_try_to_write_data()
->   filelayout_write_pagelist()
->   nfs_initiate_pgio()
->   nfs_local_doio()
->   nfs_local_do_write()
->   nfs_local_call_write()
->   ->write_iter()
->   generic_file_write_iter()
->   generic_write_sync()
->   vfs_fsync_range()
->   ->fsync()
->   xfs_file_fsync()
->   file_write_and_wait_range()
->   filemap_fdatawrite_range()
->   filemap_writeback()
->   do_writepages()
->   ->writepages()
->   xfs_vm_writepages()
->   iomap_writepages()
->   iomap_writeback_folio()
->   iomap_writeback_range()
->   ->writeback_range()
->   xfs_zoned_writeback_range()
->   iomap_add_to_ioend()
->   ->writeback_submit()
->   xfs_zoned_writeback_submit()
->   xfs_zone_alloc_and_submit()
->   xfs_submit_zoned_bio()
->   submit_bio()
->   submit_bio_noacct()
->   submit_bio_noacct_nocheck()
->   __submit_bio_noacct()
->   __submit_bio()
->   blk_mq_submit_bio()
->   blk_mq_run_dispatch_ops()
->   blk_mq_try_issue_directly()
->   blk_mq_run_hw_queue()
->   blk_mq_sched_dispatch_requests()
->   blk_mq_do_dispatch_sched()
->   __blk_mq_do_dispatch_sched()
->   blk_mq_dispatch_rq_list()
->   ->queue_rq()
->   scsi_queue_rq()
->   scsi_dispatch_cmd()
->   ->queuecommand()
->   ata_scsi_queuecmd()
->   __ata_scsi_queuecmd()
->   ata_scsi_translate()
->   ata_scsi_qc_issue()
->   ata_qc_issue()
->   qc_issue()
->   ata_sff_qc_issue()
->   ata_sff_queue_pio_task()
+ * Drop v3 patches 1-4, which are already applied.
+ * Rebase on the current bpf-next/master.
+ * State in the Program Structure patch that CO-RE relocations stay where
+   c26e97721b17 put them and only func_info and line_info validation
+   moves ahead of the layout checks. (Alexei)
 
-Ugh delightful :)
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260924092941.3174809-1-memxor@gmail.com
 
->
-> There are many ways the call chain can go of course, but the actual
-> stack overflows do tend to follow this pattern where you are at a
-> function with high stack usage and call kmalloc() during low memory
-> condition and that ends up waiting for a block I/O down the line.
-> (you normally don't go through swap and nfs, I was just looking
-> for the worst case I could easily see in the code)
+ * Rebase on bpf-next/master, which now applies CO-RE relocations before
+   subprogram discovery, and only move func_info and line_info validation
+   ahead of the layout checks.
+ * Drop the truncated final LD_IMM64 relocation guard and its test, as
+   bpf_check() now rejects that form up front and core_reloc_raw covers it.
 
-You certainly found quite the example haha.
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260816015746.2632990-1-memxor@gmail.com
 
->
-> > In general I am absolutely taking this seriously and will find a way to
-> > reduce this, but my only question is whether this is actually something
-> > that needs to be done in this series?
-> >
-> > Because it's already huge and I would rather avoid adding yet another patch
-> > to it if possible.
-> >
-> > If I can do it as a follow-up that'd be ideal!
->
-> What I was hoping for is that as you are already deep into the
-> exact code that caused the warning and you can already see something
-> in there that may help.
->
-> I don't think it's urgent, I just don't want it to be forgotten.
+ * Drop v1 patches 3, 5-7, 11, and 13-14 because they are already present
+   in bpf-next.
+ * Use instruction-neutral wording for variable-offset stack accesses
+   rather than inferring an atomic operation from value_regno == -1. (Eduard)
+ * Update the variable-offset assertions and cover the retained
+   uninitialized stack-read diagnostic through the existing CAP_PERFMON-less
+   read inside the allocated stack. (BPF CI)
+ * Keep v1 patch 4 unchanged after confirming that the write filter is
+   reachable for lineage-preserving ALU operations with unchanged
+   diagnostic snapshots; only its spill arm is impossible. Say so in the
+   commit message. (Eduard)
+ * Consider active critical sections only for sleepable programs and let
+   non-sleepable programs reach the existing no-active-context fallback
+   instead of adding an early branch. A non-sleepable program can still
+   hold RCU, preempt, IRQ, or lock state, so the fallback alone would
+   keep blaming the region. Keep the "non-sleepable prog" description.
+   (Eduard, BPF CI)
+ * Select the helper and global-function suggestions by cause, matching
+   the kfunc site. (BPF CI)
+ * Split the kfunc coverage into a non-sleepable program case and a
+   sleepable program inside an RCU read-side critical section. (Eduard)
+ * Scan subprogram properties with nested loops and drop the partial
+   recursive-edge details together with their assertion. (Eduard)
+ * Reject CO-RE relocations targeting a truncated final LD_IMM64 before
+   applying them, since BTF validation now runs before the subprogram
+   layout check, and add raw CO-RE coverage for the rejection. Add the
+   Fixes tag. (BPF CI)
+ * Rebase on the current bpf-next/master and let the new property scan
+   also set the callx marker that check_subprogs() collects upstream.
 
-It won't be, it's now on my TODO and I see it as a relatively high priority
-thing to follow up with.
+Kumar Kartikeya Dwivedi (3):
+  selftests/bpf: Test non-sleepable kfunc context
+  bpf: Correct Program Structure diagnostic context
+  selftests/bpf: Test Program Structure diagnostic context
 
-Will likely send a patch for it next cycle (this is about the worst cycle I've
-seen workload-size for mm so I don't really want to send anything more this time
-around).
+ kernel/bpf/cfg.c                              |  2 +-
+ kernel/bpf/verifier.c                         | 54 +++++++++++++------
+ .../selftests/bpf/progs/preempt_lock.c        | 26 +++++++++
+ .../selftests/bpf/progs/verifier_cfg.c        | 40 ++++++++++++++
+ .../selftests/bpf/progs/verifier_gotox.c      |  2 +
+ 5 files changed, 106 insertions(+), 18 deletions(-)
 
->
->      Arnd
 
---
-Cheers, Lorenzo
+base-commit: ea9358e1270ab2c3ba6f36bd9bdda68617665516
+-- 
+2.53.0
+
