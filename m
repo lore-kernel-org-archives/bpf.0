@@ -1,95 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C7A36DA15;
-	Sat, 26 Sep 2026 20:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C690377ABF
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 21:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790455142; cv=none; b=ND2hJIo/9oXyneJvRpVy0m17u6jPstWIPk0Lq86A/lLy53b0EfXHSdufBPAGONrSC6HdKJQIC6L7Uk+XErWAdGzbMkHumgAdqBEnmqwWvyBHEUOu5HTbCfhctXlPXawMjJZ5HMnmaMK1aOh70AO72zuzNlR7YodzXunPSYzhOIA=
+	t=1790456471; cv=none; b=UDSx8mjrbw2ZLQvFr+r8HF/uKd+nJJGa7GBfTKqQEyux4K/aWJAXMOLkiYkoDjFiGzn27hTVEV5R2F17lLid87IWjK4ae88KhGOcCnodK0R8tz2VC5atx5cH27Y72CCAa6yq0yuon3wRr5pdnt+JFCbPHax0PRZSQrKdtIBxei4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790455142; c=relaxed/simple;
-	bh=WcVTwGAqB8YmWIqbv12BtHyhd+b5UhezZLShFgEBfeY=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=gm4Y5Wa+xjswvXxS6lwRM0Zcgj/srnB7DWQW68nSJZO5HGkm2dQtg9YGOabFcC+LthtMNcnbFfKu9eNfqJlAw6lGPAtKkVNSdk7dlegD3CSoOuqpPfBIQuMsqGqo4THFovHeXomKoRO5pO2pW13Si8EwH8Vsib37OMScyXsCpYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=j3wf/B0P; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790456471; c=relaxed/simple;
+	bh=Da25MHReMOlEkuK+VI+5H0M6vtVB1RpW8AQV3E0+/BA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T2lrS+vuBLhXV5lbgxedp3PWamkf5n4uijIP/sJBMBthM01fRCcp9dq5pVTSC8pYqFxAfeGfdHCrK+Assqxnsavc13CC6+SHW3RR/wWrUpr07/FgV6nuWX5zvTOdWvxr07WC0vE+nsDvSP5pPMFsT64RA+OGaiXQY5exqZLTs7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GuSb6QGH; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="j3wf/B0P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E5F01F000FF;
-	Sat, 26 Sep 2026 20:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1790455140;
-	bh=02DQCrFlxmpCYsYFSl0Uzr7hhjDE/dW47AC7GUSlrxQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=j3wf/B0P5XyKqxSsEjcKXOxZ68HSNPr51dRebHjrAbWlXq+djrJhmIH+okuCnxdfS
-	 +4fSGzal0ks3J7vnJHvZmIZFYT+HeZMXtQ4WbVyBpFYBPSfzsyTuFZuMwi91/u4LGY
-	 BaOKmTDT/+RzC+VpowJzQWh7KM47juoEXrebiBpc=
-Date: Sat, 26 Sep 2026 13:38:59 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Jim Cromie <jim.cromie@gmail.com>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, Kees Cook <kees@kernel.org>, David
- Laight <david.laight.linux@gmail.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Jiri Olsa <olsajiri@gmail.com>,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v6 0/3] kallsyms: Accelerate symbol name lookups by ~7x
-Message-Id: <20260926133859.c8232c439184dfa17472b020@linux-foundation.org>
-In-Reply-To: <20260926-ksyms-tune-v6-0-236620c65e98@gmail.com>
-References: <20260926-ksyms-tune-v6-0-236620c65e98@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GuSb6QGH"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 638874E41080;
+	Sat, 26 Sep 2026 21:01:05 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1523F60749;
+	Sat, 26 Sep 2026 21:01:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id ABF53102F1E3A;
+	Sat, 26 Sep 2026 23:00:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1790456463; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=Pj1uucL4M3zJ3KDkppzQhixOfCGgqRJ28eK/71kmnzQ=;
+	b=GuSb6QGHqCU5QR5aVBlz5zFyO4woFpqPZ+mULDcVnusmfq/uh7lPz4Kj1z/cCha4O9l6Nl
+	gN+T29O5w/oATed7BDFEPJXLdQo+32hqYPOQUqP/8W2WPrhVnlfVZOus/Z1gs+YwS6rMvb
+	8kBq7wLYk8HtFfMI0zj6/9YfyVSiyYLC17KHwnd6MmhO1Vo2bqF+oRvclPI5Glt9bHun2b
+	7Xqn3y1M29Q3oNdhPdp46rSlHTcxYUfRf5Z8m/GztiJgabTf0KM3ViR9g1w/Ib+TWA7I3W
+	p8etIKyxY3Hjkp2McbK+hriXl/fNT7atXTx/hRjfvvZt9v62jqZ39JIvb6W7Xg==
+Message-ID: <c011f95b-1293-4fa0-8080-f4dc9a418f89@bootlin.com>
+Date: Sat, 26 Sep 2026 23:00:56 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] net: stmmac: fix rx Scatter-Gather support
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <Jose.Abreu@synopsys.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+References: <20260921-stmmac-rx-sg-fix-v2-1-b6d88c5ac2d7@oss.qualcomm.com>
+Content-Language: en-US
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+In-Reply-To: <20260921-stmmac-rx-sg-fix-v2-1-b6d88c5ac2d7@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat, 26 Sep 2026 13:40:11 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
+Hi Lorenzo,
 
-> As measured by kernel/kallsyms_selftest across ~184k symbols,
-> kallsyms_lookup_names() binary search takes ~6.1 us per lookup due to
-> two inner-loop costs:
-
-We don't have a kallsyms maintainer afaik.  Petr is pretty active in
-there so let's give him a hopeful cc.
-
-> 0. Candidate symbols are fully decompressed into a 512-byte stack buffer
->    before calling strcmp(), even though non-matching steps could choose on the
->    first differing character (0..N-1).
+On 9/21/26 16:47, Lorenzo Bianconi wrote:
+> When a received frame is larger than dma_buf_sz, the DMA scatters it
+> across multiple RX descriptors (rx Scatter-Gather). The secondary RX
+> buffer (sec_page) was only allocated and programmed when split-header
+> (SPH) was active, so for regular frames buffer2 was neither allocated
+> nor backed by a valid mapping. As soon as an incoming frame overflowed
+> buffer1, the DMA wrote the overflow into the unmapped secondary-buffer
+> address, triggering an SMMU translation fault on IOMMU-based platforms:
 > 
-> 1. Probes scan sequentially from 256:1 markers in kallsyms_names[],
->    decoding an average of 127.5 symbols per probe (~2,170 hops across a
->    17-step search).
+> arm-smmu 15000000.iommu: Unhandled context fault: fsr=0x402, iova=0x00000000, fsynr=0x7f0011, cbfrsynra=0x1c90, cb=11
+> arm-smmu 15000000.iommu: FSR    = 00000402 [Format=2 TF], SID=0x1c90
+> arm-smmu 15000000.iommu: FSYNR0 = 007f0011 [S1CBNDX=127 WNR PLVL=1]
 > 
-> This 3-patch series addresses both:
+> Enable scatter-gather for non-SPH frames on cores that can program an
+> independent secondary RX buffer (GMAC4/XGMAC): allocate and mark buffer2
+> as valid in stmmac_init_rx_buffers() and stmmac_rx_refill(), and account
+> for it in the buffer length computation. Legacy cores have no set_sec_addr
+> op, so they keep buffer2 disabled.
 > 
-> 0. Patch 1 introduces kallsyms_strcmp_symbol() to compare ASCII queries
->    against compressed tokens on the fly, bailing out on first mismatch.
->    Drops the 512-byte stack buffer and saves ~530 ns.
+> Since buffer2 is handed to the DMA at page offset 0, the page pool sync
+> window is widened to cover both buffers in every mode: offset is set to 0
+> and max_len to dma_buf_sz + stmmac_rx_offset().
 > 
-> 1. Patch 2 increases marker density from 256:1 to 16:1, cutting average
->    scan distance from 127.5 to 7.5 hops and dropping lookup latency from
->    6,102 ns to 866 ns for +42.2 KiB of .rodata.
+> The FCS can straddle the buffer1/buffer2 boundary and a descriptor
+> boundary, so it is now stripped from the tail of the assembled frame with
+> skb_trim() instead of from a single buffer, avoiding an unsigned underflow
+> for frames that overflow a buffer by 1..3 bytes. For single-buffer frames
+> the XDP program must not see the FCS, so it is removed from the XDP buffer
+> before the program runs.
 > 
-> 2. Patch 3 inlines and unrolls get_symbol_seq() 24-bit reconstruction.
+> Native XDP currently only supports single-buffer (linear) frames. An
+> oversized frame accepted by the MAC (jumbo enabled) is received via
+> buffer2; the XDP program only sees buffer1, so on a TX/REDIRECT verdict
+> the frame is forwarded truncated. XDP multi-buffer support to handle
+> this case is planned as a follow-up.
 > 
-> Results (kernel/kallsyms_selftest across ~184k symbols):
-> - Baseline (256:1):  6,102 ns
-> - Patch 1 (strcmp):  5,572 ns (-530 ns)
-> - Patch 2 (16:1):      866 ns (7.0x faster)
-> - Memory: +42.2 KiB .rodata, 0 bytes dynamic RAM
+> AF_XDP zero-copy RX is not covered by this change: a ZC queue still
+> programs buffer2 at DMA address 0 (and XGMAC has no buffer2-valid bit),
+> so an oversized frame overflowing buffer1 can still trigger the same
+> SMMU translation fault. Handling is planned as a follow-up.
+> 
+> Fixes: 88ebe2cf7f3f ("net: stmmac: Rework stmmac_rx()")
+> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-Can you better explain the tradeoffs here?  Increased memory use?  If
-so how much?  Is any change in build time expected?
+I was able to test that on DWMAC4 (stm32mp157) sending oversized frames,
+and they correctly spill over the next descriptor, no crashes no stall,
+the only limitation being the RX fifo size now.
 
+Tested-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-What isn't addressed in here (afaict) is "who cares".  Is there some
-workload which is kallsyms-intensive?
+Maxime
 
-This info really should be right in the first para of the [0/N], and in
-detail.  What benefit does this work offer to our users?  Use cases,
-example scenarios, etc.
-
-Apologies if I missed this in earlier discussions, but if it was in the
-[0/N] this wouldn't matter!
