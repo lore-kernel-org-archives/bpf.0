@@ -1,49 +1,51 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5617E391E7C
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 17:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D42381EBC
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 17:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790445105; cv=none; b=nPRzv+9Fu7oLtme+/QTDfOIgBBwl66ZjFtLyTDGBUhGe+Sbn9MFGB71dEv3nREVz89rFI480jIWUcZCKDk5N+hqNl6LldMOFg9gvd0ae0wunjL+CQvfgu82Pu52k/k5s6xNpoo1w/StVBvLawjtmrH7cHl0YqIDF/UQCNoAnoS0=
+	t=1790445112; cv=none; b=DzQ+n/RRN3XbFx1zbv2vsHl/ac8Lb2ofsgr56gvrHcKSFmORAH4m8Na/ZosDpkSIVffRFL33UIiHkPpgvVkAbJOS0c+p3ql5/DZ0e6Xia0h4LbCSkmEiIuhT6O9mQ1kqU1y9nleEzVcCL68zG98GMdf6VjjCmT48OGLSSKZrwKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790445105; c=relaxed/simple;
-	bh=5Yq4bJdShF1+1yLoYG8oIeKXCXyv55NsosGOwjW2DxY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=geSIYP3qorIZeI5SRHzlmiof7lqiC/qStL0qwC2YrR2nlrXz0IAJ5PQdYZcWbcbweOOi+iuqGyDVjxddpW+dsPEUJopNaj5gn/l1A7zN2X71RqyZEqHh81ZbaICV8Qk+lL5wJ0Nj9h4tzB/00732oKZncCulZobGFKlo1fjTmX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mAnEpPpE; arc=none smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1790445112; c=relaxed/simple;
+	bh=PyvHPT+g3S9iGH0pT1A+Xw218WtDI/xcTArD4TrcLio=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cLDdlm7Ax8chh+Jp9RhRXxD+3eMLWcP48OrDYiWit6QtrXiyk6Tt99P70a/FvgjEgW6uFbEzgjH80KSxYDxkQ4ZhLXagpHE0koSriYJ2QGF1iUVWLhadJLLoDGtyVvi6nCA+ZR3sG+tREbRbQFGzr34VMUH7HARnoNqlFPTbZiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=WkwEXh9t; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mAnEpPpE"
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68QHaWI73169344;
-	Sat, 26 Sep 2026 17:51:19 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WkwEXh9t"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68QHZjS92317899;
+	Sat, 26 Sep 2026 17:51:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=DytjtnpYWJr7+G9V7bcxY7BoWWpOh
-	K5fUmT0mNRgTp0=; b=mAnEpPpEzXSPEEEkNgGjdYf2TGkgIblJUQLKmzCgKlGPH
-	lf1ogDpJ/FSjEZ9PfGgXLiHGPZLeIpo1cHOncdEplkgTwuBcxcS2tNAB1bv0/+C5
-	XoKjbssUWQEJoPGQ6e5J/+SQTM4GA6qAT8GY/cOqfGkI/J1Mgf83hkdOb8Ys9kxl
-	R/SdJUe2A3lcojg0Efz5tO3Bj6Sc7hWWIL6+ly/35pov9hJA//4fkdcBYOLXbTAo
-	EW+oJtQyCKMU8sEqV93mZLmYW7efaGfrbhiGOHnriD97yHmNoPBUhJBTrmD5GMyK
-	17gtCtJZUcyp3ufvwVn0Jvvh0M78aGsiNGGWcWzLQ==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=7LjhX
+	6hUArHsBmXAQCrtHqykvgnv12fFMdhPYNpvCA0=; b=WkwEXh9tqICj9y/BlypbM
+	axmh9qKzwT6Qne88VXA+liePb30SrstvLrwPmryCf8kQ1Ei+kNzN1Jor/4VevL4j
+	TczzY8nucQQOlQeDNX7m6ZhSwOvFAqlA81qJtCWN0UarsBEq7IaalydydYv+I+Dx
+	7J+VEPdm2b3R8pVara7qc5d3KqzCF4W3LNvqFtYsfQ9SZherpTXkcHRblh6ytn7/
+	3Ml8jyskpFpjdrt0ETYKo2xSbSf2mb0+aAQYln7djxaXc/Nas7aQfPa/v/GKjIJf
+	R7RCrgGgZot4xA+i2u0U0hrrhfhuFlwcmlh/hcUb9/t+9wR/OEamaDhPFOF0I5Xn
+	w==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gx63bran4-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gx4y98cc1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 26 Sep 2026 17:51:19 +0000 (GMT)
+	Sat, 26 Sep 2026 17:51:22 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68QHo2Aw017856;
-	Sat, 26 Sep 2026 17:51:18 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68QHo2Ax017856;
+	Sat, 26 Sep 2026 17:51:21 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4gx4g8nbcm-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4gx4g8nbea-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 26 Sep 2026 17:51:18 +0000 (GMT)
+	Sat, 26 Sep 2026 17:51:21 +0000 (GMT)
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68QHpHsV020485;
-	Sat, 26 Sep 2026 17:51:17 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68QHpHsX020485;
+	Sat, 26 Sep 2026 17:51:21 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-81-123.vpn.oracle.com [10.154.81.123])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4gx4g8nbb1-1;
-	Sat, 26 Sep 2026 17:51:17 +0000 (GMT)
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4gx4g8nbb1-2;
+	Sat, 26 Sep 2026 17:51:21 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, qmo@kernel.org
 Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
@@ -51,10 +53,12 @@ Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
         memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
         nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 bpf-next 0/3] BTF inline functionality followups
-Date: Sat, 26 Sep 2026 18:51:10 +0100
-Message-ID: <20260926175113.2368566-1-alan.maguire@oracle.com>
+Subject: [PATCH v3 bpf-next 1/3] bpf: Verify BTF_KIND_LOC_PARAM vlen, flags
+Date: Sat, 26 Sep 2026 18:51:11 +0100
+Message-ID: <20260926175113.2368566-2-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260926175113.2368566-1-alan.maguire@oracle.com>
+References: <20260926175113.2368566-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,55 +73,93 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  mlxlogscore=999 lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0
  mlxscore=0 spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2609040000 definitions=main-2609260071
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI2MDA3MSBTYWx0ZWRfX0nb71kxaMQv0
- osXO56omArMe3GY25T7GXARel5F1Zc1Ws0dh/bbY3Erm2T0al7UMCWgx65oMAKxWMBFrn2EB/kN
- 08lB3He4AUEDaehvUJLfs3hlF20ZycQWU8DLG5U6Pw7W7y0FUPio
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI2MDA3MSBTYWx0ZWRfX7pK6f+HpGNHe
- UpiPagWvnhpNWVNLB2OZIiCQtnIdMtpfJv3sIXE79ZJqaPIJ18VTLfynmOh9TJ/LK/3d3adRrRc
- wsd/b7aQLb17SKLteO8b2/3o91FMy+F+I8V5fmk8FNJso24AHY9Pgl3HjaoVn9OTxV0FiXsP3sz
- Nh7TJgzuZ4jSOoucP74fog/Rapi1o8yZpT0fP/0bchS7xTRP2V/IEaReQed9b5vWHF43XT3Pjdr
- 2GF/n9hpjrBJmRNUvDa0TdeFdkbVJHbg1PD0UlfFdm5iMqSAwER4yn76s+yFE9ObylFl8kvsQ6t
- JDiGXVMkNEf9FDqyK8gvgTT/DnoVGzM5iu4zepUh2doWkWG/zw7Zu3QwYjJRg30fAcDuwa7cnxw
- bxBmOeAiNvp2Rs2IvN2jVuttF+pTeUq+eAPdoSXl39stkzlFNGSwZUtXtTCHmKtfKD9fIaJaNbn
- +R6COKNJE/u6uTcreEQ==
-X-Proofpoint-ORIG-GUID: Jt6A0ErpkvKPbLUaAHpc4eZoG3TCRahX
-X-Proofpoint-GUID: Jt6A0ErpkvKPbLUaAHpc4eZoG3TCRahX
-X-Authority-Analysis: v=2.4 cv=PPGaavqC c=1 sm=1 tr=0 ts=6ab80617 b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI2MDA3MSBTYWx0ZWRfX8A72m6zzV1pn
+ 2UBqZ9koS1+ZuA0Sjas9hw7RlNMo47yBXrrK9183sVpif8GvckdJoiTVWgn6hrheq/JsgkWNEEN
+ AURcH7gskIwDaZOgmZv9yvRUlTpAE82YJog27c0tdQpK86THWWq2G4Lkmpb0AV/8b4lTPaLnTxK
+ w0Caey9ZYNVW2bJroqca2nuyBm7Pxwv6IDd9/1mg+58OgGkjzC/YPO6bw/u3l3yl59o01Ozds8/
+ cReF+/9H+Hqx0YoGEA7MQKwaeM/YO0PuOL9tihnfFvMFfIDWfKcSAh+0OrGsfOg2+hJQGbWL57t
+ HiRXBua3fQYfhjSNeonLV7HCl0lspwX9/tgFXReMhF1/zy7FyyZHXFykjb+3VFwi+wtC19VpnSN
+ tVizslzAaWI94slMNKOqwAkboFSBk+CeV4ifImyBgEm/gs2XN7z0QEkaxKP7Pdx2UIl+UvsFVEp
+ YvzaUbiHE7SYBeiIWoQ==
+X-Proofpoint-GUID: wBAkosqFRquh536tLpLkT8k1TN0vOHZQ
+X-Proofpoint-ORIG-GUID: wBAkosqFRquh536tLpLkT8k1TN0vOHZQ
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI2MDA3MSBTYWx0ZWRfX8GZal8pfWkqH
+ wz/F2oahvNnL/C297l98lC/ZQSVFYR5r9sg9E0YGQNle2Guq7iav3KlrUMW6RCru5rVOD1y/kdK
+ rr3Els6UVdT2axyfP+Q0FzCt7lOjdbd/2uzlFOfQAQ5HMPfk4jPE
+X-Authority-Analysis: v=2.4 cv=IuyL47/g c=1 sm=1 tr=0 ts=6ab8061a b=1 cx=c_pps
  a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
  a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
- a=e-s1Mb4KYa-ADvBhKC0A:9 a=WmVTiCyuxqgg3mnwYu6p:22
+ a=x0eKOSpe3m1H3M0S9YoZ:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
+ a=z8lHZeWSVM0VDOMPmbQA:9 a=WmVTiCyuxqgg3mnwYu6p:22
 
-Include additional vlen/flags verification for BTF_KIND_LOC_PARAM
-(patch 1), and add function signatures to LOCSEC entries (patch 2),
-adjusting test to cover these (patch 3).
+Ensure that vlen and flags combinations are consistent for
+BTF_KIND_LOC_PARAMs.
 
-Changes since v2 [1]
+Fixes: 33c5a3278bdb ("btf: Extend UAPI to support BTF location (inline site) info")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ kernel/bpf/btf.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-- Improved flag/vlen verification to check combinations (Alexei,
-  patch 1)
-- Simplified overrun ellipsis printing (Quentin, patch 2)
-
-Changes since v1 [2]
-
-- Fixed sign to appear after const (bots, patch 2)
-- Simplified loc printing to remove vsnprintf() logic, updated
-  to retain name in json (Quentin, patch 2)
-- For oversized signature strings, append "..." (Quentin, patch 2)
-
-[1] https://lore.kernel.org/bpf/20260925170854.1240637-1-alan.maguire@oracle.com/
-[2] https://lore.kernel.org/bpf/20260925095231.879708-1-alan.maguire@oracle.com/
-
-Alan Maguire (3):
-  bpf: Verify BTF_KIND_LOC_PARAM vlen, flags
-  bpftool: Update func representation to include function signature
-  selftests/bpf: Fix up bpftool btf dump test for signatures
-
- kernel/bpf/btf.c                              |  43 ++++++
- tools/bpf/bpftool/btf.c                       | 123 ++++++++++++++++--
- .../bpf/prog_tests/bpftool_btf_dump.c         |  14 +-
- 3 files changed, 165 insertions(+), 15 deletions(-)
-
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 9bcfefdfb734..8cc17a1cd25c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4823,10 +4823,53 @@ static s32 btf_loc_param_check_meta(struct btf_verifier_env *env,
+ 		btf_verifier_log_type(env, t, "Invalid btf_info kind_flag");
+ 		return -EINVAL;
+ 	}
++	/* All LOC_PARAMs have vlen of at least 1 */
++	if (vlen < 1)
++		goto invalid_vlen;
++
++	switch (p->flags) {
++	case BTF_LOC_PARAM_CONST:
++	case BTF_LOC_PARAM_CONST | BTF_LOC_PARAM_SIGNED:
++	case BTF_LOC_PARAM_CONST | BTF_LOC_PARAM_ADDR:
++	case BTF_LOC_PARAM_CONST | BTF_LOC_PARAM_ADDR | BTF_LOC_PARAM_SIGNED:
++		if (vlen > 2)
++			goto invalid_vlen;
++		/* Ensure size/vlen are consistent */
++		if (size > sizeof(__u32) && vlen != 2)
++			goto invalid_vlen;
++		if (size > sizeof(__u64))
++			goto invalid_vlen;
++		break;
++	case BTF_LOC_PARAM_REG:
++		/* Reg or reg/reg pair */
++		if (vlen > 2)
++			goto invalid_vlen;
++		break;
++	case BTF_LOC_PARAM_REG | BTF_LOC_PARAM_DEREF:
++		/* A reg deref without offset can only have vlen 1 */
++		if (vlen != 1)
++			goto invalid_vlen;
++		break;
++	case BTF_LOC_PARAM_REG | BTF_LOC_PARAM_OFFSET:
++	case BTF_LOC_PARAM_REG | BTF_LOC_PARAM_OFFSET | BTF_LOC_PARAM_SIGNED:
++	case BTF_LOC_PARAM_REG | BTF_LOC_PARAM_DEREF | BTF_LOC_PARAM_OFFSET:
++	case BTF_LOC_PARAM_REG | BTF_LOC_PARAM_DEREF | BTF_LOC_PARAM_OFFSET |
++	     BTF_LOC_PARAM_SIGNED:
++		if (vlen < 2 || vlen > 3)
++			goto invalid_vlen;
++		break;
++	default:
++		btf_verifier_log_type(env, t, "Invalid flags");
++		return -EINVAL;
++	}
+ 
+ 	btf_verifier_log_type(env, t, NULL);
+ 
+ 	return meta_needed;
++
++invalid_vlen:
++	btf_verifier_log_type(env, t, "Invalid vlen");
++	return -EINVAL;
+ }
+ 
+ static void btf_loc_param_log(struct btf_verifier_env *env,
 -- 
 2.43.5
 
