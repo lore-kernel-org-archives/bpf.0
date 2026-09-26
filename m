@@ -1,282 +1,252 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f41.google.com (mail-oo2-f41.google.com [74.125.231.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB413839A8
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 18:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790445875; cv=pass; b=KIClb3XwVOPYGFXaqlywm/9Y7H3gDlFunYGcujqpxGRAjCQNwXRRo2DIsxPV01soCDqq2it8OW1qCvesHTJd8L7+zquh7bIQSi9Zjo7gVxxX3p8A8SbJ8r0+swNPqCrtgOW9RRPw0k7wwr0ctGWuf2MPf1xYq3tol0TldJjr948=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790445875; c=relaxed/simple;
-	bh=tYFORwU82GIPiVzr9eaBMmA/qcuhjPtagnSM/ZDRX9Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pz4FKtswRq5T4vO9q0PlEwdaBWLKW27CwjBRyefbWLil6p06kE5EYtdMY0aX1Z3YjIlyztdedHakji9F1akKILytxeZVxNDS0VBlYkUauS1yX2txsqkpnXEHwuIYsUEGLNl+GsrNOliLK1vs9CXb03ufjALX5x83cgmQSUNUbDk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=LGV9soC+; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=FvLRvPWL; arc=pass smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EB5381EA3
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 19:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790451620; cv=none; b=ATx3ry2Tvq5Awe8KQfSaAbtzuCv7kAKeTRJDdLkVixUrpCRjnR9/kl2w2YhxbYeWiVd58Ih3na5Onoq2HYTZuYULAM/2Ncm1zcNX9c39Jmoeuji0xkrufFh3h9xI51hTHl2cDKQCBDDP2QqXKDs8riY1fsv04D5lcNykfVVfyIo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790451620; c=relaxed/simple;
+	bh=OSINSMyFOeedO6ZrqROTPkBKxmtb5CoHcUyLQkCdwJM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T3SSsXu+mcp5aitBLLdW5LVsR1wji1xjcurJ84hLtGQE0FdGPQs9NNjajnjuiMTdIs9EDyPQnwcfCdtXEdnsem11JC5K7aS3vBkz9fgVOvCQxQlJ2OVwz6dKOZuAMX3G5riNwYLdeeUnYv9SLik8IYph/EziFqFRwNpgBilgMew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kH9+40YD; arc=none smtp.client-ip=74.125.231.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="LGV9soC+";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="FvLRvPWL"
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68QFPIwF1150816
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 18:04:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=GtJujZlkuQ828dseqHuH0wNH7O6BdO/6unmn1amR4z8=; b=LGV9
-	soC+aInd4sX1l7uTzgoQ+Bbhyd2HkmJqVZhXe3ZhkYDaF8Jmo50EjRC/Lmmx4Y2d
-	0eTfjZGNczmdDplfLhcPcyGG7S6P2pv1zm2zpl/5wIg56QK3QUoNV2HoYO3tMdcH
-	L3LI2+EwUzjrFeENDcgXrTb3YT/umka7avreIdzwj9kBOGovz2mtwlf5kd2qY3vy
-	+TL/q5HFRW73RIwFtj3FX2Xdgs9+sYxVVkGS8lQiEnoVj8o4SyNDEcnc4LoDYBzb
-	uC6K4RXbtcRuNADpRSchaWnUtrBzpRtgUz6tdrYGMydQJ9qonjTFpJp+qyh1XQCf
-	RoyC8gNJGHoQ+JchEw==
-Received: from mail-yx1-f69.google.com (mail-yx1-f69.google.com [74.125.224.69])
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4gxade927q-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 18:04:33 +0000 (GMT)
-Received: by mail-yx1-f69.google.com with SMTP id 956f58d0204a3-673263bc7e1so2084569d50.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 11:04:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790445872; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lQz1sFMKGEIkhMWpzWw9n5CbRG6mOM0JI1JAQ7NMAat8g3cv2ruWAPYfimcMVrpxU8
-         SClxoaGonrP1IlzBS6b/Q8OZGjPh9PSq3SGU7/VP0wMxDreU4i6ig8kqHXQ1OtqvfCMg
-         FfU/2swOAjzr4TuC3oehP8e70EV8jiIP4I3Zv87FVEOKE8FwGwzZ5iYE6rPWAmrJXkYE
-         fCKU76MA6YuUUB1HzEJUzKFEJfV9cK17SktSV37ETEgEJoHIOUJ4RuTTLw+P/qt+4zXS
-         8513gd5AKo8JwujIkArZLZjQ1GuoMEYzVtf2kQldp2y/y3dNgRywmURrljhaysqtakaT
-         hN+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GtJujZlkuQ828dseqHuH0wNH7O6BdO/6unmn1amR4z8=;
-        fh=gRVdEfKsy6bBYj2FtlGsH3p7h37Tvsw1/iQP5r5HM4k=;
-        b=LEluLIZ2NPjH3luwHv9Q3dpWghXOA4k5wTFEeRqRPfmOCVHWUasl+LvTH2eqxst4q/
-         n8HP9/OE7jDxO0Ac4YeQ4w1uvJawEAoFbAp4qNxSYJqqj3yZldhuV6I0T6ZIpIRMxEry
-         eejhiCoiS9czP5KbehJNp0vkUW6yQ6ldt+rwPLosiIPdKhU4d/uWG00hTzM552h/UM2l
-         S1Nq15uKdGl1OWSvE3GUThR3uciBlhRjKGXcSksEhzWqFvhjZaCZ+tGNgiYQpqfnlCDL
-         N+Md6hUDwAEM07rRQM7/jwmxeoce7PlwQWiJ4hZIL0uTZJ2QLUhopNrsJMveo2TH6Thk
-         PWWw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kH9+40YD"
+Received: by mail-oo2-f41.google.com with SMTP id 006d021491bc7-6d06a12d360so1104486eaf.2
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 12:40:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1790445872; x=1791050672; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GtJujZlkuQ828dseqHuH0wNH7O6BdO/6unmn1amR4z8=;
-        b=FvLRvPWLyNLIVSPrQjcVaaVqqd0z6zRYp2V87kQB2CJO+gp0xvcI+fBPbExfkChXiY
-         /ch/JWaL5COycHuZxTqGkE5mR310pE7/B9jTkE2ZWljU9Naq+rae3Ek0B8W9yfL4YKn5
-         9LwE9OTxxRYbLr9B5daGazlRH+fgxgUNV2BP+USwRKc/MyWUeFQY56EAKwir4v36+Qcw
-         MgStWeco7CqPEqkounJyKKIq6CJSv+uCmbNpPBjvjYwyVqCE/liNOA+9bCcZvm/oG0bK
-         y6ekmvr8neewoiPZ2XoHKPQO2qRIsGp2LzulGPRTDKOcHzVKm0jgzpJEJb8v3LzUuyg9
-         PG9A==
+        d=gmail.com; s=20251104; t=1790451616; x=1791056416; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CAdE4jpwNTj11WAhE2pjyq7b0zOjoxgSwK0L+TfYZpE=;
+        b=kH9+40YDiCpwUfH0VMZuR/gWefOpy6hW61y7F7Tk/pSnZWY9fhAf6a7GiNpmj/kawb
+         ZhM3DNfwW6TfjaXkecSpdWnxdUY9ab5Yv3X8azCIpsl9F9axvTEGrWx6WKE7hSHIiSdB
+         uI6cBk3Kd+i7gIm7Uuw/p9bJTr9AEjiOveNRPg7tRZ/OM/bck0cImurZlyGe0IQYrMHF
+         xLwbveuJwvbQHusyAFkjjNvy0ftlH2JVUJCJoQBtxmQH+JDwISj/fU9d1Sjo+J/vsB/r
+         tUWLYwXq9WD80nRWYe6HrhAneE075jDfY64RVImISMPr6leOzPx2aPNAkVdDrlxYqT+L
+         LKvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790445872; x=1791050672;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GtJujZlkuQ828dseqHuH0wNH7O6BdO/6unmn1amR4z8=;
-        b=RDOMnm47Psq4w0jzS7TFF5VDowUclzf6yYT4t/R4EWzhmijmZCNEtQ96NRaOpDlg45
-         3LAUhWibWIty30DJQBT+4vh+cTBAcj+RBCFMpqI6QyGS/nJT0gjAqgLM/zQ37jOoXzOv
-         woe5fYkg++8y1m2WNKBEvgdQVHmxb+Y2ldG1BtkcINhNShXgXdD5o49KD/jGpLvLMQ9a
-         PqcZaAMLAi1oFzU1+LW0n0ZZqtpry0/6qwz3DcssEgWODN0ZqOb9yIoHsvGreY0nEjuc
-         2Iw5XTWigpuwoIHZKu1AobB9IhANZTz3o86+cIOPR4/mQCorvf+n3HqHRo9C19iIn+wF
-         vpHw==
-X-Gm-Message-State: AFq9FYJbS5PzExFitXAaqLSZrz+AdBapXSF3wFMyIQjzoAZUnxykKKNj
-	gQo2CK7DSyQgm5AJ837b5ou98YUqxl8/WkyvgUuG2JxgLhZNjrT+K8R6tfTPmNaw6U4+Aw7wHFg
-	SABUtfJrJWSs2pwqEnu2W9MxgCeGiqK8a+EWXM5W3l2OcwLpUjIYgi/j704ItOcegx/qUg8g+t7
-	0/arVVWKeTnwJxrCfk+x3/EitbjoNG
-X-Gm-Gg: AYBFou0GjxeG8gfSKXrGHKVZm+YzHOUnjXVXhy8WejN7Qd36KTBorGiijDb6eC+FvbZ
-	cg4LPkfAaKeDPNkTeV3whq3rKjB6ig2lTrBBh0s7OYVfxPOJfXQd9lzAjZ6ZhJmhrdBo9LRzd57
-	ysSoMim+AQh742WQ7S5yWiuLGhPaA4HuYTTYd1j0OFpvJjdSiagBAcdjqpKA==
-X-Received: by 2002:a05:690e:d58:b0:675:3247:9b3c with SMTP id 956f58d0204a3-6753247a4bbmr428695d50.42.1790445872122;
-        Sat, 26 Sep 2026 11:04:32 -0700 (PDT)
-X-Received: by 2002:a05:690e:d58:b0:675:3247:9b3c with SMTP id
- 956f58d0204a3-6753247a4bbmr428683d50.42.1790445871586; Sat, 26 Sep 2026
- 11:04:31 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790451616; x=1791056416;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=CAdE4jpwNTj11WAhE2pjyq7b0zOjoxgSwK0L+TfYZpE=;
+        b=0NAxfkY9Xk7ALTKe1RxxL61AVjPvtwcpgN3YGmlivcavQBNXeD6diL+cVHPeG4f76I
+         Je9jnyhVczr7708dh6qwJNKLTEHji2E7090bUMdTHHsoae13LGpOIKYLT9vxAnTKhIWQ
+         dJC1vx6lrD+/0ki+6c5Yp9WSxdBwEq7E6N6l93fEemCDSXQ05n6WVotLimxgYpJt3s0Y
+         E4WWT/XJC6QmfdPp/kePFHhk4NdRPuZyTv6L+EgZaX2Tc+STbNI4vtbIpvLoHcVmGezG
+         foO9Dk9Zqkn8mnLr+vwF1bRUdXecyR2JeupN9AL+l7vqz/zu1V90w7FjWO9aY4FHpSgA
+         OwKQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxHvO+GIlcWJHf1Y/wC/pbCP08qHT4fEM+pBYtK1bjbP1NLw0/o46VFP2toF/ThH9k33gs=@vger.kernel.org
+X-Gm-Message-State: AFuF++ms9QP6NRH7zyYv3KF7ca+QwhbP/YN8UnbiIMz3FhNNfNxEQBy8
+	oar8ku1jukl1yZasZuIxZa0f4DLt+vw+Y/7jR/mermP6vrz5J1Wi5cg6
+X-Gm-Gg: AYBFou0DDMCgIOyFY3gjAwPXYoM0oNa2VIDurfzgX/9cJRmKuDRDM5BRTGplP5hvVhX
+	vfw/CP5+IO0wx05OV2R685z+f+EMYRwNEa9pG3dacB7gt5eeGf8FmcvoCU4rXrG2fBPaT6kpOfO
+	4lj5INqgm2H0rErwsfxU4rp16crr8+l+lu7RNXIbx79cqBFplplGImcqpGOi0RuTN7SwYb+5wsC
+	8MXJVsCHCMYjKA1YjYsjT2m2Gba1zpOJ4ybbtCRgU3Qvr2EpjwedqbskzH02JgLVTnkNsQstXuT
+	UutOVOjANChYDSSyznxGyFKc3pW4OU9b34swBnA6FVUM4wa1kqf7ZolpMfyRk3YjcTKMG6Jqluu
+	ocXqvvdG3HN2BKJ3WBlV+G3xRvX7vUyEHthQ9+T7nRTZ2lEonN9xoBMSkPmK97MDtk5s6U7/78o
+	knKV40mNYqX8XkIeWt9W1umXWuJlloqo/VWQDI1GkshHnoaTlTxbMMvoBcdbk8/5U+VgYfPUTiW
+	H110bvojkwowvHnyI/hk1XTuZEjdZmPOA0ntZJNadHK98/0PjLlBcurgCtI8eCZI8NrrWj5zbyR
+	MrZHFIbX1SRF/OvmAgdWDgMavuJNAQ==
+X-Received: by 2002:a05:6820:625:b0:6d8:5491:3752 with SMTP id 006d021491bc7-6d854913f2bmr298494eaf.46.1790451615962;
+        Sat, 26 Sep 2026 12:40:15 -0700 (PDT)
+Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
+        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-49335011458sm5955595fac.4.2026.09.26.12.40.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2026 12:40:14 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v6 0/3] kallsyms: Accelerate symbol name lookups by ~7x
+Date: Sat, 26 Sep 2026 13:40:11 -0600
+Message-Id: <20260926-ksyms-tune-v6-0-236620c65e98@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260923232939.1886328-1-andrey.grodzovsky@crowdstrike.com>
- <20260923232939.1886328-6-andrey.grodzovsky@crowdstrike.com> <CAEf4BzbgkghzOfHJh-A9z=kMn=NaHgr04_DUUrQ63bvHaAsqTg@mail.gmail.com>
-In-Reply-To: <CAEf4BzbgkghzOfHJh-A9z=kMn=NaHgr04_DUUrQ63bvHaAsqTg@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Sat, 26 Sep 2026 14:04:20 -0400
-X-Gm-Features: AclHuK9m4SJvzgH8tdPrh3tJU4ducfrzz440g9SD_ELiz6OphluwTg_J1yw3VKg
-Message-ID: <CAOu3gNjv_NciUt-UxxmfpyakLzpF2tmu+J34g91gxAkuFMSOfw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 5/8] libbpf: Version bpf_program__set_autoattach()
- ABI change
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        martin.kelly@crowdstrike.com, slava.imameev@crowdstrike.com,
-        linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI2MDA3MSBTYWx0ZWRfX+mhfJW46kE4m
- TT6h+BvZsimy9wwPxM005yJ073RrAyRm4upUYuSryLqWzyOawQJ7hCL/Dmd+40dVKiR9c0Lm+JQ
- vGVXK6MsFuTHqtgJV8uzhPXxWS88PI/yMEujvhIDt/srHnB8eTr1YS58reU2i3cfphmbryMSsv/
- LUQnuxCppIgela6P5TeoOJFFjH1Ezqm+siko2WLphOhuYt1mF9+8EFuUBl6GGPRL7PrzNItBJvX
- JU0PnW/5BNhVoYboMwqJuKw+UbytyPoWWgiONeP9bB4CwNzQ72PwOD5Z56FOET5A800dRDrGC29
- NLlU7+8L9Tfd+86NzZrhXrUoKoiz4i2TwAvGi6PL5Bae+HYAqmmRqBN0bqqYNia1ZX0HGLfF9h9
- Prxm7id/V+Qa9mwRc1LOWV8JM9KebRwKoCrseZ2dRhw0JsUwPdFuxApQoiWyjc8eNURx9aLWi0G
- qAzsbGl5cvvwkS7VTkQ==
-X-Proofpoint-ORIG-GUID: GTMG5Cvg6arI4GueQBBkHJj-Hin3g-k7
-X-Proofpoint-GUID: GTMG5Cvg6arI4GueQBBkHJj-Hin3g-k7
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI2MDA3MSBTYWx0ZWRfX4s7JxOaz+zxl
- YLpsFBzZhwi5EdzdEm/XuwFErApE5EpbDy9H4v7p1UU4E9fRLb2vZMyb8aE//68UHQavEVwPUgQ
- YRRLu/nPnpvsaXl92yQh+0o3GqkwOq7876HdoExP5gaUDnYJ4qOE
-X-Authority-Analysis: v=2.4 cv=DZyCOftW c=1 sm=1 tr=0 ts=6ab80931 cx=c_pps
- a=J+5FMm3BkXb42VdG8aMU9w==:117 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=t04HzT_fAfAF5W-3wVZy:22 a=pGLkceISAAAA:8 a=pl6vuDidAAAA:8
- a=y03PYLBpwSwoDu5VP9oA:9 a=QEXdDO2ut3YA:10 a=Epx66wHExT0cjJnnR-oj:22
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11917
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 priorityscore=1501 spamscore=0 clxscore=1015 adultscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609260071
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNwU7DMAzG8VeZciYotpO24cR7IA4m8bYI2qJmV
+ ExT3x1vp65ix8/S7++LqTIVqeZldzGTzKWWcdDRPO1MOvJwEFuyboMOGxch2s967qs9/QxiBZE
+ 95o4J2Cj4nmRffm+xt3fdx1JP43S+tWe4Xv/NzGCdzV1Isc0MTPh66Ll8PaexN9fMjCuKeEdRK
+ RORCIFwareUHlNS2nT6zwu7kOOW+sfUK43ISbjzHxFgS8OahjsalMK+DZxdIoS0psuy/AF0BsG
+ HkAEAAA==
+X-Change-ID: 20260919-ksyms-tune-e22a42d8a31a
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, Kees Cook <kees@kernel.org>, 
+ David Laight <david.laight.linux@gmail.com>, 
+ Masahiro Yamada <masahiroy@kernel.org>, Jiri Olsa <olsajiri@gmail.com>, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790451613; l=7906;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=OSINSMyFOeedO6ZrqROTPkBKxmtb5CoHcUyLQkCdwJM=;
+ b=80JfYp39IgvK2tSs0oLXyMGtssDmLgEUSDKDIpWZ4X4SB1y5aaBbeB9n+QU5l4we0EtLgnaO9
+ WaV/h3wcKwjCbKWjvg9NX0q8mSmyB8DI7Rs7PenTCF/uJ3wOGZiF7QV
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-On Thu, Sep 24, 2026 at 7:19=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Sep 23, 2026 at 4:29=E2=80=AFPM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
-> >
-> > bpf_program__set_autoattach()'s return type changed from void to int to
-> > let callers observe the new -EINVAL rejection for MANUAL-strategy
-> > programs, but the symbol stayed under its original LIBBPF_1.0.0 node in
-> > libbpf.map. Binaries already linked against the old void-returning ABI
-> > recorded a request for exactly that symbol@version pair at link time;
-> > without a version bump they would silently start hitting the new
-> > rejection behavior underneath them after a libbpf upgrade.
-> >
-> > Split the symbol via ELF symbol versioning:
-> >
-> >   - bpf_program__set_autoattach_deprecated() keeps the original
-> >     unconditional behavior, bound via COMPAT_VERSION() to the existing
-> >     LIBBPF_1.0.0 node.
-> >   - bpf_program__set_autoattach_v1_8_0() carries the new MANUAL-rejecti=
-ng
-> >     behavior, bound via DEFAULT_VERSION() to the new LIBBPF_1.8.0 node.
-> >
-> > Old binaries keep resolving bpf_program__set_autoattach() to the old
-> > behavior at runtime; anything linked against the current headers/map
-> > gets the new int-returning, MANUAL-rejecting behavior. Also adds the
-> > missing __LIBBPF_MARK_DEPRECATED_1_8 gate to libbpf_common.h (only the
-> > 1.0 gate existed) so LIBBPF_DEPRECATED_SINCE(1, 8, ...) can mark the
-> > deprecated variant.
-> >
-> > Assisted-by: Claude:claude-sonnet-5
-> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c        | 9 ++++++++-
-> >  tools/lib/bpf/libbpf.h        | 6 ++++++
-> >  tools/lib/bpf/libbpf.map      | 2 ++
-> >  tools/lib/bpf/libbpf_common.h | 6 ++++++
-> >  4 files changed, 22 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 85e1d9c775ab..224fb0247a39 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -9974,7 +9974,14 @@ bool bpf_program__autoattach(const struct bpf_pr=
-ogram *prog)
-> >         return prog->autoattach;
-> >  }
-> >
-> > -int bpf_program__set_autoattach(struct bpf_program *prog, bool autoatt=
-ach)
-> > +COMPAT_VERSION(bpf_program__set_autoattach_deprecated, bpf_program__se=
-t_autoattach, LIBBPF_1.0.0)
->
-> no compat stuff, it should be backwards compatible to change return
-> from void to int
+As measured by kernel/kallsyms_selftest across ~184k symbols,
+kallsyms_lookup_names() binary search takes ~6.1 us per lookup due to
+two inner-loop costs:
 
-I was more worried about legacy binaries dynamiclly linking against
-this risking to somehow getting silently rejected by load_strategy =3D=3D
-BPF_PROG_LOAD_STRATEGY_MANUAL check. But yea, practically this is
-impossible so I will drop this.
+0. Candidate symbols are fully decompressed into a 512-byte stack buffer
+   before calling strcmp(), even though non-matching steps could choose on the
+   first differing character (0..N-1).
 
-Andrey
+1. Probes scan sequentially from 256:1 markers in kallsyms_names[],
+   decoding an average of 127.5 symbols per probe (~2,170 hops across a
+   17-step search).
 
->
->
-> > +void bpf_program__set_autoattach_deprecated(struct bpf_program *prog, =
-bool autoattach)
-> > +{
-> > +       prog->autoattach =3D autoattach;
-> > +}
-> > +
-> > +DEFAULT_VERSION(bpf_program__set_autoattach_v1_8_0, bpf_program__set_a=
-utoattach, LIBBPF_1.8.0)
-> > +int bpf_program__set_autoattach_v1_8_0(struct bpf_program *prog, bool =
-autoattach)
-> >  {
-> >         if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL)
-> >                 return libbpf_err(-EINVAL);
-> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> > index faea42f75847..d172c137cc37 100644
-> > --- a/tools/lib/bpf/libbpf.h
-> > +++ b/tools/lib/bpf/libbpf.h
-> > @@ -393,6 +393,12 @@ LIBBPF_API bool bpf_program__autoload(const struct=
- bpf_program *prog);
-> >  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, boo=
-l autoload);
-> >  LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog=
-);
-> >  LIBBPF_API int bpf_program__set_autoattach(struct bpf_program *prog, b=
-ool autoattach);
-> > +/* this "specialization" should go away once the deprecation window fo=
-r
-> > + * bpf_program__set_autoattach_deprecated() closes
-> > + */
-> > +LIBBPF_API int bpf_program__set_autoattach_v1_8_0(struct bpf_program *=
-prog, bool autoattach);
-> > +LIBBPF_DEPRECATED_SINCE(1, 8, "use int-returning bpf_program__set_auto=
-attach() instead")
-> > +LIBBPF_API void bpf_program__set_autoattach_deprecated(struct bpf_prog=
-ram *prog, bool autoattach);
-> >
-> >  struct bpf_insn;
-> >
-> > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> > index 8def5474885a..999e791d9887 100644
-> > --- a/tools/lib/bpf/libbpf.map
-> > +++ b/tools/lib/bpf/libbpf.map
-> > @@ -465,6 +465,8 @@ LIBBPF_1.8.0 {
-> >                 bpf_program__clone;
-> >                 bpf_program__load;
-> >                 bpf_program__load_strategy;
-> > +               bpf_program__set_autoattach;
-> > +               bpf_program__set_autoattach_deprecated;
-> >                 bpf_program__set_load_strategy;
-> >                 btf__find_by_name_kind_own;
-> >                 btf__new_empty_opts;
-> > diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_commo=
-n.h
-> > index 8fe248e14eb6..12ad4f5f558f 100644
-> > --- a/tools/lib/bpf/libbpf_common.h
-> > +++ b/tools/lib/bpf/libbpf_common.h
-> > @@ -36,6 +36,12 @@
-> >  #define __LIBBPF_MARK_DEPRECATED_1_0(X)
-> >  #endif
-> >
-> > +#if __LIBBPF_CURRENT_VERSION_GEQ(1, 8)
-> > +#define __LIBBPF_MARK_DEPRECATED_1_8(X) X
-> > +#else
-> > +#define __LIBBPF_MARK_DEPRECATED_1_8(X)
-> > +#endif
-> > +
-> >  /* This set of internal macros allows to do "function overloading" bas=
-ed on
-> >   * number of arguments provided by used in backwards-compatible way du=
-ring the
-> >   * transition to libbpf 1.0
-> > --
-> > 2.34.1
-> >
+This 3-patch series addresses both:
+
+0. Patch 1 introduces kallsyms_strcmp_symbol() to compare ASCII queries
+   against compressed tokens on the fly, bailing out on first mismatch.
+   Drops the 512-byte stack buffer and saves ~530 ns.
+
+1. Patch 2 increases marker density from 256:1 to 16:1, cutting average
+   scan distance from 127.5 to 7.5 hops and dropping lookup latency from
+   6,102 ns to 866 ns for +42.2 KiB of .rodata.
+
+2. Patch 3 inlines and unrolls get_symbol_seq() 24-bit reconstruction.
+
+Results (kernel/kallsyms_selftest across ~184k symbols):
+- Baseline (256:1):  6,102 ns
+- Patch 1 (strcmp):  5,572 ns (-530 ns)
+- Patch 2 (16:1):      866 ns (7.0x faster)
+- Memory: +42.2 KiB .rodata, 0 bytes dynamic RAM
+
+What's Unchanged:
+- Symbol table layout in address order remains identical.
+- Streaming decompression for /proc/kallsyms and sprint_symbol() is
+  untouched.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+Changes in v6:
+- In patch 1, clarify token matching mechanics and early exit on char
+  0..N-1; cite CONFIG_KALLSYMS_SELFTEST across all ~184k symbols for the
+  ~530 ns measurement (addresses BPF CI review).
+- In patch 1, drop 0-2 list and fix repeated word typo ("the the").
+- In patch 2, recast commit body around kallsyms storage trade-offs and
+  drop hunk-by-hunk numbered list (addresses BPF CI review).
+- In patch 2, drop 0.002% percentage claim and state absolute .rodata
+  cost (+42 KiB for ~184k symbols).
+- In patch 2, drop ephemeral benchmark comment from
+  kernel/kallsyms_internal.h (addresses BPF CI review).
+- Link to v5: https://lore.kernel.org/r/20260925-ksyms-tune-v5-0-1f75ad0c321c@gmail.com
+
+Changes in v5:
+- Dismiss dynamic 1:1 batch table as unnecessary:
+  In v2-v4, a dynamic u32 lookup index allocated in transient RAM was
+  explored.  While dynamic 1:1 breaks even against baseline 256:1 after
+  ~1,200 queries, comparing dynamic 1:1 against static 16:1 markers
+  dismisses the dynamic approach entirely:
+  * Static 16:1 markers achieve 866 ns, capturing 97.4% of the maximum
+    latency savings of a 1:1 table (an 85.8% reduction from baseline).
+  * Dynamic 1:1 gains only an incremental 138 ns (the remaining 2.6%),
+    while paying ~6,419 us in allocation setup and synchronize_rcu()
+    teardown.
+  * Amortizing 6,419 us at 138 ns saved requires 46,514 queries just to
+    break even against 16:1 markers.  For any workload under 46k
+    queries, dynamic allocation is slower overall.
+  * Drop kallsyms_lookup_batch_start/end APIs, mutexes, refcounts,
+    transient kvmalloc RAM allocations, and RCU synchronization.
+- Drop lib/test_kallsyms_perf benchmark module and
+  CONFIG_TEST_KALLSYMS_PERF; existing in-tree CONFIG_KALLSYMS_SELFTEST
+  already benchmarks standard kallsyms_lookup_name() without adding
+  unmaintained test files in lib/.
+- In patch 2, increase marker density to 16:1 via
+  KALLSYMS_MARKER_SHIFT 4 shared between scripts/kallsyms.c and
+  kernel/kallsyms_internal.h, and drop all references to dynamic tables
+  from the patch body.
+- Link to v4: https://lore.kernel.org/r/20260922-ksyms-tune-v4-0-92acea84b911@gmail.com
+
+Changes in v4:
+- In patch 1, ignore early boot invocations in param_set_trigger() when
+  system_state < SYSTEM_RUNNING to prevent NULL pointer dereference in
+  ktime_get_ns() prior to timekeeping_init() (addresses Sashiko review).
+- In patch 1, prevent sysfs TOCTOU divide-by-zero panic: reject
+  num_iters == 0 in param setter, snapshot iters locally via READ_ONCE,
+  and serialize runs with bench_lock mutex (addresses Sashiko review).
+- In patch 1, eliminate multi-second boot stall: add run_on_boot
+  parameter (default false) so late_initcall only runs benchmark when
+  explicitly requested (addresses Sashiko review).
+- In patch 1, chunk lookup loops in 4096-iter batches with
+  cond_resched() outside the timing bracket to prevent preemption sleep
+  time from inflating reported latency (addresses Sashiko review).
+- In patch 3, annotate dyn_kallsyms_offsets declaration with __rcu to
+  satisfy sparse type checking and prevent address-space warnings across
+  rcu_assign_pointer() and rcu_dereference() (addresses Sashiko review).
+- In patch 3, use rcu_replace_pointer() with lockdep_is_held() during
+  batch teardown to atomically read and clear the pointer while
+  satisfying sparse address-space constraints (addresses Sashiko
+  review).
+- Link to v3: https://lore.kernel.org/r/20260922-ksyms-tune-v3-0-681a34ea05d9@gmail.com
+
+Changes in v3:
+- Reorder series: place on-the-fly token matching ahead of marker
+  density optimization, establishing an active proof of incremental
+  performance deltas across all steps (addresses David Laight review).
+- Add inlined and unrolled get_symbol_seq() 24-bit sequence index
+  reconstruction into direct byte shifts (addresses David Laight
+  review).
+- In test_kallsyms_perf, configure as a built-in test (bool) rather
+  than a module (tristate) and drop kallsyms iterator EXPORT_SYMBOL_GPL
+  exports to avoid exposing internal kernel symbol data (addresses
+  Sashiko review).
+- In patch 1, optimize kallsyms_strcmp_symbol() by dropping
+  skipped_first tracking and checking len at the bottom of the token
+  loop (addresses David Laight review).
+- Drop 'default m' from lib/Kconfig.debug.
+- Fix soft lockup risks by adding cond_resched() every 16k iterations in
+  test_kallsyms_perf loops.
+- Replace direct 64-bit integer divisions with div_u64() to fix 32-bit
+  builds.
+- Guard against divide-by-zero when num_iters=0.
+- Replace tcp_v4_rcv with panic in hit_symbols to prevent failures wo
+  CONFIG_INET.
+- Move David Laight to series-wide Cc on cover letter, dropping trailer
+  from patch 3.
+- Link to v2: https://lore.kernel.org/r/20260922-ksyms-tune-v2-0-a333ee31eac7@gmail.com
+
+Changes in v2:
+- Replaced static build-time 3-byte offset table with a dynamic u32
+  index bracketed by kallsyms_lookup_batch_start() and
+  kallsyms_lookup_batch_end().
+- Dropped .rodata image footprint addition from +573 KiB to 0 KiB,
+  addressing Kees Cook's memory footprint objection.
+- Native u32 loads in transient RAM eliminate 24-bit big-endian shifts
+  and unaligned loads, addressing David Laight's endianness critique.
+- Direct O(1) table indexing provides 0 hops for all symbol lookups
+  without remainder logic or odd/even branching.
+- Restored scripts/kallsyms.c and kernel/kallsyms_internal.h to pristine
+  state, leaving legacy kallsyms_markers[] as safety fallback.
+- Rebased out Lorenzo Stoakes' kbuild series; this series is now
+  completely decoupled and applies cleanly directly onto mainline.
+- Link to v1: https://lore.kernel.org/r/20260919-ksyms-tune-v1-0-d85c97da1a32@gmail.com
+
+---
+Jim Cromie (3):
+      kallsyms: Match compressed tokens on the fly during binary search
+      kallsyms: Increase marker density to 16:1 to accelerate lookups
+      kallsyms: Unroll 24-bit sequence reconstruction in get_symbol_seq()
+
+ kernel/kallsyms.c          | 111 +++++++++++++++++++++++++++------------------
+ kernel/kallsyms_internal.h |  11 +++++
+ scripts/kallsyms.c         |  14 ++++--
+ 3 files changed, 86 insertions(+), 50 deletions(-)
+---
+base-commit: 93f51579e7df248780214094418f205253383cc5
+change-id: 20260919-ksyms-tune-e22a42d8a31a
+
+Best regards,
+-- 
+Jim Cromie <jim.cromie@gmail.com>
+
