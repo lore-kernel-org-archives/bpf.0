@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D89454705A
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 00:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A1054704B
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 00:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790381324; cv=none; b=YmjSZZF0balpOvPZOXbTgfSG/tDTtFNHrBnnVV61Ul5QvIRTJy5FlInz1OjmryUxgI7R58Zt78eH6jzTNknUx9tbtRMNkLdRFWMRqYk83498Xy5gx4IKwNhgElnxq8+rSwOQ8OWWzPDpT0WdWzprTzVYFQVMyC443ALIIp3lts8=
+	t=1790382962; cv=none; b=SeIDgULFK0UphTf1t4BtsCmedmMxm3hngYsFDQNYrZ0TuNZ87ZJWWSPZVatGNwfZOlLJ/jPdqoUO/6KklKnMOOUJ27cLwBPx3UDrMtIy9W22RNV1sg7dFwcghKNARZ8Ph/z2GI1fzb8qiE11TAIfEkeGxbYXRDxmBtcz7bsPW2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790381324; c=relaxed/simple;
-	bh=1nZdaqrATtTceCXUXxvP+GdiYRIWzU9sAOwWw5a5gMQ=;
+	s=arc-20240116; t=1790382962; c=relaxed/simple;
+	bh=m7ktrSpaqn+VEcM4mKdnqDQdEpRXvNQnS0Y+xAsYKoQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=V69lifqBkKfnU4uawip6X9zrZlnqF1LAWU/9YI7c6QMufPO74SACCj4iiKlrQ+oZJRvPMPdz7ibm7cBZimhDs2Db8KaeJe+7tu5C4JtiXZzEQmQ2M3rkw5UoMdO7SSUFXRC8s18eOiTM3mOQkJ/1Ynlu9v8mbeUJgKAuOeApces=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MCcioWl5; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=CiP+CHalXJebX73klfcoE59mMuFk4YvzHD0ibUtl5uVtIem04bgeQLwG/nn3w3HR2ALSY3BYxTrWr5mQ4e9UMuWRbWappTRMsIot/1l7cDcVpBFuuKrAzeMN05ZMWdYUczmE47B6mPqNSP5NxemFxU9TZqi8hD5eM6pHg/ZQlFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9ZDdg8S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MCcioWl5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134841F000FF;
-	Sat, 26 Sep 2026 00:08:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9ZDdg8S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DA31F000FF;
+	Sat, 26 Sep 2026 00:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790381323;
-	bh=Tof3xIxOhMOzXAv15eR+a3duxNxoVjzeZbR/16Q2LZA=;
+	s=k20260515; t=1790382961;
+	bh=levBHbfWQ6XRcIoXkx/K/zRNBXy9gWpOS187sevqdnM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MCcioWl5fM9OwpVnc1u1vgj0DQRVedWutk+AURaG335wWclE+SxXeVG9uCEDPCi0C
-	 8itWV58mYR9NRWgJyWcnNtGqHvRkj3ssKrTGgovim/zuf9upV4uKzey2pbPi/mk3+Y
-	 e6oOe8Hs7UhBXavevJrMd6ziSMnEvb1NcrmytWPCQg3+6AgfwFrXMSn2wXVCUP3KYY
-	 xjIjWDGPVedVvooyltQr0dtP/A/Za9s+wkKQI/hNka7Xo3f5eO+jOXmI6wflJD8j4Z
-	 8X4a5ERzHuaU+iEwv3hkOtUOyGPrFjoUXQ49g81eiZCEt49g08qWB/YwhjY+xctSkH
-	 JLr/I7vRxePiw==
+	b=Y9ZDdg8SUaLVw2cBWseLWYvXLjp8UEEQfvlIfZsLw/xNyPTJQ3zBFxMiaGX1AUffK
+	 xCcATmbndZ5+xINbByl060nXGqHGLQmu/Itg6Ljv6k9Y7qlpohZCkU4NsPwL5LPoIt
+	 94zp1UzjlgeQglySzQD+dVOuA1OcDqKVLw2n7v+0LvBbq+XProhGNVgD/z/hMtuTOL
+	 +1hYO8YN07PUKbC4hQ+x96swGYI24KSo08Q+ZjEcBTATjjbhKck4j5pkPpT+h54si5
+	 lL3ka4AokJLMIwRrLxTdAd7uwuDtAsX1lUEjWvs48l9+nOkyEeA02TmGT6UCXIvKyW
+	 z2neVUoYCvwpA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: Add linked_externs test
- for externs in allocated sections
+Subject: Re: [PATCH net-next v2 5/8] eth: mpnic: start and stop the Tx HW
+ queues
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Andrii Nakryiko" <andrii@kernel.org>
+To: "Daniel Zahka" <daniel.zahka@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260926000243.2830819-2-andrii@kernel.org>
-References: <20260926000243.2830819-1-andrii@kernel.org>
- <20260926000243.2830819-2-andrii@kernel.org>
+In-Reply-To: <20260924-linux-mpnic-v2-5-4badc9b58b9e@gmail.com>
+References: <20260924-linux-mpnic-v2-0-4badc9b58b9e@gmail.com>
+ <20260924-linux-mpnic-v2-5-4badc9b58b9e@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 00:08:42 +0000
-Message-Id: <20260926000843.134841F000FF@smtp.kernel.org>
+Date: Sat, 26 Sep 2026 00:36:00 +0000
+Message-Id: <20260926003601.14DA31F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,54 +47,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests/bpf: unhandled mkstemp() failure in test_relink()
+- [High] eth: mpnic: swallowed queue idle timeout allows DMA UAF
 --
 
-commit e2fcaeeb4be58f57f9657902a9e400bc15e30412
-Author: Andrii Nakryiko <andrii@kernel.org>
+commit 9b058fd2b1d09b6f8ce72863ddb8a3c9c658d5a3
+Author: Daniel Zahka <daniel.zahka@gmail.com>
 
-selftests/bpf: Add linked_externs test for externs in allocated sections
+eth: mpnic: start and stop the Tx HW queues
 
-This commit adds a selftest to verify that the BPF linker correctly handles
-extern variables in allocated sections (like arena and maps). It tests the
-behavior both via the BPF skeleton and by directly driving the libbpf linker
-API.
+This commit adds the routines to start and stop the transmit hardware queues
+for the mpnic device. It provides functions to point the hardware at the
+descriptor rings and wait for the DMA engines to become idle during teardow=
+n.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/linked_externs.c b/to=
-ols/testing/selftests/bpf/prog_tests/linked_externs.c
-> new file mode 100644
-> index 0000000000000..29358c82dc356
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/linked_externs.c
+> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/e=
+thernet/meta/mpnic/mpnic_txrx.c
+> index 853976e11b032..aaa3a3e99a138 100644
+> --- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+
 [ ... ]
-> +/* link in1 on its own first, then link the result with in2 */
-> +static void test_relink(const char *in1, const char *in2, const char *se=
-c_name)
+
+> +void mpnic_wait_all_queues_idle(struct mpnic_dev *mpd)
 > +{
-> +	char out1[] =3D "/tmp/linked_externs.XXXXXX", out2[] =3D "/tmp/linked_e=
-xterns.XXXXXX";
-> +	const struct btf_var_secinfo *vi;
-> +	struct bpf_object *obj =3D NULL;
-> +	const struct btf_type *t;
-> +	struct btf *btf;
-> +	int i, id, n;
+> +	static const struct mpnic_idle_regs queues[] =3D {
+> +		{ MPNIC_TWQ_IDLE(0), MPNIC_TWQ_IDLE_CNT, "TWQ" },
+> +		{ MPNIC_TQS_IDLE(0), MPNIC_TQS_IDLE_CNT, "TQS" },
+> +		{ MPNIC_TDE_IDLE(0), MPNIC_TDE_IDLE_CNT, "TDE" },
+> +		{ MPNIC_TCQ_IDLE(0), MPNIC_TCQ_IDLE_CNT, "TCQ" },
+> +	};
+> +	u32 non_idle_bitmap;
+> +	int err;
 > +
-> +	close(mkstemp(out1));
-> +	close(mkstemp(out2));
+> +	err =3D read_poll_timeout(mpnic_non_idle_queues, non_idle_bitmap,
+> +				!non_idle_bitmap, 20, 500000, false, mpd,
+> +				queues, ARRAY_SIZE(queues));
+> +	if (err)
+> +		mpnic_idle_dump(mpd, queues, ARRAY_SIZE(queues),
+> +				non_idle_bitmap, err);
 
-[Severity: Medium]
-What happens if mkstemp() fails here?
+[Severity: High]
+Does this code silently ignore the timeout from read_poll_timeout()?
 
-If it returns -1, it will be passed directly to close() which will just fai=
-l,
-but the template strings will remain undefined (typically unmodified). The
-test would then continue using the predictable string
-"/tmp/linked_externs.XXXXXX" for file operations.
+If the hardware is stalled or under heavy load, read_poll_timeout() times o=
+ut
+after 500ms. Because mpnic_wait_all_queues_idle() returns void, it logs the
+error but hides it from the caller during interface teardown.
 
-Could this cause collisions with other concurrent test runs or leave leftov=
-er
-predictable files in /tmp?
+Could the caller blindly proceed to free the ring memory back to the page
+allocator while the active hardware is still performing DMA transfers into =
+it,
+causing a DMA use-after-free?
+
+Should the error be propagated so the driver can leak the memory or trigger
+a hardware reset rather than risking memory corruption?
+
+> +}
+> +
+> +void mpnic_flush(struct mpnic_net *mpn)
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926000243.2830=
-819-1-andrii@kernel.org?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260924-linux-mpni=
+c-v2-0-4badc9b58b9e@gmail.com?part=3D5
