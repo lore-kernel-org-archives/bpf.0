@@ -1,111 +1,212 @@
-Received: from mta1.migadu.com (out-63.mta1.migadu.com [95.215.58.63])
+Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2018045A29F
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E23E4562A9
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790430897; cv=none; b=WSqMgIm/iPUt2TdFhSV0rgdKY+oERW8VIjxQ+gu6s0A1HWf02ZGVVHSbtEhwbwFC2nWUujmaz99TDQcboWw4q4CLShOw8kSGOAe8FNjxfcsXqy/vO5Nbdd1e/sWwfmlrqaYVisTY+gkdfuFpE9ckr4G3bS3BzUqyziVvbk/0qm0=
+	t=1790430987; cv=none; b=UsVuAGS3qkPECgunSUFW9tUwXZSjyQY+/1i6/iOJYwBj/VQzYhms92P99EEm7E+TK/2cZ8DXYnxS6kQ2OOzcKgzqNELap0U9rdZqXq+R+UE4KQWvU0TDXCf5V7zsHDqEGyOOmG3tnpjtz7w1PTmvhAqSt/zrqNBj86JZ0e2hyto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790430897; c=relaxed/simple;
-	bh=uV1gUFauIFFwAoGKortGYvqxA0j9X10wY+UMtq1n/tI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=kQFIzZhS1tt0tlgsg/UcWol8Pw9uv8DctC7QPOMymcFxev/tkEgxA6zNJNkGWYUHBzNQ4OyAZ5z/QSuXlMP1QeF9xC0nxD8YI/Z2pZeetc21WXpIpOdgp6TY49Ktj7bpAKUU1iPdrqY1/tHqrgmLgdrNOVcwCXAGMJfFBFGRoZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=At/vpMdz; arc=none smtp.client-ip=95.215.58.63
+	s=arc-20240116; t=1790430987; c=relaxed/simple;
+	bh=Jk1pfOxu5P7hTWP0WaNJ55pPrxw8o/7nlJ9L9NFZsYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e9ep5NoRGExRhfh/Ls4yEjhENXWbnCxVU0l2LQ8Lqs9QqPPas0fTf4hQi2p3y+VMQ7J6bnp5r30UTWKlZvFCv4118hi28YzHFYt1EvQims4v+upkXkaxWJChmpZuqOYVsN0M3TL6DpfF46BqDz0c3gx8TmU1p7BtH1COdJSq+dU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pq/OvM9y; arc=none smtp.client-ip=95.215.58.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="At/vpMdz"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pq/OvM9y"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uV1gUFauIFFwAoGKortGYvqxA0j9X10wY+UMtq1n/tI=;
+DKIM-Signature: a=rsa-sha256; bh=Jk1pfOxu5P7hTWP0WaNJ55pPrxw8o/7nlJ9L9NFZsYY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790430890; v=1; x=1791035690;
- b=At/vpMdz8n9cpfcS5W1uZqlPT4H44VPEMbDSEv5996jV2w6t6yFrwe071vcPhlHBSKCRVf4R
- iTtAUN9/0OQL+1QsvMDp1E1LwJGeGNCUD7w+gDtpMcV4Xu8S1iq8nA+mKIXC9UeYwTXHj2byHO5
- 0rilLHGsSPF71yUD1COY1pQQ=
+ t=1790430981; v=1; x=1791035781;
+ b=pq/OvM9ygkPg4Lt7BAym+I7C8FFHbcHQsIcbBeuyJRjXTQKeW8PzFWDrAeQ+dLlxXmqRHt0J
+ jkcFcEnIGvkt+EqEsxSIKebVjQoycrO85fZFGyURHEUXDnjLhTzTxAMdhuKkMT684URA3xXA5E4
+ LncpLwu1R9HRZozl/92RNIls=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ca2b2b4202485a3a;
-	Sat, 26 Sep 2026 13:54:50 +0000
-X-Mizu-Trace-ID: ca2b2b4202485a3a
+Received: by smtp.migadu.com with ESMTPS id e6577e4ede2e14f5;
+	Sat, 26 Sep 2026 13:56:21 +0000
+X-Mizu-Trace-ID: e6577e4ede2e14f5
 X-Migadu-Flow: FLOW_OUT
+From: "Florent Revest (Anthropic)" <florent.revest@linux.dev>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: "Florent Revest (Anthropic)" <florent.revest@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Junseo Lim <zirajs7@gmail.com>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Borislav Petkov <bp@alien8.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Ingo Molnar <mingo@redhat.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Will Deacon <will@kernel.org>,
+	x86@kernel.org
+Subject: [PATCH bpf v5 0/3] bpf: Fix use-after-free of progs detached from busy trampolines
+Date: Sat, 26 Sep 2026 13:55:57 +0000
+Message-ID: <20260926135605.1217928-1-florent.revest@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 26 Sep 2026 13:54:45 +0000
-Message-Id: <DLPAS1T6DHBE.LUGVFAKFRVSG@linux.dev>
-Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <kpsingh@kernel.org>, <john.fastabend@gmail.com>, <leon.hwang@linux.dev>,
- <zirajs7@gmail.com>, <rhkrqnwk98@gmail.com>, <puranjay@kernel.org>,
- <xukuohai@huaweicloud.com>, <iii@linux.ibm.com>, <hbathini@linux.ibm.com>,
- <chleroy@kernel.org>, <naveen@kernel.org>, <bjorn@kernel.org>,
- <pulehui@huawei.com>, <yangtiezhu@loongson.cn>, <hengqi.chen@gmail.com>,
- <linux-kernel@vger.kernel.org>, <martin.lau@kernel.org>,
- <eddyz87@gmail.com>, <yonghong.song@linux.dev>, <mason@kernel.org>,
- <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf v4 1/3] bpf: Wait for an RCU tasks grace period
- before freeing trampoline progs
-From: "Florent Revest" <florent.revest@linux.dev>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20260925100342.481242-2-florent.revest@linux.dev>
- <22e95dbf944bdf6b657249657e884617f79972a92430f17abd47c472797ec4ff@mail.kernel.org>
-In-Reply-To: <22e95dbf944bdf6b657249657e884617f79972a92430f17abd47c472797ec4ff@mail.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri Sep 25, 2026 at 10:47 AM UTC,  wrote:
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index 1d2676782d70..d4f732996b47 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -1770,6 +1770,7 @@ struct bpf_prog_aux {
-> >  	bool offload_requested; /* Program is bound and offloaded to the netd=
-ev. */
-> >  	bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp */
-> >  	bool attach_tracing_prog; /* true if tracing another tracing program =
-*/
-> > +	bool tramp_linked; /* true if it was ever called from a trampoline */
-> >  	bool func_proto_unreliable;
->
-> Does this comment accurately describe when the flag is set?
->
-> Looking at bpf_trampoline_add_prog() in kernel/bpf/trampoline.c, the
-> flag is set at link time, right after hlist_add_head():
->
-> 	hlist_add_head(&node->tramp_hlist, prog_list);
-> 	node->link->prog->aux->tramp_linked =3D true;
->
-> This happens before bpf_trampoline_update() has generated an image that
-> could call the prog. If bpf_trampoline_update() then fails,
-> __bpf_trampoline_link_prog() calls bpf_trampoline_remove_prog() and the
-> flag stays true even though no trampoline ever called the prog.
->
-> Setting the flag conservatively is correct for the free path, since it
-> only adds an RCU Tasks grace period. But the comment describes a
-> different condition than the one the code tracks. The field name and the
-> commit message both say "linked to a trampoline".
->
-> Would something like /* true if it was ever linked to a trampoline */
-> match the code better, and stop a later reader from assuming the flag is
-> only set once a trampoline image has actually run the prog?
+A task running in a trampoline image can call a prog that was detached
+and freed in the meantime, when it slept in a sleepable prog before
+reaching the detached one or was preempted right before calling it.
+Patch 1 handles the preempted case with an RCU tasks grace period,
+patch 2 handles the sleeping case by patching detached progs out of the
+images that still call them and patch 3 adds a selftest for the sleeping
+case.
 
-Done in v5.
+Since v3, only the nop of the prog that is detached is patched, in every
+image that isn't freed yet, like v2 did. Progs that stay attached keep
+running for the tasks that are in old images, ip_after_call is gone and
+the call to the original function is never skipped.
 
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/361228=
-63248
+On riscv and loongarch a jump of any range takes several instructions,
+and as bpf-ci and Alexei pointed out, a task preempted in the middle of
+such a patch site could resume into half of the new sequence. v5 makes
+the skip sites a single instruction there, patched to a jal / b through
+a new arch_bpf_trampoline_skip() hook, like their jump labels. I could
+only test these two under qemu.
+
+Tested on x86_64 under KVM and on arm64, s390x, powerpc64le, riscv64
+and loongarch64 under qemu TCG, all with KASAN: the new selftest crashes
+the unpatched kernel and passes with the series on every one of them,
+along with trampoline_count, fentry/fexit, fentry_fexit, modify_return
+and lsm_cgroup (and the full test_progs on x86_64). On x86_64, 18
+fsession progs with cookies on an 11 argument function still fit in the
+image. Same on bpf-next, where patch 2 has trivial context conflicts in
+the x86 and arm64 JITs.
+
+Changes since v4
+(https://lore.kernel.org/bpf/20260925100342.481242-1-florent.revest@linux.dev/):
+- riscv, loongarch: single instruction skip sites, patched through
+  arch_bpf_trampoline_skip(), loongarch keeps its limit of 38 (bpf-ci,
+  Alexei)
+- arm64: say in bpf_arch_text_poke() why patching out a detached prog
+  needs no synchronization (bpf-ci)
+- Comment fixes (bpf-ci)
+- Cc the arch maintainers and lists
+
+Changes since v3
+(https://lore.kernel.org/bpf/20260924170543.1017048-1-florent.revest@linux.dev/):
+- Only patch the nop of the prog that is detached, in all the images
+  that aren't freed yet, like v2 did, and explain why a list of images
+  is needed (Alexei, bpf-ci)
+- Lower BPF_MAX_TRAMP_LINKS to 36 on x86, the worst case no longer fit
+  in a page with the nops (bpf-ci, Alexei)
+- selftest: wait for the detached progs to really be freed before
+  releasing the task, the grace period of patch 1 made the previous wait
+  too short (bpf-ci). Detach two progs one after the other, so that the
+  second detach has to reach an image that isn't the current one anymore
+- Keep a single comment block in bpf_tramp_image_put() (bpf-ci)
+
+Changes since v2
+(https://lore.kernel.org/bpf/20260912095924.866254-1-florent.revest@linux.dev/):
+- Patch all the nops in bpf_tramp_image_put() instead of the detached
+  prog's nop at detach time, drop the image list, the trampoline
+  backpointer and ip_after_call (Alexei)
+- Wait for an RCU tasks grace period before freeing progs that were
+  linked to a trampoline, for tasks preempted right before the enter
+  helper (Junseo, sashiko)
+- Initialize the jit ctx in loongarch's arch_bpf_trampoline_size() and
+  the dummy image in every arch_bpf_trampoline_size() (bpf-ci)
+- selftest: move the userfaultfd helper to testing_helpers.c and share
+  it with bpf_mod_race, comment fixes (bpf-ci), add a subtest where the
+  original function runs between the sleeping prog and the detached one
+
+Changes since v1
+(https://lore.kernel.org/bpf/20260819122252.1782790-1-florent.revest@linux.dev/):
+- Patch nops in front of detached progs instead of taking prog
+  references from the image (Alexei)
+- Lower BPF_MAX_TRAMP_LINKS on arm64, loongarch and powerpc so the
+  image still fits in a page
+- Explain that the sleepable case doesn't depend on CONFIG_PREEMPTION
+  (Kumar, Alexei)
+- Add a selftest (Jiri, Alexei)
+- Add Sechang's Reported-by (Junseo, Kumar)
+- Drop Leon's and Kumar's acks since the code changed entirely
+
+Florent Revest (Anthropic) (3):
+  bpf: Wait for an RCU tasks grace period before freeing trampoline
+    progs
+  bpf: Skip detached progs in trampoline images that are still in use
+  selftests/bpf: Detach a trampoline prog while a task sleeps before it
+
+ arch/arm64/net/bpf_jit_comp.c                 |  37 ++--
+ arch/loongarch/net/bpf_jit.c                  |  60 ++++--
+ arch/powerpc/net/bpf_jit_comp.c               |  45 +++--
+ arch/riscv/net/bpf_jit_comp64.c               |  56 ++++--
+ arch/s390/net/bpf_jit_comp.c                  |  46 +++--
+ arch/x86/net/bpf_jit_comp.c                   |  26 ++-
+ include/linux/bpf.h                           |  45 ++++-
+ kernel/bpf/syscall.c                          |  19 +-
+ kernel/bpf/trampoline.c                       |  85 ++++++--
+ .../selftests/bpf/prog_tests/bpf_mod_race.c   |  34 +---
+ .../bpf/prog_tests/tramp_prog_detach.c        | 188 ++++++++++++++++++
+ .../selftests/bpf/progs/tramp_prog_detach.c   |  56 ++++++
+ tools/testing/selftests/bpf/testing_helpers.c |  28 +++
+ tools/testing/selftests/bpf/testing_helpers.h |   2 +
+ 14 files changed, 572 insertions(+), 155 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tramp_prog_detach.c
+
+
+base-commit: ab39974240a0cff765f3bb9cce81d8001ffdb144
+-- 
+2.55.0
 
