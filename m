@@ -1,64 +1,64 @@
-Received: from mail-pj2-f40.google.com (mail-pj2-f40.google.com [74.125.227.168])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99137476683
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF12C47D45B
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790432467; cv=none; b=qRGl/d68JyIcfmPrL3readZGKwWzh+Ih7zzoNoPX7g1hIF7S66Jiw+wO2HzVSLlx+et57SK8BJsC6hGgjYaIkZyTogJt0Iqw5xV4hAzHJUr2YjuJu4baGrPRDAWd1vrmUpbf9gW480VUBFl2bKpoMJr3UPVJcwChVpZmQ6Vnp4M=
+	t=1790432469; cv=none; b=IE2lwQfuw3wXMvtLQykWUeoUaAll6r1mXR8oBCADd1lg2L6J6btsjAxyzbrY1mVR60AmFfxu8UOQkR85olQ37MBGCC4xSJw0MdwsCbE8D6hqNh4IQ2X3byQO+A1/hOk2j65lp13bCARYW5Dex7Wzzq/CVsa02aI+y4MIC3nGBSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790432467; c=relaxed/simple;
-	bh=8WKh6ILQeArCCkMNJRnXdzs4kCXx75aunzcZBsPV9WQ=;
+	s=arc-20240116; t=1790432469; c=relaxed/simple;
+	bh=WIvGprRCkMrA5sid+9UqI4UJ2ja2jMf34BYZ3fzu/Qo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h2jSTZQKydra50Awvcxw0qqateSqk/RL1VhVRxG08XaSy417Dp0xF+W8IADw0rYcfUNeCSk/L5pE5C8AKNyT1k3XEIh+HMKOgyp9C9upupgMqcDeUkGxaTvu/IgR2whJ2ecmzrMvcS97jMhcGfpQKgCeHPDDp4TFg+23Ms2Zf8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3pmpUCH; arc=none smtp.client-ip=74.125.227.168
+	 MIME-Version:Content-Type; b=jtUEV2aXOL1kQA/hBiG6MUvuXOcRFjR4G2qPav4e5O2xPs8+mvQnKfR/gZLVAb8NEEnTF+ejSOiuM9lkTIgMLo08aHBrc5r5kbpP2XG6uIJyCtWrIsS24JtcCLbLox23M2EfciOf0PyBhLsibzd/nlgHgHuNVaDB/xxH7L4+4Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p9G/zL98; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3pmpUCH"
-Received: by mail-pj2-f40.google.com with SMTP id 98e67ed59e1d1-3a0d2c37b0bso416815a91.0
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p9G/zL98"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccb1a98dso1075325a91.0
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790432466; x=1791037266; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790432467; x=1791037267; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=crjq4RONIas12yYuA/eUK2riqsT3JwSyAAmCzqKpOgc=;
-        b=W3pmpUCHZsWMMuT/MiiOFtB7k7Alk6xLM6AWVx+sVVlgQS2YTW5tGUDue70meKCe7K
-         MOEG349C+VECvTtSHnk/DpwgIrCFJwSPAXkKF+AJrDei3rZH3p8BemIjmFobq7euUfaI
-         ABLs1g8g/Tep7EkIndrTIhX4f/PeQyMkEPoYfHdO2H0yek5QVHnp55G95eO2Ssr6mo1G
-         ogx9D2Qw0VaIQYc/tzCWgGD9EN0ELiz/Dpnkph5WDPQXrklijXmA3SUQNA2esQHKTGOG
-         g/FDuLOGLCNXoGpksWWtlPJzGdoK8QV3ug8CRgaoo7JiIm1/umE7eMoefNPqjFOvOR17
-         KTtA==
+        bh=tw5+coc6MRDRqijXbt/dsjDBETnMqD+0RhmWEEk0G8Q=;
+        b=p9G/zL98O9d6kGc5VqQGeF0ZTe/nINW4VaScq5h+25uQSpaB1pELUXL4q/tyMjBE0m
+         eqE0S1MD4dByPNWWDKxnHLGVPlkcP+54J9q0vBUMt93j9l0VtzCWwuFv62eYjDN9ijfC
+         6KVaFzjyUIAfLZ3CVxjTWPsNoOIsNfGzCe9w3iuTX+CfakFzI8ZFuI37tquDb56mm7fD
+         jdoVfNGqKw+j7GxOxmm1cKuVhRn+eoM6diwKnku3WZCrTeUxOf/robQl7MLZ/dI3y78G
+         yqozkVX+Y5Jemkq3qILGcnxuWSj2t73LNWEQbi6B4xqEq9jZC3hvomFFrV05ogdbY+7+
+         Or8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790432466; x=1791037266;
+        d=1e100.net; s=20260707; t=1790432467; x=1791037267;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=crjq4RONIas12yYuA/eUK2riqsT3JwSyAAmCzqKpOgc=;
-        b=fU99B/Wk2wD7rSU/XGUpvHDcvcIPol3207BL554LSGKXKYmPVyOPIWD+njPjO9moTc
-         sZ6CFAvdP28iCfaZxWEGNJhtrsZKW1rtEKh53Sb2VSGlZbEqh+HSyMKEvvbXrweinzDE
-         OMqCwJQzUfxfV9qbxEQKtvZbstx9MnKClBc74Q+J0YnOxfYlibWr01Dpe3AhA1m5e66z
-         6EnyO3mWSbXMtMyZ/31dQf7OXH3X4G6ggsewyXR22GTh0P0A0y+wutOAbaxPWcVFh72l
-         Lp0hfxSKGSFHRHUMvEK4nUU+Y2TquaXu8q8ncCJkKLTlTFVJ4pCzGBNIS0DhwBpHWwzM
-         FEQQ==
-X-Gm-Message-State: AFq9FYKygw6KL+899ZiRWIXFcTywiCh7MsLPebsIxzeGcNKvHgMnhL5M
-	Bdfx8nWO2PItTsx3ESH9hED00VpiHdPavL5xyLUbQbTrLrBP6IgHXfKZ5ToQYYnC91c=
-X-Gm-Gg: AYBFou16BpZsS72q+EEaCL4/Tiwh4l9+MTjSJE3kCZNgdsEsrgJx4p6mKZk3q7cSyx9
-	RliPrpnq9FdyZ7DJgtC8LBW/6f+cG/xxerWzM7kvaaNAkhtHk6B5p2Xo5byL+sPb2uNKNvrtrbQ
-	TyHe0h4prq06LIuXGqE2zb+YUXm3AYaOTjrvYjOIck8TopdelKNitAEyR/3jY2JKRhFoLKFVx3E
-	L0C3sM5ADdjIsnvWqNxnj9cp7CrRrUkMqno4Pn033BS0Z1yIEVsARlFhZPCUiU9oao4vG2knHYm
-	Pi+Db0yLwlNf7IakEU7a7II0+HvQCBwUgPteLaiV/7fmDnZ8IZvCafbj117kNNHpEMzYPs6r71+
-	du6Ji+a7bQAtb/DVEzLnK5GEL4IDC+XcvnxF1UkCOdFKLorhVvow/m+viCPDQrNjkq7nT5XJP5C
-	v7heuGPSAbWPVdkKd9CcBa6qEBG+LhH20YUZ6IZ7vFe58ClZtIloOStTCteoI8yDMqm/ZIZPeiF
-	Qx89tVN/a4RIdA6gfrjwlb7sDVZpL6AWEN9zgRJYg==
-X-Received: by 2002:a17:90a:1649:b0:3a0:abe7:f0f3 with SMTP id 98e67ed59e1d1-3a0abe7f56emr3828666a91.0.1790432465753;
-        Sat, 26 Sep 2026 07:21:05 -0700 (PDT)
+        bh=tw5+coc6MRDRqijXbt/dsjDBETnMqD+0RhmWEEk0G8Q=;
+        b=Z3I/fpZwCmr/6x11gqgOolF8mCtQrA1KhHyb93xXocBq9ZVgaDEGht1s3NRbp9p3Zm
+         1rpl9tne/Yb1KV4b9APdLlxpZCb+nc/4E6rsqfFUIlB+FMPI8MCa9cBYCt9CgOdC/zZa
+         J1rHFjHF6bCK/Os8GPAEC90Xm75kJfE/zHNdt/Bxmjlu2jnFvmwVr/IMtP9NkikgFmAd
+         ibIwZW5bG0F5+Kt5fUh3kbaPSnTG7PyQW69VgE9DIZZwmf6Y1d8gfwLMfwFYcg/npWKF
+         i3IVwL5hF+hknOBSiYrLdVZJ7NjBLsZdBQ21on/PtUDeMun5yDMDNmSjIWN2zcRf3S74
+         VS5w==
+X-Gm-Message-State: AFq9FYKkQC/LG1ld6B1Kse8MjKzFKIKU3knBbXYkRUW/Avv6jhiVgYhl
+	uXCmN8ydVKRg9Le2Edsml3M5KVlZ2Q8+5ska4dzMCoWIhZ3PwdiGAt5wRa7x6E0GeCM=
+X-Gm-Gg: AYBFou0bCZCKYYx+t3OZssqy1QPP/u47z4gXB5d4efMeCjIohSb/fEw6KB6v8IpQj3X
+	B5IiMtJK3EIDhVxoPCE5nejZB4XCU9If+eaOlndhfKwgQOF/m/FqmZqNVvib/HgvLdRjhNU0lk/
+	Tf8E1MnDhM+cYXqBfL5WSrRT8vkrtygacQ94V+9mNy+3S37zsifM6ILsGAXhr3u3pbF49PWJcCa
+	3VYxFJ4nQGI4xfAqoz+lIkJpgXj+bhAkRy1VzhONBSFEYLSM6wTAv0BXkOHhT+ij4mDjyLKqhDI
+	DmGjn/qJFFf5042JgJrAq/nQEldkTpjjI+WNuzCng6ARm3QoqIc9V/evOpvF7Hmdl7Anr/mt9ei
+	nsO/IR/5XIevRjvP5lII7SZ54nZV+4UZDVTHbtjBNtiNI3Q+ZPSAJk1T8NO67jmfIiMCd2jQtwn
+	FUrU3lS27MRbQfuiUoVSns1LmRu1ZwgpdaHK/moXua54OOZW44fcOPnZzaeBngJ8ifCKf5HxfUy
+	vtLCQeyMNTBt03aXhDbQ9LiBZJ28zJpVopv8D3czQ==
+X-Received: by 2002:a17:90a:597:b0:3a0:a055:1759 with SMTP id 98e67ed59e1d1-3a0bb60e55amr3031338a91.40.1790432466458;
+        Sat, 26 Sep 2026 07:21:06 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
         by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.21.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 07:21:05 -0700 (PDT)
+        Sat, 26 Sep 2026 07:21:06 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -68,11 +68,10 @@ Cc: daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
-	memxor@gmail.com,
-	Eduard Zingerman <ezingerman@fb.com>
-Subject: [PATCH bpf-next 21/36] bpf: record basic-block ends in insn_aux_data
-Date: Sat, 26 Sep 2026 07:20:19 -0700
-Message-ID: <20260926-scev-minimal-rebase-v1-21-c8e5ab5ba79f@gmail.com>
+	memxor@gmail.com
+Subject: [PATCH bpf-next 22/36] bpf: add bpf_split_cur_state()
+Date: Sat, 26 Sep 2026 07:20:20 -0700
+Message-ID: <20260926-scev-minimal-rebase-v1-22-c8e5ab5ba79f@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
@@ -85,72 +84,143 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-From: Eduard Zingerman <ezingerman@fb.com>
-
-SCEV needs information about the program's basic-block structure.
-Piggyback on compute_predecessors() and set
-insn_aux_data->bb_end for an instruction if:
-- it has multiple successors, or
-- it has multiple predecessors, or
-- it is a jump instruction.
+SCEV widening needs an explicit checkpoint preserving the original
+loop-entry state, independently of ordinary state-cache heuristics.
+This commit extracts checkpoint creation logic from
+bpf_is_state_visited() into a separate utility function.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
  include/linux/bpf_verifier.h |  1 +
- kernel/bpf/loops.c           | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
+ kernel/bpf/states.c          | 95 ++++++++++++++++++++++++--------------------
+ 2 files changed, 54 insertions(+), 42 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index f2497236542c..728567bde055 100644
+index 728567bde055..76833c2ad452 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -729,6 +729,7 @@ struct bpf_insn_aux_data {
- 	bool non_sleepable; /* helper/kfunc may be called from non-sleepable context */
- 	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
- 	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
-+	bool bb_end;
- 	u8 alu_state; /* used in combination with alu_limit */
- 	/* true if STX or LDX instruction is a part of a spill/fill
- 	 * pattern for a bpf_fastcall call.
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-index e269870f6a6e..5f52a88d5283 100644
---- a/kernel/bpf/loops.c
-+++ b/kernel/bpf/loops.c
-@@ -4,8 +4,23 @@
- #include <linux/slab.h>
- #include <linux/bpf_verifier.h>
+@@ -1329,6 +1329,7 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
+ int mark_chain_precision(struct bpf_verifier_env *env, int regno);
  
-+static bool is_cfg_jump(struct bpf_insn *insn)
-+{
-+	u8 class = BPF_CLASS(insn->code);
-+	u8 opcode = BPF_OP(insn->code);
+ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx);
++int bpf_split_cur_state(struct bpf_verifier_env *env);
+ int bpf_update_branch_counts(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+ 
+ void bpf_clear_jmp_history(struct bpf_verifier_state *state);
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 3eaae1452c54..d7f9f879bd87 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -1268,11 +1268,61 @@ static void mark_all_scalars_imprecise(struct bpf_verifier_env *env, struct bpf_
+ 	}
+ }
+ 
+-int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
++int bpf_split_cur_state(struct bpf_verifier_env *env)
+ {
++	struct bpf_verifier_state *cur = env->cur_state, *new;
+ 	struct bpf_verifier_state_list *new_sl;
++	struct list_head *head;
++	int insn_idx = cur->insn_idx;
++	int err;
 +
-+	switch (class) {
-+	case BPF_JMP:
-+	case BPF_JMP32:
-+		return opcode != BPF_CALL;
-+	default:
-+		return false;
++	head = bpf_explored_state(env, insn_idx);
++	new_sl = kzalloc_obj(struct bpf_verifier_state_list, GFP_KERNEL_ACCOUNT);
++	if (!new_sl)
++		return -ENOMEM;
++	env->total_states++;
++	env->explored_states_size++;
++	update_peak_states(env);
++	env->prev_jmps_processed = env->jmps_processed;
++	env->prev_insn_processed = env->insn_processed;
++
++	/* forget precise markings we inherited, see __mark_chain_precision */
++	if (env->bpf_capable)
++		mark_all_scalars_imprecise(env, cur);
++
++	bpf_clear_singular_ids(env, cur);
++
++	/* add new state to the head of linked list */
++	new = &new_sl->state;
++	err = bpf_copy_verifier_state(new, cur);
++	if (err) {
++		bpf_free_verifier_state(new, false);
++		kfree(new_sl);
++		return err;
 +	}
++	new->insn_idx = insn_idx;
++	verifier_bug_if(new->branches != 1, env,
++			"%s:branches_to_explore=%d insn %d",
++			__func__, new->branches, insn_idx);
++	err = maybe_enter_scc(env, new);
++	if (err) {
++		bpf_free_verifier_state(new, false);
++		kfree(new_sl);
++		return err;
++	}
++
++	cur->parent = new;
++	cur->first_insn_idx = insn_idx;
++	cur->dfs_depth = new->dfs_depth + 1;
++	bpf_clear_jmp_history(cur);
++	list_add(&new_sl->node, head);
++	return 0;
 +}
 +
- static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env *env)
- {
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
- 	struct bpf_iarray *succ, *preds, **result;
- 	struct bpf_prog *prog = env->prog;
- 	u32 *num_preds, i, s, sz, len = prog->len;
-@@ -54,6 +69,10 @@ static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env *env)
- 			preds = result[s];
- 			preds->items[preds->cnt++] = i;
- 		}
-+		if (succ->cnt > 1 ||
-+		    (succ->cnt == 1 && num_preds[succ->items[0]] > 1) ||
-+		    is_cfg_jump(insn))
-+			aux[i].bb_end = true;
- 		if (bpf_is_ldimm64(insn))
- 			i++;
- 	}
++int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
++{
+ 	struct bpf_verifier_state_list *sl;
+-	struct bpf_verifier_state *cur = env->cur_state, *new;
++	struct bpf_verifier_state *cur = env->cur_state;
+ 	bool force_new_state, add_new_state, loop;
+ 	int n, err, states_cnt = 0;
+ 	struct list_head *pos, *tmp, *head;
+@@ -1600,44 +1650,5 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	 * When looping the sl->state.branches will be > 0 and this state
+ 	 * will not be considered for equivalence until branches == 0.
+ 	 */
+-	new_sl = kzalloc_obj(struct bpf_verifier_state_list, GFP_KERNEL_ACCOUNT);
+-	if (!new_sl)
+-		return -ENOMEM;
+-	env->total_states++;
+-	env->explored_states_size++;
+-	update_peak_states(env);
+-	env->prev_jmps_processed = env->jmps_processed;
+-	env->prev_insn_processed = env->insn_processed;
+-
+-	/* forget precise markings we inherited, see __mark_chain_precision */
+-	if (env->bpf_capable)
+-		mark_all_scalars_imprecise(env, cur);
+-
+-	bpf_clear_singular_ids(env, cur);
+-
+-	/* add new state to the head of linked list */
+-	new = &new_sl->state;
+-	err = bpf_copy_verifier_state(new, cur);
+-	if (err) {
+-		bpf_free_verifier_state(new, false);
+-		kfree(new_sl);
+-		return err;
+-	}
+-	new->insn_idx = insn_idx;
+-	verifier_bug_if(new->branches != 1, env,
+-			"%s:branches_to_explore=%d insn %d",
+-			__func__, new->branches, insn_idx);
+-	err = maybe_enter_scc(env, new);
+-	if (err) {
+-		bpf_free_verifier_state(new, false);
+-		kfree(new_sl);
+-		return err;
+-	}
+-
+-	cur->parent = new;
+-	cur->first_insn_idx = insn_idx;
+-	cur->dfs_depth = new->dfs_depth + 1;
+-	bpf_clear_jmp_history(cur);
+-	list_add(&new_sl->node, head);
+-	return 0;
++	return bpf_split_cur_state(env);
+ }
 
 -- 
 2.55.0
