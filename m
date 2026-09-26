@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A932331EA5
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:36:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F9B231842
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790433371; cv=none; b=SgS+ky6mKlpKCaL6c0DsRG7ph9sGAOFxKUm1Np5/VcTVin3+tQvcYDKRN3j3DZ9z+KVGK/7qC+FZ6WdkOZzy0uImpmEGVMrkfu9M5V3nhEzUeybP8uCE8zyZg2U0MdHVw1AO257+HmjIWyJ5Piztm3zt8FSNYlLAV6BKgEjkzcw=
+	t=1790433452; cv=none; b=Y6yM8heKTBeuWx6Peo649I8O7mSCPZi9I8hF7Tfaob6xeOri9FM4EzwZD56YdYu5sMh0o+IFQF9FTt05MrmjBqz4eMQf6emONdb4aDwr3YV/sDA1PWmpg2ylkGwWX8EKabyRjqUE2SsD3nGF/sBpg60Latl20vsfTRRF+EvJ1Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790433371; c=relaxed/simple;
-	bh=nfv73M/p206t8KVR3//X8lTAdfeaxgf0Y7g/e3ZaapA=;
+	s=arc-20240116; t=1790433452; c=relaxed/simple;
+	bh=+GwI1NcAAsChkLp9/QJ3LH52ZSmUpo1hTGSJ2eIBUpo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=S9JfS9FfQpXUDoU1SOJHfr61SOz2bvkOzfnpvR7bC/KtBjEdELO6YnbmejTO6AH+kxG+xRUMigws+8vXokczkS0Qizw64mf+6aUYByWA0NJUrvOtc+8TkBGglYp3Jd2bstpoPrh7DX6EQIla4jOWJYkT7eogMOKgDDTnOBsozlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SN/p0s7y; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=UUhjCkLywi/VKCw7ddTxP48n80VAmRzSMFbOrMaVQKS3bx+nHutmwRDHmJZQyPsE2vJprMaT7VerNkvVjQMx9kVVSOED/o2D1ENYjWqosjmqEGaKGfxEcemFK7zWZXP7RHloSQvxTYLhOYW6g63ydSPxkDpl0SmXdkfaE/JzvDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBCheQai; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SN/p0s7y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D181F000FF;
-	Sat, 26 Sep 2026 14:36:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FBCheQai"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D5A1F000FF;
+	Sat, 26 Sep 2026 14:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790433370;
-	bh=IMHI3/mVusZmN3sxJuNaADpmAEDzXd6P5qYXN//4KZ0=;
+	s=k20260515; t=1790433451;
+	bh=RK2COtFlpv/yXKCM+EIOv8w433Bu689wHWSpo78QoZE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SN/p0s7yLC4Ogw5GqbE05DMUEne9a02iOgTLwphCfuGYYUBbPQEC1HiSNB8WH6jdh
-	 pChbUlaGxCWAm557gzJKoqZ4l9IXi6I56zxv9fXb10VeHuIIvtNLYY9lyEwbtC3LqM
-	 jcuRs3L0UAVI8VHSWVcLYLU5BpD5t7SUxRdMKgFZsVUV/cFGUJ2uFo9bnhxOUYXF/p
-	 kqeWkHucI5OAFL5ieN0JKEbg0xsWoKRKWhtWlNVyf+mLm1CNeqK47k5HTh1ihX9wAl
-	 uamVGMcyKE843l6Q/GN1LWmt9R87RADtApNMCcFsiGeUCIx1nKUmsu92eH8Em/ViLE
-	 W9Cu2s2yfgx8g==
+	b=FBCheQaiwxSV0Rzzido3b7KB0YmbpjefOTf5yAZEw9K9ijnwJrCyYndftVqNLylKl
+	 3Rs8Tn6zRBqL5IUT7VUUoynBeDnU+kjU3r5BI8TJSQ2P2uPv4g/x6t0TyoxgyvOOls
+	 wJXLaG3NKxajIi8PSzlFm1YBc94lpRAcNy7wj85s16f9wWhE9mp6Mj6aDOHOH7Pf7a
+	 Gj4/lngtApVuH8H1ni6RR3NEF4V+u3Wxhs25UwXP283N8IB7LObD5BRHX7HQcYJ04S
+	 YZR+gMT3xlnqX5WjIXDurrN8Y2AMgzhgsjYckjq5p9QDOhUIH3TBcGmy4toC7/gVhy
+	 FNhTc6Rh6fZrw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 09/36] bpf: add bpf_set_reg_range()
+Subject: Re: [PATCH bpf-next 15/36] bpf: varying offset access support for
+ PTR_TO_BTF_ID pointers
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Eduard Zingerman" <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260926-scev-minimal-rebase-v1-9-c8e5ab5ba79f@gmail.com>
+In-Reply-To: <20260926-scev-minimal-rebase-v1-15-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
- <20260926-scev-minimal-rebase-v1-9-c8e5ab5ba79f@gmail.com>
+ <20260926-scev-minimal-rebase-v1-15-c8e5ab5ba79f@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 14:36:09 +0000
-Message-Id: <20260926143609.E2D181F000FF@smtp.kernel.org>
+Date: Sat, 26 Sep 2026 14:37:30 +0000
+Message-Id: <20260926143731.11D5A1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,57 +47,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] bpf: build failure due to missing step and base fields in struct bp=
-f_reg_state
+- [Medium] bpf: varying offset accesses to nested flexible arrays are incor=
+rectly rejected
 --
 
-commit b21e96677bd5c8c118c6f3ee527144b5d83b0c82
+commit 9dc337511b42c543566061ccac0810b0e6e74dae
 Author: Eduard Zingerman <eddyz87@gmail.com>
 
-bpf: add bpf_set_reg_range()
+bpf: varying offset access support for PTR_TO_BTF_ID pointers
 
-A utility function for setting a register's range and step information.
-Used by SCEV widening and clamping logic further in the series.
+This commit relaxes the verifier requirements for reads like p->arr[i].fiel=
+d=20
+where p is a PTR_TO_BTF_ID, allowing i to be a non-constant value. It=20
+introduces bounds checking based on the access register's min and max bound=
+s,=20
+along with alignment checks.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 03dbc0e003986..f2d44e026e4bd 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 [ ... ]
-
-> @@ -16934,6 +16934,18 @@ static int adjust_reg_min_max_vals(struct bpf_ve=
-rifier_env *env,
->  	return 0;
->  }
+> @@ -7846,6 +7905,54 @@ int btf_struct_access(struct bpf_verifier_log *log,
+>  	} while (t);
 > =20
-> +int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state=
- *reg,
-> +		      struct cnum64 range, u16 step)
-> +{
-> +	reg->r64 =3D range;
-> +	reg->r32 =3D CNUM32_UNBOUNDED;
-> +	reg->step =3D step;
-> +	reg->base =3D imod(cnum64_smin(range), step);
-
-[Severity: Low]
-Does this code cause a build failure?
-
-It appears that the `step` and `base` fields do not exist in
-`struct bpf_reg_state` at this point in the commit history, which would
-break `git bisect`.
-
-While this patch splitting error is resolved in the subsequent commit
-'[PATCH bpf-next 14/36] bpf: representation for intervals with steps' which
-adds the missing fields, each patch in a series must compile independently.
-
-> +	reg->var_off =3D tnum_unknown;
-> +	reg_bounds_sync(reg); /* this should infer the tnum alignment */
-> +	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
-> +}
+>  	return -EINVAL;
 > +
->  /* check validity of 32-bit and 64-bit arithmetic operations */
+> +check_variable_offset:
+> +	if (min_off =3D=3D max_off)
+> +		return ret;
+> +
+> +	/* Find an offset at which access would go to a flexible array tail (if=
+ any). */
+> +	t =3D btf_type_skip_modifiers(btf, reg->btf_id, NULL);
+> +	member =3D find_flex_member(btf, t);
+> +	flex_off =3D member ? __btf_member_bit_offset(t, member) / 8 : S64_MAX;
+
+[Severity: Medium]
+Does this code handle flexible arrays embedded within nested structs?
+
+When a BPF program attempts a variable-offset access (for example,
+ptr->nested_struct.flex_array[i]) on a PTR_TO_BTF_ID, find_flex_member()
+is called strictly on the top-level struct type ID.
+
+Because find_flex_member() does not recursively evaluate nested structs,
+it returns NULL in this case. This causes flex_off to evaluate to S64_MAX,
+which later makes the array bounds check fail since the flexible array
+has a size of 0, resulting in -EINVAL being returned.
+
+Can this be updated so the verifier doesn't incorrectly reject valid progra=
+ms
+performing varying-offset accesses to nested flexible arrays?
+
+> +
+> +	/*
+> +	 * If this is a varying offset access, the step recorded within a regis=
+ter
+> +	 * should correspond to one of the arrays visited while walking.
+> +	 */
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926-scev-minim=
-al-rebase-v1-0-c8e5ab5ba79f@gmail.com?part=3D9
+al-rebase-v1-0-c8e5ab5ba79f@gmail.com?part=3D15
