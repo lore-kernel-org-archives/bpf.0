@@ -1,64 +1,64 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A88E3A6F09
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9CC388E7A
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790465732; cv=none; b=FunNs8gq8NFHRPlQ+1xqWpfQOG/s6pAiMA56VanRUSN8KDXoYRRULxqPzWdC961atribU9f9AG3tuqAdHdp/ULMCswq8uBaGnMI4flKHujT+f9drkBgdCC4GXydGsaa1nSxqRMlK5Z42iHK7sQbH9/x86hOmaD4adQr+aO3w3O4=
+	t=1790465734; cv=none; b=q/CNAorqLn1dm9dE+qzYxaEPj7e8I2C68Vv/e3QrRIfLEoFl4oW52J5/1aobrngE9sc9kB/BWCF8kaE39WOYohV0SiW4d3bGWJT/wdYiunLsELqnlpChQ0HBZEJvgvPo3G5/Uv5cypC2GvVXTAYkIAAs5sd096uSSG8JTHUAAAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790465732; c=relaxed/simple;
-	bh=NihkExTU5Oy2O73M3GWCK8s9N13eOJ7mEgHUr/kenD4=;
+	s=arc-20240116; t=1790465734; c=relaxed/simple;
+	bh=orYbZJ8RVoQeiKThgyzp+0gtZuB0HV/YtXjcc6IQ8/A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y+z8HM1i1eybcYz5EFj3Yf0xfJ+HjvY47zdjXPONUY22ccwCIvWGgoHUluYtl4HvGvmJ40CQOqBxo1S/HVmQjv6huCoHQ+B67jV3RaedsanTt6hNsbCgZC2n6FALfJ9XpOw4ZjFFX8eDMPuw6L7AzothDIATGfjUPdd9CQ94XC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dDvwWS7A; arc=none smtp.client-ip=74.125.225.74
+	 MIME-Version; b=JBYJ4jWILn8isvgIznHmY9qgYzpquYNkQ158r/IFd9/41sgFkmDj3asKaBPbWCj0+vDH5qGIpDYbxVU0TFB32hUjW+N5viU86PB4VUGJZiUbBUYJH36r+TyGEr4NEM4KpbmSokguApuAGqdXTvoKbCjOy03IRhZfG5hcECgNyEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r9PQHGmx; arc=none smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDvwWS7A"
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484373a2e82so1211325f8f.0
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r9PQHGmx"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4a001db39abso115815e9.0
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790465728; x=1791070528; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790465730; x=1791070530; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Mu4UWyHvgwo1edC7xmmrpotEGV5mappoAMf1nO8bc9Y=;
-        b=dDvwWS7AwYaD1X/TNoXioH9Sy/dmW6oIVzWaYUovUHFMTsb34lSBe8O8NAEQFtmhXc
-         KEiedG1dre7mnL0oojO5QXxKX5PXSaA90qw4jAbgP8MHdPn6OJA8FJyj+p3Ov/B0gksM
-         OqMAX5HHekU2FUDaUzgWxetPXh/OWtZBr3yqF3wAyGV7ug3vMdzHeXQeEwCoZ3jMnB+l
-         xP0PXbiXyvdwFT2XGy7BYnZYRw3WDZNxI16P2crx5y1SQAFiiUMt0hmpeBMbKShn57op
-         AAM+6wR3cd1OREAj8SrggnwV0kkBfczTpY8F4grDfFRBp5dRjuwahkQfbjmoYuchRage
-         ftxw==
+        bh=5UHMqiQFjCtPwqP9pY2XiSkzNFE780y+QNflbnd2RVQ=;
+        b=r9PQHGmxSUoYg3fNEWiH73PgB9W+YaWCkLIwlmSmkSaX9K5OT0uwoMnILkcRpQ0SI5
+         H5kXWHNhR+nsJxMWWbqKA9AsPmSd56mchcP9ZqyxZtxaLLkfUfQauFpBPmT1iBtMNAl2
+         p8X3rh4QnR8ouVsg7DAXE+8+8NCAi1WuWftUrXgqUhYonBU5+SZHCLGo2xbNbGlVzpw2
+         y5FqI+nM9/szoRfxOEQmHRpHu3vgX2FdgMoKt0r667XY0a/4ZfSLPurfAHKUSEOaVBkF
+         rvArBOpeD1ExTgX0CTTT/rDN0RYne0YTJkfZMpC7zF/Gy4bTJFDVKcXFSCLpl6qmobUN
+         Drtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790465728; x=1791070528;
+        d=1e100.net; s=20260707; t=1790465730; x=1791070530;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Mu4UWyHvgwo1edC7xmmrpotEGV5mappoAMf1nO8bc9Y=;
-        b=sCA5mOlpyCovc0dNpwEXV/SfJZ50k4dlZ+lMpxnduWexBksOcgDcabDZK3o64Ynbya
-         foCUI4+QPxtWr2Vcwsi5bMUI8r0J3XhhoQDAReGR8ZtZu/cmv9HUuyz+TwdToc8xG7bR
-         kEcdHVcWODLvAC5H0TExIjXReAPRKwKKbjdP8YKsV4IpT4u0y+0WAHMv+g7cT9D5TiVW
-         Od+gTCRcdGGWinoioBT9ddmOtMvZNJ9yUtqQAnBDU5PzlX5sdjlZB9cG9KCpi4DFEabm
-         dHB8Zs7laLHAmoGfJbAWzZfAmW/sELgk22nql+PDh4zuT3JXOxBJWROMD6hTGdVex63l
-         J5RQ==
-X-Gm-Message-State: AFq9FYKPrCydh9LXPhz8/8sk0HRbiQQqedWtzKVk9Ur0ONlnxfaW0CvK
-	DSyRgDtVNZid9WRYTLwJExKS2SPtfAn9xYwor/HgUlIE5aPgh0NmSTdUQpsEImNj
-X-Gm-Gg: AYBFou3QsqtOMvALCjaGumCyirGrNq3gT0z6buBhhSL/Bqm1Pr9CUJEBts/A0ww0zad
-	uzOR353rItQI0MBHK6GPExcx2TvDUkEevaTibcRHnOM1Nw9CibiSJ1oJn4nYbYx0LgTAR1JJw2M
-	VWbW/DKKl448O3vGwyW40HxurGrpp+ElG0hG6SycsuOeRBYE2Hw/j0HZ/5Y81jIMt3HjY4o32wJ
-	gudr+T7OKIWQVvnu9iy6YOa9FDusG0ZPZMvksBH1z0fc7/+wNR+uN/6vRj5qZFFLuyeUFagBR4q
-	XanqpvJZF95Zsz8PjAp/XHresgnmOVFse1iOOBtw/UEGsQXWMMcu/ibB+00bE38OKxBa32WrehS
-	vhre5p7sAX2xALHVzXTlfUt61WmthcDqY5U4RC+POgKx40r/JoZhy9mGzqRvwyurg+o3DgilcVf
-	40mGwZeRkjZ1x4E5sJVIeUUSYuxfCNKmmcDUzYuKxqO1MeMwpnmRZW5raMhkDY+C1hI4t1l/JE5
-	S+/pdGizkGQGxxT7l/ArLiyLJkhvrdak7FTACfkXxc7x/e8q8oamS1ogYZIflQ+I+pSE0mJBjMr
-	fTWhZL7jhdk5ViRnWVfDTC/7fJgJTCWKgNlC5w==
-X-Received: by 2002:a05:6000:1869:b0:487:27f9:842 with SMTP id ffacd0b85a97d-48871729534mr16111192f8f.55.1790465728364;
-        Sat, 26 Sep 2026 16:35:28 -0700 (PDT)
+        bh=5UHMqiQFjCtPwqP9pY2XiSkzNFE780y+QNflbnd2RVQ=;
+        b=WkHk5L4yb5l2xHLpbwf1GwF8FQtg+49zwP+0jEv80Ojv3TOmAqlr5BeFwUUWxpw3wJ
+         SC1naVbasz4fFIY7BJidf0XZlwpOJuKhEszGW9EjCszbqVCxebnftPLQXq1qEba3a2CC
+         bz4usR4Q+0ky1NN5ZGIsG50MwpX0sYcqmv0tGt8e2D1WQLn2IHm/t+o+cjdsLG8KAvvy
+         Rlr3O1C0u5N7ZUYVhQZUodyERkeQ+oO/6jdbAIoXcnUqtfpVvDal5SDL6aZXzJ9l1O/o
+         xZ3ucwYo2zNxnJas2vifZ0lxD90GnMmIIuundOXEmfjRa7g+SvkUMcaiyGFpwqZbPWre
+         WZ7Q==
+X-Gm-Message-State: AFuF++mwr/uDIwt9RG90XrDAThBZO/0hDHNF5WDanS3UEgnPhbru5vNF
+	h0wB+YA/fj7Szq0yvFkO1oeKANpf7rLhQWABWD8805nrAlfx1Klb08sJf7dBlRlH
+X-Gm-Gg: AYBFou0SPcSx6EdH6Y7IlwonIgvlkTgwM0pdedzYiOVaGmeMJbWZcB8UPD/5hVR3xpU
+	fKo6MOgXwrr5WL9zioHrc90ELEprGNiTkyr4v7MDhfEX2ZZEWymElalQfihvkoqbSCBob84l4Dw
+	MMFD4M/GuaHJik3ls3nRq0B3dESd3a/2wIH2zm1sU/ldbw3Gx2Ui3MZ5E7sOpp4Uk+2rvUF9+t7
+	nGJaEVoiXV1MQ/oamROUh7cl7icqluCuiPjSNL0Zqp4EjwyNmTOEAj2asxRr4L0ueKmfcPKnA/E
+	BhVSOvNm+XplR0Pvn2/Bh1vbrL7A5dr6lUmrf2W5Fsv2hWQiehmgcvIoP/hCt8g6AgMWTdvS//X
+	/SCbW2jDGs59mZ6tEWeYlevOndC+ibHmo/w8yDkIyVJZDLUtTekrPyRP5BRBuy89zMVlwuV7p4D
+	xl69FVKjIPznK+YSgMZdFoBKAtN2qSvCyBmLM7LzwRAqzUB2twR79MaSif8B13f/fEC9TFXLFX8
+	2qy8y7AuNflP5e15hPnxA8AlST3fyw1tz0vpCA0lVpPGJmP7OnwJOp7FC5pGjnR08VlxeUcUlWU
+	MKAMJDssw8wOVKFJw+r+S0OgITt1zEeEawgpRQ==
+X-Received: by 2002:a05:600c:4f12:b0:49f:ce78:356b with SMTP id 5b1f17b1804b1-49fe6700d0cmr184417565e9.28.1790465730037;
+        Sat, 26 Sep 2026 16:35:30 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a30c43asm17725534f8f.3.2026.09.26.16.35.27
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ffd137346sm52585365e9.1.2026.09.26.16.35.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 16:35:27 -0700 (PDT)
+        Sat, 26 Sep 2026 16:35:29 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 13/16] selftests/bpf: Test typed arena casts and registration
-Date: Sun, 27 Sep 2026 01:34:51 +0200
-Message-ID: <20260926233503.3114147-14-memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 14/16] selftests/bpf: Test typed arena object access, kptrs and typed pointer fields
+Date: Sun, 27 Sep 2026 01:34:52 +0200
+Message-ID: <20260926233503.3114147-15-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926233503.3114147-1-memxor@gmail.com>
 References: <20260926233503.3114147-1-memxor@gmail.com>
@@ -80,645 +80,688 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=18975; i=memxor@gmail.com; h=from:subject; bh=NihkExTU5Oy2O73M3GWCK8s9N13eOJ7mEgHUr/kenD4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWELVg7C4jMCgA1GbvbbdOhxr/zJX22ieZqvX0Tye6 1u2rXfrKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwERcghn+hyvIv5w8PePl08K6 ULcG3V+srIZfHT4bhSQ+f5E5/xqvAMM/u7TWVSK6inlyV6/tmbll0qHpT95U7m/juDCnhvl0dgA /GwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=18737; i=memxor@gmail.com; h=from:subject; bh=orYbZJ8RVoQeiKThgyzp+0gtZuB0HV/YtXjcc6IQ8/A=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWMKM198i9909xRDKeUTzEINB66up9xeF+uqps/1jf bJGeN/djlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzEnoORYZraU8PGh2sX/me4 I/HoOMPEaWZxs783XrTOOcL7RFXTKYORoZmrf51c8XevqzXOe06kJGffYr2md0ay4JrRnscfZKv VuAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The compiler inserts a typed_arena_cast where a value is converted to a
-pointer to a typed struct and before every use of such a pointer as an
-address, so the programs write no cast: an object is whatever value user
-space hands in, a raw arena pointer, or a pointer of another type, and the
-casts the verifier sees are all the compiler's.
+Write and read a scalar field natively on a chunk faulted to scratch, run an
+atomic on it, and move the pointer within the object; reject an access
+beyond the object, a negative offset and a variable one. Walk a nested
+struct and see a pointer to a kernel struct load as a scalar. See helpers
+refuse the pointer as memory.
 
-Convert a value user space hands in and see it lowered to the mask, the
-base load and the add, with the pointer typed as the struct's object;
-convert a raw arena pointer, and a typed pointer passed through an opaque
-value and to another type, which land on objects like any other value. See
-the registration logged with the slot size. A cast of a pointer the
-verifier already trusts is the identity: an allocated object, a typed
-struct inside a map value and one on the stack keep their type and state
-through the cast the compiler inserts, and such programs need no arena.
+Exchange a kernel kptr into an object and out again, leave a local kptr in a
+dummy object for the map to drop, and reject direct loads and stores of a
+kptr field, an exchange on a scalar field and one with the wrong type.
 
-Reject a cast in a program without an arena map, and structs with the
-special fields a typed arena does not carry: spin locks, resilient spin
-locks, timers, refcounts, list heads and rbtree roots. A struct without
-special fields is not typed to the compiler and no cast names it; the page
-kfuncs, which take a type ID, reject one in their own tests. Reject typed
-arena sizes that are not a power of two, below a page, above the region, or
-too small for one object, and two size declarations on one struct; accept
-sizes with a suffix and see the object count follow, take an object larger
-than a page in a slot of whole pages, and see the region refuse a third
-type once two 2 GiB ones have filled it.
-
-A typed pointer is a kernel pointer: a 32-bit copy is the scalar a privileged
-program may take of any pointer, and a narrow store to the stack is an
-invalid spill.
-
-The values user space would hand in stay unset: the verifier does not care
-where a value lands, and at run time an unset one names object 0 of its
-slice. The tests exist only when the compiler emits the cast; the runner
-checks a flag the object exports and skips otherwise. Add the typed arena
-size tag macro to bpf_experimental.h.
+Load a typed pointer field and see the pointer stay unsanitized until it is
+used as an address: the dereference carries the mask, base load and add in
+place, a compare of the value does not, a store of the raw value written by
+hand is accepted, a second dereference through the same register does not
+sanitize again, and pointer arithmetic sanitizes before it adds. A NULL
+dereferences object 0 of the slice, whether held directly or loaded from
+the field. The field takes a typed pointer, a loaded pointer or NULL, and
+the compiler casts what a program assigns to it, so a scalar and a pointer
+to another typed struct are accepted from C and rejected only when stored
+by hand; reject a narrow load or store and an atomic. The same member in
+raw arena memory is data: a stored pointer loads as a scalar and casts back
+to its object where it is used. A struct whose only special field is a
+pointer to a typed struct gets a typed arena of its own. One instruction
+sanitizes one typed arena: reject it when two paths bring pointers of
+different types, or a typed pointer on one path only, and reject the cast
+the compiler inserts when one path brings a loaded arena pointer and
+another an allocated object.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../testing/selftests/bpf/bpf_experimental.h  |   6 +
- .../selftests/bpf/prog_tests/verifier.c       |  22 +
- .../bpf/progs/verifier_typed_arena.c          | 528 ++++++++++++++++++
- 3 files changed, 556 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_typed_arena.c
+ .../bpf/progs/verifier_typed_arena.c          | 634 ++++++++++++++++++
+ 1 file changed, 634 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 2893bf06ff25..128654997328 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -9,6 +9,12 @@
- 
- #define __contains(name, node) __attribute__((btf_decl_tag("contains:" #name ":" #node)))
- 
-+/*
-+ * Size of a struct's typed arena in bytes: a power of two with an optional K,
-+ * M or G suffix, 128M unless declared.
-+ */
-+#define __typed_arena_size(sz) __attribute__((btf_decl_tag("typed_arena_size:" #sz)))
-+
- /* Convenience macro to wrap over bpf_obj_new */
- #define bpf_obj_new(type) ((type *)bpf_obj_new(bpf_core_type_id_local(type)))
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8a6d341b754a..3a4270fca559 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -120,6 +120,7 @@
- #include "verifier_subreg.skel.h"
- #include "verifier_tailcall.skel.h"
- #include "verifier_tailcall_jit.skel.h"
-+#include "verifier_typed_arena.skel.h"
- #include "verifier_typedef.skel.h"
- #include "verifier_uninit.skel.h"
- #include "verifier_unpriv.skel.h"
-@@ -303,6 +304,27 @@ void test_verifier_subprog_topo(void)        { RUN(verifier_subprog_topo); }
- void test_verifier_subreg(void)               { RUN(verifier_subreg); }
- void test_verifier_tailcall(void)             { RUN(verifier_tailcall); }
- void test_verifier_tailcall_jit(void)         { RUN(verifier_tailcall_jit); }
-+
-+/*
-+ * The typed arena tests need a compiler that emits the cast; without one the
-+ * object holds no programs.
-+ */
-+void test_verifier_typed_arena(void)
-+{
-+	struct verifier_typed_arena *skel;
-+	bool supported;
-+
-+	skel = verifier_typed_arena__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+	supported = skel->rodata->typed_arena_supported;
-+	verifier_typed_arena__destroy(skel);
-+	if (!supported) {
-+		test__skip();
-+		return;
-+	}
-+	RUN(verifier_typed_arena);
-+}
- void test_verifier_typedef(void)              { RUN(verifier_typedef); }
- void test_verifier_uninit(void)               { RUN(verifier_uninit); }
- void test_verifier_unpriv(void)               { RUN(verifier_unpriv); }
 diff --git a/tools/testing/selftests/bpf/progs/verifier_typed_arena.c b/tools/testing/selftests/bpf/progs/verifier_typed_arena.c
-new file mode 100644
-index 000000000000..22a8c3bfd493
---- /dev/null
+index 22a8c3bfd493..808a65611d4e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_typed_arena.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_typed_arena.c
-@@ -0,0 +1,528 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+@@ -523,6 +523,640 @@ int narrow_store_is_invalid_spill(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("syscall")
++__description("a scalar field is written and read natively, on a chunk faulted to scratch")
++__success __retval(7)
++__stderr("ERROR: Typed arena WRITE access to unallocated struct typed_obj at 0x{{[0-9a-f]+}}")
++int access_scalar_field(void *ctx)
++{
++	struct typed_obj *obj;
 +
-+#include <vmlinux.h>
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+#include "bpf_arena_common.h"
-+
-+#ifdef __TARGET_ARCH_arm64
-+#define ARENA_VM_START ((1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1))
-+#else
-+#define ARENA_VM_START ((1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1))
-+#endif
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 2);
-+	__ulong(map_extra, ARENA_VM_START);
-+} arena SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} not_an_arena SEC(".maps");
-+
-+/* Tells the runner whether the compiler emits the cast, and so whether the tests below exist. */
-+const volatile bool typed_arena_supported =
-+#ifdef __BPF_FEATURE_TYPED_ARENA_CAST
-+	true;
-+#else
-+	false;
-+#endif
-+
-+#ifdef __BPF_FEATURE_TYPED_ARENA_CAST
-+
-+/* 16-byte slot, 8 Mi objects in the default 128 MiB typed arena: the cast mask is 134217712 */
-+struct typed_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+};
-+
-+/* 32-byte slot */
-+struct other_obj {
-+	struct task_struct __kptr *task;
-+	__u64 a;
-+	__u64 b;
-+};
-+
-+struct plain_obj {
-+	__u64 value;
-+};
-+
-+/*
-+ * A program is associated with an arena by referencing the map. Programs that
-+ * only convert values they already hold reference it explicitly.
-+ */
-+#define arena_bind() asm volatile("r0 = %[m] ll" :: [m] "i"(&arena) : "r0")
-+
-+/*
-+ * Objects as the opaque 64-bit values user space hands in. Converting one to a
-+ * pointer to a typed struct is where the compiler inserts the typed_arena_cast,
-+ * as it does before every use of such a pointer as an address. A cast of a
-+ * pointer the verifier already trusts lowers to nothing, so a lowered program
-+ * shows one sequence per value that enters. The values stay unset here: the
-+ * verifier does not care where a value lands, and at run time an unset one
-+ * names object 0 of its slice.
-+ */
-+void *ptr;
-+void *ptr2;
++	arena_bind();
++	obj = ptr;
++	obj->value = 7;
++	return obj->value;
++}
 +
 +SEC("syscall")
-+__description("a cast masks the value into a slot and adds the typed arena base")
++__description("atomics run natively on a scalar field")
++__success __retval(3)
++int access_atomic(void *ctx)
++{
++	struct typed_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	obj->value = 1;
++	__sync_fetch_and_add(&obj->value, 2);
++	return obj->value;
++}
++
++SEC("syscall")
++__description("pointer arithmetic stays inside the object")
++__success __retval(9)
++int access_after_arithmetic(void *ctx)
++{
++	struct typed_obj *obj;
++	void *p;
++
++	arena_bind();
++	obj = ptr;
++	p = obj;
++	asm volatile("%[p] += 8" : [p] "+r"(p));
++	*(__u64 *)p = 9;
++	return obj->value;
++}
++
++SEC("syscall")
++__description("an access beyond the object is rejected")
++__failure __msg("access beyond struct typed_obj")
++int access_beyond_object(void *ctx)
++{
++	struct typed_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	((__u64 *)obj)[2] = 1;
++	return 0;
++}
++
++SEC("syscall")
++__description("a negative offset is rejected")
++__failure __msg("invalid negative access")
++int access_negative_offset(void *ctx)
++{
++	struct typed_obj *obj;
++	void *p;
++
++	arena_bind();
++	obj = ptr;
++	p = (void *)obj - 8;
++	return *(__u64 *)p;
++}
++
++SEC("syscall")
++__description("a variable offset is rejected")
++__failure __msg("{{variable (offset|typed_arena_ptr_ access)}}")
++int access_variable_offset(void *ctx)
++{
++	struct typed_obj *obj;
++	void *p;
++
++	arena_bind();
++	obj = ptr;
++	p = (void *)obj + (bpf_get_prandom_u32() & 8);
++	return *(__u64 *)p;
++}
++
++struct mixed_obj {
++	struct task_struct __kptr *task;
++	struct {
++		__u32 a;
++		__u32 b;
++	} inner;
++	struct task_struct *ptr;
++};
++
++SEC("syscall")
++__description("nested structs are walked and pointers to kernel structs load as scalars")
++__success __retval(3)
++int access_nested_and_kernel_pointer_fields(void *ctx)
++{
++	struct mixed_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	obj->inner.b = 3;
++	if (obj->ptr)
++		return 1;
++	return obj->inner.b;
++}
++
++SEC("syscall")
++__description("helpers do not take typed arena pointers as memory")
++__failure __msg("R1 type=typed_arena_ptr_ expected=")
++int helper_rejects_typed_pointer(void *ctx)
++{
++	struct typed_obj *obj;
++	__u64 src = 0;
++
++	arena_bind();
++	obj = ptr;
++	bpf_probe_read_kernel(&obj->value, sizeof(obj->value), &src);
++	return 0;
++}
++
++struct arena_node {
++	__u64 v;
++};
++
++struct kptr_obj {
++	struct task_struct __kptr *task;
++	struct arena_node __kptr *node;
++	__u64 value;
++};
++
++SEC("syscall")
++__description("a kernel kptr is exchanged into and out of an object")
++__success __retval(0)
++int kptr_xchg_task(void *ctx)
++{
++	struct task_struct *task, *old;
++	struct kptr_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	task = bpf_task_acquire(bpf_get_current_task_btf());
++	if (!task)
++		return 2;
++	old = bpf_kptr_xchg(&obj->task, task);
++	if (old)
++		bpf_task_release(old);
++	old = bpf_kptr_xchg(&obj->task, NULL);
++	if (!old)
++		return 3;
++	bpf_task_release(old);
++	return 0;
++}
++
++SEC("syscall")
++__description("a local kptr left in a dummy object is dropped with the map")
++__success __retval(0)
++int kptr_xchg_local(void *ctx)
++{
++	struct arena_node *n, *old;
++	struct kptr_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	n = bpf_obj_new(struct arena_node);
++	if (!n)
++		return 2;
++	n->v = 42;
++	old = bpf_kptr_xchg(&obj->node, n);
++	if (old)
++		bpf_obj_drop(old);
++	return 0;
++}
++
++SEC("syscall")
++__description("a kptr field is not read directly")
++__failure __msg("direct access to kptr is disallowed")
++int kptr_read_directly(void *ctx)
++{
++	struct kptr_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	return obj->task != NULL;
++}
++
++SEC("syscall")
++__description("a kptr field is not written directly")
++__failure __msg("direct access to kptr is disallowed")
++int kptr_write_directly(void *ctx)
++{
++	struct kptr_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	obj->task = NULL;
++	return 0;
++}
++
++SEC("syscall")
++__description("an exchange needs a kptr field")
++__failure __msg("off=16 doesn't point to kptr")
++int kptr_xchg_scalar_field(void *ctx)
++{
++	struct kptr_obj *obj;
++
++	arena_bind();
++	obj = ptr;
++	bpf_kptr_xchg(&obj->value, NULL);
++	return 0;
++}
++
++SEC("syscall")
++__description("an exchange checks the value against the field's type")
++__failure __msg("invalid kptr access, R2 type=ptr_arena_node expected=ptr_task_struct")
++int kptr_xchg_wrong_type(void *ctx)
++{
++	struct kptr_obj *obj;
++	struct arena_node *n;
++
++	arena_bind();
++	obj = ptr;
++	n = bpf_obj_new(struct arena_node);
++	if (!n)
++		return 2;
++	n = bpf_kptr_xchg(&obj->task, n);
++	if (n)
++		bpf_obj_drop(n);
++	return 0;
++}
++
++/* 32-byte slot, linked through a typed pointer field: the sanitize mask is 134217696 */
++struct node_obj {
++	struct task_struct __kptr *task;
++	struct node_obj *next;
++	__u64 value;
++};
++
++/* The same layout as node_obj, a different typed arena */
++struct pair_obj {
++	struct task_struct __kptr *task;
++	struct pair_obj *next;
++	__u64 value;
++};
++
++/* 8-byte slot, typed only by its pointer to a typed struct: the cast mask is 134217720 */
++struct head_obj {
++	struct node_obj *first;
++};
++
++SEC("syscall")
++__description("a typed pointer field loads unsanitized, and a dereference sanitizes it in place")
 +__success __retval(0) __log_level(2)
-+__msg("typed arena for struct typed_obj: slot 16 bytes")
-+__msg("R{{[0-9]}}=typed_arena_ptr_typed_obj(")
-+__xlated("r{{[0-9]}} &= 134217712")
++__msg("R{{[0-9]}}=unsanitized_typed_arena_ptr_node_obj(")
++__xlated("r{{[0-9]}} &= 134217720")
 +__xlated("r12 = 0x{{[0-9a-f]+}}")
 +__xlated("r{{[0-9]}} += r12")
-+int cast_lowers_to_mask_and_base(void *ctx)
++__xlated("...")
++__xlated("r{{[0-9]}} = *(u64 *)(r{{[0-9]}} +0)")
++__xlated("r{{[0-9]}} &= 134217696")
++__xlated("r12 = 0x{{[0-9a-f]+}}")
++__xlated("r{{[0-9]}} += r12")
++__xlated("r{{[0-9]}} = *(u64 *)(r{{[0-9]}} +16)")
++int ptr_field_deref_sanitizes(void *ctx)
 +{
-+	struct typed_obj *obj;
++	struct head_obj *h;
++	struct node_obj *n;
 +
 +	arena_bind();
-+	obj = ptr;
-+	return obj->value;
++	h = ptr;
++	n = h->first;
++	return n->value;
 +}
 +
 +SEC("syscall")
-+__description("any 64-bit value casts: a raw arena pointer lands on an object")
-+__success __retval(0)
-+int cast_raw_arena_pointer(void *ctx)
++__description("a compare and a store of a loaded typed pointer use the raw value")
++__success __retval(0) __log_level(2)
++__msg("R{{[0-9]}}=unsanitized_typed_arena_ptr_node_obj(")
++__msg("if r{{[0-9]}} == 0x0 goto")
++__msg("R{{[0-9]}}=unsanitized_typed_arena_ptr_node_obj(")
++__msg("*(u64 *)(r1 +8) = r2")
++int ptr_field_compare_and_store_stay_raw(void *ctx)
 +{
-+	struct typed_obj *obj;
-+	void __arena *page;
-+
-+	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!page)
-+		return 1;
-+	obj = (void *)page;
-+	obj->value = 3;
-+	return obj->value - 3;
-+}
-+
-+SEC("syscall")
-+__description("a typed pointer casts to itself, and to another type without knowing the source")
-+__success __retval(0)
-+int cast_typed_pointer_again(void *ctx)
-+{
-+	struct typed_obj *obj, *again;
-+	struct other_obj *other;
-+	void *opaque;
++	struct node_obj *n, *m;
 +
 +	arena_bind();
-+	obj = ptr;
-+	opaque = obj;
-+	again = opaque;
-+	if (again != obj)
-+		return 1;
-+	other = (struct other_obj *)obj;
-+	other->a = 1;
-+	return other->a - 1;
-+}
-+
-+/*
-+ * The same struct lives in allocated objects, in map values and on the stack,
-+ * and the compiler casts every use of a pointer to it there too. Such a cast
-+ * is the identity: the pointer keeps its type and its state, nothing is
-+ * lowered, and the access follows that pointer's own rules. These programs
-+ * reference no arena, since nothing in them is sanitized.
-+ */
-+SEC("syscall")
-+__description("a cast of an allocated object of a typed struct is the identity")
-+__success __retval(0) __log_level(2)
-+__msg("typed_arena_cast(r{{[0-9]}}, {{[0-9]+}})")
-+__msg("R{{[0-9]}}=ptr_typed_obj(")
-+int cast_allocated_object_is_identity(void *ctx)
-+{
-+	struct typed_obj *obj;
-+
-+	obj = bpf_obj_new(struct typed_obj);
-+	if (!obj)
-+		return 1;
-+	obj->value = 1;
-+	bpf_obj_drop(obj);
-+	return 0;
-+}
-+
-+struct value_with_typed {
-+	__u64 pad;
-+	struct typed_obj obj;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct value_with_typed);
-+} typed_in_map SEC(".maps");
-+
-+SEC("syscall")
-+__description("a cast of a typed struct inside a map value is the identity")
-+__success __retval(0) __log_level(2)
-+__msg("typed_arena_cast(r{{[0-9]}}, {{[0-9]+}})")
-+__msg("R{{[0-9]}}=map_value(")
-+int cast_map_value_is_identity(void *ctx)
-+{
-+	struct value_with_typed *v;
-+	struct typed_obj *obj;
-+	__u32 key = 0;
-+
-+	v = bpf_map_lookup_elem(&typed_in_map, &key);
-+	if (!v)
-+		return 1;
-+	obj = &v->obj;
-+	obj->value = 1;
++	n = ptr;
++	m = n->next;
++	/* Opaque to the compiler, so that the compare is emitted. */
++	barrier_var(m);
++	if (!m)
++		return 0;
++	/* The store is written by hand: the compiler would cast the value first. */
++	asm volatile("r1 = %[n];"
++		     "r2 = %[m];"
++		     "*(u64 *)(r1 + 8) = r2;"
++		     :: [n] "r"(n), [m] "r"(m)
++		     : "r1", "r2", "memory");
 +	return 0;
 +}
 +
 +SEC("syscall")
-+__description("a cast of a typed struct on the stack is the identity")
-+__success __retval(0) __log_level(2)
-+__msg("typed_arena_cast(r{{[0-9]}}, {{[0-9]+}})")
-+__msg("R{{[0-9]}}=fp-")
-+int cast_stack_object_is_identity(void *ctx)
++__description("a register sanitized by one dereference is not sanitized again by the next")
++__success __retval(5)
++__xlated("r1 = *(u64 *)(r1 +8)")
++__xlated("r2 = 5")
++__xlated("r1 &= 134217696")
++__xlated("r12 = 0x{{[0-9a-f]+}}")
++__xlated("r1 += r12")
++__xlated("*(u64 *)(r1 +16) = r2")
++__xlated("r0 = *(u64 *)(r1 +16)")
++int ptr_field_second_deref_not_sanitized_again(void *ctx)
 +{
-+	struct typed_obj local = {};
-+	struct typed_obj *obj = &local;
-+
-+	barrier_var(obj);
-+	obj->value = 1;
-+	return local.value - 1;
-+}
-+
-+SEC("syscall")
-+__description("the cast needs the program's arena")
-+__failure __msg("typed_arena_cast insn can only be used in a program that has an associated arena")
-+int cast_needs_arena(void *ctx)
-+{
-+	struct typed_obj *obj;
-+
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct locked_obj {
-+	struct bpf_spin_lock lock;
-+	__u64 value;
-+};
-+
-+SEC("syscall")
-+__description("spin locks are not supported in typed arena objects yet")
-+__failure __msg("struct locked_obj field bpf_spin_lock is not supported in a typed arena")
-+int cast_rejects_spin_lock(void *ctx)
-+{
-+	struct locked_obj *obj;
++	struct node_obj *n;
++	__u64 ret;
 +
 +	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct res_locked_obj {
-+	struct bpf_res_spin_lock lock;
-+	__u64 value;
-+};
-+
-+SEC("syscall")
-+__description("resilient spin locks are not supported in typed arena objects yet")
-+__failure __msg("struct res_locked_obj field bpf_res_spin_lock is not supported in a typed arena")
-+int cast_rejects_res_spin_lock(void *ctx)
-+{
-+	struct res_locked_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct timer_obj {
-+	struct bpf_timer timer;
-+	__u64 value;
-+};
-+
-+SEC("syscall")
-+__description("timers are not supported in typed arena objects")
-+__failure __msg("struct timer_obj field bpf_timer is not supported in a typed arena")
-+int cast_rejects_timer(void *ctx)
-+{
-+	struct timer_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct refcount_obj {
-+	struct bpf_refcount ref;
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+};
-+
-+SEC("syscall")
-+__description("refcounts are not supported in typed arena objects")
-+__failure __msg("struct refcount_obj field bpf_refcount is not supported in a typed arena")
-+int cast_rejects_refcount(void *ctx)
-+{
-+	struct refcount_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct list_node_obj {
-+	struct bpf_list_node node;
-+	__u64 value;
-+};
-+
-+struct list_obj {
-+	struct bpf_list_head head __contains(list_node_obj, node);
-+	struct bpf_spin_lock lock;
-+};
-+
-+/* The node structs must reach the BTF for the contains tags to resolve; nothing else uses them. */
-+struct list_node_obj *list_node_in_btf;
-+
-+SEC("syscall")
-+__description("list heads are not supported in typed arena objects")
-+__failure __msg("struct list_obj field bpf_list_head is not supported in a typed arena")
-+int cast_rejects_list_head(void *ctx)
-+{
-+	struct list_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj == NULL;
-+}
-+
-+struct rb_node_obj {
-+	struct bpf_rb_node node;
-+	__u64 value;
-+};
-+
-+struct rb_obj {
-+	struct bpf_rb_root root __contains(rb_node_obj, node);
-+	struct bpf_spin_lock lock;
-+};
-+
-+struct rb_node_obj *rb_node_in_btf;
-+
-+SEC("syscall")
-+__description("rbtree roots are not supported in typed arena objects")
-+__failure __msg("struct rb_obj field bpf_rb_root is not supported in a typed arena")
-+int cast_rejects_rb_root(void *ctx)
-+{
-+	struct rb_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj == NULL;
-+}
-+
-+struct size_not_pow2_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(3M);
-+
-+SEC("syscall")
-+__description("a typed arena size must be a power of two")
-+__failure __msg("struct size_not_pow2_obj has invalid typed arena size '3M'")
-+int size_rejects_not_pow2(void *ctx)
-+{
-+	struct size_not_pow2_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct size_below_page_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(2048);
-+
-+SEC("syscall")
-+__description("a typed arena is at least a page")
-+__failure __msg("struct size_below_page_obj has invalid typed arena size '2048'")
-+int size_rejects_below_page(void *ctx)
-+{
-+	struct size_below_page_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct size_above_region_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(8G);
-+
-+SEC("syscall")
-+__description("a typed arena is at most the region")
-+__failure __msg("struct size_above_region_obj has invalid typed arena size '8G'")
-+int size_rejects_above_region(void *ctx)
-+{
-+	struct size_above_region_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+/* 128 KiB slot in a 64 KiB typed arena */
-+struct size_below_slot_obj {
-+	struct task_struct __kptr *task;
-+	char pad[65536 + 8];
-+} __typed_arena_size(64K);
-+
-+SEC("syscall")
-+__description("a typed arena holds at least one object")
-+__failure __msg("struct size_below_slot_obj does not fit its typed arena: slot 131072 bytes, size 65536 bytes")
-+int size_rejects_below_slot(void *ctx)
-+{
-+	struct size_below_slot_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->pad[0];
-+}
-+
-+struct size_conflict_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(64K) __typed_arena_size(128K);
-+
-+SEC("syscall")
-+__description("a struct declares one typed arena size")
-+__failure __msg("struct size_conflict_obj has conflicting typed arena size declarations")
-+int size_rejects_conflict(void *ctx)
-+{
-+	struct size_conflict_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	return obj->value;
-+}
-+
-+struct size_64k_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(64K);
-+
-+struct size_2m_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(2M);
-+
-+SEC("syscall")
-+__description("a typed arena size takes a suffix and sets the object count")
-+__success __retval(0) __log_level(2)
-+__msg("typed arena for struct size_64k_obj: slot 16 bytes")
-+__msg("size 65536 bytes")
-+__msg("typed arena for struct size_2m_obj: slot 16 bytes")
-+__msg("size 2097152 bytes")
-+int size_accepts_suffix(void *ctx)
-+{
-+	struct size_64k_obj *small;
-+	struct size_2m_obj *large;
-+
-+	arena_bind();
-+	small = ptr;
-+	large = ptr;
-+	small->value = 1;
-+	large->value = 2;
-+	return small->value + large->value - 3;
-+}
-+
-+/* 16 KiB slot: an object of more than a page, four of them in a 64 KiB typed arena */
-+struct big_obj {
-+	struct task_struct __kptr *task;
-+	char pad[8192];
-+} __typed_arena_size(64K);
-+
-+SEC("syscall")
-+__description("an object larger than a page takes a slot of whole pages")
-+__success __retval(0) __log_level(2)
-+__msg("typed arena for struct big_obj: slot 16384 bytes")
-+int size_object_beyond_a_page(void *ctx)
-+{
-+	struct big_obj *obj;
-+
-+	arena_bind();
-+	obj = ptr;
-+	obj->pad[0] = 1;
-+	obj->pad[8191] = 2;
-+	return obj->pad[0] + obj->pad[8191] - 3;
-+}
-+
-+/* A slice is capped at 2 GiB, half the region: two of them fill it. */
-+struct huge_obj {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(2G);
-+
-+struct huge_obj2 {
-+	struct task_struct __kptr *task;
-+	__u64 value;
-+} __typed_arena_size(2G);
-+
-+SEC("syscall")
-+__description("the region has room for 4 GiB of typed arenas")
-+__failure __msg("no room in the typed arena region for struct typed_obj")
-+int size_region_runs_out(void *ctx)
-+{
-+	struct huge_obj *huge;
-+	struct huge_obj2 *huge2;
-+	struct typed_obj *obj;
-+
-+	arena_bind();
-+	huge = ptr;
-+	huge2 = ptr;
-+	obj = ptr;
-+	return huge->value + huge2->value + obj->value;
++	n = ptr;
++	/* Written by hand: the compiler would cast copies rather than reuse the register. */
++	asm volatile("r1 = %[n];"
++		     "r1 = *(u64 *)(r1 + 8);"
++		     "r2 = 5;"
++		     "*(u64 *)(r1 + 16) = r2;"
++		     "r0 = *(u64 *)(r1 + 16);"
++		     "%[ret] = r0;"
++		     : [ret] "=r"(ret) : [n] "r"(n)
++		     : "r0", "r1", "r2", "memory");
++	return ret;
 +}
 +
 +SEC("syscall")
-+__description("a 32-bit copy of a typed pointer is a scalar, as for any pointer a privileged program holds")
-+__success __retval(0) __log_level(2)
-+__msg("R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
-+int narrow_copy_yields_scalar(void *ctx)
++__description("pointer arithmetic on a loaded typed pointer sanitizes it first")
++__success __retval(0)
++__xlated("r{{[0-9]}} = *(u64 *)(r{{[0-9]}} +8)")
++__xlated("...")
++__xlated("r1 &= 134217696")
++__xlated("r12 = 0x{{[0-9a-f]+}}")
++__xlated("r1 += r12")
++__xlated("r1 += 16")
++__xlated("*(u64 *)(r1 +0) = r2")
++int ptr_field_arithmetic_sanitizes(void *ctx)
 +{
-+	struct typed_obj *obj;
++	struct node_obj *n, *m;
 +
 +	arena_bind();
-+	obj = ptr;
-+	asm volatile("r1 = %[p];"
-+		     "w2 = w1;"
-+		     :: [p] "r"(obj)
++	n = ptr;
++	m = n->next;
++	asm volatile("r1 = %[m];"
++		     "r2 = 0;"
++		     "r1 += 16;"
++		     "*(u64 *)(r1 + 0) = r2;"
++		     :: [m] "r"(m)
++		     : "r1", "r2", "memory");
++	return 0;
++}
++
++SEC("syscall")
++__description("a NULL typed pointer dereferences object 0 of the slice, held directly or loaded from a field")
++__success __retval(42)
++int ptr_field_null_lands_on_object_zero(void *ctx)
++{
++	struct node_obj *zero = NULL, *n, *m;
++
++	arena_bind();
++	/*
++	 * The compiler treats a NULL dereference as undefined and would drop
++	 * the store, fold the stored NULL into the load and the load into
++	 * nothing; the barriers keep each value opaque so that the accesses
++	 * are emitted.
++	 */
++	barrier_var(zero);
++	zero->value = 42;
++	n = ptr;
++	n->next = NULL;
++	barrier_var(n);
++	m = n->next;
++	barrier_var(m);
++	return m->value;
++}
++
++SEC("syscall")
++__description("a typed pointer field takes a typed pointer, a loaded one, or NULL")
++__success __retval(0)
++int ptr_field_store_accepted(void *ctx)
++{
++	struct node_obj *n, *m, *p;
++
++	arena_bind();
++	n = ptr;
++	m = ptr2;
++	n->next = m;
++	p = m->next;
++	n->next = p;
++	n->next = NULL;
++	return 0;
++}
++
++SEC("syscall")
++__description("a typed pointer field does not take a scalar")
++__failure __msg("store into typed pointer field of struct node_obj expects a typed arena pointer to struct node_obj or NULL")
++int ptr_field_store_scalar_rejected(void *ctx)
++{
++	struct node_obj *n;
++
++	arena_bind();
++	n = ptr;
++	/* Written by hand: the compiler would cast the value before the store. */
++	asm volatile("r6 = %[n];"
++		     "call %[bpf_get_prandom_u32];"
++		     "r1 = r6;"
++		     "*(u64 *)(r1 + 8) = r0;"
++		     :: [n] "r"(n), __imm(bpf_get_prandom_u32)
++		     : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "memory");
++	return 0;
++}
++
++SEC("syscall")
++__description("a scalar assigned to a typed pointer field is cast by the compiler first")
++__success __retval(0)
++__xlated("call unknown")
++__xlated("...")
++__xlated("r{{[0-9]}} &= 134217696")
++__xlated("r12 = 0x{{[0-9a-f]+}}")
++__xlated("r{{[0-9]}} += r12")
++__xlated("*(u64 *)(r{{[0-9]}} +8) = r{{[0-9]}}")
++int ptr_field_store_scalar_cast_by_compiler(void *ctx)
++{
++	struct node_obj *n;
++
++	arena_bind();
++	n = ptr;
++	n->next = (void *)(long)bpf_get_prandom_u32();
++	return 0;
++}
++
++SEC("syscall")
++__description("a typed pointer field does not take a pointer to another typed struct")
++__failure __msg("store into typed pointer field of struct node_obj expects a typed arena pointer to struct node_obj or NULL")
++int ptr_field_store_other_type_rejected(void *ctx)
++{
++	struct typed_obj *other;
++	struct node_obj *n;
++
++	arena_bind();
++	n = ptr;
++	other = ptr;
++	/* Written by hand: the compiler would re-cast the value to node_obj first. */
++	asm volatile("r1 = %[n];"
++		     "r2 = %[o];"
++		     "*(u64 *)(r1 + 8) = r2;"
++		     :: [n] "r"(n), [o] "r"(other)
++		     : "r1", "r2", "memory");
++	return 0;
++}
++
++SEC("syscall")
++__description("a pointer to another typed struct assigned to a typed pointer field is re-cast by the compiler")
++__success __retval(0)
++int ptr_field_store_other_type_recast(void *ctx)
++{
++	struct typed_obj *other;
++	struct node_obj *n;
++
++	arena_bind();
++	n = ptr;
++	other = ptr;
++	n->next = (struct node_obj *)other;
++	return n->next == NULL;
++}
++
++SEC("syscall")
++__description("a typed pointer field is loaded whole")
++__failure __msg("typed pointer field of struct node_obj must be accessed with a 64-bit load or store")
++int ptr_field_narrow_load_rejected(void *ctx)
++{
++	struct node_obj *n;
++
++	arena_bind();
++	n = ptr;
++	asm volatile("r1 = %[n];"
++		     "w2 = *(u32 *)(r1 + 8);"
++		     :: [n] "r"(n)
 +		     : "r1", "r2");
 +	return 0;
 +}
 +
 +SEC("syscall")
-+__description("a narrow store of a typed pointer to the stack is an invalid spill")
-+__failure __msg("invalid size of register spill")
-+int narrow_store_is_invalid_spill(void *ctx)
++__description("a typed pointer field is stored whole")
++__failure __msg("typed pointer field of struct node_obj must be accessed with a 64-bit load or store")
++int ptr_field_narrow_store_rejected(void *ctx)
 +{
-+	struct typed_obj *obj;
++	struct node_obj *n;
 +
 +	arena_bind();
-+	obj = ptr;
-+	asm volatile("r1 = %[p];"
-+		     "*(u32 *)(r10 - 8) = r1;"
-+		     :: [p] "r"(obj)
-+		     : "r1", "memory");
++	n = ptr;
++	asm volatile("r1 = %[n];"
++		     "w2 = 0;"
++		     "*(u32 *)(r1 + 8) = w2;"
++		     :: [n] "r"(n)
++		     : "r1", "r2", "memory");
 +	return 0;
 +}
 +
-+#endif /* __BPF_FEATURE_TYPED_ARENA_CAST */
++SEC("syscall")
++__description("a typed pointer field takes no atomic operation")
++__failure __msg("typed pointer field of struct node_obj")
++int ptr_field_atomic_rejected(void *ctx)
++{
++	struct node_obj *n, *m;
 +
-+char _license[] SEC("license") = "GPL";
++	arena_bind();
++	n = ptr;
++	m = ptr2;
++	__sync_val_compare_and_swap((__u64 *)&n->next, 0, (__u64)m);
++	return 0;
++}
++
++/* The same member outside a typed object is data */
++struct raw_holder {
++	struct node_obj *n;
++	__u64 v;
++};
++
++SEC("syscall")
++__description("a pointer stored in raw arena memory loads as a scalar and casts back to its object")
++__success __retval(0)
++int ptr_field_in_raw_memory_is_scalar(void *ctx)
++{
++	struct raw_holder __arena *h;
++	struct node_obj *n, *again;
++
++	h = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!h)
++		return 1;
++	n = ptr;
++	n->value = 7;
++	h->n = n;
++	again = h->n;
++	return again != n || again->value != 7;
++}
++
++SEC("syscall")
++__description("a struct typed only by a pointer to a typed struct gets a typed arena of its own")
++__success __retval(0) __log_level(2)
++__msg("typed arena for struct head_obj: slot 8 bytes")
++int ptr_field_makes_struct_typed(void *ctx)
++{
++	struct head_obj *h;
++	struct node_obj *n;
++
++	arena_bind();
++	h = ptr;
++	n = ptr2;
++	h->first = n;
++	return h->first != n;
++}
++
++/*
++ * The cast the compiler inserts is one instruction on every path through it:
++ * a loaded typed pointer needs the sanitizing sequence there, an allocated
++ * object needs the identity, and the two cannot share a lowering.
++ */
++SEC("syscall")
++__description("one cast cannot both sanitize an arena pointer and pass an allocated object")
++__failure __msg("casts values that need different treatment on different paths")
++int cast_conflicts_between_arena_and_allocated(void *ctx)
++{
++	struct node_obj *n, *a;
++	struct head_obj *h;
++
++	arena_bind();
++	a = bpf_obj_new(struct node_obj);
++	if (!a)
++		return 1;
++	h = ptr;
++	if (bpf_get_prandom_u32() & 1)
++		n = h->first;
++	else
++		n = a;
++	n->value = 1;
++	bpf_obj_drop(a);
++	return 0;
++}
++
++SEC("syscall")
++__description("one instruction sanitizes one typed arena: two types on two paths are rejected")
++__failure __msg("sanitizes typed arena pointers of different types on different paths")
++int ptr_field_sanitize_two_types_at_one_insn(void *ctx)
++{
++	struct node_obj *n;
++	struct pair_obj *p;
++
++	arena_bind();
++	n = ptr;
++	p = ptr;
++	asm volatile("call %[bpf_get_prandom_u32];"
++		     "if r0 == 0 goto 1f;"
++		     "r1 = %[n];"
++		     "r1 = *(u64 *)(r1 + 8);"
++		     "goto 2f;"
++		     "1: r1 = %[p];"
++		     "r1 = *(u64 *)(r1 + 8);"
++		     "2: r2 = *(u64 *)(r1 + 16);"
++		     :: [n] "r"(n), [p] "r"(p), __imm(bpf_get_prandom_u32)
++		     : "r0", "r1", "r2", "r3", "r4", "r5", "memory");
++	return 0;
++}
++
++SEC("syscall")
++__description("one instruction sanitizes one typed arena: a typed pointer on one path only is rejected")
++__failure __msg("sanitizes a typed arena pointer only on some paths")
++int ptr_field_sanitize_on_one_path(void *ctx)
++{
++	struct node_obj *n;
++
++	arena_bind();
++	n = ptr;
++	asm volatile("r2 = 0;"
++		     "*(u64 *)(r10 - 16) = r2;"
++		     "call %[bpf_get_prandom_u32];"
++		     "if r0 == 0 goto 1f;"
++		     "r1 = %[n];"
++		     "r1 = *(u64 *)(r1 + 8);"
++		     "goto 2f;"
++		     "1: r1 = r10;"
++		     "r1 += -32;"
++		     "2: r2 = *(u64 *)(r1 + 16);"
++		     :: [n] "r"(n), __imm(bpf_get_prandom_u32)
++		     : "r0", "r1", "r2", "r3", "r4", "r5", "memory");
++	return 0;
++}
++
+ #endif /* __BPF_FEATURE_TYPED_ARENA_CAST */
+ 
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
