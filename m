@@ -1,64 +1,64 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-wr2-f7.google.com (mail-wr2-f7.google.com [74.125.225.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716A33A05C4
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4918B3A7F46
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790465728; cv=none; b=o0B9jH22buMtRQP6Sryr6gkMI7yY3ibnDGf9Fx1zgOEkEpSVVHXqw488ehSSCO5uShPk2UUt/vHF+xX8yBC1c+xH5ktR74khTvH6av3hpyiXqKEDUY/7cUpcgaUJZ/uke5/VC/1iP0borofW4pTfWtQnYddmhVAPbLSHUl8yliQ=
+	t=1790465729; cv=none; b=ABNLpL+epYwUNYCYQlZm9g/ngY/RZ6z5q7OI+HF18NNLxdWRHssamwXCqpCzrx2+6MAv1YKqiH9FqJqThEoOj98/3usyiZ7+2hkfSizCBcKZk383xNmcJlreWwBX/C9qaW6pBlWTNdvL858YAjkuz2DJtZJOACfg7+sldVZ4vpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790465728; c=relaxed/simple;
-	bh=E2AuCmsXTK++8U0Kn7WnJ7Om+7zwIUgxEE+w99xm0zc=;
+	s=arc-20240116; t=1790465729; c=relaxed/simple;
+	bh=ZLmEI5cq/Suni8pJI8suZUXD0UDh+vhex1BG3mkFFk8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cqqRDiL5hbgtWY9RfkVqJFWxap3hsSomKEC5phEdJpt8UJXwfyHFmHwhja55KseuWju+wqnP5h/+3UQSRbpJ80WgN7dZBiJE7NQwB89p3h62Su5pVFvCwKLas9ia0HLle4DC+wtWgffGGeJOANTJ5WmKAek6jUe2SJdkf5KkFd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DdDxSBz6; arc=none smtp.client-ip=74.125.225.138
+	 MIME-Version; b=h4Pk2MZHcKj91wMqBbtNpZVrqu3Y/SfrHhQUvoeUizqZmlxBOM4Cl+DsoEcw/GzdzisPL1CRRucZpz+Eu7KHF2wV66uXQHjlAvu6NnyHzZg/6Bar4QmbKTpMFFLdNJpo5V9BlB3evfwhmZvXfi41oq6E5BhzMqclmke3WKul0nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B/p2XeDk; arc=none smtp.client-ip=74.125.225.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdDxSBz6"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ffd5111f2so3330605e9.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B/p2XeDk"
+Received: by mail-wr2-f7.google.com with SMTP id ffacd0b85a97d-48888103f99so271996f8f.0
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790465724; x=1791070524; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790465726; x=1791070526; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OVQfxctZBAmzG6J0lcASmCkF/iklJ8Ai6u3dFnv6bp4=;
-        b=DdDxSBz6rSw5NKbkwHZ/My2ieB/xzzMm44g2foUEt2YMREa0GDaUppS5bIcg9M4Saq
-         FaVm9nssK738odbckRM2/AwLYRcp9+osO8RVmDsMpGsWsJY8XIwAjiRaxg6a80pq2L0f
-         q6ZXgqSwtn9yj30Ww1x7/dxDX/CpimrPwf0qbMRONKwo7M/f2BsYjm4I/N5JMVRCCxDJ
-         s22FjgQrv/nt9f38eQihSkzqKbDJm5RfFMwxTSuBGOfhIzzg6Ay1ZYL4sVKC+/uMsqVz
-         TPsT9bmn38336X8Pu5Rd9RMBX4XsoUZeyfXety6eRDnUKHWw+z/1NtLQSE4KHh9lNSqA
-         42Tg==
+        bh=oBukAGD51VpFtJSBzeBykFBrjv1g1mPavrDHfL7i5x8=;
+        b=B/p2XeDkLgDkfq5CEU5dAEBFbKgiMKc5nl3hI5QYOEhrr+KkqK4HzPjiA2ZG85oV8l
+         ec1mnwkN9q5R5QZjOxVlTdeQ1w0v/9SoRA6pIh6+OCiUq+Ya2eD02+Lsy2l0GCtbJfJ3
+         gET1RMydtEWzdGo+48Q9wJ3m+SV2WZd1IXscqjwwTmdMvM31gCRYGuet5FxLR591kBbi
+         QSFdK26I8dh8wbdweaIffzIVLDjsJSFnsMgo63lyTkLrA3WpDCPx89mY0EdSwTb32GHE
+         70uCl7C5wKmWm4oav1mtMF+BjgGA1mXlVvd43jJZoVe1+hqEJt0yhzwQqtW4nCYdrfPC
+         8JUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790465724; x=1791070524;
+        d=1e100.net; s=20260707; t=1790465726; x=1791070526;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OVQfxctZBAmzG6J0lcASmCkF/iklJ8Ai6u3dFnv6bp4=;
-        b=xycD9A5URCpHIgUEHBJZ/ap+lomLU973pR46U6FPJ2pqR86sagxuRyCzsSBmXYsC8p
-         Ahs4JVcV1fMmN+eIut9hfIFPMbmnfmxtpzr+mkOZ0LHtl6jB/Ggip+XJJM1ZnEmbiZSx
-         9fWYZ1tTEiJOOZZe02tw5w945RBwKRC9HKf+dmANMAjUsgC6aN0+//Plt/bVRP1HAJC4
-         w39cgjmWbLSbpqX9wy8h7qqJzoafhlm6dQxV3YegxuRSeGimNgnCDcmScr0eCyjczY/p
-         CSHLWxnOtLXIW2RWK0IwvrqdejZrkW8S1SYW15GYg/MqDufAAigOhjmlJiTyLZ5KCq2b
-         4o3A==
-X-Gm-Message-State: AFuF++mAiJ81Juy5oeaxRNfHfrLbK5fQXJcBWU6R7R+91Swt2GkbfS15
-	07fGpqXf2oG9CmadxPuxRQvJre2+4xCzL3cWm2u/4dlcXi8d2zJhuboDKSHTmNph
-X-Gm-Gg: AYBFou3bh0LUQxgmqTqNS6Db0VcEddlJjHeRyooDx+6UQJ41iJ7N+UwYz8NWyzTjlLJ
-	5W8xaXN4ibPQlbe15k0KOFWC7Ji0e6RVTW8R0gM/wHjfbA7dTp1oV6GzutyUHtBXMwewwcrFbrA
-	/F3LbXqdsEup0WGiGqsya/uXDfHh8KSuoJjYepreZRLzkp2KAqpC5Py3wDkyp/3ilPjKjqBFTm1
-	YSCHpcOtwvKnzsSsIawSrlXA6srODyNEZyKxBEi6UiPcIbm0ovCOi5oi2vgYgGr+PhPIJuW0Bd8
-	ZOYyeLOdGzwllobjQfWLCW93h+boD36n3bv6V/U/+hhvTu3mFdZYuIedCRcM3kf89zdFvqoXNA/
-	YE31HpAP3HdRs3SuwJ0U1I1gvua7Z/X4VGH6wljacboZk4LF6ElpbUg9dRw8J0AHytaEcX4M8rq
-	+6E3SrZZH3S+f55z9RvIbRZampP/HW/CVA8blqaDtP9udoMKLcJaAXSUSQ5DejZ9di6rF4vqBF0
-	YXWqRfUHmazwmGaGcWrdir0zZ1jNRI+hj/84zoPjEx/yNYAt++k/px0Z1fqdPE8kJkN88R9aB0m
-	vmlqorFBC8UuXwKIwUvvT6IsGdf1115QGaT6RQ==
-X-Received: by 2002:a05:600c:628e:b0:49e:84bf:6136 with SMTP id 5b1f17b1804b1-49fe66b42b6mr147917685e9.11.1790465724549;
-        Sat, 26 Sep 2026 16:35:24 -0700 (PDT)
+        bh=oBukAGD51VpFtJSBzeBykFBrjv1g1mPavrDHfL7i5x8=;
+        b=XQsVUIDSOd3gmzL5ZMZHl0f3hsDNdONpSBzBXpDtXbS1wdlDQalfeaeQ6+P82TDHfp
+         NHfKgcVOpbsnmhuzBiF56McScOoz5/FmLOqPYT93t0nH29kM4tVgnxWDElvWGYAitVTt
+         HbdFgwUM3kr/bi6UBy+7/jdYrxmkGL50eCUCxrvMdKA6E2Uq8pyredyEKTidTTqoqURd
+         crBKFhH01l7xnWGXdDKhJlEtzkG4j04mUMu/h/4MRFXZQbuwdLCo0BZcwrut5XEls02l
+         +uPqIF8CvPWXA2WV9hMdlGjdCmy5JjESC3Pgb3xmYbYjYSSirKLK+FqvzO0d4RDr5qUl
+         XZfQ==
+X-Gm-Message-State: AFuF++mOtpnlOBEWhwn2LHqtNFHeUDzh/e9UbxEHqfsyIXqwh+0nYIEN
+	iy2Wwnu3whIP42DpsJ45KZdas/BCplqDDROrtWAUNKnxb0GflhyPIOfC+1BYSweZ
+X-Gm-Gg: AYBFou1u8Crq7G4dsdcYdcuAiSxsBTAqDBlYNRo/NrYr4eYpCBr8XZJgEp2gFstMt62
+	4/RYzIVcMyJvD6+mHVQ73aRWwbVij5VovkUY6Gnj6vaNvmV04QRDwQCf9FDGC9FEQFcjFAC787K
+	Ql9nS0KIRg2mfBh4dz9UFTr+iBfp6Bk9E468uTyR8t58bw2vTJDcO7zVgJEOQrQj8nzXOGVc+2m
+	OeU4p+jY4pYoF4xKYda4+aDy2mF6+ftGZ/MxcDMO3k0R9KxZa+rhdEF2xOkolQJv7M/3MFX5jtX
+	Ivx4hKfnStLyoEbSOTiVyTjqc/Y4BjhZuQgSe+Mjbn5NtL18nUz64t78WAws/gYX9tvHbzHQF8o
+	veqhNFnln8M+zEnILK058sCkmIWXqJCG6jeo9XY4MtupvKBga15w+8A+a3RwZZio0FhtbuEvrFH
+	wHjDFjHJMH6he4KRqVd9tAKBgvIPa9nAdm9oPzuYcUfqt0Hc0OGE2426x1Hye0/nK69T7B31SoF
+	oruJWI3zeV0f9vF17ORUm28GjV+h4UBDDV+wQPie4khOFds9BkoRXlT+ei4j1IqBWXoFitVQJuH
+	WFJd/Ay9JOD5LJ9Et5sLkFfvPrpgv4l5nJ92Zw==
+X-Received: by 2002:a05:600c:1d29:b0:49c:fc6e:a3d9 with SMTP id 5b1f17b1804b1-49fe66eeeaamr192025515e9.24.1790465726541;
+        Sat, 26 Sep 2026 16:35:26 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0019162fcsm10329225e9.13.2026.09.26.16.35.24
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0018f0e79sm14477275e9.7.2026.09.26.16.35.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 16:35:24 -0700 (PDT)
+        Sat, 26 Sep 2026 16:35:25 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 11/16] libbpf: Support the typed_arena_cast instruction
-Date: Sun, 27 Sep 2026 01:34:49 +0200
-Message-ID: <20260926233503.3114147-12-memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 12/16] selftests/bpf: Build BPF objects with compiler-inserted typed arena casts
+Date: Sun, 27 Sep 2026 01:34:50 +0200
+Message-ID: <20260926233503.3114147-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926233503.3114147-1-memxor@gmail.com>
 References: <20260926233503.3114147-1-memxor@gmail.com>
@@ -80,102 +80,66 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4073; i=memxor@gmail.com; h=from:subject; bh=E2AuCmsXTK++8U0Kn7WnJ7Om+7zwIUgxEE+w99xm0zc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWLxqd+L6Q+/S3nQcPvtz01a1Bf2PJj1sURbL2HROq coyOb6po5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABNR2c7whz9JhZmRSzhxmUfh 4ZAvHLqd5ypzl9iL39ldb1Vz4sZPbkaGT5czz24sXz9X6tCBRp6ic7euah1VPq3ru+ez1ezEE0E b2AA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2734; i=memxor@gmail.com; h=from:subject; bh=ZLmEI5cq/Suni8pJI8suZUXD0UDh+vhex1BG3mkFFk8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWAIn28TzUd9kvjy5dqLsJE+m6duQi6lfHpru2zh55 ZJ/L8W/dJSyMIhxMciKKbKU/N/HZHyi8neg7TJumDmsTCBDGLg4BWAif7QZ/tfu1lyg/DOoLGfn NYbI/9s+/D0uv9044GCAO/fPGrtL9r8Y/odd7Npy6hZncULi2ecbfj9aMLFK/oLvFiVGr0nXNv6 LZeYGAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The typed_arena_cast instruction turns any 64-bit value into a pointer to an
-object of a program-BTF struct in the struct's typed arena, the kernel-only
-region of an arena map. It is encoded as a 64-bit register move with an off
-of BPF_TYPED_ARENA_CAST and the struct's local BTF type ID in imm, and the
-kernel takes the ID from there, so a compiler that emits the instruction
-records a BPF_CORE_TYPE_ID_LOCAL relocation against it, the way it does for
-the ld_imm64 behind __builtin_btf_type_id().
-
-Let the relocation patcher write a local type ID into that instruction. It
-is the one ALU form with a register source that carries a relocation, and it
-takes no other relocation kind; nothing else about the patching of ALU
-immediates changes.
-
-Add bpf_typed_arena_cast() to bpf_helpers.h, wrapping the compiler builtin
-under its feature macro, so that programs cast through one name whatever the
-toolchain.
+Clang inserts typed_arena_cast where a pointer to a typed record is used,
+but only with the +typed-arena target feature, and it defines
+__BPF_FEATURE_TYPED_ARENA_CAST only then: a struct with kptr fields lives in
+map values of programs that run on kernels without the instruction, so the
+insertion has to be opted into. Probe the feature the way cpu v4 is probed,
+by asking the compiler for the macro, and pass it to every flavor when the
+compiler has it. The typed arena tests are gated on the macro and skip with
+a compiler that lacks the feature.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/bpf_helpers.h | 13 +++++++++++++
- tools/lib/bpf/relo_core.c   | 19 +++++++++++++++++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 9d160b5b9c0e..1a440e32ebeb 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -340,6 +340,19 @@ enum libbpf_tristate {
- /* Helper macro to print out debug messages */
- #define bpf_printk(fmt, args...) ___bpf_pick_printk(args)(fmt, ##args)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index afa589a27b15..bd1f84f55edc 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -15,6 +15,13 @@ ifneq ($(shell $(CLANG) --target=bpf -mcpu=help 2>&1 | grep 'v4'),)
+ CLANG_CPUV4 := 1
+ endif
  
-+/*
-+ * Turn any 64-bit value into a pointer to an object of the given struct type
-+ * in its typed arena, with the typed_arena_cast instruction: the kernel masks
-+ * the value into the struct's slice of the arena map's typed region, so the
-+ * result names an object of that type whatever the value was, and the
-+ * verifier trusts it. The struct's local BTF type ID is relocated into the
-+ * instruction. Requires compiler support.
-+ */
-+#ifdef __BPF_FEATURE_TYPED_ARENA_CAST
-+#define bpf_typed_arena_cast(v, type)					\
-+	((typeof(type) *)__builtin_bpf_typed_arena_cast((v), *(typeof(type) *)0))
-+#endif
++# Check whether clang inserts typed arena casts; the feature defines the macro
++# the typed arena tests are gated on, so they skip with a clang without it
++ifneq ($(shell echo | $(CLANG) --target=bpf -Xclang -target-feature -Xclang +typed-arena \
++		-dM -E - 2>/dev/null | grep __BPF_FEATURE_TYPED_ARENA_CAST),)
++CLANG_TYPED_ARENA := -Xclang -target-feature -Xclang +typed-arena
++endif
 +
- struct bpf_iter_num;
+ # Order correspond to 'make run_tests' order
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
+ 	test_sockmap \
+@@ -510,7 +517,7 @@ BINARY := test_progs
+ BPF_CC := $(CLANG)
+ BPF_CC_MSG := CLNG-BPF
+ BPF_SYS_INCLUDES := $(CLANG_SYS_INCLUDES)
+-BPF_CC_FLAGS := -O2 $(BPF_TARGET_ENDIAN) -mcpu=v3
++BPF_CC_FLAGS := -O2 $(BPF_TARGET_ENDIAN) -mcpu=v3 $(CLANG_TYPED_ARENA)
+ BPF_DEFINES := -DENABLE_ATOMICS_TESTS
+ include Makefile.skel
  
- extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __weak __ksym;
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 2672623a4198..e872e432729b 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -1028,6 +1028,12 @@ static int insn_bytes_to_bpf_size(__u32 sz)
- 	}
- }
+@@ -526,12 +533,12 @@ $(OUTPUT)/test_progs: $(RUNNER_PREREQS) $(BPF_OBJS) $(ALL_SKELS) FORCE
  
-+/* rX = typed_arena_cast(rY, <local type ID in imm>) */
-+static bool is_typed_arena_cast_insn(struct bpf_insn *insn)
-+{
-+	return insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && insn->off == BPF_TYPED_ARENA_CAST;
-+}
-+
- /*
-  * Patch relocatable BPF instruction.
-  *
-@@ -1043,7 +1049,8 @@ static int insn_bytes_to_bpf_size(__u32 sz)
-  * 3. rX = <imm64> (load with 64-bit immediate value);
-  * 4. rX = *(T *)(rY + <off>), where T is one of {u8, u16, u32, u64};
-  * 5. *(T *)(rX + <off>) = rY, where T is one of {u8, u16, u32, u64};
-- * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64}.
-+ * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64};
-+ * 7. rX = typed_arena_cast(rY, <imm>), for a local type ID relocation only.
-  */
- int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
- 			int insn_idx, const struct bpf_core_relo *relo,
-@@ -1060,8 +1067,16 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
- 	switch (class) {
- 	case BPF_ALU:
- 	case BPF_ALU64:
--		if (BPF_SRC(insn->code) != BPF_K)
-+		/*
-+		 * The typed arena cast is a register move whose imm names the
-+		 * struct by its local type ID; the kernel takes the ID from there.
-+		 */
-+		if (is_typed_arena_cast_insn(insn)) {
-+			if (relo->kind != BPF_CORE_TYPE_ID_LOCAL)
-+				goto bad_insn;
-+		} else if (BPF_SRC(insn->code) != BPF_K) {
- 			goto bad_insn;
-+		}
- 		if (res->poison)
- 			return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
- 		if (res->validate && insn->imm != orig_val) {
+ $(OUTPUT)/test_progs-no_alu32: $(RUNNER_PREREQS) FORCE
+ 	+$(Q)$(RUNNER_MAKE) RUNNER=test_progs FLAVOR=no_alu32 TESTS_DIR=prog_tests \
+-		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v2'
++		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v2 $(CLANG_TYPED_ARENA)'
+ 
+ ifneq ($(CLANG_CPUV4),)
+ $(OUTPUT)/test_progs-cpuv4: $(RUNNER_PREREQS) FORCE
+ 	+$(Q)$(RUNNER_MAKE) RUNNER=test_progs FLAVOR=cpuv4 TESTS_DIR=prog_tests \
+-		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v4' \
++		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v4 $(CLANG_TYPED_ARENA)' \
+ 		BPF_DEFINES=-DENABLE_ATOMICS_TESTS
+ endif
+ 
 -- 
 2.53.0
 
