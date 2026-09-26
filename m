@@ -1,151 +1,265 @@
-Received: from mta1.migadu.com (out-51.mta1.migadu.com [95.215.58.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5553A7580
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1734261B9E
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790466847; cv=none; b=Z6cQsSasJ+/nq+3YsckZPSnmd67vERGFeYQRAMV43qf3bp6F4TwUXhCUQ4O7tQ1EIx15kJDKtGJDyHkrnCx9u+gDLWsjaOaYmzP46naCaJBHsbrBchj8H2ntyDTpAAwitlpA3yO4pgY3JzsA7cbQJCLX+mqy9s4g4fZis85VFiw=
+	t=1790466918; cv=none; b=n1Qw7ehB2u4BNcqnRcPXIiouDaVWAY7gsWuQNF2LH6A96CosBnexFKitv0a2ARfysHePyiWH4RcGEIZNcxTKlCeIadV6spMr7btrZVLy49cefAPg7ModT1UIUDPXeYF1eBuDhJDpOY8+hYXi8ezOSFnomFJ49UF7yqeuWISFqNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790466847; c=relaxed/simple;
-	bh=jnoEmM6Qt97VgN8QiJcQ9FUn+SKqvZTHZvARRfMvd5Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B0fQ6SH4cTMbFZGElBy0wsQE5Cm9aka4WGBW5/erLCv3sKeJI5JmfIE4r0tcgUDcF0BnzJg9ej67rjtBS67BCgSN+7m+Wn1cPNMgXo4TaKLl3unqP1JALeMWCDbDeaB41ZnK+TrP+UyWM5MRwv535StkFbe1CgHMKBR7fgi7DkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Uu71l1yc; arc=none smtp.client-ip=95.215.58.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790466918; c=relaxed/simple;
+	bh=w5qG3jSaIxMhTZhaQQ1xBbH60hJxBlzcv+N3c1sKcgM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=SL1Cg14ylqB4lBcAgIrM39NB37SKtexEKE8hzpLp3Neq6yHIJ6kbOo3YmdL8+98YOToaXKE35XpnSKvmMHx/s64CqKOqzZi25PSHzlztxSbf8UfJ64X67b/UDT/rM2FzybaTxDR2fRZnV2+KRs62jHoDYyXxrdeWf0Y0wKZUIqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dz3vk0VL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Uu71l1yc"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=jnoEmM6Qt97VgN8QiJcQ9FUn+SKqvZTHZvARRfMvd5Q=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790466842; v=1; x=1791071642;
- b=Uu71l1ycIj0yOV6+j6EOtPEijyww68ppYu7nIrmc+/poog9buUXrSuJwe3PdvjplcDZd3LJ5
- s3NV0dN2i59n268f5mHWi+xK+2Tg08/xwA7TLXbnSPFkgo3NjIRbyWqXdCBOMh/wRbq00N2Z2N8
- QHuvh5ykowaAiuOKPkjqFLXw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 23df2140449d7eee;
-	Sat, 26 Sep 2026 23:54:02 +0000
-X-Mizu-Trace-ID: 23df2140449d7eee
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d19b799a-03d6-4902-91ff-9b97d54c3fd4@linux.dev>
-Date: Sat, 26 Sep 2026 16:54:00 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dz3vk0VL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EAA1F000FF;
+	Sat, 26 Sep 2026 23:55:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790466916;
+	bh=RTn9oGpiBkDrlbwcXX7ioUFWt4ll3ytnng7IodvfUlg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Dz3vk0VLQ2dKjTQrf+U6H1Y2vhX0+rJICiSFhngPk5tsLeuQH/JUBacPmsBksDa5W
+	 LPS8WzjRCnb8JCK/qHj6Yvs1eCFRWHViw1o0aid0vxFxYzQ1DcBPZVlKUb9rh8IRkm
+	 i90khCj8bJxtsd7+RGNazVKcUdTmLkUG9qR0TQ0qs+4jb95paXXSiDk1X4N+oWk+Gv
+	 t/hf0q84q01lxR/juzixURmM+UAMC1L/iY1MGzTzoFTQnrny8tQPEdiFdqNVztjjQ4
+	 YTSZfozbmhKjECZYlhYAOaSKY/rx9VNevwuRtNuWLS4iuVDsI8899VcczoPlV65k6P
+	 OtLqfZsZBKn9A==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next v1 09/16] bpf: Add typed arena page
+ allocation and release kfuncs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260926233503.3114147-10-memxor@gmail.com>
+References: <20260926233503.3114147-1-memxor@gmail.com>
+ <20260926233503.3114147-10-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 26 Sep 2026 23:55:15 +0000
+Message-Id: <20260926235516.28EAA1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 05/21] bpf: Prepare for an exception cleanup
- table before the CFG walk
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260926050006.2213110-1-yonghong.song@linux.dev>
- <20260926050032.2215748-1-yonghong.song@linux.dev>
- <20260926051638.867681F00893@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260926051638.867681F00893@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+s) to consider:
+- [Critical] bpf: stale TLB use-after-free window in allocation error path
+- [High] bpf: uninitialized kernel memory leak via arena page allocation
+- [High] bpf: TLB shootdown race due to premature state publication
+- [High] bpf: TOCTOU vulnerability via double fetch of user-provided page_c=
+nt
+- [High] bpf: state machine corruption race between worker and page fault h=
+andler
+- [Medium] bpf: memory leak when resilient spinlock acquisition fails
+- [Medium] bpf: incorrect memcg charging in tracking struct allocation
+--
 
+commit fcd33d7dbae3719eae8ea173b7e1a7f8cbe911c9
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-On 9/25/26 10:16 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] bpf: bpf_throw() bypasses exception_callback_subprog check skipping cleanup pads
-> --
->
-> commit bfb14bc84bb67f59ae10ca034e824ec0357d7d80
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Prepare for an exception cleanup table before the CFG walk
->
-> This commit introduces bpf_prepare_cleanup_exceptions() to record landing pads
-> for BPF-to-BPF calls and bpf_unwind() within a cleanup record's range. It
-> ensures the JIT supports dispatching landing pads and refuses to combine
-> tables with an exception callback.
->
->> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
->> index b19fcbf49b7ef..1ed0370a171b7 100644
->> --- a/kernel/bpf/exception.c
->> +++ b/kernel/bpf/exception.c
->> @@ -7,9 +7,56 @@
->>   #include <linux/filter.h>
->>   #include "exception.h"
->>   
->> +#define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
->> +
->>   BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
->>   BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
->>   
->> +static void mark_call_sites(struct bpf_verifier_env *env)
->> +{
->> +	u32 i, j;
->> +
->> +	for (i = 0; i < env->cleanup_info_cnt; i++) {
->> +		struct bpf_cleanup_info *rec = &env->cleanup_info[i];
->> +
->> +		for (j = rec->begin_off; j < rec->end_off; j++) {
->> +			struct bpf_insn *insn = &env->prog->insnsi[j];
->> +
->> +			if (!bpf_pseudo_call(insn) && !bpf_is_unwind_kfunc(insn))
->> +				continue;
-> [Severity: Medium]
-> Since bpf_throw() is not matched here, does it skip receiving a landing pad?
->
-> If a program is loaded with .bpf_cleanup records and calls bpf_throw() without
-> specifying a custom exception callback, could this cause it to silently bypass
-> the cleanup execution during unwinding, leaking user-defined logical resources
-> like map-based counters?
+bpf: Add typed arena page allocation and release kfuncs
 
-Yes, when bpf_throw() is triggered and landing pad has some resource to be
-released, it is possible those resource is not released. Will reject
-bpf_throw() if *any* landing pad exists in the program.
+This patch introduces typed arenas for BPF programs, allowing them to
+allocate and release contiguous memory regions mapped as real objects
+rather than scratch pages. It exposes two new kfuncs,=20
+bpf_typed_arena_alloc_pages() and bpf_typed_arena_free_pages(), which=20
+interface with a lock-free page allocator and defer the release via RCU
+workers.
 
->
->> +			env->insn_aux_data[j].cleanup_pad = rec->landing_pad_off + 1;
->> +		}
->> +	}
->> +}
->> +
->> +int bpf_prepare_cleanup_exceptions(struct bpf_verifier_env *env)
->> +{
-> [ ... ]
->
->> +	if (!bpf_jit_supports_cleanup_pads() || !env->prog->jit_requested) {
->> +		verbose(env,
->> +			"exception cleanup needs a JIT that can dispatch landing pads\n");
->> +		return -EOPNOTSUPP;
->> +	}
->> +	env->prog->jit_required = 1;
->> +
->> +	if (env->exception_callback_subprog) {
-> [Severity: Medium]
-> Does this check the state of env->exception_callback_subprog too early?
->
-> If a later pass dynamically inserts a default exception callback, could it
-> bypass this restriction and result in a mix of exception cleanup tables and
-> bpf_throw() usage?
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -686,6 +1045,8 @@ static unsigned long typed_arena_alloc_pages(struct bp=
+f_typed_arena *ta, unsigne
+ 					     u32 *page_cnt, int node_id)
+ {
+[ ... ]
+> +	if (node_id !=3D NUMA_NO_NODE &&
+> +	    ((unsigned int)node_id >=3D nr_node_ids || !node_online(node_id)))
+> +		return 0;
+> +	if (!*page_cnt)
+> +		return 0;
+> +	chunk_cnt =3D DIV_ROUND_UP((unsigned long)*page_cnt, typed_arena_chunk_=
+pages(ta));
 
-In the beginning of bpf_prepare_cleanup_exceptions(), we have
+[Severity: High]
+Does this code introduce a TOCTOU vulnerability? Because page_cnt is a poin=
+ter
+to memory that can be shared with BPF programs or userspace, it could be
+modified concurrently. If the value is changed to zero between the
+if (!*page_cnt) check and the DIV_ROUND_UP() calculation, chunk_cnt will
+evaluate to 0. This would cause bitmap_find_next_zero_area() to return 0 and
+grant the BPF program a valid pointer to the arena's base address without
+actually allocating any pages, potentially leading to memory corruption.
 
-+       if (!env->cleanup_info_cnt)
-+               return 0;
+[ ... ]
+> +	data.arena =3D arena;
+> +	for (done =3D 0; done < chunk_cnt; done++) {
+> +		head =3D alloc_pages_nolock(__GFP_ACCOUNT, node_id, order);
+> +		if (!head) {
 
-so landing_pad will exist in the prog. With previous explanation, that
-means bpf_throw() will be rejected. So reject exception_callback_subprog
-too.
+[Severity: High]
+Does this allocation leak uninitialized buddy allocator memory?
+The call to alloc_pages_nolock() omits the __GFP_ZERO flag. Since arena
+memory is exposed to BPF programs (and potentially mapped to userspace),
+untrusted code could read stale kernel data. Furthermore, during teardown,
+the kernel might invoke bpf_obj_free_fields() on this uninitialized garbage,
+which could lead to panics if random memory is treated as valid kptrs.
 
->
->> +		verbose(env,
->> +			"exception cleanup table cannot be combined with an exception callback\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	mark_call_sites(env);
->> +	return 0;
->> +}
+> +			ret =3D -ENOMEM;
+> +			goto back_out;
+> +		}
+> +		data.head =3D head;
+> +		data.start =3D start + (done << ta->chunk_shift);
+> +		data.i =3D 0;
+> +		ret =3D apply_to_page_range(&init_mm, data.start, chunk, apply_range_s=
+et_typed_cb,
+> +					  &data);
+> +		if (ret) {
+> +			/* The fault path took this chunk: give back the allocation whole. */
+> +			cdata.arena =3D arena;
+> +			cdata.ta =3D ta;
+> +			if (data.i)
+> +				apply_to_existing_page_range(&init_mm, data.start,
+> +							     (unsigned long)data.i << PAGE_SHIFT,
+> +							     apply_range_clear_typed_cb, &cdata);
+> +			free_pages_nolock(head, order);
+> +			goto back_out;
+> +		}
 
+[Severity: Critical]
+Does this code clear PTEs and free physical pages before flushing the TLB?
+When apply_to_page_range() returns -EBUSY, the partially installed PTEs are
+cleared and the pages are immediately freed to the buddy allocator via
+free_pages_nolock(). The actual TLB flush happens later at the back_out
+label. This creates a window where freed pages can be reallocated
+elsewhere in the kernel, while stale, writable VMA translations remain cach=
+ed
+in the TLB, allowing arbitrary memory overwrite.
+
+[ ... ]
+> +back_out:
+> +	/*
+> +	 * Back out the chunks installed before the one that failed. On -EBUSY
+> +	 * that chunk is the one the fault path took, and it keeps its mark.
+> +	 */
+> +	init_llist_head(&freed);
+> +	cdata.arena =3D arena;
+> +	cdata.ta =3D ta;
+> +	for (i =3D 0; i < chunk_cnt; i++)
+> +		if (ret !=3D -EBUSY || i !=3D done)
+> +			clear_bit(coff + i, ta->chunks);
+> +	for (i =3D 0; i < done; i++) {
+> +		cdata.head =3D NULL;
+> +		apply_to_existing_page_range(&init_mm, start + (i << ta->chunk_shift),=
+ chunk,
+> +					     apply_range_clear_typed_cb, &cdata);
+> +		if (cdata.head)
+> +			__llist_add(&cdata.head->pcp_llist, &freed);
+> +	}
+> +	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+> +	flush_tlb_kernel_range(start, start + (chunk_cnt << ta->chunk_shift));
+
+[Severity: High]
+Does this sequence create a TLB shootdown race? By clearing the allocation
+state bits (ta->chunks) and dropping the spinlock before calling
+flush_tlb_kernel_range(), it creates a window where concurrent allocations =
+can
+immediately claim the chunk and expose new mappings. Other CPUs might retain
+stale TLB translations to the old pages that are about to be freed, leading=
+ to
+silent data corruption or use-after-free conditions.
+
+[ ... ]
+> +static void typed_arena_free_pages(struct bpf_typed_arena *ta, unsigned =
+long addr, u32 page_cnt)
+> +{
+[ ... ]
+> +	first =3D off >> ta->chunk_shift;
+> +	last =3D (off + ((unsigned long)page_cnt << PAGE_SHIFT) - 1) >> ta->chu=
+nk_shift;
+> +
+> +	s =3D kmalloc_nolock(sizeof(*s), __GFP_ACCOUNT, NUMA_NO_NODE);
+
+[Severity: Medium]
+Does this structure allocation incorrectly charge the current context's mem=
+ory
+cgroup? Because this is a generic kfunc that can be invoked from arbitrary
+execution contexts (like tracepoints or network packets), __GFP_ACCOUNT will
+charge whichever random user task happens to be interrupted. Shouldn't this=
+ be
+wrapped with bpf_map_memcg_enter() and bpf_map_memcg_exit() to charge the
+map's memcg?
+
+> +	if (!s)
+> +		/*
+> +		 * The chunks stay allocated until the map is freed; nothing can
+> +		 * be retried from here.
+> +		 */
+> +		return;
+> +	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+> +		goto free_span;
+[ ... ]
+> +	irq_work_queue(&arena->typed_free_irq);
+> +	return;
+> +
+> +free_span:
+> +	kfree_nolock(s);
+> +}
+
+[Severity: Medium]
+Does failing to acquire the resilient spinlock cause a silent memory leak?
+If raw_res_spin_lock_irqsave() fails (e.g., due to lock contention), the
+tracking struct is freed and the function returns without error. The reques=
+ted
+chunks remain marked as taken indefinitely, but the BPF program assumes they
+were successfully queued for release, leaking arena chunks until map teardo=
+wn.
+
+[ ... ]
+> +static void typed_arena_free_worker(struct work_struct *work)
+> +{
+[ ... ]
+> +		while (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+> +			cpu_relax();
+> +		for (i =3D 0; i < s->chunk_cnt; i++) {
+> +			cdata.head =3D NULL;
+> +			apply_to_existing_page_range(&init_mm, start + (i << ta->chunk_shift),
+> +						     bpf_typed_arena_chunk(ta),
+> +						     apply_range_clear_typed_cb, &cdata);
+> +			if (cdata.head)
+> +				__llist_add(&cdata.head->pcp_llist, &heads);
+> +		}
+> +		typed_arena_chunks_mark(ta, s->coff, s->chunk_cnt, false);
+
+[Severity: High]
+Does this create a destructive state machine race with the page fault handl=
+er?
+The worker clears the PTE mappings under the spinlock, but the page fault
+handler (typed_arena_handle_page_fault()) runs locklessly. If a page fault
+triggers on a cleared chunk just before typed_arena_chunks_mark(..., false)=
+ is
+called, the fault handler will install a scratch page and set the chunk bit.
+The worker will then blindly force the bit to 0. The chunk becomes marked as
+'free' but contains a scratch page, causing all future allocations of this
+chunk to permanently fail with -EBUSY.
+
+> +		bitmap_clear(ta->pending, s->coff, s->chunk_cnt);
+> +		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+> +
+> +		flush_tlb_kernel_range(start,
+> +				       start + ((unsigned long)s->chunk_cnt << ta->chunk_shift));
+
+[Severity: High]
+Can this sequence lead to a TLB shootdown race? Similar to the allocation
+error path, clearing the allocation state bits and dropping the spinlock
+before flushing the TLB allows concurrent allocations to claim the chunks
+while stale translations remain cached, introducing memory corruption risks.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926233503.3114=
+147-1-memxor@gmail.com?part=3D9
