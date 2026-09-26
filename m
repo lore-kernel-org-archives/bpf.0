@@ -1,64 +1,64 @@
-Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4E943C05F
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749273A875D
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790429456; cv=none; b=j/hlZIBAM9krdZdCy9mpH5x2iz+ukNu1jUYtsYqVvdY9h2t9Q9aQQd0vGMV78HqT47U/ceCKf52Fhd4aPHa/rFiXUhGqHetdpve2ARKZZz25DCw9WEw7FF4hswhCqvO1532KpF+edujeWwyQttPWB+vhfBNbVJkUU4wCjBtcO5Y=
+	t=1790429458; cv=none; b=lTVrRISXwnMdFq/HMfA0qw4zWji/3vsW1X8wXLU9xD2jMK5vwMyiCledNXYTDbxvosPF6DpPaDiXzuYyA0BmxJSyELi8tcWd4UScpxmCN3VfrspFCBkTUzPmBx7GpQzPpBezAfCW279yc0dNW5MrzwJB33HVBnL4p8+0RDumOvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790429456; c=relaxed/simple;
-	bh=Z/fAGKxM/kwN9NtIupqtxmxlToae+MQKZDpvODEamLI=;
+	s=arc-20240116; t=1790429458; c=relaxed/simple;
+	bh=THTO3f6tYPhZQddgqGI16d/UpY8Z7CFiTb+sHQvTnSI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G8964+FZL18B0RNe103ihmlGuBeTDUvQUFGrBTHS/aoA5EhtArFud4ZnZgHXLaBCtZ7Gc2jrS/nfhUu3wCjJpYNrIcYbsSS3HkD/h6qmqDFSKkWaQqaVJsUb5jyt7cMsrCXqpbppKjfRfUGIrKqPT2o6GGgS27MSh2SBenzkgJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWgyCiKx; arc=none smtp.client-ip=74.125.225.72
+	 MIME-Version; b=ZNLUWiuexRc0ieRDG7SY15c5b/8/7wY5i7J1eg10bDGqecIM5o7kfHdZu4Ru3+JU8golHn2oAc3r5vyJpb0aZn3YKFKnZJTiUFCU5Ds5GMuVRwPMjIwnframWiF6JTMr6gFhG96VRtWM8RHJMW2K7wzH92EgujiSpSL4rgMfiBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aGOvfAsn; arc=none smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWgyCiKx"
-Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-48880d1367fso557374f8f.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 06:30:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aGOvfAsn"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ffff11265so194985e9.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 06:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790429453; x=1791034253; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790429454; x=1791034254; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qH3PaVT/QJtDkzjVNWGNimUbmF56crRwYyDvwUsVet4=;
-        b=LWgyCiKxMe6mlo9aYohEwKYxJIiT7aQR98Kyz25f/cXVYIfy6JqCsvDn57ocM4nilV
-         QvJQaSTXcQpOlqA4p3P9iWxizMAzFgnymg2L7V7fYMx1Tuq0P8W6I1o4gt6RWGV+bkIM
-         WkQtHGN8WnVlJ1R1gDUV3cfA8XcnNtdMw1Qrt/MaDTY6UO28SZFQ30HxvISkqPFV1yzX
-         E16/wqOHhsumlLZQ1I5AGPRzcsqu1tWNyulb+JcWl5mT9QFaUxva1iy3mQU8WOHevLH5
-         ORGM2trRg9l9u0B8z7ICiM/30p8xcQ2NxbSeXw1QzE1zioFC7x4VM0EENzQhAccxBM1U
-         kbsg==
+        bh=S6wfD9Kh63r+1oPu+xfURlwcqdKMI/8fklfFl1dQPUo=;
+        b=aGOvfAsnnKqx5GETyA1RzyrGqvhDjUH+oJ7w5iWseNiy6V2eTs+WiAGGZL8KH/9cyR
+         nNm/e0gHlC6h83cVv72p40g63iSiieScXF3qWPpkMD7sNrYtckvzb/pZw40CLzsSlDNs
+         O6vSm8nng4u4nD+OIK9vdXCEIJn4kAnnUytVXPHYb0EXcsbRSNBjzQD+lQc2Ee7Lju6O
+         Y7ClsSWTKpXXp4UlU7Soe6hjuE5gYocpuoKfyLQ+7tmjtfoKeRAdWsdnl8LdOkXusBzK
+         fx0lCErMovCnJZVKO1G8VbZQIZXcVHewrH8CBhGn8aJR7KEXPLEqbDOZzxClqDfBt7yO
+         0lEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790429453; x=1791034253;
+        d=1e100.net; s=20260707; t=1790429454; x=1791034254;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qH3PaVT/QJtDkzjVNWGNimUbmF56crRwYyDvwUsVet4=;
-        b=tWcKHN2aNY7gdjDsN1ThIF/SY9GrbeSFShJyFI/wLKD3ifguZB/zInpyVxIFeJVyFW
-         oMKb76ECD3a8J3EAZWKcsRuQWeY3t45te+td7RWhe0He8PZmbiR2sUQyF+v8KEnw3VPx
-         wAEmd/NZhScdM1TbSnfh2ED0NGM7k4qdPupkedmDsRHQaEa/xctDXrcSlCRoi5BRsaxY
-         FxwWVTWHRd30q2dJQo3ufTPW3RddV9q6ZSN1ZFN+Znouo3Yekq8h+7hWGIY4VpKNSENO
-         YZwoXoY/ayq1yulxjEDa6ozXHPHxESRv3WlCllL5ptjQbJheDTf/y+WnI+PWWO8C3iNx
-         3njw==
-X-Gm-Message-State: AFuF++mIWgFIJqiSWqgYgVgieNAOkYEUzbGnxeE94516rWsa1qoGjOok
-	Ez9Z3a8arog6RNeAJHWF8Fnc6H9/542cWmGcKCRceJ1paGyl5XKobU6WzDB24IRO
-X-Gm-Gg: AYBFou1mC4OE3zX0yiI5IFSORJfpeVI0StxSQtOlYl1xBnrikCD3ePp+puKVPHP+Xqj
-	JdPh6O+0RO5RnOKIGPAmfFbkuklQLYIZOee7zgByaDRaSY59kOrDNAlYYbuNoXl3ENql68LBBLL
-	WLG4mP85XyYxMCLb280bbkeylM54ZzH5s2tKtFh/1Z0sIidW9rsGFvkUYFiDBj+SHS4uxf7CeH5
-	pxJUTqa986p/EsaYzkGt4MHHay3pxsh+QnU98ytDlClmffvsltjRVb41irp1FV3l5RPAZi6www1
-	a2RvplwU2R0Q2uRxoonNi/kPlYEENxhF1eAL0vRHRf7sDAzs2tTRWi7qfP9irfg5h8vJgwONfg1
-	u7ArjstH9d5PnVzsgrrosplHV0DH7RJ6IsawpkqgkC384YamJ3AGdSmamuKKMDnp5s6qmh61PYv
-	glk2DtW3in/HbMdCjtBBKmj1ivsBkJIMP8AQOL573Gir2lYy7MPeTS5GKbau8FHHBeRSk5HmEgG
-	H9cJ8f/BHuuVuc4UrwzjyVUPblDAxMGrjURELHO429aZYreXul57Kl5puA2uqlVaSja45Tc/HTE
-	F6D7Iv3A6il0htcYRvh6zJwsruCW+EKdYRr2SW8=
-X-Received: by 2002:a05:600c:8b25:b0:49f:e58a:1dc7 with SMTP id 5b1f17b1804b1-49ff06e50a7mr93904105e9.19.1790429452813;
-        Sat, 26 Sep 2026 06:30:52 -0700 (PDT)
+        bh=S6wfD9Kh63r+1oPu+xfURlwcqdKMI/8fklfFl1dQPUo=;
+        b=cToV+ZLE5SdLiTd2hincoQyzdlMcp8z8UTqeAwufRZfnh0MLFgdmwVU+kXzdsjVieS
+         NYun7U26QGpkhSw58luKcvQ/wssjhp3nplg4QijU5xl2Yih+uKO8qvAZAoNYzMsHyLtA
+         Z7XSbVk4EiuAADHFuz5B45T241MLuSr5ymof6JhFSY7+I723mGhEB3NK0Q2r1OUi+ZC9
+         cTNC9k4iW6JrtkxHek2He2+fIz6WstO0pe79ter4OoOEhJCVqTn/2LHuBEueGfjeF16r
+         z/hD7sIKPTJlcuyP0PhLBtNcBzeR6bile3CrfohyE3X3+gh/nmwcSUBIh5HYECqyn94o
+         P1xA==
+X-Gm-Message-State: AFuF++mXDuQnkY4WOjxyzzbWpATxIGQMuHAapfHbfYtlTArM5MdUltke
+	kbdTtY87x+wW6RqTlyudHCNImvu+BggEayy9IPcNnXBC/eR4UjlWtb4rX67mGzGF
+X-Gm-Gg: AYBFou39ZWln0lb7uTwxP6HqDhbVp0z3Slmrk+zPBxglAuhmpbxMiTNny9v76l8L50x
+	k/sNjKv2vTnaV38EqRu6Zd2EGStc1Gs2sB9HOnD2xf+6IVw50LlTOddaHqs+YPnaJ0FAQsnVdTG
+	C0R+csQDTGNQeEI58VSEE0ZSUaden7THG+cgk9CU70ZBWnx5ELdyReePLI4263M3sq9k81amhgi
+	BEitNVnJLkyXT+2udZdxqgi2CxNLnaRs71LYBcOOngLldxcRjBVFKxh2aV6/Yc22gkm6Ho1/ZFE
+	WtL+iBKz/xpLGegNXPsIPlW6oYMlFobeBaNoxID0Pl2EHy6hRAzKVOwPcHSgOIGztg3SIXQbnCC
+	ftxReiZQEKS93YzpQL2U7c3EeErpl87aZ627iWBKVVtCadxFTQPXf7GB9sM30tBi9arfIcSu5xK
+	orWUYsg7NfQ27Q/ga2Sxb+ByF8XFQ9jbpO486b5ajBABK6ClBuGfUCiBaneIk8UXWO6s513rHa3
+	K5e0vD3TpepAuINW4pP+FtrpOzAPuWD0VRCzd22JRgYmEWgSsECak2N5x7FYXx89RP/ugTYVkG1
+	rz6y/qRK6yvp4/x61YC1AQREdtCyvVLI6eql+pqHyKFKoK5s
+X-Received: by 2002:a05:600c:354e:b0:49e:6e7c:d895 with SMTP id 5b1f17b1804b1-49fe66ef3f5mr153550735e9.26.1790429454482;
+        Sat, 26 Sep 2026 06:30:54 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06bdd11sm135711925e9.9.2026.09.26.06.30.52
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06d4394sm138690175e9.15.2026.09.26.06.30.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 06:30:52 -0700 (PDT)
+        Sat, 26 Sep 2026 06:30:54 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 2/3] bpf: Correct Program Structure diagnostic context
-Date: Sat, 26 Sep 2026 15:30:44 +0200
-Message-ID: <20260926133048.2962553-3-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 3/3] selftests/bpf: Test Program Structure diagnostic context
+Date: Sat, 26 Sep 2026 15:30:45 +0200
+Message-ID: <20260926133048.2962553-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926133048.2962553-1-memxor@gmail.com>
 References: <20260926133048.2962553-1-memxor@gmail.com>
@@ -80,148 +80,94 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5556; i=memxor@gmail.com; h=from:subject; bh=Z/fAGKxM/kwN9NtIupqtxmxlToae+MQKZDpvODEamLI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv7iSdlq3pmLTG0u9zRxH6zntmE7VXUjuOq7WuVd6qKa 5X8bkjuKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwESOvWFkmPDF56b876e7eBTl k78smTL3niODoOXGVYsUjE50PJqo9JyR4cqE4mcXX390vts0w2ND4iO+BY+7vVNaGmu6vadnnD1 0mQUA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2917; i=memxor@gmail.com; h=from:subject; bh=THTO3f6tYPhZQddgqGI16d/UpY8Z7CFiTb+sHQvTnSI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv7iSdyfSyL353hU3vv2Sniq8XFutWWX+WagWLd34n3v vNHF/N1lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCL8dQz/rHo9BG9pvJqt/2C5 9Qwe2XAvoyTGk3M3rWYXTl9SXGr5leGf3sddjQznwoovpof8e+WX9TZ+mSw385WM39kywdN3Rcx hAAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Program Structure reports have two attribution gaps. A missing jump
-table is reported at the beginning of its subprogram rather than at
-the gotox that needs the table, and the subprogram-layout checks run
-before func_info and line_info are validated and installed, so their
-reports cannot name the source function or line.
+Exercise each corrected Program Structure report. Place a
+missing-table gotox after another instruction so its attribution
+differs from the subprogram start.
 
-Report the missing jump table at the gotox instruction that looks it up,
-rather than at the start of its subprogram.
-
-func_info and line_info validation only needs the subprogram boundaries
-found by add_subprogs() and the LD_ABS and tail-call properties that
-check_subprogs() collects while scanning instructions; it does not
-depend on the layout checks themselves. Split the property collection
-into its own nested subprogram and instruction scan, together with the
-program's callx marker, and run bpf_check_btf_info() before
-check_subprogs(). The jump-boundary and fallthrough reports then carry
-validated source information without changing either check.
-
-CO-RE relocations are unaffected: commit c26e97721b17 ("bpf: Apply
-CO-RE relocations before subprogram validation") applies them before
-add_subprogs(), and they stay there. Only the func_info and line_info
-validation moves.
+Add malformed subprogram layouts for a branch crossing a subprogram
+boundary and a subprogram that falls through its end. Both cases carry
+BTF line records and assert that their structured reports include the
+corresponding source function and file.
 
 Link: https://lore.kernel.org/bpf/cf2f420c2b21de440a7dc51b1565c0f06d4b539640ee5c03384e5d77bcfb5686@mail.kernel.org/
-Fixes: a8f427835394 ("bpf: Report Program Structure CFG errors")
+Link: https://lore.kernel.org/r/20260924170646.2366016-8-memxor@gmail.com
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/cfg.c      |  2 +-
- kernel/bpf/verifier.c | 54 +++++++++++++++++++++++++++++--------------
- 2 files changed, 38 insertions(+), 18 deletions(-)
+ .../selftests/bpf/progs/verifier_cfg.c        | 40 +++++++++++++++++++
+ .../selftests/bpf/progs/verifier_gotox.c      |  2 +
+ 2 files changed, 42 insertions(+)
 
-diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-index b0bd9ba951df..d8a579680e5b 100644
---- a/kernel/bpf/cfg.c
-+++ b/kernel/bpf/cfg.c
-@@ -393,7 +393,7 @@ subprog_jt(int t, struct bpf_verifier_env *env)
- 	if (!subprog->jt) {
- 		verbose(env, "no jump tables found for subprog starting at %u\n", subprog_start);
- 		bpf_diag_program_structure(
--			env, subprog_start, "missing jump table",
-+			env, t, "missing jump table",
- 			"Make sure subprograms containing gotox instructions are accompanied by jump tables referencing these subprograms.",
- 			"No jump table was found for the subprogram that starts at instruction %u.",
- 			subprog_start);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 03dbc0e00398..b2cc607ac02d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3107,6 +3107,34 @@ static int add_kfuncs(struct bpf_verifier_env *env)
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+index 6379dfc9389b..b429fa7a08f5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+@@ -56,6 +56,46 @@ __naked void out_of_range_jump2(void)
+ "	::: __clobber_all);
  }
  
-+static void find_subprog_properties(struct bpf_verifier_env *env)
++static __naked __noinline __used int cross_subprog_target(void)
 +{
-+	struct bpf_subprog_info *subprog = env->subprog_info;
-+	struct bpf_insn *insn = env->prog->insnsi;
-+	int cur_subprog;
-+
-+	for (cur_subprog = 0; cur_subprog < env->subprog_cnt; cur_subprog++) {
-+		int i;
-+
-+		for (i = subprog[cur_subprog].start;
-+		     i < subprog[cur_subprog + 1].start; i++) {
-+			u8 code = insn[i].code;
-+
-+			if (code == (BPF_JMP | BPF_CALL) &&
-+			    insn[i].src_reg == 0 &&
-+			    insn[i].imm == BPF_FUNC_tail_call) {
-+				subprog[cur_subprog].has_tail_call = true;
-+				subprog[cur_subprog].tail_call_reachable = true;
-+			}
-+			if (BPF_CLASS(code) == BPF_LD &&
-+			    (BPF_MODE(code) == BPF_ABS || BPF_MODE(code) == BPF_IND))
-+				subprog[cur_subprog].has_ld_abs = true;
-+			if (bpf_is_callx(&insn[i]))
-+				env->has_callx = true;
-+		}
-+	}
++	asm volatile ("					\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
 +}
 +
- static int check_subprogs(struct bpf_verifier_env *env)
- {
- 	int i, subprog_start, subprog_end, off, cur_subprog = 0;
-@@ -3120,17 +3148,6 @@ static int check_subprogs(struct bpf_verifier_env *env)
- 	for (i = 0; i < insn_cnt; i++) {
- 		u8 code = insn[i].code;
- 
--		if (code == (BPF_JMP | BPF_CALL) &&
--		    insn[i].src_reg == 0 &&
--		    insn[i].imm == BPF_FUNC_tail_call) {
--			subprog[cur_subprog].has_tail_call = true;
--			subprog[cur_subprog].tail_call_reachable = true;
--		}
--		if (BPF_CLASS(code) == BPF_LD &&
--		    (BPF_MODE(code) == BPF_ABS || BPF_MODE(code) == BPF_IND))
--			subprog[cur_subprog].has_ld_abs = true;
--		if (bpf_is_callx(&insn[i]))
--			env->has_callx = true;
- 		if (BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32)
- 			goto next;
- 		if (BPF_OP(code) == BPF_CALL)
-@@ -3154,9 +3171,10 @@ static int check_subprogs(struct bpf_verifier_env *env)
- 		}
- next:
- 		if (i == subprog_end - 1) {
--			/* to avoid fall-through from one subprog into another
-+			/*
-+			 * To avoid fall-through from one subprog into another,
- 			 * the last insn of the subprog should be either exit
--			 * or unconditional jump back or bpf_throw call
-+			 * or unconditional jump back or bpf_throw call.
- 			 */
- 			if (code != (BPF_JMP | BPF_EXIT) &&
- 			    code != (BPF_JMP32 | BPF_JA) &&
-@@ -22570,17 +22588,19 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
- 
--	/* Discover all subprograms before validating their layout and BTF. */
-+	/* Discover all subprograms and collect the properties needed by BTF validation. */
- 	ret = add_subprogs(env);
- 	if (ret < 0)
- 		goto skip_full_check;
- 
--	ret = check_subprogs(env);
-+	find_subprog_properties(env);
++SEC("socket")
++__description("jump across subprogram boundary")
++__failure __msg("jump out of range from insn 1")
++__msg("jump_across_subprog_boundary @ verifier_cfg.c")
++__naked void jump_across_subprog_boundary(void)
++{
++	asm volatile ("					\
++	call cross_subprog_target;			\
++	goto +1;					\
++	exit;						\
++"	::: __clobber_all);
++}
 +
-+	/* Validate BTF before reporting subprogram layout errors. */
-+	ret = bpf_check_btf_info(env, attr, uattr);
- 	if (ret < 0)
- 		goto skip_full_check;
- 
--	/* Validate BTF against the complete subprogram layout. */
--	ret = bpf_check_btf_info(env, attr, uattr);
-+	ret = check_subprogs(env);
- 	if (ret < 0)
- 		goto skip_full_check;
- 
++static __naked __noinline __used int fallthrough_subprog(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("subprogram fallthrough")
++__failure __msg("last insn is not an exit or jmp")
++__msg("fallthrough_subprog @ verifier_cfg.c")
++__naked void subprog_fallthrough(void)
++{
++	asm volatile ("					\
++	call fallthrough_subprog;			\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ SEC("socket")
+ __description("invalid DW LDSX instruction in diagnostics")
+ __failure __msg("BUG_ldx_99")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+index f5a9878c7b8d..dc7baa0f2458 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
++++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+@@ -101,9 +101,11 @@ __naked void jump_table_terminal_gotox_subprog(void)
+  */
+ SEC("socket")
+ __failure __msg("no jump tables found for subprog starting at 0")
++__msg(">>> 1 | (0d) gotox r0")
+ __naked void jump_table_no_jump_table(void)
+ {
+ 	asm volatile ("						\
++	r0 = 0;							\
+ 	.8byte %[gotox_r0];					\
+ 	r0 = 1;							\
+ 	exit;							\
 -- 
 2.53.0
 
