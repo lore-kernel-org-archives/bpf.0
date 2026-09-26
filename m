@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29EE38AC68
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 05:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B22038643B
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 05:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790398898; cv=none; b=V7XAfSv+geqXgQ+y53X04X0R1OazTdbIY/N+WwxVUNdIaSPj+WTVxSZUHmeWsLENKF4kbxkZgtPDONHjguFDoQYyxZxN2PluLUclxDRt+27lc78ZnqeMgV8R4z7clMX60koO1L7d2wsrhhbHrtEbIDkYhFSYZBxs+VgmwPOm0/I=
+	t=1790398899; cv=none; b=RlTeQZcYIUHKKfVjnR/N8hrC40L7CHYSuto4AjLdBFUM5XUBtGonfQOxtSWi3YlNc31te5UH3wIerfmZ1wahm7+yFXMw+kvoQi6r4k5TEHiPp/hIf4UmPJt3jOWCJFtFaAK3HWc8DtG7ADmQU0ty6tLSjBCZ0pElfPYor6KoKsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790398898; c=relaxed/simple;
-	bh=DyeKN3b/kTWE2k7Z/Ynpn6DyZ5pYEpY8GARS5IOsvpw=;
+	s=arc-20240116; t=1790398899; c=relaxed/simple;
+	bh=ugO5Ys4nM3MA8/F0ETaRfBXfIUfwsQITnT4J0GFGdsw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FJKk2Ie7kYoSJvbxeBGSwdXsb4DcnTscVpC9MdFBmoUR5MFSf9j1lG10NV1n51eroQ1fR8n5fhAY8rKgHl7BNZmx9LwocQhhLBOs+i6ZubPU4sUSHbAzYLKZN0RCk1uHuijPBWpNcyb8qISfE3pYRpr0ZVVWmvqiLN0y+UMmvmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=APgJ+1Dil8RHLRjg1Wa5m6kOqQwYb/lzauyipxX1+/GudH8nEbVGAMWBW4D82JlFbFdxj1kqwV/vAtp+Q2Y4k+nIwQR2w5PSYjS2ViZSCZXqPgLYkW7q2arVemShKSlt51SiRWFjZ9nI8ckiBOTyxW9z9lc+42hWDh1CnlaOuQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 3D8EC2D45969AB; Fri, 25 Sep 2026 22:01:23 -0700 (PDT)
+	id 597522D45969CF; Fri, 25 Sep 2026 22:01:28 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v6 15/21] libbpf: Collect .bpf_cleanup records and pass them to the kernel
-Date: Fri, 25 Sep 2026 22:01:23 -0700
-Message-ID: <20260926050123.2220977-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 16/21] libbpf: Carry the exception cleanup table through the light skeleton
+Date: Fri, 25 Sep 2026 22:01:28 -0700
+Message-ID: <20260926050128.2221315-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926050006.2213110-1-yonghong.song@linux.dev>
 References: <20260926050006.2213110-1-yonghong.song@linux.dev>
@@ -37,523 +37,135 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Parse the compiler-emitted .bpf_cleanup section and hand the resulting
-table to BPF_PROG_LOAD.
-
-Each record is three 4-byte fields, and each field is a byte offset into
-some code section named by a matching .rel.bpf_cleanup relocation.
-bpf_object__init_cleanup_info() resolves both halves once at open time an=
+A light skeleton does not call bpf_prog_load(). bpf_gen__prog_load() buil=
+ds
+its own union bpf_attr field by field, and the loader program it emits is
+what issues BPF_PROG_LOAD when the skeleton runs -- so a program loaded
+this way reached the kernel without the table the previous patch collecte=
 d
-keeps (section, instruction index) pairs; it rejects a record whose field
-has no relocation, whose relocation is not one of the two 32-bit types th=
-at
-spell a data reference to a code section -- R_BPF_64_NODYLD32 from LLVM,
-R_BPF_64_ABS32 from GNU as -- or whose offset is not instruction aligned.
-LLVM leaves the section's sh_entsize unset, so a section that declares on=
-e
-of a different size is refused, that being the only way a producer can sa=
-y
-it means something wider.
+for it, and the verifier refused it with "unreachable insn", which names
+neither the skeleton nor the table.
 
-The records are sorted by begin_off once the offsets are final, since the
-kernel wants the table sorted with disjoint ranges to find the record
-covering a call site with a binary search, and they arrive in .bpf_cleanu=
-p
-order, which says nothing about where the subprograms they describe were
-appended. Overlapping ranges are reported here, where the program name an=
-d
-both regions are still at hand.
-
-bpf_object_load_prog() then passes the per-program table through the
-bpf_prog_load() options added in the previous patch, with the record size
-carried on the program the way func_info and line_info carry theirs.
-bpf_program__clone() carries it too -- that is the load path veristat use=
-s,
-and without the table the kernel sees landing pads nothing reaches and
-refuses the program with "unreachable insn".
+Carry it the way func_info and line_info are carried: the records go into
+the loader's blob of bytes, the count and record size into the attr, and =
+a
+relocation stores the blob's address into attr.cleanup_info once that
+address is known. The attr grows to its new last field, cleanup_info_cnt.
+Records are 4-byte fields like the other info blobs, so a cross-endian
+build has to swap them too.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/libbpf.c          | 319 ++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf_internal.h |   3 +
- 2 files changed, 322 insertions(+)
+ tools/lib/bpf/gen_loader.c      | 29 +++++++++++++++++++++++++----
+ tools/lib/bpf/libbpf_internal.h |  7 +++++++
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7eb15a013a83..4e9584fff264 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -516,6 +516,11 @@ struct bpf_program {
- 	void *line_info;
- 	__u32 line_info_rec_size;
- 	__u32 line_info_cnt;
-+
-+	struct bpf_cleanup_info *cleanup_info;
-+	__u32 cleanup_info_rec_size;
-+	__u32 cleanup_info_cnt;
-+
- 	__u32 prog_flags;
- 	__u8  hash[SHA256_DIGEST_LENGTH];
-=20
-@@ -552,6 +557,7 @@ struct bpf_struct_ops {
- #define STRUCT_OPS_SEC ".struct_ops"
- #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
- #define ARENA_SEC ".addr_space.1"
-+#define CLEANUP_SEC ".bpf_cleanup"
-=20
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
-@@ -683,6 +689,25 @@ struct elf_sec_desc {
- 	Elf_Data *data;
- };
-=20
-+#define CLEANUP_REC_FIELDS	(sizeof(struct bpf_cleanup_info) / sizeof(__u=
-32))
-+
-+/* Index of each field of struct bpf_cleanup_info, read as an array of _=
-_u32. */
-+enum {
-+	CLEANUP_REC_BEGIN,
-+	CLEANUP_REC_END,
-+	CLEANUP_REC_PAD,
-+};
-+
-+/*
-+ * One (begin, end, landing_pad) triple from .bpf_cleanup, each field re=
-solved
-+ * from its relocation to a section and an instruction index within it. =
-Final
-+ * indices wait for subprogram placement, which differs per main program=
-.
-+ */
-+struct cleanup_raw_rec {
-+	int sec_idx[CLEANUP_REC_FIELDS];
-+	size_t insn_idx[CLEANUP_REC_FIELDS];
-+};
-+
- struct elf_state {
- 	int fd;
- 	const void *obj_buf;
-@@ -702,6 +727,8 @@ struct elf_state {
- 	bool has_st_ops;
- 	int arena_data_shndx;
- 	int jumptables_data_shndx;
-+	Elf_Data *cleanup_data;
-+	int cleanup_shndx;
- };
-=20
- struct usdt_manager;
-@@ -779,6 +806,9 @@ struct bpf_object {
- 	void *jumptables_data;
- 	size_t jumptables_data_sz;
-=20
-+	struct cleanup_raw_rec *cleanup_recs;
-+	size_t cleanup_rec_cnt;
-+
- 	struct {
- 		struct bpf_program *prog;
- 		unsigned int sym_off;
-@@ -848,7 +878,10 @@ static void bpf_program__exit(struct bpf_program *pr=
-og)
- 	zfree(&prog->sec_name);
- 	zfree(&prog->insns);
- 	zfree(&prog->reloc_desc);
-+	zfree(&prog->cleanup_info);
-=20
-+	prog->cleanup_info_rec_size =3D 0;
-+	prog->cleanup_info_cnt =3D 0;
- 	prog->nr_reloc =3D 0;
- 	prog->insns_cnt =3D 0;
- 	prog->sec_idx =3D -1;
-@@ -1600,6 +1633,7 @@ static struct bpf_object *bpf_object__new(const cha=
-r *path,
- 	obj->efile.obj_buf =3D obj_buf;
- 	obj->efile.obj_buf_sz =3D obj_buf_sz;
- 	obj->efile.btf_maps_shndx =3D -1;
-+	obj->efile.cleanup_shndx =3D -1;
- 	obj->kconfig_map_idx =3D -1;
- 	obj->arena_map_idx =3D -1;
-=20
-@@ -4100,6 +4134,9 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 				sec_desc->shdr =3D sh;
- 				sec_desc->data =3D data;
- 				obj->efile.has_st_ops =3D true;
-+			} else if (strcmp(name, CLEANUP_SEC) =3D=3D 0) {
-+				obj->efile.cleanup_data =3D data;
-+				obj->efile.cleanup_shndx =3D idx;
- 			} else if (strcmp(name, ARENA_SEC) =3D=3D 0) {
- 				obj->efile.arena_data =3D data;
- 				obj->efile.arena_data_shndx =3D idx;
-@@ -4135,6 +4172,7 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 			    strcmp(name, ".rel" STRUCT_OPS_LINK_SEC) &&
- 			    strcmp(name, ".rel?" STRUCT_OPS_SEC) &&
- 			    strcmp(name, ".rel?" STRUCT_OPS_LINK_SEC) &&
-+			    strcmp(name, ".rel" CLEANUP_SEC) &&
- 			    strcmp(name, ".rel" MAPS_ELF_SEC)) {
- 				pr_info("elf: skipping relo section(%d) %s for section(%d) %s\n",
- 					idx, name, targ_sec_idx,
-@@ -4915,6 +4953,249 @@ static struct bpf_program *find_prog_by_sec_insn(=
-const struct bpf_object *obj,
- 	return NULL;
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 251392aa8b41..d10cd0672475 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -994,13 +994,15 @@ static void cleanup_relos(struct bpf_gen *gen, int =
+insns)
+ 	cleanup_core_relo(gen);
  }
 =20
-+static int bpf_object__init_cleanup_info(struct bpf_object *obj)
-+{
-+	Elf_Data *data =3D obj->efile.cleanup_data;
-+	Elf_Data *relo =3D NULL;
-+	size_t i, nrels, nslots, nrecs;
-+	struct cleanup_raw_rec *recs;
-+	int *slot_sec, ret =3D 0;
-+	size_t *slot_val;
-+	const __u32 *vals;
-+	Elf64_Shdr *sh;
-+	bool native;
-+
-+	if (!data || obj->efile.cleanup_shndx < 0 || !data->d_size)
-+		return 0;
-+
-+	native =3D is_native_endianness(obj);
-+
-+	for (i =3D 0; i < obj->efile.sec_cnt; i++) {
-+		struct elf_sec_desc *sd =3D &obj->efile.secs[i];
-+
-+		if (sd->sec_type =3D=3D SEC_RELO && sd->shdr &&
-+		    sd->shdr->sh_info =3D=3D (Elf64_Word)obj->efile.cleanup_shndx) {
-+			relo =3D sd->data;
-+			break;
-+		}
-+	}
-+	if (!relo) {
-+		pr_warn("%s present without relocations\n", CLEANUP_SEC);
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+	/*
-+	 * LLVM leaves sh_entsize unset, so this only bites a producer that
-+	 * declares a record size -- which is the one able to tell us it means
-+	 * something other than three 4-byte fields.
-+	 */
-+	sh =3D elf_sec_hdr(obj, elf_sec_by_idx(obj, obj->efile.cleanup_shndx));
-+	if (sh && sh->sh_entsize &&
-+	    sh->sh_entsize !=3D sizeof(struct bpf_cleanup_info)) {
-+		pr_warn("%s record size %zu is not the expected %zu\n", CLEANUP_SEC,
-+			(size_t)sh->sh_entsize, sizeof(struct bpf_cleanup_info));
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+	if (data->d_size % sizeof(struct bpf_cleanup_info)) {
-+		pr_warn("%s size %zu is not a multiple of the record size %zu\n",
-+			CLEANUP_SEC, data->d_size, sizeof(struct bpf_cleanup_info));
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+
-+	vals =3D data->d_buf;
-+	nslots =3D data->d_size / sizeof(__u32);
-+	nrecs =3D data->d_size / sizeof(struct bpf_cleanup_info);
-+
-+	slot_sec =3D calloc(nslots, sizeof(*slot_sec));
-+	slot_val =3D calloc(nslots, sizeof(*slot_val));
-+	recs =3D calloc(nrecs ?: 1, sizeof(*recs));
-+	if (!slot_sec || !slot_val || !recs) {
-+		ret =3D -ENOMEM;
-+		goto out;
-+	}
-+	for (i =3D 0; i < nslots; i++)
-+		slot_sec[i] =3D -1;
-+
-+	/* One relocation per 4-byte field, naming the section it points into. =
-*/
-+	nrels =3D relo->d_size / sizeof(Elf64_Rel);
-+	for (i =3D 0; i < nrels; i++) {
-+		Elf64_Rel *rel =3D elf_rel_by_idx(relo, i);
-+		Elf64_Sym *sym =3D elf_sym_by_idx(obj, ELF64_R_SYM(rel->r_info));
-+		size_t type =3D ELF64_R_TYPE(rel->r_info);
-+		size_t slot =3D rel->r_offset / sizeof(__u32);
-+
-+		if (type !=3D R_BPF_64_NODYLD32 && type !=3D R_BPF_64_ABS32) {
-+			pr_warn("%s: relocation %zu has unexpected type %zu\n",
-+				CLEANUP_SEC, i, type);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+		if (!sym || slot >=3D nslots || rel->r_offset % sizeof(__u32)) {
-+			pr_warn("%s: bad relocation %zu\n", CLEANUP_SEC, i);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+		slot_sec[slot] =3D sym->st_shndx;
-+		/*
-+		 * The addend lives in the section data, which libelf leaves in
-+		 * the object's byte order; a non-section symbol additionally
-+		 * contributes its own value.
-+		 */
-+		slot_val[slot] =3D (native ? vals[slot] : bswap_32(vals[slot])) +
-+				 sym->st_value;
-+	}
-+
-+	for (i =3D 0; i < nslots; i++) {
-+		struct cleanup_raw_rec *rec =3D &recs[i / CLEANUP_REC_FIELDS];
-+		size_t field =3D i % CLEANUP_REC_FIELDS;
-+
-+		if (slot_sec[i] < 0) {
-+			pr_warn("%s: field %zu has no relocation\n", CLEANUP_SEC, i);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+		if (slot_val[i] % BPF_INSN_SZ) {
-+			pr_warn("%s: field %zu offset %zu is not instruction aligned\n",
-+				CLEANUP_SEC, i, slot_val[i]);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+		rec->sec_idx[field] =3D slot_sec[i];
-+		rec->insn_idx[field] =3D slot_val[i] / BPF_INSN_SZ;
-+	}
-+
-+	obj->cleanup_recs =3D recs;
-+	obj->cleanup_rec_cnt =3D nrecs;
-+	recs =3D NULL;
-+out:
-+	free(recs);
-+	free(slot_val);
-+	free(slot_sec);
-+	return ret;
-+}
-+
-+static int cmp_cleanup_info(const void *a, const void *b)
-+{
-+	const struct bpf_cleanup_info *x =3D a, *y =3D b;
-+
-+	if (x->begin_off =3D=3D y->begin_off)
-+		return 0;
-+	return x->begin_off < y->begin_off ? -1 : 1;
-+}
-+
-+static int bpf_prog_collect_cleanup_info(struct bpf_object *obj,
-+					 struct bpf_program *prog)
-+{
-+	size_t i;
-+	int j;
-+
-+	for (i =3D 0; i < obj->cleanup_rec_cnt; i++) {
-+		struct cleanup_raw_rec *raw =3D &obj->cleanup_recs[i];
-+		struct bpf_program *owner =3D NULL;
-+		struct bpf_cleanup_info ci =3D {};
-+		__u32 fields[CLEANUP_REC_FIELDS];
-+		void *tmp;
-+
-+		if (raw->sec_idx[CLEANUP_REC_BEGIN] =3D=3D raw->sec_idx[CLEANUP_REC_EN=
-D] &&
-+		    raw->insn_idx[CLEANUP_REC_BEGIN] >=3D raw->insn_idx[CLEANUP_REC_EN=
-D]) {
-+			pr_warn("%s: record %zu is an empty range [%zu,%zu)\n",
-+				CLEANUP_SEC, i, raw->insn_idx[CLEANUP_REC_BEGIN],
-+				raw->insn_idx[CLEANUP_REC_END]);
-+			return -LIBBPF_ERRNO__FORMAT;
-+		}
-+
-+		for (j =3D 0; j < CLEANUP_REC_FIELDS; j++) {
-+			size_t idx =3D raw->insn_idx[j], final;
-+			struct bpf_program *p;
-+
-+			/*
-+			 * An exclusive end may name the instruction past the
-+			 * last of a function, so ask about the last one the
-+			 * range covers, the way the kernel does.
-+			 */
-+			if (j =3D=3D CLEANUP_REC_END) {
-+				if (!idx) {
-+					pr_warn("%s: record %zu ends at instruction 0\n",
-+						CLEANUP_SEC, i);
-+					return -LIBBPF_ERRNO__FORMAT;
-+				}
-+				idx--;
-+			}
-+
-+			p =3D find_prog_by_sec_insn(obj, raw->sec_idx[j], idx);
-+			if (!p) {
-+				pr_warn("%s: record %zu field %d is not inside a function\n",
-+					CLEANUP_SEC, i, j);
-+				return -LIBBPF_ERRNO__FORMAT;
-+			}
-+			if (!owner) {
-+				owner =3D p;
-+			} else if (owner !=3D p) {
-+				pr_warn("%s: record %zu spans functions '%s' and '%s'\n",
-+					CLEANUP_SEC, i, owner->name, p->name);
-+				return -LIBBPF_ERRNO__FORMAT;
-+			}
-+
-+			if (owner =3D=3D prog) {
-+				final =3D raw->insn_idx[j] - prog->sec_insn_off;
-+			} else if (prog_is_subprog(obj, owner) && owner->sub_insn_off) {
-+				/*
-+				 * sub_insn_off is where this subprogram was
-+				 * appended to the main program being relocated;
-+				 * zero means it is not part of it.
-+				 */
-+				final =3D owner->sub_insn_off +
-+					raw->insn_idx[j] - owner->sec_insn_off;
-+			} else {
-+				owner =3D NULL;
-+				break;
-+			}
-+			fields[j] =3D final;
-+		}
-+		if (!owner)
-+			continue;
-+
-+		ci.begin_off =3D fields[CLEANUP_REC_BEGIN];
-+		ci.end_off =3D fields[CLEANUP_REC_END];
-+		ci.landing_pad_off =3D fields[CLEANUP_REC_PAD];
-+
-+		tmp =3D libbpf_reallocarray(prog->cleanup_info, prog->cleanup_info_cnt=
- + 1,
-+					  sizeof(*prog->cleanup_info));
-+		if (!tmp)
-+			return -ENOMEM;
-+		prog->cleanup_info =3D tmp;
-+		prog->cleanup_info_rec_size =3D sizeof(struct bpf_cleanup_info);
-+		prog->cleanup_info[prog->cleanup_info_cnt++] =3D ci;
-+
-+		pr_debug("prog '%s': cleanup region [%u,%u) -> landing pad %u\n",
-+			 prog->name, ci.begin_off, ci.end_off, ci.landing_pad_off);
-+	}
-+
-+	if (!prog->cleanup_info_cnt)
-+		return 0;
-+
-+	if (prog->cleanup_info_cnt > INT32_MAX / sizeof(struct bpf_cleanup_info=
-)) {
-+		pr_warn("prog '%s': too many cleanup records: %u\n",
-+			prog->name, prog->cleanup_info_cnt);
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+
-+	qsort(prog->cleanup_info, prog->cleanup_info_cnt,
-+	      sizeof(*prog->cleanup_info), cmp_cleanup_info);
-+	for (i =3D 1; i < prog->cleanup_info_cnt; i++) {
-+		struct bpf_cleanup_info *prev =3D &prog->cleanup_info[i - 1];
-+		struct bpf_cleanup_info *cur =3D &prog->cleanup_info[i];
-+
-+		if (cur->begin_off < prev->end_off) {
-+			pr_warn("prog '%s': overlapping cleanup regions [%u,%u) and [%u,%u)\n=
-",
-+				prog->name, prev->begin_off, prev->end_off,
-+				cur->begin_off, cur->end_off);
-+			return -LIBBPF_ERRNO__FORMAT;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int
- bpf_object__collect_prog_relos(struct bpf_object *obj, Elf64_Shdr *shdr,=
- Elf_Data *data)
+-/* Convert func, line, and core relo info blobs to target endianness */
++/* Convert func, line, core relo and cleanup info blobs to target endian=
+ness */
+ static void info_blob_bswap(struct bpf_gen *gen, int func_info, int line=
+_info,
+-			    int core_relos, struct bpf_prog_load_opts *load_attr)
++			    int core_relos, int cleanup_info,
++			    struct bpf_prog_load_opts *load_attr)
  {
-@@ -7894,6 +8175,13 @@ static int bpf_object__relocate(struct bpf_object =
-*obj, const char *targ_btf_pat
- 					return err;
- 			}
- 		}
-+
-+		err =3D bpf_prog_collect_cleanup_info(obj, prog);
-+		if (err) {
-+			pr_warn("prog '%s': failed to collect cleanup info: %s\n",
-+				prog->name, errstr(err));
-+			return err;
-+		}
- 	}
- 	for (i =3D 0; i < obj->nr_programs; i++) {
- 		prog =3D &obj->programs[i];
-@@ -8176,6 +8464,9 @@ static int bpf_object__collect_relos(struct bpf_obj=
-ect *obj)
- 			return -LIBBPF_ERRNO__INTERNAL;
- 		}
+ 	struct bpf_func_info *fi =3D gen->data_start + func_info;
+ 	struct bpf_line_info *li =3D gen->data_start + line_info;
+ 	struct bpf_core_relo *cr =3D gen->data_start + core_relos;
++	struct bpf_cleanup_info *ci =3D gen->data_start + cleanup_info;
+ 	int i;
 =20
-+		if (idx =3D=3D obj->efile.cleanup_shndx)
-+			continue;
-+
- 		if (obj->efile.secs[idx].sec_type =3D=3D SEC_RODATA)
- 			err =3D bpf_object__collect_rodata_relos(obj, shdr, data);
- 		else if (obj->efile.secs[idx].sec_type =3D=3D SEC_ST_OPS)
-@@ -8469,6 +8760,11 @@ static int bpf_object_load_prog(struct bpf_object =
-*obj, struct bpf_program *prog
- 		load_attr.line_info_rec_size =3D prog->line_info_rec_size;
- 		load_attr.line_info_cnt =3D prog->line_info_cnt;
- 	}
-+	if (prog->cleanup_info_cnt) {
-+		load_attr.cleanup_info =3D prog->cleanup_info;
-+		load_attr.cleanup_info_cnt =3D prog->cleanup_info_cnt;
-+		load_attr.cleanup_info_rec_size =3D prog->cleanup_info_rec_size;
-+	}
- 	load_attr.log_level =3D log_level;
- 	load_attr.prog_flags =3D prog->prog_flags;
- 	load_attr.fd_array =3D obj->fd_array;
-@@ -9062,6 +9358,7 @@ static struct bpf_object *bpf_object_open(const cha=
-r *path, const void *obj_buf,
- 	err =3D err ? : bpf_object__init_maps(obj, opts);
- 	err =3D err ? : bpf_object_init_progs(obj, opts);
- 	err =3D err ? : bpf_object__collect_relos(obj);
-+	err =3D err ? : bpf_object__init_cleanup_info(obj);
- 	if (err)
- 		goto out;
+ 	for (i =3D 0; i < load_attr->func_info_cnt; i++)
+@@ -1011,6 +1013,9 @@ static void info_blob_bswap(struct bpf_gen *gen, in=
+t func_info, int line_info,
 =20
-@@ -10195,6 +10492,9 @@ void bpf_object__close(struct bpf_object *obj)
- 	zfree(&obj->jumptables_data);
- 	obj->jumptables_data_sz =3D 0;
-=20
-+	zfree(&obj->cleanup_recs);
-+	obj->cleanup_rec_cnt =3D 0;
+ 	for (i =3D 0; i < gen->core_relo_cnt; i++)
+ 		bpf_core_relo_bswap(cr++);
 +
- 	for (i =3D 0; i < obj->jumptable_map_cnt; i++)
- 		close(obj->jumptable_maps[i].fd);
- 	zfree(&obj->jumptable_maps);
-@@ -10599,6 +10899,25 @@ int bpf_program__clone(struct bpf_program *prog,=
- const struct bpf_prog_load_opts
- 		attr.line_info_rec_size =3D info ? info_rec_size : prog->line_info_rec=
-_size;
- 	}
++	for (i =3D 0; i < load_attr->cleanup_info_cnt; i++)
++		bpf_cleanup_info_bswap(ci++);
+ }
 =20
-+	/* exception cleanup table */
-+	info =3D OPTS_GET(opts, cleanup_info, NULL);
-+	info_cnt =3D OPTS_GET(opts, cleanup_info_cnt, 0);
-+	info_rec_size =3D OPTS_GET(opts, cleanup_info_rec_size, 0);
-+	if (!!info !=3D !!info_cnt || !!info !=3D !!info_rec_size) {
-+		pr_warn("prog '%s': cleanup_info, cleanup_info_cnt, and cleanup_info_r=
-ec_size must all be specified or all omitted\n",
-+			prog->name);
-+		return libbpf_err(-EINVAL);
-+	}
-+	if (info) {
-+		attr.cleanup_info =3D info;
-+		attr.cleanup_info_cnt =3D info_cnt;
-+		attr.cleanup_info_rec_size =3D info_rec_size;
-+	} else if (prog->cleanup_info_cnt) {
-+		attr.cleanup_info =3D prog->cleanup_info;
-+		attr.cleanup_info_cnt =3D prog->cleanup_info_cnt;
-+		attr.cleanup_info_rec_size =3D prog->cleanup_info_rec_size;
-+	}
+ void bpf_gen__prog_load(struct bpf_gen *gen,
+@@ -1024,8 +1029,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 			       load_attr->line_info_rec_size;
+ 	int core_relo_tot_sz =3D gen->core_relo_cnt *
+ 			       sizeof(struct bpf_core_relo);
++	int cleanup_info_tot_sz =3D load_attr->cleanup_info_cnt *
++				  load_attr->cleanup_info_rec_size;
+ 	int prog_load_attr, license_off, insns_off, func_info, line_info, core_=
+relos;
+-	int attr_size =3D offsetofend(union bpf_attr, core_relo_rec_size);
++	int attr_size =3D offsetofend(union bpf_attr, cleanup_info_cnt);
++	int cleanup_info;
+ 	union bpf_attr attr;
+=20
+ 	memset(&attr, 0, attr_size);
+@@ -1074,9 +1082,17 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 		 core_relos, gen->core_relo_cnt,
+ 		 sizeof(struct bpf_core_relo));
+=20
++	attr.cleanup_info_rec_size =3D tgt_endian(load_attr->cleanup_info_rec_s=
+ize);
++	attr.cleanup_info_cnt =3D tgt_endian(load_attr->cleanup_info_cnt);
++	cleanup_info =3D add_data(gen, load_attr->cleanup_info, cleanup_info_to=
+t_sz);
++	pr_debug("gen: prog_load: cleanup_info: off %d cnt %u rec size %u\n",
++		 cleanup_info, load_attr->cleanup_info_cnt,
++		 load_attr->cleanup_info_rec_size);
 +
- 	/* Logging is caller-controlled; no fallback to prog/obj log settings *=
-/
- 	attr.log_buf =3D OPTS_GET(opts, log_buf, NULL);
- 	attr.log_size =3D OPTS_GET(opts, log_size, 0);
+ 	/* convert all info blobs to target endianness */
+ 	if (gen->swapped_endian && !gen->error)
+-		info_blob_bswap(gen, func_info, line_info, core_relos, load_attr);
++		info_blob_bswap(gen, func_info, line_info, core_relos, cleanup_info,
++				load_attr);
+=20
+ 	libbpf_strlcpy(attr.prog_name, prog_name, sizeof(attr.prog_name));
+ 	prog_load_attr =3D add_data(gen, &attr, attr_size);
+@@ -1098,6 +1114,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 	/* populate union bpf_attr with a pointer to core_relos */
+ 	emit_rel_store(gen, attr_field(prog_load_attr, core_relos), core_relos)=
+;
+=20
++	/* with no records there is no blob of them to point the attr at */
++	if (load_attr->cleanup_info_cnt)
++		emit_rel_store(gen, attr_field(prog_load_attr, cleanup_info),
++			       cleanup_info);
++
+ 	/* populate union bpf_attr fd_array with a pointer to data where map_fd=
+s are saved */
+ 	emit_rel_store(gen, attr_field(prog_load_attr, fd_array), gen->fd_array=
+);
+=20
 diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
 nal.h
-index 546f65b95cf4..f1630f03d5f5 100644
+index f1630f03d5f5..9d341839ca74 100644
 --- a/tools/lib/bpf/libbpf_internal.h
 +++ b/tools/lib/bpf/libbpf_internal.h
-@@ -56,6 +56,9 @@
- #ifndef R_BPF_64_ABS32
- #define R_BPF_64_ABS32 3
- #endif
-+#ifndef R_BPF_64_NODYLD32
-+#define R_BPF_64_NODYLD32 4
-+#endif
- #ifndef R_BPF_64_32
- #define R_BPF_64_32 10
- #endif
+@@ -572,6 +572,13 @@ static inline void bpf_core_relo_bswap(struct bpf_co=
+re_relo *i)
+ 	i->kind =3D bswap_32(i->kind);
+ }
+=20
++static inline void bpf_cleanup_info_bswap(struct bpf_cleanup_info *i)
++{
++	i->begin_off =3D bswap_32(i->begin_off);
++	i->end_off =3D bswap_32(i->end_off);
++	i->landing_pad_off =3D bswap_32(i->landing_pad_off);
++}
++
+ enum btf_field_iter_kind {
+ 	BTF_FIELD_ITER_IDS,
+ 	BTF_FIELD_ITER_STRS,
 --=20
 2.53.0-Meta
 
