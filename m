@@ -1,64 +1,64 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB0A466B70
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD0A45C70E
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790432454; cv=none; b=j953PcG8J+oJvLgxvfRgsLsUUQSqiJxz/JjFaq+NvoMie2SlKPGXY4Q8EAzVZWz7cu2D4WAA2Y5vE5RFnutPigIhOi1RgrFDBtxFPhfY/4elUWtw9V5DkConbedtb8Cc76eGDqxjRCKpzA+SGe5VO40luvWAFW2IYQ0YLTlbrQQ=
+	t=1790432455; cv=none; b=kl+TUMSV+iTKSqUQN7dMvUCzBMINb2fu89vvf6g7HkX9hIpzWpy+ADBM3ol7jY4JGOr1AlB5x407kQek3vS/Os2sxq0GRhk/UHxSnSKL5Yxr02Mk72vhC9OmaU50FvCAekk8XOi3Q/rSiae8f+DgoKD1M+vQfeA3NtoERaD6qDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790432454; c=relaxed/simple;
-	bh=tHuIJLAxQ9w5BnpgeLaFFxOisuZeQ1tZCcshkCYMwU0=;
+	s=arc-20240116; t=1790432455; c=relaxed/simple;
+	bh=aAMS7GR2IPU4cdgDTUEqDE3CeI6CFxANRxbtBYuGKB8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z628CekNh6n7Rz3H0S7xTgAnx9qY9t83QafjhETMHLXoz/7InhME3YY7qh9k/2YCBqEQeqQhkElrdJxpcbixx5sxzfCFpKTZout7kXymKSU0d8ofX5agKRUtEOyy1sVgno6KZWU52opdNfqkXJ81Fma0ay4w3uFFJJ2KtTIQ4Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OedxfIJS; arc=none smtp.client-ip=74.125.228.40
+	 MIME-Version:Content-Type; b=c7ud2JpMvbkju7+RT23NJXcjZj+6VNvyECmauS/etNab4BInEL6jN1UU/bH05y5w9aeDpgVb0FKYSgS1ooE/SniBKr4RbelI1qON1gqbp5aQZcFuJp4MoJ+AAlyk/OcIP9OyYWxLcNfRZNYAmk8rhTQTu87FCix57TcwLSqN2tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHBxBkFz; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OedxfIJS"
-Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc750a1482fso975445a12.2
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:20:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHBxBkFz"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4aa0f1766so1003109a12.0
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790432452; x=1791037252; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790432453; x=1791037253; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=dcpZPe85Z2cA2oFhs90y1NZzOIJkDihLuGeCHukreQw=;
-        b=OedxfIJSL8WdZZm0eMrkwnpzBLOc4UaGW1BKr9mvPkDDzLOu8LcInZc8qWJS9bTcLJ
-         8jM8FfzGd65hbI6Gv2jJMnrJagbrexbGiMHZcV5aQnqudxG9B4lHjOAQiSDPThhnxW58
-         jXVQALayBfy8t/XRaGwKtJeCLjtx1saZffNKpVk2M4SVh62RT5KunKY8jEjBpYcjlY3v
-         tdJrHjqgtqQ0MKYoSlA/kJ0cahIHr5NACzwavTBrSHPbqCfVCTeafHY0KAqLMOvOoHmW
-         9LLkkLWt5EdcUr2dnHJHK4QlAs0gTvPJo4BJqLQAMq9IwosyDzW/j+rIUyBdYYXiO211
-         cUSw==
+        bh=1MJGrlcNgSz3LrDg2uuiqS6Nb1GOd+/HLgF3iBBxN4A=;
+        b=bHBxBkFzqpMwIjPTPdQkGCXQkl8l11VgELsydLGG2ktUc6FwjrZTeloI+1HZERuC64
+         2MKvfKGfFL6ZgXSFmhQjynTPZt+8y7RZmsoBHyBuGuOZgYm27JfEuFHwGSFHas0esFOW
+         UQviLZHbIH3kmahsHxJwRRhin9aGJ6xNYKw/f8s3LAm2WICFbWzLq4G9QpvweBxOJpkZ
+         /GIiDRBuPFTknUYBOxgJN2jZ4R5NA4i5uXVsHJ8mq1xSB3dmwb2os0l6TpLLDBKwgnQS
+         OQUjGESC43U6eLOvsvLsR4XTjbTlhIqLfDdO/sFVVbRlwfXus9t8DzEiEMm+/C2JidSl
+         JJdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790432452; x=1791037252;
+        d=1e100.net; s=20260707; t=1790432453; x=1791037253;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=dcpZPe85Z2cA2oFhs90y1NZzOIJkDihLuGeCHukreQw=;
-        b=jPbVhNUSRhavUB6BNw1oLTsNKyOQDWfPm6Q6RYXBMrfSCwqJvl2eqNZ4AE8yxYrdtf
-         x1vWZnZGWTP3ond8A/L2bw5wLZ9+DGwHMyhz5IWzlzhl0N4vjcg8mtDsJCZv7bxxzhf7
-         ohVMZe/B/LOM6DZljokiH2hEvXqzL+iir+4vaT6aoJbR375+4h3frEH7xzpHOZPS1qLG
-         xIoSzxRdqU7d1oRf/jj1lCiheOHdNWyN+dpeXH0gvZKSyRWrDDnaHIHVMz0EJAp1CAhX
-         uGOGKRD4Bs+J9+vOs6IaThrgKl9OwHSAPPbW2Aebjnm+83Addqz+RIewX/GymIZhYhsl
-         Ncmw==
-X-Gm-Message-State: AFq9FYJRutR1og5jcoFegUUfJpvJkPvHLUF7m0aDkZuiVyBhoEqqS+Kn
-	nwtg8/gow3xfA7SYrsdxqw6OSoWi0FhHG/R3X2+u9bGiPIa3Ocd/0UMwzbduM7VJCV8=
-X-Gm-Gg: AYBFou0hfhTcTQZQmhesXK0RoAm2TXfpGuCdQcKZzbDYouhn/oENHoPISbsQD3IE0fE
-	TMiLH++VerAxCC/kk7YGF4vPoy64V7vrtJyYVjdLW/Il1w26UwFj3wZUsIWxrk56+w9PS5uI2I+
-	NX25p7uWJQd43f+TBllwToTt6+n9HJ+jWPeqcZCn/LsPLoz7nrtBksxH3UxsMzNsHr+h32guQVG
-	XwoZejn41Xqa0aKMzY9BZ8gB20F4qkqba7rnhgL3RW/dnC0x8RI0NNcNolKDJ2FZmtZjlWEFigQ
-	V2yYNH+IxKr2huA2DQqWCeU6wUcUIamIY559d0u+q/vK32bvkyx/EgJ4g0zTs4B22M/JZxDhPpA
-	6IsDsEh6Qz9Ldn4AkdzY0PbiJiqkoUaG+Rw6x4KJppd8cOWObAft7dvolbAeEoCILz79mxj8KJL
-	C4baFOzOVO+Azym04VTIcn61m6oeh7Xk9/cYYy68GjuhIcRHxxbFh9rOtkTu9ociCL1GCORgH2d
-	TMQCmzb0aKWgmwxSk8uogIk6EoLauwPk9JJ1Qz55A==
-X-Received: by 2002:a17:90b:50:b0:39e:5c88:ce10 with SMTP id 98e67ed59e1d1-3a0bb443ff8mr4339529a91.0.1790432452075;
-        Sat, 26 Sep 2026 07:20:52 -0700 (PDT)
+        bh=1MJGrlcNgSz3LrDg2uuiqS6Nb1GOd+/HLgF3iBBxN4A=;
+        b=fMPyetrg3YnggsEddPsekGW2Qe1ZbOItRP8OivyhDPN5I9L9Me14jGMIC5G/vHGCvf
+         aHcTnForPzgPmPsQrj7HEXD6kYHdFCmv0KnCsDK6axHD/brXgkQVaKaRUkH1Q449QPq7
+         /0YPOw+Hn+7UkZrRpuEJ3kTqABgkoDd9tm7Q0iedN1qFSHq73AxzLQY8asKU/cFW51ml
+         7amEuZR3QwXA/wiWwlb2aSiTjmxPbn9zfrY95sXxY/xUGL4S1JrOwCo+LtzcaXgoBfeI
+         bdI+TZgNYglls2GcirexhiXVjE9dOgcUc2y5a18Z8zRL4xcasSGOwrIU/IwmqBrBLFmw
+         9vzA==
+X-Gm-Message-State: AFq9FYJOXjhGwC6v4JCbqIWtWXIOREnClinpAa/FxrIr9PgpmVBtAZo9
+	PtdnywmItLde+aZ3jCx3Pvi31xsn77IlVek0xCbHKadBEbzXCxI+/9QmsbqhSlGYp9w=
+X-Gm-Gg: AYBFou3CMxJVR5Oe+p9BgzaK3EBwMSKdDMV+otr8W7G+0G8xEYBHSzGxisDcnoWLSQM
+	cEYN1IREjMB8tWzZDdLlxqgHQ4AkgcJt2qSX1xongx8rGcEtOJ+qY+L0iSnhkwROryEAv7zCP/2
+	DzjeYgKrLx6X6k9EN4D8FYIB8MstHTFQoWy+eKPmny297PI19aJC0CzlcxqGDq/9OJk82FmOYVc
+	oviWY7V0r5Ss/yapwq9lpfNTDddCml95/vTOnlJ1gtguomg1LRf8UpuoDZtl47Gw2ANBOW/LzMf
+	vrqXBz6yYpbakwLNJMNerZ1eQvSt8AfmYzE/Ul8KrtPznziZFI6vQrw9nqs/0nQ+GKJobzN6UBe
+	O7nue2XHUoPCWngklViFz5P7OdD7/skq3C3/CBF3rPGnbSQoBxjpDDGZ8UBTq4kipx7t3MRQ6S6
+	T1s0qGdynCy7S1jn/3DysNNmDqo1ea+4RTi3MMWqplx5NpHRu9XT3w70fv6gyxTAKQ3K5zsWGPb
+	R/HmH6C3THhS4spRG65l/L9aFdR9LGf/KciRC4TlQ==
+X-Received: by 2002:a17:90b:1643:b0:3a0:345a:3646 with SMTP id 98e67ed59e1d1-3a0bb62f2d3mr4677442a91.45.1790432453038;
+        Sat, 26 Sep 2026 07:20:53 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.20.51
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.20.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 07:20:51 -0700 (PDT)
+        Sat, 26 Sep 2026 07:20:52 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 06/36] bpf: add tnum_alignment()
-Date: Sat, 26 Sep 2026 07:20:04 -0700
-Message-ID: <20260926-scev-minimal-rebase-v1-6-c8e5ab5ba79f@gmail.com>
+Subject: [PATCH bpf-next 07/36] bpf: add cnum{32,64}_union()
+Date: Sat, 26 Sep 2026 07:20:05 -0700
+Message-ID: <20260926-scev-minimal-rebase-v1-7-c8e5ab5ba79f@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
@@ -84,47 +84,135 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Used by the SCEV widening logic later in the series.
-The verifier checks alignment for some memory accesses.
-When SCEV widens a pointer or an index variable, it must retain
-alignment information in order to allow array access.
+Add cnum32_union() and cnum64_union() to compute a smallest circular
+range containing both inputs.
+
+Do so by enumerating the following configurations in a rotated
+frame (a.base at the origin):
+
+0                                              UT_MAX
+|---------------------------------------------------|
+[= a ==============================]                |
+[= b tail =]           [= b main ===================>
+[= union ===========================================]
+
+0                                              UT_MAX
+|---------------------------------------------------|
+[= a =====================]                         |
+[= b tail ======]                    [= b main =====>
+[= union tail ============]          [= union main =>
+
+0                                              UT_MAX
+|---------------------------------------------------|
+[= a =======]                                       |
+[= b tail =============]             [= b main =====>
+[= union tail =========]             [= union main =>
+
+0                                              UT_MAX
+|---------------------------------------------------|
+[= a =========================]                     |
+|                 [= b ====================]        |
+[= union ==================================]        |
+
+0                                              UT_MAX
+|---------------------------------------------------|
+[= a =====================================]         |
+|               [= b ========]                      |
+[= union =================================]         |
+
+0                                              UT_MAX
+|---------------------------------------------------|
+[= a ============]                                  |
+|                               [= b =======]       |
+
+Two possible covering arcs:
+
+[= ab ======================================]       |
+[= ba tail ======]              [= ba main =========>
+
+Pick the smaller one.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/tnum.h |  2 ++
- kernel/bpf/tnum.c    | 11 +++++++++++
- 2 files changed, 13 insertions(+)
+ include/linux/cnum.h   |  2 ++
+ kernel/bpf/cnum_defs.h | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/include/linux/tnum.h b/include/linux/tnum.h
-index ca2cfec8de08..16682248f963 100644
---- a/include/linux/tnum.h
-+++ b/include/linux/tnum.h
-@@ -134,4 +134,6 @@ static inline bool tnum_subreg_is_const(struct tnum a)
- /* Returns the smallest member of t larger than z */
- u64 tnum_step(struct tnum t, u64 z);
- 
-+u32 tnum_alignment(struct tnum a);
-+
- #endif /* _LINUX_TNUM_H */
-diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
-index ec9c310cf5d7..1f620facd1b7 100644
---- a/kernel/bpf/tnum.c
-+++ b/kernel/bpf/tnum.c
-@@ -317,3 +317,14 @@ u64 tnum_step(struct tnum t, u64 z)
- 	inc = (filled + 1) & t.mask;
- 	return t.value | inc;
+diff --git a/include/linux/cnum.h b/include/linux/cnum.h
+index 49b7d0c7645d..ddf4726841e6 100644
+--- a/include/linux/cnum.h
++++ b/include/linux/cnum.h
+@@ -39,6 +39,7 @@ u32 cnum32_umin(struct cnum32 cnum);
+ u32 cnum32_umax(struct cnum32 cnum);
+ s32 cnum32_smin(struct cnum32 cnum);
+ s32 cnum32_smax(struct cnum32 cnum);
++struct cnum32 cnum32_union(struct cnum32 a, struct cnum32 b);
+ struct cnum32 cnum32_intersect(struct cnum32 a, struct cnum32 b);
+ void cnum32_intersect_with(struct cnum32 *dst, struct cnum32 src);
+ void cnum32_intersect_with_urange(struct cnum32 *dst, u32 min, u32 max);
+@@ -65,6 +66,7 @@ u64 cnum64_umin(struct cnum64 cnum);
+ u64 cnum64_umax(struct cnum64 cnum);
+ s64 cnum64_smin(struct cnum64 cnum);
+ s64 cnum64_smax(struct cnum64 cnum);
++struct cnum64 cnum64_union(struct cnum64 a, struct cnum64 b);
+ struct cnum64 cnum64_intersect(struct cnum64 a, struct cnum64 b);
+ void cnum64_intersect_with(struct cnum64 *dst, struct cnum64 src);
+ void cnum64_intersect_with_urange(struct cnum64 *dst, u64 min, u64 max);
+diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
+index 30685e43de04..05b17a8b4814 100644
+--- a/kernel/bpf/cnum_defs.h
++++ b/kernel/bpf/cnum_defs.h
+@@ -198,6 +198,50 @@ static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
+ 	return cnum;
  }
-+
+ 
 +/*
-+ * Return the number of trailing bits known to be zero in a tnum.
-+ * Return 64 for a tnum representing zero.
++ * Return a smallest arc containing both 'a' and 'b'.
++ * Break equal-size ties by choosing the smaller base.
 + */
-+u32 tnum_alignment(struct tnum a)
++struct cnum_t FN(union)(struct cnum_t a, struct cnum_t b)
 +{
-+	u64 v = a.value | a.mask;
++	struct cnum_t b1, ab, ba;
++	ut end;
 +
-+	return v ? __ffs64(v) : 64;
++	if (FN(is_empty)(a))
++		return b;
++	if (FN(is_empty)(b))
++		return a;
++
++	/*
++	 * Rotate so that a1.base == 0 and a1.end == a.size.
++	 * Normalize b1 to preserve the full-circle representation.
++	 */
++	b1 = FN(normalize)((struct cnum_t){ b.base - a.base, b.size });
++	end = max(a.size, (ut)(b1.base + b1.size));
++
++	if (FN(urange_overflow)(b1)) {
++		/* a1 reaches b1's main arc: together they cover the circle. */
++		if (b1.base <= a.size)
++			return (struct cnum_t){ 0, UT_MAX };
++
++		/* Extend b1's tail through a1's end, then rotate back. */
++		return FN(normalize)((struct cnum_t){ b.base, end - b1.base });
++	}
++
++	/* ab, rotated back, covers both nonwrapping arcs. */
++	ab = (struct cnum_t){ a.base, end };
++	if (b1.base <= a.size)
++		return FN(normalize)(ab);
++
++	/* The arcs are disjoint; ba is the other possible covering arc. */
++	ba = (struct cnum_t){ b.base, a.size - b1.base };
++	if (ba.size < ab.size ||
++	    (ba.size == ab.size && ba.base < ab.base))
++		ab = ba;
++
++	return FN(normalize)(ab);
 +}
++
+ struct cnum_t FN(add)(struct cnum_t a, struct cnum_t b)
+ {
+ 	if (FN(is_empty)(a) || FN(is_empty)(b))
 
 -- 
 2.55.0
