@@ -1,64 +1,64 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pj2-f40.google.com (mail-pj2-f40.google.com [74.125.227.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D3947CC8F
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488A541D131
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790432472; cv=none; b=hpDzXYkjciu9pEhU3P1PYgqrpWAHVq+kvceIjCkt2FWsi9a/jw/TILEhQVAAHkFEK/NLKDZA/6Alqq11WEW6Rf6H4mh99hPqxfg2mb81NPWXsHyaS8WAopU5Dn9EZ1yEtoD+x7vJUjYs7K2OVKdV6nJaVeBNw6/O2xPLKC+GM88=
+	t=1790432473; cv=none; b=DgZXkUmnFuIJC5iw3a7/8mNg8aW21cIps4e/u5R/5JcaV8OarBBmRzbMYr9Kem1P0OnUmlhpMiFCPih5NFlf/SjdsmAL0Nz9V2ds9rGRZyyjx7zcxi2WWxH1SX7rru/bIPFmuaiG6z548C36+kajEfJqV3OjkcXWYDtpm+xe3OI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790432472; c=relaxed/simple;
-	bh=LyMsayt/d24HVLKf8K5/9C/PMILFdwyKApHv8rQXXv0=;
+	s=arc-20240116; t=1790432473; c=relaxed/simple;
+	bh=3KcVHb5YMuycrQW6pm2ipLEbgdnweegUa3V0RzYBh+c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mj1OifvQmyjIhoKVLwHxz3w10o38ryy8IFid4sWGoSPvXTx9FQ+79Ci8FI5k5eNXUuGqzbPh3i7heik/vOVcCq+1kz58Q1cvNdVmTbMeEsMEPSevUjPv5TdTg6kFZBRzSyjaDUGIdNJQI2HkZxi6lUWYifaZnvahVcBQ9veIyjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dveGNIb3; arc=none smtp.client-ip=74.125.228.12
+	 MIME-Version:Content-Type; b=XwlDOSuJ+zQqCAUiSGvf9vg3RPTrqVtjzlsqvjAwwxW+eIKVlVC7cozMFTT67XYT17FswZAw/lH3mydltAVkR9in4UJnHh/QvqbECMY8vhS9nJ9SugnZZ2+YBxc7c5wJdJp1kliXKJJ/D6rC++wZ+Znt8qAF+dMH1Z8nNVkOfMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hYYP9lSh; arc=none smtp.client-ip=74.125.227.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dveGNIb3"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4c3304833so651073a12.3
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hYYP9lSh"
+Received: by mail-pj2-f40.google.com with SMTP id 98e67ed59e1d1-3a0df0bb2d6so303617a91.3
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790432469; x=1791037269; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790432470; x=1791037270; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=9miEJwyNfyaMDA5XIWbASjU5Msf1mzrFGeqpHcDQVUw=;
-        b=dveGNIb3EKImLz5yzHCb02LcT4QrePCCJ3aQjolllvMJcOR9Fprdx8S9pj5EHAXEgP
-         U8XR2ekTTxthqA25366H5McOBgEq9Z4pyaX1Q7RJXRKmZe51SrF3IobmcJ+yW3nOKra0
-         DVMFnNsNNpW8YKM2bj14mt1KvIov1cWffag7nGNZjFeAlj7psyeujW24yH2e1vD7Whfe
-         O9zaFRj3SOfZctb5EWtgyDpMWVpy5saotGIhIrMhFK+pUDUy3nxZURMSZRlIgfnXWvrI
-         Otp+X8LTw2FHlxyZDuwcJec+XGqutGhDtaVZAx2UxqnqV9/zI00qTH9bsjXcjWQn10Kq
-         kVCw==
+        bh=zj4Aa470U5B0GTRTsa95X20cYD8SfKs9fkz0gmX3LUA=;
+        b=hYYP9lSh+cqw4r440bURw8WQZ6xTupmodb1TRkYadjid7/DhQYrMBetrtQGEEn0yYM
+         7ARKRhRmqv9Hp5SQxWLPhpmq+X5wErYpNYCGIQoe631ynf15m0PzjCgYL1mHRi0wZh4H
+         YjXUC0Nws6SbPyQ3VoOMOXzxSRsogNyTZ9etP7PVWhJTSexi5sbLNTpdIplcsvO2v5Ak
+         XpG45LZTRBqsb4ylOr9zufbdn1Io0/pTC3aYJ0roUV3u1G2FAQqm6xG9V1PAgHiuJWv7
+         q6KIMRonC5xU7hQILLMLVijZ0SRKCA3HZ8s9oGKwwOsapNpkjbITqfF9fH2poxReATht
+         +CDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790432469; x=1791037269;
+        d=1e100.net; s=20260707; t=1790432470; x=1791037270;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9miEJwyNfyaMDA5XIWbASjU5Msf1mzrFGeqpHcDQVUw=;
-        b=cgcn/5gFJbI23FlOduYfOwIVeog+IfPVyKOrRhaU/dp1ja1rdTAjiIwwmalduthddS
-         VpnavL+u8ZHdZzVrJ3SpH+6FE1OEf5CR8jp92lKydEHVV9ejBYOyC+D6VK+Yk3mszck4
-         uI5G5OOCMNJg2kfINLCuyqN5s+gFbYteNxJESNSiWFGb7BaisquRUt9h64eKmjaCmlSY
-         Fh7+rO17Ug0XHlvUt2Qkktmf7IEIpjBIKGInFh0EtTiDpHl62BeQC9nt4AUtP7F2mUuv
-         IsBlosaxdWZ+KiQg6n4k6Cv9TM3FLENIqyl9XU132aI6WkQWm6DZtHG8HUFxVZSwtzxd
-         7vwQ==
-X-Gm-Message-State: AFq9FYL4xXp9zZi2RkvIMbNYQxiaBrNphSsg4iq65NzNuenx0tK9uIdL
-	OCh6FgfKg/ZA5u6aAzqwjRrpcJ0wrghMnGtfN8Drc/RahS9NpE4tVx7cnqtjvYa+j4U=
-X-Gm-Gg: AYBFou2BX5Wenysnv6kqqHh/PtBu4/luP14fZQuNtzknOl/oi5GU8+08ggO4qkov+ji
-	o8DEwwXb3GkMvRMvinllUbV1BQwflYPbHbpfLvgqwhLx7ksTE+tvHs+QDN4NkTZrkR4F3P1HC1z
-	j8wBLaW/AFuQ2shkUEGDDLwKRozy/OUPEmzAjKzFTGOSesw8rpsVWYr3Q/Ty3Ii1BBPriryrBoW
-	Y5WQfpmcwdAQeq0i8OxjeU5LbJahXu7HI59BBJ7qJf0+rmgfyVQ/+Wo+JHQ3EVycC7hs5eNEynB
-	1Sd4wL8RnHY68ukNdSG362x3SSiVMvq7/bTi0umI1vOQmc22LGZCDWF7uv1OIx1WkbLZcEb4UoQ
-	JkqGeLGwJ9h8tm90zyM+K0iPaA8jWoa7WWRlDuIfOuMF3oaZ3bGjY0IDHKweA6ois/E35cEfESi
-	TbJ6vgfuv1L4s5Su04jLJ+TMDd7qog2tBRhgsG+X9AImnlpyPIZ3hNDDMlh9mxoxo0aiqxNV8vy
-	wvu4YnDSB5lsIhH7BOI5zczW0r5MgUfBOQmH9kgEp3IhXzhaOGW
-X-Received: by 2002:a17:90a:da8b:b0:3a0:efa0:ff2a with SMTP id 98e67ed59e1d1-3a0efa10105mr711186a91.45.1790432468368;
-        Sat, 26 Sep 2026 07:21:08 -0700 (PDT)
+        bh=zj4Aa470U5B0GTRTsa95X20cYD8SfKs9fkz0gmX3LUA=;
+        b=ILOukqKWsegRPG//37nprw6ElpHEZMb6LJ5qnLq08Speu8w9jQLfv3/zihIecYyU5m
+         tZEAKWk+qdGPWyFh3Ku6+NF4B24kX+YI8gVk1IA+3dESJVT6ylekW1Yd8VCRTaBRHHKv
+         FlP3NCAfIZ7SnxAhCN223yihm7523IA8boLPMU+YdlrxFWHiw30+2aZxogMKp0m3R3ul
+         L2539VTXU0ygDmB/yN/WFPhVQkUBQAztSSXFPMuMztjEwedHCu0OgPc7OqYtaItE+sBW
+         RAU7Y0n72HK6Xkjk2uAXGHA+dslREB+LcrjU8Wy08n+cXf1FiUm4gql3JQyAEVMVHl5k
+         3Fqg==
+X-Gm-Message-State: AFq9FYKZDYG+NoEGpUHp8Ed6g9p1z6hPUu8AjhFKWUxsFY06/AsKSrjy
+	KoO9hF40CNuaGlM1gzJ0P8htFzRV92gPttEW8DOg2Q3g4VozygQPsbhFSjF7+6c5TeI=
+X-Gm-Gg: AYBFou2HjdLbCXfaV/prJUy00US6JMlGFoOpJC03eT7k6D5toFAZUBSsB3ZvEYRpCxS
+	O77lKK5gTtCxAIMy2rZbLceahqWH6htKtkg0wNQRluZIL1Q8CCIyLCVmWEb0Ebm1FPi5Ku5j5aZ
+	nWUSe2ic0YoInmA9AdaCK9loUnEykCAIlUlYsjdILRkM/5PXWriTNdFhevNVYtuk95wK+8HfqeX
+	IytopDhJ1bPdE5Qt9aMzTFBEQVnyfqCIRYtx4jzij4IbNoC0zP4Sn1tyyte6mK/eXjpzIRo8BXX
+	nDM/kvtwyVM7M/8dh72eC4XfuZeF5B7APdqVKc3qUe5zWM6O1v7ej65oEyfmhzN26BLTynIDNz4
+	J2gj31qq9P3SdyvFq/VFeYc7HrX25KUtWzRPgfXa4BweiD6gXldNZRrGY+z0i1NTYSnFT+WNelu
+	DhwJ/b9sEzhTEdpkvNeCZ2h0CE6ZFnaNiEwfgB1XLIIxT2Bhkz83092w5yQ5QgPh74Q5M3Wx7Iz
+	1rypi0CbTQyee2YtEYaOiGrUuf4tjbwGqTBdh9nC+8=
+X-Received: by 2002:a17:90b:4d09:b0:3a0:c85a:e602 with SMTP id 98e67ed59e1d1-3a0c85aeba7mr2745314a91.9.1790432469242;
+        Sat, 26 Sep 2026 07:21:09 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.21.07
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 07:21:07 -0700 (PDT)
+        Sat, 26 Sep 2026 07:21:08 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 24/36] bpf: compute scalar evolution expressions for loops
-Date: Sat, 26 Sep 2026 07:20:22 -0700
-Message-ID: <20260926-scev-minimal-rebase-v1-24-c8e5ab5ba79f@gmail.com>
+Subject: [PATCH bpf-next 25/36] bpf: use SCEV to widen bounded loops
+Date: Sat, 26 Sep 2026 07:20:23 -0700
+Message-ID: <20260926-scev-minimal-rebase-v1-25-c8e5ab5ba79f@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
@@ -84,1691 +84,1303 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Assign algebraic expressions to loop variables (registers and stack
-spills), describing how their values evolve across iterations. These
-summaries provide symbolic input for the subsequent widening patch.
+Loop-bound computation and register widening
+===========================================
 
-The algorithm draws on ideas from the following papers:
+During the main verification pass, use SCEV expressions and register
+values at the entry to the loop to estimate the number of iterations
+the loop might execute. Use this number to widen loop induction variables.
 
-- "Symbolic Evaluation of Chains of Recurrences for Loop Optimization"
-  Robert A. van Engelen, 2000
-- "The CR# Algebra and its Application in Loop Analysis and Optimization"
-  Robert A. van Engelen, 2004
-
-The analysis proceeds in two phases:
-
-- Compute expressions for one symbolic iteration: start each variable
-  with a reference to its input value, apply instruction effects and
-  join expressions where control-flow paths merge.
-- Convert the resulting backedge updates to recurrences at the header,
-  then substitute these recurrences into expressions at the latch.
-
-Analyze loops innermost first. Within each loop, visit blocks in
-topological order (reverse postorder, with backedges ignored and nested
-loops collapsed). Treat each nested loop as an opaque operation:
-preserve its invariant values, forget the others and continue at its
-exits, without expanding its iterations.
-
-For example, using 64-bit arithmetic:
+For example:
 
     0: r7 = 5;
     1: r6 = 0;
-    2: do {                // header
+    2: while (r6 < 3) {   // latch
     3:     if (r6 == 1)
     4:         r7 = 10;
     5:     r6 += 1;
-    6: } while (r6 < 3);   // latch
+    6: }
+    8: use(r7);
 
-Expressions use symbolic inputs r6 and r7; the concrete values from
-lines 0-1 are supplied later by the main verifier.
+- Scalar evolution expressions (SCEVs) at the latch are:
+  - r6 = (linear r6 1)
+  - r7 = (any r7 10)
+- For this pre-condition loop, this corresponds to the linear inequality
+  `r6_entry + n < 3`. With r6_entry = 0, the inequality is `n < 3`.
+- Hence infer that r6's range at line 2 is [0,3], including the final
+  failed test. The body starts with r6 in [0,2].
+- r7's (any r7 10) expression means that its initial value 5 from line 0
+  is joined with 10 from line 4: it is widened to [5,10] within
+  and after the loop.
 
-First phase:
-------------
+Currently such inference is supported for:
+- Reducible loops with one backedge and complete backedge/exit lists.
+- A linear latch dominating the backedge, with one successor exiting
+  the loop. Additional exits are allowed; they can shorten execution.
+- 64-bit arithmetic and comparisons whose continuation condition
+  normalizes to signed/unsigned < or <=, or !=.
+- Initial counter, latch offset, slope and bound evaluable as constants
+  at loop entry, yielding a finite, representable iteration bound.
+- Values with an eligible type at loop entry, e.g. SCALAR_VALUE or
+  PTR_TO_STACK, but not PTR_TO_CTX.
 
-At each instruction, an environment maps register numbers to their
-current expressions. Transfer functions update this mapping, while
-joins merge the environments arriving along different paths.
+In order for widening to proceed, every register live at the loop
+entry has to have a SCEV that can be widened. Currently, the following
+expressions are supported:
+- (linear <self> <step>): entry value + iteration# * constant step.
+- (reg <self>): loop invariant; keep its entry value unchanged.
+- (any ...): join the entry value with immediates or invariant registers;
+  types must match, and immediates require SCALAR_VALUE.
 
-For illustration, follow each branch separately to the backedge:
+Main verification loop integration
+==================================
 
-- At 3, take the path skipping 4: r6 = r6, r7 = r7.
-- At 5, transfer(r6 += 1): r6 = r6 -> r6 = (+ r6 1).
-- At 2, the first path contributes r6 = (+ r6 1), r7 = r7.
-- At 4, on the other path from 3, transfer(r7 = 10):
-  r7 = r7 -> r7 = 10.
-- At 5, transfer(r6 += 1): r6 = r6 -> r6 = (+ r6 1).
-- At 2, join the two paths' contributions:
-  join((+ r6 1), (+ r6 1)) = (+ r6 1) for r6;
-  join(r7, 10) = (any r7 10) for r7.
+Before proceeding with the usual instruction processing, do_check()
+takes the following steps at loop entries (H):
+- Checks whether the loop can be widened and obtains its
+  iteration bound (scev.c:bpf_compute_loop_iters()).
+- If it can, saves an unwidened checkpoint E0, which will be used as
+  a base for deriving widened values throughout this invocation of
+  the loop.
+- Widens registers in the current state using E0 and SCEV expressions
+  computed for H (scev.c:bpf_widen_scev_regs()).
+- Pushes a per-frame loop-stack record to the current verifier state.
+  For terminating loops, the record stores E0 and the iteration bounds.
+- Lets is_state_visited() create a new checkpoint W at the same
+  header, now containing the widened values, and proceeds with
+  normal checking.
+- On an exit edge, pops the loop record and verifies the exit
+  path normally.
 
-Equal expressions stay unchanged; different expressions become ANY
-alternatives. These summarize one iteration, without unrolling the loop.
+is_state_visited() treats a loop proven to terminate like an
+iterator-based loop: RANGE_WITHIN comparison attempts to establish
+convergence against a checkpoint whose exploration is still
+in progress.
 
-Second phase:
--------------
+For example:
 
-The update r6 = (+ r6 1) says that each iteration adds 1 to r6.
-Repeating this update n times gives r6_entry + n, a linear recurrence.
+    r0 = 0;
+    H: r0 += 1;
+       if (r0 != 3) goto H;
+       exit;
 
-- At header 2, r6 = (+ r6 1) becomes (linear r6 1), meaning
-  r6_entry + n, where n counts iterations from zero.
-- At latch 6, substitute this recurrence into (+ r6 1):
-  (+ (linear r6 1) 1) simplifies to (linear (+ r6 1) 1),
-  meaning r6_entry + 1 + n.
-- At both points, r7 retains (any r7 10): either its entry value
-  or 10. ANY records alternatives, not numeric ranges or the path
-  conditions selecting them. Unchanged variables retain their inputs.
+    first H:  prove H_count = 3; save E0(r0 = 0)
+              widen r0 to [0,2]; push the loop record
+              save W(r0 = [0,2])
+    body:     r0 becomes [1,3]; fork at the conditional
+    exit:     r0 = 3; pop the loop record and check exit
+    backedge: r0 = [1,2]; clamp, then match with W and prune
+
+Clamping
+--------
+
+Independent register ranges lose correlations between induction
+variables. For example:
+
+    r6 = 0; r7 = 0;
+    do { r6 += 1; r7 += 2; } while (r6 < 3);
+    use(r7);
+
+    header:   r6 in [0,2], r7 in {0,2,4}
+    body:     r6 in [1,3], r7 in {2,4,6}
+    backedge: r6 in [1,2], r7 still in {2,4,6}
+
+The latch narrows r6 but does not propagate this refinement to r7.
+To account for this, before comparing states on a backedge,
+scev.c:bpf_clamp_scev_regs() recomputes r7's range from E0 and the
+saved iteration bound, then intersects the current range {2,4,6}
+with the recomputed {0,2,4}, arriving at {2,4}.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |    7 +
- kernel/bpf/Makefile          |    2 +-
- kernel/bpf/scev.c            | 1519 ++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        |    9 +
- 4 files changed, 1536 insertions(+), 1 deletion(-)
+ include/linux/bpf_verifier.h                       |  31 +
+ kernel/bpf/log.c                                   |   5 +
+ kernel/bpf/scev.c                                  | 653 +++++++++++++++++++++
+ kernel/bpf/states.c                                |  67 ++-
+ kernel/bpf/verifier.c                              | 226 ++++++-
+ tools/testing/selftests/bpf/progs/verifier_gotox.c |   6 +-
+ 6 files changed, 976 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 08e0b49841df..54a971800ea3 100644
+index 54a971800ea3..c0eea472949d 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -732,6 +732,7 @@ struct bpf_insn_aux_data {
- 	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
- 	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
- 	bool bb_end;
-+	bool need_scev;
- 	u8 alu_state; /* used in combination with alu_limit */
- 	/* true if STX or LDX instruction is a part of a spill/fill
- 	 * pattern for a bpf_fastcall call.
-@@ -991,6 +992,7 @@ struct bpf_scc_info {
+@@ -328,6 +328,21 @@ struct bpf_retval_range {
+ 	bool return_32bit;
  };
  
- struct bpf_liveness;
-+struct scev;
++struct bpf_loop_iters {
++	u32 min_header_count;   /* min number of times header is executed */
++	u32 max_header_count;   /* max number of times header is executed */
++	bool pre_cond;
++};
++
++struct loop_stack_entry {
++	struct bpf_verifier_state *entry_state;
++	struct bpf_loop_iters iters;
++	u32 loop_id:31;
++	u32 terminates:1;
++};
++
++#define LOOP_STACK_SIZE 16
++
+ /* state of the program:
+  * type of all registers and stack info
+  */
+@@ -373,6 +388,12 @@ struct bpf_func_state {
+ 	u32 callback_depth;
+ 	/* Instructions processed in this frame and callees on the current path. */
+ 	u32 insns_subtotal;
++	/*
++	 * Control-flow loop nesting at the current insn within this frame's
++	 * subprogram (loops never cross subprogram boundaries).
++	 */
++	u32 loop_stack_cnt;
++	struct loop_stack_entry loop_stack[LOOP_STACK_SIZE];
  
- struct bpf_fd_array {
- 	union {
-@@ -1153,6 +1155,7 @@ struct bpf_verifier_env {
- 	struct bpf_iarray *succ;
+ 	/* The following fields should be last. See copy_func_state() */
+ 	/* The state of the stack. Each element of the array describes BPF_REG_SIZE
+@@ -436,6 +457,7 @@ static_assert(MAX_BPF_STACK_SLOTS <= (1 << 12));
+ #define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
+ #define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK_SLOTS + MAX_STACK_ARG_SLOTS) * \
+ 			 MAX_CALL_FRAMES)
++
+ struct bpf_verifier_state {
+ 	/* call stack tracking */
+ 	struct bpf_func_state *frame[MAX_CALL_FRAMES];
+@@ -1156,6 +1178,8 @@ struct bpf_verifier_env {
  	struct bpf_iarray *gotox_tmp_buf;
  	int *idoms;
-+	struct scev *scev;
+ 	struct scev *scev;
++	/* SCEV representation of stack slots not allocated yet. */
++	struct bpf_reg_state scev_not_init_reg;
  };
  
  static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
-@@ -1937,4 +1940,8 @@ void bpf_min_heap_free(struct bpf_min_heap *heap);
- int bpf_min_heap_push(struct bpf_min_heap *heap, int elt);
- bool bpf_min_heap_pop(struct bpf_min_heap *heap, int *elt);
+@@ -1944,4 +1968,11 @@ int bpf_init_scev(struct bpf_verifier_env *env);
+ void bpf_free_scev(struct bpf_verifier_env *env);
+ int bpf_compute_scev(struct bpf_verifier_env *env);
  
-+int bpf_init_scev(struct bpf_verifier_env *env);
-+void bpf_free_scev(struct bpf_verifier_env *env);
-+int bpf_compute_scev(struct bpf_verifier_env *env);
++int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			   struct bpf_loop_iters *iters);
++int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			struct bpf_verifier_state *loop_entry, struct bpf_loop_iters *iters);
++int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *st, u32 insn_idx,
++			struct bpf_verifier_state *entry_state, struct bpf_loop_iters *iters);
 +
  #endif /* _LINUX_BPF_VERIFIER_H */
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 7a2c179a9059..fdff31d962d6 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
- 
--obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o heap.o
-+obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o heap.o scev.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 900d1bb1988b..6a5564f62669 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -792,6 +792,11 @@ void print_verifier_state(struct bpf_verifier_env *env, const struct bpf_verifie
+ 		verbose(env, " cb");
+ 	if (state->in_async_callback_fn)
+ 		verbose(env, " async_cb");
++	if (state->loop_stack_cnt) {
++		verbose(env, " loop_stack=");
++		for (i = 0; i < state->loop_stack_cnt; i++)
++			verbose(env, "%s%d", i ? "," : "", state->loop_stack[i].loop_id);
++	}
+ 	verbose(env, "\n");
+ 	if (!print_all)
+ 		mark_verifier_state_clean(env);
 diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-new file mode 100644
-index 000000000000..396b0c776dfa
---- /dev/null
+index 396b0c776dfa..205bf8684c3d 100644
+--- a/kernel/bpf/scev.c
 +++ b/kernel/bpf/scev.c
-@@ -0,0 +1,1519 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+@@ -1,9 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+ 
++#include "linux/cnum.h"
+ #include <linux/bpf_verifier.h>
+ #include <linux/jhash.h>
+ #include <linux/bug.h>
++#include <linux/tnum.h>
++#include <linux/overflow.h>
+ 
+ #define REGS_NUM (MAX_BPF_REG + MAX_BPF_STACK_SLOTS)
+ #define UNKNOWN_EXPR_ID 0
+@@ -1498,6 +1501,7 @@ int bpf_init_scev(struct bpf_verifier_env *env)
+ 	if (!scev)
+ 		return -ENOMEM;
+ 	env->scev = scev;
++	bpf_mark_reg_not_init(env, &env->scev_not_init_reg);
+ 	/* Order worklist in reverse post-order. */
+ 	bpf_min_heap_init(&scev->worklist, reverse_ranked_compare, env->cfg.postorder_nums);
+ 	if (expr0(scev, UNKNOWN) < 0 || expr0(scev, OPAQUE)  < 0)
+@@ -1517,3 +1521,652 @@ int bpf_init_scev(struct bpf_verifier_env *env)
+ 	bpf_free_scev(env);
+ 	return -ENOMEM;
+ }
 +
-+#include <linux/bpf_verifier.h>
-+#include <linux/jhash.h>
-+#include <linux/bug.h>
++static struct bpf_reg_state *scev_regno_to_reg(struct bpf_verifier_env *env,
++					    struct bpf_func_state *st, u32 r)
++{
++	int spi, slots_available;
 +
-+#define REGS_NUM (MAX_BPF_REG + MAX_BPF_STACK_SLOTS)
-+#define UNKNOWN_EXPR_ID 0
-+#define OPAQUE_EXPR_ID  1
++	if (r < MAX_BPF_REG)
++		return &st->regs[r];
++
++	slots_available = st->allocated_stack / BPF_REG_SIZE;
++	spi = r - MAX_BPF_REG;
++	if (spi < slots_available)
++		return &st->stack[spi].spilled_ptr;
++
++	return &env->scev_not_init_reg;
++}
++
++static bool scev_reg_alive(struct bpf_verifier_env *env, struct bpf_verifier_state *st, u32 r)
++{
++	int insn_idx = bpf_frame_insn_idx(st, st->curframe);
++	u16 live_regs = env->insn_aux_data[insn_idx].live_regs_before;
++	int spi;
++
++	if (r < MAX_BPF_REG) {
++		return BIT(r) & live_regs;
++	} else {
++		spi = r - MAX_BPF_REG;
++		return bpf_stack_slot_alive(env, st->curframe, spi * 2) ||
++		       bpf_stack_slot_alive(env, st->curframe, spi * 2 + 1);
++	}
++}
 +
 +/*
-+ * BPF instructions use 'code', 'src_reg', 'off' and 'imm' fields for instruction encoding.
-+ * For scalar evolution purpose we want to reuse most of the opcode definitions,
-+ * but also add a few custom operations (REG and IMM).
-+ * Use the enum below to uniformly represent all operations relevant for SCEV.
++ * Latch is a condition deciding if execution remains inside a loop.
++ * Linear latch represents a condition 'if <reg> <op> <loop invariant> goto <loop-header>',
++ * where equation '<base> + i * <step> <op> <bound>' describes values taken by register <reg>,
++ * 'i' is the loop iteration number, starting from 0.
 + */
-+enum expr_op {
-+	/* leave range 0..255 for standard bpf opcodes */
-+	UNKNOWN = 256, /* start custom opcodes from the second byte */
-+	REG,
-+	IMM,
-+	SDIV, SMOD,
-+	SEXT8, SEXT16, SEXT32,
-+	ZEXT8, ZEXT16, ZEXT32,
-+	BSWAP16, BSWAP32, BSWAP64,
-+	/* during the loop body execution the value can be either of param[0] or param[1] */
-+	ANY,
-+	/* some value that verifier is not going to track precisely */
-+	OPAQUE,
-+	/* '*(u8/16/32 *)(r10 + X) = Y' writes define slot contents only partially */
-+	SPILL8, SPILL16, SPILL32,
-+	/*
-+	 * SCEV expression corresponding to linear equation 'param[0] + param[1] * k',
-+	 * where k is a loop iteration number. Loop here refers to innermost loop
-+	 * containing instruction associated with this expression, as returned by
-+	 * bpf_loop_at_index().
-+	 */
-+	LINEAR_SCEV,
-+};
-+
-+struct expr {
++struct linear_latch {
++	u32 insn_idx;
++	u32 base_expr;
++	u32 step_expr;
++	u32 bound_expr;
++	u32 reg_expr;
++	u32 reg;
 +	u32 op;
-+	union {
-+		u32 params[2];
-+		s64 imm;
-+	};
 +};
 +
-+struct expr_bucket {
-+	u32 cnt;
-+	u32 cap;
-+	u32 ids[];
-+};
-+
-+struct env {
-+	bool empty;
-+	u32 reg2expr[REGS_NUM];
-+	u32 reg2scev[REGS_NUM];
-+};
-+
-+struct insn_envs {
-+	u32 cnt;
-+	struct {
-+		int loop_header;
-+		struct env *env;
-+	} entries[];
-+};
-+
-+#define NUM_BUCKETS 256
-+#define EXPR_STACK_DEPTH 8
-+
-+struct expr_stack_elt {
-+	u32 id:28;
-+	u32 pre:1;
-+	u32 next_param:2;
-+};
-+
-+struct scev {
-+	/*
-+	 * Expressions are identified by id, exprs_ht ensures that
-+         * each expression exists as a unique instance.
-+	 * This allows for fast equivalence check: id1 === id2.
-+	 */
-+	struct expr_bucket *exprs_ht[NUM_BUCKETS]; // Don't want to add struct hlist_node to expr
-+	struct bpf_min_heap worklist;
-+	struct insn_envs **envs;
-+	struct expr *exprs;
-+	/*
-+	 * Loops are analyzed one by one, this array keeps track if a particular
-+	 * instruction was visited on a current pass.
-+	 */
-+	u32 *discovered;
-+	int exprs_cnt;
-+	int exprs_cap;
-+	int envs_cnt;
-+	int stack_sz;
-+	struct expr_stack_elt expr_stack[EXPR_STACK_DEPTH];
-+	u32 ids_buf[EXPR_STACK_DEPTH];
-+};
-+
-+static u32 expr_hash(struct expr *e)
++static bool loop_invariant(struct scev *scev, u32 id)
 +{
-+	return jhash_3words(e->op, e->params[0], e->params[1], 0);
-+}
-+
-+static int expr_eq(struct expr *a, struct expr *b)
-+{
-+	return a->op == b->op && a->imm == b->imm;
-+}
-+
-+static int add_expr(struct scev *scev, struct expr e)
-+{
-+	struct expr_bucket *bucket;
-+	u32 i, id, hash, new_cap;
-+	void *tmp;
-+
-+	hash = expr_hash(&e) % NUM_BUCKETS;
-+	bucket = scev->exprs_ht[hash];
-+
-+	if (bucket) {
-+		for (i = 0; i < bucket->cnt; i++) {
-+			id = bucket->ids[i];
-+			if (expr_eq(&e, &scev->exprs[id]))
-+				return id;
-+		}
-+	}
-+
-+	if (!bucket || bucket->cap == bucket->cnt) {
-+		new_cap = bucket ? bucket->cap * 2 : 32;
-+		bucket = kvrealloc(bucket, sizeof(*bucket) + sizeof(u32) * new_cap, GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-+		if (!bucket)
-+			return -ENOMEM;
-+		scev->exprs_ht[hash] = bucket;
-+		bucket->cap = new_cap;
-+	}
-+
-+	if (scev->exprs_cnt == scev->exprs_cap) {
-+		new_cap = scev->exprs_cap + 256;
-+		tmp = kvrealloc(scev->exprs, sizeof(struct expr) * new_cap, GFP_KERNEL_ACCOUNT);
-+		if (!tmp)
-+			return -ENOMEM;
-+		scev->exprs = tmp;
-+		scev->exprs_cap = new_cap;
-+	}
-+
-+	id = scev->exprs_cnt++;
-+	scev->exprs[id] = e;
-+	bucket->ids[bucket->cnt++] = id;
-+	return id;
-+}
-+
-+static int expr2(struct scev *scev, u32 op, int a, int b)
-+{
-+	if (a < 0)
-+		return a;
-+	if (b < 0)
-+		return b;
-+	return add_expr(scev, (struct expr){ .op = op, .params = {a, b} });
-+}
-+
-+static int expr1(struct scev *scev, u32 op, int a)
-+{
-+	if (a < 0)
-+		return a;
-+	return expr2(scev, op, a, 0);
-+}
-+
-+static int expr0(struct scev *scev, u32 op)
-+{
-+	return expr2(scev, op, 0, 0);
-+}
-+
-+static bool is_expr1(struct expr *expr, u32 op, int a)
-+{
-+	return expr->op == op && expr->params[0] == a;
-+}
-+
-+static int imm_expr(struct scev *scev, s64 value)
-+{
-+	return add_expr(scev, (struct expr){ .op = IMM, .imm = value });
-+}
-+
-+static bool same_exprs(struct scev *scev, int id_a, int id_b)
-+{
-+	return id_a == id_b;
-+}
-+
-+static bool is_imm(struct scev *scev, int id, s64 *imm)
-+{
-+	if (scev->exprs[id].op != IMM)
-+		return false;
-+	*imm = scev->exprs[id].imm;
-+	return true;
-+}
-+
-+static bool is_op(struct scev *scev, int id, u32 op)
-+{
-+	if (scev->exprs[id].op != op)
-+		return false;
-+	return true;
-+}
-+
-+static bool is_unop(struct scev *scev, enum expr_op op, int id, u32 *p0)
-+{
-+	if (scev->exprs[id].op != op)
-+		return false;
-+	*p0 = scev->exprs[id].params[0];
-+	return true;
-+}
-+
-+static bool is_binop(struct scev *scev, enum expr_op op, int id, u32 *p0, u32 *p1)
-+{
-+	if (scev->exprs[id].op != op)
-+		return false;
-+	*p0 = scev->exprs[id].params[0];
-+	*p1 = scev->exprs[id].params[1];
-+	return true;
-+}
-+
-+static bool is_reg(struct scev *scev, int id, u32 *reg)
-+{
-+	return is_unop(scev, REG, id, reg);
-+}
-+
-+static bool is_add(struct scev *scev, int id, u32 *left, u32 *right)
-+{
-+	return is_binop(scev, BPF_ADD, id, left, right);
-+}
-+
-+static bool is_zext32(struct scev *scev, int id, u32 *left)
-+{
-+	return is_unop(scev, ZEXT32, id, left);
-+}
-+
-+static bool is_any(struct scev *scev, int id, u32 *left, u32 *right)
-+{
-+	return is_binop(scev, ANY, id, left, right);
-+}
-+
-+static bool is_linear(struct scev *scev, int id, u32 *base, u32 *slope)
-+{
-+	return is_binop(scev, LINEAR_SCEV, id, base, slope);
-+}
-+
-+static bool is_opaque(struct scev *scev, int id)
-+{
-+	return is_op(scev, id, OPAQUE);
-+}
-+
-+static void log_reg(struct bpf_verifier_env *env, u32 reg)
-+{
-+	if (reg < MAX_BPF_REG)
-+		bpf_log(&env->log, "r%d", reg);
-+	else
-+		bpf_log(&env->log, "*fp%d", (MAX_BPF_REG - reg - 1) * 8);
-+}
-+
-+static const char *op_str(u32 op)
-+{
-+	switch (op) {
-+	case BPF_ADD:  return "+";
-+	case BPF_SUB:  return "-";
-+	case BPF_MUL:  return "*";
-+	case BPF_DIV:  return "/";
-+	case SDIV:     return "s/";
-+	case BPF_OR:   return "|";
-+	case BPF_AND:  return "&";
-+	case BPF_LSH:  return "<<";
-+	case BPF_RSH:  return ">>";
-+	case BPF_NEG:  return "-";
-+	case BPF_MOD:  return "%";
-+	case SMOD:     return "s%";
-+	case BPF_XOR:  return "^";
-+	case BPF_ARSH: return "s>>";
-+	case SEXT8:    return "sext8";
-+	case SEXT16:   return "sext16";
-+	case SEXT32:   return "sext32";
-+	case ZEXT8:    return "zext8";
-+	case ZEXT16:   return "zext16";
-+	case ZEXT32:   return "zext32";
-+	case BSWAP16:  return "bswap16";
-+	case BSWAP32:  return "bswap32";
-+	case BSWAP64:  return "bswap64";
-+	case SPILL8:   return "spill8";
-+	case SPILL16:  return "spill16";
-+	case SPILL32:  return "spill32";
-+	case ANY:      return "any";
-+	case LINEAR_SCEV:  return "linear";
-+	}
-+	return NULL;
-+}
-+
-+static u32 op_params_num(u32 op)
-+{
-+	switch (op) {
-+	case BPF_ADD:
-+	case BPF_SUB:
-+	case BPF_MUL:
-+	case BPF_DIV:
-+	case BPF_MOD:
-+	case BPF_OR:
-+	case BPF_XOR:
-+	case BPF_AND:
-+	case BPF_LSH:
-+	case BPF_RSH:
-+	case BPF_ARSH:
-+	case SDIV:
-+	case SMOD:
-+	case ANY:
-+	case LINEAR_SCEV:
-+		return 2;
-+	case BPF_NEG:
-+	case SEXT8:
-+	case SEXT16:
-+	case SEXT32:
-+	case ZEXT8:
-+	case ZEXT16:
-+	case ZEXT32:
-+	case BSWAP16:
-+	case BSWAP32:
-+	case BSWAP64:
-+	case SPILL8:
-+	case SPILL16:
-+	case SPILL32:
-+		return 1;
-+	case REG:
-+	case IMM:
-+	case OPAQUE:
-+		return 0;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static bool expr_stack_push(struct scev *scev, u32 id)
-+{
-+	if (scev->stack_sz >= EXPR_STACK_DEPTH)
-+		return false;
-+	scev->expr_stack[scev->stack_sz].id = id;
-+	scev->expr_stack[scev->stack_sz].pre = true;
-+	scev->expr_stack[scev->stack_sz].next_param = 0;
-+	scev->stack_sz++;
-+	return true;
-+}
-+
-+enum {
-+	PRE = BIT(1), POST = BIT(2), DEPTH_LIMIT = BIT(3)
-+};
-+
-+static bool expr_next(struct scev *scev, u32 *id, u32 *order)
-+{
-+	struct expr_stack_elt *elt;
-+	struct expr *expr;
-+	u32 num_params;
-+
-+	if (scev->stack_sz == 0)
-+		return false;
-+
-+	elt = &scev->expr_stack[scev->stack_sz - 1];
-+	*id = elt->id;
-+	*order = 0;
-+	expr = &scev->exprs[elt->id];
-+	num_params = op_params_num(expr->op);
-+	if (elt->pre) {
-+		elt->pre = false;
-+		*order = PRE;
-+		return true;
-+	}
-+	if (elt->next_param == num_params) {
-+		*order = POST;
-+		scev->stack_sz--;
-+		return true;
-+	}
-+	if (scev->stack_sz == EXPR_STACK_DEPTH) {
-+		*order = POST | DEPTH_LIMIT;
-+		scev->stack_sz--;
-+		return true;
-+	}
-+	expr_stack_push(scev, expr->params[elt->next_param]);
-+	elt->next_param++;
-+	return expr_next(scev, id, order);
-+}
-+
-+static void log_expr(struct bpf_verifier_env *env, u32 id)
-+{
-+	struct bpf_verifier_log *log = &env->log;
-+	struct scev *scev = env->scev;
-+	struct expr *expr;
-+	const char *str;
-+	u32 order;
-+
-+	scev->stack_sz = 0;
-+	expr_stack_push(scev, id);
-+	while (expr_next(scev, &id, &order)) {
-+		if ((order & PRE) && scev->stack_sz > 1)
-+			bpf_log(log, " ");
-+		expr = &scev->exprs[id];
-+		switch (expr->op) {
-+		case UNKNOWN:
-+			if (order & PRE)
-+				bpf_log(log, "?");
-+			break;
-+		case OPAQUE:
-+			if (order & PRE)
-+				bpf_log(log, "_");
-+			break;
-+		case REG:
-+			if (order & PRE)
-+				log_reg(env, expr->params[0]);
-+			break;
-+		case IMM:
-+			if (order & PRE)
-+				bpf_log(log, "%lld", expr->imm);
-+			break;
-+		default:
-+			if (order & PRE) {
-+				str = op_str(expr->op);
-+				bpf_log(log, "(");
-+				if (str)
-+					bpf_log(log, "%s", str);
-+				else
-+					bpf_log(log, "bad-expr-op %x", expr->op);
-+			}
-+			if (order & DEPTH_LIMIT)
-+				bpf_log(log, "...");
-+			if (order & POST)
-+				bpf_log(log, ")");
-+		}
-+	}
-+}
-+
-+enum print_env_flags {
-+	PRINT_SCEV = BIT(1)
-+};
-+
-+static bool reg_alive_at(struct bpf_verifier_env *env, u32 reg, u32 insn_idx)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	u16 live_regs = aux[insn_idx].live_regs_before;
-+
-+	return reg < MAX_BPF_REG
-+	       ? (BIT(reg) & live_regs)
-+	       : test_bit(reg - MAX_BPF_REG, aux[insn_idx].live_stack_before);
-+}
-+
-+static void print_env(struct bpf_verifier_env *env, struct env *e, u32 insn_idx, u32 flags)
-+{
-+	struct bpf_verifier_log *log = &env->log;
-+	struct scev *scev = env->scev;
-+	bool printed_some = false;
-+	bool print_scev = flags & PRINT_SCEV;
-+	bool is_self_scev;
-+	bool is_self_reg;
-+	int i, r;
-+
-+	if (e->empty) {
-+		bpf_log(log, "  <empty>\n");
-+		return;
-+	}
-+
-+	for (i = 0; i < REGS_NUM; i++) {
-+		if (!reg_alive_at(env, i, insn_idx))
-+			continue;
-+		is_self_reg = is_reg(scev, e->reg2expr[i], &r) && i == r;
-+		is_self_scev = is_reg(scev, e->reg2scev[i], &r) && i == r;
-+		if (is_self_reg && (!print_scev || is_self_scev))
-+			continue;
-+		printed_some = true;
-+		bpf_log(log, "  ");
-+		log_reg(env, i);
-+		bpf_log(log, "=");
-+		log_expr(env, e->reg2expr[i]);
-+		if (print_scev && e->reg2expr[i] != UNKNOWN_EXPR_ID) {
-+			bpf_log(log, " / ");
-+			log_expr(env, e->reg2scev[i]);
-+		}
-+		bpf_log(log, "\n");
-+	}
-+	if (!printed_some)
-+		bpf_log(log, "  <all regs unchanged>\n");
-+}
-+static struct env *find_loop_env(struct scev *scev, int loop_header, int insn_idx)
-+{
-+	struct insn_envs *envs = scev->envs[insn_idx];
-+	u32 i;
-+
-+	if (!envs)
-+		return NULL;
-+	for (i = 0; i < envs->cnt; i++)
-+		if (envs->entries[i].loop_header == loop_header)
-+			return envs->entries[i].env;
-+	return NULL;
-+}
-+
-+static struct env *find_header_env(struct scev *scev, int header)
-+{
-+	return find_loop_env(scev, header, header);
-+}
-+
-+static struct env *get_loop_env(struct scev *scev, int loop_header, int insn_idx)
-+{
-+	struct insn_envs *envs = scev->envs[insn_idx];
-+	u32 cnt = envs ? envs->cnt : 0;
-+	struct insn_envs *tmp;
-+	struct env *e;
-+
-+	e = find_loop_env(scev, loop_header, insn_idx);
-+	if (e)
-+		return e;
-+
-+	e = kzalloc(sizeof(*e), GFP_KERNEL_ACCOUNT);
-+	if (!e)
-+		return NULL;
-+
-+	tmp = krealloc(envs, struct_size(envs, entries, cnt + 1), GFP_KERNEL_ACCOUNT);
-+	if (!tmp) {
-+		kfree(e);
-+		return NULL;
-+	}
-+
-+	e->empty = true;
-+	tmp->entries[cnt].loop_header = loop_header;
-+	tmp->entries[cnt].env = e;
-+	tmp->cnt = cnt + 1;
-+	scev->envs[insn_idx] = tmp;
-+	return e;
-+}
-+
-+static void setup_initial_loop_env(struct bpf_verifier_env *env, struct env *e, int insn_idx)
-+{
-+	struct scev *scev = env->scev;
-+	int i;
-+
-+	for (i = 0; i < REGS_NUM; i++)
-+		e->reg2expr[i] = expr1(scev, REG, i);
-+}
-+
-+static int replace_reg(struct scev *scev, struct env *e, u32 reg, int id)
-+{
-+	if (id < 0)
-+		return id;
-+	e->reg2expr[reg] = id;
-+	return 0;
-+}
-+
-+static void forget_call_regs(struct env *e)
-+{
-+	int i;
-+
-+	for (i = BPF_REG_0; i <= BPF_REG_5; i++)
-+		e->reg2expr[i] = UNKNOWN_EXPR_ID;
-+}
-+
-+static u32 spill_spi(struct bpf_insn *insn)
-+{
-+	return -insn->off / BPF_REG_SIZE - 1;
-+}
-+
-+static u32 off_to_reg(struct bpf_insn *insn)
-+{
-+	return spill_spi(insn) + MAX_BPF_REG;
-+}
-+
-+static bool is_spill_off(int off)
-+{
-+	return off % BPF_REG_SIZE == 0 &&
-+	       off <= -BPF_REG_SIZE &&
-+	       off >= -MAX_BPF_STACK_JIT;
-+}
-+
-+static void mark_opaque(struct env *e, int off, int size)
-+{
-+	int b, spi;
-+
-+	for (b = off; b < off + size; b++) {
-+		if (b >= 0 || b < -MAX_BPF_STACK_JIT)
-+			continue;
-+		spi = (-b - 1) / BPF_REG_SIZE;
-+		e->reg2expr[MAX_BPF_REG + spi] = OPAQUE_EXPR_ID;
-+	}
-+}
-+
-+static int mk_spill(struct scev *scev, u8 size, int id)
-+{
-+	switch (size) {
-+	case BPF_B:  return expr1(scev, SPILL8,  id);
-+	case BPF_H:  return expr1(scev, SPILL16, id);
-+	case BPF_W:  return expr1(scev, SPILL32, id);
-+	case BPF_DW: return id;
-+	}
-+	return UNKNOWN_EXPR_ID;
-+}
-+
-+static int mk_fill(struct scev *scev, int id, u8 code)
-+{
-+	bool sx = BPF_MODE(code) == BPF_MEMSX;
-+
-+	switch (BPF_SIZE(code)) {
-+	case BPF_B:  return expr1(scev, sx ? SEXT8  : ZEXT8,  id);
-+	case BPF_H:  return expr1(scev, sx ? SEXT16 : ZEXT16, id);
-+	case BPF_W:  return expr1(scev, sx ? SEXT32 : ZEXT32, id);
-+	case BPF_DW: return sx ? UNKNOWN_EXPR_ID : id; /* DW sign-extended load is invalid */
-+	}
-+	return UNKNOWN_EXPR_ID;
-+}
-+
-+static int maybe_store_fp(struct scev *scev, struct env *e, struct bpf_insn *insn, int id)
-+{
-+	u8 size = BPF_SIZE(insn->code);
-+
-+	if (insn->dst_reg != BPF_REG_FP)
-+		return 0;
-+	if (is_spill_off(insn->off))
-+		return replace_reg(scev, e, off_to_reg(insn), mk_spill(scev, size, id));
-+	mark_opaque(e, insn->off, bpf_size_to_bytes(size));
-+	return 0;
-+}
-+
-+static int maybe_load_fp(struct scev *scev, struct env *e, struct bpf_insn *insn)
-+{
-+	int id;
-+
-+	if (insn->src_reg == BPF_REG_FP && is_spill_off(insn->off))
-+		id = mk_fill(scev, e->reg2expr[off_to_reg(insn)], insn->code);
-+	else
-+		id = OPAQUE_EXPR_ID;
-+	return replace_reg(scev, e, insn->dst_reg, id);
-+}
-+
-+static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
-+{
-+	const bool little_endian = htons(0x3412) == 0x1234;
-+	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	struct scev *scev = env->scev;
-+	u32 *reg2expr = e->reg2expr;
-+	u8 class = BPF_CLASS(insn->code);
-+	u8 x_or_k = BPF_SRC(insn->code);
-+	u8 opcode = BPF_OP(insn->code);
-+	u8 mode = BPF_MODE(insn->code);
-+	u32 dst = insn->dst_reg;
-+	u32 src = insn->src_reg;
-+	u32 op, sext;
-+	int i, id;
 +	s64 imm;
++	u32 reg;
 +
-+	switch (class) {
-+	case BPF_ALU:
-+	case BPF_ALU64:
-+		switch (opcode) {
-+		case BPF_MOV:
-+			switch (insn->off) {
-+			case 0: sext = 0; break;
-+			case 8: sext = SEXT8; break;
-+			case 16: sext = SEXT16; break;
-+			case 32: sext = SEXT32; break;
-+			default:
-+				goto mark_dst_unknown;
-+			}
-+
-+			if (x_or_k == BPF_X && insn->imm == 0)
-+				id = reg2expr[src];
-+			else if (x_or_k == BPF_K && src == 0 && insn->off == 0)
-+				id = imm_expr(scev, insn->imm);
-+			else
-+				goto mark_dst_unknown;
-+
-+			if (sext)
-+				id = expr1(scev, sext, id);
-+			if (class == BPF_ALU)
-+				id = expr1(scev, ZEXT32, id);
-+
-+			return replace_reg(scev, e, dst, id);
-+
-+		case BPF_ADD:
-+		case BPF_SUB:
-+		case BPF_MUL:
-+		case BPF_DIV:
-+		case BPF_MOD:
-+		case BPF_OR:
-+		case BPF_XOR:
-+		case BPF_AND:
-+		case BPF_LSH:
-+		case BPF_RSH:
-+		case BPF_ARSH:
-+			if (opcode == BPF_DIV && insn->off == 1)
-+				op = SDIV;
-+			else if (opcode == BPF_MOD && insn->off == 1)
-+				op = SMOD;
-+			else if (insn->off == 0)
-+				op = opcode;
-+			else
-+				goto mark_dst_unknown;
-+
-+			if (x_or_k == BPF_X && insn->imm == 0)
-+				id = reg2expr[src];
-+			else if (x_or_k == BPF_K && src == 0)
-+				id = imm_expr(scev, insn->imm);
-+			else
-+				goto mark_dst_unknown;
-+
-+			id = expr2(scev, op, reg2expr[dst], id);
-+
-+			if (class == BPF_ALU)
-+				id = expr1(scev, ZEXT32, id);
-+
-+			return replace_reg(scev, e, dst, id);
-+
-+		case BPF_NEG:
-+			if (src == 0 && insn->off == 0 && insn->imm == 0)
-+				id = expr1(scev, BPF_NEG, reg2expr[dst]);
-+			else
-+				goto mark_dst_unknown;
-+
-+			if (class == BPF_ALU)
-+				id = expr1(scev, ZEXT32, id);
-+
-+			return replace_reg(scev, e, dst, id);
-+
-+		case BPF_END:
-+			switch (insn->imm) {
-+			case 16: op = BSWAP16; break;
-+			case 32: op = BSWAP32; break;
-+			case 64: op = BSWAP64; break;
-+			default:
-+				goto mark_dst_unknown;
-+			}
-+
-+			if (class == BPF_ALU && x_or_k == BPF_TO_LE && insn->off == 0 && little_endian)
-+				op = 0; /* little-endian to little-endian is noop */
-+			else if (class == BPF_ALU && x_or_k == BPF_TO_BE && insn->off == 0 && !little_endian)
-+				op = 0; /* big-endian to big-endian is noop */
-+			else if (class == BPF_ALU64 && x_or_k == 0 && insn->off == 0)
-+				/* always swap */;
-+			else
-+				goto mark_dst_unknown;
-+
-+			id = reg2expr[dst];
-+			if (op)
-+				id = expr1(scev, op, reg2expr[dst]);
-+
-+			if (class == BPF_ALU)
-+				id = expr1(scev, ZEXT32, id);
-+
-+			return replace_reg(scev, e, dst, id);
-+		default:
-+			goto mark_dst_unknown;
-+		}
-+		break;
-+	case BPF_LDX:
-+		switch (mode) {
-+		case BPF_MEM:
-+		case BPF_MEMSX:
-+			return maybe_load_fp(scev, e, insn);
-+		default:
-+			goto mark_dst_unknown;
-+		}
-+	case BPF_STX:
-+		switch (mode) {
-+		case BPF_MEM:
-+			return maybe_store_fp(scev, e, insn, reg2expr[src]);
-+		case BPF_ATOMIC:
-+			if (insn->imm == BPF_LOAD_ACQ)
-+				return maybe_load_fp(scev, e, insn);
-+			if (insn->imm == BPF_STORE_REL) {
-+				return maybe_store_fp(scev, e, insn, reg2expr[src]);
-+			}
-+			/*
-+			 * verifier does not track other atomic ops precisely,
-+			 * hence mark the results as opaque.
-+			 */
-+			if (insn->dst_reg == BPF_REG_FP)
-+				mark_opaque(e, insn->off, bpf_size_to_bytes(BPF_SIZE(insn->code)));
-+			if (insn->imm == BPF_CMPXCHG)
-+				return replace_reg(scev, e, BPF_REG_0, OPAQUE_EXPR_ID);
-+			if (insn->imm & BPF_FETCH)
-+				return replace_reg(scev, e, src, OPAQUE_EXPR_ID);
-+			break;
-+		}
-+		break;
-+	case BPF_ST:
-+		if (insn->dst_reg == BPF_REG_FP) {
-+			id = imm_expr(scev, insn->imm);
-+			if (id < 0)
-+				return id;
-+			return maybe_store_fp(scev, e, insn, id);
-+		}
-+		break;
-+	case BPF_JMP:
-+	case BPF_JMP32:
-+		if (opcode == BPF_CALL)
-+			forget_call_regs(e);
-+		/* for non-CALL there are no changes in register states */
-+		break;
-+	case BPF_LD:
-+		switch (mode) {
-+		case BPF_IMM:
-+			/* rX = imm ll */
-+			if (BPF_SIZE(insn->code) == BPF_DW && insn->src_reg == 0) {
-+				imm = ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
-+				return replace_reg(scev, e, dst, imm_expr(scev, imm));
-+			}
-+			/* map, map value, BTF id, function */
-+			if (BPF_SIZE(insn->code) == BPF_DW)
-+				return replace_reg(scev, e, dst, OPAQUE_EXPR_ID);
-+			goto mark_dst_unknown;
-+		case BPF_ABS:
-+		case BPF_IND:
-+			forget_call_regs(e);
-+			break;
-+		default:
-+			goto mark_dst_unknown;
-+		}
-+		break;
-+	default:
-+		/* unknown instruction, nuke state */
-+		for (i = 0; i < REGS_NUM; i++)
-+			reg2expr[i] = UNKNOWN_EXPR_ID;
-+		break;
-+	}
-+	return 0;
-+
-+mark_dst_unknown:
-+	reg2expr[dst] = UNKNOWN_EXPR_ID;
-+	return 0;
++	return is_reg(scev, id, &reg) || is_imm(scev, id, &imm);
 +}
 +
-+/*
-+ * Construct minimal 'ANY' expression by traversing 'a' and 'b'
-+ * and accumulating non-duplicated non-ANY entries.
-+ */
-+static int mk_any(struct scev *scev, u32 a, u32 b)
++static int match_linear_latch(struct bpf_verifier_env *env,
++			      u32 latch_idx,
++			      struct linear_latch *latch)
 +{
-+	struct expr_stack_elt *elt;
-+	struct expr *expr;
-+	u32 i, j, ids_buf_sz;
-+	u32 roots[2] = {a, b};
++	struct bpf_insn *insn = &env->prog->insnsi[latch_idx];
++	struct scev *scev = env->scev;
++	struct env *latch_env = find_loop_env(scev, bpf_loop_at_index(env, latch_idx), latch_idx);
++	u32 true_branch_tgt;
++	u32 l, r, op, base;
++	u32 src_reg_scev;
++	u32 dst_reg_scev;
 +	int id;
 +
-+	ids_buf_sz = 0;
-+	for (i = 0; i < ARRAY_SIZE(roots); i++) {
-+		scev->stack_sz = 0;
-+		expr_stack_push(scev, roots[i]);
-+		while (scev->stack_sz) {
-+			elt = &scev->expr_stack[--scev->stack_sz];
-+			id = elt->id;
-+			expr = &scev->exprs[elt->id];
-+			if (expr->op == ANY) {
-+				if (!expr_stack_push(scev, expr->params[0]) ||
-+				    !expr_stack_push(scev, expr->params[1]))
-+					return UNKNOWN_EXPR_ID;
-+			} else {
-+				for (j = 0; j < ids_buf_sz; j++) {
-+					if (same_exprs(scev, scev->ids_buf[j], id))
-+						goto next;
-+				}
-+				if (ids_buf_sz == ARRAY_SIZE(scev->ids_buf))
-+					return UNKNOWN_EXPR_ID;
-+				scev->ids_buf[ids_buf_sz++] = id;
-+			}
-+next:;
-+		}
++	/* 32-bit arithmetic is not handled yet */
++	if (BPF_CLASS(insn->code) != BPF_JMP)
++		return false;
++	op = BPF_OP(insn->code);
++	/* Flip the condition if true branch jumps out of the loop */
++	true_branch_tgt = latch_idx + bpf_jmp_offset(insn) + 1;
++	if (bpf_loop_at_index(env, true_branch_tgt) != bpf_loop_at_index(env, latch_idx))
++		op = bpf_rev_opcode(op);
++	switch (op) {
++	case BPF_JSLT:
++	case BPF_JSLE:
++	case BPF_JSGT:
++	case BPF_JSGE:
++	case BPF_JLT:
++	case BPF_JLE:
++	case BPF_JGT:
++	case BPF_JGE:
++	case BPF_JNE:
++		break;
++	default:
++		return false;
 +	}
-+	if (WARN_ON(ids_buf_sz == 0))
-+		return -EFAULT;
-+	id = scev->ids_buf[0];
-+	for (i = 1; i < ids_buf_sz; i++) {
-+		id = expr2(scev, ANY, id, scev->ids_buf[i]);
++
++	latch->op = op;
++	latch->insn_idx = latch_idx;
++
++	dst_reg_scev = latch_env->reg2scev[insn->dst_reg];
++	src_reg_scev = latch_env->reg2scev[insn->src_reg];
++	if (!is_linear(scev, dst_reg_scev, &base, &latch->step_expr))
++		return false;
++
++	if (BPF_SRC(insn->code) == BPF_K) {
++		id = imm_expr(scev, insn->imm);
 +		if (id < 0)
 +			return id;
-+	}
-+	return id;
-+}
-+
-+static int join(struct scev *scev, struct env *acc, struct env *cur)
-+{
-+	int i, id;
-+
-+	if (acc->empty) {
-+		memcpy(acc, cur, sizeof(*acc));
-+		acc->empty = false;
-+		return 0;
++		latch->bound_expr = id;
++	} else {
++		latch->bound_expr = src_reg_scev;
 +	}
 +
-+	for (i = 0; i < REGS_NUM; i++) {
-+		if (!same_exprs(scev, acc->reg2expr[i], cur->reg2expr[i])) {
-+			id = mk_any(scev, acc->reg2expr[i], cur->reg2expr[i]);
-+			if (id < 0)
-+				return id;
-+			acc->reg2expr[i] = id;
-+		}
++	if (is_reg(scev, base, &latch->reg)) {
++		id = imm_expr(scev, 0);
++		if (id < 0)
++			return id;
++		latch->base_expr = id;
++		latch->reg_expr = base;
++	} else if (is_add(scev, base, &l, &r) &&
++		   is_reg(scev, l, &latch->reg)) {
++		latch->base_expr = r;
++		latch->reg_expr = l;
++	} else {
++		return false;
 +	}
-+	return 0;
++
++	if (!loop_invariant(scev, latch->base_expr) ||
++	    !loop_invariant(scev, latch->step_expr) ||
++	    !loop_invariant(scev, latch->bound_expr))
++		return false;
++
++	return true;
 +}
 +
-+/* Mark any register modified in 'header_env' as unknown in 'acc'. */
-+static void forget_non_invariants(struct scev *scev, struct env *acc, struct env *header_env)
++static bool eval_expr(struct bpf_verifier_env *env, struct scev *scev, struct bpf_func_state *st, u32 id, u64 *result)
 +{
-+	struct expr *header_expr;
-+	int i;
++	struct bpf_reg_state *reg;
++	u32 regno;
++	s64 imm;
 +
-+	if (acc->empty)
-+		acc->empty = false;
-+
-+	for (i = 0; i < REGS_NUM; i++) {
-+		header_expr = &scev->exprs[header_env->reg2expr[i]];
-+		if (is_expr1(header_expr, REG, i))
-+			continue;
-+		acc->reg2expr[i] = UNKNOWN_EXPR_ID;
-+	}
-+}
-+
-+static int worklist_push(struct scev *scev, int loop_header, int idx)
-+{
-+	u32 tag = (u32)loop_header + 1;
-+	int err;
-+
-+	if (scev->discovered[idx] == tag)
-+		return 0;
-+
-+	err = bpf_min_heap_push(&scev->worklist, idx);
-+	if (err)
-+		return err;
-+
-+	scev->discovered[idx] = tag;
-+	return 0;
-+}
-+
-+static bool reg_alive_at_succ(struct bpf_verifier_env *env, u32 r, u32 insn_idx)
-+{
-+	struct bpf_iarray *succ = bpf_insn_successors(env, insn_idx);
-+	u32 i;
-+
-+	for (i = 0; i < succ->cnt; i++)
-+		if (reg_alive_at(env, r, succ->items[i]))
++	if (is_reg(scev, id, &regno)) {
++		reg = scev_regno_to_reg(env, st, regno);
++		if (reg->type == NOT_INIT)
++			return false;
++		if (tnum_is_const(reg->var_off)) {
++			*result = reg->var_off.value;
 +			return true;
++		}
++	} else if (is_imm(scev, id, &imm)) {
++		*result = imm;
++		return true;
++	}
 +	return false;
 +}
 +
-+enum changes_at {
-+	LOG_AT_TRANSFER,
-+	LOG_AT_JOIN,
-+};
-+
-+static void log_env_changes(struct bpf_verifier_env *env, enum changes_at at,
-+			    struct env *old, struct env *new, int insn_idx)
++/* Like DIV_ROUND_UP() but overflow safe */
++static u64 div_round_up(u64 a, u64 b)
 +{
-+	struct bpf_verifier_log *log = &env->log;
-+	struct scev *scev = env->scev;
-+	u64 null_pos = log->end_pos;
-+	bool any_changes = false;
-+	u32 old_id, new_id;
-+	u64 len;
-+	int r;
-+
-+	bpf_log(log, "%s %4d: ", at == LOG_AT_TRANSFER ? "t" : "j", insn_idx);
-+	bpf_verbose_insn(env, &env->prog->insnsi[insn_idx]);
-+	len = log->end_pos - null_pos;
-+	bpf_log(log, "%*s", max(37 - (int)len, 1), " ");
-+	bpf_log(log, " ; ");
-+	for (r = 0; r < REGS_NUM; r++) {
-+		old_id = old->reg2expr[r];
-+		new_id = new->reg2expr[r];
-+		if (at == LOG_AT_TRANSFER && !reg_alive_at_succ(env, r, insn_idx))
-+			continue;
-+		if (at == LOG_AT_JOIN && !reg_alive_at(env, r, insn_idx))
-+			continue;
-+		if (same_exprs(scev, old_id, new_id))
-+			continue;
-+		if (any_changes)
-+			bpf_log(log, ", ");
-+		log_reg(env, r);
-+		bpf_log(log, " ");
-+		log_expr(env, old_id);
-+		bpf_log(log, " -> ");
-+		log_expr(env, new_id);
-+		any_changes = true;
-+	}
-+	bpf_log(log, "\n");
-+	if (!any_changes)
-+		bpf_vlog_reset(log, null_pos);
-+}
-+
-+static bool is_probe_read_helper(u32 func_id)
-+{
-+	return func_id == BPF_FUNC_probe_read ||
-+	       func_id == BPF_FUNC_probe_read_kernel ||
-+	       func_id == BPF_FUNC_probe_read_user ||
-+	       func_id == BPF_FUNC_probe_read_str ||
-+	       func_id == BPF_FUNC_probe_read_kernel_str ||
-+	       func_id == BPF_FUNC_probe_read_user_str;
++	return a / b + (a % b != 0);
 +}
 +
 +/*
-+ * If instruction is an indirect write to stack, invalidate SCEVs for spi's
-+ * that this instruction can touch.
++ * Loop with post-condition:
++ *
++ *    r0 = 0
++ * l: ...                r0 ∈ [0,1,2] header executed 3 times
++ *    r0 += 1            r0 ∈ [0,1,2]
++ *    ...                r0 ∈ [1,2,3]
++ *    if r0 != 3 goto l  r0 ∈ [1,2,3] backedge taken 2 times
++ *    ...                r0 ∈ [3]
++ *
++ * SCEV at header: r0 = k
++ * SCEV at latch:  r0 = 1 + k
++ *
++ * Loop with pre-condition:
++ *
++ *    r0 = 0
++ * l: ...                r0 ∈ [0,1,2,3] header executed 4 times
++ *    if r0 == 3 goto e  r0 ∈ [0,1,2,3] backedge taken 3 times
++ *    r0 += 1            r0 ∈ [0,1,2]
++ *    ...                r0 ∈ [1,2,3]
++ *    goto l             r0 ∈ [1,2,3]
++ * e: ...                r0 ∈ [3]
++ *
++ * SCEV at header: r0 = k
++ * SCEV at latch:  r0 = k
 + */
-+static void reset_scevs_at_indirect_writes(struct bpf_verifier_env *env, struct env *cur_env, int idx)
++static bool compute_max_iters(struct bpf_verifier_env *env,
++			      struct bpf_func_state *st,
++			      struct linear_latch *latch,
++			      struct bpf_loop_iters *iters)
 +{
-+	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	struct scev *scev = env->scev;
-+	u8 class = BPF_CLASS(insn->code);
-+	const unsigned long *mask;
-+	u32 spi, reg;
-+	bool opaque;
-+
-+	/* Direct fp stores are fine. */
-+	if ((class == BPF_ST || class == BPF_STX) && insn->dst_reg == BPF_REG_FP)
-+		return;
-+
-+	mask = bpf_may_write_mask(env, idx);
-+	opaque = bpf_helper_call(insn) && is_probe_read_helper(insn->imm);
-+	for_each_set_bit(spi, mask, MAX_BPF_STACK_SLOTS) {
-+		reg = MAX_BPF_REG + spi;
-+		if (cur_env->reg2expr[reg] == UNKNOWN_EXPR_ID)
-+			continue;
-+		replace_reg(scev, cur_env, reg, opaque ? OPAQUE_EXPR_ID : UNKNOWN_EXPR_ID);
-+	}
-+}
-+
-+/* Find the topmost loop header containing idx inside cur_header, or -1 if none. */
-+static int topmost_nested_loop(struct bpf_verifier_env *env, int idx, int cur_header)
-+{
++	u64 base, step, diff, bound, initial, max_iters;
 +	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int header;
-+
-+	for (header = bpf_loop_at_index(env, idx); header >= 0;
-+	     header = aux[header].loop_header)
-+		if (aux[header].loop_header == cur_header)
-+			return header;
-+
-+	return -1;
-+}
-+
-+/*
-+ * Join cur_env into the successor's environment and schedule their traversal.
-+ * Map successors in nested loops to their topmost nested header.
-+ * Ignore successors outside the current loop and its nested loops.
-+ */
-+static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ_idx,
-+			  struct env *old_env, struct env *cur_env)
-+{
-+	bool log_level2 = env->log.level & BPF_LOG_LEVEL2;
++	struct bpf_loop *loop = aux[bpf_loop_at_index(env, latch->insn_idx)].loop;
 +	struct scev *scev = env->scev;
-+	int err, nested_header;
-+	struct env *succ_env;
++	u8 op = latch->op;
++
++	if (!eval_expr(env, scev, st, latch->base_expr, &base) ||
++	    !eval_expr(env, scev, st, latch->step_expr, &step) ||
++	    !eval_expr(env, scev, st, latch->bound_expr, &bound) ||
++	    !eval_expr(env, scev, st, latch->reg_expr, &initial))
++		return false;
++
++	if (step == 0)
++		return false;
++	if ((s64)step == S64_MIN)
++		return false;
++	if ((s64)step < 0) {
++		/* Multiply both sides of the equation by -1, e.g. -2*i > -3 becomes 2*i < 3 */
++		op = bpf_flip_opcode(op);
++		step = -step;
++		swap(bound, initial);
++	}
++	diff = bound - initial;
++	if (diff / step == U64_MAX)
++		return false;
++	switch (op) {
++	case BPF_JLT:
++		max_iters = (u64)initial >= (u64)bound ? 0 : div_round_up(diff, step);
++		break;
++	case BPF_JLE:
++		max_iters = (u64)initial >  (u64)bound ? 0 : diff / step + 1;
++		break;
++	case BPF_JSLT:
++		max_iters = (s64)initial >= (s64)bound ? 0 : div_round_up(diff, step);
++		break;
++	case BPF_JSLE:
++		max_iters = (s64)initial >  (s64)bound ? 0 : diff / step + 1;
++		break;
++	case BPF_JNE:
++		max_iters = diff % step ? U32_MAX : div_round_up(diff, step);
++		break;
++	default:
++		return false;
++	}
++
++	if (max_iters > U32_MAX)
++		return false;
 +
 +	/*
-+	 * There are several possibilities for a successor:
-+	 * - succ_idx can be a part of a loop outside of the cur_header's loop,
-+	 *   such edges are ignored.
-+	 * - succ_idx can be a part of the same loop as cur_header,
-+	 *   for such edges succ_idx environment is updated:
-+	 *     e[succ_idx] = join(e[succ_idx], cur_env)
-+	 * - succ_idx can be a part of some loop inner to cur_header,
-+	 *   in such a case there exists some loop header H,
-+	 *   such that H.loop_header == cur_header
-+	 *   and H is the same as succ_idx's loop or contains it.
++	 * The latch is a conditional jump with one jump target exiting the loop.
++	 * Linear latch is matched only if the loop has a single backedge.
++	 * The loop still, however can have multiple exits.
++	 * In such case, conservatively assume that non-latch exit can happen
++	 * at any iteration, thus setting minimal number of iterations as 0.
 +	 */
-+	if (bpf_loop_at_index(env, succ_idx) != cur_header) {
-+		/*
-+		 * topmost_nested_loop() either finds H or returns -1,
-+		 * in case if succ_idx is a part of a loop outer to cur_header.
-+		 */
-+		nested_header = topmost_nested_loop(env, succ_idx, cur_header);
-+		if (nested_header < 0)
-+			return 0;
-+		succ_idx = nested_header;
-+	}
-+	succ_env = get_loop_env(scev, cur_header, succ_idx);
-+	if (!succ_env)
-+		return -ENOMEM;
-+	if (log_level2)
-+		memcpy(old_env, succ_env, sizeof(*old_env));
-+	err = join(scev, succ_env, cur_env);
-+	if (err)
-+		return err;
-+	err = worklist_push(scev, cur_header, succ_idx);
-+	if (err)
-+		return err;
-+	if (log_level2)
-+		log_env_changes(env, LOG_AT_JOIN, old_env, succ_env, succ_idx);
-+	return 0;
++	iters->max_header_count = max_iters + (base == 0 ? 1 : 0);
++	iters->min_header_count = loop->exits_cnt == 1 ? iters->max_header_count : 0;
++	iters->pre_cond = base == 0;
++	return true;
 +}
 +
-+static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
++static void mark_scev_reg_scratched(struct bpf_verifier_env *env, u32 r)
 +{
-+	struct bpf_min_heap *worklist = &env->scev->worklist;
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct bpf_loop *cur_loop = aux[cur_header].loop;
-+	struct env *header_env, *nested_header_env;
++	if (r < MAX_BPF_REG)
++		mark_reg_scratched(env, r);
++	else
++		mark_stack_slot_scratched(env, r - __MAX_BPF_REG);
++}
++
++/* Main logic in verifier.c forbids varying offsets for certain register types. */
++static bool is_widenable_reg_type(const struct bpf_reg_state *reg)
++{
++	switch (base_type(reg->type)) {
++	case SCALAR_VALUE:
++	case PTR_TO_MAP_VALUE:
++	case PTR_TO_MAP_KEY:
++	case PTR_TO_STACK:
++	case PTR_TO_PACKET:
++	case PTR_TO_PACKET_META:
++	case PTR_TO_MEM:
++	case PTR_TO_BUF:
++	case PTR_TO_BTF_ID:
++		return true;
++	default:
++		return false;
++	}
++}
++
++/* Check that ANY leaves can be unioned with r's loop-entry value. */
++static bool is_any_imm_reg(struct bpf_verifier_env *env, struct bpf_func_state *loop_entry,
++			   struct env *header_env, u32 r, u32 id)
++{
 +	struct scev *scev = env->scev;
-+	struct bpf_loop *nested_loop;
-+	struct env *cur_env = NULL;
-+	struct env *old_env = NULL;
-+	struct bpf_iarray *succ;
-+	bool log_level2 = env->log.level & BPF_LOG_LEVEL2;
-+	int s, i, err, idx, succ_idx;
-+
-+	if (log_level2)
-+		bpf_log(&env->log, "Computing SCEV for loop at %d:\n", cur_header);
-+
-+	/*
-+	 * For irreducible loops, and for loops nesting a loop with a truncated
-+	 * exit list, just assume that everything is clobbered for now.
-+	 */
-+	if (cur_loop->irreducible || cur_loop->exits_overflow) {
-+		header_env = get_loop_env(scev, cur_header, cur_header);
-+		if (!header_env)
-+			return -ENOMEM;
-+		/* The freshly allocated environment has all expressions unknown. */
-+		header_env->empty = false;
-+		return 0;
-+	}
-+
-+	cur_env = kzalloc(sizeof(*cur_env), GFP_KERNEL_ACCOUNT);
-+	if (!cur_env)
-+		goto nomem;
-+	if (log_level2) {
-+		old_env = kzalloc(sizeof(*old_env), GFP_KERNEL_ACCOUNT);
-+		if (!old_env)
-+			goto nomem;
-+	}
-+	header_env = get_loop_env(scev, cur_header, cur_header);
-+	if (!header_env)
-+		goto nomem;
-+	setup_initial_loop_env(env, header_env, cur_header);
-+	err = worklist_push(scev, cur_header, cur_header);
-+	if (err)
-+		goto out;
-+
-+	for (;;) {
-+		if (!bpf_min_heap_pop(worklist, &idx))
-+			break;
-+
-+		/* join_successor() maps nested-loop entries to their representative header. */
-+		nested_loop = idx != cur_header ? aux[idx].loop : NULL;
-+		memcpy(cur_env, find_loop_env(scev, cur_header, idx), sizeof(*cur_env));
-+		if (nested_loop) {
-+			/*
-+			 * Process nested loop as a single instruction by
-+			 * forgetting anything non-invariant in the nested loop
-+			 */
-+			if (log_level2)
-+				memcpy(old_env, cur_env, sizeof(*old_env));
-+			nested_header_env = find_header_env(scev, idx);
-+			forget_non_invariants(scev, cur_env, nested_header_env);
-+			if (log_level2)
-+				log_env_changes(env, LOG_AT_TRANSFER, old_env, cur_env, idx);
-+			/*
-+			 * Treat nested loop exits as successors,
-+			 * join cur_env into successor's envs.
-+			 */
-+			for (i = 0; i < nested_loop->exits_cnt; i++) {
-+				s = nested_loop->exits[i].to;
-+				err = join_successor(env, cur_header, s, old_env, cur_env);
-+				if (err)
-+					goto out;
-+			}
-+		} else {
-+			/*
-+			 * Iterate instructions within a single basic block
-+			 * starting at 'idx' mutating 'cur_env'.
-+			 */
-+			for (;;) {
-+				if (log_level2)
-+					memcpy(old_env, cur_env, sizeof(*old_env));
-+				err = transfer(env, cur_env, idx);
-+				if (err)
-+					goto out;
-+				reset_scevs_at_indirect_writes(env, cur_env, idx);
-+				if (log_level2)
-+					log_env_changes(env, LOG_AT_TRANSFER, old_env, cur_env, idx);
-+				succ = bpf_insn_successors(env, idx);
-+				if (succ->cnt != 1)
-+					break;
-+				succ_idx = succ->items[0];
-+				if (aux[idx].bb_end || aux[succ_idx].need_scev ||
-+				    bpf_loop_at_index(env, succ_idx) != cur_header)
-+					break;
-+				idx = succ_idx;
-+			}
-+			/* Join cur_env into basic block successor's envs. */
-+			iarray_for_each(s, succ) {
-+				err = join_successor(env, cur_header, s, old_env, cur_env);
-+				if (err)
-+					goto out;
-+			}
-+		}
-+	}
-+
-+	err = 0;
-+out:
-+	kfree(cur_env);
-+	kfree(old_env);
-+	return err;
-+nomem:
-+	err = -ENOMEM;
-+	goto out;
-+}
-+
-+static void mark_latches(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct bpf_loop *loop;
-+	int len = env->prog->len;
-+	int i, j, latch;
-+
-+	for (i = 0; i < len; i++) {
-+		loop = aux[i].loop;
-+		if (!loop)
-+			continue;
-+		aux[i].need_scev = true;
-+		if (loop->irreducible)
-+			continue;
-+		for (j = 0; j < loop->backedges_cnt; j++) {
-+			latch = loop->backedges[j].latch;
-+			if (latch >= 0)
-+				aux[latch].need_scev = true;
-+		}
-+	}
-+}
-+
-+static bool is_any_imm_reg_opaque(struct scev *scev, u32 id)
-+{
-+	u32 l, r, reg, order;
++	struct bpf_reg_state *reg, *leaf_reg;
++	u32 l, rr, leaf, ra, order;
 +	s64 imm;
++
++	if (!is_any(scev, id, &l, &rr))
++		return false;
++	reg = scev_regno_to_reg(env, loop_entry, r);
++	if (!is_widenable_reg_type(reg))
++		return false;
 +
 +	scev->stack_sz = 0;
 +	expr_stack_push(scev, id);
 +	while (expr_next(scev, &id, &order)) {
 +		if (order & DEPTH_LIMIT)
 +			return false;
-+		if (!(order & PRE) ||
-+		    is_imm(scev, id, &imm) ||
-+		    is_reg(scev, id, &reg) ||
-+		    is_opaque(scev, id) ||
-+		    is_any(scev, id, &l, &r))
++		if (!(order & PRE) || is_any(scev, id, &l, &rr))
 +			continue;
-+		return false;
++		if (is_imm(scev, id, &imm)) {
++			if (reg->type != SCALAR_VALUE)
++				return false;
++		} else if (is_reg(scev, id, &leaf)) {
++			/* Other leaves must denote loop-invariant registers. */
++			if (leaf != r &&
++			    !(is_reg(scev, header_env->reg2scev[leaf], &ra) && ra == leaf))
++				return false;
++			leaf_reg = scev_regno_to_reg(env, loop_entry, leaf);
++			if (leaf_reg->type != reg->type)
++				return false;
++		} else {
++			return false;
++		}
 +	}
 +	return true;
 +}
 +
++struct bounds {
++	struct cnum64 range;
++	u16 step;
++};
++
++static bool is_simple_linear(struct scev *scev, u32 id, u32 *base_reg, s64 *slope_imm)
++{
++	u32 base, slope;
++
++	return is_linear(scev, id, &base, &slope) &&
++	       is_reg(scev, base, base_reg) &&
++	       is_imm(scev, slope, slope_imm) &&
++	       *slope_imm <= S16_MAX &&
++	       *slope_imm >= S16_MIN &&
++	       *slope_imm != 0;
++}
++
 +/*
-+ * Can implement explicit stack version, but it is harder to read.
-+ * Stick with recursive version for now.
++ * Compute the range an induction variable in `reg` spans over the loop.
++ * Returns false if the computation overflows s64.
 + */
-+static int transform_expr_once(struct scev *scev, u32 lvl, u32 root, void *priv,
-+                               int (*fn)(struct scev *scev, u32 id, void *priv))
++static bool linear_bounds(struct bpf_reg_state *reg, struct bpf_loop_iters *iters, s64 slope,
++			  struct bounds *out)
 +{
-+	struct expr expr;
-+	int p0, p1, id;
++	s64 slope_abs = slope < 0 ? -slope : slope;
++	s64 min_val = reg_smin(reg);
++	s64 max_val = reg_smax(reg);
++	s64 total_change;
++	u16 step;
 +
-+	if (lvl >= EXPR_STACK_DEPTH)
-+		return UNKNOWN_EXPR_ID;
-+
-+        expr = scev->exprs[root]; /* snapshot the expr before potential realloc */
-+	switch (op_params_num(expr.op)) {
-+	case 0:
-+		id = root;
-+		break;
-+	case 1:
-+		p0 = transform_expr_once(scev, lvl + 1, expr.params[0], priv, fn);
-+		id = expr1(scev, expr.op, p0);
-+		break;
-+	case 2:
-+		p0 = transform_expr_once(scev, lvl + 1, expr.params[0], priv, fn);
-+		p1 = transform_expr_once(scev, lvl + 1, expr.params[1], priv, fn);
-+		id = expr2(scev, expr.op, p0, p1);
-+		break;
++	if (check_mul_overflow(slope, (s64)iters->max_header_count - 1, &total_change))
++		return false;
++	if (slope > 0) {
++		if (check_add_overflow(max_val, total_change, &max_val))
++			return false;
++	} else {
++		if (check_add_overflow(min_val, total_change, &min_val))
++			return false;
 +	}
-+	return id < 0 ? id : fn(scev, id, priv);
++	/*
++	 * If the entry value is a single point the value set is 'v + slope * k',
++	 * so the step is |slope|. Otherwise, only the power-of-two alignment
++	 * shared by the entry value and the slope.
++	 */
++	if (cnum64_is_const(reg->r64))
++		step = slope_abs;
++	else
++		step = 1u << min_t(u32, tnum_alignment(reg->var_off), __ffs(slope_abs));
++	out->range = cnum64_from_srange(min_val, max_val);
++	out->step = step;
++	return true;
 +}
 +
-+static int transform_expr(struct scev *scev, u32 root, void *priv,
-+                          int (*fn)(struct scev *scev, u32 id, void *priv))
++int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			   struct bpf_loop_iters *iters)
 +{
-+	int id_old, id_new = root;
-+
-+	do {
-+		id_old = id_new;
-+		id_new = transform_expr_once(scev, 0, id_old, priv, fn);
-+		if (id_new < 0)
-+			return id_new;
-+	} while (id_old != id_new);
-+	return id_new;
-+}
-+
-+static int simplify(struct scev *scev, u32 id, void *priv)
-+{
-+	u32 l, r, base, slope;
-+	s64 imm1, imm2;
-+
-+	/* (+ (linear base slope) imm) -> (linear (+ base imm) slope) */
-+	if (is_add(scev, id, &l, &r) &&
-+	    is_linear(scev, l, &base, &slope) &&
-+	    is_imm(scev, r, &imm1))
-+		return expr2(scev, LINEAR_SCEV, expr2(scev, BPF_ADD, base, r), slope);
-+
-+	/* (+ imm imm) -> imm */
-+	if (is_add(scev, id, &l, &r) &&
-+	    is_imm(scev, l, &imm1) &&
-+	    is_imm(scev, r, &imm2))
-+		return imm_expr(scev, imm1 + imm2);
-+
-+	if (is_zext32(scev, id, &l) && is_imm(scev, l, &imm1))
-+		return imm_expr(scev, (u64)(u32)imm1);
-+
-+	return id;
-+}
-+
-+static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header_env)
-+{
-+	struct scev *scev = env->scev;
-+	u32 ra, rb, l, r, ra_expr;
-+	s64 imm;
-+	int id;
-+
-+	for (ra = 0; ra < REGS_NUM; ra++) {
-+		id = transform_expr(scev, header_env->reg2expr[ra], NULL, simplify);
-+		if (id < 0)
-+			return id;
-+		header_env->reg2expr[ra] = id;
-+		ra_expr = header_env->reg2expr[ra];
-+		/* rA = (+ rA IMM) */
-+		if (is_add(scev, ra_expr, &l, &r) &&
-+		    is_reg(scev, l, &rb) &&
-+		    is_imm(scev, r, &imm) &&
-+		    ra == rb) {
-+			id = expr2(scev, LINEAR_SCEV, l, r);
-+			if (id < 0)
-+				return id;
-+			header_env->reg2scev[ra] = id;
-+			continue;
-+		}
-+		/* rA = rA */
-+		if (is_reg(scev, ra_expr, &rb) && ra == rb) {
-+			header_env->reg2scev[ra] = ra_expr;
-+			continue;
-+		}
-+		/* rA = (any 1 2 3 4 ...) */
-+		if (is_any_imm_reg_opaque(scev, ra_expr)) {
-+			header_env->reg2scev[ra] = ra_expr;
-+			continue;
-+		}
-+
-+	}
-+	return 0;
-+}
-+static int instantiate_header_scevs(struct scev *scev, u32 id, void *priv)
-+{
-+	u32 reg, base, slope, *reg2scev = priv;
-+
-+	/* (reg r) -> (linear ...), where r is a LINEAR_SCEV in the header */
-+	if (is_reg(scev, id, &reg) &&
-+	    is_linear(scev, reg2scev[reg], &base, &slope))
-+		return reg2scev[reg];
-+	return id;
-+}
-+
-+static int compute_insn_scevs(struct bpf_verifier_env *env, struct env *eheader, struct env *einsn)
-+{
-+	struct scev *scev = env->scev;
-+	int id, reg;
-+
-+	for (reg = 0; reg < REGS_NUM; reg++) {
-+		id = einsn->reg2expr[reg];
-+		id = transform_expr_once(scev, 0, id, eheader->reg2scev, instantiate_header_scevs);
-+		if (id < 0)
-+			return id;
-+		id = transform_expr(scev, id, NULL, simplify);
-+		if (id < 0)
-+			return id;
-+		einsn->reg2scev[reg] = id;
-+	}
-+
-+	return 0;
-+}
-+
-+static void log_scevs(struct bpf_verifier_env *env)
-+{
++	struct bpf_func_state *cur_func = st->frame[st->curframe];
 +	struct bpf_insn_aux_data *aux = env->insn_aux_data;
 +	struct bpf_verifier_log *log = &env->log;
 +	struct scev *scev = env->scev;
++	struct env *header_env;
++	struct linear_latch latch;
 +	struct bpf_loop *loop;
-+	int i, j, len, latch;
++	struct bounds bounds;
++	int insn_idx = st->insn_idx;
++	int linear_latch;
++	u32 r, base_reg;
++	int latch_idx;
++	s64 slope_imm;
++	int err;
 +
-+	len = env->prog->len;
-+	for (i = 0; i < len; i++) {
-+		loop = aux[i].loop;
-+		if (!loop)
++	/*
++	 * If insn_idx is a loop header for a reducible loop with a single backedge.
++	 * loop is NULL for secondary entries to irreducible loops.
++	 */
++	loop = aux[insn_idx].loop;
++	if (!loop || loop->irreducible || loop->backedges_cnt != 1 || loop->backedges_overflow ||
++	    loop->exits_overflow) {
++		if (log->level & BPF_LOG_LEVEL2)
++			bpf_log(log, "loop header at %d, unsupported loop:%s%s%s\n", insn_idx,
++				!loop || loop->irreducible ? " irreducible" : "",
++				loop && loop->backedges_cnt > 1 ? " multiple backedges" : "",
++				loop && loop->exits_overflow ? " too many exits" : "");
++		return 0;
++	}
++
++	/* If this backedge has a latch */
++	latch_idx = loop->backedges[0].latch;
++	if (latch_idx < 0)
++		return 0;
++
++	linear_latch = match_linear_latch(env, latch_idx, &latch);
++	if (linear_latch < 0)
++		return linear_latch;
++
++	if (!linear_latch) {
++		if (log->level & BPF_LOG_LEVEL2)
++			bpf_log(log, "loop header at %d, non-linear latch at %d\n",
++				insn_idx, latch_idx);
++		return 0;
++	}
++
++	if (!compute_max_iters(env, cur_func, &latch, iters)) {
++		if (log->level & BPF_LOG_LEVEL2)
++			bpf_log(log, "loop header at %d, can't compute iterations count\n", insn_idx);
++		return 0;
++	}
++
++	if (iters->max_header_count == 0) {
++		if (log->level & BPF_LOG_LEVEL2)
++			bpf_log(log, "loop header at %d, 0 iterations count\n", insn_idx);
++		return 0;
++	}
++
++	if (iters->max_header_count == U32_MAX) {
++		if (log->level & BPF_LOG_LEVEL2)
++			bpf_log(log, "loop header at %d, inf iterations count\n", insn_idx);
++		return 0;
++	}
++
++	if (log->level & BPF_LOG_LEVEL2) {
++		bpf_log(log, "loop header at %d, header_count is ", insn_idx);
++		if (iters->min_header_count == iters->max_header_count)
++			bpf_log(log, "%u ", iters->max_header_count);
++		else
++			bpf_log(log, "[%u..%u] ", iters->min_header_count, iters->max_header_count);
++		bpf_log(log, "%s\n", iters->pre_cond ? "pre-cond" : "post-cond");
++	}
++
++	err = bpf_live_stack_query_init(env, st);
++	if (err)
++		return err;
++
++	header_env = find_header_env(scev, insn_idx);
++	for (r = 0; r < REGS_NUM; r++) {
++		struct bpf_reg_state *reg;
++		u32 ra, r_scev, r_expr;
++
++		if (!scev_reg_alive(env, st, r))
 +			continue;
-+		bpf_log(log, "scev at header %d:\n", i);
-+		print_env(env, find_header_env(scev, i), i, PRINT_SCEV);
-+		if (loop->irreducible)
++
++		r_scev = header_env->reg2scev[r];
++		reg = scev_regno_to_reg(env, cur_func, r);
++		/* If SCEV for r is (linear <reg> <slope>) */
++		if (is_simple_linear(scev, r_scev, &base_reg, &slope_imm) &&
++		    is_widenable_reg_type(reg)) {
++			/* Can't widen if the iteration range overflows */
++			if (base_reg == r &&
++			    !linear_bounds(reg, iters, slope_imm, &bounds))
++				goto cant_widen;
 +			continue;
-+		for (j = 0; j < loop->backedges_cnt; j++) {
-+			latch = loop->backedges[j].latch;
-+			if (latch < 0)
-+				continue;
-+			bpf_log(log, " scev at latch %d:\n", latch);
-+			print_env(env, find_loop_env(scev, bpf_loop_at_index(env, latch), latch),
-+				  latch, PRINT_SCEV);
++		}
++
++		/* rA = rA, loop does not change this reg */
++		if (is_reg(scev, r_scev, &ra) && r == ra)
++			continue;
++
++		/* (any 1 (any 2 (any 3 4))) */
++		if (is_any_imm_reg(env, cur_func, header_env, r, r_scev))
++			continue;
++
++cant_widen:
++		if (log->level & BPF_LOG_LEVEL2) {
++			r_expr = header_env->reg2expr[r];
++			bpf_log(log, "loop header at %d, can't widen ", insn_idx);
++			log_reg(env, r);
++			bpf_log(log, ", expr is ");
++			log_expr(env, r_expr);
++			bpf_log(log, "\n");
++		}
++		return 0;
++	}
++
++	return 1;
++}
++
++static void scratch_scalar_id(struct bpf_reg_state *reg)
++{
++	if (reg->type == SCALAR_VALUE)
++		reg->id = 0;
++}
++
++/* The filtering pass has checked that every leaf can be unioned into acc. */
++static int union_any_reg(struct bpf_verifier_env *env, struct bpf_func_state *loop_entry,
++			 struct bpf_reg_state *acc, u32 id)
++{
++	struct bpf_reg_state *tmp = &env->fake_reg[0], *leaf_reg;
++	struct scev *scev = env->scev;
++	u32 l, r, leaf, order;
++	s64 imm;
++	int err;
++
++	scev->stack_sz = 0;
++	expr_stack_push(scev, id);
++	while (expr_next(scev, &id, &order)) {
++		if (order & DEPTH_LIMIT) {
++			verifier_bug(env, "scev ANY union exceeds expression depth limit");
++			return -EFAULT;
++		}
++		if (!(order & PRE) || is_any(scev, id, &l, &r))
++			continue;
++		if (is_imm(scev, id, &imm)) {
++			bpf_mark_reg_known_scalar(tmp, imm);
++			leaf_reg = tmp;
++		} else if (is_reg(scev, id, &leaf)) {
++			leaf_reg = scev_regno_to_reg(env, loop_entry, leaf);
++		} else {
++			verifier_bug(env, "scev ANY union has an unsupported leaf");
++			return -EFAULT;
++		}
++		err = bpf_reg_union(env, acc, leaf_reg);
++		if (err)
++			return err;
++	}
++	return 0;
++}
++
++int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			struct bpf_verifier_state *loop_entry, struct bpf_loop_iters *iters)
++{
++	struct bpf_func_state *cur_func = st->frame[st->curframe];
++	struct bpf_func_state *entry_func = loop_entry->frame[loop_entry->curframe];
++	struct bpf_verifier_log *log = &env->log;
++	struct scev *scev = env->scev;
++	struct bpf_reg_state *reg;
++	struct env *header_env;
++	struct bounds bounds;
++	u32 r, base_reg, r_expr, a, b;
++	int insn_idx = st->insn_idx;
++	s64 slope_imm;
++	int err;
++
++	header_env = find_header_env(scev, insn_idx);
++	for (r = 0; r < REGS_NUM; r++) {
++		if (!scev_reg_alive(env, st, r))
++			continue;
++
++		r_expr = header_env->reg2scev[r];
++		/* If SCEV for r is (linear <reg> <slope>)*/
++		if (is_simple_linear(scev, r_expr, &base_reg, &slope_imm) &&
++		    base_reg == r) {
++			reg = scev_regno_to_reg(env, cur_func, r);
++			/* Feasibility was checked in the filtering pass above. */
++			if (!linear_bounds(reg, iters, slope_imm, &bounds)) {
++				verifier_bug(env, "scev widen bounds overflow for r%d", r);
++				return -EFAULT;
++			}
++			if (log->level & BPF_LOG_LEVEL2) {
++				bpf_log(log, "loop header at %d, widening ", insn_idx);
++				log_reg(env, r);
++				bpf_log(log, " to %lld..%lld step %u\n",
++					cnum64_smin(bounds.range), cnum64_smax(bounds.range),
++					bounds.step);
++			}
++			scratch_scalar_id(reg);
++			err = bpf_set_reg_range(env, reg, bounds.range, bounds.step);
++			if (err)
++				return err;
++			mark_scev_reg_scratched(env, r);
++		} else if (is_any(scev, r_expr, &a, &b)) {
++			reg = scev_regno_to_reg(env, cur_func, r);
++			err = union_any_reg(env, entry_func, reg, r_expr);
++			if (err)
++				return err;
++			if (log->level & BPF_LOG_LEVEL2) {
++				bpf_log(log, "loop header at %d, widening ", insn_idx);
++				log_reg(env, r);
++				bpf_log(log, " to %lld..%lld step %u\n",
++					reg_smin(reg), reg_smax(reg), reg->step);
++			}
++			scratch_scalar_id(reg);
++			mark_scev_reg_scratched(env, r);
 +		}
 +	}
++	return 1;
 +}
 +
-+int bpf_compute_scev(struct bpf_verifier_env *env)
++int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur_func_state, u32 insn_idx,
++			struct bpf_verifier_state *entry_state, struct bpf_loop_iters *iters)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_func_state *entry_st = entry_state->frame[entry_state->curframe];
++	struct bpf_verifier_log *log = &env->log;
++	struct bpf_reg_state *reg, *entry_reg;
 +	struct scev *scev = env->scev;
-+	int *postorder = env->cfg.insn_postorder;
-+	int cnt = env->cfg.cur_postorder;
-+	int i, idx, err, header;
++	struct env *header_env;
++	struct bounds bounds;
++	u32 r, base_reg;
++	s64 slope_imm;
++	int err;
 +
-+	mark_latches(env);
-+	/*
-+	 * Visit loop headers in postorder, to guarantee that scevs
-+         * for innermost loops are computed first.
-+	 */
-+	for (i = 0; i < cnt; i++) {
-+		idx = postorder[i];
-+		if (!aux[idx].loop)
++	if (entry_state->curframe != cur_func_state->frameno) {
++		verifier_bug(env, "clamping registers for a wrong frame: %d vs %d\n",
++			     entry_state->curframe, cur_func_state->frameno);
++		return -EFAULT;
++	}
++
++	header_env = find_header_env(scev, insn_idx);
++	for (r = 0; r < REGS_NUM; r++) {
++		/* If SCEV for r is (linear <reg> <slope>)*/
++		if (!is_simple_linear(scev, header_env->reg2scev[r], &base_reg, &slope_imm) ||
++		    base_reg != r)
 +			continue;
-+		err = compute_scev_for_loop(env, idx);
++
++		entry_reg = scev_regno_to_reg(env, entry_st, r);
++		reg = scev_regno_to_reg(env, cur_func_state, r);
++		if (entry_reg->type == NOT_INIT || reg->type == NOT_INIT)
++			continue;
++
++		if (!linear_bounds(entry_reg, iters, slope_imm, &bounds)) {
++			verifier_bug(env, "scev clamp bounds overflow for r%d", r);
++			return -EFAULT;
++		}
++		bounds.range = cnum64_intersect(reg->r64, bounds.range);
++		if (cnum64_is_empty(bounds.range)) {
++			verifier_bug(env, "scev clamp produced empty range for r%d", r);
++			return -EFAULT;
++		}
++		if (log->level & BPF_LOG_LEVEL2) {
++			bpf_log(log, "loop header at %d, clamping ", insn_idx);
++			log_reg(env, r);
++			bpf_log(log, " to %lld..%lld step %u\n",
++				cnum64_smin(bounds.range), cnum64_smax(bounds.range),
++				bounds.step);
++		}
++		scratch_scalar_id(reg);
++		err = bpf_set_reg_range(env, reg, bounds.range, bounds.step);
 +		if (err)
 +			return err;
++		mark_scev_reg_scratched(env, r);
 +	}
-+
-+	/*
-+	 * Compute scevs from exprs collected on a previous step. Iterate instructions in
-+	 * reverse post-order so that each loop header is processed before instructions
-+	 * reachable from it.
-+	 */
-+	for (i = cnt - 1; i >= 0; i--) {
-+		idx = postorder[i];
-+		if (!aux[idx].need_scev)
-+			continue;
-+		header = bpf_loop_at_index(env, idx);
-+		err = aux[idx].loop
-+		      ? compute_header_scevs(env, find_header_env(scev, header))
-+		      : compute_insn_scevs(env, find_header_env(scev, header),
-+				   find_loop_env(scev, header, idx));
-+		if (err)
-+			return err;
-+	}
-+
-+	for (i = 0; i < env->prog->len; i++)
-+		if (aux[i].loop)
-+			aux[i].prune_point = true;
-+
-+	if (env->log.level & BPF_LOG_LEVEL2)
-+		log_scevs(env);
-+
 +	return 0;
 +}
-+
-+static int reverse_ranked_compare(int a, int b, void *arg)
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 68df27e34b60..c1771a355e4e 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -942,6 +942,28 @@ static bool refsafe(struct bpf_verifier_state *old, struct bpf_verifier_state *c
+ 	return true;
+ }
+ 
++static bool loop_stack_safe(struct bpf_verifier_env *env, struct bpf_func_state *old,
++			    struct bpf_func_state *cur)
 +{
-+	int *rank = arg;
++	struct loop_stack_entry *old_stack = old->loop_stack;
++	struct loop_stack_entry *cur_stack = cur->loop_stack;
++	u32 i;
 +
-+	return rank[b] - rank[a];
-+}
++	if (old->loop_stack_cnt != cur->loop_stack_cnt)
++		return false;
 +
-+void bpf_free_scev(struct bpf_verifier_env *env)
-+{
-+	struct scev *scev = env->scev;
-+	struct insn_envs *envs;
-+	int i;
-+	u32 j;
-+
-+	if (!scev)
-+		return;
-+	for (i = 0; i < scev->envs_cnt; i++) {
-+		envs = scev->envs[i];
-+		if (!envs)
++	for (i = 0; i < old->loop_stack_cnt; i++) {
++		if (old_stack[i].loop_id == cur_stack[i].loop_id &&
++		    old_stack[i].iters.max_header_count == cur_stack[i].iters.max_header_count &&
++		    old_stack[i].iters.pre_cond == cur_stack[i].iters.pre_cond &&
++		    old_stack[i].terminates == cur_stack[i].terminates)
 +			continue;
-+		for (j = 0; j < envs->cnt; j++)
-+			kfree(envs->entries[j].env);
-+		kfree(envs);
++		return false;
 +	}
-+	for (i = 0; i < ARRAY_SIZE(scev->exprs_ht); i++)
-+		kvfree(scev->exprs_ht[i]);
-+	bpf_min_heap_free(&scev->worklist);
-+	kvfree(scev->envs);
-+	kvfree(scev->exprs);
-+	kvfree(scev->discovered);
-+	kfree(scev);
-+	env->scev = NULL;
++
++	return true;
 +}
 +
-+int bpf_init_scev(struct bpf_verifier_env *env)
+ /* compare two verifier states
+  *
+  * all states stored in state_list are known to be valid, since
+@@ -992,6 +1014,9 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
+ 	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch, exact))
+ 		return false;
+ 
++	if (!loop_stack_safe(env, old, cur))
++		return false;
++
+ 	return true;
+ }
+ 
+@@ -1038,6 +1063,7 @@ static bool states_equal(struct bpf_verifier_env *env,
+ 		if (!func_states_equal(env, old->frame[i], cur->frame[i], insn_idx, exact))
+ 			return false;
+ 	}
++
+ 	return true;
+ }
+ 
+@@ -1320,15 +1346,30 @@ int bpf_split_cur_state(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+ 
++/* Force a checkpoint upon reaching a loop header for a terminating loop. */
++static bool need_loop_checkpoint(struct bpf_verifier_env *env, int insn_idx)
 +{
-+	struct scev *scev;
++	struct bpf_verifier_state *cur = env->cur_state;
++	struct bpf_func_state *frame = cur->frame[cur->curframe];
++	struct loop_stack_entry *top;
 +
-+	scev = kzalloc(sizeof(struct scev), GFP_KERNEL_ACCOUNT);
-+	if (!scev)
-+		return -ENOMEM;
-+	env->scev = scev;
-+	/* Order worklist in reverse post-order. */
-+	bpf_min_heap_init(&scev->worklist, reverse_ranked_compare, env->cfg.postorder_nums);
-+	if (expr0(scev, UNKNOWN) < 0 || expr0(scev, OPAQUE)  < 0)
-+		goto nomem;
-+	scev->envs = kvcalloc(env->prog->len, sizeof(*scev->envs), GFP_KERNEL_ACCOUNT);
-+	scev->discovered = kvcalloc(env->prog->len, sizeof(*scev->discovered), GFP_KERNEL_ACCOUNT);
-+	if (!scev->envs || !scev->discovered)
-+		goto nomem;
-+	/*
-+	 * Remember original program length, in case bpf_free_scev()
-+         * is called after bpf program rewrites that increase program
-+         * length.
-+	 */
-+	scev->envs_cnt = env->prog->len;
-+	return 0;
-+nomem:
-+	bpf_free_scev(env);
-+	return -ENOMEM;
++	if (bpf_loop_at_index(env, insn_idx) != insn_idx || !frame->loop_stack_cnt)
++		return false;
++	top = &frame->loop_stack[frame->loop_stack_cnt - 1];
++	return top->loop_id == insn_idx && top->terminates;
 +}
++
+ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ {
+ 	struct bpf_verifier_state_list *sl;
+ 	struct bpf_verifier_state *cur = env->cur_state;
+-	bool force_new_state, add_new_state, loop;
++	bool force_new_state, add_new_state, loop, loop_checkpoint;
+ 	int n, err, states_cnt = 0;
+ 	struct list_head *pos, *tmp, *head;
+ 
++	loop_checkpoint = need_loop_checkpoint(env, insn_idx);
+ 	force_new_state = env->test_state_freq || bpf_is_force_checkpoint(env, insn_idx) ||
++			  loop_checkpoint ||
+ 			  /* Avoid accumulating infinitely long jmp history */
+ 			  cur->jmp_history_cnt > 40;
+ 
+@@ -1359,10 +1400,11 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 			continue;
+ 
+ 		if (sl->state.branches) {
+-			struct bpf_func_state *frame = sl->state.frame[0];
++			struct bpf_func_state *old_top_frame = sl->state.frame[0];
++			struct bpf_func_state *old_cur_frame = sl->state.frame[sl->state.curframe];
+ 
+-			if (frame->in_async_callback_fn &&
+-			    frame->async_entry_cnt != cur->frame[0]->async_entry_cnt) {
++			if (old_top_frame->in_async_callback_fn &&
++			    old_top_frame->async_entry_cnt != cur->frame[0]->async_entry_cnt) {
+ 				/* Different async_entry_cnt means that the verifier is
+ 				 * processing another entry into async callback.
+ 				 * Seeing the same state is not an indication of infinite
+@@ -1461,6 +1503,20 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 				}
+ 				goto skip_inf_loop_check;
+ 			}
++
++			/*
++			 * If old state belongs to a control flow loop that we know terminates,
++			 * it should be safe to prune current state.
++			 */
++			if (old_cur_frame->loop_stack_cnt &&
++			    old_cur_frame->loop_stack[old_cur_frame->loop_stack_cnt - 1].terminates) {
++				if (states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
++					loop = true;
++					goto hit;
++				}
++				goto skip_inf_loop_check;
++			}
++
+ 			/* attempt to detect infinite loop to avoid unnecessary doomed work */
+ 			if (states_maybe_looping(&sl->state, cur) &&
+ 			    states_equal(env, &sl->state, cur, EXACT) &&
+@@ -1619,7 +1675,8 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		 * Use bigger 'n' for checkpoints because evicting checkpoint states
+ 		 * too early would hinder iterator convergence.
+ 		 */
+-		n = bpf_is_force_checkpoint(env, insn_idx) && sl->state.branches > 0 ? 64 : 3;
++		n = (bpf_is_force_checkpoint(env, insn_idx) || loop_checkpoint) &&
++		    sl->state.branches > 0 ? 64 : 3;
+ 		if (sl->miss_cnt > sl->hit_cnt * n + n) {
+ 			/* the state is unlikely to be useful. Remove it to
+ 			 * speed up verification
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0d18b3bb0865..57085f1bf915 100644
+index 57085f1bf915..9f56ffe09eba 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -22835,6 +22835,14 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (env->log.level & BPF_LOG_LEVEL2)
- 		log_program(env);
+@@ -19604,6 +19604,204 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 	return -EFAULT;
+ }
  
-+	ret = bpf_init_scev(env);
-+	if (ret < 0)
-+		goto skip_full_check;
++static bool has_entered_loop(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int prev_insn_idx = env->prev_insn_idx;
++	int insn_idx = env->insn_idx;
 +
-+	ret = bpf_compute_scev(env);
-+	if (ret < 0)
-+		goto skip_full_check;
++	return aux[insn_idx].loop_entry &&
++	       (prev_insn_idx == -1 ||
++		bpf_loop_at_index(env, prev_insn_idx) != bpf_loop_at_index(env, insn_idx));
++}
 +
- 	ret = mark_fastcall_patterns(env);
- 	if (ret < 0)
- 		goto skip_full_check;
-@@ -22984,6 +22992,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 		bpf_clear_insn_aux_data(env, 0, env->insn_aux_data_len);
- 	vfree(env->insn_aux_data);
- 	kvfree(env->fd_array);
-+	bpf_free_scev(env);
- 	bpf_stack_liveness_free(env);
- 	kvfree(env->cfg.postorder_nums);
- 	kvfree(env->cfg.insn_postorder);
++static bool is_next_loop_iteration(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int prev_insn_idx = env->prev_insn_idx;
++	int insn_idx = env->insn_idx;
++
++	return aux[insn_idx].loop_entry &&
++	       (prev_insn_idx != -1 &&
++		bpf_loop_at_index(env, prev_insn_idx) == bpf_loop_at_index(env, insn_idx));
++}
++
++static bool has_exited_loop(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int prev_insn_idx = env->prev_insn_idx;
++	int insn_idx = env->insn_idx;
++	int prev_loop_idx, h;
++
++	if (prev_insn_idx == -1)
++		return false;
++
++	prev_loop_idx = bpf_loop_at_index(env, prev_insn_idx);
++	if (prev_loop_idx < 0)
++		return false;
++
++	/* Still inside the previous instruction's loop if that loop encloses insn_idx */
++	for (h = bpf_loop_at_index(env, insn_idx); h >= 0; h = aux[h].loop_header)
++		if (h == prev_loop_idx)
++			return false;
++
++	return true;
++}
++
++/*
++ * Push the loop entered at insn_idx onto the stack. Usually this adds a single
++ * entry on top of its enclosing loop. However, an edge may enter an inner loop
++ * directly, bypassing the header(s) of its enclosing loop(s), e.g.:
++ *
++ *   1: for (...):       // enclosing loop, header at 1
++ *   2:   for (...):     // inner loop, header at 2
++ *        ...
++ *   3: if ...:
++ *        goto 2b;       // enters loop 2 without going through header 1
++ *
++ * Such a bypass makes the enclosing loop irreducible, so its header is missing
++ * from the stack and both headers (1) and (2) need to be pushed onto stack.
++ * Only the innermost loop (the one actually entered at insn_idx) carries SCEV bounds;
++ * the bypassed ancestors are irreducible and pushed as non-terminating.
++ *
++ * Assumes loop_stack_pop() has already truncated the stack to the common ancestor
++ * of the bpf_loop_at_index(env->prev_insn_idx) and bpf_loop_at_index(env->insn_idx).
++ */
++static int loop_stack_push(struct bpf_verifier_env *env,
++			   struct bpf_verifier_state *entry_state,
++			   bool terminates,
++			   struct bpf_loop_iters *iters)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_func_state *frame = cur_func(env);
++	struct loop_stack_entry *loop_stack = frame->loop_stack;
++	u32 missing_headers[LOOP_STACK_SIZE];
++	u32 cnt = frame->loop_stack_cnt;
++	u32 num_missing = 0;
++	int h;
++
++	for (h = bpf_loop_at_index(env, env->insn_idx); h >= 0; h = aux[h].loop_header, num_missing++) {
++		if (cnt && loop_stack[cnt - 1].loop_id == h)
++			break;
++		if (num_missing == LOOP_STACK_SIZE)
++			goto e2big;
++		missing_headers[num_missing] = h;
++	}
++
++	for (; num_missing; num_missing--, cnt++) {
++		if (cnt == LOOP_STACK_SIZE)
++			goto e2big;
++		loop_stack[cnt].loop_id = missing_headers[num_missing - 1];
++		if (num_missing == 1) {
++			loop_stack[cnt].iters = terminates ? *iters : (struct bpf_loop_iters){};
++			loop_stack[cnt].terminates = terminates;
++			loop_stack[cnt].entry_state = entry_state;
++		} else {
++			loop_stack[cnt].iters = (struct bpf_loop_iters){};
++			loop_stack[cnt].terminates = false;
++			loop_stack[cnt].entry_state = NULL;
++		}
++	}
++	frame->loop_stack_cnt = cnt;
++	return 0;
++
++e2big:
++	verbose(env, "Too many nested loops (%d/%d) at %d\n", cnt, num_missing, env->insn_idx);
++	return -E2BIG;
++}
++
++/*
++ * An exit from a loop can cross several nested loops, e.g.:
++ *
++ *   1: for (...):
++ *   2:   for (...):
++ *   3:     for (...):
++ *            if ...:    // before goto the loop stack is [1, 2, 3 <top>]
++ *              goto 1b; // after goto it should become [1]
++ */
++static int loop_stack_pop(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_func_state *frame = cur_func(env);
++	int h, i;
++
++	/*
++	 * Walk the loop nest of insn_idx outwards (innermost first) and stop at
++	 * the first loop that is present on the stack - that loop is the common
++	 * ancestor and becomes the new top. If no enclosing loop is on the
++	 * stack, drop all loops.
++	 */
++	for (h = bpf_loop_at_index(env, env->insn_idx); h >= 0; h = aux[h].loop_header) {
++		for (i = frame->loop_stack_cnt - 1; i >= 0; i--) {
++			if (frame->loop_stack[i].loop_id == h) {
++				frame->loop_stack_cnt = i + 1;
++				return 0;
++			}
++		}
++	}
++
++	frame->loop_stack_cnt = 0;
++	return 0;
++}
++
++static int maybe_clamp_scev_regs(struct bpf_verifier_env *env)
++{
++	struct bpf_func_state *frame = cur_func(env);
++	struct loop_stack_entry *entry;
++
++	if (frame->loop_stack_cnt == 0) {
++		verifier_bug(env, "%s: loop stack empty at %d", __FUNCTION__, env->insn_idx);
++		return -EFAULT;
++	}
++
++	entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
++	if (!entry->terminates)
++		return 0;
++
++	return bpf_clamp_scev_regs(env, frame, env->insn_idx, entry->entry_state, &entry->iters);
++}
++
++static int handle_loop_entry_exit(struct bpf_verifier_env *env)
++{
++	struct bpf_verifier_state *cur = env->cur_state;
++	struct bpf_loop_iters iters;
++	bool terminates;
++	int err;
++
++	if (is_next_loop_iteration(env)) {
++		err = maybe_clamp_scev_regs(env);
++		if (err)
++			return err;
++	}
++	if (has_exited_loop(env)) {
++		if (env->log.level & BPF_LOG_LEVEL2)
++			verbose(env, "exiting loop %d\n", bpf_loop_at_index(env, env->prev_insn_idx));
++		err = loop_stack_pop(env);
++		if (err)
++			return err;
++	}
++	if (has_entered_loop(env)) {
++		if (env->log.level & BPF_LOG_LEVEL2)
++			verbose(env, "entering loop %d\n", bpf_loop_at_index(env, env->insn_idx));
++		err = bpf_compute_loop_iters(env, env->cur_state, &iters);
++		if (err < 0)
++			return err;
++		terminates = err == 1;
++		if (terminates) {
++			err = bpf_split_cur_state(env);
++			if (err)
++				return err;
++			err = bpf_widen_scev_regs(env, cur, cur->parent, &iters);
++			if (err < 0)
++				return err;
++		}
++		err = loop_stack_push(env, env->cur_state->parent, terminates, &iters);
++		if (err)
++			return err;
++	}
++	return 0;
++}
++
+ static int do_check(struct bpf_verifier_env *env)
+ {
+ 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
+@@ -19618,6 +19816,12 @@ static int do_check(struct bpf_verifier_env *env)
+ 		struct bpf_insn_aux_data *insn_aux;
+ 		int err;
+ 
++		if (signal_pending(current))
++			return -EAGAIN;
++
++		if (need_resched())
++			cond_resched();
++
+ 		/* reset current history entry on each new instruction */
+ 		env->cur_hist_ent = NULL;
+ 
+@@ -19664,6 +19868,15 @@ static int do_check(struct bpf_verifier_env *env)
+ 			}
+ 		}
+ 
++		/*
++		 * Possibly widen the registers before creating a checkpoint
++		 * in bpf_is_state_visited(). The next loop iteration will
++		 * have a chance to hit this checkpoint and converge.
++		 */
++		err = handle_loop_entry_exit(env);
++		if (err)
++			return err;
++
+ 		if (bpf_is_prune_point(env, env->insn_idx)) {
+ 			err = bpf_is_state_visited(env, env->insn_idx);
+ 			if (err < 0)
+@@ -19689,12 +19902,6 @@ static int do_check(struct bpf_verifier_env *env)
+ 				return err;
+ 		}
+ 
+-		if (signal_pending(current))
+-			return -EAGAIN;
+-
+-		if (need_resched())
+-			cond_resched();
+-
+ 		if (env->log.level & BPF_LOG_LEVEL2 && do_print_state) {
+ 			verbose(env, "\nfrom %d to %d%s:",
+ 				env->prev_insn_idx, env->insn_idx,
+@@ -19704,6 +19911,13 @@ static int do_check(struct bpf_verifier_env *env)
+ 			do_print_state = false;
+ 		}
+ 
++		if (bpf_loop_at_index(env, env->insn_idx) >= 0 &&
++		    cur_func(env)->loop_stack_cnt == 0) {
++			verifier_bug(env, "loop stack empty at %d, while inside the loop %d\n",
++				     env->insn_idx, bpf_loop_at_index(env, env->insn_idx));
++			return -EFAULT;
++		}
++
+ 		if (env->log.level & BPF_LOG_LEVEL) {
+ 			if (verifier_state_scratched(env))
+ 				print_insn_state(env, state, state->curframe);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+index f5a9878c7b8d..03a3bee21236 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
++++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+@@ -509,7 +509,7 @@ __naked void too_many_gotox_edges(void)
+ 
+ SEC("socket")
+ __description("gotox-edges-at-limit")
+-__success __retval(0)
++__failure __msg("Too many nested loops")
+ __naked void gotox_edges_at_limit(void)
+ {
+ 	asm volatile (
+@@ -517,6 +517,10 @@ __naked void gotox_edges_at_limit(void)
+ 		 * 1000 gotox * 1000 targets = 1,000,000 CFG edges. At run
+ 		 * time, each block loads the next table entry and jumps to
+ 		 * the following block, so the program terminates.
++		 *
++		 * Every block can jump to every later block, so the CFG is
++		 * a nest of ~1000 irreducible loops, deeper than the
++		 * verifier's loop stack; the program is rejected.
+ 		 */
+ 		GOTOX_TABLE_BEGIN(1000)
+ 		".rept 1000;"
 
 -- 
 2.55.0
