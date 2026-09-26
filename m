@@ -1,265 +1,195 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1734261B9E
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BFB3AA4E4
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:55:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790466918; cv=none; b=n1Qw7ehB2u4BNcqnRcPXIiouDaVWAY7gsWuQNF2LH6A96CosBnexFKitv0a2ARfysHePyiWH4RcGEIZNcxTKlCeIadV6spMr7btrZVLy49cefAPg7ModT1UIUDPXeYF1eBuDhJDpOY8+hYXi8ezOSFnomFJ49UF7yqeuWISFqNw=
+	t=1790466943; cv=none; b=VWjlBajwNEewgP6WBm8zKv3RM8E5hkO2RzxggKJWvODBYjmL8Vxep9g+ATbI3Icu8pdwdO4gY3A7U8abvreIBCUtWulUHJQVqYvMvbYDZgtYUO7O4d0JamFtEoo7w8yM8f3ZS8OiR4gpaL8fv2Ct1x7lFe3yh2p+WuAE6Ytx6Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790466918; c=relaxed/simple;
-	bh=w5qG3jSaIxMhTZhaQQ1xBbH60hJxBlzcv+N3c1sKcgM=;
+	s=arc-20240116; t=1790466943; c=relaxed/simple;
+	bh=o4n1/p092CG12fBCszcYbftlZE/h2IVcw8eBcvUxs9M=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SL1Cg14ylqB4lBcAgIrM39NB37SKtexEKE8hzpLp3Neq6yHIJ6kbOo3YmdL8+98YOToaXKE35XpnSKvmMHx/s64CqKOqzZi25PSHzlztxSbf8UfJ64X67b/UDT/rM2FzybaTxDR2fRZnV2+KRs62jHoDYyXxrdeWf0Y0wKZUIqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dz3vk0VL; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ZfXwubjl4x/FlewCH5OfFOlLdIL1Z+Rv4CVwee6OXgKPhYYftmu21ds7NQ1mFIekFXnpR+TVm3HbVCTtOFsbsOuZBHp2ltqcgzs4oi7ydGMyP5GHBxqhWu2Xnxe1fzgR17X/THwbRSPlGRBXaWRj6C04REOpIerBPe/Um/cFEZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i5D2x1Kd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dz3vk0VL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EAA1F000FF;
-	Sat, 26 Sep 2026 23:55:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i5D2x1Kd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF5B1F000FF;
+	Sat, 26 Sep 2026 23:55:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790466916;
-	bh=RTn9oGpiBkDrlbwcXX7ioUFWt4ll3ytnng7IodvfUlg=;
+	s=k20260515; t=1790466942;
+	bh=NloI5wrF3Vxw7RCJqvkWk5r4C8Vb3J/8bWWyC/Asr6o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Dz3vk0VLQ2dKjTQrf+U6H1Y2vhX0+rJICiSFhngPk5tsLeuQH/JUBacPmsBksDa5W
-	 LPS8WzjRCnb8JCK/qHj6Yvs1eCFRWHViw1o0aid0vxFxYzQ1DcBPZVlKUb9rh8IRkm
-	 i90khCj8bJxtsd7+RGNazVKcUdTmLkUG9qR0TQ0qs+4jb95paXXSiDk1X4N+oWk+Gv
-	 t/hf0q84q01lxR/juzixURmM+UAMC1L/iY1MGzTzoFTQnrny8tQPEdiFdqNVztjjQ4
-	 YTSZfozbmhKjECZYlhYAOaSKY/rx9VNevwuRtNuWLS4iuVDsI8899VcczoPlV65k6P
-	 OtLqfZsZBKn9A==
+	b=i5D2x1KdwykKiCFKufb0NoO1qZ8ydUYCx8w1DiTX2zib6F+5CmJaVa+B9/YNjRxZB
+	 wju32/DeBy5XWy3v/mj5DFODePYdRFSGqzTnRI0sAZbcSahPtM69efVLsCd0lQLhP4
+	 0XGT9Eb1p7/HjbleN+Cue/VAJHFrpcpYga8Nm+v5qzH77ynsfalTlPN4I4GOgTQUgP
+	 dHRC3B382PloES1QUUaAwZbVoZgDhDd3wAuXtSUGxRj04xJfzexxicAC62+TqJhw+s
+	 cH87MPOEKt3lBoEumXEcFFXvrZCKGnOZtiQc5ZBURKnAsTIW/yR8qj4+TipZxJ2Ojt
+	 VUpt6LDp1w1Sw==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 09/16] bpf: Add typed arena page
- allocation and release kfuncs
+Subject: Re: [RFC PATCH bpf-next v1 04/16] bpf: Add the typed_arena_cast
+ instruction
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260926233503.3114147-10-memxor@gmail.com>
+In-Reply-To: <20260926233503.3114147-5-memxor@gmail.com>
 References: <20260926233503.3114147-1-memxor@gmail.com>
- <20260926233503.3114147-10-memxor@gmail.com>
+ <20260926233503.3114147-5-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 23:55:15 +0000
-Message-Id: <20260926235516.28EAA1F000FF@smtp.kernel.org>
+Date: Sat, 26 Sep 2026 23:55:41 +0000
+Message-Id: <20260926235541.CFF5B1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] bpf: stale TLB use-after-free window in allocation error path
-- [High] bpf: uninitialized kernel memory leak via arena page allocation
-- [High] bpf: TLB shootdown race due to premature state publication
-- [High] bpf: TOCTOU vulnerability via double fetch of user-provided page_c=
-nt
-- [High] bpf: state machine corruption race between worker and page fault h=
-andler
-- [Medium] bpf: memory leak when resilient spinlock acquisition fails
-- [Medium] bpf: incorrect memcg charging in tracking struct allocation
+- [High] bpf: typed arenas leak on late verification failure
+- [Medium] bpf: diagnostic log state leak in check_alu_op() on typed arena =
+cast
+- [Low] bpf: comment style violation in backtrack_insn()
 --
 
-commit fcd33d7dbae3719eae8ea173b7e1a7f8cbe911c9
+commit 1039fff673a440b6fdcfc452a1630f899213bc0c
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Add typed arena page allocation and release kfuncs
+bpf: Add the typed_arena_cast instruction
 
-This patch introduces typed arenas for BPF programs, allowing them to
-allocate and release contiguous memory regions mapped as real objects
-rather than scratch pages. It exposes two new kfuncs,=20
-bpf_typed_arena_alloc_pages() and bpf_typed_arena_free_pages(), which=20
-interface with a lock-free page allocator and defer the release via RCU
-workers.
+This commit adds the typed_arena_cast instruction, which turns an untrusted
+64-bit value into a verifier-trusted pointer to a typed arena object. The
+verifier registers the typed arena on first sight, logs it, and lowers the
+instruction after verification.
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -686,6 +1045,8 @@ static unsigned long typed_arena_alloc_pages(struct bp=
-f_typed_arena *ta, unsigne
- 					     u32 *page_cnt, int node_id)
- {
-[ ... ]
-> +	if (node_id !=3D NUMA_NO_NODE &&
-> +	    ((unsigned int)node_id >=3D nr_node_ids || !node_online(node_id)))
-> +		return 0;
-> +	if (!*page_cnt)
-> +		return 0;
-> +	chunk_cnt =3D DIV_ROUND_UP((unsigned long)*page_cnt, typed_arena_chunk_=
-pages(ta));
+> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+> index 0e38b9575328c..38984e52ee375 100644
+> --- a/kernel/bpf/backtrack.c
+> +++ b/kernel/bpf/backtrack.c
+> @@ -328,11 +328,13 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx, int subseq_idx,
+>  				if (sreg !=3D BPF_REG_FP)
+>  					bt_set_reg(bt, sreg);
+>  			} else {
+> -				/* dreg =3D K
+> +				/* dreg =3D K, or dreg =3D typed_arena_cast(sreg, imm)
+>  				 * dreg needs precision after this insn.
+>  				 * Corresponding register is already marked
+>  				 * as precise=3Dtrue in this verifier state.
+> -				 * No further markings in parent are necessary
+> +				 * No further markings in parent are necessary;
+> +				 * a cast yields a pointer that is safe for any
+> +				 * value of sreg, which needs no precision.
+>  				 */
+                                 ^^^
 
-[Severity: High]
-Does this code introduce a TOCTOU vulnerability? Because page_cnt is a poin=
-ter
-to memory that can be shared with BPF programs or userspace, it could be
-modified concurrently. If the value is changed to zero between the
-if (!*page_cnt) check and the DIV_ROUND_UP() calculation, chunk_cnt will
-evaluate to 0. This would cause bitmap_find_next_zero_area() to return 0 and
-grant the BPF program a valid pointer to the arena's base address without
-actually allocating any pages, potentially leading to memory corruption.
-
-[ ... ]
-> +	data.arena =3D arena;
-> +	for (done =3D 0; done < chunk_cnt; done++) {
-> +		head =3D alloc_pages_nolock(__GFP_ACCOUNT, node_id, order);
-> +		if (!head) {
-
-[Severity: High]
-Does this allocation leak uninitialized buddy allocator memory?
-The call to alloc_pages_nolock() omits the __GFP_ZERO flag. Since arena
-memory is exposed to BPF programs (and potentially mapped to userspace),
-untrusted code could read stale kernel data. Furthermore, during teardown,
-the kernel might invoke bpf_obj_free_fields() on this uninitialized garbage,
-which could lead to panics if random memory is treated as valid kptrs.
-
-> +			ret =3D -ENOMEM;
-> +			goto back_out;
-> +		}
-> +		data.head =3D head;
-> +		data.start =3D start + (done << ta->chunk_shift);
-> +		data.i =3D 0;
-> +		ret =3D apply_to_page_range(&init_mm, data.start, chunk, apply_range_s=
-et_typed_cb,
-> +					  &data);
-> +		if (ret) {
-> +			/* The fault path took this chunk: give back the allocation whole. */
-> +			cdata.arena =3D arena;
-> +			cdata.ta =3D ta;
-> +			if (data.i)
-> +				apply_to_existing_page_range(&init_mm, data.start,
-> +							     (unsigned long)data.i << PAGE_SHIFT,
-> +							     apply_range_clear_typed_cb, &cdata);
-> +			free_pages_nolock(head, order);
-> +			goto back_out;
-> +		}
-
-[Severity: Critical]
-Does this code clear PTEs and free physical pages before flushing the TLB?
-When apply_to_page_range() returns -EBUSY, the partially installed PTEs are
-cleared and the pages are immediately freed to the buddy allocator via
-free_pages_nolock(). The actual TLB flush happens later at the back_out
-label. This creates a window where freed pages can be reallocated
-elsewhere in the kernel, while stale, writable VMA translations remain cach=
-ed
-in the TLB, allowing arbitrary memory overwrite.
+[Severity: Low]
+Does this multi-line comment violate the BPF subsystem comment formatting r=
+ules?
+The opening /* should typically be on its own line for multi-line comments =
+in
+BPF subsystem code.
 
 [ ... ]
-> +back_out:
-> +	/*
-> +	 * Back out the chunks installed before the one that failed. On -EBUSY
-> +	 * that chunk is the one the fault path took, and it keeps its mark.
-> +	 */
-> +	init_llist_head(&freed);
-> +	cdata.arena =3D arena;
-> +	cdata.ta =3D ta;
-> +	for (i =3D 0; i < chunk_cnt; i++)
-> +		if (ret !=3D -EBUSY || i !=3D done)
-> +			clear_bit(coff + i, ta->chunks);
-> +	for (i =3D 0; i < done; i++) {
-> +		cdata.head =3D NULL;
-> +		apply_to_existing_page_range(&init_mm, start + (i << ta->chunk_shift),=
- chunk,
-> +					     apply_range_clear_typed_cb, &cdata);
-> +		if (cdata.head)
-> +			__llist_add(&cdata.head->pcp_llist, &freed);
-> +	}
-> +	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-> +	flush_tlb_kernel_range(start, start + (chunk_cnt << ta->chunk_shift));
 
-[Severity: High]
-Does this sequence create a TLB shootdown race? By clearing the allocation
-state bits (ta->chunks) and dropping the spinlock before calling
-flush_tlb_kernel_range(), it creates a window where concurrent allocations =
-can
-immediately claim the chunk and expose new mappings. Other CPUs might retain
-stale TLB translations to the old pages that are about to be freed, leading=
- to
-silent data corruption or use-after-free conditions.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index d3b8b626ec0f7..619f7c6a778d9 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -3085,6 +3085,8 @@ static void bpf_prog_free_deferred(struct work_stru=
+ct *work)
+>  	aux =3D container_of(work, struct bpf_prog_aux, work);
+>  #ifdef CONFIG_BPF_SYSCALL
+>  	bpf_free_kfunc_btf_tab(aux->kfunc_btf_tab);
+> +	/* The typed arenas outlive the program; only the load's failure retrac=
+ts them. */
+> +	kfree(aux->typed_arenas);
+>  #endif
+>  #ifdef CONFIG_CGROUP_BPF
+>  	if (aux->cgroup_atype !=3D CGROUP_BPF_ATTACH_TYPE_INVALID)
 
 [ ... ]
-> +static void typed_arena_free_pages(struct bpf_typed_arena *ta, unsigned =
-long addr, u32 page_cnt)
-> +{
-[ ... ]
-> +	first =3D off >> ta->chunk_shift;
-> +	last =3D (off + ((unsigned long)page_cnt << PAGE_SHIFT) - 1) >> ta->chu=
-nk_shift;
-> +
-> +	s =3D kmalloc_nolock(sizeof(*s), __GFP_ACCOUNT, NUMA_NO_NODE);
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 03dbc0e003986..a0069983f1036 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -16993,7 +17173,9 @@ static int check_alu_op(struct bpf_verifier_env *=
+env, struct bpf_insn *insn)
+>  			struct bpf_reg_state *dst_reg =3D regs + insn->dst_reg;
+> =20
+>  			if (BPF_CLASS(insn->code) =3D=3D BPF_ALU64) {
+> -				if (insn->imm) {
+> +				if (insn->off =3D=3D BPF_TYPED_ARENA_CAST) {
+> +					return check_typed_arena_cast(env, insn);
+                                        ^^^^
 
 [Severity: Medium]
-Does this structure allocation incorrectly charge the current context's mem=
-ory
-cgroup? Because this is a generic kfunc that can be invoked from arbitrary
-execution contexts (like tracepoints or network packets), __GFP_ACCOUNT will
-charge whichever random user task happens to be interrupted. Shouldn't this=
- be
-wrapped with bpf_map_memcg_enter() and bpf_map_memcg_exit() to charge the
-map's memcg?
+Does this early return bypass the paired bpf_diag_mod_end(env) cleanup at t=
+he
+end of check_alu_op()? Leaving the diagnostic state active here fails to re=
+cord
+the register modification in the diagnostic event log.
 
-> +	if (!s)
-> +		/*
-> +		 * The chunks stay allocated until the map is freed; nothing can
-> +		 * be retried from here.
-> +		 */
-> +		return;
-> +	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
-> +		goto free_span;
+> +				} else if (insn->imm) {
+>  					/* off =3D=3D BPF_ADDR_SPACE_CAST */
+>  					mark_reg_unknown(env, regs, insn->dst_reg);
+>  					if (insn->imm =3D=3D 1) /* cast from as(1) to as(0) */
+
 [ ... ]
-> +	irq_work_queue(&arena->typed_free_irq);
-> +	return;
+
+> @@ -20580,8 +20764,26 @@ static int resolve_func_ptrs(struct bpf_verifier=
+_env *env)
+>  }
+> =20
+>  /* drop refcnt of maps used by the rejected program */
+> +/*
+> + * Drop the rejected program's typed arena references before its arena m=
+ap
+> + * reference. A typed arena nobody else registered is retracted; one tha=
+t a
+> + * loaded program registered lives on for the map's lifetime.
+> + */
+> +static void release_typed_arenas(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_prog_aux *aux =3D env->prog->aux;
+> +	u32 i;
 > +
-> +free_span:
-> +	kfree_nolock(s);
+> +	for (i =3D 0; i < aux->typed_arena_cnt; i++)
+> +		bpf_typed_arena_put(bpf_prog_arena(env->prog), aux->typed_arenas[i]);
+> +	kfree(aux->typed_arenas);
+> +	aux->typed_arenas =3D NULL;
+> +	aux->typed_arena_cnt =3D 0;
 > +}
-
-[Severity: Medium]
-Does failing to acquire the resilient spinlock cause a silent memory leak?
-If raw_res_spin_lock_irqsave() fails (e.g., due to lock contention), the
-tracking struct is freed and the function returns without error. The reques=
-ted
-chunks remain marked as taken indefinitely, but the BPF program assumes they
-were successfully queued for release, leaking arena chunks until map teardo=
-wn.
-
-[ ... ]
-> +static void typed_arena_free_worker(struct work_struct *work)
-> +{
-[ ... ]
-> +		while (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
-> +			cpu_relax();
-> +		for (i =3D 0; i < s->chunk_cnt; i++) {
-> +			cdata.head =3D NULL;
-> +			apply_to_existing_page_range(&init_mm, start + (i << ta->chunk_shift),
-> +						     bpf_typed_arena_chunk(ta),
-> +						     apply_range_clear_typed_cb, &cdata);
-> +			if (cdata.head)
-> +				__llist_add(&cdata.head->pcp_llist, &heads);
-> +		}
-> +		typed_arena_chunks_mark(ta, s->coff, s->chunk_cnt, false);
-
-[Severity: High]
-Does this create a destructive state machine race with the page fault handl=
-er?
-The worker clears the PTE mappings under the spinlock, but the page fault
-handler (typed_arena_handle_page_fault()) runs locklessly. If a page fault
-triggers on a cleared chunk just before typed_arena_chunks_mark(..., false)=
- is
-called, the fault handler will install a scratch page and set the chunk bit.
-The worker will then blindly force the bit to 0. The chunk becomes marked as
-'free' but contains a scratch page, causing all future allocations of this
-chunk to permanently fail with -EBUSY.
-
-> +		bitmap_clear(ta->pending, s->coff, s->chunk_cnt);
-> +		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
 > +
-> +		flush_tlb_kernel_range(start,
-> +				       start + ((unsigned long)s->chunk_cnt << ta->chunk_shift));
+>  static void release_maps(struct bpf_verifier_env *env)
+>  {
+> +	release_typed_arenas(env);
+        ^^^^
 
 [Severity: High]
-Can this sequence lead to a TLB shootdown race? Similar to the allocation
-error path, clearing the allocation state bits and dropping the spinlock
-before flushing the TLB allows concurrent allocations to claim the chunks
-while stale translations remain cached, introducing memory corruption risks.
+Can this leak the typed arena references?
+
+In bpf_check(), if verification fails after env->prog->aux->used_maps is
+populated, the err_release_maps path bypasses calling release_maps(env):
+
+err_release_maps:
+	if (ret)
+		release_insn_arrays(env);
+	if (!env->prog->aux->used_maps)
+		release_maps(env);
+
+If release_maps(env) is skipped, release_typed_arenas(env) will not be call=
+ed.
+Then, bpf_prog_free_deferred() only does kfree(aux->typed_arenas) without
+dropping the actual bpf_typed_arena_put() refcounts, permanently leaking
+the typed arenas and their backing resources.
+
+>  	__bpf_free_used_maps(env->prog->aux, env->used_maps,
+>  			     env->used_map_cnt);
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926233503.3114=
-147-1-memxor@gmail.com?part=3D9
+147-1-memxor@gmail.com?part=3D4
