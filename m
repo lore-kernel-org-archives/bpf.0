@@ -1,62 +1,62 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395C7477E4D
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E382547CA9C
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790432477; cv=none; b=jk8HDgrJBcrolackT6k2l5faZOvlGoXjN/TZtw9L6t79efmbezWXzhAWfx9DPJYbCdzKGBkQK4eiQ8gnmADh5lBtS2N7zRdBWl03gWImci9sFlZSLB2RA6Z/LdsTyFqRwDj8u5C/ww4CEq+shuP37AZaQ4bJCVjpG1aZfuDpV5A=
+	t=1790432479; cv=none; b=sx+Mdtw5/ZcNVhB6W/cjTfw/4TvbFN/8o2iQLte2iBHNA2I4rt5ek7yIkcPHyK9/e6DVab6+nY6IV+02x8o3kzhKi50KU2HxxJrFZVShzuL37TXjqwhgXa1quImKpiCvmY1Fk1BiGiFzQ6dvlND+xXqS/zybwIX/zLlasmbJ6O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790432477; c=relaxed/simple;
-	bh=LztGugWqoypo7YLyVnbO/aCFsomnBLd2TbZLp9c3GTM=;
+	s=arc-20240116; t=1790432479; c=relaxed/simple;
+	bh=r9baQaSai5BSobQ8aOcQLp05rq++O3azrbn9XQ92Zd0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TU/uBalv6cM7R9I7fWpG7uFi2fOx3u3Q8rZV1K1+sZztFRtiupZVR7e7j4DjdvJCaxcHsk8r9AdKxrDASup1Sv6FMirJFwUlQSYIKMsLyJqHIrFrvCD/A6Z2LFi9Xf2i5fNy0OpwVpBGjSUW3pMSE7T5Kmw3HwkL3dVG0iB8jaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cCbg58+Z; arc=none smtp.client-ip=74.125.227.171
+	 MIME-Version:Content-Type; b=XRxcJVtpTRwiFPxm15JGVKcg2PuVPa4EWoO2VEklqO2CD61YBTGdBVWaCajOstAAl5xGk1EruWAROBVyFU6A23BgJLv78t/RYJhGZ+GfJ78r/bDmZHBel6aCtoHrVq9Y7PcINdJ/AVuVvpUeC4otL+McJm2IIzbz8kNCcZST7kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZyDN8/0C; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cCbg58+Z"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccd4f99dso1186582a91.2
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZyDN8/0C"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccdaea75so650915a91.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790432475; x=1791037275; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790432477; x=1791037277; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ZfVCSEH8wNRY/7JSUuYKXFs43CZE73bxPz8ZiuRfzw8=;
-        b=cCbg58+ZUwG5SUcowK4Qb4TiIrjtKgqIvd5Pk94VlTzkM2aAz0zQIjxJ6NwsVd11G9
-         0h31LQuHIaIHtd54kqQWlGYamW9P4tmJyfzxdsQfif9Ohy1foguMzja4o7S2k6RxED4O
-         b9J80id1eVqbrpTYHwn2z8pnTfFd2YVXVmst3lr6i+D/4WIvr43b31Hz5r3Shu/dr+WP
-         wZhPwf4+Xl3SL5aDy1mmM43r0ecRaMpGhptg8GvkhdRY7G6TPRqWp2uKwWC5QSiq4Md5
-         rr207W6I76UxrxT8oUdkMOWMSJfowg4VimHTy2Sw8PgIKiHFoCW4QbkUQF2o9IKOSKsj
-         Y8IQ==
+        bh=FR4gqkNwSJEM7Z5emhMjaSEOrCpY+9oEgc2qTeciVVI=;
+        b=ZyDN8/0CUnXUtIYaxdctgKtDlpaQq4lOlyLE0cNEJSbe4qEBoyi8MM0wV7QxQC+AIr
+         bfu1AB6CW+a1esc6MxYmMDDulu20q83o8tMgVFoQtX2u3uJe4td1XOotrGSaQhqidm2L
+         Ye3DuXJ66quyou2lkYGnMMCdrnpTAweqF6lVqog+ce+PytvrgkaRngIPS/RMl7Kkj3/h
+         oyBQCE0yAq6iSAjEa9KReRy2XpjfcbZPzEcsFaQuFnuxj/XHp+kB3YtcW7hqd2FRx/1w
+         cJshjwbNch7u/jXaPp4IMTROmSPS5mejZVkjg/IxRpPn3wFwDiWCsry5LC2KVS+Q4EzI
+         2DfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790432475; x=1791037275;
+        d=1e100.net; s=20260707; t=1790432477; x=1791037277;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZfVCSEH8wNRY/7JSUuYKXFs43CZE73bxPz8ZiuRfzw8=;
-        b=uMtaSxAhtuBSzq62aq4cwy79me1nN8jIA7vBiBZpmPTdgQUx/Xkd6+58ppUv8W8IyN
-         OSp+18dHY618Dajcoao22ug0CexKu2E+7ndqSstEESrVF1Irkwcs029YvsAi++yn4ir1
-         tiadDZvhHlUTF/6NLwpxNPlmsjWyXaw9x8PIOliu9wNgxoiAjCD9/TfA0tvyGzDVQiAw
-         fd52QvQGPVV+wN90ObTb5lbPNt3KG5NVH10nFHZv+dQUOqlH+Zt0cUdh7pI4PPBFoLDA
-         nSw64QKVMrRMjof08GbPJXmdVKJABS9pk+8b6aK/OCHwzOqynyb+MEnHwntlKer8Bfla
-         GaCA==
-X-Gm-Message-State: AFq9FYJN7qsIXbwgVXXy1ExQhTwa0hW+w5zgDnN3sbj+ACPRF2oVID+l
-	5+jO7bS080fcdc1Rye9UwBoQhYEvRpR3Sq6TX8Ri+5zjVBr4Scd8FPCVzdfTYnslxuU=
-X-Gm-Gg: AYBFou0Cor6//PTtgyjIMjQxgUmKMrXn98LpY+uByey5iTrCaqk9VTsD9nzJdYSMq3E
-	czq9KFTYTOZS1DtAg8biQ95Z5VHG/MBj21Cj0bk4b1Vx+IRWlRul1kS8coB5sjYDgLfXfnQyNWJ
-	Eiel4iWX+jzTaj/c6MPUGFFY4wAcIOn1iZz4MVUfSwSjQckOdtWtsAKmA7hhD7HO4GPQ40PiiT/
-	C3WwC02AUhFYiGYsvCSu2hovvr1pRtJ++R4u0ER9g3gjmWnowg7omDpBtZR6Zs3lPRdcJ0PPgEZ
-	O7EvR2vq3SYv97Hm72QkEdwEJdQJh1T4ZtiehnIjn7qmI4qvbXmum0lnGJ2Fc5NKHh6StutnczL
-	+RFO5yxc53xF+rCEXgUci+HHD/9itXz3w57YHMedCXHv0XvzMcpT6omuhc5uuUp6H5zfCnNSvTI
-	6DK0Km20jkumwXikftaWz+s31/m8M8rQTx4x2+/UBMUskcw+Qt2g0K96k/mwirkvK5MFc8jS6ny
-	H3I7yQXc7/Vi2wlmv7O6CF7h+CgElaX/kJxbuyHvQ==
-X-Received: by 2002:a17:90b:3d8d:b0:3a0:ddef:3d69 with SMTP id 98e67ed59e1d1-3a0ddef3f5amr1764274a91.58.1790432475477;
-        Sat, 26 Sep 2026 07:21:15 -0700 (PDT)
+        bh=FR4gqkNwSJEM7Z5emhMjaSEOrCpY+9oEgc2qTeciVVI=;
+        b=KTDCd3Wlz/PiR24DzHsJiRUJBAvDspYmde6Jj/PV1owRXQGHcyPaHQ1RGqFgAGZRm4
+         GIbWplvwviWw+U3SjRMRlusYgpa3rIwFufQIAp5zbu0ofk9ZEa7zKbaHZYZR3bgELVBY
+         HPdQksTs3rLY8/ujLBuSE3mGSFxf9JuTYhxzaz87DEi+MQ+YV5AFocNC8cvzSxEH6Wug
+         5S6pO1IiIBWLPdSFXIZ4v6yKdqwrblevfAaGq6Afu7wxvq+1p5wyFoz0r6KRO3+Q6QrX
+         z6LJaJKJdEtY93EOjvX5XuPp1Ewsm8u4TlVzQUvI5HAkPwZjGCXqPGvputNOxJXx1q4w
+         gOtg==
+X-Gm-Message-State: AFq9FYIBFFmF/p2/Mduatb8zgYq51Q0FodOqQ0ZDjEmNxjBwricN5e3L
+	FNDqvfYGUorpJHjEUNMlqbEg6PFxrh3vX5L0s6+dGj3sxkuS6GqO7w8z0W+YBj5A7yk=
+X-Gm-Gg: AYBFou17zFUJh6D4JCGpP+1wR8goGqhe/i42/XsZXGrA7T7Zy+A3tSuvvbEM6SWucKk
+	pIlFB22aknqs7SX/YwvjouaH1R22ChOAEbNdmCXwAZHhsGTTO7h8DpUpEXNXtkXeKxbH89111qV
+	7BkTUdv6g2P6g8FqAgDG/aw8unT6G9dfX5e52hklhNfJmiByBucsFNCJdt2vKVLYN4K7GogEQYK
+	xsG0zkm+T4iKb2qDwE8+qthmXTA76xVQI5jZip9nLh6SbjPL3Fn+QZkTCyDNjavZ9FAiH7BQIrX
+	fkcirykXw0rDxWz1QmEqEbVWNt5GQiGngjS1F44defYsoA1l1cHMx0PMAPwwX1Ynk+Wk2tEof25
+	wBJTgQWK6yydWok3gcNpp81o/P3GiPIcGvkm5heuG4sGmughDC9DEjTr6mjUuXrEu7bfc2RvG4C
+	MY1p4TEhdJmFIVVhhPFNxlJHs9/Bdt4OBcwh4SRjZsdr0rMRAwVg7EWOrUwcOJ5St4l/eB03HuL
+	aVKzMGKPRRnbjktXyFF6HNbWTlSOv+PmRDvjoke6g==
+X-Received: by 2002:a17:90b:4cc9:b0:39e:6c68:fd91 with SMTP id 98e67ed59e1d1-3a098b8fe02mr4937151a91.38.1790432477018;
+        Sat, 26 Sep 2026 07:21:17 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.21.14
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.21.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 26 Sep 2026 07:21:15 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 32/36] selftests/bpf: tests for register base/step state pruning
-Date: Sat, 26 Sep 2026 07:20:30 -0700
-Message-ID: <20260926-scev-minimal-rebase-v1-32-c8e5ab5ba79f@gmail.com>
+Subject: [PATCH bpf-next 33/36] selftests/bpf: tests for varying offset access to PTR_TO_BTF_ID
+Date: Sat, 26 Sep 2026 07:20:31 -0700
+Message-ID: <20260926-scev-minimal-rebase-v1-33-c8e5ab5ba79f@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
@@ -84,213 +84,576 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Tests for the base/step reasoning in states.c:range_within():
-- step_prune_hit_multiple: prune a step-4 range contained in a cached
-  step-2 range when the scalar is used to address the stack.
-- step_prune_miss_non_multiple: do not let a cached step-2 range hide a
-  step-3 path reaching division by zero.
-- step_prune_hit_const_on_line: prune constant 6 against a cached
-  base-0, step-3 range.
-- step_prune_miss_const_off_line: do not prune constant 7 against that
-  range even though its bounds and tnum admit the value.
+Verifier tests for accessing arrays at a varying offset through a
+PTR_TO_BTF_ID pointer, e.g. a[i].b where 'i' is a register with a
+varying value:
+- bpf_obj_new() is used to obtain a PTR_TO_BTF_ID to a program-defined
+  struct
+- bpf_get_current_task_btf() is used to obtain a PTR_TO_BTF_ID from
+  the kernel BTF.
+
+The cases cover:
+- in-bounds access to a field of an array of structs;
+- out-of-bounds access where the maximal offset runs past the array;
+- a scalar (long) array with a matching stride;
+- a byte array (step 1);
+- a 4-byte read whose maximal offset spills past the array end;
+- an unaligned step that is not a whole number of elements;
+- both dimensions of a 2D array;
+- an array of pointers within a program-allocated object, where reading a
+  pointer member yields a SCALAR_VALUE but the varying offset is still
+  validated against the array bounds (in-bounds and out-of-bounds);
+- a varying access into an array embedded in a kernel BTF type
+  (task_struct's comm[]), covering the non-allocated, trusted-pointer path
+  (in-bounds and out-of-bounds);
+- an array nested below a struct member at a non-zero offset, exercising
+  the offset telescoping done while walking across a struct boundary
+  (in-bounds and out-of-bounds);
+- a trailing flexible array member, whose unbounded tail makes a varying
+  access have no upper bound to exceed. A program-defined struct cannot be
+  used here because bpf_obj_new() forbids flexible array members, so a
+  kernel type (struct vring_used, with its 'ring[]' tail) is used
+  (in-bounds, and an unaligned step that is not a whole number of
+   elements).
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_bounds_step.c     | 183 +++++++++++++++++++++
- 1 file changed, 183 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
+ .../bpf/progs/verifier_btf_array_access.c          | 506 +++++++++++++++++++++
+ 2 files changed, 508 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-index a8358b625ce7..cb55fc216bc8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-@@ -121,4 +121,187 @@ l_bad_%=:						\
- 	: __clobber_all);
- }
- 
-+struct step_val {
-+	__u8 data[1024];
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index e1d559ba1271..9f188ff9be89 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -26,6 +26,7 @@
+ #include "verifier_bpf_get_stack.skel.h"
+ #include "verifier_bpf_trap.skel.h"
+ #include "verifier_bswap.skel.h"
++#include "verifier_btf_array_access.skel.h"
+ #include "verifier_btf_ctx_access.skel.h"
+ #include "verifier_btf_flex_array.skel.h"
+ #include "verifier_btf_unreliable_prog.skel.h"
+@@ -211,6 +212,7 @@ void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mix_sign_u
+ void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_stack); }
+ void test_verifier_bpf_trap(void)             { RUN(verifier_bpf_trap); }
+ void test_verifier_bswap(void)                { RUN(verifier_bswap); }
++void test_verifier_btf_array_access(void)     { RUN(verifier_btf_array_access); }
+ void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
+ void test_verifier_btf_flex_array(void)       { RUN(verifier_btf_flex_array); }
+ void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+new file mode 100644
+index 000000000000..ab6b74457365
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+@@ -0,0 +1,506 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++#include "bpf_experimental.h"
++#include "bpf_misc.h"
++
++/*
++ * Variable-offset access into arrays within a BTF access chain, e.g. a[i].b,
++ * where 'i' is a register with a varying offset. The register's step has to
++ * match the stride of one of the arrays crossed while walking the access
++ * chain, and the maximal possible offset has to stay within that array.
++ *
++ * A program-allocated object (bpf_obj_new) is used as the source of a
++ * PTR_TO_BTF_ID with a shape we fully control.
++ */
++struct inner {
++	int a;
++	int b;
 +};
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct step_val);
-+} step_map SEC(".maps");
++struct outer {
++	struct inner arr[8];	/* off 0,   stride 8, size 64 */
++	char bytes[32];		/* off 64,  stride 1, size 32 */
++	long longs[8];		/* off 96,  stride 8, size 64 */
++	int grid[4][4];		/* off 160, 16 ints,  size 64 */
++};
 +
-+/* Old register [4..130, step 2] should prune cur register [8..64, step 4]. */
-+SEC("socket")
-+__success __log_level(2)
-+__msg("7: (27) r6 *= 4                       ; R6=scalar({{.*}}umin32=8,{{.*}}umax32=68,{{.*}},step=0+4)")
-+__msg("10: (27) r7 *= 2                      ; R7=scalar({{.*}}umin32=4,{{.*}}umax32=130,{{.*}},step=0+2)")
-+__msg("11: (25) if r0 > 0x2a goto pc+1")
-+__msg("from 11 to 13: safe")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void step_prune_hit_multiple(void)
++/* arr[i].b, i in [0, 7], 4-byte read: stays within arr. */
++SEC("syscall")
++__success
++int arr_field_in_bounds(void *ctx)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	call %[bpf_get_prandom_u32];			\
-+	r7 = r0;					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 &= 0x0f;					\
-+	r6 += 2;					\
-+	r6 *= 4;					\
-+	r7 &= 0x3f;					\
-+	r7 += 2;					\
-+	r7 *= 2;					\
-+	if r0 > 42 goto 1f;	/* can't predict */	\
-+	r6 = r7;		/* step=2 explored first, step=4 explored next */ \
-+1:	r0 = r10;					\
-+	r6 = -r6;					\
-+	r0 += r6;					\
-+	*(u8 *)(r0 + 0) = 7;	/* force r6 precise */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(step_map)
-+	: __clobber_all);
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 7;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 4);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
 +}
 +
-+/* Old register [0..126, step 2] should not prune cur register [0..45, step 3]. */
-+SEC("socket")
-+__failure __log_level(2)
-+__msg("6: (27) r6 *= 3                       ; R6=scalar({{.*}}smin32=0,{{.*}}umax32=45,{{.*}},step=0+3)")
-+__msg("8: (27) r7 *= 2                       ; R7=scalar({{.*}}smin32=0,{{.*}}umax32=126,{{.*}},step=0+2)")
-+__msg("9: (25) if r0 > 0x2a goto pc+1")
-+__msg("11: (15) if r6 == 0x3 goto pc+2")
-+__msg("11: R6=scalar({{.*}},step=0+2)")
-+__msg("13: (95) exit")
-+__msg("from 9 to 11: {{.*}} R6=scalar({{.*}},step=0+3)")
-+__msg("from 11 to 14")
-+__msg("div by zero")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void step_prune_miss_non_multiple(void)
++/* arr[i].b, i in [0, 15]: max offset runs past the end of arr. */
++SEC("syscall")
++__failure
++__msg("invalid variable offset access into struct outer")
++int arr_field_out_of_bounds(void *ctx)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	call %[bpf_get_prandom_u32];			\
-+	r7 = r0;					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 &= 0x0f;					\
-+	r6 *= 3;					\
-+	r7 &= 0x3f;					\
-+	r7 *= 2;					\
-+	if r0 > 42 goto 1f;	/* can't predict */	\
-+	r6 = r7;		/* step=2 explored first, step=3 explored next */ \
-+1:							\
-+	if r6 == 3 goto 2f;	/* false if step=2, should not prune step=3 */ \
-+	r0 = 0;						\
-+	exit;						\
-+2:							\
-+	r0 /= 0;		/* trap */		\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 15;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 4);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
 +}
 +
-+/*
-+ * Constant current register lying on the cached line: cached is {0,3,6,...}
-+ * (step 3, base 0), current is the constant 6. range_within() takes the
-+ * constant branch: imod(6, 3) == base 0, so cur is on the line and the
-+ * (precise) state is pruned -> "safe".
-+ */
-+SEC("socket")
-+__success __log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("14: (27) r1 *= 3")		/* cached path: step 3 line */
-+__msg("16: (b7) r1 = 6")		/* current path: const 6, on the line */
-+__msg("17: safe")			/* pruned at join: imod(6, 3) == 0 */
-+__naked void step_prune_hit_const_on_line(void)
++/* longs[i], i in [0, 7], 8-byte read: scalar array with stride 8. */
++SEC("syscall")
++__success
++int long_array_in_bounds(void *ctx)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	r1 = 0;						\
-+	*(u32*)(r10 - 4) = r1;				\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = %[step_map] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l_out_%=;			\
-+	r7 = r0;					\
-+	r1 = r6;					\
-+	r1 &= 0xff;					\
-+	if r6 > 0 goto l_cur_%=;			\
-+	r1 *= 3;			/* old: step 3 */	\
-+	goto l_join_%=;					\
-+l_cur_%=:						\
-+	r1 = 6;				/* cur: const on line */	\
-+l_join_%=:						\
-+	r0 = r7;					\
-+	r0 += r1;			/* r1 forced precise */	\
-+	r2 = *(u8 *)(r0 + 0);				\
-+l_out_%=:						\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(step_map)
-+	: __clobber_all);
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	long val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 7;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u64 *)(r1 + 96);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
 +}
 +
 +/*
-+ * Constant current register NOT on the cached line: cached is {0,3,6,...}
-+ * (step 3, base 0), current is the constant 7. imod(7, 3) == 1 != base 0,
-+ * so range_within() fails and the join is traversed again. A power-of-two
-+ * step is avoided on purpose: with step 3 the tnum is loose enough to admit
-+ * 7, so imod() is
-+ * the sole check that rejects it. No failure shape is possible here: 7 is
-+ * within the line's bounds and tnum, and the cached line path already
-+ * verifies the whole outro, so an eager prune could not miss an error.
++ * bytes[i], i in [0, 31], read as 4 bytes: min_off is valid within the array,
++ * but the 4-byte read at max_off runs past the array end. Exercises the
++ * size-aware bound in btf_struct_access().
 + */
-+SEC("socket")
-+__success __log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("14: (27) r1 *= 3")		/* cached path: step 3 line */
-+__msg("16: (b7) r1 = 7")		/* current path: const 7, off the line */
-+/* not pruned: current continues past the join with the constant offset 7 */
-+__msg("19: R0=map_value({{.*}}imm=7) R1=7")
-+__naked void step_prune_miss_const_off_line(void)
++SEC("syscall")
++__failure
++__msg("invalid variable offset access into struct outer")
++int byte_array_size_spanning(void *ctx)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	r1 = 0;						\
-+	*(u32*)(r10 - 4) = r1;				\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = %[step_map] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l_out_%=;			\
-+	r7 = r0;					\
-+	r1 = r6;					\
-+	r1 &= 0xff;					\
-+	if r6 > 0 goto l_cur_%=;			\
-+	r1 *= 3;			/* old: step 3 */	\
-+	goto l_join_%=;					\
-+l_cur_%=:						\
-+	r1 = 7;				/* cur: const off line */	\
-+l_join_%=:						\
-+	r0 = r7;					\
-+	r0 += r1;			/* r1 forced precise */	\
-+	r2 = *(u8 *)(r0 + 0);				\
-+l_out_%=:						\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(step_map)
-+	: __clobber_all);
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 31;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 64);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
 +}
 +
- char _license[] SEC("license") = "GPL";
++/* bytes[i], i in [0, 31], 1-byte read: step 1 matches the char array stride. */
++SEC("syscall")
++__success
++int byte_array_in_bounds(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 31;						\
++	r1 += r2;						\
++	%[val] = *(u8 *)(r1 + 64);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/*
++ * arr[] accessed with step 4 (half of sizeof(struct inner)): the step is not
++ * a whole number of elements, so no crossed array has a matching stride.
++ */
++SEC("syscall")
++__failure
++__msg("invalid variable offset access into struct outer")
++int arr_unaligned_step(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 7;						\
++	r2 *= 4;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 0);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/*
++ * grid[i][0], i in [0, 3]: steps along the outer dimension of a 2D array
++ * (stride 16). __btf_resolve_size() linearizes the array; the step is a
++ * multiple of the innermost element size (4).
++ */
++SEC("syscall")
++__success
++int grid_outer_dim(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 3;						\
++	r2 *= 16;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 160);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/*
++ * grid[0][i], i in [0, 3]: steps along the inner dimension of a 2D array
++ * (stride 4, the innermost element size).
++ */
++SEC("syscall")
++__success
++int grid_inner_dim(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct outer *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 3;						\
++	r2 *= 4;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 160);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/*
++ * An array of pointers within a program-allocated object. Reading a pointer
++ * member of a local object yields a SCALAR_VALUE, but the varying offset still
++ * has to be validated against the array bounds.
++ */
++struct with_ptrs {
++	struct inner *parr[8];	/* off 0, stride 8 (sizeof ptr), size 64 */
++};
++
++/* parr[i], i in [0, 7], 8-byte read: stays within parr. */
++SEC("syscall")
++__success
++int ptr_array_in_bounds(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct with_ptrs *o;
++	long val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 7;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u64 *)(r1 + 0);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/*
++ * parr[i], i in [0, 15]: max offset runs past the end of parr. Without the
++ * variable-offset check on the WALK_PTR path this would be wrongly accepted.
++ */
++SEC("syscall")
++__failure
++__msg("invalid variable offset access into struct with_ptrs")
++int ptr_array_out_of_bounds(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct with_ptrs *o;
++	long val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 15;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u64 *)(r1 + 0);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/*
++ * The cases above all use bpf_obj_new() (PTR_TO_BTF_ID | MEM_ALLOC). Exercise
++ * the trusted kernel-BTF path too, using a task_struct from
++ * bpf_get_current_task_btf() and its embedded char comm[] array. The comm
++ * offset is folded into the pointer as a constant before the varying index.
++ */
++
++/* task->comm[i], i in [0, 15], 1-byte read: stays within comm. */
++SEC("syscall")
++__success
++int kernel_btf_array_in_bounds(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct task_struct *task;
++	int val = 0;
++
++	task = bpf_get_current_task_btf();
++	asm volatile ("						\
++	r1 = %[task];						\
++	r1 += %[off];						\
++	r2 = %[i];						\
++	r2 &= 15;						\
++	r1 += r2;						\
++	%[val] = *(u8 *)(r1 + 0);				\
++"	: [val] "=r"(val)
++	: [task] "r"(task), [i] "r"(i),
++	  [off] "i"(offsetof(struct task_struct, comm))
++	: "r1", "r2");
++	return val;
++}
++
++/* task->comm[i], i in [0, 31]: max offset runs past comm. */
++SEC("syscall")
++__failure
++__msg("invalid variable offset access into struct task_struct")
++int kernel_btf_array_out_of_bounds(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct task_struct *task;
++	int val = 0;
++
++	task = bpf_get_current_task_btf();
++	asm volatile ("						\
++	r1 = %[task];						\
++	r1 += %[off];						\
++	r2 = %[i];						\
++	r2 &= 31;						\
++	r1 += r2;						\
++	%[val] = *(u8 *)(r1 + 0);				\
++"	: [val] "=r"(val)
++	: [task] "r"(task), [i] "r"(i),
++	  [off] "i"(offsetof(struct task_struct, comm))
++	: "r1", "r2");
++	return val;
++}
++
++/*
++ * Array nested below a struct member at a non-zero offset. The walk descends
++ * through 'm' (resetting the running offset) before reaching 'arr', exercising
++ * the array_start = min_off - arrays[i].off telescoping across a WALK_STRUCT
++ * dive.
++ */
++struct mid {
++	struct inner arr[8];	/* stride 8, size 64 */
++};
++
++struct nest {
++	long pad;		/* off 0 */
++	struct mid m;		/* off 8 */
++};
++
++/* m.arr[i].b, i in [0, 7], 4-byte read: stays within m.arr. */
++SEC("syscall")
++__success
++int nested_struct_in_bounds(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct nest *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 7;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 12);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/* m.arr[i].b, i in [0, 15]: max offset runs past the end of m.arr. */
++SEC("syscall")
++__failure
++__msg("invalid variable offset access into struct nest")
++int nested_struct_out_of_bounds(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct nest *o;
++	int val = 0;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return 0;
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 15;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 12);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	bpf_obj_drop(o);
++	return val;
++}
++
++/*
++ * A trailing flexible array member makes the struct tail an unbounded region,
++ * so a varying access into it has no upper bound to exceed (mirrors how
++ * unix_address.name[] is accessed via sun_path[i]).
++ *
++ * A custom (program) BTF struct can only be reached as a PTR_TO_BTF_ID through
++ * bpf_obj_new(), which does not allow flexible array members. So use a kernel
++ * type via an untrusted PTR_TO_BTF_ID (bpf_core_cast()). struct vring_used ends
++ * with a flexible array 'ring[]' of struct vring_used_elem { __virtio32 id, len; },
++ * mirroring a 'struct foo { int a; int b; }' flexible array.
++ */
++
++/* ring[i].len, i in [0, 63], 4-byte read: the flexible array has no upper bound. */
++SEC("syscall")
++__success
++int flex_array_field(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct vring_used *o;
++	int val = 0;
++
++	o = bpf_core_cast(bpf_get_current_task_btf(), struct vring_used);
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 63;						\
++	r2 *= 8;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 8);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	return val;
++}
++
++/*
++ * ring[] accessed with step 4 (half of sizeof(struct vring_used_elem)): the
++ * step is not a whole number of elements, so the flexible array stride does
++ * not match.
++ */
++SEC("syscall")
++__failure
++__msg("invalid variable offset access into struct vring_used")
++int flex_array_unaligned_step(void *ctx)
++{
++	unsigned long i = bpf_get_prandom_u32();
++	struct vring_used *o;
++	int val = 0;
++
++	o = bpf_core_cast(bpf_get_current_task_btf(), struct vring_used);
++	asm volatile ("						\
++	r1 = %[o];						\
++	r2 = %[i];						\
++	r2 &= 7;						\
++	r2 *= 4;						\
++	r1 += r2;						\
++	%[val] = *(u32 *)(r1 + 4);				\
++"	: [val] "=r"(val)
++	: [o] "r"(o), [i] "r"(i)
++	: "r1", "r2");
++	return val;
++}
++
++char _license[] SEC("license") = "GPL";
 
 -- 
 2.55.0
