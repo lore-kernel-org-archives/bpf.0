@@ -1,64 +1,64 @@
 Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBBE3A7F7C
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716A33A05C4
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790465726; cv=none; b=IjWJphHF11onNHrVhasqsom+GxBTXzJzRVGCTaxo/un4n0QDaf6ZWbAVcAKUEKUtPRVlm6LT9uI+VQe9P1TuPQZfxCkakkDVV53FE6b3kwGDqQaUyveb65tGphkb6cmb2rTSzFpNPJR7xVAaM3DjKBGd2P1dFARvuhyw5kEVS1o=
+	t=1790465728; cv=none; b=o0B9jH22buMtRQP6Sryr6gkMI7yY3ibnDGf9Fx1zgOEkEpSVVHXqw488ehSSCO5uShPk2UUt/vHF+xX8yBC1c+xH5ktR74khTvH6av3hpyiXqKEDUY/7cUpcgaUJZ/uke5/VC/1iP0borofW4pTfWtQnYddmhVAPbLSHUl8yliQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790465726; c=relaxed/simple;
-	bh=Zt6GKFGiSHtvIgW2MT699YvjOF0HREKyOUXkqm6Qadg=;
+	s=arc-20240116; t=1790465728; c=relaxed/simple;
+	bh=E2AuCmsXTK++8U0Kn7WnJ7Om+7zwIUgxEE+w99xm0zc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BRz24VadYX/SSmCsyNNLxFwaZM4Vd28EQpdg8U5QPir+xZ1v+GznqgRkA4bVHHnpcM9fmNnOJkznvWC8kE/Op4mXXNZjMB6EMh+NuugSvkroHZ3PeGInGN2jsPa6FoQromKi8cv6MTNUZh8l+J5x6LCr1yitsxG/gLP3/oID0zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VyDaU7XO; arc=none smtp.client-ip=74.125.225.138
+	 MIME-Version; b=cqqRDiL5hbgtWY9RfkVqJFWxap3hsSomKEC5phEdJpt8UJXwfyHFmHwhja55KseuWju+wqnP5h/+3UQSRbpJ80WgN7dZBiJE7NQwB89p3h62Su5pVFvCwKLas9ia0HLle4DC+wtWgffGGeJOANTJ5WmKAek6jUe2SJdkf5KkFd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DdDxSBz6; arc=none smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VyDaU7XO"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ffd5111f2so3330515e9.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdDxSBz6"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ffd5111f2so3330605e9.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790465723; x=1791070523; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790465724; x=1791070524; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LqMYsWJki1aSEgKbPdpJAmDFKxvkOARKEH1/43UO3Ug=;
-        b=VyDaU7XO672ts9KlBjhtiynGMRgQ+IrGzjPMgWIDPaGzDZPY+x2cO1xLMPqgX/Rnmf
-         94277UN4tChoTCTR4FXvyOoJfLnOLy/++n+SNyoVy9uoMd3vQBPsWf18sQsQBCZAqFv3
-         xXdHH6/X1NjkO3aN7SWEhhQfxB656Z53DANJV0yKoWqpWZntrxRUMGI05JKmHGhcFD+t
-         SY+MNXJJYG6qv+Yw88x8v2QyvhgXFXLF8G0KQfZu632NgdZeYR0xGeK6lLX/O6guG7UC
-         VT/p3jN/Mm9EvuU4s881ApAe0cR0ye8ssjhG2VFwBMiLMAS8XXmZbfd8Eb5EMCOk1YA2
-         jGnQ==
+        bh=OVQfxctZBAmzG6J0lcASmCkF/iklJ8Ai6u3dFnv6bp4=;
+        b=DdDxSBz6rSw5NKbkwHZ/My2ieB/xzzMm44g2foUEt2YMREa0GDaUppS5bIcg9M4Saq
+         FaVm9nssK738odbckRM2/AwLYRcp9+osO8RVmDsMpGsWsJY8XIwAjiRaxg6a80pq2L0f
+         q6ZXgqSwtn9yj30Ww1x7/dxDX/CpimrPwf0qbMRONKwo7M/f2BsYjm4I/N5JMVRCCxDJ
+         s22FjgQrv/nt9f38eQihSkzqKbDJm5RfFMwxTSuBGOfhIzzg6Ay1ZYL4sVKC+/uMsqVz
+         TPsT9bmn38336X8Pu5Rd9RMBX4XsoUZeyfXety6eRDnUKHWw+z/1NtLQSE4KHh9lNSqA
+         42Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790465723; x=1791070523;
+        d=1e100.net; s=20260707; t=1790465724; x=1791070524;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LqMYsWJki1aSEgKbPdpJAmDFKxvkOARKEH1/43UO3Ug=;
-        b=aEzdcZIhq8+NTzFV9orRlB9II3INvDpHqvbl1CYQtat5/+mYestoxuhcehj+15veaj
-         fPdcNy01mOiBl0kHHU/KGQNXaZzutMDb2TeQRGlwvNZShqG9VahhqYJlRNmGmPb7IBAe
-         QoBngEOSP9D74/SWBqaMe6nt/RxEVW5ikxJYPMvbuCMYlvwo11cIpGYM8Lvzdc4Hd7bJ
-         a4VawBw5jgJRv9cZLwUPfn6d9J9sbUVwbbrpOph/tcHwXQYgmFuou/h36kh1s1Uj3x+i
-         kPNFyR8ugLnOHo1R19lR/T+OKl6XoUfVCMtt5letaWgHqXRsBay07F4BcuSOKKaVYy3C
-         VCxw==
-X-Gm-Message-State: AFuF++k+iPpXeKxzPNwQiadj4u29J5bX+GPHDAeZa2rhlCgbdBk7KZh/
-	ErrqY2U+7hEkFJThhlcFwOJNoJ8B+/dzo7vathTNRlbI7IZWo9/IfrfZsIMNVrdK
-X-Gm-Gg: AYBFou2lZszC9KvxDMG22oOjzGMwIZz/nRrIwfmZwGPtprX+JCGaPJPboKJckstud3T
-	mKlE31kllayo1ZpuLeGdOkC6eMU1z7R5WBobRKLe6WpOEbJ1JGE9lAi6Wj0RXbeIr2fn46RZ2Ac
-	5s7u9bUizIpcXKhdvzq7AspAmjgani0mWqn96xHBkE7qUDrFd2/lJLr9DDcDrjFGpXMhfNk2Uho
-	0ZwfS6vxOcDLU/6xlDbQ66wAhx5y5EHUcWW5X2l/ZRtiDgvc+dtq8Bgv8LS50uPsvsg2qhWV+Oy
-	buK1JOH4NiRbiVnRObx97nIhv+YzXhPu7q9b+0tjdlhoOoka75UsrgASAbuBy95Z79lH0UMDDz8
-	u9yzHup5lgB8iEza3mrQT6PBeKtjcP2hjn3HYXnrm80a28+CUDUzdlbFD+NOHru+TmDC3FTTp6H
-	uSyGxRsdYOBSjs1J9SwVmQEVLq83/c1QjrZQxdKZoio1I6oRTYzsbaTPM/pvF7gIIxwNh/I6oHv
-	Ki3Gf8TKNXjrYRbFJxasyNCG9ySyt+9ltyBKWR9Hm7LZCmvMsi+ne2N6wlvNGwWwQrWnvVVKKlE
-	nweGlU+k64hKlaS2CByy2Rkuj+PwO3zHpIDHUyk=
-X-Received: by 2002:a05:600d:849b:20b0:49c:f4ff:e872 with SMTP id 5b1f17b1804b1-49fe66abd01mr121676555e9.5.1790465722712;
-        Sat, 26 Sep 2026 16:35:22 -0700 (PDT)
+        bh=OVQfxctZBAmzG6J0lcASmCkF/iklJ8Ai6u3dFnv6bp4=;
+        b=xycD9A5URCpHIgUEHBJZ/ap+lomLU973pR46U6FPJ2pqR86sagxuRyCzsSBmXYsC8p
+         Ahs4JVcV1fMmN+eIut9hfIFPMbmnfmxtpzr+mkOZ0LHtl6jB/Ggip+XJJM1ZnEmbiZSx
+         9fWYZ1tTEiJOOZZe02tw5w945RBwKRC9HKf+dmANMAjUsgC6aN0+//Plt/bVRP1HAJC4
+         w39cgjmWbLSbpqX9wy8h7qqJzoafhlm6dQxV3YegxuRSeGimNgnCDcmScr0eCyjczY/p
+         CSHLWxnOtLXIW2RWK0IwvrqdejZrkW8S1SYW15GYg/MqDufAAigOhjmlJiTyLZ5KCq2b
+         4o3A==
+X-Gm-Message-State: AFuF++mAiJ81Juy5oeaxRNfHfrLbK5fQXJcBWU6R7R+91Swt2GkbfS15
+	07fGpqXf2oG9CmadxPuxRQvJre2+4xCzL3cWm2u/4dlcXi8d2zJhuboDKSHTmNph
+X-Gm-Gg: AYBFou3bh0LUQxgmqTqNS6Db0VcEddlJjHeRyooDx+6UQJ41iJ7N+UwYz8NWyzTjlLJ
+	5W8xaXN4ibPQlbe15k0KOFWC7Ji0e6RVTW8R0gM/wHjfbA7dTp1oV6GzutyUHtBXMwewwcrFbrA
+	/F3LbXqdsEup0WGiGqsya/uXDfHh8KSuoJjYepreZRLzkp2KAqpC5Py3wDkyp/3ilPjKjqBFTm1
+	YSCHpcOtwvKnzsSsIawSrlXA6srODyNEZyKxBEi6UiPcIbm0ovCOi5oi2vgYgGr+PhPIJuW0Bd8
+	ZOYyeLOdGzwllobjQfWLCW93h+boD36n3bv6V/U/+hhvTu3mFdZYuIedCRcM3kf89zdFvqoXNA/
+	YE31HpAP3HdRs3SuwJ0U1I1gvua7Z/X4VGH6wljacboZk4LF6ElpbUg9dRw8J0AHytaEcX4M8rq
+	+6E3SrZZH3S+f55z9RvIbRZampP/HW/CVA8blqaDtP9udoMKLcJaAXSUSQ5DejZ9di6rF4vqBF0
+	YXWqRfUHmazwmGaGcWrdir0zZ1jNRI+hj/84zoPjEx/yNYAt++k/px0Z1fqdPE8kJkN88R9aB0m
+	vmlqorFBC8UuXwKIwUvvT6IsGdf1115QGaT6RQ==
+X-Received: by 2002:a05:600c:628e:b0:49e:84bf:6136 with SMTP id 5b1f17b1804b1-49fe66b42b6mr147917685e9.11.1790465724549;
+        Sat, 26 Sep 2026 16:35:24 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a34a314sm17290731f8f.6.2026.09.26.16.35.22
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0019162fcsm10329225e9.13.2026.09.26.16.35.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 16:35:22 -0700 (PDT)
+        Sat, 26 Sep 2026 16:35:24 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 10/16] bpf: Let typed_arena_cast copy pointers the verifier already trusts
-Date: Sun, 27 Sep 2026 01:34:48 +0200
-Message-ID: <20260926233503.3114147-11-memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 11/16] libbpf: Support the typed_arena_cast instruction
+Date: Sun, 27 Sep 2026 01:34:49 +0200
+Message-ID: <20260926233503.3114147-12-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926233503.3114147-1-memxor@gmail.com>
 References: <20260926233503.3114147-1-memxor@gmail.com>
@@ -80,160 +80,102 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7336; i=memxor@gmail.com; h=from:subject; bh=Zt6GKFGiSHtvIgW2MT699YvjOF0HREKyOUXkqm6Qadg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWHzIly3/HpUJdjVWtq1UPcnFy7bh27z3Jt57jzwyl mo7uCK+o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABM5+JjhJ2PuodXTZ6Ykuqxe tUzn13QZk7KksxvlFdg4OQ7W7++5cZWRYfJtVZ5vewVyte3CY1JTfq6M/re97dK2B0x34qoqTvx /zgcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4073; i=memxor@gmail.com; h=from:subject; bh=E2AuCmsXTK++8U0Kn7WnJ7Om+7zwIUgxEE+w99xm0zc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWLxqd+L6Q+/S3nQcPvtz01a1Bf2PJj1sURbL2HROq coyOb6po5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABNR2c7whz9JhZmRSzhxmUfh 4ZAvHLqd5ypzl9iL39ldb1Vz4sZPbkaGT5czz24sXz9X6tCBRp6ic7euah1VPq3ru+ez1ezEE0E b2AA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The compiler inserts the cast at every use of a pointer to a struct with
-special fields, so that programs never write one, and it cannot tell what
-the pointer is: the same struct lives in typed arenas, in allocated objects,
-in map values and on the stack. So the verifier decides per path what the
-cast takes. A scalar, a raw arena pointer, a typed arena pointer loaded from
-a field and not yet sanitized, one of another struct, or one that
-arithmetic moved inside its object is sanitized as before. A sanitized
-pointer of the struct's own typed arena at offset zero is already what the
-cast produces, so it is copied, and since the sequence is a no-op on it,
-such a path may share the instruction with sanitizing ones. Any other
-verified pointer, to an allocated object, a map value, the stack or
-anything else, is copied with its state, offset and references: the cast
-has nothing to add to what the verifier knows, so it needs neither an arena
-map nor a registration, and a program that only allocates objects of the
-struct loads as before. The lowering is per instruction and runs on every
-path through it, so a path that copies such a pointer cannot share the
-instruction with one that sanitizes, since the sequence would mask a
-pointer that is not in the slice; that program is rejected. An instruction
-that only copied lowers to a move, or to nothing when dst is src, which
-takes removing the instruction, as the nop removal pass has already run.
+The typed_arena_cast instruction turns any 64-bit value into a pointer to an
+object of a program-BTF struct in the struct's typed arena, the kernel-only
+region of an arena map. It is encoded as a 64-bit register move with an off
+of BPF_TYPED_ARENA_CAST and the struct's local BTF type ID in imm, and the
+kernel takes the ID from there, so a compiler that emits the instruction
+records a BPF_CORE_TYPE_ID_LOCAL relocation against it, the way it does for
+the ld_imm64 behind __builtin_btf_type_id().
+
+Let the relocation patcher write a local type ID into that instruction. It
+is the one ALU form with a register source that carries a relocation, and it
+takes no other relocation kind; nothing else about the patching of ALU
+immediates changes.
+
+Add bpf_typed_arena_cast() to bpf_helpers.h, wrapping the compiler builtin
+under its feature macro, so that programs cast through one name whatever the
+toolchain.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/fixups.c   | 35 ++++++++++++++++++++++--------
- kernel/bpf/verifier.c | 50 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+), 9 deletions(-)
+ tools/lib/bpf/bpf_helpers.h | 13 +++++++++++++
+ tools/lib/bpf/relo_core.c   | 19 +++++++++++++++++--
+ 2 files changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index fd0ba8376c1c..a0856bd18ac2 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -897,17 +897,34 @@ int bpf_lower_typed_arena_insns(struct bpf_verifier_env *env)
- 	for (i = 0; i < insn_cnt; i++, insn++) {
- 		aux = &env->insn_aux_data[i + delta];
- 		cnt = 0;
--		if (aux->sanitize_needed)
--			cnt = bpf_typed_arena_cast_insns(aux->sanitize_arena, aux->sanitize_reg,
--							 aux->sanitize_reg, insn_buf);
- 		if (insn_is_typed_arena_cast(insn)) {
--			if (!aux->typed_arena) {
--				verifier_bug(env, "typed_arena_cast at insn %d has no typed arena", i);
--				return -EFAULT;
-+			/*
-+			 * A cast that sanitized on some path lowers to the
-+			 * sequence, a no-op on the paths that brought a sanitized
-+			 * pointer of the same typed arena. One that only copied
-+			 * verified pointers is a move, or nothing at all.
-+			 */
-+			if (aux->sanitize_needed) {
-+				if (!aux->typed_arena) {
-+					verifier_bug(env, "typed_arena_cast at insn %d has no typed arena", i);
-+					return -EFAULT;
-+				}
-+				cnt = bpf_typed_arena_cast_insns(aux->typed_arena, insn->dst_reg,
-+								 insn->src_reg, insn_buf);
-+			} else if (insn->dst_reg != insn->src_reg) {
-+				insn_buf[cnt++] = BPF_MOV64_REG(insn->dst_reg, insn->src_reg);
-+			} else {
-+				int err = verifier_remove_insns(env, i + delta, 1);
-+
-+				if (err)
-+					return err;
-+				delta--;
-+				insn = env->prog->insnsi + i + delta;
-+				continue;
- 			}
--			cnt += bpf_typed_arena_cast_insns(aux->typed_arena, insn->dst_reg,
--							  insn->src_reg, insn_buf + cnt);
--		} else if (cnt) {
-+		} else if (aux->sanitize_needed) {
-+			cnt = bpf_typed_arena_cast_insns(aux->sanitize_arena, aux->sanitize_reg,
-+							 aux->sanitize_reg, insn_buf);
- 			insn_buf[cnt++] = *insn;
- 		}
- 		if (!cnt)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b85d99f81ef5..aceb17e62948 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17299,13 +17299,51 @@ static struct bpf_typed_arena *typed_arena_register(struct bpf_verifier_env *env
-  * of the instruction, so an instruction casts to one type on every path, and
-  * the lowering can be chosen once.
-  */
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 9d160b5b9c0e..1a440e32ebeb 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -340,6 +340,19 @@ enum libbpf_tristate {
+ /* Helper macro to print out debug messages */
+ #define bpf_printk(fmt, args...) ___bpf_pick_printk(args)(fmt, ##args)
+ 
 +/*
-+ * dst = typed_arena_cast(src, imm) makes a trusted pointer to an object of the
-+ * struct imm names out of the value in src. What that takes depends on the
-+ * value, and the compiler that inserts the cast at every use of a pointer to
-+ * the struct cannot tell, since the same struct lives in typed arenas, in
-+ * allocated objects, in map values and on the stack. So the verifier decides
-+ * per path. A scalar, a raw arena pointer, or a typed arena pointer that is
-+ * unsanitized, of another struct, or moved inside its object is sanitized:
-+ * dst becomes a pointer to the start of an object of the struct's typed
-+ * arena, and the lowering masks and rebases the value. A sanitized pointer of
-+ * that typed arena at offset zero is already what the cast makes, so dst is a
-+ * copy of src; the sequence is a no-op on it, which lets such a path share
-+ * the instruction with sanitizing ones. Any other verified pointer, to an
-+ * allocated object, a map value, the stack, or anything else, is copied as it
-+ * is, with its state, offset and references: the cast has nothing to add to
-+ * what the verifier already knows, and needs no arena and no registration. A
-+ * typed arena pointer that may be NULL, an allocation's result, is one of
-+ * these: sanitizing it would turn a failed allocation into object 0, so it is
-+ * copied and keeps its check.
-+ *
-+ * The lowering is per instruction and runs on every path through it, so a
-+ * path that copies a verified pointer of another kind cannot share the
-+ * instruction with a path that sanitizes: the sequence would mask a pointer
-+ * that is not in the slice. Such a program is rejected.
++ * Turn any 64-bit value into a pointer to an object of the given struct type
++ * in its typed arena, with the typed_arena_cast instruction: the kernel masks
++ * the value into the struct's slice of the arena map's typed region, so the
++ * result names an object of that type whatever the value was, and the
++ * verifier trusts it. The struct's local BTF type ID is relocated into the
++ * instruction. Requires compiler support.
 + */
- static int check_typed_arena_cast(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
- 	struct bpf_insn_aux_data *aux = &env->insn_aux_data[env->insn_idx];
- 	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_reg_state *src = &regs[insn->src_reg];
- 	struct bpf_reg_state *dst = &regs[insn->dst_reg];
- 	struct bpf_typed_arena *ta;
++#ifdef __BPF_FEATURE_TYPED_ARENA_CAST
++#define bpf_typed_arena_cast(v, type)					\
++	((typeof(type) *)__builtin_bpf_typed_arena_cast((v), *(typeof(type) *)0))
++#endif
++
+ struct bpf_iter_num;
  
-+	if (src->type != SCALAR_VALUE && base_type(src->type) != PTR_TO_ARENA &&
-+	    (!type_is_typed_arena_obj(src->type) || type_flag(src->type) & PTR_MAYBE_NULL)) {
-+		if (aux->sanitize_needed) {
-+			verbose(env, "insn %d casts values that need different treatment on different paths\n",
-+				env->insn_idx);
-+			return -EINVAL;
+ extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __weak __ksym;
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index 2672623a4198..e872e432729b 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -1028,6 +1028,12 @@ static int insn_bytes_to_bpf_size(__u32 sz)
+ 	}
+ }
+ 
++/* rX = typed_arena_cast(rY, <local type ID in imm>) */
++static bool is_typed_arena_cast_insn(struct bpf_insn *insn)
++{
++	return insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && insn->off == BPF_TYPED_ARENA_CAST;
++}
++
+ /*
+  * Patch relocatable BPF instruction.
+  *
+@@ -1043,7 +1049,8 @@ static int insn_bytes_to_bpf_size(__u32 sz)
+  * 3. rX = <imm64> (load with 64-bit immediate value);
+  * 4. rX = *(T *)(rY + <off>), where T is one of {u8, u16, u32, u64};
+  * 5. *(T *)(rX + <off>) = rY, where T is one of {u8, u16, u32, u64};
+- * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64}.
++ * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64};
++ * 7. rX = typed_arena_cast(rY, <imm>), for a local type ID relocation only.
+  */
+ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 			int insn_idx, const struct bpf_core_relo *relo,
+@@ -1060,8 +1067,16 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 	switch (class) {
+ 	case BPF_ALU:
+ 	case BPF_ALU64:
+-		if (BPF_SRC(insn->code) != BPF_K)
++		/*
++		 * The typed arena cast is a register move whose imm names the
++		 * struct by its local type ID; the kernel takes the ID from there.
++		 */
++		if (is_typed_arena_cast_insn(insn)) {
++			if (relo->kind != BPF_CORE_TYPE_ID_LOCAL)
++				goto bad_insn;
++		} else if (BPF_SRC(insn->code) != BPF_K) {
+ 			goto bad_insn;
 +		}
-+		aux->sanitize_plain |= BIT(insn->src_reg);
-+		*dst = *src;
-+		return 0;
-+	}
-+
- 	/* The arena itself needs CAP_PERFMON, so the leak rules already permit a kernel pointer. */
- 	if (!env->prog->aux->arena) {
- 		verbose(env, "typed_arena_cast insn can only be used in a program that has an associated arena\n");
-@@ -17320,6 +17358,18 @@ static int check_typed_arena_cast(struct bpf_verifier_env *env, struct bpf_insn
- 		return PTR_ERR(ta);
- 	aux->typed_arena = ta;
- 
-+	if (src->type == (PTR_TO_BTF_ID | MEM_ARENA) && src->btf_id == ta->btf_id &&
-+	    tnum_is_const(src->var_off) && !src->var_off.value) {
-+		*dst = *src;
-+		return 0;
-+	}
-+	if (aux->sanitize_plain) {
-+		verbose(env, "insn %d casts values that need different treatment on different paths\n",
-+			env->insn_idx);
-+		return -EINVAL;
-+	}
-+	aux->sanitize_needed = true;
-+
- 	mark_reg_known_zero(env, regs, insn->dst_reg);
- 	dst->type = PTR_TO_BTF_ID | MEM_ARENA;
- 	dst->btf = env->prog->aux->btf;
+ 		if (res->poison)
+ 			return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
+ 		if (res->validate && insn->imm != orig_val) {
 -- 
 2.53.0
 
