@@ -1,48 +1,52 @@
-Received: from out-zbxj-a78.jellyfish.systems (out-zbxj-a78.jellyfish.systems [198.54.127.78])
+Received: from out-zbxj-a75.jellyfish.systems (out-zbxj-a75.jellyfish.systems [198.54.127.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8F633CEA7
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 01:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83037315D32
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 01:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790387078; cv=none; b=cjK51Cqxc0twANudy3FgOaZYGL4yScBM2VWAtJYi+/xZE2UpljBhGNzOAw5kOGRKJgEBROuzbi7LD2yz/TjewmV1oYMbpuwznTg0bd3BI6D/kJXh0WNSNWJ5NayY9PAPesp6QUpcJlVaN1algVNwrZyJC7Ztu4W1xSA9tLYcEU0=
+	t=1790387094; cv=none; b=W123PZ9+iYsBDqKBu1311vdvkjVIHRi5C/lBj9HV30CRE37AOh1aV84V4c3FXRNbcg7r57HFRAhM6FzBwpJ1OBvOHco3OoBzpVsl9LsbVTF1RTOoQVM3thKEAdr/ivoCSo0z4qrghQcwKhAgZz3k9z4LI+b/N2FYrnhcu8IvOXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790387078; c=relaxed/simple;
-	bh=VHIw1jqoLRo6+Mo0bxOR2W3IJ5NrOZ9nWmYQHzKyvcw=;
+	s=arc-20240116; t=1790387094; c=relaxed/simple;
+	bh=zQ7Db06q8qeYH7rafIP30VKwT78ouJ0Pa3J48XIAAM0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lLyCEXM75AmKYz2gaIPzxCWcugGtLFGKkNCrE3+ykP03zYd5goUrupMgyyIi7zgLIwWfiUQIAp6PZEIdh71TDtRQvpuIDEy/hDKbxSWB6TFlYv9e4GCsqA3RuXomjCaOAw6bxShg9liLoe4ADEeO49GSPGEh8IiVKs1pdhLmP4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=RV7y3I16; arc=none smtp.client-ip=198.54.127.78
+	 Content-Type:MIME-Version; b=CboQUGHavsglwsdMf1JET322JmHDemupkvxVuF39XzgYrnz9L/taJWy2lTPjRAdoyV+u3w+AYpdmCakXgmlo3uNsmyEp8oYQpDFMNOLR4MFyhRhom+6iUfgJsl/V0Qs5FXbS22jao5NQwQJuQuZDBuGIZArMB/y+2/8/nRRxCiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=ZrnrV/g+; arc=none smtp.client-ip=198.54.127.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="RV7y3I16"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="ZrnrV/g+"
 Received: from 192.168.50.46 (unknown [114.92.81.237])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hs9NN330Vz6tmS;
-	Sat, 26 Sep 2026 01:44:20 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hs9NY71xbz2x9g;
+	Sat, 26 Sep 2026 01:44:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1790387062;
-	bh=VHIw1jqoLRo6+Mo0bxOR2W3IJ5NrOZ9nWmYQHzKyvcw=;
+	s=spacemail; t=1790387074;
+	bh=zQ7Db06q8qeYH7rafIP30VKwT78ouJ0Pa3J48XIAAM0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RV7y3I162eIzCeF5xICAhsByD20NDYJqHfYEN8LtMJaFojljp7PPRmE6bVaxaRBrK
-	 1qWlkBtKYYf487/tc5RpYLAQodHlWRZnxhG+gYlPq6TRpY0LNAKoW0tvE0XhHv/RrG
-	 brlHUVTs1tGmUFJ5NaQxxfSYhA39VbQLs/EPStxZb/ERS00bQBmhL5aru5edBSab6O
-	 iSaezXMt/2FLYU5Bai6bw9468b/uSl+fB7Q66Drq7di03F5TPagC9e2g56eBGO6FpJ
-	 NXOpZApybMnDlQWs30RveUMX3rCZZmyTxjI8YOAwlRhGPgXbC86MjR8Y4/Trd34Cq4
-	 RL5eYQJqH+Msg==
+	b=ZrnrV/g+p7IQAlBoUfAtVM8N4Jn773cp0wynz8k9Uep+KKIxdW0J7Ywvsm6df/b3S
+	 nnEh8YaSCeEJcT9dVU+Ag9VnB/2p/JV1oVrlN9wZMeI41JbUaUYCBWQnCOX5M5agI1
+	 QWiHnifT0/b1JRjVFyZzE8x4sJf4w/QVDG09p/brnN2Z70LMgPfPPgknWHo/rXsm2g
+	 FO5YfW/n7PNW4hs5jZbkTmBbyS7hGr+qLNgfzBAREZiDADFMqZxuscasdkYFENT0bR
+	 HMS8HiTaozIz19qy/Lio8504I4p47vM13u5LvM+oLZFyIuf9m1cy5/5wwUapX443cl
+	 oSoag17VS671w==
 From: Tianyi Chen <hi@tychen.cc>
-To: qmo@kernel.org
-Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com,
- ihor.solodrai@linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v8 1/2] bpftool: Add recursive map dumping
-Date: Sat, 26 Sep 2026 10:44:18 +0900
-Message-ID: <179038705821.25394.6011108837604232801@tychen.cc>
-In-Reply-To: <43549d30-0f47-46a2-a60f-fb6f252e6738@kernel.org>
-References: <20260925174402.2028649-1-hi@tychen.cc>
- <20260925174402.2028649-2-hi@tychen.cc>
- <43549d30-0f47-46a2-a60f-fb6f252e6738@kernel.org>
+To: qmo@kernel.org, skokovmaksimevg@gmail.com
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, kuba@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Fail map dump for maps that
+ can't be iterated
+Date: Sat, 26 Sep 2026 10:44:28 +0900
+Message-ID: <179038706871.25394.17522711126515661125@tychen.cc>
+In-Reply-To: <661699fb-456c-4e68-85df-94cb829b2204@kernel.org>
+References: <20260925162031.27259-1-skokovmaksimevg@gmail.com>
+ <20260925162031.27259-2-skokovmaksimevg@gmail.com>
+ <661699fb-456c-4e68-85df-94cb829b2204@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -53,24 +57,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-Envelope-From: hi@tychen.cc
 
-Hi Quentin,
+Hi Quentin, Maxim,
 
-> This hunk is no longer necessary now that we use a keyword rather than
-> an option, please drop the rewrap.
+> Tianyi, note that this conflicts with your series ("bpftool: Add
+> recursive map dumping"), one of you will have to rebase.
 
-Dropped in v9.
-
-> Looks mostly good otherwise, but Sashiko's finding seems correct, so
-> please look into it.
-
-Confirmed: v8 incorrectly formats a non-BTF map using the preceding map's
-BTF. v9 clears info and resets len before each query in all three
-do_dump() loops. The two new mixed-BTF regression cases fail with v8;
-all 15 dump subtests pass with v9 in an x86-64 VM.
-
-I also rebased on current bpf-next plus Maxim's v2 implementation patch,
-with that prerequisite identified in the cover letter:
+I'll take care of rebasing the recursive dump series. I have posted v9
+on current bpf-next plus Maxim's v2 patch 1/2, explicitly listed as a
+prerequisite in the cover letter:
 https://lore.kernel.org/r/20260926014208.24773-1-hi@tychen.cc
 
-Thanks for the review!
+The conflict resolution keeps the early iteration check before recursive
+plain/BTF output and retains Maxim's iteration-error reporting. All 15
+recursive dump subtests pass on the combined tree. I also checked that
+non-iterable ringbuf dumps fail with valid JSON, with and without recursion.
+
+Maxim, please go ahead with your revisions; no need to rebase around my
+series. I'll adjust mine if your implementation changes.
+
+Thanks,
 Tianyi
