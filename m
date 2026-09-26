@@ -1,64 +1,64 @@
-Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617EE466B70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126A746AA96
 	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790432458; cv=none; b=LkGMFpnNgK0b0ay9Yhn82OiiOms/94Yp1LmJvCmg6ced/EquBJA376cM1oJJ2/+vCYt1PAE24y1oARTHTC/PKMAKd43r2ylYn4ZAKNw5ji949J9WywesTIFq3OIJqA9oNi8wXB3GbEvKDimx+CFj0//UaxeNr+8xuSahA1+0md8=
+	t=1790432459; cv=none; b=ZyGE1iH5LRaGmHIHVnjNrvAlUF0EC0YlyQKOiXK/hwhOGhMnh79Af7+cnQ288GIgPgvZHMEkgNR2rQDU0N+HSiqYQvghGb30RtPFAty01VHiNbpq+yPFzOHPsZFTyyvC8jy/+0RXNvZ0d4aZkav7U7BwOsHGU7qtt1u0LecPZrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790432458; c=relaxed/simple;
-	bh=sh21OCSOpw/0JdxqcJkMNcyP1h4Yui7PLPRy+4kcagM=;
+	s=arc-20240116; t=1790432459; c=relaxed/simple;
+	bh=Kx8PczaMnrVtCeSORCYNmmp3+2ILYgWO3oNsDrD6YHw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UzvaPYi0Jl81qCZpROufr4vHq9cmsovPl+bcX1fIR+JU1xErIqG72Ln1igpH68tUTKATQsnJqMWPkZcSpcjilT4BuYhxnefPWyVt0IQVrAFA/onmCaYz6VvpQIkMQpFEKCvIUZtQyqO26V/1UnhgNKPENzrbklmbZkm7ztQs3Mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HK5okGWC; arc=none smtp.client-ip=74.125.227.169
+	 MIME-Version:Content-Type; b=Q16hM6tMfyKIstLwGX2loyTUi6hYbnWwQBHjMpTncsmJ+54jC8WC41sehpwpDVYqFA2xXAg3kwfXgIqrqF5K42pnh1e1G35A+BX8iukPhtQ4KRa3UElIcEJw7fEVSKOMmQBfuIBM5fXojInY8GIwc/5bxh7XuzqYGxGGyPySoDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jTC7Rd1I; arc=none smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HK5okGWC"
-Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a0b6200eb0so1305518a91.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jTC7Rd1I"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-398beb616f5so900465a91.1
         for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:20:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790432456; x=1791037256; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790432457; x=1791037257; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=mJaFEb6R9EFikkeg0iZgPvrkezv8YHql7yg4MpyWneM=;
-        b=HK5okGWCh+MoEd4wNgG1oB+JUBihixNTZaj3UuBqVPIPMDB4X9b3bwf/MyTNEAa9Sq
-         Tbm8EFu4StLJwDwmnvMJosiGfyO7zwcT1XC5vkb4U8RN6xFcy7yTcGkFwLXWhlD7ocC7
-         cXmf6R6i3PwKlfkxcKL03YpB8/rSNhZomTMoeuTeaZ36GjO4m8KZn6o4N+GRDeJQlg8j
-         qtqCgajeGPX+G5xPfhCMyAYptnLLnhczUC10Ab6wql0PsSdbDHMqZTZ1MOXxDP0MMK2J
-         0gbxggy92w5abUbCOLd7tdShDjnY/MQf8k8luMB6vTRDoJjJftBCgaJa4wFbQae4gKHH
-         C+uA==
+        bh=QPKbx3ItVOpjH9sY90r8wbZdXfWgHP2IcmoJJfmh1Kg=;
+        b=jTC7Rd1I0lpmSLhXYDD/TNwQRwatAjf0fGmQ4GjpLSbDGSTWhQPeET8AdL6K7yamvN
+         ZWZCM3VMVZ1sCnp0AbPy510jclfRggWBaahKNvLlIuHMXKTJ4iTBqZT4juaey+CKgYEf
+         2iGz0RFqh/LwERcbEz9Ia8Btm6QGMfHfdoqtjtVVZhoe6byMi0c0uDiJCl/6Ez+KYx9q
+         xUtlu/YLDIES3dCF64ATw8gIsn6r1Akvnj8szAKtPSbaxVOe+4Z15hagGdBWR8hfZPy+
+         IUsP11LcCBgKvI28uh1hUDY3XKycDRrduq01slB/GI8WTqnw0nsRtebKh1yi5YTAUXVC
+         zw0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790432456; x=1791037256;
+        d=1e100.net; s=20260707; t=1790432457; x=1791037257;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mJaFEb6R9EFikkeg0iZgPvrkezv8YHql7yg4MpyWneM=;
-        b=CmaLFXSeXid+KmmCHimUEcmzpfufoWmduJMyQy0j1hPHfgPFVgURs8uZJvi9ivu5TS
-         3rXr4gr773RTnUxrfeDa8rgTUlFfttD1TKIdB5CCK5sWxFQgGJfTAkuaJPHH9nX6IaGo
-         BqlibdojKMyuqK8okoKUvIdLWudFI6/wbsTpL2HqJOPi3kxDgxEPyUO/EUtU+Gkx7ZFs
-         J7ITjUe/SLVn2xQkK5wzR0qSWwYniwuRiU0/v7S8SY6yS/14/jCkT7RblfI2lf4KnVT3
-         kqIEHylEq+TEMOVAo4nKUVclkEA/oinhJPmC6ThSIySKccEoqnpGfEZOWSrOrMF356UG
-         Dmyw==
-X-Gm-Message-State: AFq9FYK+gUd9d5Q7RceEpi85v5Mq17dTLeyWyHTcdmqwoo6kW7ClxxTO
-	ob2j/Xn2+qMbhjSPkdw4ZmjE50+I3cFPqU+F4JFfRTgXQAhgOZh0lDeOmv87JDyeGIs=
-X-Gm-Gg: AYBFou1sT06jwdbDPhjj6dhyY6UjTCaAFLoMOui5VQArhNoHgGWBjFIU+RvzqbXlNho
-	SpR2S6A1C7IzBdGnHy90/WpWfKuGSAY6bfiJwBZtF+iAGzdoQU3FcU9orYObDvWQknZ3Or62Fo7
-	x+u9HK+zjjmTSNSEeon54+8bX8t2pW9hLnskPmAXJ8+JVE7lIwKgKi6wDGN+ZxyhFAdez+Qfr4x
-	kS1tV+/2NCgyDpXDF6vvOX9mXvmWmDZK3E9C8rdKxm28nk2Knre8zvpioEBB9HD7MsKyotCLleJ
-	EN3KxaEE4hFwUaWdJPsZGxsqQexmBH6631KhVXUveCWcmZ4hirlhCSb4im44wMb5nOQWBoiHcUb
-	SA/JaY8vA2MRJyHPD8FcQaTrEVLOHqdsCyBT9rhzOB0g6SYYeZNdOY65F4jDfryNU0jeZLBNkAR
-	1EX2RoSqjBaOKOnyQm0AtWmCoawuYssaVeYXGdXjqYM933Pi3pugBaxaqk98UMptE/ayHnly5es
-	qhtWK2OCvs+DlhsB+zy5SIXII4QVkTxSI+XXvNsTA==
-X-Received: by 2002:a17:90b:2682:b0:39e:6a80:b795 with SMTP id 98e67ed59e1d1-3a0bb60b2f7mr4398587a91.37.1790432456577;
-        Sat, 26 Sep 2026 07:20:56 -0700 (PDT)
+        bh=QPKbx3ItVOpjH9sY90r8wbZdXfWgHP2IcmoJJfmh1Kg=;
+        b=cXaQAFduthreX+MEfvBPba7/7ndVWSh89mxnYaMEH5xwp37jnxXSTfSNb1/xwGGnCS
+         piScLZrRQdC2d21NqHk3U0XqVMs7TOJORK+H78KWUpF0wtanqKTbZsNmFvYs9nyVmWkb
+         6gvCuBoNWs7ILfs/AOokmIivXBoBTa4IpTg56DEBQ7GfVS+REZ4IE57StWw1vZLB21c3
+         wxHxT64LoOZzLLfoycRCnrMfKa18RUPZyRbfxThlzr4TGtIs/pXnm9FBkNiz+9I3J6Na
+         IEp8ArE8WkvV4D/+wOOSBVoVCBSXN3DWdi3W3nNy3GfKtAxxscMIq4ZQrNuid8eW/DaI
+         bIcg==
+X-Gm-Message-State: AFq9FYI7DAgmD7XQTun89oGQOrJJ5h+D637K2ytUfnBpTLmOLXt2pFTz
+	A+y13BT/DHxbtGgdXPnPMSfi3rWYhnkvLzZ7oL128a8T9dNo9BcifOsEhMATlVskWvE=
+X-Gm-Gg: AYBFou0TjSGVyvCmZjELhSN7vlE5yCDvCcLHt9PZMHurxOIJzPNgw3vb0N6SJ4scVCU
+	MhJI3zJ1oTBZrtyv8WJgdxuSZvwEDe4oEa3S6j0EgdveRHcstXH6eozWwGVNoQWdb/EemmGjlK1
+	UbY/GHjUIujT7/wIJi6UX/gLDG0oJ/zQ5iaXDM7lm9BTnGNuhnc+MZykIuDdTt+XvrxerAtGRgd
+	+e56K6+Im1Z6dZwQyG4ya3+USOjlzZnY8ukiPC83XyDbREo1S7EPLbNoVfbqqXrInABS6NfcUay
+	XARDLGIshvPytnbPtvbKq4gKKaeqTAzGdtcTxLs/DGwUyDAI/xRd02tn3QmYkFpdAvaZXFNpqfK
+	9A5Dmm4hjdecMmXhgFA/rEbddsVoyDCb+5qhWYeG3eyMX4QZaUv4RNTQQPZrG9va7xlUgsHwLge
+	OWCadAoTsHnU2zELD2oI54zbhBCoJa0JTxGHGaiEe3o+vekHHSEXnzTDPNvf4TjU2pxAd/5FNsS
+	o/inazYac52sKaDx0u3dw81kP38m0Z0TpwuAthnExoPm5Iy66OB
+X-Received: by 2002:a17:90b:4a0c:b0:3a0:e568:ed63 with SMTP id 98e67ed59e1d1-3a0e568ef17mr932009a91.8.1790432457283;
+        Sat, 26 Sep 2026 07:20:57 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.20.55
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.20.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 07:20:55 -0700 (PDT)
+        Sat, 26 Sep 2026 07:20:57 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 10/36] bpf: add bpf_mark_reg_known_scalar()
-Date: Sat, 26 Sep 2026 07:20:08 -0700
-Message-ID: <20260926-scev-minimal-rebase-v1-10-c8e5ab5ba79f@gmail.com>
+Subject: [PATCH bpf-next 11/36] bpf: add bpf_reg_union()
+Date: Sat, 26 Sep 2026 07:20:09 -0700
+Message-ID: <20260926-scev-minimal-rebase-v1-11-c8e5ab5ba79f@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
@@ -84,44 +84,76 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Provide a helper to set a register to a known scalar value for use outside
-verifier.c. To be used by SCEV widening logic.
+A utility function to take the union of two registers' scalar values:
+merge the circular 32-bit and 64-bit bounds and tnums of two registers,
+then synchronize and validate the result. Leave scalar id invalidation
+and type validation to the caller.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h | 1 +
- kernel/bpf/verifier.c        | 6 ++++++
- 2 files changed, 7 insertions(+)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/verifier.c        | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 94c0dddaaaa7..719b7c7fd2f5 100644
+index 719b7c7fd2f5..706fdefbc07a 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1293,6 +1293,7 @@ int bpf_push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifier_state
- void bpf_bt_sync_linked_regs(struct backtrack_state *bt, struct bpf_jmp_history_entry *hist);
- void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
- 			   struct bpf_reg_state *reg);
-+void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm);
- void bpf_mark_reg_unknown_imprecise(struct bpf_reg_state *reg);
- void bpf_mark_all_scalars_precise(struct bpf_verifier_env *env,
- 				  struct bpf_verifier_state *st);
+@@ -1748,6 +1748,8 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env,
+ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
+ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		      struct cnum64 range, u16 step);
++int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
++		  const struct bpf_reg_state *src);
+ 
+ int bpf_stack_liveness_init(struct bpf_verifier_env *env);
+ void bpf_stack_liveness_free(struct bpf_verifier_env *env);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f2d44e026e4b..b5f45cb46f14 100644
+index b5f45cb46f14..1ec44d72a346 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1932,6 +1932,12 @@ static void __mark_reg_known(struct bpf_reg_state *reg, u64 imm)
- 	___mark_reg_known(reg, imm);
+@@ -30,6 +30,7 @@
+ #include <linux/module.h>
+ #include <linux/cpumask.h>
+ #include <linux/cnum.h>
++#include <linux/gcd.h>
+ #include <linux/bpf_mem_alloc.h>
+ #include <net/xdp.h>
+ #include <linux/trace_events.h>
+@@ -16952,6 +16953,33 @@ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
  }
  
-+void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm)
++/* acc := acc U src, matching types only. Caller must clear acc's scalar ID. */
++int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
++		  const struct bpf_reg_state *src)
 +{
-+	__mark_reg_known(reg, imm);
-+	reg->type = SCALAR_VALUE;
++	u16 base, step;
++
++	if (acc->type != src->type) {
++		verifier_bug(env, "union of registers with different types");
++		return -EFAULT;
++	}
++	acc->r64 = cnum64_union(acc->r64, src->r64);
++	acc->r32 = cnum32_union(acc->r32, src->r32);
++	acc->var_off = tnum_union(acc->var_off, src->var_off);
++
++	/* Retain a common congruence if the bases agree modulo the gcd. */
++	step = gcd(acc->step, src->step);
++	base = acc->base % step;
++	if (base != src->base % step) {
++		reg_step_reset(acc);
++	} else {
++		acc->base = base;
++		acc->step = step;
++	}
++	reg_bounds_sync(acc);
++	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
 +}
 +
- static void __mark_reg32_known(struct bpf_reg_state *reg, u64 imm)
+ /* check validity of 32-bit and 64-bit arithmetic operations */
+ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
  {
- 	reg->var_off = tnum_const_subreg(reg->var_off, imm);
 
 -- 
 2.55.0
