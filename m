@@ -1,135 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B154C2931F1;
-	Sat, 26 Sep 2026 00:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C17454707C;
+	Sat, 26 Sep 2026 00:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790383614; cv=none; b=TRUMVuyxKde3Ibr5nsUDuct5bmdiL9E2/6OcxjVyiKeWZSLmi4KBFFRdk766kDaZ27jSVV0yqAdqYMHqfbPZspeeK+RXp9tMbB7FFs4DZ1NFmQSJmvJzChTnC+E89hudUmI9CW60SFFI+Ou59lL/1nifk4qqr1vkIjl5nuDoAoM=
+	t=1790383716; cv=none; b=aVCTTAosQZ/hhavfUhGdoP7hY9Djs/JEe7qV/9aIakIAHo5lciUrl5/wsnoV9iQ0t9XJ7ihFWv7xFvjEtIKuPuXu3DjZIdVUOb1AD06WMpfB91oaM/fUys4U6wKe/gSwJ3GVpQVH591/wDmytgu7RLX/nGpzsnLU+iiK95o48o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790383614; c=relaxed/simple;
-	bh=DKdq3voB47uzGIch1glrSHGpfqUBBs9eBQrk1bu6Gqk=;
+	s=arc-20240116; t=1790383716; c=relaxed/simple;
+	bh=kV2SxQvU2RCE03UZeNW+WczE4uMmi4tQoKcN24Pv9wE=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GFTQ/O8kqAecCkckjBbmrlr5rM4jXZanuKX2XtAI6dMyCJHXzXcQhTWF+D+MwNWhW7M6XfNrc8jaRry2rbuNBV9tTRWbqAexWPkUubz4WQ+EyXQfBFtPSq7uNqzcQI3ggZNKltncjfZ7nYkPaE+Vez3yhcYHHDR1dkvrzyv7uaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hgUQgDA8; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=F8WWnTmkjg1nisz0lJSUZAbHdiFHu0mmYZ4/Lm7BXGmPkoN+7ZJpKTbXVlHm6q77eEiIw0rX6/LN8zqP3PG9G+qPh0EQAiOm0letlzt4s8eqB9O8MpSODpCjG9DkvB3VYRqwObU31ol31IAyKMpxgwb35P3RGAmPaDyV0snya+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kskks+Tl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hgUQgDA8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CE61F000FF;
-	Sat, 26 Sep 2026 00:46:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kskks+Tl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415951F000FF;
+	Sat, 26 Sep 2026 00:48:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790383613;
-	bh=hJCxWty+NRCNWggDVWTk+vRAamuJiEacabDIAt3udy8=;
+	s=k20260515; t=1790383715;
+	bh=sDMlYFN1ZYQqp0Zn3AzXcmxDlXJCZyJLYKmF9HGp54M=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hgUQgDA8giVxde4VVjbJwhWi8tJ5KxklKgZ7mT3kz4Rpb7mzqxGryvD48SXl/NBB0
-	 kl1x1Q5H9aurhS8tfPSMZ6p/wQTQRNbF7t2UObEOik33qd/1hWjU5D2JfL3Exji/yU
-	 QRZUTMHTyDY5FWz3Sf6XzMByHYnu8DJw0eINPHwYaGw9RylpZSEdRWrBzerOZy2F+P
-	 v7GZRWcyrI7338WrDYn/aGExoKtZ+mcD7SsGWZRT0LEIaiTVenS1IkJECDv7Rhi39t
-	 N07xAC02FpuNfHIyai6iQYsJj7KQJUYmRA1sImU9VakwD271AozshmwVt4COPoWU4W
-	 otnF8MP8bd4yw==
-Content-Type: multipart/mixed; boundary="===============4005590161933855054=="
+	b=kskks+TlbPJ3QM0G9NVMxVhNIUvW1jtjDUjXxaLrZcz1xA0EXP9cZdEjXPL7KCalR
+	 3Ez8LGVLri9ncrzpnFJHQBkkGpyPELPM/3tXUhQpZWHX9eRK6vuQnYE672SyJxiOrK
+	 8ZhWk+9T1hG0YpkSfqgnIw1wimdCIPRd7zS1ml8XgiQC20L90lmtFbyNPz8UOwncnW
+	 jIiSwjJx7VRsmmp1RhD3PIOL+fgtVqM49bK5SX0BrkHGvB0CbNOU/pgiEKlevyaZ/w
+	 E1aiwLwjL1vTwQ0lMxsY8KqCtWyyaYiz6UYmics199LSBzF61ESGj1+v9YzaeT3d+U
+	 Qyaigcah7r3/Q==
+Content-Type: multipart/mixed; boundary="===============1513375797936626188=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b03043f923291b82f8491c1f713a7017bb807171e1f577f6f431116813c3ce70@mail.kernel.org>
-In-Reply-To: <20260924130503.853919-1-usama.arif@linux.dev>
-References: <20260924130503.853919-1-usama.arif@linux.dev>
-Subject: Re: [PATCH v2] sched_ext: Update scx_dispatch_dequeue() comments
+Message-Id: <f0270d46b72ba20afbb472d2bb4e2392a70d79e9be7783b50a7d5970759b1f63@mail.kernel.org>
+In-Reply-To: <20260925-ksyms-tune-v5-1-1f75ad0c321c@gmail.com>
+References: <20260925-ksyms-tune-v5-1-1f75ad0c321c@gmail.com>
+Subject: Re: [PATCH v5 1/3] kallsyms: Match compressed tokens on the fly during binary search
 From: bot+bpf-ci@kernel.org
-To: usama.arif@linux.dev,arighi@nvidia.com,bpf@vger.kernel.org,bsegall@google.com,changwoo@igalia.com,dietmar.eggemann@arm.com,etsal@meta.com,juri.lelli@redhat.com,kprateek.nayak@amd.com,linux-kernel@vger.kernel.org,mgorman@suse.de,mingo@redhat.com,peterz@infradead.org,rostedt@goodmis.org,sched-ext@lists.linux.dev,tj@kernel.org,vincent.guittot@linaro.org,void@manifault.com,vschneid@redhat.com,yphbchou0911@gmail.com
-Cc: usama.arif@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 26 Sep 2026 00:46:52 +0000 (UTC)
+To: jim.cromie@gmail.com,akpm@linux-foundation.org
+Cc: ljs@kernel.org,kees@kernel.org,david.laight.linux@gmail.com,masahiroy@kernel.org,olsajiri@gmail.com,linux-kernel@vger.kernel.org,linux-kbuild@vger.kernel.org,bpf@vger.kernel.org,jim.cromie@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 26 Sep 2026 00:48:34 +0000 (UTC)
 
---===============4005590161933855054==
+--===============1513375797936626188==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-> index 3219f0da0fe4..ed5b3d954a45 100644
-> --- a/kernel/sched/ext/ext.c
-> +++ b/kernel/sched/ext/ext.c
-> @@ -1766,10 +1766,10 @@ void scx_dispatch_dequeue(struct rq *rq, struct task_struct *p)
->  			list_del_init(&p->scx.dsq_list.node);
+> kallsyms: Match compressed tokens on the fly during binary search
 >
->  		/*
-> -		 * When dispatching directly from the BPF scheduler to a local
-> -		 * DSQ, the task isn't associated with any DSQ but
-> -		 * @p->scx.holding_cpu may be set under the protection of
-> -		 * %SCX_OPSS_DISPATCHING.
-> +		 * When dispatch_to_local_dsq() or remote consumption moves a
-> +		 * task to a local DSQ, the task isn't associated with any DSQ
-> +		 * but @p->scx.holding_cpu may be set. Clearing holding_cpu
-> +		 * tells dispatch_to_local_dsq() that it lost to a dequeue.
->  		 */
->  		if (p->scx.holding_cpu >= 0)
->  			p->scx.holding_cpu = -1;
+> kallsyms_lookup_names() runs a binary search across kallsyms_names[],
+> a packed array of ~130k encoded kernel symbols.  For each of the ~17
+> comparisons in the search, it currently decompresses the candidate
+> symbol into a temporary buffer on the stack before calling strcmp().
+>
+> Comparing raw tokens directly in compressed space is impossible.  The
+> BPE token table assigns values by frequency, not alphabetical order
+> (e.g. token 0x05 might expand to "zebra" while 0x42 expands to "apple"),
+> so comparing raw token values scrambles lexicographical order.
+>
+> However, full string expansion is equally wasteful: roughly 16 of the
+> 17 binary search steps fail within the first two characters.
+>
+> Introduce kallsyms_strcmp_symbol() to compare ASCII queries against
+> compressed tokens on the fly.  It walks kallsyms_token_index and
+> kallsyms_token_table incrementally, matching characters directly and
+> bailing out on the first character mismatch without expanding subsequent
+> tokens.
+>
+> This optimization:
+>
+> 0. Avoids decompressing non-matching tokens, short-circuiting ~94% of
+>    binary search character expansions without adding any tables in
+>    .rodata.
+>
+> 1. Drops the 512-byte namebuf buffer from the kernel stack in
+>    kallsyms_lookup_names().
+>
+> 2. Cuts unindexed lookup latency by ~530 ns (~14% faster) while leaving
+>    sequential address ordering and kallsyms_expand_symbol() streaming
+>    invariants intact for /proc/kallsyms and table walks.
 
-Can remote consumption actually reach this !dsq branch with holding_cpu
-set?  The commit message and the new comment both say it does, but looking
-at the code path:
-
-Remote consumption goes through scx_consume_dispatch_q() ->
-consume_remote_task() -> unlink_dsq_and_switch_rq_lock().  That function
-sets holding_cpu but never clears p->scx.dsq:
-
-    WARN_ON_ONCE(p->scx.holding_cpu >= 0);
-    scx_task_unlink_from_dsq(p, dsq);
-    p->scx.holding_cpu = cpu;
-
-scx_task_unlink_from_dsq() also leaves p->scx.dsq alone. This is on
-purpose: the kernel-doc of unlink_dsq_and_switch_rq_lock() says the goal
-is to "maintain the invariant that @p->scx.dsq can only change while
-@src_rq is locked, which e.g. scx_dump_task() depends on."
-
-Only two places set p->scx.dsq = NULL: scx_dispatch_dequeue() itself at
-the end of this function, and dispatch_dequeue_locked().
-
-So while a remote-consumed task has holding_cpu >= 0, p->scx.dsq still
-points to the source DSQ. Every scx_dispatch_dequeue() call for such a
-task takes the dsq-present branch below, not the !dsq branch:
-
-- Racing dequeue on src_rq (dequeue_task_scx/set_next_task_scx): dsq !=
-  NULL, so it locks dsq->lock, sees holding_cpu >= 0, and clears
-  holding_cpu and p->scx.dsq together.
-
-- The consumer's own successful move: move_remote_task_to_local_dsq() ->
-  deactivate_task(src_rq, p, 0) -> dequeue_task_scx() ->
-  scx_dispatch_dequeue(). dsq is still the source DSQ, so the dsq-present
-  else branch runs and resets holding_cpu. There is no race in this case.
-
-holding_cpu >= 0 together with dsq == NULL can only come from
-dispatch_to_local_dsq(). That path sets holding_cpu while the task is in
-BPF custody, where p->scx.dsq is NULL. Callers are finish_dispatch() and
-process_ddsp_deferred_locals().
-
-Should the comment and commit message drop the "or remote consumption"
-part?  The dsq-present branch comment below might also benefit from noting
-that consume_remote_task()'s own deactivate_task() also ends up there,
-not just the racing case.
-
-> @@ -1789,10 +1789,10 @@ void scx_dispatch_dequeue(struct rq *rq, struct task_struct *p)
->  		scx_task_unlink_from_dsq(p, dsq);
->  	} else {
->  		/*
-> -		 * We're racing against dispatch_to_local_dsq() which already
-> -		 * removed @p from @dsq and set @p->scx.holding_cpu. Clear the
-> -		 * holding_cpu which tells dispatch_to_local_dsq() that it lost
-> -		 * the race.
-> +		 * We're racing against unlink_dsq_and_switch_rq_lock(),
-> +		 * which already removed @p from @dsq and set
-> +		 * @p->scx.holding_cpu. Clear holding_cpu to tell
-> +		 * unlink_dsq_and_switch_rq_lock() that it lost the race.
->  		 */
->  		WARN_ON_ONCE(!list_empty(&p->scx.dsq_list.node));
->  		p->scx.holding_cpu = -1;
+This isn't a bug, but could the changelog say how the ~530 ns and ~14%
+numbers were measured, such as which selftest and roughly how many
+symbols? The ~94% figure seems to come from the 16-of-17 binary search
+steps estimate mentioned earlier, which is a share of comparisons rather
+than character expansions. Could that be reworded to match what it seems
+to come from?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36204647163
---===============4005590161933855054==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36204745600
+--===============1513375797936626188==--
