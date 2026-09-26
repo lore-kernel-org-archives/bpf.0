@@ -1,145 +1,169 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-oo2-f38.google.com (mail-oo2-f38.google.com [74.125.231.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90F71E32D6
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 15:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C123624A6
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 15:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790437520; cv=none; b=MdESPtc+aQw/LhIPL/jz4+0N/lrqoZJ9DNemk3qgyKwBBC8/vmK4oaGv32aeUQUIIBth3XgGopKt21elqPxek7NSdDnQCku8R+vFDa+RrXpmPwk6YHrqjzQ9+GpvSefdO4qjULsqc9psrTbIYDLyjyV2tdHP0MBjr7OdFKZ0UAg=
+	t=1790437765; cv=none; b=ku5gcuKqryw3HTqZ6MEjhoEmJMYeJ0MitY/9trxb7boovwS0eU8T9V159NCjIcj2oddVExDez/SNCSUCn3KxpIEj/2ggNIOPczlUAxv8UHi1zMX8jCsVH9hIeVhLlh1fHJEvXe5JNMLJ8yA5aKdBY21u/m2rkt8WT2wr9nWSQQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790437520; c=relaxed/simple;
-	bh=SZSfDIcU01oCJJjpY5YqZXxBvEuKx5QL7hP8XNEKZz4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uJqgSIZc6cwPW6Qwis1L4v8fug/+oeyim84ElDtqKM8nrDzaQ0p7s64VMsAjzg3tFxMelGkw9gcxyH4Hox7ZE+03EbmFZW6bWydwFD+ZNB1omikC/w8BDhdnGRmNetGZ2lJTsXVh5a4V6/lnW9Kc+TBHhPDykIIdP67oaAR5zVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=avNaLDf5; arc=none smtp.client-ip=74.125.225.138
+	s=arc-20240116; t=1790437765; c=relaxed/simple;
+	bh=KS/8rL8UeoBvoNAjD7fEnF4xbmiricnrL+uNpL65yjc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=c3s3SfOmexhPe6jxqUg9XzOLowB/ef8nLDbWS7SsmU1hH6yMQXxbYnnA0JE2ZPMVqMGE3R3Va24Mju1gj5vcYK+P9XJRyvUVMLsvLwr6SO8bOsYHD1t8tBbrL9hYrikHuXG/N6y81IdC2fV/N1SqrRkKD+kEovDUxMTJrZF2dGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZYQj66vV; arc=none smtp.client-ip=74.125.231.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="avNaLDf5"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ffd31dd58so1195175e9.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 08:45:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZYQj66vV"
+Received: by mail-oo2-f38.google.com with SMTP id 46e09a7af769-7f4f0d37f9dso823068a34.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 08:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790437517; x=1791042317; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SV+qQX3p5A4pWiA1HjeLdHiu8rd47lH84A4U4zOYlCE=;
-        b=avNaLDf5Q8qeqHqk1HcwkDe0KwQfs+BJkzSc7TivwjzQDageKRHPx81zU+vbnuCgyT
-         3b99qFulWoeq1DmSAFP/g42e12C3NHLjsPk5z8VFmsb6BnUqCl33AvWRVXgzJEPJSpJ8
-         6WEeDGnYtC7yftHiEX7/gEJxZ40b/l46n4ejXB47d6TN5xVNViLi4/56CeUebIJr+b28
-         ab35dJpVYp9IYHIRO4YaXyGbNM0BPNTMGlrtWpe+ZiCulUc6GF+fDzESiIPm3zRDpF85
-         Y9XGRfRrt2LWrOQ2pC7i552Sm5jlAxJTm1lt0XlmHyAbpqBRTVwc6d8BRupJKIodXbs1
-         +Cww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790437517; x=1791042317;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790437761; x=1791042561; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SV+qQX3p5A4pWiA1HjeLdHiu8rd47lH84A4U4zOYlCE=;
-        b=xapXzGwKekYvJDFYbhlWR5TgoWQidz8hzq7tDDuzY4CBrGj2hYo804dQZ37BVqXY5x
-         KVAwMzQ+fLn6/gGzqlKIsBUU3O+/WWjYzALYvPOHA/qoGk7Whe8oDNWeBBbdB8Q97qZI
-         2J6xtbiLjFbntP+g7ISa8WnyuhK5eTHxc8U20u863WvUUYfTHbsmAiGayDBS2XpstTM0
-         9+HL5CVnapvwHvKyGDLU6Ol31jdp4SpDqgaECExBx//J+OOCdspasPIx4Vj7JKK6nbAB
-         cXS1fXn/3wAk0Tl0XCrmwgV2D18LaerQywSnyho/7xSBJbz1IXio6a2S7Ffv0i0Qs9HY
-         MHLg==
-X-Gm-Message-State: AFuF++nzvy30Z+EToXDNtIdkW3C59ylG0oBXIWrkUJ5nNfZgJJd9btCU
-	kXAMGbwkkkjmfZPkjf/kLx4H7oYuIR3j1/M9b4ggmvK1z5fLo64jXkfSRMiWEyYH
-X-Gm-Gg: AYBFou38n0KB2RmAPqUIDzK3mlkvaFoUEbvybKc+s7D9BelZ162yCzMaqmMm69YJvD8
-	SLsAo2vbABesU/eSFa/KVuF9sFNZdXphcT8EU56m07HC2Tvpl8NuSyV/R2lkO8ljHp9eK8qHhvn
-	xxWmCNmFk8RvrTmRluPIVqnda/G+F9SZCo01oat92906nYKpj6TMuYht+h3cIEvSyCFQnMgOHV0
-	9jzvOagM90L2u9Vz6ddGusG9772peuPiKFpNn+pSKubJG0J4cVX0nHb+pm/HjuN0fccNRcBBhG0
-	ncQdz0wN4/YugW0h9POi7IiZu+vci2ak0Wy6VDJ5MCJopdUYJgOG1JwV8GNjsAC882wTvzFhQJ4
-	L79/ds8Rq8s1PaTct41aUuk2Spn9MlKoKd8zJSQK9bTI4LBfirVqrJ4kSs+THHbSuwt2xrQH1+l
-	qagUO/A1br3w6vqCtg6+Rvex9WFqQ9BKA/LKTGiel3stmevWndXIheWGwY1J3WT/5wt6YZ9WyTN
-	zoo8WexuynmhGLVYEXpqjGRRy0MRMIlGu7F6THef1XnXj4NArByGT/lTOP2Ow4swyhwJq6HBr8k
-	GJkiRw6EArLOAA6PofN1PiQRciBTEGsKuJhJwcPWI/wQt+D6
-X-Received: by 2002:a05:600c:698d:b0:49d:1df6:2592 with SMTP id 5b1f17b1804b1-49ff06e504dmr99447835e9.21.1790437516587;
-        Sat, 26 Sep 2026 08:45:16 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06b6108sm166229535e9.8.2026.09.26.08.45.16
+        bh=ux2E3gKwjBl0LaPoZnc38g0A76GDt8ClA7XYMblBPIo=;
+        b=ZYQj66vVNAQ2yWSuR657ndMiocyvCVppkJ8SN8xr50O2vMUbx6YcXkYGykxb2qTNhk
+         PWfwfp0VXMqN9s5iPOe4sbHlNBftKWszL9A9sfPlzBDIjm1fL/+ViSwIZKj+tLMgr0WA
+         7kBszEVWIazl8H38sKrQ2qLgnNmn2sVe8fvODgHr9ETwcrYd01ZRI8r+ddiXYhNBpBhj
+         cPfsYtMfEF5ckF0hOzG+GcmBiieOVoYggrVt9WXL3zbC0XM8Kz6cwyoXJ26BeZjkbPQp
+         0YI1lgtJsRQGsDtU/xK/2bho1P+pL3weWYuSWRGEAHk4aQQqApJfJI2Zm+yCbH1NMsZ0
+         wrkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790437761; x=1791042561;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ux2E3gKwjBl0LaPoZnc38g0A76GDt8ClA7XYMblBPIo=;
+        b=jN02kFdU+5Wzpmqxl9FvwMj64KwF8ym/PMQcMLurgXBD/qg2/FkblUrXUaJZSOvC4a
+         5oTmi3gyYPeq/w6Ad3q6RgnH1rmOMxMqVWhCe41bzkOENZdPs2aNuf1B0OTLGHjlTmAn
+         KTUs+rbasf/0MR/hxAssEyjUfASUWCjPHK37+h1df3CzDwPLl3MqwaXrn41k6Xjkkwnr
+         ohT7nlGxTmxfKrgqB+AQnPqD+kFOsHjHUITQYXLqHGpUXgxyYyhe0zLox/Jqv0230Moh
+         s9GQinm8O6lWx5eQzpjZmV6W5J25c62d91zmK9F4mgMzDFPZoCa5cuerJr93AhjaqyIv
+         vMuw==
+X-Forwarded-Encrypted: i=1; AKwUvBziwB3PQUWvRJqMjlf3s9BfbdUUFdZfjLGOuIo2xAscyrmcuzDMF8vuwnXhqT4Eq32Tqzw=@vger.kernel.org
+X-Gm-Message-State: AFuF++k35N2qXU3jAJzY+QM9BQn8u6tip8CEheKEwgXBMcc/6e1/09YE
+	aJX+v0Rf/ReUpL/uQ7AoknoYC7yTU6EzMjGZs1CcRHkBoSb2mbnelNxY
+X-Gm-Gg: AYBFou3VPiIlzUWU4vlO85f9/WI9gT54HBbwE8Yia4JWo8a8UwlMKKkAIeWzyBnP4aS
+	nDpQpNOW1PNfX4A/PVboBWgjB3F6Lisd4M9mr/vA17qfOz4ytjWxtmyKMaEJhHEd/Lwfg/BUDpC
+	aa52yZkS5Qr0sxDLElIYFO/gDy22cRKoNTkboLCSloviw8HVr2rhsK1fG39HCp8DwSzpL8G6peW
+	X63CPsZcZ+MpKrqzw7q/KbPvx3jyjHO084OHihEniqtKoNmA/nwTDhGRxFwsXcY4nH4gCGqSajx
+	GECe0f9hCbuPvzR6Oe/eOa0VJvkXDulFeSL6GsPfNBflSOEibJyvMXxRcD1WcmHMW0+Tsc0e362
+	uSESASSeYNfieXX14KKxB9pFqrj8t5DzP66at+hnYnZhivVRLz1x2Jigk6dl5cdX78C8llSy4Uv
+	LdyBdOe6QaxJlU4cAmSA342ncZ+f6IJV5Ed1kHSLXpfrVdYCUDWdsfxqnKS9gbEoyaVCFLXA2E6
+	u+2QkQKXpvP+A4fOsPsFHloRfEMaAHk+B4rtG473CGj2px0NfPPnxmDgQQyRWkvBuFhvV33SOfG
+	M0I+SoFviKPTYSs9d8ok3O+jdUsjiA92lmVox2cl8/XDxj0UwU+Yt8tfpAsti3xJAGjSW1tmRuj
+	43on9EPYGKJbPZT0GhG/k
+X-Received: by 2002:a05:6830:43ac:b0:7e9:ea28:4c1f with SMTP id 46e09a7af769-81781790b5emr8931706a34.8.1790437760721;
+        Sat, 26 Sep 2026 08:49:20 -0700 (PDT)
+Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-818e98b16d4sm5442366a34.26.2026.09.26.08.49.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 08:45:16 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Quentin Monnet <qmo@qmon.net>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next] bpftool: Exit from the stream wait signal handler with _exit()
-Date: Sat, 26 Sep 2026 17:45:14 +0200
-Message-ID: <20260926154515.191689-1-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Sat, 26 Sep 2026 08:49:20 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 26 Sep 2026 09:48:56 -0600
+Subject: [PATCH net v4 01/15] net: stmmac: unwind the WoL IRQ after a
+ safety IRQ request failure
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260926-submit-stmmac-reset-fixes-v1-v4-1-ec1c0250b3c9@gmail.com>
+References: <20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9@gmail.com>
+In-Reply-To: <20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9@gmail.com>
+To: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
+ Heiner Kallweit <hkallweit1@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Joakim Zhang <qiangqing.zhang@nxp.com>, 
+ "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Christian Marangi <ansuelsmth@gmail.com>, 
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Serge Semin <fancer.lancer@gmail.com>, 
+ Suraj Jaiswal <quic_jsuraj@quicinc.com>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ Joao Pinto <Joao.Pinto@synopsys.com>, 
+ Vladimir Oltean <vladimir.oltean@nxp.com>, 
+ Ong Boon Leong <boon.leong.ong@intel.com>, 
+ Voon Weifeng <weifeng.voon@intel.com>, 
+ "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
+ Linus Walleij <linusw@kernel.org>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Simon Horman <horms@kernel.org>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Thierry Reding <thierry.reding@kernel.org>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, Chen-Yu Tsai <wens@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, Eric Dumazet <edumazet@kernel.org>
+Cc: Richard Genoud <richard.genoud@bootlin.com>, 
+ Alastair D'Silva <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+ ZhaoJinming <zhaojinming@uniontech.com>, 
+ Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>, 
+ Ding Hui <dinghui1111@163.com>, James Hilliard <james.hilliard1@gmail.com>, 
+ linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev
+X-Mailer: b4 0.15.2
 
-bpftool prog tracelog -w ends from its SIGINT, SIGHUP and SIGTERM handler,
-which calls exit(). exit() is not async-signal-safe: it runs atexit
-handlers and flushes stdio streams, and the signal may land while the read
-loop is inside fwrite() or fflush() on the stream being flushed. Whether
-that deadlocks or flushes a half-updated buffer depends on the C library.
+The IRQ setup paths request the MAC IRQ, then the optional WoL IRQ, then
+the common safety IRQ. If requesting the safety IRQ fails, cleanup must
+release the WoL and MAC IRQs, but not the failed safety IRQ.
 
-Call _exit() instead. The loop flushes every chunk as soon as it is
-printed, so the stdio buffer is empty except while a chunk is being
-written, and skipping the exit-time flush loses nothing.
+The REQ_IRQ_ERR_SFTY case instead frees the safety IRQ and skips the WoL
+IRQ. Allocation fault injection during live XDP reopening reproduces a
+"Trying to free already-free IRQ" warning and leaves the WoL handler
+registered after the datapath resources have been released. A subsequent
+open can then fail to request that still-owned IRQ.
 
-While here, note in the manual page that opening a stream as a file
-descriptor arrives in Linux 7.4, and restrict the -w/--wait description to
-the stdout/stderr form of the tracelog command, since the trace pipe form
-does not take the option.
+Move safety IRQ cleanup before REQ_IRQ_ERR_SFTY and WoL IRQ cleanup
+after it. This restores reverse acquisition order for both shared and
+MSI IRQ setup, including unwind after failures in later per-queue IRQ
+requests.
 
-Link: https://lore.kernel.org/bpf/d64c6402-175f-4ea6-be6d-1a544a95c97c@qmon.net
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Fixes: 5c2215167d12 ("net: stmmac: Add driver support for common safety IRQ")
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- tools/bpf/bpftool/Documentation/bpftool-prog.rst | 8 +++++---
- tools/bpf/bpftool/prog.c                         | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 17aa0d560e32..8dbd34ef3d8b 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -190,7 +190,8 @@ bpftool prog tracelog { stdout | stderr } *PROG*
-     By default, bpftool prints the output buffered so far and exits. With
-     **-w** or **--wait**, it keeps printing new output as the program produces
-     it, until the program is unloaded or <Ctrl+C> is hit. Waiting requires a
--    kernel that supports opening a stream as a file descriptor.
-+    kernel that supports opening a stream as a file descriptor, introduced
-+    upstream in Linux 7.4.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 3f34d491c959..4f3d452c3503 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3797,13 +3797,13 @@ static void stmmac_free_irq(struct net_device *dev,
+ 			free_irq(msi->sfty_ce_irq, dev);
+ 		fallthrough;
+ 	case REQ_IRQ_ERR_SFTY_CE:
+-		if (priv->wol_irq > 0 && priv->wol_irq != dev->irq)
+-			free_irq(priv->wol_irq, dev);
+-		fallthrough;
+-	case REQ_IRQ_ERR_SFTY:
+ 		if (priv->sfty_irq > 0 && priv->sfty_irq != dev->irq)
+ 			free_irq(priv->sfty_irq, dev);
+ 		fallthrough;
++	case REQ_IRQ_ERR_SFTY:
++		if (priv->wol_irq > 0 && priv->wol_irq != dev->irq)
++			free_irq(priv->wol_irq, dev);
++		fallthrough;
+ 	case REQ_IRQ_ERR_WOL:
+ 		free_irq(dev->irq, dev);
+ 		fallthrough;
 
- bpftool prog run *PROG* data_in *FILE* [data_out *FILE* [data_size_out *L*]] [ctx_in *FILE* [ctx_out *FILE* [ctx_size_out *M*]]] [repeat *N*]
-     Run BPF program *PROG* in the kernel testing infrastructure for BPF,
-@@ -274,8 +275,9 @@ OPTIONS
-     signing.
-
- -w, --wait
--    When dumping a program stream with **bpftool prog tracelog**, wait for new
--    output instead of exiting once the buffered output has been printed.
-+    When dumping a program stream with **bpftool prog tracelog** { **stdout** |
-+    **stderr** } *PROG*, wait for new output instead of exiting once the
-+    buffered output has been printed.
-
- EXAMPLES
- ========
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 5e27b22444f2..a60414aaa494 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1121,7 +1121,7 @@ enum prog_tracelog_mode {
-
- static void exit_stream(int signo)
- {
--	exit(0);
-+	_exit(0);
- }
-
- /* Consumes prog_fd. */
---
+-- 
 2.53.0
 
