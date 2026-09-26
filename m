@@ -1,71 +1,71 @@
 Received: from mail-oo2-f37.google.com (mail-oo2-f37.google.com [74.125.231.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8B0372B41
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 15:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B97364E9E
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 15:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790437775; cv=none; b=RuZMfUaL7YpjM2xiWo//VwxSHrRPQLypijCN9yydQ0Hq62ZBToIM4c+a0SyrvwBviC7B4z19SNQPjJOziIUiJxci0jkHEFO0HC+g+4y0YVOu48k2XHTRFRrFWyLZ91kEcCybF7MZXzXxRfnnW8Ftlds8YmtUKcXwQgpxBC8y980=
+	t=1790437775; cv=none; b=RhLWD+9eTfh8PTENqRvjL4poEFmPk7xq/yDERwwq3e7qShqTUK3pO9nj4QUbZDlYIO0RPknNODeNvNkfiEFKqWofz1p4fZXNwjFsKVVuNr2I0HrYIAim0NEsozSqg/4C4fwlFGxLpIpjcOS82P1dORGPUBTw+f/UZLYhgHWBLDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790437775; c=relaxed/simple;
-	bh=M5M3PgGTSsBzpkQ0euUZJ5B4ccey2Neh1h31IhOxfnM=;
+	bh=QLLzCqU0wCcXmeIHIV8TgQgW9BBj0BKW1s7r4z+lcPQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XJZd2QeqBskLh6eUEz785bUnNi1ZFSp9FRV+y2F2B5Yzp/9/zUzJ3prIdjApaRBvrcZqi1hOs9k69DZoyi+voe3KjWu47p0fGMz/dFWUl0wt1mfwawI6HbIwT+YDlBE+leKVTUITj5eqMxGQYuoPg9fjT/cBsmXt5j7EbYruG5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q4gOZTcJ; arc=none smtp.client-ip=74.125.231.165
+	 In-Reply-To:To:Cc; b=sBPfnDyxmI70pAPchF11iVK+6QCmD+G1YJxceBW42ZDyjaqxy6486ks3Wk9LPQ4pQ2dr2pPPmb8RuAikkKhWo4qrvTVZkZlRsHPb00T8kC0ZMgH9t37YZDzaDsNMCpZWMKOY+Saf9YUNunrLbt9y6bUcFm78yGEOHaVCpnG5X2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Emknx7si; arc=none smtp.client-ip=74.125.231.165
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q4gOZTcJ"
-Received: by mail-oo2-f37.google.com with SMTP id 46e09a7af769-7f4f0d1779dso1398509a34.2
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 08:49:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Emknx7si"
+Received: by mail-oo2-f37.google.com with SMTP id 46e09a7af769-804f7045f3eso692861a34.2
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 08:49:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790437765; x=1791042565; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790437770; x=1791042570; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Z7kcdEW7zqHkGJYzryRmaM6C2T9h9+G3wdmEwpizeis=;
-        b=q4gOZTcJcjriq1d7JgLyp/2wy1Knv/D0Mt6P79U6s8EIsTWmJToO1Nlh7hvgQj3lJw
-         RK0X9X+jkloEC8XbB01zWYkowuo20nAsLdO66ahYx5UFhFupY6QElV23l4dt3gyHZWrx
-         OhEiAsGsblQ9Ywl/HtWmxXFwTCk7i3aFmvbWM7lLyuqummmyFqGB8fqUxLGrgjJbcQst
-         Pxx+Z3qa4vkpSw4snJPgte2mRFC4uwWhLK6wxI/MFuXEO2Rk6nRMy88ne7OrKsnhca3h
-         T7vQoZGyAYV+3w6hiWfoza8uHNyGBhuZaPGK3foFt1zVYfoaw7RXr20wIqzkL8OQDxmu
-         h5Lg==
+        bh=pXuc4JFXb8UPUC0fNxWljunUCLVVXc20qC1Nh0LbmgY=;
+        b=Emknx7siRYKk5lGoPo7pSlH9zRbLQHa0DpBtGnyhnfej7VTITr3FNhZL+7bKzKwGgg
+         UPeG9p1HkD4RTMdTmA85HQAJHykQ6HE5zNpmoSy+anDOJ9QRYmywvGWzivwQ4cgQf1q4
+         wSQkZUwRWNP+mKMhvsld/xrbeWljto3ffoJMKNJ3dMIy5zlsiRgXBr84JM7D36+OBSh/
+         lMFJfwtdMb8yEfUwZbhMlCfr+JSgUiGT0QbQngmdEM1YQZe6Wxj2Q7IFv1Dy9F+o1Py7
+         H+GEErAkFTK+dkfdfL4Jliks96E5rjUIxcLqNhgHBpQR7SCCG1Q2yD6TDJyV2zZD3mEe
+         +2Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790437765; x=1791042565;
+        d=1e100.net; s=20260707; t=1790437770; x=1791042570;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Z7kcdEW7zqHkGJYzryRmaM6C2T9h9+G3wdmEwpizeis=;
-        b=wXBw0qOUeh8Mss/29PsKsBp4s2Pt7L/fhxIy8i9Y1VrwuzT0vg/x7v5g2+PUBwQ9+K
-         39JWg6+S38jKfpOh1b2yFxDkLpYtYoKyqLlbU0gQAJiFyBS5AFwmozAoaqIJzWhsTfyt
-         nfFh1YEluxp1AQdU6E9Hr+hAPWH77MrgOe+HIfegYhrrpi+5W7mDCIzmAZKJISgvlQaT
-         je5RxpjB4wHpb5mDs/zlrCgzEwf08GUu+UChBCTtn/9CupfBPCjEH+u+WFZmxpaZUGBO
-         raXcxK/oQjQtpyYRGp4ux98gwvDKEdGo8rkXK2X+CW9i85wG6/QEc3bVkrRq2HFrboj/
-         vJxQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxiwa0GAzuntaI1AaEtmHmoVWzMZ0/QPgkGnftgY3Tkjn2onDxN1lbaPvSL5HF+ebvPrPs=@vger.kernel.org
-X-Gm-Message-State: AFuF++nGmqGIP3e3OUiDr4FxhQhduj5Cyi3qlJvPROg7PpPGz8F4FnZe
-	IIj1LuqSMzETtBCkcvDM4RiUnqsEQ/cwLaJQTDiz9dCcki+0pl8gy0PG
-X-Gm-Gg: AYBFou2hTNBwpplOEkVO84hEryPuubWemCti2ToNIqqrSm6zKXNB6qzXqclKgCwfxzv
-	omWGqJ0U7I6xzP/yI5GST3x1keHxQnr4hvDivHBcq26zJd/nlhCFx6Sq0wooVKap2s9EevSmhcs
-	l2aLFBDsr2bCH6RY6QlPk7Gnz1iJ+I84BtYmrDnWszpb9033fH/ElYkBIjF+TaVwKqxvyIowx7y
-	6oF2B9rAB92A46aPgQGVoM30spyOV6gddc7geiiUdd3esoPN3XkVwpawHSUMpq9PmVLT3VskZzI
-	c5y3MjH6q+lbVhOy7t8xGePS797RreegITT33M0m2SShCWvEFav2cXDo+TTzRbrIJSQoMgGmVhj
-	lR2Xqdu0hQgOhIX0BabFwBwl/3wpAzZ5u0PO6PvMtqnly5dP0un58YzzifhDsdb1ocb7QxmVLdD
-	Ue7nmCpoo3cGmjV890OZIimSH1OmMVAPR+3Ix4tGKQ1A5gOVzyMFA7xZLRMVCCddduJOwOW1KGH
-	9fruBAwHviDlKK0NiOhhuCvwJr6fgSC73Qbj39AO0Ycfrp0i6alweigJwL+O18jwzYDSsnDqnv4
-	TfbMRTrdUnWlh9Lxu6iar7q5x183me3M6oPDfUpz5nc5YTBDSqCQ8lXbnoFmcbE7SYsCcjPbh0i
-	m18Yu2b5BNwt4ZH19Ckjofhd78oV70qo=
-X-Received: by 2002:a05:6830:a203:20b0:81b:8032:716d with SMTP id 46e09a7af769-81b8032721cmr86559a34.20.1790437765027;
-        Sat, 26 Sep 2026 08:49:25 -0700 (PDT)
+        bh=pXuc4JFXb8UPUC0fNxWljunUCLVVXc20qC1Nh0LbmgY=;
+        b=c/mz0j26yie1HmmIRA/1wC3TInzIfJeKsMD0H0CYcES5ayUrea9xC4KtFMQJfNL6F6
+         lxEf3IJUpSKSRylKznewD1hotPUFhTNo7jdYgsBv9OW05Oue1iNVqKaMevTY4ZVQbd37
+         ACCc2oyO9oQ+k5E5dxEpMtwNekvPvBg4F7PKz8r0CKojbQDEadWj3YzldVOyPeW5lTOw
+         Q0KfWJ6EVl8Qyc2MkALHdCzkof/Mw9qhfDUJAx+hNIn3eb7ECd3j9z4IC7t07Jt6tR+T
+         UfjdwVR7YhFV01C1AnSzAoRRDkh7jekGAK2Fl2IRd7gKkW2kXdIG6Z/KtGsFSpjfA3i0
+         Pcaw==
+X-Forwarded-Encrypted: i=1; AKwUvBzEY0vn1SjnlqqKCA2256fDNkZ7ulhIUGv5F8v59fhdtaf0Mom8BQu+1O4OfFwbBQ9d5CI=@vger.kernel.org
+X-Gm-Message-State: AFuF++neiyw/xVJa7EUxXQgad28IrU3FLfLme60EJnrgDkwoOUC0zLE2
+	la5EfuABJZK4VNNuavUPgbBIaXcOuZGi2hj4LNkGPgumwzN0ZcVzo1PL
+X-Gm-Gg: AYBFou1tj9i073ClshBmBYVsTC83QFDASJc0EWtMa+o+68OP4cwV+MM4xMDisEP5Yu4
+	+01SFwg1//E3f4lRzhBU/bv3j0OPf16qXE4KXTUy/szhFEkJh/RXo67ZqDdge2/4i5OvaPEf9fy
+	EtEwX+vbu064okENZ7PmuOHrPd/9I5sV3FjQ2Kc8NueetzMflxakK14ME7PD1IWV1MeRy/vXbjS
+	vHhkmW0DnVyV0NMkVGXh7WggGBltFB4cse8VhxbNa5UkOjG6R4lLw4Zde998RKWY+YGUMfXXjF1
+	xSQhOCDfRXYiQkSx4+QFqF2IV6Jp9x9pmoPgqwO1cOUEeGLSZO/Pos81yop0HP7tLNitMX3iHwQ
+	d+7gkoeKICeRgQZZrEt0M9maHYiZSl4Q+DQmp1/THFFkoWkugB53UCclj0PVSYvIsg20LVIyNtc
+	RK0vh4TQ2jhNLkPCh5X895yPDJ61i/wF++KquPBJExpIco+8YsPT/BurB4IGhIJhB1XsZHc+IzT
+	JjdkKrTunKYhI8CKgVNHYCj/0WuISzfh9DdF+2hzzZptZBmSrVEmYtvnRVGtRi/pZpMkdyipsq7
+	/Eewk2BF8OW3tYOIFp84KtPhO/gQC12l5si1tMnC8lIoYto5gt2UjefTbx++N5CJTWOR8mwya5p
+	NlNExoukM/247RlzVVA13
+X-Received: by 2002:a05:6830:334c:b0:819:60f4:56cd with SMTP id 46e09a7af769-81960f4adefmr3991885a34.6.1790437769815;
+        Sat, 26 Sep 2026 08:49:29 -0700 (PDT)
 Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-818e98b16d4sm5442366a34.26.2026.09.26.08.49.22
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-818e98b16d4sm5442366a34.26.2026.09.26.08.49.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 08:49:24 -0700 (PDT)
+        Sat, 26 Sep 2026 08:49:29 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 26 Sep 2026 09:48:58 -0600
-Subject: [PATCH net v4 03/15] net: phylink: allow stopping a suspended
- instance
+Date: Sat, 26 Sep 2026 09:49:00 -0600
+Subject: [PATCH net v4 05/15] net: stmmac: serialize and retain PHC
+ configuration across reset
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,7 +74,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260926-submit-stmmac-reset-fixes-v1-v4-3-ec1c0250b3c9@gmail.com>
+Message-Id: <20260926-submit-stmmac-reset-fixes-v1-v4-5-ec1c0250b3c9@gmail.com>
 References: <20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9@gmail.com>
 In-Reply-To: <20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9@gmail.com>
 To: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
@@ -120,161 +120,350 @@ Cc: Richard Genoud <richard.genoud@bootlin.com>,
  linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev
 X-Mailer: b4 0.15.2
 
-If a network driver's system resume fails before phylink_resume(), the
-network device can remain administratively up with phylink suspended.
-Closing the interface then needs to terminate that suspended instance.
-Calling phylink_resume() merely to make phylink_stop() work is not a
-safe substitute: resume reconfigures the MAC and restarts link
-resolution, although the driver has not successfully restored the MAC.
+Keep the frequency correction, PEROUT requests and EXTTS selection
+independently of timestamp register contents. Cache PPS requests before
+converting units so they can be replayed after reset.
 
-This is a missing suspend-to-stop transition, independent of the reason
-hardware restoration failed. No MAC recovery policy belongs in phylink;
-the driver still decides whether to retry resume or wait for an ordinary
-administrative down/up cycle.
+Serialize timestamp writers and devlink timestamp-mode updates with a
+mutex, and let atomic gettime callers observe a reset gate under
+ptp_lock. Provide a common replay helper for later reset transactions,
+without changing PHC registration lifetime.
 
-Without MAC Wake-on-LAN, phylink_suspend() has already called
-phylink_stop(). Do not repeat PHY, SFP and PCS shutdown. However,
-phylink_prepare_resume() may have powered that stopped PHY back up to
-provide the receive clock for MAC reset. Suspend it again if WoL
-permits, without repeating phy_stop() on a PHY which is already halted.
-
-With MAC Wake-on-LAN, suspend deliberately defers mac_link_down() and
-sets PHYLINK_DISABLE_MAC_WOL. Finish that deferred link-down, drain
-resolution work and clear the WoL disable bit while retaining
-PHYLINK_DISABLE_STOPPED. Otherwise a subsequent start cannot resolve the
-link.
-
-Also undo PHY speed control performed by phylink_suspend(). As Andrew
-Lunn pointed out, phylink_start() does not restore the advertised speeds
-that phylink_resume() normally restores. Track suspend-owned speed
-control and restore the saved advertisement from either resume or
-suspended stop, including when PHY shutdown has already completed.
-
-An explicit driver speed-down request, such as stmmac's close-time power
-saving, must remain in effect until its matching speed-up. Restore any
-suspend-owned reduction before applying that request, so it cannot save
-the reduced advertisement over the original one. The following stop must
-not undo the driver's new reduction.
-
-Document that a suspended instance can be stopped directly. This neither
-resumes the PHY nor reconfigures or brings up the MAC.
-
-Fixes: f97493657c63 ("net: phylink: add suspend/resume support")
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- drivers/net/phy/phylink.c | 51 ++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 48 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h      |   7 ++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |  19 +++-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c  | 131 +++++++++++++++++++---
+ 3 files changed, 141 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-index 1bbcf46c8356..b7d30ca34031 100644
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -78,6 +78,7 @@ struct phylink {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+index c7c876408d85..aa09b2defcd9 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+@@ -337,6 +337,12 @@ struct stmmac_priv {
+ 	int use_riwt;
+ 	int irq_wake;
+ 	rwlock_t ptp_lock;
++	/* Serialize PHC changes with a hardware reset; gettime uses ptp_lock. */
++	struct mutex ptp_mutex;
++	bool ptp_blocked;
++	long ptp_scaled_ppm;
++	u32 ptp_perout;
++	u32 ptp_extts;
+ 	/* Protects auxiliary snapshot registers from concurrent access. */
+ 	struct mutex aux_ts_lock;
+ 	wait_queue_head_t tstamp_busy_wait;
+@@ -404,6 +410,7 @@ void stmmac_set_ethtool_ops(struct net_device *netdev);
  
- 	bool link_failed;
- 	bool suspend_link_up;
-+	bool suspend_speed_down;
- 	bool force_major_config;
- 	bool major_config_failed;
- 	bool mac_supports_eee_ops;
-@@ -2498,6 +2499,14 @@ void phylink_start(struct phylink *pl)
+ void stmmac_ptp_register(struct stmmac_priv *priv);
+ void stmmac_ptp_unregister(struct stmmac_priv *priv);
++int stmmac_ptp_restore(struct stmmac_priv *priv);
+ int stmmac_xdp_open(struct net_device *dev);
+ void stmmac_xdp_release(struct net_device *dev);
+ int stmmac_get_phy_intf_sel(phy_interface_t interface);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 4f3d452c3503..8b0bc7c46df9 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -941,6 +941,11 @@ static void stmmac_setup_ptp(struct stmmac_priv *priv)
+ {
+ 	int ret;
+ 
++	priv->ptp_scaled_ppm = 0;
++	priv->ptp_perout = 0;
++	priv->ptp_extts = 0;
++	priv->ptp_blocked = false;
++
+ 	ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
+ 	if (ret < 0)
+ 		netdev_warn(priv->dev,
+@@ -6285,7 +6290,8 @@ static void stmmac_common_interrupt(struct stmmac_priv *priv)
+ 		for (queue = 0; queue < queues_count; queue++)
+ 			stmmac_host_mtl_irq_status(priv, priv->hw, queue);
+ 
+-		stmmac_timestamp_interrupt(priv, priv);
++		if (!READ_ONCE(priv->ptp_blocked))
++			stmmac_timestamp_interrupt(priv, priv);
+ 	}
  }
- EXPORT_SYMBOL_GPL(phylink_start);
  
-+static void phylink_restore_suspend_speed(struct phylink *pl)
-+{
-+	if (pl->suspend_speed_down) {
-+		phylink_speed_up(pl);
-+		pl->suspend_speed_down = false;
+@@ -7696,6 +7702,14 @@ static int stmmac_dl_ts_coarse_set(struct devlink *dl, u32 id,
+ {
+ 	struct stmmac_devlink_priv *dl_priv = devlink_priv(dl);
+ 	struct stmmac_priv *priv = dl_priv->stmmac_priv;
++	unsigned long flags;
++
++	mutex_lock(&priv->ptp_mutex);
++	if (priv->ptp_blocked) {
++		mutex_unlock(&priv->ptp_mutex);
++		return -EBUSY;
 +	}
++	write_lock_irqsave(&priv->ptp_lock, flags);
+ 
+ 	priv->tsfupdt_coarse = ctx->val.vbool;
+ 
+@@ -7708,6 +7722,8 @@ static int stmmac_dl_ts_coarse_set(struct devlink *dl, u32 id,
+ 	 * reconfigure the systime, subsecond increment and addend.
+ 	 */
+ 	stmmac_update_subsecond_increment(priv);
++	write_unlock_irqrestore(&priv->ptp_lock, flags);
++	mutex_unlock(&priv->ptp_mutex);
+ 
+ 	return 0;
+ }
+@@ -8048,6 +8064,7 @@ static int __stmmac_dvr_probe(struct device *device,
+ 
+ 	mutex_init(&priv->lock);
+ 	rwlock_init(&priv->ptp_lock);
++	mutex_init(&priv->ptp_mutex);
+ 
+ 	stmmac_fpe_init(priv);
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
+index 3bfcc9760dce..bc6fe0c87e01 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
+@@ -12,6 +12,16 @@
+ 
+ #define PTP_SAFE_TIME_OFFSET_NS	500000
+ 
++static int stmmac_ptp_begin(struct stmmac_priv *priv)
++{
++	mutex_lock(&priv->ptp_mutex);
++	if (priv->ptp_blocked) {
++		mutex_unlock(&priv->ptp_mutex);
++		return -EBUSY;
++	}
++	return 0;
 +}
 +
  /**
-  * phylink_stop() - stop a phylink instance
-  * @pl: a pointer to a &struct phylink returned from phylink_create()
-@@ -2509,11 +2518,30 @@ EXPORT_SYMBOL_GPL(phylink_start);
+  * stmmac_adjust_freq
   *
-  * This will synchronously bring down the link if the link is not already
-  * down (in other words, it will trigger a mac_link_down() method call.)
-+ * A suspended instance may be stopped without first calling phylink_resume().
-+ * In particular, closing a device after a failed resume must not restart the
-+ * link or reconfigure the MAC just to finish shutting it down.
-+ * Any PHY advertisement reduced by phylink_suspend() is restored as part
-+ * of this transition.
-+ * If phylink_prepare_resume() powered up an already stopped PHY, suspend
-+ * it again when Wake-on-LAN permits.
-  */
- void phylink_stop(struct phylink *pl)
- {
- 	ASSERT_RTNL();
+@@ -28,14 +38,21 @@ static int stmmac_adjust_freq(struct ptp_clock_info *ptp, long scaled_ppm)
+ 	    container_of(ptp, struct stmmac_priv, ptp_clock_ops);
+ 	unsigned long flags;
+ 	u32 addend;
++	int ret;
  
-+	/* Also undo PHY speed control when terminating a suspended instance. */
-+	phylink_restore_suspend_speed(pl);
+-	addend = adjust_by_scaled_ppm(priv->default_addend, scaled_ppm);
++	ret = stmmac_ptp_begin(priv);
++	if (ret)
++		return ret;
+ 
+ 	write_lock_irqsave(&priv->ptp_lock, flags);
+-	stmmac_config_addend(priv, priv->ptpaddr, addend);
++	addend = adjust_by_scaled_ppm(priv->default_addend, scaled_ppm);
++	ret = stmmac_config_addend(priv, priv->ptpaddr, addend);
++	if (!ret)
++		priv->ptp_scaled_ppm = scaled_ppm;
+ 	write_unlock_irqrestore(&priv->ptp_lock, flags);
++	mutex_unlock(&priv->ptp_mutex);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ /**
+@@ -57,6 +74,10 @@ static int stmmac_adjust_time(struct ptp_clock_info *ptp, s64 delta)
+ 	bool xmac, est_rst = false;
+ 	int ret;
+ 
++	ret = stmmac_ptp_begin(priv);
++	if (ret)
++		return ret;
 +
-+	if (test_bit(PHYLINK_DISABLE_STOPPED, &pl->phylink_disable_state)) {
-+		/* A failed MAC resume may have called phylink_prepare_resume()
-+		 * and powered the stopped PHY back up to supply its RX clock.
-+		 */
-+		if (pl->phydev)
-+			phy_suspend(pl->phydev);
-+		return;
-+	}
-+
- 	if (pl->sfp_bus)
- 		sfp_upstream_stop(pl->sfp_bus);
- 	if (pl->phydev)
-@@ -2526,6 +2554,16 @@ void phylink_stop(struct phylink *pl)
+ 	xmac = dwmac_is_xmac(priv->plat->core_type);
  
- 	phylink_run_resolve_and_disable(pl, PHYLINK_DISABLE_STOPPED);
- 
-+	if (test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)) {
-+		/* Finish the link-down deferred by MAC WoL, without restarting. */
-+		flush_work(&pl->resolve);
-+		mutex_lock(&pl->state_mutex);
-+		if (pl->suspend_link_up)
-+			phylink_link_down(pl);
-+		__clear_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state);
-+		mutex_unlock(&pl->state_mutex);
-+	}
-+
- 	pl->pcs_state = PCS_STATE_DOWN;
- 
- 	phylink_pcs_disable(pl->pcs);
-@@ -2657,8 +2695,10 @@ void phylink_suspend(struct phylink *pl, bool mac_wol)
- 		phylink_stop(pl);
+ 	if (delta < 0) {
+@@ -110,6 +131,7 @@ static int stmmac_adjust_time(struct ptp_clock_info *ptp, s64 delta)
+ 			netdev_err(priv->dev, "failed to configure EST\n");
  	}
  
--	if (phylink_phy_pm_speed_ctrl(pl))
-+	if (phylink_phy_pm_speed_ctrl(pl)) {
- 		phylink_speed_down(pl, false);
-+		pl->suspend_speed_down = true;
-+	}
++	mutex_unlock(&priv->ptp_mutex);
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(phylink_suspend);
  
-@@ -2698,8 +2738,7 @@ void phylink_resume(struct phylink *pl)
- {
- 	ASSERT_RTNL();
+@@ -128,14 +150,18 @@ static int stmmac_get_time(struct ptp_clock_info *ptp, struct timespec64 *ts)
+ 	    container_of(ptp, struct stmmac_priv, ptp_clock_ops);
+ 	unsigned long flags;
+ 	u64 ns = 0;
++	int ret = 0;
  
--	if (phylink_phy_pm_speed_ctrl(pl))
--		phylink_speed_up(pl);
-+	phylink_restore_suspend_speed(pl);
+ 	read_lock_irqsave(&priv->ptp_lock, flags);
+-	stmmac_get_systime(priv, priv->ptpaddr, &ns);
++	if (priv->ptp_blocked)
++		ret = -EBUSY;
++	else
++		stmmac_get_systime(priv, priv->ptpaddr, &ns);
+ 	read_unlock_irqrestore(&priv->ptp_lock, flags);
  
- 	if (test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)) {
- 		/* Wake-on-Lan enabled, MAC handling */
-@@ -3616,6 +3655,12 @@ int phylink_speed_down(struct phylink *pl, bool sync)
+ 	*ts = ns_to_timespec64(ns);
  
- 	ASSERT_RTNL();
+-	return 0;
++	return ret;
+ }
  
-+	/* An explicit request takes over from suspend-time speed control.
-+	 * Restore the original advertisement before saving it again, so a
-+	 * repeated speed-down cannot replace it with the reduced advertisement.
-+	 */
-+	phylink_restore_suspend_speed(pl);
+ /**
+@@ -153,25 +179,34 @@ static int stmmac_set_time(struct ptp_clock_info *ptp,
+ 	struct stmmac_priv *priv =
+ 	    container_of(ptp, struct stmmac_priv, ptp_clock_ops);
+ 	unsigned long flags;
++	int ret;
 +
- 	if (!pl->sfp_bus && pl->phydev)
- 		ret = phy_speed_down(pl->phydev, sync);
++	ret = stmmac_ptp_begin(priv);
++	if (ret)
++		return ret;
  
+ 	write_lock_irqsave(&priv->ptp_lock, flags);
+-	stmmac_init_systime(priv, priv->ptpaddr, ts->tv_sec, ts->tv_nsec);
++	ret = stmmac_init_systime(priv, priv->ptpaddr, ts->tv_sec, ts->tv_nsec);
+ 	write_unlock_irqrestore(&priv->ptp_lock, flags);
++	mutex_unlock(&priv->ptp_mutex);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+-static int stmmac_enable(struct ptp_clock_info *ptp,
+-			 struct ptp_clock_request *rq, int on)
++static int __stmmac_enable(struct ptp_clock_info *ptp,
++			   struct ptp_clock_request *rq, int on)
+ {
+ 	struct stmmac_priv *priv =
+ 	    container_of(ptp, struct stmmac_priv, ptp_clock_ops);
+ 	void __iomem *ptpaddr = priv->ptpaddr;
+-	struct stmmac_pps_cfg *cfg;
++	struct stmmac_pps_cfg pps, saved, *cfg = &pps;
+ 	int ret = -EOPNOTSUPP;
+ 	unsigned long flags;
+ 	u32 acr_value;
+ 
++	if (priv->plat->core_type == DWMAC_CORE_GMAC)
++		return dwmac1000_ptp_enable(ptp, rq, on);
++
+ 	switch (rq->type) {
+ 	case PTP_CLK_REQ_PEROUT: {
+ 		struct timespec64 curr_time;
+@@ -182,8 +217,6 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
+ 		if (rq->perout.flags)
+ 			return -EOPNOTSUPP;
+ 
+-		cfg = &priv->pps[rq->perout.index];
+-
+ 		cfg->start.tv_sec = rq->perout.start.sec;
+ 		cfg->start.tv_nsec = rq->perout.start.nsec;
+ 
+@@ -213,6 +246,7 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
+ 
+ 		cfg->period.tv_sec = rq->perout.period.sec;
+ 		cfg->period.tv_nsec = rq->perout.period.nsec;
++		saved = *cfg;
+ 
+ 		write_lock_irqsave(&priv->ptp_lock, flags);
+ 		ret = stmmac_flex_pps_config(priv, priv->ioaddr,
+@@ -220,6 +254,9 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
+ 					     priv->sub_second_inc,
+ 					     priv->systime_flags);
+ 		write_unlock_irqrestore(&priv->ptp_lock, flags);
++		/* Some cores convert cfg->start to binary rollover units. */
++		if (!ret)
++			priv->pps[rq->perout.index] = saved;
+ 		break;
+ 	}
+ 	case PTP_CLK_REQ_EXTTS: {
+@@ -265,6 +302,64 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
+ 	return ret;
+ }
+ 
++static int stmmac_enable(struct ptp_clock_info *ptp,
++			 struct ptp_clock_request *rq, int on)
++{
++	struct stmmac_priv *priv =
++		container_of(ptp, struct stmmac_priv, ptp_clock_ops);
++	int ret;
++
++	ret = stmmac_ptp_begin(priv);
++	if (ret)
++		return ret;
++	ret = __stmmac_enable(ptp, rq, on);
++	if (!ret) {
++		if (rq->type == PTP_CLK_REQ_PEROUT) {
++			if (on)
++				priv->ptp_perout |= BIT(rq->perout.index);
++			else
++				priv->ptp_perout &= ~BIT(rq->perout.index);
++		} else if (rq->type == PTP_CLK_REQ_EXTTS) {
++			priv->ptp_extts = on ? BIT(rq->extts.index) : 0;
++		}
++	}
++	mutex_unlock(&priv->ptp_mutex);
++	return ret;
++}
++
++/* Called with ptp_mutex held and PHC access blocked across the MAC reset. */
++int stmmac_ptp_restore(struct stmmac_priv *priv)
++{
++	struct ptp_clock_request rq = { .type = PTP_CLK_REQ_EXTTS };
++	unsigned long flags;
++	u64 ns = 0, period;
++	u32 addend;
++	int i, ret;
++
++	write_lock_irqsave(&priv->ptp_lock, flags);
++	addend = adjust_by_scaled_ppm(priv->default_addend, priv->ptp_scaled_ppm);
++	ret = stmmac_config_addend(priv, priv->ptpaddr, addend);
++	for (i = 0; !ret && i < STMMAC_PPS_MAX; i++) {
++		struct stmmac_pps_cfg cfg = priv->pps[i];
++
++		if (!(priv->ptp_perout & BIT(i)))
++			continue;
++		stmmac_get_systime(priv, priv->ptpaddr, &ns);
++		period = timespec64_to_ns(&cfg.period);
++		/* Retain phase, but move an expired target into the future. */
++		cfg.start = stmmac_calc_tas_basetime(timespec64_to_ktime(cfg.start),
++						     ns + PTP_SAFE_TIME_OFFSET_NS, period);
++		ret = stmmac_flex_pps_config(priv, priv->ioaddr, i, &cfg, true,
++					     priv->sub_second_inc, priv->systime_flags);
++	}
++	write_unlock_irqrestore(&priv->ptp_lock, flags);
++	if (ret || !priv->ptp_extts)
++		return ret;
++
++	rq.extts.index = __ffs(priv->ptp_extts);
++	return __stmmac_enable(&priv->ptp_clock_ops, &rq, 1);
++}
++
+ /**
+  * stmmac_get_syncdevicetime
+  * @device: current device time
+@@ -287,9 +382,15 @@ static int stmmac_getcrosststamp(struct ptp_clock_info *ptp,
+ {
+ 	struct stmmac_priv *priv =
+ 		container_of(ptp, struct stmmac_priv, ptp_clock_ops);
++	int ret;
+ 
+-	return get_device_system_crosststamp(stmmac_get_syncdevicetime,
+-					     priv, NULL, xtstamp);
++	ret = stmmac_ptp_begin(priv);
++	if (ret)
++		return ret;
++	ret = get_device_system_crosststamp(stmmac_get_syncdevicetime,
++					    priv, NULL, xtstamp);
++	mutex_unlock(&priv->ptp_mutex);
++	return ret;
+ }
+ 
+ /* structure describing a PTP hardware clock */
+@@ -323,7 +424,7 @@ const struct ptp_clock_info dwmac1000_ptp_clock_ops = {
+ 	.adjtime = stmmac_adjust_time,
+ 	.gettime64 = stmmac_get_time,
+ 	.settime64 = stmmac_set_time,
+-	.enable = dwmac1000_ptp_enable,
++	.enable = stmmac_enable,
+ };
+ 
+ /**
 
 -- 
 2.53.0
