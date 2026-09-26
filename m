@@ -1,21 +1,21 @@
 Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6123769E6
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 05:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EA6386C0A
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 05:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790398906; cv=none; b=gsL3DF9qbYhMl3AYVgjARo645l38XKUQZ8JzjK5mo9S3r7X2XnWtP341+wB90sVYy/4wA9kQT06Lelmv5TadEfR9lMQb2ipkZ88MThcfgB2ZcgF0/L1c/8bWyufuXcqsWQ1MT8YU4pOqYB8Mir2/bJcgRUOEHePiCkAZNN7ZL5M=
+	t=1790398918; cv=none; b=uP99ZLRH32I7Qy3J1B+/ffi336SZlcpzEIgSM3DBqQUJh0gB+dDyRx0SmisAfdPHzzB2TfBqZNllKTdC9RM7zm7mI9T014BFRNAnSPpod4QxuDrwcaNgV6dPasg5x0d36pghlYk78cBS6ChByTO6tSuds+KLSSBxaZGqXe81BFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790398906; c=relaxed/simple;
-	bh=EjOjFTdh4Tq74h2sLOHTajNkJ5JC4+H2S10Mnkdqq/M=;
+	s=arc-20240116; t=1790398918; c=relaxed/simple;
+	bh=z8ApIr0j8KKNgP3vSjfjMlkZY6v4Qpowcu93/1O2n+E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YYzgpFUMd8w+T3IPbFrGAogGxJli4fFQzqOOkqhixMaqmBtOXd3dW6N9O+qQPH8QUMxv3Pw+RKljKu/9LxoIuusSDf/zIEwJ4f2KAd+60OiF++RVw2z6DGN3xCNWpKaB1GhJ1IBIk9wuZ8/Vnm+3bCcxaa0x1q/PunBljtCpYP8=
+	 MIME-Version; b=j01nB74PZLPwakEfP5EAJBtPv5w1WdU53yMAJGNDXK550sfSEj7XnYyXKfv59lty5p6yZCw6yYnKpztwW6BsPEAvKsXRi1TE53XGfd/MZzIQoU4VXkHIZfvFgjL2LIFGgsvFRnPd3nqv7fd/BMXiBuCGJfY81Vvg5wfB5XKC1T4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 757152D4596A0E; Fri, 25 Sep 2026 22:01:33 -0700 (PDT)
+	id EAB702D459710A; Fri, 25 Sep 2026 22:01:53 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v6 17/21] libbpf: Let the static linker carry .bpf_cleanup relocations
-Date: Fri, 25 Sep 2026 22:01:33 -0700
-Message-ID: <20260926050133.2221762-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 21/21] selftests/bpf: Load an exception cleanup program from a light skeleton
+Date: Fri, 25 Sep 2026 22:01:53 -0700
+Message-ID: <20260926050153.2223013-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926050006.2213110-1-yonghong.song@linux.dev>
 References: <20260926050006.2213110-1-yonghong.song@linux.dev>
@@ -37,107 +37,166 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-An object that carries a compiler-emitted exception cleanup table cannot =
-be
-linked today. The table's fields are byte offsets into a code section,
-materialised by a 32-bit relocation against that section's symbol with th=
-e
-offset itself as the implicit addend, and the linker rejects both halves =
-of
-that: the relocation type is not in the list it accepts, and a relocation
-against an STT_SECTION symbol from a non-executable section is an outrigh=
-t
-error.
+For a light skeleton, libbpf hands the records to bpf_gen__prog_load(),
+which writes them into a blob and emits a loader program that issues
+BPF_PROG_LOAD from inside the kernel. Nothing about that is shared with t=
+he
+ordinary path: the attr is built field by field, and the kfunc names are
+resolved by the loader program when it runs.
 
-Both spellings of that relocation have to be taken. LLVM emits
-R_BPF_64_NODYLD32 for a .long against a section symbol; GNU as emits
-R_BPF_64_ABS32, which is what bpf_reloc_type_lookup() maps BFD_RELOC_32 t=
-o.
-They describe the same value, and the selftests are built with both
-compilers.
-
-Keying on the relocation type rather than the section name means any
-non-executable section can reach the new arm, where an unconditional
-refusal used to stand. That refusal was covering two things the arm now h=
-as
-to do itself: a target may be SHT_NOBITS, which extend_sec() leaves with =
-no
-raw_data, and r_offset is alignment-checked only where the section holds
-instructions. The arm rejects both, and bounds the offset against the
-section size before writing through it.
+exceptions_cleanup_light.c is the smallest program that can tell whether =
+a
+table survives that trip: one record covering the bpf_unwind() call itsel=
+f,
+one pad that sets a bit and resumes. If the table arrives, the pad runs a=
+nd
+sets its bit; if it does not, the program does not load at all, because t=
+he
+pad is then reachable from nothing.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/linker.c | 36 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile.skel     |  2 +-
+ .../selftests/bpf/exceptions_cleanup.h        |  3 ++
+ .../bpf/prog_tests/exceptions_cleanup.c       | 28 +++++++++++++
+ .../bpf/progs/exceptions_cleanup_light.c      | 39 +++++++++++++++++++
+ 4 files changed, 71 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+light.c
 
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index 53f64a1a1f25..26a5e53df6f0 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -1036,7 +1036,8 @@ static int linker_sanity_check_elf_relos(struct src=
-_obj *obj, struct src_sec *se
- 		size_t sym_type =3D ELF64_R_TYPE(relo->r_info);
+diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/se=
+lftests/bpf/Makefile.skel
+index 3d92cdca62ed..6197ca023c2f 100644
+--- a/tools/testing/selftests/bpf/Makefile.skel
++++ b/tools/testing/selftests/bpf/Makefile.skel
+@@ -33,7 +33,7 @@ LINKED_SKELS :=3D test_static_linked.skel.h linked_func=
+s.skel.h		\
+ LSKELS :=3D fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c =
+	\
+ 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
+ 	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
+-	test_ringbuf_overwrite.c callx_rodata.c
++	test_ringbuf_overwrite.c callx_rodata.c exceptions_cleanup_light.c
 =20
- 		if (sym_type !=3D R_BPF_64_64 && sym_type !=3D R_BPF_64_32 &&
--		    sym_type !=3D R_BPF_64_ABS64 && sym_type !=3D R_BPF_64_ABS32) {
-+		    sym_type !=3D R_BPF_64_ABS64 && sym_type !=3D R_BPF_64_ABS32 &&
-+		    sym_type !=3D R_BPF_64_NODYLD32) {
- 			pr_warn("ELF relo #%d in section #%zu has unexpected type %zu in %s\n=
-",
- 				i, sec->sec_idx, sym_type, obj->filename);
- 			return -EINVAL;
-@@ -2258,6 +2259,7 @@ static int linker_append_elf_relos(struct bpf_linke=
-r *linker, struct src_obj *ob
- 			if (ELF64_ST_TYPE(src_sym->st_info) =3D=3D STT_SECTION) {
- 				struct src_sec *sec =3D &obj->secs[src_sym->st_shndx];
- 				struct bpf_insn *insn;
-+				__u32 *val;
+ LSKELS_SIGNED :=3D fentry_test.c fexit_test.c atomics.c
 =20
- 				if (src_linked_sec->shdr->sh_flags & SHF_EXECINSTR) {
- 					/* calls to the very first static function inside
-@@ -2292,6 +2294,38 @@ static int linker_append_elf_relos(struct bpf_link=
-er *linker, struct src_obj *ob
- 					if (linker->swapped_endian)
- 						off =3D bswap_64(off);
- 					memcpy(ptr, &off, sizeof(off));
-+				} else if (sym_type =3D=3D R_BPF_64_NODYLD32 ||
-+					   sym_type =3D=3D R_BPF_64_ABS32) {
-+					/*
-+					 * A byte offset into a code section,
-+					 * stored in place. LLVM spells this
-+					 * relocation NODYLD32 and GNU as
-+					 * spells it ABS32; being bytes, the
-+					 * section's new start goes in as it
-+					 * is, not scaled the way a call's
-+					 * instruction index is above.
-+					 *
-+					 * r_offset is checked only for an
-+					 * executable section, and SHT_NOBITS
-+					 * has no raw_data, so bound it here --
-+					 * subtracting, so it cannot wrap.
-+					 */
-+					if (!dst_linked_sec->raw_data ||
-+					    dst_linked_sec->sec_sz < (int)sizeof(*val) ||
-+					    dst_rel->r_offset % sizeof(*val) ||
-+					    dst_rel->r_offset >
-+					    (size_t)dst_linked_sec->sec_sz - sizeof(*val)) {
-+						pr_warn("ELF relo #%d in section #%zu points outside the data of s=
-ection '%s' in %s\n",
-+							j, src_sec->sec_idx,
-+							dst_linked_sec->sec_name,
-+							obj->filename);
-+						return -EINVAL;
-+					}
-+					val =3D dst_linked_sec->raw_data + dst_rel->r_offset;
-+					if (linker->swapped_endian)
-+						*val =3D bswap_32(bswap_32(*val) + sec->dst_off);
-+					else
-+						*val +=3D sec->dst_off;
- 				} else {
- 					pr_warn("relocation against STT_SECTION in non-exec section is not =
-supported!\n");
- 					return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/exceptions_cleanup.h b/tools/tes=
+ting/selftests/bpf/exceptions_cleanup.h
+index 49b6806cde82..243ab42c7ae7 100644
+--- a/tools/testing/selftests/bpf/exceptions_cleanup.h
++++ b/tools/testing/selftests/bpf/exceptions_cleanup.h
+@@ -27,6 +27,9 @@
+ #define RAN_GAP_INNER		0x2000
+ #define RAN_GAP_OUTER		0x4000
+=20
++/* progs/exceptions_cleanup_light.c: the one pad it has. */
++#define RAN_LIGHT		0x1
++
+ #define CLEANUP_REC(begin, end, landing_pad)			\
+ 	".pushsection .bpf_cleanup,\"a\",@progbits;"		\
+ 	".long " begin ";"					\
+diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
+b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+index c06ec10359b9..d251148279bf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
++++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+@@ -5,6 +5,7 @@
+ #include "exceptions_cleanup.skel.h"
+ #include "exceptions_cleanup_fail.skel.h"
+ #include "exceptions_cleanup_shapes.skel.h"
++#include "exceptions_cleanup_light.lskel.h"
+=20
+ /* foo3 unwound: every frame that has a pad ran it. */
+ #define PADS_FOO3_UNWOUND \
+@@ -37,6 +38,30 @@ static void run(struct exceptions_cleanup *skel, __u64=
+ input, __u32 retval,
+ 	ASSERT_EQ(skel->bss->pads_ran, pads | RAN_BUMP, "pads_ran");
+ }
+=20
++static void test_light_skeleton(void)
++{
++	struct exceptions_cleanup_light_lskel *skel;
++	__u64 ctx =3D 0;
++	int err;
++
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		    .ctx_in =3D &ctx,
++		    .ctx_size_in =3D sizeof(ctx),
++	);
++
++	skel =3D exceptions_cleanup_light_lskel__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "light open_and_load"))
++		return;
++
++	err =3D bpf_prog_test_run_opts(skel->progs.entry_light.prog_fd, &topts)=
+;
++	if (!ASSERT_OK(err, "run"))
++		goto out;
++	ASSERT_EQ(topts.retval, 0, "retval");
++	ASSERT_EQ(skel->bss->pads_ran, RAN_LIGHT, "pads_ran");
++out:
++	exceptions_cleanup_light_lskel__destroy(skel);
++}
++
+ void test_exceptions_cleanup(void)
+ {
+ 	char log[8192] =3D {};
+@@ -82,6 +107,9 @@ void test_exceptions_cleanup(void)
+=20
+ 	exceptions_cleanup__destroy(skel);
+=20
++	if (test__start_subtest("light_skeleton"))
++		test_light_skeleton();
++
+ 	RUN_TESTS(exceptions_cleanup_fail);
+ 	RUN_TESTS(exceptions_cleanup_shapes);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c=
+ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c
+new file mode 100644
+index 000000000000..19d53569bbda
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "exceptions_cleanup.h"
++
++static __used __noinline void __kfunc_btf_anchor(void)
++{
++	bpf_throw(0);
++	bpf_unwind();
++	bpf_preempt_disable();
++	bpf_preempt_enable();
++	bpf_unwind_resume(NULL);
++}
++
++__u64 pads_ran =3D 0;
++
++SEC("syscall")
++__naked int entry_light(void)
++{
++	asm volatile (
++	"call bpf_preempt_disable;"
++"1:"	"call bpf_unwind;"		/* cleanup region */
++"2:"
++	"exit;"
++"3:"					/* landing pad */
++	"call bpf_preempt_enable;"
++	PAD_RAN("%[ran]")
++	"call bpf_unwind_resume;"
++	"exit;"
++	CLEANUP_REC("1b", "2b", "3b")
++	:
++	: [ran]"i"(RAN_LIGHT),
++	  __imm_addr(pads_ran)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.53.0-Meta
 
