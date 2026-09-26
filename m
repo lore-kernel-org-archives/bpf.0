@@ -1,124 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-51.mta1.migadu.com [95.215.58.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0083ACEF9
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5553A7580
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790466653; cv=none; b=SCElOxE9qdBty37S+R9JL347Bnyz8QAzga3gNZRhX7gDg/DiFBdeVtdCFYOe2SkV7meeWDzw6at6YgEmYZbF6pRw8Ekz9BdZOqpXSBCgtLDjJx52m4fi9cfichtZuj/78sna7kvfLQhk7tPKXNKNyxdUprmb8j6yduHsWIlrKUQ=
+	t=1790466847; cv=none; b=Z6cQsSasJ+/nq+3YsckZPSnmd67vERGFeYQRAMV43qf3bp6F4TwUXhCUQ4O7tQ1EIx15kJDKtGJDyHkrnCx9u+gDLWsjaOaYmzP46naCaJBHsbrBchj8H2ntyDTpAAwitlpA3yO4pgY3JzsA7cbQJCLX+mqy9s4g4fZis85VFiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790466653; c=relaxed/simple;
-	bh=qItbywAmnert4WcySlgWTAszSvvggGwKuVVP32Rb62o=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=F8dMGuhiw5BTAACaskDN7LqSC7ZNjRk/JxPPEjbmcCct3MEBVuWbgxgJvAT3xOXtoFFnPfaKRSssGK9qjUbk4Fd/Y18eGdahfCDUhZrOZE5inFkcXSz4UMYWaYnIaySgyAUHAc7ll/mINZ8HJkXI34PyqD3j8s6/jRhgr561wjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOQA8Lqc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790466847; c=relaxed/simple;
+	bh=jnoEmM6Qt97VgN8QiJcQ9FUn+SKqvZTHZvARRfMvd5Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B0fQ6SH4cTMbFZGElBy0wsQE5Cm9aka4WGBW5/erLCv3sKeJI5JmfIE4r0tcgUDcF0BnzJg9ej67rjtBS67BCgSN+7m+Wn1cPNMgXo4TaKLl3unqP1JALeMWCDbDeaB41ZnK+TrP+UyWM5MRwv535StkFbe1CgHMKBR7fgi7DkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Uu71l1yc; arc=none smtp.client-ip=95.215.58.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOQA8Lqc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE1F81F000FF;
-	Sat, 26 Sep 2026 23:50:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790466643;
-	bh=aApkbFCPwV+ddx8Rny1ys2Plv+S0b5Yx4FTp1m7hkm0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EOQA8Lqc2lb3fPY1Dz0DMw9tQ17GVRwRkj6eFuAbEJqjFHcNwGa/c5VuD9uNhs3Lv
-	 fgu8BRAXYP6Dcz7CrNT0VHoKcYHVdGR5ytZM5mK1ezg5U5ek1oqN8yBPo/xYWH9xHT
-	 P1xNUSbccl26VG0xOHDUHBimEmcDoWu/xaN7vPfgMwA+Lmt37zmQXTwif0ffOB9nLr
-	 AJOlHuhpcUJXLzITS7Nr35ZhzgaZq37GbqmpSbYwQfMG4UhMBbjvPvDxeRZfdZr0r9
-	 EaQCL5XpPe8P9O8cg7XEC2z20CmgFIR7nkhhfuzrS1+OkdvBWAD8XTk/mGHyHqHVym
-	 plYvHodrXOJ1w==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 16/16] selftests/bpf: Exercise typed
- arenas at run time
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260926233503.3114147-17-memxor@gmail.com>
-References: <20260926233503.3114147-1-memxor@gmail.com>
- <20260926233503.3114147-17-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 23:50:42 +0000
-Message-Id: <20260926235042.DE1F81F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Uu71l1yc"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=jnoEmM6Qt97VgN8QiJcQ9FUn+SKqvZTHZvARRfMvd5Q=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790466842; v=1; x=1791071642;
+ b=Uu71l1ycIj0yOV6+j6EOtPEijyww68ppYu7nIrmc+/poog9buUXrSuJwe3PdvjplcDZd3LJ5
+ s3NV0dN2i59n268f5mHWi+xK+2Tg08/xwA7TLXbnSPFkgo3NjIRbyWqXdCBOMh/wRbq00N2Z2N8
+ QHuvh5ykowaAiuOKPkjqFLXw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 23df2140449d7eee;
+	Sat, 26 Sep 2026 23:54:02 +0000
+X-Mizu-Trace-ID: 23df2140449d7eee
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d19b799a-03d6-4902-91ff-9b97d54c3fd4@linux.dev>
+Date: Sat, 26 Sep 2026 16:54:00 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 05/21] bpf: Prepare for an exception cleanup
+ table before the CFG walk
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260926050006.2213110-1-yonghong.song@linux.dev>
+ <20260926050032.2215748-1-yonghong.song@linux.dev>
+ <20260926051638.867681F00893@smtp.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260926051638.867681F00893@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: test_release_bounds unconditionally fails due to =
-logic error in alloc_at expectation
---
 
-commit a5c65698dd674c11891a999b72347849ae68ce84
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-selftests/bpf: Exercise typed arenas at run time
+On 9/25/26 10:16 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] bpf: bpf_throw() bypasses exception_callback_subprog check skipping cleanup pads
+> --
+>
+> commit bfb14bc84bb67f59ae10ca034e824ec0357d7d80
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf: Prepare for an exception cleanup table before the CFG walk
+>
+> This commit introduces bpf_prepare_cleanup_exceptions() to record landing pads
+> for BPF-to-BPF calls and bpf_unwind() within a cleanup record's range. It
+> ensures the JIT supports dispatching landing pads and refuses to combine
+> tables with an exception callback.
+>
+>> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+>> index b19fcbf49b7ef..1ed0370a171b7 100644
+>> --- a/kernel/bpf/exception.c
+>> +++ b/kernel/bpf/exception.c
+>> @@ -7,9 +7,56 @@
+>>   #include <linux/filter.h>
+>>   #include "exception.h"
+>>   
+>> +#define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
+>> +
+>>   BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
+>>   BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
+>>   
+>> +static void mark_call_sites(struct bpf_verifier_env *env)
+>> +{
+>> +	u32 i, j;
+>> +
+>> +	for (i = 0; i < env->cleanup_info_cnt; i++) {
+>> +		struct bpf_cleanup_info *rec = &env->cleanup_info[i];
+>> +
+>> +		for (j = rec->begin_off; j < rec->end_off; j++) {
+>> +			struct bpf_insn *insn = &env->prog->insnsi[j];
+>> +
+>> +			if (!bpf_pseudo_call(insn) && !bpf_is_unwind_kfunc(insn))
+>> +				continue;
+> [Severity: Medium]
+> Since bpf_throw() is not matched here, does it skip receiving a landing pad?
+>
+> If a program is loaded with .bpf_cleanup records and calls bpf_throw() without
+> specifying a custom exception callback, could this cause it to silently bypass
+> the cleanup execution during unwinding, leaking user-defined logical resources
+> like map-based counters?
 
-Drive typed arenas from user space through a skeleton, testing map memory
-usage, chunk allocation, release, multipage allocations, bounds checking,
-and pointer fields.
+Yes, when bpf_throw() is triggered and landing pad has some resource to be
+released, it is possible those resource is not released. Will reject
+bpf_throw() if *any* landing pad exists in the program.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/typed_arena.c b/tools=
-/testing/selftests/bpf/prog_tests/typed_arena.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/typed_arena.c
+>
+>> +			env->insn_aux_data[j].cleanup_pad = rec->landing_pad_off + 1;
+>> +		}
+>> +	}
+>> +}
+>> +
+>> +int bpf_prepare_cleanup_exceptions(struct bpf_verifier_env *env)
+>> +{
+> [ ... ]
+>
+>> +	if (!bpf_jit_supports_cleanup_pads() || !env->prog->jit_requested) {
+>> +		verbose(env,
+>> +			"exception cleanup needs a JIT that can dispatch landing pads\n");
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +	env->prog->jit_required = 1;
+>> +
+>> +	if (env->exception_callback_subprog) {
+> [Severity: Medium]
+> Does this check the state of env->exception_callback_subprog too early?
+>
+> If a later pass dynamically inserts a default exception callback, could it
+> bypass this restriction and result in a mix of exception cleanup tables and
+> bpf_throw() usage?
 
-[ ... ]
+In the beginning of bpf_prepare_cleanup_exceptions(), we have
 
-> +static void test_release_bounds(void)
-> +{
-> +	long ps =3D PAGE_SIZE, base, nr =3D OBJ_ARENA_SIZE / PAGE_SIZE;
-> +	struct typed_arena *skel;
-> +	int fd;
-> +
-> +	skel =3D typed_arena__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_load"))
-> +		return;
-> +	fd =3D bpf_map__fd(skel->maps.arena);
-> +	base =3D map_memlock(fd);
-> +
-> +	/* Fill the typed arena, so that a scan of its bitmap for a free chunk =
-runs to the end. */
-> +	skel->bss->ptr =3D NULL;
-> +	skel->data->page_cnt =3D nr;
-> +	if (run(skel->progs.alloc_at, "fill"))
-> +		goto out;
++       if (!env->cleanup_info_cnt)
++               return 0;
 
-[Severity: Medium]
-Will this unconditionally abort the test?
+so landing_pad will exist in the prog. With previous explanation, that
+means bpf_throw() will be rejected. So reject exception_callback_subprog
+too.
 
-When skel->bss->ptr is set to NULL in test_release_bounds(), the BPF program
-alloc_at() executes with its hint variable as NULL. If the allocation is
-successful, o will be non-NULL, which makes the condition o !=3D hint evalu=
-ate
-to 1 (true):
+>
+>> +		verbose(env,
+>> +			"exception cleanup table cannot be combined with an exception callback\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	mark_call_sites(env);
+>> +	return 0;
+>> +}
 
-tools/testing/selftests/bpf/progs/typed_arena.c:alloc_at() {
-    ...
-	hint =3D ptr;
-	o =3D bpf_typed_arena_alloc_pages(&arena, TYPE_ID(struct obj), hint, &page=
-_cnt, NUMA_NO_NODE);
-	if (!o)
-		return 1;
-	return o !=3D hint;
-}
-
-The run() helper wraps ASSERT_OK(ret), which expects a return value of 0.
-Since it receives 1, the assertion fails and the test executes goto out,
-leaving the rest of test_release_bounds() unexecuted.
-
-Could the return logic in alloc_at() be adjusted when hint is NULL, or
-should this test use a different program or helper to fill the arena?
-
-> +	ASSERT_EQ(map_memlock(fd), base + nr * ps, "full");
-> +
-> +	skel->data->page_cnt =3D nr + 1;
-> +	if (run(skel->progs.free_pages, "free_oversized"))
-> +		goto out;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926233503.3114=
-147-1-memxor@gmail.com?part=3D16
