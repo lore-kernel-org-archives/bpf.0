@@ -1,62 +1,64 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6504C175A6C
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F681EB1AA
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 13:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790429452; cv=none; b=Sa+JgRFizEltSrK4p2MTzxXZKcY5bVFf9cvcy2ep/enV0nOmBDMiz8AnXVBNHmfpl6uMC0D1cLF0i64VPag0jTpfIAQUNhh3up3f97RcpiDaEhBMeJbysz64WxuWT3etJKmMFDHSfOSb0h6/qWvKIPve9uiW902aAWiFLlDfuCI=
+	t=1790429454; cv=none; b=efC2yO88fANCqd1QH7+X6uHxQTVZWpWOBnFF9uUCvQOtIVHVIyIkrA4d6EbOVnI5z7jYo/fIvuQM834xX0O+0veVLtI1hBZdYBjf93DQkdRbIm/qS8GhX7ERJmz/ygGDs93dk+ZyHHvW0wWnkj3OYvP4d/BrZyHZNiOc66HctWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790429452; c=relaxed/simple;
-	bh=hSlcltwX/gTUqir1vGAHsYx5mAeS9xhWXRzsm5Im5D4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=teDORnUwQqtz3TM5PB8TW/JN/cHRI9O0M/b9vZv1kS8lOg1vsT4D5KjPgsQdWMCHi4Lb2RmI1Vc3mFflSLDQpwZhFUTp6GYSXeetrGdFmBMezTryzXt7MHx4usOtT3SNe3NYTd46FtOrDd5s0ah82dPNFYKkGmER7B1Eh5GTNzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NnS9oAzZ; arc=none smtp.client-ip=74.125.225.137
+	s=arc-20240116; t=1790429454; c=relaxed/simple;
+	bh=7BVB89PKLVO6i5G2jI7rGPJfLWFoJWGU1PnXo22Lcv0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=j9P2BiGxz3cW6l2wITj8wybRjDl7YtTvLyl/kXycNTQhE8gohIF8e34hPkHPmvIJsdPOKsINK1erJ07AQgKMxCKJ3n7wxCi95/4quSBjuBWiSxq/vo2/kslrvO8+6AMxt6XYpUWYEj5B6Ew3uyOY6v99DIHB7W+C9j9CwAKzIfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QuQeycjL; arc=none smtp.client-ip=74.125.225.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NnS9oAzZ"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bbf77e8so2476265e9.0
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 06:30:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QuQeycjL"
+Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-48880d1367fso557331f8f.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 06:30:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790429449; x=1791034249; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ojBPBkhL5Jc0n5dPNdsgITK4l+rLeg8PO1T1tFs40nU=;
-        b=NnS9oAzZXaIbKqqHROEyvwEpSKdZ00Sucua6ayGopDDN3zS7YxD5BH9BqCFttfy3pG
-         bsGA2Kk7qgWsmIxvUxWMQtCLakc3C6Lp6NzegFQxgIir8nD8gVbgWNoV0l+gNFdXevUv
-         UnOWV47DSyFOABG3C750xQB81r+soVxA/kwCkg78KzbyRFRhO1vYSHyz1pgbL47OmsYY
-         O1aGik2CQ3nnXkw9yVe1Oplluz6+g5fJSFP2q56ZUyXPYRBUuxwYPEF5Uuv0J2xC1gxT
-         C5JUB0cHX3QXTRzBvOiT/KsPplekCrvgnVvmpWt6lNggzcrjCU2dBrj/YhaTrW04quo4
-         V6rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790429449; x=1791034249;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790429451; x=1791034251; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ojBPBkhL5Jc0n5dPNdsgITK4l+rLeg8PO1T1tFs40nU=;
-        b=uy9D/1AeixIUNocUmgVjgXXf+GeaZs1MeGdQjjmlw/5nQypBvVDJjJug8UG8SeoyGv
-         oBpiLbSUXuUuyanFhO66dMb6SL2V4f54evk2bwwWtDEes6O3FZ6P1DO2vCAKZQ1TVLwM
-         ANuvxRsongBH4/EXT99vsLmMWwMtoId4Ym7iBMF14Oul/ivjDmqrE/kk4uIpMFH2VBFe
-         OYz7ZYRcvHpGUSbwClQWdkhWKvu48H0tnyT6jcbX2NC8dkH/fdpuy1wCAnkeXxPhd9zE
-         ansRV2V1K1EeX4uSCE00Agk7itfJ2xlTvWDrK+DVXZ7ZUtrZUe9gx0zYCiQnOhSoey9M
-         kO6A==
-X-Gm-Message-State: AFuF++mZAPNMquCw2JkaJRDXOBYmfUmQkx7An3lB4QbwrGcRkp+1nWcS
-	LXWDMZYZTkBc4ugbkD8+G/CPKQWHbYNKOjA5edrB7dZElUgbRXbW3zE2kAuMlJzw
-X-Gm-Gg: AYBFou0V/G2iUcXCLm1H1g//zYZgi3Tc1za+S5GJ4LIxUwED0hjQ6d/REAFU24aflQO
-	hUD85jgZ5lXhmO1YrVrYL1QZaAjE+K+h1eRfe+AVb9Ia4+UnaaWpNEBm2ytCFgv57Mhst5+iIm5
-	rx0vJ2tMbEI+AAf3SQE/mWD6kKnxJCvsX6XEsGwLfqXE4CXeQR5MciwzuGDqsDyomHGk7Qw497s
-	Srk22Bmfg39vWo80t97hBx2c1CPDzcfgM9JGRWS4GOgyOvOnFqcVVlWjDZUBD/td8b3GLcUOmDm
-	6cd76rgYl50SbFQB8cbGZOJ/AlTRlFFYEAZSUn7foCl3ROPffTdBLP3eFd2UBIxXUgDDWz/y4Lf
-	IwBm+xE5ubB5Qm22a3a8sRESmwLDfTaTdBLFSic3Oruwg2nfQlKVt1sAajlgRY4OUWFc/8dW+kv
-	/8YDAk5h3fXGvl2rqeB1HyL6wH2Q9y2S2vcFu8MKinuts3h1Lasiji7tlR2uKU21lgR0IQeODav
-	geRMmkrQrmKfoZic50Wrj4GQiMbgSUtNnMZYfjyMfHTxUol+A2gu1IeQH9te9IIPHYFvqqMVY8D
-	LfCXHz9xU3d4tKwMWPGLKoFz2b38RT4onFIwJ9I=
-X-Received: by 2002:a05:600c:1f95:b0:49f:ce78:3562 with SMTP id 5b1f17b1804b1-49fe66f1aa8mr149337545e9.19.1790429449237;
-        Sat, 26 Sep 2026 06:30:49 -0700 (PDT)
+        bh=1CFYJ5BBZus0Xc8QfUJLqSAqFlEwcYlRk/osGlbbe+s=;
+        b=QuQeycjL3txOsOn9hExWZlvCDv3gukho+Br3BFcwHWEObTJ7JjNGD4SafK9bD4fcxb
+         StXkIDnHEMgx/mW0kRPjUmg4RI3MPfoqHtL7dgPUWS/XnP0Ao041UtgqmntQSWBdzjC0
+         rRrgDWXm6VCADAiwDiyOU9MOcelzRwrgR8CD0QxZ/YQjM9uHUCm4IE0paN6HBoWHeCjs
+         mUCPOSmhGo7EL2JBI4qDeYadNOlz0uF72edqj8/G6cZyLaaVx5/LLMjcDoftVoC36Ddp
+         BmeS2k47/l1DWnXsWxFXRGaZFJ4gLylySvsG7KQUzVbPV0aDhsXdXPV4Kkn3HqbRPvef
+         rUDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790429451; x=1791034251;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1CFYJ5BBZus0Xc8QfUJLqSAqFlEwcYlRk/osGlbbe+s=;
+        b=uoHIkXsBCnxjcO4WynXhJdyIa7lwlKhUmqf6hpwWYXdKjxkqegG/oeuoVPqkyFv4GG
+         lEVEqlNwTwHr+vnf6cRRmZSWCR+YURfHXwZqFUY1q7uWxP1G5wiPZLWP9VuX1TcWBEZe
+         eoDCCkpzfk0hFGw6OeBzLmm1wXJKvSqDOU5SuttRfKqmXl7rFFmD+OUTgv9N0/FafxJJ
+         pAg4htgDjKsoal1RrVC1k6giOWYEE9wC64ifjDYrZg+QXWDCrUdovjzHPtVUI50Pr/ij
+         NqDVTRAqxRDqDamoe2FIe7x20Nt/Jxtb9nfUqMvllGnFO4Rc06bUukqCMIoJ7ZAcwUJU
+         Opxw==
+X-Gm-Message-State: AFq9FYK+FC4W5URsQeY5PeAPnpdXmNRDm6sivMsIFV76pfIKK/1lqdiJ
+	ACzFA2eGbXNu/4lxpMKdNTP2SvXgz5Sdx72+EHzEOkJ7oBxXMfmdLcL/OCc9EsKm
+X-Gm-Gg: AYBFou0M8JRBwppqjihSxHe0ZQnjSOGwPkUuxTzogcNqoQMN1D9Na69wDEx4NC4nKJM
+	mF7vt0qoXPmUrM57rTkS3n9jZ4PZf0s5d1Rh/fLFN2ppX3sGwkNbjNLfqczNj2HYbK/Kp3uch+0
+	eFt1nSPoKmvPw9jjKaBdae5l5VbjILN2gOOjkM28xJlzEMth0fVyPpkVZGFKY3w7m285y73mjAB
+	UOPnnLCiqQ0lxlJl+0/WZAA7h66iCqsGzcUYOo7RS6NwxjIcyBUibQxZfaIiBLItBi+AoLPXSi/
+	4Hduxuvqx0uHsR56m7IFIyePS3aisP98RCxbve077iY0NOlp6YnsuM6RIJJmIFLM7IVZquhkUF5
+	qFjY/lz2vNqO/1PXpgDjT4xsNKhVrny16nguTNXAYyMwAzbXFeTMsaEC2c3aA1+cVU/MXfbZHPj
+	ehkeKRozx47mbzviP0I0lA3XRNeGSPOmecE8Vb0AA9q06jFdaHPMyS3t+OysYuZp/tcysET4h8C
+	ng9RgyWj+GDQfw40qJSwCx0boI3+KTmD1IcEeut4hGHDmVijTO+JaZELyhSphIkUKCQsKSl/ap7
+	lnwOyZBBBIrZe3cAH+WXOitEdxXkm8NBn3uAlg==
+X-Received: by 2002:a5d:584a:0:b0:487:89:bf74 with SMTP id ffacd0b85a97d-4887db4b55bmr9932731f8f.51.1790429450957;
+        Sat, 26 Sep 2026 06:30:50 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fef4fc959sm122021985e9.2.2026.09.26.06.30.48
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a84205esm13920686f8f.37.2026.09.26.06.30.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 06:30:48 -0700 (PDT)
+        Sat, 26 Sep 2026 06:30:50 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -66,93 +68,82 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 0/3] Follow ups for verifier errors set
-Date: Sat, 26 Sep 2026 15:30:42 +0200
-Message-ID: <20260926133048.2962553-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 1/3] selftests/bpf: Test non-sleepable kfunc context
+Date: Sat, 26 Sep 2026 15:30:43 +0200
+Message-ID: <20260926133048.2962553-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260926133048.2962553-1-memxor@gmail.com>
+References: <20260926133048.2962553-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3585; i=memxor@gmail.com; h=from:subject; bh=hSlcltwX/gTUqir1vGAHsYx5mAeS9xhWXRzsm5Im5D4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv7iceZdur9b74E1vOGWD/Luder/uTJnT3Vvk9KFv8tL evnK1vcUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm4WTEyfJqa6/FofRf/ovzb Zz8qyGpt6HpgN9GM/0Z9frvpZt/MOEaGVwIxJxhSlm59xpSxkqlgd9SBOnmFgoIj5gw6W4obtUq ZAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2318; i=memxor@gmail.com; h=from:subject; bh=7BVB89PKLVO6i5G2jI7rGPJfLWFoJWGU1PnXo22Lcv0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv7iSfbBfYFHNp7q0SNO7z6scDMmg+XliW95Di/8wFPt aWkftKJjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzE7SXDHy4mc2bpPVVT/3Rc myr+3evVVJH3p7T+ZU7kmH4g5d8u10BGhjsTpyiuWPTHxto1JSrol/WCflvTrT2/XkjGeFtrzb+ xlgUA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Some follow up changes based on comments from Eduard, Sashiko, and BPF
-CI Bot. See commits for details.
+A sleepable kfunc call can be rejected because the program itself is
+not sleepable or because a sleepable program is inside an active
+critical section.
 
-Patches 1-4 of v3 were applied to bpf-next. This is the remainder,
-rebased on the current bpf-next/master.
+Exercise the two causes separately. Call a sleepable kfunc directly
+from a non-sleepable tracing program, then call it from a sleepable
+tracing program inside an RCU read-side critical section. Assert both
+the legacy verifier messages and the structured reasons.
 
-Changelog:
-----------
-v3 -> v4
-v3: https://lore.kernel.org/bpf/20260924170646.2366016-1-memxor@gmail.com
+Link: https://lore.kernel.org/bpf/2e42a1a2bf45f4d2aba7495bdc9f147558055740e2f3c8b9dae255f6c57fc13c@mail.kernel.org/
+Link: https://lore.kernel.org/r/20260924170646.2366016-6-memxor@gmail.com
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ .../selftests/bpf/progs/preempt_lock.c        | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
- * Drop v3 patches 1-4, which are already applied.
- * Rebase on the current bpf-next/master.
- * State in the Program Structure patch that CO-RE relocations stay where
-   c26e97721b17 put them and only func_info and line_info validation
-   moves ahead of the layout checks. (Alexei)
-
-v2 -> v3
-v2: https://lore.kernel.org/bpf/20260924092941.3174809-1-memxor@gmail.com
-
- * Rebase on bpf-next/master, which now applies CO-RE relocations before
-   subprogram discovery, and only move func_info and line_info validation
-   ahead of the layout checks.
- * Drop the truncated final LD_IMM64 relocation guard and its test, as
-   bpf_check() now rejects that form up front and core_reloc_raw covers it.
-
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20260816015746.2632990-1-memxor@gmail.com
-
- * Drop v1 patches 3, 5-7, 11, and 13-14 because they are already present
-   in bpf-next.
- * Use instruction-neutral wording for variable-offset stack accesses
-   rather than inferring an atomic operation from value_regno == -1. (Eduard)
- * Update the variable-offset assertions and cover the retained
-   uninitialized stack-read diagnostic through the existing CAP_PERFMON-less
-   read inside the allocated stack. (BPF CI)
- * Keep v1 patch 4 unchanged after confirming that the write filter is
-   reachable for lineage-preserving ALU operations with unchanged
-   diagnostic snapshots; only its spill arm is impossible. Say so in the
-   commit message. (Eduard)
- * Consider active critical sections only for sleepable programs and let
-   non-sleepable programs reach the existing no-active-context fallback
-   instead of adding an early branch. A non-sleepable program can still
-   hold RCU, preempt, IRQ, or lock state, so the fallback alone would
-   keep blaming the region. Keep the "non-sleepable prog" description.
-   (Eduard, BPF CI)
- * Select the helper and global-function suggestions by cause, matching
-   the kfunc site. (BPF CI)
- * Split the kfunc coverage into a non-sleepable program case and a
-   sleepable program inside an RCU read-side critical section. (Eduard)
- * Scan subprogram properties with nested loops and drop the partial
-   recursive-edge details together with their assertion. (Eduard)
- * Reject CO-RE relocations targeting a truncated final LD_IMM64 before
-   applying them, since BTF validation now runs before the subprogram
-   layout check, and add raw CO-RE coverage for the rejection. Add the
-   Fixes tag. (BPF CI)
- * Rebase on the current bpf-next/master and let the new property scan
-   also set the callx marker that check_subprogs() collects upstream.
-
-Kumar Kartikeya Dwivedi (3):
-  selftests/bpf: Test non-sleepable kfunc context
-  bpf: Correct Program Structure diagnostic context
-  selftests/bpf: Test Program Structure diagnostic context
-
- kernel/bpf/cfg.c                              |  2 +-
- kernel/bpf/verifier.c                         | 54 +++++++++++++------
- .../selftests/bpf/progs/preempt_lock.c        | 26 +++++++++
- .../selftests/bpf/progs/verifier_cfg.c        | 40 ++++++++++++++
- .../selftests/bpf/progs/verifier_gotox.c      |  2 +
- 5 files changed, 106 insertions(+), 18 deletions(-)
-
-
-base-commit: ea9358e1270ab2c3ba6f36bd9bdda68617665516
+diff --git a/tools/testing/selftests/bpf/progs/preempt_lock.c b/tools/testing/selftests/bpf/progs/preempt_lock.c
+index 81c459435680..955391da326a 100644
+--- a/tools/testing/selftests/bpf/progs/preempt_lock.c
++++ b/tools/testing/selftests/bpf/progs/preempt_lock.c
+@@ -6,6 +6,8 @@
+ #include "bpf_experimental.h"
+ 
+ extern int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void *unsafe_ptr__ign, u64 flags) __weak __ksym;
++extern void bpf_rcu_read_lock(void) __ksym;
++extern void bpf_rcu_read_unlock(void) __ksym;
+ 
+ SEC("?tc")
+ __failure __msg("BPF_EXIT instruction in main prog cannot be used inside bpf_preempt_disable-ed region")
+@@ -179,6 +181,30 @@ int preempt_sleepable_kfunc(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++__failure __msg("program must be sleepable to call sleepable kfunc bpf_copy_from_user_str")
++__msg("cannot be used in non-sleepable program")
++int non_sleepable_kfunc(void *ctx)
++{
++	u32 data;
++
++	bpf_copy_from_user_str(&data, sizeof(data), NULL, 0);
++	return 0;
++}
++
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("kernel func bpf_copy_from_user_str is sleepable within rcu_read_lock region")
++__msg("cannot be used in RCU read lock region")
++int sleepable_kfunc_in_rcu(void *ctx)
++{
++	u32 data;
++
++	bpf_rcu_read_lock();
++	bpf_copy_from_user_str(&data, sizeof(data), NULL, 0);
++	bpf_rcu_read_unlock();
++	return 0;
++}
++
+ int __noinline preempt_global_subprog(void)
+ {
+ 	preempt_balance_subprog();
 -- 
 2.53.0
 
