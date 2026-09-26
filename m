@@ -1,64 +1,64 @@
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B86E23A05C4
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9252D3A16B9
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790465722; cv=none; b=OZobRnHpU9l0fEdfptrfsW0JkjBVz7ggDznwBDvQ+ph67GwaFLlKXsssTnKuji2M1LCbyLRRTR/WIiuMS+bMVAv6zRUSsW7PHwFDjkbucFle7g2y0U0EGyGhk7R78bl756FG7upHSIGNenjuo7kyQa/cOHAbbbpKjXnq3cwIo9A=
+	t=1790465723; cv=none; b=bI73M5aTeQTl3Ael//61UMx4VSod9wJgFWE4U952wZy3vsnVrNjxvrVWif1WHp8OciYLzH+INzrwtuhrKn2XG1/fkzMec4rEUf5JC3NFheFGpdsAimRLld6ikj1fxqhGIMhGlZn+CN6wFjPbZpi7M+JdIZm6sdb7h0MQ6hqVDkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790465722; c=relaxed/simple;
-	bh=acEpGvFHKuEdEHkOo9qPO7ChRUB8bqZb6gFhJSxFNM0=;
+	s=arc-20240116; t=1790465723; c=relaxed/simple;
+	bh=wd5/4gJP8RTe0AViW83QlQ1hQstjiMVwK3UIGK3ozC8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HUV5gTV6gQ9bY8HG8JL4Bpe3kUkpwzDoDmThL2yE8e5nX/6s1WHtmo0S2z9h0cn4ibeHJqr7r/8fdzEzheAW3FGn5yhhexh8thoZTD+pOvykY5KpjdNqqIODX2H32rJN+AXQ4NSZcuRwnV4WwE4k7BFRNpClOrvaExw7LREup6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q+t6UfFy; arc=none smtp.client-ip=209.85.221.66
+	 MIME-Version; b=etu7xUK9oBgd0OZuhkrPnzEgGAu+HalvkdstkaHsWjOUyLu9diG3bTAxxmn3XLpKMVpqiwQLXeLkITdc4rRt4fCLqrY9r+/sIxNg2ky8yt8V0+BK11zHsSgE40I7GHSh0WEMC4jiWFbDOxViCIptQRes0R4k76boTT7WjPjUIww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AyNPZrWe; arc=none smtp.client-ip=74.125.225.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q+t6UfFy"
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-48870973bddso840538f8f.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AyNPZrWe"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484372811e5so588649f8f.0
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790465718; x=1791070518; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790465719; x=1791070519; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NfUnry3yQRy6KcUkVKpDtVYlOJAPNCtGzB3z+KVGzDc=;
-        b=q+t6UfFywAw4ejL6ZU/jPBORMAxjCv2Q9i5Op8ve8Gz8TAE2juDe3laD89VfbthoKC
-         2qjTf8bXJcpW8HoCHLIOxLuOetO/gSIK5KOFCHczuS+LqwT0kOHtaoQ18+yEtgfA9+f/
-         R3PjNKixRFMatr0yt54RCzYc3uDuu1vL5ya2yjGSEYwv5pBW1f1wPqf+7dFH0YRarTZK
-         5ll20hG/WwlFJhAgQEbSUdw/axagScrwcejhdm22ffIv0B7qgKIWze88GIAV3UzwOd34
-         JIuOellBt8d5jszlcyvAzTtLkF7Fw9DxWlTEqodSjNBo7JjapzSWKx0lZCY6xyMASsEl
-         NxQw==
+        bh=do5ZDVvxmmN+614CpafluJsI1iW8B4+p2QLfPJNdRAU=;
+        b=AyNPZrWesO3g9fE2Ln5F1NQCrJYmmiaftq+kkLADVGhHsGaxXdfZeyrc/meJti9xEP
+         tdLdaMN44rSzp1Qq4gBNJz8Lo0grdvFXfA+yoVcHYH3RwBCqACL8MM1WuG7OJ9R480i1
+         9tuIaTP/06U6f196Cufu1okzlDeKSk1QhY80+CghbiQv7okE2aLTZjVkkOVSisJNC9bY
+         Lpy5wi106+9lB2BHdEMIw05DZ4n3JniUnOC5aIwHkD42zJfcZVRd8E6bH9Nnqj9PWGhO
+         VoGMZDkcmZb84+N8Kei7r/rq9g0eweVsFusQCJKCeXnQmwNi0Bum7iBPJAFcT+fQTlA1
+         QP2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790465718; x=1791070518;
+        d=1e100.net; s=20260707; t=1790465719; x=1791070519;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NfUnry3yQRy6KcUkVKpDtVYlOJAPNCtGzB3z+KVGzDc=;
-        b=nQat5HtZ8dfz0CIO7GBzArPjyHmmO5zaiF8x6cWkm4ozAZ3W+hEeozYLMqHZZxiV6u
-         ER24UfSad9h351TE89nEGVSC5Pf1wFm0oJQNJ3Ff65glC/31Pvl+hvfex6+g6q4YQ7AT
-         UccQo79iYZOswkh4qAn6z4YqfOqJ0LuJR+Z4MyO/AFOXfx0hLYuizSF5T/3IpbH2Cchb
-         3bGVlbKp4gCGEk7OCcoUKPnNIA3ej3B0TeBLepwAZkhGbVqs/fRBTSt+oez7e6p2QxZo
-         ++5/7A3ooO+3YiAj2JWnxYdRZ4Uinjg6BR059meDUbYcRt9+SAMy+TFTMZnMAgEjKsPd
-         Bfrw==
-X-Gm-Message-State: AFq9FYIfqId+wQQwcUEzjIfJ8UL62OCXSqxsGaROZ/duxbbqWlRlHr17
-	Wd9TzKwJZzq/tvzhd6SrhBWNLL5MPFdgG5BIvic2np36jpcee8I0er61UC+NtCNq
-X-Gm-Gg: AYBFou2oJfWDU0aC6umkuDMEP+sfr8ZRCQzzyiL8g0BZZrAPJ9Ba8pm4AYqx8SCLbnB
-	8O4gbUV7Qwk9wq0hDmjjeO2N3HBvmuVCHHNQOMzrBnqCGLdOUih1D6Gr+dDD4w1rl3p2CstSs7u
-	ujKIubESUPmQ6ZHS58p8GapxXyejAkoeiLd98l4krVJCkQuFxp7UsFKEW1wJp2I2nmkxhYTRnVA
-	AK7kg640fbMbtwNEqMBK+CRgIJRMmVa3rQIkIUzdTclIhEbPjZKPR9gwxfeQ02YZKOI4IX7nqLd
-	6woQk4/+IZ4fz2apmN8jnRjBKs3wmcW/Kx4RFbVDdAvIasdGPxXRxzP/HWnVc95WlrHfW6lZgUS
-	pDimfxXqh/UKHy+bnvHWNUx6h3wr78GKhkMxkddimMlUI6xXgH/YnqufLjdVJkMmT3qEjqp9cdm
-	fnqTYt3u79Oitb8ihOjLxX45QevIlGBbvqxgu6s6H0oD7Y/C2aS2cVvpyCzilSUeYRVkrW3BSHZ
-	FtbO20/i4VzTU62JQAnDvhCaPqPWce+nsA+MRJNY+9GiDqTiDezywD6i7M69IFpb1k6v/Z8c4ZR
-	r7fm66RKvYXXvVAO4MvurRQLJZvXcRzlLlmKpw==
-X-Received: by 2002:adf:e197:0:b0:488:8cf8:1c with SMTP id ffacd0b85a97d-4888cf80236mr928578f8f.0.1790465717603;
-        Sat, 26 Sep 2026 16:35:17 -0700 (PDT)
+        bh=do5ZDVvxmmN+614CpafluJsI1iW8B4+p2QLfPJNdRAU=;
+        b=kxJEo6ntm8dxJdikTKSZkMwEI3+XH/gDzDgmB1vwOl6RfCVYc0/idcno1x8FTG80XU
+         tbDphG82FCI9K69Ly/JUNJHpRNm5ufC06+4lqxiOOC10dZb0jrHAovaEZmXOlIxEJXk+
+         Q5ec27dtKtFcXxeESZUVGgGujorIos4ibOSYnK2rl51ewICUucXFJLLlZuD476ixVNfp
+         7NxpTW9eXxhZ0lyTjTAd1aqMkw4dDlK5hUckJzSeumBPUY7zFcLOBihVKFrAChjkI03M
+         KQqWoj1md4IWx2ih7YAR4CIB24JBKDLFWMfNwC8GMGezFRHCC5lQUfyZw8jul1I/WGQX
+         8OZg==
+X-Gm-Message-State: AFuF++m2b2ynKZv4AjfBwDwB0rI5d5AKad6HfB+sPhbEWEj9rynzI2lx
+	Fc+NlKYIRql2EseEmuz2Hm+TLeEb6LQiTWdLkTKhth+bAtbKRYA9QTg+h2FggSqS
+X-Gm-Gg: AYBFou1tV+YGFLmQcBsKw48i1mpO/J33Kf/X4d5AQVcKuJzZwAG41oYKAanJZ3h8SAw
+	bKy3xzVoq2ZLu/O5FB+nuoHcfqLsVgtp+lI2jn6xi11MwJsJ3ooWn85LApoaK9Zoa/Ld/y3SG35
+	KCt5qDR/1YCl/L8Yzv57Kf+0nv3exS3eWNeDu0+I5s4Ex/4eHA8/OtAQrmX1YrjUTe9FVURebIz
+	bZwoJqqSLynoilDTsbCiXubWyv0tEQU/mVjTx4BD4JEsA4wRUrajyrpLCRsEySTN8sQbxbnO62N
+	e2zYsED/9TO71un23cumMvXTF5OVZ9MGJGhoHM6bA7y9Hb5rO8m1YRtDSUP3bfagYzfvyBxuMSF
+	zavTocGaQ1JR+kguUr9StfmTzYEuQgoIz3jl+dnUDU2jpojUjR7ZKWpz5A1Iijbj2/xDKxrBRgU
+	lArZOd0ZjNXvpc+az0pKK1PDuuNKRzRkXI4QqlMRuxvBhExLGeDvCBuUcwAOL9db5PYDxK+iK6/
+	9HbWAXqPZNOvG6kXTA22oFTO2LlYZyZXV2yq8nPhFSp1TcTL5MZSxCCdov5ePh7aN89R7+SmEDE
+	3RSRQcvPf9andR/HEKPD2L4fctPe46gQT2rnQg==
+X-Received: by 2002:a05:600d:486:20b0:49f:e8bf:221a with SMTP id 5b1f17b1804b1-49fe8bf24fbmr118351675e9.22.1790465719344;
+        Sat, 26 Sep 2026 16:35:19 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a74538asm16375248f8f.34.2026.09.26.16.35.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fef60cc72sm103921155e9.3.2026.09.26.16.35.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 16:35:17 -0700 (PDT)
+        Sat, 26 Sep 2026 16:35:18 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 07/16] bpf: Trust typed pointer fields of typed arena objects
-Date: Sun, 27 Sep 2026 01:34:45 +0200
-Message-ID: <20260926233503.3114147-8-memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 08/16] bpf: Canonicalize loaded typed arena pointers where they are used
+Date: Sun, 27 Sep 2026 01:34:46 +0200
+Message-ID: <20260926233503.3114147-9-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926233503.3114147-1-memxor@gmail.com>
 References: <20260926233503.3114147-1-memxor@gmail.com>
@@ -80,674 +80,229 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=25141; i=memxor@gmail.com; h=from:subject; bh=acEpGvFHKuEdEHkOo9qPO7ChRUB8bqZb6gFhJSxFNM0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWNzlGn8x9h2Td/af8O9ifdp4ZnrBI/njrT+XHti9Q 37btXyNjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEwk+BMjw+HQ6eynzJcFrd7J /q/13K3L57m+tlnrR+w9rhftt69yJxvD/wQbsbmJb3uaTk3d6F9y9hy/wIfJx//lCfz7MePlVMa 9y/gA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10548; i=memxor@gmail.com; h=from:subject; bh=wd5/4gJP8RTe0AViW83QlQ1hQstjiMVwK3UIGK3ozC8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWJzpL/WJD2d4hq7q2VFz6yVrIN+hdDOvQysnyjKu8 xY6domzo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABPZ/YqR4UbLuYO3lzBE6iQ4 n0lTKk/vjik6O3H2usL4fzsa5c+G2jP8T6ho8/MXWsNcFnTIXO+l3sKZK+++NQ6yOqj/0vkP2z8 7HgA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A pointer member of a typed arena object whose pointee is itself a struct
-with a typed arena is a typed pointer field: it holds a pointer to an object
-of that struct, or 0, and nothing else, because the verifier lets nothing
-else be written there. Typed objects live in memory only programs can
-write, every store into such a field is a 64-bit store of a typed arena
-pointer to the pointee struct at offset zero or of the constant 0, and a
-chunk comes back zeroed when it is reused. A stale pointer, to an object
-whose chunk was released and claimed again, still names a whole object of
-the type. So a 64-bit load from the field gives back a value that is an
-object of the pointee type or 0 without a check, and a linked structure in
-a typed arena is walked with plain loads: no cast per hop, no annotation.
+A typed arena pointer loaded from a typed pointer field is an object of its
+type or 0, but it is not canonical: nothing masked it into its slot, and it
+may be 0. The previous patch refused to use it as an address. Sanitize it
+instead where it is used, in place: when an instruction loads or stores
+through such a pointer, or an atomic runs on it, when arithmetic moves it,
+or when it goes to a helper or kfunc, the lowering prepends the typed
+arena's cast sequence to that instruction, on that register, and on that
+path the register is canonical from then on. Compares, copies, spills and
+stores of the value as a value need nothing, so a list is walked with plain
+loads and ends with the usual test against 0, and a pointer that is only
+passed along is never touched.
 
-Detect the fields from BTF alone. A struct is typed when it has a special
-field, a kptr today, or a pointer member to a typed struct, taken to the
-closure: the closure runs when the program's BTF is parsed, before the
-struct records, and is kept in the BTF, so that parsing a record can ask
-whether a pointee is typed. A struct whose only pointers are to itself and
-that has no special field of its own never joins, and pointer members
-tagged as arena pointers are user addresses and stay scalars. The field
-becomes a new record kind, BPF_TYPED_PTR, eight bytes aligned to eight like
-a kptr, allowed in arrays and nested structs, with nothing to acquire,
-release or free. It counts as a special field, so a struct holding only a
-pointer to a typed struct, a list head for instance, gets a typed arena of
-its own. The same member of a struct allocated with bpf_obj_new() keeps its
-old meaning, a plain pointer that loads as a scalar, and so does the same
-shape in a map value or in the raw arena, whose memory is not disciplined.
+This is the whole of the NULL question. The field's discipline says the
+value is an object or 0. A program that tests for 0 sees the raw value and
+takes its branch. A program that does not test, or tests wrongly, uses the
+value as an address, the sequence maps 0 to object 0 of the slice, and the
+access lands on a whole object of the type, the same outcome as feeding 0
+to a cast. Nothing the program does with the value can reach outside the
+slice, so the verifier asks for no annotation and no check: the SFI scheme
+decides the result, not the type system, and a NULL check is a matter of
+program logic alone. The alternative, a maybe-NULL pointer type that must
+be checked before every use, would put a check on every hop of a
+traversal that the sanitization makes unnecessary.
 
-The load yields a new form of typed arena pointer, PTR_UNSANITIZED: the
-value is trusted to be an object or 0 but is not canonical, since nothing
-masked it into its slot, and it may be 0, which no NULL check is required
-to exclude. It survives 64-bit copies, spills and fills, and 64-bit
-compares on the raw value, so a loop ends with the usual test against 0. It
-may be stored back into a typed pointer field or anywhere a pointer store is
-allowed. What it cannot do yet is serve as an address: a load or store
-through it, arithmetic on it, or passing it to a call is refused until the
-next patch teaches the lowering to sanitize it in place at that point.
+The sequence is lowered once per instruction and runs on every path through
+it, so it must be harmless on every path. It is idempotent on a canonical
+pointer of the same typed arena at offset zero, which is what a path that
+got its pointer from a cast or from an earlier sanitization brings. It is
+wrong on a pointer with an offset into its object, since the mask rounds to
+the object base, on a pointer of another typed arena, whose base and mask
+differ, and on any other value. So the verifier records the register and
+its typed arena in the instruction's aux data when a path needs the
+sequence, and rejects the program when another path brings that register
+in a form the sequence would corrupt, or when a second register needs it at
+the same instruction, which no compiler-generated code does. Arithmetic
+sanitizes before it moves the pointer for the same reason: the offset must
+be added to the object base, not masked away later.
 
-Narrower loads and stores of a typed pointer field, stores of anything but
-a typed pointer to the pointee or 0, and atomics on the field are rejected,
-as the field's invariant depends on them. A struct whose special fields are
-only inherited from a nested struct has no record of its own and is refused
-at registration rather than treated as a verifier bug.
+The later optimization phase builds on the unsanitized form: a load through
+such a pointer that nothing writes to can be a probed load instead of a
+sanitized one, and a chain of reads then costs nothing beyond the loads. A
+store of a typed pointer into a typed object always sanitizes its
+destination, since the field's discipline depends on the store landing in a
+real object.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h          |  12 ++++
- include/linux/bpf_verifier.h |   6 ++
- kernel/bpf/btf.c             | 131 +++++++++++++++++++++++++++++++----
- kernel/bpf/log.c             |   3 +-
- kernel/bpf/syscall.c         |   3 +
- kernel/bpf/verifier.c        | 124 +++++++++++++++++++++++++++++++--
- 6 files changed, 260 insertions(+), 19 deletions(-)
+ include/linux/bpf_verifier.h | 10 +++++
+ kernel/bpf/fixups.c          | 38 +++++++++++++------
+ kernel/bpf/verifier.c        | 71 ++++++++++++++++++++++++++++++++----
+ 3 files changed, 99 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 307e0e7c9445..f4c65fabedbf 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -218,6 +218,7 @@ enum btf_field_type {
- 	BPF_RES_SPIN_LOCK = (1 << 12),
- 	BPF_TASK_WORK  = (1 << 13),
- 	BPF_RCU_HEAD   = (1 << 14),
-+	BPF_TYPED_PTR  = (1 << 15),
- };
- 
- enum bpf_cgroup_storage_type {
-@@ -451,6 +452,8 @@ static inline const char *btf_field_type_name(enum btf_field_type type)
- 		return "bpf_task_work";
- 	case BPF_RCU_HEAD:
- 		return "bpf_rcu_head";
-+	case BPF_TYPED_PTR:
-+		return "typed_ptr";
- 	default:
- 		WARN_ON_ONCE(1);
- 		return "unknown";
-@@ -478,6 +481,7 @@ static inline u32 btf_field_type_size(enum btf_field_type type)
- 	case BPF_KPTR_REF:
- 	case BPF_KPTR_PERCPU:
- 	case BPF_UPTR:
-+	case BPF_TYPED_PTR:
- 		return sizeof(u64);
- 	case BPF_LIST_HEAD:
- 		return sizeof(struct bpf_list_head);
-@@ -514,6 +518,7 @@ static inline u32 btf_field_type_align(enum btf_field_type type)
- 	case BPF_KPTR_REF:
- 	case BPF_KPTR_PERCPU:
- 	case BPF_UPTR:
-+	case BPF_TYPED_PTR:
- 		return __alignof__(u64);
- 	case BPF_LIST_HEAD:
- 		return __alignof__(struct bpf_list_head);
-@@ -562,6 +567,7 @@ static inline void bpf_obj_init_field(const struct btf_field *field, void *addr)
- 	case BPF_UPTR:
- 	case BPF_TASK_WORK:
- 	case BPF_RCU_HEAD:
-+	case BPF_TYPED_PTR:
- 		break;
- 	default:
- 		WARN_ON_ONCE(1);
-@@ -948,6 +954,12 @@ enum bpf_type_flag {
- 	/* MEM is an object in a typed arena, reached through a native pointer. */
- 	MEM_ARENA		= BIT(21 + BPF_BASE_TYPE_BITS),
- 
-+	/*
-+	 * MEM_ARENA pointer as loaded from a typed pointer field: an object of
-+	 * the type or 0, not yet masked into its slot.
-+	 */
-+	PTR_UNSANITIZED		= BIT(22 + BPF_BASE_TYPE_BITS),
-+
- 	__BPF_TYPE_FLAG_MAX,
- 	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
- };
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 135049628313..77e7c4b45a1f 100644
+index 77e7c4b45a1f..bf0f23929671 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1475,6 +1475,12 @@ static inline bool type_is_local_obj(u32 type)
- 	return type & (MEM_ALLOC | MEM_ARENA);
- }
- 
-+/* A typed arena pointer as a typed pointer field holds it, not yet rounded into its slot. */
-+static inline bool type_is_unsanitized_arena_obj(u32 type)
-+{
-+	return type_is_typed_arena_obj(type) && type_flag(type) & PTR_UNSANITIZED;
-+}
-+
- static inline bool insn_is_typed_arena_cast(const struct bpf_insn *insn)
- {
- 	return insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && insn->off == BPF_TYPED_ARENA_CAST;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6a29a9d87702..20338a2657cd 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -272,6 +272,8 @@ struct btf {
- 	struct btf_struct_metas *struct_meta_tab;
- 	struct btf_struct_ops_tab *struct_ops_tab;
- 	struct btf_layout *layout;
-+	/* structs with special fields, closed over plain pointers to them; see btf_find_kptr() */
-+	unsigned long *typed_structs;
- 
- 	/* split BTF support */
- 	struct btf *base_btf;
-@@ -1890,6 +1892,7 @@ static void btf_free_struct_ops_tab(struct btf *btf)
- static void btf_free(struct btf *btf)
- {
- 	btf_free_struct_meta_tab(btf);
-+	bitmap_free(btf->typed_structs);
- 	btf_free_dtor_kfunc_tab(btf);
- 	btf_free_kfunc_set_tab(btf);
- 	btf_free_struct_ops_tab(btf);
-@@ -3578,6 +3581,11 @@ bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type *t)
- 	return false;
- }
- 
-+static bool btf_struct_is_typed(const struct btf *btf, u32 id)
-+{
-+	return btf->typed_structs && id < btf_nr_types(btf) && test_bit(id, btf->typed_structs);
-+}
-+
- static int btf_find_kptr(const struct btf *btf, const struct btf_type *t,
- 			 u32 off, int sz, struct btf_field_info *info, u32 field_mask)
- {
-@@ -3589,6 +3597,7 @@ static int btf_find_kptr(const struct btf *btf, const struct btf_type *t,
+@@ -662,6 +662,16 @@ struct bpf_insn_aux_data {
  	};
- 	struct btf_type_tag_walk_ctx ctx;
- 	enum btf_field_type type = 0;
-+	const struct btf_type *ptr;
- 	int err;
- 	u32 res_id;
- 
-@@ -3598,6 +3607,7 @@ static int btf_find_kptr(const struct btf *btf, const struct btf_type *t,
- 	/* For PTR, sz is always == 8 */
- 	if (!btf_type_is_ptr(t))
- 		return BTF_FIELD_IGNORE;
-+	ptr = t;
- 
- 	ctx.t = t;
- 	err = btf_type_tag_walk(btf, &ctx, kptr_type_tags,
-@@ -3609,6 +3619,15 @@ static int btf_find_kptr(const struct btf *btf, const struct btf_type *t,
- 	res_id = ctx.id;
- 	type = ctx.res;
- 
+ 	struct btf_struct_meta *kptr_struct_meta;
+ 	struct bpf_typed_arena *typed_arena; /* named by a cast or a typed arena kfunc call */
 +	/*
-+	 * A plain pointer to a struct that has a typed arena is a typed pointer
-+	 * field: an object of that struct, or NULL, whatever the program wrote.
-+	 * Arena pointers are user addresses and stay plain scalars.
++	 * Lazy sanitization of a typed arena pointer used as an address here:
++	 * the register and its typed arena, whether a path brought the pointer
++	 * unsanitized, and the registers some path brought in a form the
++	 * sanitizing sequence would corrupt.
 +	 */
-+	if (!type && field_mask & BPF_TYPED_PTR && __btf_type_is_struct(t) &&
-+	    !btf_type_is_arena_ptr(btf, ptr) && btf_struct_is_typed(btf, res_id))
-+		type = BPF_TYPED_PTR;
-+
- 	if (!(type & field_mask))
- 		return BTF_FIELD_IGNORE;
- 
-@@ -3748,7 +3767,7 @@ static int btf_get_field_type(const struct btf *btf, const struct btf_type *var_
- 	}
- 
- 	/* Only return BPF_KPTR when all other types with matchable names fail */
--	if (field_mask & (BPF_KPTR | BPF_UPTR) && !__btf_type_is_struct(var_type)) {
-+	if (field_mask & (BPF_KPTR | BPF_UPTR | BPF_TYPED_PTR) && !__btf_type_is_struct(var_type)) {
- 		type = BPF_KPTR_REF;
- 		goto end;
- 	}
-@@ -3780,6 +3799,7 @@ static int btf_repeat_fields(struct btf_field_info *info, int info_cnt,
- 		case BPF_KPTR_REF:
- 		case BPF_KPTR_PERCPU:
- 		case BPF_UPTR:
-+		case BPF_TYPED_PTR:
- 		case BPF_LIST_HEAD:
- 		case BPF_RB_ROOT:
- 			break;
-@@ -3915,6 +3935,7 @@ static int btf_find_field_one(const struct btf *btf,
- 	case BPF_KPTR_REF:
- 	case BPF_KPTR_PERCPU:
- 	case BPF_UPTR:
-+	case BPF_TYPED_PTR:
- 		ret = btf_find_kptr(btf, var_type, off, sz,
- 				    info_cnt ? &info[0] : &tmp, field_mask);
- 		if (ret < 0)
-@@ -4262,6 +4283,11 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
- 			if (ret < 0)
- 				goto end;
- 			break;
-+		case BPF_TYPED_PTR:
-+			/* The pointee is in this BTF, which outlives the record. */
-+			rec->fields[i].kptr.btf = (struct btf *)btf;
-+			rec->fields[i].kptr.btf_id = info_arr[i].kptr.type_id;
-+			break;
- 		case BPF_LIST_HEAD:
- 			ret = btf_parse_list_head(btf, &rec->fields[i], &info_arr[i]);
- 			if (ret < 0)
-@@ -6162,12 +6188,29 @@ static const char * const alloc_obj_fields[] = {
- 	"bpf_refcount",
- };
- 
-+/*
-+ * Whether a struct holds a typed pointer field, given the typed structs known
-+ * so far. Every struct of the BTF is scanned, kernel structs pulled in from
-+ * vmlinux.h included, and the scan can fail on members a typed arena object
-+ * could not have, such as pointers with kernel type tags: a failure does not
-+ * make a struct typed. A struct that a program registers is parsed again then,
-+ * and that parse reports what is wrong with it.
-+ */
-+static bool btf_struct_has_typed_ptr(const struct btf *btf, const struct btf_type *t)
-+{
-+	struct btf_field_info info[BTF_FIELDS_MAX];
-+
-+	return btf_find_field(btf, t, BPF_TYPED_PTR, info, ARRAY_SIZE(info)) > 0;
-+}
-+
- static struct btf_struct_metas *
- btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
++	struct bpf_typed_arena *sanitize_arena;
++	u16 sanitize_plain;
++	u8 sanitize_reg;
++	bool sanitize_needed;
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+ 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 0b4636498ddc..fd0ba8376c1c 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -877,27 +877,41 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+  *     struct bpf_sock_ops -> struct sock
+  */
+ /*
+- * Replace every typed_arena_cast with the sanitizing sequence of the typed
+- * arena the verifier registered for it. The type is part of the instruction,
+- * so a cast has exactly one typed arena by the time it gets here.
++ * Lower the instructions the verifier tied to a typed arena. A typed_arena_cast
++ * becomes the sanitizing sequence of the typed arena the verifier registered
++ * for it; the type is part of the instruction, so a cast has exactly one. An
++ * instruction that uses a typed pointer loaded from a typed pointer field as
++ * an address gets the same sequence prepended, in place on that register: the
++ * verifier checked that every path brings that register here as an
++ * unsanitized pointer of that typed arena, or as a canonical one at offset
++ * zero, on which the sequence is a no-op.
+  */
+ int bpf_lower_typed_arena_insns(struct bpf_verifier_env *env)
  {
- 	struct btf_struct_metas *tab = NULL;
-+	unsigned long *typed = NULL;
- 	struct btf_id_set *aof;
- 	int i, n, id, ret;
-+	bool changed;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+ 	int i, cnt, delta = 0, insn_cnt = env->prog->len;
+-	const struct bpf_typed_arena *ta;
+-	struct bpf_insn insn_buf[8];
++	struct bpf_insn insn_buf[16];
++	struct bpf_insn_aux_data *aux;
+ 	struct bpf_prog *new_prog;
  
- 	BUILD_BUG_ON(offsetof(struct btf_id_set, cnt) != 0);
- 	BUILD_BUG_ON(sizeof(struct btf_id_set) != sizeof(u32));
-@@ -6231,26 +6274,65 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
- 	}
- 	sort(&aof->ids, aof->cnt, sizeof(aof->ids[0]), btf_id_cmp_func, NULL);
- 
-+	/*
-+	 * The structs with special fields, and their closure over plain
-+	 * pointers: a pointer member to a struct with special fields is a typed
-+	 * pointer field, itself a special field, so the struct holding it joins
-+	 * the set, and so on until nothing changes. A struct whose only pointers
-+	 * are to itself, with no special field of its own, never joins. The set
-+	 * is published in the btf before the records are parsed, since parsing
-+	 * consults it for every pointer member.
-+	 */
-+	typed = bitmap_zalloc(n, GFP_KERNEL | __GFP_NOWARN);
-+	if (!typed) {
-+		ret = -ENOMEM;
-+		goto free_aof;
-+	}
- 	for (i = 1; i < n; i++) {
--		struct btf_struct_metas *new_tab;
- 		const struct btf_member *member;
--		struct btf_struct_meta *type;
--		struct btf_record *record;
- 		const struct btf_type *t;
--		int j, tab_cnt;
-+		int j;
- 
- 		t = btf_type_by_id(btf, i);
- 		if (!__btf_type_is_struct(t))
- 			continue;
-+		for_each_member(j, t, member) {
-+			if (btf_id_set_contains(aof, member->type)) {
-+				set_bit(i, typed);
-+				break;
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+-		if (!insn_is_typed_arena_cast(insn))
+-			continue;
+-		ta = env->insn_aux_data[i + delta].typed_arena;
+-		if (!ta) {
+-			verifier_bug(env, "typed_arena_cast at insn %d has no typed arena", i);
+-			return -EFAULT;
++		aux = &env->insn_aux_data[i + delta];
++		cnt = 0;
++		if (aux->sanitize_needed)
++			cnt = bpf_typed_arena_cast_insns(aux->sanitize_arena, aux->sanitize_reg,
++							 aux->sanitize_reg, insn_buf);
++		if (insn_is_typed_arena_cast(insn)) {
++			if (!aux->typed_arena) {
++				verifier_bug(env, "typed_arena_cast at insn %d has no typed arena", i);
++				return -EFAULT;
 +			}
-+		}
-+	}
-+	btf->typed_structs = typed;
-+	do {
-+		changed = false;
-+		for (i = 1; i < n; i++) {
-+			const struct btf_type *t;
-+
-+			t = btf_type_by_id(btf, i);
-+			if (!__btf_type_is_struct(t) || test_bit(i, typed))
-+				continue;
-+			cond_resched();
-+			if (btf_struct_has_typed_ptr(btf, t)) {
-+				set_bit(i, typed);
-+				changed = true;
-+			}
-+		}
-+	} while (changed);
-+
-+	for (i = 1; i < n; i++) {
-+		struct btf_struct_metas *new_tab;
-+		struct btf_struct_meta *type;
-+		struct btf_record *record;
-+		const struct btf_type *t;
-+		int tab_cnt;
-+
-+		if (!test_bit(i, typed))
-+			continue;
-+		t = btf_type_by_id(btf, i);
- 
- 		cond_resched();
- 
--		for_each_member(j, t, member) {
--			if (btf_id_set_contains(aof, member->type))
--				goto parse;
--		}
--		continue;
--	parse:
- 		tab_cnt = tab ? tab->cnt : 0;
- 		new_tab = krealloc(tab, struct_size(new_tab, types, tab_cnt + 1),
- 				   GFP_KERNEL | __GFP_NOWARN);
-@@ -6266,10 +6348,12 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
- 		type->btf_id = i;
- 		record = btf_parse_fields(btf, t, BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK | BPF_LIST_HEAD | BPF_LIST_NODE |
- 						  BPF_RB_ROOT | BPF_RB_NODE | BPF_REFCOUNT |
--						  BPF_KPTR, t->size);
-+						  BPF_KPTR | BPF_TYPED_PTR, t->size);
- 		/* The record cannot be unset, treat it as an error if so */
- 		if (IS_ERR_OR_NULL(record)) {
- 			ret = PTR_ERR_OR_ZERO(record) ?: -EFAULT;
-+			bpf_log(log, "struct %s has an invalid layout of special fields: %d\n",
-+				__btf_name_by_offset(btf, t->name_off), ret);
- 			goto free;
++			cnt += bpf_typed_arena_cast_insns(aux->typed_arena, insn->dst_reg,
++							  insn->src_reg, insn_buf + cnt);
++		} else if (cnt) {
++			insn_buf[cnt++] = *insn;
  		}
- 		type->record = record;
-@@ -6279,6 +6363,8 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
- 	return tab;
- free:
- 	btf_struct_metas_free(tab);
-+	bitmap_free(typed);
-+	btf->typed_structs = NULL;
- free_aof:
- 	kfree(aof);
- 	return ERR_PTR(ret);
-@@ -7782,6 +7868,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	u32 id = reg->btf_id;
- 	int err;
- 
-+	t = btf_type_by_id(btf, id);
- 	while (type_is_local_obj(reg->type)) {
- 		struct btf_struct_meta *meta;
- 		struct btf_record *rec;
-@@ -7795,6 +7882,25 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			struct btf_field *field = &rec->fields[i];
- 			u32 offset = field->offset;
- 			if (off < offset + field->size && offset < off + size) {
-+				if (field->type == BPF_TYPED_PTR) {
-+					/*
-+					 * A typed pointer field is only special in a
-+					 * typed arena object, where it is read and
-+					 * written whole. In an allocated object it is
-+					 * the plain pointer member it always was.
-+					 */
-+					if (!type_is_typed_arena_obj(reg->type))
-+						continue;
-+					if (off != offset || size != field->size) {
-+						bpf_log(log,
-+							"typed pointer field of struct %s must be accessed with a 64-bit load or store\n",
-+							__btf_name_by_offset(btf, t->name_off));
-+						return -EACCES;
-+					}
-+					*next_btf_id = field->kptr.btf_id;
-+					*flag = MEM_ARENA | PTR_UNSANITIZED;
-+					return PTR_TO_BTF_ID;
-+				}
- 				bpf_log(log,
- 					"direct access to %s is disallowed\n",
- 					btf_field_type_name(field->type));
-@@ -7804,7 +7910,6 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		break;
- 	}
- 
--	t = btf_type_by_id(btf, id);
- 	do {
- 		err = btf_struct_walk(log, btf, t, off, size, &id, &tmp_flag,
- 				      field_name, !type_is_local_obj(reg->type));
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 1ae29a08a607..f2319e9f0fa6 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -432,7 +432,7 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
- 			strscpy(postfix, "_or_null");
- 	}
- 
--	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s%s",
-+	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s%s%s",
- 		 type & MEM_RDONLY ? "rdonly_" : "",
- 		 type & MEM_RINGBUF ? "ringbuf_" : "",
- 		 type & MEM_USER ? "user_" : "",
-@@ -440,6 +440,7 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
- 		 type & MEM_RCU ? "rcu_" : "",
- 		 type & PTR_UNTRUSTED ? "untrusted_" : "",
- 		 type & PTR_TRUSTED ? "trusted_" : "",
-+		 type & PTR_UNSANITIZED ? "unsanitized_" : "",
- 		 type & MEM_ARENA ? "typed_arena_" : ""
- 	);
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ac52f4ae414c..c989a29e1ba7 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -688,6 +688,7 @@ void btf_record_free(struct btf_record *rec)
- 		case BPF_WORKQUEUE:
- 		case BPF_TASK_WORK:
- 		case BPF_RCU_HEAD:
-+		case BPF_TYPED_PTR:
- 			/* Nothing to release */
- 			break;
- 		default:
-@@ -743,6 +744,7 @@ struct btf_record *btf_record_dup(const struct btf_record *rec)
- 		case BPF_WORKQUEUE:
- 		case BPF_TASK_WORK:
- 		case BPF_RCU_HEAD:
-+		case BPF_TYPED_PTR:
- 			/* Nothing to acquire */
- 			break;
- 		default:
-@@ -877,6 +879,7 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
- 		case BPF_RB_NODE:
- 		case BPF_REFCOUNT:
- 		case BPF_RCU_HEAD:
-+		case BPF_TYPED_PTR:
- 			break;
- 		default:
- 			WARN_ON_ONCE(1);
+-		cnt = bpf_typed_arena_cast_insns(ta, insn->dst_reg, insn->src_reg, insn_buf);
++		if (!cnt)
++			continue;
+ 		new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 		if (!new_prog)
+ 			return -ENOMEM;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f854d8419fff..5ca5fc4696d9 100644
+index 5ca5fc4696d9..2d406034556e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -358,6 +358,9 @@ static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_stat
- 	type = reg->type;
- 	if (type_may_be_null(type))
- 		return false;
-+	/* A typed pointer field holds an object or 0, and its load is neither checked nor masked. */
-+	if (type_flag(type) & PTR_UNSANITIZED)
-+		return false;
- 
- 	/*
- 	 * The types below guarantee a non-NULL base, an unbounded offset can
-@@ -379,6 +382,23 @@ static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_stat
- 		type == CONST_PTR_TO_MAP;
+@@ -383,20 +383,75 @@ static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_stat
  }
- 
-+/*
-+ * @regno is about to serve as an address, or go to a call. A typed arena
-+ * pointer loaded from a typed pointer field is not canonical yet: its slice
-+ * and slot are what the field's discipline promises, not what the lowering has
-+ * masked, and until the lowering learns to sanitize it in place such a use is
-+ * refused.
-+ */
-+static int typed_arena_use(struct bpf_verifier_env *env, int regno)
-+{
-+	struct bpf_reg_state *reg = &cur_regs(env)[regno];
-+
-+	if (!type_is_unsanitized_arena_obj(reg->type))
-+		return 0;
-+	verbose(env, "R%d unsanitized typed arena pointer cannot be dereferenced\n", regno);
-+	return -EACCES;
-+}
-+
- static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg)
- {
- 	struct btf_record *rec = NULL;
-@@ -6328,6 +6348,61 @@ static bool type_is_trusted_or_null(struct bpf_verifier_env *env,
- 					  "__safe_trusted_or_null");
- }
- 
-+/*
-+ * A typed pointer field of a typed arena object holds a pointer to an object
-+ * of the pointee struct, or 0, and nothing else. Only a 64-bit store of a
-+ * typed arena pointer to that struct at offset 0, sanitized or not, or of the
-+ * constant 0, may write it, and only a plain 64-bit load may read it. The load
-+ * yields the value as stored: an unsanitized typed arena pointer, which the
-+ * write discipline makes trustworthy without a check.
-+ */
-+static int check_typed_ptr_field_access(struct bpf_verifier_env *env, struct bpf_reg_state *regs,
-+					struct bpf_reg_state *reg, const char *tname, u32 btf_id,
-+					enum bpf_access_type atype, int value_regno)
-+{
-+	struct bpf_insn *insn = &env->prog->insnsi[env->insn_idx];
-+	u8 class = BPF_CLASS(insn->code);
-+	struct bpf_reg_state *val;
-+	struct bpf_typed_arena *ta;
-+
-+	if (BPF_MODE(insn->code) != BPF_MEM || BPF_SIZE(insn->code) != BPF_DW ||
-+	    (class != BPF_LDX && class != BPF_STX && class != BPF_ST)) {
-+		verbose(env, "typed pointer field of struct %s must be accessed with a 64-bit load or store\n",
-+			tname);
-+		return -EACCES;
-+	}
-+	if (atype == BPF_READ) {
-+		/*
-+		 * The pointer leads into the pointee's typed arena, which the
-+		 * program may never cast to or allocate from: register it here,
-+		 * as a cast would, so that the sanitization has a slice to mask
-+		 * into and the slice exists for the map's lifetime.
-+		 */
-+		ta = typed_arena_register(env, btf_id);
-+		if (IS_ERR(ta))
-+			return PTR_ERR(ta);
-+		return mark_btf_ld_reg(env, regs, value_regno, PTR_TO_BTF_ID, reg->btf, btf_id,
-+				       MEM_ARENA | PTR_UNSANITIZED);
-+	}
-+
-+	if (class == BPF_ST) {
-+		if (!insn->imm)
-+			return 0;
-+	} else {
-+		val = &regs[value_regno];
-+		if (val->type == SCALAR_VALUE && tnum_is_const(val->var_off) && !val->var_off.value)
-+			return 0;
-+		if (type_is_typed_arena_obj(val->type) &&
-+		    !(type_flag(val->type) & ~(MEM_ARENA | PTR_UNSANITIZED)) &&
-+		    val->btf == reg->btf && val->btf_id == btf_id &&
-+		    tnum_is_const(val->var_off) && !val->var_off.value)
-+			return 0;
-+	}
-+	verbose(env, "store into typed pointer field of struct %s expects a typed arena pointer to struct %s or NULL\n",
-+		tname, btf_name_by_offset(reg->btf, btf_type_by_id(reg->btf, btf_id)->name_off));
-+	return -EACCES;
-+}
-+
- static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *regs, struct bpf_reg_state *reg,
- 				   argno_t argno, int off, int size,
-@@ -6433,6 +6508,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	if (ret < 0)
- 		return ret;
- 
-+	if (ret == PTR_TO_BTF_ID && flag & MEM_ARENA)
-+		return check_typed_ptr_field_access(env, regs, reg, tname, btf_id, atype, value_regno);
-+
- 	if (ret != PTR_TO_BTF_ID) {
- 		/* just mark; */
- 
-@@ -7170,6 +7248,10 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (err)
- 		return err;
- 
-+	err = typed_arena_use(env, insn->src_reg);
-+	if (err)
-+		return err;
-+
- 	/* check dst operand */
- 	err = check_reg_arg(env, insn->dst_reg, DST_OP_NO_MARK);
- 	if (err)
-@@ -7221,6 +7303,10 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (err)
- 		return err;
- 
-+	err = typed_arena_use(env, insn->dst_reg);
-+	if (err)
-+		return err;
-+
- 	dst_reg_type = regs[insn->dst_reg].type;
- 
- 	/* Check if (dst_reg + off) is writeable. */
-@@ -7273,6 +7359,10 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
- 		return -EACCES;
- 	}
- 
-+	err = typed_arena_use(env, insn->dst_reg);
-+	if (err)
-+		return err;
-+
- 	if (!atomic_ptr_type_ok(env, insn->dst_reg, insn)) {
- 		verbose(env, "BPF_ATOMIC stores into R%d %s is not allowed\n",
- 			insn->dst_reg,
-@@ -9386,6 +9476,13 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
- 		return 0;
- 	}
- 
-+	/* Every register argument reaches the callee, an ignored one included. */
-+	if (regno >= 0) {
-+		err = typed_arena_use(env, regno);
-+		if (err)
-+			return err;
-+	}
-+
- 	if (arg_type == ARG_IGNORE)
- 		return 0;
- 
-@@ -16811,6 +16908,15 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 		aux->prevent_zext = true;
- 	}
- 
-+	/* Arithmetic moves a typed arena pointer within its object, which needs the object. */
-+	if (BPF_CLASS(insn->code) == BPF_ALU64) {
-+		err = typed_arena_use(env, insn->dst_reg);
-+		if (!err && src_reg)
-+			err = typed_arena_use(env, insn->src_reg);
-+		if (err)
-+			return err;
-+	}
-+
- 	if (dst_reg->type != SCALAR_VALUE)
- 		ptr_reg = dst_reg;
- 
-@@ -16948,8 +17054,8 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- #define BPF_TYPED_ARENA_FIELDS \
- 	(BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK | BPF_TIMER | BPF_KPTR | BPF_LIST_HEAD | \
- 	 BPF_LIST_NODE | BPF_RB_ROOT | BPF_RB_NODE | BPF_REFCOUNT | BPF_WORKQUEUE | \
--	 BPF_UPTR | BPF_TASK_WORK | BPF_RCU_HEAD)
--#define BPF_TYPED_ARENA_SUPPORTED_FIELDS BPF_KPTR
-+	 BPF_UPTR | BPF_TASK_WORK | BPF_RCU_HEAD | BPF_TYPED_PTR)
-+#define BPF_TYPED_ARENA_SUPPORTED_FIELDS (BPF_KPTR | BPF_TYPED_PTR)
  
  /*
-  * The size of a struct's typed arena is a declared resource, read from the
-@@ -17031,11 +17137,15 @@ static struct bpf_typed_arena *typed_arena_register(struct bpf_verifier_env *env
- 		return ERR_PTR(-EOPNOTSUPP);
- 	}
- 	btf_record_free(record);
--	/* BTF keeps a record for every struct with these fields. */
-+	/*
-+	 * BTF keeps a record for every struct with these fields as direct
-+	 * members; one that only inherits them from a nested struct has none.
-+	 */
- 	meta = btf_find_struct_meta(btf, btf_id);
- 	if (!meta) {
--		verifier_bug(env, "struct %s has special fields but no metadata", tname);
--		return ERR_PTR(-EFAULT);
-+		verbose(env, "struct %s has special fields only in a nested struct, which a typed arena does not support\n",
-+			tname);
-+		return ERR_PTR(-EOPNOTSUPP);
- 	}
- 
- 	err = typed_arena_size(env, btf, t, tname, &size, &value);
-@@ -19569,6 +19679,10 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
- 		if (err)
- 			return err;
- 
-+		err = typed_arena_use(env, insn->dst_reg);
-+		if (err)
-+			return err;
+- * @regno is about to serve as an address, or go to a call. A typed arena
+- * pointer loaded from a typed pointer field is not canonical yet: its slice
+- * and slot are what the field's discipline promises, not what the lowering has
+- * masked, and until the lowering learns to sanitize it in place such a use is
+- * refused.
++ * @regno is about to serve as an address, be moved by arithmetic, or go to a
++ * call. A typed arena pointer loaded from a typed pointer field is not
++ * canonical: it is an object of its type or 0, as the field's discipline
++ * promises, but nothing masked it into its slot. Sanitize it here, in place:
++ * the lowering prepends the typed arena's cast sequence to this instruction,
++ * and on this path the register is canonical from here on. The sequence maps
++ * 0 to object 0 of the slice, as the cast maps any value, so a NULL the
++ * program did not test costs no more than a stray cast would.
++ *
++ * The sequence is lowered once per instruction and runs on every path through
++ * it, so it must be harmless on every path. It is a no-op on a canonical
++ * pointer of the same typed arena at offset zero, and wrong on anything else:
++ * a path that brings another typed arena, a pointer with an offset into its
++ * object, or a value of another kind to this register here is rejected, and
++ * so is a second register in need of the sequence at the same instruction.
++ * Where nothing brings an unsanitized pointer, nothing is lowered.
+  */
+ static int typed_arena_use(struct bpf_verifier_env *env, int regno)
+ {
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[env->insn_idx];
+ 	struct bpf_reg_state *reg = &cur_regs(env)[regno];
++	struct bpf_typed_arena *ta;
++	bool canonical;
 +
- 		dst_reg_type = cur_regs(env)[insn->dst_reg].type;
++	canonical = !(type_flag(reg->type) & PTR_UNSANITIZED);
++	if (!type_is_typed_arena_obj(reg->type) ||
++	    (canonical && (!tnum_is_const(reg->var_off) || reg->var_off.value))) {
++		if (aux->sanitize_needed && aux->sanitize_reg == regno) {
++			verbose(env, "insn %d sanitizes a typed arena pointer only on some paths\n",
++				env->insn_idx);
++			return -EINVAL;
++		}
++		aux->sanitize_plain |= BIT(regno);
++		return 0;
++	}
  
- 		err = check_mem_access(env, env->insn_idx, cur_regs(env) + insn->dst_reg, argno_from_reg(insn->dst_reg),
+-	if (!type_is_unsanitized_arena_obj(reg->type))
++	ta = bpf_prog_typed_arena(env->prog->aux, reg->btf_id);
++	if (verifier_bug_if(!ta, env, "R%d typed arena pointer has no typed arena", regno))
++		return -EFAULT;
++	if (aux->sanitize_arena && aux->sanitize_reg == regno && aux->sanitize_arena != ta) {
++		verbose(env, "insn %d sanitizes typed arena pointers of different types on different paths\n",
++			env->insn_idx);
++		return -EINVAL;
++	}
++	if (aux->sanitize_arena && aux->sanitize_reg != regno) {
++		if (canonical)
++			return 0;
++		if (aux->sanitize_needed) {
++			verbose(env, "insn %d needs more than one typed arena pointer sanitized\n",
++				env->insn_idx);
++			return -EINVAL;
++		}
++		/* A canonical pointer only booked the register; the one in need takes it. */
++		aux->sanitize_arena = NULL;
++	}
++	if (!aux->sanitize_arena) {
++		aux->sanitize_arena = ta;
++		aux->sanitize_reg = regno;
++	}
++	if (canonical)
+ 		return 0;
+-	verbose(env, "R%d unsanitized typed arena pointer cannot be dereferenced\n", regno);
+-	return -EACCES;
++	if (aux->sanitize_plain & BIT(regno)) {
++		verbose(env, "insn %d sanitizes a typed arena pointer only on some paths\n",
++			env->insn_idx);
++		return -EINVAL;
++	}
++	aux->sanitize_needed = true;
++	reg->type &= ~PTR_UNSANITIZED;
++	return 0;
+ }
+ 
+ static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg)
 -- 
 2.53.0
 
