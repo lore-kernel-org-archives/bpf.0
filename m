@@ -1,64 +1,64 @@
 Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E098438026
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395C7477E4D
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:21:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790432477; cv=none; b=cgE+91RfSdbXTV7QXdDEttxM/40BQUr6skphB2OUMUIzGntvBsNz6V1EKUHizkURKIvO/2ZgbuYTHquX/WCuOgW6CTaryddAZzc07vsN10ic4vuEM7Y3nCo5qLAnNjHHwzqThl8RUwAv4WNUVL6usR/165NGtqWywY7ndFiuEbw=
+	t=1790432477; cv=none; b=jk8HDgrJBcrolackT6k2l5faZOvlGoXjN/TZtw9L6t79efmbezWXzhAWfx9DPJYbCdzKGBkQK4eiQ8gnmADh5lBtS2N7zRdBWl03gWImci9sFlZSLB2RA6Z/LdsTyFqRwDj8u5C/ww4CEq+shuP37AZaQ4bJCVjpG1aZfuDpV5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790432477; c=relaxed/simple;
-	bh=5TTlv4/VvsPncIUAym/9dxV8Lw9ZSwExPaMCp3sBrfQ=;
+	bh=LztGugWqoypo7YLyVnbO/aCFsomnBLd2TbZLp9c3GTM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HBjoN74q4NSzFR+pU8In4LZsOshYwMPaSDxoOZhM4qk8nly9Jvxx6zXF1WlPzdiPZJvoYBtCFiSaSX8BfBu6vBANZSzm2/4njxgY/RssCx86WQfBVes3d7tI7/2NEFnDUm3r34U2sSSq0CQKdm2css/Z+gWTvwgQkfp/iHYudUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3037lu3; arc=none smtp.client-ip=74.125.227.171
+	 MIME-Version:Content-Type; b=TU/uBalv6cM7R9I7fWpG7uFi2fOx3u3Q8rZV1K1+sZztFRtiupZVR7e7j4DjdvJCaxcHsk8r9AdKxrDASup1Sv6FMirJFwUlQSYIKMsLyJqHIrFrvCD/A6Z2LFi9Xf2i5fNy0OpwVpBGjSUW3pMSE7T5Kmw3HwkL3dVG0iB8jaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cCbg58+Z; arc=none smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3037lu3"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-398b3b189e0so956003a91.2
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cCbg58+Z"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccd4f99dso1186582a91.2
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 07:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1790432475; x=1791037275; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=CDvbzcUUtNn3x1k8DnXxAqU9+2+p5OeX8rEpc+Y9ekY=;
-        b=G3037lu3HjOBjQ+rXTxXTl6xkTYYQ8joRsz+tP+jMJGnudpT1O3NwMx9TioRTvhv3I
-         sV+hTuUZp0cvtyW0707gcpbltReudsVF5/3UtB8KgkZb4GRFf7izK5f6xHTWnwMCCmSu
-         KgXk3YFDAWkS7Bu9KacNFuCR2KajfAl6GuzoWaQGmZl/JFogZYRAMRyrt7+ud/DuCCbV
-         8EDXlZAxOtCL94hcMAmblDL9nOMSQOmgGnTVlxfJx+KP0giO9XAdLVAQIFQHJxNCmCei
-         mmdx/TdLvJTqwpQB8gpnWkDvPvSDw0wcLGiliuDyMfxBwpP6CH46nFm6jPPxusKhkuLS
-         PX8Q==
+        bh=ZfVCSEH8wNRY/7JSUuYKXFs43CZE73bxPz8ZiuRfzw8=;
+        b=cCbg58+ZUwG5SUcowK4Qb4TiIrjtKgqIvd5Pk94VlTzkM2aAz0zQIjxJ6NwsVd11G9
+         0h31LQuHIaIHtd54kqQWlGYamW9P4tmJyfzxdsQfif9Ohy1foguMzja4o7S2k6RxED4O
+         b9J80id1eVqbrpTYHwn2z8pnTfFd2YVXVmst3lr6i+D/4WIvr43b31Hz5r3Shu/dr+WP
+         wZhPwf4+Xl3SL5aDy1mmM43r0ecRaMpGhptg8GvkhdRY7G6TPRqWp2uKwWC5QSiq4Md5
+         rr207W6I76UxrxT8oUdkMOWMSJfowg4VimHTy2Sw8PgIKiHFoCW4QbkUQF2o9IKOSKsj
+         Y8IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1790432475; x=1791037275;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CDvbzcUUtNn3x1k8DnXxAqU9+2+p5OeX8rEpc+Y9ekY=;
-        b=1asngBESzbrbG5zY+J1yXYAjA938wsoTGwWcsdTXfZLDibK+vsdz744EXk4LGibcGV
-         kmNRF2pBreQD7VbaHYZ71PPEXuCbeMQMwt/Lg7a20BQuS/bZRBeW3OelS2E4NFb8Qmao
-         8bDGaVGz76mS1MHzoGGCA4bWsOiF9NWR/e8RygQmTEE1bOIW75AsdU4D/GauRYgtp5Ha
-         p1G3PinH17PEVRvFj+fIGEmSZ5UNqRepXTdd7H9ENYl5mO5KTkYBZTOqYAiT5LLXvNNv
-         6Ov19qzZY0KLtTTHAZzPwf6o+cLIMlWWBNeliqUyULN8SRYC1Ai1paooPOxirqlv6LKR
-         C/cQ==
-X-Gm-Message-State: AFq9FYI2lP14VTXbEc1eew5qcK6LuGWQdC3pcYS9Pm59vDMaNsVitFdg
-	d69NeEBsCuOZTruv9+35EF5zNwRHqaeec/iqwXxmzSlKZw2gE6gVaLXrhea26MkM+RI=
-X-Gm-Gg: AYBFou0KGgnvTyiSyUryh5UC2huS/dTE0FdSx6M4olIuWhAkZDQBPzvoUCoNEzZlGGe
-	CSalzegVhCcdNj4/b+lLSqoBbWnXCKiHhprJbpYeMdWDJqcoHaLvCK6ygAN8XK49lsTxoBJO8xk
-	KydclJisydYPL0bf6bNik1Z3gMKNe/fNTNNzFQPfVi6BvoVPrCGw3ck6s81DCpjbaWNI4zBO6hM
-	19H55wxtttGi5Tsss91+Khs+jLz9PPy5LI9G/O+Q13BXo5lJOXDh2mLtzCVMA7faFmZEgw6Dt78
-	cZ6N33SNZ/L8Vfaf9q811srFpNRKHNPyiMK+y1xv7iYnII/bV21QYGwyKvbkqRdy74r847s+uOy
-	3mGAd35+crqfJt055p5LWh5H5VK7wuqhFCbfFiDPYxw/JN1M+nFY96wXpZeleDU/R9iF67G94LS
-	GNilv0rg8rX8MdJJ13WyrpO8s95+TOP/i2UtCXU03nBdXRvf/8lhThRM+d2hJW6NhOXV8L8piyl
-	8ykZIkqAt/OqMh0i04gJuSPbnGJA3avo8ZqNZaoww==
-X-Received: by 2002:a17:90b:1c84:b0:39e:6a81:5a94 with SMTP id 98e67ed59e1d1-3a098e39a55mr7051188a91.40.1790432474747;
-        Sat, 26 Sep 2026 07:21:14 -0700 (PDT)
+        bh=ZfVCSEH8wNRY/7JSUuYKXFs43CZE73bxPz8ZiuRfzw8=;
+        b=uMtaSxAhtuBSzq62aq4cwy79me1nN8jIA7vBiBZpmPTdgQUx/Xkd6+58ppUv8W8IyN
+         OSp+18dHY618Dajcoao22ug0CexKu2E+7ndqSstEESrVF1Irkwcs029YvsAi++yn4ir1
+         tiadDZvhHlUTF/6NLwpxNPlmsjWyXaw9x8PIOliu9wNgxoiAjCD9/TfA0tvyGzDVQiAw
+         fd52QvQGPVV+wN90ObTb5lbPNt3KG5NVH10nFHZv+dQUOqlH+Zt0cUdh7pI4PPBFoLDA
+         nSw64QKVMrRMjof08GbPJXmdVKJABS9pk+8b6aK/OCHwzOqynyb+MEnHwntlKer8Bfla
+         GaCA==
+X-Gm-Message-State: AFq9FYJN7qsIXbwgVXXy1ExQhTwa0hW+w5zgDnN3sbj+ACPRF2oVID+l
+	5+jO7bS080fcdc1Rye9UwBoQhYEvRpR3Sq6TX8Ri+5zjVBr4Scd8FPCVzdfTYnslxuU=
+X-Gm-Gg: AYBFou0Cor6//PTtgyjIMjQxgUmKMrXn98LpY+uByey5iTrCaqk9VTsD9nzJdYSMq3E
+	czq9KFTYTOZS1DtAg8biQ95Z5VHG/MBj21Cj0bk4b1Vx+IRWlRul1kS8coB5sjYDgLfXfnQyNWJ
+	Eiel4iWX+jzTaj/c6MPUGFFY4wAcIOn1iZz4MVUfSwSjQckOdtWtsAKmA7hhD7HO4GPQ40PiiT/
+	C3WwC02AUhFYiGYsvCSu2hovvr1pRtJ++R4u0ER9g3gjmWnowg7omDpBtZR6Zs3lPRdcJ0PPgEZ
+	O7EvR2vq3SYv97Hm72QkEdwEJdQJh1T4ZtiehnIjn7qmI4qvbXmum0lnGJ2Fc5NKHh6StutnczL
+	+RFO5yxc53xF+rCEXgUci+HHD/9itXz3w57YHMedCXHv0XvzMcpT6omuhc5uuUp6H5zfCnNSvTI
+	6DK0Km20jkumwXikftaWz+s31/m8M8rQTx4x2+/UBMUskcw+Qt2g0K96k/mwirkvK5MFc8jS6ny
+	H3I7yQXc7/Vi2wlmv7O6CF7h+CgElaX/kJxbuyHvQ==
+X-Received: by 2002:a17:90b:3d8d:b0:3a0:ddef:3d69 with SMTP id 98e67ed59e1d1-3a0ddef3f5amr1764274a91.58.1790432475477;
+        Sat, 26 Sep 2026 07:21:15 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
         by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0c2e986easm10949613a91.1.2026.09.26.07.21.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 07:21:14 -0700 (PDT)
+        Sat, 26 Sep 2026 07:21:15 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 31/36] selftests/bpf: tests for register base/step arithmetic
-Date: Sat, 26 Sep 2026 07:20:29 -0700
-Message-ID: <20260926-scev-minimal-rebase-v1-31-c8e5ab5ba79f@gmail.com>
+Subject: [PATCH bpf-next 32/36] selftests/bpf: tests for register base/step state pruning
+Date: Sat, 26 Sep 2026 07:20:30 -0700
+Message-ID: <20260926-scev-minimal-rebase-v1-32-c8e5ab5ba79f@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
 References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
@@ -84,139 +84,109 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-- step_mul_non_pow2: Retain step 3 after multiplying a bounded scalar
-  by a non-power-of-two constant.
-- step_lsh: Record step 4 after shifting a bounded scalar left by two.
-- step_add_const_base: Shift the base to 1 while preserving step 4
-  after adding a constant.
-- step_neg_value_range: Preserve the signed range of {-3, 0, 3, 6}
-  when intersecting with a non-power-of-two step across zero.
-- step_neg_value_sound: Reject a reachable invalid access that would
-  be hidden by incorrectly narrowing that range's upper bound to 4.
+Tests for the base/step reasoning in states.c:range_within():
+- step_prune_hit_multiple: prune a step-4 range contained in a cached
+  step-2 range when the scalar is used to address the stack.
+- step_prune_miss_non_multiple: do not let a cached step-2 range hide a
+  step-3 path reaching division by zero.
+- step_prune_hit_const_on_line: prune constant 6 against a cached
+  base-0, step-3 range.
+- step_prune_miss_const_off_line: do not prune constant 7 against that
+  range even though its bounds and tnum admit the value.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- .../selftests/bpf/progs/verifier_bounds_step.c     | 124 +++++++++++++++++++++
- 2 files changed, 126 insertions(+)
+ .../selftests/bpf/progs/verifier_bounds_step.c     | 183 +++++++++++++++++++++
+ 1 file changed, 183 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8a6d341b754a..e1d559ba1271 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -19,6 +19,7 @@
- #include "verifier_basic_stack.skel.h"
- #include "verifier_bitfield_write.skel.h"
- #include "verifier_bounds.skel.h"
-+#include "verifier_bounds_step.skel.h"
- #include "verifier_bounds_deduction.skel.h"
- #include "verifier_bounds_deduction_non_const.skel.h"
- #include "verifier_bounds_mix_sign_unsign.skel.h"
-@@ -203,6 +204,7 @@ void test_verifier_arena_globals2(void)       { RUN(verifier_arena_globals2); }
- void test_verifier_basic_stack(void)          { RUN(verifier_basic_stack); }
- void test_verifier_bitfield_write(void)       { RUN(verifier_bitfield_write); }
- void test_verifier_bounds(void)               { RUN(verifier_bounds); }
-+void test_verifier_bounds_step(void)          { RUN(verifier_bounds_step); }
- void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_deduction); }
- void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_bounds_deduction_non_const); }
- void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mix_sign_unsign); }
 diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-new file mode 100644
-index 000000000000..a8358b625ce7
---- /dev/null
+index a8358b625ce7..cb55fc216bc8 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+@@ -121,4 +121,187 @@ l_bad_%=:						\
+ 	: __clobber_all);
+ }
+ 
++struct step_val {
++	__u8 data[1024];
++};
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, struct step_val);
++} step_map SEC(".maps");
 +
-+/*
-+ * Tests for the linear "base + step * k" description tracked per scalar
-+ * register.
-+ *
-+ * The base/step computed by scalar arithmetic is observed directly in the
-+ * level-2 register dump, printed as "step=<base>+<step>" when the register is
-+ * not the trivial base=0, step=1. Range inference that depends on the line
-+ * (e.g. a sign-crossing range with a non-power-of-2 step) is checked via the
-+ * resulting smin/smax, which feed ordinary signed branch decisions.
-+ *
-+ * Note: eq/neq branch checks do not consult base/step, so impossible-value
-+ * pruning is intentionally not relied upon here; the register dump is the
-+ * reliable signal.
-+ */
-+
-+/* a &= 0xff; a *= 3  =>  multiples of 3, step=0+3 (not representable as tnum) */
++/* Old register [4..130, step 2] should prune cur register [8..64, step 4]. */
 +SEC("socket")
 +__success __log_level(2)
-+__msg("r0 *= 3 {{.*}}step=0+3)")
-+__naked void step_mul_non_pow2(void)
++__msg("7: (27) r6 *= 4                       ; R6=scalar({{.*}}umin32=8,{{.*}}umax32=68,{{.*}},step=0+4)")
++__msg("10: (27) r7 *= 2                      ; R7=scalar({{.*}}umin32=4,{{.*}}umax32=130,{{.*}},step=0+2)")
++__msg("11: (25) if r0 > 0x2a goto pc+1")
++__msg("from 11 to 13: safe")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void step_prune_hit_multiple(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r0 *= 3;					\
-+	r0 = 0;						\
++	r6 = r0;					\
++	call %[bpf_get_prandom_u32];			\
++	r7 = r0;					\
++	call %[bpf_get_prandom_u32];			\
++	r6 &= 0x0f;					\
++	r6 += 2;					\
++	r6 *= 4;					\
++	r7 &= 0x3f;					\
++	r7 += 2;					\
++	r7 *= 2;					\
++	if r0 > 42 goto 1f;	/* can't predict */	\
++	r6 = r7;		/* step=2 explored first, step=4 explored next */ \
++1:	r0 = r10;					\
++	r6 = -r6;					\
++	r0 += r6;					\
++	*(u8 *)(r0 + 0) = 7;	/* force r6 precise */	\
 +	exit;						\
 +"	:
-+	: __imm(bpf_get_prandom_u32)
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(step_map)
 +	: __clobber_all);
 +}
 +
-+/* a &= 0xff; a <<= 2  =>  step=0+4 */
++/* Old register [0..126, step 2] should not prune cur register [0..45, step 3]. */
 +SEC("socket")
-+__success __log_level(2)
-+__msg("r0 <<= 2 {{.*}}step=0+4)")
-+__naked void step_lsh(void)
++__failure __log_level(2)
++__msg("6: (27) r6 *= 3                       ; R6=scalar({{.*}}smin32=0,{{.*}}umax32=45,{{.*}},step=0+3)")
++__msg("8: (27) r7 *= 2                       ; R7=scalar({{.*}}smin32=0,{{.*}}umax32=126,{{.*}},step=0+2)")
++__msg("9: (25) if r0 > 0x2a goto pc+1")
++__msg("11: (15) if r6 == 0x3 goto pc+2")
++__msg("11: R6=scalar({{.*}},step=0+2)")
++__msg("13: (95) exit")
++__msg("from 9 to 11: {{.*}} R6=scalar({{.*}},step=0+3)")
++__msg("from 11 to 14")
++__msg("div by zero")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void step_prune_miss_non_multiple(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r0 <<= 2;					\
++	r6 = r0;					\
++	call %[bpf_get_prandom_u32];			\
++	r7 = r0;					\
++	call %[bpf_get_prandom_u32];			\
++	r6 &= 0x0f;					\
++	r6 *= 3;					\
++	r7 &= 0x3f;					\
++	r7 *= 2;					\
++	if r0 > 42 goto 1f;	/* can't predict */	\
++	r6 = r7;		/* step=2 explored first, step=3 explored next */ \
++1:							\
++	if r6 == 3 goto 2f;	/* false if step=2, should not prune step=3 */ \
 +	r0 = 0;						\
 +	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* a &= 0xff; a *= 4; a += 1  =>  base shifts to 1, step=1+4 */
-+SEC("socket")
-+__success __log_level(2)
-+__msg("r0 += 1 {{.*}}step=1+4)")
-+__naked void step_add_const_base(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r0 *= 4;					\
-+	r0 += 1;					\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Sign-crossing range with a non-power-of-2 step. After "*= 3; += -3" the value
-+ * set is {-3, 0, 3, 6}. The line description is tracked in signed space, so the
-+ * intersection keeps smax=6. A u64-modular intersection would mis-place the
-+ * line for the negative values and wrongly narrow smax to 4.
-+ */
-+SEC("socket")
-+__success __log_level(2)
-+__msg("r0 += -3 {{.*}}smax=smax32=6)")
-+__naked void step_neg_value_range(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 3;					\
-+	r0 *= 3;					\
-+	r0 += -3;					\
-+	r0 = 0;						\
++2:							\
++	r0 /= 0;		/* trap */		\
 +	exit;						\
 +"	:
 +	: __imm(bpf_get_prandom_u32)
@@ -224,32 +194,103 @@ index 000000000000..a8358b625ce7
 +}
 +
 +/*
-+ * Same {-3, 0, 3, 6} value set: 6 is reachable, so "if r0 s> 4" can be taken
-+ * and the illegal scalar dereference behind it must be rejected. Guards against
-+ * the unsound narrowing (smax=4) that would prune the branch and accept the
-+ * program. This rides on the signed comparison, which uses smin/smax.
++ * Constant current register lying on the cached line: cached is {0,3,6,...}
++ * (step 3, base 0), current is the constant 6. range_within() takes the
++ * constant branch: imod(6, 3) == base 0, so cur is on the line and the
++ * (precise) state is pruned -> "safe".
 + */
 +SEC("socket")
-+__failure __msg("invalid mem access 'scalar'")
-+__naked void step_neg_value_sound(void)
++__success __log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("14: (27) r1 *= 3")		/* cached path: step 3 line */
++__msg("16: (b7) r1 = 6")		/* current path: const 6, on the line */
++__msg("17: safe")			/* pruned at join: imod(6, 3) == 0 */
++__naked void step_prune_hit_const_on_line(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
-+	r0 &= 3;					\
-+	r0 *= 3;					\
-+	r0 += -3;					\
-+	if r0 s> 4 goto l_bad_%=;			\
++	r6 = r0;					\
++	r1 = 0;						\
++	*(u32*)(r10 - 4) = r1;				\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[step_map] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l_out_%=;			\
++	r7 = r0;					\
++	r1 = r6;					\
++	r1 &= 0xff;					\
++	if r6 > 0 goto l_cur_%=;			\
++	r1 *= 3;			/* old: step 3 */	\
++	goto l_join_%=;					\
++l_cur_%=:						\
++	r1 = 6;				/* cur: const on line */	\
++l_join_%=:						\
++	r0 = r7;					\
++	r0 += r1;			/* r1 forced precise */	\
++	r2 = *(u8 *)(r0 + 0);				\
++l_out_%=:						\
 +	r0 = 0;						\
 +	exit;						\
-+l_bad_%=:						\
-+	r1 = *(u8 *)(r0 + 0);				\
-+	exit;						\
 +"	:
-+	: __imm(bpf_get_prandom_u32)
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(step_map)
 +	: __clobber_all);
 +}
 +
-+char _license[] SEC("license") = "GPL";
++/*
++ * Constant current register NOT on the cached line: cached is {0,3,6,...}
++ * (step 3, base 0), current is the constant 7. imod(7, 3) == 1 != base 0,
++ * so range_within() fails and the join is traversed again. A power-of-two
++ * step is avoided on purpose: with step 3 the tnum is loose enough to admit
++ * 7, so imod() is
++ * the sole check that rejects it. No failure shape is possible here: 7 is
++ * within the line's bounds and tnum, and the cached line path already
++ * verifies the whole outro, so an eager prune could not miss an error.
++ */
++SEC("socket")
++__success __log_level(2)
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("14: (27) r1 *= 3")		/* cached path: step 3 line */
++__msg("16: (b7) r1 = 7")		/* current path: const 7, off the line */
++/* not pruned: current continues past the join with the constant offset 7 */
++__msg("19: R0=map_value({{.*}}imm=7) R1=7")
++__naked void step_prune_miss_const_off_line(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = r0;					\
++	r1 = 0;						\
++	*(u32*)(r10 - 4) = r1;				\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[step_map] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l_out_%=;			\
++	r7 = r0;					\
++	r1 = r6;					\
++	r1 &= 0xff;					\
++	if r6 > 0 goto l_cur_%=;			\
++	r1 *= 3;			/* old: step 3 */	\
++	goto l_join_%=;					\
++l_cur_%=:						\
++	r1 = 7;				/* cur: const off line */	\
++l_join_%=:						\
++	r0 = r7;					\
++	r0 += r1;			/* r1 forced precise */	\
++	r2 = *(u8 *)(r0 + 0);				\
++l_out_%=:						\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(step_map)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.55.0
