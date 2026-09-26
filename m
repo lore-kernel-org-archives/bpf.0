@@ -1,120 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EB033D6ED
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 14:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90F71E32D6
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 15:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790434002; cv=none; b=Brs/lyZ9o9dM6thhZCW4NFDucXbE81Zh6Y9vcVhyRqlUP7Q78xjY558Z30iiiQnb9/ytahSil2KHNbNQSNCMfigddX8cVWQrl7LPwKKf/6u0G98qOORJX4vHItd955vgnTZNm6ExKSmZ7cKsfDuUX1fk06ILJ2OnTfa2Ei8meAg=
+	t=1790437520; cv=none; b=MdESPtc+aQw/LhIPL/jz4+0N/lrqoZJ9DNemk3qgyKwBBC8/vmK4oaGv32aeUQUIIBth3XgGopKt21elqPxek7NSdDnQCku8R+vFDa+RrXpmPwk6YHrqjzQ9+GpvSefdO4qjULsqc9psrTbIYDLyjyV2tdHP0MBjr7OdFKZ0UAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790434002; c=relaxed/simple;
-	bh=ErWTIsYJuOYuiL6Ag2OQxXj6t+P8bGcbq7kY+Re+ufo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IYxRLoZXBjYjzYfSrw5mrsoMWW0QDN4deooytzLLE5CbUSwl7fy8wwPspriBvaJOOZM6JQFFZ68ek+qnG9KhhvQuDypZMP4IZldWWsJG3DemB4FBhzyAfxwOxX3l3hNazh+kx4Ha6hiPczWkiUvWhvoBRJPy9+Q+JIx99f0AojM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jc9Ek5xX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790437520; c=relaxed/simple;
+	bh=SZSfDIcU01oCJJjpY5YqZXxBvEuKx5QL7hP8XNEKZz4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uJqgSIZc6cwPW6Qwis1L4v8fug/+oeyim84ElDtqKM8nrDzaQ0p7s64VMsAjzg3tFxMelGkw9gcxyH4Hox7ZE+03EbmFZW6bWydwFD+ZNB1omikC/w8BDhdnGRmNetGZ2lJTsXVh5a4V6/lnW9Kc+TBHhPDykIIdP67oaAR5zVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=avNaLDf5; arc=none smtp.client-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jc9Ek5xX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4AFE1F000FF;
-	Sat, 26 Sep 2026 14:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790434001;
-	bh=OEZoYFSQr0Axh5iOdt9y374HSA/cNeJ4WTQLbYtSnTs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jc9Ek5xXsuowx86OS8zj5pgu4RnRV8rqohlCqtPXMdlUegemp+Tw9kWWn/SC1igGM
-	 GSfkKxuHzCS794sfB/W28FHZLgKBt2TzkocJeB0dPyVl2Cyf4kQoCFy8X4R5cyNL2k
-	 zagSwajtIFyg0QGSB1+2dSWA3X1eeBG44tE37OOt+JZTHZrT8ZlhEQyrwVp1ZY7jFh
-	 Zn608DzpJtLrQP+DTj4YXqJSltpRURoqzl6VTqxqIGV/1UBgmXER2TUuGbbI1zerkX
-	 uzquRb3o22M+48he+vgDgCucG1LUOGS5RMwfAM2SSUVjhseijM7XmAH4KZ3aq4xshG
-	 3E+uOpS2TNMRA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 26/36] bpf: avoid widening registers that
- hinder exact stack-slot tracking
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260926-scev-minimal-rebase-v1-26-c8e5ab5ba79f@gmail.com>
-References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
- <20260926-scev-minimal-rebase-v1-26-c8e5ab5ba79f@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 14:46:40 +0000
-Message-Id: <20260926144640.C4AFE1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="avNaLDf5"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ffd31dd58so1195175e9.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 08:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790437517; x=1791042317; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SV+qQX3p5A4pWiA1HjeLdHiu8rd47lH84A4U4zOYlCE=;
+        b=avNaLDf5Q8qeqHqk1HcwkDe0KwQfs+BJkzSc7TivwjzQDageKRHPx81zU+vbnuCgyT
+         3b99qFulWoeq1DmSAFP/g42e12C3NHLjsPk5z8VFmsb6BnUqCl33AvWRVXgzJEPJSpJ8
+         6WEeDGnYtC7yftHiEX7/gEJxZ40b/l46n4ejXB47d6TN5xVNViLi4/56CeUebIJr+b28
+         ab35dJpVYp9IYHIRO4YaXyGbNM0BPNTMGlrtWpe+ZiCulUc6GF+fDzESiIPm3zRDpF85
+         Y9XGRfRrt2LWrOQ2pC7i552Sm5jlAxJTm1lt0XlmHyAbpqBRTVwc6d8BRupJKIodXbs1
+         +Cww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790437517; x=1791042317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=SV+qQX3p5A4pWiA1HjeLdHiu8rd47lH84A4U4zOYlCE=;
+        b=xapXzGwKekYvJDFYbhlWR5TgoWQidz8hzq7tDDuzY4CBrGj2hYo804dQZ37BVqXY5x
+         KVAwMzQ+fLn6/gGzqlKIsBUU3O+/WWjYzALYvPOHA/qoGk7Whe8oDNWeBBbdB8Q97qZI
+         2J6xtbiLjFbntP+g7ISa8WnyuhK5eTHxc8U20u863WvUUYfTHbsmAiGayDBS2XpstTM0
+         9+HL5CVnapvwHvKyGDLU6Ol31jdp4SpDqgaECExBx//J+OOCdspasPIx4Vj7JKK6nbAB
+         cXS1fXn/3wAk0Tl0XCrmwgV2D18LaerQywSnyho/7xSBJbz1IXio6a2S7Ffv0i0Qs9HY
+         MHLg==
+X-Gm-Message-State: AFuF++nzvy30Z+EToXDNtIdkW3C59ylG0oBXIWrkUJ5nNfZgJJd9btCU
+	kXAMGbwkkkjmfZPkjf/kLx4H7oYuIR3j1/M9b4ggmvK1z5fLo64jXkfSRMiWEyYH
+X-Gm-Gg: AYBFou38n0KB2RmAPqUIDzK3mlkvaFoUEbvybKc+s7D9BelZ162yCzMaqmMm69YJvD8
+	SLsAo2vbABesU/eSFa/KVuF9sFNZdXphcT8EU56m07HC2Tvpl8NuSyV/R2lkO8ljHp9eK8qHhvn
+	xxWmCNmFk8RvrTmRluPIVqnda/G+F9SZCo01oat92906nYKpj6TMuYht+h3cIEvSyCFQnMgOHV0
+	9jzvOagM90L2u9Vz6ddGusG9772peuPiKFpNn+pSKubJG0J4cVX0nHb+pm/HjuN0fccNRcBBhG0
+	ncQdz0wN4/YugW0h9POi7IiZu+vci2ak0Wy6VDJ5MCJopdUYJgOG1JwV8GNjsAC882wTvzFhQJ4
+	L79/ds8Rq8s1PaTct41aUuk2Spn9MlKoKd8zJSQK9bTI4LBfirVqrJ4kSs+THHbSuwt2xrQH1+l
+	qagUO/A1br3w6vqCtg6+Rvex9WFqQ9BKA/LKTGiel3stmevWndXIheWGwY1J3WT/5wt6YZ9WyTN
+	zoo8WexuynmhGLVYEXpqjGRRy0MRMIlGu7F6THef1XnXj4NArByGT/lTOP2Ow4swyhwJq6HBr8k
+	GJkiRw6EArLOAA6PofN1PiQRciBTEGsKuJhJwcPWI/wQt+D6
+X-Received: by 2002:a05:600c:698d:b0:49d:1df6:2592 with SMTP id 5b1f17b1804b1-49ff06e504dmr99447835e9.21.1790437516587;
+        Sat, 26 Sep 2026 08:45:16 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06b6108sm166229535e9.8.2026.09.26.08.45.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2026 08:45:16 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Quentin Monnet <qmo@qmon.net>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next] bpftool: Exit from the stream wait signal handler with _exit()
+Date: Sat, 26 Sep 2026 17:45:14 +0200
+Message-ID: <20260926154515.191689-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: bpf_needs_fixed_stack_off misses dynptr consumers, rejectin=
-g valid loops
+bpftool prog tracelog -w ends from its SIGINT, SIGHUP and SIGTERM handler,
+which calls exit(). exit() is not async-signal-safe: it runs atexit
+handlers and flushes stdio streams, and the signal may land while the read
+loop is inside fwrite() or fflush() on the stream being flushed. Whether
+that deadlocks or flushes a half-updated buffer depends on the C library.
+
+Call _exit() instead. The loop flushes every chunk as soon as it is
+printed, so the stdio buffer is empty except while a chunk is being
+written, and skipping the exit-time flush loses nothing.
+
+While here, note in the manual page that opening a stream as a file
+descriptor arrives in Linux 7.4, and restrict the -w/--wait description to
+the stdout/stderr form of the tracelog command, since the trace pipe form
+does not take the option.
+
+Link: https://lore.kernel.org/bpf/d64c6402-175f-4ea6-be6d-1a544a95c97c@qmon.net
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst | 8 +++++---
+ tools/bpf/bpftool/prog.c                         | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 17aa0d560e32..8dbd34ef3d8b 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -190,7 +190,8 @@ bpftool prog tracelog { stdout | stderr } *PROG*
+     By default, bpftool prints the output buffered so far and exits. With
+     **-w** or **--wait**, it keeps printing new output as the program produces
+     it, until the program is unloaded or <Ctrl+C> is hit. Waiting requires a
+-    kernel that supports opening a stream as a file descriptor.
++    kernel that supports opening a stream as a file descriptor, introduced
++    upstream in Linux 7.4.
+
+ bpftool prog run *PROG* data_in *FILE* [data_out *FILE* [data_size_out *L*]] [ctx_in *FILE* [ctx_out *FILE* [ctx_size_out *M*]]] [repeat *N*]
+     Run BPF program *PROG* in the kernel testing infrastructure for BPF,
+@@ -274,8 +275,9 @@ OPTIONS
+     signing.
+
+ -w, --wait
+-    When dumping a program stream with **bpftool prog tracelog**, wait for new
+-    output instead of exiting once the buffered output has been printed.
++    When dumping a program stream with **bpftool prog tracelog** { **stdout** |
++    **stderr** } *PROG*, wait for new output instead of exiting once the
++    buffered output has been printed.
+
+ EXAMPLES
+ ========
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 5e27b22444f2..a60414aaa494 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1121,7 +1121,7 @@ enum prog_tracelog_mode {
+
+ static void exit_stream(int signo)
+ {
+-	exit(0);
++	_exit(0);
+ }
+
+ /* Consumes prog_fd. */
 --
+2.53.0
 
-commit a3ca958d64fafcbcf31deb9929c54958bdb72868
-Author: Eduard Zingerman <eddyz87@gmail.com>
-
-bpf: avoid widening registers that hinder exact stack-slot tracking
-
-This commit adds logic to prevent loop-widening for registers that are
-used as base addresses for stack access instructions that require exact
-tracking (such as spills, fills, and calls constructing stack objects).
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 9f56ffe09ebac..327bfc00da5f5 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -14087,6 +14087,46 @@ static bool kfunc_spin_allowed(struct bpf_verifi=
-er_env *env, s32 func_id, s16 of
-[ ... ]
-> +bool bpf_needs_fixed_stack_off(struct bpf_verifier_env *env, int insn_id=
-x)
-> +{
-> +	const struct bpf_insn *insn =3D &env->prog->insnsi[insn_idx];
-> +	u32 *flags, btf_id;
-> +
-> +	if (bpf_helper_call(insn)) {
-> +		return insn->imm =3D=3D BPF_FUNC_dynptr_from_mem ||
-> +		       insn->imm =3D=3D BPF_FUNC_ringbuf_reserve_dynptr;
-> +	}
-
-[Severity: Medium]
-Does this logic miss helper functions that consume dynptrs (like
-BPF_FUNC_dynptr_read, BPF_FUNC_dynptr_write, or BPF_FUNC_ringbuf_submit_dyn=
-ptr)?
-
-Since process_dynptr_func() relies on dynptr_get_spi(), which in turn
-requires constant stack offsets via stack_slot_obj_get_spi(), wouldn't
-omitting these dynptr consumers here cause a regression? If the verifier
-widens the loop variable used for a dynptr array index, the stack offset
-becomes non-constant and the verifier will erroneously reject valid programs
-that read or write stack-based dynptrs in a loop.
-
-> +
-> +	/* vmlinux kfuncs only */
-> +	if (!bpf_pseudo_kfunc_call(insn) || insn->off !=3D 0)
-> +		return false;
-> +	btf_id =3D insn->imm;
-[ ... ]
-> +	if (btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_skb] ||
-> +	    btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_xdp] ||
-> +	    btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_skb_meta] ||
-> +	    btf_id =3D=3D special_kfunc_list[KF_bpf_dynptr_from_file])
-> +		return true;
-
-[Severity: Medium]
-Similarly, does this miss kfuncs that consume or clone dynptrs (such as
-KF_bpf_dynptr_clone and KF_bpf_dynptr_slice)?
-
-If a loop variable is used to compute a dynptr address passed to these
-kfuncs, the loop variable will be widened, leading to the same verification
-regression when stack_slot_obj_get_spi() is called with a non-constant stack
-offset.
-
-> +
-> +	return false;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926-scev-minim=
-al-rebase-v1-0-c8e5ab5ba79f@gmail.com?part=3D26
