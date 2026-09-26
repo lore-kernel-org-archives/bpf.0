@@ -1,64 +1,64 @@
-Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
+Received: from mail-wr2-f7.google.com (mail-wr2-f7.google.com [74.125.225.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5DD3115A2
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CE2380FCF
+	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790465717; cv=none; b=S5SR3jPgKqS/JYWtU0gsvjEcs/BHGmeBZhHRzbBuWKJ0HIWclaqmm7BF/qcj+2qS6xez79FpZS0hCepaJ07k66blVRm7fGoIZnOjQ4tRxqiNbPRkrxfeCCImPn9rSVO/vXZF6i4X8VvaUdGpHULFETKl1a8JZx/38hVMPXLSkW8=
+	t=1790465719; cv=none; b=H5J5hUE7LB/rF/G90qRgGLYlCWRPDUnpjXW1lM3UrT4gEGcPNxmaOZX1nt+h1z8UVWdAw3fRRJpgypdnX9tRq3dnJ/AFOZ8LU3RiW40I09wzHbE2pixJD6V2Q9dFRtpeOwiHf7yWqHwyuYVUFNUL6ZOY4B2dpEwkeOYY/wEEroo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790465717; c=relaxed/simple;
-	bh=7+3w0J1/pGodLmA3vrZdXBkhae484YbGQX+7hqtAcoQ=;
+	s=arc-20240116; t=1790465719; c=relaxed/simple;
+	bh=mdl0bHekMZPsDzq8R2rOaKYoki4uPL/MY94votAWWF8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A397sJfvezN9ss+zRgR6U83uAfnK6L1DHJlIiryOQU0omLGieGI8rTAlA+M6DeNPyVAvhIXcMCYQrKL7avSbTOl9qV45dF6+f3OWmwSvMhn2RRTfhCvZDN0FOBuyniRKK2Nxkyqgwhktok75VXYk48eeD7mxtvOeIoGNDV/1dX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RHGlcj0T; arc=none smtp.client-ip=74.125.225.72
+	 MIME-Version; b=TU0f27sh3XXiFTgqeM2LkdJIqui9Da5+s4h95uO33wFDha24RW0KZWpDRv7BS1c/eQdqacmgxxw3o9hzgGJdSeearYYAETXANd5A2nDNa7O55WdXaAkIRe9BLBrR6Ll9Xr8IkjMV1oCX8JWR5GMnqmN8OiCLKBfX36aXLtSY3XM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sHtML6G9; arc=none smtp.client-ip=74.125.225.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RHGlcj0T"
-Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-48880d1367fso369511f8f.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sHtML6G9"
+Received: by mail-wr2-f7.google.com with SMTP id ffacd0b85a97d-48888103f99so271964f8f.0
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 16:35:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790465714; x=1791070514; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790465716; x=1791070516; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=RR3lV7EZ6a/PcRikckR1v+jZegi35m6AGnlc385O0g8=;
-        b=RHGlcj0TQ9F364HKEOfh1pCUrPjekp9sghZOA61CxOk/euOsLIbA4jiLN492fG0agQ
-         cf44WtzrEhdFxJQggO5+QKR/je/fRBTyvOVNajPRslK7ohxDyZ9fiXGWExHFcCz7G6Z1
-         H1Jvjt9oomqcC2X8Mndh5lzlySkPOeDeV3fG2NNgO/TLHevENM0P7GimeCGfeVHqna/Y
-         Hmq/U9L9GK/JBxDRLxGwXPsMB9egdhQSLtpc5vBarQuBP10biq60mJDn9A15jr5sSe4+
-         rEVq849a/e29yD3S4gBd9110KFaXag07h5xToPnmE68Fhkq+80rWN3nIbUClY9iTKgpZ
-         aqDA==
+        bh=aWbjbTIKOC7T75SGsH568HJmvFj5YkUAClcJ6ld4oxc=;
+        b=sHtML6G9/wixpclTQ/acGRkBgmHh1RIPKJELIytgFRScOkFF0NLAfl4XYZ+aXW+Jur
+         +VbQ3UzmuRgFKEW/1qyo4RRbrnEWaXgxM4mutZigbigo07aVoGTBzABNII+NXd/+y87Y
+         JSFe3Ypp/QnmN9f1GdTFaJzwbqZdLTFx1WT7OSlygH0w8qYfpHj0BiubfCAWlt57Q2Y6
+         Hg+WXP25tw1agQafTzBxxzcfPC9Gde0hGJssy+N4cYlmMwCFVx5oCnZTY7VKL/LHpocL
+         TBZUNg3Ik4zR5u1i/UqoI3PitnHj2ZcD+w5/12zJAEN787guAJ16w//B+JwcO5wf+S+T
+         2C4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790465714; x=1791070514;
+        d=1e100.net; s=20260707; t=1790465716; x=1791070516;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RR3lV7EZ6a/PcRikckR1v+jZegi35m6AGnlc385O0g8=;
-        b=hY1oWlPiq1y9zNe7nHDhD6xOvNduh6UW+KJ/FQprdL1193AFRoW2klJ9eN5sYGBm1M
-         03JhNZAngSyLB4bqTqh/J9elE8/cAgIkPL8nyB6PYnMoZfHGrfskkPI0+rgViwFsHwob
-         +LB3ChAoZi8/Uxvy38RnkcFZWnmupEFt3zbAzcSNzxhWUIX4bkdH5mJNggRQCWGnVw9r
-         6xTq4Dn5f65WnSJjniAvTTjOFy8WIi2QCgQvXq9lh3nKU7Gmn7UPDNZ5fInFrq1ECKDb
-         ttWN26icnxNk042yKDd46DV2vk4rSy3aRRP5rqgJz91qQ4gEGOe4j92hZ31VLNyscVGV
-         qQ/w==
-X-Gm-Message-State: AFq9FYK00qUc3uYxHoG76Nit4cue0C6+VN0eBkENHhD46vkAXOyCrNGM
-	mIDTS3Mu6O+WIx7bSL3qfBTY6G54ne3A/esSQ91Os4r6krm8U4dweyWrln+Av4ck
-X-Gm-Gg: AYBFou3HidgJSTWIeHoPeNiU/TLl5SViH1j4gKkosKXCf3D8OG6s5NXls1KexJBU2tC
-	C5pXFT3w4j2ZGlMbbQEr+OZddFclKKmQlIwuGgD47e9Fj0xeXJeQafPojqk04n+Bqc3kObZEK3j
-	tvuTL6z8n8WaQw0pD0STK1NWRCEHoqC+73NBsQo5zEVWhr+nuaQajBN/GGWwqz4JBxBI1u7bdCb
-	BuJib/pTmYuJwu41VUAHuRiLSJFExjlzsjSkrl4TOHpqGQ+xmfIDkA3YS0PiA4Aia8MW04Hf9nf
-	LwLNzat2lgPx02cX2tCSmrVsko3cs/SzL9TShSX57rUhL71hBLOpB4chaOyaDiE3HnMtZ8mSVyy
-	fMB5WeMW9X/tFkpCyS4IFDPvNifdWskzd0/5XeldLbXL4DQIVwsEbOvWK9cuDTGcx/0yRroDo9n
-	VUazcoP+p/dYBu9YtK9VDRimY8SpRjFKSCSeZwGnxNJ4Jffq42PLAcnxbfXP9mAHkB3fEEXei6l
-	WhWSpWEz0eBZcvkP5G1tCeACEy7N9P0pGSQGtk3T55YZXloGLVtjdler0Nf5abbikxK/XD86BAf
-	tdHdZlBRFCKi3X6xRMjvhYWA0vDTnn+bzjopOQ==
-X-Received: by 2002:a05:6000:2206:b0:488:5d3e:bf47 with SMTP id ffacd0b85a97d-4887db2d092mr10119881f8f.33.1790465714117;
-        Sat, 26 Sep 2026 16:35:14 -0700 (PDT)
+        bh=aWbjbTIKOC7T75SGsH568HJmvFj5YkUAClcJ6ld4oxc=;
+        b=JPHv3qku0TJhCetkkhtUr56qpbcOXna6q0j4vKoO3gRxAWUAbb6P/Tcmkmt5Fsy9ac
+         bLVd6IBUA2Fw+fc9Xj2KqCC9WKj6VNH49cqqmYuvg5Pd1+NKO07qd45yOlEx+lsClHK3
+         eA3US4MZdGzFKczEM6zX3MfmglCeSbkZRMvBfeA5OT72pWeBOzd6j/za6ywkQ9MqHFGr
+         UipxjdvVul5tg1negXCOCCWtrC5Gu4gtbmZlNYjXu4Kskm7a9Xi0f8aAGrJce/ndr0ZY
+         RQCJuUkdemS2Dt3Wd6OfRc0Td5gI8QumgUjt0EKaTLrrNBsQKoPpK3VxCoZTPPL6caAC
+         D8pA==
+X-Gm-Message-State: AFq9FYJAOE5QMJown41UJy1SIfK75Q6WGcolvVWkAnYpe6YjEnxNyAhe
+	5mDyVjdxLjtjK8VjTt6sTyZK4Ku2l83PsBmVFO5tnRKVAR6rzEPrK4urFOBnAmr6
+X-Gm-Gg: AYBFou0IepsIrY5T83cCq2bTgMGGPP4fpiR1W6iIXm4lZFTM2QKB79hchRrJCPtdDSW
+	Cn7wqXxerojzJMFuBNNJ/0Ke2NW7DJYKTZAsyfx+E3hscbxptECRCPLtgn0FczKS4WrNwCEZe6N
+	FQGg57r+NpEPaPDti21iJx+6saRH0tENHfYy14umKoQO+gepDiDVmenAULc/9NFpRt478PyeW3z
+	qc/9/RezzjW1MYVYTGMNLIiA+vWqJfRDReU1Zp0KNS+J6IgNn5eP2dWJBOOrPw9ztvBY8UUjo7y
+	1R9Drj3Q2mwkPETjJskJCa3da5KbCv7h1niK5hjOhXGkly3Tyc2MndvfUxj94CF5pbS4goZpY+O
+	8DWcOnEqkAUBFJWntll3MMgZ0nHM9BybH7PdhCRfC3PrGQU75Zz10HZUd4pbfBhJD3y5715ZSra
+	vcsPMMtUrh0KSAXc6TIiMJFv9hR90i0f9Mx93Pc0HezDyg5TaaD5C3u18C/IKhplY0FMGOwjy96
+	Tp6gcMuxZiKLh302i+6aERlshVxYbkBNOa5w9fA9WFkrOOtbxE3wKLmSUYpoi/z9yj4TLew5sCz
+	hzeSjL7RukitM326o6eTb6qhS9u98L9tdt6dbg==
+X-Received: by 2002:a05:6000:2dc8:b0:488:82e6:2671 with SMTP id ffacd0b85a97d-48882e62910mr8722925f8f.12.1790465715766;
+        Sat, 26 Sep 2026 16:35:15 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a34a76fsm17567926f8f.7.2026.09.26.16.35.13
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a84221bsm16782533f8f.36.2026.09.26.16.35.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 16:35:13 -0700 (PDT)
+        Sat, 26 Sep 2026 16:35:15 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 05/16] bpf: Allow scalar and atomic access to typed arena objects
-Date: Sun, 27 Sep 2026 01:34:43 +0200
-Message-ID: <20260926233503.3114147-6-memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 06/16] bpf: Support special fields in typed arena objects
+Date: Sun, 27 Sep 2026 01:34:44 +0200
+Message-ID: <20260926233503.3114147-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260926233503.3114147-1-memxor@gmail.com>
 References: <20260926233503.3114147-1-memxor@gmail.com>
@@ -80,119 +80,95 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4886; i=memxor@gmail.com; h=from:subject; bh=7+3w0J1/pGodLmA3vrZdXBkhae484YbGQX+7hqtAcoQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWGz2BunkqKLrry3m+irohdU3f9jEuIjBTbeM2cpVU XHJk+KOUhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATCTcmuGvgMTCtwLP/s1oaSlq Czf1PBOuWq/g9k/yxDFux4Bmxa4ORoZXTgWbjpxv0nEy/vin49e8bR4aBuuj/AUVVy7ouzHhz24 OAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4620; i=memxor@gmail.com; h=from:subject; bh=mdl0bHekMZPsDzq8R2rOaKYoki4uPL/MY94votAWWF8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtHWNw/ps2VU1Ne7d/iVHVwhlj/K3/923NmfPs4U/+GZ IrasnKjjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzkxyeG/zXXv8at7pTI0XXN 7F5t80TtLMfpayeO8XKEeru272J8M4vhn1m9TjDT/4d3RSXLjNYmJh99OlUwkPetyWILB83Tcz5 9YAQA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Let a program read and write the ordinary fields of a typed arena object,
-and run atomics on them, through the native pointer the cast produced.
-Every byte the pointer can reach is mapped, either with real objects or
-with the type's scratch chunk, so the accesses are plain loads and stores:
-no probe mode, no exception table entry, and no address check at the
-access. The verifier's bounds are the whole check. It already keeps a BTF
-pointer's offset constant and inside the object, and the object is inside
-its slot by construction, so a typed pointer never leaves its typed arena.
-This is what the sanitizing cast buys: the cost of trust is paid once, where
-a value enters, and every access after it is as cheap as a load from the
-stack.
+Let bpf_kptr_xchg() take a pointer to a referenced or percpu kptr field of a
+typed arena object, so that objects in arena memory can own references to
+kernel objects and to program-allocated objects. The exchange is a single
+atomic word swap on a native address, so it needs nothing from the arena:
+the field's record comes from the struct's BTF as it does for an allocated
+object, the destination may carry the field's offset, and the value is
+matched against the field's type as before. Direct loads and stores of the
+field stay rejected, as they are for allocated objects; the exchange is the
+only access. A reference left in an object is dropped when its chunk is
+released or the map is destroyed, including one stored into a dummy object
+of the scratch chunk by a program that used a pointer nobody allocated.
 
-Reuse the rules for program-allocated objects. A typed arena object is a
-program-BTF struct with a special-field record, as an allocated object is,
-so give both the same treatment where the code asked whether a pointer is
-allocated: reads and writes of scalar fields are permitted, an access that
-overlaps a special field is rejected, a pointer field loads as a scalar
-rather than as a pointer, and flexible arrays are not walked. Writes are
-permitted because the memory under the object is never unmapped while a
-program that saw it can still run, which is what allocated objects need a
-reference for. The fault-prone dereference predicate does not match the
-class, so the context conversion pass leaves the accesses alone and
-load-acquire is allowed on it. Helpers and kfuncs keep rejecting the class
-as plain memory, since none of the argument type tables lists it; a kfunc
-that wants a typed arena pointer asks for it by type, as the page kfuncs and
-the kptr exchange do.
+Kptrs are the only special fields a typed arena object may hold, and the
+reason is how its memory behaves. A chunk is released after a grace period
+that covers the invocations that started before the release was requested,
+not the ones that start after it and cast into the range, and a fault in
+the middle of a kfunc swaps the page under the object for the scratch
+chunk, so the rest of the kfunc runs on the dummy object that every
+unallocated slot shares. A field survives that only if each operation on it
+is one atomic instruction, so that it lands on the real page or on the
+dummy but is never split, and if the kernel keeps no pointer into the
+object, so that nothing dangles once the memory is gone or reused. A kptr
+is exactly that: the exchange is the only operation, and the referenced
+object is held through the pointer value alone.
+
+Timers, workqueues, task work and RCU heads are not. Their kfuncs take a
+lock in the field and touch it several times, the async callback object
+records the object's address for the callback, and an RCU head is linked
+into the RCU callback list in place. A release or a fault in the middle
+leaves a lock taken on a real page and dropped on the dummy, a callback
+running on memory that now holds another object, or the dummy's RCU head
+queued twice. Locks, lists, rbtrees and refcounts stay refused as well; the
+memory is native, and a program builds those from typed pointer fields and
+atomics without kernel help.
+
+The way to give a typed object a timer, a workqueue, task work or an RCU
+head is to allocate an object holding them with bpf_obj_new() and keep it
+in a kptr field of the typed object. Allocated memory is owned by the
+allocator and freed only by bpf_obj_drop() after its fields are cancelled,
+so nothing swaps it or reuses it under a kfunc or a callback. That needs
+those fields to be allowed in allocated objects, which a later patch adds.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/btf.c      |  9 +++++----
- kernel/bpf/verifier.c | 18 ++++++++----------
- 2 files changed, 13 insertions(+), 14 deletions(-)
+ kernel/bpf/verifier.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 9bcfefdfb734..6a29a9d87702 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7782,7 +7782,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	u32 id = reg->btf_id;
- 	int err;
- 
--	while (type_is_alloc(reg->type)) {
-+	while (type_is_local_obj(reg->type)) {
- 		struct btf_struct_meta *meta;
- 		struct btf_record *rec;
- 		int i;
-@@ -7807,14 +7807,15 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	t = btf_type_by_id(btf, id);
- 	do {
- 		err = btf_struct_walk(log, btf, t, off, size, &id, &tmp_flag,
--				      field_name, !type_is_alloc(reg->type));
-+				      field_name, !type_is_local_obj(reg->type));
- 
- 		switch (err) {
- 		case WALK_PTR:
--			/* For local types, the destination register cannot
-+			/*
-+			 * For local types, the destination register cannot
- 			 * become a pointer again.
- 			 */
--			if (type_is_alloc(reg->type))
-+			if (type_is_local_obj(reg->type))
- 				return SCALAR_VALUE;
- 			/* If we found the pointer or scalar on t+off,
- 			 * we're done.
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a0069983f103..75697e52a2df 100644
+index 75697e52a2df..f854d8419fff 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -6341,12 +6341,6 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	u32 btf_id = 0;
- 	int ret;
+@@ -386,7 +386,7 @@ static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg)
  
--	/* The access rules for typed arena objects come with a later patch. */
--	if (type_is_typed_arena_obj(reg->type)) {
--		verbose(env, "typed arena access is not supported yet\n");
--		return -EACCES;
--	}
--
- 	if (!env->allow_ptr_leaks) {
- 		verbose(env,
- 			"'struct %s' access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
-@@ -6398,7 +6392,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 		return -EACCES;
+ 	if (reg->type == PTR_TO_MAP_VALUE) {
+ 		rec = reg->map_ptr->record;
+-	} else if (type_is_ptr_alloc_obj(reg->type)) {
++	} else if (type_is_ptr_alloc_obj(reg->type) || type_is_typed_arena_obj(reg->type)) {
+ 		meta = btf_find_struct_meta(reg->btf, reg->btf_id);
+ 		if (meta)
+ 			rec = meta->record;
+@@ -8063,7 +8063,7 @@ static int process_kptr_func(struct bpf_verifier_env *env, int regno,
+ 	struct btf_record *rec;
+ 	u32 kptr_off;
+ 
+-	if (type_is_ptr_alloc_obj(reg->type)) {
++	if (type_is_ptr_alloc_obj(reg->type) || type_is_typed_arena_obj(reg->type)) {
+ 		rec = reg_btf_record(reg);
+ 	} else { /* PTR_TO_MAP_VALUE */
+ 		map_ptr = reg->map_ptr;
+@@ -8834,6 +8834,7 @@ static const struct bpf_reg_types kptr_xchg_dest_types = {
+ 		PTR_TO_BTF_ID | MEM_ALLOC,
+ 		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF,
+ 		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU,
++		PTR_TO_BTF_ID | MEM_ARENA,
  	}
- 
--	if (env->ops->btf_struct_access && !type_is_alloc(reg->type) && atype == BPF_WRITE) {
-+	if (env->ops->btf_struct_access && !type_is_local_obj(reg->type) && atype == BPF_WRITE) {
- 		if (!btf_is_kernel(reg->btf)) {
- 			verifier_bug(env, "reg->btf must be kernel btf");
- 			return -EFAULT;
-@@ -6409,10 +6403,14 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 				"%s cannot write into ptr_%s at off=%d size=%d\n",
- 				reg_arg_name(env, argno), tname, off, size);
- 	} else {
--		/* Writes are permitted with default btf_struct_access for
--		 * program allocated objects (which always have id > 0).
-+		/*
-+		 * Writes are permitted with default btf_struct_access for
-+		 * program allocated objects (which always have id > 0) and
-+		 * for typed arena objects, whose memory is never unmapped
-+		 * under a program.
- 		 */
--		if (atype != BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
-+		if (atype != BPF_READ && !type_is_ptr_alloc_obj(reg->type) &&
-+		    !type_is_typed_arena_obj(reg->type)) {
- 			verbose(env, "only read is supported\n");
- 			return -EACCES;
- 		}
+ };
+ static const struct bpf_reg_types dynptr_types = {
+@@ -9154,6 +9155,7 @@ static int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 	case PTR_TO_BTF_ID | MEM_RCU:
+ 	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
+ 	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU:
++	case PTR_TO_BTF_ID | MEM_ARENA:
+ 		/* When referenced PTR_TO_BTF_ID is passed to release function,
+ 		 * its fixed offset must be 0. bpf_refcount_acquire() returns the
+ 		 * pointer it was given while incrementing the refcount at the
 -- 
 2.53.0
 
