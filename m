@@ -1,136 +1,154 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76C23BED38
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DD82FE56A
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790551777; cv=none; b=VDSC3JeYuFg+3fymLjvwXTZ2dAj2nyzIg2yLTQJRaRC0H3bmLfI4FNrQ+4Hk2YloK5A4nNFL/fNcWP9LmzNQBmngo/0k+yHVW76LuQa9tywVTl5XpHlCHt0/Bjx/rUKKUjSXtlcwgBgeTfS9i/Aud7VQpuq8GXNJlvpJq8ZBtkc=
+	t=1790552157; cv=none; b=LKOWg9qCiQky2Mh7YhtJYOr2Mis7zNjGWmAvjmhM4jtvCYGcOQGzufvvRgEeBNGCwtB4YQnhyTHsJ8+0jNTWG+Odj1Otui2cuWWoexeZ4LTx8PGgMEw73mTrmvh2gQo7EDL4zwSlKtLPPLdpqIlZ63XrdxKfxeMk5ypNmtUaByg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790551777; c=relaxed/simple;
-	bh=asJs0c5zT/497M6//GyJ/PuW0cj6uiaNYR792UIjbqw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Du6EJHS3otw2AWUricnuwfPagNbJKBC11tbsJdW+u22zHlQ8S9VGdx1Vw0e65EnxJEPNRZXoYxK/GPxwCm2vVdgoXw2GvR6E1YxkfKgjHHbrQs4c5ixNADTkocZR2KHNvNVDgz5+1e7b9W2WUV5XMgbqNnKLzDhQpdFtNtLO2co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XB4WYcl8; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790552157; c=relaxed/simple;
+	bh=zUczv42xnBRKDUlSGntImfEdrqpq77GiCQwYtmt81sM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZlDF+8fMYxCtwC3O0xk830NirEIOx0wBwp1gvXOwOK8ncCcHAJzkummuALAxS3s/1H0DZoUGf2a2IVL6oMFrHbOQA2qNM/5LUB/aYwYh5DCHI5hZf9fh/3ZiKR63Bjbz+f2ZzEOItlTsxleCLTUDqABB7ORnydvucsHsXix/+a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MG4l3pXr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XB4WYcl8"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e4b11so13105685e9.3
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790551774; x=1791156574; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XdSUb7fF1yQuVuZ/Ucyhp0itw3vsUUaaEZuWy+I0GJ4=;
-        b=XB4WYcl8zXGRc9DueyfH1NHe2vI9s534iZcipOk7Opr5eJKkVk0HrEM39H7lw/zGG+
-         5XWSMzKuNbwRqlJuMpnMZkzZ4jJ5nne4pvD2E3KRfN8DnvqIsYM6rN3I+eALx3BhB1ac
-         /o5NRN88nQCoLpbmkWuqpINMT0xIJq2xSS01P2FrQn+6Y73dKRvV2y1Kj7ibZu5m2nsF
-         3XOVP1eK+q346NC0wmFG/0vZirS+e93dvKMju9jygyZSzftOhFwCfU8nUKe9xU6gJzpb
-         3esxFq2kKSEUeH4zWvQKjm/HTZku1wJwptfSPhKyUlR4spt+iHBOOaFmuu5V4cjaEA8J
-         oNFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790551774; x=1791156574;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XdSUb7fF1yQuVuZ/Ucyhp0itw3vsUUaaEZuWy+I0GJ4=;
-        b=P+5/g96gUGJOiNPF+mX1n/3/ivd7maAdx/aNdasTgDHvIqFiaucAb8xZb2KvcLeN4I
-         dATOQqwuD8xRgAekLjEYAQ5n9Buoj3hwVhkKXhg9VX6SahheRIrgwFgArFtW36clhqsA
-         1JfZ72Gp6ZFO8O0SPSQtKiGDHgIbKHGB5Gd3LzCCU9wtejTEtU5mJyt/ZNmP76D5Z011
-         SZMkrycQN6h7nEdjH6J4Vy05kMAjtMapbxmYQlo5JZxQu88spw8yuKX4PVf/WHUX+KqR
-         PDwdTU2rZYICkeXE+STyQF+I/IGMOmceahfFniXx8EuQVR7Emo+CutbQQA8Fsk8DKAxT
-         zkhA==
-X-Forwarded-Encrypted: i=1; AKwUvBwATtl7gjcTlLCBQm6EMvBL8Y4OXrWBWkwE8nhMBSauSLanoiVYWh6Aow5OAbHMC+AEWz4=@vger.kernel.org
-X-Gm-Message-State: AFuF++lmNmF1oHbEgkiengrypdE/sy30xsoQNsWTrKWFmDErx2oFJEDp
-	NdCmoOTAFK78o7nOmpBIEv72DXPdYsZ/p1Ctg3o1/kqZBJH5GvhN1QUTSvmu0ZkDrwc=
-X-Gm-Gg: AYBFou3NHrRgdpxZ1QX1wKI6oFtebJphsogPHvBXjYKbogNiXz+eIQFozjJkVuqjjno
-	iu5oEMHP1U/zEhWeFFPpFRCwZGpHCZOCARq1HO99IlvRxlnPeGDQRzAtsDaqupLrjO8amS8EB8B
-	61Gz25cVlb513ewbNr3e2zENwVD33j/6YE5ks72Rko4mixXuhMzQ2VWAAx2khQJmZ9n8IByK2mq
-	3oTDlkIjNrv1lYtO2wvdxOnGjY3whlfXbCmltcwU9cL+KJPCeyg9b0GUMavhB6ePyDwHm+y6jFW
-	NopQs3jQcQNVVPAFE+pEwbdwHlCjCLY/9Fdb/3PJxqByopvIiEfb+1tn6XsOKmfH3o8BQi8S0Mw
-	XhRKhenZiHhdCxcFU8SYJ3iKZy9M4dFkxN6u4iaRiMzkc9FNJ1zh9J2pM2dNpYqx3QNzwBH4Uqx
-	qXokH6blqp80PChc9nbuCT9VNZkw5QKXmSkHcRBULp1XtdL+XNuKtNevMV5ULM4PH7+CNY
-X-Received: by 2002:a05:600c:138c:b0:49d:174e:2a1e with SMTP id 5b1f17b1804b1-49fe66e6538mr205793325e9.19.1790551774183;
-        Sun, 27 Sep 2026 16:29:34 -0700 (PDT)
-Received: from metepc ([46.197.185.71])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a34a314sm23987518f8f.6.2026.09.27.16.29.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 16:29:33 -0700 (PDT)
-From: =?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net
-Cc: john.fastabend@gmail.com,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
-Subject: [PATCH bpf v2] bpf: Fix wrong frame passed to check_fastcall_stack_contract() in check_stack_read_fixed_off()
-Date: Mon, 28 Sep 2026 02:21:37 +0300
-Message-ID: <20260927232917.422183-1-omermetekaya0@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MG4l3pXr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8421F00899
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790552155;
+	bh=zUczv42xnBRKDUlSGntImfEdrqpq77GiCQwYtmt81sM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=MG4l3pXrmLQikpOj1nFptIcrJ3kSNKrgOvojutXhYWAChjwZ+A9kB9Q4ZaJLfkHrG
+	 8XkM+Afyy7TQ1h95nasz1z5+jzJdDn5PzerWLZGbEfRKfODKJXvhuFp66O1AVkO//V
+	 FeOCg7UQ868vXpQmpq4bPTNxsuWaec0d1QQNBcGnwQ4vh7vWWJQZkh4/rcnqsm4IuB
+	 cn0NY7g1mmJAQ57p5ZW8AMMvTkItYflbuxgHgoBdG86oDw40QHBEZ/6qoretLrAm4s
+	 a0YZmyZqzDMGYo510Dt4WRJAO/jQwsgYPiv7BysivCe3eXM6fVGOYNAeBbZEHEIeaJ
+	 b6RNt6XqnLV+w==
+Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b8eacb7c8fso1857476e87.3
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:35:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzt5g/UQMUz74gCrXWYwb9bIK7MA+g0ierRc8llEMookGTa1OEBbNVP0G+zPw2fVhXy7ys=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI3vdiitP6MBCbBe/MwfqTY2YQkO1g78i7xvR+W1Dr6wgOM3Xoo
+	9v9japzLdBdyZ6w4XnFVLeSEuxM8zCI6cqrNpbv+yKkFnwm3a9i0C4VNjeiJfT0OxhwuhX7m3K/
+	D8QAY0AQtEaufW1erzS1pv7v1P61Eoxc=
+X-Received: by 2002:a05:6512:b92:b0:5b8:f562:d232 with SMTP id
+ 2adb3069b0e04-5b8f562d300mr836313e87.53.1790552153978; Sun, 27 Sep 2026
+ 16:35:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
+ <20260927-submit-stmmac-reset-fixes-v1-v5-2-feec6c14dd06@gmail.com>
+In-Reply-To: <20260927-submit-stmmac-reset-fixes-v1-v5-2-feec6c14dd06@gmail.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Mon, 28 Sep 2026 01:35:42 +0200
+X-Gmail-Original-Message-ID: <CAD++jL=6Ov5BPK1naX6orzMsrJPm_g6SkdRaU6Ji+okXMFaZdQ@mail.gmail.com>
+X-Gm-Features: AclHuK8bRJUtWoB2-ejh2LEjrHa5vNcye2LD6vhX4uf9CtkXYnbSEGRsJ5xc6Kc
+Message-ID: <CAD++jL=6Ov5BPK1naX6orzMsrJPm_g6SkdRaU6Ji+okXMFaZdQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 02/19] net: stmmac: request the MDIO reset
+ GPIO only once
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
+	Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Christian Marangi <ansuelsmth@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Serge Semin <fancer.lancer@gmail.com>, Suraj Jaiswal <quic_jsuraj@quicinc.com>, 
+	Richard Cochran <richardcochran@gmail.com>, Joao Pinto <Joao.Pinto@synopsys.com>, 
+	Vladimir Oltean <vladimir.oltean@nxp.com>, Ong Boon Leong <boon.leong.ong@intel.com>, 
+	Voon Weifeng <weifeng.voon@intel.com>, "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Simon Horman <horms@kernel.org>, 
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Jose Abreu <Jose.Abreu@synopsys.com>, Yao Zi <me@ziyao.cc>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Richard Genoud <richard.genoud@bootlin.com>, 
+	"Alastair D'Silva" <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+	ZhaoJinming <zhaojinming@uniontech.com>, 
+	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>, Ding Hui <dinghui1111@163.com>, 
+	Linkui Xiao <xiaolinkui@kylinos.cn>, Linkui Xiao <xiaolinkui@126.com>, linux-tegra@vger.kernel.org, 
+	linux-sunxi@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-check_stack_read_fixed_off() calls check_fastcall_stack_contract() with
-'state' (always the current frame, vstate->frame[vstate->curframe])
-instead of 'reg_state' (the frame the pointer refers to).
+Hi James,
 
-In a bpf2bpf call where a callee reads from a PTR_TO_STACK pointing
-into the caller's frame, 'reg_state' and 'state' are different:
-'reg_state' is the caller's frame, while 'state' is the callee's.
-Passing 'state' causes the fastcall contract to be checked against the
-callee's subprog instead of the caller's, leaving the caller's fastcall
-region unprotected and potentially causing an incorrect fastcall rewrite.
+On Sun, Sep 27, 2026 at 11:59=E2=80=AFPM James Hilliard
+<james.hilliard1@gmail.com> wrote:
 
-The three sibling functions all pass the frame the pointer refers to:
-  check_stack_write_fixed_off -> passes 'state'    (ptr's frame)
-  check_stack_write_var_off   -> passes 'state'    (ptr's frame)
-  check_stack_read_var_off    -> passes 'ptr_state' (ptr's frame)
+> From: Linkui Xiao <xiaolinkui@kylinos.cn>
+>
+> stmmac_mdio_reset() calls devm_gpiod_get_optional() every time it runs.
+> A GPIO line can only be requested once, so from the second call on
+> gpiod_request_commit() returns -EBUSY. devm_gpiod_get_optional() only
+> turns -ENOENT into NULL, hence the error is passed straight back and
+> stmmac_mdio_reset() bails out before pulsing "snps,reset" and before
+> running the STE101P MDC workaround.
+>
+> The first call, made by of_mdiobus_register(), succeeds, so the failure
+> is only visible later on: every resume that does not use WoL goes
+> through stmmac_resume() -> stmmac_mdio_reset(), and that caller ignores
+> the return value, so the PHY silently stays un-reset.
+>
+> The descriptor used to be requested exactly once: stmmac_mdio_reset()
+> resolved "snps,reset-gpio" itself and cached the GPIO number in
+> stmmac_mdio_bus_data::reset_gpio, and commit ae26c1c6cb9b ("stmmac: fix
+> PHY reset during resume") relies on that cache to reuse the line on
+> every call. commit 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in
+> stmmac_mdio_reset") replaced it with a devm_gpiod_get_optional() that
+> caches nothing, so the request is repeated on every call and fails from
+> the second one on.
+>
+> Parse the whole reset description, the GPIO and "snps,reset-delays-us",
+> in stmmac_mdio_register() at probe time, and keep it in struct
+> stmmac_priv. This is where devm-gpiod is meant to be used: the line is
+> acquired with the device and released with it, and any failure to
+> acquire it is reported during probe instead of being ignored by
+> stmmac_resume(). stmmac_mdio_reset() then only pulses the cached line,
+> with the delays that were read once and for all at probe time.
+>
+> Cache the request and delays for DT devices regardless of
+> mdio_bus_data->needs_reset. That flag controls the registration-time
+> bus reset callback, but system resume calls stmmac_mdio_reset()
+> directly. The reset routine no longer looks at the device tree: where
+> the description is absent the cached descriptor is NULL and the delays
+> are zero, so the pulse remains a no-op.
+>
+> Keep acquisition conditional on CONFIG_STMMAC_PLATFORM, matching the
+> reset callback, so non-platform configurations do not request an unused
+> GPIO. Also skip acquisition for a disabled MDIO child: registering that
+> bus returns -ENODEV without calling its reset callback, and the driver
+> must retain the existing disabled-bus success path even if the unused
+> GPIO is unavailable. Remove the unnecessary gpio_desc forward declaration=
+.
+>
+> Fixes: 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in stmmac_mdio_re=
+set")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
+> Co-developed-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Only check_stack_read_fixed_off was incorrectly passing the current frame
-instead of the pointer's frame.
+Dostoyevsky commit message, I didn't read it. Ask the agent
+to be terse.
 
-Fix by passing 'reg_state' instead of 'state', matching the pattern used
-by all sibling functions.
+I looked at the code and from a GPIO PoV it does the right
+thing: use 1 as asserted and 0 as de-asserted RESET line.
 
-Fixes: 5b5f51bff1b6 ("bpf: no_caller_saved_registers attribute for helper calls")
-Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
----
-Changes in v2:
-  - Fix commit message: sibling write functions pass the frame the
-    pointer refers to, not curframe. Reported by bpf-ci bot.
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1cd92336309b..5c523a9bde6b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4020,7 +4020,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 	reg = &reg_state->stack[spi].spilled_ptr;
-
- 	mark_stack_slot_scratched(env, spi);
--	check_fastcall_stack_contract(env, state, env->insn_idx, off);
-+	check_fastcall_stack_contract(env, reg_state, env->insn_idx, off);
-
- 	/*
- 	 * Refine the in-progress load record's origin to the source stack slot.
---
-2.55.0
-
+Yours,
+Linus Walleij
