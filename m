@@ -1,193 +1,164 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
+Received: from mta1.migadu.com (out-5.mta1.migadu.com [95.215.58.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E1B1AA1D5
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 05:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4131531C8
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 05:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790486122; cv=none; b=Rgg153bcpY5Tj1Hp6/ihHC5fu8G6D8VEckzGATeXDlqxzQpa+aitp3cmk8yCA2I6HHufzTeEW6kUVAWRCc7hqupmmU3vHEGarHCaRlkoPgIpGEz02VWhNZCJwYC7oUxZhuabxmTdMd7oJi3Bj3IPJc1s6ejOzjlNfcw006siJ3Q=
+	t=1790488183; cv=none; b=Vij2fVrOEs0BxdRPMV0K+aV0cQ4MvFG3NY6RJHHXyT2uTcP+TT3sPRYWszh/L6zOy7Kp9E18k1bcU+cDFUHSYtiGAfNGdSHuTdDrNnJ3+x4b9HpwM4wEDGAZM9nIYx1KpuGRTKk3UphnXOfPatPo+xhye7RgZ8GkppN6OZkrd6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790486122; c=relaxed/simple;
-	bh=Mj6a9MgdGCqWYAQGPhRA9sgl7Qe9WwUI4ge989Hfa88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AOZ1e4/GjPOeZ+T90oTCgPM2H5BEJ/YiZimTRVBd+tUSyYH9MuAyPKSM0gmI02SgqsULNPOUYt/aopYlZh0zMc23FeEK+P2Pucp9Qbj10GtcQmDliCw0Z8b9cTtMmX2QlmioGwrp3m92uHSMV+F0iCr+Woi25zi0/8MfIF2l10g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OtbCbEAL; arc=none smtp.client-ip=74.125.228.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790488183; c=relaxed/simple;
+	bh=dfPLd2FnRW/99bwR4QFd27uQCYqrxoTkbXr1ugbGMaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XzUsEHHgBx02vT61Uwl7HOtyrv6eP0EaDqbUWkDyAd533ZxNosyIwGrV2ROsJevoM6Jl3WO6UKhkOXBgTGXoCLMSD+OqtHI+9scaGorF4KI2EhBshCkOFZJ1QuC94GHB7tpOjWZsWc8bNrkXygoQZpAaAUFzY0C3YeIsYQqzZ0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BCXT4sYW; arc=none smtp.client-ip=95.215.58.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OtbCbEAL"
-Received: by mail-pz2-f40.google.com with SMTP id d2e1a72fcca58-8804b59404aso834269b3a.3
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 22:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790486120; x=1791090920; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OjKSfukDZvlY1eXjlV/PoddSyojDKst8RtQu8NrZS7I=;
-        b=OtbCbEALZGSTOiKY8BVEckLUD9ldbK5dm0D6aa1cI8I730FdFdac2alwxRhh1HRViV
-         n+dtNgfbhS32jt0q9eWBN1IDQMMSVtDChdhx+EUPOdVJfeu3oLExKxGDY0SfAOn4YzYO
-         kAVraD65UwfYXeB+lagYMhT6HMyGBZaJFyZ184/Giu4NA0JESZoqWl6LR0vdvSxVUJiq
-         Sg2QkGJjqWxLbt6BwejAAoInbSp25n2CTW5XMLW/mvKGxFaWjbnFG3UYojN7Pi5FusK9
-         /9pt9Obi8op9riSFp11xFxT4SvUEySRU/44Duh5F05BsNTYBW+jk0UhDq0mfHxHCssHM
-         /gmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790486120; x=1791090920;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OjKSfukDZvlY1eXjlV/PoddSyojDKst8RtQu8NrZS7I=;
-        b=enQWjyKckn92B1icMrAhPZzkVvHN4/n864c1XXgyN+TKkhmdiQMJ3ywtclLl9akRys
-         bj60AqeVErrOH+69qtavUphvvo48+lCr4kMKNJKCRx0VPWKhy1Z08XIRJeHpNQxgeXDf
-         MkXfLYFuh6Rl6H4VO/txTZLqs1UhAf0jwqnebzv6sP8e3Fg68Gpbfzp9idDnbD++h1t3
-         TPjYq3qVdaRvdhmo1GrYa2OJpcx3iHltsXFYKoWX9YWL9P+K17ukZnmj9Fsh46Ll9yzk
-         9zE+zaZhTwqRiWT/fDzXY05h75HgxLgBPESEqTwIloRpD0lmfbjFDnN+QlIOtOZumfSp
-         18wg==
-X-Forwarded-Encrypted: i=1; AKwUvBxQPxVXoLUUwwDpxZcaaIjfxDqfkcvfpVb1mAVAAiQfYDNii9gN06Pu/N3/TsOjsnZieM0=@vger.kernel.org
-X-Gm-Message-State: AFuF++lDwK4qFJD1rBv/TccDQ1Xsm1BfK0Fbo2Eca1TTsSdAR+/tu4JK
-	tWNwqmgL15pRbDEU+Qtzpr7hfr2E10am/Wsz/TA+Qx6UM8pYb8+VX0Dy
-X-Gm-Gg: AYBFou211jp4Mox7vzRv8HCroLCrpv+IzwVE8oCbbOP6X7gw18FgsGiBIQTpKqWj0Hx
-	02AxemFZE4rizIqSa2zEnjjDbeJ66SW/V5z9RLuKdWy6kbqUEegmonKIDjKZyHD7YBVAEmDrd4j
-	tCTQKPx+Ts/ftGJY5D4+gFz/hyxfoUth0G6Rpgx20n1uXKtdVrb+Y+T/F55FLkjcPTS+6K1MPr4
-	i33kWRQhn+adTph7kNVTChR7ZDC9t92IAZ2CupWN599PYlgZrnS14MVkpDYTdhz8mYnUeS+PvYt
-	3xDUQ1twbE66yX43PL6OyRB3bx0csXM1/zC8P985MRrc0k+DTAGlZMJOcvVvop0eqhnpstw2Qre
-	BKWPGHexzd56wC7j8FXOND8aAhc/r4j47m7Og6GbRb9cpGLCpfPKn7Ly7D+Yof3+oG7M/yYF0/S
-	RQkVCdUNWVaYJA1OhNdljLycX+r8/jbyc74jMqnhG3Ew7RU/h6PbdQILupTCwNFTHqvpcmOw==
-X-Received: by 2002:a05:6a00:464e:b0:881:e266:c3d4 with SMTP id d2e1a72fcca58-881e266c980mr1869862b3a.25.1790486119873;
-        Sat, 26 Sep 2026 22:15:19 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:7ff:4::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87feaf852d7sm2718078b3a.42.2026.09.26.22.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 22:15:17 -0700 (PDT)
-Date: Sat, 26 Sep 2026 22:14:55 -0700
-From: Narcisa Vasile <narcisav.kernel@gmail.com>
-To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-Cc: netdev@vger.kernel.org, "K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Simon Horman <horms@kernel.org>,
-	Erni Sri Satya Vennela <ernis@linux.microsoft.com>,
-	Dipayaan Roy <dipayanroy@linux.microsoft.com>,
-	Aditya Garg <gargaditya@linux.microsoft.com>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Saurabh Sengar <ssengar@linux.microsoft.com>,
-	linux-hyperv@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net] net: mana: reserve RX buffer headroom to fix
- forwarding performance
-Message-ID: <arimAGRnmHEAviqi@gmail.com>
-References: <20260923144500.4073380-1-hamzamahfooz@linux.microsoft.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BCXT4sYW"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=dfPLd2FnRW/99bwR4QFd27uQCYqrxoTkbXr1ugbGMaw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790488179; v=1; x=1791092979;
+ b=BCXT4sYWjbFDcHRIovxphf0t4OhYmVfnW1OhdOnttb3GeF4fUTktOHsQm0WYx28K4vnLm/B6
+ ZUuKA6pwGjMSXZVc5QcD8y+IZYncLYNXlBBzAjxnFltEfoC6mLnkkmOrrte1aTi0IXTJZtlCaKT
+ KLtmC50j4Xf+vjeqiT3et43w=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 973c231d1a8be2b5;
+	Sun, 27 Sep 2026 05:49:39 +0000
+X-Mizu-Trace-ID: 973c231d1a8be2b5
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e3f30691-a5d8-41b8-a075-10cf8cf4bd95@linux.dev>
+Date: Sat, 26 Sep 2026 22:49:35 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260923144500.4073380-1-hamzamahfooz@linux.microsoft.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves 1/2] dwarf_loader: Trust the entry value register
+ over the first location entry
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+ kernel-team@fb.com, Tejun Heo <tj@kernel.org>
+References: <20260925213619.2187751-1-yonghong.song@linux.dev>
+ <DLP2WZASF7LP.18SWCONJDR4LV@gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DLP2WZASF7LP.18SWCONJDR4LV@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 23, 2026 at 10:45:00AM -0400, Hamza Mahfooz wrote:
-> Commit 730ff06d3f5c ("net: mana: Use page pool fragments for RX buffers
-> instead of full pages to improve memory efficiency.") started handing
-> out RX buffers with zero headroom so that two buffers fit into one page
-> at the default MTU.
-> 
-> The MANA TX path, however, stores the per scatter-gather entry DMA
-> mappings in `struct mana_skb_head` at skb->head, and mana_start_xmit()
-> therefore calls skb_cow_head(skb, MANA_HEADROOM). The port advertises
-> this requirement as ndev->needed_headroom = MANA_HEADROOM.
-> 
-> As a result every packet that is received and then forwarded out of a
-> MANA port fails the skb_cow() in ip_forward() and gets reallocated and
-> copied by pskb_expand_head(). This is invisible to a plain RX or TX
-> workload, but it puts a full skb reallocation plus memcpy on the hot
-> path of every single forwarded packet, which is exactly what a
-> router/NVA workload does.
-> 
-> Restore the headroom. Note that reserving MANA_HEADROOM (232) is not
-> enough: ip_forward() asks for LL_RESERVED_SPACE(dev), which rounds
-> hard_header_len + needed_headroom up to HH_DATA_MOD and is 256 bytes on
-> ethernet. Use LL_RESERVED_SPACE() directly so the value keeps tracking
-> both constants.
-> 
-> At the default MTU on a 4K page this means a buffer no longer fits twice
-> into a page (SKB_DATA_ALIGN(1500 + MANA_RXBUF_PAD + 256) = 2112), so the
-> frag-vs-single decision is now made by computing the real buffer size
-> instead of comparing the MTU against PAGE_SIZE / 2. The page_pool
-> fragment path is still used wherever at least two buffers genuinely fit,
-> e.g. on 16K and 64K page sizes.
-> 
-> Measured on an Azure VM with a MANA NIC acting as a forwarding NVA (UDP,
-> 1400 byte payload, 4 streams, 8 Gbps offered, only the forwarding
-> node's kernel differs), 8 runs each, median:
-> 
->                   forwarded pps    throughput
->   before              272,830       3.06 Gbps
->   after               390,560       4.37 Gbps   (+43%)
-> 
-> perf on the forwarding node, same workload:
-> 
->                   memset_orig   __pi_memcpy   pskb_expand_head
->   before             10.07%         3.96%         present
->   after               0.94%         0.64%         gone
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 730ff06d3f5c ("net: mana: Use page pool fragments for RX buffers instead of full pages to improve memory efficiency.")
-> Signed-off-by: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-> ---
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 58 ++++++++++++++-----
->  1 file changed, 44 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> index 591fb4191d90d..e3f3b33ba9062 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -758,6 +758,36 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
->  	return va;
->  }
->  
-> +/* RX buffers must be allocated with enough headroom for the TX path:
-> + * mana_start_xmit() stores the SGE DMA mappings in struct mana_skb_head at
-> + * skb->head, which is why the port advertises ndev->needed_headroom =
-> + * MANA_HEADROOM.
-> + *
-> + * An skb that is forwarded out of a MANA port has to satisfy
-> + * skb_cow(skb, LL_RESERVED_SPACE(dev) + ...) in ip_forward(), so reserve
-> + * LL_RESERVED_SPACE() here rather than just MANA_HEADROOM - it rounds
-> + * hard_header_len + needed_headroom up to HH_DATA_MOD and is therefore
-> + * larger. Reserving less makes every forwarded packet get reallocated and
-> + * copied by pskb_expand_head().
-> + */
 
-nit: maybe trim this comment to make it easier to read. For example, 
-"Reserve enough headroom to satisfy the skb_cow() call in ip_forward()
-and avoid reallocation."
 
-> +static u32 mana_get_rxbuf_headroom(struct mana_port_context *apc)
-> +{
-> +	u32 headroom = LL_RESERVED_SPACE(apc->ndev);
-> +
-> +	if (mana_xdp_get(apc))
-> +		return max_t(u32, headroom, XDP_PACKET_HEADROOM);
-> +
-This implies that the headroom could now be greater than XDP_PACKET_HEADROOM,
-in XDP case. Should we then use the actual headroom value, instead
-of assuming XDP_PACKET_HEADROOM, in mana_run_xdp() when preparing the buffer:
+On 9/26/26 12:45 AM, Alexei Starovoitov wrote:
+> On Fri, Sep 25, 2026 at 02:36 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> DW_OP_entry_value(DW_OP_regN) says the parameter still holds the value regN
+>> had on entry to the function, so regN is by definition the register the
+>> parameter was passed in.  That is better evidence than the first location
+>> list entry, so prefer it.
+> my bot is saying that this is not quite the case.
+>
+> gcc 13 -O2 for
+>
+> long f6(long a, long b)
+> {
+> 	b = a;
+> 	ext();
+> 	ext();
+> 	return 0;
+> }
+>
+> describes 'b' as:
+>    [0x40, 0x44): DW_OP_reg4 RSI
+>    [0x44, 0x4c): DW_OP_reg5 RDI
+>    [0x4c, 0x59): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
 
-  line 94:	xdp_prepare_buff(xdp, buf_va, XDP_PACKET_HEADROOM, pkt_len, true);
+I tried with the above example.
 
-Does MANA_XDP_MTU_MAX need to be updated?
+$ cat t1.c
+void ext(void);
+long f6(long a, long b)
+{
+         b = a;
+         ext();
+         ext();
+         return 0;
+}
 
-> +	return headroom;
-> +}
-> +
+$ gcc -O2 -c -g t1.c.  # gcc14
+$ llvm-dwarfdump t1.o
+...
+
+0x00000053:     DW_TAG_formal_parameter
+                   DW_AT_name    ("a")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t1.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_decl_column     (14)
+                   DW_AT_type    (0x0000008e "long int")
+                   DW_AT_location        (0x00000010:
+                      [0x0000000000000000, 0x0000000000000008): DW_OP_reg5 RDI
+                      [0x0000000000000008, 0x0000000000000015): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+                   DW_AT_GNU_locviews    (0x0000000c)
+
+0x00000063:     DW_TAG_formal_parameter
+                   DW_AT_name    ("b")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t1.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_decl_column     (22)
+                   DW_AT_type    (0x0000008e "long int")
+                   DW_AT_location        (0x0000002d:
+                      [0x0000000000000000, 0x0000000000000000): DW_OP_reg4 RSI
+                      [0x0000000000000000, 0x0000000000000008): DW_OP_reg5 RDI
+                      [0x0000000000000008, 0x0000000000000015): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+                   DW_AT_GNU_locviews    (0x00000027)
+
+Maybe we need to poke into locations to get precise parameter register.
+For example, for argument 'b', we have
+	[0x0000000000000000, 0x0000000000000000): DW_OP_reg4 RSI
+	...
+	[0x0000000000000008, 0x0000000000000015): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+RSI has location starts from 0x0, RDI starts from 0x8 although it has DW_OP_entry_value.
+
+But this makes things complicated, and there is no garantee across different compilers due to
+code gen.
+
+>
+> pahole encodes f6() today. With this patch loc_reg of 'b' becomes RDI,
+> RSI is expected, and f6() is dropped.
+
+Okay, that means my patch actually not working.
+
+>
+>> +	if (entry_value_reg != PARAMETER_UNKNOWN_REG && !parameter__has_piece_info(parm))
+>> +		parm->loc_reg = entry_value_reg;
+> This fixes only the functions where clang happened to emit
+> an entry value. clang -O2 for
+>
+> bool g_lazy(struct task *p, bool lazy)
+> {
+> 	rcu_lock();
+> 	__atomic_store_n(&p->lazy, lazy, __ATOMIC_RELAXED);
+> 	rcu_unlock();
+> 	return lazy;
+> }
+>
+> describes 'lazy' as:
+>    [0x09, 0x1e): DW_OP_reg3 RBX
+>    [0x1e, 0x21): DW_OP_reg0 RAX
+>
+> low_pc is 0. There is no entry value, so g_lazy() is still dropped.
+> With 'int lazy' the list starts at low_pc with RSI.
+> Looks like clang loses the entry range for every bool arg.
+
+In some other cases, clang may generate even more complicated dwarf
+for bool parameters.
+
+One possible workaround is change 'lazy' type from 'bool' to say 'int'.
+As Alexei mentioned in the above, clang didn't handle 'bool' well
+in debug info.
+
