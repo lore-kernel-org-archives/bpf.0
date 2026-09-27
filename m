@@ -1,142 +1,132 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1942FD1B3
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 06:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790489633; cv=pass; b=ttJlEYm9qLMfG8wXpN4HoIwEGGqaC8bmsXMUS85kHJUUUrRKniEvTAlnzi0oQVZGsxtUu1jYLuk9uUpNA5RgZOIm4/kkjj/NpGrE9VVMD1iJZkHXtoTGC3iikzUt+NTa+Pfqp1WDyQG8hR6QIWsVoglNJPSDgTpbyWQuATZz4Ks=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790489633; c=relaxed/simple;
-	bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eTzbZhKzkjnQliTIqp5ordaOKyf+KwcKJowWl2h0P/nn3Eyj3uM5z+2wJ5bjpVHDiJrUcKOzPgvejTzDGkkJ+0iVnsKIdBjwkwbmOpqHGpeFXpGpT1e4eU76Zlhb1hMt8ot7yhhI6cHBogPH7qwx4rzpiJAiMjYK1JrSNXwWnkM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BIfo6Fdf; arc=pass smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9C53A16B2
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 06:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790492043; cv=none; b=knZODs/iY8RlcYNspji19MbiusQk0+jEUHn7e4+IevHEcrdFHW6X+JGuriw1AnC4dE2iV2AsSCOJ6pZkhXaG470RK9KYeUpxuJYhDazrIz0STLj6NvDD6CMUd/8uM121m8PfTBdhCgKFggxkEINzmptUQ3xhcdWB6ryq5UmDelM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790492043; c=relaxed/simple;
+	bh=Rp2X+dx5hQ3lt91Pr5vYcPaasxyyoToGNSTmo5cX7rE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PW+XP5ObK7pC57keX4aecBD+6WyRofU+peVMZkgINQi9OJexAA65vm2w1FygQ2bak81sMuaLud4JZ1AZI/q09P6lg/FzCiJIZI6Ix629q8puu20Rs8aqh7E4InVf8QedowxTfqYwDKA6w/G7nE7vs0oyvZ4o34437TYaZSOQVxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GVmgCx8I; arc=none smtp.client-ip=74.125.225.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BIfo6Fdf"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-3115c4451c8so1673793eec.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:13:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790489631; cv=none;
-        d=google.com; s=arc-20260327;
-        b=c3/7Bb3PVmE6dOBuSIYJ8TGpKF2FVAb0w3mAlLwUvNgsXIyhwBH6HUgelf2q0Jv74a
-         Q5iynrrNTEQU7isqhD2sUUckTM1FB70sxzf8dlhSi/7HyQvdd5BW4V1jCEJmnKvoWM4s
-         nhLhJy8ZaOhhv+3efPMJxuT7ZYwDxh8NVtEqHG1tNb0NTEjnxPdRWYPXlVSbu2vVjejF
-         Y/F79krhy+tev00JeImVa7hDnD0SJ2O+9lyedNtYbr9AB2tCtK9eBnHeh6wTFsvkOQCa
-         ywIEJlxbIdTjZH44yrh3q0T53FXIaYhxYPjFg28S+wcxhARaAC5K3kYB5V4L3pzNyzbg
-         amEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
-        fh=DLFiSZ/WBTVmOrzBD8besMEWnoG795Mc2ZYrxwtUgTc=;
-        b=sOCw+YWK2t64P978FtNRxN+S4HM0a+gF0XPQmtuuqjIv717K5jqFMWztGBDQVUahdL
-         ANpdYNlWF0QJQ1Ad5NAtdTYCdKrbFvuxzfBBX+h/PTDCUQPTuOCgxpvtjlLmjI+HHfGP
-         au4oNTKjDOIaHe9MN1HxJhY9KVHesNSaDzZ9hNFzAGh46ZzrSmOMRW3pQDxq4ag2Ka1Y
-         lx1jyJqPmSxUuWA8C/x+Oie1ws4STU+42DvUnvWjmF0xDmA50rgdaJz/B/gzHkiqevqZ
-         MhPWvCWd06skeJK/IxmfbN6TzND9LrQgbkRCJVcDelw0EvA3gGCEvTV/ijGn352nZ/Sf
-         LxkA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GVmgCx8I"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6351831so1137365f8f.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790489631; x=1791094431; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1790492040; x=1791096840; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
-        b=BIfo6FdfW9YzBUAJa9Bh2IkhjazzGe+0+EQjjp6qGgaX1iZh1DITClCAsvFsqSPItb
-         8wBDm5wjaEaXpnuQxIjrgCwiTxh1I61CSJJFpOZ3XaPIxYPvrF3qqExFN2TvCTeRZDBy
-         6D/dT0ULYH5jPQnbr4/azQewLJDbiAbkbroStRxmnwiCBEAx1WdiSQ4GEnd+lh0P0vDc
-         7nKuvr6p3ok/0usRu9JxwASvwdedRH16cCuKmW+pjrIdpuOV7cYEBNBGFllg2YFWYVKf
-         riuSpebv7OkVe0JvF79wIdpxuDoh4ao4VYBnash6MMhr+mZhd/yxoTMhDESzkTFIjOPt
-         uE4Q==
+        bh=blA64iov7PIlD+oGU3ZepcahACLOoCoJ8JGCVHSsjCo=;
+        b=GVmgCx8IWI7BJwAGDmQqubdboZkfj9rKj+kWI/YizjieVCyI5F5r/LcTUzaBK8LZuv
+         +Jkv0NEwqONlns2PLh9jel/dshFd7vQ3RpakjyBu3MoUQRlVB+nr+sC+uMspPrjWWKkW
+         uV5T6rwrrco27Ro2bnNZsHhwFawMMdF5Umg5uNAwvO3hGeLH4cex/Im5CqxwTXwYjgyc
+         uiJgyeZeqfUo0oJe5XNNpUBWoKwR/48ydQHVoUNCCoZmg5hJ9dI74lBlIa74TNmtAe4W
+         kkVzpoiX9s39fxRLBfFgor7wv7C7CNutbf3mEqzOWYX1GomXigv0TmSTPlCT64V4Q/DA
+         iTHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790489631; x=1791094431;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790492040; x=1791096840;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
-        b=s9Ik0EmqgC/PIPgAIl/itGA8GDHnachHcwFB/R4RzFhXCMi+dY2vjAuFzw+/fi5YC2
-         vzglrQIz+3mzcZWBFety9jvWuoD3zodYRPSsO7mizJHDt0Cv0B4RJ8a6NeUabeqcRkMt
-         vRxCkgjXLD2MJC6gccwnR/NpBZCtM44PaYXI44d+EqJNQweChnVrk0tC5mDRzyve6IDW
-         zbL0H/Ak/jtSmS2WmIhQAilPpnT02JuYVoco3yKjSjBfILXoiuliROcDwVE7smCXdxt3
-         0nJoh84dwQNwdv8tFwxT1Nki8YEq/aFpk3rPNnU3EMqmN2NhCJVKHZrU8rAKHAuk2Z1t
-         9B5w==
-X-Gm-Message-State: AFq9FYJOBFTY3u0Ie91PW4ysJXGYpa20wrVT3nah2i783jsukGrOgh82
-	eHZOpmHoMjrPC5R2deVSfOJgd7dwD48IjdAv4PFdH9WcmO4+MG5gqZFZDse3g9Hx5ZCusy0kPXX
-	+ucp61putJMta4hHfhy5GZVilu6BUF60=
-X-Gm-Gg: AYBFou3oFFQh9y865YUO3+ZdDZ49GCzWfqbxNF2ypPX4yxSkO6mS5k5cQ+uSXAh21yD
-	o1/7XyMOMYRpjDOE4sjuGWdb6mY5grWUdoL5HZhz1yvUkrzBu5f94wdPCAeXPMDCqVUN6goOLms
-	s13/pVyM1Z5VynDueyGlNFi+0CEu2apcYpqMqMRYx2MM27jQsMmlZsrG+sBE38DcZVs/xsIGik+
-	Z3wNz370r9Ij/5Oq8DOOHXIhlS1/1srPK3vj5aVOcywX/5BSzVv7issz8WogoK0+SGR3s86zC4o
-	qxxL72fL0ssFb2jXQE5RkRuLcYNEacQTq5LyTEJ2wYSlv6qlprOa/Rg=
-X-Received: by 2002:a05:7301:7107:b0:341:2c6b:8c97 with SMTP id
- 5a478bee46e88-34270ab8e8bmr4558045eec.12.1790489631424; Sat, 26 Sep 2026
- 23:13:51 -0700 (PDT)
+        bh=blA64iov7PIlD+oGU3ZepcahACLOoCoJ8JGCVHSsjCo=;
+        b=BeYmxGMFbMTTqQOqFZGzLjOFBYkgo/WgfS6n+pDMJQOu00V2FrQizXuHX1gOmC0hr5
+         2gbxzfQ2xQ07kRFmeExMEE8768geuEJO9uo5CStnl8j2By3px9W9DLWQKQ3aNoWSosrx
+         y0wHunpA6K1HoXU/TykEzy4v6wW6g0E5mJ2eFS8ckbzXdPsW8Kjepx+RXglyCqjc8K8H
+         owjlRxaAIyfGsPx+V03UsdkD0ANxRx231ZEUyTqsrF8xgv2Tj8/IKKQXv32VtsMd2Jqq
+         QgZixcslseN4M/MZrMj64k3utgRi2sNrWuVPS/nINjhERbnE1k+E4K8LRawJBTNMRDHa
+         3i6A==
+X-Forwarded-Encrypted: i=1; AKwUvByMnstpWLx6IzC9FlqlRWIVg8PQl1v4tMhFYKGAVzXwJ5/PM9MwUL2idx6OZQDRrXab4Nw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL/SpEhsyusGo/UTEkE8rCBm8x74ptjOKrVpV19Sp5/ManNQ1+k
+	B3gV+yc4oQN4CwE/TDCXlpk1qJ4nn5m58Uo09cK1UN/P5rMPwWBTIRoz
+X-Gm-Gg: AYBFou0g4yMPByIyXkZCaWni3tc2xr9CnCuY/K+ZWDxyDZs8x05p5y18MysSn7J2wQJ
+	wlCX15/QLzDsvfPPAfeD41x1TsvUxvMNOmZqkxxq8ZjzGYcBcnHB772BrCK53pfdp6D9jrHPPTX
+	gLs85JzASVgXEYsLd1LFZDPUBCopVxeU0wfJfAPXlZvu5TiAQ3jGLi9AW6NytRivXq9qXr7A5bI
+	Pz7EeTtHDMru5m6YVCzJMdyuqRDkznyZxcWtnDg1x6NCUa1hQomiXPffb4RR5JGRpDyTf3yo/ua
+	FAA9fiP/vMeDhN3P0y9qot/Qs8CNTdMKHoWID2Gm2i9FJZtGT0tnkUGzf31ncRT4iwJrU6oLHIt
+	AN2OvChiw00As8aeojSDlXL8YLt/IjBSey3PJ4OvzFs73U/ytg38cbKuQMFwixwvuYdTzTh6Rq6
+	twy7nTfcQp4MaWNMSl8peW9lSQsf5NyTkTgzy9RgPqKT8jHnRP4d+ylFrbc83CSvdeLb/jZS0x3
+	3aBAQEowyia0Ll8hC5IKvZE1ycp1UsyVseF75DhOa1otQ==
+X-Received: by 2002:a05:6000:2504:b0:487:1256:ab80 with SMTP id ffacd0b85a97d-48871878daemr18432269f8f.57.1790492040099;
+        Sat, 26 Sep 2026 23:54:00 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a349a0esm26432209f8f.10.2026.09.26.23.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2026 23:53:59 -0700 (PDT)
+Date: Sun, 27 Sep 2026 07:53:58 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Breno Leitao <leitao@debian.org>, David Ahern <dsahern@kernel.org>, Ido
+ Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next 1/6] ipv6: reject a negative optlen in
+ do_ipv6_getsockopt()
+Message-ID: <20260927075358.129e5f65@pumpkin>
+In-Reply-To: <arbE6i8JZrOs-DO9@devvm7509.cco0.facebook.com>
+References: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
+	<20260925-sockopt_expand_out_v2-v1-1-c3ef2e3bb5c0@debian.org>
+	<arbE6i8JZrOs-DO9@devvm7509.cco0.facebook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260926210757.2152159-1-thisseanzhang@gmail.com> <DLPTN52TGGMY.TPWL2GZA38RK@gmail.com>
-In-Reply-To: <DLPTN52TGGMY.TPWL2GZA38RK@gmail.com>
-From: Sean zhang <thisseanzhang@gmail.com>
-Date: Sat, 26 Sep 2026 23:13:38 -0700
-X-Gm-Features: AclHuK8wXN2xAfp9zc6K6pU-EYUnBl-bodxzJ1vo68HRxFJW1oVa3YT6t8_CCik
-Message-ID: <CAEejd4QjwcjMNKuwDYBV_u4XJ_CfzGZGR5MXGtOgM+BoAMP23w@mail.gmail.com>
-Subject: Re: [RFC bpf-next 0/3] bpf: Add PPPoE encap/decap support to bpf_skb_adjust_room
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, netdev@vger.kernel.org, 
-	Nick Hudson <nhudson@akamai.com>, Felix Fietkau <nbd@openwrt.org>, Qingfang Deng <dqfext@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> =E4=BA=8E2026=E5=B9=B49=
-=E6=9C=8826=E6=97=A5=E5=91=A8=E5=85=AD 21:41=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sat Sep 26, 2026 at 9:07 PM UTC, ThisSeanZhang wrote:
-> > Hello,
-> >
-> > This series adds PPPoE session encapsulation and decapsulation support =
-to
-> > bpf_skb_adjust_room(), allowing TC BPF programs to update packet data a=
-nd
-> > skb metadata consistently.
->
-> Why?
-> Is this a research project on what llm can implement?
-> It certainly can, but it's not a reason to add new uapi.
->
-> pw-bot: cr
->
+On Fri, 25 Sep 2026 12:02:22 -0700
+Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
 
-Hi Alexei,
+> On 09/25, Breno Leitao wrote:
+> > IPv4's do_ip_getsockopt() rejects a negative optlen right after reading
+> > it. do_ipv6_getsockopt() never has, and nothing downstream treats it as
+> > an error either: len is an int, but every consumer compares it unsigned,
+> > so -1 behaves as a huge value and each site clamps to its own reply
+> > size.
+> > 
+> > 	len = min_t(unsigned int, sizeof(int), len);
+> > 
+> > So getsockopt(fd, SOL_IPV6, IPV6_TCLASS, buf, &len) with len set to -1
+> > answers 4 bytes and reports 4, rather than failing.
+> > 
+> > This is a bug ready to bite us in the near future, let's get this fixed.
+> > 
+> > I've found this because testing the rest of the patch was returning
+> > inconsistency when optlen = -1.  
+> 
+> If I can do getsockopt with len=-1 today and get 4 bytes back, isn't
+> that a uapi and we are gonna break someone?
+> 
 
-The use case comes from Landscape, an eBPF router I maintain. Its native
-PPPoE WAN mode is implemented in XDP/TC BPF.
+Treating negative values as 4 goes way back into the pre-historic annals,
+And I agree that there could be code out there that fails to set a value
+so passes 'dirty stack' and it always works because it never passed 0..3.
 
-The motivation is a bug we hit: forwarded GSO packets larger than the
-negotiated PPPoE MTU are dropped after the TC program inserts the PPPoE
-header, because the stack cannot segment a PPPoE frame. This was
-reported in https://github.com/ThisSeanZhang/landscape/issues/57
+I suspect all the per-protocol code ought to be passed an unsigned 'len'
+(and return back a possibly modified value for the wrapper code to give
+to the user).
+Then you have somewhere:
+	/* Historic bug compatibility */
+	ulen = len >= 0 ? len : 4;
 
-The reason is that the PPPoE metadata transition cannot be expressed
-from BPF today: bpf_skb_adjust_room() cannot set
-skb->protocol =3D=3D ETH_P_PPP_SES, so an eBPF datapath cannot use the
-kernel's PPPoE GSO/GRO support (55a5d8fca836). Our egress program uses
-BPF_F_ADJ_ROOM_ENCAP_L3_IPV4/IPV6 as a workaround [1], which marks the
-skb as IP-in-IP (skb->encapsulation, SKB_GSO_IPXIP4/6) while the wire
-format is PPPoE. On decapsulation, a TC program similarly cannot restore
-skb->protocol to the inner protocol.
-
-The flags in this series let the helper make these transitions for
-skb-based datapaths; if this support is merged, we plan to switch
-Landscape to the new flags.
-
-[1] https://github.com/ThisSeanZhang/landscape/blob/80bc43eef7143ad029283fe=
-2a8d510718c22af12/landscape-ebpf/src/bpf/tc_chain/tc_pppoe.bpf.c#L38-L47
+David
