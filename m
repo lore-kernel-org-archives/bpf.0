@@ -1,107 +1,229 @@
-Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33869352C3F
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 19:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.205
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790539027; cv=pass; b=hqYze1w6uR9P+vVoqCe2EqF4d1L2/WNgmzhIk79mldJoj6Z5j2OHkqS6+0RAhk1J7PdFwTFHgRtgVWHUaieVU/ItHR9vJB3Q9dTnWhTy7HbKj6orR8s0x41n6gz1/ETcmLQaWufvsh/98OEDbz7qcK+lS/SZ05Zaee5V9l6csdM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790539027; c=relaxed/simple;
-	bh=Rl82HRH9QhRQ15slVr5/LOduMsQeFMyqd3DMVvT5fYQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=W9yipOGKSUe9ZoGCXAsosATidnRUxKezEil5cNa4GQ5S8j7vgz4f9wwKDgWnE5mNAda+ymqz0jHVwsunhFIhjJYBAKFNFwckE42ChWAGJhyDSGWeUm89wKDCEJDFtCdv+H+KRFX9iK3hHtFfU1xvYp3Xnfx+rSc6BpFAN2KLD44=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LxzZ9EmL; arc=pass smtp.client-ip=74.125.230.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD51379ED7
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790540679; cv=none; b=sb/qQcx/fGb7tpoGzcNMiLffXIxkvIKB6DOlUtjXJy+0HR4yMJTAXCFhKDsqA0V9YvMpYaYNflpKs3HOochhf107sEZybwlXVEnOB/mlHn4ZrS4H6LkGnBDP4hc2biTJUjJs8ri5uw2BID63TDjxNGVqA2XuUXz/WjHaYmfDQfA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790540679; c=relaxed/simple;
+	bh=6HWsu4tbBlQ+F1fAeGDMhfwAzQGzSffGFnKOn+HcvEM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Xud46DM64rDzWVy2TvYV5Lk/eLftkJTN3h2PSbORGY/uFNLuVNjpzmgercXKwuq0pzNnsuWeUpLfr3955g2VXN6pxSczmIuoOYUlS1BYUe1hJkmZIHPXnQ1AepOGmJJYyWhsejnJB3RjUjgDq6GBanqGX42F2VIkl5R6I1iQt8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BndxxOXj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LxzZ9EmL"
-Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-939922847efso224133885a.0
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 12:57:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790539025; cv=none;
-        d=google.com; s=arc-20260327;
-        b=R/fYsqDpy9GFmkw0enpcTI8MJX9Y40EtuCS/xAkYyFDt5h6NWSE2/JdAf7MhiQW5+W
-         qDd6CkInhoa9xxBgFkdA+Oljc/3k7olJSBFIGLf8XT4Qi26vFiJ3qto6auwXi0MlwUS1
-         A7LSkE9K7Grdc6TdnvgT9Bmyg+jRTS3tDua3xRLC3kZLm9Cu+xTJAjy4VVEFWGxVguLr
-         BB4489N9swfb4wkwihdP4Ofqd/S/EFTA6vArYpEMHpWZTI9dgKmsofoYLGsF7eoGf+mL
-         TORpK014Jon/xWxU8gw7Ec5EeH3W8d/ShdbLlBjWTCoTvxNQtPoHc4GALd93fIAbhScr
-         hJGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=Rl82HRH9QhRQ15slVr5/LOduMsQeFMyqd3DMVvT5fYQ=;
-        fh=P7khHHMXgrsGuRSJAo6un8IrGadXFp+JJkxY8oXnt2o=;
-        b=G0/Iq5oYjS+yU+LQB8A+/D1P6c9gAjHhRT7SZwUDY0zsNP8aTVfSz4PTc6auTL0LNz
-         Q7eVD0fiRzsuo3p/caNZ2o8pTQHEueGZjzQHYsQvnEYoW+QFrb1XStmN0ee03LzcEJPA
-         5UJ6vmkdi+1F7bnqiUaOg4nG2+5Zi3Fnx0T5tceByvsQvrZEcGSc6WDFrf4L9/PMuX8A
-         3ST8LLR7kpS5dQP5DyQXtb9UkC5oB6e9mAhLrX7oWA20EO+9UuIz4AP9R9OtFnbPNoFx
-         f3A3kKZHa643R+E13pppsdesx5pq7++bpemGhARrreQm507or4JpRyHqKnuoSoxVaYw3
-         9Xkw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790539025; x=1791143825; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Rl82HRH9QhRQ15slVr5/LOduMsQeFMyqd3DMVvT5fYQ=;
-        b=LxzZ9EmLuscV+GwSshg62otchKngE4e/OvPOsIx8QUvfYMK598XzJThGjVNvfHkVph
-         Juz0c9aVfur4rZhfV/PuUKPH/I+//hlpc2DR1pvQy5OXi7doogbSF8etnm2AnUpGDeM5
-         X9cVZ7yaVDjfd8KQwQzpCocaa1KbE3Q6IlMlfe3RT7H40fuc0sypHAHi1vgWpr93mJJN
-         BVP7qAMWKK3fsTykmcsr/eMxakpFDVukZPiNEsFfClUkjrpznKRN/xn3rZpFgybz37QL
-         Y+NABlYJPwqjQ+LDPiJ/0j0c17CPbCuMH8jjzL0lWc0ILvhflJzpOynw3uO/vZ2e6cub
-         97wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790539025; x=1791143825;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Rl82HRH9QhRQ15slVr5/LOduMsQeFMyqd3DMVvT5fYQ=;
-        b=a0Jeg8K7ev+0uGunEm4OasY9kmMSeDBfbkEFS65K9sbtS1Pir4dyy2GsU7+qWU7cS/
-         S1MqmOTw/YWJkcWYDRLMuxtajTGHbL2RhDXC2g2jB8dPKNIxVBFS+T9zNC7bj4pKOFjP
-         DNS103l1kFaJjXhVv8rkpdvsS4YrwNNbumNzLTSBDsnwl3UVOmvURXu/71Fa7Ojcrkv1
-         3DgxmED+Z++FX3HcK8gL7bX+YFZKzNMcYYC9/KS+MuGZ6YyD6aC8pR40yzDI22vLvW36
-         1f7va7/EPx71Ee2lhWX54kD6svPy/1w2pdvmSzCnLSBNOtUmDdvwP6qs7pvjHZ8E3otz
-         ZZJQ==
-X-Gm-Message-State: AFuF++mSL8cASbZnzFjoX7i9y4/EjgGJj3jyz3Wu832dUHItHMf14hfw
-	L1eKihshwgO6ErI7hAzdGW5/512zwW0KnHsHOJuMEdoyYXTxX6A+CUsMY6CnA6pEuMTovh6Gjdv
-	jit521a1+TPeCpfWKoED9zDQB44tbEJchy951zvQ=
-X-Gm-Gg: AYBFou3eF8SrnZP0gZDP51LYR5OWyKHiD5Torm+CecxX2dLJGtWDgkSSEOxb+PAdTzv
-	iR2Z0ey2JIPgPJMw0TJamcq/S2PEyuNG1aYY7a/uICCz3HVGcK4Uoc0gcam6Ri8tdn3911xkVC/
-	Kh3H1ftnAVSpUjEBVWlYwCAgxGc24SSxyW9+lk9YNgOE8tLGF6ZM1rDhq6FNjbLuBZtYK0HaTzj
-	dvuQmKu8NK6kZXjKd8e767y5kdi+dAUqYwQFwa+vq8x1yUmkrC2iFkd0N8zRu7LRTTbEwuxUfLU
-	W0r5IziC3G0L8iRm+/ZpMNgMODI0q5SRorJoXz0XPGHDEBXVWVkh/7r0WvuGY2BNHPrTLLCpf7s
-	MI2/XhAbesRDSays0A2b1LS7y9AXc9sd4Nid327fcJdyK2eAmLs2okwYdTGgcGvIjPNTF0NPrEz
-	Q=
-X-Received: by 2002:a05:620a:170e:b0:93b:e578:583d with SMTP id
- af79cd13be357-93c43bc5366mr1762871985a.21.1790539025038; Sun, 27 Sep 2026
- 12:57:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BndxxOXj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FCFC1F000FF;
+	Sun, 27 Sep 2026 20:24:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790540677;
+	bh=KiXmX7wqYMYzPyttQ4pfrnZbP19B+n7s10d/j8OxGsc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BndxxOXj66SVWEP1agu3mtGeaty7xrxYH3nDHza8JoE+UhIR4yNQ8eZ/nzli661H/
+	 DZWZbaklfth1sQ1UV3cXuo0NPLVlebVDlGaCIAnyEkhHQ9al4pN7SPbPWeTA+x3E3z
+	 SbsJpJHU6BdW0ZHFotbiF45KYCRckubPhPA7/LNuRI0yjn316i4ZhMGemoJqKmYFfE
+	 C5NTztN/v66aBRzllE5PcHjfPdxVe1PyufXtcvOtz8v2BlMql5L5wHUhj9WApe4vbG
+	 D1gW1notqc+/jwOLbbRheGxNJatuydm7QqYySYyvhKJG5v2wCG2jvFHWjQnM894OlZ
+	 W2bxzVdpezv5w==
+Content-Type: multipart/mixed; boundary="===============3661544393272203588=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Pablo Greco <psgreco@gmail.com>
-Date: Sun, 27 Sep 2026 16:56:54 -0300
-X-Gm-Features: AclHuK-RSbH5IQFKBYuPOy7LX-qB6rGHWKnLPO3SAj5XL3E-rYdkr5GS8AcMnes
-Message-ID: <CAK9Zeh8NgWCdXy6dUiakqy+L+fieU8NJxJNxPadbF0UPHWUqyQ@mail.gmail.com>
-Subject: [BUILD BUG] tools/bpf broken in v5.15.221 stable due to backport [7140c9e5e460ee11172ea6c1a6e368b29923003d]
-To: stable@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <a15ab7ae278b027898a8c42648927ac3787f041e33daec5237fc675f67a6eea1@mail.kernel.org>
+In-Reply-To: <20260926050143.2222664-1-yonghong.song@linux.dev>
+References: <20260926050143.2222664-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v6 19/21] selftests/bpf: Add __set_global() and __ret_global() test tags
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 27 Sep 2026 20:24:36 +0000 (UTC)
 
-7140c9e5e460ee11172ea6c1a6e368b29923003d broke v5.15.221 in two different ways
+--===============3661544393272203588==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-It uses LIBBPF_OPTS, which could be an easy fix by adding
-be80e9cdbca8ac66d09e0e24e0bd41d992362a0b, but then it breaks by the
-lack of "sz" in the struct. Also fails due to extra args in the call
-to perf_buffer__new_raw.
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+> index f3dbc3b59bff..9afa163fac5a 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
+> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
 
-IIUC, both issues could be fixed by porting also
-4178893465774f91dcd49465ae6f4e3cc036b7b2,
-22dd7a58b2e9965c1a612b6a09c4a6146cbb5873 (along with their
-predecessors)
+[ ... ]
 
-or by reverting 7140c9e5e460ee11172ea6c1a6e368b29923003d and its successors.
+> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+> index 25eeb1c1248b..65b55f7fa907 100644
+> --- a/tools/testing/selftests/bpf/test_loader.c
+> +++ b/tools/testing/selftests/bpf/test_loader.c
 
-Please advise on how to proceed.
+[ ... ]
 
-Thanks, Pablo
+> @@ -311,6 +326,142 @@ static int parse_caps(const char *str, __u64 *val, const char *name)
+>  	return 0;
+>  }
+>
+> +static int access_global_var(struct bpf_object *obj, const char *name,
+> +			     __u64 *val, bool set)
+> +{
+> +	__u32 off, sz, zero = 0;
+> +	struct bpf_map *map;
+> +	size_t vsz;
+> +	void *buf;
+> +	int err;
+> +
+> +	err = find_global_var(obj, name, &map, &off, &sz);
+> +	if (err)
+> +		return err;
+> +
+> +	vsz = bpf_map__value_size(map);
+> +	buf = calloc(1, vsz);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	err = bpf_map__lookup_elem(map, &zero, sizeof(zero), buf, vsz, 0);
+> +	if (err) {
+> +		PRINT_FAIL("failed to read '%s': %d\n", name, err);
+> +		goto out;
+> +	}
+> +	if (!set) {
+> +		*val = sz == 4 ? *(__u32 *)(buf + off) : *(__u64 *)(buf + off);
+> +		goto out;
+> +	}
+>                        ^^^^
+
+Can __ret_global() match a negative expected value for a 4-byte variable?
+
+parse_global_var() uses strtoull(), which takes a leading '-' and negates
+it as a 64-bit unsigned value. So __ret_global(err, -22) stores
+0xffffffffffffffea (64 bits).
+
+But access_global_var() reads the 4-byte variable zero-extended:
+
+    *val = sz == 4 ? *(__u32 *)(buf + off) : *(__u64 *)(buf + off);
+
+and gets 0x00000000ffffffea (32 bits extended to 64). Then run_subtest()
+compares the two as __u64:
+
+    if (v != subspec->ret_global_val) {
+        PRINT_FAIL("Unexpected %s: 0x%llx != 0x%llx\n", ...);
+
+so the check always fails with "Unexpected err: 0xffffffea !=
+0xffffffffffffffea", even though the program stored exactly -22.
+
+This matters in practice. Existing selftests keep negative errnos in
+4-byte globals and check them from a hand-written driver, e.g.
+progs/test_bpf_nf.c has `int test_einval_reserved = 0;` checked in
+prog_tests/bpf_nf.c with `ASSERT_EQ(skel->bss->test_einval_reserved,
+-EINVAL, ...)`. The commit message says these tags are meant to replace
+that kind of driver. The neighbouring __retval() also supports negative
+values (parse_int() uses strtol() with a special case for INT_MIN), and 68
+programs under progs/ use __retval(-...).
+
+The write side does not have this problem. __set_global(err, -22)
+truncates to 0xffffffea and stores -22 correctly, so the same literal
+behaves differently in the two tags. 8-byte variables are fine because
+both sides are 64-bit.
+
+Should the expected value be truncated or sign-extended to the variable
+width (for example, compare only the low 32 bits when sz == 4, or
+sign-extend the value read back), or should out-of-range values be refused
+at parse time?
+
+A related issue: __set_global() on a 4-byte variable silently drops any
+bits above 32:
+
+> +	if (sz == 4)
+> +		*(__u32 *)(buf + off) = *val;
+
+with no error. The tree allows it, but none of the tests in this series
+trigger it: they only use __u64 variables with non-negative values.
+
+> +	else
+> +		*(__u64 *)(buf + off) = *val;
+> +	err = bpf_map__update_elem(map, &zero, sizeof(zero), buf, vsz, 0);
+> +	if (err)
+> +		PRINT_FAIL("failed to write '%s': %d\n", name, err);
+> +out:
+> +	free(buf);
+> +	return err;
+> +}
+
+[ ... ]
+
+> @@ -1532,6 +1720,13 @@ void run_subtest(struct test_loader *tester,
+>  			}
+>  		}
+>
+> +		if (subspec->has_set_global) {
+> +			__u64 v = subspec->set_global_val;
+> +
+> +			if (access_global_var(tobj, subspec->set_global_var, &v, true))
+> +				goto tobj_cleanup;
+> +		}
+> +
+>  		err = do_prog_test_run(bpf_program__fd(tprog), &retval,
+>  				       bpf_program__type(tprog) == BPF_PROG_TYPE_SYSCALL ? true : false,
+>  				       spec->linear_sz);
+> @@ -1540,6 +1735,18 @@ void run_subtest(struct test_loader *tester,
+>  			goto tobj_cleanup;
+>  		}
+>
+> +		if (subspec->has_ret_global) {
+> +			__u64 v = 0;
+> +
+> +			if (access_global_var(tobj, subspec->ret_global_var, &v, false))
+> +				goto tobj_cleanup;
+> +			if (v != subspec->ret_global_val) {
+> +				PRINT_FAIL("Unexpected %s: 0x%llx != 0x%llx\n",
+> +					   subspec->ret_global_var, v, subspec->ret_global_val);
+> +				goto tobj_cleanup;
+> +			}
+> +		}
+>                    ^^^^
+
+For a 4-byte variable, __ret_global() cannot match any expected value
+outside [0, UINT32_MAX], and that range includes every negative literal.
+
+parse_global_var() parses the value with strtoull(), so XSTR(-1) ("-1")
+becomes 0xffffffffffffffff. access_global_var() reads a 4-byte variable as
+
+    *val = sz == 4 ? *(__u32 *)(buf + off) : *(__u64 *)(buf + off);
+
+which zero-extends it to 0x00000000ffffffff. The comparison here then
+always fails for `int cnt; ... __ret_global(cnt, -1)`, printing
+"Unexpected cnt: 0xffffffff != 0xffffffffffffffff" even when the program
+set cnt to -1.
+
+__set_global() does not have this problem: the same value truncated into a
+__u32 stores -1 correctly. So the two tags do not agree on what a 4-byte
+value is.
+
+Values too wide for the variable are also not rejected:
+__set_global(int_var, 0x100000000) quietly writes 0.
+
+The commit message says 4-byte variables are supported and cites veristat
+as the model, but veristat's set_global_var() checks signedness and range
+("Variable %s value %lld is out of range [%lld; %lld]").
+
+Should the expected value be truncated or sign-adjusted to the variable
+width (for example, compare only the low 32 bits when sz == 4), or should
+out-of-range values be refused at parse time?
+
+No test in the series hits this today; they all use the __u64 pads_ran
+with positive masks.
+
+> +
+>  		verify_stderr(bpf_program__fd(tprog), &subspec->stderr);
+>
+>  		if (subspec->stdout.cnt) {
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346422430
+--===============3661544393272203588==--
