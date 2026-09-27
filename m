@@ -1,62 +1,63 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A293B6C0C
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EC83CF952
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790550437; cv=none; b=Vra7NAEGTDtS0h7ZuchvtDeI0ijgk2EQoOh5TipHALuzM8PLP5QgqK+9m8CCnEPBTZUZ8W+wGkqDFc8Pp+0KrYgmVX34aJhfPMt0a5oiiSLXIdR0KhHj/89dATPDOGW6ImSftHcMBFBOZIDvZpfvgUNXP2OYAVCi1U6dhy/t14E=
+	t=1790550523; cv=none; b=dCyIQ9Uxh7JMXZ0yOLxQDgCyTy0D0HU0X9Z1RgfPAJcDsNER+VTBYWiI5HqaD+hS3NDlsbU5a00CQF8fpNLXCHeCCTiM43xAyVAnoUH9wj4NxiN3jTWSolhUvswKc16HbxiMLf11r9fBHay0InWGetZDFMW6ExDO0oexBPWWNGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790550437; c=relaxed/simple;
-	bh=F9Sa7Q15VZJxKT3BZA0gOeZJQMHcfq0klY9AQGiGSOw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dilfz1OudNoCuO5LUrkFBA2p4wfByLf3RD2q+AmEiT2iVYpJdsNgFzH8EhuUHvdwQcwYvhm1/Kcu2Aq5J5inrxDmzL/gVfwX6z+J/q3WD9zIVljQeK8rcN4YGd1owCCzoOqbRIujQM5oFBVhOL8qq3e1LQPbnG5YwjDZe4vBEJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q5mvhz4s; arc=none smtp.client-ip=74.125.225.140
+	s=arc-20240116; t=1790550523; c=relaxed/simple;
+	bh=xkSLCh845EsJhrdCyhg70nL7NkB5a8zwpqs11NLsxss=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pb1emGMDWZODyMN6i1lY5TcfDdRxemydddEMxPwS/7IcAmxYlrMRHwex8hQ8iOlvuw7M9Lbn3JSaC9llPDN+cT+kfUC7nkqieR1QSwy4hiIaXrBWwd5WFnQJAGmBy00KDzy07slw6vUJF1xfmuBVgDMZ3QPCruXYK/pqx/abVbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4UphsD2; arc=none smtp.client-ip=74.125.225.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q5mvhz4s"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ffed768deso4771635e9.1
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:07:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4UphsD2"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e8185e037so12811475e9.3
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:08:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790550434; x=1791155234; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790550520; x=1791155320; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:message-id:date
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/a+F39bGWb4OewkX5Hci6JgQLGfPvrvosBqj3gZjoyM=;
-        b=q5mvhz4sY88KKx91DnEgAULZZt1vBzV/a9AyA0NnAQarsBrPOuffT+OlR9K8M02LtW
-         B2yXi5a82kNnMiTFum85upIioSXCzVEfnuPWV2LCcmBfX/1rbzSCpX550fN/qcYyguVh
-         jwbY39Yw+Wo0kLYRlq9xnV83a6aoeSHYDcLRXkdsCx2boT8wfW+KfEisnoILS1dAz7ey
-         DUgxRJd8GJW/9mzy1mku14P6zG/2u4+jxjsNY8LjRkcOhM+naXLHnu2k/LZfKDZbh+d0
-         xvFrEnLz0shSq+1eeCMBQ1kWx6J/Cu0WYTa92Rc4VRF/UJ2adi2oJqAam2nr+S/PllL4
-         vIBw==
+        bh=HKp73jGG5LTsQWZvXwxxCZVQVZBAoFZGjXIJpSRfgkI=;
+        b=D4UphsD2ivi88C+drIBgNdYkbpymwEOoohShRjWjN0yQdRRXqh/O+Nb1iT3d5d7IE5
+         nSUj8LmBoPjMmMKIygFa1jfVxBL7csun+pbSVIgdch++/6W+8E6wLC78jF/SLxJDB10x
+         sd+nfgA8xfQaa7bssu6+eThl1N2UEIVS9BNZLz5HeXJOnEs8huvRW7lSBxsw+O1SzuOn
+         U/in9C7BdkuWs0xIcRBH93M/9oj7XvX6nG6luctLdMTbf2/tNZSiVObF803kVx3HMnsa
+         WfxFZJ0iKAsxLmHMSL5OmLwzaroe01pgq+H/Bw3zCbApuEFHYHHRBQE4DiLkAsFEJBn3
+         JK8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790550434; x=1791155234;
+        d=1e100.net; s=20260707; t=1790550520; x=1791155320;
         h=content-transfer-encoding:content-type:mime-version:message-id:date
          :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=/a+F39bGWb4OewkX5Hci6JgQLGfPvrvosBqj3gZjoyM=;
-        b=ahF3AsuzjZw3E6lyjH0QOk3luVmKDq+LS0aAE6lo5sq8VCMwxPhGFZDVjyQMQP6Sjx
-         8cRMpkx/QgcjIyqb9JfkWGwd8r3uM0QAcEFIYw1pflZv2PoV+SNrAmfIgPm/QOtaKHf0
-         ZfT4c4l1hk6hQABMyTvRmGRtnX6VIlLauGdhk5y1F2fgcaL7ACpdQm9IaXRAt7RPgGZw
-         AnLrkHh+70q5aZG1OGdClhBTV1QhlbaUNQdCb/sNTV8CcIZFFT7Op2Z5WXPlFlTdvZKa
-         iGEl2FPH+b2BIscUbkFafYgMR+pmVb+Y4koYFUjMbIhMTd4S+6T3sr3rhWBCR6vsjmH8
-         KcRQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy8lflfqOAvtsnWKTh9aG9zfqC9nLFVxu/It3zGaUne9AeLlE69H5JLKisC04otTLBtafc=@vger.kernel.org
-X-Gm-Message-State: AFuF++mtjUflzNScdEEkupC70LSBpIM+25/AtvtAISmxOMbZPnWPqiGx
-	t0O2NT4KJUQsCxK2ej717I8sx44XAntUAJIxool0eSPTZbUE940jf2WF
-X-Gm-Gg: AYBFou3Q5MXShA1aiRcdAAlB+Rw12+CN3GqI1Xb284IOQsSEKC+vaOxDw706leN6aUJ
-	hGbLK3QWi1+qyYiZkmOOzvYu8DR9rUg6GxU0dOHMd2sp1iiwPDXfbhgwbPaNsHt/B8TmjVdwdtF
-	05I2iGEDIPhD86jzpcSrFQYaZ3vwHC32mYvFloLtkutKoDpuI25MhDbAJl+ILtORoSpSy64u+Gg
-	IrYbZ8KkreXiVHCsdysI4Dc0sJTlsL16ZLqqr7hSe8WiZ55hhoEnrNgqy/CSr+97K37WaVp/zgG
-	t92dR8r9eTbIBf2e/JHWmZ9ogKLIAHF9Dsc/a4byuDcogiXRuAh9TCnbVacoFNUsvKnvKf4lWwi
-	X+Cs5lJ2ZmFcy4u8ah5/JvymtCiTuNBH5m5MbeTlpAbFarjSu1eBlcf3RkFm6qWkDFzaukTt+M0
-	ppjqg7zmvZR5ayBjlPRQEl/gUShZLQ6TRZdEhZN58QEzh8vecwUiLacgrcCgD2VtQKDkku
-X-Received: by 2002:a05:600c:3148:b0:49f:fc4f:9efb with SMTP id 5b1f17b1804b1-49ffc4fa10bmr80800295e9.7.1790550434194;
-        Sun, 27 Sep 2026 16:07:14 -0700 (PDT)
+        bh=HKp73jGG5LTsQWZvXwxxCZVQVZBAoFZGjXIJpSRfgkI=;
+        b=yDNVEUqGBfTYMTEvtBHqggkvF69Gk7isVjme/lWEisCSmTXPAkkD+MljZvaQhqgbmZ
+         51aK/P5O3skLASHjTMqhxMpKjDZtqo3ycCsKjMU/xdPmFqna+QXGnb3qiU5gsE/1QGWo
+         sYX3y0v7PP0kJOySqEdcyVW5zJD2H1Wd4Wb/CBEyiSGTlbRUre99HqDFqBVnAdpFptYf
+         6rkhgDjYYxOpiLq6f6Xd7q3A0komG2WkCtq0CxmXyre4wwR/13z1ADWHvUtwkc37TMMA
+         r/xf4FojjxH8C4GotSFGLrIK1cotvKtSJxH/UNDbqHavY8cy83wHydYOJxB5sMC1cp5y
+         cBIw==
+X-Forwarded-Encrypted: i=1; AKwUvByrK7I3Y2hC2KErAJ7UqEsXubQrk0aPuWzRo3v2hKcujOhiiTVa6Zos/L21Ow5hn1QWMyg=@vger.kernel.org
+X-Gm-Message-State: AFuF++n0wkjXnnEpiAZykf1vWEl3a9J6PPCkcx5Af5v/8kUcOA0ef+as
+	JLm3BOHuRP+UTPnojT1bzoLl8gcfCSHMMZ/4hcYsTubDECnA5UhoHObf
+X-Gm-Gg: AYBFou0fJV2rwAYeSpE9weTRBKL5E8vYnB4tTP4H2mQIWj9Rd5+sDQ6c+lYGbcj+8fq
+	owvsghpGBDarNxX0mKI9BzxQMBULOlJlVD5xUN/OJ4o/3XEAc5I/i304e8+bQKGLv4GxdhodMjd
+	gBbXSHF4FB+DE1LKeFauDwq1GhX6xZliAl3omO2Q2EVmTmu+aR42+cbioBPYhoQfJCUOiDe8rIn
+	cohPn4y0WB7j07T3E0istm8gB28H6QmH30J/2SAFTwvDfYpv6wNoPaB2OPCqCgnAB6D43PxYPPs
+	46+o0Y1wKXVT5N99cGVAAw+dgZqdBZ/eF81t2ScfbYBglLONax7MWKDNfHG1NlS+m/wTaF2jhnX
+	PwHQWqZ04XwiVGWmagof7jeEevMMkvKghCPTZGKwxnEHTXI7SPweRZ3PoSnULyxxipYMTC2gQIT
+	xL4cJrhAqWKshEBiTgmBPYCeWzOP+df0euoeMp9FJCNTOr4N8GQUlzGVOSVygmjU7WtafV0xe2d
+	Ju1na0=
+X-Received: by 2002:a05:600c:8718:b0:49c:fc6c:be08 with SMTP id 5b1f17b1804b1-49ff06f8316mr132620435e9.31.1790550520067;
+        Sun, 27 Sep 2026 16:08:40 -0700 (PDT)
 Received: from metepc ([46.197.185.71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0017998dbsm134269715e9.14.2026.09.27.16.07.12
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0018f0e79sm145623205e9.7.2026.09.27.16.08.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 16:07:13 -0700 (PDT)
+        Sun, 27 Sep 2026 16:08:39 -0700 (PDT)
 From: =?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net
@@ -73,9 +74,9 @@ Cc: john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	=?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
-Subject: [PATCH bpf-next] bpf: Skip redundant destroy_if_dynptr_stack_slot calls in check_stack_write_var_off
-Date: Mon, 28 Sep 2026 02:04:28 +0300
-Message-ID: <20260927230511.417420-1-omermetekaya0@gmail.com>
+Subject: [PATCH bpf-next] bpf: Fix bpf_loop() depth check to use 32-bit max for nr_loops
+Date: Mon, 28 Sep 2026 02:07:26 +0300
+Message-ID: <20260927230822.417683-1-omermetekaya0@gmail.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -86,39 +87,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-bpf_get_spi() maps 8 consecutive byte offsets to the same slot index.
-When iterating over a variable-offset stack write range byte by byte,
-destroy_if_dynptr_stack_slot() can be called up to 8 times for the same
-slot, even though it operates per-slot.
+bpf_loop() takes a u32 nr_loops argument. At runtime, nr_loops is
+passed as a u32 via the BPF_CALL_4 signature:
 
-Skip iterations where the slot index matches the previous byte's slot
-index to avoid the redundant calls.
+    BPF_CALL_4(bpf_loop, u32, nr_loops, ...)
+
+However, the verifier compares callback_depth (u32) against
+reg_umax(), which returns the 64-bit upper bound of R1. If the upper
+32 bits of R1 are set, reg_umax() can be U64_MAX, causing the depth
+check to remain ineffective and triggering excessive
+push_callback_call() invocations until the complexity limit is hit.
+
+Use reg_u32_max() instead, matching the 32-bit range actually used by
+bpf_loop() and avoiding unnecessary state exploration when R1 has a
+large 64-bit range.
 
 Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
 ---
- kernel/bpf/verifier.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fec5a1ae6a4d..0eeb498db9d3 100644
+index 0eeb498db9d3..8d8923ad5094 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3824,9 +3824,13 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- 		writing_zero = true;
-
- 	for (i = min_off; i < max_off; i++) {
--		int spi;
-+		int spi = bpf_get_spi(i);
-
--		spi = bpf_get_spi(i);
-+		/* bpf_get_spi() maps 8 consecutive byte offsets to the same
-+		 * slot index; skip redundant calls for the same slot.
-+		 */
-+		if (i != min_off && spi == bpf_get_spi(i - 1))
-+			continue;
- 		err = destroy_if_dynptr_stack_slot(env, state, spi);
+@@ -12184,7 +12184,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		err = mark_chain_precision(env, BPF_REG_1);
  		if (err)
  			return err;
+-		if (cur_func(env)->callback_depth < reg_umax(&regs[BPF_REG_1])) {
++		if (cur_func(env)->callback_depth < reg_u32_max(&regs[BPF_REG_1])) {
+ 			err = push_callback_call(env, insn, insn_idx, meta.subprogno,
+ 						 set_loop_callback_state);
+ 		} else {
 --
 2.55.0
 
