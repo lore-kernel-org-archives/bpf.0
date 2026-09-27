@@ -1,154 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DD82FE56A
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031D2397E85
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790552157; cv=none; b=LKOWg9qCiQky2Mh7YhtJYOr2Mis7zNjGWmAvjmhM4jtvCYGcOQGzufvvRgEeBNGCwtB4YQnhyTHsJ8+0jNTWG+Odj1Otui2cuWWoexeZ4LTx8PGgMEw73mTrmvh2gQo7EDL4zwSlKtLPPLdpqIlZ63XrdxKfxeMk5ypNmtUaByg=
+	t=1790552237; cv=none; b=KVMlLzaZKcSUIP+HXOf08skTXsjMxFpfccqCBnxeOUvflD1aL883q8WFyKvRAcwMFAqtFo+lOHnbv9eSJ0Sm9l1fShMlgW0POfMgig5brSUjxZ1UawstBKrrlS8fMUUugOubhJ+PBQD//N246fXu5Xu2czfhxy77oBtopiZxduU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790552157; c=relaxed/simple;
-	bh=zUczv42xnBRKDUlSGntImfEdrqpq77GiCQwYtmt81sM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZlDF+8fMYxCtwC3O0xk830NirEIOx0wBwp1gvXOwOK8ncCcHAJzkummuALAxS3s/1H0DZoUGf2a2IVL6oMFrHbOQA2qNM/5LUB/aYwYh5DCHI5hZf9fh/3ZiKR63Bjbz+f2ZzEOItlTsxleCLTUDqABB7ORnydvucsHsXix/+a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MG4l3pXr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790552237; c=relaxed/simple;
+	bh=vMx2OEAWQB1yWyZ78d+EHmuyKxCDM2aewJvKv9yR0Bc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pxhmiv4bZumd0WdJaD7k/Dm3Yj2b7W7/F7LE1FM2OQ+l1peRD1sNfYZcOx4eFv6J7fWn8tJvp9oVNtISk2SF5gcFvbmXdQRDyCS5NcU+Cqw15rdT2auszHophT33yvFvCD5rNQRH7gSTPqyoapA6j7ypTay5btzHXmGaoDKSYyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhLXHVA0; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MG4l3pXr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8421F00899
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790552155;
-	bh=zUczv42xnBRKDUlSGntImfEdrqpq77GiCQwYtmt81sM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=MG4l3pXrmLQikpOj1nFptIcrJ3kSNKrgOvojutXhYWAChjwZ+A9kB9Q4ZaJLfkHrG
-	 8XkM+Afyy7TQ1h95nasz1z5+jzJdDn5PzerWLZGbEfRKfODKJXvhuFp66O1AVkO//V
-	 FeOCg7UQ868vXpQmpq4bPTNxsuWaec0d1QQNBcGnwQ4vh7vWWJQZkh4/rcnqsm4IuB
-	 cn0NY7g1mmJAQ57p5ZW8AMMvTkItYflbuxgHgoBdG86oDw40QHBEZ/6qoretLrAm4s
-	 a0YZmyZqzDMGYo510Dt4WRJAO/jQwsgYPiv7BysivCe3eXM6fVGOYNAeBbZEHEIeaJ
-	 b6RNt6XqnLV+w==
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b8eacb7c8fso1857476e87.3
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:35:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzt5g/UQMUz74gCrXWYwb9bIK7MA+g0ierRc8llEMookGTa1OEBbNVP0G+zPw2fVhXy7ys=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI3vdiitP6MBCbBe/MwfqTY2YQkO1g78i7xvR+W1Dr6wgOM3Xoo
-	9v9japzLdBdyZ6w4XnFVLeSEuxM8zCI6cqrNpbv+yKkFnwm3a9i0C4VNjeiJfT0OxhwuhX7m3K/
-	D8QAY0AQtEaufW1erzS1pv7v1P61Eoxc=
-X-Received: by 2002:a05:6512:b92:b0:5b8:f562:d232 with SMTP id
- 2adb3069b0e04-5b8f562d300mr836313e87.53.1790552153978; Sun, 27 Sep 2026
- 16:35:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhLXHVA0"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d8239so19870965e9.0
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790552234; x=1791157034; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eeI+lVedHv94sduKpny4VEBPiP55GfeWt60bzHlR0o4=;
+        b=RhLXHVA0T++C62hPZh+4Oi5oEkOYn8+Kv4cGKaHiFaM8imGcAzHRqQts/jyW8vCqqI
+         AKyCkzrLs2q2VRtukZvTL4yZJIJyMRdodAedIqK6qzQIqV1ExAUMJaeJl68gxXi/oYQl
+         MIbFdwk1uGzp+DtZ2gILMX31NRQ0bAQ76FpJtsCTbeNNlIZeH8KUTh8KJaPgKLtzZW+P
+         F7QaJ66MkkibGG/BGjET3/3INANaxlZaCvdfdQ5z7ctYXhKI4rkXFXHvnNItDeyHbsV4
+         emU87Hovfm/w0wHk/xYBPukdfKsyUk9DC35DOxRrLjWiC7U1GZcwcMZFASjbLcsIYolZ
+         u8TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790552234; x=1791157034;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eeI+lVedHv94sduKpny4VEBPiP55GfeWt60bzHlR0o4=;
+        b=xYZZrwSx7BPmGi4w+PIhFCt/7jPlFdPOgK+R5CVLdEW/LsIzWkj9Ir447c6+qF0wsP
+         ebrTp0nb7FD7O4Eskoyl1VZjm3po/3wjssmFBiynXiSSHERJu6qBiF9mDlRoNEjShr4b
+         ffHY7vKXdiXdkm8qBj3bUjXHyKG6F/t8MSBgfjo8P8HbibXB1JyDSHhdzI1RhlddhZVx
+         rJ+4VzDhKrC3CZP3Ec71ZIwBSzeFd4dWWUrRDiHgYzokoxaXOU1hspvaswVRNcYpgRmV
+         OTQa7jIay098B1ftQqW4qSwIrPupmoxqxvewj7+FQ9O1lpeHqfFXCuFOKXjK63jNmis7
+         BiNw==
+X-Forwarded-Encrypted: i=1; AKwUvByhruH0fpDelR33J247BaOu8tW6Ruj0rZUMW7GSXQnGWlImkNGu/3FKvukTENjf99e7KwA=@vger.kernel.org
+X-Gm-Message-State: AFuF++lFb01ZAFOB4iuMadybdb4BHjwHiqZV7pqe+1fB6MbwSmY5roTf
+	4EYw1zviM6KAJPUbAP/tap1hqOnCzMe+lO6BPB4msFv7FaNGZO5Z5vp3
+X-Gm-Gg: AYBFou2Qjj5phIRu5RoQztlc0iFCHVat1p0U6pt1eAVUSN4AtZmvL5yDSdzvuz01mbJ
+	H0eAxd2srnJyMJ61B6xlF1whfcJuu5eaP8hATsBX2w0aqKSm64BwWem1HYRkvHg1qBD9de9GTSE
+	zLe8Ot6A5zudwgX1KwYg4K6g4BM0DBagKGzxoYd965uj1I1yNWUBp9rsLYBC297jwdDQ60P63WP
+	QzigTbLBYiaArV0MmILxwTs4F8+Uu7k0u7ydPzvlPXhpx8G/Cjt53MVmSYCRARsizbyoQu9a+Fp
+	4AqelKEla7EXHJK8vGTE305eEndUaIRQTqkyxMfTgZH7W5p1A0ywi24RWFpqZKiWB2/30qbctrJ
+	h0b38zPAcOAhaf7X9u+hF4mhz08Hy5iFJwQRAwPpEalUjOVBaL2viNfgQZuRqB175FO0o7EXJ4S
+	03vAZ0M88BgWFRYFDDodHsKN/0z/FOzPedD+UN8ukb9MYUAmiu8ZXqyqJJdmUJ+Q5iUz2v
+X-Received: by 2002:a05:600c:4505:b0:49f:f922:1dc1 with SMTP id 5b1f17b1804b1-49ff9221e35mr84930855e9.28.1790552234070;
+        Sun, 27 Sep 2026 16:37:14 -0700 (PDT)
+Received: from metepc ([46.197.185.71])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ffabc3f33sm135335115e9.4.2026.09.27.16.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 16:37:12 -0700 (PDT)
+From: =?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net
+Cc: john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
+Subject: [PATCH bpf-next v2] bpf: Skip redundant destroy_if_dynptr_stack_slot calls in check_stack_write_var_off
+Date: Mon, 28 Sep 2026 02:35:59 +0300
+Message-ID: <20260927233653.424163-1-omermetekaya0@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
- <20260927-submit-stmmac-reset-fixes-v1-v5-2-feec6c14dd06@gmail.com>
-In-Reply-To: <20260927-submit-stmmac-reset-fixes-v1-v5-2-feec6c14dd06@gmail.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Mon, 28 Sep 2026 01:35:42 +0200
-X-Gmail-Original-Message-ID: <CAD++jL=6Ov5BPK1naX6orzMsrJPm_g6SkdRaU6Ji+okXMFaZdQ@mail.gmail.com>
-X-Gm-Features: AclHuK8bRJUtWoB2-ejh2LEjrHa5vNcye2LD6vhX4uf9CtkXYnbSEGRsJ5xc6Kc
-Message-ID: <CAD++jL=6Ov5BPK1naX6orzMsrJPm_g6SkdRaU6Ji+okXMFaZdQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 02/19] net: stmmac: request the MDIO reset
- GPIO only once
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
-	Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Christian Marangi <ansuelsmth@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Serge Semin <fancer.lancer@gmail.com>, Suraj Jaiswal <quic_jsuraj@quicinc.com>, 
-	Richard Cochran <richardcochran@gmail.com>, Joao Pinto <Joao.Pinto@synopsys.com>, 
-	Vladimir Oltean <vladimir.oltean@nxp.com>, Ong Boon Leong <boon.leong.ong@intel.com>, 
-	Voon Weifeng <weifeng.voon@intel.com>, "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Simon Horman <horms@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Jose Abreu <Jose.Abreu@synopsys.com>, Yao Zi <me@ziyao.cc>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Richard Genoud <richard.genoud@bootlin.com>, 
-	"Alastair D'Silva" <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	ZhaoJinming <zhaojinming@uniontech.com>, 
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>, Ding Hui <dinghui1111@163.com>, 
-	Linkui Xiao <xiaolinkui@kylinos.cn>, Linkui Xiao <xiaolinkui@126.com>, linux-tegra@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi James,
+bpf_get_spi() maps 8 consecutive byte offsets to the same slot index.
+When iterating over a variable-offset stack write range byte by byte,
+destroy_if_dynptr_stack_slot() can be called up to 8 times for the same
+slot, even though it operates per-slot.
 
-On Sun, Sep 27, 2026 at 11:59=E2=80=AFPM James Hilliard
-<james.hilliard1@gmail.com> wrote:
+Skip iterations where the slot index matches the previous byte's slot
+index to avoid the redundant calls.
 
-> From: Linkui Xiao <xiaolinkui@kylinos.cn>
->
-> stmmac_mdio_reset() calls devm_gpiod_get_optional() every time it runs.
-> A GPIO line can only be requested once, so from the second call on
-> gpiod_request_commit() returns -EBUSY. devm_gpiod_get_optional() only
-> turns -ENOENT into NULL, hence the error is passed straight back and
-> stmmac_mdio_reset() bails out before pulsing "snps,reset" and before
-> running the STE101P MDC workaround.
->
-> The first call, made by of_mdiobus_register(), succeeds, so the failure
-> is only visible later on: every resume that does not use WoL goes
-> through stmmac_resume() -> stmmac_mdio_reset(), and that caller ignores
-> the return value, so the PHY silently stays un-reset.
->
-> The descriptor used to be requested exactly once: stmmac_mdio_reset()
-> resolved "snps,reset-gpio" itself and cached the GPIO number in
-> stmmac_mdio_bus_data::reset_gpio, and commit ae26c1c6cb9b ("stmmac: fix
-> PHY reset during resume") relies on that cache to reuse the line on
-> every call. commit 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in
-> stmmac_mdio_reset") replaced it with a devm_gpiod_get_optional() that
-> caches nothing, so the request is repeated on every call and fails from
-> the second one on.
->
-> Parse the whole reset description, the GPIO and "snps,reset-delays-us",
-> in stmmac_mdio_register() at probe time, and keep it in struct
-> stmmac_priv. This is where devm-gpiod is meant to be used: the line is
-> acquired with the device and released with it, and any failure to
-> acquire it is reported during probe instead of being ignored by
-> stmmac_resume(). stmmac_mdio_reset() then only pulses the cached line,
-> with the delays that were read once and for all at probe time.
->
-> Cache the request and delays for DT devices regardless of
-> mdio_bus_data->needs_reset. That flag controls the registration-time
-> bus reset callback, but system resume calls stmmac_mdio_reset()
-> directly. The reset routine no longer looks at the device tree: where
-> the description is absent the cached descriptor is NULL and the delays
-> are zero, so the pulse remains a no-op.
->
-> Keep acquisition conditional on CONFIG_STMMAC_PLATFORM, matching the
-> reset callback, so non-platform configurations do not request an unused
-> GPIO. Also skip acquisition for a disabled MDIO child: registering that
-> bus returns -ENODEV without calling its reset callback, and the driver
-> must retain the existing disabled-bus success path even if the unused
-> GPIO is unavailable. Remove the unnecessary gpio_desc forward declaration=
-.
->
-> Fixes: 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in stmmac_mdio_re=
-set")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
-> Co-developed-by: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
+---
+Changes in v2:
+  - Fix multi-line comment style: move opening /* to its own line.
+    Reported by Sashiko AI review.
 
-Dostoyevsky commit message, I didn't read it. Ask the agent
-to be terse.
+ kernel/bpf/verifier.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-I looked at the code and from a GPIO PoV it does the right
-thing: use 1 as asserted and 0 as de-asserted RESET line.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fec5a1ae6a4d..6bc5bc56f0d3 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3824,9 +3824,14 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+ 		writing_zero = true;
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+ 	for (i = min_off; i < max_off; i++) {
+-		int spi;
++		int spi = bpf_get_spi(i);
 
-Yours,
-Linus Walleij
+-		spi = bpf_get_spi(i);
++		/*
++		 * bpf_get_spi() maps 8 consecutive byte offsets to the same
++		 * slot index; skip redundant calls for the same slot.
++		 */
++		if (i != min_off && spi == bpf_get_spi(i - 1))
++			continue;
+ 		err = destroy_if_dynptr_stack_slot(env, state, spi);
+ 		if (err)
+ 			return err;
+--
+2.55.0
+
