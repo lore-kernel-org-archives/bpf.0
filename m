@@ -1,71 +1,71 @@
 Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208263D9043
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 22:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784BC3EB104
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 22:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790546436; cv=none; b=EzctcIZ3W+SEICxHMbmF1zcvWbFyI2H+xiceg9q3juFJ4u4OxeFnAnj7eByveCaUjNOhvYI9a1ncGb0lwdKupXME8ubgx4/DnEEPRoUyaCHqw3onUIn2ecmiYxcdRzKoUEZLyj0z+x4blEoaP+++X7NBD6hZ1QaJEFtl3Tfz5P0=
+	t=1790546443; cv=none; b=hpyTRNwyAjXZgYO1hhRsKSulUMkVyY4pRW55297xtssoJ3LLGVGmiZcR93OQfoWxfayBHjK5336He63bfmKRxibXIVaqjZTcBu9uCVcrZ3tPJTJXOaHNbbKG0Bcmp09aaj5Tpq19kFnCYe34s+x8KDCiKlf9Or/T/5NzwEdX8Es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790546436; c=relaxed/simple;
-	bh=gZXSjVV+EhPzqrz1y5g+JcyjmC0K8V1222JL7roYnrA=;
+	s=arc-20240116; t=1790546443; c=relaxed/simple;
+	bh=U4LiS/1QhWXgAOWmd043vnNYlAj5iV4fmmuqnUtrYw0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FyNMf7PqhCRA9nognaZBQCGrPUvIjyK6YQpPFAIm5AAVNYe66R2GxtC5U5TOBrY9p5XD08ht+OfoEv/2jL//850GjhdrgHJtVvOZFZd3acsIiZPj3OUC3aEIRkNQxJM+frHtPJZSvqdocCYAmt2rB93zLVwhuJp+T+T1YJ43Xmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FqMfPNBq; arc=none smtp.client-ip=74.125.231.170
+	 In-Reply-To:To:Cc; b=V0NpcubDHUMO8x04sELOZ4DCzHRyjVuCXAiomcOP3L7jGkMbHcddgpeFFcNai4nEUNnMaWaJ+mMroE7SrwEa/aT03b/7iF9CUASrnqaTh0tE+ulcQNvWzUeSQCPigSt9NCzvooNGfuNFQOPHYqqnMmP4To+BObMWEPaGT89EXJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XzesUSZi; arc=none smtp.client-ip=74.125.231.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FqMfPNBq"
-Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6d817a94747so321868eaf.3
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 15:00:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XzesUSZi"
+Received: by mail-oo2-f42.google.com with SMTP id 46e09a7af769-81be26ba237so319212a34.0
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 15:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790546429; x=1791151229; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790546435; x=1791151235; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=5SnaOI9os24/FlLLZlHcaQE+bseaAXy0CLUFqMKAceU=;
-        b=FqMfPNBq073VACiUvfrNVkKFkocppAqRligcs5SSqEAE7op2S3EEMtbGK0lvXQI0bS
-         MmvGhO+46XaKlJ96DwUHxvb7aUvKb+wQonGh7NaYKLoJ1TWp+Tr0GW4rICJM/YLX3TtY
-         mNl4tkyBjLY2sCakZuUM9HCfPGjJ1w+zMuK3Q8iqQSJR7X9HU990zXBeMs88/BayujM/
-         s8LW9GQIiXk7ZoesVghdP+YL7S6pVPQ11GEY+UZE08TZ0934xbD5d0S+lfpwP4H9kK1t
-         dNiuMG6Gu0eJo/QAX/+VA5G6CW/wGjUz3wC09WJ/pezqMy8sSPgCQsQZiTxHpFrb4+/2
-         eYEQ==
+        bh=30RkihLAQAAN+ek9RJOVBaHflsvDFgd1E0pCuaoqmxI=;
+        b=XzesUSZiju+QxNc+HkuiaPOp0/aRrObrX6NlN8ueS4oGKykp9fchffcIrTo/jAVyoT
+         3z1L54kwf3vNGo2gXN0vjU4FZp2X/+ggqNvfyIhUfaA3CV61E64NrRvnS84J5kDqBgyo
+         Tplr4OBprm3BIi780AYbbnqfjQLXVYB+sOg7Yi+db5j+4h5eZYNPu9u5AePEMPM2AXYO
+         YGQxeNGejLslg3qq9ZfTe0f/n7zX2wjFzPQzabG4gRd0Xt//r6ipiN4QgQVA1e3JJp0u
+         X4CndZnSa7rvFt8Bk3mR1NaP0J/vxfJ+3tYlV0piv8sB1zE1wEmXnowHNrQz/iVmO+DM
+         6ozQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790546429; x=1791151229;
+        d=1e100.net; s=20260707; t=1790546435; x=1791151235;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5SnaOI9os24/FlLLZlHcaQE+bseaAXy0CLUFqMKAceU=;
-        b=w9vM19RJhl/rwK54XNdXAvE+HRr+5JdHQD8aXFCc8Zdnm3Rh1b7yRQbjQRWVCwkpG3
-         5FqUzaCCH+6uZomGziedzKC7GHiHM2CADs+ZD44lhXdGn5TOKu/VaUS2KMms9+gPItPb
-         PhPxPNF6ryM4F/M16xn26QAKr41HGHs7ODLJRiRzM0+1tG9h+xKdU1fpAITs94IsFp5R
-         J9Wrelge2gWWRUJwfQE+mVJsUVj1oMWM1T73oTGx0ky3DZ+72OEweQc5fIRWv3xIuGBS
-         sT06Lh4RPIH/8yUDF1fIQX6W+q1lSk8vZJrb+fodxlupy48WXg4kg8NTVUZprvRRBk9A
-         0nZg==
-X-Forwarded-Encrypted: i=1; AKwUvBzInPGuyytqPAT7txSenaTqelYRqgSsHy6cG5eXVjhjeRcO7WZsEUkmwWJ8LdNID23ewQU=@vger.kernel.org
-X-Gm-Message-State: AFuF++kDXDBLPp6XwJ/A9FKZhRTt0zfJLmER3GTkQ06Bqn46A0IGCNRz
-	74y3fCejTbxuFNql9Vx08WFsxtwryoxGBJp5vYMBZpjaMGXf/kOs9RGY
-X-Gm-Gg: AYBFou1UIuvm3CP/23QVi39TSJUynIK6TRWhV+peKlYqdS3TNGFNNjjh16ufw/aWLsM
-	kzo3k743rJyRDd9qEelGnVDR2Lo0obf/w0Xocw8YUcG49TtB5TJ4YTX7eC9uDPSHBmpMOpWsA9q
-	8MWi5qNuhgh7egijY9ZtSG2psB4HTLx2UHaecwKgpaHBhHXgkuZCfrjhJTpxHux7In0SyXWhETX
-	h15lXnfLZGq6FlsngdkfqB6soDDGfnn3v8hA/ydim5hgpFCGPavqHfiMdfq2OwF+tFzaMjroF9k
-	xDarWtKK9FFZQTzTE0uYs+V41zB80pZW5jLZPis4qMFjUToAOXedAGiZ3vIL/3qGmS3h15/W6VB
-	DbXuZMJhYVvgCmONrNr+ou6VojkVVzOD1uWrJmOHKSfFed57WCzb/XjNfd/QNwsqCgKZy984QXd
-	IfjQ6EWyt+PisCer/dKi93jmZGSDZkEZDKQqn0LwnJYpRghkqVM//u7MVd8L78roIe5eZbrsxNo
-	VDoqE6yhSpgvkCbRkoouRueDvyjVjg5uf3ah0Z7pQEtW7YMJm0EaIld7ieIYyd+vixcIRuVpeoQ
-	KUoje2tDzkSh6cVcW3ZLkS6ZM9k2pqUjYi/dm/yqOzu3obHGnGS0ma6QPmsYhDFFjuIxJfsySWf
-	SIXETHWbfU2DgNiqmQ9s7
-X-Received: by 2002:a4a:e90c:0:b0:6c7:7668:a2a5 with SMTP id 006d021491bc7-6d43f4bd3d0mr10312715eaf.25.1790546429037;
-        Sun, 27 Sep 2026 15:00:29 -0700 (PDT)
+        bh=30RkihLAQAAN+ek9RJOVBaHflsvDFgd1E0pCuaoqmxI=;
+        b=GOqhgVJV6tAX8Ymjux1zxHf80xHyRXGnSQ+yz3OYNd6OcbPQSDefDcLdO0qeDAWY9/
+         uNq445POixJ2HFIqSlLjK1UHFB/gJNnKVPNPa18jC+ZKEnYc95oQVOYNyKfeUSt/wjCC
+         7IJM3vaeeisaOoa1z27iU9+H9hTKnA0FY/rSCIcK10yXQ/Q3CikE0lAG8ySAdK5yy1rV
+         fm8XpZ6840uKEuBKVP+ztbyEr8cOGcUx01L8onRnQ2gLcC0z8cPNPbazxOsgygUM9W6g
+         j6QF8XGOQ9cQYf/0+8UwHnfKWjFamc3PQCcsFuIjo/CxxTbVmNE5BPXstFgogF0YR6iJ
+         1YqA==
+X-Forwarded-Encrypted: i=1; AKwUvBzuqvv8aXi6OOoGfQKqJWeGHOKpD2UNz+uiYfKaMng2nammCwIXRrnx8rx5IoXoJom9Vt0=@vger.kernel.org
+X-Gm-Message-State: AFuF++lCEdkgeBqBpq+keBBcOzY1sm0g89LmPGMGvzw9QcmilyCj/vqZ
+	+ULT6ta5uSepBvu2mHqk6jCSpqvM7c/ZzdCwMzjruCp6OGnRdCoqzZzu
+X-Gm-Gg: AYBFou1mO6k4RS69hJvn71hfpnExgiq0baTzDGqPINJMuzBWIyKBkZNGYQsZsBK19BV
+	EsBQy5RGdx45zIjrgUnj+P1fveQqlaXg8VYs83qlz5V+0m2X/6pu42kA/2m/wL9Ol5jGbyO4tGc
+	81vriHD1R5LRZ8MJ6S5SUWO56PhbsLNRWGW8fSeQkO6SOqbH6sEOhaHWF10G860eQF/sF1DSTmf
+	FSoQny7MdOyDcOqm21SzoNCSRMj/TDjdMYarD2kQ/KLvlkmDuYsEyoxyYRNSgdULn5q3X9qSq5D
+	5mCEfmxDqAAqXuQ1G9/xUXcS2sIW956DPNhsLK965V8oD1l4Ysj8Oc6mTZdIw3lb1SCIU5kpfPZ
+	LXoFzSeWAhK39QZFaWUUUQH4dKVJbW+jrf6njiJcDbjfrfpEAQxfSpiIKBX4H+gwZ11RpQcsGby
+	jSEOylqQIdjkPA6iJ/xuwAUpiAIvrLCl76oBxhOekQiQ6GeVii+Elan/7oDFX47WpOaIz1JkzIZ
+	vIuIMsBLgmR0VU00gJZGNxEn+gxcAajWnDdnlI8qbt7zyl4As3eW4sogqmFUXuSI8o8nuj67cEy
+	QAUcWdZ7NKKk3Jv4A4LadRArtmnSRA8zHH6XUA4S21zRQ9857vpWosBGfOmbrQR9215kssjgzwg
+	xM1L4KMEqVgBlA+YzyVEmguSod5aORRU=
+X-Received: by 2002:a05:6830:2708:b0:81a:adf1:ae71 with SMTP id 46e09a7af769-81aadf1b046mr5285934a34.4.1790546434869;
+        Sun, 27 Sep 2026 15:00:34 -0700 (PDT)
 Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81b3de6f7e1sm4874147a34.22.2026.09.27.15.00.26
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81b3de6f7e1sm4874147a34.22.2026.09.27.15.00.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 15:00:28 -0700 (PDT)
+        Sun, 27 Sep 2026 15:00:34 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 27 Sep 2026 15:59:51 -0600
-Subject: [PATCH net-next v5 16/19] xsk: allow drivers to retain DMA
- mappings independently of pools
+Date: Sun, 27 Sep 2026 15:59:53 -0600
+Subject: [PATCH net-next v5 18/19] net: stmmac: prepare device-local DMA
+ interrupt quiescence
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,7 +74,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260927-submit-stmmac-reset-fixes-v1-v5-16-feec6c14dd06@gmail.com>
+Message-Id: <20260927-submit-stmmac-reset-fixes-v1-v5-18-feec6c14dd06@gmail.com>
 References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
 In-Reply-To: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
 To: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
@@ -122,243 +122,296 @@ Cc: Richard Genoud <richard.genoud@bootlin.com>,
  linux-sunxi@lists.linux.dev, James Hilliard <james.hilliard1@gmail.com>
 X-Mailer: b4 0.15.2
 
-An unsuccessful device shutdown does not make its DMA memory safe to
-unmap. AF_XDP pool removal must nevertheless complete: the last socket
-release invokes the driver detach callback and then destroys the pool,
-regardless of the callback's return value.
+Add DMA interrupt-mask accessors for the supported cores and a
+per-channel gate protected by the channel lock. A handler invoked on a
+shared IRQ can then mask newly enabled device sources without
+acknowledging pending events or touching rings being replaced.
 
-Provide an independent reference to the existing DMA mapping and its
-UMEM pages. A driver can take it while installing rings and release it
-after DMA has actually stopped. Retain the pool and buffer-head storage
-separately from the pool users reference which triggers teardown. This
-lets a driver keep DMA-owned frames out of the reusable free list even
-after socket teardown has released its fill and completion rings.
-
-Return retained buffers only after DMA shutdown, before dropping the DMA
-reference. Keeping pages pinned alone does not prevent an active pool
-from recycling a frame still reachable by hardware. The retained metadata
-does not permit other pool operations after detach.
-
-Keep the DMA device and the mapping's netdev lookup key allocated,
-without taking a netdev usage reference that would prevent unregister.
-Save the mapping attributes and unmap before dropping the last retained
-UMEM reference. Mapping reference operations are serialized by RTNL,
-like the existing mapping list operations.
+The retained-ring MTU transaction will save and restore these masks and
+synchronize the registered handlers. No interrupt-controller line needs
+to be disabled, so other devices sharing the IRQ remain serviceable.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes in v5:
-- Retain pool/head storage independently of socket users so DMA-owned
-  frames need not be returned to the free list during pool removal.
-- Keep the saved mapping in a separate reference object, since detach
-  clears the pool's device and DMA lookup state.
----
- include/net/xdp_sock_drv.h  | 25 +++++++++++++++++
- include/net/xsk_buff_pool.h |  7 +++++
- net/xdp/xsk_buff_pool.c     | 67 +++++++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 96 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c  | 11 ++++++++
+ .../net/ethernet/stmicro/stmmac/dwmac1000_dma.c    |  1 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c |  1 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c   |  2 ++
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h   |  2 ++
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c   | 11 ++++++++
+ drivers/net/ethernet/stmicro/stmmac/dwmac_dma.h    |  2 ++
+ drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c    | 10 ++++++++
+ drivers/net/ethernet/stmicro/stmmac/dwxgmac2_dma.c | 11 ++++++++
+ drivers/net/ethernet/stmicro/stmmac/hwif.h         |  5 ++++
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h       |  2 ++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  | 30 ++++++++++++++++------
+ 12 files changed, 80 insertions(+), 8 deletions(-)
 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index d94aeb506379..a39768b1c00f 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -95,6 +95,22 @@ static inline void xsk_pool_dma_unmap(struct xsk_buff_pool *pool,
- 	xp_dma_unmap(pool, attrs);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+index c9145441aab0..8a3f15134402 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+@@ -374,6 +374,16 @@ static void sun8i_dwmac_disable_dma_irq(struct stmmac_priv *priv,
+ 	writel(value, ioaddr + EMAC_INT_EN);
  }
  
-+/* RTNL must be held. Retain mappings, pages and buffer metadata without
-+ * postponing the socket's detach callback. Do not return DMA-owned buffers
-+ * with xsk_buff_free() until hardware has stopped, even after pool removal.
-+ * Afterwards, free those buffers before putting the reference. This does not
-+ * retain the FILL/COMPLETION rings or allow other pool operations after detach.
-+ */
-+static inline struct xsk_dma_ref *xsk_pool_dma_get(struct xsk_buff_pool *pool)
++static u32 sun8i_dwmac_set_dma_irq_mask(struct stmmac_priv *priv,
++					void __iomem *ioaddr, u32 chan, u32 mask)
 +{
-+	return xp_dma_get(pool);
++	u32 old_mask = readl(ioaddr + EMAC_INT_EN);
++
++	writel(mask, ioaddr + EMAC_INT_EN);
++	readl(ioaddr + EMAC_INT_EN);
++	return old_mask;
 +}
 +
-+static inline void xsk_pool_dma_put(struct xsk_dma_ref *ref)
-+{
-+	xp_dma_put(ref);
-+}
-+
- static inline int xsk_pool_dma_map(struct xsk_buff_pool *pool,
- 				   struct device *dev, unsigned long attrs)
+ static void sun8i_dwmac_dma_start_tx(struct stmmac_priv *priv,
+ 				     void __iomem *ioaddr, u32 chan)
  {
-@@ -432,6 +448,15 @@ static inline void xsk_pool_dma_unmap(struct xsk_buff_pool *pool,
- {
+@@ -579,6 +589,7 @@ static const struct stmmac_dma_ops sun8i_dwmac_dma_ops = {
+ 	.enable_dma_transmission = sun8i_dwmac_enable_dma_transmission,
+ 	.enable_dma_irq = sun8i_dwmac_enable_dma_irq,
+ 	.disable_dma_irq = sun8i_dwmac_disable_dma_irq,
++	.set_irq_mask = sun8i_dwmac_set_dma_irq_mask,
+ 	.start_tx = sun8i_dwmac_dma_start_tx,
+ 	.stop_tx = sun8i_dwmac_dma_stop_tx,
+ 	.start_rx = sun8i_dwmac_dma_start_rx,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c b/drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c
+index 4cb7e6c16bdd..2285eac69071 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c
+@@ -264,6 +264,7 @@ const struct stmmac_dma_ops dwmac1000_dma_ops = {
+ 	.enable_dma_reception = dwmac_enable_dma_reception,
+ 	.enable_dma_irq = dwmac_enable_dma_irq,
+ 	.disable_dma_irq = dwmac_disable_dma_irq,
++	.set_irq_mask = dwmac_set_dma_irq_mask,
+ 	.start_tx = dwmac_dma_start_tx,
+ 	.stop_tx = dwmac_dma_stop_tx,
+ 	.start_rx = dwmac_dma_start_rx,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c b/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c
+index 5ffd3c1471c4..41579d10af3c 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c
+@@ -118,6 +118,7 @@ const struct stmmac_dma_ops dwmac100_dma_ops = {
+ 	.enable_dma_transmission = dwmac_enable_dma_transmission,
+ 	.enable_dma_irq = dwmac_enable_dma_irq,
+ 	.disable_dma_irq = dwmac_disable_dma_irq,
++	.set_irq_mask = dwmac_set_dma_irq_mask,
+ 	.start_tx = dwmac_dma_start_tx,
+ 	.stop_tx = dwmac_dma_stop_tx,
+ 	.start_rx = dwmac_dma_start_rx,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c
+index d7928678dee1..d5f0cc8b851d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c
+@@ -582,6 +582,7 @@ const struct stmmac_dma_ops dwmac4_dma_ops = {
+ 	.dma_tx_mode = dwmac4_dma_tx_chan_op_mode,
+ 	.enable_dma_irq = dwmac4_enable_dma_irq,
+ 	.disable_dma_irq = dwmac4_disable_dma_irq,
++	.set_irq_mask = dwmac4_set_dma_irq_mask,
+ 	.start_tx = dwmac4_dma_start_tx,
+ 	.stop_tx = dwmac4_dma_stop_tx,
+ 	.start_rx = dwmac4_dma_start_rx,
+@@ -613,6 +614,7 @@ const struct stmmac_dma_ops dwmac410_dma_ops = {
+ 	.dma_tx_mode = dwmac4_dma_tx_chan_op_mode,
+ 	.enable_dma_irq = dwmac4_enable_dma_irq,
+ 	.disable_dma_irq = dwmac4_disable_dma_irq,
++	.set_irq_mask = dwmac4_set_dma_irq_mask,
+ 	.start_tx = dwmac4_dma_start_tx,
+ 	.stop_tx = dwmac4_dma_stop_tx,
+ 	.start_rx = dwmac4_dma_start_rx,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h
+index 9352107204eb..edccc09f0b03 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h
+@@ -184,6 +184,8 @@ void dwmac4_enable_dma_irq(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			   u32 chan, bool rx, bool tx);
+ void dwmac4_disable_dma_irq(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			    u32 chan, bool rx, bool tx);
++u32 dwmac4_set_dma_irq_mask(struct stmmac_priv *priv, void __iomem *ioaddr,
++			    u32 chan, u32 mask);
+ void dwmac4_dma_start_tx(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			 u32 chan);
+ void dwmac4_dma_stop_tx(struct stmmac_priv *priv, void __iomem *ioaddr,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c
+index 9af0565a9bca..477bdb081c52 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c
+@@ -155,6 +155,17 @@ void dwmac4_disable_dma_irq(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 	writel(value, ioaddr + DMA_CHAN_INTR_ENA(dwmac4_addrs, chan));
  }
  
-+static inline struct xsk_dma_ref *xsk_pool_dma_get(struct xsk_buff_pool *pool)
++u32 dwmac4_set_dma_irq_mask(struct stmmac_priv *priv, void __iomem *ioaddr,
++			    u32 chan, u32 mask)
 +{
-+	return NULL;
++	const struct dwmac4_addrs *dwmac4_addrs = priv->plat->dwmac4_addrs;
++	u32 old_mask = readl(ioaddr + DMA_CHAN_INTR_ENA(dwmac4_addrs, chan));
++
++	writel(mask, ioaddr + DMA_CHAN_INTR_ENA(dwmac4_addrs, chan));
++	readl(ioaddr + DMA_CHAN_INTR_ENA(dwmac4_addrs, chan));
++	return old_mask;
 +}
 +
-+static inline void xsk_pool_dma_put(struct xsk_dma_ref *ref)
-+{
-+}
-+
- static inline int xsk_pool_dma_map(struct xsk_buff_pool *pool,
- 				   struct device *dev, unsigned long attrs)
+ int dwmac4_dma_interrupt(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			 struct stmmac_extra_stats *x, u32 chan, u32 dir)
  {
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index a7df573784fd..df7e20fe5ae3 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -11,6 +11,7 @@
- #include <net/xdp.h>
- 
- struct xsk_buff_pool;
-+struct xsk_dma_ref;
- struct xdp_rxq_info;
- struct xsk_cb_desc;
- struct xsk_queue;
-@@ -38,6 +39,8 @@ struct xsk_dma_map {
- 	dma_addr_t *dma_pages;
- 	struct device *dev;
- 	struct net_device *netdev;
-+	struct xdp_umem *umem;
-+	unsigned long attrs;
- 	refcount_t users;
- 	struct list_head list; /* Protected by the RTNL_LOCK */
- 	u32 dma_pages_cnt;
-@@ -52,6 +55,8 @@ struct xsk_buff_pool {
- 	spinlock_t xsk_tx_list_lock;
- 	refcount_t users;
- 	struct xdp_umem *umem;
-+	/* Pool/head storage; DMA references must not postpone socket teardown. */
-+	refcount_t refs;
- 	struct work_struct work;
- 	/* Protects generic receive in shared and non-shared umem mode. */
- 	spinlock_t rx_lock;
-@@ -143,6 +148,8 @@ void xp_fill_cb(struct xsk_buff_pool *pool, struct xsk_cb_desc *desc);
- int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- 	       unsigned long attrs, struct page **pages, u32 nr_pages);
- void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs);
-+struct xsk_dma_ref *xp_dma_get(struct xsk_buff_pool *pool);
-+void xp_dma_put(struct xsk_dma_ref *ref);
- struct xdp_buff *xp_alloc(struct xsk_buff_pool *pool);
- u32 xp_alloc_batch(struct xsk_buff_pool *pool, struct xdp_buff **xdp, u32 max);
- bool xp_can_alloc(struct xsk_buff_pool *pool, u32 count);
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index c58f56f24a9c..8c71974494c9 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -12,6 +12,11 @@
- 
- #define ETH_PAD_LEN (ETH_HLEN + 2 * VLAN_HLEN  + ETH_FCS_LEN)
- 
-+struct xsk_dma_ref {
-+	struct xsk_dma_map *dma_map;
-+	struct xsk_buff_pool *pool;
-+};
-+
- void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs)
- {
- 	if (!xs->tx)
-@@ -34,7 +39,7 @@ void xp_del_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs)
- 
- void xp_destroy(struct xsk_buff_pool *pool)
- {
--	if (!pool)
-+	if (!pool || !refcount_dec_and_test(&pool->refs))
- 		return;
- 
- 	kvfree(pool->tx_descs);
-@@ -68,6 +73,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
- 	pool = kvzalloc_flex(*pool, free_heads, entries);
- 	if (!pool)
- 		goto out;
-+	refcount_set(&pool->refs, 1);
- 
- 	pool->heads = kvzalloc_objs(*pool->heads, umem->chunks);
- 	if (!pool->heads)
-@@ -360,7 +366,8 @@ static struct xsk_dma_map *xp_find_dma_map(struct xsk_buff_pool *pool)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac_dma.h b/drivers/net/ethernet/stmicro/stmmac/dwmac_dma.h
+index 970495bccfd2..4726801253f5 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac_dma.h
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac_dma.h
+@@ -150,6 +150,8 @@ void dwmac_enable_dma_irq(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			  u32 chan, bool rx, bool tx);
+ void dwmac_disable_dma_irq(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			   u32 chan, bool rx, bool tx);
++u32 dwmac_set_dma_irq_mask(struct stmmac_priv *priv, void __iomem *ioaddr,
++			   u32 chan, u32 mask);
+ void dwmac_dma_start_tx(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			u32 chan);
+ void dwmac_dma_stop_tx(struct stmmac_priv *priv, void __iomem *ioaddr,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c b/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
+index bb907db8fca1..88d904ed4685 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
+@@ -84,6 +84,16 @@ void dwmac_disable_dma_irq(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 	writel(value, ioaddr + DMA_CHAN_INTR_ENA(chan));
  }
  
- static struct xsk_dma_map *xp_create_dma_map(struct device *dev, struct net_device *netdev,
--					     u32 nr_pages, struct xdp_umem *umem)
-+					     u32 nr_pages, struct xdp_umem *umem,
-+					     unsigned long attrs)
++u32 dwmac_set_dma_irq_mask(struct stmmac_priv *priv, void __iomem *ioaddr,
++			   u32 chan, u32 mask)
++{
++	u32 old_mask = readl(ioaddr + DMA_CHAN_INTR_ENA(chan));
++
++	writel(mask, ioaddr + DMA_CHAN_INTR_ENA(chan));
++	readl(ioaddr + DMA_CHAN_INTR_ENA(chan));
++	return old_mask;
++}
++
+ void dwmac_dma_start_tx(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			u32 chan)
  {
- 	struct xsk_dma_map *dma_map;
- 
-@@ -376,6 +383,8 @@ static struct xsk_dma_map *xp_create_dma_map(struct device *dev, struct net_devi
- 
- 	dma_map->netdev = netdev;
- 	dma_map->dev = dev;
-+	dma_map->umem = umem;
-+	dma_map->attrs = attrs;
- 	dma_map->dma_pages_cnt = nr_pages;
- 	refcount_set(&dma_map->users, 1);
- 	list_add(&dma_map->list, &umem->xsk_dma_list);
-@@ -430,6 +439,58 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_dma.c b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_dma.c
+index ff83858ebc1f..30915d3f5230 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_dma.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_dma.c
+@@ -256,6 +256,16 @@ static void dwxgmac2_disable_dma_irq(struct stmmac_priv *priv,
+ 	writel(value, ioaddr + XGMAC_DMA_CH_INT_EN(chan));
  }
- EXPORT_SYMBOL(xp_dma_unmap);
  
-+struct xsk_dma_ref *xp_dma_get(struct xsk_buff_pool *pool)
++static u32 dwxgmac2_set_dma_irq_mask(struct stmmac_priv *priv,
++				     void __iomem *ioaddr, u32 chan, u32 mask)
 +{
-+	struct xsk_dma_map *dma_map;
-+	struct xsk_dma_ref *ref;
++	u32 old_mask = readl(ioaddr + XGMAC_DMA_CH_INT_EN(chan));
 +
-+	ASSERT_RTNL();
-+	if (!pool->dma_pages)
-+		return NULL;
-+	dma_map = xp_find_dma_map(pool);
-+	if (WARN_ON_ONCE(!dma_map))
-+		return NULL;
-+
-+	ref = kmalloc_obj(*ref);
-+	if (!ref)
-+		return NULL;
-+	ref->dma_map = dma_map;
-+	ref->pool = pool;
-+	refcount_inc(&pool->refs);
-+	refcount_inc(&dma_map->users);
-+	xdp_get_umem(dma_map->umem);
-+	get_device(dma_map->dev);
-+	/* Keep the mapping's lookup key alive without preventing unregister. */
-+	get_device(&dma_map->netdev->dev);
-+	return ref;
++	writel(mask, ioaddr + XGMAC_DMA_CH_INT_EN(chan));
++	readl(ioaddr + XGMAC_DMA_CH_INT_EN(chan));
++	return old_mask;
 +}
-+EXPORT_SYMBOL_GPL(xp_dma_get);
 +
-+void xp_dma_put(struct xsk_dma_ref *ref)
-+{
-+	struct xsk_dma_map *dma_map;
-+	struct net_device *netdev;
-+	struct xdp_umem *umem;
-+	struct device *dev;
-+
-+	ASSERT_RTNL();
-+	if (!ref)
-+		return;
-+	dma_map = ref->dma_map;
-+	dev = dma_map->dev;
-+	netdev = dma_map->netdev;
-+	umem = dma_map->umem;
-+	if (refcount_dec_and_test(&dma_map->users))
-+		__xp_dma_unmap(dma_map, dma_map->attrs);
-+	/* Unmap before the final reference can unpin the UMEM pages. */
-+	xdp_put_umem(umem, false);
-+	put_device(&netdev->dev);
-+	put_device(dev);
-+	xp_destroy(ref->pool);
-+	kfree(ref);
-+}
-+EXPORT_SYMBOL_GPL(xp_dma_put);
-+
- static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map)
+ static void dwxgmac2_dma_start_tx(struct stmmac_priv *priv,
+ 				  void __iomem *ioaddr, u32 chan)
  {
- 	u32 i;
-@@ -487,7 +548,7 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- 		return 0;
- 	}
+@@ -604,6 +614,7 @@ const struct stmmac_dma_ops dwxgmac210_dma_ops = {
+ 	.dma_tx_mode = dwxgmac2_dma_tx_mode,
+ 	.enable_dma_irq = dwxgmac2_enable_dma_irq,
+ 	.disable_dma_irq = dwxgmac2_disable_dma_irq,
++	.set_irq_mask = dwxgmac2_set_dma_irq_mask,
+ 	.start_tx = dwxgmac2_dma_start_tx,
+ 	.stop_tx = dwxgmac2_dma_stop_tx,
+ 	.start_rx = dwxgmac2_dma_start_rx,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+index 4b7381a6fcce..20de97ac011a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+@@ -197,6 +197,9 @@ struct stmmac_dma_ops {
+ 			       u32 chan, bool rx, bool tx);
+ 	void (*disable_dma_irq)(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 				u32 chan, bool rx, bool tx);
++	/* Replace and flush the full interrupt enable mask; return the old mask. */
++	u32 (*set_irq_mask)(struct stmmac_priv *priv, void __iomem *ioaddr,
++			    u32 chan, u32 mask);
+ 	void (*start_tx)(struct stmmac_priv *priv, void __iomem *ioaddr,
+ 			 u32 chan);
+ 	void (*stop_tx)(struct stmmac_priv *priv, void __iomem *ioaddr,
+@@ -263,6 +266,8 @@ struct stmmac_dma_ops {
+ 	stmmac_do_void_callback(__priv, dma, enable_dma_irq, __priv, __args)
+ #define stmmac_disable_dma_irq(__priv, __args...) \
+ 	stmmac_do_void_callback(__priv, dma, disable_dma_irq, __priv, __args)
++#define stmmac_set_dma_irq_mask(__priv, __args...) \
++	stmmac_do_callback(__priv, dma, set_irq_mask, __priv, __args)
+ #define stmmac_start_tx(__priv, __args...) \
+ 	stmmac_do_void_callback(__priv, dma, start_tx, __priv, __args)
+ #define stmmac_stop_tx(__priv, __args...) \
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+index 090d79aeb2ad..06fe750624b6 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+@@ -146,6 +146,8 @@ struct stmmac_channel {
+ 	struct stmmac_priv *priv_data;
+ 	spinlock_t lock;
+ 	u32 index;
++	/* Protected by lock; IRQ handlers must not access the DMA rings. */
++	bool irq_quiesced;
+ };
  
--	dma_map = xp_create_dma_map(dev, pool->netdev, nr_pages, pool->umem);
-+	dma_map = xp_create_dma_map(dev, pool->netdev, nr_pages, pool->umem, attrs);
- 	if (!dma_map)
- 		return -ENOMEM;
+ struct stmmac_fpe_cfg {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 98dbc873e1c8..435c76b7db30 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3370,14 +3370,30 @@ static bool stmmac_safety_feat_interrupt(struct stmmac_priv *priv)
+ 
+ static int stmmac_napi_check(struct stmmac_priv *priv, u32 chan, u32 dir)
+ {
+-	int status = stmmac_dma_interrupt_status(priv, priv->ioaddr,
+-						 &priv->xstats, chan, dir);
+-	struct stmmac_rx_queue *rx_q = &priv->dma_conf->rx_queue[chan];
+-	struct stmmac_tx_queue *tx_q = &priv->dma_conf->tx_queue[chan];
+ 	struct stmmac_channel *ch = &priv->channel[chan];
++	struct stmmac_rx_queue *rx_q;
++	struct stmmac_tx_queue *tx_q;
+ 	struct napi_struct *rx_napi;
+ 	struct napi_struct *tx_napi;
+ 	unsigned long flags;
++	int status;
++
++	spin_lock_irqsave(&ch->lock, flags);
++	if (unlikely(ch->irq_quiesced)) {
++		/* A shared IRQ may still invoke us, and DMA initialization can
++		 * restore interrupt enables. Mask them again without acknowledging
++		 * pending events or accessing the configuration being replaced.
++		 */
++		stmmac_set_dma_irq_mask(priv, priv->ioaddr, chan, 0);
++		spin_unlock_irqrestore(&ch->lock, flags);
++		return 0;
++	}
++	spin_unlock_irqrestore(&ch->lock, flags);
++
++	status = stmmac_dma_interrupt_status(priv, priv->ioaddr,
++					     &priv->xstats, chan, dir);
++	rx_q = &priv->dma_conf->rx_queue[chan];
++	tx_q = &priv->dma_conf->tx_queue[chan];
+ 
+ 	rx_napi = rx_q->xsk_pool ? &ch->rxtx_napi : &ch->rx_napi;
+ 	tx_napi = tx_q->xsk_pool ? &ch->rxtx_napi : &ch->tx_napi;
+@@ -4096,8 +4112,7 @@ static void stmmac_free_irq(struct net_device *dev,
+ 		for (j = irq_idx - 1; msi && j >= 0; j--) {
+ 			if (msi->tx_irq[j] > 0) {
+ 				irq_set_affinity_hint(msi->tx_irq[j], NULL);
+-				free_irq(msi->tx_irq[j],
+-					 &priv->channel[j]);
++				free_irq(msi->tx_irq[j], &priv->channel[j]);
+ 			}
+ 		}
+ 		irq_idx = priv->plat->rx_queues_to_use;
+@@ -4106,8 +4121,7 @@ static void stmmac_free_irq(struct net_device *dev,
+ 		for (j = irq_idx - 1; msi && j >= 0; j--) {
+ 			if (msi->rx_irq[j] > 0) {
+ 				irq_set_affinity_hint(msi->rx_irq[j], NULL);
+-				free_irq(msi->rx_irq[j],
+-					 &priv->channel[j]);
++				free_irq(msi->rx_irq[j], &priv->channel[j]);
+ 			}
+ 		}
  
 
 -- 
