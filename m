@@ -1,167 +1,130 @@
-Received: from mta0.migadu.com (out-60.mta0.migadu.com [91.218.175.60])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F48A54704C
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 00:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.60
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB675695
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 00:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790467351; cv=none; b=Srd0eSPcU2ohxpqeYEdR7hboU1kcd5Gj2xWFaoEJSt5fKUxKqrOV/L15PIGVVjVNO5lMB+T4GGFsbOflCyn8hzGHs8poeVc+jwO+I6+VLw3b2krLDBjjA77Y0aRUP3qOkNxa6P8bY6pp3932QXfMcqI/2LwqQkU66/rmBma/tdw=
+	t=1790467410; cv=none; b=a6VXEWRl28IdIw1aWi133KeEMf4Vs2WW8cB0IpwLNbftEAk8DUibkFyHKKPF3geJYftz9ClLfqEtKxFtXZYct3i8cfjbbUKwbczu00s4LbrOXpTmaYtmZbcQUqjnzgVKtNIzDPZ/F6aMRnxyJBulSPW7oY3E4wr+vDCe39IDpX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790467351; c=relaxed/simple;
-	bh=+618+mufiBuzAWWHOtxBAv76pP8RS0vaeumb9smfaBw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kM1AgM1gQeYmLrGcVS5UaYxnCdWOC841pa6A/a/INT+su+kn1xvGCSzUwML1L5xK/FsFC4lsY+3X6ytM2HQSL6bK8iHxFtzseI4DQhdyYtE7PV922Y91KmIROx34ImVb+kq4KeWsxGhId7Bcgti131+lhWYQwGuHDPWU6eIiZj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wKaQrRqG; arc=none smtp.client-ip=91.218.175.60
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790467410; c=relaxed/simple;
+	bh=IzhPlvNU9Cs3HWAX2+bQujgI1fvNjcca2jvzsJZyl7U=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=p8oh/Ugew+Yp+CsfunYp329a948kRBi0Xy7d8j9NOhQezjHPg5I0CdhCLkRNMw0vizKORoFKL22PtH+6tA6+Z0b1/3u9ipvMcIDQAd29pFB23JCSReSAMV9veBnzRKYcH2bTlyTVpZ60MMUt9ImvobKkcaStwPyeB/9NaPNtdAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEZazKRC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wKaQrRqG"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=+618+mufiBuzAWWHOtxBAv76pP8RS0vaeumb9smfaBw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790467347; v=1; x=1791072147;
- b=wKaQrRqGOPxllqhXYdhaV81J0PEYYq5NLniMsRW6WaxgXnzN2WYLWUc+umQ1zeN88SBRkdPD
- 1YxARmrvjdJbUs2TXU5I+NddqtPsP0VgPDU3hhHJrlx90z8R+blzstEWZ+UxzBGEHuGirFSJBLw
- bsSTkVV3QsBBdQSI8ib3xMI0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4509d27e0a3bd69b;
-	Sun, 27 Sep 2026 00:02:16 +0000
-X-Mizu-Trace-ID: 4509d27e0a3bd69b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <16ff7e99-973b-44f0-b139-ff5dca529ac6@linux.dev>
-Date: Sat, 26 Sep 2026 17:02:11 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oEZazKRC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676401F000FF;
+	Sun, 27 Sep 2026 00:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790467408;
+	bh=7gBZ4ULwhWQe6YlSMsjl+kJ0Jv7kT9nyN3XPEfJP9H8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=oEZazKRC+rl8dotc77Iayey3FqJiigNkEWpEXkOyYDGqr2hKvGBewTKcYTKWlqKxc
+	 GGQMu1OmjSp3xBLaV+hm1lqafuVPFPZy5CjgmBYM6hwW5oILUqakkq7MLKOsBs4l4J
+	 24kc6lOTLMVRWEa7SGKS7YNULSbsXiqqJXoHSE7xlWrzaY40WUVCsGn2eKzZOB+Iuu
+	 ssOmLwnSzG810AovwGcEVg9bw/1UP/hqBGDXBFgfQFEDB8P1kxuFY/Fiksrvrqv2QG
+	 5yPhiKWsEaLtZhpFqf/j9+tuSCKkoC55fgK+YIy/shBESyxaEaHy0Gqsg5642XxQHC
+	 s6lW1aOPWgZHQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next v1 07/16] bpf: Trust typed pointer fields
+ of typed arena objects
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260926233503.3114147-8-memxor@gmail.com>
+References: <20260926233503.3114147-1-memxor@gmail.com>
+ <20260926233503.3114147-8-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 27 Sep 2026 00:03:26 +0000
+Message-Id: <20260927000328.676401F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 06/21] bpf: Make exception landing pads
- reachable in the CFG
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260926050006.2213110-1-yonghong.song@linux.dev>
- <20260926050037.2216265-1-yonghong.song@linux.dev>
- <20260926052120.AEFD41F000FF@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260926052120.AEFD41F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: refcount leak in bpf_typed_arena causes saturation and WARN
+--
 
+commit 824870737e5e6082cced029879731300754bd906
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: bpf: Trust typed pointer fields of typed arena objects
 
-On 9/25/26 10:21 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] bpf: DFS traversal invariant violation in visit_func_call_insn
-> --
->
-> commit 9f815c7b6f7049f1604884b98686a7516748e963
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Make exception landing pads reachable in the CFG
->
-> A bpf_unwind() or a bpf2bpf call inside the [begin_off, end_off) range of a
-> cleanup record can reach that record's landing pad. Add that edge to the
-> CFG walk, which explores the pad and makes both ends prune points, and to
-> bpf_insn_successors(), which liveness and the SCC passes walk.
->
->> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
->> index b0bd9ba951dfb..4e2b6985bc964 100644
->> --- a/kernel/bpf/cfg.c
->> +++ b/kernel/bpf/cfg.c
-> [ ... ]
->
->> @@ -160,17 +161,64 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
->>   	return DONE_EXPLORING;
->>   }
->>   
->> +static int visit_cleanup_pad_edge(int t, struct bpf_verifier_env *env)
->> +{
->> +	int *insn_stack = env->cfg.insn_stack;
->> +	int *insn_state = env->cfg.insn_state;
->> +	int w;
->> +
->> +	if (!env->cleanup_info_cnt)
->> +		return DONE_EXPLORING;
->> +	w = bpf_exc_pad_of_call(env, t);
->> +	if (w < 0)
->> +		return DONE_EXPLORING;
->> +
->> +	/*
->> +	 * @t is a call that may branch here, and @w is the target of that
->> +	 * branch, so both are prune points. @w especially: every covered call
->> +	 * site in a region unwinds to the same pad, and without a prune point
->> +	 * at its head the verifier walks the pad again for each of them.
->> +	 */
->> +	mark_prune_point(env, t);
->> +	mark_prune_point(env, w);
->> +	mark_jmp_point(env, w);
->> +	mark_jump_target(env, w);
->> +
->> +	if (insn_state[w])
->> +		return DONE_EXPLORING;
->> +	if (env->cfg.cur_stack >= env->prog->len)
->> +		return -E2BIG;
->> +	insn_stack[env->cfg.cur_stack++] = w;
->> +	insn_state[w] |= DISCOVERED;
-> [Severity: Medium]
-> Does setting the DISCOVERED flag here in visit_cleanup_pad_edge() mark the
-> pad prematurely?
->
-> By marking it DISCOVERED before fully exploring its path, any valid
-> cross-edges to the cleanup pad (e.g., from shared cleanup code) might be
-> incorrectly classified as back-edges and rejected by the verifier.
+This commit introduces logic to track and trust typed pointer fields
+within typed arena objects. A load from these fields returns an
+unsanitized pointer which is considered trustworthy without additional
+checks, and writes ensure only valid typed arena pointers or null are
+stored.
 
-The actual problem is below due to premature dfs stop's. See below.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -6328,6 +6348,61 @@ static bool type_is_trusted_or_null(struct bpf_ver=
+ifier_env *env,
+[ ... ]
+> +static int check_typed_ptr_field_access(struct bpf_verifier_env *env, st=
+ruct bpf_reg_state *regs,
+> +					struct bpf_reg_state *reg, const char *tname, u32 btf_id,
+> +					enum bpf_access_type atype, int value_regno)
+> +{
+> +	struct bpf_insn *insn =3D &env->prog->insnsi[env->insn_idx];
+> +	u8 class =3D BPF_CLASS(insn->code);
+> +	struct bpf_reg_state *val;
+> +	struct bpf_typed_arena *ta;
+> +
+> +	if (BPF_MODE(insn->code) !=3D BPF_MEM || BPF_SIZE(insn->code) !=3D BPF_=
+DW ||
+> +	    (class !=3D BPF_LDX && class !=3D BPF_STX && class !=3D BPF_ST)) {
+> +		verbose(env, "typed pointer field of struct %s must be accessed with a=
+ 64-bit load or store\n",
+> +			tname);
+> +		return -EACCES;
+> +	}
+> +	if (atype =3D=3D BPF_READ) {
+> +		/*
+> +		 * The pointer leads into the pointee's typed arena, which the
+> +		 * program may never cast to or allocate from: register it here,
+> +		 * as a cast would, so that the sanitization has a slice to mask
+> +		 * into and the slice exists for the map's lifetime.
+> +		 */
+> +		ta =3D typed_arena_register(env, btf_id);
 
->
->> +	return KEEP_EXPLORING;
->> +}
->> +
-> [ ... ]
->
->>   static int visit_func_call_insn(int t, struct bpf_insn *insns,
->>   				struct bpf_verifier_env *env,
->>   				bool visit_callee)
->>   {
->> -	int ret, insn_sz;
->> +	int ret, insn_sz, pad_ret;
->>   	int w;
->>   
->> +	pad_ret = visit_cleanup_pad_edge(t, env);
->> +	if (pad_ret < 0)
->> +		return pad_ret;
->> +
->>   	insn_sz = bpf_is_ldimm64(&insns[t]) ? 2 : 1;
->>   	ret = push_insn(t, t + insn_sz, FALLTHROUGH, env);
-> [Severity: Medium]
-> Is it safe to push the fallthrough edge even if visit_cleanup_pad_edge()
-> has just returned KEEP_EXPLORING?
->
-> The CFG checker typically relies on returning KEEP_EXPLORING immediately
-> after pushing a new node to maintain the invariant that DISCOVERED nodes are
-> strictly ancestors. By ignoring whether pad_ret is KEEP_EXPLORING and
-> eagerly pushing the fallthrough edge, this leaves the cleanup pad marked
-> DISCOVERED while the fallthrough path is being explored.
->
-> Could this lead to loop-free programs being incorrectly rejected if a
-> cross-edge on the fallthrough path is misidentified as a back-edge?
+[Severity: Medium]
+Could this lead to a refcount leak for the typed arena when the program
+is unloaded?
 
-The above
-	if (pad_ret < 0)
-		return pad_ret;
-is not correct and it may cause premature dfs stop (ignoring KEEP_EXPLORING).
-The correct one is
-	if (pad_ret != DONE_EXPLORING)
-		return pad_ret;
-This way, pad_ret can be either KEEP_EXPLORING or err.
-If KEEP_EXPLORING, dfs can continue with landing pad.
+When typed_arena_register() is called here, it acquires a reference to
+the typed arena via bpf_typed_arena_get() which increments ta->refcnt.
+However, the program unload path in bpf_prog_free_deferred() skips
+releasing the reference acquired during load:
 
->
->>   	if (ret)
->> -		return ret;
->> +		return merge_visit_ret(pad_ret, ret);
+kernel/bpf/core.c:bpf_prog_free_deferred() {
+    ...
+    /* The typed arenas outlive the program; only the load's failure retrac=
+ts them. */
+    kfree(aux->typed_arenas);
+    ...
+}
 
+Because the reference is never decremented after a successful load, the
+refcount will monotonically increase by one per load and unload cycle.
+
+Since this path is reachable by any user capable of loading BPF programs,
+is it possible for a user to repeatedly load and unload a program to
+saturate the refcount and trigger a kernel WARN?
+
+> +		if (IS_ERR(ta))
+> +			return PTR_ERR(ta);
+> +		return mark_btf_ld_reg(env, regs, value_regno, PTR_TO_BTF_ID, reg->btf=
+, btf_id,
+> +				       MEM_ARENA | PTR_UNSANITIZED);
+> +	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926233503.3114=
+147-1-memxor@gmail.com?part=3D7
