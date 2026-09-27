@@ -1,112 +1,284 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8349218E025;
-	Sun, 27 Sep 2026 20:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9653237BE6C
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790541676; cv=none; b=mXeGiWUXp31Tg7Yp0QYZTFvS0an3PlYtXP64L5HfLOLTfi59iFIsToX8FyVL7enr/kGOzPcM4n1NTC2PxHeCBOqsfLXhnnoVDD8d1uPrtqc001dq/KstVUxjN2s9QJacHdU2gFhnnpIP+vjr+QzbHTIW0p95csoLr/2TvONOckY=
+	t=1790541766; cv=none; b=m8snYF9o9bAuBD1Ckl3BLQg9BgM1/5N/4iYl5rV7JZlgnQN/+UbRXj9fW5ueEBEFAv3xvX0IESGUKxAy+gy0EXXEdfy0MxLmBao8SQH5P7DfjOvj3esM9UgFs0fJ1p6aA9aMWUWmB0Zt3giBGmpysdakMAxRqdChAij9GtnXKgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790541676; c=relaxed/simple;
-	bh=IZx0c5YL4BHjcA0kGkmqaKl9y+gkwGc5SNdMF/976Po=;
+	s=arc-20240116; t=1790541766; c=relaxed/simple;
+	bh=NOkGwIenjNjk30UzlXE1oLqr71Ngk7ioNe7ayXECHxs=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=NC2wWxcxtL8m8H9vqWQfj6RL714A4Bb9aL5VMrpvwrWp87G/SM9KG5agzdHNBvf2Ufm63MxjLRAreUZksZwt6HeClkuUALkx5uSqTnmnSQCGAaknLtDjXWK/oyhjSEdgkmDxRplK6gtlOxcm3uJ6zxDHjpE7PqrLeBEn90WsSQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TuTmdGnt reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=FGkjhopCKWQ5kTZWjg4PeVZnFBDXhULLhc24II2p7j2iaBlRPXWeRo4rnGPGkzP83CbuI4jT8e3qlWsxw3M24ctg8m/pWU9pu17HgoUvw50iE9aMkDmdNiXoYaxWrk7infvEUWBehwK/oqPNbxTqq3uABJiteNPqjCzO3Q2QFSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLou+W+F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TuTmdGnt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C091F000FF;
-	Sun, 27 Sep 2026 20:41:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLou+W+F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BAF01F000FF;
+	Sun, 27 Sep 2026 20:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790541675;
-	bh=vLO37l59WyVXOc1GaSGyfri+C0pwbOWgxmIfm+nlpBs=;
+	s=k20260515; t=1790541765;
+	bh=6YSd3HkaTH7eevBNlkrPRy28trxcu8k8mnqmIpPmDvo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TuTmdGnt2aTd7EYBIGzQPK6hgv2mwZj/e+iMLaZQhl+kbqjNk+Gn0JGXGu+zgmfyt
-	 x+Jeaumu4xurUfC51qiVkNk0aZqWfE6CifBVSz0/DVzlYQAmvmm3NBDuVE8n/xtFeN
-	 /T62KvCuyw7jcMax/bVpfRf7QBJnNqHjfoKjCz1UuB6bWyLjvMjJmDUFCT9aw1ttAd
-	 nReKDQGOh6/xSa+g0Xh/CaBwmnUWNv9LiHwGPUx39dhZZG3dK6Yzs4TcoD96N7bqud
-	 7Ar3WdLf7zr4A7TmUGMUZPzNmmmQZiAt4yLw5kf/7+H14P9PFbPxJ9MmSslmJB0L8d
-	 STXnJylkLfaIQ==
-Content-Type: multipart/mixed; boundary="===============7476743973010168723=="
+	b=iLou+W+FWgd1fvvIxo59Io6h2XL+dvPWKP3Ejbt/QeJWLh1mEftlqsqTB63oJbJjW
+	 3qICNYxCX6Z9LhnsyCAX+VCT9iokX0bYmoMwKeb9I08h7g5KhTquAJ8R09flnPI/fk
+	 l0kcc6WpYPjnGeGXhWP8LuzSVRpVUIQ8UkWJL3EYMS0hqxT/kNxyIJM+fdJ92rwLmU
+	 zFzR7ahqgtftXmz4El8J5YzN1LrbzHRukHTwGE8no7fliy1g6bIKTj2isypz94VFNl
+	 x/nZzswXbCcM7rJ9mjuTHISvrGjVXiUFLSNbKFBN7/Acv29KCXmOyx/Cpcr+0g1rEE
+	 mzhQTQk9jo5jA==
+Content-Type: multipart/mixed; boundary="===============3413850216712457221=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9d932a22ca908da9378ea281633ddb749453911ac6ae7a27a09e376f9ad02ff7@mail.kernel.org>
-In-Reply-To: <20260926135605.1217928-2-florent.revest@linux.dev>
-References: <20260926135605.1217928-2-florent.revest@linux.dev>
-Subject: Re: [PATCH bpf v5 1/3] bpf: Wait for an RCU tasks grace period before freeing trampoline progs
+Message-Id: <fbc569e51e53b47e086068dd5ede783b671becfa03da2a0b8f6ef0946286040b@mail.kernel.org>
+In-Reply-To: <20260926-scev-minimal-rebase-v1-18-c8e5ab5ba79f@gmail.com>
+References: <20260926-scev-minimal-rebase-v1-18-c8e5ab5ba79f@gmail.com>
+Subject: Re: [PATCH bpf-next 18/36] bpf: compute immediate dominators
 From: bot+bpf-ci@kernel.org
-To: florent.revest@linux.dev,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: florent.revest@linux.dev,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kpsingh@kernel.org,john.fastabend@gmail.com,leon.hwang@linux.dev,zirajs7@gmail.com,rhkrqnwk98@gmail.com,puranjay@kernel.org,xukuohai@huaweicloud.com,iii@linux.ibm.com,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,bjorn@kernel.org,pulehui@huawei.com,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,linux-kernel@vger.kernel.org,aou@eecs.berkeley.edu,agordeev@linux.ibm.com,alex@ghiti.fr,bp@alien8.de,catalin.marinas@arm.com,borntraeger@linux.ibm.com,dave.hansen@linux.intel.com,emil@etsalapatis.com,hca@linux.ibm.com,hpa@zytor.com,chenhuacai@kernel.org,ihor.solodrai@linux.dev,mingo@redhat.com,linux-arm-kernel@lists.infradead.org,linux-kselftest@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-riscv@lists.infradead.org,linux-s390@vger.kernel.org,loongarch@lists.linux.dev,maddy@linux.ibm.com,mark.rutland@arm.com,mpe@ellerman.id.au,npiggin@g
- mail.com,palmer@dabbelt.com,paulmck@kernel.org,pjw@kernel.org,ritesh.list@gmail.com,sshegde@linux.ibm.com,shuah@kernel.org,svens@linux.ibm.com,tglx@kernel.org,gor@linux.ibm.com,kernel@xen0n.name,will@kernel.org,x86@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 27 Sep 2026 20:41:12 +0000 (UTC)
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 27 Sep 2026 20:42:44 +0000 (UTC)
 
---===============7476743973010168723==
+--===============3413850216712457221==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Wait for an RCU tasks grace period before freeing trampoline progs
->
-> When a prog is detached from a trampoline, it is freed after an RCU
-> grace period, or an RCU tasks trace one if it is sleepable. This covers
-> the tasks that are running the prog, since the prog's enter helper takes
-> the matching read lock before the prog is called. On a preemptible
-> kernel, it doesn't cover a task that was preempted in the trampoline
-> just before the enter helper. That task holds no lock yet, and it calls
-> the prog after it was freed:
->
->   BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_enter_recur+0x3a5/0x3f0
->   Read of size 8 at addr ffffc90000055040 by task candidate/110
->   CPU: 1 UID: 0 PID: 110 Comm: candidate Not tainted 7.3.0-rc2-00014-g15071f2a1263-dirty #2 PREEMPT(full)
->   Call Trace:
->    <TASK>
->    __bpf_prog_enter_recur+0x3a5/0x3f0
->    bpf_trampoline_6442509193+0x37/0xf1
->    __x64_sys_futex+0x9/0x410
->    do_syscall_64+0xb0/0x530
->    ...
->
-> Wait for an RCU tasks grace period before the existing one when freeing
-> a prog that was linked to a trampoline. An RCU tasks grace period only
-> ends once the tasks that were preempted have run again, and
-> bpf_tramp_image_put() already relies on it to free the image. It doesn't
-> wait for tasks that sleep in the trampoline, the next commit takes care
-> of those.
->
-> Only progs that were linked to a trampoline can be called this way, so
-> bpf_trampoline_add_prog() marks them and other progs are still freed as
-> before.
->
-> Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 6a8157e607ee..5e6fa41a1353 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
-Is this the right Fixes: target?
+[ ... ]
 
-The race being closed here (a task preempted inside the trampoline image
-before __bpf_prog_enter*() takes its RCU read lock, while the prog is freed
-after only a regular RCU or RCU tasks trace grace period) appears to predate
-e21aa341785c.
+> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> index c1f9b0d3468d..6210601eb40b 100644
+> --- a/kernel/bpf/Makefile
+> +++ b/kernel/bpf/Makefile
 
-In fec56f5890d9 ("bpf: Introduce BPF trampoline") bpf_trampoline_update()
-switched images with no tasks RCU wait, and __bpf_prog_put_noref() freed the
-prog with a plain call_rcu(&prog->aux->rcu, __bpf_prog_put_rcu).
+[ ... ]
 
-Just before e21aa341785c, the synchronize_rcu_mult(call_rcu_tasks,
-call_rcu_tasks_trace) in bpf_trampoline_update() ran before
-arch_prepare_bpf_trampoline() rather than after the new image was installed,
-and the total == 0 unregister_fentry() path had no wait at all, so a task
-preempted in the old image could already reach a freed prog.
+> diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+> new file mode 100644
+> index 000000000000..e7ff02e9ab3a
+> --- /dev/null
+> +++ b/kernel/bpf/loops.c
+> @@ -0,0 +1,143 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <linux/slab.h>
+> +#include <linux/bpf_verifier.h>
+> +
+> +static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_iarray *succ, *preds, **result;
+> +	struct bpf_prog *prog = env->prog;
+> +	u32 *num_preds, i, s, sz, len = prog->len;
+> +	struct bpf_insn *insn;
+> +	void *tmp;
+> +
+> +	num_preds = kvcalloc(prog->len, sizeof(u32), GFP_KERNEL_ACCOUNT);
+> +	if (!num_preds)
+> +		return NULL;
+> +
+> +	/*
+> +	 * 'result' layout:
+> +	 *  - array of pointers (struct bpf_iarray *)[len]
+> +	 *  - struct bpf_iarray one after another
+> +	 */
+> +	sz = sizeof(struct bpf_iarray) * len;
+> +	sz += sizeof(struct bpf_iarray *) * len;
+> +	for (i = 0; i < len; i++) {
+> +		insn = env->prog->insnsi + i;
+> +		succ = bpf_insn_successors(env, i);
+> +		sz += sizeof(u32) * succ->cnt;
+                     ^^^^
 
-Would Fixes: fec56f5890d9 ("bpf: Introduce BPF trampoline") be more
-accurate, so that stable trees without e21aa341785c also pick this up? The
-follow-up 49ca60187380 in this series uses the same tag.
+Can sz overflow here?  It is a u32 with no overflow check, but for
+programs with many gotox instructions the sum of edges can exceed
+prog->len.  bpf_insn_successors() returns the whole shared jump table
+for gotox (up to one entry per instruction in the subprogram), and
+every gotox in that subprog adds that full count again.
+
+For large privileged programs (prog->len up to BPF_COMPLEXITY_LIMIT_INSNS),
+(number of gotox) * (jump table size) can make 4 * that product exceed
+U32_MAX.
+
+If sz wraps, kvzalloc(sz) returns a buffer smaller than what the next
+loops write:
+
+    result[0..len-1] pointers
+    per-insn bpf_iarray headers
+    preds->items[preds->cnt++] = i
+
+and those writes run past the end of the allocation.
+
+Even if sz does not wrap but exceeds INT_MAX, kvmalloc() WARNs and
+returns NULL.
+
+> +		iarray_for_each(s, succ) {
+> +			num_preds[s]++;
+> +		}
+> +		if (bpf_is_ldimm64(insn))
+> +			i++;
+> +	}
+> +
+> +	result = kvzalloc(sz, GFP_KERNEL_ACCOUNT);
+> +	if (!result) {
+> +		kvfree(num_preds);
+> +		return NULL;
+> +	}
+
+[ ... ]
+
+> +static int idoms_intersect(struct bpf_verifier_env *env, int a, int b)
+> +{
+> +	int *postorder_nums = env->cfg.postorder_nums;
+> +	int *idoms = env->idoms;
+> +
+> +	while (a != b) {
+> +		while (postorder_nums[a] < postorder_nums[b]) {
+> +			a = idoms[a];
+> +		}
+> +		while (postorder_nums[b] < postorder_nums[a]) {
+> +			b = idoms[b];
+> +		}
+> +	}
+> +	return a;
+> +}
+
+A review comment from v1 raised a performance concern here.  This walks
+the idom chain one instruction at a time, and for a program with many
+predecessors (for example, error handling with many "if (err) goto out;"
+statements), the k-th call to compute_subprog_idoms() for an instruction
+with N predecessors walks back over k branches.  That is N^2/2 steps,
+and the outer loop runs at least twice, all before do_check() and for
+every program regardless of whether it has loops.
+
+The suggestion was to compute dominators only for instructions inside
+loops (scc != 0) since SCEV only needs dominators inside loops, and
+possibly to add a bound for large loop bodies.
+
+Has this been addressed?
+
+> +
+> +/* See "A Simple, Fast Dominance Algorithm" by Cooper et al. for details. */
+> +static void compute_subprog_idoms(struct bpf_verifier_env *env, struct bpf_iarray **preds, int subprog_idx)
+> +{
+> +	struct bpf_subprog_info *subprog = &env->subprog_info[subprog_idx];
+> +	int start = subprog->start;
+> +	int po_first = subprog->postorder_start;
+> +	int po_last = (subprog + 1)->postorder_start - 1;
+> +	int *idoms = env->idoms;
+> +	int po_num, pred;
+> +	bool changed;
+> +
+> +	idoms[start] = 0;
+> +	changed = true;
+> +	do {
+> +		changed = false;
+> +		/* iterate in reverse postorder */
+> +		for (po_num = po_last; po_num >= po_first; po_num--) {
+> +			int idx = env->cfg.insn_postorder[po_num];
+> +			int new_idom = -1;
+> +
+> +			iarray_for_each(pred, preds[idx]) {
+> +				if (idoms[pred] == -1)
+> +					continue;
+> +				if (new_idom == -1)
+> +					new_idom = pred;
+> +				else
+> +					new_idom = idoms_intersect(env, pred, new_idom);
+> +			}
+> +			if (new_idom != -1 && idoms[idx] != new_idom) {
+> +				idoms[idx] = new_idom;
+> +				changed = true;
+> +			}
+> +		}
+> +	} while (changed);
+> +	idoms[start] = -1;
+> +}
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 474caf8696fd..93100541475a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -22815,6 +22816,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+>  	if (ret < 0)
+>  		goto skip_full_check;
+>
+> +	ret = bpf_compute_idoms(env);
+> +	if (ret < 0)
+> +		goto skip_full_check;
+> +
+
+bpf_compute_idoms() now runs on every program load before do_check(),
+so none of the verifier's complexity limits apply yet.  The pass has a
+quadratic worst case and nothing in it calls cond_resched() or checks
+signal_pending().
+
+The dominator tree is built per instruction, not per basic block, so a
+node's depth in the tree is roughly the number of instructions before
+it.  compute_subprog_idoms() folds every predecessor into new_idom
+using idoms_intersect(), and the cost of each call is the tree distance
+from pred up to new_idom.
+
+For a program made of k instructions "if rX == 0 goto E" (fallthrough
+to the next), followed by "E: exit", then idom(C_i) = C_{i-1} and
+preds[E] = {C_0, C_1, ..., C_{k-1}}.  The call idoms_intersect(C_i, C_0)
+walks i steps, so E alone costs about k^2/2 steps per pass.  The do/while
+loop always makes at least one extra pass to confirm nothing changed, so
+the total is about k^2.
+
+With CAP_BPF, insn_cnt can be up to BPF_COMPLEXITY_LIMIT_INSNS (1M).
+That gives about 1e12 pointer-chasing steps inside a single syscall.
+The task cannot be killed during this time, and non-preemptible kernels
+will report soft lockups.
+
+The shape is not only adversarial: large programs where many checks jump
+to one shared return block cost roughly (number of such jumps) x
+(program length / 2) per pass.  For example, 50K checks in a 500K-
+instruction program is about 1e10 steps per pass.  Unprivileged programs
+are capped at BPF_MAXINSNS (4096), where the cost is small.
+
+Other long-running verifier stages guard themselves.  do_check() checks
+signal_pending() and calls cond_resched().  Liveness analysis has a
+10000-call limit plus cond_resched().  The next commit in this series
+adds "if (signal_pending(current)) return -EAGAIN; cond_resched();" to
+compute_loops_in_subprog() "to guard against pathological inputs."
+
+Should bpf_compute_idoms() have a similar guard?  Or could the tree be
+built over basic blocks instead of instructions so the tree depth stays
+small?
+
+>  	ret = bpf_compute_live_registers(env);
+>  	if (ret < 0)
+>  		goto skip_full_check;
+
+[ ... ]
+
+> @@ -22978,6 +22983,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+>  	kvfree(env->callx_edges);
+>  	kvfree(env->func_ptrs);
+>  	bpf_diag_free(env);
+> +	kvfree(env->idoms);
+>  	kvfree(env);
+>  	return ret;
+>  }
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346518503
---===============7476743973010168723==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346543957
+--===============3413850216712457221==--
