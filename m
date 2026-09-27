@@ -1,112 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF20B3EC2E6;
-	Sun, 27 Sep 2026 23:08:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142F82EEE92
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790550537; cv=none; b=EgtnBC1gsIRiYeM6SLooPbUPBegcBC2djGUNJmOEpO4WR5Xx0C6VRRfMvUymHFW6OU9C4GBC8GCZtAiS5hw31tPSrLTLTGcCbAIDokCS3dk4baluDr2fICz7GCjNKXvWnG8ymzvBns/xCYqeUWzgxsx6Cz/8CRjYD1+q6U1OXVI=
+	t=1790550880; cv=none; b=nkF17x1nry1UugEbtCZvoo1KYEsse+8L8NbMHIr3cOiwa2X+c/wOIVLszD6kGaWrPES8YIZL3k10ps2TP2yyOUWn3UVZJgoVvwVxbSoz6Ia2dzZYGk4axvP9nggDWhkFU4w1uLl0VeJkSXQtUnxbUVSgHQrS6bWVOGp7s/fp0zA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790550537; c=relaxed/simple;
-	bh=QzT8CB+7E1fTOlSl+pF6tcJYwCR2UamrnK09/boyhug=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=foFCkVjkiyz6NOB6URT5fYn60zy79HWso8WQQM6VIn/mj2rNbOBwDj4VUSi/ojO3FZALYt/+GuLmdZDh4bJX+oWAwMoyBNYgBkrF0ZPGhSCtc6vM9glWVcHp3r1CrYJyI96r6i1WVvy+weqiSzoBPg+tL25/tZvH4+WqOjAW05A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jn1olMSQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790550880; c=relaxed/simple;
+	bh=vPhvbw+0aBtm9mthMklrVYHZ3rDNKcI7RmUIzcz+m2A=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=DLTRH5cwoleWwm5sNQ/CLuXt0Vc+kDEmiXbS1paGE/q5cF4uhlN0VWyWnIvouQIUaQPWRNBnSJQUW4pk/GEQdPDyFjT4GAYvhJT8f8oIhYV7MAJNhUABw4LQA9TW3ClrxhQO+1gea5ZosbAC+OlFMvZ/X12h9Fuxnx79MMPd1nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VyHvcRbz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jn1olMSQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3251F000FF;
-	Sun, 27 Sep 2026 23:08:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VyHvcRbz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 549B01F000FF;
+	Sun, 27 Sep 2026 23:14:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790550536;
-	bh=QzT8CB+7E1fTOlSl+pF6tcJYwCR2UamrnK09/boyhug=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Jn1olMSQiX+d5sVAD0WNoE87Yf8JiDL4ld3WV4Jw1F/qez/kBtv6z8FcDeDHFIpSE
-	 Yqc9eIq8yfttmi/aasUM0J/8ZEyDFahaXv/u0+JdsfXqpannSKGnRI7ICQU4Ec5JWO
-	 sChSfKWu4rmO+PiOKBG8YzvgOl/sXxtGaD1Wj6w8khRPTz97j9y9DxwsOOSfUFjQyi
-	 bUcZxax5lg+BV3Vf8n90CwpDpPrl5uK1FdbZZHMpTT1QCGBC7LoCuUM0JgJX6Kutaw
-	 EBzieRykAMPxci4SJcfShewoxxzHQozL0FesUr8iJuRPYWOcdGRJ8M/1YDcOMqZK8d
-	 8d/kUjm8oxxwg==
-Content-Type: multipart/mixed; boundary="===============1149197110879977975=="
+	s=k20260515; t=1790550878;
+	bh=LaGYMoYrxgabuwS8iI93khA7ZTNuOnWNgCOHmv2lI5Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VyHvcRbzisjVvnoPPfFUMpM2qXqoy7vAW9JDdZ7dG5avR5eS7Amz47M7slJICHtMD
+	 p3pzIIqwMCB3+PfB5WNNYY9STHj3m5cystSUiDWQxvYKgWXyEFUr3W0fb9SgyO1K3Z
+	 fFzWPGG8avVgDgMT0cfGGowjhZU85crRUPykEwFx5apb4S8Cs5T+ZokJ9dUo35tmIQ
+	 P5XAEzt/IbPf5fZafj7vbW++Pr3yM4JDJ7/eG44B2dmDpoDuCILC/2gP0h9v94P9qa
+	 aE9jLy0Lc8zfxR1J0GgusHlc+vlu7q4jmE9nEzC7gFU6yAv0kmJ3UWNwro6OXj2MPU
+	 35VgT/NDwNb6g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Skip redundant
+ destroy_if_dynptr_stack_slot calls in check_stack_write_var_off
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?w5ZtZXIgTWV0ZSBLYXlh?= <omermetekaya0@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260927230511.417420-1-omermetekaya0@gmail.com>
+References: <20260927230511.417420-1-omermetekaya0@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 27 Sep 2026 23:14:37 +0000
+Message-Id: <20260927231438.549B01F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <1827cc98516932eafa7e509cc320028dd34f54f9cbafb8dad770ba6516360125@mail.kernel.org>
-In-Reply-To: <20260927222718.414674-1-omermetekaya0@gmail.com>
-References: <20260927222718.414674-1-omermetekaya0@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix wrong frame passed to check_fastcall_stack_contract() in check_stack_read_fixed_off()
-From: bot+bpf-ci@kernel.org
-To: omermetekaya0@gmail.com,ast@kernel.org,daniel@iogearbox.net
-Cc: john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,omermetekaya0@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 27 Sep 2026 23:08:55 +0000 (UTC)
 
---===============1149197110879977975==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: multi-line comment style violation in check_stack_write_var_of=
+f()
+--
 
-PiBjb21taXQgZmY2ZTE5ZDFmMGQ4ZTQwMDE2OTNhYzQ2YzIzZWM3MjA0OTEyZTVkMgo+IEF1dGhv
-cjogw5ZtZXIgTWV0ZSBLYXlhIDxvbWVybWV0ZWtheWEwQGdtYWlsLmNvbT4KPiBEYXRlOiAgIE1v
-biBTZXAgMjggMDE6MjM6NDQgMjAyNiArMDMwMAo+Cj4gICAgIGJwZjogRml4IHdyb25nIGZyYW1l
-IHBhc3NlZCB0byBjaGVja19mYXN0Y2FsbF9zdGFja19jb250cmFjdCgpIGluIGNoZWNrX3N0YWNr
-X3JlYWRfZml4ZWRfb2ZmKCkKPgo+ICAgICBjaGVja19zdGFja19yZWFkX2ZpeGVkX29mZigpIGNh
-bGxzIGNoZWNrX2Zhc3RjYWxsX3N0YWNrX2NvbnRyYWN0KCkgd2l0aAo+ICAgICAnc3RhdGUnICh0
-aGUgY3VycmVudCBmcmFtZSwgaS5lLiB0aGUgY2FsbGVlKSBpbnN0ZWFkIG9mICdyZWdfc3RhdGUn
-Cj4gICAgICh0aGUgZnJhbWUgdGhhdCBvd25zIHRoZSBzdGFjayBiZWluZyByZWFkLCBpLmUuIHRo
-ZSBjYWxsZXIpLgo+Cj4gICAgIEluIGEgYnBmMmJwZiBjYWxsIHdoZXJlIGEgY2FsbGVlIHJlYWRz
-IGZyb20gYSBQVFJfVE9fU1RBQ0sgcG9pbnRpbmcKPiAgICAgaW50byB0aGUgY2FsbGVyJ3MgZnJh
-bWUsICdyZWdfc3RhdGUnIGFuZCAnc3RhdGUnIGFyZSBkaWZmZXJlbnQ6Cj4gICAgICdyZWdfc3Rh
-dGUnIGlzIHRoZSBjYWxsZXIncyBmcmFtZSwgd2hpbGUgJ3N0YXRlJyBpcyB0aGUgY2FsbGVlJ3Mu
-Cj4gICAgIFBhc3NpbmcgJ3N0YXRlJyBjYXVzZXMgdGhlIGZhc3RjYWxsIGNvbnRyYWN0IHRvIGJl
-IGNoZWNrZWQgYWdhaW5zdCB0aGUKPiAgICAgY2FsbGVlJ3Mgc3VicHJvZyBpbnN0ZWFkIG9mIHRo
-ZSBjYWxsZXIncywgbGVhdmluZyB0aGUgY2FsbGVyJ3MgZmFzdGNhbGwKPiAgICAgcmVnaW9uIHVu
-cHJvdGVjdGVkIGFuZCBwb3RlbnRpYWxseSBjYW4gY2F1c2UgYW4gaW5jb3JyZWN0IGZhc3RjYWxs
-Cj4gICAgIHJld3JpdGUuCj4KPiAgICAgVGhlIHRocmVlIHNpYmxpbmcgZnVuY3Rpb25zIGFyZSBh
-bGwgY29ycmVjdDoKPiAgICAgY2hlY2tfc3RhY2tfd3JpdGVfZml4ZWRfb2ZmICAtPiBwYXNzZXMg
-J3N0YXRlJyAgICAgKHdyaXRlcyB0byBjdXJmcmFtZSkKPiAgICAgY2hlY2tfc3RhY2tfd3JpdGVf
-dmFyX29mZiAgICAtPiBwYXNzZXMgJ3N0YXRlJyAgICAgKHdyaXRlcyB0byBjdXJmcmFtZSkKPiAg
-ICAgY2hlY2tfc3RhY2tfcmVhZF92YXJfb2ZmICAgICAtPiBwYXNzZXMgJ3B0cl9zdGF0ZScgKHJl
-YWRzIGZyb20gcHRyJ3MgZnJhbWUpCgpUaGUgZXhwbGFuYXRpb24gb2Ygd2h5IHRoZSB3cml0ZSBz
-aWJsaW5ncyBhcmUgY29ycmVjdCBtYXkgbm90IGJlIGFjY3VyYXRlLgpUaGUgY29tbWl0IG1lc3Nh
-Z2Ugc2F5cyB0aGV5IHBhc3MgJ3N0YXRlJyBiZWNhdXNlIHRoZXkgIndyaXRlIHRvCmN1cmZyYW1l
-IiwgYnV0IGxvb2tpbmcgYXQgY2hlY2tfc3RhY2tfd3JpdGVfZml4ZWRfb2ZmKCksICdzdGF0ZScg
-aXMKYWN0dWFsbHkgY29tcHV0ZWQgYXMgdGhlIGZyYW1lIHRoZSBkZXN0aW5hdGlvbiBwb2ludGVy
-IHJlZmVycyB0bzoKCiAgICBzdHJ1Y3QgYnBmX2Z1bmNfc3RhdGUgKnN0YXRlID0gYnBmX2Z1bmMo
-ZW52LCByZWcpOwoKd2hpY2ggaXMgY3VyLT5mcmFtZVtyZWctPmZyYW1lbm9dLCBub3QgbmVjZXNz
-YXJpbHkgdGhlIGN1cnJlbnQgZnJhbWUuIFRoZQpmdW5jdGlvbiBkb2N1bWVudHMgdGhlIHBhcmFt
-ZXRlciBhcyAic3RhY2sgZnJhbWUgd2UncmUgd3JpdGluZyB0byIgYW5kCmNvbXBhcmVzIGl0IGFn
-YWluc3QgdGhlIHJlYWwgY3VycmVudCBmcmFtZSBzZXBhcmF0ZWx5OgoKICAgIGN1ciA9IGVudi0+
-Y3VyX3N0YXRlLT5mcmFtZVtlbnYtPmN1cl9zdGF0ZS0+Y3VyZnJhbWVdOwogICAgLi4uCiAgICBp
-ZiAoc3RhdGUgIT0gY3VyICYmIHJlZy0+dHlwZSA9PSBQVFJfVE9fU1RBQ0spIHsKICAgICAgICB2
-ZXJib3NlKGVudiwgImNhbm5vdCBzcGlsbCBwb2ludGVycyB0byBzdGFjayBpbnRvIHN0YWNrIGZy
-YW1lIG9mIHRoZSBjYWxsZXJcbiIpOwoKY2hlY2tfc3RhY2tfd3JpdGVfdmFyX29mZigpIGxpa2V3
-aXNlIGRvY3VtZW50cyAnc3RhdGUnIGFzICJmdW5jIHdoZXJlCnJlZ2lzdGVyIHBvaW50cyB0byIu
-CgpUaGUgZXhpc3Rpbmcgc2VsZnRlc3QgYmFkX3dyaXRlX2luX3N1YnByb2cgaW4gdmVyaWZpZXJf
-YnBmX2Zhc3RjYWxsLmMgaGFzCmEgY2FsbGVlIHdyaXRlIHRocm91Z2ggYSBjYWxsZXIgc3RhY2sg
-cG9pbnRlciwgd2l0aCB0aGUgY29tbWVudAoiaW52YWxpZGF0ZXMgYnBmX2Zhc3RjYWxsIGNvbnRy
-YWN0IGZvciBjYWxsZXIiLiBTbyB0aGUgd3JpdGUgcGF0aHMgYWxyZWFkeQpwYXNzIHRoZSBwb2lu
-dGVyJ3MgZnJhbWUsIGp1c3QgbGlrZSBjaGVja19zdGFja19yZWFkX3Zhcl9vZmYoKSBwYXNzZXMK
-cHRyX3N0YXRlLgoKQ291bGQgdGhlIGV4cGxhbmF0aW9uIGJlIHVwZGF0ZWQgdG8gc2F5IHRoZSB3
-cml0ZSBoZWxwZXJzIHBhc3MgJ3N0YXRlJwpiZWNhdXNlIGl0J3MgdGhlIGZyYW1lIHRoZSBwb2lu
-dGVyIHJlZmVycyB0bywgbm90IGJlY2F1c2UgdGhleSB3cml0ZSB0bwpjdXJmcmFtZT8gVGhlIGNv
-ZGUgY2hhbmdlIGl0c2VsZiBpcyBjb3JyZWN0LCBidXQgdGhlICIod3JpdGVzIHRvCmN1cmZyYW1l
-KSIgd29yZGluZyBtaWdodCBtaXNsZWFkIGZ1dHVyZSByZWFkZXJzIGFib3V0IHdoYXQgdGhlc2Ug
-ZnVuY3Rpb25zCmFjdHVhbGx5IGRvLgoKPiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi92ZXJpZmll
-ci5jIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gaW5kZXggNDFiNDljNTZlMTIzLi43ZGQ4ZTMy
-NDIwZmQgMTAwNjQ0Cj4gLS0tIGEva2VybmVsL2JwZi92ZXJpZmllci5jCj4gKysrIGIva2VybmVs
-L2JwZi92ZXJpZmllci5jCj4gQEAgLTM4ODEsNyArMzg4MSw3IEBAIHN0YXRpYyBpbnQgY2hlY2tf
-c3RhY2tfcmVhZF9maXhlZF9vZmYoc3RydWN0IGJwZl92ZXJpZmllcl9lbnYgKmVudiwKPiAgCXJl
-ZyA9ICZyZWdfc3RhdGUtPnN0YWNrW3NwaV0uc3BpbGxlZF9wdHI7Cj4KPiAgCW1hcmtfc3RhY2tf
-c2xvdF9zY3JhdGNoZWQoZW52LCBzcGkpOwo+IC0JY2hlY2tfZmFzdGNhbGxfc3RhY2tfY29udHJh
-Y3QoZW52LCBzdGF0ZSwgZW52LT5pbnNuX2lkeCwgb2ZmKTsKPiArCWNoZWNrX2Zhc3RjYWxsX3N0
-YWNrX2NvbnRyYWN0KGVudiwgcmVnX3N0YXRlLCBlbnYtPmluc25faWR4LCBvZmYpOwo+Cj4gIAkv
-Kgo+ICAJICogUmVmaW5lIHRoZSBpbi1wcm9ncmVzcyBsb2FkIHJlY29yZCdzIG9yaWdpbiB0byB0
-aGUgc291cmNlIHN0YWNrIHNsb3QuCgoKLS0tCkFJIHJldmlld2VkIHlvdXIgcGF0Y2guIFBsZWFz
-ZSBmaXggdGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBidWcuClNlZTogaHR0
-cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1
-ZGUvUkVBRE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1w
-YXRjaGVzL2JwZi9hY3Rpb25zL3J1bnMvMzYzNTYxNjc5ODc=
+commit 2ecbd1f84931126c23d8e648f52879b6e724f3c6
+Author: =C3=96mer Mete Kaya <omermetekaya0@gmail.com>
 
---===============1149197110879977975==--
+bpf: Skip redundant destroy_if_dynptr_stack_slot calls in check_stack_write=
+_var_off
+
+This commit optimizes check_stack_write_var_off() by skipping redundant cal=
+ls
+to destroy_if_dynptr_stack_slot(). Since bpf_get_spi() maps 8 consecutive b=
+yte
+offsets to the same slot index, it avoids repeatedly processing the same sl=
+ot
+when iterating over a variable-offset stack write range.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 03dbc0e003986..ba029d8c34f89 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -3824,9 +3824,13 @@ static int check_stack_write_var_off(struct bpf_ve=
+rifier_env *env,
+>  		writing_zero =3D true;
+> =20
+>  	for (i =3D min_off; i < max_off; i++) {
+> -		int spi;
+> +		int spi =3D bpf_get_spi(i);
+> =20
+> -		spi =3D bpf_get_spi(i);
+> +		/* bpf_get_spi() maps 8 consecutive byte offsets to the same
+> +		 * slot index; skip redundant calls for the same slot.
+> +		 */
+
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the preferred BPF
+subsystem style?=20
+
+The BPF subsystem explicitly requires multi-line comments to have the openi=
+ng
+'/*' on its own line, with the text starting on the subsequent line.
+
+> +		if (i !=3D min_off && spi =3D=3D bpf_get_spi(i - 1))
+> +			continue;
+>  		err =3D destroy_if_dynptr_stack_slot(env, state, spi);
+>  		if (err)
+>  			return err;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260927230511.4174=
+20-1-omermetekaya0@gmail.com?part=3D1
