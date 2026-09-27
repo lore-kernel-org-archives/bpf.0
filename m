@@ -1,139 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-60.mta0.migadu.com [91.218.175.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB6639CCED
-	for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F48A54704C
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 00:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.60
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790467176; cv=none; b=ZETpZqZBsMnfVWKbrPA8KNok73PRJF3d0gGaEHZHbTufCkX6m5CP0/MYCOetaiYp2lX9wQW8QLJr64+5c2HBYXaf+eL27FkXU5RIMPOgsCKue+re4TiByQGLu4kR0cwUhSDt62MegQsLdO7Rv4EhFptym3lr0h+qGi/B5vcjmqU=
+	t=1790467351; cv=none; b=Srd0eSPcU2ohxpqeYEdR7hboU1kcd5Gj2xWFaoEJSt5fKUxKqrOV/L15PIGVVjVNO5lMB+T4GGFsbOflCyn8hzGHs8poeVc+jwO+I6+VLw3b2krLDBjjA77Y0aRUP3qOkNxa6P8bY6pp3932QXfMcqI/2LwqQkU66/rmBma/tdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790467176; c=relaxed/simple;
-	bh=m2MqmzD08qgD+9S0NAlLS6onslEAlPCR6igK5NcUvLE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fNyHqqpDq3/6UwDsvi6G2+WgJY5Nu8y0FbiCgfwe9tx4DoPr1vPl02j25I4Zp837kuxkMQjiuoFE9BFwLxHlHkFr/OO/UP5I2C10CTSDTxzLizX48Vb28yslJo8/EKpg88CWvM0OfTu+jlZ3lTocHBaGq9Y1YJ51loNq70Cmo+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqPLvRq5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790467351; c=relaxed/simple;
+	bh=+618+mufiBuzAWWHOtxBAv76pP8RS0vaeumb9smfaBw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kM1AgM1gQeYmLrGcVS5UaYxnCdWOC841pa6A/a/INT+su+kn1xvGCSzUwML1L5xK/FsFC4lsY+3X6ytM2HQSL6bK8iHxFtzseI4DQhdyYtE7PV922Y91KmIROx34ImVb+kq4KeWsxGhId7Bcgti131+lhWYQwGuHDPWU6eIiZj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wKaQrRqG; arc=none smtp.client-ip=91.218.175.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqPLvRq5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C4E1F000FF;
-	Sat, 26 Sep 2026 23:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790467174;
-	bh=9g+wUfsxtwxGG08rPe2CG5u0ld7CWiMWuLyRvYMYP3I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aqPLvRq59TcPRttVE0Cz50BidqsmgfYmODMvj61XY+R4B0Y706W0BEM90IFiXGhJQ
-	 3b5FRQECYcSAnwtnZ6T16eQeHQKM0p6PMi9v64qpjh9SFcQS7xvPjBJ2fnzbMmbeAo
-	 7IBBz7eA4MErsU1RJOxtZh3wdqPA6QzZBQb+4WydFrKTWNQrbG4UWdOQlq4bd2Axbp
-	 V6q8GoNqMgP3bDdq9dwlRHmrK3LguOUzoka2dN3BS6SY+9DfYQnckBIEu9gfwk697f
-	 NHPcwY8o78dORbx9ElvJ9yl+FASZrNVt0tZJ/YtJLYMt+W4ZSfAq5JglUwfMXq4wCo
-	 mZVTyy7pr4C3A==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 06/16] bpf: Support special fields in
- typed arena objects
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260926233503.3114147-7-memxor@gmail.com>
-References: <20260926233503.3114147-1-memxor@gmail.com>
- <20260926233503.3114147-7-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 26 Sep 2026 23:59:34 +0000
-Message-Id: <20260926235934.B6C4E1F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wKaQrRqG"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=+618+mufiBuzAWWHOtxBAv76pP8RS0vaeumb9smfaBw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790467347; v=1; x=1791072147;
+ b=wKaQrRqGOPxllqhXYdhaV81J0PEYYq5NLniMsRW6WaxgXnzN2WYLWUc+umQ1zeN88SBRkdPD
+ 1YxARmrvjdJbUs2TXU5I+NddqtPsP0VgPDU3hhHJrlx90z8R+blzstEWZ+UxzBGEHuGirFSJBLw
+ bsSTkVV3QsBBdQSI8ib3xMI0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4509d27e0a3bd69b;
+	Sun, 27 Sep 2026 00:02:16 +0000
+X-Mizu-Trace-ID: 4509d27e0a3bd69b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <16ff7e99-973b-44f0-b139-ff5dca529ac6@linux.dev>
+Date: Sat, 26 Sep 2026 17:02:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 06/21] bpf: Make exception landing pads
+ reachable in the CFG
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260926050006.2213110-1-yonghong.song@linux.dev>
+ <20260926050037.2216265-1-yonghong.song@linux.dev>
+ <20260926052120.AEFD41F000FF@smtp.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260926052120.AEFD41F000FF@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] bpf: bpf_kptr_xchg allows user-space to forge kernel pointers =
-via typed arena memory
-- [High] bpf: bpf_kptr_xchg on arena pointers causes kernel panic on archs =
-lacking inline support
---
 
-commit 2d0dbe5c6fd18e1e3096285d4ab48687f876b4ce
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Support special fields in typed arena objects
+On 9/25/26 10:21 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] bpf: DFS traversal invariant violation in visit_func_call_insn
+> --
+>
+> commit 9f815c7b6f7049f1604884b98686a7516748e963
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf: Make exception landing pads reachable in the CFG
+>
+> A bpf_unwind() or a bpf2bpf call inside the [begin_off, end_off) range of a
+> cleanup record can reach that record's landing pad. Add that edge to the
+> CFG walk, which explores the pad and makes both ends prune points, and to
+> bpf_insn_successors(), which liveness and the SCC passes walk.
+>
+>> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+>> index b0bd9ba951dfb..4e2b6985bc964 100644
+>> --- a/kernel/bpf/cfg.c
+>> +++ b/kernel/bpf/cfg.c
+> [ ... ]
+>
+>> @@ -160,17 +161,64 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
+>>   	return DONE_EXPLORING;
+>>   }
+>>   
+>> +static int visit_cleanup_pad_edge(int t, struct bpf_verifier_env *env)
+>> +{
+>> +	int *insn_stack = env->cfg.insn_stack;
+>> +	int *insn_state = env->cfg.insn_state;
+>> +	int w;
+>> +
+>> +	if (!env->cleanup_info_cnt)
+>> +		return DONE_EXPLORING;
+>> +	w = bpf_exc_pad_of_call(env, t);
+>> +	if (w < 0)
+>> +		return DONE_EXPLORING;
+>> +
+>> +	/*
+>> +	 * @t is a call that may branch here, and @w is the target of that
+>> +	 * branch, so both are prune points. @w especially: every covered call
+>> +	 * site in a region unwinds to the same pad, and without a prune point
+>> +	 * at its head the verifier walks the pad again for each of them.
+>> +	 */
+>> +	mark_prune_point(env, t);
+>> +	mark_prune_point(env, w);
+>> +	mark_jmp_point(env, w);
+>> +	mark_jump_target(env, w);
+>> +
+>> +	if (insn_state[w])
+>> +		return DONE_EXPLORING;
+>> +	if (env->cfg.cur_stack >= env->prog->len)
+>> +		return -E2BIG;
+>> +	insn_stack[env->cfg.cur_stack++] = w;
+>> +	insn_state[w] |= DISCOVERED;
+> [Severity: Medium]
+> Does setting the DISCOVERED flag here in visit_cleanup_pad_edge() mark the
+> pad prematurely?
+>
+> By marking it DISCOVERED before fully exploring its path, any valid
+> cross-edges to the cleanup pad (e.g., from shared cleanup code) might be
+> incorrectly classified as back-edges and rejected by the verifier.
 
-This commit allows bpf_kptr_xchg() to take a pointer to a kptr field of a
-typed arena object. It modifies the verifier to permit objects in arena
-memory to own references to kernel objects and program-allocated objects.
+The actual problem is below due to premature dfs stop's. See below.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 75697e52a2df6..f854d8419fff0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -8063,7 +8063,7 @@ static int process_kptr_func(struct bpf_verifier_en=
-v *env, int regno,
->  	struct btf_record *rec;
->  	u32 kptr_off;
-> =20
-> -	if (type_is_ptr_alloc_obj(reg->type)) {
-> +	if (type_is_ptr_alloc_obj(reg->type) || type_is_typed_arena_obj(reg->ty=
-pe)) {
->  		rec =3D reg_btf_record(reg);
+>
+>> +	return KEEP_EXPLORING;
+>> +}
+>> +
+> [ ... ]
+>
+>>   static int visit_func_call_insn(int t, struct bpf_insn *insns,
+>>   				struct bpf_verifier_env *env,
+>>   				bool visit_callee)
+>>   {
+>> -	int ret, insn_sz;
+>> +	int ret, insn_sz, pad_ret;
+>>   	int w;
+>>   
+>> +	pad_ret = visit_cleanup_pad_edge(t, env);
+>> +	if (pad_ret < 0)
+>> +		return pad_ret;
+>> +
+>>   	insn_sz = bpf_is_ldimm64(&insns[t]) ? 2 : 1;
+>>   	ret = push_insn(t, t + insn_sz, FALLTHROUGH, env);
+> [Severity: Medium]
+> Is it safe to push the fallthrough edge even if visit_cleanup_pad_edge()
+> has just returned KEEP_EXPLORING?
+>
+> The CFG checker typically relies on returning KEEP_EXPLORING immediately
+> after pushing a new node to maintain the invariant that DISCOVERED nodes are
+> strictly ancestors. By ignoring whether pad_ret is KEEP_EXPLORING and
+> eagerly pushing the fallthrough edge, this leaves the cleanup pad marked
+> DISCOVERED while the fallthrough path is being explored.
+>
+> Could this lead to loop-free programs being incorrectly rejected if a
+> cross-edge on the fallthrough path is misidentified as a back-edge?
 
-[Severity: Critical]
-Does this allow user-space to forge kernel pointers?
+The above
+	if (pad_ret < 0)
+		return pad_ret;
+is not correct and it may cause premature dfs stop (ignoring KEEP_EXPLORING).
+The correct one is
+	if (pad_ret != DONE_EXPLORING)
+		return pad_ret;
+This way, pad_ret can be either KEEP_EXPLORING or err.
+If KEEP_EXPLORING, dfs can continue with landing pad.
 
-Because arena memory (BPF_MAP_TYPE_ARENA) is inherently shared between the
-kernel and user-space, it can be mmapped with PROT_READ and PROT_WRITE.
-Furthermore, arena maps lack a map-level btf_record (it is NULL), which
-bypasses the standard check in bpf_map_mmap() that forbids mmapping maps
-containing special fields.
+>
+>>   	if (ret)
+>> -		return ret;
+>> +		return merge_visit_ret(pad_ret, ret);
 
-Could a malicious user-space process mmap the arena, write an arbitrary
-64-bit value to the offset of the kptr field, and then have the BPF program
-call bpf_kptr_xchg() to read this user-supplied value? The verifier would
-unconditionally track the returned value as a trusted kernel pointer.
-
-Could this forged pointer then be dereferenced or passed to bpf_obj_drop(),
-leading to memory corruption or KASLR bypass?
-
->  	} else { /* PTR_TO_MAP_VALUE */
->  		map_ptr =3D reg->map_ptr;
-[ ... ]
-> @@ -8834,6 +8834,7 @@ static const struct bpf_reg_types kptr_xchg_dest_ty=
-pes =3D {
->  		PTR_TO_BTF_ID | MEM_ALLOC,
->  		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF,
->  		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU,
-> +		PTR_TO_BTF_ID | MEM_ARENA,
-
-[Severity: High]
-Could this cause a kernel panic on architectures that lack inline support
-for ptr_xchg?
-
-On architectures that support arenas but do not override
-bpf_jit_supports_ptr_xchg() to return true (e.g., PowerPC and s390x), the J=
-IT
-will fall back to calling the bpf_kptr_xchg() C kernel helper.
-
-The bpf_kptr_xchg() helper uses the raw xchg() macro on the provided pointe=
-r,
-which resides in demand-paged arena memory:
-
-kernel/bpf/helpers.c:bpf_kptr_xchg() {
-    ...
-    return xchg(kptr, (unsigned long)ptr);
-}
-
-If the accessed arena page is unmapped, a kernel page fault occurs. Because
-bpf_arena_handle_page_fault() is only wired up in the architecture-specific
-fault handlers for arm64 and x86, it is completely ignored on PowerPC and
-s390x.
-
-Since the xchg() macro lacks an exception table entry inside the helper,
-wouldn't an unmapped arena page result in an unhandled fault and a direct
-kernel panic?
-
->  	}
->  };
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926233503.3114=
-147-1-memxor@gmail.com?part=3D6
