@@ -1,175 +1,193 @@
-Received: from mta0.migadu.com (out-248.mta0.migadu.com [91.218.175.248])
+Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5084272E56
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 04:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E1B1AA1D5
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 05:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790485135; cv=none; b=NtRvCJFcCldR5wEeiBIL82vWXD5Mkd91HbNy6sVhZAdOU0eiV5oAWC8Hku5y434hw0eFAzU3bxd9+ZeMt355z8cF75rXGmeEpB4ZC9Bw7nwxuicwpN9WF3CjOdYp6JCb1NWLSxMlGRNtsX1Gb/zY1DUIB8OQ9vwH32zEeMGmG5Q=
+	t=1790486122; cv=none; b=Rgg153bcpY5Tj1Hp6/ihHC5fu8G6D8VEckzGATeXDlqxzQpa+aitp3cmk8yCA2I6HHufzTeEW6kUVAWRCc7hqupmmU3vHEGarHCaRlkoPgIpGEz02VWhNZCJwYC7oUxZhuabxmTdMd7oJi3Bj3IPJc1s6ejOzjlNfcw006siJ3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790485135; c=relaxed/simple;
-	bh=X8lsTjqZV22Rnd0q4FfpEAxwKr0oq2/OBDSOCjdpCV8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PWKFshEFvew/BsmswZ6TLINP4gkuf2OvJ1XpO2W2SROgnIntav5cfaaJHyQ6cDhS8p6fYQgBYsGN7NlmbXj7uQX5u9cseaw1DKux5n0YfoZCL8SZAKTw07uiYiXXiUx5nYeFJyafxw3X4HZ5O+M7572W20KA13RnxXS3BftfA0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YSD1ZRYQ; arc=none smtp.client-ip=91.218.175.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790486122; c=relaxed/simple;
+	bh=Mj6a9MgdGCqWYAQGPhRA9sgl7Qe9WwUI4ge989Hfa88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AOZ1e4/GjPOeZ+T90oTCgPM2H5BEJ/YiZimTRVBd+tUSyYH9MuAyPKSM0gmI02SgqsULNPOUYt/aopYlZh0zMc23FeEK+P2Pucp9Qbj10GtcQmDliCw0Z8b9cTtMmX2QlmioGwrp3m92uHSMV+F0iCr+Woi25zi0/8MfIF2l10g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OtbCbEAL; arc=none smtp.client-ip=74.125.228.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YSD1ZRYQ"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=X8lsTjqZV22Rnd0q4FfpEAxwKr0oq2/OBDSOCjdpCV8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790485130; v=1; x=1791089930;
- b=YSD1ZRYQ4FYt9xkw4rCTv0710niToFJ1INRFQ9yMlkyhXKA218EbnIT3IeC4fItbImNiq8nT
- ljf9C66ruflokRRhD+xDpE5H2qTjmZl8DhFvLBJbjO9kG8MopDTSt0c///eKYLD8r2RYh5IJW29
- +DHVj2qm+CcH423xZG/UYsMw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fcb931db36341460;
-	Sun, 27 Sep 2026 04:58:40 +0000
-X-Mizu-Trace-ID: fcb931db36341460
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c75bf2fe-c25e-4e08-bec1-bc38a2eaafe2@linux.dev>
-Date: Sat, 26 Sep 2026 21:58:38 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OtbCbEAL"
+Received: by mail-pz2-f40.google.com with SMTP id d2e1a72fcca58-8804b59404aso834269b3a.3
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 22:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790486120; x=1791090920; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=OjKSfukDZvlY1eXjlV/PoddSyojDKst8RtQu8NrZS7I=;
+        b=OtbCbEALZGSTOiKY8BVEckLUD9ldbK5dm0D6aa1cI8I730FdFdac2alwxRhh1HRViV
+         n+dtNgfbhS32jt0q9eWBN1IDQMMSVtDChdhx+EUPOdVJfeu3oLExKxGDY0SfAOn4YzYO
+         kAVraD65UwfYXeB+lagYMhT6HMyGBZaJFyZ184/Giu4NA0JESZoqWl6LR0vdvSxVUJiq
+         Sg2QkGJjqWxLbt6BwejAAoInbSp25n2CTW5XMLW/mvKGxFaWjbnFG3UYojN7Pi5FusK9
+         /9pt9Obi8op9riSFp11xFxT4SvUEySRU/44Duh5F05BsNTYBW+jk0UhDq0mfHxHCssHM
+         /gmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790486120; x=1791090920;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=OjKSfukDZvlY1eXjlV/PoddSyojDKst8RtQu8NrZS7I=;
+        b=enQWjyKckn92B1icMrAhPZzkVvHN4/n864c1XXgyN+TKkhmdiQMJ3ywtclLl9akRys
+         bj60AqeVErrOH+69qtavUphvvo48+lCr4kMKNJKCRx0VPWKhy1Z08XIRJeHpNQxgeXDf
+         MkXfLYFuh6Rl6H4VO/txTZLqs1UhAf0jwqnebzv6sP8e3Fg68Gpbfzp9idDnbD++h1t3
+         TPjYq3qVdaRvdhmo1GrYa2OJpcx3iHltsXFYKoWX9YWL9P+K17ukZnmj9Fsh46Ll9yzk
+         9zE+zaZhTwqRiWT/fDzXY05h75HgxLgBPESEqTwIloRpD0lmfbjFDnN+QlIOtOZumfSp
+         18wg==
+X-Forwarded-Encrypted: i=1; AKwUvBxQPxVXoLUUwwDpxZcaaIjfxDqfkcvfpVb1mAVAAiQfYDNii9gN06Pu/N3/TsOjsnZieM0=@vger.kernel.org
+X-Gm-Message-State: AFuF++lDwK4qFJD1rBv/TccDQ1Xsm1BfK0Fbo2Eca1TTsSdAR+/tu4JK
+	tWNwqmgL15pRbDEU+Qtzpr7hfr2E10am/Wsz/TA+Qx6UM8pYb8+VX0Dy
+X-Gm-Gg: AYBFou211jp4Mox7vzRv8HCroLCrpv+IzwVE8oCbbOP6X7gw18FgsGiBIQTpKqWj0Hx
+	02AxemFZE4rizIqSa2zEnjjDbeJ66SW/V5z9RLuKdWy6kbqUEegmonKIDjKZyHD7YBVAEmDrd4j
+	tCTQKPx+Ts/ftGJY5D4+gFz/hyxfoUth0G6Rpgx20n1uXKtdVrb+Y+T/F55FLkjcPTS+6K1MPr4
+	i33kWRQhn+adTph7kNVTChR7ZDC9t92IAZ2CupWN599PYlgZrnS14MVkpDYTdhz8mYnUeS+PvYt
+	3xDUQ1twbE66yX43PL6OyRB3bx0csXM1/zC8P985MRrc0k+DTAGlZMJOcvVvop0eqhnpstw2Qre
+	BKWPGHexzd56wC7j8FXOND8aAhc/r4j47m7Og6GbRb9cpGLCpfPKn7Ly7D+Yof3+oG7M/yYF0/S
+	RQkVCdUNWVaYJA1OhNdljLycX+r8/jbyc74jMqnhG3Ew7RU/h6PbdQILupTCwNFTHqvpcmOw==
+X-Received: by 2002:a05:6a00:464e:b0:881:e266:c3d4 with SMTP id d2e1a72fcca58-881e266c980mr1869862b3a.25.1790486119873;
+        Sat, 26 Sep 2026 22:15:19 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:7ff:4::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87feaf852d7sm2718078b3a.42.2026.09.26.22.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2026 22:15:17 -0700 (PDT)
+Date: Sat, 26 Sep 2026 22:14:55 -0700
+From: Narcisa Vasile <narcisav.kernel@gmail.com>
+To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+Cc: netdev@vger.kernel.org, "K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Simon Horman <horms@kernel.org>,
+	Erni Sri Satya Vennela <ernis@linux.microsoft.com>,
+	Dipayaan Roy <dipayanroy@linux.microsoft.com>,
+	Aditya Garg <gargaditya@linux.microsoft.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Saurabh Sengar <ssengar@linux.microsoft.com>,
+	linux-hyperv@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH net] net: mana: reserve RX buffer headroom to fix
+ forwarding performance
+Message-ID: <arimAGRnmHEAviqi@gmail.com>
+References: <20260923144500.4073380-1-hamzamahfooz@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 19/21] selftests/bpf: Add __set_global() and
- __ret_global() test tags
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260926050006.2213110-1-yonghong.song@linux.dev>
- <20260926050143.2222664-1-yonghong.song@linux.dev>
- <20260926051839.F28911F000FF@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260926051839.F28911F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260923144500.4073380-1-hamzamahfooz@linux.microsoft.com>
 
+On Wed, Sep 23, 2026 at 10:45:00AM -0400, Hamza Mahfooz wrote:
+> Commit 730ff06d3f5c ("net: mana: Use page pool fragments for RX buffers
+> instead of full pages to improve memory efficiency.") started handing
+> out RX buffers with zero headroom so that two buffers fit into one page
+> at the default MTU.
+> 
+> The MANA TX path, however, stores the per scatter-gather entry DMA
+> mappings in `struct mana_skb_head` at skb->head, and mana_start_xmit()
+> therefore calls skb_cow_head(skb, MANA_HEADROOM). The port advertises
+> this requirement as ndev->needed_headroom = MANA_HEADROOM.
+> 
+> As a result every packet that is received and then forwarded out of a
+> MANA port fails the skb_cow() in ip_forward() and gets reallocated and
+> copied by pskb_expand_head(). This is invisible to a plain RX or TX
+> workload, but it puts a full skb reallocation plus memcpy on the hot
+> path of every single forwarded packet, which is exactly what a
+> router/NVA workload does.
+> 
+> Restore the headroom. Note that reserving MANA_HEADROOM (232) is not
+> enough: ip_forward() asks for LL_RESERVED_SPACE(dev), which rounds
+> hard_header_len + needed_headroom up to HH_DATA_MOD and is 256 bytes on
+> ethernet. Use LL_RESERVED_SPACE() directly so the value keeps tracking
+> both constants.
+> 
+> At the default MTU on a 4K page this means a buffer no longer fits twice
+> into a page (SKB_DATA_ALIGN(1500 + MANA_RXBUF_PAD + 256) = 2112), so the
+> frag-vs-single decision is now made by computing the real buffer size
+> instead of comparing the MTU against PAGE_SIZE / 2. The page_pool
+> fragment path is still used wherever at least two buffers genuinely fit,
+> e.g. on 16K and 64K page sizes.
+> 
+> Measured on an Azure VM with a MANA NIC acting as a forwarding NVA (UDP,
+> 1400 byte payload, 4 streams, 8 Gbps offered, only the forwarding
+> node's kernel differs), 8 runs each, median:
+> 
+>                   forwarded pps    throughput
+>   before              272,830       3.06 Gbps
+>   after               390,560       4.37 Gbps   (+43%)
+> 
+> perf on the forwarding node, same workload:
+> 
+>                   memset_orig   __pi_memcpy   pskb_expand_head
+>   before             10.07%         3.96%         present
+>   after               0.94%         0.64%         gone
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 730ff06d3f5c ("net: mana: Use page pool fragments for RX buffers instead of full pages to improve memory efficiency.")
+> Signed-off-by: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+> ---
+>  drivers/net/ethernet/microsoft/mana/mana_en.c | 58 ++++++++++++++-----
+>  1 file changed, 44 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> index 591fb4191d90d..e3f3b33ba9062 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> @@ -758,6 +758,36 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
+>  	return va;
+>  }
+>  
+> +/* RX buffers must be allocated with enough headroom for the TX path:
+> + * mana_start_xmit() stores the SGE DMA mappings in struct mana_skb_head at
+> + * skb->head, which is why the port advertises ndev->needed_headroom =
+> + * MANA_HEADROOM.
+> + *
+> + * An skb that is forwarded out of a MANA port has to satisfy
+> + * skb_cow(skb, LL_RESERVED_SPACE(dev) + ...) in ip_forward(), so reserve
+> + * LL_RESERVED_SPACE() here rather than just MANA_HEADROOM - it rounds
+> + * hard_header_len + needed_headroom up to HH_DATA_MOD and is therefore
+> + * larger. Reserving less makes every forwarded packet get reallocated and
+> + * copied by pskb_expand_head().
+> + */
 
+nit: maybe trim this comment to make it easier to read. For example, 
+"Reserve enough headroom to satisfy the skb_cow() call in ip_forward()
+and avoid reallocation."
 
-On 9/25/26 10:18 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Medium] bpf: selftests: out-of-bounds heap access in access_global_var
-> - [Medium] bpf: selftests: multiple __set_global or __ret_global tags are silently overwritten
-> --
->
-> commit 81344b890bb87ceeed0ef105e0aab6e9d6797e2d
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> selftests/bpf: Add __set_global() and __ret_global() test tags
->
-> This commit adds __set_global() and __ret_global() tags to the BPF
-> test loader. These tags allow setting a program's global variable before
-> execution and verifying its value afterwards.
->
->> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
->> --- a/tools/testing/selftests/bpf/test_loader.c
->> +++ b/tools/testing/selftests/bpf/test_loader.c
-> [ ... ]
->
->> @@ -311,6 +326,142 @@ static int parse_caps(const char *str, __u64 *val, const char *name)
->> +static int parse_global_var(const char *str, char **var, __u64 *val, const char *name)
->> +{
->> +	const char *colon = strrchr(str, ':');
->> +	char *end;
-> [ ... ]
->
->> +		term = end + 1;
->> +	}
->> +
->> +	free(*var);
->> +	*var = strndup(str, colon - str);
-> [Severity: Medium]
-> If a test author uses multiple __set_global() or __ret_global() tags in a
-> single test, does this silently overwrite the previous allocations? Only the
-> last tag seems to take effect, making it impossible to configure multiple
-> global variables in one test.
+> +static u32 mana_get_rxbuf_headroom(struct mana_port_context *apc)
+> +{
+> +	u32 headroom = LL_RESERVED_SPACE(apc->ndev);
+> +
+> +	if (mana_xdp_get(apc))
+> +		return max_t(u32, headroom, XDP_PACKET_HEADROOM);
+> +
+This implies that the headroom could now be greater than XDP_PACKET_HEADROOM,
+in XDP case. Should we then use the actual headroom value, instead
+of assuming XDP_PACKET_HEADROOM, in mana_run_xdp() when preparing the buffer:
 
-Indeed, maybe an array of global's can work. I will explore.
+  line 94:	xdp_prepare_buff(xdp, buf_va, XDP_PACKET_HEADROOM, pkt_len, true);
 
->
->> +	if (!*var) {
->> +		PRINT_FAIL("failed to allocate %s variable name\n", name);
->> +		return -ENOMEM;
->> +	}
->> +
->> +	return 0;
->> +}
-> [ ... ]
->
->> +static int access_global_var(struct bpf_object *obj, const char *name,
->> +			     __u64 *val, bool set)
->> +{
->> +	__u32 off, sz, zero = 0;
->> +	struct bpf_map *map;
->> +	size_t vsz;
->> +	void *buf;
->> +	int err;
->> +
->> +	err = find_global_var(obj, name, &map, &off, &sz);
->> +	if (err)
->> +		return err;
->> +
->> +	vsz = bpf_map__value_size(map);
->> +	buf = calloc(1, vsz);
->> +	if (!buf)
->> +		return -ENOMEM;
->> +
->> +	err = bpf_map__lookup_elem(map, &zero, sizeof(zero), buf, vsz, 0);
->> +	if (err) {
->> +		PRINT_FAIL("failed to read '%s': %d\n", name, err);
->> +		goto out;
->> +	}
->> +	if (!set) {
->> +		*val = sz == 4 ? *(__u32 *)(buf + off) : *(__u64 *)(buf + off);
-> [Severity: Medium]
-> Is it possible to have an out-of-bounds heap read/write here? The function
-> find_global_var() extracts off and sz from BTF, but off + sz is never
-> validated against the buffer size vsz before accessing buf + off.
+Does MANA_XDP_MTU_MAX need to be updated?
 
-Indeed, a bug. Will fix.
-
->
->> +		goto out;
->> +	}
->> +	if (sz == 4)
->> +		*(__u32 *)(buf + off) = *val;
->> +	else
->> +		*(__u64 *)(buf + off) = *val;
->> +	err = bpf_map__update_elem(map, &zero, sizeof(zero), buf, vsz, 0);
->> +	if (err)
->> +		PRINT_FAIL("failed to write '%s': %d\n", name, err);
->> +out:
->> +	free(buf);
->> +	return err;
->> +}
-> [ ... ]
->
->> @@ -557,6 +708,24 @@ static int parse_test_spec(struct test_loader *tester,
->>   			spec->mode_mask |= UNPRIV;
->>   			spec->unpriv.execute = true;
->>   			has_unpriv_retval = true;
->> +		} else if ((val = str_has_pfx(s, "test_global_set="))) {
->> +			err = parse_global_var(val, &spec->priv.set_global_var,
->> +					       &spec->priv.set_global_val,
->> +					       "__set_global");
-> [Severity: Medium]
-> Storing the variable in a singular field here also means that using multiple
-> __set_global() or __ret_global() tags will result in the earlier ones being
-> ignored. Should this support a list of variables instead?
-
-the same as previous, maybe an array of globals.
-
->
->> +			if (err)
->> +				goto cleanup;
->> +			spec->priv.has_set_global = true;
->> +			spec->priv.execute = true;
->> +			spec->mode_mask |= PRIV;
-
+> +	return headroom;
+> +}
+> +
