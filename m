@@ -1,170 +1,136 @@
-Received: from mail-ua2-f43.google.com (mail-ua2-f43.google.com [74.125.226.235])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27BD2D0620
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.226.235
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790550952; cv=pass; b=aYR73u/xx89UBkDMTEgT1T6cGU0kY7HxxMWL1gKGCJ8AiOyypiibxvjmvbGOzbn4KpWlRYXIeKmIU8+/UkWD2z75sqwLp0oTZ39xzuFVrDZ14b72yKsxm+M2CGgUZ06aAmDfE/6l7cwkMnlymzGwKk6pJr+72M/TTjlkHj1Okds=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790550952; c=relaxed/simple;
-	bh=Ou3b3cWlbHbJ+7kgTjQuk4/2d8eoHkAAMLMLbj2Apo4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J8Tk4jMOfgOHbiRicSUQ5xdLbgQwUKBdqSSGlR+qnjgC1LTNf/1xxz/q6vOaSIzjIN6PxZzZyyLkakNACudmTTRCyGEE3z7I4PR5FmQ57+u6dpLna4S6mS27ijNCYJXWQV6bh0EGBXmCsRnmS+yLcDLB3ecnU+snmGnU7CM0D18=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+PqK2M3; arc=pass smtp.client-ip=74.125.226.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76C23BED38
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790551777; cv=none; b=VDSC3JeYuFg+3fymLjvwXTZ2dAj2nyzIg2yLTQJRaRC0H3bmLfI4FNrQ+4Hk2YloK5A4nNFL/fNcWP9LmzNQBmngo/0k+yHVW76LuQa9tywVTl5XpHlCHt0/Bjx/rUKKUjSXtlcwgBgeTfS9i/Aud7VQpuq8GXNJlvpJq8ZBtkc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790551777; c=relaxed/simple;
+	bh=asJs0c5zT/497M6//GyJ/PuW0cj6uiaNYR792UIjbqw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Du6EJHS3otw2AWUricnuwfPagNbJKBC11tbsJdW+u22zHlQ8S9VGdx1Vw0e65EnxJEPNRZXoYxK/GPxwCm2vVdgoXw2GvR6E1YxkfKgjHHbrQs4c5ixNADTkocZR2KHNvNVDgz5+1e7b9W2WUV5XMgbqNnKLzDhQpdFtNtLO2co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XB4WYcl8; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+PqK2M3"
-Received: by mail-ua2-f43.google.com with SMTP id a1e0cc1a2514c-985369a13bbso649428241.0
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:15:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790550950; cv=none;
-        d=google.com; s=arc-20260327;
-        b=aAZZoR1XGMXrY76kUCYTXOGpTNDIoTMwf6U6fZNhC5yzJwQ4WDekXDUyDaQ/dKfiTI
-         73z/K2c2cFQ/T6fm8YYoP1yfmdoL78ytyZRJM/kjDgUgHyWSYsIQDRwIbCWp9q/ndSUU
-         SoaTCwYJWwa/gPbTO+7tWrLYdUQsWsu58aoD9QPlAj58q26dOyemMZbPY2hDiP8xzuCB
-         B8oZXmu7BftVpSswcu7KvrtqjWp6HCkxVLuSx/miQLkYC19VfXacMB+fix0QN+3e7VQl
-         HEeRbvQWOKYGyQHBSWm195bXEk8BhSpIdbZHd1w7SMwiEMHWMBPJQQfDFnsKHuROux9O
-         StIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ou3b3cWlbHbJ+7kgTjQuk4/2d8eoHkAAMLMLbj2Apo4=;
-        fh=t3zUMewEYtos1ybgszZVx5uJqFD10zQj/aa2yMtJu9I=;
-        b=BRyjq8M8FSwWVm6tuNofMQeQ/5MfoKKnT2v/PTmp9y6m8krfPtLhEANw8Nf4W4SPUN
-         Sxseu68Tk34EvTOd7iReokbhzWCKba09wGXQ5BUjFgMc6KRb+Nwt+zcawQlq0ZkcsWdV
-         lHuzfKCKOjIev4i7mGpQYzeGBZQorkULNS/mobw5WxxbDpuoZHOI1mQd9rViHyK44pXx
-         IZOT2Jw1GZjTFwFyBlyFJoutFDq4Y9GSb8zzcVjOLYrW3p/XJD8XjKICpT2GKHDBUGt8
-         ZJgAqP4Wwv9myhVE74A8TbGVL9KQaFFF11Cgo3RfR44PjBgZs49QZDxrEIf0mTa0A+jb
-         JRaQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XB4WYcl8"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e4b11so13105685e9.3
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 16:29:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790550950; x=1791155750; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ou3b3cWlbHbJ+7kgTjQuk4/2d8eoHkAAMLMLbj2Apo4=;
-        b=T+PqK2M3lz6/GTLTbfZ+wf3aH0CDX+6TeFjym9+zJKGpyXZBxlmBOEa+bHdSrN+L6L
-         BncmTDBzL/9lC4Xq4JftFpOBn6xfR1/LHL6L5gYkF6VoEtTAYYVQpTghOM6I4tcbtKar
-         oIcmUwPU3BmUtsKWo+aCKFc2Y8jdJBNNr5iABZ6lFf9QVCKtC13Lk8vgNU9OsSQpygb0
-         uYMd9wcsSuEnwRkV6OB7JdMHqA3/Vd2Bm1OgR75maAc6Vv9X3KdObSIWTvc8RXmLgoOn
-         ehx1VXnA2MTpbY1aXfrL11rTOH8IGNB9cOz63EOKNIRzunvpE7Jj1JbiZqQcONtUpp6s
-         e1Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790550950; x=1791155750;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1790551774; x=1791156574; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ou3b3cWlbHbJ+7kgTjQuk4/2d8eoHkAAMLMLbj2Apo4=;
-        b=DxdZU9WiciCYJLtbIV6dmCnaKFVrG5zLx0Q+NQ+ZjY5gwJAc59jyvcFrEVmA5Js0sH
-         R4ae0JADK4RtcGeRu/U+R8q1OyRuDAPmyrDg0BXh70GOTvIRTFSGp4kS+5bbjt3FqkEA
-         Hfc6qDnwtXQi3zy11hd51yDaSqk/V0MH87oTq38H4YvXGwQwwoHqOQbv8Qxs0q/p+q0c
-         iY2s40sHeE5DGl7JG/uJPBFoaNugavCmyBhQl21ykkNcXMhsk5Yal48hfnbtT/TtAREY
-         MXlCUYSDykQ5+Ka8and7PnG9VqAHmU0OUqNQt4x/gFdQyqsNjD3+EzJbXh3RGzT4iN+1
-         kJag==
-X-Forwarded-Encrypted: i=1; AKwUvBzT1oJJOreWkiRielJaMIvcnhIsgkCYTzvF/dyzwmixoAs2fYWibiLSAUje57w3l+ViyJc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK+LMJipryBlakiKEnu11bOuWCJBFOcYqJGApREgBm8zorwymGu
-	1Vtke/5hxrTY16LZuJkcOjZeU2M/olwLtpncnKg091AtzBsNVStMEAqpknNy8cBVJWchjs/Dzsh
-	G1qmSA9GLmVNUyIOe+h6PUobKvChL380=
-X-Gm-Gg: AYBFou1Cr0ywaBYm5GEFl/nsyNSMLU/e5AiTWuRhosH6DwRvj1UXqUWdt5wvvL9Y2wD
-	C2eTB+ULwRAy4y3r0WMMzuuQ/3A9M0k7KAo0uCBoYCA/DBjqOs7je8hnHuT1W1R+ii38HCgNBRJ
-	vNRh2PTZADh2NtHVICid1BZh4X6tZMpj300HQCNP9RP+GslmTDRGDgIvpxUtBi+M5bFdELtI/Bu
-	eBnlDlfplhz2Ri/Ky+CStjPrTdd41OUZ4c1ivSuThGf3DzAnLiJZ99XrBBXV0pmA1HePGZO4biJ
-	zmRR+Um87+3/nB4e1rIICsU4uGvSUQnnqk5JVNGuR+HXPFhrSJ5SnpZnA+TrdkUG5DsfuBi3rbH
-	Sg4wHdyB+/Q8XahIV7U4/Z3TguEG6RP4Q/toa+aEHYFyboP/rD5WYu2K2wc5qQywKAZdUPCA7ah
-	bkNsgb7AK1o2HgmEjkNxBVmb9/q57LAoW7a390YhwzW+Tg
-X-Received: by 2002:a05:6102:1627:b0:7a5:673f:9a37 with SMTP id
- ada2fe7eead31-7af1eef5929mr3482037137.15.1790550949793; Sun, 27 Sep 2026
- 16:15:49 -0700 (PDT)
+        bh=XdSUb7fF1yQuVuZ/Ucyhp0itw3vsUUaaEZuWy+I0GJ4=;
+        b=XB4WYcl8zXGRc9DueyfH1NHe2vI9s534iZcipOk7Opr5eJKkVk0HrEM39H7lw/zGG+
+         5XWSMzKuNbwRqlJuMpnMZkzZ4jJ5nne4pvD2E3KRfN8DnvqIsYM6rN3I+eALx3BhB1ac
+         /o5NRN88nQCoLpbmkWuqpINMT0xIJq2xSS01P2FrQn+6Y73dKRvV2y1Kj7ibZu5m2nsF
+         3XOVP1eK+q346NC0wmFG/0vZirS+e93dvKMju9jygyZSzftOhFwCfU8nUKe9xU6gJzpb
+         3esxFq2kKSEUeH4zWvQKjm/HTZku1wJwptfSPhKyUlR4spt+iHBOOaFmuu5V4cjaEA8J
+         oNFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790551774; x=1791156574;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=XdSUb7fF1yQuVuZ/Ucyhp0itw3vsUUaaEZuWy+I0GJ4=;
+        b=P+5/g96gUGJOiNPF+mX1n/3/ivd7maAdx/aNdasTgDHvIqFiaucAb8xZb2KvcLeN4I
+         dATOQqwuD8xRgAekLjEYAQ5n9Buoj3hwVhkKXhg9VX6SahheRIrgwFgArFtW36clhqsA
+         1JfZ72Gp6ZFO8O0SPSQtKiGDHgIbKHGB5Gd3LzCCU9wtejTEtU5mJyt/ZNmP76D5Z011
+         SZMkrycQN6h7nEdjH6J4Vy05kMAjtMapbxmYQlo5JZxQu88spw8yuKX4PVf/WHUX+KqR
+         PDwdTU2rZYICkeXE+STyQF+I/IGMOmceahfFniXx8EuQVR7Emo+CutbQQA8Fsk8DKAxT
+         zkhA==
+X-Forwarded-Encrypted: i=1; AKwUvBwATtl7gjcTlLCBQm6EMvBL8Y4OXrWBWkwE8nhMBSauSLanoiVYWh6Aow5OAbHMC+AEWz4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lmNmF1oHbEgkiengrypdE/sy30xsoQNsWTrKWFmDErx2oFJEDp
+	NdCmoOTAFK78o7nOmpBIEv72DXPdYsZ/p1Ctg3o1/kqZBJH5GvhN1QUTSvmu0ZkDrwc=
+X-Gm-Gg: AYBFou3NHrRgdpxZ1QX1wKI6oFtebJphsogPHvBXjYKbogNiXz+eIQFozjJkVuqjjno
+	iu5oEMHP1U/zEhWeFFPpFRCwZGpHCZOCARq1HO99IlvRxlnPeGDQRzAtsDaqupLrjO8amS8EB8B
+	61Gz25cVlb513ewbNr3e2zENwVD33j/6YE5ks72Rko4mixXuhMzQ2VWAAx2khQJmZ9n8IByK2mq
+	3oTDlkIjNrv1lYtO2wvdxOnGjY3whlfXbCmltcwU9cL+KJPCeyg9b0GUMavhB6ePyDwHm+y6jFW
+	NopQs3jQcQNVVPAFE+pEwbdwHlCjCLY/9Fdb/3PJxqByopvIiEfb+1tn6XsOKmfH3o8BQi8S0Mw
+	XhRKhenZiHhdCxcFU8SYJ3iKZy9M4dFkxN6u4iaRiMzkc9FNJ1zh9J2pM2dNpYqx3QNzwBH4Uqx
+	qXokH6blqp80PChc9nbuCT9VNZkw5QKXmSkHcRBULp1XtdL+XNuKtNevMV5ULM4PH7+CNY
+X-Received: by 2002:a05:600c:138c:b0:49d:174e:2a1e with SMTP id 5b1f17b1804b1-49fe66e6538mr205793325e9.19.1790551774183;
+        Sun, 27 Sep 2026 16:29:34 -0700 (PDT)
+Received: from metepc ([46.197.185.71])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a34a314sm23987518f8f.6.2026.09.27.16.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 16:29:33 -0700 (PDT)
+From: =?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net
+Cc: john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
+Subject: [PATCH bpf v2] bpf: Fix wrong frame passed to check_fastcall_stack_contract() in check_stack_read_fixed_off()
+Date: Mon, 28 Sep 2026 02:21:37 +0300
+Message-ID: <20260927232917.422183-1-omermetekaya0@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
- <20260927151043.7c8dfb36@kernel.org>
-In-Reply-To: <20260927151043.7c8dfb36@kernel.org>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 27 Sep 2026 17:15:38 -0600
-X-Gm-Features: AclHuK_THxkPfcffLWRyKYWHUWs5mZ9sx2wsFti5QobsyH-hd7-eV_3I5VuXwpA
-Message-ID: <CADvTj4pZpJBAa99F322jBetg96axu_Dbv-iKAWwhOUqe==EE1A@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 00/19] net: stmmac: preserve datapath state
- across MTU and resume failures
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
-	Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Christian Marangi <ansuelsmth@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Serge Semin <fancer.lancer@gmail.com>, Suraj Jaiswal <quic_jsuraj@quicinc.com>, 
-	Richard Cochran <richardcochran@gmail.com>, Joao Pinto <Joao.Pinto@synopsys.com>, 
-	Vladimir Oltean <vladimir.oltean@nxp.com>, Ong Boon Leong <boon.leong.ong@intel.com>, 
-	Voon Weifeng <weifeng.voon@intel.com>, "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
-	Linus Walleij <linusw@kernel.org>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Simon Horman <horms@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Jose Abreu <Jose.Abreu@synopsys.com>, Yao Zi <me@ziyao.cc>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Richard Genoud <richard.genoud@bootlin.com>, 
-	"Alastair D'Silva" <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	ZhaoJinming <zhaojinming@uniontech.com>, 
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>, Ding Hui <dinghui1111@163.com>, 
-	Linkui Xiao <xiaolinkui@kylinos.cn>, Linkui Xiao <xiaolinkui@126.com>, linux-tegra@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, Rayagond Kokatanur <rayagond@vayavyalabs.com>, 
-	Ding Hui <dinghui@lixiang.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 27, 2026 at 4:10=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Sun, 27 Sep 2026 15:59:35 -0600 James Hilliard wrote:
-> > Keep the stmmac datapath coherent after failed MTU changes or hardware
-> > resume without changing the interface's administrative state. Retain th=
-e
-> > working MTU configuration for rollback, and allow ordinary down/up
-> > recovery when hardware cannot be restored.
->
-> Please read:
-> https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
->
-> The limit is 15 patches per tree, you have 22 outstanding to
-> net-next right now.
+check_stack_read_fixed_off() calls check_fastcall_stack_contract() with
+'state' (always the current frame, vstate->frame[vstate->curframe])
+instead of 'reg_state' (the frame the pointer refers to).
 
-Oh, I had bundled some prerequisite patches to avoid breaking the review
-bot since my fix for prerequisite handling for the review bot doesn't appea=
-r
-to be live quite yet(it was merged but the live server looks to be on an ol=
-der
-tag still).
+In a bpf2bpf call where a callee reads from a PTR_TO_STACK pointing
+into the caller's frame, 'reg_state' and 'state' are different:
+'reg_state' is the caller's frame, while 'state' is the callee's.
+Passing 'state' causes the fastcall contract to be checked against the
+callee's subprog instead of the caller's, leaving the caller's fastcall
+region unprotected and potentially causing an incorrect fastcall rewrite.
 
-https://github.com/sashiko-dev/sashiko/pull/389
+The three sibling functions all pass the frame the pointer refers to:
+  check_stack_write_fixed_off -> passes 'state'    (ptr's frame)
+  check_stack_write_var_off   -> passes 'state'    (ptr's frame)
+  check_stack_read_var_off    -> passes 'ptr_state' (ptr's frame)
 
-That just got merged so that shouldn't be an issue going forwards as I
-assume it should go live soon.
+Only check_stack_read_fixed_off was incorrectly passing the current frame
+instead of the pointer's frame.
 
-This was originally on the net tree but I had switched to net-next since
-some additional prerequisite commits were only in net-next and I was
-trying to avoid conflicts or having to bundle the patches to avoid breaking
-the review bot.
+Fix by passing 'reg_state' instead of 'state', matching the pattern used
+by all sibling functions.
 
-https://lore.kernel.org/all/8ed1298a-4c29-4db3-b76e-c8d34f91b4c9@bootlin.co=
-m/
+Fixes: 5b5f51bff1b6 ("bpf: no_caller_saved_registers attribute for helper calls")
+Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
+---
+Changes in v2:
+  - Fix commit message: sibling write functions pass the frame the
+    pointer refers to, not curframe. Reported by bpf-ci bot.
 
-I guess I could move this back to net and specify the prerequisites with b4
-metadata. It isn't entirely clear to me which branch is appropriate for thi=
-s
-however.
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1cd92336309b..5c523a9bde6b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4020,7 +4020,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+ 	reg = &reg_state->stack[spi].spilled_ptr;
+
+ 	mark_stack_slot_scratched(env, spi);
+-	check_fastcall_stack_contract(env, state, env->insn_idx, off);
++	check_fastcall_stack_contract(env, reg_state, env->insn_idx, off);
+
+ 	/*
+ 	 * Refine the in-progress load record's origin to the source stack slot.
+--
+2.55.0
+
