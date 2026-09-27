@@ -1,232 +1,301 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91E63C10B5
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068273B7750
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790541773; cv=none; b=gaUkBo+ftV2w84i2WyGJN/9blx5uklMYq+n6tLA+fZzPJQMGWQLF8rKFJ5sldIn6MClo7+B9Fc5mj/rcxb/BTe22Mfwvu+NRuQWnVcts+WOI4MFp9/Rl8V1AHX5Ybm6H4FKBwlFe4XjPhPXK/nwyGcOVUlZAUBRMByZG92LXl/M=
+	t=1790541775; cv=none; b=Pqcu65JMmSZHxKkG2ldY8jowvwBYWb9gw9Jr5Vi8N9Z4tNi9jVJmUC26WgLXbd6LRPBrX4kJv/xjElB1hK0G3jorLkFMnOQtJ0AiQEYYwJwpku7KJotzWs/7ISiBB6nmFoNAHyL2O76faZ62g6QeDYkl6BnlUzHzwqbd6gM9HjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790541773; c=relaxed/simple;
-	bh=radqAnBuLbg0sI+snYICGdV5NbthAUhgPW5YmCn3ogw=;
+	s=arc-20240116; t=1790541775; c=relaxed/simple;
+	bh=2H0MXCG8PGyisST7LsT4NPmRvQmpm40INlYQguhNalU=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=nQDl/0apFp9nYNXpQREHRnxgKaUjBRAg5cPXmmgZCa4hQgCPB52EZsXG1XdkKmEGHYngAKEkA9d6UYwp70ecwkzDzQSTY8muHIRYfsDuo/G5S1C2prKh26wqz105MswHNRUtLOLJ7nebtbaAQmNK9tmiPYkKsNGoeVdONPt9dlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/a+D+aI; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=TGN4Z6orr3begm/wzoOQS6gx/vRgXKMFUkXPBbGueMIdB3LeEiH6ss4W0Zsk1dCCH39vQBbya0CigU+sqpTV+3hQ71qpz5lYz6DfxLfKML3hQLYvuPUt18+xkPHEG1+fLzRO11Pl1L2o4oJUDlScHHGTxh7WzWh9Hc0aCxVMZ+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUKE4Aq5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/a+D+aI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC0C41F00893;
-	Sun, 27 Sep 2026 20:42:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUKE4Aq5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4E81F000FF;
+	Sun, 27 Sep 2026 20:42:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790541771;
-	bh=9VXQ7HkILLnRWPcSrW1LR7szTR5XD7SY49UdmSbZNhs=;
+	s=k20260515; t=1790541773;
+	bh=o23uZXPRWowG2FoEQsfpH0QKuVGBCDsaSo+hwh8yflk=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=G/a+D+aI6Qf+Tvlm8+lQ7YsnBqTCsZvPwSqr/QmtVKPmvFueIo0h74Jiboc+g/Yp4
-	 bP4RbtT7ZLA5UZuveqCmKC4M7CXsbaaZ2tNQ13t1eYDvW5MayEQRS8sJBGqo324dvt
-	 lvgT//aV76HpY94RMksrSVSxCgabNac1w0xCQzBouqHce/xzryGWLE/uHS4sx93i/o
-	 o36TvjSx6u0uNAZxoAC7az59EoxfekbF6SwSDEh1T0cj1WVtKrbkSQu14sC4rk8xxT
-	 CJrAAolPWw24lTz25PxnOZ0FJua1O/fswViaenoN+TwX8zbFo8wOMeqWwZIZwQoZp0
-	 h+2oEzBvJX01w==
-Content-Type: multipart/mixed; boundary="===============4703152210799744251=="
+	b=RUKE4Aq5kEcYsOGGE8cf9rC7Z2miBJ0WtwVtpEFij08/6uDtEBcu3KGWd+d6o9e+5
+	 uGm8wHQ8kEPHvAByVbq6kKskwjVOkM+TnM+KURdT3npY6GDTpK0h68w+KYimwZhfMN
+	 WsEtsckf33TEysRRCHMgwmEimlhSyciQh/WyayHRcRvnVjD/ImgzacYCKH7x6OqzAW
+	 1SyfyP/6u8qDn0HxZ1GS57qjz/EHTskm4a2BhzGZWWkkFxLH/72C9HEnmz29cOunkl
+	 0/IniW417HKKQcxg9p94+InQ9sUkoPW3BGZXusvRiKaCoqInfgOHDh/hMn+W7lwt6L
+	 GvrAn8wYW8Pkg==
+Content-Type: multipart/mixed; boundary="===============3615861331373378302=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8a92d98d702c9cbab1575c9c4a6d9f721fa8b797012928dd5fee4b606574c543@mail.kernel.org>
-In-Reply-To: <20260926-scev-minimal-rebase-v1-36-c8e5ab5ba79f@gmail.com>
-References: <20260926-scev-minimal-rebase-v1-36-c8e5ab5ba79f@gmail.com>
-Subject: Re: [PATCH bpf-next 36/36] selftests/bpf: cover SCEV analysis and loop widening
+Message-Id: <9a141712e953b6cf3b27ddb58f0c212a27efa93dc0df088a5a2fd47151bc7459@mail.kernel.org>
+In-Reply-To: <20260926-scev-minimal-rebase-v1-33-c8e5ab5ba79f@gmail.com>
+References: <20260926-scev-minimal-rebase-v1-33-c8e5ab5ba79f@gmail.com>
+Subject: Re: [PATCH bpf-next 33/36] selftests/bpf: tests for varying offset access to PTR_TO_BTF_ID
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
 Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 27 Sep 2026 20:42:50 +0000 (UTC)
+Date: Sun, 27 Sep 2026 20:42:52 +0000 (UTC)
 
---===============4703152210799744251==
+--===============3615861331373378302==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> index 82b21ec472ba..2bc1ef910c16 100644
+> index e1d559ba1271..9f188ff9be89 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+> @@ -26,6 +26,7 @@
+>  #include "verifier_bpf_get_stack.skel.h"
+>  #include "verifier_bpf_trap.skel.h"
+>  #include "verifier_bswap.skel.h"
+> +#include "verifier_btf_array_access.skel.h"
+>  #include "verifier_btf_ctx_access.skel.h"
+>  #include "verifier_btf_flex_array.skel.h"
+>  #include "verifier_btf_unreliable_prog.skel.h"
+> @@ -211,6 +212,7 @@ void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mix_sign_u
+>  void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_stack); }
+>  void test_verifier_bpf_trap(void)             { RUN(verifier_bpf_trap); }
+>  void test_verifier_bswap(void)                { RUN(verifier_bswap); }
+> +void test_verifier_btf_array_access(void)     { RUN(verifier_btf_array_access); }
+>  void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
+>  void test_verifier_btf_flex_array(void)       { RUN(verifier_btf_flex_array); }
+>  void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
 > new file mode 100644
-> index 000000000000..69e9062870ac
+> index 000000000000..ab6b74457365
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+> @@ -0,0 +1,506 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_core_read.h>
+> +#include "bpf_experimental.h"
+> +#include "bpf_misc.h"
 
 [ ... ]
 
 > +/*
-> + * Loop A (counter in r6) contains irreducible loop B (header 5),
-> + * which contains C (counter in r9).
-> + * Entering B at 'body' saves and restores r6, making it appear invariant.
-> + * Entering B at 'alternate' skips the save and modifies r6 instead.
-> + * Hence A must not infer a SCEV expression for r6.
-> + * SCEV expression for r9 in C should still be computed.
+> + * Array nested below a struct member at a non-zero offset. The walk descends
+> + * through 'm' (resetting the running offset) before reaching 'arr', exercising
+> + * the array_start = min_off - arrays[i].off telescoping across a WALK_STRUCT
+> + * dive.
+> + */
+> +struct mid {
+> +	struct inner arr[8];	/* stride 8, size 64 */
+> +};
+> +
+> +struct nest {
+> +	long pad;		/* off 0 */
+> +	struct mid m;		/* off 8 */
+> +};
+> +
+> +/* m.arr[i].b, i in [0, 7], 4-byte read: stays within m.arr. */
+> +SEC("syscall")
+> +__success
+> +int nested_struct_in_bounds(void *ctx)
+> +{
+> +	unsigned long i = bpf_get_prandom_u32();
+> +	struct nest *o;
+> +	int val = 0;
+> +
+> +	o = bpf_obj_new(typeof(*o));
+> +	if (!o)
+> +		return 0;
+> +	asm volatile ("						\
+> +	r1 = %[o];						\
+> +	r2 = %[i];						\
+> +	r2 &= 7;						\
+> +	r2 *= 8;						\
+> +	r1 += r2;						\
+> +	%[val] = *(u32 *)(r1 + 12);				\
+> +"	: [val] "=r"(val)
+> +	: [o] "r"(o), [i] "r"(i)
+> +	: "r1", "r2");
+> +	bpf_obj_drop(o);
+> +	return val;
+> +}
+
+Does this test actually exercise the WALK_STRUCT path described in the
+comment? The comment says the test exercises "offset telescoping across a
+WALK_STRUCT dive," but with offset 12 (reading m.arr[i].b), the walk
+path appears to skip the WALK_STRUCT branch.
+
+Looking at btf_struct_walk() in the verifier, it only returns WALK_STRUCT
+when the offset exactly equals a member's start:
+
+    if (btf_type_is_struct(mtype)) {
+        t = mtype;
+        if (off == moff) {
+            *next_btf_id = mid;
+            return WALK_STRUCT;
+        }
+        off -= moff;
+        goto again;
+    }
+
+With min_off at 12:
+- At nest, m starts at moff 8 but off is 12, so it takes 'goto again'
+  with off 4
+- At mid, arr[0] starts at moff 0 but off is 4, so it takes 'goto again'
+  again
+- At inner, it finds b and returns WALK_SCALAR
+
+The WALK_STRUCT branch in btf_struct_access() is never reached, so the
+offset reset and arrays[] re-entry that the comment describes doesn't
+occur.
+
+Would reading m.arr[i].a (r1 + 8) instead put min_off at offsetof(struct
+nest, m), causing the walk to go through WALK_STRUCT twice (nest->mid,
+then mid->inner) and cover the telescoping path the comment describes?
+
+> +
+> +/* m.arr[i].b, i in [0, 15]: max offset runs past the end of m.arr. */
+> +SEC("syscall")
+> +__failure
+> +__msg("invalid variable offset access into struct nest")
+> +int nested_struct_out_of_bounds(void *ctx)
+> +{
+> +	unsigned long i = bpf_get_prandom_u32();
+> +	struct nest *o;
+> +	int val = 0;
+> +
+> +	o = bpf_obj_new(typeof(*o));
+> +	if (!o)
+> +		return 0;
+> +	asm volatile ("						\
+> +	r1 = %[o];						\
+> +	r2 = %[i];						\
+> +	r2 &= 15;						\
+> +	r2 *= 8;						\
+> +	r1 += r2;						\
+> +	%[val] = *(u32 *)(r1 + 12);				\
+> +"	: [val] "=r"(val)
+> +	: [o] "r"(o), [i] "r"(i)
+> +	: "r1", "r2");
+> +	bpf_obj_drop(o);
+> +	return val;
+> +}
+> +
+> +/*
+> + * A trailing flexible array member makes the struct tail an unbounded region,
+> + * so a varying access into it has no upper bound to exceed (mirrors how
+> + * unix_address.name[] is accessed via sun_path[i]).
 > + *
-> + *  0: r6 = 0;
-> + *     do {                              // A
-> + *  1:     r6++;
-> + *  2:     r0 = bpf_get_prandom_u32();
-> + *  3:     r7 = 0;
-> + *  4:     if (r0 > 5) goto alternate;
-> + *  5: B:  r8 = r6;                      // B
-> + *  6:     goto body;
-> + *  7: alternate:
-> + *         r8 = r6;
-> + *  8:     r8++;
-> + *  9: body:
-> + *         r6 = r8;
-> + * 10:     r9 = 0;
-> + *         do {                          // C
-> + * 11:         r9++;
-> + * 12:     } while (r9 < 3);
-> + * 13:     r7++;
-> + * 14:     if (r7 < 4) goto B;
-> + * 15: } while (r6 < 4);
-> + * 16: r0 = 0;
-> + * 17: return r0;
+> + * A custom (program) BTF struct can only be reached as a PTR_TO_BTF_ID through
+> + * bpf_obj_new(), which does not allow flexible array members. So use a kernel
+> + * type via an untrusted PTR_TO_BTF_ID (bpf_core_cast()). struct vring_used ends
+> + * with a flexible array 'ring[]' of struct vring_used_elem { __virtio32 id, len; },
+> + * mirroring a 'struct foo { int a; int b; }' flexible array.
 > + */
-> +SEC("xdp")
+
+Is the justification here accurate? The comment states that "bpf_obj_new()
+does not allow flexible array members," which also appears in the commit
+message:
+
+    A program-defined struct cannot be used here because bpf_obj_new()
+    forbids flexible array members
+
+However, looking at the verifier, bpf_obj_new() itself doesn't reject
+flexible array members. The obj_new path in check_kfunc_call() only
+checks that the type is a struct and allocates ret_t->size bytes.
+
+tools/testing/selftests/bpf/progs/linked_list_fail.c already has
+obj_new_flex_array that allocates a struct with a flexible array member
+using bpf_obj_new_impl():
+
+    struct obj_new_flex {
+        int hdr;
+        struct obj_new_flex_elem cells[];
+    };
+
+It only fails later on access with "access beyond struct obj_new_flex."
+
+The real restriction appears to be that btf_struct_access() passes
+walk_flex_arrays = !type_is_alloc(reg->type), so flexible arrays aren't
+walked for MEM_ALLOC registers.
+
+Also, a program-BTF struct can be reached as a non-MEM_ALLOC PTR_TO_BTF_ID
+through other means. Loading a __kptr field of a local type outside an RCU
+critical section yields PTR_TO_BTF_ID | PTR_MAYBE_NULL | PTR_UNTRUSTED
+without MEM_ALLOC (through btf_ld_kptr_type()). For such a register,
+btf_struct_walk() does walk flexible arrays.
+
+tools/testing/selftests/bpf/progs/verifier_btf_flex_array.c:stash_and_peek
+already uses exactly this approach to reach the flexible array walk with a
+program-defined struct in a SEC("syscall") program (which is outside RCU by
+default).
+
+Should the comment and commit message give the correct reason instead? The
+current explanation also creates a dependency on struct vring_used being in
+vmlinux BTF, which only exists when virtio is built in.
+
+> +
+> +/* ring[i].len, i in [0, 63], 4-byte read: the flexible array has no upper bound. */
+> +SEC("syscall")
 > +__success
-> +__log_level(2)
-> +__msg("loop at 1{{$}}")
-> +__msg("loop at 5, nested in 1, irreducible")
-> +__msg("loop at 11, nested in 5")
-> +__msg("scev at header 1:")
-> +__msg_next("  r6=?")
-> +__msg("scev at header 11:")
-> +__msg_next("  r9=(+ r9 1) / (linear r9 1)")
-> +__msg("loop header at 11, widening r9 to 0..2 step 1")
-> +__not_msg("loop header at 1, widening r6")
-> +__naked void nested_irreducible_loop(void)
+> +int flex_array_field(void *ctx)
 > +{
-> +	asm volatile ("					\
-> +	r6 = 0;						\
-> +a_%=:	r6 += 1;					\
-> +	call %[bpf_get_prandom_u32];			\
-> +	r7 = 0;						\
-> +	if r0 > 5 goto alternate_%=;			\
-> +b_%=:	r8 = r6;					\
-> +	goto body_%=;					\
-> +alternate_%=:						\
-> +	r8 = r6;					\
-> +	r8 += 1;					\
-> +body_%=:						\
-> +	r6 = r8;					\
-> +	r9 = 0;						\
-> +c_%=:	r9 += 1;					\
-> +	if r9 < 3 goto c_%=;				\
-> +	r7 += 1;					\
-> +	if r7 < 4 goto b_%=;				\
-> +	if r6 < 4 goto a_%=;				\
-> +	r0 = 0;						\
-> +	exit;						\
-> +"	:
-> +	: __imm(bpf_get_prandom_u32)
-> +	: __clobber_all);
+> +	unsigned long i = bpf_get_prandom_u32();
+> +	struct vring_used *o;
+> +	int val = 0;
+> +
+> +	o = bpf_core_cast(bpf_get_current_task_btf(), struct vring_used);
+> +	asm volatile ("						\
+> +	r1 = %[o];						\
+> +	r2 = %[i];						\
+> +	r2 &= 63;						\
+> +	r2 *= 8;						\
+> +	r1 += r2;						\
+> +	%[val] = *(u32 *)(r1 + 8);				\
+> +"	: [val] "=r"(val)
+> +	: [o] "r"(o), [i] "r"(i)
+> +	: "r1", "r2");
+> +	return val;
 > +}
-
-Does the comment describe the entry points correctly? Looking at the
-pseudo-code and the asm, loop B has its header at 'b_' (insn 5, the
-backedge 14 -> 5), and two entry points: the header itself at 'b_' (reached
-by falling through from insn 4), and 'body_' at insn 9 (reached from
-'alternate_' at insns 7-8).
-
-The path that saves and restores r6 enters at the header 'b_':
-
-    b_:  r8 = r6;
-         goto body_;
-    ...
-    body_: r6 = r8;
-
-The path that modifies r6 goes through 'alternate_' (which is outside loop
-B), then enters B at 'body_':
-
-    alternate_:
-         r8 = r6;
-         r8 += 1;
-    body_: r6 = r8;   // gives r6 + 1
-
-The comment says "Entering B at 'body' saves and restores r6" but that
-describes the header path, and "Entering B at 'alternate'" names a label
-that is outside B. Could the comment be updated to say "Entering B at B
-saves and restores r6 ... Entering B at body (via alternate) skips the save
-and modifies r6 instead"?
-
-[ ... ]
-
+> +
 > +/*
-> + * Complement of no_widen_stack_spill: a sub-register (1-byte) store to the stack
-> + * lands as STACK_MISC and carries no tracked value, so the induction variable
-> + * addressing it (r2) is still widened.
+> + * ring[] accessed with step 4 (half of sizeof(struct vring_used_elem)): the
+> + * step is not a whole number of elements, so the flexible array stride does
+> + * not match.
 > + */
-> +SEC("xdp")
-> +__success
-> +__log_level(2)
-> +__flag(BPF_F_TEST_STATE_FREQ)
-> +__msg("widening r2 to 0..24 step 8")
-> +__naked void widen_byte_stack_store(void)
+> +SEC("syscall")
+> +__failure
+> +__msg("invalid variable offset access into struct vring_used")
+> +int flex_array_unaligned_step(void *ctx)
 > +{
-> +	asm volatile ("					\
-> +	r0 = 0;						\
-> +	r2 = 0;						\
-> +1:	r3 = r10;					\
-> +	r3 += -64;					\
-> +	r3 += r2;					\
-> +	*(u8 *)(r3 + 0) = r0;				\
-> +	r0 += 1;					\
-> +	r2 += 8;					\
-> +	if r0 < 4 goto 1b;				\
-> +	r0 = 0;						\
-> +	exit;						\
-> +"	::: __clobber_all);
+> +	unsigned long i = bpf_get_prandom_u32();
+> +	struct vring_used *o;
+> +	int val = 0;
+> +
+> +	o = bpf_core_cast(bpf_get_current_task_btf(), struct vring_used);
+> +	asm volatile ("						\
+> +	r1 = %[o];						\
+> +	r2 = %[i];						\
+> +	r2 &= 7;						\
+> +	r2 *= 4;						\
+> +	r1 += r2;						\
+> +	%[val] = *(u32 *)(r1 + 4);				\
+> +"	: [val] "=r"(val)
+> +	: [o] "r"(o), [i] "r"(i)
+> +	: "r1", "r2");
+> +	return val;
 > +}
-
-Does the comment correctly describe the verifier's behavior here? In this
-test, r3 = fp-64 + r2 with r2 in {0, 8, 16, 24}, so before widening each
-store '*(u8 *)(r3 + 0) = r0' is at a fixed offset that is 8-byte-aligned
-(-64, -56, -48, -40).
-
-check_stack_write_fixed_off() handles that as a narrow spill when the value
-fits:
-
-    if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE &&
-        env->bpf_capable) {
-        ...
-        save_register_state(env, state, spi, reg, size);
-
-save_register_state() marks the low 'size' bytes STACK_SPILL and saves the
-scalar. r0 is 0..3, so it fits in a byte and is fully tracked with its
-scalar id. check_stack_read_fixed_off() then gives it back on a same-size
-fill.
-
-The store only lands as STACK_MISC after r2 is widened, because then the
-write offset varies. That can happen with any size store, so it is not what
-separates this case from no_widen_stack_spill.
-
-The actual difference is that collect_store_base_regs() only counts BPF_W
-and BPF_DW accesses:
-
-    if (size == BPF_W || size == BPF_DW)
-
-Byte and half-word spills lose precision under widening in the same way.
-
-Could the comment describe the actual rule (byte and half-word accesses are
-not treated as spill bases) rather than say a 1-byte store has no tracked
-value? Also, BPF does not use the term "sub-register" for narrow
-operations.
-
+> +
+> +char _license[] SEC("license") = "GPL";
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346543957
---===============4703152210799744251==--
+--===============3615861331373378302==--
