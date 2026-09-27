@@ -1,89 +1,212 @@
-Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CF23E4110
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 14:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FC124A078;
+	Sun, 27 Sep 2026 15:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790517956; cv=none; b=I0/IPAufKnxJatzfin+uZE7kWuFXepZlKqfPJJfWIbG8H7/tlQOxbHR4soOLE5Dh8+6U+G4wBqOFk7OhrvSediR+1o8uEYb1FYGoAjzPcdJMJsSEQ3XSw4PsB5Nv/Ff32vvQRUR7KnwPx2J5QdcFlcRnhXNnKizMNfOM7CSjYjM=
+	t=1790522862; cv=none; b=Cd+YtB5P+tMiKWbdtik+48uQA32fnH6pzsGN+AFriTsTXDNOp99F3sF4zoa09z8TDxAzQs2GyDwUMBQtspN6aIxZsoVL4weGovXAU6ySn+xsOoVV1NBCDxtGW6Nar+JZYePkKq4Co2jdeUIbuxAi4PDFtqOEreU4T7y4ZposHzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790517956; c=relaxed/simple;
-	bh=JE5rHMFVp1ASSitG2+LEzV8irkI3ba+nPxRmpmzRXKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J9HUKEMibU2LP5HPyN0hfaS+6kAMW5NZMMsFWj51K8yddQHtEuoBNugXueTpIBoBGTYP8Itr+Idg6BgnL6ImxjIvekffr4cazdV63hJEN8Of8u9jvctwBCS4YlUDBqCGlJ7kPnoDI7vpT12ildUKp1biMNa/7vBggEugHGIXA0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A9nYE5lN; arc=none smtp.client-ip=95.215.58.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790522862; c=relaxed/simple;
+	bh=ZZctbrUtdp2u1m5vR8OUb3RsnNvd4XESXPNyA9NR6/4=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ozPkFoOyFyTBezebjeiSzGmhsqebigwA4iD7dWxIc5fZi5cr3uqmts4Jk8L26/KGIWcq0iB3OYitAfkwjEdad81o8j5a23yIwO0XL99o3seMBXj/ph2lwmnrBNUI3ZnLSZNG4d5/LATR/GZhE6seeouBI0xv/VU+1p2WaYgPcPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJ9lOZUi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A9nYE5lN"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JE5rHMFVp1ASSitG2+LEzV8irkI3ba+nPxRmpmzRXKs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790517952; v=1; x=1791122752;
- b=A9nYE5lNnyMo+Usgv0+SQwNCMeCW2uG+TelmxP1TF563w+m2i0Qml/jlyDhEwr+OyUbi/PWZ
- +Un5zQqzldDYeU8IQFLkKSJQiyWgQN0XuWvwx7/SkKr4QSHXwHN4srCuqHw+bnvwJdBdf6odEB/
- eCTE3R/lwWKbsMjmQ/LwsMHw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9e0e383a7683fddd;
-	Sun, 27 Sep 2026 14:05:50 +0000
-X-Mizu-Trace-ID: 9e0e383a7683fddd
-X-Migadu-Flow: FLOW_OUT
-Date: Sun, 27 Sep 2026 14:05:38 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Bill Wendling <morbo@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	bpf@vger.kernel.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
-Subject: Re: [PATCH v2 6/9] arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS
- for the type hash offset
-Message-ID: <arkimpxRmauCfcn8@linux.dev>
-References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev>
- <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
- <CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJ9lOZUi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C21C41F000FF;
+	Sun, 27 Sep 2026 15:27:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790522861;
+	bh=ogmrucsA1GTOgB+NrmzwiRT9ggqTpVQd1FndsO0P5oI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=XJ9lOZUioQgut0C+aOfkbVUFgxqx+RqYjpyXr8Jxy96ecgJqIkV1RCw6UOWab7LNK
+	 npnuMdCqFqPBu9Vdz+Xi44WpWRa/15gSMFKdNf5nOHEdnlGxcLgTLbbcX1v0jddA4n
+	 DTtcwbsgTHAczjpdB+WGatG5qHLVM+mdPShuwxaepAgUI5gwFUtZe9mY5VgWXfjDJz
+	 BtJTkK+/GCWmv31H+SAzM45DBdD1l3UWzQfWq6QdTk5HVxRYyqcgVECZfZiZOFeWGp
+	 N4REtcWRX2FuCnemnQtHe5E7Atjb6TOZh1k3QkQTDEqvZXKoKCywobAYj8fRFS/M3A
+	 Iybgv4QrKdwZA==
+Subject: Re: [PATCH net] net: mana: reserve RX buffer headroom to fix
+ forwarding performance
+From: netdev-bot+sashiko@kernel.org
+To: hamzamahfooz@linux.microsoft.com
+Cc: netdev@vger.kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
+ wei.liu@kernel.org, decui@microsoft.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, horms@kernel.org,
+ ernis@linux.microsoft.com, dipayanroy@linux.microsoft.com,
+ gargaditya@linux.microsoft.com, jacob.e.keller@intel.com,
+ ssengar@linux.microsoft.com, linux-hyperv@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date: Sun, 27 Sep 2026 15:27:39 +0000
+Message-ID: <179052285930.2160803.11184804113286091670@kernel.org>
+In-Reply-To: <20260923144500.4073380-1-hamzamahfooz@linux.microsoft.com>
+References: <20260923144500.4073380-1-hamzamahfooz@linux.microsoft.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com>
 
-On Fri, Sep 25, 2026 at 12:17 PM Bill Wendling wrote:
-> > +       return 4 + 4 * CONFIG_ARM64_FUNCTION_PREFIX_NOPS;
->
-> *drive by review* Could you explain the two fours in this equation
-> with a comment? (Feel free to ignore this if it's obvious to
-> developers.)
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-The first is the type hash and the second is the size of a NOP. For v3
-I'll spell the second one out and add a comment for the first.
+Critical: 0 · High: 1 · Medium: 0 · Low: 2
 
-	/* The 4-byte type hash sits before the prefix NOPs. */
-	return 4 + CONFIG_ARM64_FUNCTION_PREFIX_NOPS * AARCH64_INSN_SIZE;
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-- Jose
+- [High] With XDP attached, the patch sets rxq->headroom to max_t(u32,
+  LL_RESERVED_SPACE(ndev), XDP_PACKET_HEADROOM) in…
+- [Low] mana_set_priv_flags() (mana_ethtool.c) keeps its own copy of the
+  old rule for when one buffer per page is forced anyway: `ndev->mtu +…
+- [Low] The comment above mana_get_rxbuf_cfg() still reads "Get RX
+  buffer's data size, alloc size, XDP headroom based on MTU".
+
+--
+
+net: mana: reserve RX buffer headroom to fix forwarding performance
+
+This patch reserves LL_RESERVED_SPACE(ndev) of headroom in MANA RX buffers,
+so forwarded packets no longer have to be reallocated by
+pskb_expand_head() to satisfy skb_cow() in ip_forward(). With XDP attached,
+the headroom is the larger of that value and XDP_PACKET_HEADROOM. The
+frag-vs-single-buffer decision now uses the computed buffer size instead of
+comparing the MTU against PAGE_SIZE / 2.
+
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> index 591fb4191d90d..e3f3b33ba9062 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> @@ -758,6 +758,36 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
+
+[ ... ]
+
+> +static u32 mana_get_rxbuf_headroom(struct mana_port_context *apc)
+> +{
+> +	u32 headroom = LL_RESERVED_SPACE(apc->ndev);
+> +
+> +	if (mana_xdp_get(apc))
+> +		return max_t(u32, headroom, XDP_PACKET_HEADROOM);
+
+[Severity: High]
+With XDP attached, can rxq->headroom now be larger than
+XDP_PACKET_HEADROOM while the XDP path still assumes 256?
+
+MANA_HEADROOM is sizeof(struct mana_skb_head), and that size grows with
+MAX_SKB_FRAGS. CONFIG_MAX_SKB_FRAGS can be anywhere from 17 to 45. With
+17 or 18 frags, LL_RESERVED_SPACE(ndev) is 256. With 19 to 45 frags it
+is 272 to 592, and then max_t() returns that value instead of 256.
+
+The NIC writes each frame at va + rxq->headroom in mana_get_rxfrag():
+
+    *da = dma_map_single(dev, va + rxq->headroom, rxq->datasize,
+                         DMA_FROM_DEVICE);
+
+However, mana_run_xdp() in mana_bpf.c still does:
+
+    xdp_prepare_buff(xdp, buf_va, XDP_PACKET_HEADROOM, pkt_len, true);
+
+On XDP_PASS, mana_build_skb() then reserves
+xdp->data - xdp->data_hard_start, which is 256 rather than
+rxq->headroom:
+
+    skb_reserve(skb, xdp->data - xdp->data_hard_start);
+
+In those configs, would the XDP program, the XDP_PASS skb, and the
+XDP_TX/REDIRECT/AF_XDP frames all start (headroom - 256) bytes before
+the real frame? The leading bytes would be stale page_pool contents, and
+the tail of the frame would be cut off.
+
+There is a related question about the MTU limit in include/net/mana/mana.h:
+
+    #define MANA_XDP_MTU_MAX (PAGE_SIZE - MANA_RXBUF_PAD - XDP_PACKET_HEADROOM)
+
+This still budgets 256 bytes of headroom, while the XDP branch of
+mana_get_rxbuf_cfg() keeps *alloc_size = PAGE_SIZE. mana_xdp_set() uses
+MANA_XDP_MTU_MAX both for the MTU check and to set max_mtu.
+
+At the largest accepted XDP MTU, does the DMA window now run
+(headroom - 256) bytes into the skb_shared_info area that
+napi_build_skb() initializes afterwards? If so, fixing only the
+xdp_prepare_buff() offset would leave this limit wrong.
+
+Before this patch the XDP headroom was always exactly
+XDP_PACKET_HEADROOM, so these values always matched.
+
+> +
+> +	return headroom;
+> +}
+> +
+> +static u32 mana_get_rxbuf_size(struct mana_port_context *apc, u32 mtu)
+> +{
+> +	u32 len = SKB_DATA_ALIGN(mtu + MANA_RXBUF_PAD +
+> +				 mana_get_rxbuf_headroom(apc));
+> +
+> +	return ALIGN(len, MANA_RX_FRAG_ALIGNMENT);
+> +}
+> +
+>  static bool
+>  mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
+>  {
+> @@ -770,11 +800,16 @@ mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
+>  	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
+>  		return true;
+>  
+> -	/* For xdp and jumbo frames make sure only one packet fits per page. */
+> -	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
+> +	/* For xdp make sure only one packet fits per page. */
+> +	if (mana_xdp_get(apc))
+>  		return true;
+>  
+> -	return false;
+> +	/* Only use the page_pool fragment path when at least two buffers,
+> +	 * including the headroom each of them has to reserve, actually fit
+> +	 * into one page. Otherwise the fragment path degenerates into one
+> +	 * buffer per page while still paying the fragment accounting cost.
+> +	 */
+> +	return PAGE_SIZE / mana_get_rxbuf_size(apc, mtu) < 2;
+
+[Severity: Low]
+Should mana_set_priv_flags() in mana_ethtool.c use this same rule? It
+still has its own copy of the old one:
+
+		if (ndev->mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 ||
+		    mana_xdp_get(apc))
+			return 0;
+
+The comment above that check says single-buffer-per-page "is already
+forced regardless of this flag", so the detach/attach cycle can be
+skipped "since nothing changes".
+
+On 4K pages with an MTU of about 1459 to 1714, which includes the default
+1500, the old check is false. The new rule here already forces one buffer
+per page in that range (buf_size is 2112 at MTU 1500).
+
+Toggling the full-page-rx private flag at those MTUs would still run
+mana_pre_alloc_rxbufs(), mana_detach() and mana_attach(), even though the
+RX layout doesn't change. The mismatch only goes this way: a
+reconfiguration that is actually needed is never skipped.
+
+>  }
+>  
+>  /* Get RX buffer's data size, alloc size, XDP headroom based on MTU */
+
+[Severity: Low]
+This isn't a bug, but this comment still describes the headroom output as
+"XDP headroom". After this patch, *headroom is always set from
+mana_get_rxbuf_headroom(). Without XDP, that is LL_RESERVED_SPACE(ndev),
+reserved for the TX-path struct mana_skb_head.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260923144500.4073380-1-hamzamahfooz%40linux.microsoft.com
