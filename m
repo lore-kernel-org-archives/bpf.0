@@ -1,159 +1,142 @@
-Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9093B7B7B
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 05:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790488653; cv=none; b=cBbzbeUVhgQv98XR8wOq3TgSIyStpiWg6L6Rb1n3dr7L/BET83ENGFn+3nrl5vtvchdylyz37CGqmXp7YTKu29QJAj7y2Y5azatau4TgDakT2UDLtY0Ll2Jyn98IFz5ieOZYF0Df0P9iPqnxMR4SfRdultr/fnpGzbOCPg9Zoy0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790488653; c=relaxed/simple;
-	bh=ECdwrOZLPkUOYEi3CxYF+G8aKAMwCDUFpNPHlXQV3q4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kvtNz1XXCzly7stRfKcea84mvNbGBRLN2wGdDesKxv17JqXuIezSO+AWmKh/+PrTyUSIyltMI5yhMyxTtEmCbJIXKfXgQZ/7bn2CWS7AG95WhL1yZfoI9IS4VT5fsdrGcRToFK+MzhFnVtQqTLkWp71VfB/Goad3KfkLFDozK24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yl/qUxFa; arc=none smtp.client-ip=74.125.225.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1942FD1B3
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 06:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790489633; cv=pass; b=ttJlEYm9qLMfG8wXpN4HoIwEGGqaC8bmsXMUS85kHJUUUrRKniEvTAlnzi0oQVZGsxtUu1jYLuk9uUpNA5RgZOIm4/kkjj/NpGrE9VVMD1iJZkHXtoTGC3iikzUt+NTa+Pfqp1WDyQG8hR6QIWsVoglNJPSDgTpbyWQuATZz4Ks=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790489633; c=relaxed/simple;
+	bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eTzbZhKzkjnQliTIqp5ordaOKyf+KwcKJowWl2h0P/nn3Eyj3uM5z+2wJ5bjpVHDiJrUcKOzPgvejTzDGkkJ+0iVnsKIdBjwkwbmOpqHGpeFXpGpT1e4eU76Zlhb1hMt8ot7yhhI6cHBogPH7qwx4rzpiJAiMjYK1JrSNXwWnkM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BIfo6Fdf; arc=pass smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yl/qUxFa"
-Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-4887635e952so849657f8f.1
-        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 22:57:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BIfo6Fdf"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-3115c4451c8so1673793eec.1
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 23:13:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790489631; cv=none;
+        d=google.com; s=arc-20260327;
+        b=c3/7Bb3PVmE6dOBuSIYJ8TGpKF2FVAb0w3mAlLwUvNgsXIyhwBH6HUgelf2q0Jv74a
+         Q5iynrrNTEQU7isqhD2sUUckTM1FB70sxzf8dlhSi/7HyQvdd5BW4V1jCEJmnKvoWM4s
+         nhLhJy8ZaOhhv+3efPMJxuT7ZYwDxh8NVtEqHG1tNb0NTEjnxPdRWYPXlVSbu2vVjejF
+         Y/F79krhy+tev00JeImVa7hDnD0SJ2O+9lyedNtYbr9AB2tCtK9eBnHeh6wTFsvkOQCa
+         ywIEJlxbIdTjZH44yrh3q0T53FXIaYhxYPjFg28S+wcxhARaAC5K3kYB5V4L3pzNyzbg
+         amEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
+        fh=DLFiSZ/WBTVmOrzBD8besMEWnoG795Mc2ZYrxwtUgTc=;
+        b=sOCw+YWK2t64P978FtNRxN+S4HM0a+gF0XPQmtuuqjIv717K5jqFMWztGBDQVUahdL
+         ANpdYNlWF0QJQ1Ad5NAtdTYCdKrbFvuxzfBBX+h/PTDCUQPTuOCgxpvtjlLmjI+HHfGP
+         au4oNTKjDOIaHe9MN1HxJhY9KVHesNSaDzZ9hNFzAGh46ZzrSmOMRW3pQDxq4ag2Ka1Y
+         lx1jyJqPmSxUuWA8C/x+Oie1ws4STU+42DvUnvWjmF0xDmA50rgdaJz/B/gzHkiqevqZ
+         MhPWvCWd06skeJK/IxmfbN6TzND9LrQgbkRCJVcDelw0EvA3gGCEvTV/ijGn352nZ/Sf
+         LxkA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790488650; x=1791093450; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1790489631; x=1791094431; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=1/dti4dnFF8A+Oe+aVgDqPONYPNqgjuPnqR3/MJboFA=;
-        b=Yl/qUxFa7Tx2nQP2me8C5oI47YhyRa7p5f5n0MpjoEcZ4ynyJt/Jj63B9Jn1QkkPhm
-         HBlSqt24fA57tV8i+/3zidKiOVfaWYHqQhK4vkbsaucscn7UTrQMs5yOZd9UvYL0x5g8
-         uqaKawPj/dohUmnjv9cmaOCY1kdKlDNAgWFpcbt7nYh5RdCUJETb1sAiAFvPFKoWcQyz
-         cLBtkrxPa6kJVpf89GSAlkGLqvCNpZzbLLOMMqBZAC4h9vM/53WaMGoejUuZz6UqrcaH
-         y21IE6L6Ho2KUG42Q5C9P6OlroZHI7QXrHBu9VBUSyNO5bf4JJE+aFJL75Znoulk3hd9
-         yL4g==
+        bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
+        b=BIfo6FdfW9YzBUAJa9Bh2IkhjazzGe+0+EQjjp6qGgaX1iZh1DITClCAsvFsqSPItb
+         8wBDm5wjaEaXpnuQxIjrgCwiTxh1I61CSJJFpOZ3XaPIxYPvrF3qqExFN2TvCTeRZDBy
+         6D/dT0ULYH5jPQnbr4/azQewLJDbiAbkbroStRxmnwiCBEAx1WdiSQ4GEnd+lh0P0vDc
+         7nKuvr6p3ok/0usRu9JxwASvwdedRH16cCuKmW+pjrIdpuOV7cYEBNBGFllg2YFWYVKf
+         riuSpebv7OkVe0JvF79wIdpxuDoh4ao4VYBnash6MMhr+mZhd/yxoTMhDESzkTFIjOPt
+         uE4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790488650; x=1791093450;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1790489631; x=1791094431;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1/dti4dnFF8A+Oe+aVgDqPONYPNqgjuPnqR3/MJboFA=;
-        b=KdE+i7tOt7cDOEHQsF+/xAb9HoS/WlDroDprv4Cj1h7lHZM7ITFvQlJj17mLPPzYaw
-         ae4wCtmCxLcyCWcNchsjOwt8ayRalgeLTb328FCoHJgK6+L8bFhktlcXn13Zu/3IbN/E
-         2JDQWSNhA8RSeESlHK6R6pdFjuUrkC1UWLrNr0bXtd/la6Beix0z2w4NXlhgNs4BRjpJ
-         Gsk2hlyotgQY0tSJUjseodsqCYgXDGtvvtw1a6HJgfhYF1bgbNGG/xsP4goY02b/TQcG
-         XMwpDmQaqCtel0FjBHyZAS4TQFD08Q9kPc8BfbZV8RY+XUA46m7rCKw1j1eLrs9qh06/
-         X1ig==
-X-Forwarded-Encrypted: i=1; AKwUvByd3rEMLuyWMYh4aQG+kZ1QkRFFeW2VQao7yEppa3Ar2Rz0ErJZpNNIiBOwo0aVWLi7Y4U=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL6uUnwhjIleZOc5BxHP1f27HK4UzmBs/pXZDK+XQ3lir5ifBrM
-	3B/IfUNSbF3RQKPUApsptA4FEkvqFryYqJqgjxvGxOI7p/3FD6ZjAhaU
-X-Gm-Gg: AYBFou3snC/ENyX+QUvieKFFPpeYWDM1DFmu1NLHOweKPQXjL+QQHcFGGcE13tg2Zbi
-	i1iO7Ek9N2xyCmuVbjKMAYYzW47ES4151g+a84xi3nIObHaKUToGMPvoIAeWbW0ds3DkKN3vHy1
-	uxMKNjXez54Xc6pNTrE3Xejzz0oE9Sa4wv8KjIrmQNo8TW5TCkt5sH5g5LjUmjoz7UMkUjgTsvk
-	lReeJEh51emeQlNp+rb5y3NoUDyQcaq7sFD17lAaDtIIDD+kcUiAnMho23N8b7udNGKByjApDHE
-	hpX+Fy6/6lu1O/djLfwJw5+i+AiVIb9qJ9sUITEvrZCQkiLo+IaTDlp/mv8CCY+zLP8DeQ1G8n8
-	K7k79MWetq0g+/q1Q2fQdTTUZHMNxRfdlLt0fnTRMB9BlhwEJvhgtd0Yop5sruMJrad9/sSsyDs
-	sYmO4eWjSHlFkxGicgL5dLMX7hbw7IZqVAm0nnaGAv9Zur6m5knUCytLKbv0UqO2qrK1rFkOTmu
-	eNUFPconemt+UYoItqS/jcOxgr3G4triuuo7L4+KwS/Rw==
-X-Received: by 2002:adf:e198:0:b0:487:146f:7c88 with SMTP id ffacd0b85a97d-4887168d970mr16805103f8f.4.1790488650200;
-        Sat, 26 Sep 2026 22:57:30 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a30bcdbsm17997084f8f.2.2026.09.26.22.57.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 22:57:29 -0700 (PDT)
-Date: Sun, 27 Sep 2026 06:57:28 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>,
- Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Jiri
- Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, Petr Mladek
- <pmladek@suse.com>
-Subject: Re: [PATCH v6 0/3] kallsyms: Accelerate symbol name lookups by ~7x
-Message-ID: <20260927065728.7f159234@pumpkin>
-In-Reply-To: <20260926133859.c8232c439184dfa17472b020@linux-foundation.org>
-References: <20260926-ksyms-tune-v6-0-236620c65e98@gmail.com>
-	<20260926133859.c8232c439184dfa17472b020@linux-foundation.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        bh=sr4Z3lGmEaVF984a2Rc9vpNw3cyNxpoqGCKnkWqzbnA=;
+        b=s9Ik0EmqgC/PIPgAIl/itGA8GDHnachHcwFB/R4RzFhXCMi+dY2vjAuFzw+/fi5YC2
+         vzglrQIz+3mzcZWBFety9jvWuoD3zodYRPSsO7mizJHDt0Cv0B4RJ8a6NeUabeqcRkMt
+         vRxCkgjXLD2MJC6gccwnR/NpBZCtM44PaYXI44d+EqJNQweChnVrk0tC5mDRzyve6IDW
+         zbL0H/Ak/jtSmS2WmIhQAilPpnT02JuYVoco3yKjSjBfILXoiuliROcDwVE7smCXdxt3
+         0nJoh84dwQNwdv8tFwxT1Nki8YEq/aFpk3rPNnU3EMqmN2NhCJVKHZrU8rAKHAuk2Z1t
+         9B5w==
+X-Gm-Message-State: AFq9FYJOBFTY3u0Ie91PW4ysJXGYpa20wrVT3nah2i783jsukGrOgh82
+	eHZOpmHoMjrPC5R2deVSfOJgd7dwD48IjdAv4PFdH9WcmO4+MG5gqZFZDse3g9Hx5ZCusy0kPXX
+	+ucp61putJMta4hHfhy5GZVilu6BUF60=
+X-Gm-Gg: AYBFou3oFFQh9y865YUO3+ZdDZ49GCzWfqbxNF2ypPX4yxSkO6mS5k5cQ+uSXAh21yD
+	o1/7XyMOMYRpjDOE4sjuGWdb6mY5grWUdoL5HZhz1yvUkrzBu5f94wdPCAeXPMDCqVUN6goOLms
+	s13/pVyM1Z5VynDueyGlNFi+0CEu2apcYpqMqMRYx2MM27jQsMmlZsrG+sBE38DcZVs/xsIGik+
+	Z3wNz370r9Ij/5Oq8DOOHXIhlS1/1srPK3vj5aVOcywX/5BSzVv7issz8WogoK0+SGR3s86zC4o
+	qxxL72fL0ssFb2jXQE5RkRuLcYNEacQTq5LyTEJ2wYSlv6qlprOa/Rg=
+X-Received: by 2002:a05:7301:7107:b0:341:2c6b:8c97 with SMTP id
+ 5a478bee46e88-34270ab8e8bmr4558045eec.12.1790489631424; Sat, 26 Sep 2026
+ 23:13:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260926210757.2152159-1-thisseanzhang@gmail.com> <DLPTN52TGGMY.TPWL2GZA38RK@gmail.com>
+In-Reply-To: <DLPTN52TGGMY.TPWL2GZA38RK@gmail.com>
+From: Sean zhang <thisseanzhang@gmail.com>
+Date: Sat, 26 Sep 2026 23:13:38 -0700
+X-Gm-Features: AclHuK8wXN2xAfp9zc6K6pU-EYUnBl-bodxzJ1vo68HRxFJW1oVa3YT6t8_CCik
+Message-ID: <CAEejd4QjwcjMNKuwDYBV_u4XJ_CfzGZGR5MXGtOgM+BoAMP23w@mail.gmail.com>
+Subject: Re: [RFC bpf-next 0/3] bpf: Add PPPoE encap/decap support to bpf_skb_adjust_room
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, netdev@vger.kernel.org, 
+	Nick Hudson <nhudson@akamai.com>, Felix Fietkau <nbd@openwrt.org>, Qingfang Deng <dqfext@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 26 Sep 2026 13:38:59 -0700
-Andrew Morton <akpm@linux-foundation.org> wrote:
+Alexei Starovoitov <alexei.starovoitov@gmail.com> =E4=BA=8E2026=E5=B9=B49=
+=E6=9C=8826=E6=97=A5=E5=91=A8=E5=85=AD 21:41=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Sat Sep 26, 2026 at 9:07 PM UTC, ThisSeanZhang wrote:
+> > Hello,
+> >
+> > This series adds PPPoE session encapsulation and decapsulation support =
+to
+> > bpf_skb_adjust_room(), allowing TC BPF programs to update packet data a=
+nd
+> > skb metadata consistently.
+>
+> Why?
+> Is this a research project on what llm can implement?
+> It certainly can, but it's not a reason to add new uapi.
+>
+> pw-bot: cr
+>
 
-> On Sat, 26 Sep 2026 13:40:11 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
-> 
-> > As measured by kernel/kallsyms_selftest across ~184k symbols,
-> > kallsyms_lookup_names() binary search takes ~6.1 us per lookup due to
-> > two inner-loop costs:  
-> 
-> We don't have a kallsyms maintainer afaik.  Petr is pretty active in
-> there so let's give him a hopeful cc.
-> 
-> > 0. Candidate symbols are fully decompressed into a 512-byte stack buffer
-> >    before calling strcmp(), even though non-matching steps could choose on the
-> >    first differing character (0..N-1).
-> > 
-> > 1. Probes scan sequentially from 256:1 markers in kallsyms_names[],
-> >    decoding an average of 127.5 symbols per probe (~2,170 hops across a
-> >    17-step search).
-> > 
-> > This 3-patch series addresses both:
-> > 
-> > 0. Patch 1 introduces kallsyms_strcmp_symbol() to compare ASCII queries
-> >    against compressed tokens on the fly, bailing out on first mismatch.
-> >    Drops the 512-byte stack buffer and saves ~530 ns.
-> > 
-> > 1. Patch 2 increases marker density from 256:1 to 16:1, cutting average
-> >    scan distance from 127.5 to 7.5 hops and dropping lookup latency from
-> >    6,102 ns to 866 ns for +42.2 KiB of .rodata.
-> > 
-> > 2. Patch 3 inlines and unrolls get_symbol_seq() 24-bit reconstruction.
-> > 
-> > Results (kernel/kallsyms_selftest across ~184k symbols):
-> > - Baseline (256:1):  6,102 ns
-> > - Patch 1 (strcmp):  5,572 ns (-530 ns)
-> > - Patch 2 (16:1):      866 ns (7.0x faster)
-> > - Memory: +42.2 KiB .rodata, 0 bytes dynamic RAM  
-> 
-> Can you better explain the tradeoffs here?  Increased memory use?  If
-> so how much?  Is any change in build time expected?
+Hi Alexei,
 
-I've had a thought of a scheme that should give most of the ~19x
-improvement of the original patch without increasing the data size and
-with only a small increase in code size.
-The downside is a slight slow down for sequential access.
+The use case comes from Landscape, an eBPF router I maintain. Its native
+PPPoE WAN mode is implemented in XDP/TC BPF.
 
-The thing to do is replace the 24bit 'symbol number' in the 'sorted by name'
-list with the offset of the beginning of the name.
-(For very large kernels it may need to be 32bit.)
-The binary search for the symbol name then doesn't need a linear scan
-and also loses one level of indirection.
-You then need to do another binary search over the 'offset of every 256th
-entry' table, followed by a linear search to find the correct address.
+The motivation is a bug we hit: forwarded GSO packets larger than the
+negotiated PPPoE MTU are dropped after the TC program inserts the PPPoE
+header, because the stack cannot segment a PPPoE frame. This was
+reported in https://github.com/ThisSeanZhang/landscape/issues/57
 
-For sequential access there is a reasonable chance the next symbol is in
-the same 256 symbol block (in address order), that can be quickly checked.
+The reason is that the PPPoE metadata transition cannot be expressed
+from BPF today: bpf_skb_adjust_room() cannot set
+skb->protocol =3D=3D ETH_P_PPP_SES, so an eBPF datapath cannot use the
+kernel's PPPoE GSO/GRO support (55a5d8fca836). Our egress program uses
+BPF_F_ADJ_ROOM_ENCAP_L3_IPV4/IPV6 as a workaround [1], which marks the
+skb as IP-in-IP (skb->encapsulation, SKB_GSO_IPXIP4/6) while the wire
+format is PPPoE. On decapsulation, a TC program similarly cannot restore
+skb->protocol to the inner protocol.
 
-I got the code to run in userspace yesterday (with a real kernel symbol
-table), I might look at some changes later today.
+The flags in this series let the helper make these transitions for
+skb-based datapaths; if this support is merged, we plan to switch
+Landscape to the new flags.
 
-David
-
-> 
-> 
-> What isn't addressed in here (afaict) is "who cares".  Is there some
-> workload which is kallsyms-intensive?
-> 
-> This info really should be right in the first para of the [0/N], and in
-> detail.  What benefit does this work offer to our users?  Use cases,
-> example scenarios, etc.
-> 
-> Apologies if I missed this in earlier discussions, but if it was in the
-> [0/N] this wouldn't matter!
-
+[1] https://github.com/ThisSeanZhang/landscape/blob/80bc43eef7143ad029283fe=
+2a8d510718c22af12/landscape-ebpf/src/bpf/tc_chain/tc_pppoe.bpf.c#L38-L47
