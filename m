@@ -1,201 +1,224 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B293037BE6C
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648603C10B5
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790541769; cv=none; b=kbzPt4Gup1fR3rchcbV1KcWRvdN9B6I1yJG9papP8xDuuq8z/jE3ff9Jr5i0WlgmodfgysbTOWpplzbHWJvP5VCmlhQhB92gzWNJEMlJCnebIbE5X+Jeef906vfGJXt2eveMBoqFVg3z6zqMvnxh1kxGYMeyP9HWL7ZzDnhIsew=
+	t=1790541770; cv=none; b=GIMoM6caDgW36nB+2jC9Fdpk8HwXMLn/u3I5dBQBaoDVlM6eVF84YMbwCEma43d4FQ++BKWGJmH2HIpNHFHE3/zqcRzzkAnAG6GRUYtbVKzJJYf5DQ0AB+N1SaZQuvcK5AkAIhtPPiYzlf7GI7vL3kDnBgDSBWgBhLyPVmmS5Bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790541769; c=relaxed/simple;
-	bh=Ao7o5pFY/C+UqVBLvTLO4NaSX0hW2lAt1qZGXosTSFo=;
+	s=arc-20240116; t=1790541770; c=relaxed/simple;
+	bh=u+hjepPT6NK6fAOyYooIaXYsq04qoxoykWOMzHMKdR4=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gVUaMjJXQiQVg9GuAA9tawEj1HU3unkKrIVerXWq/vCKZHbXkgTYiEsKnBy0iQZmVliqzbkv27sKslDPm3wF28+uI3vbzlI1re64j5sKUenrCrRgNeNNbbaW9p0KmJ+dCYui+xbmGt0Ehu3Ig7rSRopsQwB3+tJAS/lcGoH6cuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ua6aSkmx; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=ZN3oBhpjt0RqTeXTaiDiH8VUN8jLJBdmL3vhmnHzHILaj01SaW83L3nRkEQi5usM22xK7qcEVM0AkeLg61v1r4YBcdKjx7YchDltGgfmkYHrPj8C6h1oubJbVvGfc0wmAWxoP/p6gBZ/zghzOSl/RyrLeC7hUBbVBDm4BAWoj+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KIgP8uIU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ua6aSkmx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4DFF1F00893;
-	Sun, 27 Sep 2026 20:42:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KIgP8uIU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9385A1F000FF;
+	Sun, 27 Sep 2026 20:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790541767;
-	bh=Ogzlx6t8Fs/KKYiqq1wR1Es5oyvP8uo+Uy4Mh7u6Rm0=;
+	s=k20260515; t=1790541769;
+	bh=F0uXcsdETb9Tu1UXdRXH2I2Ndr8cSiP5HcnrkUaSW3I=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Ua6aSkmxoxstbbOmslblIwFcu8nR6RDiO+oyrUVRz1fgPAxplNp9Fjj8dzZHarRXU
-	 c4573OobOLK0y2S9wuP/jiguJnkJk8zGy6z208+TAM2Ws9n/Esm+dAfyKnpaicNebZ
-	 mBRbZ2Pt0xnUMKPO4JCMJyZA3U46pAI44pNgYBAJQAkxdENlHn7RNJ09oNGyyzVTLd
-	 GuvHdaA8WNN9RnR2RSxeDSFVWWhTH55yIZO3y4u0Ix1K2wx31Nge9ZNB15EEnhpWTm
-	 bOb+zBST+z/NlC8wFbDnFlCEEXShNq0RnNS7rRewVgFC0wHZ2Tptw5OGAUu7JDS+fM
-	 qlx5m0cx0wq+g==
-Content-Type: multipart/mixed; boundary="===============4133675119298884715=="
+	b=KIgP8uIUBxluZ6KyJCmNbozNV0CZQlBSTFQ60DnewUFiwWN80+0rHEv5u9L1c471B
+	 72ChuJGpN5J/7l/pprLM7rA/knQLT8TJUnd7I6sr8Wx5zVRPCrDbr6D/2bbollR0ht
+	 Vwlp5/+DIZOUWYTw8utwsin31M7Qm9/A7Ry5m1AnRi+UG+4giYsELZaRWWmnkN5xN4
+	 UZykUI20d2nVYmCdZAdvH3x3O8LRMLDdfiI6atDRjmT7ceSPnT3CI/vFLjP4NNLnnL
+	 ZRGE7U+bJOZaMo/bTBD66IAzfV/ZaG5kiFJsYZzNyc0BeL7zDdAicim6qnUsnMlAad
+	 LCUbVtY7dJGRw==
+Content-Type: multipart/mixed; boundary="===============4271042771192856100=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <92725cabd34b462486052bddd62757252de036696d01a7b0b96a6dacc01a8a09@mail.kernel.org>
-In-Reply-To: <20260926-scev-minimal-rebase-v1-11-c8e5ab5ba79f@gmail.com>
-References: <20260926-scev-minimal-rebase-v1-11-c8e5ab5ba79f@gmail.com>
-Subject: Re: [PATCH bpf-next 11/36] bpf: add bpf_reg_union()
+Message-Id: <1e179f726ade68c29a7ca9530746bee1473aa7f1b18b3886c777537831375ad7@mail.kernel.org>
+In-Reply-To: <20260926-scev-minimal-rebase-v1-2-c8e5ab5ba79f@gmail.com>
+References: <20260926-scev-minimal-rebase-v1-2-c8e5ab5ba79f@gmail.com>
+Subject: Re: [PATCH bpf-next 02/36] bpf: summarize may write stack slots in insn_aux_data
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
 Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 27 Sep 2026 20:42:46 +0000 (UTC)
+Date: Sun, 27 Sep 2026 20:42:48 +0000 (UTC)
 
---===============4133675119298884715==
+--===============4271042771192856100==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 719b7c7fd2f5..706fdefbc07a 100644
+> index c775bd757706..c6d617581e84 100644
 > --- a/include/linux/bpf_verifier.h
 > +++ b/include/linux/bpf_verifier.h
-> @@ -1748,6 +1748,8 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env,
->  int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
->  int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
->  		      struct cnum64 range, u16 step);
-> +int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
-> +		  const struct bpf_reg_state *src);
+> @@ -662,6 +662,11 @@ struct bpf_insn_aux_data {
+>  	};
+>  	struct btf_struct_meta *kptr_struct_meta;
+>  	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+> +	/*
+> +	 * Per-instruction summary of stack slots in the current frame
+> +	 * that this instruction may write to.
+> +	 */
+> +	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
+
+Is the comment accurate that this covers every write? Looking at how the
+mask is populated in compute_may_write_masks(), it only ORs in FM_MAY_WRITE
+bits from liveness. When a bpf_loop()/for_each_map_elem()/find_vma()/
+user_ringbuf_drain() call passes a frame pointer as ctx but the callback is
+not a constant (R2 could be cb_a or cb_b on different branches), liveness
+handles this case specially in analyze_subprog():
+
+    if (callee == -2) {
+        /*
+         * same bpf_loop() calls two different callbacks and passes
+         * stack pointer to them
+         */
+        if (info[subprog].at_in[j][caller_reg].frame == ARG_NONE)
+            continue;
+        for (int f = 0; f <= depth; f++) {
+            err = mark_stack_read_all(env, instance, f, idx);
+            ...
+        }
+        continue;
+    }
+
+That code calls mark_stack_read_all() but nothing marks may_write. The
+callbacks themselves are analyzed standalone with R1-R5 as ARG_NONE, so a
+store like `*(u64 *)(r2 + 0) = 0` in the callback is never attributed to
+the caller's frame. This means FM_MAY_WRITE stays empty at the call site,
+and compute_may_write_masks() stores an empty may_write_mask even when the
+callback writes through ctx.
+
+The verifier accepts this pattern: bpf_loop_two_callbacks in
+tools/testing/selftests/bpf/progs/verifier_live_stack.c exercises the
+callee == -2 branch (it passes fp but with two possible callbacks). If its
+callbacks wrote through ctx instead of reading, aux[call].may_write_mask
+would stay empty for those slots.
+
+This matters because reset_scevs_at_indirect_writes() in
+60fc0594170e ("bpf: compute scalar evolution expressions for loops") uses
+bpf_may_write_mask() as the only way to invalidate stack-slot expressions
+at a call. A stack-slot SCEV expression could survive a bpf_loop() whose
+callback overwrites that slot, and then bpf_clamp_scev_regs() would
+intersect the slot's range with bounds derived from that stale expression.
+
+Should the callee == -2 branch also call mark_stack_may_write_all() for
+frames 0..depth so the summary is conservative?
+
+Alexei Starovoitov raised a concern about memory usage in the v1 thread
+(https://lore.kernel.org/bpf/DLPD9Q4H9C62.2QMD510XIOOJR@gmail.com/):
+
+> That's 32 bytes per insn and the next patch adds 32 more,
+> for every prog whether it has loops or not.
+> FM_MAY_WRITE in patch 1 makes every frame_masks a third bigger too.
+> commit 481ceda77aeb sized the liveness masks by the stack the frame
+> uses to avoid exactly that.
 >
+> bpf_may_write_mask() is the only accessor.
+> Can the summary stay in liveness.c, as wide as the subprog's stack,
+> and only for insns with scc != 0 ?
+
+Could the summary be stored in liveness.c instead, sized by the subprog's
+actual stack usage and only for instructions with scc != 0, to avoid the
+fixed 32-byte overhead for every instruction?
+
+>  	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+>  	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
+>  	bool nospec; /* do not execute this instruction speculatively */
+> @@ -1728,6 +1733,7 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
 >  int bpf_stack_liveness_init(struct bpf_verifier_env *env);
 >  void bpf_stack_liveness_free(struct bpf_verifier_env *env);
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b5f45cb46f14..1ec44d72a346 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -30,6 +30,7 @@
->  #include <linux/module.h>
->  #include <linux/cpumask.h>
->  #include <linux/cnum.h>
-> +#include <linux/gcd.h>
->  #include <linux/bpf_mem_alloc.h>
->  #include <net/xdp.h>
->  #include <linux/trace_events.h>
+>  int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+> +const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx);
+>  bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi);
+>  int bpf_compute_live_registers(struct bpf_verifier_env *env);
 
 [ ... ]
 
-> @@ -16952,6 +16953,33 @@ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
->  	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index cc3ad75aa1e2..c871744ca5a8 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+> @@ -718,6 +718,45 @@ static int cmp_instances(const void *pa, const void *pb)
+>  	return 0;
 >  }
->
-> +/* acc := acc U src, matching types only. Caller must clear acc's scalar ID. */
-> +int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
-> +		  const struct bpf_reg_state *src)
+
+[ ... ]
+
+> +/*
+> + * Precompute, for each instruction, the OR of may_write masks over its top
+> + * frame across all func_instances reaching it, stash it in the insn_aux_data.
+> + */
+> +static void compute_may_write_masks(struct bpf_verifier_env *env)
 > +{
-> +	u16 base, step;
+> +	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+> +	struct bpf_liveness *liveness = env->liveness;
+> +	struct func_instance *instance;
+> +	struct frame_masks *fm;
+> +	u32 nbits;
+> +	int bkt, i;
 > +
-> +	if (acc->type != src->type) {
-> +		verifier_bug(env, "union of registers with different types");
-> +		return -EFAULT;
+> +	hash_for_each(liveness->func_instances, bkt, instance, hl_node) {
+> +		fm = instance->frames[instance->depth];
+> +		if (!fm)
+> +			continue;
+> +		nbits = frame_mask_bits(fm);
+> +		for (i = 0; i < instance->insn_cnt; i++)
+> +			half_spis_to_slots(aux[instance->subprog_start + i].may_write_mask,
+> +					   rel_mask(fm, i, FM_MAY_WRITE), nbits);
 > +	}
-> +	acc->r64 = cnum64_union(acc->r64, src->r64);
-> +	acc->r32 = cnum32_union(acc->r32, src->r32);
-> +	acc->var_off = tnum_union(acc->var_off, src->var_off);
-
-Does this function handle pointer registers correctly? When bpf_reg_union()
-widens a PTR_TO_PACKET's offset (r64/r32/var_off) but keeps its id, it can
-break the id-tracking invariant.
-
-For PTR_TO_PACKET, registers with the same id differ only by a known
-constant. When adjust_ptr_min_max_vals() adds a non-constant to a packet
-pointer, it gives it a fresh id:
-
-  if (!known)
-      dst_reg->id = ++env->id_gen;
-
-find_good_pkt_pointers() depends on this rule. After a successful
-'pkt_ptr > pkt_end' test, it uses reg_umax(dst_reg) as the new range
-and sets reg->range = max(reg->range, new_range) on every PTR_TO_PACKET
-with the same id, assuming they all track the same maximum offset.
-
-Once bpf_reg_union() enlarges acc's umax but leaves acc in the same id
-group as registers that were not widened, a comparison on acc can give
-those other registers a range based on the widened umax that nothing at
-runtime backs.
-
-The comment says "Caller must clear acc's scalar ID", but for pointer
-types the id has a different meaning. Later in the series when this is
-called from union_any_reg() (1987b0e52b34), is_widenable_reg_type()
-accepts PTR_TO_PACKET, and scratch_scalar_id() only clears the id when
-reg->type == SCALAR_VALUE.
-
-Here's a concrete example with a similar shape to the
-conditional_stack_pointer_assignment selftest at the series end:
-
-  r2 = *(u32 *)(r1 + 0)   // data: pkt, id=0
-  r3 = *(u32 *)(r1 + 4)   // data_end
-  r9 = r2                 // pkt, id=0, off 0
-  r7 = r2
-  r7 += 1000              // pkt, id=0 (constant add keeps id)
-  r6 = 0
-1: if r6 >= 3 goto 3f
-  if r2 > r3 goto 3f      // fallthrough: find_good_pkt_pointers(r2)
-  r0 = *(u8 *)(r9 + 999)
-  if r6 != 1 goto 2f
-  r2 = r7                 // r2 = (any r2 r7) at loop entry
-2: r6 += 1
-  goto 1b
-3: r0 = 0
-  exit
-
-At loop entry, bpf_reg_union() turns r2 into pkt(id=0, [0,1000]), but r9
-keeps id=0 and [0,0]. On the fallthrough of 'if r2 > r3',
-find_good_pkt_pointers() sets r9->range = reg_umax(r2) = 1000. The load
-from r9 + 999 then passes (0 + 999 + 1 <= 1000).
-
-At runtime, on the first iteration r2 == data, so 'data > data_end'
-is always false. The program then reads data[999] for any packet,
-including one shorter than 1000 bytes: an out-of-bounds packet read.
-
-Should widened PTR_TO_PACKET registers either get a fresh id (and zero
-range), or should widening refuse packet pointers that share their id
-with other live registers?
-
-> +
-> +	/* Retain a common congruence if the bases agree modulo the gcd. */
-> +	step = gcd(acc->step, src->step);
-> +	base = acc->base % step;
-> +	if (base != src->base % step) {
-> +		reg_step_reset(acc);
-> +	} else {
-> +		acc->base = base;
-> +		acc->step = step;
-> +	}
-                ^^^^^^^^^^
-                ^^^^^^^^^^
-
-Does this commit build on its own? At ef75b765c289, struct bpf_reg_state
-(include/linux/bpf_verifier.h:53) has no 'base' or 'step' members. The
-struct ends with id, parent_id, map_uid, precise. Also reg_step_reset()
-is not defined anywhere ('git grep reg_step_reset ef75b765c289' only
-finds this call site).
-
-So the references to acc->step, src->step, acc->base, src->base and the
-reg_step_reset(acc) call all fail to build kernel/bpf/verifier.c when
-CONFIG_BPF_SYSCALL=y, which breaks bisection.
-
-The missing pieces are added later in the series by a89774dffa02
-("bpf: representation for intervals with steps"), which adds 'u16 base;
-u16 step;' to struct bpf_reg_state and defines reg_step_reset(). So the
-tree builds again from that commit on, but ef75b765c289 and the commits
-between it and a89774dffa02 (d18308307ed6, 0516ad0f46c2) do not build.
-The earlier baecd299ec89 ("bpf: add bpf_set_reg_range()") has the same
-dependency on reg->step/reg->base.
-
-Would moving a89774dffa02 before these helper commits fix this?
-
-Also, the commit message mentions merging "the circular 32-bit and 64-bit
-bounds and tnums" but doesn't mention the base/step congruence merge that
-the code does here.
-
-> +	reg_bounds_sync(acc);
-> +	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
 > +}
+
+This function reads FM_MAY_WRITE from liveness and summarizes it into
+may_write_mask. Does this capture all writes that the instruction might
+perform?
+
+As noted above for the header comment, when analyze_subprog() encounters
+callee == -2 (same bpf_loop() or similar can invoke different callbacks),
+it only marks reads and skips recording writes:
+
+    if (callee == -2) {
+        ...
+        for (int f = 0; f <= depth; f++) {
+            err = mark_stack_read_all(env, instance, f, idx);
+            ...
+        }
+        continue;
+    }
+
+No callee instance is created for this case, so merge_may_write() never
+runs. The helper's ARG_PTR_TO_STACK argument doesn't help either:
+bpf_helper_stack_access_bytes() returns 0 for it, with the comment "The
+callback subprog does and it's analyzed separately". But in the -2 case the
+callbacks are analyzed only at depth 0 with ctx == ARG_NONE, so their
+stores through ctx are never attributed to the caller's frame.
+
+This means FM_MAY_WRITE stays empty at that call instruction even when a
+callback writes through ctx into the caller's frame. Since this function
+only ORs in FM_MAY_WRITE bits, it will produce an empty may_write_mask for
+those slots.
+
+This gap is still present at the end of the series at 4a6395b27755 - the
+callee == -2 branch still has only mark_stack_read_all(). Should it also
+call mark_stack_may_write_all() for frames 0..depth to keep the summary
+conservative?
+
 > +
->  /* check validity of 32-bit and 64-bit arithmetic operations */
->  static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
->  {
+> +const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx)
+> +{
+> +	return env->insn_aux_data[insn_idx].may_write_mask;
+> +}
+
+[ ... ]
+
+> @@ -2352,6 +2391,8 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
+>  			goto out;
+>  	}
+>
+> +	compute_may_write_masks(env);
+> +
+>  	if (env->log.level & BPF_LOG_LEVEL2)
+>  		err = print_instances(env);
 
 
 ---
@@ -203,4 +226,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346543957
---===============4133675119298884715==--
+--===============4271042771192856100==--
