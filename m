@@ -1,584 +1,540 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-oo2-f41.google.com (mail-oo2-f41.google.com [74.125.231.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99413C5540
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 21:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790545475; cv=pass; b=ZdMUhIuanHtN5VFLb+i4O8PPpaReIJc4JcsVMEkRrGA0pOsRM0wGttGWUstIwNV7Do+ivm04tKN/S7uMp/Ouhbe9ZfJ3sMO3Hl71Q8bxtbouLv5ibBTJx43B5wiBzmTTMIJKf7dwkmXkbDCA/bCLKx4cxJthGjyMMt0zreyK/Ok=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790545475; c=relaxed/simple;
-	bh=FAEI8WA8cSRyBC82ESn9Wgc0lJuxeWzrumO8pwMuOCw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bYz/hNqjf/xaJFKPDxIVOMP2cUeJF7Mrb77z8WwiFQuAZSB3bM5rzeiiHR3sPS7NCHKrJJ5IkqScCxFVnqaFTwlU1QmWbt5W4l3cA7pKsqqZ4epdZvoykpOJnpfyn58VaN/qbPzvKzmzePYlt3Tb9xUSd94Ds5HJAusvkQqsQUY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I5VjodPw; arc=pass smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626223CB568
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 21:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790546392; cv=none; b=ez0i1WmaUIy+IFCzQGiXbRm2NMHTjC51nT2Mab/UekCBDP0b+Iq9PHdvo/MPbfKlNsXlAl7Hfr4y+s0oJBZ3baDzw6pdjeTDnWHdMvThTIjwWpY5c9oaHKKXx/qLb6aQ+/ZyeKDozTDVyFDq6ztoPEqpar4q5kyF822xGpTx7JI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790546392; c=relaxed/simple;
+	bh=qYGQCHXoEZV5jzZUL1na1NCk0N4dxc04XAI8z6cnaPs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kF+5mW4DsQblPwtRS37lCh+2WL04Wo8fHR8Up0ubc09otYYs0CuOjjWMzHTzxzvX7sKP9Y7PE1engXSACXr8XHsQD+Hbl1wdeAKYyLahgmXO0SZvZgyt/+Rqxd386dxkdbCrRJ3TyxMKgRAlZ7DL/UCjhCjPt+v3JW0f+1ZdVxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CAEssD63; arc=none smtp.client-ip=74.125.231.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I5VjodPw"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-53113d72966so243171cf.1
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 14:44:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790545471; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ey30+Kg/srCWtZTvYS5AqlNWirnYZVvSp2oGMa2+MZbKuW6QZIidBzjbG3m0i6bLXk
-         pHCPodd4uq2aPtaB4/HZGacGEaKvKRfSHUq02EYNkU78lSwSSCW0L0XRUfJKMFTfus9r
-         +qNlI4CSohxR+KP/yOJxg8oIfyRjm7SFVC87Em+vFn4THpghIyoHF4WQGGcanTjCqhCY
-         ydG23rf/kM9FXE5TQaFNG+u/IFS+N+4HnI3cCdmhLQe1Dy2OhoV4s5kzQNPqoMQC5c4X
-         Lix6ZZnY/7L4wGII5LcNAKhAqgrrbxZF94thjru81oqB0Ay8az5eSt8CPuAzeui29PP9
-         iaww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=y119z7sdl3qfjHiuF1t57ekDKg+i4BGISMvCcdxAaw0=;
-        fh=2Ot2YtStk8c+poNQlgoGrUtOaXaQwOhO6/Xr3q+x9ks=;
-        b=LEgpRl3At+Ad2n/zsg/PZiHnpiEJNdcjSiFzaydEzAtrpoXilPMtC+IPN6/0/Ew3J2
-         sPMM9hmraZOywaX0nm00+vFuCBS9wC+mV91Eobnp/Z9bD3JYf32Y4n2F0mpDPs2kq9Kz
-         QfOlEJcyy6Xm73XTu3Wd83vymGwrWsbUdpiZL81Uxj2ZEQmgFkMBjaJb+xN8k/hoYm4H
-         ZQQ4ttD+fUSOGgckL9azBD/xRMrenIzptQKLhJ4Y3qIP2txWP1gBlEMfX/DiP0sTjZNK
-         n5/kBtF27bIZz8ymKN/W7ccIqahEyyvfHPIwldc6g/O95Ee49MVdvZ67lI4IdkIe9mGL
-         /tCw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CAEssD63"
+Received: by mail-oo2-f41.google.com with SMTP id 006d021491bc7-6d33d80855eso1788153eaf.1
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 14:59:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790545471; x=1791150271; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=y119z7sdl3qfjHiuF1t57ekDKg+i4BGISMvCcdxAaw0=;
-        b=I5VjodPwHpL9BixS42rWXrnPT6+elB+/mMrPXmirlQ8+rPcCjsN7W7tIDWs+4hLifZ
-         5Kml8fM43Kyw5RNPKgoz4OTkNv7ggCtkf2JPe5S8qErAJiJA/EvxvClyBbxDkKhL/R5r
-         Cz5wt5nnd0mCvao/1UAxXDYiKYGDyrLucubogJxXfWQnJ0IcW2VwWP2ruO0CQfyZphaN
-         NRFY/P8mXXYZtIMc9KGTzkAVkm9b8/ek8jjhUNG6bRx92fKS39rB8RbuNHSnzcNU/jPc
-         4pPVIEdYyOwMRZ/DkXxovIMLejDZrlDoCTUaCEyGb0Sk8Nn1I+X8S3KXKDkQfdmRW8Ak
-         9ygA==
+        d=gmail.com; s=20251104; t=1790546386; x=1791151186; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=igAli1XIKkBSafQqyYALsMXsjZszlsyKkYv896bnSd8=;
+        b=CAEssD63xSev8cIlamG9fb6OmSBYBbpP3wNsYmE9dy6b5jVMoPUOoF0huYdEzGSowt
+         zNlnO19EgUh+FPrdWMLZpfKMePV9rySelzKSkepewWTNH06gSSWJhYgxQX31ufdzDHKq
+         vQH8sdXkZysef+0dzEwxkVX2dDheEby7po7S2R4aEA8YYn4WzBMvgc6pR0g+pSxjHZYF
+         jTenG+mDVJRSTTJdMNhk+oqbgyc6IPdg9KD7ChDVuLVn9Gwct6oV68e+IsIcqKFodemb
+         oaPaFki2d1yues6ZYBxZDDsJMK1fXTPVUb2AsouUBkxTsTkGXgU10LYstRthTOyIeSeA
+         xcxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790545471; x=1791150271;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=y119z7sdl3qfjHiuF1t57ekDKg+i4BGISMvCcdxAaw0=;
-        b=Ju7sYQtzuvOTPmWi1qrjMHG26JcAojx1p3tC4oE0WiaHv+s6kLb+nXQdLDuiYbPPN3
-         P3utqB78YdVztYudnkrOFg6AaJxUObD70DFnG/4SHVOQhfDwk10/D9B72RRwYYg4zjfL
-         Lu7D+Iu/+hg7sVkxF1WQpPL/d+yrvNtOUYLNW655koXNerIhYh2g6g9wDdZT5pGu/ZkD
-         jrsmo9c5LUVby1BHhytZvm2NJyGuYRWuF1QJy2O4S+/RP1ZPMRL/qMDqxn/wxtGZ/O65
-         uKq4ioJreunz+wFxTWpoWzWE02ql+2H19AAZiwYMXZlC/rve9CzSJ+/GSCZxBcWg3bbL
-         MNRg==
-X-Forwarded-Encrypted: i=1; AKwUvBxNUMin6x7XwxL7WYIubDIWX2MSfcsqrK0F7/+wP1vxv21834ovzooWcqZMke4qZ5Y4zeM=@vger.kernel.org
-X-Gm-Message-State: AFuF++li7t4hy20j6ulivwNhhD/NS5nD6HOEtb0lDc+L6yFyZFKzOKu8
-	GRlhX9EILgVBS/mDNL6h7463sFe2ncHgPtI0xn8HcQuBY7kSfnfaDY57NOO8r5lVwZZnwOBVi/J
-	ubH/Rk9Fbg5oLN0+7xOGHcxs+QZ7TLzSgV6va4IMs
-X-Gm-Gg: AYBFou38SzUI7UAFMhJuAlSuUpBHuLKjoUN5uit8y077+/BvJ7dzWFQFUnSQlE7RA2d
-	+JlgvUUkKTMWSBohDo7COZhrxgXqlMExQeUGLtPaWlbA6ygmRaj5sXpWJjtNAxDBLxVs4SoO4ZV
-	gxUwO3pEDMnmo4Ao36aEfLEQtSvAWdaRxntvjF8Z5bOc63pSK5ezYOm0jPCq5+D4yTTSkLgMheE
-	PQ11cxrW3AP33MeJ2tAQC8oFioYoXxNMe90XHMzOTOa1GvlS0O9+JJLNJKeAnv5L5vTXKgTVbOQ
-	l8Xl1co9wVzlUIP9Glv9EgFINTncAJDoMk/vVs0xWAQdFb0m5nIGqQ==
-X-Received: by 2002:ac8:6104:0:b0:530:e00f:7768 with SMTP id
- d75a77b69052e-5331fed98dfmr23915841cf.0.1790545469472; Sun, 27 Sep 2026
- 14:44:29 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790546386; x=1791151186;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=igAli1XIKkBSafQqyYALsMXsjZszlsyKkYv896bnSd8=;
+        b=JpefI+KyOoqDAws13Ho+mVl+1etPqB1BJdchaZtMtMEsrbxITi0K8ML+P70caJXyZt
+         72NNAzg93K/fvWT35wDMYMVZgoVcwMUU2IHisH1adbZQQSqJgdwNL5Aag8NiYbnKOyQq
+         00IghM+egvOotEx/oxk2FN7QI57FhAKuxjk/5fbFQaw7Anpu0E4igP4Lnii6wvfajGlW
+         v6pGeWeG4YMQp9gMlRpo5beS13wx+0kndQTUKx6pC/wv3qqDKbFS9XZ4ktZl1KgQp4CA
+         N3O0WjoXWHFdvdPmM1/K0BU8VdfYk/UnXZdtvYlOOEaxKM+rWGxv1lRMitgoLIUz+vBD
+         IH4g==
+X-Forwarded-Encrypted: i=1; AKwUvBy1qmKvDm3WjSTyh3n79XRC9ae8/z/i57+4N2iI2MEFhUaSjt5dye6co4DIr5ODYR/PqVM=@vger.kernel.org
+X-Gm-Message-State: AFuF++k7KGb4LAV+XnwVh7153R87xRyiBnrs5z7LqPzD/PkZF9M+IUJX
+	eYYLG8/MehkA2aerFN671oxttgaNmO0jnBkcqCLV13TzlrFPeOSW6K+/
+X-Gm-Gg: AYBFou21xPrllGoYbv/un7aolz+bRNCwbgUyVW53oP02f5X3n0/eFLhFITeG6Ij1664
+	XU1jeErqYoFKgmZXNAqeUYWfhOslmnWI3B9JMYcPA7aaqu5Q8wgwYR7cOaP4xH68kwq2xd5+Idu
+	zz3Gi3MpIhGJwl78s7NM1cNuRE7dHq2jhHYuK1/+9rd2SP5mBaYr1KEB+K7Tv1nBvh4I1ZkBnae
+	bWQRkUi7A/btKrm/NGtZfeFB+Zfjvo3lhoeU7RXu3pXyJjoxtMRXL/FyyRFGIgcQw4jEv+zzaZS
+	5L9qVaS+BCwp0Woz0HcLDfdV4R3cWIL/DF4W0KgZRuSCqh+X9hUQ0f+AYtaUtuUO4HtmZGaEV7z
+	6n56SjSCr7mnI2C0AKS6TNY2YyiZAm3l8Q56KsuvM+aBlfsA2TIG5uNZ4gtmqVaGrM5qHZLfSpd
+	nr0UjtaE8B3IWEZCcKMA29u0l4WbxAp7TnLaw3E1g6noKg8tkEw9sVrVFHN++8dRqf7JG2hQrCb
+	zYdMW3wER5GzxhH8TAydus/PP5ZC228wuModqvgLwyuX2s1c5hY3IsJrByzgNABuFDZf+FK9kfv
+	yiVbkGBVLSlsIOrgF5khrQJg/LfDCWgHdLNx29tGKy73vRSDAudvGYQHHY+DcrINEP/OQCXrA+m
+	kt0kCWyiT64ERrFPy1KTC
+X-Received: by 2002:a4a:ee0a:0:b0:6c9:80d8:a1f3 with SMTP id 006d021491bc7-6d4410d5fa6mr10516659eaf.48.1790546385625;
+        Sun, 27 Sep 2026 14:59:45 -0700 (PDT)
+Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81b3de6f7e1sm4874147a34.22.2026.09.27.14.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 14:59:44 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+Subject: [PATCH net-next v5 00/19] net: stmmac: preserve datapath state
+ across MTU and resume failures
+Date: Sun, 27 Sep 2026 15:59:35 -0600
+Message-Id: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-8-4583d8a23bca@kernel.org>
-In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-8-4583d8a23bca@kernel.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Sun, 27 Sep 2026 14:44:18 -0700
-X-Gm-Features: AclHuK-2F2ckU1C-yxhObu0QhsQKrsVKTug_h-Hi9fsC16ALl2HO1fuDhZLvMkI
-Message-ID: <CAJuCfpEawD2NUO9EoqKnR6YR59XMdYrtUrj8KEwJVwO8AOk8Lw@mail.gmail.com>
-Subject: Re: [PATCH v3 08/40] mm: add mmap action for discontiguous kernel
- page mapping
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, 
-	Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, 
-	Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
-	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
-	fuse-devel@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43OwU7DMAwG4FeZciYocbKu5sR7oB1S19uCSIuSr
+ Bqa+u545VLtUiRfLP/+7LsqnCMX9ba7q8xTLHEcpNm/7BRdwnBmHXvpFRhoDILV5dqlWHWpKQX
+ SmQtXfYo3Lnqy+kDYdgg9YEAlxHfmZSbChxokOfCtquPfRKRPpvrQH9lLLHXMP8snk102/ndUy
+ uj2EDx7Z5mNeT+nEL9eaUzLqQnWGGxgIFiPwJLtGLF5xtwa8xuYE4yMfOVOLkALz5hfY80G5gV
+ jsmRgbzpHuMbmef4FduVD78sBAAA=
+X-Change-ID: 20260921-submit-stmmac-reset-fixes-v1-7c98b92d29a9
+To: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
+ Heiner Kallweit <hkallweit1@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Christian Marangi <ansuelsmth@gmail.com>, 
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Serge Semin <fancer.lancer@gmail.com>, 
+ Suraj Jaiswal <quic_jsuraj@quicinc.com>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ Joao Pinto <Joao.Pinto@synopsys.com>, 
+ Vladimir Oltean <vladimir.oltean@nxp.com>, 
+ Ong Boon Leong <boon.leong.ong@intel.com>, 
+ Voon Weifeng <weifeng.voon@intel.com>, 
+ "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
+ Linus Walleij <linusw@kernel.org>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Simon Horman <horms@kernel.org>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Thierry Reding <thierry.reding@kernel.org>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, Chen-Yu Tsai <wens@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, Jose Abreu <Jose.Abreu@synopsys.com>, 
+ Yao Zi <me@ziyao.cc>, Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Richard Genoud <richard.genoud@bootlin.com>, 
+ Alastair D'Silva <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+ ZhaoJinming <zhaojinming@uniontech.com>, 
+ Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>, 
+ Ding Hui <dinghui1111@163.com>, Linkui Xiao <xiaolinkui@kylinos.cn>, 
+ Linkui Xiao <xiaolinkui@126.com>, linux-tegra@vger.kernel.org, 
+ linux-sunxi@lists.linux.dev, James Hilliard <james.hilliard1@gmail.com>, 
+ stable@vger.kernel.org, Rayagond Kokatanur <rayagond@vayavyalabs.com>, 
+ Ding Hui <dinghui@lixiang.com>
+X-Mailer: b4 0.15.2
 
-On Thu, Sep 17, 2026 at 9:27=E2=80=AFAM Lorenzo Stoakes (ARM) <ljs@kernel.o=
-rg> wrote:
->
-> The existing kernel page mapping mmap actions allow for partial and full
-> mapping of an array of struct page pointers.
->
-> However some drivers require the mapping of discontiguous ranges. Permit
-> this by providing discontig_kernel_page_ops which allows a driver to
-> specify how the operation should begin and how batches of pages should be
-> retrieved.
->
-> It uses the minimum exposed interface to do so, providing address, page
-> offset and both vm_private_data state and a local private state object.
->
-> ops->init can establish state for the operation, and ops->get outputs the
-> pages to map and their count. Should an error arise the core unmaps the
-> VMA, invoking vm_ops->close, which is therefore where any state establish=
-ed
-> by ops->init is released.
->
-> Batches may not exceed the VMA, but may map less than its full range in
-> case the driver wishes to allow the user to map an area larger than the
-> available data.
->
-> To use it, users invoke mmap_action_map_discontig_kernel_pages() with
-> initial local private state and a set of operations.
->
-> Users can then use one of the provided helper functions to perform an
-> action:
->
-> * discontig_kernel_map_abort() - Abort and leave the mapping as it has
->   been accumulated so far.
-> * discontig_kernel_map_page() - Map a single page, or a compound page giv=
-en
->   its head page.
-> * discontig_kernel_map_page_range() - Maps a struct page ** array of a
->   specified count.
->
-> The userland VMA tests are updated accordingly.
->
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  include/linux/mm.h              |  45 +++++++++++++++++
->  include/linux/mm_types.h        |  44 +++++++++++++++-
->  mm/internal.h                   |   3 ++
->  mm/memory.c                     | 108 ++++++++++++++++++++++++++++++++++=
-++++--
->  mm/util.c                       |   7 +++
->  tools/testing/vma/include/dup.h |  11 +++-
->  6 files changed, 209 insertions(+), 9 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index a1f2d375cf7d..2a92193ac6a5 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -4647,10 +4647,55 @@ static inline void mmap_action_map_kernel_pages_f=
-ull(struct vm_area_desc *desc,
->                                      vma_desc_pages(desc));
->  }
->
-> +static inline
-> +void mmap_action_map_discontig_kernel_pages(struct vm_area_desc *desc,
-> +               void *init_private, const struct discontig_kernel_page_op=
-s *ops)
-> +{
-> +       struct mmap_action *action =3D &desc->action;
-> +
-> +       action->type =3D MMAP_DISCONTIG_KERNEL_PAGES;
-> +       action->map_kernel_discontig.init_private =3D init_private;
-> +       action->map_kernel_discontig.ops =3D ops;
-> +}
-> +
->  int mmap_action_prepare(struct vm_area_desc *desc);
->  int mmap_action_complete(struct vm_area_struct *vma,
->                          struct mmap_action *action, bool is_compat);
->
-> +static inline void
-> +discontig_kernel_map_abort(struct discontig_kernel_page_state *state)
-> +{
-> +       state->action =3D DISCONTIG_KERNEL_PAGE_ABORT;
-> +}
-> +
-> +static inline void
-> +discontig_kernel_map_page(struct discontig_kernel_page_state *state,
-> +                         struct page *page)
-> +{
-> +       struct folio *folio =3D page_folio(page);
-> +
-> +       if (folio_test_large(folio)) {
-> +               VM_WARN_ON_ONCE(page !=3D folio_page(folio, 0));
-> +               state->action =3D DISCONTIG_KERNEL_PAGE_MAP_COMPOUND_PAGE=
-;
-> +               state->__folio =3D folio;
-> +               state->__nr_pages =3D min(state->nr_pages_remain,
-> +                                       folio_nr_pages(folio));
-> +       } else {
-> +               state->action =3D DISCONTIG_KERNEL_PAGE_MAP_PAGE;
-> +               state->__page =3D page;
-> +               state->__nr_pages =3D 1;
-> +       }
-> +}
-> +
-> +static inline void
-> +discontig_kernel_map_page_range(struct discontig_kernel_page_state *stat=
-e,
-> +                               struct page **page_arr, unsigned long nr_=
-pages)
-> +{
-> +       state->action =3D DISCONTIG_KERNEL_PAGE_MAP_PAGE_RANGE;
-> +       state->__page_arr =3D page_arr;
-> +       state->__nr_pages =3D nr_pages;
+Keep the stmmac datapath coherent after failed MTU changes or hardware
+resume without changing the interface's administrative state. Retain the
+working MTU configuration for rollback, and allow ordinary down/up
+recovery when hardware cannot be restored.
 
-Shouldn't we cap state->__nr_pages at state->nr_pages_remain like you
-do in discontig_kernel_map_page()?
+This revision incorporates the following previously posted fixes as
+prerequisites:
 
-> +}
-> +
->  /* Look up the first VMA which exactly match the interval vm_start ... v=
-m_end */
->  static inline struct vm_area_struct *find_exact_vma(struct mm_struct *mm=
-,
->                                 unsigned long vm_start, unsigned long vm_=
-end)
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 9ca2ea3664bc..0cb4f9603956 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -818,8 +818,44 @@ enum mmap_action_type {
->         MMAP_NOTHING,
->         MMAP_REMAP_PFN,
->         MMAP_IO_REMAP_PFN,
-> -       MMAP_SIMPLE_IO_REMAP,   /* I/O remap with guardrails. */
-> -       MMAP_KERNEL_PAGES,      /* Map kernel page range from array. */
-> +       MMAP_SIMPLE_IO_REMAP,           /* I/O remap with guardrails. */
-> +       MMAP_KERNEL_PAGES,              /* Map kernel page range from arr=
-ay. */
-> +       MMAP_DISCONTIG_KERNEL_PAGES,    /* Map kernel discontig page rang=
-e. */
-> +};
-> +
-> +enum discontig_kernel_page_action {
-> +       DISCONTIG_KERNEL_PAGE_ABORT,
-> +       DISCONTIG_KERNEL_PAGE_MAP_PAGE,
-> +       DISCONTIG_KERNEL_PAGE_MAP_COMPOUND_PAGE,
-> +       DISCONTIG_KERNEL_PAGE_MAP_PAGE_RANGE,
-> +};
-> +
-> +struct discontig_kernel_page_state {
-> +       /* Map state. */
-> +       const unsigned long start;      /* Start address of VMA. */
-> +       const unsigned long end;        /* End address of VMA. */
-> +       unsigned long addr;             /* The current address to be mapp=
-ed. */
-> +       pgoff_t pgoff;                  /* The current pgoff to be mapped=
-. */
-> +       unsigned long nr_pages_mapped;  /* The number of pages mapped. */
-> +       unsigned long nr_pages_remain;  /* The number of pages remaining.=
- */
-> +
-> +       /* User-defined state. */
-> +       void *vm_private_data;          /* VMA private data. */
-> +       void *private;                  /* Mapping private data. */
-> +
-> +       /* Users should not touch these, use discontig_kernel_map_*() hel=
-pers. */
-> +       enum discontig_kernel_page_action action;
-> +       union {
-> +               struct page *__page;
-> +               struct folio *__folio;
-> +               struct page **__page_arr;
-> +       };
-> +       unsigned long __nr_pages;
-> +};
-> +
-> +struct discontig_kernel_page_ops {
-> +       int (*init)(void *vm_private_data, void **private);
-> +       int (*get)(struct discontig_kernel_page_state *state);
->  };
->
->  /*
-> @@ -844,6 +880,10 @@ struct mmap_action {
->                         unsigned long nr_pages;
->                         pgoff_t pgoff;
->                 } map_kernel;
-> +               struct {
-> +                       void *init_private;
-> +                       const struct discontig_kernel_page_ops *ops;
-> +               } map_kernel_discontig;
->         };
->         enum mmap_action_type type;
->
-> diff --git a/mm/internal.h b/mm/internal.h
-> index c767007c2187..b81fce5fe510 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -1516,6 +1516,9 @@ int simple_ioremap_prepare(struct vm_area_desc *des=
-c);
->  int map_kernel_pages_prepare(struct vm_area_desc *desc);
->  int map_kernel_pages_complete(struct vm_area_struct *vma,
->                               struct mmap_action *action);
-> +int map_discontig_kernel_pages_prepare(struct vm_area_desc *desc);
-> +int map_discontig_kernel_pages_complete(struct vm_area_struct *vma,
-> +                                       struct mmap_action *action);
->
->  static inline int io_remap_pfn_range_prepare(struct vm_area_desc *desc)
->  {
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 448342883e9d..45b21bb04a18 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2609,17 +2609,23 @@ int vm_insert_pages(struct vm_area_struct *vma, u=
-nsigned long addr,
->  }
->  EXPORT_SYMBOL(vm_insert_pages);
->
-> +static void __map_kernel_pages_prepare(struct vm_area_desc *desc)
-> +{
-> +       if (vma_desc_test(desc, VMA_MIXEDMAP_BIT))
-> +               return;
-> +
-> +       VM_WARN_ON_ONCE(mmap_read_trylock(desc->mm));
-> +       VM_WARN_ON_ONCE(vma_desc_test(desc, VMA_PFNMAP_BIT));
-> +       vma_desc_set_flags(desc, VMA_MIXEDMAP_BIT);
-> +}
-> +
->  int map_kernel_pages_prepare(struct vm_area_desc *desc)
->  {
->         const struct mmap_action *action =3D &desc->action;
->         const unsigned long addr =3D action->map_kernel.start;
->         unsigned long nr_pages, end;
->
-> -       if (!vma_desc_test(desc, VMA_MIXEDMAP_BIT)) {
-> -               VM_WARN_ON_ONCE(mmap_read_trylock(desc->mm));
-> -               VM_WARN_ON_ONCE(vma_desc_test(desc, VMA_PFNMAP_BIT));
-> -               vma_desc_set_flags(desc, VMA_MIXEDMAP_BIT);
-> -       }
-> +       __map_kernel_pages_prepare(desc);
->
->         nr_pages =3D action->map_kernel.nr_pages;
->         end =3D addr + PAGE_SIZE * nr_pages;
-> @@ -2640,6 +2646,98 @@ int map_kernel_pages_complete(struct vm_area_struc=
-t *vma,
->                             &nr_pages, vma->vm_page_prot);
->  }
->
-> +int map_discontig_kernel_pages_prepare(struct vm_area_desc *desc)
-> +{
-> +       const struct mmap_action *action =3D &desc->action;
-> +       const struct discontig_kernel_page_ops *ops =3D
-> +               action->map_kernel_discontig.ops;
-> +
-> +       /* At minimum need to be able to get pages. */
-> +       if (WARN_ON_ONCE(!ops || !ops->get))
-> +               return -EINVAL;
-> +
-> +       __map_kernel_pages_prepare(desc);
-> +       return 0;
-> +}
-> +
-> +static int apply_discontig_action(struct vm_area_struct *vma,
-> +                                 struct discontig_kernel_page_state *sta=
-te)
-> +{
-> +       unsigned long nr_pages =3D state->__nr_pages;
-> +       unsigned long addr =3D state->addr;
-> +       unsigned long i;
-> +
-> +       if (state->action =3D=3D DISCONTIG_KERNEL_PAGE_MAP_PAGE)
-> +               return insert_page(vma, addr, state->__page,
-> +                                  vma->vm_page_prot, /*mkwrite=3D*/false=
-);
-> +       if (state->action =3D=3D DISCONTIG_KERNEL_PAGE_MAP_PAGE_RANGE)
-> +               return insert_pages(vma, addr, state->__page_arr,
-> +                                   &nr_pages, vma->vm_page_prot);
-> +
-> +       /* Compound folio - have to iterate through each page. */
-> +       for (i =3D 0; i < nr_pages; i++, addr +=3D PAGE_SIZE) {
-> +               struct page *page =3D folio_page(state->__folio, i);
-> +               int err;
-> +
-> +               err =3D insert_page(vma, addr, page, vma->vm_page_prot,
-> +                                 /*mkwrite=3D*/false);
-> +               if (err)
-> +                       return err;
-> +       }
-> +       return 0;
-> +}
-> +
-> +int map_discontig_kernel_pages_complete(struct vm_area_struct *vma,
-> +                                       struct mmap_action *action)
-> +{
-> +       const struct discontig_kernel_page_ops *ops =3D
-> +               action->map_kernel_discontig.ops;
-> +       struct discontig_kernel_page_state state =3D {
-> +               .start =3D vma->vm_start,
-> +               .end =3D vma->vm_end,
-> +               .addr =3D vma->vm_start,
-> +               .pgoff =3D vma->vm_pgoff,
-> +               .nr_pages_mapped =3D 0,
-> +               .nr_pages_remain =3D vma_pages(vma),
-> +               .vm_private_data =3D vma->vm_private_data,
-> +               .private =3D action->map_kernel_discontig.init_private,
-> +       };
-> +       int err =3D 0;
-> +
-> +       if (ops->init)
-> +               err =3D ops->init(vma->vm_private_data, &state.private);
-> +       if (err)
-> +               return err;
-> +
-> +       do {
-> +               unsigned long end, pgoff_end;
-> +               unsigned long nr_pages;
-> +
-> +               /* Default to abort. */
-> +               state.action =3D DISCONTIG_KERNEL_PAGE_ABORT;
-> +               err =3D ops->get(&state);
-> +               if (err || state.action =3D=3D DISCONTIG_KERNEL_PAGE_ABOR=
-T)
-> +                       return err;
-> +               nr_pages =3D state.__nr_pages;
-> +
-> +               if (!nr_pages || nr_pages > state.nr_pages_remain)
-> +                       return -EINVAL;
-> +               end =3D state.addr + PAGE_SIZE * nr_pages;
-> +               pgoff_end =3D state.pgoff + nr_pages;
-> +
-> +               err =3D apply_discontig_action(vma, &state);
-> +               if (err)
-> +                       return err;
-> +
-> +               state.addr =3D end;
-> +               state.pgoff =3D pgoff_end;
-> +               state.nr_pages_mapped +=3D nr_pages;
-> +               state.nr_pages_remain -=3D nr_pages;
-> +       } while (state.addr < vma->vm_end);
-> +
-> +       return 0;
-> +}
-> +
->  /**
->   * vm_insert_page - insert single page into user vma
->   * @vma: user vma to map to
-> diff --git a/mm/util.c b/mm/util.c
-> index 438170490e7f..c5ee52aede1e 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -1469,6 +1469,8 @@ int mmap_action_prepare(struct vm_area_desc *desc)
->                 return simple_ioremap_prepare(desc);
->         case MMAP_KERNEL_PAGES:
->                 return map_kernel_pages_prepare(desc);
-> +       case MMAP_DISCONTIG_KERNEL_PAGES:
-> +               return map_discontig_kernel_pages_prepare(desc);
->         }
->
->         WARN_ON_ONCE(1);
-> @@ -1501,6 +1503,9 @@ int mmap_action_complete(struct vm_area_struct *vma=
-,
->         case MMAP_KERNEL_PAGES:
->                 err =3D map_kernel_pages_complete(vma, action);
->                 break;
-> +       case MMAP_DISCONTIG_KERNEL_PAGES:
-> +               err =3D map_discontig_kernel_pages_complete(vma, action);
-> +               break;
->         case MMAP_IO_REMAP_PFN:
->         case MMAP_SIMPLE_IO_REMAP:
->                 /* Should have been delegated. */
-> @@ -1522,6 +1527,7 @@ int mmap_action_prepare(struct vm_area_desc *desc)
->         case MMAP_IO_REMAP_PFN:
->         case MMAP_SIMPLE_IO_REMAP:
->         case MMAP_KERNEL_PAGES:
-> +       case MMAP_DISCONTIG_KERNEL_PAGES:
->                 WARN_ON_ONCE(1); /* nommu cannot handle these. */
->                 break;
->         }
-> @@ -1543,6 +1549,7 @@ int mmap_action_complete(struct vm_area_struct *vma=
-,
->         case MMAP_IO_REMAP_PFN:
->         case MMAP_SIMPLE_IO_REMAP:
->         case MMAP_KERNEL_PAGES:
-> +       case MMAP_DISCONTIG_KERNEL_PAGES:
->                 WARN_ON_ONCE(1); /* nommu cannot handle this. */
->
->                 err =3D -EINVAL;
-> diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/=
-dup.h
-> index 1098655a5f4a..1d5f6b3cbd21 100644
-> --- a/tools/testing/vma/include/dup.h
-> +++ b/tools/testing/vma/include/dup.h
-> @@ -457,14 +457,17 @@ enum mmap_action_type {
->         MMAP_NOTHING,
->         MMAP_REMAP_PFN,
->         MMAP_IO_REMAP_PFN,
-> -       MMAP_SIMPLE_IO_REMAP,   /* I/O remap with guardrails. */
-> -       MMAP_KERNEL_PAGES,      /* Map kernel page range from array. */
-> +       MMAP_SIMPLE_IO_REMAP,           /* I/O remap with guardrails. */
-> +       MMAP_KERNEL_PAGES,              /* Map kernel page range from arr=
-ay. */
-> +       MMAP_DISCONTIG_KERNEL_PAGES,    /* Map kernel discontig page rang=
-e. */
->  };
->
->  /*
->   * Describes an action an mmap_prepare hook can instruct to be taken to =
-complete
->   * the mapping of a VMA. Specified in vm_area_desc.
->   */
-> +struct discontig_kernel_page_ops;
-> +
->  struct mmap_action {
->         union {
->                 struct {
-> @@ -483,6 +486,10 @@ struct mmap_action {
->                         unsigned long nr_pages;
->                         pgoff_t pgoff;
->                 } map_kernel;
-> +               struct {
-> +                       void *init_private;
-> +                       const struct discontig_kernel_page_ops *ops;
-> +               } map_kernel_discontig;
->         };
->         enum mmap_action_type type;
->
->
-> --
-> 2.55.0
->
+- Linkui Xiao's v3 MDIO reset GPIO fix:
+  https://lore.kernel.org/r/20260921015727.2643540-1-xiaolinkui@126.com
+- Ding Hui's v3 DMA descriptor allocation cleanup:
+  https://lore.kernel.org/r/20260919121436.1642724-1-dinghui1111@163.com
+- Lorenzo Bianconi's v3 EST series, patches 2-4:
+  https://lore.kernel.org/r/20260902-stmmac-est-reapply-after-open-v3-0-e72a6df5a7ef@oss.qualcomm.com
+
+The GPIO patch incorporates the review fixes for non-platform builds,
+disabled MDIO children and resume-only resets, and drops the unnecessary
+forward declaration. Ding's allocation patch is unchanged apart from our
+forwarding sign-off; its deliberate omission of Fixes tags is kept.
+
+The ownership transition and its XDP, ethtool and PM consumers land
+together, so resource cleanup does not precede the power-access guards
+it requires. The larger DMA shutdown change precedes MTU rollback,
+rather than leaving early retained-ring commits with unsafe teardown
+paths.
+
+The ownership states remain distinct: DOWN owns no IRQs or enabled NAPI;
+RUNNING has active queues; SUSPENDED retains rings and IRQs; HALTED
+retains rings but has released IRQs after failed MTU rollback.
+Collapsing the last two states would make close free IRQs which it no
+longer owns. DMA memory ownership is tracked separately: a failed
+shutdown can retain allocations even in DOWN until hardware acknowledges
+a successful reset.
+
+Jumbo rollback allocates no new buffers or IRQ registrations. RX holes
+are filled before reset without changing the old descriptors;
+descriptors are rebuilt or retired only after reset succeeds. If
+rollback also fails, the interface remains detached until down/up
+recovery. This cannot guarantee recovery from indefinitely failing
+hardware.
+
+Failed interfaces still receive hardware/PHY sleep handling. A failed
+datapath with MAC WoL configured rejects suspend with -EBUSY because its
+wake path is unusable; PHY-only WoL is not rejected. Platform MAC WoL
+retains register, receive and timestamp power so a level wake interrupt
+can be acknowledged before normal resume. PCI power transitions instead
+run inside the noirq window, retaining PME/D3 wakeup. Failed PCI
+restoration masks only that function's INTx source until recovery, not a
+shared IRQ line. Optional platform wake resources are balanced
+separately from BSP power.
+
+Timestamp filters and PHC registration survive an MTU change. MTU reset
+and the live XDP/XSK reset fallback replay the platform PTP clock
+selector, frequency correction, PEROUT and EXTTS settings. Ordinary
+system resume retains the timestamp initialization path and does not
+replay cached PEROUT or EXTTS requests. Continuous PHC time is not
+preserved across reset.
+
+Live XDP and ethtool failures leave the administratively-up interface
+detached for ordinary down/up recovery. Program attachment failures
+return an error without consuming the proposed program. BPF-link and
+XSK-pool removal still complete if their datapath restart fails, so
+teardown can release the program or pool safely. AF_XDP pool
+reconfiguration now pauses all queues and replays the MAC link while
+rebuilding the rings. Successful reconfiguration leaves the PHY running
+rather than powering it down and restarting autonegotiation. All queues
+and other sockets are still paused while their rings are rebuilt. A
+failed restart stops phylink without reconfiguring the failed MAC, then
+permits ordinary down/up recovery.
+
+Close and live XDP/XSK release now require stopped DMA process states or
+a completed global reset before releasing DMA memory. Unsupported
+idle-register layouts, including XGMAC and GMAC4 with more than three
+channels, use the reset fallback. Replay cached L3/L4 filters, EtherType
+steering, VLAN priority, preemption/TC mapping and EST before starting
+DMA, with PHC replay on the reset paths described above. A datapath
+replay failure enters the existing rollback or detached recovery path.
+
+If shutdown and reset both fail, retain rings, mappings and backing
+memory. AF_XDP pool teardown still completes, with independent
+references keeping its DMA mapping, UMEM pages and buffer metadata
+alive. DMA-owned frames are not returned to the pool's reusable free
+list. A later successful down/up reset reclaims them. There is no
+generic isolation guarantee for permanently unresponsive hardware:
+removal reports and retains unsafe DMA allocations, which may therefore
+remain pinned until reboot.
+
+Assisted-by: Codex:gpt-6-astra
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes in v5:
+
+- Keep platform MAC-WoL register access available while IRQ handlers can
+  run; separate STM32 wake-clock preparation from power removal and
+  retain Tegra private clocks/reset state. Publish wake handling before
+  arming PMT.
+- Move PCI BSP power changes into noirq while preserving PME/D3 wakeup.
+  Mask function-local INTx after failed restoration until datapath
+  recovery.
+- Acknowledge powered timestamp interrupts while PHC access is blocked,
+  including after PMT is disarmed; suppress delivery from a blocked
+  clock. Balance wake-only resources and unwind a failed suspend
+  callback.
+- Keep frequency correction when recalculating the PHC increment.
+- Retain XSK buffer metadata without delaying socket teardown, and keep
+  DMA-owned RX frames off the pool free list until shutdown is
+  confirmed.
+- Rebuild RX buffer addresses and read-format control words after a
+  successful resume reset, including page-pool holes and partial XSK
+  rings.
+- Target net-next and include the unmerged GPIO, allocation and EST
+  work, retaining authorship, sign-offs, review history and original
+  submission links. Place the EST group before PHC serialization and the
+  per-queue allocation cleanup immediately before the remaining
+  allocation fixes.
+- Drop our MDIO GPIO patch. Keep only the allocation-lifetime additions
+  not covered by Ding's per-queue allocation cleanup.
+- Incorporate the GPIO acquisition guards and declaration cleanup from
+  the prerequisite reviews. Cache reset resources even without
+  needs_reset, because system resume calls the reset routine directly.
+- Reuse Lorenzo's embedded EST state, explicit hardware enable argument
+  and shared replay helper; retain transactional schedule replacement
+  and replay before DMA starts, under the PTP mutex. Pass unpublished
+  replacements through the same base-time and programming helper as
+  reset replay.
+- Return EST disable, clock-update and EST replay errors from PHC time
+  adjustment. Keep the schedule locked throughout and attempt to rearm
+  it even if the clock update fails.
+- Preserve net-next PTP error propagation and timestamp-capability
+  checks, while tracking actual clock ownership independently during
+  failed PM.
+- Keep the already merged open-error DMA stop and extend it with
+  hardware shutdown confirmation and retained DMA memory on failure.
+- Link to v4:
+  https://patch.msgid.link/20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9@gmail.com
+
+Changes in v4:
+
+- Reorder prerequisites ahead of their consumers. Separate the
+  independent MDIO GPIO fix and PHC/IRQ preparation, and combine
+  datapath ownership with the XDP, ethtool and PM paths which must
+  observe it. Keep MTU rollback last.
+- Replay cached TC filters, steering, preemption mapping and EST after
+  reset, with DMA held stopped until replay succeeds. Preserve the
+  previous cached rule on installation failure and advance EST base time
+  by whole cycles.
+- Validate TAPRIO replacements without modifying the installed schedule;
+  reject failed PHC reads and retain a valid cache after setup failure.
+- Keep control operations from accessing unpowered registers after close
+  reattaches the netdev. Permit software-only VLAN, qdisc and TC filter
+  removal, and preserve open-time power recovery. Remove cached flower,
+  steering and u32 rules while down or detached so reset cannot replay
+  filters which TC has already deleted.
+- Use phylink link replay for live XDP/XSK updates, leaving the PHY
+  running on success and balancing replay with phylink_stop() on failed
+  restart.
+- Require a hardware idle acknowledgement or completed reset before DMA
+  memory retirement on close, XDP/XSK replacement and failed open.
+  Retain failed configurations for recovery, and defer IRQ TX recovery
+  and resume descriptor rebuilding until shutdown/reset is confirmed.
+- Add independent AF_XDP mapping/UMEM references so pool teardown can
+  complete without unmapping DMA-visible memory after a shutdown
+  failure. Document reset fallback and permanent-failure memory
+  retention.
+- Keep shared IRQ controller lines enabled during MTU replacement. Mask
+  DMA sources at the device, protect DMA-handler quiescence with the
+  channel lock, and drain registered handlers with synchronize_irq().
+- Preserve pending DMA status while quiesced, including when hardware
+  setup restores interrupt enables. Restore saved masks on restart and
+  leave DMA sources masked when failed rollback releases the driver's
+  IRQ handlers.
+- Reuse the final TX queue and timer drain after synchronizing IRQ
+  handlers.
+- Restore saved RX skb ownership immediately when taking partial receive
+  state, including a budget-one completion and a DMA-owned next
+  descriptor.
+- Cancel the EEE software timer after draining NAPI, and make GSO
+  feature checks use stable platform TBS capabilities rather than
+  replaceable rings.
+- Reuse the MDIO reset GPIO acquired at probe and reject TC queue work
+  when the datapath is not running, except for software-only filter
+  deletion.
+- Let carrier-down XSK TX polls complete instead of continuously
+  repolling, and remove the unused external XSK wakeup declaration.
+- Stop a PHY powered by prepare_resume() after failed ethtool setup.
+  Publish core queue counts transactionally only after the fallible open
+  work.
+- Initialize rollback RX addresses before publishing descriptor
+  ownership. Restore the platform PTP clock selection, frequency
+  adjustment, PEROUT and EXTTS settings; serialize PHC/devlink access
+  across reset and reject access to a failed retained clock.
+- Freeze deferred XSK pool teardown before device PM. Track platform
+  power, pending clock restoration and actual PTP clock ownership
+  separately from the datapath. Avoid unpowered MAC/MDIO accesses on
+  failed close-time recovery and balance clocks even after a noirq
+  resume failure.
+- Check unusable MAC WoL before the pending-sleep shortcut, and update
+  comments for HALTED ownership and the ethtool reopen path.
+- Link to v3:
+  https://patch.msgid.link/20260924-submit-stmmac-reset-fixes-v1-v3-0-c031e3f3a282@gmail.com
+
+Changes in v3:
+
+- Snapshot debugfs queue counts under RTNL with the descriptor ownership
+  check, so a reader blocked behind channel shrink uses the new
+  topology.
+- Complete pending core sleep state during close and retry restoration
+  on open after runtime-PM acquisition. Use the installed wake state
+  rather than mutable WoL settings, and retain the pending marker if
+  restoration fails.
+- Put the independent IRQ unwind fix first, ahead of the ownership
+  changes.
+- Correct the WoL/safety IRQ unwind order, fixing a repeated safety IRQ
+  free and a leaked WoL handler.
+- Account for live XDP release/reopen in datapath ownership. Stop DMA on
+  late IRQ failure, propagate program-attach errors without losing
+  program references, and allow BPF-link removal to complete after
+  restart failure.
+- Replace the void AF_XDP queue-enable helpers with the tracked XDP
+  restart. Unmap a removed pool only after freeing its rings, undo
+  failed pool attachment, and preserve TBS configuration while
+  rebuilding the channels.
+- Keep PHY/PM ownership across ethtool ring/channel changes, restoring
+  the old configuration after failed reopening and leaving the interface
+  detached for down/up recovery without a second runtime-PM put.
+  Explicitly disable the MAC during release even when link resolution
+  has not reached mac_link_up().
+- Split the MTU work into normal-size MTU handling, allocation unwind,
+  stable DMA/IRQ ownership (including timer lifetime), and the
+  retained-ring transaction. Keep the ownership change and its
+  open/error-path adaptations in the same patch.
+- Restore the PHY advertisement reduced by phylink_suspend() when
+  stopping a suspended instance, without restarting or reconfiguring the
+  MAC, in response to Andrew Lunn.
+- Keep suspend-owned PHY speed control separate from explicit driver
+  speed-down requests, so close-time power saving does not overwrite the
+  original advertisement and remains effective until the matching
+  speed-up.
+- Suspend a stopped PHY powered back up by phylink_prepare_resume() when
+  stopping after a failed MAC resume, without repeating phy_stop().
+- Add a separate MTU transaction patch retaining old DMA resources and
+  IRQ registrations until replacement succeeds, following Andrew Lunn's
+  request to keep the old setup for failure recovery.
+- Keep DMA configuration objects at stable addresses and use persistent
+  channel objects for per-queue interrupt contexts.
+- Drain transmitters and post-completion NAPI poll tails before
+  cancelling TX timers.
+- Avoid resetting normal-size MTU changes, including all supported
+  AF_XDP MTUs, and stop rebinding live pools through temporary RXQ
+  objects.
+- Program the new MAC receive limit before activation and restore the
+  old MTU on failure; refill old RX buffer holes before reset so
+  rollback does not require allocation.
+- Preserve coalescing, TBS state, PHC registration and timestamp
+  filters; leave a failed rollback detached with old rings retained for
+  close.
+- Harden partial-allocation unwind.
+- Separate core sleep completion from datapath ownership so failed MTU
+  and resume paths still receive hardware PM handling, without disabling
+  NAPI twice or restarting released queues. Address the skipped-suspend
+  issue reported by Sashiko; reject an unusable MAC WoL path with
+  -EBUSY.
+- Balance platform noirq PTP clock handling against resources still
+  owned after detached XDP cleanup.
+- Link to v2:
+  https://patch.msgid.link/20260922-submit-stmmac-reset-fixes-v1-v2-0-d92e609be996@gmail.com
+
+Changes in v2:
+
+- Drop forced netif_close() and retain the interface's administrative
+  state, as requested by Maxime Chevallier.
+- Separate queue quiescence from resource release and use explicit
+  datapath state instead of a napi_disabled argument to the release
+  helper.
+- Handle repeated suspend/resume after failure, preserve PHY/PM
+  ownership until ordinary close, and allow a fresh down/up recovery.
+- Check XDP/AF_XDP cleanup, descriptor readback and asynchronous reset
+  work while the netdev is administratively up but unavailable.
+- Explain the generic phylink suspend-to-stop transition and why
+  restarting phylink after a failed MAC resume is not a valid
+  substitute, in response to Andrew Lunn.
+- Combine the two stmmac error-path fixes so every user of the new state
+  has consistent resource and NAPI lifetime handling in one patch.
+- Link to v1:
+  https://patch.msgid.link/20260921-submit-stmmac-reset-fixes-v1-v1-0-87a4e431ee00@gmail.com
+
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+To: Serge Semin <fancer.lancer@gmail.com>
+To: Suraj Jaiswal <quic_jsuraj@quicinc.com>
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To: Linus Walleij <linusw@kernel.org>
+To: Russell King <linux@armlinux.org.uk>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To: Magnus Karlsson <magnus.karlsson@intel.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Simon Horman <horms@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Björn Töpel <bjorn@kernel.org>
+To: Richard Cochran <richardcochran@gmail.com>
+To: Jose Abreu <Jose.Abreu@synopsys.com>
+To: Christian Marangi <ansuelsmth@gmail.com>
+To: Joao Pinto <Joao.Pinto@synopsys.com>
+To: Yao Zi <me@ziyao.cc>
+To: Thierry Reding <thierry.reding@kernel.org>
+To: Jonathan Hunter <jonathanh@nvidia.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>
+To: Ong Boon Leong <boon.leong.ong@intel.com>
+To: Voon Weifeng <weifeng.voon@intel.com>
+To: "Song, Yoong Siang" <yoong.siang.song@intel.com>
+To: Chen-Yu Tsai <wens@kernel.org>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>
+To: Samuel Holland <samuel@sholland.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: bpf@vger.kernel.org
+Cc: linux-tegra@vger.kernel.org
+Cc: linux-sunxi@lists.linux.dev
+
+---
+Ding Hui (1):
+      net: stmmac: fix error path cleanup in DMA descriptor ring allocation
+
+James Hilliard (14):
+      net: stmmac: unwind the WoL IRQ after a safety IRQ request failure
+      net: phylink: allow stopping a suspended instance
+      xsk: freeze deferred pool teardown during system sleep
+      net: stmmac: serialize and retain PHC configuration across reset
+      net: stmmac: leave the datapath running for normal-size MTU changes
+      net: stmmac: complete DMA configuration allocation unwind
+      net: stmmac: keep DMA configurations at stable addresses
+      net: stmmac: track datapath and power ownership across failed reopening
+      net: stmmac: use the tracked datapath restart for XSK pool changes
+      net: stmmac: restore TC offloads before restarting DMA
+      xsk: allow drivers to retain DMA mappings independently of pools
+      net: stmmac: retain DMA memory until hardware shutdown completes
+      net: stmmac: prepare device-local DMA interrupt quiescence
+      net: stmmac: retain DMA resources across MTU changes
+
+Linkui Xiao (1):
+      net: stmmac: request the MDIO reset GPIO only once
+
+Lorenzo Bianconi (3):
+      net: stmmac: embed struct stmmac_est in stmmac_priv struct
+      net: stmmac: pass the desired EST enable state to est_configure()
+      net: stmmac: re-apply taprio offload in __stmmac_open() and stmmac_resume()
+
+ drivers/net/ethernet/stmicro/stmmac/chain_mode.c   |    6 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c  |    2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-loongson.c   |    2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-motorcomm.c  |    2 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c  |   18 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c  |   28 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac-tegra.c  |   27 +-
+ .../net/ethernet/stmicro/stmmac/dwmac1000_core.c   |    4 +
+ .../net/ethernet/stmicro/stmmac/dwmac1000_dma.c    |    2 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c |    2 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c   |    4 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h   |    8 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c   |   29 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac_dma.h    |    4 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c    |   30 +
+ drivers/net/ethernet/stmicro/stmmac/dwxgmac2_dma.c |   11 +
+ drivers/net/ethernet/stmicro/stmmac/hwif.h         |   11 +-
+ drivers/net/ethernet/stmicro/stmmac/ring_mode.c    |    4 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h       |   70 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_est.c   |   49 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_est.h   |   13 +
+ .../net/ethernet/stmicro/stmmac/stmmac_ethtool.c   |   15 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_fpe.c   |    1 +
+ .../net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c  |   10 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  | 1912 +++++++++++++++-----
+ drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c  |   65 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c   |    2 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.c   |    3 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_platform.c  |   40 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c   |  190 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_selftests.c |    8 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c    |  375 ++--
+ drivers/net/ethernet/stmicro/stmmac/stmmac_vlan.c  |    6 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c   |   83 +-
+ drivers/net/phy/phylink.c                          |   51 +-
+ include/linux/stmmac.h                             |    7 +
+ include/net/xdp_sock_drv.h                         |   25 +
+ include/net/xsk_buff_pool.h                        |    7 +
+ net/xdp/xsk_buff_pool.c                            |   72 +-
+ 39 files changed, 2390 insertions(+), 808 deletions(-)
+---
+base-commit: 014d795c73837ea2339a4ea8e8f82c6e959b845d
+change-id: 20260921-submit-stmmac-reset-fixes-v1-7c98b92d29a9
+
+Best regards,
+--  
+James Hilliard <james.hilliard1@gmail.com>
+
