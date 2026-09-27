@@ -1,121 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1223B2FCA;
-	Sun, 27 Sep 2026 15:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C293CBE8B;
+	Sun, 27 Sep 2026 17:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790524208; cv=none; b=bdhSae3VDkRz9ux4xxqtKxRdl1CZQUqaV74nFiIzbhUPPQrFwiXd/sULSz4S5qW3ZBuTIdYWs4NxLko92pWnqESpGm9ZtjH/iq0gTikLIyosi2Fy35dvjZLvqx4iqjiMG8CqC5rBbnyPFAK0TR526Z+irky3TD508S0G9S8GAqI=
+	t=1790531313; cv=none; b=YljZvPAkzJNYtGKbII/cfUhFfOdqb2oA1ZNaeRVusYuCUV6OR/fqZhxx5j6vUm3lI/4pr8n4sDa41mk9e2RT9Mbh71B6eqxGXRSLGPxjB8xp/kNdStlrpMDaWgUjGnVgPe7TmffwPLd7sATPChWS83tAius5Ly+ZOVMDKYAxGaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790524208; c=relaxed/simple;
-	bh=CEs8jJTg1IbI6xr9K1eZ9cZINfJQPvy3J0K9LwvAig4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=W2tY1Eo3saYVm9rUolEbPI5RDq/Uy+BzvLxzBDGZzMy4KKqISs5UrJ9k6vJSe4Pl4DdAFsL+lBIH5haEznahDPsesV3ohWzll+G5nPpW7wIwdPjU9UBMpDywEQ4yVVkH1khwcJYChxEUVRfFfoiwblxeHs3ZbQZNlsnfeKsG+SY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZljS/43Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790531313; c=relaxed/simple;
+	bh=77tu4iNrx8Sh3PiZPWpnqFZCgOQw/3Lq4YX1j1xZPf0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SmfdKupBpRizPYeafIwE/R9RbHsdOhteotv0JrDo17oDNJd1EVfKSoI2zcKmo+wD22NlFeCDIiJu9OIQGFT7M44IiLn8ivE5nUKRm6xv72KZleF35efqsrE1Qv2M6RV93yHisvbMEYoYuCm9sxe/uAfn2a5i2VMAQulfxCXtlm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TdsNNYUE; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZljS/43Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FB61F000FF;
-	Sun, 27 Sep 2026 15:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790524207;
-	bh=0nMk8Z2X3+PO6Urp05IHH+Xi1G1Roa6nXTtbB9DZAb4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZljS/43Z7/ZJFJirfAWTc0xcCp40A/P5eyPXSiMtyLKxwrJxZ4fofJ6m3aQuXTczL
-	 laKWzzcAf3cpMOMeTsLPVLFmWEwT0okWyxzH/6eI53AKqDNn5OAJYG4WTBQCP/gMw4
-	 k5LICRVluMTt2X8jzUiuj9A7qePBo/7w+NmAnvL7BDtN2xhnXau+i154JVuewB7pcC
-	 3QAaLizxRivAKMG/5nrXYlPKA9di8LuCpEkxR49fcBiOpoQGC8AGiNUTgWxJjplpwV
-	 JhYnSoqcxVxAscV0uBxGEEoa1JARGBYUuVSD7Q33Nr2gqfi6S4AHdF3SeZ58SyKB4B
-	 yQGBIuYvG4drQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v4 15/15] net: stmmac: retain DMA resources across
- MTU changes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "James Hilliard" <james.hilliard1@gmail.com>
-Cc: linux-sunxi@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20260926-submit-stmmac-reset-fixes-v1-v4-15-ec1c0250b3c9@gmail.com>
-References: <20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9@gmail.com>
- <20260926-submit-stmmac-reset-fixes-v1-v4-15-ec1c0250b3c9@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 27 Sep 2026 15:50:06 +0000
-Message-Id: <20260927155007.06FB61F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TdsNNYUE"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id E9E1AC5CD41;
+	Sun, 27 Sep 2026 17:49:15 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 06961604FF;
+	Sun, 27 Sep 2026 17:48:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8AD2B102F1E7E;
+	Sun, 27 Sep 2026 19:48:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1790531305; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=AfLFefFTZ9CCY0LnSyMHekNeX2TotPch4ikL4DSCq7U=;
+	b=TdsNNYUEGR/IlBVUa5FG0wm302dtB1cFBSLS4xtjpv0xlLK2c5SQFG14+2O+6kp8Zkzf+5
+	6auCNcbQvePq9bPfeHYNzImSnb4sxVuebq2UkFT59Y9cdJv7wxFy5XhQTM2ZKpD2AHOqVP
+	LU9zy2Z3/fcjkHK4MZAcVp+lnl/jMxIizh07sIJ6HCO5D/vMmLxC/iDBk/bPd7nPdzGSOT
+	G9xJBcGeVqr7fvZ1let+m6wXw6tAqNqgemQTI36cO0QmcGTwbGp17wf82fOTa3m4fxzI8j
+	FLvQBl3dtHJ/iysB5ksUHdtxADjdQ9a81tSbFup5guiEaGsrlhGHoScMxTSs5A==
+Message-ID: <9f7d6b86-3ccb-4ccf-8758-c4b8c6ad2ef1@bootlin.com>
+Date: Sun, 27 Sep 2026 19:48:16 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v3] net: stmmac: fix rx Scatter-Gather support
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <Jose.Abreu@synopsys.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+References: <20260923-stmmac-rx-sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com>
+Content-Language: en-US
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+In-Reply-To: <20260923-stmmac-rx-sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] net: stmmac: double disable of NAPI causing deadlock in stmmac_rec=
-onfigure_mtu()
---
+Hi Lorenzo,
 
-commit ed7896fe947ec45eb3dddd37b9ca9ed5f20ea4e9
-Author: James Hilliard <james.hilliard1@gmail.com>
+On 9/23/26 11:14, Lorenzo Bianconi wrote:
+> When a received frame is larger than dma_buf_sz, the DMA scatters it
+> across multiple RX descriptors (rx Scatter-Gather). The secondary RX
+> buffer (sec_page) was only allocated and programmed when split-header
+> (SPH) was active, so for regular frames buffer2 was neither allocated
+> nor backed by a valid mapping. As soon as an incoming frame overflowed
+> buffer1, the DMA wrote the overflow into the unmapped secondary-buffer
+> address, triggering an SMMU translation fault on IOMMU-based platforms:
+> 
+> arm-smmu 15000000.iommu: Unhandled context fault: fsr=0x402, iova=0x00000000, fsynr=0x7f0011, cbfrsynra=0x1c90, cb=11
+> arm-smmu 15000000.iommu: FSR    = 00000402 [Format=2 TF], SID=0x1c90
+> arm-smmu 15000000.iommu: FSYNR0 = 007f0011 [S1CBNDX=127 WNR PLVL=1]
+> 
+> Enable scatter-gather for non-SPH frames on cores that can program an
+> independent secondary RX buffer (GMAC4/XGMAC): allocate and mark buffer2
+> as valid in stmmac_init_rx_buffers() and stmmac_rx_refill(), and account
+> for it in the buffer length computation. Legacy cores have no set_sec_addr
+> op, so they keep buffer2 disabled.
+> 
+> Since buffer2 is handed to the DMA at page offset 0, the page pool sync
+> window is widened to cover both buffers in every mode: offset is set to 0
+> and max_len to dma_buf_sz + stmmac_rx_offset().
+> 
+> The FCS can straddle the buffer1/buffer2 boundary and a descriptor
+> boundary, so it is now stripped from the tail of the assembled frame with
+> pskb_trim() instead of from a single buffer, avoiding an unsigned underflow
+> for frames that overflow a buffer by 1..3 bytes. For single-buffer frames
+> the XDP program must not see the FCS, so it is removed from the XDP buffer
+> before the program runs.
+> 
+> Native XDP currently only supports single-buffer (linear) frames. An
+> oversized frame accepted by the MAC (jumbo enabled) is received via
+> buffer2; the XDP program only sees buffer1, so on a TX/REDIRECT verdict
+> the frame is forwarded truncated. XDP multi-buffer support to handle
+> this case is planned as a follow-up.
+> 
+> AF_XDP zero-copy RX is not covered by this change: a ZC queue still
+> programs buffer2 at DMA address 0 (and XGMAC has no buffer2-valid bit),
+> so an oversized frame overflowing buffer1 can still trigger the same
+> SMMU translation fault. Handling is planned as a follow-up.
+> 
+> Fixes: 88ebe2cf7f3f ("net: stmmac: Rework stmmac_rx()")
+> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-net: stmmac: retain DMA resources across MTU changes
+Meh I replied to the previous iteration... I did test V3 actually, so
+here's the blurb I said on V2 + tag :
 
-This commit modifies the MTU change procedure to prepare the replacement
-configuration before quiescing the old datapath. It retains the rings and I=
-RQ
-registrations until setup succeeds so rollback needs no new allocations, and
-leaves the interface detached in a distinct HALTED state if rollback fails.
+I was able to test that on DWMAC4 (stm32mp157) sending oversized frames,
+and they correctly spill over the next descriptor, no crashes no stall,
+the only limitation being the RX fifo size now.
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+Tested-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-[ ... ]
+Maxime
 
-> @@ -6601,6 +6651,109 @@ static void stmmac_set_rx_mode(struct net_device =
-*dev)
->  	stmmac_set_filter(priv, priv->hw, dev);
->  }
-> =20
-> +static int stmmac_reconfigure_mtu(struct net_device *dev, int mtu)
-> +{
-> +	struct stmmac_priv *priv =3D netdev_priv(dev);
-> +	struct stmmac_dma_conf *old_conf =3D priv->dma_conf;
-> +	struct stmmac_dma_conf *new_conf;
-> +	int old_mtu =3D dev->mtu;
-> +	int ret, restore_ret;
-> +	u32 irq_mask[STMMAC_CH_MAX];
-> +	u32 chan;
-> +
-> +	new_conf =3D stmmac_setup_dma_desc(priv, mtu);
-> +	if (IS_ERR(new_conf))
-> +		return PTR_ERR(new_conf);
-> +
-> +	mutex_lock(&priv->ptp_mutex);
-> +	stmmac_block_ptp(priv, true);
-> +	netif_device_detach(dev);
-> +	phylink_stop(priv->phylink);
-> +	stmmac_quiesce(priv);
-
-[Severity: High]
-Does this unconditional call to stmmac_quiesce() lead to a double-disable of
-NAPI if the interface is already in the HALTED state?
-
-If stmmac_reconfigure_mtu() fails to rollback after a hardware setup error,
-the interface state is set to STMMAC_DATAPATH_HALTED with NAPI left disable=
-d,
-but the device remains administratively up (netif_running(dev) remains true=
-).
-
-If an MTU change is attempted again, stmmac_change_mtu() will call
-stmmac_reconfigure_mtu() a second time. This unconditional stmmac_quiesce()
-call will invoke stmmac_disable_all_queues(), resulting in a second
-napi_disable() on the already disabled NAPI instances. This can cause the
-kernel to deadlock in napi_disable_locked() while waiting for
-NAPIF_STATE_SCHED to clear.
-
-> +	if (stmmac_fpe_supported(priv))
-> +		ethtool_mmsv_stop(&priv->fpe_cfg.mmsv);
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260926-submit-stm=
-mac-reset-fixes-v1-v4-0-ec1c0250b3c9@gmail.com?part=3D15
