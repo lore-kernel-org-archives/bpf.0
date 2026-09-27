@@ -1,279 +1,201 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9653237BE6C
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B293037BE6C
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790541766; cv=none; b=m8snYF9o9bAuBD1Ckl3BLQg9BgM1/5N/4iYl5rV7JZlgnQN/+UbRXj9fW5ueEBEFAv3xvX0IESGUKxAy+gy0EXXEdfy0MxLmBao8SQH5P7DfjOvj3esM9UgFs0fJ1p6aA9aMWUWmB0Zt3giBGmpysdakMAxRqdChAij9GtnXKgM=
+	t=1790541769; cv=none; b=kbzPt4Gup1fR3rchcbV1KcWRvdN9B6I1yJG9papP8xDuuq8z/jE3ff9Jr5i0WlgmodfgysbTOWpplzbHWJvP5VCmlhQhB92gzWNJEMlJCnebIbE5X+Jeef906vfGJXt2eveMBoqFVg3z6zqMvnxh1kxGYMeyP9HWL7ZzDnhIsew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790541766; c=relaxed/simple;
-	bh=NOkGwIenjNjk30UzlXE1oLqr71Ngk7ioNe7ayXECHxs=;
+	s=arc-20240116; t=1790541769; c=relaxed/simple;
+	bh=Ao7o5pFY/C+UqVBLvTLO4NaSX0hW2lAt1qZGXosTSFo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FGkjhopCKWQ5kTZWjg4PeVZnFBDXhULLhc24II2p7j2iaBlRPXWeRo4rnGPGkzP83CbuI4jT8e3qlWsxw3M24ctg8m/pWU9pu17HgoUvw50iE9aMkDmdNiXoYaxWrk7infvEUWBehwK/oqPNbxTqq3uABJiteNPqjCzO3Q2QFSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLou+W+F; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=gVUaMjJXQiQVg9GuAA9tawEj1HU3unkKrIVerXWq/vCKZHbXkgTYiEsKnBy0iQZmVliqzbkv27sKslDPm3wF28+uI3vbzlI1re64j5sKUenrCrRgNeNNbbaW9p0KmJ+dCYui+xbmGt0Ehu3Ig7rSRopsQwB3+tJAS/lcGoH6cuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ua6aSkmx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLou+W+F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BAF01F000FF;
-	Sun, 27 Sep 2026 20:42:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ua6aSkmx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4DFF1F00893;
+	Sun, 27 Sep 2026 20:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790541765;
-	bh=6YSd3HkaTH7eevBNlkrPRy28trxcu8k8mnqmIpPmDvo=;
+	s=k20260515; t=1790541767;
+	bh=Ogzlx6t8Fs/KKYiqq1wR1Es5oyvP8uo+Uy4Mh7u6Rm0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iLou+W+FWgd1fvvIxo59Io6h2XL+dvPWKP3Ejbt/QeJWLh1mEftlqsqTB63oJbJjW
-	 3qICNYxCX6Z9LhnsyCAX+VCT9iokX0bYmoMwKeb9I08h7g5KhTquAJ8R09flnPI/fk
-	 l0kcc6WpYPjnGeGXhWP8LuzSVRpVUIQ8UkWJL3EYMS0hqxT/kNxyIJM+fdJ92rwLmU
-	 zFzR7ahqgtftXmz4El8J5YzN1LrbzHRukHTwGE8no7fliy1g6bIKTj2isypz94VFNl
-	 x/nZzswXbCcM7rJ9mjuTHISvrGjVXiUFLSNbKFBN7/Acv29KCXmOyx/Cpcr+0g1rEE
-	 mzhQTQk9jo5jA==
-Content-Type: multipart/mixed; boundary="===============3413850216712457221=="
+	b=Ua6aSkmxoxstbbOmslblIwFcu8nR6RDiO+oyrUVRz1fgPAxplNp9Fjj8dzZHarRXU
+	 c4573OobOLK0y2S9wuP/jiguJnkJk8zGy6z208+TAM2Ws9n/Esm+dAfyKnpaicNebZ
+	 mBRbZ2Pt0xnUMKPO4JCMJyZA3U46pAI44pNgYBAJQAkxdENlHn7RNJ09oNGyyzVTLd
+	 GuvHdaA8WNN9RnR2RSxeDSFVWWhTH55yIZO3y4u0Ix1K2wx31Nge9ZNB15EEnhpWTm
+	 bOb+zBST+z/NlC8wFbDnFlCEEXShNq0RnNS7rRewVgFC0wHZ2Tptw5OGAUu7JDS+fM
+	 qlx5m0cx0wq+g==
+Content-Type: multipart/mixed; boundary="===============4133675119298884715=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fbc569e51e53b47e086068dd5ede783b671becfa03da2a0b8f6ef0946286040b@mail.kernel.org>
-In-Reply-To: <20260926-scev-minimal-rebase-v1-18-c8e5ab5ba79f@gmail.com>
-References: <20260926-scev-minimal-rebase-v1-18-c8e5ab5ba79f@gmail.com>
-Subject: Re: [PATCH bpf-next 18/36] bpf: compute immediate dominators
+Message-Id: <92725cabd34b462486052bddd62757252de036696d01a7b0b96a6dacc01a8a09@mail.kernel.org>
+In-Reply-To: <20260926-scev-minimal-rebase-v1-11-c8e5ab5ba79f@gmail.com>
+References: <20260926-scev-minimal-rebase-v1-11-c8e5ab5ba79f@gmail.com>
+Subject: Re: [PATCH bpf-next 11/36] bpf: add bpf_reg_union()
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
 Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 27 Sep 2026 20:42:44 +0000 (UTC)
+Date: Sun, 27 Sep 2026 20:42:46 +0000 (UTC)
 
---===============3413850216712457221==
+--===============4133675119298884715==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 6a8157e607ee..5e6fa41a1353 100644
+> index 719b7c7fd2f5..706fdefbc07a 100644
 > --- a/include/linux/bpf_verifier.h
 > +++ b/include/linux/bpf_verifier.h
-
-[ ... ]
-
-> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> index c1f9b0d3468d..6210601eb40b 100644
-> --- a/kernel/bpf/Makefile
-> +++ b/kernel/bpf/Makefile
-
-[ ... ]
-
-> diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-> new file mode 100644
-> index 000000000000..e7ff02e9ab3a
-> --- /dev/null
-> +++ b/kernel/bpf/loops.c
-> @@ -0,0 +1,143 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <linux/slab.h>
-> +#include <linux/bpf_verifier.h>
-> +
-> +static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_iarray *succ, *preds, **result;
-> +	struct bpf_prog *prog = env->prog;
-> +	u32 *num_preds, i, s, sz, len = prog->len;
-> +	struct bpf_insn *insn;
-> +	void *tmp;
-> +
-> +	num_preds = kvcalloc(prog->len, sizeof(u32), GFP_KERNEL_ACCOUNT);
-> +	if (!num_preds)
-> +		return NULL;
-> +
-> +	/*
-> +	 * 'result' layout:
-> +	 *  - array of pointers (struct bpf_iarray *)[len]
-> +	 *  - struct bpf_iarray one after another
-> +	 */
-> +	sz = sizeof(struct bpf_iarray) * len;
-> +	sz += sizeof(struct bpf_iarray *) * len;
-> +	for (i = 0; i < len; i++) {
-> +		insn = env->prog->insnsi + i;
-> +		succ = bpf_insn_successors(env, i);
-> +		sz += sizeof(u32) * succ->cnt;
-                     ^^^^
-
-Can sz overflow here?  It is a u32 with no overflow check, but for
-programs with many gotox instructions the sum of edges can exceed
-prog->len.  bpf_insn_successors() returns the whole shared jump table
-for gotox (up to one entry per instruction in the subprogram), and
-every gotox in that subprog adds that full count again.
-
-For large privileged programs (prog->len up to BPF_COMPLEXITY_LIMIT_INSNS),
-(number of gotox) * (jump table size) can make 4 * that product exceed
-U32_MAX.
-
-If sz wraps, kvzalloc(sz) returns a buffer smaller than what the next
-loops write:
-
-    result[0..len-1] pointers
-    per-insn bpf_iarray headers
-    preds->items[preds->cnt++] = i
-
-and those writes run past the end of the allocation.
-
-Even if sz does not wrap but exceeds INT_MAX, kvmalloc() WARNs and
-returns NULL.
-
-> +		iarray_for_each(s, succ) {
-> +			num_preds[s]++;
-> +		}
-> +		if (bpf_is_ldimm64(insn))
-> +			i++;
-> +	}
-> +
-> +	result = kvzalloc(sz, GFP_KERNEL_ACCOUNT);
-> +	if (!result) {
-> +		kvfree(num_preds);
-> +		return NULL;
-> +	}
-
-[ ... ]
-
-> +static int idoms_intersect(struct bpf_verifier_env *env, int a, int b)
-> +{
-> +	int *postorder_nums = env->cfg.postorder_nums;
-> +	int *idoms = env->idoms;
-> +
-> +	while (a != b) {
-> +		while (postorder_nums[a] < postorder_nums[b]) {
-> +			a = idoms[a];
-> +		}
-> +		while (postorder_nums[b] < postorder_nums[a]) {
-> +			b = idoms[b];
-> +		}
-> +	}
-> +	return a;
-> +}
-
-A review comment from v1 raised a performance concern here.  This walks
-the idom chain one instruction at a time, and for a program with many
-predecessors (for example, error handling with many "if (err) goto out;"
-statements), the k-th call to compute_subprog_idoms() for an instruction
-with N predecessors walks back over k branches.  That is N^2/2 steps,
-and the outer loop runs at least twice, all before do_check() and for
-every program regardless of whether it has loops.
-
-The suggestion was to compute dominators only for instructions inside
-loops (scc != 0) since SCEV only needs dominators inside loops, and
-possibly to add a bound for large loop bodies.
-
-Has this been addressed?
-
-> +
-> +/* See "A Simple, Fast Dominance Algorithm" by Cooper et al. for details. */
-> +static void compute_subprog_idoms(struct bpf_verifier_env *env, struct bpf_iarray **preds, int subprog_idx)
-> +{
-> +	struct bpf_subprog_info *subprog = &env->subprog_info[subprog_idx];
-> +	int start = subprog->start;
-> +	int po_first = subprog->postorder_start;
-> +	int po_last = (subprog + 1)->postorder_start - 1;
-> +	int *idoms = env->idoms;
-> +	int po_num, pred;
-> +	bool changed;
-> +
-> +	idoms[start] = 0;
-> +	changed = true;
-> +	do {
-> +		changed = false;
-> +		/* iterate in reverse postorder */
-> +		for (po_num = po_last; po_num >= po_first; po_num--) {
-> +			int idx = env->cfg.insn_postorder[po_num];
-> +			int new_idom = -1;
-> +
-> +			iarray_for_each(pred, preds[idx]) {
-> +				if (idoms[pred] == -1)
-> +					continue;
-> +				if (new_idom == -1)
-> +					new_idom = pred;
-> +				else
-> +					new_idom = idoms_intersect(env, pred, new_idom);
-> +			}
-> +			if (new_idom != -1 && idoms[idx] != new_idom) {
-> +				idoms[idx] = new_idom;
-> +				changed = true;
-> +			}
-> +		}
-> +	} while (changed);
-> +	idoms[start] = -1;
-> +}
-
-[ ... ]
-
+> @@ -1748,6 +1748,8 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env,
+>  int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
+>  int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+>  		      struct cnum64 range, u16 step);
+> +int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
+> +		  const struct bpf_reg_state *src);
+>
+>  int bpf_stack_liveness_init(struct bpf_verifier_env *env);
+>  void bpf_stack_liveness_free(struct bpf_verifier_env *env);
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 474caf8696fd..93100541475a 100644
+> index b5f45cb46f14..1ec44d72a346 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/module.h>
+>  #include <linux/cpumask.h>
+>  #include <linux/cnum.h>
+> +#include <linux/gcd.h>
+>  #include <linux/bpf_mem_alloc.h>
+>  #include <net/xdp.h>
+>  #include <linux/trace_events.h>
 
 [ ... ]
 
-> @@ -22815,6 +22816,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->  	if (ret < 0)
->  		goto skip_full_check;
->
-> +	ret = bpf_compute_idoms(env);
-> +	if (ret < 0)
-> +		goto skip_full_check;
-> +
-
-bpf_compute_idoms() now runs on every program load before do_check(),
-so none of the verifier's complexity limits apply yet.  The pass has a
-quadratic worst case and nothing in it calls cond_resched() or checks
-signal_pending().
-
-The dominator tree is built per instruction, not per basic block, so a
-node's depth in the tree is roughly the number of instructions before
-it.  compute_subprog_idoms() folds every predecessor into new_idom
-using idoms_intersect(), and the cost of each call is the tree distance
-from pred up to new_idom.
-
-For a program made of k instructions "if rX == 0 goto E" (fallthrough
-to the next), followed by "E: exit", then idom(C_i) = C_{i-1} and
-preds[E] = {C_0, C_1, ..., C_{k-1}}.  The call idoms_intersect(C_i, C_0)
-walks i steps, so E alone costs about k^2/2 steps per pass.  The do/while
-loop always makes at least one extra pass to confirm nothing changed, so
-the total is about k^2.
-
-With CAP_BPF, insn_cnt can be up to BPF_COMPLEXITY_LIMIT_INSNS (1M).
-That gives about 1e12 pointer-chasing steps inside a single syscall.
-The task cannot be killed during this time, and non-preemptible kernels
-will report soft lockups.
-
-The shape is not only adversarial: large programs where many checks jump
-to one shared return block cost roughly (number of such jumps) x
-(program length / 2) per pass.  For example, 50K checks in a 500K-
-instruction program is about 1e10 steps per pass.  Unprivileged programs
-are capped at BPF_MAXINSNS (4096), where the cost is small.
-
-Other long-running verifier stages guard themselves.  do_check() checks
-signal_pending() and calls cond_resched().  Liveness analysis has a
-10000-call limit plus cond_resched().  The next commit in this series
-adds "if (signal_pending(current)) return -EAGAIN; cond_resched();" to
-compute_loops_in_subprog() "to guard against pathological inputs."
-
-Should bpf_compute_idoms() have a similar guard?  Or could the tree be
-built over basic blocks instead of instructions so the tree depth stays
-small?
-
->  	ret = bpf_compute_live_registers(env);
->  	if (ret < 0)
->  		goto skip_full_check;
-
-[ ... ]
-
-> @@ -22978,6 +22983,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->  	kvfree(env->callx_edges);
->  	kvfree(env->func_ptrs);
->  	bpf_diag_free(env);
-> +	kvfree(env->idoms);
->  	kvfree(env);
->  	return ret;
+> @@ -16952,6 +16953,33 @@ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+>  	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
 >  }
+>
+> +/* acc := acc U src, matching types only. Caller must clear acc's scalar ID. */
+> +int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
+> +		  const struct bpf_reg_state *src)
+> +{
+> +	u16 base, step;
+> +
+> +	if (acc->type != src->type) {
+> +		verifier_bug(env, "union of registers with different types");
+> +		return -EFAULT;
+> +	}
+> +	acc->r64 = cnum64_union(acc->r64, src->r64);
+> +	acc->r32 = cnum32_union(acc->r32, src->r32);
+> +	acc->var_off = tnum_union(acc->var_off, src->var_off);
+
+Does this function handle pointer registers correctly? When bpf_reg_union()
+widens a PTR_TO_PACKET's offset (r64/r32/var_off) but keeps its id, it can
+break the id-tracking invariant.
+
+For PTR_TO_PACKET, registers with the same id differ only by a known
+constant. When adjust_ptr_min_max_vals() adds a non-constant to a packet
+pointer, it gives it a fresh id:
+
+  if (!known)
+      dst_reg->id = ++env->id_gen;
+
+find_good_pkt_pointers() depends on this rule. After a successful
+'pkt_ptr > pkt_end' test, it uses reg_umax(dst_reg) as the new range
+and sets reg->range = max(reg->range, new_range) on every PTR_TO_PACKET
+with the same id, assuming they all track the same maximum offset.
+
+Once bpf_reg_union() enlarges acc's umax but leaves acc in the same id
+group as registers that were not widened, a comparison on acc can give
+those other registers a range based on the widened umax that nothing at
+runtime backs.
+
+The comment says "Caller must clear acc's scalar ID", but for pointer
+types the id has a different meaning. Later in the series when this is
+called from union_any_reg() (1987b0e52b34), is_widenable_reg_type()
+accepts PTR_TO_PACKET, and scratch_scalar_id() only clears the id when
+reg->type == SCALAR_VALUE.
+
+Here's a concrete example with a similar shape to the
+conditional_stack_pointer_assignment selftest at the series end:
+
+  r2 = *(u32 *)(r1 + 0)   // data: pkt, id=0
+  r3 = *(u32 *)(r1 + 4)   // data_end
+  r9 = r2                 // pkt, id=0, off 0
+  r7 = r2
+  r7 += 1000              // pkt, id=0 (constant add keeps id)
+  r6 = 0
+1: if r6 >= 3 goto 3f
+  if r2 > r3 goto 3f      // fallthrough: find_good_pkt_pointers(r2)
+  r0 = *(u8 *)(r9 + 999)
+  if r6 != 1 goto 2f
+  r2 = r7                 // r2 = (any r2 r7) at loop entry
+2: r6 += 1
+  goto 1b
+3: r0 = 0
+  exit
+
+At loop entry, bpf_reg_union() turns r2 into pkt(id=0, [0,1000]), but r9
+keeps id=0 and [0,0]. On the fallthrough of 'if r2 > r3',
+find_good_pkt_pointers() sets r9->range = reg_umax(r2) = 1000. The load
+from r9 + 999 then passes (0 + 999 + 1 <= 1000).
+
+At runtime, on the first iteration r2 == data, so 'data > data_end'
+is always false. The program then reads data[999] for any packet,
+including one shorter than 1000 bytes: an out-of-bounds packet read.
+
+Should widened PTR_TO_PACKET registers either get a fresh id (and zero
+range), or should widening refuse packet pointers that share their id
+with other live registers?
+
+> +
+> +	/* Retain a common congruence if the bases agree modulo the gcd. */
+> +	step = gcd(acc->step, src->step);
+> +	base = acc->base % step;
+> +	if (base != src->base % step) {
+> +		reg_step_reset(acc);
+> +	} else {
+> +		acc->base = base;
+> +		acc->step = step;
+> +	}
+                ^^^^^^^^^^
+                ^^^^^^^^^^
+
+Does this commit build on its own? At ef75b765c289, struct bpf_reg_state
+(include/linux/bpf_verifier.h:53) has no 'base' or 'step' members. The
+struct ends with id, parent_id, map_uid, precise. Also reg_step_reset()
+is not defined anywhere ('git grep reg_step_reset ef75b765c289' only
+finds this call site).
+
+So the references to acc->step, src->step, acc->base, src->base and the
+reg_step_reset(acc) call all fail to build kernel/bpf/verifier.c when
+CONFIG_BPF_SYSCALL=y, which breaks bisection.
+
+The missing pieces are added later in the series by a89774dffa02
+("bpf: representation for intervals with steps"), which adds 'u16 base;
+u16 step;' to struct bpf_reg_state and defines reg_step_reset(). So the
+tree builds again from that commit on, but ef75b765c289 and the commits
+between it and a89774dffa02 (d18308307ed6, 0516ad0f46c2) do not build.
+The earlier baecd299ec89 ("bpf: add bpf_set_reg_range()") has the same
+dependency on reg->step/reg->base.
+
+Would moving a89774dffa02 before these helper commits fix this?
+
+Also, the commit message mentions merging "the circular 32-bit and 64-bit
+bounds and tnums" but doesn't mention the base/step congruence merge that
+the code does here.
+
+> +	reg_bounds_sync(acc);
+> +	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
+> +}
+> +
+>  /* check validity of 32-bit and 64-bit arithmetic operations */
+>  static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  {
 
 
 ---
@@ -281,4 +203,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346543957
---===============3413850216712457221==--
+--===============4133675119298884715==--
