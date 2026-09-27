@@ -1,132 +1,99 @@
-Received: from mta1.migadu.com (out-31.mta1.migadu.com [95.215.58.31])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB7C2D2488
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 04:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A052FD1B3
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 04:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790483743; cv=none; b=M5JhYlWiQxntoDLCarf9/9Vq5Ew08sirsB02BXpY8gWCg1tb8ZFInIx6CT5wcLW4cwtKxjcgfmUoanTbibb3F5w9+hw1u7P9S6LlqIM834fzrZ6Gx72HWpal3AtCtXo+6V3E7GdhTps9g8RNd3Ptfdf+lompGUb9Mx7RbHaB3O4=
+	t=1790484108; cv=none; b=UFoZYjBcfEXnUdUroihRBapPE6GJxkEZGmL2OUukbD42QEjM+u5BaAJ/TINRG7v1zOUo6pwLTxHVBI3vdeeBgjr/EkmUSM+TYCnG7NrOyq/xsCHBGy47XgUn1AoPAXoa2b0N/XkhOeieU6Yz9gvJ/Iux96J7u4wxGsSIGOUQPsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790483743; c=relaxed/simple;
-	bh=gMW+LqaZBOobL0nwVugxqJOL7fLnyUSayxIjQJjzuJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hDcsKKxVnWabTCR9r3KpbIFvTrl+QKyrT3u51N/NGcJq/foPcyIHuagmwOFwpLS0NaQNjPARkX+jym9v5HmsjkSHlInWmuXbfL4odOcKO3vAl39w5RhsM9RvajPYMffP1OySmKO0Kdgiw5wlrPsK4rx9GFJUBS5zV5F9KSJ8X0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F3W/6cdg; arc=none smtp.client-ip=95.215.58.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790484108; c=relaxed/simple;
+	bh=aSIQliU8fMQFvFPepj6X9dk5tV3aAChq7NCseb3A15w=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ivvtpyFG9jxhsGUIrDs+oUpicExpz6fBeBh6lRl4i2I/rZIH79YnlKUHwLeXLU84wRBSLA7n9i4CQmE+2NEqGZ4+df+bleJhFW9l68PMxb4jMcbbpS+QOHse+tCv3z0i683BNRqDdf1M5C6DBJMCB9+Z0+zXXnWC1KWNuwr/Bvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EAiu+wus; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F3W/6cdg"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gMW+LqaZBOobL0nwVugxqJOL7fLnyUSayxIjQJjzuJk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790483738; v=1; x=1791088538;
- b=F3W/6cdgIiKlatOVOIg/7Dzclp6AwJJsk/pNApNrPO7UVRxc5R06rUBPmcOH4KlwVVglsAT7
- OBTzVv069g2roWkENZKHVkOmBY8FWg4+roxY9H3iPi2HpYbnBDxHYeRIFCiaTsUfm4RlKGb20S8
- jxEs1IZlQOaTihWYbX9HOgcM=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 375785e4799922db;
-	Sun, 27 Sep 2026 04:35:34 +0000
-X-Mizu-Trace-ID: 375785e4799922db
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c30b6d55-1ef1-4b9a-a434-99b7f3834bb4@linux.dev>
-Date: Sat, 26 Sep 2026 21:35:32 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EAiu+wus"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-8692a8568e9so884139b3a.3
+        for <bpf@vger.kernel.org>; Sat, 26 Sep 2026 21:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790484106; x=1791088906; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=aSIQliU8fMQFvFPepj6X9dk5tV3aAChq7NCseb3A15w=;
+        b=EAiu+wusG9A/Tb9WV07FSVs9/QOiRuBuLBGZ1VkGsKhGwZCHrYYOeYp3RteNwYJ+2x
+         OrW38fpkrNHQkPL3UUCzLi7aSLsJtcX5GtdU41+Ib8+oif30+CWB0r/ARqeWMU/O4usV
+         4eTnwWl42QsRVVrYVtnpU0bx6gZnquIKehQtf1Y6QPiQfsGx4zqju5rr3wNDBLZ5JUo3
+         ULiijcIWVCfAPMZWeFP9QA6LaF1skgua2++KoXNKf/L8K5l3RDTySZ7qwNuCE8lX2+c1
+         pvGF06LvqsqUjNF8tyi91kmAd3agOpdS1VoQhyVKdly79n984HlKtPpEX3tvqW5wRBU4
+         XMGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790484106; x=1791088906;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aSIQliU8fMQFvFPepj6X9dk5tV3aAChq7NCseb3A15w=;
+        b=nnYLaWphpgNB1ZZsIVrtnFTUe0cR1RyHiIoE1/MEn6eRavYOhQqWJSlst57iAFU25i
+         q/f/t+usS5xfsuXIgPHJCR02RHns+CSIGhDf+g9l4yNKbdadPeSazB6sNKksBkVINknj
+         zfBhwVL3/wyrZWl/MPh72CuzEhokCElA9qA4wMKzZq45ggQRbEITMr2RUs+lqsfNWVjR
+         sJDjKOtKhgM8Pv58d41nbT7wfJvM+YYjPx9iZhIZM1m/Y1jrE72LYVFP2GCWViKziv4N
+         hj46gDmKFwMGAuLYN5jl/wW4OHz8UF1j9qDSBghTUYIjrjX+9cy+ympGqos9v17geBbE
+         FkOg==
+X-Forwarded-Encrypted: i=1; AKwUvBwv9wJrzmkq+oc1f/m0FoQJgYzg+qBDGh5K1bvPnxjLTrsYoEBFBAxajZ/L1jpRC0EmLzE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJMP4kPZl70hvQyzr2iF2r2SRdWI4jqUNfkOO9iYzDdf9/Euwvj
+	0oniGl5f3CaJ0puJ7gb9eUK5FMtnpkNaJgnlLW8l19ceg3R0hwKKTxO/
+X-Gm-Gg: AYBFou1lVPndbj2/eFI14IHT2UEIFzF/Tya8CtZXjEeGitX4s48UhHrF7JWKirJdzjM
+	9YYyLBHtZo2InSHYp+pAbAM3iRB//P6n300YEpck91wAYrMQEaQuAJ8M0I4FMxSAFFuYVlDjxjd
+	GUHqJKxRadhd/hnlHrfqavk4CFxqOCFsQ9ie/jBdF4R4OGoN/wUcHg7XibgHND5P7gtj0M78KON
+	zmqysjmUNZc96OEnHvZeypaBX9TMU5ZO6jicsVyTD5uiJjXMFE0BOs2RHdLOkc0cd8KaxRN+fVV
+	pjTDhURW/wY80dYOzFL5kibbUrjR/xvDpfn3lbJQZorkGYo4udebnAsoy97QDno/GB3d+QksUiD
+	Yx7CV+PFhnFIYxFRBnp9fEppxTuHlq/nGDNYajuubBF5nc+BaT392SPVZcmwLZF85LqlVCKdEmY
+	CBBhJN+ITgblX7yxctgtTX4eAv4JQBxbiVRUXwsM4JeaVgCfFxoE/N+1oEmDPgspEsSpUmDPCgH
+	/FgV3yhtEQuO/QO/+21UvInBHrWmUJogZnmU2VbhWhqz/H84Dx+9yNGTdj6PoMgeRlw/L/ObSG0
+	0pE=
+X-Received: by 2002:a17:90b:3d92:b0:3a0:f0a1:b45a with SMTP id 98e67ed59e1d1-3a0f0a1b93amr1697408a91.65.1790484106186;
+        Sat, 26 Sep 2026 21:41:46 -0700 (PDT)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b9356f48sm13099339a91.6.2026.09.26.21.41.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Sep 2026 21:41:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 11/21] bpf, x86: Dispatch exception cleanup
- pads at run time
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260926050006.2213110-1-yonghong.song@linux.dev>
- <20260926050102.2218021-1-yonghong.song@linux.dev>
- <20260926051542.4DF841F000FF@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260926051542.4DF841F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 27 Sep 2026 04:41:41 +0000
+Message-Id: <DLPTN52TGGMY.TPWL2GZA38RK@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, <netdev@vger.kernel.org>, "Nick Hudson"
+ <nhudson@akamai.com>, "Felix Fietkau" <nbd@openwrt.org>, "Qingfang Deng"
+ <dqfext@gmail.com>
+Subject: Re: [RFC bpf-next 0/3] bpf: Add PPPoE encap/decap support to
+ bpf_skb_adjust_room
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "ThisSeanZhang" <thisseanzhang@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
+References: <20260926210757.2152159-1-thisseanzhang@gmail.com>
+In-Reply-To: <20260926210757.2152159-1-thisseanzhang@gmail.com>
 
+On Sat Sep 26, 2026 at 9:07 PM UTC, ThisSeanZhang wrote:
+> Hello,
+>
+> This series adds PPPoE session encapsulation and decapsulation support to
+> bpf_skb_adjust_room(), allowing TC BPF programs to update packet data and
+> skb metadata consistently.
 
+Why?
+Is this a research project on what llm can implement?
+It certainly can, but it's not a reason to add new uapi.
 
-On 9/25/26 10:15 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf, x86: missing JIT epilogue for exit-less subprograms crashes exception unwinder
-> --
->
-> commit 9bb870f715bdf91026578628a6afaf5325f80183
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf, x86: Dispatch exception cleanup pads at run time
->
-> This commit updates the x86 BPF JIT to dispatch exception cleanup pads at run
-> time, setting up native cleanup tables and populating the epilogue IP to allow
-> redirecting a frame to its landing pad during an ORC stack walk.
->
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 6c7a0578760e7..fb7e8ca1aab21 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
-> [ ... ]
->
->> @@ -3278,6 +3279,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
->>   			seen_exit = true;
->>   			/* Update cleanup_addr */
->>   			ctx->cleanup_addr = proglen;
->> +			/* Where an unwind sends a frame with no pad. */
->> +			bpf_prog->aux->epilogue_ip = (u64)image + proglen;
-> [Severity: High]
-> What happens if a BPF subprogram only terminates via a noreturn kfunc like
-> bpf_throw(), meaning it lacks a BPF_EXIT instruction entirely?
-
-bpf_throw() will be rejected if landing_pad is available.
-
->
-> Since the x86 JIT generates the epilogue lazily when the first BPF_EXIT is
-> encountered, wouldn't do_jit() produce no epilogue at all for such a program,
-> leaving epilogue_ip as 0?
->
-> If an exception unwinds through this subprogram's frame, the unwinder relies
-> on epilogue_ip to rewrite the return address. Wouldn't it hit this error path
-> and abort the unwind?
->
-> kernel/bpf/helpers.c:bpf_unwind_rewrite() {
->      ...
->      } else if (prog->aux->epilogue_ip) {
->          *ra = prog->aux->epilogue_ip;
->      } else {
->          WARN_ON_ONCE(1);
->          return false;
->      }
-> }
->
-> Could this lead to corrupted exception handling that can be triggered by
-> user-supplied BPF programs?
-
-Yes, it is possible that epilogue_ip is 0 if that subprog is always
-in the path when unwinding happens. The fix will be keep 'exit' insn's
-so they won'be removed. See bpf_jit_comp.c
-
-                 case BPF_JMP | BPF_EXIT:
-                         if (seen_exit) {
-                                 jmp_offset = ctx->cleanup_addr - addrs[i];
-                                 goto emit_jmp;
-                         }
-                         seen_exit = true;
-                         /* Update cleanup_addr */
-                         ctx->cleanup_addr = proglen;
-                         /* Where an unwind sends a frame with no pad. */
-                         bpf_prog->aux->epilogue_ip = (u64)image + proglen;
-			...
-
->
->>   			if (bpf_prog_was_classic(bpf_prog) &&
->>   			    !ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN)) {
->>   				if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
-> [ ... ]
->
+pw-bot: cr
 
