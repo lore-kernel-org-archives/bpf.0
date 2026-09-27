@@ -1,224 +1,227 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648603C10B5
-	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91E63C10B5
+	for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790541770; cv=none; b=GIMoM6caDgW36nB+2jC9Fdpk8HwXMLn/u3I5dBQBaoDVlM6eVF84YMbwCEma43d4FQ++BKWGJmH2HIpNHFHE3/zqcRzzkAnAG6GRUYtbVKzJJYf5DQ0AB+N1SaZQuvcK5AkAIhtPPiYzlf7GI7vL3kDnBgDSBWgBhLyPVmmS5Bw=
+	t=1790541773; cv=none; b=gaUkBo+ftV2w84i2WyGJN/9blx5uklMYq+n6tLA+fZzPJQMGWQLF8rKFJ5sldIn6MClo7+B9Fc5mj/rcxb/BTe22Mfwvu+NRuQWnVcts+WOI4MFp9/Rl8V1AHX5Ybm6H4FKBwlFe4XjPhPXK/nwyGcOVUlZAUBRMByZG92LXl/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790541770; c=relaxed/simple;
-	bh=u+hjepPT6NK6fAOyYooIaXYsq04qoxoykWOMzHMKdR4=;
+	s=arc-20240116; t=1790541773; c=relaxed/simple;
+	bh=radqAnBuLbg0sI+snYICGdV5NbthAUhgPW5YmCn3ogw=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ZN3oBhpjt0RqTeXTaiDiH8VUN8jLJBdmL3vhmnHzHILaj01SaW83L3nRkEQi5usM22xK7qcEVM0AkeLg61v1r4YBcdKjx7YchDltGgfmkYHrPj8C6h1oubJbVvGfc0wmAWxoP/p6gBZ/zghzOSl/RyrLeC7hUBbVBDm4BAWoj+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KIgP8uIU; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=nQDl/0apFp9nYNXpQREHRnxgKaUjBRAg5cPXmmgZCa4hQgCPB52EZsXG1XdkKmEGHYngAKEkA9d6UYwp70ecwkzDzQSTY8muHIRYfsDuo/G5S1C2prKh26wqz105MswHNRUtLOLJ7nebtbaAQmNK9tmiPYkKsNGoeVdONPt9dlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/a+D+aI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KIgP8uIU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9385A1F000FF;
-	Sun, 27 Sep 2026 20:42:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/a+D+aI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC0C41F00893;
+	Sun, 27 Sep 2026 20:42:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790541769;
-	bh=F0uXcsdETb9Tu1UXdRXH2I2Ndr8cSiP5HcnrkUaSW3I=;
+	s=k20260515; t=1790541771;
+	bh=9VXQ7HkILLnRWPcSrW1LR7szTR5XD7SY49UdmSbZNhs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KIgP8uIUBxluZ6KyJCmNbozNV0CZQlBSTFQ60DnewUFiwWN80+0rHEv5u9L1c471B
-	 72ChuJGpN5J/7l/pprLM7rA/knQLT8TJUnd7I6sr8Wx5zVRPCrDbr6D/2bbollR0ht
-	 Vwlp5/+DIZOUWYTw8utwsin31M7Qm9/A7Ry5m1AnRi+UG+4giYsELZaRWWmnkN5xN4
-	 UZykUI20d2nVYmCdZAdvH3x3O8LRMLDdfiI6atDRjmT7ceSPnT3CI/vFLjP4NNLnnL
-	 ZRGE7U+bJOZaMo/bTBD66IAzfV/ZaG5kiFJsYZzNyc0BeL7zDdAicim6qnUsnMlAad
-	 LCUbVtY7dJGRw==
-Content-Type: multipart/mixed; boundary="===============4271042771192856100=="
+	b=G/a+D+aI6Qf+Tvlm8+lQ7YsnBqTCsZvPwSqr/QmtVKPmvFueIo0h74Jiboc+g/Yp4
+	 bP4RbtT7ZLA5UZuveqCmKC4M7CXsbaaZ2tNQ13t1eYDvW5MayEQRS8sJBGqo324dvt
+	 lvgT//aV76HpY94RMksrSVSxCgabNac1w0xCQzBouqHce/xzryGWLE/uHS4sx93i/o
+	 o36TvjSx6u0uNAZxoAC7az59EoxfekbF6SwSDEh1T0cj1WVtKrbkSQu14sC4rk8xxT
+	 CJrAAolPWw24lTz25PxnOZ0FJua1O/fswViaenoN+TwX8zbFo8wOMeqWwZIZwQoZp0
+	 h+2oEzBvJX01w==
+Content-Type: multipart/mixed; boundary="===============4703152210799744251=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1e179f726ade68c29a7ca9530746bee1473aa7f1b18b3886c777537831375ad7@mail.kernel.org>
-In-Reply-To: <20260926-scev-minimal-rebase-v1-2-c8e5ab5ba79f@gmail.com>
-References: <20260926-scev-minimal-rebase-v1-2-c8e5ab5ba79f@gmail.com>
-Subject: Re: [PATCH bpf-next 02/36] bpf: summarize may write stack slots in insn_aux_data
+Message-Id: <8a92d98d702c9cbab1575c9c4a6d9f721fa8b797012928dd5fee4b606574c543@mail.kernel.org>
+In-Reply-To: <20260926-scev-minimal-rebase-v1-36-c8e5ab5ba79f@gmail.com>
+References: <20260926-scev-minimal-rebase-v1-36-c8e5ab5ba79f@gmail.com>
+Subject: Re: [PATCH bpf-next 36/36] selftests/bpf: cover SCEV analysis and loop widening
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
 Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 27 Sep 2026 20:42:48 +0000 (UTC)
+Date: Sun, 27 Sep 2026 20:42:50 +0000 (UTC)
 
---===============4271042771192856100==
+--===============4703152210799744251==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index c775bd757706..c6d617581e84 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -662,6 +662,11 @@ struct bpf_insn_aux_data {
->  	};
->  	struct btf_struct_meta *kptr_struct_meta;
->  	u64 map_key_state; /* constant (32 bit) key tracking for maps */
-> +	/*
-> +	 * Per-instruction summary of stack slots in the current frame
-> +	 * that this instruction may write to.
-> +	 */
-> +	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
-
-Is the comment accurate that this covers every write? Looking at how the
-mask is populated in compute_may_write_masks(), it only ORs in FM_MAY_WRITE
-bits from liveness. When a bpf_loop()/for_each_map_elem()/find_vma()/
-user_ringbuf_drain() call passes a frame pointer as ctx but the callback is
-not a constant (R2 could be cb_a or cb_b on different branches), liveness
-handles this case specially in analyze_subprog():
-
-    if (callee == -2) {
-        /*
-         * same bpf_loop() calls two different callbacks and passes
-         * stack pointer to them
-         */
-        if (info[subprog].at_in[j][caller_reg].frame == ARG_NONE)
-            continue;
-        for (int f = 0; f <= depth; f++) {
-            err = mark_stack_read_all(env, instance, f, idx);
-            ...
-        }
-        continue;
-    }
-
-That code calls mark_stack_read_all() but nothing marks may_write. The
-callbacks themselves are analyzed standalone with R1-R5 as ARG_NONE, so a
-store like `*(u64 *)(r2 + 0) = 0` in the callback is never attributed to
-the caller's frame. This means FM_MAY_WRITE stays empty at the call site,
-and compute_may_write_masks() stores an empty may_write_mask even when the
-callback writes through ctx.
-
-The verifier accepts this pattern: bpf_loop_two_callbacks in
-tools/testing/selftests/bpf/progs/verifier_live_stack.c exercises the
-callee == -2 branch (it passes fp but with two possible callbacks). If its
-callbacks wrote through ctx instead of reading, aux[call].may_write_mask
-would stay empty for those slots.
-
-This matters because reset_scevs_at_indirect_writes() in
-60fc0594170e ("bpf: compute scalar evolution expressions for loops") uses
-bpf_may_write_mask() as the only way to invalidate stack-slot expressions
-at a call. A stack-slot SCEV expression could survive a bpf_loop() whose
-callback overwrites that slot, and then bpf_clamp_scev_regs() would
-intersect the slot's range with bounds derived from that stale expression.
-
-Should the callee == -2 branch also call mark_stack_may_write_all() for
-frames 0..depth so the summary is conservative?
-
-Alexei Starovoitov raised a concern about memory usage in the v1 thread
-(https://lore.kernel.org/bpf/DLPD9Q4H9C62.2QMD510XIOOJR@gmail.com/):
-
-> That's 32 bytes per insn and the next patch adds 32 more,
-> for every prog whether it has loops or not.
-> FM_MAY_WRITE in patch 1 makes every frame_masks a third bigger too.
-> commit 481ceda77aeb sized the liveness masks by the stack the frame
-> uses to avoid exactly that.
->
-> bpf_may_write_mask() is the only accessor.
-> Can the summary stay in liveness.c, as wide as the subprog's stack,
-> and only for insns with scc != 0 ?
-
-Could the summary be stored in liveness.c instead, sized by the subprog's
-actual stack usage and only for instructions with scc != 0, to avoid the
-fixed 32-byte overhead for every instruction?
-
->  	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
->  	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
->  	bool nospec; /* do not execute this instruction speculatively */
-> @@ -1728,6 +1733,7 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
->  int bpf_stack_liveness_init(struct bpf_verifier_env *env);
->  void bpf_stack_liveness_free(struct bpf_verifier_env *env);
->  int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
-> +const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx);
->  bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi);
->  int bpf_compute_live_registers(struct bpf_verifier_env *env);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+> index 82b21ec472ba..2bc1ef910c16 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
 
 [ ... ]
 
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index cc3ad75aa1e2..c871744ca5a8 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -718,6 +718,45 @@ static int cmp_instances(const void *pa, const void *pb)
->  	return 0;
->  }
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+> new file mode 100644
+> index 000000000000..69e9062870ac
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
 
 [ ... ]
 
 > +/*
-> + * Precompute, for each instruction, the OR of may_write masks over its top
-> + * frame across all func_instances reaching it, stash it in the insn_aux_data.
+> + * Loop A (counter in r6) contains irreducible loop B (header 5),
+> + * which contains C (counter in r9).
+> + * Entering B at 'body' saves and restores r6, making it appear invariant.
+> + * Entering B at 'alternate' skips the save and modifies r6 instead.
+> + * Hence A must not infer a SCEV expression for r6.
+> + * SCEV expression for r9 in C should still be computed.
+> + *
+> + *  0: r6 = 0;
+> + *     do {                              // A
+> + *  1:     r6++;
+> + *  2:     r0 = bpf_get_prandom_u32();
+> + *  3:     r7 = 0;
+> + *  4:     if (r0 > 5) goto alternate;
+> + *  5: B:  r8 = r6;                      // B
+> + *  6:     goto body;
+> + *  7: alternate:
+> + *         r8 = r6;
+> + *  8:     r8++;
+> + *  9: body:
+> + *         r6 = r8;
+> + * 10:     r9 = 0;
+> + *         do {                          // C
+> + * 11:         r9++;
+> + * 12:     } while (r9 < 3);
+> + * 13:     r7++;
+> + * 14:     if (r7 < 4) goto B;
+> + * 15: } while (r6 < 4);
+> + * 16: r0 = 0;
+> + * 17: return r0;
 > + */
-> +static void compute_may_write_masks(struct bpf_verifier_env *env)
+> +SEC("xdp")
+> +__success
+> +__log_level(2)
+> +__msg("loop at 1{{$}}")
+> +__msg("loop at 5, nested in 1, irreducible")
+> +__msg("loop at 11, nested in 5")
+> +__msg("scev at header 1:")
+> +__msg_next("  r6=?")
+> +__msg("scev at header 11:")
+> +__msg_next("  r9=(+ r9 1) / (linear r9 1)")
+> +__msg("loop header at 11, widening r9 to 0..2 step 1")
+> +__not_msg("loop header at 1, widening r6")
+> +__naked void nested_irreducible_loop(void)
 > +{
-> +	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-> +	struct bpf_liveness *liveness = env->liveness;
-> +	struct func_instance *instance;
-> +	struct frame_masks *fm;
-> +	u32 nbits;
-> +	int bkt, i;
-> +
-> +	hash_for_each(liveness->func_instances, bkt, instance, hl_node) {
-> +		fm = instance->frames[instance->depth];
-> +		if (!fm)
-> +			continue;
-> +		nbits = frame_mask_bits(fm);
-> +		for (i = 0; i < instance->insn_cnt; i++)
-> +			half_spis_to_slots(aux[instance->subprog_start + i].may_write_mask,
-> +					   rel_mask(fm, i, FM_MAY_WRITE), nbits);
-> +	}
+> +	asm volatile ("					\
+> +	r6 = 0;						\
+> +a_%=:	r6 += 1;					\
+> +	call %[bpf_get_prandom_u32];			\
+> +	r7 = 0;						\
+> +	if r0 > 5 goto alternate_%=;			\
+> +b_%=:	r8 = r6;					\
+> +	goto body_%=;					\
+> +alternate_%=:						\
+> +	r8 = r6;					\
+> +	r8 += 1;					\
+> +body_%=:						\
+> +	r6 = r8;					\
+> +	r9 = 0;						\
+> +c_%=:	r9 += 1;					\
+> +	if r9 < 3 goto c_%=;				\
+> +	r7 += 1;					\
+> +	if r7 < 4 goto b_%=;				\
+> +	if r6 < 4 goto a_%=;				\
+> +	r0 = 0;						\
+> +	exit;						\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
 > +}
 
-This function reads FM_MAY_WRITE from liveness and summarizes it into
-may_write_mask. Does this capture all writes that the instruction might
-perform?
+Does the comment describe the entry points correctly? Looking at the
+pseudo-code and the asm, loop B has its header at 'b_' (insn 5, the
+backedge 14 -> 5), and two entry points: the header itself at 'b_' (reached
+by falling through from insn 4), and 'body_' at insn 9 (reached from
+'alternate_' at insns 7-8).
 
-As noted above for the header comment, when analyze_subprog() encounters
-callee == -2 (same bpf_loop() or similar can invoke different callbacks),
-it only marks reads and skips recording writes:
+The path that saves and restores r6 enters at the header 'b_':
 
-    if (callee == -2) {
-        ...
-        for (int f = 0; f <= depth; f++) {
-            err = mark_stack_read_all(env, instance, f, idx);
-            ...
-        }
-        continue;
-    }
+    b_:  r8 = r6;
+         goto body_;
+    ...
+    body_: r6 = r8;
 
-No callee instance is created for this case, so merge_may_write() never
-runs. The helper's ARG_PTR_TO_STACK argument doesn't help either:
-bpf_helper_stack_access_bytes() returns 0 for it, with the comment "The
-callback subprog does and it's analyzed separately". But in the -2 case the
-callbacks are analyzed only at depth 0 with ctx == ARG_NONE, so their
-stores through ctx are never attributed to the caller's frame.
+The path that modifies r6 goes through 'alternate_' (which is outside loop
+B), then enters B at 'body_':
 
-This means FM_MAY_WRITE stays empty at that call instruction even when a
-callback writes through ctx into the caller's frame. Since this function
-only ORs in FM_MAY_WRITE bits, it will produce an empty may_write_mask for
-those slots.
+    alternate_:
+         r8 = r6;
+         r8 += 1;
+    body_: r6 = r8;   // gives r6 + 1
 
-This gap is still present at the end of the series at 4a6395b27755 - the
-callee == -2 branch still has only mark_stack_read_all(). Should it also
-call mark_stack_may_write_all() for frames 0..depth to keep the summary
-conservative?
-
-> +
-> +const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx)
-> +{
-> +	return env->insn_aux_data[insn_idx].may_write_mask;
-> +}
+The comment says "Entering B at 'body' saves and restores r6" but that
+describes the header path, and "Entering B at 'alternate'" names a label
+that is outside B. Could the comment be updated to say "Entering B at B
+saves and restores r6 ... Entering B at body (via alternate) skips the save
+and modifies r6 instead"?
 
 [ ... ]
 
-> @@ -2352,6 +2391,8 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
->  			goto out;
->  	}
->
-> +	compute_may_write_masks(env);
-> +
->  	if (env->log.level & BPF_LOG_LEVEL2)
->  		err = print_instances(env);
+> +/*
+> + * Complement of no_widen_stack_spill: a sub-register (1-byte) store to the stack
+> + * lands as STACK_MISC and carries no tracked value, so the induction variable
+> + * addressing it (r2) is still widened.
+> + */
+> +SEC("xdp")
+> +__success
+> +__log_level(2)
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +__msg("widening r2 to 0..24 step 8")
+> +__naked void widen_byte_stack_store(void)
+> +{
+> +	asm volatile ("					\
+> +	r0 = 0;						\
+> +	r2 = 0;						\
+> +1:	r3 = r10;					\
+> +	r3 += -64;					\
+> +	r3 += r2;					\
+> +	*(u8 *)(r3 + 0) = r0;				\
+> +	r0 += 1;					\
+> +	r2 += 8;					\
+> +	if r0 < 4 goto 1b;				\
+> +	r0 = 0;						\
+> +	exit;						\
+> +"	::: __clobber_all);
+> +}
+
+Does the comment correctly describe the verifier's behavior here? In this
+test, r3 = fp-64 + r2 with r2 in {0, 8, 16, 24}, so before widening each
+store '*(u8 *)(r3 + 0) = r0' is at a fixed offset that is 8-byte-aligned
+(-64, -56, -48, -40).
+
+check_stack_write_fixed_off() handles that as a narrow spill when the value
+fits:
+
+    if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE &&
+        env->bpf_capable) {
+        ...
+        save_register_state(env, state, spi, reg, size);
+
+save_register_state() marks the low 'size' bytes STACK_SPILL and saves the
+scalar. r0 is 0..3, so it fits in a byte and is fully tracked with its
+scalar id. check_stack_read_fixed_off() then gives it back on a same-size
+fill.
+
+The store only lands as STACK_MISC after r2 is widened, because then the
+write offset varies. That can happen with any size store, so it is not what
+separates this case from no_widen_stack_spill.
+
+The actual difference is that collect_store_base_regs() only counts BPF_W
+and BPF_DW accesses:
+
+    if (size == BPF_W || size == BPF_DW)
+
+Byte and half-word spills lose precision under widening in the same way.
+
+Could the comment describe the actual rule (byte and half-word accesses are
+not treated as spill bases) rather than say a 1-byte store has no tracked
+value? Also, BPF does not use the term "sub-register" for narrow
+operations.
 
 
 ---
@@ -226,4 +229,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346543957
---===============4271042771192856100==--
+--===============4703152210799744251==--
