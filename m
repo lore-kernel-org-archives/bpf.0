@@ -1,215 +1,181 @@
-Received: from mta1.migadu.com (out-216.mta1.migadu.com [95.215.58.216])
+Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49ABF361947
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 03:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.216
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790565044; cv=none; b=K2/h9G6KNIf/chVAXDy+XujgUrFDZ6pvr0EG5ZxPkZD/hNfJPGDvTtNHj8TxUBYRh5YqDVVlzd8BX5h4rijX6WOcNioFoBlBeYt0L0JrnCZt9VlAA6vA6rwYUhJFK213xZ+flFnuKwmZkXIgKIBfuguQvBEldmRykvByBueRSGY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790565044; c=relaxed/simple;
-	bh=k0YHNB9R9CPLsOduJLwbiWt1z2+vcwvZN7BZGJWl3j8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HU6zz6T41WIQMhVKPxzVX75SG0co1BzhRGwDBNkYfZC636X4NylbuYK7tErmjKXvr1aj7yOYzszKvF9wUJjAF5hHzXsyBBdQfgfsF/M9OgmssVOfoQcbVsS4n4YLdsA0nlzEEkoM7+tJ/QInu2503s8jsAeQ31ZtIc5jcUeYl64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pa4vIJu6; arc=none smtp.client-ip=95.215.58.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB01376A1A
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 03:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.141
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790565841; cv=pass; b=myNhG6jaBIQJdbitq0BD4hvH8OMP8uA3I87kNuVlv2/dBM3tM7UqQO6N2lvhJFnEd9YSkh5YjMe/Z8xixOwoMv9k6MG+nkifPvPNOh+ut3xZFv0HHeKy+SBKqAwctv4Xh8HxsO+c5sb9qhMUsQrqA6TbNdOE9ACzM5/Hy808s1s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790565841; c=relaxed/simple;
+	bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rEYU0ovuaEWY/9aKCn8tUrkG40Jt2vyVJNM8BcbVrP8agF65AFf2nqqFk8DPnA33YuBuAzs7frsj4gDJdtNB/AEmZ8GC4vhJktA2kMAE7ckZsfHRnBdELvoUd4P3v48jz2a8fKxVAb81aHvO+VuagTj+bYFfGtKcH+nrSoBuvjI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qrxXDM8D; arc=pass smtp.client-ip=74.125.224.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pa4vIJu6"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=k0YHNB9R9CPLsOduJLwbiWt1z2+vcwvZN7BZGJWl3j8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790565040; v=1; x=1791169840;
- b=pa4vIJu6fHqLAzQVuQwIsmDfd2KLfdigsSUBMtD0V/2MH/picjt00w6F2dJrXTmDTFPCQS7Y
- DAvhK7XxjrOFfPOtSJtyd1/Z1pIgXIRfakPhcw1Wm1z9p16bE1rmNs08IGbEFpnZ/WFgSZe8F9+
- 6Ia7Gxksn50WDStCUtEae/p4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 71863c4a9f5cca80;
-	Mon, 28 Sep 2026 03:10:39 +0000
-X-Mizu-Trace-ID: 71863c4a9f5cca80
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f975aa30-a056-4f48-8f65-abcff0e7cc70@linux.dev>
-Date: Sun, 27 Sep 2026 20:10:36 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qrxXDM8D"
+Received: by mail-yx2-f13.google.com with SMTP id 00721157ae682-8659af7454eso27657257b3.1
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:23:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790565837; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rlxUI9k9N58TmyKW+J4kKmN6oii7S3M2IyZSKIIL6VacL+GJiM60qQLpRO+O5U+Lpi
+         JVu14oRASGnBWydbPWQu1Vn/JDtb0kx78YFZMpL4RPx6pE79BRQBF75QIOnIOx08N4F3
+         GPoZdGIiaqPk24NPgRR9ZzZMlhoVnqbm4SWHW0nihuQoPX3YABAUzgKydPl8qK4NdMXB
+         dc7XasndV2oj1FDMCblzLoWHL8ACSEd30dOPyFOoSwaZszvUjyAfnIKkpjSFiTZkU0Js
+         79s8a23XR9sxeMi/2+M2swSjBI4BCk8K64xkPMjTWygeMP0ePdM9eOTei8XEuriRhKO1
+         yt5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
+        fh=0777sipYr71jHz7j5N2S5U5k+x12V67R63XnvGdF8pY=;
+        b=hU1XiiO2+TM80ye2yuRjQTdaoWzvv49onS/7O2w8qMhwVIPvRQ6HalBkZVdZ89cxJf
+         Yl1E1f9J0krasrqiF/kff3OWov1vZZv9ZnnwVkxGUHEaNNQNq94XfCb4R76Jrd2lCfJW
+         gDOZrEgWZKbr6xEYfOLxYUWCGlSoTYNFvRNcf1NU817bWFtwomZGVS/rfIlIWC3eq+fS
+         AAZwZ82SkI/5aoVLU0rSL/VgzWGMIQlUJEesTBJNR66CourZZ9Kotnwu+o7gwBqnberc
+         TLKXXzYhlI2w0Ll2jLSaghtuoG8FZNAwS1CjQ9NDsQ5RYIFb7B1HFR31kwGWxXcXO5Wp
+         OEIQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790565837; x=1791170637; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
+        b=qrxXDM8DVJbLM3aRXZ8qIGu8mwDVY6d45qU+d7J9x/Jn6S3Fli4QxLAc0VW0C6Olp7
+         SM3oayTFpxisbV/PjdPpbifLlsQqNGb39LF9YfsZXGicPAlx4sZvzJ/4hvqfn+6USluK
+         kkDtV706sLpAXCG8WMV460KaVjPSmL1sdl8qxRCZRigbxD0fiEvJ93q/WtdleAdi3rUy
+         5qrl0nO3RW6nnof6qK/507/25yPbLtwO4tftv1L429vieHH+sg0SR47Po1nkdOoLxa+k
+         RnCovbwgcnCa4/JO2fpdPh8BrIvXGl0L9QF2Ovx3Q+Ve7xwKwhWWNiWhME9aSafhlVcN
+         An9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790565837; x=1791170637;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
+        b=vukQ+crRxgX4DQXFdnODiJQPTsX8qiocVbOibuVwPlob8tyW4BbMRyMgWiM6xxpYI5
+         mgaigXbV3QpWIK1EJImOS3Si/ZnFKeFFhnS5iuOIO275kUt+7DKkjt3faguH2hAcCwVI
+         WGN/PCN9Wn9IYbHrqxcxKSXLE5bc0LGbFkstZGftybDfLluN0Jd7b71eMNvRhjgvqyJn
+         wXpVxn2oFkKyQwuTKReVxIu0iaB8knBVdekKuj5gTCoDzIBgfaJiQF2L17JByeSmS4SO
+         9DDBYruA4vuziJoIdbOy5oKmSp1xCyL22Dp4OUZkdY+g80fkrhMmJJ3KktUi8oE+8i/P
+         ePlg==
+X-Forwarded-Encrypted: i=1; AKwUvBw54jP2NGP7t/CHDDQhkXAUWAzQDyK7Mj2AhtttlODxjGePL9hgYRTMwzLSBvQeOOE1COE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK3FKx8nIXVeCCm8t+Ws0TRQNNMAqZBegu50mo0mJnTCHVpJC3E
+	3x8IPxOA74s0zFTs6OdETwnU/WNNK2xbdSAD15/p8MVZJTiGskzPpwJz7Gpyb6NE38WQms20jev
+	S4gXd0YDAAI7FM/3aGnPxiUCwby1gwws=
+X-Gm-Gg: AYBFou0oSm8pPJmaZ/dWuWuwnx5OuuYh19bO1Rg4+rIvYx4s8Nef6qQR/IecIMdyORV
+	mWvaMriP83C2uDvm2AIt20mSwS3s0+iiyFzQKXCUMJjfGIR0RzXz0kWl3lu2g14Yf1N7/xgqo0a
+	kS1xrVOADtAyfJY5eMoaSms/NaiqXrTdP35/Mvr6iuaeMOCebpDjB7oetL3ssazz6ymfFLz3fBU
+	U6DuJvQO020qgdDgsQSUNB6SpdxAcrWi22mMUfmyzJm464vVUNOp+jxI8PqwTMsFW1s+pIIfDD9
+	dVu7cFrZLsH9r6XFDCH7eF2kFDroR2vrRLkOfZyahF8wUr7zVBFf8RHVljBO2AEG8LATLB8TJwW
+	tbpFDm7foMGCmPVG+Pz0G3w==
+X-Received: by 2002:a05:690c:c4e6:b0:8a8:4931:61b5 with SMTP id
+ 00721157ae682-8a84940aad1mr42888027b3.30.1790565837502; Sun, 27 Sep 2026
+ 20:23:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 11/21] bpf, x86: Dispatch exception cleanup
- pads at run time
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260926050102.2218021-1-yonghong.song@linux.dev>
- <699b29ac22154d64cba9488294b7931090b0c50650e99e555f278a1da854647e@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <699b29ac22154d64cba9488294b7931090b0c50650e99e555f278a1da854647e@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
+ <CALOAHbA4EgGw_uWfbXD0Q87exP7ek=z9ENuU_ARgb+DgBgy1kQ@mail.gmail.com>
+ <arPyspcEFNkqfNyr@linux.dev> <CALOAHbDKRw9cPN_GxOYbp9u50cvr7PzPyoGPsSwoPDPAwBCGbA@mail.gmail.com>
+ <arWJBBOdvLsOSdCt@linux.dev>
+In-Reply-To: <arWJBBOdvLsOSdCt@linux.dev>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Mon, 28 Sep 2026 11:23:19 +0800
+X-Gm-Features: AclHuK_1E2YfKgYgZbd4tDw3yFNtrrBUY1yd8dRRWaf2ogOVKnaFSdEC5R5Nlks
+Message-ID: <CALOAHbCAtEixXTvRaF0qtGMjNwMHtYBL1eQU6GMgduRaWPGOmg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached struct_ops
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, Michal Koutny <mkoutny@suse.com>, 
+	Amery Hung <ameryhung@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
+	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
+	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Sep 25, 2026 at 4:42=E2=80=AFAM Shakeel Butt <shakeel.butt@linux.de=
+v> wrote:
+>
+> On Thu, Sep 24, 2026 at 06:01:27PM +0800, Yafang Shao wrote:
+> > On Wed, Sep 23, 2026 at 11:47=E2=80=AFPM Shakeel Butt <shakeel.butt@lin=
+ux.dev> wrote:
+> > >
+> > > Hi Yafang,
+> > >
+> > > On Wed, Sep 23, 2026 at 09:07:40PM +0800, Yafang Shao wrote:
+> > > > On Tue, Sep 22, 2026 at 3:30=E2=80=AFAM Shakeel Butt <shakeel.butt@=
+linux.dev> wrote:
+> > > > >
+> > > > Hello Shakeel,
+> > > >
+> > > > On the open question of how deferred debt eventually gets paid: wou=
+ld
+> > > > it make sense for the policy to also notify userspace (e.g. via
+> > > > ringbuf) when it defers,
+> > >
+> > > I think the notification through bpf programs is already possible and=
+ a bpf
+> > > program deciding to bypass memory.high can already do notification vi=
+a ringbuf.
+> > >
+> > > > and have a userspace reclaimer do the reclaim
+> > > > through memory.reclaim?
+> > > >
+> > > > I understand one of the concerns for the async worker is CPU
+> > > > accounting. If the concern is that the kworker's CPU usage is not
+> > > > charged to the target cgroup, the userspace reclaimer could instead=
+ be
+> > > > spawned with clone3(CLONE_INTO_CGROUP) so it runs inside the target
+> > > > cgroup, and both its CPU and memory usage get charged there.
+> > > >
+> > > > One caveat: intermediate cgroups with the no-internal-process
+> > > > constraint cannot take processes, so this would only work for leaf
+> > > > cgroups.
+> > > >
+> > > > What do you think?
+> > >
+> > > I think all of this is possible without additional code and with this=
+ series.
+> > > With AI, should be very easy to prototype it. Please take a stab and =
+I will look
+> > > into it as well (time permitting).
+> >
+> > An LLM helped me quickly implement a userspace async memcg reclaimer
+> > based on your series, and it seems to work quite well.
+>
+> That's awesome. Please do take a look at the code and provide feedback an=
+d if
+> you don't mind, a tested-by tag would be awesome.
 
+For this series, feel free to add:
 
-On 9/27/26 1:39 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git arch/x86/net/bpf_jit_comp.c arch/x86/net/bpf_jit_comp.c
->> index 6c7a0578760e..fb7e8ca1aab2 100644
->> --- arch/x86/net/bpf_jit_comp.c
->> +++ arch/x86/net/bpf_jit_comp.c
->> @@ -2150,7 +2150,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
->>   			dst_reg = X86_REG_R9;
->>   	}
->>
->> -	if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
->> +	if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1) ||
->> +	    bpf_exc_insn_is_pad(env, bpf_prog, i - 1))
->>   		EMIT_ENDBR();
-> Landing pads are only ever entered by a ret whose stack slot
-> bpf_unwind_rewrite() rewrote. Nothing jumps or calls to a pad indirectly
-> since bpf_unwind_resume() is lowered to 'r0 = 0; exit', and
-> bpf_exc_check_insn() forbids gotox inside a pad. IBT only checks
-> indirect JMP/CALL targets, not RET targets, so the ENDBR at each pad
-> head should not be needed.
+Tested-by: Yafang Shao <laoar.shao@gmail.com>
 
-Yes, you are right. ENDBR is not needed here.
+One nit:
 
->
-> The same patch sends pad-less frames to aux->epilogue_ip through the
-> same kind of rewritten ret, and emits no ENDBR there. That shows the pad
-> ENDBR does no functional work. Each extra ENDBR in the middle of a JITed
-> function is one more valid IBT landing site in executable kernel memory,
-> and the kernel normally keeps those to a minimum (objtool seals unused
-> ENDBRs).
->
-> Is there an indirect-branch path to the pad that is not visible here?
->
->>   	ip = image + addrs[i - 1] + (prog - temp);
-> [ ... ]
->
->> @@ -3278,6 +3279,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
->>   		seen_exit = true;
->>   		/* Update cleanup_addr */
->>   		ctx->cleanup_addr = proglen;
->> +		/* Where an unwind sends a frame with no pad. */
->> +		bpf_prog->aux->epilogue_ip = (u64)image + proglen;
-> Eduard Zingerman raised an optimization suggestion in v5: use register
-> liveness information at landing pads to avoid spilling all registers
-> unnecessarily. The suggestion was to use register liveness information
-> at call sites and collect a union of registers alive at landing pads for
-> all callers of this particular function.
->
-> You acknowledged and said you would try to fix it to avoid saving
-> unnecessary callee saved registers. However, the current v6
-> implementation still appears to unconditionally spill registers for
-> exception_boundary programs without optimizing based on which registers
-> are actually live at landing pads.
->
-> Note: v6 significantly changed the implementation approach from v5, so
-> this suggestion may need re-evaluation in the context of the new design.
-> Does this optimization still apply, or does the new design address this
-> differently?
+Since we might extend the cgroup-ops to other subsystems, or even to
+the cgroup itself, could we define a more generic CGROUP_OPS instead
+of CGROUP_MEMCG_OPS, and also rename `struct bpf_memcg_ops` to `struct
+bpf_cgroup_ops`? This way, we attach to the `struct cgroup` itself
+rather than to a specific subsystem.
 
-Alexei suggested a new approach in v6.
-
->
->>   		if (bpf_prog_was_classic(bpf_prog) &&
->>   		    !ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN)) {
->>   			if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
-> [ ... ]
->
->> @@ -4614,6 +4629,24 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp
->>   #endif
->>   }
->>
->> +void arch_bpf_stack_walk_ra(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp, u64 *ra),
->> +			    void *cookie)
->> +{
->> +#if defined(CONFIG_UNWINDER_ORC)
->> +	struct unwind_state state;
->> +	unsigned long addr, *ra;
->> +
->> +	for (unwind_start(&state, current, NULL, NULL); !unwind_done(&state);
->> +	     unwind_next_frame(&state)) {
->> +		addr = unwind_get_return_address(&state);
->> +		ra = unwind_get_return_address_ptr(&state);
->> +		if (!addr || !ra ||
->> +		    !consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 *)ra))
->> +			break;
->> +	}
->> +#endif
->> +}
-> arch_bpf_stack_walk_ra() pairs the unwinder's recovered return address
-> with the raw stack slot. On x86 ORC, unwind_next_frame() does
->
-> arch/x86/kernel/unwind_orc.c:unwind_next_frame() {
->      ...
->      state->ip = unwind_recover_ret_addr(state, state->ip, (unsigned long *)ip_p);
->      ...
-> }
->
-> which turns return_to_handler (function_graph / fprobe exit on fgraph)
-> or the rethook trampoline (kretprobe) back into the original caller
-> address. But unwind_get_return_address_ptr() returns `(unsigned long
-> *)state->sp - 1`, i.e. ip_p itself, and that slot still holds the
-> tracer's trampoline address. Nothing checks that *ra == addr before
-> handing ra to the consumer.
->
-> bpf_unwind() is a normal __bpf_kfunc in kernel/bpf/helpers.c with no
-> notrace, so function_graph, kretprobe:bpf_unwind, or a kprobe.multi
-> return probe can hook its return. In that case the prologue replaces the
-> slot holding bpf_unwind's return into the BPF program. Then:
->
->    bpf_unwind() -> arch_bpf_stack_walk_ra() -> bpf_unwind_rewrite()
->      cnt == 1 frame, and the bpf_unwind call is covered by a cleanup record
->      (mark_call_sites() marks bpf_is_unwind_kfunc() calls)
->      -> *ra = rec->pad;   /* overwrites return_to_handler / rethook trampoline */
->
-> bpf_unwind() then returns straight into the pad and skips the tracer's
-> return trampoline. Its fgraph ret_stack entry (or rethook node) is left
-> behind. The next hooked function further up that returns through the
-> trampoline pops that stale entry.
->
-> For fgraph, ftrace_pop_return_trace() has no frame-pointer check on x86
-> (HAVE_FUNCTION_GRAPH_FP_TEST is not defined there). For rethook,
-> __rethook_find_ret_addr() picks the top node. Either way execution jumps
-> to the old BPF address after the bpf_unwind call, running on a different
-> function's stack, which leads to an oops or arbitrary control flow.
->
-> The arm64 version of this same walker, added later in the series
-> (8bd2af30a28e "bpf, arm64: Dispatch exception cleanup pads at run
-> time"), handles exactly this case:
->
-> arch/arm64/net/bpf_jit_comp.c:arch_bpf_stack_walk_ra() {
->      ...
->      if (state->flags.fgraph || state->flags.kretprobe)
->          return false;
->      ...
-> }
->
-> Its changelog says: "a frame whose return the function graph tracer or a
-> kretprobe has hooked holds the tracer's trampoline in its slot rather
-> than the address the unwinder reports, so the walk stops there." The x86
-> walker has no such check, and no later commit in the series touches
-> arch/x86/net/bpf_jit_comp.c.
->
-> Should the x86 version also check state flags or compare
-> READ_ONCE_NOCHECK(*ra) against the value the unwinder read, and stop the
-> walk when they differ?
-
-Okay, will do this since arm64 has a different guard.
-
->
->> +
->>   void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
->>   			       struct bpf_prog *new, struct bpf_prog *old)
->>   {
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346422430
-
+--=20
+Regards
+Yafang
