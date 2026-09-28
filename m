@@ -1,111 +1,161 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA9C4E36D0
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 16:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2FB4C9E04;
+	Mon, 28 Sep 2026 16:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790612058; cv=none; b=bME6dhlGmLC3Vluy0Odurfmq/aWLWLXaA0kiHSRPIJDjKDjOUxApe7yuIFLAqVnyU12roV0f2S4/uGyc70A2WX4W1hmz2Xm7gBI1qfylCAqMuLlVS3yynUWPQYiSgbVTP4pZ0Hgat5EY6aXiKYHwiqXAGm7hqP6BdjTZCF+G9Ms=
+	t=1790612537; cv=none; b=JQNr429uUnaf66VO4t1JuEQ1Agn64yC0FeNWJODl7qqNhdxgNRfz5so0J7mKVsYYn39kNq43DH9Es4khXgl8Q2zdpjc6qRepWvcEso6coz7ZaKdWwERAHN1XnaRshYATWfGs6tjO9JBmKmCekE3ABF5oHxgxcovpOdIpsLtpavk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790612058; c=relaxed/simple;
-	bh=0mNiBoZ+EjTYD7duzkXnrvojGRhNpWwj6eK4k43UdIg=;
-	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:MIME-Version; b=lkKIeAkhvZixpxMhncycwde9x8Wo3qDVWA9PRY2YBgbhElNYxKXgwfE4V7dC4MinRE9AsXeXT3zR7FbNs3yFTiMQHz6agz2MR0wRrfMESC9IPxmN1RmmehmOY7aCJBNjdj+x2hp/MNmgeUs0kepYUu4I44vzrVbhK2+V0ZxHlK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VVrbvnSu; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790612537; c=relaxed/simple;
+	bh=5lHqMWuG2SC/nvr8+jRbwofW8j9/nXRWESqbC2CG75I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZdcR/tF0lLepUvriYxMjb0maUxPzfTGLzh03DE4gV5opigO6Th1MyXDCPXW8F2RKkxTKp+EFp06uKWOz8GZ3xgnHy04juPcn4wMr2gYiVcxFw/ba48jTRPtItaECwVOwuAaFGZ5BRhh3s3eC5qNOvuurWSxkMX0/eGYKJ9Y+4b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKbUATTq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VVrbvnSu"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d8fbef5018so22040155ad.0
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 09:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790612047; x=1791216847; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0mNiBoZ+EjTYD7duzkXnrvojGRhNpWwj6eK4k43UdIg=;
-        b=VVrbvnSuaJz2ZwHKMfTDbeWKgGXlU+SRNnvIJADJjM5ZCLiBQUYVygyAhCJbAqdWSV
-         vuomXrcTbVzHgRzEAWTIoP3CFv30oTmNyVkjT7oTsLd13PlpzPqIvKYymFB+NrD7UqEM
-         AM3oHV5JBdB0jWQRZE/DcfrTBlSb6otB5azjhbORu1ncBEMfjiIsmepG4nS7e/WXNsf9
-         r9zSmzrVlIFU3aqLgnd3ox49iyY3K061EvfEFpYc8FO2JIKJfeMsiP7c2Y+NDsDH63ih
-         G/9WlONkPQsbWSvgGo03OIc0AXlqu2bhDmRyV1l9Qwmo+G0Ta0cal3qQpR/B9oJqEhhN
-         quuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790612047; x=1791216847;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0mNiBoZ+EjTYD7duzkXnrvojGRhNpWwj6eK4k43UdIg=;
-        b=iy5xe8JtCa5CK2GB7TGnGt9o6eHpsq/VL9t4YYVdJ8b/kNyT0RaNczrc1LRoSmcog9
-         CAy/8oDrS7ITH6AxZntTnaoYeRrJ9cfxykTTq0jkcYOS1TWSKhugTJTfuCpVHQIM81S0
-         PBJ+e1J+q3oTrLab2DXUj9qo7wbIg052Ts5VeSMp85tACyiFDwEVnIign8PNw0Orhmn+
-         smL13ZVOxlTmwV8E/7nIdI9Xn+9xDyvJI2N/46fyCjVNYJaahE/mMZ90nHZldzSkNjAO
-         twHrmKXJaYof/8aPRz11uiep0Enw+Zv6E3UGEEsdXFJqz1dH3pzdpwnBftQodBqzXkoF
-         f7BQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwCMLe/23CgYJH0xqlZUTP57Grvq25OkSAJso/56Rxm8mg8VArGPAIXhITi9cH2KvTkSv8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIbjXXeusN3jn+oSqz3wSchwrLn9ht6mdTk7Zh2o8P9qyoXZIkb
-	Q+8PQEB2R4uJSnFSQOg8091ZLNuHdi4roIidmcd5s8a2r3kJ96Kgbz1f
-X-Gm-Gg: AYBFou3pMaj3tKt2/VOZjJPdog0OBwPa8TmV/kaJxfkRIuZPr3nMRoNUbEkkVUcfDwj
-	Mi5tH44KzK4RrO3xag238NFJzlYNopXQ1X1YAbnCavgVNxJkTGVbqigkd6xc2+1gPllg/WuSdHF
-	EqSYxpoFXU+pZeUv0B+Ys+J4yov+Y63dqGdZrABX4ZaWCHulIskcd2egt0JVgjlp6uw0OqEqm20
-	fy18M4O2H+jU6kMbgGFa8y7flLrULTp+iv+pCTkdiNxg7oeplSROOR7bEAeprck+8k7MqdUHmO4
-	hV+sYQVd+LbKwWXDhrzgxK0OehoMzkLb597ZcAydOyTY6b9Ldd11o/PaTUjg5VRcFJJkn6SVAys
-	ulw1KFDkVEopqNC/xaR1JGAjP3glhCkNY6JYzNOGp+G6V80UvwnYNPumgcDXMySNDt7irSNPgZY
-	HE2ctsVsTbdwdP3AHSXkEqSMMxDzitF7oYcpxmP8ep0kkJK5qmFC/lZzi06408N3DWpSgIQfVVS
-	b4mofPfSgd193p01zl+S3ChfWmhbkUPSStlW44MIor/HNZwOlaJ+CrUBA7zxzf0XmCITwupPzdb
-	yhU=
-X-Received: by 2002:a17:902:ef4c:b0:2dd:ad74:ac20 with SMTP id d9443c01a7336-2df7dea7d02mr104273185ad.27.1790612046704;
-        Mon, 28 Sep 2026 09:14:06 -0700 (PDT)
-Received: from localhost ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df913dfea3sm43852325ad.14.2026.09.28.09.14.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 09:14:05 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 16:14:04 +0000
-Message-Id: <DLR2ZT65RKF3.3KZ8O8P4VKTI2@gmail.com>
-Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
- packet scrubbing
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jakub Sitnicki" <jakub@cloudflare.com>
-Cc: "Jakub Kicinski" <kuba@kernel.org>, "Daniel Zahka"
- <daniel.zahka@gmail.com>, <netdev@vger.kernel.org>, "Kuniyuki Iwashima"
- <kuniyu@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, <bpf@vger.kernel.org>,
- <kernel-team@cloudflare.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Simon Horman"
- <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
- Bruijn" <willemdebruijn.kernel@gmail.com>, "Florian Westphal"
- <fw@strlen.de>, "Jack Wang" <163wangjack@gmail.com>
-In-Reply-To: <87jyo5bcgs.fsf@cloudflare.com>
-References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com> <20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com> <DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com> <DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com> <20260925121849.2ac5150b@kernel.org> <DLONQQN0RB03.1NVWVFHGRRWV4@gmail.com> <20260925132004.171b751e@kernel.org> <DLOOI89GKM5B.W4XPBNJUXRV1@gmail.com> <87jyo5bcgs.fsf@cloudflare.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKbUATTq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E36C1F000FF;
+	Mon, 28 Sep 2026 16:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790612535;
+	bh=qg3X+kdxoIWMjV+DfXe6h75eyqNhu8yttfmSXvX9ux8=;
+	h=From:Subject:Date:To:Cc;
+	b=dKbUATTq4fjTaREfaqOEJGvKEw83Tkv2bH+3PvipH+013sWwF/VxYiBwbK+eoOwZy
+	 k7KhBu9U6ZrpmwjNv441irC7hYgx1ptdfTcbR2jUdYIxskcQpdihnFXHt0NIZ9kew0
+	 ivHFhvBWAPG3mi6hGj8BhsucDAoySnOrGIDQlBCTiIHru/oQgpD/N6lUZUKqdvUlmN
+	 EWGOkNOOu1+dI1m+I66QxLEq9rMMZl5se+TWXwquTqfu0bjp01p1uAnryJoLAUNEyZ
+	 fYPjsSmoKLJ2zaiQYbQV65uNVVT5I/cWA70HrblFyyzYkQjHeJk+iAmNVoW67BM2Wy
+	 Rm54b9XunksrA==
+From: Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+Date: Mon, 28 Sep 2026 18:22:00 +0200
+Message-Id: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avErBswibSuEi1MxxpIE4UIorsnL
+ d/i/wcKZaYCU/NAposLn7Giaxuwu4kbIbtqkEIOYpQaXQ4YODG6wphMpANpTR6d0quSZrS98lD
+ rlMnz/Z/n5X0/x9i3pGkAAAA=
+X-Change-ID: 20260928-drm-mipi-dsi-panel-ebpf-d78b72a9c47f
+To: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Albert Esteve <aesteve@redhat.com>, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+ Javier Martinez Canillas <javierm@redhat.com>, 
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ Maxime Ripard <mripard@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4301; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=5lHqMWuG2SC/nvr8+jRbwofW8j9/nXRWESqbC2CG75I=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDFm7phjskmP3W/my72a6h9id8ra8E4bWkqpTYr+rP48xP
+ 6birXm/YyoLgzAng6yYIssTmbDTy9sXVznYr/wBM4eVCWQIAxenAEzEJpWx4UnduYjC+p/PzPNt
+ VvU+/nxQrc+y/voPa6HDJzYu3f7liYbArLZ+l7VMjyaKC9xwsEngYqyPXXZksrx6Ycbi47cYfkm
+ bmn+1+Vy3KePL/Aydw58Et22dxR95wPlUzj75jeccSldGuL0CAA==
+X-Developer-Key: i=mripard@kernel.org; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-On Mon, Sep 28, 2026 at 05:52 PM Jakub Sitnicki <jakub@cloudflare.com> wrote:
-> The correct results - as in reproducible and with lower variance - are
-> the other way around - BPF skb ext is cheaper CPU-wise than gated skb
-> tracepoints. Please see:
->
-> https://patch.msgid.link/20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com
+Hi,
 
-I don't think these numbers measure the mechanism either.
-cpustats.py divides busy by ncpus, so +16.4 and +6.6 are the mean
-over 6 cpus, while 146k pps is the total of 3 flows.
-So it's 6.7 usec vs 2.7 usec per packet and not 1125 ns vs 450 ns.
-That's a lot for one kmem_cache_alloc/free and a 16 byte copy.
+Panels in general, and MIPI-DSI panels in particular, are pretty
+difficult to support and require pretty much a panel driver for each
+panel produced. Most of them are pretty simple, and require an opaque
+initialization sequence that is usually poorly documented.
 
-Pls share perf report for both and rerun.
+This creates a tension between OEMs and distros because OEMs will
+typically get a new panel to react to a sourcing issue during
+production, and thus need some swift turnaround between getting their
+new panel and it being operational in the OS. Distributions on the other
+hand can take years to ship a kernel with that new panel driver.
+
+To solve this, I followed the example of HID-BPF and wrote a panel
+driver that will rely on BPF programs to perform the panel
+initialization. That way, we can ship the programs separately from the
+kernel, and with a different lifecycle. If this driver is accepted, the
+plan is to have a userspace component started by udev to identify and
+load the right BPF program for the panels found on the device.
+
+This driver is fully functional and works with both 5" and 7" Touch
+Display 2 panels for the RaspberryPi. However, it breaks away from the
+typical panel driver in multiple ways:
+
+- BPF programs can only be loaded by userspace. This leaves us with two
+  choices: 
+
+  * We prevent the driver from loading until the script itself is
+    loaded. This has the side effect of preventing any other output to
+    be used until the initramfs is ran at the earliest, and possibly
+    ever if the loader isn't installed for example.
+
+  * Or we probe the driver all the time, but only report it as connected
+    once a program has been registered. This is somewhat unconventional,
+    but allows the other outputs to be functional, *and* allows the user
+    to force the output if their panel doesn't require any
+    initialization or during debugging. I chose this solution.
+
+- It's not a panel driver, but a bridge one, which is also pretty
+  unconventional. This is required because panel drivers don't have
+  access to a detect callback that is required for the above, but I also
+  think that the recent work from Luca blurs the line from panels and
+  bridges and we'll end up going that road anyway.
+
+Let me know what you think,
+Maxime
+
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
+---
+Maxime Ripard (6):
+      dt-bindings: display: Add panel-mipi-dsi-bpf generic panel binding
+      drm/panel: Add generic MIPI-DSI panel driver with BPF init sequences
+      drm/panel: dsi-bpf: Add BPF program build infrastructure and helper header
+      drm/panel: dsi-bpf: Add Raspberry Pi 7-inch panel BPF program
+      drm/panel: dsi-bpf: Add Raspberry Pi 5-inch panel BPF program
+      [DO NOT MERGE] arm64: dts: broadcom: Add Raspberry Pi ILI9881C DSI panel overlays
+
+ .../bindings/display/panel/panel-mipi-dsi-bpf.yaml | 184 +++++++++
+ arch/arm64/boot/dts/broadcom/Makefile              |   8 +
+ .../bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso         |  22 +
+ .../bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso         |  22 +
+ .../dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi  |  65 +++
+ drivers/gpu/drm/panel/Kconfig                      |   3 +
+ drivers/gpu/drm/panel/Makefile                     |   1 +
+ drivers/gpu/drm/panel/bpf/Kconfig                  |  28 ++
+ drivers/gpu/drm/panel/bpf/Makefile                 |  10 +
+ .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-core.c    | 452 +++++++++++++++++++++
+ .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-kfuncs.c  | 278 +++++++++++++
+ drivers/gpu/drm/panel/bpf/panel-bpf-mipi-dsi-ops.c | 242 +++++++++++
+ .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-trace.c   |   4 +
+ .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-trace.h   | 246 +++++++++++
+ drivers/gpu/drm/panel/bpf/panel-bpf-mipi-dsi.h     | 264 ++++++++++++
+ drivers/gpu/drm/panel/bpf/progs/Makefile           |  93 +++++
+ .../panel/bpf/progs/Raspberrypi__dsi-5inch.bpf.c   | 266 ++++++++++++
+ .../panel/bpf/progs/Raspberrypi__dsi-7inch.bpf.c   | 271 ++++++++++++
+ .../gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h   |  95 +++++
+ 19 files changed, 2554 insertions(+)
+---
+base-commit: 6e375de99d0c420169481fcd36064177ab55b09d
+change-id: 20260928-drm-mipi-dsi-panel-ebpf-d78b72a9c47f
+
+Best regards,
+-- 
+Maxime Ripard <mripard@kernel.org>
 
