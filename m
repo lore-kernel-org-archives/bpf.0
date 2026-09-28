@@ -1,91 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B44C400969;
-	Mon, 28 Sep 2026 20:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70304E80C3;
+	Mon, 28 Sep 2026 20:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790628022; cv=none; b=mYfE+/5PQvQ2Iu2xkgkETT80qRyIeMLKxPNCt3b/N6Sq9eRwvBQ3SO1lJRu9ksWDcQ/BQCuXpJaI5XJGngCEB1fPlUk0zueUqnbsRuZbT9FH8aFSwBQ6/AXzvg6EpDK7cVQ/jfGLiLjgi6Fx9tBX261NuXgZgvjIMjafmXVe7Ks=
+	t=1790628063; cv=none; b=THI22Io4JdguwNe4EKninw92NTI48K7hHckyCZYqv/c9TJ4qB1RZm23idvv2JuPobbXXX3yXETb9vQ9yo+gU4LA4OYJ3IfQCAhwlyRSZf8ezw84rfTwHkkgLQ+mEK+DMHxZ3+8WFucItAgJxe0W6KvPdR5BgGaV7Ov7ReCW2WKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790628022; c=relaxed/simple;
-	bh=CoHoRxjQ6xpgpQCcQ4DIDavYf4+oiU0CnmGBD4CzMNc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=RI0mfFWtSaJqGX5obVdXWn9xgwat2yZhj9lJpYSFwtmjhQJhYor16GnQNzOSe80zAVWW+WkCbzq+bs5WMi6ZBZldMNG1AGz0rmOaC1fxSxOFIZNqmv96KfF0tzOLqgKlHZ/aefVdR2O1u4Ex6JE5zW/Q25gwVqX5xb7I8PdvtSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GwpH/rQq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790628063; c=relaxed/simple;
+	bh=LiG8M1g1s4hpV/5/ll/EQsp5UdX56AQ73H8mw0UIYCg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lL6mFshXEZ1iL8JHedQ1AEP1u2Xg90f6w9TJkuvA0pIWu3Q1b9Ch1Yb28sBP173mvTvct5+A2r1uxlwUIcRN7HJbrhJEsHSG08mjdwkRw9+uUuxfU+YGmMzWeoKP518V95vAgGbW3oJvJi0ToolzIf0BT6qbsprMjRtEBx9NlF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=egMXFZSF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GwpH/rQq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC0621F000FF;
-	Mon, 28 Sep 2026 20:40:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="egMXFZSF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D5E1F00898;
+	Mon, 28 Sep 2026 20:41:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790628021;
-	bh=m8gNHGeN9x3rygoOMPou+J30yRI3f3dCJdb5tsXJA8o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=GwpH/rQqVv024QcgJ6u3+OLqasWshPI5N2UHnxjNm/VTJaZ5eseSEUd7CIaE1i3i6
-	 opCPfoiVnbc0CRgpybqTMVFg/t4qbQwgFsGNMa7sPUQCgf8rjhmuFCg6wnWW3qahi6
-	 0dg4qW44ZgyNlBqrHCoGiNOqtTAtwUN0ex+qMG/LkEmSebCBiLp3Bm0iwB1PJHYuZx
-	 zK0qcQn+9qJ5Zk9zA+Yr03TNNmYKenX+OVMA6xHKilAq9+bV/deI2pILyTX5b340GF
-	 2GU8Mq6lZDmRRG3+Roaam4mTC4PXjouQQFDQC4NOPa4yxx6X+RIh50zw9BSScy1TED
-	 aI2x/noyxexCA==
-Date: Mon, 28 Sep 2026 10:40:20 -1000
-Message-ID: <bda525506b3fb3e61da28a112f28abba@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>,
-	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev,
-	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>,
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org,
-	bpf@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
- struct_ops
-In-Reply-To: <20260921192559.2619635-1-shakeel.butt@linux.dev>
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
+	s=k20260515; t=1790628062;
+	bh=NLW0Xvdr0NdDdNm3pJOiMfwy/Xm72khh3QPraAupQ7Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=egMXFZSFJB8mIyXxncXKqSPcoR7YjAGqoqd1U9D9l0YRxjjUjZRzlxCONoBn5oAms
+	 I3tRdMjjkNFhoZqWIMId7vW1XmU2yi/unDIg2XY2LRHTGafQ0aMZzjp/rhfkoWUxEE
+	 o5wMXTad/9D4Rpwpgmh+Qk4aCNKVo01HPLlEuOJ6/XrVZ4LSxVdoWg8TnYbkI/fOOy
+	 60ouPKeoRXjipb+i/MjB2mtzMDzpfGvVnNjGhosiUNudr8tV9mW0dYhdFNl8cfY80z
+	 LsCuhOsxDNHPMzD6WhRGaJSSg54X96OQq2mD2UAvdeYavujR8brUKcWIi0e5IyyuoN
+	 TKXUO1R/PMAdQ==
+Date: Mon, 28 Sep 2026 15:40:59 -0500
+From: Rob Herring <robh@kernel.org>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Albert Esteve <aesteve@redhat.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+Message-ID: <20260928204059.GA515872-robh@kernel.org>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
 
-Hello, Shakeel.
+On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
+> Most MIPI-DSI panel drivers follow an identical pattern: acquire
+> regulators and GPIOs, perform a reset pulse with specific timing,
+> send a vendor-supplied sequence of DSI commands, then enable the
+> display. The only truly panel-specific part is the init sequence
+> and power-on/off timing.
+> 
+> The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
+> with a single generic driver whose panel-specific behavior is
+> provided by BPF programs loaded from userspace at runtime,
+> following the HID-BPF model. This enables new panel support
+> without kernel patches.
+> 
+> Panel DT nodes use a two-entry compatible with the panel-specific
+> string first and "panel-mipi-dsi-bpf" as fallback. The generic
+> driver matches on the fallback, while the first compatible is used
+> to identify which BPF program to load.
 
-On Mon, Sep 21, 2026 at 12:25:55PM -0700, Shakeel Butt wrote:
-> try_charge_memcg() calls __mem_cgroup_handle_over_high() before it returns,
-> which reclaims and can throttle the task.  That happens wherever the charge
-> happens, so a task holding a kernel lock can be stuck there, and everything
-> waiting on that lock is stuck behind it.
+If you need the 1st compatible anyways, what is the point of the second 
+one? Also, I assume there is at least some panel supported in the kernel 
+you might want to convert to this. That panel would not have the 
+fallback (and the DT is fixed).
 
-Why not just raise the lazy bound high enough that most charges never
-enforce inline, and maybe annotate the specific paths that can allocate a
-lot so that they do? Inline enforcement should be the exception, not the
-rule. Flipping that and then trying to reverse it with custom BPF policies
-doesn't make a lot of sense.
+And I agree with Neil's comment. At least until we start embedding BPF 
+into DT directly. ;)
 
-> One concrete scenario which can be resolved by this new feature is the
-> kernfs notify worker. It delivers notifications with the cgroup2
-> kernfs_rwsem held for read, and the charge for the delivery allocation goes
-> to the cgroup that set the watch, usually one already under pressure. So
-> the worker reclaims while holding the lock, a waiting writer blocks every
-> later reader, and anything touching cgroupfs stalls for seconds.
-
-Slowing down the kworker inline doesn't make sense. It's charging on behalf
-of the watcher through set_active_memcg(), which already tells us whose debt
-it is. Wouldn't it make more sense to defer the debt to that cgroup instead
-of slowing down the kernel thread?
-
-Thanks.
-
---
-tejun
+Rob
