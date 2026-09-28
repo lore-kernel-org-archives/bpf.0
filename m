@@ -1,197 +1,111 @@
-Received: from mail-qv2-f32.google.com (mail-qv2-f32.google.com [74.125.230.160])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C184E1C73
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 16:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA9C4E36D0
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 16:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790611285; cv=none; b=rxV66/ag6O7qTF/Llb4GnYw9GUnMfnr4MjHhMjQhGqGHMTye8VKyPTVY6XO7WaPT6+PHweWiat9bglyN4VFK0rAqNSgyiAIE5TIyxMLiDZjugWgIL3UyLP/KGNzcfxRixezM1Io8NpKz8pM1HyanW1sRAs7i65tJIMcnx9apSXs=
+	t=1790612058; cv=none; b=bME6dhlGmLC3Vluy0Odurfmq/aWLWLXaA0kiHSRPIJDjKDjOUxApe7yuIFLAqVnyU12roV0f2S4/uGyc70A2WX4W1hmz2Xm7gBI1qfylCAqMuLlVS3yynUWPQYiSgbVTP4pZ0Hgat5EY6aXiKYHwiqXAGm7hqP6BdjTZCF+G9Ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790611285; c=relaxed/simple;
-	bh=uSKWGEy+h0iZrPZ3sx1w7LlZBURNAT0ImgBibqITfCc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=rrui36k6DnACLpareCZv6j6MQZeExnC1CpIs+eDkqgbIgC+jc6QItg8A2sRrj/GZ3WERMa1Aks/sO5Yxy1BxMJRF2sgajp5QG5YiZ7V/oQxzuTCMN7wFlxVOZZeOmBLiQaZlDb9UnF/7/wu/yw7HW4G50ff/e2ij+QMdwp+xffk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mLYrsp8U; arc=none smtp.client-ip=74.125.230.160
+	s=arc-20240116; t=1790612058; c=relaxed/simple;
+	bh=0mNiBoZ+EjTYD7duzkXnrvojGRhNpWwj6eK4k43UdIg=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:MIME-Version; b=lkKIeAkhvZixpxMhncycwde9x8Wo3qDVWA9PRY2YBgbhElNYxKXgwfE4V7dC4MinRE9AsXeXT3zR7FbNs3yFTiMQHz6agz2MR0wRrfMESC9IPxmN1RmmehmOY7aCJBNjdj+x2hp/MNmgeUs0kepYUu4I44vzrVbhK2+V0ZxHlK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VVrbvnSu; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mLYrsp8U"
-Received: by mail-qv2-f32.google.com with SMTP id 6a1803df08f44-91782711448so1501726d6.2
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 09:01:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VVrbvnSu"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d8fbef5018so22040155ad.0
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 09:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790611282; x=1791216082; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=0L0FfZEwFrI5hnOen6cKyT8bGV7DqSFD/qxUGYMRgC4=;
-        b=mLYrsp8U1ewdKN6ZuAjN904WjXAEnrq4AROfEBedTkheVduZCT4PiT55DZJIXp+0/I
-         PNJ+y1jYs8N5IIQ7GUemW/6n5Al57tktiB88eNM9uRcE64P2YRIpsyTlhReGwx7K213O
-         BXYWlQeY3KEpFgBEiiYxPvpEwv4S3sDJyCQBAoBkj/3JmujluI67wQvdOvoOGF5K30mI
-         UECe2a1QcygOk3lWajoZnfe0J1mLqNKfwfpWZ/lHvVZbtCLW+aEeyvMxFY1VsTT2eD1d
-         7JRkgdXyannb/R4mrCdxydOLkcXbm/8e0mstAqz3aI+xts6QHsPreWzJmNZENx2xJm9I
-         EqUA==
+        d=gmail.com; s=20251104; t=1790612047; x=1791216847; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=0mNiBoZ+EjTYD7duzkXnrvojGRhNpWwj6eK4k43UdIg=;
+        b=VVrbvnSuaJz2ZwHKMfTDbeWKgGXlU+SRNnvIJADJjM5ZCLiBQUYVygyAhCJbAqdWSV
+         vuomXrcTbVzHgRzEAWTIoP3CFv30oTmNyVkjT7oTsLd13PlpzPqIvKYymFB+NrD7UqEM
+         AM3oHV5JBdB0jWQRZE/DcfrTBlSb6otB5azjhbORu1ncBEMfjiIsmepG4nS7e/WXNsf9
+         r9zSmzrVlIFU3aqLgnd3ox49iyY3K061EvfEFpYc8FO2JIKJfeMsiP7c2Y+NDsDH63ih
+         G/9WlONkPQsbWSvgGo03OIc0AXlqu2bhDmRyV1l9Qwmo+G0Ta0cal3qQpR/B9oJqEhhN
+         quuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790611282; x=1791216082;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790612047; x=1791216847;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0L0FfZEwFrI5hnOen6cKyT8bGV7DqSFD/qxUGYMRgC4=;
-        b=Gbf+3iecwp4Rto3zfBOEl2b8d4N4HVQv7NW3DjZmz2w2dZ5eITbqeWkoXEvFh/si73
-         zcnARmMzCPzgB4vKA/nrPxmuCmokn6yS3qve+0Q/ZpLkEzxAq0nflvB/QslmqGcMEp4t
-         lmdwW0yjepdyPttm3EiKTrqrjB+Kaj5zZTXI62JIN7CJxAZBFDX4qKC5bwXLkLHvy+6N
-         UdrSfiTCOKJFfEkYdTZqPkdFf4fOWs+L/AQqFbec8d9x6RTVOVeL3+QYVgyCQ5XCobpw
-         BTh2ap2qwF70eBMgUckR+lkNFFyjUTSgRJLeEgdp8xqZs0pC+6uxzf/n6Yy81qGJp0L6
-         vEhQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxc/a3jfdFZzasL330zVy8lXCk4/M/jugLtj5quCoT0sweM2Y7T611wum//XFctmwn4wso=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKQSejnuEJktq078tTYaDl3uKh7cyvDjIUiHgWSPGOJhOjAOSzi
-	hKyWhfIfFXQxzr8lIAx6mRdg8mef6yF6bLyiB1B9mDxcmNdQqjqCHZiF
-X-Gm-Gg: AYBFou1PnUnpnJDZI85CpFqa4HJAcvsN0xPBKrX3vyklVr8BNzk9BT+RIK7kcp4WYJT
-	92M3T89t6ZIuEmC+ZTM6OVSKGwMPnZTt0Ml5ekGrdkigHKClJ1NmRjAqffS9JZR2dNaVki894/Y
-	rR3Za1u7w4ZQd8aysUHuqQHLGMZuOE9t+hnKGr+pdt3euLiR9GYmGL/50ZbI8Tka9CBWoQte/qb
-	6McGCszZ2wTlsoyH9yRGDkVcWl0jWAShQfqY3i+1oHrkiaFQ5OEK3bVzn4ZX+9eASI5BrBuYkxx
-	XswGwOjos0qzanyp+G9vv1RS71UMdefIHRxAg6HNdrPpiowD1Kok1TOYtkBz5sMnpO3eo5EDGZ+
-	Q47dDG/OeBoSQ0VX70Z3Qoq2elTRAiRk5vr/7BB34xODxPw/WBmYUVJPJaF7CYsTTO/JuV6BzOC
-	1FRnZpZoz6XXY77acb5kNNb9dylkrf6mOgqW6/7RG2NuM7tMyCgBu1VtGkJfhidJYvf56wXPJ5a
-	FQ=
-X-Received: by 2002:a05:6214:1d26:b0:914:40fb:8e89 with SMTP id 6a1803df08f44-91440fb8eebmr178876886d6.16.1790611281978;
-        Mon, 28 Sep 2026 09:01:21 -0700 (PDT)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91430e09985sm83727016d6.30.2026.09.28.09.01.20
+        bh=0mNiBoZ+EjTYD7duzkXnrvojGRhNpWwj6eK4k43UdIg=;
+        b=iy5xe8JtCa5CK2GB7TGnGt9o6eHpsq/VL9t4YYVdJ8b/kNyT0RaNczrc1LRoSmcog9
+         CAy/8oDrS7ITH6AxZntTnaoYeRrJ9cfxykTTq0jkcYOS1TWSKhugTJTfuCpVHQIM81S0
+         PBJ+e1J+q3oTrLab2DXUj9qo7wbIg052Ts5VeSMp85tACyiFDwEVnIign8PNw0Orhmn+
+         smL13ZVOxlTmwV8E/7nIdI9Xn+9xDyvJI2N/46fyCjVNYJaahE/mMZ90nHZldzSkNjAO
+         twHrmKXJaYof/8aPRz11uiep0Enw+Zv6E3UGEEsdXFJqz1dH3pzdpwnBftQodBqzXkoF
+         f7BQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwCMLe/23CgYJH0xqlZUTP57Grvq25OkSAJso/56Rxm8mg8VArGPAIXhITi9cH2KvTkSv8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIbjXXeusN3jn+oSqz3wSchwrLn9ht6mdTk7Zh2o8P9qyoXZIkb
+	Q+8PQEB2R4uJSnFSQOg8091ZLNuHdi4roIidmcd5s8a2r3kJ96Kgbz1f
+X-Gm-Gg: AYBFou3pMaj3tKt2/VOZjJPdog0OBwPa8TmV/kaJxfkRIuZPr3nMRoNUbEkkVUcfDwj
+	Mi5tH44KzK4RrO3xag238NFJzlYNopXQ1X1YAbnCavgVNxJkTGVbqigkd6xc2+1gPllg/WuSdHF
+	EqSYxpoFXU+pZeUv0B+Ys+J4yov+Y63dqGdZrABX4ZaWCHulIskcd2egt0JVgjlp6uw0OqEqm20
+	fy18M4O2H+jU6kMbgGFa8y7flLrULTp+iv+pCTkdiNxg7oeplSROOR7bEAeprck+8k7MqdUHmO4
+	hV+sYQVd+LbKwWXDhrzgxK0OehoMzkLb597ZcAydOyTY6b9Ldd11o/PaTUjg5VRcFJJkn6SVAys
+	ulw1KFDkVEopqNC/xaR1JGAjP3glhCkNY6JYzNOGp+G6V80UvwnYNPumgcDXMySNDt7irSNPgZY
+	HE2ctsVsTbdwdP3AHSXkEqSMMxDzitF7oYcpxmP8ep0kkJK5qmFC/lZzi06408N3DWpSgIQfVVS
+	b4mofPfSgd193p01zl+S3ChfWmhbkUPSStlW44MIor/HNZwOlaJ+CrUBA7zxzf0XmCITwupPzdb
+	yhU=
+X-Received: by 2002:a17:902:ef4c:b0:2dd:ad74:ac20 with SMTP id d9443c01a7336-2df7dea7d02mr104273185ad.27.1790612046704;
+        Mon, 28 Sep 2026 09:14:06 -0700 (PDT)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df913dfea3sm43852325ad.14.2026.09.28.09.14.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 09:01:21 -0700 (PDT)
+        Mon, 28 Sep 2026 09:14:05 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 28 Sep 2026 16:14:04 +0000
+Message-Id: <DLR2ZT65RKF3.3KZ8O8P4VKTI2@gmail.com>
+Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
+ packet scrubbing
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jakub Sitnicki" <jakub@cloudflare.com>
+Cc: "Jakub Kicinski" <kuba@kernel.org>, "Daniel Zahka"
+ <daniel.zahka@gmail.com>, <netdev@vger.kernel.org>, "Kuniyuki Iwashima"
+ <kuniyu@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, <bpf@vger.kernel.org>,
+ <kernel-team@cloudflare.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Simon Horman"
+ <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
+ Bruijn" <willemdebruijn.kernel@gmail.com>, "Florian Westphal"
+ <fw@strlen.de>, "Jack Wang" <163wangjack@gmail.com>
+In-Reply-To: <87jyo5bcgs.fsf@cloudflare.com>
+References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com> <20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com> <DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com> <DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com> <20260925121849.2ac5150b@kernel.org> <DLONQQN0RB03.1NVWVFHGRRWV4@gmail.com> <20260925132004.171b751e@kernel.org> <DLOOI89GKM5B.W4XPBNJUXRV1@gmail.com> <87jyo5bcgs.fsf@cloudflare.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 12:01:20 -0400
-Message-Id: <DLR2Q21OM7VS.EXK4BZIZJ1VL@gmail.com>
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
-Cc: <alexanderduyck@fb.com>, <kuba@kernel.org>, <kernel-team@meta.com>,
- <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
- <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
- <dimitri.daskalakis1@gmail.com>, <mohsin.bashr@gmail.com>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 3/8] eth: mpnic: allocate MSI-X vectors
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20260924-linux-mpnic-v2-3-4badc9b58b9e@gmail.com>
- <179055370029.3145.13976204260796634034@kernel.org>
-In-Reply-To: <179055370029.3145.13976204260796634034@kernel.org>
+MIME-Version: 1.0
 
-On Sun Sep 27, 2026 at 8:01 PM EDT, netdev-bot+sashiko wrote:
-> Thank you for your contribution! Sashiko AI review found more severe
-> issue(s) in other patches of this series. This mail is only an FYI, in ca=
-se
-> you want to address the nit picks below when you respin.
+On Mon, Sep 28, 2026 at 05:52 PM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+> The correct results - as in reproducible and with lower variance - are
+> the other way around - BPF skb ext is cheaper CPU-wise than gated skb
+> tracepoints. Please see:
 >
-> Low priority / nit picks for your consideration:
->
-> - [Low] The driver frees its MSI-X vectors both by hand and through
->   devres.
->
-> --
->
-> eth: mpnic: allocate MSI-X vectors
->
-> This commit adds mpnic_irq.c, which allocates one MSI-X vector for FW
-> interrupts and one vector per online CPU for the completion queues. The
-> allocation happens in mpnic_probe(). The vectors are freed on the probe
-> error path and in mpnic_remove().
->
->> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_irq.c b/drivers/net/e=
-thernet/meta/mpnic/mpnic_irq.c
->> new file mode 100644
->> index 0000000000000..bcc33655cbbea
->> --- /dev/null
->> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_irq.c
->
-> [ ... ]
->
->> +void mpnic_free_irqs(struct mpnic_dev *mpd)
->> +{
->> +	struct pci_dev *pdev =3D to_pci_dev(mpd->dev);
->> +
->> +	mpd->num_irqs =3D 0;
->> +	pci_free_irq_vectors(pdev);
->> +}
->
-> [Severity: Low]
-> Is it safe to call pci_free_irq_vectors() here when mpnic_probe() enables
-> the device with pcim_enable_device()?
->
-> pcim_enable_device() sets pdev->is_managed. Because of that,
-> pci_alloc_irq_vectors() in mpnic_alloc_irqs() ends up in
-> pcim_setup_msi_release():
->
-> drivers/pci/msi/msi.c:pcim_setup_msi_release() {
->     ...
-> 	if (!pci_is_managed(dev) || dev->is_msi_managed)
-> 		return 0;
->
-> 	ret =3D devm_add_action(&dev->dev, pcim_msi_release, dev);
->     ...
-> }
->
-> The kernel-doc for pci_free_irq_vectors() says not to do this:
->
->  * WARNING: Do not call this function if the device has been enabled
->  * with pcim_enable_device(). In that case, IRQ vectors are automatically
->  * managed via pcim_msi_release() and calling pci_free_irq_vectors() can
->  * lead to double-free issues.
->
-> With this patch, both the err_free_irqs path in mpnic_probe() and
-> mpnic_remove() call mpnic_free_irqs()->pci_free_irq_vectors(). Devres
-> then runs pcim_msi_release()->pci_free_irq_vectors() a second time.
->
-> Today the second call does nothing, because pci_disable_msix() returns
-> early when !dev->msix_enabled. That makes it an internal guard, though,
-> not part of the API contract. The TODO in pcim_setup_msi_release() also
-> says the implicit managed mode is slated for removal.
->
+> https://patch.msgid.link/20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com
 
-For these two reasons (second call idempotent, msix auto enrollment in
-devrez slated for removal), I think it is ok to keep as is. Let me know if
-that is a problem.
+I don't think these numbers measure the mechanism either.
+cpustats.py divides busy by ncpus, so +16.4 and +6.6 are the mean
+over 6 cpus, while 146k pps is the total of 3 flows.
+So it's 6.7 usec vs 2.7 usec per packet and not 1125 ns vs 450 ns.
+That's a lot for one kmem_cache_alloc/free and a 16 byte copy.
 
-> The pattern is still present at the end of the series.
->
-> Could the driver pick one owner for the vectors? It could drop the manual
-> pci_free_irq_vectors() and let devres free them. Or it could stop relying
-> on the implicit managed mode, so the explicit free is the only one.
->
->> +
->> +int mpnic_alloc_irqs(struct mpnic_dev *mpd)
->> +{
->
-> [ ... ]
->
->> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c b/drivers/net/e=
-thernet/meta/mpnic/mpnic_pci.c
->> index 68a64377e6c5a..127b71b44b0fb 100644
->> --- a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
->> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
->> @@ -112,12 +112,18 @@ static int mpnic_probe(struct pci_dev *pdev, const=
- struct pci_device_id *ent)
->
-> [ ... ]
->
->> +err_free_irqs:
->> +	mpnic_free_irqs(mpd);
->>  err_free_mpd:
->>  	kfree(mpd);
->> =20
->> @@ -132,6 +138,7 @@ static void mpnic_remove(struct pci_dev *pdev)
->>  {
->>  	struct mpnic_dev *mpd =3D pci_get_drvdata(pdev);
->> =20
->> +	mpnic_free_irqs(mpd);
->>  	kfree(mpd);
->>  }
+Pls share perf report for both and rerun.
 
