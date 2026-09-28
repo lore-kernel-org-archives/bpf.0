@@ -1,151 +1,237 @@
-Received: from mail-vs2-f43.google.com (mail-vs2-f43.google.com [74.125.227.43])
+Received: from mta1.migadu.com (out-208.mta1.migadu.com [95.215.58.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6E722576E
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 03:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5526C3264E7
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 03:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790567262; cv=none; b=b/h/PrPbVTkKO68P2JQZ1OUUOyZr77+sLUt0ypAtjHzVVG5eoz3KqOipba6BDqcFOeMMeZo1b/ctfw9MhdBDLLE8+1ACqO4F2NgC9up7rT1fX9re1d0JFAd8BSQ5EpgeP+R1icintp4OWtE4SoE2CWKcI4IlFdipAhBKn81DgZc=
+	t=1790567362; cv=none; b=bpvSmTEwTIcwDovb6SJ5qW0F+PKQihqJEgdFvMKDTh0U0vK1YveBZl+VrJUjMphe6U90HmGRNW7NAcQ0aeRIiVRF8s4ae5+OeCL9TlGntR2zWX/+Tm9kBxhSyy5wo1iFfQEpMFVSmzBpApzSb7CmU9dIihBPTzNAYZpw7ea2dHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790567262; c=relaxed/simple;
-	bh=rcMi8vC6nR1ZBut2wZQz7X3NIJIWWci1IHnHKbjCcG8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=geHfKVFkxfmUggQebDLfr1VAUsSrk8vDqI1nQtZ/J+il/ZvSlQ+pGOVjSLK2ctJOlomwxvCl2tvuuMUGtcPabXz1atNrVT0m+BLfUmtNEUsuDkP4KLlr0iF3sHlj5rXVgz7iaKymZvBDdpXvpQOvUdJgkNbcsH00BHWN90pS+/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F2kG+GQy; arc=none smtp.client-ip=74.125.227.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790567362; c=relaxed/simple;
+	bh=Yo/VcYLp4bbr08J+bHs3739Ca0M3LK+rLS/Dh7LQJGU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=io634Rka7viFs+ACTQ8p7pojbnr21QCVI+3V7a8+rVfhTrQgAa27SpIiCZs3281UPjWLgxQmYejgd2x8A0JDjkFsT8PG6ZNqDrEiwohItmJs+Y86ryVuoj55bdbs3UHqLac88yikZiJN5ABQnPYhoOiV+ng1zYj+ZTD0Zv+HVF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mCiS+Fgc; arc=none smtp.client-ip=95.215.58.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F2kG+GQy"
-Received: by mail-vs2-f43.google.com with SMTP id 71dfb90a1353d-5ce08b5bd3dso196397e0c.0
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790567259; x=1791172059; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=tcXl6Fa3snS7QY1nUGehz7eptADgZA98OKznWa3G7tc=;
-        b=F2kG+GQyafsyrgKWvBpRS1DXaWF+yCKR23dPcZs1xcd9YgZM29PPfqbgUhcn8Goen5
-         3031JjJKf+hxnj0RogK3CgML2ChiOfcXDERw71nbY8en7nwGptIgPG4g7TEug7cfvKQ0
-         aNFxxmWYLBUZBIT1jXxyqGJi4wvl+bvHC3vidVV+DrwHSpAn2perP3o9pISL0wbxjZ/1
-         chKahHVnPvrFPZ1HLpLDDfwTfiMaFS3el7QuNgn3LKhpXFNbtaLMxzQl7ruYO8eZyd9s
-         KC91nq5lgAdsaQQt3WUWgzpmpqelxt8bs8sNRHbJzrnHOg9MccXiyJ1/X6l2DdoE1iz/
-         4V6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790567259; x=1791172059;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=tcXl6Fa3snS7QY1nUGehz7eptADgZA98OKznWa3G7tc=;
-        b=12DeTqw9+ui4469EB6JmTPZjtRAk2zEANCDOm9T/rDiiilbQUG+Qk0QDen84CiGDQC
-         3e2JIlIKS8amSqudvF79PZZtHcCclgh+ok61VZtjE1XA+WCt7NEmfY6lnQx9Cbq7bGzq
-         IuxwdFG3Jibj/zOcVZ31glBVfvCVl0YJ+48F4R+AnyhcuSTzHvLbeei/R+FVE3gfqbHi
-         DFkmIdHMiiGcK3ODYba930YzyqXP9iR4QiTzD2mZxzn8Vfskvmj0KD6K1cNMZVw5AtL6
-         yF6mI1Dsrr5dMx4IHPdeQcDFehhnifu9rxLXDrDc5kLRtGjINJEywX4VgGnON0PbqM+i
-         1nVg==
-X-Gm-Message-State: AFq9FYIg5SRh+1PAyPoLGSQsr5692gSWXdch9bICUucKWGaUQyLKmL5l
-	B0JFDs6+nfLMKg9UuS4tovf7pnZwpSy93wXTCyQB66nIUgF3xsPJTiien/6HRajq1ts=
-X-Gm-Gg: AYBFou2oooeJ2BhY+N/7GvkfJ6KlSi37IPr4uj9mR12VVUu9Gm/JcP8/YG8qqL9WQbw
-	ZJ8+7pXfPfNtw8++0lOg7RyKh70wCrHxx7SqkLU/Y2Y1exutAKhlZmm/5Q5lzykKP+1Cic3Dafz
-	2GjDNKXi9QgXP98uG3V09bdALdD8AXFBo0mkIlttmQVvhYoCQbNIyibscZnBW7bd6MEIkvQsWGn
-	r/F2nT9Ux4hgNe6EzAWzcp72fweNzMdJathjPIEZYfDyVKW3isejtp3GHJ9chpHsz8ZtcCVW9Pu
-	jpKh7aHAlpOySxW+xspeCen1J2dmH5E2dQsJDp65QKVEbutsMtvxoOBWLXCi7VYzoyj9ab2DxBe
-	S+NYA3+tfDnWBUw6KIge58iGa4T2EpBeHoNJ/DrvQrJEe0QO6Qjn+BzyK5USaGnH30VuYsBosJ/
-	ZcRmFhevF58mjFGRxGB0s2YDZyNqUCpdvhcbsl0NtbKJg4G3GJarw9WzgMc517+k/fYP90ZAchZ
-	qnZ+eolVWmcCA==
-X-Received: by 2002:a05:6122:8d5:b0:5c8:46e3:ec57 with SMTP id 71dfb90a1353d-5cb09027e49mr5251881e0c.1.1790567258905;
-        Sun, 27 Sep 2026 20:47:38 -0700 (PDT)
-Received: from [127.0.1.1] ([201.162.73.164])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5cde4f969b9sm7596010e0c.3.2026.09.27.20.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 20:47:38 -0700 (PDT)
-From: Luis Vieira <luisflavieira@gmail.com>
-Date: Mon, 28 Sep 2026 00:47:07 -0300
-Subject: [PATCH bpf-next] libbpf: Fix struct and union zero detection in
- BTF dumper
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mCiS+Fgc"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Yo/VcYLp4bbr08J+bHs3739Ca0M3LK+rLS/Dh7LQJGU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790567357; v=1; x=1791172157;
+ b=mCiS+FgcxaRd5DZlv+rknCQBRoNKI9/8qw27Fu/SvmuwKbjj7yvZpM1q4kWil87uzYr9Pn+c
+ fL4k0aE9YbRzosfXiCLFgG/DNRz3YNNwFEwr4zYNSBspVe3ylYAS2cTaEnRT8kQrd5zsGD8zpNk
+ 6e788GMRdShaTtxAFMEBHBPM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a3cb099de9170291;
+	Mon, 28 Sep 2026 03:49:17 +0000
+X-Mizu-Trace-ID: a3cb099de9170291
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <6018bb70-ed67-4ad3-a448-a06af1677f56@linux.dev>
+Date: Sun, 27 Sep 2026 20:49:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 20/21] selftests/bpf: Cover the exception
+ cleanup shapes the chain does not reach
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260926050148.2222810-1-yonghong.song@linux.dev>
+ <5c23637cc1ccedfd0f1487b3a623608ca1356f4569c8bb5d0bd91a59c2a30cff@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <5c23637cc1ccedfd0f1487b3a623608ca1356f4569c8bb5d0bd91a59c2a30cff@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260928-libbpf-btf-enodata-fix-v1-1-56dae4cab778@gmail.com>
-X-B4-Tracking: v=1; b=H4sIADrjuWoC/yWMQQ6CMBBFr0Jm7SRQsalexbCYKVMdYwppqyEh3
- N2Cy/d/3lshS1LJcGtWSPLVrFOs0J0a8E+KD0EdK4NpjW2vxuFbmeeAXAJKnEYqhEEXJG/PrrP
- 9hdhBleckdT7Cd9iFKEuB4f/kD7/El70L2/YDOWsvUIQAAAA=
-X-Change-ID: 20260928-libbpf-btf-enodata-fix-ac6381645ab8
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Luis Vieira <luisflavieira@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790567253; l=2720;
- i=luisflavieira@gmail.com; s=20260913; h=from:subject:message-id;
- bh=rcMi8vC6nR1ZBut2wZQz7X3NIJIWWci1IHnHKbjCcG8=;
- b=VUPd87UjtqOWywMsrdtsRG5QI5Jng9qSgdEbVU3NmWcWhcSRNN7+2g6C57h416rD8ERJP3VUV
- dugpV2S8lqQC0Y9cnoc4yug/iIThAAIqqp+tOroefFYvtGRtU0JdwTT
-X-Developer-Key: i=luisflavieira@gmail.com; a=ed25519;
- pk=98MeC/NdrC6ah7zYpPnkWiQIoyj62iUP/rNuV3esCW4=
 
-btf_dump_type_data_check_zero() uses -ENODATA to indicate that a value
-is zero. The array path handles this sentinel correctly, but the struct
-and union path compares the return value against positive ENODATA.
 
-As a result, the member loop returns after examining its first member.
-A nested struct or union whose first member is zero can therefore be
-treated as entirely zero even when a later member is non-zero.
 
-Compare against -ENODATA so zero members are skipped while looking for
-a non-zero member. Add a regression test with a nested struct whose
-first member is zero and second member is non-zero.
+On 9/27/26 1:40 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/exceptions_cleanup.h b/tools/testing/selftests/bpf/exceptions_cleanup.h
+>> index d1d40314035e..49b6806cde82 100644
+>> --- a/tools/testing/selftests/bpf/exceptions_cleanup.h
+>> +++ b/tools/testing/selftests/bpf/exceptions_cleanup.h
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
+>> new file mode 100644
+>> index 000000000000..37a78e035a50
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
+>> @@ -0,0 +1,665 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+>> +#include <vmlinux.h>
+>> +#include <bpf/bpf_helpers.h>
+>> +#include "bpf_misc.h"
+>> +#include "exceptions_cleanup.h"
+> [ ... ]
+>
+>> +/* The callee most of the shapes below unwind out of. */
+>> +static __used __noinline __u64 pc_unwinder(__u64 x)
+>> +{
+>> +	if (x > 100)
+>> +		bpf_unwind();
+>> +	return x + 1;
+>> +}
+> [ ... ]
+>
+>> +/* A callee on both a covered and an uncovered call: the pad is the site's. */
+>> +static __used __noinline __u64 shared_callee(__u64 x)
+>> +{
+>> +	if (x > 100)
+>> +		bpf_unwind();
+>> +	return x + 1;
+>> +}
+> This isn't a bug, but shared_callee() looks the same as pc_unwinder().
+> Could the shared-callee shape call pc_unwinder() from both sites, or
+> could wide_rec_frame() use pc_unwinder() so that shared_callee() is left
+> to the one shape its comment describes? And should the 'most of the
+> shapes' comment on pc_unwinder() be narrowed to match its three callers?
 
-Signed-off-by: Luis Vieira <luisflavieira@gmail.com>
----
- tools/lib/bpf/btf_dump.c                          | 2 +-
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+Okay, will remore shared_callee and just use pc_unwinder() then.
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index fa995c02a170..dbf9f17e4b37 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2474,7 +2474,7 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
- 			bit_sz = btf_member_bitfield_size(t, i);
- 			err = btf_dump_type_data_check_zero(d, mtype, m->type, data + moffset / 8,
- 							    moffset % 8, bit_sz);
--			if (err != ENODATA)
-+			if (err != -ENODATA)
- 				return err;
- 		}
- 		return -ENODATA;
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index fe04a955d46c..dd1241fcdb01 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -886,6 +886,11 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
- 			   "(union bpf_iter_link_info){.map = (struct){.map_fd = (__u32)1,},.cgroup = (struct){.order = (enum bpf_cgroup_iter_order)BPF_CGROUP_ITER_SELF_ONLY,.cgroup_fd = (__u32)1,},.task = (struct){.tid = (__u32)1,.pid = (__u32)1,},}",
- 			   { .cgroup = { .order = 1, .cgroup_fd = 1, }});
- 
-+	/* nested structs with zero first member and non-zero second member */
-+	TEST_BTF_DUMP_DATA(btf, d, "union", str, union bpf_iter_link_info, BTF_F_COMPACT,
-+			   "(union bpf_iter_link_info){.cgroup = (struct){.cgroup_fd = (__u32)1,},.task = (struct){.pid = (__u32)1,},}",
-+			   { .cgroup = { .cgroup_fd = 1 }});
-+
- 	/* struct skb with nested structs/unions; because type output is so
- 	 * complex, we don't do a string comparison, just verify we return
- 	 * the type size as the amount of data displayed.
+>
+> [ ... ]
+>
+>> +/*
+>> + * A covered bpf_unwind() the sweep leaves last, behind the exception callback
+>> + * patchlet, which has to carry the marks with it.
+>> + */
+>> +SEC("?syscall")
+>> +__success __set_global(input, 101) __retval(0)
+>> +__ret_global(pads_ran, RAN_PAD_FIRST)
+>> +__naked int entry_pad_first(void)
+>> +{
+> This isn't a bug, but is 'exception callback patchlet' meant to be the
+> exit that bpf_exc_keep_exits() puts back after bpf_unwind()? If so,
+> could the comment name that instead? This program never sets up an
+> exception callback.
 
----
-base-commit: ea9358e1270ab2c3ba6f36bd9bdda68617665516
-change-id: 20260928-libbpf-btf-enodata-fix-ac6381645ab8
+This is a mistake for comments. Will fix.
 
-Best regards,
---  
-Luis Vieira <luisflavieira@gmail.com>
+>
+> [ ... ]
+>
+>> +/* A pad that indexes its frame by a register set before the unwinding call. */
+>> +
+>> +/* An unwinder that touches none of r6-r9, so the walk leaves this frame. */
+>> +static __used __naked __noinline __u64 var_unwinder(void)
+>> +{
+>> +	asm volatile (
+>> +	"if r1 < 101 goto 1f;"
+>> +	"call bpf_unwind;"
+>> +"1:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +	::: __clobber_all);
+>> +}
+>> +
+>> +static __used __naked __noinline __u64 var_stack_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"r1 = %[magic] ll;"
+>> +	"r1 = *(u64 *)(r1 + 0);"
+>> +	"*(u64 *)(r10 - 8) = r1;"	/* the slot the pad will read... */
+>> +	"*(u64 *)(r10 - 16) = r1;"	/* ...whichever of the two it is */
+>> +	"r1 = %[input] ll;"
+>> +	"r6 = *(u64 *)(r1 + 0);"
+>> +	"r6 &= 1;"			/* an unknown slot number... */
+>> +	"r6 <<= 3;"			/* ...as an aligned byte offset */
+>> +	"r1 = %[input] ll;"
+>> +	"r1 = *(u64 *)(r1 + 0);"
+>> +"1:"	"call var_unwinder;"		/* cleanup region */
+>> +"2:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* landing pad */
+>> +	"r7 = r0;"
+>> +	"r1 = r10;"
+>> +	"r1 += r6;"			/* variable offset into the frame */
+>> +	"r2 = *(u64 *)(r1 - 16);"
+>> +	"r3 = %[magic] ll;"
+>> +	"r3 = *(u64 *)(r3 + 0);"
+>> +	"if r2 != r3 goto 9f;"
+>> +	PAD_RAN("%[ran]")
+>> +"9:"
+>> +	"r1 = r7;"
+>> +	"call bpf_unwind_resume;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	:
+>> +	: [ran]"i"(RAN_VAR_STACK), __imm_addr(input), __imm_addr(magic),
+>> +	  __imm_addr(pads_ran)
+>> +	: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +/* The same over a global subprogram, which the verifier enters no frame for. */
+>> +__noinline __u64 global_unwinder(__u64 x)
+>> +{
+>> +	if (x > 100)
+>> +		bpf_unwind();
+>> +	return x + 1;
+>> +}
+>> +
+>> +static __used __naked __noinline __u64 global_pad_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"r1 = %[magic] ll;"
+>> +	"r1 = *(u64 *)(r1 + 0);"
+>> +	"*(u64 *)(r10 - 8) = r1;"
+>> +	"*(u64 *)(r10 - 16) = r1;"
+>> +	"r1 = %[input] ll;"
+>> +	"r6 = *(u64 *)(r1 + 0);"
+>> +	"r6 &= 1;"
+>> +	"r6 <<= 3;"
+>> +	"r1 = %[input] ll;"
+>> +	"r1 = *(u64 *)(r1 + 0);"
+>> +"1:"	"call global_unwinder;"		/* cleanup region */
+>> +"2:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* landing pad */
+>> +	"r7 = r0;"
+>> +	"r1 = r10;"
+>> +	"r1 += r6;"
+>> +	"r2 = *(u64 *)(r1 - 16);"
+>> +	"r3 = %[magic] ll;"
+>> +	"r3 = *(u64 *)(r3 + 0);"
+>> +	"if r2 != r3 goto 9f;"
+>> +	PAD_RAN("%[ran]")
+>> +"9:"
+>> +	"r1 = r7;"
+>> +	"call bpf_unwind_resume;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	:
+>> +	: [ran]"i"(RAN_GLOBAL_PAD), __imm_addr(input), __imm_addr(magic),
+>> +	  __imm_addr(pads_ran)
+>> +	: __clobber_all);
+>> +}
+> This isn't a bug, but global_pad_frame() looks nearly identical to
+> var_stack_frame(), and pad_r0_frame() repeats the same pad body. Could
+> these share a macro, the way LOAD_MAGIC_REGS/CHECK_MAGIC_REGS are shared
+> earlier in the file, so each variant only spells out the part it is
+> testing?
+
+Yes, it is better indeed.
+
+>
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346422430
 
