@@ -1,132 +1,134 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE1C37BE9F;
-	Mon, 28 Sep 2026 18:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A09337204C
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 18:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790619167; cv=none; b=iJiY/In1875Qt6XQ2iJr5VgH7hdMGPJEiZiVKeVo/mwarNFQykIi0xxeou9lOnif5DyPjhJPLhNdJ/AGEXIuWBmOeU96rgxQ54MhsYLJSieCY0RNJh8FTP3Plqh00Z/mf6NAOq16hsM6r8PU3Dl3fCqFyr/7X4pDAceQP98By/E=
+	t=1790619258; cv=none; b=GplIAxG/6LLGdCiG6vq+nWul1t3ImBL/2KccB/XuEkCRhxvBa4hthqpP1yuxBAkxkmKA5+8Kwv6FVIUTJf1aL4RrIun1YMzgaQsIJZOkWnBMeYn6MzXgsCSSNCRpAUvIlFwXkL4jxzk5sR+G+nPbivxASyErCBejF+e9WocEmUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790619167; c=relaxed/simple;
-	bh=USfKYzH0A6fMkjH3Ae9LrJxx6YoB7rY2b4VDa8FNY+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XredEqfa5hZ5DkHm+/bWtJzf5clfBY2VABhtdC/e/swodRs7t53h2rdAeiyc2nlt2eykOlrJQSrIW5GZbAG1NrXoIrTSmioxFtZuqFW3sRyVJ/nLhvtrlfpdRflD0ZJj98N7nIHX9+vBnsITH5e8CD3lIk7MyIrZGZqM7AHLbog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=QTo0gZkm; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1790619258; c=relaxed/simple;
+	bh=LM+M80QwDRRk+Jdz5eGa82f1bsNGNtVGH6xFRpqdSR4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sJy0IVACse4/Ph1iypHEWgw9Mtfj57U7IThUNia+TOXacl+OZaGs9AyP+QhZjC7Xfz92VQ2sLLuU5h8RJwjlxAiNqQZRpO5m2X0t2zWFh9olWfmil7d+GOGMZXUbz4MvWYJ2Mdr6JZdpmqA0vFItBsHhzxJLnPZJTvTqE15XNoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eMIcMXes; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QTo0gZkm"
-Received: from killaraus.ideasonboard.com (2001-14ba-70f3-e800--a06.rev.dnainternet.fi [IPv6:2001:14ba:70f3:e800::a06])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9B5D18FD;
-	Mon, 28 Sep 2026 20:10:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1790619052;
-	bh=USfKYzH0A6fMkjH3Ae9LrJxx6YoB7rY2b4VDa8FNY+M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QTo0gZkm7WwOtTm4JaKIpKPrNLiNa+iZIUEZ+OKoVN6xmtGJuZe+OAlqHyYjFcvoh
-	 CEdeaxjv555X963g8CAZa26Y7UZal+YLZ74per2iWl1sNXIT3kYNjPZmw2ailNjNf0
-	 On4p0mZ6uI91tZqb1ZUSGlulGesv3QLO3SS1ocAg=
-Date: Mon, 28 Sep 2026 21:12:41 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Maxime Ripard <mripard@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <jesszhan0024@gmail.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Albert Esteve <aesteve@redhat.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <20260928181241.GB210522@killaraus.ideasonboard.com>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928163711.GA210522@killaraus.ideasonboard.com>
- <arqi0etVHGajQAMe@beelink>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eMIcMXes"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-81ad35a4608so70803a34.1
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:14:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790619255; x=1791224055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=El1CUcQcdnRepz3zxv1YbWSd5fYer4OyyMawBr9e1sc=;
+        b=eMIcMXesPiH6aYhhq2dWfGOjoVhnCruLkSTdWwK/OWafN+eBBS5UcNR0sVnqHhesai
+         ofejR3V5SCyLyN5xHHi3ADLHCqYilEuXUQzNo/oZgMogqKc8XGV9mhdR+EMFMDbjooSe
+         vdvmrnDp2tqq7S7j7d+8pSgRSe4A7Z8ibV3qOwMMklLfP7ZBv0qZn5moxWC1JkOBMU17
+         XMiBF98Mqd2zJRBByxuaRER9/XDqSipJqb2BaXLdlnb4mMo87lUgBZX5PKufloDiWp++
+         ZXtkZ2U3G1jBUEZIB9LOHTPC6AsMZh3O4Wzx8YlHvzl1O11Qwiwspc1MaQhXfrGLA+/j
+         1pgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790619255; x=1791224055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=El1CUcQcdnRepz3zxv1YbWSd5fYer4OyyMawBr9e1sc=;
+        b=USTnDqL8A7/VK0gAPmgk0R6E56tsWe3LlFyqFln1Pv/Jh3PND798kjUYCP2CpFH5Qp
+         YRQQmg7UBq7NUvYOhxprKssN4fQ/n2/ZIFpuSnyjNUWYAdUnZ+MR2Cmmx3tjLqHsr+q/
+         mCUSuM+MrwmTy+9yHicmh29wKLZ9SdgNvXFQMWt1MjWenkIamgWTrEvt4iwK1/Ion6M6
+         qQYmPFdVWCDtRSfoX3yUnA+7+m0egDW0TPrUhOu8uvEwBV205Y1JYSp5JGYejo3WDaC2
+         GJ5eJTn1Jq1WGuUPul3biJho2joPECZ+FaWUUunfIAcM+hN9IOY3j3hGCAYdiFHiLb/f
+         AvHA==
+X-Gm-Message-State: AFuF++m7fd6r0Pm9NM5FphVOfOwOXyOD2N9RP3z9b6y+m+2+XCXHhVvm
+	g8rwCdtXpZYUn0LsOJ966CBCxW6wWmlW1gQLaRBxzUMALPeNkqSEfqvqvKHusg==
+X-Gm-Gg: AYBFou3Fc9JWaIdpj3pJbiak7Max/7vXc9Kq8OTVzxiyBhOQDZ/bZvvTi5EAm3u6YH/
+	GH47MoDlPV9CxtSZ3VdsZwXuqJrrLkUmO+vi1WSF/O2Q+8r0HxN87JhH9ZkbhDdL8svn6ZK9NUu
+	gkmhlJxMXzPoCXTHMk5FHH++BjpsGE+d/ToBw+s4fnoi8paHZU/8WSxDzgh4JgQk+qFh1cirYD3
+	qPRIF3HcHjcqB/o9n6malXo7W0r6kiWw20jmqSDEllKQTHR7FbYn6AqB0u81AsZc7Gjks2vxKkw
+	eHH6GsT/qSvFzGKDwWR/eui/Iw4V50AG3cG0ZK12MT7EWgZSTGYLEplgZl6uFU8mchNME3/0e1N
+	2vBx/fPobL/iSUATZ8N6I9foic6xlgeoXAJwvEgL7i+TXKPeuTa04TMClK8dkkEXi8ZqPOVsRrp
+	z0mVPOcTVpVVFDUdL+yTOYSXvZHUhoXFMk244TdzMln3O7dkRJRQiTvqJI6KibziLmD1HaI/Y=
+X-Received: by 2002:a9d:66cc:0:b0:81b:ae41:af65 with SMTP id 46e09a7af769-81e737bd4demr86776a34.3.1790619255301;
+        Mon, 28 Sep 2026 11:14:15 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:7::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81dcf09f01asm1459376a34.3.2026.09.28.11.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 11:14:14 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 00/11] Unify subprog argument checks
+Date: Mon, 28 Sep 2026 11:14:02 -0700
+Message-ID: <20260928181414.644158-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <arqi0etVHGajQAMe@beelink>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 28, 2026 at 07:31:59PM +0200, Benjamin Tissoires wrote:
-> On Sep 28 2026, Laurent Pinchart wrote:
-> > On Mon, Sep 28, 2026 at 06:22:00PM +0200, Maxime Ripard wrote:
-> > > Hi,
-> > > 
-> > > Panels in general, and MIPI-DSI panels in particular, are pretty
-> > > difficult to support and require pretty much a panel driver for each
-> > > panel produced. Most of them are pretty simple, and require an opaque
-> > > initialization sequence that is usually poorly documented.
-> > > 
-> > > This creates a tension between OEMs and distros because OEMs will
-> > > typically get a new panel to react to a sourcing issue during
-> > > production, and thus need some swift turnaround between getting their
-> > > new panel and it being operational in the OS. Distributions on the other
-> > > hand can take years to ship a kernel with that new panel driver.
-> > > 
-> > > To solve this, I followed the example of HID-BPF and wrote a panel
-> > > driver that will rely on BPF programs to perform the panel
-> > > initialization. That way, we can ship the programs separately from the
-> > > kernel, and with a different lifecycle. If this driver is accepted, the
-> > > plan is to have a userspace component started by udev to identify and
-> > > load the right BPF program for the panels found on the device.
-> > 
-> > Interesting idea.
-> > 
-> > How would that work for devices that want early display support ? In
-> 
-> Brain fart... Include a bpf VM in the bootloader? :)
+Hi,
 
-The boot loader can have its own panel driver, that's not an issue. What
-I'm wondering is how we will deal with e.g. getting oops traces on the
-screen before userspace is available.
+Helper and kfunc calls now validate arguments through check_func_args(),
+while subprog calls still duplicate much of the same validation in
+btf_check_func_arg_match(). This makes common argument rules and
+diagnostics easy to change for one call kind without updating the other.
 
-> > particular, how does it interact with your recent work on "fastboot"
-> > support (with the kernel drivers taking over a running display
-> > configured by the boot loader) ?
-> > 
-> > I'm also wondering about the incentives for vendors to upstream the
-> > code. How will we avoid having a proliferation of out-of-tree drivers ?
-> 
-> My 2 cents here from the HID-BPF point of view:
-> - as mentioned in my reply to Neil, the kernel enforce GPL licensed BPF
-> 	only
+This series builds a temporary helper-style argument prototype from the
+subprog's cached BTF metadata, then moves each supported argument class to
+the common checker. The last patch removes the duplicate loop.
 
-I didn't know that, it's interesting.
+The series is organized as follows:
 
-> - so vendors have to publish their code somewhere
-> - in HID-BPF, I decided to provide an "official" list of HID-BPF sources
-> 	as part of the kernel (see drivers/hid/bpf/progs). I try to sync them
-> 	with the userspace tree when time permits
-> 
-> So basically, distributions can say "we ship only BPF objects compiled
-> from the kernel tree". It doesn't mean they have to be in a released
-> kernel already to remove the friction, but in the process of being
-> released could be sufficient.
+- Patch 1 fixes kfunc BTF parameter lookups after wide arguments.
+- Patches 2-3 identify subprog calls in common metadata and generate the
+  temporary argument prototype.
+- Patches 4-9 move scalar, untrusted, context, arena, dynptr, and BTF-ID
+  arguments to the common path.
+- Patch 10 moves global subprog memory arguments and their packet-change
+  check to the common path.
+- Patch 11 removes the legacy loop and checks all subprog arguments through
+  check_func_args().
+
+This follows the helper/kfunc argument-checking consolidation:
+https://lore.kernel.org/bpf/20260911220415.1396439-1-ameryhung@gmail.com/
+
+Changes from v1:
+- Extend patch 1 to fix the release and iterator BTF parameter lookups
+  after wide arguments (Alexei)
+- Keep subprog call metadata local to argument checking, leaving callers
+  and helper/kfunc handling unchanged (Alexei)
+
+Amery Hung (11):
+  bpf: Fix kfunc BTF parameter lookups after wide arguments
+  bpf: Identify subprog calls in argument metadata
+  bpf: Build argument prototypes for subprog calls
+  bpf: Check subprog scalar arguments in the common path
+  bpf: Check global subprog untrusted arguments in the common path
+  bpf: Check subprog context arguments in the common path
+  bpf: Check subprog arena arguments in the common path
+  bpf: Check subprog dynptr arguments in the common path
+  bpf: Check global subprog BTF-ID arguments in the common path
+  bpf: Check global subprog memory arguments in the common path
+  bpf: Check all subprog arguments in the common path
+
+ include/linux/bpf_verifier.h                  |   6 +-
+ kernel/bpf/verifier.c                         | 271 ++++++++----------
+ .../selftests/bpf/progs/aggregate_arg_func.c  |   2 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |  11 +-
+ .../selftests/bpf/progs/test_global_func5.c   |   2 +-
+ .../bpf/progs/verifier_global_ptr_args.c      |   7 +-
+ .../bpf/progs/verifier_global_subprogs.c      |   2 +-
+ 7 files changed, 129 insertions(+), 172 deletions(-)
 
 -- 
-Regards,
-
-Laurent Pinchart
+2.52.0
