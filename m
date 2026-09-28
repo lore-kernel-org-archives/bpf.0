@@ -1,168 +1,246 @@
-Received: from mta1.migadu.com (out-152.mta1.migadu.com [95.215.58.152])
+Received: from mta1.migadu.com (out-167.mta1.migadu.com [95.215.58.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2787E36493C
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 23:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442EB4973B2
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 23:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790637197; cv=none; b=Ns2nNPe+rDYKqYv0zrs/rHDebRp4rFVBjkpt7ewdg/OAvUgIuMEztnZd+UjrRmW1tqHoTgrdl3uZz1tmb3HwwihpPHQUijEkNMPCL1a9k+tCaJSqPOGxBw3pWbzb/GXCSgdjJiP7PcKINIOYUzv7VEGMAq4oCuLwVeyDItDLV1Y=
+	t=1790637299; cv=none; b=JVj5VSVcbK1kEoEdgDkPWR3okUid1/Dyb9p15R11ex2KkvEu14Y4xCxbersCDH7c0BctD0PhkQD1vKwFIipZwKGQHi8Oy/F/z3DqS7MyhQA+D799mbwdbkVpB+eD0nDklOx+gLg/O99QnW1eN94MX1zam3Li4HKfz52nOLESzG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790637197; c=relaxed/simple;
-	bh=7RoiqoRNFqjTDbI6Tu2iwj7TYs/6MG+px9aEnDhNSxI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LzOstfC81kc6n+84W22XdU1hP82Me+EmTh7l4OMnDfHIlBX2/s3Cyx5NX9roKZBx+8HzetXKWj3XX6XjqCJCsu73XoFtKfTw5CPa+I9VDhaypzu8VAhJVhBBeTabJiw2wPeLCaqjminVYxa5EqU0nH7k8TJvWMgKH8i3o5+4eb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wa2un31G; arc=none smtp.client-ip=95.215.58.152
+	s=arc-20240116; t=1790637299; c=relaxed/simple;
+	bh=x+cDE8E7K0qlKzMLS59z5dej9jmxGFTWB4qeaI7YgRk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iLQNAW/dQJQPFUCphFwxpBtxVa1QmKUQFp0Pv0S1SfuUrXjjrLSW+mJqQNLCyT8LSXuswL5pBzfqss+ThU+OD+G3hlmYxAWen/rVE1fR+lHLacBfaBxoGOV9sZOehDVldUPanxQo6lQxHU0qglwzhRdTGVMl0ewo14pLY+s84t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TQR5Km6O; arc=none smtp.client-ip=95.215.58.167
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wa2un31G"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TQR5Km6O"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7RoiqoRNFqjTDbI6Tu2iwj7TYs/6MG+px9aEnDhNSxI=;
+DKIM-Signature: a=rsa-sha256; bh=x+cDE8E7K0qlKzMLS59z5dej9jmxGFTWB4qeaI7YgRk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790637192; v=1; x=1791241992;
- b=wa2un31Gjj30eURMFkvDwhgZy3SvWjbGtRLREGE71PpaBMFm5OLdjPBg1S+868WI0/wU4LF1
- eeZMvWoQJt6sKZ+oXeXg7jA2+VQLDCNCew/0wRm3vFcXdO0Dl6SQ300Xj/cFx0Tgc5TVGwJD4Gz
- 61j/BXafoUDZUim3HGElFmf4=
+ t=1790637295; v=1; x=1791242095;
+ b=TQR5Km6Oc1583tfmSq/sFRfgDcHnNRNrB0LbBrxC9fr93DYU8yzT0DBjF2ZsYY4ZpeHrp2i8
+ WGpoiqrrVWAaG30+1VOn1Oe/rUI9dDlRe9+jedgjIc3tjkltTf2AXBkmAJUlu2BmUI+OvcaAfsT
+ vJgINwM/EJz8HaTsoulC6/uQ=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0fe08cb5dd7dfc97;
-	Mon, 28 Sep 2026 23:13:09 +0000
-X-Mizu-Trace-ID: 0fe08cb5dd7dfc97
+Received: by smtp.migadu.com with ESMTPS id fb08bce978942be0;
+	Mon, 28 Sep 2026 23:14:55 +0000
+X-Mizu-Trace-ID: fb08bce978942be0
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <a25b9150-55ba-41ef-8de9-0067b4576278@linux.dev>
-Date: Mon, 28 Sep 2026 16:13:01 -0700
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: bpf@vger.kernel.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Cc: eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	linux-kernel@vger.kernel.org,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v2] selftests/bpf: Fix linked_externs with bpf-gcc
+Date: Mon, 28 Sep 2026 16:14:41 -0700
+Message-ID: <20260928231441.4037097-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 00/17] bpf: Indirect calls of bpf subprogs
- (callx)
-To: patchwork-bot+netdevbpf@kernel.org,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, Emil Tsalapatis <emil@etsalapatis.com>
-References: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
- <179022901639.1337807.12766583921039284951.git-patchwork-notify@kernel.org>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <179022901639.1337807.12766583921039284951.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2026-09-23 10:50 p.m., patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
-> 
-> This series was applied to bpf/bpf-next.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
+test_progs-bpf_gcc fails to build:
 
-Alexei,
+  prog_tests/linked_externs.c:17:23: error: 'struct linked_arena' has no
+      member named 'arena'
 
-We're testing clang 21->22 bump on BPF CI, and something is broken
-when compiling callx selftests:
+Several problems, all from bpf-gcc not supporting address_space(1).
 
-2026-09-28T22:12:12.4226025Z error: Undefined temporary symbol 
-.Lswitch.table.call_by_switch
-2026-09-28T22:12:12.4229909Z 1 error generated.
-2026-09-28T22:12:12.4265848Z make[1]: *** [Makefile.skel:93: 
-/home/runner/work/ci/ci/tools/testing/selftests/bpf/cpuv4/verifier_callx_rodata.bpf.o] 
-Error 1
-2026-09-28T22:12:12.4275948Z make: *** [Makefile:533: 
-/home/runner/work/ci/ci/tools/testing/selftests/bpf/test_progs-cpuv4] 
-Error 2
-2026-09-28T22:12:12.4291571Z   CLNG-BPF [test_progs-no_alu32] 
-verifier_gotol.bpf.o
-2026-09-28T22:12:12.4292514Z make: *** Waiting for unfinished jobs....
+First, the arena variables are declared with __arena, but that macro is
+for pointers -- it marks the pointee address space. The one that carries
+placement is __arena_global:
 
-See: https://github.com/libbpf/ci/actions/runs/36487754699/job/109148996137
+  #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
+  #define __arena        __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
+  #define __arena_global __attribute__((address_space(1)))
+  #else
+  #define __arena        __attribute__((btf_type_tag("arena")))
+  #define __arena_global SEC(".addr_space.1")
+  #endif
 
-What's the requirements for callx? Does it need bleeding edge clang?
-If so, let's explicitly skip relevant selftests for clang < N?
+__BPF_FEATURE_ADDR_SPACE_CAST is a clang predefine. Under clang the two
+are interchangeable here, since address_space(1) both places the
+variable and is what btf_type_tag would have described. Under bpf-gcc
+__arena is only a BTF type tag, so the definitions land in .data, the
+arena map gets no initial value, and is_skel_data() in bpftool does not
+emit the typed arena member -- hence the build error. Note this is
+distinct from skel->maps.arena, which comes from SEC(".maps") and is
+always present.
 
-Currently CI runs with clang-21.
+The extern declarations need __arena_global too. Without a section, gcc
+does not place an extern in any DATASEC, so it stays a free-floating
+extern VAR rather than an entry of .addr_space.1. test_relink() only
+walks that DATASEC:
 
-> 
-> On Thu, 24 Sep 2026 03:10:25 +0000 you wrote:
->> From: Alexei Starovoitov <ast@kernel.org>
->>
->> v1->v2:
->> - Dropped "bpf: Don't fold loads from insn_array maps into constants".
->>    bpf_map_direct_read() rejects insn_array already.
->> - patch 1: emit the same diag as sort_subprogs_topo() (bpf-ci).
->> - patch 3 is new: taking the address of a function that is never called
->>    hit verifier_bug() in jit_subprogs(). Not related to callx, but callx
->>    makes it likely.
->> - patch 4: BPF_OP() == BPF_CALL in liveness like in const_fold, explained
->>    in the comment why slots are live before callx callsite (Eduard).
->> - patch 5: moved !bpf_is_callx() into nested 'if' (Eduard). JIT support
->>    is checked before the type of the register.
->> - patch 6: sync callbacks are in the call graph too. Stack depth of
->>    a callback whose address is read from .rodata or taken in another
->>    subprog was not accounted.
->> - patch 10:
->>    . check_cfg() explores functions of a table one at a time. It was
->>      losing changes_pkt_data and other effects of the functions in
->>      a table that call each other.
->>    . no cmpxchg64(), it's not available on all 32-bit archs.
->>    . don't reject the prog that reads a pointer to a function that was
->>      removed as dead code (sashiko).
->>    . load of the pointer sets jit_required, so the prog that passes it to
->>      a helper as a callback can't run in the interpreter (bpf-ci).
->>    . tbl[i].data at variable offset is a regular load when none of
->>      the possible offsets overlaps with a pointer (bpf-ci).
->> - patch 12: append the functions and copy the map only for progs that
->>    have callx. The rest use .rodata as-is (bpf-ci). Pass token_fd to map
->>    create. Dropped dead bpf_map_lookup_elem() fallback.
->> - patch 14: light skeleton reserves fd_array slots only when the object
->>    has callx.
->> - selftests: anchored callx_retval_is_tracked to the caller, the tests
->>    of global func in a table and of const folding of the pointer test what
->>    they claim now, skip without JIT, fixed ASSERT_GT() of u32 and
->>    the comment, added tests for the above (bpf-ci). The table in
->>    callx_rodata_lskel test is volatile. clang was turning it into
->>    direct calls, so the test didn't test light skeleton.
->> - Added acks.
->> v1: https://lore.kernel.org/bpf/20260922011323.1298619-1-alexei.starovoitov@gmail.com/
->>
->> [...]
-> 
-> Here is the summary with links:
->    - [bpf-next,v2,01/17] bpf: Fix infinite loop in check_max_stack_depth()
->      https://git.kernel.org/bpf/bpf-next/c/f2c33a159190
->    - [bpf-next,v2,02/17] selftests/bpf: Test recursion through a global function and a callback
->      https://git.kernel.org/bpf/bpf-next/c/6cec7366b5ce
->    - [bpf-next,v2,03/17] bpf: Keep functions with address taken when removing dead code
->      https://git.kernel.org/bpf/bpf-next/c/fb1f5ac185b7
->    - [bpf-next,v2,04/17] bpf: Prepare static analysis passes for callx instruction
->      https://git.kernel.org/bpf/bpf-next/c/373e3fd0bff0
->    - [bpf-next,v2,05/17] bpf: Add callx instruction to call bpf subprogs indirectly
->      https://git.kernel.org/bpf/bpf-next/c/7f0f66c069ae
->    - [bpf-next,v2,06/17] bpf: Add callx calls to the call graph
->      https://git.kernel.org/bpf/bpf-next/c/b7151a69bc6e
->    - [bpf-next,v2,07/17] bpf, x86: Add JIT support for callx
->      https://git.kernel.org/bpf/bpf-next/c/69a30e5fe5a8
->    - [bpf-next,v2,08/17] bpf, arm64: Add JIT support for callx
->      https://git.kernel.org/bpf/bpf-next/c/11a516144d9a
->    - [bpf-next,v2,09/17] bpf: Discover subprogs described by func_info
->      https://git.kernel.org/bpf/bpf-next/c/3a03595510dc
->    - [bpf-next,v2,10/17] bpf: Recognize pointers to functions in read-only maps
->      https://git.kernel.org/bpf/bpf-next/c/a04286f6d828
->    - [bpf-next,v2,11/17] libbpf: Support pointers to static functions in data when linking
->      https://git.kernel.org/bpf/bpf-next/c/296fd4782754
->    - [bpf-next,v2,12/17] libbpf: Resolve pointers to functions in read-only data
->      https://git.kernel.org/bpf/bpf-next/c/b223044a68d5
->    - [bpf-next,v2,13/17] libbpf: Treat .data.rel.ro as read-only data
->      https://git.kernel.org/bpf/bpf-next/c/6ec77f0a7697
->    - [bpf-next,v2,14/17] libbpf: Support pointers to functions in read-only data in light skeleton
->      https://git.kernel.org/bpf/bpf-next/c/9f99fc05fc92
->    - [bpf-next,v2,15/17] selftests/bpf: Add tests for callx
->      https://git.kernel.org/bpf/bpf-next/c/e9b22d50796d
->    - [bpf-next,v2,16/17] selftests/bpf: Add tests for callx through pointers in read-only data
->      https://git.kernel.org/bpf/bpf-next/c/b018e998e645
->    - [bpf-next,v2,17/17] bpf, docs: Document callx instruction
->      https://git.kernel.org/bpf/bpf-next/c/fd318eab4b09
-> 
-> You are awesome, thank you!
+    id = btf__find_by_name_kind(btf, sec_name, BTF_KIND_DATASEC);
+    ...
+        ASSERT_NEQ(btf_var(t)->linkage, BTF_VAR_GLOBAL_EXTERN, "var_resolved");
+
+so relink_arena would report OK under bpf-gcc whether or not the linker
+resolved anything -- it would not be testing the allocated-section path
+this test exists for.
+
+Second, placement alone is not enough to run the test. Dereferencing an
+arena global needs an addr_space_cast, which only clang emits:
+
+  clang:                                  bpf-gcc:
+    r1 = 0x0 ll                             r1 = 0x0 ll
+    r1 = addr_space_cast(r1, 0x0, 0x1)      r2 = *(u64 *)(r1 + 0x0)
+    r1 = *(u64 *)(r1 + 0x0)
+
+so the verifier sees a scalar and rejects the program:
+
+  4: (79) r2 = *(u64 *)(r1 +0)
+  R1 invalid mem access 'scalar'
+
+Guard the program bodies and skip the skeleton subtest, as
+arena_atomics.c already does. The variables stay unconditional so the
+arena is still populated and the skeleton still has its member. The
+fallback bodies reference the externs without dereferencing them:
+'used' is ignored on an extern, so an unreferenced one is dropped and
+.addr_space.1 loses it again.
+
+With this, bpf-gcc reports:
+
+  #217/1   linked_externs/skel_arena:SKIP
+  #217/2   linked_externs/relink_arena:OK
+  #217/3   linked_externs/relink_maps:OK
+
+with b_val present in .addr_space.1 as linkage=extern, same as clang, so
+relink_arena covers the same path in both. clang still passes all three.
+
+Fixes: 34354db1b148 ("selftests/bpf: Add linked_externs test for externs in allocated sections")
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
+
+v2:
+- Declare the externs with __arena_global too. Without a section gcc
+  keeps them out of the .addr_space.1 DATASEC, which is the only thing
+  test_relink() inspects, so relink_arena could not fail under bpf-gcc
+  regardless of the linker (bpf-ci).
+- Link to v1: https://lore.kernel.org/bpf/20260928215110.3966357-1-vineet.gupta@linux.dev/
+ .../selftests/bpf/prog_tests/linked_externs.c | 15 ++++++++++--
+ .../selftests/bpf/progs/linked_arena1.c       | 24 +++++++++++++++++--
+ .../selftests/bpf/progs/linked_arena2.c       |  8 +++++--
+ 3 files changed, 41 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/linked_externs.c b/tools/testing/selftests/bpf/prog_tests/linked_externs.c
+index 29358c82dc35..ff568f5cfc42 100644
+--- a/tools/testing/selftests/bpf/prog_tests/linked_externs.c
++++ b/tools/testing/selftests/bpf/prog_tests/linked_externs.c
+@@ -10,10 +10,20 @@ static void test_skel(void)
+ 	struct linked_arena *skel;
+ 	int err;
+ 
+-	skel = linked_arena__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++	skel = linked_arena__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
+ 		return;
+ 
++	if (skel->data->skip_tests) {
++		printf("%s:SKIP: no addr_space_cast support in the BPF compiler\n", __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	err = linked_arena__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
+ 	ASSERT_EQ(skel->arena->a_val, 1, "a_val_init");
+ 	ASSERT_EQ(skel->arena->b_val, 2, "b_val_init");
+ 
+@@ -28,6 +38,7 @@ static void test_skel(void)
+ 	ASSERT_EQ(skel->arena->a_val, 11, "a_val");
+ 	ASSERT_EQ(skel->arena->b_val, 22, "b_val");
+ 
++cleanup:
+ 	linked_arena__destroy(skel);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/linked_arena1.c b/tools/testing/selftests/bpf/progs/linked_arena1.c
+index 3e8788dec1d9..5027b4ac2887 100644
+--- a/tools/testing/selftests/bpf/progs/linked_arena1.c
++++ b/tools/testing/selftests/bpf/progs/linked_arena1.c
+@@ -10,13 +10,33 @@ struct {
+ 	__uint(max_entries, 1); /* number of pages */
+ } arena SEC(".maps");
+ 
+-long __arena a_val = 1;
+-extern long __arena b_val; /* defined in linked_arena2.c */
++/*
++ * Dereferencing an arena global needs the compiler to emit an
++ * addr_space_cast, which only clang does. Keep the variables so the arena
++ * is still populated and the skeleton still has its arena member, but skip
++ * the test elsewhere.
++ */
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++bool skip_tests __attribute((__section__(".data"))) = false;
++#else
++bool skip_tests = true;
++#endif
++
++long __arena_global a_val = 1;
++extern long __arena_global b_val; /* defined in linked_arena2.c */
+ 
+ SEC("syscall")
+ int sum1(void *ctx)
+ {
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+ 	return a_val + b_val;
++#else
++	/*
++	 * Reference the extern without dereferencing it, so that the relink
++	 * test still has an extern to resolve.
++	 */
++	return (long)&b_val;
++#endif
+ }
+ 
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/linked_arena2.c b/tools/testing/selftests/bpf/progs/linked_arena2.c
+index d0bcdf18a4b6..db37198854a3 100644
+--- a/tools/testing/selftests/bpf/progs/linked_arena2.c
++++ b/tools/testing/selftests/bpf/progs/linked_arena2.c
+@@ -4,15 +4,19 @@
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_arena_common.h"
+ 
+-long __arena b_val = 2;
+-extern long __arena a_val; /* defined in linked_arena1.c */
++long __arena_global b_val = 2;
++extern long __arena_global a_val; /* defined in linked_arena1.c */
+ 
+ SEC("syscall")
+ int bump2(void *ctx)
+ {
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+ 	a_val += 10;
+ 	b_val += 20;
+ 	return a_val + b_val;
++#else /* see linked_arena1.c */
++	return (long)&a_val;
++#endif
+ }
+ 
+ char _license[] SEC("license") = "GPL";
+-- 
+2.53.0-Meta
 
