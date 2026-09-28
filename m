@@ -1,75 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7DF499F0C;
-	Mon, 28 Sep 2026 22:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADFD502D5F;
+	Mon, 28 Sep 2026 22:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790635159; cv=none; b=m2LqIiqeCqA5gF0u94rKbDwAWuO4XgY20uMJzCdCpC3/k550Kgp1AxOKC2NbqSNfaoj8/W7xRNKD5vJuTjQ7M6mNC0+HBoqjAqN9zpPPvZ1RhNCyY8i8S0g1MtdrTPsczigBP4AzWDDRlyYqOPTMu7inaf6BupyqVzaNx4YH0PQ=
+	t=1790635160; cv=none; b=bFtArPcSJxod82WEM7ZNKQ1AVJfU3dfBMehOSjvHEZyXuo4Iqu93dngd4B+rp8FixFqtyv1te+w1QAupLmvwvOQwKgA06lRX2aLay9ktz1hwJs0rOEM3CchroL7E+LDpywKxeCqFsu0EndLP3M1x6Zz+bcZYvnxLyox4aAVtdz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790635159; c=relaxed/simple;
-	bh=P+s+U8O+yVO/12ZXol6bRvfjkFAxEXGnv3nDTRHGEss=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nHwfZ3dwM7ooCYdx4CVhXucE4kOQGtpxNK9kaZIaKWIsFZxdRyMH7gdIGHCoK/B4+/OUpbls75OXkc4ihDqUvq4LElF8xncuFKGmMgADvpjM+GdkwlSGKafp2TzH0M6fQyJLWKFQv7EAfCp6c+UGZ7FKNX2VkM641JMUGiDVdBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMf83G5b; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790635160; c=relaxed/simple;
+	bh=0DcTnoia+4xLSrCsg5TVEUmSrD1P5AixIs8yunT2mbo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=Guzs/4CS5m2K2pWe6XFnoigxQbbLwlLrR3yHzXfVJbcEG7G8Fw5wwpNh7NxV+mLp/VJxjQQzMR6uJaGL6SmBJaOslAagNasBqzKaplNn6xG3Ck6rzjroRK7lheyXR5AqhA6xjGgUDzyTkeRussgIIxBpZUgBW72tQFbj3jIod2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nvC1M3Ic; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMf83G5b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F091F00893;
-	Mon, 28 Sep 2026 22:39:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nvC1M3Ic"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771F01F000FF;
+	Mon, 28 Sep 2026 22:39:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790635157;
-	bh=xMdyLjftnH/OJ8gRUrodvRCRgcmw687ttfCXUGdrh1Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dMf83G5bLsgk1PZ9VYjbqGvihVyC8tlO0yw8Vh2rYHhieN4jeBGarXZGAmUxxxLCU
-	 XMPzzY+PayQPKDdGUeV+k2Bh3rJis4eVenUWW7SYKfJztLrMBorhqGFIeuajQjB7Rl
-	 TcUJvRRRRx+e1c+t4wJKTj0xrbgtbW+2ZCqNQBiS6426kviPf98bcGptj4qwzfjCRs
-	 FQRnWLLyjSaTwlVN8Cem2rWWfBD2HQQ6WTN6agPwn50FKdT4Yed9vzYsFwvcB1EXI1
-	 PglIfQ1yOW3OEOB/l9rpgZ4K0xEeDZWehLHqloJBMh2HniJgoweTd6EDXpY/ugKkqw
-	 x8yqlvv9RyLFg==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org
-Cc: Sasha Levin <sashal@kernel.org>,
-	bpf@vger.kernel.org,
-	Pablo Greco <psgreco@gmail.com>
-Subject: Re: [BUILD BUG] tools/bpf broken in v5.15.221 stable due to backport [7140c9e5e460ee11172ea6c1a6e368b29923003d]
-Date: Mon, 28 Sep 2026 18:39:07 -0400
-Message-ID: <2026-09-28-2-daily-reply-0003-re-bpftool-5-15-build-break@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <CAK9Zeh8NgWCdXy6dUiakqy+L+fieU8NJxJNxPadbF0UPHWUqyQ@mail.gmail.com>
-References: <CAK9Zeh8NgWCdXy6dUiakqy+L+fieU8NJxJNxPadbF0UPHWUqyQ@mail.gmail.com>
+	s=k20260515; t=1790635158;
+	bh=0DcTnoia+4xLSrCsg5TVEUmSrD1P5AixIs8yunT2mbo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=nvC1M3IcvbjGKpuIeoOXjwdt4kNlIDUq7OoP/yr+feT3CCiUuC8a1GV8p+mbtQFYO
+	 uou5WRLU8eKJeRWvKfNvBVnhh9l9YHewiwmKYE9hO+wemXQwqTckvZL7vavzqysKiR
+	 hAXz/2Ae/xHx1xeUh2G7b4XmEAznKdHly1jHEJsIfbEXFjyldks0Gb4T5PTXtuyl7s
+	 ODG0CcrT1DXPcLfxo9c49uEJwD6X4E+KApLeD6JPvydwH/xbAYjbCdpRD87SnR/UC5
+	 l+Qi24UmRyohYuc7M2fxjf6gGbfQ4mFBtWVlOVSrOcNWupOfEigalg1zsY2rtg7XhH
+	 Fguwz6dSvzcPw==
+Date: Mon, 28 Sep 2026 12:39:17 -1000
+Message-ID: <e2ede7c4172c421c0894f1962fbe8517@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Aaron Lu <ziqianlu@bytedance.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com,
+	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
+ done for
+In-Reply-To: <arWLq4p488JPhuZ1@linux.dev>
+References: <20260924184714.912181-1-shakeel.butt@linux.dev>
+ <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+ <arWLq4p488JPhuZ1@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-> IIUC, both issues could be fixed by porting also
-> 4178893465774f91dcd49465ae6f4e3cc036b7b2,
-> 22dd7a58b2e9965c1a612b6a09c4a6146cbb5873 (along with their
-> predecessors)
->
-> or by reverting 7140c9e5e460ee11172ea6c1a6e368b29923003d and its successors.
->
-> Please advise on how to proceed.
+Hello, Shakeel.
 
-Please don't backport the libbpf API changes. 7140c9e5e460 ("bpftool:
-Update btf_dump__new() and perf_buffer__new_raw() calls") only came in
-as context for 66d7e39e49b0 ("tools/bpf/bpftool: Reset vmlinux BTF
-after map commands"), and changing libbpf's API in 5.15 to carry it
-isn't worth it.
+On Thu, Sep 24, 2026 at 02:11:00PM -0700, Shakeel Butt wrote:
+> On the modern NICs where the workloads get their own rx queues, I think the
+> proposed mechanism can help to do the accurate accounting (I have to extend this
+> to softirqs as it is limited to kthreads atm) very easily.
 
-Reverting only that commit builds cleanly here. It conflicts in btf.c
-and gen.c with 44f58f0c5202 ("bpftool: Use libbpf_get_error() to check
-error"): put the btf_dump__new() calls back to the 5.15 argument order
-and keep the libbpf_get_error() checks. Those two files matter even
-where they only warn, since with the new argument order printf_fn is
-NULL on 5.15 and 'bpftool btf dump ... format c' crashes. The rest of
-the chain, including the vmlinux BTF reset fix, can stay.
+Rx steering is useful for partitioning the whole machine, but it doesn't
+seem like the right tool for attributing CPU cycles to each cgroup. It's
+cumbersome to set up and the granularity doesn't match. We aren't going
+to be steering net rx processing per cgroup.
 
-Nothing is queued for this yet.
+> If you don't mind, I think having solution for modern NICs i.e. dedicated rx
+> queues, should suffice for now (unless you want the solution for old NICs as
+> well). Let me know what you think.
 
--- 
-Thanks,
-Sasha
+This doesn't have to be exact or completely synchronous. I don't see why
+net rx charging and reclaim CPU charging can't share the same mechanism,
+where the cycles are force charged to the cgroup after the fact.
+
+I don't think PSI needs to be involved either. Shared execution in
+itself shouldn't create pressure. The forced charge changes the cgroup's
+usage, and that usage then creates pressure in the cgroup. IO works the
+same way.
+
+Thanks.
+
+--
+tejun
