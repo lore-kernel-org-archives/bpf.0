@@ -1,33 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6E4351C1E;
-	Mon, 28 Sep 2026 00:01:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A753B1EEF;
+	Mon, 28 Sep 2026 00:01:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790553704; cv=none; b=pM9QBuo/F83xoLluh/JcVvH3J3I+RosVDpcmjIVZRYtwxWa28t+8HvExHUj4JocKuKSFQpVijrpF2l3IomuUw0foysth3swIS+RwZsC7bkFs+PfhRExITeFQdQ3m9OWxK8EliJxitaMlXull6r1fasgwPsPiCqbFdB8dSgmkqpo=
+	t=1790553706; cv=none; b=N2BM6rSE+IMzpCtXMRAf6EnBD9NLH5X/6fnkTVFGC6pf3Zubfg/pp4NWGNYC+3GnGH7oC54yvo4FV/a0n7CkICTpncFnGepLHCfSB45cre0JdmyM3omxjvlzs00AiMxf3Ag+sDwj+mJwm14BXD0ZIeI4fDszkQGBFkrdCUYWaEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790553704; c=relaxed/simple;
-	bh=dWbF6oP+2D/rP/sG/G3T0/li1T69/60Pq6TWB/+JUCU=;
+	s=arc-20240116; t=1790553706; c=relaxed/simple;
+	bh=0Wu46LZd/S6aBQjWWEuOJcLcCG6ax3IEiv2AYF/9S/Y=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S8M5bi9d/zCCg/wg1jwXcRa5PaoQVB3ExcLTmS6ebGp9jrEGZE0OnSZGJJJ2UFQK+lZ6a0V6lFrqaKNGGyDq+V0YfMh66SNBVV0RFnbd/QNmWJ2HjKskjF/ziNgUlgSjtnaGzMbrGIBDads12NsKlY8wEizoQQKGZuG/6iWuLDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QBRNBuf9; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=WE1tQbZz9kdxqLixJfp/w8tBEnuzhlIfUIFFIYdoQgxtaRLpfxkHFmbV03F64h6IYGohO5+ZwBQFhan01CQBow0Eh41/e0HKoXU72vPnlFPxLOSzvx7ePqDCA8EfAc7fhiJ9uFRnMO9F8fvX0xpg4g36JKAGqG/5nj19kkWV1qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSSCFrVR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QBRNBuf9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401071F00893;
-	Mon, 28 Sep 2026 00:01:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSSCFrVR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B604C1F00898;
+	Mon, 28 Sep 2026 00:01:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790553700;
-	bh=7diu9kj64t0BSHjaUwyvl3zx64ACF9IDLTJRdrgGsiY=;
+	s=k20260515; t=1790553701;
+	bh=UMU4Ti/Az2TBlyVkYvUgq1zKOL+XERG4tXtmgpgDKUA=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QBRNBuf9Kx1iNPhH4tYM0ntuP5mgsUl3CoyUuEI3dwlcD2bW1IZcKCpNmYbyFBiVJ
-	 5wg6mJv+wayTNPp1DIoZoFAPpogkJCTHVVmRYPx7xIRkIUeBTDwO0odQzeWHlgdsM9
-	 kG94x7r9y0RGBrw9oV67F9/vviIrvckS9Wh72DCD7QizAO1WkZbmYzKvS9wCCGypAf
-	 CinFQbSPP/Pe9kfKdcGxi3XPopDGbuO6XXwY/c6ZS6LeYh5zdQbWmS95r9i2fVSWPV
-	 plnxY5EA/HpEc3onvlWFql/yJPYd3Da6SCwbMF9y71m4C6ijisxfhJXFnwJy0cHVgR
-	 IhPRkVYW7fKeA==
-Subject:
- Re: [PATCH net-next v2 2/8] eth: mpnic: add register init for the device
+	b=TSSCFrVRBVt+k/4Fkgf1rXJioXmfFYIZHwmzzAr5FW+9RM7IcOE6e9+pkkiURaw/X
+	 BB1NYfCjRCv1niveup2U84O6M4k5TNXVMQ/arlgqTMzMQjGQIVgD1CUf7ni7N5euAR
+	 bzUm9m1MtJbJcPAnNCLxgk9Dd+txerx71EUbZjeFq1UDmKaCpC1OXA/DUEjU3bV6c/
+	 B2QbsCq9VKLg1CcvSfzFftFbEqaawZIcPka+ab6iuXc4szZV3rU6PtMPSKFoBE92pa
+	 Hxi2G9PgZ601YGiOOXHuC7LqvGvAwDxpa82TH3YmHEH1Ck1PuVv86gAtW0lAzC1sp6
+	 ICDMRi6I1ra3A==
+Subject: Re: [PATCH net-next v2 3/8] eth: mpnic: allocate MSI-X vectors
 From: netdev-bot+sashiko@kernel.org
 To: daniel.zahka@gmail.com
 Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
@@ -36,10 +35,10 @@ Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
  john.fastabend@gmail.com, sdf@fomichev.me, dimitri.daskalakis1@gmail.com,
  mohsin.bashr@gmail.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  bpf@vger.kernel.org
-Date: Mon, 28 Sep 2026 00:01:38 +0000
-Message-ID: <179055369885.3145.4992800467382356655@kernel.org>
-In-Reply-To: <20260924-linux-mpnic-v2-2-4badc9b58b9e@gmail.com>
-References: <20260924-linux-mpnic-v2-2-4badc9b58b9e@gmail.com>
+Date: Mon, 28 Sep 2026 00:01:40 +0000
+Message-ID: <179055370029.3145.13976204260796634034@kernel.org>
+In-Reply-To: <20260924-linux-mpnic-v2-3-4badc9b58b9e@gmail.com>
+References: <20260924-linux-mpnic-v2-3-4badc9b58b9e@gmail.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,63 +55,99 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] mpnic_dev_init() writes BAR0 CSRs up to MPNIC_OB_ATTR_RDE_P
-  (dword 0x9a001a, byte 0x2680068 + 8, about 38.5 MiB into BAR0), and…
+- [Low] The driver frees its MSI-X vectors both by hand and through
+  devres.
 
 --
 
-eth: mpnic: add register init for the device
+eth: mpnic: allocate MSI-X vectors
 
-This commit adds one-time CSR initialization to mpnic_probe() through a
-new mpnic_dev_init() in mpnic_init.c. The new code sets static TXB, RXB,
-TQS, AXI and relaxed-ordering configuration. It also starts SRAM zeroing
-on several blocks and polls until that finishes.
+This commit adds mpnic_irq.c, which allocates one MSI-X vector for FW
+interrupts and one vector per online CPU for the completion queues. The
+allocation happens in mpnic_probe(). The vectors are freed on the probe
+error path and in mpnic_remove().
 
-> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
-> index 96393e7812418..68a64377e6c5a 100644
-> --- a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
-> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_irq.c b/drivers/net/ethernet/meta/mpnic/mpnic_irq.c
+> new file mode 100644
+> index 0000000000000..bcc33655cbbea
+> --- /dev/null
+> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_irq.c
 
 [ ... ]
 
-> @@ -108,6 +112,10 @@ static int mpnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->  	pci_set_master(pdev);
->  	pci_save_state(pdev);
->  
-> +	err = mpnic_dev_init(mpd);
-> +	if (err)
-> +		goto err_free_mpd;
+> +void mpnic_free_irqs(struct mpnic_dev *mpd)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(mpd->dev);
 > +
+> +	mpd->num_irqs = 0;
+> +	pci_free_irq_vectors(pdev);
+> +}
 
 [Severity: Low]
-Should mpnic_probe() check the size of BAR0 before mpnic_dev_init() runs?
+Is it safe to call pci_free_irq_vectors() here when mpnic_probe() enables
+the device with pcim_enable_device()?
 
-mpnic_probe() maps BAR0 with pcim_iomap_region() but never compares
-pci_resource_len(pdev, 0) with the highest CSR offset the driver uses.
-Neither mpnic_wr64() nor mpnic_rd64() puts an upper limit on reg:
+pcim_enable_device() sets pdev->is_managed. Because of that,
+pci_alloc_irq_vectors() in mpnic_alloc_irqs() ends up in
+pcim_setup_msi_release():
 
-    if (csr)
-        writeq(val, csr + reg);
+drivers/pci/msi/msi.c:pcim_setup_msi_release() {
+    ...
+	if (!pci_is_managed(dev) || dev->is_msi_managed)
+		return 0;
 
-The highest register mpnic_dev_init() writes is MPNIC_OB_ATTR_RDE_P, from
-mpnic_ro_init(). Its byte offset is 0x2680068, about 38.5 MiB into BAR0.
-mpnic_desc_sram_init() also issues 4096 writeq() calls at offsets
-computed from the loop index:
+	ret = devm_add_action(&dev->dev, pcim_msi_release, dev);
+    ...
+}
 
-    for (i = 0; i < MPNIC_MAX_TXQS * 2; i++)
-        mpnic_wr64(mpd, MPNIC_TDF_DESC_CFG(i), ...);
+The kernel-doc for pci_free_irq_vectors() says not to do this:
 
-A device that matches the PCI ID but reports a smaller BAR0 would make
-these accesses land outside the ioremap'd region during probe.
+ * WARNING: Do not call this function if the device has been enabled
+ * with pcim_enable_device(). In that case, IRQ vectors are automatically
+ * managed via pcim_msi_release() and calling pci_free_irq_vectors() can
+ * lead to double-free issues.
 
-The PCI core normally trusts BAR sizes reported by the device, and fbnic
-maps its BARs without a length check too. So this would be defensive
-hardening rather than a fix for a known failure. Would a check against
-the largest CSR offset in mpnic_probe() be worth adding?
+With this patch, both the err_free_irqs path in mpnic_probe() and
+mpnic_remove() call mpnic_free_irqs()->pci_free_irq_vectors(). Devres
+then runs pcim_msi_release()->pci_free_irq_vectors() a second time.
 
->  	return 0;
->  
+Today the second call does nothing, because pci_disable_msix() returns
+early when !dev->msix_enabled. That makes it an internal guard, though,
+not part of the API contract. The TODO in pcim_setup_msi_release() also
+says the implicit managed mode is slated for removal.
+
+The pattern is still present at the end of the series.
+
+Could the driver pick one owner for the vectors? It could drop the manual
+pci_free_irq_vectors() and let devres free them. Or it could stop relying
+on the implicit managed mode, so the explicit free is the only one.
+
+> +
+> +int mpnic_alloc_irqs(struct mpnic_dev *mpd)
+> +{
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+> index 68a64377e6c5a..127b71b44b0fb 100644
+> --- a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+> @@ -112,12 +112,18 @@ static int mpnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+
+[ ... ]
+
+> +err_free_irqs:
+> +	mpnic_free_irqs(mpd);
 >  err_free_mpd:
+>  	kfree(mpd);
+>  
+> @@ -132,6 +138,7 @@ static void mpnic_remove(struct pci_dev *pdev)
+>  {
+>  	struct mpnic_dev *mpd = pci_get_drvdata(pdev);
+>  
+> +	mpnic_free_irqs(mpd);
+>  	kfree(mpd);
+>  }
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924-linux-mpnic-v2-0-4badc9b58b9e%40gmail.com
