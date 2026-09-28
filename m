@@ -1,69 +1,68 @@
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D3D4AF69C
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97DF4B0E33
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790595641; cv=none; b=a/W0hRtRE7KMZCTvLEmeBtSnQJyWQDbJBZXcPGy9chzahsP+2B46pndLHki0x8UZB4bUgQpp7YqrYb9NQoueip43bCMXQuydx8RGd+Pc4gfICjxx27DXfPPaaFPPqCbcfXFZXX2agBV4H6svgnd8ojx8yQCp0iYRQSjmnm7RmMo=
+	t=1790595642; cv=none; b=u8ewsf06AG/ohOI2BC422Hm3VuSo9JqkhmTKdQmsV5U92uwswiqo4J0xhjWkOMJ/lxrbpfseWch55Iz7FAjrbBZsm6SkoW02SdIXQ5G1/fI6PCcZND1yNZ2Z7JMFRti707wmLdSz7GaqoZFWGI1ZWYAy9DZJxdBwpUPt7J4EL6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790595641; c=relaxed/simple;
-	bh=d6KbR59dkcbsD0M9ZUwSWvRlh6H69J/BDDfsQ/xZW3E=;
+	s=arc-20240116; t=1790595642; c=relaxed/simple;
+	bh=B7Bc00WuRfwzQkHbx/wrtPAk7y8Au+RTrsFDT8CH4fs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=t5Y8Wh10BBaiE4xdyjGhUs/pKnXIhk92OF4y+4MAM3Ri74BQJ73t04e7Qk9899o+EbFX3X4aX2xJ6FBmnZpmJgEHcMQyjghdpPEw+j+1+VR7/5t8Jke/hCDMZa+2YF8Iwe851eKh7yb/brkzkK7XA2tIoo/ClEasUGWrj81gWuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=D0KUDXPw; arc=none smtp.client-ip=74.125.228.140
+	 In-Reply-To:To:Cc; b=p0J3UDdbxC2Jw3yo7qoDiEPfTH5FBWrOej3j6kTDuExoGFbCqPebA8xF5ussqUMbrEhKJRpVq0LDfBDJiELAwmDLhky6jG56BxJjgE9iqmaye5I8kYaxvzGmVXYqkq6Nv+WvNFbkhU/JLlTz9usw7agi/01ko50GDdmf6vye7fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=gC19/46f; arc=none smtp.client-ip=74.125.228.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="D0KUDXPw"
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c2940ef15c1so378282166b.1
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 04:40:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="gC19/46f"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a6056ac81fso4059632a12.2
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 04:40:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1790595637; x=1791200437; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1790595638; x=1791200438; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HIbsSqHl+MDKm5PxzterHMeikSiHm6pGuzTMdv6hXm4=;
-        b=D0KUDXPwtiUn798uaHj7vwPbRXkwLWS7bymj16N3hkAUtAfxkkIy8MbP74DiHDEtS2
-         Ct7rWy2yUeDKFiVRF+R1cXXu2WfU8QgcjqKOfZ5oIRDiaTfuIlui3DCA/OXER3WfAcNK
-         36AYOSl7M2iukeToVDvua8HbgtRHi2MqaegNg0yWWsLcjUjLI0WLVjOSoSD7h8/A6mG4
-         7+Iy9y1nhpQExYaa6wSJJEn0Nmr0umThxgYJqbvjZJvN59JL2guC/PMhntQwI/55a+Jt
-         GrNaEZxP4D6WM5LJz7IEJ9lWAFfOb/9HNzl9f4U+rRn3G8vhcAS2TVIaYjxWigjYaSGg
-         Ic9Q==
+        bh=pVAJ1NgEXnSaT90SAJ2mbWCptUlBge8LdG03UtznJjU=;
+        b=gC19/46fGxemi2idqibZ3d183UobUNPfrED7xGxGEbduX9un6IDiBKschkOgROIFri
+         al2YCtXIbZxCX9nSd0oAL8mKiIrMS1H0+NEPHdhyeiHvvyDs0S/3IIkS6pNgZyDrQpnp
+         waFdCu7olTUaG9MPqJtE5CwpoGeMReEN4T+ydW0zMGSN4lFinj94VqsamCP/9/Oa2+bi
+         ARzJdR7gKLXY+d8xU+6+aPbErHTr2UQYT1+EkY/6LIalN3SEiGLdQMHrzXK5BQOwt/w+
+         PX/Srjn3KfKegrHGhdo8w7SqQOGl0xyclwmp4hm+3Bai6HmzVCeTWKyoUL5aoazrGVA1
+         yBQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790595637; x=1791200437;
+        d=1e100.net; s=20260707; t=1790595638; x=1791200438;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HIbsSqHl+MDKm5PxzterHMeikSiHm6pGuzTMdv6hXm4=;
-        b=v6zSVtLgTVNc4e2ZBgLaTRE7otQO5Mje5ygoPA0ZNZSn/cJ1TzVltrObXiFSYlUmXt
-         rg/GXQCgPwY7S15WMpLYb3LW0LzUiZVLcINaQ44iC4MkOez8Z0wRCsTCULn2rADl+RKz
-         Q6iVlBm1khOSoeGAQkR/g4WzugOiEyAhRZZoLY7RSR+dduOctVAMQwnkrnwfo0Wc2sqi
-         0/C/mHaCeVPtaWtk91hvCs4c2pW6HWsCvSZqfimx1viu4JTVM6LmIKvJikZyA4UfgE4R
-         /hJ1TAVAfttv1aaW59qyJnBouETKymmFFIifImn2jZXvIQFYSrMeG2QsfiNx1FWD349y
-         jZnw==
-X-Gm-Message-State: AFuF++njjs8B7Lxvz/DIF00dcsJ76dlQzHyLw1qY++EeKPA/0N3uZEyZ
-	wPLxyAXzWTDsXaogSfgmHz+6LQHqitzrD7hMpBR15KCIkLmEFVfHeTuQNmppCvetS7M=
-X-Gm-Gg: AYBFou3YTHFrii34eGdfE54RbcmrIlA/6C1EwRROmtJ+ijAnjT+rIKvrW7KYt8/6BIt
-	TCrg5AwpkVf9IgyqvkFfEn5suJG0IrQUsi8eWxyBZqlPFbrHQJpmL/gLNYaWHqPEzzABxOPf4qd
-	g/2JXutgiTtDxZqGblnQ4H0aadF4IUFIEX489K6Lxwpkts9ieHtJL7RPVpBYLNog3+k2GhyUyN5
-	pWLC9I1O5g0q9qIO3pH9uhEIQEiP0CHzZwzL4bEapOJIN3dArM+CNsalDAxqCnK3wymjXmAW1Sn
-	PeZJhUHi09p2k9a3yp8f51JMMVgIEKhhczSPCfHzrtHLJzg6MkWzWAzVMetFMpvPDcgrtvD6JEx
-	gTfMatTMkJWW2/Nzs9oMNZrFVX4CID59JLWEIi8vv6laEyhWGYCv8Mbgtl7s0UD/WXj7XyoK3HW
-	EshmO4R/xu9zCJH5UswkOROmXqrzXqcTJw3N6DZdokwv+9AeTZADI5WUD7rACajqv5ULc625WGS
-	b3oCOFIX4toJM4fFNT84dh1TAqrHXIhWGtJgda1XefdJOYqaVMdgNWwMlWt5/b5OE9YUzFCL2qx
-	JpUIK9Io9UPz
-X-Received: by 2002:a17:907:a890:b0:c29:8a0e:4458 with SMTP id a640c23a62f3a-c2ac231466fmr1001159266b.7.1790595636695;
-        Mon, 28 Sep 2026 04:40:36 -0700 (PDT)
-Received: from cloudflare.com (2a01-110f-491b-1300-c0dd-2af4-566b-b23f.aa.ipv6.supernova.orange.pl. [2a01:110f:491b:1300:c0dd:2af4:566b:b23f])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2af3128c48sm385465566b.3.2026.09.28.04.40.36
+        bh=pVAJ1NgEXnSaT90SAJ2mbWCptUlBge8LdG03UtznJjU=;
+        b=eFehLc7Q0qkt2k2I+6y70B2TpyVNjGFFGnkh+notnnYFP/Wm363Or444biS3oPveun
+         nCsbdwgqCpRSGKxM7agLvdnIFrHbh7ygQV9jQRed0pOIHIzfKk/4mm0KQmMHvWAQ7LQ3
+         d5QoNCxQBcGMM+q3JEQCyi2TU+LgPnrD3aa+Se/nmJ08np92Z226cH4Aus3QeBUM597o
+         nB7MrdreUileYfTqGQBUG8wffk6zmzTB0NFNbwJlWUUxV2tV8eDS73tdeimovgN/MUX9
+         DTGZ/naUBydMmyMUh2QrCKfkFCmgZADYi4pa24ugn+9b6Y1KeTUIFEk/mdgPH0ZdUEgc
+         ybiQ==
+X-Gm-Message-State: AFq9FYKSVh/FavFzUivk7W4/XjVUG7o77140dIjItjz6J+O3oa94Y32P
+	lL6ksQefGBAUOPQVz07YUSyNNBlEpi32bL97givRozFPJwaTbui3zc1PocX/YmwQY/U=
+X-Gm-Gg: AYBFou3lqy2jcf6TuFCh4Xey2SKUXsBE5bNjaNVif9Rv4APurZgaV2Tsbz7CWQigGmx
+	zQlVjCgbS5IjTYCw83jRMGzPMpuAQNhZQ6WsfjrZXx5UzhostOjMh20lQNMcseSlUzJf1H3nkRZ
+	UaRhMgyzcedLye1MIb6h/dOPHAG7tFOwaySmKDOP94EXR7YSeAT280la1pEBbVgmxKdepFCLah3
+	8AkOvB9NcHfg78dFbEYkMAKzYHxnPWwiGw/4u9VgWx14W2wigNeH6Jch2ulBghDCa9lad4eIgnB
+	9UGDKQr2rd0sTRw6efAHbUkfb8X01m6NtdB7UE043LEmOc0xdHHrHVEKcyliREl24laQSinnjeY
+	zILXVzo6Rn3GUkVYSlWUhnAyfTHVQ4ToDTsmHH04Af5qS00/jXk2cK2sBF4VUASGLxDSIOqFi/d
+	rAIbunpAI3wnDO+9oEvIwxPURX/J8dP0XQI95bc3lzF3hFVDt9ibyCBnFSVwbhT6weLGThvGet1
+	DXfjRQ=
+X-Received: by 2002:a05:6402:360a:b0:6aa:f1d2:ddbf with SMTP id 4fb4d7f45d1cf-6aaf1d2e1e7mr6600902a12.35.1790595637941;
+        Mon, 28 Sep 2026 04:40:37 -0700 (PDT)
+Received: from cloudflare.com ([2a01:110f:491b:1300:c0dd:2af4:566b:b23f])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aae5dc0cddsm4016637a12.14.2026.09.28.04.40.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 04:40:36 -0700 (PDT)
+        Mon, 28 Sep 2026 04:40:37 -0700 (PDT)
 From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Mon, 28 Sep 2026 13:40:27 +0200
-Subject: [PATCH net-next 10/15] selftests/bpf: Test passing metadata to TCP
- egress
+Date: Mon, 28 Sep 2026 13:40:28 +0200
+Subject: [PATCH net-next 11/15] selftests/bpf: Test passing metadata to
+ netfilter hook
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,7 +71,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260928-bpf-meta-gated-tracepoints-v1-10-844dbf3e1edf@cloudflare.com>
+Message-Id: <20260928-bpf-meta-gated-tracepoints-v1-11-844dbf3e1edf@cloudflare.com>
 References: <20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com>
 In-Reply-To: <20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com>
 To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -91,45 +90,47 @@ Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 X-Mailer: b4 0.16.0
 
-Tag the skb at cgroup/skb egress and read the stashed metadata back at TC
-egress: for a regular TCP transmission, and for a retransmission, where
-the first transmission is dropped at TC and the write-queue original,
-tagged via bpf_skb_fclone_orig, passes the metadata to the retransmitted
-fast clone via the copy tracepoint.
+Add a TC -> netfilter cross-hook test for the metadata stash. A TC ingress
+program tags the skb on loopback, and a netfilter program at
+NF_INET_LOCAL_IN reads the stashed metadata.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- .../bpf/prog_tests/xdp_context_test_run.c          | 216 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_xdp_meta.c  |  72 +++++++
- 2 files changed, 288 insertions(+)
+ .../bpf/prog_tests/xdp_context_test_run.c          | 74 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  | 21 ++++++
+ 2 files changed, 95 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index 890a881a6a1f..ac5c0f067b3f 100644
+index ac5c0f067b3f..eb0d36e7a45d 100644
 --- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
 +++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -1268,6 +1268,218 @@ static void test_skb_trace__tcp_ingress(struct test_xdp_meta *skel, const char *
- 	netns_free(ns);
+@@ -2,6 +2,7 @@
+ #include <test_progs.h>
+ #include <network_helpers.h>
+ #include <linux/ipv6.h>
++#include <linux/netfilter.h>
+ #include <arpa/inet.h>
+ #include "test_xdp_context_test_run.skel.h"
+ #include "test_xdp_meta.skel.h"
+@@ -1566,6 +1567,77 @@ static void test_cgrp_egress_to_kfree_skb(struct test_xdp_meta *skel)
+ 		close(cgroup_fd);
  }
  
-+/*
-+ * Test metadata passing across cgroup/skb egress -> TC egress with TCP
-+ * traffic.  TCP fast-clones the write-queue skb at tcp_transmit_skb();
-+ * both hooks run on the transmitted clone.
-+ */
-+static void test_skb_trace__tcp_egress(struct test_xdp_meta *skel)
++/* Test metadata passing across TC ingress -> netfilter hook */
++static void test_skb_trace__nf(struct test_xdp_meta *skel, const char *name)
 +{
 +	LIBBPF_OPTS(bpf_tc_hook, tc_hook,
 +		    .ifindex = 1 /* IFINDEX_LO */,
-+		    .attach_point = BPF_TC_EGRESS);
++		    .attach_point = BPF_TC_INGRESS);
 +	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
++	LIBBPF_OPTS(bpf_netfilter_opts, nf_opts,
++		    .pf = NFPROTO_IPV4,
++		    .hooknum = NF_INET_LOCAL_IN,
++		    .priority = 1);
++	struct bpf_link *reader_link = NULL;
 +	struct bpf_link *put_link = NULL;
-+	struct bpf_link *cg_link = NULL;
 +	struct netns_obj *ns = NULL;
-+	char buf[TEST_PAYLOAD_LEN];
 +	int server_fd = -1;
-+	int cgroup_fd = -1;
-+	int client_fd = -1;
-+	int conn_fd = -1;
 +	int ret;
 +	int i;
 +
@@ -137,50 +138,33 @@ index 890a881a6a1f..ac5c0f067b3f 100644
 +	if (!ASSERT_OK_PTR(put_link, "put_attach"))
 +		return;
 +
-+	cgroup_fd = test__join_cgroup("/cgrp_to_tc");
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
++	ns = netns_new(name, true);
++	if (!ASSERT_OK_PTR(ns, "netns_new"))
 +		goto cleanup;
 +
-+	ns = netns_new("cgrp_to_tc", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
++	server_fd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 0);
++	if (!ASSERT_GE(server_fd, 0, "start_server"))
 +		goto cleanup;
 +
 +	skel->bss->test_pass = false;
 +	skel->bss->free_count = 0;
 +
-+	cg_link = bpf_program__attach_cgroup(skel->progs.cgrp_meta_write,
-+					     cgroup_fd);
-+	if (!ASSERT_OK_PTR(cg_link, "attach_cgroup"))
-+		goto cleanup;
-+
 +	ret = bpf_tc_hook_create(&tc_hook);
 +	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
 +		goto cleanup;
 +
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_read_pass);
++	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_write);
 +	ret = bpf_tc_attach(&tc_hook, &tc_opts);
 +	if (!ASSERT_OK(ret, "bpf_tc_attach"))
 +		goto cleanup;
 +
-+	server_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
++	reader_link = bpf_program__attach_netfilter(skel->progs.nf_meta_read,
++						    &nf_opts);
++	if (!ASSERT_OK_PTR(reader_link, "attach_nf"))
 +		goto cleanup;
 +
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect"))
++	if (send_loopback_udp(server_fd))
 +		goto cleanup;
-+
-+	conn_fd = accept(server_fd, NULL, NULL);
-+	if (!ASSERT_GE(conn_fd, 0, "accept"))
-+		goto cleanup;
-+
-+	ret = send(client_fd, test_payload, TEST_PAYLOAD_LEN, 0);
-+	if (!ASSERT_EQ(ret, TEST_PAYLOAD_LEN, "send"))
-+		goto cleanup;
-+
-+	/* Receive -- synchronizes with packet delivery and free */
-+	ret = recv(conn_fd, buf, sizeof(buf), 0);
-+	ASSERT_EQ(ret, TEST_PAYLOAD_LEN, "recv");
 +
 +	/* Poll every 10 msec up to 1 sec */
 +	for (i = 0; i < 100 && !skel->bss->test_pass; i++)
@@ -193,240 +177,58 @@ index 890a881a6a1f..ac5c0f067b3f 100644
 +	ASSERT_GE(skel->bss->free_count, 1, "free_count");
 +
 +	assert_meta_stash_empty(skel->maps.meta_map);
++
 +cleanup:
-+	if (conn_fd >= 0)
-+		close(conn_fd);
-+	if (client_fd >= 0)
-+		close(client_fd);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+	bpf_link__destroy(cg_link);
++	bpf_link__destroy(reader_link);
 +	bpf_link__destroy(put_link);
 +	bpf_tc_hook_destroy(&tc_hook);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
++	if (server_fd >= 0)
++		close(server_fd);
 +	netns_free(ns);
 +}
 +
-+/*
-+ * Test metadata passing across TCP retransmission with fast-clone
-+ * support: cgroup/skb egress -> TC egress.  The cgroup writer tags the
-+ * transmitted fast clone and, via bpf_skb_fclone_orig, the write-queue
-+ * original.  The TC drop program kills the first transmission; the
-+ * retransmit is a fresh fast clone of the tagged original, so the copy
-+ * tracepoint propagates the entry to it and the TC reader sees the
-+ * metadata.
-+ */
-+static void test_skb_trace__tcp_retrans(struct test_xdp_meta *skel)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook,
-+		    .ifindex = 1 /* IFINDEX_LO */,
-+		    .attach_point = BPF_TC_EGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, drop_opts, .handle = 1, .priority = 1);
-+	LIBBPF_OPTS(bpf_tc_opts, read_opts, .handle = 2, .priority = 2);
-+	struct bpf_link *put_link = NULL;
-+	struct bpf_link *copy_link = NULL;
-+	struct bpf_link *cg_link = NULL;
-+	struct netns_obj *ns = NULL;
-+	char buf[TEST_PAYLOAD_LEN];
-+	int server_fd = -1;
-+	int cgroup_fd = -1;
-+	int client_fd = -1;
-+	int conn_fd = -1;
-+	int ret;
-+	int i;
-+
-+	put_link = bpf_program__attach(skel->progs.skb_free);
-+	if (!ASSERT_OK_PTR(put_link, "put_attach"))
-+		return;
-+
-+	copy_link = bpf_program__attach(skel->progs.skb_copy);
-+	if (!ASSERT_OK_PTR(copy_link, "copy_attach"))
-+		goto cleanup;
-+
-+	cgroup_fd = test__join_cgroup("/cgrp_to_tc_twins");
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		goto cleanup;
-+
-+	ns = netns_new("cgrp_to_tc_twins", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto cleanup;
-+
-+	skel->bss->write_once_done = false;
-+	skel->bss->drop_once_done = false;
-+	skel->bss->test_pass = false;
-+	skel->bss->free_count = 0;
-+
-+	cg_link = bpf_program__attach_cgroup(skel->progs.cgrp_meta_write_twins,
-+					     cgroup_fd);
-+	if (!ASSERT_OK_PTR(cg_link, "attach_cgroup"))
-+		goto cleanup;
-+
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto cleanup;
-+
-+	drop_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_drop_once);
-+	ret = bpf_tc_attach(&tc_hook, &drop_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach drop"))
-+		goto cleanup;
-+
-+	read_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_read_pass);
-+	ret = bpf_tc_attach(&tc_hook, &read_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach read"))
-+		goto cleanup;
-+
-+	server_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect"))
-+		goto cleanup;
-+
-+	conn_fd = accept(server_fd, NULL, NULL);
-+	if (!ASSERT_GE(conn_fd, 0, "accept"))
-+		goto cleanup;
-+
-+	ret = send(client_fd, test_payload, TEST_PAYLOAD_LEN, 0);
-+	if (!ASSERT_EQ(ret, TEST_PAYLOAD_LEN, "send"))
-+		goto cleanup;
-+
-+	/* First transmission is dropped at TC; recv unblocks on retransmit */
-+	ret = recv(conn_fd, buf, sizeof(buf), 0);
-+	ASSERT_EQ(ret, TEST_PAYLOAD_LEN, "recv");
-+
-+	/* Poll every 10 msec up to 1 sec */
-+	for (i = 0; i < 100 && !skel->bss->test_pass; i++)
-+		usleep(10000);
-+	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
-+
-+	/* Skb is freed after RX delivery; wait for free tp */
-+	for (i = 0; i < 100 && !skel->bss->free_count; i++)
-+		usleep(10000);
-+	ASSERT_GE(skel->bss->free_count, 1, "free_count");
-+
-+	assert_meta_stash_empty(skel->maps.meta_map);
-+cleanup:
-+	if (conn_fd >= 0)
-+		close(conn_fd);
-+	if (client_fd >= 0)
-+		close(client_fd);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+	bpf_link__destroy(cg_link);
-+	bpf_link__destroy(copy_link);
-+	bpf_link__destroy(put_link);
-+	bpf_tc_hook_destroy(&tc_hook);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+	netns_free(ns);
-+}
-+
- /*
-  * Test skb_ext survival until skb free: cgroup/skb egress -> kfree_skb.
-  * Send UDP to a closed port. The packet is dropped, triggering kfree_skb.
-@@ -1372,6 +1584,10 @@ void test_skb_trace_cross_hook(void)
- 		test_skb_trace__tcp_ingress(skel, "tc_to_skops", READER_SKOPS);
- 	if (test__start_subtest("cgrp_egress_to_kfree_skb"))
- 		test_cgrp_egress_to_kfree_skb(skel);
-+	if (test__start_subtest("cgrp_egress_to_tc_egress"))
-+		test_skb_trace__tcp_egress(skel);
-+	if (test__start_subtest("cgrp_egress_to_tc_egress_fclone"))
-+		test_skb_trace__tcp_retrans(skel);
+ void test_skb_trace_cross_hook(void)
+ {
+ 	struct test_xdp_meta *skel = NULL;
+@@ -1588,6 +1660,8 @@ void test_skb_trace_cross_hook(void)
+ 		test_skb_trace__tcp_egress(skel);
+ 	if (test__start_subtest("cgrp_egress_to_tc_egress_fclone"))
+ 		test_skb_trace__tcp_retrans(skel);
++	if (test__start_subtest("tc_to_nf"))
++		test_skb_trace__nf(skel, "tc_to_nf");
  
  	test_xdp_meta__destroy(skel);
  }
 diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-index 9ff6ef4b7f3c..50aa045bcc22 100644
+index 50aa045bcc22..d85b60c24f73 100644
 --- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
 +++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-@@ -736,6 +736,44 @@ int tc_meta_read(struct __sk_buff *ctx)
- 	return TC_ACT_UNSPEC;
+@@ -988,4 +988,25 @@ int BPF_PROG(tp_kfree_meta_read, struct sk_buff *skb)
+ 	return 0;
  }
  
-+/*
-+ * Read skb_ext at TC, never drop -- for cross-hook tests where untagged
-+ * packets (e.g. TCP handshake) must pass through the same hook.
-+ */
-+SEC("tc")
-+int tc_meta_read_pass(struct __sk_buff *ctx)
++#define NF_ACCEPT 1
++
++SEC("netfilter")
++int nf_meta_read(struct bpf_nf_ctx *ctx)
 +{
++	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
 +	__u8 *meta_have;
 +
-+	meta_have = bpf_map_lookup_elem(&meta_map, &ctx);
++	if (!skb)
++		return NF_ACCEPT;
++
++	meta_have = bpf_map_lookup_elem(&meta_map, &skb);
 +	if (!meta_have)
-+		return TC_ACT_UNSPEC;
++		return NF_ACCEPT;
 +	if (!check_metadata(meta_have))
-+		return TC_ACT_UNSPEC;
++		return NF_ACCEPT;
 +
 +	test_pass = true;
-+	return TC_ACT_UNSPEC;
++	return NF_ACCEPT;
 +}
 +
-+bool drop_once_done;
-+
-+/* Drop the first packet carrying an skb_ext entry -- force TCP retransmit */
-+SEC("tc")
-+int tc_meta_drop_once(struct __sk_buff *ctx)
-+{
-+	__u8 *meta_have;
-+
-+	if (drop_once_done)
-+		return TC_ACT_UNSPEC;
-+
-+	meta_have = bpf_map_lookup_elem(&meta_map, &ctx);
-+	if (!meta_have)
-+		return TC_ACT_UNSPEC;
-+
-+	drop_once_done = true;
-+	return TC_ACT_SHOT;
-+}
-+
- int free_count;
- 
- SEC("raw_tp/skb_free")
-@@ -900,6 +938,40 @@ int cgrp_meta_write_once(struct __sk_buff *ctx)
- 	return 1;
- }
- 
-+/*
-+ * Write skb_ext from cgroup/skb egress on both fast-clone twins: the
-+ * transmitted packet is a fast clone of the write-queue original; tag
-+ * both so the retransmit (a fresh clone of the tagged original) inherits
-+ * the entry via the skb_copy tracepoint.
-+ */
-+SEC("cgroup_skb/egress")
-+int cgrp_meta_write_twins(struct __sk_buff *ctx)
-+{
-+	struct sk_buff *twin;
-+	__u8 *meta_have;
-+
-+	if (write_once_done || !is_test_packet_tc(ctx))
-+		return 1;
-+
-+	write_meta(ctx, &meta_map);
-+	write_once_done = true;
-+
-+	twin = bpf_skb_fclone_orig(bpf_cast_to_kern_ctx(ctx));
-+	if (!twin)
-+		return 1;
-+
-+	if (bpf_map_update_elem(&meta_map, &twin, &meta_want, BPF_NOEXIST))
-+		return 1;
-+	bpf_trace_skb(twin, 0);
-+
-+	meta_have = bpf_map_lookup_elem(&meta_map, &twin);
-+	if (!meta_have)
-+		return 1;
-+	__builtin_memcpy(meta_have, meta_want, META_SIZE);
-+
-+	return 1;
-+}
-+
- /* Read skb_ext from tp_btf/kfree_skb -- tests survival until skb free */
- SEC("tp_btf/kfree_skb")
- int BPF_PROG(tp_kfree_meta_read, struct sk_buff *skb)
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.43.0
