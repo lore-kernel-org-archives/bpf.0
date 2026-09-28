@@ -1,163 +1,170 @@
-Received: from mail-qk2-f40.google.com (mail-qk2-f40.google.com [74.125.230.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF22649CF39
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 13:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FB24D9908;
+	Mon, 28 Sep 2026 14:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790601306; cv=none; b=oQMu1w6TjUdAV7rjtyC65Bp3NX2C5N8girZ1/FXsaA0tBSJa40cCSC4ovQ+DJnjXjnJh2pq6wWA5xlJWnwDhEVxPIYDiCRb9UF8d8Zcr/rR4WLW75nuZKNqou6zStncaNxQyk6esTL+Q5aYTAKaUTfZ2B6ZiRHC2NDY4sbEfZqc=
+	t=1790605763; cv=none; b=SAwazMpou0JRaiRAdJJ5prj76Ejc91Ad8IV4hrS3r0NZAEUJvlDmVW94A5exT6Ekza+tVPR8kiuQdnJV0QEpkh7nTPP5BHqvDqrUfD14c5TTr5B3Jj4ZLjnfHt3OvFz+ZgIauG/u3NfSbDS3ocBzn58ieVlI7+mUQCF++HDE0NM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790601306; c=relaxed/simple;
-	bh=KUBocqw5cboHcSNnT0W6/Ucblbw9xsAcwi4MHpF6L5I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qxfqN1+A7/dHQ5xwzMstJsqov081bkrYY2GykHsW0w28uVil6uQqhMcPSyf4TXjAkREljMj14JpAtCSRKQ1EhBaSNm3VqtSjh/L2PaOuVYRVTl87DWvmYcPVrePKpP2mBWcLJvWJ1gljBlxSSe23qjhfFtNUID7Dqke+EdVEaNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ozQjR7wM; arc=none smtp.client-ip=74.125.230.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790605763; c=relaxed/simple;
+	bh=QVRWFLw76zgCtb7Dk0+R/Mu4NDb54jeLKb2zAJjJsIQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BCIl2QcwxMblRtb6V+TbOJU6GLAKY3UaTiczeJDehCofPWgc+BABd5zdA3P1Hth+qJ9b2rjLOn6Jo3Euzm1azAwmak+6Zn/xQMZOHuW65nLZVvsXfhokwgmc0+GXX/K16+7ZgEN+PThqAHkOxfhDn6U8WLGb+/vW5u2dTHt9aBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/ghxvVF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ozQjR7wM"
-Received: by mail-qk2-f40.google.com with SMTP id af79cd13be357-93c5a837375so93191685a.0
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 06:15:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790601304; x=1791206104; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=X3V0idLX7JfHuxhG0y/iym7zpN4jxFLNmH6tSltjyP4=;
-        b=ozQjR7wM1LJZEEDbuWhxCOptxQgXiGL6lG8Y4t81jqdi7boHroPmYTz84pDw6BaybV
-         hQojzTMafsD5jVkKNwZao6NFvKvqXTcbDks3YnWZnDTR4TAgY7ExMda10LSOlTwZBJqz
-         hwazNE6T+N7g/TLd0YyWaZkFjm+Ar1lr0SPjI9xKMQ1eqYzsYlOCOJtoxerDdApwCdlv
-         YBM8nCqkcaKSlSU2ZtAaZVei2GMj1XnMoYkgLSMb7zIdhJ6GM4jcCrmE0zD4TCVQHBkO
-         9W3KGzmdglSOfYdCqMriqzWj7auL/VL9AF0d+Jjq8+KaVEaHPoQpGiKq6FoU84Edht2p
-         d3Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790601304; x=1791206104;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=X3V0idLX7JfHuxhG0y/iym7zpN4jxFLNmH6tSltjyP4=;
-        b=AnE8psS98igP1z2aKWWjwaCCzbKph51sPBcaT5xlLHFvknsbav4ZnqX+jht8UN0CGH
-         LhW9CSibO74YD3MNLdyHTeZ5aLMZS/tGx8OPykfZ3eSPbYPd+tFPAnjrlovsGfZm1qOU
-         eGnCeBNx+ATRKbZBSG/NyKLxsGniK3wK1jDbE75LKVPx1S8iNn84FYWDSbINpo5KSu9t
-         sT/TqjYMCwOFx8ISldOrY4YeVoN57MCMv63H/J3OX1Zmelkygsw7GfVD1LswcgT4iEq0
-         HNCPF2fu/k3wcx8LoArT5ucse1IWhSCPsfFidFXFWa3abJsdqmg0e1c4kF0mjcFKU/VM
-         Iq+A==
-X-Forwarded-Encrypted: i=1; AKwUvBxzp3F3gq6kX4EwobwopBb5w0pXaDqMx3bR/GHbZPhXXzezHLF+NVqmCwMSvCMhi/Nz0VY=@vger.kernel.org
-X-Gm-Message-State: AFuF++lIBiTr0SBx9LsgAEstQI4WvjmTCO0o1zaSGirKfNuuhZzRERM1
-	ZsjejKufb10ReFqWv0PK1MWdQo0Q6XvjQdm/Ebpj9xrwMLBLBPC7RuOK
-X-Gm-Gg: AYBFou0CBODGJp+zweftkbA9NyudbozrAiVNh9vlyceS5/JpGnR6q7hlfU798fNUSia
-	wcanM7Je9yUe+UilzhltpSXhnzVMZwH1PiZOPt1aoc3sUAgZCjVfmPeI28zt4JvLZim70jmLavt
-	LbHRDbMipy9QyvKfCV+olVN4f1c0tX+flhdZsu5hpB6T1NqsrDk07mRRsDEmpu/fAokW4L8tIOC
-	W7hmYqCvUwTUE0JTrI/A2G48x6spwbepYCbSAC8YX93y5wt7R7jgHAuYNtL9MmDmTWrzWXtetFr
-	23vSCgUOZwingSQomzANpUXjWuzo1EHhvY0JIl7FyHZA9orWIc+/ZISFf5y2h/3tNtO+HmJA0ux
-	+/8Q/2/9hcQ4DMEPcc3Rh4usqnEYXPjOsnOF3g6rZllq5Cpsau9nHHP9wkwRLTnYmkNwVuOF9Tk
-	sjXH8JR8xLvEgfNduvikG8+cAgLmZelIQx4o6P/QY7rmk3NBPZL7hGgI30kxi2tqs0KURP5zUO
-X-Received: by 2002:a05:620a:31a9:b0:93b:d7a4:9d4b with SMTP id af79cd13be357-93c43db7b1amr2012446885a.30.1790601303558;
-        Mon, 28 Sep 2026 06:15:03 -0700 (PDT)
-Received: from localhost ([125.16.97.114])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c813a5ae6sm145555985a.13.2026.09.28.06.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 06:15:02 -0700 (PDT)
-From: Vaibhav Nagare <nagarevaibhav@gmail.com>
-X-Google-Original-From: Vaibhav Nagare <vnagare@redhat.com>
-To: Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/ghxvVF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E5F1F000FF;
+	Mon, 28 Sep 2026 14:29:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790605761;
+	bh=UWCMYFvLNAm68dl9T3p5+ei0mitspgrPR0ZgUvMplx4=;
+	h=From:To:Cc:Subject:Date;
+	b=N/ghxvVFzeM7ZM0edHvlEWjV6tkzS0tfZ9dGHsuTbydx102IBb+Uy5wajLYWomwU5
+	 dQD98F2WlQpzb6NgbSg9uzCRKD90WwdEjg2Ehe3MTvm33ML/MtxmhAcD3LkvOJfz9e
+	 w12EhLDkvzDUvifx/J8IjGmAmTQ+N9etWAnTgK1IMSjUZItyZQ7qtmHCFXDRdyxKnC
+	 dL1k7MS9bSQgrcXidTF71kJVb5H6BAAcfKYXWMwDUb+PS99i1n186Fs4RkHWWLyusq
+	 yeOCJOSJOFjoiiOc+VRZ2X3Z1iT8KZIpjcUXrYnNG4WGtX4kAngJiJeVvReMdZmjhB
+	 /HVtYc4eVKz8g==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: "Paul E . McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Thomas Graf <tgraf@suug.ch>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	rcu@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Vaibhav Nagare <vnagare@redhat.com>,
-	stable@vger.kernel.org
-Subject: [PATCH net] bnxt_en: don't leave an XDP program installed when the open fails
-Date: Mon, 28 Sep 2026 18:44:58 +0530
-Message-ID: <20260928131458.1012180-1-vnagare@redhat.com>
-X-Mailer: git-send-email 2.55.0
+	linux-crypto@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/3] fprobe, rcu/tasks, rhashtable: Switch fprobe and BPF kprobe-multi to Tasks-Rude RCU
+Date: Mon, 28 Sep 2026 23:29:13 +0900
+Message-ID: <179060575297.372125.10581329083761385407.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-bnxt_xdp_set() stores the new program and drops the reference on the old
-one before reopening the NIC.  If bnxt_open_nic() then fails, ndo_bpf()
-returns an error with the new program still in bp->xdp_prog.  The caller
-treats the error as "nothing was installed" and drops its own reference,
-so bp->xdp_prog is left pointing at a freed program and the next XDP
-update dereferences it:
+Hi,
 
-  BUG: unable to handle page fault for address: ff78ecc80ddd1038
-  RIP: 0010:__bpf_prog_put+0x5/0x80
-  Call Trace:
-   bnxt_xdp_set+0xad/0x1b0 [bnxt_en]
-   dev_xdp_propagate+0x36/0xa0
-   bond_xdp_set+0xeb/0x2d0 [bonding]
-   dev_xdp_install+0x1b1/0x350
-   bpf_xdp_link_update+0xc5/0x1b0
-   link_update+0x104/0x1e0
-   __sys_bpf+0x662/0xcf0
+Here is an RFC patch series which removes standard RCU read lock
+(guard(rcu) and rcu_read_lock()) from fprobe callback paths
+by switching fprobe and BPF multi-kprobe to Tasks-Rude RCU.
 
-Seen on a 6.12 based kernel after bnxt_alloc_mem() failed an order-4
-allocation on a fragmented host:
+Motivation & Problem
+====================
 
-  bnxt_en 0000:a0:00.1 ens4f1np1: nic open fail (rc: fffffff4)
-  bond1: (slave ens4f1np1): Error -12 calling ndo_bpf
+Currently, fprobe entry and exit callbacks (fprobe_fgraph_entry,
+fprobe_return, and fprobe_ftrace_entry) execute in the tracing hot
+path where preemption is disabled.
 
-Bonding is not required to hit this; a plain XDP attach on a bnxt
-interface takes the same path.
+However, fprobe was forced to wrap hash lookups with guard(rcu)() and
+rcu_read_lock() because:
 
-Restore the previous program when the open fails and release it only
-once the change has been committed.  The ring and feature configuration
-is left as computed for the rejected program; the device stays down on
-this path, and reconciling it is left for a separate change.
+- rhashtable defers bucket table deallocation using standard RCU
+- unregister_fprobe() and BPF waited for a standard RCU grace period
 
-Fixes: c6d30e8391b8 ("bnxt_en: Add basic XDP support.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vaibhav Nagare <vnagare@redhat.com>
+Taking standard RCU read locks in the tracing fast path introduces
+several drawbacks:
+
+1. Unnecessary Runtime Overhead:
+   Every probe hit manipulates current->rcu_read_lock_nesting with
+   memory barriers, and rcu_read_unlock() adds conditional branches
+   to check for special quiescent processing.
+   On debug kernels with CONFIG_PROVE_RCU=y or CONFIG_LOCKDEP=y,
+   this additionally acquires and releases lockdep maps on every hit,
+   introducing severe lockdep hashing overhead and tracer recursion risks.
+
+2. Fragile Dependency on rcu_is_watching():
+   Standard RCU treats idle CPUs (and user-space on nohz_full CPUs) as
+   Extended Quiescent States (EQS). If a function is traced while
+   rcu_is_watching() is false, standard RCU is blind to the read-side
+   critical section. In such contexts, synchronize_rcu() does not wait
+   for the reader (risking Use-After-Free), and lockdep emits an
+   "RCU-illegal: rcu_read_lock() used while not watching!" warning.
+   To avoid this, ftrace callbacks normally require FTRACE_OPS_FL_RCU,
+   adding extra trampoline check overhead.
+
+3. Asymmetric Synchronization with fprobe_return():
+   fprobe_return() executes under preempt_disable_notrace() without
+   holding rcu_read_lock(). Prior to this series, unregister_fprobe()
+   only waited on synchronize_rcu(), which does NOT wait for pure
+   preempt-disabled sections, leaving a potential Use-After-Free window
+   during probe unregistration.
+
+I've tried to fix the last UAF with simply introducing guard(rcu)()[1]
+but Sashiko found the 2nd problem [2]. So I decided to implement this
+series.
+
+[1] https://lore.kernel.org/all/179055575009.241711.6358052647499787191.stgit@devnote2/
+[2] https://lore.kernel.org/all/20260928005114.9C9FC1F000FF@smtp.kernel.org/
+
+
+Solution: Tasks-Rude RCU
+========================
+
+Because fprobe callbacks already run strictly within preempt-disabled
+contexts, we can transition fprobe and its deferred table reclamation
+to Tasks-Rude RCU:
+
+- Tasks-Rude RCU detects grace periods via schedule_on_each_cpu(),
+  forcing a schedule on every online CPU. This guarantees that all
+  preempt-disabled sections that began prior to the grace period have
+  completed before memory is reclaimed.
+- Unlike standard RCU, Tasks-Rude RCU does not rely on dyntick-idle /
+  EQS tracking. It does NOT require rcu_is_watching() to be true and
+  does not trigger lockdep warnings in pre-RCU/idle execution paths.
+- Within fprobe, guard(rcu)() is replaced with guard(rcu_sched_notrace)(),
+  reducing the lookup lock to pure, non-tracing preempt counter
+  increments without lockdep or RCU state manipulation.
+
+Feedback and suggestions from RCU, BPF, and tracing maintainers are welcome!
+
+Thank you,
+
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+base-commit: 5bfa9f1a9dcb6ecb607adbc1c0226605c972935b
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-index 9e5009be8e98..f30ce644e377 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-@@ -419,8 +419,6 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
- 		bnxt_close_nic(bp, true, false);
- 
- 	old = xchg(&bp->xdp_prog, prog);
--	if (old)
--		bpf_prog_put(old);
- 
- 	if (prog) {
- 		bnxt_set_rx_skb_mode(bp, true);
-@@ -435,8 +433,16 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
- 	bnxt_set_tpa_flags(bp);
- 	bnxt_set_ring_params(bp);
- 
--	if (netif_running(dev))
--		return bnxt_open_nic(bp, true, false);
-+	if (netif_running(dev)) {
-+		rc = bnxt_open_nic(bp, true, false);
-+		if (rc) {
-+			WRITE_ONCE(bp->xdp_prog, old);
-+			return rc;
-+		}
-+	}
-+
-+	if (old)
-+		bpf_prog_put(old);
- 
- 	return 0;
- }
+Masami Hiramatsu (Google) (3):
+      rcu/tasks: Export call_rcu_tasks_rude()
+      rhashtable: Add use_tasks_rude parameter to defer bucket table free
+      fprobe: Switch fprobe and BPF kprobe-multi to Tasks-Rude RCU
+
+
+ include/linux/rcupdate.h         |    6 +++
+ include/linux/rhashtable-types.h |    2 +
+ kernel/bpf/syscall.c             |    2 +
+ kernel/rcu/tasks.h               |    8 ++---
+ kernel/trace/fprobe.c            |   66 +++++++++++++++++++++-----------------
+ lib/rhashtable.c                 |    5 ++-
+ 6 files changed, 54 insertions(+), 35 deletions(-)
+
 -- 
-2.55.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
