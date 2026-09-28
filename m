@@ -1,101 +1,127 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1545837B01E
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 07:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275E246D56E;
+	Mon, 28 Sep 2026 08:12:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790581718; cv=none; b=cUuU9w+PhI90pXCKDNGuVI8yWp+Dor7LFog634zBPwIBfG8IBHNpd/8EFPPGrgFRbF7D7u1w1KULFA2Mxa8mVGygUsCF9j2lmhcF03jGMxZAwNquxRXkvbGacvP8t7AL5dx/nTmqP2mlW8MXZ4EHqiSpJ9W4E4/FfgRCQXXYKB0=
+	t=1790583162; cv=none; b=Nr3yLE3dNGXJ4Ke7EGitUBQJ+J3nxJe7BsFwjW6bYbJdY/+qJs6witNyieBoPUnfgFJlWoRkasJYQ3X9glPuUinSqeSzBzqvzLFDYhKGdgXxEaQJ8E3CaaXzJqBfgeW1fmlvHOZJgw4vsK1w5LERWRFrXDITjumO9eShlEygtE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790581718; c=relaxed/simple;
-	bh=FVEHpdiwvMC7UliGeRBKqzyenyVO/eVH9K2CHQ9L4oE=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=o+7xt1Wkpt+cK85kIg8qhSR3RWHsZEO5DxIicsgdpveI5GLeIvaGkUHss10VBQK8rC/c/u+uP1vYMEEPD2ewLHaM3x9/TZrugFCBU5JGSw0gZEaUsSjMU06wtI5/FWKYj1TRefDHbBuTWRbqaEQPaGPrUAFVLuDfNwxjiXwyCI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jlKPW3L2; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790583162; c=relaxed/simple;
+	bh=DJg7qrSQLpUIylA65DFiLzQuISQk6VYJnGsMA/ft0pU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=down32F2B6GB+tBalT3jIjtMRbHarYlzT2SSETQ4ZuDVcjvMl4T82DILoeeB0FPJo5sQkpnIX44+B5GurLOULoIBPfOPhG1feQO9EJVFbww+oqYh3w+f6a43mYlcL+QFnBdBQIPaKehaXteJPDgTS0u/dOj0IPC/53jbMopFgp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QduDBK8C; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jlKPW3L2"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc797656e69so630963a12.0
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 00:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790581716; x=1791186516; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=FVEHpdiwvMC7UliGeRBKqzyenyVO/eVH9K2CHQ9L4oE=;
-        b=jlKPW3L2QgrRw4jPjrqapp68cGBIPKa1YRlKyf+l2M58o5tM9rMhL2tpdRNWbTaFex
-         mX746blM8pHhmstb+lY5P+R3wUUG9UOyMYNCEzo0VYhFflt5wedAHmtbitkuLpdKOW8O
-         gNCPLE9uTxpzOIU29yCvj/GC+bD35OP4s3UP7mkYcx5CCRi9VRlLsFYwsaI/w3RKzSwc
-         /pzeFsB/5HHoHs1jp8dudaazi6ZBppqjfUDtB0fKyE6Ftqsayx6+Z45qkGHX7oDLac/O
-         jWJZXoethJhBuBVPw1IKqWgSFRwfZvb6KDw540PmPUDxJU6kg9ZBHzr91Shg7yWiJZFH
-         vvQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790581716; x=1791186516;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FVEHpdiwvMC7UliGeRBKqzyenyVO/eVH9K2CHQ9L4oE=;
-        b=1lfnGSvITkF79U2MtqqO/T9lIOpaEOXqP+Mmru5+r+dh0EdwQCFeAxv16rNexPbzLl
-         9B7O3lzSJLXmRZkNok/7HKsknIA4gZfoZTNmg8p3RPGaScsXBPAyMVRiHeYz/pe/Q+7P
-         x3u1rvyfF9Sp7h6vJqAfXlkfLF23EPooSxV0h1CALGx7KKeJt0icTUL6ekKK0MYrzudO
-         KKAZ5RyOn80DmxGK4sR/DL0Zo+85s3l8mJfXS/15R5RCkT9aQl6RxvVMZeay8WxPYaVa
-         lIJqjbDYFeQEauKHY6lqA1Y3BPoL+HNm/LFQCuEWh/K5M91yMKtNnwuim7Fd92EggXMD
-         S03g==
-X-Forwarded-Encrypted: i=1; AKwUvBwttMIONJH04L1nKvSDgnmbx8JDQ6Nq1/jXmOm3uvR8K/4rBOVTjJEvsGHzhJ1tKiv92j0=@vger.kernel.org
-X-Gm-Message-State: AFuF++lG6e3xmXzll00gcZAIOSE8UIEHUV5sbUkfgpNKyc+5rvDFKYpU
-	D3S+H8XZmcrDyDFqvQ1YrFom3Rly2L5muSLKhnP3UpljO1aDUqNNir3E
-X-Gm-Gg: AYBFou0If05ePmO266EgAEkuosqZn7CB0yJ5aOozExKWVnBT4RzndHL/XpKAHYtyiUm
-	/pbS1p4T19juMfd1rERSVBrN7aTyWXb7ZTK0wHmkiIhdrkQZ8w12g9gHCnt9nvSDDcKmqBSZBtC
-	PdRQRD04jctLCACDZJKzoE/oSo10eITkTPLhCYntOmqmfB582JyiH0AaRVPopthKNawZOl3B8Ur
-	KLZEsQ4S81RtH7sCVtz5zSw51gSYRUeWHMeEJ/6WjyXKefr02znnFLh9tBQ7FSSvoj74sKL0lH0
-	4FPQ7UkDy16KlO2MC/1ISx0+nCcP2TZtzZUKI0xeu8lM+6McE8hvKFULf2qc0zuERW+LIChmFCF
-	hUVZrTziKcmwtlM3yGsVvMYWqT4xshawemP1KkMO0EhtTJRwT1ex66IBwpeDzsvIZaj73kokd1S
-	zcL/Ti/Sw3VrD3m2U8rQFbEiVw4ZoqNHJQO8qToQV9Gh0WcR4wWvZeZsYjM4k2nqOB/EpxFvzYK
-	YoCR4+CPOcZ/9CXb6R2RfZ2dg94mXLk73mQK3zntk9WAc2dKSYOSx3F1zraqmqf/FUWXU0dEsKE
-	OGrY
-X-Received: by 2002:a05:6300:210e:b0:3d1:39e9:b267 with SMTP id adf61e73a8af0-3de0e67622cmr10607469637.3.1790581716294;
-        Mon, 28 Sep 2026 00:48:36 -0700 (PDT)
-Received: from localhost ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc7ae09698csm1383579a12.31.2026.09.28.00.48.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 00:48:35 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 07:48:35 +0000
-Message-Id: <DLQS8S2AXJX4.2UUWRPBC46X2G@gmail.com>
-Cc: <john.fastabend@gmail.com>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2] bpf: Fix bpf_loop() depth check to use
- 32-bit max for nr_loops
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: =?utf-8?q?=C3=96mer_Mete_Kaya?= <omermetekaya0@gmail.com>,
- <daniel@iogearbox.net>
-In-Reply-To: <20260928001609.429840-1-omermetekaya0@gmail.com>
-References: <20260928001609.429840-1-omermetekaya0@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QduDBK8C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=2+
+	bx5+w9qWHeU9nlycB8XjinIN8UVu3ZqdBzS/ofTQM=; b=QduDBK8CItG+35PkJJ
+	NfY3RIFIfRuGblkNShpVldRGzqm8HlypkMEmEkjLoG6jBltOFn4/WgemyN/Mdt4l
+	oHrDiEvETWOPLZeB/4BknWXSq28vLbx9+mlQX05WdedwsyqxIoXxNWpuojMDsiNL
+	aBhONvLoTbzZb06GM7H18Jm+0=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgBHpnpGIbpqfB48Bw--.29622S2;
+	Mon, 28 Sep 2026 16:11:51 +0800 (CST)
+From: chenyuan_fl@163.com
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org
+Cc: yonghong.song@linux.dev,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	jolsa@kernel.org,
+	ihor.solodrai@linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH] bpf: Claim the per-CPU send_signal irq_work before filling it
+Date: Mon, 28 Sep 2026 16:11:44 +0800
+Message-ID: <20260928081144.207908-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgBHpnpGIbpqfB48Bw--.29622S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJFWDuFWxCFyfJr43XF43Jrb_yoW5Gr1DpF
+	s8J3s7C3ykJwsFqrnrAw4kur1Sk3Z5K3yUKr48G3sakF1Fqr1fuw1xtFy2vw4Fqr97WFnx
+	Zr4j9rZFkr4Uur7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnb18UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQijYWq6IUgz0QAA3Q
 
-On Mon, Sep 28, 2026 at 03:15 AM Ömer Mete Kaya <omermetekaya0@gmail.com> wrote:
-> The verifier compares callback_depth (u32) against reg_umax(), which
-> returns the 64-bit upper bound of R1. If the upper 32 bits of R1 are
-> set, reg_umax() can be U64_MAX, causing the depth check to be
-> ineffective and triggering excessive push_callback_call() invocations
-> until the complexity limit is hit.
->
-> Use reg_u32_max() instead. The change is sound for both runtime paths:
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-It's not a fix. Nothing is broken.
+irq_work_is_busy() cannot see the per-CPU send_signal_work while
+it is being filled: the check only matches after irq_work_queue()
+has claimed the work. An NMI interrupting the fill therefore passes
+it, both callers race for the same irq_work, and the loser's signal
+is silently lost along with its task reference while the queued
+work runs with a mix of both callers' fields.
 
-pls stop the spam.
+Claim the work with an atomic gate before touching any of its
+fields and release it only after the callback has consumed them. A
+context finding the work claimed returns the documented -EBUSY,
+and the return value of irq_work_queue() is now handled.
 
-pw-bot: cr
+Fixes: 1bc7896e9ef4 ("bpf: Fix deadlock with rq_lock in bpf_send_signal()")
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ kernel/trace/bpf_trace.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 891897f8a1b3..03552637aab9 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -823,6 +823,8 @@ const struct bpf_func_proto bpf_task_pt_regs_proto = {
+ 
+ struct send_signal_irq_work {
+ 	struct irq_work irq_work;
++	/* Covers the fill-to-run span which irq_work_is_busy() cannot see. */
++	atomic_t claimed;
+ 	struct task_struct *task;
+ 	u32 sig;
+ 	enum pid_type type;
+@@ -842,6 +844,8 @@ static void do_bpf_send_signal(struct irq_work *entry)
+ 
+ 	group_send_sig_info(work->sig, siginfo, work->task, work->type);
+ 	put_task_struct(work->task);
++	/* Release once the fields are consumed. */
++	atomic_set_release(&work->claimed, 0);
+ }
+ 
+ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struct *task, u64 value)
+@@ -885,7 +889,7 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
+ 			return -EINVAL;
+ 
+ 		work = this_cpu_ptr(&send_signal_work);
+-		if (irq_work_is_busy(&work->irq_work))
++		if (atomic_xchg(&work->claimed, 1))
+ 			return -EBUSY;
+ 
+ 		/* Add the current task, which is the target of sending signal,
+@@ -898,7 +902,12 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
+ 			copy_siginfo(&work->info, &info);
+ 		work->sig = sig;
+ 		work->type = type;
+-		irq_work_queue(&work->irq_work);
++		if (unlikely(!irq_work_queue(&work->irq_work))) {
++			/* Unreachable while the claim is held. */
++			put_task_struct(task);
++			atomic_set_release(&work->claimed, 0);
++			return -EBUSY;
++		}
+ 		return 0;
+ 	}
+ 
+-- 
+2.54.0
+
