@@ -1,960 +1,434 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBFD4F7CA5;
-	Mon, 28 Sep 2026 19:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A7E377A8B;
+	Mon, 28 Sep 2026 19:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790623943; cv=none; b=GUrYPddA2nIDGvF2Mt+n5aKBE2q6JKmjh6WrnC4FZVgwWCHijaKMohT3VdREbRN5bHYcd/m1xxc3Ns9LB2MiDoV3HVOWM5sWJ0rjOIZQxyFbLqzqIRMfj9qEX+nArqq404Zjdq7hFAaUmWfxQKCCdm+Jpgl5q/C4umztFn/mYoI=
+	t=1790623981; cv=none; b=ZIPdwxL9cbrt7F26lVioJpNodgAx1xjjzn1zcjIQ0M4E1JbXDCVVPdp5qWmPP59qMQthjvlpNg1Y8VZDU3y1n/pNLS31m5I4nVhpLAoIz3XDaHCsYETC+hJua18NJ24ofIxLjXWnlJtXja3NwAnoCegMHaBqnjKksCnpvELM6Ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790623943; c=relaxed/simple;
-	bh=Oy8emGMafkX3hUGwJxmGx9clEer2z3YTLGZT42AoAd4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jSArnZJsJDnzODscNIjNftW+283wjPhAG5FOyiZxBhMKpgdwL+sCQJSXzgxHVs0X/t0FU6PJBuVuwh47OMZKlLO+u4v0jdjUXFCiV8JWfCp6GTuTo/So1vuMI9Io34C3BnF82MN+paz89GqkKipT291s2H2gL7sS3Fw2n0qptjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=d+sxoEwR; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9LFIHwih; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vmBbyJ1G; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HEBVkJFG; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1790623981; c=relaxed/simple;
+	bh=AQshiReT6epNxwKsY5NmZGp/dBB4g/z6A9fOiDBa/qw=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=XnW9R2uZ38E6lCC+ZXbYoVsKtocz01WwAOQ9ze3Yoj+LaFh3/2X5lT0kHLplvSOYlJjFmcMNl0NHExbKw/nIiGYD6oV7HuPGBizNEC3ihh6mll67JT4RjnuRWua+W3w5TEh7RIygI4TZ235T7izxXPpoBaVx8CVLKq/1pb71QCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=wB/Jn6vS; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="d+sxoEwR";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9LFIHwih";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vmBbyJ1G";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HEBVkJFG"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0B2AA21BBF;
-	Mon, 28 Sep 2026 19:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790623933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
-	b=d+sxoEwRwgQEjYQDwCMz0+bjgFYm7MzO98Lil+foNTHaStojyHrVFbLj1gy/+TfSv7Smp/
-	nHz5D4MugeOvbB52u0BwH/CmC3zq+pqISi4l4WjdzQFUmiS2ruZInL8HTcDUaeb3u5yrEs
-	/QOhF273SspDuqzSrXP6ihwNV02mbp8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790623933;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
-	b=9LFIHwihJ5xgiFM7sNi2e3/CVd29vVAlk9flkiSzZirtunEZ3TiWoSokkg4UqoU79QJLRb
-	mf0X2LHMHo90IYAw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790623929; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
-	b=vmBbyJ1Gx/7E1t9yOKo+FcaLLdNmXv4QC3Dhqq5G1jAH3cCydqktj4q3nLYAxvSjf6f+sM
-	hIPUwdvcSCIfylCWcDxoYJfeFOCdFs95cwCCEUSahOEdqamYvVO7E9chkcdmyhuBqxbsI3
-	f7s+/893Ml7PGj0kBDDf9DXBgfPNV7M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790623929;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
-	b=HEBVkJFGSaGLWVMMe0ws/91cuThvAwOAk4isFopPlhbdHIThO752CXMnAMJLM/AyWsIe0q
-	K4jh1JlrnpC0R7Bg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 91027133F1;
-	Mon, 28 Sep 2026 19:32:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4RBiFn3AumpWOAAAD6G6ig:T10
-	(envelope-from <fmancera@suse.de>); Mon, 28 Sep 2026 19:32:07 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: horms@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@kernel.org,
-	davem@davemloft.net,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Song Liu <song@kernel.org>,
-	Mahe Tardy <mahe.tardy@gmail.com>,
-	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
-	Joel Granados <joel.granados@kernel.org>,
-	Wyatt Feng <bronzed_45_vested@icloud.com>,
-	Yung Chih Su <yuuchihsu@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH 09/16 net-next v2] ipv4: fib: split common nexthop logic to fib_core.c
-Date: Mon, 28 Sep 2026 21:30:05 +0200
-Message-ID: <20260928193046.6698-10-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260928193046.6698-1-fmancera@suse.de>
-References: <20260928193046.6698-1-fmancera@suse.de>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="wB/Jn6vS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1790623979; x=1822159979;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=AQshiReT6epNxwKsY5NmZGp/dBB4g/z6A9fOiDBa/qw=;
+  b=wB/Jn6vStBxH32D5Zzo0fO3sYWbLKh2WV3Z2ONY8cnHzb8w//Br69ErT
+   9jUIS06nH5uNZqba7Z3081IusP+6r1pVwIZPaoXqGtFJWwDKiReQTztAs
+   14bhUBz+Vxnc7SUU2ZAIAnuPz7C9atw864oOoLvb6mSFEUJW2CgiDjqbt
+   HiwRraST6mDsr5QeJVhs9CvEJEYY8mrhE0hnvgmoDyU8S6XLyOTW1la/M
+   wuRDOUuNG08B5gkOohNsi1fcD95Hmde618Ty8lnrbgU0jVoSBB7UBmXla
+   1ZOM0Bk263DhywRXuAL7FSWdcZZKzjCInEUUbBM7UtF0G5l1opPDtGX6G
+   A==;
+X-CSE-ConnectionGUID: SAVYTVgyRburbMp3c07Hpg==
+X-CSE-MsgGUID: cxirhw30RNC7Vs6+eGiW7A==
+X-IronPort-AV: E=Sophos;i="6.27,129,1787036400"; 
+   d="scan'208";a="231389902"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2026 12:32:58 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 28 Sep 2026 12:32:57 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 28 Sep 2026 12:32:54 -0700
+From: Daniel Machon <daniel.machon@microchip.com>
+Subject: [PATCH net-next v9 00/15] net: lan966x: add support for PCIe FDMA
+Date: Mon, 28 Sep 2026 21:32:48 +0200
+Message-ID: <20260928-lan966x-pci-fdma-v9-0-a17caf60f89a@microchip.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Score: -1.30
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-1.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo];
-	RCPT_COUNT_TWELVE(0.00)[24];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,redhat.com,davemloft.net,suse.de,nvidia.com,google.com,iogearbox.net,gmail.com,fomichev.me,nokia-bell-labs.com,icloud.com,vger.kernel.org];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLrr9ek4ud4f4qwi71m7motjzt)];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,icloud.com]
+X-B4-Tracking: v=1; b=H4sIAODAumoC/23QzWrDMAwH8FcpPs9D/rZ72nuMHRxZWQxrUpISO
+ krffSI7JFAfhayfpf9DLDRXWsT59BAzrXWp08hFejsJHPL4TbIWroUG7cEoI3/ymLy/yytW2Zd
+ LlslSsdEVbfoseOw6U1/vG/kpRrrJke438cWdoS63af7d/lrV1v9nNbyyq5IgqXcWu9QB2u7jU
+ nGecKjXd5wuG7jqHbE6NhDNSDGE3hN4ftdCzI44sA3EMJKd712wUGKAFmKPSGsTy4iyBBhTicW
+ bFuIOSDMTxwjyKiqFTOCamfgdSZAaiGfE9zaW3KXig2oh4YCo1jmBESBEFRLGrLGFxAOiW8FGR
+ jQoDF2AUOLLOc/n8w8hxlSnoQIAAA==
+X-Change-ID: 20260313-lan966x-pci-fdma-94ed485d23fa
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
+ Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
+	<mohsin.bashr@gmail.com>, "Simon Horman" <horms@kernel.org>
+CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+X-Mailer: b4 0.14.3
 
-To enable compiling INET subsystem without IPv4, shared FIB and nexthop
-logic must be accessible to IPv6 when IPv4 routing stack is omitted.
+When lan966x operates as a PCIe endpoint, the driver currently uses
+register-based I/O for frame injection and extraction. This approach is
+functional but slow, topping out at around 33 Mbps on an Intel x86 host
+with a lan966x PCIe card.
 
-This patch creates fib_core.c and move all the functions for common
-nexthop initialization and release from fib_semantics.c to fib_core.c.
-Note that fib_core.c is under net/core.
+This series adds FDMA (Frame DMA) support for the PCIe path. When
+operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
+directly access host memory, so DMA buffers are allocated as contiguous
+coherent memory and mapped through the PCIe Address Translation Unit
+(ATU). The ATU provides outbound windows that translate internal FDMA
+addresses to PCIe bus addresses, allowing the FDMA engine to read and
+write host memory. Because the ATU requires contiguous address regions,
+page_pool and normal per-page DMA mappings cannot be used. Instead,
+frames are transferred using memcpy between the ATU-mapped buffers and
+the network stack. With this, throughput increases from ~33 Mbps to
+~620 Mbps for default MTU.
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+Patch 1 adds the shared drivers/net/ethernet/microchip/fdma/ directory
+to the Sparx5 SoC MAINTAINERS entry.
+
+Patches 2-4 prepare the shared FDMA library: patch 2 renames the
+contiguous dataptr helpers for clarity, patch 3 adds PCIe ATU region
+management and coherent DMA allocation with ATU mapping, and patch 4
+gives the descriptor fields an explicit little-endian type, since on the
+PCIe path the descriptors are written by the host CPU.
+
+Patches 5-8 refactor the lan966x FDMA code to support both platform
+and PCIe paths: extracting the LLP register write into a helper,
+exporting shared functions, introducing a dedicated device for DMA
+operations, and adding an ops dispatch table selected at probe time.
+
+Patches 9-10 harden the existing FDMA path for the PCIe endpoint
+lifecycle: patch 9 clears latched FDMA error/interrupt stickies after
+the switch reset so they don't assert as soon as interrupts are
+enabled, and patch 10 adds a shutdown() callback that quiesces the
+FDMA engine on host warm reboot (on the PCIe card the FDMA survives
+host reset and would otherwise keep the shared INTx asserted into
+the next probe).
+
+Patch 11 adds the core PCIe FDMA implementation with RX/TX using
+contiguous ATU-mapped buffers. Patches 12 and 13 extend it with MTU
+change and XDP support respectively. XDP_PASS, XDP_TX, XDP_DROP and
+XDP_ABORTED are supported; XDP_REDIRECT is deliberately not, because
+the PCIe data path does not use page_pool.
+
+Patches 14-15 update the lan966x PCI device tree overlay to extend the
+cpu register mapping to cover the ATU register space and add the FDMA
+interrupt.
+
+Patches 1-13 touch MAINTAINERS and drivers/net/ethernet/microchip/, and
+are for the netdev tree.
+
+Patches 14-15 touch drivers/misc/lan966x_pci.dtso, and are for the
+char-misc tree.
+
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Horatiu Vultur <horatiu.vultur@microchip.com>
+To: Steen Hegelund <steen.hegelund@microchip.com>
+To: UNGLinuxDriver@microchip.com
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Herve Codina <herve.codina@bootlin.com>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mohsin Bashir <mohsin.bashr@gmail.com>
+To: Simon Horman <horms@kernel.org>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+
+Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 ---
- include/net/ip_fib.h       |  27 +++-
- include/net/route.h        |   6 +
- net/core/Makefile          |   2 +-
- net/core/fib_core.c        | 307 +++++++++++++++++++++++++++++++++++++
- net/ipv4/fib_frontend.c    |  96 ------------
- net/ipv4/fib_semantics.c   | 205 -------------------------
- net/ipv4/nexthop.c         |   5 +-
- net/ipv4/sysctl_net_ipv4.c |   2 +
- 8 files changed, 345 insertions(+), 305 deletions(-)
- create mode 100644 net/core/fib_core.c
+Changes in v9:
+- PCIe: use a private copy of lan966x_hw_offload() that reports when
+  skb_vlan_untag() frees the skb, fixing a use-after-free reachable via
+  XDP shrinking the frame.
+- Link to v8: https://lore.kernel.org/r/20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com
 
-diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
-index 0a35355fb0f3..6058e53fa3de 100644
---- a/include/net/ip_fib.h
-+++ b/include/net/ip_fib.h
-@@ -250,7 +250,13 @@ int call_fib4_notifiers(struct net *net, enum fib_event_type event_type,
- int __net_init fib4_notifier_init(struct net *net);
- void __net_exit fib4_notifier_exit(struct net *net);
- 
-+#if IS_ENABLED(CONFIG_IPV4)
- void fib_info_notify_update(struct net *net, struct nl_info *info);
-+#else
-+static inline void fib_info_notify_update(struct net *net, struct nl_info *info)
-+{
-+}
-+#endif
- int fib_notify(struct net *net, struct notifier_block *nb,
- 	       struct netlink_ext_ack *extack);
- 
-@@ -442,7 +448,7 @@ static inline bool fib_dscp_masked_match(dscp_t dscp, const struct flowi4 *fl4)
- 	return dscp == (fl4->flowi4_dscp & INET_DSCP_LEGACY_TOS_MASK);
- }
- 
--/* Exported by fib_frontend.c */
-+/* Exported by net/core/fib_core.c */
- extern const struct nla_policy rtm_ipv4_policy[];
- void ip_fib_init(void);
- int fib_gw_from_via(struct fib_config *cfg, struct nlattr *nla,
-@@ -578,10 +584,23 @@ void fib_select_multipath(struct fib_result *res, int hash,
- void fib_select_path(struct net *net, struct fib_result *res,
- 		     struct flowi4 *fl4, const struct sk_buff *skb);
- 
-+#if IS_ENABLED(CONFIG_IPV4)
- int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
- 		struct fib_config *cfg, int nh_weight,
- 		struct netlink_ext_ack *extack);
- void fib_nh_release(struct net *net, struct fib_nh *fib_nh);
-+#else
-+static inline int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
-+			      struct fib_config *cfg, int nh_weight,
-+			      struct netlink_ext_ack *extack)
-+{
-+	return -EAFNOSUPPORT;
-+}
-+
-+static inline void fib_nh_release(struct net *net, struct fib_nh *fib_nh)
-+{
-+}
-+#endif
- int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
- 		       struct nlattr *fc_encap, u16 fc_encap_type,
- 		       void *cfg, gfp_t gfp_flags,
-@@ -620,7 +639,13 @@ static inline void fib_combine_itag(u32 *itag, const struct fib_result *res)
- #endif
- }
- 
-+#if IS_ENABLED(CONFIG_IPV4)
- void fib_flush(struct net *net);
-+#else
-+static inline void fib_flush(struct net *net)
-+{
-+}
-+#endif
- void free_fib_info(struct fib_info *fi);
- 
- static inline void fib_info_hold(struct fib_info *fi)
-diff --git a/include/net/route.h b/include/net/route.h
-index 8c21881eb5f4..8788bf096c15 100644
---- a/include/net/route.h
-+++ b/include/net/route.h
-@@ -128,7 +128,13 @@ extern struct ip_rt_acct __percpu *ip_rt_acct;
- struct in_device;
- 
- int ip_rt_init(void);
-+#if IS_ENABLED(CONFIG_IPV4)
- void rt_cache_flush(struct net *net);
-+#else
-+static inline void rt_cache_flush(struct net *net)
-+{
-+}
-+#endif
- void rt_flush_dev(struct net_device *dev);
- 
- static inline void inet_sk_init_flowi4(const struct inet_sock *inet,
-diff --git a/net/core/Makefile b/net/core/Makefile
-index c20e520358b8..315e437a49d8 100644
---- a/net/core/Makefile
-+++ b/net/core/Makefile
-@@ -12,7 +12,7 @@ obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
- obj-y		     += dev.o dev_api.o dev_addr_lists.o dst.o netevent.o \
- 			neighbour.o rtnetlink.o utils.o link_watch.o filter.o \
- 			sock_diag.o dev_ioctl.o tso.o sock_reuseport.o \
--			fib_notifier.o xdp.o flow_offload.o gro.o \
-+			fib_notifier.o fib_core.o xdp.o flow_offload.o gro.o \
- 			netdev-genl.o netdev-genl-gen.o netdev_work.o gso.o
- 
- obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
-diff --git a/net/core/fib_core.c b/net/core/fib_core.c
-new file mode 100644
-index 000000000000..6f59ee43ccbb
---- /dev/null
-+++ b/net/core/fib_core.c
-@@ -0,0 +1,307 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/inetdevice.h>
-+#include <linux/types.h>
-+#include <net/addrconf.h>
-+#include <net/lwtunnel.h>
-+#include <net/route.h>
-+
-+static void rt_fibinfo_free(struct rtable __rcu **rtp)
-+{
-+	struct rtable *rt = rcu_dereference_protected(*rtp, 1);
-+
-+	if (!rt)
-+		return;
-+
-+	/* Not even needed : RCU_INIT_POINTER(*rtp, NULL);
-+	 * because we waited an RCU grace period before calling
-+	 * free_fib_info_rcu()
-+	 */
-+
-+	dst_dev_put(&rt->dst);
-+	dst_release_immediate(&rt->dst);
-+}
-+
-+static void free_nh_exceptions(struct fib_nh_common *nhc)
-+{
-+	struct fnhe_hash_bucket *hash;
-+	int i;
-+
-+	hash = rcu_dereference_protected(nhc->nhc_exceptions, 1);
-+	if (!hash)
-+		return;
-+	for (i = 0; i < FNHE_HASH_SIZE; i++) {
-+		struct fib_nh_exception *fnhe;
-+
-+		fnhe = rcu_dereference_protected(hash[i].chain, 1);
-+		while (fnhe) {
-+			struct fib_nh_exception *next;
-+
-+			next = rcu_dereference_protected(fnhe->fnhe_next, 1);
-+
-+			rt_fibinfo_free(&fnhe->fnhe_rth_input);
-+			rt_fibinfo_free(&fnhe->fnhe_rth_output);
-+
-+			kfree(fnhe);
-+
-+			fnhe = next;
-+		}
-+	}
-+	kfree(hash);
-+}
-+
-+static void rt_fibinfo_free_cpus(struct rtable __rcu * __percpu *rtp)
-+{
-+	int cpu;
-+
-+	if (!rtp)
-+		return;
-+
-+	for_each_possible_cpu(cpu) {
-+		struct rtable *rt;
-+
-+		rt = rcu_dereference_protected(*per_cpu_ptr(rtp, cpu), 1);
-+		if (rt) {
-+			dst_dev_put(&rt->dst);
-+			dst_release_immediate(&rt->dst);
-+		}
-+	}
-+	free_percpu(rtp);
-+}
-+
-+void fib_nh_common_release(struct fib_nh_common *nhc)
-+{
-+	netdev_put(nhc->nhc_dev, &nhc->nhc_dev_tracker);
-+	lwtstate_put(nhc->nhc_lwtstate);
-+	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
-+	rt_fibinfo_free(&nhc->nhc_rth_input);
-+	free_nh_exceptions(nhc);
-+}
-+
-+int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
-+		       struct nlattr *encap, u16 encap_type,
-+		       void *cfg, gfp_t gfp_flags,
-+		       struct netlink_ext_ack *extack)
-+{
-+	int err;
-+
-+	nhc->nhc_pcpu_rth_output = alloc_percpu_gfp(struct rtable __rcu *,
-+						    gfp_flags);
-+	if (!nhc->nhc_pcpu_rth_output)
-+		return -ENOMEM;
-+
-+	if (encap) {
-+		struct lwtunnel_state *lwtstate;
-+
-+		err = lwtunnel_build_state(net, encap_type, encap,
-+					   nhc->nhc_family, cfg, &lwtstate,
-+					   extack);
-+		if (err)
-+			goto lwt_failure;
-+
-+		nhc->nhc_lwtstate = lwtstate_get(lwtstate);
-+	}
-+
-+	return 0;
-+
-+lwt_failure:
-+	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
-+	nhc->nhc_pcpu_rth_output = NULL;
-+	return err;
-+}
-+
-+int fib_nexthop_info(struct sk_buff *skb, const struct fib_nh_common *nhc,
-+		     u8 rt_family, unsigned char *flags, bool skip_oif)
-+{
-+	if (nhc->nhc_flags & RTNH_F_DEAD)
-+		*flags |= RTNH_F_DEAD;
-+
-+	if (nhc->nhc_flags & RTNH_F_LINKDOWN) {
-+		*flags |= RTNH_F_LINKDOWN;
-+
-+		rcu_read_lock();
-+		switch (nhc->nhc_family) {
-+		case AF_INET:
-+			if (ip_ignore_linkdown(nhc->nhc_dev))
-+				*flags |= RTNH_F_DEAD;
-+			break;
-+		case AF_INET6:
-+			if (ip6_ignore_linkdown(nhc->nhc_dev))
-+				*flags |= RTNH_F_DEAD;
-+			break;
-+		}
-+		rcu_read_unlock();
-+	}
-+
-+	switch (nhc->nhc_gw_family) {
-+	case AF_INET:
-+		if (nla_put_in_addr(skb, RTA_GATEWAY, nhc->nhc_gw.ipv4))
-+			goto nla_put_failure;
-+		break;
-+	case AF_INET6:
-+		/* if gateway family does not match nexthop family
-+		 * gateway is encoded as RTA_VIA
-+		 */
-+		if (rt_family != nhc->nhc_gw_family) {
-+			int alen = sizeof(struct in6_addr);
-+			struct nlattr *nla;
-+			struct rtvia *via;
-+
-+			nla = nla_reserve(skb, RTA_VIA, alen + 2);
-+			if (!nla)
-+				goto nla_put_failure;
-+
-+			via = nla_data(nla);
-+			via->rtvia_family = AF_INET6;
-+			memcpy(via->rtvia_addr, &nhc->nhc_gw.ipv6, alen);
-+		} else if (nla_put_in6_addr(skb, RTA_GATEWAY,
-+					    &nhc->nhc_gw.ipv6) < 0) {
-+			goto nla_put_failure;
-+		}
-+		break;
-+	}
-+
-+	*flags |= (nhc->nhc_flags &
-+		   (RTNH_F_ONLINK | RTNH_F_OFFLOAD | RTNH_F_TRAP));
-+
-+	if (!skip_oif && nhc->nhc_dev &&
-+	    nla_put_u32(skb, RTA_OIF, nhc->nhc_dev->ifindex))
-+		goto nla_put_failure;
-+
-+	if (lwtunnel_fill_encap(skb, nhc->nhc_lwtstate,
-+				RTA_ENCAP, RTA_ENCAP_TYPE) < 0)
-+		goto nla_put_failure;
-+
-+	return 0;
-+
-+nla_put_failure:
-+	return -EMSGSIZE;
-+}
-+
-+#if IS_ENABLED(CONFIG_IP_ROUTE_MULTIPATH) || IS_ENABLED(CONFIG_IPV6)
-+int fib_add_nexthop(struct sk_buff *skb, const struct fib_nh_common *nhc,
-+		    int nh_weight, u8 rt_family, u32 nh_tclassid)
-+{
-+	const struct net_device *dev = nhc->nhc_dev;
-+	struct rtnexthop *rtnh;
-+	unsigned char flags = 0;
-+
-+	rtnh = nla_reserve_nohdr(skb, sizeof(*rtnh));
-+	if (!rtnh)
-+		goto nla_put_failure;
-+
-+	rtnh->rtnh_hops = nh_weight - 1;
-+	rtnh->rtnh_ifindex = dev ? dev->ifindex : 0;
-+
-+	if (fib_nexthop_info(skb, nhc, rt_family, &flags, true) < 0)
-+		goto nla_put_failure;
-+
-+	rtnh->rtnh_flags = flags;
-+
-+	if (nh_tclassid && nla_put_u32(skb, RTA_FLOW, nh_tclassid))
-+		goto nla_put_failure;
-+
-+	/* length of rtnetlink header + attributes */
-+	rtnh->rtnh_len = nlmsg_get_pos(skb) - (void *)rtnh;
-+
-+	return 0;
-+
-+nla_put_failure:
-+	return -EMSGSIZE;
-+}
-+#endif
-+
-+const struct nla_policy rtm_ipv4_policy[RTA_MAX + 1] = {
-+	[RTA_UNSPEC]		= { .strict_start_type = RTA_DPORT + 1 },
-+	[RTA_DST]		= { .type = NLA_U32 },
-+	[RTA_SRC]		= { .type = NLA_U32 },
-+	[RTA_IIF]		= { .type = NLA_U32 },
-+	[RTA_OIF]		= { .type = NLA_U32 },
-+	[RTA_GATEWAY]		= { .type = NLA_U32 },
-+	[RTA_PRIORITY]		= { .type = NLA_U32 },
-+	[RTA_PREFSRC]		= { .type = NLA_U32 },
-+	[RTA_METRICS]		= { .type = NLA_NESTED },
-+	[RTA_MULTIPATH]		= { .len = sizeof(struct rtnexthop) },
-+	[RTA_FLOW]		= { .type = NLA_U32 },
-+	[RTA_ENCAP_TYPE]	= { .type = NLA_U16 },
-+	[RTA_ENCAP]		= { .type = NLA_NESTED },
-+	[RTA_UID]		= { .type = NLA_U32 },
-+	[RTA_MARK]		= { .type = NLA_U32 },
-+	[RTA_TABLE]		= { .type = NLA_U32 },
-+	[RTA_IP_PROTO]		= { .type = NLA_U8 },
-+	[RTA_SPORT]		= { .type = NLA_U16 },
-+	[RTA_DPORT]		= { .type = NLA_U16 },
-+	[RTA_NH_ID]		= { .type = NLA_U32 },
-+};
-+
-+int ip_valid_fib_dump_req(struct net *net, const struct nlmsghdr *nlh,
-+			  struct fib_dump_filter *filter,
-+			  struct netlink_callback *cb)
-+{
-+	struct netlink_ext_ack *extack = cb->extack;
-+	struct nlattr *tb[RTA_MAX + 1];
-+	struct rtmsg *rtm;
-+	int err, i;
-+
-+	rtm = nlmsg_payload(nlh, sizeof(*rtm));
-+	if (!rtm) {
-+		NL_SET_ERR_MSG(extack, "Invalid header for FIB dump request");
-+		return -EINVAL;
-+	}
-+
-+	if (rtm->rtm_dst_len || rtm->rtm_src_len  || rtm->rtm_tos   ||
-+	    rtm->rtm_scope) {
-+		NL_SET_ERR_MSG(extack, "Invalid values in header for FIB dump request");
-+		return -EINVAL;
-+	}
-+
-+	if (rtm->rtm_flags & ~(RTM_F_CLONED | RTM_F_PREFIX)) {
-+		NL_SET_ERR_MSG(extack, "Invalid flags for FIB dump request");
-+		return -EINVAL;
-+	}
-+	if (rtm->rtm_flags & RTM_F_CLONED)
-+		filter->dump_routes = false;
-+	else
-+		filter->dump_exceptions = false;
-+
-+	filter->flags    = rtm->rtm_flags;
-+	filter->protocol = rtm->rtm_protocol;
-+	filter->rt_type  = rtm->rtm_type;
-+	filter->table_id = rtm->rtm_table;
-+
-+	err = nlmsg_parse_deprecated_strict(nlh, sizeof(*rtm), tb, RTA_MAX,
-+					    rtm_ipv4_policy, extack);
-+	if (err < 0)
-+		return err;
-+
-+	for (i = 0; i <= RTA_MAX; ++i) {
-+		int ifindex;
-+
-+		if (!tb[i])
-+			continue;
-+
-+		switch (i) {
-+		case RTA_TABLE:
-+			filter->table_id = nla_get_u32(tb[i]);
-+			break;
-+		case RTA_OIF:
-+			ifindex = nla_get_u32(tb[i]);
-+
-+			filter->dev = dev_get_by_index_rcu(net, ifindex);
-+			if (!filter->dev)
-+				return -ENODEV;
-+			break;
-+		default:
-+			NL_SET_ERR_MSG(extack, "Unsupported attribute in dump request");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	if (filter->flags || filter->protocol || filter->rt_type ||
-+	    filter->table_id || filter->dev) {
-+		filter->filter_set = 1;
-+		cb->answer_flags = NLM_F_DUMP_FILTERED;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(ip_valid_fib_dump_req);
-diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
-index 8a3dc04e8cac..c507d53c6da6 100644
---- a/net/ipv4/fib_frontend.c
-+++ b/net/ipv4/fib_frontend.c
-@@ -684,29 +684,6 @@ int ip_rt_ioctl(struct net *net, unsigned int cmd, struct rtentry *rt)
- 	return -EINVAL;
- }
- 
--const struct nla_policy rtm_ipv4_policy[RTA_MAX + 1] = {
--	[RTA_UNSPEC]		= { .strict_start_type = RTA_DPORT + 1 },
--	[RTA_DST]		= { .type = NLA_U32 },
--	[RTA_SRC]		= { .type = NLA_U32 },
--	[RTA_IIF]		= { .type = NLA_U32 },
--	[RTA_OIF]		= { .type = NLA_U32 },
--	[RTA_GATEWAY]		= { .type = NLA_U32 },
--	[RTA_PRIORITY]		= { .type = NLA_U32 },
--	[RTA_PREFSRC]		= { .type = NLA_U32 },
--	[RTA_METRICS]		= { .type = NLA_NESTED },
--	[RTA_MULTIPATH]		= { .len = sizeof(struct rtnexthop) },
--	[RTA_FLOW]		= { .type = NLA_U32 },
--	[RTA_ENCAP_TYPE]	= { .type = NLA_U16 },
--	[RTA_ENCAP]		= { .type = NLA_NESTED },
--	[RTA_UID]		= { .type = NLA_U32 },
--	[RTA_MARK]		= { .type = NLA_U32 },
--	[RTA_TABLE]		= { .type = NLA_U32 },
--	[RTA_IP_PROTO]		= { .type = NLA_U8 },
--	[RTA_SPORT]		= { .type = NLA_U16 },
--	[RTA_DPORT]		= { .type = NLA_U16 },
--	[RTA_NH_ID]		= { .type = NLA_U32 },
--};
--
- int fib_gw_from_via(struct fib_config *cfg, struct nlattr *nla,
- 		    struct netlink_ext_ack *extack)
- {
-@@ -957,79 +934,6 @@ static int inet_rtm_newroute(struct sk_buff *skb, struct nlmsghdr *nlh,
- 	return err;
- }
- 
--int ip_valid_fib_dump_req(struct net *net, const struct nlmsghdr *nlh,
--			  struct fib_dump_filter *filter,
--			  struct netlink_callback *cb)
--{
--	struct netlink_ext_ack *extack = cb->extack;
--	struct nlattr *tb[RTA_MAX + 1];
--	struct rtmsg *rtm;
--	int err, i;
--
--	rtm = nlmsg_payload(nlh, sizeof(*rtm));
--	if (!rtm) {
--		NL_SET_ERR_MSG(extack, "Invalid header for FIB dump request");
--		return -EINVAL;
--	}
--
--	if (rtm->rtm_dst_len || rtm->rtm_src_len  || rtm->rtm_tos   ||
--	    rtm->rtm_scope) {
--		NL_SET_ERR_MSG(extack, "Invalid values in header for FIB dump request");
--		return -EINVAL;
--	}
--
--	if (rtm->rtm_flags & ~(RTM_F_CLONED | RTM_F_PREFIX)) {
--		NL_SET_ERR_MSG(extack, "Invalid flags for FIB dump request");
--		return -EINVAL;
--	}
--	if (rtm->rtm_flags & RTM_F_CLONED)
--		filter->dump_routes = false;
--	else
--		filter->dump_exceptions = false;
--
--	filter->flags    = rtm->rtm_flags;
--	filter->protocol = rtm->rtm_protocol;
--	filter->rt_type  = rtm->rtm_type;
--	filter->table_id = rtm->rtm_table;
--
--	err = nlmsg_parse_deprecated_strict(nlh, sizeof(*rtm), tb, RTA_MAX,
--					    rtm_ipv4_policy, extack);
--	if (err < 0)
--		return err;
--
--	for (i = 0; i <= RTA_MAX; ++i) {
--		int ifindex;
--
--		if (!tb[i])
--			continue;
--
--		switch (i) {
--		case RTA_TABLE:
--			filter->table_id = nla_get_u32(tb[i]);
--			break;
--		case RTA_OIF:
--			ifindex = nla_get_u32(tb[i]);
--
--			filter->dev = dev_get_by_index_rcu(net, ifindex);
--			if (!filter->dev)
--				return -ENODEV;
--			break;
--		default:
--			NL_SET_ERR_MSG(extack, "Unsupported attribute in dump request");
--			return -EINVAL;
--		}
--	}
--
--	if (filter->flags || filter->protocol || filter->rt_type ||
--	    filter->table_id || filter->dev) {
--		filter->filter_set = 1;
--		cb->answer_flags = NLM_F_DUMP_FILTERED;
--	}
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(ip_valid_fib_dump_req);
--
- static int inet_dump_fib(struct sk_buff *skb, struct netlink_callback *cb)
- {
- 	const struct nlmsghdr *nlh = cb->nlh;
-diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
-index e3bcc25229b0..3ce0f2611e69 100644
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -136,78 +136,6 @@ const struct fib_prop fib_props[RTN_MAX + 1] = {
- 	},
- };
- 
--static void rt_fibinfo_free(struct rtable __rcu **rtp)
--{
--	struct rtable *rt = rcu_dereference_protected(*rtp, 1);
--
--	if (!rt)
--		return;
--
--	/* Not even needed : RCU_INIT_POINTER(*rtp, NULL);
--	 * because we waited an RCU grace period before calling
--	 * free_fib_info_rcu()
--	 */
--
--	dst_dev_put(&rt->dst);
--	dst_release_immediate(&rt->dst);
--}
--
--static void free_nh_exceptions(struct fib_nh_common *nhc)
--{
--	struct fnhe_hash_bucket *hash;
--	int i;
--
--	hash = rcu_dereference_protected(nhc->nhc_exceptions, 1);
--	if (!hash)
--		return;
--	for (i = 0; i < FNHE_HASH_SIZE; i++) {
--		struct fib_nh_exception *fnhe;
--
--		fnhe = rcu_dereference_protected(hash[i].chain, 1);
--		while (fnhe) {
--			struct fib_nh_exception *next;
--
--			next = rcu_dereference_protected(fnhe->fnhe_next, 1);
--
--			rt_fibinfo_free(&fnhe->fnhe_rth_input);
--			rt_fibinfo_free(&fnhe->fnhe_rth_output);
--
--			kfree(fnhe);
--
--			fnhe = next;
--		}
--	}
--	kfree(hash);
--}
--
--static void rt_fibinfo_free_cpus(struct rtable __rcu * __percpu *rtp)
--{
--	int cpu;
--
--	if (!rtp)
--		return;
--
--	for_each_possible_cpu(cpu) {
--		struct rtable *rt;
--
--		rt = rcu_dereference_protected(*per_cpu_ptr(rtp, cpu), 1);
--		if (rt) {
--			dst_dev_put(&rt->dst);
--			dst_release_immediate(&rt->dst);
--		}
--	}
--	free_percpu(rtp);
--}
--
--void fib_nh_common_release(struct fib_nh_common *nhc)
--{
--	netdev_put(nhc->nhc_dev, &nhc->nhc_dev_tracker);
--	lwtstate_put(nhc->nhc_lwtstate);
--	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
--	rt_fibinfo_free(&nhc->nhc_rth_input);
--	free_nh_exceptions(nhc);
--}
--
- void fib_nh_release(struct net *net, struct fib_nh *fib_nh)
- {
- #ifdef CONFIG_IP_ROUTE_CLASSID
-@@ -639,38 +567,6 @@ static int fib_detect_death(struct fib_info *fi, int order,
- 	return 1;
- }
- 
--int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
--		       struct nlattr *encap, u16 encap_type,
--		       void *cfg, gfp_t gfp_flags,
--		       struct netlink_ext_ack *extack)
--{
--	int err;
--
--	nhc->nhc_pcpu_rth_output = alloc_percpu_gfp(struct rtable __rcu *,
--						    gfp_flags);
--	if (!nhc->nhc_pcpu_rth_output)
--		return -ENOMEM;
--
--	if (encap) {
--		struct lwtunnel_state *lwtstate;
--
--		err = lwtunnel_build_state(net, encap_type, encap,
--					   nhc->nhc_family, cfg, &lwtstate,
--					   extack);
--		if (err)
--			goto lwt_failure;
--
--		nhc->nhc_lwtstate = lwtstate_get(lwtstate);
--	}
--
--	return 0;
--
--lwt_failure:
--	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
--	nhc->nhc_pcpu_rth_output = NULL;
--	return err;
--}
--
- int fib_nh_init(struct net *net, struct fib_nh *nh,
- 		struct fib_config *cfg, int nh_weight,
- 		struct netlink_ext_ack *extack)
-@@ -1605,107 +1501,6 @@ struct fib_info *fib_create_info(struct fib_config *cfg,
- 	return ERR_PTR(err);
- }
- 
--int fib_nexthop_info(struct sk_buff *skb, const struct fib_nh_common *nhc,
--		     u8 rt_family, unsigned char *flags, bool skip_oif)
--{
--	if (nhc->nhc_flags & RTNH_F_DEAD)
--		*flags |= RTNH_F_DEAD;
--
--	if (nhc->nhc_flags & RTNH_F_LINKDOWN) {
--		*flags |= RTNH_F_LINKDOWN;
--
--		rcu_read_lock();
--		switch (nhc->nhc_family) {
--		case AF_INET:
--			if (ip_ignore_linkdown(nhc->nhc_dev))
--				*flags |= RTNH_F_DEAD;
--			break;
--		case AF_INET6:
--			if (ip6_ignore_linkdown(nhc->nhc_dev))
--				*flags |= RTNH_F_DEAD;
--			break;
--		}
--		rcu_read_unlock();
--	}
--
--	switch (nhc->nhc_gw_family) {
--	case AF_INET:
--		if (nla_put_in_addr(skb, RTA_GATEWAY, nhc->nhc_gw.ipv4))
--			goto nla_put_failure;
--		break;
--	case AF_INET6:
--		/* if gateway family does not match nexthop family
--		 * gateway is encoded as RTA_VIA
--		 */
--		if (rt_family != nhc->nhc_gw_family) {
--			int alen = sizeof(struct in6_addr);
--			struct nlattr *nla;
--			struct rtvia *via;
--
--			nla = nla_reserve(skb, RTA_VIA, alen + 2);
--			if (!nla)
--				goto nla_put_failure;
--
--			via = nla_data(nla);
--			via->rtvia_family = AF_INET6;
--			memcpy(via->rtvia_addr, &nhc->nhc_gw.ipv6, alen);
--		} else if (nla_put_in6_addr(skb, RTA_GATEWAY,
--					    &nhc->nhc_gw.ipv6) < 0) {
--			goto nla_put_failure;
--		}
--		break;
--	}
--
--	*flags |= (nhc->nhc_flags &
--		   (RTNH_F_ONLINK | RTNH_F_OFFLOAD | RTNH_F_TRAP));
--
--	if (!skip_oif && nhc->nhc_dev &&
--	    nla_put_u32(skb, RTA_OIF, nhc->nhc_dev->ifindex))
--		goto nla_put_failure;
--
--	if (lwtunnel_fill_encap(skb, nhc->nhc_lwtstate,
--				RTA_ENCAP, RTA_ENCAP_TYPE) < 0)
--		goto nla_put_failure;
--
--	return 0;
--
--nla_put_failure:
--	return -EMSGSIZE;
--}
--
--#if IS_ENABLED(CONFIG_IP_ROUTE_MULTIPATH) || IS_ENABLED(CONFIG_IPV6)
--int fib_add_nexthop(struct sk_buff *skb, const struct fib_nh_common *nhc,
--		    int nh_weight, u8 rt_family, u32 nh_tclassid)
--{
--	const struct net_device *dev = nhc->nhc_dev;
--	struct rtnexthop *rtnh;
--	unsigned char flags = 0;
--
--	rtnh = nla_reserve_nohdr(skb, sizeof(*rtnh));
--	if (!rtnh)
--		goto nla_put_failure;
--
--	rtnh->rtnh_hops = nh_weight - 1;
--	rtnh->rtnh_ifindex = dev ? dev->ifindex : 0;
--
--	if (fib_nexthop_info(skb, nhc, rt_family, &flags, true) < 0)
--		goto nla_put_failure;
--
--	rtnh->rtnh_flags = flags;
--
--	if (nh_tclassid && nla_put_u32(skb, RTA_FLOW, nh_tclassid))
--		goto nla_put_failure;
--
--	/* length of rtnetlink header + attributes */
--	rtnh->rtnh_len = nlmsg_get_pos(skb) - (void *)rtnh;
--
--	return 0;
--
--nla_put_failure:
--	return -EMSGSIZE;
--}
--#endif
--
- #ifdef CONFIG_IP_ROUTE_MULTIPATH
- static int fib_add_multipath(struct sk_buff *skb, struct fib_info *fi)
- {
-diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
-index 42e55b5a755e..ad79943376c5 100644
---- a/net/ipv4/nexthop.c
-+++ b/net/ipv4/nexthop.c
-@@ -1421,7 +1421,7 @@ static bool nexthop_is_good_nh(const struct nexthop *nh)
- 
- 	switch (nhi->family) {
- 	case AF_INET:
--		return ipv4_good_nh(&nhi->fib_nh);
-+		return IS_ENABLED(CONFIG_IPV4) && ipv4_good_nh(&nhi->fib_nh);
- 	case AF_INET6:
- 		return IS_ENABLED(CONFIG_IPV6) && ipv6_good_nh(&nhi->fib6_nh);
- 	}
-@@ -4005,7 +4005,8 @@ static int nh_netdev_event(struct notifier_block *this,
- 		break;
- 	case NETDEV_CHANGEMTU:
- 		info_ext = ptr;
--		nexthop_sync_mtu(dev, info_ext->ext.mtu);
-+		if (IS_ENABLED(CONFIG_IPV4))
-+			nexthop_sync_mtu(dev, info_ext->ext.mtu);
- 		rt_cache_flush(dev_net(dev));
- 		break;
- 	}
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index e3760daa3470..0e7fef5973db 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -615,6 +615,7 @@ static struct ctl_table ipv4_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_doulongvec_minmax,
- 	},
-+#if IS_ENABLED(CONFIG_IPV4)
- 	{
- 		.procname	= "fib_sync_mem",
- 		.data		= &sysctl_fib_sync_mem,
-@@ -624,6 +625,7 @@ static struct ctl_table ipv4_table[] = {
- 		.extra1		= &sysctl_fib_sync_mem_min,
- 		.extra2		= &sysctl_fib_sync_mem_max,
- 	},
-+#endif
- };
- 
- static const struct ctl_table ipv4_net_table[] = {
+Changes in v8:
+- New patch 4: use little-endian types for the FDMA descriptor fields.
+  On the PCIe path the descriptors live in host memory and are written
+  by the host CPU, which may be big-endian, while the FDMA engine reads
+  them little-endian. The fields become __le64 and are converted at the
+  library boundary; the dataptr/nextptr callbacks keep their u64
+  signatures, so sparx5 and lan969x need no changes. Checked with sparse
+  (-D__CHECK_ENDIAN__). No functional change on little-endian hosts.
+  Tested on lan966x (arm), sparx5 and lan969x (arm64), and lan966x over
+  PCIe on an x86 host, with no regressions. (Simon)
+- PCIe: read the RX block length through fdma_db_len_get() instead of
+  open-coding the status field, following patch 4.
+- Stickies: extend the comment to also mention the data-block sticky,
+  which is cleared alongside the error stickies.
+- Shutdown: reword the commit message to describe the tree at that
+  commit, noting where it relies on the PCIe FDMA backend added later
+  in the series.
+- Link to v7: https://lore.kernel.org/r/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c@microchip.com
+
+Changes in v7:
+
+Mostly a response to the automated review of v6. The notable change is
+that the resize-time MTU guards added in v6 are replaced by an advertised
+limit. v6 rejected an oversized MTU inside lan966x_fdma_pci_resize() with
+-ERANGE, which is late, and leaves dev->max_mtu advertising a range the
+PCIe path cannot honour. v7 derives the maximum from the same constants
+and publishes it in dev->max_mtu instead, so the core rejects the request
+up front and both -ERANGE returns become unreachable and are removed.
+Also, the shutdown() was refactored to not race with ndo's.
+
+- PCIe: cap dev->max_mtu on the PCIe path (FDMA_PCI_MAX_MTU), derived
+  from the contiguous ring having to fit one MAX_PAGE_ORDER block after
+  padding to the ATU region granularity, and from db_size having to fit
+  the 16-bit DCB DATAL field. On a 4KB-page, MAX_PAGE_ORDER=10 build that
+  is MTU 15498. Both resize-time -ERANGE checks are removed with it.
+- PCIe: factor the frame overhead into LAN966X_FDMA_OVERHEAD and use it
+  for both the cap and lan966x_fdma_get_max_frame(), so it is not
+  open-coded twice.
+- PCIe: skip the resize while the FDMA is not initialised. The rings are
+  built by lan966x_fdma_pci_init(), which runs after the netdevs are
+  registered, so an MTU change in that window would dereference NULL.
+- PCIe: comment why NAPI has to be enabled before the queues are woken in
+  the MTU reload path.
+- shutdown(): rework the quiesce ordering. Free the xtr, ana and FDMA
+  irqs first so no source can assert INTx, mask ANA_ANAINTR whether or not
+  the FDMA is in use, then disable NAPI, stop and detach the netdevs,
+  disable the FDMA channels, clear the FDMA interrupt enables and unmap
+  the ATU windows.
+- ATU: document the alignment requirement and -EINVAL at
+  fdma_pci_atu_region_map(), document at fdma_pci_atu_translate_addr()
+  that the caller must quiesce DMA and the descriptor paths before
+  unmapping a region, initialise the region bookkeeping explicitly in
+  fdma_pci_atu_init(), and fix the comment on the upper limit register.
+- Patch 3 commit message: drop the claim that the patch adds PCIe FDMA
+  support; it adds the helpers the lan966x path later uses.
+
+Reported by the v6 review and deliberately not fixed here, because the
+code is pre-existing and the fixes want a Fixes: tag:
+
+- register_netdev() and the FDMA irq request both happen before
+  ops->fdma_init(), so an MTU change or a stale interrupt can reach an
+  uninitialised FDMA. Pre-existing on the platform path; the fix is a
+  reorder of the shared probe, which I will send against net. The skip
+  above closes the MTU-change half on PCIe in the meantime.
+- lan966x_hw_offload() frees the caller's skb and reports only a bool.
+  Pre-existing, all three callers affected. Goes to net with
+  Fixes: 6476f90aefaf.
+- The platform XDP hook leaves the FCS in the window handed to the BPF
+  program, while the PCIe hook strips it. Pre-existing. Goes to net with
+  Fixes: 6a2159be7604.
+- Link to v6: https://lore.kernel.org/r/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671@microchip.com
+
+Changes in v6:
+
+The main change is a DMA bug on the PCIe path, found after enabling the
+IOMMU on the test host. The rest is hardening and cleanup.
+
+- New patch 6: use a dedicated device for DMA operations. On the PCIe
+  path lan966x->dev is the platform device created by
+  of_platform_default_populate(), which carries no iommus/dma-ranges of
+  its own, so it is not the device the IOMMU has a domain for. DMA
+  mapped against it lands outside the domain the endpoint's requester ID
+  is associated with. With the IOMMU enabled, AMD-Vi reported
+  IO_PAGE_FAULT for the endpoint and no traffic passed. All FDMA DMA now
+  targets the real PCIe endpoint device. Retested with the IOMMU in
+  translated (DMA-FQ) mode.
+- ATU: serialise region allocation/free and ATU register access with a
+  mutex.
+- ATU: program the region limit per mapping (base_addr + size - 1)
+  instead of the full region bound, and disable every region in
+  fdma_pci_atu_init().
+- ATU: return -ERANGE instead of -E2BIG when the requested size exceeds
+  the region size, and clear fdma->atu_region on unmap.
+- PCIe FDMA: check fdma_dcbs_init() and unwind the coherent allocation
+  and the ATU mapping on failure.
+- PCIe FDMA: drop the WARN_ON() on an out-of-range src_port; a malformed
+  IFH should not be able to splat the host.
+- Quiesce consistently in shutdown, deinit and the MTU reload: stop the
+  netdev queues and NAPI before disabling the FDMA channels, and share
+  one lan966x_fdma_tx_disable_netdev() helper instead of open-coding it
+  per path.
+- shutdown: also mask ANA_ANAINTR, which shares the PCIe INTx with the
+  FDMA sources.
+- MTU change: reject an MTU whose ring would not fit in a single
+  MAX_PAGE_ORDER coherent block, and reject one whose db_size would be
+  truncated by the 16-bit DCB DATAL field, rather than programming a
+  wrong buffer length.
+- Assign lan966x->ops directly in the ops dispatch patch, so that patch
+  no longer adds a helper returning a single constant; PCI detection now
+  derives from dma_dev and arrives with the PCIe implementation.
+- ATU: reject a target address that is not aligned to the 64KB ATU region
+  granularity, instead of programming a translation offset by the
+  misalignment.
+- Drop the CONFIG_MCHP_LAN966X_PCI guard around the fdma_pci.h include in
+  fdma_api.h (Jakub).
+- Use ifneq ($(CONFIG_MCHP_LAN966X_PCI),) instead of ifdef in both the fdma
+  and lan966x Makefiles; the symbol is tristate, so the condition has to
+  cover both y and m (Jakub).
+- Reprogram the FDMA LLP registers on the platform reload restore path,
+  which stopped happening when the LLP write moved into the allocation
+  functions.
+- XDP: drop the napi_synchronize() before freeing the old program on the
+  PCIe path; READ_ONCE() on port->xdp_prog plus the RCU-deferred
+  bpf_prog_put() already cover the in-flight poll.
+- XDP: note that the ETH_ZLEN floor is deliberately not enforced on XDP_TX.
+- PCIe FDMA: count tx_dropped when the DCB ring is full.
+- PCIe FDMA: guard the deinit napi_disable() on fdma_ndev, as shutdown()
+  already does; NAPI is only initialised on the first ndo_open.
+- ATU: program the region translation before enabling the region.
+- ATU: pad the mapped allocation to the 64KB outbound region granularity,
+  so the window does not extend past the coherent allocation.
+- ATU: reject mapping an fdma that already holds a region, instead of
+  overwriting the handle and leaking the old mapping. The MTU reload clears
+  the handle on the live rings first, since it keeps the old mapping alive
+  until the new rings are in place.
+- PCIe FDMA: declare the RX DCB DATAL as the space actually available to the
+  extraction engine (db_size - XDP_PACKET_HEADROOM), since the data block
+  pointer starts that far into the slot.
+- Move the XDP-unsupported guards from the XDP patch into the PCIe FDMA
+  patch, so that no intermediate commit advertises NETDEV_XDP_ACT_NDO_XMIT
+  for a PCIe instance while tx->dcbs_buf is NULL, and none lets an XDP
+  attach reach the platform page_pool reload. The final tree is unchanged.
+- shutdown: take rtnl, so it cannot interleave with the rtnl-only reload
+  paths and double-disable the NAPI, which would spin forever in
+  napi_disable().
+- Link to v5: https://lore.kernel.org/r/20260520-lan966x-pci-fdma-v5-0-ca56197ae05b@microchip.com
+
+Changes in v5:
+
+This version fixes a single AI review issue, flagged by Paolo. Other AI
+issues  for v4 has been classified as pre-existing or changes for
+follow-ups.
+
+- Fix premature napi_complete_done() in lan966x_fdma_pci_napi_poll() on
+  FDMA_ERROR and napi_alloc_skb() failure. Bailing out left DONE=1 DCBs
+  in the ring with no IRQ to drain them. Drop the frame and continue
+  the poll loop instead. Bump rx_dropped on memory-pressure drop.
+  (Paolo)
+- Link to v4: https://lore.kernel.org/r/20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com
+
+Changes in v4:
+- Consolidate rx size checks into lan966x_fdma_pci_rx_size_fits().
+  Subtract XDP_PACKET_HEADROOM on the max size check, and add ETH_HLEN
+  on the min size check. This fixes potential OOB reads/writes.
+- On xdp_prepare_buff(), update comment to clarify that data is already
+  offset by XDP_PACKET_HEADROOM.
+- Link to v3:
+  https://lore.kernel.org/r/20260504-lan966x-pci-fdma-v3-0-a56f5740d870@microchip.com
+
+Changes in v3:
+
+Version 3 fixes a number of issues reported by sashiko - mostly
+hardening.
+
+- Fix double use of XDP_PACKET_HEADROOM.
+- Fix ERR_PTR persistence in fdma->atu_region and add missing
+  NULL/ERR_PTR guard in fdma_pci_atu_region_unmap().
+- Reject size <= 0 in fdma_pci_atu_region_map() and return
+  -ENOSPC (was -ENOMEM) when no region is free.
+- Introduce lan966x_fdma_pci_tx_size_fits() that accounts for
+  XDP_PACKET_HEADROOM; use it from both xmit paths to keep
+  bpf_xdp_adjust_tail from writing past the TX slot.
+- Validate BLOCKL in rx_check_frame() (reject < IFH+FCS or
+  > db_size) before it feeds memcpy/XDP sizes.
+- READ_ONCE(port->xdp_prog) inside lan966x_xdp_pci_run() to close
+  a TOCTOU on XDP detach that could deref NULL in
+  bpf_prog_run_xdp().
+- Strip IFH and FCS pre-XDP in rx_check_frame(). After BPF runs
+  the driver cannot tell whether the tail was modified; drop the
+  unconditional skb_pull/skb_trim in rx_get_frame().
+- Account tx_bytes/tx_packets on XDP_TX success and tx_dropped on
+  XDP_TX size reject.
+- Add dma_wmb()/dma_rmb() around DCB status writes and reads in
+  xmit, xmit_xdpf, and napi_poll.
+- Collected Tested-by: Hervé Codina.
+- Link to v2: https://lore.kernel.org/r/20260428-lan966x-pci-fdma-v2-0-d3ec66e06202@microchip.com
+
+Changes in v2:
+
+Version 2 primarily addresses issues with module unload/load, where
+traffic would stop working (Hervé), and XDP head/tail adjust that would be
+discarded (Mohsin).
+
+Apart from that, I ran through issues reported by Sashiko, and fixed a
+number of other issues.
+
+- New patch 1: add drivers/net/ethernet/microchip/fdma/ to the Sparx5
+  SoC MAINTAINERS entry.
+- New patch 7: clear latched FDMA error/interrupt stickies after the
+  switch reset so they don't fire as soon as interrupts are enabled.
+- New patch 8: shutdown() callback, quiescing FDMA on host warm reboot.
+- Replaced the depth-2 dev_is_pci(parent->parent) backend selector
+  with a parent-chain walk.
+- XDP: use xdp.data/xdp.data_end for the post-XDP frame length so that
+  bpf_xdp_adjust_head/tail are respected (Mohsin Bashir)
+- MTU change: drain in-flight xmits with netif_tx_disable() on every
+  port before reallocating rings, waking them again on completion.
+- MTU change: cap the PCIe DCB ring at 256 entries so a full-ring
+  coherent DMA allocation fits in a single MAX_PAGE_ORDER block at
+  jumbo MTU.
+- PCIe ATU: disable the region before clearing its translation on
+  unmap.
+- PCIe FDMA: hold tx_lock in napi_poll around the free-DCB check used
+  to wake stopped netdev queues.
+- PCIe FDMA: return -ENOSPC (not -1) when the DCB ring is exhausted.
+- Link to v1: https://lore.kernel.org/r/20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com
+
+---
+Daniel Machon (15):
+      MAINTAINERS: add FDMA library to Sparx5 SoC entry
+      net: microchip: fdma: rename contiguous dataptr helpers
+      net: microchip: fdma: add PCIe ATU support
+      net: microchip: fdma: use little-endian types for descriptor fields
+      net: lan966x: add FDMA LLP register write helper
+      net: lan966x: export FDMA helpers for reuse
+      net: lan966x: use a dedicated device for DMA operations
+      net: lan966x: add FDMA ops dispatch for PCIe support
+      net: lan966x: clear FDMA interrupt stickies after switch reset
+      net: lan966x: add shutdown callback to stop the FDMA on reboot
+      net: lan966x: add PCIe FDMA support
+      net: lan966x: add PCIe FDMA MTU change support
+      net: lan966x: add PCIe FDMA XDP support
+      misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
+      misc: lan966x-pci: dts: add fdma interrupt to overlay
+
+ MAINTAINERS                                        |   1 +
+ drivers/misc/lan966x_pci.dtso                      |   5 +-
+ drivers/net/ethernet/microchip/fdma/Makefile       |   4 +
+ drivers/net/ethernet/microchip/fdma/fdma_api.c     |  65 +-
+ drivers/net/ethernet/microchip/fdma/fdma_api.h     |  42 +-
+ drivers/net/ethernet/microchip/fdma/fdma_pci.c     | 208 ++++++
+ drivers/net/ethernet/microchip/fdma/fdma_pci.h     |  57 ++
+ drivers/net/ethernet/microchip/lan966x/Makefile    |   4 +
+ .../net/ethernet/microchip/lan966x/lan966x_fdma.c  |  97 ++-
+ .../ethernet/microchip/lan966x/lan966x_fdma_pci.c  | 731 +++++++++++++++++++++
+ .../net/ethernet/microchip/lan966x/lan966x_main.c  | 121 +++-
+ .../net/ethernet/microchip/lan966x/lan966x_main.h  |  69 ++
+ .../net/ethernet/microchip/lan966x/lan966x_regs.h  |  25 +
+ .../net/ethernet/microchip/lan966x/lan966x_xdp.c   |   6 +
+ 14 files changed, 1357 insertions(+), 78 deletions(-)
+---
+base-commit: 014d795c73837ea2339a4ea8e8f82c6e959b845d
+change-id: 20260313-lan966x-pci-fdma-94ed485d23fa
+
+Best regards,
 -- 
-2.55.0
+Daniel Machon <daniel.machon@microchip.com>
 
