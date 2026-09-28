@@ -1,54 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D7B499F1E;
-	Mon, 28 Sep 2026 22:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7DF499F0C;
+	Mon, 28 Sep 2026 22:39:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790635015; cv=none; b=KX0NeGBKjZZnECqRUMLQcvV4UBQx1Z4WgL9ilikWP1iL+1rELBb2DDQ5599aqkTszXJIkWQGjZugX6pVDX5huUwlpc/geP2XWI30YImxz89UkltDe16ThqzdVVAytU8D0lDUCJBb46JSqkHzoMiPIo10MlF1UjBbY4wTTIC+0UQ=
+	t=1790635159; cv=none; b=m2LqIiqeCqA5gF0u94rKbDwAWuO4XgY20uMJzCdCpC3/k550Kgp1AxOKC2NbqSNfaoj8/W7xRNKD5vJuTjQ7M6mNC0+HBoqjAqN9zpPPvZ1RhNCyY8i8S0g1MtdrTPsczigBP4AzWDDRlyYqOPTMu7inaf6BupyqVzaNx4YH0PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790635015; c=relaxed/simple;
-	bh=NqBNE51bJx4UPSYMjOt1UjkT6HegT2zBHYDaKQlQUAY=;
+	s=arc-20240116; t=1790635159; c=relaxed/simple;
+	bh=P+s+U8O+yVO/12ZXol6bRvfjkFAxEXGnv3nDTRHGEss=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fsLk9yqhghn6QQCLHZDLxnsuPMLF0K7mwUr3riz2+Chm/1WcfaaI9HC0MIjlmI8hGO9T9swKfneI910no7zlFKGTkzORVj0Sp1mJuNYxBkJhhnLoovYK/VdzaTE6PZtD+1+tuUnKpmKmpq+mnhyeaWCqQQQpptYSmsfxTMf1Oek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ii9hsZaB; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=nHwfZ3dwM7ooCYdx4CVhXucE4kOQGtpxNK9kaZIaKWIsFZxdRyMH7gdIGHCoK/B4+/OUpbls75OXkc4ihDqUvq4LElF8xncuFKGmMgADvpjM+GdkwlSGKafp2TzH0M6fQyJLWKFQv7EAfCp6c+UGZ7FKNX2VkM641JMUGiDVdBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMf83G5b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ii9hsZaB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDBA1F00899;
-	Mon, 28 Sep 2026 22:36:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMf83G5b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F091F00893;
+	Mon, 28 Sep 2026 22:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790635013;
-	bh=fI+zezBWtJo4PhVH2Jn+7LYv6E+83YkjR2yJzrkGXm8=;
+	s=k20260515; t=1790635157;
+	bh=xMdyLjftnH/OJ8gRUrodvRCRgcmw687ttfCXUGdrh1Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Ii9hsZaBEoKorMBwVo+0DoFtJwJsurfvBv+3dndeEYJx7kdW85xFgBI2b8F3b6pax
-	 jv7bh13fK7lgyOnB+gqzEjIS/xqesNNSNHOlxVDpPXDesp7UpBDcmdV2z0dRyepu1q
-	 ilWwq+mgksUVxjV1Y7krSkXE1/2rZvaMAc9Fm0s2HOGl7LedYMR1c+YqfCC9CeieRJ
-	 iqDJzmruUBySalsHrI7lIGTIF26IGkQbzF1BJgnCNQFyVU8S0pBQbYZo0GHtu68qtk
-	 0jEVEpthqudxx1woGIkVTtRVuUZECL7DdZicwN5IU+Zl9yFDAL5I2xdt2TrOn01irX
-	 Hha0XCp7eQMYw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	jv@jvosburgh.net,
-	hawk@kernel.org,
-	sdf@fomichev.me,
-	emil@etsalapatis.com,
-	liuhangbin@gmail.com,
+	b=dMf83G5bLsgk1PZ9VYjbqGvihVyC8tlO0yw8Vh2rYHhieN4jeBGarXZGAmUxxxLCU
+	 XMPzzY+PayQPKDdGUeV+k2Bh3rJis4eVenUWW7SYKfJztLrMBorhqGFIeuajQjB7Rl
+	 TcUJvRRRRx+e1c+t4wJKTj0xrbgtbW+2ZCqNQBiS6426kviPf98bcGptj4qwzfjCRs
+	 FQRnWLLyjSaTwlVN8Cem2rWWfBD2HQQ6WTN6agPwn50FKdT4Yed9vzYsFwvcB1EXI1
+	 PglIfQ1yOW3OEOB/l9rpgZ4K0xEeDZWehLHqloJBMh2HniJgoweTd6EDXpY/ugKkqw
+	 x8yqlvv9RyLFg==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org
+Cc: Sasha Levin <sashal@kernel.org>,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	willemdebruijn.kernel@gmail.com,
-	aleksander.lobakin@intel.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 5/5] net: drop GSO skbs instead of handing them to XDP
-Date: Mon, 28 Sep 2026 15:36:48 -0700
-Message-ID: <20260928223648.2739371-6-kuba@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260928223648.2739371-1-kuba@kernel.org>
-References: <20260928223648.2739371-1-kuba@kernel.org>
+	Pablo Greco <psgreco@gmail.com>
+Subject: Re: [BUILD BUG] tools/bpf broken in v5.15.221 stable due to backport [7140c9e5e460ee11172ea6c1a6e368b29923003d]
+Date: Mon, 28 Sep 2026 18:39:07 -0400
+Message-ID: <2026-09-28-2-daily-reply-0003-re-bpftool-5-15-build-break@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <CAK9Zeh8NgWCdXy6dUiakqy+L+fieU8NJxJNxPadbF0UPHWUqyQ@mail.gmail.com>
+References: <CAK9Zeh8NgWCdXy6dUiakqy+L+fieU8NJxJNxPadbF0UPHWUqyQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,107 +45,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-skb BPF paths have a number of helpers to fix up the GSO
-state after packet modifications. XDP has no such support.
+> IIUC, both issues could be fixed by porting also
+> 4178893465774f91dcd49465ae6f4e3cc036b7b2,
+> 22dd7a58b2e9965c1a612b6a09c4a6146cbb5873 (along with their
+> predecessors)
+>
+> or by reverting 7140c9e5e460ee11172ea6c1a6e368b29923003d and its successors.
+>
+> Please advise on how to proceed.
 
-"Real" / driver XDP runs before the SW GRO, and drivers generally
-disable HW-GRO when XDP is attached (with the exception of IDPF,
-story for another time), so this is not an issue. We also try
-to disable HW-GRO and elide SW GRO when generic XDP prog is
-attached. These precautions are not 100% today, and IMHO fixing
-that is impossible. Let's explicitly drop GSO skbs on input to XDP.
+Please don't backport the libbpf API changes. 7140c9e5e460 ("bpftool:
+Update btf_dump__new() and perf_buffer__new_raw() calls") only came in
+as context for 66d7e39e49b0 ("tools/bpf/bpftool: Reset vmlinux BTF
+after map commands"), and changing libbpf's API in 5.15 to carry it
+isn't worth it.
 
-First example how things can go sideways today - bonding.
-We only disable & elide GRO on the device to which program is
-attached. Nothing reaches the devices below it, and for a stacked
-device that is where the packets come from:
+Reverting only that commit builds cleanly here. It conflicts in btf.c
+and gen.c with 44f58f0c5202 ("bpftool: Use libbpf_get_error() to check
+error"): put the btf_dump__new() calls back to the 5.15 argument order
+and keep the libbpf_get_error() checks. Those two files matter even
+where they only warn, since with the new argument order printf_fn is
+NULL on 5.15 and 'bpftool btf dump ... format c' crashes. The rest of
+the chain, including the vmlinux BTF reset fix, can stay.
 
-  ip link set dev bond0 xdpgeneric obj prog.o sec xdp
+Nothing is queued for this yet.
 
-leaves every slave with GRO on and no xdp_prog of its own, so
-netif_elide_gro() lets them coalesce as usual. bond_handle_frame()
-then returns RX_HANDLER_ANOTHER, __netif_receive_skb_core() loops back
-round to another_round with skb->dev switched to the bond, and the
-program gets handed a packet which was never on the wire. HW-GRO is
-the same story - while netif_disable_lro() walks the lower devices,
-its HW-GRO counterpart never did (this is largely the point of
-distinguishing between LRO and HW-GRO).
-
-Example two - veth. Generic XDP on a veth gets there by a different route.
-veth_xdp_set() takes NETIF_F_GSO_SOFTWARE away from the peer so that
-no GSO skb is ever built for a device running XDP, but generic XDP does
-not go through ndo_bpf, so none of that happens.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- include/net/xdp.h  | 16 ++++++++++++++++
- drivers/net/veth.c |  3 +++
- net/core/dev.c     |  4 ++++
- 3 files changed, 23 insertions(+)
-
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index aa742f413c35..5a234aab1e1c 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -291,6 +291,22 @@ static inline bool xdp_buff_add_frag(struct xdp_buff *xdp, netmem_ref netmem,
- 	return true;
- }
- 
-+/**
-+ * xdp_skb_feature_check() - can this skb be handed to an XDP program?
-+ * @skb: skb about to be turned into an xdp_buff
-+ *
-+ * Return: true if the skb must not reach the program and has to be dropped.
-+ */
-+static inline bool xdp_skb_feature_check(const struct sk_buff *skb)
-+{
-+	if (likely(!skb_is_gso(skb)))
-+		return false;
-+
-+	net_warn_ratelimited("%s: dropping coalesced packet before XDP, receive offloads are still on\n",
-+			     skb->dev->name);
-+	return true;
-+}
-+
- struct xdp_frame {
- 	void *data;
- 	u32 len;
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 71227d0389aa..5635037e3b60 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -756,6 +756,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 	struct sk_buff *skb = *pskb;
- 	u32 frame_sz;
- 
-+	if (unlikely(xdp_skb_feature_check(skb)))
-+		goto drop;
-+
- 	if (skb_shared(skb) || skb_head_is_locked(skb) ||
- 	    skb_is_nonlinear(skb) ||
- 	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 096d1dedebfd..fbeb3df4c11f 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -158,6 +158,7 @@
- #include <linux/once_lite.h>
- #include <net/netdev_lock.h>
- #include <net/netdev_rx_queue.h>
-+#include <net/xdp.h>
- #include <net/page_pool/types.h>
- #include <net/page_pool/helpers.h>
- #include <net/page_pool/memory_provider.h>
-@@ -5516,6 +5517,9 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
- 	u32 metalen, act;
- 	int off;
- 
-+	if (unlikely(xdp_skb_feature_check(skb)))
-+		return XDP_DROP;
-+
- 	/* The XDP program wants to see the packet starting at the MAC
- 	 * header.
- 	 */
 -- 
-2.55.0
-
+Thanks,
+Sasha
