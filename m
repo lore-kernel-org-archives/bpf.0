@@ -1,238 +1,215 @@
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795CF37D110;
-	Mon, 28 Sep 2026 19:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA01353A7F;
+	Mon, 28 Sep 2026 19:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790624849; cv=none; b=nzGeWiIJ2z69ZY44akosPPfSVM/PMO6ledgtv3A+irMXMYWNfuNcgJBFclJLbHsYGWmTnCHXUQLZWXZdWdlSvJ+wKlu/hViuXoFvFFs39ToFHUAAZSo2/ShvXqQI3imK/Gx2rZ6v+3b3l+0t8JBsOPu1mIak9oMGtEALiMCn9qo=
+	t=1790624949; cv=none; b=Y2ZMWy0w7bD3XjWrnei81/ix8l/Ou547lY1rMvQZYeVEzqMdnvU38z/s+mYrzS9UeWmK2jCUeOGA1VmdSe0h4JRiD8gaxePqq8U7WjdnKtE985Wa/xM3PGe7igNCn+Z8RNoZ2rSSHy6Or/mJk6mAQuKY2R3jNbMKMWT3kq9ACTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790624849; c=relaxed/simple;
-	bh=U+kqju76cNoJQVhw6/DyvDJkrDhq+++/O9NLhBaWyAU=;
+	s=arc-20240116; t=1790624949; c=relaxed/simple;
+	bh=+n0gYPk+JRkIbFK1wIkwVMj03UuedrHR7yRES1xA1fs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KcPoINpmosPhRJ08PXcFMg8vWICe+rGjEpBSLmO0wNi+CzFBwQrK5iauvva1uKXfj6mWkoY+KkYPSbeAnDZaUKxQkL+rEfv57cFTAofbuphlys2BxunKlV2SikInu3NJtYQ6Wp4mBmq6ylGWPpMxFZNwRW8fvzGxsf220nrpU+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=kxjEERuW; arc=none smtp.client-ip=83.166.143.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=HG/U3AAx5RchT9ukSC0Qvv5CQucFUO4Ln8pfeeJFZi9rP4+PkrrotGe6tq7x4STcZxc6wM/ek2vRiJUl5ymqtxSdHttrROwSk0XeW/Jyy7VMODkD7pZdkvhVyFUGd+rwIW6FiDfNnBW7lJgxB4QRoCVdpr646AGBCIUArGC8t48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1UpVHdb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="kxjEERuW"
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4htsK66G5jznW5;
-	Mon, 28 Sep 2026 21:47:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1790624842;
-	bh=+VdTVqBVlfaHaioRFQvSt61ywqOeh3oyx/gpUYheHVw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kxjEERuWtRNOkoKYbnyFMJQOilbAHdkBxlSQMMZMvjbqPrsq2eMZbZvAL/F1Lg8wr
-	 hZmXb9TizZwTXzGEERZSbI2gk8zdZKkYDQsk+a7k5MydGnxkPjmDiTH92dVoV3de77
-	 Dqw46RQmrVe5y7Ys5yBJNPv2q4pSUH00ZdtLOuvg=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4htsJl14b7z2g4;
-	Mon, 28 Sep 2026 21:47:03 +0200 (CEST)
-Date: Mon, 28 Sep 2026 21:46:59 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>, 
-	gnoack@google.com, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
-	corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, dlemoal@kernel.org, 
-	hch@lst.de, axboe@kernel.dk, viro@zeniv.linux.org.uk, brauner@kernel.org, 
-	jack@suse.cz, dhowells@redhat.com, code@tyhicks.com, linkinjeon@kernel.org, 
-	sj1557.seo@samsung.com, yuezhang.mo@sony.com, hirofumi@mail.parknet.co.jp, 
-	cel@kernel.org, jlayton@kernel.org, neil@brown.name, okorniev@redhat.com, 
-	Dai.Ngo@oracle.com, tom@talpey.com, miklos@szeredi.hu, amir73il@gmail.com, 
-	senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	stephen.smalley.work@gmail.com, omosnacek@gmail.com, casey@schaufler-ca.com, nanx95726@gmail.com, 
-	djwong@kernel.org, daniel@iogearbox.net, linux-security-module@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, driver-core@lists.linux.dev, 
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev, 
-	ecryptfs@vger.kernel.org, exfat@lists.linux.dev, linux-nfs@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-cifs@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, xiujianfeng@huawei.com, 
-	lujialin4@huawei.com, bpf@vger.kernel.org, kpsingh@kernel.org, matt@bobrowski.net, 
-	alexei.starovoitov@gmail.com
-Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-Message-ID: <20260928.phei6Ohmeiba@digikod.net>
-References: <20260924104831.1081137-1-caixinchen1@huawei.com>
- <20260926.e0135fe7712f@gnoack.org>
- <a6a40c38-0e1c-4a3f-a705-e4a38c575c25@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K1UpVHdb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9F91F000FF;
+	Mon, 28 Sep 2026 19:49:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790624947;
+	bh=jdHpFCmsfbMWILh+4zQbXzTgvExVPPbHVQNyp37fwu8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=K1UpVHdbtKLuk0b6PGJwnkcMiQQc3FOtgp5i3jPSjc03nPPVWKJdRDDdCcoeo/JYz
+	 ab6rp54bO+xE+cQVGENaJOpeQHykZTq08O5djVbP1x6QarrPDCUT6usoart9BrVN8P
+	 exFxTaGfz1qKavaskz0rXWSPeg8og50p0Yd/s1iUTGKI0czkfywCXDWKIZQH9p/Kyb
+	 U+SNhQ4ngEIfBnXPjoH1p7KE++RQn4cu3SYKv52+Aud9Gjy8+4689hKOj+Xw1S4OAy
+	 KbiSdHV0nazW5sHdc5wG7ljabqYltoksk0H4xkxQGCHQwgr1RlxClJ9oaGn3DC6olh
+	 jRna+5Lr3DITQ==
+Date: Mon, 28 Sep 2026 21:48:58 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Maxime Ripard <mripard@kernel.org>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+Message-ID: <arrAqg5n87INTHE6@beelink>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
+ <arqhwHiVf00j94J7@beelink>
+ <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a6a40c38-0e1c-4a3f-a705-e4a38c575c25@huawei.com>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
 
-Thank for this patch series!
-
-I'll send more reviews tomorrow, but in the meantime here are some
-answers:
-
-On Mon, Sep 28, 2026 at 02:52:02PM +0800, Cai Xinchen wrote:
-> Thank you for review!
-> 
-> I will link the feature request
-> (https://github.com/landlock-lsm/linux/issues/11) in the v2 cover letter.
-> 
-> For https://github.com/landlock-lsm/linux/issues/18, the current
-> READ_METADATA cannot solve this problem, and I don't have a good idea for
-> now.
-> 
-> For path_* rename, I'd rather keep the inode_* names:
-> 
-> * There is precedent for the mismatch: the inode_getattr hook
->   upstream already takes a "const struct path *" (this series just
->   aligns the other metadata hooks with it).
-> 
-> * The path_* prefix has an established meaning in the LSM hook
->   interface: it denotes the pathname-based (TOMOYO/AppArmor-style)
->   hooks that are invoked at the VFS path level *before* the
->   corresponding inode_* hook, as a paired, duplicate check
->   serving a different class of LSMs.  For example, a chmod(2)
->   currently runs security_path_chmod() (fs/open.c, for TOMOYO and
->   AppArmor) and then, via notify_change(),
->   security_inode_setattr() (for SELinux, Smack and now Landlock);
->   vfs_mknod() similarly calls both security_path_mknod() and
->   security_inode_mknod().  Renaming inode_setattr to
->   path_setattr would put two path_-prefixed hooks with different
->   call contracts into the same syscall, and path_chown(path,
->   uid, gid) next to a path_setattr(path, attr) would read as a
->   redundant pair, even though they belong to different hook
->   families.  Landlock itself already uses the path_* family for
->   its real path-level hooks (e.g. path_truncate for the TRUNCATE
->   right), so mixing renamed inode hooks into that prefix would
->   also blur its own hook table.
-
-I had the same though as Günther on this, but I'll leave that up to
-Paul.
-
-Regarding the BPF LSM use case, I don't think it would make a big
-difference.  Anyway, some BPF selftests need to be updated at the same
-time, which will also make the changes clear to the BPF folks.
-
-> 
-> * If the consensus is that these hooks should be renamed, I think
->   that should be a standalone, tree-wide rename series (including
->   inode_getattr), so that BPF programs only break once instead of
->   twice.
-
-As a general rule, please create bisectable patches (e.g. any patch must
-pass BPF and Landlock selftests; all dependent kernel code must build).
-But new tests still deserve their own patches.
-
-> 
-> On 9/26/2026 4:27 PM, Günther Noack wrote:
-> > On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
-> > > This series adds two new Landlock filesystem access rights,
-> > > LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
-> > > which control access to file and directory metadata such as inode
-> > > attributes (mode, ownership, timestamps), extended attributes and POSIX
-> > > ACLs.  It picks up the work from the "landlock: add chmod and chown
-> > > support" series [1] and follows the coarse-grained grouping discussed in
-> > > that thread [2]: instead of separate chmod/chown rights, metadata
-> > > operations are grouped into one read and one write right.
+On Sep 28 2026, Neil Armstrong wrote:
+> On 9/28/26 19:24, Benjamin Tissoires wrote:
+> > On Sep 28 2026, Neil Armstrong wrote:
+> > > Hi,
 > > > 
-> > > Landlock evaluates access rights on a per-path basis, but the metadata
-> > > related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
-> > > inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
-> > > inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
-> > > object.  Patches 1-7 therefore first pass struct path instead of dentry
-> > > through the metadata-related VFS helpers and LSM hooks.  This is a pure
-> > > refactoring with no behavior change, split so that every patch builds
-> > > and works on its own:
+> > > On 9/28/26 18:22, Maxime Ripard wrote:
+> > > > Hi,
+> > > > 
+> > > > Panels in general, and MIPI-DSI panels in particular, are pretty
+> > > > difficult to support and require pretty much a panel driver for each
+> > > > panel produced. Most of them are pretty simple, and require an opaque
+> > > > initialization sequence that is usually poorly documented.
+> > > > 
+> > > > This creates a tension between OEMs and distros because OEMs will
+> > > > typically get a new panel to react to a sourcing issue during
+> > > > production, and thus need some swift turnaround between getting their
+> > > > new panel and it being operational in the OS. Distributions on the other
+> > > > hand can take years to ship a kernel with that new panel driver.
+> > > > 
+> > > > To solve this, I followed the example of HID-BPF and wrote a panel
+> > > > driver that will rely on BPF programs to perform the panel
+> > > > initialization. That way, we can ship the programs separately from the
+> > > > kernel, and with a different lifecycle. If this driver is accepted, the
+> > > > plan is to have a userspace component started by udev to identify and
+> > > > load the right BPF program for the panels found on the device.
 > > > 
-> > >    1: notify_change() and its callers
-> > >    2: inode_setsecctx hook (must come before 3: the SELinux and Smack
-> > >       implementations call __vfs_setxattr_locked internally)
-> > >    3: xattr helpers, which also drops a redundant EVM xattr size sanity
-> > >       check whose vfs_getxattr() call only has a dentry and therefore
-> > >       cannot be migrated to the new path-based signature
-> > >    4: POSIX ACL helpers
-> > >    5: inode_setattr hook
-> > >    6: inode xattr hooks
-> > >    7: inode POSIX ACL hooks
+> > > This is kind of late for serious applications except if we manage to
+> > > solve the bootloader to Linux display engine transition.
 > > > 
-> > > Two deliberate scoping decisions for this refactor:
+> > > > 
+> > > > This driver is fully functional and works with both 5" and 7" Touch
+> > > > Display 2 panels for the RaspberryPi. However, it breaks away from the
+> > > > typical panel driver in multiple ways:
+> > > > 
+> > > > - BPF programs can only be loaded by userspace. This leaves us with two
+> > > >     choices:
+> > > > 
+> > > >     * We prevent the driver from loading until the script itself is
+> > > >       loaded. This has the side effect of preventing any other output to
+> > > >       be used until the initramfs is ran at the earliest, and possibly
+> > > >       ever if the loader isn't installed for example.
 > > > 
-> > > - The hooks consistently take struct path rather than struct file.  The
-> > >    VFS call sites involved (chmod(2), chown(2), utimensat(2), xattr(2)
-> > >    and ACL syscalls) operate on paths, and several of them (lstat(2),
-> > >    lchown(2), llistxattr(2), ...) have no struct file to begin with.
+> > > This adds a dependency on user-space behavior and if somehow the
+> > > initramfs doesn't load for a reason we won't have a way to display
+> > > an error.
 > > > 
-> > > - struct inode_operations->setattr still receives (idmap, dentry, attr).
-> > >    Only the VFS boundary (notify_change()) and the LSM hook layer see the
-> > >    path, which keeps the refactor contained to fs/attr.c and the LSM
-> > >    infrastructure instead of touching every filesystem.
+> > > > 
+> > > >     * Or we probe the driver all the time, but only report it as connected
+> > > >       once a program has been registered. This is somewhat unconventional,
+> > > >       but allows the other outputs to be functional, *and* allows the user
+> > > >       to force the output if their panel doesn't require any
+> > > >       initialization or during debugging. I chose this solution.
 > > > 
-> > > Patches 8-12 then implement the new rights, their tests, the sandboxer
-> > > sample and the documentation.  Semantics:
+> > > Both options are not really great...
 > > > 
-> > > - READ_METADATA covers stat(2) and friends, getxattr(2) and friends,
-> > >    listxattr(2) and friends, and POSIX ACL reads.
-> > > - WRITE_METADATA covers chmod(2), chown(2), utimensat(2), setxattr(2),
-> > >    removexattr(2) and friends, and POSIX ACL set and remove.
-> > > - Only explicit metadata changes requested by user space are restricted.
-> > >    Implicit changes performed by the kernel (e.g. timestamp updates on
-> > >    write(2), size changes on truncate(2)) are not, and neither are
-> > >    chmod(2)/chown(2) calls that change nothing (e.g. chown(2) with
-> > >    (-1, -1), which never reaches the hook), matching the SELinux
-> > >    inode_setattr behavior.
-> > > - Kernel-internal accesses performed with override_creds() (e.g.
-> > >    overlayfs, cachefiles) and kernel threads without a Landlock domain
-> > >    (e.g. nfsd, ksmbd) are not restricted.
+> > > > 
+> > > > - It's not a panel driver, but a bridge one, which is also pretty
+> > > >     unconventional. This is required because panel drivers don't have
+> > > >     access to a detect callback that is required for the above, but I also
+> > > >     think that the recent work from Luca blurs the line from panels and
+> > > >     bridges and we'll end up going that road anyway.
 > > > 
-> > > The Landlock ABI version is incremented from 11 to 12.
+> > > On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
+> > > the panel and the DDIC. So being a bridge is fine, but in a general way we lack
+> > > a proper way to describe the display/panel/monitor independently of the DDIC.
 > > > 
-> > > The series is based on linux-next commit 5c4d4169604b ("Add linux-next
-> > > specific files for 20260921").
-> > > 
-> > > Testing: each patch has been built for aarch64 (gcc, -Werror) and the
-> > > landlock selftests (445 tests, including the new ones) pass in QEMU on
-> > > aarch64; base_test reports ABI v12.
-> > > 
-> > > [1] https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
-> > > [2] https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
-> > Thank you for sending this patch set!
+> > > At first glance it's a nice driver, but moving the timings into a blob moves something
+> > > into possible proprietary binaries with possible closed licence and distribution
+> > > restriction so it's a downgrade for the same of bringing up a panel faster.
 > > 
-> > Some meta-remarks at the beginning:
-> > 
-> > * You might want to link the bugtracker feature request:
-> >    https://github.com/landlock-lsm/linux/issues/11
-> > * In the final version, I think it's preferred to merge patches 8
-> >    (adding the access right enums) and 9 (adding the LSM hooks that use
-> >    them).  Having the feature as an atomic commit makes it harder to
-> >    accidentally mess it up during a backport, because you can't patch 8
-> >    without 9.
-> > * As Paul alluded to, the changes to the LSM hook interface and to the
-> >    existing callers in VFS are likely the hardest part of this patch
-> >    set.  Alexei from the BPF subsystem has also reiterated recently
-> >    that he wants BPF to be looped into such changes.  BPF hooks do not
-> >    give the same backwards compatibility guarantees as the syscall
-> >    layer, but there are existing users of LSM hooks specifically
-> >    through the BPF LSM.
-> > 
-> > * In https://github.com/landlock-lsm/linux/issues/18, we came across
-> >    statfs(), which returns file system meta-information based for the
-> >    file system that a given file belongs to.  I have weak confidence
-> >    that READ_METADATA would be the right access right to protect this
-> >    with, but it's a somewhat related operation.  Maybe you have some
-> >    thoughts on this?
-> > 
-> > More concrete questions:
-> > 
-> > * If a "inode" LSM hook gets a "path" argument now, should it be
-> >    renamed from "inode_..." to "path_..."?
-> > 
-> >    (Maybe the BPF people can chime in about to what extent that would
-> >    cause additional churn for BPF users, in a situation where they
-> >    anyway already need to make a change due to the changing function
-> >    signature?)
-> > 
-> > –Günther
+> > Quick answer on this, because I had the very same questions regarding
+> > HID-BPF:
+> > - in BPF, you can require (and by default it does) that only GPL
+> > 	compatible BPF programs are loaded, closing the argument of "closed
+> > 	licence and distribution restriction"
+> > - also, a BPF program can be disassembled much easier than a binary
+> > 	blob, and I remember Alexei showing me an example where you get almost
+> > 	the source code from the BPF object in just one pass.
 > 
+> Right, it "solve" one of my question, but doesn't really solve the issue
+> of vendors providing "GPL" bpf programs with source available "somewhere".
+> 
+> Another big issue is the API, I don't want to keep the current API as-is,
+> we plan to support more advanced panel features and use try to use the
+> atomic states to support rate switching for example, and I'm not confident
+> it's a good idea since there's no "simple" and "forever valid" API
+> to initialize panels...
+> 
+
+That's exactly where BPF shines. The simple rule of thumb is: there is
+no API stability guaranteed. Basically, thanks to the verifier and CORE
+(Compile Once Run Everywhere), you don't need to keep the API stable and
+available forever. There are multiple ways of dealing with it, but the
+gist is that if a BPF is trying to load an "old" API, it will be
+rejected by the verifier.
+
+Then it's a matter of being nice enough in the kernel and provide ways
+to deal with those.
+
+To give you a few examples:
+
+- in HID-BPF, in userspace, we keep old versions of APIs in separate
+	compiled objects. Each is incremented (by 10 so we have a little bit
+	of room in the middle). Then the loader tries first
+	0020-device-with-new-api.bpf.o, and if it fails, it tries
+	0010-device-with-old-api.bpf.o
+
+	I'm not saying we should do the same here, but that's one idea
+
+- recently, a BPF commit broke the ABI of a function while removing
+	implicits: bpf_wq_set_callback_impl() was replaced by
+	bpf_wq_set_callback() with a different number of arguments. I simply
+	had to add a new function in my header which basically does:
+
+	static inline int
+	hid_bpf_wq_set_callback(struct bpf_wq *wq,
+	                        int (*callback_fn)(void *, int *, void *),
+	                        unsigned int flags)
+	{
+      if (bpf_ksym_exists(bpf_wq_set_callback))
+              return bpf_wq_set_callback(wq, callback_fn, flags);
+      if (bpf_ksym_exists(bpf_wq_set_callback_impl))
+              return bpf_wq_set_callback_impl(wq, callback_fn, flags, NULL);
+  }
+
+  And then I changed the bpf.c to use hid_bpf_wq_set_callback() and the
+  bpf is compatible with both APIs
+
+- with CORE, struct fields are relocated on the fly when you load the BPF
+ 
+  So for instance, if my BPF only accesses fields .name, .phys and .id
+  in the BPF, I can define:
+  struct hid_device {
+    char                       name[128];
+    char                       phys[64];
+    unsigned int               id;
+  }
+
+  Then when loading the bpf, the verifier replaces all offset to the
+  ones actually used by the running kernel, and the program loads
+  transparently, even if you add fields before/after or change the
+  fields order in the kernel.
+
+Changing the mindset is the hardest part of it. But once you are making
+the shift, it's actually much better to work with. It doesn't mean you
+can go yolo. You still need to be careful in your choices knowing the
+impact on your users. But the API at version 0 is not frozen and you
+don't need to maintain it forever, especially if you control the loader
+and the headers used to compile the BPFs.
+
+Cheers,
+Benjamin
