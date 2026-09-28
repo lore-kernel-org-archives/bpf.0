@@ -1,78 +1,78 @@
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C5A4F68B8;
-	Mon, 28 Sep 2026 19:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBFD4F7CA5;
+	Mon, 28 Sep 2026 19:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790623937; cv=none; b=Y/4YynJ9ESCeNw4HjfoHdnIxVJkNPuSRoANxLPIJYPWRbO2/yOUuMdLwDSNMIVpnNqzhmBqrXI4ln3SHeAqQ4mF2W37+shyckEh7Bkt+5q9AowVw5sRveddupxGNnzJMTGEO73rmM2sbz/G0Y130XkDiIlY1eVn/JP3pdB1bv1A=
+	t=1790623943; cv=none; b=GUrYPddA2nIDGvF2Mt+n5aKBE2q6JKmjh6WrnC4FZVgwWCHijaKMohT3VdREbRN5bHYcd/m1xxc3Ns9LB2MiDoV3HVOWM5sWJ0rjOIZQxyFbLqzqIRMfj9qEX+nArqq404Zjdq7hFAaUmWfxQKCCdm+Jpgl5q/C4umztFn/mYoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790623937; c=relaxed/simple;
-	bh=d9drHmILXEV/jetVTacifv1X2zzQVL3f9Sxkt32srjQ=;
+	s=arc-20240116; t=1790623943; c=relaxed/simple;
+	bh=Oy8emGMafkX3hUGwJxmGx9clEer2z3YTLGZT42AoAd4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ceeP61TQC5mzUkdyobJhoqZ6Tj09gNK4kpOH+mt4axfUb+YPRqH4g/8Tg9LDFk72mc+XUIq2heoWHH1IKjDDcYnnWL4WJ/Sno1NLMmK2rzR100KpTjwv60ac4Rva8x3QHA4y7Vm8pHJJAm41Mg9YxBasjMC2btr1qfXePZNJmh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=dl2tHQFo; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gJXMZIMr; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WePNxzoK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=QxDbjBuU; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=jSArnZJsJDnzODscNIjNftW+283wjPhAG5FOyiZxBhMKpgdwL+sCQJSXzgxHVs0X/t0FU6PJBuVuwh47OMZKlLO+u4v0jdjUXFCiV8JWfCp6GTuTo/So1vuMI9Io34C3BnF82MN+paz89GqkKipT291s2H2gL7sS3Fw2n0qptjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=d+sxoEwR; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9LFIHwih; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vmBbyJ1G; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HEBVkJFG; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="dl2tHQFo";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gJXMZIMr";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WePNxzoK";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="QxDbjBuU"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="d+sxoEwR";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9LFIHwih";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vmBbyJ1G";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HEBVkJFG"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9EB2521B07;
-	Mon, 28 Sep 2026 19:32:04 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0B2AA21BBF;
+	Mon, 28 Sep 2026 19:32:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790623928; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1790623933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=dl2tHQFoLocMOuOMz99A46HP20m/xWNKwtmVFrdgXO+nPc2PP+JxTJfejCBotHnGwiMHgG
-	vYO7xEh2KEycawqs11fWz5ZicBjSan/2bRFRsvYJQxE5QegvzFNTwbv8c9UorEXK1/Nvb/
-	b9p62u+iQp5GOTjCRxNPEQUx42lW+NE=
+	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
+	b=d+sxoEwRwgQEjYQDwCMz0+bjgFYm7MzO98Lil+foNTHaStojyHrVFbLj1gy/+TfSv7Smp/
+	nHz5D4MugeOvbB52u0BwH/CmC3zq+pqISi4l4WjdzQFUmiS2ruZInL8HTcDUaeb3u5yrEs
+	/QOhF273SspDuqzSrXP6ihwNV02mbp8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790623928;
+	s=susede2_ed25519; t=1790623933;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=gJXMZIMrgGh4sCv5hLOrCGrEiFABUb6Lt4YCatn0ijcLCvKa14kvVUXlZ+O2pctRjhUgLo
-	zLWRa0o8jgC9lfDw==
+	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
+	b=9LFIHwihJ5xgiFM7sNi2e3/CVd29vVAlk9flkiSzZirtunEZ3TiWoSokkg4UqoU79QJLRb
+	mf0X2LHMHo90IYAw==
 Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790623924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1790623929; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=WePNxzoK7Vdx029Ex1qlU9esH8o8WUtEg/4cY9bK5qsoe+IOIMA4NOyU/vueFc6wTd/394
-	tBqfaxeITygsX/nY1rPHYrFOAetP+gcq/JXhJsDvrasqtTeN9hjn1c/A0moalFm3NipcHq
-	3P9qnFAcDLTqnww05+g3d0KdCmwQS0k=
+	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
+	b=vmBbyJ1Gx/7E1t9yOKo+FcaLLdNmXv4QC3Dhqq5G1jAH3cCydqktj4q3nLYAxvSjf6f+sM
+	hIPUwdvcSCIfylCWcDxoYJfeFOCdFs95cwCCEUSahOEdqamYvVO7E9chkcdmyhuBqxbsI3
+	f7s+/893Ml7PGj0kBDDf9DXBgfPNV7M=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790623924;
+	s=susede2_ed25519; t=1790623929;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=QxDbjBuUTOjVj8x0073GQSy3+wMZHYcjw9kuwRheuV80JcJqtHoBDrElRFJ8R2EPUQcvyJ
-	KYO4P9FxRfQfCCBQ==
+	bh=Vp8UPL3kM6pL63nb5KYd5SCmnmtMWzsc4F/yIoxdp+c=;
+	b=HEBVkJFGSaGLWVMMe0ws/91cuThvAwOAk4isFopPlhbdHIThO752CXMnAMJLM/AyWsIe0q
+	K4jh1JlrnpC0R7Bg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6AA3113418;
-	Mon, 28 Sep 2026 19:32:03 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 91027133F1;
+	Mon, 28 Sep 2026 19:32:07 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4RBiFn3AumpWOAAAD6G6ig:T9
-	(envelope-from <fmancera@suse.de>); Mon, 28 Sep 2026 19:32:03 +0000
+	id 4RBiFn3AumpWOAAAD6G6ig:T10
+	(envelope-from <fmancera@suse.de>); Mon, 28 Sep 2026 19:32:07 +0000
 From: Fernando Fernandez Mancera <fmancera@suse.de>
 To: netdev@vger.kernel.org
 Cc: horms@kernel.org,
@@ -81,22 +81,26 @@ Cc: horms@kernel.org,
 	edumazet@kernel.org,
 	davem@davemloft.net,
 	Fernando Fernandez Mancera <fmancera@suse.de>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
 	Eric Dumazet <edumazet@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Neal Cardwell <ncardwell@google.com>,
-	Eric Biggers <ebiggers@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	"yuan.gao" <yuan.gao@ucloud.cn>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Kees Cook <kees@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Mahe Tardy <mahe.tardy@gmail.com>,
+	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
+	Joel Granados <joel.granados@kernel.org>,
+	Wyatt Feng <bronzed_45_vested@icloud.com>,
+	Yung Chih Su <yuuchihsu@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH 08/16 net-next v2] ipv4: ping: split IPv4 specific logic into ping_ipv4.c
-Date: Mon, 28 Sep 2026 21:30:04 +0200
-Message-ID: <20260928193046.6698-9-fmancera@suse.de>
+Subject: [PATCH 09/16 net-next v2] ipv4: fib: split common nexthop logic to fib_core.c
+Date: Mon, 28 Sep 2026 21:30:05 +0200
+Message-ID: <20260928193046.6698-10-fmancera@suse.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260928193046.6698-1-fmancera@suse.de>
 References: <20260928193046.6698-1-fmancera@suse.de>
@@ -108,556 +112,849 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Level: 
-X-Spam-Score: -2.80
+X-Spam-Score: -1.30
 X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.80 / 50.00];
+X-Spamd-Result: default: False [-1.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.995];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid];
 	ARC_NA(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,redhat.com,davemloft.net,suse.de,nvidia.com,google.com,iogearbox.net,gmail.com,fomichev.me,nokia-bell-labs.com,icloud.com,vger.kernel.org];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	R_RATELIMIT(0.00)[to_ip_from(RLrr9ek4ud4f4qwi71m7motjzt)];
-	RCVD_TLS_ALL(0.00)[]
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,icloud.com]
 
-To enable compiling INET subsystem withot IPv4, ping socket IPv4
-specific functions must be isolated from the generic ping
-infrastructure.
+To enable compiling INET subsystem without IPv4, shared FIB and nexthop
+logic must be accessible to IPv6 when IPv4 routing stack is omitted.
 
-This patch creates ping_ipv4.c and move all the functions for packet
-transmission and the AF_INET ping_prot definition from ping.c to the new
-file. The Makefile is updated to compile ping_ipv4.c only when
-CONFIG_IPV4 is enabled.
+This patch creates fib_core.c and move all the functions for common
+nexthop initialization and release from fib_semantics.c to fib_core.c.
+Note that fib_core.c is under net/core.
 
 Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
 ---
- net/ipv4/Makefile    |   2 +-
- net/ipv4/ping.c      | 210 +--------------------------------------
- net/ipv4/ping_ipv4.c | 228 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 234 insertions(+), 206 deletions(-)
- create mode 100644 net/ipv4/ping_ipv4.c
+ include/net/ip_fib.h       |  27 +++-
+ include/net/route.h        |   6 +
+ net/core/Makefile          |   2 +-
+ net/core/fib_core.c        | 307 +++++++++++++++++++++++++++++++++++++
+ net/ipv4/fib_frontend.c    |  96 ------------
+ net/ipv4/fib_semantics.c   | 205 -------------------------
+ net/ipv4/nexthop.c         |   5 +-
+ net/ipv4/sysctl_net_ipv4.c |   2 +
+ 8 files changed, 345 insertions(+), 305 deletions(-)
+ create mode 100644 net/core/fib_core.c
 
-diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
-index 651835073a29..83c25f52eb58 100644
---- a/net/ipv4/Makefile
-+++ b/net/ipv4/Makefile
-@@ -14,7 +14,7 @@ obj-y     := inetpeer.o protocol.o inet_hashtables.o inet_timewait_sock.o \
- obj-$(CONFIG_IPV4) += route.o ip_input.o ip_fragment.o ip_forward.o ip_options.o \
- 		      ip_sockglue.o tcp_ipv4.o datagram.o arp.o devinet.o igmp.o \
- 		      fib_notifier.o ip_output.o fib_frontend.o fib_semantics.o \
--		      fib_trie.o raw_ipv4.o udp_ipv4.o icmp_ipv4.o
-+		      fib_trie.o raw_ipv4.o udp_ipv4.o icmp_ipv4.o ping_ipv4.o
+diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
+index 0a35355fb0f3..6058e53fa3de 100644
+--- a/include/net/ip_fib.h
++++ b/include/net/ip_fib.h
+@@ -250,7 +250,13 @@ int call_fib4_notifiers(struct net *net, enum fib_event_type event_type,
+ int __net_init fib4_notifier_init(struct net *net);
+ void __net_exit fib4_notifier_exit(struct net *net);
  
- obj-$(CONFIG_NET_IP_TUNNEL) += ip_tunnel.o
- obj-$(CONFIG_SYSCTL) += sysctl_net_ipv4.o
-diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
-index 223a0108b74c..ada4ff932734 100644
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -285,19 +285,6 @@ void ping_close(struct sock *sk, long timeout)
- 	sk_common_release(sk);
++#if IS_ENABLED(CONFIG_IPV4)
+ void fib_info_notify_update(struct net *net, struct nl_info *info);
++#else
++static inline void fib_info_notify_update(struct net *net, struct nl_info *info)
++{
++}
++#endif
+ int fib_notify(struct net *net, struct notifier_block *nb,
+ 	       struct netlink_ext_ack *extack);
+ 
+@@ -442,7 +448,7 @@ static inline bool fib_dscp_masked_match(dscp_t dscp, const struct flowi4 *fl4)
+ 	return dscp == (fl4->flowi4_dscp & INET_DSCP_LEGACY_TOS_MASK);
  }
  
--static int ping_pre_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
--			    int addr_len)
--{
--	/* This check is replicated from __ip4_datagram_connect() and
--	 * intended to prevent BPF program called below from accessing bytes
--	 * that are out of the bound specified by user in addr_len.
--	 */
--	if (addr_len < sizeof(struct sockaddr_in))
--		return -EINVAL;
--
--	return BPF_CGROUP_RUN_PROG_INET4_CONNECT_LOCK(sk, uaddr, &addr_len);
--}
--
- /* Checks the bind address and possibly modifies sk->sk_bound_dev_if. */
- static int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
- 				struct sockaddr_unsized *uaddr, int addr_len)
-@@ -308,6 +295,9 @@ static int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
- 		u32 tb_id = RT_TABLE_LOCAL;
- 		int chk_addr_ret;
+-/* Exported by fib_frontend.c */
++/* Exported by net/core/fib_core.c */
+ extern const struct nla_policy rtm_ipv4_policy[];
+ void ip_fib_init(void);
+ int fib_gw_from_via(struct fib_config *cfg, struct nlattr *nla,
+@@ -578,10 +584,23 @@ void fib_select_multipath(struct fib_result *res, int hash,
+ void fib_select_path(struct net *net, struct fib_result *res,
+ 		     struct flowi4 *fl4, const struct sk_buff *skb);
  
-+		if (!IS_ENABLED(CONFIG_IPV4))
-+			return -EAFNOSUPPORT;
++#if IS_ENABLED(CONFIG_IPV4)
+ int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
+ 		struct fib_config *cfg, int nh_weight,
+ 		struct netlink_ext_ack *extack);
+ void fib_nh_release(struct net *net, struct fib_nh *fib_nh);
++#else
++static inline int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
++			      struct fib_config *cfg, int nh_weight,
++			      struct netlink_ext_ack *extack)
++{
++	return -EAFNOSUPPORT;
++}
 +
- 		if (addr_len < sizeof(*addr))
- 			return -EINVAL;
- 
-@@ -527,7 +517,7 @@ void ping_err(struct sk_buff *skb, int offset, u32 info)
- 	harderr = 0;
- 	inet_sock = inet_sk(sk);
- 
--	if (skb->protocol == htons(ETH_P_IP)) {
-+	if (IS_ENABLED(CONFIG_IPV4) && skb->protocol == htons(ETH_P_IP)) {
- 		switch (type) {
- 		default:
- 		case ICMP_TIME_EXCEEDED:
-@@ -580,7 +570,7 @@ void ping_err(struct sk_buff *skb, int offset, u32 info)
- 		if (!harderr || sk->sk_state != TCP_ESTABLISHED)
- 			goto out;
- 	} else {
--		if (family == AF_INET) {
-+		if (IS_ENABLED(CONFIG_IPV4) && family == AF_INET) {
- 			ip_icmp_error(sk, skb, err, 0 /* no remote port */,
- 				      info, (u8 *)icmph);
- #if IS_ENABLED(CONFIG_IPV6)
-@@ -625,21 +615,6 @@ int ping_getfrag(void *from, char *to,
- 	return 0;
++static inline void fib_nh_release(struct net *net, struct fib_nh *fib_nh)
++{
++}
++#endif
+ int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
+ 		       struct nlattr *fc_encap, u16 fc_encap_type,
+ 		       void *cfg, gfp_t gfp_flags,
+@@ -620,7 +639,13 @@ static inline void fib_combine_itag(u32 *itag, const struct fib_result *res)
+ #endif
  }
  
--static int ping_v4_push_pending_frames(struct sock *sk, struct pingfakehdr *pfh,
--				       struct flowi4 *fl4)
--{
--	struct sk_buff *skb = skb_peek(&sk->sk_write_queue);
--
--	if (!skb)
--		return 0;
--	pfh->wcheck = csum_partial((char *)&pfh->icmph,
--		sizeof(struct icmphdr), pfh->wcheck);
--	pfh->icmph.checksum = csum_fold(pfh->wcheck);
--	memcpy(icmp_hdr(skb), &pfh->icmph, sizeof(struct icmphdr));
--	skb->ip_summed = CHECKSUM_NONE;
--	return ip_push_pending_frames(sk, fl4);
--}
--
- int ping_common_sendmsg(int family, struct msghdr *msg, size_t len,
- 			void *user_icmph, size_t icmph_len)
- {
-@@ -685,160 +660,6 @@ int ping_common_sendmsg(int family, struct msghdr *msg, size_t len,
- 	return 0;
- }
++#if IS_ENABLED(CONFIG_IPV4)
+ void fib_flush(struct net *net);
++#else
++static inline void fib_flush(struct net *net)
++{
++}
++#endif
+ void free_fib_info(struct fib_info *fi);
  
--static int ping_v4_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
--{
--	DEFINE_RAW_FLEX(struct ip_options_rcu, opt_copy, opt.__data,
--			IP_OPTIONS_DATA_FIXED_SIZE);
--	struct net *net = sock_net(sk);
--	struct flowi4 fl4;
--	struct inet_sock *inet = inet_sk(sk);
--	struct ipcm_cookie ipc;
--	struct icmphdr user_icmph;
--	struct pingfakehdr pfh;
--	struct rtable *rt = NULL;
--	int free = 0;
--	__be32 saddr, daddr, faddr;
--	u8 scope;
--	int err;
--
--	pr_debug("ping_v4_sendmsg(sk=%p,sk->num=%u)\n", inet, inet->inet_num);
--
--	err = ping_common_sendmsg(AF_INET, msg, len, &user_icmph,
--				  sizeof(user_icmph));
--	if (err)
--		return err;
--
--	/*
--	 *	Get and verify the address.
--	 */
--
--	if (msg->msg_name) {
--		DECLARE_SOCKADDR(struct sockaddr_in *, usin, msg->msg_name);
--		if (msg->msg_namelen < sizeof(*usin))
--			return -EINVAL;
--		if (usin->sin_family != AF_INET)
--			return -EAFNOSUPPORT;
--		daddr = usin->sin_addr.s_addr;
--		/* no remote port */
--	} else {
--		if (sk->sk_state != TCP_ESTABLISHED)
--			return -EDESTADDRREQ;
--		daddr = inet->inet_daddr;
--		/* no remote port */
--	}
--
--	ipcm_init_sk(&ipc, inet);
--
--	if (msg->msg_controllen) {
--		err = ip_cmsg_send(sk, msg, &ipc, false);
--		if (unlikely(err)) {
--			kfree(ipc.opt);
--			return err;
--		}
--		if (ipc.opt)
--			free = 1;
--	}
--	if (!ipc.opt) {
--		struct ip_options_rcu *inet_opt;
--
--		rcu_read_lock();
--		inet_opt = rcu_dereference(inet->inet_opt);
--		if (inet_opt) {
--			memcpy(opt_copy, inet_opt,
--			       sizeof(*inet_opt) + inet_opt->opt.optlen);
--			ipc.opt = opt_copy;
--		}
--		rcu_read_unlock();
--	}
--
--	saddr = ipc.addr;
--	ipc.addr = faddr = daddr;
--
--	if (ipc.opt && ipc.opt->opt.srr) {
--		if (!daddr) {
--			err = -EINVAL;
--			goto out_free;
--		}
--		faddr = ipc.opt->opt.faddr;
--	}
--	scope = ip_sendmsg_scope(inet, &ipc, msg);
--
--	if (ipv4_is_multicast(daddr)) {
--		if (!ipc.oif || netif_index_is_l3_master(sock_net(sk), ipc.oif))
--			ipc.oif = READ_ONCE(inet->mc_index);
--		if (!saddr)
--			saddr = READ_ONCE(inet->mc_addr);
--	} else if (!ipc.oif)
--		ipc.oif = READ_ONCE(inet->uc_index);
--
--	flowi4_init_output(&fl4, ipc.oif, ipc.sockc.mark,
--			   ipc.tos & INET_DSCP_MASK, scope,
--			   sk->sk_protocol, inet_sk_flowi_flags(sk), faddr,
--			   saddr, 0, 0, sk_uid(sk));
--
--	fl4.fl4_icmp_type = user_icmph.type;
--	fl4.fl4_icmp_code = user_icmph.code;
--
--	security_sk_classify_flow(sk, flowi4_to_flowi_common(&fl4));
--	rt = ip_route_output_flow(net, &fl4, sk);
--	if (IS_ERR(rt)) {
--		err = PTR_ERR(rt);
--		rt = NULL;
--		if (err == -ENETUNREACH)
--			IP_INC_STATS(net, IPSTATS_MIB_OUTNOROUTES);
--		goto out;
--	}
--
--	err = -EACCES;
--	if ((rt->rt_flags & RTCF_BROADCAST) &&
--	    !sock_flag(sk, SOCK_BROADCAST))
--		goto out;
--
--	if (msg->msg_flags & MSG_CONFIRM)
--		goto do_confirm;
--back_from_confirm:
--
--	if (!ipc.addr)
--		ipc.addr = fl4.daddr;
--
--	lock_sock(sk);
--
--	pfh.icmph.type = user_icmph.type; /* already checked */
--	pfh.icmph.code = user_icmph.code; /* ditto */
--	pfh.icmph.checksum = 0;
--	pfh.icmph.un.echo.id = inet->inet_sport;
--	pfh.icmph.un.echo.sequence = user_icmph.un.echo.sequence;
--	pfh.msg = msg;
--	pfh.wcheck = 0;
--	pfh.family = AF_INET;
--
--	err = ip_append_data(sk, &fl4, ping_getfrag, &pfh, len,
--			     sizeof(struct icmphdr), &ipc, &rt,
--			     msg->msg_flags);
--	if (err)
--		ip_flush_pending_frames(sk);
--	else
--		err = ping_v4_push_pending_frames(sk, &pfh, &fl4);
--	release_sock(sk);
--
--out:
--	ip_rt_put(rt);
--out_free:
--	if (free)
--		kfree(ipc.opt);
--	if (!err)
--		return len;
--	return err;
--
--do_confirm:
--	if (msg->msg_flags & MSG_PROBE)
--		dst_confirm_neigh(&rt->dst, &fl4.daddr);
--	if (!(msg->msg_flags & MSG_PROBE) || len)
--		goto back_from_confirm;
--	err = 0;
--	goto out;
--}
--
- int ping_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags)
- {
- 	struct inet_sock *isk = inet_sk(sk);
-@@ -976,27 +797,6 @@ enum skb_drop_reason ping_rcv(struct sk_buff *skb)
- 	return SKB_DROP_REASON_NO_SOCKET;
- }
+ static inline void fib_info_hold(struct fib_info *fi)
+diff --git a/include/net/route.h b/include/net/route.h
+index 8c21881eb5f4..8788bf096c15 100644
+--- a/include/net/route.h
++++ b/include/net/route.h
+@@ -128,7 +128,13 @@ extern struct ip_rt_acct __percpu *ip_rt_acct;
+ struct in_device;
  
--struct proto ping_prot = {
--	.name =		"PING",
--	.owner =	THIS_MODULE,
--	.init =		ping_init_sock,
--	.close =	ping_close,
--	.pre_connect =	ping_pre_connect,
--	.connect =	ip4_datagram_connect,
--	.disconnect =	__udp_disconnect,
--	.setsockopt =	ip_setsockopt,
--	.getsockopt =	ip_getsockopt,
--	.sendmsg =	ping_v4_sendmsg,
--	.recvmsg =	ping_recvmsg,
--	.bind =		ping_bind,
--	.backlog_rcv =	ping_queue_rcv_skb,
--	.release_cb =	ip4_datagram_release_cb,
--	.unhash =	ping_unhash,
--	.get_port =	ping_get_port,
--	.put_port =	ping_unhash,
--	.obj_size =	sizeof(struct inet_sock),
--};
--
- #ifdef CONFIG_PROC_FS
+ int ip_rt_init(void);
++#if IS_ENABLED(CONFIG_IPV4)
+ void rt_cache_flush(struct net *net);
++#else
++static inline void rt_cache_flush(struct net *net)
++{
++}
++#endif
+ void rt_flush_dev(struct net_device *dev);
  
- static struct sock *ping_get_first(struct seq_file *seq, int start)
-diff --git a/net/ipv4/ping_ipv4.c b/net/ipv4/ping_ipv4.c
+ static inline void inet_sk_init_flowi4(const struct inet_sock *inet,
+diff --git a/net/core/Makefile b/net/core/Makefile
+index c20e520358b8..315e437a49d8 100644
+--- a/net/core/Makefile
++++ b/net/core/Makefile
+@@ -12,7 +12,7 @@ obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
+ obj-y		     += dev.o dev_api.o dev_addr_lists.o dst.o netevent.o \
+ 			neighbour.o rtnetlink.o utils.o link_watch.o filter.o \
+ 			sock_diag.o dev_ioctl.o tso.o sock_reuseport.o \
+-			fib_notifier.o xdp.o flow_offload.o gro.o \
++			fib_notifier.o fib_core.o xdp.o flow_offload.o gro.o \
+ 			netdev-genl.o netdev-genl-gen.o netdev_work.o gso.o
+ 
+ obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
+diff --git a/net/core/fib_core.c b/net/core/fib_core.c
 new file mode 100644
-index 000000000000..4489aa292a4e
+index 000000000000..6f59ee43ccbb
 --- /dev/null
-+++ b/net/ipv4/ping_ipv4.c
-@@ -0,0 +1,228 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * INET		An implementation of the TCP/IP protocol suite for the LINUX
-+ *		operating system.  INET is implemented using the  BSD Socket
-+ *		interface as the means of communication with the user level.
-+ *
-+ *		"Ping" sockets
-+ *
-+ *		IPv4 specific functions
-+ *
-+ *		code split from:
-+ *		net/ipv4/ping.c
-+ *
-+ *		See ping.c for author information
-+ */
-+
-+#include <linux/bpf-cgroup.h>
-+#include <linux/in.h>
-+#include <linux/socket.h>
++++ b/net/core/fib_core.c
+@@ -0,0 +1,307 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/inetdevice.h>
 +#include <linux/types.h>
-+#include <net/ping.h>
-+#include <net/udp.h>
++#include <net/addrconf.h>
++#include <net/lwtunnel.h>
++#include <net/route.h>
 +
-+static int ping_pre_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
-+			    int addr_len)
++static void rt_fibinfo_free(struct rtable __rcu **rtp)
 +{
-+	/* This check is replicated from __ip4_datagram_connect() and
-+	 * intended to prevent BPF program called below from accessing bytes
-+	 * that are out of the bound specified by user in addr_len.
++	struct rtable *rt = rcu_dereference_protected(*rtp, 1);
++
++	if (!rt)
++		return;
++
++	/* Not even needed : RCU_INIT_POINTER(*rtp, NULL);
++	 * because we waited an RCU grace period before calling
++	 * free_fib_info_rcu()
 +	 */
-+	if (addr_len < sizeof(struct sockaddr_in))
-+		return -EINVAL;
 +
-+	return BPF_CGROUP_RUN_PROG_INET4_CONNECT_LOCK(sk, uaddr, &addr_len);
++	dst_dev_put(&rt->dst);
++	dst_release_immediate(&rt->dst);
 +}
 +
-+static int ping_v4_push_pending_frames(struct sock *sk, struct pingfakehdr *pfh,
-+				       struct flowi4 *fl4)
++static void free_nh_exceptions(struct fib_nh_common *nhc)
 +{
-+	struct sk_buff *skb = skb_peek(&sk->sk_write_queue);
++	struct fnhe_hash_bucket *hash;
++	int i;
 +
-+	if (!skb)
-+		return 0;
-+	pfh->wcheck = csum_partial((char *)&pfh->icmph,
-+				   sizeof(struct icmphdr), pfh->wcheck);
-+	pfh->icmph.checksum = csum_fold(pfh->wcheck);
-+	memcpy(icmp_hdr(skb), &pfh->icmph, sizeof(struct icmphdr));
-+	skb->ip_summed = CHECKSUM_NONE;
-+	return ip_push_pending_frames(sk, fl4);
++	hash = rcu_dereference_protected(nhc->nhc_exceptions, 1);
++	if (!hash)
++		return;
++	for (i = 0; i < FNHE_HASH_SIZE; i++) {
++		struct fib_nh_exception *fnhe;
++
++		fnhe = rcu_dereference_protected(hash[i].chain, 1);
++		while (fnhe) {
++			struct fib_nh_exception *next;
++
++			next = rcu_dereference_protected(fnhe->fnhe_next, 1);
++
++			rt_fibinfo_free(&fnhe->fnhe_rth_input);
++			rt_fibinfo_free(&fnhe->fnhe_rth_output);
++
++			kfree(fnhe);
++
++			fnhe = next;
++		}
++	}
++	kfree(hash);
 +}
 +
-+static int ping_v4_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
++static void rt_fibinfo_free_cpus(struct rtable __rcu * __percpu *rtp)
 +{
-+	DEFINE_RAW_FLEX(struct ip_options_rcu, opt_copy, opt.__data,
-+			IP_OPTIONS_DATA_FIXED_SIZE);
-+	struct net *net = sock_net(sk);
-+	struct flowi4 fl4;
-+	struct inet_sock *inet = inet_sk(sk);
-+	struct ipcm_cookie ipc;
-+	struct icmphdr user_icmph;
-+	struct pingfakehdr pfh;
-+	struct rtable *rt = NULL;
-+	int free = 0;
-+	__be32 saddr, daddr, faddr;
-+	u8 scope;
++	int cpu;
++
++	if (!rtp)
++		return;
++
++	for_each_possible_cpu(cpu) {
++		struct rtable *rt;
++
++		rt = rcu_dereference_protected(*per_cpu_ptr(rtp, cpu), 1);
++		if (rt) {
++			dst_dev_put(&rt->dst);
++			dst_release_immediate(&rt->dst);
++		}
++	}
++	free_percpu(rtp);
++}
++
++void fib_nh_common_release(struct fib_nh_common *nhc)
++{
++	netdev_put(nhc->nhc_dev, &nhc->nhc_dev_tracker);
++	lwtstate_put(nhc->nhc_lwtstate);
++	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
++	rt_fibinfo_free(&nhc->nhc_rth_input);
++	free_nh_exceptions(nhc);
++}
++
++int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
++		       struct nlattr *encap, u16 encap_type,
++		       void *cfg, gfp_t gfp_flags,
++		       struct netlink_ext_ack *extack)
++{
 +	int err;
 +
-+	pr_debug("ping_v4_sendmsg(sk=%p,sk->num=%u)\n", inet, inet->inet_num);
++	nhc->nhc_pcpu_rth_output = alloc_percpu_gfp(struct rtable __rcu *,
++						    gfp_flags);
++	if (!nhc->nhc_pcpu_rth_output)
++		return -ENOMEM;
 +
-+	err = ping_common_sendmsg(AF_INET, msg, len, &user_icmph,
-+				  sizeof(user_icmph));
-+	if (err)
-+		return err;
++	if (encap) {
++		struct lwtunnel_state *lwtstate;
 +
-+	/*
-+	 *	Get and verify the address.
-+	 */
++		err = lwtunnel_build_state(net, encap_type, encap,
++					   nhc->nhc_family, cfg, &lwtstate,
++					   extack);
++		if (err)
++			goto lwt_failure;
 +
-+	if (msg->msg_name) {
-+		DECLARE_SOCKADDR(struct sockaddr_in *, usin, msg->msg_name);
-+
-+		if (msg->msg_namelen < sizeof(*usin))
-+			return -EINVAL;
-+		if (usin->sin_family != AF_INET)
-+			return -EAFNOSUPPORT;
-+		daddr = usin->sin_addr.s_addr;
-+		/* no remote port */
-+	} else {
-+		if (sk->sk_state != TCP_ESTABLISHED)
-+			return -EDESTADDRREQ;
-+		daddr = inet->inet_daddr;
-+		/* no remote port */
++		nhc->nhc_lwtstate = lwtstate_get(lwtstate);
 +	}
 +
-+	ipcm_init_sk(&ipc, inet);
++	return 0;
 +
-+	if (msg->msg_controllen) {
-+		err = ip_cmsg_send(sk, msg, &ipc, false);
-+		if (unlikely(err)) {
-+			kfree(ipc.opt);
-+			return err;
-+		}
-+		if (ipc.opt)
-+			free = 1;
-+	}
-+	if (!ipc.opt) {
-+		struct ip_options_rcu *inet_opt;
++lwt_failure:
++	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
++	nhc->nhc_pcpu_rth_output = NULL;
++	return err;
++}
++
++int fib_nexthop_info(struct sk_buff *skb, const struct fib_nh_common *nhc,
++		     u8 rt_family, unsigned char *flags, bool skip_oif)
++{
++	if (nhc->nhc_flags & RTNH_F_DEAD)
++		*flags |= RTNH_F_DEAD;
++
++	if (nhc->nhc_flags & RTNH_F_LINKDOWN) {
++		*flags |= RTNH_F_LINKDOWN;
 +
 +		rcu_read_lock();
-+		inet_opt = rcu_dereference(inet->inet_opt);
-+		if (inet_opt) {
-+			memcpy(opt_copy, inet_opt,
-+			       sizeof(*inet_opt) + inet_opt->opt.optlen);
-+			ipc.opt = opt_copy;
++		switch (nhc->nhc_family) {
++		case AF_INET:
++			if (ip_ignore_linkdown(nhc->nhc_dev))
++				*flags |= RTNH_F_DEAD;
++			break;
++		case AF_INET6:
++			if (ip6_ignore_linkdown(nhc->nhc_dev))
++				*flags |= RTNH_F_DEAD;
++			break;
 +		}
 +		rcu_read_unlock();
 +	}
 +
-+	saddr = ipc.addr;
-+	ipc.addr = daddr;
-+	faddr = daddr;
++	switch (nhc->nhc_gw_family) {
++	case AF_INET:
++		if (nla_put_in_addr(skb, RTA_GATEWAY, nhc->nhc_gw.ipv4))
++			goto nla_put_failure;
++		break;
++	case AF_INET6:
++		/* if gateway family does not match nexthop family
++		 * gateway is encoded as RTA_VIA
++		 */
++		if (rt_family != nhc->nhc_gw_family) {
++			int alen = sizeof(struct in6_addr);
++			struct nlattr *nla;
++			struct rtvia *via;
 +
-+	if (ipc.opt && ipc.opt->opt.srr) {
-+		if (!daddr) {
-+			err = -EINVAL;
-+			goto out_free;
++			nla = nla_reserve(skb, RTA_VIA, alen + 2);
++			if (!nla)
++				goto nla_put_failure;
++
++			via = nla_data(nla);
++			via->rtvia_family = AF_INET6;
++			memcpy(via->rtvia_addr, &nhc->nhc_gw.ipv6, alen);
++		} else if (nla_put_in6_addr(skb, RTA_GATEWAY,
++					    &nhc->nhc_gw.ipv6) < 0) {
++			goto nla_put_failure;
 +		}
-+		faddr = ipc.opt->opt.faddr;
-+	}
-+	scope = ip_sendmsg_scope(inet, &ipc, msg);
-+
-+	if (ipv4_is_multicast(daddr)) {
-+		if (!ipc.oif || netif_index_is_l3_master(sock_net(sk), ipc.oif))
-+			ipc.oif = READ_ONCE(inet->mc_index);
-+		if (!saddr)
-+			saddr = READ_ONCE(inet->mc_addr);
-+	} else if (!ipc.oif) {
-+		ipc.oif = READ_ONCE(inet->uc_index);
++		break;
 +	}
 +
-+	flowi4_init_output(&fl4, ipc.oif, ipc.sockc.mark,
-+			   ipc.tos & INET_DSCP_MASK, scope,
-+			   sk->sk_protocol, inet_sk_flowi_flags(sk), faddr,
-+			   saddr, 0, 0, sk_uid(sk));
++	*flags |= (nhc->nhc_flags &
++		   (RTNH_F_ONLINK | RTNH_F_OFFLOAD | RTNH_F_TRAP));
 +
-+	fl4.fl4_icmp_type = user_icmph.type;
-+	fl4.fl4_icmp_code = user_icmph.code;
++	if (!skip_oif && nhc->nhc_dev &&
++	    nla_put_u32(skb, RTA_OIF, nhc->nhc_dev->ifindex))
++		goto nla_put_failure;
 +
-+	security_sk_classify_flow(sk, flowi4_to_flowi_common(&fl4));
-+	rt = ip_route_output_flow(net, &fl4, sk);
-+	if (IS_ERR(rt)) {
-+		err = PTR_ERR(rt);
-+		rt = NULL;
-+		if (err == -ENETUNREACH)
-+			IP_INC_STATS(net, IPSTATS_MIB_OUTNOROUTES);
-+		goto out;
-+	}
++	if (lwtunnel_fill_encap(skb, nhc->nhc_lwtstate,
++				RTA_ENCAP, RTA_ENCAP_TYPE) < 0)
++		goto nla_put_failure;
 +
-+	err = -EACCES;
-+	if ((rt->rt_flags & RTCF_BROADCAST) &&
-+	    !sock_flag(sk, SOCK_BROADCAST))
-+		goto out;
++	return 0;
 +
-+	if (msg->msg_flags & MSG_CONFIRM)
-+		goto do_confirm;
-+back_from_confirm:
-+
-+	if (!ipc.addr)
-+		ipc.addr = fl4.daddr;
-+
-+	lock_sock(sk);
-+
-+	pfh.icmph.type = user_icmph.type; /* already checked */
-+	pfh.icmph.code = user_icmph.code; /* ditto */
-+	pfh.icmph.checksum = 0;
-+	pfh.icmph.un.echo.id = inet->inet_sport;
-+	pfh.icmph.un.echo.sequence = user_icmph.un.echo.sequence;
-+	pfh.msg = msg;
-+	pfh.wcheck = 0;
-+	pfh.family = AF_INET;
-+
-+	err = ip_append_data(sk, &fl4, ping_getfrag, &pfh, len,
-+			     sizeof(struct icmphdr), &ipc, &rt,
-+			     msg->msg_flags);
-+	if (err)
-+		ip_flush_pending_frames(sk);
-+	else
-+		err = ping_v4_push_pending_frames(sk, &pfh, &fl4);
-+	release_sock(sk);
-+
-+out:
-+	ip_rt_put(rt);
-+out_free:
-+	if (free)
-+		kfree(ipc.opt);
-+	if (!err)
-+		return len;
-+	return err;
-+
-+do_confirm:
-+	if (msg->msg_flags & MSG_PROBE)
-+		dst_confirm_neigh(&rt->dst, &fl4.daddr);
-+	if (!(msg->msg_flags & MSG_PROBE) || len)
-+		goto back_from_confirm;
-+	err = 0;
-+	goto out;
++nla_put_failure:
++	return -EMSGSIZE;
 +}
 +
-+struct proto ping_prot = {
-+	.name =		"PING",
-+	.owner =	THIS_MODULE,
-+	.init =		ping_init_sock,
-+	.close =	ping_close,
-+	.pre_connect =	ping_pre_connect,
-+	.connect =	ip4_datagram_connect,
-+	.disconnect =	__udp_disconnect,
-+	.setsockopt =	ip_setsockopt,
-+	.getsockopt =	ip_getsockopt,
-+	.sendmsg =	ping_v4_sendmsg,
-+	.recvmsg =	ping_recvmsg,
-+	.bind =		ping_bind,
-+	.backlog_rcv =	ping_queue_rcv_skb,
-+	.release_cb =	ip4_datagram_release_cb,
-+	.unhash =	ping_unhash,
-+	.get_port =	ping_get_port,
-+	.put_port =	ping_unhash,
-+	.obj_size =	sizeof(struct inet_sock),
++#if IS_ENABLED(CONFIG_IP_ROUTE_MULTIPATH) || IS_ENABLED(CONFIG_IPV6)
++int fib_add_nexthop(struct sk_buff *skb, const struct fib_nh_common *nhc,
++		    int nh_weight, u8 rt_family, u32 nh_tclassid)
++{
++	const struct net_device *dev = nhc->nhc_dev;
++	struct rtnexthop *rtnh;
++	unsigned char flags = 0;
++
++	rtnh = nla_reserve_nohdr(skb, sizeof(*rtnh));
++	if (!rtnh)
++		goto nla_put_failure;
++
++	rtnh->rtnh_hops = nh_weight - 1;
++	rtnh->rtnh_ifindex = dev ? dev->ifindex : 0;
++
++	if (fib_nexthop_info(skb, nhc, rt_family, &flags, true) < 0)
++		goto nla_put_failure;
++
++	rtnh->rtnh_flags = flags;
++
++	if (nh_tclassid && nla_put_u32(skb, RTA_FLOW, nh_tclassid))
++		goto nla_put_failure;
++
++	/* length of rtnetlink header + attributes */
++	rtnh->rtnh_len = nlmsg_get_pos(skb) - (void *)rtnh;
++
++	return 0;
++
++nla_put_failure:
++	return -EMSGSIZE;
++}
++#endif
++
++const struct nla_policy rtm_ipv4_policy[RTA_MAX + 1] = {
++	[RTA_UNSPEC]		= { .strict_start_type = RTA_DPORT + 1 },
++	[RTA_DST]		= { .type = NLA_U32 },
++	[RTA_SRC]		= { .type = NLA_U32 },
++	[RTA_IIF]		= { .type = NLA_U32 },
++	[RTA_OIF]		= { .type = NLA_U32 },
++	[RTA_GATEWAY]		= { .type = NLA_U32 },
++	[RTA_PRIORITY]		= { .type = NLA_U32 },
++	[RTA_PREFSRC]		= { .type = NLA_U32 },
++	[RTA_METRICS]		= { .type = NLA_NESTED },
++	[RTA_MULTIPATH]		= { .len = sizeof(struct rtnexthop) },
++	[RTA_FLOW]		= { .type = NLA_U32 },
++	[RTA_ENCAP_TYPE]	= { .type = NLA_U16 },
++	[RTA_ENCAP]		= { .type = NLA_NESTED },
++	[RTA_UID]		= { .type = NLA_U32 },
++	[RTA_MARK]		= { .type = NLA_U32 },
++	[RTA_TABLE]		= { .type = NLA_U32 },
++	[RTA_IP_PROTO]		= { .type = NLA_U8 },
++	[RTA_SPORT]		= { .type = NLA_U16 },
++	[RTA_DPORT]		= { .type = NLA_U16 },
++	[RTA_NH_ID]		= { .type = NLA_U32 },
 +};
++
++int ip_valid_fib_dump_req(struct net *net, const struct nlmsghdr *nlh,
++			  struct fib_dump_filter *filter,
++			  struct netlink_callback *cb)
++{
++	struct netlink_ext_ack *extack = cb->extack;
++	struct nlattr *tb[RTA_MAX + 1];
++	struct rtmsg *rtm;
++	int err, i;
++
++	rtm = nlmsg_payload(nlh, sizeof(*rtm));
++	if (!rtm) {
++		NL_SET_ERR_MSG(extack, "Invalid header for FIB dump request");
++		return -EINVAL;
++	}
++
++	if (rtm->rtm_dst_len || rtm->rtm_src_len  || rtm->rtm_tos   ||
++	    rtm->rtm_scope) {
++		NL_SET_ERR_MSG(extack, "Invalid values in header for FIB dump request");
++		return -EINVAL;
++	}
++
++	if (rtm->rtm_flags & ~(RTM_F_CLONED | RTM_F_PREFIX)) {
++		NL_SET_ERR_MSG(extack, "Invalid flags for FIB dump request");
++		return -EINVAL;
++	}
++	if (rtm->rtm_flags & RTM_F_CLONED)
++		filter->dump_routes = false;
++	else
++		filter->dump_exceptions = false;
++
++	filter->flags    = rtm->rtm_flags;
++	filter->protocol = rtm->rtm_protocol;
++	filter->rt_type  = rtm->rtm_type;
++	filter->table_id = rtm->rtm_table;
++
++	err = nlmsg_parse_deprecated_strict(nlh, sizeof(*rtm), tb, RTA_MAX,
++					    rtm_ipv4_policy, extack);
++	if (err < 0)
++		return err;
++
++	for (i = 0; i <= RTA_MAX; ++i) {
++		int ifindex;
++
++		if (!tb[i])
++			continue;
++
++		switch (i) {
++		case RTA_TABLE:
++			filter->table_id = nla_get_u32(tb[i]);
++			break;
++		case RTA_OIF:
++			ifindex = nla_get_u32(tb[i]);
++
++			filter->dev = dev_get_by_index_rcu(net, ifindex);
++			if (!filter->dev)
++				return -ENODEV;
++			break;
++		default:
++			NL_SET_ERR_MSG(extack, "Unsupported attribute in dump request");
++			return -EINVAL;
++		}
++	}
++
++	if (filter->flags || filter->protocol || filter->rt_type ||
++	    filter->table_id || filter->dev) {
++		filter->filter_set = 1;
++		cb->answer_flags = NLM_F_DUMP_FILTERED;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(ip_valid_fib_dump_req);
+diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
+index 8a3dc04e8cac..c507d53c6da6 100644
+--- a/net/ipv4/fib_frontend.c
++++ b/net/ipv4/fib_frontend.c
+@@ -684,29 +684,6 @@ int ip_rt_ioctl(struct net *net, unsigned int cmd, struct rtentry *rt)
+ 	return -EINVAL;
+ }
+ 
+-const struct nla_policy rtm_ipv4_policy[RTA_MAX + 1] = {
+-	[RTA_UNSPEC]		= { .strict_start_type = RTA_DPORT + 1 },
+-	[RTA_DST]		= { .type = NLA_U32 },
+-	[RTA_SRC]		= { .type = NLA_U32 },
+-	[RTA_IIF]		= { .type = NLA_U32 },
+-	[RTA_OIF]		= { .type = NLA_U32 },
+-	[RTA_GATEWAY]		= { .type = NLA_U32 },
+-	[RTA_PRIORITY]		= { .type = NLA_U32 },
+-	[RTA_PREFSRC]		= { .type = NLA_U32 },
+-	[RTA_METRICS]		= { .type = NLA_NESTED },
+-	[RTA_MULTIPATH]		= { .len = sizeof(struct rtnexthop) },
+-	[RTA_FLOW]		= { .type = NLA_U32 },
+-	[RTA_ENCAP_TYPE]	= { .type = NLA_U16 },
+-	[RTA_ENCAP]		= { .type = NLA_NESTED },
+-	[RTA_UID]		= { .type = NLA_U32 },
+-	[RTA_MARK]		= { .type = NLA_U32 },
+-	[RTA_TABLE]		= { .type = NLA_U32 },
+-	[RTA_IP_PROTO]		= { .type = NLA_U8 },
+-	[RTA_SPORT]		= { .type = NLA_U16 },
+-	[RTA_DPORT]		= { .type = NLA_U16 },
+-	[RTA_NH_ID]		= { .type = NLA_U32 },
+-};
+-
+ int fib_gw_from_via(struct fib_config *cfg, struct nlattr *nla,
+ 		    struct netlink_ext_ack *extack)
+ {
+@@ -957,79 +934,6 @@ static int inet_rtm_newroute(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	return err;
+ }
+ 
+-int ip_valid_fib_dump_req(struct net *net, const struct nlmsghdr *nlh,
+-			  struct fib_dump_filter *filter,
+-			  struct netlink_callback *cb)
+-{
+-	struct netlink_ext_ack *extack = cb->extack;
+-	struct nlattr *tb[RTA_MAX + 1];
+-	struct rtmsg *rtm;
+-	int err, i;
+-
+-	rtm = nlmsg_payload(nlh, sizeof(*rtm));
+-	if (!rtm) {
+-		NL_SET_ERR_MSG(extack, "Invalid header for FIB dump request");
+-		return -EINVAL;
+-	}
+-
+-	if (rtm->rtm_dst_len || rtm->rtm_src_len  || rtm->rtm_tos   ||
+-	    rtm->rtm_scope) {
+-		NL_SET_ERR_MSG(extack, "Invalid values in header for FIB dump request");
+-		return -EINVAL;
+-	}
+-
+-	if (rtm->rtm_flags & ~(RTM_F_CLONED | RTM_F_PREFIX)) {
+-		NL_SET_ERR_MSG(extack, "Invalid flags for FIB dump request");
+-		return -EINVAL;
+-	}
+-	if (rtm->rtm_flags & RTM_F_CLONED)
+-		filter->dump_routes = false;
+-	else
+-		filter->dump_exceptions = false;
+-
+-	filter->flags    = rtm->rtm_flags;
+-	filter->protocol = rtm->rtm_protocol;
+-	filter->rt_type  = rtm->rtm_type;
+-	filter->table_id = rtm->rtm_table;
+-
+-	err = nlmsg_parse_deprecated_strict(nlh, sizeof(*rtm), tb, RTA_MAX,
+-					    rtm_ipv4_policy, extack);
+-	if (err < 0)
+-		return err;
+-
+-	for (i = 0; i <= RTA_MAX; ++i) {
+-		int ifindex;
+-
+-		if (!tb[i])
+-			continue;
+-
+-		switch (i) {
+-		case RTA_TABLE:
+-			filter->table_id = nla_get_u32(tb[i]);
+-			break;
+-		case RTA_OIF:
+-			ifindex = nla_get_u32(tb[i]);
+-
+-			filter->dev = dev_get_by_index_rcu(net, ifindex);
+-			if (!filter->dev)
+-				return -ENODEV;
+-			break;
+-		default:
+-			NL_SET_ERR_MSG(extack, "Unsupported attribute in dump request");
+-			return -EINVAL;
+-		}
+-	}
+-
+-	if (filter->flags || filter->protocol || filter->rt_type ||
+-	    filter->table_id || filter->dev) {
+-		filter->filter_set = 1;
+-		cb->answer_flags = NLM_F_DUMP_FILTERED;
+-	}
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(ip_valid_fib_dump_req);
+-
+ static int inet_dump_fib(struct sk_buff *skb, struct netlink_callback *cb)
+ {
+ 	const struct nlmsghdr *nlh = cb->nlh;
+diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
+index e3bcc25229b0..3ce0f2611e69 100644
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -136,78 +136,6 @@ const struct fib_prop fib_props[RTN_MAX + 1] = {
+ 	},
+ };
+ 
+-static void rt_fibinfo_free(struct rtable __rcu **rtp)
+-{
+-	struct rtable *rt = rcu_dereference_protected(*rtp, 1);
+-
+-	if (!rt)
+-		return;
+-
+-	/* Not even needed : RCU_INIT_POINTER(*rtp, NULL);
+-	 * because we waited an RCU grace period before calling
+-	 * free_fib_info_rcu()
+-	 */
+-
+-	dst_dev_put(&rt->dst);
+-	dst_release_immediate(&rt->dst);
+-}
+-
+-static void free_nh_exceptions(struct fib_nh_common *nhc)
+-{
+-	struct fnhe_hash_bucket *hash;
+-	int i;
+-
+-	hash = rcu_dereference_protected(nhc->nhc_exceptions, 1);
+-	if (!hash)
+-		return;
+-	for (i = 0; i < FNHE_HASH_SIZE; i++) {
+-		struct fib_nh_exception *fnhe;
+-
+-		fnhe = rcu_dereference_protected(hash[i].chain, 1);
+-		while (fnhe) {
+-			struct fib_nh_exception *next;
+-
+-			next = rcu_dereference_protected(fnhe->fnhe_next, 1);
+-
+-			rt_fibinfo_free(&fnhe->fnhe_rth_input);
+-			rt_fibinfo_free(&fnhe->fnhe_rth_output);
+-
+-			kfree(fnhe);
+-
+-			fnhe = next;
+-		}
+-	}
+-	kfree(hash);
+-}
+-
+-static void rt_fibinfo_free_cpus(struct rtable __rcu * __percpu *rtp)
+-{
+-	int cpu;
+-
+-	if (!rtp)
+-		return;
+-
+-	for_each_possible_cpu(cpu) {
+-		struct rtable *rt;
+-
+-		rt = rcu_dereference_protected(*per_cpu_ptr(rtp, cpu), 1);
+-		if (rt) {
+-			dst_dev_put(&rt->dst);
+-			dst_release_immediate(&rt->dst);
+-		}
+-	}
+-	free_percpu(rtp);
+-}
+-
+-void fib_nh_common_release(struct fib_nh_common *nhc)
+-{
+-	netdev_put(nhc->nhc_dev, &nhc->nhc_dev_tracker);
+-	lwtstate_put(nhc->nhc_lwtstate);
+-	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
+-	rt_fibinfo_free(&nhc->nhc_rth_input);
+-	free_nh_exceptions(nhc);
+-}
+-
+ void fib_nh_release(struct net *net, struct fib_nh *fib_nh)
+ {
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+@@ -639,38 +567,6 @@ static int fib_detect_death(struct fib_info *fi, int order,
+ 	return 1;
+ }
+ 
+-int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
+-		       struct nlattr *encap, u16 encap_type,
+-		       void *cfg, gfp_t gfp_flags,
+-		       struct netlink_ext_ack *extack)
+-{
+-	int err;
+-
+-	nhc->nhc_pcpu_rth_output = alloc_percpu_gfp(struct rtable __rcu *,
+-						    gfp_flags);
+-	if (!nhc->nhc_pcpu_rth_output)
+-		return -ENOMEM;
+-
+-	if (encap) {
+-		struct lwtunnel_state *lwtstate;
+-
+-		err = lwtunnel_build_state(net, encap_type, encap,
+-					   nhc->nhc_family, cfg, &lwtstate,
+-					   extack);
+-		if (err)
+-			goto lwt_failure;
+-
+-		nhc->nhc_lwtstate = lwtstate_get(lwtstate);
+-	}
+-
+-	return 0;
+-
+-lwt_failure:
+-	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
+-	nhc->nhc_pcpu_rth_output = NULL;
+-	return err;
+-}
+-
+ int fib_nh_init(struct net *net, struct fib_nh *nh,
+ 		struct fib_config *cfg, int nh_weight,
+ 		struct netlink_ext_ack *extack)
+@@ -1605,107 +1501,6 @@ struct fib_info *fib_create_info(struct fib_config *cfg,
+ 	return ERR_PTR(err);
+ }
+ 
+-int fib_nexthop_info(struct sk_buff *skb, const struct fib_nh_common *nhc,
+-		     u8 rt_family, unsigned char *flags, bool skip_oif)
+-{
+-	if (nhc->nhc_flags & RTNH_F_DEAD)
+-		*flags |= RTNH_F_DEAD;
+-
+-	if (nhc->nhc_flags & RTNH_F_LINKDOWN) {
+-		*flags |= RTNH_F_LINKDOWN;
+-
+-		rcu_read_lock();
+-		switch (nhc->nhc_family) {
+-		case AF_INET:
+-			if (ip_ignore_linkdown(nhc->nhc_dev))
+-				*flags |= RTNH_F_DEAD;
+-			break;
+-		case AF_INET6:
+-			if (ip6_ignore_linkdown(nhc->nhc_dev))
+-				*flags |= RTNH_F_DEAD;
+-			break;
+-		}
+-		rcu_read_unlock();
+-	}
+-
+-	switch (nhc->nhc_gw_family) {
+-	case AF_INET:
+-		if (nla_put_in_addr(skb, RTA_GATEWAY, nhc->nhc_gw.ipv4))
+-			goto nla_put_failure;
+-		break;
+-	case AF_INET6:
+-		/* if gateway family does not match nexthop family
+-		 * gateway is encoded as RTA_VIA
+-		 */
+-		if (rt_family != nhc->nhc_gw_family) {
+-			int alen = sizeof(struct in6_addr);
+-			struct nlattr *nla;
+-			struct rtvia *via;
+-
+-			nla = nla_reserve(skb, RTA_VIA, alen + 2);
+-			if (!nla)
+-				goto nla_put_failure;
+-
+-			via = nla_data(nla);
+-			via->rtvia_family = AF_INET6;
+-			memcpy(via->rtvia_addr, &nhc->nhc_gw.ipv6, alen);
+-		} else if (nla_put_in6_addr(skb, RTA_GATEWAY,
+-					    &nhc->nhc_gw.ipv6) < 0) {
+-			goto nla_put_failure;
+-		}
+-		break;
+-	}
+-
+-	*flags |= (nhc->nhc_flags &
+-		   (RTNH_F_ONLINK | RTNH_F_OFFLOAD | RTNH_F_TRAP));
+-
+-	if (!skip_oif && nhc->nhc_dev &&
+-	    nla_put_u32(skb, RTA_OIF, nhc->nhc_dev->ifindex))
+-		goto nla_put_failure;
+-
+-	if (lwtunnel_fill_encap(skb, nhc->nhc_lwtstate,
+-				RTA_ENCAP, RTA_ENCAP_TYPE) < 0)
+-		goto nla_put_failure;
+-
+-	return 0;
+-
+-nla_put_failure:
+-	return -EMSGSIZE;
+-}
+-
+-#if IS_ENABLED(CONFIG_IP_ROUTE_MULTIPATH) || IS_ENABLED(CONFIG_IPV6)
+-int fib_add_nexthop(struct sk_buff *skb, const struct fib_nh_common *nhc,
+-		    int nh_weight, u8 rt_family, u32 nh_tclassid)
+-{
+-	const struct net_device *dev = nhc->nhc_dev;
+-	struct rtnexthop *rtnh;
+-	unsigned char flags = 0;
+-
+-	rtnh = nla_reserve_nohdr(skb, sizeof(*rtnh));
+-	if (!rtnh)
+-		goto nla_put_failure;
+-
+-	rtnh->rtnh_hops = nh_weight - 1;
+-	rtnh->rtnh_ifindex = dev ? dev->ifindex : 0;
+-
+-	if (fib_nexthop_info(skb, nhc, rt_family, &flags, true) < 0)
+-		goto nla_put_failure;
+-
+-	rtnh->rtnh_flags = flags;
+-
+-	if (nh_tclassid && nla_put_u32(skb, RTA_FLOW, nh_tclassid))
+-		goto nla_put_failure;
+-
+-	/* length of rtnetlink header + attributes */
+-	rtnh->rtnh_len = nlmsg_get_pos(skb) - (void *)rtnh;
+-
+-	return 0;
+-
+-nla_put_failure:
+-	return -EMSGSIZE;
+-}
+-#endif
+-
+ #ifdef CONFIG_IP_ROUTE_MULTIPATH
+ static int fib_add_multipath(struct sk_buff *skb, struct fib_info *fi)
+ {
+diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
+index 42e55b5a755e..ad79943376c5 100644
+--- a/net/ipv4/nexthop.c
++++ b/net/ipv4/nexthop.c
+@@ -1421,7 +1421,7 @@ static bool nexthop_is_good_nh(const struct nexthop *nh)
+ 
+ 	switch (nhi->family) {
+ 	case AF_INET:
+-		return ipv4_good_nh(&nhi->fib_nh);
++		return IS_ENABLED(CONFIG_IPV4) && ipv4_good_nh(&nhi->fib_nh);
+ 	case AF_INET6:
+ 		return IS_ENABLED(CONFIG_IPV6) && ipv6_good_nh(&nhi->fib6_nh);
+ 	}
+@@ -4005,7 +4005,8 @@ static int nh_netdev_event(struct notifier_block *this,
+ 		break;
+ 	case NETDEV_CHANGEMTU:
+ 		info_ext = ptr;
+-		nexthop_sync_mtu(dev, info_ext->ext.mtu);
++		if (IS_ENABLED(CONFIG_IPV4))
++			nexthop_sync_mtu(dev, info_ext->ext.mtu);
+ 		rt_cache_flush(dev_net(dev));
+ 		break;
+ 	}
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index e3760daa3470..0e7fef5973db 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -615,6 +615,7 @@ static struct ctl_table ipv4_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_doulongvec_minmax,
+ 	},
++#if IS_ENABLED(CONFIG_IPV4)
+ 	{
+ 		.procname	= "fib_sync_mem",
+ 		.data		= &sysctl_fib_sync_mem,
+@@ -624,6 +625,7 @@ static struct ctl_table ipv4_table[] = {
+ 		.extra1		= &sysctl_fib_sync_mem_min,
+ 		.extra2		= &sysctl_fib_sync_mem_max,
+ 	},
++#endif
+ };
+ 
+ static const struct ctl_table ipv4_net_table[] = {
 -- 
 2.55.0
 
