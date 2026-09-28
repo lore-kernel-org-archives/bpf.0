@@ -1,62 +1,62 @@
-Received: from mail-oo2-f38.google.com (mail-oo2-f38.google.com [74.125.231.166])
+Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BDB3C8716
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 18:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3913BED4A
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 18:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790621634; cv=none; b=eNBeWNUmSnWx7qIQZM195lkRsZhEsixKK4KccnHYtb+5ueU77bdN2JRwoSCdWLuO7ZLNvW1LXkVtT/H8qYxQdzKkZck7Edw/TUVpggZQpFSLGFwNxuHpy06pnAWT1eJWemJY7SdVCE24qkIF8JGKOuT7P7VMYpsahYTqZ+X/jUo=
+	t=1790621632; cv=none; b=kHQZ0I9FuWOcOvo0n7GmjfJzkgSzY4lIMBv+UOYjryUb01Az2nB3AyDDjfT6zhw8U05aqZYz1+yXv6hTeucNymiGepVURNfoYCz58YFlVhRwTEtysNxXNfZZSAhb0l8EUfHghAyDH32Hn7QrAKn4v3el8eE88eOdsV5+iq1f9n4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790621634; c=relaxed/simple;
-	bh=VW4/pnBpUpWuJxqj5rzJekQjvPjhFoNBuDDY00MI0Nk=;
+	s=arc-20240116; t=1790621632; c=relaxed/simple;
+	bh=qQ5K9OKGZulWiLhYOB1FrnxadGcL5+/YeLvLHsca+1E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i3Po3L2IUjf6N9IhRPY7jeNACQhb1Q5Q6ZNEJMVXPvpEXrKbKVYABXFW3O+jkKJFmS9j7CfjaX4FH+6Jxh0USPG1ugkG2grIXsLS0PfpgbrewzwWTejwMr6ScW7BS17dokJSvUtQ+IZl/kyviZ848hskUxr7OiUtQpbhzH399A8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GSimwOmO; arc=none smtp.client-ip=74.125.231.166
+	 MIME-Version; b=DyfLdJPCKv7TcZ0gvzvqNR9jyjATNy94YZs2xQfDpfmvNIpQWZEPgZvLRsDOJa/vOfKao+B7Crfgl9xO3KnJgKy10maCXcbSy8LBYKe4le7h5Oj8QyUOrld3d8EPZWAo20xnEQQiQ1f0DnXzs+9pCk/0YIZremjPmMWEA/Er8Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SBt5z+ye; arc=none smtp.client-ip=74.125.231.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GSimwOmO"
-Received: by mail-oo2-f38.google.com with SMTP id 46e09a7af769-7f4f0c89e34so2234338a34.1
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:53:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SBt5z+ye"
+Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6d817a94745so1099308eaf.1
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:53:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790621621; x=1791226421; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790621625; x=1791226425; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CNF89wTVo8xSOO0QxLVLNI0GwQraIC4IM+KbWkb2M4Q=;
-        b=GSimwOmOlKa5nv7B7Ur3WCKPfzzKTcR84oO9qbIgriurbWHJSlNH0Z6oNWDMqkqiQO
-         4nLEn/hW9K6aliEVRZyCHWcSoSnz1t95NaqdYJDYLyjS03vUVn98VNkUysJc0E/i9HiR
-         mg5meu9W1cLLMz49lPx4A/XuCOhnfZONWzKu6/fvI1w2nLQfr5ocCzoFY0TMbEwd5/Nf
-         MZ5GSc0lxHKvfF4zziTu2TU8+5By0zEKzfYzaseFb2vCKyQsqI/AyS6EljNuq3G3cNMQ
-         6C2vjxPyuC2/vfesYLfqaGZDzaovi751kRv4tZSZaKaX62stuhXUQdUCs85Wb0Z71VnD
-         pYIw==
+        bh=ZR51Idqbkctd9YFgZiJO5Qq1jjz1fe5rgHJdzXHZtCI=;
+        b=SBt5z+yeudFO50aejTGtOS7tJn2EguwYMnqmrDysyh/6gLhb/z3H7bD2giVSExvpXo
+         K31dS6Pf/Rnw+7Z8HnK3AnL4j40N8ximq5Qjp3edGsM4qFB+GuvXMYixxwsqCEvn/5SW
+         eDiZYBc0JQRc9M0O8/DPFjcVr+6dePl2+DNnJJF1iSZNHBZhLPRKJar716tQ+lj7ejJ1
+         D2Y9ZtwzEJCPNAav1d5/fAe5IchAubdy3muDmPNwVpiidyPqWwuyGnDf92xO0UqptB8o
+         0TbgR2lH3OVtfw8pHFhrBrvbXshhp2laHi9s9LDbouI4Q+bPTuglvwLpeA0fe8i3N0Qm
+         JxOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790621621; x=1791226421;
+        d=1e100.net; s=20260707; t=1790621625; x=1791226425;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CNF89wTVo8xSOO0QxLVLNI0GwQraIC4IM+KbWkb2M4Q=;
-        b=hRjX39RS7qs5JLDXfnFk8YN0VL9BDKiiTA2iyFGkOfpaRaMjDM5UI4mPj/XmxQBYqz
-         n15q0FpzWldAGcCQdWLjb0x1B5ef+O1S+/w996MDtuWYOK5YSOepWs8Yhex6Z8gRmsZ+
-         BPvIEWiMCrjIze60aYDrdXOOcW9ARiHkE1NmdzzEOSa+B31V79GX7Qqy5qfbPdDLZiM9
-         /+eO6Hon8QTKzWj1kYHQVshpiC2tLWt5VK32P3M888zIq2opUqQTJZfJZviLrS3IEsM0
-         A8ea28K93bTpgN8eWDwr4oZn5yKvLGwQHP8aNq7Ay/ZvZ/cMuPRljIeehNv/5jTFDEDH
-         YH0g==
-X-Gm-Message-State: AFuF++lkmSGegS0a8Vch32DBtMENiyEwFPSqPFztf4tAzr+1GuaFDQGO
-	vYyeEktzYrxK9e1Wpf1FgOwdwFiXvQpo4i43LBrS29uajkO6XK/Bh+9wKmcyNQ==
-X-Gm-Gg: AYBFou3wz0lAsPviVltbb038okoZTdd3aB8fgyQ0P0VEyE0qoX36M49Cmge0peKTn9f
-	QZ2kV8aOw1Dl/eyK+vyifGcejQr18tymDCDe5DCdHv69c3ScCNh+3h3KWPuGhtxGLoULrSoY+gh
-	GOPzF6aTAZnOsg6zC6E1jH81+NBn6m07FlXgvs6L0jYH957NCcpKbQpwaNh4O8rRqd+qWl2maRt
-	PdGu+XF/ubsbE+2JVWkxbQ2cR2zYJuQeG3ElZdoW1MVxWEfvQfpNkQslc0ekoXQ7EfO5bTv1etn
-	FDVcnmMAWAdYA+I//elYb+Qx2GJ9EhHJk/Z7ufzTFiJPhjkhfOCTepnIkzLDsW3ZimOxZI2CYA7
-	1hAjzUJ/l8Khwq4RRfEcks57A0D3W1lO1dSCFFw2jSrUBOLRSTipQIbdZ7RFBJCa0ONfOiZZdew
-	s+KA6X2fHptSSOg1KjLTOeFoS1l5bdt6P6tLE2TrQtGSevWdk1GHhleNeRYUW0
-X-Received: by 2002:a05:6820:1849:b0:6c1:e01b:3b1e with SMTP id 006d021491bc7-6d43ff69297mr13149683eaf.48.1790621620776;
-        Mon, 28 Sep 2026 11:53:40 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:4::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81d58a04499sm2522620a34.18.2026.09.28.11.53.40
+        bh=ZR51Idqbkctd9YFgZiJO5Qq1jjz1fe5rgHJdzXHZtCI=;
+        b=cV7apt8S4ieGGMGaSt4NSNNUCpQazLb050TIW/ZbVfR+Jvx9ZLdLJQLRhBON/nydTu
+         3ZxFyyfDnczed7IPm2b3yzd4rpg55K07sbuQLR8CV7JNSLP83GoEOznRdfH9vSEDayHn
+         byJuPmKTjFNj/jgEiZbWqUdBTyvW7ZyUdyVEry68YhOhoKQ6dU7cqR4Ej4uhCJXEGF75
+         MF/41gYDEkIP38+v6Xecl7ayofU/zbWwq/qoPS4dE6KQZ6tbXAYjLQlD39NprrPReph0
+         Ty6jfO3pkqjGKH+zukkNs3h7Qb+w/juTEi4dkghakGi0+UpkK8rqDe0r0lKX9oa/EVNg
+         Wqig==
+X-Gm-Message-State: AFuF++lFSpSfrMkrAWfTdgLpqTzyvNpSXAOmxnbiwZOeu4fPm7+1Ci6R
+	5ONeKckOqWamerlwFZFUl1r4+2zJ4RtCYvGXIgjbLxo1oIHP3l7nh1s6MbwG6A==
+X-Gm-Gg: AYBFou0NzlibOMlCTVHd9HB6mHCuU06A2o0zpkLgXdXTSovK/hbDu0unibXjHn1jqPy
+	Ve0oi5Vl8Uvc2FN98+EFaylmnNUvhyOCmtbYB7ID/13ML3u2g3aV2At8jlNaoDqz+AGvf/B+Gi/
+	tJPqBbC9QcGC+T6+hECsATVqnx35lw1eqU8Ss/QfL2ugxdNRej/pP1Yq6AOtCgEYuh6ixlcTxSU
+	ZSgN90oUqZZB3U0JfELplAUsIYMBZjL17z8F08RYj/pO9WF2OOofh/kIq54EhuLYbJLczPzULgb
+	UZXC/mUTlaV4qrZBV0MipyHD3gdsSpO//KRJNaS/9K90qqJ+WetfU6YsrtOd+LCIUwgXXqthrcw
+	DD85ZiglvhpB9yUVPj00iAuWfzvikvOUndJYo8SfJldfTWCI8sehyq7XiN4kO2n0y49w/5a4eX4
+	VKG+0+2kJ2ymaDC3srfOOSlTmtFPO/HPPGY42biT+e93gW/WljiDzOZoiReA==
+X-Received: by 2002:a4a:ee10:0:b0:6b3:4a99:bd87 with SMTP id 006d021491bc7-6d43e80c99fmr14236893eaf.30.1790621624751;
+        Mon, 28 Sep 2026 11:53:44 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81d58f1748fsm2729849a34.23.2026.09.28.11.53.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 11:53:40 -0700 (PDT)
+        Mon, 28 Sep 2026 11:53:44 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 03/11] bpf: Build argument prototypes for subprog calls
-Date: Mon, 28 Sep 2026 11:53:26 -0700
-Message-ID: <20260928185334.1004200-4-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v3 06/11] bpf: Check subprog context arguments in the common path
+Date: Mon, 28 Sep 2026 11:53:29 -0700
+Message-ID: <20260928185334.1004200-7-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260928185334.1004200-1-ameryhung@gmail.com>
 References: <20260928185334.1004200-1-ameryhung@gmail.com>
@@ -80,301 +80,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The common argument checker consumes a parameter-indexed bpf_func_proto,
-while BPF subprogram argument metadata is cached by ABI slot in compact
-bpf_subprog_info entries. Embedding a full prototype in every fixed
-subprogram entry would waste memory.
-
-Embed a scratch prototype in the verifier environment. Fill it by
-walking BTF parameters and the cached slots with separate cursors,
-mirroring the kfunc representation for parameters that occupy multiple
-slots. Keep the compact cache as the source of truth. The verifier
-environment is already heap allocated, so this avoids a separate
-allocation, failure path, and cleanup.
-
-Keep the existing validation loop, but make it consume the generated
-prototype in preparation for moving BPF subprogram calls to the common
-argument checker. No functional change.
+Subprog and helper/kfunc context arguments require PTR_TO_CTX with an
+acceptable offset. Route subprog context arguments through
+check_func_arg() and update the verifier-log expectation.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- include/linux/bpf_verifier.h |   3 +-
- kernel/bpf/verifier.c        | 103 ++++++++++++++++++++++++-----------
- 2 files changed, 73 insertions(+), 33 deletions(-)
+ kernel/bpf/verifier.c                             | 15 ++-------------
+ .../selftests/bpf/progs/test_global_func5.c       |  2 +-
+ 2 files changed, 3 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index c775bd757706..183759f1e014 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -976,6 +976,7 @@ struct bpf_verifier_env {
- 	const struct bpf_line_info *prev_linfo;
- 	struct bpf_verifier_log log;
- 	struct bpf_diag *diag;
-+	struct bpf_func_proto bpf_subprog_scratch;
- 	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 for the fake and exception subprogs */
- 	/* subprog indices sorted in topological order: leaves first, callers last */
- 	int subprog_topo_order[BPF_MAX_SUBPROGS + 2];
-@@ -1645,6 +1646,7 @@ struct bpf_call_arg_meta {
- 	struct btf *btf;
- 	u32 func_id;
- 	const struct bpf_func_proto *fn;
-+	const struct btf_type *func_proto;
- 	u8 release_regno;
- 	u32 ret_btf_id;
- 	u32 subprogno;
-@@ -1657,7 +1659,6 @@ struct bpf_call_arg_meta {
- 	/* Only set by kfunc */
- 	bool r0_rdonly;
- 	u32 kfunc_flags;
--	const struct btf_type *func_proto;
- 	const char *func_name;
- 	struct arg_constant_desc arg_constant;
- 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index de9276a3ee4d..e677e5615fee 100644
+index 79b9e7242fee..659820a4b805 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -9941,20 +9941,20 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
-  * func model recorded, or the verifier would check an argument at a slot
-  * the JIT does not place it at.
-  */
--static u32 kfunc_arg_slots(const struct btf_type *t)
-+static u32 btf_arg_slots(const struct btf_type *t)
- {
- 	if (btf_type_is_int(t) || btf_type_is_struct(t))
- 		return (t->size + BPF_REG_SIZE - 1) / BPF_REG_SIZE;
- 	return 1;
- }
+@@ -10880,22 +10880,11 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+ 		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
+ 		nslots = btf_arg_slots(t);
  
--static u32 kfunc_proto_slots(const struct btf *btf, const struct btf_type *func_proto)
-+static u32 btf_proto_slots(const struct btf *btf, const struct btf_type *func_proto)
- {
- 	const struct btf_param *args = btf_params(func_proto);
- 	u32 i, nargs = btf_type_vlen(func_proto), slots_used = 0;
- 
- 	for (i = 0; i < nargs; i++)
--		slots_used += kfunc_arg_slots(btf_type_skip_modifiers(btf, args[i].type, NULL));
-+		slots_used += btf_arg_slots(btf_type_skip_modifiers(btf, args[i].type, NULL));
- 
- 	return slots_used;
- }
-@@ -9997,7 +9997,7 @@ static int check_func_args(struct bpf_verifier_env *env, struct bpf_call_arg_met
- 	 * count. Only a proto whose parameters take a slot each can name the
- 	 * argument a stack slot belongs to.
- 	 */
--	proto_slots = meta->btf ? kfunc_proto_slots(meta->btf, meta->func_proto) : nargs;
-+	proto_slots = meta->btf ? btf_proto_slots(meta->btf, meta->func_proto) : nargs;
- 
- 	if (proto_slots > MAX_BPF_FUNC_REG_ARGS) {
- 		err = check_outgoing_stack_args(env, caller, proto_slots, meta->func_name,
-@@ -10013,7 +10013,7 @@ static int check_func_args(struct bpf_verifier_env *env, struct bpf_call_arg_met
- 		nslots = 1;
- 		if (args) {
- 			t = btf_type_skip_modifiers(meta->btf, args[arg].type, NULL);
--			nslots = kfunc_arg_slots(t);
-+			nslots = btf_arg_slots(t);
- 		}
- 
- 		if (meta->fn->arg_type[arg] == ARG_UNUSED)
-@@ -10798,6 +10798,22 @@ static int setup_func_entry(struct bpf_verifier_env *env, int subprog, int calls
- 	return err;
- }
- 
-+static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const struct btf *btf,
-+				  const struct btf_type *func_proto, struct bpf_func_proto *proto)
-+{
-+	const struct btf_param *args = btf_params(func_proto);
-+	u32 arg, slot = 0;
-+
-+	memset(proto, 0, sizeof(*proto));
-+	for (arg = 0; arg < btf_type_vlen(func_proto); arg++) {
-+		const struct btf_type *t;
-+
-+		proto->arg_type[arg] = sub->args[slot].arg_type;
-+		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
-+		slot += btf_arg_slots(t);
-+	}
-+}
-+
- static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 				    struct btf *btf,
- 				    struct bpf_reg_state *regs)
-@@ -10805,10 +10821,11 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 	struct bpf_subprog_info *sub = subprog_info(env, subprog);
- 	struct bpf_func_state *caller = cur_func(env);
- 	struct bpf_verifier_log *log = &env->log;
--	const struct btf_param *args;
-+	const struct btf_param *args, *stack_args;
- 	const struct btf_type *func, *func_proto;
- 	struct bpf_call_arg_meta meta;
--	u32 i;
-+	struct bpf_func_proto *fn;
-+	u32 arg, slot, nslots;
- 	int ret, err;
- 
- 	memset(&meta, 0, sizeof(meta));
-@@ -10830,33 +10847,42 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 	func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
- 	func_proto = btf_type_by_id(btf, func->type);
- 	args = btf_params(func_proto);
--	if (sub->arg_slot_cnt != btf_type_vlen(func_proto))
--		args = NULL;
-+	stack_args = sub->arg_slot_cnt == btf_type_vlen(func_proto) ? args : NULL;
- 	ret = check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
--					bpf_subprog_name(env, subprog), btf, args);
-+					bpf_subprog_name(env, subprog), btf, stack_args);
- 	if (ret)
- 		return ret;
- 
-+	fn = &env->bpf_subprog_scratch;
-+	gen_subprog_arg_proto(sub, btf, func_proto, fn);
-+	meta.fn = fn;
-+	meta.func_proto = func_proto;
-+
- 	/* check that BTF function arguments match actual types that the
- 	 * verifier sees.
- 	 */
--	for (i = 0; i < sub->arg_slot_cnt; i++) {
--		argno_t argno = argno_from_arg(i + 1);
--		struct bpf_reg_state *reg = get_func_arg_reg(caller, regs, i);
--		struct bpf_subprog_arg_info *arg = &sub->args[i];
-+	for (arg = 0, slot = 0; arg < btf_type_vlen(func_proto); arg++, slot += nslots) {
-+		struct bpf_reg_state *reg = get_func_arg_reg(caller, regs, slot);
-+		enum bpf_arg_type arg_type = fn->arg_type[arg];
-+		argno_t argno = argno_from_arg(slot + 1);
-+		const struct btf_type *t;
-+		u32 k;
-+
-+		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
-+		nslots = btf_arg_slots(t);
- 
--		if (arg->arg_type == ARG_SCALAR) {
-+		if (arg_type == ARG_SCALAR) {
- 			if (reg->type != SCALAR_VALUE) {
- 				bpf_log(log, "%s is not a scalar\n", reg_arg_name(env, argno));
- 				return -EINVAL;
- 			}
--		} else if (arg->arg_type & PTR_UNTRUSTED) {
-+		} else if (arg_type & PTR_UNTRUSTED) {
- 			/*
- 			 * Anything is allowed for untrusted arguments, as these are
- 			 * read-only and probe read instructions would protect against
- 			 * invalid memory access.
- 			 */
--		} else if (arg->arg_type == ARG_PTR_TO_CTX) {
-+		} else if (arg_type == ARG_PTR_TO_CTX) {
- 			ret = check_func_arg_reg_off(env, reg, argno, ARG_PTR_TO_CTX);
- 			if (ret < 0)
+-		if (arg_type == ARG_SCALAR || arg_type == ARG_IGNORE) {
++		if (arg_type == ARG_SCALAR || arg_type == ARG_IGNORE ||
++		    arg_type == ARG_PTR_TO_CTX) {
+ 			ret = check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
+ 			if (ret)
  				return ret;
-@@ -10868,11 +10894,12 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 					reg_arg_name(env, argno));
- 				return -EINVAL;
- 			}
--		} else if (base_type(arg->arg_type) == ARG_PTR_TO_MEM) {
-+		} else if (base_type(arg_type) == ARG_PTR_TO_MEM) {
+-		} else if (arg_type == ARG_PTR_TO_CTX) {
+-			ret = check_func_arg_reg_off(env, reg, argno, ARG_PTR_TO_CTX);
+-			if (ret < 0)
+-				return ret;
+-			/* If function expects ctx type in BTF check that caller
+-			 * is passing PTR_TO_CTX.
+-			 */
+-			if (reg->type != PTR_TO_CTX) {
+-				bpf_log(log, "%s expects pointer to ctx\n",
+-					reg_arg_name(env, argno));
+-				return -EINVAL;
+-			}
+ 		} else if (base_type(arg_type) == ARG_PTR_TO_MEM) {
  			ret = check_func_arg_reg_off(env, reg, argno, ARG_PTR_TO_MEM);
  			if (ret < 0)
- 				return ret;
--			if (check_mem_reg(env, reg, argno, arg->mem_size, BPF_READ | BPF_WRITE, NULL,
-+			if (check_mem_reg(env, reg, argno, sub->args[slot].mem_size,
-+					  BPF_READ | BPF_WRITE, NULL,
- 					  NULL))
- 				return -EINVAL;
- 			/*
-@@ -10885,13 +10912,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 						reg_arg_name(env, argno), subprog);
- 				return -EINVAL;
- 			}
--			if (!(arg->arg_type & PTR_MAYBE_NULL) &&
-+			if (!(arg_type & PTR_MAYBE_NULL) &&
- 			    (type_may_be_null(reg->type) || bpf_register_is_null(reg))) {
- 				bpf_log(log, "%s is expected to be non-NULL\n",
- 					reg_arg_name(env, argno));
- 				return -EINVAL;
- 			}
--		} else if (base_type(arg->arg_type) == ARG_PTR_TO_ARENA) {
-+		} else if (base_type(arg_type) == ARG_PTR_TO_ARENA) {
- 			/*
- 			 * Can pass any value and the kernel won't crash, but
- 			 * only PTR_TO_ARENA or SCALAR make sense. Everything
-@@ -10904,38 +10931,50 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 					reg_arg_name(env, argno));
- 				return -EINVAL;
- 			}
--		} else if (arg->arg_type == ARG_PTR_TO_DYNPTR) {
-+		} else if (arg_type == ARG_PTR_TO_DYNPTR) {
- 			ret = check_func_arg_reg_off(env, reg, argno, ARG_PTR_TO_DYNPTR);
- 			if (ret)
- 				return ret;
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func5.c b/tools/testing/selftests/bpf/progs/test_global_func5.c
+index 257c0569ff98..4573ecd96aa0 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func5.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func5.c
+@@ -26,7 +26,7 @@ int f3(int val, struct __sk_buff *skb)
+ }
  
- 			ret = process_dynptr_func(env, reg, argno, env->insn_idx,
--						  arg->arg_type, &meta);
-+						  arg_type, &meta);
- 			if (ret)
- 				return ret;
--		} else if (base_type(arg->arg_type) == ARG_PTR_TO_BTF_ID) {
-+		} else if (base_type(arg_type) == ARG_PTR_TO_BTF_ID) {
- 			int err;
- 
--			if (bpf_register_is_null(reg) && type_may_be_null(arg->arg_type)) {
-+			if (bpf_register_is_null(reg) && type_may_be_null(arg_type)) {
- 				err = mark_arg_precision(env, argno);
- 				if (err)
- 					return err;
- 				continue;
- 			}
- 
--			err = check_reg_type(env, reg, argno, arg->arg_type, &meta);
--			err = err ?: check_func_arg_reg_off(env, reg, argno, arg->arg_type);
-+			err = check_reg_type(env, reg, argno, arg_type, &meta);
-+			err = err ?: check_func_arg_reg_off(env, reg, argno, arg_type);
- 			if (!err && base_type(reg->type) == PTR_TO_BTF_ID)
--				err = process_arg_ptr_to_btf_id(env, reg, argno, arg->arg_type,
--								btf_vmlinux, arg->btf_id,
-+				err = process_arg_ptr_to_btf_id(env, reg, argno, arg_type,
-+								btf_vmlinux, sub->args[slot].btf_id,
- 								&meta, env->insn_idx);
- 			if (err)
- 				return err;
- 		} else {
- 			verifier_bug(env, "unrecognized %s type %d",
--				     reg_arg_name(env, argno), arg->arg_type);
-+				     reg_arg_name(env, argno), arg_type);
- 			return -EFAULT;
- 		}
-+
-+		for (k = 1; k < nslots; k++) {
-+			argno_t extra_argno = argno_from_arg(slot + k + 1);
-+			struct bpf_reg_state *extra_reg;
-+
-+			extra_reg = get_func_arg_reg(caller, regs, slot + k);
-+			if (extra_reg->type != SCALAR_VALUE) {
-+				bpf_log(log, "%s is not a scalar\n",
-+					reg_arg_name(env, extra_argno));
-+				return -EINVAL;
-+			}
-+		}
- 	}
- 
- 	return 0;
-@@ -14511,7 +14550,7 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *
- 	 * pointer, and neither does a slot past the last parameter.
- 	 */
- 	for (i = 0, slot = 0; i < nargs && slot < arg; i++)
--		slot += kfunc_arg_slots(btf_type_skip_modifiers(btf, args[i].type, NULL));
-+		slot += btf_arg_slots(btf_type_skip_modifiers(btf, args[i].type, NULL));
- 	if (i >= nargs || slot != arg)
- 		return 0;
- 
-@@ -18794,7 +18833,7 @@ bool bpf_get_call_summary(struct bpf_verifier_env *env, struct bpf_insn *call,
- 		if (err < 0)
- 			/* error would be reported later */
- 			return false;
--		cs->arg_slot_cnt = kfunc_proto_slots(meta.btf, meta.func_proto);
-+		cs->arg_slot_cnt = btf_proto_slots(meta.btf, meta.func_proto);
- 		cs->fastcall = meta.kfunc_flags & KF_FASTCALL;
- 		cs->is_void = btf_type_is_void(btf_type_by_id(meta.btf, meta.func_proto->type));
- 		return true;
+ SEC("tc")
+-__failure __msg("expects pointer to ctx")
++__failure __msg("R2 type=fp expected=ctx")
+ int global_func5(struct __sk_buff *skb)
+ {
+ 	return f1(skb) + f2(2, skb) + f3(3, skb);
 -- 
 2.52.0
 
