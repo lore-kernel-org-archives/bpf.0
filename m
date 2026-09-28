@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-33.mta0.migadu.com [91.218.175.33])
+Received: from mta0.migadu.com (out-21.mta0.migadu.com [91.218.175.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1E129B77E
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 00:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167D32877DE
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 01:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790555368; cv=none; b=PK3+ePSN8D/mT5ukheUMVEZDRT0KHHVEuYLXCqy5PmvXcUlXc4YeZnGwkY6x//EA1FMmbjzyH1/KRF31mmn/mlqV8plo5PjvlBFJXIFVuSCItX3L/TuJqgQUSmXTqNfw0+xbK8pxz2PUz2GaksRtcYRbR/xraN13+qFEM0x2Mq4=
+	t=1790557702; cv=none; b=W2iMkkra4x8UHDlbASYxxGxz13pgDyeeYa3/D9PBamuhMFYSsZ4oZQ6s4b+NHfuwRxmkUcKJeFwuO4H5feldaX621wNCWBFaDXjGeX2ner1A4BurpwSNVlpI2gdQdUQVzOlymAlyzdlCPAK+0yPzgRh30x0iO4O0UAaJ6r5yQYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790555368; c=relaxed/simple;
-	bh=3qFFNhoQKT6DHczdCPAovpTvhFLtIIVvBcHoBKSSWxA=;
+	s=arc-20240116; t=1790557702; c=relaxed/simple;
+	bh=Hg8hAJfKfAcK3ZW/+fuHjcyL6qj/9VtB2e8X7W6rU+0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PKgSWWhV7jf9mkMOpu82Nbm4eMmI8FSTopqYgZM41TXFEh6o5UKc5z8y+fFmNtUh6w6eGOJerynDIJCzyS17LL8UWr1j36q5LLiuemaa0m2aW4tJHWNNtmxh1uHfB3lbb8d/yxSyaVohsElLcvIYGjba3usR6vYb9jLMJmWG71c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=spSPyVPq; arc=none smtp.client-ip=91.218.175.33
+	 In-Reply-To:Content-Type; b=OZ+RyXD7GcDRJjX1Ux13YoJUBe7ttJS6sVvu3r8GIqsjQcN99OwcokfSjD88fW1I8NkiobTF+TSFRVbMwBeXkZ0wwXPmbrgf8ZBDG9uydriDPTaeu5mLi36O2Bc1xPrXidyI9rFMi18bUc2vB0KP6nziZ/926iuZfcLg5RFfeZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b2LUFocU; arc=none smtp.client-ip=91.218.175.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="spSPyVPq"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b2LUFocU"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=3qFFNhoQKT6DHczdCPAovpTvhFLtIIVvBcHoBKSSWxA=;
+DKIM-Signature: a=rsa-sha256; bh=Hg8hAJfKfAcK3ZW/+fuHjcyL6qj/9VtB2e8X7W6rU+0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790555364; v=1; x=1791160164;
- b=spSPyVPqaVhPuI1ApWPU5crh3roT3x/wZ1afVhgqu3qu7xQHIrkR3BLVrJar7mw0rszSRhbp
- cGAhOV19tqZ5yeBjqkVhwDA3QuEUc3D4QR9sezQ9DODhxVW5OrnLcarijk+7Ja2abZH8foyNNkG
- LAdf+j7oXKOWvhsUeTBYJHlc=
+ t=1790557696; v=1; x=1791162496;
+ b=b2LUFocUywxEok03K1pQjK1swIsa54VXy8GNGZLvVJAgCHGqmC95bi8QxPqaHiydlpyyc6aB
+ lumWKZWd98qsXs/CBavI4AfP09rG3/ZVq4X+1guxqABsahMjvayFZi/4tXXyTug1MQgNw7mxq7c
+ e1/tUYLydKtVOtY2LGRlej/U=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0bef10d21a55c909;
-	Mon, 28 Sep 2026 00:29:13 +0000
-X-Mizu-Trace-ID: 0bef10d21a55c909
+Received: by smtp.migadu.com with ESMTPS id 1cc3a937fb38fd8f;
+	Mon, 28 Sep 2026 01:08:15 +0000
+X-Mizu-Trace-ID: 1cc3a937fb38fd8f
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <2ca45402-d5b5-49cb-b5cb-a72d022c597f@linux.dev>
-Date: Sun, 27 Sep 2026 17:29:10 -0700
+Message-ID: <2850d0a2-b293-4502-b14d-7552ce0b8cd6@linux.dev>
+Date: Sun, 27 Sep 2026 18:08:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,235 +38,327 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 08/21] bpf: Refuse a landing pad that does not
- resume
+Subject: Re: [PATCH bpf-next v6 10/21] bpf: Dispatch cleanup pads by rewriting
+ return addresses
 Content-Language: en-GB
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
  mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260926050047.2216836-1-yonghong.song@linux.dev>
- <e99037a0f0459c6d3e4c30ae417dff917a74f23163785f10598ef953425347da@mail.kernel.org>
+References: <20260926050057.2217436-1-yonghong.song@linux.dev>
+ <52fc5f40733390fb8ab1309d868744cef387c0c24b95df383a4dcf6c66a3fdb9@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <e99037a0f0459c6d3e4c30ae417dff917a74f23163785f10598ef953425347da@mail.kernel.org>
+In-Reply-To: <52fc5f40733390fb8ab1309d868744cef387c0c24b95df383a4dcf6c66a3fdb9@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
 On 9/27/26 1:40 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 0143688896b0..4174c7d0177e 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -339,6 +339,8 @@ struct bpf_func_state {
->>   	bool in_async_callback_fn;
->>   	bool in_exception_callback_fn;
->>   	bool no_stack_arg_load;
->> +	/* an unwind reached this frame and its landing pad is running */
->> +	bool in_pad;
->>   	/* For callback calling functions that limit number of possible
->>   	 * callback executions (e.g. bpf_loop) keeps track of current
->>   	 * simulated iteration number.
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index 4bae3796c42f..98de251037df 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
 > [ ... ]
 >
->> @@ -698,6 +700,8 @@ struct bpf_insn_aux_data {
->>   	u64 non_stack_access:1; /* instruction can access non-stack memory */
->>   	/* true if some jump or call instruction targets this instruction */
->>   	u64 jump_target:1;
->> +	u64 in_cleanup_pad:1; /* reached with a landing pad running */
->> +	u64 outside_cleanup_pad:1; /* ... and the other way round */
->>
->>   	unsigned int orig_idx; /* original instruction index, initialized once */
-> Do these two bits grow bpf_insn_aux_data by 8 bytes per instruction?
-
-I would like to keep the current layout for now as this is not
-the important part of this patch set.
-
+>> @@ -1885,6 +1928,8 @@ struct bpf_prog_aux {
+>>   	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
+>>   	u16 stack_arg_sp_adjust;
+>>   	u16 freplace_link_cnt; /* counts freplace links extending this prog */
+>> +	struct bpf_exception_info *exc;
+>> +	u64 epilogue_ip; /* native address of this (sub)program's epilogue */
+>>   #ifdef CONFIG_SECURITY
+>>   	void *security;
+>>   #endif
+> The commit message says epilogue_ip "is recorded for every program", but
+> can a caller that only calls subprogs which always unwind end up with
+> epilogue_ip still zero?
 >
-> Before this patch the u64 flag word held 31 bits (nospec through
-> jump_target), fitting in the low 4 bytes, so orig_idx went at offset +4
-> inside the flag word. Adding in_cleanup_pad and outside_cleanup_pad makes
-> it 33 bits. Bit 32 lands in byte 4, so orig_idx moves to offset +8, and
-> every later member shifts by 4 bytes.
+> Looking at bpf_exc_keep_exits(), it only patches an exit after
+> bpf_unwind() kfunc calls:
 >
-> The 4-byte tail padding was already used up by cleanup_pad from 97f5b1e363fd.
-> The struct therefore rounds up by another 4 bytes, for +8 in total. Measured
-> from the start of the flag word, the tail goes from 64 bytes to 68, padded to
-> 72.
->
-> da01eb889d50 (Suggested-by Eduard Zingerman) was written to cut this struct
-> from 136 bytes to 128. On those figures this patch takes it back to 136. The
-> array is allocated for every load as __vmalloc(array_size(sizeof(struct
-> bpf_insn_aux_data), len), ...), and bpf_patch_insn_data() memmoves and
-> reallocates it on every patch.
->
-> The two marks are only read and written by bpf_exc_check_insn(), which runs
-> only when env->cleanup_info_cnt is non-zero. So programs that never use
-> exception tables pay the cost.
->
-> The cleanup_pad_head bit added later in the series makes the word 34 bits and
-> does not change this. No later commit in the series restores the size.
->
-> Two possible fixes: narrow alu_state, whose flags BPF_ALU_SANITIZE_SRC
-> through BPF_ALU_IMMEDIATE occupy only bits 0-4, so the word stays within 32
-> bits; or keep the pad-membership marks in a side array allocated only when a
-> cleanup table is present.
->
->> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
->> index 1ed0370a171b..86fdf847d33e 100644
->> --- a/kernel/bpf/exception.c
->> +++ b/kernel/bpf/exception.c
->> @@ -12,6 +12,15 @@
->>   BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
->>   BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
->>
->> +int bpf_exc_check_callback(struct bpf_verifier_env *env, int subprog)
->> +{
->> +	if (!env->subprog_info[subprog].might_unwind)
->> +		return 0;
->> +
->> +	verbose(env, "subprog %d may unwind and is used as a callback\n", subprog);
->> +	return -EINVAL;
->> +}
->> +
->>   static void mark_call_sites(struct bpf_verifier_env *env)
->>   {
->>   	u32 i, j;
-> [ ... ]
->
->> @@ -69,6 +78,78 @@ bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn)
->>   	       insn->imm == bpf_unwind_resume_id[0];
->>   }
->>
->> +/* Is an unwind in flight: is this frame a landing pad, or below one? */
->> +static bool unwinding(const struct bpf_verifier_state *state)
->> +{
->> +	u32 i;
->> +
->> +	for (i = 0; i <= state->curframe; i++)
->> +		if (state->frame[i]->in_pad)
->> +			return true;
->> +	return false;
->> +}
->> +
->> +int bpf_exc_check_insn(struct bpf_verifier_env *env, struct bpf_insn *insn)
->> +{
->> +	bool in_pad = cur_func(env)->in_pad;
->> +	struct bpf_insn_aux_data *aux;
->> +	u32 i = env->insn_idx;
->> +	const char *why = NULL;
->> +
->> +	if (unwinding(env->cur_state)) {
->> +		if (bpf_is_unwind_kfunc(insn)) {
->> +			verbose(env, "insn %u starts a second unwind while one is in flight\n", i);
->> +			return -EINVAL;
->> +		}
->> +		if (bpf_pseudo_call(insn)) {
->> +			int subprog = bpf_find_subprog(env, i + insn->imm + 1);
->> +
->> +			if (subprog >= 0 && bpf_subprog_is_global(env, subprog) &&
->> +			    env->subprog_info[subprog].might_unwind) {
->> +				verbose(env,
->> +					"insn %u calls global subprog %d, which can unwind while an unwind is in flight\n",
->> +					i, subprog);
->> +				return -EINVAL;
->> +			}
->> +		}
->> +	}
->> +
->> +	aux = &env->insn_aux_data[i];
->> +
->> +	if (in_pad ? aux->outside_cleanup_pad : aux->in_cleanup_pad) {
->> +		verbose(env, "insn %u runs both inside and outside a landing pad\n", i);
->> +		return -EINVAL;
->> +	}
->> +	if (in_pad)
->> +		aux->in_cleanup_pad = true;
->> +	else
->> +		aux->outside_cleanup_pad = true;
->> +
->> +	if (!in_pad)
->> +		return 0;
->> +
->> +	if (insn->code == (BPF_JMP | BPF_EXIT)) {
->> +		verbose(env,
->> +			"exit at insn %u ends a landing pad: a catch pad is not supported yet, only cleanup pads that resume\n",
->> +			i);
->> +		return -EOPNOTSUPP;
->> +	}
->> +	if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_tail_call)
->> +		why = "is a tail call, which replaces the frame";
->> +	else if (BPF_CLASS(insn->code) == BPF_LD &&
->> +		 (BPF_MODE(insn->code) == BPF_ABS || BPF_MODE(insn->code) == BPF_IND))
->> +		why = "is a BPF_LD_[ABS|IND], which can leave through the epilogue";
->> +	else if (insn->code == (BPF_JMP | BPF_JA | BPF_X) ||
->> +		 insn->code == (BPF_JMP32 | BPF_JA | BPF_X))
->> +		why = "is an indirect jump";
->> +
->> +	if (!why)
->> +		return 0;
->> +
->> +	verbose(env, "insn %u %s, and is in a landing pad\n", i, why);
->> +	return -EINVAL;
->> +}
->> +
-> The commit message states "bpf_unwind() and the branch pushed at a covered
-> call are the only ways into a pad, and both mark the frame they enter." Does
-> bpf_exc_check_insn() also verify callx (indirect calls)?
->
-> mark_call_sites() only sets aux->cleanup_pad for bpf_pseudo_call() and
-> bpf_unwind(), not for bpf_is_callx():
->
-> kernel/bpf/exception.c:mark_call_sites() {
-> 	...
-> 	if (!bpf_pseudo_call(insn) && !bpf_is_unwind_kfunc(insn))
-> 		continue;
-> 	env->insn_aux_data[j].cleanup_pad = rec->landing_pad_off + 1;
+> kernel/bpf/fixups.c:bpf_exc_keep_exits() {
+>      for (i = 0; i < insn_cnt; i++) {
+>          if (!bpf_is_unwind_kfunc(insn))
+>              continue;
+>          /* patch exit after call */
+>      }
 > }
 >
-> So bpf_exc_pad_of_call() returns -1 for a callx inside the covered range, and
-> push_cleanup_pad_branch() in do_check_insn() returns 0 without pushing a pad
-> state. The CFG and liveness successors add no pad edge for it either.
+> It doesn't patch exits after calls to subprogs that can only unwind.
+> The verifier ends that path at the subprog's bpf_unwind()
+> (process_bpf_unwind() returns PROCESS_BPF_EXIT), so code after the call
+> is never seen and gets swept. If that was the caller's only exit, it
+> never emits a BPF_EXIT, so the JIT never sets epilogue_ip.
 >
-> The verifier walks the callx into its static callee through
-> check_static_func_call(). If the callee's bpf_unwind() is not covered in the
-> callee, process_bpf_unwind() returns PROCESS_BPF_EXIT and the path ends
-> there. The caller frame is never continued, and the pad is never explored from
-> the state at the callx.
+> At run time bpf_unwind_rewrite() would then reach:
 >
-> But at run time the unwind does reach that pad. bpf_unwind_rewrite() matches
-> each frame's return address with bpf_exc_pad_for_ip(), which is a pure ip
-> range check (begin < ip <= end) over ranges that bpf_exc_fill_native_ranges()
-> builds. There is no filter on call type. The callee's return address sits
-> inside the covered range, so it is rewritten to rec->pad. The callee's
-> epilogue then restores the caller's r6-r9 and stack as they were at the
-> callx.
+>      } else if (prog->aux->epilogue_ip) {
+>          *ra = prog->aux->epilogue_ip;
+>      } else {
+>          WARN_ON_ONCE(1);
+>          return false;
+>      }
 >
-> Example: a covered range holds call sub_a (pseudo call) with r6 = a valid
-> pointer, then r6 = scalar; r2 = sub_b ll; callx r2. The pad dereferences or
-> stores through r6 and then calls bpf_unwind_resume(). sub_b calls
-> bpf_unwind() unconditionally. The pad is verified only with the state pushed
-> at call sub_a, where r6 is a pointer. At run time sub_b's unwind resumes the
-> pad with r6 holding the scalar, which gives an arbitrary kernel memory access
-> from a program the verifier accepted.
+> with epilogue_ip still 0. The return address stays pointing just past the
+> call, which is the end of the JIT image.
 >
-> The same entry also gets around what this patch sets out to refuse. A pad
-> reached only by normal flow and by the callx is verified with in_pad false, so
-> it can end in exit (a catch pad), use a tail call or LD_ABS, and pass the
-> "both inside and outside" check, because no in-pad state ever reaches it.
->
-> No later commit in the series marks, refuses or filters callx.
-> mark_call_sites(), push_cleanup_pad_branch() and bpf_exc_pad_for_ip() are
-> unchanged in this respect, and neither the x86 nor the arm64 dispatch patch
-> handles callx.
->
-> Possible fixes: mark bpf_is_callx() sites in mark_call_sites(), so
-> push_cleanup_pad_branch() and the CFG treat them like pseudo calls.
-> Alternatively, refuse a callx inside a covered range when the cleanup table is
-> checked.
+> Example: main calls a static subprog that only has `call bpf_unwind; exit`.
+> With no cleanup table (or no record covering either call), the main frame
+> would be redirected to epilogue_ip, but that field was never set.
 
-Yes, fix in the next revision by adding callx support in mark_all_sites().
+Yes, this is indeed a bug. Will fix to find at least one 'exit'.
+
+>
+> [ ... ]
+>
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index d813fdde29e3..60905643cb9c 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+> [ ... ]
+>
+>> @@ -3511,6 +3523,12 @@ void __weak arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp,
+>>   {
+>>   }
+>>
+>> +void __weak arch_bpf_stack_walk_ra(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp,
+>> +						      u64 *ra),
+>> +				   void *cookie)
+>> +{
+>> +}
+>> +
+>>   bool __weak bpf_jit_supports_cleanup_pads(void)
+>>   {
+>>   	return false;
+> Does bpf_unwind() produce correct behavior on architectures that keep this
+> weak stub?
+>
+> At this commit no architecture implements the walker. At the end of the
+> series only x86-64 with CONFIG_UNWINDER_ORC and arm64 do. x86 with the
+> frame-pointer unwinder, riscv, s390, powerpc and loongarch keep the stub.
+>
+> Nothing stops those architectures from using bpf_unwind():
+>
+> - It is in generic_btf_ids, registered for TRACING, SCHED_CLS, XDP,
+>    STRUCT_OPS, SYSCALL, CGROUP_SKB and others.
+>
+> - bpf_prepare_cleanup_exceptions() only checks bpf_jit_supports_cleanup_pads()
+>    when a table was supplied:
+>
+>        if (!env->cleanup_info_cnt)
+>            return 0;
+>
+> - An uncovered call is a terminator for the verifier:
+>
+>        if (pad < 0)
+>            return PROCESS_BPF_EXIT;
+>
+> At run time the weak stub does nothing, so bpf_unwind() returns. The frame
+> returns through the patched 'r0 = 0; exit'. Each caller then resumes at
+> the instruction after its call, in a state the verifier never explored for
+> that path, or in code the dead code sweep already removed.
+>
+> Concrete case: a static subprog that returns a checked non-NULL map value
+> pointer on its normal path and calls bpf_unwind() on another path. The
+> caller dereferences the returned pointer without a NULL check, since the
+> verifier only saw the pointer-returning exit. At run time the subprog
+> returns 0 and the caller writes through NULL in kernel context.
+>
+> The commit message says the separate entry point exists "so that the
+> architectures which do not dispatch pads keep the walker they have."
+> Does bpf_unwind() need to be gated on bpf_jit_supports_cleanup_pads(), or
+> should the stub have a fallback that doesn't leave callers in unverified
+> code?
+
+Okay, you are correct. condition env->cleanup_info_cnt is not enough
+to allow bpf_unwind() since bpf_unwind() typically won't be in cleanup
+region. Will fix it by checking whether any function is might_unwind
+or not.
+
+>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index f291611fe578..ea5c4d81f8b7 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+> [ ... ]
+>
+>> @@ -3424,8 +3426,51 @@ static bool bpf_stack_walker(void *cookie, u64 ip, u64 sp, u64 bp)
+>>   	return false;
+>>   }
+>>
+>> +struct bpf_unwind_ctx {
+>> +	u32 cnt;
+>> +};
+>> +
+>> +static bool bpf_unwind_rewrite(void *cookie, u64 ip, u64 sp, u64 bp, u64 *ra)
+>> +{
+>> +	const struct bpf_cleanup_range *rec;
+>> +	struct bpf_unwind_ctx *ctx = cookie;
+>> +	struct bpf_exception_info *exc;
+>> +	struct bpf_prog *prog;
+>> +
+>> +	rcu_read_lock();
+>> +	prog = bpf_prog_ksym_find(ip);
+>> +	rcu_read_unlock();
+>> +	if (!prog)
+>> +		return !ctx->cnt;
+>> +	ctx->cnt++;
+>> +
+>> +	exc = prog->aux->exc;
+>> +	rec = (exc && exc->nr_ranges) ? bpf_exc_pad_for_ip(prog, ip) : NULL;
+>> +	if (rec) {
+>> +		*ra = rec->pad;
+>> +	} else if (ctx->cnt == 1) {
+>> +		/*
+>> +		 * The frame that called bpf_unwind(). Its return address
+>> +		 * always names the 'r0 = 0; exit' that bpf_exc_keep_exits()
+>> +		 * put after the call, so leave it alone and let the frame
+>> +		 * return through that: running it is what sets the value
+>> +		 * the unwind returns.
+>> +		 */
+>> +	} else if (prog->aux->epilogue_ip) {
+>> +		*ra = prog->aux->epilogue_ip;
+> Does sending a frame to epilogue_ip work correctly when the verifier
+> treats the resume as returning to the instruction after the call?
+>
+> At run time, a caller frame whose call site no cleanup record covers is
+> sent to aux->epilogue_ip, so it returns straight away. The verifier does
+> not model that: it treats a pad's bpf_unwind_resume() as an ordinary return
+> into the caller, at the instruction after the call. The code after the call
+> is therefore verified but never runs, and the return-at-once path is never
+> checked.
+>
+> kernel/bpf/verifier.c:do_check_insn() with curframe > 0:
+>
+>      cur_func(env)->in_pad = false;
+>      return process_bpf_exit_full(env, do_print_state, false);
+>
+> process_bpf_exit_full(..., false) goes to prepare_func_exit(), which
+> continues the caller at callsite + 1 with r0 known to be zero. Only a
+> covered call site gets its pad pushed as another branch
+> (push_cleanup_pad_branch()). Nothing requires a call to a might_unwind
+> static subprog to be covered, and bpf_exc_check_insn() only restricts global
+> subprogs while an unwind is in flight.
+>
+> Concrete case (x86-64 with ORC, or arm64, at the end of the series):
+>
+>      main:  t = bpf_task_acquire(p); if (!t) return 0;
+>             sub();                 /* call site not covered */
+>             bpf_task_release(t); return 0;
+>      sub:   bpf_unwind();          /* covered by a record in sub */
+>             pad: bpf_unwind_resume(0);
+>
+> The verifier accepts this because it walks main past the call and sees the
+> release. At run time sub's pad runs, resumes, and returns into main's
+> epilogue, so the task reference is leaked.
+>
+> The same shape with bpf_rcu_read_lock()/unlock(), preempt disable/enable,
+> or bpf_spin_lock()/unlock() leaves the lock held when the program returns.
+> Static subprog calls are allowed under a spin lock, and the bpf_unwind
+> check comes before the active_locks check. bpf_spin_lock is taken with IRQs
+> disabled, so the next locker deadlocks.
+>
+> Does the verifier need to model the epilogue_ip redirect for uncovered
+> callers, or should uncovered calls be refused when the callee might unwind?
+
+I think proper resource checking at every level is needed.
+
+>
+> ---
+>
+> On x86-64 with a private stack, does this redirect skip the pop r9 that
+> follows the call?
+>
+> With a private stack, the JIT wraps every call in push_r9/pop_r9
+> (arch/x86/net/bpf_jit_comp.c). When bpf_unwind_rewrite() sets
+> `*ra = prog->aux->epilogue_ip` for a caller frame, the callee's ret lands
+> on the epilogue with the pushed r9 still on top of the stack. The epilogue
+> is `add rsp, outgoing_rsp; pop_callee_regs(); leave; ret`.
+> pop_callee_regs() therefore pops the saved r9 into the first callee-saved
+> register and shifts the rest by one slot. leave then fixes rsp, so the
+> function returns normally, but with the kernel caller's rbx/r13/r14/r15
+> corrupted.
+>
+> check_max_stack_depth() refuses a private stack only when a table is
+> present:
+>
+>      if (env->cleanup_info_cnt)
+>          priv_stack_mode = NO_PRIV_STACK;
+>
+> Its own comment describes this exact problem for pads ("on x86-64 that
+> skips the pop which restores r9"). A table-less program can still reach the
+> redirect.
+>
+> Example: an fentry or kprobe program whose main prog uses at least
+> BPF_PRIV_STACK_MIN_SIZE bytes of stack and holds a value in r6 across a
+> call to a static subprog that calls bpf_unwind(). This applies on x86-64
+> with ORC after the x86 enablement patch. Should the refusal cover
+> might_unwind programs, not only programs with a table?
+
+Yes, we should refuse might_unwind programs with private stack.
+
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 677bab92f624..f2a59716fdab 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -22781,6 +22781,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+>>   		/* program is valid, convert *(u32*)(ctx + off) accesses */
+>>   		ret = bpf_convert_ctx_accesses(env);
+>>
+>> +	if (ret == 0)
+>> +		ret = bpf_exc_keep_exits(env);
+> Do the exits this patch adds skip a struct_ops program's BPF-level
+> epilogue?
+>
+> bpf_convert_ctx_accesses() is the only place that epilogue is inserted:
+> every BPF_EXIT in the main prog is replaced with the epilogue or a jump to
+> it (fixups.c, "Generate epilogue for the main prog"). But
+> bpf_exc_keep_exits() runs after that pass and emits a plain
+> `r0 = 0; exit` after every bpf_unwind() call. bpf_do_misc_fixups() runs
+> later still and lowers each bpf_unwind_resume() to a plain `r0 = 0; exit`
+> too. In the main prog, both of these exits go straight to the JIT's native
+> epilogue. So does the `*ra = prog->aux->epilogue_ip` redirect in
+> bpf_unwind_rewrite().
+>
+> Does this break bpf_qdisc? bpf_qdisc_gen_epilogue()
+> (net/sched/bpf_qdisc.c) adds a call to bpf_qdisc_reset_destroy_epilogue()
+> to every .reset and .destroy program. That call is the only thing that runs
+> qdisc_watchdog_cancel(&q->watchdog), and bpf_qdisc_validate() requires
+> .reset and .destroy to be BPF programs for exactly that reason.
+> bpf_unwind() is in generic_btf_ids, which is registered for
+> BPF_PROG_TYPE_STRUCT_OPS with no filter. With no cleanup table,
+> process_bpf_unwind() simply returns PROCESS_BPF_EXIT, so no gating applies.
+>
+> Failure path:
+>
+> 1. A .destroy program runs `if (cond) bpf_unwind();`.
+>
+> 2. On any arch, bpf_unwind() either leaves the first frame's return address
+>     alone (bpf_unwind_rewrite(), cnt == 1) or does nothing (the weak
+>     arch_bpf_stack_walk_ra()). Either way the frame returns through the
+>     `r0 = 0; exit` that bpf_exc_keep_exits() inserted, which is not the
+>     gen_epilogue.
+>
+> 3. qdisc_watchdog_cancel() never runs, so an hrtimer that .enqueue armed
+>     through bpf_qdisc_watchdog_schedule() stays armed inside
+>     qdisc_priv(sch).
+>
+> 4. The qdisc is freed, the timer fires, and qdisc_watchdog()
+>     (net/sched/sch_api.c) dereferences wd->qdisc in freed memory. The
+>     hrtimer base also still links the freed timer.
+>
+> The same bypass happens when a .reset/.destroy main prog resumes from a
+> landing pad (lowered resume), or when a covered or uncovered subprog unwinds
+> and the main frame is sent to epilogue_ip.
+>
+> Should bpf_unwind()/cleanup tables be rejected for programs whose
+> verifier_ops has a gen_epilogue, or should these exits be inserted before
+> bpf_convert_ctx_accesses() and point epilogue_ip at the BPF-level epilogue?
+
+Indeed, for such cases, we should disable cleanup exceptions to avoid
+early return for qdisc epilogue.
 
 >
 >
