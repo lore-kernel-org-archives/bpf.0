@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C054FD296;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D7B499F1E;
 	Mon, 28 Sep 2026 22:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790635014; cv=none; b=VCfSofPgN+iQzEyLjBN6z2I4KwgMWGf47WMMP/vaPxeY0ILesREtWK1jeV0QcZvFgmZq3RUB0G3BngnztImVgaUc8uBDFxkVW3FwbY7mVWntBZz/MHK0CR9z939NKOrK1Wz12fOkTZm26Ukwf8A+cY/mG2qNuBErXbLVmm0ooeI=
+	t=1790635015; cv=none; b=KX0NeGBKjZZnECqRUMLQcvV4UBQx1Z4WgL9ilikWP1iL+1rELBb2DDQ5599aqkTszXJIkWQGjZugX6pVDX5huUwlpc/geP2XWI30YImxz89UkltDe16ThqzdVVAytU8D0lDUCJBb46JSqkHzoMiPIo10MlF1UjBbY4wTTIC+0UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790635014; c=relaxed/simple;
-	bh=fyTc7NgG7aer+e1HR8NfUGBmVmNoCgZSmYbzfnL6hHk=;
+	s=arc-20240116; t=1790635015; c=relaxed/simple;
+	bh=NqBNE51bJx4UPSYMjOt1UjkT6HegT2zBHYDaKQlQUAY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mCNvj8ColKhFQAn6MXXf7S/lLliX9YXtjr9MjsPKuEk49NeU0hd8CD+QhakX9UjTu4XcaW9yuxsUdaN4hYp1GnJHuncDamJE3qKd1Bce8Qs09N56VZJk/5fvgSnRxj/iCtnSybuvqEHVE5CIvFylQIx3MzifgfCOxvDFJYZgua8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIsloHzm; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=fsLk9yqhghn6QQCLHZDLxnsuPMLF0K7mwUr3riz2+Chm/1WcfaaI9HC0MIjlmI8hGO9T9swKfneI910no7zlFKGTkzORVj0Sp1mJuNYxBkJhhnLoovYK/VdzaTE6PZtD+1+tuUnKpmKmpq+mnhyeaWCqQQQpptYSmsfxTMf1Oek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ii9hsZaB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIsloHzm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B173E1F0089B;
-	Mon, 28 Sep 2026 22:36:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ii9hsZaB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDBA1F00899;
+	Mon, 28 Sep 2026 22:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1790635013;
-	bh=EqCKfTIqYiiQfGfL7Gl9Syaz4pkJt2hXF/QnfmKlaGc=;
+	bh=fI+zezBWtJo4PhVH2Jn+7LYv6E+83YkjR2yJzrkGXm8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=TIsloHzmSjXXPtjnYihTtFBzWCcZluW3kRZkHdTzWf++bUXEM0f995+CzCBuTbPig
-	 zO9AOKWmXkhOavH2iZLXg/+ty6MtqORqOnNjCqKSornUTtA+mno24OQrHMcpgQPZCT
-	 MuPUZ1/yNdzlCj3DXJ0+LdRtCCWXCI7tL0z0pC8KU3QS4W2S1UeDDNOOH/wWT3VrM0
-	 gskEpL4L8516M5lcHqtfwkXVu5b3XH6oQ7/RQtAAybrcA1lXB+0F9k5GMrFP+LtRLt
-	 1L5D5kovSv2Yzl49suLc8WDovTj0AW+m2d2bGMFy5NEk/8sVNULR6hU2WJ11LZ7gIj
-	 dn9DhFqeEv4Og==
+	b=Ii9hsZaBEoKorMBwVo+0DoFtJwJsurfvBv+3dndeEYJx7kdW85xFgBI2b8F3b6pax
+	 jv7bh13fK7lgyOnB+gqzEjIS/xqesNNSNHOlxVDpPXDesp7UpBDcmdV2z0dRyepu1q
+	 ilWwq+mgksUVxjV1Y7krSkXE1/2rZvaMAc9Fm0s2HOGl7LedYMR1c+YqfCC9CeieRJ
+	 iqDJzmruUBySalsHrI7lIGTIF26IGkQbzF1BJgnCNQFyVU8S0pBQbYZo0GHtu68qtk
+	 0jEVEpthqudxx1woGIkVTtRVuUZECL7DdZicwN5IU+Zl9yFDAL5I2xdt2TrOn01irX
+	 Hha0XCp7eQMYw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc: netdev@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	aleksander.lobakin@intel.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 4/5] selftests/bpf: check XDP attach on a nested bond slave
-Date: Mon, 28 Sep 2026 15:36:47 -0700
-Message-ID: <20260928223648.2739371-5-kuba@kernel.org>
+Subject: [PATCH net-next 5/5] net: drop GSO skbs instead of handing them to XDP
+Date: Mon, 28 Sep 2026 15:36:48 -0700
+Message-ID: <20260928223648.2739371-6-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260928223648.2739371-1-kuba@kernel.org>
 References: <20260928223648.2739371-1-kuba@kernel.org>
@@ -57,64 +57,107 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-test_xdp_bonding_attach() already covers a flat bond both ways round:
-the master is refused while a slave has a program, and a slave is
-refused while the master has one. The nested test only ever checked
-that attaching to the outermost master succeeds.
+skb BPF paths have a number of helpers to fix up the GSO
+state after packet modifications. XDP has no such support.
 
-That left the more interesting half of the nesting untested. Only the
-direct upper is consulted when deciding whether a device is already
-running XDP, so with bond -> bond_nest1 -> bond_nest2 the check on
-bond_nest2 looks at bond_nest1, and it only sees a program there if
-bond_nest1 recorded the one it was handed. Before the preceding fix it
-did not, and a second program could be attached to bond_nest2 while the
-outer bond's program was already running on it.
+"Real" / driver XDP runs before the SW GRO, and drivers generally
+disable HW-GRO when XDP is attached (with the exception of IDPF,
+story for another time), so this is not an issue. We also try
+to disable HW-GRO and elide SW GRO when generic XDP prog is
+attached. These precautions are not 100% today, and IMHO fixing
+that is impossible. Let's explicitly drop GSO skbs on input to XDP.
+
+First example how things can go sideways today - bonding.
+We only disable & elide GRO on the device to which program is
+attached. Nothing reaches the devices below it, and for a stacked
+device that is where the packets come from:
+
+  ip link set dev bond0 xdpgeneric obj prog.o sec xdp
+
+leaves every slave with GRO on and no xdp_prog of its own, so
+netif_elide_gro() lets them coalesce as usual. bond_handle_frame()
+then returns RX_HANDLER_ANOTHER, __netif_receive_skb_core() loops back
+round to another_round with skb->dev switched to the bond, and the
+program gets handed a packet which was never on the wire. HW-GRO is
+the same story - while netif_disable_lro() walks the lower devices,
+its HW-GRO counterpart never did (this is largely the point of
+distinguishing between LRO and HW-GRO).
+
+Example two - veth. Generic XDP on a veth gets there by a different route.
+veth_xdp_set() takes NETIF_F_GSO_SOFTWARE away from the peer so that
+no GSO skb is ever built for a device running XDP, but generic XDP does
+not go through ndo_bpf, so none of that happens.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../selftests/bpf/prog_tests/xdp_bonding.c     | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ include/net/xdp.h  | 16 ++++++++++++++++
+ drivers/net/veth.c |  3 +++
+ net/core/dev.c     |  4 ++++
+ 3 files changed, 23 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index c42488e445c2..486e0f9a2ada 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -464,8 +464,9 @@ static void test_xdp_bonding_attach(struct skeletons *skeletons)
- /* Test with nested bonding devices to catch issue with negative jump label count */
- static void test_xdp_bonding_nested(struct skeletons *skeletons)
- {
-+	struct bpf_link *link2 = NULL;
- 	struct bpf_link *link = NULL;
--	int bond, err;
-+	int bond, nest2, err;
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index aa742f413c35..5a234aab1e1c 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -291,6 +291,22 @@ static inline bool xdp_buff_add_frag(struct xdp_buff *xdp, netmem_ref netmem,
+ 	return true;
+ }
  
- 	if (!ASSERT_OK(system("ip link add bond type bond"), "add bond"))
- 		goto out;
-@@ -488,10 +489,23 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
- 	if (!ASSERT_OK(err, "set bond_nest2 master"))
- 		goto out;
- 
-+	nest2 = if_nametoindex("bond_nest2");
-+	if (!ASSERT_GE(nest2, 0, "if_nametoindex bond_nest2"))
-+		goto out;
++/**
++ * xdp_skb_feature_check() - can this skb be handed to an XDP program?
++ * @skb: skb about to be turned into an xdp_buff
++ *
++ * Return: true if the skb must not reach the program and has to be dropped.
++ */
++static inline bool xdp_skb_feature_check(const struct sk_buff *skb)
++{
++	if (likely(!skb_is_gso(skb)))
++		return false;
 +
- 	link = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, bond);
--	ASSERT_OK_PTR(link, "attach program to master");
-+	if (!ASSERT_OK_PTR(link, "attach program to master"))
-+		goto out;
++	net_warn_ratelimited("%s: dropping coalesced packet before XDP, receive offloads are still on\n",
++			     skb->dev->name);
++	return true;
++}
 +
-+	/* Attaching to a nested slave is not allowed either. Only the direct
-+	 * upper is consulted, so this only holds if every device the program
-+	 * was propagated to records it.
-+	 */
-+	link2 = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, nest2);
-+	ASSERT_ERR_PTR(link2, "attach program to nested slave when master has program");
+ struct xdp_frame {
+ 	void *data;
+ 	u32 len;
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 71227d0389aa..5635037e3b60 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -756,6 +756,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+ 	struct sk_buff *skb = *pskb;
+ 	u32 frame_sz;
  
- out:
-+	bpf_link__destroy(link2);
- 	bpf_link__destroy(link);
- 	system("ip link del bond");
- 	system("ip link del bond_nest1");
++	if (unlikely(xdp_skb_feature_check(skb)))
++		goto drop;
++
+ 	if (skb_shared(skb) || skb_head_is_locked(skb) ||
+ 	    skb_is_nonlinear(skb) ||
+ 	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 096d1dedebfd..fbeb3df4c11f 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -158,6 +158,7 @@
+ #include <linux/once_lite.h>
+ #include <net/netdev_lock.h>
+ #include <net/netdev_rx_queue.h>
++#include <net/xdp.h>
+ #include <net/page_pool/types.h>
+ #include <net/page_pool/helpers.h>
+ #include <net/page_pool/memory_provider.h>
+@@ -5516,6 +5517,9 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+ 	u32 metalen, act;
+ 	int off;
+ 
++	if (unlikely(xdp_skb_feature_check(skb)))
++		return XDP_DROP;
++
+ 	/* The XDP program wants to see the packet starting at the MAC
+ 	 * header.
+ 	 */
 -- 
 2.55.0
 
