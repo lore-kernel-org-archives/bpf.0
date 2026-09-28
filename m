@@ -1,344 +1,124 @@
-Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16562D8DC4
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 16:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A814EDCD6;
+	Mon, 28 Sep 2026 16:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790612905; cv=none; b=N+xhhUoSzrfUFYT4fYaDiFQ6yXTH0pg7EOTIAA47FZROu9LYd6yx7YxRDtn9xfdhFbUXTNedqQzNQR9WbgZvmqK9w34O7/Ki8dJo4ewjnHfqFfo/lBvMIk9WmJT+Uy32GeKR4nhsWkrgKKhdXGMxL9xkh+CPReCDabOfqBnl+lY=
+	t=1790613077; cv=none; b=RnDT6/ABFIbsLIged8BPjlLzwaq3Rv00U7czz9QSQsjf36A3USaCLgrocvSqCoAWt88P3cFI7j/Ra93K/C2P3AbH5RqfxLebJo3bZsQarbJCBEAyh92D9R5VsOgrLUDBB4h1jRqoDVnXVe9V7Ugbu0nNk8BP7Gq++HzUMgJmCIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790612905; c=relaxed/simple;
-	bh=QjKoa83vUscHPWixSENA/eeT5V7SaTdaNpttS74xevc=;
-	h=Content-Type:Mime-Version:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=X3Y3DTti2PVUtXy72tU/86hcsElYL1NmWxW7XQkO2Os+V+53vcANfmAH+eZtImgFtsP1GWApe8g4p+Ghjh/xIDeUVAyS3tT4HzIcEyyoD/JXlLL+bqQ95dP91eqvW8QjgZze5nDNpdfyLY9KAflJuTSbOJ60Kw2y7GNmN7o793U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=W7QyUuKU; arc=none smtp.client-ip=74.125.231.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790613077; c=relaxed/simple;
+	bh=jxr4W06vcfBL19u+U8WQUniKMdmeStDAti5e3Y5oKXQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=EiTiVvKd9IjDEDZATZIrYM0g4CJcQJDurEfQRMzvc1Hj/+YaBMTrjftqpTyqkftUFAJweQjSX9PNkaLTztxD6HYFTJaiycpSkLRV6AQZ5fWmc/0x0HcJ6v49KvyJU4GdHlFiRTT0MqWfUo1FGYYY7jvzEbW0S1TAFMSy4sLUJr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lEnwEpkb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="W7QyUuKU"
-Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6d7a52c9d62so719434eaf.1
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 09:28:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790612903; x=1791217703;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :mime-version:content-type:dkim-signature:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QjKoa83vUscHPWixSENA/eeT5V7SaTdaNpttS74xevc=;
-        b=aYMIN9sEF7XtV259V6XxX835EP5l0MtIFv+KXr947AY8xzEhTJoZCJq3EGSvekiOqq
-         bBZrw84Bmy93KW68DtBTqSThL8lyKDGX/KVsuCIYzg2XGZehMCygtHZCs/Bk7NNuuaTw
-         L+KQkUMj/aWm+FNwlez+XoFfPwz+7jTiXDlZ3y/2M6RnAbO2sOnzj1gqumBg8gPQSyhd
-         3yvzcU477bps6onnHDd2Xri2aOl0c1MkVlKpdvA/E5m769QhSoSYysniroHLsHTUSUKV
-         aqX9fUOe5Tnv7uy30JA5YvV5xaQNBEOpaxYaLqdCVj4LlAyYC1X+vTeEl7iIpKFFj+l6
-         ED4Q==
-X-Gm-Message-State: AFuF++mXhhS+o5ORpXM8wd1O/deINnQeqGzljSn4Qer/WA3XGCETUxjZ
-	miU/fSwkawP5M7lq1IvuEbsNdEsOJkS2SUIGEMBMP3VEMi2okY7zDIYM
-X-Gm-Gg: AYBFou3Es9WgqasLn+m+ZGm22iAoxfsR2OE7+55upu2vwKv/iWtXXjkPi/B97tC/YL3
-	ckA/u2ViZ+y+/m/asD1h3MBLgxr/coYZBD/C6DqUml9ze4CDzW1CcOzexyf3fQb7Pa31zbSuZ+i
-	E7pFv2z6GHTCtb0NVYWzW+/YmVrInlU/2XdTIC7gFIOEHIYMisK+Sbf81COaUzPHunyIU4iXIf9
-	PKeaETlz39KjTOBLmc8iK+pU7RWWMYUn+9166/XyAjNEjkGtG4C3htr7brcCyjiMKyarSvpxzQY
-	8j/SraKcuvrfBNrsYbmtA+T88PilMbzQNhxgg+mbbm8gFD9F+UcvSGJ9oYiuBG0pFl97kmnvDEj
-	ioi97CKK929WokqoktybIFXvMqL21HiZ9VeklwboUWC1OhPwiO04oRHCfofEHsUMBuZVWXNxr4F
-	uthvFAZg+ELDXVmv9oeS0MnJNKkeT2IHA60FPgXjV7tbyifM4YxKkq0nOwaVHPeSsreuujvOx+w
-	z4MZIDQ0TCLQrNHnet7zvt1nS+iQji/mfSZUcv2GequHk/8jTRbw42xB81hPdbbVTI798IK9snu
-X-Received: by 2002:a05:6820:2005:b0:6d7:c2d2:3ba2 with SMTP id 006d021491bc7-6d7c2d23f2amr5439391eaf.52.1790612902703;
-        Mon, 28 Sep 2026 09:28:22 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d88358bb8dsm5080742eaf.14.2026.09.28.09.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 09:28:21 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D95E0605C7;
-	Mon, 28 Sep 2026 16:28:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1790612900;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=QjKoa83vUscHPWixSENA/eeT5V7SaTdaNpttS74xevc=;
-	b=W7QyUuKUM/oEr6k+yHmpkqBVWTvqxRzTI/9u7ep7QkjvbNEM7OJFdHGUtv1kkaFfIEK6Eo
-	4S9sQvWBV2Uu+MwaP/tK43Mdc9BAnIJtsnbjUrsqPaoC6Bw0oVM0WDzLII2AfUl5O4uAz1
-	dGVsrc+s2GZcNDaNm3Ik4Dz/c4Qgn2rP5h7Shrt/XnzvnhZlwcPTkykYYDpcJ/1rFx5mOR
-	mO3rOWeln5VT/jcRf3yb3ZhkTLAW/vtRtgWYiEnbJ2USgWVfHdbD6xYvRPm5webLKQie0s
-	doTXovgi2D6SYSW8rKxRBbbc/my8qj/aTaMSMLaA6zGMY0PjopkGdb4LNYFx1A==
-Content-Type: multipart/mixed;
- boundary=cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lEnwEpkb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFACC1F000FF;
+	Mon, 28 Sep 2026 16:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790613076;
+	bh=b9+3FkzlI/wIWQJcNTEFtgC0MrVxpEcwVbCYCmj7aIE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lEnwEpkbgMvdLF3/EK74V3v15X6gXZIi+Zf856Yrs47RwjjuSgxlT+E79RS2BbbK3
+	 OILcuPuOCbulZMrVj6umC8YLlyUl2IrsnC01NNU/BSNT+MupLcZLKylkPysghNsTh7
+	 J4Xp8qB6s2yB0mfvUYvy+sVN+ZFIy7+V8j34TgLy1CsYDPmoxhxMfKfYcvgPAhNG1U
+	 wBQGm+mULAgCgqdwVhNez4ImjCTdXPqUlnuTrQ6XPza2V2XHXwnWj+T10eivUr3tBo
+	 P9pNc3qJ5mbwE7QSZSsjt29Znf+xcrGvUYGCtCuHVXRDaukhBGMVeKEw8NAkCpHGcM
+	 zFM9DN4O7IjLg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 3/6] drm/panel: dsi-bpf: Add BPF program build
+ infrastructure and helper header
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Maxime Ripard" <mripard@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, robh@kernel.org, devicetree@vger.kernel.org, bpf@vger.kernel.org, conor+dt@kernel.org
+In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-3-5244926aace4@kernel.org>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-3-5244926aace4@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 28 Sep 2026 16:31:15 +0000
+Message-Id: <20260928163115.AFACC1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Date: Mon, 28 Sep 2026 13:28:15 -0300
-Message-Id: <DLR3AO5BKYRO.11LS3U6V04LII@marliere.net>
-Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Jiri Olsa" <jolsa@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Song Liu" <song@kernel.org>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kernel@vger.kernel.org>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>
-To: "Eduard Zingerman" <eddyz87@gmail.com>,
- =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
- "Nico Pache (Red Hat)" <nico.pache@linux.dev>, <ihor.solodrai@linux.dev>,
- <nickolay.lysenko@gmail.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
- <ricardo@marliere.net>
-X-Mailer: aerc 0.22.0-16-ge144528849ba
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
- <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
- <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
- <DLM25PIKJTE5.1Q1IO5PAM6VBD@marliere.net>
- <78e6ad2dc979983bd65514166fa0020729a4147d.camel@gmail.com>
-In-Reply-To: <78e6ad2dc979983bd65514166fa0020729a4147d.camel@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
---cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
-Content-Type: multipart/alternative;
- boundary=5d2767df3777ddd6c6e62542789a2836dc5c3b781deb8b1ccf57d5943538
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] drm/panel: dsi-bpf: panel_bpf_mipi_dsi_dcs_write_byte macro prev=
+ents error handling
+- [Low] build: Makefile misses vmlinux.h in clean target and uses undefined=
+ variable
+--
 
---5d2767df3777ddd6c6e62542789a2836dc5c3b781deb8b1ccf57d5943538
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
-Content-Type: text/plain; charset=UTF-8
+commit 94b9d5177a6ef3a698ad45fa764e652b0d0dbae4
+Author: Maxime Ripard <mripard@kernel.org>
 
-On Thu Sep 24, 2026 at 4:06 AM -03, Eduard Zingerman wrote:
-> On Tue, 2026-09-22 at 15:31 -0300, Ricardo B. Marli=C3=A8re (SUSE) wrote:
->> On Mon Sep 21, 2026 at 6:04 PM -03, Eduard Zingerman wrote:
->> > On Mon, 2026-09-21 at 14:40 -0600, Nico Pache (Red Hat) wrote:
->> >=20
->> > ...
->> >=20
->> > > Given your series was defferred, and there is a "rewrite" coming, wh=
-at would
->> > > be the best approach to working together (between us three) to get t=
-hese
->> > > fixes in that series too.=20
->> >=20
->> > The, "rewrite", as you call it, had landed today.
->> > So the series in question can be re-spun.
->> > Regarding your patch on top of it, it appears you can just post is sep=
-arately.
->> > However, I am inclined to be confrontational towards changes like this=
- one.
->> > The purpose of the selftests makefile is to run selftests as appropria=
-te
->> > for current tip of the kernel tree using a very specific kernel config=
-uration.
->>=20
->> Ideally, if a Kconfig symbol is needed and the kernel under test does no=
-t
->> have it, tests are skipped. But with BPF they were simply not built,
->> rendering the tests useless for anything other than in-tree vmlinux with
->> tools/selftests/bpf/config*.
->>=20
->> > Main users of this makefile are BPF developers and BPF CI.
->>=20
->> But they shouldn't be the *only* ones, IMHO. Enabling distros to build a=
-nd
->> run the tests is also valuable to catch regressions in their kernels, do=
-n't
->> you think?
->>=20
->> > Support for distros customizing the makefile is a non-goal.
->> > The "PERMISSIVE" change done enough damage already.
->>=20
->> It's ugly, I agree, but what damage has it caused? I see that it's going=
- to
->> be reverted anyway, but I would appreciate if you could elaborate.
->
-> It's the first time I see a makefile that builds stuff not fully but
-> 90% of it and returns success. The damage is the need to maintain it
-> going forward that already cost some time.
+drm/panel: dsi-bpf: Add BPF program build infrastructure and helper header
 
-Sure, that's fair.
+Add the BPF-side header panel-bpf-mipi-dsi.h and a standalone
+Makefile for building panel BPF programs. The header provides
+section name macros (PANEL_BPF_MIPI_DSI_PREPARE, etc.), the
+PANEL_BPF_MIPI_DSI_OPS() struct_ops declaration macro, extern
+declarations for all the kfuncs, and some convenience macros.
 
->
-> Do you have a list of kernel configs you had issues with?
+> diff --git a/drivers/gpu/drm/panel/bpf/progs/Makefile b/drivers/gpu/drm/p=
+anel/bpf/progs/Makefile
+> new file mode 100644
+> index 0000000000000..74190ee618abd
+> --- /dev/null
+> +++ b/drivers/gpu/drm/panel/bpf/progs/Makefile
+[ ... ]
+> +clean:
+> +	$(call msg,CLEAN)
+> +	$(Q)rm -rf $(OUTPUT) $(TARGETS)
 
-So, for openSUSE Tumbleweed (x86_64) specifically these are the ones:
+[Severity: Low]
+Will this clean target leave a dirty working tree? The generated vmlinux.h
+artifact is not removed when executing make clean.
 
-- PACKET
-- NF_CONNTRACK
-- NF_NAT
-- NF_CONNTRACK_MARK
-- VXLAN
-- XFRM_USER
+> +
+> +%.bpf.o: %.bpf.c vmlinux.h $(BPFOBJ) | $(OUTPUT)
+> +	$(call msg,BPF,$@)
+> +	$(Q)$(CLANG) -g -O2 --target=3Dbpf -Wall -Werror $(INCLUDES)		\
+> +		     -Wno-microsoft-anon-tag					\
+> +		     -fms-extensions						\
+> +		     -c $(filter %.c,$^) -o $@ &&				\
+> +	$(LLVM_STRIP) -g $@
+> +
+> +vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
 
-I attached the details.
+[Severity: Low]
+Is the INCLUDE_DIR order-only dependency defined? It appears to resolve to
+an empty string since it is not defined in this Makefile.
 
-Thanks!
+[ ... ]
+> diff --git a/drivers/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h b/drive=
+rs/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h
+> new file mode 100644
+> index 0000000000000..e2b03afef2c8c
+> --- /dev/null
+> +++ b/drivers/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h
+[ ... ]
+> +/* Send a DCS command with a single byte payload. */
+> +#define panel_bpf_mipi_dsi_dcs_write_byte(ctx, cmd, val)		\
+> +	do {								\
+> +		const __u8 _v =3D (val);					\
+> +		panel_bpf_mipi_dsi_dcs_write((ctx), (cmd), &_v, 1);	\
+> +	} while (0)
 
---5d2767df3777ddd6c6e62542789a2836dc5c3b781deb8b1ccf57d5943538--
+[Severity: Medium]
+Could the panel_bpf_mipi_dsi_dcs_write_byte macro prevent callers from
+checking for and handling DSI transmission errors?
 
---cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=bpf-allnoconfig.sh
-Content-Type: application/x-shellscript; name=bpf-allnoconfig.sh
+By wrapping panel_bpf_mipi_dsi_dcs_write in a do-while loop, the integer
+return value is dropped. This causes initialization routines to blindly pro=
+ceed
+even if the panel is detached or unresponsive, as BPF programs invoking this
+macro cannot assign or evaluate its result.
 
-IyEvYmluL2Jhc2gKCm1ha2UgYWxsbm9jb25maWcKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25m
-aWcgXAogICAgICAgICAgICAgICAtLWVuYWJsZSA2NEJJVCBcCiAgICAgICAgICAgICAgIC0tZW5h
-YmxlIEJQRl9KSVQgXAogICAgICAgICAgICAgICAtLWVuYWJsZSBCUEZfU1lTQ0FMTCBcCiAgICAg
-ICAgICAgICAgIC0tZW5hYmxlIERFQlVHX0lORk9fQlRGIFwKICAgICAgICAgICAgICAgLS1lbmFi
-bGUgREVCVUdfSU5GT19EV0FSRl9UT09MQ0hBSU5fREVGQVVMVCBcCiAgICAgICAgICAgICAgIC0t
-ZW5hYmxlIERFQlVHX0tFUk5FTCBcCiAgICAgICAgICAgICAgIC0tZW5hYmxlIE1PRFVMRVMKbWFr
-ZSBvbGRkZWZjb25maWcKCiMgdjcuMy1yYzUKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBD
-TE5HLUJQRiBbdGVzdF9wcm9nc10gYXJlbmFfa2Z1bmMuYnBmLm8KI3Byb2dzLy4uL3Rlc3Rfa21v
-ZHMvYnBmX3Rlc3Rtb2Rfa2Z1bmMuaDo4MDoxMjogZXJyb3I6IGludmFsaWQgYXBwbGljYXRpb24g
-b2YgJ3NpemVvZicgdG8gYW4KIyAgICAgIGluY29tcGxldGUgdHlwZSAnc3RydWN0IF9fa2VybmVs
-X3NvY2thZGRyX3N0b3JhZ2UnCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxl
-IE5FVAptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkct
-QlBGIFt0ZXN0X3Byb2dzXSBicGZfY2NfY3ViaWMuYnBmLm8KI3Byb2dzL2JwZl9jY19jdWJpYy5j
-OjEyMjoxMTogZXJyb3I6IHVzZSBvZiB1bmRlY2xhcmVkIGlkZW50aWZpZXIgJ1RDUF9DQV9DV1In
-CnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxlIElORVQKbWFrZSBvbGRkZWZj
-b25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VU
-Uz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10g
-YnBmX2l0ZXJfc2V0c29ja29wdF91bml4LmJwZi5vCiNwcm9ncy9icGZfaXRlcl9zZXRzb2Nrb3B0
-X3VuaXguYzoyOToyNjogZXJyb3I6IGRlY2xhcmF0aW9uIG9mICdzdHJ1Y3QgYnBmX2l0ZXJfX3Vu
-aXgnIHdpbGwgbm90CiMgICAgICBiZSB2aXNpYmxlIG91dHNpZGUgb2YgdGhpcyBmdW5jdGlvbiBb
-LVdlcnJvciwtV3Zpc2liaWxpdHldCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5h
-YmxlIFVOSVgKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBD
-TE5HLUJQRiBbdGVzdF9wcm9nc10gYnBmX2l0ZXJfdGFza19idGYuYnBmLm8KI3Byb2dzL2JwZl9p
-dGVyX3Rhc2tfYnRmLmM6MjA6MjQ6IGVycm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBl
-ICdzdHJ1Y3QgYnRmX3B0cicKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUg
-S1BST0JFUyAtLWVuYWJsZSBGVFJBQ0UgLS1lbmFibGUgS1BST0JFX0VWRU5UUwptYWtlIG9sZGRl
-ZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMgU0tJUF9UQVJH
-RVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBGIFt0ZXN0X3Byb2dz
-XSBicGZfcWRpc2NfZHlucHRyX3VzZV9hZnRlcl9pbnZhbGlkYXRlX2Nsb25lLmJwZi5vCiNwcm9n
-cy9icGZfcWRpc2NfZHlucHRyX3VzZV9hZnRlcl9pbnZhbGlkYXRlX2Nsb25lLmM6MjY6MzogZXJy
-b3I6IGNhbGwgdG8gdW5kZWNsYXJlZCBmdW5jdGlvbgojICAgICAgJ2JwZl9xZGlzY19za2JfZHJv
-cCcKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgTkVUX1NDSEVECm1ha2Ug
-b2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQ
-X1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1CUEYgW3Rlc3Rf
-cHJvZ3NdIGJwZl9xZGlzY19keW5wdHJfdXNlX2FmdGVyX2ludmFsaWRhdGVfY2xvbmUuYnBmLm8K
-I3Byb2dzL2JwZl9xZGlzY19keW5wdHJfdXNlX2FmdGVyX2ludmFsaWRhdGVfY2xvbmUuYzoyNjoz
-OiBlcnJvcjogY2FsbCB0byB1bmRlY2xhcmVkIGZ1bmN0aW9uCiMgICAgICAnYnBmX3FkaXNjX3Nr
-Yl9kcm9wJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBORVRfU0NIX0JQ
-RgptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBG
-IFt0ZXN0X3Byb2dzXSBidGZfdHlwZV90YWdfcGVyY3B1LmJwZi5vCiNwcm9ncy9idGZfdHlwZV90
-YWdfcGVyY3B1LmM6NTM6MTc6IGVycm9yOiBpbmNvbXBsZXRlIGRlZmluaXRpb24gb2YgdHlwZSAn
-c3RydWN0IGNncm91cCcKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgQ0dS
-T1VQUwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkct
-QlBGIFt0ZXN0X3Byb2dzXSBjZ3JvdXBfaXRlcl9tZW1jZy5icGYubwojcHJvZ3MvY2dyb3VwX2l0
-ZXJfbWVtY2cuYzoyMzoxMDogZXJyb3I6IGNhbGwgdG8gdW5kZWNsYXJlZCBmdW5jdGlvbiAnYnBm
-X2dldF9tZW1fY2dyb3VwJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBN
-RU1DRwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkct
-QlBGIFt0ZXN0X3Byb2dzXSBjZ3JvdXBfbXByb2cuYnBmLm8KI3Byb2dzL2Nncm91cF9tcHJvZy5j
-Ojk6MjU6IGVycm9yOiBkZWNsYXJhdGlvbiBvZiAnc3RydWN0IGJwZl9zb2Nrb3B0JyB3aWxsIG5v
-dCBiZSB2aXNpYmxlCiMgICAgICBvdXRzaWRlIG9mIHRoaXMgZnVuY3Rpb24gWy1XZXJyb3IsLVd2
-aXNpYmlsaXR5XQpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBDR1JPVVBf
-QlBGCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1C
-UEYgW3Rlc3RfcHJvZ3NdIGNyeXB0b19iYXNpYy5icGYubwojcHJvZ3MvY3J5cHRvX2Jhc2ljLmM6
-MTU6Mjc6IGVycm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3QgYnBmX2Ny
-eXB0b19wYXJhbXMnCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxlIENSWVBU
-TwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBG
-IFt0ZXN0X3Byb2dzXSBkbWFidWZfaXRlci5icGYubwojcHJvZ3MvZG1hYnVmX2l0ZXIuYzozMToy
-OTogZXJyb3I6IGRlY2xhcmF0aW9uIG9mICdzdHJ1Y3QgYnBmX2l0ZXJfX2RtYWJ1Zicgd2lsbCBu
-b3QgYmUgdmlzaWJsZQojICAgICAgb3V0c2lkZSBvZiB0aGlzIGZ1bmN0aW9uIFstV2Vycm9yLC1X
-dmlzaWJpbGl0eV0Kc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgU1lOQ19G
-SUxFCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1C
-UEYgW3Rlc3RfcHJvZ3NdIGZpbGVfcmVhZGVyLmJwZi5vCiNwcm9ncy9maWxlX3JlYWRlci5jOjQ1
-Ojk6IGVycm9yOiBjYWxsIHRvIHVuZGVjbGFyZWQgZnVuY3Rpb24gJ2JwZl9nZXRfdGFza19leGVf
-ZmlsZScKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgU0VDVVJJVFkgLS1l
-bmFibGUgQlBGX0xTTQptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEK
-CiMgIENMTkctQlBGIFt0ZXN0X3Byb2dzXSBsc21fY2dyb3VwLmJwZi5vCiNwcm9ncy9sc21fY2dy
-b3VwLmM6MTA3OjIxOiBlcnJvcjogdmFyaWFibGUgaGFzIGluY29tcGxldGUgdHlwZSAnc3RydWN0
-IHNvY2thZGRyX2xsJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBQQUNL
-RVQKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRl
-c3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQ
-RiBbdGVzdF9wcm9nc10gbHd0X21pc2MuYnBmLm8KI3Byb2dzL2x3dF9taXNjLmM6MTc6MjY6IGVy
-cm9yOiB1c2Ugb2YgdW5kZWNsYXJlZCBpZGVudGlmaWVyICdCUEZfTFdUX0VOQ0FQX0lQJwpzY3Jp
-cHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBMV1RVTk5FTCAtLWVuYWJsZSBMV1RV
-Tk5FTF9CUEYKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBD
-TE5HLUJQRiBbdGVzdF9wcm9nc10gbXB0Y3Bfc29jay5icGYubwojcHJvZ3MvbXB0Y3Bfc29jay5j
-OjQ5OjQwOiBlcnJvcjogbm8gbWVtYmVyIG5hbWVkICdpc19tcHRjcCcgaW4gJ3N0cnVjdCB0Y3Bf
-c29jaycKI3Byb2dzL21wdGNwX3NvY2suYzo2OToyNTogZXJyb3I6IG5vIG1lbWJlciBuYW1lZCAn
-dG9rZW4nIGluICdzdHJ1Y3QgbXB0Y3Bfc29jaycKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25m
-aWcgLS1lbmFibGUgTVBUQ1AKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VU
-Uz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10gcHJvZmlsZXIxLzIvMy5icGYubwojcHJvZ3Mv
-cHJvZmlsZXIuaW5jLmg6NTk5OjQ5OiBlcnJvcjogZGVjbGFyYXRpb24gb2YgJ3N0cnVjdCBzeXNj
-YWxsX3RyYWNlX2VudGVyJyB3aWxsIG5vdCBiZQojICAgICAgdmlzaWJsZSBvdXRzaWRlIG9mIHRo
-aXMgZnVuY3Rpb24gWy1XZXJyb3IsLVd2aXNpYmlsaXR5XQpzY3JpcHRzL2NvbmZpZyAtLWZpbGUg
-LmNvbmZpZyAtLWVuYWJsZSBGVFJBQ0VfU1lTQ0FMTFMKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAt
-agptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1i
-cGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10gdGVzdF9icGZfbmYu
-YnBmLm8KI3Byb2dzL3Rlc3RfYnBmX25mLmM6ODk6NDk6IGVycm9yOiBkZWNsYXJhdGlvbiBvZiAn
-dW5pb24gbmZfaW5ldF9hZGRyJyB3aWxsIG5vdCBiZSB2aXNpYmxlIC4uLgojcHJvZ3MvdGVzdF9i
-cGZfbmYuYzoyMDA6NTogZXJyb3I6IGluY29tcGxldGUgZGVmaW5pdGlvbiBvZiB0eXBlICdzdHJ1
-Y3QgbmZfY29ubicKI3Byb2dzL3Rlc3RfYnBmX25mLmM6MjMzOjEyOiBlcnJvcjogdXNlIG9mIHVu
-ZGVjbGFyZWQgaWRlbnRpZmllciAnSVBTX0NPTkZJUk1FRCcKc2NyaXB0cy9jb25maWcgLS1maWxl
-IC5jb25maWcgXAogICAgICAgICAgICAgICAtLWVuYWJsZSBORVRGSUxURVIgXAogICAgICAgICAg
-ICAgICAtLWVuYWJsZSBORl9DT05OVFJBQ0sgXAogICAgICAgICAgICAgICAtLWVuYWJsZSBORl9D
-T05OVFJBQ0tfTUFSSyBcCiAgICAgICAgICAgICAgIC0tZW5hYmxlIE5GX05BVAptYWtlIG9sZGRl
-ZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMgU0tJUF9UQVJH
-RVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBGIFt0ZXN0X3Byb2dz
-XSB0ZXN0X2x3dF9pcF9lbmNhcC5icGYubwojcHJvZ3MvdGVzdF9sd3RfaXBfZW5jYXAuYzoxMDU6
-MTk6IGVycm9yOiBmaWVsZCBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3QgdnhsYW5oZHInCnNj
-cmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxlIE5FVERFVklDRVMgLS1lbmFibGUg
-VlhMQU4KbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5H
-LUJQRiBbdGVzdF9wcm9nc10gdGVzdF90dW5uZWxfa2Vybi5icGYubwojcHJvZ3MvdGVzdF90dW5u
-ZWxfa2Vybi5jOjk2NDoyNDogZXJyb3I6IHZhcmlhYmxlIGhhcyBpbmNvbXBsZXRlIHR5cGUgJ3N0
-cnVjdCBicGZfeGZybV9zdGF0ZScKI3Byb2dzL3Rlc3RfdHVubmVsX2tlcm4uYzo5ODM6Mjk6IGVy
-cm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3QgYnBmX3hmcm1fc3RhdGVf
-b3B0cycKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgWEZSTV9VU0VSCm1h
-a2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBT
-S0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQo=
---cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=bpf-tumbleweed.sh
-Content-Type: application/x-shellscript; name=bpf-tumbleweed.sh
-
-IyEvYmluL2Jhc2gKCiMgb3BlblNVU0UgVHVtYmxld2VlZCB4ODZfNjQgS2NvbmZpZwpjdXJsIGh0
-dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9TVVNFL2tlcm5lbC1zb3VyY2UvcmVmcy9o
-ZWFkcy9zdGFibGUvY29uZmlnL3g4Nl82NC9kZWZhdWx0ID4gLmNvbmZpZwpzY3JpcHRzL2NvbmZp
-ZyAtLWZpbGUgLmNvbmZpZyAtLXNldC1zdHIgTU9EVUxFX1NJR19LRVkgImNlcnRzL3NpZ25pbmdf
-a2V5LnBlbSIKbWFrZSBvbGRkZWZjb25maWcKbWFrZSBtb2Qybm9jb25maWcKCiMgdjcuMy1yYzUK
-bWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFS
-R0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10gbHNtX2Nn
-cm91cC5icGYubwojcHJvZ3MvbHNtX2Nncm91cC5jOjEwNzoyMTogZXJyb3I6IHZhcmlhYmxlIGhh
-cyBpbmNvbXBsZXRlIHR5cGUgJ3N0cnVjdCBzb2NrYWRkcl9sbCcKc2NyaXB0cy9jb25maWcgLS1m
-aWxlIC5jb25maWcgLS1lbmFibGUgUEFDS0VUCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFr
-ZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZP
-UkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1CUEYgW3Rlc3RfcHJvZ3NdIHRlc3RfYnBmX25mLmJwZi5v
-CiNwcm9ncy90ZXN0X2JwZl9uZi5jOjg5OjQ5OiBlcnJvcjogZGVjbGFyYXRpb24gb2YgJ3VuaW9u
-IG5mX2luZXRfYWRkcicgd2lsbCBub3QgYmUgdmlzaWJsZSBvdXRzaWRlIG9mIHRoaXMgZnVuY3Rp
-b24gWy1XZXJyb3IsLVd2aXNpYmlsaXR5XQojcHJvZ3MvdGVzdF9icGZfbmYuYzoxOTU6MjI6IGVy
-cm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBlICd1bmlvbiBuZl9pbmV0X2FkZHInCiNw
-cm9ncy90ZXN0X2JwZl9uZi5jOjIwMDo1OiBlcnJvcjogaW5jb21wbGV0ZSBkZWZpbml0aW9uIG9m
-IHR5cGUgJ3N0cnVjdCBuZl9jb25uJwojcHJvZ3MvdGVzdF9icGZfbmYuYzoyMzM6MTI6IGVycm9y
-OiB1c2Ugb2YgdW5kZWNsYXJlZCBpZGVudGlmaWVyICdJUFNfQ09ORklSTUVEJwojcHJvZ3MvdGVz
-dF9icGZfbmYuYzoyMzM6Mjg6IGVycm9yOiB1c2Ugb2YgdW5kZWNsYXJlZCBpZGVudGlmaWVyICdJ
-UFNfU0VFTl9SRVBMWScKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLWUgTkZfQ09OTlRS
-QUNLIC1lIE5GX05BVAptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEK
-CiMgIENMTkctQlBGIFt0ZXN0X3Byb2dzXSB0ZXN0X2JwZl9uZi5icGYubwojcHJvZ3MvdGVzdF9i
-cGZfbmYuYzoyMDA6NzogZXJyb3I6IG5vIG1lbWJlciBuYW1lZCAnbWFyaycgaW4gJ3N0cnVjdCBu
-Zl9jb25uJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtZSBORl9DT05OVFJBQ0tfTUFS
-SwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBG
-IFt0ZXN0X3Byb2dzXSB0ZXN0X2x3dF9pcF9lbmNhcC5icGYubwojcHJvZ3MvdGVzdF9sd3RfaXBf
-ZW5jYXAuYzoxMDU6MTk6IGVycm9yOiBmaWVsZCBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3Qg
-dnhsYW5oZHInCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC1lIFZYTEFOCm1ha2Ugb2xk
-ZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQX1RB
-UkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1CUEYgW3Rlc3RfcHJv
-Z3NdIHRlc3RfdHVubmVsX2tlcm4uYnBmLm8KI3Byb2dzL3Rlc3RfdHVubmVsX2tlcm4uYzo0NTo1
-MTogZXJyb3I6IGRlY2xhcmF0aW9uIG9mICdzdHJ1Y3QgYnBmX3hmcm1fc3RhdGVfb3B0cycgd2ls
-bCBub3QgYmUgdmlzaWJsZSBvdXRzaWRlIG9mIHRoaXMgZnVuY3Rpb24gWy1XZXJyb3IsLVd2aXNp
-YmlsaXR5XQojcHJvZ3MvdGVzdF90dW5uZWxfa2Vybi5jOjk2NDoyNDogZXJyb3I6IHZhcmlhYmxl
-IGhhcyBpbmNvbXBsZXRlIHR5cGUgJ3N0cnVjdCBicGZfeGZybV9zdGF0ZScKI3Byb2dzL3Rlc3Rf
-dHVubmVsX2tlcm4uYzo5ODM6Mjk6IGVycm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBl
-ICdzdHJ1Y3QgYnBmX3hmcm1fc3RhdGVfb3B0cycKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25m
-aWcgLWUgWEZSTV9VU0VSCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9
-MQo=
---cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928-drm-mipi-d=
+si-panel-ebpf-v1-0-5244926aace4@kernel.org?part=3D3
