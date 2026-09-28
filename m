@@ -1,124 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A814EDCD6;
-	Mon, 28 Sep 2026 16:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDB04EDCD6;
+	Mon, 28 Sep 2026 16:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790613077; cv=none; b=RnDT6/ABFIbsLIged8BPjlLzwaq3Rv00U7czz9QSQsjf36A3USaCLgrocvSqCoAWt88P3cFI7j/Ra93K/C2P3AbH5RqfxLebJo3bZsQarbJCBEAyh92D9R5VsOgrLUDBB4h1jRqoDVnXVe9V7Ugbu0nNk8BP7Gq++HzUMgJmCIM=
+	t=1790613084; cv=none; b=nADBBM287AV066SOCnbO4fzQquzHSXwixoegjJeMEofmTe1VYAzanjcgxlCns8ZEZdJy3PYBVJodaz3JOtoqZOZMcAiGFsF1qLR3Qb9CN+/HoNGlusNCCoBYHELDiS8LOyUr5nZSmvvxpcqYvaGymLFUQa38yd2Vyz4oiLRxmts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790613077; c=relaxed/simple;
-	bh=jxr4W06vcfBL19u+U8WQUniKMdmeStDAti5e3Y5oKXQ=;
+	s=arc-20240116; t=1790613084; c=relaxed/simple;
+	bh=qPBI/zh+Lgn2YvS8JOKlw5PHw0KtSgSTml6EMkj5BYw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=EiTiVvKd9IjDEDZATZIrYM0g4CJcQJDurEfQRMzvc1Hj/+YaBMTrjftqpTyqkftUFAJweQjSX9PNkaLTztxD6HYFTJaiycpSkLRV6AQZ5fWmc/0x0HcJ6v49KvyJU4GdHlFiRTT0MqWfUo1FGYYY7jvzEbW0S1TAFMSy4sLUJr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lEnwEpkb; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=TlFpGPfkiM55Hbd2D3BrSXzggdxSFm50uu09s8smSy5qp5bXZRWE5ag282t5P3hLIoHwlof4N0JbzhJz1h14WfiDC4MP0Y5v0NwfOEGuiemLbV5knnZBNlhsLE/3cp95nNjKZ2RRDiYLqVrUxRGzTl3vWklKCiJEomMsPxQNUiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IRuSkJvi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lEnwEpkb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFACC1F000FF;
-	Mon, 28 Sep 2026 16:31:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IRuSkJvi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C711F000FF;
+	Mon, 28 Sep 2026 16:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790613076;
-	bh=b9+3FkzlI/wIWQJcNTEFtgC0MrVxpEcwVbCYCmj7aIE=;
+	s=k20260515; t=1790613083;
+	bh=EnF1lpL8yOAVbciKvQW9ui5UiqpwepMChIPZqx1gRuM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lEnwEpkbgMvdLF3/EK74V3v15X6gXZIi+Zf856Yrs47RwjjuSgxlT+E79RS2BbbK3
-	 OILcuPuOCbulZMrVj6umC8YLlyUl2IrsnC01NNU/BSNT+MupLcZLKylkPysghNsTh7
-	 J4Xp8qB6s2yB0mfvUYvy+sVN+ZFIy7+V8j34TgLy1CsYDPmoxhxMfKfYcvgPAhNG1U
-	 wBQGm+mULAgCgqdwVhNez4ImjCTdXPqUlnuTrQ6XPza2V2XHXwnWj+T10eivUr3tBo
-	 P9pNc3qJ5mbwE7QSZSsjt29Znf+xcrGvUYGCtCuHVXRDaukhBGMVeKEw8NAkCpHGcM
-	 zFM9DN4O7IjLg==
+	b=IRuSkJvi7ERiOqzVWjSyCEYf/Y3fU2wxA8HSAlOJeLzpvLiMiLQz6WqeeV6/iqh/3
+	 K81zJGtHSru8y3T0VPdTZN//WVr2UP59X1HbCpDsPv7JRIZHZIumOetrnGFI2SeYdA
+	 tRYXuOOoMCpPwpsZbNwqTT80Ohq4RmMpvgIgQZE1Hrx4b3suEX6sXahcM27rnfJC43
+	 HBpiplZ14fI6+TJpcp2d59zYMCI4nqf++Bddnv/2+C8hIQQ4F7LaRwQYWB20qCWP31
+	 Sq9pDWwTyGLiRA/ia6ov7KcRT5qlUJ+hHzFZDX6+DItsGp9b5j/+9S+p0a86lw0yFb
+	 STTXG75+jNG7A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/6] drm/panel: dsi-bpf: Add BPF program build
- infrastructure and helper header
+Subject: Re: [PATCH DO NOT MERGE 6/6] arm64: dts: broadcom: Add Raspberry Pi
+ ILI9881C DSI panel overlays
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Maxime Ripard" <mripard@kernel.org>
-Cc: dri-devel@lists.freedesktop.org, robh@kernel.org, devicetree@vger.kernel.org, bpf@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-3-5244926aace4@kernel.org>
+Cc: bpf@vger.kernel.org, dri-devel@lists.freedesktop.org, robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-6-5244926aace4@kernel.org>
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-3-5244926aace4@kernel.org>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-6-5244926aace4@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 28 Sep 2026 16:31:15 +0000
-Message-Id: <20260928163115.AFACC1F000FF@smtp.kernel.org>
+Date: Mon, 28 Sep 2026 16:31:22 +0000
+Message-Id: <20260928163123.04C711F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] drm/panel: dsi-bpf: panel_bpf_mipi_dsi_dcs_write_byte macro prev=
-ents error handling
-- [Low] build: Makefile misses vmlinux.h in clean target and uses undefined=
- variable
+- [Low] dt: node names use underscores instead of hyphens
 --
 
-commit 94b9d5177a6ef3a698ad45fa764e652b0d0dbae4
+commit 13a81e24cfdf82fcd1a6606b31ae481417af3552
 Author: Maxime Ripard <mripard@kernel.org>
 
-drm/panel: dsi-bpf: Add BPF program build infrastructure and helper header
+arm64: dts: broadcom: Add Raspberry Pi ILI9881C DSI panel overlays
 
-Add the BPF-side header panel-bpf-mipi-dsi.h and a standalone
-Makefile for building panel BPF programs. The header provides
-section name macros (PANEL_BPF_MIPI_DSI_PREPARE, etc.), the
-PANEL_BPF_MIPI_DSI_OPS() struct_ops declaration macro, extern
-declarations for all the kfuncs, and some convenience macros.
+This commit adds device tree overlays for the Raspberry Pi 5-inch and
+7-inch MIPI-DSI panels on the Raspberry Pi 4 Model B. It introduces a
+shared dtsi for the common display MCU and backlight components.
 
-> diff --git a/drivers/gpu/drm/panel/bpf/progs/Makefile b/drivers/gpu/drm/p=
-anel/bpf/progs/Makefile
+> diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dts=
+i b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi
 > new file mode 100644
-> index 0000000000000..74190ee618abd
+> index 0000000000000..bd08e22581a31
 > --- /dev/null
-> +++ b/drivers/gpu/drm/panel/bpf/progs/Makefile
+> +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi
+
 [ ... ]
-> +clean:
-> +	$(call msg,CLEAN)
-> +	$(Q)rm -rf $(OUTPUT) $(TARGETS)
+
+> +&{/} {
+> +	panel_backlight: panel_backlight {
 
 [Severity: Low]
-Will this clean target leave a dirty working tree? The generated vmlinux.h
-artifact is not removed when executing make clean.
+Should this node name use hyphens instead of underscores, such as
+panel-backlight? Devicetree naming conventions generally prefer hyphens,
+and using underscores here triggers node_name_chars_strict warnings when
+building the device trees with standard strict dtc checks enabled.
 
+> +		compatible =3D "pwm-backlight";
+> +		brightness-levels =3D <0 31>;
+
+[ ... ]
+
+> +&i2c0_1 {
+> +	status =3D "okay";
 > +
-> +%.bpf.o: %.bpf.c vmlinux.h $(BPFOBJ) | $(OUTPUT)
-> +	$(call msg,BPF,$@)
-> +	$(Q)$(CLANG) -g -O2 --target=3Dbpf -Wall -Werror $(INCLUDES)		\
-> +		     -Wno-microsoft-anon-tag					\
-> +		     -fms-extensions						\
-> +		     -c $(filter %.c,$^) -o $@ &&				\
-> +	$(LLVM_STRIP) -g $@
-> +
-> +vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
+> +	display_mcu: display_mcu@45 {
 
 [Severity: Low]
-Is the INCLUDE_DIR order-only dependency defined? It appears to resolve to
-an empty string since it is not defined in this Makefile.
+Similarly, could this node be named display-mcu@45 instead? Replacing the
+underscore with a hyphen avoids dtc compiler warnings for invalid node
+name characters.
 
-[ ... ]
-> diff --git a/drivers/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h b/drive=
-rs/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h
-> new file mode 100644
-> index 0000000000000..e2b03afef2c8c
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h
-[ ... ]
-> +/* Send a DCS command with a single byte payload. */
-> +#define panel_bpf_mipi_dsi_dcs_write_byte(ctx, cmd, val)		\
-> +	do {								\
-> +		const __u8 _v =3D (val);					\
-> +		panel_bpf_mipi_dsi_dcs_write((ctx), (cmd), &_v, 1);	\
-> +	} while (0)
-
-[Severity: Medium]
-Could the panel_bpf_mipi_dsi_dcs_write_byte macro prevent callers from
-checking for and handling DSI transmission errors?
-
-By wrapping panel_bpf_mipi_dsi_dcs_write in a do-while loop, the integer
-return value is dropped. This causes initialization routines to blindly pro=
-ceed
-even if the panel is detached or unresponsive, as BPF programs invoking this
-macro cannot assign or evaluate its result.
+> +		compatible =3D "raspberrypi,touchscreen-panel-regulator-v2";
+> +		reg =3D <0x45>;
+> +		gpio-controller;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928-drm-mipi-d=
-si-panel-ebpf-v1-0-5244926aace4@kernel.org?part=3D3
+si-panel-ebpf-v1-0-5244926aace4@kernel.org?part=3D6
