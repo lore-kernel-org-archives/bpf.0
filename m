@@ -1,138 +1,107 @@
-Received: from mta1.migadu.com (out-149.mta1.migadu.com [95.215.58.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BA048F82E
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 08:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54215485949;
+	Mon, 28 Sep 2026 09:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790585462; cv=none; b=H9kTFMfn3+7HkfzbPqr3Gfe0kM389bU3E5wc/fMEU//71WwaII/PPIjQC6h/jac4rEUFpOE3gnvbvixaYQhAhMxUEE2J2pfXH2ekFn4hna/rSUt8N+0Wou5cNDWlKCGAXK5dpWv+Ihbg8bm1ilVEhhdA6LuSwIX7SBPZ5Ty3CaQ=
+	t=1790586308; cv=none; b=IN2jn4D8jsAkdF9+fieD22PWWQodohsC5xrdzCWcgHJ3ca/oQnF2H9p3GKJ+pVAWOI8bP940LIevfycsfX+EcbPGySNd3ecs+9RSxxA3AYsjozRS+A9iJ+BNumyDrxkBR0JxCA/LzHcFpKoWKaLnIss/pkDq5z8ixs6cTf7lDzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790585462; c=relaxed/simple;
-	bh=09WBzyqcOHBSt5hLHqAwbTciP1G0S+c8iry/IFi/HlI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=NB01grjr1Xr2KFuMFOsl91MX7ip78eEHj76P6M9KLQn0fIBQ8V7J8aePOLNRJge+ltHrleNJbu2xneFOiOn+Sk1WcMLYuMtlyeBqRKXKUPc5sfvDjMgRZ/8Do6C9oV6n2ZdfE62SBWmiV6B/7SBedl7v9bkC7wJSFLADCBG1GWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CgWoLLGC; arc=none smtp.client-ip=95.215.58.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790586308; c=relaxed/simple;
+	bh=OcB/HbUJXOH4AxpxgD5AjyEHemYd1NtXf1vwRzdhtQk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=jcRadNQeM1wWP0Cn5vTIJFKN430Dr23UfCoi8OmmmcH144+TBLOo4aa0UEnTcH2jhBmvddRroQ/YQzCjLUu+mYWAMEsyOWeLzwDhAJVc1kG6Y6/eUYoffO8X571yYCYdmitfJhL1TQU/NeiwfvXaQgEjSPA+b5nq8IUyun4M224=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gjz9IG/a; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CgWoLLGC"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=09WBzyqcOHBSt5hLHqAwbTciP1G0S+c8iry/IFi/HlI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790585458; v=1; x=1791190258;
- b=CgWoLLGCEWvFIpu2stwYKXLjwNJHsGBKgRrsOVAXsJX4m5XtA2uHzqbFI6j0QwaUo+OOXceN
- DkrP+8DVXSdE0Eca5n5ZtakjSjb50fy6UumPnNCjYGxAj3JPtQr29aN4vobT6FsFchCRR+y7eYP
- 2Y9RLM4bjDNXIiqIdytCBFV8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id dcca5a333ecbdbdc;
-	Mon, 28 Sep 2026 08:50:58 +0000
-X-Mizu-Trace-ID: dcca5a333ecbdbdc
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gjz9IG/a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009E11F000FF;
+	Mon, 28 Sep 2026 09:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790586306;
+	bh=o3adarYtVvsy0MBOXWtEhIf3HmHUT/7SthKqv/p+Bk8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Gjz9IG/aR9HRZ4et/x7TD0nd0jpjp2aHjmseYxW8i1qmGFRerSWaRcO3z9t3VLXQS
+	 tSYQ+MvWLpinEHO//RD+TS2azGRYqLxDPXYPOkweg8V3DZGQzRCYkeH95wb/ONWxRX
+	 Lg59ZB+gwY5qRUk2Or9YMM2zbdXMa1owgbWeCMkV44wI0ahYIUHyzMRR+oLeR5qHe4
+	 huWeF31eEEe0One95SLP+vjpytjDAyaxaIntRTp20IPsUprLKXRr0sIG/5Uspy2u+f
+	 RhoyaROimNPX0YShb0iUiq80kazn+Qo9c7yvP7mp6YjC04Ngt4Ka2BdHh17VwlBA6b
+	 GZylG73v1YPmA==
+Content-Type: multipart/mixed; boundary="===============0836752905273921371=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 08:50:55 +0000
-Message-Id: <DLQTKIGNXKLS.1E0Y9RS93S82N@linux.dev>
-From: "Florent Revest" <florent.revest@linux.dev>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>
-Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <kpsingh@kernel.org>, <john.fastabend@gmail.com>, <leon.hwang@linux.dev>,
- <zirajs7@gmail.com>, <rhkrqnwk98@gmail.com>, <puranjay@kernel.org>,
- <xukuohai@huaweicloud.com>, <iii@linux.ibm.com>, <hbathini@linux.ibm.com>,
- <chleroy@kernel.org>, <naveen@kernel.org>, <bjorn@kernel.org>,
- <pulehui@huawei.com>, <yangtiezhu@loongson.cn>, <hengqi.chen@gmail.com>,
- <linux-kernel@vger.kernel.org>, <aou@eecs.berkeley.edu>,
- <agordeev@linux.ibm.com>, <alex@ghiti.fr>, <bp@alien8.de>,
- <catalin.marinas@arm.com>, <borntraeger@linux.ibm.com>,
- <dave.hansen@linux.intel.com>, <emil@etsalapatis.com>, <hca@linux.ibm.com>,
- <hpa@zytor.com>, <chenhuacai@kernel.org>, <ihor.solodrai@linux.dev>,
- <mingo@redhat.com>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kselftest@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
- <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
- <loongarch@lists.linux.dev>, <maddy@linux.ibm.com>, <mark.rutland@arm.com>,
- <mpe@ellerman.id.au>, <npiggin@g>
-Subject: Re: [PATCH bpf v5 1/3] bpf: Wait for an RCU tasks grace period
- before freeing trampoline progs
-X-Mailer: aerc 0.17.0
-References: <20260926135605.1217928-2-florent.revest@linux.dev>
- <9d932a22ca908da9378ea281633ddb749453911ac6ae7a27a09e376f9ad02ff7@mail.kernel.org>
-In-Reply-To: <9d932a22ca908da9378ea281633ddb749453911ac6ae7a27a09e376f9ad02ff7@mail.kernel.org>
+MIME-Version: 1.0
+Message-Id: <cc8705840580f8645d92a6bb8431ad9766aceb52fc9423513f93d16d8b908ac0@mail.kernel.org>
+In-Reply-To: <20260928081144.207908-1-chenyuan_fl@163.com>
+References: <20260928081144.207908-1-chenyuan_fl@163.com>
+Subject: Re: [PATCH] bpf: Claim the per-CPU send_signal irq_work before filling it
+From: bot+bpf-ci@kernel.org
+To: chenyuan_fl@163.com,ast@kernel.org,daniel@iogearbox.net,bpf@vger.kernel.org
+Cc: yonghong.song@linux.dev,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 28 Sep 2026 09:05:05 +0000 (UTC)
 
-On Sun Sep 27, 2026 at 8:41 PM UTC,  wrote:
-> > bpf: Wait for an RCU tasks grace period before freeing trampoline progs
-> >
-> > When a prog is detached from a trampoline, it is freed after an RCU
-> > grace period, or an RCU tasks trace one if it is sleepable. This covers
-> > the tasks that are running the prog, since the prog's enter helper take=
-s
-> > the matching read lock before the prog is called. On a preemptible
-> > kernel, it doesn't cover a task that was preempted in the trampoline
-> > just before the enter helper. That task holds no lock yet, and it calls
-> > the prog after it was freed:
-> >
-> >   BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_enter_recur+0x3a5/0x3=
-f0
-> >   Read of size 8 at addr ffffc90000055040 by task candidate/110
-> >   CPU: 1 UID: 0 PID: 110 Comm: candidate Not tainted 7.3.0-rc2-00014-g1=
-5071f2a1263-dirty #2 PREEMPT(full)
-> >   Call Trace:
-> >    <TASK>
-> >    __bpf_prog_enter_recur+0x3a5/0x3f0
-> >    bpf_trampoline_6442509193+0x37/0xf1
-> >    __x64_sys_futex+0x9/0x410
-> >    do_syscall_64+0xb0/0x530
-> >    ...
-> >
-> > Wait for an RCU tasks grace period before the existing one when freeing
-> > a prog that was linked to a trampoline. An RCU tasks grace period only
-> > ends once the tasks that were preempted have run again, and
-> > bpf_tramp_image_put() already relies on it to free the image. It doesn'=
-t
-> > wait for tasks that sleep in the trampoline, the next commit takes care
-> > of those.
-> >
-> > Only progs that were linked to a trampoline can be called this way, so
-> > bpf_trampoline_add_prog() marks them and other progs are still freed as
-> > before.
-> >
-> > Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
->
-> Is this the right Fixes: target?
->
-> The race being closed here (a task preempted inside the trampoline image
-> before __bpf_prog_enter*() takes its RCU read lock, while the prog is fre=
-ed
-> after only a regular RCU or RCU tasks trace grace period) appears to pred=
-ate
-> e21aa341785c.
->
-> In fec56f5890d9 ("bpf: Introduce BPF trampoline") bpf_trampoline_update()
-> switched images with no tasks RCU wait, and __bpf_prog_put_noref() freed =
-the
-> prog with a plain call_rcu(&prog->aux->rcu, __bpf_prog_put_rcu).
->
-> Just before e21aa341785c, the synchronize_rcu_mult(call_rcu_tasks,
-> call_rcu_tasks_trace) in bpf_trampoline_update() ran before
-> arch_prepare_bpf_trampoline() rather than after the new image was install=
-ed,
-> and the total =3D=3D 0 unregister_fentry() path had no wait at all, so a =
-task
-> preempted in the old image could already reach a freed prog.
->
-> Would Fixes: fec56f5890d9 ("bpf: Introduce BPF trampoline") be more
-> accurate, so that stable trees without e21aa341785c also pick this up? Th=
-e
-> follow-up 49ca60187380 in this series uses the same tag.
+--===============0836752905273921371==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Yeah, that seems right. It shouldn't make much of a difference for stable
-because both have been introduced in the same 5.10.y. I can either switch t=
-his
-if there's a v6 or a maintainer can change when applying.
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 195f78db9bda..e60b4fdf2923 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -823,6 +823,8 @@ const struct bpf_func_proto bpf_task_pt_regs_proto = {
+>
+>  struct send_signal_irq_work {
+>  	struct irq_work irq_work;
+> +	/* Covers the fill-to-run span which irq_work_is_busy() cannot see. */
+> +	atomic_t claimed;
+>  	struct task_struct *task;
+>  	u32 sig;
+>  	enum pid_type type;
+> @@ -842,6 +844,8 @@ static void do_bpf_send_signal(struct irq_work *entry)
+>
+>  	group_send_sig_info(work->sig, siginfo, work->task, work->type);
+>  	put_task_struct(work->task);
+> +	/* Release once the fields are consumed. */
+> +	atomic_set_release(&work->claimed, 0);
+>  }
+>
+>  static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struct *task, u64 value)
+> @@ -885,7 +889,7 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
+>  			return -EINVAL;
+>
+>  		work = this_cpu_ptr(&send_signal_work);
+> -		if (irq_work_is_busy(&work->irq_work))
+> +		if (atomic_xchg(&work->claimed, 1))
+>  			return -EBUSY;
+>
+>  		/* Add the current task, which is the target of sending signal,
+> @@ -898,7 +902,12 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
+>  			copy_siginfo(&work->info, &info);
+>  		work->sig = sig;
+>  		work->type = type;
+> -		irq_work_queue(&work->irq_work);
+> +		if (unlikely(!irq_work_queue(&work->irq_work))) {
+> +			/* Unreachable while the claim is held. */
+> +			put_task_struct(task);
+> +			atomic_set_release(&work->claimed, 0);
+> +			return -EBUSY;
+> +		}
+
+This isn't a bug, but since the comment says this cannot happen while the
+claim is held, would it be clearer to drop the branch or reduce it to a
+WARN_ON_ONCE(!irq_work_queue(...))? As written it looks like a recovery
+path, but it wouldn't actually undo the overwritten fields if it ever ran.
+
+>  		return 0;
+>  	}
+>
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36398456272
+--===============0836752905273921371==--
