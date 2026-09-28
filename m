@@ -1,238 +1,202 @@
-Received: from mail-qk2-f42.google.com (mail-qk2-f42.google.com [74.125.230.234])
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F464DD3D3
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 15:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B540B3749E1
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 15:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790607621; cv=none; b=NyZ04ed5+Xg2QeXi5iYYxVWPnJlcjgvBVwGoD1dJMrFmFOQLvIr96m4lO/PUsLL02FBSnUgomn8b2gROSapBQ8LabZSmaCE0b6369mpQa8ahgNovX0RBJ1rjXJT7Y04Bz94dhn9frEVMwpA0N4yTeA4aFboNRD9F6tpcG2vEejE=
+	t=1790607688; cv=none; b=bVFcO59vriV5F7c1WKFVZCscCl6cKiSmNevHA6kvraKm+WOYosHYK6dK5gavpHbnvlgBt13AxEjll6qSAqU1WW9BnScpObXnRt8k87rucwd8Dm6Bv7cGtT9ixcN80rlASf1D34TweIoZvenBGQWIiztbRs7IAmoEsG3HM+SvszQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790607621; c=relaxed/simple;
-	bh=ofLhtOUraYrBU9vH7dVYS99Kn/ZKr6TmW9UdLaKMYnE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=M91qlFdaOr2lYsOEWoxPbfp2A2MqGeKESeYlbGTtvp1hCDwWMxj4NAK8L2NfX2ZJ/zWElmzs7r2fB2MZXEEYOq5SFa5RcZRz4ZpFbHuXGcwKuAGIZyaCNkfGzfpYrxuOFMTJ8ao97c2i+lmUO4NmVHxLzdB3lten7tAbUORXpQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WmYqnuJ+; arc=none smtp.client-ip=74.125.230.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790607688; c=relaxed/simple;
+	bh=jdQOpTd1yKVH2Iw9b4utgOqc6ic9XH0J/Yb2gcTPXtM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=K+bmxjV64E8TtiBsT1mHG7hY4iBvC5+QsZotvk7a/p8SpFemPPMUdHv4f+7O7MzuVuB9czJP7sJMt7Zeul9gIgLsLKmg9W5RAaR8pIsApM1LcuLnRjjx+jnQ3/ZxNPcn60so7Xmj2iZtHhbNQJm6hiuj/W/87VJHYlUn5yN3k0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fB+jOAQ2; arc=none smtp.client-ip=209.85.210.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WmYqnuJ+"
-Received: by mail-qk2-f42.google.com with SMTP id d75a77b69052e-53320dc09fcso17226051cf.0
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 08:00:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fB+jOAQ2"
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8699b293a80so1795254b3a.0
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 08:01:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790607618; x=1791212418; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=l4pH9TWXZJHK102QKSQ5xfmRzXhpONAZW7fKUqg/bHg=;
-        b=WmYqnuJ+46B0CyUHEK39N3jeLZJGPd6/S4xTSwn+XFdZ4I8g1xMxmiFG7BFyJvlzOz
-         QYpSr4HLJh5P4EQLSewdpOQ9NnCInXWAhmdPXRry2DQG8UUokOy1iUDwf47rV5GzJQSg
-         lJ7V7B0lXbcvlsOHYmYMp4yABEnp1HIRRDFp/n/c03xYApY+0As0YSoLDASMCOV7jf0O
-         frblB61G/oDyoYz/Xh4Mp2F9bteHXYkGMBrPFZuOLqLEThDB4gOIxBpc2aHgLdPXTNUs
-         XEA1Mp6ngJge1xuX0Ky17+/5cs4iKrc2E8dWev+VBdrLdVJZ1YQ88+SSe7meMx2LXmp+
-         Y8nw==
+        d=google.com; s=20251104; t=1790607686; x=1791212486; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=TnFki+BLJa1RwxDmrHE/Ki7U3AU1ZKVEEJDLyRcwiMA=;
+        b=fB+jOAQ2GgrTNvh/M7NyBkoImGJ2g1cKsg1SuHFgxUsVX6EtaZ/LlkRu2lmNvVZBaG
+         Xa0cncKvtEnmFy2zkDKXOgGJF/enJEG6uvARZOeUzLLqtaNWrtmWShFVnwtSncomZA9J
+         G972w26Xz/0egdtm52x1N0t3G+yd5bnOWQRM2NbYijYlHHDmp71kgU/clTgZCiSJxUrI
+         vuE4dSB1TprWTj4RfASvVnSHGPXLMC11+z5TxOWsqtrc6bDwGxNFlgQ3W5iJjkBTlzn9
+         iIXoNEgN/rfym1dfpgBSlZInCLiGoYyFLNpb55Uij6gGUU1Z24N4VhnjYAevpGoEu59j
+         HiyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790607618; x=1791212418;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=l4pH9TWXZJHK102QKSQ5xfmRzXhpONAZW7fKUqg/bHg=;
-        b=f3WgPyoRJvVVLMJKiTzUU7G3ESYiovua51I7ScjRlz8727X3JhOH382cIdL/LUfMFu
-         pahlB2LVo2yJly6T0DhFojjnngUQ4bfwWz10BU9dTjSlqKQbD+R4hD1j35pzDMi4JOtr
-         6QNGfqChnPQyeA8ckoqWqwQMPu0BNs6u6HJfgikxb88UvbOQ5C/fzHe71TFmye1iysfb
-         snwAJtG8KlLi/MUGKzpfHIvxFGWWMuwUFoyzrgd5n80qgIXcg5kakLTJFAZl0M0y0Cye
-         5ReuU6XY564zwmnOI1FeZwVWafUYDpCGuLw2JrZpp+fDDPl6sYD9mXxW3LMsMWPsiwnW
-         GgCA==
-X-Forwarded-Encrypted: i=1; AKwUvBxyx8FRmEAkG53bz9+zkZlvTC4Y8/M++GLCEMXvG2MxJmOOmdgsv/+TjeKNNTzWEKNoAq8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJE78MQQ2iNiv/RaPo0a+S6/iB4weDFU4Tab7TvhFBFJjUAwb8P
-	8f9hHJSjbPkQfTYop85nHpI9HGO7N/p42yEteOzYUIuoIu8ryGrPcrGL
-X-Gm-Gg: AYBFou2R6YDlPkqQwFABCBHNMz/BkogTn3pU++k8iRKzRg8ouvyK0wcQiU7V5e0tS3F
-	cjKQsrowYsA2lee2eyZEOh0kC8V9BNYXrdDuHuOKzoFHWRquOILshZ7EXysfgY97Xf3twMEWUUu
-	RY1HUR+dwFUijoNQ+8pM9KSrqTlnnepfNrdAhA3Ejr7HILwN6UKep3RgFITo74kwDGS8BBf6Ad7
-	f4mEFtk9zskHqrVMbyFqOPOxaIf0civj5xcf9+I2dWk9ZqRzP0+vbYdXTyQm9aEEpN9q//miAKU
-	S6WoVNopxBkG3OAn7DYM29Dyg6z5rudQoDlhDL3BTexTxp6UulRwtxRUizKJJ5UEekVZclZw789
-	h5GQc90iqEvjqsMdMsz8h7KquCGInvVSIvYzd+Gu3t4CYdRcitBssq9/N9VZQqfXI/pDvZYz80V
-	PcoCl7mO5cZWW5E8mIWABpGzwOuD3NAUc3FWd7l+QOQV/t5b/9Gjgt4dAImT8DOwSmeolUqyGNM
-	wQ=
-X-Received: by 2002:a05:6214:d84:b0:914:5176:a0a6 with SMTP id 6a1803df08f44-9145176a45emr123730886d6.2.1790607615421;
-        Mon, 28 Sep 2026 08:00:15 -0700 (PDT)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91430e281a8sm81970906d6.33.2026.09.28.08.00.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 08:00:14 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790607686; x=1791212486;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=TnFki+BLJa1RwxDmrHE/Ki7U3AU1ZKVEEJDLyRcwiMA=;
+        b=I/1tSi1LZEDva5/9GwVLBo59evsk3KUNVkGffm2K8YF4SdqHv+29YbYeg6WTTlsGwu
+         XlxDPiC2Q5xWjnYhUGjhmZvEwdILgA6pLdN0ooVyN3+6rNLsqjY5RRVecOuI6rjHBv2z
+         wQxRQZazVKHVDu3WJ/sP2g56yLVVQT2eUQdy3afZz47wl84xA37s75Zt4wPbVsL8p08C
+         l2CvGAZ6p7y2GLIXtZpKX0UmiijW3WMawU3kx6wxPwknGfIOlYXLUlmwinzcOweDvwq5
+         lqBRs5wjsDqKzQHkUN6O3riZW3a9FO2gj3pwzQ2YBN0EApWZbj1Pq92l4rTnSlYri4lh
+         B52Q==
+X-Gm-Message-State: AFuF++kqlIdUfPM9H2vMQNV5JE7bvdM5bCTb/k1C0qPifu3ZRuqzefaq
+	jLGHkMAWzjCoDKzt+HJfrdbPTs1m6wfJKPhLZMwpRrBlRrcSc1ozt74nBiMxUMqPlOMAo8o535H
+	3ixuQNrQZkEk/1zrAcA==
+X-Received: from pfki17.prod.google.com ([2002:a05:6a00:51:b0:881:464e:33be])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:138d:b0:881:7ff5:605c with SMTP id d2e1a72fcca58-8817ff562d9mr5296272b3a.55.1790607685619;
+ Mon, 28 Sep 2026 08:01:25 -0700 (PDT)
+Date: Mon, 28 Sep 2026 08:01:18 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
+Message-ID: <20260928150121.1712559-1-tjmercier@google.com>
+Subject: [PATCH bpf-next v7 0/2] bpf: htab: Reduce memory use of hash maps
+From: "T.J. Mercier" <tjmercier@google.com>
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"T.J. Mercier" <tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 11:00:13 -0400
-Message-Id: <DLR1F9RXTT06.UETFCFM0S7X9@gmail.com>
-Cc: <alexanderduyck@fb.com>, <kuba@kernel.org>, <kernel-team@meta.com>,
- <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
- <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
- <dimitri.daskalakis1@gmail.com>, <mohsin.bashr@gmail.com>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 5/8] eth: mpnic: start and stop the Tx HW
- queues
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20260924-linux-mpnic-v2-5-4badc9b58b9e@gmail.com>
- <179055370349.3145.18291043056842354620@kernel.org>
-In-Reply-To: <179055370349.3145.18291043056842354620@kernel.org>
 
-On Sun Sep 27, 2026 at 8:01 PM EDT, netdev-bot+sashiko wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
->
-> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 =C2=B7 Low: 1
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->
-> - [High] mpnic_wait_all_queues_idle() returns void and drops the
->   -ETIMEDOUT from read_poll_timeout().
-> - [Low] mpnic_enable_twq() writes fls(size_mask) & MPNIC_TWQ_SIZE_SIZE (a
->   4-bit field), and mpnic_enable_tcq() writes the same exponent into=E2=
-=80=A6
->
-> --
->
-> eth: mpnic: start and stop the Tx HW queues
->
-> This commit writes the Tx work queue and completion queue base addresses
-> and sizes into the hardware. It adds mpnic_enable() and mpnic_disable() t=
-o
-> turn the Tx queues on and off. It also adds mpnic_wait_all_queues_idle(),
-> which polls the TWQ, TQS, TDE and TCQ idle bitmaps, and mpnic_flush(),
-> which throws away any Tx work left in the rings.
->
->> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/=
-ethernet/meta/mpnic/mpnic_txrx.c
->> index 853976e11b032..aaa3a3e99a138 100644
->> --- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
->> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
->
-> [ ... ]
->
->> @@ -467,6 +468,180 @@ void mpnic_reset_netif_queues(struct mpnic_net *mp=
-n)
->>  	}
->>  }
->> =20
->> +static void mpnic_enable_twq(struct mpnic_dev *mpd, struct mpnic_ring *=
-twq)
->> +{
->> +	u32 log_size =3D fls(twq->size_mask);
->> +	u32 i =3D twq->q_idx;
->
-> [ ... ]
->
->> +	/* Store descriptor ring address and size */
->> +	mpnic_wr64(mpd, MPNIC_TWQ_BASE_ADDR(i, 0), twq->dma);
->> +	mpnic_wr64(mpd, MPNIC_TWQ_SIZE(i, 0), log_size & MPNIC_TWQ_SIZE_SIZE);
->
-> [ ... ]
->
->> +static void mpnic_enable_tcq(struct mpnic_dev *mpd,
->> +			     struct mpnic_napi_vector *nv,
->> +			     struct mpnic_ring *tcq)
->> +{
->> +	u32 log_size =3D fls(tcq->size_mask);
->> +	u32 i =3D tcq->q_idx;
->
-> [ ... ]
->
->> +	/* Store descriptor ring address and size */
->> +	mpnic_wr64(mpd, MPNIC_TCQ_BASE_ADDR(i), tcq->dma);
->> +	mpnic_wr64(mpd, MPNIC_TCQ_SIZE(i), log_size & MPNIC_TCQ_SIZE_SIZE);
->
-> [Severity: Low]
-> This isn't a bug with the current fixed 1024-entry rings, but
-> mpnic_enable_twq() and mpnic_enable_tcq() mask the same exponent with
-> fields of different widths in mpnic_csr.h:
->
->   #define MPNIC_TWQ_SIZE_SIZE    CSR_GENMASK(3, 0)
->   #define MPNIC_TCQ_SIZE_SIZE    CSR_GENMASK(4, 0)
->
-> For a 64K-entry ring (fls() =3D=3D 16), TWQ_SIZE would get 0 and TCQ_SIZE
-> would get 16. Is this the intended encoding for each register?
->
+Memory is expensive and scarce these days. This series reduces the
+memory use of BPF hash maps by eliminating the per-element overheads
+below. This saves up to 50% of per-element memory use for standard and
+PCPU hash maps. The memory use of LRU hash maps is unaffected.
 
-The code is correct. TWQ has a max ring size of 64k, and that has an
-encoding of 0 (like fbnic). TCQ actually supports rings as large as
-256k, but it does not have/need the 0 encoding for that, as there is an
-extra bit in the size field.
+Map Type & Configuration           | Old size | New size | Savings
+-----------------------------------|----------|----------|--------
+Standard (key =E2=89=A4 8 B, val =E2=89=A4 8 B)    |   64 B   |   32 B   | =
+50.0%
+Per-CPU (prealloc) (key =E2=89=A4 8 B)     |   64 B   |   32 B   | 50.0%
+Per-CPU (non-prealloc) (key =E2=89=A4 8 B) |   64 B   |   40 B   | 37.5%
+LRU (Any key/value size)           |    -     |    -     | 00.0%
 
-> fbnic has a comment for the 4-bit form: "Write lower 4 bits of log size
-> as 64K ring size is 0". Would a similar comment help here?
->
-> [ ... ]
->
->> +void mpnic_wait_all_queues_idle(struct mpnic_dev *mpd)
->> +{
->> +	static const struct mpnic_idle_regs queues[] =3D {
->> +		{ MPNIC_TWQ_IDLE(0), MPNIC_TWQ_IDLE_CNT, "TWQ" },
->> +		{ MPNIC_TQS_IDLE(0), MPNIC_TQS_IDLE_CNT, "TQS" },
->> +		{ MPNIC_TDE_IDLE(0), MPNIC_TDE_IDLE_CNT, "TDE" },
->> +		{ MPNIC_TCQ_IDLE(0), MPNIC_TCQ_IDLE_CNT, "TCQ" },
->> +	};
->> +	u32 non_idle_bitmap;
->> +	int err;
->> +
->> +	err =3D read_poll_timeout(mpnic_non_idle_queues, non_idle_bitmap,
->> +				!non_idle_bitmap, 20, 500000, false, mpd,
->> +				queues, ARRAY_SIZE(queues));
->> +	if (err)
->> +		mpnic_idle_dump(mpd, queues, ARRAY_SIZE(queues),
->> +				non_idle_bitmap, err);
->> +}
->
-> [Severity: High]
-> What happens to the Tx rings if this poll times out?
->
-> The commit message says every block "has to report idle before the
-> descriptors are safe to free". However, the -ETIMEDOUT from
-> read_poll_timeout() is only logged. mpnic_wait_all_queues_idle() returns
-> void, so a caller can't tell a timeout apart from a clean drain.
->
-> mpnic_stop() is added later in the series, in "eth: mpnic: add a netdevic=
-e
-> and basic Tx handling". It carries on whatever the result:
->
->   mpnic_disable(mpn);
->   mpnic_wait_all_queues_idle(mpn->mpd);
->   mpnic_flush(mpn);
->
->   mpnic_reset_netif_queues(mpn);
->   mpnic_free_resources(mpn);
->
-> mpnic_disable_twq() and mpnic_disable_tcq() only clear the enable bits.
-> TWQ_BASE_ADDR and TCQ_BASE_ADDR still point at the rings.
->
-> After a timeout, mpnic_flush()->mpnic_clean_twq0(..., true, tail) unmaps
-> the in-flight Tx buffers and consumes their skbs. Then
-> mpnic_free_ring_resources() calls dma_free_coherent() on the TWQ and TCQ
-> descriptor memory.
->
-> Could a Tx engine that is still busy then fetch descriptors or payload fr=
-om
-> freed memory and put it on the wire? Could the TCM write completion
-> descriptors into memory that now belongs to another user?
->
-> fbnic_wait_all_queues_idle() handles the same case differently. It turns
-> on Tx drop through fbnic_tx_flush(), polls again, and returns an int.
-> Would something similar be needed here? At minimum, could the error be
-> returned so the caller can avoid freeing the rings?
+1) Unused LRU / PCPU fields in standard and PCPU hash maps (patch 1)
+struct htab_elem is used for all hash map types, and includes fields
+that are not always used (bpf_lru_node, ptr_to_pptr). For standard
+(non-LRU, non-PCPU) hash maps the 24 bytes for the bpf_lru_node (union)
+are entirely overhead and can be eliminated. Non-preallocated PCPU maps
+only need the 8 byte ptr_to_pptr which is currently unioned with the
+unneeded 24 byte bpf_lru_node, so 16 bytes of overhead can be
+eliminated. Preallocated PCPU maps don't need ptr_to_pptr, so 24 bytes
+of overhead can be saved.
 
-This was addressed many times in the v1 sashiko review.
+2) Hash caching for small keys (patch 2)
+For hash maps with small key sizes (=E2=89=A4 word size), comparing keys on=
+ly
+requires a single instruction. Currently the 4 byte hash value (8 byte
+aligned and padded) is used for this, but offers no performance
+advantage in this case and can be eliminated.
+
+The implementation splits htab_elem into dedicated structures for the
+different map types (htab_elem, htab_elem_pcpu, htab_elem_lru with
+hashed and unhashed variants) so that the map-type specific fields
+exist only in structures where they are necessary. In all hashed
+variants, the hash is always at a -8 byte offset from the start of
+htab_elem. The elem_offset map field supports the different sized
+element headers, and allows dynamic offsets to be kept out of the hot
+lookup path. It is used primarliy for allocation / free, and indexing
+preallocated elements.
+
+run_bench_htab_mem.sh shows the following changes across 10 runs on my
+3995WX.
+
+Benchmark (all in kops/sec)  |  Avg. Before  |  Avg. After  | Delta
+-----------------------------|---------------|--------------|--------
+prealloc overwrite           | 116.26 =C2=B1 4.3  | 118.81 =C2=B1 4.2 | +2.=
+19%
+prealloc batch_add_batch_del | 128.43 =C2=B1 3.6  | 128.89 =C2=B1 2.9 | +0.=
+35%
+prealloc add_del_on_diff_cpu | 22.91 =C2=B1 0.69  | 22.44 =C2=B1 0.62 | -2.=
+07%
+normal overwrite             | 72.43 =C2=B1 3.13  | 81.06 =C2=B1 1.49 | +11=
+.9%
+normal batch_add_batch_del   | 45.20 =C2=B1 0.78  | 50.09 =C2=B1 0.56 | +10=
+.8%
+normal add_del_on_diff_cpu   | 12.02 =C2=B1 0.24  | 12.80 =C2=B1 0.18 | +6.=
+49%
+
+---
+Changes in v7:
+Rebase on bpf-next/for-next. Resolve conflicts with 63b13537e6b2 ("bpf:
+Speed up htab lookups for u32/u64 keys")
+
+Changes in v6:
+Make htab_elem_set_hash branchless like htab_elem_hash
+
+From Alexei Starovoitov:
+Drop smp_wmb/smp_rmb and WRITE_ONCE/READ_ONCE on hash
+Drop map size check changes (just use sizeof(struct htab_elem_lru))
+Drop BUILD_BUG_ON on elem_offset
+
+Changes in v5:
+Rebase on top of bpf-next/for-next
+
+Update elem_size check in map_ptr_kern selftest to 40 in first patch
+(Sashiko)
+
+Place hash at constant compile-time offset before htab_elem, to allow
+removal of key_offset. (Andrii Nakryiko)
+This avoids dynamic htab->key_offset load and pointer arithmetic. The
+struct declarations got reworked to implement this, and htab_node was
+dropped. All map_in_map changes became unnecessary and were dropped.
+
+Fix key update before pptr, value initialization for recycled elements
+and lockless readers. (Sashiko finding on internal run)
+Read / write memory barriers and READ_ONCE() / WRITE_ONCE() were added
+for this.
+
+Combine rhtab_mem_dtor() and htab_mem_dtor() implementations.
+
+Fixed the KMALLOC_MAX_SIZE overflow check since sizeof(struct htab_elem)
+shrinks in both patches.
+
+Changes in v4:
+Removed inline from new functions per BPF CI (netdev/source_inline).
+
+From Mykyta Yatsenko:
+Factor out duplicate lookup_elem code into __lookup_elem_raw.
+Use offsetof instead of sizeof for key_offset assignments in
+htab_map_alloc (patch 1).
+Eliminate branching and htab_elem casting in htab_elem_hash /
+htab_elem_set_hash.
+
+Changes in v3:
+From Sashiko on torn reads/writes:
+Use a local unsigned long and READ_ONCE / WRITE_ONCE instead of memcmp /
+memcpy for atomic key comparisons for hashless elements.
+
+Changes in v2:
+Make maximum key_size for !has_hash depend on word size for atomicity
+on 32-bit.
+
+From Mykyta Yatsenko:
+Put the htab_elem* common initial sequence in its own struct (htab_node)
+and reuse it across all element types that share it. Eliminate
+associated BUILD_BUG_ON additions.
+Replace both the hash and key fields with data[].
+Store has_hash in struct bpf_htab, and avoid per-element reads of it.
+
+T.J. Mercier (2):
+  bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
+  bpf: htab: Reduce elem_size by 8 bytes for small key sizes
+
+ kernel/bpf/hashtab.c                          | 320 ++++++++++++------
+ .../selftests/bpf/progs/map_ptr_kern.c        |   2 +-
+ 2 files changed, 226 insertions(+), 96 deletions(-)
+
+
+base-commit: ea9358e1270ab2c3ba6f36bd9bdda68617665516
+--=20
+2.56.0.rc1.315.gc6ed9934b7-goog
+
