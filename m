@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8C22D9780;
-	Mon, 28 Sep 2026 12:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB049332EBD;
+	Mon, 28 Sep 2026 12:23:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790597804; cv=none; b=AcOg9A6u9K5FAE3T+bQuv+g4ARn/rjuwfSctBEXjZYuHbiU5VLLNYdo59cASD4tef44pP39veYsBZbqro1SOLWdhrvlw3ddx0FlZfDCocPqH9nUC6aVtLwiM9xcw4fSpGOoztfb/dBcPHeQW9mbOqGVT7hXZpMBlAzosovANGas=
+	t=1790598182; cv=none; b=oPKNPMVSnp9e0JhSvEw16XMeYfIsfMUZe76Mswy9blLWTvcnlaMrg5XYndT1JiYn4ESQSS6odjK3z+mqUEiegGJi5GDdyAnbN+C1ty99PhOaE2DQCkMAb6JydGX3/mDtpdGrArGUAoN7m0KEG7+iap9ozjdWpV4qlWNSUyu3jb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790597804; c=relaxed/simple;
-	bh=OuWmBA2AfGbO9O6NdK7R0zBcaotzJKjBa8IaakDd9so=;
+	s=arc-20240116; t=1790598182; c=relaxed/simple;
+	bh=6fwJ4i3NDqYT8BexAHF55cqi10Og3PkaSv4LXWi0VG0=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=l/JLb1eNtbL200pwQAYiN8vbJ0FB3crGCchfZMZUe+Zs9wnoBgGrFcmg70aMFsjyyP0OK9Z3ZHqv1rl0xe5l4L24noyFjqy6IZSpBASM9CGP035MYnhf6L2NnM2g029MEgfsW7hiUWlxiSLVVXxqDADYf4Rxrcif/WaQvFAQxbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=moa9aQb3; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=lTjladIp/1iu1hbozwh9kIGI60vE1VMvbaUfvo9R0gqNaTrSyW3OiXJNtNJjWSTLfU0XZhNU01rUtWO1L2WCFYGVjRuFjxkk+lvBshFy2gcU8ZPlAtL9+xAnOwRX50k+g6F/1K+idRvl/UG6JS7wag0bZsGavxUvWNHp52jKJDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GCMTonux; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="moa9aQb3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A5B1F000FF;
-	Mon, 28 Sep 2026 12:16:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GCMTonux"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB151F000FF;
+	Mon, 28 Sep 2026 12:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790597802;
-	bh=+BPqsEVt6o4S2aBhcJVM3MwO8plXj1e6T8B9ELdlxEA=;
+	s=k20260515; t=1790598181;
+	bh=6fwJ4i3NDqYT8BexAHF55cqi10Og3PkaSv4LXWi0VG0=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=moa9aQb3uCCfgmel/5Ls6dMMX8FiDIbpFtAl0OglOc5WQq9twT1qo3F8SrENZSoje
-	 t/j4bsP0U5yWAILoh5PLYxgawlHdLxZSRDxX84SWTG7srrTOp3fMnBshwR/c/pcsr2
-	 BPBO5oH1Le5OgGV2Ztyb92XBLO/Hp2W2MMO4WmJpBZpRi8D/TJr6r2G4enp1UQgreP
-	 G1jiEbXBudwxinLrlCVk7t5aQZCb6a7XjvtW2mloEez0gUUebYBc+X+cNjjSFg4LeK
-	 eWtggWd4ipNrb6qAr1teES8bUO8OQ9VQjAxOlZng3NkqCPduVkWmefUoD3kQivOOHa
-	 lLk3ffPsllK7A==
+	b=GCMTonuxt0X9cGbbLXwM9v+dUY4s/DLM/5HBoABlAfRf7Pc3beikMJzuZ7VzFTmpx
+	 SQxjixgjnxTMt/ASnUuBaTnVlPHllDXh1hoP4RI+wV3mKC6qvnzGuuDPSmt4KDx1NJ
+	 X68eCaCRPbLqNaDvn+OztXSnQoR56kaZXJUFzcHhuJt9mJ5HYFVY82OSQriRV5TnVF
+	 iQcAS6+scw/YOl/P+5qecNySMY8IdBLNRNUJq/hecldhkYQVkh6b8oHhXdjjVQDYYT
+	 FU9rqL4wlUzR8GrVSZ29UjS7u/hhl/K5FhR2oLsq6GoCCYwz1HcDoyPt+GdUgfsTWl
+	 6zIVhvIrgAsLA==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: James Hilliard <james.hilliard1@gmail.com>, Russell King
  <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit
@@ -64,13 +64,13 @@ Cc: Richard Genoud <richard.genoud@bootlin.com>, Alastair D'Silva
  Linkui Xiao <xiaolinkui@kylinos.cn>, Linkui Xiao <xiaolinkui@126.com>,
  linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev, James Hilliard
  <james.hilliard1@gmail.com>
-Subject: Re: [PATCH net-next v5 04/19] xsk: freeze deferred pool teardown
- during system sleep
-In-Reply-To: <20260927-submit-stmmac-reset-fixes-v1-v5-4-feec6c14dd06@gmail.com>
+Subject: Re: [PATCH net-next v5 16/19] xsk: allow drivers to retain DMA
+ mappings independently of pools
+In-Reply-To: <20260927-submit-stmmac-reset-fixes-v1-v5-16-feec6c14dd06@gmail.com>
 References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
- <20260927-submit-stmmac-reset-fixes-v1-v5-4-feec6c14dd06@gmail.com>
-Date: Mon, 28 Sep 2026 14:16:38 +0200
-Message-ID: <87a4p14lll.fsf@all.your.base.are.belong.to.us>
+ <20260927-submit-stmmac-reset-fixes-v1-v5-16-feec6c14dd06@gmail.com>
+Date: Mon, 28 Sep 2026 14:22:58 +0200
+Message-ID: <875wzp4lb1.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,37 +82,12 @@ Content-Transfer-Encoding: quoted-printable
 
 James Hilliard <james.hilliard1@gmail.com> writes:
 
-> Pool destruction calls the driver under RTNL from system_wq. That queue
-> is not frozen during system sleep, so ndo_bpf() can run after the device
-> suspend callback has gated its clocks or after the noirq phase.
->
-> Use the freezable workqueue for deferred pool release. Work already
-> running completes before device suspend, and newly queued destruction
-> waits until device resume. The pool, UMEM and netdev references remain
-> owned by the work until then. This does not replace driver error
-> handling after a failed resume.
->
-> Fixes: 1c1efc2af158 ("xsk: Create and free buffer pool independently from=
- umem")
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> An unsuccessful device shutdown does not make its DMA memory safe to
+> unmap.
 
-This fix should go as a separate net fix for AF_XDP (potentially paired
-with a minimal stmac-fix).
-
-> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> index 9d2d94f1fb75..c58f56f24a9c 100644
-> --- a/net/xdp/xsk_buff_pool.c
-> +++ b/net/xdp/xsk_buff_pool.c
-> @@ -337,7 +337,10 @@ bool xp_put_pool(struct xsk_buff_pool *pool)
->=20=20
->  	if (refcount_dec_and_test(&pool->users)) {
->  		INIT_WORK(&pool->work, xp_release_deferred);
-> -		schedule_work(&pool->work);
-> +		/* Teardown calls ndo_bpf(), which may need powered hardware.
-> +		 * RTNL alone does not exclude the device's system PM callbacks.
-> +		 */
-
-Remove the comment, please. The commit message is enough in this case.
+Why does this need an AF_XDP API? Can stmmac fence DMA before releasing
+the pool? Please show a case where stop and reset fail, DMA remains
+active, and the driver cannot isolate it.
 
 
 Bj=C3=B6rn
