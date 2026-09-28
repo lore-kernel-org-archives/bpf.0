@@ -1,181 +1,204 @@
-Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
+Received: from mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB01376A1A
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 03:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790565841; cv=pass; b=myNhG6jaBIQJdbitq0BD4hvH8OMP8uA3I87kNuVlv2/dBM3tM7UqQO6N2lvhJFnEd9YSkh5YjMe/Z8xixOwoMv9k6MG+nkifPvPNOh+ut3xZFv0HHeKy+SBKqAwctv4Xh8HxsO+c5sb9qhMUsQrqA6TbNdOE9ACzM5/Hy808s1s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790565841; c=relaxed/simple;
-	bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rEYU0ovuaEWY/9aKCn8tUrkG40Jt2vyVJNM8BcbVrP8agF65AFf2nqqFk8DPnA33YuBuAzs7frsj4gDJdtNB/AEmZ8GC4vhJktA2kMAE7ckZsfHRnBdELvoUd4P3v48jz2a8fKxVAb81aHvO+VuagTj+bYFfGtKcH+nrSoBuvjI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qrxXDM8D; arc=pass smtp.client-ip=74.125.224.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0384D376A1A
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 03:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790566093; cv=none; b=Yl+mEratNLCXiVxDoSBvU6KKcHR714kUN54FR8Ta49gk2uVVmcdktHGN1xkr3dkr1dB7NIiMab20Wbex6QVYk+5fC6D+n+8HvA4nQJtyZtsO6LxqjS3dER0eWN8nIMmr6hqKQ0C3Iib9xOCFUzayFvP4qr/zjLcP0dU6C/5KM7I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790566093; c=relaxed/simple;
+	bh=bXG3K6wMt4deNnlkV76PufRbzKqmhatztOtmm1/gzhU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I6ioOg0zcScjhDXiEs5mxCseeFWCP7ETYM+BghyxBwDC+bfVsB4tdqiDVgCUGObhCaYkabOIjgXj2s/c4bKuht1NwPigmXj+qZ0/nI6TQEmtrCvCvSPJdWgCWRqbFM4xXf7TMWbWVhrmV1lT32EmvViWMTZ4XcsiL4b8EWwB0k0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u4YKmVrj; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qrxXDM8D"
-Received: by mail-yx2-f13.google.com with SMTP id 00721157ae682-8659af7454eso27657257b3.1
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 20:23:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790565837; cv=none;
-        d=google.com; s=arc-20260327;
-        b=rlxUI9k9N58TmyKW+J4kKmN6oii7S3M2IyZSKIIL6VacL+GJiM60qQLpRO+O5U+Lpi
-         JVu14oRASGnBWydbPWQu1Vn/JDtb0kx78YFZMpL4RPx6pE79BRQBF75QIOnIOx08N4F3
-         GPoZdGIiaqPk24NPgRR9ZzZMlhoVnqbm4SWHW0nihuQoPX3YABAUzgKydPl8qK4NdMXB
-         dc7XasndV2oj1FDMCblzLoWHL8ACSEd30dOPyFOoSwaZszvUjyAfnIKkpjSFiTZkU0Js
-         79s8a23XR9sxeMi/2+M2swSjBI4BCk8K64xkPMjTWygeMP0ePdM9eOTei8XEuriRhKO1
-         yt5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
-        fh=0777sipYr71jHz7j5N2S5U5k+x12V67R63XnvGdF8pY=;
-        b=hU1XiiO2+TM80ye2yuRjQTdaoWzvv49onS/7O2w8qMhwVIPvRQ6HalBkZVdZ89cxJf
-         Yl1E1f9J0krasrqiF/kff3OWov1vZZv9ZnnwVkxGUHEaNNQNq94XfCb4R76Jrd2lCfJW
-         gDOZrEgWZKbr6xEYfOLxYUWCGlSoTYNFvRNcf1NU817bWFtwomZGVS/rfIlIWC3eq+fS
-         AAZwZ82SkI/5aoVLU0rSL/VgzWGMIQlUJEesTBJNR66CourZZ9Kotnwu+o7gwBqnberc
-         TLKXXzYhlI2w0Ll2jLSaghtuoG8FZNAwS1CjQ9NDsQ5RYIFb7B1HFR31kwGWxXcXO5Wp
-         OEIQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790565837; x=1791170637; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
-        b=qrxXDM8DVJbLM3aRXZ8qIGu8mwDVY6d45qU+d7J9x/Jn6S3Fli4QxLAc0VW0C6Olp7
-         SM3oayTFpxisbV/PjdPpbifLlsQqNGb39LF9YfsZXGicPAlx4sZvzJ/4hvqfn+6USluK
-         kkDtV706sLpAXCG8WMV460KaVjPSmL1sdl8qxRCZRigbxD0fiEvJ93q/WtdleAdi3rUy
-         5qrl0nO3RW6nnof6qK/507/25yPbLtwO4tftv1L429vieHH+sg0SR47Po1nkdOoLxa+k
-         RnCovbwgcnCa4/JO2fpdPh8BrIvXGl0L9QF2Ovx3Q+Ve7xwKwhWWNiWhME9aSafhlVcN
-         An9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790565837; x=1791170637;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=t1IQEqIjCBwZZIxvdliQr/avoVNu2GRtPs5ChSnYCfg=;
-        b=vukQ+crRxgX4DQXFdnODiJQPTsX8qiocVbOibuVwPlob8tyW4BbMRyMgWiM6xxpYI5
-         mgaigXbV3QpWIK1EJImOS3Si/ZnFKeFFhnS5iuOIO275kUt+7DKkjt3faguH2hAcCwVI
-         WGN/PCN9Wn9IYbHrqxcxKSXLE5bc0LGbFkstZGftybDfLluN0Jd7b71eMNvRhjgvqyJn
-         wXpVxn2oFkKyQwuTKReVxIu0iaB8knBVdekKuj5gTCoDzIBgfaJiQF2L17JByeSmS4SO
-         9DDBYruA4vuziJoIdbOy5oKmSp1xCyL22Dp4OUZkdY+g80fkrhMmJJ3KktUi8oE+8i/P
-         ePlg==
-X-Forwarded-Encrypted: i=1; AKwUvBw54jP2NGP7t/CHDDQhkXAUWAzQDyK7Mj2AhtttlODxjGePL9hgYRTMwzLSBvQeOOE1COE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK3FKx8nIXVeCCm8t+Ws0TRQNNMAqZBegu50mo0mJnTCHVpJC3E
-	3x8IPxOA74s0zFTs6OdETwnU/WNNK2xbdSAD15/p8MVZJTiGskzPpwJz7Gpyb6NE38WQms20jev
-	S4gXd0YDAAI7FM/3aGnPxiUCwby1gwws=
-X-Gm-Gg: AYBFou0oSm8pPJmaZ/dWuWuwnx5OuuYh19bO1Rg4+rIvYx4s8Nef6qQR/IecIMdyORV
-	mWvaMriP83C2uDvm2AIt20mSwS3s0+iiyFzQKXCUMJjfGIR0RzXz0kWl3lu2g14Yf1N7/xgqo0a
-	kS1xrVOADtAyfJY5eMoaSms/NaiqXrTdP35/Mvr6iuaeMOCebpDjB7oetL3ssazz6ymfFLz3fBU
-	U6DuJvQO020qgdDgsQSUNB6SpdxAcrWi22mMUfmyzJm464vVUNOp+jxI8PqwTMsFW1s+pIIfDD9
-	dVu7cFrZLsH9r6XFDCH7eF2kFDroR2vrRLkOfZyahF8wUr7zVBFf8RHVljBO2AEG8LATLB8TJwW
-	tbpFDm7foMGCmPVG+Pz0G3w==
-X-Received: by 2002:a05:690c:c4e6:b0:8a8:4931:61b5 with SMTP id
- 00721157ae682-8a84940aad1mr42888027b3.30.1790565837502; Sun, 27 Sep 2026
- 20:23:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u4YKmVrj"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=bXG3K6wMt4deNnlkV76PufRbzKqmhatztOtmm1/gzhU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790566087; v=1; x=1791170887;
+ b=u4YKmVrjJuV/SZi8uOtqSlS1bPJfe9i9kI11LxLg1odohqaFYKnEnFgBN8NQAbhYhdYuPa4N
+ 8zfnPXPTMxeMxgZZYnkxCZQRoqc02VJqdLxlCC1SIHekdb0229LgGBPRKN5IYNbiiTP0dzs0wcr
+ /l5YtIQDJhvnABrYLzKpKs9c=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5452234aa663155b;
+	Mon, 28 Sep 2026 03:28:07 +0000
+X-Mizu-Trace-ID: 5452234aa663155b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <0b83c451-1704-4630-9086-1f4e7a652619@linux.dev>
+Date: Sun, 27 Sep 2026 20:28:03 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
- <CALOAHbA4EgGw_uWfbXD0Q87exP7ek=z9ENuU_ARgb+DgBgy1kQ@mail.gmail.com>
- <arPyspcEFNkqfNyr@linux.dev> <CALOAHbDKRw9cPN_GxOYbp9u50cvr7PzPyoGPsSwoPDPAwBCGbA@mail.gmail.com>
- <arWJBBOdvLsOSdCt@linux.dev>
-In-Reply-To: <arWJBBOdvLsOSdCt@linux.dev>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Mon, 28 Sep 2026 11:23:19 +0800
-X-Gm-Features: AclHuK_1E2YfKgYgZbd4tDw3yFNtrrBUY1yd8dRRWaf2ogOVKnaFSdEC5R5Nlks
-Message-ID: <CALOAHbCAtEixXTvRaF0qtGMjNwMHtYBL1eQU6GMgduRaWPGOmg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached struct_ops
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, Michal Koutny <mkoutny@suse.com>, 
-	Amery Hung <ameryhung@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
-	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 15/21] libbpf: Collect .bpf_cleanup records
+ and pass them to the kernel
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260926050123.2220977-1-yonghong.song@linux.dev>
+ <3b553c5ab29803b0aa25087a5a5b0e1d15bfce01166bfa8e97aad8e704cce09f@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <3b553c5ab29803b0aa25087a5a5b0e1d15bfce01166bfa8e97aad8e704cce09f@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 25, 2026 at 4:42=E2=80=AFAM Shakeel Butt <shakeel.butt@linux.de=
-v> wrote:
+
+
+On 9/27/26 1:39 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index 7eb15a013a83..4e9584fff264 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+> [ ... ]
 >
-> On Thu, Sep 24, 2026 at 06:01:27PM +0800, Yafang Shao wrote:
-> > On Wed, Sep 23, 2026 at 11:47=E2=80=AFPM Shakeel Butt <shakeel.butt@lin=
-ux.dev> wrote:
-> > >
-> > > Hi Yafang,
-> > >
-> > > On Wed, Sep 23, 2026 at 09:07:40PM +0800, Yafang Shao wrote:
-> > > > On Tue, Sep 22, 2026 at 3:30=E2=80=AFAM Shakeel Butt <shakeel.butt@=
-linux.dev> wrote:
-> > > > >
-> > > > Hello Shakeel,
-> > > >
-> > > > On the open question of how deferred debt eventually gets paid: wou=
-ld
-> > > > it make sense for the policy to also notify userspace (e.g. via
-> > > > ringbuf) when it defers,
-> > >
-> > > I think the notification through bpf programs is already possible and=
- a bpf
-> > > program deciding to bypass memory.high can already do notification vi=
-a ringbuf.
-> > >
-> > > > and have a userspace reclaimer do the reclaim
-> > > > through memory.reclaim?
-> > > >
-> > > > I understand one of the concerns for the async worker is CPU
-> > > > accounting. If the concern is that the kworker's CPU usage is not
-> > > > charged to the target cgroup, the userspace reclaimer could instead=
- be
-> > > > spawned with clone3(CLONE_INTO_CGROUP) so it runs inside the target
-> > > > cgroup, and both its CPU and memory usage get charged there.
-> > > >
-> > > > One caveat: intermediate cgroups with the no-internal-process
-> > > > constraint cannot take processes, so this would only work for leaf
-> > > > cgroups.
-> > > >
-> > > > What do you think?
-> > >
-> > > I think all of this is possible without additional code and with this=
- series.
-> > > With AI, should be very easy to prototype it. Please take a stab and =
-I will look
-> > > into it as well (time permitting).
-> >
-> > An LLM helped me quickly implement a userspace async memcg reclaimer
-> > based on your series, and it seems to work quite well.
+>> @@ -4915,6 +4953,249 @@ static struct bpf_program *find_prog_by_sec_insn(const struct bpf_object *obj,
+>>   	return NULL;
+>>   }
+>>
+>> +static int bpf_object__init_cleanup_info(struct bpf_object *obj)
+>> +{
+>> +	Elf_Data *data = obj->efile.cleanup_data;
+>> +	Elf_Data *relo = NULL;
+>> +	size_t i, nrels, nslots, nrecs;
+>> +	struct cleanup_raw_rec *recs;
+>> +	int *slot_sec, ret = 0;
+>> +	size_t *slot_val;
+>> +	const __u32 *vals;
+>> +	Elf64_Shdr *sh;
+>> +	bool native;
+>> +
+>> +	if (!data || obj->efile.cleanup_shndx < 0 || !data->d_size)
+>> +		return 0;
+>> +
+>> +	native = is_native_endianness(obj);
+>> +
+>> +	for (i = 0; i < obj->efile.sec_cnt; i++) {
+>> +		struct elf_sec_desc *sd = &obj->efile.secs[i];
+>> +
+>> +		if (sd->sec_type == SEC_RELO && sd->shdr &&
+>> +		    sd->shdr->sh_info == (Elf64_Word)obj->efile.cleanup_shndx) {
+>> +			relo = sd->data;
+>> +			break;
+>> +		}
+>> +	}
+>> +	if (!relo) {
+>> +		pr_warn("%s present without relocations\n", CLEANUP_SEC);
+>> +		return -LIBBPF_ERRNO__FORMAT;
+>> +	}
+>> +	/*
+>> +	 * LLVM leaves sh_entsize unset, so this only bites a producer that
+>> +	 * declares a record size -- which is the one able to tell us it means
+>> +	 * something other than three 4-byte fields.
+>> +	 */
+>> +	sh = elf_sec_hdr(obj, elf_sec_by_idx(obj, obj->efile.cleanup_shndx));
+>> +	if (sh && sh->sh_entsize &&
+>> +	    sh->sh_entsize != sizeof(struct bpf_cleanup_info)) {
+>> +		pr_warn("%s record size %zu is not the expected %zu\n", CLEANUP_SEC,
+>> +			(size_t)sh->sh_entsize, sizeof(struct bpf_cleanup_info));
+>> +		return -LIBBPF_ERRNO__FORMAT;
+>> +	}
+> Should sh_entsize == 0 be explicitly treated as 12, so that wider
+> records (if necessary in the future) end up being easier to reject?
 >
-> That's awesome. Please do take a look at the code and provide feedback an=
-d if
-> you don't mind, a tested-by tag would be awesome.
+> This design question was raised by Kumar Kartikeya Dwivedi in v5:
+> https://lore.kernel.org/bpf/DLMGMYOHSGFW.24JML4GSMTV2K@gmail.com/
+>
+> The current code accepts sh_entsize == 0 (LLVM's default) silently, but
+> treating it explicitly as 12 would allow future tools to cleanly reject
+> wider records by setting sh_entsize to a different value.
 
-For this series, feel free to add:
+Okay. This is not a bug, but rather to have better code to have
+explicit 'entsize' size and then check against size of bpf_cleanup_info.
 
-Tested-by: Yafang Shao <laoar.shao@gmail.com>
+>
+>> +	if (data->d_size % sizeof(struct bpf_cleanup_info)) {
+>> +		pr_warn("%s size %zu is not a multiple of the record size %zu\n",
+>> +			CLEANUP_SEC, data->d_size, sizeof(struct bpf_cleanup_info));
+>> +		return -LIBBPF_ERRNO__FORMAT;
+>> +	}
+>> +
+>> +	vals = data->d_buf;
+>> +	nslots = data->d_size / sizeof(__u32);
+>> +	nrecs = data->d_size / sizeof(struct bpf_cleanup_info);
+>> +
+>> +	slot_sec = calloc(nslots, sizeof(*slot_sec));
+>> +	slot_val = calloc(nslots, sizeof(*slot_val));
+>> +	recs = calloc(nrecs ?: 1, sizeof(*recs));
+> This isn't a bug, but could the relocation loop fill recs directly
+> (with sec_idx initialised to -1) so the slot_sec/slot_val scratch
+> arrays and the copy loop go away?
 
-One nit:
+Good point. This will make things easier.
 
-Since we might extend the cgroup-ops to other subsystems, or even to
-the cgroup itself, could we define a more generic CGROUP_OPS instead
-of CGROUP_MEMCG_OPS, and also rename `struct bpf_memcg_ops` to `struct
-bpf_cgroup_ops`? This way, we attach to the `struct cgroup` itself
-rather than to a specific subsystem.
+>
+> The relocation loop could write straight into recs, using sec_idx = -1
+> as the 'no relocation' sentinel and checking alignment while the byte
+> offset is at hand, the way bpf_object__collect_rodata_relos() checks
+> (sym->st_value + addend) % BPF_INSN_SZ inline. That would leave one
+> allocation instead of three and drop the copy loop.
+>
+> Also, is the 'nrecs ?: 1' needed? d_size has already been checked to be
+> a non-zero multiple of the record size.
 
---=20
-Regards
-Yafang
+Will do.
+
+>
+>> +	if (!slot_sec || !slot_val || !recs) {
+>> +		ret = -ENOMEM;
+>> +		goto out;
+>> +	}
+>> +	for (i = 0; i < nslots; i++)
+>> +		slot_sec[i] = -1;
+>> +
+>> +	/* One relocation per 4-byte field, naming the section it points into. */
+>> +	nrels = relo->d_size / sizeof(Elf64_Rel);
+>> +	for (i = 0; i < nrels; i++) {
+> [ ... ]
+>
+>> +	for (i = 0; i < nslots; i++) {
+>> +		struct cleanup_raw_rec *rec = &recs[i / CLEANUP_REC_FIELDS];
+>> +		size_t field = i % CLEANUP_REC_FIELDS;
+>> +
+>> +		if (slot_sec[i] < 0) {
+>> +			pr_warn("%s: field %zu has no relocation\n", CLEANUP_SEC, i);
+>> +			ret = -LIBBPF_ERRNO__FORMAT;
+>> +			goto out;
+>> +		}
+>> +		if (slot_val[i] % BPF_INSN_SZ) {
+>> +			pr_warn("%s: field %zu offset %zu is not instruction aligned\n",
+>> +				CLEANUP_SEC, i, slot_val[i]);
+>> +			ret = -LIBBPF_ERRNO__FORMAT;
+>> +			goto out;
+>> +		}
+>> +		rec->sec_idx[field] = slot_sec[i];
+>> +		rec->insn_idx[field] = slot_val[i] / BPF_INSN_SZ;
+>> +	}
+>> +
+>> +	obj->cleanup_recs = recs;
+>> +	obj->cleanup_rec_cnt = nrecs;
+>> +	recs = NULL;
+>> +out:
+>> +	free(recs);
+>> +	free(slot_val);
+>> +	free(slot_sec);
+>> +	return ret;
+>> +}
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346422430
+
