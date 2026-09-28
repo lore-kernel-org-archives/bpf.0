@@ -1,143 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f26.google.com (mail-ej2-f26.google.com [74.125.228.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9114CC61B;
-	Mon, 28 Sep 2026 15:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A933C4E534C
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 15:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790610371; cv=none; b=Wlq/Nc02cIBc+tqurkSaCJYysrEJNnF7pznmgT8GArmzj3SXngFdNk5VSa4Dz5F2AilCRck/WBSf5BG+NPFLmD/geIPRzd7L5Twl3vbeTK/vM1CWZm13Q7KAAMfLSrHpo5cw3BJ075MW9CbmZTfUnaEiULHLfWwTgr7Z3C9UchM=
+	t=1790610863; cv=none; b=b3mCvINkKs1XRPdaOm3gbqAEJw2Ok1W7IAy3apM843XVYLyH04hapoXVl6IatlkiO4cJ3knU7yZnJKrKKyNXJ5yaDhDeU5koEecIxPQU4aGA/pQ1bkvzrky8Ual+iX84qz72DkH6WYwyc70YvXx3pKXnE80cel8/OWYaiq+izJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790610371; c=relaxed/simple;
-	bh=N5Ohrv3V+NnMgyUJTBdJmbYNr4yprKAMIjPlSO/ztSc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mtPjZWmukZY73atdI5Ezt2x394bvQjeUk8cLCXEBOVK7N4ELfXcOC1TuaR3DjwJ6fzmIB7d9daEb372dkit1G/k1Aigl7Y3LjNeXXC5WB53vPgHMJSuaXdfeys/bb30cuL3V/nxy/DtZcoCR8L1InRe9OF/zJpNM2uvCKvCOD30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bbJJsok6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790610863; c=relaxed/simple;
+	bh=ghSZTabWnqxavl/W4iUtPMg/mi1Uq99yCxVqS1s2Znc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=GA/ToNDKZ8zxYAbqqGkhI3eSwXEMpRDQM3jlfnGoUdoLONrkB7UdBx28s1LiQyOjB1iijaJNDAA8s4vHYwOoJRjKxrOX83FGEYCzcywF50BJAlR+WDw5pa9Wqlh3QUA/aN26tuoleVFGRRcmcBegOQGa2IgBNqjCzcJ7Zxh9Jog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=GKeLAThI; arc=none smtp.client-ip=74.125.228.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bbJJsok6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B01051F000FF;
-	Mon, 28 Sep 2026 15:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790610369;
-	bh=1pa9vC5Lbo6L0EX98csRUk8Kmp6D4AGsfQlmAkk15TY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bbJJsok6gwM8UjEgMXy7k1eRABFk1R1ghWgNu5gAFqsE8tR2Nt7OguyLvBsWm0i+5
-	 /RGf8rjKBDNc+ZSeQLOQ/8Yi9Vdb5yBlpn9U8l/Zb4YuuwlLigeOo3EyjLWhMi0gY8
-	 PVJ8XDGGtpwv20rh7AlZBD7iYlHQ9GpqXXpzeTxsw1yvEXd4ylMa+79ig4QZTqxUbh
-	 7aHJjplizCB8E0L0NAgbNaf+WxVC9T86Ul8O5NyYMDErphpgHd5PEhI8yaTBkUfZiI
-	 SINQrOJBgRBrMa9412RBpZ/9IRGXrs+OomBu9BVUVJewCztUvqct6JMJ/0xQbJ+Z0A
-	 34735Hu5TWwZw==
-Content-Type: multipart/mixed; boundary="===============5141152035541028834=="
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="GKeLAThI"
+Received: by mail-ej2-f26.google.com with SMTP id a640c23a62f3a-c2940ef15d3so395780766b.2
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 08:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1790610859; x=1791215659; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=bUFOamo9O9BYWzyDGfu0crdKrXnEWewsENPgbfRd9Ig=;
+        b=GKeLAThIaTL9gSl+ImfnBkW/NgkwABplPrMt6Q3EHlN0bp5j4jifEd/55KkZ/Lh64f
+         cSWOkQZieQyhkVhfOc/w07DX7I2YjOyzcQJJt+y/sXeGMzgkVAuCffRBuG1T7xwpOwgD
+         hBtnW6SVDEvkVSzME26ACJCbG4+oNWCdloAaJaoB0Y73mnDPvmRpvacOPs9plkqqmzLr
+         X8be2lMALK0hWQN4oGz9btDh+03nqUiz1JW/rHV3hTwiJDJbUjspTBOkVeqqnlxPOE8j
+         jPTLzL2B/Gatgjnw+ckcGGpi2MTFd1v2aydRzdwS7lt2Bq6sk55fd+ycZsPWK80TN9+C
+         5tQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790610859; x=1791215659;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=bUFOamo9O9BYWzyDGfu0crdKrXnEWewsENPgbfRd9Ig=;
+        b=fCvUCgYY+fVhZVZzgV3FGSsJvvMrpEXY3NhDjpBgAb+wdbog5T5MNGlLS9xTqBY7yX
+         6PRmOhS9S8sRjLYtrxqiKHXOPzR7d04LGFH74mWcKoyn19hz6db7Tz507HMw+9zymZAZ
+         oWMwMYOocf99udnJjrW3o35/qXAR1AKnwwkdR2WJMZISv9Iqv41dpqVHocO3Hp+aEN7C
+         vDNL3Nu48yX83jB4T0rXTLx0Kce4ZJxh00rOc7rxLSz7CnTiOvhjmMJWPYBoFVwlE6PK
+         uvw5K9AGKZlIpfGC2M1AA6aT6a2my0vzXSTSGqcZCP8BFOwbKhM/vq3qitKyktg6qYsb
+         VqLw==
+X-Forwarded-Encrypted: i=1; AKwUvByWRBmfZLTG/tO3iy70N0/0Q5OU8rZYfLjTGSk/SRwG6ozzgu3wXouDjE9TyJUkLrtFbJU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKFTcpxzA5whjUnletcu8uEv8aGZj0CyeKU4cyNXeob6gw6nRoF
+	NqsMB27I9Q1hWSAGmCyiUHorzjeZyaiKx0iG+VMX3C7nAICbei3N+Ww/vXLxPXm01dU=
+X-Gm-Gg: AYBFou3hlT+DC7MZWgSJ1omUbQcnv8ovUe9Bu/uLEv9d97+Zp1qaFhTiaPfdJklYvCk
+	fxJAtn7Nby22F8TR8+idYJZsHfBx2m97xLTzeqIEUFm3BHxYUEzJSrh2LSBPDJNNdfsqGCFc2TG
+	aa2WrYCuNKKdd0HwFMQPTW9J8ungRbBPoZWMCqWF3CTLERsoKs46cCwnf6uTNckHwcW+kuZp21h
+	pgtirSasqKPRGHc5DK97iYwEm3sfWuYcwYhptoz3WuWhZMW6wftZgec1rUEQsw+7XmSSiKX1YMW
+	JloLmMDmkJmXFvs2kCuS/W9gSghUU/NBmmHVZeE86A+avqyUY8kGRxk76dpE1RmXG6rsr0aUf91
+	dvtiHI8W2PYT0XyN2tLbPSadFMcynZA7caP391afKx+DkjXI7P/G0kY2rGI+27kHHZt1iyGM5TD
+	8VuOUQvnT/G/Sncdm2MxwpkRq7MlgjjaNMK04OVhXr5f+0+6mYc14Qb5FGl0yZ0/A4EmKZXqs3
+X-Received: by 2002:a17:907:c24:b0:c20:1bc5:7002 with SMTP id a640c23a62f3a-c2ac22daf39mr1111903266b.3.1790610859621;
+        Mon, 28 Sep 2026 08:54:19 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2ae76a68aasm480717366b.35.2026.09.28.08.54.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 08:54:19 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Jakub Kicinski" <kuba@kernel.org>,  "Daniel Zahka"
+ <daniel.zahka@gmail.com>,  <netdev@vger.kernel.org>,  "Kuniyuki Iwashima"
+ <kuniyu@google.com>,  "Paolo Abeni" <pabeni@redhat.com>,  "Stanislav
+ Fomichev" <sdf@fomichev.me>,  <bpf@vger.kernel.org>,
+  <kernel-team@cloudflare.com>,  "Daniel Borkmann" <daniel@iogearbox.net>,
+  "John Fastabend" <john.fastabend@gmail.com>,  "Andrii Nakryiko"
+ <andrii@kernel.org>,  "Eduard Zingerman" <eddyz87@gmail.com>,  "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>,  "Martin KaFai Lau"
+ <martin.lau@linux.dev>,  "Song Liu" <song@kernel.org>,  "Yonghong Song"
+ <yonghong.song@linux.dev>,  "Jiri Olsa" <jolsa@kernel.org>,  "Emil
+ Tsalapatis" <emil@etsalapatis.com>,  "David S. Miller"
+ <davem@davemloft.net>,  "Eric Dumazet" <edumazet@google.com>,  "Simon
+ Horman" <horms@kernel.org>,  "Jesper Dangaard Brouer" <hawk@kernel.org>,
+  "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,  "Florian Westphal"
+ <fw@strlen.de>,  "Jack Wang" <163wangjack@gmail.com>
+Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
+ packet scrubbing
+In-Reply-To: <DLOOI89GKM5B.W4XPBNJUXRV1@gmail.com> (Alexei Starovoitov's
+	message of "Fri, 25 Sep 2026 20:27:31 +0000")
+References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
+	<20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com>
+	<DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com>
+	<DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com>
+	<20260925121849.2ac5150b@kernel.org>
+	<DLONQQN0RB03.1NVWVFHGRRWV4@gmail.com>
+	<20260925132004.171b751e@kernel.org>
+	<DLOOI89GKM5B.W4XPBNJUXRV1@gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Mon, 28 Sep 2026 17:52:03 +0200
+Message-ID: <87jyo5bcgs.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <714f119d120fb9ba4aa7e82af621edb7bc97813a760c9dd2cb5363c55b7365a9@mail.kernel.org>
-In-Reply-To: <20260928150121.1712559-2-tjmercier@google.com>
-References: <20260928150121.1712559-2-tjmercier@google.com>
-Subject: Re: [PATCH bpf-next v7 1/2] bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
-From: bot+bpf-ci@kernel.org
-To: tjmercier@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,mykyta.yatsenko5@gmail.com
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,tjmercier@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 28 Sep 2026 15:46:08 +0000 (UTC)
+Content-Type: text/plain
 
---===============5141152035541028834==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 53c99fe4f176..5db11a21ce98 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-
-[ ... ]
-
-> @@ -828,8 +861,12 @@ static __always_inline void *__htab_lru_map_lookup_elem(struct bpf_map *map,
->  	struct htab_elem *l = __htab_map_lookup_elem(map, key);
+On Fri, Sep 25, 2026 at 08:27 PM GMT, Alexei Starovoitov wrote:
+> On Fri Sep 25, 2026 at 8:20 PM UTC, Jakub Kicinski wrote:
+>> On Fri, 25 Sep 2026 19:51:37 +0000 Alexei Starovoitov wrote:
+>>> On Fri, Sep 25, 2026 at 12:18 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>>> > Instead of improving the existing infra we're adding more BPF-specific
+>>> > glue and another bit to the skb. Matter of perspective I suppose :/  
+>>> 
+>>> skb_ext version needs a bit too. SKB_EXT_BPF is the 8th id, so it takes
+>>> the last bit of u8 active_extensions.
+>>> skbuff_ext_cache object is sized for all ids, so it also grows by
+>>> BPF_SKB_EXT_SIZE for xfrm, mptcp, psp whether bpf is used or not.
+>>> 
+>>> As I said earlier skb_ext is fine from bpf pov. If it can be made as
+>>> cheap as bit + tracepoint I don't mind it at all.
+>>> Which part of skb_ext would you improve?
+>>
+>> Mostly allocation speed. Either a small per-CPU cache like we have
+>> for skbs or let the scalar matadata fields live inside the skb.
 >
->  	if (l) {
-> -		if (mark)
-> -			bpf_lru_node_set_ref(&l->lru_node);
-> +		if (mark) {
-> +			struct htab_elem_lru *l_lru =
-> +				container_of(l, struct htab_elem_lru, elem);
-> +
-> +			bpf_lru_node_set_ref(&l_lru->lru_node);
-> +		}
->  		return htab_elem_value(l, map->key_size);
->  	}
+> makes sense to me. Speeding up generic infra is always a good thing.
 >
-
-[ ... ]
-
-> @@ -1310,16 +1349,19 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+>> That said, the selective tracing approach is also tempting.
+>> It'd be great if we could have that for sockets.
+>> Could we possibly think of a way to build that into tracepoints
+>> instead of having the open coded
+>>
+>> obj_maybe_trace_bla()
+>> {
+>> 	if (obj->trace)
+>> 		trace_bla();
+>> }
+>>
+>> Having both:
+>>
+>> 	skb_maybe_trace_free(skb, SKB_CONSUMED);
+>> 	skb_release_data(skb, SKB_CONSUMED);
 >
->  static void htab_lru_push_free(struct bpf_htab *htab, struct htab_elem *elem)
->  {
-> +	struct htab_elem_lru *l = container_of(elem, struct htab_elem_lru, elem);
-> +
->  	check_and_cancel_fields(htab, elem);
->  	bpf_map_dec_elem_count(&htab->map);
-> -	bpf_lru_push_free(&htab->lru, &elem->lru_node);
-> +	bpf_lru_push_free(&htab->lru, &l->lru_node);
->  }
+> with a 3rd enum argument for different use cases?
+> As a way to generalize different bits / different users?
 >
+> Also makes sense.
 
-[ ... ]
+The benchmarks from Friday were wrong. I got bit by KVM halt polling,
+which was randomly inflating the runtime cost by preventing batching.
 
-> @@ -1500,15 +1543,18 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
->  		goto err;
->
->  	if (l_old) {
-> -		bpf_lru_node_set_ref(&l_old->lru_node);
-> +		struct htab_elem_lru *l_old_lru =
-> +			container_of(l_old, struct htab_elem_lru, elem);
-> +
-> +		bpf_lru_node_set_ref(&l_old_lru->lru_node);
->
->  		/* per-cpu hash map can update value in-place */
->  		pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
+The correct results - as in reproducible and with lower variance - are
+the other way around - BPF skb ext is cheaper CPU-wise than gated skb
+tracepoints. Please see:
 
-[ ... ]
+https://patch.msgid.link/20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com
 
-> @@ -2505,7 +2551,10 @@ static void *htab_lru_percpu_map_lookup_elem(struct bpf_map *map, void *key)
->  	struct htab_elem *l = __htab_map_lookup_elem(map, key);
->
->  	if (l) {
-> -		bpf_lru_node_set_ref(&l->lru_node);
-> +		struct htab_elem_lru *l_lru =
-> +			container_of(l, struct htab_elem_lru, elem);
-> +
-> +		bpf_lru_node_set_ref(&l_lru->lru_node);
->  		return this_cpu_ptr(htab_elem_get_ptr(l, map->key_size));
->  	}
->
-> @@ -2521,7 +2570,10 @@ static void *htab_lru_percpu_map_lookup_percpu_elem(struct bpf_map *map, void *k
->
->  	l = __htab_map_lookup_elem(map, key);
->  	if (l) {
-> -		bpf_lru_node_set_ref(&l->lru_node);
-> +		struct htab_elem_lru *l_lru =
-> +			container_of(l, struct htab_elem_lru, elem);
-> +
-> +		bpf_lru_node_set_ref(&l_lru->lru_node);
->  		return per_cpu_ptr(htab_elem_get_ptr(l, map->key_size), cpu);
->  	}
->
+Despite that, I agree that the tracepoint approach is tempting from the
+UX PoV.
 
-This isn't a bug, but would a small helper keep these call sites to one
-line, matching the pcpu accessors this patch adds? Each site now repeats
-the same container_of(l, struct htab_elem_lru, elem) boilerplate followed
-by bpf_lru_node_set_ref(). The patch adds htab_elem_get_ptr_to_pptr() and
-htab_elem_set_ptr_to_pptr() for the pcpu variant, but open-codes the
-container_of for the LRU variant at every site.
+While an skb extension seems like a natural continuation of the XDP/TC
+metadata pattern, I think that model is not a great fit for skbs
+traveling through the network stack.
+
+For XDP hook, there will be usually a single owning process of the
+attached program, I think. While TC, cgroup, tracepoints can have
+independent program owners, each wanting to associate their own piece of
+metadata with the skb.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+I can iterate on on cosmetic aspects so that we don't have blocks like:
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36441357391
---===============5141152035541028834==--
+        if (reason == SKB_CONSUMED)
+                trace_consume_skb(...)
+        else
+                trace_kfree_skb(..., reason, ...)
+        skb_maybe_trace_free(..., reason, ...)
+
+... in a couple places where they appear in v1.
+
+Thanks for feedback.
