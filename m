@@ -1,215 +1,180 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA01353A7F;
-	Mon, 28 Sep 2026 19:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925EC4F4D01
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 19:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790624949; cv=none; b=Y2ZMWy0w7bD3XjWrnei81/ix8l/Ou547lY1rMvQZYeVEzqMdnvU38z/s+mYrzS9UeWmK2jCUeOGA1VmdSe0h4JRiD8gaxePqq8U7WjdnKtE985Wa/xM3PGe7igNCn+Z8RNoZ2rSSHy6Or/mJk6mAQuKY2R3jNbMKMWT3kq9ACTQ=
+	t=1790625217; cv=none; b=AExHEpdjkHHlgvT48l6AS4Gy0N5BiEb8D5t0YLtIwdr868mE+kB5YacaYYHk22HIvzbw2RZ+o1CIiAI6MbCdFfbgN+tDVOagN2traUJlCuChRhvK+DfCO4QNnkaDq2WlJo1xgbHKA+swhsUk6NE9+MvVeGoCZ0cewJ+8HzZhWvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790624949; c=relaxed/simple;
-	bh=+n0gYPk+JRkIbFK1wIkwVMj03UuedrHR7yRES1xA1fs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HG/U3AAx5RchT9ukSC0Qvv5CQucFUO4Ln8pfeeJFZi9rP4+PkrrotGe6tq7x4STcZxc6wM/ek2vRiJUl5ymqtxSdHttrROwSk0XeW/Jyy7VMODkD7pZdkvhVyFUGd+rwIW6FiDfNnBW7lJgxB4QRoCVdpr646AGBCIUArGC8t48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1UpVHdb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790625217; c=relaxed/simple;
+	bh=Zk9v1AgymRlYisZpavaslPz7jkuhdPLECq3wBBDV6KM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=TvfL4Yii4J7jh3hm8smchm+6gVSBf0LPlQwvVojpBVQHgJ92/w34CaPcWpFN7d0/26d0MZ8vzUTJ1qZgRzsTEmcKsCXFw6j6cBZ+w1JMQCU4egwSULV1ZOfZpVdEt5vqeiqqCl/8XG2aO2u9qnSqkwpUGSOPZZ5DVyziWlSC0Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cc8pR24i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K1UpVHdb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9F91F000FF;
-	Mon, 28 Sep 2026 19:49:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cc8pR24i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6FCB1F000FF;
+	Mon, 28 Sep 2026 19:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790624947;
-	bh=jdHpFCmsfbMWILh+4zQbXzTgvExVPPbHVQNyp37fwu8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=K1UpVHdbtKLuk0b6PGJwnkcMiQQc3FOtgp5i3jPSjc03nPPVWKJdRDDdCcoeo/JYz
-	 ab6rp54bO+xE+cQVGENaJOpeQHykZTq08O5djVbP1x6QarrPDCUT6usoart9BrVN8P
-	 exFxTaGfz1qKavaskz0rXWSPeg8og50p0Yd/s1iUTGKI0czkfywCXDWKIZQH9p/Kyb
-	 U+SNhQ4ngEIfBnXPjoH1p7KE++RQn4cu3SYKv52+Aud9Gjy8+4689hKOj+Xw1S4OAy
-	 KbiSdHV0nazW5sHdc5wG7ljabqYltoksk0H4xkxQGCHQwgr1RlxClJ9oaGn3DC6olh
-	 jRna+5Lr3DITQ==
-Date: Mon, 28 Sep 2026 21:48:58 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Maxime Ripard <mripard@kernel.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <arrAqg5n87INTHE6@beelink>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
- <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
+	s=k20260515; t=1790625212;
+	bh=u5RDhX8rO65XWjw7AcQGtdoDFUUHlO93CrdzLx83feM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Cc8pR24ispe9Nxsskopn872vyGGmqmsVKmhjxXUiRwGEvw9/AJ2cH9eq1ZdhjCxv6
+	 MWv3oNr2OyculBETHQjLX9RRrGa4rtdvuNMXZdcpb/wd61j4yOepx+gRTxeHJCuYpq
+	 kA9wmZXGUdJOz2RGqJfIGRiF3Y7Johay//GJyXw9IIoD8ifGGtyAcVlGsSmVCcffWo
+	 4YOvPzLV4Z3GyiEoF5ZXLqmEhFGc2rpobXrojZwqpPsNjY/1WSwf+kqJ6uejdA9AbR
+	 ADn+wsdw48jQh4bP9xNGcOUM88mIa0BkEWqC1ktsKMVA9kFrIJ9eD3M3r8QIcHV9hK
+	 d1lIa6vWhUHCg==
+Content-Type: multipart/mixed; boundary="===============0151256475181154666=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
+Message-Id: <caefde4dfb91214529bfacc6bc746d8df5fface2c1587550a29a3575566d0ecb@mail.kernel.org>
+In-Reply-To: <20260928185334.1004200-11-ameryhung@gmail.com>
+References: <20260928185334.1004200-11-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v3 10/11] bpf: Check global subprog memory arguments in the common path
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 28 Sep 2026 19:53:31 +0000 (UTC)
 
-On Sep 28 2026, Neil Armstrong wrote:
-> On 9/28/26 19:24, Benjamin Tissoires wrote:
-> > On Sep 28 2026, Neil Armstrong wrote:
-> > > Hi,
-> > > 
-> > > On 9/28/26 18:22, Maxime Ripard wrote:
-> > > > Hi,
-> > > > 
-> > > > Panels in general, and MIPI-DSI panels in particular, are pretty
-> > > > difficult to support and require pretty much a panel driver for each
-> > > > panel produced. Most of them are pretty simple, and require an opaque
-> > > > initialization sequence that is usually poorly documented.
-> > > > 
-> > > > This creates a tension between OEMs and distros because OEMs will
-> > > > typically get a new panel to react to a sourcing issue during
-> > > > production, and thus need some swift turnaround between getting their
-> > > > new panel and it being operational in the OS. Distributions on the other
-> > > > hand can take years to ship a kernel with that new panel driver.
-> > > > 
-> > > > To solve this, I followed the example of HID-BPF and wrote a panel
-> > > > driver that will rely on BPF programs to perform the panel
-> > > > initialization. That way, we can ship the programs separately from the
-> > > > kernel, and with a different lifecycle. If this driver is accepted, the
-> > > > plan is to have a userspace component started by udev to identify and
-> > > > load the right BPF program for the panels found on the device.
-> > > 
-> > > This is kind of late for serious applications except if we manage to
-> > > solve the bootloader to Linux display engine transition.
-> > > 
-> > > > 
-> > > > This driver is fully functional and works with both 5" and 7" Touch
-> > > > Display 2 panels for the RaspberryPi. However, it breaks away from the
-> > > > typical panel driver in multiple ways:
-> > > > 
-> > > > - BPF programs can only be loaded by userspace. This leaves us with two
-> > > >     choices:
-> > > > 
-> > > >     * We prevent the driver from loading until the script itself is
-> > > >       loaded. This has the side effect of preventing any other output to
-> > > >       be used until the initramfs is ran at the earliest, and possibly
-> > > >       ever if the loader isn't installed for example.
-> > > 
-> > > This adds a dependency on user-space behavior and if somehow the
-> > > initramfs doesn't load for a reason we won't have a way to display
-> > > an error.
-> > > 
-> > > > 
-> > > >     * Or we probe the driver all the time, but only report it as connected
-> > > >       once a program has been registered. This is somewhat unconventional,
-> > > >       but allows the other outputs to be functional, *and* allows the user
-> > > >       to force the output if their panel doesn't require any
-> > > >       initialization or during debugging. I chose this solution.
-> > > 
-> > > Both options are not really great...
-> > > 
-> > > > 
-> > > > - It's not a panel driver, but a bridge one, which is also pretty
-> > > >     unconventional. This is required because panel drivers don't have
-> > > >     access to a detect callback that is required for the above, but I also
-> > > >     think that the recent work from Luca blurs the line from panels and
-> > > >     bridges and we'll end up going that road anyway.
-> > > 
-> > > On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
-> > > the panel and the DDIC. So being a bridge is fine, but in a general way we lack
-> > > a proper way to describe the display/panel/monitor independently of the DDIC.
-> > > 
-> > > At first glance it's a nice driver, but moving the timings into a blob moves something
-> > > into possible proprietary binaries with possible closed licence and distribution
-> > > restriction so it's a downgrade for the same of bringing up a panel faster.
-> > 
-> > Quick answer on this, because I had the very same questions regarding
-> > HID-BPF:
-> > - in BPF, you can require (and by default it does) that only GPL
-> > 	compatible BPF programs are loaded, closing the argument of "closed
-> > 	licence and distribution restriction"
-> > - also, a BPF program can be disassembled much easier than a binary
-> > 	blob, and I remember Alexei showing me an example where you get almost
-> > 	the source code from the BPF object in just one pass.
-> 
-> Right, it "solve" one of my question, but doesn't really solve the issue
-> of vendors providing "GPL" bpf programs with source available "somewhere".
-> 
-> Another big issue is the API, I don't want to keep the current API as-is,
-> we plan to support more advanced panel features and use try to use the
-> atomic states to support rate switching for example, and I'm not confident
-> it's a good idea since there's no "simple" and "forever valid" API
-> to initialize panels...
-> 
+--===============0151256475181154666==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-That's exactly where BPF shines. The simple rule of thumb is: there is
-no API stability guaranteed. Basically, thanks to the verifier and CORE
-(Compile Once Run Everywhere), you don't need to keep the API stable and
-available forever. There are multiple ways of dealing with it, but the
-gist is that if a BPF is trying to load an "old" API, it will be
-rejected by the verifier.
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 183759f1e014..811342e3c041 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
-Then it's a matter of being nice enough in the kernel and provide ways
-to deal with those.
+[ ... ]
 
-To give you a few examples:
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8aa1336453a4..ad18b6ab7e88 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-- in HID-BPF, in userspace, we keep old versions of APIs in separate
-	compiled objects. Each is incremented (by 10 so we have a little bit
-	of room in the middle). Then the loader tries first
-	0020-device-with-new-api.bpf.o, and if it fails, it tries
-	0010-device-with-old-api.bpf.o
+[ ... ]
 
-	I'm not saying we should do the same here, but that's one idea
+> @@ -9036,8 +9042,8 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
+>  		type &= ~PTR_MAYBE_NULL;
+>  	if (base_type(arg_type) == ARG_PTR_TO_MEM)
+>  		type &= ~DYNPTR_TYPE_FLAG_MASK;
+> -	/* Allow allocated memory for kfunc ARG_PTR_TO_MEM but not helper. */
+> -	if (is_kfunc(meta) && base_type(arg_type) == ARG_PTR_TO_MEM &&
+> +	/* Allow allocated memory for BTF-defined ARG_PTR_TO_MEM but not helpers. */
+> +	if (!is_helper(meta) && base_type(arg_type) == ARG_PTR_TO_MEM &&
+>  	    type_is_ptr_alloc_obj(type))
+>  		type = PTR_TO_MEM;
+>
 
-- recently, a BPF commit broke the ABI of a function while removing
-	implicits: bpf_wq_set_callback_impl() was replaced by
-	bpf_wq_set_callback() with a different number of arguments. I simply
-	had to add a new function in my header which basically does:
+[ ... ]
 
-	static inline int
-	hid_bpf_wq_set_callback(struct bpf_wq *wq,
-	                        int (*callback_fn)(void *, int *, void *),
-	                        unsigned int flags)
-	{
-      if (bpf_ksym_exists(bpf_wq_set_callback))
-              return bpf_wq_set_callback(wq, callback_fn, flags);
-      if (bpf_ksym_exists(bpf_wq_set_callback_impl))
-              return bpf_wq_set_callback_impl(wq, callback_fn, flags, NULL);
-  }
+> @@ -10863,7 +10883,6 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+>  	 * verifier sees.
+>  	 */
+>  	for (arg = 0, slot = 0; arg < btf_type_vlen(func_proto); arg++, slot += nslots) {
+> -		struct bpf_reg_state *reg = get_func_arg_reg(caller, regs, slot);
+>  		enum bpf_arg_type arg_type = fn->arg_type[arg];
+>  		argno_t argno = argno_from_arg(slot + 1);
+>  		const struct btf_type *t;
+> @@ -10875,34 +10894,11 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+>  		if (arg_type == ARG_SCALAR || arg_type == ARG_IGNORE ||
+>  		    arg_type == ARG_PTR_TO_CTX || arg_type == ARG_PTR_TO_DYNPTR ||
+>  		    base_type(arg_type) == ARG_PTR_TO_ARENA ||
+> -		    base_type(arg_type) == ARG_PTR_TO_BTF_ID) {
+> +		    base_type(arg_type) == ARG_PTR_TO_BTF_ID ||
+> +		    base_type(arg_type) == ARG_PTR_TO_MEM) {
+>  			ret = check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
+>  			if (ret)
+>  				return ret;
+> -		} else if (base_type(arg_type) == ARG_PTR_TO_MEM) {
+> -			ret = check_func_arg_reg_off(env, reg, argno, ARG_PTR_TO_MEM);
+> -			if (ret < 0)
+> -				return ret;
+> -			if (check_mem_reg(env, reg, argno, sub->args[slot].mem_size,
+> -					  BPF_READ | BPF_WRITE, NULL,
+> -					  NULL))
+> -				return -EINVAL;
+> -			/*
+> -			 * PTR_TO_PACKET get passed as PTR_TO_MEM, preventing
+> -			 * us from adjusting bounds tracking info.
+> -			 */
+> -			if ((reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg)) &&
+> -			    sub->changes_pkt_data) {
+> -				bpf_log(log, "%s is a packet pointer, but func#%d may change packet data\n",
+> -						reg_arg_name(env, argno), subprog);
+> -				return -EINVAL;
+> -			}
+> -			if (!(arg_type & PTR_MAYBE_NULL) &&
+> -			    (type_may_be_null(reg->type) || bpf_register_is_null(reg))) {
+> -				bpf_log(log, "%s is expected to be non-NULL\n",
+> -					reg_arg_name(env, argno));
+> -				return -EINVAL;
+> -			}
+>  		} else {
+>  			verifier_bug(env, "unrecognized %s type %d",
+>  				     reg_arg_name(env, argno), arg_type);
 
-  And then I changed the bpf.c to use hid_bpf_wq_set_callback() and the
-  bpf is compatible with both APIs
+Routing ARG_PTR_TO_MEM through check_func_arg() adds a check_reg_type()
+step that wasn't in the old path. The old btf_check_func_arg_match() code
+called check_func_arg_reg_off(), then check_mem_reg() which eventually
+reached check_ptr_to_btf_access() for PTR_TO_BTF_ID registers.
 
-- with CORE, struct fields are relocated on the fly when you load the BPF
- 
-  So for instance, if my BPF only accesses fields .name, .phys and .id
-  in the BPF, I can define:
-  struct hid_device {
-    char                       name[128];
-    char                       phys[64];
-    unsigned int               id;
-  }
+Does this break PTR_TO_BTF_ID | MEM_RCU? Looking at check_reg_type() in
+verifier.c around line 9050, the mem_types array only includes
+PTR_TO_BTF_ID | PTR_TRUSTED for the PTR_TO_BTF_ID case. MEM_ALLOC objects
+are handled separately by type_is_ptr_alloc_obj() conversion.
 
-  Then when loading the bpf, the verifier replaces all offset to the
-  ones actually used by the running kernel, and the program loads
-  transparently, even if you add fields before/after or change the
-  fields order in the kernel.
+Before this patch, check_func_arg_reg_off() accepted PTR_TO_BTF_ID |
+MEM_RCU with fixed offset, then check_mem_reg() sent it to
+check_ptr_to_btf_access(). For program types with
+env->ops->btf_struct_access, the write check was delegated to that
+callback since MEM_RCU doesn't satisfy bpf_may_fault_on_deref().
 
-Changing the mindset is the hardest part of it. But once you are making
-the shift, it's actually much better to work with. It doesn't mean you
-can go yolo. You still need to be careful in your choices knowing the
-impact on your users. But the API at version 0 is not frozen and you
-don't need to maintain it forever, especially if you control the loader
-and the headers used to compile the BPFs.
+As a concrete example, in sched_ext struct_ops programs:
 
-Cheers,
-Benjamin
+  struct task_struct *p = scx_bpf_cpu_curr(cpu);
+  // or p = scx_bpf_tid_to_task(pid);
+  // Both are KF_RCU_PROTECTED | KF_RET_NULL, so after NULL check
+  // R0 becomes PTR_TO_BTF_ID | MEM_RCU per the kfunc return handling.
+
+  // Tasks from bpf_for_each(task|scx_dsq, ...) are also MEM_RCU
+
+  __weak int f(u64 *v) { ... }
+  f(&p->scx.dsq_vtime);  // or &p->scx.slice
+
+The old code verified this because bpf_scx_btf_struct_access() allows
+writes to those specific fields. The new path would reject it in
+check_reg_type() with:
+
+  "R1 type=rcu_ptr_task_struct expected=fp, pkt, pkt_meta, map_key,
+   map_value, mem, ringbuf_mem, buf, trusted_ptr_, ctx"
+
+Programs that loaded before this patch would fail with "Caller passes
+invalid args into func". The commit message says "Preserve their
+read-write access check" but this appears to change the acceptance
+criteria for BTF pointers.
+
+The existing selftest trusted_btf_field_to_writable_mem confirms that BTF
+field pointers passed to global mem args went through
+check_ptr_to_btf_access() under the old code path.
+
+Should check_reg_type() continue accepting PTR_TO_BTF_ID | MEM_RCU for
+subprog ARG_PTR_TO_MEM and leave the access decision to
+check_mem_reg()/check_ptr_to_btf_access()?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36470745096
+--===============0151256475181154666==--
