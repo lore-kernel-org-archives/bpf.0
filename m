@@ -1,141 +1,119 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6290D3644DE
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 06:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B353368B0
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 06:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790578251; cv=none; b=nEFQfv/8XWj4M3plHfn+4mpZ0iUQiE3mRRN252DfCc1nvQEly3g0qwS5j1/aGWcM3qBXBUwh5rZkPaC/nQ+efnKnbtfyp2Ekxn8b/lGz9m3ed4rzi7zFfTjhuuIr1mYHRI7RZVnjFORkybEkwcJwlQpVwDwQtPz877cpUfs2CMs=
+	t=1790578269; cv=none; b=g6+mCqsdidowH5TefeVgWDrBcPmSXtS7ytOpfjSJn9GWnuwaVO+1cPQ+gXv5+xTzSosumKjo2aoJJV9A18fZZgQkAbid2x/h1IFk0VOUSrPI+sBHl2psAOxkWJuIJGxbr4yJudGBVGKBarzH+rHyrleP0FbI9E39VaQiNQpzAk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790578251; c=relaxed/simple;
-	bh=F2fkqk+warAqlcPPl4KiiXVtBr/t+GSWodwfx0lgHlQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tNHd5N7SSvfx/CSCGjIWJxn/i/7nmouBFFPiKOLrbLswuYXMO7xlYqmKQ/acz7VaqMMIESzkMoWxBro1cbAZgqojknFzIjj3hz/0v7mWd5cevKbECysHzVm6WC0qh2sP8frP/bXXMF969FWcRqI+M/dglAb0c+6/LG1ZnuYlG6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=X5vM0D1k; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1790578269; c=relaxed/simple;
+	bh=eIKla4S6a3D0MHGwhrlPCSrXWKbvb2Ko4TtW5GQrom8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ShzO60KVPMpyNA7qApR/zoxD6N6CQLxmLRJtz/zR6iQfEiPgHB9qBwVKKroWEy62B2Yxg5dau1TZNHnwPU7b3q6Oo0iPfYp05dVHNdn7YfqydaAajTsmgm/qBDbhv2NXzOEtGpgb99xXv4a1+CO1swfv6PdfuJ05+5+6NmSyl58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jRahg4cA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="X5vM0D1k"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 6DF9FC5CD4B;
-	Mon, 28 Sep 2026 06:51:36 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 29C566074B;
-	Mon, 28 Sep 2026 06:50:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 80AAD102F1E74;
-	Mon, 28 Sep 2026 08:50:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1790578243; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=fcCndR4hJBCttx8cdfopSI/TUzzp6DbkY/Fy9CVnC8Y=;
-	b=X5vM0D1kBOHu5HqWiZ2dMX/Vp9xsfJhQ55pab6Q3IvULx98hYPpBlV+sdsLkCwZpQk6E//
-	/Rh+gAfr4sLLcM5PxAaAPBBkDkYqv6YTVjONM6aN/eV34FtPgBjjr/nrRFZKi9IedGLTJZ
-	cWEQciLMZxa2OUY6jOpX3kvU0W8TETg/nNen/GLpjzmMXzYncfCBLSucZ2Zuv/4jjFcI0+
-	Fy3UKP7IzOUEmw+3Zcd4vJ6vqbw7n0YR4kO7hgI9jfwUzCOYA0xpEE/b3jDHaIk04HWos/
-	CpJ6Ve67NZgQUuVxT6HE39uDIJ6Udh40uZ9FQ2ovztLbRUmiDgJMmG36+jqzmQ==
-Message-ID: <d9d028e9-240a-4249-bc3f-c47194676fc7@bootlin.com>
-Date: Mon, 28 Sep 2026 08:50:12 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jRahg4cA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A711F0089D
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 06:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790578268;
+	bh=s5UI4Wy+eGiErrBzR7b2VedGpOFJDsN75qbhAxc0yzs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=jRahg4cAxN6Tle2r15oJe/vmxLHt/LqsTmTxt34l9F+NJ+DReohvk6pR5vCHz2B3O
+	 pcJWUAQ6QH4Lp0CuwBlUfYDuo8LRITlBQkrUs+FWRkmUazrwaGqVihIh4IqyqQnhho
+	 SzyMTgwzEgMUZNVh1F/Zj0azGL+N+c5Ip34weRdyBiQruy5eAGdfDQpOqcJy0xC9If
+	 XninYxyuXj034C3GWnRU/6CjCPxeYVDzZ7UFgT6+ITXDEVEQGj43lpS/oBRFluKgN6
+	 GcObbZtLOxjCr5AeIQf/biJ0/q1/t08Vi+9JBBBQYwnZtkEnOC4gB+89RwY77H8Rzi
+	 ckorlts8LfjXQ==
+Received: by mail-qk2-f35.google.com with SMTP id d75a77b69052e-533264052d0so14011261cf.1
+        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 23:51:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBx2g5CHV5UytW/rUTe/1mn6x8lynA1rG1CqS9pnxK9rRz9TFcMFCaQzfHJTuPV0EKCxqr8=@vger.kernel.org
+X-Gm-Message-State: AFuF++kcArFHbh9u3Hh2Dpr9nVTYkApaa5M+8RYh6FM67uQi/EQWC9ul
+	1wot1goKgOfFuhFr1mESV9g9w39p3cWWAsDUqhIA/2uN8Ax7oyl8iHVhBmp1JV1kqXVhvSuT0VI
+	S2nSgH9tr57QvqCJkuHd9VdFWPpeJick=
+X-Received: by 2002:a05:620a:6486:b0:93c:6925:dfeb with SMTP id
+ af79cd13be357-93c6925e8a2mr834739185a.56.1790578267654; Sun, 27 Sep 2026
+ 23:51:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 00/19] net: stmmac: preserve datapath state
- across MTU and resume failures
-To: James Hilliard <james.hilliard1@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
- Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
- Andrew Lunn <andrew+netdev@lunn.ch>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Christian Marangi <ansuelsmth@gmail.com>,
- Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Suraj Jaiswal
- <quic_jsuraj@quicinc.com>, Richard Cochran <richardcochran@gmail.com>,
- Joao Pinto <Joao.Pinto@synopsys.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>,
- Ong Boon Leong <boon.leong.ong@intel.com>,
- Voon Weifeng <weifeng.voon@intel.com>,
- "Song, Yoong Siang" <yoong.siang.song@intel.com>,
- Linus Walleij <linusw@kernel.org>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Simon Horman <horms@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Thierry Reding <thierry.reding@kernel.org>,
- Jonathan Hunter <jonathanh@nvidia.com>, Chen-Yu Tsai <wens@kernel.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Jose Abreu <Jose.Abreu@synopsys.com>,
- Yao Zi <me@ziyao.cc>, Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Richard Genoud <richard.genoud@bootlin.com>,
- Alastair D'Silva <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- ZhaoJinming <zhaojinming@uniontech.com>,
- Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
- Ding Hui <dinghui1111@163.com>, Linkui Xiao <xiaolinkui@kylinos.cn>,
- Linkui Xiao <xiaolinkui@126.com>, linux-tegra@vger.kernel.org,
- linux-sunxi@lists.linux.dev, stable@vger.kernel.org,
- Rayagond Kokatanur <rayagond@vayavyalabs.com>, Ding Hui <dinghui@lixiang.com>
-References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260928063724.24008-1-hui.zhu@linux.dev>
+In-Reply-To: <20260928063724.24008-1-hui.zhu@linux.dev>
+From: Barry Song <baohua@kernel.org>
+Date: Mon, 28 Sep 2026 14:50:55 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4wrWdw+4B10K3J+sDCSjVoBs2=LtObb6MKehuYsx9pXMg@mail.gmail.com>
+X-Gm-Features: AclHuK-c7GpN5AyOOlaUnzGeJcdZoBH-1EyfOLTse_68UQXS73MXqF_7DQKjthA
+Message-ID: <CAGsJ_4wrWdw+4B10K3J+sDCSjVoBs2=LtObb6MKehuYsx9pXMg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add bpf_proactive_reclaim test
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	Hui Zhu <zhuhui@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi James,
+On Mon, Sep 28, 2026 at 2:37=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
+>
+> From: Hui Zhu <zhuhui@kylinos.cn>
+>
+> bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
+> unlike a write to memory.reclaim, does not retry until the goal is
+> reached.
+>
+> Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
+> and check that the result is positive but well below the request: one
+> pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
+> 4K and 64K page kernels.
+>
+> The test deliberately covers only the kfunc itself. A full example of
+> the intended asynchronous use, where a BPF program watches one cgroup's
+> workingset refaults and reclaims another one from bpf_wq callbacks, is
+> maintained out of tree at [1], released under GPLv2.
+>
+> Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.=
+c
+> is not built at all.
+>
+> [1] https://github.com/teawater/memcg-async-reclaim
+>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
+[...]
+> +
+> +       /*
+> +        * Charge FILE_SIZE of page cache to the cgroup. Reading rather t=
+han
+> +        * writing keeps the pages clean, so reclaim does not have to sta=
+rt
+> +        * writeback before it can evict them.
+> +        */
+> +       if (!ASSERT_OK(ftruncate(data_fd, FILE_SIZE), "ftruncate"))
+> +               goto out;
+> +       for (off =3D 0; off < (off_t)FILE_SIZE; off +=3D sizeof(buf))
+> +               if (!ASSERT_GT(read(data_fd, buf, sizeof(buf)), 0, "read"=
+))
+> +                       goto out;
+> +
 
-On 9/27/26 23:59, James Hilliard wrote:
-> Keep the stmmac datapath coherent after failed MTU changes or hardware
-> resume without changing the interface's administrative state. Retain the
-> working MTU configuration for rollback, and allow ordinary down/up
-> recovery when hardware cannot be restored.
-> 
-> This revision incorporates the following previously posted fixes as
-> prerequisites:
-> 
-> - Linkui Xiao's v3 MDIO reset GPIO fix:
->   https://lore.kernel.org/r/20260921015727.2643540-1-xiaolinkui@126.com
-> - Ding Hui's v3 DMA descriptor allocation cleanup:
->   https://lore.kernel.org/r/20260919121436.1642724-1-dinghui1111@163.com
-> - Lorenzo Bianconi's v3 EST series, patches 2-4:
->   https://lore.kernel.org/r/20260902-stmmac-est-reapply-after-open-v3-0-e72a6df5a7ef@oss.qualcomm.com
+In case we might map file holes to the zero PFN someday (not sure when),
+this wouldn't necessarily give us page cache. So maybe write + fsync is
+more future-proof? In that case, you could also drop the two lines of
+comments.
 
-Then please wait for them to be merged.
-
-Also why are you targetting net-next now ?
-
-And most important, no more than 15 outstanding patches,
-this series alone goes over the limit.
-
-You need to split this up, tackle the issues one at a time, even
-if the overall goal is "MTU and resume failures".
-
-As you can see there's a lot of backlog in this driver, and if you try
-to address sashiko's review by adding more patches and account for
-all "pre-existing issues", this won't work.
-
-This series already went from a 3-ish series that was
-sent alongside the allwinner glue to 19 patches in about a week.
-
-Please think about the people who have to review that :
-
->  39 files changed, 2390 insertions(+), 808 deletions(-)
-
-Not only the quantity, but the quality of the commit logs, the changelogs
-and the comments. This really feels like the raw output of an LLM and it's
-very hard to read.
-
-Maxime
-
+Best Regards
+Barry
