@@ -1,239 +1,178 @@
-Received: from mail-qt1-f226.google.com (mail-qt1-f226.google.com [209.85.160.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E772E3BE17D
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 21:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7152343C7A4
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 21:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790629301; cv=none; b=iMJnYzu7qV0YLumR9gVdBvsU7pOp/lHpw7Xe1helFdf/doTdkxLJeRVUDDRNRA8hvkAURPm6dS3mfZJy80FzJckikQIFMLa6wHUDJU56hGWZhJWvAjtA6LOAlIAsXUvNdUMyvNhABA/5S7OD8GX9wbW0L3OwwygJhd2QPi9p/ME=
+	t=1790629880; cv=none; b=tANOQADWT8wa7uXpl7Gjgg4VW7d9UdEdlv1+Q7FHL/opsKZspNzVXYQGjpAV0ywnUFr4ASkOzOf8pRy1smhh7QHeVS48yh/l/ixcY3vCyW0xaXE2ztiTwryusiByXML/7Z/nsCsjxjjhfowXk5esv79Mxwsu1xHWgxml9+L07VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790629301; c=relaxed/simple;
-	bh=PfuEM5IA51T7IQumIPPslQeBV7v0PC8yZC351aWh7Fg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lStmpEHaCYnJd3YuQZj1dygRw4lhqs/KA5GR9cWMNAWYFLWAwGtrhcndLyxVBUa3xzXi1AB+QooA1vVnCYSVT/Hz2adYkGWaTEqp8HZB6/l2viWUFtshB0veAc8nqJiAgu4pJMFbZJxroWrFB5d4b0tM1fPUg2WNDbUXmE0fMQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Ebi8tmG1; arc=none smtp.client-ip=209.85.160.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1790629880; c=relaxed/simple;
+	bh=HhMQdDpdJ4aiR0FEEcorPDP0mpgjdWdCBdel1ayrG44=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=fOK7/E4HeMgteZcRSbh4ikC5K/KRPkAemvEigxLNuoWPHHopH5psTcP/Zq8udCsTdvTjdVOFGYYIyWvvzhB8qiL40XFMW2BJd2j1t/C9nQCLxXK/SzsSwN3KBkucAV0tG6uZYpL5zVz/O9D+mVX0/mjpi+AY91LZPUeIo0eyVHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bh8x446+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Ebi8tmG1"
-Received: by mail-qt1-f226.google.com with SMTP id d75a77b69052e-532ed7ce029so12512101cf.0
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 14:01:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790629299; x=1791234099;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:dkim-signature:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=f/IFOMHGwO0ok3TO6Ok+o6BC5VPNbPfTzhR68W2FkWQ=;
-        b=kHvQi7hFxZodjFh+HpiCFKTrflUqV128FgEAdLcgTLn+ATlmGTGdYMQVqsfOXjENN4
-         7AlD3WOvaQIii6uLwa7NHokIxsumsWeTTKgyNEwkHTyGk7V5JaBLns38C1EyP5vhhOHW
-         PXOznScbLThKxeTJiex//LLaeTQtmhjXd9ZyNgwHq8rcVnPxJ0fWsHADSC6nrMBBhKxz
-         rudae/sV6H+IVxmyO1+QdUmG5Jobc7AN6L1Ebl2Gaa2mfZmyGIpln1FvcxqfQXaqOQen
-         qnqEAaCy8yfZbdWMt28XD/7pe1Np7axmDfz7Unz47VHOpBBcvtNc6yJqXM7tGwojPaWG
-         d9MQ==
-X-Forwarded-Encrypted: i=1; AKwUvByVp3S1nNADABwBv9rMOIGQtPimFYvN9y90hbMKMPFbFRD0un123GsbXmLiyGMUSvxstfw=@vger.kernel.org
-X-Gm-Message-State: AFuF++m1nKGnv0lj4XDr7BBD69mrnZg1qJcA38R4JBLQSRJUuy/YHhMh
-	+3R3q60qCpZMVbt9xR1HdCoqz/BVIB1QHd8jJ2Ax8/FluF2SZ3ZHuQ/T2wwI/3zd0EgI4aFjv+D
-	Dx0rm1vbUYSFYWtFm63gC4usrUXhy+aHVUPfkIf6uNfmeJoxG24aVWElsLt6btbiFD3HL41dKFb
-	vdrnEnE5CYSJiOSdb+6jx+plNf9JqbrEx7lBN5sImLsBABgjz8IkQU3t/6Pqdd39abgToeV3tPD
-	SGc7Q4=
-X-Gm-Gg: AYBFou0Fqcy1A0E7IPYwVvQR2ZEj3npcnAneX4ziw1Y64D4edPToxHqgBmZCjsY56FI
-	evLijCVhlEZfC6eBC2t/SMg8PTBTvEurU53N3PXbfmw6T566nbDlLcK1YX8Idyn9r77MZv7kCe9
-	wTPce302UHMPMVPSpj4EDx8E9NSHti2RTnN1pbGBqys+hj3Fz4nelzJrf8r0gH0zBjUXKgWhHbA
-	U5v2GNtil9kQLbjRuusi8d9l2zorHpo9u59W3tVsfROw7Lru9NMLlgAvgPu8LcFTNq25wOVgVbQ
-	dc9nPF1C112b5lRK9Pqjf40p8kejzT7MNBonLPcnMURanJ+cg4hhKyryiOLHgyhEaphUF8u9Ksf
-	oR08LeLBZC29eXrG+o9IouV6ClVMn/mL9d7HRErLWQu7FQpDATuXK18FBcM6hZ8GDLZS64DATb3
-	rNyFwX9WpqJS/8D28rUz0S3ksDms0Id4WMgbQ=
-X-Received: by 2002:a05:620a:1a09:b0:939:6dbd:de57 with SMTP id af79cd13be357-93c43cd4de5mr2184046185a.32.1790629298486;
-        Mon, 28 Sep 2026 14:01:38 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-25.dlp.protect.broadcom.com. [144.49.247.25])
-        by smtp-relay.gmail.com with ESMTPS id af79cd13be357-93c8144b691sm84343685a.9.2026.09.28.14.01.38
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Sep 2026 14:01:38 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c29452ecadeso397133066b.3
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 14:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1790629297; x=1791234097; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=f/IFOMHGwO0ok3TO6Ok+o6BC5VPNbPfTzhR68W2FkWQ=;
-        b=Ebi8tmG19shaG7U+jMRXCInkJLouVosbDvh6nKrtW8jF5k75mBa+fIcSPfb4k+a6aK
-         cebksRwasNtZb54TaAliWaFQ1W8FR3KuAr48hsEFIUl9wksbU6DUEOXzzTbCKtDt2s/U
-         Ya3RainhD7Nk9MA/CEEQE8nhRSBSrMoZC3KcY=
-X-Forwarded-Encrypted: i=1; AKwUvBzQAWFvINKX2VpfTXFgZDevleYI8YPyzyBp9usiIxt0Q7Sd+qdV02IjBvWv++c+3R3P/7w=@vger.kernel.org
-X-Received: by 2002:a17:907:c614:20b0:c2d:d9f4:2c85 with SMTP id a640c23a62f3a-c2dd9f42eaamr223975866b.41.1790629296789;
-        Mon, 28 Sep 2026 14:01:36 -0700 (PDT)
-X-Received: by 2002:a17:907:c614:20b0:c2d:d9f4:2c85 with SMTP id
- a640c23a62f3a-c2dd9f42eaamr223974666b.41.1790629296414; Mon, 28 Sep 2026
- 14:01:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bh8x446+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 585F91F000FF;
+	Mon, 28 Sep 2026 21:11:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790629879;
+	bh=Y9gFnT1QA1uZcIMvz1HKCAaupy9YBO3hvbcWrxm80Fk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Bh8x446+xrBir6ruLZ7YOZqUTNeaX1qZk29dTJX60niciSwN5N45CKAgJ9LZ7Ziiv
+	 kSyV41Dzk8bx6lF+juuHTbJGkqdY0KPfRqJxS2Vek0UkDoNJ56MNMthTGEFV8JlT58
+	 CS7Lj4JXS3nkU/xylk43wHCkkhbnL8lCNcKWJ8RkfsMZ18T/4uAEN7kZ0wEgNcA5jW
+	 LiAUiFq+LUN1qtfTCSQpdxNtNrIQ800lpS8cKR4Xk9ufb+YSVbOMksCAES2/5S2B0s
+	 FB8k5txxKfOPDWgyv4kixqfZV0i+gAZYw/68UrubR0SBZ0r+07IrIkYpPvSNocfFQb
+	 84mBl0XVcuhdQ==
+Content-Type: multipart/mixed; boundary="===============1712620672654090282=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260928131458.1012180-1-vnagare@redhat.com>
-In-Reply-To: <20260928131458.1012180-1-vnagare@redhat.com>
-From: Michael Chan <michael.chan@broadcom.com>
-Date: Mon, 28 Sep 2026 14:01:24 -0700
-X-Gm-Features: AclHuK-LLZxY-7zBIpHr84SeFAGdZgSZVV4ExNQKznc8Jir7zMPJ2Pq3fUuX6Jw
-Message-ID: <CACKFLikzTgx_2cDdxFeKLJpdDt9iVxL8FG5NMXQgYQbeBk8FPA@mail.gmail.com>
-Subject: Re: [PATCH net] bnxt_en: don't leave an XDP program installed when
- the open fails
-To: Vaibhav Nagare <nagarevaibhav@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Vaibhav Nagare <vnagare@redhat.com>, stable@vger.kernel.org
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000002eb6ac065c915f81"
+Message-Id: <347f689699a63771b3be60c747063acb8dae433d2d7c1cde09a9d5dfe8e2ab35@mail.kernel.org>
+In-Reply-To: <20260928202643.9114-7-emil@etsalapatis.com>
+References: <20260928202643.9114-7-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v5 6/7] bpf: Support per-call-site kfunc specialization
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,daniel@iogearbox.net,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 28 Sep 2026 21:11:18 +0000 (UTC)
 
---0000000000002eb6ac065c915f81
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--===============1712620672654090282==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 28, 2026 at 6:15=E2=80=AFAM Vaibhav Nagare <nagarevaibhav@gmail=
-.com> wrote:
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 5cbae5d05fe7..7bdbda7764c7 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
-> Restore the previous program when the open fails and release it only
-> once the change has been committed.  The ring and feature configuration
-> is left as computed for the rejected program; the device stays down on
-> this path, and reconciling it is left for a separate change.
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8183a8f22ed5..8ba831329ab7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -22062,6 +22065,56 @@ static int specialize_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_desc
+>  	return 0;
+>  }
 >
-> Fixes: c6d30e8391b8 ("bnxt_en: Add basic XDP support.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Vaibhav Nagare <vnagare@redhat.com>
-
-> @@ -435,8 +433,16 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_=
-prog *prog)
->         bnxt_set_tpa_flags(bp);
->         bnxt_set_ring_params(bp);
->
-> -       if (netif_running(dev))
-> -               return bnxt_open_nic(bp, true, false);
-> +       if (netif_running(dev)) {
-> +               rc =3D bnxt_open_nic(bp, true, false);
-> +               if (rc) {
-> +                       WRITE_ONCE(bp->xdp_prog, old);
-> +                       return rc;
-> +               }
-> +       }
+> +static int add_kfunc_desc_target(struct bpf_verifier_env *env,
+> +				 const struct bpf_kfunc_desc *target_desc,
+> +				 u16 base_desc_idx, u16 *desc_idx)
+> +{
+> +	struct bpf_kfunc_desc desc = *target_desc;
+> +	struct bpf_kfunc_desc_tab *new_tab;
+> +	struct bpf_kfunc_desc_tab *tab;
+> +	struct bpf_prog_aux *prog_aux;
+> +	u32 i;
 > +
-> +       if (old)
-> +               bpf_prog_put(old);
+> +	prog_aux = env->prog->aux;
+> +	tab = prog_aux->kfunc_tab;
+> +
+> +	if (WARN_ON_ONCE(base_desc_idx >= tab->nr_base_descs))
+> +		return -EFAULT;
+> +	if (WARN_ON_ONCE(tab->descs[base_desc_idx].func_id != desc.func_id ||
+> +			 tab->descs[base_desc_idx].offset != desc.offset))
+> +		return -EFAULT;
 
-As mentioned in your commit message, the driver's internal ring state
-and the XDP program state may be out-of-sync at this point.  I think
-bad things can happen if the next open succeeds.  Ideally, we want to
-get everything back in sync.
+This isn't a bug, but would verifier_bug_if() be a better fit for these
+sanity checks?
 
---0000000000002eb6ac065c915f81
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Looking at bpf_fixup_kfunc_call() a few lines below, the
+descriptor-not-found case uses:
 
-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
-DPVtLUtep/P3evQuAtTQRaKedjamBcUpJ7qUhBuv/Z07LlLIlB/vfNSPWe1V+njTezc8m3VfvNEC
-qEpXasPSfDgfcuUhcPR+7++oUDaTt9iqGFOjwiURxx08pL6ogSuiT41O4Xu7msabnUE6RY0O0xR5
-5UGwbpC1QSmnBq7TAy8oQg/nNw4vowEh3S2lmjdHCOdR270Ygd7jet8WQKa5ia4ZK4QdkS8+5uLt
-rMMRyM3QurndiZZJBipjPvEWJR/+jod8867f3n0CAwEAAaOCAd0wggHZMA4GA1UdDwEB/wQEAwIF
-oDAMBgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDovL3Nl
-Y3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5BggrBgEF
-BQcwAYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUGA1Ud
-IAReMFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUFBwIB
-FiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDagNKAy
-hjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBQAKTaeXHq6D68tUC3boCOFGLCgkjAdBgNVHQ4EFgQUJbO/Fi7RhZHYmATVQf6NlAH2
-qUcwDQYJKoZIhvcNAQELBQADggIBABcLQEF8mPE9o6GHJd52vmHFsKsf8vRmdMEouFxrW+GhXXzg
-2/AqqhXeeFZki82D6/5VAPkeVcgDeGZ43Bv89GHnjh/Vv0iCUGHgClZezpWdKCAXkn698xoh1+Wx
-K/c/SHMqGWfBSVm1ygKAWkmzJLF/rd4vUE0pjvZVBpNSVkjXgc80dTZcs7OvoFnt14UgvjuYe+Ia
-H/ux6819kbi0Tmmj5LwSZW8GXw3zcPmAyEYc0ZDCZk9QckL5yPzMlTAsy0Q+NMVpJ8onLj/mHgTk
-Ev8zt1OUE8MlXZj2+wgVY+az2T8rGmqRU2iOzRlJnc86qVwuwjL9AA9v4R13Yt8zYyA7jL0NiBNP
-WaOSajKBB5Z/4ZVtcvOMILD1+G+CVZX7GUWERT9NRXw/SyIEMU59lFbuvy4zxe3+RbOleCgp3pze
-q8HE2p9rkOJT3MkCNLxe+ij4RytIvPQXACsZeLdfTDUnjeXCDDJ9KugVhuqMelAZc4NissPz8FOn
-2NK++r5/QamlFqYRhsFxSBIvhkh2Q/hD3/zy4j17Yf/FUje5uyg03FblSBOk2WYpRpXEuCpyn5pb
-bYVIzfhQJgwGfO+L8BAeZIFjO1QL3s/zzn+RBlTl4wdDzh8L9eS+QEDhMcSsqb4fFRDbsoVuRjpx
-R5MunSUzk4GcmmM19m7oHhPGeKwIMYICVzCCAlMCAQEwYjBSMQswCQYDVQQGEwJCRTEZMBcGA1UE
-ChMQR2xvYmFsU2lnbiBudi1zYTEoMCYGA1UEAxMfR2xvYmFsU2lnbiBHQ0MgUjYgU01JTUUgQ0Eg
-MjAyMwIMZh03KTi4m/vsqWZxMA0GCWCGSAFlAwQCAQUAoIHHMC8GCSqGSIb3DQEJBDEiBCB6ZWOT
-B5LJ0iTpCQvWHCR96b7oxm6S74i1j7LPhg1V1jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
-CSqGSIb3DQEJBTEPFw0yNjA5MjgyMTAxMzdaMFwGCSqGSIb3DQEJDzFPME0wCwYJYIZIAWUDBAEq
-MAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEHMAsGCWCG
-SAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBB/UuaImP/4LsVBryy8JLyrdLgJrQpsh62J7G+SARy
-z+OWI3wtnchWDVqLp2aaDPPcoPvz3/KaLbiX2taJ/rGsDgkgFILrLndBI9CKOOn+8xJaV9DVv97/
-ihhl8cdBBEiEQM33mlMfZaeC46jhq0mHatLJV/pbYPD6ZxX8f540ytpBoOIbju+iU2hUkksVuYsP
-C55sF2+6VNDOTvjmhtNNmSH+DErAQGL5KXdnKaxwWbwEtrxUKUF7W8MQFxFSzyYSONFYb+ejY4Fj
-Dyj/r2oait0Js1d0vdW8KFS0WYLOwWeDwIt35Wg7EBRh0NSNUZHkqXyEGzRfZdSwztjBw3yX
---0000000000002eb6ac065c915f81--
+  verifier_bug(env, "kernel function descriptor not found for func_id %u",
+               insn->imm);
+  return -EFAULT;
+
+verifier_bug() writes the reason to the verifier log and only WARNs under
+CONFIG_DEBUG_KERNEL. A bare WARN_ON_ONCE() warns on every kernel and leaves
+the log with no explanation for the -EFAULT.
+
+> +
+> +	if (tab->descs[base_desc_idx].addr == desc.addr) {
+> +		*desc_idx = base_desc_idx;
+> +		return 0;
+> +	}
+> +
+> +	for (i = tab->nr_base_descs; i < tab->nr_descs; i++) {
+> +		if (tab->descs[i].func_id == desc.func_id &&
+> +		    tab->descs[i].offset == desc.offset &&
+> +		    tab->descs[i].addr == desc.addr) {
+> +			*desc_idx = i;
+> +			return 0;
+> +		}
+> +	}
+> +
+> +	if (tab->nr_descs == MAX_KFUNC_CALL_DESCS) {
+> +		verbose(env, "too many different kernel function call targets\n");
+> +		return -E2BIG;
+> +	}
+> +
+> +	new_tab = krealloc(tab, struct_size(tab, descs, tab->nr_descs + 1),
+> +			   GFP_KERNEL_ACCOUNT);
+> +	if (!new_tab)
+> +		return -ENOMEM;
+> +	tab = new_tab;
+> +	prog_aux->kfunc_tab = tab;
+> +
+> +	*desc_idx = tab->nr_descs;
+> +	tab->descs[tab->nr_descs++] = desc;
+> +	return 0;
+> +}
+
+[ ... ]
+
+> @@ -22082,9 +22135,11 @@ static void __fixup_collection_insert_kfunc(struct bpf_insn_aux_data *insn_aux,
+>  int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  		     struct bpf_insn *insn_buf, int insn_idx, int *cnt)
+>  {
+> +	struct bpf_kfunc_desc desc_copy;
+>  	struct bpf_kfunc_desc *desc;
+>  	unsigned long call_imm;
+> -	u16 desc_idx;
+> +	u16 base_desc_idx, desc_idx;
+> +	bool near_call;
+>  	int err;
+>
+>  	if (!insn->imm) {
+> @@ -22104,13 +22159,17 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  			     insn->imm);
+>  		return -EFAULT;
+>  	}
+> -	desc_idx = desc - env->prog->aux->kfunc_tab->descs;
+> +	base_desc_idx = desc - env->prog->aux->kfunc_tab->descs;
+> +
+> +	near_call = !bpf_jit_supports_far_kfunc_call();
+> +	desc_copy = *desc;
+> +	desc = &desc_copy;
+>
+>  	err = specialize_kfunc(env, desc, insn_idx);
+>  	if (err)
+>  		return err;
+>
+> -	if (!bpf_jit_supports_far_kfunc_call()) {
+> +	if (near_call) {
+>  		call_imm = BPF_CALL_IMM(desc->addr);
+>  		if ((unsigned long)(s32)call_imm != call_imm) {
+>  			verbose(env, "address of kernel func_id %u is out of range\n",
+
+The same question applies to the WARN_ON_ONCE() in bpf_add_kfunc_call()
+which checks `tab->nr_descs != tab->nr_base_descs`.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36480760039
+--===============1712620672654090282==--
