@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-17.mta1.migadu.com [95.215.58.17])
+Received: from mta0.migadu.com (out-33.mta0.migadu.com [91.218.175.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDF92628D
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 00:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1E129B77E
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 00:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790554651; cv=none; b=ILlkGeW+mtW7IyEA4ObQFJdx7/qgI+1jKTQ+hEcXlvhUJv0NOi9RaKjqegmP1eGgMfFbHUKfjpo95+Eso+ij95O0aJwOzLeG4Xgw/kMvS2LSF/8pi76VidG5Lycci2f5K4euXjQEeElYk2y6W26kgxct+tHgdym1fG/bixW19fA=
+	t=1790555368; cv=none; b=PK3+ePSN8D/mT5ukheUMVEZDRT0KHHVEuYLXCqy5PmvXcUlXc4YeZnGwkY6x//EA1FMmbjzyH1/KRF31mmn/mlqV8plo5PjvlBFJXIFVuSCItX3L/TuJqgQUSmXTqNfw0+xbK8pxz2PUz2GaksRtcYRbR/xraN13+qFEM0x2Mq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790554651; c=relaxed/simple;
-	bh=VT+mhNBH5xTLY9nbMmmO3wwx5RO7Muta+Bfopbk5IlY=;
+	s=arc-20240116; t=1790555368; c=relaxed/simple;
+	bh=3qFFNhoQKT6DHczdCPAovpTvhFLtIIVvBcHoBKSSWxA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I4nyKQi49fEO3lcjO0/0bBotUJ7Cso3OtiAJQW64sePl3GsFrbM2huuEU3ZB6Yr0NNBwFRZGua1G5h5ffIrGe63yNsAti/WeyuKlZ+VbwLscJCDuZJwhkJr/DJsWZqdzZVjLQdtuU1CxWzGANmtcxrIrL0FNGyAO4X0++Iuly9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hJiAtc2K; arc=none smtp.client-ip=95.215.58.17
+	 In-Reply-To:Content-Type; b=PKgSWWhV7jf9mkMOpu82Nbm4eMmI8FSTopqYgZM41TXFEh6o5UKc5z8y+fFmNtUh6w6eGOJerynDIJCzyS17LL8UWr1j36q5LLiuemaa0m2aW4tJHWNNtmxh1uHfB3lbb8d/yxSyaVohsElLcvIYGjba3usR6vYb9jLMJmWG71c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=spSPyVPq; arc=none smtp.client-ip=91.218.175.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hJiAtc2K"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="spSPyVPq"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=VT+mhNBH5xTLY9nbMmmO3wwx5RO7Muta+Bfopbk5IlY=;
+DKIM-Signature: a=rsa-sha256; bh=3qFFNhoQKT6DHczdCPAovpTvhFLtIIVvBcHoBKSSWxA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790554646; v=1; x=1791159446;
- b=hJiAtc2KlT7xQPUxCqNZwg0mXJ0rKJhZYfEctEHHBNXzoAE72mk3xEjS5JdaVtVhhm4byoi4
- 8UzvjRdD1HKEwuWhJCo1in+1SrRz6IMD5G6IGomReBO9U26mMu3J8IJ50xPu4gZ2mIc6guj/D76
- aQQ68PFCdqSF1/spQ8KaYVro=
+ t=1790555364; v=1; x=1791160164;
+ b=spSPyVPqaVhPuI1ApWPU5crh3roT3x/wZ1afVhgqu3qu7xQHIrkR3BLVrJar7mw0rszSRhbp
+ cGAhOV19tqZ5yeBjqkVhwDA3QuEUc3D4QR9sezQ9DODhxVW5OrnLcarijk+7Ja2abZH8foyNNkG
+ LAdf+j7oXKOWvhsUeTBYJHlc=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 044e12472f33e501;
-	Mon, 28 Sep 2026 00:17:26 +0000
-X-Mizu-Trace-ID: 044e12472f33e501
+Received: by smtp.migadu.com with ESMTPS id 0bef10d21a55c909;
+	Mon, 28 Sep 2026 00:29:13 +0000
+X-Mizu-Trace-ID: 0bef10d21a55c909
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <e114594f-e79e-49df-ac7c-39fcc114aa1e@linux.dev>
-Date: Sun, 27 Sep 2026 17:17:22 -0700
+Message-ID: <2ca45402-d5b5-49cb-b5cb-a72d022c597f@linux.dev>
+Date: Sun, 27 Sep 2026 17:29:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,17 +38,17 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 07/21] bpf: Resume a covered call at its
- landing pad
+Subject: Re: [PATCH bpf-next v6 08/21] bpf: Refuse a landing pad that does not
+ resume
 Content-Language: en-GB
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
  mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260926050042.2216692-1-yonghong.song@linux.dev>
- <e0a07e78708d4f576ee9a50c2d7c2137b6f399d9de52917a7e59e4602716c1d7@mail.kernel.org>
+References: <20260926050047.2216836-1-yonghong.song@linux.dev>
+ <e99037a0f0459c6d3e4c30ae417dff917a74f23163785f10598ef953425347da@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <e0a07e78708d4f576ee9a50c2d7c2137b6f399d9de52917a7e59e4602716c1d7@mail.kernel.org>
+In-Reply-To: <e99037a0f0459c6d3e4c30ae417dff917a74f23163785f10598ef953425347da@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
@@ -56,182 +56,218 @@ Content-Transfer-Encoding: 8bit
 
 On 9/27/26 1:40 PM, bot+bpf-ci@kernel.org wrote:
 >> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 6d78c20e6507..0143688896b0 100644
+>> index 0143688896b0..4174c7d0177e 100644
 >> --- a/include/linux/bpf_verifier.h
 >> +++ b/include/linux/bpf_verifier.h
->> @@ -836,6 +836,7 @@ struct bpf_subprog_info {
->>   	s16 fastcall_stack_off;
->>   	bool has_tail_call: 1;
->>   	bool might_throw: 1;
->> +	bool might_unwind: 1;
->>   	bool tail_call_reachable: 1;
->>   	bool has_ld_abs: 1;
->>   	bool is_cb: 1;
+>> @@ -339,6 +339,8 @@ struct bpf_func_state {
+>>   	bool in_async_callback_fn;
+>>   	bool in_exception_callback_fn;
+>>   	bool no_stack_arg_load;
+>> +	/* an unwind reached this frame and its landing pad is running */
+>> +	bool in_pad;
+>>   	/* For callback calling functions that limit number of possible
+>>   	 * callback executions (e.g. bpf_loop) keeps track of current
+>>   	 * simulated iteration number.
 > [ ... ]
 >
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 08aee86a155c..f291611fe578 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -5095,6 +5095,8 @@ BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
->>   BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
->>   BTF_ID_FLAGS(func, bpf_throw)
->> +BTF_ID_FLAGS(func, bpf_unwind)
->> +BTF_ID_FLAGS(func, bpf_unwind_resume)
->>   #ifdef CONFIG_BPF_EVENTS
->>   BTF_ID_FLAGS(func, bpf_send_signal_task)
->>   #endif
-> Can a CAP_BPF program call bpf_unwind() at this commit? The kfuncs are
-> registered in generic_btf_ids, which makes them resolvable, and the body
-> at kernel/bpf/helpers.c is still __bpf_kfunc void bpf_unwind(void) { },
-> so the call returns normally to the next instruction.
->
-> However, the verifier assumes bpf_unwind() never falls through:
->
-> kernel/bpf/verifier.c:process_bpf_unwind() ends the path with
-> PROCESS_BPF_EXIT for an uncovered call, and jumps to the pad for a
-> covered call. liveness.c keeps a fall-through edge, but do_check()
-> never explores it. As a result, any instructions reachable only from
-> after the call are skipped by the verifier and removed by
-> bpf_opt_remove_dead_code().
->
-> At run time the call returns and execution continues into whatever the
-> JIT placed next, with r0-r5 clobbered, or off the end of the image.
->
-> This is fixed later in the series by 7924e9e105cf "bpf: Dispatch cleanup
-> pads by rewriting return addresses", which implements the real body via
-> arch_bpf_stack_walk_ra()/bpf_unwind_rewrite(), and bpf_exc_keep_exits()
-> puts 'r0 = 0; exit' after every bpf_unwind call.
-
-As you suggested, I will move two BTF_ID_FLAGS's into commit
-"bpf: Dispatch cleanup pads by rewriting return addresses".
-
->
-> [ ... ]
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index fc3df452de2e..77176250f866 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -19167,6 +19167,40 @@ enum {
->>   	INSN_IDX_UPDATED = 2,
->>   };
+>> @@ -698,6 +700,8 @@ struct bpf_insn_aux_data {
+>>   	u64 non_stack_access:1; /* instruction can access non-stack memory */
+>>   	/* true if some jump or call instruction targets this instruction */
+>>   	u64 jump_target:1;
+>> +	u64 in_cleanup_pad:1; /* reached with a landing pad running */
+>> +	u64 outside_cleanup_pad:1; /* ... and the other way round */
 >>
->> +static int push_cleanup_pad_branch(struct bpf_verifier_env *env, int insn_idx)
+>>   	unsigned int orig_idx; /* original instruction index, initialized once */
+> Do these two bits grow bpf_insn_aux_data by 8 bytes per instruction?
+
+I would like to keep the current layout for now as this is not
+the important part of this patch set.
+
+>
+> Before this patch the u64 flag word held 31 bits (nospec through
+> jump_target), fitting in the low 4 bytes, so orig_idx went at offset +4
+> inside the flag word. Adding in_cleanup_pad and outside_cleanup_pad makes
+> it 33 bits. Bit 32 lands in byte 4, so orig_idx moves to offset +8, and
+> every later member shifts by 4 bytes.
+>
+> The 4-byte tail padding was already used up by cleanup_pad from 97f5b1e363fd.
+> The struct therefore rounds up by another 4 bytes, for +8 in total. Measured
+> from the start of the flag word, the tail goes from 64 bytes to 68, padded to
+> 72.
+>
+> da01eb889d50 (Suggested-by Eduard Zingerman) was written to cut this struct
+> from 136 bytes to 128. On those figures this patch takes it back to 136. The
+> array is allocated for every load as __vmalloc(array_size(sizeof(struct
+> bpf_insn_aux_data), len), ...), and bpf_patch_insn_data() memmoves and
+> reallocates it on every patch.
+>
+> The two marks are only read and written by bpf_exc_check_insn(), which runs
+> only when env->cleanup_info_cnt is non-zero. So programs that never use
+> exception tables pay the cost.
+>
+> The cleanup_pad_head bit added later in the series makes the word 34 bits and
+> does not change this. No later commit in the series restores the size.
+>
+> Two possible fixes: narrow alu_state, whose flags BPF_ALU_SANITIZE_SRC
+> through BPF_ALU_IMMEDIATE occupy only bits 0-4, so the word stays within 32
+> bits; or keep the pad-membership marks in a side array allocated only when a
+> cleanup table is present.
+>
+>> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+>> index 1ed0370a171b..86fdf847d33e 100644
+>> --- a/kernel/bpf/exception.c
+>> +++ b/kernel/bpf/exception.c
+>> @@ -12,6 +12,15 @@
+>>   BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
+>>   BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
+>>
+>> +int bpf_exc_check_callback(struct bpf_verifier_env *env, int subprog)
 >> +{
->> +	struct bpf_verifier_state *branch;
->> +	struct bpf_func_state *frame;
->> +	int pad = bpf_exc_pad_of_call(env, insn_idx);
->> +
->> +	if (pad < 0)
+>> +	if (!env->subprog_info[subprog].might_unwind)
 >> +		return 0;
->> +	branch = push_stack(env, pad, insn_idx, false);
->> +	if (IS_ERR(branch))
->> +		return PTR_ERR(branch);
->> +	frame = branch->frame[branch->curframe];
->> +	/*
->> +	 * The state at that call with the caller-saved registers gone: the
->> +	 * callee's epilogue put r6-r9 and the stack back on the way out.
->> +	 */
->> +	clear_caller_saved_regs(env, frame->regs);
->> +	mark_reg_unknown(env, frame->regs, BPF_REG_0);
->> +	return 0;
+>> +
+>> +	verbose(env, "subprog %d may unwind and is used as a callback\n", subprog);
+>> +	return -EINVAL;
 >> +}
 >> +
->> +static int process_bpf_unwind(struct bpf_verifier_env *env, int *insn_idx)
->> +{
->> +	struct bpf_func_state *frame = cur_func(env);
->> +	int pad = bpf_exc_pad_of_call(env, *insn_idx);
->> +
->> +	if (pad < 0)
->> +		return PROCESS_BPF_EXIT;
->> +	clear_caller_saved_regs(env, frame->regs);
->> +	mark_reg_unknown(env, frame->regs, BPF_REG_0);
->> +	*insn_idx = pad;
->> +	return INSN_IDX_UPDATED;
->> +}
->> +
->>   static int process_bpf_exit_full(struct bpf_verifier_env *env,
->>   				 bool *do_print_state,
->>   				 bool exception_exit)
->> @@ -19404,6 +19438,20 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
->>
->>   		env->jmps_processed++;
->>   		if (opcode == BPF_CALL) {
->> +			if (bpf_is_unwind_kfunc(insn))
->> +				return process_bpf_unwind(env, &env->insn_idx);
->> +			if (bpf_is_unwind_resume_kfunc(insn)) {
->> +				/*
->> +				 * Mark r0 a known zero -- unknown first, as
->> +				 * the known-zero helper keeps the type it
->> +				 * finds, which here is NOT_INIT. The fixups
->> +				 * lower this to 'r0 = 0; exit', so the frame
->> +				 * returns a real zero.
->> +				 */
->> +				mark_reg_unknown(env, cur_regs(env), BPF_REG_0);
->> +				mark_reg_known_zero(env, cur_regs(env), BPF_REG_0);
->> +				return process_bpf_exit_full(env, do_print_state, false);
->> +			}
->>   			if (env->cur_state->active_locks) {
->>   				/* similar to static subprog calls callx is allowed under a lock */
->>   				if (!bpf_is_callx(insn) &&
-> Both new kfuncs are handled before check_kfunc_call(), so
-> bpf_fetch_kfunc_arg_meta() never runs for them. That function rejects a
-> kfunc with -EACCES "calling kernel function %s is not allowed" when
-> btf_kfunc_is_allowed() fails for the program type or the kfunc has no
-> flags. bpf_add_kfunc_call() only resolves the BTF id and does not apply
-> that filter.
-
-You are right, we need bpf_fetch_kfunc_arg_meta check. Will fix.
-
->
-> As a result, bpf_unwind() and bpf_unwind_resume() are callable from any
-> program type that can make kfunc calls, including types that
-> generic_kfunc_set is not registered for (it is registered for TRACING,
-> SCHED_CLS, XDP, STRUCT_OPS, SYSCALL and CGROUP_SKB).
->
-> It also skips the usual sleepable, RCU, preempt and IRQ-context checks
-> in check_kfunc_call().
->
-> ---
->
-> At this commit a bpf_unwind_resume() call is verified as a frame exit
-> with r0 = 0, but the comment says "The fixups lower this to
-> 'r0 = 0; exit'". Does that lowering exist yet? No fixup for it exists in
-> kernel/bpf/fixups.c at this commit.
-
-Comment is not right. The fixup is in later patch
-"bpf: Dispatch cleanup pads by rewriting return addresses".
-
->
-> This call is also accepted anywhere, not only inside a landing pad. So a
-> CAP_BPF program can place 'call bpf_unwind_resume' in its main path. The
-> verifier treats the path as ended and never looks at the following
-> instructions, which the dead-code pass then removes or sanitizes.
->
-> At run time the real kfunc body runs WARN_ONCE(1, "exception cleanup
-> resume was not lowered to a return\n"). That is a user-triggerable
-> warning, and a panic with panic_on_warn. The call then returns normally
-> with r0-r5 clobbered and falls into instructions that were never
-> verified for this state, or off the end of the JIT image.
->
-> This is fixed later in the series by 7924e9e105cf "bpf: Dispatch cleanup
-> pads by rewriting return addresses", which adds the bpf_do_misc_fixups
-> lowering, and 2a1e4ed1e9ae "bpf: Refuse a landing pad that does not
-> resume", which rejects "resume at insn %d is not in a landing pad".
->
->> @@ -19422,6 +19470,10 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
->>   				}
->>   			}
->>   			mark_reg_scratched(env, BPF_REG_0);
->> +			/* An unwind out of this call resumes at the pad. */
->> +			err = push_cleanup_pad_branch(env, env->insn_idx);
->> +			if (err)
->> +				return err;
->>   			if (bpf_in_stack_arg_cnt(&env->subprog_info[cur_func(env)->subprogno]))
->>   				cur_func(env)->no_stack_arg_load = true;
->>   			if (bpf_is_callx(insn))
+>>   static void mark_call_sites(struct bpf_verifier_env *env)
+>>   {
+>>   	u32 i, j;
 > [ ... ]
+>
+>> @@ -69,6 +78,78 @@ bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn)
+>>   	       insn->imm == bpf_unwind_resume_id[0];
+>>   }
+>>
+>> +/* Is an unwind in flight: is this frame a landing pad, or below one? */
+>> +static bool unwinding(const struct bpf_verifier_state *state)
+>> +{
+>> +	u32 i;
+>> +
+>> +	for (i = 0; i <= state->curframe; i++)
+>> +		if (state->frame[i]->in_pad)
+>> +			return true;
+>> +	return false;
+>> +}
+>> +
+>> +int bpf_exc_check_insn(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>> +{
+>> +	bool in_pad = cur_func(env)->in_pad;
+>> +	struct bpf_insn_aux_data *aux;
+>> +	u32 i = env->insn_idx;
+>> +	const char *why = NULL;
+>> +
+>> +	if (unwinding(env->cur_state)) {
+>> +		if (bpf_is_unwind_kfunc(insn)) {
+>> +			verbose(env, "insn %u starts a second unwind while one is in flight\n", i);
+>> +			return -EINVAL;
+>> +		}
+>> +		if (bpf_pseudo_call(insn)) {
+>> +			int subprog = bpf_find_subprog(env, i + insn->imm + 1);
+>> +
+>> +			if (subprog >= 0 && bpf_subprog_is_global(env, subprog) &&
+>> +			    env->subprog_info[subprog].might_unwind) {
+>> +				verbose(env,
+>> +					"insn %u calls global subprog %d, which can unwind while an unwind is in flight\n",
+>> +					i, subprog);
+>> +				return -EINVAL;
+>> +			}
+>> +		}
+>> +	}
+>> +
+>> +	aux = &env->insn_aux_data[i];
+>> +
+>> +	if (in_pad ? aux->outside_cleanup_pad : aux->in_cleanup_pad) {
+>> +		verbose(env, "insn %u runs both inside and outside a landing pad\n", i);
+>> +		return -EINVAL;
+>> +	}
+>> +	if (in_pad)
+>> +		aux->in_cleanup_pad = true;
+>> +	else
+>> +		aux->outside_cleanup_pad = true;
+>> +
+>> +	if (!in_pad)
+>> +		return 0;
+>> +
+>> +	if (insn->code == (BPF_JMP | BPF_EXIT)) {
+>> +		verbose(env,
+>> +			"exit at insn %u ends a landing pad: a catch pad is not supported yet, only cleanup pads that resume\n",
+>> +			i);
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +	if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_tail_call)
+>> +		why = "is a tail call, which replaces the frame";
+>> +	else if (BPF_CLASS(insn->code) == BPF_LD &&
+>> +		 (BPF_MODE(insn->code) == BPF_ABS || BPF_MODE(insn->code) == BPF_IND))
+>> +		why = "is a BPF_LD_[ABS|IND], which can leave through the epilogue";
+>> +	else if (insn->code == (BPF_JMP | BPF_JA | BPF_X) ||
+>> +		 insn->code == (BPF_JMP32 | BPF_JA | BPF_X))
+>> +		why = "is an indirect jump";
+>> +
+>> +	if (!why)
+>> +		return 0;
+>> +
+>> +	verbose(env, "insn %u %s, and is in a landing pad\n", i, why);
+>> +	return -EINVAL;
+>> +}
+>> +
+> The commit message states "bpf_unwind() and the branch pushed at a covered
+> call are the only ways into a pad, and both mark the frame they enter." Does
+> bpf_exc_check_insn() also verify callx (indirect calls)?
+>
+> mark_call_sites() only sets aux->cleanup_pad for bpf_pseudo_call() and
+> bpf_unwind(), not for bpf_is_callx():
+>
+> kernel/bpf/exception.c:mark_call_sites() {
+> 	...
+> 	if (!bpf_pseudo_call(insn) && !bpf_is_unwind_kfunc(insn))
+> 		continue;
+> 	env->insn_aux_data[j].cleanup_pad = rec->landing_pad_off + 1;
+> }
+>
+> So bpf_exc_pad_of_call() returns -1 for a callx inside the covered range, and
+> push_cleanup_pad_branch() in do_check_insn() returns 0 without pushing a pad
+> state. The CFG and liveness successors add no pad edge for it either.
+>
+> The verifier walks the callx into its static callee through
+> check_static_func_call(). If the callee's bpf_unwind() is not covered in the
+> callee, process_bpf_unwind() returns PROCESS_BPF_EXIT and the path ends
+> there. The caller frame is never continued, and the pad is never explored from
+> the state at the callx.
+>
+> But at run time the unwind does reach that pad. bpf_unwind_rewrite() matches
+> each frame's return address with bpf_exc_pad_for_ip(), which is a pure ip
+> range check (begin < ip <= end) over ranges that bpf_exc_fill_native_ranges()
+> builds. There is no filter on call type. The callee's return address sits
+> inside the covered range, so it is rewritten to rec->pad. The callee's
+> epilogue then restores the caller's r6-r9 and stack as they were at the
+> callx.
+>
+> Example: a covered range holds call sub_a (pseudo call) with r6 = a valid
+> pointer, then r6 = scalar; r2 = sub_b ll; callx r2. The pad dereferences or
+> stores through r6 and then calls bpf_unwind_resume(). sub_b calls
+> bpf_unwind() unconditionally. The pad is verified only with the state pushed
+> at call sub_a, where r6 is a pointer. At run time sub_b's unwind resumes the
+> pad with r6 holding the scalar, which gives an arbitrary kernel memory access
+> from a program the verifier accepted.
+>
+> The same entry also gets around what this patch sets out to refuse. A pad
+> reached only by normal flow and by the callx is verified with in_pad false, so
+> it can end in exit (a catch pad), use a tail call or LD_ABS, and pass the
+> "both inside and outside" check, because no in-pad state ever reaches it.
+>
+> No later commit in the series marks, refuses or filters callx.
+> mark_call_sites(), push_cleanup_pad_branch() and bpf_exc_pad_for_ip() are
+> unchanged in this respect, and neither the x86 nor the arm64 dispatch patch
+> handles callx.
+>
+> Possible fixes: mark bpf_is_callx() sites in mark_call_sites(), so
+> push_cleanup_pad_branch() and the CFG treat them like pseudo calls.
+> Alternatively, refuse a callx inside a covered range when the cleanup table is
+> checked.
+
+Yes, fix in the next revision by adding callx support in mark_all_sites().
+
 >
 >
 > ---
