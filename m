@@ -1,83 +1,81 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f40.google.com (mail-pj2-f40.google.com [74.125.227.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C82D3AAF67
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 07:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200D53F823C
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 07:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790581142; cv=none; b=U6FVgTEcWFJd2ic2E4ywU9h19Mfz2UyPljsY42IBBTC5HYFBg0EbRlfG2zOYgS5MSzjoC/PftuYpEJFEVVslGLsePS0EFlXdv340eY/d5zUMPOsr59Rm0zujaxFENIvT2QTB9x73JiTWGkHVjCNN1Sj/t3c+nlJKP7DSp4+3x3o=
+	t=1790581335; cv=none; b=iRSGMBLjY+cjuGpCrN2WmzWIgKqFmgCPphnLx1hUAKGdw1kqvXiT7F0ouurfgtE3xGL45vH+2Mpb8PCTlblfAdcnu59C0qjr4WsKOMQqLQtr25Gyv0cQydjY6iYSNVV0mTXBY39UP6bSbVnrIAJSJu7AYzo5lM5c1XXZXsyK9Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790581142; c=relaxed/simple;
-	bh=JYguKpWYYDdj85O8UNrflccHJDrj4xz7wT+IHO0o+TI=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=epSAnW6e6pTnsNEa75QVjAtMqXVijD70m+RnnUgPHb6bQ1FG7yM3a6fvDFV1QTpE1RxpMzrU2bYnCSiucDKXMpmadXilgbIWniANP59G2V7EhtW0qGaAsNcpmWeXslgxoKtO+7IDtxXHcuKTLYf2y2DfVIdZg9AhmaZIdx+w5vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CSxOnD8+; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1790581335; c=relaxed/simple;
+	bh=eviVKQL1GqxJ7n6WTPVfikHyW1NbKYtUFXOY02zwrio=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:MIME-Version; b=mdgxPGvMia9+35dDsSC9OgtFbTiU/AADsx8VRZUQROz29sTRPk/3uW5LfiOWe0SUvcYeVuMuMB0/6nphX+vm9V1D8QI21IJVWqtdU5pwfo6KjjllxPhs3gPYQabazHNl3v54rSYw5JXfCuh6pOAWPK7U9aI+0Tp64ca3twYc7v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GbVVFhT+; arc=none smtp.client-ip=74.125.227.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CSxOnD8+"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d8fdc579daso16770485ad.1
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 00:39:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GbVVFhT+"
+Received: by mail-pj2-f40.google.com with SMTP id 98e67ed59e1d1-3a0d31bda43so1268889a91.1
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 00:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790581140; x=1791185940; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=NrMGPZQfXAem1w1eTjPgNNpDrfOCX+chlCVcm7+bkR4=;
-        b=CSxOnD8+FAiM1CguoaAzVBcp7KirSRa1BsTjvvt42KqpJ/9y5hIF4OSsxiqNEPKoLL
-         f+LtXK0/nFALt/2rOrnnXzzq4D5g33A+HfiYMgIAECXgyB0avC1LMjtNPv/Sv0iUsDuR
-         Laz7KJHY1h8fMh188aNXkeD/7OJnZO1Z0weHcZS7e6/i4nXSMfYDYArKuC//4cYmLMMd
-         fvPXwstO9Sr8E85AA3zR7tTvGIhwPNxf63JWLzqF8wMcCtADl9mSBCmTxwKVX0P4hJFN
-         kq6T63Ccmkg6YOBNRctP29Uh7x5yxc/AA1mjaUgnPlzXp8MncVCZqVJuNIhnZLBe9IR7
-         vYzA==
+        d=gmail.com; s=20251104; t=1790581333; x=1791186133; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wzC7ZwZxhN/+isWJR43KtRgUye/21tDI5dM3m9YrgyE=;
+        b=GbVVFhT+1SypBnt7bd7P+9HUIs0CrzHlOnB82gde1LN1yvOO3HUg+Y6LfP7dUfZfP3
+         tuiPgS9cRxiSDG/Q68FofQikYkwUJ24D+CnM/XbRV34HWDbnS55ajRuiTtSpFIv6CH7b
+         Ib/p6ZHun1E4ydMbanoMjLzBXpcaxNsPOpPlqMg4Us0CXj+B00eB4+SO2qscTjy4t4E9
+         7nDaWda7Fi4b8xh0j5SxvjMURcuGu3s1ZwZGvGlVseKKnlcwBgEg9kNQus44QjO8MBcT
+         g8HeHMXafk/rMsGz8IQv2ypVlhMSgWG7rHLcu9hdzGPa1YERCBoy9TX7lTN8OfEoYGUC
+         VxNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790581140; x=1791185940;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1790581333; x=1791186133;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NrMGPZQfXAem1w1eTjPgNNpDrfOCX+chlCVcm7+bkR4=;
-        b=qW9oPzcOu5kPQKuuWi7xs0pp2pThZS+JLzousBn0sC2LVpYMON0k0GoLE2f/Ls0VHe
-         BmmV3fK2KvpepDOSYsJ4gkDfcNooF9VNCHAfx9BDqZT6cDKn3RwoYSUgR056XR9/h8Ua
-         UYMAaMD2fd3gCE3fcaF2LjfmpsHDZN9pmr9WgR+sJbaJw0FcvM8xTcrfCElguVYJiSVO
-         0f7iZmWIUKlts9KKRCUl2FCtG5SVtF9gh3DOv+egfhq6KGAkhVLrGnSN0QrZwd83iePo
-         XdVIGMi+w4hhWWY7Geqyvy0qZKDJccqCku+zpN3NvOo3XDqyRtf2jAj0N9fXpkdKDT2Z
-         16RA==
-X-Forwarded-Encrypted: i=1; AKwUvBzaObV+Sumu+IRIQ1I2wpWqqLDqFOQasX1phfl9MN0bS7FyWNP8QJGFlW3cr5CErM+1JDs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL5VoupISB+cxVKh/Y/GccuMWyesplqfvMNz9mZpuZxsoekwJC6
-	sUL3uG8zijxxTQ6wcVPt7O1O/sQPeYYocOxnaDYdhX7cZBTIjUAi/v49
-X-Gm-Gg: AYBFou0GW1WkLHW/IIfDLu+Fu0BddSOniwomDclF9BIVktlNM9Y+nBGtFt/AWTmPolO
-	Lbg1sP0Nv474JgPETL09SQUlbPTmmb3seQuHQvWVNJ3XS8mZ75bmknYhsGABn+1rq1Q/oYCqwXr
-	RVUyTd2UwN5kv+nw6Qug//ve4RXcTADCCq4Edu4wHpKk7LgAm9Ah4UrUbpohaNz6VPUMzLJrOZX
-	Z+TCtLhWs0sLtp2A5tTdeBSY0PJaD8PewfmoG7IvqOYJImdack6dbEFxVUwbZ2KojocEsGqXLp2
-	Qs1ifCgTOXPkuST1wBSsXJTpSvTMb2B+/vffg0g1MU8eXG/0F19l2RbEH4fMYbht+lIaL1RYus9
-	pvJElPB1TsbAYasK5LxMrAb5BqBhDhIsM32C8Jic5fKlg5tCAOa8G6kvV6G1BeAdfqGAZEeWbJm
-	eDrl/3fh4WBih/bmwzeAbIQbaXmdwtyH6p2N+x2r0dTALUNiqGP/NpVFQ16/FuYS7wDU5hjvL2z
-	/VCzQB0Oq+UM8UGBrKDaBWCXs9jTxktQBi8Ynl683+rH/J+MV6I0mIKycqLqZqIRL3KEnnSc0/G
-	HhjA
-X-Received: by 2002:a17:902:fc4f:b0:2da:f7ad:cfea with SMTP id d9443c01a7336-2df7dd76871mr98510165ad.8.1790581140234;
-        Mon, 28 Sep 2026 00:39:00 -0700 (PDT)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df91444763sm36663265ad.60.2026.09.28.00.38.58
+        bh=wzC7ZwZxhN/+isWJR43KtRgUye/21tDI5dM3m9YrgyE=;
+        b=T9ngGCwV1hKegx1KIwFluKZMVLmuxtGIpt4ZugkpQWgsb0cSMfPh/Yj7fpGt036fsD
+         sArQgA5H5R+igQJoZ+WNPJ/YdzKlwS1PITerla23fFU6C0USGInDzGjPJ9FnMCBoWk21
+         gOCWk8WHHfB9KybrYWcq4AORPMODFYfZ768YG//yXq4tOjwsoe1w4xy7N/tQ3AO8FKWO
+         WXxGEX6TD5+CsAnozR6kcRD0p50wBU7XXybEdLk34MLYm84QneMkJr4MstdsSmRtkilF
+         b09PaZK3blmMlpxZmLqsO/qVqXcAa/Etn0rfn51uSmQPDlX8u/wnXb6T66beznoIbsxh
+         5HrQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwU+MGSx5jMQyeOPVN5J91rXYsSRVeHFQbTXpkB5LMKJcxd+ZVi5KzzYP0MSc1DYuHMmr8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJsoNaKxskMZvySqj7KjXPAVqeiyfzaY6VDWU3kgXeC+E3ZBSMc
+	jD7TCDxtjDNx3R2noY5zpP/kY5xSX4UwPqTcKoAGJSHID22AFEDck01X
+X-Gm-Gg: AYBFou04Z6TpDzZzmYL6xj0qLcQLaeDryjswPfHR955q7CNBb8cKIqb72KRAE0rTXhV
+	WWKmWv4cpXna0zKP57ou8wRIMUw12XPns3zV92rPS/GShs/I1NvMQU2LZP25ptn5KtLy2uxpH9Q
+	7Hmoygp/N08z2mS0kKrQg5NVbeLYNCnCtKhDHW9aOkz6iG7TD14A68ZtRiiJREqWdzM/Y5OyNCr
+	fbehL5Phc8/zrIIZJa73k3U1uAS4AU4S2YIgLAgrZi6gMjuH5zvZ/F8E7E0FaOYDIB+n4iMpfTF
+	QQAU/XLOHdILfYNfk0qx3WRUT6qwvo7HUIeqQLk96HEGj+qIP4T7dth7igh2nwGipB135+Y9V3d
+	wWoYJSAyauMCP4w7hKpTUVt/KNOmAxxw+hR3+BvZpDbKXuc7AzMKFxWtE8DgQS4Jkxy5ppX7UQT
+	uTiZdkN1K/+YnWDasrc3DkojvXz05ONLVbhBbW4qKWsdvNvS4EyGjLvNomU7iMCOINOlGZQtw4D
+	ZWssK17qxbILJIT2wIM9RR1VFrFyjOqshM8q92tDdTP9i3jFRp839AgeCp2JUKuGAPkvBNOfG+h
+	GKZMcGJKp8lyPaQ=
+X-Received: by 2002:a17:90b:3843:b0:3a0:e4ce:31fd with SMTP id 98e67ed59e1d1-3a0e4ce57f5mr4745750a91.10.1790581333234;
+        Mon, 28 Sep 2026 00:42:13 -0700 (PDT)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0e151be04sm12870178a91.9.2026.09.28.00.42.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 00:38:58 -0700 (PDT)
+        Mon, 28 Sep 2026 00:42:12 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 07:38:57 +0000
-Message-Id: <DLQS1EUNZG5T.1ZCONM8DQM45@gmail.com>
-Cc: <stable@vger.kernel.org>
-Subject: Re: [PATCH] bpf: Initialize IMA hash helper output buffers
+Date: Mon, 28 Sep 2026 07:42:11 +0000
+Message-Id: <DLQS3VWUPXK9.NWD6AU4CU898@gmail.com>
+Subject: Re: [PATCH v2] bpf: add diagnostics for rejected memory and map
+ accesses
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jiale Yao" <yaojiale02@163.com>, "KP Singh" <kpsingh@kernel.org>, "Matt
- Bobrowski" <matt@bobrowski.net>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Roberto Sassu" <roberto.sassu@huawei.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20260927121400.1188165-1-yaojiale02@163.com>
-References: <20260927121400.1188165-1-yaojiale02@163.com>
+To: "Suchit Karunakaran" <suchitkarunakaran@gmail.com>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>
+Cc: <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+ <john.fastabend@gmail.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+In-Reply-To: <20260927194205.125086-1-suchitkarunakaran@gmail.com>
+References: <20260927194205.125086-1-suchitkarunakaran@gmail.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -87,22 +85,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Sun, Sep 27, 2026 at 08:14 PM Jiale Yao <yaojiale02@163.com> wrote:
-> The output arguments of bpf_ima_inode_hash() and bpf_ima_file_hash()
-> are marked as ARG_PTR_TO_UNINIT_MEM, so the verifier considers the full
-> range initialized after either helper returns.  The IMA hash functions,
-> however, leave the buffer unchanged on error and only copy the digest
-> length on success.  A BPF program can therefore read stale data from
-> the untouched portion of the buffer.
+On Mon, Sep 28, 2026 at 01:12 AM Suchit Karunakaran <suchitkarunakaran@gmail.com> wrote:
+> @@ -4472,12 +4472,22 @@ static int check_map_access_type(struct bpf_verifier_env *env, struct bpf_reg_st
+>  	if (type == BPF_WRITE && !(cap & BPF_MAP_CAN_WRITE)) {
+>  		verbose(env, "write into map forbidden, value_size=%d off=%lld size=%d\n",
+>  			map->value_size, reg_smin(reg) + off, size);
+> +		bpf_diag_policy(env, env->insn_idx,
+> +				bpf_diag_fmt(env, "write to map '%s'",
+> +					map->name[0] ? map->name : "unnamed"),
+> +				"this map was created with BPF_F_RDONLY_PROG, which allows BPF programs to only read it",
+> +				"Remove the write, or create the map without BPF_F_RDONLY_PROG if BPF programs need to write to it.");
 
-That's not a bug.
-These helpers are available to LSM progs only and LSM progs
-require CAP_PERFMON to load.
-With CAP_PERFMON the verifier allows reading uninitialized stack
-with or without the helper call.
+That's not true.
+dev_map_init_map() and insn_array_alloc() set BPF_F_RDONLY_PROG
+in the kernel for every devmap and insn_array.
+libbpf sets it for .rodata when the prog has a const global.
+The user didn't create the map with that flag and
+cannot create it without.
+Same in record_func_map().
 
-Since commit 5da4a9f26fca ("bpf: Preserve stack initialization for
-generic output buffers") MEM_UNINIT helpers don't have to write
-the whole buffer.
+[...]
+
+> @@ -6944,6 +6954,10 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+> +					"Use a writable destination, or copy the data into a writable buffer before modifying it.");
+
+[...]
+
+> @@ -7032,6 +7046,10 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+> +					"Remove the direct write, or perform the modification in a program type and hook that support packet writes.");
+
+These two are the same as in v1 and don't tell the user anything.
+
+Pls focus your tokens elsewhere. I don't feel we will converge here.
 
 pw-bot: cr
