@@ -1,237 +1,139 @@
-Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C011637F00B
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 18:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4DC3822BF;
+	Mon, 28 Sep 2026 18:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790619277; cv=none; b=BzyXy0ofPy2K1eRIrptxoXdQDI8IfW0t4SDY8KRq3qDuYXVspu0mlVxm0pYnRSyQjniA5eV4SquAOR7hDMGJn6bAwyFFFVctVlbj2jMMLYFZTALPm4LgXbkIXc04Px3g+pdMKQuvsR9w7LsM3Ajep/YZx4rF3OzCXSbtyY/mzNc=
+	t=1790619366; cv=none; b=i8w6vhvOJeRU8BlCwXksdF7tpehUmolGy6txwZRTrYJDDc5aJ4ZNIClyeqh0upWG1CFWIa/YltI3uOzdssn4oy1WltMz7uQqxu0qvtjDvk2PAuTGoNM3xZA2JwPOUvhghj6tkm+pwQYR+1Pj/ecvquMSpYbZNSKugx891RN7FAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790619277; c=relaxed/simple;
-	bh=m6resj3DyUH1+3P3dcjqGi0bjuUdw4tqQtXXyL2vbWI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VHRA8yGPniy3WMbVwksbLwi66ApmF6fUtXL+Ma3BeGSoP9es8JTUKLG+amDSrpnO+WISkA8FKc6m6avqJmLKU4LjCEv6SNM6O/kVUCHbveoeh8xlGp7lAiv7GJVJg57Pg1RpyySHtN+eOJyY/H24eWeXmKN0td9HmF+VwcDp+AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=USHTNuMd; arc=none smtp.client-ip=74.125.231.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790619366; c=relaxed/simple;
+	bh=eCX6gIdEYkT417xsYq6oZtLjWqJXJL+1hRsuayDbwtk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=P1pq72zyRpDTW/KMYRbiZPu9D7Lwz3gN/rShq23BdNDQWRTS/ErsUgYcYE2/Xg90f1WtJ+eReQlcx8pXZt0z1gM3OiSgk3GPTM8LzJqtBn6VLw8H7oq401rox7mK06wtehNKXYulaijKrUSYk4CnWbJ471pHnyc+agGwE0auEfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y94zjGYI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USHTNuMd"
-Received: by mail-oo2-f39.google.com with SMTP id 46e09a7af769-8144632e066so1825249a34.0
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790619274; x=1791224074; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=zom1IlWYLrV3nhDzjm+zQNROCI0EkpCcZmypS3/lUdw=;
-        b=USHTNuMd39JhNGeodkI7Xfth3S/USOiQHbDlsXMYuGJeSm2XR30FbZkpD+lZ88cS3h
-         uml42WaS3Sw+B4ILmviypPAAI6WvAkZOAIutAw6B/jbtzIBj5oNAh7+65+IT3ZjsrnyB
-         YZUtAXlbBSVqu9WKoL5FrkZCeGQfJqe4DT0TvKs/ZNkbrg4AtnkdMHMXOjd7HFvJ7XmF
-         0hgP8b+fwro71/luV3bvPWEGCqq/tC7IaXK0MY2WPbnLE+4ByE3kciIVKlzDvK84eqWr
-         yWx2oZlBjr8l2lcraO/c591qvdRfhYtJpKaEWfUgoy9yJx6HMVwmhD7GniKp4329wZsh
-         LurA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790619274; x=1791224074;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zom1IlWYLrV3nhDzjm+zQNROCI0EkpCcZmypS3/lUdw=;
-        b=N0uWPiQ0WFl19hzowarDZvXOqNSTFEHlVv0jajz/3aMZZuf1c06Ar1kiEOcuKW6jdQ
-         OKCo4FbazBQaP6cc8vi/r5k+X7z13CI9qmdogCmYdBOdPitJYzUjcrdwowkUImqUzUzr
-         sGcy3snmBpc0itX5+h/U0pzVVRxTCjBFE2I3XR0DO+SldfMFJyo70RLSPD8rpb0G8Vpb
-         Ah3y5USyVwk5SYXl2SvVvyzRkwzJq/G5/TlsQOIdkE5IGZzrd0H9aiBaFPZxCep51fz1
-         cADeQ0ZaVtd4IynuvW91JIcEaHW0rMDV529Yk+b+wEqlfCbzkoXjpt9f5BMMp9MjBvId
-         oxgA==
-X-Gm-Message-State: AFuF++kq4NDg6tmOvkm39ngpiZlz9oroWmS0230JACgpOh2PC2Q2IfNl
-	mOcOQkL6EAIjBNN/l9deLKUpWDsirAQB+zJrssuJaqDsAL2FKE3+/MT5hfOAgg==
-X-Gm-Gg: AYBFou2Xk09jVEo8MmcbcK+SXcEUKObnT8JnkQAnuaVOpICmSRfXWemodobr0dUsual
-	AG6bEnZKUyGvMHC/1eZPLuYB7TB3c2gdPnZE+R7NAvGVRNR3jrfxDW5iV6X994JAqKa7i5pcHQY
-	dGw3/8XdEVahKuZgaN/G0+2TKIoq7lij4XF4D3Zu8qkhCYOpwOF8OUFeM6HJmiGyXh8NX1EJsjE
-	XB4FXF9w4YG+YV9CcDYLO+7G13/xd9s8EJR1ZtXZahGI1asOuFWVnugdXKXkgR0tzENq0fq9Owx
-	qG3H3op1P2EGdhQChMpTr409TfOvRqAEkS4Q1d7YBbcr2nIGAnNpnexIOa9fZzR4GLokEsgj7Er
-	852I6QVHHRCEwVx8UahYwm7ya1AuC1D0OIvMhsbE4SGi1Jq96gQUVz5xOpJOwVP7GLvK/Qev5FP
-	8RyRqqgNz7H7C5i4Wg7hRCpLyBLPVf4NPoUIliN0wKx9HzZ0+rBZC9ALl+1/J0ig==
-X-Received: by 2002:a4a:e90c:0:b0:6c9:d43e:a703 with SMTP id 006d021491bc7-6d43f4bf666mr13468497eaf.33.1790619274389;
-        Mon, 28 Sep 2026 11:14:34 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:51::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d882bd143asm6158238eaf.8.2026.09.28.11.14.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 11:14:34 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 11/11] bpf: Check all subprog arguments in the common path
-Date: Mon, 28 Sep 2026 11:14:13 -0700
-Message-ID: <20260928181414.644158-12-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260928181414.644158-1-ameryhung@gmail.com>
-References: <20260928181414.644158-1-ameryhung@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y94zjGYI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C48681F00899;
+	Mon, 28 Sep 2026 18:16:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790619364;
+	bh=eCX6gIdEYkT417xsYq6oZtLjWqJXJL+1hRsuayDbwtk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Y94zjGYIgXaGFCM8+cYub+kjJkM4I/X+eiF2sKThO73xMOmFncvgENEUGyfPXQYcW
+	 1GxA82+AqOWa/TFTXB6/tI8m2fgDU4lAuNvRhWZPKfuGMx1ToxQBxcpUJdckvqA2qI
+	 1Ezp5XQwJW7uZRJsOGXa/stX+B8Pkou9gK2O5pzYBVsOEBTISnwDGfiUf8cn+IZE4O
+	 6nAeYYptCBdes1L5tX8eCcDLWS+9k/dTg8hgoqkbG7lhW65qHPAJEBeEo1ZMpni8En
+	 z1XPaC40Pto7S1C6tBnpUJo0Z6YNP8RK8bLXcPkrUP2NNCEq1mLkocOYOlH5sQvrIW
+	 X2CBRAUigSdKA==
+Content-Type: multipart/mixed; boundary="===============3244192027009424929=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <6bc000f8a55a0ae09c3a5024b1c944c07536f746030fb30810159fd092b7af31@mail.kernel.org>
+In-Reply-To: <20260928173703.504474-1-omermetekaya0@gmail.com>
+References: <20260928173703.504474-1-omermetekaya0@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Fix smp_processor_id() warning in rhtab_delete_elem()
+From: bot+bpf-ci@kernel.org
+To: omermetekaya0@gmail.com,ast@kernel.org,daniel@iogearbox.net
+Cc: john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,omermetekaya0@gmail.com,syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 28 Sep 2026 18:16:03 +0000 (UTC)
 
-All supported BPF-subprogram argument types now pass through
-check_func_arg() from one guarded branch in the legacy validation loop.
-Replace that loop and its outgoing-stack validation with
-check_func_args().
+--===============3244192027009424929==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-The scratch prototype is indexed by BTF parameter and the call metadata
-carries the BTF function prototype. The existing BTF argument iteration
-therefore maps parameters to ABI slots for both kfunc and BPF subprogram
-calls, including additional slots occupied by by-value aggregates.
+PiBicGY6IEZpeCBzbXBfcHJvY2Vzc29yX2lkKCkgd2FybmluZyBpbiByaHRhYl9kZWxldGVfZWxl
+bSgpCj4KPiBicGZfbWVtX2NhY2hlX2ZyZWVfcmN1KCkgdXNlcyB0aGlzX2NwdV9wdHIoKSB3aGlj
+aCByZXF1aXJlcyBwcmVlbXB0aW9uCj4gdG8gYmUgZGlzYWJsZWQuIEluIHJodGFiX2RlbGV0ZV9l
+bGVtKCksIHRoaXMgY2FsbCBoYXBwZW5zIGFmdGVyCj4gYnBmX2VuYWJsZV9pbnN0cnVtZW50YXRp
+b24oKSwgc28gcHJlZW1wdGlvbiBpcyByZS1lbmFibGVkIGF0IHRoYXQKPiBwb2ludCBhbmQgdGhp
+c19jcHVfcHRyKCkgdHJpZ2dlcnM6Cj4KPiAgIEJVRzogdXNpbmcgc21wX3Byb2Nlc3Nvcl9pZCgp
+IGluIHByZWVtcHRpYmxlIFswMDAwMDAwMF0gY29kZQo+Cj4gRml4IGJ5IG1vdmluZyBhbGwgcG9z
+dC1kZWxldGUgY2xlYW51cCDigJQgcmh0YWJfcmVhZF9lbGVtX3ZhbHVlKCksCj4gY2hlY2tfYW5k
+X2luaXRfbWFwX3ZhbHVlKCksIGJwZl9vYmpfY2FuY2VsX2ZpZWxkcygpLCBhbmQKPiBicGZfbWVt
+X2NhY2hlX2ZyZWVfcmN1KCkg4oCUIGluc2lkZSB0aGUgYnBmX2Rpc2FibGVfaW5zdHJ1bWVudGF0
+aW9uKCkKPiBzZWN0aW9uLCBiZWZvcmUgYnBmX2VuYWJsZV9pbnN0cnVtZW50YXRpb24oKSBpcyBj
+YWxsZWQuCj4KPiBUaGlzIGlzIGNvbnNpc3RlbnQgd2l0aCBfX2h0YWJfbWFwX2xvb2t1cF9hbmRf
+ZGVsZXRlX2JhdGNoKCkgd2hpY2gKPiB3cmFwcyB0aGUgZW50aXJlIGJhdGNoIG9wZXJhdGlvbiBp
+bmNsdWRpbmcgZWxlbWVudCBmcmVlaW5nIHVuZGVyCj4gYnBmX2Rpc2FibGVfaW5zdHJ1bWVudGF0
+aW9uKCkuCj4KPiBGaXhlczogNjkwNWY4NjAxMjk4ICgiYnBmOiBBbGxvdyBzcGVjaWFsIGZpZWxk
+cyBpbiByZXNpemFibGUgaGFzaHRhYiIpCj4gUmVwb3J0ZWQtYnk6IHN5emJvdCtmZDdlNDE1ZDg5
+MTA3M2I4M2UxZkBzeXprYWxsZXIuYXBwc3BvdG1haWwuY29tCj4gQ2xvc2VzOiBodHRwczovL3N5
+emthbGxlci5hcHBzcG90LmNvbS9idWc/ZXh0aWQ9ZmQ3ZTQxNWQ4OTEwNzNiODNlMWYKCklzIHRo
+ZSBleHBsYW5hdGlvbiBvZiBob3cgdGhlIGZpeCB3b3JrcyBhY2N1cmF0ZT8gVGhlIGNvbW1pdCBt
+ZXNzYWdlIHNheXMKYnBmX2VuYWJsZV9pbnN0cnVtZW50YXRpb24oKSAicmUtZW5hYmxlcyBwcmVl
+bXB0aW9uLCIgYnV0IGxvb2tpbmcgYXQKaW5jbHVkZS9saW51eC9icGYuaCwgYnBmX2Rpc2FibGVf
+aW5zdHJ1bWVudGF0aW9uKCkgaXM6CgogICAgc3RhdGljIGlubGluZSB2b2lkIGJwZl9kaXNhYmxl
+X2luc3RydW1lbnRhdGlvbih2b2lkKQogICAgewogICAgICAgIG1pZ3JhdGVfZGlzYWJsZSgpOwog
+ICAgICAgIHRoaXNfY3B1X2luYyhicGZfcHJvZ19hY3RpdmUpOwogICAgfQoKYW5kIGJwZl9lbmFi
+bGVfaW5zdHJ1bWVudGF0aW9uKCkgaXM6CgogICAgc3RhdGljIGlubGluZSB2b2lkIGJwZl9lbmFi
+bGVfaW5zdHJ1bWVudGF0aW9uKHZvaWQpCiAgICB7CiAgICAgICAgdGhpc19jcHVfZGVjKGJwZl9w
+cm9nX2FjdGl2ZSk7CiAgICAgICAgbWlncmF0ZV9lbmFibGUoKTsKICAgIH0KClRoZXNlIGZ1bmN0
+aW9ucyBkaXNhYmxlIGFuZCBlbmFibGUgbWlncmF0aW9uLCBub3QgcHJlZW1wdGlvbi4gQWZ0ZXIg
+dGhlCnBhdGNoLCBicGZfbWVtX2NhY2hlX2ZyZWVfcmN1KCkgc3RpbGwgcnVucyB3aXRoIHByZWVt
+cHRpb24gZW5hYmxlZCBvbiB0aGUKYmF0Y2ggcGF0aCB1bmRlciBDT05GSUdfUFJFRU1QVF9SQ1Uu
+CgpUaGUgZml4IHdvcmtzIGJlY2F1c2UgY2hlY2tfcHJlZW1wdGlvbl9kaXNhYmxlZCgpIGluCmxp
+Yi9zbXBfcHJvY2Vzc29yX2lkLmMgYWNjZXB0cyBjdXJyZW50LT5taWdyYXRpb25fZGlzYWJsZWQg
+YXMgb25lIG9mIGl0cwplYXJseSBleGl0cywgYW5kIHVuaXRfZnJlZV9yY3UoKSBndWFyZHMgaXRz
+IHBlci1DUFUgbGlzdCB1cGRhdGUgd2l0aApsb2NhbF9pcnFfc2F2ZSgpLiBUaGlzIG1ha2VzIHRo
+ZSBjb2RlIGJvdGggd2FybmluZy1mcmVlIGFuZCBjb3JyZWN0LgoKU2hvdWxkIHRoZSBtZXNzYWdl
+IHNheSB0aGF0IHRoaXNfY3B1X3B0cigpIG5lZWRzIHByZWVtcHRpb24gb3IgbWlncmF0aW9uCmRp
+c2FibGVkLCBhbmQgdGhhdCB0aGUgZml4IGtlZXBzIHRoZSBmcmVlIGluc2lkZSB0aGUgbWlncmF0
+ZV9kaXNhYmxlKCkKc2VjdGlvbj8gT3RoZXJ3aXNlIHJlYWRlcnMgbWlnaHQgYXNzdW1lIHRoZSBz
+ZWN0aW9uIGlzIG5vbi1wcmVlbXB0aWJsZSwKd2hpY2ggaXQgaXMgbm90LgoKQWxzbywgdGhlIG1l
+c3NhZ2UgZG9lcyBub3QgaWRlbnRpZnkgd2hpY2ggY2FsbGVyIHJlYWNoZXMgcmh0YWJfZGVsZXRl
+X2VsZW0oKQp3aXRob3V0IG1pZ3JhdGlvbiBwcm90ZWN0aW9uLiBMb29raW5nIGF0IHRoZSBjYWxs
+ZXJzOgoKLSByaHRhYl9tYXBfZGVsZXRlX2VsZW0oKSBpcyByZWFjaGVkIGZyb20gbWFwX2RlbGV0
+ZV9lbGVtKCkKICAoa2VybmVsL2JwZi9zeXNjYWxsLmMpIHdoaWNoIHdyYXBzIHRoZSBjYWxsIGlu
+CiAgYnBmX2Rpc2FibGVfaW5zdHJ1bWVudGF0aW9uKCkKLSByaHRhYl9tYXBfbG9va3VwX2FuZF9k
+ZWxldGVfZWxlbSgpIGlzIHJlYWNoZWQgZnJvbQogIG1hcF9sb29rdXBfYW5kX2RlbGV0ZV9lbGVt
+KCkgKGtlcm5lbC9icGYvc3lzY2FsbC5jKSB3aGljaCBhbHNvIHdyYXBzCiAgdGhlIGNhbGwgaW4g
+YnBmX2Rpc2FibGVfaW5zdHJ1bWVudGF0aW9uKCkKLSBCUEYgcHJvZ3JhbSBjYWxsZXJzIHJ1biB3
+aXRoIG1pZ3JhdGlvbiBhbHJlYWR5IGRpc2FibGVkCgpUaGUgb25seSB1bnByb3RlY3RlZCBjYWxs
+ZXIgaXMgX19yaHRhYl9tYXBfbG9va3VwX2FuZF9kZWxldGVfYmF0Y2goKQooa2VybmVsL2JwZi9o
+YXNodGFiLmMpLCB3aGljaCBjYWxscyByaHRhYl9kZWxldGVfZWxlbSgpIGluIGEgbG9vcCB3aGls
+ZQpob2xkaW5nIG9ubHkgcmN1X3JlYWRfbG9jaygpLiBUaGlzIHBhdGggcmVhY2hlcyByaHRhYl9k
+ZWxldGVfZWxlbSgpCnRocm91Z2ggQlBGX01BUF9MT09LVVBfQU5EX0RFTEVURV9CQVRDSCAtPiBi
+cGZfbWFwX2RvX2JhdGNoKCkgLT4KX19yaHRhYl9tYXBfbG9va3VwX2FuZF9kZWxldGVfYmF0Y2go
+KS4KCkNvdWxkIHRoZSBtZXNzYWdlIG5hbWUgdGhpcyBzcGVjaWZpYyBwYXRoIHRvIGNsYXJpZnkg
+dGhhdCBvbmx5IHRoZSBiYXRjaApvcGVyYXRpb24gaXMgYWZmZWN0ZWQsIG5vdCBldmVyeSByaHRh
+Yl9kZWxldGVfZWxlbSgpIGNhbGw/CgpEb2VzIHRoZSBGaXhlcyB0YWcgcG9pbnQgYXQgdGhlIHJp
+Z2h0IGNvbW1pdD8gTG9va2luZyBhdCA2OTA1Zjg2MDEyOTgKKCJicGY6IEFsbG93IHNwZWNpYWwg
+ZmllbGRzIGluIHJlc2l6YWJsZSBoYXNodGFiIiksIGl0cyBkaWZmIHNob3dzCmJwZl9tZW1fY2Fj
+aGVfZnJlZV9yY3UoKSBhbmQgX19yaHRhYl9tYXBfbG9va3VwX2FuZF9kZWxldGVfYmF0Y2goKSBv
+bmx5CmFzIHVuY2hhbmdlZCBjb250ZXh0IGxpbmVzLiBUaGF0IGNvbW1pdCBhZGRlZCByaHRhYl9j
+aGVja19hbmRfZnJlZV9maWVsZHMoKQpidXQgZGlkIG5vdCBjaGFuZ2UgdGhlIG9yZGVyaW5nIG9m
+IG9wZXJhdGlvbnMuCgpJbiAxNmI0ZDNlMmZiMjQgKCJicGY6IEltcGxlbWVudCByZXNpemFibGUg
+aGFzaG1hcCBiYXNpYyBmdW5jdGlvbnMiKSwKcmh0YWJfZGVsZXRlX2VsZW0oKSBhbHJlYWR5IGhh
+ZCB0aGlzIHN0cnVjdHVyZToKCiAgICBicGZfZGlzYWJsZV9pbnN0cnVtZW50YXRpb24oKTsKICAg
+IGVyciA9IHJoYXNodGFibGVfcmVtb3ZlX2Zhc3QoJnJodGFiLT5odCwgJmVsZW0tPm5vZGUsIHJo
+dGFiX3BhcmFtcyk7CiAgICBicGZfZW5hYmxlX2luc3RydW1lbnRhdGlvbigpOwogICAgLi4uCiAg
+ICBicGZfbWVtX2NhY2hlX2ZyZWVfcmN1KCZyaHRhYi0+bWEsIGVsZW0pOwoKQXQgdGhhdCBjb21t
+aXQsIGV2ZXJ5IGNhbGxlciB3YXMgc3RpbGwgd3JhcHBlZCBpbiBicGZfZGlzYWJsZV9pbnN0cnVt
+ZW50YXRpb24oKToKbWFwX2RlbGV0ZV9lbGVtKCkgYW5kIG1hcF9sb29rdXBfYW5kX2RlbGV0ZV9l
+bGVtKCkgaW4gc3lzY2FsbC5jIGJvdGggd3JhcAp0aGVpciBjYWxscywgYW5kIEJQRiBwcm9ncmFt
+cyBydW4gd2l0aCBtaWdyYXRpb24gZGlzYWJsZWQuCgpUaGUgZmlyc3QgY2FsbGVyIHRoYXQgcmVh
+Y2hlcyByaHRhYl9kZWxldGVfZWxlbSgpIGhvbGRpbmcgb25seQpyY3VfcmVhZF9sb2NrKCkgY2Ft
+ZSB3aXRoIDgxOGUwMDg0ODIyNyAoImJwZjogSW1wbGVtZW50IGl0ZXJhdGlvbiBvcHMgZm9yCnJl
+c2l6YWJsZSBoYXNodGFiIikuIFRoYXQgY29tbWl0IGFkZGVkIF9fcmh0YWJfbWFwX2xvb2t1cF9h
+bmRfZGVsZXRlX2JhdGNoKCksCndoaWNoIGRvZXM6CgogICAgZm9yIChpID0gMDsgaSA8IHRvdGFs
+OyBpKyspCiAgICAgICAgcmh0YWJfZGVsZXRlX2VsZW0ocmh0YWIsIGRlbF9lbGVtc1tpXSwgTlVM
+TCwgMCk7Cgp1bmRlciBhIHBsYWluIHJjdV9yZWFkX2xvY2soKS4gT24gQ09ORklHX1BSRUVNUFRf
+UkNVLCByY3VfcmVhZF9sb2NrKCkgb25seQpidW1wcyByY3VfcmVhZF9sb2NrX25lc3RpbmcgYW5k
+IGxlYXZlcyBwcmVlbXB0X2NvdW50IGFsb25lLCBzbyB0aGUgdGFzawpzdGF5cyBwcmVlbXB0aWJs
+ZSBhbmQgdGhpc19jcHVfcHRyKCkgZmlyZXMgdGhlIHdhcm5pbmcuCgpTaG91bGQgdGhlIHRhZyBi
+ZToKCiAgICBGaXhlczogODE4ZTAwODQ4MjI3ICgiYnBmOiBJbXBsZW1lbnQgaXRlcmF0aW9uIG9w
+cyBmb3IgcmVzaXphYmxlIGhhc2h0YWIiKQoKVGhpcyB3b3VsZCB0aWUgdGhlIGZpeCB0byB0aGUg
+Y29tbWl0IHRoYXQgbWFkZSB0aGUgYnVnIHJlYWNoYWJsZSwgc28KYmFja3BvcnQgdG9vbGluZyBr
+bm93cyB3aGVyZSB0aGUgZml4IHNob3VsZCBsYW5kLgoKCi0tLQpBSSByZXZpZXdlZCB5b3VyIHBh
+dGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVn
+LgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0
+ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNv
+bS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9ydW5zLzM2NDYwNTczMjYy
 
-The common checker can return non-EFAULT errors other than -EINVAL, as
-the existing BTF-ID path already did. This is compatible with subprog
-call handling: only -EFAULT is fatal. Any other error marks BTF
-unreliable. Static subprogs can then fall back to inline verification,
-while global subprogs reject the call.
-
-Remove the caller-register plumbing that the dedicated loop required.
-
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- kernel/bpf/verifier.c | 65 ++++++++-----------------------------------
- 1 file changed, 11 insertions(+), 54 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2142610ce503..1a0a11a4894f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10846,17 +10846,13 @@ static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const stru
- 	}
- }
- 
--static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
--				    struct btf *btf,
--				    struct bpf_reg_state *regs)
-+static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, struct btf *btf)
- {
- 	struct bpf_subprog_info *sub = subprog_info(env, subprog);
- 	struct bpf_func_state *caller = cur_func(env);
--	const struct btf_param *args, *stack_args;
- 	const struct btf_type *func, *func_proto;
- 	struct bpf_call_arg_meta meta;
- 	struct bpf_func_proto *fn;
--	u32 arg, slot, nslots;
- 	int ret, err;
- 
- 	memset(&meta, 0, sizeof(meta));
-@@ -10878,63 +10874,24 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 
- 	func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
- 	func_proto = btf_type_by_id(btf, func->type);
--	args = btf_params(func_proto);
--	stack_args = sub->arg_slot_cnt == btf_type_vlen(func_proto) ? args : NULL;
--	ret = check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
--					bpf_subprog_name(env, subprog), btf, stack_args);
--	if (ret)
--		return ret;
- 
- 	fn = &env->bpf_subprog_scratch;
- 	gen_subprog_arg_proto(sub, btf, func_proto, fn);
- 	meta.fn = fn;
- 	meta.func_proto = func_proto;
- 
--	/* check that BTF function arguments match actual types that the
--	 * verifier sees.
--	 */
--	for (arg = 0, slot = 0; arg < btf_type_vlen(func_proto); arg++, slot += nslots) {
--		enum bpf_arg_type arg_type = fn->arg_type[arg];
--		argno_t argno = argno_from_arg(slot + 1);
--		const struct btf_type *t;
--		u32 k;
--
--		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
--		nslots = btf_arg_slots(t);
--
--		if (arg_type == ARG_SCALAR || arg_type == ARG_IGNORE ||
--		    arg_type == ARG_PTR_TO_CTX || arg_type == ARG_PTR_TO_DYNPTR ||
--		    base_type(arg_type) == ARG_PTR_TO_ARENA ||
--		    base_type(arg_type) == ARG_PTR_TO_BTF_ID ||
--		    base_type(arg_type) == ARG_PTR_TO_MEM) {
--			ret = check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
--			if (ret)
--				return ret;
--		} else {
--			verifier_bug(env, "unrecognized %s type %d",
--				     reg_arg_name(env, argno), arg_type);
--			return -EFAULT;
--		}
--
--		for (k = 1; k < nslots; k++) {
--			ret = check_arg_extra_slot(env, caller, slot + k, &meta);
--			if (ret)
--				return ret;
--		}
--	}
--
--	return 0;
-+	return check_func_args(env, &meta, env->insn_idx);
- }
- 
--/* Compare BTF of a function call with given bpf_reg_state.
-+/*
-+ * Check that call-site argument states match a subprog's BTF signature.
-+ *
-  * Returns:
-  * EFAULT - there is a verifier bug. Abort verification.
-- * EINVAL - there is a type mismatch or BTF is not available.
-+ * Other errors - there is a type mismatch or BTF is not available.
-  * 0 - BTF matches with what bpf_reg_state expects.
-- * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-  */
--static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
--				  struct bpf_reg_state *regs)
-+static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog)
- {
- 	struct bpf_prog *prog = env->prog;
- 	struct btf *btf = prog->aux->btf;
-@@ -10951,7 +10908,7 @@ static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
- 	if (prog->aux->func_info_aux[subprog].unreliable)
- 		return -EINVAL;
- 
--	err = btf_check_func_arg_match(env, subprog, btf, regs);
-+	err = btf_check_func_arg_match(env, subprog, btf);
- 	/* Compiler optimizations can remove arguments from static functions
- 	 * or mismatched type can be passed into a global function.
- 	 * In such cases mark the function as unreliable from BTF point of view.
-@@ -10970,7 +10927,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	int err;
- 
- 	caller = state->frame[state->curframe];
--	err = btf_check_subprog_call(env, subprog, caller->regs);
-+	err = btf_check_subprog_call(env, subprog);
- 	if (err == -EFAULT)
- 		return err;
- 
-@@ -11107,7 +11064,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		return -EFAULT;
- 
- 	caller = state->frame[state->curframe];
--	err = btf_check_subprog_call(env, subprog, caller->regs);
-+	err = btf_check_subprog_call(env, subprog);
- 	if (err == -EFAULT)
- 		return err;
- 	if (bpf_subprog_is_global(env, subprog)) {
-@@ -11243,7 +11200,7 @@ static int check_func_callx(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 
- 	/* PTR_TO_FUNC is a pointer to a static subprog */
- 	subprog = reg->subprogno;
--	err = btf_check_subprog_call(env, subprog, caller->regs);
-+	err = btf_check_subprog_call(env, subprog);
- 	if (err == -EFAULT)
- 		return err;
- 
--- 
-2.52.0
-
+--===============3244192027009424929==--
