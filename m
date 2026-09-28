@@ -1,265 +1,215 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mta1.migadu.com (out-216.mta1.migadu.com [95.215.58.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47E82D1F7B
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 02:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790563637; cv=pass; b=o1kI52ZVKk97AB7i8gPTIEDl9DYzH+k3FpdigMC9/BsnbHMiM3gpQ9CrEA32nxA70fLUXEbLV017Rk2pPtHy6pQw4eurl+OnIzgPciGiKwJjZC8llIqh4ru/has9UYV0WUa6pNB3tFI0vwINgAazl+JVcMY1sXocTek3CD5nm0c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790563637; c=relaxed/simple;
-	bh=kfLoILawQtt3GmHszvYMld0py7d1Fw/qISyON4KY3vU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=spqxFPClZXMyW7EFjnMMnWPk8Z56Fief1zxl3H8Hai8xP46GFVjm/yhVpY6H204l2lCXZ2rstfPPlsNIZZ9sMRRFByHtnMFc+rRuklq798jKqb9qvUpUKJoSGWwMsK5TNnnXjq+ii5RNs9BWrE7hb1jRjR3QBZK7FiSXB0I2ybg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sl9KQhN+; arc=pass smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49ABF361947
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 03:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.216
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790565044; cv=none; b=K2/h9G6KNIf/chVAXDy+XujgUrFDZ6pvr0EG5ZxPkZD/hNfJPGDvTtNHj8TxUBYRh5YqDVVlzd8BX5h4rijX6WOcNioFoBlBeYt0L0JrnCZt9VlAA6vA6rwYUhJFK213xZ+flFnuKwmZkXIgKIBfuguQvBEldmRykvByBueRSGY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790565044; c=relaxed/simple;
+	bh=k0YHNB9R9CPLsOduJLwbiWt1z2+vcwvZN7BZGJWl3j8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HU6zz6T41WIQMhVKPxzVX75SG0co1BzhRGwDBNkYfZC636X4NylbuYK7tErmjKXvr1aj7yOYzszKvF9wUJjAF5hHzXsyBBdQfgfsF/M9OgmssVOfoQcbVsS4n4YLdsA0nlzEEkoM7+tJ/QInu2503s8jsAeQ31ZtIc5jcUeYl64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pa4vIJu6; arc=none smtp.client-ip=95.215.58.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sl9KQhN+"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d8fd7a3f38so47585ad.1
-        for <bpf@vger.kernel.org>; Sun, 27 Sep 2026 19:47:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790563635; cv=none;
-        d=google.com; s=arc-20260327;
-        b=E6FqjpfOZWnlpDgla8FAqRdEcyN2HWea2lD8qO2/wXAZxJ/LqUpra9gmSf6YWgSmt5
-         ULV9u0h/qbuuqfbzA1ZFoJtnVeLvnoJbeXRLVVbY/Kw3hIxS52HN0rjulREat5narHhB
-         KrKuIOIRsL4zEHUOVMHt29WYaYhl8UPeQOH6ioIWevboRKxFdULXMfJ2zFoxk3d/BPSe
-         kLf+QEYBnjnFZmXBquPCS1vGb7NXOhwEehtH1EsK+2808jlB83KZ9Etx3trvgrrDYoL3
-         XWt+oOz98x4iAiTzSuXoNQJEe6NG25HZhVVj0IuS7H7pLczKFpdxQutxtpycjnCmvEpV
-         QHEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=augEudhXCRPhiwglRSNBL2Iu+v3w4mRzMH115XwWtzU=;
-        fh=CkslIGpORM1/TexYgaoTR7l+xhNfgCQNRT8RZgK8sQs=;
-        b=bquPK5MeJc3My+fX63G5sFdsQuLR6B2Opjo5WEeNU00JxikR26QvTM1arO8yz+xUTh
-         iUXSsxwLfOfNURR+b1E4I3YvOBxrzKeK9q4LKbC88nW9VObV9Du3wwR5bK3zLPPo3u0i
-         oTA+O554uQBD352k1CzR45rsls61In1pHijGm2DP1WmtOkmmQSeONFRokkFSrbdQHLpv
-         o/hBRYXjTputMpNLnAluk6aVMGRFoYEtPbb6CJFiSeLyFRL+G3Hm2YCYjrJoaDHv9YLW
-         yibnqrHAHLqN8oLUuaiWBvP5OlbZi0TPH0isGUnbFM5XBghiavasoe/EuosDqbHCuWrK
-         Xoeg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790563635; x=1791168435; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=augEudhXCRPhiwglRSNBL2Iu+v3w4mRzMH115XwWtzU=;
-        b=sl9KQhN+QEgFViLK1ZumHInb9dLoKmqlMLEtfjnC5c/NImBRV2X84xcLiDOgtWvEoX
-         rXDWHJFPddtrenuz+7cGSDkEGpZ1PXkEEcPgXvj9KkXj/gObToD7Sh2soBldwb1PNna9
-         pP9/pdFvSfoWYuXWyDxKwEHnqZ7LV7Km5XYapKC+0AveZaCz9Tw7pBjcfRQ7NgdFTOBG
-         66ZkjiwkIybx+E5nLzNMQtdv3LWM1iyelLpQZ2Y4yXCY8ynISkvDR2Wa3sUd+hjPaSB9
-         Ry+uMw9/+wuf6WIfJMyy1rV6A+CCS3QyxgqWSSuvJXOsTEp46pGK2qnLp9CH0i3QNk2V
-         maGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790563635; x=1791168435;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=augEudhXCRPhiwglRSNBL2Iu+v3w4mRzMH115XwWtzU=;
-        b=L9oBF6LEVsp7xHzbnpqUKzh6J4zDikNOWR5tlly9LNlZfNGWpSQll87bfh5hOByM1g
-         zzxBwcwllazcXBMP4pXKywQuBwgngR9byuRLsXwrih2DHoQHa82ZYrWrT7vgmxoWs7g5
-         Z2o9/aq85bzk2V0pYfKZLSnoCUsLrSh4ICpa17EvOVDlNiXVyKQt5BlWt/E044U/qicc
-         L1j8RvEpvJbMaWKe6v04ce7vN3b83yGgEAExPlaaZpTyacsxk+nqItiIay3IwwYi6lkM
-         pAQbdRzNvFVsI9jEGxFKYgmoVVx6dIJp7bShGTTcCjgimsF0ZJ8ZrHu2pEix/t6xYpHM
-         Nuyg==
-X-Forwarded-Encrypted: i=1; AKwUvBzFW54+jVC8IwUAgceDoNZyI7PUgWZw8TjZLlbbzGzo18R1ZQglhNQtZMUg6pSs/yC9GkE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ6HiAxRiJ/IwDuz0XRgwKoM+BWuQ4INE9nPCw9TIJoFKL69Qbv
-	MQXYSkihL54+vfUfvmUorgZN6kOy7CtamJGkLyQGoUeIQDbHGoi1nnSSIxmKIjawQ+p5xz0wqz8
-	E/B45U9cU9gqMO0wqIv/Q2433eWux37slTYb5oVfL
-X-Gm-Gg: AYBFou2W4N+rkUviVGsthgoiZcL2yA4Xlun0+S0TdlbGVQXSP2iU5FwV3M7PZ5hrmBh
-	RKx9RAiK1BIKVRu/lfD7w0VCVbeK91wbHuyQGOndSjMts3g515CccP2HsWkW6evQf3jVoE/ukbP
-	gxkeC8ZrC9+8p/b7UzHoMySsN8XF5f9uNcsWQuGuGa03wmNSzw2jTg+ikRftiQ82afgkVMcLIOG
-	865PAg59iENRR9c24bpbMlAzoi5YEOFRL8Lc0/Uv1J5k7qFrBfXRgZ/JTGU8jrFs2idQrZYmjz8
-	av0fYToPSdtMurok+l5FvLKBQ8n3HnCt5TCGVOdlavKZ4P3yFUvkCkDuSxOSgB6mB/JMep7domj
-	5WOw7g5xdQTBEAat8gK7WVgf463+CsvpVr4NP8C9R6QFfWD2OdFUPKZ4=
-X-Received: by 2002:a17:902:d54f:b0:2d5:c090:3810 with SMTP id
- d9443c01a7336-2dfa615a5b9mr3166565ad.2.1790563634286; Sun, 27 Sep 2026
- 19:47:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pa4vIJu6"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=k0YHNB9R9CPLsOduJLwbiWt1z2+vcwvZN7BZGJWl3j8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790565040; v=1; x=1791169840;
+ b=pa4vIJu6fHqLAzQVuQwIsmDfd2KLfdigsSUBMtD0V/2MH/picjt00w6F2dJrXTmDTFPCQS7Y
+ DAvhK7XxjrOFfPOtSJtyd1/Z1pIgXIRfakPhcw1Wm1z9p16bE1rmNs08IGbEFpnZ/WFgSZe8F9+
+ 6Ia7Gxksn50WDStCUtEae/p4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 71863c4a9f5cca80;
+	Mon, 28 Sep 2026 03:10:39 +0000
+X-Mizu-Trace-ID: 71863c4a9f5cca80
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f975aa30-a056-4f48-8f65-abcff0e7cc70@linux.dev>
+Date: Sun, 27 Sep 2026 20:10:36 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260924185316.2831077-1-hramamurthy@google.com>
-In-Reply-To: <20260924185316.2831077-1-hramamurthy@google.com>
-From: Harshitha Ramamurthy <hramamurthy@google.com>
-Date: Sun, 27 Sep 2026 19:47:01 -0700
-X-Gm-Features: AclHuK-e80j_tEsr2eWKoIEd6Nv5MH1_swonyIC0fjDKChHLUEFmd8yxlyMBtRM
-Message-ID: <CAEAWyHfHGhExuWf77nG7W=Bh0crzdb-LQvR0wsc7dRrtjs9yBw@mail.gmail.com>
-Subject: Re: [PATCH net-next v8 00/12] gve: AdminQ mode related refactors
-To: netdev@vger.kernel.org
-Cc: joshwash@google.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	sdf@fomichev.me, jordanrhee@google.com, willemb@google.com, nktgrg@google.com, 
-	maolson@google.com, thostet@google.com, jacob.e.keller@intel.com, 
-	debarghyak@google.com, kees@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, przemyslaw.kitszel@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 11/21] bpf, x86: Dispatch exception cleanup
+ pads at run time
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260926050102.2218021-1-yonghong.song@linux.dev>
+ <699b29ac22154d64cba9488294b7931090b0c50650e99e555f278a1da854647e@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <699b29ac22154d64cba9488294b7931090b0c50650e99e555f278a1da854647e@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 24, 2026 at 11:53=E2=80=AFAM Harshitha Ramamurthy
-<hramamurthy@google.com> wrote:
->
-> This series is preparing the driver for the addition of a new control
-> plane mode(MailboxQ) by commonizing and reusing as much code as possible.
-> MailboxQ is a new control plane infrastructure which uses mailbox queues.
-> This is a new control plane to communicate with the device when the drive=
-r
-> is running on bare-metal instances as well as newer versions of the devic=
-e.
->
-> This series contains 2 main changes to the gve driver's existing control
-> plane(AdminQ):
-> 1) refactor some initialization/teardown path methods to make it work for
->    both control planes.
-> 2) add gve_ctrl_ops structure to the driver for various control plane
->    operations
->
-> The refactors are mainly around the init, reset and recover paths so that
-> functionalities could be moved into the control ops like 'set_num_queues'=
-,
-> 'set_num_ntfy_blks' etc.
->
-> This patch series only sets the control ops for AdminQ mode. This is
-> intended as a preparation for adding MailboxQ mode in upcoming series
-> which will add the new control plane infrastructure and then introduce
-> the corresponding control ops for MailboxQ mode.
->
-> The entire list of future patches can be found here for reference:
-> https://github.com/hramamurthy12/linux/commits/gve-mailbox-queues/
->
-> Changes in v8:
-> - Patch 6(Sashiko):
->     - call gve_queues_stop() directly in gve_queues_start() to handle XDP
->       info unregistration
->     - drop gve_queues_mem_remove() from gve_queues_start() and leave it t=
-o
->       the caller; this moves a few function definitions around to avoid
->       forward declarations
->     - revert the gve_mgmnt_intr() behavior change from v7
->     - handle the TOCTOU when checking for a pending reset
->     - record all configurations in priv before sending an AQ command that
->       can result in a reset
->     - update the commit description regarding teardown-related resets
-> - Patch 8(Sashiko):
->     - gate mgmt IRQ and notify block teardown on different conditions
->     - move gve_teardown_notify_blocks() from gve_reset_device() to
->       gve_teardown_device(), and tear down notify blocks as part of the
->       device reset
->     - don't set block->irq when tearing down notify blocks; instead guard
->       the disable_irq() call in gve_remove_napi() on whether the IRQ was
->       requested
-> - v7: https://lore.kernel.org/netdev/20260916165533.2187434-1-hramamurthy=
-@google.com/
->
-> Changes in v7:
-> - All changes are in patch 6(Sashiko):
->     - Return IRQ_HANDLED instead of IRQ_NONE in gve_mgmnt_intr()
->     - disable service task instead of stats report task for gve_probe() e=
-rror
->     - cancel stats report in gve_free_stats_report()
->     - extract gve_teardown_control_plane_resouces() and gve_adminq_free()=
- into
->       new gve_reset_device() to ensure the device reset is triggered befo=
-re
->       stopping queues
->     - don't call gve_queues_stop() in the gve_close() error path since th=
-e
->       gve_reset() takes care of that.
-> - v6: https://lore.kernel.org/netdev/20260909191136.3811892-1-hramamurthy=
-@google.com/
->
-> Changes in v6:
-> - update commit message to be more consistent with code (patch 1,9 Sashik=
-o)
-> - call out MTU validation change (patch 1, Sashiko)
-> - A few other Sashiko related fixes (error propagation in patch 2, drop d=
-ouble
->   logging in patch 5, drop unintentional type conversion in patch 11)
-> - v5: https://lore.kernel.org/netdev/20260903215606.31633-1-hramamurthy@g=
-oogle.com/
->
-> Changes in v5:
-> - This series contains 12 patches since 3 patches from v4 were applied
-> - Picked up Przemek Kitszel's Reviewed-by tag
-> - Honor device provided default no. of Qs and max rx buffer size correctl=
-y (patch 1, Sashiko)
-> - drop unnecessary header files and __maybe_unused tag (patch 4, Sashiko)
-> - fix workqueue disable count, destroy rings before stopping Qs, stop que=
-ues in error path
->   in gve_close, preserve ordering of gve_turndown->gve_destroy_rings->gve=
-_queues_stop
->   during close and reset (patch 6, Sashiko)
-> - drop double logging in all paths for queue creation/destruction (patch =
-11, Sashiko)
-> - v4: https://lore.kernel.org/netdev/20260814021406.3044324-1-hramamurthy=
-@google.com/
->
-> Changes in v4:
-> - Reduce code churn by placing new functions directly in gve_adminq.c, in=
-troducing final tab spacing
->   and using local variable (Przemek Kitszel)
-> - Fix kdoc formatting and drop spurious management interrupt(patch 9)
-> - Propagate release_db_resources naming change (patch 12)
-> - Remove double logging in destroy queues path (patch 14)
-> - v3: https://lore.kernel.org/netdev/20260803184630.3813311-1-hramamurthy=
-@google.com/
->
-> Changes in v3:
-> - Fix driver compatibility verification in the reset and recovery paths (=
-patches 2, 8).
-> - Mark gve_adminq_get_device_properties() with __maybe_unused ahead of it=
-s usage (patch 7).
-> - Refine error handling and resource cleanup in reset, probe, and queue c=
-reation paths (patches 8, 9, 11, 14).
-> - Keep IRQ doorbell allocation/release in control plane resource helpers =
-(patch 12).
-> - Minor fixes: fix TOCTOU issue for link speed, correct kdoc comments, an=
-d remove redundant teardown calls (patches 4, 11, 15).
-> - v2: https://lore.kernel.org/netdev/20260602235900.3050782-1-hramamurthy=
-@google.com/
->
-> Changes in v2:
-> - Rebased against latest net-next to resolve apply failure for patch 5
-> - Fixed a few typos in commit messages of patch 9 and 14
-> - Fixed a kdoc warning in patch 9
-> - v1: https://lore.kernel.org/netdev/20260601175437.3767283-1-hramamurthy=
-@google.com/
->
-> Harshitha Ramamurthy (6):
->   gve: add struct gve_device_info to hold device properties
->   gve: introduce control plane operations structure
->   gve: introduce ctrl ops to set vectors and Qs
->   gve: introduce gve_adminq_get_device_properties()
->   gve: refactor gve_init_priv for reset path
->   gve: add ctrl ops for queue operations
->
-> Joshua Washington (6):
->   gve: simplify reset logic
->   gve: add gve_ctrl_ops for gve initialization/teardown sequences
->   gve: split up notify block allocation and setup paths
->   gve: introduce new methods to handle IRQ doorbells
->   gve: setup and teardown management interrupts
->   gve: add link status/speed ctrl ops
 
-There are a few high/medium issues that Sashiko has spotted for patch
-6. Will fix in v9.
+
+On 9/27/26 1:39 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git arch/x86/net/bpf_jit_comp.c arch/x86/net/bpf_jit_comp.c
+>> index 6c7a0578760e..fb7e8ca1aab2 100644
+>> --- arch/x86/net/bpf_jit_comp.c
+>> +++ arch/x86/net/bpf_jit_comp.c
+>> @@ -2150,7 +2150,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>>   			dst_reg = X86_REG_R9;
+>>   	}
+>>
+>> -	if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
+>> +	if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1) ||
+>> +	    bpf_exc_insn_is_pad(env, bpf_prog, i - 1))
+>>   		EMIT_ENDBR();
+> Landing pads are only ever entered by a ret whose stack slot
+> bpf_unwind_rewrite() rewrote. Nothing jumps or calls to a pad indirectly
+> since bpf_unwind_resume() is lowered to 'r0 = 0; exit', and
+> bpf_exc_check_insn() forbids gotox inside a pad. IBT only checks
+> indirect JMP/CALL targets, not RET targets, so the ENDBR at each pad
+> head should not be needed.
+
+Yes, you are right. ENDBR is not needed here.
 
 >
->  drivers/net/ethernet/google/gve/gve.h           |   87 +-
->  drivers/net/ethernet/google/gve/gve_adminq.c    |  376 ++++++--
->  drivers/net/ethernet/google/gve/gve_adminq.h    |   30 +-
->  drivers/net/ethernet/google/gve/gve_ethtool.c   |    5 +-
->  drivers/net/ethernet/google/gve/gve_flow_rule.c |   15 +-
->  drivers/net/ethernet/google/gve/gve_main.c      | 1067 ++++++++++++-----=
-------
->  drivers/net/ethernet/google/gve/gve_utils.c     |    4 +-
->  7 files changed, 972 insertions(+), 612 deletions(-)
+> The same patch sends pad-less frames to aux->epilogue_ip through the
+> same kind of rewritten ret, and emits no ENDBR there. That shows the pad
+> ENDBR does no functional work. Each extra ENDBR in the middle of a JITed
+> function is one more valid IBT landing site in executable kernel memory,
+> and the kernel normally keeps those to a minimum (objtool seals unused
+> ENDBRs).
 >
-> --
-> 2.56.0.rc1.310.g51773c2048-goog
+> Is there an indirect-branch path to the pad that is not visible here?
 >
+>>   	ip = image + addrs[i - 1] + (prog - temp);
+> [ ... ]
+>
+>> @@ -3278,6 +3279,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>>   		seen_exit = true;
+>>   		/* Update cleanup_addr */
+>>   		ctx->cleanup_addr = proglen;
+>> +		/* Where an unwind sends a frame with no pad. */
+>> +		bpf_prog->aux->epilogue_ip = (u64)image + proglen;
+> Eduard Zingerman raised an optimization suggestion in v5: use register
+> liveness information at landing pads to avoid spilling all registers
+> unnecessarily. The suggestion was to use register liveness information
+> at call sites and collect a union of registers alive at landing pads for
+> all callers of this particular function.
+>
+> You acknowledged and said you would try to fix it to avoid saving
+> unnecessary callee saved registers. However, the current v6
+> implementation still appears to unconditionally spill registers for
+> exception_boundary programs without optimizing based on which registers
+> are actually live at landing pads.
+>
+> Note: v6 significantly changed the implementation approach from v5, so
+> this suggestion may need re-evaluation in the context of the new design.
+> Does this optimization still apply, or does the new design address this
+> differently?
+
+Alexei suggested a new approach in v6.
+
+>
+>>   		if (bpf_prog_was_classic(bpf_prog) &&
+>>   		    !ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN)) {
+>>   			if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
+> [ ... ]
+>
+>> @@ -4614,6 +4629,24 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp
+>>   #endif
+>>   }
+>>
+>> +void arch_bpf_stack_walk_ra(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp, u64 *ra),
+>> +			    void *cookie)
+>> +{
+>> +#if defined(CONFIG_UNWINDER_ORC)
+>> +	struct unwind_state state;
+>> +	unsigned long addr, *ra;
+>> +
+>> +	for (unwind_start(&state, current, NULL, NULL); !unwind_done(&state);
+>> +	     unwind_next_frame(&state)) {
+>> +		addr = unwind_get_return_address(&state);
+>> +		ra = unwind_get_return_address_ptr(&state);
+>> +		if (!addr || !ra ||
+>> +		    !consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 *)ra))
+>> +			break;
+>> +	}
+>> +#endif
+>> +}
+> arch_bpf_stack_walk_ra() pairs the unwinder's recovered return address
+> with the raw stack slot. On x86 ORC, unwind_next_frame() does
+>
+> arch/x86/kernel/unwind_orc.c:unwind_next_frame() {
+>      ...
+>      state->ip = unwind_recover_ret_addr(state, state->ip, (unsigned long *)ip_p);
+>      ...
+> }
+>
+> which turns return_to_handler (function_graph / fprobe exit on fgraph)
+> or the rethook trampoline (kretprobe) back into the original caller
+> address. But unwind_get_return_address_ptr() returns `(unsigned long
+> *)state->sp - 1`, i.e. ip_p itself, and that slot still holds the
+> tracer's trampoline address. Nothing checks that *ra == addr before
+> handing ra to the consumer.
+>
+> bpf_unwind() is a normal __bpf_kfunc in kernel/bpf/helpers.c with no
+> notrace, so function_graph, kretprobe:bpf_unwind, or a kprobe.multi
+> return probe can hook its return. In that case the prologue replaces the
+> slot holding bpf_unwind's return into the BPF program. Then:
+>
+>    bpf_unwind() -> arch_bpf_stack_walk_ra() -> bpf_unwind_rewrite()
+>      cnt == 1 frame, and the bpf_unwind call is covered by a cleanup record
+>      (mark_call_sites() marks bpf_is_unwind_kfunc() calls)
+>      -> *ra = rec->pad;   /* overwrites return_to_handler / rethook trampoline */
+>
+> bpf_unwind() then returns straight into the pad and skips the tracer's
+> return trampoline. Its fgraph ret_stack entry (or rethook node) is left
+> behind. The next hooked function further up that returns through the
+> trampoline pops that stale entry.
+>
+> For fgraph, ftrace_pop_return_trace() has no frame-pointer check on x86
+> (HAVE_FUNCTION_GRAPH_FP_TEST is not defined there). For rethook,
+> __rethook_find_ret_addr() picks the top node. Either way execution jumps
+> to the old BPF address after the bpf_unwind call, running on a different
+> function's stack, which leads to an oops or arbitrary control flow.
+>
+> The arm64 version of this same walker, added later in the series
+> (8bd2af30a28e "bpf, arm64: Dispatch exception cleanup pads at run
+> time"), handles exactly this case:
+>
+> arch/arm64/net/bpf_jit_comp.c:arch_bpf_stack_walk_ra() {
+>      ...
+>      if (state->flags.fgraph || state->flags.kretprobe)
+>          return false;
+>      ...
+> }
+>
+> Its changelog says: "a frame whose return the function graph tracer or a
+> kretprobe has hooked holds the tracer's trampoline in its slot rather
+> than the address the unwinder reports, so the walk stops there." The x86
+> walker has no such check, and no later commit in the series touches
+> arch/x86/net/bpf_jit_comp.c.
+>
+> Should the x86 version also check state flags or compare
+> READ_ONCE_NOCHECK(*ra) against the value the unwinder read, and stop the
+> walk when they differ?
+
+Okay, will do this since arm64 has a different guard.
+
+>
+>> +
+>>   void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+>>   			       struct bpf_prog *new, struct bpf_prog *old)
+>>   {
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346422430
+
