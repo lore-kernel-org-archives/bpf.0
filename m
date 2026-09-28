@@ -1,52 +1,51 @@
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FB7378D9A;
-	Mon, 28 Sep 2026 19:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FFA4F93BD;
+	Mon, 28 Sep 2026 19:33:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790624030; cv=none; b=D5iqvkuDNUBZJfAbuLX7sDLlIyZP9j4kFg3ovPyZPb2mzq4whlCvUyc8jA+jc5Kcez/eEIYVTVqKArPCNlicNIJpZ3G2G+b1zhzCm1pzCEj8Flt8MfhdsL3CqnmFqECrHExUQ5SDW2pq2bA4TMUyO8cb08gJtNNy6yQpjvRmtnw=
+	t=1790624034; cv=none; b=bJtGstPRpfTDJ1B/tKzONxXKMwJHTNT5Ao29x/gYbsASIZcinIrTjzUEYGC7YZ8HhUhAVCRTfSY/1agkZDoM+9ineZdxnyPbfPyDlARyeiBISKY9DKMEk6s3pj0j23tOkjZSlaL9MIT8RGbi141WRiCxFlSpSNl+aQlkUyY2Vpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790624030; c=relaxed/simple;
-	bh=PR9CQGF15Q2dL+ghhUUA0dWIEYjbCFewN4sf2Ee2bcY=;
+	s=arc-20240116; t=1790624034; c=relaxed/simple;
+	bh=TnsOxFY0wiBqZcAeAEHi02HOZ0LfY5fshoRRQmJHLPs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=ul1V61mBSqBkg7C0IyhclwpaVi+VOeO7D6aJQsH9fi5urriBG7E9HR85eX4QqhW66zFBFqdEacKaXNCK0hQFHePTCstwFgWAFjUaAJHyE94N/y9zfgs23XCJ0RBCTAnx+IKoRHhtHF2YznOwMlMVA0l5kBtEf4iYKvofurnc+ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Q2ffdnc1; arc=none smtp.client-ip=68.232.154.123
+	 In-Reply-To:To:CC; b=qDL///XhQfbsvGBpidv0icDURM5LwsJeKfqKw4zLZSPTfMFFHYljiEpsbdpbS+Tc5fR28tIKIbk1FUxC0Kx7GCeW2V6FTLxxVKcLCdGWS4Go6eid0NQTUm1Wkp59otEoHdDZrofmy7BfRa+vAgs9sGmOADOjkIU6lWTUYpDI4lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=HvBIqW7L; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Q2ffdnc1"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="HvBIqW7L"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790624033; x=1822160033;
+  t=1790624032; x=1822160032;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=PR9CQGF15Q2dL+ghhUUA0dWIEYjbCFewN4sf2Ee2bcY=;
-  b=Q2ffdnc1Fq8TDPw36k99lc0Kbvx6x5yIP1d1pat6/i7X3A6Esy07QXc5
-   XQ65o8SywRf7izwK2YRajYEr6GdVa/ZAg/E2JiYlh6WnnpKKHFpTiuqRz
-   C4vEFQkiZgcVhPNQwbZqiMn0YeGiP46mFwiTV3NovseOTqi5jLibCtBiE
-   tWyF+bD1wPIhawWHNT/NP3YMaV53cRxYejKqMB5vHkDCREpCxv0TOJz7p
-   FSO4GWC/DXOov9cGnmfDy9pkClknX7GO4AMetLeOkbNeM6cCakdp+5HCP
-   iaZrl0D31RIJgj9jYAmNHHGYqP6WfZ2aCsO8aFIMhPs+IsZPGzMViyj99
+  bh=TnsOxFY0wiBqZcAeAEHi02HOZ0LfY5fshoRRQmJHLPs=;
+  b=HvBIqW7LTCDAsJ2hOIWvTFIl0gNGOjtUdpnfmCN6PUWM5Mwj9ySfpZSQ
+   ZbTVOpkkUoFlo9DXlSy7NRG26KBoe3RG9aqzkOnFa/IX38Qj5djYyBrwT
+   +Mh1jPZuQP1KDAiTJ5iFs2TxPylQtM3mQrxzh33NdtQc+jLbcwdTNVjCv
+   K+n8xZTcgF7rW1PhY8kiWsSt+mbWrGDNJ+o9UL+wSoCl/lZbJUORCgsXy
+   UtkU5SzAMjMLw6SJtZ3DqDQB8/d0VyuykjWbzoTE56iffLlhgZptRW5D4
+   jdIGfa3nWsoPkZ8kn8yECo1jv8cxXk9XSzfMNuJPxh/FVtsMGtYx1tPlO
    w==;
-X-CSE-ConnectionGUID: Dz92n7h/StC1ahpkG//Uuw==
-X-CSE-MsgGUID: iIcW4kiwRFeV4msEV1PaRw==
+X-CSE-ConnectionGUID: yDMBiLazTSKTgU5MD1NK3A==
+X-CSE-MsgGUID: VzrlhFOaTkaKJ7ldCG5+IQ==
 X-IronPort-AV: E=Sophos;i="6.27,129,1787036400"; 
-   d="scan'208";a="63340466"
+   d="scan'208";a="231389936"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2026 12:33:52 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2026 12:33:51 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ chn-vm-ex4.mchp-main.com (10.10.87.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Mon, 28 Sep 2026 12:33:46 -0700
+ 15.2.2562.49; Mon, 28 Sep 2026 12:33:51 -0700
 Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Mon, 28 Sep 2026 12:33:43 -0700
+ 15.1.2507.58 via Frontend Transport; Mon, 28 Sep 2026 12:33:47 -0700
 From: Daniel Machon <daniel.machon@microchip.com>
-Date: Mon, 28 Sep 2026 21:33:00 +0200
-Subject: [PATCH net-next v9 12/15] net: lan966x: add PCIe FDMA MTU change
- support
+Date: Mon, 28 Sep 2026 21:33:01 +0200
+Subject: [PATCH net-next v9 13/15] net: lan966x: add PCIe FDMA XDP support
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,7 +54,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260928-lan966x-pci-fdma-v9-12-a17caf60f89a@microchip.com>
+Message-ID: <20260928-lan966x-pci-fdma-v9-13-a17caf60f89a@microchip.com>
 References: <20260928-lan966x-pci-fdma-v9-0-a17caf60f89a@microchip.com>
 In-Reply-To: <20260928-lan966x-pci-fdma-v9-0-a17caf60f89a@microchip.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
@@ -74,292 +73,316 @@ CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>
 X-Mailer: b4 0.14.3
 
-Add MTU change support for the PCIe FDMA path: on an MTU change, the
-contiguous ATU-mapped RX and TX buffers are reallocated at the new
-size, falling back to the existing buffers on failure.
+Add XDP support for the PCIe FDMA path. The implementation operates on
+contiguous ATU-mapped buffers with memcpy-based XDP_TX, unlike the
+platform path which uses page_pool.
 
-Cap the PCIe DCB ring at 256 (FDMA_PCI_DCB_MAX): 512 DCBs would
-overflow MAX_PAGE_ORDER at jumbo MTU.
+XDP sees the frame with IFH and FCS stripped. These are removed in
+lan966x_fdma_pci_rx_check_frame() before the BPF program runs, because
+after the program returns the driver cannot tell whether the tail
+region was modified. The skb_pull/skb_trim previously done in
+lan966x_fdma_pci_rx_get_frame() are removed for the same reason; the
+frame pointer and length are pre-computed by rx_check_frame() and
+passed through rx_get_frame() and lan966x_xdp_pci_run() to the caller.
 
-The ring must fit one MAX_PAGE_ORDER block after ATU padding, and
-db_size is handed to the FDMA in the 16-bit DCB DATAL field.
-Advertise the resulting limit in dev->max_mtu (FDMA_PCI_MAX_MTU)
-when the FDMA is in use - a switch with no "fdma" interrupt named
-uses the unconstrained register-based path instead, so the cap is
-gated on lan966x->fdma, not lan966x_is_pci() alone. On a 4KB-page,
-MAX_PAGE_ORDER=10 build this is MTU 15498; the overhead is shared
-with lan966x_fdma_get_max_frame() via FDMA_OVERHEAD.
+lan966x_fdma_pci_xmit_xdpf() handles XDP_TX: it rebuilds a fresh IFH
+in the TX slot, copies the post-XDP frame after it, and lets HW insert
+a new FCS.
 
-Skip the resize until lan966x_fdma_pci_init() has built the rings;
-it runs after the netdevs register and sizes them from
-DEV_MAC_MAXLEN_CFG, already programmed by the caller.
+lan966x_xdp_setup() is extended so the PCIe path skips the page_pool
+reload that the platform path needs.
+
+Only XDP_ACT_BASIC is supported.
 
 Tested-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 Reviewed-by: Simon Horman <horms@kernel.org>
 ---
- .../net/ethernet/microchip/lan966x/lan966x_fdma.c  |   6 +-
- .../ethernet/microchip/lan966x/lan966x_fdma_pci.c  | 153 ++++++++++++++++++++-
- .../net/ethernet/microchip/lan966x/lan966x_main.c  |   3 +-
- .../net/ethernet/microchip/lan966x/lan966x_main.h  |  28 ++++
- 4 files changed, 181 insertions(+), 9 deletions(-)
+ .../ethernet/microchip/lan966x/lan966x_fdma_pci.c  | 166 ++++++++++++++++++---
+ .../net/ethernet/microchip/lan966x/lan966x_main.c  |  12 +-
+ .../net/ethernet/microchip/lan966x/lan966x_xdp.c   |  12 +-
+ 3 files changed, 159 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 2e8f786d6fee..a7940eca5df3 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -890,11 +890,7 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
- 
- int lan966x_fdma_get_max_frame(struct lan966x *lan966x)
- {
--	return lan966x_fdma_get_max_mtu(lan966x) +
--	       IFH_LEN_BYTES +
--	       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) +
--	       VLAN_HLEN * 2 +
--	       XDP_PACKET_HEADROOM;
-+	return lan966x_fdma_get_max_mtu(lan966x) + FDMA_OVERHEAD;
- }
- 
- static int __lan966x_fdma_reload(struct lan966x *lan966x, int max_mtu)
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-index f511e7061314..758554c951c5 100644
+index 758554c951c5..949994874ed9 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-@@ -395,7 +395,7 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
- 	lan966x->rx.lan966x = lan966x;
- 	lan966x->rx.max_mtu = lan966x_fdma_get_max_frame(lan966x);
- 	rx_fdma->channel_id = FDMA_XTR_CHANNEL;
--	rx_fdma->n_dcbs = FDMA_DCB_MAX;
-+	rx_fdma->n_dcbs = FDMA_PCI_DCB_MAX;
- 	rx_fdma->n_dbs = FDMA_RX_DCB_MAX_DBS;
- 	rx_fdma->priv = lan966x;
- 	rx_fdma->db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-@@ -405,7 +405,7 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
  
- 	lan966x->tx.lan966x = lan966x;
- 	tx_fdma->channel_id = FDMA_INJ_CHANNEL;
--	tx_fdma->n_dcbs = FDMA_DCB_MAX;
-+	tx_fdma->n_dcbs = FDMA_PCI_DCB_MAX;
- 	tx_fdma->n_dbs = FDMA_TX_DCB_MAX_DBS;
- 	tx_fdma->priv = lan966x;
- 	tx_fdma->db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-@@ -428,9 +428,156 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
- 	return 0;
++#include <linux/bpf_trace.h>
+ #include <linux/ip.h>
+ #include <net/addrconf.h>
+ 
+@@ -139,7 +140,123 @@ static bool lan966x_fdma_pci_rx_size_fits(struct fdma *fdma, u32 blockl)
+ 	       blockl <= fdma->db_size - XDP_PACKET_HEADROOM;
  }
  
-+/* Reset existing rx and tx buffers. */
-+static void lan966x_fdma_pci_reset_mem(struct lan966x *lan966x)
+-static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
++static int lan966x_fdma_pci_xmit_xdpf(struct lan966x_port *port,
++				      void *ptr, u32 len)
 +{
-+	struct lan966x_rx *rx = &lan966x->rx;
++	struct lan966x *lan966x = port->lan966x;
 +	struct lan966x_tx *tx = &lan966x->tx;
++	struct fdma *fdma = &tx->fdma;
++	int next_to_use, ret = 0;
++	void *virt_addr;
 +
-+	memset(rx->fdma.dcbs, 0, rx->fdma.size);
-+	memset(tx->fdma.dcbs, 0, tx->fdma.size);
++	spin_lock(&lan966x->tx_lock);
 +
-+	fdma_dcbs_init(&rx->fdma,
-+		       FDMA_DCB_INFO_DATAL(rx->fdma.db_size - XDP_PACKET_HEADROOM),
-+		       FDMA_DCB_STATUS_INTR);
++	next_to_use = lan966x_fdma_pci_get_next_dcb(fdma);
 +
-+	fdma_dcbs_init(&tx->fdma,
-+		       FDMA_DCB_INFO_DATAL(tx->fdma.db_size),
-+		       FDMA_DCB_STATUS_DONE);
++	if (next_to_use < 0) {
++		netif_stop_queue(port->dev);
++		port->dev->stats.tx_dropped++;
++		ret = NETDEV_TX_BUSY;
++		goto out;
++	}
 +
-+	lan966x_fdma_llp_configure(lan966x,
-+				   tx->fdma.atu_region->base_addr,
-+				   tx->fdma.channel_id);
-+	lan966x_fdma_llp_configure(lan966x,
-+				   rx->fdma.atu_region->base_addr,
-+				   rx->fdma.channel_id);
++	/* Only the upper bound is enforced: XDP owns the frame contents and
++	 * length, so a program that shrinks below ETH_ZLEN gets what it asked
++	 * for.
++	 */
++	if (!lan966x_fdma_pci_tx_size_fits(fdma, len)) {
++		port->dev->stats.tx_dropped++;
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* virt_addr points to the IFH. */
++	virt_addr = fdma_dataptr_virt_addr_contiguous(fdma, next_to_use, 0);
++
++	/* Construct a fresh IFH. */
++	memset(virt_addr, 0, IFH_LEN_BYTES);
++	lan966x_ifh_set_bypass(virt_addr, 1);
++	lan966x_ifh_set_port(virt_addr, BIT_ULL(port->chip_port));
++
++	/* Copy the (post-XDP) frame after the IFH. */
++	memcpy(virt_addr + IFH_LEN_BYTES, ptr, len);
++
++	/* Order frame write before DCB status write below. */
++	dma_wmb();
++
++	/* Reserve ETH_FCS_LEN for the HW-inserted FCS (len is FCS-stripped). */
++	fdma_dcb_add(fdma,
++		     next_to_use,
++		     0,
++		     FDMA_DCB_STATUS_INTR |
++		     FDMA_DCB_STATUS_SOF |
++		     FDMA_DCB_STATUS_EOF |
++		     FDMA_DCB_STATUS_BLOCKO(0) |
++		     FDMA_DCB_STATUS_BLOCKL(IFH_LEN_BYTES + len + ETH_FCS_LEN));
++
++	/* Start the transmission. */
++	lan966x_fdma_tx_start(tx);
++
++	port->dev->stats.tx_bytes += len;
++	port->dev->stats.tx_packets++;
++
++out:
++	spin_unlock(&lan966x->tx_lock);
++
++	return ret;
 +}
 +
-+/* Wake all TX queues on every port (undoes lan966x_fdma_tx_disable_netdev). */
-+static void lan966x_fdma_pci_wakeup_netdev(struct lan966x *lan966x)
++static int lan966x_xdp_pci_run(struct lan966x_port *port, void *data,
++			       u32 data_len, void **xdp_data, u32 *xdp_len)
 +{
-+	for (int i = 0; i < lan966x->num_phys_ports; ++i) {
-+		struct lan966x_port *port = lan966x->ports[i];
++	/* Read once so the NULL check and bpf_prog_run_xdp() see the same
++	 * pointer.
++	 */
++	struct bpf_prog *xdp_prog = READ_ONCE(port->xdp_prog);
++	struct lan966x *lan966x = port->lan966x;
++	struct fdma *fdma = &lan966x->rx.fdma;
++	struct xdp_buff xdp;
++	u32 act;
 +
-+		if (port)
-+			netif_tx_wake_all_queues(port->dev);
++	if (!xdp_prog)
++		return FDMA_PASS;
++
++	xdp_init_buff(&xdp, fdma->db_size, &port->xdp_rxq);
++
++	/* hard_start is set to slot start (virt_addr is XDP_PACKET_HEADROOM
++	 * into the slot). Headroom includes the IFH; BPF may grow into it
++	 * via adjust_head. IFH is rebuilt on XDP_TX and unread on XDP_PASS.
++	 */
++	xdp_prepare_buff(&xdp,
++			 data - XDP_PACKET_HEADROOM,
++			 XDP_PACKET_HEADROOM + IFH_LEN_BYTES,
++			 data_len,
++			 false);
++
++	act = bpf_prog_run_xdp(xdp_prog, &xdp);
++
++	*xdp_data = xdp.data;
++	*xdp_len = xdp.data_end - xdp.data;
++
++	switch (act) {
++	case XDP_PASS:
++		return FDMA_PASS;
++	case XDP_TX:
++		return lan966x_fdma_pci_xmit_xdpf(port, *xdp_data, *xdp_len) ?
++		       FDMA_DROP : FDMA_TX;
++	default:
++		bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
++		fallthrough;
++	case XDP_ABORTED:
++		trace_xdp_exception(port->dev, xdp_prog, act);
++		fallthrough;
++	case XDP_DROP:
++		return FDMA_DROP;
 +	}
 +}
 +
-+static int lan966x_fdma_pci_reload(struct lan966x *lan966x, int new_mtu)
-+{
-+	struct fdma tx_fdma_old = lan966x->tx.fdma;
-+	struct fdma rx_fdma_old = lan966x->rx.fdma;
-+	u32 old_mtu = lan966x->rx.max_mtu;
-+	int err;
-+
-+	napi_disable(&lan966x->napi);
-+	lan966x_fdma_tx_disable_netdev(lan966x);
-+	lan966x_fdma_rx_disable(&lan966x->rx);
-+	lan966x_fdma_tx_disable(&lan966x->tx);
-+
-+	lan966x->rx.max_mtu = new_mtu;
-+
-+	/* Must be NULL'ed in order to realloc them. */
-+	lan966x->rx.fdma.atu_region = NULL;
-+	lan966x->tx.fdma.atu_region = NULL;
-+
-+	lan966x->tx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-+	lan966x->tx.fdma.size = fdma_get_size_contiguous(&lan966x->tx.fdma);
-+	lan966x->rx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-+	lan966x->rx.fdma.size = fdma_get_size_contiguous(&lan966x->rx.fdma);
-+
-+	err = lan966x_fdma_pci_rx_alloc(&lan966x->rx);
-+	if (err)
-+		goto restore;
-+
-+	err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
-+	if (err) {
-+		fdma_free_coherent_and_unmap(lan966x->dma_dev,
-+					     &lan966x->rx.fdma);
-+		goto restore;
-+	}
-+
-+	/* Free and unmap old memory. */
-+	fdma_free_coherent_and_unmap(lan966x->dma_dev, &rx_fdma_old);
-+	fdma_free_coherent_and_unmap(lan966x->dma_dev, &tx_fdma_old);
-+
-+	/* Order matters: napi_enable() must precede the wakes, or a TX that
-+	 * completes first clears FDMA_INTR_DB_ENA with nothing scheduled to
-+	 * restore it, leaving RX dead until the next reload.
-+	 */
-+	napi_enable(&lan966x->napi);
-+	lan966x_fdma_rx_start(&lan966x->rx);
-+	lan966x_fdma_pci_wakeup_netdev(lan966x);
-+
-+	return err;
-+restore:
-+
-+	/* No new buffers are allocated at this point. Use the old buffers,
-+	 * but reset them before starting the FDMA again.
-+	 */
-+
-+	memcpy(&lan966x->tx.fdma, &tx_fdma_old, sizeof(struct fdma));
-+	memcpy(&lan966x->rx.fdma, &rx_fdma_old, sizeof(struct fdma));
-+
-+	lan966x->rx.max_mtu = old_mtu;
-+
-+	lan966x_fdma_pci_reset_mem(lan966x);
-+
-+	napi_enable(&lan966x->napi);
-+	lan966x_fdma_rx_start(&lan966x->rx);
-+	lan966x_fdma_pci_wakeup_netdev(lan966x);
-+
-+	return err;
-+}
-+
-+static int __lan966x_fdma_pci_reload(struct lan966x *lan966x, int max_mtu)
-+{
-+	int err;
-+	u32 val;
-+
-+	/* Disable the CPU port. */
-+	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(0),
-+		QSYS_SW_PORT_MODE_PORT_ENA,
-+		lan966x, QSYS_SW_PORT_MODE(CPU_PORT));
-+
-+	/* Flush the CPU queues. */
-+	readx_poll_timeout(lan966x_qsys_sw_status,
-+			   lan966x,
-+			   val,
-+			   !(QSYS_SW_STATUS_EQ_AVAIL_GET(val)),
-+			   READL_SLEEP_US, READL_TIMEOUT_US);
-+
-+	/* Add a sleep in case there are frames between the queues and the CPU
-+	 * port
-+	 */
-+	usleep_range(USEC_PER_MSEC, 2 * USEC_PER_MSEC);
-+
-+	err = lan966x_fdma_pci_reload(lan966x, max_mtu);
-+
-+	/* Enable back the CPU port. */
-+	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(1),
-+		QSYS_SW_PORT_MODE_PORT_ENA,
-+		lan966x, QSYS_SW_PORT_MODE(CPU_PORT));
-+
-+	return err;
-+}
-+
- static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
++static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port,
++					   void **data, u32 *data_len)
  {
--	return -EOPNOTSUPP;
-+	int max_mtu;
-+
-+	/* Nothing to resize until fdma_pci_init() has built the rings; it
-+	 * sizes them from DEV_MAC_MAXLEN_CFG, which the caller already set.
+ 	struct lan966x *lan966x = rx->lan966x;
+ 	struct fdma *fdma = &rx->fdma;
+@@ -171,7 +288,15 @@ static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
+ 	if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
+ 		return FDMA_ERROR;
+ 
+-	return FDMA_PASS;
++	/* Present the Ethernet frame (no IFH, no FCS). HW re-inserts the
++	 * FCS on TX; see lan966x_fdma_pci_xmit_xdpf(). May be overridden
++	 * by XDP. The FCS strip is unconditional because NETIF_F_RXFCS
++	 * is not advertised in hw_features.
 +	 */
-+	if (!lan966x->rx.lan966x)
-+		return 0;
++	*data = virt_addr + IFH_LEN_BYTES;
++	*data_len = blockl - IFH_LEN_BYTES - ETH_FCS_LEN;
 +
-+	max_mtu = lan966x_fdma_get_max_frame(lan966x);
-+	if (max_mtu == lan966x->rx.max_mtu)
-+		return 0;
-+
-+	return __lan966x_fdma_pci_reload(lan966x, max_mtu);
++	return lan966x_xdp_pci_run(port, virt_addr, *data_len, data, data_len);
  }
  
- static void lan966x_fdma_pci_deinit(struct lan966x *lan966x)
+ static bool lan966x_fdma_pci_hw_offload(struct lan966x *lan966x, u32 port,
+@@ -206,34 +331,21 @@ static bool lan966x_fdma_pci_hw_offload(struct lan966x *lan966x, u32 port,
+ }
+ 
+ static struct sk_buff *lan966x_fdma_pci_rx_get_frame(struct lan966x_rx *rx,
+-						     u64 src_port)
++						     u64 src_port, void *data,
++						     u32 data_len)
+ {
+ 	struct lan966x *lan966x = rx->lan966x;
+-	struct fdma *fdma = &rx->fdma;
+ 	struct sk_buff *skb;
+-	struct fdma_db *db;
+-	u32 data_len;
+-
+-	/* Get the received frame and create an SKB for it. */
+-	db = fdma_db_next_get(fdma);
+-	data_len = fdma_db_len_get(db);
+ 
+ 	skb = napi_alloc_skb(&lan966x->napi, data_len);
+ 	if (unlikely(!skb))
+ 		return NULL;
+ 
+-	memcpy(skb->data,
+-	       fdma_dataptr_virt_addr_contiguous(fdma,
+-						 fdma->dcb_index,
+-						 fdma->db_index),
+-						 data_len);
++	memcpy(skb->data, data, data_len);
+ 
+ 	skb_put(skb, data_len);
+ 
+ 	skb->dev = lan966x->ports[src_port]->dev;
+-	skb_pull(skb, IFH_LEN_BYTES);
+-
+-	skb_trim(skb, skb->len - ETH_FCS_LEN);
+ 
+ 	skb->protocol = eth_type_trans(skb, skb->dev);
+ 
+@@ -324,6 +436,8 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+ 	struct sk_buff *skb;
+ 	int counter = 0;
+ 	u64 src_port;
++	u32 data_len;
++	void *data;
+ 
+ 	/* Wake any stopped TX queues if a TX DCB is available. */
+ 	spin_lock(&lan966x->tx_lock);
+@@ -340,7 +454,10 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+ 		/* Order DONE read before DCB/frame reads below. */
+ 		dma_rmb();
+ 		counter++;
+-		switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
++		switch (lan966x_fdma_pci_rx_check_frame(rx,
++							&src_port,
++							&data,
++							&data_len)) {
+ 		case FDMA_PASS:
+ 			break;
+ 		case FDMA_ERROR:
+@@ -349,8 +466,17 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+ 			 */
+ 			fdma_dcb_advance(fdma);
+ 			continue;
++		case FDMA_TX:
++			fdma_dcb_advance(fdma);
++			continue;
++		case FDMA_DROP:
++			fdma_dcb_advance(fdma);
++			continue;
+ 		}
+-		skb = lan966x_fdma_pci_rx_get_frame(rx, src_port);
++		skb = lan966x_fdma_pci_rx_get_frame(rx,
++						    src_port,
++						    data,
++						    data_len);
+ 		fdma_dcb_advance(fdma);
+ 		if (!skb) {
+ 			lan966x->ports[src_port]->dev->stats.rx_dropped++;
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index de2202786826..c3afc4cc597f 100644
+index c3afc4cc597f..e4c9c5812cca 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -823,7 +823,8 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
- 	port->chip_port = p;
- 	lan966x->ports[p] = port;
+@@ -875,11 +875,13 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
  
--	dev->max_mtu = ETH_MAX_MTU;
-+	dev->max_mtu = lan966x_is_pci(lan966x) && lan966x->fdma ?
-+		       FDMA_PCI_MAX_MTU : ETH_MAX_MTU;
+ 	port->phylink = phylink;
  
- 	dev->netdev_ops = &lan966x_port_netdev_ops;
- 	dev->ethtool_ops = &lan966x_ethtool_ops;
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 16bc28c8f11f..1877f1916d71 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -7,6 +7,7 @@
- #include <linux/etherdevice.h>
- #include <linux/if_vlan.h>
- #include <linux/jiffies.h>
-+#include <linux/mmzone.h>
- #include <linux/phy.h>
- #include <linux/phylink.h>
- #include <linux/ptp_clock_kernel.h>
-@@ -87,6 +88,33 @@
- #define FDMA_INJ_CHANNEL		0
- #define FDMA_DCB_MAX			512
+-	/* XDP is not supported on the PCIe FDMA path. */
+-	if (lan966x->fdma && !lan966x_is_pci(lan966x))
+-		dev->xdp_features = NETDEV_XDP_ACT_BASIC |
+-				    NETDEV_XDP_ACT_REDIRECT |
+-				    NETDEV_XDP_ACT_NDO_XMIT;
++	if (lan966x->fdma) {
++		dev->xdp_features = NETDEV_XDP_ACT_BASIC;
++
++		if (!lan966x_is_pci(lan966x))
++			dev->xdp_features |= NETDEV_XDP_ACT_REDIRECT |
++					     NETDEV_XDP_ACT_NDO_XMIT;
++	}
  
-+/* Ring must fit in one MAX_PAGE_ORDER DMA block; 512 DCBs overflows
-+ * at jumbo MTU.
-+ */
-+#define FDMA_PCI_DCB_MAX		256
+ 	err = register_netdev(dev);
+ 	if (err) {
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+index e63634887f64..b98426afc785 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+@@ -20,16 +20,16 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+-	if (lan966x_is_pci(lan966x)) {
+-		NL_SET_ERR_MSG_MOD(xdp->extack,
+-				   "XDP is not supported on the PCIe FDMA path");
+-		return -EOPNOTSUPP;
+-	}
+-
+ 	old_xdp = lan966x_xdp_present(lan966x);
+ 	old_prog = xchg(&port->xdp_prog, xdp->prog);
+ 	new_xdp = lan966x_xdp_present(lan966x);
+ 
++	/* PCIe FDMA uses contiguous buffers, so no page_pool reload
++	 * is needed.
++	 */
++	if (lan966x_is_pci(lan966x))
++		goto out;
 +
-+#define FDMA_OVERHEAD							\
-+	(IFH_LEN_BYTES +						\
-+	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) +		\
-+	 VLAN_HLEN * 2 +						\
-+	 XDP_PACKET_HEADROOM)
-+
-+/* Largest db_size keeping the ATU-padded ring inside one MAX_PAGE_ORDER
-+ * block and within the 16-bit DCB DATAL field. Inverts ALIGN(x, R) <= L
-+ * into x <= ALIGN_DOWN(L, R) to bound x directly.
-+ */
-+#define FDMA_PCI_DB_SIZE_MAX						\
-+	MIN_T(u32,							\
-+	      (ALIGN_DOWN(PAGE_SIZE << MAX_PAGE_ORDER,			\
-+			  FDMA_PCI_ATU_REGION_ALIGN) -			\
-+	       FDMA_PCI_DCB_MAX * sizeof(struct fdma_dcb)) /		\
-+	      (FDMA_PCI_DCB_MAX * FDMA_RX_DCB_MAX_DBS),			\
-+	      ALIGN_DOWN(GENMASK(15, 0), FDMA_PCI_DB_ALIGN))
-+
-+#define FDMA_PCI_MAX_MTU						\
-+	(FDMA_PCI_DB_SIZE_MAX - FDMA_OVERHEAD -				\
-+	 (ETH_HLEN + ETH_FCS_LEN))
-+
- #define SE_IDX_QUEUE			0  /* 0-79 : Queue scheduler elements */
- #define SE_IDX_PORT			80 /* 80-89 : Port schedular elements */
+ 	if (old_xdp == new_xdp)
+ 		goto out;
  
 
 -- 
