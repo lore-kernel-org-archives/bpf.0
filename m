@@ -1,30 +1,30 @@
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E376836195B;
-	Mon, 28 Sep 2026 02:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907E13659EB;
+	Mon, 28 Sep 2026 02:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790562098; cv=none; b=b8ND6qEwxtuogdKJXpmlBMx5NYtTWFSjSbUCuP5pgB0NlWK2xWth3XSScpHQrrWq8X9NZzIJEGP6FhBuYMDropYdGJVhfIR+Ni2rbzjvXPX2hdWRXRcij+Np4oyRY5YK4Ji2sb7PE5gbGLHEgfQ7LktFMmt7EVo/ppy5YQBiv/g=
+	t=1790562426; cv=none; b=bEnvZGtWXFgmf4dWlXiBWtMWkZHXEDvdTcFkL+sFf8nOWmvFY2rpnS+m3THR5icsU4mrDIEB+LiAklEUmXJox7i+AFHJDg0h4xfiX5Z84V9bY4Bv6LYCPHYKgqTGQP621yghf5gGNGMJAL8qjyUcGkhjgUpyq3d2Bboi4r2/3W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790562098; c=relaxed/simple;
-	bh=Rs2FBqQifyANYmW9JggxqukmdYoNPAHP6hClmxD3OOk=;
+	s=arc-20240116; t=1790562426; c=relaxed/simple;
+	bh=+IHq2LajwxLmLBH4+t94ISfOlEZHbtgmyo+rg9UBkok=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LnM4l6Sr1Q+8FAWPTeAsioNXdhumxvT6taKBr3A8Bknf8SzUFSqvLGMpFjaH4M9imMgEXC4lr6yTV0gu5G1sP0IkyHxIdbbneLu3BgpSNi0K9Jq55SqS9PJ4vsne5a+9Vum+cLK0Nfn7/QcI6Dc+FqAk14T7a/ih7Pq0SfqkavA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=dl0ARl3R; arc=none smtp.client-ip=115.124.30.98
+	 MIME-Version:Content-Type; b=abtas3TF3RImVovlc1vmo1Ac2eHrRg9a+l0bXz2NbIVL1zL7emgA5whPITOGy++vbDFIrCzUhkpdVnxpSM/GhIpXpSp74r6B/Zj1s0mm6kLUUeHWaSPO+8a1/8oQUyFkXoji2cN2XSEVLiGSDsW3PCBUhWuRfwo6j33DGK98O5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=lw3n/7PB; arc=none smtp.client-ip=115.124.30.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="dl0ARl3R"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="lw3n/7PB"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1790562093; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	bh=X3FxpV9hdjJFYmi4djMcIYOFyHUGcAiMBxxXsjrwS8c=;
-	b=dl0ARl3RPhRMDbyH/NenK/5HNhGhdz526IY+7ki8cXt8gGaCgyA3FcolOoeXNu++DXMu54JVncptSIj6bus6rfswLWzJY8JTTJI1d95NCi7jA5afj1JL86yXWZrkSXJbDDB9AGtHLFgXMnuNoWgXqwR+lF4we2Pp15/7vsmxKqY=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0XBgzgOz_1790562092;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XBgzgOz_1790562092 cluster:ay36)
+	t=1790562411; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	bh=065VVLUzE02OfjnOXMUOzcbAkEzc2W26yXRo/QM7FkE=;
+	b=lw3n/7PBhyjKtJxTar4YlIV2Vof4HdDv9uQIRHRxQ+5prymNgvcSZ9JPO3VQoTpMVHxgEyD5tFxZFe+CXp5zd1S5d2jk/gD1ll2H2c0OabMjBT11H+J54jCYQcAPAlDHnKcVd6Z2reVKGkifHdlaMfWWBjOdfClVSq8TUT3P9L0=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0XBgzgOW_1790562091;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XBgzgOW_1790562091 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Mon, 28 Sep 2026 10:21:32 +0800
+          Mon, 28 Sep 2026 10:21:31 +0800
 From: Chen Pei <cp0613@linux.alibaba.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -47,9 +47,9 @@ Cc: ihor.solodrai@linux.dev,
 	bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Enable gotox tests for riscv64
-Date: Mon, 28 Sep 2026 10:21:09 +0800
-Message-ID: <20260928022109.1093-3-cp0613@linux.alibaba.com>
+Subject: [PATCH bpf-next v2 1/2] bpf, riscv: Add support for indirect jumps
+Date: Mon, 28 Sep 2026 10:21:08 +0800
+Message-ID: <20260928022109.1093-2-cp0613@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260928022109.1093-1-cp0613@linux.alibaba.com>
 References: <20260928022109.1093-1-cp0613@linux.alibaba.com>
@@ -62,11 +62,20 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The riscv64 JIT now supports the gotox instruction and jump tables, so
-run the tests in verifier_gotox.c on riscv64 too, mirroring what was done
-for arm64 and powerpc.
+Implement JIT support for the indirect jump instruction (BPF_JMP |
+BPF_JA | BPF_X), a.k.a. gotox, which lets a BPF program jump through a
+BPF_MAP_TYPE_INSN_ARRAY jump table.
 
-The guard is 64-bit only because the RV32 JIT does not implement gotox.
+Emit "jalr zero, rd, 0" and hand the xlated to jitted offsets to
+bpf_prog_update_insn_ptrs(), which is what fills in the jump table
+entries; without that call the load fails with -EFAULT in
+bpf_insn_array_ready(). ctx->offset[] holds the offset of the insn
+*following* insn i, as bpf_prog_fill_jited_linfo() expects, so it is
+shifted by one and offset[0] comes from the prologue length. build_body()
+now records both halves of a multi-insn record, so no slot keeps a
+fabricated offset.
+
+Only the RV64 JIT is covered; RV32 keeps failing to load as before.
 
 Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
 Reviewed-by: Björn Töpel <bjorn@kernel.org>
@@ -74,34 +83,64 @@ Acked-by: Björn Töpel <bjorn@kernel.org>
 ---
 
 Changes since v1:
-- Collapse the multi-line #endif marker to a single line.
+- Reword the code comment to say "shift ctx->offset[] by one".
 
- tools/testing/selftests/bpf/progs/verifier_gotox.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/riscv/net/bpf_jit_comp64.c |  5 +++++
+ arch/riscv/net/bpf_jit_core.c   | 16 ++++++++++++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-index f5a9878c7b8d..96a9d914930e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-@@ -6,7 +6,9 @@
- #include "bpf_misc.h"
- #include "../../../include/linux/filter.h"
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index ed0a6f871dea..9de3749fb268 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1691,6 +1691,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			emit_zextw(rd, rd, ctx);
+ 		break;
  
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_powerpc)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	defined(__TARGET_ARCH_powerpc) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
++	/* JUMP reg */
++	case BPF_JMP | BPF_JA | BPF_X:
++		emit_jalr(RV_REG_ZERO, rd, 0, ctx);
++		break;
++
+ 	/* JUMP off */
+ 	case BPF_JMP | BPF_JA:
+ 	case BPF_JMP32 | BPF_JA:
+diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+index 470a6ace5662..5265dd5bd39e 100644
+--- a/arch/riscv/net/bpf_jit_core.c
++++ b/arch/riscv/net/bpf_jit_core.c
+@@ -26,10 +26,13 @@ static int build_body(struct rv_jit_context *ctx, bool extra_pass, int *offset)
+ 		int ret;
  
- #define DEFINE_SIMPLE_JUMP_TABLE_PROG(NAME, SRC_REG, OFF, IMM, OUTCOME)	\
- 									\
-@@ -580,6 +582,6 @@ nop_%=:								\
- 	: __clobber_all);
- }
- 
--#endif /* __TARGET_ARCH_x86 || __TARGET_ARCH_arm64 || __TARGET_ARCH_powerpc*/
-+#endif /* gotox: x86, arm64, powerpc, riscv64 */
- 
- char _license[] SEC("license") = "GPL";
+ 		ret = bpf_jit_emit_insn(insn, ctx, extra_pass);
+-		if (ret > 0)
+-			i++; /* skip the next instruction */
+ 		if (offset)
+ 			offset[i] = ctx->ninsns;
++		if (ret > 0) {
++			i++; /* skip the next instruction */
++			if (offset)
++				offset[i] = ctx->ninsns;
++		}
+ 		if (ret < 0)
+ 			return ret;
+ 	}
+@@ -176,6 +179,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 		for (i = 0; i < prog->len; i++)
+ 			ctx->offset[i] = ninsns_rvoff(ctx->offset[i]);
+ 		bpf_prog_fill_jited_linfo(prog, ctx->offset);
++
++		/*
++		 * bpf_prog_update_insn_ptrs() wants the start of each insn, so
++		 * shift ctx->offset[] by one and get insn 0 from the prologue.
++		 */
++		for (i = prog->len - 1; i > 0; i--)
++			ctx->offset[i] = ctx->offset[i - 1];
++		ctx->offset[0] = ninsns_rvoff(ctx->prologue_len);
++		bpf_prog_update_insn_ptrs(prog, ctx->offset, jit_data->ro_image);
+ out_offset:
+ 		kvfree(ctx->offset);
+ 		kfree(jit_data);
 -- 
 2.50.1
 
