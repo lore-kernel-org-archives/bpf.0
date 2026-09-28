@@ -1,146 +1,115 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907E13659EB;
-	Mon, 28 Sep 2026 02:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC211547042
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 02:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790562426; cv=none; b=bEnvZGtWXFgmf4dWlXiBWtMWkZHXEDvdTcFkL+sFf8nOWmvFY2rpnS+m3THR5icsU4mrDIEB+LiAklEUmXJox7i+AFHJDg0h4xfiX5Z84V9bY4Bv6LYCPHYKgqTGQP621yghf5gGNGMJAL8qjyUcGkhjgUpyq3d2Bboi4r2/3W8=
+	t=1790562671; cv=none; b=GPYRwcvMSu2DjXGNRv0H22dOa7MEpgb+ZWu+3bh6mK1YGFckIBUF/d3I4bVAKv4UiRIU8+LqMe+QCSzFRYQPAEA6GQmBChWPipXZK5y/XzUiTpf+UGP9BwKJYv1upJ00qlQIm2Onuk3hcyNk3SlhbltWG1zdwbdCLL+X7kN5Ni0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790562426; c=relaxed/simple;
-	bh=+IHq2LajwxLmLBH4+t94ISfOlEZHbtgmyo+rg9UBkok=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=abtas3TF3RImVovlc1vmo1Ac2eHrRg9a+l0bXz2NbIVL1zL7emgA5whPITOGy++vbDFIrCzUhkpdVnxpSM/GhIpXpSp74r6B/Zj1s0mm6kLUUeHWaSPO+8a1/8oQUyFkXoji2cN2XSEVLiGSDsW3PCBUhWuRfwo6j33DGK98O5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=lw3n/7PB; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1790562671; c=relaxed/simple;
+	bh=xMBrgwZ8XfaBdx+x2Nhe/6MDtWFFoDxUWCqOzhR3AXY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FjhvcghTAqn48ggs9mfkqE4HSYv9BjXKybs3oEUrO02WOFtTr0Z40sbPyskpZAyX3CcV9QkML4InkemLdK++ZK5Y6aXR+YZALO/eKi2xKwM0X8+dA6IH05OgwLy9oYCG9UG4wsgx/gg+O6DpBGFPS6C0ILUayEfmnfW4StBqv9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPxxBjdw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="lw3n/7PB"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1790562411; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	bh=065VVLUzE02OfjnOXMUOzcbAkEzc2W26yXRo/QM7FkE=;
-	b=lw3n/7PBhyjKtJxTar4YlIV2Vof4HdDv9uQIRHRxQ+5prymNgvcSZ9JPO3VQoTpMVHxgEyD5tFxZFe+CXp5zd1S5d2jk/gD1ll2H2c0OabMjBT11H+J54jCYQcAPAlDHnKcVd6Z2reVKGkifHdlaMfWWBjOdfClVSq8TUT3P9L0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0XBgzgOW_1790562091;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XBgzgOW_1790562091 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 28 Sep 2026 10:21:31 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	pulehui@huawei.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	shuah@kernel.org,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] bpf, riscv: Add support for indirect jumps
-Date: Mon, 28 Sep 2026 10:21:08 +0800
-Message-ID: <20260928022109.1093-2-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260928022109.1093-1-cp0613@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPxxBjdw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C1B21F000FF;
+	Mon, 28 Sep 2026 02:31:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790562669;
+	bh=ZIn4ssKudH70BFWwq9d8UDnW3c+Qxz1fmXpvWfY4eRQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VPxxBjdw8yS/RUq+5z+kKwi9TeLa5BBDdq1H+KoWRu+O/n1NNfywj8nrMYDNT51p/
+	 erAx/a1jAYg+iuDIRcjrty98nMVKm4tKfXFNa15xdWUMEHeAQdPblGu5tJJVg2+AYn
+	 2sp52yt7+ai7R2KlupG/OjwuKdhhHfYdG8GWQL//by9z84SfTuZOAbVIh7LEgfwrvJ
+	 RDl+Uz78zW2t398SRCVEP51dkpZTGTjZGQxzR9xW+R49kekMeu2r8dWTMwsl8v02p1
+	 mRh1eH3voUdqze4V63kv/wafCrt04rzdDgK6ctGX8k2Q7W3SDisvGDYgrh5Pyv1a3m
+	 q0lwfKyI26WXw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Enable gotox tests for
+ riscv64
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Chen Pei" <cp0613@linux.alibaba.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260928022109.1093-3-cp0613@linux.alibaba.com>
 References: <20260928022109.1093-1-cp0613@linux.alibaba.com>
+ <20260928022109.1093-3-cp0613@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 28 Sep 2026 02:31:08 +0000
+Message-Id: <20260928023109.5C1B21F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Implement JIT support for the indirect jump instruction (BPF_JMP |
-BPF_JA | BPF_X), a.k.a. gotox, which lets a BPF program jump through a
-BPF_MAP_TYPE_INSN_ARRAY jump table.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: missing architecture guards for riscv64 gotox tests
+--
 
-Emit "jalr zero, rd, 0" and hand the xlated to jitted offsets to
-bpf_prog_update_insn_ptrs(), which is what fills in the jump table
-entries; without that call the load fails with -EFAULT in
-bpf_insn_array_ready(). ctx->offset[] holds the offset of the insn
-*following* insn i, as bpf_prog_fill_jited_linfo() expects, so it is
-shifted by one and offset[0] comes from the prologue length. build_body()
-now records both halves of a multi-insn record, so no slot keeps a
-fabricated offset.
+commit 1d33b2e23d145afdb7fdcec7bed2452e5b940956
+Author: Chen Pei <cp0613@linux.alibaba.com>
 
-Only the RV64 JIT is covered; RV32 keeps failing to load as before.
+selftests/bpf: Enable gotox tests for riscv64
 
-Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-Reviewed-by: Björn Töpel <bjorn@kernel.org>
-Acked-by: Björn Töpel <bjorn@kernel.org>
----
+This commit adds riscv64 to the architecture whitelist in verifier_gotox.c
+because the JIT now supports the gotox instruction and jump tables.
 
-Changes since v1:
-- Reword the code comment to say "shift ctx->offset[] by one".
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/t=
+esting/selftests/bpf/progs/verifier_gotox.c
+> index f5a9878c7b8d4..96a9d914930ee 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> @@ -6,7 +6,9 @@
+>  #include "bpf_misc.h"
+>  #include "../../../include/linux/filter.h"
+> =20
+> -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || define=
+d(__TARGET_ARCH_powerpc)
+> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
+> +	defined(__TARGET_ARCH_powerpc) || \
+> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen =3D=3D 64)
 
- arch/riscv/net/bpf_jit_comp64.c |  5 +++++
- arch/riscv/net/bpf_jit_core.c   | 16 ++++++++++++++--
- 2 files changed, 19 insertions(+), 2 deletions(-)
+[Severity: Low]
+Are there other files that need their architecture guards updated for riscv=
+64
+gotox tests to prevent a regression in test coverage?
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index ed0a6f871dea..9de3749fb268 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1691,6 +1691,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_zextw(rd, rd, ctx);
- 		break;
- 
-+	/* JUMP reg */
-+	case BPF_JMP | BPF_JA | BPF_X:
-+		emit_jalr(RV_REG_ZERO, rd, 0, ctx);
-+		break;
-+
- 	/* JUMP off */
- 	case BPF_JMP | BPF_JA:
- 	case BPF_JMP32 | BPF_JA:
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index 470a6ace5662..5265dd5bd39e 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -26,10 +26,13 @@ static int build_body(struct rv_jit_context *ctx, bool extra_pass, int *offset)
- 		int ret;
- 
- 		ret = bpf_jit_emit_insn(insn, ctx, extra_pass);
--		if (ret > 0)
--			i++; /* skip the next instruction */
- 		if (offset)
- 			offset[i] = ctx->ninsns;
-+		if (ret > 0) {
-+			i++; /* skip the next instruction */
-+			if (offset)
-+				offset[i] = ctx->ninsns;
-+		}
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -176,6 +179,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 		for (i = 0; i < prog->len; i++)
- 			ctx->offset[i] = ninsns_rvoff(ctx->offset[i]);
- 		bpf_prog_fill_jited_linfo(prog, ctx->offset);
-+
-+		/*
-+		 * bpf_prog_update_insn_ptrs() wants the start of each insn, so
-+		 * shift ctx->offset[] by one and get insn 0 from the prologue.
-+		 */
-+		for (i = prog->len - 1; i > 0; i--)
-+			ctx->offset[i] = ctx->offset[i - 1];
-+		ctx->offset[0] = ninsns_rvoff(ctx->prologue_len);
-+		bpf_prog_update_insn_ptrs(prog, ctx->offset, jit_data->ro_image);
- out_offset:
- 		kvfree(ctx->offset);
- 		kfree(jit_data);
--- 
-2.50.1
+For example, tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c has:
 
+#if defined(__x86_64__) || defined(__powerpc__) || defined(__aarch64__)
+static int map_create(__u32 map_type, __u32 max_entries)
+{
+    ...
+
+This skips the bpf_insn_array test suite on riscv64, which heavily exercises
+the gotox jump table logic.
+
+Similarly, tools/testing/selftests/bpf/progs/compute_live_registers.c has:
+
+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+
+SEC("socket")
+__log_level(2)
+__msg("2: .1........ (07) r1 +=3D 8")
+__msg("3: .1........ (79) r2 =3D *(u64 *)(r1 +0)")
+__msg("4: ..2....... (b7) r3 =3D 1")
+__msg("5: ..23...... (b7) r4 =3D 2")
+__msg("6: ..234..... (0d) gotox r2")
+...
+
+This prevents the gotox liveness tracking tests from being compiled and run
+on riscv64.
+
+Should these architecture guards also be updated to ensure comprehensive te=
+st
+coverage for the newly introduced JIT feature on riscv64?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928022109.1093=
+-1-cp0613@linux.alibaba.com?part=3D2
