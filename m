@@ -1,69 +1,69 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
+Received: from mail-ed2-f35.google.com (mail-ed2-f35.google.com [74.125.228.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127A04AEBE5
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227F44AF17E
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790595634; cv=none; b=V49MdYDFAAgxt9pvJisU3mMEafI13EM0CHn9tDPu7YneAVq+WhKiXp5fv6oiAhySC9TdzVihY6JifxgIqkPS479TcmOMvo/XJXTQq2zWIueP1iDN9gQ/YnyilLb8dTMKzmCiPuG3zSKozWb8Ar+wvkoiQf6lc4npAUFd1aNV2Bo=
+	t=1790595635; cv=none; b=L373nic7lkhkPXX59hbvdw6LySmt/yyKVHkdVWhc3//IC95bYVUkJugGzD0VLWz5UqYFsXAgylcNvU7pgRPslGEbxn2m6t/F6ZLIXoOmPdP9MTdr62QPNZcDyjDVTgTB5uiKBymqbVpOTA6H1Aj/Hek02mW/vGDBW92qQxXr09s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790595634; c=relaxed/simple;
-	bh=rgstUqMT4KZ0czW9meFMULds8Vo4NDqrHrPJMCwUK/o=;
+	s=arc-20240116; t=1790595635; c=relaxed/simple;
+	bh=g6EVWnm52NHn3HVCEViqVgeLHHPOgD9nrXiavo+aWv4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=k/Dfn6ZZXQlJ5aJ+O56HO6YWorgaAs0C2YXZyN+UZwvHlS6Lo92Qp8FWD4X+wNWlz5XB5JFAdOfpzvW+LT3bYrrwC90OR0sn4gQZWRKswcjozKnrsZjv6aY0dBZG7udNNLZZ5RXAqTZyG/e9Lt6+4QyaHlnpuDsGbB4ro86F874=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=N8lSzttV; arc=none smtp.client-ip=74.125.228.76
+	 In-Reply-To:To:Cc; b=QpbvKlcM9fXDtFIcx7H7kgh0PKpzhoB0Cr1szJJ2jtxNqzKSCs6w2XpMYQa7QSy0Tg6sd+cqkr3vy84aiR6IIc1epMtbWI9+9w8Y4Kh2PByFzOm01nOkXCKmmIPBsO108ZqKZOFmyq5Uyj9EuorAZpXZ+7BdKKTQG6HegNV+Z0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Ni9ARtre; arc=none smtp.client-ip=74.125.228.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="N8lSzttV"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a605c198fdso4586586a12.2
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 04:40:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Ni9ARtre"
+Received: by mail-ed2-f35.google.com with SMTP id 4fb4d7f45d1cf-6aaeeacce15so4040522a12.1
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 04:40:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1790595630; x=1791200430; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1790595631; x=1791200431; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zvZ48sAxF/8N/0BbFvVBsZDDiPIt+ro9tL/tJPEMiuA=;
-        b=N8lSzttV5fInR/UjbHAW/d1ixCITcD6fgsRmEP1eIGA+tMrAUun6/3A4Oa7KzhlQ8C
-         AkKeKhykhHsYuUg6NWCclYiDNlguZa9MmBY3+nIwLUyG0xOQV2b1VE0aIsl0LL8jgmie
-         YAAUsawb+zAyO8kF8TRH8rf/WZqfT40+yc1PXkMEfY+NOQOrI++Nqurjbep87VT/l5Wv
-         QgUUTwvw5bAZr9axjye9XEeMxLu8iUzleZLdo8cX6WGSwRxW9Jnhi6FP5dOruz2q/hr6
-         v46B6ZZOrtHwUslKIvpl/5YEO7mSBrZujlHuKvFsXp72C8gIew98G8nDiY0zO/ZQxF2m
-         HtWg==
+        bh=M5+H6FPF3XGvaw9tYBI8EyPTLFuYfrRv5EG1kCVWTG4=;
+        b=Ni9ARtreRcYIwwiQ9Un6yT9296aUYrvZGUN69j8ZSWZ5H5iISZim001RVBmcDpOblH
+         TgibZApmnKMnioqM9jacxGysZ1h3rYuYCo7e/PU12BAltpHh97BhV5CnWK/M4S5fCp/D
+         aKmbWpI7exLpqiDLK0YOQ6O7V4MiUm4qJcBhHiXuwNzHF1AsHGit7p02ueKHdgBxhTxr
+         JfIeD0isXeapV71K4RaADIpawWkKvWEFGPLgQtxncV8+3Zf2RxgNrPEsUeaaT6y5t7wz
+         mAk7ucYp/qct7usG/FWoJOkw73bWsPwvOo/3K2xWb+l6gbI6FufLj/5s3UlN5Qj1aU42
+         +B0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790595630; x=1791200430;
+        d=1e100.net; s=20260707; t=1790595631; x=1791200431;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zvZ48sAxF/8N/0BbFvVBsZDDiPIt+ro9tL/tJPEMiuA=;
-        b=VHQAaNqacNdeyrb1X/pn9R5ABRVu/xpaWDtBeqwnzrt8QtepYG9CW5n0pZcPe7a7Ko
-         esZDa5y4z3F/ZFSU0mt+TMeHWoZDryXg9XXLgRCLugBQHwlSXQD7+q4l3XeKF6BK+JLk
-         vB3Ngc035yj6xtSOJM24Fdpkhj1uvKIyforw+3EIsG6D4zdH60quWtIGpN6VhTlXcC7J
-         3QHvya7S0bU32dKSjovipZSxwumotsxnxHIsSQm8n2AQjOnrY/4qAlBSA0egyx/IzgAu
-         Ey57oLHxbclNJwuZtvZ73H2ZuDLmgYsMo9SvL36hpypROsRV4SBz0IzXN4SneGp9v1Zb
-         Q7mA==
-X-Gm-Message-State: AFuF++koRlPQTCZwmOXQOAvyS+el0gOqHW0p50PYuqVt4H2jda4lXxC0
-	WHPtspmwjlvU8bXzPWFdDtZehGjaT4kOwb7eABw+0MqmcPh4Oe5ITs6sBY9Fyw9A85k=
-X-Gm-Gg: AYBFou2V5x7hRY4oGmaK2xUnKPJRtL34W6cWfI5zp7jgOAHKdZWi5JFSQN4zFnkM2Yk
-	+fNqyVg51cgpGVLtjoikqNRectLSkMUswpI0rwAtO3yHwrlJhPPqcAPi/VFKCUJkCZ2yMnJNnm6
-	6Y7wfftIeDhcKWJYq5/K+VnCnFutlZcw2bjXNy494aZ7n7zCfkzWssKHOQ3nYR/cjrKXrWHcCJX
-	Ge+gGm5s6pCigUEwBmlx8IY5sxQZcOuWc2GDJSLnoRYHhONW49gtOd0iZJ+NSXxTbj85KXPXOnj
-	v79MfKnRS+ggKfNT7A0WPuLHLBxIRKMbZ50TyJhG6PL/hIE23uUFs6ypVoMU1atrQT/Ul2BrlFG
-	OjQPyMSZY9ciLrizbgTU/BHRtEBWuig5285cRDhG90qcVmkVOtaczUw0D8rF0ec0txDkohOnNoG
-	NgyKCO+Xf9MUwRBs0K4x2JrR5MUtYLIcPGZ38DQKd5MspLeIhYA5MXztj+P+N7cVOsm/uwawmZU
-	ddnHXOkNulB2xde2Qg7kP4iitvUBkmU+yTtCJGR4nbWHS+2eb6CF0Ms6S6NCgD/VPc93fm3uxeV
-	I5OO2rmUHqa2
-X-Received: by 2002:a17:907:c602:20b0:c2a:fcf5:c6b4 with SMTP id a640c23a62f3a-c2afcf5f0b1mr400518266b.49.1790595630108;
-        Mon, 28 Sep 2026 04:40:30 -0700 (PDT)
+        bh=M5+H6FPF3XGvaw9tYBI8EyPTLFuYfrRv5EG1kCVWTG4=;
+        b=osSaFOG3LwBPldLNgiomB6VboYChguJQAXOgXVIsPGoBJjsssZ2Lzz7mLo1XLFJcw8
+         QbTDAJXtxDHUwTP/RnQa9M5uCvvY9lapYxuQPH2E/fv/QhvKJErhl82cpWrvPSM3+ZdI
+         6VDtngQXJOZAOhHgbBMXfHpno8jjBuWO9C0dmB0F7RFXv3CZhF+V6uL+ccsNEBJp2cJN
+         riChtoBQqML20B3QndaCvnlPKNBEGoleQIuMUIWSXd42CkDFqeV5NteCsrkLr3vbysFj
+         sf6iRiATwP6KqDoBjE7xN9zr/Bwn0RomxUJ3weUL6CXiIa+HLQ87QqPeuxU52Ni2J0MF
+         6bjA==
+X-Gm-Message-State: AFuF++loUj1ou3c9JH0HtI/oyYnOq52bbay53Mk27eitJGSR1Q0SDEWM
+	rUwyAfOrBzoEIgWEOUT21DBrqfpvMzak2bR2WdbAHQJ3qGGpOOfkHBdSNV28GW9x+IQ=
+X-Gm-Gg: AYBFou0bA9xhpcWisxZWl0JqC6Y9LIki5R2L04x75pXUAXqkxMcILdjC5ipmXOYtiLv
+	+qnrBP1+uGfBct1yFB1l8mrXKgdWhZt0iQUUYpmyAHkxcuIKKyPmv/Lr04wcN6t3pBa8jrbnsqq
+	pjLkiQGBlqrAVR15AiZ1FB4TMf9NVA1bq86hviVBGiYgR8ftVynhAeDzj36cLmInoE1+QDy3bjJ
+	Ahm/pexizazkkuSkrQThow4iQOGuPyfQlw+eK7WnZhaosvPnXAEpFCvLlI9e+T3iqzNIUnX5wCW
+	noLlRV63tOl7Fl1rewniTeg4oE1W6bMaPurPE3HD8gMEP6cueGz+tsQEwXy+/k3Ntm7IWCbnwId
+	DNqHiWUhm/q7gWrMCiQjPed76G1NeSf3wpqP0NPhXb8hYsNw2WqNpg1hko00ZuDpBKMuo3fhisf
+	bcp87QI2yVsnwBlAe1HjmkXR9c3fdfSdag8oZQQeSVKKiuMpDDlbP6zVwF+o9nO1v0AZKcMn7Lv
+	gt5EUOTVVZ5nf7TBhKPgBG4MHZz8qoPr7lOFUt9G98OkedO4TwsTWVsH3nPOQQhVTC9d4A7hwq3
+	0VCixcPWeKfm
+X-Received: by 2002:a17:906:f588:b0:c26:1648:a065 with SMTP id a640c23a62f3a-c2ac24ba0demr1120420366b.32.1790595631333;
+        Mon, 28 Sep 2026 04:40:31 -0700 (PDT)
 Received: from cloudflare.com (2a01-110f-491b-1300-c0dd-2af4-566b-b23f.aa.ipv6.supernova.orange.pl. [2a01:110f:491b:1300:c0dd:2af4:566b:b23f])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2dc70bb213sm218313666b.43.2026.09.28.04.40.29
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2dbd3bcac3sm257134666b.73.2026.09.28.04.40.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 04:40:29 -0700 (PDT)
+        Mon, 28 Sep 2026 04:40:30 -0700 (PDT)
 From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Mon, 28 Sep 2026 13:40:22 +0200
-Subject: [PATCH net-next 05/15] selftests/bpf: Basic tests for metadata
- passing with gated skb tracepoints
+Date: Mon, 28 Sep 2026 13:40:23 +0200
+Subject: [PATCH net-next 06/15] selftests/bpf: Test passing metadata across
+ veth and GRE
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260928-bpf-meta-gated-tracepoints-v1-5-844dbf3e1edf@cloudflare.com>
+Message-Id: <20260928-bpf-meta-gated-tracepoints-v1-6-844dbf3e1edf@cloudflare.com>
 References: <20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com>
 In-Reply-To: <20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com>
 To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -91,345 +91,226 @@ Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 X-Mailer: b4 0.16.0
 
-Cover metadata passing where test programs stash per-packet metadata in a
-hash map (meta_map) keyed by the skb address, tag packets as traced with
-bpf_trace_skb(), propagate entries from the tp_btf/skb_copy tracepoint, and
-reclaim them from the raw_tp/skb_free tracepoint:
+Stash metadata at TC egress and read it back at TC ingress after the packet
+crosses device boundaries, relying on the gated skb tracepoints to reclaim
+the stash once the packet is freed:
 
-- write_read: stash metadata at tap ingress, read it back on the same hook
-  after a device round trip, and verify the free tracepoint drained the
-  meta_map
-- clone_read: metadata stashed at tap ingress is readable from a mirred
-  clone (tc mirror to a dummy device) - the copy tracepoint propagates the
-  entry to the clone, and the free tracepoint reaps both
+- survives_veth: veth forwarding between two netns
+- survives_gre: GRE encap/decap between two gretap endpoints over loopback
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- tools/testing/selftests/bpf/config                 |   2 +
- .../bpf/prog_tests/xdp_context_test_run.c          | 165 ++++++++++++++++++++-
- tools/testing/selftests/bpf/progs/test_xdp_meta.c  |  83 +++++++++++
- 3 files changed, 245 insertions(+), 5 deletions(-)
+ .../bpf/prog_tests/xdp_context_test_run.c          | 190 +++++++++++++++++++++
+ 1 file changed, 190 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index ea7044f30adc..692909b28d3a 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -7,6 +7,7 @@ CONFIG_BPF_JIT=y
- CONFIG_BPF_KPROBE_OVERRIDE=y
- CONFIG_BPF_LIRC_MODE2=y
- CONFIG_BPF_LSM=y
-+CONFIG_SKB_GATED_TRACEPOINTS=y
- CONFIG_BPF_STREAM_PARSER=y
- CONFIG_BPF_SYSCALL=y
- # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
-@@ -136,3 +137,4 @@ CONFIG_SMC_HS_CTRL_BPF=y
- CONFIG_DIBS=y
- CONFIG_DIBS_LO=y
- CONFIG_PM_WAKELOCKS=y
-+CONFIG_NET_SCH_NETEM=y
 diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index 448807676176..c9b115c14acb 100644
+index c9b115c14acb..1155e868ffbd 100644
 --- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
 +++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -16,6 +16,7 @@
- #define DUMMY_NAME "dum0"
- #define TAP_NETNS "xdp_context_tuntap"
- #define LWT_NETNS "xdp_context_lwt"
-+#define SKB_TRACE_NETNS "skb_trace_tuntap"
- 
- #define TEST_PAYLOAD_LEN 32
- static const __u8 test_payload[TEST_PAYLOAD_LEN] = {
-@@ -331,10 +332,11 @@ void test_xdp_context_veth(void)
- 	netns_free(tx_ns);
- }
- 
--static void test_tuntap(struct bpf_program *xdp_prog,
--			struct bpf_program *tc_prio_1_prog,
--			struct bpf_program *tc_prio_2_prog,
--			bool *test_pass)
-+static void __test_tuntap(const char *nsname,
-+			  struct bpf_program *xdp_prog,
-+			  struct bpf_program *tc_prio_1_prog,
-+			  struct bpf_program *tc_prio_2_prog,
-+			  bool *test_pass)
- {
- 	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
- 	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-@@ -345,7 +347,7 @@ static void test_tuntap(struct bpf_program *xdp_prog,
- 
- 	*test_pass = false;
- 
--	ns = netns_new(TAP_NETNS, true);
-+	ns = netns_new(nsname, true);
- 	if (!ASSERT_OK_PTR(ns, "create and open ns"))
- 		return;
- 
-@@ -396,6 +398,15 @@ static void test_tuntap(struct bpf_program *xdp_prog,
+@@ -833,6 +833,192 @@ static void test_skb_trace__mirred_clone(struct test_xdp_meta *skel)
  	netns_free(ns);
  }
  
-+static void test_tuntap(struct bpf_program *xdp_prog,
-+			struct bpf_program *tc_prio_1_prog,
-+			struct bpf_program *tc_prio_2_prog,
-+			bool *test_pass)
++/* Test if skb_ext survives veth cross-netns forward */
++static void test_skb_trace__veth(struct test_xdp_meta *skel)
 +{
-+	__test_tuntap(TAP_NETNS, xdp_prog, tc_prio_1_prog, tc_prio_2_prog,
-+		      test_pass);
-+}
-+
- /* Write a packet to a tap dev and copy it to ingress of a dummy dev */
- static void test_tuntap_mirred(struct bpf_program *xdp_prog,
- 			       struct bpf_program *tc_prog,
-@@ -693,3 +704,147 @@ void test_xdp_context_lwt_encap(void)
- 
- 	test_xdp_meta__destroy(skel);
- }
-+
-+/* Assert that the free tracepoint prog drained the metadata stash */
-+static void assert_meta_stash_empty(struct bpf_map *meta_map)
-+{
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+
-+	if (!ASSERT_OK(bpf_map_get_info_by_fd(bpf_map__fd(meta_map), &info,
-+					      &info_len),
-+		       "get_info"))
-+		return;
-+
-+	ASSERT_EQ(info.map_extra, 0, "meta_map not empty");
-+}
-+
-+static void test_skb_trace__tuntap(struct test_xdp_meta *skel)
-+{
-+	struct bpf_link *link;
-+
-+	skel->bss->free_count = 0;
-+
-+	link = bpf_program__attach(skel->progs.skb_free);
-+	if (!ASSERT_OK_PTR(link, "prog_attach"))
-+		return;
-+
-+	__test_tuntap(SKB_TRACE_NETNS, NULL /* xdp */, skel->progs.tc_meta_write,
-+		      skel->progs.tc_meta_read, &skel->bss->test_pass);
-+
-+	ASSERT_GE(skel->bss->free_count, 1, "free_count");
-+	assert_meta_stash_empty(skel->maps.meta_map);
-+
-+	bpf_link__destroy(link);
-+}
-+
-+/*
-+ * Test if stashed metadata survives skb clone (via tc mirred).
-+ * tap_prog writes on the tap ingress, dummy_prog runs on the clone
-+ * (dummy ingress).
-+ */
-+static void test_skb_trace__mirred_clone(struct test_xdp_meta *skel)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct bpf_link *put_link = NULL, *copy_link = NULL;
-+	struct netns_obj *ns = NULL;
-+	int dummy_ifindex;
-+	int tap_ifindex;
-+	int tap_fd = -1;
++	LIBBPF_OPTS(bpf_tc_hook, tx_hook, .attach_point = BPF_TC_EGRESS);
++	LIBBPF_OPTS(bpf_tc_opts, tx_opts, .handle = 1, .priority = 1);
++	LIBBPF_OPTS(bpf_tc_hook, rx_hook, .attach_point = BPF_TC_INGRESS);
++	LIBBPF_OPTS(bpf_tc_opts, rx_opts, .handle = 1, .priority = 1);
++	struct netns_obj *rx_ns = NULL, *tx_ns = NULL;
++	struct bpf_link *put_link = NULL;
++	struct nstoken *nstoken = NULL;
++	int rx_ifindex, tx_ifindex;
 +	int ret;
-+
-+	skel->bss->write_done = false;
-+	skel->bss->test_pass = false;
-+	skel->bss->free_count = 0;
-+	skel->bss->copy_done = false;
++	int i;
 +
 +	put_link = bpf_program__attach(skel->progs.skb_free);
 +	if (!ASSERT_OK_PTR(put_link, "put_attach"))
 +		return;
 +
-+	copy_link = bpf_program__attach(skel->progs.skb_copy);
-+	if (!ASSERT_OK_PTR(copy_link, "copy_attach"))
++	tx_ns = netns_new(TX_NETNS, false);
++	if (!ASSERT_OK_PTR(tx_ns, "create tx_ns"))
 +		goto close;
 +
-+	ns = netns_new("mirred_clone", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
++	rx_ns = netns_new(RX_NETNS, false);
++	if (!ASSERT_OK_PTR(rx_ns, "create rx_ns"))
 +		goto close;
 +
-+	/* Dummy dev: attach reader */
-+	SYS(close, "ip link add name " DUMMY_NAME " type dummy");
-+	SYS(close, "ip link set dev " DUMMY_NAME " up");
++	SYS(close, "ip link add " RX_NAME " netns " RX_NETNS
++	    " type veth peer name " TX_NAME " netns " TX_NETNS);
 +
-+	dummy_ifindex = if_nametoindex(DUMMY_NAME);
-+	if (!ASSERT_GT(dummy_ifindex, 0, "dummy_ifindex"))
++	/* Setup RX side: TC ingress reader */
++	nstoken = open_netns(RX_NETNS);
++	if (!ASSERT_OK_PTR(nstoken, "setns rx_ns"))
 +		goto close;
 +
-+	tc_hook.ifindex = dummy_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "dummy_hook_create"))
++	SYS(close, "ip link set dev " RX_NAME " up");
++
++	rx_ifindex = if_nametoindex(RX_NAME);
++	if (!ASSERT_GT(rx_ifindex, 0, "if_nametoindex rx"))
 +		goto close;
 +
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_read);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "dummy_attach"))
++	rx_hook.ifindex = rx_ifindex;
++	ret = bpf_tc_hook_create(&rx_hook);
++	if (!ASSERT_OK(ret, "bpf_tc_hook_create rx"))
 +		goto close;
 +
-+	/* TAP dev: attach writer + mirred to dummy */
-+	tap_fd = open_tuntap(TAP_NAME, true);
-+	if (!ASSERT_GE(tap_fd, 0, "open_tuntap"))
++	rx_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_read);
++	ret = bpf_tc_attach(&rx_hook, &rx_opts);
++	if (!ASSERT_OK(ret, "bpf_tc_attach rx"))
 +		goto close;
 +
-+	SYS(close, "ip link set dev " TAP_NAME " up");
++	close_netns(nstoken);
 +
-+	tap_ifindex = if_nametoindex(TAP_NAME);
-+	if (!ASSERT_GT(tap_ifindex, 0, "tap_ifindex"))
++	/* Setup TX side: TC egress writer */
++	nstoken = open_netns(TX_NETNS);
++	if (!ASSERT_OK_PTR(nstoken, "setns tx_ns"))
 +		goto close;
 +
-+	tc_hook.ifindex = tap_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "tap_hook_create"))
++	SYS(close, "ip link set dev " TX_NAME " up");
++
++	tx_ifindex = if_nametoindex(TX_NAME);
++	if (!ASSERT_GT(tx_ifindex, 0, "if_nametoindex tx"))
 +		goto close;
 +
-+	tc_opts.prog_id = 0;
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_write);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "tap_attach"))
++	tx_hook.ifindex = tx_ifindex;
++	ret = bpf_tc_hook_create(&tx_hook);
++	if (!ASSERT_OK(ret, "bpf_tc_hook_create tx"))
 +		goto close;
 +
-+	SYS(close, "tc filter add dev " TAP_NAME " ingress "
-+		   "protocol all matchall "
-+		   "action mirred ingress mirror dev " DUMMY_NAME);
-+
-+	ret = write_test_packet(tap_fd);
-+	if (!ASSERT_OK(ret, "write_test_packet"))
++	tx_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_write);
++	ret = bpf_tc_attach(&tx_hook, &tx_opts);
++	if (!ASSERT_OK(ret, "bpf_tc_attach tx"))
 +		goto close;
 +
-+	ASSERT_TRUE(skel->bss->write_done, "write_done");
++	skel->bss->test_pass = false;
++	skel->bss->free_count = 0;
++
++	ret = send_test_packet(tx_ifindex);
++	if (!ASSERT_OK(ret, "send_test_packet"))
++		goto close;
++
++	/* Poll every 10 msec up to 1 sec */
++	for (i = 0; i < 100 && !skel->bss->test_pass; i++)
++		usleep(10000);
 +	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
-+	ASSERT_TRUE(skel->bss->copy_done, "copy_done");
-+	ASSERT_GE(skel->bss->free_count, 2, "free_count");
++
++	/* Skb is freed after RX delivery; wait for free tp */
++	for (i = 0; i < 100 && !skel->bss->free_count; i++)
++		usleep(10000);
++	ASSERT_GE(skel->bss->free_count, 1, "free_count");
++
 +	assert_meta_stash_empty(skel->maps.meta_map);
 +
 +close:
-+	bpf_link__destroy(copy_link);
 +	bpf_link__destroy(put_link);
-+	if (tap_fd >= 0)
-+		close(tap_fd);
++	close_netns(nstoken);
++	netns_free(rx_ns);
++	netns_free(tx_ns);
++}
++
++/* Test if skb_ext survives GRE tunnel encap+decap */
++static void test_skb_trace__gre(struct test_xdp_meta *skel)
++{
++	LIBBPF_OPTS(bpf_tc_hook, tx_hook, .attach_point = BPF_TC_EGRESS);
++	LIBBPF_OPTS(bpf_tc_opts, tx_opts, .handle = 1, .priority = 1);
++	LIBBPF_OPTS(bpf_tc_hook, rx_hook, .attach_point = BPF_TC_INGRESS);
++	LIBBPF_OPTS(bpf_tc_opts, rx_opts, .handle = 1, .priority = 1);
++	struct bpf_link *put_link = NULL;
++	struct netns_obj *ns = NULL;
++	int tx_ifindex;
++	int rx_ifindex;
++	int ret;
++	int i;
++
++	put_link = bpf_program__attach(skel->progs.skb_free);
++	if (!ASSERT_OK_PTR(put_link, "put_attach"))
++		return;
++
++	ns = netns_new("gre_test", true);
++	if (!ASSERT_OK_PTR(ns, "netns_new"))
++		goto close;
++
++	/* Setup: gre_tx -> lo -> gre_rx */
++	SYS(close, "ip link set lo up");
++	SYS(close, "ip link add gre_tx type gretap"
++	    " local 127.0.0.1 remote 127.0.0.2");
++	SYS(close, "ip link set gre_tx up");
++	SYS(close, "ip addr add 127.0.0.2/8 dev lo");
++	SYS(close, "ip link add gre_rx type gretap"
++	    " local 127.0.0.2 remote 127.0.0.1");
++	SYS(close, "ip link set gre_rx up");
++
++	/* Write skb_ext on TC egress on GRE tx */
++	tx_ifindex = if_nametoindex("gre_tx");
++	if (!ASSERT_GT(tx_ifindex, 0, "tx_ifindex"))
++		goto close;
++
++	tx_hook.ifindex = tx_ifindex;
++	ret = bpf_tc_hook_create(&tx_hook);
++	if (!ASSERT_OK(ret, "tx_hook_create"))
++		goto close;
++
++	tx_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_write);
++	ret = bpf_tc_attach(&tx_hook, &tx_opts);
++	if (!ASSERT_OK(ret, "tx_attach"))
++		goto close;
++
++	/* Read skb_ext on TC ingress on GRE rx */
++	rx_ifindex = if_nametoindex("gre_rx");
++	if (!ASSERT_GT(rx_ifindex, 0, "rx_ifindex"))
++		goto close;
++
++	rx_hook.ifindex = rx_ifindex;
++	ret = bpf_tc_hook_create(&rx_hook);
++	if (!ASSERT_OK(ret, "rx_hook_create"))
++		goto close;
++
++	rx_opts.prog_fd = bpf_program__fd(skel->progs.tc_meta_read);
++	ret = bpf_tc_attach(&rx_hook, &rx_opts);
++	if (!ASSERT_OK(ret, "rx_attach"))
++		goto close;
++
++	/* Then use send_test_packet on GRE tx */
++	skel->bss->test_pass = false;
++	skel->bss->free_count = 0;
++
++	ret = send_test_packet(tx_ifindex);
++	if (!ASSERT_OK(ret, "send_test_packet"))
++		goto close;
++
++	/* Poll every 10 msec up to 1 sec */
++	for (i = 0; i < 100 && !skel->bss->test_pass; i++)
++		usleep(10000);
++	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
++
++	/* Skb is freed after RX delivery; wait for free tp */
++	for (i = 0; i < 100 && !skel->bss->free_count; i++)
++		usleep(10000);
++	ASSERT_GE(skel->bss->free_count, 1, "free_count");
++
++	assert_meta_stash_empty(skel->maps.meta_map);
++
++close:
++	bpf_link__destroy(put_link);
 +	netns_free(ns);
 +}
 +
-+void test_skb_trace_basic(void)
-+{
-+	struct test_xdp_meta *skel = NULL;
-+
-+	skel = test_xdp_meta__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
-+		return;
-+
-+	if (test__start_subtest("write_read"))
-+		test_skb_trace__tuntap(skel);
-+	if (test__start_subtest("clone_read"))
-+		test_skb_trace__mirred_clone(skel);
-+
-+	test_xdp_meta__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-index 08b03be0b891..35a2c0e6ccb0 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-@@ -3,9 +3,11 @@
+ void test_skb_trace_basic(void)
+ {
+ 	struct test_xdp_meta *skel = NULL;
+@@ -845,6 +1031,10 @@ void test_skb_trace_basic(void)
+ 		test_skb_trace__tuntap(skel);
+ 	if (test__start_subtest("clone_read"))
+ 		test_skb_trace__mirred_clone(skel);
++	if (test__start_subtest("survives_veth"))
++		test_skb_trace__veth(skel);
++	if (test__start_subtest("survives_gre"))
++		test_skb_trace__gre(skel);
  
- #include <bpf/bpf_endian.h>
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
- #include <errno.h>
- 
- #include "bpf_kfuncs.h"
-+#include "bpf_misc.h"
- #include "bpf_tracing_net.h"
- 
- #define META_SIZE 32
-@@ -689,4 +691,85 @@ int helper_skb_change_proto(struct __sk_buff *ctx)
- 	return TC_ACT_SHOT;
+ 	test_xdp_meta__destroy(skel);
  }
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RHASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 128);
-+	__type(key, struct __sk_buff *);
-+	__type(value, __u8[META_SIZE]);
-+} meta_map SEC(".maps");
-+
-+bool write_done;
-+
-+static void write_meta(struct __sk_buff *ctx, void *map)
-+{
-+	if (bpf_map_update_elem(map, &ctx, &meta_want, BPF_NOEXIST))
-+		return;
-+	bpf_trace_skb(bpf_cast_to_kern_ctx(ctx), 0);
-+	write_done = true;
-+}
-+
-+/* Stash test metadata in the meta_map, keyed by the skb address */
-+SEC("tc")
-+int tc_meta_write(struct __sk_buff *ctx)
-+{
-+	if (!is_test_packet_tc(ctx))
-+		return TC_ACT_SHOT;
-+
-+	write_meta(ctx, &meta_map);
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Read test metadata stashed in the meta_map on the same hook */
-+SEC("tc")
-+int tc_meta_read(struct __sk_buff *ctx)
-+{
-+	__u8 *meta_have;
-+
-+	meta_have = bpf_map_lookup_elem(&meta_map, &ctx);
-+	if (!meta_have)
-+		return TC_ACT_SHOT;
-+	if (!check_metadata(meta_have))
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+int free_count;
-+
-+SEC("raw_tp/skb_free")
-+int BPF_PROG(skb_free, struct sk_buff *skb, enum skb_drop_reason reason,
-+	     void *location)
-+{
-+	__u8 *meta_have;
-+
-+	meta_have = bpf_map_lookup_elem(&meta_map, &skb);
-+	if (!meta_have)
-+		return 0;
-+	if (bpf_map_delete_elem(&meta_map, &skb))
-+		return 0;
-+
-+	free_count++;
-+	return 0;
-+}
-+
-+bool copy_done;
-+
-+SEC("tp_btf/skb_copy")
-+int BPF_PROG(skb_copy, struct sk_buff *dst, struct sk_buff *src)
-+{
-+	__u8 *meta_have;
-+
-+	meta_have = bpf_map_lookup_elem(&meta_map, &src);
-+	if (!meta_have)
-+		return 0;
-+	if (bpf_map_update_elem(&meta_map, &dst, meta_have, BPF_NOEXIST))
-+		return 0;
-+
-+	bpf_trace_skb(dst, 0);
-+	copy_done = true;
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
 
 -- 
 2.43.0
