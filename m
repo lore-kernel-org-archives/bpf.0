@@ -1,114 +1,45 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590AF4D0A12
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 21:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07F3397935
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 21:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.202.254.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790632388; cv=none; b=eTrgjmvagdE4FtfRA4MbDCochG+I7vc99PYbqKKcjV7InjnQBrWEIurD2orpr87Qr+KpvUj3DWH57oqc3/rJym2ajb5Zg+r64aK8adDq8KFyXibl+9rdTaREuNJWt53oh3s/GaHXLIq2QstDXAvMDwpjXDk6faPte+IiF0zc8cw=
+	t=1790632395; cv=none; b=ca5QOEnMbh2ZwvjQO1ENkRppbcp3/nt4N+LOu9TcTFkz42NlewuUHjJzDnCNBfj5J52rFNEFc8b6hZpeR8W2wjV+RaPqSNEn09vdu8Xvn45/C/ht05/N+ZHyve395+aoOHjh8hLOB/xqZk0zTbBK9I0vfjauiYtcbI0o4d7SZmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790632388; c=relaxed/simple;
+	s=arc-20240116; t=1790632395; c=relaxed/simple;
 	bh=eXZI9d9vVUyEmzpz1g2CP4YMku19jekaprBzsuOMuqQ=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=d4jHx6egc3Smqse6Vohutq4g7emkhW6axI8PHDUq0cPivne92D0WSaUIYDPyvxzUgKNOKvi/ntL7fESEYF0LU7BYja17SYtEYrkqahlXlq9iMQTNdDQvHjOyzCyrqNz0O7oU6tX5Wx/59V3hBR9Atd166xX7CuY199wietufwe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=LDY+7J+P; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="LDY+7J+P"
-Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68SLTU3Q062062
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 14:53:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=JS4y13hb6uJ3wHuFCzCSOoOkOOFEcVeZPXzNx
-	yfyu80=; b=LDY+7J+PkFatQnOeRh6Ds6sY/bCF14bIWU/e40waVIDlfzXG2fEWV
-	TtzUQ7kJtlcoDb43FMgqS3lJhhzlVRYwa6mJ+8ZfC9F76F/zN541vLc4OQ3YkU2o
-	5W53J+iDRdr+H4Ws560326Wu97sMfx+66HjAqmptFlH7ULzxMP0Cv2VmUUClRBr0
-	oiw0tLZ7WR3G3EsTnXCTgbsspvZMK2RyRtoSYzzLr9co32RksW2NCWL9AknCkvNf
-	jE1NrfcB5kqxKVyd/grN7FljornwZwxIyEcfCgC6NfZBqRaudplCEHUnmvou0/Lc
-	Wp+3j8qPUk/z2y4N4pWaJZFtCSs0PYmbg==
-Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4gy2nm3xg4-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 14:53:05 -0700 (PDT)
-Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1431ba79941so3298872c88.1
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 14:53:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790632385; x=1791237185;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:newsgroups:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JS4y13hb6uJ3wHuFCzCSOoOkOOFEcVeZPXzNxyfyu80=;
-        b=lReUK84fDDD9HggEc/Iik3ikQJdiDFM/ikklfIAoVFwpX2cjKrtdteIgjMKCx62j9N
-         kT6V+D/70V9EPapY63cBx6YYU1zKMLOaUnZI5E1aqV9UlIwKQ86XArQ0ZshHCGG4Azlq
-         uQXC8G/c+tAaTNerRbwJpMO942nTWsKpmLmKE5Wj0DM2n0XiHQUYYmEDlgJkKNrGoZ5h
-         Lv9cvOIVZdOSzzkw5JCfj7A+O69u3u12oxm84y0adzOLL3p/+YKdTIcwuyPU0gbAHaVU
-         qQvzCogvn5H95Qx5kzzjRzzBM9/aH2EQtTlXkhfoKlYMaBQvO2RaMN3dLs2xb/PTpn2O
-         aAMw==
-X-Forwarded-Encrypted: i=1; AKwUvBwONx8HN8xSbI0APDoWbvjZHGlFKp/kbccLMInnwbTplQW+/YWIoBrwZbgtuBWX34KsSe0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kaRPZV+0e1iBF2MpZm8p/qI39sp+YvohMWYAZlEDPtSYEo0cN3
-	rZreVwdC40d5pn23ExzAMzSitnFNWOrGCsUlmb1dahxkk0tM0juREFxoyQ1h0qehR/ecAwRO8F2
-	OuuqRgytv1VdvEmBrrPGlxmwHXGICHZo6S9ADU2TQHbyyYryxoh+IhlAVr7mK
-X-Gm-Gg: AYBFou12/wPX8MFTeyHRZwrxlptXJU9TQWc/H+V8R6eQkyPkisTyBtHEaAtsa13Awcg
-	Nq6yae3dNC34fRIkErpgv3IGikF8K3kfg+LD/VWLzzIr01VB1wOHUAxHaEp2zicyYoJwvr82SFv
-	i/vFSbg4Zny8wNNBq9jZDLIR3m2RkVhr2mFJwdtvyEFCKhwoIzA7LI2aQsqcqC+sVXQMQPOzGcT
-	bOprSGIQ2GxorBnLD0f1/Uzh4RhdaRm/wnMYUAvjLecpn/I0RnBeQhdvOIhjval+Q/fDkg+bR9l
-	uUv+wDqKXBCkyMBSJCnqtf8zOIegobBdAEUgq+K9etYJTcEeLOQ1RHFFd96iBm2pZorTe0QUlMg
-	nvWqJuXXZSfvkwa0=
-X-Received: by 2002:a05:701b:2504:b0:14a:e7be:7a38 with SMTP id a92af1059eb24-14ae7be88bamr1608643c88.4.1790632384471;
-        Mon, 28 Sep 2026 14:53:04 -0700 (PDT)
-X-Received: by 2002:a05:701b:2504:b0:14a:e7be:7a38 with SMTP id a92af1059eb24-14ae7be88bamr1608529c88.4.1790632382611;
-        Mon, 28 Sep 2026 14:53:02 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c085:21cf::10e3? ([2620:10d:c090:400::5:9746])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3434958c3adsm38882252eec.22.2026.09.28.14.53.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 14:53:02 -0700 (PDT)
-From: Vineet Gupta <gvineet@meta.com>
-X-Google-Original-From: Vineet Gupta <vineet.gupta@linux.dev>
-Message-ID: <6cadba40-10bb-4acf-9a32-d22a270ada8d@linux.dev>
+	h=To:From:Subject:Date:Message-ID:References:Mime-Version:
+	 Content-Type:Cc:In-Reply-To; b=FbSNiWZ4aFVybPYvGLaNqQNmGH0q+46IwTa6eqHPHwYBARx/ypiCanzVKdlqyzEZUOg4V6IZUjqFvzSd6amZolv3bKbCz1zZ1fQ4DG8x2G1aCXN78h3hUFtoSVmxZPwkzMkTU+ECj0KWP0VsaAQAysq5Iifow8loYaorGC0t0Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=m.gmane-mx.org; arc=none smtp.client-ip=116.202.254.214
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=m.gmane-mx.org
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+	(envelope-from <glkb-bpf@m.gmane-mx.org>)
+	id 1xBJHV-000AQ9-KM
+	for bpf@vger.kernel.org; Mon, 28 Sep 2026 23:53:05 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To: bpf@vger.kernel.org
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: Add linked_externs test
+ for externs in allocated sections
 Date: Mon, 28 Sep 2026 14:52:59 -0700
+Message-ID: <6cadba40-10bb-4acf-9a32-d22a270ada8d@linux.dev>
+References: <20260926000243.2830819-1-andrii@kernel.org>
+ <20260926000243.2830819-2-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: Add linked_externs test
- for externs in allocated sections
-To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
-Cc: kernel-team@meta.com, Ihor Solodrai <ihor.solodrai@linux.dev>
-Newsgroups: gmane.linux.kernel.bpf
-References: <20260926000243.2830819-1-andrii@kernel.org>
- <20260926000243.2830819-2-andrii@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20260926000243.2830819-2-andrii@kernel.org>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=fuNJ914f c=1 sm=1 tr=0 ts=6abae1c1 cx=c_pps
- a=kVLUcbK0zfr7ocalXnG1qA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=_1IyUuN4QrATX339ibzo:22 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
- a=i-6TwEPlgW01CNtUTPMA:9 a=QEXdDO2ut3YA:10 a=vr4QvYf-bLy2KjpDp97w:22
-X-Proofpoint-ORIG-GUID: TGfgGZ8TuKL0eg2ryZsHUOy3lcCyFP52
-X-Proofpoint-GUID: TGfgGZ8TuKL0eg2ryZsHUOy3lcCyFP52
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI4MDA4NiBTYWx0ZWRfX1KUA4y7FwfnK
- j8W8eQWxXXw4GyXZHP1TyY7mJ+3W5FRdV8Fps0cjuLSHVkj2fUx3mIQeSzlwTChn3KZ39H3yjul
- 6zguu4Dkt+EZv9R46+9nENYYINO4RDQ=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI4MDA4NiBTYWx0ZWRfX/KBlKJBNJtDA
- LvVOn/R8P5fGmgx8GS6BnuOEV5B5TWYSb1ryNT2leopQD/CGb1271Vjw670epcw6wwp62H3PDTk
- ZHvufdrWtVQcfVlIjr21JRLr0ynxbnQ5dEQsbUSMAa7dqFRNMj2/bKYRz0NbjJiHWrMLKOOYcZN
- UkjKm/U86E1yJ0xeBMaxE91kXzfrqpaREclYTrE0x5Uj+lS892Bm2HUrCOuvCUzeenVyOMEQPP4
- 4XvFCXWZxMRGKzQaCRJzwMwmp+xWmdYWr933L35V+uVjj3VWMcmjImgoFFP+t+arjbNRY/FzOUQ
- kdfeMVeDbpAHa72m3rDNYwLumigmCFlR9E2t+QomuyYnVDMQ1M+QkDJZc7EnExZtVpGkmMGAQQB
- XkF6vve5Lubrti6KZYz5+dAjKJQSOrSxkO1bH1T7eCgOZ3oIwuWmt5LFASH97+rx3xL9uyiYw4K
- C2645I9aIs810bnAHrg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-28_06,2026-09-21_02,2025-10-01_01
+User-Agent: Mozilla Thunderbird
+Cc: kernel-team@meta.com, Ihor Solodrai <ihor.solodrai@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20260926000243.2830819-2-andrii@kernel.org>
+Message-ID: <20260928215259.79HZdS5cr3XmU_Wrc6t2XMLDh4PKme5_iz3tc8_xFpo@z>
 
 Hi Andrii,
 
@@ -335,4 +266,5 @@ Thx,
 > +}
 > +
 > +char _license[] SEC("license") = "GPL";
+
 
