@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE0149A3D6;
-	Mon, 28 Sep 2026 22:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C054FD296;
+	Mon, 28 Sep 2026 22:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790635014; cv=none; b=sQcFh77IS/+TiemXtKejO78alYCW90+Z6RxscLGgmYM6LUM7y2bYbrw22Iq0Fxo/G/TD4+rG2oeUyXxikEMo1IEZ3XTcJ1VlXq6hTfrcOrRFo8eqYooiNuvnqO0Ir6PzMjLoI4U/7dxm8AYTKzj2UqXoGG1FM/1ZYbuh4gaVrJ8=
+	t=1790635014; cv=none; b=VCfSofPgN+iQzEyLjBN6z2I4KwgMWGf47WMMP/vaPxeY0ILesREtWK1jeV0QcZvFgmZq3RUB0G3BngnztImVgaUc8uBDFxkVW3FwbY7mVWntBZz/MHK0CR9z939NKOrK1Wz12fOkTZm26Ukwf8A+cY/mG2qNuBErXbLVmm0ooeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790635014; c=relaxed/simple;
-	bh=CFgkAhQwEqccWgELEg/9JK2GKL5SpQfgGzA5vZ0YqHI=;
+	bh=fyTc7NgG7aer+e1HR8NfUGBmVmNoCgZSmYbzfnL6hHk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fo9Ld2xyP0oqqyz6rXVxrDcJhugS2lHCAPgvn0w0Tc+sOF9Exw/FnOtFEL8ShTjA1XWm33PiTiSr+qUuaG8uMVu4i2l7U1vZV7lBkNXySc0GM8ajKyj2b40buHxapigRnpSxPNsBRzy4DVsE+lAPVuLd/9VcxupP/TQq7hRD8GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VE6hrjtw; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=mCNvj8ColKhFQAn6MXXf7S/lLliX9YXtjr9MjsPKuEk49NeU0hd8CD+QhakX9UjTu4XcaW9yuxsUdaN4hYp1GnJHuncDamJE3qKd1Bce8Qs09N56VZJk/5fvgSnRxj/iCtnSybuvqEHVE5CIvFylQIx3MzifgfCOxvDFJYZgua8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIsloHzm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VE6hrjtw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239391F0089C;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIsloHzm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B173E1F0089B;
 	Mon, 28 Sep 2026 22:36:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790635012;
-	bh=7WMv94dmHQt/4IHOC7Zem7o5TU9iTHRnxfl7eBmQS3A=;
+	s=k20260515; t=1790635013;
+	bh=EqCKfTIqYiiQfGfL7Gl9Syaz4pkJt2hXF/QnfmKlaGc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=VE6hrjtwsggVYnjlHNSYVBvUvLJbaC9BtLFDMJjQWNE77yyC6nte/gCMT6E9/qkDV
-	 7J+hxoo6EuczjsKy4eTmh/EEN/DW0p+m5CnQISTCyBP0xZH5wEdTXc4ynt9pJBpxbX
-	 I/umhkLd0+zup+vNuifIWnvwL/asOgvgz2/U+FVD67vny/cjJVXtwHFhLCpxtPGECp
-	 HH5pOTRefwsiEsUtr9wSptRvEOBCOnSJec4RH9jg5oAXpojSW0hcZXfiCyvvXdzcfD
-	 FjHpQ9e2Ji9cg50zRKSIkcdDP8KyXCljGovLApBI18J5KV87vK+wZag8Cu1kgjUyFq
-	 fmLHs1sY0h8Cw==
+	b=TIsloHzmSjXXPtjnYihTtFBzWCcZluW3kRZkHdTzWf++bUXEM0f995+CzCBuTbPig
+	 zO9AOKWmXkhOavH2iZLXg/+ty6MtqORqOnNjCqKSornUTtA+mno24OQrHMcpgQPZCT
+	 MuPUZ1/yNdzlCj3DXJ0+LdRtCCWXCI7tL0z0pC8KU3QS4W2S1UeDDNOOH/wWT3VrM0
+	 gskEpL4L8516M5lcHqtfwkXVu5b3XH6oQ7/RQtAAybrcA1lXB+0F9k5GMrFP+LtRLt
+	 1L5D5kovSv2Yzl49suLc8WDovTj0AW+m2d2bGMFy5NEk/8sVNULR6hU2WJ11LZ7gIj
+	 dn9DhFqeEv4Og==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc: netdev@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	aleksander.lobakin@intel.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 3/5] selftests: drv-net: check tcp-data-split against an already attached XDP
-Date: Mon, 28 Sep 2026 15:36:46 -0700
-Message-ID: <20260928223648.2739371-4-kuba@kernel.org>
+Subject: [PATCH net-next 4/5] selftests/bpf: check XDP attach on a nested bond slave
+Date: Mon, 28 Sep 2026 15:36:47 -0700
+Message-ID: <20260928223648.2739371-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260928223648.2739371-1-kuba@kernel.org>
 References: <20260928223648.2739371-1-kuba@kernel.org>
@@ -57,131 +57,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hds.py only ever tested one direction of the rule: with header-data
-split on, installing a single-buffer XDP program must fail. The other
-direction was not covered at all, and that is the one which was broken
-for a program an upper device pushed down - the device was running XDP
-but nothing in the core knew, so enabling tcp-data-split underneath it
-succeeded.
+test_xdp_bonding_attach() already covers a flat bond both ways round:
+the master is refused while a slave has a program, and a slave is
+refused while the master has one. The nested test only ever checked
+that attaching to the outermost master succeeds.
 
-xdp_set_hds() covers the direct case, xdp_bond_set_hds() the propagated
-one. The latter fails without the preceding fix.
-
-The bond case is disruptive, it takes the device down to enslave it, and
-skips on devices bonding will not take as an XDP slave.
+That left the more interesting half of the nesting untested. Only the
+direct upper is consulted when deciding whether a device is already
+running XDP, so with bond -> bond_nest1 -> bond_nest2 the check on
+bond_nest2 looks at bond_nest1, and it only sees a program there if
+bond_nest1 recorded the one it was handed. Before the preceding fix it
+did not, and a second program could be attached to bond_nest2 while the
+outer bond's program was already running on it.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/drivers/net/config |  1 +
- tools/testing/selftests/drivers/net/hds.py | 65 ++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ .../selftests/bpf/prog_tests/xdp_bonding.c     | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
-index 4838adf27fa1..29293e41c3fa 100644
---- a/tools/testing/selftests/drivers/net/config
-+++ b/tools/testing/selftests/drivers/net/config
-@@ -1,3 +1,4 @@
-+CONFIG_BONDING=m
- CONFIG_CONFIGFS_FS=y
- CONFIG_DEBUG_INFO_BTF=y
- CONFIG_DEBUG_INFO_BTF_MODULES=n
-diff --git a/tools/testing/selftests/drivers/net/hds.py b/tools/testing/selftests/drivers/net/hds.py
-index 606e26d75951..5fe82b98c1fb 100755
---- a/tools/testing/selftests/drivers/net/hds.py
-+++ b/tools/testing/selftests/drivers/net/hds.py
-@@ -6,6 +6,7 @@ import os
- import random
- from typing import Union
- from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_raises, KsftSkipEx
-+from lib.py import ksft_disruptive
- from lib.py import CmdExitFailure, EthtoolFamily, NlError
- from lib.py import NetDrvEnv
- from lib.py import defer, ethtool, ip
-@@ -28,6 +29,21 @@ from lib.py import defer, ethtool, ip
-     ip("link set dev %s xdp off" % cfg.ifname)
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+index c42488e445c2..486e0f9a2ada 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+@@ -464,8 +464,9 @@ static void test_xdp_bonding_attach(struct skeletons *skeletons)
+ /* Test with nested bonding devices to catch issue with negative jump label count */
+ static void test_xdp_bonding_nested(struct skeletons *skeletons)
+ {
++	struct bpf_link *link2 = NULL;
+ 	struct bpf_link *link = NULL;
+-	int bond, err;
++	int bond, nest2, err;
  
+ 	if (!ASSERT_OK(system("ip link add bond type bond"), "add bond"))
+ 		goto out;
+@@ -488,10 +489,23 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
+ 	if (!ASSERT_OK(err, "set bond_nest2 master"))
+ 		goto out;
  
-+def _xdp_attach(cfg, ifname):
-+    """Attach a single-buffer XDP program, detach it when the test ends."""
-+    prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-+    ip(f"link set dev {ifname} xdp obj {prog} sec xdp")
-+    defer(ip, f"link set dev {ifname} xdp off")
++	nest2 = if_nametoindex("bond_nest2");
++	if (!ASSERT_GE(nest2, 0, "if_nametoindex bond_nest2"))
++		goto out;
 +
+ 	link = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, bond);
+-	ASSERT_OK_PTR(link, "attach program to master");
++	if (!ASSERT_OK_PTR(link, "attach program to master"))
++		goto out;
 +
-+def _hds_enable_expect_fail(cfg, netnl):
-+    """Enabling HDS must be refused while single-buffer XDP is attached."""
-+    with ksft_raises(NlError) as e:
-+        netnl.rings_set({'header': {'dev-index': cfg.ifindex},
-+                         'tcp-data-split': 'enabled'})
-+    ksft_eq(e.exception.nl_msg.error, -errno.EINVAL)
-+
-+
- def _ioctl_ringparam_modify(cfg, netnl) -> None:
-     """
-     Helper for performing a hopefully unimportant IOCTL SET.
-@@ -240,6 +256,53 @@ from lib.py import defer, ethtool, ip
-         _xdp_onoff(cfg)
++	/* Attaching to a nested slave is not allowed either. Only the direct
++	 * upper is consulted, so this only holds if every device the program
++	 * was propagated to records it.
++	 */
++	link2 = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, nest2);
++	ASSERT_ERR_PTR(link2, "attach program to nested slave when master has program");
  
- 
-+def xdp_set_hds(cfg, netnl) -> None:
-+    """
-+    Enable single-buffer XDP on the device, then try to enable HDS.
-+    The mirror of enabled_set_xdp(): HDS must be refused.
-+    """
-+    mode = _get_hds_mode(cfg, netnl)
-+    _defer_reset_hds(cfg, netnl)
-+    if mode == 'enabled':
-+        netnl.rings_set({'header': {'dev-index': cfg.ifindex},
-+                         'tcp-data-split': 'unknown'})
-+
-+    _xdp_attach(cfg, cfg.ifname)
-+
-+    _hds_enable_expect_fail(cfg, netnl)
-+
-+
-+@ksft_disruptive
-+def xdp_bond_set_hds(cfg, netnl) -> None:
-+    """
-+    Like xdp_set_hds(), but the program is installed on a bond and pushed
-+    down to the device rather than attached to it directly. The device is
-+    running it either way, so HDS must be refused all the same.
-+    """
-+    mode = _get_hds_mode(cfg, netnl)
-+    _defer_reset_hds(cfg, netnl)
-+    if mode == 'enabled':
-+        netnl.rings_set({'header': {'dev-index': cfg.ifindex},
-+                         'tcp-data-split': 'unknown'})
-+
-+    ip("link add hds-bond type bond mode active-backup")
-+    defer(ip, "link del hds-bond")
-+
-+    # bonding refuses to enslave a device which is up
-+    ip(f"link set dev {cfg.ifname} down")
-+    defer(ip, f"link set dev {cfg.ifname} up")
-+    ip(f"link set dev {cfg.ifname} master hds-bond")
-+    defer(ip, f"link set dev {cfg.ifname} nomaster")
-+    ip("link set dev hds-bond up")
-+
-+    try:
-+        _xdp_attach(cfg, "hds-bond")
-+    except CmdExitFailure:
-+        raise KsftSkipEx("device can't be an XDP bond slave")
-+
-+    _hds_enable_expect_fail(cfg, netnl)
-+
-+
- def ioctl(cfg, netnl) -> None:
-     mode1 = _get_hds_mode(cfg, netnl)
-     _ioctl_ringparam_modify(cfg, netnl)
-@@ -290,6 +353,8 @@ from lib.py import defer, ethtool, ip
-                   set_hds_thresh_gt,
-                   set_xdp,
-                   enabled_set_xdp,
-+                  xdp_set_hds,
-+                  xdp_bond_set_hds,
-                   ioctl,
-                   ioctl_set_xdp,
-                   ioctl_enabled_set_xdp],
+ out:
++	bpf_link__destroy(link2);
+ 	bpf_link__destroy(link);
+ 	system("ip link del bond");
+ 	system("ip link del bond_nest1");
 -- 
 2.55.0
 
