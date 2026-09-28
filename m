@@ -1,148 +1,127 @@
-Received: from mail-yx2-f41.google.com (mail-yx2-f41.google.com [74.125.224.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94312381EA3
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 18:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB0038D3F9
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 18:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790619381; cv=none; b=jFLrVfpoGZR3sNPmPSN88t8RZzEWRRSqAE3WebGQKOPqFdH0saJhL9QrxbNAufSaMHdKY6Nj+2SLcGZBt8p8Pdrdy0KRxZydInqXHeYoqcxJFCNsWKaECkBRRKipKoPJvpEDI+3/hYz7ZW8tT36K8NHdsqO2sE9MjDsBSKHu1Eg=
+	t=1790620107; cv=none; b=MoJhNghEeIxDUFFbTQ6GPsubsuP1+nCQjWmkQ+JMQVslLyDuKDeNAvM27AotC8D3kubHZiF9gUJg+2aK0vpOqLRs0ACXhi/LGltzKj+X5pHqpA5n7iq9M81jc8KJzVfTB7kBpAzPCWZdXMSnMq7K4eo+3cN0qCsj1TqHMuSPoLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790619381; c=relaxed/simple;
-	bh=7vTTHLgjDLlLPdeQhoLdV3OKPsU5wVu1rrzkeJBO1WU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=sC/ZS/XGE1uD55WTh4XV1a71zyxGkcHey5goYz8w0D+Md6kydVT9iK9cnntzeo/tg0g0e2IhA/DcUXXl9QlH1Fq0dzj6B6l6SBwHMawsGABMjcZkq0rk/0+nrqwQgLwAMELlYlpMfUPeNZbNjemQEt4UYhheIDmCXkeznyQhSI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjeXz0+e; arc=none smtp.client-ip=74.125.224.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790620107; c=relaxed/simple;
+	bh=ZhXWr/RZlpDNw60C16o/Ks1nqFW07EDBqdOM5nr8I2M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FbA43aK4rdn1Q9kl9zOOzewH8BA9OynEghgEde86wiqSLjnBeK1KtQwH8ZKwdboA9+ng7bu8TzjnGIEr59vULlPviEKDrnqUwx0aGzzftzWCsSIvbyIGkXG1unc7WR4QXH0vCh438Jn7qhhLK+XivJwhenFBPwDFYTBUom/cQ6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ii1QcXku; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjeXz0+e"
-Received: by mail-yx2-f41.google.com with SMTP id 00721157ae682-8a7c33dbfeeso32718827b3.2
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790619378; x=1791224178; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=6+5QZjBHt7slhpA3khxfZMkWrPmM/EZL0JsZQiZlI8s=;
-        b=XjeXz0+etdc+BAUrhRYq5qnNq6ODE+MlZG9z83EVCIeIY86f9o/shHRaNJteZUpFLb
-         hOlQDXYVRiYIlWSwH7HHQH547xGz8Z/w+R59SaDQmUmiPXY2JSEnorVsjq1JWcKyDC3D
-         s0lpAGVd6XhVmE40xfK5o7W4gXXbxnHVzWyz0ZBrt6cp0tERAX3EufA4RgDBSGvZPwuU
-         2/DUmtmZvqeCxFu0qVth1DvuCg2n2uUHEcHdjqKEL7hrMMYEFcPCKCkSQVqzR2ezySvJ
-         N0C2FzGedbMy6qeIb6ULm/Jdzi1dsqahheZj9aQUSk4aBMONsgw0j2f5PR8B4fvfBwtI
-         SJyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790619378; x=1791224178;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6+5QZjBHt7slhpA3khxfZMkWrPmM/EZL0JsZQiZlI8s=;
-        b=1RqQYlg6WGuYK6LleKBDbyhXdVfOlancotdFRhtYnI5h/e50xl5CgSoLNlGZWbG+pv
-         5JVyTYBjYNXndD5GvtfpQmNqQPxY+Tx7DnWcS3evqOQlZEMOKJc9ITw8Plb03wnHTDzm
-         kMtVPoipGfDkDSY61It/epOlo9jz/+rUojriV9lGIMgivllicj7FivxQiZwplOLzH3Tm
-         cEWNpIouE8w2LrgdJjw5ICYktqfgWqTQwGV8zz5ke1Ib+ue1AWFXdj6D4Dysx6oFFowq
-         4pab/d0DeN8dfXPuF0eQAxlPGp6xZrU47h+m3PQtqrhj+gC93kJTjTQOf80W/wyMMc1O
-         ZYqQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxUQijj0+KYPCYhT5SuDDcYOVrZaiHHQHxiTKvFVdxb23mVTeaFNXhBuPNmhdNas+Zojho=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIii1QbTyxMwrkTzloGk2UKRkFmZex6r9I2k0jRvMNrahxdnWOW
-	NyoBwtjAdgPhFemSIh10VAPVPbpZ95kEZLSvMiOfpa8p56Qhqe65pHHv
-X-Gm-Gg: AYBFou0z39Sm36UXsKBCSqzWoG9X30pgBsPsxxNPS4TZI/6cwVkdui2ankJVBHdE7VY
-	wDdWTXlLQKPERr1CxkafHQGH3nUrWjd5PIQ8Hl/S7I9uo7br++SF0WR4i4y5HksT5i1GWz5rZoJ
-	HssBF6VJQpdqD3OVKb7UsJfog6C2XMk77M7fFBYtIPCa8t+G9A46J6ue1QK4qFfuE+oACOIZnoH
-	sBt+ReXZhp+xlfKtt5425Ny8Yij1CLz+sbJXQ/lv7vTzUHu/7I44YLJwc9l5PM1hY6W0hlfLd+R
-	ImEd/5siaKZPH/lcH+c9eATysWog6CdZLWEIlGRCXmzyaGpcFrkvMxpWJt7p8E8PdnXKXDUfmnd
-	Mpzwj3S4spVtmi12s/WSJ3y+2322rUyIjTUr6TxNjYTiGv74bQIJLmrBjmrF9P5qqmdySrROBDf
-	fLmzwD9EzvINoM53LTMj/AmoczTeLS7dwCIVv7Xt1YUXLaZWUqK7Tb6IdphW1GOXCq4tHQsNYJY
-	aurAzt63FZJcA==
-X-Received: by 2002:a05:690c:83:b0:87f:bf8d:3377 with SMTP id 00721157ae682-8a64e4b9525mr68069317b3.63.1790619378395;
-        Mon, 28 Sep 2026 11:16:18 -0700 (PDT)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c81425bf8sm207305285a.28.2026.09.28.11.16.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 11:16:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ii1QcXku"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFEF1F000FF;
+	Mon, 28 Sep 2026 18:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790620103;
+	bh=cjNP5KZIvvtAnIqcCK/0694p/bwsl50BFtDlMEsBA2o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ii1QcXkuM/8QCpbnc5N1gRU6iEJi+F90KSkSOVMk1GtBsYM7vAeUdv3edhQnyaUxq
+	 RquurVLrPtD92zv2yLEtoIJIIgJP/f6TDDYlC8agX+7u8Lan6bDPtW/JlKT+9xuZVp
+	 xM3PpX+mxDzhr7V3DPMxZC7aKH8S4Ggtyojw+fulKPuwU38jnDPY+JiPK2r4C74LhT
+	 t+0ZXWvZ1dlU4++Bn8emBZJ2D5l2vuR+mhqn6mUSLxL4yubDwtFdZ7WoCJqAh4QS+A
+	 lBsOhn8CrPjGNu3umHcdwgRLQhgCT0OJJjwRnV2dqfTPW1YHIjxtHx6BTyVP3eWPKl
+	 omftljMbQyW6A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 08/11] bpf: Check subprog dynptr arguments
+ in the common path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260928181414.644158-9-ameryhung@gmail.com>
+References: <20260928181414.644158-1-ameryhung@gmail.com>
+ <20260928181414.644158-9-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 28 Sep 2026 18:28:22 +0000
+Message-Id: <20260928182823.0EFEF1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 14:16:16 -0400
-Message-Id: <DLR5LDKR0ZN5.A3UPDC84TSQE@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 0/8] eth: mpnic: initial support for Meta
- Platforms NIC
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Daniel Zahka" <daniel.zahka@gmail.com>, "Alexander Duyck"
- <alexanderduyck@fb.com>, "Jakub Kicinski" <kuba@kernel.org>,
- <kernel-team@meta.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Dimitri Daskalakis"
- <dimitri.daskalakis1@gmail.com>, "Mohsin Bashir" <mohsin.bashr@gmail.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20260924-linux-mpnic-v2-0-4badc9b58b9e@gmail.com>
-In-Reply-To: <20260924-linux-mpnic-v2-0-4badc9b58b9e@gmail.com>
 
-On Thu Sep 24, 2026 at 8:35 PM EDT, Daniel Zahka wrote:
-> Meta Platforms NIC is the second-generation NIC from Meta. There are
-> quite a few high-level similarities to fbnic, but all of the CSRs and
-> descriptors have been reshuffled, and new features have been added.
-> Since the device is sufficiently different from fbnic, and the design of
-> our FW is minimal, we have decided a separate driver is appropriate.
->
-> Major new features compared to fbnic will take a while to land. This
-> series includes only the bare-bones Tx/Rx datapath.
->
-> Our high-level patch sequence and plan for the upcoming series is:
->  1. Core datapath (this series)
->  2. Basic offloads, RSS, and counters
->  3. Firmware mailbox support
->  4. Base ethtool operations
->
-> This patch series was prepared in part with these LLM prompts:
-> https://github.com/kuba-moo/ai-prompts/blob/main/driver-upstreaming-promp=
-ts.md
->
-> The prompts were used to distill our fully-featured OOT driver into this
-> minimal Tx/Rx capable upstream driver. We then performed human review on
-> the output to create this posting. Jakub has made the prompts public in
-> case people would like to take a look.=20
->
-> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
-> ---
-> Changes in v2:
-> - eth: mpnic: add register init for the device
->   - derive the TQS TXB credit limits from the TXB private credit config
->   - program the BMC to MAC XOFF threshold (TXB_THRESHOLDS_P0[16])
->     instead of the host to BMC one, and drop the now unused
->     MPNIC_TXB_BMC_THRESH
->   - drop L2_HLEN from the default TWD, it only matters for csum/LSO
-> - eth: mpnic: implement Tx queue allocation and cleanup
->   - add mpnic_nv_irq_trigger()
-> - eth: mpnic: add a netdevice and basic Tx handling
->   - trim the real Tx queue count before register_netdev()
-> - eth: mpnic: implement Rx queue allocation and cleanup
->   - drop an inaccurate comment on mpnic_bdq_desc_unused()
->   - drop the unused data_truesize field from struct mpnic_pkt_ctxt
->   - trim the real Rx queue count before register_netdev() too
-> - eth: mpnic: add basic Rx handling
->   - skip Rx cleaning and BDQ refill when polled with a budget of 0
->     (netpoll), page pool must not be used in that context
->   - keep struct mpnic_pkt_ctxt instead of replacing it with a bare
->     xdp_buff, and move add_frag_failed into it
->   - give each Rx queue only the NAPI budget left over by the previous
->     ones instead of the full budget
->   - sync Rx buffers for the CPU with page_pool_dma_sync_for_cpu() instead
->     of dma_sync_single_range_for_cpu()
-> - Link to v1: https://lore.kernel.org/r/20260922-linux-mpnic-v1-0-236844f=
-53072@gmail.com
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: dead code and unreachable diagnostic in process_dynptr_func()
+--
 
-Just so it doesn't get lost over all of back and forth with sashiko. My
-view on the series is that I don't see any issues requiring a v3. Until
-other feedback comes along, I will not post a v3.
+commit a02951e0de8834e87c650bf3681861699a204241
+Author: Amery Hung <ameryhung@gmail.com>
+
+bpf: Check subprog dynptr arguments in the common path
+
+This commit routes subprog dynptr arguments through check_func_arg() to ens=
+ure
+register types, offsets, and dynptr states are validated in a common order.=
+ It
+also updates a related selftest to maintain consistent failure states across
+different compilers.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index efb20e50c974a..075002f6a59fe 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -10883,7 +10883,7 @@ static int btf_check_func_arg_match(struct bpf_ve=
+rifier_env *env, int subprog,
+>  		nslots =3D btf_arg_slots(t);
+> =20
+>  		if (arg_type =3D=3D ARG_SCALAR || arg_type =3D=3D ARG_IGNORE ||
+> -		    arg_type =3D=3D ARG_PTR_TO_CTX ||
+> +		    arg_type =3D=3D ARG_PTR_TO_CTX || arg_type =3D=3D ARG_PTR_TO_DYNPT=
+R ||
+>  		    base_type(arg_type) =3D=3D ARG_PTR_TO_ARENA) {
+
+[Severity: Low]
+Does routing this through check_func_arg() render the register type validat=
+ion
+in process_dynptr_func() redundant and unreachable?
+
+Since check_func_arg() calls check_reg_type() before process_dynptr_func(),
+the requirement for PTR_TO_STACK or CONST_PTR_TO_DYNPTR is already enforced
+earlier in the flow.
+
+This makes the custom error block in process_dynptr_func() dead code:
+
+kernel/bpf/verifier.c:process_dynptr_func() {
+	...
+	if (reg->type !=3D PTR_TO_STACK && reg->type !=3D CONST_PTR_TO_DYNPTR) {
+		verbose(env,
+			"%s expected pointer to stack or const struct bpf_dynptr\n",
+			reg_arg_name(env, argno));
+		...
+		return -EINVAL;
+	}
+	...
+}
+
+The selftest updates in this patch seem to confirm this, as the expected
+error message is changed from this custom diagnostic to the generic one
+produced by check_reg_type().
+
+>  			ret =3D check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
+>  			if (ret)
+> @@ -10912,15 +10912,6 @@ static int btf_check_func_arg_match(struct bpf_v=
+erifier_env *env, int subprog,
+>  					reg_arg_name(env, argno));
+>  				return -EINVAL;
+>  			}
+> -		} else if (arg_type =3D=3D ARG_PTR_TO_DYNPTR) {
+> -			ret =3D check_func_arg_reg_off(env, reg, argno, ARG_PTR_TO_DYNPTR);
+> -			if (ret)
+> -				return ret;
+> -
+> -			ret =3D process_dynptr_func(env, reg, argno, env->insn_idx,
+> -						  arg_type, &meta);
+> -			if (ret)
+> -				return ret;
+>  		} else if (base_type(arg_type) =3D=3D ARG_PTR_TO_BTF_ID) {
+>  			int err;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928181414.6441=
+58-1-ameryhung@gmail.com?part=3D8
