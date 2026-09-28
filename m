@@ -1,52 +1,52 @@
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614EF4F7993;
-	Mon, 28 Sep 2026 19:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1A44FD799;
+	Mon, 28 Sep 2026 19:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790623985; cv=none; b=fvkUw650KILEP2wNNaV2TVDykx9nSKjKtmt4OSTiyyxfhr5IvUESZrRY6lXcaGnpyIiJkkI+fENBqeO+2eZ4BnUM2tEs7tS9vCPbtU03pGe6el4G58QL0WEB8UkVz8TVpLcFjFwmqG5HZrtGZMDFrahsF0pqvtLkKnpuxEZrilk=
+	t=1790623989; cv=none; b=XAILR+RlUNFyKpTw3j1cef3RjrBaPirsPYXFlstvajuUxMV9Dur6UJ6TGBiSyqYBpCLH50FrMs4B2z/LVhVFMJz6X6iO6KtMZdy/788ThCTsMsy+lUM7bbO5utnUmB11V0EvY3R8NB0IZqe1iiomYianvggeVoPcQaI2FodWfqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790623985; c=relaxed/simple;
-	bh=u994Z1jwmZ/TKNi7Rq4rSCq8AqEEFkfuzzqzMPgbbII=;
+	s=arc-20240116; t=1790623989; c=relaxed/simple;
+	bh=d+JKpOCaVjCO+56ImP8WkKP2l/kS85jXgylLfub1kPQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=MOkh3SOe0Ab+AX9mwHeFtbsKzphKkZlMatDyH6nwX2+z5/Gt7Ih/MNtYSzNcRkIWzyR9lE/Kulp+C+ZI2b9JOmXHkJCbqjV+3H63rCBVe5D/1ybUVaMxolm7K3b55SvD/fv9/YysLNbY9pYLIL0HvT2LukeLaPWnVdcSScEMlzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kvNt16G7; arc=none smtp.client-ip=68.232.154.123
+	 In-Reply-To:To:CC; b=ZnCbWk3n1N9LhpJO3o09olJPX4nWuf4UuOxiji3v1RlanuiH0mnM2c/M545KATJ307vmeQ6zFJOJtIPJqaKZbHzEDbJ1g6X/vRaju6FRFQXLdw5Ye7Im0Yj4qSunebdHkQXAtoF/dhk89WEqzg2Dx0KD4QtsOBIvdMOw8/wbizU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=zG0RCsAd; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kvNt16G7"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="zG0RCsAd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790623983; x=1822159983;
+  t=1790623992; x=1822159992;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=u994Z1jwmZ/TKNi7Rq4rSCq8AqEEFkfuzzqzMPgbbII=;
-  b=kvNt16G7lu6wS5FF//bzMgyV0nxwgdZXDAwB9lk6rpmAW1vtB/u6mqsR
-   IxzWkrspUSbU/8UWV6MvPovLlt1ZRPI4cSe6hFi6uAJ5BtReQ1/swYUpY
-   gkZtVncie1WVYfHQ4Y5iQOJZbDSAq6A8JKERh9Qy5IUf9v02Nr4ESjBv7
-   /bQZydu9uKQlBrZpYN7GwYgA7XzxwiHc5i0+6LhwZ6KkR4KVA/fnj/aM7
-   Dj+Oa8sXSI/Bd3JKEMSIj1juOANQnZ6+qFcI0Lnye3SR3Zmm0cvAFrVgM
-   LZ/o6D+isCbm2+7kPfUthJhWnbyN+RGJs0NNn3MiBOZ1wNe9SKJqXAD+H
-   Q==;
-X-CSE-ConnectionGUID: zZQhqAAsToeQadjYsZnkRQ==
-X-CSE-MsgGUID: b7zjOgIaRuK4F5aIUrMb2Q==
+  bh=d+JKpOCaVjCO+56ImP8WkKP2l/kS85jXgylLfub1kPQ=;
+  b=zG0RCsAdw9PK1aEo7cYvCmcRu4TG+rdzdkigDeALhuqeP8pEHPtcV3Wy
+   eBApldM1Tn/ETSyqYQ89OJtx7q87jSGrZXUj3togBX67NBD/eLKPLTFNL
+   NRdBbPnJe0HXecUHenyvJWn7mZ4Yt+7/SpmPGc6QMp79rM+MFYi4Uopvb
+   7raxi/JYxpigK/bFhyswSgC7Qkj/n/DxaS3NPEP7AUteAkvyDDmsRSnaO
+   NJHeBWzfnvP5NScjNkVXHy1jJzQntwoRfSI3DqEllqr+eGft7awbibvZC
+   TrusT2b8git05faoC/G5XkzZIKLb887Ke7gKXHTWQjBPbKhgGxR50xAm+
+   A==;
+X-CSE-ConnectionGUID: 30PJ9v2nTjuq2+aBAhh2pw==
+X-CSE-MsgGUID: peHBUjjxQyOz0wPNAw/YPw==
 X-IronPort-AV: E=Sophos;i="6.27,129,1787036400"; 
-   d="scan'208";a="231389907"
+   d="scan'208";a="64576542"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2026 12:33:02 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex4.mchp-main.com (10.10.87.33) with Microsoft SMTP Server
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2026 12:33:11 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.49; Mon, 28 Sep 2026 12:33:02 -0700
+ 15.1.2507.58; Mon, 28 Sep 2026 12:33:06 -0700
 Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Mon, 28 Sep 2026 12:32:58 -0700
+ 15.1.2507.58 via Frontend Transport; Mon, 28 Sep 2026 12:33:02 -0700
 From: Daniel Machon <daniel.machon@microchip.com>
-Date: Mon, 28 Sep 2026 21:32:49 +0200
-Subject: [PATCH net-next v9 01/15] MAINTAINERS: add FDMA library to Sparx5
- SoC entry
+Date: Mon, 28 Sep 2026 21:32:50 +0200
+Subject: [PATCH net-next v9 02/15] net: microchip: fdma: rename contiguous
+ dataptr helpers
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260928-lan966x-pci-fdma-v9-1-a17caf60f89a@microchip.com>
+Message-ID: <20260928-lan966x-pci-fdma-v9-2-a17caf60f89a@microchip.com>
 References: <20260928-lan966x-pci-fdma-v9-0-a17caf60f89a@microchip.com>
 In-Reply-To: <20260928-lan966x-pci-fdma-v9-0-a17caf60f89a@microchip.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
@@ -74,33 +74,51 @@ CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>
 X-Mailer: b4 0.14.3
 
-The FDMA library under drivers/net/ethernet/microchip/fdma/ is shared by
-the lan966x, sparx5 and lan969x drivers, but is not covered by an entry
-in the MAINTAINERS file. A subsequent patch will add new files to the
-FDMA library, so let's make sure it's covered.
+When the FDMA library was introduced [1], two helpers to get the DMA and
+virtual address of a data buffer, in contiguous memory, were added. These
+helpers have had no callers until this series. I found the naming I
+initially used confusing and inconsistent.
 
-Add drivers/net/ethernet/microchip/fdma/ to the Sparx5 SoC entry, since
-I am already listed there.
+Rename fdma_dataptr_get_contiguous() and
+fdma_dataptr_virt_get_contiguous() to fdma_dataptr_dma_addr_contiguous()
+and fdma_dataptr_virt_addr_contiguous(). This makes the pair symmetric
+and clarifies what type of address each returns.
+
+[1]: commit 30e48a75df9c ("net: microchip: add FDMA library")
 
 Tested-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 Reviewed-by: Simon Horman <horms@kernel.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/microchip/fdma/fdma_api.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6de1ff058db6..740f362e03f8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3214,6 +3214,7 @@ M:	UNGLinuxDriver@microchip.com
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	arch/arm64/boot/dts/microchip/sparx*
-+F:	drivers/net/ethernet/microchip/fdma/
- F:	drivers/net/ethernet/microchip/vcap/
- F:	drivers/pinctrl/pinctrl-microchip-sgpio.c
- N:	sparx5
+diff --git a/drivers/net/ethernet/microchip/fdma/fdma_api.h b/drivers/net/ethernet/microchip/fdma/fdma_api.h
+index d91affe8bd98..dea8e3cc155a 100644
+--- a/drivers/net/ethernet/microchip/fdma/fdma_api.h
++++ b/drivers/net/ethernet/microchip/fdma/fdma_api.h
+@@ -197,8 +197,8 @@ static inline int fdma_nextptr_cb(struct fdma *fdma, int dcb_idx, u64 *nextptr)
+  * if the dataptr addresses and DCB's are in contiguous memory and the driver
+  * supports XDP.
+  */
+-static inline u64 fdma_dataptr_get_contiguous(struct fdma *fdma, int dcb_idx,
+-					      int db_idx)
++static inline u64 fdma_dataptr_dma_addr_contiguous(struct fdma *fdma,
++						   int dcb_idx, int db_idx)
+ {
+ 	return fdma->dma + (sizeof(struct fdma_dcb) * fdma->n_dcbs) +
+ 	       (dcb_idx * fdma->n_dbs + db_idx) * fdma->db_size +
+@@ -209,8 +209,8 @@ static inline u64 fdma_dataptr_get_contiguous(struct fdma *fdma, int dcb_idx,
+  * applicable if the dataptr addresses and DCB's are in contiguous memory and
+  * the driver supports XDP.
+  */
+-static inline void *fdma_dataptr_virt_get_contiguous(struct fdma *fdma,
+-						     int dcb_idx, int db_idx)
++static inline void *fdma_dataptr_virt_addr_contiguous(struct fdma *fdma,
++						      int dcb_idx, int db_idx)
+ {
+ 	return (u8 *)fdma->dcbs + (sizeof(struct fdma_dcb) * fdma->n_dcbs) +
+ 	       (dcb_idx * fdma->n_dbs + db_idx) * fdma->db_size +
 
 -- 
 2.34.1
