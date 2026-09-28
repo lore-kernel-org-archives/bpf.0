@@ -1,102 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6BB4D795D
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 22:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF31218592;
+	Mon, 28 Sep 2026 22:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790633021; cv=none; b=DxK6zEVC0ZYglUn2oh2MB5sXfqIyoWdjIja8FAKV2l0Cf4t8J1xAOw6Fgj3UAmNs/MqpLO/whrPRlJSP4QKOxgxjMl11f9qMCRt0IZquDWdra42W/vswrYSIdXFKWCEiKHQBuhLygBhi3uKyAwmcwn3aaU9WBvun3tbL8lzCxKw=
+	t=1790635012; cv=none; b=UMuO475rlruveKkq8k5U9EvRlrs6L0Ew9kuSd3FKzAnpCavr0fEOl98MqrXADA72H99EmpFX5h2DqqV0ZBIPobf/rZmi3FRvC4qD0gdFSTZRh90AbWdvo9hx5rkWKgvl+MfmeLaRT2FyaEueNUHFqQczK15XauQEV4JZAPTJwfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790633021; c=relaxed/simple;
-	bh=qe66IsUGLcU1aN/OVsKwNb/a57Cj2xeC5+mKssiSve0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P2itrcZItCFb+qSiouPZJQwt1hEw+EtrzQFJidRCzPaQ0QgR+7MHADHn/KLdxbYSksy8EMzNmLl5tu2aTxrqe8SHpT9WF3GUQ4pNuLwReEOBgSttH84ICUVP0Ilo6InsGDiQRkxAkeQgMfZHKd4dn7BNzjs5yB/YbP1L4NO8kvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1kEALxm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790635012; c=relaxed/simple;
+	bh=LIQanfSaxIUi6VLWl0d6XjTJHItjtvI8B2E1EnJoO1U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nXkBPDm45vBPBLKb9gSbJifd8Fbc3TynLaTNQIn54ePXeushNQ5Cr49mWGCuQYOp8xcB6ECDpn3XC1dv/icWeq55apQeLyuX9vEEwDpDgPYehT8ykB+R+Kbu+UnWQIpMY66CT8bsMJIJCaEumKo1+yFvlyDe5PECxfwGdQgWoOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDxaocP6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1kEALxm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 168F31F000FF;
-	Mon, 28 Sep 2026 22:03:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDxaocP6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C99B1F000FF;
+	Mon, 28 Sep 2026 22:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790633020;
-	bh=sGfYcjpCSvPagmu/uKf8aGJ6cqF9qLQ+3xY8nwgnJeM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=S1kEALxmsnxWpIKHdj1rAFu28MFBDgNvSsQeOQCkvtbqONGM44qNX/2ouDNdvj6AN
-	 nyNClbzYbbCKgBSGLpfVq6+8cLeMA0t5jSE3d25DSYwc6ew3SZPL17Wbkf86ClqpzV
-	 kGKEuDUGOrO/KobWtLPyKmTQmlDf3BEGu3jwGADHknh731cmRICOvK0RWDgfTokAqQ
-	 CRwXZ+o1ae4a54mu0ldUVwP1XzFlrJ9PS4mxqmneUhlBhzDZSmpLvURUAm5bWYsdEe
-	 QDvtUGXVrRR3XirkdD49mccLkTQa+Hnnm4Ryn8FZLd5+pmzv68Gk7TLmULKW39TaON
-	 bRgTTJOg+pbag==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: Zero-fill non-target CPU slots on BPF_F_CPU
- insert of new per-CPU element
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?w5ZtZXIgTWV0ZSBLYXlh?= <omermetekaya0@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260928214932.544124-1-omermetekaya0@gmail.com>
-References: <20260928214932.544124-1-omermetekaya0@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 28 Sep 2026 22:03:39 +0000
-Message-Id: <20260928220340.168F31F000FF@smtp.kernel.org>
+	s=k20260515; t=1790635010;
+	bh=vPCBXO1kkq526fBpUwntrVU7Hx/cJtpw8iz8MwqJa8o=;
+	h=From:To:Cc:Subject:Date;
+	b=cDxaocP6RaNiTpZlCLr85bklliVWRVial2n80MrQop/bWMRNfgm+ihRu/6YsIh3QG
+	 i7DoIZTNRNjtqU18poYIwUqFw7nwzTcPiR+rNifxz3PkAex2KuZ1vCSO8AgFI2pqcI
+	 O5+KcGa1dmmLCZVrWl8HTC7JWnCbXB5Uo30/Mo4HkQW8yP7IsBCYDDEsY4OAY2i2CW
+	 odYKwVlrqbRja7fRaWs0tQyH1jG2bp1Yxg5EuzdIKi02hhjCzMgkAlNcZn0C4DYWiy
+	 VUPzF2nITdhZ1I6t009Ki7832lRw+CmFEw+9v/9JS2VUVzEYz9Uu0rCO6t1Nm06+N3
+	 n3OC4Lbpfwq5g==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	jv@jvosburgh.net,
+	hawk@kernel.org,
+	sdf@fomichev.me,
+	emil@etsalapatis.com,
+	liuhangbin@gmail.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	willemdebruijn.kernel@gmail.com,
+	aleksander.lobakin@intel.com,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 0/5] net: fix a couple of problems with XDP and bonding
+Date: Mon, 28 Sep 2026 15:36:43 -0700
+Message-ID: <20260928223648.2739371-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] bpf: unreachable dead code added in pcpu_init_value()
---
+I started looking at untangling XDP vs HW-GRO story because of mlx5.
+mlx5 requires HW-GRO for HDS/memory providers. But generic XDP clears
+HW-GRO enablement completely. This is annoying in NIPA but also,
+from past experience with XDP changing ring geometry and IRQ mapping,
+it will also be annoying in production.
 
-commit aa9c1147874e7681c03a2eaf750ae6f2bf2a633a
-Author: =C3=96mer Mete Kaya <omermetekaya0@gmail.com>
+My plan / hope is to make generic XDP attachment leave HW-GRO in wanted
+features, that way it comes back after XDP is removed, making NIPA happy.
+This also simplifies the drivers slightly, as they no longer have to
+check XDP vs HW-GRO locally.
 
-bpf: Zero-fill non-target CPU slots on BPF_F_CPU insert of new per-CPU elem=
-ent
+This is the most important part, I think - I would like to make
+the claim that HW-GRO and XDP are incompatible (today). Most drivers
+seem to agree, but IDPF allows XDP and HW-GRO to coexist. XDP can't
+carry the GRO/GSO state so changing the packet or trying to send it
+out would probably end badly. We should explicitly clear HW-GRO when
+XDP is attached in the core, until we have an understanding of how
+they would work together, and appropriate tests.
 
-pcpu_copy_value() with BPF_F_CPU copies the value only to the target
-CPU's slot and returns immediately, leaving all other CPUs untouched.
-When inserting a *new* element, the backing per-CPU area may be reused
-from bpf_mem_cache or a prealloc freelist without being zero-initialized,
-so non-target CPUs retain stale contents of a previously-deleted
-element in the same map =E2=80=94 a same-map information disclosure.
+Please comment if you have opinion on the HW-GRO+XDP in general,
+that said, this series is just prep around bonding. What I described
+above will come next.
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 548eb1cc7c45c..f426d4c00bdc8 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -1086,6 +1086,16 @@ static void pcpu_init_value(struct bpf_htab *htab,=
- void __percpu *pptr,
->  		}
->  	} else {
->  		pcpu_copy_value(htab, pptr, value, onallcpus, map_flags);
-> +		if (map_flags & BPF_F_CPU) {
+This series tries to shore up the gaps in XDP propagation.
+bonding bypasses the XDP program accounting in net_device so all
+the checks on control path trying to avoid enabling features
+incompatible with XDP are moot (e.g. we can have XDP+memory providers).
+First patch fixes the accounting (next 3 patches add tests).
 
-[Severity: Low]
-Is this block reachable?
+Last patch makes us drop GSO packets if they reach XDP. I can't come
+up with a clean way of stopping GRO from working on lower when upper
+has generic XDP, so let's just drop the packets. I don't think
+generic XDP is worth the effort, users can disable GRO themselves
+if they really care.
 
-Since the preceding if statement in pcpu_init_value() evaluates
-"if (!onallcpus || (map_flags & BPF_F_CPU))", the else branch will only
-execute if "(map_flags & BPF_F_CPU)" evaluates to false.
+All the issues here were discovered while working another series,
+but they were reproduced and tested with the selftests included.
 
-This makes the newly added code here unreachable. Furthermore, the new
-element initialization issue mentioned in the commit message appears to
-already be handled correctly in the first branch, which already zeroes out
-non-target CPUs via zero_map_value().
+Jakub Kicinski (5):
+  net: record XDP programs propagated to lower devices
+  netdevsim: add ndo_xdp_xmit
+  selftests: drv-net: check tcp-data-split against an already attached
+    XDP
+  selftests/bpf: check XDP attach on a nested bond slave
+  net: drop GSO skbs instead of handing them to XDP
 
-> +			int target =3D map_flags >> 32;
-> +			int cpu;
-> +
-> +			for_each_possible_cpu(cpu) {
-> +				if (cpu !=3D target)
-> +					zero_map_value(&htab->map,
-> +						       per_cpu_ptr(pptr, cpu));
-> +			}
-> +		}
->  	}
->  }
+ include/linux/netdevice.h                     |   7 ++
+ include/net/xdp.h                             |  16 +++
+ drivers/net/bonding/bond_main.c               |   4 +-
+ drivers/net/netdevsim/netdev.c                |  20 ++++
+ drivers/net/veth.c                            |   3 +
+ net/core/dev.c                                | 105 +++++++++++++-----
+ .../selftests/bpf/prog_tests/xdp_bonding.c    |  18 ++-
+ tools/testing/selftests/drivers/net/config    |   1 +
+ tools/testing/selftests/drivers/net/hds.py    |  65 +++++++++++
+ 9 files changed, 206 insertions(+), 33 deletions(-)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928214932.5441=
-24-1-omermetekaya0@gmail.com?part=3D1
+-- 
+2.55.0
+
