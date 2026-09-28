@@ -1,141 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-2z4y-a153.jellyfish.systems (out-2z4y-a153.jellyfish.systems [198.54.127.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4AA4E50AF;
-	Mon, 28 Sep 2026 17:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BFD3FA5E4
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 17:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790616272; cv=none; b=ZrjK/hUiF1e68cdxAWxgXOvcdk1f/aRDVD4WUVfgYjkHFCXJ6OM5ffITzwrJaje8RgJXCeTrnm5SziD5mJ+yqZeK3A6NwYg8xdaZX3PLxFX86UAJyswPaGnM22h/HYIlc5MMmi/+t6yGF/pBGo5xKt0d27Nnm6rq+kztrLhFbmQ=
+	t=1790616347; cv=none; b=P7kbIw7T4+dK5aRPzGU6OtZW+0NBs0u/08g3Zm8vxaCsftS8GL6qRDfT4LAkv0x7WZ1EFFhi8G7hULOe1YQtYxiIhuiOufvP7bY2/ESFeo/LDkF8xtMXhxkDzg1myfDyd9tpH9KL7sZoZpK7nFt1Zw4vEx8hvuKzhx+Kt2tW35w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790616272; c=relaxed/simple;
-	bh=A4sGNxmkOrAHQZrCx4hlTt8pCr3WBaG5i7z5E4gUzm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aRq9OiulSVvmekQFbQ9G0cA6DDf4bUte2WmW3SMCeQYb3JKTgCOQ4JYE1WCaunLRw8kovIFlA4B4wTnzMqGibmHABzEJDtK/yB+tvoMhDjO/WL99BFcNYpaqbvDMlu+e0hY1wW7xGSBnD9z4ektt4wf32Gdsp0FoTtZWyjMm4rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTTnwgHo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790616347; c=relaxed/simple;
+	bh=gw9hfRMP5K8RM/53d5o4qZzIGdwYsTgi3pnXv2QXXyo=;
+	h=Message-ID:From:Date:Subject:To:Cc; b=SzwWlU/pEOY4/IB8xsE3/96WF6gwXvoTNCRlrAupG6mzrqlR8Ch4n+ahJeDYJlvevvkziXe3Ler8kMZbEu+OLsg/nq1a2MyNwKiQtq/DReHEcVoTmjSlk2aGTBX8Ou6zHj9mOzfOS1NSrxoVRG0lCsa5a58Aq04s00quu+RU7hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=pPvB0oaq; arc=none smtp.client-ip=198.54.127.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTTnwgHo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A4B1F000FF;
-	Mon, 28 Sep 2026 17:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790616271;
-	bh=CzE2GE5JN/tI9+vf5ceSYktDtLDt2Ax4ATT81DGIpY4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BTTnwgHo3e7c9o0rEnQRB7ZYUXhkhD5eIFXOeC520HyCwUZwp8jntGIY9n5YsIix9
-	 /Ym50PIIpYqM37fQQXINrRbjumZpkwgpqOull3Vidwl2FElBE4K/ZGUVeOGKt8cKu4
-	 a+UKkqCjaVec32acLq750VC4ry62UJhA1lTT4gGp/y+DstTdzx6MC0BJ24rg7StUJf
-	 dgv845cDIgkefff7Lc7OjPDgek/7/hApSlYTBXj74Uhnqg/3FzAsZ6YruF/Wkt4mBa
-	 F4lCS7i9EpYsGaacidhpQDKTKg3WlYFlUrNt18dgBccYqZ94wbeGNi0MRC87EwDbH+
-	 BDQNjNC1bQU2A==
-Date: Mon, 28 Sep 2026 19:24:21 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Maxime Ripard <mripard@kernel.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <arqhwHiVf00j94J7@beelink>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="pPvB0oaq"
+Received: from [172.20.10.14] (unknown [151.145.76.168])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4htp3P11wfz6tkK;
+	Mon, 28 Sep 2026 17:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1790616019;
+	bh=p4jmEPfiL19R0WbLDiO7llxGbAVI26cpPxruli/nSR4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=pPvB0oaq/na1rUv4XCq+NmEUQbA8gdjeVEPcw78HoyYBlp/CIgrvQ6yMxeFtmsrmh
+	 UFaa7vupnKur7739UPa0RAVtElNzsUgCetr3yW1Z983peeR2+fBHTnmMgG+PXPyHq1
+	 vR61in9b/j93Kxrap2nb/G33IpBdu7eRz8biuo1AFH9pPUjuZPVqVymDedrAuVHLe/
+	 Ka3SzqeLEjMcvJcbR3FXC43ZepX5RKVCGBCRvND7GGd23HOoYHb+tb521LuD9zhquE
+	 XOb6nt+mFML7OWeKjDcFTLlAChX2w7/2/oyO88/uivtBxG4js7iiNA0V0LoHDnI65s
+	 BL9RrLZzOfhGg==
+Message-ID: <cover.1790615923.git.hi@tychen.cc>
+From: Tianyi Chen <hi@tychen.cc>
+Date: Tue, 29 Sep 2026 02:18:43 +0900
+Subject: [PATCH bpf-next 0/2] bpftool: Reset map info between queries
+To: bpf@vger.kernel.org
+Cc: qmo@kernel.org,
+    andrii@kernel.org,
+    eddyz87@gmail.com,
+    ihor.solodrai@linux.dev,
+    linux-kselftest@vger.kernel.org,
+    skokovmaksimevg@gmail.com
+X-Envelope-From: hi@tychen.cc
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
 
-On Sep 28 2026, Neil Armstrong wrote:
-> Hi,
-> 
-> On 9/28/26 18:22, Maxime Ripard wrote:
-> > Hi,
-> > 
-> > Panels in general, and MIPI-DSI panels in particular, are pretty
-> > difficult to support and require pretty much a panel driver for each
-> > panel produced. Most of them are pretty simple, and require an opaque
-> > initialization sequence that is usually poorly documented.
-> > 
-> > This creates a tension between OEMs and distros because OEMs will
-> > typically get a new panel to react to a sourcing issue during
-> > production, and thus need some swift turnaround between getting their
-> > new panel and it being operational in the OS. Distributions on the other
-> > hand can take years to ship a kernel with that new panel driver.
-> > 
-> > To solve this, I followed the example of HID-BPF and wrote a panel
-> > driver that will rely on BPF programs to perform the panel
-> > initialization. That way, we can ship the programs separately from the
-> > kernel, and with a different lifecycle. If this driver is accepted, the
-> > plan is to have a userspace component started by udev to identify and
-> > load the right BPF program for the panels found on the device.
-> 
-> This is kind of late for serious applications except if we manage to
-> solve the bootloader to Linux display engine transition.
-> 
-> > 
-> > This driver is fully functional and works with both 5" and 7" Touch
-> > Display 2 panels for the RaspberryPi. However, it breaks away from the
-> > typical panel driver in multiple ways:
-> > 
-> > - BPF programs can only be loaded by userspace. This leaves us with two
-> >    choices:
-> > 
-> >    * We prevent the driver from loading until the script itself is
-> >      loaded. This has the side effect of preventing any other output to
-> >      be used until the initramfs is ran at the earliest, and possibly
-> >      ever if the loader isn't installed for example.
-> 
-> This adds a dependency on user-space behavior and if somehow the
-> initramfs doesn't load for a reason we won't have a way to display
-> an error.
-> 
-> > 
-> >    * Or we probe the driver all the time, but only report it as connected
-> >      once a program has been registered. This is somewhat unconventional,
-> >      but allows the other outputs to be functional, *and* allows the user
-> >      to force the output if their panel doesn't require any
-> >      initialization or during debugging. I chose this solution.
-> 
-> Both options are not really great...
-> 
-> > 
-> > - It's not a panel driver, but a bridge one, which is also pretty
-> >    unconventional. This is required because panel drivers don't have
-> >    access to a detect callback that is required for the above, but I also
-> >    think that the recent work from Luca blurs the line from panels and
-> >    bridges and we'll end up going that road anyway.
-> 
-> On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
-> the panel and the DDIC. So being a bridge is fine, but in a general way we lack
-> a proper way to describe the display/panel/monitor independently of the DDIC.
-> 
-> At first glance it's a nice driver, but moving the timings into a blob moves something
-> into possible proprietary binaries with possible closed licence and distribution
-> restriction so it's a downgrade for the same of bringing up a panel faster.
+Reset map info before each query in the existing show and dump loops
+to prevent BTF metadata from a preceding map leaking into a map without
+BTF.
 
-Quick answer on this, because I had the very same questions regarding
-HID-BPF:
-- in BPF, you can require (and by default it does) that only GPL
-	compatible BPF programs are loaded, closing the argument of "closed
-	licence and distribution restriction"
-- also, a BPF program can be disassembled much easier than a binary
-	blob, and I remember Alexei showing me an example where you get almost
-	the source code from the BPF object in just one pass.
+Patch 1 fixes the four query loops. Patch 2 adds regression tests for
+full and named listings, JSON dumps, and plain dumps.
 
-Cheers,
-Benjamin
+All four regression subtests fail on the unmodified bpf-next base and
+pass with the fix in an x86-64 VM. This series does not depend on
+recursive dumping or Maxim's series.
+
+Tianyi Chen (2):
+  bpftool: Reset map info before each query in show and dump loops
+  selftests/bpf: Check bpftool map info across mixed BTF maps
+
+ tools/bpf/bpftool/map.c                       |   8 ++
+ .../bpf/prog_tests/bpftool_map_info.c         | 126 ++++++++++++++++++
+ 2 files changed, 134 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_info.c
+
+
+base-commit: ea9358e1270ab2c3ba6f36bd9bdda68617665516
+-- 
+2.55.0
 
