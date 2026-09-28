@@ -1,60 +1,40 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BDC4377A8A;
-	Mon, 28 Sep 2026 06:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A88377A8A;
+	Mon, 28 Sep 2026 06:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790578315; cv=none; b=pyHzyHO2HrPbHnqvmwA3vrmT5MluX6bFcPZpZTCeYYXZ9LghviubumixPbRjiLB33Egy70PMrpdobtj4O5WX11iMyx0W59cnvbFV3qAuQs4hKpjHpSOXK1d1fUD+8BkyK3bKF6y+xhmx7mzqCencsUL77/XpP06juj2SPCUL71w=
+	t=1790578347; cv=none; b=GhwIK7rpTDFxDUOJlupaujJhou+zSk77wFLi5hZRFNnsm1pkbtt4aPdoBulJG9nAfmlQ+udvIlmgpD+QiO+mzLfn1qoJjI8UjT8TVLnUEoblB0gOfRk1E7bbIUjRqMoFE5AQdmezaGL8w9mQsKyi5Yd3bAGz2TJUUt91yWkUzJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790578315; c=relaxed/simple;
-	bh=pZclHBw4hTRqn4zAyX+dq81xPXNnnvfu1pRcitXrswk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aoj9eBolO04OiQp/B4HIxhtDuXKOfaJJ/jXjajOLlchSi/DfJi+I/moQWD4e3UM4L/PYstapGjEJgU9tZaS+1tBg7JoRZExuCUGZAd7IXKo1xXt5UtQbbe8AjPlRKRkQD3atMbR/kJMxMEfUN5JjeAKae00KlOccXw/TBno1h0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cAXu6dUh; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1790578347; c=relaxed/simple;
+	bh=l99O4EFuTYgaVlJE6vpUwnoIBIsWomYu6FImDHQefNw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Pcc4+n5IQamy6p4GXCQFIaMjKD5/vQh/ap5biYCdEQHtTg3vdY+Nf5fyt9VlzdICR3Rp9prLIyepv1SpmMXZqb5bE4mhOeZyAlrn9NPiH8cidCQm2QZ3Co7MtTPc/gj4ImoOk8etUBNP3ZReiHmMapeKKaezTDMGHLQMVQiutGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=tZ+wKmOM; arc=none smtp.client-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cAXu6dUh"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68RMPJf9847847;
-	Mon, 28 Sep 2026 06:51:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=5jT551
-	7oJPg+1gJw1c3nS8KZ61rgm9av4UeuMlDP/oI=; b=cAXu6dUhyGJonoAiPpVDpQ
-	7oj9wKypwDdFlaae2u3ynrp0VyM1duvLWLCfvZEQn+w54iav4rJqjiSbaK6dGY4f
-	7Kzy/vsdFWSFtZNHhAu6LC38Ze0LkFyU/tI9aGqI56ttknZL9V9gphQWAvSjHeke
-	yOjgLNFYsOb7PFiYT8SOhrArvUSgq7F1iAiaV14svG0fHpMK0y8sBZynqMb9MgMr
-	fODt/hBZ75XfJlAm+TOsscVCX1TL89hZ3c42tf32uqxJO20+A6mHYeyJAWrYkTKL
-	DEDZI/OAHL5xLtRX5s7nqdduDVZI9GhKmbT143lymhX7yCD6wN0yMO0HV4GbmIzQ
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx5s4ys6j-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 28 Sep 2026 06:51:31 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68S2qUVi2024407;
-	Mon, 28 Sep 2026 06:51:31 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gxrrw45me-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Sep 2026 06:51:30 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68S6pQHT43057594
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Sep 2026 06:51:26 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B919F2004B;
-	Mon, 28 Sep 2026 06:51:26 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2627820040;
-	Mon, 28 Sep 2026 06:51:24 +0000 (GMT)
-Received: from [9.89.252.119] (unknown [9.89.252.119])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 28 Sep 2026 06:51:23 +0000 (GMT)
-Message-ID: <b09ca3ae-701d-4c02-9225-d08589b5b660@linux.ibm.com>
-Date: Mon, 28 Sep 2026 12:21:22 +0530
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="tZ+wKmOM"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=bF8dwco2OpD4jw+50IjUaWbm2lJ2kGH1r7RGZwU0W0U=;
+	b=tZ+wKmOMTbZczy4gL36DV6korVrDaOkEMaU77eNpngM0R1q31v2+V3uXwl+/ZcznRLqzPasUl
+	eIce1fwk7YKmARooBYj6Lqiw3GAaNlYP/36f2E2tCuWM4AXAFAu9UNw4dtAJP6Ye0pJE5lBixZP
+	fRIxJ9kXCs/c6I2hGflDe9Q=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4htWrY3DnCzKmWP;
+	Mon, 28 Sep 2026 14:39:57 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2F7F640572;
+	Mon, 28 Sep 2026 14:52:09 +0800 (CST)
+Received: from [10.67.109.91] (10.67.109.91) by whupemk100010.china.huawei.com
+ (7.152.184.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 28 Sep
+ 2026 14:52:03 +0800
+Message-ID: <a6a40c38-0e1c-4a3f-a705-e4a38c575c25@huawei.com>
+Date: Mon, 28 Sep 2026 14:52:02 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,217 +42,189 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 5/5] powerpc/bpf: Move out dummy_tramp_addr after Long
- branch stub
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc: maddy@linux.ibm.com, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        venkat88@linux.ibm.com, yeswanth@linux.ibm.com
-References: <cover.1789982239.git.skb99@linux.ibm.com>
- <552225fc257381fb83d282b3040c6ad363246465.1789982239.git.skb99@linux.ibm.com>
+Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
+ WRITE_METADATA access rights
+To: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
+	<skhan@linuxfoundation.org>, <rdunlap@infradead.org>,
+	<gregkh@linuxfoundation.org>, <rafael@kernel.org>, <dakr@kernel.org>,
+	<dlemoal@kernel.org>, <hch@lst.de>, <axboe@kernel.dk>,
+	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
+	<dhowells@redhat.com>, <code@tyhicks.com>, <linkinjeon@kernel.org>,
+	<sj1557.seo@samsung.com>, <yuezhang.mo@sony.com>,
+	<hirofumi@mail.parknet.co.jp>, <cel@kernel.org>, <jlayton@kernel.org>,
+	<neil@brown.name>, <okorniev@redhat.com>, <Dai.Ngo@oracle.com>,
+	<tom@talpey.com>, <miklos@szeredi.hu>, <amir73il@gmail.com>,
+	<senozhatsky@chromium.org>, <chenxiaosong@chenxiaosong.com>,
+	<zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
+	<dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
+	<stephen.smalley.work@gmail.com>, <omosnacek@gmail.com>,
+	<casey@schaufler-ca.com>, <nanx95726@gmail.com>, <djwong@kernel.org>,
+	<daniel@iogearbox.net>, <linux-security-module@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<driver-core@lists.linux.dev>, <linux-block@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <netfs@lists.linux.dev>,
+	<ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
+	<linux-nfs@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<xiujianfeng@huawei.com>, <lujialin4@huawei.com>, <bpf@vger.kernel.org>,
+	<kpsingh@kernel.org>, <matt@bobrowski.net>, <alexei.starovoitov@gmail.com>
+References: <20260924104831.1081137-1-caixinchen1@huawei.com>
+ <20260926.e0135fe7712f@gnoack.org>
 Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <552225fc257381fb83d282b3040c6ad363246465.1789982239.git.skb99@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI4MDAyNiBTYWx0ZWRfX3yKMRnykW+cz
- ZMbc5taDi4GvHJBmudOvU3HxiKJP9fPzxiwdO5K0PYhc67OKm9rOwEYM5OQYq3Yj1sKYaNk4uvG
- xcG3liMlX8Cj9SESJuOnL13NWDS3ow4=
-X-Authority-Analysis: v=2.4 cv=HJ5WhYtv c=1 sm=1 tr=0 ts=6aba0e74 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=JCM8ehL5gn53L53ZUGAA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 64RwCDLHdaVjaW0YFLc-09AVFc_1lBN0
-X-Proofpoint-ORIG-GUID: 64RwCDLHdaVjaW0YFLc-09AVFc_1lBN0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI4MDAyNiBTYWx0ZWRfX4HpR5nwC2d7H
- PCdFsas9XTHSDuJoUFeZwobAibSS3BD/Rw59YBMgkuF7IshAdn+/Bbt04xh1F0nifoR1pqHxgM0
- 7u3ChQNlz22M+Gze3mbaKsyuDzL/iIAmz+IFxdDg3mEzz8BGxgm02RgiWZC9gzNLwF8QkGYKMiV
- 3CsgKcTXDK8Tomiqc+ku3o5YjhoOqSAYl847JZYN3QXwHnYT3v1D9FPfhyT9wshLZOqMx33sLzz
- LMJNNSK+ctI30FivzIIBDKMU5y7KbSfyDnXJ0xEeNeF/WE8ERxrLkaFDTuZsSIRaNidX0h+yUc1
- otKc5a8V0tVcKfbgGNJGC5uJJAS/wiqv3xIolvqOUMsenmbig5QcH22dVNEtxq2oqcv0aRV34hT
- KhoPrZRnFnby7CRTQJWbOCzwevEmkxmw5R2dkx1nop4eKFm+hzARvEcQEQd3/Yt5boXTM/kqsi/
- NGdb+T4w4yLgaPx3dVQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-26_05,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
- spamscore=0 impostorscore=0 phishscore=0 priorityscore=1501 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609280026
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <20260926.e0135fe7712f@gnoack.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
+Thank you for review!
 
+I will link the feature request
+(https://github.com/landlock-lsm/linux/issues/11) in the v2 cover letter.
 
-On 28/09/26 10:43 am, Saket Kumar Bhaskar wrote:
-> From: Abhishek Dubey <adubey@linux.ibm.com>
-> 
-> Move the long branch address field to the bottom of the long
-> branch stub. This allows uninterrupted disassembly until the
-> last 4/8 bytes. The last bytes exclusion is logically necessary to
-> prevent disassembly failure, otherwise the actual program layout
-> is never altered. Hence no effect on overall program size.
-> Also, align dummy_tramp_addr field with 8-byte boundary.
-> 
-> Following is disassembler output for test program with moved down
-> dummy_tramp_addr field:
-> .....
-> .....
-> pc:68    left:44     a6 03 08 7c  :  mtlr 0
-> pc:72    left:40     bc ff ff 4b  :  b .-68
-> pc:76    left:36     a6 02 68 7d  :  mflr 11
-> pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
-> pc:84    left:28     a6 02 88 7d  :  mflr 12
-> pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
-> pc:92    left:20     a6 03 89 7d  :  mtctr 12
-> pc:96    left:16     a6 03 68 7d  :  mtlr 11
-> pc:100   left:12     20 04 80 4e  :  bctr
-> pc:104   left:8      c0 34 1d 00  :
-> 
-> Failure log:
-> Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
-> Disassembly logic can truncate at 104, ignoring last 8 bytes.
-> 
-> Update the dummy_tramp_addr field offset calculation from the end
-> of the program to reflect its new location, for bpf_arch_text_poke()
-> to update the actual trampoline's address in this field.
-> 
-> All BPF trampoline selftests continue to pass with this patch applied.
-> 
+For https://github.com/landlock-lsm/linux/issues/18, the current
+READ_METADATA cannot solve this problem, and I don't have a good idea 
+for now.
 
-Looks good to me.
+For path_* rename, I'd rather keep the inode_* names:
 
-Acked-by: Hari Bathini <hbathini@linux.ibm.com>
+* There is precedent for the mismatch: the inode_getattr hook
+   upstream already takes a "const struct path *" (this series just
+   aligns the other metadata hooks with it).
 
-> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
-> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
-> Tested-by: R Nageswara Sastry <rnsastry@linux.ibm.com>
-> ---
->   arch/powerpc/net/bpf_jit_comp.c | 44 ++++++++++++++++++---------------
->   1 file changed, 24 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 8ca36a933c7a..c2717f0d9cdd 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -52,19 +52,19 @@ asm (
->   void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
->   {
->   	int ool_stub_idx, long_branch_stub_idx;
-> -	int ool_stub_sz;
-> +	int stub_sz;
->   
->   	/*
-> +	 * The dummy_tramp_addr field is placed at bottom of Long branch stub.
->   	 * Align the mis-aligned dummy_tramp_addr field in the fimage.
->   	 * The alignment NOP must appear before OOL stub, to make
->   	 * ool_stub_idx & long_branch_stub_idx constant from end.
->   	 *
->   	 * The fimage can be non 8-byte aligned, so final alignment depends
-> -	 * on start of fimage and the stub's instruction count offset. The
-> -	 * OOL stub size is 4 instructions (with CONFIG_PPC_FTRACE_OUT_OF_LINE)
-> -	 * or 3 instructions (without) before dummy_tramp_addr.
-> -	 *
-> -	 * Emit a NOP here if address is not SZL aligned.
-> +	 * on start of fimage and the stub's instruction count. The
-> +	 * stubs block has 11 instructions (with CONFIG_PPC_FTRACE_OUT_OF_LINE)
-> +	 * or 10 instructions (without) before dummy_tramp_addr field. Emit a
-> +	 * NOP if the address of dummy_tramp_addr is non aligned.
->   	 *
->   	 * In pass=0 when image==NULL, conservatively account for space
->   	 * required to accommodate alignment NOP. In case final pass skips
-> @@ -72,8 +72,8 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
->   	 * jited_len signifies correct program size.
->   	 */
->   
-> -	ool_stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 16 : 12;
-> -	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + ool_stub_sz, SZL))
-> +	stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 44 : 40;
-> +	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + stub_sz, SZL))
->   		EMIT(PPC_RAW_NOP());
->   
->   	/*
-> @@ -94,28 +94,29 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
->   
->   	/*
->   	 * Long branch stub:
-> -	 *	.long	<dummy_tramp_addr>  // 8-byte aligned
->   	 *	mflr	r11
->   	 *	bcl	20,31,$+4
-> -	 *	mflr	r12
-> -	 *	ld	r12, -8-SZL(r12)
-> +	 *	mflr	r12	// lr/r12 stores pc of current(this) inst.
-> +	 *	ld	r12, 20(r12) // offset(dummy_tramp_addr) from prev inst. is 20
->   	 *	mtctr	r12
-> -	 *	mtlr	r11 // needed to retain ftrace ABI
-> +	 *	mtlr	r11	// needed to retain ftrace ABI
->   	 *	bctr
-> +	 *	.long	<dummy_tramp_addr>  // SZL bytes aligned
->   	 */
-> -	if (image)
-> -		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
-> -
-> -	ctx->idx += SZL / 4;
->   	long_branch_stub_idx = ctx->idx;
->   	EMIT(PPC_RAW_MFLR(_R11));
->   	EMIT(PPC_RAW_BCL4());
->   	EMIT(PPC_RAW_MFLR(_R12));
-> -	EMIT(PPC_RAW_LL(_R12, _R12, -8-SZL));
-> +	EMIT(PPC_RAW_LL(_R12, _R12, 20));
->   	EMIT(PPC_RAW_MTCTR(_R12));
->   	EMIT(PPC_RAW_MTLR(_R11));
->   	EMIT(PPC_RAW_BCTR());
->   
-> +	if (image)
-> +		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
-> +
-> +	ctx->idx += SZL / 4;
-> +
->   	if (!bpf_jit_ool_stub) {
->   		bpf_jit_ool_stub = (ctx->idx - ool_stub_idx) * 4;
->   		bpf_jit_long_branch_stub = (ctx->idx - long_branch_stub_idx) * 4;
-> @@ -1309,6 +1310,7 @@ static void do_isync(void *info __maybe_unused)
->    * bpf_func:
->    *	[nop|b]	ool_stub
->    * 2. Out-of-line stub:
-> + *	nop	// optional nop for alignment
->    * ool_stub:
->    *	mflr	r0
->    *	[b|bl]	<bpf_prog>/<long_branch_stub>
-> @@ -1316,14 +1318,14 @@ static void do_isync(void *info __maybe_unused)
->    *	b	bpf_func + 4
->    * 3. Long branch stub:
->    * long_branch_stub:
-> - *	.long	<branch_addr>/<dummy_tramp>
->    *	mflr	r11
->    *	bcl	20,31,$+4
->    *	mflr	r12
-> - *	ld	r12, -16(r12)
-> + *	ld	r12, 20(r12)
->    *	mtctr	r12
->    *	mtlr	r11 // needed to retain ftrace ABI
->    *	bctr
-> + *	.long	<branch_addr>/<dummy_tramp>
->    *
->    * dummy_tramp is used to reduce synchronization requirements.
->    *
-> @@ -1425,10 +1427,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
->   	 * 1. Update the address in the long branch stub:
->   	 * If new_addr is out of range, we will have to use the long branch stub, so patch new_addr
->   	 * here. Otherwise, revert to dummy_tramp, but only if we had patched old_addr here.
-> +	 *
-> +	 * dummy_tramp_addr moved to bottom of long branch stub.
->   	 */
->   	if ((new_addr && !is_offset_in_branch_range(new_addr - ip)) ||
->   	    (old_addr && !is_offset_in_branch_range(old_addr - ip)))
-> -		ret = patch_ulong((void *)(bpf_func_end - bpf_jit_long_branch_stub - SZL),
-> +		ret = patch_ulong((void *)(bpf_func_end - SZL), /* SZL: dummy_tramp_addr offset */
->   				  (new_addr && !is_offset_in_branch_range(new_addr - ip)) ?
->   				  (unsigned long)new_addr : (unsigned long)dummy_tramp);
->   	if (ret)
+* The path_* prefix has an established meaning in the LSM hook
+   interface: it denotes the pathname-based (TOMOYO/AppArmor-style)
+   hooks that are invoked at the VFS path level *before* the
+   corresponding inode_* hook, as a paired, duplicate check
+   serving a different class of LSMs.  For example, a chmod(2)
+   currently runs security_path_chmod() (fs/open.c, for TOMOYO and
+   AppArmor) and then, via notify_change(),
+   security_inode_setattr() (for SELinux, Smack and now Landlock);
+   vfs_mknod() similarly calls both security_path_mknod() and
+   security_inode_mknod().  Renaming inode_setattr to
+   path_setattr would put two path_-prefixed hooks with different
+   call contracts into the same syscall, and path_chown(path,
+   uid, gid) next to a path_setattr(path, attr) would read as a
+   redundant pair, even though they belong to different hook
+   families.  Landlock itself already uses the path_* family for
+   its real path-level hooks (e.g. path_truncate for the TRUNCATE
+   right), so mixing renamed inode hooks into that prefix would
+   also blur its own hook table.
 
+* If the consensus is that these hooks should be renamed, I think
+   that should be a standalone, tree-wide rename series (including
+   inode_getattr), so that BPF programs only break once instead of
+   twice.
+
+On 9/26/2026 4:27 PM, Günther Noack wrote:
+> On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
+>> This series adds two new Landlock filesystem access rights,
+>> LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
+>> which control access to file and directory metadata such as inode
+>> attributes (mode, ownership, timestamps), extended attributes and POSIX
+>> ACLs.  It picks up the work from the "landlock: add chmod and chown
+>> support" series [1] and follows the coarse-grained grouping discussed in
+>> that thread [2]: instead of separate chmod/chown rights, metadata
+>> operations are grouped into one read and one write right.
+>>
+>> Landlock evaluates access rights on a per-path basis, but the metadata
+>> related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
+>> inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
+>> inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
+>> object.  Patches 1-7 therefore first pass struct path instead of dentry
+>> through the metadata-related VFS helpers and LSM hooks.  This is a pure
+>> refactoring with no behavior change, split so that every patch builds
+>> and works on its own:
+>>
+>>    1: notify_change() and its callers
+>>    2: inode_setsecctx hook (must come before 3: the SELinux and Smack
+>>       implementations call __vfs_setxattr_locked internally)
+>>    3: xattr helpers, which also drops a redundant EVM xattr size sanity
+>>       check whose vfs_getxattr() call only has a dentry and therefore
+>>       cannot be migrated to the new path-based signature
+>>    4: POSIX ACL helpers
+>>    5: inode_setattr hook
+>>    6: inode xattr hooks
+>>    7: inode POSIX ACL hooks
+>>
+>> Two deliberate scoping decisions for this refactor:
+>>
+>> - The hooks consistently take struct path rather than struct file.  The
+>>    VFS call sites involved (chmod(2), chown(2), utimensat(2), xattr(2)
+>>    and ACL syscalls) operate on paths, and several of them (lstat(2),
+>>    lchown(2), llistxattr(2), ...) have no struct file to begin with.
+>>
+>> - struct inode_operations->setattr still receives (idmap, dentry, attr).
+>>    Only the VFS boundary (notify_change()) and the LSM hook layer see the
+>>    path, which keeps the refactor contained to fs/attr.c and the LSM
+>>    infrastructure instead of touching every filesystem.
+>>
+>> Patches 8-12 then implement the new rights, their tests, the sandboxer
+>> sample and the documentation.  Semantics:
+>>
+>> - READ_METADATA covers stat(2) and friends, getxattr(2) and friends,
+>>    listxattr(2) and friends, and POSIX ACL reads.
+>> - WRITE_METADATA covers chmod(2), chown(2), utimensat(2), setxattr(2),
+>>    removexattr(2) and friends, and POSIX ACL set and remove.
+>> - Only explicit metadata changes requested by user space are restricted.
+>>    Implicit changes performed by the kernel (e.g. timestamp updates on
+>>    write(2), size changes on truncate(2)) are not, and neither are
+>>    chmod(2)/chown(2) calls that change nothing (e.g. chown(2) with
+>>    (-1, -1), which never reaches the hook), matching the SELinux
+>>    inode_setattr behavior.
+>> - Kernel-internal accesses performed with override_creds() (e.g.
+>>    overlayfs, cachefiles) and kernel threads without a Landlock domain
+>>    (e.g. nfsd, ksmbd) are not restricted.
+>>
+>> The Landlock ABI version is incremented from 11 to 12.
+>>
+>> The series is based on linux-next commit 5c4d4169604b ("Add linux-next
+>> specific files for 20260921").
+>>
+>> Testing: each patch has been built for aarch64 (gcc, -Werror) and the
+>> landlock selftests (445 tests, including the new ones) pass in QEMU on
+>> aarch64; base_test reports ABI v12.
+>>
+>> [1] https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
+>> [2] https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
+> Thank you for sending this patch set!
+>
+> Some meta-remarks at the beginning:
+>
+> * You might want to link the bugtracker feature request:
+>    https://github.com/landlock-lsm/linux/issues/11
+> * In the final version, I think it's preferred to merge patches 8
+>    (adding the access right enums) and 9 (adding the LSM hooks that use
+>    them).  Having the feature as an atomic commit makes it harder to
+>    accidentally mess it up during a backport, because you can't patch 8
+>    without 9.
+> * As Paul alluded to, the changes to the LSM hook interface and to the
+>    existing callers in VFS are likely the hardest part of this patch
+>    set.  Alexei from the BPF subsystem has also reiterated recently
+>    that he wants BPF to be looped into such changes.  BPF hooks do not
+>    give the same backwards compatibility guarantees as the syscall
+>    layer, but there are existing users of LSM hooks specifically
+>    through the BPF LSM.
+>
+> * In https://github.com/landlock-lsm/linux/issues/18, we came across
+>    statfs(), which returns file system meta-information based for the
+>    file system that a given file belongs to.  I have weak confidence
+>    that READ_METADATA would be the right access right to protect this
+>    with, but it's a somewhat related operation.  Maybe you have some
+>    thoughts on this?
+>
+> More concrete questions:
+>
+> * If a "inode" LSM hook gets a "path" argument now, should it be
+>    renamed from "inode_..." to "path_..."?
+>
+>    (Maybe the BPF people can chime in about to what extent that would
+>    cause additional churn for BPF users, in a situation where they
+>    anyway already need to make a change due to the changing function
+>    signature?)
+>
+> –Günther
