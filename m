@@ -1,68 +1,39 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mta1.migadu.com (out-140.mta1.migadu.com [95.215.58.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F2D48CD50
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 21:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67E33B7757
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 21:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790632194; cv=none; b=BLIA30uH1Xov7lF+j/9QmyWw/gVlnXv4myT9468qLXtcedQKzB8kQq5cHIVgnDqkwvgrq5o5vWVMCKhbzbXjqz0TF4SsbNxtKJoZ3I8JfYuR6RdjocPXYsLO2W/09+NexoViLiJe2dsNsBq3L2GeOhbMB1WxN1XBVoVB8GtGYz0=
+	t=1790632284; cv=none; b=mP4wR5EOsW7DqKVUY3ErLN38S5hpj61DwPdbB4igP7Zawg7cCej8GO4KolYSqyrVHGKTjNlqDb/ofkQ7wHcOJCkzdAqyNPd/KeUuljNHWzs+B3bUlYAddl9TyU/VCIvXA16LN5+XfBAHNQwYFj+Qg03CcqP4XyxeSJwutpplr4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790632194; c=relaxed/simple;
-	bh=ilQXaEciDmAvPZ2ZCD3kX6pyRzoHKCk42twk2gWnZPY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CL8EZZEXSmB71P4GM+NyVBz3OPdVMR8Gii/9JMP+AGASlZ6OY4O51QyluKuGmFhHlYr+cQ+V8EweZqiu4ys9nD2V5hL9evbMdyer+WzG/8xGBNPUfY76JR1qlbnkB+vcq51ZC08KPFTN3J9zCUV6e3N5ln3E/f/yC0ratPsCkZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KwfN01/v; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790632284; c=relaxed/simple;
+	bh=QuZOUlYYZuS9Kslz5UG/STBli+7LBXT+FgQPgWf8Z18=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WvV7H5SMOQGC6AUGiEvYMGvfIC6bVPRsntLm+JBrbV9zv96fQiitjiu+rO9Di6EmJUh45d6Et8dlbJH5W3oWakdDcv9FiVdZdKOAcTfd6T65r+D1NAv6a4KABhS1DGnbqKUJlh7FKoJRc+tEi2GUgLhP6OaD060hr6ZDVSpxmPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I4AuBbii; arc=none smtp.client-ip=95.215.58.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KwfN01/v"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49e66390995so19731395e9.2
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 14:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790632191; x=1791236991; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=81S92gRsTze5dEkVsqAlBNRD4h1XA9f5yyArW4yZOQA=;
-        b=KwfN01/vdOTXCooUL3QRj7PoEWtCQInhwg0DWAKz8DUcdVRjG1Kf/sqwIOVteySWAx
-         8ENRqsBYC70x30LY9gcuTm6pUZMjbT50ghUf60g+gKNx0Qe9kxwdxXWgwRAMVwY2jqJC
-         E9iL7lY50N+4lEVAmkCFYFgI7+Or23IAFO6X89f+MwZlQH/p//aHZ6g/zvloIkklUHBa
-         89fmsG6K2+BWXMzE2pVBwWbzMNE7BxrwARqBVP9zaoWbXq6jtsLufLB2J+AKIk160dYA
-         tU8MrFtEe4SBwA54HdVKjS/zWrC1JriRoMdhwInyM7makGLXGE5r5uje2gAf8M+ulx1/
-         Kd5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790632191; x=1791236991;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=81S92gRsTze5dEkVsqAlBNRD4h1XA9f5yyArW4yZOQA=;
-        b=W58Fy/qOyVJaeEzNHcrlASlsLHkLpQQBqN0x/Y08O3AfBmGyWLMwWLIN6vBVwA1hu4
-         vdeOkcnhG2Pchczjy2ZRiQth3j8iBkVu0kcP7E5OvbZh4SXraKuUYCvX8KBICzFdEQjL
-         5p3wvB1EiMJV7iLM4QlDdEvVKnxPRyT8cvBXef4aSF34cCz0xs63Y0zwfgJeCyeAtiYG
-         wAsh15K+gi363XaAS6ytaf7bwbAI2PwpqvvtXh8x41nK6X0gac+3fmPeTDJSiUmyVk38
-         W4Uw+/9kbqTkOYOeYPTOfQTBb5A2Y73mGnY2KtGmhlUVC8kCiJ3k0JBxY/4Q57pcvKq4
-         4HnQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwFYTqgxNIo3ahLwPQzC1vZb5kmgMqgnvhdPDQ/h3wWwunELekko+P3lGQbUE5NnFniOx4=@vger.kernel.org
-X-Gm-Message-State: AFuF++n9aQG+clsTjXB/OKZSCDalBTRPnQwF2aQ1owSdSrUXkO3P2XXg
-	ak/r1fPJquEZNCyQ5Fy+NEZM7aAMuuQVqnYhUJXQsfW6wKN+YPyfEEIM
-X-Gm-Gg: AYBFou0pXQ1StbdJV6Xb3X/YU+5Ns+1Iehj04/qVYyoH8ABwdumtu3E98jt4ap7NpNc
-	Z+PsLwDjhk44K3wxBhXvGXXD8Yk8iRUalXY1bUXC8QOaLvF6ECtBRqMBmmU7ay5CdXyfkeHrmd8
-	XovMqW2j7wwDwSN36yZvxxvIVTiKoah6KE05EyxtbL0TZoU4ArpJpK/6ahRwjsK8cbhaiU1bA92
-	Lj3Q33IbT981hGZOst2xhIS6nhdsLgiE4c4j1Y7IjQd9tJ/3eRYrMSyRyvi2uAGG+CJQfyRuTDD
-	iLLm2USL5oS5nYNahOfE9d4uIOw7ekcukhB19MPQE7ngwG8BTqvLx1jiY7SDqM3eo0g3paeNp//
-	Yvq8fGmwL/7LJQsVySrV1rJ0UCTBjBUlIiFLvr1iE8Tvau9eKQrOUoVjYk4OUmOUaBqhnLvKbvc
-	FfAgVE12Mj3us8s2cJ8A1mcXb/f/b7imUziimf6GTwxNBWMyh+FnDeyOTNi9jhN7Vd17HIDL7Lc
-	gtd+j0=
-X-Received: by 2002:a05:600c:698d:b0:49d:1df6:2592 with SMTP id 5b1f17b1804b1-49ff06e504dmr192580495e9.21.1790632190773;
-        Mon, 28 Sep 2026 14:49:50 -0700 (PDT)
-Received: from metepc ([46.197.185.71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00cfa57d7sm22704295e9.10.2026.09.28.14.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 14:49:50 -0700 (PDT)
-From: =?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
-To: ast@kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I4AuBbii"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=QuZOUlYYZuS9Kslz5UG/STBli+7LBXT+FgQPgWf8Z18=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790632279; v=1; x=1791237079;
+ b=I4AuBbiioMxy8JW3+qpEdimL3n1TaUlxhyPrDDsU+Gze47TcJwk6yWUdRonL1e0iy4NXflnf
+ D/dqokH7UmQZDSQ2HycMlS56IwaEWJuei+pansXK0iRH7RVN+cxlwmmWFhMe3NmGsJ6/CckPoW+
+ RauTvbeWMHRfkm75kQP7eyRU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a88035eb946d56e8;
+	Mon, 28 Sep 2026 21:51:19 +0000
+X-Mizu-Trace-ID: a88035eb946d56e8
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: bpf@vger.kernel.org,
+	andrii@kernel.org,
+	ast@kernel.org,
 	daniel@iogearbox.net
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
+Cc: eddyz87@gmail.com,
 	memxor@gmail.com,
 	martin.lau@linux.dev,
 	song@kernel.org,
@@ -70,13 +41,11 @@ Cc: andrii@kernel.org,
 	jolsa@kernel.org,
 	emil@etsalapatis.com,
 	ihor.solodrai@linux.dev,
-	leon.hwang@linux.dev,
-	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
-Subject: [PATCH bpf] bpf: Zero-fill non-target CPU slots on BPF_F_CPU insert of new per-CPU element
-Date: Tue, 29 Sep 2026 00:47:29 +0300
-Message-ID: <20260928214932.544124-1-omermetekaya0@gmail.com>
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next] selftests/bpf: Fix linked_externs with bpf-gcc
+Date: Mon, 28 Sep 2026 14:51:10 -0700
+Message-ID: <20260928215110.3966357-1-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -84,66 +53,168 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-pcpu_copy_value() with BPF_F_CPU copies the value only to the target
-CPU's slot and returns immediately, leaving all other CPUs untouched.
-When inserting a *new* element, the backing per-CPU area may be reused
-from bpf_mem_cache or a prealloc freelist without being zero-initialized,
-so non-target CPUs retain stale contents of a previously-deleted
-element in the same map — a same-map information disclosure.
+This was reported by BPF CI [1]. test_progs-bpf_gcc fails to build:
 
-pcpu_init_value() is used to initialize newly allocated elements, while
-updates to existing elements call pcpu_copy_value() directly; non-target
-CPU slots intentionally retain their previous values there.
+  prog_tests/linked_externs.c:17:23: error: 'struct linked_arena' has no
+      member named 'arena'
 
-The onallcpus=false path in pcpu_init_value() already handles new
-element initialization correctly by explicitly zeroing non-current CPUs:
+[1] https://github.com/kernel-patches/bpf/actions/runs/36243003457
 
-  if (cpu == current_cpu)
-      copy_map_value(..., value);
-  else
-      zero_map_value(...);
+Two separate problems, both from bpf-gcc not supporting address_space(1).
 
-Fix by adding a zero-fill pass in pcpu_init_value() after
-pcpu_copy_value() returns, covering only the BPF_F_CPU new-element
-path: iterate all CPUs and zero-fill every slot except the target.
-This leaves pcpu_copy_value() unchanged so the update-existing-element
-semantics are not affected.
+First, the arena globals are defined with __arena, but that macro is for
+pointers -- it marks the pointee address space. The one that carries
+placement is __arena_global:
 
-Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash and lru_percpu_hash maps")
-Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
+  #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
+  #define __arena        __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
+  #define __arena_global __attribute__((address_space(1)))
+  #else
+  #define __arena        __attribute__((btf_type_tag("arena")))
+  #define __arena_global SEC(".addr_space.1")
+  #endif
+
+Under bpf-gcc __arena is only a BTF type tag, so the variables land in
+.data, the arena map gets no initial value, and bpftool does not emit the
+typed arena member, hence the build error.
+
+Second, fixing the placement is not enough to run the test. Dereferencing
+an arena global needs an addr_space_cast, which only clang emits:
+
+  clang:                                  bpf-gcc:
+    r1 = 0x0 ll                             r1 = 0x0 ll
+    r1 = addr_space_cast(r1, 0x0, 0x1)      r2 = *(u64 *)(r1 + 0x0)
+    r1 = *(u64 *)(r1 + 0x0)
+
+so the verifier sees a scalar and rejects the program:
+
+  4: (79) r2 = *(u64 *)(r1 +0)
+  R1 invalid mem access 'scalar'
+
+Guard the program bodies and skip the skeleton subtest, as
+arena_atomics.c already does.
+
+The fallback bodies reference the externs without dereferencing them,
+otherwise gcc drops the unreferenced extern and relink_arena passes
+without having an extern to resolve.
+
+With this, bpf-gcc reports:
+
+  #217/1   linked_externs/skel_arena:SKIP
+  #217/2   linked_externs/relink_arena:OK
+  #217/3   linked_externs/relink_maps:OK
+
+and clang still passes all three.
+
+Fixes: 34354db1b148 ("selftests/bpf: Add linked_externs test for externs in allocated sections")
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-Tested with a reproducer:
-- Before the fix: CPU 1 retained 0xDEADBEEFCAFEBABE from the deleted
-  element.
-- After the fix: the non-target CPU read back zero.
+ .../selftests/bpf/prog_tests/linked_externs.c | 15 +++++++++++--
+ .../selftests/bpf/progs/linked_arena1.c       | 22 ++++++++++++++++++-
+ .../selftests/bpf/progs/linked_arena2.c       |  6 ++++-
+ 3 files changed, 39 insertions(+), 4 deletions(-)
 
- kernel/bpf/hashtab.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 8cc07e54daaa..dff4321f2828 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -1099,6 +1099,16 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
- 		}
- 	} else {
- 		pcpu_copy_value(htab, pptr, value, onallcpus, map_flags);
-+		if (map_flags & BPF_F_CPU) {
-+			int target = map_flags >> 32;
-+			int cpu;
+diff --git a/tools/testing/selftests/bpf/prog_tests/linked_externs.c b/tools/testing/selftests/bpf/prog_tests/linked_externs.c
+index 29358c82dc35..ff568f5cfc42 100644
+--- a/tools/testing/selftests/bpf/prog_tests/linked_externs.c
++++ b/tools/testing/selftests/bpf/prog_tests/linked_externs.c
+@@ -10,10 +10,20 @@ static void test_skel(void)
+ 	struct linked_arena *skel;
+ 	int err;
+ 
+-	skel = linked_arena__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++	skel = linked_arena__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
+ 		return;
+ 
++	if (skel->data->skip_tests) {
++		printf("%s:SKIP: no addr_space_cast support in the BPF compiler\n", __func__);
++		test__skip();
++		goto cleanup;
++	}
 +
-+			for_each_possible_cpu(cpu) {
-+				if (cpu != target)
-+					zero_map_value(&htab->map,
-+						       per_cpu_ptr(pptr, cpu));
-+			}
-+		}
- 	}
++	err = linked_arena__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
+ 	ASSERT_EQ(skel->arena->a_val, 1, "a_val_init");
+ 	ASSERT_EQ(skel->arena->b_val, 2, "b_val_init");
+ 
+@@ -28,6 +38,7 @@ static void test_skel(void)
+ 	ASSERT_EQ(skel->arena->a_val, 11, "a_val");
+ 	ASSERT_EQ(skel->arena->b_val, 22, "b_val");
+ 
++cleanup:
+ 	linked_arena__destroy(skel);
  }
-
---
-2.55.0
+ 
+diff --git a/tools/testing/selftests/bpf/progs/linked_arena1.c b/tools/testing/selftests/bpf/progs/linked_arena1.c
+index 3e8788dec1d9..dd9c5fa424dd 100644
+--- a/tools/testing/selftests/bpf/progs/linked_arena1.c
++++ b/tools/testing/selftests/bpf/progs/linked_arena1.c
+@@ -10,13 +10,33 @@ struct {
+ 	__uint(max_entries, 1); /* number of pages */
+ } arena SEC(".maps");
+ 
+-long __arena a_val = 1;
++/*
++ * Dereferencing an arena global needs the compiler to emit an
++ * addr_space_cast, which only clang does. Keep the variables so the arena
++ * is still populated and the skeleton still has its arena member, but skip
++ * the test elsewhere.
++ */
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++bool skip_tests __attribute((__section__(".data"))) = false;
++#else
++bool skip_tests = true;
++#endif
++
++long __arena_global a_val = 1;
+ extern long __arena b_val; /* defined in linked_arena2.c */
+ 
+ SEC("syscall")
+ int sum1(void *ctx)
+ {
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+ 	return a_val + b_val;
++#else
++	/*
++	 * Reference the extern without dereferencing it, so that the relink
++	 * test still has an extern to resolve.
++	 */
++	return (long)&b_val;
++#endif
+ }
+ 
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/linked_arena2.c b/tools/testing/selftests/bpf/progs/linked_arena2.c
+index d0bcdf18a4b6..1bc8b97ed8cc 100644
+--- a/tools/testing/selftests/bpf/progs/linked_arena2.c
++++ b/tools/testing/selftests/bpf/progs/linked_arena2.c
+@@ -4,15 +4,19 @@
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_arena_common.h"
+ 
+-long __arena b_val = 2;
++long __arena_global b_val = 2;
+ extern long __arena a_val; /* defined in linked_arena1.c */
+ 
+ SEC("syscall")
+ int bump2(void *ctx)
+ {
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+ 	a_val += 10;
+ 	b_val += 20;
+ 	return a_val + b_val;
++#else /* see linked_arena1.c */
++	return (long)&a_val;
++#endif
+ }
+ 
+ char _license[] SEC("license") = "GPL";
+-- 
+2.53.0-Meta
 
