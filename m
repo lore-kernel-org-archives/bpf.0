@@ -1,237 +1,168 @@
-Received: from mail-oo2-f36.google.com (mail-oo2-f36.google.com [74.125.231.164])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C5F37C0E6
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 18:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2195632;
+	Mon, 28 Sep 2026 18:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790621646; cv=none; b=jh7XBgKhiiaA1k37lCOPKZlbHGUd7O37g0T6r2PzcOt0coh1TYfDzDncqD347gePzYSmohKJVzy09pxEI4kxMWayhyBqHO6h4GUV6XK/hwbKRY7wucvM4IzdwZDOxGNA4es/kxr3CHfbSS7Qf+SctcJA4KZLhojz4btV2eqTPV8=
+	t=1790621745; cv=none; b=qPOr9+fAtzWkWXCwXbnNxcjgdDhkH2hr6ybU8huoq+xFpDPJY1MWSMyvbq39IeQ1bvWGX3Q4+UyXqzDdDCTw4mgeEr3nYUHJs1cZJIJHNdOAmD7Kz8KySYRAuWmPUDYU/2E+ygsZqz7mGe2gTvmyAxVievFOKKVX8O1oxCysKtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790621646; c=relaxed/simple;
-	bh=O7GCxgq/pY3LnesExSbdjtJVCJNv1V690HDE/atSPbY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H0dO/Ihqim3dDjymdv6ht8uosT9S8qV4cLvgJWyIdPjSPjjX9hKLj5ayAyAs3XFsRwHYEHSCw2uAgJeoELzx84TAJaP9xURVjsH2TVtApnkAYc7PR/RDtG92cargBVQkCxuo41zGlrkb1l8E1BowWY5hpnD86S63KvAjbsa4vuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wz1z2k/S; arc=none smtp.client-ip=74.125.231.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790621745; c=relaxed/simple;
+	bh=onZDiNCv4SpLXbclYO7QTRI0/zTxTJio8MMiVpSA3ys=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G1ZMk3w8aoWLJ4/CjU9ICxsYo0TEfNUmUCu3BDPIHqX656zF9hG4jBm4JQiBqgerkJ1TISxvm9JIU2SfOsx/bfyq9LIUqIbkSP0TLMDp0DjSS8am08IGj4RaqVRdrss1pt7t6uGR6npa0JJyyZ+xRpo8AvANU3xDNzO/q3A9AWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHmy2ePq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wz1z2k/S"
-Received: by mail-oo2-f36.google.com with SMTP id 006d021491bc7-6d769a6fbe4so169168eaf.3
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 11:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790621632; x=1791226432; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UhzAQptal3G+ETurMu5M3pPLQUPYks+6Xzslu0tt0JA=;
-        b=Wz1z2k/S9xCpaovcZ4FeucazV40nuNUwg4HYsav+MOG4OX51KCUzBRisvN+5e8TmXM
-         aG3abNu1VtDet/hLjub2ArJs6xiGbvjDfVBALUCw8Y62NUdaHCptFHrNUyZu/e4bXFAI
-         ic0vkHYdPvWCRea1d1fl2xHHVBQpa0zXJwr4mwU5u44TtQ405FPMTlZbdVbLKfeZO7aF
-         MbtPfXMvXO3zhsdzZc4HK8ndGuJ485QVs+fnihjRYLgYK9ilpZMHO4RXr6EcmZhtbmCM
-         MTiHfb08ziHjnrocJ0YMG98S3rOHWLPOuWJX53boKqSISPTF9gRGdzBJyir7/dC9tXsa
-         iJBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790621632; x=1791226432;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UhzAQptal3G+ETurMu5M3pPLQUPYks+6Xzslu0tt0JA=;
-        b=JIcWQgS5oiZEaIYqUGlWug2MLis0lbtUgIFL160GwQuv6Bos62NGuqaJrwlzI8Q4iP
-         JOrMKurjnjpXKskqOtWnUZz4UfT7/kZEvF2KVyF6ClZyQj9A3Ccip6M3KDDoKB4AHABB
-         EJ9x4V8b1JqpO6DKQV+Xtrf2fSa4+PVXJTCVnR7fLJwrLcpB9SAMm4qmB+A7CzUcTliO
-         ixt+OjsxWAfd5IgXksOesTsIgNrYCYr2ts5DuzeWayhXzD4XM9MWdApWIg+MlX/mhpYv
-         BLYkliPAcCCsHcGhJO8c5XRexw0WEwAeTAz446u/48qMCwyuu9HfGjutptgxaxn0TRKf
-         +z+g==
-X-Gm-Message-State: AFuF++neMSiq6Cn/j5zoIFarGLuUXwRljx+xeS/EErUOfMXFcwUGM3lO
-	j4HJqanA0+lmN5O+uuQEwFhWgMIBxi3/IDRh2/BrSScZzkKqIOUSTFiKBw/9FA==
-X-Gm-Gg: AYBFou2jOdtFsBvQ3HGnS9AXw1WXlny7pd1BdgtM9uGm2hAWTvxRg6A2BW13NMpQJy7
-	n9OO/5L5InHzLGZDERxBlC0bQ75Mwad8LsHzZkTzEoW88PEIwcahBEEa9UPqDxA1lUHgYIiTM13
-	e4p0hAyQV6IfHoCzFfMybq6qW7Ml5/Vb4XHYa+ywuOQb+zYwwlmmkU1qSajwJxOuRkfKlt4N48N
-	X/X0kLaZTW6dLv9exYFNp4JaSNJ5582IkdWpuNANo/wyDjE7vS+YDE/+efoPvIuZMninUn4yPBv
-	iOC+y7bZEhzLN4SLnzRvJ16U0Z7axCKLDlw9gccKTuK9nnvjFKbNYBSKsSboDT96zQ9IiKzGW/x
-	8Qendt9ye7Uchs/VA9pDwEVrkO34YGScrPqJZ7jUdo2e41JoKhfo4mzLFm+9s31xrxfyTUM4xnA
-	8FxWWvdKhAavzsGCcRvswFeOPWMxbkSMD3sGA4WSaitxNCi3SBg6bfy2/NWko9TQ==
-X-Received: by 2002:a05:6820:a0c:b0:6cd:3fdc:a936 with SMTP id 006d021491bc7-6d441d78911mr11963947eaf.83.1790621631833;
-        Mon, 28 Sep 2026 11:53:51 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:4a::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d8802f28b6sm5745045eaf.2.2026.09.28.11.53.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 11:53:51 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 11/11] bpf: Check all subprog arguments in the common path
-Date: Mon, 28 Sep 2026 11:53:34 -0700
-Message-ID: <20260928185334.1004200-12-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260928185334.1004200-1-ameryhung@gmail.com>
-References: <20260928185334.1004200-1-ameryhung@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHmy2ePq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA091F000FF;
+	Mon, 28 Sep 2026 18:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790621743;
+	bh=LV5foDq0te//h3ZFoq+eAVN3kgz2N/aXomur4SLjfrs=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=RHmy2ePqKXcwoZ6sOF7EkuTmUGsyy55qFEnR3bxmPV1Md1l2SfmzNinWLsWWYVIbP
+	 FIs5DyhSATA5lJBx14pPb7T8WFefOrpjQo7hd5tLPTq1Hq7lA2+Tz3ogCVa58Dm9J5
+	 hye2SrWsvIn0NJinRY7xbAQUM7cHTh/aL3xLwKgAfxPrSwFz0cEGr9HySQwNIuG8V1
+	 JEs4uuUfDn8pmTlqDb7BeUApsz8sj9gHf9P781S0VgS/nBHT6M64zisqGiVP6qLnCw
+	 UT1Z88sVXIaHIzRD8oCujjnxZ8mTYMTaFXXBhfEwPwmZZULbTvr9TFwg9s2WxTCQh0
+	 CVrDnOsMYT7rA==
+Subject: Re: [PATCH net-next 1/6] ipv6: reject a negative optlen in
+ do_ipv6_getsockopt()
+From: netdev-bot+sashiko@kernel.org
+To: leitao@debian.org
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, john.fastabend@gmail.com, sdf@fomichev.me,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ david.laight.linux@gmail.com, kernel-team@meta.com
+Date: Mon, 28 Sep 2026 18:55:41 +0000
+Message-ID: <179062174160.3145.8573490114986242294@kernel.org>
+In-Reply-To: <20260925-sockopt_expand_out_v2-v1-1-c3ef2e3bb5c0@debian.org>
+References: <20260925-sockopt_expand_out_v2-v1-1-c3ef2e3bb5c0@debian.org>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-All supported BPF-subprogram argument types now pass through
-check_func_arg() from one guarded branch in the legacy validation loop.
-Replace that loop and its outgoing-stack validation with
-check_func_args().
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-The scratch prototype is indexed by BTF parameter and the call metadata
-carries the BTF function prototype. The existing BTF argument iteration
-therefore maps parameters to ABI slots for both kfunc and BPF subprogram
-calls, including additional slots occupied by by-value aggregates.
+Low priority / nit picks for your consideration:
 
-The common checker can return non-EFAULT errors other than -EINVAL, as
-the existing BTF-ID path already did. This is compatible with subprog
-call handling: only -EFAULT is fatal. Any other error marks BTF
-unreliable. Static subprogs can then fall back to inline verification,
-while global subprogs reject the call.
+- [Low] The commit message misdescribes how a negative optlen behaved
+  before the patch.
+- [Low] The commit message frames the change as a standalone bug fix
+  ("the fix stands on its own here") for user-visible behaviour, but it…
 
-Remove the caller-register plumbing that the dedicated loop required.
+--
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- kernel/bpf/verifier.c | 65 ++++++++-----------------------------------
- 1 file changed, 11 insertions(+), 54 deletions(-)
+ipv6: reject a negative optlen in do_ipv6_getsockopt()
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ad18b6ab7e88..1599bac1bac9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10835,17 +10835,13 @@ static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const stru
- 	}
- }
- 
--static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
--				    struct btf *btf,
--				    struct bpf_reg_state *regs)
-+static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, struct btf *btf)
- {
- 	struct bpf_subprog_info *sub = subprog_info(env, subprog);
- 	struct bpf_func_state *caller = cur_func(env);
--	const struct btf_param *args, *stack_args;
- 	const struct btf_type *func, *func_proto;
- 	struct bpf_call_arg_meta meta;
- 	struct bpf_func_proto *fn;
--	u32 arg, slot, nslots;
- 	int ret, err;
- 
- 	memset(&meta, 0, sizeof(meta));
-@@ -10867,63 +10863,24 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 
- 	func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
- 	func_proto = btf_type_by_id(btf, func->type);
--	args = btf_params(func_proto);
--	stack_args = sub->arg_slot_cnt == btf_type_vlen(func_proto) ? args : NULL;
--	ret = check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
--					bpf_subprog_name(env, subprog), btf, stack_args);
--	if (ret)
--		return ret;
- 
- 	fn = &env->bpf_subprog_scratch;
- 	gen_subprog_arg_proto(sub, btf, func_proto, fn);
- 	meta.fn = fn;
- 	meta.func_proto = func_proto;
- 
--	/* check that BTF function arguments match actual types that the
--	 * verifier sees.
--	 */
--	for (arg = 0, slot = 0; arg < btf_type_vlen(func_proto); arg++, slot += nslots) {
--		enum bpf_arg_type arg_type = fn->arg_type[arg];
--		argno_t argno = argno_from_arg(slot + 1);
--		const struct btf_type *t;
--		u32 k;
--
--		t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
--		nslots = btf_arg_slots(t);
--
--		if (arg_type == ARG_SCALAR || arg_type == ARG_IGNORE ||
--		    arg_type == ARG_PTR_TO_CTX || arg_type == ARG_PTR_TO_DYNPTR ||
--		    base_type(arg_type) == ARG_PTR_TO_ARENA ||
--		    base_type(arg_type) == ARG_PTR_TO_BTF_ID ||
--		    base_type(arg_type) == ARG_PTR_TO_MEM) {
--			ret = check_func_arg(env, arg, slot, 0, &meta, env->insn_idx);
--			if (ret)
--				return ret;
--		} else {
--			verifier_bug(env, "unrecognized %s type %d",
--				     reg_arg_name(env, argno), arg_type);
--			return -EFAULT;
--		}
--
--		for (k = 1; k < nslots; k++) {
--			ret = check_arg_extra_slot(env, caller, slot + k, &meta);
--			if (ret)
--				return ret;
--		}
--	}
--
--	return 0;
-+	return check_func_args(env, &meta, env->insn_idx);
- }
- 
--/* Compare BTF of a function call with given bpf_reg_state.
-+/*
-+ * Check that call-site argument states match a subprog's BTF signature.
-+ *
-  * Returns:
-  * EFAULT - there is a verifier bug. Abort verification.
-- * EINVAL - there is a type mismatch or BTF is not available.
-+ * Other errors - there is a type mismatch or BTF is not available.
-  * 0 - BTF matches with what bpf_reg_state expects.
-- * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-  */
--static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
--				  struct bpf_reg_state *regs)
-+static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog)
- {
- 	struct bpf_prog *prog = env->prog;
- 	struct btf *btf = prog->aux->btf;
-@@ -10940,7 +10897,7 @@ static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
- 	if (prog->aux->func_info_aux[subprog].unreliable)
- 		return -EINVAL;
- 
--	err = btf_check_func_arg_match(env, subprog, btf, regs);
-+	err = btf_check_func_arg_match(env, subprog, btf);
- 	/* Compiler optimizations can remove arguments from static functions
- 	 * or mismatched type can be passed into a global function.
- 	 * In such cases mark the function as unreliable from BTF point of view.
-@@ -10959,7 +10916,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	int err;
- 
- 	caller = state->frame[state->curframe];
--	err = btf_check_subprog_call(env, subprog, caller->regs);
-+	err = btf_check_subprog_call(env, subprog);
- 	if (err == -EFAULT)
- 		return err;
- 
-@@ -11096,7 +11053,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		return -EFAULT;
- 
- 	caller = state->frame[state->curframe];
--	err = btf_check_subprog_call(env, subprog, caller->regs);
-+	err = btf_check_subprog_call(env, subprog);
- 	if (err == -EFAULT)
- 		return err;
- 	if (bpf_subprog_is_global(env, subprog)) {
-@@ -11233,7 +11190,7 @@ static int check_func_callx(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 
- 	/* PTR_TO_FUNC is a pointer to a static subprog */
- 	subprog = reg->subprogno;
--	err = btf_check_subprog_call(env, subprog, caller->regs);
-+	err = btf_check_subprog_call(env, subprog);
- 	if (err == -EFAULT)
- 		return err;
- 
+This commit makes do_ipv6_getsockopt() return -EINVAL when the optlen
+read from userspace is negative. IPv4's do_ip_getsockopt() already does
+this.
+
+> IPv4's do_ip_getsockopt() rejects a negative optlen right after reading
+> it. do_ipv6_getsockopt() never has, and nothing downstream treats it as
+> an error either: len is an int, but every consumer compares it unsigned,
+> so -1 behaves as a huge value and each site clamps to its own reply
+> size.
+
+[Severity: Low]
+
+Is this an accurate description of the old behaviour? Two cases in
+do_ipv6_getsockopt() in net/ipv6/ipv6_sockglue.c don't seem to match it.
+
+For MCAST_MSFILTER, ipv6_get_msfilter() and compat_ipv6_get_msfilter()
+already use a signed compare, because size0 is a const int:
+
+	const int size0 = offsetof(struct group_filter, gf_slist_flex);
+	...
+	if (len < size0)
+		return -EINVAL;
+
+So len = -1 already returned -EINVAL before this patch.
+
+For IPV6_2292PKTOPTIONS on a SOCK_STREAM socket, len is never compared
+or clamped:
+
+		msg.msg_controllen = len;
+
+msg_controllen is __kernel_size_t, so -1 becomes SIZE_MAX. That value
+passes both size checks in put_cmsg():
+
+  msg_controllen < sizeof(struct cmsghdr)
+  msg_controllen < cmlen
+
+As a result, every pending cmsg is written to optval with no limit from
+the real buffer size. This covers the cmsgs from ip6_datagram_recv_ctl()
+and from the sticky rxopt put_cmsg() calls. After that:
+
+		len -= msg.msg_controllen;
+
+reports the number of bytes written, not a clamped reply size.
+
+The writes only land in the caller's own address space. The BPF kernel
+sockptr path through sol_ipv6_sockopt() only allows IPV6_TCLASS,
+IPV6_AUTOFLOWLABEL and IPV6_TRANSPARENT with *optlen == sizeof(int).
+So this is a changelog problem only, and the code change covers both
+paths.
+
+Could the commit message mention the IPV6_2292PKTOPTIONS case, and drop
+the claim that every consumer compares len unsigned?
+
+> This is a bug ready to bite us in the near future, let's get this fixed.
+>
+> I've found this because testing the rest of the patch was returning
+> inconsistency when optlen = -1.
+>
+> Later patches make the check unreachable, since sockopt_init_user() and
+> sockptr_to_sockopt() both reject a negative length before the switch
+> runs. Keep it as a guard; the fix stands on its own here.
+
+[Severity: Low]
+
+Is this meant as a standalone fix, or as preparatory hardening for the
+series?
+
+Userspace can see the change on the baseline. The IPv6 proto_ops have no
+getsockopt_iter, so do_sock_getsockopt() takes the legacy
+ops->getsockopt path and never reaches sockptr_to_sockopt():
+
+do_sock_getsockopt()
+  sock_common_getsockopt()
+    udpv6_getsockopt()
+      ipv6_getsockopt()
+        do_ipv6_getsockopt()
+
+Nothing on that path checks the sign of len. With len = -1,
+getsockopt(udp6_fd, SOL_IPV6, IPV6_TCLASS, buf, &len) reaches:
+
+	len = min_t(unsigned int, sizeof(int), len);
+
+It then writes 4 bytes and returns 0. With this patch it returns -EINVAL.
+
+If this is a fix, should it have a Fixes: tag and target net? The
+unchecked len predates git history, so something like this would fit:
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+
+If it is hardening for the net-next series, could "a bug ready to bite
+us" and "the fix stands on its own here" be reworded?
+
+Also, "the rest of the patch" and "Later patches make the check
+unreachable" refer to the series. Once this is in git history, readers
+won't have that context. Could those sentences be reworded too?
+
 -- 
-2.52.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0%40debian.org
