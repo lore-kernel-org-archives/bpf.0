@@ -1,118 +1,163 @@
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+Received: from mail-qk2-f40.google.com (mail-qk2-f40.google.com [74.125.230.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78FB3CDBA5
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 12:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF22649CF39
+	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 13:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790600049; cv=none; b=IENbsY6ofPHFT7gjc7vx1G0PRQMi4a8s4ZJ7/48DigqbHPnZWppWHYox8gJvUqbEsAs6RF05FrFnzG1Cw5htbswDNl1cxUF8ve79lTZplt2eKda2QET+OoeGyBnju6Q0pFSy6bG48IhAlwiocrH48r9LXFaRzsOTBFkdpSGtrEM=
+	t=1790601306; cv=none; b=oQMu1w6TjUdAV7rjtyC65Bp3NX2C5N8girZ1/FXsaA0tBSJa40cCSC4ovQ+DJnjXjnJh2pq6wWA5xlJWnwDhEVxPIYDiCRb9UF8d8Zcr/rR4WLW75nuZKNqou6zStncaNxQyk6esTL+Q5aYTAKaUTfZ2B6ZiRHC2NDY4sbEfZqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790600049; c=relaxed/simple;
-	bh=tJFYAFdar/edNhuq+KmVYEKhj6ZL8sX1lZmp/hi5rZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mipVlkb+stTp70kNSIgiqIBbetivVLBGplFjKSFFzB07UxzxOsWmJfQohpWPw64dzYQgIOqEN0+SriUOhPMGIUjgtBDlyperQ+6t8COSl2WeZzM1UQtGnkm8EAUsmd2466rEjW7CuNmVEcaOD8meMi9f22m+QNCIA3cvSnnwjq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=kEih1S1p; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+	s=arc-20240116; t=1790601306; c=relaxed/simple;
+	bh=KUBocqw5cboHcSNnT0W6/Ucblbw9xsAcwi4MHpF6L5I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qxfqN1+A7/dHQ5xwzMstJsqov081bkrYY2GykHsW0w28uVil6uQqhMcPSyf4TXjAkREljMj14JpAtCSRKQ1EhBaSNm3VqtSjh/L2PaOuVYRVTl87DWvmYcPVrePKpP2mBWcLJvWJ1gljBlxSSe23qjhfFtNUID7Dqke+EdVEaNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ozQjR7wM; arc=none smtp.client-ip=74.125.230.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="kEih1S1p"
-Received: from mail01.layka.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id D88E980881;
-	Mon, 28 Sep 2026 14:54:04 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 04FPWnroJKYK; Mon, 28 Sep 2026 14:54:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1790600044; bh=tJFYAFdar/edNhuq+KmVYEKhj6ZL8sX1lZmp/hi5rZQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=kEih1S1p3YbA5y5Xq6H5LYMpHLIAcnDqLLMKW+6SXC4E9ML1cWxaHtQih91YK/902
-	 BS/PBa+qjRCPbulUsfWvFkK2kaJenOvwL50KWHWSGUqtlqh6jm4ZJRcmyHTecJ/7Yt
-	 N/21p/cHA7Jbe21rV4ic02vy0pIXGjDLUqKrBeOQkvPT3ytbOPfJuIXvtIvY/KN/5z
-	 D0k6IVPPt++Q12s1sstKRiDFPBLCMWRqaKYFd8JLnYOLe3gzUhkKsXLVtHQUwwgCxB
-	 Hr869fbGl825GYPYthvcNFCmtwBHShyj57eRKbikQKj/4KZU/SogMQ7BLIQnddAMLV
-	 6jgh+9irQCOlQ==
-Message-ID: <27c143ce-7f50-4d78-beaf-8d82e3677d22@disroot.org>
-Date: Mon, 28 Sep 2026 13:53:58 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ozQjR7wM"
+Received: by mail-qk2-f40.google.com with SMTP id af79cd13be357-93c5a837375so93191685a.0
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 06:15:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790601304; x=1791206104; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=X3V0idLX7JfHuxhG0y/iym7zpN4jxFLNmH6tSltjyP4=;
+        b=ozQjR7wM1LJZEEDbuWhxCOptxQgXiGL6lG8Y4t81jqdi7boHroPmYTz84pDw6BaybV
+         hQojzTMafsD5jVkKNwZao6NFvKvqXTcbDks3YnWZnDTR4TAgY7ExMda10LSOlTwZBJqz
+         hwazNE6T+N7g/TLd0YyWaZkFjm+Ar1lr0SPjI9xKMQ1eqYzsYlOCOJtoxerDdApwCdlv
+         YBM8nCqkcaKSlSU2ZtAaZVei2GMj1XnMoYkgLSMb7zIdhJ6GM4jcCrmE0zD4TCVQHBkO
+         9W3KGzmdglSOfYdCqMriqzWj7auL/VL9AF0d+Jjq8+KaVEaHPoQpGiKq6FoU84Edht2p
+         d3Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790601304; x=1791206104;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=X3V0idLX7JfHuxhG0y/iym7zpN4jxFLNmH6tSltjyP4=;
+        b=AnE8psS98igP1z2aKWWjwaCCzbKph51sPBcaT5xlLHFvknsbav4ZnqX+jht8UN0CGH
+         LhW9CSibO74YD3MNLdyHTeZ5aLMZS/tGx8OPykfZ3eSPbYPd+tFPAnjrlovsGfZm1qOU
+         eGnCeBNx+ATRKbZBSG/NyKLxsGniK3wK1jDbE75LKVPx1S8iNn84FYWDSbINpo5KSu9t
+         sT/TqjYMCwOFx8ISldOrY4YeVoN57MCMv63H/J3OX1Zmelkygsw7GfVD1LswcgT4iEq0
+         HNCPF2fu/k3wcx8LoArT5ucse1IWhSCPsfFidFXFWa3abJsdqmg0e1c4kF0mjcFKU/VM
+         Iq+A==
+X-Forwarded-Encrypted: i=1; AKwUvBxzp3F3gq6kX4EwobwopBb5w0pXaDqMx3bR/GHbZPhXXzezHLF+NVqmCwMSvCMhi/Nz0VY=@vger.kernel.org
+X-Gm-Message-State: AFuF++lIBiTr0SBx9LsgAEstQI4WvjmTCO0o1zaSGirKfNuuhZzRERM1
+	ZsjejKufb10ReFqWv0PK1MWdQo0Q6XvjQdm/Ebpj9xrwMLBLBPC7RuOK
+X-Gm-Gg: AYBFou0CBODGJp+zweftkbA9NyudbozrAiVNh9vlyceS5/JpGnR6q7hlfU798fNUSia
+	wcanM7Je9yUe+UilzhltpSXhnzVMZwH1PiZOPt1aoc3sUAgZCjVfmPeI28zt4JvLZim70jmLavt
+	LbHRDbMipy9QyvKfCV+olVN4f1c0tX+flhdZsu5hpB6T1NqsrDk07mRRsDEmpu/fAokW4L8tIOC
+	W7hmYqCvUwTUE0JTrI/A2G48x6spwbepYCbSAC8YX93y5wt7R7jgHAuYNtL9MmDmTWrzWXtetFr
+	23vSCgUOZwingSQomzANpUXjWuzo1EHhvY0JIl7FyHZA9orWIc+/ZISFf5y2h/3tNtO+HmJA0ux
+	+/8Q/2/9hcQ4DMEPcc3Rh4usqnEYXPjOsnOF3g6rZllq5Cpsau9nHHP9wkwRLTnYmkNwVuOF9Tk
+	sjXH8JR8xLvEgfNduvikG8+cAgLmZelIQx4o6P/QY7rmk3NBPZL7hGgI30kxi2tqs0KURP5zUO
+X-Received: by 2002:a05:620a:31a9:b0:93b:d7a4:9d4b with SMTP id af79cd13be357-93c43db7b1amr2012446885a.30.1790601303558;
+        Mon, 28 Sep 2026 06:15:03 -0700 (PDT)
+Received: from localhost ([125.16.97.114])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c813a5ae6sm145555985a.13.2026.09.28.06.15.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 06:15:02 -0700 (PDT)
+From: Vaibhav Nagare <nagarevaibhav@gmail.com>
+X-Google-Original-From: Vaibhav Nagare <vnagare@redhat.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Vaibhav Nagare <vnagare@redhat.com>,
+	stable@vger.kernel.org
+Subject: [PATCH net] bnxt_en: don't leave an XDP program installed when the open fails
+Date: Mon, 28 Sep 2026 18:44:58 +0530
+Message-ID: <20260928131458.1012180-1-vnagare@redhat.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] bpf: Fix incorrect handling of user flags by percpu
- map updates
-To: bpf <bpf@vger.kernel.org>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, leon.hwang@linux.dev,
- sashiko-reviews@lists.linux.dev
-References: <20260928102821.995214-1-maghasi@disroot.org>
- <20260928102821.995214-2-maghasi@disroot.org>
- <20260928104137.2B9601F000FF@smtp.kernel.org>
-Content-Language: en-US
-From: Masoud Aghasi <maghasi@disroot.org>
-In-Reply-To: <20260928104137.2B9601F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 28/09/2026 11:41, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] bpf: bpf_percpu_array_update() misses validation for mutually exclusive flags
-> --
-> 
-> commit 41d85d3576867a24ad9b52f72cd4c1d7b23504a6
-> Author: Masoud Aghasi <maghasi@disroot.org>
-> 
-> bpf: Fix incorrect handling of user flags by percpu map updates
-> 
-> This commit fixes incorrect handling of BPF_EXIST, BPF_NOEXIST, BPF_F_CPU,
-> and BPF_F_ALL_CPUS flag combinations in BPF_MAP_TYPE_PERCPU_HASH and
-> BPF_MAP_TYPE_PERCPU_ARRAY map updates.
-> 
->> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
->> index 0ce26b538075e..463f43b19e5cd 100644
->> --- a/kernel/bpf/arraymap.c
->> +++ b/kernel/bpf/arraymap.c
->> @@ -438,7 +438,7 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
->>  	u32 size;
->>  	int cpu, off = 0;
->>  
->> -	if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
->> +	if (unlikely((u32)map_flags & ~(BPF_EXIST | BPF_NOEXIST | BPF_F_CPU | BPF_F_ALL_CPUS)))
->>  		/* unknown flags */
->>  		return -EINVAL;
->>  
->> @@ -446,7 +446,7 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
->>  		/* all elements were pre-allocated, cannot insert a new one */
->>  		return -E2BIG;
->>  
->> -	if (unlikely(map_flags == BPF_NOEXIST))
->> +	if (unlikely(map_flags & BPF_NOEXIST))
-> 
-> [Severity: Low]
-> Does this validation correctly handle the case where both BPF_EXIST and
-> BPF_NOEXIST are passed together?
-> 
-> Since the mask check above allows this mutually exclusive combination through,
-> evaluating `map_flags & BPF_NOEXIST` as true here will return -EEXIST instead
-> of the expected -EINVAL error code. Should an explicit check for the 
-> combination of BPF_EXIST and BPF_NOEXIST be added here, similar to the one
-> added for hash maps in htab_map_check_update_flags() in this same patch?
-> 
->>  		/* all elements already exist */
->>  		return -EEXIST;
-> 
+bnxt_xdp_set() stores the new program and drops the reference on the old
+one before reopening the NIC.  If bnxt_open_nic() then fails, ndo_bpf()
+returns an error with the new program still in bp->xdp_prog.  The caller
+treats the error as "nothing was installed" and drops its own reference,
+so bp->xdp_prog is left pointing at a freed program and the next XDP
+update dereferences it:
 
-As there is already a check for "BPF_NOEXIST", it is just a matter of
-which error code to return, -EEXIST or -EINVAL. The implementation
-currently handles it by prioritizing the BPF_NOEXIST.
+  BUG: unable to handle page fault for address: ff78ecc80ddd1038
+  RIP: 0010:__bpf_prog_put+0x5/0x80
+  Call Trace:
+   bnxt_xdp_set+0xad/0x1b0 [bnxt_en]
+   dev_xdp_propagate+0x36/0xa0
+   bond_xdp_set+0xeb/0x2d0 [bonding]
+   dev_xdp_install+0x1b1/0x350
+   bpf_xdp_link_update+0xc5/0x1b0
+   link_update+0x104/0x1e0
+   __sys_bpf+0x662/0xcf0
 
-There is a similar case for the combination of BPF_F_CPU and
-BPF_F_ALL_CPUS, but the implementation already handles it by
-prioritizing the BPF_F_CPU.
+Seen on a 6.12 based kernel after bnxt_alloc_mem() failed an order-4
+allocation on a fragmented host:
 
-But let's wait for other reviews as well.
+  bnxt_en 0000:a0:00.1 ens4f1np1: nic open fail (rc: fffffff4)
+  bond1: (slave ens4f1np1): Error -12 calling ndo_bpf
+
+Bonding is not required to hit this; a plain XDP attach on a bnxt
+interface takes the same path.
+
+Restore the previous program when the open fails and release it only
+once the change has been committed.  The ring and feature configuration
+is left as computed for the rejected program; the device stays down on
+this path, and reconciling it is left for a separate change.
+
+Fixes: c6d30e8391b8 ("bnxt_en: Add basic XDP support.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vaibhav Nagare <vnagare@redhat.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+index 9e5009be8e98..f30ce644e377 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+@@ -419,8 +419,6 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
+ 		bnxt_close_nic(bp, true, false);
+ 
+ 	old = xchg(&bp->xdp_prog, prog);
+-	if (old)
+-		bpf_prog_put(old);
+ 
+ 	if (prog) {
+ 		bnxt_set_rx_skb_mode(bp, true);
+@@ -435,8 +433,16 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
+ 	bnxt_set_tpa_flags(bp);
+ 	bnxt_set_ring_params(bp);
+ 
+-	if (netif_running(dev))
+-		return bnxt_open_nic(bp, true, false);
++	if (netif_running(dev)) {
++		rc = bnxt_open_nic(bp, true, false);
++		if (rc) {
++			WRITE_ONCE(bp->xdp_prog, old);
++			return rc;
++		}
++	}
++
++	if (old)
++		bpf_prog_put(old);
+ 
+ 	return 0;
+ }
+-- 
+2.55.0
 
