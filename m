@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F01494806;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE0149A3D6;
 	Mon, 28 Sep 2026 22:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790635013; cv=none; b=nvvzo3TGhIwW+BbnGfL5AcKoFhOk41Rs0KY9jCPYqPNhXCv9rMfzRMiM1avZqjGhB3IBbi3QyNhuW2UQMEHKSvtFcp2iiVHCE8OAA+xFnHQ9Aj+LwdXDXh0agr2OsP5TC3NB6p+oMkghawGbIG4jXM03e301mmeM15IGhg+iMKs=
+	t=1790635014; cv=none; b=sQcFh77IS/+TiemXtKejO78alYCW90+Z6RxscLGgmYM6LUM7y2bYbrw22Iq0Fxo/G/TD4+rG2oeUyXxikEMo1IEZ3XTcJ1VlXq6hTfrcOrRFo8eqYooiNuvnqO0Ir6PzMjLoI4U/7dxm8AYTKzj2UqXoGG1FM/1ZYbuh4gaVrJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790635013; c=relaxed/simple;
-	bh=1WrYFfmoNkL+ykKOGZ+vNNdKeJwGCDEX9k7Gi7WgcQ8=;
+	s=arc-20240116; t=1790635014; c=relaxed/simple;
+	bh=CFgkAhQwEqccWgELEg/9JK2GKL5SpQfgGzA5vZ0YqHI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u87cb+JQcWSJyPaXaqJ+Oq/sKgFt23qXVVYT3knZIhtx71mQu97fyRI/U/B4ZwZPSNznmZB4110xIp+4pMlU4WfoAnGgh8CAJvZ2idD88zoFI58eEsu89VIL9JlIs+nhKJGUHMLoP7makZQbW0s1SRcnJp2XPp8VTIH3NqpGsF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBW1jb9a; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=fo9Ld2xyP0oqqyz6rXVxrDcJhugS2lHCAPgvn0w0Tc+sOF9Exw/FnOtFEL8ShTjA1XWm33PiTiSr+qUuaG8uMVu4i2l7U1vZV7lBkNXySc0GM8ajKyj2b40buHxapigRnpSxPNsBRzy4DVsE+lAPVuLd/9VcxupP/TQq7hRD8GQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VE6hrjtw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WBW1jb9a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886C51F00893;
-	Mon, 28 Sep 2026 22:36:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VE6hrjtw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239391F0089C;
+	Mon, 28 Sep 2026 22:36:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1790635012;
-	bh=OLUf1naNsJELLhXEIqR1tqlxMSBY5TYxmmwXG0pchco=;
+	bh=7WMv94dmHQt/4IHOC7Zem7o5TU9iTHRnxfl7eBmQS3A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WBW1jb9aQ/5LIE7l0F+5CsYJMl2aWihMHAKaTveZfL59MD5fCKmZIhZTggJFlZeQH
-	 II2XB4DUglGnYxi/IVbsHJCvflQcpsFG00ILHhccCw1YmjnEsKcgrPBbi6w8MZS27s
-	 3MLtSDCdpVwO8ve068IJMurr+8L9K+g5e6SROUbYnWRlhNk9LJgp9+Ao7Sg8vT3GEG
-	 hG4nRu2hn0CNriXpCExXX5q89K+NP4s600Gl6HNjyIHEBwKHHu2zmZoIB98On8Ekf6
-	 lQfTR7GZb6P1NphuscKYEGUGzF4J15Izdnq6sGAXdm2hponJE84/69yWiS0/ftH8dw
-	 E7gaUE8dZz4YA==
+	b=VE6hrjtwsggVYnjlHNSYVBvUvLJbaC9BtLFDMJjQWNE77yyC6nte/gCMT6E9/qkDV
+	 7J+hxoo6EuczjsKy4eTmh/EEN/DW0p+m5CnQISTCyBP0xZH5wEdTXc4ynt9pJBpxbX
+	 I/umhkLd0+zup+vNuifIWnvwL/asOgvgz2/U+FVD67vny/cjJVXtwHFhLCpxtPGECp
+	 HH5pOTRefwsiEsUtr9wSptRvEOBCOnSJec4RH9jg5oAXpojSW0hcZXfiCyvvXdzcfD
+	 FjHpQ9e2Ji9cg50zRKSIkcdDP8KyXCljGovLApBI18J5KV87vK+wZag8Cu1kgjUyFq
+	 fmLHs1sY0h8Cw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc: netdev@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	aleksander.lobakin@intel.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 2/5] netdevsim: add ndo_xdp_xmit
-Date: Mon, 28 Sep 2026 15:36:45 -0700
-Message-ID: <20260928223648.2739371-3-kuba@kernel.org>
+Subject: [PATCH net-next 3/5] selftests: drv-net: check tcp-data-split against an already attached XDP
+Date: Mon, 28 Sep 2026 15:36:46 -0700
+Message-ID: <20260928223648.2739371-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260928223648.2739371-1-kuba@kernel.org>
 References: <20260928223648.2739371-1-kuba@kernel.org>
@@ -57,59 +57,131 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Bonding refuses a slave which has no ndo_xdp_xmit once the bond runs an
-XDP program, so netdevsim can't currently be enslaved into an XDP bond
-and the propagation of XDP down to lower devices has no test coverage
-at all.
+hds.py only ever tested one direction of the rule: with header-data
+split on, installing a single-buffer XDP program must fail. The other
+direction was not covered at all, and that is the one which was broken
+for a program an upper device pushed down - the device was running XDP
+but nothing in the core knew, so enabling tcp-data-split underneath it
+succeeded.
 
-There is no data path behind it. netdevsim does not advertise
-NETDEV_XDP_ACT_NDO_XMIT, so nothing should be redirecting frames here;
-anything which does anyway is counted and freed rather than dropped
-silently.
+xdp_set_hds() covers the direct case, xdp_bond_set_hds() the propagated
+one. The latter fails without the preceding fix.
+
+The bond case is disruptive, it takes the device down to enslave it, and
+skips on devices bonding will not take as an XDP slave.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- drivers/net/netdevsim/netdev.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ tools/testing/selftests/drivers/net/config |  1 +
+ tools/testing/selftests/drivers/net/hds.py | 65 ++++++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index eebc02ccc4a9..3790b6eb4083 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -185,6 +185,25 @@ static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
- 	return NETDEV_TX_OK;
- }
+diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+index 4838adf27fa1..29293e41c3fa 100644
+--- a/tools/testing/selftests/drivers/net/config
++++ b/tools/testing/selftests/drivers/net/config
+@@ -1,3 +1,4 @@
++CONFIG_BONDING=m
+ CONFIG_CONFIGFS_FS=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_DEBUG_INFO_BTF_MODULES=n
+diff --git a/tools/testing/selftests/drivers/net/hds.py b/tools/testing/selftests/drivers/net/hds.py
+index 606e26d75951..5fe82b98c1fb 100755
+--- a/tools/testing/selftests/drivers/net/hds.py
++++ b/tools/testing/selftests/drivers/net/hds.py
+@@ -6,6 +6,7 @@ import os
+ import random
+ from typing import Union
+ from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_raises, KsftSkipEx
++from lib.py import ksft_disruptive
+ from lib.py import CmdExitFailure, EthtoolFamily, NlError
+ from lib.py import NetDrvEnv
+ from lib.py import defer, ethtool, ip
+@@ -28,6 +29,21 @@ from lib.py import defer, ethtool, ip
+     ip("link set dev %s xdp off" % cfg.ifname)
  
-+/* Do not advertise NETDEV_XDP_ACT_NDO_XMIT, no real datapath.
-+ * This is a "stub" which allows netdevsim to be put under a bond with XDP.
-+ */
-+static int nsim_xdp_xmit(struct net_device *dev, int n,
-+			 struct xdp_frame **frames, u32 flags)
-+{
-+	int i;
+ 
++def _xdp_attach(cfg, ifname):
++    """Attach a single-buffer XDP program, detach it when the test ends."""
++    prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
++    ip(f"link set dev {ifname} xdp obj {prog} sec xdp")
++    defer(ip, f"link set dev {ifname} xdp off")
 +
-+	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
-+		return -EINVAL;
 +
-+	for (i = 0; i < n; i++) {
-+		dev_dstats_tx_dropped(dev);
-+		xdp_return_frame(frames[i]);
-+	}
++def _hds_enable_expect_fail(cfg, netnl):
++    """Enabling HDS must be refused while single-buffer XDP is attached."""
++    with ksft_raises(NlError) as e:
++        netnl.rings_set({'header': {'dev-index': cfg.ifindex},
++                         'tcp-data-split': 'enabled'})
++    ksft_eq(e.exception.nl_msg.error, -errno.EINVAL)
 +
-+	return n;
-+}
 +
- static netdev_tx_t nsim_start_xmit_vf(struct sk_buff *skb,
- 				      struct net_device *dev)
- {
-@@ -651,6 +670,7 @@ static const struct net_device_ops nsim_netdev_ops = {
- 	.ndo_set_features	= nsim_set_features,
- 	.ndo_get_iflink		= nsim_get_iflink,
- 	.ndo_bpf		= nsim_bpf,
-+	.ndo_xdp_xmit		= nsim_xdp_xmit,
- 	.ndo_open		= nsim_open,
- 	.ndo_stop		= nsim_stop,
- 	.ndo_vlan_rx_add_vid	= nsim_vlan_rx_add_vid,
+ def _ioctl_ringparam_modify(cfg, netnl) -> None:
+     """
+     Helper for performing a hopefully unimportant IOCTL SET.
+@@ -240,6 +256,53 @@ from lib.py import defer, ethtool, ip
+         _xdp_onoff(cfg)
+ 
+ 
++def xdp_set_hds(cfg, netnl) -> None:
++    """
++    Enable single-buffer XDP on the device, then try to enable HDS.
++    The mirror of enabled_set_xdp(): HDS must be refused.
++    """
++    mode = _get_hds_mode(cfg, netnl)
++    _defer_reset_hds(cfg, netnl)
++    if mode == 'enabled':
++        netnl.rings_set({'header': {'dev-index': cfg.ifindex},
++                         'tcp-data-split': 'unknown'})
++
++    _xdp_attach(cfg, cfg.ifname)
++
++    _hds_enable_expect_fail(cfg, netnl)
++
++
++@ksft_disruptive
++def xdp_bond_set_hds(cfg, netnl) -> None:
++    """
++    Like xdp_set_hds(), but the program is installed on a bond and pushed
++    down to the device rather than attached to it directly. The device is
++    running it either way, so HDS must be refused all the same.
++    """
++    mode = _get_hds_mode(cfg, netnl)
++    _defer_reset_hds(cfg, netnl)
++    if mode == 'enabled':
++        netnl.rings_set({'header': {'dev-index': cfg.ifindex},
++                         'tcp-data-split': 'unknown'})
++
++    ip("link add hds-bond type bond mode active-backup")
++    defer(ip, "link del hds-bond")
++
++    # bonding refuses to enslave a device which is up
++    ip(f"link set dev {cfg.ifname} down")
++    defer(ip, f"link set dev {cfg.ifname} up")
++    ip(f"link set dev {cfg.ifname} master hds-bond")
++    defer(ip, f"link set dev {cfg.ifname} nomaster")
++    ip("link set dev hds-bond up")
++
++    try:
++        _xdp_attach(cfg, "hds-bond")
++    except CmdExitFailure:
++        raise KsftSkipEx("device can't be an XDP bond slave")
++
++    _hds_enable_expect_fail(cfg, netnl)
++
++
+ def ioctl(cfg, netnl) -> None:
+     mode1 = _get_hds_mode(cfg, netnl)
+     _ioctl_ringparam_modify(cfg, netnl)
+@@ -290,6 +353,8 @@ from lib.py import defer, ethtool, ip
+                   set_hds_thresh_gt,
+                   set_xdp,
+                   enabled_set_xdp,
++                  xdp_set_hds,
++                  xdp_bond_set_hds,
+                   ioctl,
+                   ioctl_set_xdp,
+                   ioctl_enabled_set_xdp],
 -- 
 2.55.0
 
