@@ -1,245 +1,181 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E064EE840;
-	Mon, 28 Sep 2026 16:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D764EDCA1;
+	Mon, 28 Sep 2026 16:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790612561; cv=none; b=amsq4m0d2VPCV2oLxp3keiw4pfOWLbsoFS7FdpbqEfEyNHAtI2FMWvj5X6LzYJvVutGHBedii8SElYt6jdgcb90ea8kAwS+YapUSAtR2k32IHZ9oaIO0uzvZ2g3flc4KrUmhyqP3JAcuDnxYkpjYHKqS2QUZ0FpGQc54megf76c=
+	t=1790612705; cv=none; b=UnejwnnQnjl7mLCWUBn+mn4X2ZHzQXaOtw9wuCbJ1r2i/34W3zcUyT1AET8tkmFsgVGz8Wen0P4Myl8sIrFfi9QmOktKmjSozlxM5xNwe23KuALUnAqQOashNfRalwz/QwleAwb458Kb9X4I5hDNcXmfDKI2yziZ/3vkWFiS2e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790612561; c=relaxed/simple;
-	bh=ZYgZYD7JpbqT97KHtSk4iVbtoENcGyke2ICgcF7Yk+A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Giptu7O2xjSSFxyJ5fmHotJnUZ6XCgjfexQn6z3NpHfWLCF6g1WescZ9uwgyeAqmKSSmXp7Uq9gwO2OqAS+z47+u2n4B2evDT2AEDfl7Feby9JvkGX5/GA7POdN/ABsv5QLjRPLnIaEqs0wJdUwJ+w526jIAoRVxRq5dDW0mKmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exUCF+uo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790612705; c=relaxed/simple;
+	bh=ksO5vdNwiO16/3z2z3UhStET95CFAPW2S0pDFRnRBbg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KLgCVhllTOJofaEznwTmINLkSpxX9Cc9FZ9l5u1J7gtObESf+ACekMelW6w876qKJXJN1yW1MKr7pgfKOSbL/vq43s06z4ksWK/8wxCaVgVM9T/hfh+7kdszYWHI3bZqO87KIVWpESbTFiweO9tU+qreSeTzDOU+7P9XueXKir8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f5CHnQyN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exUCF+uo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243E21F00893;
-	Mon, 28 Sep 2026 16:22:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f5CHnQyN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FBCE1F00893;
+	Mon, 28 Sep 2026 16:25:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790612557;
-	bh=WuyZUjLenwsCfwS9QKli7wzxywUnFb57xoXkqL2ZFHg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=exUCF+uoC3LJPEFvKkr/Iyg+urdpecMJmq7SPUSTT5u92JP60c4PWpugRa0IgDGSF
-	 wun3g+u/KBxDs1HuGZcR2mE01wHfBRE3ulSnkwPsj6lYbwQXmX12FqM2pSshmzJ8CH
-	 s9G351I/gGdlu/uSY0hop3Lv0NdBwkm9JgliyyP5KXPcfzv6nNpnkRUJ4vodk+X+Bl
-	 g6SkFxdgjDohjlrXzzOP0z68xkaGHWjdZtpTUQhcAoUOTzxmrAdm6ZcYqTl5o8n8qG
-	 U2jmlW8PLPGNpG7/IYBhw1abW6NZP4kRCxkh+NJKE85073awxYlqp0W4Ijn9YctkHo
-	 4IHKt3sA3IwLQ==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 28 Sep 2026 18:22:06 +0200
-Subject: [PATCH DO NOT MERGE 6/6] arm64: dts: broadcom: Add Raspberry Pi
- ILI9881C DSI panel overlays
+	s=k20260515; t=1790612702;
+	bh=9HcBleETp0MDSzH0J4NabctHRFmmeu+mI+U5rmWUvFA=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=f5CHnQyNP8sbdymYVvvJ9mO57B5WXyyU7yslASru9n2q+0vhE2xzbbjqkfQweUz1Q
+	 rCyXYdGwBGU26O23WrCfbVOEIjPaHKW0HqXX4ehERrLvAJ9ynw6o/TcuLCytNJCh7d
+	 01z70s5XXw8Ij2U7iNQkOSMlLz40Tz9vJQK3a7drsu911nzGgJp5+r6sqSjjv2iaRH
+	 gLb+dox2ZgcSTpBI0EpUQn/fJWEeLydhYxb7dNXlId/Y264tOMeqR8rGlR44yJmpUd
+	 av7ME15bdqEvO0x8VfRQK4lifCv/vDRXRI4MVlovijLvyhyxvDJNwaLfy+/WEEZ+ek
+	 cdkBhpsJaVu/g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 1396BCE0832; Mon, 28 Sep 2026 09:25:02 -0700 (PDT)
+Date: Mon, 28 Sep 2026 09:25:02 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Thomas Graf <tgraf@suug.ch>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>, rcu@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Chris Mason <clm@meta.com>
+Subject: Re: [RFC PATCH 0/3] fprobe, rcu/tasks, rhashtable: Switch fprobe and
+ BPF kprobe-multi to Tasks-Rude RCU
+Message-ID: <f593867e-dcef-4f68-b609-a253f489f7b8@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <179060575297.372125.10581329083761385407.stgit@devnote2>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260928-drm-mipi-dsi-panel-ebpf-v1-6-5244926aace4@kernel.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
-In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>, 
- Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Albert Esteve <aesteve@redhat.com>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- Maxime Ripard <mripard@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4776; i=mripard@kernel.org;
- h=from:subject:message-id; bh=ZYgZYD7JpbqT97KHtSk4iVbtoENcGyke2ICgcF7Yk+A=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDFm7phj/0Lt4cMNSEx3jk6zlPks2G0z0vnmIvUGP9Z7fy
- u3s8zU/d0xlYRDmZJAVU2R5IhN2enn74ioH+5U/YOawMoEMYeDiFICJrBRnrI88+bCp864+x7H1
- ngWGbVyysas3C8hxqfK0afGeXl0ayPK67Ze6Lf8hHq365hWSQvrTGesUvyR/Eo1k/vPO/Xgg178
- qFr+C+UuPxSmxPjELvb1vUjnbtLn7JudIzVA/1Kq82yigzwEA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <179060575297.372125.10581329083761385407.stgit@devnote2>
 
-Add device tree overlays for the Raspberry Pi 5-inch and 7-inch
-MIPI-DSI panels (ILI9881C) on the Raspberry Pi 4 Model B.
+On Mon, Sep 28, 2026 at 11:29:13PM +0900, Masami Hiramatsu (Google) wrote:
+> Hi,
+> 
+> Here is an RFC patch series which removes standard RCU read lock
+> (guard(rcu) and rcu_read_lock()) from fprobe callback paths
+> by switching fprobe and BPF multi-kprobe to Tasks-Rude RCU.
+> 
+> Motivation & Problem
+> ====================
+> 
+> Currently, fprobe entry and exit callbacks (fprobe_fgraph_entry,
+> fprobe_return, and fprobe_ftrace_entry) execute in the tracing hot
+> path where preemption is disabled.
+> 
+> However, fprobe was forced to wrap hash lookups with guard(rcu)() and
+> rcu_read_lock() because:
+> 
+> - rhashtable defers bucket table deallocation using standard RCU
+> - unregister_fprobe() and BPF waited for a standard RCU grace period
+> 
+> Taking standard RCU read locks in the tracing fast path introduces
+> several drawbacks:
+> 
+> 1. Unnecessary Runtime Overhead:
+>    Every probe hit manipulates current->rcu_read_lock_nesting with
+>    memory barriers, and rcu_read_unlock() adds conditional branches
+>    to check for special quiescent processing.
+>    On debug kernels with CONFIG_PROVE_RCU=y or CONFIG_LOCKDEP=y,
+>    this additionally acquires and releases lockdep maps on every hit,
+>    introducing severe lockdep hashing overhead and tracer recursion risks.
+> 
+> 2. Fragile Dependency on rcu_is_watching():
+>    Standard RCU treats idle CPUs (and user-space on nohz_full CPUs) as
+>    Extended Quiescent States (EQS). If a function is traced while
+>    rcu_is_watching() is false, standard RCU is blind to the read-side
+>    critical section. In such contexts, synchronize_rcu() does not wait
+>    for the reader (risking Use-After-Free), and lockdep emits an
+>    "RCU-illegal: rcu_read_lock() used while not watching!" warning.
+>    To avoid this, ftrace callbacks normally require FTRACE_OPS_FL_RCU,
+>    adding extra trampoline check overhead.
+> 
+> 3. Asymmetric Synchronization with fprobe_return():
+>    fprobe_return() executes under preempt_disable_notrace() without
+>    holding rcu_read_lock(). Prior to this series, unregister_fprobe()
+>    only waited on synchronize_rcu(), which does NOT wait for pure
+>    preempt-disabled sections, leaving a potential Use-After-Free window
+>    during probe unregistration.
+> 
+> I've tried to fix the last UAF with simply introducing guard(rcu)()[1]
+> but Sashiko found the 2nd problem [2]. So I decided to implement this
+> series.
 
-Both panels share the same I2C-connected display MCU at 0x45 on
-i2c0_1, which provides GPIO and PWM for reset and backlight
-control. The common parts are in a shared dtsi. Each panel overlay
-includes it and adds only the panel-specific compatible string, physical
-dimensions, and timing.
+Unless I am missing something subtle, Sashiko needs to be taught a
+little bit more about RCU.  Preemption-disabled regions of code really
+are valid RCU readers.  If you have a reproducer showing that this is
+not the case in some situation, that would be a bug in RCU.
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- arch/arm64/boot/dts/broadcom/Makefile              |  8 +++
- .../bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso         | 22 ++++++++
- .../bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso         | 22 ++++++++
- .../dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi  | 65 ++++++++++++++++++++++
- 4 files changed, 117 insertions(+)
+Adding Roman Gushchin and Chris Mason on CC for their thoughts.
 
-diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-index 01ecfa304184..d717dc8c4071 100644
---- a/arch/arm64/boot/dts/broadcom/Makefile
-+++ b/arch/arm64/boot/dts/broadcom/Makefile
-@@ -13,8 +13,16 @@ dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
- 			      bcm2837-rpi-3-b.dtb \
- 			      bcm2837-rpi-3-b-plus.dtb \
- 			      bcm2837-rpi-cm3-io3.dtb \
- 			      bcm2837-rpi-zero-2-w.dtb
- 
-+dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b-dsi-ili9881-5inch.dtb
-+bcm2711-rpi-4-b-dsi-ili9881-5inch-dtbs := bcm2711-rpi-4-b.dtb \
-+	bcm2711-rpi-4-b-dsi-ili9881-5inch.dtbo
-+
-+dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b-dsi-ili9881-7inch.dtb
-+bcm2711-rpi-4-b-dsi-ili9881-7inch-dtbs := bcm2711-rpi-4-b.dtb \
-+	bcm2711-rpi-4-b-dsi-ili9881-7inch.dtbo
-+
- subdir-y	+= bcmbca
- subdir-y	+= northstar2
- subdir-y	+= stingray
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso
-new file mode 100644
-index 000000000000..99aac1105ac6
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso
-@@ -0,0 +1,22 @@
-+/dts-v1/;
-+/plugin/;
-+
-+#include "bcm2711-rpi-4-b-dsi-ili9881.dtsi"
-+
-+&panel {
-+	compatible = "raspberrypi,dsi-5inch", "panel-mipi-dsi-bpf";
-+	width-mm = <62>;
-+	height-mm = <110>;
-+
-+	panel-timing {
-+		clock-frequency = <83333000>;
-+		hactive = <720>;
-+		vactive = <1280>;
-+		hfront-porch = <110>;
-+		hsync-len = <12>;
-+		hback-porch = <95>;
-+		vfront-porch = <100>;
-+		vsync-len = <2>;
-+		vback-porch = <100>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso
-new file mode 100644
-index 000000000000..809d9b354b89
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso
-@@ -0,0 +1,22 @@
-+/dts-v1/;
-+/plugin/;
-+
-+#include "bcm2711-rpi-4-b-dsi-ili9881.dtsi"
-+
-+&panel {
-+	compatible = "raspberrypi,dsi-7inch", "panel-mipi-dsi-bpf";
-+	width-mm = <90>;
-+	height-mm = <151>;
-+
-+	panel-timing {
-+		clock-frequency = <83330000>;
-+		hactive = <720>;
-+		vactive = <1280>;
-+		hfront-porch = <239>;
-+		hsync-len = <33>;
-+		hback-porch = <50>;
-+		vfront-porch = <20>;
-+		vsync-len = <2>;
-+		vback-porch = <30>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi
-new file mode 100644
-index 000000000000..bd08e22581a3
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Common DSI infrastructure for Raspberry Pi ILI9881C panels
-+ * (backlight, i2c mux, display MCU, DSI1 port wiring)
-+ *
-+ * Each panel overlay includes this and extends &panel with its own
-+ * compatible, dimensions, and panel-timing.
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+&{/} {
-+	panel_backlight: panel_backlight {
-+		compatible = "pwm-backlight";
-+		brightness-levels = <0 31>;
-+		num-interpolated-steps = <31>;
-+		default-brightness-level = <15>;
-+		pwms = <&display_mcu 0 200000 0>;
-+	};
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c0mux {
-+	status = "okay";
-+};
-+
-+&i2c0_1 {
-+	status = "okay";
-+
-+	display_mcu: display_mcu@45 {
-+		compatible = "raspberrypi,touchscreen-panel-regulator-v2";
-+		reg = <0x45>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		#pwm-cells = <3>;
-+	};
-+};
-+
-+&dsi1 {
-+	status = "okay";
-+
-+	panel: panel@0 {
-+		reg = <0>;
-+		reset-gpios = <&display_mcu 0 GPIO_ACTIVE_LOW>;
-+		backlight = <&panel_backlight>;
-+		dsi-lanes = <2>;
-+		mode-video;
-+		mode-lpm;
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&dsi1_out>;
-+			};
-+		};
-+	};
-+
-+	port {
-+		dsi1_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
+							Thanx, Paul
 
--- 
-2.55.0
-
+> [1] https://lore.kernel.org/all/179055575009.241711.6358052647499787191.stgit@devnote2/
+> [2] https://lore.kernel.org/all/20260928005114.9C9FC1F000FF@smtp.kernel.org/
+> 
+> 
+> Solution: Tasks-Rude RCU
+> ========================
+> 
+> Because fprobe callbacks already run strictly within preempt-disabled
+> contexts, we can transition fprobe and its deferred table reclamation
+> to Tasks-Rude RCU:
+> 
+> - Tasks-Rude RCU detects grace periods via schedule_on_each_cpu(),
+>   forcing a schedule on every online CPU. This guarantees that all
+>   preempt-disabled sections that began prior to the grace period have
+>   completed before memory is reclaimed.
+> - Unlike standard RCU, Tasks-Rude RCU does not rely on dyntick-idle /
+>   EQS tracking. It does NOT require rcu_is_watching() to be true and
+>   does not trigger lockdep warnings in pre-RCU/idle execution paths.
+> - Within fprobe, guard(rcu)() is replaced with guard(rcu_sched_notrace)(),
+>   reducing the lookup lock to pure, non-tracing preempt counter
+>   increments without lockdep or RCU state manipulation.
+> 
+> Feedback and suggestions from RCU, BPF, and tracing maintainers are welcome!
+> 
+> Thank you,
+> 
+> ---
+> base-commit: 5bfa9f1a9dcb6ecb607adbc1c0226605c972935b
+> 
+> Masami Hiramatsu (Google) (3):
+>       rcu/tasks: Export call_rcu_tasks_rude()
+>       rhashtable: Add use_tasks_rude parameter to defer bucket table free
+>       fprobe: Switch fprobe and BPF kprobe-multi to Tasks-Rude RCU
+> 
+> 
+>  include/linux/rcupdate.h         |    6 +++
+>  include/linux/rhashtable-types.h |    2 +
+>  kernel/bpf/syscall.c             |    2 +
+>  kernel/rcu/tasks.h               |    8 ++---
+>  kernel/trace/fprobe.c            |   66 +++++++++++++++++++++-----------------
+>  lib/rhashtable.c                 |    5 ++-
+>  6 files changed, 54 insertions(+), 35 deletions(-)
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
