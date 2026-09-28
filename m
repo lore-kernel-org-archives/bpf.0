@@ -1,114 +1,132 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5364DDB4F
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 17:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790617392; cv=pass; b=RY16LLe4vAgS5CNCm+DU2LfwvXmPR/kGaBg4B37Yy1/djtaQB2p0N1bQIsVQIZme/iwj1FH8p00Os9vQjs5WY6stIpwtJPnxJ3ziCLVnAmqDvtp1VarUG4XsdzRi7enSzfg7xCthYhXZA/CDHpeo0ske7yvOW/6eezRzqruOfHY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790617392; c=relaxed/simple;
-	bh=nxJChoBwmzTKXKMcM45VqLvl7ngasT8C9VAQle1AzbA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TlU0QfMA2Xc6MDyPepTovZ+Nu3sNUOsTGdHkIbPvNOY1MKuEAtcCkKGgjR2E/S0gOw4HdrjPZ2o85dDwN157awAIV5PELVfxvaeYZLhUtHqp5WUpdongug/H9AfjOE/dENDFfun9kcwx8Sh4FYHMnNMyFdpWF1ojOpHAlQ3dVFM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YRRCKHzT; arc=pass smtp.client-ip=209.85.167.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE1C37BE9F;
+	Mon, 28 Sep 2026 18:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790619167; cv=none; b=iJiY/In1875Qt6XQ2iJr5VgH7hdMGPJEiZiVKeVo/mwarNFQykIi0xxeou9lOnif5DyPjhJPLhNdJ/AGEXIuWBmOeU96rgxQ54MhsYLJSieCY0RNJh8FTP3Plqh00Z/mf6NAOq16hsM6r8PU3Dl3fCqFyr/7X4pDAceQP98By/E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790619167; c=relaxed/simple;
+	bh=USfKYzH0A6fMkjH3Ae9LrJxx6YoB7rY2b4VDa8FNY+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XredEqfa5hZ5DkHm+/bWtJzf5clfBY2VABhtdC/e/swodRs7t53h2rdAeiyc2nlt2eykOlrJQSrIW5GZbAG1NrXoIrTSmioxFtZuqFW3sRyVJ/nLhvtrlfpdRflD0ZJj98N7nIHX9+vBnsITH5e8CD3lIk7MyIrZGZqM7AHLbog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=QTo0gZkm; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YRRCKHzT"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4e4a4d77e5bso59950b6e.0
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 10:43:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790617390; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jJSjZ9uHvD6+auT+DKSMpiIzwKOqdKff/Qk+rAARbimts05HNCA1gLjSsmy8gp30BT
-         NEsTNkVhcuWJ4NQKYXMXRCk6PyKj/GO4xnP8arViB3jZNXSytxNaryTJLEp6eE/F5Df6
-         1hqhzFvBQzXK4cNDE6dJdyETQClIGpwC1TooLLnEb3ubTS4zj7jFmgFvwQ4twR8cd04w
-         TF/Sk7bGmqW/C8/fbkFHWUcGgEH4rcIwjJp41gsYVbrLO58ZveaOzwXasuO6jQo8yEUp
-         4igFistkHyFpC/I6R9A8KZdG2zyNaxntoyxmSsmgcL3gmjxhbmjpnIt/rdW51E/F880x
-         Z5Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oc7A63JbH+Ok4G4qh8iOnEvm8cBuU6WIcMJKCamJNmE=;
-        fh=2MBOojPsOSARizhxuWgT5BqcaOh4dFXJJ9MmFSYnYEA=;
-        b=mf6IO5Pnq43yPB73TxptDPwwJkWu8pRMTuRkdxSu7oiBntqO/7Q6uBLr16EoHW2h/C
-         vRRElXRCmMiGZuJbNZMxDsuRpQSKMSvzxzCRPxf+MtWavM3v8vPkELWb3OIT/sfhCdHO
-         xrzm1cuyEz/QqkuYPuYuFclOiEe+AemizNJBc0Uds0nUPBZ1ZMLpTUWQCmYo9afCcyR3
-         a22GMY0sDiDMIsx8azBsY3XO8nR0Tl7ZPUTls8EtgcQ1IBFsONCgNWWLnABSCMObAhG2
-         /O+5RdCmMOhVy/5ggFn4JEno9c9mML3n7zhurrtpOEqQ+H5tFW41kP8Vop3QILZx+srZ
-         9TiA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790617390; x=1791222190; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=oc7A63JbH+Ok4G4qh8iOnEvm8cBuU6WIcMJKCamJNmE=;
-        b=YRRCKHzTMcJb5I6d/CoVoWucmwYviDbq6O+GVSHjsXaAUsmNnGL/EmsaZZ4CfNVrak
-         SbZXemH8ct/tFqhYv7S5Yf3rlL3jo/Swf30/N/d/WKXbZHCAlHBeDuBz3VG3U0w0piG9
-         lqs0onFga0FSAyufON2nsmQ9+8TC+Csq6pg/45bPYRiZHiXNWAen5+tUWapcphQN6lfK
-         T4zdBpdojLEuqxXMZBnVY2IDCGhzJbDiSiFzIAQq26+zaWB0Ifnj8rafWkpAVXA1hOyQ
-         ErYZMEbsvsv3lcRkGn0KBIPprwi25FzLvHvUh116fp2mf/2ue7t6oh/TfMTiYbAZqadD
-         6V+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790617390; x=1791222190;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oc7A63JbH+Ok4G4qh8iOnEvm8cBuU6WIcMJKCamJNmE=;
-        b=CeABS3nQTaeKaESh1GobXbHBcBHrRuIATeuN3nD8b7snJrr7Ke1n5VT0ZRQMQ4JFK7
-         tgCJo6UrJ84TbtXDVFa1LOR4JdC3INqKTg2xgPzYczgO3euxZAQDIFDj+YT4GimvllZ9
-         tTaKMpDZrb9AE1j5GCERbq9ydQRqkHrNtkI9N6fEK08CiUTNtrKT1ZfgsXWeCQFCkaYo
-         ogh/d/kkVMZJB6XeUDNocSGRzDbCHdPHJ8u8dmjST5wVmyDY+Ji9a6Wla2zMVKi2Q5P3
-         sHlrqJa6rdkOUUng+RyZL07oUQi7DVJYUQxZxJFD53GrtFnxThhkz83X/XfcyGGAjueM
-         FjGQ==
-X-Gm-Message-State: AFuF++n/pBohC6UPsgbd1wagrSYShBJ8QT3oFDeaZvRYDD46hn2dBvY2
-	K1znWDn3H+O1IOLyhfpd5wPVyPI9sSNMkwh6a+/ePf8i4/WEjZ9HV6GEBN/2dIvAtgSnlgv9EJa
-	NBAmzVX6/7Wjp0JPJTEz9k/hd6ZMBLXE=
-X-Gm-Gg: AYBFou0unuWIm9zDht7jYEN4/0fk4TjEaNUojWZobOjSqkmhyBEy7ub6hiM9ljmdBcl
-	etfgMXdfaio83wEFT2hoqnGkEuQ8q0mlZj4fbXUd+T8v4I1ytqOdHQFdX+9q0KLbtMZQe5U3Rp0
-	PwwTpZqHZYJItKuxV7GnqTCPV94X0Ef2FMSRXS5e2OyuN9AtHE6jK15cZ2kFtiC5/OA1ipQS1KS
-	J9Nsp63q5Jg4UqEnepD0XIQeFhCXZ4By/40p2PSpng2myeLrdjwcNi38mweQC7e1JuIdlZhGtCN
-	8CHQ4Nm59cK0+yvWtDjrv8+fJesnq3Y5zSPJlxVXTyPqTtA7d5UMSf6jCQiICtrUuw==
-X-Received: by 2002:a05:6808:181a:b0:4c7:26ee:3378 with SMTP id
- 5614622812f47-4eddbc3ba35mr15582b6e.30.1790617390246; Mon, 28 Sep 2026
- 10:43:10 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QTo0gZkm"
+Received: from killaraus.ideasonboard.com (2001-14ba-70f3-e800--a06.rev.dnainternet.fi [IPv6:2001:14ba:70f3:e800::a06])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9B5D18FD;
+	Mon, 28 Sep 2026 20:10:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1790619052;
+	bh=USfKYzH0A6fMkjH3Ae9LrJxx6YoB7rY2b4VDa8FNY+M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QTo0gZkm7WwOtTm4JaKIpKPrNLiNa+iZIUEZ+OKoVN6xmtGJuZe+OAlqHyYjFcvoh
+	 CEdeaxjv555X963g8CAZa26Y7UZal+YLZ74per2iWl1sNXIT3kYNjPZmw2ailNjNf0
+	 On4p0mZ6uI91tZqb1ZUSGlulGesv3QLO3SS1ocAg=
+Date: Mon, 28 Sep 2026 21:12:41 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Maxime Ripard <mripard@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Albert Esteve <aesteve@redhat.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+Message-ID: <20260928181241.GB210522@killaraus.ideasonboard.com>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928163711.GA210522@killaraus.ideasonboard.com>
+ <arqi0etVHGajQAMe@beelink>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260925211256.1834061-1-ameryhung@gmail.com> <20260925211256.1834061-2-ameryhung@gmail.com>
- <DLP49QC3FFYL.2255E96POZL9C@gmail.com>
-In-Reply-To: <DLP49QC3FFYL.2255E96POZL9C@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 28 Sep 2026 10:42:59 -0700
-X-Gm-Features: AclHuK8BLivePhDSsYjfAn4jkpryvtabC_Wif-yIcr6hBeIaS6k19lZbhX6VEiw
-Message-ID: <CAMB2axMij6DbHMoGikb2pUeJF0s+s5q2yoJr64WzRE4JMUYUVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 01/12] bpf: Fix kfunc nullability diagnostics
- after wide arguments
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
-	eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <arqi0etVHGajQAMe@beelink>
 
-On Sat, Sep 26, 2026 at 1:48=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Sep 25, 2026 at 02:12 PM Amery Hung <ameryhung@gmail.com> wrote:
-> > -             arg_btf_id =3D btf_params(meta->func_proto)[arg_idx_from_=
-argno(argno)].type;
-> > +             arg_btf_id =3D btf_params(meta->func_proto)[arg].type;
->
-> check_func_arg_release() and process_iter_arg() index the BTF params
-> with arg_idx_from_argno(argno) too.
-> For kfunc(struct two_u64 v, struct foo *p) 'p' is param 1 in slot 2.
-> check_func_arg_release() reads btf_params()[2] past the end of
-> the proto and process_iter_arg() passes 2 to btf_check_iter_arg().
-> Let's fix all three in one go?
+On Mon, Sep 28, 2026 at 07:31:59PM +0200, Benjamin Tissoires wrote:
+> On Sep 28 2026, Laurent Pinchart wrote:
+> > On Mon, Sep 28, 2026 at 06:22:00PM +0200, Maxime Ripard wrote:
+> > > Hi,
+> > > 
+> > > Panels in general, and MIPI-DSI panels in particular, are pretty
+> > > difficult to support and require pretty much a panel driver for each
+> > > panel produced. Most of them are pretty simple, and require an opaque
+> > > initialization sequence that is usually poorly documented.
+> > > 
+> > > This creates a tension between OEMs and distros because OEMs will
+> > > typically get a new panel to react to a sourcing issue during
+> > > production, and thus need some swift turnaround between getting their
+> > > new panel and it being operational in the OS. Distributions on the other
+> > > hand can take years to ship a kernel with that new panel driver.
+> > > 
+> > > To solve this, I followed the example of HID-BPF and wrote a panel
+> > > driver that will rely on BPF programs to perform the panel
+> > > initialization. That way, we can ship the programs separately from the
+> > > kernel, and with a different lifecycle. If this driver is accepted, the
+> > > plan is to have a userspace component started by udev to identify and
+> > > load the right BPF program for the panels found on the device.
+> > 
+> > Interesting idea.
+> > 
+> > How would that work for devices that want early display support ? In
+> 
+> Brain fart... Include a bpf VM in the bootloader? :)
 
-Sure. Will do.
+The boot loader can have its own panel driver, that's not an issue. What
+I'm wondering is how we will deal with e.g. getting oops traces on the
+screen before userspace is available.
+
+> > particular, how does it interact with your recent work on "fastboot"
+> > support (with the kernel drivers taking over a running display
+> > configured by the boot loader) ?
+> > 
+> > I'm also wondering about the incentives for vendors to upstream the
+> > code. How will we avoid having a proliferation of out-of-tree drivers ?
+> 
+> My 2 cents here from the HID-BPF point of view:
+> - as mentioned in my reply to Neil, the kernel enforce GPL licensed BPF
+> 	only
+
+I didn't know that, it's interesting.
+
+> - so vendors have to publish their code somewhere
+> - in HID-BPF, I decided to provide an "official" list of HID-BPF sources
+> 	as part of the kernel (see drivers/hid/bpf/progs). I try to sync them
+> 	with the userspace tree when time permits
+> 
+> So basically, distributions can say "we ship only BPF objects compiled
+> from the kernel tree". It doesn't mean they have to be in a released
+> kernel already to remove the friction, but in the process of being
+> released could be sufficient.
+
+-- 
+Regards,
+
+Laurent Pinchart
