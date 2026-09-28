@@ -1,223 +1,542 @@
-Received: from mail-ua2-f30.google.com (mail-ua2-f30.google.com [74.125.226.222])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F074EB876
-	for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 19:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.226.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876284F5DE7;
+	Mon, 28 Sep 2026 19:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790623218; cv=none; b=EMetFzPF7Q+eW5zbKbroxyFotDzF0r7seUsmN5/+QhXpLUDwpvLn5tO6lpZbej2MdA5jB4MZ96wvcbMiHnD5F4geR4feZXaKPUuFusWdV2v/FCSJuDg6Q3Sq8yFu5Sx0W6JraSy1F6YAzxHKLiDz493Gb91wYj6RFnkNHIDPabY=
+	t=1790623905; cv=none; b=e9q7qiAxU5P8hHdexIX3lYQc39tngCgZXfi7wTkwAY/LXHibyT04W8ZCbhL1x/+zbYtvU/07qpWHMw22wlNScxy7PEqtT/DQGNID0PhyRCH3LMQOL3Vicawell0w6vAyRFwRjz1H4a2NR69Ok7Jqhf3EKsma0jW5EaaDxhNjxpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790623218; c=relaxed/simple;
-	bh=+IdK2muCFRO0CVjwWieNJcwFsMXfEeJbRjc+FinzqwI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=SpK4/XHz20sqWYEkbz8GiQ8cneVhwGCNSJze2PcUTj4RhBt/axXpSuk65nrzXvc3Nmm+gmHw/2qd6EwB4g/5ZxyF5ny0p+nWjPp0oMxFB2Ar/yYWXNSk7wrBXUhof48dNHjK64JA4gJDovyiog4LAxWCvcW67k23MAJp3/8YHmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q0PsxeLF; arc=none smtp.client-ip=74.125.226.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1790623905; c=relaxed/simple;
+	bh=/6zWI33GDKS7Lcbxs671d+r0KIE+G9GvXvjJqA+kYmE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WSYjFvCjA1D2+JHShry21cP/Y2Ml2gxqb8FpY8LJFBIXa7zSeKBpDLj3ykrJxqtXIqDcYAfESgM7E9EMl4L1Ulqm/oEwHd64sbfr68yHyV+bquh5j9C+/CsALjOs0ZQ6zuroFfGPDjs0my6g2B0lGr+m20hWhBEgKeJHIa20ouQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Yhl5pIRv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mvShzv/3; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BvkPBH9K; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qjODziIY; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q0PsxeLF"
-Received: by mail-ua2-f30.google.com with SMTP id a1e0cc1a2514c-97e7c7b4ed1so2018513241.1
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 12:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790623215; x=1791228015; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3EOtyWnpj6H2JKh2l6IAWizW9Kgj+njv8aMgbCxIvr4=;
-        b=q0PsxeLFzwdunkwC4eSX0d+C8Pa5wgTuqRwjkZJezaOmGXMuXtaKdThAgnE3yaIi6l
-         kH3CT/GUozRF4oxBmTQvBqJXDHlomOXBQKIOqCUI5MxQspH8kTQc5zSEX2JS4S19cWzO
-         b2oDrOTkLmhtYN25GiuzVEBbpbrUWB7tFi2xSHB85InaYm27YQMEaWb8fqaTIBa6fzBT
-         NJNd3nvqKIWQtV1o8x7/2b26PncmtElk0rtaNgyUz/nqsrqGRwppCGWmBQtsZB9m2atP
-         SW1bmzaP8mxnWhCoWX/Motn3jhiQrTFgpIktM4ClBAYtgp4Y3UYtPs/D+5SU4ZGJ4HHq
-         mgHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790623215; x=1791228015;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3EOtyWnpj6H2JKh2l6IAWizW9Kgj+njv8aMgbCxIvr4=;
-        b=yGRz8Y0ER0aQe24cm3DQ6Lf3sKWEKionAZqRWEZDNaF4I+fAj0xHTAGT4feILlcxGV
-         OyIFijCUPFc95MfCXnYK/rVNnMFLEOAm5xf7HstWxgxswNOr+JGmcWMuCbg2zUohjeW7
-         8RMg6sz035POeMozDwKQ1l58pTvNOjHhx/+jBzvnwdvuda66/O2OltTYC5voIR8lEYBJ
-         /UIlUJ0/KTvobGVhks1X/99N7hED8dv2lU50/H+wdFpDZ8/GvvJsLv9JElE7JvdWLZfW
-         Wq0nbJGhaKLvZOQcR5nbD0tOvfuSTiVRLDgGw+L9q3uyM8YzRS/QrhcYwqoCqDX0ui3d
-         WZ5g==
-X-Forwarded-Encrypted: i=1; AKwUvBwi1oSu+8qJzF0Fze3f0KOZEOWaca2OMq1AkobaQ7PWGmHV3V3xsyrkSbXxAZWgZoUpYPw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKFUQmYlBhqvRtsYWgj9gr4lcMl55FHAm9o8QcRgdyZpRH5LTb+
-	3GNskSPhgs3uVKn17pFLp5qS0cxgJVXO/zI2+1ldjglS7MwnE+DyzLP76YqSt14GNvg=
-X-Gm-Gg: AYBFou0i1/tDL0lrphTioF1cMyd/yNy6+/BT/wWorfZw6zXCdFFzMZpr/nVAZJmvSDs
-	egF1C958eLQDfGUtp+h6wJI9txstdZY5guCyIhkSx5b+A8vxjXN1HEmeacsQb8MN+Nl1xvf/bDn
-	jY/5cuuQiJdn5t7Hhl8QQM9UgNqq9SgxZ7FsIOkF7Ai7R3POet6L88OBwM7Ro9OODOO6qkymLSQ
-	gz1aVxJz/0CPhi0IWH5YW0TStqJQ/G4MARfrB5nR9+OdTSQSToJRORwr4xYnx+QN7udVyOXAHOg
-	3aHDBCXqnVQGUaP6CJMeLFU5wSzcZAeUWAQY6JJWtneAAf4snBYkFPOfsL8Pit70D2fT16V5obf
-	ULTY24+76DFjj3nl0tfdehJu/sKYlj9KQ7/62YkBgKAN0G+jD/eZxxbYTTHZsBKotO/gkqxq5DH
-	5KnyjqPkb6kJdYBZym9+pVbwpu2x5IZFV1g2FxBm80n1UtroAbTDmBKsy+QsopAC+0dPvOiLfkq
-	E0gH96UDjsPaGcyxScU6qdOMkZc3nESAR+/xTU7bvEwOZJNzuVB3Zc9UbHYz1P2vxH1wChOldK5
-	UX/D2XYEPgaXrviU8g==
-X-Received: by 2002:a05:6102:3f8b:b0:7a6:bc69:5a32 with SMTP id ada2fe7eead31-7af1e6f3640mr5363208137.23.1790623214949;
-        Mon, 28 Sep 2026 12:20:14 -0700 (PDT)
-Received: from [10.21.51.184] (ipagstaticip-88fc351e-cb28-db3e-3f52-ad13c70f08da.sdsl.bell.ca. [142.127.77.63])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-9889afc5c7csm8124301241.2.2026.09.28.12.20.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2026 12:20:14 -0700 (PDT)
-Message-ID: <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
-Date: Mon, 28 Sep 2026 21:20:12 +0200
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Yhl5pIRv";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mvShzv/3";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BvkPBH9K";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qjODziIY"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 602B021BC1;
+	Mon, 28 Sep 2026 19:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790623897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HBQt5FZ3PztA2JtZhGd6hjOW2kZMD8lYQ7oO51kEBus=;
+	b=Yhl5pIRvpbEF4UHIqTUFkgFxoebTGrAW86C2XoBh0S6PameYAt6jpyyAekISRHlCpnKJ10
+	mo1q8Tr81LQuxoh5dMqVoRR1WztvdbcvQqIAcknZiUgWWrsgLLG18G9IY7SQm3skC4D1+t
+	v2dDfhQhvtyGFhugBSK6cl5x90idjtw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790623897;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HBQt5FZ3PztA2JtZhGd6hjOW2kZMD8lYQ7oO51kEBus=;
+	b=mvShzv/3FWOVoLYeOylarbH1vl4pD9zHj0qa40JD9peHzZSkAtWnkGVN/6PZ7yqp4xBLoZ
+	CAPSADiiK7/WiBBQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=BvkPBH9K;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=qjODziIY
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790623893; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HBQt5FZ3PztA2JtZhGd6hjOW2kZMD8lYQ7oO51kEBus=;
+	b=BvkPBH9KD0Saoo5YIJLBqo1QbVNCBmSYyNogOVvQ/x/pbCOhxXA4gvFgP2ETBoo8Q4noO0
+	xm5CwCRo9j3vey/NQJA144DLGFcqt9wkG5q0C4Vz6jzkMfEKIEgPHOtpgEXRJPGCa48LRU
+	OJSEjr/Ad1TSQMnu7x1rrU8sLo5kU68=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790623893;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HBQt5FZ3PztA2JtZhGd6hjOW2kZMD8lYQ7oO51kEBus=;
+	b=qjODziIYlLLRq/n7JgU53SZ7FwFngBOTCPLmBaToVe+lNW5lPuW9kxAboBVoJGGqVQ2Rt1
+	qG8nw+Cvih5s+MDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 546231340F;
+	Mon, 28 Sep 2026 19:31:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 4RBiFn3AumpWOAAAD6G6ig:T3
+	(envelope-from <fmancera@suse.de>); Mon, 28 Sep 2026 19:31:31 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: horms@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@kernel.org,
+	davem@davemloft.net,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	Eric Dumazet <edumazet@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Nicolai Buchwitz <nb@tipi-net.de>,
+	Kees Cook <kees@kernel.org>,
+	Jiaming Zhang <r772577952@gmail.com>,
+	Petr Machata <petrm@nvidia.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH 02/16 net-next v2] net: core: add IPv4 fallback stubs and guards for CONFIG_IPV4=n
+Date: Mon, 28 Sep 2026 21:29:58 +0200
+Message-ID: <20260928193046.6698-3-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260928193046.6698-1-fmancera@suse.de>
+References: <20260928193046.6698-1-fmancera@suse.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Maxime Ripard <mripard@kernel.org>, Jessica Zhang
- <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
- <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <arqhwHiVf00j94J7@beelink>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.51
+X-Rspamd-Queue-Id: 602B021BC1
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-1.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[34];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,redhat.com,davemloft.net,suse.de,google.com,nvidia.com,iogearbox.net,gmail.com,fomichev.me,linux.dev,etsalapatis.com,bootlin.com,intel.com,tipi-net.de,vger.kernel.org];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLu6zfm1tkte8c1ooxktzp1s3b)];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spam-Flag: NO
 
-On 9/28/26 19:24, Benjamin Tissoires wrote:
-> On Sep 28 2026, Neil Armstrong wrote:
->> Hi,
->>
->> On 9/28/26 18:22, Maxime Ripard wrote:
->>> Hi,
->>>
->>> Panels in general, and MIPI-DSI panels in particular, are pretty
->>> difficult to support and require pretty much a panel driver for each
->>> panel produced. Most of them are pretty simple, and require an opaque
->>> initialization sequence that is usually poorly documented.
->>>
->>> This creates a tension between OEMs and distros because OEMs will
->>> typically get a new panel to react to a sourcing issue during
->>> production, and thus need some swift turnaround between getting their
->>> new panel and it being operational in the OS. Distributions on the other
->>> hand can take years to ship a kernel with that new panel driver.
->>>
->>> To solve this, I followed the example of HID-BPF and wrote a panel
->>> driver that will rely on BPF programs to perform the panel
->>> initialization. That way, we can ship the programs separately from the
->>> kernel, and with a different lifecycle. If this driver is accepted, the
->>> plan is to have a userspace component started by udev to identify and
->>> load the right BPF program for the panels found on the device.
->>
->> This is kind of late for serious applications except if we manage to
->> solve the bootloader to Linux display engine transition.
->>
->>>
->>> This driver is fully functional and works with both 5" and 7" Touch
->>> Display 2 panels for the RaspberryPi. However, it breaks away from the
->>> typical panel driver in multiple ways:
->>>
->>> - BPF programs can only be loaded by userspace. This leaves us with two
->>>     choices:
->>>
->>>     * We prevent the driver from loading until the script itself is
->>>       loaded. This has the side effect of preventing any other output to
->>>       be used until the initramfs is ran at the earliest, and possibly
->>>       ever if the loader isn't installed for example.
->>
->> This adds a dependency on user-space behavior and if somehow the
->> initramfs doesn't load for a reason we won't have a way to display
->> an error.
->>
->>>
->>>     * Or we probe the driver all the time, but only report it as connected
->>>       once a program has been registered. This is somewhat unconventional,
->>>       but allows the other outputs to be functional, *and* allows the user
->>>       to force the output if their panel doesn't require any
->>>       initialization or during debugging. I chose this solution.
->>
->> Both options are not really great...
->>
->>>
->>> - It's not a panel driver, but a bridge one, which is also pretty
->>>     unconventional. This is required because panel drivers don't have
->>>     access to a detect callback that is required for the above, but I also
->>>     think that the recent work from Luca blurs the line from panels and
->>>     bridges and we'll end up going that road anyway.
->>
->> On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
->> the panel and the DDIC. So being a bridge is fine, but in a general way we lack
->> a proper way to describe the display/panel/monitor independently of the DDIC.
->>
->> At first glance it's a nice driver, but moving the timings into a blob moves something
->> into possible proprietary binaries with possible closed licence and distribution
->> restriction so it's a downgrade for the same of bringing up a panel faster.
-> 
-> Quick answer on this, because I had the very same questions regarding
-> HID-BPF:
-> - in BPF, you can require (and by default it does) that only GPL
-> 	compatible BPF programs are loaded, closing the argument of "closed
-> 	licence and distribution restriction"
-> - also, a BPF program can be disassembled much easier than a binary
-> 	blob, and I remember Alexei showing me an example where you get almost
-> 	the source code from the BPF object in just one pass.
+To enable compiling the core network stack without IPv4, generic
+networking code must avoid referencing missing IPv4 symbols.
 
-Right, it "solve" one of my question, but doesn't really solve the issue
-of vendors providing "GPL" bpf programs with source available "somewhere".
+This patch provides static inline stubs in include/net/ip.h and
+include/net/route.h that return a proper error code when IPv4 is
+disabled. This behaves as IPv6 code does. In addition, it introduces
+guards around IPv4 specific code in generic implementations to prevent
+undefined reference errors while linking.
 
-Another big issue is the API, I don't want to keep the current API as-is,
-we plan to support more advanced panel features and use try to use the
-atomic states to support rate switching for example, and I'm not confident
-it's a good idea since there's no "simple" and "forever valid" API
-to initialize panels...
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+ include/linux/indirect_call_wrapper.h |   8 +-
+ include/net/ip.h                      | 111 ++++++++++++++++++++++----
+ include/net/route.h                   |   8 ++
+ net/core/dev_ioctl.c                  |   3 +
+ net/core/filter.c                     |  20 ++---
+ net/core/neighbour.c                  |   4 +
+ net/ipv4/inet_hashtables.c            |   3 +
+ 7 files changed, 127 insertions(+), 30 deletions(-)
 
-Neil
-
-> 
-> Cheers,
-> Benjamin
+diff --git a/include/linux/indirect_call_wrapper.h b/include/linux/indirect_call_wrapper.h
+index 0e4340ecd857..583efbc03446 100644
+--- a/include/linux/indirect_call_wrapper.h
++++ b/include/linux/indirect_call_wrapper.h
+@@ -57,16 +57,18 @@
+  * builtin, this macro simplify dealing with indirect calls with only ipv4/ipv6
+  * alternatives
+  */
+-#if IS_ENABLED(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV4) && IS_ENABLED(CONFIG_IPV6)
+ #define INDIRECT_CALL_INET(f, f2, f1, ...) \
+ 	INDIRECT_CALL_2(f, f2, f1, __VA_ARGS__)
+-#elif IS_ENABLED(CONFIG_INET)
++#elif IS_ENABLED(CONFIG_IPV4)
+ #define INDIRECT_CALL_INET(f, f2, f1, ...) INDIRECT_CALL_1(f, f1, __VA_ARGS__)
++#elif IS_ENABLED(CONFIG_IPV6)
++#define INDIRECT_CALL_INET(f, f2, f1, ...) INDIRECT_CALL_1(f, f2, __VA_ARGS__)
+ #else
+ #define INDIRECT_CALL_INET(f, f2, f1, ...) f(__VA_ARGS__)
+ #endif
+ 
+-#if IS_ENABLED(CONFIG_INET)
++#if IS_ENABLED(CONFIG_IPV4)
+ #define INDIRECT_CALL_INET_1(f, f1, ...) INDIRECT_CALL_1(f, f1, __VA_ARGS__)
+ #else
+ #define INDIRECT_CALL_INET_1(f, f1, ...) f(__VA_ARGS__)
+diff --git a/include/net/ip.h b/include/net/ip.h
+index 6f602df72ee6..194a464c443a 100644
+--- a/include/net/ip.h
++++ b/include/net/ip.h
+@@ -171,8 +171,17 @@ int ip_mr_input(struct sk_buff *skb);
+ int ip_mr_output(struct net *net, struct sock *sk, struct sk_buff *skb);
+ int ip_output(struct net *net, struct sock *sk, struct sk_buff *skb);
+ int ip_mc_output(struct net *net, struct sock *sk, struct sk_buff *skb);
++#if IS_ENABLED(CONFIG_IPV4)
+ int ip_do_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
+ 		   int (*output)(struct net *, struct sock *, struct sk_buff *));
++#else
++static inline int ip_do_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
++				 int (*output)(struct net *, struct sock *, struct sk_buff *))
++{
++	kfree_skb(skb);
++	return -EAFNOSUPPORT;
++}
++#endif
+ 
+ struct ip_fraglist_iter {
+ 	struct sk_buff	*frag;
+@@ -218,6 +227,7 @@ int ip_local_out(struct net *net, struct sock *sk, struct sk_buff *skb);
+ int __ip_queue_xmit(struct sock *sk, struct sk_buff *skb, struct flowi *fl,
+ 		    __u8 tos);
+ void ip_init(void);
++#if IS_ENABLED(CONFIG_IPV4)
+ int ip_append_data(struct sock *sk, struct flowi4 *fl4,
+ 		   int getfrag(void *from, char *to, int offset, int len,
+ 			       int odd, struct sk_buff *skb),
+@@ -225,27 +235,58 @@ int ip_append_data(struct sock *sk, struct flowi4 *fl4,
+ 		   struct ipcm_cookie *ipc,
+ 		   struct rtable **rt,
+ 		   unsigned int flags);
+-int ip_generic_getfrag(void *from, char *to, int offset, int len, int odd,
+-		       struct sk_buff *skb);
+-struct sk_buff *__ip_make_skb(struct sock *sk, struct flowi4 *fl4,
+-			      struct sk_buff_head *queue,
+-			      struct inet_cork *cork);
+-int ip_send_skb(struct net *net, struct sk_buff *skb);
+-int ip_push_pending_frames(struct sock *sk, struct flowi4 *fl4);
+-void ip_flush_pending_frames(struct sock *sk);
+ struct sk_buff *ip_make_skb(struct sock *sk, struct flowi4 *fl4,
+ 			    int getfrag(void *from, char *to, int offset,
+ 					int len, int odd, struct sk_buff *skb),
+ 			    void *from, int length, int transhdrlen,
+ 			    struct ipcm_cookie *ipc, struct rtable **rtp,
+ 			    struct inet_cork *cork, unsigned int flags);
+-
+-int ip_queue_xmit(struct sock *sk, struct sk_buff *skb, struct flowi *fl);
++struct sk_buff *__ip_make_skb(struct sock *sk, struct flowi4 *fl4,
++			      struct sk_buff_head *queue,
++			      struct inet_cork *cork);
++void ip_flush_pending_frames(struct sock *sk);
+ 
+ static inline struct sk_buff *ip_finish_skb(struct sock *sk, struct flowi4 *fl4)
+ {
+ 	return __ip_make_skb(sk, fl4, &sk->sk_write_queue, &inet_sk(sk)->cork.base);
+ }
++#else
++static inline int ip_append_data(struct sock *sk, struct flowi4 *fl4,
++				 int getfrag(void *from, char *to, int offset, int len,
++					     int odd, struct sk_buff *skb),
++				 void *from, int len, int protolen,
++				 struct ipcm_cookie *ipc,
++				 struct rtable **rt,
++				 unsigned int flags)
++{
++	return -EAFNOSUPPORT;
++}
++
++static inline struct sk_buff *ip_make_skb(struct sock *sk, struct flowi4 *fl4,
++					  int getfrag(void *from, char *to, int offset,
++						      int len, int odd, struct sk_buff *skb),
++					  void *from, int length, int transhdrlen,
++					  struct ipcm_cookie *ipc, struct rtable **rtp,
++					  struct inet_cork *cork, unsigned int flags)
++{
++	return ERR_PTR(-EAFNOSUPPORT);
++}
++
++static inline struct sk_buff *ip_finish_skb(struct sock *sk, struct flowi4 *fl4)
++{
++	return ERR_PTR(-EAFNOSUPPORT);
++}
++
++static inline void ip_flush_pending_frames(struct sock *sk)
++{
++}
++#endif
++
++int ip_generic_getfrag(void *from, char *to, int offset, int len, int odd,
++		       struct sk_buff *skb);
++int ip_send_skb(struct net *net, struct sk_buff *skb);
++int ip_push_pending_frames(struct sock *sk, struct flowi4 *fl4);
++int ip_queue_xmit(struct sock *sk, struct sk_buff *skb, struct flowi *fl);
+ 
+ /* Get the route scope that should be used when sending a packet. */
+ static inline u8 ip_sendmsg_scope(const struct inet_sock *inet,
+@@ -768,7 +809,7 @@ static inline bool ip_defrag_user_in_between(u32 user,
+ }
+ 
+ int ip_defrag(struct net *net, struct sk_buff *skb, u32 user);
+-#ifdef CONFIG_INET
++#if IS_ENABLED(CONFIG_IPV4)
+ struct sk_buff *ip_check_defrag(struct net *net, struct sk_buff *skb, u32 user);
+ #else
+ static inline struct sk_buff *ip_check_defrag(struct net *net, struct sk_buff *skb, u32 user)
+@@ -813,24 +854,60 @@ int ip_options_rcv_srr(struct sk_buff *skb, struct net_device *dev);
+  *	Functions provided by ip_sockglue.c
+  */
+ 
+-void ipv4_pktinfo_prepare(const struct sock *sk, struct sk_buff *skb, bool drop_dst);
++#if IS_ENABLED(CONFIG_IPV4)
+ void ip_cmsg_recv_offset(struct msghdr *msg, struct sock *sk,
+ 			 struct sk_buff *skb, int tlen, int offset);
++void ipv4_pktinfo_prepare(const struct sock *sk, struct sk_buff *skb, bool drop_dst);
+ int ip_cmsg_send(struct sock *sk, struct msghdr *msg,
+ 		 struct ipcm_cookie *ipc, bool allow_ipv6);
++int ip_recv_error(struct sock *sk, struct msghdr *msg, int len);
++int ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
++		  unsigned int optlen);
++int ip_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
++		  int __user *optlen);
++#else
++static inline void ip_cmsg_recv_offset(struct msghdr *msg, struct sock *sk,
++				       struct sk_buff *skb, int tlen, int offset)
++{
++}
++
++static inline void ipv4_pktinfo_prepare(const struct sock *sk,
++					struct sk_buff *skb,
++					bool drop_dst)
++{
++}
++
++static inline int ip_cmsg_send(struct sock *sk, struct msghdr *msg,
++			       struct ipcm_cookie *ipc, bool allow_ipv6)
++{
++	return 0;
++}
++
++static inline int ip_recv_error(struct sock *sk, struct msghdr *msg, int len)
++{
++	return -EAFNOSUPPORT;
++}
++
++static inline int ip_setsockopt(struct sock *sk, int level, int optname,
++				sockptr_t optval, unsigned int optlen)
++{
++	return -EAFNOSUPPORT;
++}
++
++static inline int ip_getsockopt(struct sock *sk, int level, int optname,
++				char __user *optval, int __user *optlen)
++{
++	return -EAFNOSUPPORT;
++}
++#endif
+ DECLARE_STATIC_KEY_FALSE(ip4_min_ttl);
+ int do_ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
+ 		     unsigned int optlen);
+-int ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
+-		  unsigned int optlen);
+ int do_ip_getsockopt(struct sock *sk, int level, int optname,
+ 		     sockptr_t optval, sockptr_t optlen);
+-int ip_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
+-		  int __user *optlen);
+ int ip_ra_control(struct sock *sk, unsigned char on,
+ 		  void (*destructor)(struct sock *));
+ 
+-int ip_recv_error(struct sock *sk, struct msghdr *msg, int len);
+ void ip_icmp_error(struct sock *sk, struct sk_buff *skb, int err, __be16 port,
+ 		   u32 info, u8 *payload);
+ void ip_local_error(struct sock *sk, int err, __be32 daddr, __be16 dport,
+diff --git a/include/net/route.h b/include/net/route.h
+index 6b55de2e4df8..8c21881eb5f4 100644
+--- a/include/net/route.h
++++ b/include/net/route.h
+@@ -169,8 +169,16 @@ static inline struct rtable *__ip_route_output_key(struct net *net,
+ 	return ip_route_output_key_hash(net, flp, NULL);
+ }
+ 
++#if IS_ENABLED(CONFIG_IPV4)
+ struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
+ 				    const struct sock *sk);
++#else
++static inline struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
++						  const struct sock *sk)
++{
++	return ERR_PTR(-EAFNOSUPPORT);
++}
++#endif
+ struct dst_entry *ipv4_blackhole_route(struct net *net,
+ 				       struct dst_entry *dst_orig);
+ 
+diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
+index 164643140a52..a10921aa3e23 100644
+--- a/net/core/dev_ioctl.c
++++ b/net/core/dev_ioctl.c
+@@ -44,6 +44,9 @@ int dev_ifconf(struct net *net, struct ifconf __user *uifc)
+ 	size_t size;
+ 	int len, total = 0, done;
+ 
++	if (!IS_ENABLED(CONFIG_IPV4))
++		return -EAFNOSUPPORT;
++
+ 	/* both the ifconf and the ifreq structures are slightly different */
+ 	if (in_compat_syscall()) {
+ 		struct compat_ifconf ifc32;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 70dc621672f2..86d531c63683 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2318,7 +2318,7 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
+ }
+ #endif /* CONFIG_IPV6 */
+ 
+-#if IS_ENABLED(CONFIG_INET)
++#if IS_ENABLED(CONFIG_IPV4)
+ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
+ 			    struct net_device *dev, struct bpf_nh_params *nh)
+ {
+@@ -2427,7 +2427,7 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+ 	kfree_skb(skb);
+ 	return NET_XMIT_DROP;
+ }
+-#endif /* CONFIG_INET */
++#endif /* CONFIG_IPV4 */
+ 
+ static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
+ 				struct bpf_nh_params *nh)
+@@ -5781,7 +5781,7 @@ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 
+ 	if (level == SOL_SOCKET)
+ 		return sol_socket_sockopt(sk, optname, optval, &optlen, false);
+-	else if (IS_ENABLED(CONFIG_INET) && level == SOL_IP)
++	else if (IS_ENABLED(CONFIG_IPV4) && level == SOL_IP)
+ 		return sol_ip_sockopt(sk, optname, optval, &optlen, false);
+ 	else if (IS_ENABLED(CONFIG_IPV6) && level == SOL_IPV6)
+ 		return sol_ipv6_sockopt(sk, optname, optval, &optlen, false);
+@@ -5818,7 +5818,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
+ 		err = sol_socket_sockopt(sk, optname, optval, &optlen, true);
+ 	else if (IS_ENABLED(CONFIG_INET) && level == SOL_TCP)
+ 		err = sol_tcp_sockopt(sk, optname, optval, &optlen, true);
+-	else if (IS_ENABLED(CONFIG_INET) && level == SOL_IP)
++	else if (IS_ENABLED(CONFIG_IPV4) && level == SOL_IP)
+ 		err = sol_ip_sockopt(sk, optname, optval, &optlen, true);
+ 	else if (IS_ENABLED(CONFIG_IPV6) && level == SOL_IPV6)
+ 		err = sol_ipv6_sockopt(sk, optname, optval, &optlen, true);
+@@ -6346,7 +6346,7 @@ static struct net_device *bpf_fib_vlan_input_dev(struct net_device *dev,
+ }
+ #endif
+ 
+-#if IS_ENABLED(CONFIG_INET)
++#if IS_ENABLED(CONFIG_IPV4)
+ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+ 			       u32 flags, bool check_mtu)
+ {
+@@ -6678,7 +6678,7 @@ BPF_CALL_4(bpf_xdp_fib_lookup, struct xdp_buff *, ctx,
+ 		return -EINVAL;
+ 
+ 	switch (params->family) {
+-#if IS_ENABLED(CONFIG_INET)
++#if IS_ENABLED(CONFIG_IPV4)
+ 	case AF_INET:
+ 		return bpf_ipv4_fib_lookup(dev_net(ctx->rxq->dev), params,
+ 					   flags, true);
+@@ -6722,7 +6722,7 @@ BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
+ 		check_mtu = true;
+ 
+ 	switch (params->family) {
+-#if IS_ENABLED(CONFIG_INET)
++#if IS_ENABLED(CONFIG_IPV4)
+ 	case AF_INET:
+ 		rc = bpf_ipv4_fib_lookup(net, params, flags, check_mtu);
+ 		break;
+@@ -12231,7 +12231,7 @@ BPF_CALL_1(bpf_skc_to_tcp_timewait_sock, struct sock *, sk)
+ 	BTF_TYPE_EMIT(struct inet_timewait_sock);
+ 	BTF_TYPE_EMIT(struct tcp_timewait_sock);
+ 
+-#ifdef CONFIG_INET
++#ifdef CONFIG_IPV4
+ 	if (sk && sk->sk_prot == &tcp_prot && sk->sk_state == TCP_TIME_WAIT)
+ 		return (unsigned long)sk;
+ #endif
+@@ -12254,7 +12254,7 @@ const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto = {
+ 
+ BPF_CALL_1(bpf_skc_to_tcp_request_sock, struct sock *, sk)
+ {
+-#ifdef CONFIG_INET
++#ifdef CONFIG_IPV4
+ 	if (sk && sk->sk_prot == &tcp_prot && sk->sk_state == TCP_NEW_SYN_RECV)
+ 		return (unsigned long)sk;
+ #endif
+@@ -12736,7 +12736,7 @@ __bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+ 		return -ENETUNREACH;
+ 
+ 	switch (skb->protocol) {
+-#if IS_ENABLED(CONFIG_INET)
++#if IS_ENABLED(CONFIG_IPV4)
+ 	case htons(ETH_P_IP): {
+ 		struct sk_buff *nskb;
+ 
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index 6ed8eb075146..63c2a1b86118 100644
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -3241,6 +3241,10 @@ int neigh_xmit(int index, struct net_device *dev,
+ 		if (index == NEIGH_ARP_TABLE) {
+ 			u32 key = *((u32 *)addr);
+ 
++			if (!IS_ENABLED(CONFIG_IPV4)) {
++				rcu_read_unlock();
++				goto out_kfree_skb;
++			}
+ 			neigh = __ipv4_neigh_lookup_noref(dev, key);
+ 		} else {
+ 			neigh = __neigh_lookup_noref(tbl, addr, dev);
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 5abcb0debb27..ae9f45368571 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -596,6 +596,9 @@ static int __inet_check_established(struct inet_timewait_death_row *death_row,
+ 	struct sock *sk2;
+ 	spinlock_t *lock;
+ 
++	if (!IS_ENABLED(CONFIG_IPV4))
++		return -EAFNOSUPPORT;
++
+ 	if (rcu_lookup) {
+ 		sk_nulls_for_each(sk2, node, &head->chain) {
+ 			if (sk2->sk_hash != hash ||
+-- 
+2.55.0
 
