@@ -1,144 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-55.mta1.migadu.com [95.215.58.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F224FECF5;
-	Tue, 29 Sep 2026 12:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCAB526AA9
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 13:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790684933; cv=none; b=nkPhmQuL0ZI54NV3StiqDl1rxVJO0c5Yizu21a3Fj/gbazwQr5Nqjd4XmgojgqpX6g0pGhgMxoA/VLh+CX0kZJ2E0iercTdIdUoJAJ0aBWrW4xr8MTt3aPhx3+3FjZO+M59aRgHsrOKxoWQBwEOCotsh0WWnshUrdr+QSSFxUNs=
+	t=1790689153; cv=none; b=cJDGCL+GZUifw66mHeYJwv0Gr7spf/wjyb/RKGZ8vzT6OU5sQIiec7KWnh4zPiWrkLj3i7xq4wmZxhFXV6BIdwhvm46/Wzmmq+PlCnuuMeEjuFO8nOaqPtV9weVQpErKN+6f5gW3ZFm54ScLHn7TL6lHc4jQnbnj2R9ts6Jsiq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790684933; c=relaxed/simple;
-	bh=Rya2/xvwmnG+LUNaAktFCoDG7sJ7+awgSLfG71+jbJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fAkrYsYEgy9LfDNLA1ayVhjq9KAa5eN6laQ5gcMClqw8EAFpVK1W5zyUt+uH8R0MqMc+1SnPLO9ebtIvfK5LGwHLn+9InM4RrrpJcwBiu5+0qvNIhiUQrQfd5jD+Rq22VpOPr1doYhj6a7mfGn1G9XrVE9KrLF1IskS+JFdH9vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDgs52RD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790689153; c=relaxed/simple;
+	bh=p0HopqRbmThSdHTCdVhwQwUjMsWdv84GVBnYu35sdLQ=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Nmt1kLlEUsTz8Ybhn9TM+1D8RFugyDGrvwX6n+m6p2nUA2dowtIbddjbQwWaYbHLeJcvw1H1bkm6wTqhEVEgTvyBAtc9/f5UIdZa5MYrSv1eb8htgZatuBMfvjkPwiqdAyaS7FvJ/jNPbTysJC1Qj3Sd53/ZZt/u2YHNTaBoC5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eOZQiVso; arc=none smtp.client-ip=95.215.58.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDgs52RD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8E61F000FF;
-	Tue, 29 Sep 2026 12:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790684927;
-	bh=Rya2/xvwmnG+LUNaAktFCoDG7sJ7+awgSLfG71+jbJ8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KDgs52RDTx6mh31I7eMF9UWgZiSg1uUMHsWF7NmqCu8jGXUdqsG5RRco4NAQ1yybk
-	 xQ+m+bbw1/UwtG3KjfgwVgTA5CaoLUfvpIS8lFDoTctzuu7VSyBxeowIx5ueXoinnE
-	 8tKck5octUTdRzH9FOQQ5rKCVgLBSz3czzpqXIl3DCc+gA8SVFh5ujozuK/cQlWlr3
-	 laRfPA3ooCYxIdbhJVJPI51VwDjiItiCpStTQWukUYuWtEtyJAROcrFDWye7LIwjKJ
-	 BEx8eFAfDOOrw/HeBkx0lBbtw4Jx8mATUrz9BoFpYrTbqm0g4vGPopfAaieDMB8Iyg
-	 sD/aDTz9tWV9g==
-Date: Tue, 29 Sep 2026 14:28:43 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <arut8kWzqX5YW5wE@houat>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <054ef52478fc93fc213a9dae23ea77f73094aaf2@intel.com>
- <aruD5kwOEsvFhW2e@beelink>
- <42cfa3fb2246c66d69e45d7d9b8d6aaadc0da4c4@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eOZQiVso"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=p0HopqRbmThSdHTCdVhwQwUjMsWdv84GVBnYu35sdLQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790689148; v=1; x=1791293948;
+ b=eOZQiVsooQobzNEYBrZz8JvKpe2lnq36dZZFAwBPG26qKrOJDdy03BgJQYBMFG4hxmZfhyTD
+ 3UO1JCJ0DTdsojyKgqNBlh0Wzj+yFDcYkQZb9oEt36g1sbgZhXSzNEDP+kKJRaAx8TukXejdK4B
+ QXfeFug0RB7rP1EKTNVdUFUo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id fd0607d5a2665ee1;
+	Tue, 29 Sep 2026 13:39:08 +0000
+X-Mizu-Trace-ID: fd0607d5a2665ee1
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4f1571a1-7e56-4264-aa7f-8dce32931ddb@linux.dev>
+Date: Tue, 29 Sep 2026 21:39:00 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="tn7gfu35hmfimxib"
-Content-Disposition: inline
-In-Reply-To: <42cfa3fb2246c66d69e45d7d9b8d6aaadc0da4c4@intel.com>
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
+ ameryhung@gmail.com, alexei.starovoitov@gmail.com
+Subject: Re: [RFC PATCH v7 0/4] blk-iocost: BPF struct_ops cost model
+To: Tejun Heo <tj@kernel.org>
+References: <20260924054549.2271705-1-cui.tao@linux.dev>
+ <6f80eca83c87b60398110c3a6d735aec@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <6f80eca83c87b60398110c3a6d735aec@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hello, Tejun.
 
---tn7gfu35hmfimxib
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-MIME-Version: 1.0
+在 2026/9/29 08:42, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> On Thu, 24 Sep 2026 13:45:45 +0800, Tao Cui wrote:
+> 
+>> loading attaches the model to
+>> that device and switches it away from the builtin linear model,
+>> detaching the struct_ops restores the builtin model, and the
+>> struct_ops core owns the program lifetime.
+> 
+> I don't think attaching should enable the controller. v7 currently turns
+> it on without the queue freeze and quiesce that ioc_qos_write() goes
+> through. Attaching can create the ioc if needed like an io.cost.model
+> write does and switch the model under the same freeze and quiesce,
+> leaving enabling to io.cost.qos.
+> 
+> This is different from what I said on v1, where switching back to the
+> builtin model detached the struct_ops, but with the controller state left
+> to io.cost.qos it seems more consistent to keep the attachment independent
+> too. Writing enable=0 or model=linear wouldn't detach the struct_ops,
+> model=bpf would switch back to the attached model, and only detaching
+> would remove it. This is the same as the linear coefficients, which are
+> kept while the BPF model is in use and take effect again when switched
+> back.
+> 
 
-On Tue, Sep 29, 2026 at 01:16:41PM +0300, Jani Nikula wrote:
-> On Tue, 29 Sep 2026, Benjamin Tissoires <bentiss@kernel.org> wrote:
-> > Ouch. This immediately raises the "let's implement a parser in the
-> > kernel" flag, or "let's create a new langage".
->=20
-> Fair.
->=20
-> > You'd still need a dedicated driver for your new blob parser, with far
-> > fewer people who had had a look at it than BPF who has been working on
-> > for several years.
->=20
-> Fair.
+Done.  The implicit enable and the wbt_disable_default() are gone.
+Attaching now checks disk_live() and creates the ioc under
+rq_qos_mutex, like blkg_conf_open_bdev() does, and switches the
+active model under the same freeze and quiesce sequence as the
+io.cost.model writes.
 
-Also, it's kind of what we had with panel-mipi-dbi:
-https://github.com/notro/panel-mipi-dbi/wiki
+To make sure I understood correctly: attaching switches the active
+model to the attached BPF model, while model=linear and model=bpf
+only switch between the attached model and the builtin model without
+affecting the attachment itself.  The attachment survives enable=0,
+and only .unreg removes it.  Please shout if I still got that wrong.
 
-It didn't really take off.
+>> iocg_init()/iocg_free()
+>> callbacks, invoked from the iocg policy init and free paths with
+>> the same per (cgroup, device) lifetime, let models manage their own
+>> per-cgroup state.
+> 
+> Existing cgroups don't get iocg_init() on attach and iocg_free() isn't
+> delivered on detach, so init and free don't pair up. Can you call
+> iocg_init() for all existing iocgs on attach and iocg_free() for the
+> remaining ones on detach? That's what sched_ext does with
+> ops.cgroup_init() and ops.cgroup_exit() on enable and disable.
+> 
 
-> > The integration of BPF and the kernel is honestly transparent nowaday:
-> > calling a struct_ops BPF function is just a function call away, and from
-> > the bpf calling anything in the kernel is also just a call away.
->=20
-> I don't know if I'm just being overly conservative here, but it seems to
-> me BPF provides too much flexibility for the use case. But maybe the
-> point is completely moot, and you should just ignore me. ;)
->=20
-> > See Maxime's answers: yes, falling back to dedicated driver is still
-> > encouraged.
->=20
-> [Moved the above to go with below.]
->=20
-> > Isn't that what Maxime wants to have? One driver for a plethora of DSI
-> > panels, with the same ability the BIOS has to also do function calls to
-> > set things up?
->=20
-> I suppose this is something that could use some clarification. Is the
-> idea that most (simple) dedicated panel drivers eventually get converted
-> to BPF?
+Done.  One note on the implementation: the existing iocgs are walked
+over q->blkg_list under q->blkcg_mutex, the same walk the blkcg
+policy teardown uses, rather than over the cgroup tree - this is a
+per-device walk and the queue is frozen and quiesced at that point.
+Cgroups without a blkg on the device yet are not missed: their blkg
+is created later and ioc_pd_init()/ioc_pd_free() deliver the
+callbacks then, so init and free pair up either way.
+>> Writing "ctrl=bpf" or "model=bpf" is accepted as a no-op so a saved
+>> configuration still parses; re-attaching the model requires loading
+>> the struct_ops again, not writing to this file.
+> 
+> ctrl keeps describing the coefficients and never reads back "bpf", so
+> ctrl=bpf shouldn't be accepted. model=bpf should fail when no model is
+> attached.
+> 
+Done as suggested; the bpf-ci review of v7 reported the same two.
 
-I don't think most of the existing panels will be converted, if only
-because it would require a different DT binding for most of them. We
-should totally fix the "what happens the panel is supported by a driver
-and the bpf driver" situation Rob (I think?) pointed out though, because
-I do think some will be converted still.
+Thanks.
+Tao> Thanks.
+> 
+> --
+> tejun
 
-> Or is the idea that BPF is easy for prototyping and development
-> using stable kernels and short time to market, and most of them would
-> eventually get converted to dedicated panel drivers?
-
-Even though it does make prototyping easier, I totally expect this to be
-a production-grade driver, just like any other panel driver.
-
-> The story wrt display before userspace is up and running also needs
-> clarification.
-
-Yeah, I'll work on an in-kernel loader for v2.
-
-Maxime
-
---tn7gfu35hmfimxib
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaruu+wAKCRAnX84Zoj2+
-dvaDAYDbgFmn3VTPnwMmRkcBxrTVtKlQ2i2nTFTQqsY6+h83dQfdgZBSKyv4PaD8
-t21q8pIBgLJeTlsC72CRcfaSgL7zPCcpR02uuJQEdtsW57i6k17jJYgTCB0r9j+y
-8X+t6kZwEw==
-=GOdP
------END PGP SIGNATURE-----
-
---tn7gfu35hmfimxib--
