@@ -1,133 +1,227 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2943C1D4A;
-	Tue, 29 Sep 2026 09:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC48C4BC003;
+	Tue, 29 Sep 2026 09:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790672658; cv=none; b=RQ2c7GEahbYRQUpiQfBdiTbieKq7eyOhnBvXr+aX0jftzSOXjOemELvvwtjRq3eteX9+JUwsCMVyYXnZ6tcesQdnYZrCWQ0MxiWfMJIl53EIx3XNDQizSUH1LHJOSFwY0OiZD8tpSMSrQ0MVLp2i/bO39iikHkkIgn04EfPCpEc=
+	t=1790674003; cv=none; b=ftAzmE3iAUo6k+F2PnjkyzkTi5B3kfmvJDLZhPhobPub31yJU5KS2f0+ioTIf8ud7dxDONnmqpRJ0YS0O5LiRQEJxUi3v6wVJcJ8V9Iq4F4QR2A8p8SQCtNPDtrHrnE1aCsrCyGLAXygRX5PccqRcc/N0WeZ7xzlqqm6RGt4oa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790672658; c=relaxed/simple;
-	bh=fjTgkfgps1Gk7j6xMRcB1fFz/DjnVOKoczfByJwdpzQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UqPwxmUE50GHn3a3aT7raF/4zVuUMMHC6k4nrZdpJ5cp9X1nbrSOthUa77fBzeuebuQYz1nw9tRaQxg6Yu1HAPr79eYqwTQHTAq3agB/gz5tpjVMzoWE0e6i6WHTx0CHQwBRK3TdWZZlGT7WnDSl9qJxJy0Flb8mpqjeT9unflk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WKt/pw4M; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790674003; c=relaxed/simple;
+	bh=cltga6RH/ol21mlzUZmEpLYtblEq58rkXhe1w04j9gc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=SNlZsdiaOa9hRJFRfB3Ow5wI4YpPz9PadqNWtUxJfDx8hYI3JFWC4a/kybQcZOt1HXJ/MnpxYsZeemtJb62lUyaEC2N2ZUNknQXQVfPRgqKUvPx2JvdCJHEUCMcZnMWmOrfYTIr/vwHlAP2RsD0y9Fpqp8xPmT+QWBwuKaYo47w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XssZ0mCO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WKt/pw4M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790672649; x=1822208649;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=fjTgkfgps1Gk7j6xMRcB1fFz/DjnVOKoczfByJwdpzQ=;
-  b=WKt/pw4M9U5RBLaUy65VJzDu8PEnPHnWr2Hxa2k170+WBSryNlIgrO63
-   HgNuyREUkxycLndkvLJ23ElTJJszrgi40ATtOIVq2i/VJUOCu/B5PS99L
-   kXhoIyCVQtPjZNYDIWD5rSK0PMV7RjyaP7lB0Ye5b4egMIlRzdnlnddij
-   TSyj/4afNa2DUqDCEuu3Jg9osvL+c85Z5oz75ALZGaRZGtsIhmtxXhDFX
-   GMnr3UPqI5jhFnF3okaLFRL4RP1dHOsIh+JQY5kAagn8JMjcLQbl325OG
-   Qs61viXYtaYOSiGBmrGL8eLasxrCvR++9Ar2ALRDM5sLYcSYBVhhdI8Gy
-   Q==;
-X-CSE-ConnectionGUID: ygR5LGxBTpqD5065wZVEIg==
-X-CSE-MsgGUID: gVJFI2GyQlq9AIIFBQPe0w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11919"; a="91405278"
-X-IronPort-AV: E=Sophos;i="6.27,130,1787036400"; 
-   d="scan'208";a="91405278"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2026 02:04:03 -0700
-X-CSE-ConnectionGUID: L4F6TTbPScOGpDGQ/vD63w==
-X-CSE-MsgGUID: px97l+LIQsul4lmsr50Xug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,130,1787036400"; 
-   d="scan'208";a="271804384"
-Received: from kniemiec-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.233])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2026 02:03:55 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Maxime Ripard <mripard@kernel.org>, Neil Armstrong
- <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, David
- Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, Florian Fainelli
- <florian.fainelli@broadcom.com>, Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Luca
- Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas
- <javierm@redhat.com>, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, Maxime Ripard <mripard@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
- 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
-Date: Tue, 29 Sep 2026 12:03:52 +0300
-Message-ID: <054ef52478fc93fc213a9dae23ea77f73094aaf2@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XssZ0mCO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9141F000FF;
+	Tue, 29 Sep 2026 09:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790673995;
+	bh=DJTxf5PAiRURAXhySgqOS+Aj3flHVqQz6tf1/FXsfOk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=XssZ0mCOgH1dSVMrNC4nf8SuW0QTXIN0DI16+LAfdz4VdIz0uvymLNrlqxgg3Fk7/
+	 OQat6CL8IQXo8DV2biTlYtmVJfjNu/0gGi9FIBASFc4Zi1D3l0LanqthO+XRz0Van1
+	 Q1nEaiidn7scNKEX3EYMA3mjGrJam0CbLAVQiq+kOCW9p2YO3TCJVDCo65oOoOoiGI
+	 1NHb3j3aY4G+yXD/Ro9BbSKr8JVptBDYXsVT27aBzusdn7B4jX1M4JegNGOHlM/AxN
+	 qMni27s7xOK0UuyCvZmfYkQIdUOruGyy1y13Aq+qNFgKXc01HOvJQz2/8GHN5MKKVF
+	 n+DgFtaCvNp9g==
+Content-Type: multipart/mixed; boundary="===============8678725211081073155=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-Id: <195e87010d3c27469fbebac9aded96ec0232aa4eb047bbc2c35136ac54a24146@mail.kernel.org>
+In-Reply-To: <20260929083447.558818-3-chenyuan_fl@163.com>
+References: <20260929083447.558818-3-chenyuan_fl@163.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add a test for udp_bpf_recvmsg() with a stuck backlog
+From: bot+bpf-ci@kernel.org
+To: chenyuan_fl@163.com,netdev@vger.kernel.org,bpf@vger.kernel.org
+Cc: john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,daniel@iogearbox.net,ast@kernel.org,cong.wang@bytedance.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 29 Sep 2026 09:26:34 +0000 (UTC)
 
-On Mon, 28 Sep 2026, Maxime Ripard <mripard@kernel.org> wrote:
-> Panels in general, and MIPI-DSI panels in particular, are pretty
-> difficult to support and require pretty much a panel driver for each
-> panel produced. Most of them are pretty simple, and require an opaque
-> initialization sequence that is usually poorly documented.
->
-> This creates a tension between OEMs and distros because OEMs will
-> typically get a new panel to react to a sourcing issue during
-> production, and thus need some swift turnaround between getting their
-> new panel and it being operational in the OS. Distributions on the other
-> hand can take years to ship a kernel with that new panel driver.
->
-> To solve this, I followed the example of HID-BPF and wrote a panel
-> driver that will rely on BPF programs to perform the panel
-> initialization. That way, we can ship the programs separately from the
-> kernel, and with a different lifecycle. If this driver is accepted, the
-> plan is to have a userspace component started by udev to identify and
-> load the right BPF program for the panels found on the device.
+--===============8678725211081073155==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I'd think for most panels it would suffice to have a declarative
-language describing what to do at what points in time. For example, at
-poweron, enable this GPIO, wait a little, write this set of DSI
-commands, etc. You rarely need actual programming, or even ability to
-read-modify-write something.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c b/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c
+> new file mode 100644
+> index 000000000000..bbfe2623bd9e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c
+> @@ -0,0 +1,141 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 KylinSoft */
+> +
+> +#include <sys/types.h>
+> +#include <sys/socket.h>
+> +#include <sys/wait.h>
+> +#include <arpa/inet.h>
+> +#include <errno.h>
+> +#include <string.h>
+> +#include <time.h>
+> +#include <unistd.h>
+> +
+> +#include "test_progs.h"
+> +#include "test_sockmap_udp_backlog.skel.h"
+> +
+> +#define RCV_TIMEOUT_MS	1000
+> +#define HANG_LIMIT_MS	5000
+> +
+> +static int run_child(void)
+> +{
+> +	struct test_sockmap_udp_backlog *skel;
+> +	struct timeval tv = { .tv_sec = RCV_TIMEOUT_MS / 1000 };
+> +	struct sockaddr_in addr = {};
+> +	struct timespec t0, t1;
+> +	socklen_t addrlen = sizeof(addr);
+> +	int zero = 0, sfd, ret, err, exit_code = 1;
+> +	double elapsed_ms;
+> +	char byte = 0;
+> +
+> +	skel = test_sockmap_udp_backlog__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+> +		return 1;
+> +
+> +	sfd = socket(AF_INET, SOCK_DGRAM, 0);
+> +	if (!ASSERT_GE(sfd, 0, "socket"))
+> +		goto out;
+> +
+> +	addr.sin_family = AF_INET;
+> +	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+> +	addr.sin_port = 0;
+> +	if (!ASSERT_OK(bind(sfd, (struct sockaddr *)&addr, sizeof(addr)), "bind"))
+> +		goto close;
+> +	addrlen = sizeof(addr);
+> +	if (!ASSERT_OK(getsockname(sfd, (struct sockaddr *)&addr, &addrlen),
+> +		       "getsockname"))
+> +		goto close;
+> +
+> +	/* Non-TCP redirect targets need TCP_ESTABLISHED: connect to self. */
+> +	if (!ASSERT_OK(connect(sfd, (struct sockaddr *)&addr, sizeof(addr)),
+> +		       "connect"))
+> +		goto close;
+> +
+> +	err = bpf_prog_attach(bpf_program__fd(skel->progs.redir_to_self),
+> +			      bpf_map__fd(skel->maps.sock_map),
+> +			      BPF_SK_SKB_VERDICT, 0);
+> +	if (!ASSERT_OK(err, "prog_attach"))
+> +		goto close;
+> +
+> +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.sock_map),
+> +				  &zero, &sfd, BPF_ANY);
+> +	if (!ASSERT_OK(err, "map_update"))
+> +		goto close;
+> +
+> +	if (!ASSERT_EQ(send(sfd, &byte, 1, 0), 1, "send"))
+> +		goto close;
+> +
+> +	/* Let the backlog pick the skb up. */
+> +	usleep(100 * 1000);
+> +
+> +	err = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+> +	if (!ASSERT_OK(err, "set_rcvtimeo"))
+> +		goto close;
+> +
+> +	/* A re-sent copy may be read back; the reader must not spin. */
+> +	clock_gettime(CLOCK_MONOTONIC, &t0);
+> +	errno = 0;
+> +	ret = recv(sfd, &byte, 1, 0);
+> +	clock_gettime(CLOCK_MONOTONIC, &t1);
+> +	elapsed_ms = (t1.tv_sec - t0.tv_sec) * 1000.0 +
+> +		     (t1.tv_nsec - t0.tv_nsec) / 1000000.0;
+> +
+> +	if (ret != 1) {
+> +		if (!ASSERT_EQ(ret, -1, "recv"))
+> +			goto close;
+> +		if (!ASSERT_EQ(errno, EAGAIN, "recv_errno"))
+> +			goto close;
+> +		if (!ASSERT_GE(elapsed_ms, RCV_TIMEOUT_MS * 0.9, "recv_blocked"))
+> +			goto close;
+> +		if (!ASSERT_LT(elapsed_ms, HANG_LIMIT_MS, "recv_timely"))
+> +			goto close;
+> +	}
+> +
+> +	exit_code = 0;
+> +close:
+> +	close(sfd);
+> +out:
+> +	test_sockmap_udp_backlog__destroy(skel);
+> +	return exit_code;
+> +}
+> +
+> +void serial_test_sockmap_udp_backlog(void)
+> +{
 
-It could be, say, YAML converted to some binary representation. Maybe
-that could be in the DT, or maybe you could override it with the
-firmware loader. And obviously any vendor "blob" could be trivially
-converted back to YAML and upstreamed.
+A subsystem pattern flags this as potentially concerning: this adds a new
+standalone prog_tests file plus a new BPF object for one narrow internal
+code path (udp_bpf_recvmsg() re-arming its loop when only
+psock->ingress_skb is populated).
 
-Where that falls short, you could always have a dedicated driver, or
-extend the declarative stuff.
+tools/testing/selftests/bpf/prog_tests/sockmap_basic.c already covers
+sockmap UDP receive behavior, for example the "sockmap udp multi
+channels" subtest and the SOCK_DGRAM FIONREAD subtest, both built on
+test_sockmap_pass_prog.
 
-Now, the question is, how much more BPF solves over that, without
-requiring a dedicated driver, and is the added complexity worth it?
+Would it be better to add this as a new case in the existing test instead
+of a new file?
 
-FWIW, on the Intel platforms that support DSI, all of the
-initialization, poweron/poweroff, backlight on/off etc. sequences like
-that are stored in the BIOS, defined by the OEM. A plethora of DSI
-panels, one driver. Don't look at it for examples how to implement it,
-but I think the basic idea is workable.
+There is a plausible reason for a separate file: on an unfixed kernel the
+reader spins, holding lock_sock with no signal check, so the scenario has
+to run in a fork()ed child with a bounded wait from the parent. It also
+should not run as a parallel test, because the unkillable child pins a
+CPU. test_sockmap_basic() is a parallel (non-serial_) test, so a separate
+serial_ entry point is defensible.
+
+> +	pid_t pid;
+> +	int status = 0;
+> +	int i;
+> +
+> +	pid = fork();
+> +	if (!ASSERT_GE(pid, 0, "fork"))
+> +		return;
+> +
+> +	if (pid == 0)
+> +		_exit(run_child());
+> +
+> +	/* The child may survive SIGKILL: only a bounded wait is safe. */
+> +	for (i = 0; i < HANG_LIMIT_MS / 100; i++) {
+> +		if (waitpid(pid, &status, WNOHANG) == pid)
+> +			break;
+> +		usleep(100 * 1000);
+> +	}
+> +
+> +	if (i == HANG_LIMIT_MS / 100) {
+> +		kill(pid, SIGKILL);
+> +		for (i = 0; i < 10; i++) {
+> +			if (waitpid(pid, &status, WNOHANG) == pid)
+> +				break;
+> +			usleep(100 * 1000);
+> +		}
+> +		fprintf(stderr,
+> +			"udp_bpf_recvmsg() spins on backlog-only ingress (timeout %dms)\n",
+> +			HANG_LIMIT_MS);
+> +		test__fail();
+> +		return;
+> +	}
+> +
+> +	if (WIFEXITED(status)) {
+> +		ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
+> +	} else {
+> +		fprintf(stderr, "child terminated abnormally (status=%d)\n", status);
+> +		test__fail();
+> +	}
+> +}
+
+[ ... ]
 
 
-BR,
-Jani.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-
--- 
-Jani Nikula, Intel
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36545669306
+--===============8678725211081073155==--
