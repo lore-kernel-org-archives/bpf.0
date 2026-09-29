@@ -1,127 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532793CA4A1
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 01:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7123CB550
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 01:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790644484; cv=none; b=G4uCFsitRZ4bsc4scOphAVTkS5S+uFaVDFKYWdVAFAGxTvGPIzrkwQS0c0f4pol92LGx855aV93dkzJWpgmPDzIYPO2dvfBUez3oaEzxYxkXZr4aCYSA97jxiyfUpK+HSW8lrz3G2icZZM+Zos7fWxg4XN5mULWXi+1HME/UNP8=
+	t=1790644486; cv=none; b=Dk0HH+D65caGeI1HCLBO89DMKPcKV21EwAa4UU93mY18xYqAD96uEsTzLCKAxXoUF3CpgD6Kph8ptR/zawn3HHcxp9JW+sS0G+wQ7Ddm6lJtkmqp4ck2TZgA4DZRqo+5UbRo7dXmEmDmr+ia7bByBrBX7RI4g6UTndxnumJZqLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790644484; c=relaxed/simple;
-	bh=Yzn6ljfpmAqTzQyTiqJsU4Kbq+J6X0ri5A5/5JuB1vg=;
+	s=arc-20240116; t=1790644486; c=relaxed/simple;
+	bh=tmJhfgin6wi3+LWghsBUaz1RkFcoYkTp7tO/vGvQbpM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=nAIzlSYQJ689a7GqEOLVfiZ47m5BhUMH8L00iWM4HeCTq4n73OqZ9gT2PhwmI9YPOixbjJ7RSjwC8svQYwnr+Ivvv0wnNv2cqb1ZiAy+HcnkDTKEezk+zNui9V9BJ0n6yxRVWofFmgZ0iX7l2NuKdfTv1OGtA+H7dlAUj4NJxbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kw4pdnNw; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=hy3tiv0nZKbtGQlAm3S097yvlZ1qhvCraU/3AqhYhMy6LC5v21fBWHhiH9he6l3aBuis8IVWfdgPIcTo4iR+smcV67+8FTVUvrqeia4MlJV0cmcN7MqbOHF+UJWQMRw7IozWvk7lS5LZUCZVysDq5iT0A835UEpFO5pB9tWaDSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l3GRQSHl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kw4pdnNw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33ABD1F000FF;
-	Tue, 29 Sep 2026 01:14:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l3GRQSHl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9591F00893;
+	Tue, 29 Sep 2026 01:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790644482;
-	bh=Hai8K1hvs0C2ulDEl9UQbYAXLYvG6bYABxEX+u5V//0=;
+	s=k20260515; t=1790644484;
+	bh=C8ag7Iahtmk69zd5ycSLRiE0GQgCgK6wWtpe9jJW69M=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Kw4pdnNwEI3CKAyXdE2skq2ZEt5x87RYRQ6k5T9PJ8eYamZ4wfQoDbSBBh2VAwTyM
-	 X1m7o/oVBsG3nkDxPrYoGh//dl4d/Guu0QAW6H4JCuePA56MBb62Fr41ycdxxARt3a
-	 QSvKzzquzZ7D/4cyaMzTJ/Nkh3jzGdL1vJicVI9BhFeLwfISmhwnu1l70Q4M/s8Jzn
-	 BZJrjbNQZ7ytPearpKMX/lBZqBpIkWolconoLbQIb4SyrXbD33vwZzD8zGagQGjTEP
-	 o/y+EmqmPDSYHkMTqnxfHoRMfMKkAZf6W/6H3dP/SfHWxXM/EdWeIMHJah+mBl20Ft
-	 4tLUWjafQql0w==
-Content-Type: multipart/mixed; boundary="===============1483874617242212674=="
+	b=l3GRQSHlIY1rCPr1W6TdR72RZZCWPHxKcBzer8+CFkA0e1UfyBTa+jWtoTtT4Asp3
+	 1cYbjakgLZRwUmfg4Ln3AdFJ/s2MjBcPr8SJ5kLob0Ma9Ol+8qo/2Mz5T8ZZgxeULU
+	 JqGWFVA2YP23cgl4zFtTJLKJpen6+QEi1Pz+S6zyAPh+ZwKMuOPT4ytCfv7GU6Obbr
+	 QEfX2g92Tu0rcmsj4YqeYeBtVuMLT6BVfOO2lZxF9gU/3K3CqwdrehjYH2oeanrg6K
+	 8bG4nhrMzls/8MpAzIg0KezJIMjlXcyHo0HWcG2Y6VT92u8EijYLOlu8Nb8Ivxv+DB
+	 6/ce1Q8Sif7qQ==
+Content-Type: multipart/mixed; boundary="===============7917287845577210380=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b205a4413229ec7b21d7ec94d0e97a9824725f1c75da88a04f31e48c72daacfa@mail.kernel.org>
-In-Reply-To: <20260929001709.3252802-1-yonghong.song@linux.dev>
-References: <20260929001709.3252802-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v7 13/22] bpf, arm64: Dispatch exception cleanup pads at run time
+Message-Id: <97e6da4cbbd16c8938762c0c0cb2044b1ff910eb53cb6ed54864b46773c65eb7@mail.kernel.org>
+In-Reply-To: <20260929001658.3251019-1-yonghong.song@linux.dev>
+References: <20260929001658.3251019-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v7 11/22] bpf: Dispatch cleanup pads by rewriting return addresses
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 29 Sep 2026 01:14:42 +0000 (UTC)
+Date: Tue, 29 Sep 2026 01:14:44 +0000 (UTC)
 
---===============1483874617242212674==
+--===============7917287845577210380==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index 3ebcf8c53fb0..1e46a22cafbd 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -445,6 +445,109 @@ noinline noinstr void arch_bpf_stack_walk(bool (*consume_entry)(void *cookie, u6
->  	kunwind_stack_walk(arch_bpf_unwind_consume_entry, &data, current, NULL);
->  }
->
-> +struct bpf_unwind_ra_consume_entry_data {
-> +	bool (*consume_entry)(void *cookie, u64 ip, u64 sp, u64 fp, u64 *ra);
-> +	void *cookie;
-> +	unsigned long record;
-> +	bool seen_first;
-> +};
-> +
-> +static u64 bpf_unwind_sign_ra(u64 ra, u64 modifier)
-> +{
-> +	asm volatile(ARM64_ASM_PREAMBLE
-> +		     ".arch_extension pauth\n"
-> +		     "	pacia %0, %1"
-> +		     : "+r" (ra) : "r" (modifier));
-> +	return ra;
-> +}
-> +
-> +/*
-> + * PACIASP's modifier is the stack pointer the owner was entered with: record
-> + * + 16 for a BPF prologue, but further up for bpf_unwind()'s own C frame.
-> + * Recognise it by re-signing @pc, which the unwinder stripped from @stored.
-> + */
-> +static bool bpf_unwind_ra_modifier(unsigned long record, unsigned long caller_fp,
-> +				   u64 stored, u64 pc, u64 *modifier)
-> +{
-> +	u64 m;
-> +
-> +	for (m = record + sizeof(struct frame_record); m <= caller_fp; m += 16) {
-> +		if (bpf_unwind_sign_ra(pc, m) == stored) {
-> +			*modifier = m;
-> +			return true;
-> +		}
-> +	}
-> +	return false;
-> +}
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 5b7fe4ba610b..bff9d2539371 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <linux/bitmap.h>
 
-Can this loop find the wrong modifier for bpf_unwind()'s own frame?
-
-The search takes the first candidate whose PAC matches. With
-CONFIG_ARM64_PTR_AUTH_KERNEL, the PAC field is quite short: roughly 15 bits
-with 48-bit VA, 11 bits with 52-bit VA, and only 7 bits when TBI is enabled
-for KASAN tag-based modes.
-
-For JIT frames, the true modifier is always record+16 (the prologue does
-paciasp then 'stp x29, lr, [sp, #-16]!'), so they always match correctly on
-the first try.
-
-But when bpf_unwind()'s own C frame is being rewritten (which happens when
-the BPF frame that called bpf_unwind() has a pad covering the call), the
-compiler might place the frame record at a different offset. For example,
-with the traditional GCC aarch64 layout that puts locals above the frame
-record, and bpf_unwind() has a stack local (ctx) whose address is taken, the
-entry SP would be record+32 rather than record+16.
-
-The loop would then try record+16 first. If PAC(pc, record+16) happens to
-equal PAC(pc, record+32) for the current task's APIA key, it returns the
-wrong modifier. With a 7-bit PAC (KASAN tag-based), that's roughly a 1/128
-chance per key.
-
-When autiasp runs in bpf_unwind()'s epilogue, the authentication would fail.
-With FEAT_FPAC this faults immediately; otherwise ret faults on the poisoned
-LR.
-
-The code has no ambiguity check and never derives the frame's actual entry
-SP. Could the search either verify there's exactly one matching candidate,
-or derive bpf_unwind()'s true entry SP directly rather than guessing?
+This isn't a bug, but is <linux/bitmap.h> needed? No bitmap API appears
+in the file.
 
 [ ... ]
+
+> @@ -1286,6 +1309,61 @@ static int resolve_func_ptrs(struct bpf_verifier_env *env)
+>  	return 0;
+>  }
+>
+> +static int exc_info_for_subprog(struct bpf_verifier_env *env, struct bpf_prog *sub,
+> +				u32 subprog, u32 start, u32 end)
+> +{
+> +	struct bpf_cleanup_info *recs;
+> +	u32 i, cnt = 0;
+> +	int err;
+> +
+> +	if (!env->cleanup_info_cnt)
+> +		return 0;
+> +
+> +	err = bpf_exc_alloc_info(sub->aux);
+> +	if (err)
+> +		return err;
+> +
+> +	for (i = start; i < end; i++) {
+> +		if (env->insn_aux_data[i].cleanup_pad)
+> +			cnt++;
+> +	}
+> +	if (!cnt)
+> +		return 0;
+> +
+> +	recs = kvmalloc_array(cnt, sizeof(*recs), GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+> +	if (!recs)
+> +		return -ENOMEM;
+> +
+> +	for (i = start, cnt = 0; i < end; i++) {
+> +		u32 pad = env->insn_aux_data[i].cleanup_pad;
+> +
+> +		if (!pad)
+> +			continue;
+> +		pad--;
+> +		if (verifier_bug_if(pad < start || pad >= end, env,
+> +				    "insn %u is covered by a landing pad at %u outside its subprog [%u, %u)",
+> +				    i, pad, start, end)) {
+> +			kvfree(recs);
+> +			return -EFAULT;
+> +		}
+> +		recs[cnt].begin_off = i - start;
+> +		recs[cnt].end_off = i - start + 1;
+> +		recs[cnt].landing_pad_off = pad - start;
+> +		cnt++;
+> +	}
+> +	err = bpf_exc_attach_info(sub->aux, recs, cnt);
+> +	if (err)
+> +		return err;
+> +	return 0;
+> +}
+
+This isn't a bug, but is the subprog parameter meant to be used? The
+function body uses only start and end, yet both callers pass a value for
+it.
 
 
 ---
@@ -129,4 +123,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36502848904
---===============1483874617242212674==--
+--===============7917287845577210380==--
