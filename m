@@ -1,151 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C06C2652B2;
-	Tue, 29 Sep 2026 16:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566D94FDA51;
+	Tue, 29 Sep 2026 16:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790698211; cv=none; b=MJBNlzzZdd8W2BqaTHJM4ZcnaGf0DWE5JEceZxPvzcvrfTq8XoypRIyZE4m6pLQTaj0hXnmz1l5KNrm2i3uVoRRo6g1BO4l3plOBXs+QqW5N1EZ7tVam6ep6vBy7ox1eAtSTrkMS7Bx3TzQKXu5dtUyeqlivp84z0DSxVV5tvP0=
+	t=1790699266; cv=none; b=oPk6smu4YW964HzE8C89cN2acJwV/gxIzYYglt/ZQOCb31g4g637LoTpvcDxgIV4BZDfIdEToBME01FdJ+zjSEvndXQikuoW/A5SB+ZEQyGZ3Lu1WnG3AzjKPH9Zt30gmNZMwGcjTX8QoGAKIzfr1TCdw2oDo7urPk/9kFfJcZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790698211; c=relaxed/simple;
-	bh=xPZs8UiMBr7UlXbMgRJpnM5RjCALLQdSBia+mnrRcKc=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mBu8LtjaYXEo8i03V++WBIs6rBLnlp0Hk3NKtI9yQtkvZJkC61s9c5gTeZwLnvzah7aHGZrQk+pL+28JatnJFWd0tSnboJEnWacTh4UihfjPKrRHyvK+5oPKcvaCIKVc8IDOzN3nCnwvokeHzVj5r1kOXPcbBGHC6yibHcykoqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9dN69jC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790699266; c=relaxed/simple;
+	bh=D2ZKfF9YspKAP5iT4ciniEq/K+NfIL+7zwDn9cpefw8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fpXmUaSM0eqrN42LbtXctgjoAFCJAxcVdsaI0gQQPOJVNw5w7PKL/9IWUwbr2Y5iEYalm1blSIZGZf4y7R3eISZLcgAP0DVBQo6j2q7AAKWfac1+o0zeSkb6WsC5ajgVok3lXSGepoFneADHaFDAhDloUXcRNpVIo756vvtoqXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=girpQtb6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9dN69jC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122081F000FF;
-	Tue, 29 Sep 2026 16:10:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="girpQtb6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C522E1F000FF;
+	Tue, 29 Sep 2026 16:27:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790698210;
-	bh=tVfug9vL0EnznpwJlFJQTc0dnpuna469mEFLzwTiUa0=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=E9dN69jCqQ1TTva2Kf/0s32EJmwt3JngztURfOXayFT1RgPJyu8QU18vsdDLUUvcd
-	 rAoMmyEdRhiJJqfs0GL1YxNyFQza2do8aKJhya4JXoxLKR5V5aroCGbc3MlkXCdgh0
-	 RxmksthVQPWEfLtIj4dhwAOCL+DwZz67dyjWw0SwXfZmCw7uOd7AYfszjN0pCQt3mG
-	 BjdyNP1S+IHeSuCz+rCizGaaCjBzCVDh+++gI3Qdks91JN9A/D+621SWpL8xEprvcx
-	 2dLmAao03DgCnkvzqecBk5VCcxsyQRriUb5bstwyZsgCgeHmAawOK05DRPFgrM2DDW
-	 86dhY/dPsmfPg==
-Subject:
- Re: [PATCH net-next v3] net: stmmac: add XDP multi-buff support for TX side
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Date: Tue, 29 Sep 2026 16:10:08 +0000
-Message-ID: <179069820857.434549.2531492906306099121@kernel.org>
-In-Reply-To: <20260925-b4-stmmac-xmit-mb-v3-1-ca08f029e81c@oss.qualcomm.com>
-References: <20260925-b4-stmmac-xmit-mb-v3-1-ca08f029e81c@oss.qualcomm.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1790699265;
+	bh=FZPdz6cMQ4NSb3CWMqHoTjaKnk3EsCcWIyIogeWJilA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=girpQtb688FGKBFQnzGj59f7gLranESzV1pPRmq0dZFMG65c7GqiCmlrzpMwgf29H
+	 6ZsphMkoKS9ULF3rLqj1m7zptLRKYLNeZGBq3e3NCekVXv4fRW8BjVbp7t8UKJkyAc
+	 MuibzoODBJ2WhpQ3r3unNrTfTejfLlXVOWx8xUhjc2+qT4wGTVA89uHvz8PvL2h6x1
+	 1x48YMNTFmfiWbCbKP5uCNRxG7iOObq7WpHBKX2k6fQ3PapCCRPlyoKWNEofpaX7gZ
+	 o3LHd36G5wWZDkw57Jn6YZkq0hD1Ua0SSkmhZycJogitmW8ejRBZXvY2rSe8VuIdXa
+	 GX5Mqt4URltBQ==
+Date: Tue, 29 Sep 2026 06:27:43 -1000
+Message-ID: <44f02289433805946d1e3272f626a925@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: josef@toxicopanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
+ Tao Cui <cuitao@kylinos.cn>, ameryhung@gmail.com,
+ alexei.starovoitov@gmail.com
+Subject: Re: [RFC PATCH v7 0/4] blk-iocost: BPF struct_ops cost model
+In-Reply-To: <4f1571a1-7e56-4264-aa7f-8dce32931ddb@linux.dev>
+References: <20260924054549.2271705-1-cui.tao@linux.dev>
+ <6f80eca83c87b60398110c3a6d735aec@kernel.org>
+ <4f1571a1-7e56-4264-aa7f-8dce32931ddb@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Hello, Tao.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+On Tue, 29 Sep 2026 21:39:00 +0800, Tao Cui wrote:
+> To make sure I understood correctly: attaching switches the active
+> model to the attached BPF model, while model=linear and model=bpf
+> only switch between the attached model and the builtin model without
+> affecting the attachment itself.  The attachment survives enable=0,
+> and only .unreg removes it.  Please shout if I still got that wrong.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Yes, except that removing the device also removes the attachment, as
+ioc_rqos_exit() ejects the model.
 
-- [Medium] The patch fixes a divide-by-zero crash in the XDP TX path
-  without saying so and without a Fixes: tag.
-- [Low] In stmmac_xdp_xmit_xdpf(), the new coalescing check reads
-  priv->tx_coal_frames[queue] twice with plain loads: once for the zero…
+Thanks.
 
 --
-
-net: stmmac: add XDP multi-buff support for TX side
-
-This commit extends stmmac_xdp_xmit_xdpf() so it can transmit XDP frames
-that carry fragments. The frame head and each frag get their own TX
-descriptor. The driver now also advertises NDO_XMIT_SG for the redirect
-target.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 3ad9252bf6aea..f1e9ac2f98598 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5241,77 +5241,118 @@ static unsigned int stmmac_rx_buf2_len(struct stmmac_priv *priv,
->  static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
->  				struct xdp_frame *xdpf, bool dma_map)
->  {
-
-[ ... ]
-
-> +	tx_q->tx_count_frames += num_frames;
->  
-> -	if (tx_q->tx_count_frames % priv->tx_coal_frames[queue] == 0)
-> -		set_ic = true;
-> -	else
-> -		set_ic = false;
-> +	if (priv->tx_coal_frames[queue] &&
-> +	    (tx_q->tx_count_frames % priv->tx_coal_frames[queue]) < num_frames) {
-
-[Severity: Medium]
-The old code here divided by priv->tx_coal_frames[queue] without checking
-it for zero. That code came in with be8b38a722e6 ("net: stmmac: Add support
-for XDP_TX action").
-
-Can tx_coal_frames[queue] be 0 here? __stmmac_set_coalesce() only rejects
-the request when both values are zero:
-
-	if ((ec->tx_coalesce_usecs == 0) &&
-	    (ec->tx_max_coalesced_frames == 0))
-		return -EINVAL;
-
-So a command like "ethtool -C ethX tx-usecs 100 tx-frames 0" is accepted
-and stores 0 in priv->tx_coal_frames[]. Before this patch, the next XDP_TX
-or ndo_xdp_xmit frame would then do a modulo by zero in softirq context.
-
-The new priv->tx_coal_frames[queue] guard fixes that, but the commit
-message only describes multi-buff TX support. stmmac_xmit(),
-stmmac_tso_xmit() and stmmac_xdp_xmit_zc() already have this check.
-
-Could the fix be split into its own patch with a
-"Fixes: be8b38a722e6" tag, so it can reach stable?
-
-[Severity: Low]
-This check does two plain loads of priv->tx_coal_frames[queue]: one for the
-zero test and one for the divisor.
-
-__stmmac_set_coalesce() writes this field under RTNL. It does not hold the
-TX queue lock that stmmac_xdp_xmit() and stmmac_xdp_xmit_back() take, and
-it can store 0.
-
-If the compiler reloads the field between the two reads and a 0 is stored
-in that window, can the modulo still divide by zero? Would taking a single
-snapshot help, for example:
-
-	u32 coal = READ_ONCE(priv->tx_coal_frames[queue]);
-
-and then using coal for both the test and the division?
-
-stmmac_xmit(), stmmac_tso_xmit() and stmmac_xdp_xmit_zc() read the field
-twice in the same way.
-
-> +		struct stmmac_txq_stats *txq_stats;
->  
-> -	if (set_ic) {
-> +		desc = stmmac_get_tx_desc(priv, tx_q, entry);
-> +		stmmac_set_tx_ic(priv, desc);
->  		tx_q->tx_count_frames = 0;
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260925-b4-stmmac-xmit-mb-v3-1-ca08f029e81c%40oss.qualcomm.com
+tejun
