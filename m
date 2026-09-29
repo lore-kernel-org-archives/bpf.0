@@ -1,83 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED5B3AEF3F
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA71B384250
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790643179; cv=none; b=EnoDYXJxhnsKotW0NofQYH47EvYK/R+5N5z0tqNy9dONfQiJYYXJrBwx9GD5S68wX+61bqZ3WxVP7jBAsLKzSXb0Xk8FM/5vdEifA6PJyNGOX1Jg5/4cAtpq5BYbu4S3wkmh5yK9Cq3jhi58yCrsi0Oyf8P0saXIr7KdL2uojEg=
+	t=1790643272; cv=none; b=uz8Vc2Efq6ro/22p7ON9h/Vt+QoCzjr0MQVRzmrHY2IzNyLKVu8SlHIkGyJ8T5vCnuf3uEVzBMiXIodbm65MrCgMTFs5cFtiRHjrW4Ua6JCX4WoiVDBWHXKhWXvlMz7BMTAiCBywcdzMFPTR+RNh1als4bepwR5YhrsZoQACkBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790643179; c=relaxed/simple;
-	bh=HZSquLerUtcIUXUAJG65yiJPqyn5hK7VwY3cVrUuAgM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=t7HqRewKAQDA5HdcGvu3a5Q59vjCezTZOY6DYuYJT/tPyIqoDcB1KlFbw1bDu+euKiRduaTgfcTpgnx4M1wFxnN6iYr3FIjr7ZGeUOaXBNKohyx9kpPTJJVBKoQ40vmD10m/kkKTHNRgtM0S4Gbvluf7B4+hqbQRt6U7CY1qiUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BtYYvf6C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790643272; c=relaxed/simple;
+	bh=/ZN+t8Y7O1ERXt/PK2W2EQrnipLYq8zXZKVAc4oVFWI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tPvfdEEPtfN1DWCEqIkbz7IQJyTEvlC8qQwxSTvlb8cWiA7P4g4vaEmBPlx2i/rebvaJ/nko86NI467+S7OyShPtKRJsZWQoGY+9n/go387rXxrfiff93MFsJcUdRZYhzS4eUSEyVCgzGA0THs+IwFZBBhGAlabRKFi6Va+kZys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BY+SdWJ8; arc=none smtp.client-ip=95.215.58.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BtYYvf6C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389271F00898;
-	Tue, 29 Sep 2026 00:52:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790643176;
-	bh=HZSquLerUtcIUXUAJG65yiJPqyn5hK7VwY3cVrUuAgM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BtYYvf6CHKyJRXccJPfc2SDgLGeNEg7pMdbVxvT1va6yAgFZh7lxsVw9Ht4dUK//d
-	 9y69n6mtSpsC+WWEJ5Wt7zZIlN4+5K+UGg0z0Ac8CWq/cbgC/E/XtTKFaRIzE+Aq1F
-	 QhNEv7uTRtYN+v/zFFxHnKRQYMl5QsCt71VeD3jhejd6qTuHkoqclIPn05nib3sd5K
-	 0tu4ShGfsfeb1SuKihI5sdF96SroFlPafIC96nfh/e/N2lk1gO8ByPIOeiv4Lk2wzB
-	 Rur/bqRxFJoRHBSDWfw6vXYaJwegUlPbyOjXis2d4FjcFP6Iv9loHf9nees1VqGpPv
-	 CjQG5TcwUi6dA==
-Content-Type: multipart/mixed; boundary="===============7009766640216881979=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BY+SdWJ8"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=/ZN+t8Y7O1ERXt/PK2W2EQrnipLYq8zXZKVAc4oVFWI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790643266; v=1; x=1791248066;
+ b=BY+SdWJ8s5UX8jw6r4m5PAMJFoZ0J2uffIv2g8PoskMyphOuZLMS0EmC75mIFtA6rPWUe1co
+ kWRWP/MVvwIhxqPFpzXqzrddW6p34kySRLj3lZViq/7aPKBpcSkfWT670BmzLI02Lep++4+dB/4
+ qmkISC2An/lay98nvrxP6YM4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 36436f1125b35320;
+	Tue, 29 Sep 2026 00:54:25 +0000
+X-Mizu-Trace-ID: 36436f1125b35320
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com,
+	andrii@kernel.org,
+	peterz@infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	kernel-team@meta.com,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH v2] tracing: fgraph: fix the quadratic shadow stack walk
+Date: Mon, 28 Sep 2026 17:54:10 -0700
+Message-ID: <20260929005411.4105448-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7d45bfa94899a2626f053f2c0fd517a074a422d796ed64389a9033c9512efd7b@mail.kernel.org>
-In-Reply-To: <20260929001643.3249386-1-yonghong.song@linux.dev>
-References: <20260929001643.3249386-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v7 08/22] bpf: Require an unwind to leave a frame holding what it entered with
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 29 Sep 2026 00:52:56 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============7009766640216881979==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+v1 tried to make the sweep loop cheaper: raise the batch from 32 to
+1024, and add a cond_resched() so the walk could not hold a CPU. Peter
+pointed out that the loop does not need to be batched at all. Allocating
+inline with GFP_NOWAIT is legal under rcu_read_lock() because it cannot
+sleep, so a single sweep can serve every task and the pre-allocated
+array becomes an out-of-memory fallback.
 
-> A landing pad's entry state is the state at the call it belongs to, taken
-> before the callee ran -- push_cleanup_pad_branch() snapshots it there. That
-> is right for the frame's own registers and stack, which the callee's
-> epilogue puts back, and wrong for what the program shares: nothing restores
-> the locks in bpf_verifier_state.
+That removes the quadratic behaviour rather than dividing it by a
+constant, so both v1 patches are dropped in favour of this one.
 
-Is the claim about the callee's epilogue restoring the caller's stack
-accurate?
+Measured at 400000 threads on a 60-core Sapphire Rapids machine,
+PREEMPT_LAZY:
 
-Looking at the BPF calling convention, the callee's epilogue only restores
-r6-r9 and the frame pointer. It does not restore the caller's BPF stack
-slots. A callee that receives a PTR_TO_STACK into the caller's frame can
-write that stack freely, and those writes are not restored on return.
+	v1 base (batch 32)      227.8 s     12503 sweeps
+	v1 patch (batch 1024)     7.2 s       391 sweeps
+	v2 (this patch)           0.092 s       1 sweep
 
-For example, if the caller spills a map value pointer to fp-8 and calls
-foo(fp-8) under a landing pad, foo can store an arbitrary scalar to
-*(u64 *)(r1 + 0) and then call bpf_unwind(). The caller's pad would be
-verified from the pre-call snapshot where fp-8 still holds the spilled
-map value pointer, but at run time the pad would load the
-attacker-controlled scalar.
+With one sweep there is no retry loop left, so the v1 cond_resched()
+patch has nothing to attach to and is dropped too.
 
-The same issue applies to any stack slot type change that the callee makes
-before unwinding, such as spilled pointers overwritten by stack writes, or
-dynptr and iterator slots clobbered by the callee.
+v1: https://lore.kernel.org/all/20260922225526.1554758-1-vineet.gupta@linux.dev/
 
-Should the commit message clarify what the epilogue actually restores?
+Changes since v1:
+ - replace both patches with Peter's inline GFP_NOWAIT approach
+ - comment why returning from inside scoped_guard() skips the free
+   loop safely
 
+Vineet Gupta (1):
+  tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/trace/fgraph.c | 38 ++++++++++++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36502848904
---===============7009766640216881979==--
+-- 
+2.53.0-Meta
+
