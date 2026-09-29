@@ -1,80 +1,100 @@
-Received: from mta1.migadu.com (out-48.mta1.migadu.com [95.215.58.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5760241A91C
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 06:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21C5296BCF;
+	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790662699; cv=none; b=DB3Z/zblL9w3IXsu2BRDTK9n/bOUtQQuL4JroIkmQj6EyEEQqDnYaS3PIF+fYrFhT7ByBXCWW7uW1MaigR44tn0GwUQgPO/vxTezRuC7QDyOoq2MXrSfHRgJtJuB7UqTQjF8w40syUPBwY4+L3DrApyM3KHzxLmIaSJNDNamezA=
+	t=1790662830; cv=none; b=g0dR+5MNE+Sbp9Em6pl2gAmthOkftZsl8pvTaU3Pwb7W/3ViBfwZIWTuYfociCRKU6UEx6DkBzP+vtHGdCj2Edxzf7M/O+djrf4yH7Migv2BIoWZXSw/3Q9+ZpQCaob3iA993cXBIZAGutXfFrl8ca0Wabj3XlpCxWiVme4VYQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790662699; c=relaxed/simple;
-	bh=62iKxTMo6T9JSr4mrj8GsqUDDBwG4+Zco1hcyISMAE0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uIioCAtPyRa0Xds3PkZ+iQhHkwVJoIfJvoVJ5xYXWcLGDTlTAeT2HCnqzlmqIeTMjCBHNUKl3YoDaJGYLo5cgbG8/dA7mluFnLNAjNPnit5dknxluOKHleq1iiKiLQn1CPf9cNFeU6MMYxUgccJG0nfWsdRmJFJuSICsH/FhEMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Uqx4+YIK; arc=none smtp.client-ip=95.215.58.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790662830; c=relaxed/simple;
+	bh=nBq0ce4U8pjNwOIB6srOmZAAPAVFm/4GWAgw9e8Y3ds=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=YQqt3FU44wfZsLETUCNUSlsk0u9t8sAkkZyz9Qaqr36kqb2KsWX5Ow0dlUWtsOugDyb24xrPJ5z+xGNQ//UbY+wk8ESLO+lYTU/Jhr1/eQcIwPWFXcHWqbOtw1z3/PzaAHS/gahp701tc1rnVIDYaMD/vJoJUyiGYAXqPch15mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEu8IKuJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Uqx4+YIK"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=62iKxTMo6T9JSr4mrj8GsqUDDBwG4+Zco1hcyISMAE0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790662695; v=1; x=1791267495;
- b=Uqx4+YIK8/INqEtytxyTluVU3qF19Zz9wfyGLNZX41t6Oo1d/C9UyIwFrLRTrkwJoqodfLFF
- ehe78PlaHj2bhNG5lKXnOqxv9Rzt0PFizhJG3gYru1hd3FENkzADijF407rwt9NUvBZoNPhgoah
- hAdE5EUuTlE9mMtrn95PFI84=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e294858c3642f305;
-	Tue, 29 Sep 2026 06:18:14 +0000
-X-Mizu-Trace-ID: e294858c3642f305
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5b0a6f1a-d44f-4e7d-9931-4106172d6258@linux.dev>
-Date: Tue, 29 Sep 2026 14:18:06 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEu8IKuJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE9C1F00893;
+	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790662829;
+	bh=lTp0iuvGgJlzLvCthN8H5DikguIjM02dg6D/PwjsUlQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=FEu8IKuJTM9UMyqWZRahuIUiQ6ZhkU4IDa2UZdQ+AHlfxY177GM88K5j47ZpxQMhi
+	 9FiOENuKjoLTRooDK6SGMn2gMDlmCoehRnP5Cw/6TyFOVTgHclMnxY1UKAjDkiTEI6
+	 K/Sd5XrAq9hpy03DSh95TZmK/hIC7jyt/XZ/GJsm1/KicRH8pbBdQeoXB2Cik/5FrY
+	 LhMT7P074WF9asToy5KM2I1lRfV//rJ6lF3tB8DG7vCsCS3rFqo0lGgSOlqUmWzNHX
+	 s6HPW0a40ZjDMKNQPLiD/ZEq0vCO79vhQpa0nH73XgM4QaTO4I76tb4UQji83RPvZR
+	 pHebvU6K9zPcg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A59239253E9;
+	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/7] net: tls: fix silent data drop under pipe
- back-pressure
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- bpf@vger.kernel.org, john.fastabend@gmail.com, sd@queasysnail.net,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
- Sasha Levin <sashal@kernel.org>
-References: <20260429222944.2139041-1-kuba@kernel.org>
- <20260429222944.2139041-2-kuba@kernel.org>
-From: Qingfang Deng <qingfang.deng@linux.dev>
-In-Reply-To: <20260429222944.2139041-2-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v5 0/3] bpf: Fix use-after-free of progs detached from
+ busy trampolines
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179066282803.293113.8557815551946775052.git-patchwork-notify@kernel.org>
+Date: Tue, 29 Sep 2026 06:20:28 +0000
+References: <20260926135605.1217928-1-florent.revest@linux.dev>
+In-Reply-To: <20260926135605.1217928-1-florent.revest@linux.dev>
+To: Florent Revest <florent.revest@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ kpsingh@kernel.org, john.fastabend@gmail.com, leon.hwang@linux.dev,
+ zirajs7@gmail.com, rhkrqnwk98@gmail.com, puranjay@kernel.org,
+ xukuohai@huaweicloud.com, iii@linux.ibm.com, hbathini@linux.ibm.com,
+ chleroy@kernel.org, naveen@kernel.org, bjorn@kernel.org, pulehui@huawei.com,
+ yangtiezhu@loongson.cn, hengqi.chen@gmail.com, linux-kernel@vger.kernel.org,
+ aou@eecs.berkeley.edu, agordeev@linux.ibm.com, alex@ghiti.fr, bp@alien8.de,
+ catalin.marinas@arm.com, borntraeger@linux.ibm.com,
+ dave.hansen@linux.intel.com, emil@etsalapatis.com, hca@linux.ibm.com,
+ hpa@zytor.com, chenhuacai@kernel.org, ihor.solodrai@linux.dev,
+ mingo@redhat.com, linux-arm-kernel@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ loongarch@lists.linux.dev, maddy@linux.ibm.com, mark.rutland@arm.com,
+ mpe@ellerman.id.au, npiggin@gmail.com, palmer@dabbelt.com,
+ paulmck@kernel.org, pjw@kernel.org, ritesh.list@gmail.com,
+ sshegde@linux.ibm.com, shuah@kernel.org, svens@linux.ibm.com,
+ tglx@kernel.org, gor@linux.ibm.com, kernel@xen0n.name, will@kernel.org,
+ x86@kernel.org
 
-Hi Jakub,
+Hello:
 
-On 2026/4/30 6:29, Jakub Kicinski wrote:
-> tls_sw_splice_read() uses len when advancing rxm->offset / rxm->full_len
-> after skb_splice_bits(), rather than copied (the actual number of bytes
-> successfully spliced into the pipe). When the destination pipe cannot
-> accept all the requested bytes, splice_to_pipe() returns fewer bytes
-> than len, and 'len - copied' of data is effectively skipped over.
->
-> Fixes: e062fe99cccd ("tls: splice_read: fix accessing pre-processed records")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: john.fastabend@gmail.com
-> CC: sd@queasysnail.net
-> ---
->   net/tls/tls_sw.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-I just hit this bug on v6.18.y. Somehow this was not automatically 
-backported to stable?
+On Sat, 26 Sep 2026 13:55:57 +0000 you wrote:
+> A task running in a trampoline image can call a prog that was detached
+> and freed in the meantime, when it slept in a sleepable prog before
+> reaching the detached one or was preempted right before calling it.
+> Patch 1 handles the preempted case with an RCU tasks grace period,
+> patch 2 handles the sleeping case by patching detached progs out of the
+> images that still call them and patch 3 adds a selftest for the sleeping
+> case.
+> 
+> [...]
 
-+Cc: stable
+Here is the summary with links:
+  - [bpf,v5,1/3] bpf: Wait for an RCU tasks grace period before freeing trampoline progs
+    https://git.kernel.org/bpf/bpf/c/0fb5751a6e41
+  - [bpf,v5,2/3] bpf: Skip detached progs in trampoline images that are still in use
+    https://git.kernel.org/bpf/bpf/c/17637e1a581a
+  - [bpf,v5,3/3] selftests/bpf: Detach a trampoline prog while a task sleeps before it
+    https://git.kernel.org/bpf/bpf/c/d5288c519bbd
 
-Best regards,
-Qingfang
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
