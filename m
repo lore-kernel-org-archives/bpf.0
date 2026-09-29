@@ -1,96 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f39.google.com (mail-pj2-f39.google.com [74.125.227.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F8C51815A
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 10:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40015518147
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 10:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790678425; cv=none; b=Nt1acbJYmpTxXeimEaCIFSKUy1M4WJuCkz/hI4s03DMaMQ3ms19jIiwiyxo7GmuWGP3feOL/Ci36xfQYWcW3Ke7UzkGqTbtywk/hDRVoyIuKONf+RmlofxoB8AYVrqpTEAc87iQp1ClHeyyvDIQrt2ggXwN1LvkSk5GMrXMnZsI=
+	t=1790678612; cv=none; b=iT3pByGguijU4130EAwnakG3//QJQEmZ0ITxDCNg9lKLlC9MVz0Aq3bsdLjG0Uze1QiNcRsiDXBWPSKEicfYlrTooN3DlLTg3Sh5GoBh1x8d1z23X87rOseUrKiFbbNJnXxVk2IoJmCUgwopwH3AOPv0BaFmjCCQOXGAMdNaYIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790678425; c=relaxed/simple;
-	bh=aNpzJbzOo/GhTPnWkaBvxEhjGt7AsFw3PczUOB1+vGE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SAmbbQI0hXV2U1W+SxNaq/FcYVSmpP/IxBELiouzlse8ZmgtnIbl59lQFNq/Ewk6iNLXXgTpvrosQf2oCK3TtCTjA+VWq3Xgu0Meq11DAlhRNpm08p/uAMMs2rksyicV/3LwmkTk0dnSKahstLj4Hvyp0sIIT5gMlXK//0WhPcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGpi/Qml; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790678612; c=relaxed/simple;
+	bh=zotbPxKoc7eaZeiHEyzpI8+4I0OpAPBxNV87xp9qI4k=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=rORrXwE0VyxiCABWi7/ZUOxERVuUH6lF+pg4yt8+5STGXObU0e7VJnu1SJIuknkzeDU4L8B++psmT3VDIM1gvedoYOtfLscLqvg9gYpKrtN7ipBOASzuztz28faHBElg7la2isipdNFmuzJCRLZGnUKmOzTgxdcqSR/XepKMV6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kSgffSUq; arc=none smtp.client-ip=74.125.227.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGpi/Qml"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1531F00893;
-	Tue, 29 Sep 2026 10:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790678415;
-	bh=6zTGE2AlofmZ4ugXrwoWZ3aZcqnsG66RMimSO66aEa8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=mGpi/Qmlm4G5/Ks4MRmNqLEiikPOLPHaTdjYZ5M3mshpPNckdjMeOOYnFRFFP2nVX
-	 n9ROOjuWHrq5Ek3/8LqhcTjUx09u7N37J1VjlXILsd8l8UPkxxEvHIcONgA5C1Ud1Y
-	 93UrFgiK9nuoIRcCTPI+n1MNxCY4/GyG8Rc9Nygd5uhOlv4qaFl7iw15bSbKjWTDDx
-	 8VxTWl3okBiLs9ns17y70XvMdgSuJJtt05IgOkxOkwidkixZi2LRd8VHzuNXB9JTRR
-	 VfTvUZNDfztVzGcMeFtxEHtXXI7we26z68lSHW/nVYW6mNmq4TZIN8MxsF1pebWfRS
-	 ImYadZ/YkZFng==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B442939263B1;
-	Tue, 29 Sep 2026 10:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kSgffSUq"
+Received: by mail-pj2-f39.google.com with SMTP id d9443c01a7336-2e2d42b972bso792655ad.3
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 03:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790678601; x=1791283401; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tiDU7Ym3H38LfGIFBt+oGKfio5R1/6Nv8WVS2Iwwlwk=;
+        b=kSgffSUqCQ2Cov3Io6B0GR591l03vXM7w66vUMhheiTd+3ZH+lhWs2grYD2V0Zaja6
+         Y9Yd7jpDq9t19FrcoGWTI2CYFwsgOj5oQbVxh8ELWowld3tdMr3zvxVwi3ma+q+Wj0vY
+         EbOoyTrK6Pgx57LigyGZr9miDQV/IIEZ7OwNsX+c9AYRNkptmKSziKe4wJez308slvgr
+         +xbrXH40O7zXW5WHcS29gWgfaY2CcT1v6TSyClxlMfJYj6wiDJD8RdVL62oa8CQ2XOy5
+         ghfOOOYBIqkpkzH1kuL+LOX9gEZOZG2TUsnchMV/Gg+nVnaOHjy4qH9m7QqVpq+dvS+7
+         deJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790678601; x=1791283401;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tiDU7Ym3H38LfGIFBt+oGKfio5R1/6Nv8WVS2Iwwlwk=;
+        b=2ROOe2HvAAFo/Z0zZl7JueVZqjLW+LeFKiAJxI8C/ul6lDPcbJwqTfVww3kQb/456x
+         9sliToDgmfwZcFICjfVF96U50XoMf/VyRRhZW7q8sFAWlbJMHIo0G1X2XHdY/Mn56Qh0
+         rNSFjjZdhOwKgy1dip97URPW7PtlS++F8KI5KzxdYKxPeSnBa2k0eHOLaST92iJ+SC4j
+         t6psvHXHxJ6PR3Ronk5cRrTzp71QPm6/swkIXUpmB3hQavosEsFrROSiM6L2STnS1s1J
+         SyiIPBKTGJc27xl4s9/J9OZdhuIAmNYMEkacisfYoQISs9gNAFRgbSS86mhyCMy8L9HF
+         eMoA==
+X-Forwarded-Encrypted: i=1; AKwUvBzUPS06O1FmdMV9nCqKiD7BRGRDl4Rs8PRq+3dperWe+H9OmeI3Eza4XPheiv2owSTwQpc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYILLZhajkHXWFlF/pm4TWAB527mU0T3RoJfA/CW7JUFysHudvKc
+	3L+l9PddCdQEwVvgCyUNSds2fWLVCRIz8R4PNJA8Nj90hXrMjzllt1U8
+X-Gm-Gg: AYBFou0hoKcvKsZml9FlaJXlzyrgw8ALhVnd1/eZ8kwsHtutf1cwt9nKRNr8bhOOApR
+	4cz5KBMdR9SD+SQNZq/prf3ILwjIiUK3adg8iTA6GK3xsBEJTvcr+CVyVQBaKnJ599a27ox1h8U
+	4yo8vuntTSYVff1Vu819cXY7tXnNf7nu43Q7uMTNUPMxaCX1nGBRHrUcJqEv8rCBCd8yckHpx2r
+	3ASb3nsd+DDulL1dNauYj28P8dbYaQNQB9lz0cxtjyzjVtMhGZn4bKqr7cgYvx9A5atrIVy1z0W
+	pcszA2srbzH7Wl2LyjdoDAnCLUf+HMFnczNM5diNsx3a6LNf1dMAd4HeX/cuUKr7pIvPQzLqP88
+	PZV8YXWreAsStc0eXUafurpnT5G/QgUGKef5smMGIFXQmzbqqGwTdxK5DlbSBomRlNJGZdC7rBM
+	1RTvIWDGla7Lwp6rquqsdGLRp/VEXyFctsFLYS/WX/BhIYBikzgNQxCZE1sOJA+IIY2E3VmCnlg
+	AVJWeghgOvJSLNHO7TO+XlpTIQ8wyWdtU5HqYk+KX2RF8CuhM+xY/XmFd8KW9O2ND4AffeitYZb
+	E+N1N3UAK3l26Fw=
+X-Received: by 2002:a17:902:d2c6:b0:2e2:be61:a87d with SMTP id d9443c01a7336-2e2be61aa0emr24586855ad.1.1790678600896;
+        Tue, 29 Sep 2026 03:43:20 -0700 (PDT)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e2ca4041dasm6474985ad.10.2026.09.29.03.43.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2026 03:43:19 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 29 Sep 2026 10:43:18 +0000
+Message-Id: <DLRQL3VZ2FRD.2JRCFNKOLT1P8@gmail.com>
+Cc: <jolsa@kernel.org>, <daniel@iogearbox.net>, <ihor.solodrai@linux.dev>,
+ <yonghong.song@linux.dev>, <song@kernel.org>, <martin.lau@linux.dev>,
+ <memxor@gmail.com>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
+ <nsc@kernel.org>, <puranjay@kernel.org>, <yatsenko@meta.com>
+Subject: Re: [PATCH v3 bpf-next 1/3] bpf: Verify BTF_KIND_LOC_PARAM vlen,
+ flags
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Alan Maguire" <alan.maguire@oracle.com>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <qmo@kernel.org>
+In-Reply-To: <20260926175113.2368566-2-alan.maguire@oracle.com>
+References: <20260926175113.2368566-1-alan.maguire@oracle.com> <20260926175113.2368566-2-alan.maguire@oracle.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 00/11] Unify subprog argument checks
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179067841453.421460.3752055362291528812.git-patchwork-notify@kernel.org>
-Date: Tue, 29 Sep 2026 10:40:14 +0000
-References: <20260928185334.1004200-1-ameryhung@gmail.com>
-In-Reply-To: <20260928185334.1004200-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- kernel-team@meta.com
 
-Hello:
+On Sat, Sep 26, 2026 at 06:51 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+> +	case BTF_LOC_PARAM_CONST | BTF_LOC_PARAM_ADDR | BTF_LOC_PARAM_SIGNED:
+> +		if (vlen > 2)
+> +			goto invalid_vlen;
+> +		/* Ensure size/vlen are consistent */
+> +		if (size > sizeof(__u32) && vlen != 2)
+> +			goto invalid_vlen;
+> +		if (size > sizeof(__u64))
+> +			goto invalid_vlen;
+> +		break;
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+size <= 4 with vlen == 2 is still accepted.
+For size=4 values={1, 2} bpftool prints 'const 0x200000001'
+and 'const 0x1' when SIGNED is set.
+pahole emits one word for size <= 4 and two otherwise.
+Should it be
+	if (vlen != (size > 4 ? 2 : 1))
+?
 
-On Mon, 28 Sep 2026 11:53:23 -0700 you wrote:
-> Hi,
-> 
-> Helper and kfunc calls now validate arguments through check_func_args(),
-> while subprog calls still duplicate much of the same validation in
-> btf_check_func_arg_match(). This makes common argument rules and
-> diagnostics easy to change for one call kind without updating the other.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v3,01/11] bpf: Fix kfunc BTF parameter lookups after wide arguments
-    https://git.kernel.org/bpf/bpf-next/c/d82229330a32
-  - [bpf-next,v3,02/11] bpf: Identify subprog calls in argument metadata
-    https://git.kernel.org/bpf/bpf-next/c/f7be720383d3
-  - [bpf-next,v3,03/11] bpf: Build argument prototypes for subprog calls
-    https://git.kernel.org/bpf/bpf-next/c/668a51c4ed4b
-  - [bpf-next,v3,04/11] bpf: Check subprog scalar arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/c40f746cc7de
-  - [bpf-next,v3,05/11] bpf: Check global subprog untrusted arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/3886a9fc38de
-  - [bpf-next,v3,06/11] bpf: Check subprog context arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/03f312c2cbd5
-  - [bpf-next,v3,07/11] bpf: Check subprog arena arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/44cfe492d06f
-  - [bpf-next,v3,08/11] bpf: Check subprog dynptr arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/a1456ec685a6
-  - [bpf-next,v3,09/11] bpf: Check global subprog BTF-ID arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/77d9384a69cd
-  - [bpf-next,v3,10/11] bpf: Check global subprog memory arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/46e074462108
-  - [bpf-next,v3,11/11] bpf: Check all subprog arguments in the common path
-    https://git.kernel.org/bpf/bpf-next/c/bf82eb018328
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Applied anyway, but pls followup.
 
