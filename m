@@ -1,71 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B926A50B8CE;
-	Tue, 29 Sep 2026 10:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F8C51815A
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 10:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790677754; cv=none; b=Sm7tdr4auuQnpqIOEWVgjdMl35nfz+7pFGA721EdYQZEAAoxKXnKpEtsJLXMAZ/SdK+g75GYT7lPZ23Lv8T0RRLv+pY+d/5VV3YBA/q+nrlSfgSSDPUkOMyVfWAFAzwFhAoR3HVLOLTqxTIRDGklQ7L0ZdANn69LHb68GM7ZNzA=
+	t=1790678425; cv=none; b=Nt1acbJYmpTxXeimEaCIFSKUy1M4WJuCkz/hI4s03DMaMQ3ms19jIiwiyxo7GmuWGP3feOL/Ci36xfQYWcW3Ke7UzkGqTbtywk/hDRVoyIuKONf+RmlofxoB8AYVrqpTEAc87iQp1ClHeyyvDIQrt2ggXwN1LvkSk5GMrXMnZsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790677754; c=relaxed/simple;
-	bh=H5wX94s2oDINK3YFOU1sKfVcXT9FRIyBh1zoeWhH2CY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gwFZtV6xaeXUJnFq0dcS9fFSu9Pqk8cHG9dfMP2hbnWcgeDuNZhoga/1YVFfWBwTmAnVdCc8MzJmMUBlzoxQUdBcwG1WSJFIi4rXo5vnfP4TGm3PXZX6esUnvZyV8jm7zu6p4vr8cuj9jAkbtp0j5Hn0elBkZyl8NuEbaUxKdw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAqSTGC1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790678425; c=relaxed/simple;
+	bh=aNpzJbzOo/GhTPnWkaBvxEhjGt7AsFw3PczUOB1+vGE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=SAmbbQI0hXV2U1W+SxNaq/FcYVSmpP/IxBELiouzlse8ZmgtnIbl59lQFNq/Ewk6iNLXXgTpvrosQf2oCK3TtCTjA+VWq3Xgu0Meq11DAlhRNpm08p/uAMMs2rksyicV/3LwmkTk0dnSKahstLj4Hvyp0sIIT5gMlXK//0WhPcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGpi/Qml; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAqSTGC1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE4B1F000FF;
-	Tue, 29 Sep 2026 10:28:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGpi/Qml"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1531F00893;
+	Tue, 29 Sep 2026 10:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790677738;
-	bh=SSKVRPg7XZZZGk4/celz91xWOAhOskM6XGleeZ0ma1c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DAqSTGC149c5G8H80inhNpYUG5KixTHs2jjsk89B9TsmYG2IL6epylvL/jqNNpOP+
-	 LCeesbA9mc0f2TIZTylXXfHWxkip+jyL7iseivnS3jOqIaCujHl8LyABHD2RzZNYWE
-	 WV7P71+YUvd01tq9iQGHrS00cvmTvlORa9GYtt9ErGFQ4H7EOEEAd5jLZHJ4X8hMDQ
-	 DlOfGMc8SIyxuLS7zFHew4PJFCg2v16jFkOFnTHlqv0QIGSJc1VPy2vTnubod/BKDN
-	 p8TsEq/PSRbqMKmY89iPJyIi9HpNi4pTT6L5+beOdSw4MhXie3C+M8o4UY2Km2fG/o
-	 TPfvWv5VJs18g==
-Message-ID: <ac6f56cb-dc79-4c44-899c-138394565fbc@kernel.org>
-Date: Tue, 29 Sep 2026 11:28:57 +0100
+	s=k20260515; t=1790678415;
+	bh=6zTGE2AlofmZ4ugXrwoWZ3aZcqnsG66RMimSO66aEa8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=mGpi/Qmlm4G5/Ks4MRmNqLEiikPOLPHaTdjYZ5M3mshpPNckdjMeOOYnFRFFP2nVX
+	 n9ROOjuWHrq5Ek3/8LqhcTjUx09u7N37J1VjlXILsd8l8UPkxxEvHIcONgA5C1Ud1Y
+	 93UrFgiK9nuoIRcCTPI+n1MNxCY4/GyG8Rc9Nygd5uhOlv4qaFl7iw15bSbKjWTDDx
+	 8VxTWl3okBiLs9ns17y70XvMdgSuJJtt05IgOkxOkwidkixZi2LRd8VHzuNXB9JTRR
+	 VfTvUZNDfztVzGcMeFtxEHtXXI7we26z68lSHW/nVYW6mNmq4TZIN8MxsF1pebWfRS
+	 ImYadZ/YkZFng==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B442939263B1;
+	Tue, 29 Sep 2026 10:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Check bpftool map info across
- mixed BTF maps
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org, skokovmaksimevg@gmail.com
-References: <cover.1790615923.git.hi@tychen.cc>
- <cea9cb26c3267c22da2101a0e3d075e2633a2e61.1790615923.git.hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <cea9cb26c3267c22da2101a0e3d075e2633a2e61.1790615923.git.hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 00/11] Unify subprog argument checks
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179067841453.421460.3752055362291528812.git-patchwork-notify@kernel.org>
+Date: Tue, 29 Sep 2026 10:40:14 +0000
+References: <20260928185334.1004200-1-ameryhung@gmail.com>
+In-Reply-To: <20260928185334.1004200-1-ameryhung@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+ kernel-team@meta.com
 
-2026-09-29 02:13 UTC+0900 ~ Tianyi Chen <hi@tychen.cc>
-> Create a typed map followed by a smaller untyped map with the same name.
-> Check that full and named listings do not report BTF for the untyped map,
-> JSON dumps match independently dumped contents, and plain dumps use raw
-> output when the selected maps do not all have BTF.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 28 Sep 2026 11:53:23 -0700 you wrote:
+> Hi,
 > 
-> These cover the separate info-query loops in map show and map dump
-> without requiring recursive dumping.
-
-
-Not sure why we'd mention recursive dumping at all in the commit logs
-for this patch (can we please drop this sentence when applying?).
-
-Looks good otherwise, thanks.
-
-Acked-by: Quentin Monnet <qmo@kernel.org>
-
-
+> Helper and kfunc calls now validate arguments through check_func_args(),
+> while subprog calls still duplicate much of the same validation in
+> btf_check_func_arg_match(). This makes common argument rules and
+> diagnostics easy to change for one call kind without updating the other.
 > 
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v3,01/11] bpf: Fix kfunc BTF parameter lookups after wide arguments
+    https://git.kernel.org/bpf/bpf-next/c/d82229330a32
+  - [bpf-next,v3,02/11] bpf: Identify subprog calls in argument metadata
+    https://git.kernel.org/bpf/bpf-next/c/f7be720383d3
+  - [bpf-next,v3,03/11] bpf: Build argument prototypes for subprog calls
+    https://git.kernel.org/bpf/bpf-next/c/668a51c4ed4b
+  - [bpf-next,v3,04/11] bpf: Check subprog scalar arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/c40f746cc7de
+  - [bpf-next,v3,05/11] bpf: Check global subprog untrusted arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/3886a9fc38de
+  - [bpf-next,v3,06/11] bpf: Check subprog context arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/03f312c2cbd5
+  - [bpf-next,v3,07/11] bpf: Check subprog arena arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/44cfe492d06f
+  - [bpf-next,v3,08/11] bpf: Check subprog dynptr arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/a1456ec685a6
+  - [bpf-next,v3,09/11] bpf: Check global subprog BTF-ID arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/77d9384a69cd
+  - [bpf-next,v3,10/11] bpf: Check global subprog memory arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/46e074462108
+  - [bpf-next,v3,11/11] bpf: Check all subprog arguments in the common path
+    https://git.kernel.org/bpf/bpf-next/c/bf82eb018328
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
