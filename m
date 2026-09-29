@@ -1,41 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D25239C657;
-	Tue, 29 Sep 2026 07:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C7C3A1A27;
+	Tue, 29 Sep 2026 07:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790665995; cv=none; b=jW3vF2lLdsXvj4/ghFpCqSg1h5MLKy94I9CoqEHfuPAjpBiem5I+KJQ61RIpM83YKfizxBpxqjDU+eJHOmJ9dub9g75d/fLzthce9vBuSbaEZyVxdxLKkBiP5yVs5yzA6l5B5lOshLlv8r0YBUs4y/ROkSTALLUEZw0ubdG4N/8=
+	t=1790666825; cv=none; b=T0HWisThezLh7nyW1v++mHklnPN7P+28XznzW7z0mNdtJmEgHwJEzGH1ATlgTFDu9EXh89PnxTPJEwr0GXqTWvvUDn3Ry+eUGDgTTFcNdp9qbFgCxsK3OADRAVvQmUcl0bGQEr7P4uRvM00m8KaMwJts3dOTCNBoAW5GmxgTC0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790665995; c=relaxed/simple;
-	bh=MZmh5P/ZHdoYjfMUQAD3Sz4/k0UreeFwW66PZrN0X3I=;
+	s=arc-20240116; t=1790666825; c=relaxed/simple;
+	bh=CedJFvYTNc7W9Y/M6+ujSiDije9JYp3xCZOZjT4s1hM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Er798y+x6lhiMtM2YzinlKrzHAcqPXuXv5mT6Anij6s/hAFo3wFNgUXd8f0mXMewQEarvW1W8HoJv1ffod44NxrUx+CZa7R0e6eG+9hpq5m/nZRQkrjFAA4RgHRIChS35Rs+lO01gSdpcbIumGvilYj3HzsklQQ6SAUEOVy16bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcWJc2OV; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=BUs2wBtwIBzdC78+u7eqMB9qIc0LkHqWpdpvABIWyyYoqn+eLUIfh8TQAOHxn4LXU6KbMFnQDFoA4Ly3EJ4/TSBcbZXxYx2q0NXwKqWx35EohrSrw6WFVAEyFh5Or47vVBxOsHEJFLVQBolrMyg0nikfwboEHb+Vw/J6wlPXFdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U+BO6Q9/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcWJc2OV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4E31F00893;
-	Tue, 29 Sep 2026 07:13:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U+BO6Q9/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D911F000FF;
+	Tue, 29 Sep 2026 07:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790665993;
-	bh=k236eWi+M5Kl1aDNRgsPv/grlHCNH6C+N1amhk4LcOw=;
+	s=k20260515; t=1790666823;
+	bh=c2C/eVtAJPpjMYDLNwQibSrOlOhibS0dGw/VMLKUe3Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=TcWJc2OVhQ+OIxvo7yTo3+t3eCUNHfFnKvWsbDnx/x+DCJmJqafvbFi3yTGdO9Qz5
-	 QZt5FW2m1vQB528/lLWlixZgPaVL6meon9ULndYSbwLcenzgFQKPrZsktUJLfpBjQU
-	 5KjrXKmKS2Eb2YG7U3f4uR02Z9O8I84RmYWMyyBaXO0IDV/YW+lP+mxqDiMnz//Pdt
-	 H6b+KMx/LIncykx3CeOWDp0BFQEr2cdjxuYe+YPDN5yDBsNKK2TM31saZTekPzwGOA
-	 J6movutHxJgScZVaASTSimb6UH2x8wH4QP9+lEIEjGSahOxLIwTqmEKbD04qBNX2VK
-	 mVlLKF7ClacEQ==
-Date: Tue, 29 Sep 2026 09:13:10 +0200
+	b=U+BO6Q9/X08aLazZhmJKUWRGrmjj+Snm4vmwY09KdDXNKy0CeH88HD15e/T1wMBOV
+	 35UauizxtojbWrKfrEFN7w+FfGso44H61e35C7lMDcGAtssEtKbbfEQ4nrUTd3eXVD
+	 gLf8fXYqi1N+UaXw93NJzh/e73uY0W5hB7RFpG4e5KiaRvKnkB1Q7fPie1Qw0C7HFC
+	 NiawgI8jEPDocDiE3T7sUTqwZcAqNzg5v99hVtNFiSrfQTvdPI8gyvQrA2RGg05+vr
+	 z2UTwUB4fW60fzsg8yPP29R6BttDkBiQz56CL1Lxf1Y+KfgSJV6jeKlt9OlvMLrTV4
+	 5e+4XWjij65Zg==
+Date: Tue, 29 Sep 2026 09:27:00 +0200
 From: Maxime Ripard <mripard@kernel.org>
 To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Jessica Zhang <jesszhan0024@gmail.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+Cc: Benjamin Tissoires <bentiss@kernel.org>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
 	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
 	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
@@ -43,11 +44,13 @@ Cc: Jessica Zhang <jesszhan0024@gmail.com>,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
 	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
+	linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <artgrTe6wvKxnUOG@houat>
+Message-ID: <artlIYhgbskRJXDQ@houat>
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
  <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
+ <arqhwHiVf00j94J7@beelink>
+ <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,131 +58,159 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="m73zwlja27vosc47"
+	protocol="application/pgp-signature"; boundary="nstt4rbbt4m4mdpf"
 Content-Disposition: inline
-In-Reply-To: <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
+In-Reply-To: <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
 
 
---m73zwlja27vosc47
+--nstt4rbbt4m4mdpf
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
 MIME-Version: 1.0
 
-Hi Neil,
-
-On Mon, Sep 28, 2026 at 06:39:58PM +0200, Neil Armstrong wrote:
-> On 9/28/26 18:22, Maxime Ripard wrote:
-> > Panels in general, and MIPI-DSI panels in particular, are pretty
-> > difficult to support and require pretty much a panel driver for each
-> > panel produced. Most of them are pretty simple, and require an opaque
-> > initialization sequence that is usually poorly documented.
+On Mon, Sep 28, 2026 at 09:20:12PM +0200, Neil Armstrong wrote:
+> On 9/28/26 19:24, Benjamin Tissoires wrote:
+> > On Sep 28 2026, Neil Armstrong wrote:
+> > > Hi,
+> > >=20
+> > > On 9/28/26 18:22, Maxime Ripard wrote:
+> > > > Hi,
+> > > >=20
+> > > > Panels in general, and MIPI-DSI panels in particular, are pretty
+> > > > difficult to support and require pretty much a panel driver for each
+> > > > panel produced. Most of them are pretty simple, and require an opaq=
+ue
+> > > > initialization sequence that is usually poorly documented.
+> > > >=20
+> > > > This creates a tension between OEMs and distros because OEMs will
+> > > > typically get a new panel to react to a sourcing issue during
+> > > > production, and thus need some swift turnaround between getting the=
+ir
+> > > > new panel and it being operational in the OS. Distributions on the =
+other
+> > > > hand can take years to ship a kernel with that new panel driver.
+> > > >=20
+> > > > To solve this, I followed the example of HID-BPF and wrote a panel
+> > > > driver that will rely on BPF programs to perform the panel
+> > > > initialization. That way, we can ship the programs separately from =
+the
+> > > > kernel, and with a different lifecycle. If this driver is accepted,=
+ the
+> > > > plan is to have a userspace component started by udev to identify a=
+nd
+> > > > load the right BPF program for the panels found on the device.
+> > >=20
+> > > This is kind of late for serious applications except if we manage to
+> > > solve the bootloader to Linux display engine transition.
+> > >=20
+> > > >=20
+> > > > This driver is fully functional and works with both 5" and 7" Touch
+> > > > Display 2 panels for the RaspberryPi. However, it breaks away from =
+the
+> > > > typical panel driver in multiple ways:
+> > > >=20
+> > > > - BPF programs can only be loaded by userspace. This leaves us with=
+ two
+> > > >     choices:
+> > > >=20
+> > > >     * We prevent the driver from loading until the script itself is
+> > > >       loaded. This has the side effect of preventing any other outp=
+ut to
+> > > >       be used until the initramfs is ran at the earliest, and possi=
+bly
+> > > >       ever if the loader isn't installed for example.
+> > >=20
+> > > This adds a dependency on user-space behavior and if somehow the
+> > > initramfs doesn't load for a reason we won't have a way to display
+> > > an error.
+> > >=20
+> > > >=20
+> > > >     * Or we probe the driver all the time, but only report it as co=
+nnected
+> > > >       once a program has been registered. This is somewhat unconven=
+tional,
+> > > >       but allows the other outputs to be functional, *and* allows t=
+he user
+> > > >       to force the output if their panel doesn't require any
+> > > >       initialization or during debugging. I chose this solution.
+> > >=20
+> > > Both options are not really great...
+> > >=20
+> > > >=20
+> > > > - It's not a panel driver, but a bridge one, which is also pretty
+> > > >     unconventional. This is required because panel drivers don't ha=
+ve
+> > > >     access to a detect callback that is required for the above, but=
+ I also
+> > > >     think that the recent work from Luca blurs the line from panels=
+ and
+> > > >     bridges and we'll end up going that road anyway.
+> > >=20
+> > > On this point, DDIC _are_ bridges, but in the current panel API we bl=
+ur the line between
+> > > the panel and the DDIC. So being a bridge is fine, but in a general w=
+ay we lack
+> > > a proper way to describe the display/panel/monitor independently of t=
+he DDIC.
+> > >=20
+> > > At first glance it's a nice driver, but moving the timings into a blo=
+b moves something
+> > > into possible proprietary binaries with possible closed licence and d=
+istribution
+> > > restriction so it's a downgrade for the same of bringing up a panel f=
+aster.
 > >=20
-> > This creates a tension between OEMs and distros because OEMs will
-> > typically get a new panel to react to a sourcing issue during
-> > production, and thus need some swift turnaround between getting their
-> > new panel and it being operational in the OS. Distributions on the other
-> > hand can take years to ship a kernel with that new panel driver.
-> >=20
-> > To solve this, I followed the example of HID-BPF and wrote a panel
-> > driver that will rely on BPF programs to perform the panel
-> > initialization. That way, we can ship the programs separately from the
-> > kernel, and with a different lifecycle. If this driver is accepted, the
-> > plan is to have a userspace component started by udev to identify and
-> > load the right BPF program for the panels found on the device.
+> > Quick answer on this, because I had the very same questions regarding
+> > HID-BPF:
+> > - in BPF, you can require (and by default it does) that only GPL
+> > 	compatible BPF programs are loaded, closing the argument of "closed
+> > 	licence and distribution restriction"
+> > - also, a BPF program can be disassembled much easier than a binary
+> > 	blob, and I remember Alexei showing me an example where you get almost
+> > 	the source code from the BPF object in just one pass.
 >=20
-> This is kind of late for serious applications except if we manage to
-> solve the bootloader to Linux display engine transition.
+> Right, it "solve" one of my question, but doesn't really solve the issue
+> of vendors providing "GPL" bpf programs with source available "somewhere".
 
-Virtually all "generic" distributions are shipping the panel as modules
-today anyway, because anything else is nothing but impractical. But
-maybe you don't consider them serious enough. Also, applications live in
-userspace already, so can be ran after this driver would be initialized
-anyway.
+Would you be ok if I was to make a tool to decompile a BPF program into its
+source file equivalent?
 
-> > This driver is fully functional and works with both 5" and 7" Touch
-> > Display 2 panels for the RaspberryPi. However, it breaks away from the
-> > typical panel driver in multiple ways:
-> >=20
-> > - BPF programs can only be loaded by userspace. This leaves us with two
-> >    choices:
-> >=20
-> >    * We prevent the driver from loading until the script itself is
-> >      loaded. This has the side effect of preventing any other output to
-> >      be used until the initramfs is ran at the earliest, and possibly
-> >      ever if the loader isn't installed for example.
->=20
-> This adds a dependency on user-space behavior and if somehow the
-> initramfs doesn't load for a reason we won't have a way to display
-> an error.
+> Another big issue is the API, I don't want to keep the current API as-is,
+> we plan to support more advanced panel features and use try to use the
+> atomic states to support rate switching for example, and I'm not confident
+> it's a good idea since there's no "simple" and "forever valid" API
+> to initialize panels...
 
-Yes, if an error happens before the DRM driver loads, it won't be shown
-on the screen. This is already the case for any panel driver today on
-any major !embedded distribution. And with built-in drivers, this can
-also happen before or while the DRM driver loads.
+So, a couple of things here. First, I really don't think we should
+extend the panel API, like at all. But let's discuss that at Plumbers, I
+don't think it's very relevant to this discussion anyway.
 
-The solution is always the same though: load simpledrm first, move to
-the proper DRM device once it's functional. It still works with this
-solution.
+Second, you don't have to use this driver, like, at all. For anything
+more complicated than what this driver can provide, I totally expect to
+still merge dedicated panel drivers if it makes sense. I also expect
+that this driver would be enough for 90% of our panel drivers and
+would allow us to support most of the cruft.
 
-> >=20
-> >    * Or we probe the driver all the time, but only report it as connect=
-ed
-> >      once a program has been registered. This is somewhat unconventiona=
-l,
-> >      but allows the other outputs to be functional, *and* allows the us=
-er
-> >      to force the output if their panel doesn't require any
-> >      initialization or during debugging. I chose this solution.
->=20
-> Both options are not really great...
-
-Feel free to make any suggestions
-
-> >=20
-> > - It's not a panel driver, but a bridge one, which is also pretty
-> >    unconventional. This is required because panel drivers don't have
-> >    access to a detect callback that is required for the above, but I al=
-so
-> >    think that the recent work from Luca blurs the line from panels and
-> >    bridges and we'll end up going that road anyway.
->=20
-> On this point, DDIC _are_ bridges,
-
-I have no idea what a DDIC mean.
-
-> but in the current panel API we blur the line between the panel and
-> the DDIC. So being a bridge is fine, but in a general way we lack a
-> proper way to describe the display/panel/monitor independently of the
-> DDIC.
->=20
-> At first glance it's a nice driver, but moving the timings into a blob
-
-Let's not kid ourselves, it's *already* a blob. We just sugar-coated it
-enough that we can be happy and call it GPL.
-
-> moves something into possible proprietary binaries with possible
-> closed licence and distribution restriction so it's a downgrade for
-> the same of bringing up a panel faster.
-
-We can already make a proprietary, out-of-tree, panel driver today. That
-being said, the only license we allow for BPF programs here is GPL, so
-if anything it would be less of a concern for this than it would be for
-regular panels.
+Finally, the BPF API is flexible. You can extend it later on and old
+programs would still work. The verifier would fail only if a program
+uses a new function in a kernel that doesn't support it. I was kind of
+expecting to put drm_display_mode in there at some point, if the state
+makes sense then why not.
 
 Maxime
 
---m73zwlja27vosc47
+--nstt4rbbt4m4mdpf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCartlBgAKCRAnX84Zoj2+
-dqpsAX9ijj8Z64VcCaqKnJ4Lo/1d/9J5/M9PC5fiO6TitAuSIb3LaOEQBIr26yrs
-/d/QkF4BgLd/UwC/5QeWZ0LyE+B9yXAqojMbHWgC6MCfuVW5GkhowZ6O3eEVFkIp
-3RTmkdPM7Q==
-=8v7b
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCartoQwAKCRAnX84Zoj2+
+dtp2AYDqEryYzoPxdZ0pP0QpPZFfX3gKsTQtb0FXlWyICU6KGPBCCAuKMYFJRLHL
+EXEyYZYBgNINSL3vSxMjOnTdTOBwGIGO7iXBZhJuZPS9DZO3C/TaZk7LCjj9P+uG
+pQo0MpI0BA==
+=BzAp
 -----END PGP SIGNATURE-----
 
---m73zwlja27vosc47--
+--nstt4rbbt4m4mdpf--
