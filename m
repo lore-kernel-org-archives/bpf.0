@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2C13043DE
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B762F7F13
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790641055; cv=none; b=O6RS8w9TNA/BRk/T2AhS3W4I4pUPKt/JGG1qHfnNGJMIRmMJzqo22znbcdNIAzG/rypY3b45Ag4e3tSOxICcZb/V3/Bo7GHO+1WkS3COdTAieca/TrFu65A9WJyoABUGt6aVkqeC4OW+iCsWK2xlhuKil7ruaFUdIdnvwqyveB0=
+	t=1790641057; cv=none; b=UJVX+shWDQOOa8dnzgsGMwQaN+6w0LXsfZL7QuXrLhCU144ItsZI3rxj/8tTZEr5Snym0H8dJjnO9esDwiWCLm7mnpvMe0wRJf306hrOTpE9tpfgDRywd0BBPp1crgnBMIeyS12QXrUsae/8JNaQwfKy7tVddTcYpDkUB+KOjs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790641055; c=relaxed/simple;
-	bh=nO7Z3khNcR3jrNKqHTlo7KhMcu2/n2id34chO+UGHQw=;
+	s=arc-20240116; t=1790641057; c=relaxed/simple;
+	bh=ugO5Ys4nM3MA8/F0ETaRfBXfIUfwsQITnT4J0GFGdsw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qd93qmqCmsJF+5PfFB1GxInJvE0zLOKygxj+0r+rpFkOPI4GOE5IgQKllwZMBcTJfBmmaybBDWXQb1bj6Qv+d4FhjvurFkIGa7t/Ti2U5D+ddZR0Cxu5KOUZYUIVlhG3q33cJtSUYNgkqop7XXdb24uzrqnUv8khbVOAT77T8rQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=IOKM66k19JPFZDbQbl2US4EkEpqMtnQnWySPm6EtoDUznyUR7cksOstWf/nF4qA7z7IbbRGhCvjzmq/hxTf3eyME0NGGLX8VqF6+EldoLobQiK5F92WjL8JGvg5DyuYO3V7c/+XwKW443Ir7WVOTu++OS0I1y02oUMQEWddaHwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 49B6A2DE075950; Mon, 28 Sep 2026 17:17:21 -0700 (PDT)
+	id 8833C2DE076256; Mon, 28 Sep 2026 17:17:31 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v7 15/22] libbpf: Add cleanup_info to bpf_prog_load_opts
-Date: Mon, 28 Sep 2026 17:17:21 -0700
-Message-ID: <20260929001721.3254465-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v7 17/22] libbpf: Carry the exception cleanup table through the light skeleton
+Date: Mon, 28 Sep 2026 17:17:31 -0700
+Message-ID: <20260929001731.3255091-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260929001601.3242665-1-yonghong.song@linux.dev>
 References: <20260929001601.3242665-1-yonghong.song@linux.dev>
@@ -37,66 +37,135 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Let a caller hand the kernel an exception cleanup table: struct
-bpf_prog_load_opts grows cleanup_info, cleanup_info_cnt and
-cleanup_info_rec_size, and bpf_prog_load() passes all three on to
-BPF_PROG_LOAD.
+A light skeleton does not call bpf_prog_load(). bpf_gen__prog_load() buil=
+ds
+its own union bpf_attr field by field, and the loader program it emits is
+what issues BPF_PROG_LOAD when the skeleton runs -- so a program loaded
+this way reached the kernel without the table the previous patch collecte=
+d
+for it, and the verifier refused it with "unreachable insn", which names
+neither the skeleton nor the table.
 
-The attr size it computes grows by one field rather than three:
-cleanup_info_cnt is the last of them in the BPF_PROG_LOAD attr, so
-offsetofend() on it already covers the other two.
+Carry it the way func_info and line_info are carried: the records go into
+the loader's blob of bytes, the count and record size into the attr, and =
+a
+relocation stores the blob's address into attr.cleanup_info once that
+address is known. The attr grows to its new last field, cleanup_info_cnt.
+Records are 4-byte fields like the other info blobs, so a cross-endian
+build has to swap them too.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/bpf.c | 6 +++++-
- tools/lib/bpf/bpf.h | 7 ++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ tools/lib/bpf/gen_loader.c      | 29 +++++++++++++++++++++++++----
+ tools/lib/bpf/libbpf_internal.h |  7 +++++++
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index b49822d212ae..2e761f020b14 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -295,7 +295,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 		  const struct bpf_insn *insns, size_t insn_cnt,
- 		  struct bpf_prog_load_opts *opts)
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 251392aa8b41..d10cd0672475 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -994,13 +994,15 @@ static void cleanup_relos(struct bpf_gen *gen, int =
+insns)
+ 	cleanup_core_relo(gen);
+ }
+=20
+-/* Convert func, line, and core relo info blobs to target endianness */
++/* Convert func, line, core relo and cleanup info blobs to target endian=
+ness */
+ static void info_blob_bswap(struct bpf_gen *gen, int func_info, int line=
+_info,
+-			    int core_relos, struct bpf_prog_load_opts *load_attr)
++			    int core_relos, int cleanup_info,
++			    struct bpf_prog_load_opts *load_attr)
  {
--	const size_t attr_sz =3D offsetofend(union bpf_attr, keyring_id);
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, cleanup_info_cnt);
- 	void *finfo =3D NULL, *linfo =3D NULL;
- 	const char *func_info, *line_info;
- 	__u32 log_size, log_level, attach_prog_fd, attach_btf_obj_fd;
-@@ -370,6 +370,10 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 	attr.fd_array =3D ptr_to_u64(OPTS_GET(opts, fd_array, NULL));
- 	attr.fd_array_cnt =3D OPTS_GET(opts, fd_array_cnt, 0);
+ 	struct bpf_func_info *fi =3D gen->data_start + func_info;
+ 	struct bpf_line_info *li =3D gen->data_start + line_info;
+ 	struct bpf_core_relo *cr =3D gen->data_start + core_relos;
++	struct bpf_cleanup_info *ci =3D gen->data_start + cleanup_info;
+ 	int i;
 =20
-+	attr.cleanup_info_rec_size =3D OPTS_GET(opts, cleanup_info_rec_size, 0)=
+ 	for (i =3D 0; i < load_attr->func_info_cnt; i++)
+@@ -1011,6 +1013,9 @@ static void info_blob_bswap(struct bpf_gen *gen, in=
+t func_info, int line_info,
+=20
+ 	for (i =3D 0; i < gen->core_relo_cnt; i++)
+ 		bpf_core_relo_bswap(cr++);
++
++	for (i =3D 0; i < load_attr->cleanup_info_cnt; i++)
++		bpf_cleanup_info_bswap(ci++);
+ }
+=20
+ void bpf_gen__prog_load(struct bpf_gen *gen,
+@@ -1024,8 +1029,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 			       load_attr->line_info_rec_size;
+ 	int core_relo_tot_sz =3D gen->core_relo_cnt *
+ 			       sizeof(struct bpf_core_relo);
++	int cleanup_info_tot_sz =3D load_attr->cleanup_info_cnt *
++				  load_attr->cleanup_info_rec_size;
+ 	int prog_load_attr, license_off, insns_off, func_info, line_info, core_=
+relos;
+-	int attr_size =3D offsetofend(union bpf_attr, core_relo_rec_size);
++	int attr_size =3D offsetofend(union bpf_attr, cleanup_info_cnt);
++	int cleanup_info;
+ 	union bpf_attr attr;
+=20
+ 	memset(&attr, 0, attr_size);
+@@ -1074,9 +1082,17 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 		 core_relos, gen->core_relo_cnt,
+ 		 sizeof(struct bpf_core_relo));
+=20
++	attr.cleanup_info_rec_size =3D tgt_endian(load_attr->cleanup_info_rec_s=
+ize);
++	attr.cleanup_info_cnt =3D tgt_endian(load_attr->cleanup_info_cnt);
++	cleanup_info =3D add_data(gen, load_attr->cleanup_info, cleanup_info_to=
+t_sz);
++	pr_debug("gen: prog_load: cleanup_info: off %d cnt %u rec size %u\n",
++		 cleanup_info, load_attr->cleanup_info_cnt,
++		 load_attr->cleanup_info_rec_size);
++
+ 	/* convert all info blobs to target endianness */
+ 	if (gen->swapped_endian && !gen->error)
+-		info_blob_bswap(gen, func_info, line_info, core_relos, load_attr);
++		info_blob_bswap(gen, func_info, line_info, core_relos, cleanup_info,
++				load_attr);
+=20
+ 	libbpf_strlcpy(attr.prog_name, prog_name, sizeof(attr.prog_name));
+ 	prog_load_attr =3D add_data(gen, &attr, attr_size);
+@@ -1098,6 +1114,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 	/* populate union bpf_attr with a pointer to core_relos */
+ 	emit_rel_store(gen, attr_field(prog_load_attr, core_relos), core_relos)=
 ;
-+	attr.cleanup_info =3D ptr_to_u64(OPTS_GET(opts, cleanup_info, NULL));
-+	attr.cleanup_info_cnt =3D OPTS_GET(opts, cleanup_info_cnt, 0);
-+
- 	if (log_level) {
- 		attr.log_buf =3D ptr_to_u64(log_buf);
- 		attr.log_size =3D log_size;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 826d9cc9ab65..2c292d56c9a3 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -128,9 +128,14 @@ struct bpf_prog_load_opts {
 =20
- 	/* if set, provides the length of fd_array */
- 	__u32 fd_array_cnt;
++	/* with no records there is no blob of them to point the attr at */
++	if (load_attr->cleanup_info_cnt)
++		emit_rel_store(gen, attr_field(prog_load_attr, cleanup_info),
++			       cleanup_info);
 +
-+	/* exception cleanup table, from the .bpf_cleanup section */
-+	const void *cleanup_info;
-+	__u32 cleanup_info_cnt;
-+	__u32 cleanup_info_rec_size;
- 	size_t :0;
- };
--#define bpf_prog_load_opts__last_field fd_array_cnt
-+#define bpf_prog_load_opts__last_field cleanup_info_rec_size
+ 	/* populate union bpf_attr fd_array with a pointer to data where map_fd=
+s are saved */
+ 	emit_rel_store(gen, attr_field(prog_load_attr, fd_array), gen->fd_array=
+);
 =20
- LIBBPF_API int bpf_prog_load(enum bpf_prog_type prog_type,
- 			     const char *prog_name, const char *license,
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+index f1630f03d5f5..9d341839ca74 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -572,6 +572,13 @@ static inline void bpf_core_relo_bswap(struct bpf_co=
+re_relo *i)
+ 	i->kind =3D bswap_32(i->kind);
+ }
+=20
++static inline void bpf_cleanup_info_bswap(struct bpf_cleanup_info *i)
++{
++	i->begin_off =3D bswap_32(i->begin_off);
++	i->end_off =3D bswap_32(i->end_off);
++	i->landing_pad_off =3D bswap_32(i->landing_pad_off);
++}
++
+ enum btf_field_iter_kind {
+ 	BTF_FIELD_ITER_IDS,
+ 	BTF_FIELD_ITER_STRS,
 --=20
 2.53.0-Meta
 
