@@ -1,132 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-52.mta0.migadu.com [91.218.175.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A777A1D416C;
-	Tue, 29 Sep 2026 23:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C323D4F7CDA
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 23:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790725584; cv=none; b=e/9v84vGCp3oud/T53Gqd9AnjP8uSKi1HR9uInNot1WxyGbMo6oLEgGrOdHcRuKVCiD4OQtBOo+hL3luiMGKwxlkUOaj6objG0RnsdJxD/9p3fEytUCiI0DImRaHPV0zFyTVRwoIf1KbzNed4PgJlHUimxp0qyVOzwSf3XNlBJA=
+	t=1790725586; cv=none; b=s6a3H0fnHMuxLQSqTxuJk5P5+RUscrHbF52KwvQx6a1d1ehulrFDYYkLGQm3nRnyyrRrb5jLif2sAd+kMMdM7D7QhkYZ7wq+HMi8joBKZRx6vbVOYn7z67BLDgikTeJQQaCWnVZCveunjB0JyCxd23wmMzn5qWGdilzo3Ev9HL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790725584; c=relaxed/simple;
-	bh=LRq4vU2UaNtO/ieQAH8HDx9+750FfkGFV8Zr+vB8jWw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=X+4N43FUROXPisi8e4+5L9Xfaxkcq+OnfoHpQS2/07JsgyP11ZSfSyDr0IwGrExQnic90x44o3AiBX0TzZdeHuaeTL65CWnfdNmV76bV9DSIt8CPn/DpgOpaYFSTlNZSxkxMmCXEQ9BbOGoxdcuUv8JL0dpRorhS73j9Qh4/e+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etKZjUUL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790725586; c=relaxed/simple;
+	bh=SjZ6yUO9LElwKmNgWKK2MK6ZwGoN3GoOlYzvfsrO2mA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vDQV+VvSxl1Vythr5of/9SSzqujtNmkNBSiIlTT9xKkdcfqShGP5TZk51in5PjzIKwZhn4/iaCFMJuYsji3nYxS+gMQdec9CHWOhWzHD/d4GOvUG2/vQNaNvTd44VvP/vijBrw+idUVXycFZPEiojObY1X5De7UzvDfNIOo1IuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XU6jaxZo; arc=none smtp.client-ip=91.218.175.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etKZjUUL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783C01F000FF;
-	Tue, 29 Sep 2026 23:46:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790725582;
-	bh=eUgBSVCxg479HmVb1My7cssnKyEELh39OZi+wobzssQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=etKZjUULIUryUFPFnSFpQgqe7lgC025pLBPcfJBgF7EIj6RaQUqZQ9lhv5XN8CyaA
-	 +yX9+Emy+4optmeHZfwi3fDFg1Aa7/+1YBXdwQ2Ckg948/SfDYt2Awk/2GMKWHoiYh
-	 /LtK9tB+/lO6D/tmanLNFiHlETt9k7+MYxFBAZFt/4aFeAcFUDnwhDcEUe6KV8stEN
-	 JJmS8poo2aZDL13MgKszUJdqFmnsOWFoD8teIhI0mr2KHBTJDtraL8SUnDeFRt0By7
-	 O4jmVK4ksdsABn2xdPjH1ny3i0pgiS5DQagH3NU2493hELsyE8ZJU0D1eXGYSXNsd6
-	 T3NVyX0leAAnw==
-Content-Type: multipart/mixed; boundary="===============5723665362160622272=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XU6jaxZo"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=SjZ6yUO9LElwKmNgWKK2MK6ZwGoN3GoOlYzvfsrO2mA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790725579; v=1; x=1791330379;
+ b=XU6jaxZoaJVgFz+myKLtf6aRzt67xTbUmm2ADIPgRk8kdAsN8yXBfWeXptIiiqlWPhfCUjhA
+ sel0iQmQ0ktuC29OAKRWMSCZvtbpeiR5KnAPwA1OuaavpNX9FArXkXxwHYRTBgIoU07CSB1/bqg
+ 2MiLV2iW+NO7jefR2dJee3Aw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id be52869c0f966f1f;
+	Tue, 29 Sep 2026 23:46:19 +0000
+X-Mizu-Trace-ID: be52869c0f966f1f
+X-Migadu-Flow: FLOW_OUT
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf-next v2 0/5] libbpf: Render decl_tags in btf_dump
+Date: Tue, 29 Sep 2026 16:46:03 -0700
+Message-ID: <20260929234608.48503-1-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2dc04cf6f1e0c474da152cb4afcd0e264930b4d1d9b969de1b7cfbdd50b1bd35@mail.kernel.org>
-In-Reply-To: <20260929005411.4105448-2-vineet.gupta@linux.dev>
-References: <20260929005411.4105448-2-vineet.gupta@linux.dev>
-Subject: Re: [PATCH v2 1/1] tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
-From: bot+bpf-ci@kernel.org
-To: vineet.gupta@linux.dev,rostedt@goodmis.org,mhiramat@kernel.org
-Cc: mark.rutland@arm.com,mathieu.desnoyers@efficios.com,andrii@kernel.org,peterz@infradead.org,linux-trace-kernel@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,kernel-team@meta.com,vineet.gupta@linux.dev,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 29 Sep 2026 23:46:21 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============5723665362160622272==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+BTF supports arbitrary __attribute__ encoding via decl tags and type
+tags [1]. However btf_dump facility only outputs the attributes
+encoded in BTF as type tags, which was implemented in commit
+2019c58318b8 ("libbpf: Check the kflag of type tags in btf_dump").
 
-> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-> index ed455b53513b..336f40dc6618 100644
-> --- a/kernel/trace/fgraph.c
-> +++ b/kernel/trace/fgraph.c
-> @@ -1036,10 +1036,9 @@ trace_func_graph_ent_t ftrace_graph_entry = ftrace_graph_entry_stub;
->  /* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */
->  static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
->  {
+BTF_KIND_DECL_TAG has been left out of btf_dump entirely, independent
+of the kflag value. An attribute a BTF producer encoded is silently
+dropped from the C output.
 
-Does this comment still match the function's behavior? Before the patch,
-alloc_retstack_tasklist() assigned at most FTRACE_RETSTACK_ALLOC_SIZE
-stacks per call and returned -EAGAIN to trigger another batch. After the
-patch, it walks every thread in one pass, allocating inline with
-GFP_NOWAIT. The FTRACE_RETSTACK_ALLOC_SIZE pre-allocated entries are now
-only a fallback when GFP_NOWAIT fails, and in the normal case they're all
-freed at the free: label.
+Implement decl_tag support in btf_dump. The btf_dump limits rendered
+BTF types to records, record members and typedefs. Other types,
+particularly functions, are deliberately skipped. Therefore decl_tag
+rendering works only for the same subset of target types.
 
-> -	int i;
-> -	int ret = 0;
->  	int start = 0, end = FTRACE_RETSTACK_ALLOC_SIZE;
->  	struct task_struct *g, *t;
-> +	int i, ret = 0;
->
->  	if (WARN_ON_ONCE(!fgraph_stack_cachep))
->  		return -ENOMEM;
-> @@ -1054,26 +1053,37 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
->  		}
->  	}
->
-> -	rcu_read_lock();
-> -	for_each_process_thread(g, t) {
-> -		if (start == end) {
-> -			ret = -EAGAIN;
-> -			goto unlock;
-> -		}
-> +	scoped_guard (rcu) {
-> +		for_each_process_thread(g, t) {
-> +			unsigned long *rs;
-> +
-> +			if (t->ret_stack)
-> +				continue;
-> +
-> +			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
-> +			if (!rs) {
-> +				/*
-> +				 * Returning from inside scoped_guard() drops
-> +				 * the RCU read lock, but skips the free loop
-> +				 * below. That is only safe because start ==
-> +				 * end here, which leaves that loop nothing to
-> +				 * free. Keep the two in step if this
-> +				 * exhaustion check ever changes.
-> +				 */
-> +				if (start == end)
-> +					return -EAGAIN;
-> +				rs = ret_stack_list[start++];
-> +			}
->
-> -		if (t->ret_stack == NULL) {
->  			atomic_set(&t->trace_overrun, 0);
-> -			ret_stack_init_task_vars(ret_stack_list[start]);
-> +			ret_stack_init_task_vars(rs);
->  			t->curr_ret_stack = 0;
->  			t->curr_ret_depth = -1;
->  			/* Make sure the tasks see the 0 first: */
-> -			smp_wmb();
-> -			t->ret_stack = ret_stack_list[start++];
-> +			smp_store_release(&t->ret_stack, rs);
->  		}
->  	}
->
-> -unlock:
-> -	rcu_read_unlock();
->  free:
->  	for (i = start; i < end; i++)
->  		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
+To be efficient, decl_tag dump support requires a reverse index from
+the target type id to the list of tags pointing at it.
 
+With decl_tag dump support, provided a validly constructed BTF, it is
+now possible to obtain C-syntax output like the following example:
+
+	struct foo {
+		int a __attribute__((bar));
+		int b: 3 __attribute__((bar));
+	} __attribute__((bar));
+	typedef struct { ... } __attribute__((bar)) foo_t __attribute__((baz));
+
+
+This closes a generic gap in btf_dump, which silently dropped every
+decl tag it was given. The in-tree consumer is:
+
+    bpftool btf dump ... format c
+
+A BPF object now keeps its member tags, such as the "contains:" tags.
+
+[1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36644771324
---===============5723665362160622272==--
+v1->v2:
+  * index all decl tags in btf_dump (Andrii)
+  * roll the decl tag count back on resize errors  (Alexei, sashiko)
+  * new patch #3 with the ASSERT_TEXT_EQ() text-comparison helper (Eduard)
+  * fold the incremental subtest into test_btf_dump_incremental (Eduard)
+  * cut test_btf_attrs down to bare API calls plus VALIDATE_RAW_BTF,
+    with no BTF_*_ENC macros (sashiko, Eduard)
+
+v1: https://lore.kernel.org/bpf/20260917012037.1396254-1-ihor.solodrai@linux.dev/
+
+---
+
+Ihor Solodrai (5):
+  libbpf: Walk types in btf_dump_resize(), not in mark_referenced()
+  libbpf: Render decl_tags in btf_dump
+  selftests/bpf: Add ASSERT_TEXT_EQ()
+  selftests/bpf: Test btf_dump rendering of decl_tags
+  selftests/bpf: Show the tag kflag in the raw BTF dump helper
+
+ tools/lib/bpf/btf_dump.c                      | 214 +++++++++----
+ tools/testing/selftests/bpf/btf_helpers.c     |  10 +-
+ .../bpf/prog_tests/bpftool_btf_dump.c         |   6 +-
+ .../selftests/bpf/prog_tests/btf_dump.c       | 285 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/btf_write.c      |  34 +++
+ tools/testing/selftests/bpf/test_progs.h      |   3 +
+ 6 files changed, 475 insertions(+), 77 deletions(-)
+
+
+base-commit: cc6010e6e5cbe1f743d3011991041f227d976a5e
+-- 
+2.50.1
+
