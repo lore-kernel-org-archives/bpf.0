@@ -1,131 +1,122 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA79B3D45FE
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 14:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A085012B2
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 14:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790691826; cv=none; b=JU/D+bai6rAiRvgJO/cD1pS1d0PSbAJ00+dBDKYBlPr/0xjMhxCGsFvHbwGxnksgS+QcwCHoaq7y9SVeoTt9AhsV6zPi/HkI7mvTf8sI70vDLXWCSpWglfeLUN3vz2gRIqdKMupoZagDaZj6Ih1IAUWfd8trcS7Phjl9M75XkZM=
+	t=1790692434; cv=none; b=WNv/j36RlN7HfCIEB/dBCy6Qfrt7kE1PdJHzMth+PB3af2ZUIE1v09IlviZhnZO7Yldn6LMCIbchR5vRX80Z/klWOgdSU8oXxbIrBON+ZqQCDSl0e7arFJkDpKZNuT5LOCTyMwOr1VpnxR4BRwyvzhQfh2fFJum9f3/kPwDXLdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790691826; c=relaxed/simple;
-	bh=YFg442dzmYLAsAia1lyH3HC9c9oEaiM/RKHPe9FKX+A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=sPrqVM/pW/al6dOel8wsGwh0ZdyMgteAAfyRlD57qpl0cJYvMVMrXuqYAAtdeES0KEHTw38l+LXpBjmZ7ah70lHW5CWbUMMNxUyhFrXc7KCCE+rd9sA9zDQm2QtHBH0ScOYHP9uEa+tGSq6r9WWldZ5N4rrG6+JlHW2rG4CddAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WKqg66mH; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=FtqM8gch; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790692434; c=relaxed/simple;
+	bh=Ictfo6ayTgeVzDX16BAuhDJZt7+ZVbpOljn2/hm1F4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XyttQg49y2DArU8xpjO+Ks5YqTKiuWyUGJoJjtNUWaoZ4TiDAh5KtTquxzLNdKUeVw2O7YtWDCx2KZq7dBpCLkm/3JXn8At77EvPjynhK1Rx9h7pcQU7Js4cYEy2yav/0YfeBlrQsFuAZWsRxxn/7QowrkBB60m13is44OPVsEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VqqqOADG; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WKqg66mH";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="FtqM8gch"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790691823;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YFg442dzmYLAsAia1lyH3HC9c9oEaiM/RKHPe9FKX+A=;
-	b=WKqg66mHeSrHia1FOPYarywABjz5JB+fzEIqY9Kgn60wjwYVPxn7xCZVWjb9pZtaGiMghw
-	8NeWQcaOWRHqktl58ZJjcZt3JuCOR85Cb45SGzHCF4WNfGLFEI/e0s3foomWZOajf21koZ
-	VRG5/gkRll91gw+Us5n4mi/LRDlmepw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-331-CDhn8UM4P5qE4ee8t3JGgA-1; Tue, 29 Sep 2026 10:23:40 -0400
-X-MC-Unique: CDhn8UM4P5qE4ee8t3JGgA-1
-X-Mimecast-MFC-AGG-ID: CDhn8UM4P5qE4ee8t3JGgA_1790691819
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a009f82bedso14636065e9.0
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 07:23:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VqqqOADG"
+Received: by mail-pz2-f41.google.com with SMTP id 41be03b00d2f7-cc4c3304833so1619770a12.3
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 07:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1790691819; x=1791296619; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YFg442dzmYLAsAia1lyH3HC9c9oEaiM/RKHPe9FKX+A=;
-        b=FtqM8gchF+ManqU9ls2eCinTJbMR7qlydUZQ+c0yY62zIhZfVgOJNWbYo/kWufCoE8
-         SAYysEnlLGLhhPcESPqLMrjY74KODwIyTqQgOhsKxPrwXYAND8AmQppBBBdicabMBRLu
-         pm1ps3GWAgAAENzl7sXT/2tIfCbH4oqV5UqMGwvj4n4jaAR86+tID9exwdc3KGEIYh+B
-         WL/ilTyNq30bgbmXfRTnBW1Ym2mJPdnTF9uhY4qHk2jy60UWwU0R+a/IkeC7U5rPQimr
-         xI8ODD2RhgodcnlK4gQr0FbmwZqMgdDy8O+Ip8zyWSB3vfGUeiVUK0YHLH/RurKGnKcE
-         yMPw==
+        d=gmail.com; s=20251104; t=1790692433; x=1791297233; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=43/3dmeDG8ZHEWDYTwQfHePyNi6D0sJRBJ/5pN8ksjc=;
+        b=VqqqOADGK6buDD9+YdT2fixb8lVGHvp3cKk7QAzHyXYdA8vECGq3PGXJYbV8TuPLiE
+         bql1PUi3LBcRrpJgVxElHsQu9EZKzFyPt1RXXJ2/On/2OC5N5GFvvRub+gc2q8u/KpPr
+         q/uBw5f++mbV3baaqeWv2dGapSDGOdByBbE/E96XOB8x7ypOI5qvrH14aH8X9e6wvrG/
+         TPMQA3IjGZ+AHIXeBOMMw9lS5PWRKqaYfbsTi8RIj4A5R4blk8EWg3ozH44hRZ+QZuev
+         PXZcrLMqDGfDCEfqndU0xo4plN/R5W7rYfcpLa4kztm7oIqK673+V+SCfO+VJqlylPrW
+         MVMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790691819; x=1791296619;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1790692433; x=1791297233;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YFg442dzmYLAsAia1lyH3HC9c9oEaiM/RKHPe9FKX+A=;
-        b=AoAStGmVb+psQiHdLV+ftGCxdcsAZ46CLKiFE753EheQXF7GAetL0uRpgmplgupOO4
-         pXBJ0LY+i4VlXd+6Bn7wl5Uq2kceayq7nNOj6gMgAbZW9tTr7K3CWCrm8Xo2yjbHbLbV
-         uw/Tv9QLynIm7H2Pqr8qv4u9Ys3kDOOfjZyMUrWLiGsupk9YeM0JtXoEJOTlsIh8nhuB
-         DD4P8n9VFfw5W0NfghDZmc8P5HmLXCO1a/hgfw47sAfZcCZGY18PT9lkvyP2z6F0VvqN
-         HAhQj5fcGiQsaFMzpY3h4cHOwyJ5L879Dhw0SbeCuzQ0GCOJHISpfiGjsQKToLnJazFN
-         yOrA==
-X-Forwarded-Encrypted: i=1; AKwUvBynLIO6e8x8vmQmi4+a7HPC0iS6Rl9B1Sdkwn2a2SEI7eJ03rEznGE2LrGlOdnGwPde6bs=@vger.kernel.org
-X-Gm-Message-State: AFuF++lQbWYle4kw+SMP27FbRebiEW1I6teUkcQZ+T5+HRqd8VWh8Z42
-	dhHKvL8+8CFILCvvYXmXmldYGEci21Uq16f9rZ4LAp4ErcDLMq2Zn/tozVXJhrub+Gkj6/IrfXN
-	W8eMEvnQnQWFugQpc5xVy/3oGFNuADpvF0QYwb7diXFLe4dtBb1hAcA==
-X-Gm-Gg: AYBFou2Xch0zwHvCS2Pt/jF5H/Qze1zR04XsqAuG3nNy1hhvFSM7z66Ik7ttJUcgsny
-	wG/NYMffuk324JJ2SLGSYotAtFAndOykS00YLpON27180jpjGAWBjwScpGsN1V5S9zQsBcpUYfi
-	jxTvbh/M3eGE9JkU1+9m7Ywzk3ypRjmTx3So3vAoqjrp+nkCkZYqLW8k228z6xOIb2BubbSd0LZ
-	LZB1c8JZCs0YQAjzBB4yK8s3O5rmHcEJjmLk6KXGlVXGskWW/e+1HkBILgxqzqOV6p9gt7jbDYA
-	lL9/VdCpEBt45m11ItLJkrVRNG543L9pF+SyVela40697UJYMDB6HcSuJTbocyBu810BcVPAWCU
-	1kabtApwHuhD6lTg6evQoSgwZ5g==
-X-Received: by 2002:a05:600c:8b32:b0:49f:fc13:189d with SMTP id 5b1f17b1804b1-4a00c6813dfmr53749125e9.1.1790691819353;
-        Tue, 29 Sep 2026 07:23:39 -0700 (PDT)
-X-Received: by 2002:a05:600c:8b32:b0:49f:fc13:189d with SMTP id 5b1f17b1804b1-4a00c6813dfmr53748395e9.1.1790691818907;
-        Tue, 29 Sep 2026 07:23:38 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00cf9dd27sm83481025e9.2.2026.09.29.07.23.38
+        bh=43/3dmeDG8ZHEWDYTwQfHePyNi6D0sJRBJ/5pN8ksjc=;
+        b=uc9udHMC9G2WIgyJTAP+VZcnHg03S089Au8jdDz5ZZP4wZf02SKdXaGqkearh9C3Wv
+         n9oI2auS5ARpE8ynkwcvURMlwSsnx9Vpbd+O2FwNEkk210Nsyhjvtkos7IG2X5Tf6fyE
+         HwN5yz+8jXyTH6xFWrQjHxVhvd67tv8YiTyhH4JYzqdI9yOgvxBJ77fbZFgrhrUliff/
+         zDy8EEhlbi7y5vUpMMQ8mV301V0F4uYj5qOYPHQ7m7DA17ElSb1dFMBUWBthGjaXcQzH
+         Ok2ZEU2i1BbGoURCFQCLdXp+K5UTxY646Wqek4V/SBG/WuRfhHyBvc7cK8IvO8Ndto7z
+         ZAmg==
+X-Forwarded-Encrypted: i=1; AKwUvBy+5dPUQeNPDv5dY1+K/B8sW4nYvm0bUncGGzd14+WRLc7d9OKelzRrbJ8whbBqJ8MsyaU=@vger.kernel.org
+X-Gm-Message-State: AFuF++mmyXYF8yieBfl2TTvrysSV7ZoMuPcUZHfN0QLpJp7i6j/htbqK
+	XSo+SGGvNmuVFJgmvBdOrRKjbFQsUiTsI1suDaLC+NRItCLDYbgLuiws
+X-Gm-Gg: AYBFou1fj1E7ZI+wlvUdxllRrOhDQ+r6Ep18UbUIj+G2ZpGAIQUMKmVAymeCl8eQdCa
+	BXBHa8FrkqB+AsP3qe+ydccbeAYy7fGWaTp3hJsEEV1hsrRi6lxO3817dFnGMPrUxK4JjggzqUP
+	RQVGOFG0qCo/RUH6NazCuTOfn+XKYuVtv3n8NSyB7Us9QTD1ojpCayN2qM6STribFeK9b6Ad4Ju
+	bAdYdx073Azpu1EgzytQY3BKeya+NQSCXHurZhKgVir2OcksP37VD05bY7uhj1QL3b4drLRNEff
+	CEXjlL4oGWPopPxFKSK4dJJiaS/qw2iHKHgN+uKRHl/iaQu1xviIDtigTs1wornDySOH0r9+ASs
+	NdsOb4VMN2s1XCi3Qfk8GyVItPTIA7T/H8u7c64+6lEpWSMWMhKsKls3R/9utVeM89Ddb0iBdUM
+	fZnNUlqapBe+ZYtparIdLzOvWmLNEoKvp45y8PGpDWw4sBsUe2+AufdZmheX0bCBIED32zKKk=
+X-Received: by 2002:a05:6a21:6089:b0:3b2:a809:1000 with SMTP id adf61e73a8af0-3de0e6f07edmr15049574637.3.1790692432560;
+        Tue, 29 Sep 2026 07:33:52 -0700 (PDT)
+Received: from google.com ([118.150.148.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc7a3bb2d5asm4339524a12.17.2026.09.29.07.33.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 07:23:38 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 3D5A3A1017A; Tue, 29 Sep 2026 16:23:37 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>, Marcin Wojtas
- <marcin.s.wojtas@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Lorenzo
- Bianconi <lorenzo@kernel.org>, Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, Lorenzo Bianconi
- <lorenzo.bianconi@oss.qualcomm.com>
-Subject: Re: [PATCH net v4] net: mvneta: clear XDP pfmemalloc flag between
- frames
-In-Reply-To: <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
-References: <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 29 Sep 2026 16:23:37 +0200
-Message-ID: <87h5j8jfva.fsf@toke.dk>
+        Tue, 29 Sep 2026 07:33:52 -0700 (PDT)
+Date: Tue, 29 Sep 2026 22:33:46 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: corbet@lwn.net, skhan@linuxfoundation.org, ast@kernel.org,
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+	andrii@kernel.org, gerg@linux-m68k.org, rdunlap@infradead.org,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, bpf@vger.kernel.org,
+	jserv@ccns.ncku.edu.tw, marscheng@google.com, eleanor15x@gmail.com,
+	Daniel Palmer <daniel@thingy.jp>
+Subject: Re: [PATCH v6] m68k, bpf: Add initial BPF JIT compiler support
+Message-ID: <arvMSjbC23bPf3l-@google.com>
+References: <20260927205501.672807-1-visitorckw@gmail.com>
+ <CAMuHMdVcpHrxg_Kb1vpguSYbRg4CU4DxNuPAv3UqHNHZTNk33A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVcpHrxg_Kb1vpguSYbRg4CU4DxNuPAv3UqHNHZTNk33A@mail.gmail.com>
 
-Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com> writes:
+Hi Geert,
 
-> mvneta_swbm_add_rx_fragment() sets XDP_FLAGS_FRAGS_PF_MEMALLOC on the
-> xdp_buff when a fragment page is a pfmemalloc one (page under memory
-> pressure). The xdp_buff is reused for the next frame, but only the
-> XDP_FLAGS_HAS_FRAGS bit was cleared at frame start, so the pfmemalloc
-> bit leaked from one frame into the following ones. mvneta_swbm_build_skb()
-> propagates the flag to skb->pfmemalloc through xdp_update_skb_frags_info(=
-),
-> so the skb of a subsequent fragmented frame could be wrongly marked as
-> pfmemalloc even if none of its pages are under pressure.
->
-> Clear all the xdp_buff flags in mvneta_swbm_rx_frame(), which is invoked
-> for each new frame, instead of just the XDP_FLAGS_HAS_FRAGS bit.
->
-> Fixes: ed7a58cb40bd ("net: marvell: rely on xdp_update_skb_shared_info ut=
-ility routine")
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+On Mon, Sep 28, 2026 at 02:15:43PM +0200, Geert Uytterhoeven wrote:
+> Hi Kuwan-Wei,
+> 
+> On Sun, 27 Sept 2026 at 22:55, Kuan-Wei Chiu <visitorckw@gmail.com> wrote:
+> > Add a BPF JIT compiler for the m68k architecture.
+> >
+> > The JIT generates m68k machine code targeting m68020+ processors and
+> > coldfire parts with an mmu (ISA_B/ISA_C). It excludes plain 68000/68010
+> > and non-mmu coldfire processors, as it relies on 32-bit branch
+> > displacements (b<cc>.l) to handle large bpf programs.
+> >
+> > Tested with the test_bpf.ko:
+> > test_bpf: Summary: 1061 PASSED, 0 FAILED, [1049/1049 JIT'ed]
+> > test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+> >
+> > Tested-by: Daniel Palmer <daniel@thingy.jp>
+> > Co-developed-by: Greg Ungerer <gerg@linux-m68k.org>
+> > Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+> > Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+> > ---
+> > Changes in v6:
+> > - Fix kconfig sort order for HAVE_EBPF_JIT.
+> > - Update eBPF-JIT/arch-support.txt
+> 
+> Thanks for the update!
+> 
+> Are any of the issues raised by the bpf-ci bot valid?
+> Thanks!
+> 
+Yeah, I'll address those and send out v7 shortly.
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-
+Regards,
+Kuan-Wei
