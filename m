@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEF242586F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF1E568FD3
 	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 19:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790710516; cv=none; b=cqjFxMyJWkh/xgkbuFnMYMMNW84hOvq16jgH72W5ia3jXzliX0tBeVq3mfz4E7kQRfPzQ0WuAz89/1NsrrIIImfYXETV5YtLkGKt6cUaG6Z0gOcoso/NhEYib5J14Hs3Axx63/DidJrlr3hOr1oAAoli5+lQp2gF+1H3K2zy2ys=
+	t=1790710517; cv=none; b=Mx7L2ps+SJBZ8ZWGrs6PjYaJDoUKzjCFkfmDYDAWNoG8eDudxpP/yiJMZOp6dYbbPHQVDiCgTHGvYLGrLkDhpw2lTSb9KqUp3ANch0ioy6iluvwxoQG0gy4Meb+2T+7CymTaOrcEfOmg5hHkZnjt6RdBMb6bI8TWegSfAwgXC5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790710516; c=relaxed/simple;
-	bh=KfJ3/sXNS3O35xbyVXE0ZNVgCkNqsOBLqZi6o9FNwWQ=;
+	s=arc-20240116; t=1790710517; c=relaxed/simple;
+	bh=7fko1rE2yAPGOLIFQEpcyNj8KZdCgfK9yVxmV41IFLM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UYgXCZgj0HYfVcxYGVHIqT/sITrKOkb79PhK466r7jtxCwIRRVoxWad80e3hlQ6LQg9O9UQ93ZVR1c4+cBfYqA0TbL8GLX4XRYwUUChpXcwCa+E7jvsGHmIz02f/WyQsfdO4i/I+SrzH4QWFqLNo6tbe2Qesl2cns6Hw8r0n9kA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ghY4uUcg; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=SlEmzCqwlEqnAnooCdVjRVrkOkdIDIyeG8mhHnU9wcpE1gEHXSA6WdVnbOFIdlzodu/kTk0fmEqhZk99zaWixzzOhRmWtlLngxTTuIvqp4CTSgAv7U8EMbVOU+YIL7/AqrOG+OSr5At7DVG19pkB6z3wj0VN/18N5PhLJZcW0X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kR7u3F1f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ghY4uUcg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D38A1F000FF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kR7u3F1f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30FA1F00898;
 	Tue, 29 Sep 2026 19:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1790710515;
-	bh=S66WoFEVaahfXoJFaTY3Kf8veMYAbNKlxhSb3/7JMIk=;
+	bh=Kh+ipMfbAf7yBHSYUFuHiiKyuzpU5L0fW1TndwPvCNg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ghY4uUcgiWvK0Ib8ZNHz7QE0qJb+xwBQykBb9rwg/ZrNBLstoE7kL++7RB+1YwdJJ
-	 RYS4FTSRime5XDTBgQvReCaQn7FEoIJmKqLQnyh8cvnk8p9H2F6cEkuTfiCkvrvIZL
-	 MrILIleqT4y0fv5sy1CKnKmw92HAZnsC6GKHiNRl11q4dkrTDBTDUuUVnqVaExjGJU
-	 FMslz54ZcWM5jCgguJ2ZUbcr8qr8lTDS3KpG26vZS8cFwH+Bx1p0LaQpyV+M1BIG3b
-	 rK+cqW6JHzkaJDWhv61PUYqvMuIJwPOR5DWghWRpECT44VSejBPBRRzRz7zCEISXp5
-	 9jDtM8s5vCQlA==
+	b=kR7u3F1fadDXDvequajOr4s00aUa9nS7AIGo2z7Igdxc3/Xr9p9N7RUC+yV6zZQxO
+	 WeBCAIsV3tS0IaETDteRM10y2eJGMYa7VCk9BDWXZWBSKQijIQDrxNt1bBPNG50udz
+	 c8JamC8BlecmjnqJ55EkebfAqfmlhzHzuVp1gBqkI/UFS+UkGZpDGvcOp+F+Ow+SHo
+	 i2Xvq/5LU+qGx1XIvmZRloPLAnRKPm4mKQCiOjEGHx2zFgcMa7rysY2+3CCrYOOrsA
+	 nDcrInn4a61XRTw1FWgzgCbYoDGMnx+eSkJ7fi3FK8N4YXqe7g5qHigi/pDmNJ8qmL
+	 NbxREjUQ8oo6w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v9 12/15] net: lan966x: add PCIe FDMA MTU
- change support
+Subject: Re: [PATCH net-next v9 13/15] net: lan966x: add PCIe FDMA XDP
+ support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Machon" <daniel.machon@microchip.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260928-lan966x-pci-fdma-v9-12-a17caf60f89a@microchip.com>
+In-Reply-To: <20260928-lan966x-pci-fdma-v9-13-a17caf60f89a@microchip.com>
 References: <20260928-lan966x-pci-fdma-v9-0-a17caf60f89a@microchip.com>
- <20260928-lan966x-pci-fdma-v9-12-a17caf60f89a@microchip.com>
+ <20260928-lan966x-pci-fdma-v9-13-a17caf60f89a@microchip.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 19:35:14 +0000
-Message-Id: <20260929193515.0D38A1F000FF@smtp.kernel.org>
+Date: Tue, 29 Sep 2026 19:35:15 +0000
+Message-Id: <20260929193515.B30FA1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,74 +47,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] net: lan966x: race condition between fdma_pci_init and mtu resize
+- [Medium] net: lan966x: missing RX stats update for packets consumed by XDP
 --
 
-commit 729515bac2cb6bfa764aa18fa01ab2ab548fd6be
+commit c200183575cbdbcd07153d60fe18b2c59693c034
 Author: Daniel Machon <daniel.machon@microchip.com>
 
-net: lan966x: add PCIe FDMA MTU change support
+net: lan966x: add PCIe FDMA XDP support
 
-This commit adds mtu change support for the PCIe FDMA path. On an mtu
-change, the rx and tx buffers are reallocated to the new size. It also caps
-the PCIe DCB ring size and defers resizing until initialization has built
-the rings.
+Add XDP support for the PCIe FDMA path. The implementation operates on
+contiguous ATU-mapped buffers with memcpy-based XDP_TX, unlike the
+platform path which uses page_pool.
 
 > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/=
 drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> index f511e70613141..758554c951c52 100644
+> index 758554c951c52..949994874ed96 100644
 > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
 > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-
 [ ... ]
+> @@ -349,8 +466,17 @@ static int lan966x_fdma_pci_napi_poll(struct napi_st=
+ruct *napi, int weight)
+>  			 */
+>  			fdma_dcb_advance(fdma);
+>  			continue;
+> +		case FDMA_TX:
+> +			fdma_dcb_advance(fdma);
+> +			continue;
+> +		case FDMA_DROP:
+> +			fdma_dcb_advance(fdma);
+> +			continue;
 
-> @@ -428,9 +428,156 @@ static int lan966x_fdma_pci_init(struct lan966x *la=
-n966x)
+[Severity: Medium]
+Will this result in missing RX statistics for packets handled by XDP?
 
-[ ... ]
+Because the loop continues immediately on FDMA_TX and FDMA_DROP verdicts, it
+skips lan966x_fdma_pci_rx_get_frame() entirely. Since
+lan966x_fdma_pci_rx_get_frame() is the only place where rx_packets and
+rx_bytes are updated, does this mean packets dropped or transmitted by XDP
+are not counted as received on the interface?
 
-> +static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
-> +{
-> +	int max_mtu;
-> +
-> +	/* Nothing to resize until fdma_pci_init() has built the rings; it
-> +	 * sizes them from DEV_MAC_MAXLEN_CFG, which the caller already set.
-> +	 */
-> +	if (!lan966x->rx.lan966x)
-> +		return 0;
+For example, lan966x_fdma_pci_rx_get_frame() updates these stats:
 
-[Severity: High]
-Does this initialization guard safely prevent concurrent execution with
-the driver probe?
+        skb->dev->stats.rx_bytes +=3D skb->len;
+        skb->dev->stats.rx_packets++;
 
-In lan966x_fdma_pci_init(), the rx.lan966x pointer is assigned before the
-actual memory allocations are completed:
+Could these statistics be updated when the packets are processed in
+lan966x_fdma_pci_napi_poll(), even if they are consumed by XDP?
 
-lan966x_fdma_pci_init() {
-        ...
-        lan966x->rx.lan966x =3D lan966x;
-        ...
-        err =3D lan966x_fdma_pci_rx_alloc(&lan966x->rx);
-        ...
-}
-
-Since the network device is registered and accessible before the probe
-thread finishes calling lan966x_fdma_pci_init(), could a concurrent mtu
-change via netlink pass the guard here while the rings are only partially
-initialized?
-
-If this race occurs, the reload operation might attempt to free
-uninitialized or null memory via dma_free_coherent(), leading to potential
-memory leaks, data races on dma structures, or a kernel panic.
-
-> +
-> +	max_mtu =3D lan966x_fdma_get_max_frame(lan966x);
-> +	if (max_mtu =3D=3D lan966x->rx.max_mtu)
-> +		return 0;
-> +
-> +	return __lan966x_fdma_pci_reload(lan966x, max_mtu);
-> +}
+>  		}
+> -		skb =3D lan966x_fdma_pci_rx_get_frame(rx, src_port);
+> +		skb =3D lan966x_fdma_pci_rx_get_frame(rx,
+> +						    src_port,
+> +						    data,
+> +						    data_len);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928-lan966x-pc=
-i-fdma-v9-0-a17caf60f89a@microchip.com?part=3D12
+i-fdma-v9-0-a17caf60f89a@microchip.com?part=3D13
