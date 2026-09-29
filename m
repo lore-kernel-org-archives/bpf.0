@@ -1,144 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581A33D1A9A
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 22:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1C13438B9;
+	Tue, 29 Sep 2026 23:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790721423; cv=none; b=am8GUnKQNdam5LRVJE7HvSiCb3Isf7Sn/kiqeUSY5uGuw7OiureS5cy+Ni/YryXuQPFsPxwXzHHak02DY6FUhwEjFvGZoE3rIwglPHpDSfEyBP/jGgIIdbVB26V9vG8xwp1FIHUy34jwx+WXc8L0kfRal1JVcChMrNcr4Vz47zk=
+	t=1790723497; cv=none; b=d1Jh+//E2yyZMksTT/9ye+el9DsXRNR1gT9Zufv4F0LQQAhF0n5r/bkEg5cw8iaf98YFvjtELdCrzqT/8RFnBX6OBYtbY7rSDCQjBvoxtIxnHbBxOBFvrJPGcOcfy9JBDwYA/GBzBiyJb5k4VS5SRMQypRzkmMkLF/rjRwa+noA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790721423; c=relaxed/simple;
-	bh=kvCZjGahBEapG0Q2WIHo9mZMXuzUKFhRXSrgJeLl67s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uzXmsF3kcWg/kfQ3pwIQRtCrSwYlMSezP3bJTzLWqySQit1g2P5Nqs4PclYutgJg1N7Gzk4qPl4IXenzgyQxf4/OwCjlruPR0Tn3RpCp7q1WJTqCrMztwOsTjdAHA0Lwptw4JN5/yoLXTPa5q5yKdx0Dg/kT8B99+h5MR8sGcTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJdS55zZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790723497; c=relaxed/simple;
+	bh=IuPu+yMf9yB+vXg30wMwcp0KVm/4Ai9mZ7o97X7hE34=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=cJZLb2jlyV/DpIEvi+bscwzqMZ77fMZYNGY7X7kHycFTFkUj+1sGS0ZTk7qoGnNiwtLAE9MVjny/LK/nGueimwACHzi+i28aJDc8ld+iyij+fVLoN5g3FxI933CQwvu9SBkcC2HCEFsm/u1YjQx62QzT45Qu6jA46xeA60gKaXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mRCzRGvZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJdS55zZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C54751F00898;
-	Tue, 29 Sep 2026 22:37:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mRCzRGvZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FE91F000FF;
+	Tue, 29 Sep 2026 23:11:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790721422;
-	bh=fKydjraTDIvGXBmkHgY0ExVyEiaSEcWB4sup2wqB2JI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BJdS55zZq8Ey7YmcIqYcBkJCYx4L6Hxf3UknsirMIAkqz4mnu+h0KjUohH4a7GgrD
-	 SFxfMbICBNyWZlvd2SBetArdUBnnHik8/PDab+fobIR8f2sga7YEQFMZdk8INtJdZ/
-	 5KjlmDXwCcVw/pYb4kNE2REFoLJc7jEFxfhlL1+zJh15ae6il5+aF98PeUa5Wfrkht
-	 1ERM+1FqaD2CvHw/9k0uxrgmqbDX9vmQZ4L9tGNTUoklhMlFNBwjBdpqma6zAGJ/VA
-	 oBqperASV2+fJQ1bMVvHwRO9VD/9Hnw7NmuF0p63a3+/3ETgOCBQAxhN3o0ruKA99T
-	 NR/EjAdm5Lgeg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 5/5] net: drop GSO skbs instead of handing them
- to XDP
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jakub Kicinski" <kuba@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260928223648.2739371-6-kuba@kernel.org>
-References: <20260928223648.2739371-1-kuba@kernel.org>
- <20260928223648.2739371-6-kuba@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 22:37:01 +0000
-Message-Id: <20260929223701.C54751F00898@smtp.kernel.org>
+	s=k20260515; t=1790723496;
+	bh=IuPu+yMf9yB+vXg30wMwcp0KVm/4Ai9mZ7o97X7hE34=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=mRCzRGvZIYg7IzyFLgXBfBrkHUoluWTIYWcOtLej3wDtaIMUQLkJ4aKz3cvCms0qd
+	 A4UTsf212JZRi0/itEZCDuhHIXZaFqnMscQUY24TloncaXPu8sKLF5cpF0KoBAzzFX
+	 WnTbrHEPLnZF01t69Q4yALfqP34V/Z5ibDHQDDu5IpCnXtMuoTyVUA5SGCFCjTFtJe
+	 7LddOt6t5BJIWfhg5gtahaLHljD5BQDRm+yg+ZUj0jBIz03nKkH69Fm8uX7XHOVYTs
+	 57mv1eqHeVbSQi57Dw2I4/xE0Tpfa5gx4VFB6XYjgJRzskm3jAjUkCGjkUu2v54Eui
+	 d/aCi/oyOVfgw==
+Date: Tue, 29 Sep 2026 13:11:35 -1000
+Message-ID: <c0b95acfee4d3becce0718035c45e4dd@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, David Dai <david.dai@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+ sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH sched_ext/for-7.4] sched_ext: Work around pahole 1.32
+ dropping scx_bpf_task_set_lazy_resched() from BTF
+In-Reply-To: <7c139810be5ffc9764ed4236efc28794@kernel.org>
+References: <7c139810be5ffc9764ed4236efc28794@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] net: late GSO check in generic XDP causes DoS via skb_linearize()
-- [Medium] veth: explicitly dropped GSO packets bypass kfree_skb tracepoints
+Applied to sched_ext/for-7.4.
+
+Thanks.
+
 --
-
-commit 9f35b405d194efb7bc146b2c667a7b894d4c2f17
-Author: Jakub Kicinski <kuba@kernel.org>
-Subject: net: drop GSO skbs instead of handing them to XDP
-
-This commit explicitly drops GSO packets on input to XDP since XDP lacks
-helpers to fix up GSO state after modifications. It adds a check to generic
-XDP and veth paths to intercept and drop these packets.
-
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 71227d0389aa5..5635037e3b605 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -756,6 +756,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_r=
-q *rq,
->  	struct sk_buff *skb =3D *pskb;
->  	u32 frame_sz;
-> =20
-> +	if (unlikely(xdp_skb_feature_check(skb)))
-> +		goto drop;
-> +
-
-[Severity: Medium]
-When jumping to the drop label here, the code uses consume_skb():
-
-veth_convert_skb_to_xdp_buff() {
-	...
-drop:
-	consume_skb(skb);
-	*pskb =3D NULL;
-
-	return -ENOMEM;
-}
-
-Because *pskb is set to NULL, the caller's kfree_skb() on the error path
-does nothing. Does this bypass network drop observability tools like
-dropwatch, since consume_skb() makes it look like the packet was
-successfully consumed instead of explicitly dropped?
-
->  	if (skb_shared(skb) || skb_head_is_locked(skb) ||
->  	    skb_is_nonlinear(skb) ||
->  	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
-
-[ ... ]
-
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 096d1dedebfd4..fbeb3df4c11f7 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-[ ... ]
-> @@ -5516,6 +5517,9 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, s=
-truct xdp_buff *xdp,
->  	u32 metalen, act;
->  	int off;
-> =20
-> +	if (unlikely(xdp_skb_feature_check(skb)))
-> +		return XDP_DROP;
-> +
-
-[Severity: High]
-Does this check happen too late for generic XDP?
-
-In netif_receive_generic_xdp(), nonlinear and GSO packets are handled by
-calling netif_skb_check_for_xdp() which triggers skb_linearize() before
-this new check is reached:
-
-netif_receive_generic_xdp() {
-	...
-	if (skb_cloned(skb) || skb_is_nonlinear(skb) ||
-	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
-		if (netif_skb_check_for_xdp(pskb, xdp_prog))
-			goto do_drop;
-	}
-	...
-	act =3D bpf_prog_run_generic_xdp(*pskb, xdp, xdp_prog);
-	...
-}
-
-Because xdp_skb_feature_check() is added inside bpf_prog_run_generic_xdp(),
-could this force the host to perform an expensive memory allocation and copy
-to linearize large GSO packets, only to immediately drop them afterwards?=20
-
-Could this be exploited as a Denial of Service vector by flooding large GSO
-packets?
-
->  	/* The XDP program wants to see the packet starting at the MAC
->  	 * header.
->  	 */
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928223648.2739=
-371-1-kuba@kernel.org?part=3D5
+tejun
