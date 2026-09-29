@@ -1,119 +1,194 @@
-Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B624F30E5
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 23:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3404532FA18;
+	Tue, 29 Sep 2026 23:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790724852; cv=none; b=g+gpOu84xPB0nAkkiDny36M/Gjr6TTHJwIKf+t4sXflrqM4ncNAn4W34EJcm3CVkXh38fef8/JW9k7gtHrT17comCaYzu4WSXNlAXumbcG1NlWA3GCRAp+ARCJKwh1rsbYNgCKVbSixpCMxVPtm09fIcvv7NgaVD+THbP3gQQAI=
+	t=1790725038; cv=none; b=AM8yOkaBA6YA2p2tFDSjkcJ8o0sYhtESFEgCWTX3QbCfRpR4LbfUAW5rZehx4qqGqAE/y4p9dFdyWFHavy/cG7NXVReZBymqvzYn4wzidsfUn86u55Hk2C0pqVfAWJimcmth8ZGTybKY75dl1//XcN+FllPKGmOV3PBR4s9W7Ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790724852; c=relaxed/simple;
-	bh=TSFedrkdsAHaN9aejTdWtXWyUH/Srv+1ePO3zcjFvCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TaS1TiYy0M4kYp7aNxyreghY98+/huYOJkOb4FPYwI7H7iIQfonediRTIEy/0g8U1jaABPapMmozipwBL6aEHL4JbuvwlPZ8jrq9BGX6Y1wOwRY9dI2XbhtKH+sBYVa1JDKlDY5lpaLC5CghNr/4jsrjQDwbutOj/7AG63CQ9zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jL8kiCpp; arc=none smtp.client-ip=74.125.227.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790725038; c=relaxed/simple;
+	bh=uXvN0o/i49sd09BGH+OHO5km4+lh8+UVoNj8DyAMh2g=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=IV/LoAOU4Y7WSFCpmV4uHYt4T5csUNT5+WmD0M9o51KNjo67TD4hLBz4F43AutxWi0yhOHH6KfCSduCfQNTHJJApSZ6WFegKembplwcVLbq3rvqeKKuD29gXyq1+fC+IrfxOvbxVl2rT+NOPLM3HxjBWyTkauwTU09ktA0sxnok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5tMbgrk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jL8kiCpp"
-Received: by mail-pj2-f10.google.com with SMTP id d9443c01a7336-2dd9bce707bso16544155ad.1
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 16:34:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790724850; x=1791329650; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9DSKh0dbyMhLQzORvY3t9iqgHHDfHJLJlZzXZ+x7vpI=;
-        b=jL8kiCppM4U4HnL+R2A9Zfwm90tIwiUdTOx8lBShTYX8C/SQWViQD7mP7U9MAUdGBk
-         iJXqxMj6xULPnfzINm4WB0HB9KG6gu036lMb3E40ThBXZ4Nhx1qF+DzVmtfJLEbbmsAi
-         3WVh2NEnyMl8PvM0v/uknCaZ/DWViVPWPoneN8z8jh/zGdEJyJq2j/QI+yopfR+MYOWy
-         3PiLWaiWXZCUeua3a895mdqFAzbu5z8rYclWnSd8wYWY8zBk6X2DLCrAIXjwp/8ycTK6
-         C7njUsgCpYfzQJVqGKsK0ZZoGDgbWk4uv8O1Kv6Bh3eOqJal2iFRqa0bHVLmm4SgO+T4
-         9reQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790724850; x=1791329650;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9DSKh0dbyMhLQzORvY3t9iqgHHDfHJLJlZzXZ+x7vpI=;
-        b=yrcFQ0mfp881QsWCLeh5iq/+UlkAj4J/H0atrR546KCXHYhOw4c6cP/SPoxCxwz53d
-         /XwK1OnAeRCEHfMOhi0O0f91iDYwVjB3y3Cx195qeSspqVQaY5IIvdyHHxtoJFCi9IyZ
-         LrTI7dbbtb+0Bgya/0eqIunEaWYS4diNVnJbPV+DzmWJ3e5W2KbeK0Yk+TGI8Wa5lw3H
-         2KTa//ovStgHJqM8LEdlJiXi1dfz6Pd3lID1bF70McIaWH9+pvFMm7F0w53mjSBVardO
-         v4MrJ7uHYaqcuLXMsZbHPZFHvR0iMCdxjps7UDFKmeqAO35yHC46pnvT+Ue4GlINzvS3
-         wHKg==
-X-Forwarded-Encrypted: i=1; AKwUvBzpTpPRMGBOI2qbDhZTOvw3lR44CtpopYnM5Wipl5uLjAfzYDX5H0VI+hZzIp8p1BkhGq4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI1z3sHAH1MBn/QmO+fpaHa6JsiVVjR4PlxJ/YujlsgwG7Edo6F
-	PjxU+ti24L2/as7B1GPCsTVl1pXHraIgJOrmpt2MkyXmWwkK0mItgLqT
-X-Gm-Gg: AYBFou2ubpyIxo+yjrMrYacD2759EtdFPBRFeUnNgP8iWc0Q9dJHAktqKXJeA1+x7SB
-	W/GhGKGjLbRyT0bnKquQiw2ErS/V/tQs5yGOxWjD2Y9oUF8FdzSW70N97guXpUnG7Qjm52broGO
-	MUOnZZaFMcW0WhtkbR6737IwDGtC3VD+xPGkc04w+zMBy6CqYdS+IillmwA4OJUH3tifa8EtK+1
-	ak7D11GtJoRwyF/AguIu5Yl26hhDMX0VgchTdcGt17CV+Opl815nQ/ZCIY3R1gmSWw5x/s/khaE
-	lRDpbbWzrg/YmOYzbP6wQrUbVaqLx+zCSDxXRZz9SaWXy+BFvyrGJYZiFhsSo5svFfU9HWQEC5c
-	Pw0UzFddFHJuAgYd+4/AEK9btflpIHn4t6qsWivWrgNxHdfb2GxwM4kyGX64mKAS1fWx/ygaPyx
-	PNqx0CJR4V/jRqc5q06YW+qpIpoSE5RPxxfzzTXH59/E3DBsdjE1NBqI3iV/9Xhp7j
-X-Received: by 2002:a17:902:f650:b0:2df:ab73:7e94 with SMTP id d9443c01a7336-2e2de587119mr4694255ad.51.1790724849971;
-        Tue, 29 Sep 2026 16:34:09 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:48::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e2dd516cd9sm1984695ad.30.2026.09.29.16.34.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 16:34:09 -0700 (PDT)
-Date: Tue, 29 Sep 2026 16:33:53 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, jv@jvosburgh.net, 
-	hawk@kernel.org, sdf@fomichev.me, emil@etsalapatis.com, liuhangbin@gmail.com, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, willemdebruijn.kernel@gmail.com, 
-	aleksander.lobakin@intel.com
-Subject: Re: [PATCH net-next 5/5] net: drop GSO skbs instead of handing them
- to XDP
-Message-ID: <arxK3DhmtyQ97Ewq@devvm7509.cco0.facebook.com>
-References: <20260928223648.2739371-1-kuba@kernel.org>
- <20260928223648.2739371-6-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5tMbgrk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA53B1F000FF;
+	Tue, 29 Sep 2026 23:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790725036;
+	bh=WHiYLve/r8dKdJur6CLdF1ljoKuGu9MvD9+c1UIePVY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=M5tMbgrkov2WEkxH+jdoYNwC5CHPdy7Zt3lqertwdfZbF/qqbbbpmEvIr2GgeQMl/
+	 k1X6mb6cu+0cycJhbCZ+xCaA/MQ0l3UblRETJ9399UuLJ1POWo2dxyvoFc4cGGFQd+
+	 R2yMBXQZyZF45DB1hXqD+u/P5UPOus5mVxEyFdvKFOkouW0UzTNDh9a5RL5NXyy0cC
+	 /X9o+GxZEaNOsiKsga+hBawTLGcpXqm8mU45DFdDPS3mDafYy63Gd6gFEjOKZHgSOf
+	 Ar6j0jcUIuNsmq4ymJrfExlkwtTc6dO4uat03Vo4h42GdSQ8WkayyJKq7NRU0xZs7d
+	 XDtEYQVnYKuoA==
+Content-Type: multipart/mixed; boundary="===============6591287826219115497=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260928223648.2739371-6-kuba@kernel.org>
+Message-Id: <d8aa770b82f03b9cbae1bc84c8505c32d451abde5fe4517a903f1311b940b0d6@mail.kernel.org>
+In-Reply-To: <20260929014206.4175245-1-irogers@google.com>
+References: <20260929014206.4175245-1-irogers@google.com>
+Subject: Re: [PATCH v1] perf/core: Restore header fields in sideband output callbacks
+From: bot+bpf-ci@kernel.org
+To: irogers@google.com,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org
+Cc: mark.rutland@arm.com,alexander.shishkin@linux.intel.com,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,james.clark@linaro.org,song@kernel.org,ast@kernel.org,linux-perf-users@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 29 Sep 2026 23:37:15 +0000 (UTC)
 
-On 09/28, Jakub Kicinski wrote:
-> skb BPF paths have a number of helpers to fix up the GSO
-> state after packet modifications. XDP has no such support.
-> 
-> "Real" / driver XDP runs before the SW GRO, and drivers generally
-> disable HW-GRO when XDP is attached (with the exception of IDPF,
-> story for another time), so this is not an issue. We also try
-> to disable HW-GRO and elide SW GRO when generic XDP prog is
-> attached. These precautions are not 100% today, and IMHO fixing
-> that is impossible. Let's explicitly drop GSO skbs on input to XDP.
-> 
-> First example how things can go sideways today - bonding.
-> We only disable & elide GRO on the device to which program is
-> attached. Nothing reaches the devices below it, and for a stacked
-> device that is where the packets come from:
-> 
->   ip link set dev bond0 xdpgeneric obj prog.o sec xdp
-> 
-> leaves every slave with GRO on and no xdp_prog of its own, so
-> netif_elide_gro() lets them coalesce as usual. bond_handle_frame()
-> then returns RX_HANDLER_ANOTHER, __netif_receive_skb_core() loops back
-> round to another_round with skb->dev switched to the bond, and the
-> program gets handed a packet which was never on the wire. HW-GRO is
-> the same story - while netif_disable_lro() walks the lower devices,
-> its HW-GRO counterpart never did (this is largely the point of
-> distinguishing between LRO and HW-GRO).
-> 
-> Example two - veth. Generic XDP on a veth gets there by a different route.
-> veth_xdp_set() takes NETIF_F_GSO_SOFTWARE away from the peer so that
-> no GSO skb is ever built for a device running XDP, but generic XDP does
-> not go through ndo_bpf, so none of that happens.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+--===============6591287826219115497==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index db7b76d6b68a..2be915a293ce 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -9032,6 +9032,11 @@ static void perf_iterate_sb_cpu(perf_iterate_f output, void *data)
+>   *
+>   * For new callers; ensure that account_pmu_sb_event() includes
+>   * your event, otherwise it might not get delivered.
+> + *
+> + * Note: @data is shared across all @output calls, so any fields modified
+> + * incrementally or conditionally (e.g. header.size via
+> + * perf_event_header__init_id()) must be saved and restored by @output,
+> + * or unconditionally re-initialized on each call.
+>   */
+>  static void
+>  perf_iterate_sb(perf_iterate_f output, void *data,
+
+Peter Zijlstra identified that perf_event_switch_output() also modifies
+header.type and header.size before calling perf_event_header__init_id()
+and suggested it might need similar treatment.
+
+Looking at perf_event_switch_output():
+
+    if (event->ctx->task) {
+        se->event_id.header.type = PERF_RECORD_SWITCH;
+        se->event_id.header.size = sizeof(se->event_id.header);
+    } else {
+        se->event_id.header.type = PERF_RECORD_SWITCH_CPU_WIDE;
+        se->event_id.header.size = sizeof(se->event_id);
+        ...
+    }
+    perf_event_header__init_id(&se->event_id.header, &sample, event);
+
+The new comment mentions that fields must be "saved and restored by
+@output, or unconditionally re-initialized on each call."
+perf_event_switch_output() does unconditionally reinitialize both
+header.type and header.size at the start of each callback invocation,
+which should prevent the accumulation bug.
+
+Is this analysis correct, or does perf_event_switch_output() need the
+save/restore pattern as well?
+
+> @@ -9726,6 +9731,7 @@ static void perf_event_mmap_output(struct perf_event *event,
+>  	struct perf_sample_data sample;
+>  	int size = mmap_event->event_id.header.size;
+>  	u32 type = mmap_event->event_id.header.type;
+> +	u16 misc = mmap_event->event_id.header.misc;
+>  	bool use_build_id;
+>  	int ret;
+>
+
+[ ... ]
+
+> @@ -9783,6 +9789,7 @@ static void perf_event_mmap_output(struct perf_event *event,
+>  out:
+>  	mmap_event->event_id.header.size = size;
+>  	mmap_event->event_id.header.type = type;
+> +	mmap_event->event_id.header.misc = misc;
+>  }
+
+[ ... ]
+
+> @@ -10247,6 +10254,7 @@ static void perf_event_ksymbol_output(struct perf_event *event, void *data)
+>  	struct perf_ksymbol_event *ksymbol_event = data;
+>  	struct perf_output_handle handle;
+>  	struct perf_sample_data sample;
+> +	u16 header_size = ksymbol_event->event_id.header.size;
+>  	int ret;
+>
+>  	if (!perf_event_ksymbol_match(event))
+> @@ -10257,13 +10265,15 @@ static void perf_event_ksymbol_output(struct perf_event *event, void *data)
+>  	ret = perf_output_begin(&handle, &sample, event,
+>  				ksymbol_event->event_id.header.size);
+>  	if (ret)
+> -		return;
+> +		goto out;
+>
+>  	perf_output_put(&handle, ksymbol_event->event_id);
+>  	__output_copy(&handle, ksymbol_event->name, ksymbol_event->name_len);
+>  	perf_event__output_id_sample(event, &handle, &sample);
+>
+>  	perf_output_end(&handle);
+> +out:
+> +	ksymbol_event->event_id.header.size = header_size;
+>  }
+
+[ ... ]
+
+> @@ -10337,6 +10347,7 @@ static void perf_event_bpf_output(struct perf_event *event, void *data)
+>  	struct perf_bpf_event *bpf_event = data;
+>  	struct perf_output_handle handle;
+>  	struct perf_sample_data sample;
+> +	u16 header_size = bpf_event->event_id.header.size;
+>  	int ret;
+>
+>  	if (!perf_event_bpf_match(event))
+> @@ -10347,12 +10358,14 @@ static void perf_event_bpf_output(struct perf_event *event, void *data)
+>  	ret = perf_output_begin(&handle, &sample, event,
+>  				bpf_event->event_id.header.size);
+>  	if (ret)
+> -		return;
+> +		goto out;
+>
+>  	perf_output_put(&handle, bpf_event->event_id);
+>  	perf_event__output_id_sample(event, &handle, &sample);
+>
+>  	perf_output_end(&handle);
+> +out:
+> +	bpf_event->event_id.header.size = header_size;
+>  }
+
+[ ... ]
+
+> @@ -10499,6 +10512,7 @@ static void perf_event_text_poke_output(struct perf_event *event, void *data)
+>  	struct perf_text_poke_event *text_poke_event = data;
+>  	struct perf_output_handle handle;
+>  	struct perf_sample_data sample;
+> +	u16 header_size = text_poke_event->event_id.header.size;
+>  	u64 padding = 0;
+>  	int ret;
+>
+> @@ -10510,7 +10524,7 @@ static void perf_event_text_poke_output(struct perf_event *event, void *data)
+>  	ret = perf_output_begin(&handle, &sample, event,
+>  				text_poke_event->event_id.header.size);
+>  	if (ret)
+> -		return;
+> +		goto out;
+>
+>  	perf_output_put(&handle, text_poke_event->event_id);
+>  	perf_output_put(&handle, text_poke_event->old_len);
+> @@ -10525,6 +10539,8 @@ static void perf_event_text_poke_output(struct perf_event *event, void *data)
+>  	perf_event__output_id_sample(event, &handle, &sample);
+>
+>  	perf_output_end(&handle);
+> +out:
+> +	text_poke_event->event_id.header.size = header_size;
+>  }
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36643934404
+--===============6591287826219115497==--
