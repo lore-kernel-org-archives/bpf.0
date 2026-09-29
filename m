@@ -1,100 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21C5296BCF;
-	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A56D3BC680;
+	Tue, 29 Sep 2026 06:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790662830; cv=none; b=g0dR+5MNE+Sbp9Em6pl2gAmthOkftZsl8pvTaU3Pwb7W/3ViBfwZIWTuYfociCRKU6UEx6DkBzP+vtHGdCj2Edxzf7M/O+djrf4yH7Migv2BIoWZXSw/3Q9+ZpQCaob3iA993cXBIZAGutXfFrl8ca0Wabj3XlpCxWiVme4VYQM=
+	t=1790664874; cv=none; b=nUsomKrjnc83IxtTs9xHmDjvptkVdWi9Bs0OQ6/as3GDOyq0C+IOuPX8ZUyhX2kt/SpaU2LUQt0339o2QjEqLEza9W+1YcFBO0WeJW7aD4QHLrQDcAVae/L3cs6eg0h7ccRHiBYhH4j06Wa8ajt6G5lyIhgntpU4ZDx6JhJQ1aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790662830; c=relaxed/simple;
-	bh=nBq0ce4U8pjNwOIB6srOmZAAPAVFm/4GWAgw9e8Y3ds=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=YQqt3FU44wfZsLETUCNUSlsk0u9t8sAkkZyz9Qaqr36kqb2KsWX5Ow0dlUWtsOugDyb24xrPJ5z+xGNQ//UbY+wk8ESLO+lYTU/Jhr1/eQcIwPWFXcHWqbOtw1z3/PzaAHS/gahp701tc1rnVIDYaMD/vJoJUyiGYAXqPch15mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEu8IKuJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790664874; c=relaxed/simple;
+	bh=fvVro5k3PR+3AomRvHgSoTQsYco3oL7ZrDn8H9OG80o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SFhGzEyTCEATJTwpCkL+hvLAv9/pn8DJYDGr88nsQ1PNHxDdxvb5Vs7BizPKNgmxcXuiprc3ID5z+UufYoF5Vq+wSMeeSMBetDm7v+lwDbom8aBYietsJdr2ahzVMs8vDinR9TQ/gHTCZauayHnn1Z94HBe5I+L9VHIGuiFnbQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mPDvVPIs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEu8IKuJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE9C1F00893;
-	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mPDvVPIs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AF81F000FF;
+	Tue, 29 Sep 2026 06:54:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790662829;
-	bh=lTp0iuvGgJlzLvCthN8H5DikguIjM02dg6D/PwjsUlQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=FEu8IKuJTM9UMyqWZRahuIUiQ6ZhkU4IDa2UZdQ+AHlfxY177GM88K5j47ZpxQMhi
-	 9FiOENuKjoLTRooDK6SGMn2gMDlmCoehRnP5Cw/6TyFOVTgHclMnxY1UKAjDkiTEI6
-	 K/Sd5XrAq9hpy03DSh95TZmK/hIC7jyt/XZ/GJsm1/KicRH8pbBdQeoXB2Cik/5FrY
-	 LhMT7P074WF9asToy5KM2I1lRfV//rJ6lF3tB8DG7vCsCS3rFqo0lGgSOlqUmWzNHX
-	 s6HPW0a40ZjDMKNQPLiD/ZEq0vCO79vhQpa0nH73XgM4QaTO4I76tb4UQji83RPvZR
-	 pHebvU6K9zPcg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A59239253E9;
-	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1790664872;
+	bh=frSugISh6ArGwMVikkGuowUUcfyIsFmCGNO08QVoGlM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mPDvVPIsCW1jE6xXRRu36jGSKhoB6gkBF5/x2mZzSwevIThy1W8kgIJafiodO57Pw
+	 jbIF4TZCI+++nk8+KoUXxQOP4eWq2i/rXQ966+/nMEE7rKBi5Z5UmQCJxzHhJCrX5x
+	 sdjRWxnDr6NYga4Ofl4rZ2MqeG9crwkRKC3lzCHo0xLhzEYatEReSHb6KAkaJ5PXDV
+	 O8ARPrqHDO+PgsRdHOF1KJ9KrJgCuejQZwYl+8RZg83+lZeEZTzPVZrfex1kx5TVTX
+	 Gtsh+RKpwW0lbgEdfN/NlVldgQW7k2ljgKd0yh7fcOVCicVxslwl2bGi1VJSz7pqmM
+	 GS0t1pNVgio6A==
+Date: Tue, 29 Sep 2026 08:54:28 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Albert Esteve <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Javier Martinez Canillas <javierm@redhat.com>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+Message-ID: <artcVqmYRxeZ4dHs@houat>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928163711.GA210522@killaraus.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v5 0/3] bpf: Fix use-after-free of progs detached from
- busy trampolines
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179066282803.293113.8557815551946775052.git-patchwork-notify@kernel.org>
-Date: Tue, 29 Sep 2026 06:20:28 +0000
-References: <20260926135605.1217928-1-florent.revest@linux.dev>
-In-Reply-To: <20260926135605.1217928-1-florent.revest@linux.dev>
-To: Florent Revest <florent.revest@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- kpsingh@kernel.org, john.fastabend@gmail.com, leon.hwang@linux.dev,
- zirajs7@gmail.com, rhkrqnwk98@gmail.com, puranjay@kernel.org,
- xukuohai@huaweicloud.com, iii@linux.ibm.com, hbathini@linux.ibm.com,
- chleroy@kernel.org, naveen@kernel.org, bjorn@kernel.org, pulehui@huawei.com,
- yangtiezhu@loongson.cn, hengqi.chen@gmail.com, linux-kernel@vger.kernel.org,
- aou@eecs.berkeley.edu, agordeev@linux.ibm.com, alex@ghiti.fr, bp@alien8.de,
- catalin.marinas@arm.com, borntraeger@linux.ibm.com,
- dave.hansen@linux.intel.com, emil@etsalapatis.com, hca@linux.ibm.com,
- hpa@zytor.com, chenhuacai@kernel.org, ihor.solodrai@linux.dev,
- mingo@redhat.com, linux-arm-kernel@lists.infradead.org,
- linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- loongarch@lists.linux.dev, maddy@linux.ibm.com, mark.rutland@arm.com,
- mpe@ellerman.id.au, npiggin@gmail.com, palmer@dabbelt.com,
- paulmck@kernel.org, pjw@kernel.org, ritesh.list@gmail.com,
- sshegde@linux.ibm.com, shuah@kernel.org, svens@linux.ibm.com,
- tglx@kernel.org, gor@linux.ibm.com, kernel@xen0n.name, will@kernel.org,
- x86@kernel.org
-
-Hello:
-
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Sat, 26 Sep 2026 13:55:57 +0000 you wrote:
-> A task running in a trampoline image can call a prog that was detached
-> and freed in the meantime, when it slept in a sleepable prog before
-> reaching the detached one or was preempted right before calling it.
-> Patch 1 handles the preempted case with an RCU tasks grace period,
-> patch 2 handles the sleeping case by patching detached progs out of the
-> images that still call them and patch 3 adds a selftest for the sleeping
-> case.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v5,1/3] bpf: Wait for an RCU tasks grace period before freeing trampoline progs
-    https://git.kernel.org/bpf/bpf/c/0fb5751a6e41
-  - [bpf,v5,2/3] bpf: Skip detached progs in trampoline images that are still in use
-    https://git.kernel.org/bpf/bpf/c/17637e1a581a
-  - [bpf,v5,3/3] selftests/bpf: Detach a trampoline prog while a task sleeps before it
-    https://git.kernel.org/bpf/bpf/c/d5288c519bbd
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="nqvv5v626rm3lewc"
+Content-Disposition: inline
+In-Reply-To: <20260928163711.GA210522@killaraus.ideasonboard.com>
 
 
+--nqvv5v626rm3lewc
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+MIME-Version: 1.0
+
+Hi Laurent,
+
+On Mon, Sep 28, 2026 at 07:37:11PM +0300, Laurent Pinchart wrote:
+> On Mon, Sep 28, 2026 at 06:22:00PM +0200, Maxime Ripard wrote:
+> > Panels in general, and MIPI-DSI panels in particular, are pretty
+> > difficult to support and require pretty much a panel driver for each
+> > panel produced. Most of them are pretty simple, and require an opaque
+> > initialization sequence that is usually poorly documented.
+> >=20
+> > This creates a tension between OEMs and distros because OEMs will
+> > typically get a new panel to react to a sourcing issue during
+> > production, and thus need some swift turnaround between getting their
+> > new panel and it being operational in the OS. Distributions on the other
+> > hand can take years to ship a kernel with that new panel driver.
+> >=20
+> > To solve this, I followed the example of HID-BPF and wrote a panel
+> > driver that will rely on BPF programs to perform the panel
+> > initialization. That way, we can ship the programs separately from the
+> > kernel, and with a different lifecycle. If this driver is accepted, the
+> > plan is to have a userspace component started by udev to identify and
+> > load the right BPF program for the panels found on the device.
+>=20
+> Interesting idea.
+>=20
+> How would that work for devices that want early display support ? In
+> particular, how does it interact with your recent work on "fastboot"
+> support (with the kernel drivers taking over a running display
+> configured by the boot loader) ?
+
+That's a very good question, and I haven't really thought about it tbh.
+I don't think it would be super hard to implement though. For panels
+itself, we don't typically track anything in the state. panel_bridge
+however would still need to fill its own bridge state but that only
+contains the bus formats and flags which can be infered from the DT.
+
+Another thing we might need for the connector is whether it's active or
+not, but panel ICs typically don't tell you that anyway, and you can
+always infer it from the encoder / previous bridge state.
+
+And then, for the first kernel modeset, we end up in the same situation
+than a regular driver I suppose.
+
+> I'm also wondering about the incentives for vendors to upstream the
+> code. How will we avoid having a proliferation of out-of-tree drivers ?
+
+I'm not really concerned about that part, because:
+
+* You can *already* support a panel with a proprietary out-of-tree
+  module, and it hasn't really affected us so far
+
+* In fact, it's easier to decompile an hypothetical proprietary BPF
+  program than an compiled .ko file (that we wouldn't be able to load
+  anyway), so if we really end up there, it would be easy for us to get
+  to the source code again.
+
+* And panels are so trivial that I don't really see the importance of
+  having support for them in the kernel anyway. It's constant tedious
+  work that is barely documented, fragile, and provides very little
+  value. And the vast majority of the panels are not supported anyway
+  except for some willing OEMs (that are using panel-edp anyway) and
+  willing hobbyists/consultants. So we probably wouldn't miss much.
+
+Maxime
+
+--nqvv5v626rm3lewc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCartgoAAKCRAnX84Zoj2+
+dt9YAYDeU+GLtwcwZIrfjpOUwqvG0dXKTb7mMZ52PfHb8HcUxp3eaOBzW24xy6Y9
+WlLfWwkBgLLyxC4OO+6o0WjZXUX0tkDmLjSIY34SioQZFBv1MwyPij+tOMXuIS6y
+2wHe+UzVuQ==
+=+zAf
+-----END PGP SIGNATURE-----
+
+--nqvv5v626rm3lewc--
