@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5BA2ED154
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A831D4F5E0
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:17:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790641060; cv=none; b=iyY/9VXoNYxzIk9IF/tJJeVtRHpk9Ij09cJJD2wTOM6UsZ/0npOrV5RtUDC/8V5Zr3b77o/JAjPGGEGZJQ9OX7n3ZlzWpyTIwBwhbY5HpnB1ugoQNvvwSFUIBQgB1UbfSxGXLw2I4AejZODwPuMw7JKiDbND71I0/lcwV0O3bgU=
+	t=1790641070; cv=none; b=TftVD/CIgM+T7hel4MyGljOpZsVL/gJCP8/Uo7jC5nihb9It4sEnnKr1ctobIbIBw4YeOWroWrt6937atzqgATAwgTE/u7+PiaxBr7um9cnW/Z3cCIYtd7YI4ve7DIC8AKy21tUuYuCw4uaVb5He1b8hiyJxM/BRmbcqMWGqyQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790641060; c=relaxed/simple;
-	bh=DD27qyXbSZFvO9ACkPbYVg3PK3qqojDhJBHtbKmU48Y=;
+	s=arc-20240116; t=1790641070; c=relaxed/simple;
+	bh=jrk75JDt8Yv5LMOPbhkC2+a3gzVVYergLTrak0U9be8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bFZn4XQwLoYytZ9gQh3/S3m4VZ2hCE1Lafi/ztIgwnEnGlwpz4Bo+bZdz5l6crrJoI6t3obDJ/EIOkHBxfnjsVVx3wRN5IDf7RWpT7xYgISOJ1oSN5rVJ2AsEu3QX9nhQ9yUALtGkCMUH5CJ3pGpPTkJr64KBCSn7uY15xKRlN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=LVHIZF5v6vRxUBspIiPj0H0q8i3J9mYPncTOQxdTlj6mAgKEHsOjdY4IySwj3JxklMaUlZ/KsiWKj4xMd3U+Y1TaPOYIMqFfQdxQGd5xA/f9sIWDyFWh7/64vfvF8USyR4qDbtFxhLE0pHuIPijHxg987iCCldOmvMiTYEwrmRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 6A44A2DE076237; Mon, 28 Sep 2026 17:17:26 -0700 (PDT)
+	id E57C52DE076A3A; Mon, 28 Sep 2026 17:17:46 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v7 16/22] libbpf: Collect .bpf_cleanup records and pass them to the kernel
-Date: Mon, 28 Sep 2026 17:17:26 -0700
-Message-ID: <20260929001726.3254850-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v7 20/22] selftests/bpf: Add __set_global() and __ret_global() test tags
+Date: Mon, 28 Sep 2026 17:17:46 -0700
+Message-ID: <20260929001746.3256138-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260929001601.3242665-1-yonghong.song@linux.dev>
 References: <20260929001601.3242665-1-yonghong.song@linux.dev>
@@ -37,514 +37,486 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Parse the compiler-emitted .bpf_cleanup section and hand the resulting
-table to BPF_PROG_LOAD.
+A test that has to look at a program's state after it ran needs a driver =
+of
+its own: open and load a skeleton, set an input, call
+bpf_prog_test_run_opts(), read a variable back, destroy the skeleton. The
+loader already does all of that for __retval(), and the only thing missin=
+g
+is reaching the program's globals.
 
-Each record is three 4-byte fields, and each field is a byte offset into
-some code section named by a matching .rel.bpf_cleanup relocation.
-bpf_object__init_cleanup_info() resolves both halves once at open time an=
-d
-keeps (section, instruction index) pairs; it rejects a record whose field
-has no relocation, whose relocation is not one of the two 32-bit types th=
-at
-spell a data reference to a code section -- R_BPF_64_NODYLD32 from LLVM,
-R_BPF_64_ABS32 from GNU as -- or whose offset is not instruction aligned.
-LLVM leaves the section's sh_entsize unset, which is taken to mean the si=
-ze
-assumed here, so a section declaring any other is refused.
+__set_global(var, value) writes one before the run and __ret_global(var,
+value) checks one after it, both of them implying the execution __retval(=
+)
+asks for. Either may be given more than once, for a test with more than
+one input or more than one thing to look at afterwards; past
+MAX_GLOBAL_VARS a tag is refused rather than quietly replacing the one
+before it.
 
-The records are sorted by begin_off once the offsets are final, since the
-kernel wants the table sorted with disjoint ranges to find the record
-covering a call site with a binary search, and they arrive in .bpf_cleanu=
-p
-order, which says nothing about where the subprograms they describe were
-appended. Overlapping ranges are reported here, where the program name an=
-d
-both regions are still at hand.
+The variable is found the way veristat finds one: the map whose name ends
+in ".bss" or ".data", the datasec of that name in the object's BTF, then
+the variable within it. Those are two lookups that nothing so far has mad=
+e
+agree on a size, so where the variable lands is checked against the map i=
+t
+was found beside. Four and eight byte variables are supported, which is
+what a counter or a bitmask needs; anything else is refused rather than
+read at the wrong width.
 
-bpf_object_load_prog() then passes the per-program table through the
-bpf_prog_load() options added in the previous patch, with the record size
-carried on the program the way func_info and line_info carry theirs.
-bpf_program__clone() carries it too -- that is the load path veristat use=
-s,
-and without the table the kernel sees landing pads nothing reaches and
-refuses the program with "unreachable insn".
+A value is held to the range its variable can represent, signedness taken
+from the BTF the way veristat's set_global_var() does, and narrowed to
+what is stored. Both tags use the one rule, so a negative literal means
+the same to each: without it __ret_global(err, -22) on an int could never
+match, the tag parsing 64 bits while the read gave back 32. Unlike
+veristat this takes no enum names and runs native-endian only.
 
+The value may be a '|' separated list of terms, so that a bitmask reads i=
+n
+the test the way it is written in the program.
+
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/libbpf.c          | 310 ++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf_internal.h |   3 +
- 2 files changed, 313 insertions(+)
+ tools/testing/selftests/bpf/progs/bpf_misc.h |   7 +
+ tools/testing/selftests/bpf/test_loader.c    | 314 ++++++++++++++++++-
+ 2 files changed, 320 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7eb15a013a83..872601183112 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -516,6 +516,11 @@ struct bpf_program {
- 	void *line_info;
- 	__u32 line_info_rec_size;
- 	__u32 line_info_cnt;
-+
-+	struct bpf_cleanup_info *cleanup_info;
-+	__u32 cleanup_info_rec_size;
-+	__u32 cleanup_info_cnt;
-+
- 	__u32 prog_flags;
- 	__u8  hash[SHA256_DIGEST_LENGTH];
-=20
-@@ -552,6 +557,7 @@ struct bpf_struct_ops {
- #define STRUCT_OPS_SEC ".struct_ops"
- #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
- #define ARENA_SEC ".addr_space.1"
-+#define CLEANUP_SEC ".bpf_cleanup"
-=20
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
-@@ -683,6 +689,25 @@ struct elf_sec_desc {
- 	Elf_Data *data;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
+/selftests/bpf/progs/bpf_misc.h
+index f3dbc3b59bff..9afa163fac5a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -93,6 +93,11 @@
+  * __failure         Expect program load failure in privileged mode.
+  * __failure_unpriv  Expect program load failure in unprivileged mode.
+  *
++ * __set_global      Set a global variable of the program to a value bef=
+ore
++ *                   executing it.
++ * __ret_global      Execute the program and check that a global variabl=
+e
++ *                   holds the given value afterwards. The variable has =
+to
++ *                   live in .bss or .data and be four or eight bytes wi=
+de.
+  * __retval          Execute the program using BPF_PROG_TEST_RUN command=
+,
+  *                   expect return value to match passed parameter:
+  *                   - a decimal number
+@@ -160,6 +165,8 @@
+ #define __log_level(lvl)	__test_tag("test_log_level=3D" #lvl)
+ #define __flag(flag)		__test_tag("test_prog_flags=3D" #flag)
+ #define __retval(val)		__test_tag("test_retval=3D" XSTR(val))
++#define __set_global(var, val)	__test_tag("test_global_set=3D" #var ":" =
+XSTR(val))
++#define __ret_global(var, val)	__test_tag("test_global_ret=3D" #var ":" =
+XSTR(val))
+ #define __retval_unpriv(val)	__test_tag("test_retval_unpriv=3D" XSTR(val=
+))
+ #define __auxiliary		__test_tag("test_auxiliary")
+ #define __auxiliary_unpriv	__test_tag("test_auxiliary_unpriv")
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
+lftests/bpf/test_loader.c
+index 25eeb1c1248b..2492841f7a49 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -50,6 +50,13 @@ enum stack_mode {
+ 	SMALL_STACK	=3D 1 << 1,
  };
 =20
-+#define CLEANUP_REC_FIELDS	(sizeof(struct bpf_cleanup_info) / sizeof(__u=
-32))
++#define MAX_GLOBAL_VARS 8
 +
-+/* Index of each field of struct bpf_cleanup_info, read as an array of _=
-_u32. */
-+enum {
-+	CLEANUP_REC_BEGIN,
-+	CLEANUP_REC_END,
-+	CLEANUP_REC_PAD,
++struct global_var {
++	char *name;
++	__u64 val;
 +};
 +
-+/*
-+ * One (begin, end, landing_pad) triple from .bpf_cleanup, each field re=
-solved
-+ * from its relocation to a section and an instruction index within it. =
-Final
-+ * indices wait for subprogram placement, which differs per main program=
-.
-+ */
-+struct cleanup_raw_rec {
-+	int sec_idx[CLEANUP_REC_FIELDS];
-+	size_t insn_idx[CLEANUP_REC_FIELDS];
-+};
-+
- struct elf_state {
- 	int fd;
- 	const void *obj_buf;
-@@ -702,6 +727,8 @@ struct elf_state {
- 	bool has_st_ops;
- 	int arena_data_shndx;
- 	int jumptables_data_shndx;
-+	Elf_Data *cleanup_data;
-+	int cleanup_shndx;
+ struct test_subspec {
+ 	char *name;
+ 	char *description;
+@@ -62,6 +69,10 @@ struct test_subspec {
+ 	int retval;
+ 	bool execute;
+ 	__u64 caps;
++	struct global_var set_globals[MAX_GLOBAL_VARS];
++	int set_global_cnt;
++	struct global_var ret_globals[MAX_GLOBAL_VARS];
++	int ret_global_cnt;
  };
 =20
- struct usdt_manager;
-@@ -779,6 +806,9 @@ struct bpf_object {
- 	void *jumptables_data;
- 	size_t jumptables_data_sz;
-=20
-+	struct cleanup_raw_rec *cleanup_recs;
-+	size_t cleanup_rec_cnt;
-+
- 	struct {
- 		struct bpf_program *prog;
- 		unsigned int sym_off;
-@@ -848,7 +878,10 @@ static void bpf_program__exit(struct bpf_program *pr=
-og)
- 	zfree(&prog->sec_name);
- 	zfree(&prog->insns);
- 	zfree(&prog->reloc_desc);
-+	zfree(&prog->cleanup_info);
-=20
-+	prog->cleanup_info_rec_size =3D 0;
-+	prog->cleanup_info_cnt =3D 0;
- 	prog->nr_reloc =3D 0;
- 	prog->insns_cnt =3D 0;
- 	prog->sec_idx =3D -1;
-@@ -1600,6 +1633,7 @@ static struct bpf_object *bpf_object__new(const cha=
-r *path,
- 	obj->efile.obj_buf =3D obj_buf;
- 	obj->efile.obj_buf_sz =3D obj_buf_sz;
- 	obj->efile.btf_maps_shndx =3D -1;
-+	obj->efile.cleanup_shndx =3D -1;
- 	obj->kconfig_map_idx =3D -1;
- 	obj->arena_map_idx =3D -1;
-=20
-@@ -4100,6 +4134,9 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 				sec_desc->shdr =3D sh;
- 				sec_desc->data =3D data;
- 				obj->efile.has_st_ops =3D true;
-+			} else if (strcmp(name, CLEANUP_SEC) =3D=3D 0) {
-+				obj->efile.cleanup_data =3D data;
-+				obj->efile.cleanup_shndx =3D idx;
- 			} else if (strcmp(name, ARENA_SEC) =3D=3D 0) {
- 				obj->efile.arena_data =3D data;
- 				obj->efile.arena_data_shndx =3D idx;
-@@ -4135,6 +4172,7 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 			    strcmp(name, ".rel" STRUCT_OPS_LINK_SEC) &&
- 			    strcmp(name, ".rel?" STRUCT_OPS_SEC) &&
- 			    strcmp(name, ".rel?" STRUCT_OPS_LINK_SEC) &&
-+			    strcmp(name, ".rel" CLEANUP_SEC) &&
- 			    strcmp(name, ".rel" MAPS_ELF_SEC)) {
- 				pr_info("elf: skipping relo section(%d) %s for section(%d) %s\n",
- 					idx, name, targ_sec_idx,
-@@ -4915,6 +4953,240 @@ static struct bpf_program *find_prog_by_sec_insn(=
-const struct bpf_object *obj,
- 	return NULL;
+ struct test_spec {
+@@ -115,6 +126,34 @@ void free_msgs(struct expected_msgs *msgs)
+ 	msgs->cnt =3D 0;
  }
 =20
-+static int bpf_object__init_cleanup_info(struct bpf_object *obj)
++static void free_global_vars(struct global_var *vars, int *cnt)
 +{
-+	Elf_Data *data =3D obj->efile.cleanup_data;
-+	size_t i, nrels, nslots, nrecs;
-+	struct cleanup_raw_rec *recs;
-+	Elf_Data *relo =3D NULL;
-+	const __u32 *vals;
-+	Elf64_Shdr *sh;
-+	int ret =3D 0;
-+	bool native;
++	int i;
 +
-+	if (!data || obj->efile.cleanup_shndx < 0 || !data->d_size)
-+		return 0;
++	for (i =3D 0; i < *cnt; i++) {
++		free(vars[i].name);
++		vars[i].name =3D NULL;
++	}
++	*cnt =3D 0;
++}
 +
-+	native =3D is_native_endianness(obj);
++static int clone_global_vars(struct global_var *dst, int *dst_cnt,
++			     const struct global_var *src, int src_cnt)
++{
++	int i;
 +
-+	for (i =3D 0; i < obj->efile.sec_cnt; i++) {
-+		struct elf_sec_desc *sd =3D &obj->efile.secs[i];
-+
-+		if (sd->sec_type =3D=3D SEC_RELO && sd->shdr &&
-+		    sd->shdr->sh_info =3D=3D (Elf64_Word)obj->efile.cleanup_shndx) {
-+			relo =3D sd->data;
-+			break;
++	for (i =3D 0; i < src_cnt; i++) {
++		dst[i].name =3D strdup(src[i].name);
++		if (!dst[i].name) {
++			free_global_vars(dst, dst_cnt);
++			return -ENOMEM;
 +		}
++		dst[i].val =3D src[i].val;
++		(*dst_cnt)++;
 +	}
-+	if (!relo) {
-+		pr_warn("%s present without relocations\n", CLEANUP_SEC);
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+	/*
-+	 * LLVM leaves sh_entsize unset, which is read as the size assumed
-+	 * here, so this bites only a producer that declares a record size --
-+	 * which is the one able to say it means something other than three
-+	 * 4-byte fields.
-+	 */
-+	sh =3D elf_sec_hdr(obj, elf_sec_by_idx(obj, obj->efile.cleanup_shndx));
-+	if (sh && sh->sh_entsize && sh->sh_entsize !=3D sizeof(struct bpf_clean=
-up_info)) {
-+		pr_warn("%s record size %llu is not the expected %zu\n", CLEANUP_SEC,
-+			(unsigned long long)sh->sh_entsize, sizeof(struct bpf_cleanup_info));
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+	if (data->d_size % sizeof(struct bpf_cleanup_info)) {
-+		pr_warn("%s size %zu is not a multiple of the record size %zu\n",
-+			CLEANUP_SEC, data->d_size, sizeof(struct bpf_cleanup_info));
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+
-+	vals =3D data->d_buf;
-+	nslots =3D data->d_size / sizeof(__u32);
-+	nrecs =3D data->d_size / sizeof(struct bpf_cleanup_info);
-+
-+	recs =3D calloc(nrecs, sizeof(*recs));
-+	if (!recs)
-+		return -ENOMEM;
-+	for (i =3D 0; i < nslots; i++)
-+		recs[i / CLEANUP_REC_FIELDS].sec_idx[i % CLEANUP_REC_FIELDS] =3D -1;
-+
-+	/* One relocation per 4-byte field, naming the section it points into. =
-*/
-+	nrels =3D relo->d_size / sizeof(Elf64_Rel);
-+	for (i =3D 0; i < nrels; i++) {
-+		Elf64_Rel *rel =3D elf_rel_by_idx(relo, i);
-+		Elf64_Sym *sym =3D elf_sym_by_idx(obj, ELF64_R_SYM(rel->r_info));
-+		size_t type =3D ELF64_R_TYPE(rel->r_info);
-+		size_t slot =3D rel->r_offset / sizeof(__u32);
-+		struct cleanup_raw_rec *rec;
-+		size_t off;
-+
-+		if (type !=3D R_BPF_64_NODYLD32 && type !=3D R_BPF_64_ABS32) {
-+			pr_warn("%s: relocation %zu has unexpected type %zu\n",
-+				CLEANUP_SEC, i, type);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+		if (!sym || slot >=3D nslots || rel->r_offset % sizeof(__u32)) {
-+			pr_warn("%s: bad relocation %zu\n", CLEANUP_SEC, i);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+		/*
-+		 * The addend lives in the section data, which libelf leaves in
-+		 * the object's byte order; a non-section symbol additionally
-+		 * contributes its own value.
-+		 */
-+		off =3D (native ? vals[slot] : bswap_32(vals[slot])) + sym->st_value;
-+		if (off % BPF_INSN_SZ) {
-+			pr_warn("%s: field %zu offset %zu is not instruction aligned\n",
-+				CLEANUP_SEC, slot, off);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+		rec =3D &recs[slot / CLEANUP_REC_FIELDS];
-+		rec->sec_idx[slot % CLEANUP_REC_FIELDS] =3D sym->st_shndx;
-+		rec->insn_idx[slot % CLEANUP_REC_FIELDS] =3D off / BPF_INSN_SZ;
-+	}
-+
-+	for (i =3D 0; i < nslots; i++) {
-+		if (recs[i / CLEANUP_REC_FIELDS].sec_idx[i % CLEANUP_REC_FIELDS] < 0) =
-{
-+			pr_warn("%s: field %zu has no relocation\n", CLEANUP_SEC, i);
-+			ret =3D -LIBBPF_ERRNO__FORMAT;
-+			goto out;
-+		}
-+	}
-+
-+	obj->cleanup_recs =3D recs;
-+	obj->cleanup_rec_cnt =3D nrecs;
 +	return 0;
-+out:
-+	free(recs);
-+	return ret;
 +}
 +
-+static int cmp_cleanup_info(const void *a, const void *b)
+ static void free_test_spec(struct test_spec *spec)
+ {
+ 	/* Deallocate expect_msgs arrays. */
+@@ -129,6 +168,11 @@ static void free_test_spec(struct test_spec *spec)
+ 	free_msgs(&spec->unpriv.stdout);
+ 	free_msgs(&spec->priv.stdout);
+=20
++	free_global_vars(spec->priv.set_globals, &spec->priv.set_global_cnt);
++	free_global_vars(spec->priv.ret_globals, &spec->priv.ret_global_cnt);
++	free_global_vars(spec->unpriv.set_globals, &spec->unpriv.set_global_cnt=
+);
++	free_global_vars(spec->unpriv.ret_globals, &spec->unpriv.ret_global_cnt=
+);
++
+ 	free(spec->priv.name);
+ 	free(spec->priv.description);
+ 	free(spec->unpriv.name);
+@@ -311,6 +355,216 @@ static int parse_caps(const char *str, __u64 *val, =
+const char *name)
+ 	return 0;
+ }
+=20
++static int parse_global_var(const char *str, struct global_var *vars, in=
+t *cnt,
++			    const char *name)
 +{
-+	const struct bpf_cleanup_info *x =3D a, *y =3D b;
++	const char *colon =3D strrchr(str, ':');
++	struct global_var *var;
++	char *end;
++	__u64 *val;
 +
-+	if (x->begin_off =3D=3D y->begin_off)
-+		return 0;
-+	return x->begin_off < y->begin_off ? -1 : 1;
-+}
++	if (!colon || colon =3D=3D str) {
++		PRINT_FAIL("expecting '<variable>:<value>' for %s, got '%s'\n", name, =
+str);
++		return -EINVAL;
++	}
++	if (*cnt >=3D MAX_GLOBAL_VARS) {
++		PRINT_FAIL("too many %s tags, at most %d are supported\n",
++			   name, MAX_GLOBAL_VARS);
++		return -E2BIG;
++	}
 +
-+static int bpf_prog_collect_cleanup_info(struct bpf_object *obj,
-+					 struct bpf_program *prog)
-+{
-+	size_t i;
-+	int j;
++	var =3D &vars[*cnt];
++	val =3D &var->val;
++	*val =3D 0;
++	for (const char *term =3D colon + 1;;) {
++		__u64 v;
 +
-+	for (i =3D 0; i < obj->cleanup_rec_cnt; i++) {
-+		struct cleanup_raw_rec *raw =3D &obj->cleanup_recs[i];
-+		struct bpf_program *owner =3D NULL;
-+		struct bpf_cleanup_info ci =3D {};
-+		__u32 fields[CLEANUP_REC_FIELDS];
-+		void *tmp;
-+
-+		if (raw->sec_idx[CLEANUP_REC_BEGIN] =3D=3D raw->sec_idx[CLEANUP_REC_EN=
-D] &&
-+		    raw->insn_idx[CLEANUP_REC_BEGIN] >=3D raw->insn_idx[CLEANUP_REC_EN=
-D]) {
-+			pr_warn("%s: record %zu is an empty range [%zu,%zu)\n",
-+				CLEANUP_SEC, i, raw->insn_idx[CLEANUP_REC_BEGIN],
-+				raw->insn_idx[CLEANUP_REC_END]);
-+			return -LIBBPF_ERRNO__FORMAT;
++		errno =3D 0;
++		v =3D strtoull(term, &end, 0);
++		if (errno || end =3D=3D term) {
++			PRINT_FAIL("failed to parse %s value '%s'\n", name, colon + 1);
++			return -EINVAL;
 +		}
++		*val |=3D v;
++		while (*end =3D=3D ' ')
++			end++;
++		if (!*end)
++			break;
++		if (*end !=3D '|') {
++			PRINT_FAIL("failed to parse %s value '%s'\n", name, colon + 1);
++			return -EINVAL;
++		}
++		term =3D end + 1;
++	}
 +
-+		for (j =3D 0; j < CLEANUP_REC_FIELDS; j++) {
-+			size_t idx =3D raw->insn_idx[j], final;
-+			struct bpf_program *p;
++	var->name =3D strndup(str, colon - str);
++	if (!var->name) {
++		PRINT_FAIL("failed to allocate %s variable name\n", name);
++		return -ENOMEM;
++	}
++	(*cnt)++;
 +
-+			/*
-+			 * An exclusive end may name the instruction past the
-+			 * last of a function, so ask about the last one the
-+			 * range covers, the way the kernel does.
-+			 */
-+			if (j =3D=3D CLEANUP_REC_END) {
-+				if (!idx) {
-+					pr_warn("%s: record %zu ends at instruction 0\n",
-+						CLEANUP_SEC, i);
-+					return -LIBBPF_ERRNO__FORMAT;
-+				}
-+				idx--;
-+			}
++	return 0;
++}
 +
-+			p =3D find_prog_by_sec_insn(obj, raw->sec_idx[j], idx);
-+			if (!p) {
-+				pr_warn("%s: record %zu field %d is not inside a function\n",
-+					CLEANUP_SEC, i, j);
-+				return -LIBBPF_ERRNO__FORMAT;
-+			}
-+			if (!owner) {
-+				owner =3D p;
-+			} else if (owner !=3D p) {
-+				pr_warn("%s: record %zu spans functions '%s' and '%s'\n",
-+					CLEANUP_SEC, i, owner->name, p->name);
-+				return -LIBBPF_ERRNO__FORMAT;
-+			}
++/* As veristat's is_signed_type(): anything not plainly unsigned is sign=
+ed. */
++static bool global_var_is_signed(const struct btf_type *t)
++{
++	if (btf_is_int(t))
++		return btf_int_encoding(t) & BTF_INT_SIGNED;
++	if (btf_is_any_enum(t))
++		return btf_kflag(t);
++	return true;
++}
 +
-+			if (owner =3D=3D prog) {
-+				final =3D raw->insn_idx[j] - prog->sec_insn_off;
-+			} else if (prog_is_subprog(obj, owner) && owner->sub_insn_off) {
-+				/*
-+				 * sub_insn_off is where this subprogram was
-+				 * appended to the main program being relocated;
-+				 * zero means it is not part of it.
-+				 */
-+				final =3D owner->sub_insn_off +
-+					raw->insn_idx[j] - owner->sec_insn_off;
-+			} else {
-+				owner =3D NULL;
++static int find_global_var(struct bpf_object *obj, const char *name,
++			   struct bpf_map **map, __u32 *off, __u32 *sz,
++			   bool *is_signed)
++{
++	static const char * const secs[] =3D { ".bss", ".data" };
++	struct btf *btf =3D bpf_object__btf(obj);
++	int i, s;
++	__u32 vsz;
++
++	if (!btf) {
++		PRINT_FAIL("no BTF for object\n");
++		return -ENOENT;
++	}
++
++	for (s =3D 0; s < ARRAY_SIZE(secs); s++) {
++		const struct btf_type *sec, *vt;
++		const struct btf_var_secinfo *vsi;
++		struct bpf_map *m =3D NULL, *iter;
++		size_t slen =3D strlen(secs[s]);
++		int id;
++
++		bpf_object__for_each_map(iter, obj) {
++			const char *mname =3D bpf_map__name(iter);
++			size_t len =3D mname ? strlen(mname) : 0;
++
++			if (len >=3D slen && strcmp(mname + len - slen, secs[s]) =3D=3D 0) {
++				m =3D iter;
 +				break;
 +			}
-+			fields[j] =3D final;
 +		}
-+		if (!owner)
++		id =3D btf__find_by_name_kind(btf, secs[s], BTF_KIND_DATASEC);
++		if (!m || id < 0)
 +			continue;
 +
-+		ci.begin_off =3D fields[CLEANUP_REC_BEGIN];
-+		ci.end_off =3D fields[CLEANUP_REC_END];
-+		ci.landing_pad_off =3D fields[CLEANUP_REC_PAD];
++		sec =3D btf__type_by_id(btf, id);
++		vsi =3D btf_var_secinfos(sec);
++		for (i =3D 0; i < btf_vlen(sec); i++, vsi++) {
++			const struct btf_type *var =3D btf__type_by_id(btf, vsi->type);
 +
-+		tmp =3D libbpf_reallocarray(prog->cleanup_info, prog->cleanup_info_cnt=
- + 1,
-+					  sizeof(*prog->cleanup_info));
-+		if (!tmp)
-+			return -ENOMEM;
-+		prog->cleanup_info =3D tmp;
-+		prog->cleanup_info_rec_size =3D sizeof(struct bpf_cleanup_info);
-+		prog->cleanup_info[prog->cleanup_info_cnt++] =3D ci;
-+
-+		pr_debug("prog '%s': cleanup region [%u,%u) -> landing pad %u\n",
-+			 prog->name, ci.begin_off, ci.end_off, ci.landing_pad_off);
-+	}
-+
-+	if (!prog->cleanup_info_cnt)
-+		return 0;
-+
-+	if (prog->cleanup_info_cnt > INT32_MAX / sizeof(struct bpf_cleanup_info=
-)) {
-+		pr_warn("prog '%s': too many cleanup records: %u\n",
-+			prog->name, prog->cleanup_info_cnt);
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+
-+	qsort(prog->cleanup_info, prog->cleanup_info_cnt,
-+	      sizeof(*prog->cleanup_info), cmp_cleanup_info);
-+	for (i =3D 1; i < prog->cleanup_info_cnt; i++) {
-+		struct bpf_cleanup_info *prev =3D &prog->cleanup_info[i - 1];
-+		struct bpf_cleanup_info *cur =3D &prog->cleanup_info[i];
-+
-+		if (cur->begin_off < prev->end_off) {
-+			pr_warn("prog '%s': overlapping cleanup regions [%u,%u) and [%u,%u)\n=
-",
-+				prog->name, prev->begin_off, prev->end_off,
-+				cur->begin_off, cur->end_off);
-+			return -LIBBPF_ERRNO__FORMAT;
++			if (strcmp(btf__name_by_offset(btf, var->name_off), name))
++				continue;
++			if (vsi->size !=3D 4 && vsi->size !=3D 8) {
++				PRINT_FAIL("'%s' is %u bytes, only 4 and 8 are supported\n",
++					   name, vsi->size);
++				return -EINVAL;
++			}
++			vt =3D btf__type_by_id(btf, btf__resolve_type(btf, var->type));
++			if (!vt || !(btf_is_int(vt) || btf_is_any_enum(vt))) {
++				PRINT_FAIL("'%s' is not an int or an enum\n", name);
++				return -EINVAL;
++			}
++			*is_signed =3D global_var_is_signed(vt);
++			/*
++			 * The map is found by the suffix of its name and the
++			 * section by its own, so nothing so far has made the
++			 * two agree on a size.
++			 */
++			vsz =3D bpf_map__value_size(m);
++			if (vsi->offset > vsz || vsi->size > vsz - vsi->offset) {
++				PRINT_FAIL("'%s' at %u+%u is outside '%s' of %u bytes\n",
++					   name, vsi->offset, vsi->size,
++					   bpf_map__name(m), vsz);
++				return -EINVAL;
++			}
++			*map =3D m;
++			*off =3D vsi->offset;
++			*sz =3D vsi->size;
++			return 0;
 +		}
 +	}
 +
++	PRINT_FAIL("no global variable '%s'\n", name);
++	return -ENOENT;
++}
++
++/*
++ * A tag's value is parsed as 64 bits, but the variable may be narrower =
+and
++ * may be signed. Hold it to the range the variable can represent, the w=
+ay
++ * veristat's set_global_var() does, and narrow it to what is stored.
++ */
++static int fit_global_var(const char *name, __u32 sz, bool is_signed, __=
+u64 *val)
++{
++	long long v =3D (long long)*val;
++	long long max_val;
++	__u32 bits;
++
++	if (sz >=3D sizeof(*val))
++		return 0;
++	bits =3D sz * 8 - (is_signed ? 1 : 0);
++	max_val =3D 1ll << bits;
++	if (v >=3D max_val || v < (is_signed ? -max_val : 0)) {
++		PRINT_FAIL("value %lld for '%s' is out of range [%lld; %lld]\n",
++			   v, name, is_signed ? -max_val : 0, max_val - 1);
++		return -EINVAL;
++	}
++	*val =3D (__u32)*val;
 +	return 0;
 +}
 +
- static int
- bpf_object__collect_prog_relos(struct bpf_object *obj, Elf64_Shdr *shdr,=
- Elf_Data *data)
++static int access_global_var(struct bpf_object *obj, const char *name,
++			     __u64 *val, __u32 *sz_out, bool *signed_out, bool set)
++{
++	__u32 off, sz, zero =3D 0;
++	bool is_signed;
++	struct bpf_map *map;
++	size_t vsz;
++	void *buf;
++	int err;
++
++	err =3D find_global_var(obj, name, &map, &off, &sz, &is_signed);
++	if (err)
++		return err;
++	if (sz_out)
++		*sz_out =3D sz;
++	if (signed_out)
++		*signed_out =3D is_signed;
++	if (set) {
++		err =3D fit_global_var(name, sz, is_signed, val);
++		if (err)
++			return err;
++	}
++
++	vsz =3D bpf_map__value_size(map);
++	buf =3D calloc(1, vsz);
++	if (!buf)
++		return -ENOMEM;
++
++	err =3D bpf_map__lookup_elem(map, &zero, sizeof(zero), buf, vsz, 0);
++	if (err) {
++		PRINT_FAIL("failed to read '%s': %d\n", name, err);
++		goto out;
++	}
++	if (!set) {
++		*val =3D sz =3D=3D 4 ? *(__u32 *)(buf + off) : *(__u64 *)(buf + off);
++		goto out;
++	}
++	if (sz =3D=3D 4)
++		*(__u32 *)(buf + off) =3D *val;
++	else
++		*(__u64 *)(buf + off) =3D *val;
++	err =3D bpf_map__update_elem(map, &zero, sizeof(zero), buf, vsz, 0);
++	if (err)
++		PRINT_FAIL("failed to write '%s': %d\n", name, err);
++out:
++	free(buf);
++	return err;
++}
++
+ static int parse_retval(const char *str, int *val, const char *name)
  {
-@@ -7894,6 +8166,13 @@ static int bpf_object__relocate(struct bpf_object =
-*obj, const char *targ_btf_pat
- 					return err;
+ 	/*
+@@ -557,6 +811,22 @@ static int parse_test_spec(struct test_loader *teste=
+r,
+ 			spec->mode_mask |=3D UNPRIV;
+ 			spec->unpriv.execute =3D true;
+ 			has_unpriv_retval =3D true;
++		} else if ((val =3D str_has_pfx(s, "test_global_set=3D"))) {
++			err =3D parse_global_var(val, spec->priv.set_globals,
++					       &spec->priv.set_global_cnt,
++					       "__set_global");
++			if (err)
++				goto cleanup;
++			spec->priv.execute =3D true;
++			spec->mode_mask |=3D PRIV;
++		} else if ((val =3D str_has_pfx(s, "test_global_ret=3D"))) {
++			err =3D parse_global_var(val, spec->priv.ret_globals,
++					       &spec->priv.ret_global_cnt,
++					       "__ret_global");
++			if (err)
++				goto cleanup;
++			spec->priv.execute =3D true;
++			spec->mode_mask |=3D PRIV;
+ 		} else if ((val =3D str_has_pfx(s, "test_log_level=3D"))) {
+ 			err =3D parse_int(val, &spec->log_level, "test log level");
+ 			if (err)
+@@ -742,6 +1012,23 @@ static int parse_test_spec(struct test_loader *test=
+er,
+ 			spec->unpriv.execute =3D spec->priv.execute;
+ 		}
+=20
++		if (spec->priv.set_global_cnt && !spec->unpriv.set_global_cnt) {
++			err =3D clone_global_vars(spec->unpriv.set_globals,
++						&spec->unpriv.set_global_cnt,
++						spec->priv.set_globals,
++						spec->priv.set_global_cnt);
++			if (err)
++				goto cleanup;
++		}
++		if (spec->priv.ret_global_cnt && !spec->unpriv.ret_global_cnt) {
++			err =3D clone_global_vars(spec->unpriv.ret_globals,
++						&spec->unpriv.ret_global_cnt,
++						spec->priv.ret_globals,
++						spec->priv.ret_global_cnt);
++			if (err)
++				goto cleanup;
++		}
++
+ 		if (spec->unpriv.expect_msgs.cnt =3D=3D 0)
+ 			clone_msgs(&spec->priv.expect_msgs, &spec->unpriv.expect_msgs);
+ 		if (spec->unpriv.expect_xlated.cnt =3D=3D 0)
+@@ -1356,7 +1643,7 @@ void run_subtest(struct test_loader *tester,
+ 	struct cap_state caps =3D {};
+ 	struct bpf_object *tobj;
+ 	struct bpf_map *map;
+-	int retval, err, i;
++	int retval, err, i, gi;
+ 	int links_cnt =3D 0;
+ 	bool should_load;
+=20
+@@ -1532,6 +1819,14 @@ void run_subtest(struct test_loader *tester,
  			}
  		}
+=20
++		for (gi =3D 0; gi < subspec->set_global_cnt; gi++) {
++			__u64 v =3D subspec->set_globals[gi].val;
 +
-+		err =3D bpf_prog_collect_cleanup_info(obj, prog);
-+		if (err) {
-+			pr_warn("prog '%s': failed to collect cleanup info: %s\n",
-+				prog->name, errstr(err));
-+			return err;
++			if (access_global_var(tobj, subspec->set_globals[gi].name,
++					      &v, NULL, NULL, true))
++				goto tobj_cleanup;
 +		}
- 	}
- 	for (i =3D 0; i < obj->nr_programs; i++) {
- 		prog =3D &obj->programs[i];
-@@ -8176,6 +8455,9 @@ static int bpf_object__collect_relos(struct bpf_obj=
-ect *obj)
- 			return -LIBBPF_ERRNO__INTERNAL;
++
+ 		err =3D do_prog_test_run(bpf_program__fd(tprog), &retval,
+ 				       bpf_program__type(tprog) =3D=3D BPF_PROG_TYPE_SYSCALL ? true =
+: false,
+ 				       spec->linear_sz);
+@@ -1540,6 +1835,23 @@ void run_subtest(struct test_loader *tester,
+ 			goto tobj_cleanup;
  		}
 =20
-+		if (idx =3D=3D obj->efile.cleanup_shndx)
-+			continue;
++		for (gi =3D 0; gi < subspec->ret_global_cnt; gi++) {
++			__u64 want =3D subspec->ret_globals[gi].val, v =3D 0;
++			bool is_signed =3D false;
++			__u32 sz =3D 0;
 +
- 		if (obj->efile.secs[idx].sec_type =3D=3D SEC_RODATA)
- 			err =3D bpf_object__collect_rodata_relos(obj, shdr, data);
- 		else if (obj->efile.secs[idx].sec_type =3D=3D SEC_ST_OPS)
-@@ -8469,6 +8751,11 @@ static int bpf_object_load_prog(struct bpf_object =
-*obj, struct bpf_program *prog
- 		load_attr.line_info_rec_size =3D prog->line_info_rec_size;
- 		load_attr.line_info_cnt =3D prog->line_info_cnt;
- 	}
-+	if (prog->cleanup_info_cnt) {
-+		load_attr.cleanup_info =3D prog->cleanup_info;
-+		load_attr.cleanup_info_cnt =3D prog->cleanup_info_cnt;
-+		load_attr.cleanup_info_rec_size =3D prog->cleanup_info_rec_size;
-+	}
- 	load_attr.log_level =3D log_level;
- 	load_attr.prog_flags =3D prog->prog_flags;
- 	load_attr.fd_array =3D obj->fd_array;
-@@ -9062,6 +9349,7 @@ static struct bpf_object *bpf_object_open(const cha=
-r *path, const void *obj_buf,
- 	err =3D err ? : bpf_object__init_maps(obj, opts);
- 	err =3D err ? : bpf_object_init_progs(obj, opts);
- 	err =3D err ? : bpf_object__collect_relos(obj);
-+	err =3D err ? : bpf_object__init_cleanup_info(obj);
- 	if (err)
- 		goto out;
-=20
-@@ -10195,6 +10483,9 @@ void bpf_object__close(struct bpf_object *obj)
- 	zfree(&obj->jumptables_data);
- 	obj->jumptables_data_sz =3D 0;
-=20
-+	zfree(&obj->cleanup_recs);
-+	obj->cleanup_rec_cnt =3D 0;
++			if (access_global_var(tobj, subspec->ret_globals[gi].name, &v,
++					      &sz, &is_signed, false))
++				goto tobj_cleanup;
++			if (fit_global_var(subspec->ret_globals[gi].name, sz, is_signed, &wan=
+t))
++				goto tobj_cleanup;
++			if (v !=3D want) {
++				PRINT_FAIL("Unexpected %s: 0x%llx !=3D 0x%llx\n",
++					   subspec->ret_globals[gi].name, v, want);
++				goto tobj_cleanup;
++			}
++		}
 +
- 	for (i =3D 0; i < obj->jumptable_map_cnt; i++)
- 		close(obj->jumptable_maps[i].fd);
- 	zfree(&obj->jumptable_maps);
-@@ -10599,6 +10890,25 @@ int bpf_program__clone(struct bpf_program *prog,=
- const struct bpf_prog_load_opts
- 		attr.line_info_rec_size =3D info ? info_rec_size : prog->line_info_rec=
-_size;
- 	}
+ 		verify_stderr(bpf_program__fd(tprog), &subspec->stderr);
 =20
-+	/* exception cleanup table */
-+	info =3D OPTS_GET(opts, cleanup_info, NULL);
-+	info_cnt =3D OPTS_GET(opts, cleanup_info_cnt, 0);
-+	info_rec_size =3D OPTS_GET(opts, cleanup_info_rec_size, 0);
-+	if (!!info !=3D !!info_cnt || !!info !=3D !!info_rec_size) {
-+		pr_warn("prog '%s': cleanup_info, cleanup_info_cnt, and cleanup_info_r=
-ec_size must all be specified or all omitted\n",
-+			prog->name);
-+		return libbpf_err(-EINVAL);
-+	}
-+	if (info) {
-+		attr.cleanup_info =3D info;
-+		attr.cleanup_info_cnt =3D info_cnt;
-+		attr.cleanup_info_rec_size =3D info_rec_size;
-+	} else if (prog->cleanup_info_cnt) {
-+		attr.cleanup_info =3D prog->cleanup_info;
-+		attr.cleanup_info_cnt =3D prog->cleanup_info_cnt;
-+		attr.cleanup_info_rec_size =3D prog->cleanup_info_rec_size;
-+	}
-+
- 	/* Logging is caller-controlled; no fallback to prog/obj log settings *=
-/
- 	attr.log_buf =3D OPTS_GET(opts, log_buf, NULL);
- 	attr.log_size =3D OPTS_GET(opts, log_size, 0);
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-index 546f65b95cf4..f1630f03d5f5 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -56,6 +56,9 @@
- #ifndef R_BPF_64_ABS32
- #define R_BPF_64_ABS32 3
- #endif
-+#ifndef R_BPF_64_NODYLD32
-+#define R_BPF_64_NODYLD32 4
-+#endif
- #ifndef R_BPF_64_32
- #define R_BPF_64_32 10
- #endif
+ 		if (subspec->stdout.cnt) {
 --=20
 2.53.0-Meta
 
