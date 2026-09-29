@@ -1,140 +1,132 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608CC3D953E;
-	Tue, 29 Sep 2026 23:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A777A1D416C;
+	Tue, 29 Sep 2026 23:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790725515; cv=none; b=gpJ42LvNm0uAWEdqQZ/hR8H/jaO9ujFklSQBdJDHzRW+8kjxruJcd9GY9ieckKFaetN3TbSP9BfinhH0rLiAMegq9TJnFJxniA+IqkXH8Zr4hfl4Vj2BOpTJa4uaRd/eC5jbBAnld3UlZq8CObhJYSnJ3mBz4wCQmVnZyIJF1XQ=
+	t=1790725584; cv=none; b=e/9v84vGCp3oud/T53Gqd9AnjP8uSKi1HR9uInNot1WxyGbMo6oLEgGrOdHcRuKVCiD4OQtBOo+hL3luiMGKwxlkUOaj6objG0RnsdJxD/9p3fEytUCiI0DImRaHPV0zFyTVRwoIf1KbzNed4PgJlHUimxp0qyVOzwSf3XNlBJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790725515; c=relaxed/simple;
-	bh=qaD+oUK2DtSCtyltd/DU1cGOaw33iQMQ/3aJCRprPkQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HUH+vUTkCHI3A3zK1va7Uh9M1jbrp2tFY/fzBROAad84lsNbtLMsMymZswTTvSDYTclFScsE3ZPtnu3feEE8Ggw1t8paZFzims5Ab1uAO3emkqlwP//3rjEcQLDOi616Lemnop0ZQyWfDx2SJB1yDUKyr5rHqqzRWumdaPvBW/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=NgkLEWKL; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1790725584; c=relaxed/simple;
+	bh=LRq4vU2UaNtO/ieQAH8HDx9+750FfkGFV8Zr+vB8jWw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=X+4N43FUROXPisi8e4+5L9Xfaxkcq+OnfoHpQS2/07JsgyP11ZSfSyDr0IwGrExQnic90x44o3AiBX0TzZdeHuaeTL65CWnfdNmV76bV9DSIt8CPn/DpgOpaYFSTlNZSxkxMmCXEQ9BbOGoxdcuUv8JL0dpRorhS73j9Qh4/e+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etKZjUUL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="NgkLEWKL"
-Received: from CPC-mawas-YGKSX.localdomain (unknown [70.37.26.35])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7D43D20B7166;
-	Tue, 29 Sep 2026 16:44:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7D43D20B7166
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1790725461;
-	bh=FuVEsT1W2BzsrFSye+6V6QlSXmi+gbYDtaB0fNAucQI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NgkLEWKLuqLGYVaKVKJ7I8Bkj6eL0gl4Q1U2MjjsFwhgNlaIbUv5JK5OMIT+x8Pl6
-	 lGKr2yfpcP/5Tzdd2O1NR1GihuZyOqzj4aveKxpODnlW88Cb2G54QVnaNrva5m1TJN
-	 amefGb0muT+7m1V/zMTU0UvxD8IJY9vtXfPwmP0o=
-From: Manish Awasthi <mawasthi@linux.microsoft.com>
-To: horms@kernel.org
-Cc: netdev-bot+sashiko@kernel.org,
-	kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	longli@microsoft.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	kotaranov@microsoft.com,
-	linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org,
-	nipun.gupta@amd.com,
-	nikhil.agarwal@amd.com,
-	gargaditya@linux.microsoft.com,
-	ernis@linux.microsoft.com,
-	kees@kernel.org,
-	paulros@microsoft.com,
-	mawasthi@microsoft.com,
-	Manish Awasthi <mawasthi@linux.microsoft.com>
-Subject: Re: [PATCH net-next 4/4] net: mana: Add support for CDX device ID 0x00C2
-Date: Tue, 29 Sep 2026 23:45:08 +0000
-Message-ID: <20260929234508.10647-1-mawasthi@linux.microsoft.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260929135738.GT13925@horms.kernel.org>
-References: <20260924173054.589291-5-mawasthi@linux.microsoft.com> <179035761944.2160803.12943182451050438147@kernel.org> <20260928202555.617331-1-mawasthi@linux.microsoft.com> <20260929135738.GT13925@horms.kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etKZjUUL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783C01F000FF;
+	Tue, 29 Sep 2026 23:46:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790725582;
+	bh=eUgBSVCxg479HmVb1My7cssnKyEELh39OZi+wobzssQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=etKZjUULIUryUFPFnSFpQgqe7lgC025pLBPcfJBgF7EIj6RaQUqZQ9lhv5XN8CyaA
+	 +yX9+Emy+4optmeHZfwi3fDFg1Aa7/+1YBXdwQ2Ckg948/SfDYt2Awk/2GMKWHoiYh
+	 /LtK9tB+/lO6D/tmanLNFiHlETt9k7+MYxFBAZFt/4aFeAcFUDnwhDcEUe6KV8stEN
+	 JJmS8poo2aZDL13MgKszUJdqFmnsOWFoD8teIhI0mr2KHBTJDtraL8SUnDeFRt0By7
+	 O4jmVK4ksdsABn2xdPjH1ny3i0pgiS5DQagH3NU2493hELsyE8ZJU0D1eXGYSXNsd6
+	 T3NVyX0leAAnw==
+Content-Type: multipart/mixed; boundary="===============5723665362160622272=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <2dc04cf6f1e0c474da152cb4afcd0e264930b4d1d9b969de1b7cfbdd50b1bd35@mail.kernel.org>
+In-Reply-To: <20260929005411.4105448-2-vineet.gupta@linux.dev>
+References: <20260929005411.4105448-2-vineet.gupta@linux.dev>
+Subject: Re: [PATCH v2 1/1] tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,rostedt@goodmis.org,mhiramat@kernel.org
+Cc: mark.rutland@arm.com,mathieu.desnoyers@efficios.com,andrii@kernel.org,peterz@infradead.org,linux-trace-kernel@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,kernel-team@meta.com,vineet.gupta@linux.dev,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 29 Sep 2026 23:46:21 +0000 (UTC)
 
-> On Mon, Sep 28, 2026 at 08:25:55PM +0000, Manish Awasthi wrote:
-> > thanks for review. Comments inline.
-> > 
-> > > Thank you for your contribution! Sashiko AI review found 3 potential
-> > > issue(s) to consider.
-> > > 
-> > > Critical: 0 · High: 0 (1) · Medium: 1 · Low: 2
-> > > 
-> > > If you believe none of the issues are legitimate, please reply to each
-> > > issue of Medium severity or higher and explain why the AI is wrong.
-> > > If any of them are legitimate and you plan to respin, please let patchwork
-> > > know by including "pw-bot: cr" as a separate line at the end of your reply
-> > > (one such reply per series is enough).
-> > > 
-> > > - [Medium] The CDX transport installs `.dev_reset = mana_cdx_dev_reset`
-> > >   (-> `cdx_dev_reset()`) but has no way to recover afterwards.
-> > > - [Low] `mana_cdx_setup_hwc_irqs()` skips IRQ affinity hints.
-> > > - [Low] The comment in `mana_gd_query_max_resources()` (gdma_main.c)
-> > >   says: "Only reset on platforms that support dynamic MSI-X allocation;…
-> > > 
-> > > Pre-existing issues:
-> > > - [High] This problem wasn't introduced by this patch, but the shared HWC
-> > >   bootstrap path that the new CDX transport now reaches trusts a device-…
-> > > 
-> > > --
-> > > 
-> > > net: mana: Add support for CDX device ID 0x00C2
-> > > 
-> > > This adds a CDX bus transport for MANA, built as mana_cdx.ko on top of
-> > > the shared gdma_core.ko, for device ID 0x00C2. It allocates the whole MSI
-> > > pool at probe time, limits the queue count to the available vectors,
-> > > restricts DMA to 32 bits, and adds a per-bus auxiliary device name prefix
-> > > so the CDX auxiliary devices stay separate from the PCI ones.
-> > > 
-> > > > diff --git a/drivers/net/ethernet/microsoft/mana/gdma_cdx.c b/drivers/net/ethernet/microsoft/mana/gdma_cdx.c
-> > > > new file mode 100644
-> > > > index 0000000000000..0d01e3d2f0d96
-> > > > --- /dev/null
-> > > > +++ b/drivers/net/ethernet/microsoft/mana/gdma_cdx.c
-> > > > @@ -0,0 +1,340 @@
-> > > 
-> > > [ ... ]
-> > > 
-> > > > +static int mana_cdx_dev_reset(struct gdma_context *gc)
-> > > > +{
-> > > > +	return cdx_dev_reset(gc->dev);
-> > > > +}
-> > > 
-> > > [Severity: Medium]
-> > > Can this reset leave the whole function unusable, with no recovery short
-> > > of a manual rebind?
-> > > 
-> > > mana_dealloc_queues() calls it when a TX queue still has pending_sends
-> > > after the drain timeout:
-> > > 
-> > > mana_tx_timeout()
-> > >   -> queue_reset_work
-> > >     -> mana_per_port_queue_reset_work_handler()
-> > >       -> mana_dealloc_queues()
-> > >         -> mana_gd_dev_reset()
-> > >           -> mana_cdx_dev_reset()
-> > >             -> cdx_dev_reset()
-> > > 
-> > This version of the driver doesn't support recovery after mana_cdx_dev_reset.
-> 
-> I don't think it needs to delay progress of this patchset.
-> But I am curious to know if there are plans to add such support.
-> 
-    It is possible to have similar recovery support as the pci in this path
-    after cdx_dev_reset() and we do have plans to add it in future.
-> ...
+--===============5723665362160622272==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index ed455b53513b..336f40dc6618 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
+> @@ -1036,10 +1036,9 @@ trace_func_graph_ent_t ftrace_graph_entry = ftrace_graph_entry_stub;
+>  /* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */
+>  static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+>  {
+
+Does this comment still match the function's behavior? Before the patch,
+alloc_retstack_tasklist() assigned at most FTRACE_RETSTACK_ALLOC_SIZE
+stacks per call and returned -EAGAIN to trigger another batch. After the
+patch, it walks every thread in one pass, allocating inline with
+GFP_NOWAIT. The FTRACE_RETSTACK_ALLOC_SIZE pre-allocated entries are now
+only a fallback when GFP_NOWAIT fails, and in the normal case they're all
+freed at the free: label.
+
+> -	int i;
+> -	int ret = 0;
+>  	int start = 0, end = FTRACE_RETSTACK_ALLOC_SIZE;
+>  	struct task_struct *g, *t;
+> +	int i, ret = 0;
+>
+>  	if (WARN_ON_ONCE(!fgraph_stack_cachep))
+>  		return -ENOMEM;
+> @@ -1054,26 +1053,37 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+>  		}
+>  	}
+>
+> -	rcu_read_lock();
+> -	for_each_process_thread(g, t) {
+> -		if (start == end) {
+> -			ret = -EAGAIN;
+> -			goto unlock;
+> -		}
+> +	scoped_guard (rcu) {
+> +		for_each_process_thread(g, t) {
+> +			unsigned long *rs;
+> +
+> +			if (t->ret_stack)
+> +				continue;
+> +
+> +			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
+> +			if (!rs) {
+> +				/*
+> +				 * Returning from inside scoped_guard() drops
+> +				 * the RCU read lock, but skips the free loop
+> +				 * below. That is only safe because start ==
+> +				 * end here, which leaves that loop nothing to
+> +				 * free. Keep the two in step if this
+> +				 * exhaustion check ever changes.
+> +				 */
+> +				if (start == end)
+> +					return -EAGAIN;
+> +				rs = ret_stack_list[start++];
+> +			}
+>
+> -		if (t->ret_stack == NULL) {
+>  			atomic_set(&t->trace_overrun, 0);
+> -			ret_stack_init_task_vars(ret_stack_list[start]);
+> +			ret_stack_init_task_vars(rs);
+>  			t->curr_ret_stack = 0;
+>  			t->curr_ret_depth = -1;
+>  			/* Make sure the tasks see the 0 first: */
+> -			smp_wmb();
+> -			t->ret_stack = ret_stack_list[start++];
+> +			smp_store_release(&t->ret_stack, rs);
+>  		}
+>  	}
+>
+> -unlock:
+> -	rcu_read_unlock();
+>  free:
+>  	for (i = start; i < end; i++)
+>  		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36644771324
+--===============5723665362160622272==--
