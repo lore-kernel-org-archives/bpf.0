@@ -1,78 +1,78 @@
-Received: from mail-dl2-f41.google.com (mail-dl2-f41.google.com [74.125.229.169])
+Received: from mail-dy2-f42.google.com (mail-dy2-f42.google.com [74.125.229.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFEC63F44D3
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 20:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E3E3A168E
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 20:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790712758; cv=none; b=Ox945A7sqpT646MykCEfMW8+/591babXZpy6ZzaGZkPa0JKaS+UUPrK9aWnSdCwPcKFDU3F3iaEXB3ceGyQZUeqsRo7KulCH/vdoAt6acQW2vR82eSmci+e3ji6VfIijjyoCIVlk2V6Q/V4tpW/4qWspcLVedU6H5kXomeA/IVM=
+	t=1790713309; cv=none; b=O508ZtAAf9N6D2Rk4KWU4Leji1M+nb7bAfvXr2iggEhxo4iFh1CQtYpNF8zmkneQp7oo4KWZOjzJvL6SYq+n843xa8ecmCjeSe4fDY95NIZNsf1wJEVNLHpgO9tD8T0z9TmecllZ7+kEe5uxprkUjs1hjtWyT9botiq6ZWMWlSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790712758; c=relaxed/simple;
-	bh=ElvmyAIAdUzGALgeKxNZcnbLCAo6GuLU08su0r0GSjQ=;
+	s=arc-20240116; t=1790713309; c=relaxed/simple;
+	bh=lMzKnAgmBmcJ4GYSzOW/Z+r5p493XcZdckXqRh0flFM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SgGQwT4o0Z5+MFq6hBQxtuSMRLLZLXPbQ5r73ej5gY1qqKPvR66tJAjZ9XnKANUvkNQct5a+v9TBwGebFu6c0G2SYyAJrAvGpFWz/WoKN7c4SPdd5DP5DbJNPfvhpuMYDAHz3xEtTVilsztAD/o3FWOs4PKe8E3pslq0E3ZO1v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K8Szk4Jg; arc=none smtp.client-ip=74.125.229.169
+	 Content-Type:MIME-Version; b=FeEqqqZ9kh/62f/vv4AGOkoz060uUVnZfhbbM5E37hBrBA574Ktn7N090yuf/Jn0tneQg/xd9VrTDbheDMj0x/uKw/yep3MYcYdAwZIMZv654KYebiJaeToB0jkfbW6mlm5DDNi1BPlSDCQen6n2FvCSCS39eL5yryqEJ6zNU6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ove/ZwkH; arc=none smtp.client-ip=74.125.229.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K8Szk4Jg"
-Received: by mail-dl2-f41.google.com with SMTP id a92af1059eb24-1480aba0484so590873c88.0
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 13:12:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ove/ZwkH"
+Received: by mail-dy2-f42.google.com with SMTP id 5a478bee46e88-3428f70d7e7so2721634eec.3
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 13:21:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790712756; x=1791317556; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790713307; x=1791318107; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=bG7TIp0AeBQEWMmQMoBS6xGlltLOOIWiijr5gb8wRh8=;
-        b=K8Szk4Jg0JJdySa4UMmknVSg6cMgwVwWa56Enlfthvdqm3oYYlVzsRX+VFfNJqEVl0
-         9ivPmoXA/1T6GGd1rc0vylVDBcTSvHEfv8q23vXPMi7w37uQUILqGSUwCJWaCdfBW8/X
-         F6fM34LNRhGXGhiFy5kEo9o3C/ziq9VIQviZGMkY1rnLKFE3w7cVeup14WkqQsOeVYP8
-         d3WwNIVV2fGAJU96ns+0K52FkYx3L3GB9o0hd/AdkTOiWDd70Qwh0v36YPnK3O2bCKPi
-         5T1WJU0RObzWJ7NxBFLJ9lS5WpEqw9diZ7MHVvaqYy+6X8Ib0Ed2wh6lgmYBTapQvRZ+
-         jvwA==
+        bh=lMzKnAgmBmcJ4GYSzOW/Z+r5p493XcZdckXqRh0flFM=;
+        b=ove/ZwkHVi0pO7KcyjSC/w/wW54be2rs5fwrTgDixkZXXSJpu8EzPSFU+8GNlqQ6n5
+         IPYxei1kSU2LceJsLMNu5dDXVgbYxOqvCp/hgPqkVGn2U6tQAGHlD0G3rlTpEEuqtcZG
+         NDmURWNipgQIzP9riIeThGaOd/7kzeoakYWtjtzbb7/Po9tiaH2sTiKw45k7X+WLcUd/
+         AaPLbT6J4fgsm+Xq40Stl1IFY3z3jwLyd7h2DqFgjsuTcTzAF/boyu4q2PK9vmgwssiA
+         ewwSprJUat/Pa1jbbi1QiBHeCZJa+OcLqIlRgPyhkVBlzXkiKwqq1+4d1a6kZEE+IBlh
+         AbYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790712756; x=1791317556;
+        d=1e100.net; s=20260707; t=1790713307; x=1791318107;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bG7TIp0AeBQEWMmQMoBS6xGlltLOOIWiijr5gb8wRh8=;
-        b=Yc93TKrAqEZqApXbsiJvhzXCNJDP/nZ6VYifEm+pD/y7rKEcMuz0GMHKiRp3Bw0sSg
-         AtPUxXz6/zn6A5FZwqIEtnv4eiJjo9S8abRO7IfsscuXLAO0jP+Ffk1qRAVnuGJ9vqM0
-         qIFSXJV/ul4ZcTTK3sW4zF6zpXZ3OD2S/DDFmb/PCXZhM1H4kER2Xuk/M5vKL7VbPG2Y
-         0XnUEBz7dvf0Uv0zbmINXqe6WYM1OLuRSSdQGXDLUWEQfS6JymPViDVNwmDGIigstD8q
-         1WrWYbaNhs++7UzIzpRJMnRJncn0dWxyDR3u6uf3/W4h4YSbDNPddQXZSUpJZ9g+rq3j
-         d3UQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzCuIplP6n14/4EzWyBXeLyuC2KGbQMhCkmItIAcrLfRBxUzhWxv/QV+BOdMwQWo3YE9aU=@vger.kernel.org
-X-Gm-Message-State: AFuF++n8amsoZNKTOViCmZYe8fMTxroegCS24Q+cMCHiaBvn6C7stDqo
-	Y8iZOJNsK36ilr4bR6kEWHGtuMmjYYT71CEJQebl4FxYgaNdgDj5yKtf
-X-Gm-Gg: AYBFou1+roi5z8kPEkQuMN95dfW4nDILeNuuUxQ6EOhX8N1d1EzYviZdmZNKFraG/mX
-	8i1S0EqXEMnHCcY74JgmyILu3yrlunHwACpCj1+HJuABgt4W9mevhoryIrkMIVDRickfmZPa20Y
-	/DbgbuoBgmHy/K5m/j3Je6UnQODl37aAFoVtZp0yseMjTUapUcvc4o1TaLV6TYSImf239LxwFPx
-	p7XU/WKK9ESYQcfk74G8VMQWDLnYrJvbMrHfLY9cz1GSIp4mnzAcml2IzzlamGXnH2s7caxM2x7
-	71c2uWeGPg2Q2umtfyqxcBObiUamc27oa/A7/QbETcqUpiLlnoReqBahvVeUBUC55HZwBXR2h0s
-	QVx9xY2/kN54SU44leVSD01lRcwRd8ZkLqbPk3cMBNyc2FNeAgDO6cEjxRcAXhTj6SHChfHHQrg
-	JFtqPAcxH8gzosrbCJk3jntuveRU0qE0tsxFYgPf+TUyQX5gy5Aqz92km7+fut1GYGutXz38bB7
-	CLEOHzza+EGwMcdJYv03D0aKa95q7hp8X5KS6WM07mYEkvRci6V9kP7
-X-Received: by 2002:a05:701b:4505:10b0:14c:a265:2f0b with SMTP id a92af1059eb24-14ca2652facmr247125c88.2.1790712755475;
-        Tue, 29 Sep 2026 13:12:35 -0700 (PDT)
+        bh=lMzKnAgmBmcJ4GYSzOW/Z+r5p493XcZdckXqRh0flFM=;
+        b=stYzlAJmzSYP/d0RR9+QvFMTaCS/xdlF/Vz9KAonuVNm6QkOIwH6ZrxC/uDxtFmU2a
+         mAGFa/EJ3lFURBTfbrFbk3I9c2U8KTm0EXH6WagVa5vWaISHnW97SlLNQB++UXRSZD2y
+         4005NFXGycnrXmZJmbOElOSOpSdHbmXxPjS3U8GY5EbPN2xsTFSNb0zSL2NIbFn+yfmz
+         TxG+zNGHVEkK7irn6eD8K1GoryrbnjGHY3wcRKVnF/6dUh3hXVpIvyLgx3TNkpHTe0Gk
+         ytR6tm/TQgU0nqH4jxPbVPuy1BquzSYuA0zIdRemnWz4o08I1DcF5LDM9u3JJN2QaDbW
+         gYgg==
+X-Forwarded-Encrypted: i=1; AKwUvByhIswk+TYDhwRkEBCZMk78uWrfQ2328+NLy+dbnjbvXKkJA1Osu471k23b/E4bOAfzGYQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK4dNi+IEVjSuY6o9NU+be5FzjdX8eaA5qL6OSVLHqUYI8H+BT0
+	bn4sdPHP6M6D882uxMc4WoTI9pWumVBfnoHx6SWrq8rEwVzleDVcDBinb5y99S6r
+X-Gm-Gg: AYBFou1sttT6yFOcAVWbN36TLD7/eHgKbZ88+zvlN77LjgTP3HOUDqQC+K49XrOupXK
+	bPqOfmFP8yQKlykKUQUWd4nBVSUAIoDPRgh1ZzM9eG7moRL779Kx9GFXCse880xsBNPEAlxK7aR
+	KjPnmcOsfEaMR8F2/I6+JiQx4ovldnCeWPtfJY/PE0pSjCFph6MypfFIBGElbBzT+FXRT/o93BB
+	IBqCb+Vlr50teSRhfNa67o1qRVMrjBvyA2qkCiDpsao04kJ2IMNsmu8Sj5cvpmtEzU7Ls7bzGv2
+	9xfYBD0Krt84PD5vBpkB5lGYGOUeOFIAAKueWrnNFU4u0naFoDdJpHJ9l2lN/f+ihS8/NOkNySb
+	x6DpUjUQxkDrW9oaxMUlOBtBpG/yfODq4t0a5Efm0SPlKxp2MA/l/cwL5y6DawJUxmrY81nfB4n
+	773qJF8DGgQFKuBiKwAa7uuODAU8e/1gTTa3alkJDJR+ss5739ZXxxdQZ/h8+gA8I0r8ghDoWsf
+	e3BTvY2Vlnt8yT2mbrs3RCSrTps8l1nT2YOBzNn3U3NzGQdwIF8SqaD
+X-Received: by 2002:a05:7301:9a8a:b0:34b:3230:5cda with SMTP id 5a478bee46e88-34c639fd460mr497960eec.26.1790713307134;
+        Tue, 29 Sep 2026 13:21:47 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:abbd:bfa5:f574:cca3? ([2620:10d:c090:500::7:dfd3])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14c63acab86sm1301895c88.9.2026.09.29.13.12.34
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34c38fe2bfesm1235531eec.27.2026.09.29.13.21.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 13:12:35 -0700 (PDT)
-Message-ID: <598051e14850fd088e33fb365868216a607357ae.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 02/36] bpf: summarize may write stack slots in
- insn_aux_data
+        Tue, 29 Sep 2026 13:21:46 -0700 (PDT)
+Message-ID: <5986bdd3811c1f6fb6e3f66c0ca7c55a6e67ce2c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 04/36] bpf: summarize regs that may hold a
+ frame pointer in insn_aux_data
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
-	andrii@kernel.org
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ andrii@kernel.org
 Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, memxor@gmail.com
-Date: Tue, 29 Sep 2026 13:12:33 -0700
-In-Reply-To: <DLPD9Q4H9C62.2QMD510XIOOJR@gmail.com>
-References: <20260926-scev-minimal-rebase-v1-0-c8e5ab5ba79f@gmail.com>
-	 <20260926-scev-minimal-rebase-v1-2-c8e5ab5ba79f@gmail.com>
-	 <DLPD9Q4H9C62.2QMD510XIOOJR@gmail.com>
+	yonghong.song@linux.dev, memxor@gmail.com, martin.lau@kernel.org,
+ mason@kernel.org, 	ihor.solodrai@linux.dev
+Date: Tue, 29 Sep 2026 13:21:44 -0700
+In-Reply-To: <d5eed8a76106def474e99ba47cc8d71becf6e5c623e498c1359b147d864abe7b@mail.kernel.org>
+References: <20260926-scev-minimal-rebase-v1-4-c8e5ab5ba79f@gmail.com>
+	 <d5eed8a76106def474e99ba47cc8d71becf6e5c623e498c1359b147d864abe7b@mail.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
@@ -83,31 +83,19 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Sat, 2026-09-26 at 15:51 +0000, Alexei Starovoitov wrote:
-> On Sat, Sep 26, 2026 at 07:20 AM Eduard Zingerman <eddyz87@gmail.com> wro=
-te:
-> > @@ -662,6 +662,11 @@ struct bpf_insn_aux_data {
-> >  	};
-> >  	struct btf_struct_meta *kptr_struct_meta;
-> >  	u64 map_key_state; /* constant (32 bit) key tracking for maps */
-> > +	/*
-> > +	 * Per-instruction summary of stack slots in the current frame
-> > +	 * that this instruction may write to.
-> > +	 */
-> > +	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
+On Sun, 2026-09-27 at 20:27 +0000, bot+bpf-ci@kernel.org wrote:
+> > bpf: summarize regs that may hold a frame pointer in insn_aux_data
+> >=20
+> > SCEV needs to know which registers might be stack pointers at a
+> > particular instruction. This information is used to invalidate SCEV
+> > expressions for slots that might be overwritten by indirect writes.
+> >=20
+> > liveness.c:compute_may_write_masks() already tracks this information.
+> > This commit modifies it to save the information in insn_aux_data for
+> > further usage.
 >=20
-> That's 32 bytes per insn and the next patch adds 32 more,
-> for every prog whether it has loops or not.
-> FM_MAY_WRITE in patch 1 makes every frame_masks a third bigger too.
-> commit 481ceda77aeb sized the liveness masks by the stack the frame
-> uses to avoid exactly that.
->=20
-> bpf_may_write_mask() is the only accessor.
-> Can the summary stay in liveness.c, as wide as the subprog's stack,
-> and only for insns with scc !=3D 0 ?
+> Are these two claims accurate?
 
-I did some profiling and may_write_mask does not show as a big hog in
-total memory consumption increase. (+50% is the biggest observed
-increase). The biggest increase is from a loop_stack_entry array in
-bpf_func_state, and from a fact that I pushed bpf_func_state to a 2KB
-allocation bucket. I'll see what can be done there.
+Commit message needs to be fixed.
+
+...
