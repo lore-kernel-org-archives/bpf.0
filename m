@@ -1,234 +1,299 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013006.outbound.protection.outlook.com [40.107.201.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy2-f42.google.com (mail-dy2-f42.google.com [74.125.229.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5218351C17;
-	Tue, 29 Sep 2026 02:39:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.6
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790649544; cv=fail; b=ErWQmt7ZjZqSlMy/RxdpuVzgLXz97V4u3EaT8rwDuTvHM7LSw1/UrDH46IoaWHHFdmoC6Z5JnJ6vAOmEOeF0TnrggWF+O8eEVAXqXTkw/3rIV3Xmvk2oqxGIX8PpgbA4CEoc/68vDh0I3Q8wYJjbDcxt3gb9c+H/h/NviaNOPAk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790649544; c=relaxed/simple;
-	bh=2To8e42dXnZG3g7asF5GaTBADeGzaHBiVIe2x0wnELE=;
-	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
-	 In-Reply-To:MIME-Version; b=QovYTNyX+h6vYRcKj4i0BBA/ycjkHG953Fa+T1lU3YZ5HmeFNYFEPdusgeBSBEfPLXNqF510iygOG/n8Nn0HY2wMlFp+7kAqNI9aKatzRyhSlmunYKAoj/JuLASSRxPISXNkEvR8voI5t2Iyj+phYO81dNWq3cAS/21+hFgdi84=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AS8wTGZ1; arc=fail smtp.client-ip=40.107.201.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA313D9DAA
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 03:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790650900; cv=none; b=dMZD5QNyKYZYTeO9XS3oWIu3hmioC8swsTYAfFRjGZvqFaj8RIK+EcAtRBXkw1PtR238ihMxgs0uDTDHpWhS+IB85Hk6hA9myl7Ylr0QsSd5rjzT2IMTL9mlVbivYXnjcIatA3EC8RgFTSE/nUvXVGQHBz5m+JdEoR3oQ4nZAt8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790650900; c=relaxed/simple;
+	bh=tjuHuJmSUWSzgdSY1MqrxhyhZbB4/rCV+kP6Py9vzxc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tCEPUfYm+1bIxj55rK3mMAElHUyL60Hzi/5Uq2VnLXLMD5UXPEppN7K7GQXoWPBUdwwSm8ShzI7AkfWc0xOaw3AtwPACCD1Yda+nlp7IzrWriDPao5hVFWi5nLp2Ys90u872wn3iUufjr0D4TxlgmePA5nDreNttf0JWhL8TKw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=Av2JwbfY; arc=none smtp.client-ip=74.125.229.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AS8wTGZ1"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FxrJD4y4/9tuSyk+P+9pc2N4nmFYLRtdMAWwZfUlv9T/7jb8JUzzcH5d9chPITiU0ebHt22hY1G41Sau58ko9u1rgBTgZk/0WFxnEjxJ/G6JS2eYLz/nPbv1yYW4FT4Z57kT0HM2q4NiDXULFA9aXerk2mIwf8rHLky3zmBSSjwFvFI5oItKYmPpnFmpvyqThOV+X3xesIeV8Rn9UPIO3/yf9e1nha9S9O45bi3KjVxp4eCwL8Fsyn4M/JwyPG+E0dKdb2OiwjWjx4vTuaqIEz/3qc3v7vEabBR0oiedKNlE0RmE2/aGrfBSxP/wCgidDQRgEoZ5dxoxMwIN/+lWxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MvaYIht3qC43l33T9gA6PBsXi5WuPyLqVZAdhOrQEok=;
- b=I8RhcZuYVsswM4jDrKuo54SLDUwYNYKPhOx5I7spYpCEoQ4zZM8Zq9XD/qMAuLmKrg7oqv2fAcIJJqxXviN+Auh+1oF2gD2qZYQ2Uf3RRPtDwMuqTQQrXpf6e5xqJbT9PNGgvp+qKjb29xJwjEMBsJO93bnpzIZ37uJsYJ/4AvZXhOk0pUWlpHcD61h0Wni5bM5wqB7mNhHLmx9Ff8PftmjCVlIK5HGJfsvolXDibbVt+7NrBOyyJAYgIGpWn34Z9rH4WvebymJdXZtsjDaFgT4VYTJ9vYAqQECP0C/HB/fW8joYoUnfv1EcV5YZCMlRYNqGqqVQ3P/oyNCWiCDPYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MvaYIht3qC43l33T9gA6PBsXi5WuPyLqVZAdhOrQEok=;
- b=AS8wTGZ1fj54HmZvvCwlcFsrIgj22uOpVJo7nWl/JAEg4azMV6alg0JlSVyWozgdL7dZzrtj3OId+U2f7wacpXSNJyuYGTUdvL/EcdV6aK1YmNSvv0+y1M9VNrYOBUh/7CpvH+l1x7JYASkC7UcShEf/XEIGzJC/tEsZUeHOXd37QISzgieWzH8H917gB8isGyhV2G+qBkfj4tsOSoHe1GrNnQZuZ7y6mOP995gWKNjnCEvTxkOvW0NBCZd/4YIwcxvc8EqwMFjbBpsE4s3BxP8ZQllNPY+MdhoNSzUXNv5nh1khFK1s3/sCtiDtuoSXOgq2f5DkrTY/sYvmcnzJDw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by LV0PR12MB259608.namprd12.prod.outlook.com (2603:10b6:408:3ef::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.24; Tue, 29 Sep
- 2026 02:38:57 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0451.022; Tue, 29 Sep 2026
- 02:38:57 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Sep 2026 22:38:50 -0400
-Message-Id: <DLRGA620YS8T.2RFO662N4ZALL@nvidia.com>
-Cc: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-usb@vger.kernel.org>,
- <linux-rdma@vger.kernel.org>, <selinux@vger.kernel.org>,
- <linux-sound@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-scsi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-perf-users@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <kvmarm@lists.linux.dev>, <linuxppc-dev@lists.ozlabs.org>,
- <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
- <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
- <sparclinux@vger.kernel.org>, <fuse-devel@lists.linux.dev>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka" <vbabka@kernel.org>, "Jann Horn" <jannh@google.com>,
- "Pedro Falcato" <pfalcato@suse.de>, "David Hildenbrand" <david@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan"
- <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Jonathan Corbet"
- <corbet@lwn.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>, "Jason
- Gunthorpe" <jgg@ziepe.ca>, "Leon Romanovsky" <leon@kernel.org>, "Paul
- Moore" <paul@paul-moore.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Jaroslav Kysela" <perex@perex.cz>,
- "Takashi Iwai" <tiwai@suse.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Baolin Wang"
- <baolin.wang@linux.alibaba.com>, "Nico Pache" <nico.pache@linux.dev>, "Ryan
- Roberts" <ryan.roberts@arm.com>, "Dev Jain" <dev.jain@arm.com>, "Barry
- Song" <baohua@kernel.org>, "Lance Yang" <lance.yang@linux.dev>, "Usama
- Arif" <usama.arif@linux.dev>, "Kiryl Shutsemau" <kas@kernel.org>, "Doug
- Gilbert" <dgilbert@interlog.com>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
- <mkp@kernel.org>, "Jaya Kumar" <jayalk@intworks.biz>, "Simona Vetter"
- <simona@ffwll.ch>, "Helge Deller" <deller@gmx.de>, "Sebastian Reichel"
- <sre@kernel.org>, "John Hubbard" <jhubbard@nvidia.com>, "Peter Xu"
- <peterx@redhat.com>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Oleg
- Nesterov" <oleg@redhat.com>, "Peter Zijlstra" <peterz@infradead.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "Arnaldo Carvalho de Melo"
- <acme@kernel.org>, "Namhyung Kim" <namhyung@kernel.org>, "Mark Rutland"
- <mark.rutland@arm.com>, "Rik van Riel" <riel@surriel.com>, "Harry Yoo"
- <harry@kernel.org>, "Juri Lelli" <juri.lelli@redhat.com>, "Vincent Guittot"
- <vincent.guittot@linaro.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
- "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
- <airlied@gmail.com>, "Will Deacon" <will@kernel.org>, "Aneesh Kumar K.V"
- <aneesh.kumar@kernel.org>, "Nick Piggin" <npiggin@gmail.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Muchun Song" <muchun.song@linux.dev>, "Oscar
- Salvador" <osalvador@suse.de>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>, "Jan Kara" <jack@suse.cz>, "Marc Zyngier"
- <maz@kernel.org>, "Oliver Upton" <oupton@kernel.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Anup Patel" <anup@brainfault.org>, "Paul Walmsley" <pjw@kernel.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>, "Janosch Frank"
- <frankja@linux.ibm.com>, "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>, "Gerald Schaefer"
- <gerald.schaefer@linux.ibm.com>, "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>, "David S. Miller"
- <davem@davemloft.net>, "Andreas Larsson" <andreas@gaisler.com>, "Alexander
- Viro" <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>,
- "Matthew Brost" <matthew.brost@intel.com>, "Joshua Hahn"
- <joshua.hahnjy@gmail.com>, "Rakie Kim" <rakie.kim@sk.com>, "Byungchul Park"
- <byungchul@sk.com>, "Gregory Price" <gourry@gourry.net>, "Ying Huang"
- <ying.huang@linux.alibaba.com>, "Alistair Popple" <apopple@nvidia.com>,
- "Chris Li" <chrisl@kernel.org>, "Kairui Song" <kasong@tencent.com>, "Kemeng
- Shi" <shikemeng@huaweicloud.com>, "Nhat Pham" <nphamcs@gmail.com>, "Baoquan
- He" <baoquan.he@linux.dev>, "Youngjun Park" <youngjun.park@lge.com>,
- "Johannes Weiner" <hannes@cmpxchg.org>, "Qi Zheng" <qi.zheng@linux.dev>,
- "Shakeel Butt" <shakeel.butt@linux.dev>, "Axel Rasmussen"
- <axelrasmussen@google.com>, "Yuanchu Xie" <yuanchu@google.com>, "Wei Xu"
- <weixugc@google.com>, "Chengming Zhou" <chengming.zhou@linux.dev>, "Michal
- Hocko" <mhocko@kernel.org>, "Miklos Szeredi" <miklos@szeredi.hu>, "Xu Xin"
- <xu.xin@linux.dev>
-From: "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [PATCH v3 30/40] mm/madvise: update is_valid_guard_vma() to use
- vma_can_merge()
-X-Mailer: aerc 0.22.0
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org> <20260917-b4-mmap-prepare-vma-flag-sanify-v3-30-4583d8a23bca@kernel.org>
-In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-30-4583d8a23bca@kernel.org>
-X-ClientProxiedBy: YQZPR01CA0186.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:8b::6) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="Av2JwbfY"
+Received: by mail-dy2-f42.google.com with SMTP id 5a478bee46e88-342568a5b54so1600708eec.2
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 20:01:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=trailofbits.com; s=google; t=1790650893; x=1791255693; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=By2LEtvJF+8W3qvYb/dMgFvkCaBZwK3OmiKAlzBobDg=;
+        b=Av2JwbfYQOAH73ibHQOh53j7ZTDzaN/fzE1EwOUPTZXX+zslX3tu6c1CKp4gBwHMsp
+         1VD6D+pfwz7XrWkagsvYyAKvfsUt7D9ouKScqddjpJGWBPBT0Qe+OmF1BqcDrz53GjFv
+         z0Yu9gl9xfkIwjo2Elw5APPq+9PsuEdDfrSuHjb+p91WZYtsBZ7JY8u9OfafCV3+prsy
+         rtIOlckiqnLZyLrVlBGK4bwh4vFybRFYOidBTMk5KQNaw2p5/9XKzPDI7W0raAsJd1a7
+         5HxwePHsklbQ1p/KAAoUOezZ784PL5gRCJPFnA167IksO6pUE+yQiVMHcqJnmYw6fhtc
+         bXcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790650893; x=1791255693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=By2LEtvJF+8W3qvYb/dMgFvkCaBZwK3OmiKAlzBobDg=;
+        b=hM0XNxupQLNMhIc2zeMEm7FGL7g1a2LSDD4MlIIV1P8tRudlQ2W48EMgPobIdbWYKx
+         4ei/ft9M8gkoelJP7mo3h9zNS+vz3i2+hYtmkLCAKr1INoIaXiEXBJUcVqniRdxOCRUd
+         FaStUOrpuJHhsxiEeBNC2ay9XJBq2xl7kI5RgiYF1CDcwdp3fmpY4AZfPSmaaAnRe4/e
+         zjN+Aa1xhgXOpi4n9+umJUyZkOhS/X6h81Dd+sAT97y6ihrvcmUuHL+vomC0BTJ+clVk
+         ECA3cDbFlL66w30aDp2cze96E2rGiPlM3QAcz02/wop7jQlE51xIbdGz4I8+I7M862Zn
+         byrw==
+X-Forwarded-Encrypted: i=1; AKwUvByEPFw6KdYCnrlxKdmzop4bFjAy1x8TS5Z/wn9/xWxeUzPfJr2uO+TrjGUwAx1ySYGbWzM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLdR+bJjOIjKs9/wOe7K9BEaBVtzhJqUiW78KYzgTMqdwDo1Es6
+	4IKPdSvRLcZ0+YAIiCQCPliwBr3Wj+g8Lvw5rRJbg0h9vBtnTs7l4gfiCTJYwqityg4=
+X-Gm-Gg: AYBFou1Jcz3zfomNX9XsVRHR7ufmOysx9TcHi80Tn2hReKQOmnhqilEHJZvBIjJZ/JK
+	vvPUbYQroxXLCOBOsZBH/5G4TPVp64/xFB9KmZm0ncowlVNv3klOpQwosA2nJh8vKIo2T63yoMP
+	+5Jpf2aVZbJqGSULMccI1RRxRwIoR9t8Hu+IiHQH7PIEdZsvxc2+tPUyOOVJl2zv2pyP5XZRXAe
+	9oWVr8a6reU+P92uDrkGUG4pqNRY+0+LcwfLUGO3oiCxT0DE1jX9w9YbXQM8CMFyuGtISFZ90Kj
+	q0hGqvu9jyNfaRZNwFWY3+xBClSZFh+t2dINrKY3xjONQ4HbQ90Nn5yzIVzatJWLEuMN67QKWBB
+	Z8ACyXPB9Sf7r4kB8CyVwj4dT/EHLiSLmpNCc0VsAxfC+zLJ6QMO0oPnGD9cmuo3IoQtjCdtlR9
+	y516I3wSKUkASQo0kYUDE266YplIF0OsqQd0LfhfAPhs4Ig872JFNhPkceX0wur7+nhQPqspcXY
+	DRcc+DLnTIDtmjvnaSBNWAQC9Di/Hn+SzjGEisfhTZlUxgLqmmahNuWg/Q1YEF9BQp+INQ=
+X-Received: by 2002:a05:7300:a987:b0:33c:1f00:358 with SMTP id 5a478bee46e88-34270ac690bmr14894659eec.17.1790650893218;
+        Mon, 28 Sep 2026 20:01:33 -0700 (PDT)
+Received: from localhost.localdomain ([2603:8001:5f01:8bab:3481:cbb6:f339:9e4e])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-347323f5a7esm10650314eec.15.2026.09.28.20.01.29
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 28 Sep 2026 20:01:32 -0700 (PDT)
+From: Artem Dinaburg <artem@trailofbits.com>
+To: stable@vger.kernel.org
+Cc: Artem Dinaburg <artem@trailofbits.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	syzbot+ad9ec60c8eaf69e6f99c@syzkaller.appspotmail.com,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Simon Horman <horms@kernel.org>,
+	sdf@google.com
+Subject: [PATCH 6.6.y] bpf: Fail verification for sign-extension of packet data/data_end/data_meta
+Date: Mon, 28 Sep 2026 23:01:25 -0400
+Message-ID: <20260929030127.86206-1-artem@trailofbits.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|LV0PR12MB259608:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d6b35c9-7282-40ea-50a5-08df1dd2cf79
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|7416014|23010399003|10067099003|11063799006|56012099006|4143699003|22082099003|18002099003|921020;
-X-Microsoft-Antispam-Message-Info:
-	gljZFTseVyKrJTZjhmJHt82BVX2G/iUZYeqKu4kYw7iKkTD5OwweUBUHMnEGd6VVpjk5m7bT0NoqjKLPWUN2PP8jcegrinKargxnoSRbxX3P7vx2d4cgfNpqsJQWzwmgNmOqA+gnO5420sG7ZD38wcFUEvUAskN+O6s7unVK5FXFyo1xPj/B++cuLlui4wRTvCP0gc28QOLcJ3Gp17Owfseg6EhjmNfReM/1+Rfckg74H0yUMp9QaSoJNn/hPHK/ZNGfgUQu32VwPjN063wM9ktc/73l30cmSHj1K2hjaTo0KbsRerVK0nvLr8m/fZEiGh9zvCkc/TkEeC+kWVkZp6q710uJP5mdv6zNK2sB/rU6pa7Zfqw6lJ/eXcXB9vCMqqSC6xm/jaxlJ20wYDh01zPjPP+LISwIWMsOQnY+fvs0olWUJmCCAvYs4SK5Nkf/3HZkbKOWJFaW+GPjTj7yt4IKfCWkkjPB2r+BguhAeRM3QB0+ZBtnmdzjaKWIZGmBWBzWdzNjflSwF2DgvROUwLhyF5Rc90xf88kSP2qRiF7pySNFyhsxKoZnFPayDZIlWT2El9Ky9RPwSQu3HqFOPehcnY3WFwYRwI1pQkIP68Wo3S8uAKg3OugkILfHlgX3z+mhlyE5QJf4KjCI+qmEaNX3bvAvHiYllW8e4Fop98ZKTulpkWkXE0k9l7u3UOAKNUXOoL31VqCKjQf3AtMrtg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(23010399003)(10067099003)(11063799006)(56012099006)(4143699003)(22082099003)(18002099003)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?LytUSFU1MHJGdGxiU0N1bjhocDdwTnNHUWZxSkszSzNKNXd0YzJyTmpDUWIx?=
- =?utf-8?B?alBSbVhKeTVJK3FQZjJYSXYzeFpJREFjOGFSTEU4UmFsTE9tTm1zb3lrVGJ5?=
- =?utf-8?B?eWFPNVpGd2J0WmR3eStJN0RoWEVWQWowMVIyTVkwWU42dVhKZVJiTjV4Y1dO?=
- =?utf-8?B?b0tSaFFxd2x1R1BaVlBmRHd2a3FweXd6c29CdXY4Rzl1L21XUzBzbjJ4TXYz?=
- =?utf-8?B?UUpoOFJRd2c4NG1McWFqbkdzQ1FheTd2eHJWUTNrOUpqUHRyK2QzNzNmNnVw?=
- =?utf-8?B?blpOdHd6UlBGSjR2ZDdjMTI1blBkT3RuNzJNazNJSytDajFzUTNxVTdBdjJP?=
- =?utf-8?B?VDFoTk5nWTNCbEpOOHZRUUdiME1tUU0wTDR1NkFUeU94aExFR1JzazkwaFV1?=
- =?utf-8?B?RElzRS9EMmJBN0tZLzJ2eEFwWFNCSW5tSkR6MDNRc0pNQWVUZHY2QXg3bURC?=
- =?utf-8?B?aFhaWkY1alRDU1VYeEJMb1NRUTRnd1NHTVRLNEZGOXhPTWhXWU80L3pqRis1?=
- =?utf-8?B?NU9QeE9WN015Sm5KZDF3am53ZnNHWTcrTVZKV3RGVlp0NjRoYVlMQi8xelV1?=
- =?utf-8?B?bi9iVXFXRnZCTHdvb1E0ZjY2T214ZlYwOFdPZjVSQk1COHp5SDl2SzFJZTho?=
- =?utf-8?B?ZFBuNzd2UEZnd00xNlRNeGpzWEtZbXloRWZyay9iVmxmay9hSGdZdUlvNHlL?=
- =?utf-8?B?TnlrblRzUWw4STQwN3VIVEhxNURHd095SldTQmRCNlVSZHRNaS9Fa3Fpc1VU?=
- =?utf-8?B?anMxSTRvUHYrY251cFV2NmgrL3pBbERXZW05VWIxMllSRXRrWmY1MngzSTgr?=
- =?utf-8?B?SUY1dldIUHhjaEt5aW1oWWFpb1lWR1lwak5lZVNzb29JVE5PaS92Rm1ScWFo?=
- =?utf-8?B?YW84RDBrdllyTzdUVlk0OHhwZkdhOE5QWkpneXlwWjgrWWo1UzZ3NElqdGdI?=
- =?utf-8?B?UmVzMGlVR0lTMWg0aXFRNGRrQVFRSDA5MlB3d3ROalM4ZktvYXN5RStsbDYw?=
- =?utf-8?B?SkpsdWxiWWhtTE1qbHFBYkoyaWlyQlg5QjQ2NHdOeXV6V1BTU2F2c05jK3Ar?=
- =?utf-8?B?SjdZYXdiZ1NUZjlQOWMvVitXd0xEeDJnYTcxWnI1U29kRG1kc1BWb1U4dVJx?=
- =?utf-8?B?cXg0UzlYYzJHbkJtQ3YvbWt5cVBTSTBpT3phSlpsVUFLM1JwVWhYMFArTzBE?=
- =?utf-8?B?QytLVEdPVE5IOWVLSlpJa0tYUlBuMmpDVmszQjhPdTVsa3dFV3NhUkh1ZWhU?=
- =?utf-8?B?VEMrNkxaaDhsR0pzSUZkdExzUGgvbnhndjJxR2l0YldwNlhESlN1TGxWNEZX?=
- =?utf-8?B?M21RelFudHVQNFlIWUc5bTdCYmpIWFRrekxrTmtNSkxTWXZiTk9FMjlvdkxU?=
- =?utf-8?B?N1NIamtEc2dscUlPOUxRdmdDdkV1U1E1VlR0ek1MYVdmdThhbUN5WWNvSWd4?=
- =?utf-8?B?YlBscmp5dnN0MkpjWnRyWHJLNEMxMjlHVE53V1NBOG02VjlUTXhjVGhVVzAv?=
- =?utf-8?B?d0FPRzlUd2tzMnBDK2tNUTFrU3h2dUhHbk5UZHg5OTF4NVE3ZDRuajVISGJ3?=
- =?utf-8?B?RnZ3NjZxR25oQ2o0emRkOXhNbk1qcE5HWmx0YXQ3U1QrcnBCeVdjejM2bXR0?=
- =?utf-8?B?UGxJczdlbWxUNE53Z2VjV0FkNzZwenZabk1PbGhmYVJiYVdyQU1IU0FURWNN?=
- =?utf-8?B?SGlTZmtHVVEycDZxUTR1eGcyMHV1aFA1NVZjVUxxVkN1K1h1b28zNkd5SEVQ?=
- =?utf-8?B?QzVwRFE2eUYzVTFiR0hnQUIwOXA5RmFBVG12L0dYK3RMeWhMMjJPYTlIMUI5?=
- =?utf-8?B?b2lxVVMxUm1PdCtIeUZPMnJQaDlLdExqYllVQktiREh4ZmZYYlYyRHZuaC9q?=
- =?utf-8?B?M3VNeDZqT2ZKSHppQmFmMTRsdTRwQWVXbk1NZFBDMmhVdnJpQS9vT0wyVHF5?=
- =?utf-8?B?ZWN3cmR1VE1sRCtXRUt6UDNwOHNtaDdmTFN6N1YzekEvNmpKNnR4Q2lYbWto?=
- =?utf-8?B?bmd0R08xeEljbTZNbXBMVkY2RmRwZlI5M0t3bmpmaE00aXh3bG9adHhSVGhO?=
- =?utf-8?B?QnFsMnVGYnRPTVBSczhKbjQxVFUyU0dpcS8yZkkxNnIrTnQxeElFQThRU0Ja?=
- =?utf-8?B?a1lHQ3FJSGUzMTBHN0NTOVBtNUt0b3FHZzNITXZzY3ZvN3d0UWFrTnBpNDB3?=
- =?utf-8?B?dC9BZWtta2JLUVN3NEIvS1dEL3VXU05HRUkzc25hWmJWSHZJaFU1MStxeW8x?=
- =?utf-8?B?cmpLZ0FXL1d2VkovWlFIbWo5aE5ITW5Cb3U4RkoxeDZNemdtZ09zb0xmb2F3?=
- =?utf-8?Q?PmSTRfh4bbbBx98Nox?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d6b35c9-7282-40ea-50a5-08df1dd2cf79
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2026 02:38:57.2557
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Kz4Gh+4PfT9OthCqi3aJai8u3MakmVbDYvKctajS1UUQMnHv4XP6ftmnTAa84qvE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV0PR12MB259608
+Content-Transfer-Encoding: 8bit
 
-On Thu Sep 17, 2026 at 12:22 PM EDT, Lorenzo Stoakes (ARM) wrote:
-> We currently disallow the installation of lightweight guard regions in VM=
-As
-> whose flags intersect VMA_SPECIAL_FLAGS or VMA_HUGETLB_BIT, or
-> VMA_LOCKED_BIT unless allow_locked is set.
->
-> hugetlb VMAs set VMA_DONTEXPAND_BIT so this was already redundant,
-> VMA_SPECIAL_FLAGS already sufficed.
->
-> However, now that VMA_IO_BIT is only set if VMA_PFNMAP or VMA_MIXEDMAP_BI=
-T
-> is set, this check collapses to being the equivalent of
-> !vma_can_merge().
->
-> Update is_valid_guard_vma() to reflect this.
->
-> No functional change intended.
->
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  mm/madvise.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
->
-LGTM.
+From: Yonghong Song <yonghong.song@linux.dev>
 
-Acked-by: Zi Yan <ziy@nvidia.com>
+[ Upstream commit 92de36080c93296ef9005690705cba260b9bd68a ]
 
---=20
-Best Regards,
-Yan, Zi
+syzbot reported a kernel crash due to
+  commit 1f1e864b6555 ("bpf: Handle sign-extenstin ctx member accesses").
+The reason is due to sign-extension of 32-bit load for
+packet data/data_end/data_meta uapi field.
+
+The original code looks like:
+        r2 = *(s32 *)(r1 + 76) /* load __sk_buff->data */
+        r3 = *(u32 *)(r1 + 80) /* load __sk_buff->data_end */
+        r0 = r2
+        r0 += 8
+        if r3 > r0 goto +1
+        ...
+Note that __sk_buff->data load has 32-bit sign extension.
+
+After verification and convert_ctx_accesses(), the final asm code looks like:
+        r2 = *(u64 *)(r1 +208)
+        r2 = (s32)r2
+        r3 = *(u64 *)(r1 +80)
+        r0 = r2
+        r0 += 8
+        if r3 > r0 goto pc+1
+        ...
+Note that 'r2 = (s32)r2' may make the kernel __sk_buff->data address invalid
+which may cause runtime failure.
+
+Currently, in C code, typically we have
+        void *data = (void *)(long)skb->data;
+        void *data_end = (void *)(long)skb->data_end;
+        ...
+and it will generate
+        r2 = *(u64 *)(r1 +208)
+        r3 = *(u64 *)(r1 +80)
+        r0 = r2
+        r0 += 8
+        if r3 > r0 goto pc+1
+
+If we allow sign-extension,
+        void *data = (void *)(long)(int)skb->data;
+        void *data_end = (void *)(long)skb->data_end;
+        ...
+the generated code looks like
+        r2 = *(u64 *)(r1 +208)
+        r2 <<= 32
+        r2 s>>= 32
+        r3 = *(u64 *)(r1 +80)
+        r0 = r2
+        r0 += 8
+        if r3 > r0 goto pc+1
+and this will cause verification failure since "r2 <<= 32" is not allowed
+as "r2" is a packet pointer.
+
+To fix this issue for case
+  r2 = *(s32 *)(r1 + 76) /* load __sk_buff->data */
+this patch added additional checking in is_valid_access() callback
+function for packet data/data_end/data_meta access. If those accesses
+are with sign-extenstion, the verification will fail.
+
+  [1] https://lore.kernel.org/bpf/000000000000c90eee061d236d37@google.com/
+
+[ Backport to 6.6.y: implemented the packet-field check without the newer
+  is_retval verifier API. ]
+
+Reported-by: syzbot+ad9ec60c8eaf69e6f99c@syzkaller.appspotmail.com
+Fixes: 1f1e864b6555 ("bpf: Handle sign-extenstin ctx member accesses")
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Link: https://lore.kernel.org/r/20240723153439.2429035-1-yonghong.song@linux.dev
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Assisted-by: LLM
+Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
+---
+Hi Greg, Sasha, and bpf maintainers,
+
+I am working through the small CVE backports still missing from 6.6.y.
+This one addresses CVE-2024-47702. It rejects sign-extended loads that can
+turn packet pointers into invalid addresses.
+
+The fix is already present in 6.12.y, 6.18.y, and 7.2.y, but not in 6.6.y.
+The target-specific adjustment is recorded in the bracketed note above.
+
+Could you please queue it for 6.6.y?
+
+CVE: CVE-2024-47702
+Upstream: 92de36080c93296ef9005690705cba260b9bd68a
+
+AI assistance: An LLM helped identify, adapt, and validate this backport; I
+reviewed the resulting code and validation evidence.
+
+Thanks,
+Artem Dinaburg
+
+ include/linux/bpf.h   |  1 +
+ kernel/bpf/verifier.c |  5 +++--
+ net/core/filter.c     | 21 ++++++++++++++++-----
+ 3 files changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fd20812cbcc331..1b2f3c94365e72 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -929,6 +929,7 @@ static_assert(__BPF_REG_TYPE_MAX <= BPF_BASE_TYPE_LIMIT);
+  */
+ struct bpf_insn_access_aux {
+ 	enum bpf_reg_type reg_type;
++	bool is_ldsx;
+ 	union {
+ 		int ctx_field_size;
+ 		struct {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f7f5f54dc44852..46c205087160c2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5664,11 +5664,12 @@ static int check_packet_access(struct bpf_verifier_env *env, u32 regno, int off,
+ /* check access to 'struct bpf_context' fields.  Supports fixed offsets only */
+ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off, int size,
+ 			    enum bpf_access_type t, enum bpf_reg_type *reg_type,
+-			    struct btf **btf, u32 *btf_id)
++			    struct btf **btf, u32 *btf_id, bool is_ldsx)
+ {
+ 	struct bpf_insn_access_aux info = {
+ 		.reg_type = *reg_type,
+ 		.log = &env->log,
++		.is_ldsx = is_ldsx,
+ 	};
+ 
+ 	if (env->ops->is_valid_access &&
+@@ -6917,7 +6918,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+ 			return err;
+ 
+ 		err = check_ctx_access(env, insn_idx, off, size, t, &reg_type, &btf,
+-				       &btf_id);
++				       &btf_id, is_ldsx);
+ 		if (err)
+ 			verbose_linfo(env, insn_idx, "; ");
+ 		if (!err && t == BPF_READ && value_regno >= 0) {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f568006baafa8a..bcf1f453f0373a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8631,13 +8631,16 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
+ 		if (off + size > offsetofend(struct __sk_buff, cb[4]))
+ 			return false;
+ 		break;
++	case bpf_ctx_range(struct __sk_buff, data):
++	case bpf_ctx_range(struct __sk_buff, data_meta):
++	case bpf_ctx_range(struct __sk_buff, data_end):
++		if (info->is_ldsx || size != size_default)
++			return false;
++		break;
+ 	case bpf_ctx_range_till(struct __sk_buff, remote_ip6[0], remote_ip6[3]):
+ 	case bpf_ctx_range_till(struct __sk_buff, local_ip6[0], local_ip6[3]):
+ 	case bpf_ctx_range_till(struct __sk_buff, remote_ip4, remote_ip4):
+ 	case bpf_ctx_range_till(struct __sk_buff, local_ip4, local_ip4):
+-	case bpf_ctx_range(struct __sk_buff, data):
+-	case bpf_ctx_range(struct __sk_buff, data_meta):
+-	case bpf_ctx_range(struct __sk_buff, data_end):
+ 		if (size != size_default)
+ 			return false;
+ 		break;
+@@ -9081,6 +9084,14 @@ static bool xdp_is_valid_access(int off, int size,
+ 			}
+ 		}
+ 		return false;
++	} else {
++		switch (off) {
++		case offsetof(struct xdp_md, data_meta):
++		case offsetof(struct xdp_md, data):
++		case offsetof(struct xdp_md, data_end):
++			if (info->is_ldsx)
++				return false;
++		}
+ 	}
+ 
+ 	switch (off) {
+@@ -9413,12 +9424,12 @@ static bool flow_dissector_is_valid_access(int off, int size,
+ 
+ 	switch (off) {
+ 	case bpf_ctx_range(struct __sk_buff, data):
+-		if (size != size_default)
++		if (info->is_ldsx || size != size_default)
+ 			return false;
+ 		info->reg_type = PTR_TO_PACKET;
+ 		return true;
+ 	case bpf_ctx_range(struct __sk_buff, data_end):
+-		if (size != size_default)
++		if (info->is_ldsx || size != size_default)
+ 			return false;
+ 		info->reg_type = PTR_TO_PACKET_END;
+ 		return true;
+-- 
+2.39.5
 
