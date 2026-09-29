@@ -1,85 +1,84 @@
-Received: from mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4E3522699
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 13:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0458B52CCC4;
+	Tue, 29 Sep 2026 13:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790689625; cv=none; b=TcAfOoj+06SBc0EPPdldvAru5FFaqZmxp2ZmRPN2LJuiXx99oCp+iuuTv5jMAjVxwXpFbpqtD3htwb5YhpaU5otd1X6BSMMi4CeTjaj/HffEdt8gmo3dRr0hALIIca/JA94V41tpE38YNV+GvOV6lUTlI0dQ8iSuEVSm0LXm1Jo=
+	t=1790689735; cv=none; b=GDmouxZ2XYEHAWbk4iHJ4ng/HjaTxfm8lVAcQjp78OcXWj4Tl7AdJqsO9fhuIXeFP8WFj/yh0xOBb8JLCW1MhbyMH1v5F44AZ8+GZ19lXHROjpZEZcorfM6tH7WwH2Nqb7gH63qa3Bx9rJD/mnz/ktj609wunos8ON27gu98FlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790689625; c=relaxed/simple;
-	bh=WrPfgETFw2Wn26KAsjIVoHMpa4pEd1Ar2QFOaJ6P6ow=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=PrzmUXOj2dMDGUmecZSszgRBjtzkt9m5+44cxLhWY48ajgNQnYaIeJUSzOd96ux4a6J5H1SLJICJsm3GGzk436/SbnShVvCcd7uDHXUz6GB5uRQqBvJ7z+SmRKlWDp9MhSOwW3QY5c+Yj28mIgLGRK1i4nFw+np/HTQLdbK9ypw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HaXp7Lmd; arc=none smtp.client-ip=95.215.58.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790689735; c=relaxed/simple;
+	bh=DxOA3K04TdGKgV9RBzwq7NMB042SfZvdvrNpiga7nYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VYg5Yp/Jn+jG7rpZwvbEbcPyJ/DsLBtgblnOHLOzQtnx6Nad8XFUCvItui6AMKz4AwgBVedaOXdbPfDOzKj9Hfbx5FTF+/0/Dmhoju1xwD8YWlxKFCWE5dKja5BmaQAsPHq6k9U8Bv6CnCU1SrtybNFunB7GeALltznu0gUBDSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TeENhm71; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HaXp7Lmd"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=WrPfgETFw2Wn26KAsjIVoHMpa4pEd1Ar2QFOaJ6P6ow=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790689621; v=1; x=1791294421;
- b=HaXp7LmdyWaNcR32feNaolNcyBlvVHM/lY/b1rh3WuMkwfQ+2oqFoQJg9C2Vh/BaEyCcFhy5
- zK/TrRVvqFGjthPryxE298u13cgOWrJtefoz+oPg5yue0+WWWjPA4fTwEY7eU/g0Z+afpEQ0Asu
- jRmAWSsHzQWqzh6I3vIKde7I=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3d76b2bad85621cf;
-	Tue, 29 Sep 2026 13:47:01 +0000
-X-Mizu-Trace-ID: 3d76b2bad85621cf
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <870cf576-a5b0-4390-ac8d-5ccfea2c82fe@linux.dev>
-Date: Tue, 29 Sep 2026 21:46:56 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TeENhm71"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC8B1F000FF;
+	Tue, 29 Sep 2026 13:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790689733;
+	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=TeENhm71871PnIfP2uUj5yUsaPzH8jjq0toNI7J1HWea0p/PX5pnnf4AQi7bwpqpT
+	 VuH59Vl6QL0PVVpzfNfgbUmo3C0NX1ocvPwYxheMNY2Wy4wOFyUJr+tw1QfJsIWCMM
+	 /cLg/9zOP+JJ3TDDSmPTHxgzP6RsrlN0DulUXpw3tzVjVEiZwHFhrsZA7c+AzuQOtq
+	 q9uWJkgpTVX4bC6vYQ+XHRVrlFFfLUZ0eQRsg/DBoBQcYnRx8sOXGengrBwY64mFGQ
+	 GCroh4xMccp9iMufU0ebQJGJvuK9pRuIvtLLWepHFXknUNFsbahJn9KO+KAb3hpL1Z
+	 q89x73rBxYK1Q==
+From: netdev-bot+sinfo@kernel.org
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Cc: Marcin Wojtas <marcin.s.wojtas@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ Toke Hoiland-Jorgensen <toke@redhat.com>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: 
+ Re: [PATCH net v4] net: mvneta: clear XDP pfmemalloc flag between frames
+Date: Tue, 29 Sep 2026 13:48:52 +0000
+Message-ID: <179068973211.31693.16960645398477065605@kernel.org>
+In-Reply-To: 
+ <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
+References: 
+ <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
+Auto-Submitted: auto-generated
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
- ameryhung@gmail.com, alexei.starovoitov@gmail.com
-Subject: Re: [RFC PATCH v7 3/4] blk-iocost: add iocost_ioc_tick tracepoint for
- per-period device summary
-To: Tejun Heo <tj@kernel.org>
-References: <20260924054549.2271705-1-cui.tao@linux.dev>
- <20260924054549.2271705-4-cui.tao@linux.dev>
- <4af70c48e8c7d1eac1425d368be92dcb@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <4af70c48e8c7d1eac1425d368be92dcb@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hello, Tejun.
+Hi!
 
-在 2026/9/29 08:42, Tejun Heo 写道:
-> Hello, Tao.
-> 
-> On Thu, 24 Sep 2026 13:45:48 +0800, Tao Cui wrote:
-> 
->> +	trace_iocost_ioc_tick(ioc, nr_active, usage_us_sum,
->> +			      ioc->period_us, ioc->vtime_base_rate,
->> +			      ioc->busy_level, ioc->running,
->> +			      now.now - ioc->period_at);
-> 
-> These are still passed in. Can you pass only ioc, &now, nr_active and
-> usage_us_sum and read the rest from ioc in TP_fast_assign() like the
-> other iocost events do?
-> 
+This is an automated message. This series looks like a fix, but its
+commit messages seem to be missing some information:
 
-Done.  The event now takes only ioc, &now, nr_active and
-usage_us_sum.  TP_fast_assign() reads period_us, vrate, busy_level
-and running from ioc directly, and derives the elapsed period for
-the usage percentage as now->now - ioc->period_at.
+ - How the issue was discovered, e.g. hit in production, hit during
+   development, syzbot report, manual code inspection, LLM or static
+   analysis tool scan.
 
-Thanks.
-Tao> Thanks.
-> 
-> --
-> tejun
+ - Whether the issue was actually triggered, or is only theoretical
+   (e.g. found by code inspection). If it was triggered please include
+   the symptoms, like the stack trace or error messages.
 
+ - What hardware the change was tested on. For driver fixes please
+   mention the device (and if relevant firmware version) used for
+   testing, or say that the change was not tested on real hardware.
+
+Please do not repost the series just to address the above. Instead,
+reply to this email with the missing information, so that reviewers
+can take it into account. If the series needs another revision for
+other reasons, please include the information in the commit messages
+then.
+
+The evaluation is done by an LLM so it may be wrong, if you think
+that is the case please reply and explain.
