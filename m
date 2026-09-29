@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC1F501293
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A852515987
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790682050; cv=none; b=mKgfsnpr6qtlpaaxao8exBJwtd1aBhmhuDSHEOuaY2whzR0FGkJ9BJmPHWrs/LMnkhKqwWP1rwcbLkXuHE5CvjqRXeaR4J9hbwGfH0MLWrZr19D6ub9cMkGgqQspQ7UDdS0oDMCt3ITAXiEvx9VMOW/XIL/rtw5MIi9yThE4QIM=
+	t=1790682050; cv=none; b=VRwFidP96q99ttZsF3yQmdVNFB+Us0q7k4yNFnlVR446HuGvd4te7f5VEicI5O39hbG9BY8pjxuKH9YW9B5PAwqjadgbwwNlhKNZmYx+AL7ydhucgmgvZRaMmtQgsh2KE2qBeRRHI72ZSnXnt190rOhJ1L5SAAzNelK+JnXejz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790682050; c=relaxed/simple;
-	bh=POGUJd2jhXuiDa1zp0LFsoIoA1ove4WyFGFg73LjOVg=;
+	bh=hfkw7fYPDQOzjgeH7LdcGs6CmE2bOjX3iEFbZltnuck=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=a2LlAXmrsu36CdOS3EgedGYAonRVMaaOL8/UOzSlSXDriiwQqOO2NihfqZ+Cf0oMtGAOe9D3JXp/4HMjwnnsyJmCJNfANX4xeA6SdcMnTia3/TmAOQ7AHkWhW7v/enqFGFx5GmiG0aB6Wh+emJg1txGXTdfp4l0DCJmyMsrVxUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PH5IryQE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kxYYQ7m8QJ95kq+cipotlDojs1kQpb8uq97gJXeT0t9ZfuQE0/X3nxcf5ZVp3n79Huj6i7fuPLckEdTD5ZMKj0on+tsJMycMuk4g31miFXOu106/NDL+rkwgH0Q1JJiUMmaUVIS9qmIprrC5J3CrpZgiWc0OnmUtfaKr6jkA17A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNGN25dC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PH5IryQE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA461F000FF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNGN25dC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2AE51F00893;
 	Tue, 29 Sep 2026 11:40:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1790682048;
-	bh=hPFmbemxWqB2wBkl76wYh3JiDGijqOQhM8kglqdwdTg=;
+	bh=at8K9TmkcP6+I6Co1J16jFV6ou5AFY6xl2fSuzwE+AU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PH5IryQEv6Hi/EPHwhZoDKzGOw//sFTroreeqSGE3E1kKMguRNIIheZTAtL8+0I61
-	 FWOyRWyeolBHKgd0u+ywIaT5+V9vouH2QMuqKHDxoOtiaG1QpgX7gR7fPvNRMlOu0t
-	 mnirVF/9JbeWc3pMWvdl4BNOAxfoTQ4DcFdLTHg6HnTytJIqSQ17q/2jS9SRP/geHX
-	 4ZY8JwDfQ77IcW5ZZtokHQmtKi5txwJZWMQCghsuLUYEdHTWXELjjxb4WQKzFNhvJ8
-	 uixEdt0opK+LJwZPCG/icbWnCpN5W2aPy35FMjpkeUzd5rnSLT2ebHiBxR9IS9i9Ug
-	 gUzzHczgchM1w==
+	b=nNGN25dCkTAvjXTR9NgEEXUSHts4kbNYCEXl+d2lLPnYX1S54Wxktx4ZgjOA7rUUn
+	 w4JO6iEsqNaoFNa/t5MTqU/7qikCZGB/ZDyXIJd2wZm0gG8RuzY3c4K3w3Rq4ZVeQi
+	 t3XaY8YfT3vgnme4FrMfRzqBEOFH4hran6ApooBw9TDT8J37CgqTP1KFuy+Jle5Y9u
+	 JKfRIHpGjl/4GLoz35zoyNg86rL69lqeoejlXwhr/IsGfx0+NAklwHb1TH1gBGnlUz
+	 e7+f/Yt/lfh8Gqd9hFYdaq0QZ2A4wEMupFZSr1hwPzJTtGo/2hXXUV5DAG0rYF0S6Y
+	 hRjUvdeuODYBw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 02/15] bpf: Add bpf_skb_fclone_orig() kfunc
+Subject: Re: [PATCH net-next 03/15] bpf: Accept trusted pointers to kern ctx
+ type for kfunc ctx args
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jakub Sitnicki" <jakub@cloudflare.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260928-bpf-meta-gated-tracepoints-v1-2-844dbf3e1edf@cloudflare.com>
+In-Reply-To: <20260928-bpf-meta-gated-tracepoints-v1-3-844dbf3e1edf@cloudflare.com>
 References: <20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com>
- <20260928-bpf-meta-gated-tracepoints-v1-2-844dbf3e1edf@cloudflare.com>
+ <20260928-bpf-meta-gated-tracepoints-v1-3-844dbf3e1edf@cloudflare.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 11:40:47 +0000
-Message-Id: <20260929114048.2DA461F000FF@smtp.kernel.org>
+Date: Tue, 29 Sep 2026 11:40:48 +0000
+Message-Id: <20260929114048.D2AE51F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,89 +47,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: UAF/Leak via trusted logically freed skb in bpf_skb_fclone_or=
-ig()
-- [Low] bpf: kernel-doc parameter mismatch for bpf_skb_fclone_orig
+- [High] bpf: unvalidated PTR_TO_BTF_ID offset in kfunc ctx args leads to O=
+OB access
+- [Medium] bpf: premature loop exit in check_kfunc_args() leaves meta->ret_=
+btf_id uninitialized
 --
 
-commit cbb8066a0a59ac3028e52e52059cc238816dbe14
+commit ea1588dd82a28e6c8256a75b8fbee8a46aedb584
 Author: Jakub Sitnicki <jakub@cloudflare.com>
 
-bpf: Add bpf_skb_fclone_orig() kfunc
+bpf: Accept trusted pointers to kern ctx type for kfunc ctx args
 
-This patch introduces a new kfunc bpf_skb_fclone_orig() to allow BPF
-programs to retrieve the fast-clone original of a TCP write-queue skb.
-This enables associating metadata with the original skb that will show
-up during retransmissions.
+This commit updates kfunc argument handling to accept trusted PTR_TO_BTF_ID
+pointers for KF_ARG_PTR_TO_CTX arguments, provided they match the expected
+kernel context type. It allows passing derived kernel pointers, such as
+those from bpf_skb_fclone_twin(), to kfuncs expecting a context pointer.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 33c1ee3b966b0..fdfc1016030a2 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -12469,6 +12469,30 @@ __bpf_kfunc bool bpf_skb_is_traced(struct sk_buf=
-f *skb)
->  	return skb->traced;
->  }
-> =20
-> +/**
-> + * bpf_skb_fclone_orig() - Return the fast-clone original of an skb
-> + * @skb_: socket buffer allocated from the fclone cache
-
-[Severity: Low]
-This isn't a bug, but there is a kernel-doc parameter mismatch here.
-The documentation refers to @skb_, but the function signature below uses
-skb. Could this trigger a warning during W=3D1 builds?
-
-> + *
-> + * TCP write-queue skbs are allocated from the fclone cache, the packet
-> + * transmitted on the wire is a fast clone. A prog can only associate
-> + * metadata with an skb by keying on its address. On retransmission TCP
-> + * reuses the write-queue original, a different address with no packet
-> + * hook, so the retransmit carries no metadata. A prog can use this kfunc
-> + * to retrieve the address of the write-queue original and populate the
-> + * metadata stash for it, so the metadata shows up on skb retransmits.
-> + *
-> + * Return:
-> + * * orig skb address  - skb is a fast clone
-> + * * %NULL             - skb is not a fast clone
-> + */
-> +__bpf_kfunc struct sk_buff *bpf_skb_fclone_orig(struct sk_buff *skb)
-> +{
-> +	if (skb->fclone =3D=3D SKB_FCLONE_CLONE)
-> +		return &container_of(skb, struct sk_buff_fclones, skb2)->skb1;
-> +
-> +	return NULL;
-> +}
-> +
->  #endif /* CONFIG_SKB_GATED_TRACEPOINTS */
-
-[ ... ]
-
-> @@ -12856,6 +12880,7 @@ BTF_KFUNCS_END(bpf_kfunc_check_set_skb_meta)
->  BTF_KFUNCS_START(bpf_kfunc_check_set_skb_tracepoints)
->  BTF_ID_FLAGS(func, bpf_trace_skb)
->  BTF_ID_FLAGS(func, bpf_skb_is_traced)
-> +BTF_ID_FLAGS(func, bpf_skb_fclone_orig, KF_RET_NULL)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 41b49c56e1237..da5d6de58650f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12891,6 +12891,23 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_call_arg_me
+>  			break;
+>  		case KF_ARG_PTR_TO_CTX:
+>  			if (reg->type !=3D PTR_TO_CTX) {
+> +				/* Only accept trusted kernel-context pointers from
+> +				 * vmlinux BTF. reg->btf_id is scoped to reg->btf,
+> +				 * so a module-local ID could otherwise alias the
+> +				 * vmlinux context type ID.
+> +				 */
+> +				if (base_type(reg->type) =3D=3D PTR_TO_BTF_ID &&
+> +				    reg->btf =3D=3D btf_vmlinux &&
+> +				    is_trusted_reg(env, reg) &&
+> +				    !bpf_type_has_unsafe_modifiers(reg->type)) {
+> +					ret =3D get_kern_ctx_btf_id(&env->log,
+> +								  resolve_prog_type(env->prog));
+> +					if (ret < 0)
+> +						return -EINVAL;
+> +					if (reg->btf_id =3D=3D ret)
+> +						break;
 
 [Severity: High]
-Can this allow a BPF program to modify a logically dead skb, leading to a
-memory leak or use-after-free?
+Does this code allow a PTR_TO_BTF_ID with a non-zero fixed offset to be
+passed to the kfunc?
 
-If TCP receives an ACK and logically frees the original skb (skb1), its
-users count drops to 0. If a qdisc or driver later drops the fast clone
-(skb2) and triggers a tracepoint, calling bpf_skb_fclone_orig() returns a
-pointer to the dead skb1.
+Earlier in check_kfunc_args(), btf_id_fixed_off_ok defaults to true for
+KF_ARG_PTR_TO_CTX. When __check_func_arg_reg_off() is called, it permits
+the non-zero offset for PTR_TO_BTF_ID. The newly added explicit type check
+here then breaks out of argument checking without verifying that
+reg->off =3D=3D 0. Can this allow a user to shift a trusted kernel pointer =
+by
+an arbitrary offset before passing it to a kfunc, leading to out-of-bounds
+memory reads or writes within the kernel?
 
-Since the kfunc is registered here without KF_ACQUIRE or KF_RCU, does the
-verifier treat the returned pointer as implicitly PTR_TRUSTED?
+[Severity: Medium]
+Will this break statement prematurely exit the switch(base_type(kf_arg_type=
+))
+block instead of bypassing just the -EINVAL error condition?
 
-If a BPF program passes this returned skb to bpf_dynptr_from_skb() and
-calls bpf_dynptr_write(), pskb_expand_head() could allocate a new head
-buffer for the dead skb1, permanently leaking it.
+If a BPF program calls bpf_cast_to_kern_ctx() and passes a trusted
+PTR_TO_BTF_ID that matches the context type, hitting this break statement
+completely skips the explicit initialization block of meta->ret_btf_id for
+KF_bpf_cast_to_kern_ctx at the bottom of the case KF_ARG_PTR_TO_CTX block:
 
->  BTF_KFUNCS_END(bpf_kfunc_check_set_skb_tracepoints)
->  #endif
+    if (meta->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern_ctx]) {
+        ret =3D get_kern_ctx_btf_id(&env->log, resolve_prog_type(env->prog)=
+);
+        if (ret < 0)
+            return -EINVAL;
+        meta->ret_btf_id  =3D ret;
+    }
+    break;
+
+Does this leave meta->ret_btf_id uninitialized as 0 (void type), corrupting
+the verifier's type tracking and causing valid BPF programs to be rejected?
+
+> +				}
+> +
+>  				verbose(env, "%s expected pointer to ctx, but got %s\n",
+>  					reg_arg_name(env, argno), reg_type_str(env, reg->type));
+>  				bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928-bpf-meta-g=
-ated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com?part=3D2
+ated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com?part=3D3
