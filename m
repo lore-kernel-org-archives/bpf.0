@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61593DB964;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C620C4F93AF;
 	Tue, 29 Sep 2026 18:07:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790705251; cv=none; b=QLgQsyldn5QjAsr8fjPSH72LDkmVnZqxzRBNSUf6GmEN60pNYpUTNBr+MIYItIj7onqf2jCK/aAgKxdSKa6gHhS8ryYFURQAYmh5BetBQFx6MRHAZk/8DRMsnW4TH24x2eVKOYnxWrBhCAM3MCwkPkoqfdXIqToz41n3kgqY86A=
+	t=1790705251; cv=none; b=denldlP5urJNl2qJihkSKg10x5C0gOdVObQsNY+3ptTF71XiJN5FChMJHVnJQLQzVyVQO3yR2r9Q0IVHhodMD5P/xnU6wsL6h3qohpLdiVpPQpv0Q7PUH1ppWmw6WjNAs/jhbGa0QiMevnTIOh/cKXFT8cxTACgBRW/YgSIUMfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790705251; c=relaxed/simple;
-	bh=XYOaZbRokxjR3B6SH6nyhW9zCU/VeMMpUYKXX/U8GK8=;
+	bh=Ggz1UUM43554Nty4rDDk9gjTjgoBO/hZuuIpxY4kNrY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=m/5EByaY6KWrBFHi/rtEh/0w5VIvGZSKANHcsWdOKyF+69ulCrJqy9GvY+9K/qUMR+rvhCgbKC27XxyrX6Gt8EltJcr+/a9M2reQTFEYPUFghtUJoWeENCYV0n7uzYyHaH07iUhVksove5HKuq0jHEI6ftoKR7WWQkWcsG8aetw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ab5J9ee1; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=fY8FEy9w5S8erskh2tcEQb6Fc3a+B8967ZntKzuX7nkkUB7w5gVlK78DngmEbeUiBTDLAt/m0TJsoeyTWbBTlOp6UIfnLWBQ3gnpm12pzYG4Ni7TVp7sDFQve8E1USRp4EuqOi3ifsJiMuUBCdxXB8RkKVRR+TsXUah/BoxUhLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X9f2qUyA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ab5J9ee1"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80B6DC4AF15;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X9f2qUyA"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FFF5C4AF12;
 	Tue, 29 Sep 2026 18:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1790705251;
-	bh=XYOaZbRokxjR3B6SH6nyhW9zCU/VeMMpUYKXX/U8GK8=;
+	bh=Ggz1UUM43554Nty4rDDk9gjTjgoBO/hZuuIpxY4kNrY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Ab5J9ee1qIrhljNTtq9opmY26T7gMK3m9qN6sF/DFO/1NWdPxO15wkMhnh8CP1mk4
-	 8JjW1seOHEaNbrx/viGXmhcRokVJtWdcYhU5XmPIQMOsDkZQUPvW9hmHuh9AWq81sM
-	 URRkdeZZIuouLSMLQf3IU4ZIzv2dvSKsZXUVg2rayihLKbMfMG8NUnfGYFlWbC75nA
-	 NlKKmX5mmhtgO1BilEDbnwdhRt0gZt6Btob8L2ydP057vWehKbQtb6sDNqDHyBKHCw
-	 isf5+j1P+JucSurgGjWZc9Di333QTkZuYbWe8ucgz9+AH5vJCK08kBGbzeHijjGFbb
-	 X5vB5BtkgQ9qA==
+	b=X9f2qUyAGI5nJfO96qv1KE6A9NLaQfGi1sbaFNaMgz05SBaKLYoafKwRSuS/SxhOx
+	 XfzIhXlI/EPO+m7ECzW/m8tEu7TUBki19jPWjREJ5EXvUneTd+eQ7Fxsnc+QyxWsQ/
+	 av7Ag76WVKDFRotTpQ6+ec3BqyLK6QLrrtHye1IUdxQtaCostoGbiJSkJ6fo/Oyar9
+	 eDH+9scrQX7KMH57qeMp/4LPNkBwhq5MicJCtbaeaoHPlNEgtflaedg3lKD29C6AO+
+	 1uEBQrJ8lTPQiDx9wBPLfYldW/pePYt+KWJlWw0HU8bRGdIad6fUPUNqeuaEP3SS8t
+	 xkdjcWuK1R2yQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FB36CA5FAD;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC7DCA5FA5;
 	Tue, 29 Sep 2026 18:07:31 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 29 Sep 2026 12:07:31 -0600
-Subject: [PATCH v7 2/3] kallsyms: Increase marker density to 16:1 to
- accelerate lookups
+Date: Tue, 29 Sep 2026 12:07:30 -0600
+Subject: [PATCH v7 1/3] kallsyms: Match compressed tokens on the fly during
+ binary search
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260929-ksyms-tune-v7-2-be568ceef41e@gmail.com>
+Message-Id: <20260929-ksyms-tune-v7-1-be568ceef41e@gmail.com>
 References: <20260929-ksyms-tune-v7-0-be568ceef41e@gmail.com>
 In-Reply-To: <20260929-ksyms-tune-v7-0-be568ceef41e@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>
@@ -54,11 +54,11 @@ Cc: Petr Mladek <pmladek@suse.com>, Zhen Lei <thunder.leizhen@huawei.com>,
  linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
  bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790705250; l=5688;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790705250; l=7334;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=L4+N7wtX63R4ON7KHqWeibK8O6baOU4ILoweuWjUQVg=;
- b=EPNmLWaNlLyoHmqK9vY/cNLtX7TGIah4Z3Q4bWcH58kHqkaEoZdiG5xfjKmJupB9xxhYLvOi7
- AkgVipaT7gXBOxBgX94kYQQHDTvHPC0hmd68rCUcEg4OFhGmBQeYHFW
+ bh=x418C0Z26mQamkJXbHqPXO271fxdJW9S7nrWDjCs7VE=;
+ b=2WgV4XHsleAnDMiLsyPdykI+Qruslpzu80vLrmHPGG9Hw/4hdjCItDegefygMibHIddsT57f+
+ ncGlUwzBGtXA4LjwBnOz8cmAj66u1jy9B393AMwogdB0jU25cwQ1tyC
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -68,154 +68,216 @@ Reply-To: jim.cromie@gmail.com
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-kallsyms stores symbols with remarkably efficient packing, and simple
-streaming unpacking, laid out sequentially in address order.  That said,
-variable-length records make arbitrary access inherently linear.
-kallsyms_markers[] addressed this by marking stream offsets every 256
-symbols, reducing the scan distance by 256x down to an average of
-127.5 sequential steps.
+kallsyms_lookup_names() runs a binary search across ~184k tokenized
+(compressed) symbols.  For each of the ~17 comparisons in the search, it
+currently decompresses the candidate symbol into a temporary buffer on
+the stack before calling strcmp().
 
-While 127.5 hops was negligible for rare, single-shot oops backtraces,
-both table size (~184k symbols) and lookup traffic have expanded
-substantially.  In alphabetical binary search (kallsyms_lookup_names),
-each of the ~17 comparison probes must locate candidate symbols via
-get_symbol_offset(), compounding into ~2,170 sequential symbol hops
-per lookup.  In bulk tracing workloads (such as BPF multi-kprobe
-attach), this penalty compounds into multi-second latency.
+Comparing tokenized symbols directly in compressed space is
+impossible.  The BPE token table assigns values by frequency, not
+alphabetical order (e.g. token 0x05 might expand to "zebra" while 0x42
+expands to "apple"), so comparing raw token values scrambles
+lexicographical order.  Even sorting the token table alphabetically
+wouldn't help; "bpf_" and "bpf_foo_" do not *have* a determinative
+sorting order, because the suffixes following those tokens would
+matter.
 
-Without altering the underlying storage layout, we can retune this
-trade-off directly by increasing marker density from 256:1 down to
-16:1 (KALLSYMS_MARKER_SHIFT 4) in kernel/kallsyms_internal.h, shared
-between scripts/kallsyms.c and kernel/kallsyms.c.
+However, full string expansion at every step is equally wasteful: of
+the ~17 strcmps in the binary search, only the last needs to check
+all N chars in both strings, earlier steps will know +/- outcome at
+char 0,1,2..N-1.
 
-This caps the remainder scan at 15 symbols and cuts average scan distance
-from 127.5 down to 7.5 hops (a 17x reduction).  Across a 17-step binary
-search, total hops collapse from ~2,170 down to ~127.  For a kernel with
-~184,000 symbols, this adds ~10,800 u32 marker entries (+42 KiB) to
-write-protected .rodata.
+However, full string expansion at every step is equally wasteful: of
+the ~17 strcmp()s in the binary search, only the final matching step
+needs to test all characters.  Earlier non-matching steps diverge at
+the first differing character (0..N-1), but the baseline expands every
+candidate symbol to the stack unconditionally, before comparing.
 
-In-tree CONFIG_KALLSYMS_SELFTEST measurements across all ~184k symbols
-show average lookup latency dropping from 6,102 ns down to 866 ns (a
-7.0x speedup).
+So we introduce kallsyms_strcmp_symbol() to compare ASCII search_name
+against tokenized symbols on the fly.  Like strcmp, it tests the
+strings char by char, but when it hits a token in the symbol-string,
+it continues the char-test against that token-string, which is in
+kallsyms_token_table[].  It returns +- on 1st mismatch.
+
+Measured across all ~184k symbols via CONFIG_KALLSYMS_SELFTEST, this
+shaves ~530 ns (~14%) off average kallsyms_lookup_name() latency (from
+~3810 ns to ~3280 ns on the default 256:1 baseline) and drops the
+512-byte namebuf buffer stack-alloc in kallsyms_lookup_names().
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
 Changes in v6:
-- Recast intro around the kallsyms storage/marker trade-off (efficient
-  address packing vs linear search hops).
-- Drop hunk-by-hunk numbered list from commit body (addresses BPF CI
-  review).
-- Drop 0.002% percentage claim and state absolute .rodata cost (+42 KiB
-  for ~184k symbols).
-- Drop ephemeral benchmark comment from kernel/kallsyms_internal.h.
-  replace with scripts/kallsyms.c include ref and __KERNEL__ wrap
+- Clarify character match mechanics in commit body (no stack expansion,
+  short-circuit at first divergent char 0..N-1).
+- Cite CONFIG_KALLSYMS_SELFTEST across all ~184k symbols for performance
+  measurements.
+- Drop stale "unindexed" phrasing and update symbol count to ~184k.
 
-Changes in v5:
-- Replace dynamic 1:1 batch lookup index (kvmalloc, mutexes, RCU) with
-  static 16:1 marker density (KALLSYMS_MARKER_SHIFT 4) in .rodata
-  (addresses Kees Cook review).
-- Eliminate all dynamic RAM allocations, setup/teardown costs, and
-  external batch APIs.
+Changes in v3:
+- Reorder patch ahead of dynamic batch index in series, establishing an
+  active proof of string matching savings on unindexed baseline
+  (addresses David Laight review).
+- Optimize kallsyms_strcmp_symbol(): drop skipped_first tracking and
+  test len at loop bottom (addresses David Laight review).
+- Guard first token with while (*tptr) to handle 1-byte type tokens.
+- Introduce get_symbol_data() helper in this patch for reuse later
 
-fx2
+Changes in v2:
+- Rebase onto mainline v7.3-rc4, removing external dependencies on
+  Lorenzo Stoakes' kbuild series.
 ---
- kernel/kallsyms.c          |  8 ++++----
- kernel/kallsyms_internal.h | 11 +++++++++++
- scripts/kallsyms.c         | 14 +++++++++-----
- 3 files changed, 24 insertions(+), 9 deletions(-)
+ kernel/kallsyms.c | 94 ++++++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 59 insertions(+), 35 deletions(-)
 
 diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index d18d78e626db..91ced7aa797e 100644
+index aec2f06858af..d18d78e626db 100644
 --- a/kernel/kallsyms.c
 +++ b/kernel/kallsyms.c
-@@ -150,10 +150,10 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 	int i, len;
+@@ -34,6 +34,21 @@
  
- 	/*
--	 * Use the closest marker we have. We have markers every 256 positions,
--	 * so that should be close enough.
-+	 * Use the closest marker we have. We have markers every
-+	 * (1 << KALLSYMS_MARKER_SHIFT) positions, so that should be close enough.
- 	 */
--	name = &kallsyms_names[kallsyms_markers[pos >> 8]];
-+	name = &kallsyms_names[kallsyms_markers[pos >> KALLSYMS_MARKER_SHIFT]];
- 
- 	/*
- 	 * Sequentially scan all the symbols up to the point we're searching
-@@ -161,7 +161,7 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 	 * so we just need to add the len to the current pointer for every
- 	 * symbol we wish to skip.
- 	 */
--	for (i = 0; i < (pos & 0xFF); i++) {
-+	for (i = 0; i < (pos & KALLSYMS_MARKER_MASK); i++) {
- 		len = *name;
- 
- 		/*
-diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
-index 81a867dbe57d..6a781e4cc77f 100644
---- a/kernel/kallsyms_internal.h
-+++ b/kernel/kallsyms_internal.h
-@@ -2,6 +2,16 @@
- #ifndef LINUX_KALLSYMS_INTERNAL_H_
- #define LINUX_KALLSYMS_INTERNAL_H_
+ #include "kallsyms_internal.h"
  
 +/*
-+ * Provide compile-constants for scripts/kallsyms.c
-+ * so it can build the corresponding kallsyms_marker[] table.
-+ * and wrap the rest in __KERNEL__
++ * Get the compressed symbol length and data pointer.
 + */
-+#define KALLSYMS_MARKER_SHIFT 4
-+#define KALLSYMS_MARKER_SIZE  (1U << KALLSYMS_MARKER_SHIFT)
-+#define KALLSYMS_MARKER_MASK  (KALLSYMS_MARKER_SIZE - 1U)
++static inline const u8 *get_symbol_data(unsigned int off, unsigned int *len)
++{
++	const u8 *p = &kallsyms_names[off];
++	unsigned int l = *p++;
 +
-+#ifdef __KERNEL__
- #include <linux/types.h>
- 
- extern const int kallsyms_offsets[];
-@@ -14,5 +24,6 @@ extern const u16 kallsyms_token_index[];
- 
- extern const unsigned int kallsyms_markers[];
- extern const u8 kallsyms_seqs_of_names[];
-+#endif /* __KERNEL__ */
- 
- #endif // LINUX_KALLSYMS_INTERNAL_H_
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 494852ade6d8..be42a9111350 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -29,6 +29,8 @@
- 
- #include <xalloc.h>
- 
-+#include "../kernel/kallsyms_internal.h"
++	if (unlikely(l & 0x80))
++		l = (l & 0x7F) | (*p++ << 7);
++	*len = l;
 +
- #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
++	return p;
++}
++
+ /*
+  * Expand a compressed symbol data into the resulting uncompressed string,
+  * if uncompressed string is too long (>= maxlen), it will be truncated,
+@@ -42,28 +57,12 @@
+ static unsigned int kallsyms_expand_symbol(unsigned int off,
+ 					   char *result, size_t maxlen)
+ {
+-	int len, skipped_first = 0;
++	int skipped_first = 0;
+ 	const char *tptr;
+-	const u8 *data;
++	unsigned int len;
++	const u8 *data = get_symbol_data(off, &len);
  
- #define KSYM_NAME_LEN		512
-@@ -349,16 +351,18 @@ static void write_src(void)
- 	printf("\t.long\t%u\n", table_cnt);
- 	printf("\n");
+-	/* Get the compressed symbol length from the first symbol byte. */
+-	data = &kallsyms_names[off];
+-	len = *data;
+-	data++;
+-	off++;
+-
+-	/* If MSB is 1, it is a "big" symbol, so needs an additional byte. */
+-	if ((len & 0x80) != 0) {
+-		len = (len & 0x7F) | (*data << 7);
+-		data++;
+-		off++;
+-	}
+-
+-	/*
+-	 * Update the offset to return the offset for the next symbol on
+-	 * the compressed stream.
+-	 */
+-	off += len;
++	off = (data - kallsyms_names) + len;
  
--	/* table of offset markers, that give the offset in the compressed stream
--	 * every 256 symbols */
--	markers_cnt = (table_cnt + 255) / 256;
-+	/*
-+	 * Table of offset markers, giving the offset in the compressed stream
-+	 * every (1 << KALLSYMS_MARKER_SHIFT) symbols.
-+	 */
-+	markers_cnt = (table_cnt + KALLSYMS_MARKER_MASK) >> KALLSYMS_MARKER_SHIFT;
- 	markers = xmalloc(sizeof(*markers) * markers_cnt);
+ 	/*
+ 	 * For every byte on the compressed symbol data, copy the table
+@@ -101,14 +100,43 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+  */
+ static char kallsyms_get_symbol_type(unsigned int off)
+ {
+-	/*
+-	 * Get just the first code, look it up in the token table,
+-	 * and return the first char from this token. If MSB of length
+-	 * is 1, it is a "big" symbol, so needs an additional byte.
+-	 */
+-	if (kallsyms_names[off] & 0x80)
+-		off++;
+-	return kallsyms_token_table[kallsyms_token_index[kallsyms_names[off + 1]]];
++	unsigned int len;
++	const u8 *data = get_symbol_data(off, &len);
++
++	return kallsyms_token_table[kallsyms_token_index[*data]];
++}
++
++/*
++ * Compare an uncompressed ASCII string against a compressed symbol table entry.
++ * Returns negative if name < sym, positive if name > sym, 0 if equal.
++ * Exits immediately on the first mismatched character without decompressing
++ * the rest of the symbol name.
++ */
++static int kallsyms_strcmp_symbol(unsigned int off, const char *name)
++{
++	const char *tptr;
++	unsigned int len;
++	const u8 *data = get_symbol_data(off, &len);
++
++	tptr = &kallsyms_token_table[kallsyms_token_index[*data++]] + 1;
++	while (*tptr) {
++		int diff = (unsigned char)*name++ - (unsigned char)*tptr++;
++
++		if (diff)
++			return diff;
++	}
++
++	while (--len) {
++		tptr = &kallsyms_token_table[kallsyms_token_index[*data++]];
++		do {
++			int diff = (unsigned char)*name++ - (unsigned char)*tptr++;
++
++			if (diff)
++				return diff;
++		} while (*tptr);
++	}
++
++	return (unsigned char)*name;
+ }
  
- 	output_label("kallsyms_names");
- 	off = 0;
- 	for (i = 0; i < table_cnt; i++) {
--		if ((i & 0xFF) == 0)
--			markers[i >> 8] = off;
-+		if ((i & KALLSYMS_MARKER_MASK) == 0)
-+			markers[i >> KALLSYMS_MARKER_SHIFT] = off;
- 		table[i]->seq = i;
  
- 		/* There cannot be any symbol of length zero. */
+@@ -174,7 +202,6 @@ static int kallsyms_lookup_names(const char *name,
+ 	int ret;
+ 	int low, mid, high;
+ 	unsigned int seq, off;
+-	char namebuf[KSYM_NAME_LEN];
+ 
+ 	low = 0;
+ 	high = kallsyms_num_syms - 1;
+@@ -183,8 +210,7 @@ static int kallsyms_lookup_names(const char *name,
+ 		mid = low + (high - low) / 2;
+ 		seq = get_symbol_seq(mid);
+ 		off = get_symbol_offset(seq);
+-		kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+-		ret = strcmp(name, namebuf);
++		ret = kallsyms_strcmp_symbol(off, name);
+ 		if (ret > 0)
+ 			low = mid + 1;
+ 		else if (ret < 0)
+@@ -200,8 +226,7 @@ static int kallsyms_lookup_names(const char *name,
+ 	while (low) {
+ 		seq = get_symbol_seq(low - 1);
+ 		off = get_symbol_offset(seq);
+-		kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+-		if (strcmp(name, namebuf))
++		if (kallsyms_strcmp_symbol(off, name) != 0)
+ 			break;
+ 		low--;
+ 	}
+@@ -212,8 +237,7 @@ static int kallsyms_lookup_names(const char *name,
+ 		while (high < kallsyms_num_syms - 1) {
+ 			seq = get_symbol_seq(high + 1);
+ 			off = get_symbol_offset(seq);
+-			kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+-			if (strcmp(name, namebuf))
++			if (kallsyms_strcmp_symbol(off, name) != 0)
+ 				break;
+ 			high++;
+ 		}
 
 -- 
 2.55.0
