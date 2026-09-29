@@ -1,32 +1,33 @@
-Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
+Received: from mta1.migadu.com (out-3.mta1.migadu.com [95.215.58.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA71B384250
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628A2380FFB
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790643272; cv=none; b=uz8Vc2Efq6ro/22p7ON9h/Vt+QoCzjr0MQVRzmrHY2IzNyLKVu8SlHIkGyJ8T5vCnuf3uEVzBMiXIodbm65MrCgMTFs5cFtiRHjrW4Ua6JCX4WoiVDBWHXKhWXvlMz7BMTAiCBywcdzMFPTR+RNh1als4bepwR5YhrsZoQACkBQ=
+	t=1790643275; cv=none; b=K1jtl9HkXKuJdlkAMchu+yr6i6LZ62LxoOJ2rBHqQHD2mYkH4eifMOMVft9sk0FHF4yWntPzzqskU5sKdUtFZZ5BHeBe3/cv8FkzGuk3SjVcT+UNR0Xy0WqTqfLttjHmvVk9m9vSfLjfKlxtmNUPIsybW/T3gSXoWh1f0lw+CKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790643272; c=relaxed/simple;
-	bh=/ZN+t8Y7O1ERXt/PK2W2EQrnipLYq8zXZKVAc4oVFWI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tPvfdEEPtfN1DWCEqIkbz7IQJyTEvlC8qQwxSTvlb8cWiA7P4g4vaEmBPlx2i/rebvaJ/nko86NI467+S7OyShPtKRJsZWQoGY+9n/go387rXxrfiff93MFsJcUdRZYhzS4eUSEyVCgzGA0THs+IwFZBBhGAlabRKFi6Va+kZys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BY+SdWJ8; arc=none smtp.client-ip=95.215.58.251
+	s=arc-20240116; t=1790643275; c=relaxed/simple;
+	bh=pZ0DYEiGQFjo0gKucuKE2g35ZE3qoWtk2IsruMzZ/ow=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AsvaaL4r2t+E94wsFvsMKzSFU0wbWoJJeCDkEN1HHFZdnUyGyVioBuPf6HaKCJl7LhyzeH35Fkxr3JSVaL9e1SgOZwMc6bwf9p137GPW2UEk49EAwbvLhZzCe6TFAMzgOVCEnjS9Ol6Y96VqoopNT3uprktfppGWKSu/1pBaT7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vtSSFhIv; arc=none smtp.client-ip=95.215.58.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BY+SdWJ8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vtSSFhIv"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/ZN+t8Y7O1ERXt/PK2W2EQrnipLYq8zXZKVAc4oVFWI=;
+DKIM-Signature: a=rsa-sha256; bh=pZ0DYEiGQFjo0gKucuKE2g35ZE3qoWtk2IsruMzZ/ow=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790643266; v=1; x=1791248066;
- b=BY+SdWJ8s5UX8jw6r4m5PAMJFoZ0J2uffIv2g8PoskMyphOuZLMS0EmC75mIFtA6rPWUe1co
- kWRWP/MVvwIhxqPFpzXqzrddW6p34kySRLj3lZViq/7aPKBpcSkfWT670BmzLI02Lep++4+dB/4
- qmkISC2An/lay98nvrxP6YM4=
+ t=1790643269; v=1; x=1791248069;
+ b=vtSSFhIvtxo2ymC6u0zVthXuzrFI8XhdoZzrGJNaMfF0jvSWu/J2VK1naAZCp+6+5wYvzBkH
+ ICLoRJB2KM8eEMn9RViMMVoC3cG6x35Otdrr1eAv08yk5jB6vuNNNM6/HMIAntWVNMNkHYirrPs
+ SAl2kvo0IHdsOg5OpvNFu7uM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 36436f1125b35320;
-	Tue, 29 Sep 2026 00:54:25 +0000
-X-Mizu-Trace-ID: 36436f1125b35320
+Received: by smtp.migadu.com with ESMTPS id 04392c3105b526d6;
+	Tue, 29 Sep 2026 00:54:29 +0000
+X-Mizu-Trace-ID: 04392c3105b526d6
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: rostedt@goodmis.org,
@@ -39,11 +40,14 @@ Cc: mark.rutland@arm.com,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH v2] tracing: fgraph: fix the quadratic shadow stack walk
-Date: Mon, 28 Sep 2026 17:54:10 -0700
-Message-ID: <20260929005411.4105448-1-vineet.gupta@linux.dev>
+	Vineet Gupta <vineet.gupta@linux.dev>,
+	stable@vger.kernel.org
+Subject: [PATCH v2 1/1] tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
+Date: Mon, 28 Sep 2026 17:54:11 -0700
+Message-ID: <20260929005411.4105448-2-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260929005411.4105448-1-vineet.gupta@linux.dev>
+References: <20260929005411.4105448-1-vineet.gupta@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,39 +56,170 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v1 tried to make the sweep loop cheaper: raise the batch from 32 to
-1024, and add a cond_resched() so the walk could not hold a CPU. Peter
-pointed out that the loop does not need to be batched at all. Allocating
-inline with GFP_NOWAIT is legal under rcu_read_lock() because it cannot
-sleep, so a single sweep can serve every task and the pre-allocated
-array becomes an out-of-memory fallback.
+When ftrace graphing is turned on, all tasks in the system missing
+return stack page are assigned one. This is done in a simplistic
+multi-sweep loop of FTRACE_RETSTACK_ALLOC_SIZE (currently 32) tasks
+at a time as follows:
 
-That removes the quadratic behaviour rather than dividing it by a
-constant, so both v1 patches are dropped in favour of this one.
+   start_graph_tracing()
+	do {
+		alloc_retstack_tasklist
+	} while (-EAGAIN);
 
-Measured at 400000 threads on a 60-core Sapphire Rapids machine,
-PREEMPT_LAZY:
+   alloc_retstack_tasklist()
+	alloc x32           # GFP_KERNEL, may sleep
+	rcu_read_lock()     # preempt off
+		for_each_process_thread    walk N_total, no cond_resched
+                     t->ret_stack = new_page
+	rcu_read_unlock()   # preempt enable but no explicit yield
 
-	v1 base (batch 32)      227.8 s     12503 sweeps
-	v1 patch (batch 1024)     7.2 s       391 sweeps
-	v2 (this patch)           0.092 s       1 sweep
+Each successive iteration of loop invokes for_each_process_thread()
+which doesn't support cursor based resume and always restarts from the
+init_task. Thus each successive loop needs to skip the tasks assigned
+ret_stack in prior sweeps and thus take longer and longer to find the
+candidate 32 tasks. And while the loop end calls rcu unlock,
+and re-enables preemption briefly, there is no explicit yield.
 
-With one sweep there is no retry loop left, so the v1 cond_resched()
-patch has nothing to attach to and is dropped too.
+The total number of iterations turn out to be
 
-v1: https://lore.kernel.org/all/20260922225526.1554758-1-vineet.gupta@linux.dev/
+	N_total * N_null / (2 * FTRACE_RETSTACK_ALLOC_SIZE)
 
-Changes since v1:
- - replace both patches with Peter's inline GFP_NOWAIT approach
- - comment why returning from inside scoped_guard() skips the free
-   loop safely
+where N_total is the number of threads on the system and N_null the number
+of those whose ret_stack is still NULL. After boot with no fgraph user that
+is every thread.
 
-Vineet Gupta (1):
-  tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
+This is not a tracing-only path. Since commit 4346ba160409 ("fprobe:
+Rewrite fprobe on function-graph tracer") fprobe is built on fgraph,
+so an ordinary kprobe_multi BPF attach that flips ftrace_graph_active
+from 0 to 1 pays the whole cost inside one bpf() syscall. Commit
+2c67dc457bc6 ("tracing: fprobe: optimization for entry only case")
+narrows that to return and session probes but does not remove it.
 
+A host running hundreds of thousands of threads, with the current batch
+size of 32, turns the ftrace_graph_active 0 -> 1 transition into a
+multi-second, and eventually multi-minute, operation which showed up as
+RCU stall and softlockup_panic on heavily loaded Meta Fleet machines
+with preemption disabled.
+
+    rcu: INFO: rcu_sched self-detected stall on CPU
+    rcu: 0-....: (20718 ticks this GP) (t=21000 jiffies g=913 q=8 ncpus=8)
+    CPU: 0 UID: 0 PID: 160141 Comm: bpftrace
+     ___slab_alloc+0x549/0xa20
+     kmem_cache_alloc_noprof+0x16c/0x340
+     register_ftrace_graph+0x3d7/0x6c0
+     register_fprobe_ips+0x2d5/0x310
+     bpf_kprobe_multi_link_attach+0x218/0x7e0
+     __sys_bpf+0x267a/0x27a0
+
+Fix this by allocating inline with GFP_NOWAIT instead of pre-allocating
+a fixed batch. GFP_NOWAIT does not sleep, so it is legal inside the RCU
+read-side critical section.
+
+A single sweep now serves every task, so the walk becomes O(N) rather
+than O(N_total * N_null), and the retry loop is no longer the normal
+path.
+
+scoped_guard(rcu) replaces the open-coded rcu_read_lock() and the
+goto unlock, which is what makes returning directly from inside the
+critical section legal.
+
+The pre-allocated array remains as a fallback, although the testing
+below never needed it.
+
+smp_store_release() is a drop-in replacement for the smp_wmb() and
+plain store it replaces.
+
+Measured on a 60-core Sapphire Rapids machine running a PREEMPT_LAZY
+kernel (CONFIG_PREEMPT_DYNAMIC=y, mode lazy), timing the write that
+drives the ftrace_graph_active 0 -> 1 transition. Threads are spawned
+while fgraph is inactive so every one of them has ret_stack == NULL,
+and the loop was instrumented to count sweeps:
+
+	threads   before              after
+	          sweeps   time       sweeps   time
+	100000     3126     15.3 s      1       0.019 s
+	200000     6253     59.1 s      1       0.047 s
+	400000    12503    227.8 s      1       0.092 s
+
+The sweep count is 1 throughout. Time now scales linearly with the
+thread count at roughly 230 ns per task, which is the allocation and
+initialisation of one shadow stack.
+
+Fixes: f201ae2356c7 ("tracing/function-return-tracer: store return stack into task_struct and allocate it dynamically")
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+Tested-by: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: stable@vger.kernel.org
+---
  kernel/trace/fgraph.c | 38 ++++++++++++++++++++++++--------------
  1 file changed, 24 insertions(+), 14 deletions(-)
 
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index ed455b53513b..336f40dc6618 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -1036,10 +1036,9 @@ trace_func_graph_ent_t ftrace_graph_entry = ftrace_graph_entry_stub;
+ /* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */
+ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+ {
+-	int i;
+-	int ret = 0;
+ 	int start = 0, end = FTRACE_RETSTACK_ALLOC_SIZE;
+ 	struct task_struct *g, *t;
++	int i, ret = 0;
+ 
+ 	if (WARN_ON_ONCE(!fgraph_stack_cachep))
+ 		return -ENOMEM;
+@@ -1054,26 +1053,37 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+ 		}
+ 	}
+ 
+-	rcu_read_lock();
+-	for_each_process_thread(g, t) {
+-		if (start == end) {
+-			ret = -EAGAIN;
+-			goto unlock;
+-		}
++	scoped_guard (rcu) {
++		for_each_process_thread(g, t) {
++			unsigned long *rs;
++
++			if (t->ret_stack)
++				continue;
++
++			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
++			if (!rs) {
++				/*
++				 * Returning from inside scoped_guard() drops
++				 * the RCU read lock, but skips the free loop
++				 * below. That is only safe because start ==
++				 * end here, which leaves that loop nothing to
++				 * free. Keep the two in step if this
++				 * exhaustion check ever changes.
++				 */
++				if (start == end)
++					return -EAGAIN;
++				rs = ret_stack_list[start++];
++			}
+ 
+-		if (t->ret_stack == NULL) {
+ 			atomic_set(&t->trace_overrun, 0);
+-			ret_stack_init_task_vars(ret_stack_list[start]);
++			ret_stack_init_task_vars(rs);
+ 			t->curr_ret_stack = 0;
+ 			t->curr_ret_depth = -1;
+ 			/* Make sure the tasks see the 0 first: */
+-			smp_wmb();
+-			t->ret_stack = ret_stack_list[start++];
++			smp_store_release(&t->ret_stack, rs);
+ 		}
+ 	}
+ 
+-unlock:
+-	rcu_read_unlock();
+ free:
+ 	for (i = start; i < end; i++)
+ 		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
 -- 
 2.53.0-Meta
 
