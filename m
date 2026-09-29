@@ -1,130 +1,144 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC6551D501;
-	Tue, 29 Sep 2026 12:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F224FECF5;
+	Tue, 29 Sep 2026 12:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790684157; cv=none; b=tMojy4UrSxDlcn5gjsHdnBNfELlIKv3LjPJjlIOFpvHFuIm0Bh1WQLIay1r4y2TgiG8T+4xJTaGh4knAJOT2/6M9sr32Rj6A0k2+fe80cYueNutBBSDyv2cjdq9BMXYzB921R5VUhFHwiXoEk5QoxEFhQ+0ahiQP375iFEpyDPo=
+	t=1790684933; cv=none; b=nkPhmQuL0ZI54NV3StiqDl1rxVJO0c5Yizu21a3Fj/gbazwQr5Nqjd4XmgojgqpX6g0pGhgMxoA/VLh+CX0kZJ2E0iercTdIdUoJAJ0aBWrW4xr8MTt3aPhx3+3FjZO+M59aRgHsrOKxoWQBwEOCotsh0WWnshUrdr+QSSFxUNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790684157; c=relaxed/simple;
-	bh=heCEvOKUdCX3/sEVSdUD1e5vx1fwNmCVIFqVXPFDvKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QX0+zA7wq/j+cUK0HRNRuZWDQRJtPRrossonWdm0cJydcak7JqSLFdX0VFjMQCqfAuz+14JXjd+/oEQIu4bqHeOXeIshrZSYc6ASBTKhmcJ5P7Wo+yuZ5hTl7AT74FU7IPRfGKXQ7VvsOMfpiLtzlgMXT2V9f2NUYgAUbDHMcHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=luzhOpha; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790684933; c=relaxed/simple;
+	bh=Rya2/xvwmnG+LUNaAktFCoDG7sJ7+awgSLfG71+jbJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fAkrYsYEgy9LfDNLA1ayVhjq9KAa5eN6laQ5gcMClqw8EAFpVK1W5zyUt+uH8R0MqMc+1SnPLO9ebtIvfK5LGwHLn+9InM4RrrpJcwBiu5+0qvNIhiUQrQfd5jD+Rq22VpOPr1doYhj6a7mfGn1G9XrVE9KrLF1IskS+JFdH9vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDgs52RD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="luzhOpha"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF251F000FF;
-	Tue, 29 Sep 2026 12:15:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDgs52RD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8E61F000FF;
+	Tue, 29 Sep 2026 12:28:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790684151;
-	bh=6QVnGnnzjb9cWbtInuifpwwmFbwdcbFh11DioSaXTFI=;
-	h=Date:From:To:Cc:Subject;
-	b=luzhOphaO3iug2mOB64ipdwYS8qub/HjVwT/iWxaUXOhzcNznxKsVNlY7hA6iDgSz
-	 pZszStbt5s5ngeOMn3VEvvCMZOqHPNP35bbk7x88EyC3YbjvPlX86hD5W03WQMxMy1
-	 rX9Y9FnEjl4dlTeAyTHw4rKJhlcziWRDLr0CqkwyhZ7sxwOtcYHosLFGsBeHlP829m
-	 5UKpGBDw/gH6lsVqwNIYXvZui7jknxEtt4vt/U/73bDCsrDwqgMcVIHMUX8oiEfP/k
-	 G05keLRUu5Hysjc/YlR2v55HgQxvUAarhVb79SAiyiXyRrM39kDZQDOZs15QjQ4Hl1
-	 7UkSAaeTk3zTA==
-Date: Tue, 29 Sep 2026 13:15:46 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Florent Revest <florent.revest@linux.dev>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <arur8pZBspVcQK5I@sirena.org.uk>
+	s=k20260515; t=1790684927;
+	bh=Rya2/xvwmnG+LUNaAktFCoDG7sJ7+awgSLfG71+jbJ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KDgs52RDTx6mh31I7eMF9UWgZiSg1uUMHsWF7NmqCu8jGXUdqsG5RRco4NAQ1yybk
+	 xQ+m+bbw1/UwtG3KjfgwVgTA5CaoLUfvpIS8lFDoTctzuu7VSyBxeowIx5ueXoinnE
+	 8tKck5octUTdRzH9FOQQ5rKCVgLBSz3czzpqXIl3DCc+gA8SVFh5ujozuK/cQlWlr3
+	 laRfPA3ooCYxIdbhJVJPI51VwDjiItiCpStTQWukUYuWtEtyJAROcrFDWye7LIwjKJ
+	 BEx8eFAfDOOrw/HeBkx0lBbtw4Jx8mATUrz9BoFpYrTbqm0g4vGPopfAaieDMB8Iyg
+	 sD/aDTz9tWV9g==
+Date: Tue, 29 Sep 2026 14:28:43 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+Message-ID: <arut8kWzqX5YW5wE@houat>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <054ef52478fc93fc213a9dae23ea77f73094aaf2@intel.com>
+ <aruD5kwOEsvFhW2e@beelink>
+ <42cfa3fb2246c66d69e45d7d9b8d6aaadc0da4c4@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Sas/joUr6P4OkPnn"
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="tn7gfu35hmfimxib"
 Content-Disposition: inline
+In-Reply-To: <42cfa3fb2246c66d69e45d7d9b8d6aaadc0da4c4@intel.com>
 
 
---Sas/joUr6P4OkPnn
-Content-Type: text/plain; charset=us-ascii
+--tn7gfu35hmfimxib
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+MIME-Version: 1.0
 
-Hi all,
+On Tue, Sep 29, 2026 at 01:16:41PM +0300, Jani Nikula wrote:
+> On Tue, 29 Sep 2026, Benjamin Tissoires <bentiss@kernel.org> wrote:
+> > Ouch. This immediately raises the "let's implement a parser in the
+> > kernel" flag, or "let's create a new langage".
+>=20
+> Fair.
+>=20
+> > You'd still need a dedicated driver for your new blob parser, with far
+> > fewer people who had had a look at it than BPF who has been working on
+> > for several years.
+>=20
+> Fair.
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Also, it's kind of what we had with panel-mipi-dbi:
+https://github.com/notro/panel-mipi-dbi/wiki
 
-  arch/arm64/net/bpf_jit_comp.c
+It didn't really take off.
 
-between commit:
+> > The integration of BPF and the kernel is honestly transparent nowaday:
+> > calling a struct_ops BPF function is just a function call away, and from
+> > the bpf calling anything in the kernel is also just a call away.
+>=20
+> I don't know if I'm just being overly conservative here, but it seems to
+> me BPF provides too much flexibility for the use case. But maybe the
+> point is completely moot, and you should just ignore me. ;)
+>=20
+> > See Maxime's answers: yes, falling back to dedicated driver is still
+> > encouraged.
+>=20
+> [Moved the above to go with below.]
+>=20
+> > Isn't that what Maxime wants to have? One driver for a plethora of DSI
+> > panels, with the same ability the BIOS has to also do function calls to
+> > set things up?
+>=20
+> I suppose this is something that could use some clarification. Is the
+> idea that most (simple) dedicated panel drivers eventually get converted
+> to BPF?
 
-  17637e1a581a2 ("bpf: Skip detached progs in trampoline images that are st=
-ill in use")
+I don't think most of the existing panels will be converted, if only
+because it would require a different DT binding for most of them. We
+should totally fix the "what happens the panel is supported by a driver
+and the bpf driver" situation Rob (I think?) pointed out though, because
+I do think some will be converted still.
 
-=66rom the bpf tree and commits:
+> Or is the idea that BPF is easy for prototyping and development
+> using stable kernels and short time to market, and most of them would
+> eventually get converted to dedicated panel drivers?
 
-  1d5306c11da2d ("bpf, arm64: Allow programs 2 KiB of stack")
-  11a516144d9a8 ("bpf, arm64: Add JIT support for callx")
+Even though it does make prototyping easier, I totally expect this to be
+a production-grade driver, just like any other panel driver.
 
-=66rom the bpf-next tree.
+> The story wrt display before userspace is up and running also needs
+> clarification.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Yeah, I'll work on an in-kernel loader for v2.
 
-diff --cc arch/arm64/net/bpf_jit_comp.c
-index 8108012cd7e4a,475e706534543..0000000000000
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@@ -2413,11 -2498,20 +2493,21 @@@ bool bpf_jit_supports_subprog_tailcalls
-  	return true;
-  }
- =20
-+ bool bpf_jit_supports_callx(void)
-+ {
-+ 	return true;
-+ }
-+=20
-+ bool bpf_jit_supports_large_stack(void)
-+ {
-+ 	return true;
-+ }
-+=20
- -static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *n=
-ode,
- -			    int bargs_off, int retval_off, int run_ctx_off,
- -			    bool save_ret)
- +static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *=
-im,
- +			    struct bpf_tramp_node *node, int bargs_off,
- +			    int retval_off, int run_ctx_off, bool save_ret)
-  {
- +	void *skip;
-  	__le32 *branch;
-  	u64 enter_prog;
-  	u64 exit_prog;
+Maxime
 
---Sas/joUr6P4OkPnn
+--tn7gfu35hmfimxib
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq7q/EACgkQJNaLcl1U
-h9BPFQf6A4Sld1BcWUFGI023KrA4xWYCY47Sq35MNNmn9ea67ZwWkQrXvg8H2cju
-cjqSUttSwtS5uJhuNinaOxjhjQW51SJSC+FogzHaEOd7rKp6wIzVXr/smhYnM0vo
-UMQ5vXM0vSajWHG9PJcKV1tNpH2yLeuGndHtK38pTbAmALZOqyIjHjxfdaSFLKdB
-i0fGZo8vF+w4VgV6HY8ce3QmNKm+o/n5T0RQ+LHbhb+0lXBoV6YlrTNH03ii40dr
-sKnel4LrZULVCULkXfsdzHDUY3IdQRCvbzDiO4bDbADhOFmPfh3ynp9Dn15xFkdN
-faEdaQiFkriqIBAfa16dr50VeS0ofw==
-=71J/
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaruu+wAKCRAnX84Zoj2+
+dvaDAYDbgFmn3VTPnwMmRkcBxrTVtKlQ2i2nTFTQqsY6+h83dQfdgZBSKyv4PaD8
+t21q8pIBgLJeTlsC72CRcfaSgL7zPCcpR02uuJQEdtsW57i6k17jJYgTCB0r9j+y
+8X+t6kZwEw==
+=GOdP
 -----END PGP SIGNATURE-----
 
---Sas/joUr6P4OkPnn--
+--tn7gfu35hmfimxib--
