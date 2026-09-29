@@ -1,210 +1,219 @@
-Received: from mail-yx2-f41.google.com (mail-yx2-f41.google.com [74.125.224.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010016.outbound.protection.outlook.com [52.101.193.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9188A51814E
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E01F513549;
+	Tue, 29 Sep 2026 11:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790682586; cv=pass; b=aRmtyGoJuxAQvRIOjGUvAKhsrnOH5juKQOT4/MHS2Y4Z8+xviX+V+4s4iWVAuPjZe9H7S8JsfoL2jgg9L1M5cot0SSXSVF/MHFF/zuIDjoVb3UusPtWqK/kUZdg0OBIbNQPmqDDTwwIRxwnTHld+RPtJwWdpPs2x1jRYoE8Uy+Y=
+	t=1790682717; cv=fail; b=NlY/SL7CO2nLL1DpRPZ8S/+9w4iGd98dBP+tXzgrTA2WaowMlkv5WUhK0JVUscKxxwIiL3PJkBq0hP/ryicbtMkkuct68J6i3brEGOPfqJyYBJyq0MgsCkHexNN8kTDKGtKq5fK0ef94GLUwlt5ZX0DaZnLrurHEX+m+6mrnA/k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790682586; c=relaxed/simple;
-	bh=kgjy2BB8Nwb8PNLZfFsqLbfjDohsf0KQ3TZfyRHIEYc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=axOHBVZXSGMQiiK23k7EOpDPm/idBIYAT84yW36AzC4t3PG0bcCp2A3KpyBArqEiwS1VvMwcouAFXvd2/rbbg02XmYqO4ZFZV1cj/gFlmWVaNU29aM8wXSUTV6pH5Zo+yYno9Dl9PhvO1v7W/b++TtFaiUYBMI/ULfWH/jws/PU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GwhE5rIr; arc=pass smtp.client-ip=74.125.224.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790682717; c=relaxed/simple;
+	bh=rc6EqlPqP4561peSV0IdsYM5M44fwiAiznV9MLThmBM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=avoDp73AaLYKEpdIVFuc13jlBnol0/dsBRkg3PErXCXtVojII17c7jDLjHb/PEkIs9Al4hdzf7lCOUWbNe70gyypUmRYAvKW8kHhxXQ2UJmr6B5/8n2F1m80OJeZlinZc9vv9vexT7KNgNgYI2jgrbsDANdno7hBOEr9fIqf8WM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=eMycSf5Z; arc=fail smtp.client-ip=52.101.193.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GwhE5rIr"
-Received: by mail-yx2-f41.google.com with SMTP id 956f58d0204a3-6756acdc3a8so243702d50.1
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 04:49:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790682583; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BOtkRV7dqblD4xfbTYCz/+nG1CGtsSnDwrMh2KqurWBRTBQJHdGXIaLEoO5g324p88
-         m1yOCUC5bTXB6aYJq2CLcrGru722GftIc1Gi16BL4DzXZwg3WMcRHmD0FuP7obKb8nFw
-         ZCE8Blc6lmQoSW6iW6Um+g1WDT6jk8tcplVpIP3TuH6bf0ODumM2UtWpechei2sLV4LV
-         CVo8jnbcOBtpSiONAbhE+GTjEod0iPeUtEiBL03yP+31XtgzTCLA1LRvnvTigz4pxIj/
-         8GTvnsFivmLGM+zXX+9SGxlZ2n8o8xTncgmWALBuy6pGUIdHSkJ+2nvMHXW9SjeXLrol
-         CfJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PinsfWb5o3H1N8+JPrpcg6f6Oxc9ozJUPh0iCkDqvJw=;
-        fh=tFVkUTtUXJ4swQQtNU5TgANaqkLDgWbYgI+RqcY0GwA=;
-        b=qrSk6nkr36IzHwF89RGURtCelgJrM8JGjfzbMaRpM//q0SRpDl+oCdzHmEbD1NMtJZ
-         /AZ563/wkRmMOTslVsR84zJuyUwIWzJzm3ULC4VjO8A2ewZsu4r/+AiwVYFjbqVLB8g6
-         pJXu3rjeUgeY87WiaBgT4YBlZZGfN0YI4vA+1UxgzKgl8ouNYAWUUuArymkFURoa5zHJ
-         hvmqp+ggB1r3/NjDVbLr9V/XX2bviv7MQls38IZ1ZnMa0eMXdeFbhCj3dOdeqwY6FGs4
-         vnd5Rw2vhHY9MUTkZ2exfs86zBknKxee9vJpEpbt4KGwzjGyLTDUMyooVPYTD6H/ckYO
-         k7AA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790682583; x=1791287383; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PinsfWb5o3H1N8+JPrpcg6f6Oxc9ozJUPh0iCkDqvJw=;
-        b=GwhE5rIrih0pY2UIXirrTWjpTlblATUKmmDYILdI35pc/2y7JVOR/hYrvlTxQV+10A
-         pCA5Ta12ibOETBKTEwhMjKjM8NCJJ/PqInEC721YWfO/BCM+hilBXJUTI5OxizkA2K+v
-         GuS0ibKZH6CtMb39fU4MBNlgRH8AxZWlHAloTlZZF22NyhU5wn9N5xKZ7SDD1u8vDBhm
-         zVq1/C5zayoM2IOhl7wBVBc5n7Q6LV6He53wTiCyugtTQgIB1Q+0UaTg+74+8GjaMppv
-         DYyl9SxXRcNJXoD3yd2/GUopP2MBEXEiflJs4DHtWlTmJ4zFQ4xNI0mZMYsg5AQ3C0be
-         dxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790682583; x=1791287383;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PinsfWb5o3H1N8+JPrpcg6f6Oxc9ozJUPh0iCkDqvJw=;
-        b=fk1zKPRTd+HZ0O0ibx76nIxEPinE45+db/ie2w2Fq76/cYwVbFx9Ukyf3TsaOE/xOm
-         UjAAbCNZdB1bqDccimwOOLw4YovoEGCGTCcVYJ4FISnr6APxMLbpmB0jgaSA5PxNQ394
-         EDYKmS2SMSyhFST80xaqrr6kzdb0YxTSH5HbSTDx+n6FUNdG9ST95IwxEyqnXeEVlTxC
-         Qp6/zq1xepI55AOyIfn+qJ8VCENYLWfiXFIsFH5OcE9iCC8ZtncCfCRUs2XIerd0Ce8v
-         yOpJFl90h+ljk2BH5nNN8whpMBpHAb7jOsl0+B52l/fKGLDhNysGNxJ+Cinzwnv85f42
-         ZRuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy7izm7MAbr3Qxu0fOW4whSHmlEHF9W8ksca88zwc9/nTkJIrBeTXWLBfQNtBC3Y/O2iMs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKpGhk+ym2q6IkMg5xVLvhadHCrm15vmtKMxu1Vl5UiYnVkfQ+N
-	N3QlSJ47a/RKE3W2tDsK6Jdz98DxNQuZnmlOjL7HE7goIbCL8MICC1UdyZezUclTV0aVyRY74vW
-	0MT/3jsBcfZKXT7BqIHsNDtAJFsFp4zU=
-X-Gm-Gg: AYBFou2hinAR0JPSO0mcwLuWNh4JHiMATks2Vtd37MHKHEjpbw08rwtlJcEKDhwydvP
-	dh/mzsmO0NWkLxtBZj6LI6i5oce0oIZyRcauYnyIf0RoYRTicNp72xIn6gNUUDYjL+DXCh7oxoQ
-	NlRmEaXpPCSdkZAQQ/bMCVC62P5ME4N/8GDc1IpZLs/RomU/V011SG859mBWTELIQcz4j34wtLb
-	G3tQW4s/YAl3AqtlOG1E54kzcBnkgRV94YnuzfE+mYydSMSvIsDh0vrVsDLEp+AQZ/1MhGYUu4v
-	bBIbjwpUkzz427Jl0XHsL3397ISkHGJA8LWEjtGFmaWpnIP4Zwmp781ZzzcvAOTQm7Tii9mLNBM
-	MOKozNMwgPA==
-X-Received: by 2002:a05:690e:144e:b0:668:9230:e266 with SMTP id
- 956f58d0204a3-674112442a9mr4372761d50.46.1790682583424; Tue, 29 Sep 2026
- 04:49:43 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eMycSf5Z"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YXKzh+j3xFu1UX7oJWCrZRPKV2bEcgBxQ5j3lcmzf7KRef5wt9om0x/892aVkokg7ye6E5ozKanttZWEl04snz07KaofyE8NE8VVi3byj+ONrorRDWJaYo8bdQBdd7bOsMThW6nCjzajyEuGLFZWs5d5Wfn/zft9x2s+UU8zUFpr3GS21VLm7lHuuPVNUIjGZnWee3pdesNLc+M+ufX3Q5Fa+KWDFv0clVIlQT2weXb7DeUpEQwvsCwlitZnv2mLTIvftq07Smzk96GOYSFUEd1PwBz2imqzFLGxQH0lnN9SqzJFxO8WroC65ZAl0H5siJSsHUszRVw2SHOILR6EaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QaP8HBu0w/srGFAieVMBNs549dqmYrYlSlAx6VQtTfA=;
+ b=vBFDVJi9S56abEjRsrXBT9sTBYxPayvg8sg/gUi+nIJuF2UvCqySQz3Zx932xDylr4+T5OCw0Jr5cgIKIsja5F3VPuDTNIhkgHiJ9IAFt3pboDFmn1APWH1AP5b4rblehPde10atZCgF8FHDPnc0bPhGh7Cbr3JY2OFjyxdTRP0fHIkkr8VTAVMom0R+Hm35Qzvh18Km5gyBMYkPo8/d1/UcPQUmyxOnzNQFepjScctPmKLKAV1OMDKs3p4+nHXTwffROC3Rq3jvglcDd3cEZgXTfEkA1J8TYYTwaYBYSKR2f30Y8Sevhw4PgFjlMlXdCqNYIPEnmyYZaOdtGmbN0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QaP8HBu0w/srGFAieVMBNs549dqmYrYlSlAx6VQtTfA=;
+ b=eMycSf5ZnK22Mqp9Sshv1T0Cpn6M/5Xf4V73FquN7W0DGQxddVpytLzefIvSDKzXiA7wOUjXsb+iVd0aMUZrH1XhDlvk2bxa5/nptLtsVpnnitMwQ0GJwhKACtODahKfg8oY47hJvPdIVDWp9UhFM15DjWxwRp2WHkssoEIYgKg=
+Received: from BN1PR14CA0027.namprd14.prod.outlook.com (2603:10b6:408:e3::32)
+ by LV8PR12MB9419.namprd12.prod.outlook.com (2603:10b6:408:206::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.24; Tue, 29 Sep
+ 2026 11:51:51 +0000
+Received: from BN1PEPF00004689.namprd05.prod.outlook.com
+ (2603:10b6:408:e3:cafe::a3) by BN1PR14CA0027.outlook.office365.com
+ (2603:10b6:408:e3::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.451.24 via Frontend Transport; Tue,
+ 29 Sep 2026 11:51:51 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BN1PEPF00004689.mail.protection.outlook.com (10.167.243.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.472.14 via Frontend Transport; Tue, 29 Sep 2026 11:51:51 +0000
+Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49; Tue, 29 Sep
+ 2026 06:51:50 -0500
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb09.amd.com
+ (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49; Tue, 29 Sep
+ 2026 06:51:50 -0500
+Received: from amd-B550M-DS3H.amd.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.49 via Frontend
+ Transport; Tue, 29 Sep 2026 06:51:47 -0500
+From: Syed Saba Kareem <syed.sabakareem@amd.com>
+To: <vkoul@kernel.org>
+CC: <broonie@kernel.org>, <Sunil-kumar.Dommati@amd.com>,
+	<vijendar.mukunda@amd.com>, <Mario.Limonciello@amd.com>,
+	<venkataprasad.potturu@amd.com>, <yung-chuan.liao@linux.intel.com>,
+	<pierre-louis.bossart@linux.dev>, <anson.tsao@amd.com>, Syed Saba Kareem
+	<Syed.SabaKareem@amd.com>, "open list:SOUNDWIRE SUBSYSTEM"
+	<linux-sound@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+	"open list:BPF [MISC]:Keyword:(?:\\b|_)bpf(?:\\b|_)" <bpf@vger.kernel.org>
+Subject: [PATCH v2 5/5] soundwire: amd: honor peripheral BRA block alignment
+Date: Tue, 29 Sep 2026 17:20:38 +0530
+Message-ID: <20260929115052.247086-6-syed.sabakareem@amd.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260929115052.247086-1-syed.sabakareem@amd.com>
+References: <20260929115052.247086-1-syed.sabakareem@amd.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev> <20260921192559.2619635-2-shakeel.butt@linux.dev>
-In-Reply-To: <20260921192559.2619635-2-shakeel.butt@linux.dev>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 29 Sep 2026 19:49:02 +0800
-X-Gm-Features: AclHuK-nFEkgx8S0aZZQyW2aKsafwpBB_ccNYji7zHIK6DtT7XurPCTCqUpsYEY
-Message-ID: <CALOAHbAb_aKHNxKV3ecUW6ZxK3VR8XAwxD0vHiaZa__6e2pKwQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] bpf, cgroup: fix cgroup struct_ops query for a
- second attach type
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, Michal Koutny <mkoutny@suse.com>, 
-	Amery Hung <ameryhung@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
-	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004689:EE_|LV8PR12MB9419:EE_
+X-MS-Office365-Filtering-Correlation-Id: bc12de7f-694a-4df9-82e9-08df1e200ce6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|23010399003|376014|36860700016|56012099006|11063799006|3023799007|10067099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	G0AI91WbHi3aupfyVKUzGGS4Lm8XHoC4fdmi++zfuzltzBwLiF1EvBz1UycZ+7TiaRipBEk3YScZaAPxSTseHB+fjVAfmniMbNS0YjGtU7N1QwtSNa/gGq9zm1PxFcFZ/fvG0fB4KidfC1WUl1DDb6W5FBKL0NEjUc5QNU9iabvvxRX6CmPJxxRgngPkUaO9UWpM9vbhljjRaOVD9tu6MsVKlbvQFpQh9nyDGFxGkFnqJdM37W8gUGjETLf2XOMT0ardy5NdjzH1I09aIKCQXcZZin3V71myiWpJhJj70QCMPfbkzhktHnqUsDlGg343ks4R1EncMen8YDbdH2YGRY44akehAdzW7rOpOtmxyxBQ4wqe+lMIsc9dFPLQUw7H2hsbqPlRnjcwiYJVmrg3FMoXEv5PSvsCSdHemcjzj0VOsXUkkqUM9F8heZGeAAc0ylv26sq6mnoFoO8iMV8NC8WDLSBYVZVFk4trHba8hvrc5Q4AGSwUjPygzuKtyJW5ejq+Mcy2+Xcbe6KJvLVWZVgsUxp3F5PL7rvd49cRgA6PWQsgOGlGF/8rxVN5Bx9ZkWXtKZ2amnRl4MlsKo4up+L7RofpvGovqwOheDK1u8TxdM/nP3X4KlsH3N7cvCR5xK9KcAOfr+9WRvI+SF/5keIvInWpG7xJRGa66gC4dF4QjkSrRbdDtGeuly2Jwt5JlsLKxT4vMHh/WXjMDgGS1A==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(23010399003)(376014)(36860700016)(56012099006)(11063799006)(3023799007)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	4BhSpLkCBURZqLcbHBP3VST/hMtUviFsnMrTkK8kotXG5a2EfZp8QYlz3CaRQFpBCBDG9tdf9EJD8BVDqvdK73925U2SBsyGL5ehSCZzRqCXxeG30XU1ofrzpOX3qZR+Om3/ONtXotm19WZs2vfCy6K6YZpztz/D9jnSZJ2F5jWB6y1CoKQrnq0fn2C0eEDpg3k4yGVixzrBaUBGg0yTQMiNPtyadkT+5fBJ7luKWVYkOJ75TWEDkxJqHHvjxNm9tNApiXO16xZNMX+zZ3zcfYcOXsMsH9lZxDPfzYs19VJxnr8odTx0XQDogX6heUj+vrAjfr+RTjPJ+bn77l7siJuUboWZUHWAC8INTaKz1VV++3LeDmP35/C6ZENWB5U4CisfAM7TPSWHb0WpQgGuxwDQGN9CjhcBScxBMIHiYYvOhWlxLJuxVYgzveqtRBnG
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2026 11:51:51.3697
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc12de7f-694a-4df9-82e9-08df1e200ce6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004689.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9419
 
-On Tue, Sep 22, 2026 at 3:31=E2=80=AFAM Shakeel Butt <shakeel.butt@linux.de=
-v> wrote:
->
-> Two things in __cgroup_bpf_query() work only because CGROUP_TCP_SOCK_OPS =
-is
-> the only one struct_ops attach type.
->
-> It calls cgroup_bpf_enabled(atype) with an atype that
-> find_atype_by_struct_ops_id() works out at runtime.  That macro is an asm
-> goto and needs a constant.  Today the compiler can see there is only one
-> value; add a second type and the build breaks with "impossible constraint=
- in
-> 'asm'".  Add cgroup_bpf_enabled_runtime(), which reads the key instead, a=
-nd
-> use it here.  This is a syscall path, so the cost does not matter.
->
-> And find_atype_by_struct_ops_id() matches on type_id alone.  An attach ty=
-pe
-> whose subsystem is not built keeps type_id 0, so a query for type 0 finds=
- it
-> and returns success with nothing instead of -ENOENT.  Skip such slots.
->
-> Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+From: Syed Saba Kareem <Syed.SabaKareem@amd.com>
 
-Acked-by: Yafang Shao <laoar.shao@gmail.com>
+The MIPI DisCo property "mipi-sdw-bra-mode-block-alignment" (parsed into
+sdw_slave_prop.bra_block_alignment) states that the BRA data payload must
+be an integer multiple of the advertised value. Some peripherals only
+ingest the BRA payload in fixed-size blocks and mis-assemble a trailing
+partial block otherwise.
 
-Could you please send this fix separately from the series so it can
-land in bpf-next on its own?
+The ACP BRA descriptor programs BytesPerFrame (frame_format[19:11]), which
+is the number of data payload bytes the engine packs into each BRA frame.
+Derive it as before, then, when the peripheral advertises a non-zero
+alignment, round bytes_per_frame down to the nearest multiple of it; the
+engine simply uses more frames to cover the same transfer_length. This
+mirrors the Cadence/Intel handling in sdw_cdns_bpt_find_buffer_sizes().
 
-> ---
->  include/linux/bpf-cgroup.h | 9 +++++++++
->  kernel/bpf/cgroup.c        | 3 ++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index 8a75a6cd7309..3b2c127d401d 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -76,6 +76,14 @@ to_cgroup_bpf_attach_type(enum bpf_attach_type attach_=
-type)
->
->  extern struct static_key_false cgroup_bpf_enabled_key[MAX_CGROUP_BPF_ATT=
-ACH_TYPE];
->  #define cgroup_bpf_enabled(atype) static_branch_unlikely(&cgroup_bpf_ena=
-bled_key[atype])
-> +/*
-> + * Same test when @atype is not a constant.  cgroup_bpf_enabled() uses
-> + * static_branch_unlikely which creates jump-label site and requires sta=
-tically
-> + * selected key. Since key is selected dynamically, use static_key_enabl=
-ed here
-> + * and keep it off fast paths.
-> + */
-> +#define cgroup_bpf_enabled_runtime(atype) \
-> +       static_key_enabled(&cgroup_bpf_enabled_key[atype])
->
->  struct bpf_cgroup_storage_map;
->
-> @@ -508,6 +516,7 @@ static inline int cgroup_bpf_struct_ops_attach(struct=
- bpf_map *map,
->  }
->
->  #define cgroup_bpf_enabled(atype) (0)
-> +#define cgroup_bpf_enabled_runtime(atype) (0)
->  #define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, atype, t_ctx) (=
-{ 0; })
->  #define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, uaddrlen, atype) ({ 0; })
->  #define BPF_CGROUP_PRE_CONNECT_ENABLED(sk) (0)
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 696b27383974..99b4e96f5db7 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -45,6 +45,7 @@ static enum cgroup_bpf_attach_type find_atype_by_struct=
-_ops_id(u32 type_id)
->
->         for (atype =3D 0; atype < MAX_CGROUP_BPF_ATTACH_TYPE; atype++) {
->                 if (cgroup_bpf_is_struct_ops_atype(atype) &&
-> +                   cgroup_struct_ops[atype].type_id &&
->                     cgroup_struct_ops[atype].type_id =3D=3D type_id)
->                         return atype;
->         }
-> @@ -1448,7 +1449,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
-const union bpf_attr *attr,
->                         return -ENOENT;
->                 from_atype =3D to_atype =3D atype;
->                 flags =3D 0;
-> -               if (!cgroup_bpf_enabled(atype))
-> +               if (!cgroup_bpf_enabled_runtime(atype))
->                         goto skip_count;
->         } else if (type =3D=3D BPF_LSM_CGROUP) {
->                 if (!effective_query && attr->query.prog_cnt &&
-> --
-> 2.53.0-Meta
->
->
+To read the property, amd_sdw_calculate_bra_params() now takes the
+sdw_slave directly instead of just its device number, and derives
+dev_addr from it.
 
+Peripherals that do not advertise the property leave bra_block_alignment
+at 0, so the new path is skipped and behavior is unchanged.
 
---=20
-Regards
-Yafang
+Signed-off-by: Syed Saba Kareem <Syed.SabaKareem@amd.com>
+---
+ drivers/soundwire/amd_manager.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
+index f5b4096c83ac..c5aa543255b7 100644
+--- a/drivers/soundwire/amd_manager.c
++++ b/drivers/soundwire/amd_manager.c
+@@ -889,7 +889,7 @@ static int amd_sdw_port_enable(struct sdw_bus *bus,
+ 
+ static int amd_sdw_calculate_bra_params(struct amd_sdw_manager *amd_manager,
+ 					struct amd_bra_params *params,
+-					u8 peripheral_addr)
++					struct sdw_slave *slave)
+ {
+ 	struct sdw_bus *bus = &amd_manager->bus;
+ 	u32 nr = bus->params.row;  /* current rows - NOT enlarged */
+@@ -900,6 +900,7 @@ static int amd_sdw_calculate_bra_params(struct amd_sdw_manager *amd_manager,
+ 	u32 sample_interval;
+ 	u32 bits_per_frame;
+ 	u32 bpf;
++	u32 block_alignment = slave->prop.bra_block_alignment;
+ 
+ 	params->hstart      = hstart;
+ 	params->hstop       = hstop;
+@@ -931,14 +932,33 @@ static int amd_sdw_calculate_bra_params(struct amd_sdw_manager *amd_manager,
+ 	if (bpf > 511)
+ 		bpf = 511;
+ 
++	/*
++	 * If the peripheral advertises the DisCo BRA block-alignment property
++	 * (mipi-sdw-bra-mode-block-alignment), the data payload carried in each
++	 * BRA frame must be an integer multiple of that value. Round
++	 * bytes_per_frame down to the nearest multiple; the ACP BRA engine then
++	 * packs an aligned payload per frame and simply uses more frames to
++	 * cover the same transfer_length. When the property is absent (0) the
++	 * value is left unchanged.
++	 */
++	if (block_alignment) {
++		if (bpf < block_alignment) {
++			dev_err(amd_manager->dev,
++				"BPT: bytes_per_frame %u smaller than block alignment %u\n",
++				bpf, block_alignment);
++			return -EINVAL;
++		}
++		bpf -= bpf % block_alignment;
++	}
++
+ 	params->sample_interval = sample_interval;
+ 	params->bytes_per_frame = bpf;
+-	params->dev_addr        = peripheral_addr;
++	params->dev_addr        = (u8)slave->dev_num;
+ 
+ 	dev_dbg(amd_manager->dev,
+ 		"BPT calc_params: NR=%u NC=%u col_width=%u WL=%u SI=%u BPF=%u hstart=%u hstop=%u dev=%u\n",
+ 		nr, nc, col_width, params->word_length, sample_interval,
+-		bpf, hstart, hstop, peripheral_addr);
++		bpf, hstart, hstop, slave->dev_num);
+ 	return 0;
+ }
+ 
+@@ -1343,7 +1363,7 @@ static int amd_sdw_bra_transfer(struct amd_sdw_manager *amd_manager,
+ 	int ret;
+ 
+ 	ret = amd_sdw_calculate_bra_params(amd_manager, &params,
+-					   (u8)slave->dev_num);
++					   slave);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1759,7 +1779,7 @@ static int amd_sdw_bpt_wait(struct sdw_bus *bus,
+ 	 * to register read/write commands.
+ 	 */
+ 	ret = amd_sdw_calculate_bra_params(amd_manager, &prep_params,
+-					   (u8)slave->dev_num);
++					   slave);
+ 	if (ret < 0) {
+ 		dev_err(amd_manager->dev,
+ 			"BPT: failed to calc params: %d\n", ret);
+-- 
+2.43.0
+
