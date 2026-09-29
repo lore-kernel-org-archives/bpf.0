@@ -1,54 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A56D3BC680;
-	Tue, 29 Sep 2026 06:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D25239C657;
+	Tue, 29 Sep 2026 07:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790664874; cv=none; b=nUsomKrjnc83IxtTs9xHmDjvptkVdWi9Bs0OQ6/as3GDOyq0C+IOuPX8ZUyhX2kt/SpaU2LUQt0339o2QjEqLEza9W+1YcFBO0WeJW7aD4QHLrQDcAVae/L3cs6eg0h7ccRHiBYhH4j06Wa8ajt6G5lyIhgntpU4ZDx6JhJQ1aw=
+	t=1790665995; cv=none; b=jW3vF2lLdsXvj4/ghFpCqSg1h5MLKy94I9CoqEHfuPAjpBiem5I+KJQ61RIpM83YKfizxBpxqjDU+eJHOmJ9dub9g75d/fLzthce9vBuSbaEZyVxdxLKkBiP5yVs5yzA6l5B5lOshLlv8r0YBUs4y/ROkSTALLUEZw0ubdG4N/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790664874; c=relaxed/simple;
-	bh=fvVro5k3PR+3AomRvHgSoTQsYco3oL7ZrDn8H9OG80o=;
+	s=arc-20240116; t=1790665995; c=relaxed/simple;
+	bh=MZmh5P/ZHdoYjfMUQAD3Sz4/k0UreeFwW66PZrN0X3I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SFhGzEyTCEATJTwpCkL+hvLAv9/pn8DJYDGr88nsQ1PNHxDdxvb5Vs7BizPKNgmxcXuiprc3ID5z+UufYoF5Vq+wSMeeSMBetDm7v+lwDbom8aBYietsJdr2ahzVMs8vDinR9TQ/gHTCZauayHnn1Z94HBe5I+L9VHIGuiFnbQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mPDvVPIs; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Er798y+x6lhiMtM2YzinlKrzHAcqPXuXv5mT6Anij6s/hAFo3wFNgUXd8f0mXMewQEarvW1W8HoJv1ffod44NxrUx+CZa7R0e6eG+9hpq5m/nZRQkrjFAA4RgHRIChS35Rs+lO01gSdpcbIumGvilYj3HzsklQQ6SAUEOVy16bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcWJc2OV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mPDvVPIs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AF81F000FF;
-	Tue, 29 Sep 2026 06:54:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcWJc2OV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4E31F00893;
+	Tue, 29 Sep 2026 07:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790664872;
-	bh=frSugISh6ArGwMVikkGuowUUcfyIsFmCGNO08QVoGlM=;
+	s=k20260515; t=1790665993;
+	bh=k236eWi+M5Kl1aDNRgsPv/grlHCNH6C+N1amhk4LcOw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mPDvVPIsCW1jE6xXRRu36jGSKhoB6gkBF5/x2mZzSwevIThy1W8kgIJafiodO57Pw
-	 jbIF4TZCI+++nk8+KoUXxQOP4eWq2i/rXQ966+/nMEE7rKBi5Z5UmQCJxzHhJCrX5x
-	 sdjRWxnDr6NYga4Ofl4rZ2MqeG9crwkRKC3lzCHo0xLhzEYatEReSHb6KAkaJ5PXDV
-	 O8ARPrqHDO+PgsRdHOF1KJ9KrJgCuejQZwYl+8RZg83+lZeEZTzPVZrfex1kx5TVTX
-	 Gtsh+RKpwW0lbgEdfN/NlVldgQW7k2ljgKd0yh7fcOVCicVxslwl2bGi1VJSz7pqmM
-	 GS0t1pNVgio6A==
-Date: Tue, 29 Sep 2026 08:54:28 +0200
+	b=TcWJc2OVhQ+OIxvo7yTo3+t3eCUNHfFnKvWsbDnx/x+DCJmJqafvbFi3yTGdO9Qz5
+	 QZt5FW2m1vQB528/lLWlixZgPaVL6meon9ULndYSbwLcenzgFQKPrZsktUJLfpBjQU
+	 5KjrXKmKS2Eb2YG7U3f4uR02Z9O8I84RmYWMyyBaXO0IDV/YW+lP+mxqDiMnz//Pdt
+	 H6b+KMx/LIncykx3CeOWDp0BFQEr2cdjxuYe+YPDN5yDBsNKK2TM31saZTekPzwGOA
+	 J6movutHxJgScZVaASTSimb6UH2x8wH4QP9+lEIEjGSahOxLIwTqmEKbD04qBNX2VK
+	 mVlLKF7ClacEQ==
+Date: Tue, 29 Sep 2026 09:13:10 +0200
 From: Maxime Ripard <mripard@kernel.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Jessica Zhang <jesszhan0024@gmail.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Albert Esteve <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Javier Martinez Canillas <javierm@redhat.com>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	Benjamin Tissoires <bentiss@kernel.org>
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
 Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <artcVqmYRxeZ4dHs@houat>
+Message-ID: <artgrTe6wvKxnUOG@houat>
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928163711.GA210522@killaraus.ideasonboard.com>
+ <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,22 +55,22 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="nqvv5v626rm3lewc"
+	protocol="application/pgp-signature"; boundary="m73zwlja27vosc47"
 Content-Disposition: inline
-In-Reply-To: <20260928163711.GA210522@killaraus.ideasonboard.com>
+In-Reply-To: <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
 
 
---nqvv5v626rm3lewc
+--m73zwlja27vosc47
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
 MIME-Version: 1.0
 
-Hi Laurent,
+Hi Neil,
 
-On Mon, Sep 28, 2026 at 07:37:11PM +0300, Laurent Pinchart wrote:
-> On Mon, Sep 28, 2026 at 06:22:00PM +0200, Maxime Ripard wrote:
+On Mon, Sep 28, 2026 at 06:39:58PM +0200, Neil Armstrong wrote:
+> On 9/28/26 18:22, Maxime Ripard wrote:
 > > Panels in general, and MIPI-DSI panels in particular, are pretty
 > > difficult to support and require pretty much a panel driver for each
 > > panel produced. Most of them are pretty simple, and require an opaque
@@ -90,58 +89,97 @@ On Mon, Sep 28, 2026 at 07:37:11PM +0300, Laurent Pinchart wrote:
 > > plan is to have a userspace component started by udev to identify and
 > > load the right BPF program for the panels found on the device.
 >=20
-> Interesting idea.
+> This is kind of late for serious applications except if we manage to
+> solve the bootloader to Linux display engine transition.
+
+Virtually all "generic" distributions are shipping the panel as modules
+today anyway, because anything else is nothing but impractical. But
+maybe you don't consider them serious enough. Also, applications live in
+userspace already, so can be ran after this driver would be initialized
+anyway.
+
+> > This driver is fully functional and works with both 5" and 7" Touch
+> > Display 2 panels for the RaspberryPi. However, it breaks away from the
+> > typical panel driver in multiple ways:
+> >=20
+> > - BPF programs can only be loaded by userspace. This leaves us with two
+> >    choices:
+> >=20
+> >    * We prevent the driver from loading until the script itself is
+> >      loaded. This has the side effect of preventing any other output to
+> >      be used until the initramfs is ran at the earliest, and possibly
+> >      ever if the loader isn't installed for example.
 >=20
-> How would that work for devices that want early display support ? In
-> particular, how does it interact with your recent work on "fastboot"
-> support (with the kernel drivers taking over a running display
-> configured by the boot loader) ?
+> This adds a dependency on user-space behavior and if somehow the
+> initramfs doesn't load for a reason we won't have a way to display
+> an error.
 
-That's a very good question, and I haven't really thought about it tbh.
-I don't think it would be super hard to implement though. For panels
-itself, we don't typically track anything in the state. panel_bridge
-however would still need to fill its own bridge state but that only
-contains the bus formats and flags which can be infered from the DT.
+Yes, if an error happens before the DRM driver loads, it won't be shown
+on the screen. This is already the case for any panel driver today on
+any major !embedded distribution. And with built-in drivers, this can
+also happen before or while the DRM driver loads.
 
-Another thing we might need for the connector is whether it's active or
-not, but panel ICs typically don't tell you that anyway, and you can
-always infer it from the encoder / previous bridge state.
+The solution is always the same though: load simpledrm first, move to
+the proper DRM device once it's functional. It still works with this
+solution.
 
-And then, for the first kernel modeset, we end up in the same situation
-than a regular driver I suppose.
+> >=20
+> >    * Or we probe the driver all the time, but only report it as connect=
+ed
+> >      once a program has been registered. This is somewhat unconventiona=
+l,
+> >      but allows the other outputs to be functional, *and* allows the us=
+er
+> >      to force the output if their panel doesn't require any
+> >      initialization or during debugging. I chose this solution.
+>=20
+> Both options are not really great...
 
-> I'm also wondering about the incentives for vendors to upstream the
-> code. How will we avoid having a proliferation of out-of-tree drivers ?
+Feel free to make any suggestions
 
-I'm not really concerned about that part, because:
+> >=20
+> > - It's not a panel driver, but a bridge one, which is also pretty
+> >    unconventional. This is required because panel drivers don't have
+> >    access to a detect callback that is required for the above, but I al=
+so
+> >    think that the recent work from Luca blurs the line from panels and
+> >    bridges and we'll end up going that road anyway.
+>=20
+> On this point, DDIC _are_ bridges,
 
-* You can *already* support a panel with a proprietary out-of-tree
-  module, and it hasn't really affected us so far
+I have no idea what a DDIC mean.
 
-* In fact, it's easier to decompile an hypothetical proprietary BPF
-  program than an compiled .ko file (that we wouldn't be able to load
-  anyway), so if we really end up there, it would be easy for us to get
-  to the source code again.
+> but in the current panel API we blur the line between the panel and
+> the DDIC. So being a bridge is fine, but in a general way we lack a
+> proper way to describe the display/panel/monitor independently of the
+> DDIC.
+>=20
+> At first glance it's a nice driver, but moving the timings into a blob
 
-* And panels are so trivial that I don't really see the importance of
-  having support for them in the kernel anyway. It's constant tedious
-  work that is barely documented, fragile, and provides very little
-  value. And the vast majority of the panels are not supported anyway
-  except for some willing OEMs (that are using panel-edp anyway) and
-  willing hobbyists/consultants. So we probably wouldn't miss much.
+Let's not kid ourselves, it's *already* a blob. We just sugar-coated it
+enough that we can be happy and call it GPL.
+
+> moves something into possible proprietary binaries with possible
+> closed licence and distribution restriction so it's a downgrade for
+> the same of bringing up a panel faster.
+
+We can already make a proprietary, out-of-tree, panel driver today. That
+being said, the only license we allow for BPF programs here is GPL, so
+if anything it would be less of a concern for this than it would be for
+regular panels.
 
 Maxime
 
---nqvv5v626rm3lewc
+--m73zwlja27vosc47
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCartgoAAKCRAnX84Zoj2+
-dt9YAYDeU+GLtwcwZIrfjpOUwqvG0dXKTb7mMZ52PfHb8HcUxp3eaOBzW24xy6Y9
-WlLfWwkBgLLyxC4OO+6o0WjZXUX0tkDmLjSIY34SioQZFBv1MwyPij+tOMXuIS6y
-2wHe+UzVuQ==
-=+zAf
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCartlBgAKCRAnX84Zoj2+
+dqpsAX9ijj8Z64VcCaqKnJ4Lo/1d/9J5/M9PC5fiO6TitAuSIb3LaOEQBIr26yrs
+/d/QkF4BgLd/UwC/5QeWZ0LyE+B9yXAqojMbHWgC6MCfuVW5GkhowZ6O3eEVFkIp
+3RTmkdPM7Q==
+=8v7b
 -----END PGP SIGNATURE-----
 
---nqvv5v626rm3lewc--
+--m73zwlja27vosc47--
