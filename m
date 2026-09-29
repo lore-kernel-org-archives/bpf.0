@@ -1,129 +1,111 @@
-Received: from mta0.migadu.com (out-127.mta0.migadu.com [91.218.175.127])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC92332EC8
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 05:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.127
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9216383984
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 06:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790658292; cv=none; b=lLC+LTiAeKW9EtpQSJwuwZvLSsEpnucw9ZF+U6Eyn8b/r/Am8LJbGfQ8lBvYjBEUltj4eOKPxmtshWFbMyPqOBx6AhmZDYmxPfAooNmYdtX6iQXSnW6s+TnFhfy1HRASw8u+u8zNrq7FBMD5KugtkKochkkYK1BQj13aVkhijYY=
+	t=1790661892; cv=none; b=YgoaR463Z7i01t4K2QiYIG08LVn6gOKR+OWBvu7z4Ij+JxgIXJ9Gy60k4/d4CtuN1+V81C8SSZorQavMtEVF2h/dCtOnLG59sP9idGsnWs0loJG+yRXVyGjAcPnjc3a2i3xMwZ09lWIV298YhbLsnPYQ+qaTAP0PX8lzmvvyxEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790658292; c=relaxed/simple;
-	bh=X2Er36dW6b9JrfFpTHvUORetkfRXInvG1FR10LsA37o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ka4lXNWm6yCkyTiBkFEna7VDC4o5gPeOF6Gn5IkZWDvM6zFcYBKuhZ56TKeHfwkUFWKHI78nQttBoj4hzdsh0K3aak9xHlPQa6hTlyg2wwIILMXVxaIaBiWHwdRDv7bYX0Ee9pHMobx9Pa1G49o498Hr9o/pV/jav67aHLJlgEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pTMhf3Uo; arc=none smtp.client-ip=91.218.175.127
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790661892; c=relaxed/simple;
+	bh=59sBPfFbQu+SgkZjBownU9qNQaLofeQyVGSUdr1zzYU=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=jGTNc1jczaaZxHBPwmRN222V/DEl0/3bvjMM1k34eLD1jJd92LNQ2rKxKrP20hcjzsuwSyQlmsrv5EC4zRoBOo1Hd3vhnxdZgBQs0492j0dMKZNrkNlUmbkKSanxOVy51MdPZBicjA8sz+W2K5PAvKdMnwRm/JS9nJkLxX5xil8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rKEDrVRQ; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pTMhf3Uo"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=X2Er36dW6b9JrfFpTHvUORetkfRXInvG1FR10LsA37o=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790658287; v=1; x=1791263087;
- b=pTMhf3UohD5bwsXuI0wgI1yW9DU/U4kpawbS3utkt3TTAzWQ2QkjMmFlZm8HbmvH6jJAmp+7
- 7wDFrc/SbvDz0Cow+ShJJn+kAJPE/8UE7zXMUXGJMFVEZDfy8hjA7vkW6G9OyJJfg05Ty++Fw1V
- bUqQ1e9YCOK9Trqd4mq9P2ZA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 31ac00f7d822a3a5;
-	Tue, 29 Sep 2026 05:04:47 +0000
-X-Mizu-Trace-ID: 31ac00f7d822a3a5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <8fce9ea9-1947-4ec4-9154-cb71fbd75671@linux.dev>
-Date: Tue, 29 Sep 2026 13:04:39 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rKEDrVRQ"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4d2fe2056so1368254a12.2
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2026 23:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790661891; x=1791266691; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=59sBPfFbQu+SgkZjBownU9qNQaLofeQyVGSUdr1zzYU=;
+        b=rKEDrVRQL2g5W3+xkiRfba4dUvfWfIfjPv2D5FaNqPZtAmfZ6lOWn1qzJHneV9rSlJ
+         f2tiBnhpSJ0y4acut5F5CTmxS+avXz3xWu1ly1+B4Nkc9+Wr7FCrcspA1WMJx6tFHGQm
+         4OIFa3UloBzwr89zRAl43aX/NL/LI06eg9qtmflHbLgYS3wnvRw+kMTS+neTi2DPejjS
+         GmEW/El3KJjJdXoweZ9MUE8GJGhxKNV9Wcf4cpV5IeBZw6bbLSRlZVfTkzva1EFngIJ8
+         u2APFFMWGlr5YLM7247uHdkHW0Qh2WiHnNyUueZMzFq+tE4/ET4nEBRlhkCd+fvjMmIm
+         PdqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790661891; x=1791266691;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=59sBPfFbQu+SgkZjBownU9qNQaLofeQyVGSUdr1zzYU=;
+        b=Sdub0gnHyQ2R/f3+j2eiLqppbBRRv651SQgV/1i2zvFTt+sYDYI0LNF53Jw2WBmGKf
+         UpGy0LLZ/V1D6dk6wTC2H02miHDaX8hbQNXtqK6jzgMhZnG2QArdyqm2+vBO9s2RR6dy
+         suD8pOdKV2Q/eyj6TD+8l3TXYQCLs1Xs0/bZIs6GV5wbXhrrQslQAwv/J+d1J238O9VN
+         VBJk2lt4sctAJ6jM5Mx0PF//UwqllTDjGX82cWs3xzD2C5o3UOqYsNOqVZT0ri+iz88/
+         OojynXuo/UPk6MAVjJDdQAMXQc+iGJm2OoxBQvlETUjAQLdH7LWGMpt/B1kMNtddfO3x
+         rI5w==
+X-Gm-Message-State: AFq9FYL//0Ihm6rsJfdYTcCJeLw3ChrIpgYrdix85JESWPR84KqpptyV
+	DpFcGKQCfPtJlBoIwlbRexF29FQZ7F3IpR1ooty5sYyi6yQAbdFvnaKj
+X-Gm-Gg: AYBFou0mDJAERiJvFUja7KBwo1M015bdGLMbQ7THfrSEe37/eazg/nWvnvYTuMxmphK
+	d14++y3v25yljILAkuJcBtNK8A89VAyWYpV9Hw9VNpK9KDHlgQs1khE6ngBy+vimOa1W0tmlsq6
+	rU5OUxrJIHL24upreYUIK3Kc/XI2Jwqi3QyKbtAm9QWE2DOL/MId0aH5pfueM5rUkHT2p2MfsxD
+	995vZpDRcCNjuEqHBPoeU8+reV2iZ7Mryx2ijzPf+5j9g0+mGxGlDtSFCabd6BTRUQ4FQcwIEok
+	IQht6nQQXgx0SJgURS3J7WjWxXRhhhvVKHR3gCKFSTNUOZ7iHO5QJcPz/qoL0KOE+rk72hriZn9
+	J5Q8SS4k9A54pib5AFp0tV34RU6XyrFCmKEncpIo5WMEp5yhqrOW61gJz2EacFmtjxnUoEzB9Gk
+	yHksUoYcCEQkQ/705kfg4xzuTVam/Qscr9FEdSKqdHJdNeg2EqupE9wx3vu0Yv2WEjHSHaNyJXM
+	gH0ZQPhqAneOzB2bHL4EjMDA6QZLyGhad1t8w0CRWnBUYg0vLl5wb3Ax5DfGxvNcHnGOJ+FjSxh
+	VX0=
+X-Received: by 2002:a17:90b:4b86:b0:3a4:a477:62e9 with SMTP id 98e67ed59e1d1-3a4a47767f1mr632577a91.51.1790661890748;
+        Mon, 28 Sep 2026 23:04:50 -0700 (PDT)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a498d8ee5esm1131839a91.2.2026.09.28.23.04.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Sep 2026 23:04:49 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 29 Sep 2026 06:04:47 +0000
+Message-Id: <DLRKNUWD51KM.3URQDVOWL0BRY@gmail.com>
+Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v2 00/17] bpf: Indirect calls of bpf subprogs
+ (callx)
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ <patchwork-bot+netdevbpf@kernel.org>
+In-Reply-To: <a25b9150-55ba-41ef-8de9-0067b4576278@linux.dev>
+References: <20260924031042.1690890-1-alexei.starovoitov@gmail.com> <179022901639.1337807.12766583921039284951.git-patchwork-notify@kernel.org> <a25b9150-55ba-41ef-8de9-0067b4576278@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: Zero-fill non-target CPU slots on BPF_F_CPU
- insert of new per-CPU element
-To: =?UTF-8?Q?=C3=96mer_Mete_Kaya?= <omermetekaya0@gmail.com>,
- ast@kernel.org, daniel@iogearbox.net
-Cc: andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260928214932.544124-1-omermetekaya0@gmail.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260928214932.544124-1-omermetekaya0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 29/9/26 05:47, Ömer Mete Kaya wrote:
-> pcpu_copy_value() with BPF_F_CPU copies the value only to the target
-> CPU's slot and returns immediately, leaving all other CPUs untouched.
-> When inserting a *new* element, the backing per-CPU area may be reused
-> from bpf_mem_cache or a prealloc freelist without being zero-initialized,
-> so non-target CPUs retain stale contents of a previously-deleted
-> element in the same map — a same-map information disclosure.
-> 
-> pcpu_init_value() is used to initialize newly allocated elements, while
-> updates to existing elements call pcpu_copy_value() directly; non-target
-> CPU slots intentionally retain their previous values there.
-> 
-> The onallcpus=false path in pcpu_init_value() already handles new
-> element initialization correctly by explicitly zeroing non-current CPUs:
-> 
->   if (cpu == current_cpu)
->       copy_map_value(..., value);
->   else
->       zero_map_value(...);
-> 
-> Fix by adding a zero-fill pass in pcpu_init_value() after
-> pcpu_copy_value() returns, covering only the BPF_F_CPU new-element
-> path: iterate all CPUs and zero-fill every slot except the target.
-> This leaves pcpu_copy_value() unchanged so the update-existing-element
-> semantics are not affected.
-> 
-> Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash and lru_percpu_hash maps")
-> Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
-> ---
-> Tested with a reproducer:
-> - Before the fix: CPU 1 retained 0xDEADBEEFCAFEBABE from the deleted
->   element.
-> - After the fix: the non-target CPU read back zero.
+On Mon, Sep 28, 2026 at 04:13 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+> We're testing clang 21->22 bump on BPF CI, and something is broken
+> when compiling callx selftests:
+>
+> 2026-09-28T22:12:12.4226025Z error: Undefined temporary symbol
+> .Lswitch.table.call_by_switch
 
-Could you add a selftest to prove the issue?
+That's a bug in llvm 22. Not related to callx.
+With -mcpu=v4 BPFAsmPrinter::doFinalization() is supposed to remove
+private arrays of blockaddress that were converted to gotox jump tables,
+but it removes all private const arrays of pointers.
+clang turns the switch in call_by_switch() into such array of
+pointers to functions.
+Yonghong fixed it in llvm 23:
+commit 9fc458a1d95b ("[BPF] Fix erroneous removal of non-jump-table globals")
+It landed after 22.1.8, so no release of 22 has it.
 
-You said a reproducer. But, I don't know what it looks like.
+> What's the requirements for callx? Does it need bleeding edge clang?
+> If so, let's explicitly skip relevant selftests for clang < N?
 
-> 
->  kernel/bpf/hashtab.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 8cc07e54daaa..dff4321f2828 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -1099,6 +1099,16 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
->  		}
->  	} else {
->  		pcpu_copy_value(htab, pptr, value, onallcpus, map_flags);
-> +		if (map_flags & BPF_F_CPU) {
-> +			int target = map_flags >> 32;
-> +			int cpu;
-> +
-> +			for_each_possible_cpu(cpu) {
+No. clang generates callx for years. clang 21 is fine and 22 is fine
+with v2 and v3.
 
-But wait, the 'map_flags & BPF_F_CPU' has been check in the first 'if
-()' condition in pcpu_init_value(). See the previous fix:
-https://lore.kernel.org/bpf/20260924102321.2120434-1-donggeunyoo.kernel@gmail.com/
+I'd bump CI to clang 23.
 
-Thanks,
-Leon
-
-> +				if (cpu != target)
-> +					zero_map_value(&htab->map,
-> +						       per_cpu_ptr(pptr, cpu));
-> +			}
-> +		}
->  	}
->  }
-> 
-> --
-> 2.55.0
+A bunch of other tests require __clang_major__ >= 23 already.
 
