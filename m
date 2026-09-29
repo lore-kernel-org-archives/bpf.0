@@ -1,84 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0458B52CCC4;
-	Tue, 29 Sep 2026 13:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E61152CCD1;
+	Tue, 29 Sep 2026 13:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790689735; cv=none; b=GDmouxZ2XYEHAWbk4iHJ4ng/HjaTxfm8lVAcQjp78OcXWj4Tl7AdJqsO9fhuIXeFP8WFj/yh0xOBb8JLCW1MhbyMH1v5F44AZ8+GZ19lXHROjpZEZcorfM6tH7WwH2Nqb7gH63qa3Bx9rJD/mnz/ktj609wunos8ON27gu98FlY=
+	t=1790690266; cv=none; b=cf21iB0rQiMcGEEiMshVbwzDHVaO1U7Pf9e15ED7hdLJkC4UQgzdkxGFtcYHn7s0E6f4Qe5ZlgRj7WBDn9JZMpY3FWbyIOsbIfbp5T8agfsgbM7M9jj50ZwgGRWD9m9W34UIMQRRAJpf1twnjI5ICss3AESFLAiIPPcn7zg5JnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790689735; c=relaxed/simple;
-	bh=DxOA3K04TdGKgV9RBzwq7NMB042SfZvdvrNpiga7nYU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VYg5Yp/Jn+jG7rpZwvbEbcPyJ/DsLBtgblnOHLOzQtnx6Nad8XFUCvItui6AMKz4AwgBVedaOXdbPfDOzKj9Hfbx5FTF+/0/Dmhoju1xwD8YWlxKFCWE5dKja5BmaQAsPHq6k9U8Bv6CnCU1SrtybNFunB7GeALltznu0gUBDSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TeENhm71; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790690266; c=relaxed/simple;
+	bh=DTJbNYpfCBu5ooZqKtvFHwpHQFtn+LZmSu/i/H5nnx4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/3J7UuQx9uVwfY/8qriI/vvJjO1PiWw7SsNHcz1kv4o14GfIszFvGCbaBDKAdAcJSy7Wi0QnbNJyhLm/N6Y/aHh4GyFUuSmAwVzAzRAlXWoz5AOFGt6OEnVhumU9SRsfrsGOsH2gASo3oN2oGpX7a2771g5/pL87ruo0RuIl50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCGE4C7s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TeENhm71"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC8B1F000FF;
-	Tue, 29 Sep 2026 13:48:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCGE4C7s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4DA1F000FF;
+	Tue, 29 Sep 2026 13:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790689733;
-	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=TeENhm71871PnIfP2uUj5yUsaPzH8jjq0toNI7J1HWea0p/PX5pnnf4AQi7bwpqpT
-	 VuH59Vl6QL0PVVpzfNfgbUmo3C0NX1ocvPwYxheMNY2Wy4wOFyUJr+tw1QfJsIWCMM
-	 /cLg/9zOP+JJ3TDDSmPTHxgzP6RsrlN0DulUXpw3tzVjVEiZwHFhrsZA7c+AzuQOtq
-	 q9uWJkgpTVX4bC6vYQ+XHRVrlFFfLUZ0eQRsg/DBoBQcYnRx8sOXGengrBwY64mFGQ
-	 GCroh4xMccp9iMufU0ebQJGJvuK9pRuIvtLLWepHFXknUNFsbahJn9KO+KAb3hpL1Z
-	 q89x73rBxYK1Q==
-From: netdev-bot+sinfo@kernel.org
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: Marcin Wojtas <marcin.s.wojtas@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Toke Hoiland-Jorgensen <toke@redhat.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: 
- Re: [PATCH net v4] net: mvneta: clear XDP pfmemalloc flag between frames
-Date: Tue, 29 Sep 2026 13:48:52 +0000
-Message-ID: <179068973211.31693.16960645398477065605@kernel.org>
-In-Reply-To: 
- <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
-References: 
- <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	s=k20260515; t=1790690264;
+	bh=xBnytLQO3xzqaW+JhEfPfT8bcu2EnuDx1iy7C0tBPVQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=LCGE4C7sJVroiez6PTTMMq9W9U2n+UUuPUySac02C+z6iiFu0qfbqS95MrI2Bx9Tg
+	 TCVmkJLeXDrjbkXDEohcdWU0kRcFuKs0ziNktkqe8tSjLk9YPXRxyViZuvYOGSxylp
+	 25V0lMsTyjGqGhHFlSESB4tofar6dlzzeozneZh38+Bkix4T5Wf334OJiyBzz+3nT6
+	 btNGEQLRqZh2lKb94tA80O8DjVuxep35kI/Y+8/fDjWlI0wQQe748i5LVJuqNUERTA
+	 I5zYwzJXm5Dmapzgk2KzmIyB7x97FusSu8Zzr4JDOu8m/LtYqmF/X/SToZB8R+RLVe
+	 Vly/BNAAM69oA==
+Date: Tue, 29 Sep 2026 14:57:38 +0100
+From: Simon Horman <horms@kernel.org>
+To: Manish Awasthi <mawasthi@linux.microsoft.com>
+Cc: netdev-bot+sashiko@kernel.org, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	longli@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	kotaranov@microsoft.com, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+	nipun.gupta@amd.com, nikhil.agarwal@amd.com,
+	gargaditya@linux.microsoft.com, ernis@linux.microsoft.com,
+	kees@kernel.org, paulros@microsoft.com, mawasthi@microsoft.com
+Subject: Re: [PATCH net-next 4/4] net: mana: Add support for CDX device ID
+ 0x00C2
+Message-ID: <20260929135738.GT13925@horms.kernel.org>
+References: <20260924173054.589291-5-mawasthi@linux.microsoft.com>
+ <179035761944.2160803.12943182451050438147@kernel.org>
+ <20260928202555.617331-1-mawasthi@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260928202555.617331-1-mawasthi@linux.microsoft.com>
 
-Hi!
+On Mon, Sep 28, 2026 at 08:25:55PM +0000, Manish Awasthi wrote:
+> thanks for review. Comments inline.
+> 
+> > Thank you for your contribution! Sashiko AI review found 3 potential
+> > issue(s) to consider.
+> > 
+> > Critical: 0 · High: 0 (1) · Medium: 1 · Low: 2
+> > 
+> > If you believe none of the issues are legitimate, please reply to each
+> > issue of Medium severity or higher and explain why the AI is wrong.
+> > If any of them are legitimate and you plan to respin, please let patchwork
+> > know by including "pw-bot: cr" as a separate line at the end of your reply
+> > (one such reply per series is enough).
+> > 
+> > - [Medium] The CDX transport installs `.dev_reset = mana_cdx_dev_reset`
+> >   (-> `cdx_dev_reset()`) but has no way to recover afterwards.
+> > - [Low] `mana_cdx_setup_hwc_irqs()` skips IRQ affinity hints.
+> > - [Low] The comment in `mana_gd_query_max_resources()` (gdma_main.c)
+> >   says: "Only reset on platforms that support dynamic MSI-X allocation;…
+> > 
+> > Pre-existing issues:
+> > - [High] This problem wasn't introduced by this patch, but the shared HWC
+> >   bootstrap path that the new CDX transport now reaches trusts a device-…
+> > 
+> > --
+> > 
+> > net: mana: Add support for CDX device ID 0x00C2
+> > 
+> > This adds a CDX bus transport for MANA, built as mana_cdx.ko on top of
+> > the shared gdma_core.ko, for device ID 0x00C2. It allocates the whole MSI
+> > pool at probe time, limits the queue count to the available vectors,
+> > restricts DMA to 32 bits, and adds a per-bus auxiliary device name prefix
+> > so the CDX auxiliary devices stay separate from the PCI ones.
+> > 
+> > > diff --git a/drivers/net/ethernet/microsoft/mana/gdma_cdx.c b/drivers/net/ethernet/microsoft/mana/gdma_cdx.c
+> > > new file mode 100644
+> > > index 0000000000000..0d01e3d2f0d96
+> > > --- /dev/null
+> > > +++ b/drivers/net/ethernet/microsoft/mana/gdma_cdx.c
+> > > @@ -0,0 +1,340 @@
+> > 
+> > [ ... ]
+> > 
+> > > +static int mana_cdx_dev_reset(struct gdma_context *gc)
+> > > +{
+> > > +	return cdx_dev_reset(gc->dev);
+> > > +}
+> > 
+> > [Severity: Medium]
+> > Can this reset leave the whole function unusable, with no recovery short
+> > of a manual rebind?
+> > 
+> > mana_dealloc_queues() calls it when a TX queue still has pending_sends
+> > after the drain timeout:
+> > 
+> > mana_tx_timeout()
+> >   -> queue_reset_work
+> >     -> mana_per_port_queue_reset_work_handler()
+> >       -> mana_dealloc_queues()
+> >         -> mana_gd_dev_reset()
+> >           -> mana_cdx_dev_reset()
+> >             -> cdx_dev_reset()
+> > 
+> This version of the driver doesn't support recovery after mana_cdx_dev_reset.
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+I don't think it needs to delay progress of this patchset.
+But I am curious to know if there are plans to add such support.
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
-
- - Whether the issue was actually triggered, or is only theoretical
-   (e.g. found by code inspection). If it was triggered please include
-   the symptoms, like the stack trace or error messages.
-
- - What hardware the change was tested on. For driver fixes please
-   mention the device (and if relevant firmware version) used for
-   testing, or say that the change was not tested on real hardware.
-
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account. If the series needs another revision for
-other reasons, please include the information in the commit messages
-then.
-
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+...
