@@ -1,167 +1,928 @@
-Received: from mail-dy2-f42.google.com (mail-dy2-f42.google.com [74.125.229.42])
+Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6B2320A34
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 18:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423DB4F7CD8
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 18:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790705818; cv=none; b=QyjmsFnRsA8mkN4G+Ae6115g6IWaFncDLlRwcs3i/jLVkm1wZhqtcn0yKDBDZbbSm8U0J+Ag0RSPJ13ZpGNJSpAMA7RnZBI5vVR3Sd1N9tlyywSLvaM37dnP4J5rTsXkgDQ8f6m7UYG5E+uqgF4r5CMvQRlV94C1p6M+NyNJgrc=
+	t=1790706076; cv=none; b=Km1YSKWZo/OGklL5SvPRl2WmKb60eVXYxjY0p6u7RQrRn805UZQEkzI94OXgCGYcK2K2zYXTdGJXoW6BQOq7sm+Z+aEfZUwVNh6vW9KbuW9PAk2o5Bh4ETpjdvKSPBP7I7Q/oDjd/xbr6XuX0gqUD8+8NwpZqL/jc6NY1XPCRww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790705818; c=relaxed/simple;
-	bh=xIgvQhjLzjDn0M61maakhxdu6V3uS9ku8v6H8LXUFKE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tUlwZzkPWB7MyTJoI0LaJOjvos7iCvYZtz4Loq2LNIHfy0BPI3WymxV8n3KsUefVLtJWGMlaUNBUEfiuDMC5qExCthAYr4CP+yrz6qyetuxOoLU2RT6kei2l5b8EYT7PiemkuTNOpK+IScgdPh2Ea4ULa89Pz6u94Ogi2fuwntI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OCeO1V21; arc=none smtp.client-ip=74.125.229.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790706076; c=relaxed/simple;
+	bh=pDFhnf3PiaLO2Xb80XiiBDQbEcH42SHTJXY7J5e2sFA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=X9nFP4SmS9epJGw7MYcvtfwXCNXR2me5Ay8krcAp3fxtUSHXaR8L4e7y7NJ8CqkIz7KTkHNpEndeDkRdxulTbhLp6/BC8+BPmN50k8+Lyf9dIt4m7BUIVDOtJf07e7WwrJeqba0EQbGJm2AnIKL/jRBNNX7yTSd4lTq6Wbe/X+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MLXvtzvP; arc=none smtp.client-ip=74.125.82.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OCeO1V21"
-Received: by mail-dy2-f42.google.com with SMTP id 5a478bee46e88-342568a5b54so2044672eec.2
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:16:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MLXvtzvP"
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-14a62326b51so1981909c88.1
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:21:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790705816; x=1791310616; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=r9GVS6fYYXvapW6F5oWuP0VOtfFOhKVRg73n+zN/6hc=;
-        b=OCeO1V212wYpy4Vw835Nl2g3BddEf6cyQpqw9YJPymCYZaj1t/lnOFnkrDaTpdpTzm
-         AmXkO1x8kn6rFzyL1f7H80k0GZMc8Rx+3EQsjenQDySyVWoFG7lR3Nv2dQj5z7bDRxrx
-         5P65/gpsAT/IwXCUjrVcpJfe08FXeQGl09xDn5+8rhf5SD7bZcMQiwEoleW8sEhb5UT0
-         BEP0AEjFyhI1RoO7KM+dvUGcpidBIMb/RbGM/epj13sCPeO9jVV6xLXA3IvAtsv8jM91
-         xAUw04TATfkBdSiLycf0OMBRhTBunNzl7Kr8yQbi0txD2b7TBo1QJ7GXVgAgTzVetjwn
-         bbzQ==
+        d=google.com; s=20251104; t=1790706072; x=1791310872; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=VJeO6eANryWB79IavWsZVtR3aOeqATvhaw4mj6LQkQw=;
+        b=MLXvtzvPN1J+O5Vr45CBP+j2uGnrPRERMT6kyDwSILYZg0+ES07UZG0htGzYJtbTTO
+         MZAUhI9btmBQzP3woSjD5mKzlq0qW8l8KBM3d84OsdrRJKhJg3t9bSunJ+jwC4yHFRRv
+         2Ze0JjR+XUvHs8B5gJ68Ljo3hvW6bjmcsfTyru70eq5HYmZElU9vpkpyk3700tkP41PF
+         +MM6jqNRalOjN+Hi8MxmPEQ60cmiHmjHysBnn8Rjyf1CNK+rIgnaGTPk/o7eSzbZLUFT
+         Sg3D9IMvHGoO+ZGC31BQFtWqZ5NM6Vze5ZiUZtu8Fmz6TxzYwYvsud5nosIyqLvv4hEw
+         zCbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790705816; x=1791310616;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1790706072; x=1791310872;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=r9GVS6fYYXvapW6F5oWuP0VOtfFOhKVRg73n+zN/6hc=;
-        b=tSO+wU0aHJY/avIxyE37S5hfUS7fcPTmkPD51X80/PmCMlrupOLASa6+G55x457ZoS
-         aS0qzCeRFpl7dYD34FtR2d/7EH3N59hLLBHVjxhW4C8qOf+8aKPtyxp+yCZ29ip1OxFq
-         zc/ZLq+EMoj1pheC+0XsIForvCbmf6RT4TImQ7pnEyQrU9COhbEFJ8vzl3/K7MGO1Ahr
-         TdHmnPycnO06Yu4h/7AOxqj7uFM9efEKJrJjM4vF7hPP/RlethThkwcn35aKVE3lSY6/
-         4nKiZ/Vzh4VByCHyKYEpLC768DWI6cUah7QT/b7UP2BM8cnPKOVwW9hIdJE/biTnpHRd
-         CWkg==
-X-Forwarded-Encrypted: i=1; AKwUvBzDeyBde7o9vT5/feG7ELPDadQy4+prX5kmR27IRP4hN4oanX5vjCjTO4/O+7jue5vv3Vc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKB7ju0yLg1gjDCrY/gbbGooqyggvAEd4avQ9q+3mQgIktT2h1J
-	tDRwEt3saNC0SudIJj5hxknTfIEjxJLpkqfRIQ1WQuUWwkryDmQh0fF2
-X-Gm-Gg: AYBFou3nTLf5Up4V6eBz8pizjxVoSLR9l+Af/H2NfpldI8ItiilSiqezovmfU7rayF1
-	qFAbM0ki0n+jSlg77rku9ydZZLHLjWGnO7W90njwrM8xvcXT46LSY92sFXHZm3Q0izbQ4EmC/p8
-	EtGqfQcyQSsjXy6KuIHhR5eBTzh3SIfrml79PE9h1FVKFyAI9hd1FPnHq8Y4n09rGtRNEqUGC/d
-	tvg0zXZ/JfNnYjQYkY0yXZCfd/dhu8wafTYNAPn6p+IkpMZvSmJNG7SKwoFbTmHXdfRlsPC2O1V
-	I6HERueaZTg6eIX0OGS3gfn2MEYKmJmE4ABfP+uErl4plpxSlq7+DUyMSGFUmRPvkTD7nLPI24n
-	UgbFBy/X1/MVa79K+Jsd6rFKoov5X/KuzcjmLvP69ua2alOBHSQgHBc10Ss6hF6k7jA5sDmqMA2
-	PKt6eRwT2CjTSpVTrf4ps55J83ynbEizHVvLc5iZSuo5AQQX2uoSRqh0080CM4h+QftxMUiuLCG
-	O8dONX77IwyPOfmwHo4ieqXEGTHAQourZLJpSLxf660oT4yqBe6UQzI
-X-Received: by 2002:a05:7301:4882:b0:346:d87c:b76 with SMTP id 5a478bee46e88-34c65c61e0emr194224eec.6.1790705815709;
-        Tue, 29 Sep 2026 11:16:55 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:abbd:bfa5:f574:cca3? ([2620:10d:c090:500::7:dfd3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34c38bea1bbsm817659eec.23.2026.09.29.11.16.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 11:16:55 -0700 (PDT)
-Message-ID: <423cf77e8a6a03287cec604b21c19866360c262f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 03/36] bpf: summarize live stack slots in
- insn_aux_data
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, memxor@gmail.com, martin.lau@kernel.org,
- mason@kernel.org, 	ihor.solodrai@linux.dev
-Date: Tue, 29 Sep 2026 11:16:52 -0700
-In-Reply-To: <e5585bc7a06dce553e5f262fc19e2a343ff1358b7176d375b27e8094239945f0@mail.kernel.org>
-References: <20260926-scev-minimal-rebase-v1-3-c8e5ab5ba79f@gmail.com>
-	 <e5585bc7a06dce553e5f262fc19e2a343ff1358b7176d375b27e8094239945f0@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        bh=VJeO6eANryWB79IavWsZVtR3aOeqATvhaw4mj6LQkQw=;
+        b=pMORiFyziJ4qMwDZfOS6Z0XwuXFbQ2lizvCB9Qu31yA843NnWUJLuYoqh6iaoCX8Pk
+         uWfx2QwzglvnvRURLUMJsM4jlMBuLsjRnag+oy7Oda5U4mGpmlIPNhF3Q+eT2kaISe6y
+         a4/Mx0r3u7lUs0b/IFisJepCWnSN82t4Ibjus27ZoASY8rMllIhhx+oIP+CAZ4Px8J3r
+         1tDGbqJr862ICupo/ooO/x29ujHVTKszNpj9wiPh6PO4AtBEkPQH6aZ+Ziep0h6VsqqL
+         K0ns1oNL3fMpfurbRB6Asnt+GrCd0LQ/+xc/HcpF1T484MrstUTUd4+tzumfpyGqM+bz
+         J+tg==
+X-Forwarded-Encrypted: i=1; AKwUvBw/auyb5mvs0apozdmgyEdDL4XDiKMYYHvq4RNjLqxegG0dinm6QDz05396k8nkbbjrj5Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++mlGSiQMzgGbUVoaDHEBTtzDOATdXbE6LsmX7D3CaePGvUuv+zW
+	9KXq2ZF4GL4nh01DozFt5gzrq3/9x3Ghx9yK3at7yCrppNtP1+uzCGUaLm1ZvsZu/+JoskoBYcd
+	qIDBwK2rOdQ==
+X-Received: from dlbps2.prod.google.com ([2002:a05:7023:882:b0:144:ce1e:6f56])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:2918:b0:14a:d8fe:33af
+ with SMTP id a92af1059eb24-14ad8fe3602mr4332112c88.40.1790706071508; Tue, 29
+ Sep 2026 11:21:11 -0700 (PDT)
+Date: Tue, 29 Sep 2026 11:21:07 -0700
+In-Reply-To: <20260929120417.GT4120091@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20260929120417.GT4120091@noisy.programming.kicks-ass.net>
+X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
+Message-ID: <20260929182108.794434-1-irogers@google.com>
+Subject: Re: [PATCH v1] perf/core: Restore header fields in sideband output callbacks
+From: Ian Rogers <irogers@google.com>
+To: peterz@infradead.org
+Cc: acme@kernel.org, adrian.hunter@intel.com, 
+	alexander.shishkin@linux.intel.com, ast@kernel.org, bpf@vger.kernel.org, 
+	irogers@google.com, james.clark@linaro.org, jolsa@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org, song@kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 2026-09-27 at 20:26 +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
-h
-> > index c6d617581e84..7f31ce5ea6b7 100644
-> > --- a/include/linux/bpf_verifier.h
-> > +++ b/include/linux/bpf_verifier.h
-> > @@ -667,6 +667,7 @@ struct bpf_insn_aux_data {
-> > =C2=A0	 * that this instruction may write to.
-> > =C2=A0	 */
-> > =C2=A0	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
-> > +	DECLARE_BITMAP(live_stack_before, MAX_BPF_STACK_SLOTS);
->=20
-> This isn't a bug, but would a short comment on live_stack_before make it
-> clearer what the field holds?  Nearly every neighbouring field like
-> live_regs_before and scc has its own comment.
+On Tue, Sep 29, 2026 at 5:04=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Mon, Sep 28, 2026 at 06:42:06PM -0700, Ian Rogers wrote:
+> > perf_iterate_sb() invokes its callback for each matching perf_event on
+> > the CPU and task context, passing a shared caller-allocated event
+> > structure.
+> >
+> > perf_event_header__init_id() increments header->size by
+> > event->id_header_size. Unlike perf_event_task_output(),
+> > perf_event_comm_output(), perf_event_namespaces_output(),
+> > perf_event_cgroup_output(), perf_event_mmap_output(), and
+> > perf_callchain_deferred_output(), three sideband callbacks failed to
+> > save and restore header.size around perf_event_header__init_id():
+> > - perf_event_ksymbol_output()
+> > - perf_event_bpf_output()
+> > - perf_event_text_poke_output()
+>
+> I also found perf_event_switch_output(). Does something like so also
+> work?
 
-Naming is clear enough.
+It does. I was considering a general pattern but in the case of
+perf_event_switch_output the header size is computed per callback
+event rather than in the caller. I wonder if the problem is really
+with perf_event_header__init_id mutating and not just assigning the
+header. It tangles the header size computation between the caller and
+the callback. If we're assigning the header in every callback then
+there is no need to save and restore it. It is inefficient to
+reinitialize values in the header every time, but saving and restoring
+the header is also inefficient. Below is the refactoring I mean and I
+think it simplifies the code overall:
 
->=20
-> > =C2=A0	int ctx_field_size; /* the ctx field size for load insn, maybe 0=
- */
-> > =C2=A0	u32 seen; /* this insn was processed by the verifier at env->pas=
-s_cnt */
-> > =C2=A0	bool nospec; /* do not execute this instruction speculatively */
->=20
-> [ ... ]
->=20
-> > diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> > index c871744ca5a8..b6b7fd479569 100644
-> > --- a/kernel/bpf/liveness.c
-> > +++ b/kernel/bpf/liveness.c
-> > @@ -729,8 +729,9 @@ static void half_spis_to_slots(unsigned long *slots=
-, const unsigned long *mask,
-> > =C2=A0}
-> >=20
-> > =C2=A0/*
-> > - * Precompute, for each instruction, the OR of may_write masks over it=
-s top
-> > - * frame across all func_instances reaching it, stash it in the insn_a=
-ux_data.
-> > + * Precompute, for each instruction, the OR of may_write and live_befo=
-re masks
-> > + * over its top frame across all func_instances reaching it, stash the=
-m in the
-> > + * insn_aux_data.
-> > =C2=A0=C2=A0*/
-> > =C2=A0static void compute_may_write_masks(struct bpf_verifier_env *env)
-> > =C2=A0{
-> > @@ -746,9 +747,12 @@ static void compute_may_write_masks(struct bpf_ver=
-ifier_env *env)
-> > =C2=A0		if (!fm)
-> > =C2=A0			continue;
-> > =C2=A0		nbits =3D frame_mask_bits(fm);
-> > -		for (i =3D 0; i < instance->insn_cnt; i++)
-> > +		for (i =3D 0; i < instance->insn_cnt; i++) {
-> > =C2=A0			half_spis_to_slots(aux[instance->subprog_start + i].may_write_=
-mask,
-> > =C2=A0					   rel_mask(fm, i, FM_MAY_WRITE), nbits);
-> > +			half_spis_to_slots(aux[instance->subprog_start + i].live_stack_befo=
-re,
-> > +					   rel_mask(fm, i, FM_LIVE_BEFORE), nbits);
-> > +		}
-> > =C2=A0	}
-> > =C2=A0}
->=20
-> This isn't a bug, but would a more general name for compute_may_write_mas=
-ks()
-> make the function's purpose clearer?  The comment now describes computing=
- both
-> may_write and live_before masks, but the name only mentions may_write.
-
-Nope.
-
->=20
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->=20
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/363465=
-43957
+diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
+index f401181d8669..ada2ebfe1fcf 100644
+--- a/arch/powerpc/perf/imc-pmu.c
++++ b/arch/powerpc/perf/imc-pmu.c
+@@ -1275,6 +1275,8 @@ static int trace_imc_prepare_sample(struct trace_imc_=
+data *mem,
+ 				    struct perf_event_header *header,
+ 				    struct perf_event *event)
+ {
++	__u16 misc =3D 0;
++
+ 	/* Sanity checks for a valid record */
+ 	if (be64_to_cpu(READ_ONCE(mem->tb1)) > *prev_tb)
+ 		*prev_tb =3D be64_to_cpu(READ_ONCE(mem->tb1));
+@@ -1289,23 +1291,19 @@ static int trace_imc_prepare_sample(struct trace_im=
+c_data *mem,
+ 	data->ip =3D  be64_to_cpu(READ_ONCE(mem->ip));
+ 	data->period =3D event->hw.last_period;
+=20
+-	header->type =3D PERF_RECORD_SAMPLE;
+-	header->size =3D sizeof(*header) + event->header_size;
+-	header->misc =3D 0;
+-
+ 	if (cpu_has_feature(CPU_FTR_ARCH_31)) {
+ 		switch (IMC_TRACE_RECORD_VAL_HVPR(be64_to_cpu(READ_ONCE(mem->val)))) {
+ 		case 0:/* when MSR HV and PR not set in the trace-record */
+-			header->misc |=3D PERF_RECORD_MISC_GUEST_KERNEL;
++			misc |=3D PERF_RECORD_MISC_GUEST_KERNEL;
+ 			break;
+ 		case 1: /* MSR HV is 0 and PR is 1 */
+-			header->misc |=3D PERF_RECORD_MISC_GUEST_USER;
++			misc |=3D PERF_RECORD_MISC_GUEST_USER;
+ 			break;
+ 		case 2: /* MSR HV is 1 and PR is 0 */
+-			header->misc |=3D PERF_RECORD_MISC_KERNEL;
++			misc |=3D PERF_RECORD_MISC_KERNEL;
+ 			break;
+ 		case 3: /* MSR HV is 1 and PR is 1 */
+-			header->misc |=3D PERF_RECORD_MISC_USER;
++			misc |=3D PERF_RECORD_MISC_USER;
+ 			break;
+ 		default:
+ 			pr_info("IMC: Unable to set the flag based on MSR bits\n");
+@@ -1313,11 +1311,14 @@ static int trace_imc_prepare_sample(struct trace_im=
+c_data *mem,
+ 		}
+ 	} else {
+ 		if (is_kernel_addr(data->ip))
+-			header->misc |=3D PERF_RECORD_MISC_KERNEL;
++			misc |=3D PERF_RECORD_MISC_KERNEL;
+ 		else
+-			header->misc |=3D PERF_RECORD_MISC_USER;
++			misc |=3D PERF_RECORD_MISC_USER;
+ 	}
+-	perf_event_header__init_id(header, data, event);
++	perf_event_header__init_header_and_id(header, data,
++					      PERF_RECORD_SAMPLE, misc,
++					      sizeof(*header) + event->header_size,
++					      event);
+=20
+ 	return 0;
+ }
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 5842552294c1..8912298e5d4d 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1523,9 +1523,10 @@ is_default_overflow_handler(struct perf_event *event=
+)
+ }
+=20
+ extern void
+-perf_event_header__init_id(struct perf_event_header *header,
+-			   struct perf_sample_data *data,
+-			   struct perf_event *event);
++perf_event_header__init_header_and_id(struct perf_event_header *header,
++				      struct perf_sample_data *data,
++				      u32 type, u16 misc, u16 size,
++				      struct perf_event *event);
+ extern void
+ perf_event__output_id_sample(struct perf_event *event,
+ 			     struct perf_output_handle *handle,
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 33210aff3ee6..5a1bfffd46e6 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -8119,13 +8119,18 @@ static void __perf_event_header__init_id(struct per=
+f_sample_data *data,
+ 	}
+ }
+=20
+-void perf_event_header__init_id(struct perf_event_header *header,
+-				struct perf_sample_data *data,
+-				struct perf_event *event)
++void perf_event_header__init_header_and_id(struct perf_event_header *heade=
+r,
++					   struct perf_sample_data *data,
++					   u32 type, u16 misc, u16 size,
++					   struct perf_event *event)
+ {
++	header->type =3D type;
++	header->misc =3D misc;
+ 	if (event->attr.sample_id_all) {
+-		header->size +=3D event->id_header_size;
++		header->size =3D size + event->id_header_size;
+ 		__perf_event_header__init_id(data, event, event->attr.sample_type);
++	} else {
++		header->size =3D size;
+ 	}
+ }
+=20
+@@ -8959,17 +8964,16 @@ perf_event_read_event(struct perf_event *event,
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
+ 	struct perf_read_event read_event =3D {
+-		.header =3D {
+-			.type =3D PERF_RECORD_READ,
+-			.misc =3D 0,
+-			.size =3D sizeof(read_event) + event->read_size,
+-		},
+ 		.pid =3D perf_event_pid(event, task),
+ 		.tid =3D perf_event_tid(event, task),
+ 	};
+ 	int ret;
+=20
+-	perf_event_header__init_id(&read_event.header, &sample, event);
++	perf_event_header__init_header_and_id(&read_event.header, &sample,
++					      PERF_RECORD_READ,
++					      /*misc=3D*/0,
++					      sizeof(read_event) + event->read_size,
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event, read_event.header.size=
+);
+ 	if (ret)
+ 		return;
+@@ -9210,6 +9214,7 @@ struct perf_task_event {
+ 		u32				ptid;
+ 		u64				time;
+ 	} event_id;
++	int new;
+ };
+=20
+ static int perf_event_task_match(struct perf_event *event)
+@@ -9226,17 +9231,21 @@ static void perf_event_task_output(struct perf_even=
+t *event,
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data	sample;
+ 	struct task_struct *task =3D task_event->task;
+-	int ret, size =3D task_event->event_id.header.size;
++	int ret;
+=20
+ 	if (!perf_event_task_match(event))
+ 		return;
+=20
+-	perf_event_header__init_id(&task_event->event_id.header, &sample, event);
++	perf_event_header__init_header_and_id(&task_event->event_id.header, &samp=
+le,
++					      task_event->new ? PERF_RECORD_FORK : PERF_RECORD_EXIT,
++					      /*misc=3D*/0,
++					      sizeof(task_event->event_id),
++					      event);
+=20
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				task_event->event_id.header.size);
+ 	if (ret)
+-		goto out;
++		return;
+=20
+ 	task_event->event_id.pid =3D perf_event_pid(event, task);
+ 	task_event->event_id.tid =3D perf_event_tid(event, task);
+@@ -9258,8 +9267,6 @@ static void perf_event_task_output(struct perf_event =
+*event,
+ 	perf_event__output_id_sample(event, &handle, &sample);
+=20
+ 	perf_output_end(&handle);
+-out:
+-	task_event->event_id.header.size =3D size;
+ }
+=20
+ static void perf_event_task(struct task_struct *task,
+@@ -9276,18 +9283,7 @@ static void perf_event_task(struct task_struct *task=
+,
+ 	task_event =3D (struct perf_task_event){
+ 		.task	  =3D task,
+ 		.task_ctx =3D task_ctx,
+-		.event_id    =3D {
+-			.header =3D {
+-				.type =3D new ? PERF_RECORD_FORK : PERF_RECORD_EXIT,
+-				.misc =3D 0,
+-				.size =3D sizeof(task_event.event_id),
+-			},
+-			/* .pid  */
+-			/* .ppid */
+-			/* .tid  */
+-			/* .ptid */
+-			/* .time */
+-		},
++		.new	  =3D new,
+ 	};
+=20
+ 	perf_iterate_sb(perf_event_task_output,
+@@ -9364,6 +9360,7 @@ struct perf_comm_event {
+ 		u32				pid;
+ 		u32				tid;
+ 	} event_id;
++	bool			exec;
+ };
+=20
+ static int perf_event_comm_match(struct perf_event *event)
+@@ -9377,18 +9374,21 @@ static void perf_event_comm_output(struct perf_even=
+t *event,
+ 	struct perf_comm_event *comm_event =3D data;
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
+-	int size =3D comm_event->event_id.header.size;
+ 	int ret;
+=20
+ 	if (!perf_event_comm_match(event))
+ 		return;
+=20
+-	perf_event_header__init_id(&comm_event->event_id.header, &sample, event);
++	perf_event_header__init_header_and_id(&comm_event->event_id.header, &samp=
+le,
++					      PERF_RECORD_COMM,
++					      comm_event->exec ? PERF_RECORD_MISC_COMM_EXEC : 0,
++					      sizeof(comm_event->event_id) + comm_event->comm_size,
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				comm_event->event_id.header.size);
+=20
+ 	if (ret)
+-		goto out;
++		return;
+=20
+ 	comm_event->event_id.pid =3D perf_event_pid(event, comm_event->task);
+ 	comm_event->event_id.tid =3D perf_event_tid(event, comm_event->task);
+@@ -9400,8 +9400,6 @@ static void perf_event_comm_output(struct perf_event =
+*event,
+ 	perf_event__output_id_sample(event, &handle, &sample);
+=20
+ 	perf_output_end(&handle);
+-out:
+-	comm_event->event_id.header.size =3D size;
+ }
+=20
+ static void perf_event_comm_event(struct perf_comm_event *comm_event)
+@@ -9416,8 +9414,6 @@ static void perf_event_comm_event(struct perf_comm_ev=
+ent *comm_event)
+ 	comm_event->comm =3D comm;
+ 	comm_event->comm_size =3D size;
+=20
+-	comm_event->event_id.header.size =3D sizeof(comm_event->event_id) + size;
+-
+ 	perf_iterate_sb(perf_event_comm_output,
+ 		       comm_event,
+ 		       NULL);
+@@ -9434,15 +9430,8 @@ void perf_event_comm(struct task_struct *task, bool =
+exec)
+ 		.task	=3D task,
+ 		/* .comm      */
+ 		/* .comm_size */
+-		.event_id  =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_COMM,
+-				.misc =3D exec ? PERF_RECORD_MISC_COMM_EXEC : 0,
+-				/* .size */
+-			},
+-			/* .pid */
+-			/* .tid */
+-		},
++		/* .event_id */
++		.exec	=3D exec,
+ 	};
+=20
+ 	perf_event_comm_event(&comm_event);
+@@ -9476,18 +9465,20 @@ static void perf_event_namespaces_output(struct per=
+f_event *event,
+ 	struct perf_namespaces_event *namespaces_event =3D data;
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
+-	u16 header_size =3D namespaces_event->event_id.header.size;
+ 	int ret;
+=20
+ 	if (!perf_event_namespaces_match(event))
+ 		return;
+=20
+-	perf_event_header__init_id(&namespaces_event->event_id.header,
+-				   &sample, event);
++	perf_event_header__init_header_and_id(&namespaces_event->event_id.header,=
+ &sample,
++					      PERF_RECORD_NAMESPACES,
++					      /*misc=3D*/0,
++					      sizeof(namespaces_event->event_id),
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				namespaces_event->event_id.header.size);
+ 	if (ret)
+-		goto out;
++		return;
+=20
+ 	namespaces_event->event_id.pid =3D perf_event_pid(event,
+ 							namespaces_event->task);
+@@ -9499,8 +9490,6 @@ static void perf_event_namespaces_output(struct perf_=
+event *event,
+ 	perf_event__output_id_sample(event, &handle, &sample);
+=20
+ 	perf_output_end(&handle);
+-out:
+-	namespaces_event->event_id.header.size =3D header_size;
+ }
+=20
+ static void perf_fill_ns_link_info(struct perf_ns_link_info *ns_link_info,
+@@ -9531,11 +9520,7 @@ void perf_event_namespaces(struct task_struct *task)
+ 	namespaces_event =3D (struct perf_namespaces_event){
+ 		.task	=3D task,
+ 		.event_id  =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_NAMESPACES,
+-				.misc =3D 0,
+-				.size =3D sizeof(namespaces_event.event_id),
+-			},
++			/* .header */
+ 			/* .pid */
+ 			/* .tid */
+ 			.nr_namespaces =3D NR_NAMESPACES,
+@@ -9603,18 +9588,19 @@ static void perf_event_cgroup_output(struct perf_ev=
+ent *event, void *data)
+ 	struct perf_cgroup_event *cgroup_event =3D data;
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
+-	u16 header_size =3D cgroup_event->event_id.header.size;
+ 	int ret;
++	__u16 size =3D sizeof(cgroup_event->event_id) + cgroup_event->path_size;
+=20
+ 	if (!perf_event_cgroup_match(event))
+ 		return;
+=20
+-	perf_event_header__init_id(&cgroup_event->event_id.header,
+-				   &sample, event);
++	perf_event_header__init_header_and_id(&cgroup_event->event_id.header, &sa=
+mple,
++					      PERF_RECORD_CGROUP, /*misc=3D*/0, size,
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				cgroup_event->event_id.header.size);
+ 	if (ret)
+-		goto out;
++		return;
+=20
+ 	perf_output_put(&handle, cgroup_event->event_id);
+ 	__output_copy(&handle, cgroup_event->path, cgroup_event->path_size);
+@@ -9622,8 +9608,6 @@ static void perf_event_cgroup_output(struct perf_even=
+t *event, void *data)
+ 	perf_event__output_id_sample(event, &handle, &sample);
+=20
+ 	perf_output_end(&handle);
+-out:
+-	cgroup_event->event_id.header.size =3D header_size;
+ }
+=20
+ static void perf_event_cgroup(struct cgroup *cgrp)
+@@ -9638,11 +9622,6 @@ static void perf_event_cgroup(struct cgroup *cgrp)
+=20
+ 	cgroup_event =3D (struct perf_cgroup_event){
+ 		.event_id  =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_CGROUP,
+-				.misc =3D 0,
+-				.size =3D sizeof(cgroup_event.event_id),
+-			},
+ 			.id =3D cgroup_id(cgrp),
+ 		},
+ 	};
+@@ -9665,7 +9644,6 @@ static void perf_event_cgroup(struct cgroup *cgrp)
+ 	while (!IS_ALIGNED(size, sizeof(u64)))
+ 		cgroup_event.path[size++] =3D '\0';
+=20
+-	cgroup_event.event_id.header.size +=3D size;
+ 	cgroup_event.path_size =3D size;
+=20
+ 	perf_iterate_sb(perf_event_cgroup_output,
+@@ -9721,8 +9699,9 @@ static void perf_event_mmap_output(struct perf_event =
+*event,
+ 	struct perf_mmap_event *mmap_event =3D data;
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
+-	int size =3D mmap_event->event_id.header.size;
+-	u32 type =3D mmap_event->event_id.header.type;
++	int size =3D sizeof(mmap_event->event_id) + mmap_event->file_size;
++	u32 type =3D PERF_RECORD_MMAP;
++	u16 misc =3D PERF_RECORD_MISC_USER;
+ 	bool use_build_id;
+ 	int ret;
+=20
+@@ -9730,20 +9709,23 @@ static void perf_event_mmap_output(struct perf_even=
+t *event,
+ 		return;
+=20
+ 	if (event->attr.mmap2) {
+-		mmap_event->event_id.header.type =3D PERF_RECORD_MMAP2;
+-		mmap_event->event_id.header.size +=3D sizeof(mmap_event->maj);
+-		mmap_event->event_id.header.size +=3D sizeof(mmap_event->min);
+-		mmap_event->event_id.header.size +=3D sizeof(mmap_event->ino);
+-		mmap_event->event_id.header.size +=3D sizeof(mmap_event->ino_generation)=
+;
+-		mmap_event->event_id.header.size +=3D sizeof(mmap_event->prot);
+-		mmap_event->event_id.header.size +=3D sizeof(mmap_event->flags);
+-	}
+-
+-	perf_event_header__init_id(&mmap_event->event_id.header, &sample, event);
++		type =3D PERF_RECORD_MMAP2;
++		size +=3D sizeof(mmap_event->maj);
++		size +=3D sizeof(mmap_event->min);
++		size +=3D sizeof(mmap_event->ino);
++		size +=3D sizeof(mmap_event->ino_generation);
++		size +=3D sizeof(mmap_event->prot);
++		size +=3D sizeof(mmap_event->flags);
++	}
++	if (!(mmap_event->vma->vm_flags & VM_EXEC))
++		misc |=3D PERF_RECORD_MISC_MMAP_DATA;
++
++	perf_event_header__init_header_and_id(&mmap_event->event_id.header, &samp=
+le,
++					      type, misc, size, event);
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				mmap_event->event_id.header.size);
+ 	if (ret)
+-		goto out;
++		return;
+=20
+ 	mmap_event->event_id.pid =3D perf_event_pid(event, current);
+ 	mmap_event->event_id.tid =3D perf_event_tid(event, current);
+@@ -9777,9 +9759,6 @@ static void perf_event_mmap_output(struct perf_event =
+*event,
+ 	perf_event__output_id_sample(event, &handle, &sample);
+=20
+ 	perf_output_end(&handle);
+-out:
+-	mmap_event->event_id.header.size =3D size;
+-	mmap_event->event_id.header.type =3D type;
+ }
+=20
+ static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
+@@ -9875,11 +9854,6 @@ static void perf_event_mmap_event(struct perf_mmap_e=
+vent *mmap_event)
+ 	mmap_event->prot =3D prot;
+ 	mmap_event->flags =3D flags;
+=20
+-	if (!(vma->vm_flags & VM_EXEC))
+-		mmap_event->event_id.header.misc |=3D PERF_RECORD_MISC_MMAP_DATA;
+-
+-	mmap_event->event_id.header.size =3D sizeof(mmap_event->event_id) + size;
+-
+ 	if (atomic_read(&nr_build_id_events))
+ 		build_id_parse_nofault(vma, mmap_event->build_id, &mmap_event->build_id_=
+size);
+=20
+@@ -9999,11 +9973,7 @@ void perf_event_mmap(struct vm_area_struct *vma)
+ 		/* .file_name */
+ 		/* .file_size */
+ 		.event_id  =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_MMAP,
+-				.misc =3D PERF_RECORD_MISC_USER,
+-				/* .size */
+-			},
++			/* .header */
+ 			/* .pid */
+ 			/* .tid */
+ 			.start  =3D vma->vm_start,
+@@ -10033,18 +10003,15 @@ void perf_event_aux_event(struct perf_event *even=
+t, unsigned long head,
+ 		u64				size;
+ 		u64				flags;
+ 	} rec =3D {
+-		.header =3D {
+-			.type =3D PERF_RECORD_AUX,
+-			.misc =3D 0,
+-			.size =3D sizeof(rec),
+-		},
+ 		.offset		=3D head,
+ 		.size		=3D size,
+ 		.flags		=3D flags,
+ 	};
+ 	int ret;
+=20
+-	perf_event_header__init_id(&rec.header, &sample, event);
++	perf_event_header__init_header_and_id(&rec.header, &sample,
++					      PERF_RECORD_AUX, /*misc=3D*/0, sizeof(rec),
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event, rec.header.size);
+=20
+ 	if (ret)
+@@ -10069,15 +10036,14 @@ void perf_log_lost_samples(struct perf_event *eve=
+nt, u64 lost)
+ 		struct perf_event_header	header;
+ 		u64				lost;
+ 	} lost_samples_event =3D {
+-		.header =3D {
+-			.type =3D PERF_RECORD_LOST_SAMPLES,
+-			.misc =3D 0,
+-			.size =3D sizeof(lost_samples_event),
+-		},
+ 		.lost		=3D lost,
+ 	};
+=20
+-	perf_event_header__init_id(&lost_samples_event.header, &sample, event);
++	perf_event_header__init_header_and_id(&lost_samples_event.header, &sample=
+,
++					      PERF_RECORD_LOST_SAMPLES,
++					      /*misc=3D*/0,
++					      sizeof(lost_samples_event),
++					      event);
+=20
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				lost_samples_event.header.size);
+@@ -10102,6 +10068,8 @@ struct perf_switch_event {
+ 		u32				next_prev_pid;
+ 		u32				next_prev_tid;
+ 	} event_id;
++	bool			sched_in;
++	bool			preempt;
+ };
+=20
+ static int perf_event_switch_match(struct perf_event *event)
+@@ -10114,6 +10082,9 @@ static void perf_event_switch_output(struct perf_ev=
+ent *event, void *data)
+ 	struct perf_switch_event *se =3D data;
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
++	__u32 type;
++	__u16 misc;
++	__u16 size;
+ 	int ret;
+=20
+ 	if (!perf_event_switch_match(event))
+@@ -10121,18 +10092,22 @@ static void perf_event_switch_output(struct perf_=
+event *event, void *data)
+=20
+ 	/* Only CPU-wide events are allowed to see next/prev pid/tid */
+ 	if (event->ctx->task) {
+-		se->event_id.header.type =3D PERF_RECORD_SWITCH;
+-		se->event_id.header.size =3D sizeof(se->event_id.header);
++		type =3D PERF_RECORD_SWITCH;
++		size =3D sizeof(se->event_id.header);
+ 	} else {
+-		se->event_id.header.type =3D PERF_RECORD_SWITCH_CPU_WIDE;
+-		se->event_id.header.size =3D sizeof(se->event_id);
++		type =3D PERF_RECORD_SWITCH_CPU_WIDE;
++		size =3D sizeof(se->event_id);
+ 		se->event_id.next_prev_pid =3D
+ 					perf_event_pid(event, se->next_prev);
+ 		se->event_id.next_prev_tid =3D
+ 					perf_event_tid(event, se->next_prev);
+ 	}
++	misc =3D se->sched_in ? 0 : PERF_RECORD_MISC_SWITCH_OUT;
++	if (se->preempt)
++		misc |=3D PERF_RECORD_MISC_SWITCH_OUT_PREEMPT;
+=20
+-	perf_event_header__init_id(&se->event_id.header, &sample, event);
++	perf_event_header__init_header_and_id(&se->event_id.header, &sample,
++					      type, misc, size, event);
+=20
+ 	ret =3D perf_output_begin(&handle, &sample, event, se->event_id.header.si=
+ze);
+ 	if (ret)
+@@ -10158,15 +10133,9 @@ static void perf_event_switch(struct task_struct *=
+task,
+ 	switch_event =3D (struct perf_switch_event){
+ 		.task		=3D task,
+ 		.next_prev	=3D next_prev,
+-		.event_id	=3D {
+-			.header =3D {
+-				/* .type */
+-				.misc =3D sched_in ? 0 : PERF_RECORD_MISC_SWITCH_OUT,
+-				/* .size */
+-			},
+-			/* .next_prev_pid */
+-			/* .next_prev_tid */
+-		},
++		/* .event_id */
++		.sched_in	=3D sched_in,
++		.preempt	=3D !sched_in && task_is_runnable(task),
+ 	};
+=20
+ 	if (!sched_in && task_is_runnable(task)) {
+@@ -10193,11 +10162,6 @@ static void perf_log_throttle(struct perf_event *e=
+vent, int enable)
+ 		u64				id;
+ 		u64				stream_id;
+ 	} throttle_event =3D {
+-		.header =3D {
+-			.type =3D PERF_RECORD_THROTTLE,
+-			.misc =3D 0,
+-			.size =3D sizeof(throttle_event),
+-		},
+ 		.time		=3D perf_event_clock(event),
+ 		.id		=3D primary_event_id(event),
+ 		.stream_id	=3D event->id,
+@@ -10206,7 +10170,11 @@ static void perf_log_throttle(struct perf_event *e=
+vent, int enable)
+ 	if (enable)
+ 		throttle_event.header.type =3D PERF_RECORD_UNTHROTTLE;
+=20
+-	perf_event_header__init_id(&throttle_event.header, &sample, event);
++	perf_event_header__init_header_and_id(&throttle_event.header, &sample,
++					      PERF_RECORD_THROTTLE,
++					      /*misc=3D*/0,
++					      sizeof(throttle_event),
++					      event);
+=20
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				throttle_event.header.size);
+@@ -10245,12 +10213,14 @@ static void perf_event_ksymbol_output(struct perf=
+_event *event, void *data)
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
+ 	int ret;
++	__u16 size =3D sizeof(ksymbol_event->event_id) + ksymbol_event->name_len;
+=20
+ 	if (!perf_event_ksymbol_match(event))
+ 		return;
+=20
+-	perf_event_header__init_id(&ksymbol_event->event_id.header,
+-				   &sample, event);
++	perf_event_header__init_header_and_id(&ksymbol_event->event_id.header, &s=
+ample,
++					      PERF_RECORD_KSYMBOL, /*misc=3D*/0, size,
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				ksymbol_event->event_id.header.size);
+ 	if (ret)
+@@ -10291,11 +10261,6 @@ void perf_event_ksymbol(u16 ksym_type, u64 addr, u=
+32 len, bool unregister,
+ 		.name =3D name,
+ 		.name_len =3D name_len,
+ 		.event_id =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_KSYMBOL,
+-				.size =3D sizeof(ksymbol_event.event_id) +
+-					name_len,
+-			},
+ 			.addr =3D addr,
+ 			.len =3D len,
+ 			.ksym_type =3D ksym_type,
+@@ -10339,8 +10304,11 @@ static void perf_event_bpf_output(struct perf_even=
+t *event, void *data)
+ 	if (!perf_event_bpf_match(event))
+ 		return;
+=20
+-	perf_event_header__init_id(&bpf_event->event_id.header,
+-				   &sample, event);
++	perf_event_header__init_header_and_id(&bpf_event->event_id.header, &sampl=
+e,
++					      PERF_RECORD_BPF_EVENT,
++					      /*misc=3D*/0,
++					      sizeof(bpf_event->event_id),
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				bpf_event->event_id.header.size);
+ 	if (ret)
+@@ -10396,10 +10364,6 @@ void perf_event_bpf_event(struct bpf_prog *prog,
+ 	bpf_event =3D (struct perf_bpf_event){
+ 		.prog =3D prog,
+ 		.event_id =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_BPF_EVENT,
+-				.size =3D sizeof(bpf_event.event_id),
+-			},
+ 			.type =3D type,
+ 			.flags =3D flags,
+ 			.id =3D prog->aux->id,
+@@ -10427,18 +10391,23 @@ static void perf_callchain_deferred_output(struct=
+ perf_event *event, void *data)
+ 	struct perf_callchain_deferred_event *deferred_event =3D data;
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
+-	int ret, size =3D deferred_event->event.header.size;
++	int ret;
++	__u16 size =3D sizeof(deferred_event->event) + (deferred_event->trace->nr=
+ * sizeof(u64));
+=20
+ 	if (!event->attr.defer_output)
+ 		return;
+=20
+ 	/* XXX do we really need sample_id_all for this ??? */
+-	perf_event_header__init_id(&deferred_event->event.header, &sample, event)=
+;
++	perf_event_header__init_header_and_id(&deferred_event->event.header, &sam=
+ple,
++					      PERF_RECORD_CALLCHAIN_DEFERRED,
++					      PERF_RECORD_MISC_USER,
++					      size,
++					      event);
+=20
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				deferred_event->event.header.size);
+ 	if (ret)
+-		goto out;
++		return;
+=20
+ 	perf_output_put(&handle, deferred_event->event);
+ 	for (int i =3D 0; i < deferred_event->trace->nr; i++) {
+@@ -10448,8 +10417,6 @@ static void perf_callchain_deferred_output(struct p=
+erf_event *event, void *data)
+ 	perf_event__output_id_sample(event, &handle, &sample);
+=20
+ 	perf_output_end(&handle);
+-out:
+-	deferred_event->event.header.size =3D size;
+ }
+=20
+ static void perf_unwind_deferred_callback(struct unwind_work *work,
+@@ -10458,12 +10425,6 @@ static void perf_unwind_deferred_callback(struct u=
+nwind_work *work,
+ 	struct perf_callchain_deferred_event deferred_event =3D {
+ 		.trace =3D trace,
+ 		.event =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_CALLCHAIN_DEFERRED,
+-				.misc =3D PERF_RECORD_MISC_USER,
+-				.size =3D sizeof(deferred_event.event) +
+-					(trace->nr * sizeof(u64)),
+-			},
+ 			.cookie =3D cookie,
+ 			.nr =3D trace->nr,
+ 		},
+@@ -10475,7 +10436,8 @@ static void perf_unwind_deferred_callback(struct un=
+wind_work *work,
+ struct perf_text_poke_event {
+ 	const void		*old_bytes;
+ 	const void		*new_bytes;
+-	size_t			pad;
++	u16			tot;
++	u16			pad;
+ 	u16			old_len;
+ 	u16			new_len;
+=20
+@@ -10496,13 +10458,18 @@ static void perf_event_text_poke_output(struct pe=
+rf_event *event, void *data)
+ 	struct perf_text_poke_event *text_poke_event =3D data;
+ 	struct perf_output_handle handle;
+ 	struct perf_sample_data sample;
++	__u16 size =3D sizeof(text_poke_event->event_id) + ALIGN(text_poke_event-=
+>tot, sizeof(u64));
+ 	u64 padding =3D 0;
+ 	int ret;
+=20
+ 	if (!perf_event_text_poke_match(event))
+ 		return;
+=20
+-	perf_event_header__init_id(&text_poke_event->event_id.header, &sample, ev=
+ent);
++	perf_event_header__init_header_and_id(&text_poke_event->event_id.header, =
+&sample,
++					      PERF_RECORD_TEXT_POKE,
++					      PERF_RECORD_MISC_KERNEL,
++					      size,
++					      event);
+=20
+ 	ret =3D perf_output_begin(&handle, &sample, event,
+ 				text_poke_event->event_id.header.size);
+@@ -10535,20 +10502,15 @@ void perf_event_text_poke(const void *addr, const=
+ void *old_bytes,
+=20
+ 	tot  =3D sizeof(text_poke_event.old_len) + old_len;
+ 	tot +=3D sizeof(text_poke_event.new_len) + new_len;
+-	pad  =3D ALIGN(tot, sizeof(u64)) - tot;
+=20
+ 	text_poke_event =3D (struct perf_text_poke_event){
+ 		.old_bytes    =3D old_bytes,
+ 		.new_bytes    =3D new_bytes,
++		.tot          =3D tot,
+ 		.pad          =3D pad,
+ 		.old_len      =3D old_len,
+ 		.new_len      =3D new_len,
+ 		.event_id  =3D {
+-			.header =3D {
+-				.type =3D PERF_RECORD_TEXT_POKE,
+-				.misc =3D PERF_RECORD_MISC_KERNEL,
+-				.size =3D sizeof(text_poke_event.event_id) + tot + pad,
+-			},
+ 			.addr =3D (unsigned long)addr,
+ 		},
+ 	};
+@@ -10579,13 +10541,12 @@ static void perf_log_itrace_start(struct perf_eve=
+nt *event)
+ 	    event->attach_state & PERF_ATTACH_ITRACE)
+ 		return;
+=20
+-	rec.header.type	=3D PERF_RECORD_ITRACE_START;
+-	rec.header.misc	=3D 0;
+-	rec.header.size	=3D sizeof(rec);
+ 	rec.pid	=3D perf_event_pid(event, current);
+ 	rec.tid	=3D perf_event_tid(event, current);
+=20
+-	perf_event_header__init_id(&rec.header, &sample, event);
++	perf_event_header__init_header_and_id(&rec.header, &sample,
++					      PERF_RECORD_ITRACE_START, /*misc=3D*/0, sizeof(rec),
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event, rec.header.size);
+=20
+ 	if (ret)
+@@ -10610,12 +10571,10 @@ void perf_report_aux_output_id(struct perf_event =
+*event, u64 hw_id)
+ 	if (event->parent)
+ 		event =3D event->parent;
+=20
+-	rec.header.type	=3D PERF_RECORD_AUX_OUTPUT_HW_ID;
+-	rec.header.misc	=3D 0;
+-	rec.header.size	=3D sizeof(rec);
+-	rec.hw_id	=3D hw_id;
+-
+-	perf_event_header__init_id(&rec.header, &sample, event);
++	rec.hw_id =3D hw_id;
++	perf_event_header__init_header_and_id(&rec.header, &sample,
++					      PERF_RECORD_AUX_OUTPUT_HW_ID, /*misc=3D*/0, sizeof(rec),
++					      event);
+ 	ret =3D perf_output_begin(&handle, &sample, event, rec.header.size);
+=20
+ 	if (ret)
