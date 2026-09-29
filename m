@@ -1,86 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C3C51B18F;
-	Tue, 29 Sep 2026 16:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D11C522699
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 16:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790699267; cv=none; b=pZ33on5YEw/T1br/D5GNg2aqDsKuOBeeM/db0X0NiHMZHyPGt7FCmyJ0Dg+cmal5N/8QBMatYPhM+NU8WCYZ5TbJPilLrBNLXUPvDibPAVxw6w1BsAqlRa56m8eWyHm+MOb3v8fo9sbodSpIZc6qmS/KgzUBsA/3a9GME9IYy/A=
+	t=1790699311; cv=none; b=u2qr1OWbo7JBTWShv6BxVwe0E9vfxVk1tGe/N8V4X+6XsFdjf04TKhQVZqgtx2ISNEMj8QVvIV/gaLy9B6qEzmIN3NWJ1WyIpBs7QK/rOSr9eNQvjXpKoW7kyOmVyvP99vYSvpVWl0Bwrk5nUItp2F5jRzwwMDTsuOP0hov5n2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790699267; c=relaxed/simple;
-	bh=FToVisFcHGImeZQTI0lUkw0nqou7C9qIziIjjD3y+Rw=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y7xsRemAu9DWSzlARkV1EfH8Vu089pYIYnjsAArW+UbRvFuAjqLFmXt6NizGzHdqRoei8mDpCtmt9ALUwXiuLgqtMpoUUA6u5sdkggHRO5xrcO61eumqU5bNFOFvF2UPeMIsXMIyhP1V+KyNgeMHjhvEihX9Qp43gvWCgahasfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bCpQ48o/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790699311; c=relaxed/simple;
+	bh=xNj28skhAXgmnVsiwfcuNW6CLgzTKZ1pXWol9Jpkmuk=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=FMR1Nu226KhwyxNY7Gj6UZ2ZNBSb7EMQUirirnM8+npZOZYN0iCh9bM1gf58VRYR8cg5vwL2dB4ev1TpWBT/UaYt5MwWA+ouLAU8hcPoq3gAhp7QGprbljZOzx6TfgoH9tO4iPwRfa1/VuogD2F7kb3M/4pIekt/fxjzAwupb9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MhD91/3t; arc=none smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bCpQ48o/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAEB01F00893;
-	Tue, 29 Sep 2026 16:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790699266;
-	bh=o0Zicd12ssGapXPbpFh0mo1gZMSR9A8dcAbcZMHgOb8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=bCpQ48o/2PCA1BJxDW+3lH5GraekOEYVsFTTXKTroQoSuAWJA3P2LIRTQAtqf5PLK
-	 lCLByBMEG9FSS30LH1uMM3Nglgue5PKm2a5b1H4AQrDzh3Vv9b89Arv5aE5LUc4toa
-	 EACu2NXquzjy3NdhbYi2I9VMpQT/IEGpz81FyiNtR190W+UuEx6XkkpLpEIx0TBDd6
-	 IZVRRVgMawC2bVNGWMq26BRHPBNZLEYdDgFE/FK3n0d6ZCuhxc56bqHHLlCO3sOHoa
-	 4/sFqhyMVLI3CXBVk/B1mFFHTNkH1JfI2YSRThC1H9qCdFIYi33H0HczHalmJBFM3h
-	 H3uAG4IJfrr3Q==
-Date: Tue, 29 Sep 2026 06:27:45 -1000
-Message-ID: <aeb50cff4d3014a43ded85247a5786da@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: josef@toxicopanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
- Tao Cui <cuitao@kylinos.cn>, ameryhung@gmail.com,
- alexei.starovoitov@gmail.com
-Subject: Re: [RFC PATCH v7 1/4] blk-iocost: add BPF struct_ops cost model
- support
-In-Reply-To: <daf428f7-d666-447f-9b6e-a77da4194e91@linux.dev>
-References: <20260924054549.2271705-1-cui.tao@linux.dev>
- <20260924054549.2271705-2-cui.tao@linux.dev>
- <4412563645504aa9a87d3cafd544c97c@kernel.org>
- <daf428f7-d666-447f-9b6e-a77da4194e91@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MhD91/3t"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-85469f204f6so2142781b3a.2
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 09:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790699307; x=1791304107; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xNj28skhAXgmnVsiwfcuNW6CLgzTKZ1pXWol9Jpkmuk=;
+        b=MhD91/3tdjUJl9IUPFfbqqyNK0xlaM0rmwKbxZAFAptTMV/dgnRnWotrAxIRQG8R0P
+         19JMuxhN5YMxksR9FtmZy5jOPtrKR4JClYkGL7etOIXzfc1cOMvNiTop1YVaH/sJ+a7u
+         WVQrtQBoukQ5vMrKZjCsvC+ZdPzJE6b3kfTinH8X6WQlkARndwfPSCAmlx+1COy9ymTT
+         5s0jt84nB9UgJqUl9xd79OAqlcIt6w0OyBrLLvOykkw+LLS6UWsE61rM3xH37EL33dQg
+         dO60Aqachs4RAfvf6KKl+he5FWqePPWHPcJ0lNDDzlxrp82nh0knJtYeANONlakLbmuJ
+         IF4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790699307; x=1791304107;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xNj28skhAXgmnVsiwfcuNW6CLgzTKZ1pXWol9Jpkmuk=;
+        b=qMPqB7XLFClBA8ctQzDqvpI9ubq+1Mx/5TUHzuxygOrVen4sD5yQa9BSdwehXTSIw6
+         5O1eeQgP7GLqN7AroGQtDawVIMQrJgD/vCpPgzxswJ6tET8ysqqiUSOzbZ1wwvTIK5kT
+         W6A5D11jmyyXkWfdOBuK/O2dpdruBJDDy2W7mzhXWm5Z1nUMY6WdGGJZ2r2wfS4Vo1Wc
+         KJpgGMCItBezVTsGng0AYr8ClKlLhs8xevKmaRSwfSzZGjleRqBWYfYPWQSPz9cDGMI4
+         tv2ufddj60bhQKP1QV9Fsla7iuYR9h0tJs2M2QGKH31gf5jLpGbn/73AaGA45o2QlO2n
+         DsKg==
+X-Forwarded-Encrypted: i=1; AKwUvBy3wgjWfnvE7Z1Qb5Oz/zcpNfFXA+CWaq5dN8snxDd8m2awNq34H6bo9pQgr+Mp9fih0Us=@vger.kernel.org
+X-Gm-Message-State: AFuF++mofIVo+rSX6k/BJNO9x6d1mGbs+ZWxaI8DTEmNaUzNtB3vHTUj
+	orsoPg2l+MSV/YfROBw8Hp2glvctjlAZyk9qo0qx7LVkWMlrnExkSh53
+X-Gm-Gg: AYBFou08xaWW16WSgcxpFXu/mDc+EV9ww2YJe1oLcFQ5XmjyKaswHwHe2NoLxby6CYs
+	dVqykqodb70Zm5C+WD7HUdb37G4i0h4l/tUS8dr3UE1wKOjshMWC6PZbli7Blcnz+Iww6yNbyTd
+	Ms6pW1vj66/Beduk5oLJdJQZqaI4BHFOSF+++4r2rQcjoTlNFA0zgjmL/eikT83HogL1UJ+fTz+
+	o3H4ontav6dWGORbg45zmkpduZcvt0WatJwIOkT9cj8IkHek/aWUECY9YEDwRlcu3kTMWpQb2su
+	ETU0CiLroHfmzv1pp6wLPSCPD3wk9JLkpxKw5lzheb4mcFNEO87ACz+BoF9lLXszTCjDcwB4fC2
+	hB37kdHdHxg71gN4oS9rAiA7JwdrfM8+m6r3ZjBtMyxcUMq9UVXUa3zffCeeQro+tc/8ik60+Pm
+	62aweGuBFvSN14Wffi7VrDtgwEacUqbCXzkgnrsSV/z7NYw+FqqHX/e2//hYr77YNxnpBubgDZA
+	9reIK10WLYAuSny6SBwyJ9SYoPrP+pGKSi2MqcUtnf2Mo/TerdyicyG+zQ6yvGu8DMtExkUjh+7
+	HE4=
+X-Received: by 2002:a05:6a00:2356:b0:882:6993:25b5 with SMTP id d2e1a72fcca58-8826993339amr6934341b3a.27.1790699307008;
+        Tue, 29 Sep 2026 09:28:27 -0700 (PDT)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-88685653bacsm276787b3a.0.2026.09.29.09.28.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2026 09:28:25 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 29 Sep 2026 16:28:25 +0000
+Message-Id: <DLRXXC72E2CS.2MRXIPM0KME7Q@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Puranjay Mohan" <puranjay@kernel.org>, "Paul
+ Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Alexandre Ghiti" <alex@ghiti.fr>, "Pu Lehui" <pulehui@huawei.com>
+Subject: Re: [PATCH bpf-next 1/5] bpf, riscv: Fix stack-passed arguments for
+ indirect trampolines
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Pu Lehui" <pulehui@huaweicloud.com>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@kernel.org>, <bpf@vger.kernel.org>,
+ <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20260929083924.1851840-2-pulehui@huaweicloud.com>
+References: <20260929083924.1851840-1-pulehui@huaweicloud.com> <20260929083924.1851840-2-pulehui@huaweicloud.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 
-Hello, Tao.
+On Tue, Sep 29, 2026 at 08:39 AM Pu Lehui <pulehui@huaweicloud.com> wrote:
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Reviewed-by: Pu Lehui <pulehui@huawei.com>
 
-On Tue, 29 Sep 2026 21:42:51 +0800, Tao Cui wrote:
-> That leaves one race: .unreg may observe a non-NULL ops->q before
-> ioc_rqos_exit() clears it, then block on rq_qos_mutex while the
-> ejection drops the last bdev reference.  This looks analogous to
-> hid_bpf's .unreg vs. destroy_device synchronization.
->
-> Does that seem acceptable here too, or would you rather have .unreg
-> own the final reference unconditionally?
-
-No, there can't be a crash window like that. The underlying problem is
-that .unreg sleeps on a mutex inside a queue it holds no reference on. The
-model should still be ejected when the device goes away, but exactly when
-doesn't matter much as long as it happens in a reasonable amount of time.
-
-request_queues are RCU-freed, so maybe .unreg can rcu_dereference() ops->q
-and try to get a queue reference under rcu_read_lock()? blk_get_queue()
-fails on a dying queue, so this would need a tryget wrapper around
-q->refs. Holding its own reference, .unreg can then take rq_qos_mutex and
-test ops->q for NULL to tell whether removal already ejected the model.
-
-Also, when .unreg detaches, the device is still live and the BPF code may
-be running. Freezing and quiescing the queue covers the IO paths but not
-iocg_init() and iocg_free() called from ioc_pd_init() and ioc_pd_free(),
-so the iocg_free() walk and clearing the model need to be synchronized
-against those too.
-
-Thanks.
-
---
-tejun
+You're sending Kumar's patch, so it needs your SOB.
