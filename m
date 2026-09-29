@@ -1,227 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC48C4BC003;
-	Tue, 29 Sep 2026 09:26:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1F24BC00B
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 09:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790674003; cv=none; b=ftAzmE3iAUo6k+F2PnjkyzkTi5B3kfmvJDLZhPhobPub31yJU5KS2f0+ioTIf8ud7dxDONnmqpRJ0YS0O5LiRQEJxUi3v6wVJcJ8V9Iq4F4QR2A8p8SQCtNPDtrHrnE1aCsrCyGLAXygRX5PccqRcc/N0WeZ7xzlqqm6RGt4oa4=
+	t=1790674029; cv=none; b=L+QVeXavsOVaszrzwDplZ5HhEHsJztX2V9onM50Ti3hJj/8nKrdOdN85/Yjo4qba/MtcPD4+XKMRNGLps34XT62Ff9jpQcpsbrOqKh9/outvFr0laLdcKvNqk1YbqfavrUq9R04EUnmMK3abLq6e1n8T2jEKn/FBCWPCV0Bmhbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790674003; c=relaxed/simple;
-	bh=cltga6RH/ol21mlzUZmEpLYtblEq58rkXhe1w04j9gc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SNlZsdiaOa9hRJFRfB3Ow5wI4YpPz9PadqNWtUxJfDx8hYI3JFWC4a/kybQcZOt1HXJ/MnpxYsZeemtJb62lUyaEC2N2ZUNknQXQVfPRgqKUvPx2JvdCJHEUCMcZnMWmOrfYTIr/vwHlAP2RsD0y9Fpqp8xPmT+QWBwuKaYo47w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XssZ0mCO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790674029; c=relaxed/simple;
+	bh=fcXyvBXj7Sy0LffIiP8HJUW08OGSCuJRW/UUi7/DyfE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f8LlGJ3r0Bvl7h7gJ0yMBU73SzyXoJbzM+VT9gTyKI41QkPKPackQcLBSIB2Dgi28/JmSnLD5QDSM1usYr+c15d6jnxqjqztnbR7h0U4/rpKHGYXH1fSm7wmbOzGTTigXrfGTfe6l0gz0NWI50pD3rHfXetCQ0r/z8Jnb07HovI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EGvaV2Zz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=DPOGSHcb; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XssZ0mCO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9141F000FF;
-	Tue, 29 Sep 2026 09:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790673995;
-	bh=DJTxf5PAiRURAXhySgqOS+Aj3flHVqQz6tf1/FXsfOk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=XssZ0mCOgH1dSVMrNC4nf8SuW0QTXIN0DI16+LAfdz4VdIz0uvymLNrlqxgg3Fk7/
-	 OQat6CL8IQXo8DV2biTlYtmVJfjNu/0gGi9FIBASFc4Zi1D3l0LanqthO+XRz0Van1
-	 Q1nEaiidn7scNKEX3EYMA3mjGrJam0CbLAVQiq+kOCW9p2YO3TCJVDCo65oOoOoiGI
-	 1NHb3j3aY4G+yXD/Ro9BbSKr8JVptBDYXsVT27aBzusdn7B4jX1M4JegNGOHlM/AxN
-	 qMni27s7xOK0UuyCvZmfYkQIdUOruGyy1y13Aq+qNFgKXc01HOvJQz2/8GHN5MKKVF
-	 n+DgFtaCvNp9g==
-Content-Type: multipart/mixed; boundary="===============8678725211081073155=="
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EGvaV2Zz";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="DPOGSHcb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790674019;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sekRSkYgEhXbsBdIcUfoQ0jf7hqjPYSNiBc5T17KCjY=;
+	b=EGvaV2ZzRI/OndavcLYpDBlajKS8C8K5Wx/1oqj97329cZi0rpb7lKSxnztIZR8NLB6Y7s
+	8xWOwP0cMJ8FZP7OyJxqYbRqJDgQghSqWOmLYLsOtrD2brkNB5qsbqDF9aEcxmwp0LMbrG
+	AL7OEQJZ4pL2XrnEOsze7S1KN2XgsOA=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-266-VY59_rvRPlqkWCctdnxfkA-1; Tue, 29 Sep 2026 05:26:57 -0400
+X-MC-Unique: VY59_rvRPlqkWCctdnxfkA-1
+X-Mimecast-MFC-AGG-ID: VY59_rvRPlqkWCctdnxfkA_1790674017
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c294c2dcdf5so353093466b.1
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 02:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1790674017; x=1791278817; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sekRSkYgEhXbsBdIcUfoQ0jf7hqjPYSNiBc5T17KCjY=;
+        b=DPOGSHcb/Cx2xsTfN3rRl/XFXi/pUVEaKMJ0u1vulQRjLMLed5jQ/z7Sy8/QYR7Q9y
+         benk0CvkDOJkfxbrd0/PRRPTpOxWh+QqJmmI0k2kXRU7Kh7HGNXntNlM2bUlMfa6FKST
+         l5OV14xUFwta0WAFG7jY7GJokTSjPt+k6am30s+fFXLri80Q87GpIZP6/C5J/LEiAIrX
+         JBSyMT74RjZOf6vhMVMVzF5GfOHdxsfe1XeKfe7lqy0T97TbvG/kHZ07gaOSOt+8cG7W
+         LkZrBXQYIC4X804i8gjE12hKtJ0+Ps5PzKMLzxm8uyrITRKqiw7JyEkJGVYJRJtOJhIQ
+         Kj8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790674017; x=1791278817;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=sekRSkYgEhXbsBdIcUfoQ0jf7hqjPYSNiBc5T17KCjY=;
+        b=HFwHaV/3+IcG2qPzpbBCNQQ2D+C+Ek21qiycZv4zRR0ybLUHfMDWmMyaVBQxLJ9sxg
+         nvWnRfJ4cS8jnEz+a3zAPKuKB+weRV38PBAoGEm1BhbZHzbFu/Cugu+SPn9ZdJzSmt0g
+         H/dKXNS1OW+/GXeBpSqQYdnLgo3KQyKct0pjsnQ11bLIIXVRYuwEVwT4iUY/lkuVD/+W
+         OofnHUvoiD0FyQ9OzxqEsDyu5Q8vC0WIKjoL6nXG4dl31SFESlYeGTneB2PjtcCTlOcv
+         D15nxTrwhlsEAPIBWPgMkwX1cys8JPRhtbB5QU7v0ghWpNVJua9F6NdGGqcwHFi08Wlw
+         Ch5w==
+X-Forwarded-Encrypted: i=1; AKwUvBzJ3BGmy6Y3mkG8lSo3Rf4C5AyB0NGrT5e5O61jq0QUh2VLSqGyvldlYPPMbdHT4bLiQW8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIXNOjOn/PCdYTeBiK1Ar2DLUxNPaik8uKAazJ8IOdXb3hdMFUe
+	YkMjeIWmxicLHIa2P25X9B9nkvXKIzP9PubYKQcnLPcy6BpkPbDswS38/xil41fUjaxf/SlnA0y
+	fxJes3n/kpvIRehs7b8hdYD9N2EiFLLOdeR5qaHfJLQHx1IYsRsVbYw==
+X-Gm-Gg: AYBFou2IHpJ7YxdH3QlGJh/e7VhS8MD7hCa7ylfZ0zq2CXTZ0oGmDHvw7F3rm4fmR72
+	RhbKLLEQHvEJCoztzGwTAieiBfl7SHCUL4dXUkcmmgRtMiv41unZSbvOL4FZPj3XxbPujz6D2Uq
+	NrI+dozWSG7x/0rLCt4MSfKYQE2lx6KnyBGd9KIpKpkJfkDwMvQMV4Q72q32UfE+tmWuu1IPMlW
+	dLtlFucn5lkhlE7TUtdU9SSGsj5S4CcrCWXRDoV18TV/++dovnDdxAT0m7NVig7Ji775ykMoDu7
+	4s+fIZEDr0x3F0O0lX6lSvmLokeoy/F8fmmkR/2ARHxvfUJIsO5J3DlWY0k/HYcF8LGOWn446tg
+	WcT7OKd109ZHr4Sw4RTf1aNW0OHpWyGS5Y9cB8xuRZuzfNrQQC+u1HQAJxuWqHJUA/vSBtuM6Zw
+	==
+X-Received: by 2002:a17:906:730d:b0:c21:9b4b:2690 with SMTP id a640c23a62f3a-c2ac23bf51fmr1255285166b.17.1790674016574;
+        Tue, 29 Sep 2026 02:26:56 -0700 (PDT)
+X-Received: by 2002:a17:906:730d:b0:c21:9b4b:2690 with SMTP id a640c23a62f3a-c2ac23bf51fmr1255281466b.17.1790674016087;
+        Tue, 29 Sep 2026 02:26:56 -0700 (PDT)
+Received: from [192.168.188.234] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2ae678bbb0sm601169966b.5.2026.09.29.02.26.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2026 02:26:55 -0700 (PDT)
+Message-ID: <286547c9-9f4a-4202-a615-b51d42850951@redhat.com>
+Date: Tue, 29 Sep 2026 11:26:53 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <195e87010d3c27469fbebac9aded96ec0232aa4eb047bbc2c35136ac54a24146@mail.kernel.org>
-In-Reply-To: <20260929083447.558818-3-chenyuan_fl@163.com>
-References: <20260929083447.558818-3-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add a test for udp_bpf_recvmsg() with a stuck backlog
-From: bot+bpf-ci@kernel.org
-To: chenyuan_fl@163.com,netdev@vger.kernel.org,bpf@vger.kernel.org
-Cc: john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,daniel@iogearbox.net,ast@kernel.org,cong.wang@bytedance.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 29 Sep 2026 09:26:34 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v8 06/12] gve: simplify reset logic
+To: netdev-bot+sashiko@kernel.org, hramamurthy@google.com
+Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, jordanrhee@google.com, willemb@google.com,
+ nktgrg@google.com, maolson@google.com, thostet@google.com,
+ jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ przemyslaw.kitszel@intel.com
+References: <20260924185316.2831077-7-hramamurthy@google.com>
+ <179036256202.2160803.12978678207911420221@kernel.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <179036256202.2160803.12978678207911420221@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---===============8678725211081073155==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 9/25/26 20:56, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 7 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 2 (1) · Medium: 2 (2) · Low: 3 (1)
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [High] After a failed recovery, an unprivileged user can crash the
+>    kernel with an ethtool query.
+> - [High] When gve_recover() fails during a reset while the interface is
+>    up (service-task reset, ethtool reset, flow-rule timeout, or…
+> - [Medium] gve_teardown_control_plane_resources() (gve_main.c) now calls
+>    gve_teardown_clock().
+> - [Medium] The commit message does not mention several user-visible
+>    changes to error handling, and one of its design statements is not…
+> - [Low] This patch removed gve_queues_mem_remove() from
+>    gve_queues_start()'s error path.
+> - [Low] The commit fixes a real unbounded recursive reset but has no
+>    Fixes: tag.
+> - [Low] Item 2 of the commit message describes the old bug this way:
+>    gve_close() during gve_shutdown triggers a hardware reset and then…
+Low prio remarks could be ignored and we prefer no fixes tag in net-next
+patches, but the first 3 ones in the list look relevant and should be
+addressed.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c b/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c
-> new file mode 100644
-> index 000000000000..bbfe2623bd9e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c
-> @@ -0,0 +1,141 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 KylinSoft */
-> +
-> +#include <sys/types.h>
-> +#include <sys/socket.h>
-> +#include <sys/wait.h>
-> +#include <arpa/inet.h>
-> +#include <errno.h>
-> +#include <string.h>
-> +#include <time.h>
-> +#include <unistd.h>
-> +
-> +#include "test_progs.h"
-> +#include "test_sockmap_udp_backlog.skel.h"
-> +
-> +#define RCV_TIMEOUT_MS	1000
-> +#define HANG_LIMIT_MS	5000
-> +
-> +static int run_child(void)
-> +{
-> +	struct test_sockmap_udp_backlog *skel;
-> +	struct timeval tv = { .tv_sec = RCV_TIMEOUT_MS / 1000 };
-> +	struct sockaddr_in addr = {};
-> +	struct timespec t0, t1;
-> +	socklen_t addrlen = sizeof(addr);
-> +	int zero = 0, sfd, ret, err, exit_code = 1;
-> +	double elapsed_ms;
-> +	char byte = 0;
-> +
-> +	skel = test_sockmap_udp_backlog__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-> +		return 1;
-> +
-> +	sfd = socket(AF_INET, SOCK_DGRAM, 0);
-> +	if (!ASSERT_GE(sfd, 0, "socket"))
-> +		goto out;
-> +
-> +	addr.sin_family = AF_INET;
-> +	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-> +	addr.sin_port = 0;
-> +	if (!ASSERT_OK(bind(sfd, (struct sockaddr *)&addr, sizeof(addr)), "bind"))
-> +		goto close;
-> +	addrlen = sizeof(addr);
-> +	if (!ASSERT_OK(getsockname(sfd, (struct sockaddr *)&addr, &addrlen),
-> +		       "getsockname"))
-> +		goto close;
-> +
-> +	/* Non-TCP redirect targets need TCP_ESTABLISHED: connect to self. */
-> +	if (!ASSERT_OK(connect(sfd, (struct sockaddr *)&addr, sizeof(addr)),
-> +		       "connect"))
-> +		goto close;
-> +
-> +	err = bpf_prog_attach(bpf_program__fd(skel->progs.redir_to_self),
-> +			      bpf_map__fd(skel->maps.sock_map),
-> +			      BPF_SK_SKB_VERDICT, 0);
-> +	if (!ASSERT_OK(err, "prog_attach"))
-> +		goto close;
-> +
-> +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.sock_map),
-> +				  &zero, &sfd, BPF_ANY);
-> +	if (!ASSERT_OK(err, "map_update"))
-> +		goto close;
-> +
-> +	if (!ASSERT_EQ(send(sfd, &byte, 1, 0), 1, "send"))
-> +		goto close;
-> +
-> +	/* Let the backlog pick the skb up. */
-> +	usleep(100 * 1000);
-> +
-> +	err = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
-> +	if (!ASSERT_OK(err, "set_rcvtimeo"))
-> +		goto close;
-> +
-> +	/* A re-sent copy may be read back; the reader must not spin. */
-> +	clock_gettime(CLOCK_MONOTONIC, &t0);
-> +	errno = 0;
-> +	ret = recv(sfd, &byte, 1, 0);
-> +	clock_gettime(CLOCK_MONOTONIC, &t1);
-> +	elapsed_ms = (t1.tv_sec - t0.tv_sec) * 1000.0 +
-> +		     (t1.tv_nsec - t0.tv_nsec) / 1000000.0;
-> +
-> +	if (ret != 1) {
-> +		if (!ASSERT_EQ(ret, -1, "recv"))
-> +			goto close;
-> +		if (!ASSERT_EQ(errno, EAGAIN, "recv_errno"))
-> +			goto close;
-> +		if (!ASSERT_GE(elapsed_ms, RCV_TIMEOUT_MS * 0.9, "recv_blocked"))
-> +			goto close;
-> +		if (!ASSERT_LT(elapsed_ms, HANG_LIMIT_MS, "recv_timely"))
-> +			goto close;
-> +	}
-> +
-> +	exit_code = 0;
-> +close:
-> +	close(sfd);
-> +out:
-> +	test_sockmap_udp_backlog__destroy(skel);
-> +	return exit_code;
-> +}
-> +
-> +void serial_test_sockmap_udp_backlog(void)
-> +{
+Also please note you are supposed to address clashiko comments proactively.
 
-A subsystem pattern flags this as potentially concerning: this adds a new
-standalone prog_tests file plus a new BPF object for one narrow internal
-code path (udp_bpf_recvmsg() re-arming its loop when only
-psock->ingress_skb is populated).
+/P
 
-tools/testing/selftests/bpf/prog_tests/sockmap_basic.c already covers
-sockmap UDP receive behavior, for example the "sockmap udp multi
-channels" subtest and the SOCK_DGRAM FIONREAD subtest, both built on
-test_sockmap_pass_prog.
-
-Would it be better to add this as a new case in the existing test instead
-of a new file?
-
-There is a plausible reason for a separate file: on an unfixed kernel the
-reader spins, holding lock_sock with no signal check, so the scenario has
-to run in a fork()ed child with a bounded wait from the parent. It also
-should not run as a parallel test, because the unkillable child pins a
-CPU. test_sockmap_basic() is a parallel (non-serial_) test, so a separate
-serial_ entry point is defensible.
-
-> +	pid_t pid;
-> +	int status = 0;
-> +	int i;
-> +
-> +	pid = fork();
-> +	if (!ASSERT_GE(pid, 0, "fork"))
-> +		return;
-> +
-> +	if (pid == 0)
-> +		_exit(run_child());
-> +
-> +	/* The child may survive SIGKILL: only a bounded wait is safe. */
-> +	for (i = 0; i < HANG_LIMIT_MS / 100; i++) {
-> +		if (waitpid(pid, &status, WNOHANG) == pid)
-> +			break;
-> +		usleep(100 * 1000);
-> +	}
-> +
-> +	if (i == HANG_LIMIT_MS / 100) {
-> +		kill(pid, SIGKILL);
-> +		for (i = 0; i < 10; i++) {
-> +			if (waitpid(pid, &status, WNOHANG) == pid)
-> +				break;
-> +			usleep(100 * 1000);
-> +		}
-> +		fprintf(stderr,
-> +			"udp_bpf_recvmsg() spins on backlog-only ingress (timeout %dms)\n",
-> +			HANG_LIMIT_MS);
-> +		test__fail();
-> +		return;
-> +	}
-> +
-> +	if (WIFEXITED(status)) {
-> +		ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
-> +	} else {
-> +		fprintf(stderr, "child terminated abnormally (status=%d)\n", status);
-> +		test__fail();
-> +	}
-> +}
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36545669306
---===============8678725211081073155==--
