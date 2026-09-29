@@ -1,98 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f29.google.com (mail-ej2-f29.google.com [74.125.228.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0AD528428;
-	Tue, 29 Sep 2026 17:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790703502; cv=none; b=SArsEbVuPOF0gAI2ne5S4GyfBLDt4WK0UKkD5kuiDx7SGNsoJIn4GgSWJuX144EBCkC5IophOU6V73Bs7qpB5y6baH23CPVF/7FyuvNjKAteL/boaBXsTwDQxiLB7aPDjzcHIPU29l/lucI40ycEbcr6ZjgOAYsdQYn8RZj0z5Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790703502; c=relaxed/simple;
-	bh=sMhfOsYRlw1oNQeIkAXv0p6U0oqD1y16erHz8e1YB3Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qakJUzx/SoWBl/gRXLBVefltaERxJNJWzJqKy1ecknXrHtNCa17czgxwXPJwNOrGbbD3dhWt0Tq7HPW1a415lGbO3Zqbdhg/7rzXzuT+CCsw7PLi/rrvzB6iHfNkh1klNNwOrzqyiQnNMQ5zsEANkMVkzaUXeUD1+wqAXn4rfeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GZbgz6Kg; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA03544D60
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 17:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.157
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790704147; cv=pass; b=PRUaomvao7b9OAVjZsSWSRRPKlr7tBPo2+LMhILoavbbtpnSFoafc6G8yY7HDr+dUtAInMTTqE22v/0UzW5OzYFaCA2cEsTPOUEkxSziBFqp3gcj5iiamLhF9Kg43dKeXryjAfQ6CSKGcRtObQLcEUoBP+l/tha/cOmMPXdUUOA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790704147; c=relaxed/simple;
+	bh=EgbFuS2Te6lm8qVRteJKBIzVGTmmynIix9CPN6Z3edM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kGZbqRVXSed+8D4wecygee/CmXK4y+CjEczBRmjkM/gflVJ82IVIFBKxjSizTNe2CY3Nc9YaUiPDwMcLpA9AzchvMxLCV34886FErI1Xcq39HMqtrfJM4w9xAfvS52QwhJHTBMTYwrHVxL6W6TG0dqU5kuo/nuZ+Coi7/iqHqOM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BjJk/HSI; arc=pass smtp.client-ip=74.125.228.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GZbgz6Kg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 125081F000FF;
-	Tue, 29 Sep 2026 17:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790703501;
-	bh=gHHVxQFAvN3ZcewoO3CLmw+cArQRBdv7a5OEkmGubew=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GZbgz6Kg3g0TGR1XlshPjv6nsnkmWt2zQzGKU4s2lzMf7he6YaUmt/e3WAwGTL4wK
-	 Wc3O+hZgiWeK60t9msqX56eOWvQmrSOFznEvDI93eml3VdH5Twea7WRfyQtVd2fYht
-	 xDAedgMy9tIHH9WcQw9Ye+jXmrPB5tYfz/b8LEHZ+uNlGuSTqkScL1D88q4JJlJUZ+
-	 fDq7TliPyjEDbusyhRoVLK4+YvOsmOa4FBN2bjadXwM44OJ5mRzjKOdGkfRSpjTUn5
-	 qBF03zxBwNC4tn6qGRkqw347/bPck/w8q01xOZBT2FPcxjUFzdHAFBeBeoxlkAaHBQ
-	 V32OtGLvH3OqQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH sched_ext/for-7.4] sched_ext: Work around pahole 1.32
- dropping scx_bpf_task_set_lazy_resched() from BTF
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tejun Heo" <tj@kernel.org>
-Cc: bpf@vger.kernel.org, sched-ext@lists.linux.dev
-In-Reply-To: <7c139810be5ffc9764ed4236efc28794@kernel.org>
-References: <7c139810be5ffc9764ed4236efc28794@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 17:38:20 +0000
-Message-Id: <20260929173821.125081F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BjJk/HSI"
+Received: by mail-ej2-f29.google.com with SMTP id a640c23a62f3a-c294496989aso603699466b.3
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 10:49:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790704144; cv=none;
+        d=google.com; s=arc-20260327;
+        b=hwetLA3QbBQ+ocYgEtj5ijdSF3XjMYLWfGz9w9yUw7HEE7XlHUNSIM2NJZnQN5gAej
+         lC0IeexgMkL7ngK/ZeH0GK4KUdxACOoTIHad1Viwvm1RlUhMAu/Fu/Tpn8JfApzFsv/X
+         UfY1bNIWfRVKZmc6z8VsowrEPo9dRDli5R4iqakdr99AUK4eyOwzJrSBVRDRcV+Ai1cW
+         OtQP2C8gm3vIZ/jWsJkeGLkTEaelP7BOh7JZ2SiNsblV1C4nzUJ/bW3Of+z1zCHzB/4t
+         7mcYFWMO6H0BreF0C5H/DlyX3yEMMrBF6VCydOyEcms0XSw2VrX7vZXhe0tBtd4WpVWC
+         g0cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ThdPZzLhMx2EO2ovYKz1eeb+03YA/YkkzTBKjXEislI=;
+        fh=Fw79DnkxEWRXN0wnHpe5eJN+I1jou+ZccFNmBuML0nA=;
+        b=iV6GQKU+HbleMt5UBz6meDX+PIr9T2Eyu7/1hLfZMES6EwLR0P3LwBxz0sJDvNC/jW
+         YVvjvTs0NKHUYVy+uenEhoW/YHwiLwkGIhRc//kG403+cCOD9XWL3DME63Nt2Hv+jov3
+         1yIDUXKgt4rD27jqX0XMZ3GHb1kQR6UwmkQ26xONXSd82itydQ3B+jhq3FRdvd4hkHBv
+         pDhRXlva+0q+CIxRne2z8pND+7M2oYMOcIXQlsavnI0tAeLY5OnO14Mq+8f20EdLsTXl
+         1vR4MZ/9leXAtlDpUMsyZTkKEMDWQtUFqq9Z4UEH1xbqey2799b0cg0XTexenBJoTivK
+         o7Gw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790704144; x=1791308944; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ThdPZzLhMx2EO2ovYKz1eeb+03YA/YkkzTBKjXEislI=;
+        b=BjJk/HSI+d90L8k+v3ogtsrpdBV9RBnS8n9GzfFAp2qbzia0SRN0MnUBBfbhTcD5bQ
+         SKlFbDp1k3y4hc1U+ArLcT/CdMPQw9rDNtPllSD+amC96TQqeF36EtM+zHn16BWbFGQo
+         v0YYl2anDZBgTxw2WKpOjBYmiZQkgZyjkQiW2hZC7677ZQaEhs1XMpoNUdlZ7pwRFczJ
+         PtTN2FTUT+dqknbyhByvt9rPvNZF4KTFNegi8e3DNcGfF20nLlIS3EHgQvm9GDvyX7s3
+         d7N+2F7wTDYiitczhVvx4FnL9GQe/QDPEqlpCEFIFWCOrSZlRyFZqvvnDXGwyei20/nw
+         uC7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790704144; x=1791308944;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ThdPZzLhMx2EO2ovYKz1eeb+03YA/YkkzTBKjXEislI=;
+        b=koY+dCOqWX5MOgPWoita2+fPHpDKDddSUZyHuIolPXFrqtOvnKr5Rp2eZm6nZGXDdA
+         EeRY+QqUgjuP8z+NJ8AZnNJ5iMt+yML8+eqC6e9Qm6buz40QZbzV+NbcC4xgY9vzx12H
+         C/f7wq61MEudPhj2RMe3aOTWF8A0iW76NGr9GincFxUNdIU232JNnqEdJqmvncUyQLfT
+         8Em67xpI4LCXo+vwKhEce2fqG9nTCu6WWamsO8jMgavuCAJlfD+oo7fuFJlbaP0NxKdr
+         TIywE4u8L8rF/9FmENBDM11bxt7dbxQTClVtpJfvdS0PHqVjD35DBwXAMmO3N6UZdsfU
+         DkEA==
+X-Forwarded-Encrypted: i=1; AKwUvByT9XyRoxfOoWR3uMuDH2Jv07W3jUrKURhDQzf0DDTlSfZ+itQqExADK4mA/Ee6s0J4s14=@vger.kernel.org
+X-Gm-Message-State: AFuF++k48zKcWRHd7tjTgMpLQJgoTlaNPoFAIltd/60k3D7N02lnfDpR
+	ux6JUp0hG9iy4aQgzXzs4IT5wBpmIq3p3EUKDp7fKJCxvk7zMU2Oq+1r0s73JNzHwVH/YBj/Pgv
+	wg86QXAHiEfMqnBxRKSVqMLsnpQVa9vGnKfHiexqL
+X-Gm-Gg: AYBFou2vLgUWhmk709lgoKcf+WeOiEHgPMZuNtySwGDLNv68xk6eZaNDAiaw5CWlcWG
+	NG2TLyjENcaLfp+F7eLHbz8HBsNW3hwkgkkdzLtqMBcjf+LSPjPdKX2G5MSpCXSMDsdz3UfoC8h
+	w2HoqNVGJ9bDG+fM/OJgP6G03fNHYJfdAI5jnXils8v6pcg3+wWFU7mToVoip/lDPA6Xsg05kHa
+	smFT3X8/L0LQqFKcXr47ruHSa9V3HIHpoQjuEXKUoT4zErSqi+SLMRhi/AZ9ynGIHCPIFbS5/Ax
+	CypL1bUcXexnQdKGDaae/k2565Egi5A6zeYqAiB9Op2Gjpjq43PXmML0
+X-Received: by 2002:a17:907:7289:b0:c2d:e067:275d with SMTP id
+ a640c23a62f3a-c2e15c0da9amr18432266b.2.1790704143373; Tue, 29 Sep 2026
+ 10:49:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260922194533.631387-1-joshwash@google.com>
+In-Reply-To: <20260922194533.631387-1-joshwash@google.com>
+From: Joshua Washington <joshwash@google.com>
+Date: Tue, 29 Sep 2026 10:48:51 -0700
+X-Gm-Features: AclHuK-4Jen_xaBqivrTS2m8jiJGtwTSvDPOut6gW97lQXY41zUzIIPLnIv2r1s
+Message-ID: <CALuQH+VWjT2VZTOUjseLfcON4=Me6v99KyW=k=Uh2Y1dvpNkcw@mail.gmail.com>
+Subject: Re: [PATCH net v2 0/9] gve: various XDP fixes
+To: netdev@vger.kernel.org
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Jordan Rhee <jordanrhee@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Tim Hostetler <thostet@google.com>, Ankit Garg <nktgrg@google.com>, 
+	Eddie Phillips <eddiephillips@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] sched: build failure due to misapplied patch in scx_bpf_task_set_ds=
-q_vtime()
---
+On Tue, Sep 22, 2026 at 12:45=E2=80=AFPM Joshua Washington <joshwash@google=
+.com> wrote:
+>
+> This patch series includes a number of XDP-related fixes, both in the
+> control plane and the dataplane.
+>
+> A summary of the changes:
+> 1) fix an issue where XDP packets weren't being counted against NAPI
+>    budget
+> 2) fix an issue where XSK buffers that have not been processed are
+>    leaked when disabling XSK pools
+> 3) fix an XSK buffer leak when an RX error descriptor comes back from
+>    the hardware
+> 4) fix a NULL dereference due to incorrect registration of XSK pools on
+>    queues not set up in XSK zero copy mode
+> 5) fix a deadlock introduced by attempting to acquire the netdev lock
+>    after it has already been acquired
+> 6) fix a racy NULL dereference due to DMA umapping the XSK pool before
+>    queues are fully stopped
+> 7) fix potential data race on priv->xsk_pool when the field is set while
+>    NAPIs are enabled
+> 8) attempt to register memory model in all cases when disabling XSK
+>    pools
+> 9) clean xdp frames when tearing down DQO queues
+>
+> ---
+> v2:
+> - introduce 3 new patches (7, 8, 9) based on Sashiko feedback
+> - corrected stat counting for packets according work_done behavioral
+>   change (patch 1)
+>
+> Eddie Phillips (1):
+>   gve: prevent XDP frame leak and corruption during DQO TX cleanup
+>
+> Joshua Washington (8):
+>   gve: increment work_done for XDP and error packets
+>   gve: fix XSK buffer leak when rings are stopped
+>   gve: fix XSK buffer leak on error descriptor
+>   gve: don't register xsk pool on pre-existing queues in RDA mode
+>   gve: fix napi_disable deadlock when attempting to disable XSK pools
+>   gve: fix NULL dereference from premature XSK pool DMA unmap
+>   gve: disable NAPI when registering XSK pools in QPL mode
+>   gve: ensure XDP mem model is registered when disabling XSK pools
+>
+>  drivers/net/ethernet/google/gve/gve_main.c   | 153 +++++++----
+>  drivers/net/ethernet/google/gve/gve_rx_dqo.c |  31 ++-
+>  drivers/net/ethernet/google/gve/gve_tx_dqo.c | 256 +++++++++++++------
+>  3 files changed, 314 insertions(+), 126 deletions(-)
+>
+> --
+> 2.55.0.1082.g2b9226bbc0-goog
+>
 
-commit 16f6b2129331609ed5db39cd3ea7260f54a1df1f
-Author: Tejun Heo <tj@kernel.org>
+In the interest of getting some of the more trivial fixes merged, I
+will send out a v3 with only the very simple fixes, and continue
+working on the more problematic/invasive changes in the background.
+This will include patches 2, 3, and 5.
 
-sched_ext: Work around pahole 1.32 dropping scx_bpf_task_set_lazy_resched()=
- from BTF
-
-This commit works around an issue with pahole 1.32 by forcing the lazy
-argument onto the stack using barrier_data() so its location doesn't
-name a register.
-
-Link: https://lore.kernel.org/r/20260925213619.2187751-1-yonghong.song@linu=
-x.dev
-
-> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-> index 6b037d27c99d3..feaa784d7a0dc 100644
-> --- a/kernel/sched/ext/ext.c
-> +++ b/kernel/sched/ext/ext.c
-> @@ -10119,6 +10119,11 @@ __bpf_kfunc bool scx_bpf_task_set_dsq_vtime(stru=
-ct task_struct *p, u64 vtime,
->  {
->  	struct scx_sched *sch;
-> =20
-> +	/*
-> +	 * clang's register locations for @lazy make pahole 1.32 drop this kfunc
-> +	 * from BTF. Keep @lazy in memory so its location names no register.
-> +	 */
-> +	barrier_data(&lazy);
-
-[Severity: Low]
-Will this cause a build failure? It looks like the lazy variable is not
-declared in scx_bpf_task_set_dsq_vtime().
-
-Could it be that this patch was mistakenly applied to=20
-scx_bpf_task_set_dsq_vtime() instead of scx_bpf_task_set_lazy_resched()?=20
-They appear to share identical context lines, meaning the patch might have
-matched guard(rcu)(); followed by sch =3D scx_prog_sched(aux); in the wrong
-function.
-
->  	guard(rcu)();
->  	sch =3D scx_prog_sched(aux);
->  	if (unlikely(!sch || !scx_task_on_sched(sch, p)))
->  		return false;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/7c139810be5ffc9764e=
-d4236efc28794@kernel.org?part=3D1
+-- Josh
