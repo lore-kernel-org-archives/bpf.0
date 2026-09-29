@@ -1,29 +1,30 @@
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50EE39E17C
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 07:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98A83A48D5
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 07:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790666944; cv=none; b=cr/77PiMa30PG3Hnrw5SRtAUFILb9DUQKmF1BuWM0N8DwuBhZO04mR0HWlSnTVImFdwyj8hjqql4qtsEvxL8yMxbbfVjbDuuDtajP2DmN7+RApWB/7n4d52g5LrOGFcVvX+692sDUobSuNgn9MPnsz0/jUpOzlwGcoyx/1JrJYQ=
+	t=1790666945; cv=none; b=cuRDpKx225wgete6j1Ou9y0BwUNMDz80YCf6QzJr3tn5RL/8eCQr/FCdUcTZUSSkalVwNoKaHXlIeX0lolDVDBsSo7ESK2SyK7wYphVG7RC+JfARXmcQIBd5EHqJnzPs52nec7Fn5ycSNMQ8P9Q91byneFpUDa7rOCqIchAEVv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790666944; c=relaxed/simple;
-	bh=saYx4lTtS38enk5zRg/v4HVjgH+ZTq6h5f6cW8sR7zw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PZhuaUeGpL5/z4VKnY/LDNaqmr+Cue9nlVlrXSEgVXN8f/ARqGNP9lx0rQ+PA5oKm1h5EeT+x8mOmuRDq5s+gCLhjS6n3w/6kkyMi/gTinYoMtNvWncm+/fbrkrd7n+bG8aSpyTOQAGb0RznVYK2YSIFuIHXzfjUgnZXj9K4blk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=g08zG0ja; arc=none smtp.client-ip=220.197.31.4
+	s=arc-20240116; t=1790666945; c=relaxed/simple;
+	bh=gfZox0U6uFSBtGXY1IBBT0GfPwiv3DXZHDqlu03tw9M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YBB96WsnvAZ6tQJAb6FTWQGnKSb5OeGLyKb2N+aXTNCaGOOxder+ZnDUn4V4EVSjEpBBlAN26A4uBlTDA/LXDrJFMe87LA4dIvVOIL6bXPV+gMNQzEGCAnkdhr3nsYxg9g67BIsnm54+Pa3FYmf+qA6pdEBYvAaEOCWINQf/Q6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=FU2S/1Xw; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="g08zG0ja"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="FU2S/1Xw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=r+
-	3p7t2CKPGdjQ9JIBSBVDe72Rm1nYsTu8JQ+KAXwAk=; b=g08zG0jalI4Rl5Lyac
-	8Q+90xd6ed6DMtEzek+Laul6IbJqbKHhhSeeXdFqDJsE932Al8bqsqObWLg7/Yr3
-	XIWmDW2NCnBTxxFFTB4P57VbJSecgeZscIyJPgxtBWBZUDz28bMV7sYxy54ITab/
-	Jt7O8kROA3k1YpdpDFL5JJ2Js=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=K9
+	igpYqMCMOEGmRLZ+IGl8wI7ir9kBpGNBhZqbn4x28=; b=FU2S/1XwaNl72oBiqI
+	rMkt+3WPyBzJypHA0KMjW58D5kNNY/KqkZEsTy3+4sIHWIjNodqKg+hu5e6Za/mP
+	C5uja15kMYZtsQg/08BJ09mDt5Y99vs1nD9DAbjFupBlOT49Xz9opQzEMyO1m5aR
+	9vdp+sfvWaIq3BamwjI0VHZ4U=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgD3H4iLaLtqtLTxBw--.62773S2;
-	Tue, 29 Sep 2026 15:28:14 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgD3H4iLaLtqtLTxBw--.62773S3;
+	Tue, 29 Sep 2026 15:28:15 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -38,10 +39,12 @@ To: ast@kernel.org,
 	ihor.solodrai@linux.dev
 Cc: yatsenko@meta.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v4 0/3] bpf: Fix task work scheduling races
-Date: Tue, 29 Sep 2026 15:27:57 +0800
-Message-ID: <20260929072800.113129-1-luyun_611@163.com>
+Subject: [PATCH bpf-next v4 1/3] bpf: Fix NULL task dereference in task work cancellation
+Date: Tue, 29 Sep 2026 15:27:58 +0800
+Message-ID: <20260929072800.113129-2-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260929072800.113129-1-luyun_611@163.com>
+References: <20260929072800.113129-1-luyun_611@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,103 +52,181 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgD3H4iLaLtqtLTxBw--.62773S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWrWfCr4xCF4rAr1rKFyUWrg_yoWrWFW5pr
-	ZYgw1Yyrs5G3WxtF47Za18GryS9ws3Ca15Grn5try0yrn8XF1xAa4xKF1jqF4UCryvyFyY
-	vr4qqa97ur4jyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jj_M-UUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCxA7GlWq7aI4HuAAA3R
+X-CM-TRANSID:QCgvCgD3H4iLaLtqtLTxBw--.62773S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW3GFyrtF4kCw4kWFWUtr4DCFg_yoW3JF47pr
+	Z0vw1jkr48WanFvF4aqanrAr1fWwsaya15Gr48Kr9Iyws8Xrn7tw18KF10qFWrCr1kJF17
+	Zr4DtrWIgr4UZ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j5GYdUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7A-GlWq7aI+SWwAA3P
 
 From: Yun Lu <luyun@kylinos.cn>
 
-This series fixes two races in the bpf_task_work scheduling kfuncs and
-adds a regression test for them.
+bpf_task_work_irq() publishes ctx->work with task_work_add() before
+changing the context from SCHEDULING to SCHEDULED.  The target task can
+run the callback on another CPU before the handler reaches its final
+state transition.
 
-Patch 1 fixes a NULL task dereference: the callback can clear ctx->task
-before the scheduling irq_work handler attempts cancellation, so the
-handler now captures the task pointer before publishing the callback and
-relies on its existing RCU read-side section, which covers the captured
-task because bpf_task_release() is put_task_struct_rcu_user().
+The handler then reloads ctx->task for cancellation if its final cmpxchg
+observes FREED.  By that point the callback or context destruction may
+already have cleared ctx->task, causing task_work_cancel() to dereference
+a NULL task pointer.
 
-Patch 2 stops a new round from reusing the context while the previous
-scheduling irq_work is still BUSY.  Without it, a delayed handler can
-consume the new round's SCHEDULING state, leaving the context stuck in a
-false SCHEDULED that later routes deletion into task_work_cancel() with
-a NULL task.
+One concrete interleaving is:
 
-Patch 3 adds a 1500-round cross-CPU test racing scheduling, callback
-completion and map-value deletion.
+  1. CPU 0 changes PENDING to SCHEDULING and successfully queues
+     ctx->work with task_work_add(), but has not attempted the final
+     state cmpxchg.
 
-Changes since v3:
+  2. The target task on CPU 1 runs the callback.  It changes SCHEDULING
+     to RUNNING, executes the BPF subprogram, resets ctx->task,
+     publishes STANDBY and drops the callback's context reference.
 
-- Drop the get_task_struct()/put_task_struct() pair: capturing the
-  pointer before task_work_add() is sufficient, since
-  bpf_task_release() is put_task_struct_rcu_user() and the handler's
-  RCU read-side section keeps the captured task alive.  Reword the
-  RCU explanation.
-- Split the BUSY check and the one-time irq_work initialization into
-  a separate patch 2, with the full interleaving and the failure it
-  prevents.
-- Selftest code unchanged; commit message wording only.
+  3. CPU 2 deletes the map value.  It changes STANDBY to FREED and drops
+     the map's context reference without queuing asynchronous
+     cancellation.
 
-v3: https://lore.kernel.org/all/20260922100042.136818-1-luyun_611@163.com/
+  4. CPU 0 resumes.  Its SCHEDULING-to-SCHEDULED cmpxchg observes FREED,
+     and the cancellation attempt passes NULL to task_work_cancel().
 
-Changes since v2:
+If deletion publishes FREED before the callback claims RUNNING, the
+callback takes its FREED exit and drops its context reference.  Context
+destruction can then clear ctx->task before CPU 0 attempts cancellation.
 
-- Kernel: drop irq_work_sync() from the callback and both
-  WARN_ON_ONCE() checks, as requested in review.  Following the
-  suggested direction, the scheduling handler now takes its own task
-  reference around task_work_add() and the post-add cancellation; the
-  temporary ctx refcount from v2 is gone as well.  The callback ends
-  up unchanged from upstream.
-- The BUSY check in acquire is kept: without it a handler delayed
-  between task_work_add() and its state cmpxchg can flip the next
-  round into a bogus SCHEDULED, which later routes map-value deletion
-  into task_work_cancel() with an already-reset ctx->task.
-- Selftest is unchanged apart from the rebase.
+A controlled reproducer with a delay before the final cmpxchg triggered
+the following fault on a v7.3-rc3 based x86-64 KVM guest:
 
-v2: https://lore.kernel.org/all/20260921101453.69273-1-luyun_611@163.com/
+  BUG: kernel NULL pointer dereference, address: 0000000000000890
+  RIP: 0010:task_work_cancel+0xd/0xa0
+  RDI: 0000000000000000
+  CR2: 0000000000000890
+  Call Trace:
+   <IRQ>
+   bpf_task_work_irq+0x95/0x100
+   irq_work_run_list+0x4f/0x90
+   irq_work_run+0x18/0x50
+   </IRQ>
 
-Changes since v1:
+0x890 is the task_struct::task_works offset in that build, read through
+the NULL task argument.
 
-- Kernel: rework the fix per review feedback.  Replace the round_refs
-  ownership counter and the extra irq_work objects with a completion
-  edge: the callback claims RUNNING and waits for the scheduling
-  irq_work via irq_work_sync(), plus one temporary reference from the
-  existing ctx refcount and a BUSY check covering the add-failure
-  path.  No context fields or states are added.
-- Selftest: address review feedback (single packed result store,
-  bounded thread-start wait, tolerate the expected deletion-race
-  outcomes).
+Capture ctx->task before task_work_add() publishes the callback and use
+that pointer for the handler's cancellation attempt.  The round still
+holds its task reference when the pointer is captured.  Releasing that
+reference uses bpf_task_release(), which calls put_task_struct_rcu_user(),
+so the handler's existing RCU read-side section keeps the captured task
+alive even if ctx->task is subsequently cleared.
 
-v1: https://lore.kernel.org/bpf/20260918080014.54012-1-luyun_611@163.com/
+The asynchronous cancellation path reads ctx->task directly, which is
+safe there: queuing it requires deletion to observe SCHEDULED, and that
+xchg wins against the callback's transition to RUNNING, so the callback
+takes its FREED exit without resetting ctx->task, while the map
+reference transferred to the cancellation handler prevents context
+destruction until cancellation completes.
 
-Testing:
+The handler-tail and asynchronous cancellation attempts are mutually
+exclusive: asynchronous cancellation is queued only if deletion observes
+SCHEDULED after the scheduling handler's final cmpxchg has succeeded.
+If that cmpxchg instead observes FREED, the scheduling handler attempts
+cancellation with the captured pointer.
 
-- Built with KASAN, lockdep, PROVE_RCU, DEBUG_ATOMIC_SLEEP and
-  KMEMLEAK; test_progs -t task_work and 900 stress rounds in QEMU are
-  clean, no leaks reported.
-- Replayed the deterministic reproducer (debug-delay only, not part of
-  the series): without the fixes it panics reliably in
-  task_work_cancel(); with them the callback stays non-blocking and
-  the guest stays healthy.
-- Directed delay tests cover both cancellation paths and both BUSY
-  rejection paths.  The cross-round interleaving from patch 2's commit
-  log crashes the kernel without patch 2 and survives with it.
+Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
+Reported-by: Jackie Liu <liuyun01@kylinos.cn>
+Suggested-by: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+---
+ kernel/bpf/helpers.c | 40 +++++++++++++++++++++++++++++++---------
+ 1 file changed, 31 insertions(+), 9 deletions(-)
 
-Yun Lu (3):
-  bpf: Fix NULL task dereference in task work cancellation
-  bpf: Prevent task work context reuse while irq_work is busy
-  selftests/bpf: Add task work scheduling race test
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b3cc5c8fc875..028fc6796b59 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4437,15 +4437,21 @@ static void bpf_task_work_ctx_put(struct bpf_task_work_ctx *ctx)
+ 	}
+ }
+ 
+-static void bpf_task_work_cancel(struct bpf_task_work_ctx *ctx)
++static void bpf_task_work_cancel(struct bpf_task_work_ctx *ctx,
++				 struct task_struct *task)
+ {
+ 	/*
+ 	 * Scheduled task_work callback holds ctx ref, so if we successfully
+ 	 * cancelled, we put that ref on callback's behalf. If we couldn't
+ 	 * cancel, callback will inevitably run or has already completed
+ 	 * running, and it would have taken care of its ctx ref itself.
++	 *
++	 * The caller passes the task explicitly: the scheduling handler must
++	 * not read ctx->task after the work is published (the callback may
++	 * have reset it), while in the asynchronous cancellation path
++	 * ctx->task is stable, see bpf_task_work_cancel_scheduled().
+ 	 */
+-	if (task_work_cancel(ctx->task, &ctx->work))
++	if (task_work_cancel(task, &ctx->work))
+ 		bpf_task_work_ctx_put(ctx);
+ }
+ 
+@@ -4486,6 +4492,7 @@ static void bpf_task_work_callback(struct callback_head *cb)
+ static void bpf_task_work_irq(struct irq_work *irq_work)
+ {
+ 	struct bpf_task_work_ctx *ctx = container_of(irq_work, struct bpf_task_work_ctx, irq_work);
++	struct task_struct *task;
+ 	enum bpf_task_work_state state;
+ 	int err;
+ 
+@@ -4496,7 +4503,16 @@ static void bpf_task_work_irq(struct irq_work *irq_work)
+ 		return;
+ 	}
+ 
+-	err = task_work_add(ctx->task, &ctx->work, ctx->mode);
++	/*
++	 * Capture the task pointer before the work is published: once the
++	 * callback runs, it may reset ctx->task. The capture happens while
++	 * this round's task reference is held, and every path that can
++	 * release it runs after this handler entered its rcu read-side
++	 * section. bpf_task_release() is put_task_struct_rcu_user(), so the
++	 * task_struct itself cannot be freed before this section ends.
++	 */
++	task = ctx->task;
++	err = task_work_add(task, &ctx->work, ctx->mode);
+ 	if (err) {
+ 		bpf_task_work_ctx_reset(ctx);
+ 		/*
+@@ -4510,14 +4526,14 @@ static void bpf_task_work_irq(struct irq_work *irq_work)
+ 
+ 	/*
+ 	 * It's technically possible for just scheduled task_work callback to
+-	 * complete running by now, going SCHEDULING -> RUNNING and then
+-	 * dropping its ctx refcount. Instead of capturing an extra ref just
+-	 * to protect below ctx->state access, we rely on rcu_read_lock
+-	 * above to prevent kfree_rcu from freeing ctx before we return.
++	 * complete running by now, going SCHEDULING -> RUNNING, resetting
++	 * ctx->task and dropping its ctx refcount. The rcu read-side section
++	 * above keeps both the ctx memory and the captured task pointer
++	 * valid until this handler returns.
+ 	 */
+ 	state = cmpxchg(&ctx->state, BPF_TW_SCHEDULING, BPF_TW_SCHEDULED);
+ 	if (state == BPF_TW_FREED)
+-		bpf_task_work_cancel(ctx); /* clean up if we switched into FREED state */
++		bpf_task_work_cancel(ctx, task); /* clean up if we switched into FREED state */
+ }
+ 
+ static struct bpf_task_work_ctx *bpf_task_work_fetch_ctx(struct bpf_task_work *tw,
+@@ -4777,7 +4793,13 @@ static void bpf_task_work_cancel_scheduled(struct irq_work *irq_work)
+ {
+ 	struct bpf_task_work_ctx *ctx = container_of(irq_work, struct bpf_task_work_ctx, irq_work);
+ 
+-	bpf_task_work_cancel(ctx); /* this might put task_work callback's ref */
++	/*
++	 * Deletion observed SCHEDULED and won against the callback's
++	 * transition to RUNNING. The callback takes its FREED exit without
++	 * resetting ctx->task, and the transferred map reference prevents
++	 * destruction until cancellation completes.
++	 */
++	bpf_task_work_cancel(ctx, ctx->task); /* this might put task_work callback's ref */
+ 	bpf_task_work_ctx_put(ctx); /* and here we put map's own ref that was transferred to us */
+ }
+ 
 
- kernel/bpf/helpers.c                          |  54 +++-
- .../selftests/bpf/prog_tests/test_task_work.c | 283 ++++++++++++++++++
- .../selftests/bpf/progs/task_work_race.c      | 126 ++++++++
- 3 files changed, 453 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/task_work_race.c
-
-
-base-commit: 5dd1818b15d98d4a20806cd00b1b40320b06004f
 -- 
 2.43.0
 
