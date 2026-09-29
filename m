@@ -1,137 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100B12E8DEB;
-	Tue, 29 Sep 2026 14:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2871753D0BB
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 15:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790693834; cv=none; b=oNxObKVs6MWgKVs/qkKdUou3Vu6+gUouxunEiEolaKBOv4D4m9AHHA1DaBIopgVKwA5154PxntBeRfZemhFrVnhakDNImGKk1sS0PwJyqJ5a08mI2kUSmReEjN1A5e+hxAiFmzrfJEnFVohECUwD2C/O7S3T1X3B9sB4Cxi0ctE=
+	t=1790694759; cv=none; b=X8UliCvDnlvyvwp4djjs3a+HwLHrZjNZ53lN8pesVs5DHzBdA64B5dFjS+mkWzQdVG0uZ+hLfdZbSeJisMc0obkrdIdnXQhAymDJ483ed7u7P09UM41WgFqOLBIMPN0C7O78MzIiWfBChxTxnvHgvNTs4tInPXxK1tNyqqGcPMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790693834; c=relaxed/simple;
-	bh=Mb/eWLB1hzxMamN2EaZvoHO/5kRqgqUoNzTGvIBJ/bQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hhru/E7RQRM+OVBwkjtJuzaFU+ZCMipwYOslOCXkKjXrjSXFJmZDDnATqYZiGpJVWWCY6QQePdJvvYv82r6n/8xCCmvZFXTdG6bNR2sh+Rid2QM4LxtVRyDuge04fDX6CaBJJiVYju3/CG86vXATw4VwJgsfNfkrQ4/nqMtiE/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hrJ2DxZa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790694759; c=relaxed/simple;
+	bh=9wZZWbx8H/BsWoEtAM7iqA4aca7JNV6xe//799RMRqU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kce3XI36rPbTiC+uJNX1RMy9tAHMZrX+bp9S5VPrD5csK3Wr2Wk1HUGdlHAGB378dKHcWW/yt9oa5hA7C/5pMjBYCOQMWoSWOW4mOZa4xzdi8QX9gJzHd42oW7hAf9Hr8lmFIMYzScM2dXV9pP8MLaByevD1Ehbo/avP4BN9kzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEbNgVuY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hrJ2DxZa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056A31F00893;
-	Tue, 29 Sep 2026 14:56:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEbNgVuY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0A81F00893;
+	Tue, 29 Sep 2026 15:12:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790693816;
-	bh=VfFU+43eV00HgURhccuIVtc5YQSWyFjP5EWQQctgOTI=;
-	h=Date:From:To:Cc:Subject;
-	b=hrJ2DxZaJAAh4OGyaSKX2PVX7ZrIpdRRMIzh/fIS05+3d5m84PwzDwkkLENiUJxFS
-	 xrGa1/vdLTmRqFsbAHLgeb4Fu/Ye5IC22Uq2elxOEzpn3N2IabB1+4JGzIkq64CVUZ
-	 jK//7eYpjijnp/PwOu7hdLEyqWUmK5NhOOeBskyqTgqkkRo7Z9AI/9F/JC7pd2bE9/
-	 Oh6wEeHzD/cOIzvS43aWGPdg2xStSzl7PDiE7EGpt98zt6y8VeUhfZDVO5GXk9tqXY
-	 4z1u2zQvDu/YrpFZ9AFyFV+4Fjo9otqXJkiPqIYkcJOUBrit/8E5C0GBztncs8vL4X
-	 8u90VA7KTsAsA==
-Date: Tue, 29 Sep 2026 15:56:51 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Florent Revest <florent.revest@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <arvRs4KdojDnW1O6@sirena.org.uk>
+	s=k20260515; t=1790694739;
+	bh=YwoOJ1zNfQNJSl4j1ib8xQKHWTFQcqR8oQgRKfKPtjM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mEbNgVuYHAZLock8OIsmrR5HvV5QpTLsRPEcb7u2SKCmhbnVCUI6JdX7xyMXmQdxF
+	 KWzjG8cABREGKkqai6lnN7NxqPamSrL7EW5X2sTk9ztn/mgqW3eFhdLuKcoyhuJOTa
+	 giIJSgg2v4BXioIIPzxkJd4Hm/jSohjOuhdn04XisQUZG4Nd68+bDFItTfERuwNNGR
+	 jadKuwlDJYRP3hBKbuxEctNC9eQpi8Ed55/bC60XptAvopuJ+jMoqdCEcB4TliiLST
+	 /00XDu3zpu+S6F7/ECUv/Mm56ASVoafa3/jxpMecG7/1i15YsMopQD8BRlLR+ti2E0
+	 Qak9vUXPrf5CA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv9 net-next] tcp: Add TCP ROCCET congestion control
+ module.
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tim Fuechsel" <t.fuechsel@gmx.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <arqDuiD4Q4GWOFBc@volt-roccet-vm>
+References: <arqDuiD4Q4GWOFBc@volt-roccet-vm>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 29 Sep 2026 15:12:18 +0000
+Message-Id: <20260929151219.5F0A81F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="U28t0JN67+uLvANc"
-Content-Disposition: inline
 
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] tcp: ROCCET stalls Fast Retransmit by bypassing PRR in TCP_CA_Reco=
+very
+- [High] tcp: integer promotion bug falsely triggers congestion events on R=
+OCCET
+- [Low] build: struct roccettcp exceeds ICSK_CA_PRIV_SIZE limit
+--
 
---U28t0JN67+uLvANc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+commit 1022dd98954ad71bd010ccb13665b66dd4141109
+Author: Tim Fuechsel <t.fuechsel@gmx.de>
 
-Hi all,
+tcp: Add TCP ROCCET congestion control module.
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+TCP ROCCET is a new congestion control algorithm based on TCP CUBIC that
+improves overall performance in cellular networks. It introduces additional
+metrics like relative increase in RTT and acknowledgment arrival rate to
+address bufferbloat and manage window scaling.
 
-  arch/x86/net/bpf_jit_comp.c
+> diff --git a/net/ipv4/tcp_roccet.c b/net/ipv4/tcp_roccet.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/net/ipv4/tcp_roccet.c
+> @@ -0,0 +1,1400 @@
+[ ... ]
+> +struct roccettcp {
+> +	u32 cnt;	/* increase cwnd by 1 after ACKs */
+[ ... ]
+> +	u16 ack_rate_cnt;	/* Used for counting acks */
+> +
+> +	enum roccet_state state : 3; /* Current operating state of roccet */
 
-between commit:
+[Severity: Low]
+Will this bitfield layout cause a compile-time failure?
 
-  17637e1a581a2 ("bpf: Skip detached progs in trampoline images that are st=
-ill in use")
+Because the preceding field is u16 (which ends at offset 102), the compiler
+inserts 2 bytes of padding to align the enum allocation unit, which needs
+4-byte alignment, at offset 104. This expands the total struct size to 108
+bytes.
 
-=66rom the bpf tree and commit:
+> +	bool initial_limit_reached: 1;	/* Set to true after the connection
+[ ... ]
+> +static int __init roccet_register(void)
+> +{
+> +	int param_err;
+> +
+> +	BUILD_BUG_ON(sizeof(struct roccettcp) > ICSK_CA_PRIV_SIZE);
 
-  29fcf9ce4bbdf ("bpf, x86: Use global buffer for trampoline size generatio=
-n")
+Since ICSK_CA_PRIV_SIZE is statically defined as 104 bytes in
+include/net/inet_connection_sock.h, it seems this check will unconditionally
+fail and break the module build.
 
-=66rom the bpf-next tree.
+[ ... ]
+> +static void roccet_orbiter_update(struct sock *sk, u32 acked)
+> +{
+[ ... ]
+> +	/* Check sent and received bytes from the previous interval.
+> +	 * Here we use a guard space of 1% of the current cwnd.
+> +	 * We do this to avoid a false positive evaluation due
+> +	 * to delays caused by jitter or scheduling.
+> +	 */
+> +	sent_more_than_acked =3D (s32)(sent - received) >
+> +			       div_u64((u64)tcp_snd_cwnd(tp) *
+> +			       (u64)tp->mss_cache, 100);
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+[Severity: High]
+Does this comparison trigger false congestion events when ACKs outpace outg=
+oing
+data?
 
-diff --cc arch/x86/net/bpf_jit_comp.c
-index 6bca87457e872,6c7a0578760e7..0000000000000
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@@ -3817,25 -4152,15 +4158,15 @@@ out
-  int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
-  			     struct bpf_tramp_nodes *tnodes, void *func_addr)
-  {
- -	struct bpf_tramp_image im;
- +	struct bpf_tramp_image im =3D {};
-- 	void *image;
-- 	int ret;
- =20
-- 	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
-- 	 *
-- 	 * We cannot use kvmalloc here, because we need image to be in
-- 	 * module memory range.
-- 	 * Since it must be writable use execmem_alloc(EXECMEM_MODULE_DATA)
-- 	 * that returns writable memory in the module address space.
-- 	 */
-- 	image =3D execmem_alloc(EXECMEM_MODULE_DATA, PAGE_SIZE);
-- 	if (!image)
-+ 	if (!trampoline_size_image)
-  		return -ENOMEM;
- =20
-- 	ret =3D __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, ima=
-ge,
-- 					    m, flags, tnodes, func_addr);
-- 	execmem_free(image);
-- 	return ret;
-+ 	return __arch_prepare_bpf_trampoline(&im, trampoline_size_image,
-+ 					     trampoline_size_image + PAGE_SIZE,
-+ 					     trampoline_size_image, m, flags,
-+ 					     tnodes, func_addr);
-  }
- =20
-  static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *=
-image, u8 *buf)
+If received exceeds sent, sent - received wraps to a very large u32. When
+cast to s32, it correctly represents a negative difference.
 
---U28t0JN67+uLvANc
-Content-Type: application/pgp-signature; name="signature.asc"
+However, because div_u64() returns a u64, standard C arithmetic conversions
+cause the negative s32 to be sign-extended and promoted to u64.
 
------BEGIN PGP SIGNATURE-----
+This results in a huge positive number, making the condition incorrectly
+evaluate to true, which freezes congestion window growth.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq70bIACgkQJNaLcl1U
-h9CIeAf/aTtse9gSc8Y06UHaIxa3EIIm1SYMyj0BImtt6DeoA592sdNNjPXKbgit
-DGg9Bas77yScTZ2GJv0eo/gTKOPrHzWj3nmmZC1xjJKEkmc332Z25TlzB1FTrvQn
-3V0eb4zInVbXJZQYFZ8HVtcjAMsneCFT/tIoyujTn20gouvZR13YWBcCyA/e5z1z
-l1YwuhBcOsZJdc4CjExcqc5PULNEOy+7fgFqhoQT8gtC5wjo+s3GsxLWj0f/55Z0
-sdTlwXiT/K6KBA3zE8cQNdIy9zHQUz4VKY4pj+MZ+M9Ma3xo/C0zPH6wQ7I/Vz3p
-xxo/0uS8kEDtEa0A2FMu0Y5b66Xrig==
-=pacq
------END PGP SIGNATURE-----
+[ ... ]
+> +	/* Terminates this function if cwnd is not fully utilized.
+> +	 * In mobile networks like 5G, this termination causes the
+> +	 * cwnd to be frozen at an excessively high value. This is
+> +	 * because slow start or HyStart massively exceed the available
+> +	 * bandwidth and leave the cwnd at an excessively high value.
+> +	 * The cwnd cannot therefore be fully utilized because it is
+> +	 * limited by the connection capacity.
+> +	 *
+> +	 * Also avoid cwnd-growth if we are in cwnd reduction phase.
+> +	 */
+> +	if (!tcp_is_cwnd_limited(sk) || sent_more_than_acked ||
+> +	    tcp_in_cwnd_reduction(sk))
+> +		return;
 
---U28t0JN67+uLvANc--
+[Severity: High]
+Can returning early here during TCP_CA_Recovery stall Fast Retransmit?
+
+When a socket enters loss recovery, the TCP core delegates all congestion
+control processing to the cong_control callback, bypassing the standard
+tcp_cwnd_reduction() PRR routine.
+
+If roccet_orbiter_update() always returns early without inflating snd_cwnd
+for incoming dupACKs:
+
+[ ... ]
+> +static void roccet_state(struct sock *sk, u8 new_state)
+> +{
+[ ... ]
+> +	} else if (new_state =3D=3D TCP_CA_Recovery) {
+> +		/* Directly reduce cwnd and rely on pacing */
+> +		cwnd =3D roccet_handle_recovery(sk);
+> +		tcp_snd_cwnd_set(tp, cwnd);
+> +	}
+
+The snd_cwnd is statically reduced upon entering recovery. Because it is
+never inflated by dupACKs, tcp_packets_in_flight() will remain above the
+reduced snd_cwnd.
+
+When tcp_xmit_retransmit_queue() attempts to fast retransmit, it calculates
+available segments as tcp_snd_cwnd(tp) - tcp_packets_in_flight(tp) which
+evaluates to <=3D 0, completely preventing retransmissions until an RTO fir=
+es.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/arqDuiD4Q4GWOFBc@vo=
+lt-roccet-vm?part=3D1
