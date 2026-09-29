@@ -1,69 +1,72 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pz2-f37.google.com (mail-pz2-f37.google.com [74.125.228.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB82851DDFC
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 16:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC5A51E42F
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 16:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790699348; cv=none; b=e720kcD+yJ9Ck4OyYk+dMJgpXxSJi1D5HmwpvjnPUzZr86SytQ4hVyCDbA22pSijLkguOlm/LuvsW4+EBTxSvs68L4xfbi03vq7kB3C1wz1etW7yQkNICLdHDOowmwo/Se4SNl+722rXvy/5bC7WaFxvLNXjVLvrZvLnhXvVsKA=
+	t=1790699365; cv=none; b=RyMbXhhq0Nf94TOb7o4DQ2vu3DDkmfwm/j3tXq/i+U9VzdneQ9EoleCu0i2pOhmHy04V7vHEMXYyImBbooBU750gAjGQfUPgKUmkyLyyloqaRck+HOBx3wxqpMKL7PcS2IqQfBAnAArpBXNgZUzlNdFmbbO7i1uQnjvZv+eYlho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790699348; c=relaxed/simple;
-	bh=gczGrvEptEHhycke4/gymHjEMbqsLy4UXX26l0bR3OM=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=VPDfWIaZaHf+ATk/cXtl0TEd+YMs9D3m2OC+2Sti+HGGUSPb79rON6k5AMJgvzhMfH6bA1RRqMEOvpKLcEYLMQ+ZK0cbHT4PJEGwQxZjAcpm/rjVhfK0wAeig4QU8eY8YLUpTXMJpyNImUPVFaoJV4Dr7r2giehBNjtorAMrUM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AgRxOj1b; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1790699365; c=relaxed/simple;
+	bh=NfII3LN3Gw72EP3w7593Da/fsSb/7y6Qp41qe4y8lCI=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:MIME-Version; b=vElgOJpMkZLkORuFCuPSes4PhOiZMIf92v5xlDawfMstix054WmHKQ3LSE32EIvQlVqFE2bPB1frdMOuiJOKBhGgQ8u39KkCeEMm2af4+hTg7CjWxp0TjVzuYQDn9L7xWW9M1t3kIon3awKJEMNIpevcT6hot2sxt2sTqjuN/ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bRT8M9Ek; arc=none smtp.client-ip=74.125.228.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AgRxOj1b"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb751so2118821a91.2
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 09:29:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bRT8M9Ek"
+Received: by mail-pz2-f37.google.com with SMTP id 41be03b00d2f7-cc7c9c2df74so217474a12.0
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 09:29:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790699346; x=1791304146; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790699364; x=1791304164; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gczGrvEptEHhycke4/gymHjEMbqsLy4UXX26l0bR3OM=;
-        b=AgRxOj1beqZDDRcpCeFm4YCvRZ/D0EyNXpFlbqUQpCcwaEIxnQqD1SwbMJmrwLkoIK
-         ascxJrwbKxqb30rhCgn9dj8nIVrqBMQ01+rIe1mp60NvUfll79VEgmvxVAVV3ZXYVd54
-         4ZXuKJWBB1DF5DRNnRN9VrqU2CVk+KC5s0y3TkDXc9M48LvFKYCWdScHl9ttjmNY2Whr
-         G/dWFh8S8Ia/ln9VhfkBPY8/Uj5NslXeAywlHj49tiKeFKU1f1fLdrlFLMS9zXtXrmFh
-         apWsEnAbOdar4pw8DngGJ74Z10V0D68m/WQ4ecy3ByxrnD2ViPwQWLoJNyam0qTBG8Z1
-         aFmw==
+        bh=NfII3LN3Gw72EP3w7593Da/fsSb/7y6Qp41qe4y8lCI=;
+        b=bRT8M9EkklfBRftJTRny/k/9gFEGp2zhCJQIdqbRYMDPeCw37Vfn7/3JSV2rrs0EXQ
+         imBqBiEkYPGlGeqt4ZtHma52a+8Wz1KYKq48hsgArkxuTMk9z4cXPvL1C713vwGDy/60
+         zaAO7nYWgziU4RRAtbvfl9ddwwhTzWh7nLC8mfN+C6GVWa/cMbxgYA3B8bGlULofO+7s
+         EA2nptm5SODA5WtiPm1OKe8aN8VXP4KzI0HeMngRezuOgOF1fKN5mmUwUHLZ163IH0Nf
+         FI8r0USmdD30SoO4RCUlgDaFIBfN/mLht9w93jAEffddnzqL7n8tMn/io6GvtqpegrlL
+         xjEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790699346; x=1791304146;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1790699364; x=1791304164;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gczGrvEptEHhycke4/gymHjEMbqsLy4UXX26l0bR3OM=;
-        b=FbzXmoeXlF4r1bd35VGOCbLXgtpHFxdAxopZsJkxCGXEO0byPPOL4+EpTMQCiTtRPM
-         TOoODUABMDXpiVhyft7tWQ7wRaeUcAmDyYlLZbO2oq4Nv8Ujo4S5tv3AicMRjM5/jK3c
-         3uAiJfn4JIfLfp27dUjHxYmrly1SJwbQEddWrDUUkCFQpJ4KtpTIIMWPbpweeX4Sg5/X
-         loUwtVJOe78Wiy3oILKa8lXmybJCkOk3hfTc60o1HvLNMKEm7tvfFVjzW/0yTPv9ZIYA
-         4yHlGU50PZOmMwI8XFrnUwHLc6zrF4GKq/CFNd2RZdjfzHJaaYRPFIrcG5H9TMPBRfBB
-         pqdg==
-X-Forwarded-Encrypted: i=1; AKwUvByvGo+5S/ZnBn9dMJ+puQmGQ0q0rqVjzEpxSrRiQ9i16Y/7D42/SeSxLJT27NKsv8lYV/I=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLWjIj575hymiUEO3LF4aSxyDd6Klqr3BxMwpYE/MqdAWqcjM51
-	M8wqi/S3qYyG1KdZ6MZ5NJHpsIvPAQS4lQtsGwOvqO1G6m0QiNqEukVH
-X-Gm-Gg: AYBFou2VmPWx9i1B9bn4tr0VVsG+uYeROqP+IJ74rrN5WuFfZ3IY6VxkrPXCF5Og8e8
-	/U1Hwfeb7Bl+2W7heX3Ch2mvIDCoZ20i7VZqL8MKhRQGxbb0DqTZmZve+9qjhX4ltJbhpFQx9ty
-	2qIb/HvCzWrZCJfFxC4kwgWxAshG6zVaE4BcXJwgjiKt9N35xy2ej1jdPsZseuauQO7pwl6k8gv
-	DELkARjBZ4xgeltyWLPu796Me8F3RQwy+eqEt3ZCzNJ07w8HXAyr3xp3dCmLU0lf7kK4hrBJ01X
-	7G5+Ob/bMEDMRraMnLTji0Wfz62hxrUbQ9k72YHHyHSI8zwTNgZ9FFYgt1TNBbn5+n95zm4OMW7
-	AxTmxzNZ/3+r1Zn9nrDcpCtZEQWHVnz+CoO9c6zxo63ND3f57AcPGbVmIEvSAlhKH//lHs0gd3P
-	I6SAlH0fdP3/5gEBtrhTnPo0i3/2REjpt9FBGXookqF/LjQ0Zk9l+dWvB/Ki6YVBW5n15fb6WEe
-	H2lln7nduJj24kWAhzI6U8U2SyFuUTUdvd6VZkY3QlaX9avu+nrJskvZcKGm9Kbb3LtTuBdoAD5
-	waY/
-X-Received: by 2002:a17:90b:582c:b0:3a2:b70b:9cd4 with SMTP id 98e67ed59e1d1-3a2b70bb0a5mr3996708a91.12.1790699345913;
-        Tue, 29 Sep 2026 09:29:05 -0700 (PDT)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a49803d745sm6413747a91.11.2026.09.29.09.29.04
+        bh=NfII3LN3Gw72EP3w7593Da/fsSb/7y6Qp41qe4y8lCI=;
+        b=eEoHHd1GQirDC4Thif/8ZDWj5hXTyXfZKniPeH+2QET5tbt8HW1oD1AauSm2KlM8oc
+         5qcs0LN0lFD3xCy/0GBQgA1rP2isSqfisyVJmGLzBFkwQRPKPYqGObqaXBj5aKdm0svX
+         WfOXcQ0yhxYiHvT7P6oPxYvejKaOXkJF5FDGBqM5yUh/w0mxoj8ZWOfYV+4CS13hEOPY
+         PRAKFK++kmCbQRgN+nDdbzvkkS2TRWstOH/1WFIUKpt1fuiZvxsVHJ0PdTGYJasxzRsP
+         qAHhVATWQE0BSZZabiEj47YH5FoZN2+Kw6LzBxkTpMdpjAeYM2nVPbLsfbemY/fY6sA/
+         eX7g==
+X-Forwarded-Encrypted: i=1; AKwUvBzoxCSSvTF2Eq3JxULKOxHH0aqG3PHtHPLywDaIzmy+Zg3IO2OOYAMaNKSBp+XNqQ4HXR0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKbBnp2BENaBnyA/ZbK4YnrFnmREr2rONzqF5GFaz457tLjd8rM
+	vF7MG61OBGsl8txSG9MbM9O+CqolV9vhsvzxXe+T0rv6Bmdoj4bConZ9
+X-Gm-Gg: AYBFou1CU8n+kbqCO6CPoYTtzYd+RGU2OQ/XZ/Y8KwNH7WM1I5qBq3DdgoG5cKmGGEl
+	I1MVOA8gn39VHw848SRDQonkQaN66k47DY5LfQ+/OWYNyop33WXmqczAtwGlv4U4utkFDVCk0iN
+	IidNRnOqQ9uitWOWTf4QR1eZaXInofCqdXNrKklxwNU2YzsWgq+4QVqfbMzoI2biSbxWpWX6gIY
+	XyZ5cWKN5TkY9tVqwoF/VUA27fVgPIczM3NUFrZhL/jOwkmgAMZ5PyE+/IyYfq9RY85Zzz4O01N
+	sVq3PkxN/ydB5GQ+/Neo/m9pjPR6IdMx55LBMBY/z3ryA6e899k+Ytf3vnINAbZiFKhgwfq9UwQ
+	X3vKCt20knPkc0zPfVkvHD+V8tfvLPB3+LHfgAbWCYzuLAVmA3/GdzMUrzULUqpMyxAi1TE6UUE
+	xiKA6Rvk1xp9qCJ+5TAtOeAvjPFMbmuau99o5xSkpqBYdO7J6pq61Zv+4gdzI35ca1OL2wzmYqj
+	dIPEEGSdBjQvNps/+RGiQrrmvFc8T9dzjpxhQZjRlBYO9uSAXDL3VPU0e8Ls56/CaX8aU9RV6Us
+	Lsg=
+X-Received: by 2002:a17:90b:1a8b:b0:39e:3d38:7ef1 with SMTP id 98e67ed59e1d1-3a49c11ae64mr1853108a91.10.1790699363711;
+        Tue, 29 Sep 2026 09:29:23 -0700 (PDT)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a497e90180sm7148752a91.2.2026.09.29.09.29.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2026 09:29:05 -0700 (PDT)
+        Tue, 29 Sep 2026 09:29:22 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 29 Sep 2026 16:29:04 +0000
-Message-Id: <DLRXXU68JZ5F.2FG7G4UY1DX7F@gmail.com>
+Date: Tue, 29 Sep 2026 16:29:22 +0000
+Message-Id: <DLRXY2AQRPYP.1YQ75SL3XHQHN@gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] selftests/bpf: Use /tmp for temporary file
+ in d_path
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 To: "Pu Lehui" <pulehui@huaweicloud.com>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
  <bjorn@kernel.org>, <bpf@vger.kernel.org>,
  <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
@@ -76,11 +79,8 @@ Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
  <ihor.solodrai@linux.dev>, "Puranjay Mohan" <puranjay@kernel.org>, "Paul
  Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>,
  "Alexandre Ghiti" <alex@ghiti.fr>, "Pu Lehui" <pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next 2/5] selftests/bpf: Set CONFIG_HZ_100 for
- riscv64
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20260929083924.1851840-3-pulehui@huaweicloud.com>
-References: <20260929083924.1851840-1-pulehui@huaweicloud.com> <20260929083924.1851840-3-pulehui@huaweicloud.com>
+In-Reply-To: <20260929083924.1851840-4-pulehui@huaweicloud.com>
+References: <20260929083924.1851840-1-pulehui@huaweicloud.com> <20260929083924.1851840-4-pulehui@huaweicloud.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -91,10 +91,20 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Tue, Sep 29, 2026 at 08:39 AM Pu Lehui <pulehui@huaweicloud.com> wrote:
-> Let's set CONFIG_HZ_100=y in config.riscv64 to align with other archs
-> and fix this issue.
+> The failure occurs because the rootfs created by libbpf/ci [0] does not
+> mount /dev/shm, causing temporary file creation under /dev/shm to fail.
+>
+> Let's switch to using /tmp instead to fix this issue.
 
-x86 has HZ_1000 and config.ppc64el doesn't set HZ at all.
-The test fails with HZ=250 on any arch.
-Change 30000 to 40000 in progs/setget_sockopt.c instead ?
-It converts without loss with HZ=100, 250 and 1000.
+This will break BPF CI.
+The test was using /tmp up to v4 and was moved to /dev/shm in v5,
+since /tmp is on 9p in BPF CI and 9p doesn't support fallocate. See
+https://lore.kernel.org/all/20251206141210.3148-1-electronlsr@gmail.com/
+vmtest's init mounts tmpfs at /dev/shm, /run and /mnt, but not at /tmp.
+So fallocate() will return EOPNOTSUPP and d_path/check_mem_access
+will fail on x86, arm64 and s390.
+
+Mount tmpfs at /dev/shm in mkrootfs_tweak.sh like you did for /tmp in [1]
+and drop this patch.
+
+pw-bot: cr
