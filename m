@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5C937F32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E99516173
 	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790682052; cv=none; b=shWUO3m7J9XMzQD77Bbn5UZzyC96YfaE6RtVRj9q8SBeboBOX6YGAUPlU4Y6UyHVP7vj2JJqOSTtbscL/Eemvc48DWC2Gpe+vlKitpiQrVzSdZwunV6t/FsT2TizcA82aGY3QVu96ocao1PwdZ+1Qv2bJ/Yk0kbaBL9b3sT+j7Q=
+	t=1790682053; cv=none; b=nXFrCd3stUhnVL5vpJzXTXUAN0TmsBx3MBrqWxK6w8jdFjAFKQFL25LxADTuL3RPKpSg6lXGHm6jhHkLIuNGh+f8tzapOI7mwKNvM1Qono8RUrij7+TgEt/J26p0dVZ0QPkRhJ4XGKfPJwvOfEw5spzo7L2YNiZQpQamLFiZYsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790682052; c=relaxed/simple;
-	bh=KRyi1UFX694OqnC6MQU1BKfvWw7i0wR7lvRltdImtG4=;
+	s=arc-20240116; t=1790682053; c=relaxed/simple;
+	bh=7LIy6hD9BpFhT3KXvzrcevWLsRX8kqdT/AQ6osn1Adc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FPB3Dv9DZJYjmVZ5I5wgCFSu8XYd4tRly/7IrWed+hNC8lgFRALqhyvgWnYjX52Kk2rwOChP7uD+JISz1cPucrkKEA9JFL5/OlxZfufMOIpj4Cbm9Tx01FhPSj8qNoUiwwcorGdD+ZZNKJbK4ivvWORqJyo7vc7vOWZRmx7FscY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z8aAJHBQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=SCqAZXA65CkLIVrJGW8ZVmmrZCwS1VARPb91h8lt4g+YJqPfKy5PHl2OGPIj2rUimTfocDqY0Dk6aOFMSHL5xcm/VIJjElt/s+Xd7zohxe0i91QJsaO1RXRn1bkNeFlVObJKJkJV72bw3PvbicY0/fVxZGKcro3T4gNjTkeUXBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MdHjcqIz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z8aAJHBQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C551F000FF;
-	Tue, 29 Sep 2026 11:40:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MdHjcqIz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1A21F00893;
+	Tue, 29 Sep 2026 11:40:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790682050;
-	bh=G6se5UkVjvdhAOtlq9VMZ6jehOY/5hfkooV9hrYAHNc=;
+	s=k20260515; t=1790682051;
+	bh=jwZ9G/89d2VOgAUXM1Ewr6AOvVhZGmur5Gtb19J18Rc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Z8aAJHBQiFLDH5048s32pSM5WvKEIXnOZ54jzNAPp++lIbQ2xkQJ5byP9xPKandJc
-	 o0CNh4jfdarq+AZ5SzjaPP6hcaFLXv+0o6IcjWxhEb2KELHl0VXz+oO7y1PliYtZU6
-	 1FmWNXrPYUWCU3a3ypJlGR/gHzFfAqFdCgcKrBHFrkn+urJRxNmyLfnbgxLEnrkAMM
-	 EeXUfoIihTjMlQ+RSaerzZQKJVjLf2ZOU3VJCVF7lLo+2O2LRbLawaNgur4GHX+4sD
-	 rjk77zvFPTqeBmdzzUpp+tV/PPo4gbHnMz7DHu9sFASdl7Un5YLY1OCYHAMmezsvWW
-	 IaETVgv3n2gZw==
+	b=MdHjcqIzAJ2AVe4SwS82aSsbju8uGvoHvFCQE/ayJy66iUP/fUWCNaLYqso2X3Fog
+	 RLEzdyypsA57gjHtErIRlPIV3GmpkGdQDYLu/bQ+2Ox/5fFGfqeM8hUEOSoR6Jr8ii
+	 tiLTYh4Or6nbqtg7GxkcU2TZVprqJxfmnpUDSFufCSsUZyMY++SpvDGrKuSTOK/X4B
+	 JzpjoJ22BEBV6HtSV2UpmpR1oFKk5IpNuirHZhy3Ab+YfXrHek5OEmIG/x/14L9IZ3
+	 HqrnApmKGBqWh+gE/FKax6Y88dHFpEpAsZX80eEn3D1pGUeJfotNiaY29A8qwkeOm7
+	 A3fvxGSLLNOJg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 06/15] selftests/bpf: Test passing metadata
- across veth and GRE
+Subject: Re: [PATCH net-next 07/15] selftests/bpf: Test metadata passing to
+ cgroup_skb and sk_filter hooks
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jakub Sitnicki" <jakub@cloudflare.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260928-bpf-meta-gated-tracepoints-v1-6-844dbf3e1edf@cloudflare.com>
+In-Reply-To: <20260928-bpf-meta-gated-tracepoints-v1-7-844dbf3e1edf@cloudflare.com>
 References: <20260928-bpf-meta-gated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com>
- <20260928-bpf-meta-gated-tracepoints-v1-6-844dbf3e1edf@cloudflare.com>
+ <20260928-bpf-meta-gated-tracepoints-v1-7-844dbf3e1edf@cloudflare.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Tue, 29 Sep 2026 11:40:50 +0000
-Message-Id: <20260929114050.A9C551F000FF@smtp.kernel.org>
+Message-Id: <20260929114051.5E1A21F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,67 +47,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: test flakiness due to hardcoded netns/device name collision
+- [Medium] bpf: unconditional bpf_tc_hook_destroy on error path flushes hos=
+t TC filters
 --
 
-commit 4f7f4b87639860030b5545295e6b1cde37989dbf
+commit b7bdaa1e031c5e65e9e6042ac51a026c08301467
 Author: Jakub Sitnicki <jakub@cloudflare.com>
 
-selftests/bpf: Test passing metadata across veth and GRE
+selftests/bpf: Test metadata passing to cgroup_skb and sk_filter hooks
 
-This commit adds tests to stash metadata at TC egress and read it back at
-TC ingress after the packet crosses veth and GRE device boundaries.
+Extend metadata cross-hook coverage to UDP readers: attach a TC ingress
+program on loopback that tags the skb, send a UDP datagram over loopback,
+and read the stashed metadata back from a cgroup_skb/ingress program and
+from a socket filter attached with SO_ATTACH_BPF.
 
 > diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.=
 c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+> index 1155e868ffbd7..25a16daf5fdf3 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-
 [ ... ]
-
-> +/* Test if skb_ext survives veth cross-netns forward */
-> +static void test_skb_trace__veth(struct test_xdp_meta *skel)
+> +static void test_skb_trace__udp(struct test_xdp_meta *skel, const char *=
+name,
+> +				enum udp_reader_type reader)
 > +{
-> +	LIBBPF_OPTS(bpf_tc_hook, tx_hook, .attach_point =3D BPF_TC_EGRESS);
-> +	LIBBPF_OPTS(bpf_tc_opts, tx_opts, .handle =3D 1, .priority =3D 1);
-> +	LIBBPF_OPTS(bpf_tc_hook, rx_hook, .attach_point =3D BPF_TC_INGRESS);
-> +	LIBBPF_OPTS(bpf_tc_opts, rx_opts, .handle =3D 1, .priority =3D 1);
-> +	struct netns_obj *rx_ns =3D NULL, *tx_ns =3D NULL;
+> +	LIBBPF_OPTS(bpf_tc_hook, tc_hook,
+> +		    .ifindex =3D 1 /* IFINDEX_LO */,
+> +		    .attach_point =3D BPF_TC_INGRESS);
+> +	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle =3D 1, .priority =3D 1);
+> +	struct bpf_link *reader_link =3D NULL;
 > +	struct bpf_link *put_link =3D NULL;
-> +	struct nstoken *nstoken =3D NULL;
-> +	int rx_ifindex, tx_ifindex;
-> +	int ret;
-> +	int i;
-> +
-> +	put_link =3D bpf_program__attach(skel->progs.skb_free);
-> +	if (!ASSERT_OK_PTR(put_link, "put_attach"))
-> +		return;
-> +
-> +	tx_ns =3D netns_new(TX_NETNS, false);
-> +	if (!ASSERT_OK_PTR(tx_ns, "create tx_ns"))
-> +		goto close;
-> +
-> +	rx_ns =3D netns_new(RX_NETNS, false);
-> +	if (!ASSERT_OK_PTR(rx_ns, "create rx_ns"))
-> +		goto close;
-> +
-> +	SYS(close, "ip link add " RX_NAME " netns " RX_NETNS
-> +	    " type veth peer name " TX_NAME " netns " TX_NETNS);
+> +	struct netns_obj *ns =3D NULL;
+[ ... ]
+> +	ns =3D netns_new(name, true);
+> +	if (!ASSERT_OK_PTR(ns, "netns_new"))
+> +		goto cleanup;
 
 [Severity: Medium]
-Does this cause test flakiness due to hardcoded netns/device name collision=
-s?
+If netns_new() fails here, the process remains in the original network
+namespace and jumps to the cleanup label.
 
-When test_progs executes independent top-level tests in parallel using
-multiple workers (-j), tests using identical globally-visible network
-namespaces and device names can concurrently attempt to create the same
-resources. This results in an "already exists" failure for the slower test.
+Could this lead to unintended side effects when bpf_tc_hook_destroy() is ca=
+lled
+below?
 
-Since TX_NETNS, RX_NETNS, TX_NAME, and RX_NAME are identical to those used
-by test_xdp_context_veth in the same file, would it be better to use
-dynamically generated or test-specific names here to avoid collisions when
-these tests run concurrently?
+> +
+> +	cgroup_fd =3D test__join_cgroup("/skb_ext_udp");
+> +	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
+> +		goto cleanup;
+[ ... ]
+> +cleanup:
+> +	bpf_link__destroy(reader_link);
+> +	bpf_link__destroy(put_link);
+> +	bpf_tc_hook_destroy(&tc_hook);
+
+[Severity: Medium]
+Since tc_hook is statically initialized with ifindex =3D 1 (loopback), and =
+it
+is destroyed unconditionally on the error path, could this unintentionally
+delete the clsact qdiscs and TC filters on the original (host) namespace's
+loopback interface if netns_new() fails?
+
+Would it be safer to only destroy the hook if it was successfully created?
+
+> +	if (server_fd >=3D 0)
+> +		close(server_fd);
+> +	if (cgroup_fd >=3D 0)
+> +		close(cgroup_fd);
+> +	netns_free(ns);
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928-bpf-meta-g=
-ated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com?part=3D6
+ated-tracepoints-v1-0-844dbf3e1edf@cloudflare.com?part=3D7
