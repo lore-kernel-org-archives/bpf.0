@@ -1,189 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-217.mta0.migadu.com [91.218.175.217])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C283E4EC65E;
-	Mon, 28 Sep 2026 23:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3077519A288
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 00:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790638119; cv=none; b=Zo1MYyRQp40jvNWCdPkc0RFp0ctM5xRAnDy31h6Y1SQanZqh+L9t/bv93o0W/lszllGT7Zt4Pe6JdOT+4UdsegMcHqACaqGKkuHSvgno8YtLpZsfNnFJSmLuvBPM5vKf/mdRJ5rP+y6uPE3Is9byFb8GcRLLMtcWqT5XfVVjhes=
+	t=1790640116; cv=none; b=nCL2ukMwi7ee/khdtuURVXTaw5aWMS0NqwHqhiLCA/Jq7PE3N35oaYjhC0Uwen2ereE867DuqcVbH4EjJ1z7L0our87E1E20c+JyJ91pVt78JHtQuzckHsLDgvXnVU7iVVWoMuzukV073W/w+cX/m0RNeVkvPauBK3qd8BXkfdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790638119; c=relaxed/simple;
-	bh=l/o7cXx1MVHJRDzgvW+ogOatBKEsTRZet2VaxF/Gpo4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=RIeQmYsy2u+iZedJ7sm0oSN8yQpXUBeuBoTyjwPE3ILXafoS3XUNL5MilLejf9tNy8X/EMCOsZwEoTKccPX4snMc7EFb4Q92wjghI/bxq53icD+DA/kZBkaZT+ha8YYrPGFe8tjMr0Z7ecJ/m02gJM8RueHHsMj3dosFkAKTcE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bmD95QVh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790640116; c=relaxed/simple;
+	bh=i7u97BNWa16kChalD0osHt7wHhTPoszN25BT4oWJpgc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oZnNyNAOngQU3pTtveu3kY9mE2GxdIjfYi4CogVhIb7ALCPMxaH24TRLHI8sKpA+6HrxLAt6DI0JQzM6jNaeEFXzbkqbiljeHZ2o+csTiaHEcNO+s8afqg8UstKVdRnhopqIvBu+2jO6lmZDQ9oyLlz+IFZ9TbiTsEd0RJI/8Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jTaKOW/c; arc=none smtp.client-ip=91.218.175.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bmD95QVh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E9551F000FF;
-	Mon, 28 Sep 2026 23:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790638117;
-	bh=N3LXhRZ9A18QFWnLXQDtNteOlvh/mZvik91X2odSzoc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=bmD95QVhaYzfqyuWwwiQW+xUj2qGmZTpmx/SeWhjAwI5wiRMC7kYRDQVVj1i9EtQO
-	 RqSr3YRFd5lR4HJsQ1rRDA2kL+hPVCcbzYyEkSirQ3Yt7CCo0nbmrGQ2LwoSyl/sNg
-	 yCuvREsjjCeydUjHAkzyY7E1oW6ND8Ez16160Ck/Ny8AYepwLkmLH+3JMLbHdx/HH7
-	 TBgMuAQMxyEFbV3cX7rBDWaXeLviZkwRhgUzVU1pID1IolPDJwdTXO0QxA9lMZ+/yg
-	 xMpi0+AX04V/WI7I/6Qrg1pX5SOkA+62NMmZltAukR61nPa0VYCNP2V7BMl7fkHTkx
-	 tu0ClVgydkHKw==
-Date: Tue, 29 Sep 2026 08:28:28 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: paulmck@kernel.org
-Cc: Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
- Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>, Uladzislau
- Rezki <urezki@gmail.com>, Thomas Graf <tgraf@suug.ch>, Herbert Xu
- <herbert@gondor.apana.org.au>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, Andrew Morton
- <akpm@linux-foundation.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
- Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Roman Gushchin
- <roman.gushchin@linux.dev>, Chris Mason <clm@meta.com>
-Subject: Re: [RFC PATCH 0/3] fprobe, rcu/tasks, rhashtable: Switch fprobe
- and BPF kprobe-multi to Tasks-Rude RCU
-Message-Id: <20260929082828.cd9844b5e632a23fd8308dbf@kernel.org>
-In-Reply-To: <f593867e-dcef-4f68-b609-a253f489f7b8@paulmck-laptop>
-References: <179060575297.372125.10581329083761385407.stgit@devnote2>
-	<f593867e-dcef-4f68-b609-a253f489f7b8@paulmck-laptop>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jTaKOW/c"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=i7u97BNWa16kChalD0osHt7wHhTPoszN25BT4oWJpgc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790640112; v=1; x=1791244912;
+ b=jTaKOW/cgtvOeyPSkrlCF9GhbvMhXMnZnTDRnVPi0bnEWJyIod1auN5GwgnsMiCCyOgOt2t2
+ B5hdpKrXz5YOOEHqKQgbyA2tUzmBNNksRc44ummAmLgTIXTqxKDFUHzWUEYnzI58fT2M6//Ft/K
+ 7Q34twsUlsaQ47iNr1Xp3vPM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cb42248dfc32517e;
+	Tue, 29 Sep 2026 00:01:51 +0000
+X-Mizu-Trace-ID: cb42248dfc32517e
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4e178583-b510-457f-94bc-e0e201698371@linux.dev>
+Date: Mon, 28 Sep 2026 17:01:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix linked_externs with
+ bpf-gcc
+To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@vger.kernel.org,
+ andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, linux-kernel@vger.kernel.org
+References: <20260928231441.4037097-1-vineet.gupta@linux.dev>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260928231441.4037097-1-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Mon, 28 Sep 2026 09:25:02 -0700
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
-
-> On Mon, Sep 28, 2026 at 11:29:13PM +0900, Masami Hiramatsu (Google) wrote:
-> > Hi,
-> > 
-> > Here is an RFC patch series which removes standard RCU read lock
-> > (guard(rcu) and rcu_read_lock()) from fprobe callback paths
-> > by switching fprobe and BPF multi-kprobe to Tasks-Rude RCU.
-> > 
-> > Motivation & Problem
-> > ====================
-> > 
-> > Currently, fprobe entry and exit callbacks (fprobe_fgraph_entry,
-> > fprobe_return, and fprobe_ftrace_entry) execute in the tracing hot
-> > path where preemption is disabled.
-> > 
-> > However, fprobe was forced to wrap hash lookups with guard(rcu)() and
-> > rcu_read_lock() because:
-> > 
-> > - rhashtable defers bucket table deallocation using standard RCU
-> > - unregister_fprobe() and BPF waited for a standard RCU grace period
-> > 
-> > Taking standard RCU read locks in the tracing fast path introduces
-> > several drawbacks:
-> > 
-> > 1. Unnecessary Runtime Overhead:
-> >    Every probe hit manipulates current->rcu_read_lock_nesting with
-> >    memory barriers, and rcu_read_unlock() adds conditional branches
-> >    to check for special quiescent processing.
-> >    On debug kernels with CONFIG_PROVE_RCU=y or CONFIG_LOCKDEP=y,
-> >    this additionally acquires and releases lockdep maps on every hit,
-> >    introducing severe lockdep hashing overhead and tracer recursion risks.
-> > 
-> > 2. Fragile Dependency on rcu_is_watching():
-> >    Standard RCU treats idle CPUs (and user-space on nohz_full CPUs) as
-> >    Extended Quiescent States (EQS). If a function is traced while
-> >    rcu_is_watching() is false, standard RCU is blind to the read-side
-> >    critical section. In such contexts, synchronize_rcu() does not wait
-> >    for the reader (risking Use-After-Free), and lockdep emits an
-> >    "RCU-illegal: rcu_read_lock() used while not watching!" warning.
-> >    To avoid this, ftrace callbacks normally require FTRACE_OPS_FL_RCU,
-> >    adding extra trampoline check overhead.
-> > 
-> > 3. Asymmetric Synchronization with fprobe_return():
-> >    fprobe_return() executes under preempt_disable_notrace() without
-> >    holding rcu_read_lock(). Prior to this series, unregister_fprobe()
-> >    only waited on synchronize_rcu(), which does NOT wait for pure
-> >    preempt-disabled sections, leaving a potential Use-After-Free window
-> >    during probe unregistration.
-> > 
-> > I've tried to fix the last UAF with simply introducing guard(rcu)()[1]
-> > but Sashiko found the 2nd problem [2]. So I decided to implement this
-> > series.
+On 2026-09-28 4:14 p.m., Vineet Gupta wrote:
+> test_progs-bpf_gcc fails to build:
 > 
-> Unless I am missing something subtle, Sashiko needs to be taught a
-> little bit more about RCU.  Preemption-disabled regions of code really
-> are valid RCU readers.  If you have a reproducer showing that this is
-> not the case in some situation, that would be a bug in RCU.
-
-Thanks for the clarification!
-So I think we can replace rcu_read_lock() with rcu_read_lock_sched_notrace()?
-(also, maybe we need to add rcu_is_watching() check)
-Current code may involves lockdep in fprobe, that is not good.
-
-BTW, if we want to trace some code in extended quiescent state, do we
-still need this Tasks-Rude RCU?
-
-Thank you,
-
+>    prog_tests/linked_externs.c:17:23: error: 'struct linked_arena' has no
+>        member named 'arena'
 > 
-> Adding Roman Gushchin and Chris Mason on CC for their thoughts.
+> Several problems, all from bpf-gcc not supporting address_space(1).
 > 
-> 							Thanx, Paul
+> First, the arena variables are declared with __arena, but that macro is
+> for pointers -- it marks the pointee address space. The one that carries
+> placement is __arena_global:
 > 
-> > [1] https://lore.kernel.org/all/179055575009.241711.6358052647499787191.stgit@devnote2/
-> > [2] https://lore.kernel.org/all/20260928005114.9C9FC1F000FF@smtp.kernel.org/
-> > 
-> > 
-> > Solution: Tasks-Rude RCU
-> > ========================
-> > 
-> > Because fprobe callbacks already run strictly within preempt-disabled
-> > contexts, we can transition fprobe and its deferred table reclamation
-> > to Tasks-Rude RCU:
-> > 
-> > - Tasks-Rude RCU detects grace periods via schedule_on_each_cpu(),
-> >   forcing a schedule on every online CPU. This guarantees that all
-> >   preempt-disabled sections that began prior to the grace period have
-> >   completed before memory is reclaimed.
-> > - Unlike standard RCU, Tasks-Rude RCU does not rely on dyntick-idle /
-> >   EQS tracking. It does NOT require rcu_is_watching() to be true and
-> >   does not trigger lockdep warnings in pre-RCU/idle execution paths.
-> > - Within fprobe, guard(rcu)() is replaced with guard(rcu_sched_notrace)(),
-> >   reducing the lookup lock to pure, non-tracing preempt counter
-> >   increments without lockdep or RCU state manipulation.
-> > 
-> > Feedback and suggestions from RCU, BPF, and tracing maintainers are welcome!
-> > 
-> > Thank you,
-> > 
-> > ---
-> > base-commit: 5bfa9f1a9dcb6ecb607adbc1c0226605c972935b
-> > 
-> > Masami Hiramatsu (Google) (3):
-> >       rcu/tasks: Export call_rcu_tasks_rude()
-> >       rhashtable: Add use_tasks_rude parameter to defer bucket table free
-> >       fprobe: Switch fprobe and BPF kprobe-multi to Tasks-Rude RCU
-> > 
-> > 
-> >  include/linux/rcupdate.h         |    6 +++
-> >  include/linux/rhashtable-types.h |    2 +
-> >  kernel/bpf/syscall.c             |    2 +
-> >  kernel/rcu/tasks.h               |    8 ++---
-> >  kernel/trace/fprobe.c            |   66 +++++++++++++++++++++-----------------
-> >  lib/rhashtable.c                 |    5 ++-
-> >  6 files changed, 54 insertions(+), 35 deletions(-)
-> > 
-> > -- 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>    #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
+>    #define __arena        __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
+>    #define __arena_global __attribute__((address_space(1)))
+>    #else
+>    #define __arena        __attribute__((btf_type_tag("arena")))
+>    #define __arena_global SEC(".addr_space.1")
+>    #endif
+> 
+> __BPF_FEATURE_ADDR_SPACE_CAST is a clang predefine. Under clang the two
+> are interchangeable here, since address_space(1) both places the
+> variable and is what btf_type_tag would have described. Under bpf-gcc
+> __arena is only a BTF type tag, so the definitions land in .data, the
+> arena map gets no initial value, and is_skel_data() in bpftool does not
+> emit the typed arena member -- hence the build error. Note this is
+> distinct from skel->maps.arena, which comes from SEC(".maps") and is
+> always present.
+> 
+> The extern declarations need __arena_global too. Without a section, gcc
+> does not place an extern in any DATASEC, so it stays a free-floating
+> extern VAR rather than an entry of .addr_space.1. test_relink() only
+> walks that DATASEC:
+> 
+>      id = btf__find_by_name_kind(btf, sec_name, BTF_KIND_DATASEC);
+>      ...
+>          ASSERT_NEQ(btf_var(t)->linkage, BTF_VAR_GLOBAL_EXTERN, "var_resolved");
+> 
+> so relink_arena would report OK under bpf-gcc whether or not the linker
+> resolved anything -- it would not be testing the allocated-section path
+> this test exists for.
+> 
+> Second, placement alone is not enough to run the test. Dereferencing an
+> arena global needs an addr_space_cast, which only clang emits:
+> 
+>    clang:                                  bpf-gcc:
+>      r1 = 0x0 ll                             r1 = 0x0 ll
+>      r1 = addr_space_cast(r1, 0x0, 0x1)      r2 = *(u64 *)(r1 + 0x0)
+>      r1 = *(u64 *)(r1 + 0x0)
+> 
+> so the verifier sees a scalar and rejects the program:
+> 
+>    4: (79) r2 = *(u64 *)(r1 +0)
+>    R1 invalid mem access 'scalar'
+> 
+> Guard the program bodies and skip the skeleton subtest, as
+> arena_atomics.c already does. The variables stay unconditional so the
+> arena is still populated and the skeleton still has its member. The
+> fallback bodies reference the externs without dereferencing them:
+> 'used' is ignored on an extern, so an unreferenced one is dropped and
+> .addr_space.1 loses it again.
+> 
+> With this, bpf-gcc reports:
+> 
+>    #217/1   linked_externs/skel_arena:SKIP
+>    #217/2   linked_externs/relink_arena:OK
+>    #217/3   linked_externs/relink_maps:OK
+> 
+> with b_val present in .addr_space.1 as linkage=extern, same as clang, so
+> relink_arena covers the same path in both. clang still passes all three.
+> 
+> Fixes: 34354db1b148 ("selftests/bpf: Add linked_externs test for externs in allocated sections")
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
+Tested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+This fixes the current GCC BPF selftests build failure on CI:
+https://github.com/kernel-patches/vmtest/actions/runs/36498905340/job/109187331070
+
+nit: The commit message is kinda too long. If you'd like it to be read
+by a human, try making it shorter :)
+
+Thanks!
+
+> [...]
