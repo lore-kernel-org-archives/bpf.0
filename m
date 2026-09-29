@@ -1,163 +1,98 @@
-Received: from mail-ej2-f29.google.com (mail-ej2-f29.google.com [74.125.228.157])
+Received: from mta1.migadu.com (out-15.mta1.migadu.com [95.215.58.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA03544D60
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 17:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.157
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790704147; cv=pass; b=PRUaomvao7b9OAVjZsSWSRRPKlr7tBPo2+LMhILoavbbtpnSFoafc6G8yY7HDr+dUtAInMTTqE22v/0UzW5OzYFaCA2cEsTPOUEkxSziBFqp3gcj5iiamLhF9Kg43dKeXryjAfQ6CSKGcRtObQLcEUoBP+l/tha/cOmMPXdUUOA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790704147; c=relaxed/simple;
-	bh=EgbFuS2Te6lm8qVRteJKBIzVGTmmynIix9CPN6Z3edM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kGZbqRVXSed+8D4wecygee/CmXK4y+CjEczBRmjkM/gflVJ82IVIFBKxjSizTNe2CY3Nc9YaUiPDwMcLpA9AzchvMxLCV34886FErI1Xcq39HMqtrfJM4w9xAfvS52QwhJHTBMTYwrHVxL6W6TG0dqU5kuo/nuZ+Coi7/iqHqOM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BjJk/HSI; arc=pass smtp.client-ip=74.125.228.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C344F3937
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 17:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790704780; cv=none; b=hXNrRFbFNmbA0K9bfUpeWV9F4SnIBByPPqVfNMOOP4kjMIbqNiW1oNA6tu16OIvQ0sV7Obzv04N+1ksyGWCwfdemstFiyBgsLPD2MGAl1Y8bzN+bmovWk1asErogfiEHFBgFP7ixkbTFfZPw8/PnP6HQMa7/XzNPNOtdUWSzID4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790704780; c=relaxed/simple;
+	bh=nvDwR7D5xUNEfLr23LHFHtYc/r1DbyybvGN9zSJqDHc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GPh2PZitPYqDz3Uf7cM2ga+pZa63ovW9JvUlCXx2xuSeXPVnVQwb35YkN3zcIz06LeI4IwlGSWbmEuwD5lfqc04M60OCzNicYZnf7SxdVJDd+SxOzE1d+JtN89v98vQvVGmn59l7Pkb23z5TaPQonlfsHqeZdQ63KNyRPhfZGqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PE6kp6d0; arc=none smtp.client-ip=95.215.58.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BjJk/HSI"
-Received: by mail-ej2-f29.google.com with SMTP id a640c23a62f3a-c294496989aso603699466b.3
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 10:49:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790704144; cv=none;
-        d=google.com; s=arc-20260327;
-        b=hwetLA3QbBQ+ocYgEtj5ijdSF3XjMYLWfGz9w9yUw7HEE7XlHUNSIM2NJZnQN5gAej
-         lC0IeexgMkL7ngK/ZeH0GK4KUdxACOoTIHad1Viwvm1RlUhMAu/Fu/Tpn8JfApzFsv/X
-         UfY1bNIWfRVKZmc6z8VsowrEPo9dRDli5R4iqakdr99AUK4eyOwzJrSBVRDRcV+Ai1cW
-         OtQP2C8gm3vIZ/jWsJkeGLkTEaelP7BOh7JZ2SiNsblV1C4nzUJ/bW3Of+z1zCHzB/4t
-         7mcYFWMO6H0BreF0C5H/DlyX3yEMMrBF6VCydOyEcms0XSw2VrX7vZXhe0tBtd4WpVWC
-         g0cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ThdPZzLhMx2EO2ovYKz1eeb+03YA/YkkzTBKjXEislI=;
-        fh=Fw79DnkxEWRXN0wnHpe5eJN+I1jou+ZccFNmBuML0nA=;
-        b=iV6GQKU+HbleMt5UBz6meDX+PIr9T2Eyu7/1hLfZMES6EwLR0P3LwBxz0sJDvNC/jW
-         YVvjvTs0NKHUYVy+uenEhoW/YHwiLwkGIhRc//kG403+cCOD9XWL3DME63Nt2Hv+jov3
-         1yIDUXKgt4rD27jqX0XMZ3GHb1kQR6UwmkQ26xONXSd82itydQ3B+jhq3FRdvd4hkHBv
-         pDhRXlva+0q+CIxRne2z8pND+7M2oYMOcIXQlsavnI0tAeLY5OnO14Mq+8f20EdLsTXl
-         1vR4MZ/9leXAtlDpUMsyZTkKEMDWQtUFqq9Z4UEH1xbqey2799b0cg0XTexenBJoTivK
-         o7Gw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790704144; x=1791308944; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ThdPZzLhMx2EO2ovYKz1eeb+03YA/YkkzTBKjXEislI=;
-        b=BjJk/HSI+d90L8k+v3ogtsrpdBV9RBnS8n9GzfFAp2qbzia0SRN0MnUBBfbhTcD5bQ
-         SKlFbDp1k3y4hc1U+ArLcT/CdMPQw9rDNtPllSD+amC96TQqeF36EtM+zHn16BWbFGQo
-         v0YYl2anDZBgTxw2WKpOjBYmiZQkgZyjkQiW2hZC7677ZQaEhs1XMpoNUdlZ7pwRFczJ
-         PtTN2FTUT+dqknbyhByvt9rPvNZF4KTFNegi8e3DNcGfF20nLlIS3EHgQvm9GDvyX7s3
-         d7N+2F7wTDYiitczhVvx4FnL9GQe/QDPEqlpCEFIFWCOrSZlRyFZqvvnDXGwyei20/nw
-         uC7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790704144; x=1791308944;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ThdPZzLhMx2EO2ovYKz1eeb+03YA/YkkzTBKjXEislI=;
-        b=koY+dCOqWX5MOgPWoita2+fPHpDKDddSUZyHuIolPXFrqtOvnKr5Rp2eZm6nZGXDdA
-         EeRY+QqUgjuP8z+NJ8AZnNJ5iMt+yML8+eqC6e9Qm6buz40QZbzV+NbcC4xgY9vzx12H
-         C/f7wq61MEudPhj2RMe3aOTWF8A0iW76NGr9GincFxUNdIU232JNnqEdJqmvncUyQLfT
-         8Em67xpI4LCXo+vwKhEce2fqG9nTCu6WWamsO8jMgavuCAJlfD+oo7fuFJlbaP0NxKdr
-         TIywE4u8L8rF/9FmENBDM11bxt7dbxQTClVtpJfvdS0PHqVjD35DBwXAMmO3N6UZdsfU
-         DkEA==
-X-Forwarded-Encrypted: i=1; AKwUvByT9XyRoxfOoWR3uMuDH2Jv07W3jUrKURhDQzf0DDTlSfZ+itQqExADK4mA/Ee6s0J4s14=@vger.kernel.org
-X-Gm-Message-State: AFuF++k48zKcWRHd7tjTgMpLQJgoTlaNPoFAIltd/60k3D7N02lnfDpR
-	ux6JUp0hG9iy4aQgzXzs4IT5wBpmIq3p3EUKDp7fKJCxvk7zMU2Oq+1r0s73JNzHwVH/YBj/Pgv
-	wg86QXAHiEfMqnBxRKSVqMLsnpQVa9vGnKfHiexqL
-X-Gm-Gg: AYBFou2vLgUWhmk709lgoKcf+WeOiEHgPMZuNtySwGDLNv68xk6eZaNDAiaw5CWlcWG
-	NG2TLyjENcaLfp+F7eLHbz8HBsNW3hwkgkkdzLtqMBcjf+LSPjPdKX2G5MSpCXSMDsdz3UfoC8h
-	w2HoqNVGJ9bDG+fM/OJgP6G03fNHYJfdAI5jnXils8v6pcg3+wWFU7mToVoip/lDPA6Xsg05kHa
-	smFT3X8/L0LQqFKcXr47ruHSa9V3HIHpoQjuEXKUoT4zErSqi+SLMRhi/AZ9ynGIHCPIFbS5/Ax
-	CypL1bUcXexnQdKGDaae/k2565Egi5A6zeYqAiB9Op2Gjpjq43PXmML0
-X-Received: by 2002:a17:907:7289:b0:c2d:e067:275d with SMTP id
- a640c23a62f3a-c2e15c0da9amr18432266b.2.1790704143373; Tue, 29 Sep 2026
- 10:49:03 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PE6kp6d0"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nvDwR7D5xUNEfLr23LHFHtYc/r1DbyybvGN9zSJqDHc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790704775; v=1; x=1791309575;
+ b=PE6kp6d0yV9CtYByzmov1c8hqQipG0geqyX5nfyjLxRtSxJB1cPYkwJLe7JG0ybi92qHdyBe
+ +DoxA9s+UOVHIoNNqNW+dYodpIhMkPoyCMsirljqz/SLFOjViEDgPlyXsiLwDalUbUwjiK6QbZy
+ f0+b6qzjR6M7cjdTHOu3XS7o=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 7760a9e8107f8b0b;
+	Tue, 29 Sep 2026 17:59:35 +0000
+X-Mizu-Trace-ID: 7760a9e8107f8b0b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2c5555c4-4dbf-44cd-8fd1-9da41740d23a@linux.dev>
+Date: Tue, 29 Sep 2026 10:59:32 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260922194533.631387-1-joshwash@google.com>
-In-Reply-To: <20260922194533.631387-1-joshwash@google.com>
-From: Joshua Washington <joshwash@google.com>
-Date: Tue, 29 Sep 2026 10:48:51 -0700
-X-Gm-Features: AclHuK-4Jen_xaBqivrTS2m8jiJGtwTSvDPOut6gW97lQXY41zUzIIPLnIv2r1s
-Message-ID: <CALuQH+VWjT2VZTOUjseLfcON4=Me6v99KyW=k=Uh2Y1dvpNkcw@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/9] gve: various XDP fixes
-To: netdev@vger.kernel.org
-Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Jordan Rhee <jordanrhee@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tim Hostetler <thostet@google.com>, Ankit Garg <nktgrg@google.com>, 
-	Eddie Phillips <eddiephillips@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves 1/2] dwarf_loader: Trust the entry value register
+ over the first location entry
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+ kernel-team@fb.com, Tejun Heo <tj@kernel.org>
+References: <20260925213619.2187751-1-yonghong.song@linux.dev>
+ <DLP2WZASF7LP.18SWCONJDR4LV@gmail.com>
+ <e3f30691-a5d8-41b8-a075-10cf8cf4bd95@linux.dev>
+ <DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 22, 2026 at 12:45=E2=80=AFPM Joshua Washington <joshwash@google=
-.com> wrote:
->
-> This patch series includes a number of XDP-related fixes, both in the
-> control plane and the dataplane.
->
-> A summary of the changes:
-> 1) fix an issue where XDP packets weren't being counted against NAPI
->    budget
-> 2) fix an issue where XSK buffers that have not been processed are
->    leaked when disabling XSK pools
-> 3) fix an XSK buffer leak when an RX error descriptor comes back from
->    the hardware
-> 4) fix a NULL dereference due to incorrect registration of XSK pools on
->    queues not set up in XSK zero copy mode
-> 5) fix a deadlock introduced by attempting to acquire the netdev lock
->    after it has already been acquired
-> 6) fix a racy NULL dereference due to DMA umapping the XSK pool before
->    queues are fully stopped
-> 7) fix potential data race on priv->xsk_pool when the field is set while
->    NAPIs are enabled
-> 8) attempt to register memory model in all cases when disabling XSK
->    pools
-> 9) clean xdp frames when tearing down DQO queues
->
-> ---
-> v2:
-> - introduce 3 new patches (7, 8, 9) based on Sashiko feedback
-> - corrected stat counting for packets according work_done behavioral
->   change (patch 1)
->
-> Eddie Phillips (1):
->   gve: prevent XDP frame leak and corruption during DQO TX cleanup
->
-> Joshua Washington (8):
->   gve: increment work_done for XDP and error packets
->   gve: fix XSK buffer leak when rings are stopped
->   gve: fix XSK buffer leak on error descriptor
->   gve: don't register xsk pool on pre-existing queues in RDA mode
->   gve: fix napi_disable deadlock when attempting to disable XSK pools
->   gve: fix NULL dereference from premature XSK pool DMA unmap
->   gve: disable NAPI when registering XSK pools in QPL mode
->   gve: ensure XDP mem model is registered when disabling XSK pools
->
->  drivers/net/ethernet/google/gve/gve_main.c   | 153 +++++++----
->  drivers/net/ethernet/google/gve/gve_rx_dqo.c |  31 ++-
->  drivers/net/ethernet/google/gve/gve_tx_dqo.c | 256 +++++++++++++------
->  3 files changed, 314 insertions(+), 126 deletions(-)
->
-> --
-> 2.55.0.1082.g2b9226bbc0-goog
->
 
-In the interest of getting some of the more trivial fixes merged, I
-will send out a v3 with only the very simple fixes, and continue
-working on the more problematic/invasive changes in the background.
-This will include patches 2, 3, and 5.
 
--- Josh
+On 9/28/26 11:11 PM, Alexei Starovoitov wrote:
+> On Sat, Sep 26, 2026 at 10:49 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> Maybe we need to poke into locations to get precise parameter register.
+>> For example, for argument 'b', we have
+>> 	[0x0000000000000000, 0x0000000000000000): DW_OP_reg4 RSI
+>> 	...
+>> 	[0x0000000000000008, 0x0000000000000015): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+>> RSI has location starts from 0x0, RDI starts from 0x8 although it has DW_OP_entry_value.
+>>
+>> But this makes things complicated, and there is no garantee across different compilers due to
+>> code gen.
+> I don't think it has to be complicated.
+> In your gcc 14 dump the first entry of 'b' starts at low_pc and it's RSI.
+> In scx_bpf_task_set_lazy_resched() low_pc is ...d70 and the first entry
+> of 'lazy' starts at ...d8b. RBP there says nothing about the register
+> 'lazy' was passed in.
+> parameter__decode_location() already has 'start' of every entry.
+> Can it take the register of the first entry only when that entry
+> starts at low_pc and use the entry value otherwise?
+
+Yes, this is what I thought as well.
+
+>
+> There is no guarantee, right, but when the guess is wrong the function
+> is dropped. It's not encoded with a wrong signature.
+
+Okay, no guarantee, but it should be an improvement.
+
+>
+>> One possible workaround is change 'lazy' type from 'bool' to say 'int'.
+>> As Alexei mentioned in the above, clang didn't handle 'bool' well
+>> in debug info.
+> That works for this kfunc and for pahole that is already released,
+> but every other function with a bool arg is still dropped.
+> Can clang be fixed to keep the entry range?
+
+Let me investigate this. Probably will be slow a little bit
+due lpc and some other events.
+
