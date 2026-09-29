@@ -1,104 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-127.mta0.migadu.com [91.218.175.127])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91E44F799D
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 03:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC92332EC8
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 05:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.127
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790652008; cv=none; b=Shx2xCwLAxlP9WtwfUHnmyCwwqCq0Bc/j/Yi0eiKazMJ8ZBIAFeT45b8eFH0pzpe4iaru9oJ9OiyJwfHbHB+Pl1wuZvi8HEHzWGEWSlGAhayv5W8cpc5di3bEmsFCeiibikOGSKNQmzoKiMxoGlp6iJ8lcou89NSpiX4kghutQ8=
+	t=1790658292; cv=none; b=lLC+LTiAeKW9EtpQSJwuwZvLSsEpnucw9ZF+U6Eyn8b/r/Am8LJbGfQ8lBvYjBEUltj4eOKPxmtshWFbMyPqOBx6AhmZDYmxPfAooNmYdtX6iQXSnW6s+TnFhfy1HRASw8u+u8zNrq7FBMD5KugtkKochkkYK1BQj13aVkhijYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790652008; c=relaxed/simple;
-	bh=/A6iZRFjps6bWE87JrI5cUpyjCyhQvmdLBeyc/Afvrs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SbP2Qe98q1VX8tma9RnweBKuqMZwZX4dtLXVGLJZRf8hECnP3rnmN6+mvht6JZEdtaRntOnG+jq0YWOlo6BYsp2OMuH15fFPEKUT40vh9Z8YnuYbSSCNyOVDWPe/Oq5jYWkhnu8u3rJp+t5gCOZD9Gs2KjUTWFV1McggLGhrEr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XX/5tHQZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790658292; c=relaxed/simple;
+	bh=X2Er36dW6b9JrfFpTHvUORetkfRXInvG1FR10LsA37o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ka4lXNWm6yCkyTiBkFEna7VDC4o5gPeOF6Gn5IkZWDvM6zFcYBKuhZ56TKeHfwkUFWKHI78nQttBoj4hzdsh0K3aak9xHlPQa6hTlyg2wwIILMXVxaIaBiWHwdRDv7bYX0Ee9pHMobx9Pa1G49o498Hr9o/pV/jav67aHLJlgEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pTMhf3Uo; arc=none smtp.client-ip=91.218.175.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XX/5tHQZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0548A1F000FF;
-	Tue, 29 Sep 2026 03:20:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790652002;
-	bh=QA3M7/Vd+Btw45l/GNWyNorVF18RyMb1ILqJWArZIik=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XX/5tHQZdS8pejIk+GKX7GVmQEoXXr4Sq4b3hI83wYhqc7bmMHwb8pmDX4bwrjum1
-	 aixiCf+7CjJq7HkhCI322faEClDbzas5z57ZEmMpEJY6NW2KSTwM74IWMCUlcp1fRD
-	 pNe/QdKamRr0tOoPy6Swq2KKjSdF7aaaWgk33bloxHfemOTNWp5cyOmPImdxwy0/br
-	 2CI7TZZMj8u+oKikgvwitsoyLPhiGdZOyxju6T1Z3A2p66VRJu1B/F44abjR13MjME
-	 hixf5a9SsQNr6W8jrJxGMCmDnqtk6G+/Tzci5q1/HmXv3jMoNxOpEvKqQFhJK0RARQ
-	 6Fpx/KX0NwtGA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6.6.y] bpf: Defer work in bpf_timer_cancel_and_free
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Artem Dinaburg" <artem@trailofbits.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260929030524.86560-1-artem@trailofbits.com>
-References: <20260929030524.86560-1-artem@trailofbits.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 03:20:01 +0000
-Message-Id: <20260929032002.0548A1F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pTMhf3Uo"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=X2Er36dW6b9JrfFpTHvUORetkfRXInvG1FR10LsA37o=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790658287; v=1; x=1791263087;
+ b=pTMhf3UohD5bwsXuI0wgI1yW9DU/U4kpawbS3utkt3TTAzWQ2QkjMmFlZm8HbmvH6jJAmp+7
+ 7wDFrc/SbvDz0Cow+ShJJn+kAJPE/8UE7zXMUXGJMFVEZDfy8hjA7vkW6G9OyJJfg05Ty++Fw1V
+ bUqQ1e9YCOK9Trqd4mq9P2ZA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 31ac00f7d822a3a5;
+	Tue, 29 Sep 2026 05:04:47 +0000
+X-Mizu-Trace-ID: 31ac00f7d822a3a5
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <8fce9ea9-1947-4ec4-9154-cb71fbd75671@linux.dev>
+Date: Tue, 29 Sep 2026 13:04:39 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf: Zero-fill non-target CPU slots on BPF_F_CPU
+ insert of new per-CPU element
+To: =?UTF-8?Q?=C3=96mer_Mete_Kaya?= <omermetekaya0@gmail.com>,
+ ast@kernel.org, daniel@iogearbox.net
+Cc: andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260928214932.544124-1-omermetekaya0@gmail.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260928214932.544124-1-omermetekaya0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: UAF in bpf_timer_cb due to deferred map element cancellation
---
+On 29/9/26 05:47, Ömer Mete Kaya wrote:
+> pcpu_copy_value() with BPF_F_CPU copies the value only to the target
+> CPU's slot and returns immediately, leaving all other CPUs untouched.
+> When inserting a *new* element, the backing per-CPU area may be reused
+> from bpf_mem_cache or a prealloc freelist without being zero-initialized,
+> so non-target CPUs retain stale contents of a previously-deleted
+> element in the same map — a same-map information disclosure.
+> 
+> pcpu_init_value() is used to initialize newly allocated elements, while
+> updates to existing elements call pcpu_copy_value() directly; non-target
+> CPU slots intentionally retain their previous values there.
+> 
+> The onallcpus=false path in pcpu_init_value() already handles new
+> element initialization correctly by explicitly zeroing non-current CPUs:
+> 
+>   if (cpu == current_cpu)
+>       copy_map_value(..., value);
+>   else
+>       zero_map_value(...);
+> 
+> Fix by adding a zero-fill pass in pcpu_init_value() after
+> pcpu_copy_value() returns, covering only the BPF_F_CPU new-element
+> path: iterate all CPUs and zero-fill every slot except the target.
+> This leaves pcpu_copy_value() unchanged so the update-existing-element
+> semantics are not affected.
+> 
+> Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash and lru_percpu_hash maps")
+> Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
+> ---
+> Tested with a reproducer:
+> - Before the fix: CPU 1 retained 0xDEADBEEFCAFEBABE from the deleted
+>   element.
+> - After the fix: the non-target CPU read back zero.
 
-commit 7fae89f817868d5f5aa9bd764292b2373d1f4677
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Could you add a selftest to prove the issue?
 
-bpf: Defer work in bpf_timer_cancel_and_free
+You said a reproducer. But, I don't know what it looks like.
 
-This commit addresses a deadlock and use-after-free scenario in
-bpf_timer_cancel_and_free() by deferring the cancellation of hrtimers to a
-workqueue when running within a timer callback.
+> 
+>  kernel/bpf/hashtab.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 8cc07e54daaa..dff4321f2828 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -1099,6 +1099,16 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
+>  		}
+>  	} else {
+>  		pcpu_copy_value(htab, pptr, value, onallcpus, map_flags);
+> +		if (map_flags & BPF_F_CPU) {
+> +			int target = map_flags >> 32;
+> +			int cpu;
+> +
+> +			for_each_possible_cpu(cpu) {
 
-Link: https://lore.kernel.org/r/20240709185440.1104957-3-memxor@gmail.com
+But wait, the 'map_flags & BPF_F_CPU' has been check in the first 'if
+()' condition in pcpu_init_value(). See the previous fix:
+https://lore.kernel.org/bpf/20260924102321.2120434-1-donggeunyoo.kernel@gmail.com/
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-[ ... ]
-> @@ -1484,14 +1504,8 @@ void bpf_timer_cancel_and_free(void *val)
-[ ... ]
->  	 *  CPU 1 (timer1_cb)			CPU 2 (timer2_cb)
->  	 *  bpf_timer_cancel_and_free(timer2)	bpf_timer_cancel_and_free(timer1)
->  	 *
->  	 * To avoid these issues, punt to workqueue context when we are in a
->  	 * timer callback.
->  	 */
-> -	if (this_cpu_read(hrtimer_running) !=3D t)
-> -		hrtimer_cancel(&t->timer);
-> -	kfree_rcu(t, cb.rcu);
-> +	if (this_cpu_read(hrtimer_running))
-> +		queue_work(system_unbound_wq, &t->cb.delete_work);
+Thanks,
+Leon
 
-[Severity: High]
-Does punting the cancellation to a workqueue and returning immediately break
-the synchronous cancellation guarantee?
-
-If a BPF program running in a timer callback deletes an element containing a
-second timer from a preallocated hash map (or updates an array map),
-bpf_timer_cancel_and_free() defers hrtimer_cancel() to the workqueue and
-returns immediately.
-
-This allows the caller to immediately recycle the map element (pushing it
-to a freelist for preallocated maps, or overwriting it in array maps)
-without waiting for the timer callback to finish. If the second timer's
-callback is currently executing on another CPU, it will continue to read
-and write the map element data, which now belongs to a different key or
-has been overwritten.
-
-Can this lead to a use-after-free and data corruption in BPF map elements?
-
-> +	else
-> +		bpf_timer_delete_work(&t->cb.delete_work);
+> +				if (cpu != target)
+> +					zero_map_value(&htab->map,
+> +						       per_cpu_ptr(pptr, cpu));
+> +			}
+> +		}
+>  	}
 >  }
+> 
+> --
+> 2.55.0
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260929030524.8656=
-0-1-artem@trailofbits.com?part=3D1
