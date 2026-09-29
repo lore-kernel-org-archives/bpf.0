@@ -1,68 +1,68 @@
-Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D144851AFC2
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 12:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D958A51AFEE
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 12:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790683263; cv=none; b=mtL7VzTMwPcoSE3u4mjIl0eVa/R3Bt7JF9dfEhdn4uKE8p68EPb12rnyuwPbn2ZnSDPfNPchZPUktA89jMnWbrv3aDCdoFjybYyBfjhkzrgRIy2zXvWYSLSHmxaKyZQqjQMC7osPhvHB/E/p5vLbMPIz8gzcFMQon34te/yBe1c=
+	t=1790683352; cv=none; b=tSGZnf8y/YbIRXip2jAHscmStJhrnt4mapTstY6Vrb6yhy5ZgrsCKWPP5hr0JlGfN79q+HmAoJqDozWJsYRfh55oQui3kbZxI/o+oAoxGhKD701KBLF3PnKYZHo5BVGdrHiipz1S9YjBAiNmz/RMF3AXk6qkx8hVQcVuvQCrEJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790683263; c=relaxed/simple;
-	bh=qdhJGebqsfb0gclk8ihu6PI6J7GbV5Fek9Elmf6NIZA=;
+	s=arc-20240116; t=1790683352; c=relaxed/simple;
+	bh=u2URI7H77FV2uO5yHbYVmhBdQqokMH1WgTp4YXioDBY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RK84/MZI/IbDkSKP0xynG2+bMD06fuW1sIOXHMl5maCa16LH5mk88JMCPDyKI1uEl6Yvfd6PHNK//cIJrUm8C/wFKbGySL9K4jxUxzy32dS8nNNB0RVoI8+9u3k8fIWZiJFxIl5hxoUqzlCOFIZNEdfvM1nbPySf8oeE5e/4W/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CaAP5pPJ; arc=none smtp.client-ip=74.125.225.99
+	 In-Reply-To:Content-Type; b=Yy0XFnbpbg7wLFpS5xrUyhZNAOMuoVuhxv9oL7seZS8zMgfwxqpO+XrgKyo6XVBrsC/EFof8wBjllGd++1pSleZ5juWJjpSAUUekcASv43cOllb0JPFKjcqXrMs5Wv9p42WjjmboncThRrl+EmuVS54GG+jrTysDiNl3vnn+W9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nD5jehd0; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CaAP5pPJ"
-Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-4885d4825adso2486680f8f.0
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 05:01:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nD5jehd0"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ff9642c57so4137115e9.0
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 05:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790683260; x=1791288060; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790683349; x=1791288149; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GTReE5FyogOIDiEYxZgO9GD5/QvwXo0l8UPlZCtTrY8=;
-        b=CaAP5pPJyTjn3ksR7YNUjjokIhpNnWf9BUkPU/nX527gK0t1KbUBSFGb9hTtSRBHEM
-         stoNrU31S2JOr88/FvFQmJGLTq8nz9+5SN5Xd2Nrv42rzOOm1n04tIg11dzIAY2I2wHU
-         7r8RhoiY77zp+I0ReBFcPJvtv20ATZZuTPG9RH1NJ16P9AgdQXOJik0EbU0ehuGIZzs+
-         iRC+ZT2ftlD+9eU1Ha3GTE3fG9XPNlEJGLawYUcmBgE4Gn9F4kM9Wj6gT0amjQd11H4C
-         PPf+GD8QkR04kqDNGvkrMFth9fjxyLSFEdEu4PiZAeHewvNUfzjB/iPUNozR4K5I0T8+
-         QrwQ==
+        bh=25t3+cyX1TPzgjhiGoYamCjE9uBsBXHzwHyGo2dqa6I=;
+        b=nD5jehd0B01tU5MAmPCHBfC1w2TudAYVyp0Kd5X4iW3mD84KWMejL5dejiA0chU2Mt
+         vgSgaybHnVIJddWo5ngC/bOqgVoMeapmp+Isinjyd7I6utaMRM6df8XM8ZpR4iVhyFPo
+         e7VGjuOKq9mTDV2vv4Eh95Sr7HtiYjNbqiZtc3eOD8D1Wrzb16kmCLTfIprw9w6Hzdty
+         +BOq1BuSiCj6txG6EzyLzEJoNOdhisYyM0o65Cgryyk8d7QA//ZD7otWJa2d1OjPi0w/
+         5rWcavr4XQSZ/09mwDd5dAmJVfN3+m/eMBlG3kLUM5PP4iUYclY/mB8+bxvqws//nMK1
+         VCZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790683260; x=1791288060;
+        d=1e100.net; s=20260707; t=1790683349; x=1791288149;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GTReE5FyogOIDiEYxZgO9GD5/QvwXo0l8UPlZCtTrY8=;
-        b=rIBI0yP6DWNxH7UrhRB/BxXwCizbvfwUCz9WnEpdTvkhTbhzSyFUTO7TRmbZhcy0cH
-         fHc03ZmJ7bnIkobyDOKkEGtwcMuVEVCXzZRaKM1kiK5+T4ibUXBRpEH4bm9UOhdEwCAZ
-         V1Ek32IXhTKgPW9i82UBPDuWlsNjkJBBCCKicK4OKkVL++/9OVruE9OxfRDwA0kMGE0k
-         89S6XZyUadeDgU1R8nN7m7HjiElbJZiDRXXNPcBheLAtaC+FRJ8cLKWrG0lj7pu0Ydsn
-         ZozJPNRDgKv7ZP75t5Xk6y4ij1s9fyZJusQa3Q+sHH/yMR+vO5/xsuNc8epGVVnB9OxL
-         atDQ==
-X-Forwarded-Encrypted: i=1; AKwUvByN2VVyvvAvwHpE+L2nKBA4vPA2g4TtC0mKfjTmdmW5F3DRCENLvIKC/gJJUEmZgepPTtk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIR1qaE0a4zzA7iAO6Tl1IjJMmcYi6tLTOFIcMd1EtjTXEqBDHa
-	IAxlw+aHd1q/amJlD65Pzwk+CwSmxvM5i8LmG9a63igNV+fDRfbS2ZBE
-X-Gm-Gg: AYBFou0Tm80++khigeXlrUJvpY3ltEkHzhdC6naYk08taSWpROcpwV1qyBcEKAs6iRM
-	gZWHiPmXQ1drQZNci2n7iatiyFbH3rTpId6fwKgaIeEbUUQ/Zbyu8GEKfOXghHVuaWvKh/YfMZb
-	OJLKN2UQkik5Kpd48hSB06Z3Ay72vRgBlXA0Dhyc5/RKp2a6BxakI+M4swPoX1gU56JAVJNErG4
-	ZfjeTJ6AdGoCfunYQ24iOJP/zpR6GMpjscP8WLTJzVlV2hMrWEBBmotTxqt2l3cLXF04MqrCo6K
-	hSoAaZoEVf5bTR7IInBM8xxSGq/d0sZi61aH98aAis2cWHlH5tFDOp76jLtHkf5iG6cOMuM0O6U
-	g+zTAYn4Ukr4uoukHE3jlkGkjsISoQnnjAmPyOgSY9txi44M6R748mtFzAtaeE/gDClS4BZ+4O0
-	L8cImoQQBcFNFzLm1VG3r/Kd00yxwcrcXERbxOdgS/OBbzbdM2o/5prFjt23FQhHnid4ltW0nZz
-	9RYNU72OH5Fi+fEBUX5fp/FI4AJvFMVh3Q=
-X-Received: by 2002:a05:6000:29da:b0:488:7737:7e5d with SMTP id ffacd0b85a97d-48877377f92mr15591801f8f.22.1790683259515;
-        Tue, 29 Sep 2026 05:00:59 -0700 (PDT)
+        bh=25t3+cyX1TPzgjhiGoYamCjE9uBsBXHzwHyGo2dqa6I=;
+        b=rNwP8bX9WfKfyxrzrYZosYVUWjUmvz3HvG4VA464nkpEHjfeCnWWLNwoMz5U6CmZ/o
+         U4qznFHk+QIckBk/ha5jH3RkFd2BUwZAObPkPhBhi4uxFZA+FArFXSYlhCkdgem/aTUq
+         +4yCJvUslQLnZZid4oSMTfuBQ+r6tuXS8ZpOFutO13P8okbh+gjXKxfCPxhx/eSk5DOj
+         2lp3cZDk9KW6PNp60nGJeQ+cRXoieqhZ/PoXkIL+F3nmcCYQBa6kSUlOCSHiXUnfSDIp
+         e9Kgxs/8M8ru3XpBfrC8ryyFTpQe/0U/OF8Kxxb5HarJ81z30t+bIYZdu3eg+5I9vHhD
+         Gqjg==
+X-Forwarded-Encrypted: i=1; AKwUvBwiX10s1teNSoCsD2HSYnV+K9CAikJWiIdN0pc8lob+u46t46AWemMyHM6kVQiIuKAPdXQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++l9k/KBRVIDjTIgbZLb3sEyI/yvkR/V9Khv8UQ9lCI1qujwaQsx
+	ixAnThZtH/h8bSjpYP1JwlSLNEOzDXbV+c2+H9m5jhFZobU3Evb+pLjX
+X-Gm-Gg: AYBFou2TxDYVWjHYnEZTD+RThMhN7RwJSWVTRsUsjxyX4SURAHYPoeD89Hb6eulacMH
+	+QixnWSMROt4DREm/9QImOC3JaYTHa0Jo2v8kd1aueIaxapplgJIMeIttwUaH9JIO0Kjq8DkvWZ
+	2BGr43GpHmyf7CNq+rDletHfZEPTZHyHghpGo8fSHDp1vMAJoFvsi+YhmVE/4LtA3dKXugri/Md
+	J4ChQPl7ILxT1PJ2xtutzRhJSY2pvzWQccsH0+5b6I4bo0X3KvfIt3cQpENnSQiPF8ktSxCPTTM
+	tTdcqcEr4tYpVbDEJk3ZzlVOdUiQVDXinbZW9GjQx8rcFAl9/LNMbpSrtsXDu2m/DEB8i/F4c+O
+	WdSuzGPH/qQjulv+eU1Ay7VxeQL2Ff9jlMVgBWi0HcMo7JRVtM3kmYt5H++u6IYUU8KHTdLfnTP
+	EMtVWq+ehSAxQNLUmVWKuW0M301WHHmD8Vr4WBoavDydsi8jfD0YVwA2nNgs/Q7c/B04EAZw/wH
+	HjbqMjiowO7s06SjRZf4dB0TDRghWquVrs=
+X-Received: by 2002:a05:600c:4ec6:b0:49c:f13e:e4d with SMTP id 5b1f17b1804b1-4a00d770386mr37629215e9.10.1790683348633;
+        Tue, 29 Sep 2026 05:02:28 -0700 (PDT)
 Received: from ?IPV6:2a03:83e0:1126:4:bbf9:6e62:677e:7b50? ([2620:10d:c092:500::5:e8fd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48af502f491sm3308500f8f.12.2026.09.29.05.00.58
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00ed06ea7sm54200505e9.4.2026.09.29.05.02.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2026 05:00:59 -0700 (PDT)
-Message-ID: <e443d46b-1062-484a-a20e-20c0d85afa48@gmail.com>
-Date: Tue, 29 Sep 2026 13:00:58 +0100
+        Tue, 29 Sep 2026 05:02:28 -0700 (PDT)
+Message-ID: <434f2e94-190c-45cb-8d91-54310da039ea@gmail.com>
+Date: Tue, 29 Sep 2026 13:02:27 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,140 +70,115 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Add task work scheduling
- race test
-To: bot+bpf-ci@kernel.org, luyun_611@163.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev
-Cc: yatsenko@meta.com, bpf@vger.kernel.org, martin.lau@kernel.org,
- mason@kernel.org
-References: <20260929072800.113129-4-luyun_611@163.com>
- <9ea45b3f464aec62edb4a2797fe3450bae63a2d6c24666af13731730f89f39e8@mail.kernel.org>
+Subject: Re: [PATCH bpf-next v4 2/3] bpf: Prevent task work context reuse
+ while irq_work is busy
+To: Yun Lu <luyun_611@163.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev
+Cc: yatsenko@meta.com, bpf@vger.kernel.org
+References: <20260929072800.113129-1-luyun_611@163.com>
+ <20260929072800.113129-3-luyun_611@163.com>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <9ea45b3f464aec62edb4a2797fe3450bae63a2d6c24666af13731730f89f39e8@mail.kernel.org>
+In-Reply-To: <20260929072800.113129-3-luyun_611@163.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 9/29/26 9:12 AM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Add task work scheduling race test
->>
->> Exercise task-work scheduling and callback execution on different CPUs
->> while userspace reuses or deletes the associated map value.  Run 1500
->> rounds rotating through context reuse, deletion after the callback has
->> recorded its generation, and deletion racing with scheduling.
->>
->> Publish the scheduling result and its generation in one packed value, so
->> userspace does not rely on ordering between separate map slots.  Record
->> callbacks in separate per-generation slots so an earlier callback cannot
->> satisfy a later round's completion check.
->>
->> Retry transient -EBUSY results while the context is unavailable for
->> reuse.  In the deletion-race case, allow -ENOENT if the element is
->> removed before a retry finds it.
->>
->> Choose two CPUs from the process affinity mask and skip if fewer than
->> two are available.  Bound the thread-start wait, report thread creation
->> and affinity failures, and stop the worker threads with an atomic
->> handshake.
->>
->> Signed-off-by: Yun Lu <luyun@kylinos.cn>
+On 9/29/26 8:27 AM, Yun Lu wrote:
+> From: Yun Lu <luyun@kylinos.cn>
 > 
-> This isn't a bug, but could the changelog say which of the preceding fixes
-> this test is meant to cover, and which interleaving each variant targets,
-> instead of listing implementation details like the bounded thread-start
-> wait and the atomic stop handshake?
+> A bpf_task_work context can return to STANDBY before its scheduling
+> irq_work handler returns.  Both callback completion and task_work_add()
+> failure can publish STANDBY while the irq_work is still BUSY.  A new
+> round can then reinitialize and queue the same irq_work on another CPU
+> while the old handler is still running.
 > 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
->> --- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
->> @@ -5,10 +5,14 @@
->>  #include <stdio.h>
->>  #include "task_work.skel.h"
->>  #include "task_work_fail.skel.h"
->> +#include "task_work_race.skel.h"
->>  #include <linux/bpf.h>
->>  #include <linux/perf_event.h>
->>  #include <sys/syscall.h>
->>  #include <time.h>
->> +#include <pthread.h>
->> +#include <sched.h>
->> +#include <unistd.h>
+> One concrete interleaving is:
 > 
-> [ ... ]
+>   1. CPU 0 successfully queues ctx->work with task_work_add() and pauses
+>      before its SCHEDULING-to-SCHEDULED cmpxchg.
 > 
->> +static void *task_work_race_trigger(void *arg)
->> +{
->> +	struct task_work_race_ctx *ctx = arg;
->> +	int err;
->> +
->> +	err = task_work_race_pin_cpu(ctx->trigger_cpu);
->> +	if (err)
->> +		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
->> +	__atomic_store_n(&ctx->trigger_tid, syscall(__NR_gettid),
->> +			 __ATOMIC_RELEASE);
->> +	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
->> +		getppid();
->> +	return NULL;
->> +}
->> +
->> +static void *task_work_race_target(void *arg)
->> +{
->> +	struct task_work_race_ctx *ctx = arg;
->> +	int err;
->> +
->> +	err = task_work_race_pin_cpu(ctx->target_cpu);
->> +	if (err)
->> +		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
->> +	__atomic_store_n(&ctx->target_tid, syscall(__NR_gettid),
->> +			 __ATOMIC_RELEASE);
->> +	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
->> +		getppid();
->> +	return NULL;
->> +}
+>   2. The target task on CPU 1 completes the callback, resets ctx->task
+>      and publishes STANDBY.
 > 
-> This isn't a bug, but could the trigger and target threads share one
-> function with a small per-thread argument (cpu and tid pointer)? And could
-> the repeated 2000000 / 100 poll bound become a named constant, like
-> TASK_WORK_RACE_ROUNDS?
+>   3. CPU 2 starts a new round, changes STANDBY to PENDING and queues the
+>      same irq_work.  The new handler changes PENDING to SCHEDULING, but
+>      task_work_add() returns -ESRCH because its target task has exited.
+>      The handler has not yet reset the context or rolled back the state.
 > 
-
-I think this is worth addressing.
-
-> [ ... ]
+>   4. CPU 0 resumes and changes the new round's SCHEDULING to SCHEDULED,
+>      even though no task work was queued for that round.
 > 
->> +		err = task_work_race_check_done(skel, seq);
->> +		/*
->> +		 * Variant 2 deletes the element right after READY, so losing
->> +		 * the race against the scheduling kfunc is a valid outcome:
->> +		 * the schedule itself fails with -EBUSY (ctx already FREED),
->> +		 * and the retry on the next tracepoint invocation fails with
->> +		 * -ENOENT because the element is gone.  Either way the round
->> +		 * exercised the deletion paths; a later variant 0 round
->> +		 * recreates the element.
->> +		 */
->> +		if (variant == 2 && (err == -EBUSY || err == -ENOENT))
->> +			err = 0;
+>   5. The new handler resets ctx->task, but its SCHEDULING-to-STANDBY
+>      cmpxchg fails.  The context remains SCHEDULED with a NULL task, and
+>      subsequent attempts to acquire this context fail with -EBUSY.
 > 
-> This isn't a bug, but can err actually be -EBUSY here, given that
-> race_sched_work() returns without publishing RESULT on -EBUSY? If not,
-> could the condition just check -ENOENT?
+>   6. Map-value deletion observes SCHEDULED and queues asynchronous
+>      cancellation, which passes the NULL ctx->task to task_work_cancel().
 > 
-> [ ... ]
+> Overlapping invocations also share one BUSY bit.  An invocation can clear
+> that bit while the other invocation is still running.
 > 
->> diff --git a/tools/testing/selftests/bpf/progs/task_work_race.c b/tools/testing/selftests/bpf/progs/task_work_race.c
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/task_work_race.c
+> Initialize the scheduling irq_work when the context is created and stop
+> reinitializing it for each round.  After claiming the context with the
+> STANDBY-to-PENDING cmpxchg, check BUSY and reject reuse with -EBUSY if a
+> previous invocation is still in progress.  Checking after the cmpxchg
+> orders the BUSY read after the STANDBY publication.
 > 
-> [ ... ]
+> No irq_work has been queued for the attempted round at this point, so
+> the rejection can roll PENDING back to STANDBY.  Use cmpxchg for that
+> rollback to preserve FREED if a concurrent deletion has published it.
+> Once BUSY clears, scheduling can be retried.
 > 
+> Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
+> Signed-off-by: Yun Lu <luyun@kylinos.cn>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+
+>  kernel/bpf/helpers.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
 > 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36538172291
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 028fc6796b59..350269b8646e 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4553,6 +4553,7 @@ static struct bpf_task_work_ctx *bpf_task_work_fetch_ctx(struct bpf_task_work *t
+>  	memset(ctx, 0, sizeof(*ctx));
+>  	refcount_set(&ctx->refcnt, 1); /* map's own ref */
+>  	ctx->state = BPF_TW_STANDBY;
+> +	init_irq_work(&ctx->irq_work, bpf_task_work_irq);
+>  
+>  	old_ctx = cmpxchg(&twk->ctx, NULL, ctx);
+>  	if (old_ctx) {
+> @@ -4595,6 +4596,18 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
+>  		bpf_task_work_ctx_put(ctx);
+>  		return ERR_PTR(-EBUSY);
+>  	}
+> +	/*
+> +	 * STANDBY can be published before the previous scheduling irq_work
+> +	 * returns. Claim PENDING before checking BUSY to order the check after
+> +	 * that publication. No irq_work has been queued for this attempt yet,
+> +	 * so reject reuse and roll back to STANDBY while BUSY is set. Preserve
+> +	 * FREED if deletion wins the rollback race.
+> +	 */
+> +	if (unlikely(irq_work_is_busy(&ctx->irq_work))) {
+> +		(void)cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_STANDBY);
+> +		bpf_task_work_ctx_put(ctx);
+> +		return ERR_PTR(-EBUSY);
+> +	}
+>  
+>  	/*
+>  	 * If no process or bpffs is holding a reference to the map, no new callbacks should be
+> @@ -4644,7 +4657,6 @@ static int bpf_task_work_schedule(struct task_struct *task, struct bpf_task_work
+>  	ctx->map = map;
+>  	ctx->map_val = (void *)tw - map->record->task_work_off;
+>  	init_task_work(&ctx->work, bpf_task_work_callback);
+> -	init_irq_work(&ctx->irq_work, bpf_task_work_irq);
+>  
+>  	irq_work_queue(&ctx->irq_work);
+>  	return 0;
 
