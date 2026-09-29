@@ -1,236 +1,230 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB8652120C
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 16:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B83252120C
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 16:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790699748; cv=pass; b=F3SueuqUAYIB5nqQf67jcDfdJCF9cpqYTNVfhwIixBaonfDYjhRt7rh6/JUTvmRZ9Hcyd22/nksSJfBYHuT0EjtvgZGAuEa3DDVTSIKSUUuZeeRhIayeVxoPVkiwjSRdguRBsmk0gUVuTgC0C6v7mMVo67Y7UScUNMEHWbwn1aE=
+	t=1790699835; cv=pass; b=gVVz4BIV500mHzDpeF/6ncZ38Jmhn/YFa91MKvXl06vihqnrRAwwDFY9CH4alDzTok/1gd38p/oh7n8qH0Sf3CXZb+hjoa2V+yGEwQf9hynyrLM4YjTN3uURUTCs1Y4OiCXtBvm+ebQsKMTQgarNWHa5kU7XeEQuvSWT1gYELOk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790699748; c=relaxed/simple;
-	bh=0p3ig6siP4sHsCraok5QIGsO9n0Tprr3D6KZrCbEgbo=;
+	s=arc-20240116; t=1790699835; c=relaxed/simple;
+	bh=gpWvrYH4Wp1rA5cCsHTR8gtqaJv0xEqoXZZCd8jv1EM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y2R1fA2msuP1pxxeGruEnqsr8NkSeihoGZtvixg2TELyY8tN39//e0yHq0Y9TICVBqOJLMc0uB9Eiq/xD2/LbEMduQLYSNWNP71h+2x5y9JIjg9J3Bdm7DZWvFP8ri2dXVCx/2AQ5yNObfe4GYdONxd7Dg4tRNFQ7g9HpyCUElw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QRHCKk2A; arc=pass smtp.client-ip=209.85.128.47
+	 To:Cc:Content-Type; b=QhBPYZ/MMvl0N40vIWO0rjNu5cQaiMGIxg1dBcJVGXgiDvRQPMM74E6ZsMPJL4jNXhahHVizQd00ZB1kKAhttyCfUUGCZm52VpUTcx+nOiJxaAA5+yKwajYHlX/LVp3k6kqfH1w2W6kauPSnNmQsdFxX0k0QYSJLOzbPaQ25ECU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GV2BFO0b; arc=pass smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QRHCKk2A"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-49e6425f96eso53005e9.1
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 09:35:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790699744; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GV2BFO0b"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a0061bf0d3so55985e9.1
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 09:37:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790699832; cv=none;
         d=google.com; s=arc-20260327;
-        b=coEMgDVlK3rkDjI3scVvCba8C5G7NjDcF0JEi8CwJum5Do2vgKRJV9Ww2vojm+9Mzx
-         hU7n2QwWgt5Spu02JOq5Rc9N8rXWZx1/dOaOtls7Vjd8sg9jNMcVjlRqZZC4hLrOVebK
-         VG4r6aJs1W9r91tND5aIHumckP0Abh9BF0TNh2r/ht2NGUcvdVPD1dGs1BX0mnpJw2WX
-         pijWg6y34V96HpuI2WrUzIIzwMTKWDDGgZIKXRbPPkk1l+l3/GEBFdS7bONSmOlL1zmH
-         SV86WACvGzqighz0oeWG79TZoSYjRJ+m+af83lbpaEcr4bLl6Lscvkd+x5awmlaoaCC5
-         psLQ==
+        b=JpZmKpfdvzpEOWbWOw6xoeYPhEZ5y6CIYd5KTX9rMLPwp7WOgFDz/oGz18trL4Ya0f
+         ACEIfMARiYPSY5IsbutI3OL7Q8k4pgGYsVgvxd5Yw19T4HTG2MQnANEZb73yx3E3MXWS
+         B6GH7H/FcMhV1NMjFNUVk6kaetf/hkAF9xXcx3jy00F6HQAhqJMCBJNe9CCFNNjNNvAa
+         k7RJIa4ybvLwUlyhcqQU9Q4l07aLAdjJtp2fhlIpyYvXKUgg/aJkLm9QQOMVpswWeOQy
+         GGmlbia06AcrbgfoxjZ+zmVoVM39evWcFdvwTiQ/6ECRFbcotoSg72Hovwm++KczbBqf
+         4Rlg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZzlAYjPHzUF+Xy0aA/hzlKYo4+ZBDVDnjvm4B+qH4Ao=;
-        fh=bYv/4OUg++miTxjnoNrpnFotx94Trc5Bs2P2btRtFwQ=;
-        b=EwrKLl4KyfCKTM4vPu5mddMefLOQsm/00aJKmtE7e4oYD1OzirnQh8NzoGSQdFBcdB
-         v21hhvaB9GtFLS5aXWBctp9xTC9M2Gv1qZNW4sYXax7NTrQ65T0YFm4bd3rq36HoF4BP
-         nh5z7/Z9tiPiLKkAlGmkf0JEPmS4lgE4CjohGSrXKgjLXICjMdSDlzeBblmBF2JlQoiy
-         ia2HkEbV/hftdIh1sdGSYWGIh+2eTWrX8M7YrT5BtMTEzA9st+dvIZt4/VJVxbz6uhs9
-         fNM4EAVJo2xzrF49KtZV7We5oa/9mJO8NiJhnlg38yARIMvjtMfXMUjkpuTvaeWNtYYa
-         iN6A==;
+        bh=le2DxLCPEDrr2PRm44y3xvUUCI3+IOhlaSJ1r852sqE=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=T2EF37YcIxzZO5Ux07+kldyG4v3RTscMKQ/dfiy94/8r4PzgIDtF7zbPtBUKPvQhTt
+         nX+NQOHGqiKj9rvPM/im+n0hVEzoofiM5vd+DSlcZVKaecq7PALETkK3q4xPWPp9lSH8
+         ayrgWFIaYFGOLLvP2O1cEb2XnSzhtMUuaVpDmHTr3DDB85gT/LlCua8lwH0gwUzs8Ym5
+         S7fF1+L4njRHbkz07EaoVoI3u5B6mvjE8TSZ2bb67wPF8OJZfxkOxGFA6DTM9cm+qZ88
+         a4TWf2swySvPHyncbDrys1yfgEDttTYpzbIdAKoAvhuO+PO4ASN9jARu5OAJM3Ny+OPJ
+         x5oA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790699744; x=1791304544; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790699832; x=1791304632; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ZzlAYjPHzUF+Xy0aA/hzlKYo4+ZBDVDnjvm4B+qH4Ao=;
-        b=QRHCKk2AH1o5UqLCJ4EkE7XehSk8K10RjrPqPAXa9csb8xl0v87anuE1k25D6UYeac
-         oE16ZYXN5oMcjBENX6d+b+Q8EYUVMLOiGym6zgFJWq0ZiqRMiWoFksSWoAYalwp4Q1jn
-         tkHUOnIhRJxXT3GCRzhQ4RrnwMVPTpegJOXqyiVwnrd7rJZfHGQcoAmeJ5sB4Qr3iluN
-         fXv985E2+BuvVx0658TGCXfRyHK1iqzrID04PhgRv4M0S1UNyWsvie0mUgxy1RWMNbTL
-         ZBt7IyagEAEKEnMfKO3v+/0J5JU6DpMMphy2FE+0aitfhpUidny77nvvlQD5nklshAut
-         GiJA==
+        bh=le2DxLCPEDrr2PRm44y3xvUUCI3+IOhlaSJ1r852sqE=;
+        b=GV2BFO0bIlTa9DZx84Gxi8vu27vHvmGG87na9h9rmkqEuX3Df4m4dkvQ6jpfXS8bmV
+         rqxiPAP5mLYMHqukcDqxkl167LiEIeLWTDkV/CSQ+Hf8LpFK4+QPAwVm0LmEmZZIeiX6
+         UOpoz+c0KDerDkeutmKWFBvo2NZ3YMOhkAVZi1oGRyvVhcIyHPPBtYI4JF/Ip1PCOUss
+         EP0gLPwUTSUk7izU3pusuC2/bUdwP31qCdki0QgF0PhK6XaqdaIsgxP3K5Epy4nN+sov
+         7SISRVjQJMOpAk+cOAYLn3FfH9JOZglgyfeeo0bCFfunQlhRQcuQO7zLzTuB6+fmPi3z
+         hgYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790699744; x=1791304544;
+        d=1e100.net; s=20260707; t=1790699832; x=1791304632;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZzlAYjPHzUF+Xy0aA/hzlKYo4+ZBDVDnjvm4B+qH4Ao=;
-        b=nstHKoIc/xYZkx4wlWdDAqiNY0ihL1qD//vGkgPin9+e9fDBMDbPTxwqDeSy0PUcXz
-         3sGt4bif2SH4qCaOH17qjoS43KSPUGjVwNvv1tu0+BswnHGtO/wgn4PdBQwUxta7HTFb
-         G7OoQzetaZCk6kZZbjg9TAgkHhDSkJyDuR5LpRF+E6wpfK4ghIdQNQtzY5drdA0J7p4Q
-         jA2aLMRL7uafMw8vyE+xE+bJ9Kqbu22y9/YDKZKrZuRZ7iH8XC7P7ncFMdkjRvKLGuRK
-         ks/Gy/qGPcIFAwTLGWHWLIctjel89XQFAy0xsydpOWtdgcr1SLZWHU4zE9wkFeqk/IgX
-         /ILQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwxFzGpDQXKFaEcbkghnShmsfxUrTvwjHKFd1/TmrYsySs/SR+lQyRJUE7klPlD+Xa2i9Q=@vger.kernel.org
-X-Gm-Message-State: AFuF++lUX9pwr6vzIa0ZJhgaAyLN5HopGG74qY1B2/66erHg6pajerqa
-	G4/e6HCqYyn2iOegLjYhI60QcPhMjY+2wCrSaxCdo4UBqJ0DUI6yuvOHsQfUU+53ASZFU3gw66Y
-	oSymUqilL5itOQjOucWy+ofrEdi4+qHcCMKH9Hbkp
-X-Gm-Gg: AYBFou3F1gC+efGLaV2WQ5GNSYfJ9oG3KYPMjRI6QzyPpS5oqvbxYtsZs5O4TzRTeun
-	WjkqNiM0F6NLiBy6z/maAeWWeLFQFlKUHL7Qdrfc3UbDqfmMytpSomZuccK6VodlgizD+t/12dc
-	WsKdew3FKPlVNS7Esv6JUG/lV5iQ0HyeOxt7f7CnBbqMtkuAC1jVfGr3Wf+MlB7sxHgAzua776r
-	hztIdRGccWeXR6jtcGj2MUbM7NCAlvgnkPR2VvfI/ZfSyAoEQZ72YbVC4XN8wXph/VUfJ7ttZi3
-	7X7Bea+MRo7Y8Ng6cubA12Q+VF0Ka4x6Rq4bxtuO3sisnkN5aNGPA5vP9jj6gJuaNi4Bz8NhMS9
-	Nr4jjnMRAmTFzNZA98Fs9MkhczFZtkYZs4Bpe/AAN68k5xQ==
-X-Received: by 2002:a05:600c:5715:b0:4a0:1282:cf4 with SMTP id
- 5b1f17b1804b1-4a012820e67mr411905e9.11.1790699743986; Tue, 29 Sep 2026
- 09:35:43 -0700 (PDT)
+        bh=le2DxLCPEDrr2PRm44y3xvUUCI3+IOhlaSJ1r852sqE=;
+        b=qx88ZuYczSyU5oD3O+6UkYKOu3TeGDYuAW66WCTtY7+IDjQeMbEkZOHPOmyLd4aqky
+         bMvoBgjGfRvt5r4MWT9tFJrs1H3hKS8/f6CiiPk0jAcXBx1xQB2jiq+4emCo0iSlDAYP
+         0Xe6tO5O8Z8R40wntO2GjJemNvxY8CE9lrFQy2NtyijL99+GvzCdhBKxrF0iNx5w05iX
+         Etz5bKLfJiI7VAjnaG3+ufJNZI9uMBDKgnRy6Oj7ykkg62i+lkdvSy7Kp/MEOgENapxl
+         bqq5ocSQo9QvFBcjCHgxSB/1En644BEflhM3D9MX+216kue2FFZCdepeKK1mIFZCAnPB
+         y1aQ==
+X-Gm-Message-State: AFuF++lo0aBn2E2INS6v12O6JcO/NIfw5cU+JS3sUiUb2Rm2AJp/xVL7
+	ABhRdkj5Ynzt/HiehDD6TWWnP/gWRxPjayxSptqj3r77tzuGPLNf7tyZoWo2zeIVFFdFcAV+pvT
+	Je8wQO1IKoLcB9YZn9n03Lsy8ZxxgBIZK21sfWSxU0rjU9IesiuNBJm/oQCE=
+X-Gm-Gg: AYBFou3h8e4UuO4kvO0j2sQfTVec87WpVXF3IVDEgmnCFDI1GyhKNYbEB65/85tSJsL
+	sRmUpHtbwE+mTQs7ZT1n/D+cDqI7j50fWpxi8KEYrnVt/xAp9HO3/5Zb0//fIJCYI+zF55Uywe6
+	Ia/CaVibZqjSQhf3U/bdeVg6jvQzM9/oZ48tQwLRF8foYnixuXGKge2s42A0TM8FMemh/JGt3PU
+	2iRvCbzqQBBRDFv3zYAsc74xaNU7AZF24jWqrQjbwKI6okhLQVYaZxhvQlglv/0FXEt/wW9I98u
+	1Ai0xcA6ya8yzhF4meSyMp6xPs3SJt71JYRxgMiGiQQ+aOaqLyD1bxa2C2u67S+XSE335XB4rzb
+	L85+kIFaEfCxzjQAH/nTEMnusqF6yKprcbNmDqXTbXT5e5w==
+X-Received: by 2002:a05:600c:a117:b0:4a0:1034:7fe5 with SMTP id
+ 5b1f17b1804b1-4a01034809dmr833175e9.14.1790699831262; Tue, 29 Sep 2026
+ 09:37:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260928150121.1712559-2-tjmercier@google.com>
- <714f119d120fb9ba4aa7e82af621edb7bc97813a760c9dd2cb5363c55b7365a9@mail.kernel.org>
- <1b41e278-f00a-4e25-a319-ba69186d92c9@gmail.com>
-In-Reply-To: <1b41e278-f00a-4e25-a319-ba69186d92c9@gmail.com>
+References: <20260928150121.1712559-1-tjmercier@google.com>
+ <20260928150121.1712559-3-tjmercier@google.com> <20260928151833.31C8F1F000FF@smtp.kernel.org>
+In-Reply-To: <20260928151833.31C8F1F000FF@smtp.kernel.org>
 From: "T.J. Mercier" <tjmercier@google.com>
-Date: Tue, 29 Sep 2026 18:35:31 +0200
-X-Gm-Features: AclHuK8T-LyWIRVBeNrxuScl6NHMsb-famc_6WB_6okWGHfF_SQujmf4Poi45Ao
-Message-ID: <CABdmKX3X7P5USNsJxmkVjBg6SW=UtkK=Pusviz0ibzhaL2A0CA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 1/2] bpf: htab: Split htab_elem_lru and
- htab_elem_pcpu off of htab_elem
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+Date: Tue, 29 Sep 2026 18:36:58 +0200
+X-Gm-Features: AclHuK9PvrsgxSgm9vpblUUY7Rb3eicL2q1Rd7eVI6sOT19pqPxF17s79AFhmlM
+Message-ID: <CABdmKX2ZonMzkiXKQNvNSNo8bNrWjb_JwR9YsDpwF_bs_C1Njg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 2/2] bpf: htab: Reduce elem_size by 8 bytes
+ for small key sizes
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 28, 2026 at 8:31=E2=80=AFPM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
+On Mon, Sep 28, 2026 at 5:18=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] bpf: RCU readers can match recycled elements causing UAF/corrupt=
+ion
+> --
 >
+> commit 1b9a82a1c5a80781d8a76b226efc1db28e064ff2
+> Author: T.J. Mercier <tjmercier@google.com>
 >
-> On 9/28/26 4:46 PM, bot+bpf-ci@kernel.org wrote:
-> >> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> >> index 53c99fe4f176..5db11a21ce98 100644
-> >> --- a/kernel/bpf/hashtab.c
-> >> +++ b/kernel/bpf/hashtab.c
-> >
-> > [ ... ]
-> >
-> >> @@ -828,8 +861,12 @@ static __always_inline void *__htab_lru_map_looku=
-p_elem(struct bpf_map *map,
-> >>      struct htab_elem *l =3D __htab_map_lookup_elem(map, key);
-> >>
-> >>      if (l) {
-> >> -            if (mark)
-> >> -                    bpf_lru_node_set_ref(&l->lru_node);
-> >> +            if (mark) {
-> >> +                    struct htab_elem_lru *l_lru =3D
-> >> +                            container_of(l, struct htab_elem_lru, ele=
-m);
-> >> +
-> >> +                    bpf_lru_node_set_ref(&l_lru->lru_node);
-> >> +            }
-> >>              return htab_elem_value(l, map->key_size);
-> >>      }
-> >>
-> >
-> > [ ... ]
-> >
-> >> @@ -1310,16 +1349,19 @@ static long htab_map_update_elem(struct bpf_ma=
-p *map, void *key, void *value,
-> >>
-> >>  static void htab_lru_push_free(struct bpf_htab *htab, struct htab_ele=
-m *elem)
-> >>  {
-> >> +    struct htab_elem_lru *l =3D container_of(elem, struct htab_elem_l=
-ru, elem);
-> >> +
-> >>      check_and_cancel_fields(htab, elem);
-> >>      bpf_map_dec_elem_count(&htab->map);
-> >> -    bpf_lru_push_free(&htab->lru, &elem->lru_node);
-> >> +    bpf_lru_push_free(&htab->lru, &l->lru_node);
-> >>  }
-> >>
-> >
-> > [ ... ]
-> >
-> >> @@ -1500,15 +1543,18 @@ static long __htab_lru_percpu_map_update_elem(=
-struct bpf_map *map, void *key,
-> >>              goto err;
-> >>
-> >>      if (l_old) {
-> >> -            bpf_lru_node_set_ref(&l_old->lru_node);
-> >> +            struct htab_elem_lru *l_old_lru =3D
-> >> +                    container_of(l_old, struct htab_elem_lru, elem);
-> >> +
-> >> +            bpf_lru_node_set_ref(&l_old_lru->lru_node);
-> >>
-> >>              /* per-cpu hash map can update value in-place */
-> >>              pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
-> >
-> > [ ... ]
-> >
-> >> @@ -2505,7 +2551,10 @@ static void *htab_lru_percpu_map_lookup_elem(st=
-ruct bpf_map *map, void *key)
-> >>      struct htab_elem *l =3D __htab_map_lookup_elem(map, key);
-> >>
-> >>      if (l) {
-> >> -            bpf_lru_node_set_ref(&l->lru_node);
-> >> +            struct htab_elem_lru *l_lru =3D
-> >> +                    container_of(l, struct htab_elem_lru, elem);
-> >> +
-> >> +            bpf_lru_node_set_ref(&l_lru->lru_node);
-> >>              return this_cpu_ptr(htab_elem_get_ptr(l, map->key_size));
-> >>      }
-> >>
-> >> @@ -2521,7 +2570,10 @@ static void *htab_lru_percpu_map_lookup_percpu_=
-elem(struct bpf_map *map, void *k
-> >>
-> >>      l =3D __htab_map_lookup_elem(map, key);
-> >>      if (l) {
-> >> -            bpf_lru_node_set_ref(&l->lru_node);
-> >> +            struct htab_elem_lru *l_lru =3D
-> >> +                    container_of(l, struct htab_elem_lru, elem);
-> >> +
-> >> +            bpf_lru_node_set_ref(&l_lru->lru_node);
-> >>              return per_cpu_ptr(htab_elem_get_ptr(l, map->key_size), c=
-pu);
-> >>      }
-> >>
-> >
-> > This isn't a bug, but would a small helper keep these call sites to one
-> > line, matching the pcpu accessors this patch adds? Each site now repeat=
-s
-> > the same container_of(l, struct htab_elem_lru, elem) boilerplate follow=
-ed
-> > by bpf_lru_node_set_ref(). The patch adds htab_elem_get_ptr_to_pptr() a=
-nd
-> > htab_elem_set_ptr_to_pptr() for the pcpu variant, but open-codes the
-> > container_of for the LRU variant at every site.
-> >
+> bpf: htab: Reduce elem_size by 8 bytes for small key sizes
 >
-> this sounds like a good refactoring:
+> This commit reduces element size for standard and non-LRU per-CPU hash
+> maps with small keys by omitting the 32-bit hash value. For these small
+> keys, it relies on a single atomic instruction for key comparison and mov=
+es
+> the new key assignment to the end of element allocation to avoid exposing
+> uninitialized values.
+>
+> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> > index 5db11a21ce980..7a8049cc99828 100644
+> > --- a/kernel/bpf/hashtab.c
+> > +++ b/kernel/bpf/hashtab.c
+>
+> [ ... ]
+>
+> > @@ -734,35 +784,60 @@ static inline struct hlist_nulls_head *select_buc=
+ket(struct bpf_htab *htab, u32
+> >       return &__select_bucket(htab, hash)->head;
+> >  }
+> >
+> > -/* this lookup function can only be called with bucket lock taken */
+> > -static struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head=
+, u32 hash,
+> > -                                      void *key, u32 key_size)
+> > +static __always_inline struct htab_elem *
+> > +__lookup_elem_raw(struct bpf_htab *htab, struct hlist_nulls_head *head=
+,
+> > +               u32 hash, void *key, u32 key_size,
+> > +               struct hlist_nulls_node **out_n)
+> >  {
+> >       struct hlist_nulls_node *n;
+> >       struct htab_elem *l;
+> >
+> > -     hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
+> > -             if (l->hash =3D=3D hash && !memcmp(&l->key, key, key_size=
+))
+> > -                     return l;
+> > +     if (htab_has_hash(htab)) {
+> > +             hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
+> > +                     if (htab_elem_hash(l) =3D=3D hash &&
+> > +                         !memcmp(&l->key, key, key_size))
+> > +                             return l;
+> > +     } else {
+> > +             /*
+> > +              * When hash is omitted, key comparisons must be atomic. =
+Zero extend
+> > +              * the caller's key to the word size to support an atomic=
+ compare.
+> > +              */
+> > +             unsigned long k =3D 0;
+> > +
+> > +             memcpy(&k, key, key_size);
+> > +             hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
+> > +                     if (READ_ONCE(*(unsigned long *)l->key) =3D=3D k)
+> > +                             return l;
+> > +     }
+>
+> [Severity: High]
+> Can an RCU reader searching for a deleted key incorrectly match a recycle=
+d
+> element here?
+>
+> Without a hash field to act as an epoch check, it seems a lockless reader
+> might accept an element that is currently being reallocated if the stale
+> key hasn't been overwritten yet.
+>
+> [ ... ]
+>
+> > @@ -1225,7 +1302,18 @@ static struct htab_elem *alloc_htab_elem(struct =
+bpf_htab *htab, void *key,
+> >               copy_map_value(&htab->map, htab_elem_value(l_new, key_siz=
+e), value);
+> >       }
+>
+> [Severity: High]
+> If a lockless reader successfully matched the old key in __lookup_elem_ra=
+w(),
+> could it observe the element in an inconsistent state here?
+>
+> While the value is being copied (or a new per-CPU pointer is being initia=
+lized
+> earlier in this function), the reader might read corrupted data. In the c=
+ase
+> of a non-preallocated per-CPU map, could it dereference the old, freed pp=
+tr
+> leading to a use-after-free?
+>
+> > -     l_new->hash =3D hash;
+> > +     if (htab_has_hash(htab)) {
+> > +             htab_elem_set_hash(l_new, hash);
+> > +     } else {
+> > +             /*
+> > +              * Zero-extend key into k for an atomic write to support
+> > +              * lockless RCU readers.
+> > +              */
+> > +             unsigned long k =3D 0;
+> > +
+> > +             memcpy(&k, key, key_size);
+> > +             WRITE_ONCE(*(unsigned long *)l_new->key, k);
+> > +     }
+> >       return l_new;
+>
+> [Severity: High]
+> Does delaying the key update to the end of alloc_htab_elem() inadvertentl=
+y
+> leave the old key intact while the new value is initialized?
+>
+> While this prevents premature matches on the new key, it seems to expose
+> the element to readers searching for the old key, breaking the RCU safety
+> of recycled elements.
 
-That sounds good to me, it shrinks the diff a bit. I'll do that in V8.
+Discussed this topic here where we decided not to increase costs for
+all callers for this case:
+https://lore.kernel.org/all/CABdmKX1vF-FD4mFmmobNJeKjQLdZ9wztqGTcR4P9tSv_nE=
+FsYw@mail.gmail.com/
 
-Also, thanks for the Ack!
 
-
-
-> static inline void bpf_lru_node_set_ref(struct htab_elem *l)
-> {
->         struct htab_elem_lru *l_lru =3D
->                 container_of(l, struct htab_elem_lru, elem);
->
->         if (!READ_ONCE(l_lru.lru_node->ref))
->                 WRITE_ONCE(l_lru.lru_node, 1);
-> }
-> >
-> > ---
-> > AI reviewed your patch. Please fix the bug or email reply why it's not =
-a bug.
-> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/REA=
-DME.md
-> >
-> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/3644=
-1357391
->
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260928150121.17=
+12559-1-tjmercier@google.com?part=3D2
