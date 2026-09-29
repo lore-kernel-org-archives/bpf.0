@@ -1,928 +1,196 @@
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2293BFE3E
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 22:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF643655EE;
+	Tue, 29 Sep 2026 22:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790720625; cv=none; b=Q2IBva44yARztehOXC6r4Bt+phG2uZn6E3v/lPRuIojytzzVuiqQZK/W7NMI6QRgLurAGfKcJu35ZyOAIKIXZg4cXx1+y4QxvviTB9CgJkPMCdoSqfc4mieql8gCB13NKAbLKRqUVZt6hYXYqGEgrkvuL7oKHGZgGKBWVs319VE=
+	t=1790720905; cv=none; b=FE71H8YMXypGuzJxvwoZYVyyeoWSWw6kLgV9JlZivjeFdua2FyqGROyefhlY/Ha0nChMfhNqn02IEOa5CYUdsfVhJiJpvkrZoncHyM2JngGLF7WyuBscChODUPc9xRGlWbMxoG8eeBIyBbL8ZOX8T9o4ZJCkDbhwHTN/s7NiCd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790720625; c=relaxed/simple;
-	bh=1cd+fsXjbY6Ole3IBC/NoQys1al5cJX/UgsBObpqKw4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TKCYpTAOK5OhuOyCXdps3XYnSmN1iJFR041YyaWiF+CCKfQ9vHNiT+rgBbGgeW0eGmm+m1vBP7C4Sirvobd0Ji3sT53bcOLqMgIc08SAl6FTgD5T1oLx/iN5aZ9Pl9P0rD2JpoeQt3ExFlYBZseApODvQIhmgjVenD78yi3K4vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Hx2Js6bs; arc=none smtp.client-ip=74.125.82.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1790720905; c=relaxed/simple;
+	bh=IjJFkVoow9lHuhMr+xYKiGwuAIazdHHcppA/oWYAze8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fm1mV4W/68JejNuf78ywC66ysWghKgdGumvxpeFAVLJ4BkpO7VR3Gqq4G1bRmwIw1FwTFCoX6NX6y8K94NaQ7ldDThBsjlnnmOxFZTthDH111tXhKJWpmlcccuDJJKoEn3wt7wkH/tMZ76h2PcRxlEjZblUww2KwLfDJBKpKWC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNnxeGjE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Hx2Js6bs"
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-341eff9e381so4878454eec.1
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 15:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790720621; x=1791325421; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7Z7ViMG/V6ZZSnId83Ius3GMe5V6F76ypw+4mSbHSM0=;
-        b=Hx2Js6bsBiTTirv66UzK/eOJsuFdNehdNVT1CO5dbEfDcXthWf/ub0WncWJ28Giewa
-         BkCdzgCjjU+AtfcXR9Mnk853badMEm/Kd+uDW0ZSKS0aD0Pc+nlNxZ5xqPh7M/jh9wYg
-         v/ksOH7UqZ6AA/idYbf1mVHtHPDuzm9OKvH2tOK6FDboqM7WCaTUrR7jI23T5phJXxd3
-         WONJTCLDm02KJWkVncNl3j0YKi3pAZXKYiplhjJ0ax/pK5SnBCX8vDqVV2BeGxG5eIjW
-         UWBNVCqc62KWUxQ+64cDPDAxJ85d++k8J5Ocg3gxQAh6nJk8pRbYD5S0ftVudEpzgjFr
-         ZT0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790720621; x=1791325421;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=7Z7ViMG/V6ZZSnId83Ius3GMe5V6F76ypw+4mSbHSM0=;
-        b=N/E6z+V6ZSYwfjUa3RDVp8j5rAlyFgn5jKhJDXV6zlasjjP15qY71b1aRdSCEQUJGd
-         B1b0R30o0aUwfqz47ABIoCsGKw2loCTW2j8Q8tXPOhyISNtPkOulQO2tKu8mGBM0oMry
-         sxcnzUOF0uwb1GdOSsUl16nQiZH8ljByPR8liTEQXTgR2NLUe0feIZWh87q/P33LZG4H
-         N/2N7wxDQbS4jC3iATavKb9o4Rs6W8qybEs8qMPeRkRClBlzEWOnxe92nZYJSujW2FiU
-         6reqxCYMJ27Hda1Eipbu8wQ807UefybQNOnKUfcKbRo3IeKVCLkPYbj+gTHY03h7GwdG
-         Rozw==
-X-Forwarded-Encrypted: i=1; AKwUvBxwxRLkV4qq0UHtx9u/53AZqUl/AsoVFNnwMvcLkeOhPIabdMBeUvYGoF+gMu1so7twvA8=@vger.kernel.org
-X-Gm-Message-State: AFuF++l3vGDFx+jovnGD11AfP+UnSlew5RGwSFL/8R1hcjgk/pXn1oJd
-	pvqnFGg0AHjpfwexMt4zDlBrAifAWw/3ByTi4bpYcV5xie/wAMJ3cxlAkpZiqvvfCO8fKZ+pRn0
-	+un6qL4a1Yg==
-X-Received: from dlbuu7.prod.google.com ([2002:a05:7022:7e87:b0:13f:c1b7:470])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:f909:b0:143:298f:33b6
- with SMTP id a92af1059eb24-14c9ed3ada6mr653078c88.46.1790720620470; Tue, 29
- Sep 2026 15:23:40 -0700 (PDT)
-Date: Tue, 29 Sep 2026 15:23:32 -0700
-In-Reply-To: <20260929182108.794434-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNnxeGjE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9861D1F000FF;
+	Tue, 29 Sep 2026 22:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790720903;
+	bh=rXq3sk0b5j6u45a9CW2UEsFy+jV3+6YxcNYu19hQgAM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NNnxeGjEGa2lNFXQY4Jt8RsbdsDI2wc8Zt4KAWsug0FBbZjoRZzn8arTtFcgouBrS
+	 l+sfIQE8bWIkRCtjSKTe2ld6W2GKOJAHd7i1fLUnhKNB8PHZIhUMakbFnyGcBE8GNK
+	 eZYJysdjyAXMPFHJp2MNckOIGNE1znNiNefIUcRngdEcAoWA768zqTorf/lOl49rxS
+	 YORcCbRLMNwWEiHkpcKWjD5G8R2zA7QeOR8LplKWQALfyhKKeRSY5NzDIpG0o6Bapo
+	 s7SGsU5WGHJ7Wql0St4LqfGFJxvE6K9HztquQ/4T4rgw7UdsYi0cl5G/bHlHMe1jlL
+	 peOZDphH/qfxw==
+Date: Tue, 29 Sep 2026 17:28:22 -0500
+From: Rob Herring <robh@kernel.org>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Albert Esteve <aesteve@redhat.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+Message-ID: <20260929222822.GA2933878-robh@kernel.org>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
+ <20260928204059.GA515872-robh@kernel.org>
+ <artyl8fD3zzng8Uh@houat>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260929182108.794434-1-irogers@google.com>
-X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
-Message-ID: <20260929222332.973435-1-irogers@google.com>
-Subject: [PATCH v1] perf/core: Replace perf_event_header__init_id with full
- header init
-From: Ian Rogers <irogers@google.com>
-To: irogers@google.com
-Cc: acme@kernel.org, adrian.hunter@intel.com, 
-	alexander.shishkin@linux.intel.com, ast@kernel.org, bpf@vger.kernel.org, 
-	james.clark@linaro.org, jolsa@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com, 
-	namhyung@kernel.org, peterz@infradead.org, song@kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <artyl8fD3zzng8Uh@houat>
 
-perf_iterate_sb() invokes its callback for each matching perf_event on
-the CPU and task context, passing a shared caller-allocated event
-structure.
+On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
+> Hi,
+> 
+> I'll merge the two discussions in that thread.
+> 
+> On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
+> > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
+> > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
+> > > regulators and GPIOs, perform a reset pulse with specific timing,
+> > > send a vendor-supplied sequence of DSI commands, then enable the
+> > > display. The only truly panel-specific part is the init sequence
+> > > and power-on/off timing.
+> > > 
+> > > The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
+> > > with a single generic driver whose panel-specific behavior is
+> > > provided by BPF programs loaded from userspace at runtime,
+> > > following the HID-BPF model. This enables new panel support
+> > > without kernel patches.
+> > > 
+> > > Panel DT nodes use a two-entry compatible with the panel-specific
+> > > string first and "panel-mipi-dsi-bpf" as fallback. The generic
+> > > driver matches on the fallback, while the first compatible is used
+> > > to identify which BPF program to load.
+> > 
+> > If you need the 1st compatible anyways, what is the point of the
+> > second one?
+> 
+> The whole point of this driver is that you don't need to modify the
+> kernel when you add support for a new panel.
 
-perf_event_header__init_id() mutated header->size in place by adding
-event->id_header_size, requiring sideband output callbacks to save and
-restore header fields across iterations. Three sideband callbacks failed
-to save and restore header.size around perf_event_header__init_id():
-- perf_event_ksymbol_output()
-- perf_event_bpf_output()
-- perf_event_text_poke_output()
+What reads the most specific compatible?
 
-When multiple events with attr.ksymbol, attr.bpf_event, or
-attr.text_poke and sample_id_all are active on the same CPU, each
-subsequent event receives a record whose header.size is inflated by all
-preceding events' id_header_size values while only a single id_sample is
-written, leaving uninitialized ring-buffer bytes at the end of the
-record and causing userspace perf to fail with -EFAULT ("Bad address")
-when parsing the sample_id trailer.
+> > Also, I assume there is at least some panel supported in the kernel
+> > you might want to convert to this. That panel would not have the
+> > fallback (and the DT is fixed).
+> 
+> Yeah, that's true. I'd still need to identify the parts though. I guess
+> using a generic compatible but a specific model would work?
 
-Similarly, perf_event_mmap_output() set PERF_RECORD_MISC_MMAP_BUILD_ID
-in mmap_event->event_id.header.misc when event->attr.build_id was
-enabled, but only saved and restored header.size and header.type. If an
-event with attr.build_id was followed by an event with attr.mmap2 and
-!attr.build_id, the second event received PERF_RECORD_MISC_MMAP_BUILD_ID
-in header.misc while its payload contained maj/min/ino/ino_generation
-instead of a build ID.
+What? You can't add a generic compatible in these cases.
 
-Rather than splitting header initialization between callers and output
-callbacks and saving/restoring mutated header fields, replace
-perf_event_header__init_id() with
-perf_event_header__init_header_and_id(), which initializes header->type,
-header->misc, and header->size alongside the sample_id fields on each
-invocation.
+> 
+> > And I agree with Neil's comment. At least until we start embedding BPF 
+> > into DT directly. ;)
+> 
+> And from Neil:
+> 
+> > I don't see how this can be a valid hardware description, bfp is a
+> > software implementation and has nothing to do in the bindings.
+> 
+> I'm quite a bit surprised by that argument though.
+> 
+> We have in the main dt-schema repos bindings like:
+> 
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/options/u-boot.yaml
 
-Fixes: 76193a94522f ("perf, bpf: Introduce PERF_RECORD_KSYMBOL")
-Fixes: 6ee52e2a3fe4 ("perf, bpf: Introduce PERF_RECORD_BPF_EVENT")
-Fixes: e17d43b93e54 ("perf: Add perf text poke event")
-Fixes: 88a16a130933 ("perf: Add build id data in mmap2 event")
-Assisted-by: Antigravity:gemini-3.1-pro
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- arch/powerpc/perf/imc-pmu.c |  23 +--
- include/linux/perf_event.h  |   7 +-
- kernel/events/core.c        | 309 +++++++++++++++---------------------
- kernel/events/ring_buffer.c |   7 +-
- 4 files changed, 149 insertions(+), 197 deletions(-)
+Self contained in a node that's specifically not h/w.
 
-diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
-index f401181d8669..cd427f2a6d26 100644
---- a/arch/powerpc/perf/imc-pmu.c
-+++ b/arch/powerpc/perf/imc-pmu.c
-@@ -1275,6 +1275,8 @@ static int trace_imc_prepare_sample(struct trace_imc_data *mem,
- 				    struct perf_event_header *header,
- 				    struct perf_event *event)
- {
-+	u16 misc = 0;
-+
- 	/* Sanity checks for a valid record */
- 	if (be64_to_cpu(READ_ONCE(mem->tb1)) > *prev_tb)
- 		*prev_tb = be64_to_cpu(READ_ONCE(mem->tb1));
-@@ -1289,23 +1291,19 @@ static int trace_imc_prepare_sample(struct trace_imc_data *mem,
- 	data->ip =  be64_to_cpu(READ_ONCE(mem->ip));
- 	data->period = event->hw.last_period;
- 
--	header->type = PERF_RECORD_SAMPLE;
--	header->size = sizeof(*header) + event->header_size;
--	header->misc = 0;
--
- 	if (cpu_has_feature(CPU_FTR_ARCH_31)) {
- 		switch (IMC_TRACE_RECORD_VAL_HVPR(be64_to_cpu(READ_ONCE(mem->val)))) {
- 		case 0:/* when MSR HV and PR not set in the trace-record */
--			header->misc |= PERF_RECORD_MISC_GUEST_KERNEL;
-+			misc |= PERF_RECORD_MISC_GUEST_KERNEL;
- 			break;
- 		case 1: /* MSR HV is 0 and PR is 1 */
--			header->misc |= PERF_RECORD_MISC_GUEST_USER;
-+			misc |= PERF_RECORD_MISC_GUEST_USER;
- 			break;
- 		case 2: /* MSR HV is 1 and PR is 0 */
--			header->misc |= PERF_RECORD_MISC_KERNEL;
-+			misc |= PERF_RECORD_MISC_KERNEL;
- 			break;
- 		case 3: /* MSR HV is 1 and PR is 1 */
--			header->misc |= PERF_RECORD_MISC_USER;
-+			misc |= PERF_RECORD_MISC_USER;
- 			break;
- 		default:
- 			pr_info("IMC: Unable to set the flag based on MSR bits\n");
-@@ -1313,11 +1311,14 @@ static int trace_imc_prepare_sample(struct trace_imc_data *mem,
- 		}
- 	} else {
- 		if (is_kernel_addr(data->ip))
--			header->misc |= PERF_RECORD_MISC_KERNEL;
-+			misc |= PERF_RECORD_MISC_KERNEL;
- 		else
--			header->misc |= PERF_RECORD_MISC_USER;
-+			misc |= PERF_RECORD_MISC_USER;
- 	}
--	perf_event_header__init_id(header, data, event);
-+	perf_event_header__init_header_and_id(header, data,
-+					      PERF_RECORD_SAMPLE, misc,
-+					      sizeof(*header) + event->header_size,
-+					      event);
- 
- 	return 0;
- }
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 5842552294c1..8912298e5d4d 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1523,9 +1523,10 @@ is_default_overflow_handler(struct perf_event *event)
- }
- 
- extern void
--perf_event_header__init_id(struct perf_event_header *header,
--			   struct perf_sample_data *data,
--			   struct perf_event *event);
-+perf_event_header__init_header_and_id(struct perf_event_header *header,
-+				      struct perf_sample_data *data,
-+				      u32 type, u16 misc, u16 size,
-+				      struct perf_event *event);
- extern void
- perf_event__output_id_sample(struct perf_event *event,
- 			     struct perf_output_handle *handle,
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 33210aff3ee6..c1b2d0c9b2af 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -8119,13 +8119,18 @@ static void __perf_event_header__init_id(struct perf_sample_data *data,
- 	}
- }
- 
--void perf_event_header__init_id(struct perf_event_header *header,
--				struct perf_sample_data *data,
--				struct perf_event *event)
-+void perf_event_header__init_header_and_id(struct perf_event_header *header,
-+					   struct perf_sample_data *data,
-+					   u32 type, u16 misc, u16 size,
-+					   struct perf_event *event)
- {
-+	header->type = type;
-+	header->misc = misc;
- 	if (event->attr.sample_id_all) {
--		header->size += event->id_header_size;
-+		header->size = size + event->id_header_size;
- 		__perf_event_header__init_id(data, event, event->attr.sample_type);
-+	} else {
-+		header->size = size;
- 	}
- }
- 
-@@ -8959,17 +8964,16 @@ perf_event_read_event(struct perf_event *event,
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
- 	struct perf_read_event read_event = {
--		.header = {
--			.type = PERF_RECORD_READ,
--			.misc = 0,
--			.size = sizeof(read_event) + event->read_size,
--		},
- 		.pid = perf_event_pid(event, task),
- 		.tid = perf_event_tid(event, task),
- 	};
- 	int ret;
- 
--	perf_event_header__init_id(&read_event.header, &sample, event);
-+	perf_event_header__init_header_and_id(&read_event.header, &sample,
-+					      PERF_RECORD_READ,
-+					      /*misc=*/0,
-+					      sizeof(read_event) + event->read_size,
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event, read_event.header.size);
- 	if (ret)
- 		return;
-@@ -9210,6 +9214,7 @@ struct perf_task_event {
- 		u32				ptid;
- 		u64				time;
- 	} event_id;
-+	int new;
- };
- 
- static int perf_event_task_match(struct perf_event *event)
-@@ -9226,17 +9231,21 @@ static void perf_event_task_output(struct perf_event *event,
- 	struct perf_output_handle handle;
- 	struct perf_sample_data	sample;
- 	struct task_struct *task = task_event->task;
--	int ret, size = task_event->event_id.header.size;
-+	int ret;
- 
- 	if (!perf_event_task_match(event))
- 		return;
- 
--	perf_event_header__init_id(&task_event->event_id.header, &sample, event);
-+	perf_event_header__init_header_and_id(&task_event->event_id.header, &sample,
-+					      task_event->new ? PERF_RECORD_FORK : PERF_RECORD_EXIT,
-+					      /*misc=*/0,
-+					      sizeof(task_event->event_id),
-+					      event);
- 
- 	ret = perf_output_begin(&handle, &sample, event,
- 				task_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	task_event->event_id.pid = perf_event_pid(event, task);
- 	task_event->event_id.tid = perf_event_tid(event, task);
-@@ -9258,8 +9267,6 @@ static void perf_event_task_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	task_event->event_id.header.size = size;
- }
- 
- static void perf_event_task(struct task_struct *task,
-@@ -9276,18 +9283,7 @@ static void perf_event_task(struct task_struct *task,
- 	task_event = (struct perf_task_event){
- 		.task	  = task,
- 		.task_ctx = task_ctx,
--		.event_id    = {
--			.header = {
--				.type = new ? PERF_RECORD_FORK : PERF_RECORD_EXIT,
--				.misc = 0,
--				.size = sizeof(task_event.event_id),
--			},
--			/* .pid  */
--			/* .ppid */
--			/* .tid  */
--			/* .ptid */
--			/* .time */
--		},
-+		.new	  = new,
- 	};
- 
- 	perf_iterate_sb(perf_event_task_output,
-@@ -9364,6 +9360,7 @@ struct perf_comm_event {
- 		u32				pid;
- 		u32				tid;
- 	} event_id;
-+	bool			exec;
- };
- 
- static int perf_event_comm_match(struct perf_event *event)
-@@ -9377,18 +9374,21 @@ static void perf_event_comm_output(struct perf_event *event,
- 	struct perf_comm_event *comm_event = data;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	int size = comm_event->event_id.header.size;
- 	int ret;
- 
- 	if (!perf_event_comm_match(event))
- 		return;
- 
--	perf_event_header__init_id(&comm_event->event_id.header, &sample, event);
-+	perf_event_header__init_header_and_id(&comm_event->event_id.header, &sample,
-+					      PERF_RECORD_COMM,
-+					      comm_event->exec ? PERF_RECORD_MISC_COMM_EXEC : 0,
-+					      sizeof(comm_event->event_id) + comm_event->comm_size,
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event,
- 				comm_event->event_id.header.size);
- 
- 	if (ret)
--		goto out;
-+		return;
- 
- 	comm_event->event_id.pid = perf_event_pid(event, comm_event->task);
- 	comm_event->event_id.tid = perf_event_tid(event, comm_event->task);
-@@ -9400,8 +9400,6 @@ static void perf_event_comm_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	comm_event->event_id.header.size = size;
- }
- 
- static void perf_event_comm_event(struct perf_comm_event *comm_event)
-@@ -9416,8 +9414,6 @@ static void perf_event_comm_event(struct perf_comm_event *comm_event)
- 	comm_event->comm = comm;
- 	comm_event->comm_size = size;
- 
--	comm_event->event_id.header.size = sizeof(comm_event->event_id) + size;
--
- 	perf_iterate_sb(perf_event_comm_output,
- 		       comm_event,
- 		       NULL);
-@@ -9434,15 +9430,8 @@ void perf_event_comm(struct task_struct *task, bool exec)
- 		.task	= task,
- 		/* .comm      */
- 		/* .comm_size */
--		.event_id  = {
--			.header = {
--				.type = PERF_RECORD_COMM,
--				.misc = exec ? PERF_RECORD_MISC_COMM_EXEC : 0,
--				/* .size */
--			},
--			/* .pid */
--			/* .tid */
--		},
-+		/* .event_id */
-+		.exec	= exec,
- 	};
- 
- 	perf_event_comm_event(&comm_event);
-@@ -9476,18 +9465,20 @@ static void perf_event_namespaces_output(struct perf_event *event,
- 	struct perf_namespaces_event *namespaces_event = data;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	u16 header_size = namespaces_event->event_id.header.size;
- 	int ret;
- 
- 	if (!perf_event_namespaces_match(event))
- 		return;
- 
--	perf_event_header__init_id(&namespaces_event->event_id.header,
--				   &sample, event);
-+	perf_event_header__init_header_and_id(&namespaces_event->event_id.header, &sample,
-+					      PERF_RECORD_NAMESPACES,
-+					      /*misc=*/0,
-+					      sizeof(namespaces_event->event_id),
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event,
- 				namespaces_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	namespaces_event->event_id.pid = perf_event_pid(event,
- 							namespaces_event->task);
-@@ -9499,8 +9490,6 @@ static void perf_event_namespaces_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	namespaces_event->event_id.header.size = header_size;
- }
- 
- static void perf_fill_ns_link_info(struct perf_ns_link_info *ns_link_info,
-@@ -9531,11 +9520,7 @@ void perf_event_namespaces(struct task_struct *task)
- 	namespaces_event = (struct perf_namespaces_event){
- 		.task	= task,
- 		.event_id  = {
--			.header = {
--				.type = PERF_RECORD_NAMESPACES,
--				.misc = 0,
--				.size = sizeof(namespaces_event.event_id),
--			},
-+			/* .header */
- 			/* .pid */
- 			/* .tid */
- 			.nr_namespaces = NR_NAMESPACES,
-@@ -9603,18 +9588,19 @@ static void perf_event_cgroup_output(struct perf_event *event, void *data)
- 	struct perf_cgroup_event *cgroup_event = data;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	u16 header_size = cgroup_event->event_id.header.size;
- 	int ret;
-+	u16 size = sizeof(cgroup_event->event_id) + cgroup_event->path_size;
- 
- 	if (!perf_event_cgroup_match(event))
- 		return;
- 
--	perf_event_header__init_id(&cgroup_event->event_id.header,
--				   &sample, event);
-+	perf_event_header__init_header_and_id(&cgroup_event->event_id.header, &sample,
-+					      PERF_RECORD_CGROUP, /*misc=*/0, size,
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event,
- 				cgroup_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	perf_output_put(&handle, cgroup_event->event_id);
- 	__output_copy(&handle, cgroup_event->path, cgroup_event->path_size);
-@@ -9622,8 +9608,6 @@ static void perf_event_cgroup_output(struct perf_event *event, void *data)
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	cgroup_event->event_id.header.size = header_size;
- }
- 
- static void perf_event_cgroup(struct cgroup *cgrp)
-@@ -9638,11 +9622,6 @@ static void perf_event_cgroup(struct cgroup *cgrp)
- 
- 	cgroup_event = (struct perf_cgroup_event){
- 		.event_id  = {
--			.header = {
--				.type = PERF_RECORD_CGROUP,
--				.misc = 0,
--				.size = sizeof(cgroup_event.event_id),
--			},
- 			.id = cgroup_id(cgrp),
- 		},
- 	};
-@@ -9665,7 +9644,6 @@ static void perf_event_cgroup(struct cgroup *cgrp)
- 	while (!IS_ALIGNED(size, sizeof(u64)))
- 		cgroup_event.path[size++] = '\0';
- 
--	cgroup_event.event_id.header.size += size;
- 	cgroup_event.path_size = size;
- 
- 	perf_iterate_sb(perf_event_cgroup_output,
-@@ -9721,38 +9699,40 @@ static void perf_event_mmap_output(struct perf_event *event,
- 	struct perf_mmap_event *mmap_event = data;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	int size = mmap_event->event_id.header.size;
--	u32 type = mmap_event->event_id.header.type;
--	bool use_build_id;
-+	int size = sizeof(mmap_event->event_id) + mmap_event->file_size;
-+	u32 type = PERF_RECORD_MMAP;
-+	u16 misc = PERF_RECORD_MISC_USER;
-+	bool use_build_id = false;
- 	int ret;
- 
- 	if (!perf_event_mmap_match(event, data))
- 		return;
- 
- 	if (event->attr.mmap2) {
--		mmap_event->event_id.header.type = PERF_RECORD_MMAP2;
--		mmap_event->event_id.header.size += sizeof(mmap_event->maj);
--		mmap_event->event_id.header.size += sizeof(mmap_event->min);
--		mmap_event->event_id.header.size += sizeof(mmap_event->ino);
--		mmap_event->event_id.header.size += sizeof(mmap_event->ino_generation);
--		mmap_event->event_id.header.size += sizeof(mmap_event->prot);
--		mmap_event->event_id.header.size += sizeof(mmap_event->flags);
--	}
--
--	perf_event_header__init_id(&mmap_event->event_id.header, &sample, event);
-+		type = PERF_RECORD_MMAP2;
-+		size += sizeof(mmap_event->maj);
-+		size += sizeof(mmap_event->min);
-+		size += sizeof(mmap_event->ino);
-+		size += sizeof(mmap_event->ino_generation);
-+		size += sizeof(mmap_event->prot);
-+		size += sizeof(mmap_event->flags);
-+		use_build_id = event->attr.build_id && mmap_event->build_id_size;
-+		if (use_build_id)
-+			misc |= PERF_RECORD_MISC_MMAP_BUILD_ID;
-+	}
-+	if (!(mmap_event->vma->vm_flags & VM_EXEC))
-+		misc |= PERF_RECORD_MISC_MMAP_DATA;
-+
-+	perf_event_header__init_header_and_id(&mmap_event->event_id.header, &sample,
-+					      type, misc, size, event);
- 	ret = perf_output_begin(&handle, &sample, event,
- 				mmap_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	mmap_event->event_id.pid = perf_event_pid(event, current);
- 	mmap_event->event_id.tid = perf_event_tid(event, current);
- 
--	use_build_id = event->attr.build_id && mmap_event->build_id_size;
--
--	if (event->attr.mmap2 && use_build_id)
--		mmap_event->event_id.header.misc |= PERF_RECORD_MISC_MMAP_BUILD_ID;
--
- 	perf_output_put(&handle, mmap_event->event_id);
- 
- 	if (event->attr.mmap2) {
-@@ -9777,9 +9757,6 @@ static void perf_event_mmap_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	mmap_event->event_id.header.size = size;
--	mmap_event->event_id.header.type = type;
- }
- 
- static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
-@@ -9875,11 +9852,6 @@ static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
- 	mmap_event->prot = prot;
- 	mmap_event->flags = flags;
- 
--	if (!(vma->vm_flags & VM_EXEC))
--		mmap_event->event_id.header.misc |= PERF_RECORD_MISC_MMAP_DATA;
--
--	mmap_event->event_id.header.size = sizeof(mmap_event->event_id) + size;
--
- 	if (atomic_read(&nr_build_id_events))
- 		build_id_parse_nofault(vma, mmap_event->build_id, &mmap_event->build_id_size);
- 
-@@ -9999,11 +9971,7 @@ void perf_event_mmap(struct vm_area_struct *vma)
- 		/* .file_name */
- 		/* .file_size */
- 		.event_id  = {
--			.header = {
--				.type = PERF_RECORD_MMAP,
--				.misc = PERF_RECORD_MISC_USER,
--				/* .size */
--			},
-+			/* .header */
- 			/* .pid */
- 			/* .tid */
- 			.start  = vma->vm_start,
-@@ -10033,18 +10001,15 @@ void perf_event_aux_event(struct perf_event *event, unsigned long head,
- 		u64				size;
- 		u64				flags;
- 	} rec = {
--		.header = {
--			.type = PERF_RECORD_AUX,
--			.misc = 0,
--			.size = sizeof(rec),
--		},
- 		.offset		= head,
- 		.size		= size,
- 		.flags		= flags,
- 	};
- 	int ret;
- 
--	perf_event_header__init_id(&rec.header, &sample, event);
-+	perf_event_header__init_header_and_id(&rec.header, &sample,
-+					      PERF_RECORD_AUX, /*misc=*/0, sizeof(rec),
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event, rec.header.size);
- 
- 	if (ret)
-@@ -10069,15 +10034,14 @@ void perf_log_lost_samples(struct perf_event *event, u64 lost)
- 		struct perf_event_header	header;
- 		u64				lost;
- 	} lost_samples_event = {
--		.header = {
--			.type = PERF_RECORD_LOST_SAMPLES,
--			.misc = 0,
--			.size = sizeof(lost_samples_event),
--		},
- 		.lost		= lost,
- 	};
- 
--	perf_event_header__init_id(&lost_samples_event.header, &sample, event);
-+	perf_event_header__init_header_and_id(&lost_samples_event.header, &sample,
-+					      PERF_RECORD_LOST_SAMPLES,
-+					      /*misc=*/0,
-+					      sizeof(lost_samples_event),
-+					      event);
- 
- 	ret = perf_output_begin(&handle, &sample, event,
- 				lost_samples_event.header.size);
-@@ -10102,6 +10066,8 @@ struct perf_switch_event {
- 		u32				next_prev_pid;
- 		u32				next_prev_tid;
- 	} event_id;
-+	bool			sched_in;
-+	bool			preempt;
- };
- 
- static int perf_event_switch_match(struct perf_event *event)
-@@ -10114,6 +10080,9 @@ static void perf_event_switch_output(struct perf_event *event, void *data)
- 	struct perf_switch_event *se = data;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
-+	u32 type;
-+	u16 misc;
-+	u16 size;
- 	int ret;
- 
- 	if (!perf_event_switch_match(event))
-@@ -10121,18 +10090,22 @@ static void perf_event_switch_output(struct perf_event *event, void *data)
- 
- 	/* Only CPU-wide events are allowed to see next/prev pid/tid */
- 	if (event->ctx->task) {
--		se->event_id.header.type = PERF_RECORD_SWITCH;
--		se->event_id.header.size = sizeof(se->event_id.header);
-+		type = PERF_RECORD_SWITCH;
-+		size = sizeof(se->event_id.header);
- 	} else {
--		se->event_id.header.type = PERF_RECORD_SWITCH_CPU_WIDE;
--		se->event_id.header.size = sizeof(se->event_id);
-+		type = PERF_RECORD_SWITCH_CPU_WIDE;
-+		size = sizeof(se->event_id);
- 		se->event_id.next_prev_pid =
- 					perf_event_pid(event, se->next_prev);
- 		se->event_id.next_prev_tid =
- 					perf_event_tid(event, se->next_prev);
- 	}
-+	misc = se->sched_in ? 0 : PERF_RECORD_MISC_SWITCH_OUT;
-+	if (se->preempt)
-+		misc |= PERF_RECORD_MISC_SWITCH_OUT_PREEMPT;
- 
--	perf_event_header__init_id(&se->event_id.header, &sample, event);
-+	perf_event_header__init_header_and_id(&se->event_id.header, &sample,
-+					      type, misc, size, event);
- 
- 	ret = perf_output_begin(&handle, &sample, event, se->event_id.header.size);
- 	if (ret)
-@@ -10158,22 +10131,11 @@ static void perf_event_switch(struct task_struct *task,
- 	switch_event = (struct perf_switch_event){
- 		.task		= task,
- 		.next_prev	= next_prev,
--		.event_id	= {
--			.header = {
--				/* .type */
--				.misc = sched_in ? 0 : PERF_RECORD_MISC_SWITCH_OUT,
--				/* .size */
--			},
--			/* .next_prev_pid */
--			/* .next_prev_tid */
--		},
-+		/* .event_id */
-+		.sched_in	= sched_in,
-+		.preempt	= !sched_in && task_is_runnable(task),
- 	};
- 
--	if (!sched_in && task_is_runnable(task)) {
--		switch_event.event_id.header.misc |=
--				PERF_RECORD_MISC_SWITCH_OUT_PREEMPT;
--	}
--
- 	perf_iterate_sb(perf_event_switch_output, &switch_event, NULL);
- }
- 
-@@ -10193,20 +10155,17 @@ static void perf_log_throttle(struct perf_event *event, int enable)
- 		u64				id;
- 		u64				stream_id;
- 	} throttle_event = {
--		.header = {
--			.type = PERF_RECORD_THROTTLE,
--			.misc = 0,
--			.size = sizeof(throttle_event),
--		},
- 		.time		= perf_event_clock(event),
- 		.id		= primary_event_id(event),
- 		.stream_id	= event->id,
- 	};
- 
--	if (enable)
--		throttle_event.header.type = PERF_RECORD_UNTHROTTLE;
--
--	perf_event_header__init_id(&throttle_event.header, &sample, event);
-+	perf_event_header__init_header_and_id(&throttle_event.header, &sample,
-+					      enable ? PERF_RECORD_UNTHROTTLE
-+						     : PERF_RECORD_THROTTLE,
-+					      /*misc=*/0,
-+					      sizeof(throttle_event),
-+					      event);
- 
- 	ret = perf_output_begin(&handle, &sample, event,
- 				throttle_event.header.size);
-@@ -10245,12 +10204,14 @@ static void perf_event_ksymbol_output(struct perf_event *event, void *data)
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
- 	int ret;
-+	u16 size = sizeof(ksymbol_event->event_id) + ksymbol_event->name_len;
- 
- 	if (!perf_event_ksymbol_match(event))
- 		return;
- 
--	perf_event_header__init_id(&ksymbol_event->event_id.header,
--				   &sample, event);
-+	perf_event_header__init_header_and_id(&ksymbol_event->event_id.header, &sample,
-+					      PERF_RECORD_KSYMBOL, /*misc=*/0, size,
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event,
- 				ksymbol_event->event_id.header.size);
- 	if (ret)
-@@ -10291,11 +10252,6 @@ void perf_event_ksymbol(u16 ksym_type, u64 addr, u32 len, bool unregister,
- 		.name = name,
- 		.name_len = name_len,
- 		.event_id = {
--			.header = {
--				.type = PERF_RECORD_KSYMBOL,
--				.size = sizeof(ksymbol_event.event_id) +
--					name_len,
--			},
- 			.addr = addr,
- 			.len = len,
- 			.ksym_type = ksym_type,
-@@ -10339,8 +10295,11 @@ static void perf_event_bpf_output(struct perf_event *event, void *data)
- 	if (!perf_event_bpf_match(event))
- 		return;
- 
--	perf_event_header__init_id(&bpf_event->event_id.header,
--				   &sample, event);
-+	perf_event_header__init_header_and_id(&bpf_event->event_id.header, &sample,
-+					      PERF_RECORD_BPF_EVENT,
-+					      /*misc=*/0,
-+					      sizeof(bpf_event->event_id),
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event,
- 				bpf_event->event_id.header.size);
- 	if (ret)
-@@ -10396,10 +10355,6 @@ void perf_event_bpf_event(struct bpf_prog *prog,
- 	bpf_event = (struct perf_bpf_event){
- 		.prog = prog,
- 		.event_id = {
--			.header = {
--				.type = PERF_RECORD_BPF_EVENT,
--				.size = sizeof(bpf_event.event_id),
--			},
- 			.type = type,
- 			.flags = flags,
- 			.id = prog->aux->id,
-@@ -10427,18 +10382,23 @@ static void perf_callchain_deferred_output(struct perf_event *event, void *data)
- 	struct perf_callchain_deferred_event *deferred_event = data;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	int ret, size = deferred_event->event.header.size;
-+	int ret;
-+	u16 size = sizeof(deferred_event->event) + (deferred_event->trace->nr * sizeof(u64));
- 
- 	if (!event->attr.defer_output)
- 		return;
- 
- 	/* XXX do we really need sample_id_all for this ??? */
--	perf_event_header__init_id(&deferred_event->event.header, &sample, event);
-+	perf_event_header__init_header_and_id(&deferred_event->event.header, &sample,
-+					      PERF_RECORD_CALLCHAIN_DEFERRED,
-+					      PERF_RECORD_MISC_USER,
-+					      size,
-+					      event);
- 
- 	ret = perf_output_begin(&handle, &sample, event,
- 				deferred_event->event.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	perf_output_put(&handle, deferred_event->event);
- 	for (int i = 0; i < deferred_event->trace->nr; i++) {
-@@ -10448,8 +10408,6 @@ static void perf_callchain_deferred_output(struct perf_event *event, void *data)
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	deferred_event->event.header.size = size;
- }
- 
- static void perf_unwind_deferred_callback(struct unwind_work *work,
-@@ -10458,12 +10416,6 @@ static void perf_unwind_deferred_callback(struct unwind_work *work,
- 	struct perf_callchain_deferred_event deferred_event = {
- 		.trace = trace,
- 		.event = {
--			.header = {
--				.type = PERF_RECORD_CALLCHAIN_DEFERRED,
--				.misc = PERF_RECORD_MISC_USER,
--				.size = sizeof(deferred_event.event) +
--					(trace->nr * sizeof(u64)),
--			},
- 			.cookie = cookie,
- 			.nr = trace->nr,
- 		},
-@@ -10475,7 +10427,8 @@ static void perf_unwind_deferred_callback(struct unwind_work *work,
- struct perf_text_poke_event {
- 	const void		*old_bytes;
- 	const void		*new_bytes;
--	size_t			pad;
-+	u16			tot;
-+	u16			pad;
- 	u16			old_len;
- 	u16			new_len;
- 
-@@ -10496,13 +10449,18 @@ static void perf_event_text_poke_output(struct perf_event *event, void *data)
- 	struct perf_text_poke_event *text_poke_event = data;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
-+	u16 size = sizeof(text_poke_event->event_id) + text_poke_event->tot + text_poke_event->pad;
- 	u64 padding = 0;
- 	int ret;
- 
- 	if (!perf_event_text_poke_match(event))
- 		return;
- 
--	perf_event_header__init_id(&text_poke_event->event_id.header, &sample, event);
-+	perf_event_header__init_header_and_id(&text_poke_event->event_id.header, &sample,
-+					      PERF_RECORD_TEXT_POKE,
-+					      PERF_RECORD_MISC_KERNEL,
-+					      size,
-+					      event);
- 
- 	ret = perf_output_begin(&handle, &sample, event,
- 				text_poke_event->event_id.header.size);
-@@ -10540,15 +10498,11 @@ void perf_event_text_poke(const void *addr, const void *old_bytes,
- 	text_poke_event = (struct perf_text_poke_event){
- 		.old_bytes    = old_bytes,
- 		.new_bytes    = new_bytes,
-+		.tot          = tot,
- 		.pad          = pad,
- 		.old_len      = old_len,
- 		.new_len      = new_len,
- 		.event_id  = {
--			.header = {
--				.type = PERF_RECORD_TEXT_POKE,
--				.misc = PERF_RECORD_MISC_KERNEL,
--				.size = sizeof(text_poke_event.event_id) + tot + pad,
--			},
- 			.addr = (unsigned long)addr,
- 		},
- 	};
-@@ -10579,13 +10533,12 @@ static void perf_log_itrace_start(struct perf_event *event)
- 	    event->attach_state & PERF_ATTACH_ITRACE)
- 		return;
- 
--	rec.header.type	= PERF_RECORD_ITRACE_START;
--	rec.header.misc	= 0;
--	rec.header.size	= sizeof(rec);
- 	rec.pid	= perf_event_pid(event, current);
- 	rec.tid	= perf_event_tid(event, current);
- 
--	perf_event_header__init_id(&rec.header, &sample, event);
-+	perf_event_header__init_header_and_id(&rec.header, &sample,
-+					      PERF_RECORD_ITRACE_START, /*misc=*/0, sizeof(rec),
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event, rec.header.size);
- 
- 	if (ret)
-@@ -10610,12 +10563,10 @@ void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)
- 	if (event->parent)
- 		event = event->parent;
- 
--	rec.header.type	= PERF_RECORD_AUX_OUTPUT_HW_ID;
--	rec.header.misc	= 0;
--	rec.header.size	= sizeof(rec);
--	rec.hw_id	= hw_id;
--
--	perf_event_header__init_id(&rec.header, &sample, event);
-+	rec.hw_id = hw_id;
-+	perf_event_header__init_header_and_id(&rec.header, &sample,
-+					      PERF_RECORD_AUX_OUTPUT_HW_ID, /*misc=*/0, sizeof(rec),
-+					      event);
- 	ret = perf_output_begin(&handle, &sample, event, rec.header.size);
- 
- 	if (ret)
-diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-index 1b1ffe0533e5..90fae9c41b9b 100644
---- a/kernel/events/ring_buffer.c
-+++ b/kernel/events/ring_buffer.c
-@@ -246,14 +246,13 @@ __perf_output_begin(struct perf_output_handle *handle,
- 	handle->size = (1UL << page_shift) - offset;
- 
- 	if (unlikely(have_lost)) {
--		lost_event.header.size = sizeof(lost_event);
--		lost_event.header.type = PERF_RECORD_LOST;
--		lost_event.header.misc = 0;
- 		lost_event.id          = event->id;
- 		lost_event.lost        = local_xchg(&rb->lost, 0);
- 
- 		/* XXX mostly redundant; @data is already fully initializes */
--		perf_event_header__init_id(&lost_event.header, data, event);
-+		perf_event_header__init_header_and_id(&lost_event.header, data,
-+						      PERF_RECORD_LOST, /*misc=*/0,
-+						      sizeof(lost_event), event);
- 		perf_output_put(handle, lost_event);
- 		perf_event__output_id_sample(event, handle, data);
- 	}
--- 
-2.56.0.rc1.315.gc6ed9934b7-goog
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/bootph.yaml
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/post-init-providers.yaml
 
+Extra hints that are safe to ignore.
+
+> 
+> Or, in Linux:
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/misc/google,android-pipe.yaml
+
+Virtual h/w which tends to have special needs.
+
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+
+Shrug. Weird Qcom shit...
+
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/sound/simple-card.yaml
+
+Just a container... Though I can't say I really like any of the audio 
+bindings.
+
+All really irrelevant to this discussion other than the panel binding...
+
+> 
+> All of them have been reviewed or acked by you, and yet none of them
+> relate to any hardware description.
+
+There are things which aren't h/w, but this is h/w and we've already 
+made decisions about how panels in particular are represented. We of 
+course have some remanents of how we don't want to do things.
+
+> panel-mipi-dsi-spi is a generic panel that will load a firmware, and
+> quite similar to this one. google,android-pipe and qcom,fastrpc don't
+> attach to anything and will just open a tunnel to userspace, which is
+> somewhat equivalent but more dramatic than what this driver is doing.
+> simple-card or its variations will just instantiate a kernel driver from
+> the DT and is used pretty much everywhere.
+> 
+> I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
+> by rob, and acked by a panel maintainer, and 4 years ago, so we're way
+> past the "oh but we didn't know what we were doing back then" argument.
+> 
+> So, let's phrase this differently: what's different about the
+> description than panel-mipi-dsi-spi, or any other binding already in
+> tree?
+
+There's all of 3 panels supported. Compared to all the other panels we 
+have, hardly the rule over the exception. You can always fine "bad" 
+examples or exceptions.
+
+That one defines a single supply. Any other MIPI SPI panel with 
+different supplies or GPIO controls probably has its own binding. Trying 
+to parameterize that in DT doesn't work. We've rejected trying to do 
+that in DT over and over. What's your story here for that?
+
+
+> If it's the BPF part, BPF is not Linux-only, and there's hardware with
+> direct BPF support these days, so it can be considered OS-agnostic and
+> not an implementation detail.
+
+Really that's the least of my concerns.
+
+Rob
