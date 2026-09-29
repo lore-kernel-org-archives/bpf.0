@@ -1,62 +1,64 @@
-Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D21F530E04
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBD65383E4
 	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 18:39:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790707173; cv=none; b=so4mp2jZLhdkcLPCJy0gWFMcDBc68cByNWDHSi01E0jK1s4Gugek3ofsNVj57osCd6oq2+2OdsiBCMRKLpLWhxL/RhlEdrH/S3pAQIvhm6QfNdGLDJkIjV1IUjYnjrHMLJlhw7L1rqBvrhnicdjX1KPWICr8HqKMnRvBrKw0JlI=
+	t=1790707173; cv=none; b=lBEqDb60bsDKO5l37NBlkxfvcsPuMSPy5WgtOhtI4amQtMb/ATp+DCCAi3thokz+gsG2kjXhVVDWwGgGiHc1M3qF4pkqnq87kW6X4Ib0DiRjvk/0W78p1mXEA53vFal9GkJ0Wpb8OgeJCL28wAokphmNGC/E+FHAt9aJCSnDjyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790707173; c=relaxed/simple;
-	bh=Bj5s2/wCxRmLUQ6V+QFLYi+quMLf1D1vOUan9CSvXBk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gpUhSw24Xk9JzC8RRTmALgkVDb+HFMZPYEJurR8u8JpRnwQTr2Tlj9JPGfSCp1RjIiF5X9xyD6MaLnvHc37MDEW6UKSFqfkHtuSxLecxj4cqaFWCu0qvEYC6yHG2v1DX3+YeKxQLkyhpTDW/nGdmEOx/u3onRJZuSIdOuEieIzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=UqK91Bmi; arc=none smtp.client-ip=74.125.227.170
+	bh=o4RGHZT7aJzADK5+73OJThek/iOlH+3PfokiNtsemxE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tfWrXf1zEUOee93W+ORu670N4bmrDBMo6Y70mEpTz466zHIijQV3bbDaN1MHw2TEvDTE+ieW6FzKO2fzExAW6KRYwtQIScScsCs/IWTTCZbTd87SKJRZ8MDTdXCHVlGujnWXPMnNXWwbgXfqvqQDib4zSjx6opPnk7B7fne6hf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=kRTmQ2bm; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="UqK91Bmi"
-Received: by mail-pj2-f42.google.com with SMTP id d9443c01a7336-2df4aa80a73so28585175ad.3
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="kRTmQ2bm"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2dd53691be5so29966615ad.1
         for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790707170; x=1791311970; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OLqX/EKXjklb9YoBJoleNt6F0FcuE4eyz2eSSnifvUc=;
-        b=UqK91BmiM/P1WPw1ukSMldaCFADJn2yr2d/rucHt7vCar5z+6j/uceyvtspdUEkmjf
-         /HaxWlkM6AA5/WawPvU6Jh9iDAso5q/zFokQTfqLWkf62y6NA0iOZKBQuFBR4PBda158
-         Quzi4poBJK8f/Xu1a8lACCh8sridhpjtTm8Dy0YC3/JPDhKkDb2F3692mIuVUPrP7UPG
-         wEXq6TgWkAhdS3GnzY6YlZxUnt1077qNuIyYyzRBaq7KvZQiQcMKv8WUe1hCK4dvwyE+
-         ZtiQ+C9l4Dz11r8i+zbXAhDFWCSUa9VjfO6fgNTLn6iQ1jo8j9o7QtvgeaFp9qHaqbyy
-         wpHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790707170; x=1791311970;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790707171; x=1791311971; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OLqX/EKXjklb9YoBJoleNt6F0FcuE4eyz2eSSnifvUc=;
-        b=JpztSTFJybfvho0CVV/7/X4emG2BGHGdM3nvLU+HEClx5SnRMOQdHwrrlQ104xp5bY
-         9iVmZ0N59OfqA1inCyHpEx0lHEviO6Kv0ghlSm2M1Kt1t3OrROwG854453YfRFqtAaob
-         4Fk4JKYMgKZCaBNxREXkpiap3u/siJt1yPRF4th673+vaR4M5T/jWhjja0qKjr9Y0pMr
-         afJcuWdJjacDeJ1MneJQPBAezOMWapBiSnMI77P3DaAiT9CpOQW7hfvmm7B/LyvDI5sr
-         ggJEwFiyH2A7XncysomJq3clCzG9zlOi/rJTIU4iILFo39ykDDHxMgwVX+Up+FnEf/1v
-         HChA==
-X-Gm-Message-State: AFq9FYJ1eVFicHDZqhCbYrmkXe6dDwxrhDBFUSQI4e4x6VDI/b3WLFk7
-	+fu8/t6c1GXz+dTKzVqGjHp6+zDQjDLRduPUdFiauMN/r4LMFq8UiJPuZ4esKMRo9vzzyBW1d06
-	/xOMz8J4=
-X-Gm-Gg: AYBFou3nAVt89XwqyJkf31bsvLVbh/VlCWpJcMpwkMvA91KK2p8IHiUfc85JpNvuz3s
-	UMk/SKBfh/4u+MwftV8Rdze3AbCDEE97F/d2IRsYENYxDyfY/TmSSp7PecY29i5r0FsmBZg8eiD
-	zDt7ZQJlhrSK6ecLir2mFEABbztz6tsLaH0ao6OI4Ge60xoKxP9eDFzGk4xf6u7lg1Jaiy4SurP
-	mqu5wkXdJR6Rlgl7Roo7ereDMy0lBCoqsAmmUnLojhL3jtgIOlZFN93CxzhHiynZpWd07iphDNI
-	QtP0R0mWRN/jQA57okflFqicSDdXAZJ2f687IElFGc0tif0xc3RJtZUb1QeRU2nUwmOHJHI9IQE
-	7cP4bmulgxhdhpEO5xrRIDXDT3IlRTuJC683hq53foM9DUyHEhI748IXxp0enWNPhcAu++2Yhu+
-	q/NGOjUkygqChasKuO/2AEjCgSyWcnobrk8nNy6KJpHIA+LVG00Dy06D507qXdIaPbHithnO7XI
-	ABT8toyvDzIO6lWdCHjNVeBAZ4e20HPMAsN/tKVXg==
-X-Received: by 2002:a17:90b:4cc4:b0:3a4:b917:b391 with SMTP id 98e67ed59e1d1-3a4c000ed5fmr95529a91.57.1790707170439;
-        Tue, 29 Sep 2026 11:39:30 -0700 (PDT)
+        bh=y9zbei/ln8S6pfwSTXxcxvm+Js4xi/igyBAkLKJlprQ=;
+        b=kRTmQ2bmWt6FHdCjEUajpIFgEGUhiW7J8c26zklud0muhV9MgjJtY1Xykh+ucDRJSF
+         3BQGVetrw07j9seltMhkZbYOmvXbP4gvAIkULNg2psEhHT412IjCYEPaKWNclRVRS3L6
+         BaBrkZ+gmKNTypN9moDAmpntpbMHzO8n5jbjEKCtd5PHMotVvOquTMkmKuqY8Ht1r/nM
+         HE++oZUI8EpkSvIZR5Sri91G6z/vzVoNqhDBZxuSziTPwp7axt1puJnh/sEWNWHpeyH/
+         06kNFwOqMpUaOtaC2yR3KXPzyWrhe+UOlLY58QgiKrLX5OQZmc6096rGuFnF1JLAdurW
+         vDUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790707171; x=1791311971;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=y9zbei/ln8S6pfwSTXxcxvm+Js4xi/igyBAkLKJlprQ=;
+        b=AStCJggMTidN+A595sRHTCxXZEC9cLVrWvnduQuBwPMPuQUqGyz1usxnjy0ENcu2vx
+         CBR5fqo5kbpOWPlLqiyTDc0NpPWGI8mDfDnEhHfmZmy740Q3HlA7a1ZY6k5LlmepVPwR
+         eg548uavgmZ1t5GC4H9AFA83RyiYmiPRrXopJiz605Ey6fWupGBlC2wmuM7t+rYNugp8
+         AYMVET6g3xF68WJ0lgqrbws5fvIyMpjmTREq431zTzM3Rdwk7jqnFyBxc7GnqV8s63wz
+         V75NFhCtXrMQrixHg98BiE5HkI+bKwxtVD0kE5sISyWR7jQQCP11tPKHBTLTKs/9uG8q
+         M2Eg==
+X-Gm-Message-State: AFq9FYIlIdHQyPUH4xX+CLyem/v1nuzjwOBcMcW1cgU98Dkueyg3H6pc
+	kbm1Zq+XMVpKSLDxOkWLddoasDaJFsxjFusWn5pVX2vDxgAS7A6nXq/FakPtJH/Hbj6rjjoCne6
+	rfL65mhw=
+X-Gm-Gg: AYBFou2/9jTq+YQaO9XlJ6iJx/jXuCjVuO5PdbA63JefpFz6tiJnXZ6hmJmJ89b6LiE
+	ndAAyoBWGvw4xR6rCWuOoYT7pRLtb4lBZfGFEWCYiet2mKplxLQbXJ/8Pg7FKwvoglsdQkHGaaH
+	ysGWIgXZS1zRxbwBVIpRlzyha+fc3gRVx+jfCApDqtb0UN7SNzl6QRhCDtiUIAZ3o3sR7XdB181
+	qm2/s2rx2Z3qgA+goKbzHnWQlRXz/K0ZcrTE/JjcG6P0qXNdoFUhzbA3L5mN++LP/B/P+sAuedF
+	RPNYGzJQvWO7hDH6qJsLhzbtadrhQf3QOniZ6KXJsNxdyLRIcRhnqsXyVsAEaW6HfzhOkexsK6h
+	aE5Nw/ggblto7p7eBUF0vG5A2p4seITDzJme9f+Nnsdjv0sYSUaQgGbeHSnkh2DVUQtIgDruyuG
+	geIoeQGiNW4LOkrq16VhiLP9VVqIFE5Czb4gInNxE82yR0kdo4V+umhSsNmM8tKW2b85TcPftoV
+	3FqPWx17i8Go9bZPPFN0r7QbyTJa/M/FQiWVKvB/0R18Z18G22W
+X-Received: by 2002:a17:90b:384c:b0:3a2:af98:3c58 with SMTP id 98e67ed59e1d1-3a4bf699664mr243667a91.0.1790707171301;
+        Tue, 29 Sep 2026 11:39:31 -0700 (PDT)
 Received: from alpine05.ht.home (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a49858bf27sm6796494a91.4.2026.09.29.11.39.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a49858bf27sm6796494a91.4.2026.09.29.11.39.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 11:39:29 -0700 (PDT)
+        Tue, 29 Sep 2026 11:39:30 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -65,10 +67,12 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v6 0/7] Make sleepable arena paths use sleepable alloc_pages
-Date: Tue, 29 Sep 2026 18:39:21 +0000
-Message-ID: <20260929183928.4896-1-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v6 1/7] bpf: Use an llist for page allocations
+Date: Tue, 29 Sep 2026 18:39:22 +0000
+Message-ID: <20260929183928.4896-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260929183928.4896-1-emil@etsalapatis.com>
+References: <20260929183928.4896-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,83 +81,298 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The arena_alloc_pages() call takes a sleepable argument based on whether
-its caller is a sleepable BPF function. This flag, along with the context
-the kfunc is called in, decides whether the call will try to fulfill the
-allocation using the regular or the _nolock variant of the alloc_pages
-API, by means of bpf_map_alloc_pages().
+bpf_map_alloc_pages() does not use its map argument. Storing allocated
+pages in an array also forces arena callers to allocate a separate
+pointer array.
 
-However, the arena_alloc_pages() call currently only makes allocations
-inside an IRQ-disabled critical section. This forces all allocations to
-use the _nolock() API, which may eagerly fail where the regular variant
-would eventually succeed. There have been reports of this happening for
-sched-ext schedulers.
-
-Restructure arena_alloc_pages() to use the _nolock() page allocation API
-only when necessary. This requires moving allocations outside of the 
-spinlock critical section for sleepable calls, which in turn requires
-slightly different logic in the allocation path. Replace the page list
-allocation with logic that reuses pcp_llist to chain allocated pages
-together, allowing us to merge the code paths for both sleepable and
-nonsleepable arena allocations.
-
-Also fix kfunc specialization to not unnecessarily force the nonsleepable version
-of bpf_arena_alloc_pages() for call sites that do not need it. This requires
-making specialization per-call site instead of overwriting the descriptor
-during fixups. 
+Expose the single-page allocator as bpf_alloc_page(), rename the bulk
+helper to bpf_alloc_pages(), and return bulk allocations through an
+llist using page->pcp_llist. Add bpf_free_pages() to safely release all
+pages remaining on such a list.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ include/linux/bpf.h  |  6 ++-
+ kernel/bpf/arena.c   | 95 +++++++++++++++++++-------------------------
+ kernel/bpf/syscall.c | 39 ++++++++++--------
+ 3 files changed, 67 insertions(+), 73 deletions(-)
 
-v1 -> v2 (https://lore.kernel.org/bpf/20260824082530.47553-1-emil@etsalapatis.com/)
-
-- Keep the sleepable and non-sleepable allocation paths within
-  arena_alloc_pages (Alexei)
-- Incorporate bot feedback on selftests (bot-ci)
-
-v2 -> v3 (https://lore.kernel.org/bpf/20260923191125.5311-1-emil@etsalapatis.com/)
-
-- Remove the intermediate page array allocation in bpf_arena_alloc_pages() and
-  use the pcp_llist pointer instead (Alexei)
-- Fix function specialization to only specialize to the nonsleepable version
-  when necessary
-
-v3 -> v4 (https://lore.kernel.org/bpf/20260925203939.4105-1-emil@etsalapatis.com/)
-
-- Remove in-flight pages tracking (Alexei)
-- Remove stale split sleepable/nonsleepable error handling (Alexei)
-
-v4 -> v5 (https://lore.kernel.org/bpf/20260925233538.5708-1-emil@etsalapatis.com/)
-
-- Remove unnecessary imm-based sorting for kfunc desc table (Alexei)
-- Skip all nonspecialized kfunc descs during the linear scan done by
-  function specialization
-
-v5 -> v6 (https://lore.kernel.org/bpf/20260928202643.9114-1-emil@etsalapatis.com/)
-
-- Use verifier_bug_if() for diagnostics (bot)
-
-
-Emil Tsalapatis (7):
-  bpf: Use an llist for page allocations
-  bpf: Add sleepable argument to bpf_alloc_pages()
-  bpf: Add sleepable arena page allocation path
-  selftests/bpf: Test large allocations for both sleepable/nonsleepable
-    arena users
-  bpf: Directly store kfunc desc index in instruction off field
-  bpf: Support per-call-site kfunc specialization
-  selftests/bpf: Test per-call site function specialization
-
- include/linux/bpf.h                           |  10 +-
- include/linux/bpf_verifier.h                  |  15 +-
- kernel/bpf/arena.c                            | 158 +++++++++---------
- kernel/bpf/fixups.c                           |  70 +-------
- kernel/bpf/syscall.c                          |  43 +++--
- kernel/bpf/verifier.c                         |  94 ++++++++++-
- .../selftests/bpf/prog_tests/file_reader.c    |  15 ++
- .../testing/selftests/bpf/progs/file_reader.c | 129 ++++++++++++++
- .../bpf/progs/verifier_arena_large.c          |  64 +++++--
- 9 files changed, 410 insertions(+), 188 deletions(-)
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4bae3796c42f..904b539810c7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2902,8 +2902,10 @@ struct bpf_map *bpf_map_get_curr_or_next(u32 *id);
+ struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id);
+ 
+ 
+-int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+-			unsigned long nr_pages, struct page **page_array);
++struct page *bpf_alloc_page(int nid);
++int bpf_alloc_pages(int nid, unsigned long nr_pages,
++		    struct llist_head *pages);
++void bpf_free_pages(struct llist_head *pages);
+ #ifdef CONFIG_MEMCG
+ void bpf_map_memcg_enter(const struct bpf_map *map, struct mem_cgroup **old_memcg,
+ 			 struct mem_cgroup **new_memcg);
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index c6369ea5e208..de4f7c7f68f5 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -146,7 +146,7 @@ static long compute_pgoff(struct bpf_arena *arena, long uaddr)
+ 
+ struct apply_range_data {
+ 	struct bpf_arena *arena;
+-	struct page **pages;
++	struct llist_head *pages;
+ 	int i;
+ };
+ 
+@@ -158,13 +158,17 @@ struct clear_range_data {
+ static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
+ {
+ 	struct apply_range_data *d = data;
++	struct llist_node *node;
+ 	struct page *page;
+ 	pte_t pteval;
+ 
+ 	if (!data)
+ 		return 0;
+ 
+-	page = d->pages[d->i];
++	node = READ_ONCE(d->pages->first);
++	if (WARN_ON_ONCE(!node))
++		return -EINVAL;
++	page = llist_entry(node, struct page, pcp_llist);
+ 	/* paranoia, similar to vmap_pages_pte_range() */
+ 	if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
+ 		return -EINVAL;
+@@ -197,6 +201,7 @@ static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
+ 		return -EBUSY;
+ 	set_pte_at(&init_mm, addr, pte, pteval);
+ #endif
++	WARN_ON_ONCE(llist_del_first(d->pages) != node);
+ 	d->i++;
+ 	WRITE_ONCE(d->arena->nr_pages, d->arena->nr_pages + 1);
+ 	return 0;
+@@ -312,8 +317,8 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
+ 	INIT_WORK(&arena->free_work, arena_free_worker);
+ 	bpf_map_init_from_attr(&arena->map, attr);
+ 
+-	err = bpf_map_alloc_pages(&arena->map, NUMA_NO_NODE, 1, &arena->scratch_page);
+-	if (err)
++	arena->scratch_page = bpf_alloc_page(NUMA_NO_NODE);
++	if (!arena->scratch_page)
+ 		goto err_free_arena;
+ 
+ 	range_tree_init(&arena->rt);
+@@ -481,7 +486,9 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	struct bpf_map *map = vmf->vma->vm_file->private_data;
+ 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
+ 	struct mem_cgroup *new_memcg, *old_memcg;
++	LLIST_HEAD(pages);
+ 	struct page *page, *new_page = NULL;
++	struct apply_range_data data;
+ 	vm_fault_t fault_ret;
+ 	long kbase, kaddr;
+ 	unsigned long flags;
+@@ -543,8 +550,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 		 * The probed page was freed meanwhile or preallocation failed;
+ 		 * try the non-blocking allocator, we cannot sleep here.
+ 		 */
+-		ret = bpf_map_alloc_pages(map, map->numa_node, 1, &new_page);
+-		if (ret) {
++		new_page = bpf_alloc_page(map->numa_node);
++		if (!new_page) {
+ 			fault_ret = VM_FAULT_SIGBUS;
+ 			goto out_err_locked_memcg;
+ 		}
+@@ -555,12 +562,14 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 		fault_ret = VM_FAULT_SIGBUS;
+ 		goto out_err_locked_memcg;
+ 	}
+-	struct apply_range_data data = {
+-		.arena = arena, .pages = &new_page, .i = 0
+-	};
++	llist_add(&new_page->pcp_llist, &pages);
++	data.arena = arena;
++	data.pages = &pages;
++	data.i = 0;
+ 
+ 	ret = apply_to_page_range(&init_mm, kaddr, PAGE_SIZE, apply_range_set_cb, &data);
+ 	if (ret) {
++		llist_del_first(&pages);
+ 		range_tree_set(&arena->rt, vmf->pgoff, 1);
+ 		fault_ret = VM_FAULT_SIGBUS;
+ 		goto out_err_locked_memcg;
+@@ -716,13 +725,12 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+ 	u64 kern_vm_start = bpf_arena_get_kern_vm_start(arena);
+ 	struct mem_cgroup *new_memcg, *old_memcg;
+ 	struct apply_range_data data;
+-	struct page **pages = NULL;
+-	long remaining, mapped = 0;
+-	long alloc_pages;
++	LLIST_HEAD(pages);
++	long mapped = 0;
+ 	unsigned long flags;
+ 	long pgoff = 0;
+ 	u32 uaddr32;
+-	int ret, i;
++	int ret;
+ 
+ 	if (node_id != NUMA_NO_NODE &&
+ 	    ((unsigned int)node_id >= nr_node_ids || !node_online(node_id)))
+@@ -741,15 +749,9 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+ 	}
+ 
+ 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+-	/* Cap allocation size to KMALLOC_MAX_CACHE_SIZE so kmalloc_nolock() can succeed. */
+-	alloc_pages = min(page_cnt, KMALLOC_MAX_CACHE_SIZE / sizeof(struct page *));
+-	pages = kmalloc_nolock(alloc_pages * sizeof(struct page *), __GFP_ACCOUNT, NUMA_NO_NODE);
+-	if (!pages) {
+-		bpf_map_memcg_exit(old_memcg, new_memcg);
+-		return 0;
+-	}
+ 	data.arena = arena;
+-	data.pages = pages;
++	data.pages = &pages;
++	data.i = 0;
+ 
+ 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+ 		goto out_free_pages;
+@@ -767,45 +769,28 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+ 	if (ret)
+ 		goto out_unlock_free_pages;
+ 
+-	remaining = page_cnt;
+ 	uaddr32 = (u32)(arena->user_vm_start + pgoff * PAGE_SIZE);
+ 
+-	while (remaining) {
+-		long this_batch = min(remaining, alloc_pages);
+-
+-		/* zeroing is needed, since alloc_pages_bulk() only fills in non-zero entries */
+-		memset(pages, 0, this_batch * sizeof(struct page *));
+-
+-		ret = bpf_map_alloc_pages(&arena->map, node_id, this_batch, pages);
+-		if (ret)
+-			goto out;
++	ret = bpf_alloc_pages(node_id, page_cnt, &pages);
++	if (ret)
++		goto out;
+ 
+-		/*
+-		 * Earlier checks made sure that uaddr32 + page_cnt * PAGE_SIZE - 1
+-		 * will not overflow 32-bit. Lower 32-bit need to represent
+-		 * contiguous user address range.
+-		 * Map these pages at kern_vm_start base.
+-		 * kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE - 1 can overflow
+-		 * lower 32-bit and it's ok.
+-		 */
+-		data.i = 0;
+-		ret = apply_to_page_range(&init_mm,
+-					  kern_vm_start + uaddr32 + (mapped << PAGE_SHIFT),
+-					  this_batch << PAGE_SHIFT, apply_range_set_cb, &data);
+-		if (ret) {
+-			/* data.i pages were mapped, account them and free the remaining */
+-			mapped += data.i;
+-			for (i = data.i; i < this_batch; i++)
+-				free_pages_nolock(pages[i], 0);
+-			goto out;
+-		}
++	/*
++	 * Earlier checks made sure that uaddr32 + page_cnt * PAGE_SIZE - 1
++	 * will not overflow 32-bit. Lower 32-bit need to represent
++	 * contiguous user address range.
++	 * Map these pages at kern_vm_start base.
++	 * kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE - 1 can overflow
++	 * lower 32-bit and it's ok.
++	 */
++	ret = apply_to_page_range(&init_mm, kern_vm_start + uaddr32,
++				  page_cnt << PAGE_SHIFT, apply_range_set_cb, &data);
++	mapped = data.i;
++	if (ret)
++		goto out;
+ 
+-		mapped += this_batch;
+-		remaining -= this_batch;
+-	}
+ 	flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
+ 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+-	kfree_nolock(pages);
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
+ 	return clear_lo32(arena->user_vm_start) + uaddr32;
+ out:
+@@ -819,7 +804,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+ out_unlock_free_pages:
+ 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+ out_free_pages:
+-	kfree_nolock(pages);
++	bpf_free_pages(&pages);
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
+ 	return 0;
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ac52f4ae414c..a5df15a6cd51 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -602,7 +602,7 @@ static bool can_alloc_pages(void)
+ 		!IS_ENABLED(CONFIG_PREEMPT_RT);
+ }
+ 
+-static struct page *__bpf_alloc_page(int nid)
++struct page *bpf_alloc_page(int nid)
+ {
+ 	if (!can_alloc_pages())
+ 		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+@@ -613,27 +613,34 @@ static struct page *__bpf_alloc_page(int nid)
+ 				0);
+ }
+ 
+-int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+-			unsigned long nr_pages, struct page **pages)
++void bpf_free_pages(struct llist_head *pages)
+ {
+-	unsigned long i, j;
++	struct llist_node *node;
++	struct page *page, *tmp;
++
++	node = llist_del_all(pages);
++	llist_for_each_entry_safe(page, tmp, node, pcp_llist)
++		free_pages_nolock(page, 0);
++}
++
++int bpf_alloc_pages(int nid, unsigned long nr_pages,
++		    struct llist_head *pages)
++{
++	unsigned long i;
+ 	struct page *pg;
+-	int ret = 0;
+ 
+ 	for (i = 0; i < nr_pages; i++) {
+-		pg = __bpf_alloc_page(nid);
+-
+-		if (pg) {
+-			pages[i] = pg;
+-			continue;
+-		}
+-		for (j = 0; j < i; j++)
+-			free_pages_nolock(pages[j], 0);
+-		ret = -ENOMEM;
+-		break;
++		pg = bpf_alloc_page(nid);
++		if (!pg)
++			goto free_pages;
++		llist_add(&pg->pcp_llist, pages);
+ 	}
+ 
+-	return ret;
++	return 0;
++
++free_pages:
++	bpf_free_pages(pages);
++	return -ENOMEM;
+ }
+ 
+ static int btf_field_cmp(const void *a, const void *b)
 -- 
 2.52.0
 
