@@ -1,83 +1,55 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E49C380FDD
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 08:16:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E48C43F080;
+	Tue, 29 Sep 2026 08:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790669791; cv=none; b=V0UYwKPxjEGmy+XFxK8+Lqmws8cLElwDs8FQPiQjuB/HpYFA5Kmpfebua3xBPgoqKj6uH+vx6eXSCGW+3VLF1x+pHyiIBcrx6BQ0+J12t8OkNkIENs0u7jQcIMCjYgZZb7nAshKlF4jTbQJ16uWzxzaj9r6bmgZSozRL88oL1sI=
+	t=1790670924; cv=none; b=MykAR3yKJf2Z7yVuGSRb2EkChgv8IcTOVbSGs+EyNEo1KyKcitcg1kONN/zbNcn4OoQy+ZBEJ2iw+GBHxDUIbVZH/egh4iPR8mgbVkSYLWwU5GqDMkuQN4no3WzIO4syv72ZqUOzSBf8gsyaUL1b4sJbGheJjpbcR66mQTb+M/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790669791; c=relaxed/simple;
-	bh=Sz1JmCKBZu7fltXb2NbvPIDp3GGnx7GfjB0icQIxMP4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EyPRpC9DKCX2WSDsGix4ZYpgigJuqPClrXScLOKcPcTBGDTYIyam3OnetW1RpgIwfTfMU3A7NVQxCHL0j7MKknAQyAkpZTsqaj/SUk1CjhKgjstwI9NnKLTMH9krJcYAj6PntrQ9ZckVOvAYbibI6MmLKQSfYEuWpcbZ8CFbhgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y8rcy+m6; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y8rcy+m6"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ffbd83a92so21406845e9.0
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 01:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790669788; x=1791274588; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DneU6OYsM/0OepyIfW6Zz603NV6AMxXwLJIXPeol2ys=;
-        b=Y8rcy+m652p0mlgwK7oPpdOWivZQ2H6f+qakgFL1LKSn+jsQXBkM8kbsxCJr6ikgCQ
-         sjq28b0++Hhszwkr7JMMycq3oIGsLVAY9+TilfzGoDcZlNhqROpLuABymg7EHr3qVuvT
-         QWQM/wFi/0ncEOkgRzf0YvF91NIwsU7Xt69RcPWVx8Q+3O1L7SG/UJfesalkc+JHrSC3
-         oQvSB/FW+ZDdJ2cjIapKv2JbGr4DmHC9B6RxWjSAfWECccXo6grEVAQ0URpc2iLlFoOI
-         VEbF6l6RsKpMFBBnam0r1wUOu9yT+EIzMBVY44j9Vmt+G24/LxWq4VtHKkd8k+ojroIb
-         57eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790669788; x=1791274588;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DneU6OYsM/0OepyIfW6Zz603NV6AMxXwLJIXPeol2ys=;
-        b=vL23qKcrwsKBulXCkyF+wpGEsHMj18SyNDexn3PNTuAN4abuqvng1XhgrVNvsAFPCH
-         aBfm3TMTE1zM7EBTFpptzlpiaPRNigp1o4GwyoJV08N2wLrnwOk61uSEhBeqQQlFCeC9
-         c3Qkp4cqMAHFBvkbwKhbssB1O0xAdrewjIdNfEW/Zbr5Y9KY8ih/kD+sAk7mvdnTcQHX
-         ocFnWpWQaZNFV9Wfrxwpt127C8bcs5ei3nY3WAsbg5iPOhWgDqkAg6hX99e2cJWn/qji
-         PnPYnCu9qe5fqJloltRSkMoCS6DhqdOQK79oK/6dmIIF4tj1sEwO7i3UnH6qzbJ/n9TV
-         Qjqw==
-X-Forwarded-Encrypted: i=1; AKwUvBwjJu6pTtC7ptJTEwB6p4PFRIp35UXSDSUSoY7LjkT7kBZ2pxjV/AuxaB2/4P1wAhIPJYs=@vger.kernel.org
-X-Gm-Message-State: AFuF++n6Ly5leg+RQl3nt6FyAZR0nyIHWq15eukGojWtjFYNTy/XLAWU
-	tPi9tu31slxRRko0y0AkiEm5Oc1zcDlEm0rIVT/L+nwVEv/YQtodTt/W
-X-Gm-Gg: AYBFou2aY9YOtOGixJbpYJjqbyPYl74xR2ISON2g0I4VcMTykI/MrjTrRNxT+t7vNhN
-	EIuD74f+8CASnvUN4ncmW3RtZMcnZy+TsDq1geskUiFlchtXZ/BhSZv43m8fyo+qxUJHAn1j1gT
-	kc0c1tEo8BuYagJeZZfGIeuzcIzTIduJ+NyF5AWO/V23PX2AQbOroVXRp8Z1dx6Oovk8XRDhg08
-	xS4jpU9003ujxoAgEGUIsDV4lCyP3zyllioiMR9oBonjUZl9LYJ5fJjPR+cpxXX446wFgj7rtag
-	fgMT7fXRpZ0QwLi6IudCWg2/LXCxv2bPmZqEQIAPyZCijo0FSur07CZLl8GeXpVSogzDYSLFv6z
-	UcYIi00CCx2tP0V7ekoVhJe0MBg/VZy/jmEw9UlHW73bpOH8pVbKL1A2gZGge/pqDkFdSDoNzkg
-	b3oEkswBgv3XjAwPt4LQf1djrW9ScqmtcXSD8ulVHKXYZyAat8jwwC1yuBDLhDWnjP+erWKzDx6
-	d4d8SM=
-X-Received: by 2002:a05:600c:310b:b0:49f:bd3c:bc18 with SMTP id 5b1f17b1804b1-49fe66f4c72mr267527685e9.19.1790669788138;
-        Tue, 29 Sep 2026 01:16:28 -0700 (PDT)
-Received: from metepc ([46.197.185.71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00d453badsm38333395e9.2.2026.09.29.01.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 01:16:27 -0700 (PDT)
-From: =?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
+	s=arc-20240116; t=1790670924; c=relaxed/simple;
+	bh=wauD9MVdy/MoTX4youPcX0YS7HKuAPSajlJFpZfcLfc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=L0UDDjO2QLDr4BlNY/TwnDk0ckky5qa5AZ4qgJgxM/O84idtXZv/Y0FrSdNA6KBntmu+cJLNwdMQeaD4ZGE5FGz2PBvjQOV1zrDzCwHFiHSptfvk4T8uaH1rQ/3IXcocasJgiItTKkGsoUB2sSpdiTWbTpeeWD6wMJ/J1KzdCGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hvBLV0ZTszKHMd6;
+	Tue, 29 Sep 2026 16:34:42 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 7A0AF40573;
+	Tue, 29 Sep 2026 16:35:17 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgBXdShEeLtqhxloCA--.42471S3;
+	Tue, 29 Sep 2026 16:35:16 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?=C3=96mer=20Mete=20Kaya?= <omermetekaya0@gmail.com>,
-	syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
-Subject: [PATCH bpf v2] bpf: Fix missing migration protection in __rhtab_map_lookup_and_delete_batch()
-Date: Tue, 29 Sep 2026 11:10:34 +0300
-Message-ID: <20260929081609.557899-1-omermetekaya0@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next 1/5] bpf, riscv: Fix stack-passed arguments for indirect trampolines
+Date: Tue, 29 Sep 2026 08:39:20 +0000
+Message-Id: <20260929083924.1851840-2-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260929083924.1851840-1-pulehui@huaweicloud.com>
+References: <20260929083924.1851840-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,57 +58,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgBXdShEeLtqhxloCA--.42471S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr1DWrWDKr4UGrWkCw47XFb_yoW5WFWfpa
+	15KwnxCFW0qr4Utas2qFWUWFyFyanYva13GrW7Ja4SkF4jgrWkKa4Fk3WYyF98Cr95A34I
+	vr4YvFs5Ka4DA37anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+	Av7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+	6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14
+	v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0GY
+	LDUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-bpf_mem_cache_free_rcu() uses this_cpu_ptr() which requires migration
-to be disabled. All callers of rhtab_delete_elem() disable migration
-except __rhtab_map_lookup_and_delete_batch(), which calls it under
-rcu_read_lock() only.
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-On CONFIG_PREEMPT_RCU, rcu_read_lock() does not disable preemption or
-migration, so the task can migrate between CPUs during the delete loop,
-causing this_cpu_ptr() to trigger:
+store_args() reads stack-passed arguments relative to FP assuming the
+trampoline was entered through the fentry call from a traced function. In
+that path, the trampoline pushes the parent frame before establishing its
+final FP, so the incoming stack arguments start at FP + 16.
 
-  BUG: using smp_processor_id() in preemptible [00000000] code
+An indirect trampoline for a struct_ops callback is called through a
+function pointer. Its prologue allocates only the trampoline frame and sets
+FP to the incoming SP. The RISC-V ABI places the first stack argument at
+that incoming SP, so the arguments start at FP, not FP + 16. Every
+stack-passed argument of a callback with more than eight argument slots is
+therefore read two slots late.
 
-Fix by wrapping the delete loop in migrate_disable()/migrate_enable()
-in __rhtab_map_lookup_and_delete_batch(), matching the migration
-protection that the other callers already provide.
+Pass the prologue-dependent offset to store_args(), using zero for a direct
+struct_ops trampoline and 16 for the fentry path.
 
-Fixes: 818e00848227 ("bpf: Implement iteration ops for resizable hashtab")
-Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=fd7e415d891073b83e1f
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Ömer Mete Kaya <omermetekaya0@gmail.com>
+Fixes: 6801b0aef79d ("riscv, bpf: Add 12-argument support for RV64 bpf trampoline")
+Cc: Björn Töpel <bjorn@kernel.org>
+Cc: Pu Lehui <pulehui@huawei.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
 ---
-Changes in v2:
-  - Fix root cause in __rhtab_map_lookup_and_delete_batch() with
-    migrate_disable()/migrate_enable() instead of stretching
-    bpf_disable_instrumentation() in rhtab_delete_elem().
-  - Fix Fixes: tag to 818e00848227.
-  - Fix commit message: migration disabled, not preemption.
+ arch/riscv/net/bpf_jit_comp64.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Tested with syzkaller:
-  - Before the fix: the reported warning was reproduced reliably.
-  - After the fix: the warning was no longer reproducible.
-
- kernel/bpf/hashtab.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index f744a42bb813..2bb9ac7fc73e 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -3369,8 +3369,10 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
- 	}
-
- 	if (do_delete) {
-+		migrate_disable();
- 		for (i = 0; i < total; i++)
- 			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
-+		migrate_enable();
- 	}
-
- 	rcu_read_unlock();
---
-2.55.0
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index ed0a6f871dea..b5fa6338e5eb 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -895,7 +895,8 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ 	return ret;
+ }
+ 
+-static void store_args(int nr_arg_slots, int args_off, struct rv_jit_context *ctx)
++static void store_args(int nr_arg_slots, int args_off, int stack_args_off,
++		       struct rv_jit_context *ctx)
+ {
+ 	int i;
+ 
+@@ -903,8 +904,8 @@ static void store_args(int nr_arg_slots, int args_off, struct rv_jit_context *ct
+ 		if (i < RV_MAX_REG_ARGS) {
+ 			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
+ 		} else {
+-			/* skip slots for T0 and FP of traced function */
+-			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
++			emit_ld(RV_REG_T1, stack_args_off +
++				(i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
+ 			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
+ 		}
+ 		args_off -= 8;
+@@ -1190,7 +1191,12 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	func_meta = nr_arg_slots;
+ 	emit_store_stack_imm64(RV_REG_T1, -func_meta_off, func_meta, ctx);
+ 
+-	store_args(nr_arg_slots, args_off, ctx);
++	/*
++	 * A direct struct_ops call has its first stack argument at the incoming
++	 * SP, which the trampoline keeps as FP. The fentry path pushes the
++	 * parent frame first, so its incoming stack arguments start at FP + 16.
++	 */
++	store_args(nr_arg_slots, args_off, is_struct_ops ? 0 : 16, ctx);
+ 
+ 	if (bpf_fsession_cnt(tnodes)) {
+ 		/* clear all session cookies' value */
+-- 
+2.34.1
 
