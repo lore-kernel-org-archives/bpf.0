@@ -1,65 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.smtp-ext.broadcom.com (lpdvsmtp09.broadcom.com [192.19.166.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF00519DFE;
-	Tue, 29 Sep 2026 18:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9227D3F12DE;
+	Tue, 29 Sep 2026 19:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790707869; cv=none; b=AHrGbcB1R+WHjhFdEBxqPCJhZb7OvZmiwJW6dShyAhPu2xdo3cvvXBxkGltxAIHBPZ0AgVaDkd9GCjBPEQJ1rrZt26AnqxCLohf3SwE1pbD/2mt/jl8OcCwPXZvFpDdSNA/zb9SfIJIxvW5PHadpsg+P2q7KYStSG1Nxf/2/tAU=
+	t=1790709362; cv=none; b=Q6nkHBKT3cFGkUd8mJk87FdDabT8SSxWLnN2hp1f4mV46aGiHrzewiCN2715w7AfQKtL85ekZGpfGUwqC5hGz4zzPw28u701hvEz4/UX8Nm4D2JdFoXtPFPZ4GtIxCderTgW/pjpwF7aqo99Lr1l+dirr3sEQzIsQNQ99A7+F74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790707869; c=relaxed/simple;
-	bh=xeDPir2vMCg9MbVRMqqwtvHoJVl8f+7Vg9oq/nrh9/I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OE91+Bs1y1B2ujmj/JpbS/XzTf1kX9ixY9UnP5WuhGgjZVJYEAtwCCBS7D9DyQXbSd4YUy2bh4VgUIqQSx/k1mG1hYBrL3I5NFGUWXTyaVgJigzUF18Go7CxWpNWMQo7Hrh/lsDTPUZuTkxZI5Iq2OE5Z7oGDVRlsFyHBHeOWBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jPOhFoe9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790709362; c=relaxed/simple;
+	bh=W10miejuAmpA1dz0uUNI/UEExlQLIprZQdu/nedANco=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=dG7TChHZeMEteY3U5C5tTnVmJJgdcn4rnDCxHTL8NpHhNCLEeqbPMrRuWSFBHSlg701MM1s92e9IrnPtjPvm/T7aX/p7KvsEIUlP58CNboJ0jctuBPgpMrgx+8X5yG1Szxpof3fVUKmVsj77RTl8wNo1U1aXWWBGqjK/Ny7MIgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ZP1nKXsW; arc=none smtp.client-ip=192.19.166.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jPOhFoe9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A221F0089B;
-	Tue, 29 Sep 2026 18:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790707868;
-	bh=yNDRM42eBrQ5mbS49iPG5XFNVheP65rhrLSdNQDYTZU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=jPOhFoe9YCGY5pc//f/Hyaqz7yU9m89dg7Vdc4I3s8tUzEZu4taAqkCkSJTHZf5Qf
-	 kKgK2UC2nGtgiY9TyCRwcqTbsLn7EOuafjJJWhjfniXOqyahlb6SvbvC6vTsq9YDMt
-	 YjxY1xBjtLL9/ZP/nb2HSO71CuZ9nQQsqLHIz4EXbjHPh3KFt8xXxd44srz3NWypB1
-	 CIXAYr6dv1Ap53iGxZkKUBYr9CYimDTbBBj0Ah1p+zDl6M3HyzvU2MWDc02Ak2Kj5k
-	 5rBA12LaMVcgo8+pKV6YnJGzgvaRXXQ+T0KSM3IQ2L8hC21ia9VWek69iuAyDaN2nb
-	 xNS2t/Ep6Csng==
-From: Sasha Levin <sashal@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>,
-	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	john.fastabend@gmail.com,
-	sd@queasysnail.net,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org,
-	Qingfang Deng <qingfang.deng@linux.dev>
-Subject: Re: [PATCH net 1/7] net: tls: fix silent data drop under pipe back-pressure
-Date: Tue, 29 Sep 2026 14:50:48 -0400
-Message-ID: <2026-09-29-daily-reply-0005-re-tls-splice-read-data-drop@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <5b0a6f1a-d44f-4e7d-9931-4106172d6258@linux.dev>
-References: <20260429222944.2139041-1-kuba@kernel.org> <20260429222944.2139041-2-kuba@kernel.org> <5b0a6f1a-d44f-4e7d-9931-4106172d6258@linux.dev>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ZP1nKXsW"
+Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id CDBD0C0000EF;
+	Tue, 29 Sep 2026 12:15:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com CDBD0C0000EF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1790709353;
+	bh=W10miejuAmpA1dz0uUNI/UEExlQLIprZQdu/nedANco=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZP1nKXsWFmEaHiEQje+dudlClCtdbwHAhY4iI7Awnj6szDDFF8wbTfqpsAEkVf1NB
+	 OJbO4IuhjCUFfHwPz20Wk/PSJ/7avy9nUl2K24fljrFKhylNrHLIuOsJuXINmQUUQa
+	 jLIwZvV9lbGgTYeEibjQPguFCoZ/lyiajhWGYaqc=
+Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id 3B2F6AEA2;
+	Tue, 29 Sep 2026 15:15:52 -0400 (EDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: stable@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
+Subject: [PATCH stable 5.15 0/2] perf build warnings fixes
+Date: Tue, 29 Sep 2026 12:15:39 -0700
+Message-Id: <20260929191541.264038-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-> I just hit this bug on v6.18.y. Somehow this was not automatically
-> backported to stable?
+This patch series fixes the following build warnings:
 
-Queued for 6.18, 6.12, 6.6, 6.1 and 5.15, thanks.
+tests/bpf.c: In function 'epoll_pwait_loop':
+tests/bpf.c:36:17: error: argument 2 null where non-null expected
+[-Werror=nonnull]
+   36 |                 epoll_pwait(-(i + 1), NULL, 0, 0, NULL);
+      |                 ^~~~~~~~~~~
+In file included from tests/bpf.c:5:
+../../../../per-package/linux-tools/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/sys/epoll.h:134:12:
+note: in a call to function 'epoll_pwait' declared 'nonnull'
+  134 | extern int epoll_pwait (int __epfd, struct epoll_event
+*__events,
+      |            ^~~~~~~~~~~
+cc1: all warnings being treated as errors
+In function 'parse_events_term__num',
+    inlined from 'parse_events_multi_pmu_add' at
+util/parse-events.c:1687:9:
+util/parse-events.c:3100:64: error: array subscript 'YYLTYPE[0]' is
+partly outside array bounds of 'char[4]' [-Werror=array-bounds]
+ 3100 |                 .err_term  = loc_term ? loc_term->first_column :
+0,
+      |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+util/parse-events.c: In function 'parse_events_multi_pmu_add':
+util/parse-events.c:1678:39: note: object 'config' of size 4
+ 1678 |                                 char *config;
+      |                                       ^~~~~~
+cc1: all warnings being treated as errors
+
+Arnaldo Carvalho de Melo (1):
+  perf test bpf: Address error about non-null argument for epoll_pwait
+    2nd arg
+
+Namhyung Kim (1):
+  perf tools: Fix a asan issue in parse_events_multi_pmu_add()
+
+ tools/perf/tests/bpf.c         | 3 ++-
+ tools/perf/util/parse-events.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 -- 
-Thanks,
-Sasha
+2.34.1
+
