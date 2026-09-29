@@ -1,177 +1,281 @@
-Received: from mail-ed2-f34.google.com (mail-ed2-f34.google.com [74.125.228.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFCA3DCDA0
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 18:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.98
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790705022; cv=pass; b=F9MrNXI2GN1r1+T2eqncMQeA60cEyevECSPm0qip/p2gSVjA4dpN/U23MT62NDXCShRr9206GD7gpEsc0xESJEVgcRHsfNx3GJ4w8XSMrZswtKcwgXZCOiGr982oKkJtXRK6E3zddLBENMcgnVxWzURajBfYS+9CX/DINWbo4Sk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790705022; c=relaxed/simple;
-	bh=66NPz0C8eG0KHGSWeidBwsifxHr9iMvd7btjXL3I6t8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KS+KnZqUc3Ish0HP0nx/h5jS95kY7iDA39/jD+nmU6Bp7T0lJh29HGqnVrL1FmFi54T5S36QSO3d8APFTAaTeQjipyquEu33YJMVNdo9X7gTnhLcD4UPaqP7F4Lvvw+VdnfkDuVURQGFLLiyETwgmMXSJNtMYR1I1AjtB3ISNhM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HZ3eNak/; arc=pass smtp.client-ip=74.125.228.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60D4322B9F;
+	Tue, 29 Sep 2026 18:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790705251; cv=none; b=Yb9EaR9louBZsfq6jx93w91vRQqLjFPIJ9PET8pbDYegL2PXVIdMPYIXaAbs/vKwEmbkPs4n9EmzY1QUvBt/X4Wh4Ml5pL9PwF03PVmn1rb0IjWaAnkBMaUb7Xumy5P2VjC/zOAlnoQtbpwquUhpSPvyRhj3Hmcj6macNX50OhY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790705251; c=relaxed/simple;
+	bh=HedXA29bP2AYga35+FP735wrhCFsjEPZwKzF7UPRSqs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pOXPqxUjLn+Ng6KI3nzKQx7G+PloXIkayqpwEfVsj7qZfVMorztW+jxmNvPm/Na0057+b/41B9U44EAFyHgegBWZ+d/3yI9q9fZ6Q3ul4M4PO3yBpFbBp2BfpLEcU0RWzDi1JgSTMyCQWitjSmJWVMITBxYBtK2kEaLx2l6Qgv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=egPIya6h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HZ3eNak/"
-Received: by mail-ed2-f34.google.com with SMTP id 4fb4d7f45d1cf-6aaf8415866so5871369a12.0
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 11:03:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790705019; cv=none;
-        d=google.com; s=arc-20260327;
-        b=TLrFuLzM4JGZot9qlBxlratQX06ZxFEYkAWSH0GuRmdXXalZI33QzjmSAp+CBzuYAR
-         EQA+R++1jg8HnbwGPws73rcha0rieAQ1F1qna4PKkDgpjDxfU8j8o6BxYPmiDHswRMTM
-         OSv6fqSu3HJpIYQ6M7buiR56nSahatvN7pSr73mpKgtnbtidewsH0M2vOd+QG5zmIrTw
-         6+cW+NZ55xXRdTD/aL/fE/3Y6iI2iU1vqOCsyxKzPgyAekeReKR3jG4yLQtKhNPFEEz9
-         TpO1g3JTBffmt4sfdqd2YZu1pLkncqpEfzStWxGfym6JmA89dQQbPZcmvvQYPSoeEhkH
-         UD2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Cx+hvzKqglq+4E86uBoiNqYHk0FJfTWAwibQaEI3f9A=;
-        fh=n8HtL/tQYsg6uYl56l87VWJL97Mga9jTLSdYnf8zSJI=;
-        b=s8+tQ5zJdUdNxFbmfpLT4m1GKi7hf4R9MoWkDUyOQ2TUf6iJWQWKxDsq81EnzmWjvr
-         I2ySaumoGrNMXjiuuBtnM/hcJXWla41XzmcmH0AxMAeApmGS2Glxox8HauYWQmPytbEA
-         k3TXS5ofqLw9M4UeQNh17fPA3ioEPHWWq1PzIBXY1j/DiObACOCwtkEDMzb6Ba74+09g
-         N2zPzxkxJEXuCHHDxWSl1+MI8sH8p67co+zz4xC5HRnBU1yQAK72Q3R4ug3wTagZbg5H
-         4zlEOhT+zOkRiNh1XYvOFXZw0SAW0yYBQveToU4dz26AN2sdg7nT3CqXhpooifgDKyF8
-         u+qg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790705019; x=1791309819; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Cx+hvzKqglq+4E86uBoiNqYHk0FJfTWAwibQaEI3f9A=;
-        b=HZ3eNak/DKOJPows8YaJ8hUGPD74CpsdmBBhhS/pws2y7XTwxXcgim/XCd69/GDi2g
-         aW0y6pNYCYkIn3YgUS9NrTISuyvJyOALivXZHU3NCmtFvI2lx5g+r7lPzmiSjghQXmkt
-         yYLv9FqXEDRiW0ki0zT976ELXQP1A6c0eWD9bxTZ49f/MpXUBPL9I16Vlothp+nlRQKu
-         5JWYeyuI89Q73YA5HJY9wyKI5VfqVutemcGQg7sq1QcX/uSlqTquZkMmgh79MGYtdD5S
-         F4DZpcp1CyIaaqf2CobxZDrL5zLTYauYaUFUaXLRzH14TOawFXqnC6Uh8NGgwjsfODQ4
-         OIfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790705019; x=1791309819;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Cx+hvzKqglq+4E86uBoiNqYHk0FJfTWAwibQaEI3f9A=;
-        b=rrOW7rKjhE7ME5d9J8T7d+1C+lH89ySvQoa7Y9X3S3FzkvdbgHd2e35FsswDB/ofth
-         +8jbNuEviAWjpvpAuvprJ3/FLB66K3SJlxf//7GujYPxj1HtVIcGCU1y+65dNip7xSFl
-         UZ3wwe1MPqtIDdm08Xbr3zL/GNQ5C2ScdBjeaJXeiCiDJfIy4SQ82rv/rN64nuJiXLsj
-         97PCzp4xqZsr1yx+UhdtqKQrNaiH17HtgW4Rx0bU1YDlap8B6xeF5b5gdw+vuJG1ax/W
-         VA0GMaRow3Tk8u4TUnFd+1188+JqBzfIlosPNchNQz4nBg3HQODwNxsGHoFFzb+CrgdZ
-         PDpQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwx+9qFgrVp1juIzSzdqT8taGZly4zX++zJxg8sPh1yxRplHVdloWfZQqQIQ3z5EgCkSSM=@vger.kernel.org
-X-Gm-Message-State: AFuF++n1i4VRXTkaonDblDcfgMjXvRj2H6DznMhvbp61pnXftxAgxJRX
-	qkjRZa/8HFw+RfRV35O0FTmH1EmmTjkMtk33VhO+pb+59GClmSVJkGOPMCTjJy0twhhTUUjOU2Z
-	/SzmsOVb7R2SxbipD02FsAYWnzmj4fS9kanZMPamH
-X-Gm-Gg: AYBFou1cPjYzol+I92SsRPyOk6ECaRolvn8mbzXXzxH1Wl99pxiyeM6EguSpMAogMIw
-	z34L5An4xcpZEOAQq42WGBBTaKo3z1fc9BgB29Cl0RwtQj9c2vNHCi6rz+k8DuLKoj3y+DLdynW
-	k5iJ5O9HmsZTH9zXlKifF7F22p99uh7goFDxMRNTYvAhO+5z90nsO4gRvjK8zHHN9udEDNNYYP5
-	hhFOVHWTd3+dQe6sDTgOkRNYhxgbtdlMBJqIAvbZGPa+mfMp/gZ38YumUZBIkYfAJgu5SQXVgJ3
-	+8/yTOMCgwNQwPu47/hN9L609Rsn+NLptf6ae76OUDixcez218quUFvmLA==
-X-Received: by 2002:a17:907:c408:b0:c26:2eee:ffc7 with SMTP id
- a640c23a62f3a-c2e1588b329mr24041666b.35.1790705018647; Tue, 29 Sep 2026
- 11:03:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="egPIya6h"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 638D6C4AF0B;
+	Tue, 29 Sep 2026 18:07:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1790705251;
+	bh=HedXA29bP2AYga35+FP735wrhCFsjEPZwKzF7UPRSqs=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=egPIya6hO0qD84jl3l6phUzqNKajQWYKKFlxstWRFyT+XstgLuyHk4IkCcU2tEzx1
+	 dXYZ1aVu8ranfxxyEOyoeHUuuv9vf7em7oKMGfkQuL0YcMCdyS9GxxRtlc0YY0QcP1
+	 T8E28kDtZ0PFE6eefHfxv7kf7SrgYqepvJrZPTff18tb+5NYoFeWWR9jf06CPe1ZyH
+	 zsemc/29RrVD4eEz/W6+vvEZk5wYjCNvuEFuYIhkIS91jilIVfWScfDPKQ7zACCiIj
+	 JqjciY3qhgWhW0w9mEiZwdLAkMV6QojV/DQ2ky6NKxjtfm7vkh+Z5zd+zsy5NITeUw
+	 1q6iFvB9k3EgA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E498CA5FA7;
+	Tue, 29 Sep 2026 18:07:31 +0000 (UTC)
+From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
+Subject: [PATCH v7 0/3] kallsyms: Accelerate symbol name lookups by ~7x
+Date: Tue, 29 Sep 2026 12:07:29 -0600
+Message-Id: <20260929-ksyms-tune-v7-0-be568ceef41e@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260924185316.2831077-7-hramamurthy@google.com>
- <179036256202.2160803.12978678207911420221@kernel.org> <286547c9-9f4a-4202-a615-b51d42850951@redhat.com>
-In-Reply-To: <286547c9-9f4a-4202-a615-b51d42850951@redhat.com>
-From: Joshua Washington <joshwash@google.com>
-Date: Tue, 29 Sep 2026 11:03:27 -0700
-X-Gm-Features: AclHuK8gnKhB4zG1JHYYcGdrp3cm0c0-oSpP2e81va5MA8TRCBQ1L_AaXhWMhjM
-Message-ID: <CALuQH+Um-hzm3UTsG35+c5AX6RuW2x=OLYq=GOpgK8fR4P7FMg@mail.gmail.com>
-Subject: Re: [PATCH net-next v8 06/12] gve: simplify reset logic
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev-bot+sashiko@kernel.org, hramamurthy@google.com, 
-	netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, 
-	jordanrhee@google.com, willemb@google.com, nktgrg@google.com, 
-	maolson@google.com, thostet@google.com, jacob.e.keller@intel.com, 
-	debarghyak@google.com, kees@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, przemyslaw.kitszel@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNwW7CMAzG8VdBOS9TYidps9PeY+LgJQaire3UQ
+ DWE+u4znNpqHD9Lv79vqvJYuKq33U2NPJVahl5G87JT6UT9kXXJshUYCCbaqL/qtav6fOlZMwA
+ 5yC2hJSXgZ+RD+X3EPvayT6Weh/H6aE/2fv03M1ltdG59ik0mSwjvx47K92saOnXPTLCgACsKQ
+ gkRmdEypWZL8TlFoaGVf47J+By31D2nTmgESkyt+4zWbqlfUr+iXqg9NJ6ySQg2bWlY0rCiQSh
+ gCGBS8BzbJZ3n+Q+NlOQ0ywEAAA==
+X-Change-ID: 20260919-ksyms-tune-e22a42d8a31a
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Petr Mladek <pmladek@suse.com>, Zhen Lei <thunder.leizhen@huawei.com>, 
+ Luis Chamberlain <mcgrof@kernel.org>, 
+ Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Kees Cook <kees@kernel.org>, David Laight <david.laight.linux@gmail.com>, 
+ Masahiro Yamada <masahiroy@kernel.org>, Jiri Olsa <olsajiri@gmail.com>, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790705250; l=10591;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=HedXA29bP2AYga35+FP735wrhCFsjEPZwKzF7UPRSqs=;
+ b=Mv/rpPgdR/0VpIzwGFWoQbsQv8QxW98ufFmXosfOyf0Cpmy3i7E8xS9kk4S6Bs+9oQ/Fph7GE
+ 7I+JIKeR3XSDlquZrCiJVg/l7V26hSsYx/IPlkYVnzaMpUdRgwhEr6B
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
+X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
+ auth_id=958
+X-Original-From: Jim Cromie <jim.cromie@gmail.com>
+Reply-To: jim.cromie@gmail.com
 
-On Tue, Sep 29, 2026 at 2:27=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On 9/25/26 20:56, netdev-bot+sashiko@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 7 potential
-> > issue(s) to consider.
-> >
-> > Critical: 0 =C2=B7 High: 2 (1) =C2=B7 Medium: 2 (2) =C2=B7 Low: 3 (1)
-> >
-> > If you believe none of the issues are legitimate, please reply to each
-> > issue of Medium severity or higher and explain why the AI is wrong.
-> > If any of them are legitimate and you plan to respin, please let patchw=
-ork
-> > know by including "pw-bot: cr" as a separate line at the end of your re=
-ply
-> > (one such reply per series is enough).
-> >
-> > - [High] After a failed recovery, an unprivileged user can crash the
-> >    kernel with an ethtool query.
-> > - [High] When gve_recover() fails during a reset while the interface is
-> >    up (service-task reset, ethtool reset, flow-rule timeout, or=E2=80=
-=A6
-> > - [Medium] gve_teardown_control_plane_resources() (gve_main.c) now call=
-s
-> >    gve_teardown_clock().
-> > - [Medium] The commit message does not mention several user-visible
-> >    changes to error handling, and one of its design statements is not=
-=E2=80=A6
-> > - [Low] This patch removed gve_queues_mem_remove() from
-> >    gve_queues_start()'s error path.
-> > - [Low] The commit fixes a real unbounded recursive reset but has no
-> >    Fixes: tag.
-> > - [Low] Item 2 of the commit message describes the old bug this way:
-> >    gve_close() during gve_shutdown triggers a hardware reset and then=
-=E2=80=A6
-> Low prio remarks could be ignored and we prefer no fixes tag in net-next
-> patches, but the first 3 ones in the list look relevant and should be
-> addressed.
->
-> Also please note you are supposed to address clashiko comments proactivel=
-y.
->
-> /P
->
+In 2022, commit 60443c88f3a8 ("kallsyms: Improve the performance of
+kallsyms_lookup_name()") introduced kallsyms_seqs_of_names[] (+550 KiB
+.rodata), transforming an O(N) linear scan into an O(log N) binary
+search (5.2 ms -> ~7.2 us).  While this was a major step forward,
+the binary search inner loop was left decompressing full candidate
+names and scanning across sparse 256:1 markers on every probe.
 
-My apologies for not replying directly. Harshitha ultimately replied
-to the cover letter stating that we would be sending a v9 to address
-high/medium issues, so I thought that was sufficient.
+Modern fleet observability, security daemons (e.g. CrowdStrike Falcon,
+Cilium, Datadog, Falco), and tracing tools resolve thousands of kernel
+functions by name at boot or service start.
 
-In any case, I will add a response here for the planned fixes for v9:
+CrowdStrike recently hit this in production:
 
-> - [High] After a failed recovery, an unprivileged user can crash the
->    kernel with an ethtool query.
-> - [High] When gve_recover() fails during a reset while the interface is
->    up (service-task reset, ethtool reset, flow-rule timeout, or=E2=80=A6
+commit 93e8fd1a565e ("ftrace: Use kallsyms binary search for single-symbol lookup")
 
-These first two are a result of the change to teardown when recover
-fails. For that, we will avoid tearing down when only queue creation
-fails, and call device_detach when the control plane itself cannot be
-set up. This should prevent any ethtool IOCTLs from going through.
+Attaching just 50 kprobe.session programs caused an 858 ms attach
+stall with 25% CPU burned in kallsyms.  That commit routed single-symbol
+libbpf attach directly to kallsyms_lookup_name().  In larger workloads
+(such as the BPF selftest serial_test_kprobe_multi_bench_attach across
+64,000 symbols), kallsyms_lookup_names() spends ~390 ms in raw CPU spin.
 
-> - [Medium] gve_teardown_control_plane_resources() (gve_main.c) now calls
->    gve_teardown_clock().
+This series accelerates kallsyms_lookup_names() by 7.0x (from 6,102 ns
+down to 866 ns per lookup), cutting 64k-symbol attach from ~390 ms to
+~55 ms, by fixing two inner-loop bottlenecks:
 
-gve_teardown_clock() will be called as part of
-gve_free_control_plane_resources() instead. Since it is only freeing
-memory, and is idempotent, this should be a safe change.
+0. Candidate symbols are fully decompressed into a 512-byte stack buffer
+   before calling strcmp(), even though ~16 of the 17 search steps
+   mismatch at the first differing character (0..N-1, heavily
+   front-loaded toward 0-2).
 
-For the commit message issue, the commit message will be updated to
-reflect the latest changes. This code has changed quite a lot since
-v1, but the commit messages has not seen many of those updates.
+1. Probes scan sequentially from 256:1 markers in kallsyms_names[],
+   decoding an average of 127.5 symbols per probe (~2,170 hops across a
+   17-step search).
 
--- Josh
+The 3-patch progression:
+
+0. Patch 1 introduces kallsyms_strcmp_symbol() to compare ASCII queries
+   against compressed tokens on the fly, bailing out on first mismatch.
+   Drops the 512-byte stack buffer and saves ~530 ns.
+
+1. Patch 2 increases marker density from 256:1 to 16:1, cutting average
+   scan distance from 127.5 to 7.5 hops and dropping lookup latency from
+   6,102 ns to 866 ns for +42.2 KiB of .rodata.
+
+2. Patch 3 inlines and unrolls get_symbol_seq() 24-bit reconstruction.
+
+Results (CONFIG_KALLSYMS_SELFTEST across ~184k symbols):
+- Baseline (256:1):  6,102 ns
+- Patch 1 (strcmp):  5,572 ns (-530 ns)
+- Patch 2 (16:1):      866 ns (7.0x faster)
+
+Trade-offs:
+- .rodata footprint: +42.2 KiB (+10,782 u32 entries for ~184k symbols,
+  ~0.1% of loaded kernel image).
+- Runtime overhead: 0 bytes dynamic RAM (no kmalloc/kvmalloc), 0 RCU,
+  0 new locks, and 0 new algorithms.
+- Kernel stack: -512 bytes freed in kallsyms_lookup_names().
+- Build tooling: scripts/kallsyms.c includes
+  ../kernel/kallsyms_internal.h (guarded by #ifdef __KERNEL__) so host
+  build and kernel runtime share KALLSYMS_MARKER_SHIFT 4 as a single
+  source of truth.
+- Build time: Unmeasurable delta (< 1 ms in scripts/kallsyms.c).
+
+What's Unchanged:
+- Symbol table layout in address order remains identical.
+- Streaming decompression for /proc/kallsyms and sprint_symbol() is
+  untouched.
+- 0 new user-facing APIs, 0 new locking primitives, 0 Kconfig options.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+Changes in v7:
+- Lead cover letter with concrete workloads and "who cares" (citing
+  CrowdStrike commit 93e8fd1a565e and 64k BPF selftest attach times)
+  (addresses Andrew Morton review).
+- Document lineage from Zhen Lei's 2022 binary search work in commit
+  60443c88f3a8 (+550 KiB .rodata) and frame this series as completing
+  that optimization (+42 KiB .rodata for 7x faster lookups).
+- Explicitly detail memory (+42.2 KiB .rodata, 0 B RAM, -512 B stack)
+  and build-time (<1 ms) trade-offs in cover letter (addresses Andrew
+  Morton review).
+- Detail lack of runtime complexity (0 kmalloc, 0 RCU, 0 locks, 0 new
+  algos).
+- Note scripts/kallsyms.c reading KALLSYMS_MARKER_SHIFT from kernel/
+  header as single source of truth.
+- Add Petr Mladek, Zhen Lei, Luis Chamberlain, Andrey Grodzovsky, and
+  Steven Rostedt to Cc list.
+- Link to v6: https://lore.kernel.org/r/20260926-ksyms-tune-v6-0-236620c65e98@gmail.com
+
+Changes in v6:
+- In patch 1, clarify token matching mechanics and early exit on char
+  0..N-1; cite CONFIG_KALLSYMS_SELFTEST across all ~184k symbols for the
+  ~530 ns measurement (addresses BPF CI review).
+- In patch 1, drop 0-2 list and fix repeated word typo ("the the").
+- In patch 2, recast commit body around kallsyms storage trade-offs and
+  drop hunk-by-hunk numbered list (addresses BPF CI review).
+- In patch 2, drop 0.002% percentage claim and state absolute .rodata
+  cost (+42 KiB for ~184k symbols).
+- In patch 2, drop ephemeral benchmark comment from
+  kernel/kallsyms_internal.h (addresses BPF CI review).
+- Link to v5: https://lore.kernel.org/r/20260925-ksyms-tune-v5-0-1f75ad0c321c@gmail.com
+
+Changes in v5:
+- Dismiss dynamic 1:1 batch table as unnecessary:
+  In v2-v4, a dynamic u32 lookup index allocated in transient RAM was
+  explored.  While dynamic 1:1 breaks even against baseline 256:1 after
+  ~1,200 queries, comparing dynamic 1:1 against static 16:1 markers
+  dismisses the dynamic approach entirely:
+  * Static 16:1 markers achieve 866 ns, capturing 97.4% of the maximum
+    latency savings of a 1:1 table (an 85.8% reduction from baseline).
+  * Dynamic 1:1 gains only an incremental 138 ns (the remaining 2.6%),
+    while paying ~6,419 us in allocation setup and synchronize_rcu()
+    teardown.
+  * Amortizing 6,419 us at 138 ns saved requires 46,514 queries just to
+    break even against 16:1 markers.  For any workload under 46k
+    queries, dynamic allocation is slower overall.
+  * Drop kallsyms_lookup_batch_start/end APIs, mutexes, refcounts,
+    transient kvmalloc RAM allocations, and RCU synchronization.
+- Drop lib/test_kallsyms_perf benchmark module and
+  CONFIG_TEST_KALLSYMS_PERF; existing in-tree CONFIG_KALLSYMS_SELFTEST
+  already benchmarks standard kallsyms_lookup_name() without adding
+  unmaintained test files in lib/.
+- In patch 2, increase marker density to 16:1 via
+  KALLSYMS_MARKER_SHIFT 4 shared between scripts/kallsyms.c and
+  kernel/kallsyms_internal.h, and drop all references to dynamic tables
+  from the patch body.
+- Link to v4: https://lore.kernel.org/r/20260922-ksyms-tune-v4-0-92acea84b911@gmail.com
+
+Changes in v4:
+- In patch 1, ignore early boot invocations in param_set_trigger() when
+  system_state < SYSTEM_RUNNING to prevent NULL pointer dereference in
+  ktime_get_ns() prior to timekeeping_init() (addresses Sashiko review).
+- In patch 1, prevent sysfs TOCTOU divide-by-zero panic: reject
+  num_iters == 0 in param setter, snapshot iters locally via READ_ONCE,
+  and serialize runs with bench_lock mutex (addresses Sashiko review).
+- In patch 1, eliminate multi-second boot stall: add run_on_boot
+  parameter (default false) so late_initcall only runs benchmark when
+  explicitly requested (addresses Sashiko review).
+- In patch 1, chunk lookup loops in 4096-iter batches with
+  cond_resched() outside the timing bracket to prevent preemption sleep
+  time from inflating reported latency (addresses Sashiko review).
+- In patch 3, annotate dyn_kallsyms_offsets declaration with __rcu to
+  satisfy sparse type checking and prevent address-space warnings across
+  rcu_assign_pointer() and rcu_dereference() (addresses Sashiko review).
+- In patch 3, use rcu_replace_pointer() with lockdep_is_held() during
+  batch teardown to atomically read and clear the pointer while
+  satisfying sparse address-space constraints (addresses Sashiko
+  review).
+- Link to v3: https://lore.kernel.org/r/20260922-ksyms-tune-v3-0-681a34ea05d9@gmail.com
+
+Changes in v3:
+- Reorder series: place on-the-fly token matching ahead of marker
+  density optimization, establishing an active proof of incremental
+  performance deltas across all steps (addresses David Laight review).
+- Add inlined and unrolled get_symbol_seq() 24-bit sequence index
+  reconstruction into direct byte shifts (addresses David Laight
+  review).
+- In test_kallsyms_perf, configure as a built-in test (bool) rather
+  than a module (tristate) and drop kallsyms iterator EXPORT_SYMBOL_GPL
+  exports to avoid exposing internal kernel symbol data (addresses
+  Sashiko review).
+- In patch 1, optimize kallsyms_strcmp_symbol() by dropping
+  skipped_first tracking and checking len at the bottom of the token
+  loop (addresses David Laight review).
+- Drop 'default m' from lib/Kconfig.debug.
+- Fix soft lockup risks by adding cond_resched() every 16k iterations in
+  test_kallsyms_perf loops.
+- Replace direct 64-bit integer divisions with div_u64() to fix 32-bit
+  builds.
+- Guard against divide-by-zero when num_iters=0.
+- Replace tcp_v4_rcv with panic in hit_symbols to prevent failures wo
+  CONFIG_INET.
+- Move David Laight to series-wide Cc on cover letter, dropping trailer
+  from patch 3.
+- Link to v2: https://lore.kernel.org/r/20260922-ksyms-tune-v2-0-a333ee31eac7@gmail.com
+
+Changes in v2:
+- Replaced static build-time 3-byte offset table with a dynamic u32
+  index bracketed by kallsyms_lookup_batch_start() and
+  kallsyms_lookup_batch_end().
+- Dropped .rodata image footprint addition from +573 KiB to 0 KiB,
+  addressing Kees Cook's memory footprint objection.
+- Native u32 loads in transient RAM eliminate 24-bit big-endian shifts
+  and unaligned loads, addressing David Laight's endianness critique.
+- Direct O(1) table indexing provides 0 hops for all symbol lookups
+  without remainder logic or odd/even branching.
+- Restored scripts/kallsyms.c and kernel/kallsyms_internal.h to pristine
+  state, leaving legacy kallsyms_markers[] as safety fallback.
+- Rebased out Lorenzo Stoakes' kbuild series; this series is now
+  completely decoupled and applies cleanly directly onto mainline.
+- Link to v1: https://lore.kernel.org/r/20260919-ksyms-tune-v1-0-d85c97da1a32@gmail.com
+
+---
+Jim Cromie (3):
+      kallsyms: Match compressed tokens on the fly during binary search
+      kallsyms: Increase marker density to 16:1 to accelerate lookups
+      kallsyms: Unroll 24-bit sequence reconstruction in get_symbol_seq()
+
+ kernel/kallsyms.c          | 111 +++++++++++++++++++++++++++------------------
+ kernel/kallsyms_internal.h |  11 +++++
+ scripts/kallsyms.c         |  14 ++++--
+ 3 files changed, 86 insertions(+), 50 deletions(-)
+---
+base-commit: 93f51579e7df248780214094418f205253383cc5
+change-id: 20260919-ksyms-tune-e22a42d8a31a
+
+Best regards,
+-- 
+Jim Cromie <jim.cromie@gmail.com>
+
+
