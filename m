@@ -1,107 +1,155 @@
-Received: from mail-dy2-f41.google.com (mail-dy2-f41.google.com [74.125.229.41])
+Received: from mail-ej2-f23.google.com (mail-ej2-f23.google.com [74.125.228.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026AD3A4F58
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 20:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06B62E7397
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 20:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790713586; cv=none; b=UCvFnTg97ZzaE8yBJSZ6SSGI1zwQ20g1KO9iaQ9TD1Ifb+fVLP9tT7Du8HjQBTwZaz2PCR1R3t4J0lPFRO2whtPQe+oWbayASR5f9/egHD9bZiaAocXhAjv/KNVZezH0KY6tSBC3LPe5iOLDiEaNxcYLdzsnPUn1R0sWUhw3I0k=
+	t=1790713959; cv=none; b=kv0zQy8JkBjqXXEFc1NA22lnU1xWULehuxiNwKEKW0FvtFaTOPiMKlu0DFsDfutbiS5x5V3W+q49uagcHVlzPSXWJ2CaAafN4vpRRJNIjl4kyHg3lccems9oCXTwnXo2kaVwOjiw8sDZcKkeeHsoVg82Wg/HbsDalkRrRhXlso4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790713586; c=relaxed/simple;
-	bh=d0f08Lw9d82bEWsPQgzcIX814zK0mNlCefYpfzSFf8I=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lknjp9r74eqZRz/dmu7w04WV9TsQh/BLL9t+wQ2B3HBOwQYRml2L/0b7UGZZp1b3h6i6bxOerjydtl9dMBLjCuH2IRJZcC+ocI3CW8u5++n4uGd9433HU3mt1dtyo1O9lafTTBUCeBDIF6aj5eunYn47gNVkA9ZRR6OXTOtmFCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ArwE5NNZ; arc=none smtp.client-ip=74.125.229.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790713959; c=relaxed/simple;
+	bh=hYcGHr5ibKDvDmCykNx3vX7gSuYkKSXK1bPrWSMxwts=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=CEm4mblGZekk1MuVEQTp1knX1mYluhzRHA4u9Oe+cnLGSltZADXesswKH2gN5bSfk24T0S8/phdrohkp3d0r+gz1NEY8yRMH2zFvI+viNkTrTsWMRgqZguYkpO+23prwWxcyt9EOzh5HX75QG+vBTqa3XlETAU1lnFG0YSwQWrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Z9Tj+asr; arc=none smtp.client-ip=74.125.228.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArwE5NNZ"
-Received: by mail-dy2-f41.google.com with SMTP id 5a478bee46e88-34c0b552ccfso394971eec.3
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 13:26:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Z9Tj+asr"
+Received: by mail-ej2-f23.google.com with SMTP id a640c23a62f3a-c2db9cc3b45so404313766b.1
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 13:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790713584; x=1791318384; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=d0f08Lw9d82bEWsPQgzcIX814zK0mNlCefYpfzSFf8I=;
-        b=ArwE5NNZjQkbrJlIfwpS+a2Coe7UoPEGJFTW928Jw8sru+bISFcRq6iBg64o5Ov/4X
-         9+m5lwU0bwIiOASkL/fhUgNMA2pVHLBrMIDGnVWQUcI++oRfkHn+ksR2dBCrQVgVdGum
-         HvX8aRoICPA/IJqh7vy45L6xV7Y86pym9Y0nlnCmdo2XH7CtxK9WgGVka91aDIzXV5aO
-         WDUu6ns30nAef5OoZHZ6qSygLJevf+x1FPskzh/VngJCqK362Z4UkKQ35Y0V0xXwLZa3
-         VEyXDkUyCMVimf3mKpgUI4C69bzwKtDgLkr9XiluZnNRiBDOTmRqZT/MePt6WeXAFOno
-         8j0g==
+        d=cloudflare.com; s=google09082023; t=1790713956; x=1791318756; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Gjn3XbTkyEC/r4PvE0helBeSNrh316D5NMR1L4m81x0=;
+        b=Z9Tj+asrbbs0RuzbTnAQsw1Huz0kGBQDMSK0kq5VFktUawva3tgu/lJvAkMZUdJzNt
+         E2E+7sJAkZQzOQjXup7r6FEoHhL65jamaXJs9saPvbYMO0lR6kewaVlVvb0RqbgpKNgR
+         IyCkFKr4mgPTehfyzyb+RyhlrtHdBJzgR7Omj0eFWgrpSauqHW71iyokUFUKcmz/zhoK
+         YfPmwgv6v5xO56LIVADTTbrb17iG/FclEACAs8jhLrpJx7crhaVqypgEHTJvOU8vRNRH
+         7D1Maqb6iFxpdK9ZFhLHzg96p4RojLFt9RqLxEnwA9f9NxJh+wN4wbbZUKNQKZKL6EgH
+         hrOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790713584; x=1791318384;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1790713956; x=1791318756;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=d0f08Lw9d82bEWsPQgzcIX814zK0mNlCefYpfzSFf8I=;
-        b=PRueveWS5PAxXpArM64gUv1ujiz9yD+0sVsu9HrNyU2VFDK/nwZTomO3g309vu/Co0
-         IiOK1Pnlv21liXiEE9tQucw5BjLw2BNTpypKZzA6NN4OCoQsUM73kiY9Dp6Lwme6ItYN
-         z+nkxh1fU/ho157TxjU0iAXPpLG0d/T7PzXs89tdCU6CCo7F6/XWTlksiMB0MAUe8qfR
-         y+am9T2Y3EpGNEbAkYF177AtsIx+RhftffqoLKzxL1oK7bV0j8c2tXHyw7WGdJZ961Dx
-         EufOn4aTHatNQvl9D6Yn3ozRrb1cz8QRsTFSqWlmdocfOFWFWszxCl8UfNAUKn69+49L
-         3lNA==
-X-Forwarded-Encrypted: i=1; AKwUvByJSwXurF8Lp4IafD54NQZZihKWNKcTnAvBq4TanT5c8agV/glDYLumdMgRx22tNjVSixo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIcCjetMuHnLQnhgjg8l6iftX1sDk/GtgSu59Wibh4ltIDQNuGI
-	c3uwzT41QHYkAABr2X+k2leKgtXf5BCprEqHZF2GGw4gthpP55isefjk
-X-Gm-Gg: AYBFou2Ay+TTrBmO5gTyNGI4yXtn5JbNbvEZEO04dnL/37GCh4ZY7XfRfJqdKigMzmD
-	Gs1c4NA84UNho84YtQ0912V3XiDjWRmtGbcIeWrw5FAj+0TBEyI4GtJ/hDLK47/WUm/CsMNYXlQ
-	HFLRKPyYHE01xhrPp+y0eRwvrV4AVvhWSZaehDenoH8hNUELp6/AZJFIrMClOItVenSPmXWTuIs
-	GuRYF4CcMP6wsnodYuIDNE87LZZi12bNhfiDmZpygxsOW1Yq4rBfZbpZ8Ks+MZ45xQNOMpI12h0
-	wbXybm/rWjSHbxLRPIBhoe/jIVmPi2t8YZzhqjyRB62baz8jbElnMDKZsf54VwTEMD7re1mpkss
-	rgMrYSnNRSMuO6Rs8ZhWztOV01vJMyrQa2ksvlAgPDUT//SbwMI3AbwcMrpzvLuJxCPm3dOnD4B
-	ocue0AiKA+JB1Kcld0ONw4IYUnxZbHrlIe4angMshGPmowHz14ZV4h4MSdU4mmVPKnaxrpyu7PG
-	bTR1K0sAtKKB7OLa+yJzSbYMksBnCPrcbSa5AZd77UoJeUGTsf1kOLy
-X-Received: by 2002:a05:7300:d20d:b0:315:afc1:72db with SMTP id 5a478bee46e88-34c65c61c60mr490065eec.9.1790713583999;
-        Tue, 29 Sep 2026 13:26:23 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:abbd:bfa5:f574:cca3? ([2620:10d:c090:500::7:dfd3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34c386c2723sm1229398eec.18.2026.09.29.13.26.22
+        bh=Gjn3XbTkyEC/r4PvE0helBeSNrh316D5NMR1L4m81x0=;
+        b=jVzGQsbDxisgEstY0W4UPdMpz9VSp6+klud+dJISlnunweGnDk/PVC5EhVS04cSlxn
+         UfdOqqOikVeWWfNJgiq8D006h1A/8pDznd7Ubn8XSvQofa54beGdkFhZ2vW31ELOE/Hg
+         CA5tgRIP9lN3Wj8C3RJId9tWPTw22ceM5+oJHDyLLkNARIkeziGmirQFLWkYgsw+CDY0
+         N/hbp8AChsskWg3eMPizw1i9BLwgg8gqCcOlp2dB3WEvYPIqvmZP9NSRLWUEaZUcolut
+         OZzo5Hs30R+Abz0nJrd3lZNABR65+PB27bFVqrATdYOv4V/yHEkLHwcTVgixKo6sPnzv
+         iiSA==
+X-Forwarded-Encrypted: i=1; AKwUvBy65S14JsDi7P2Fo9pJ6gVeG/+1YFzzv37CYrMMOF/9FXYo8jS4ty6T/3JxOhZW6dl2JTk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mE+CqMLoeuec4dZYXZ7Hdo2JLhWLM08NtsazvswkvcaijkkRyL
+	qG1oSddBKcMm582dJam25eg18UkIPYLLggVwGyTm7Li9MtsQ1H/gkT+JfV4DjcTQC1U=
+X-Gm-Gg: AYBFou1ddi5dkN5IqJAW3X49e1jFFGhernZ4NbR+WuYYSs14aasHo1DEGsNE44CLVYO
+	Ao95tfsP4iDFGXtVuj3vmxWZsIdD/i2vGhZhIAf2+i1hVDm6foFQIxuKATMmzNZTxROKzQ+A82c
+	xNmK+Ux24YyTXZYcIm/cD5y30VHfDHZKPOT44cJJKKRDZS45FNIMBdhGoJ2CWknprw3c0o5iBvY
+	D7TWq3Kcu1gkl9OweP8hYuxftp5xAICDgfXmefA2VQbQq1FbyqGXPFAK99OpS3fuh+NtrDNxUyu
+	gGTen1yUq/RTURg39T7LyWFRPP9aRX16RJk8pBsR4GEZrCKa7gYvkVqEDfBeky+Xxaq1fuC13vw
+	J8mjGtuJ+qvg8pimmZhw2cZEPjUq8aeZ+k1Q02YBx9FnlBTysjNd34eEOheGqtpuxckAqDUlrvR
+	ZnAoDr3P1ieVW7Wqtfe3OA30zbc8j0KXrGiiSsbBlnZqgw5dUx4G62GjYE/06ZjJHJ7D90DDoy
+X-Received: by 2002:a17:906:c155:b0:c29:286e:2e3e with SMTP id a640c23a62f3a-c2e15e255eamr43800766b.38.1790713955825;
+        Tue, 29 Sep 2026 13:32:35 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e1330d7c0sm25660466b.44.2026.09.29.13.32.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 13:26:23 -0700 (PDT)
-Message-ID: <37811b8cd92da6a037f33ea98549e6c0f37a8759.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 05/36] bpf: record write effects for atomic
- operations in liveness.c
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, memxor@gmail.com, martin.lau@kernel.org,
- mason@kernel.org, 	ihor.solodrai@linux.dev
-Date: Tue, 29 Sep 2026 13:26:21 -0700
-In-Reply-To: <2dd22c28c9377610b3471eba2f88253146a2af847c30aeee6f5f86f5f2183f64@mail.kernel.org>
-References: <20260926-scev-minimal-rebase-v1-5-c8e5ab5ba79f@gmail.com>
-	 <2dd22c28c9377610b3471eba2f88253146a2af847c30aeee6f5f86f5f2183f64@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        Tue, 29 Sep 2026 13:32:35 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Jakub Kicinski" <kuba@kernel.org>,  "Daniel Zahka"
+ <daniel.zahka@gmail.com>,  <netdev@vger.kernel.org>,  "Kuniyuki Iwashima"
+ <kuniyu@google.com>,  "Paolo Abeni" <pabeni@redhat.com>,  "Stanislav
+ Fomichev" <sdf@fomichev.me>,  <bpf@vger.kernel.org>,
+  <kernel-team@cloudflare.com>,  "Daniel Borkmann" <daniel@iogearbox.net>,
+  "John Fastabend" <john.fastabend@gmail.com>,  "Andrii Nakryiko"
+ <andrii@kernel.org>,  "Eduard Zingerman" <eddyz87@gmail.com>,  "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>,  "Martin KaFai Lau"
+ <martin.lau@linux.dev>,  "Song Liu" <song@kernel.org>,  "Yonghong Song"
+ <yonghong.song@linux.dev>,  "Jiri Olsa" <jolsa@kernel.org>,  "Emil
+ Tsalapatis" <emil@etsalapatis.com>,  "David S. Miller"
+ <davem@davemloft.net>,  "Eric Dumazet" <edumazet@google.com>,  "Simon
+ Horman" <horms@kernel.org>,  "Jesper Dangaard Brouer" <hawk@kernel.org>,
+  "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,  "Florian Westphal"
+ <fw@strlen.de>,  "Jack Wang" <163wangjack@gmail.com>
+Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
+ packet scrubbing
+In-Reply-To: <DLR2ZT65RKF3.3KZ8O8P4VKTI2@gmail.com> (Alexei Starovoitov's
+	message of "Mon, 28 Sep 2026 16:14:04 +0000")
+References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
+	<20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com>
+	<DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com>
+	<DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com>
+	<20260925121849.2ac5150b@kernel.org>
+	<DLONQQN0RB03.1NVWVFHGRRWV4@gmail.com>
+	<20260925132004.171b751e@kernel.org>
+	<DLOOI89GKM5B.W4XPBNJUXRV1@gmail.com> <87jyo5bcgs.fsf@cloudflare.com>
+	<DLR2ZT65RKF3.3KZ8O8P4VKTI2@gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Tue, 29 Sep 2026 22:32:34 +0200
+Message-ID: <87ecebbxy5.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 2026-09-27 at 20:27 +0000, bot+bpf-ci@kernel.org wrote:
-> > bpf: record write effects for atomic operations in liveness.c
-> >=20
-> > Atomic read-modify-write instructions are recorded as reads only,
-> > omitting their stack write effects from the may_write masks needed
-> > by SCEV.
-> >=20
-> > Record both read and write accesses for atomic RMW operations. Keep
-> > LOAD_ACQ read-only and STORE_REL write-only. Share the precise/imprecis=
-e
-> > stack-access dispatch so both accesses use the same address handling.
-> >=20
-> > Fixes: fed53dbcdb61 ("bpf: record arg tracking results in bpf_liveness =
-masks")
->=20
-> Does the Fixes: tag point at the right commit?
+On Mon, Sep 28, 2026 at 04:14 PM GMT, Alexei Starovoitov wrote:
+> On Mon, Sep 28, 2026 at 05:52 PM Jakub Sitnicki <jakub@cloudflare.com> wr=
+ote:
+>> The correct results - as in reproducible and with lower variance - are
+>> the other way around - BPF skb ext is cheaper CPU-wise than gated skb
+>> tracepoints. Please see:
+>>
+>> https://patch.msgid.link/20260928-bpf-meta-gated-tracepoints-v1-0-844dbf=
+3e1edf@cloudflare.com
+>
+> I don't think these numbers measure the mechanism either.
+> cpustats.py divides busy by ncpus, so +16.4 and +6.6 are the mean
+> over 6 cpus, while 146k pps is the total of 3 flows.
+> So it's 6.7 usec vs 2.7 usec per packet and not 1125 ns vs 450 ns.
+> That's a lot for one kmem_cache_alloc/free and a 16 byte copy.
+>
+> Pls share perf report for both and rerun.
 
-Hm, fixes tag is not needed.
-The original code returns negative size only for STORE_REL,
-which is fine.
+My mistake. Per-packet cost shouldn't have been normalized to CPU count.
 
-...
+I grabbed the perf reports and flamegraphs, and added another variant to th=
+e mix
+with per-CPU LRU hash instead of rhash to get an idea how much overhead com=
+es
+from locking. Gated tracepoints + per-CPU LRU hash sits in the middle with =
+~1.5x
+the cost of skb extension:
+
+| variant                        | =CE=94 busy (mean/6)    | ns/pkt @146k |
+|--------------------------------|--------------------|--------------|
+| gated tracepoints (rhash)      | **+16.4 =C2=B1 2.8 pp** | **=E2=89=88 67=
+50**   |
+| gated tracepoints (percpu LRU) | **+10.0 =C2=B1 3.3 pp** | **=E2=89=88 41=
+00**   |
+| bpf skb ext                    | **+6.6 =C2=B1 1.1 pp**  | **=E2=89=88 27=
+20**   |
+
+% of perf samples breakdown looks like so:
+
+| component                              | cnt  | ext  | gtplru | gtp  |
+|----------------------------------------|------|------|--------|------|
+| tc dispatch (`tcf_classify`+`cls_bpf`) | 0.08 | 0.25 | 0.34   | 0.88 |
+| skb free path (`napi_consume_skb`)     | 0.05 | 0.09 | 0.16   | 0.31 |
+| TX chain total (`udp_sendmsg`)         | 2.51 | 2.53 | 2.98   | 3.27 |
+
+Everything pushed to:
+
+https://github.com/jsitnicki/skb-metadata-bench/tree/main/profile
+
+If the numbers look fishy, after Plumbers I can set up a proper
+experiment in production to see what the CPU overhead is like on bare
+metal.
