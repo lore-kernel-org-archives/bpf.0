@@ -1,525 +1,229 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E8D34EEEE;
-	Tue, 29 Sep 2026 12:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E77C4E9C10
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 12:07:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790683476; cv=none; b=BISrcKwFb8tM7TTa3Gs/4sq7Lsiw00mUABmkOUoDk8Qre428MgtikYWNf2sAa4Ev7l8aQAGviiNTlQV/ixn5t9p6Uzh+dmzKDgLKlECV5Fl3NVD8kYvMnYr4Sz1mOCMKjAvZgz6WCbh8AdtXcGrjT/Woaf39ycXwp8JkAW1CtfM=
+	t=1790683662; cv=none; b=h+h20g/uryfsTRCLB3qqQHLe79nQP2Dj6V26w+Q2voeHYkb9keQttxg2HYe8KUI15ULtBHcnc1J2EcvzaVPjZkWBGW0dT9NQoH3Ugdm1E9oA4z2b9Fe6bS8xdwkrmGOeHM4pO6Lat+mYPtL7B7NPU8DhjF4PS8u3whUhZY1f+iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790683476; c=relaxed/simple;
-	bh=1y76855U6ChdIrhrqweUZHPoC7pVIbY69wDQlNdEx1E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M9uBvSd4bOZhoT+Pubk7YDzlQ3SGK/Hcuk8j9iNU5bGUc2cw4KdST2Kexz8nLJwyglUSuIBhRpfXhA/Fjz4MZ8HxyJXY4ksRKCssnpegPyxoC96fkROthFGupvkARFWpk88aH7obEqmksolADDzKBfPmHq05bRxbF6fe0rijbgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Ih+isx6z; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1790683662; c=relaxed/simple;
+	bh=PUYYBYX9OVjHhkzTDtcpDFQ0ga/OHuv2zaqtUq0IWeA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=NNhjyXU8ro4lGdp090XRdHkKcN+KawKLSAe3lSwCa1+CMrmZVbYDMTPXnlDTut/0QPyf5SzTt3bbR1Po+8DXEfHTubI3aWCEjUGBN/gcUVfZQtyHa97i754IOR/BhrfL51SIZUqsGVxUwtkYNe16GNlXGZOmtBoaN1YVjsyi9bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cHt1pzL9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ih+isx6z"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=gwtnzsRCmg/KlI6wP8v+iy295jBczPbk3ZA5tWfqhFU=; b=Ih+isx6zVuklPt3zqlYuYMHcDJ
-	Z+oJjTxwVPT2IfD2qzUkUBeXDQJjQGx60kF14PoAR6gatbxEs4IOr5cJ0jzWg06PQPFIpBYgOgq84
-	1y/kPBdrHZYlj5clLymuiY3LfcGJdCK5ukJwPprqV5QPZ9+R2+BSGnC5R0/WFWL6FAn05DBHJRF3Q
-	aXAISh8JNzXK99pwcoVJx8APQhd6hDdxlP2Fj+PdjkZasQkOtGmM7E+htVDfWliWGMTbOnz4SB67h
-	ZJEi3+tu5kivXfje569oEmyGkunPMVVo3GABtfbxsI5sGs2bheSTj+O1aquxVwelIrlDUikLmLAJP
-	MPSuXVbQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1xBWZH-00000002aLG-2A5m;
-	Tue, 29 Sep 2026 12:04:21 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0029F300AAD; Tue, 29 Sep 2026 14:04:17 +0200 (CEST)
-Date: Tue, 29 Sep 2026 14:04:17 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>, Song Liu <song@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1] perf/core: Restore header fields in sideband output
- callbacks
-Message-ID: <20260929120417.GT4120091@noisy.programming.kicks-ass.net>
-References: <20260929014206.4175245-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cHt1pzL9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29B21F000FF;
+	Tue, 29 Sep 2026 12:07:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790683661;
+	bh=scf9Z1J8B6Uf2UdJXsYH3+S99fXPDQY6/0LPRydspeQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cHt1pzL9dMBh1v1WCsjY801E4ZpjgbafRAZ2UTCFawpCHZUpcazZedfOvZZEuAkKo
+	 pq6YXQ7speNvXaMoOlwSnGUa++AlmyAbiJSngoXOleZjjlS9P29MCvF8v9zqT3KQpR
+	 f8CDU8H7WshM6kKto722Yl2pX1vH2SYtmFLam6AYyN+G58V9j6lGXfeYHMKnAw9Xvv
+	 0aA6GzAz9PZcG9ZHIuqbWVW81UqPMrj1CBe50RdIJq0ZSpI0h/ymWXXcvxj/hHZChD
+	 5WYedNEWaj5LKSJZBo+ETxgdRKtpSCOAIov/xGtmEhbyhLKEzgnYQ4zxM5u49oEcnr
+	 gYYQ8ddn5dvOQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 4/5] soundwire: amd: Add BRA/BPT firmware download
+ support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Syed Saba Kareem" <syed.sabakareem@amd.com>
+Cc: bpf@vger.kernel.org, media-ci@linuxtv.org, dri-devel@lists.freedesktop.org
+In-Reply-To: <20260929115052.247086-5-syed.sabakareem@amd.com>
+References: <20260929115052.247086-1-syed.sabakareem@amd.com>
+ <20260929115052.247086-5-syed.sabakareem@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 29 Sep 2026 12:07:40 +0000
+Message-Id: <20260929120740.B29B21F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260929014206.4175245-1-irogers@google.com>
 
-On Mon, Sep 28, 2026 at 06:42:06PM -0700, Ian Rogers wrote:
-> perf_iterate_sb() invokes its callback for each matching perf_event on
-> the CPU and task context, passing a shared caller-allocated event
-> structure.
-> 
-> perf_event_header__init_id() increments header->size by
-> event->id_header_size. Unlike perf_event_task_output(),
-> perf_event_comm_output(), perf_event_namespaces_output(),
-> perf_event_cgroup_output(), perf_event_mmap_output(), and
-> perf_callchain_deferred_output(), three sideband callbacks failed to
-> save and restore header.size around perf_event_header__init_id():
-> - perf_event_ksymbol_output()
-> - perf_event_bpf_output()
-> - perf_event_text_poke_output()
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [Critical] soundwire: amd: deconfiguring wedged BRA descriptor redirects =
+active DMA to physical address 0
+- [High] soundwire: amd: master port 0 aliasing silences concurrent audio s=
+treams during BPT
+- [High] soundwire: amd: global acp_bra_wedged flag breaks independent Soun=
+dWire controllers
+- [Medium] soundwire: amd: integer overflow in total_len causes heap buffer=
+ overflow
+--
 
-I also found perf_event_switch_output(). Does something like so also
-work?
+commit 10078bc80a59ffcc131913ae41fbb4706ce8f69f
+Author: Syed Saba Kareem <Syed.SabaKareem@amd.com>
+Subject: soundwire: amd: Add BRA/BPT firmware download support
 
----
- kernel/events/core.c | 131 ++++++++++++++++++++++++---------------------------
- 1 file changed, 61 insertions(+), 70 deletions(-)
+This commit adds Bulk Register Access (BRA) and Bulk Payload Transport
+(BPT) support for AMD SoundWire platforms. It uses the SoundWire stream
+framework for programming the DP0 port and relies on the ACP BRA DMA
+engine for transferring large firmware segments.
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index de05df65ab3d..28770ca689c8 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9108,12 +9108,22 @@ perf_event_read_event(struct perf_event *event,
- 	perf_output_end(&handle);
- }
- 
--typedef void (perf_iterate_f)(struct perf_event *event, void *data);
-+typedef void (perf_iterate_f)(struct perf_event *event, struct perf_event_header *header);
-+
-+static __always_inline
-+void __perf_iterate_output(perf_iterate_f output,
-+			   struct perf_event *event,
-+			   struct perf_event_header *header)
-+{
-+	struct perf_event_header old = *header;
-+	output(event, header);
-+	*header = old;
-+}
- 
- static void
- perf_iterate_ctx(struct perf_event_context *ctx,
- 		   perf_iterate_f output,
--		   void *data, bool all)
-+		   struct perf_event_header *header, bool all)
- {
- 	struct perf_event *event;
- 
-@@ -9125,11 +9135,11 @@ perf_iterate_ctx(struct perf_event_context *ctx,
- 				continue;
- 		}
- 
--		output(event, data);
-+		__perf_iterate_output(output, event, header);
- 	}
- }
- 
--static void perf_iterate_sb_cpu(perf_iterate_f output, void *data)
-+static void perf_iterate_sb_cpu(perf_iterate_f output, struct perf_event_header *header)
- {
- 	struct pmu_event_list *pel = this_cpu_ptr(&pmu_sb_events);
- 	struct perf_event *event;
-@@ -9147,7 +9157,8 @@ static void perf_iterate_sb_cpu(perf_iterate_f output, void *data)
- 			continue;
- 		if (!event_filter_match(event))
- 			continue;
--		output(event, data);
-+
-+		__perf_iterate_output(output, event, header);
- 	}
- }
- 
-@@ -9158,7 +9169,7 @@ static void perf_iterate_sb_cpu(perf_iterate_f output, void *data)
-  * your event, otherwise it might not get delivered.
-  */
- static void
--perf_iterate_sb(perf_iterate_f output, void *data,
-+perf_iterate_sb(perf_iterate_f output, struct perf_event_header *header,
- 	       struct perf_event_context *task_ctx)
- {
- 	struct perf_event_context *ctx;
-@@ -9172,15 +9183,15 @@ perf_iterate_sb(perf_iterate_f output, void *data,
- 	 * context.
- 	 */
- 	if (task_ctx) {
--		perf_iterate_ctx(task_ctx, output, data, false);
-+		perf_iterate_ctx(task_ctx, output, header, false);
- 		goto done;
- 	}
- 
--	perf_iterate_sb_cpu(output, data);
-+	perf_iterate_sb_cpu(output, header);
- 
- 	ctx = rcu_dereference(current->perf_event_ctxp);
- 	if (ctx)
--		perf_iterate_ctx(ctx, output, data, false);
-+		perf_iterate_ctx(ctx, output, header, false);
- done:
- 	preempt_enable();
- 	rcu_read_unlock();
-@@ -9347,13 +9358,13 @@ static int perf_event_task_match(struct perf_event *event)
- }
- 
- static void perf_event_task_output(struct perf_event *event,
--				   void *data)
-+				   struct perf_event_header *header)
- {
--	struct perf_task_event *task_event = data;
-+	auto task_event = container_of(header, struct perf_task_event, event_id.header);
-+	struct task_struct *task = task_event->task;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data	sample;
--	struct task_struct *task = task_event->task;
--	int ret, size = task_event->event_id.header.size;
-+	int ret;
- 
- 	if (!perf_event_task_match(event))
- 		return;
-@@ -9363,7 +9374,7 @@ static void perf_event_task_output(struct perf_event *event,
- 	ret = perf_output_begin(&handle, &sample, event,
- 				task_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	task_event->event_id.pid = perf_event_pid(event, task);
- 	task_event->event_id.tid = perf_event_tid(event, task);
-@@ -9385,8 +9396,6 @@ static void perf_event_task_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	task_event->event_id.header.size = size;
- }
- 
- static void perf_event_task(struct task_struct *task,
-@@ -9418,7 +9427,7 @@ static void perf_event_task(struct task_struct *task,
- 	};
- 
- 	perf_iterate_sb(perf_event_task_output,
--		       &task_event,
-+		       &task_event.event_id.header,
- 		       task_ctx);
- }
- 
-@@ -9499,12 +9508,11 @@ static int perf_event_comm_match(struct perf_event *event)
- }
- 
- static void perf_event_comm_output(struct perf_event *event,
--				   void *data)
-+				   struct perf_event_header *header)
- {
--	struct perf_comm_event *comm_event = data;
-+	auto comm_event = container_of(header, struct perf_comm_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	int size = comm_event->event_id.header.size;
- 	int ret;
- 
- 	if (!perf_event_comm_match(event))
-@@ -9513,9 +9521,8 @@ static void perf_event_comm_output(struct perf_event *event,
- 	perf_event_header__init_id(&comm_event->event_id.header, &sample, event);
- 	ret = perf_output_begin(&handle, &sample, event,
- 				comm_event->event_id.header.size);
--
- 	if (ret)
--		goto out;
-+		return;
- 
- 	comm_event->event_id.pid = perf_event_pid(event, comm_event->task);
- 	comm_event->event_id.tid = perf_event_tid(event, comm_event->task);
-@@ -9527,8 +9534,6 @@ static void perf_event_comm_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	comm_event->event_id.header.size = size;
- }
- 
- static void perf_event_comm_event(struct perf_comm_event *comm_event)
-@@ -9546,7 +9551,7 @@ static void perf_event_comm_event(struct perf_comm_event *comm_event)
- 	comm_event->event_id.header.size = sizeof(comm_event->event_id) + size;
- 
- 	perf_iterate_sb(perf_event_comm_output,
--		       comm_event,
-+		       &comm_event->event_id.header,
- 		       NULL);
- }
- 
-@@ -9598,12 +9603,11 @@ static int perf_event_namespaces_match(struct perf_event *event)
- }
- 
- static void perf_event_namespaces_output(struct perf_event *event,
--					 void *data)
-+					 struct perf_event_header *header)
- {
--	struct perf_namespaces_event *namespaces_event = data;
-+	auto namespaces_event = container_of(header, struct perf_namespaces_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	u16 header_size = namespaces_event->event_id.header.size;
- 	int ret;
- 
- 	if (!perf_event_namespaces_match(event))
-@@ -9614,7 +9618,7 @@ static void perf_event_namespaces_output(struct perf_event *event,
- 	ret = perf_output_begin(&handle, &sample, event,
- 				namespaces_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	namespaces_event->event_id.pid = perf_event_pid(event,
- 							namespaces_event->task);
-@@ -9626,8 +9630,6 @@ static void perf_event_namespaces_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	namespaces_event->event_id.header.size = header_size;
- }
- 
- static void perf_fill_ns_link_info(struct perf_ns_link_info *ns_link_info,
-@@ -9701,7 +9703,7 @@ void perf_event_namespaces(struct task_struct *task)
- #endif
- 
- 	perf_iterate_sb(perf_event_namespaces_output,
--			&namespaces_event,
-+			&namespaces_event.event_id.header,
- 			NULL);
- }
- 
-@@ -9725,12 +9727,11 @@ static int perf_event_cgroup_match(struct perf_event *event)
- 	return event->attr.cgroup;
- }
- 
--static void perf_event_cgroup_output(struct perf_event *event, void *data)
-+static void perf_event_cgroup_output(struct perf_event *event, struct perf_event_header *header)
- {
--	struct perf_cgroup_event *cgroup_event = data;
-+	auto cgroup_event = container_of(header, struct perf_cgroup_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	u16 header_size = cgroup_event->event_id.header.size;
- 	int ret;
- 
- 	if (!perf_event_cgroup_match(event))
-@@ -9741,7 +9742,7 @@ static void perf_event_cgroup_output(struct perf_event *event, void *data)
- 	ret = perf_output_begin(&handle, &sample, event,
- 				cgroup_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	perf_output_put(&handle, cgroup_event->event_id);
- 	__output_copy(&handle, cgroup_event->path, cgroup_event->path_size);
-@@ -9749,8 +9750,6 @@ static void perf_event_cgroup_output(struct perf_event *event, void *data)
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	cgroup_event->event_id.header.size = header_size;
- }
- 
- static void perf_event_cgroup(struct cgroup *cgrp)
-@@ -9796,7 +9795,7 @@ static void perf_event_cgroup(struct cgroup *cgrp)
- 	cgroup_event.path_size = size;
- 
- 	perf_iterate_sb(perf_event_cgroup_output,
--			&cgroup_event,
-+			&cgroup_event.event_id.header,
- 			NULL);
- 
- 	kfree(pathname);
-@@ -9832,9 +9831,8 @@ struct perf_mmap_event {
- };
- 
- static int perf_event_mmap_match(struct perf_event *event,
--				 void *data)
-+				 struct perf_mmap_event *mmap_event)
- {
--	struct perf_mmap_event *mmap_event = data;
- 	struct vm_area_struct *vma = mmap_event->vma;
- 	int executable = vma->vm_flags & VM_EXEC;
- 
-@@ -9843,17 +9841,15 @@ static int perf_event_mmap_match(struct perf_event *event,
- }
- 
- static void perf_event_mmap_output(struct perf_event *event,
--				   void *data)
-+				   struct perf_event_header *header)
- {
--	struct perf_mmap_event *mmap_event = data;
-+	auto mmap_event = container_of(header, struct perf_mmap_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	int size = mmap_event->event_id.header.size;
--	u32 type = mmap_event->event_id.header.type;
- 	bool use_build_id;
- 	int ret;
- 
--	if (!perf_event_mmap_match(event, data))
-+	if (!perf_event_mmap_match(event, mmap_event))
- 		return;
- 
- 	if (event->attr.mmap2) {
-@@ -9870,7 +9866,7 @@ static void perf_event_mmap_output(struct perf_event *event,
- 	ret = perf_output_begin(&handle, &sample, event,
- 				mmap_event->event_id.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	mmap_event->event_id.pid = perf_event_pid(event, current);
- 	mmap_event->event_id.tid = perf_event_tid(event, current);
-@@ -9904,9 +9900,6 @@ static void perf_event_mmap_output(struct perf_event *event,
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	mmap_event->event_id.header.size = size;
--	mmap_event->event_id.header.type = type;
- }
- 
- static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
-@@ -10011,7 +10004,7 @@ static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
- 		build_id_parse_nofault(vma, mmap_event->build_id, &mmap_event->build_id_size);
- 
- 	perf_iterate_sb(perf_event_mmap_output,
--		       mmap_event,
-+		       &mmap_event->event_id.header,
- 		       NULL);
- 
- 	kfree(buf);
-@@ -10236,9 +10229,9 @@ static int perf_event_switch_match(struct perf_event *event)
- 	return event->attr.context_switch;
- }
- 
--static void perf_event_switch_output(struct perf_event *event, void *data)
-+static void perf_event_switch_output(struct perf_event *event, struct perf_event_header *header)
- {
--	struct perf_switch_event *se = data;
-+	auto se = container_of(header, struct perf_switch_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
- 	int ret;
-@@ -10301,7 +10294,7 @@ static void perf_event_switch(struct task_struct *task,
- 				PERF_RECORD_MISC_SWITCH_OUT_PREEMPT;
- 	}
- 
--	perf_iterate_sb(perf_event_switch_output, &switch_event, NULL);
-+	perf_iterate_sb(perf_event_switch_output, &switch_event.event_id.header, NULL);
- }
- 
- /*
-@@ -10366,9 +10359,9 @@ static int perf_event_ksymbol_match(struct perf_event *event)
- 	return event->attr.ksymbol;
- }
- 
--static void perf_event_ksymbol_output(struct perf_event *event, void *data)
-+static void perf_event_ksymbol_output(struct perf_event *event, struct perf_event_header *header)
- {
--	struct perf_ksymbol_event *ksymbol_event = data;
-+	auto ksymbol_event = container_of(header, struct perf_ksymbol_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
- 	int ret;
-@@ -10430,7 +10423,7 @@ void perf_event_ksymbol(u16 ksym_type, u64 addr, u32 len, bool unregister,
- 		},
- 	};
- 
--	perf_iterate_sb(perf_event_ksymbol_output, &ksymbol_event, NULL);
-+	perf_iterate_sb(perf_event_ksymbol_output, &ksymbol_event.event_id.header, NULL);
- 	return;
- err:
- 	WARN_ONCE(1, "%s: Invalid KSYMBOL type 0x%x\n", __func__, ksym_type);
-@@ -10456,9 +10449,9 @@ static int perf_event_bpf_match(struct perf_event *event)
- 	return event->attr.bpf_event;
- }
- 
--static void perf_event_bpf_output(struct perf_event *event, void *data)
-+static void perf_event_bpf_output(struct perf_event *event, struct perf_event_header *header)
- {
--	struct perf_bpf_event *bpf_event = data;
-+	auto bpf_event = container_of(header, struct perf_bpf_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
- 	int ret;
-@@ -10536,7 +10529,7 @@ void perf_event_bpf_event(struct bpf_prog *prog,
- 	BUILD_BUG_ON(BPF_TAG_SIZE % sizeof(u64));
- 
- 	memcpy(bpf_event.event_id.tag, prog->tag, BPF_TAG_SIZE);
--	perf_iterate_sb(perf_event_bpf_output, &bpf_event, NULL);
-+	perf_iterate_sb(perf_event_bpf_output, &bpf_event.event_id.header, NULL);
- }
- 
- struct perf_callchain_deferred_event {
-@@ -10549,12 +10542,12 @@ struct perf_callchain_deferred_event {
- 	} event;
- };
- 
--static void perf_callchain_deferred_output(struct perf_event *event, void *data)
-+static void perf_callchain_deferred_output(struct perf_event *event, struct perf_event_header *header)
- {
--	struct perf_callchain_deferred_event *deferred_event = data;
-+	auto deferred_event = container_of(header, struct perf_callchain_deferred_event, event.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
--	int ret, size = deferred_event->event.header.size;
-+	int ret;
- 
- 	if (!event->attr.defer_output)
- 		return;
-@@ -10565,7 +10558,7 @@ static void perf_callchain_deferred_output(struct perf_event *event, void *data)
- 	ret = perf_output_begin(&handle, &sample, event,
- 				deferred_event->event.header.size);
- 	if (ret)
--		goto out;
-+		return;
- 
- 	perf_output_put(&handle, deferred_event->event);
- 	for (int i = 0; i < deferred_event->trace->nr; i++) {
-@@ -10575,8 +10568,6 @@ static void perf_callchain_deferred_output(struct perf_event *event, void *data)
- 	perf_event__output_id_sample(event, &handle, &sample);
- 
- 	perf_output_end(&handle);
--out:
--	deferred_event->event.header.size = size;
- }
- 
- static void perf_unwind_deferred_callback(struct unwind_work *work,
-@@ -10596,7 +10587,7 @@ static void perf_unwind_deferred_callback(struct unwind_work *work,
- 		},
- 	};
- 
--	perf_iterate_sb(perf_callchain_deferred_output, &deferred_event, NULL);
-+	perf_iterate_sb(perf_callchain_deferred_output, &deferred_event.event.header, NULL);
- }
- 
- struct perf_text_poke_event {
-@@ -10618,9 +10609,9 @@ static int perf_event_text_poke_match(struct perf_event *event)
- 	return event->attr.text_poke;
- }
- 
--static void perf_event_text_poke_output(struct perf_event *event, void *data)
-+static void perf_event_text_poke_output(struct perf_event *event, struct perf_event_header *header)
- {
--	struct perf_text_poke_event *text_poke_event = data;
-+	auto text_poke_event = container_of(header, struct perf_text_poke_event, event_id.header);
- 	struct perf_output_handle handle;
- 	struct perf_sample_data sample;
- 	u64 padding = 0;
-@@ -10680,7 +10671,7 @@ void perf_event_text_poke(const void *addr, const void *old_bytes,
- 		},
- 	};
- 
--	perf_iterate_sb(perf_event_text_poke_output, &text_poke_event, NULL);
-+	perf_iterate_sb(perf_event_text_poke_output, &text_poke_event.event_id.header, NULL);
- }
- 
- void perf_event_itrace_started(struct perf_event *event)
+> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_mana=
+ger.c
+> index a3316efdf8ac2..f5b4096c83ac3 100644
+> --- a/drivers/soundwire/amd_manager.c
+> +++ b/drivers/soundwire/amd_manager.c
+> [ ... ]
+> @@ -713,6 +764,13 @@ static int amd_sdw_port_params(struct sdw_bus *bus, =
+struct sdw_port_params *p_pa
+>  	struct amd_sdw_manager *amd_manager =3D to_amd_sdw(bus);
+>  	u32 frame_fmt_reg, dpn_frame_fmt;
+> =20
+> +	/*
+> +	 * BPT uses dedicated ACP BRA descriptor registers; ignore DP0 ops only.
+> +	 * Allow DPn audio port ops to proceed even while BPT is active.
+> +	 */
+> +	if (READ_ONCE(bus->bpt_stream) && p_params->num =3D=3D 0)
+> +		return 0;
+> +
+
+[Severity: High]
+By checking p_params->num =3D=3D 0 when bus->bpt_stream is active, won't th=
+is
+skip hardware programming for any concurrent audio stream using CPU DAI 0
+(which also maps to master port 0)? Because the callback cannot distinguish
+between the concurrent audio stream's port 0 and the BPT stream's port 0,
+does this leave the audio stream unconfigured in the hardware?
+
+> [ ... ]
+> @@ -764,6 +843,13 @@ static int amd_sdw_transport_params(struct sdw_bus *=
+bus,
+>  	u32 frame_fmt_reg, sample_int_reg, hctrl_dp0_reg;
+>  	u32 offset_reg, lane_ctrl_ch_en_reg;
+> =20
+> +	/*
+> +	 * BPT uses dedicated ACP BRA descriptor registers; ignore DP0 ops only.
+> +	 * Allow DPn audio port ops to proceed even while BPT is active.
+> +	 */
+> +	if (READ_ONCE(bus->bpt_stream) && params->port_num =3D=3D 0)
+> +		return 0;
+> +
+
+[Severity: High]
+Similarly, does skipping the transport parameters leave concurrent audio
+streams on port 0 in a broken hardware state?
+
+> [ ... ]
+> @@ -887,6 +953,1062 @@ static int amd_sdw_port_enable(struct sdw_bus *bus,
+> +/*
+> + * Latched when a BRA transfer leaves the ACP DMA engine wedged: it fail=
+ed to
+> + * confirm it stopped and may still be bus-mastering through the ACP-glo=
+bal ATU
+> + * PTEs. Once set, amd_sdw_bra_configure_pte() refuses to reprogram thos=
+e shared
+> + * PTEs, so a still-active engine on one manager instance cannot be redi=
+rected
+> + * into another instance's buffer. Written and read only under acp_bra_l=
+ock and
+> + * never cleared: recovering the engine requires a device reset / driver=
+ reload.
+> + */
+> +static bool acp_bra_wedged;
+> +
+> +static u32 amd_sdw_bra_configure_pte(struct amd_sdw_manager *amd_manager,
+> +				     dma_addr_t dma_addr, size_t size)
+> +{
+> [ ... ]
+> +
+> +	if (acp_bra_wedged) {
+> +		dev_err(amd_manager->dev,
+> +			"BRA engine previously wedged; refusing to reprogram shared ATU PTEs\=
+n");
+> +		return 0;
+> +	}
+
+[Severity: High]
+Since acp_bra_wedged is declared as a static module-level global variable,
+won't a failure in one SoundWire controller permanently disable firmware
+downloads on all other independent controllers in the system? Should this
+state be scoped to the shared ACP hardware context (for example, inside
+acp_dev_data or sdw_amd_res) so that physically distinct ACP PCI devices
+like an APU and a discrete GPU do not share this wedged state?
+
+> [ ... ]
+> +static void amd_sdw_deconfig_bra_descriptor(struct amd_sdw_manager *amd_=
+manager)
+> +{
+> [ ... ]
+> +	writel(0, amd_manager->mmio + ACP_SW_BRA_BASE_ADDRESS);
+> +	writel(0, amd_manager->mmio + ACP_SW_BRA_TRANSFER_SIZE);
+> +}
+> [ ... ]
+> +static int amd_sdw_bra_transfer(struct amd_sdw_manager *amd_manager,
+> +				struct sdw_slave *slave, u32 reg_addr,
+> +				u32 acp_base_addr, size_t len, bool write,
+> +				bool *dma_unsafe)
+> +{
+> [ ... ]
+> +	ret =3D amd_sdw_execute_bra_transfer(amd_manager, slave, dma_unsafe);
+> +	amd_sdw_deconfig_bra_descriptor(amd_manager);
+> +
+> +	return ret;
+> +}
+
+[Severity: Critical]
+If amd_sdw_execute_bra_transfer() sets dma_unsafe to true, this signals
+that the DMA engine failed to quiesce and is still actively bus-mastering.
+Because amd_sdw_deconfig_bra_descriptor() is called unconditionally, it
+writes 0 to ACP_SW_BRA_BASE_ADDRESS. Won't altering the base address
+mid-flight redirect the ongoing DMA writes to physical address 0x0,
+bypassing the ATU safe leak buffer and causing memory corruption?
+
+> [ ... ]
+> +static int amd_sdw_bpt_send_async(struct sdw_bus *bus,
+> +				  struct sdw_slave *slave,
+> +				  struct sdw_bpt_msg *msg)
+> +{
+> +	struct amd_sdw_manager *amd_manager =3D to_amd_sdw(bus);
+> +	size_t total_len =3D 0;
+> +	int i;
+> +
+> +	for (i =3D 0; i < msg->sections; i++)
+> +		total_len +=3D msg->sec[i].len;
+> +
+> [ ... ]
+> +static int amd_sdw_bpt_wait(struct sdw_bus *bus,
+> +			    struct sdw_slave *slave,
+> +			    struct sdw_bpt_msg *msg)
+> +{
+> [ ... ]
+> +	size_t total_len =3D 0;
+> +	int ret =3D 0;
+> +	int i;
+> +	bool dma_unsafe =3D false;
+> +
+> +	for (i =3D 0; i < msg->sections; i++)
+> +		total_len +=3D msg->sec[i].len;
+
+[Severity: Medium]
+Could total_len (a 32-bit size_t on 32-bit architectures) integer-overflow
+here? If a multi-section firmware payload specifies lengths that sum past
+4GB, total_len would wrap to a small value, bypassing the
+SDW_BPT_MSG_MAX_BYTES validation limit.
+
+> [ ... ]
+> +	/* For writes, copy all section data into the DMA buffer */
+> +	if (is_write) {
+> +		for (i =3D 0; i < msg->sections; i++) {
+> +			memcpy(dma_buf + offset, msg->sec[i].buf, msg->sec[i].len);
+> +			offset +=3D msg->sec[i].len;
+> +		}
+> +	}
+
+[Severity: Medium]
+If the validation is bypassed due to the wrap-around, dma_buf is allocated
+with the wrapped, small total_len. Will this memcpy() using the original,
+un-wrapped msg->sec[i].len cause a heap buffer overflow?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260929115052.2470=
+86-2-syed.sabakareem@amd.com?part=3D4
