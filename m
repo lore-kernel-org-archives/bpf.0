@@ -1,174 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A803475349;
-	Tue, 29 Sep 2026 08:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C9738DC4C
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 08:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790671169; cv=none; b=PSQRo4xskuk/c0bz+gGm+qkdvACfTD/tzhmfEqkCK46U9BG4hTWG/PI7uaj3X57IuW/kqLCoY9FeMie7E67+Kl7i7USv4ehDHKsATkWrTo+vOa6Q9X2VEI3rzxaQvHHciTz7Sg/j9cGd4rRx0Tq17u6flNnbAs5ZMKCAQ+owLA8=
+	t=1790671447; cv=none; b=jkTdMJZHfGRLGOAgxiByLnNMEpRRlFtO5DBY961zyVWDN5ufaAInG7zZa+NT0aTmirpb/dk1oFC2GTsQzbGQx8shITUEDNnm0kZp5pOuB3Js+uS8eGZc/vaIsOqQGXu3ZfGanX4RSGppYNGybteDlZL2jDpu0k1pQDJP8BQ6TUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790671169; c=relaxed/simple;
-	bh=vHaUtZ3yE9ZiHYbJMJ7LMgQCwamNYBySvviYFUnXHXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IUcelLslPKn5kvEzsJCe6w6Mu/7WUiQqRYreXLBV4UM8btED73SjWyUomRMEG81JE5RffiDDwxMi1p5JzmMMfzvYdpX3jLVHGx55ygM/2DEWZWUIluEmR5BLBHyg1Lyhvfhz67Z81hNHsDEhJkNcALq2vXFOinA0qRxbAiVcQBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VyMSysAv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790671447; c=relaxed/simple;
+	bh=J4Let7bApZs3+/vhkQJu5zXR60CByLbcCWT/omaRoyo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=vALvtpS00O5PMjySWGMWnE8NwF0sJ4gZe9pjYe0nG0Q4jhh6t8o+BOQveQdFM5GrqmUiI/wGs6cpy7oVDcuWIzhxJLkCExtvhFnlYNTqX8jbZcDkNDClYIiyVae8TcwiEwoV6kOHZoRmEo1uTtOx9v5NfwpHgie1b0e8Y65dVGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bYlGFkdW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VyMSysAv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AAC01F000FF;
-	Tue, 29 Sep 2026 08:39:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bYlGFkdW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DB11F0089C;
+	Tue, 29 Sep 2026 08:43:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790671167;
-	bh=vHaUtZ3yE9ZiHYbJMJ7LMgQCwamNYBySvviYFUnXHXg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VyMSysAvAo7ngdUGShaeaSS7dNAOWwUOlTJuYF0veHDkZPuwBGplCxkq3zYfmMXso
-	 /zwdaYLvq0ftT23TrtAk+3Q/V507oCqtKiCaTTa3dU+SPoJfI6z5TEMDwY4f2FboHw
-	 sLiQOF8ZyUV+QafHjHlodL/KuvuTwUt11h1537m7TDAiuUmK+N7DYsgklbj5HWVVdd
-	 qFKGSRvAvZFoogC74Yzbmqp4YKJ42qAt7YcwtMXwwNEDLY8WHX9fs1dB1x3Z2YlSxi
-	 DznitOMAhJeq5fTWgmuwINB1mdpeXesqzXKCKJgoYsc4bj4ZlorP346HLkA6U2tMSr
-	 YL3DYq2Kc+dMQ==
-Date: Tue, 29 Sep 2026 10:39:24 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-Message-ID: <artyl8fD3zzng8Uh@houat>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
- <20260928204059.GA515872-robh@kernel.org>
+	s=k20260515; t=1790671440;
+	bh=zb+Jr4ovUhNNZRI24KuyQxsUTOQ0rBBYqdY/SPkm7G0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=bYlGFkdWcUfs1O1tX7WLxaTsSeZegJ0cJDjWUqjKR/pEsRWagoLaRxWOgR7ccCXGH
+	 F1ArLB1nEiw3EOi/gDa43yT810IMZPhXNCoIu3g/nvBoThBm1ypn4yjU43bF9wjMqF
+	 rzLL0xYAW50+rf/K8Y2kX2jIFYp25IXLXcWAJeltaB+u/n/TLhBM7vjktvc4mPvP5f
+	 DnNuSMmptm3T6Ek2o+o682p42zNFLWT/ABUQtSxmSwTXK80SnEmAgZmSQATPVXXB7L
+	 RUZRSCUTu6DP06HXcw+fFB3Pp5JyzON49Pa8aV5sWd8Sr/xJPujOfTrcCL1IYP9vl1
+	 wjGI0cfM04sdQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add a test for
+ udp_bpf_recvmsg() with a stuck backlog
+Reply-To: sashiko-reviews@lists.linux.dev
+To: chenyuan_fl@163.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260929083447.558818-3-chenyuan_fl@163.com>
+References: <20260929083447.558818-1-chenyuan_fl@163.com>
+ <20260929083447.558818-3-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 29 Sep 2026 08:43:59 +0000
+Message-Id: <20260929084359.C2DB11F0089C@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="gzxryrlughoococo"
-Content-Disposition: inline
-In-Reply-To: <20260928204059.GA515872-robh@kernel.org>
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: out-of-bounds stack read in bpf_map_update_elem() due to si=
+ze mismatch
+--
 
---gzxryrlughoococo
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-MIME-Version: 1.0
+commit b1443b15549bc27b1d37fdde6146f87e16092cd2
+Author: Yuan Chen <chenyuan@kylinos.cn>
+Subject: selftests/bpf: Add a test for udp_bpf_recvmsg() with a stuck backl=
+og
 
-Hi,
+This commit adds a BPF selftest for udp_bpf_recvmsg(). It verifies that rea=
+ding
+from a socket where a verdict program redirects every skb back to the socket
+itself falls back to the plain UDP receive path and correctly handles timeo=
+uts.
 
-I'll merge the two discussions in that thread.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c=
+ b/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_udp_backlog.c
+[ ... ]
+> +static int run_child(void)
+> +{
+> +	struct test_sockmap_udp_backlog *skel;
+> +	struct timeval tv =3D { .tv_sec =3D RCV_TIMEOUT_MS / 1000 };
+> +	struct sockaddr_in addr =3D {};
+> +	struct timespec t0, t1;
+> +	socklen_t addrlen =3D sizeof(addr);
+> +	int zero =3D 0, sfd, ret, err, exit_code =3D 1;
+[ ... ]
+> +	err =3D bpf_prog_attach(bpf_program__fd(skel->progs.redir_to_self),
+> +			      bpf_map__fd(skel->maps.sock_map),
+> +			      BPF_SK_SKB_VERDICT, 0);
+> +	if (!ASSERT_OK(err, "prog_attach"))
+> +		goto close;
+> +
+> +	err =3D bpf_map_update_elem(bpf_map__fd(skel->maps.sock_map),
+> +				  &zero, &sfd, BPF_ANY);
 
-On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
-> On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
-> > Most MIPI-DSI panel drivers follow an identical pattern: acquire
-> > regulators and GPIOs, perform a reset pulse with specific timing,
-> > send a vendor-supplied sequence of DSI commands, then enable the
-> > display. The only truly panel-specific part is the init sequence
-> > and power-on/off timing.
-> >=20
-> > The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
-> > with a single generic driver whose panel-specific behavior is
-> > provided by BPF programs loaded from userspace at runtime,
-> > following the HID-BPF model. This enables new panel support
-> > without kernel patches.
-> >=20
-> > Panel DT nodes use a two-entry compatible with the panel-specific
-> > string first and "panel-mipi-dsi-bpf" as fallback. The generic
-> > driver matches on the fallback, while the first compatible is used
-> > to identify which BPF program to load.
->=20
-> If you need the 1st compatible anyways, what is the point of the
-> second one?
+[Severity: Medium]
+Will this cause an out-of-bounds stack read?
 
-The whole point of this driver is that you don't need to modify the
-kernel when you add support for a new panel.
+The map is defined to expect an 8-byte value:
 
-> Also, I assume there is at least some panel supported in the kernel
-> you might want to convert to this. That panel would not have the
-> fallback (and the DT is fixed).
+tools/testing/selftests/bpf/progs/test_sockmap_udp_backlog.c:sock_map:
+    struct {
+        __uint(type, BPF_MAP_TYPE_SOCKMAP);
+        __uint(max_entries, 1);
+        __type(key, __u32);
+        __type(value, __u64);
+    } sock_map SEC(".maps");
 
-Yeah, that's true. I'd still need to identify the parts though. I guess
-using a generic compatible but a specific model would work?
+Since sfd is declared as a 4-byte integer in run_child(), passing it as the=
+=20
+value pointer to bpf_map_update_elem() will cause the kernel to read past=20
+the bounds of the variable.=20
 
-> And I agree with Neil's comment. At least until we start embedding BPF=20
-> into DT directly. ;)
+If the 4 bytes of adjacent stack memory cause the 64-bit value to exceed
+S32_MAX, the map update can be rejected by sock_map_update_elem_sys(),=20
+leading to random test failures with -EINVAL.
 
-And from Neil:
+> +	if (!ASSERT_OK(err, "map_update"))
+> +		goto close;
 
-> I don't see how this can be a valid hardware description, bfp is a
-> software implementation and has nothing to do in the bindings.
-
-I'm quite a bit surprised by that argument though.
-
-We have in the main dt-schema repos bindings like:
-
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/opti=
-ons/u-boot.yaml
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/boot=
-ph.yaml
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/post=
--init-providers.yaml
-
-Or, in Linux:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/devicetree/bindings/misc/google,android-pipe.yaml
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/devicetree/bindings/sound/simple-card.yaml
-
-All of them have been reviewed or acked by you, and yet none of them
-relate to any hardware description.
-
-panel-mipi-dsi-spi is a generic panel that will load a firmware, and
-quite similar to this one. google,android-pipe and qcom,fastrpc don't
-attach to anything and will just open a tunnel to userspace, which is
-somewhat equivalent but more dramatic than what this driver is doing.
-simple-card or its variations will just instantiate a kernel driver from
-the DT and is used pretty much everywhere.
-
-I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
-by rob, and acked by a panel maintainer, and 4 years ago, so we're way
-past the "oh but we didn't know what we were doing back then" argument.
-
-So, let's phrase this differently: what's different about the
-description than panel-mipi-dsi-spi, or any other binding already in
-tree?
-
-If it's the BPF part, BPF is not Linux-only, and there's hardware with
-direct BPF support these days, so it can be considered OS-agnostic and
-not an implementation detail.
-
-Maxime
-
---gzxryrlughoococo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCart5NwAKCRAnX84Zoj2+
-dq+3AXsHKGDW5rCG290Y1fx+OohFSBUrfr+SjWPzYJbv3AsWDJ+tyk6pJ0aj+C5d
-QReuRzgBf1XMASoAKO+JAW9hFCf/nZfVfklcUBc5TR6bE1h5DcpFLGIlYksltuZo
-cQcGQ3gsrw==
-=YrNa
------END PGP SIGNATURE-----
-
---gzxryrlughoococo--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260929083447.5588=
+18-1-chenyuan_fl@163.com?part=3D2
