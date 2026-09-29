@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AED2472AE;
-	Tue, 29 Sep 2026 17:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0AD528428;
+	Tue, 29 Sep 2026 17:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790703334; cv=none; b=D6edZMSBHdB1Dk2/5DqwOmkYmLdI7nhQJEnl9BpGfNWv+UAnfYEoijMaH8yPElZXszIM08zsxC7hqe6C7PobBPFp862zKIY4UaA9USV0PVgq4dzCfcxSocP6SxIrsc6On7j7rwqY7TXu1KHTuH0tbDerv8R3HUgE19adbSZ7aM8=
+	t=1790703502; cv=none; b=SArsEbVuPOF0gAI2ne5S4GyfBLDt4WK0UKkD5kuiDx7SGNsoJIn4GgSWJuX144EBCkC5IophOU6V73Bs7qpB5y6baH23CPVF/7FyuvNjKAteL/boaBXsTwDQxiLB7aPDjzcHIPU29l/lucI40ycEbcr6ZjgOAYsdQYn8RZj0z5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790703334; c=relaxed/simple;
-	bh=LCCm9TdD7IBpMpqOchJaXCd9YzFtxv7n5q7b3Wdv45I=;
+	s=arc-20240116; t=1790703502; c=relaxed/simple;
+	bh=sMhfOsYRlw1oNQeIkAXv0p6U0oqD1y16erHz8e1YB3Y=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JAjL4KLuBaBp+4aDcN7RmsTuLb2OLi7KxcHfHwPrTvsavuN4mmO+2xEm6oCa6gwN/WYcfhihYWcE2LHIO4bwHzxgcgWtr3e/hyXzFnljx8l1/+vKS64I/CYLfvKu27GwDrPu70TkZSyCKoDS+bWpa+px9zc/jyuG5U17WCOz5ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=igg0NQDl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qakJUzx/SoWBl/gRXLBVefltaERxJNJWzJqKy1ecknXrHtNCa17czgxwXPJwNOrGbbD3dhWt0Tq7HPW1a415lGbO3Zqbdhg/7rzXzuT+CCsw7PLi/rrvzB6iHfNkh1klNNwOrzqyiQnNMQ5zsEANkMVkzaUXeUD1+wqAXn4rfeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GZbgz6Kg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="igg0NQDl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88191F000FF;
-	Tue, 29 Sep 2026 17:35:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GZbgz6Kg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 125081F000FF;
+	Tue, 29 Sep 2026 17:38:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790703333;
-	bh=8ox1yIKsjgmd67Nn+OV3krulVc0mUnkNPEk6FpSCLz0=;
+	s=k20260515; t=1790703501;
+	bh=gHHVxQFAvN3ZcewoO3CLmw+cArQRBdv7a5OEkmGubew=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=igg0NQDl78pWIdxhYnxRMV7yeLp3/ykbhXkTJ5x17Bop5KRppAChpQW6wRO2vrRD7
-	 SzvWxKO8SZ7RxlUinYScpY6jtbFHnZY4LLLakRNR2wwLulceH588QRo3QFaHb30hrN
-	 Nr0MwtQ1AaTuPLCJvoG/xHHuJHDzyuu/Vu1t2zRFsRK4kcUQLhHm1fofgHKK4yVGac
-	 WTuJGfPiY0JMpXH76MN9+PvCem4BhLtm1SsyXKrYjF9Rb0jiWFw4ovh6iQusvO4sOF
-	 jADJ6y6BV0lKQF2ICundI7aDndU31zvSJMQW8tjP7tAvsLrSRK0vZfOM711BibM8I0
-	 KzhnkjCdI5y5A==
+	b=GZbgz6Kg3g0TGR1XlshPjv6nsnkmWt2zQzGKU4s2lzMf7he6YaUmt/e3WAwGTL4wK
+	 Wc3O+hZgiWeK60t9msqX56eOWvQmrSOFznEvDI93eml3VdH5Twea7WRfyQtVd2fYht
+	 xDAedgMy9tIHH9WcQw9Ye+jXmrPB5tYfz/b8LEHZ+uNlGuSTqkScL1D88q4JJlJUZ+
+	 fDq7TliPyjEDbusyhRoVLK4+YvOsmOa4FBN2bjadXwM44OJ5mRzjKOdGkfRSpjTUn5
+	 qBF03zxBwNC4tn6qGRkqw347/bPck/w8q01xOZBT2FPcxjUFzdHAFBeBeoxlkAaHBQ
+	 V32OtGLvH3OqQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 03/14] rcu-tasks: Add a Tasks RCU implementation for
- reader-marked trampolines
+Subject: Re: [PATCH sched_ext/for-7.4] sched_ext: Work around pahole 1.32
+ dropping scx_bpf_task_set_lazy_resched() from BTF
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Josef Bacik" <josef@toxicpanda.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20260929-b4-rcu-tasks-preempt-qs-v6-3-c111ee02caca@toxicpanda.com>
-References: <20260929-b4-rcu-tasks-preempt-qs-v6-0-c111ee02caca@toxicpanda.com>
- <20260929-b4-rcu-tasks-preempt-qs-v6-3-c111ee02caca@toxicpanda.com>
+To: "Tejun Heo" <tj@kernel.org>
+Cc: bpf@vger.kernel.org, sched-ext@lists.linux.dev
+In-Reply-To: <7c139810be5ffc9764ed4236efc28794@kernel.org>
+References: <7c139810be5ffc9764ed4236efc28794@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 17:35:32 +0000
-Message-Id: <20260929173532.C88191F000FF@smtp.kernel.org>
+Date: Tue, 29 Sep 2026 17:38:20 +0000
+Message-Id: <20260929173821.125081F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,89 +46,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] rcu-tasks: Use-After-Free if task oopses inside irq-exit preempt=
-ion
+- [Low] sched: build failure due to misapplied patch in scx_bpf_task_set_ds=
+q_vtime()
 --
 
-commit 6894dfa1f4c077dbeacd53dcfc82e1697f747465
-Author: Josef Bacik <josef@toxicpanda.com>
+commit 16f6b2129331609ed5db39cd3ea7260f54a1df1f
+Author: Tejun Heo <tj@kernel.org>
 
-rcu-tasks: Add a Tasks RCU implementation for reader-marked trampolines
+sched_ext: Work around pahole 1.32 dropping scx_bpf_task_set_lazy_resched()=
+ from BTF
 
-This commit introduces a new Tasks RCU implementation for architectures
-where trampolines are marked as Tasks Trace RCU readers. It tracks context
-switches and preemptions during irq exits to wait for tasks that might
-be lingering in unmarked trampoline text.
+This commit works around an issue with pahole 1.32 by forcing the lazy
+argument onto the stack using barrier_data() so its location doesn't
+name a register.
 
-> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> index 627295396cd91..e7498601c28c3 100644
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-[ ... ]
-> +static void rcu_tasks_tramp_hold(struct task_struct *t)
-> +{
-> +	unsigned long flags;
-> +
-> +	if (t->rcu_tasks_holdout)
-> +		return;
-> +	raw_spin_lock_irqsave(&rcu_tasks_tramp_lock, flags);
-> +	list_add_tail(&t->rcu_tasks_holdout_list, &rcu_tasks_tramp_holdouts);
-> +	WRITE_ONCE(t->rcu_tasks_holdout, true);
-> +	raw_spin_unlock_irqrestore(&rcu_tasks_tramp_lock, flags);
-> +}
+Link: https://lore.kernel.org/r/20260925213619.2187751-1-yonghong.song@linu=
+x.dev
 
-[Severity: Medium]
-Does this code risk a use-after-free of the task struct?
+> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+> index 6b037d27c99d3..feaa784d7a0dc 100644
+> --- a/kernel/sched/ext/ext.c
+> +++ b/kernel/sched/ext/ext.c
+> @@ -10119,6 +10119,11 @@ __bpf_kfunc bool scx_bpf_task_set_dsq_vtime(stru=
+ct task_struct *p, u64 vtime,
+>  {
+>  	struct scx_sched *sch;
+> =20
+> +	/*
+> +	 * clang's register locations for @lazy make pahole 1.32 drop this kfunc
+> +	 * from BTF. Keep @lazy in memory so its location names no register.
+> +	 */
+> +	barrier_data(&lazy);
 
-It appears that the task is added to the holdout list without incrementing =
-its
-reference count (e.g., unlike the classic flavor which deliberately calls
-get_task_struct()).
+[Severity: Low]
+Will this cause a build failure? It looks like the lazy variable is not
+declared in scx_bpf_task_set_dsq_vtime().
 
-If a task is preempted inside unmarked trampoline text,
-rcu_tasks_irq_resched_enter() adds it to rcu_tasks_tramp_holdouts. If the t=
-ask
-subsequently suffers a hardware exception or kernel oops while executing
-preempt_schedule_irq(), it will be killed via make_task_dead() and do_exit(=
-).
-Because rcu_tasks_irq_resched_exit() would never be reached to clear
-t->rcu_tasks_irq_ip, rcu_tasks_note_qs() skips removing it from the holdout
-list, leaving a dangling pointer when the task is later freed.
+Could it be that this patch was mistakenly applied to=20
+scx_bpf_task_set_dsq_vtime() instead of scx_bpf_task_set_lazy_resched()?=20
+They appear to share identical context lines, meaning the patch might have
+matched guard(rcu)(); followed by sch =3D scx_prog_sched(aux); in the wrong
+function.
 
-[ ... ]
-> +static void rcu_tasks_tramp_wait_holdouts(struct rcu_tasks *rtp, unsigne=
-d long *lastreport)
-> +{
-> +	struct task_struct *t;
-> +	unsigned long flags;
-> +	int cpu;
-> +
-> +	raw_spin_lock_irqsave(&rcu_tasks_tramp_lock, flags);
-> +	list_splice_tail_init(&rcu_tasks_tramp_holdouts, &rcu_tasks_gp_holdouts=
-);
-> +	raw_spin_unlock_irqrestore(&rcu_tasks_tramp_lock, flags);
-> +
-> +	for (;;) {
-> +		struct cpumask *kick =3D &rcu_tasks_pending_cpus;
-> +		struct task_struct *show[8];
-> +		int nshow =3D 0, i;
-> +		bool empty, report;
-> +
-> +		report =3D rcu_tasks_tramp_stall(rtp, lastreport,
-> +					       "tasks preempted in trampoline text");
-> +		cpumask_clear(kick);
-> +		raw_spin_lock_irqsave(&rcu_tasks_tramp_lock, flags);
-> +		empty =3D list_empty(&rcu_tasks_gp_holdouts);
-> +		list_for_each_entry(t, &rcu_tasks_gp_holdouts, rcu_tasks_holdout_list)=
- {
-> +			if (task_curr(t))
-> +				__cpumask_set_cpu(task_cpu(t), kick);
-
-[Severity: Medium]
-If the scenario described above occurs and the task struct has been freed,
-could we hit a use-after-free here when iterating over the holdout list and
-accessing t?
+>  	guard(rcu)();
+>  	sch =3D scx_prog_sched(aux);
+>  	if (unlikely(!sch || !scx_task_on_sched(sch, p)))
+>  		return false;
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260929-b4-rcu-tas=
-ks-preempt-qs-v6-0-c111ee02caca@toxicpanda.com?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/7c139810be5ffc9764e=
+d4236efc28794@kernel.org?part=3D1
