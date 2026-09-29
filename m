@@ -1,172 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2871753D0BB
-	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 15:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C56468C3F
+	for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 15:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790694759; cv=none; b=X8UliCvDnlvyvwp4djjs3a+HwLHrZjNZ53lN8pesVs5DHzBdA64B5dFjS+mkWzQdVG0uZ+hLfdZbSeJisMc0obkrdIdnXQhAymDJ483ed7u7P09UM41WgFqOLBIMPN0C7O78MzIiWfBChxTxnvHgvNTs4tInPXxK1tNyqqGcPMM=
+	t=1790697504; cv=none; b=MghL+3MNWSBSscPUZl3MAYGaGTOX8qEYMnh7A45BBTm4UJNADfcSFL/Z8IhqK4DZfiBof5vnYx2qp+mLytx9XUFO8J0gNUfBIwjHQJ9tIOheg3Q2Yl2iGIiZGhvxf9KQ2v97cipvh/PzY9zPMttk2ox8oJgh4zYgK7bTPOd28So=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790694759; c=relaxed/simple;
-	bh=9wZZWbx8H/BsWoEtAM7iqA4aca7JNV6xe//799RMRqU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kce3XI36rPbTiC+uJNX1RMy9tAHMZrX+bp9S5VPrD5csK3Wr2Wk1HUGdlHAGB378dKHcWW/yt9oa5hA7C/5pMjBYCOQMWoSWOW4mOZa4xzdi8QX9gJzHd42oW7hAf9Hr8lmFIMYzScM2dXV9pP8MLaByevD1Ehbo/avP4BN9kzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEbNgVuY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790697504; c=relaxed/simple;
+	bh=nR4yrTOIgVgspvjCPgKKmvkm5cZCrViKQN79fpTorck=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KQGnW1gJloY1pbEPWzCYCd0FU/AXn30hWIkU7mJXnNjDOnIfcA0B8cBMBKsmnsA0dS0wiaxjk/V4uiX4gdR/XetFrnigL6rVsvZc8wrwhbTt1JyxcmMuE1VznSPzjDwtDB4l+Gc5ApwR/WIWGUEHYlszufXuCYfHfbBLFHXB6so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=TGjFZgg5; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEbNgVuY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0A81F00893;
-	Tue, 29 Sep 2026 15:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790694739;
-	bh=YwoOJ1zNfQNJSl4j1ib8xQKHWTFQcqR8oQgRKfKPtjM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mEbNgVuYHAZLock8OIsmrR5HvV5QpTLsRPEcb7u2SKCmhbnVCUI6JdX7xyMXmQdxF
-	 KWzjG8cABREGKkqai6lnN7NxqPamSrL7EW5X2sTk9ztn/mgqW3eFhdLuKcoyhuJOTa
-	 giIJSgg2v4BXioIIPzxkJd4Hm/jSohjOuhdn04XisQUZG4Nd68+bDFItTfERuwNNGR
-	 jadKuwlDJYRP3hBKbuxEctNC9eQpi8Ed55/bC60XptAvopuJ+jMoqdCEcB4TliiLST
-	 /00XDu3zpu+S6F7/ECUv/Mm56ASVoafa3/jxpMecG7/1i15YsMopQD8BRlLR+ti2E0
-	 Qak9vUXPrf5CA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv9 net-next] tcp: Add TCP ROCCET congestion control
- module.
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tim Fuechsel" <t.fuechsel@gmx.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <arqDuiD4Q4GWOFBc@volt-roccet-vm>
-References: <arqDuiD4Q4GWOFBc@volt-roccet-vm>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 29 Sep 2026 15:12:18 +0000
-Message-Id: <20260929151219.5F0A81F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="TGjFZgg5"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e721b5503so41089225e9.0
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 08:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1790697499; x=1791302299; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Gf4CL38l7K7zHB2Jr75kV3VIF1+DE+Av3C/FhqhlLqk=;
+        b=TGjFZgg5lUHeZxukRtGDBpWWXiPuev8gp7o7FIX6qFXoKC2EajqRD+/ExUDCSfZjoC
+         i4OrZjFiZGSOtA6mpUM4f/v/zeZAXWCL3g41cedVNWBPRLuxv+9Dd+SWUiKp5re4pZfU
+         jJ7hvCUY3S01HlnQisdD/KK+9JhEQayTnTWsXyOQs91JsZXPSkOOZZ2+4l+vktxu61vb
+         8w/OE2ayTWQXiV2FZWNafA6HdPrYCAqgm4k0PQXdk1/Vwauf44GR+0YcnVQSOaFVxjpB
+         d+/mHzpjlC5QOs1jyDU2SN5c6YrW8WpQYyg2fsMt9DDG51eS4rnjRbgfKV2Dql7KmKt4
+         ocqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790697499; x=1791302299;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Gf4CL38l7K7zHB2Jr75kV3VIF1+DE+Av3C/FhqhlLqk=;
+        b=IBygo5RDKJB8hYhE//QMaBwPBMmDFd9hjoWHVEzsPkM3mCEDZmfvpNZpTB/yZv0kLJ
+         mDQK266svfO5wMtI1MtubH8ux0WcfEFHG+MdQJ34jA3sxtDnG55c7uuJ9uQHVrwT3Qlx
+         k4/VvRe5T6R4E++6BNEjpzy14d1v5mJHNEYfU38XQ3zbM4T8az1PW8fN8JQ1/N/QM75p
+         gOXdRXe32YLzklvTKOqi1vBJL564tXduAoX3btliJyYWDB2nZh1Z62dKbK2FGSVY+E6D
+         WBJZpeG2+so1KPWv3m65agi3OrOvnw11Nl4q8QTeezoo+uaWWI29ze3whZZt8X+BY9nv
+         Pv2Q==
+X-Forwarded-Encrypted: i=1; AKwUvBydQ5+cqqC92G5upAjPvyEyf4E1K5Bnd1MOZ0Ze7xn7sDJsB1hu2OpvmnF2OkTyZXQvLkk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mAD9jWCRnq0TGeAFloa7FzNUrcoVvvk3ilisAjgfzRvlaSfy9u
+	sdHqUjQ1uxBP3MEavYp2RleTXUtw8+TGjvVlJY3KkTP+gg13S8tF/fENJaXzPL4GZW8=
+X-Gm-Gg: AYBFou2Gh6fw8YJV1SPkopNCA3MnCWywK6+Ya941RKB430PTEtNpJJt7V5Q5CWuYhOu
+	ehUn1jvHZnCTJic1dMVjbq5W5iFHpnjy3pzfQDrLRD8YO/emYzz9CQ5CBoUlDkKw1Gi06IXOeGK
+	6HeaWewtKX7kIMJh4Uirm9KfPVEUrTMjKbKYOtVD+Pwz1ORKby1QKh1tcBqoPVqXzfMUl58P8GZ
+	2rkdSIxWxZ8eQv5b5flK7Cf0Mx/lab4djRp+VgQ7vGxpA2EnU81IJamgKifBJQTUcRbVaZ4wZzm
+	5VoMEXW5etPMSr9H1oyPeYJws6Ws8KYmgsGl/F/+xXNWPGRSoL7OAyHrCXd98poWpdtIyCe9bKB
+	qTSnerWuKL3pvRm964zLvgrqFOEAp/xYFV4Gjt5ZFSCcBR3vhc3z9ZVhC6+2ZtPSbiLrxxIH0n6
+	AhTnUTQFJES58beujvsNvRT7Kp99nz/31SIILDoH+U3hCq/5B2KYITbX0rlH/tCfqGAh7zo4yft
+	8oe
+X-Received: by 2002:a05:600c:1d1c:b0:49c:eb16:9fd with SMTP id 5b1f17b1804b1-49fe66c9ae3mr284330975e9.3.1790697499193;
+        Tue, 29 Sep 2026 08:58:19 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F ([2620:10d:c092:500::5:5c0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00cf9dfdbsm127631095e9.1.2026.09.29.08.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2026 08:58:18 -0700 (PDT)
+Date: Tue, 29 Sep 2026 11:58:16 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v3 06/40] mm: make map_kernel_pages_[prepare,complete]
+ internal and unexported
+Message-ID: <arvf-dEnIzsXhzkL@gourry-fedora-PF4VCD3F>
+References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
+ <20260917-b4-mmap-prepare-vma-flag-sanify-v3-6-4583d8a23bca@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-6-4583d8a23bca@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] tcp: ROCCET stalls Fast Retransmit by bypassing PRR in TCP_CA_Reco=
-very
-- [High] tcp: integer promotion bug falsely triggers congestion events on R=
-OCCET
-- [Low] build: struct roccettcp exceeds ICSK_CA_PRIV_SIZE limit
---
+On Thu, Sep 17, 2026 at 05:22:15PM +0100, Lorenzo Stoakes (ARM) wrote:
+> There's no reason to export the symbols for these functions which are only
+> called from internal mm logic, additionally there's no reason for them to
+> be declared in mm.h.
+> 
+> This patch therefore removes the exports and moves the declarations to
+> mm/internal.h.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-commit 1022dd98954ad71bd010ccb13665b66dd4141109
-Author: Tim Fuechsel <t.fuechsel@gmx.de>
+Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
 
-tcp: Add TCP ROCCET congestion control module.
-
-TCP ROCCET is a new congestion control algorithm based on TCP CUBIC that
-improves overall performance in cellular networks. It introduces additional
-metrics like relative increase in RTT and acknowledgment arrival rate to
-address bufferbloat and manage window scaling.
-
-> diff --git a/net/ipv4/tcp_roccet.c b/net/ipv4/tcp_roccet.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/net/ipv4/tcp_roccet.c
-> @@ -0,0 +1,1400 @@
-[ ... ]
-> +struct roccettcp {
-> +	u32 cnt;	/* increase cwnd by 1 after ACKs */
-[ ... ]
-> +	u16 ack_rate_cnt;	/* Used for counting acks */
-> +
-> +	enum roccet_state state : 3; /* Current operating state of roccet */
-
-[Severity: Low]
-Will this bitfield layout cause a compile-time failure?
-
-Because the preceding field is u16 (which ends at offset 102), the compiler
-inserts 2 bytes of padding to align the enum allocation unit, which needs
-4-byte alignment, at offset 104. This expands the total struct size to 108
-bytes.
-
-> +	bool initial_limit_reached: 1;	/* Set to true after the connection
-[ ... ]
-> +static int __init roccet_register(void)
-> +{
-> +	int param_err;
-> +
-> +	BUILD_BUG_ON(sizeof(struct roccettcp) > ICSK_CA_PRIV_SIZE);
-
-Since ICSK_CA_PRIV_SIZE is statically defined as 104 bytes in
-include/net/inet_connection_sock.h, it seems this check will unconditionally
-fail and break the module build.
-
-[ ... ]
-> +static void roccet_orbiter_update(struct sock *sk, u32 acked)
-> +{
-[ ... ]
-> +	/* Check sent and received bytes from the previous interval.
-> +	 * Here we use a guard space of 1% of the current cwnd.
-> +	 * We do this to avoid a false positive evaluation due
-> +	 * to delays caused by jitter or scheduling.
-> +	 */
-> +	sent_more_than_acked =3D (s32)(sent - received) >
-> +			       div_u64((u64)tcp_snd_cwnd(tp) *
-> +			       (u64)tp->mss_cache, 100);
-
-[Severity: High]
-Does this comparison trigger false congestion events when ACKs outpace outg=
-oing
-data?
-
-If received exceeds sent, sent - received wraps to a very large u32. When
-cast to s32, it correctly represents a negative difference.
-
-However, because div_u64() returns a u64, standard C arithmetic conversions
-cause the negative s32 to be sign-extended and promoted to u64.
-
-This results in a huge positive number, making the condition incorrectly
-evaluate to true, which freezes congestion window growth.
-
-[ ... ]
-> +	/* Terminates this function if cwnd is not fully utilized.
-> +	 * In mobile networks like 5G, this termination causes the
-> +	 * cwnd to be frozen at an excessively high value. This is
-> +	 * because slow start or HyStart massively exceed the available
-> +	 * bandwidth and leave the cwnd at an excessively high value.
-> +	 * The cwnd cannot therefore be fully utilized because it is
-> +	 * limited by the connection capacity.
-> +	 *
-> +	 * Also avoid cwnd-growth if we are in cwnd reduction phase.
-> +	 */
-> +	if (!tcp_is_cwnd_limited(sk) || sent_more_than_acked ||
-> +	    tcp_in_cwnd_reduction(sk))
-> +		return;
-
-[Severity: High]
-Can returning early here during TCP_CA_Recovery stall Fast Retransmit?
-
-When a socket enters loss recovery, the TCP core delegates all congestion
-control processing to the cong_control callback, bypassing the standard
-tcp_cwnd_reduction() PRR routine.
-
-If roccet_orbiter_update() always returns early without inflating snd_cwnd
-for incoming dupACKs:
-
-[ ... ]
-> +static void roccet_state(struct sock *sk, u8 new_state)
-> +{
-[ ... ]
-> +	} else if (new_state =3D=3D TCP_CA_Recovery) {
-> +		/* Directly reduce cwnd and rely on pacing */
-> +		cwnd =3D roccet_handle_recovery(sk);
-> +		tcp_snd_cwnd_set(tp, cwnd);
-> +	}
-
-The snd_cwnd is statically reduced upon entering recovery. Because it is
-never inflated by dupACKs, tcp_packets_in_flight() will remain above the
-reduced snd_cwnd.
-
-When tcp_xmit_retransmit_queue() attempts to fast retransmit, it calculates
-available segments as tcp_snd_cwnd(tp) - tcp_packets_in_flight(tp) which
-evaluates to <=3D 0, completely preventing retransmissions until an RTO fir=
-es.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/arqDuiD4Q4GWOFBc@vo=
-lt-roccet-vm?part=3D1
