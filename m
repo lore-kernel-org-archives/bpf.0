@@ -1,154 +1,198 @@
-Received: from mail-ed2-f32.google.com (mail-ed2-f32.google.com [74.125.228.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89153366057
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 07:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4F23E1D13
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 07:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790752074; cv=none; b=XBa2HdAcS5rgPI+LSi/M/OAGEU+Yel+z2ZvyFN4HrXVQZBaO+Eb+D4erz8j5K/iZlRP1MnGl0cSjrz5PgILFrZDj5CQW+uOfU1WBZ031Ebyy4Dy3x2GJ7LN7dxshvdTgbHMX9QP+3wP5NSVQYLGnXh8FJYgAZICZ3mWdLpjOd10=
+	t=1790752158; cv=none; b=MTYBVafijMDcrIHLMAy1om+V27kT63RWhIV7RcXHW5Hsqqr2aC59gKQu0crb2Y3IJddz+efw0TDoukl2HLNzC3yOyzNJBNagcjrsmdsjaWkJU7SB9P3DdW7Wo5K4heK1TsZQcXgNRATnFrJZ5V4QRAaTS1ygxcZRFDkz1C2MBNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790752074; c=relaxed/simple;
-	bh=rtEvlpc5RFKwgsy5Faq1Dvca+J9Y2+1PDgdNAuQ81Ko=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rCIZMBiGOx0Yda9Emmh6A7sIBQX39KPxW9pSwkpz1+LBDlz1LhP8W8YVvQ6lan6sIPxD942fCIfoFcCm0MH145yQgWsydvZQxGE7xRjcMgS2w29qTGPovzMibyoyp0Qjjdwk8PHrxj2xA8mGaEVgvIyRDYaiPQnntklrur4sQbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Szt92RVN; arc=none smtp.client-ip=74.125.228.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790752158; c=relaxed/simple;
+	bh=kUJ6AZwh1W1UbN+W0pIvxx+NYxdVnJ7wO2p2cLzdAzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XPRb6fthCibNFIzvnZWOk4ycy55n4GgDKjqSVlozpwm5nfk6wjaDBfVX/Oc0ciijDnlGtr5vsHqipfcyRfpwE3j4RK3yaGd/nc7Q0daaAXo3af7yvtKH4NOZIc9JWpUsNMCmElT3DR45NlvLSSBmXLZZfDu4hMrzVvOgKw1/dHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bQWazhUK; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Szt92RVN"
-Received: by mail-ed2-f32.google.com with SMTP id 4fb4d7f45d1cf-6acb8b78d6cso2072210a12.2
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 00:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790752070; x=1791356870; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yPxo5oIesTw/2A8ukKykJpHFhPhcqo3C0UATOY1SYVs=;
-        b=Szt92RVNxsQONHzDiByv/n6PzMGv6h4y6UjVPybFbLRgpjjr8QfsRew1uLr9hQLYxx
-         v70iODpytwPPiZYybLrv13lZWJUfKQw07NWrpb+D7hNlOLrXmxPPFWiy1WUI9OceA/sK
-         I25m64P9h0V38DW/pjKltS3kqj2FjuAo5ymbtKRxkG8XCSrYjUvotKHL2+yE3F9rKsjz
-         Q3+0TLkQl8cLx+wRkjEesdTx9do2aCfAijl1cwDEibmvR8j9goP/sE1l+ksr3fFFp6AT
-         NMdtazOwUg0Yw4UG/z79KEpHrmSYqR8lYQZNc4as5C53Cf9aSkDxPTbRJxJCL9HlEaCv
-         Y7Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790752070; x=1791356870;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yPxo5oIesTw/2A8ukKykJpHFhPhcqo3C0UATOY1SYVs=;
-        b=ADDLhlrzaElNBX1InQILstq8qv1f55svKv5AKh+QpazNXeN7IiNKNt8hAGPRccoPnj
-         eh4gVq+MOJpfRXJmGz2ZkbmggRQZM2kQgfumFagaX3hW8VlEM3dzNOAFKSkg0jNFT7Q4
-         6qboOggiDTvCOJnYuFh1gYGySdzdAaPYYwzekzhpxYcgPv0LQ4xCFnvV5GBqnbFlxQ3+
-         uL+nMWVx8xPMkyBrf3OjqA49Ef9IbUPqrQOIt+xnLaD5gSYjbkT0FQVYuWfqwsVP/cRP
-         MjVCYYneRjcI8U3a9bS8SC3vKgKdkQ9LEe9Lb4u7AtbMWMVIVbhDHGaJL4jQCH4ow/pp
-         TG5w==
-X-Forwarded-Encrypted: i=1; AKwUvBxZUCvJ4pywA2C8+VfQRWP1wFaUIdcfbYT8RBwJzmX9jOcfxOyPzAZztEPzI69rGiobBao=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKiIyErpTeu2SApzt0WVDgW1v5PIVWyTz/namqTprMDFEaBfIXz
-	1aa46Xw/2AWjHqxK1RWNcTjIO/H1vC4VNCksMD04QJ4t44LWVmW/T8bO
-X-Gm-Gg: AYBFou2uXFdRvBCFH+AO6oEpmAsQLgi6A4nUAEvFQE35dmXmrhUcEONGGnirhQDypt4
-	wNjicXNNwAf9COjvg2PmSIPbPNyL8FaG0c0OkGeo7xP/NM1J5yKOSWoPj6IIeQs4skA9reCI9NZ
-	Nq4z6yVDvg30RnmWvExQJ+GXxrVfQX3LIR9PDGN7UJEMHkzseVQ0c0aSaFY4LZUhaNBrEx7sUlt
-	6sUZN0NWmRjrD3Xhcm10WuI7f5vnn0XusQ1uGd+0MNQpsL8SHQXF14VihEGqrepKWYmlwaQeufm
-	Kt+cjGdZRhqcz9NVKN9MrmM0tNpYaOjqoM6jJYdpQJw0l92+24JDOomwncHyJHXBezueT/aLKrD
-	bfoIM7f4bxCefyKPiuPkVS/vaJlwjw0Xjo+s2E6FsEapSHt4XLdQ+XWg0aXhRC6oZ6IMm93q6kn
-	sIziYrWExZIeQWrMpJWfpWw+87lo1bPSNdpU9spUlNWC/03tncTOWznvQyaA==
-X-Received: by 2002:a05:6402:4613:b0:6ae:160a:58a6 with SMTP id 4fb4d7f45d1cf-6ae19963b9cmr194812a12.36.1790752069491;
-        Wed, 30 Sep 2026 00:07:49 -0700 (PDT)
-Received: from krava ([173.38.220.48])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ae1558d9b5sm325750a12.17.2026.09.30.00.07.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 00:07:48 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 30 Sep 2026 09:07:47 +0200
-To: Mark Brown <broonie@kernel.org>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>,
-	Florent Revest <florent.revest@linux.dev>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <ary1Q48NrlD4i_Zf@krava>
-References: <arvRs4KdojDnW1O6@sirena.org.uk>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bQWazhUK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790752155;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=g2+MnM/YIgixxkMmTeuWBOIVUrZVmFR9eLMZG/rNhnQ=;
+	b=bQWazhUKVliDNjStQ5bu/TY13t5ICvFscoUXPge8v63q6NOqJa3QjyUZSqhPIc1MhAOnhg
+	UFsnd8h8V281Cs5/DYxHNSEbwEP1XOUBRkSQdgFtFaV1HqJJ555zbqkHE2T32Ib1ItrcKn
+	R6CuYR3wGHo+bk2Ni3seT3UGnS+ciC8=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-14-HqjLmjYlNGKACq-MU47iYg-1; Wed,
+ 30 Sep 2026 03:09:09 -0400
+X-MC-Unique: HqjLmjYlNGKACq-MU47iYg-1
+X-Mimecast-MFC-AGG-ID: HqjLmjYlNGKACq-MU47iYg_1790752146
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5522B1955EAB;
+	Wed, 30 Sep 2026 07:09:06 +0000 (UTC)
+Received: from localhost (unknown [10.74.80.98])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 21A9C180035F;
+	Wed, 30 Sep 2026 07:09:04 +0000 (UTC)
+From: Vaibhav Nagare <vnagare@redhat.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	nagarevaibhav@gmail.com,
+	Vaibhav Nagare <vnagare@redhat.com>,
+	stable@vger.kernel.org
+Subject: [PATCH net v2] bnxt_en: don't leave an XDP program installed when the open fails
+Date: Wed, 30 Sep 2026 12:39:01 +0530
+Message-ID: <20260930070901.1218980-1-vnagare@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <arvRs4KdojDnW1O6@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Tue, Sep 29, 2026 at 03:56:51PM +0100, Mark Brown wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the bpf-next tree got a conflict in:
-> 
->   arch/x86/net/bpf_jit_comp.c
-> 
-> between commit:
-> 
->   17637e1a581a2 ("bpf: Skip detached progs in trampoline images that are still in use")
-> 
-> from the bpf tree and commit:
-> 
->   29fcf9ce4bbdf ("bpf, x86: Use global buffer for trampoline size generation")
-> 
-> from the bpf-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
+bnxt_xdp_set() stores the new program and drops the reference on the old
+one before reopening the NIC.  If bnxt_open_nic() then fails, ndo_bpf()
+returns an error with the new program still in bp->xdp_prog.  The caller
+treats the error as "nothing was installed" and drops its own reference,
+so bp->xdp_prog is left pointing at a freed program and the next XDP
+update dereferences it:
 
-lgtm, thanks
+  BUG: unable to handle page fault for address: ff78ecc80ddd1038
+  RIP: 0010:__bpf_prog_put+0x5/0x80
+  Call Trace:
+   bnxt_xdp_set+0xad/0x1b0 [bnxt_en]
+   dev_xdp_propagate+0x36/0xa0
+   bond_xdp_set+0xeb/0x2d0 [bonding]
+   dev_xdp_install+0x1b1/0x350
+   bpf_xdp_link_update+0xc5/0x1b0
+   link_update+0x104/0x1e0
+   __sys_bpf+0x662/0xcf0
 
-jirka
+Seen on a 6.12 based kernel after bnxt_alloc_mem() failed an order-4
+allocation on a fragmented host:
 
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> diff --cc arch/x86/net/bpf_jit_comp.c
-> index 6bca87457e872,6c7a0578760e7..0000000000000
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@@ -3817,25 -4152,15 +4158,15 @@@ out
->   int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
->   			     struct bpf_tramp_nodes *tnodes, void *func_addr)
->   {
->  -	struct bpf_tramp_image im;
->  +	struct bpf_tramp_image im = {};
-> - 	void *image;
-> - 	int ret;
->   
-> - 	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
-> - 	 *
-> - 	 * We cannot use kvmalloc here, because we need image to be in
-> - 	 * module memory range.
-> - 	 * Since it must be writable use execmem_alloc(EXECMEM_MODULE_DATA)
-> - 	 * that returns writable memory in the module address space.
-> - 	 */
-> - 	image = execmem_alloc(EXECMEM_MODULE_DATA, PAGE_SIZE);
-> - 	if (!image)
-> + 	if (!trampoline_size_image)
->   		return -ENOMEM;
->   
-> - 	ret = __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, image,
-> - 					    m, flags, tnodes, func_addr);
-> - 	execmem_free(image);
-> - 	return ret;
-> + 	return __arch_prepare_bpf_trampoline(&im, trampoline_size_image,
-> + 					     trampoline_size_image + PAGE_SIZE,
-> + 					     trampoline_size_image, m, flags,
-> + 					     tnodes, func_addr);
->   }
->   
->   static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image, u8 *buf)
+  bnxt_en 0000:a0:00.1 ens4f1np1: nic open fail (rc: fffffff4)
+  bond1: (slave ens4f1np1): Error -12 calling ndo_bpf
 
+Bonding is not required to hit this; a plain XDP attach on a bnxt
+interface takes the same path.
+
+Restore the previous program when the open fails and release it only
+once the change has been committed.  Also restore the ring and feature
+configuration that was in service before the change: without it a
+failed detach leaves bp->xdp_prog set while page mode is off, so
+bnxt_init_one_rx_ring() never assigns rxr->xdp_prog on a later open and
+the program is reported as attached while no packet ever reaches it.
+
+Fixes: c6d30e8391b8 ("bnxt_en: Add basic XDP support.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vaibhav Nagare <vnagare@redhat.com>
+---
+v2:
+ - also restore the ring and feature configuration on the error path,
+   not just bp->xdp_prog, so a later successful open cannot bring the
+   device up with the driver state and the XDP program out of sync
+   (Michael Chan)
+ - v1: https://lore.kernel.org/netdev/20260928131458.1012180-1-vnagare@redhat.com/
+
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 48 ++++++++++++-------
+ 1 file changed, 32 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+index 9e5009be8e98..edfd751a601a 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+@@ -381,11 +381,31 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
+ 	return nxmit;
+ }
+ 
++static void bnxt_xdp_apply_cfg(struct bnxt *bp, int tx_xdp)
++{
++	struct net_device *dev = bp->dev;
++	int tc = bp->num_tc ? : 1;
++
++	if (bp->xdp_prog) {
++		bnxt_set_rx_skb_mode(bp, true);
++		xdp_features_set_redirect_target_locked(dev, true);
++	} else {
++		xdp_features_clear_redirect_target_locked(dev);
++		bnxt_set_rx_skb_mode(bp, false);
++	}
++	bp->tx_nr_rings_xdp = tx_xdp;
++	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
++	bnxt_set_cp_rings(bp, true);
++	bnxt_set_tpa_flags(bp);
++	bnxt_set_ring_params(bp);
++}
++
+ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
+ {
+ 	struct net_device *dev = bp->dev;
+ 	int tx_xdp = 0, rc, tc;
+ 	struct bpf_prog *old;
++	int old_tx_xdp;
+ 
+ 	netdev_assert_locked(dev);
+ 
+@@ -418,25 +438,21 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
+ 	if (netif_running(dev))
+ 		bnxt_close_nic(bp, true, false);
+ 
++	old_tx_xdp = bp->tx_nr_rings_xdp;
+ 	old = xchg(&bp->xdp_prog, prog);
+-	if (old)
+-		bpf_prog_put(old);
+-
+-	if (prog) {
+-		bnxt_set_rx_skb_mode(bp, true);
+-		xdp_features_set_redirect_target_locked(dev, true);
+-	} else {
+-		xdp_features_clear_redirect_target_locked(dev);
+-		bnxt_set_rx_skb_mode(bp, false);
++	bnxt_xdp_apply_cfg(bp, tx_xdp);
++
++	if (netif_running(dev)) {
++		rc = bnxt_open_nic(bp, true, false);
++		if (rc) {
++			WRITE_ONCE(bp->xdp_prog, old);
++			bnxt_xdp_apply_cfg(bp, old_tx_xdp);
++			return rc;
++		}
+ 	}
+-	bp->tx_nr_rings_xdp = tx_xdp;
+-	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
+-	bnxt_set_cp_rings(bp, true);
+-	bnxt_set_tpa_flags(bp);
+-	bnxt_set_ring_params(bp);
+ 
+-	if (netif_running(dev))
+-		return bnxt_open_nic(bp, true, false);
++	if (old)
++		bpf_prog_put(old);
+ 
+ 	return 0;
+ }
+-- 
+2.55.0
 
