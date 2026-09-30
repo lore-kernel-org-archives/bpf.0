@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DAA38A73B;
-	Wed, 30 Sep 2026 04:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AF53AA9C4;
+	Wed, 30 Sep 2026 04:51:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790743891; cv=none; b=UdWW6jZaRp0ZDCQ3iB8w7Cl9NwmThj9rCmfm7xx0h1YYSsiQuqBR9gbLPy8gNXAJMSeOXygyHDHndb8pzaEyw5wUXgDIpy2n2OOuqDKHjJ18H6w9SJWpsdA7UXm0tr5M3D0i1jl8BGo5IjkEhXS/QnPbeD+VZ0HOP/unP4V/wzw=
+	t=1790743895; cv=none; b=CLu6/CnlPmEIa+T478ZGWQa728sThljGCYGnpA+0AZVKMein5iMdKlBmyPxzrD9Vcoj8Da5zTD7/c6LwBKSJTuTLPhohmvGD6oXTGwVpG8IQRvwMX3gg7VqTPSRNpLEywYqnPnZRqvx20tnJfonxodu0uinltYfWApzVtNF01xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790743891; c=relaxed/simple;
-	bh=O4ZEI8E7/aLCYgTl8e7WVy6Vu+ylqm/hJe9IfZ9kY9c=;
+	s=arc-20240116; t=1790743895; c=relaxed/simple;
+	bh=W1xV03bczKJyo62M0xXybTM/81Dtan9M3OnYcdD2m1Q=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hhmdZNUzAQmastJzRURZW8zPncyyRN/uKqtC5DJryYksjBhCJFdqwdtDCFDHV0iNK93S56kM7tX+dFBY7iF6ZtABJBmcp211nxB667jAf8f1BO2XrW6r/7XaHepW9CWO99VSJoDSRTZTuXT+2WL1znxIdIpJ69mmL7ITagynMLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cVmotk48; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=EgzE+mWlkE6pxirTdjNZYlv3AC1OlxsXqSldg6yizJe158C3U4VzLg7wFZJqTLjbfRZIO0lXDx8p2Z1HQZvUjgRfvUYKufuKIA5hTI2qloXiKcibiJKwIyc6DmzFS6JEYKeyKlRZ4VUshldjg1yIDub440LAVsa16NwkiMAiMfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiWiPp2R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVmotk48"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622781F000FF;
-	Wed, 30 Sep 2026 04:51:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiWiPp2R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A326B1F00893;
+	Wed, 30 Sep 2026 04:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790743890;
-	bh=I6jkYFcTNthR5C+Hpfv06QjmgS8uSSJevl9gWXkvy/I=;
+	s=k20260515; t=1790743893;
+	bh=6i9MajxOfUTnhZI9wNdwKJVhTSCDODZ5z6OOpWJk2s0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=cVmotk48593ZILJB8/gEe7LYuTOWfrkzQF/exVikVuuuFa9zA/AAqfhd0BByUTffD
-	 /H+BVg9OGvBFTWmyev6HkAAoE858UtcJI8fL9W5TKWJ2YMZ9k69gDDC47LRlNZCw5C
-	 dn5WDmzhOWPVLpn9JrUQaNEHi9RxK/f23gxq3qD+iJvWv9yIjJ/X6UXUdM1ZohQIDf
-	 5PnpWJEFuXEtsEpzuvZc2bqUN71NOOXm6bnl2QKCARiAhEzIKFrsJI+kiU023wz0YW
-	 ZcOHRYdClFfyVcNrhSmJXd0cY7jYuEnZ/BAlCN1/mxx4b8oINjVFgOJm+hOAo71s8P
-	 +zyr/FaT+SYeA==
+	b=aiWiPp2RP812fWkDNudSqPFTSqyWr8yp7wUyo5ypN76/Cz3pWrxk5KJzoEPVKWvF6
+	 jI2TlrGU+Buz1TJ2zxFqJjqz/OZo9h31S/oYt5CHyKXPjajLI3hpwyjr0jSOZRUJqg
+	 H1jdCMOQPs9rNBmMHF7JzwOql4Jauk0l/AwArCQINeuhsZKj3RJUEuz9ootveqhafk
+	 RuJUhJs3Ux2qR+z7v59HBJMGaQEuHPal7U1lbcBQgS4Mxy78M9/FpBeCLE4yuB+1Op
+	 9JABI30Mv6vAKiGP4hGLJ2Zkz2wmcSw9sI/ogFUqyPdrSLAcwQ5iKw6malmQPoYLIB
+	 QkorU+QjSGKqA==
 Subject:
- Re: [PATCH net v4 02/15] net: stmmac: reuse the MDIO reset GPIO on resume
+ Re: [PATCH net v4 03/15] net: phylink: allow stopping a suspended instance
 From: netdev-bot+sashiko@kernel.org
 To: james.hilliard1@gmail.com
 Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
@@ -50,13 +50,13 @@ Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
  zhaojinming@uniontech.com, lorenzo.bianconi@oss.qualcomm.com,
  dinghui1111@163.com, linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev
-Date: Wed, 30 Sep 2026 04:51:26 +0000
-Message-ID: <179074388691.434549.18241724837995094025@kernel.org>
+Date: Wed, 30 Sep 2026 04:51:30 +0000
+Message-ID: <179074389021.434549.9076032327066191129@kernel.org>
 In-Reply-To:
- <20260926-submit-stmmac-reset-fixes-v1-v4-2-ec1c0250b3c9@gmail.com>
+ <20260926-submit-stmmac-reset-fixes-v1-v4-3-ec1c0250b3c9@gmail.com>
 References:
- <20260926-submit-stmmac-reset-fixes-v1-v4-2-ec1c0250b3c9@gmail.com>
-X-sashiko-severity: High
+ <20260926-submit-stmmac-reset-fixes-v1-v4-3-ec1c0250b3c9@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -66,10 +66,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 1
+Critical: 0 · High: 0 · Medium: 2 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -77,142 +77,196 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Once the cached descriptor is used, stmmac_mdio_reset() really
-  does pulse the snps,reset PHY reset line on every system resume…
-- [Low] The commit message explains the mechanism (the second exclusive
-  request of snps,reset returns -EBUSY) but not what users see.
+- [Medium] phylink_stop() now returns early whenever
+  PHYLINK_DISABLE_STOPPED is set (drivers/net/phy/phylink.c:2536-2543).
+- [Medium] The new MAC-WoL completion in phylink_stop()
+  (phylink.c:2557-2565) calls phylink_link_down() only when…
+- [Low] The only Fixes: tag is f97493657c63 ("net: phylink: add
+  suspend/resume support", 2021).
 
 --
 
-net: stmmac: reuse the MDIO reset GPIO on resume
+net: phylink: allow stopping a suspended instance
 
-MDIO bus registration acquires the snps,reset GPIO. This commit caches
-that descriptor in priv->mdio_reset_gpio, so later calls to
-stmmac_mdio_reset(), such as the one on resume, reuse it. Without the
-cache, those calls request the exclusive line again and fail with
--EBUSY.
+This patch lets phylink_stop() shut down an instance that is still
+suspended after a driver resume failed, without going through
+phylink_resume(). When the instance is already stopped, it no longer
+repeats PHY/SFP/PCS shutdown. It also completes the link-down that MAC WoL
+deferred, and it tracks and undoes the PHY speed-down done at suspend time.
 
-> MDIO bus registration acquires the optional snps,reset GPIO through
-> devres. A later bus reset must reuse that descriptor: requesting the
-> same exclusive GPIO again returns -EBUSY while devres still owns it.
+> Fixes: f97493657c63 ("net: phylink: add suspend/resume support")
 
 [Severity: Low]
+Is this Fixes: tag complete? Several of the things this patch fixes were
+added after f97493657c63.
 
-This isn't a bug, but could the commit message describe the effect that
-users see?
+phylink_phy_pm_speed_ctrl() and the phylink_speed_down() call in
+phylink_suspend() came from dc1a2a9ce5b2c8. The new suspend_speed_down
+tracking and phylink_restore_suspend_speed() fix that commit.
 
-stmmac_resume() ignores the return value of stmmac_mdio_reset(). Before
-this patch, on OF boards with a snps,reset GPIO, every resume without
-MAC WoL silently skipped two things: the PHY reset pulse and the
-STE101P dummy MDC write:
+The new MAC WoL block in phylink_stop() depends on suspend_link_up
+handling, which came from 4c8925cb9db158.
 
-    writel(0, priv->ioaddr + mii_address);
+The commit message gives phylink_prepare_resume() as the reason for the
+new phy_suspend() call, and phylink_prepare_resume() came from
+367f1854d442b3.
 
-Nothing was logged when this happened.
+Should there be at least one more Fixes: tag, for dc1a2a9ce5b2c8? With
+only f97493657c63, stable tooling may try to backport this to trees that
+lack the state and functions the patch modifies.
 
-The message also doesn't say that this change turns the PHY hard reset
-on resume back on. That reset has not run since 7c86f20d15b7. Without a
-symptom or behaviour change in the message, stable backporters
-following the Fixes: tag have nothing to match against bug reports.
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index 1bbcf46c83566..b7d30ca340316 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-> index afe98ff5bdcb0..07d5eab05996b 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-> @@ -386,14 +386,20 @@ int stmmac_mdio_reset(struct mii_bus *bus)
+[ ... ]
+
+> @@ -2509,11 +2518,30 @@ EXPORT_SYMBOL_GPL(phylink_start);
+>   *
+>   * This will synchronously bring down the link if the link is not already
+>   * down (in other words, it will trigger a mac_link_down() method call.)
+> + * A suspended instance may be stopped without first calling phylink_resume().
+> + * In particular, closing a device after a failed resume must not restart the
+> + * link or reconfigure the MAC just to finish shutting it down.
+> + * Any PHY advertisement reduced by phylink_suspend() is restored as part
+> + * of this transition.
+> + * If phylink_prepare_resume() powered up an already stopped PHY, suspend
+> + * it again when Wake-on-LAN permits.
+>   */
+>  void phylink_stop(struct phylink *pl)
+>  {
+>  	ASSERT_RTNL();
 >  
->  #ifdef CONFIG_OF
->  	if (priv->device->of_node) {
-> -		struct gpio_desc *reset_gpio;
-> +		struct gpio_desc *reset_gpio = priv->mdio_reset_gpio;
->  		u32 delays[3] = { 0, 0, 0 };
->  
-> -		reset_gpio = devm_gpiod_get_optional(priv->device,
-> -						     "snps,reset",
-> -						     GPIOD_OUT_LOW);
-> -		if (IS_ERR(reset_gpio))
-> -			return PTR_ERR(reset_gpio);
-> +		/* The bus reset also runs on resume. Devres retains the GPIO
-> +		 * until unbind, so do not request an already owned line again.
+> +	/* Also undo PHY speed control when terminating a suspended instance. */
+> +	phylink_restore_suspend_speed(pl);
+> +
+> +	if (test_bit(PHYLINK_DISABLE_STOPPED, &pl->phylink_disable_state)) {
+> +		/* A failed MAC resume may have called phylink_prepare_resume()
+> +		 * and powered the stopped PHY back up to supply its RX clock.
 > +		 */
-> +		if (!reset_gpio) {
-> +			reset_gpio = devm_gpiod_get_optional(priv->device,
-> +							     "snps,reset",
-> +							     GPIOD_OUT_LOW);
-> +			if (IS_ERR(reset_gpio))
-> +				return PTR_ERR(reset_gpio);
-> +			priv->mdio_reset_gpio = reset_gpio;
-> +		}
+> +		if (pl->phydev)
+> +			phy_suspend(pl->phydev);
+> +		return;
+> +	}
 
-[Severity: High]
+[Severity: Medium]
+Is PHYLINK_DISABLE_STOPPED specific enough to identify a suspended
+instance? phylink_create() also sets it:
 
-With the descriptor cached, stmmac_mdio_reset() now really pulses the
-snps,reset line on every system resume where MAC WoL is off. Does
-anything re-initialise the PHY after that?
-
-Before this patch, the second devm_gpiod_get_optional() on the
-exclusive line failed in gpiod_request_commit() with -EBUSY. The
-resume path ignores that error:
-
-stmmac_resume()
-    } else {
-        pinctrl_pm_select_default_state(priv->device);
-        /* reset the phy so that it's ready */
-        if (priv->mii)
-            stmmac_mdio_reset(priv->mii);
-    }
-
-So no PHY hard reset has run on resume since 7c86f20d15b7. Before that
-commit the reset did run, but mdio_bus_phy_resume()->phy_init_hw()
-followed it.
-
-Today stmmac_phylink_setup() sets config->mac_managed_pm = true, and
-phylink copies that into phydev->mac_managed_pm. As a result,
-mdio_bus_phy_resume() returns early:
-
-mdio_bus_phy_resume()
-    if (phydev->mac_managed_pm)
-        return 0;
+drivers/net/phy/phylink.c:phylink_create() {
     ...
-    ret = phy_init_hw(phydev);
+	__set_bit(PHYLINK_DISABLE_STOPPED, &pl->phylink_disable_state);
+    ...
+}
 
-The MAC-managed path only runs phylink_prepare_resume()->phy_resume()
-and phylink_resume()->phylink_start()->phy_start()->__phy_resume().
-Neither of these replays config_init() or config_intr().
+Every completed phylink_stop() also leaves it set. So this branch also
+runs for an instance that was never started and for a second, unbalanced
+phylink_stop(). In both cases it calls phy_suspend() without any warning.
 
-Wouldn't that leave the PHY at its power-on or strap defaults while
-phylib believes it is still configured? The config_init() settings
-would be lost: RGMII delays or skews, clock-out, LEDs, vendor quirks,
-and the autonomous EEE disable.
+Before this patch, a second phylink_stop() reached phy_stop() with the PHY
+in PHY_HALTED, which hit:
 
-For an interrupt-driven PHY, the reset also clears the interrupt
-enable register. phy_start() restarts aneg, sees link down and moves
-to PHY_NOLINK, and it does not poll after that. Could link-up then
-never be reported, so the interface stays down until the admin runs a
-down/up cycle?
+	WARN(1, "called from state %s\n", phy_state_to_str(phydev->state));
 
-PHY-based WoL seems to be affected too. phylink_ethtool_set_wol()
-removes the modes the PHY handles from the MAC mask:
+Is it intended that phylink users lose this warning for unbalanced
+start/stop?
 
-    wolopts &= ~w.wolopts;
+The new kernel-doc says the PHY is suspended again only "If
+phylink_prepare_resume() powered up an already stopped PHY". The code does
+it for any stopped instance whose PHY is not suspended. That includes a
+PHY powered up by phy_attach_direct() on an instance that was never
+started.
 
-With PHY WoL, priv->wolopts is therefore 0, so resume takes the reset
-branch. Won't the reset pulse erase the PHY's WoL enables, so the next
-suspend is not armed for wake?
+A later patch in this series ("net: stmmac: track datapath and power
+ownership across failed reopening") already relies on this broader
+behaviour. Its __stmmac_open() calls phylink_stop() twice on an instance
+that phylink_start() never started.
 
-Resume now also blocks for the snps,reset-delays-us msleep() calls.
-When those delays are 0, the DMA reset in stmmac_hw_setup() needs the
-PHY RX clock, and it runs right after reset deassert.
+Should the commit message and kernel-doc describe this wider contract?
 
-This also looks unresolved at the end of the series. After "net:
-stmmac: track datapath and power ownership across failed reopening",
-stmmac_resume_hw() still calls stmmac_mdio_reset(). stmmac_resume()
-still only calls phylink_prepare_resume() and phylink_resume() after
-it, and no phy_init_hw() call was added in stmmac or phylink.
+The early return also skips the new MAC WoL cleanup further down. If
+phylink_suspend(pl, true) runs on an instance that is already stopped,
+both bits end up set:
 
-This patch carries a Fixes: tag, so it will reach stable. Should the
-resume path either re-initialise the PHY after the reset, or skip the
-reset pulse on resume?
+phylink_suspend(pl, true)
+    __set_bit(PHYLINK_DISABLE_MAC_WOL, ...)
+phylink_stop(pl)
+    STOPPED already set -> phy_suspend(); return;
+phylink_start(pl)
+    phylink_enable_and_run_resolve(pl, PHYLINK_DISABLE_STOPPED)
+        MAC_WOL is still set, so the resolver never runs
+
+Can the link still come up after that phylink_start()? At this commit,
+stmmac seems able to reach this sequence:
+
+  - an MTU change reopen fails, leaving the interface up with phylink
+    stopped
+  - a MAC WoL system suspend
+  - a failed resume
+  - close, then open
+
+> +
+>  	if (pl->sfp_bus)
+>  		sfp_upstream_stop(pl->sfp_bus);
+>  	if (pl->phydev)
+
+[ ... ]
+
+> @@ -2526,6 +2554,16 @@ void phylink_stop(struct phylink *pl)
+>  
+>  	phylink_run_resolve_and_disable(pl, PHYLINK_DISABLE_STOPPED);
+>  
+> +	if (test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)) {
+> +		/* Finish the link-down deferred by MAC WoL, without restarting. */
+> +		flush_work(&pl->resolve);
+> +		mutex_lock(&pl->state_mutex);
+> +		if (pl->suspend_link_up)
+> +			phylink_link_down(pl);
+> +		__clear_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state);
+> +		mutex_unlock(&pl->state_mutex);
+> +	}
+
+[Severity: Medium]
+Does this still complete the deferred link-down if phylink_suspend() was
+called twice with no phylink_resume() in between?
+
+phylink_suspend() recomputes the flag on every MAC WoL suspend:
+
+drivers/net/phy/phylink.c:phylink_suspend() {
+    ...
+		pl->suspend_link_up = phylink_link_is_up(pl);
+		if (pl->suspend_link_up) {
+			...
+			if (pl->netdev)
+				netif_carrier_off(pl->netdev);
+			pl->old_link_state = false;
+		}
+    ...
+}
+
+The first suspend turns the carrier off and clears old_link_state, but
+does not call mac_link_down(). While PHYLINK_DISABLE_MAC_WOL is set, the
+resolver cannot turn the carrier back on.
+
+Now suppose resume fails before phylink_resume() and the device stays
+running. The next system suspend calls phylink_suspend(pl, true) again.
+
+stmmac_suspend() at this commit does this, because it only checks
+netif_running(). ucc_geth_suspend() does it after ucc_geth_init_mac()
+fails in ucc_geth_resume().
+
+That second call sets suspend_link_up to false, although mac_link_down()
+has still not been called.
+
+A later close reaches this block and skips phylink_link_down(), so neither
+mac_link_down() nor phylink_deactivate_lpi() runs. PHYLINK_DISABLE_MAC_WOL
+is still cleared.
+
+Wouldn't that leave the earlier mac_link_up() without a matching
+mac_link_down(), with pl->mac_enable_tx_lpi still true? The next
+phylink_start() could then call mac_link_up() again with no link-down in
+between.
 
 [ ... ]
 
