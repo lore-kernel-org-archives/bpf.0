@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553EE4FDA65;
-	Wed, 30 Sep 2026 13:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503704DEC38;
+	Wed, 30 Sep 2026 13:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790775171; cv=none; b=eW/9CZZ6R0F+nXNX2xh/T4ijsVqfrVBVxq4QndRr72XPAdjT3Rm23YkQBBnUK+LgJFs39x7ZJ7qgTo3Jqz+Ir1GuVoBlWd1YthaiUHzCetMqBjxR+QTpAyX+0r7gS3ZBnyiWXuNWT0Dq0MyIxG+3VyRGqhfFQGK7UR2xLuryaL8=
+	t=1790775180; cv=none; b=Z5A3TyMI4WopnEod9jbnAFwsUdv4G5YKW4hvqZJkDyrFb/WsJMRcSymuuF46mrPg3vFrq3ZbYj6r9u/toKb/FoFfHxo412PjCn8CjCkJeI7FzGIvlLgOpzL4hLLEHMMdqE7X6ziQQBMZCtAgXAGCJY0ukVO/UZnlZUivqsnDCis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790775171; c=relaxed/simple;
-	bh=aLAt3O000c+HgzM4kEJcEbm6sHc2kmKlwquloW5nlhw=;
+	s=arc-20240116; t=1790775180; c=relaxed/simple;
+	bh=VChDy3hWuDVdVUGE2WTB5GqyHC2FHigZ78MGkN2d5SI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PC1kixyGn5ayTcTjsH0AxTpPevqQUVrBM8YwZC8l1pT6Df9DRScUn3anN/tS+G99IiVWvP/zxE5/D975tUfEoV7zjffvvliZ5W4r74IxwCXvSOoQfqppHkpvGQnaSsI09AUIlpoUTN0BhmM7V8GUHaWD/Xim+K3iYs2tl+UQrwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kypbNAEE; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=CWifTk/cEHe9VvqIYruC3V9Xmoh07//gqyz8VJX8DPPff5Jzs7k56DctHdi5vfoeMUjkgzFM058BUBC0evO3awIeypRpVuU08KhDGUJz9vmdoZZdj5S2FHpQdWHA1KNKfcsmXSxmP2ILLjN852xj9c4gN1ae/SOW+9+7iNDaSpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oKA5HNab; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kypbNAEE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1204B1F00899;
-	Wed, 30 Sep 2026 13:32:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKA5HNab"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 327021F0089A;
+	Wed, 30 Sep 2026 13:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790775163;
-	bh=bJfaNU1C8Yzvj+zzG4aPnzlR5aml+D+FHeWud95ZDJ4=;
+	s=k20260515; t=1790775167;
+	bh=1FuQuElpPxGN8uVh1NtWSNUZDwVfZAjS2FFOCmLaE4Q=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=kypbNAEErueQjTZRCaiuFOYQUz3e3KNJ3MdTbkKwCkj3nL3GPx0vA5dC7EtCs8VCf
-	 PaKF+8qlB85KhHuYnCgsnaLz/8jxD7fcQGDC0hHVUiE3LtPj25LMddpdRXuCk7pcK1
-	 6qaw9iCeC/r4Cv2ZE07BixqOZa5o6l4kPIQ9nKr7pkIwc8g+2ECVP5wnORUo2ldj/x
-	 4lwuvUrOQdvu+sJEeto2buPOiGGYQT/tZ65GO/jIqX/Vx9fC7+EK1Ogwc8nIfrnBmU
-	 MOJ2ivUQgpoCOGq/UOemgNScMrdUBZ9pZDT0NDq6UZ+APHy2Ul//y14NPER7reHi0E
-	 EnyK+ADM5p+tQ==
+	b=oKA5HNabn1jFifZPRmbUOzYb61+zce/8xwqirvNxr6R7LLdFytkG1ah+d7jwmnvX8
+	 yNXQP7p3geynLFhxBvnlR0KMuvFiAcG4Sc2FiC/vR6/QeMCnEZprv/zDPBe4y4xN9s
+	 tvV/iTJG2L3m5dluo0cT5yPkLTdJMeMabUsGmMgItQr07IjLf1f2ve/gH3F2UdJrgM
+	 +bWnt+fGIcdqLihq/eVECn+V7oL2YcwjCX5fWiip+wZhpWFqdZsOvtlgfUsm62LiQm
+	 Qv+rOCDGK7rFd+Bnlln+JByHrb+lGSnaqnOAoBgw9s06QDqv0po6YYIwgqJyzG5ob/
+	 j4pU0h10LhCnQ==
 From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 30 Sep 2026 15:32:06 +0200
-Subject: [PATCH 14/17] fsnotify: detach the connector before destroying its
- marks
+Date: Wed, 30 Sep 2026 15:32:07 +0200
+Subject: [PATCH 15/17] dcache: don't put a mountpoint on a dentry that's
+ being removed
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260930-work-mount-fixes-3-v1-14-be34c83956ae@kernel.org>
+Message-Id: <20260930-work-mount-fixes-3-v1-15-be34c83956ae@kernel.org>
 References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
 In-Reply-To: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -49,84 +49,70 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
  bpf@vger.kernel.org, "Christian Brauner (Amutable)" <brauner@kernel.org>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.17-dev-db0b7
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3181; i=brauner@kernel.org;
- h=from:subject:message-id; bh=aLAt3O000c+HgzM4kEJcEbm6sHc2kmKlwquloW5nlhw=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTt5fevtXht9JbHebKqhNuTYtdH2qv+Jju80v9Qs//Rf
- 5miG1f9O0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACZy1pjhv8+0N2q7v78X2nT8
- 5f9/rs5J2ovvnv3w6sbs23OKOKP+qjxm+F+gfiYrImJF72WV/1s3m2yXXMqj637q45T7C7e05fe
- tM2cFAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2406; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=VChDy3hWuDVdVUGE2WTB5GqyHC2FHigZ78MGkN2d5SI=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTt5fe//2/S2pa6COXkFPlOZfGzPyJjeI/MLDx+0LFjh
+ /LCNUwbO0pYGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACYy4RbDP/tbdXkxAp/DD5qK
+ hlexeDf96rUIDK9pcVs0ieuIyNRdFQzfCy00FFg6GOwufE/+ohxxMovPYcvqvX/WvWa4/nRieT4
+ nAA==
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-fsnotify_destroy_marks() removes every mark of an object that goes away.
-It walks the mark list of the connector and has to drop the connector
-lock around fsnotify_destroy_mark() since that sleeps. Afterwards it
-continues from the mark it just destroyed. That mark stays on the list
-because the function holds a reference to it. But while the lock is
-dropped fsnotify_add_mark_list() can add a mark to the very same
-connector and put it in front of the current one when group priority
-dictates. fsnotify_grab_connector() hands out the connector until it is
-detached and it only gets detached after the walk.
+rmdir(), unlink() and rename() call dont_mount() on the victim and then
+detach_mounts() with the victim's inode locked. do_lock_mount() takes
+the inode lock of the mountpoint and checks cant_mount() so a mount
+can't show up after detach_mounts().
 
-So the walk never sees that mark. The connector is detached from the
-object with the new mark still attached to it. It never receives an
-event nor IN_IGNORED. For inotify that's a watch descriptor that never
-reports anything and doesn't show up in fdinfo either:
+But attach_recursive_mnt() makes a second mountpoint for the root of the
+source mount so that the mounts already located at the destination can
+be put on top of it. No inode is locked for that one and d_set_mounted()
+only refuses a dentry that is unlinked. Between detach_mounts() and
+d_delete() the victim is still hashed:
 
-  wd1 = inotify_add_watch(/proc/self/fd/6) = 2
-  events after the unlink:
-    wd 1 mask 0x400 IN_DELETE_SELF
-    wd 1 mask 0x8000 IN_IGNORED
-  events after write() to the file:
-    (none)
+  rmrace: b passed dont_mount() and detach_mounts(), sleeping
+  T2: move_mount(S, /tmp/plcant/x, BENEATH) = 0 errno 0 ()
+  T1: rmdir(/tmp/plcant/d/b) = 0 errno 0
+      109 107 0:61 /d/b//deleted /tmp/plcant/x rw,relatime - tmpfs tmpfs rw
+      108 109 0:63 / /tmp/plcant/x rw,relatime - tmpfs T rw
 
-Detach the connector from the object before the marks are destroyed.
-fsnotify_grab_connector() refuses a detached connector so a mark added
-from then on gets a connector of its own. Nothing during the destruction
-needs the connector. The inode reference of the connector is dropped
-after the marks are gone as before.
+A bind mount of the directory that's being removed is moved beneath an
+existing mount while the rmdir() is located between the two calls. The
+mount ends up on the removed directory and nothing will ever detach it.
 
-Fixes: 6b3f05d24d35 ("fsnotify: Detach mark from object list when last reference is dropped")
+Check cant_mount() in d_set_mounted() as well. dont_mount() raises the
+flag under d_lock before detach_mounts() runs so either the mountpoint
+is set first and detach_mounts() finds the mount or the flag is seen and
+the mount is refused.
+
+Fixes: 1064f874abc0 ("mnt: Tuck mounts under others instead of creating shadow/side mounts.")
 Cc: stable@vger.kernel.org
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/notify/mark.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ fs/dcache.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-index b2640d836a71..f6891d39e42f 100644
---- a/fs/notify/mark.c
-+++ b/fs/notify/mark.c
-@@ -1112,6 +1112,16 @@ void fsnotify_destroy_marks(fsnotify_connp_t *connp)
- 	conn = fsnotify_grab_connector(connp);
- 	if (!conn)
- 		return;
-+	/*
-+	 * Detach the connector from the object first. Once conn->lock is
-+	 * dropped a mark could be added in front of the one we're at and the
-+	 * walk would miss it. fsnotify_grab_connector() refuses a detached
-+	 * connector so any mark added from now on gets a connector of its
-+	 * own. This also stops pinning the inode until all mark references
-+	 * get dropped. It would lead to strange results such as delaying
-+	 * inode deletion or blocking unmount.
-+	 */
-+	objp = fsnotify_detach_connector_from_object(conn, &type);
- 	/*
- 	 * We have to be careful since we can race with e.g.
- 	 * fsnotify_clear_marks_by_group() and once we drop the conn->lock, the
-@@ -1128,12 +1138,6 @@ void fsnotify_destroy_marks(fsnotify_connp_t *connp)
- 		fsnotify_destroy_mark(mark, mark->group);
- 		spin_lock(&conn->lock);
+diff --git a/fs/dcache.c b/fs/dcache.c
+index a66be85f9d01..f44c7b39c3b3 100644
+--- a/fs/dcache.c
++++ b/fs/dcache.c
+@@ -1583,6 +1583,8 @@ EXPORT_SYMBOL(path_has_submounts);
+  *
+  * Only one of d_invalidate() and d_set_mounted() must succeed.  For
+  * this reason take rename_lock and d_lock on dentry and ancestors.
++ * Likewise for dont_mount() which marks a dentry that is being removed
++ * under d_lock.
+  */
+ int d_set_mounted(struct dentry *dentry)
+ {
+@@ -1599,7 +1601,7 @@ int d_set_mounted(struct dentry *dentry)
+ 		spin_unlock(&p->d_lock);
  	}
--	/*
--	 * Detach list from object now so that we don't pin inode until all
--	 * mark references get dropped. It would lead to strange results such
--	 * as delaying inode deletion or blocking unmount.
--	 */
--	objp = fsnotify_detach_connector_from_object(conn, &type);
- 	spin_unlock(&conn->lock);
- 	if (old_mark)
- 		fsnotify_put_mark(old_mark);
+ 	spin_lock(&dentry->d_lock);
+-	if (!d_unlinked(dentry)) {
++	if (!d_unlinked(dentry) && !cant_mount(dentry)) {
+ 		ret = -EBUSY;
+ 		if (!d_mountpoint(dentry)) {
+ 			dentry->d_flags |= DCACHE_MOUNTED;
 
 -- 
 2.53.0
