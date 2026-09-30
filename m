@@ -1,60 +1,45 @@
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453373BFAD4
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 10:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D2248CD7F
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 10:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790763713; cv=none; b=OQeB/sSSn5PThPH083YYY3KhhMCPviu2I9sOJQRuzQqANELZDruH+rHDVpDx4s6/B4rCdyWufWXWGjSGgZu1rBYnsR8//x5skMmovGW87B+BQVtqgF2s+svuN9+irbvfDGBjMFsnl05BN24PwpbyfuLgpj2RMfCdYexDBPx/Hho=
+	t=1790764986; cv=none; b=pMNpftfswtRMyPANcIDwkb+p6//Vcohsy0eVw4tXFtDBxYykcmiDU10CJjrZjRXPzxyuYvuYq5li0BSOxcNfsJVnc9kJVFRHgN7WKUd3fwfSIKXzxXx26SBXY/BGIm8CBHK6TI7LT/EpS/HMgC6FKH4RUrX/iZ0TWZATzHQYoGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790763713; c=relaxed/simple;
-	bh=YzrXyE+KiFB9PrgEmBMX+gTIog+scwfDKhNCbcKdn0Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=qB1yiB+NFMZWz1AatxpVLFtm+D7TOo2nn+S9KP8KiODlGH1JYbZ6m22+Ub+zQUqWd51jANBCauvBdXYj+QW8LG9y1U2uqoy9S+jSD1BHLgjTcDfsuMj0v5bhmCMvYq/dfyyBoeKKL9QT/k3GYSs3etctMzeZKKhy+tyCl5KZvqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=eaW4u6Zh; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="eaW4u6Zh"
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260930102146epoutp04f08258ab6b3d0640871e5d7953a1c7f3~aEhp_RK_A2317223172epoutp04v
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 10:21:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260930102146epoutp04f08258ab6b3d0640871e5d7953a1c7f3~aEhp_RK_A2317223172epoutp04v
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1790763706;
-	bh=Goz+ZnZPXqlp3yHBfNf3yL8aoOM+Et1nHBDFEdLsoKk=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=eaW4u6ZhGnPRuBfgVQn7rEYlS/ckRxqGWZ6D4StPBYuyXd6+EJwbjII39CsgApuBp
-	 0KALMTNYG+I3FvRjApIhioXjohPZxEiJs1Tk1H5Ef6d55lZmPFESn7E3ekMIqlQEP+
-	 JqCinxhhU5mjbxYK0azkRg0x2NFdQhLQHi/BAiRQ=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
-	20260930102146epcas5p28408df57497d488fe04887f1539bb856~aEhpR5wrw2824628246epcas5p24;
-	Wed, 30 Sep 2026 10:21:46 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.91]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4hvrgY2fNrz2SSKd; Wed, 30 Sep
-	2026 10:21:45 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20260930102144epcas5p419270301dba37c520277e6c6cff75def~aEhoIsn870186501865epcas5p4E;
-	Wed, 30 Sep 2026 10:21:44 +0000 (GMT)
-Received: from ws2030076956.sa.corp.samsungelectronics.net (unknown
-	[107.99.235.31]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260930102141epsmtip18dfc224628574539264afb7e0fb39036~aEhlFOjh91950619506epsmtip1V;
-	Wed, 30 Sep 2026 10:21:41 +0000 (GMT)
-From: Irlanki Sandeep <irlanki.s@samsung.com>
-To: netdev@vger.kernel.org, bpf@vger.kernel.org, kuba@kernel.org
-Cc: edumazet@google.com, davem@davemloft.net, pabeni@redhat.com,
-	ncardwell@google.com, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
-	lorenzo@google.com, maze@google.com, sporeba@google.com,
-	motomuman@google.com, madhan.raj@samsung.com, srihari.k@samsung.com,
-	g.pokhra@samsung.com, r.kumawat@samsung.com, raj.kumars@samsung.com,
-	ts413.lee@samsung.com, ramyashree.s@samsung.com, daeil2.hwang@samsung.com,
-	irlanki.s@samsung.com
-Subject: [PATCH net-next v5] tcp: add TCP_ECN and TCP_ECN_OPTION kfuncs
-Date: Wed, 30 Sep 2026 15:53:08 +0530
-Message-Id: <20260930102308.197808-1-irlanki.s@samsung.com>
+	s=arc-20240116; t=1790764986; c=relaxed/simple;
+	bh=soFI/8w1oGqLIedwGHhtHwuwn9kpTW6DxOdhNgm1g+A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WijtSLR4CrHErSv2aDSB6CdSkFO9U64JMFN1tAA9DpbsADOtCvU6SPMZpmtXBvfFoqV1Tx86YKbTf6dnpSETkVKyk0dZgCHedWn6AzS2/eyiOvoj7TgZte2MBGfOYZPkXyqzbG7qteb88wrH7aZrvkedHdThVgddmqFM0hAkABo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hvs7B67RNzKHMh7
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 18:42:14 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 0C9BA40888
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 18:42:52 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgBHZCeq57xqgX_xCA--.57102S2;
+	Wed, 30 Sep 2026 18:42:51 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Luke Nelson <luke.r.nels@gmail.com>,
+	Xi Wang <xi.wang@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf] MAINTAINERS: Add myself as co-maintainer of riscv bpf
+Date: Wed, 30 Sep 2026 10:46:59 +0000
+Message-Id: <20260930104659.1919027-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -62,598 +47,73 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260930102144epcas5p419270301dba37c520277e6c6cff75def
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-065,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260930102144epcas5p419270301dba37c520277e6c6cff75def
-References: <CGME20260930102144epcas5p419270301dba37c520277e6c6cff75def@epcas5p4.samsung.com>
+X-CM-TRANSID:gCh0CgBHZCeq57xqgX_xCA--.57102S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrWrAr17XF1fKr1rXr48Crg_yoW8AF43pa
+	15Gw15C34kWr1xAr4rGF1jqayrA3WkG3y5CrZrW3s8AFn3Kw10gr10ka1Uua109FWrur4S
+	yry3Xr1vyaykAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
+	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Currently, ECN and Accurate ECN (AccECN) configurations in the Linux
-kernel are controlled globally via the net.ipv4.tcp_ecn and
-net.ipv4.tcp_ecn_option sysctl variables. This global approach lacks the
-granularity required for per-connection ECN configuration in modern
-multi-application runtimes.
+From: Pu Lehui <pulehui@huawei.com>
 
-In diverse network environments, such as mobile operating systems like
-Android, different applications route their traffic over distinct
-physical and virtual interfaces. Certain legacy network paths or
-misconfigured middleboxes are known to blackhole packets with ECN
-negotiation flags or AccECN option headers.
+Over the years, I have been actively involved in the development and
+have proactively taken on maintenance responsibilities for the RV64 JIT,
+covering the related bpf core, riscv architecture, and selftests/CI
+infrastructure. With the continuous growth of riscv bpf features and
+testing workload, adding a co-maintainer helps share the review burden
+and ensure timely patch handling.
 
-To provide granular control, introduce two new BPF kfuncs that can be
-called from sockops programs:
+As for the RV32 JIT, there has been a lack of active maintainer response
+for several years, leaving incoming patches occasionally stalled. Active
+maintenance is needed to review incoming patches and ensure issues are
+addressed in a timely manner.
 
-1. bpf_sock_ops_set_ecn_mode(): Overrides the ECN negotiation mode for
-   a socket.
+Therefore, I would like to request taking on the co-maintainer role for
+both the RV64 and RV32 JITs. For me, being a maintainer is both an honor
+and a responsibility, and it also makes it easier for me to participate
+in riscv bpf work, where I look forward to dedicating more time and
+effort.
 
-2. bpf_sock_ops_set_accecn_option(): Overrides the AccECN option
-   sending frequency for a socket, allowing for dynamic runtime
-   adaptation if middlebox dropping is observed.
-
-New helpers tcp_ecn_mode_eff() and tcp_accecn_option_eff() resolve the
-effective per-socket value, transparently falling back to the global
-sysctl defaults when no per-socket override is set.
-
-The ECN mode kfunc is restricted to the CONNECT_CB and LISTEN_CB
-callbacks since the mode is only consulted during connection
-establishment, while the AccECN option kfunc may be called from any
-callback on a full socket to allow runtime adaptation. Child sockets
-are initialized with TCP_ECN_MODE_UNSPEC and do not inherit the
-listener's per-socket override; the listener's effective mode is
-consulted during SYN cookie validation and request processing instead.
-
-This implementation replaces the previous socket option approach with a
-more flexible BPF-native interface.
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Irlanki Sandeep <irlanki.s@samsung.com>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
-v4 -> v5:
- - Replaced setsockopt implementation with BPF kfuncs.
- - Placed ecn_mode/ecn_option in the cold section of tcp_sock to avoid
-   polluting hot cachelines (suggested by Eric Dumazet).
- - Updated Documentation/networking/net_cachelines/tcp_sock.rst.
- - Removed userspace UAPI and documentation for the sockopt.
- - Added new selftest for the kfunc implementation.
+ MAINTAINERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-v3 -> v4:
- - Define TCP_ECN and TCP_ECN_OPTION in bpf_tracing_net.h to fix
-   BPF selftest compilation failure in progs/setget_sockopt.c (bpf-ci).
-
-v2 -> v3:
- - Use READ_ONCE() when reading ecn_mode and ecn_option in tcp_ecn_mode_eff()
-   and tcp_accecn_option_eff() to prevent compiler double-fetches (sashiko-bot).
- - Move cookie_ecn_ok() to include/net/tcp_ecn.h and update syncookies.
-
-v1 -> v2:
- - Remove unused variable 'net' in tcp_ecn_create_request() reported
-   by kernel test robot.
----
- .../networking/net_cachelines/tcp_sock.rst    |   2 +
- include/linux/tcp.h                           |   6 +
- include/net/tcp.h                             |   6 -
- include/net/tcp_ecn.h                         |  31 ++++-
- net/core/filter.c                             |  63 ++++++++++
- net/ipv4/syncookies.c                         |   2 +-
- net/ipv4/tcp.c                                |   2 +
- net/ipv4/tcp_input.c                          |   5 +-
- net/ipv4/tcp_output.c                         |   6 +-
- net/ipv6/syncookies.c                         |   2 +-
- .../bpf/prog_tests/sockops_ecn_kfunc.c        |  91 ++++++++++++++
- .../selftests/bpf/progs/sockops_ecn_kfunc.c   | 111 ++++++++++++++++++
- 12 files changed, 312 insertions(+), 15 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
-
-diff --git a/Documentation/networking/net_cachelines/tcp_sock.rst b/Documentation/networking/net_cachelines/tcp_sock.rst
-index 0f6088c4ab8b..b12cc823b601 100644
---- a/Documentation/networking/net_cachelines/tcp_sock.rst
-+++ b/Documentation/networking/net_cachelines/tcp_sock.rst
-@@ -114,6 +114,8 @@ u8:2                          accecn_opt_demand       read_mostly         read_w
- u8:2                          prev_ecnfield                               read_write
- u64                           accecn_opt_tstamp       read_write
- u8:4                          accecn_fail_mode
-+u8                            ecn_mode
-+u8                            ecn_option
- u32                           lost                                        read_mostly         tcp_ack
- u32                           app_limited             read_write          read_mostly         tcp_rate_check_app_limited,tcp_rate_skb_sent(tx);tcp_rate_gen(rx)
- u64                           first_tx_mstamp         read_write                              tcp_rate_skb_sent
-diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-index 6a8c77719322..c9be37c01ac2 100644
---- a/include/linux/tcp.h
-+++ b/include/linux/tcp.h
-@@ -412,6 +412,12 @@ struct tcp_sock {
- 	u8	keepalive_probes; /* num of allowed keep alive probes	*/
- 	u8	accecn_fail_mode:4,	/* AccECN failure handling */
- 		saw_accecn_opt:2;	/* An AccECN option was seen */
-+	u8	ecn_mode;	/* Per-socket ECN mode set via BPF
-+				 * (TCP_ECN_MODE_UNSPEC = use sysctl)
-+				 */
-+	u8	ecn_option;	/* Per-socket AccECN option set via BPF
-+				 * (TCP_ACCECN_OPTION_UNSPEC = use sysctl)
-+				 */
- 	u32	tcp_tx_delay;	/* delay (in usec) added to TX packets */
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 140eafcbbd78..c27119500152 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4872,6 +4872,7 @@ F:	arch/powerpc/net/
+ BPF JIT for RISC-V (32-bit)
+ M:	Luke Nelson <luke.r.nels@gmail.com>
+ M:	Xi Wang <xi.wang@gmail.com>
++M:	Pu Lehui <pulehui@huawei.com>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
+ F:	arch/riscv/net/
+@@ -4879,7 +4880,7 @@ X:	arch/riscv/net/bpf_jit_comp64.c
  
- /* RTT measurement */
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 96a1a23e47fa..0aa74ac92058 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -707,12 +707,6 @@ u64 cookie_init_timestamp(struct request_sock *req, u64 now);
- bool cookie_timestamp_decode(const struct net *net,
- 			     struct tcp_options_received *opt);
- 
--static inline bool cookie_ecn_ok(const struct net *net, const struct dst_entry *dst)
--{
--	return READ_ONCE(net->ipv4.sysctl_tcp_ecn) ||
--		dst_feature(dst, RTAX_FEATURE_ECN);
--}
--
- #if IS_ENABLED(CONFIG_BPF)
- static inline bool cookie_bpf_ok(struct sk_buff *skb)
- {
-diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
-index 865d5c5a7718..48e364c458b2 100644
---- a/include/net/tcp_ecn.h
-+++ b/include/net/tcp_ecn.h
-@@ -22,6 +22,7 @@ enum tcp_ecn_mode {
- 	TCP_ECN_IN_ACCECN_OUT_ACCECN = 3,
- 	TCP_ECN_IN_ACCECN_OUT_ECN = 4,
- 	TCP_ECN_IN_ACCECN_OUT_NOECN = 5,
-+	TCP_ECN_MODE_UNSPEC = 255,	/* Use sysctl default (per-socket) */
- };
- 
- /* AccECN option sending when AccECN has been successfully negotiated */
-@@ -30,8 +31,36 @@ enum tcp_accecn_option {
- 	TCP_ACCECN_OPTION_MINIMUM = 1,
- 	TCP_ACCECN_OPTION_FULL = 2,
- 	TCP_ACCECN_OPTION_PERSIST = 3,
-+	TCP_ACCECN_OPTION_UNSPEC = 255,	/* Use sysctl default (per-socket) */
- };
- 
-+/* Resolve the effective ECN mode: per-socket override or sysctl fallback */
-+static inline u8 tcp_ecn_mode_eff(const struct sock *sk)
-+{
-+	u8 mode = READ_ONCE(tcp_sk(sk)->ecn_mode);
-+
-+	if (mode == TCP_ECN_MODE_UNSPEC)
-+		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
-+	return mode;
-+}
-+
-+/* Resolve the effective AccECN option: per-socket override or sysctl fallback */
-+static inline u8 tcp_accecn_option_eff(const struct sock *sk)
-+{
-+	u8 opt = READ_ONCE(tcp_sk(sk)->ecn_option);
-+
-+	if (opt == TCP_ACCECN_OPTION_UNSPEC)
-+		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
-+	return opt;
-+}
-+
-+/* ECN support for SYN cookies: per-socket override or route feature */
-+static inline bool cookie_ecn_ok(const struct sock *sk, const struct dst_entry *dst)
-+{
-+	return tcp_ecn_mode_eff(sk) ||
-+		dst_feature(dst, RTAX_FEATURE_ECN);
-+}
-+
- /* Apply either ECT(0) or ECT(1) based on TCP_CONG_ECT_1_NEGOTIATION flag */
- static inline void INET_ECN_xmit_ect_1_negotiation(struct sock *sk)
- {
-@@ -599,7 +628,7 @@ static inline void tcp_ecn_send_syn(struct sock *sk, struct sk_buff *skb)
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	bool bpf_needs_ecn = tcp_bpf_ca_needs_ecn(sk);
- 	bool use_ecn, use_accecn;
--	u8 tcp_ecn = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
-+	u8 tcp_ecn = tcp_ecn_mode_eff(sk);
- 
- 	use_accecn = tcp_ecn == TCP_ECN_IN_ACCECN_OUT_ACCECN ||
- 		     tcp_ca_needs_accecn(sk);
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 70dc621672f2..b9dc1079aefc 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -56,6 +56,7 @@
- #include <net/sock_reuseport.h>
- #include <net/busy_poll.h>
- #include <net/tcp.h>
-+#include <net/tcp_ecn.h>
- #include <net/gre.h>
- #include <net/xfrm.h>
- #include <net/udp.h>
-@@ -12609,6 +12610,66 @@ __bpf_kfunc int bpf_sock_ops_enable_tx_tstamp(struct bpf_sock_ops_kern *skops,
- 	return 0;
- }
- 
-+/**
-+ * bpf_sock_ops_set_ecn_mode() - Set the per-socket TCP ECN negotiation mode.
-+ * @skops: &bpf_sock_ops_kern context of the sockops program
-+ * @mode: value in the range accepted by the tcp_ecn sysctl (0-5), or
-+ *	TCP_ECN_MODE_UNSPEC to defer to the sysctl
-+ *
-+ * Overrides net.ipv4.tcp_ecn for this socket only. The mode is consulted
-+ * during connection establishment, so the kfunc may only be called from
-+ * BPF_SOCK_OPS_TCP_CONNECT_CB (before the SYN is built) or from
-+ * BPF_SOCK_OPS_TCP_LISTEN_CB, in which case the mode is consulted for each
-+ * incoming connection to decide ECN negotiation during the handshake.
-+ *
-+ * Return: 0 on success, -EOPNOTSUPP when called from any other sockops
-+ *	callback, -EINVAL if @mode is out of range.
-+ */
-+__bpf_kfunc int bpf_sock_ops_set_ecn_mode(struct bpf_sock_ops_kern *skops,
-+					  u32 mode)
-+{
-+	if (skops->op != BPF_SOCK_OPS_TCP_CONNECT_CB &&
-+	    skops->op != BPF_SOCK_OPS_TCP_LISTEN_CB)
-+		return -EOPNOTSUPP;
-+
-+	if (!skops->is_fullsock)
-+		return -EOPNOTSUPP;
-+
-+	if (mode != TCP_ECN_MODE_UNSPEC && mode > TCP_ECN_IN_ACCECN_OUT_NOECN)
-+		return -EINVAL;
-+
-+	WRITE_ONCE(tcp_sk(skops->sk)->ecn_mode, mode);
-+	return 0;
-+}
-+
-+/**
-+ * bpf_sock_ops_set_accecn_option() - Set the per-socket AccECN option mode.
-+ * @skops: &bpf_sock_ops_kern context of the sockops program
-+ * @opt: value in the range accepted by the tcp_ecn_option sysctl (0-3), or
-+ *	TCP_ACCECN_OPTION_UNSPEC to defer to the sysctl
-+ *
-+ * Overrides net.ipv4.tcp_ecn_option for this socket only. Unlike the ECN
-+ * mode, the option setting is consulted for the whole lifetime of an AccECN
-+ * connection, so it may be changed from any sockops callback that runs on a
-+ * full socket, e.g. to stop sending the option once a middlebox is observed
-+ * to drop segments carrying it.
-+ *
-+ * Return: 0 on success, -EOPNOTSUPP if @skops is not a full socket, -EINVAL
-+ *	if @opt is out of range.
-+ */
-+__bpf_kfunc int bpf_sock_ops_set_accecn_option(struct bpf_sock_ops_kern *skops,
-+					       u32 opt)
-+{
-+	if (!skops->is_fullsock)
-+		return -EOPNOTSUPP;
-+
-+	if (opt != TCP_ACCECN_OPTION_UNSPEC && opt > TCP_ACCECN_OPTION_PERSIST)
-+		return -EINVAL;
-+
-+	WRITE_ONCE(tcp_sk(skops->sk)->ecn_option, opt);
-+	return 0;
-+}
-+
- /**
-  * bpf_xdp_pull_data() - Pull in non-linear xdp data.
-  * @x: &xdp_md associated with the XDP buffer
-@@ -12822,6 +12883,8 @@ BTF_KFUNCS_END(bpf_kfunc_check_set_tcp_reqsk)
- 
- BTF_KFUNCS_START(bpf_kfunc_check_set_sock_ops)
- BTF_ID_FLAGS(func, bpf_sock_ops_enable_tx_tstamp)
-+BTF_ID_FLAGS(func, bpf_sock_ops_set_ecn_mode)
-+BTF_ID_FLAGS(func, bpf_sock_ops_set_accecn_option)
- BTF_KFUNCS_END(bpf_kfunc_check_set_sock_ops)
- 
- BTF_KFUNCS_START(bpf_kfunc_check_set_icmp_send)
-diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
-index 73e129768184..ebc438bc6a46 100644
---- a/net/ipv4/syncookies.c
-+++ b/net/ipv4/syncookies.c
-@@ -490,7 +490,7 @@ struct sock *cookie_v4_check(struct sock *sk, struct sk_buff *skb)
- 	 */
- 	if (!req->syncookie)
- 		ireq->rcv_wscale = rcv_wscale;
--	ireq->ecn_ok &= cookie_ecn_ok(net, &rt->dst);
-+	ireq->ecn_ok &= cookie_ecn_ok(sk, &rt->dst);
- 	treq->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
- 
- 	ret = tcp_get_cookie_sock(sk, skb, req, &rt->dst);
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 3ac485685279..0303f7c2ec18 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -463,6 +463,8 @@ void tcp_init_sock(struct sock *sk)
- 
- 	tp->tsoffset = 0;
- 	tp->rack.reo_wnd_steps = 1;
-+	tp->ecn_mode = TCP_ECN_MODE_UNSPEC;
-+	tp->ecn_option = TCP_ACCECN_OPTION_UNSPEC;
- 
- 	sk->sk_write_space = sk_stream_write_space;
- 	sock_set_flag(sk, SOCK_USE_WRITE_QUEUE);
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 892ff256e235..78603f68bc5a 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -7453,13 +7453,12 @@ static void tcp_ecn_create_request(struct request_sock *req,
- 				   const struct dst_entry *dst)
- {
- 	const struct tcphdr *th = tcp_hdr(skb);
--	const struct net *net = sock_net(listen_sk);
- 	bool th_ecn = th->ece && th->cwr;
- 	bool ect, ecn_ok;
- 	u32 ecn_ok_dst;
- 
- 	if (tcp_accecn_syn_requested(th) &&
--	    (READ_ONCE(net->ipv4.sysctl_tcp_ecn) >= 3 ||
-+	    (tcp_ecn_mode_eff(listen_sk) >= 3 ||
- 	     tcp_ca_needs_accecn(listen_sk))) {
- 		inet_rsk(req)->ecn_ok = 1;
- 		tcp_rsk(req)->accecn_ok = 1;
-@@ -7473,7 +7472,7 @@ static void tcp_ecn_create_request(struct request_sock *req,
- 
- 	ect = !INET_ECN_is_not_ect(TCP_SKB_CB(skb)->ip_dsfield);
- 	ecn_ok_dst = dst_feature(dst, DST_FEATURE_ECN_MASK);
--	ecn_ok = READ_ONCE(net->ipv4.sysctl_tcp_ecn) || ecn_ok_dst;
-+	ecn_ok = tcp_ecn_mode_eff(listen_sk) || ecn_ok_dst;
- 
- 	if (((!ect || th->res1 || th->ae) && ecn_ok) ||
- 	    tcp_ca_needs_ecn(listen_sk) ||
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index c8865205cdc8..8833578bbd84 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -1045,7 +1045,7 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
- 	if (unlikely((TCP_SKB_CB(skb)->tcp_flags & TCPHDR_ACK) &&
- 		     tcp_ecn_mode_accecn(tp) &&
- 		     inet_csk(sk)->icsk_retransmits < 2 &&
--		     READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
-+		     tcp_accecn_option_eff(sk) &&
- 		     remaining >= TCPOLEN_ACCECN_BASE)) {
- 		opts->use_synack_ecn_bytes = 1;
- 		remaining -= tcp_options_fit_accecn(opts, 0, remaining);
-@@ -1133,7 +1133,7 @@ static unsigned int tcp_synack_options(const struct sock *sk,
- 	smc_set_option_cond(tcp_sk(sk), ireq, opts, &remaining);
- 
- 	if (treq->accecn_ok &&
--	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
-+	    tcp_accecn_option_eff(sk) &&
- 	    synack_type != TCP_SYNACK_RETRANS && remaining >= TCPOLEN_ACCECN_BASE) {
- 		opts->use_synack_ecn_bytes = 1;
- 		remaining -= tcp_options_fit_accecn(opts, 0, remaining);
-@@ -1221,7 +1221,7 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
- 	}
- 
- 	if (tcp_ecn_mode_accecn(tp)) {
--		int ecn_opt = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
-+		int ecn_opt = tcp_accecn_option_eff(sk);
- 
- 		if (ecn_opt && tp->saw_accecn_opt &&
- 		    (ecn_opt >= TCP_ACCECN_OPTION_PERSIST ||
-diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
-index b581cb1ee2e8..06efcbf46346 100644
---- a/net/ipv6/syncookies.c
-+++ b/net/ipv6/syncookies.c
-@@ -271,7 +271,7 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
- 	 */
- 	if (!req->syncookie)
- 		ireq->rcv_wscale = rcv_wscale;
--	ireq->ecn_ok &= cookie_ecn_ok(net, dst);
-+	ireq->ecn_ok &= cookie_ecn_ok(sk, dst);
- 	tcp_rsk(req)->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
- 
- 	ret = tcp_get_cookie_sock(sk, skb, req, dst);
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c b/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
-new file mode 100644
-index 000000000000..506b48e08621
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
-@@ -0,0 +1,91 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <errno.h>
-+
-+#include "test_progs.h"
-+#include "cgroup_helpers.h"
-+#include "network_helpers.h"
-+
-+#include "sockops_ecn_kfunc.skel.h"
-+
-+/* From include/net/tcp_ecn.h */
-+#define TCP_ECN_IN_ACCECN_OUT_ACCECN	3
-+#define TCP_ECN_IN_ACCECN_OUT_ECN	4
-+#define TCP_ECN_MODE_UNSPEC		255
-+#define TCP_ACCECN_OPTION_MINIMUM	1
-+#define TCP_ACCECN_OPTION_FULL		2
-+#define TCP_ACCECN_OPTION_PERSIST	3
-+#define TCP_ACCECN_OPTION_UNSPEC	255
-+
-+void test_sockops_ecn_kfunc(void)
-+{
-+	struct sockops_ecn_kfunc__bss *bss;
-+	struct sockops_ecn_kfunc *skel;
-+	int cg_fd, sfd = -1, cfd = -1, afd = -1;
-+
-+	cg_fd = test__join_cgroup("/sockops_ecn_kfunc");
-+	if (!ASSERT_OK_FD(cg_fd, "join_cgroup"))
-+		return;
-+
-+	skel = sockops_ecn_kfunc__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto out;
-+	bss = skel->bss;
-+
-+	skel->links.skops_ecn =
-+		bpf_program__attach_cgroup(skel->progs.skops_ecn, cg_fd);
-+	if (!ASSERT_OK_PTR(skel->links.skops_ecn, "attach_cgroup"))
-+		goto out;
-+
-+	sfd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_OK_FD(sfd, "start_server"))
-+		goto out;
-+
-+	cfd = connect_to_fd(sfd, 0);
-+	if (!ASSERT_OK_FD(cfd, "connect_to_fd"))
-+		goto out;
-+
-+	/* accept() returning guarantees PASSIVE_ESTABLISHED_CB has run. */
-+	afd = accept(sfd, NULL, NULL);
-+	if (!ASSERT_OK_FD(afd, "accept"))
-+		goto out;
-+
-+	/* BPF_SOCK_OPS_TCP_CONNECT_CB */
-+	ASSERT_EQ(bss->connect_bad_mode_ret, -EINVAL, "connect_bad_mode_ret");
-+	ASSERT_EQ(bss->connect_bad_opt_ret, -EINVAL, "connect_bad_opt_ret");
-+	ASSERT_EQ(bss->connect_set_mode_ret, 0, "connect_set_mode_ret");
-+	ASSERT_EQ(bss->connect_mode_read, TCP_ECN_IN_ACCECN_OUT_ACCECN,
-+		  "connect_mode_read");
-+	ASSERT_EQ(bss->connect_set_opt_ret, 0, "connect_set_opt_ret");
-+	ASSERT_EQ(bss->connect_opt_read, TCP_ACCECN_OPTION_FULL,
-+		  "connect_opt_read");
-+	ASSERT_EQ(bss->connect_unspec_mode_ret, 0, "connect_unspec_mode_ret");
-+	ASSERT_EQ(bss->connect_unspec_mode_read, TCP_ECN_MODE_UNSPEC,
-+		  "connect_unspec_mode_read");
-+
-+	/* BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB */
-+	ASSERT_EQ(bss->estab_set_mode_ret, -EOPNOTSUPP, "estab_set_mode_ret");
-+	ASSERT_EQ(bss->estab_set_opt_ret, 0, "estab_set_opt_ret");
-+	ASSERT_EQ(bss->estab_opt_read, TCP_ACCECN_OPTION_MINIMUM,
-+		  "estab_opt_read");
-+
-+	/* BPF_SOCK_OPS_TCP_LISTEN_CB -> BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB
-+	 * Listener's values are consulted for SYN negotiation, but the child
-+	 * socket is initialized with UNSPEC (not inherited).
-+	 */
-+	ASSERT_EQ(bss->listen_set_mode_ret, 0, "listen_set_mode_ret");
-+	ASSERT_EQ(bss->listen_set_opt_ret, 0, "listen_set_opt_ret");
-+	ASSERT_EQ(bss->passive_mode_read, TCP_ECN_MODE_UNSPEC,
-+		  "passive_mode_read");
-+	ASSERT_EQ(bss->passive_opt_read, TCP_ACCECN_OPTION_UNSPEC,
-+		  "passive_opt_read");
-+
-+out:
-+	if (afd >= 0)
-+		close(afd);
-+	if (cfd >= 0)
-+		close(cfd);
-+	if (sfd >= 0)
-+		close(sfd);
-+	sockops_ecn_kfunc__destroy(skel);
-+	close(cg_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c b/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
-new file mode 100644
-index 000000000000..32ed64ac4f3d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_kfuncs.h"
-+
-+/* From include/net/tcp_ecn.h */
-+#define TCP_ECN_IN_ACCECN_OUT_ACCECN	3
-+#define TCP_ECN_IN_ACCECN_OUT_ECN	4
-+#define TCP_ECN_IN_ACCECN_OUT_NOECN	5
-+#define TCP_ECN_MODE_UNSPEC		255
-+#define TCP_ACCECN_OPTION_MINIMUM	1
-+#define TCP_ACCECN_OPTION_FULL		2
-+#define TCP_ACCECN_OPTION_PERSIST	3
-+#define TCP_ACCECN_OPTION_UNSPEC	255
-+
-+extern int bpf_sock_ops_set_ecn_mode(struct bpf_sock_ops_kern *skops,
-+				     u32 mode) __ksym;
-+extern int bpf_sock_ops_set_accecn_option(struct bpf_sock_ops_kern *skops,
-+					  u32 opt) __ksym;
-+
-+int connect_bad_mode_ret;
-+int connect_bad_opt_ret;
-+int connect_set_mode_ret;
-+int connect_mode_read;
-+int connect_set_opt_ret;
-+int connect_opt_read;
-+int connect_unspec_mode_ret;
-+int connect_unspec_mode_read;
-+int estab_set_mode_ret;
-+int estab_set_opt_ret;
-+int estab_opt_read;
-+int listen_set_mode_ret;
-+int listen_set_opt_ret;
-+int passive_mode_read;
-+int passive_opt_read;
-+
-+SEC("sockops")
-+int skops_ecn(struct bpf_sock_ops *skops)
-+{
-+	struct bpf_sock_ops_kern *skops_kern;
-+	struct bpf_sock *sk = skops->sk;
-+	struct tcp_sock *tp;
-+
-+	if (!sk)
-+		return 1;
-+
-+	tp = bpf_skc_to_tcp_sock(sk);
-+	if (!tp)
-+		return 1;
-+
-+	skops_kern = bpf_cast_to_kern_ctx(skops);
-+
-+	switch (skops->op) {
-+	case BPF_SOCK_OPS_TCP_CONNECT_CB:
-+		connect_bad_mode_ret =
-+			bpf_sock_ops_set_ecn_mode(skops_kern,
-+						  TCP_ECN_IN_ACCECN_OUT_NOECN + 1);
-+		connect_bad_opt_ret =
-+			bpf_sock_ops_set_accecn_option(skops_kern,
-+						       TCP_ACCECN_OPTION_PERSIST + 1);
-+
-+		connect_set_mode_ret =
-+			bpf_sock_ops_set_ecn_mode(skops_kern,
-+						  TCP_ECN_IN_ACCECN_OUT_ACCECN);
-+		connect_mode_read = tp->ecn_mode;
-+
-+		connect_set_opt_ret =
-+			bpf_sock_ops_set_accecn_option(skops_kern,
-+						       TCP_ACCECN_OPTION_FULL);
-+		connect_opt_read = tp->ecn_option;
-+
-+		/* Leave the socket on the sysctl defaults so the loopback
-+		 * handshake driven by the test is not altered.
-+		 */
-+		connect_unspec_mode_ret =
-+			bpf_sock_ops_set_ecn_mode(skops_kern, TCP_ECN_MODE_UNSPEC);
-+		connect_unspec_mode_read = tp->ecn_mode;
-+		bpf_sock_ops_set_accecn_option(skops_kern,
-+					       TCP_ACCECN_OPTION_UNSPEC);
-+		break;
-+	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
-+		/* The mode is handshake-only; the option is not. */
-+		estab_set_mode_ret =
-+			bpf_sock_ops_set_ecn_mode(skops_kern,
-+						  TCP_ECN_IN_ACCECN_OUT_ACCECN);
-+		estab_set_opt_ret =
-+			bpf_sock_ops_set_accecn_option(skops_kern,
-+						       TCP_ACCECN_OPTION_MINIMUM);
-+		estab_opt_read = tp->ecn_option;
-+		break;
-+	case BPF_SOCK_OPS_TCP_LISTEN_CB:
-+		listen_set_mode_ret =
-+			bpf_sock_ops_set_ecn_mode(skops_kern,
-+						  TCP_ECN_IN_ACCECN_OUT_ECN);
-+		listen_set_opt_ret =
-+			bpf_sock_ops_set_accecn_option(skops_kern,
-+						       TCP_ACCECN_OPTION_PERSIST);
-+		break;
-+	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
-+		/* Listener values consulted for SYN negotiation; child starts
-+		 * with UNSPEC (not inherited).
-+		 */
-+		passive_mode_read = tp->ecn_mode;
-+		passive_opt_read = tp->ecn_option;
-+		break;
-+	}
-+
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ BPF JIT for RISC-V (64-bit)
+ M:	Björn Töpel <bjorn@kernel.org>
+-R:	Pu Lehui <pulehui@huawei.com>
++M:	Pu Lehui <pulehui@huawei.com>
+ R:	Puranjay Mohan <puranjay@kernel.org>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
 -- 
 2.34.1
 
