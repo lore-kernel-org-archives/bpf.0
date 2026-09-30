@@ -1,44 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DDB38E5ED;
-	Wed, 30 Sep 2026 04:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DAA38A73B;
+	Wed, 30 Sep 2026 04:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790743100; cv=none; b=sOOIt/+F0feedYwLEIc1LPjlFSRCLVh5wZXD33FXXS0qYlqJUlHeEOFhnuUkyAI3rgIJWAVODYLJS3eKCf4xMJsCBMsI5/xQuJ26KTQ8brHC5rVYOusIOS9BxfThiYkULXlMYCz+iYRgqT5jqY4xYSl7TJCssZ5Mdr+rFxSSq3E=
+	t=1790743891; cv=none; b=UdWW6jZaRp0ZDCQ3iB8w7Cl9NwmThj9rCmfm7xx0h1YYSsiQuqBR9gbLPy8gNXAJMSeOXygyHDHndb8pzaEyw5wUXgDIpy2n2OOuqDKHjJ18H6w9SJWpsdA7UXm0tr5M3D0i1jl8BGo5IjkEhXS/QnPbeD+VZ0HOP/unP4V/wzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790743100; c=relaxed/simple;
-	bh=Hl4nFr/Va+fR+63IuMlMpTP0/HB7OoF8GMNfxygWygA=;
+	s=arc-20240116; t=1790743891; c=relaxed/simple;
+	bh=O4ZEI8E7/aLCYgTl8e7WVy6Vu+ylqm/hJe9IfZ9kY9c=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ky5u3tYBeraEpd8pH62rMeFlVx4/qq7Gah2/ZADLQlktR7TXb7oUVZUwes8blQ2StC9FN3/TuNHD112oXsTgWbNeRXWzLJs79T7S1tZcgd2iv+jrrTQrXNKQp2zE8Ld/vKZWp5OEl4pr35gKPcRpXNNSdSyo/nDZ5fftBx17iJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lgu2XD3M; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=hhmdZNUzAQmastJzRURZW8zPncyyRN/uKqtC5DJryYksjBhCJFdqwdtDCFDHV0iNK93S56kM7tX+dFBY7iF6ZtABJBmcp211nxB667jAf8f1BO2XrW6r/7XaHepW9CWO99VSJoDSRTZTuXT+2WL1znxIdIpJ69mmL7ITagynMLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cVmotk48; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lgu2XD3M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F081F000FF;
-	Wed, 30 Sep 2026 04:38:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVmotk48"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622781F000FF;
+	Wed, 30 Sep 2026 04:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790743098;
-	bh=GcbSLid+0kIeQoGJyodBytvXj4ILayJre5/BxDEOK9E=;
+	s=k20260515; t=1790743890;
+	bh=I6jkYFcTNthR5C+Hpfv06QjmgS8uSSJevl9gWXkvy/I=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=lgu2XD3MhJyZNEokLxt7RLvJsVprGevzKmj1l/oejBJIyeNl0IrVeqXqnYxuAL9dd
-	 6ysa3+IJYyoV/XIP2SjvLQX+cWh8fAoOyQHF64Q7FUtF6/chkQNAaxodON2K10KY9c
-	 6/a7jkLRsDSEl6FC0FA/3v3BoJK0NzaJtyZ5Sp6tCJArHMvDy0Xj5AYT2Nc3VyqpFF
-	 v8YkmiWliaLjT5jOTlsYwnf3j2vkAkUQ7T3DMezgLpzbm16XkQNi6QiCfHUVVzMkn1
-	 GU5Prt5dKZue2lzqtBmGmeoQvVV6DfMExXEDlT250qcbjUEcIqGzO+Mw0EAItp8bOO
-	 uBSp0b7vMh8hQ==
+	b=cVmotk48593ZILJB8/gEe7LYuTOWfrkzQF/exVikVuuuFa9zA/AAqfhd0BByUTffD
+	 /H+BVg9OGvBFTWmyev6HkAAoE858UtcJI8fL9W5TKWJ2YMZ9k69gDDC47LRlNZCw5C
+	 dn5WDmzhOWPVLpn9JrUQaNEHi9RxK/f23gxq3qD+iJvWv9yIjJ/X6UXUdM1ZohQIDf
+	 5PnpWJEFuXEtsEpzuvZc2bqUN71NOOXm6bnl2QKCARiAhEzIKFrsJI+kiU023wz0YW
+	 ZcOHRYdClFfyVcNrhSmJXd0cY7jYuEnZ/BAlCN1/mxx4b8oINjVFgOJm+hOAo71s8P
+	 +zyr/FaT+SYeA==
 Subject:
- Re: [PATCH net-next 5/5] net: drop GSO skbs instead of handing them to XDP
+ Re: [PATCH net v4 02/15] net: stmmac: reuse the MDIO reset GPIO on resume
 From: netdev-bot+sashiko@kernel.org
-To: kuba@kernel.org
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, jv@jvosburgh.net,
- hawk@kernel.org, sdf@fomichev.me, emil@etsalapatis.com, liuhangbin@gmail.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- willemdebruijn.kernel@gmail.com, aleksander.lobakin@intel.com
-Date: Wed, 30 Sep 2026 04:38:17 +0000
-Message-ID: <179074309702.434549.6254450635863004021@kernel.org>
-In-Reply-To: <20260928223648.2739371-6-kuba@kernel.org>
-References: <20260928223648.2739371-6-kuba@kernel.org>
+To: james.hilliard1@gmail.com
+Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ qiangqing.zhang@nxp.com, rmk+kernel@armlinux.org.uk,
+ maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ansuelsmth@gmail.com,
+ yangtiezhu@loongson.cn, chenhuacai@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, fancer.lancer@gmail.com, quic_jsuraj@quicinc.com,
+ richardcochran@gmail.com, Joao.Pinto@synopsys.com, vladimir.oltean@nxp.com,
+ boon.leong.ong@intel.com, weifeng.voon@intel.com, yoong.siang.song@intel.com,
+ linusw@kernel.org, martin.blumenstingl@googlemail.com,
+ magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, horms@kernel.org,
+ bjorn@kernel.org, thierry.reding@kernel.org, jonathanh@nvidia.com,
+ wens@kernel.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+ edumazet@kernel.org, richard.genoud@bootlin.com, alastair@d-silva.org,
+ mripard@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+ zhaojinming@uniontech.com, lorenzo.bianconi@oss.qualcomm.com,
+ dinghui1111@163.com, linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev
+Date: Wed, 30 Sep 2026 04:51:26 +0000
+Message-ID: <179074388691.434549.18241724837995094025@kernel.org>
+In-Reply-To:
+ <20260926-submit-stmmac-reset-fixes-v1-v4-2-ec1c0250b3c9@gmail.com>
+References:
+ <20260926-submit-stmmac-reset-fixes-v1-v4-2-ec1c0250b3c9@gmail.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -49,10 +66,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 5 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 2 · Low: 2
+Critical: 0 · High: 1 · Medium: 0 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -60,189 +77,144 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Regression in tun/tap with native XDP attached: guest and
-  vnet_hdr TSO/USO traffic is now silently dropped.
-- [Medium] netdevsim with XDP attached now drops TCP TSO traffic from its
-  peer.
-- [Medium] veth: explicitly dropped GSO packets bypass kfree_skb
-  tracepoints
-- [Low] The patch describes and fixes a user-visible bug: generic XDP is
-  handed GRO-coalesced/GSO skbs, e.g. generic XDP on bond0 over GRO-…
-- [Low] In the generic XDP path, the new GSO check sits in
-  bpf_prog_run_generic_xdp(), which runs after…
+- [High] Once the cached descriptor is used, stmmac_mdio_reset() really
+  does pulse the snps,reset PHY reset line on every system resume…
+- [Low] The commit message explains the mechanism (the second exclusive
+  request of snps,reset returns -EBUSY) but not what users see.
 
 --
 
-net: drop GSO skbs instead of handing them to XDP
+net: stmmac: reuse the MDIO reset GPIO on resume
 
-This commit adds xdp_skb_feature_check(). It drops GSO skbs, with a
-ratelimited warning, before they can reach an XDP program. The check is
-called from bpf_prog_run_generic_xdp() and veth_convert_skb_to_xdp_buff().
-The motivation is stacked devices such as bonding, and generic XDP on veth,
-where GRO-coalesced packets can still get to the program.
+MDIO bus registration acquires the snps,reset GPIO. This commit caches
+that descriptor in priv->mdio_reset_gpio, so later calls to
+stmmac_mdio_reset(), such as the one on resume, reuse it. Without the
+cache, those calls request the exclusive line again and fail with
+-EBUSY.
 
-> These precautions are not 100% today, and IMHO fixing
-> that is impossible. Let's explicitly drop GSO skbs on input to XDP.
-
-[ ... ]
-
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> MDIO bus registration acquires the optional snps,reset GPIO through
+> devres. A later bus reset must reuse that descriptor: requesting the
+> same exclusive GPIO again returns -EBUSY while devres still owns it.
 
 [Severity: Low]
-The commit message describes a bug that exists today: generic XDP on bond0
-over GRO-enabled slaves, and generic XDP on veth. There is no Fixes: tag,
-though. Should one be added if this is meant for net?
 
-The change also affects callers that send GSO skbs to generic XDP on
-purpose, such as tun and netdevsim. An origin reference would help stable
-backporters decide where the change applies.
+This isn't a bug, but could the commit message describe the effect that
+users see?
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 5c67e555f82d6..8c9dcb4126bd3 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
+stmmac_resume() ignores the return value of stmmac_mdio_reset(). Before
+this patch, on OF boards with a snps,reset GPIO, every resume without
+MAC WoL silently skipped two things: the PHY reset pulse and the
+STE101P dummy MDC write:
 
-[ ... ]
+    writel(0, priv->ioaddr + mii_address);
 
-> @@ -5551,6 +5552,9 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
->  	u32 metalen, act;
->  	int off;
+Nothing was logged when this happened.
+
+The message also doesn't say that this change turns the PHY hard reset
+on resume back on. That reset has not run since 7c86f20d15b7. Without a
+symptom or behaviour change in the message, stable backporters
+following the Fixes: tag have nothing to match against bug reports.
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
+> index afe98ff5bdcb0..07d5eab05996b 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
+> @@ -386,14 +386,20 @@ int stmmac_mdio_reset(struct mii_bus *bus)
 >  
-> +	if (unlikely(xdp_skb_feature_check(skb)))
-> +		return XDP_DROP;
-> +
-
-[Severity: Medium]
-Will anyone chasing lost packets be able to see this drop?
-
-The new branch jumps to the existing drop label. That label frees the
-skb with consume_skb() and sets *pskb to NULL. consume_skb() fires the
-consume_skb tracepoint, not kfree_skb, so dropwatch, perf on
-skb:kfree_skb and similar tools never see these packets.
-
-The caller, veth_xdp_rcv_skb(), bumps stats->rx_drops and then calls
-kfree_skb(skb) on its drop path. By then skb is already NULL, so that
-call is a no-op and the drop is still reported as a normal consume.
-
-The generic XDP call site behaves differently. There the XDP_DROP
-returned by bpf_prog_run_generic_xdp() reaches the do_drop label in
-netif_receive_generic_xdp(), which uses kfree_skb(). So the two callers
-of xdp_skb_feature_check() report the same policy drop in two different
-ways. Returning -ENOMEM is also misleading, since nothing failed to
-allocate here.
-
-The consume_skb() at the drop label predates this patch; it covers the
-skb_pp_cow_data() failure. That is arguably an error path as well.
-Would it make sense to free with kfree_skb_reason() for the GSO case?
-A dedicated drop reason for GSO skbs reaching XDP could then be used by
-both veth and the generic XDP path.
+>  #ifdef CONFIG_OF
+>  	if (priv->device->of_node) {
+> -		struct gpio_desc *reset_gpio;
+> +		struct gpio_desc *reset_gpio = priv->mdio_reset_gpio;
+>  		u32 delays[3] = { 0, 0, 0 };
+>  
+> -		reset_gpio = devm_gpiod_get_optional(priv->device,
+> -						     "snps,reset",
+> -						     GPIOD_OUT_LOW);
+> -		if (IS_ERR(reset_gpio))
+> -			return PTR_ERR(reset_gpio);
+> +		/* The bus reset also runs on resume. Devres retains the GPIO
+> +		 * until unbind, so do not request an already owned line again.
+> +		 */
+> +		if (!reset_gpio) {
+> +			reset_gpio = devm_gpiod_get_optional(priv->device,
+> +							     "snps,reset",
+> +							     GPIOD_OUT_LOW);
+> +			if (IS_ERR(reset_gpio))
+> +				return PTR_ERR(reset_gpio);
+> +			priv->mdio_reset_gpio = reset_gpio;
+> +		}
 
 [Severity: High]
-Does this break tun/tap when a native XDP program is attached?
 
-tun sends packets whose virtio_net_hdr has a gso_type to the generic XDP
-path on purpose, because its native XDP can't handle GSO:
+With the descriptor cached, stmmac_mdio_reset() now really pulses the
+snps,reset line on every system resume where MAC WoL is off. Does
+anything re-initialise the PHY after that?
 
-drivers/net/tun.c:tun_build_skb() {
+Before this patch, the second devm_gpiod_get_optional() on the
+exclusive line failed in gpiod_request_commit() with -EBUSY. The
+resume path ignores that error:
+
+stmmac_resume()
+    } else {
+        pinctrl_pm_select_default_state(priv->device);
+        /* reset the phy so that it's ready */
+        if (priv->mii)
+            stmmac_mdio_reset(priv->mii);
+    }
+
+So no PHY hard reset has run on resume since 7c86f20d15b7. Before that
+commit the reset did run, but mdio_bus_phy_resume()->phy_init_hw()
+followed it.
+
+Today stmmac_phylink_setup() sets config->mac_managed_pm = true, and
+phylink copies that into phydev->mac_managed_pm. As a result,
+mdio_bus_phy_resume() returns early:
+
+mdio_bus_phy_resume()
+    if (phydev->mac_managed_pm)
+        return 0;
     ...
-	if (hdr->gso_type || !xdp_prog) {
-		*skb_xdp = 1;
-		return __tun_build_skb(tfile, alloc_frag, buf, buflen, len,
-				       pad, metasize);
-    ...
-}
+    ret = phy_init_hw(phydev);
 
-The comment in tun_get_user() documents this:
+The MAC-managed path only runs phylink_prepare_resume()->phy_resume()
+and phylink_resume()->phylink_start()->phy_start()->__phy_resume().
+Neither of these replays config_init() or config_intr().
 
-		/* For the packet that is not easy to be processed
-		 * (e.g gso or jumbo packet), we will do it at after
-		 * skb was created with generic XDP routine.
-		 */
+Wouldn't that leave the PHY at its power-on or strap defaults while
+phylib believes it is still configured? The config_init() settings
+would be lost: RGMII delays or skews, clock-out, LEDs, vendor quirks,
+and the autonomous EEE disable.
 
-Once tun_vnet_hdr_tnl_to_skb() has set gso_size, the path becomes:
+For an interrupt-driven PHY, the reset also clears the interrupt
+enable register. phy_start() restarts aneg, sees link down and moves
+to PHY_NOLINK, and it does not poll after that. Could link-up then
+never be reported, so the interface stays down until the admin runs a
+down/up cycle?
 
-tun_get_user()
-  do_xdp_generic()
-    netif_receive_generic_xdp()
-      bpf_prog_run_generic_xdp()
-        xdp_skb_feature_check() -> XDP_DROP
+PHY-based WoL seems to be affected too. phylink_ethtool_set_wol()
+removes the modes the PHY handles from the MAC mask:
 
-The vhost-net batched path in tun_xdp_one() does the same:
+    wolopts &= ~w.wolopts;
 
-	if (xdp_prog) {
-		if (gso->gso_type) {
-			skb_xdp = true;
-			goto build;
-		}
-    ...
-	if (skb_xdp) {
-		ret = do_xdp_generic(xdp_prog, &skb);
-		if (ret != XDP_PASS) {
-			ret = 0;
-			goto out;
+With PHY WoL, priv->wolopts is therefore 0, so resume takes the reset
+branch. Won't the reset pulse erase the PHY's WoL enables, so the next
+suspend is not armed for wake?
 
-tun treats any result other than XDP_PASS as consumed. tun_get_user()
-returns total_len and tun_xdp_one() returns 0. QEMU or vhost therefore sees
-success, but every guest TSO/USO frame is dropped. This happens even when
-the program only returns XDP_PASS.
+Resume now also blocks for the snps,reset-delays-us msleep() calls.
+When those delays are 0, the DMA reset in stmmac_hw_setup() needs the
+PHY RX clock, and it runs right after reset deassert.
 
-Unlike veth_xdp_set(), tun_xdp_set() does nothing to stop the writer from
-producing GSO frames. Guest TX TSO is negotiated between the guest and the
-VMM, so the admin has no receive offload to turn off. That makes the
-"receive offloads are still on" warning misleading here.
+This also looks unresolved at the end of the series. After "net:
+stmmac: track datapath and power ownership across failed reopening",
+stmmac_resume_hw() still calls stmmac_mdio_reset(). stmmac_resume()
+still only calls phylink_prepare_resume() and phylink_resume() after
+it, and no phy_init_hw() call was added in stmmac or phylink.
 
-The commit message says driver XDP "is not an issue", but tun's native XDP
-depends on generic XDP for GSO frames. Would tun need its own handling,
-such as segmenting or exempting these skbs?
+This patch carries a Fixes: tag, so it will reach stable. Should the
+resume path either re-initialise the PHY after the reset, or skip the
+reset pulse on resume?
 
-[Severity: Medium]
-Could this also blackhole TCP bulk traffic on netdevsim when XDP is
-attached?
-
-nsim_setup() advertises NETIF_F_TSO. nsim_start_xmit() only calls
-skb_linearize() before forwarding the skb to the peer, so gso_size is
-kept. The peer then runs its program through do_xdp_generic():
-
-drivers/net/netdevsim/netdev.c:nsim_rcv() {
-    ...
-			if (skb->ip_summed == CHECKSUM_PARTIAL)
-				skb_checksum_help(skb);
-			ret = do_xdp_generic(xdp_prog, &skb);
-			if (ret != XDP_PASS) {
-				dev_dstats_rx_add(dev, skblen);
-				continue;
-    ...
-}
-
-netdevsim never clears TSO on the peer when XDP is installed. Every TSO
-skb would now get XDP_DROP here and still be counted as received.
-
-For CHECKSUM_PARTIAL GSO skbs, this combination already triggered
-skb_warn_bad_offload() via skb_checksum_help() before this patch. The
-existing ping.py TCP subtests only send a short string, so they are
-unlikely to catch this.
-
-[Severity: Low]
-This isn't a bug, but should the check move to the top of
-netif_receive_generic_xdp()?
-
-GRO/GSO skbs are almost always nonlinear. By the time
-bpf_prog_run_generic_xdp() runs, netif_receive_generic_xdp() has already
-done this:
-
-	if (skb_cloned(skb) || skb_is_nonlinear(skb) ||
-	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
-		if (netif_skb_check_for_xdp(pskb, xdp_prog))
-			goto do_drop;
-	}
-
-If the program lacks xdp_has_frags, or the page pool copy would be too
-large, netif_skb_check_for_xdp() falls back to
-pskb_expand_head(..., GFP_ATOMIC) plus skb_linearize(). That means a
-high-order atomic allocation and a full copy of a 64KB (or BIG TCP sized)
-aggregate, and the skb is then dropped right away.
-
-The veth hunk already places the check before skb_pp_cow_data().
+[ ... ]
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260928223648.2739371-1-kuba%40kernel.org
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9%40gmail.com
