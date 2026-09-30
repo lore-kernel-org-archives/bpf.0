@@ -1,241 +1,311 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-dl2-f42.google.com (mail-dl2-f42.google.com [74.125.229.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124EA4322EC
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 21:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3636B3E1681
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 21:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790802011; cv=pass; b=kT+xdUWF2s8xLTp53Y7pwzsTtSibHZBWbmHUyG7BXg5aXg+9wxL05sw1lKKRjI6g3TTUHsrJOuuNb3Y71ME2GA9ck9E1eUxXZl380QqfQCahsIgoJn+9v3x/YR+l5bxPaN9MIolq/OQwzmUxp9/oA27FQFhyulg99Lo26FOh/t4=
+	t=1790802197; cv=pass; b=XBy51LWb+kvsIm4eTLwcj7evcqz4SDavgCGTALskxsFWsg3W/D2devvo9WIN7p2gjDpoaXKJnzVFe8JbmSJeEVOGfwH8wKn8v9xYeLEIFIMV8SbQIc2grrbRoA7xw4a6wGUh54UQrpapf/hquQHhDX8CGPpQwsx3aV/7sQWcYvg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790802011; c=relaxed/simple;
-	bh=rcs4n9zECvFTiJ4zFF1MuTa8jrtASPjzZuKgErXZ6NQ=;
+	s=arc-20240116; t=1790802197; c=relaxed/simple;
+	bh=lIhm7UC2kT5ROrHVGw4LQXZLeUC0iPiXA/+b3RzceXA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cwi5kVN2TEAhyR5rJAoJEA0J3Ts/uyjV3y56XuthsIOQqZf+6JfVSTvqyrLCkA76n5pR3X1FraPlGYGo4BiSNwJ0gT7+Cv2zBFZOIR4gFMe1zEucbaCK89FpzSvys3s/2+jNAtFG6AbiYoT8zeDHnh2fQmek10BtlJTpXuKwTp0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PLB+Bf7f; arc=pass smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=bNMyLlvncjjnyZ8BmmtiH9RBHvX2QWHvYfA9Yq2nOQ2YWJ6bfeueWWyov6OT3zR1cFsOHPapreQydixjnkc+MEGZFnyUcNnM6lCYW7gd9qsQXMVqRv1RWCFDIm6Z93SOul3eTJEZilt7pA1276hCiUi3MUl2qmv82hyPi/jB0gM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qd+iHHvI; arc=pass smtp.client-ip=74.125.229.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PLB+Bf7f"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48b0514ad8fso202011f8f.0
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 14:00:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790802008; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qd+iHHvI"
+Received: by mail-dl2-f42.google.com with SMTP id a92af1059eb24-144ecebb6cbso2136271c88.3
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 14:03:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790802195; cv=none;
         d=google.com; s=arc-20260327;
-        b=pY9oT/NeaomWZmutFyyv9qXhCDhLpAsJBt1fMp8/bRVRXe5901s/nBNmroKZcNprL0
-         zXnjNJCdEi4lAjVC2RL4RrLGVs7ttxjHGRSsSQHJ43ialE4nVC2TpIF7jeIKXRMIPbTR
-         AHl/oe+AtI/Phf6PHwmtFAGsZ4Tw/4po07KiEc+6yIt9m6ku4+tMTUuCpj/636y1loXr
-         U9BaQDU9x3DJe4/cJV12jeCymYVHpLklL6vSbT/d95yFMO+YzlB/Fbws/+uka1Duje9U
-         Jc6HdgAs9TN0raXD1F9kyCwiEWgtb4pQYm2Jlf0fmS7Rw345uhSZLwPW2EqeroRgjiIx
-         YViQ==
+        b=NJhmfN08+4cIeVheKQd2G2wUChoSc7XtoVAmunUSC/CVS6ZNTgwuGyU4D3wFrVFXMC
+         rx+cpljYG+M6++NBBFXr6lKO2q0MRujh00Z0mtx9D+E41+tAIoHeFyZdloVxoKt97VKm
+         u4cRWYcLZ5K4CHez2J3LbGbwE7HeLi17ZsVXQX96jNe6tcgCbVyhiDAT9TSewi9dwITg
+         CHFBNySd+LknwgkNgdEqw6fHeVKLKYW9VixapbH0Hpt/CV3YJa0/Kca487oqzAyaMRcI
+         evooj4zwehSt5KDhNsEG1OkvaaGJ/xebb38N38A0SdQ8IRdh04vL1w7b9nQrkoDkOmVD
+         TBWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=BdHV7DMCXxsggz4//I4AlWe1QoSNzGSaCcBE0kpC5j4=;
-        fh=ymlZtFzTKotzj3VY94+s794dQuZcAGqWObd2ANOdD3Y=;
-        b=BlTOA3Sd3lTSUrFDjRLpYmN/9PZuiduLS6WmwQTk0P3ai6x33MnqIU9A4kl5M7WtYm
-         fMNyhAawsTUoXIe945R+0ZS9pOxdDEMw5GhRrfyT+hYGDiawp/IorZUGCVOCH3Tnyxrc
-         +cmbuM70mjn425rBD7aKuHMFTY8VHedoe41fufktFyCfzXEUNK+Uia2ZnPSwaeia8ias
-         coC3y3ymyk7dJZI9OtnTyXLr74U4/EozufYnPtzT+QbWXnW8TNbaHi9EsH00swUO5fxO
-         z25nMbuxS9vrtxOpqWFmad8L6Rg1QRwkNrDzSCGAN702ZgJV37lA4LjcWG8rZ3gsBJ2R
-         EObg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=alY1D4dr1/XbPo3crLHK96vQqmMKQi2M+hPvkA6+sWc=;
+        fh=588sVmmzvUEEJBziH4VkQaVqh8Z0RgfolrKFkB8bhT0=;
+        b=K66beSH+B37JAVCU54yXfIhdvWkbaOqtwzFRCz1nOg1Mlyk9ouT8pPGPpK0zRvZSlH
+         EaCnd23awTj82Jq3YmgQ6VYQovq1SNKRI6spw8bZ2iHbsp4OLLntGi/iaBIir567DylX
+         Wi+LepIwRNfRfuxo7VlvvL6qbZjEoU7gOY9sxxk/6jHxctqUvbZ3pSEl9XRhc1DYa7GZ
+         kwxlbgCnUdZ3UTqNpoUs+eyVtDcwOwNQdSBo8hubEW5ClSxjbVPXN/97Dc18hW8nk9ez
+         7LzbCMhCKbaQRkau0zYrGsN93gMunDrTEjVOeQJgaj+mQNEm6kBl2EXp3aEFAni7P8Fq
+         JjNg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790802008; x=1791406808; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BdHV7DMCXxsggz4//I4AlWe1QoSNzGSaCcBE0kpC5j4=;
-        b=PLB+Bf7fMCvu3ppNvE9pTgQFvwtzCq1sOKZkWMRRk6QOewX0v7fDRflUtnaLjHnpUZ
-         pI3/Q7GsL7sUQw9+uswlS5vkK7+JVlze9hkqmUS4kqzu+kq4avAVIgIEK8UFVhQxaYoc
-         hzT4X5r++uHP8+mMCyHoy0+fDPAkJ13nYXpfLYedbM2djDbgZfmvIipwbPAckqqqS4jC
-         f3/rAXTVtdy1q1cZAvTnAZYGRGkFwGqqbwdPOxH+cSc8D7EaKXP81Ter6b8ZlCfUQcFF
-         71YFWWnp0h0rYm1OVU2JB7e6zw8AETI5u6h+/0hOZBNFedAoDf2Z9BAmMVdMeAw9FT/O
-         10xg==
+        d=google.com; s=20251104; t=1790802195; x=1791406995; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=alY1D4dr1/XbPo3crLHK96vQqmMKQi2M+hPvkA6+sWc=;
+        b=Qd+iHHvIq2nIlrh4smLew+TTx3U7PRu78lh9sVRQK9PGesBC8GugKfzKQapihU3szW
+         aOK0AIN+IwxqanoHxaE+P82yZ1twM2718k1TvgzvUUvI0afNRMHvlY03QvkpkRLVbxoW
+         XRtIsHJSmfUatag3GNZqu6e9HtDsDsJuVB33QK65x+9+W2kI8EeaQLRzcCpTozTrfbxK
+         FAJpvvfEh5WtqYiej2alLawVDh5CAMrbEHjHLyXlxy6T3/s3P5NA+0+HxSqjIczqbgIw
+         nkmSzB69asGhGWSzbW0nLLBMdnszuSziatPjUgX+28yLQzQCg/aPbIwqyGlLIUq2GKN4
+         kgSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790802008; x=1791406808;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=BdHV7DMCXxsggz4//I4AlWe1QoSNzGSaCcBE0kpC5j4=;
-        b=E9DjdHQyudmcGtqwjiEmL+iHaAUot5S2ZWEPYReBR5IFztGo27z+RQj16RCdgS0LUj
-         aDDL5Y2/R+rBVxeFT1jDCr/RGo/7vDuADSkkNpXrUohmudJlyR/2oCtJ9KeJbdJAJW6H
-         31C98izKP9Wt2nKjS2eLslFUYfbP7dBs3/XPqe8dl0LGiGeQr31YrXmASRtEC/CxBBO1
-         /Q5a/eo/Hb8ByLBNtJKT4fOeWXnmYZvGYD/Ja16zT+y5mk0KiwM1D8IDpghEoospH3k2
-         lGxtYLIXZqnrJPYHUDG/Cy8CQYTK8qjejEN7N6A8DgKh88gzkhCoa4CxD9d9FG+sH62y
-         uG9Q==
-X-Forwarded-Encrypted: i=1; AKwUvBx1eUyrhyNoz3g2OzzmPdBxP8VjmQjbhF26t6TUfKmudn7f/B6dGkynzcJVeWIYEdXaQzo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKgrMBHcuoPwBajFc7pMWxAf8+i4DaCitVj4AkxJpNQoLteNc9/
-	0lxy2WEwyX2BAdDndS0sZxZw5WEm8eIEWnkHO1MZves7F1xwqVhCbEuJ/GzWxJfjU2Een8wHbtT
-	PUJ1liu681AIudx5JG8f6pAF1PVamy6I=
-X-Gm-Gg: AYBFou0ke0DDVH7kL2QqB3JAskNXrBnQxoFak+Rtg91hFd/6fuv6v+u+mS8YlrDnOKn
-	ZBQ4rXybmXPjMz6+sWeFw0zKvR2qlzZ3YPqh3UMCbPV7uoXQGzgekiqaK7RJ070kgaaoY/PunyQ
-	sXGm/sLcXE8lTroxMnRHJHN/OKXnpId0brEIOaBwV3+hjx03EbTcuChwr8v9JNviCWZYJPAiRIj
-	dEs9gnBlq8Qn+FCbgSGdw4XidUVdoAEx9N2/TdwcYyirAfMiVjIvzHr/XYlHgavXhi0iHh+GACH
-	FmbWtPHKCYvfxZ03c8NvFAXhfsoNsoStbLI2f1y8g3v74i9470/Tnhd/9+m/K4kDj+csZyoRIaN
-	AZsegUyweYVOvMM2QweR9375awaqx3QblPEpdqPhs5RsW4wz+dO5QcyM/Ea+F8nbVbW8JPrGVXS
-	HK+50/QaZ8ULn6QEi/SQ==
-X-Received: by 2002:a05:6000:2dc6:b0:48b:68:594a with SMTP id
- ffacd0b85a97d-48b024c5716mr5289021f8f.12.1790802008034; Wed, 30 Sep 2026
- 14:00:08 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790802195; x=1791406995;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=alY1D4dr1/XbPo3crLHK96vQqmMKQi2M+hPvkA6+sWc=;
+        b=XAY406XTNzLPYmByyOTRdCUR38TDy1tku/RwhzefQXVUdI3kKBYYRVksdbtZVzhgZG
+         bthIgui7QwZo32JR+nSYCNppNwZg17lUXvlWghxmh2bcoFFXjgAoJ1qL+GbNE8DXlMsm
+         z9KQewjlL0YfJgZeLTzp9QqzCIYMiy+CCLbgOqmQ58HttWyQpknjfOHFToVcsl7pi2x3
+         3O85e2PeG5sM3YDYb16jvr5Ju+xO2EIp4nZST7O/tXr5UR5TtPY+IVOXRNES8Jo/Av9H
+         UmyqhnOqnZP7kM9Iw3L7PraNKxdNz8g4QWZtb+aS/bK7By3OcudGvXXuwxOKUK+TOE+C
+         m21A==
+X-Forwarded-Encrypted: i=1; AKwUvBw2x9rdrhNnYARkdBLkeM5bb+gvYxLX2nkeSfOmXfyYRn8If1RtZCesg9C0ZywXX71bPUo=@vger.kernel.org
+X-Gm-Message-State: AFuF++kWRVB9t9XJZfmvwIVSog9zDP+lKE3qEL/M2rLqaa59Gsme5jrf
+	KhlL7TDlZHg6ANp+Hfxt2rxOWZNf3tcgEThnsgUDt+wLQIaISUBQHV8P7rvRwPN8Ad6mmY7br1O
+	wN4Is6+EKYqB5S8eqVMq7HYVE5w3GpeMdiWs7Glw2
+X-Gm-Gg: AYBFou24tqRAhJqRCZsPFjQdWHRjIAPxmhjA4nuVYxqt/6117rQOXHM2r+fz87PZjwg
+	5sZ9+0Dq4fU7b74dhwI/ZdMBybXCH6siranZo3RS8+GARoRQ+KHUyX1aYQyCtjj2AvWyDNe1pKU
+	9gkE7DfJWbKz6wvD9K5i/61hcC/PJT9yGYRJDC213BRu2Bagsxtt9t/+WlARoUltKpc0aGam+xQ
+	IpCExTYwCgAXX2pH/WD/5TIobzkBAGwHR2Taf0kkzqQv3Z3pJhQ5Bl9N73W11oTrJA2Foob/TqT
+	9cH5b9vTybBh+fJ1jtvf7niUH4h1NmuQjroiw3MnrcWcXM2ogydaruO5LXOGkSQMFsRJiOTNWn0
+	9oRGZjFBfI7Q1UPNIgqiI2YZ5PZdDOkQCLbXoi1nT8AyUFRyhqd5yvuN5zh3pJXY7yUZSWolQA3
+	4gpKDho4nzq61txc9B3LxtzUXQOY/4Du32V30=
+X-Received: by 2002:a05:7022:ed02:b0:144:fa79:174 with SMTP id
+ a92af1059eb24-14d33f39d82mr1949574c88.44.1790802193969; Wed, 30 Sep 2026
+ 14:03:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org> <arrAqg5n87INTHE6@beelink>
- <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org> <artpBMeM13Dd0lLy@houat> <fb7ed8ab-8aea-4731-a5e5-c9476d8bfd38@linaro.org>
-In-Reply-To: <fb7ed8ab-8aea-4731-a5e5-c9476d8bfd38@linaro.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 30 Sep 2026 22:59:30 +0200
-X-Gm-Features: AclHuK-U6pulImpn0m_SQCkcJ5kAgToTplTEZZASDrUoYoF9BUdVXxkuuMMc3Rg
-Message-ID: <CAP01T772Vgc4=ShFHQ5bFBAF0PYuQ07xe3h+biT7LST-tahHhg@mail.gmail.com>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Maxime Ripard <mripard@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Albert Esteve <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Javier Martinez Canillas <javierm@redhat.com>, dri-devel@lists.freedesktop.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
+References: <CAMB2axN93iJnrZAk6hWraSnz32FtRDdpz_UbzsVB4YU7gRK_3Q@mail.gmail.com>
+ <20260927001921.604064-1-kuniyu@google.com> <CAMB2axMwBuz3X4Uwn5uzZUqm91EbiMnbQX832wUFOQ44fOwDnQ@mail.gmail.com>
+In-Reply-To: <CAMB2axMwBuz3X4Uwn5uzZUqm91EbiMnbQX832wUFOQ44fOwDnQ@mail.gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Wed, 30 Sep 2026 14:03:02 -0700
+X-Gm-Features: AclHuK84XmHn8n--BuXAOq17HM-w4ciTYGzcvqjBetaRb-dVT79FM-kQwsYTBYA
+Message-ID: <CAAVpQUCRm-7HqHT2ViSraEWkxF_QWiGJb93fx_BOwPgD2aUtuA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 3/8] bpf: tcp: Introduce bpf_tcp_ops.{enqueue,dequeue}_rcvq().
+To: Amery Hung <ameryhung@gmail.com>
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, bpf@vger.kernel.org, 
+	cleger@meta.com, daniel@iogearbox.net, eddyz87@gmail.com, edumazet@google.com, 
+	john.fastabend@gmail.com, kuni1840@gmail.com, martin.lau@linux.dev, 
+	memxor@gmail.com, ncardwell@google.com, netdev@vger.kernel.org, 
+	sdf@fomichev.me, ukyab@berkeley.edu, willemb@google.com, 
+	yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 30 Sept 2026 at 15:57, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+On Wed, Sep 30, 2026 at 12:56=E2=80=AFPM Amery Hung <ameryhung@gmail.com> w=
+rote:
 >
-> [...]
-> >>>
-> >>> Changing the mindset is the hardest part of it. But once you are making
-> >>> the shift, it's actually much better to work with. It doesn't mean you
-> >>> can go yolo. You still need to be careful in your choices knowing the
-> >>> impact on your users. But the API at version 0 is not frozen and you
-> >>> don't need to maintain it forever, especially if you control the loader
-> >>> and the headers used to compile the BPFs.
-> >>
-> >> It's really impressive, but there's no way this would become the de-facto
-> >> way to program the panels
+> On Sat, Sep 26, 2026 at 5:19=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.=
+com> wrote:
 > >
-> > Nobody said it would? And like I said in my previous mail, I actually
-> > expect us to keep merging panel drivers. Do I think it should become the
-> > go-to solution for simple panels? yes. But we can always make
-> > exceptions, and for more complex panels we should totally do a more
-> > complex driver. Like HID has been doing.
+> > From: Amery Hung <ameryhung@gmail.com>
+> > Date: Fri, 25 Sep 2026 10:33:50 -0700
+> > > On Thu, Sep 24, 2026 at 6:41=E2=80=AFPM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Thu, Sep 24, 2026 at 05:39 PM Kuniyuki Iwashima <kuniyu@google.c=
+om> wrote:
+> > > > >> can we drop the flag ?
+> > > > >> hdr_opt_len() is called for every tx skb without per-socket opt-=
+in.
+> > > > >
+> > > > > Oh, I assumed bpf_tcp_ops keeps the same behaviour.
+> > > >
+> > > > bpf_tcp_ops were moved out of BPF_SOCK_OPS_TEST_FLAG() guards on
+> > > > purpose. None of the existing members has per-socket opt-in.
+> > > > hdr_opt_len() runs for every tx skb, rtt() for every rtt sample.
+> > > > See the log of commit 3bb54768fe3e
+> > > > ("bpf: tcp: Support parse/len/write header option hooks in bpf_tcp_=
+ops"):
+> > > > "A per-member/per-cgroup gate could be added later if the extra
+> > > > fast-path work proves measurable."
+> > > >
+> > > > > We have a bpf prog to turn the hook on (from cgroup_skb/ingress),
+> > > > > only when ingress rate exceeds the allocated capacity, to signal =
+that
+> > > > > via a custom TCP option and turn the hook off from the hook itsel=
+f.
+> > > > > (and I planned to post another patch for that)
+> > > >
+> > > > That should work today without another patch and without the flag.
+> > > > cgroup_skb/ingress prog does
+> > > >   bpf_sk_storage_get(&map, sk, 0, BPF_SK_STORAGE_GET_F_CREATE);
+> > > > when the rate is exceeded. hdr_opt_len() and write_hdr_opt() do
+> > > >   bpf_sk_storage_get(&map, sk, 0, 0);
+> > > > and return when it's NULL. write_hdr_opt() calls
+> > > > bpf_sk_storage_delete() after the option went out.
+> > > > cg_skb_func_proto() has both helpers and get_func_proto() in
+> > > > bpf_tcp_ops.c allows them in every member.
+> > > > egress_read_sock_fields() in test_sock_fields.c does the cgroup_skb
+> > > > part.
+> > > >
+> > > > > Anyway, is it because calling bpf prog is not very expensive
+> > > > > or per-prog switch is preferable to per-socket flag ?
+> > > >
+> > > > The switch is still per socket. It's sk_storage instead of a bit in
+> > > > tcp_sock, so every prog has its own.
+> > > >
+> > > > While such new flag is per socket, but it's one for all progs.
+> > > >
+> > > > And you want to take the last bit of u8 bpf_sock_ops_cb_flags...
+> > > >
+> > > > As far as the cost. A socket that didn't opt in pays for an indirec=
+t
+> > > > call into the prog and for bpf_sk_storage_get() that finds nothing,
+> > > > but only in cgroups where bpf_tcp_ops with enqueue_rcvq is attached=
+.
+> > > > The members that are not set are NULL and bpf_tcp_ops_call() skips
+> > > > them. That's what hdr_opt_len() costs on tx.
+> > > >
+> > > > I don't remember what Amery measured, but worth benchmarking
+> > > > for your case.
+> > >
+> > > I did not benchmark the initial bpf_tcp_ops patch set, so per-socket
+> > > gating was deferred. Before deciding whether to add such a gate for
+> > > AutoLOWAT, could we compare:
+> > >
+> > > 1. No bpf_tcp_ops attached.
+> > > 2. No-op enqueue_rcvq() and dequeue_rcvq() callbacks attached.
+> > > 3. The same callbacks performing an sk-local-storage lookup (or maybe
+> > > rhashtable).
 > >
-> >> and if the motivation is to make it simpler this implementation
-> >> requires adding bindings and bpf programs which that are the same as
-> >> native panel drivers, but won't be able to work until user-space
-> >> starts and will require to be in initramfs or rootfs to have
-> >> functional display.
-> >>
-> >> Not sure to understand what are the positive features here except
-> >> isolating the panel code in a safe bpf program (is this really needed
-> >> ?).
-> >
-> >  From the cover letter:
-> >
-> > """
-> > Panels in general, and MIPI-DSI panels in particular, are pretty
-> > difficult to support and require pretty much a panel driver for each
-> > panel produced. Most of them are pretty simple, and require an opaque
-> > initialization sequence that is usually poorly documented.
-> >
-> > This creates a tension between OEMs and distros because OEMs will
-> > typically get a new panel to react to a sourcing issue during
-> > production, and thus need some swift turnaround between getting their
-> > new panel and it being operational in the OS. Distributions on the other
-> > hand can take years to ship a kernel with that new panel driver.
-> >
-> > To solve this, I followed the example of HID-BPF and wrote a panel
-> > driver that will rely on BPF programs to perform the panel
-> > initialization. That way, we can ship the programs separately from the
-> > kernel, and with a different lifecycle.
-> > """
-> >
-> > You can disagree with the solution, that's fair, we can also discuss on
-> > how to solve this problem, but I'd appreciate it if you weren't claiming
-> > it's all useless.
+> > I used tcp_rr (128 threads, 20000 flows) and didn't see a big
+> > perf diff between 1. and 2., but 3. showed some costs even when
+> > only looking up sk_storage and returning immediately:
 >
-> I did read the cover-letter and I got the arguments from Benjamin, and
-> while in theory it could indeed solve the issue described, in reality
-> it won't for the reasons I exposed.
+> Hey, sorry for the late reply.
 >
-> And since it's basically allowing to accept out-of-tree downstream
-> driver instead of upstreaming, I'm kind against TBH.
+> Your result gave me some hope that we could implement the gate in the
+> BPF program, since callback dispatch appeared cheap.
 >
-> But I'm open to discussion, and I'll talk about display Panel in
-> XDC today, Plumbers and ELC next week so I hope we'll find time to
-> discuss about this in person!
+> However, my experiment with several program-local gate implementations
+> produced a different result. I ran the experiment using hdr_opt_len().
+> Except for the baseline, every case else had bpf_tcp_ops attached, and
+> only the hdr_opt_len member changed. I used loopback tcp_rr with 128
+
+Thanks for testing.  To be fair, I used two machines on the same rack,
+and it seems loopback has bottleneck on CPU rather than network,
+less relaxed.
+
+
+> threads and 20,000 flows. All lookups missed, modeling sockets that
+> had not opted in.
 >
-
-Hi Neil, Maxime, Benjamin, and others,
-
-I've been following the patch set over the past couple of days, mostly
-out of curiosity. You folks understand the details of your subsystem
-best, therefore I trust you with that, but I've seen a lot of
-misunderstandings which feed into unjustified worries about how some
-of this will work.
-
-For clarity, as several people have already pointed out:
-1) BPF programs ship with complete bytecode and line information from
-the source, so I don't think the concern about the program being a
-binary blob is justified in any sense. The verifier has to verify it
-after all, before it gets loaded into the kernel. They also must be
-licensed as GPL to have access to any kernel functionality.
-2) Adding BPF interfaces does not lock the kernel side ABI into a
-perpetual stability contract. There have been several thriving
-communities (sched_ext, HID-BPF) which have used BPF successfully in
-practice and have never had to make suboptimal technical choices
-because they support BPF-based customization. The interfaces have
-changed and in some cases completely rewritten without breaking users.
-Of course, you might decide to be less or more graceful w.r.t.
-backwards compatibility, but this is a choice left in the hands of
-subsystem maintainers.
-3) On top of all this, there are several mechanisms in BPF programs to
-detect availability of APIs and adapt it during load to allow programs
-to work across kernel versions, both for functions the program can
-call and data it can access.
-
-As far as people being able to carry downstream changes, I think, at
-this point, that is already trivial with or without BPF (esp. with
-LLMs), the only thing you change is how easy it is for users to avoid
-being tied to kernel release cycles.
-
-With the right incentives people will end up sharing their BPF
-programs with the rest of the community. sched_ext and HID-BPF are two
-strong examples of this. All programs get developed in the open with
-community involvement, even when several companies make use of them
-internally for their production use cases. The theoretical worries are
-fine, but as far as practical evidence goes it has worked out
-positively for everyone involved (not once, but twice).
-
-The only valid concern I saw was the dependency on user space to load
-these programs. We have had a bpf_preload mechanism in the tree since
-forever, it has not found much traction since existing use cases
-didn't often need the ability to load programs early. We'd be happy to
-explore how it could be adjusted, or reworked to better support
-whatever requirements emerge from this work.
-
-In any case, I am not equipped to decide what is best for your
-subsystem, but at least from the BPF side, I saw several
-misconceptions which I hope the above can address.
-
-Thanks
-
-> Neil
+> |.                     | Throughput (tx/s) | diff   | diff (abs)     |
+> |-----------------------|-------------------|--------|----------------|
+> | no tcp_ops            | 2,231,461         | --     | --             |
+> | attached, NULL member | 2,200,750         | -1.38% | -30,711 tx/s   |
+> | no-op                 | 2,172,596         | -2.64% | -58,865 tx/s   |
+> | sk-storage            | 2,159,986         | -3.20% | -71,475 tx/s   |
+> | RHASH                  | 2,156,491         | -3.36% | -74,970 tx/s   |
+>
+> The NULL-member result measures the cgroup struct_ops dispatch and
+> array scan. The difference from NULL member to no-op measures the
+> indirect call and trampoline, while the remaining difference measures
+> the program-local lookup.
+>
+> Although hdr_opt_len() has a different signature and call frequency
+> from the RCVQ hooks, all three layers have observable fast-path
+> overhead. A program-local gate cannot avoid the dispatch and
+> trampoline costs. Therefore, a per-socket gate before dispatch seems
+> worthwhile for conditional hot-path callbacks.
 >
 > >
-> > Maxime
+> >                     |    w/o bpf    |     w/ bpf    |  diff   |  diff (=
+abs)
+> >  -------------------+---------------+---------------+---------+--------=
+-----
+> >  num_transactions   | 1,209,349,692 | 1,185,180,017 |  -2.00% | -24.17M=
+ tx
+> >  throughput (tx/s)  | 20,318,689.83 | 19,953,668.49 |  -1.80% | -365.0K=
+ tx/s
+> >  remote_throughput  |    19,472,629 |    19,135,463 |  -1.73% | -337.2K=
+ tx/s
+> >  latency_min        |      50.83 us |      46.08 us |  -9.34% | -4.75 u=
+s
+> >  latency_p25        |     911.35 us |     911.35 us |   0.00% | 0.00 us
+> >  latency_p50        |     972.79 us |     983.03 us |  +1.05% | +10.24 =
+us
+> >  latency_mean       |     983.64 us |   1,001.71 us |  +1.84% | +18.08 =
+us
+> >  latency_p90        |   1,136.63 us |   1,187.83 us |  +4.50% | +51.20 =
+us
+> >  latency_p95        |   1,208.31 us |   1,259.51 us |  +4.24% | +51.20 =
+us
+> >  latency_p99        |   1,392.63 us |   1,454.07 us |  +4.41% | +61.44 =
+us
+> >  latency_stddev     |     141.82 us |     158.53 us | +11.78% | +16.71 =
+us
+> >  cpu time (u+s, 60s)|     8,165.91s |     8,312.57s |  +1.80% | +146.66=
+s
+> >
+> >
+> > Given the other hooks in the fast path (hdr_opt_len(),
+> > parse_hdr(), etc) should add costs at the same level,
+> > I think we should guard them with flags.
+> >
+> > But u8 is too small, so I think we could add a new field
+> > (maybe u32?) and a new kfunc for bpf_tcp_ops only.  Also,
+> > I'd add CONFIG_BPF_SOCK_OPS_LEGACY to save some calls.
+> >
+> > What do you think ?
 >
+> A separate bpf_tcp_ops mask in tcp_sock seems reasonable.
+
+I will add another flag and kfunc in the next version.
+
+
 >
+> CONFIG_BPF_SOCK_OPS_LEGACY seems premature considering we don't have
+> feature parity with sockops at this moment (not saying we need to
+> fully duplicate though).
+
+This can be a separate topic, and I also think we don't need
+feature parity.  I think some hooks are not used in many
+deployments.
+
+
+>
+> >
+> >
+> > >
+> > > >
+> > > > >> The prog in patch 8 already returns when the socket has no
+> > > > >> sk_storage.
+> > > > >
+> > > > > Yes, but this is only for bpf verifier.
+> > > >
+> > > > tcp_init_autolowat_cb() can be the only place that passes
+> > > > BPF_SK_STORAGE_GET_F_CREATE.
+> > > > So for a socket that didn't do setsockopt(BPF_TCP_AUTOLOWAT)
+> > > > other cbs will return NULL on lookup.
+> > > >
+> > > > tcp_disable_autolowat() will do:
+> > > >   bpf_sk_storage_delete(&tcp_autolowat_map, sk);
+> > > >   bpf_tcp_ops_set_rcvlowat(sk, 1);
+> > > >
+> > > > > Just an idea, would it make sense to add a kfunc to move bpf_tcp_=
+ops
+> > > > > callback to a shadow pointer by allocating sizeof(bpf_tcp_ops) * =
+2 ?
+> > >
+> > > A bpf_tcp_ops instance is shared by all sockets, so this would not
+> > > provide per-socket gating. Making it per-socket would require copying
+> > > the callback table for every tcp_sock, which seems more complex than
+> > > adding a gate directly to tcp_sock.
+> > >
+> > > Am I understanding your idea correctly?
+> >
+> > Yes, but this is overkill indeed.  I think most deployments
+> > use just a single SOCK_OPS/bpf_tcp_ops, and per-scoket flag
+> > would be enough.
