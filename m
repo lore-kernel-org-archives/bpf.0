@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF684E0213;
-	Wed, 30 Sep 2026 13:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB564F68A7;
+	Wed, 30 Sep 2026 13:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790775165; cv=none; b=pUSo/29z+7Z1Ie9k3Cg1JOMlBVQxhPHuuMb3SqdkfIgcTybqkT4cVgTlOh5ScZpESsXbj08U8sGCPnHvaxiqgXTAVyj00N8Jlb8S5TC5PM/hPQrUrcmPHjl0FaCuZn3SZ3WsQ9ANHrsSb94zzszdCx2GODHmAMJwcLyXCeQ5gOs=
+	t=1790775169; cv=none; b=nUegX8WOQoJa0wXtGv7eNbHUFQ0qdsEutzqkrwYA3VM2DqG2tlYlhD8n3WNWah+5EXKeBy5GnSNUoyXeNISXiMHddT6NpvcRCKaM4kqHctr2q+LmH76WWfQs40MF7JSPBGgp63mQ834NAk/7qrR2jUAatAX9SXECucnsBISjHh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790775165; c=relaxed/simple;
-	bh=bwxyd+peEw7h9/qF9HlhYJK4VprP5WnYZvI4aeZmLmE=;
+	s=arc-20240116; t=1790775169; c=relaxed/simple;
+	bh=qAhFc1MKfRPlCnzoOiOLF3NZPByZNr5U3L7UmdgR1WY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UAeo+EJnExjjPlU8zeCFQyJf+NxMQxB/FQ1ZAjHwisXoNq41V2lKIS/ZfshiBabYhGU+Ceymt9pTEd9MjCiqSqA9yCpJmHYufMKNL0bVUe4MdB5U+C+rNqiewoWtZqtMnNEDtg2YiP2J626gmFzWhq0vhyblZqew7PS7L3wOXgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W9k96XsW; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=Vfutw4EPd8RT8cW2H8hmlmm8/BDAGiLOIujTpXSADKnLZj0SA4K7EONPViykbrC5Y9y4Tpr06x/9TGdu9H2yFqGCr6GvMjQV2XukYc/Ca5L4tG89PA7l1HWpoeocOY57xRZgHCOhJVaYhjW1d0ab0q+iUmhYO1M/Aj5BnbFmbCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScYu/8cK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W9k96XsW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49911F00893;
-	Wed, 30 Sep 2026 13:32:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScYu/8cK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD9B81F00898;
+	Wed, 30 Sep 2026 13:32:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790775160;
-	bh=3ZucXWECji4gkUktkefSBd5DcFs2vae6ciiEpDVZGOo=;
+	s=k20260515; t=1790775157;
+	bh=QH5MHjbLZHRgehOfJtLxrSDVUDUvUZovYV2sI4Kr/iM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=W9k96XsWCgYWvBwjG6tjVstj2F9lKPuUcWKYJHd7WPIgtiElrFifRCvovqvPbU5g3
-	 OYs5vqTdd4QHnRQXqIgBaM2F6ZrafrPLRVPtZpcwym3YVApB5Vt1k3a30CwQfiRHV7
-	 /XFEof+PebeDBSpgA4y7amETR7xzImZ/ST6Nu2i9upVdaU20TQFCygdHcXhQN3S+Of
-	 8yzpY7pPLLob7feAL6kwsYqY9aCsA/siQ+sw8Is4eYo1hinfO9Pf+9UMAzP5FWev4r
-	 Ib7SLd4IR2JRNthj5AL5Q/wI7te0x8+jQuyLPgqXMrISL5i19uxT61mdkq6vsZE9Oi
-	 12aixnDnTeh3w==
+	b=ScYu/8cKK3bPFejSapFFpmwZbJm6u1fpIVFe0BhGqEI5q3OUED46/c9wdBu1osP8p
+	 i7CKAnH2hTVQ1f40YVXAdjMsR+MfEt1ymit1UXIJG69ptz69x1z17M6ZiAlwq2QzkJ
+	 MCsjxdflJQnPj8Ss+txH55xk9w0ir3IEF5OR4kqYgigwoVc3QGknBrQaVRqvhmfygE
+	 4C0vKI2jvrL8i7MSuR9dNKcOyprL3QlRg5ilzYnybwkVpkhcZlpBN0jWmfw2kMJiHi
+	 LT7JJGeWC77m1b4m8/FgOS+9u35fpO42iRgbCNgng54Qt/5rYMm4FAnQl+UgJeA8/2
+	 meLs9sKoZQ+fg==
 From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 30 Sep 2026 15:32:05 +0200
-Subject: [PATCH 13/17] namespace: remove the fsnotify marks of a mount
- namespace in process context
+Date: Wed, 30 Sep 2026 15:32:04 +0200
+Subject: [PATCH 12/17] selftests/filesystems: check that the nullfs root
+ can't be reconfigured
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260930-work-mount-fixes-3-v1-13-be34c83956ae@kernel.org>
+Message-Id: <20260930-work-mount-fixes-3-v1-12-be34c83956ae@kernel.org>
 References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
 In-Reply-To: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -46,71 +46,169 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
  Chris Mason <mason@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
  Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>, 
  Aleksa Sarai <cyphar@cyphar.com>, Amir Goldstein <amir73il@gmail.com>, 
- bpf@vger.kernel.org, "Christian Brauner (Amutable)" <brauner@kernel.org>, 
- stable@vger.kernel.org
+ bpf@vger.kernel.org, "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.17-dev-db0b7
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2257; i=brauner@kernel.org;
- h=from:subject:message-id; bh=bwxyd+peEw7h9/qF9HlhYJK4VprP5WnYZvI4aeZmLmE=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTt5fePn8l/MOtv8Ra91W913wUILH+zX7R3U/3BlRV1x
- z4+sdBv6ShlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZiI6wGGv/Jev3e63tbSmTPj
- Zy7jozjugIDDb7pypE1fvevmnTn3RQgjw5Gvl7/xXrBv3aNcbRJe+LAp0m3Budutbupas33jeO6
- 8YgEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4887; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=qAhFc1MKfRPlCnzoOiOLF3NZPByZNr5U3L7UmdgR1WY=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTt5ffPzdy2zeChsNJHE/v/NjKHmtqrcksX+Fz9tWZW5
+ pe2ucu/dZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykO4aR4U/gu+D+qm8tj101
+ 4tu6+7k650guXBKx4YfPCjZDvzyLKEaG5w+l52eViPe3tjapJ5tHS3hOld6zeKHGL7u3Bp+lU7a
+ xAwA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-mnt_ns_release() drops the last passive reference of a mount namespace
-and removes its fanotify marks via fsnotify_mntns_delete(). That takes
-the mutex of every group with a mark on the namespace and the spinlock
-of the connector. Fine from process context. But mnt_ns_tree_remove()
-hands the reference the namespace was allocated with to call_rcu() and
-so the marks are removed from the RCU softirq:
+Add a test for the root of an empty mount namespace:
 
-  BUG: sleeping function called from invalid context at kernel/locking/mutex.c:623
-  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 0, name: swapper/3
-   __mutex_lock+0x113/0x24b0
-   fsnotify_destroy_marks+0x11b/0x3d0
-   mnt_ns_release_rcu+0x57/0xa0
-   rcu_core+0x6b6/0x1e40
+- fspick() of the root fails with EINVAL
+- mount(MS_REMOUNT) of the root fails with EINVAL
+- umount() of the root fails and doesn't remount it read-only
 
-and lockdep complains about the connector lock being taken from softirq
-context. A fanotify group with a FAN_MARK_MNTNS mark on the mount
-namespace of another task is all that's needed. Root in a user
-namespace can do that for a mount namespace it owns. The task exits and
-the namespace is freed with the mark still on it.
-
-Remove the marks in free_mnt_ns() before the namespace is handed to RCU.
-That runs in process context once the last active reference is gone. A
-mark is added through a file descriptor to the namespace which holds an
-active reference so no mark can show up after that.
-
-Fixes: bf630c401641 ("vfs: add notifications for mount attach and detach")
-Cc: stable@vger.kernel.org # v6.15+
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/namespace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../selftests/filesystems/empty_mntns/.gitignore   |   1 +
+ .../selftests/filesystems/empty_mntns/Makefile     |   2 +
+ .../empty_mntns/internal_sb_reconfigure_test.c     | 108 +++++++++++++++++++++
+ 3 files changed, 111 insertions(+)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 0a7d50db228d..3c90d853e091 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -130,7 +130,6 @@ static void mnt_ns_release(struct mnt_namespace *ns)
- {
- 	/* keep alive for {list,stat}mount() */
- 	if (ns && refcount_dec_and_test(&ns->passive)) {
--		fsnotify_mntns_delete(ns);
- 		put_user_ns(ns->user_ns);
- 		kfree(ns);
- 	}
-@@ -4279,6 +4278,8 @@ static void free_mnt_ns(struct mnt_namespace *ns)
- 	if (!is_anon_ns(ns))
- 		ns_common_free(ns);
- 	dec_mnt_namespaces(ns->ucounts);
-+	/* the last active reference is gone, no mark can show up anymore */
-+	fsnotify_mntns_delete(ns);
- 	mnt_ns_tree_remove(ns);
- }
+diff --git a/tools/testing/selftests/filesystems/empty_mntns/.gitignore b/tools/testing/selftests/filesystems/empty_mntns/.gitignore
+index 99f89d329db2..32125b3eaa80 100644
+--- a/tools/testing/selftests/filesystems/empty_mntns/.gitignore
++++ b/tools/testing/selftests/filesystems/empty_mntns/.gitignore
+@@ -2,3 +2,4 @@
+ clone3_empty_mntns_test
+ empty_mntns_test
+ overmount_chroot_test
++internal_sb_reconfigure_test
+diff --git a/tools/testing/selftests/filesystems/empty_mntns/Makefile b/tools/testing/selftests/filesystems/empty_mntns/Makefile
+index 22e3fb915e81..b64818b962ca 100644
+--- a/tools/testing/selftests/filesystems/empty_mntns/Makefile
++++ b/tools/testing/selftests/filesystems/empty_mntns/Makefile
+@@ -4,9 +4,11 @@ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS += -lcap
  
+ TEST_GEN_PROGS := empty_mntns_test overmount_chroot_test clone3_empty_mntns_test
++TEST_GEN_PROGS += internal_sb_reconfigure_test
+ 
+ include ../../lib.mk
+ 
+ $(OUTPUT)/empty_mntns_test: ../utils.c
+ $(OUTPUT)/overmount_chroot_test: ../utils.c
+ $(OUTPUT)/clone3_empty_mntns_test: ../utils.c
++$(OUTPUT)/internal_sb_reconfigure_test: ../utils.c
+diff --git a/tools/testing/selftests/filesystems/empty_mntns/internal_sb_reconfigure_test.c b/tools/testing/selftests/filesystems/empty_mntns/internal_sb_reconfigure_test.c
+new file mode 100644
+index 000000000000..cb645d1e5a9a
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/empty_mntns/internal_sb_reconfigure_test.c
+@@ -0,0 +1,108 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * The root of an empty mount namespace is a nullfs mount. Its superblock is
++ * kernel-internal and shared by every mount namespace. It can't be
++ * reconfigured, neither through fspick() nor through mount(MS_REMOUNT) nor
++ * through umount() of the root which remounts it read-only.
++ */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <sched.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/mount.h>
++#include <sys/statfs.h>
++#include <sys/statvfs.h>
++#include <sys/syscall.h>
++#include <sys/vfs.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#include "../utils.h"
++#include "../wrappers.h"
++#include "empty_mntns.h"
++#include "kselftest_harness.h"
++
++#ifndef __NR_fspick
++#define __NR_fspick 433
++#endif
++
++static int sys_fspick(int dfd, const char *path, unsigned int flags)
++{
++	return syscall(__NR_fspick, dfd, path, flags);
++}
++
++/* Child exit codes. */
++enum {
++	CHILD_OK,
++	CHILD_USERNS,		/* could not create the user namespace */
++	CHILD_UNSHARE,		/* could not create the empty mount namespace */
++	CHILD_FSPICK,		/* fspick() of the root was not refused with EINVAL */
++	CHILD_REMOUNT,		/* mount(MS_REMOUNT) was not refused with EINVAL */
++	CHILD_UMOUNT,		/* umount() of the root succeeded */
++	CHILD_STATFS,		/* statfs() of the root failed */
++	CHILD_RDONLY,		/* the root ended up read-only */
++};
++
++static int empty_mntns_child(void)
++{
++	struct statfs st;
++
++	if (enter_userns())
++		return CHILD_USERNS;
++	if (unshare(UNSHARE_EMPTY_MNTNS))
++		return CHILD_UNSHARE;
++
++	if (sys_fspick(AT_FDCWD, "/", 0) >= 0 || errno != EINVAL)
++		return CHILD_FSPICK;
++	if (!mount(NULL, "/", NULL, MS_REMOUNT | MS_RDONLY, NULL) ||
++	    errno != EINVAL)
++		return CHILD_REMOUNT;
++	if (!umount2("/", 0))
++		return CHILD_UMOUNT;
++	if (statfs("/", &st))
++		return CHILD_STATFS;
++	if (st.f_flags & ST_RDONLY)
++		return CHILD_RDONLY;
++	return CHILD_OK;
++}
++
++FIXTURE(internal_sb_reconfigure) {};
++
++FIXTURE_SETUP(internal_sb_reconfigure)
++{
++	pid_t pid;
++	int status;
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++	if (pid == 0) {
++		if (enter_userns())
++			_exit(1);
++		if (unshare(UNSHARE_EMPTY_MNTNS))
++			_exit(1);
++		_exit(0);
++	}
++	ASSERT_EQ(waitpid(pid, &status, 0), pid);
++	if (!WIFEXITED(status) || WEXITSTATUS(status))
++		SKIP(return, "UNSHARE_EMPTY_MNTNS not supported");
++}
++
++FIXTURE_TEARDOWN(internal_sb_reconfigure) {}
++
++TEST_F(internal_sb_reconfigure, nullfs_root)
++{
++	pid_t pid;
++	int status;
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++	if (pid == 0)
++		_exit(empty_mntns_child());
++	ASSERT_EQ(waitpid(pid, &status, 0), pid);
++	ASSERT_TRUE(WIFEXITED(status));
++	ASSERT_EQ(WEXITSTATUS(status), CHILD_OK);
++}
++
++TEST_HARNESS_MAIN
 
 -- 
 2.53.0
