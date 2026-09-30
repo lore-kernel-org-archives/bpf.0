@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3113CEB8A
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D5036F905
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790797658; cv=none; b=fqE7z00v1dwmYVL314gD8DJGc1dGpZvigzSnXQgKff20Nr+eUxT92BueuEMBC4NNOXba5iRI5MgVINsoBRzcTHr8k/TqH2as4ajNxerBRVckihJthrWhavwipP7eNKlk9l/0wwPCBAp1la8I3Ja8FCB6m3pfmMXGq/ojm6h36C8=
+	t=1790797710; cv=none; b=iHAJZJJzQHIuaCw2uOO2IwuXtM6w9+r1uXzVs0iVZ7VFA0SfoxtHXk85HOcSAURNlTwY/bD9KnUvqIuHQdzweE2lpKbOW8BqFUWEmRt1mYzVbJAo2xxOqVLY6+jRBYe4zwMX/aqlzCUqh8MmGZMFBIcWYCqta61tAGbnQ28TZV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790797658; c=relaxed/simple;
-	bh=39e/bpw9hI3TccX2Ab5WIUZKOhFd+zQle6Yub1Zr+Tk=;
+	s=arc-20240116; t=1790797710; c=relaxed/simple;
+	bh=MMluh5Pm7qfU6KM5DFTv+Bg6YkjopC+fS0qoN6ERu0s=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IE14a0pV8W2o0Vav5ZQyZ6BVbkLXEiRndbfQIIo8hf+lVBlZbXlme2mv0N4bYUmmdMOS2ubJF0PPjN8xxCyT443tdXwuYHAkHOlxeZQazpxlrVtz61DEi8pXbe/GNIksMMaN1zp5lKUUwOvFIMDqdqGT6/CHMHfBnRoPfcyG8o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWyrUjrC; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=f+dCWuL99oKSFwnUbS9pEmztiMZdfid7/d9eq+3unY+AZwu7vPuhHXz1VPq17Ogj3+Ud+bQvVnnHEk0ag10w/63myhhtFwLFZHQjyJphi24FWhvIFD7EciWrfxjPyuuUJw94n9P9oP+73N4t7PWZQhjT/dqJ+0ftr3Gs1xbSS6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQiYKgwZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWyrUjrC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3830F1F000FF;
-	Wed, 30 Sep 2026 19:47:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQiYKgwZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05A601F000FF;
+	Wed, 30 Sep 2026 19:48:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790797656;
-	bh=qg3l+o/PhtzPaKzx+0rrM3Ot4NU8Koum/AAa5233kkY=;
+	s=k20260515; t=1790797707;
+	bh=V5uD3fYCHmqAq/OlBKptMq5kjSyzUKqbRVT8oqo/eAA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YWyrUjrCvQ8m0HOCq1nFobj5BNqdIt/91c91pO9B192lIJBFsXWGP0zzIWzVCQx3K
-	 9dEvyJsUdBhtCV7EjMualRV3xNnI18sLcz/eyfrDwN5o8QpoxZnfoRDxBzsvZ8GFgq
-	 VTbVgnceQfakVAf67ViUI7NX6etPOwuztlkztOJowpiJVvXe7pbyplRaZBy0c3rbOf
-	 nk6zmaVgPFh1XTL73vdv5AEU/vikup1V7Ho+0C5In6UNgDeidxFJPmPKKtm7M1KpBZ
-	 YuWCBqErr1Xaz5Z2IA3br8ke34T8uDm1ueUFggOpfdHU7WRBmWZZTc82a7yHZ8bBdh
-	 ZIYrnry6mWOKQ==
+	b=BQiYKgwZPRRgFaNWrXl4SGA3tZsumZVtc6J/Tse07it4Ldw/eAWJOflC29gfwZFZR
+	 P4Q1EcuXtiIcP5CfZBseKmuzPZf2+ftYWL7x5Zl1oT9NvDZSKax+9zJ2Beo2o6uhk3
+	 OIKrxZe6Q3kV1NnUE2LBcDqMhgMDuOjNFU82SD7Pv/lxrjo1kWb1ffLj53bixmSruR
+	 LM71QLqeNAvgEtFMiSbUCZpY/D78nj1iCF4YP8hvPve0YV/KEB23vBqpl3MsV/sVmg
+	 519RPNF0T/Z94PWIcAOoUu4M3BJTY8Um039Ho2hh+kectmfaMcf8Q+SxlUjyZM1cOY
+	 bzVisGYpKcFbg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 09/14] bpf: Allow a variable in DATASEC that is
- smaller than its type
+Subject: Re: [PATCH bpf-next 04/14] selftests/bpf: Add tests for arena
+ access through numbers
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260930193127.2181684-10-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260930193127.2181684-5-alexei.starovoitov@gmail.com>
 References: <20260930193127.2181684-1-alexei.starovoitov@gmail.com>
- <20260930193127.2181684-10-alexei.starovoitov@gmail.com>
+ <20260930193127.2181684-5-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 30 Sep 2026 19:47:35 +0000
-Message-Id: <20260930194736.3830F1F000FF@smtp.kernel.org>
+Date: Wed, 30 Sep 2026 19:48:26 +0000
+Message-Id: <20260930194827.05A601F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,88 +47,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpftool/perf: out-of-bounds heap read when dumping DATASEC varia=
-bles
+- [Medium] bpf: verifier rejects valid atomic RMW due to register aliasing =
+in check_atomic_rmw
 --
 
-commit 1b453d08464afcede36a667c89c48e99ef1d651d
+commit 3887e0dd2a26cbc2d80c4f160a7eb98315fcc18d
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Allow a variable in DATASEC that is smaller than its type
-   =20
-LLVM splits a static of a Rust program into pieces. Every piece is a VAR
-with the type of the whole static:
-   =20
-  [223] STRUCT 'BpfCell<core::option::Option<...>>' size=3D32 vlen=3D1
-  [236] VAR '..scx_cosmos9TASK_CTXS.0' type_id=3D223, linkage=3Dstatic
-  [248] DATASEC '.bss' size=3D0 vlen=3D9
-          type_id=3D236 offset=3D24648 size=3D1 (VAR '..TASK_CTXS.0')
-   =20
-and the kernel rejects such BTF with "Invalid size". Allow it.
+selftests/bpf: Add tests for arena access through numbers
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index c9d4b709380c9..0630675377aaa 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+This commit adds various tests for loading and storing through addresses
+returned by bpf_arena_alloc_pages() without cast_kern. It includes tests
+covering different sizes, atomic operations, and boundary conditions for
+arena and non-arena pointers.
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c b/=
+tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
+> new file mode 100644
+> index 0000000000000..bebc37f501b7e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
+
 [ ... ]
-> @@ -5412,16 +5412,16 @@ static int btf_datasec_resolve(struct btf_verifie=
-r_env *env,
->  			return env_stack_push(env, var_type, var_type_id);
->  		}
-> =20
-> +		/*
-> +		 * The variable can be smaller than its type. It's a piece of
-> +		 * a variable that the compiler split then, with the type of
-> +		 * the whole variable.
-> +		 */
->  		type_id =3D var_type->type;
-> -		if (!btf_type_id_size(btf, &type_id, &type_size)) {
-> +		if (!btf_type_id_size(btf, &type_id, NULL)) {
->  			btf_verifier_log_vsi(env, v->t, vsi, "Invalid type");
->  			return -EINVAL;
->  		}
-> -
-> -		if (vsi->size < type_size) {
-> -			btf_verifier_log_vsi(env, v->t, vsi, "Invalid size");
-> -			return -EINVAL;
-> -		}
+
+> +SEC("syscall")
+> +__arena_scalar
+> +__description("arena_scalar: xchg into the register that holds a pointer=
+ to stack")
+> +__failure __msg("misaligned access off (0x0; 0xffffffffffffffff)+0 size =
+8")
+> +__naked void xchg_into_stack_ptr(void)
+> +{
+> +	asm volatile ("					\
+> +	r1 =3D %[arena] ll;				\
+> +	r1 =3D 0;						\
+> +	*(u64 *)(r10 - 8) =3D r1;				\
+> +	r1 =3D r10;					\
+> +	r1 +=3D -8;					\
+> +	.8byte %[xchg_insn]; /* r1 =3D xchg_64(r1 + 0, r1) */ \
+> +	r0 =3D 0;						\
+> +	exit;						\
+> +"	:
+> +	: __imm_addr(arena),
+> +	  __imm_insn(xchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_=
+REG_1, 0))
+> +	: __clobber_all);
+> +}
 
 [Severity: Medium]
-Does removing this validation expose userspace tools to out-of-bounds heap
-reads?
+Does this test codify an incorrect verifier rejection?
 
-By allowing vsi->size < type_size, a DATASEC variable piece's offset plus i=
-ts
-full type size can now exceed the DATASEC's total size.
+It appears the BPF verifier incorrectly rejects valid atomic read-modify-wr=
+ite
+operations (like xchg r1, [r1]) on non-arena pointers (like PTR_TO_STACK)
+due to in-place register corruption.
 
-When bpftool dumps a DATASEC:
+Looking at kernel/bpf/verifier.c:check_atomic_rmw() at line 7312:
 
-tools/bpf/bpftool/btf_dumper.c:btf_dumper_datasec() {
-    ...
-    ret =3D btf_dumper_do_type(d, vsi[i].type, 0, data + vsi[i].offset);
-    ...
-}
+    /* load_reg may be dst_reg. Look at dst_reg before it's marked as unkno=
+wn. */
+    dst_reg =3D mem_access_reg(env, insn->dst_reg, &arena);
 
-It unconditionally reads bytes based on the variable's full type size. Since
-the piece is smaller than its type, this reads past the end of the allocated
-map value buffer.
+    load_reg =3D bpf_atomic_load_reg(insn);
+    if (load_reg >=3D 0) {
+        /* check and record load of old value */
+        err =3D check_reg_arg(env, load_reg, DST_OP);
 
-Similarly, perf passes the full type size as the bounding data_sz to libbpf:
+Since kernel/bpf/verifier.c:mem_access_reg() at line 7162 returns a live
+reference to the register state for non-arena pointers:
 
-tools/perf/util/bpf-event.c:format_btf_variable() {
-    ...
-    btf_size =3D btf__resolve_size(btf, t->type);
-    btf_dump__dump_type_data(d, t->type, btf_data, btf_size, &opts);
-    ...
-}
+    if (!is_arena_scalar(env, regno))
+        return cur_regs(env) + regno;
 
-This incorrectly bypasses libbpf's internal bounds checks, causing libbpf
-to read out-of-bounds from map->rodata.
+Could this cause an aliasing bug when the live register is later mutated by
+check_reg_arg(), leading to this test's misaligned access failure message?
 
->  	}
-> =20
->  	env_stack_pop_resolved(env, 0, 0);
+This is where the verifier attempts to snapshot the destination register st=
+ate
+but fails to isolate it from the source register mutation.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930193127.2181=
-684-1-alexei.starovoitov@gmail.com?part=3D9
+684-1-alexei.starovoitov@gmail.com?part=3D4
