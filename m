@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-77.mta1.migadu.com [95.215.58.77])
+Received: from mta1.migadu.com (out-19.mta1.migadu.com [95.215.58.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446C0331ED5
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4964532B108
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790732059; cv=none; b=WrC92QqBcbn90Nb1YdpHr2rKw3eKmpTwbrwZo0bMju+7c+l4UWTYg5J38IcqygwyEoluO/B2bVIj9FwUZEVUcI0pmdouIWcN/6cTOML2j1r0F6R1AqMgCGcxgFSO9e6eA1Cg6j8gdN8gUBW9OR5GjCiBnP99uB3CqekvUmC55ps=
+	t=1790732576; cv=none; b=bbr4pr5FafrZyIzNqGPySQkBT1UmJHZnCqACcHfKCrKTf3DZ/KLDfyL06mbnnayPrY3H27rRV9uoQJpTPlfsvP39ZjEo6Ejx5oFVPKuribI+R1mo6S2EuDOLWz06qo6Ebile076woYnIWhLwrPrNz49jA6nsGjzsWaZXWvb6GIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790732059; c=relaxed/simple;
-	bh=5QL2XutwcNraGW2+IuSz3WkhNGt2+jFEZrdcSrDs1jA=;
+	s=arc-20240116; t=1790732576; c=relaxed/simple;
+	bh=twkuGM2txU1PIRmt4tSHKY29rliboSJcKKiRTV4Ghq0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jxXULKUcTBge8C0ozRZlI/7nc4YH5Yo3sqezurJ7xcWr9aJTBTYocufyMEgAfLm4JK36J9Hs/XMHL3GfS5GAiH05HjeC2VyGjtEjxP3N7RBX0k2RCrftX/Oaeoe/nZYcDcbxpTAqfIliRAaMW7uxI7DkCRyz49I1h7jCWBYIFqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A0+lpvJb; arc=none smtp.client-ip=95.215.58.77
+	 In-Reply-To:Content-Type; b=kJ4ONAK9r32pIKoefskyqqPYw7XVX75zIWtp8uODDVDsyCrdWlDkhMgXEkgRJct9sdKF5YGpCsJW7C6rE2V8S/WQKpJyQ7UDWHuzpRnhg76nmS8OyYU59xKJCYyRA7f+vakhVbnGDWVk+S25FpMnsR2oEORgeMUgM1cnMlMJzZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GyQnEc5i; arc=none smtp.client-ip=95.215.58.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A0+lpvJb"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GyQnEc5i"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5QL2XutwcNraGW2+IuSz3WkhNGt2+jFEZrdcSrDs1jA=;
+DKIM-Signature: a=rsa-sha256; bh=twkuGM2txU1PIRmt4tSHKY29rliboSJcKKiRTV4Ghq0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790732055; v=1; x=1791336855;
- b=A0+lpvJb5Je5xTQ1AGdKr6z2PYmR9XscmobGjue3yGE2Uf4S/Lc4zztp6Wuer0JeUsFNc3m8
- 4Dy47xr1JtVttLR+BPUXy3sp3i9Ek89u0YVJbzPV9e//tzdKrBt1vzScn7PUce0+PgbWqX3BB3E
- LGioZthuNFmUJItQ6tPsHEis=
+ t=1790732572; v=1; x=1791337372;
+ b=GyQnEc5igHlNdjII2Pg6m01k/N9BeVk4m5t8DgcCa4je4ccM+ovI2EKJ7Tw3e0P4gMNy0JS6
+ TflRkhvNyrjQ06fIhBAFrNwoSB/6/ttR5j8lNgS+Qes2K5pEVuUSomMFdrn4E/WKRysG+DKQAN1
+ bgrfB5dYQcjyA9kwPKg9a51A=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7bafeff122540951;
-	Wed, 30 Sep 2026 01:34:15 +0000
-X-Mizu-Trace-ID: 7bafeff122540951
+Received: by smtp.migadu.com with ESMTPS id 49faa4691a67d2cc;
+	Wed, 30 Sep 2026 01:42:52 +0000
+X-Mizu-Trace-ID: 49faa4691a67d2cc
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <e771ec2c-1821-40db-abe3-b25b5f876013@linux.dev>
-Date: Tue, 29 Sep 2026 18:34:08 -0700
+Message-ID: <e0a5e59a-23f9-4a5d-bb83-07e2f6948594@linux.dev>
+Date: Tue, 29 Sep 2026 18:42:45 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,92 +38,200 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 12/22] bpf, x86: Dispatch exception cleanup
- pads at run time
+Subject: Re: [PATCH bpf-next v7 19/22] selftests/bpf: Add end-to-end and
+ negative .bpf_cleanup exception tests
 Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260929001601.3242665-1-yonghong.song@linux.dev>
- <20260929001704.3251543-1-yonghong.song@linux.dev>
- <20260929003055.812791F000FF@smtp.kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260929001741.3255990-1-yonghong.song@linux.dev>
+ <6a088778cba5c689e9024c435e0e092047176fff11c56ce6cb04d732b6073c34@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260929003055.812791F000FF@smtp.kernel.org>
+In-Reply-To: <6a088778cba5c689e9024c435e0e092047176fff11c56ce6cb04d732b6073c34@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 9/28/26 5:30 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf: exception unwinding aborted when bpf_unwind is traced via kretprobe
-> --
->
-> commit f3ba2238caee72a50c097a775a0290b3b66ab98b
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf, x86: Dispatch exception cleanup pads at run time
->
-> This commit updates the BPF JIT on x86 to dispatch exception cleanup pads at
-> run time by writing directly to the return-address slot. It introduces
-> arch_bpf_stack_walk_ra() to support unwinding alongside the ORC unwinder.
->
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 6c7a0578760e7..d4feade5b5c72 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
+On 9/28/26 5:52 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
+>> new file mode 100644
+>> index 000000000000..76cca8dc45a9
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
+>> @@ -0,0 +1,878 @@
 > [ ... ]
 >
->> @@ -4614,6 +4628,34 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp
->>   #endif
->>   }
->>   
->> +void arch_bpf_stack_walk_ra(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp, u64 *ra),
->> +			    void *cookie)
+>> +static __used __noinline void __kfunc_btf_anchor(void)
 >> +{
->> +#if defined(CONFIG_UNWINDER_ORC)
->> +	struct unwind_state state;
->> +	unsigned long addr, *ra;
->> +
->> +	for (unwind_start(&state, current, NULL, NULL); !unwind_done(&state);
->> +	     unwind_next_frame(&state)) {
->> +		addr = unwind_get_return_address(&state);
->> +		ra = unwind_get_return_address_ptr(&state);
->> +		if (!addr || !ra)
->> +			break;
->> +		/*
->> +		 * A traced return: the unwinder recovered @addr from under a
->> +		 * function graph or kretprobe trampoline, which is what the
->> +		 * slot itself still holds. Writing there would skip the
->> +		 * trampoline and leave its entry for the next hooked return
->> +		 * to pop.
->> +		 */
->> +		if (READ_ONCE_NOCHECK(*ra) != addr)
->> +			break;
-> [Severity: High]
-> Will this unconditionally abort the unwinder if a kernel function like
-> bpf_unwind() is traced via a kretprobe or function graph tracer?
->
-> When a BPF program triggers an exception, bpf_unwind() invokes
-> arch_bpf_stack_walk_ra(). The unwinder processes kernel frames first. If
-> a user has legitimately attached a tracer to bpf_unwind(), the stack return
-> address slot (*ra) for that frame will hold the tracer's trampoline, while
-> the unwinder recovers the real return address (addr).
->
-> Because this evaluates to true and breaks the loop, it seems the walk stops
-> completely before it even reaches the BPF frames. Could this result in a
-> silent failure of BPF exception handling and resource leaks (e.g., unreleased
-> spinlocks or memory) since the cleanup pads are never executed?
-
-Will add a WARN_ON_ONCE to expose the failure if it happens.
-
->
->> +		if (!consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 *)ra))
->> +			break;
->> +	}
->> +#endif
+>> +	bpf_throw(0);
+>> +	bpf_unwind();
+>> +	bpf_preempt_disable();
+>> +	bpf_preempt_enable();
+>> +	bpf_rcu_read_lock();
+>> +	bpf_rcu_read_unlock();
+>> +	bpf_unwind_resume(NULL);
 >> +}
 >> +
->>   void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
->>   			       struct bpf_prog *new, struct bpf_prog *old)
->>   {
+>> +/* An unwind raised in a callee, which is how a cleanup region gets one. */
+>> +static __used __naked __noinline __u64 inner_unwind(void)
+>> +{
+>> +	asm volatile (
+>> +	"r1 = 1;"
+>> +	"call bpf_unwind;"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +	::: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +static __used __naked __noinline __u64 unwind_in_pad_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"call bpf_preempt_disable;"
+>> +"1:"	"call inner_unwind;"		/* cleanup region */
+>> +"2:"
+>> +	"call bpf_preempt_enable;"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* landing pad that unwinds again */
+>> +	"call bpf_preempt_enable;"
+>> +	"r1 = 2;"
+>> +	"call bpf_unwind;"
+>> +	"call bpf_unwind_resume;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	::: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +static __used __naked __noinline __u64 cb_and_table_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"call bpf_preempt_disable;"
+>> +	"r1 = 9;"
+>> +"1:"	"call bpf_unwind;"		/* cleanup region */
+>> +"2:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* landing pad */
+>> +	"call bpf_preempt_enable;"
+>> +	"call bpf_unwind_resume;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	::: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +static __used __naked __noinline __u64 pad_calls_thrower_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"call bpf_preempt_disable;"
+>> +	"r1 = 11;"
+>> +"1:"	"call bpf_unwind;"		/* cleanup region */
+>> +"2:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* landing pad */
+>> +	"call pad_callee_that_throws;"	/* ...which can throw: refused */
+>> +	"call bpf_preempt_enable;"
+>> +	"call bpf_unwind_resume;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	::: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +static __used __naked __noinline __u64 catch_pad_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"call bpf_preempt_disable;"
+>> +	"r1 = 12;"
+>> +"1:"	"call bpf_unwind;"		/* cleanup region */
+>> +"2:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* catch pad: no resume, it stops here */
+>> +	"call bpf_preempt_enable;"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	::: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +static __used __naked __noinline __u64 stray_resume_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"call bpf_preempt_disable;"
+>> +	"r1 = 13;"
+>> +"1:"	"call bpf_unwind;"		/* cleanup region */
+>> +"2:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* landing pad */
+>> +	"call bpf_preempt_enable;"
+>> +	"call bpf_unwind_resume;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	::: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +static __used __naked __noinline __u64 pad_calls_resumer_frame(void)
+>> +{
+>> +	asm volatile (
+>> +	"call bpf_preempt_disable;"
+>> +	"r1 = 14;"
+>> +"1:"	"call bpf_unwind;"		/* cleanup region */
+>> +"2:"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +"3:"					/* landing pad */
+>> +	"call bpf_preempt_enable;"
+>> +	"call resume_in_callee;"	/* ...which resumes: refused */
+>> +	"call bpf_unwind_resume;"
+>> +	"exit;"
+>> +	CLEANUP_REC("1b", "2b", "3b")
+>> +	::: __clobber_all);
+>> +}
+> [ ... ]
+>
+>> +static __used __naked __noinline void gotox_unwinder(void)
+>> +{
+>> +	asm volatile (
+>> +	"r1 = 15;"
+>> +	"call bpf_unwind;"
+>> +	"exit;"
+>> +	::: __clobber_all);
+>> +}
+> This isn't a bug, but bpf_unwind() is declared as __bpf_kfunc void
+> bpf_unwind(void) in kernel/bpf/helpers.c and takes no arguments.
+>
+> Several of these inline asm frames load r1 with a numbered value right
+> before calling bpf_unwind: r1=1 in inner_unwind, r1=2 in
+> unwind_in_pad_frame, r1=9 in cb_and_table_frame, r1=11 in
+> pad_calls_thrower_frame, r1=12 in catch_pad_frame, r1=13 in
+> stray_resume_frame, r1=14 in pad_calls_resumer_frame, and r1=15 in
+> gotox_unwinder.
+>
+> Other bpf_unwind call sites in the same file like pad_drops_caller_lock_frame,
+> no_pad_keeps_own_lock_frame, and pad_drops_caller_ref_frame call bpf_unwind
+> without setting r1 first. The verifier checks no arguments for a zero-argument
+> kfunc, and neither bpf_exc_keep_exits nor the runtime walk uses r1.
+>
+> Are the "r1 = N;" loads before these calls left over from an earlier
+> cookie-style signature? Could they be dropped so the asm matches the kfunc
+> prototype?
+
+Will fix. thanks!
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36502848904
 
