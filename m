@@ -1,148 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-77.mta1.migadu.com [95.215.58.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A110578F3A;
-	Wed, 30 Sep 2026 01:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446C0331ED5
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790732010; cv=none; b=kg+LpSw5Q1HMq5O5f370cQFwwi0VOUXcArWJNWpLVi6Nt9mEBBx7vlnkmiqh9hVzEB9grMVh2WR+1zDKPtEI8acBEDgCFapFHKlQPLWxO2ntb+0U2/quZb4rmcxenN/Pco6oRkkFMqFilBZnfrPbiTW4kUOzQFZhjB+B8czOXM4=
+	t=1790732059; cv=none; b=WrC92QqBcbn90Nb1YdpHr2rKw3eKmpTwbrwZo0bMju+7c+l4UWTYg5J38IcqygwyEoluO/B2bVIj9FwUZEVUcI0pmdouIWcN/6cTOML2j1r0F6R1AqMgCGcxgFSO9e6eA1Cg6j8gdN8gUBW9OR5GjCiBnP99uB3CqekvUmC55ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790732010; c=relaxed/simple;
-	bh=YSVmkmi1ikpMMqEeXfU+2dZ+SR2KUO762Kq7vjBBdwc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=FUdi8YAbbr8SKMQ2p4YV2J6yhn7U3N2IrCFBYM/yBNGjjsWeL5xn5bI5JeNTOtnS0tlUyxicNIddWyAxGcM0mTZoEkZrzX0nIxEgyC/uoJz2l2fJf6czeJSkQDLmE5SX0T6q9thfAyFocbaY2YB7Zd7wFdv8I56EL2fMZv78GFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVOqrf4O; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790732059; c=relaxed/simple;
+	bh=5QL2XutwcNraGW2+IuSz3WkhNGt2+jFEZrdcSrDs1jA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jxXULKUcTBge8C0ozRZlI/7nc4YH5Yo3sqezurJ7xcWr9aJTBTYocufyMEgAfLm4JK36J9Hs/XMHL3GfS5GAiH05HjeC2VyGjtEjxP3N7RBX0k2RCrftX/Oaeoe/nZYcDcbxpTAqfIliRAaMW7uxI7DkCRyz49I1h7jCWBYIFqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A0+lpvJb; arc=none smtp.client-ip=95.215.58.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVOqrf4O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171E71F000FF;
-	Wed, 30 Sep 2026 01:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790732009;
-	bh=1KjwthvQCbBo4aisL7sqZxIkYiI+s62XYB1p6NJwq20=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=nVOqrf4OKdZfXyOB+vwp0Tv2jghDegwxSZcUM0flltH5rfizzW+kc9HcAOVHQL1z+
-	 nzBTwigLgzljpUEMCRxzHKfM06IlgK4vgtBfU88mBRcaXWfDp9xev4xrWUGWnq6qBc
-	 fJW4shOz3iCoD2KjL0C4Mf7sYVfwtnzOlFNSxvocA+f8KgO0uatMvhqoJM3+Sfc39V
-	 Ju3YMdeYEAwLjATZ1E8shmu1xDDsYgPk2wwhFp/ilTAOcJbSCFS0zXxC9+d5hRxItI
-	 iiMMVFgDDz2tYcjilpT4pMOCKvAc3XDF5dQi0RHokBvoe59LLuLNGO1bg5psTA6zCJ
-	 p3VJ/4PniEFsg==
-Date: Wed, 30 Sep 2026 10:33:26 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: sashiko-bot@kernel.org, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v2] kprobes: Make optprobe optimizer
- multi-generational and asynchronous
-Message-Id: <20260930103326.161812f00774be79848248ab@kernel.org>
-In-Reply-To: <20260930001024.4F2371F00893@smtp.kernel.org>
-References: <179072636063.409480.10967951178575355535.stgit@devnote2>
-	<20260930001024.4F2371F00893@smtp.kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A0+lpvJb"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=5QL2XutwcNraGW2+IuSz3WkhNGt2+jFEZrdcSrDs1jA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790732055; v=1; x=1791336855;
+ b=A0+lpvJb5Je5xTQ1AGdKr6z2PYmR9XscmobGjue3yGE2Uf4S/Lc4zztp6Wuer0JeUsFNc3m8
+ 4Dy47xr1JtVttLR+BPUXy3sp3i9Ek89u0YVJbzPV9e//tzdKrBt1vzScn7PUce0+PgbWqX3BB3E
+ LGioZthuNFmUJItQ6tPsHEis=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 7bafeff122540951;
+	Wed, 30 Sep 2026 01:34:15 +0000
+X-Mizu-Trace-ID: 7bafeff122540951
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e771ec2c-1821-40db-abe3-b25b5f876013@linux.dev>
+Date: Tue, 29 Sep 2026 18:34:08 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 12/22] bpf, x86: Dispatch exception cleanup
+ pads at run time
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260929001601.3242665-1-yonghong.song@linux.dev>
+ <20260929001704.3251543-1-yonghong.song@linux.dev>
+ <20260929003055.812791F000FF@smtp.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260929003055.812791F000FF@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Wed, 30 Sep 2026 00:10:23 +0000
-sashiko-bot@kernel.org wrote:
 
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] kprobes: 100% CPU busy-loop livelock when flushing optimizer
-> - [High] kprobes: memory leak of optinsn slots during async unoptimization
+
+On 9/28/26 5:30 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] bpf: exception unwinding aborted when bpf_unwind is traced via kretprobe
 > --
-> 
-> commit 9f64df8dc4c148639fefa4dcd4859438e335848a
-> Author: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> kprobes: Make optprobe optimizer multi-generational and asynchronous
-> 
-> This patch decouples kprobe jump optimization from synchronous waiting by
-> moving to an asynchronous, multi-generational model using call_rcu_tasks().
-> 
-> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> > index 4edd8ca5c6578..377fa9bfa0291 100644
-> > --- a/kernel/kprobes.c
-> > +++ b/kernel/kprobes.c
+>
+> commit f3ba2238caee72a50c097a775a0290b3b66ab98b
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf, x86: Dispatch exception cleanup pads at run time
+>
+> This commit updates the BPF JIT on x86 to dispatch exception cleanup pads at
+> run time by writing directly to the return-address slot. It introduces
+> arch_bpf_stack_walk_ra() to support unwinding alongside the ORC unwinder.
+>
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 6c7a0578760e7..d4feade5b5c72 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
 > [ ... ]
-> > @@ -588,17 +653,25 @@ static void do_unoptimize_kprobes(void)
-> [ ... ]
-> > -/* Reclaim all kprobes on the 'freeing_list' */
-> > -static void do_free_cleaned_kprobes(void)
-> > +/* Reclaim all kprobes on the 'free_list' */
-> > +static void do_free_cleaned_kprobes(struct list_head *free_list)
-> >  {
-> >  	struct optimized_kprobe *op, *tmp;
-> >  
-> > -	list_for_each_entry_safe(op, tmp, &freeing_list, list) {
-> > +	list_for_each_entry_safe(op, tmp, free_list, list) {
-> > +		struct kprobe *_p;
-> > +
-> >  		list_del_init(&op->list);
-> [ ... ]
-> > -		struct kprobe *_p = get_optimized_kprobe(op->kp.addr);
-> > +		_p = get_optimized_kprobe(op->kp.addr);
-> >  		if (unlikely(_p))
-> >  			optimize_kprobe(_p);
-> >  
-> > -		free_aggr_kprobe(&op->kp);
-> > +		free_aggr_kprobe(&op->kp);
-> >  	}
-> >  }
-> 
+>
+>> @@ -4614,6 +4628,34 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp
+>>   #endif
+>>   }
+>>   
+>> +void arch_bpf_stack_walk_ra(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp, u64 *ra),
+>> +			    void *cookie)
+>> +{
+>> +#if defined(CONFIG_UNWINDER_ORC)
+>> +	struct unwind_state state;
+>> +	unsigned long addr, *ra;
+>> +
+>> +	for (unwind_start(&state, current, NULL, NULL); !unwind_done(&state);
+>> +	     unwind_next_frame(&state)) {
+>> +		addr = unwind_get_return_address(&state);
+>> +		ra = unwind_get_return_address_ptr(&state);
+>> +		if (!addr || !ra)
+>> +			break;
+>> +		/*
+>> +		 * A traced return: the unwinder recovered @addr from under a
+>> +		 * function graph or kretprobe trampoline, which is what the
+>> +		 * slot itself still holds. Writing there would skip the
+>> +		 * trampoline and leave its entry for the next hooked return
+>> +		 * to pop.
+>> +		 */
+>> +		if (READ_ONCE_NOCHECK(*ra) != addr)
+>> +			break;
 > [Severity: High]
-> Does this leak the dynamically allocated optinsn memory slots?
-> 
-> Later in the patch, kill_optimized_kprobe() is modified to intentionally
-> defer calling arch_remove_optimized_kprobe(op) if the probe is queued,
-> leaving the optimizer to reclaim it after the quiescence period.
-> 
-> However, when do_free_cleaned_kprobes() runs to reclaim the probe after the
-> grace period, free_aggr_kprobe() only frees the kprobe struct. Without a
-> call to arch_remove_optimized_kprobe(op) here, the executable memory slots
-> allocated for the optimized kprobes appear to be permanently leaked.
+> Will this unconditionally abort the unwinder if a kernel function like
+> bpf_unwind() is traced via a kretprobe or function graph tracer?
+>
+> When a BPF program triggers an exception, bpf_unwind() invokes
+> arch_bpf_stack_walk_ra(). The unwinder processes kernel frames first. If
+> a user has legitimately attached a tracer to bpf_unwind(), the stack return
+> address slot (*ra) for that frame will hold the tracer's trampoline, while
+> the unwinder recovers the real return address (addr).
+>
+> Because this evaluates to true and breaks the loop, it seems the walk stops
+> completely before it even reaches the BPF frames. Could this result in a
+> silent failure of BPF exception handling and resource leaks (e.g., unreleased
+> spinlocks or memory) since the cleanup pads are never executed?
 
-This is false positive. There are 2 implementations of free_aggr_kprobe(),
-with CONFIG_OPTPROBES=y, it frees optinsn correctly.
+Will add a WARN_ON_ONCE to expose the failure if it happens.
 
-(Hmm, this is interesting failure pattern. Maybe I should not make
- configure-selectable implementation except for empty alternatives.)
+>
+>> +		if (!consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 *)ra))
+>> +			break;
+>> +	}
+>> +#endif
+>> +}
+>> +
+>>   void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+>>   			       struct bpf_prog *new, struct bpf_prog *old)
+>>   {
 
-> 
-> [ ... ]
-> > @@ -624,67 +696,138 @@ static void do_free_cleaned_kprobes(void)
-> [ ... ]
-> > +/* Kprobe jump optimizer */
-> > +static void kprobe_optimizer(void)
-> > +{
-> [ ... ]
-> > +	/* Step 3: Wake up flushers and kick optimizer again if needed */
-> >  	optimizer_passes++;
-> >  	wake_up_var_locked(&optimizer_passes, &kprobe_mutex);
-> 
-> [Severity: High]
-> Does unconditionally incrementing optimizer_passes here cause a 100% CPU
-> busy-loop livelock?
-> 
-> When wait_for_kprobe_optimizer_locked() is called while a Tasks RCU grace
-> period is in flight, it sees optprobe_optimizer_busy() is true and wakes the
-> optimizer thread.
-> 
-> The optimizer thread wakes up, clears its flushing state, and calls
-> kprobe_optimizer(). Since the RCU callback hasn't fired yet, it makes no
-> progress but unconditionally increments optimizer_passes here.
-> 
-> This wakes wait_for_kprobe_optimizer_locked(), which loops, wakes the
-> optimizer again, and waits for another optimizer_passes change. Both threads
-> could spin in this tight loop until the Tasks RCU grace period completes.
-
-Ah, good catch!
-OK, to avoid that, wakeup flushers only if any progress has been made.
-
-Thank you!
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
