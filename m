@@ -1,143 +1,242 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011039.outbound.protection.outlook.com [52.101.65.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF04516148;
-	Wed, 30 Sep 2026 17:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790789181; cv=none; b=ODMtqCb7XMiNk4AsfC/SW2AiBUqe+F2vA2cMC9CmHnPNcjt3CBaJ/ps9xUjMc3nNE2JLgfOnhBTGDVzK1WrjIBHFRPW++eGOCKYyJCGhnLWuQAwHQLUc2KqijiMlUSjmsrlOgT5IxdH/QP+cf1PpMD0wTgN9elpoZI98ziSAk3s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790789181; c=relaxed/simple;
-	bh=X+yKqhr9AUfYhBvk+Ta3nF7sM+59yJudX1hbD8yel1I=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=cpHhxlELAbAQ2SWeNPpMRbpUYuhLiclL2rylr4shHNmct72Q9IquMvD5+PMRp1pufq4px6wsjsrfVqIuYoWPiUQRN5rOXWXRt8sDqPIxq6e2rpy6Maj12UCR1VnA21tdvD9u/0RHqasQ6MOMAAwYL0mue0YzA0eYpGdNaLbu8Uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FPSpf1Ev; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C3951FCC8;
+	Wed, 30 Sep 2026 17:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.39
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790790076; cv=fail; b=byFItsMhAEfHEu0K6KByRh4L6y/YwewryC6ltk8kRqqsERkBcjz3Nz30H9ZJSFAh0sr6z/IjGe1C2tG4aSEKRBB+ypsaon5nTvsgu3DSxREmKfUGuPIsC4pSE+Njy35O+whWIy+UKJLiLxOvj9nLa+9pFNLJTZoSNuxeP0Oa5bA=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790790076; c=relaxed/simple;
+	bh=0fRGPtoQ+NQVLfyjBT6ARAJLDTGEzmajzQsOs5jGVSY=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=In4wVSecJNKGSbOC3GF23f8a8dcuPcD6YCW9AynOD2+1VbDWW7cYPt27kMaqzYnbP/eLaEpb0fUPBhZXCLEl1BHjOdlAE4Zq2ok19PAPB7qXt+YhNvN4gaBW8tBpd8cEPOre2uFUQzhIm+8PwJ7qTsP9cqnpYTqNFmyoKmauosE=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=oDOAon48; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=oDOAon48; arc=fail smtp.client-ip=52.101.65.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FPSpf1Ev"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF2C21F00898;
-	Wed, 30 Sep 2026 17:26:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790789179;
-	bh=RT+FEqj8btCnhn1wWNlSl5S9TYVlgLOWvfvX50rJm0s=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=FPSpf1EvKhPP8wLm/wGhpEwDyRK+JxwUa9SOGvBeAQTDt8bicIg/Cp520HCPqhr6m
-	 LDubXiz2IsS+yGrBD0PytUVvSC5m2LQ4ox9bJGwxtqXEBEUTZFJHLNNUKC+QdzHVkw
-	 mEfoLp9al9jwEO4qb+DKq1dsnjx3RiwjK374q9u5cAInBXXk45YVkd0x9QcJ5uvx76
-	 Y7ZeLl6TPDp6v7vXpH/8mnYLDoNrfzcbl73K83pcSqXszOGTvIydFYxkkympiFlcSV
-	 3KLYE9Tp/X4EPXIF53IC/jP1ihwnPopk1Paor+Gs3418kfBXGUuIIunX+rJ2+5PEsZ
-	 /eiCxIYoVMOTg==
-Content-Type: multipart/mixed; boundary="===============1708859807357407925=="
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="oDOAon48";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="oDOAon48"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=rnmT8kao+W+92vbrU+1X5YqYwSCJzV9dgvDMeKGltPUdCc1kSpS2h9VyOlJAmEFDk4zZOYgww7dk/oAvjjC+lr2TuM3Q3ZGbytMliClaT1mhu2m49Pzl2SvKZCLGfuINNZaFj0Gso9da3LKabAV8ht7DBcl5qoMQfk+Lu5yetWiq64hTfH1k1UUQVOa+zjfgovW8unB7me7tLvbHYVz8/phB5xoaocpaqYJDc+E1JI99XNl9aT2tlmyJTMz3GSTpNjTz+dm068OX1V1zSFb1HLq6kQOucFGAipSET9MehkMYZycMrIFWY4HusmPr5B9OYBiw6UJEdVmLkUdXXGM/2Q==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6Dj3mza0d7acfswRMgXyXAp0FLYQUvs4v9I7WURo1EM=;
+ b=wZiqYr0SPoLlLzTjnKBNL1ao93XBR+kDf0TbPItLGPBZpPta+vJE6OCxsbb2TSfHgBXc4Z1K+5qs+tVD+xHySY7EwRqQO9e/tNVi0pfozQaXaVZqPhOJ08adNn/j3OXrHsP3MRz0K4QN4mNdIM20RsEO9t+MUbX5dIHNeMJqugSVTonGmQkmZIcgTGLvkDRjBzCEfOxWe6HGI323vtIE2v6yTqIpwD9nl65cPNimpPzHs0KEZmIJF2CTxruHBqWHdZkZq64+J8TSQfG1owQzKxs3CfM/f7lK5E2z2WquCAseXpjGyQj1BkpxrlCTs7lk874q5CD4rTsu/As6oGfawA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Dj3mza0d7acfswRMgXyXAp0FLYQUvs4v9I7WURo1EM=;
+ b=oDOAon48OeBS6pTAWmIZUiQfOFqJqq0xC/o9Tw0s5gOjXQnDoL+hPmSOeIkUgQpL+YkpspeF+nomKaA5eICb+l8wbbqFVNLMc+h2jYeZCLL8eWRyN5teXiYFyGCxF3PiWxHeWL27e/t/Lx4Wc8Ar2gbhQeb+jWPPxZ9fx1sWosc=
+Received: from VI1P189CA0011.EURP189.PROD.OUTLOOK.COM (2603:10a6:802:2a::24)
+ by DU5PR08MB10677.eurprd08.prod.outlook.com (2603:10a6:10:529::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.14; Wed, 30 Sep
+ 2026 17:41:08 +0000
+Received: from MI3PEPF00008485.eurprd02.prod.outlook.com
+ (2603:10a6:802:2a:cafe::7d) by VI1P189CA0011.outlook.office365.com
+ (2603:10a6:802:2a::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.472.14 via Frontend Transport; Wed,
+ 30 Sep 2026 17:41:08 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 4.158.2.129) smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ MI3PEPF00008485.mail.protection.outlook.com (10.167.240.132) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.472.14
+ via Frontend Transport; Wed, 30 Sep 2026 17:41:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MUZQb3FAg7yfr2Gmy65jr58i8W7Vn13ARnWdNaUoxX4nsvwmwZAYBAvK52SM7RPBMA2jLKTeQjot5JDkgVcSPC0SS8AwTnJk98aLdlWmxhB5rSXOtR9ObN/iQuVdnX9h+nqy3v5PNsCyJlHIxrBuL8X0wN46uF7tSgaiHR6juqe3StVFe6EsN4NDOC1bxNmKJXhedpIAypEaraZX1M3DGRFk242WiBT7OFtCCP7JdLl0ExLB8cgNGhE/KrUI/Tt0BztagRXiX1POKo2JsuG+t/qydQMUn72csR4mKdNUwNAWwKN7iFmH3KJGd9CWc3hTXN0c/p7FDr7kHl8F0WvnqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6Dj3mza0d7acfswRMgXyXAp0FLYQUvs4v9I7WURo1EM=;
+ b=VLFluQFA4wUPvgWQqHMQT8kDLgBsVRnxlZBM2UP9tj/aZn2yC8vHyHQ6aCyngsOl2jw1YVXg2vvUYrtRFUOjt2qSKRMJRLXwcLedBPPi/rSTLR6a58omQe6iS0Wy2Qy7j+InZjL+X7H7Nsw8dFepQKnkClXmiELQhiy59cz3a6X+33l1HbEA3fUL/r6kGULXPlrpsGNC4yAIchLd9ZWe9jIqgL+PG4kxLz0UfXY+FTQZGUyBohS33RTOyu6lSBqOGBis73hp3IXIcD6+/uVStswqXKLNKazfxIMVc6Wv1dgJGlfQ/NNyoOrvBOlL+Qg2X0od6iYBNk9IrjA4zDEiHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Dj3mza0d7acfswRMgXyXAp0FLYQUvs4v9I7WURo1EM=;
+ b=oDOAon48OeBS6pTAWmIZUiQfOFqJqq0xC/o9Tw0s5gOjXQnDoL+hPmSOeIkUgQpL+YkpspeF+nomKaA5eICb+l8wbbqFVNLMc+h2jYeZCLL8eWRyN5teXiYFyGCxF3PiWxHeWL27e/t/Lx4Wc8Ar2gbhQeb+jWPPxZ9fx1sWosc=
+Authentication-Results-Original: mx.microsoft.com 1; dkim=none (message not
+ signed) header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
+ by AS8PR08MB9840.eurprd08.prod.outlook.com (2603:10a6:20b:613::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.7; Wed, 30 Sep
+ 2026 17:40:33 +0000
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0472.012; Wed, 30 Sep 2026
+ 17:40:33 +0000
+Message-ID: <63db3469-82d0-4997-9bcf-31bb3aa59deb@arm.com>
+Date: Wed, 30 Sep 2026 18:40:28 +0100
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com, Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Xu Xin <xu.xin16@zte.com.cn>,
+ Chengming Zhou <chengming.zhou@linux.dev>, Jann Horn <jannh@google.com>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ Pedro Falcato <pfalcato@suse.de>, Arnd Bergmann <arnd@arndb.de>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, Rik van Riel <riel@surriel.com>,
+ Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
+ Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>,
+ Baoquan He <baoquan.he@linux.dev>, Barry Song <baohua@kernel.org>,
+ Youngjun Park <youngjun.park@lge.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ James Clark <james.clark@linaro.org>, SJ Park <sj@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Usama Arif <usama.arif@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
+ Ying Huang <ying.huang@linux.alibaba.com>,
+ Alistair Popple <apopple@nvidia.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Juergen Gross <jgross@suse.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, damon@lists.linux.dev,
+ kasan-dev@googlegroups.com, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v3 3/9] mm: use hw_pte_t for generic PTE table storage
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+References: <20260922-pte0-v3-0-5670b8cb9059@arm.com>
+ <20260922-pte0-v3-3-5670b8cb9059@arm.com>
+ <xzlxdkrjilskjcagnl33eed7ijxrgfhoalmmmq5ks3wgjmkkhi@zchtxpr2amff>
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+Content-Language: en-US
+In-Reply-To: <xzlxdkrjilskjcagnl33eed7ijxrgfhoalmmmq5ks3wgjmkkhi@zchtxpr2amff>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0267.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:37c::7) To VI1PR08MB3421.eurprd08.prod.outlook.com
+ (2603:10a6:803:80::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c904434ece0c4e6c712af199370e991c926e2c1f5a571d78ae7c06c94b9f6e2e@mail.kernel.org>
-In-Reply-To: <20260930164020.41006-2-shlomojune6@gmail.com>
-References: <20260930164020.41006-2-shlomojune6@gmail.com>
-Subject: Re: [PATCH bpf v3 2/2] bpf: reject incompatible protocol changes
-From: bot+bpf-ci@kernel.org
-To: shlomojune6@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,shlomojune6@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 30 Sep 2026 17:26:18 +0000 (UTC)
+X-MS-TrafficTypeDiagnostic:
+	VI1PR08MB3421:EE_|AS8PR08MB9840:EE_|MI3PEPF00008485:EE_|DU5PR08MB10677:EE_
+X-MS-Office365-Filtering-Correlation-Id: f654edf1-1795-4e27-6e0f-08df1f1a0268
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|366016|7416014|376014|23010399003|1800799024|6133799003|22082099003|18002099003|10067099003|56012099006|11063799006|3023799007|4143699003;
+X-Microsoft-Antispam-Message-Info-Original:
+ oGI7muJrlZpwF/CpDHEzSDJCtzoqS/F3W423126M4B7XVwwmWQMfuelL6Drv404qx12ulnjM4McoRoH2NEquKYER7GCiXUBW2yAtyKLG5ZfBjfUL99P38usNcVC0HjNO/EWQlAlszKFgqK3QjtoK4jRiTZR7h6q3UCvMmEmJj+Zc9flQRzesGOjw4Bjzlc3JwakYyyuP81YRfDZjr7WXaL/YBEk7WP5Zx6XX8bST7EL+YkcQsAL+jYauBpPQJMJTxHW0+4D6r28jU7hFISb4k5fLhdxsCJMhvjoqyCScUWK2XexS1WeyCKHxbXAiR9Y4lzTTl3bM0wOUObWbYPGoseq1+bd9V+gDvz44n9Z4sZWuclTXfJ797kFqNJ/dPY0hlLRBBtPFczXpxW4Jrwo6fhrvbUxlTKhMYweDNyxCG4hMOWqh3Pr0y8Cb31TKDgfZ4nTLwfT0q+OdTJKI+g3t2OHVEynSCqM+0eNK6RhXhg9pN4QLKVzZrNL/3bJPKMPULVkmlZhCDxhH3d2glFtWSxtnJJjOqVwGHoiEvWxeYzo9pWCj1RGSYhinwWMWpXcHfT1Ts1H82zA8m24Olqxekvt6pCSivv9BdoOTXhQuY5Z51sxkdkvXU/UY5OHdGsaD/0ljbuXWDhq2J61EwuOBFAIVLiLOUXMAB0as2Shst3Q=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(23010399003)(1800799024)(6133799003)(22082099003)(18002099003)(10067099003)(56012099006)(11063799006)(3023799007)(4143699003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ ZRh/vaUJ8vPLDwbrpqZLGWjxaIwOvyvt14r+gVvGKmgPPwK2TDTTLFe3d41eOrldXN2Fh6Rlgp30is4w/0Ee+/Iz707w8ulVg8jMkeJmQ9QgGwFHZ5aPzws0sX9jQQk+GVEI8LwKndr1/707rxzO8hbJd1HDaxV8NCyM+pYvcnxP1HNJHpEykUsZ0nxE9BGYRfQ1OVtCbOkU9xW6FoIiOOaiHUJhQJUJf98vL796fhWLRMJ5tWyDNUEy39UrG+G97sssgwv7emKfpTstqUBx5b83Q5zktpXhxsiXlgmkTb7hcUBoY38o6Myeb2CjQybUiRxo5I3mlgrYuef+nXXc+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9840
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ MI3PEPF00008485.eurprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	5a3f536c-6b22-4217-dabc-08df1f19ed82
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|7416014|376014|1800799024|23010399003|14060799003|35042699022|36860700016|6133799003|22082099003|18002099003|3023799007|56012099006|10067099003|4143699003|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	lKEksvLE37fjc2mwiNSXeiH0ULDoLEwpGCyPCthjhujizaV0pVRBxx78QRZ1fDXyKhJ3hY09i2N+AXkOtyC7aoof15gnXkUqwBXrDxDS/qn45IYL5Y5dFNmhnQD6GBKvj3n/bNRgneKt66YF7BZ48BfttEHtgm8PzSta57upzE04JYeWzPqXitdBqKaGDQ3qRkvq2/oHFq3SfONA7s8G05F9SDsA596dv6X1UK9iEH/Tlrh0YIO7+nvJu47da4GjBXFzkHwdqG05wYNyPTMJZHIAyMxCyXUtPiAIgP7A/TU4YG/zaavEXXd2XLX8H6il4ABjnPNJNSIjsqiWv0h1XTGMmT2TPU+3piIhyBgwnRhS7JwtT/8R/wYew/0OqSmOEogGVWlgGO+Km2Apgo3EGt0PQaonNACOL/0OaLaRGYyH3Kovf29vAW6Ylyod1VI3x8pjOQWM+4aIAAbmTm9Zu4w6O4kEKvAXbwF3Cg01zCGDtXy9+vU27Da2W2rEHkbG7NO3z/DwJZO0q8h5FwY0ZNgKvdt0PhDAWpNU4+uSalGZCzhNYbII/7qRhGdLWgM516z4jfQhafhNJKNGPrFEr2t15IWwpQMC8AxM6HQavlpzjxhtfiGB/jQze0YLTwRu+V0X1cf85Yr6Os9y6not/T4iH/8oKIQRfSspcLC0IturY2rxEY+4W++8FzKLPUMkRYaHzDHnYr+3VY+t7SIu6Q==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(1800799024)(23010399003)(14060799003)(35042699022)(36860700016)(6133799003)(22082099003)(18002099003)(3023799007)(56012099006)(10067099003)(4143699003)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	shaQxYrWuv0/HunaC8qXu8DHPkm5VaxjmfyI4Nk4p8VJB+fstynyA1uZ+UA19aEaaljuD9vLf0nUSaDJgSjOMRNOhtcd52Yd6OVG7kIP4ZUyFGyDc0O8fh+m53bbPz2aAJwLuWrJmseTOcYd34e1kD8nlzHqPfb1xqiXCQKcEEpTPrwBQ5StMGs1YaZ4xFCcBsNs8Tlvqk3ch+pVUCQqWh81hROJF70SSeybACbI7TnGdR2QD0Qn4mUvPOaVYgYTiREvbv47Wp7mbkz6aw2ReTn94zGFNrxRpyvf327epAN5j82rEPKp25y901lLPiel0MHNUzqu8VBIHdkm2KE/CccuYNt5avoouA+7tiNSMWwY9GI5G9AK5zJJXne97UcTBqV8XoiIlB02gF4JGujHgDpEczv0mxrBIv+e8VXBlC7CXhMwxZmNXUQHMGRMCSKg
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2026 17:41:07.8344
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f654edf1-1795-4e27-6e0f-08df1f1a0268
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MI3PEPF00008485.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU5PR08MB10677
 
---===============1708859807357407925==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 30/09/2026 5:35 am, Anshuman Khandual wrote:
+> On Tue, Sep 22, 2026 at 06:12:31PM +0100, Muhammad Usama Anjum wrote:
+>> Generic page-table interfaces use pte_t * for both pointers to PTE table
+>> storage and pointers to software PTE values. Convert the generic
+>> declarations and their MM, fs, and kernel users together so parameters,
+>> return types, callbacks, and local pointers that designate table storage
+>> use hw_pte_t *.
+>>
+>> Include linux/pgtable_types.h from headers that expose the converted
+>> interfaces. It continues to provide pgprot_t to vmalloc.h through
+>> asm/page.h.
+>>
+>> Keep software PTE values as pte_t and retain pte_t * for value interfaces.
+>>
+>> No architecture selects ARCH_HAS_HW_PTE_T at this point, so hw_pte_t
+>> remains an alias of pte_t and this changes the interface vocabulary without
+>> changing representation or behavior.
+>>
+>> Most of this mechanical conversion was generated with the Coccinelle script
+>> included in the cover letter. The script deliberately ignores pte_t *
+> 
+> Just wondering - should this Coccinelle script that converted all these
+> instances be saved inside ./scripts/coccinelle/ for future referene.
 
-> bpf: reject incompatible protocol changes
+Thanks for the suggestion. This script was written for this one-time conversion
+and requires manual review to distinguish HW PTE table pointers from SW PTE
+pointers. After the conversion, it would not be useful.
+(Maybe other arch can use it to do their conversion. But they can always
+copy script from the series)
 
-TL;DR: The family revalidation looks incomplete: LWT ingress encap
-(bpf_lwt_push_ip_encap, seg6) can still change L3 protocol and leave a
-mismatched assigned socket. Extend the check, or narrow the commit message's
-claim?
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 173349bd2a3f..22e2ecb0cf2f 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-
-[ ... ]
-
-> @@ -3549,6 +3549,12 @@ static bool bpf_sk_assign_family_ok(const struct sk_buff *skb,
->  	return bpf_sk_assign_family_ok_proto(sk, skb_protocol(skb, true));
->  }
->
-> +static bool bpf_skb_proto_change_sk_ok(struct sk_buff *skb, __be16 proto)
-> +{
-> +	return !skb_sk_is_prefetched(skb) ||
-> +	       bpf_sk_assign_family_ok_proto(skb->sk, proto);
-> +}
-> +
->  BPF_CALL_3(bpf_skb_change_proto, struct sk_buff *, skb, __be16, proto,
->  	   u64, flags)
->  {
-
-The commit message says "Without revalidation, this bypasses the
-assignment-time family check. Reject incompatible protocol changes before
-modifying the skb, including L3 encapsulation and decapsulation."
-
-Is this revalidation complete?  It is only wired into bpf_skb_change_proto(),
-bpf_skb_net_grow() and bpf_skb_net_shrink(), but another path can still change
-the L3 protocol of an skb that keeps its bpf_sk_assign()ed socket.
-
-Here is one concrete sequence:
-
-1. A tc ingress program calls bpf_sk_assign() on an IPv4 packet with an
-   AF_INET TCP socket.  bpf_sk_assign_family_ok() passes and the program
-   returns TC_ACT_OK.
-
-2. ip_rcv_core() keeps the prefetched socket:
-
-    /* Must drop socket now because of tproxy. */
-    if (!skb_sk_is_prefetched(skb))
-        skb_orphan(skb);
-
-3. ip_rcv_finish_core() skips early demux because skb->sk is set, then calls
-   ip_route_input_noref().  A route with "encap bpf in" sets
-   dst->input = lwtunnel_input.
-
-4. bpf_input() runs the LWT_IN program, which calls
-   bpf_lwt_in_push_encap(BPF_LWT_ENCAP_IP) with an IPv6 header.  That reaches
-   bpf_lwt_push_ip_encap(..., ingress=true):
-
-    } else {
-        skb->protocol = htons(ETH_P_IPV6);
-    }
-
-   The skb->sk / sock_pfree assignment is left untouched.
-   BPF_LWT_ENCAP_SEG6 behaves the same way.
-
-5. The program returns BPF_LWT_REROUTE.  bpf_lwt_input_reroute() calls
-   ip6_route_input() and dst_input(), so the packet goes through ip6_input
-   and on to tcp_v6_rcv().
-
-6. inet6_steal_sock() -> skb_steal_sock() returns the prefetched AF_INET
-   socket for the IPv6 packet.  This is the family mismatch that
-   bpf_skb_proto_change_sk_ok() is meant to prevent.
-
-In-kernel IP tunnel decapsulation in the same netns keeps the prefetched
-socket across a family change in the same way.  For example, with sit:
-
-    ipip6_rcv()
-        iptunnel_pull_header()    /* sets skb->protocol = ETH_P_IPV6 */
-        skb_scrub_packet(skb, false)    /* does not orphan */
-        netif_rx()
-
-Should bpf_lwt_push_ip_encap() and bpf_push_seg6_encap() on ingress also call
-bpf_skb_proto_change_sk_ok() (or orphan a prefetched socket)?  Or should the
-commit message narrow its claim to the two tc helpers?
-
-This is not introduced by this patch, and every step above needs
-CAP_NET_ADMIN (tc and LWT programs).  But it limits the protection the patch
-claims to provide.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36746681022
---===============1708859807357407925==--
+-- 
+Thanks,
+Usama
