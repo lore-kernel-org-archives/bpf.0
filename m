@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F8A4F798F;
-	Wed, 30 Sep 2026 13:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B3B4FD263;
+	Wed, 30 Sep 2026 13:33:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790775180; cv=none; b=kOtPj9ZAED4O9fT5IP/HmK0tqciPe4Ri9Np8GG4kjxgotWL6uKLtDrjUpY+fAlrEJVVAac6WvT/FGKl3zrgsqKCCPLY1KthbP4XZnDwk0QxO8UY+jiClmbRYpBkyo2ui+5upSghE75MgFmbbf3w9R0WLd/za5fVTPyOq3TTpuFA=
+	t=1790775197; cv=none; b=kbRSoqIjCzX94qqj77nTH8/v4Dp0WDlKxvz+2WSFZhPkGkjcIovCMrjJ1V57Pp0SG3AQmk/U/SFQ0BLYllaJOPSkuCCj3VBLeG8fqhWmPZihQFFw2CTZE96Vr5SKpHDgUVar5Ty0dlws090ZSZrxTPo3zsZL/fo8C75c//xCuac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790775180; c=relaxed/simple;
-	bh=xjaJpu71wtxZPaffO2t2mAezyGOcyI3WnNFVHcEk+cc=;
+	s=arc-20240116; t=1790775197; c=relaxed/simple;
+	bh=+nHyJr37x1sHrzsEBJjBcsZpjxWnEya3d4VWbLO9h+A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qscx+tJBDvH/uSbdOBmGneW9eZd2jXO1cfLOQaa5fugUOigv9KZ4X83mvPsmwmI84cj0NTw/OLLJJN1u3t4WH25KVPL9gIxzuBcPCnahWWfb4+8CFqwf2pgiokpTzLWtIbPktDoiRIx6JAJXx+fpMbBUNXOyGmQ9VyZb2MYT42g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SltihyvJ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=A9+2qQkSRQZfp32oor65nL6oZ3UhmBKgsIpGGAee7w8gyR+Nq9lfQQTSlZgmYhy/3uQFTcAjFj8AwI1zy5r/gRxMv2iHj9sJdLBQHdRm2O+694INnS6c2etcD/9gfuACWkgAjnXeevbOzlR1B5rWXBp0uhTbV4/Sb+F3b868IRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AVq63Jpj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SltihyvJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117CF1F000FF;
-	Wed, 30 Sep 2026 13:32:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AVq63Jpj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB1E1F00898;
+	Wed, 30 Sep 2026 13:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790775154;
-	bh=Pv8aJ6WqYmcV1tWSgDtF3teD9TFSCiQrJlufI+kzIh4=;
+	s=k20260515; t=1790775176;
+	bh=jZyI/bRT1onhPYauu7psPBF4Q8V/T/GQ8M15ucbjntw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=SltihyvJqAkJna52Dga7eW795xyn+r0T0mwU/oqKzMqW1Uocij4aNQ8nPYjnRgvsA
-	 exjCEzoqJnSNSkg12GDMT4x19sTsg1ludHGo5XSKK1SBij6KXncl+PsW2IGyL2Z3OL
-	 heykTIjxPADwF4bume6mPe/SsglIME49Jjx4A8x2gcuQa3K7YbFTS8RWtGAWgp+rm9
-	 JORWvNTGTHjHF1/R06J/WjxyjOu7mbAu5k7S07D2R+oWDMlrTctorS49fLTBT9lt6G
-	 MrV/igt/3fXPd9l0nycin44ayt69IegjFkDrBylXTB9zee2NKzwTcaY8ehFGipipfN
-	 EmbtrpwF6dIsA==
+	b=AVq63JpjmRQ73gRFd8iP1tByaybqt3zX4IY4NiTyGlndIcYjMyTHSKYX24TWjGdnO
+	 shjzE/DvX0paYs6Hz+/rSy+J58m5Kn8gMeGiwAdIA8fGAnw44m6YRkpr2Av/PcnplG
+	 Bkzcsym4WZ4JbsKLACLNkYeDy54OMITExktuHE4c0fZS55tdeTkNBGxgzEF5KcGuvB
+	 hsY/b5q3f5n9xCzKqaPXfDWb1JdLOyvKr84GNYWZ0AeR3QNHi/P3ikieTc6CrBHvcG
+	 Lh9RlLVpiOxu1Zw6XLWAGPk2O7soFkdqf5MFtyT7Da1MHkTWhvkhJ6Hx85pdVsQ3cJ
+	 2TdI48PaMPsQQ==
 From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 30 Sep 2026 15:32:03 +0200
-Subject: [PATCH 11/17] namespace: don't reconfigure internal superblocks
- via remount and umount
+Date: Wed, 30 Sep 2026 15:32:09 +0200
+Subject: [PATCH 17/17] namespace: don't let a pseudo dentry become the root
+ of a mount
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260930-work-mount-fixes-3-v1-11-be34c83956ae@kernel.org>
+Message-Id: <20260930-work-mount-fixes-3-v1-17-be34c83956ae@kernel.org>
 References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
 In-Reply-To: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -49,68 +49,63 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
  bpf@vger.kernel.org, "Christian Brauner (Amutable)" <brauner@kernel.org>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.17-dev-db0b7
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2162; i=brauner@kernel.org;
- h=from:subject:message-id; bh=xjaJpu71wtxZPaffO2t2mAezyGOcyI3WnNFVHcEk+cc=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTt5ffXaf7JFva8yOuG8XJ/vrXxsze87fL8vjtAXXd1x
- YlmY8bdHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABPZ1svwz0BxnY7W8QbVKCZN
- xrN+eyPPveR26HKQnmTBkROSxHN1LSPDLnazrd4f2cx+7eY5ta1m1vvOnKOKoUWin/zZpzBLec3
- lAAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2103; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=+nHyJr37x1sHrzsEBJjBcsZpjxWnEya3d4VWbLO9h+A=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTt5ffPtfn/epp3wK5LxUePd7b8crneuvIa2+nasEur/
+ K+Jf9yxp6OUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAiBz8xMtzrn2v+onLRwz9/
+ tib+6le4sJ2vsWnXpY3brwrM3T/Z4FERI8NT5Y4TKrn79ySU9NVuU7k1UefSxMAJMWvCfuy+8rP
+ rVC0zAA==
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Commit 02587a4af82a ("fs: refuse fspick() on internal superblocks")
-blocked fspick() on SB_NOUSER superblocks. But that's not the only way
-to reconfigure_super(). mount(MS_REMOUNT) and umount() of the caller's
-root without MNT_DETACH. The root of an empty mount namespace is a
-nullfs mount and all mount namespaces share that superblock:
+d_alloc_pseudo() hands out dentries for pipes, sockets and other files
+that are never anyone's child or parent. They carry DCACHE_NORCU and
+dentry_free() frees them right away because no lockless path walk can
+ever reach them. That holds as long as such a dentry isn't the root of
+a mount. But bind mounting /proc/self/fd/<fd> of such a file does
+exactly that.
 
-  nullfs: fspick: FAIL errno=22 (Invalid argument)
-  nullfs: mount(MS_REMOUNT|MS_RDONLY): ok(0)
-  nullfs after remount: statfs(/): magic=0x4e554c4c flags=0x21 RDONLY
-  nullfs: umount2("/", 0): ok(0)
+Most callers of alloc_file_pseudo() put their files on kernel-internal
+mounts and may_copy_tree() refuses those. bpf_token_create() doesn't. It
+places the token file on the bpffs mount the caller handed it and that
+mount is in the caller's mount namespace so the clone goes through:
 
-Refuse both like fspick() does. Only root in the initial user namespace
-can do this and nullfs is empty and immutable so the flags don't buy
-anything. But they show up in statfs() for the root of every mount
-namespace on the host.
+  mount --bind /proc/self/fd/<token> <file>
+  open_tree(tokfd, "", AT_EMPTY_PATH | OPEN_TREE_CLONE) + move_mount()
 
-Fixes: 9d4e752a24f7 ("namespace: allow creating empty mount namespaces")
-Cc: stable@vger.kernel.org # v7.1+
+__follow_mount_rcu() then loads ->mnt_root of that mount, reads d_seq
+and d_flags of the dentry and only then checks mount_lock. The dentry
+can be gone by then. The final mntput() of an unmounted parent unhooks
+a child that stayed attached to it under mount_lock alone. When the
+child's holder does the final put right after that the root is dput()
+and freed immediately while a walker that found the mount hashed still
+looks at it.
+
+Refuse to clone a mount with a DCACHE_NORCU dentry as its root. Nothing
+sensible can be done with a bind mount of a bpf token anyway.
+
+Fixes: 35f96de04127 ("bpf: Introduce BPF token object")
+Cc: stable@vger.kernel.org # v6.9+
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/fs_context.c | 4 ++++
- fs/fsopen.c     | 3 ---
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ fs/namespace.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/fs_context.c b/fs/fs_context.c
-index 23ad66cd94e1..a50584df97be 100644
---- a/fs/fs_context.c
-+++ b/fs/fs_context.c
-@@ -315,6 +315,10 @@ struct fs_context *fs_context_for_reconfigure(struct dentry *dentry,
- 					unsigned int sb_flags,
- 					unsigned int sb_flags_mask)
- {
-+	/* kernel-internal superblocks are nobody's to reconfigure */
-+	if (dentry->d_sb->s_flags & SB_NOUSER)
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 3c90d853e091..fcf42f192aae 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -3026,6 +3026,10 @@ static struct mount *__do_loopback(const struct path *old_path,
+ 	if (!may_copy_tree(old_path))
+ 		return ERR_PTR(-EINVAL);
+ 
++	/* a pseudo dentry is freed without an RCU delay, no walk may find it */
++	if (old_path->dentry->d_flags & DCACHE_NORCU)
 +		return ERR_PTR(-EINVAL);
 +
- 	return alloc_fs_context(dentry->d_sb->s_type, dentry, sb_flags,
- 				sb_flags_mask, FS_CONTEXT_FOR_RECONFIGURE);
- }
-diff --git a/fs/fsopen.c b/fs/fsopen.c
-index 9d5a7a22b529..ae19e5136598 100644
---- a/fs/fsopen.c
-+++ b/fs/fsopen.c
-@@ -190,9 +190,6 @@ SYSCALL_DEFINE3(fspick, int, dfd, const char __user *, path, unsigned int, flags
- 	ret = -EINVAL;
- 	if (target.mnt->mnt_root != target.dentry)
- 		goto err_path;
--	/* kernel-internal superblocks are nobody's to reconfigure */
--	if (target.dentry->d_sb->s_flags & SB_NOUSER)
--		goto err_path;
+ 	if (recurse && !old->mnt_ns)
+ 		return ERR_PTR(-EINVAL);
  
- 	fc = fs_context_for_reconfigure(target.dentry, 0, 0);
- 	if (IS_ERR(fc)) {
 
 -- 
 2.53.0
