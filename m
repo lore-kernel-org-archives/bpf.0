@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E433909A2;
-	Wed, 30 Sep 2026 04:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1A13AD539;
+	Wed, 30 Sep 2026 04:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790743923; cv=none; b=kVTuu1Ox4Zg3rAoo6SCLxfw1x9wY2DvZ8TfjZQWK1Ryw5WFPq6SlmrSfY6t5AE3P/ww3P/3UJ+l0Hy9tt0+MYq36vsuA2zQ51DYMr5WUsd4xFh/bYBtnZ/WtWW4VwRM/8SKpSPVGcs4L1G7DYZ28ZcEDm3vHMiYP/7SwFi/ZnMk=
+	t=1790743924; cv=none; b=YbQaK8eV+mVyGy3ONeVE3fW8w2R0Rw8JutH9rmTA2rL6RXUayV8TR678axBLiKFSDpxxCoa+hQYw5u/YkVeh7liu0IukvqTjoxnwy/PDxgtEKSqQbW731xUchovIwfzbLYlxNHVjGNWrRwocfpfqzo7cx57verFPnV02JB3TVEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790743923; c=relaxed/simple;
-	bh=bSzK4vyx7DcIlXR9DnpD48c2SchuyupmnnSgCckfqV0=;
+	s=arc-20240116; t=1790743924; c=relaxed/simple;
+	bh=df1pSSG34gO+mAKZQn2WV73rJLwUuwpRQt6pKH2NkDQ=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OzWhA70t3OV7BootqwUu+D5+ocyTYJuiDO8MgkSRhdphx/sawxn+kyaUBVv5EA7MRkLRVo3QuUIanTiqKPBoe9p5in7JfC8KoNQusBx1go98GuG45xTmDtYhrJFym94XbqZTqOz8x8O8bkKR0D7u+sEKdpbabIbj8G7c91kpGOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwyHTm+l; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=NurRTYkTpgS/srmIfTOopaausKRvX1fPeH0USqxWCLAFJlLUClt0C+PvTgh/1V9qR2pKEv0oL/MGudMlgnAC+Oe6x+QFL27eRS6zMK8WPvGd0DBYZizG6PYTwfmEvBoClUq9B2WupRxJQyoTSgsBcMJly7ZagxhkOFquHFqhlss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQZGrlci; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwyHTm+l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58ECE1F00898;
-	Wed, 30 Sep 2026 04:51:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQZGrlci"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08F31F00899;
+	Wed, 30 Sep 2026 04:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790743917;
-	bh=tUfkIuIu01TE09unIbwfyc+jw+tUIQD5Z08Cnsfr7Cg=;
+	s=k20260515; t=1790743921;
+	bh=vrN+A0X0KTyilFwWOzxsQiFyGJzVtrqK0X8cSfJxtTE=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=bwyHTm+l2GDzc0P92NdG1ctDhgVg1QhX5jCoXfUrPsSqvrYSHY21jGSLr5PnJ+7yK
-	 JpW31PCHmgxEqsl3aNupQ37yi9Xacp7XWlP2rMoz1wc/CQYaWingQe3RSlnRna9zlL
-	 hK0LeAmZZ/xGLW1egqoAkxyzZ/3ch/8f1aeeRz4HXiWf/hOQSE0H3zQaqsxmbT1mBW
-	 oc0udvv0IT/2/lFn7zaZz+p2aE74og6Qa9pv4FHVl0pVYJwlSPZ+HESggrGAI9kNfM
-	 LThaaXPVUfBBAt8IrKuc8Cr026IMYQZVSwrhOz2jOGBAH7XkxhnHwnuzqnpkOR2Xku
-	 3rCLfBNTlLqXA==
-Subject: Re: [PATCH net v4 11/15] net: stmmac: restore TC offloads before
- restarting DMA
+	b=NQZGrlci67oXn07kJR/S8vO9EjhhN+/fdlYufDGobWIM/uUMGA4mxr33rrc06UpUp
+	 KWXoYJN8JZfeURBP7IOs9T9wZp07EFSrLcRE5IFRYQNVsnxrDw21ECCp8gau4wOC0u
+	 ssDszhS7WixSfMgpwxqCA/CA54//34JteoA0YE4Xb+P2cuM7PeK1zP7u8WCkeQM95m
+	 bIPjRkSBLedvjjmUakZWmoNSeFSP+51Qkld/wq5zVfurI0GSa/kStCgyA//6+VkSvU
+	 /PVwRO1sdeExBIn7gxwrtA6xHF2Bc3Tewl5H6UO9q3UR2fmon6pQDdKy9sN/qirrfR
+	 zQpkQC8acr+Gg==
+Subject: Re: [PATCH net v4 13/15] net: stmmac: retain DMA memory until
+ hardware shutdown completes
 From: netdev-bot+sashiko@kernel.org
 To: james.hilliard1@gmail.com
 Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
@@ -50,12 +50,12 @@ Cc: linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
  zhaojinming@uniontech.com, lorenzo.bianconi@oss.qualcomm.com,
  dinghui1111@163.com, linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev
-Date: Wed, 30 Sep 2026 04:51:53 +0000
-Message-ID: <179074391390.434549.14176681299170404417@kernel.org>
+Date: Wed, 30 Sep 2026 04:51:57 +0000
+Message-ID: <179074391749.434549.15093720940446108090@kernel.org>
 In-Reply-To:
- <20260926-submit-stmmac-reset-fixes-v1-v4-11-ec1c0250b3c9@gmail.com>
+ <20260926-submit-stmmac-reset-fixes-v1-v4-13-ec1c0250b3c9@gmail.com>
 References:
- <20260926-submit-stmmac-reset-fixes-v1-v4-11-ec1c0250b3c9@gmail.com>
+ <20260926-submit-stmmac-reset-fixes-v1-v4-13-ec1c0250b3c9@gmail.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,10 +66,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential
+Thank you for your contribution! Sashiko AI review found 5 potential
 issue(s) to consider.
 
-Critical: 0 · High: 2 · Medium: 3 (1) · Low: 1 (2)
+Critical: 0 · High: 2 · Medium: 3 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -77,439 +77,312 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] The patch saves VLAN-priority steering in
-  priv->plat->rx_queues_cfg[tc] and relies on stmmac_mtl_configuration()…
-- [High] On XGMAC, the runtime TC-to-queue mapping that this patch
-  restores is corrupted again before DMA starts.
-- [Medium] The patch fixes a real divide-by-zero crash but does not say
-  so and has no Fixes: tag.
-- [Medium] When tc_taprio_configure() fails after programming the new
-  schedule (stmmac_est_configure() or tc_config_preemption() fails), the…
-- [Medium] stmmac_tc_restore_filters() walks
-  priv->flow_entries[0..flow_entries_max) and…
-- [Low] EST replay and DMA start go ahead even when timestamp setup
-  failed.
-
-Pre-existing issues:
-- [Medium] This problem wasn't introduced by this patch, but
-  tc_config_flow() programs port_src and then port_dst into the same…
-- [Low] This problem wasn't introduced by this patch, but a protocol-only
-  flower rule (e.g. IPv4/UDP DROP with no address or port keys) is…
-- [Low] This problem wasn't introduced by this patch, but
-  dwmac4_config_l3_filter()/dwmac4_config_l4_filter() (and the XGMAC…
+- [High] Resume puts retained RX descriptors back into service after the
+  reset without rewriting their buffer addresses.
+- [High] After a failed close, the retained ring set can stay attached to
+  priv->dma_conf with all its allocations but with dma_owned cleared, so…
+- [Medium] TX error recovery can now be lost for good.
+- [Medium] On a failed DMA shutdown, stmmac_detach_xsk_buffers() sets
+  every dma_conf->tx_queue[q].xsk_pool to NULL but never calls…
+- [Medium] Once a config is left dma_owned by a failed drain, removal
+  never retries the stop or reset before stmmac_free_dma_conf()…
 
 --
 
-net: stmmac: restore TC offloads before restarting DMA
+net: stmmac: retain DMA memory until hardware shutdown completes
 
-This patch saves L3/L4 flower rules, VLAN priority steering, EtherType
-steering, the FPE preemption mapping and the EST schedule so they can be
-replayed after a DMA software reset on open and resume. DMA start is
-delayed until those offloads have been restored. TAPRIO replacement now
-builds the new schedule separately and publishes it only after hardware
-programming succeeds.
+Before rings and buffers are released on close, XDP/XSK replacement or a
+failed open, this patch waits for the DMA engines to report idle. If
+they do not, it falls back to a completed global reset. Configurations
+the hardware may still reach are tracked on a list and kept until a
+later successful reset, and XSK DMA references are held independently.
+TX hard error recovery moves to the process-context reset path, and
+resume-time descriptor cleanup moves after the reset.
 
 > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 618e01772ab86..edcb9a025385b 100644
+> index edcb9a025385b..4d70645c4a4f8 100644
 > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
 [ ... ]
 
-> @@ -4348,6 +4350,14 @@ static int __stmmac_open(struct net_device *dev,
->  	stmmac_init_coalesce(priv);
->  
->  	stmmac_vlan_restore(priv);
-> +	mutex_lock(&priv->ptp_mutex);
-> +	ret = stmmac_tc_restore_est(priv);
-> +	mutex_unlock(&priv->ptp_mutex);
-> +	if (ret)
-> +		goto irq_error;
-> +
-> +	/* All reset-sensitive offloads must be installed before DMA runs. */
-> +	stmmac_start_all_dma(priv);
->  
->  	ret = stmmac_request_irq(dev);
->  	if (ret)
-> @@ -8722,10 +8732,14 @@ int stmmac_resume(struct device *dev)
->  		goto error_stop_dma;
->  	}
->  
-> -	stmmac_init_timestamping(priv);
->  	mutex_lock(&priv->ptp_mutex);
-> -	stmmac_block_ptp(priv, false);
-> +	stmmac_init_timestamping(priv);
-> +	ret = stmmac_tc_restore_est(priv);
-> +	if (!ret)
-> +		stmmac_block_ptp(priv, false);
->  	mutex_unlock(&priv->ptp_mutex);
-> +	if (ret)
-> +		goto error_stop_dma;
-
-[Severity: Low]
-The commit message says "Restore EST after the timestamp counter is
-usable". The comment above stmmac_tc_restore_est() also says it is called
-after timestamp setup. Does either caller actually enforce that?
-
-In stmmac_resume(), the return value of stmmac_init_timestamping() is
-ignored before stmmac_tc_restore_est() runs. Also,
-stmmac_init_tstamp_counter() throws away the result of
-stmmac_init_systime(), so a TSINIT timeout is reported as success.
-
-In __stmmac_open(), stmmac_setup_ptp() returns void. It returns early if
-clk_prepare_enable() fails for clk_ptp_ref, but stmmac_tc_restore_est()
-and stmmac_start_all_dma() still run afterwards.
-
-stmmac_get_systime() cannot fail when the callback exists. In these cases,
-won't the replay compute a base time from a counter that was never
-initialized, arm EST, and report success?
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c
-> index 9ded65750e89f..de254919f6ab7 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c
-
-[ ... ]
-
-> @@ -577,23 +559,46 @@ static int tc_add_ports_flow(struct stmmac_priv *priv,
-
-[ ... ]
-
-> +static int tc_config_flow(struct stmmac_priv *priv,
-> +			  const struct stmmac_flow_entry *entry)
+> +static void stmmac_detach_xsk_buffers(struct stmmac_priv *priv,
+> +				      struct stmmac_dma_conf *dma_conf)
 > +{
-> +	bool inv = entry->action & STMMAC_FLOW_ACTION_DROP;
-> +	bool udp = entry->ip_proto == IPPROTO_UDP;
-> +	int ret;
+> +	u32 queue;
 > +
-> +	/* Clear the whole slot, including matches removed by a replacement. */
-> +	ret = stmmac_config_l3_filter(priv, priv->hw, entry->idx, false,
-> +				      false, false, false, 0);
-
-[Severity: Low]
-This isn't a bug introduced by this patch, but dwmac4_config_l3_filter()
-and dwmac4_config_l4_filter() do an unlocked read-modify-write of
-MAC_PACKET_FILTER to set IPFE. The XGMAC equivalents do the same:
-
-    value = readl(ioaddr + GMAC_PACKET_FILTER);
-    value |= GMAC_PACKET_FILTER_IPFE;
-    writel(value, ioaddr + GMAC_PACKET_FILTER);
-
-tc_add_flow() holds only RTNL. The rx-mode set_filter path writes the same
-register under the address lock.
-
-Could a concurrent rx-mode update lose the IPFE bit? This clear-slot call
-adds one more read-modify-write per add or replace, but the race itself
-is unchanged.
-
-> +	if (ret || !entry->in_use)
-> +		return ret;
-
-[ ... ]
-
-> +	if (entry->port_src) {
->  		ret = stmmac_config_l4_filter(priv, priv->hw, entry->idx, true,
-> -					      is_udp, false, inv, hw_match);
-> +					    udp, true, inv, entry->port_src);
->  		if (ret)
->  			return ret;
->  	}
-> -
-> -	entry->is_l4 = true;
-> +	if (entry->port_dst)
-> +		return stmmac_config_l4_filter(priv, priv->hw, entry->idx, true,
-> +					      udp, false, inv, entry->port_dst);
->  	return 0;
->  }
-
-[Severity: Medium]
-This is a pre-existing issue, but on dwmac4, is the source port match
-still there after port_src and then port_dst are programmed into the same
-slot?
-
-Every call to dwmac4_config_l4_filter() clears both enables and rewrites
-the whole GMAC_L4_ADDR register:
-
-    value &= ~(GMAC_L4SPM0 | GMAC_L4SPIM0);
-    value &= ~(GMAC_L4DPM0 | GMAC_L4DPIM0);
-    ...
-    writel(value, ioaddr + GMAC_L4_ADDR(filter_no));
-
-As a result, a flower rule with both src and dst ports seems to match only
-the dst port. That happens at install time and, with this patch, on every
-reset replay too. The old tc_add_ports_flow() used the same call sequence.
-
-[ ... ]
-
-> @@ -637,23 +643,33 @@ static int tc_add_flow(struct stmmac_priv *priv,
->  			return -ENOENT;
->  	}
->  
-> -	ret = tc_parse_flow_actions(priv, &rule->action, entry,
-> +	new.idx = entry->idx;
-> +	ret = tc_parse_flow_actions(priv, &rule->action, &new,
->  				    cls->common.extack);
->  	if (ret)
->  		return ret;
->  
->  	for (i = 0; i < ARRAY_SIZE(tc_flow_parsers); i++) {
-> -		ret = tc_flow_parsers[i].fn(priv, cls, entry);
-> +		ret = tc_flow_parsers[i].fn(priv, cls, &new);
->  		if (!ret)
-> -			entry->in_use = true;
-> +			new.in_use = true;
->  		else if (ret == -EOPNOTSUPP)
->  			return ret;
->  	}
->  
-> -	if (!entry->in_use)
-> +	if (!new.in_use)
->  		return -EINVAL;
->  
-> -	entry->cookie = cls->cookie;
-> +	ret = tc_config_flow(priv, &new);
-
-[Severity: Low]
-This isn't a bug introduced by this patch, but what happens with a
-protocol-only rule, for example an IPv4/UDP drop with no address or port
-keys?
-
-tc_add_basic_flow() records only ip_proto and returns 0, which sets
-new.in_use. The IPv4 and ports parsers return -EINVAL, and that is ignored
-here.
-
-tc_config_flow() then clears the slot, enables no match and returns 0.
-The cookie is published and the rule is reported as offloaded, but it has
-no effect in hardware. The baseline had the same false success.
-
-[ ... ]
-
-> @@ -739,6 +755,8 @@ static int tc_add_vlan_flow(struct stmmac_priv *priv,
->  
->  		prio = BIT(match.key->vlan_priority);
->  		stmmac_rx_queue_prio(priv, priv->hw, prio, tc);
-> +		priv->plat->rx_queues_cfg[tc].prio = prio;
-> +		priv->plat->rx_queues_cfg[tc].use_prio = true;
->  
->  		entry->in_use = true;
->  		entry->cookie = cls->cookie;
-> @@ -760,6 +778,8 @@ static int tc_del_vlan_flow(struct stmmac_priv *priv,
->  
->  	if (stmmac_tc_active(priv))
->  		stmmac_rx_queue_prio(priv, priv->hw, 0, entry->tc);
-> +	priv->plat->rx_queues_cfg[entry->tc].prio = 0;
-> +	priv->plat->rx_queues_cfg[entry->tc].use_prio = true;
->  
->  	entry->in_use = false;
->  	entry->cookie = 0;
-
-[Severity: High]
-Can tc go past the end of rx_queues_cfg[] here?
-
-rx_queues_cfg[] has MTL_MAX_RX_QUEUES (8) entries, and tx_queues_cfg[]
-follows it in struct plat_stmmacenet_data. tc comes from
-tc_classid_to_hwtc(), which only guarantees tc < netdev_get_num_tc().
-
-taprio in txtime-assist mode allows overlapping TXQ ranges and can set up
-to TC_MAX_QUEUE (16) traffic classes. A rule with "vlan_prio N hw_tc 8..15
-skip_sw" would then write into tx_queues_cfg[] (CBS slopes, weights,
-prio). tc_del_vlan_flow() uses entry->tc as the index in the same way.
-
-Before this patch, tc_add_vlan_flow() only called stmmac_rx_queue_prio()
-and did not write to the array.
-
-Separately, does the saved copy match what the hardware holds?
-dwmac4_rx_queue_priority() and dwxgmac2_rx_queue_prio() OR the new bit
-into the target queue's PSRQ field and clear it from the other queues.
-The saved value, however, is overwritten:
-
-    priv->plat->rx_queues_cfg[tc].prio = prio;
-
-With two VLAN priority rules on the same tc, both bits are set in
-hardware, but only the last one would be replayed after a reset.
-
-In tc_del_vlan_flow(), setting prio = 0 for the whole tc also drops any
-other VLAN rule still installed on that tc. It also permanently removes
-the board or DT priority for that queue.
-
-A rule can also move priority p from DT queue r to queue q. In that case
-rx_queues_cfg[r].prio still contains p. stmmac_mac_config_rx_queues_prio()
-replays queues in ascending order. When r > q, wouldn't replaying r take
-p back from q?
-
-In addition, stmmac_mtl_configuration() only replays priorities for
-queues below rx_queues_to_use, and only when rx_queues_to_use > 1:
-
-    if (rx_queues_count > 1)
-        stmmac_mac_config_rx_queues_prio(priv);
-
-stmmac_tc_restore_filters() skips STMMAC_RFS_T_VLAN on the assumption
-that stmmac_mtl_configuration() replays it. After open or resume, won't
-the RX VLAN priority steering then differ from the installed flower
-rules?
-
-> @@ -934,6 +954,45 @@ static int tc_setup_cls(struct stmmac_priv *priv,
->  	return ret;
->  }
->  
-> +int stmmac_tc_restore_filters(struct stmmac_priv *priv)
-> +{
-> +	int i, ret;
+> +	/* Socket teardown cannot retain the pool itself. Drop software-only
+> +	 * references, but keep each xsk_dma reference: hardware can still reach
+> +	 * the mapped UMEM pages even after the pool and its heads are freed.
+> +	 */
+> +	for (queue = 0; queue < MTL_MAX_RX_QUEUES; queue++) {
+> +		struct stmmac_rx_queue *rx_q = &dma_conf->rx_queue[queue];
 > +
-> +	for (i = 0; i < priv->flow_entries_max; i++) {
-> +		struct stmmac_flow_entry *entry = &priv->flow_entries[i];
-> +
-> +		if (!entry->in_use)
+> +		if (!rx_q->xsk_pool)
 > +			continue;
-
-[Severity: Medium]
-Can priv->flow_entries be NULL here while flow_entries_max is non-zero?
-
-tc_init() sets flow_entries_max from dma_cap->l3l4fnum before calling
-devm_kcalloc(). If the allocation fails, it returns -ENOMEM with the
-count still set. tc_rfs_init() does the same with rfs_entries_total and
-rfs_entries.
-
-__stmmac_dvr_probe() ignores the error:
-
-    ret = stmmac_tc_init(priv, priv);
-    if (!ret) {
-        ndev->hw_features |= NETIF_F_HW_TC;
-    }
-
-Before this patch, these tables were only reached through flower
-offload, which needs NETIF_F_HW_TC. Now stmmac_hw_setup() calls
-stmmac_tc_restore_filters() on every open and resume. Wouldn't that
-dereference NULL on every open and resume?
-
-The RX parser replay nearby is already guarded with if (priv->tc_entries).
-
-> +		ret = tc_config_flow(priv, entry);
-> +		if (ret)
-> +			return ret;
+> +		dma_free_rx_xskbufs(priv, dma_conf, queue);
+> +		xsk_pool_set_rxq_info(rx_q->xsk_pool, NULL);
+> +		rx_q->xsk_pool = NULL;
 > +	}
-
-[ ... ]
-
-> +	/* The XGMAC callback also restores the runtime TC-to-queue mapping. */
-> +	if (priv->fpe_cfg.mapping_configured)
-> +		return tc_config_preemption(priv, NULL,
-> +					    priv->fpe_cfg.preemptible_tcs);
-> +	return 0;
+> +	for (queue = 0; queue < MTL_MAX_TX_QUEUES; queue++)
+> +		dma_conf->tx_queue[queue].xsk_pool = NULL;
 > +}
 
-[Severity: High]
-On XGMAC, is this mapping still intact when DMA starts?
+[Severity: Medium]
+Are the zero-copy XSK TX frames still in the retained TX ring ever
+completed after a failed shutdown? Each one reserved a completion queue
+slot in xsk_tx_peek_desc() through xskq_prod_reserve_addr().
 
-dwxgmac3_fpe_map_preemption_class() writes Q2TCMAP = tc using
-u32_replace_bits(). However, stmmac_hw_setup() calls
-stmmac_dma_operation_mode() after stmmac_tc_restore_filters(), and
-dwxgmac2_dma_tx_mode() ORs in the channel without clearing the field:
+After a later successful reset, the retained config is freed through
+free_dma_desc_resources() -> dma_free_tx_skbufs(). There,
+stmmac_free_tx_buffer() counts the STMMAC_TXBUF_T_XSK_TX entries in
+xsk_frames_done, but the completion is gated on the pool pointer:
 
-    /* Use static TC to Queue mapping */
-    value |= FIELD_PREP(XGMAC_Q2TCMAP, channel);
+    if (tx_q->xsk_pool && tx_q->xsk_frames_done) {
+        xsk_tx_completed(tx_q->xsk_pool, tx_q->xsk_frames_done);
 
-That would leave Q2TCMAP = tc | channel. For example, with mqprio 2@0 2@2,
-queue 1 would move from TC 0 to TC 1, and queues 2 and 3 would move from
-TC 1 to TC 3, which does not exist.
+tx_q->xsk_pool was already cleared here, so those frames are dropped.
 
-Should the replay run after stmmac_dma_operation_mode(), or should
-dwxgmac2_dma_tx_mode() clear the field first?
+The socket can stay bound across ifdown/ifup, an XDP program swap, or a
+pool change on another queue. In that case the next open attaches the
+same pool, which still holds k reserved but unsubmitted CQ slots.
+
+xskq_prod_submit_n() publishes entries in reservation order. Wouldn't
+every later completion then report an address k frames behind, with
+those k CQ slots and UMEM frames lost for good?
 
 [ ... ]
 
-> @@ -1040,34 +1130,27 @@ static int tc_taprio_configure(struct stmmac_priv *priv,
->  	if (qopt->cycle_time_extension >= BIT(wid + 7))
->  		return -ERANGE;
->  
-> -	if (!priv->est) {
-> -		priv->est = devm_kzalloc(priv->device, sizeof(*priv->est),
-> -					 GFP_KERNEL);
-> -		if (!priv->est)
-> -			return -ENOMEM;
+> @@ -3072,25 +3205,17 @@ static int stmmac_tx_clean(struct stmmac_priv *priv, int budget, u32 queue,
+>   * stmmac_tx_err - to manage the tx error
+>   * @priv: driver private structure
+>   * @chan: channel index
+> - * Description: it cleans the descriptors and restarts the transmission
+> - * in case of transmission errors.
+> + * Description: stop submissions and request process-context DMA recovery.
+>   */
+>  static void stmmac_tx_err(struct stmmac_priv *priv, u32 chan)
+>  {
+> -	struct stmmac_tx_queue *tx_q = &priv->dma_conf->tx_queue[chan];
 > -
-> -		mutex_init(&priv->est_lock);
-> -	} else {
-> -		mutex_lock(&priv->est_lock);
-> -		memset(priv->est, 0, sizeof(*priv->est));
-> -		mutex_unlock(&priv->est_lock);
-> -	}
-> +	/* Build the replacement without changing the installed schedule. An
-> +	 * entry rejected below must not leave an enabled, zero-cycle cache for
-> +	 * PHC adjustment or reset replay to consume.
+>  	netif_tx_stop_queue(netdev_get_tx_queue(priv->dev, chan));
+> -
+>  	stmmac_stop_tx_dma(priv, chan);
+> -	dma_free_tx_skbufs(priv, priv->dma_conf, chan);
+> -	stmmac_clear_tx_descriptors(priv, priv->dma_conf, chan);
+> -	stmmac_reset_tx_queue(priv, chan);
+> -	stmmac_init_tx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
+> -			    tx_q->dma_tx_phy, chan);
+> -	stmmac_start_tx_dma(priv, chan);
+> -
+>  	priv->xstats.tx_errors++;
+> -	netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, chan));
+> +	/* Recovery must wait for DMA before freeing or rewriting descriptors.
+> +	 * Use the process-context reset path, not teardown in hard IRQ context.
 > +	 */
-> +	est = kzalloc_obj(*est);
-> +	if (!est)
-> +		return -ENOMEM;
->  
->  	size = qopt->num_entries;
-> -
-> -	mutex_lock(&priv->est_lock);
-> -	priv->est->gcl_size = size;
-> -	priv->est->enable = qopt->cmd == TAPRIO_CMD_REPLACE;
-> -	mutex_unlock(&priv->est_lock);
-> +	est->gcl_size = size;
-> +	est->enable = true;
+> +	stmmac_global_err(priv);
+>  }
 
 [Severity: Medium]
-This change fixes a divide-by-zero in the baseline, but the commit
-message only says:
+Now that the in-IRQ restart is gone, TX recovery depends only on
+stmmac_global_err() queueing the reset work. Can that request be lost?
 
-  "A rejected first install must not leave an enabled zero-cycle cache
-  for PHC adjustment or reset replay."
+stmmac_service_event_schedule() queues the work only when
+STMMAC_SERVICE_SCHED is not already set:
 
-In the baseline, every TAPRIO_CMD_REPLACE cleared priv->est with memset()
-and set enable before the gate list was validated. An entry with an
-out-of-range interval (for example more than 65535 ns with wid=16)
-returned -ERANGE and left enable set with ctr[] still zero.
-taprio_change() then keeps the previous qdisc and does not send DESTROY.
+    if (!test_bit(STMMAC_DOWN, &priv->state) &&
+        !test_and_set_bit(STMMAC_SERVICE_SCHED, &priv->state))
+            queue_work(priv->wq, &priv->service_task);
 
-The next PHC step then reaches this code in stmmac_adjust_time():
+stmmac_reset_subtask() clears STMMAC_DOWN right after dev_open() has
+re-requested the IRQs and restarted DMA. STMMAC_SERVICE_SCHED is only
+cleared once the subtask returns:
 
-    cycle_time = (u64)priv->est->ctr[1] * NSEC_PER_SEC + priv->est->ctr[0];
-    time = stmmac_calc_tas_basetime(basetime, current_time_ns, cycle_time);
+stmmac_reset_subtask()
+    dev_open(priv->dev, NULL);
+    clear_bit(STMMAC_DOWN, &priv->state);
+    clear_bit(STMMAC_RESETING, &priv->state);
+    ...
+stmmac_service_task()
+    stmmac_reset_subtask(priv);
+    clear_bit(STMMAC_SERVICE_SCHED, &priv->state);
 
-That ends up calling div64_s64() with a zero divisor. It affects any
-rejected replace, not only the first install.
+Suppose a TX hard error lands in that window. It stops the queue and the
+TX DMA channel, turns the carrier off and sets STMMAC_RESET_REQUESTED,
+but no work gets queued. The worker also never re-checks
+STMMAC_RESET_REQUESTED.
 
-Could this fix be split into its own patch with a Fixes: tag and a commit
-message that describes the crash, so it can go to stable without the rest
-of the series?
+With the carrier off, dev_watchdog() won't call ndo_tx_timeout either.
+Does the channel then stay stopped until an administrative down/up or a
+link change?
 
 [ ... ]
 
-> +	*priv->est = *est;
-> +	mutex_unlock(&priv->est_lock);
-> +free_est:
-> +	kfree(est);
-> +	return ret;
+> @@ -3350,6 +3476,19 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
+>  		netdev_err(priv->dev, "Failed to reset the dma\n");
+>  		return ret;
+>  	}
+> +	stmmac_dma_reset_complete(priv);
+> +	priv->dma_reset_needed = false;
 > +
-> +restore:
-> +	/* A failed hardware update must not publish the rejected schedule. */
-> +	if (stmmac_est_configure(priv, priv, priv->est, priv->plat->clk_ptp_rate))
-> +		netdev_err(priv->dev, "failed to restore EST\n");
-> +	mutex_unlock(&priv->est_lock);
-> +	goto free_est;
+> +	if (reinit) {
+> +		stmmac_reinit_dma_desc(priv);
+> +	} else if (priv->datapath == STMMAC_DATAPATH_SUSPENDED) {
+> +		/* Suspend only requested a stop. Do not modify its descriptors
+> +		 * or release pending TX buffers until this reset has completed.
+> +		 */
+> +		stmmac_reset_queues_param(priv);
+> +		stmmac_free_tx_skbufs(priv);
+> +		stmmac_clear_descriptors(priv, priv->dma_conf);
+> +	}
+
+[Severity: High]
+The commit message says:
+
+  "Rebuild retained RX descriptors after reset with buffer addresses and
+  chain links written before ownership."
+
+and:
+
+  "Likewise, move resume-time TX cleanup and descriptor rebuilding after
+  the reset succeeds."
+
+That rebuild is stmmac_reinit_dma_desc(), which only runs when reinit is
+true. No caller in this patch passes true.
+
+A later patch in the series ("net: stmmac: retain DMA resources across
+MTU changes") passes it only for MTU rollback. At the end of the series,
+stmmac_resume() still does:
+
+    ret = stmmac_hw_setup(ndev, false, false);
+
+So resume takes the STMMAC_DATAPATH_SUSPENDED branch above, which only
+calls stmmac_clear_descriptors(). On GMAC4 that goes through
+dwmac4_rd_init_rx_desc() -> dwmac4_set_rx_owner(). On XGMAC it goes
+through dwxgmac2_init_rx_desc() -> dwxgmac2_set_rx_owner(). Both only OR
+flags into des3:
+
+    p->des3 |= cpu_to_le32(flags);
+
+stmmac_suspend() disables NAPI in stmmac_quiesce() before
+stmmac_stop_all_dma(). Frames the DMA completes in between stay in
+writeback format: des0 holds VLAN tags or zero, and des1/des2 hold
+status. Entries whose refill failed (buf->page == NULL) also stay in
+writeback format.
+
+After stmmac_start_all_dma() on resume, would the RX DMA take those
+writeback words as buffer addresses and write received data there?
+
+[ ... ]
+
+> @@ -7967,6 +8183,8 @@ int stmmac_reinit_ringparam(struct net_device *dev, u32 rx_size, u32 tx_size)
+>  		netif_device_detach(dev);
+>  		__stmmac_release(dev);
+>  	}
+> +	if (stmmac_dma_busy(priv))
+> +		return -EBUSY;
+>  
+>  	priv->dma_conf->dma_rx_size = rx_size;
+>  	priv->dma_conf->dma_tx_size = tx_size;
+
+[Severity: High]
+Can priv->dma_conf still hold all of its allocations while dma_owned is
+false, so that this check doesn't catch it? One sequence that seems to
+get there:
+
+1. ndo_stop -> __stmmac_release() -> stmmac_drain_dma(): the idle wait
+   and stmmac_reset() both fail. Config A stays dma_owned.
+   free_dma_desc_resources(A) only calls stmmac_detach_xsk_buffers(), so
+   A keeps its descriptors, buf_pool, page_pool and tx_skbuff /
+   tx_skbuff_dma arrays. A is not marked retired, because only
+   stmmac_put_dma_conf() sets that.
+
+2. ndo_open: stmmac_open() allocates config B. Then
+   __stmmac_open(B) -> stmmac_hw_setup() -> stmmac_init_dma_engine()
+   resets successfully, and stmmac_dma_reset_complete() sets
+   A->dma_owned = false without freeing A.
+
+3. A later step of the open fails, for example stmmac_rxp_config(),
+   stmmac_tc_restore_filters(), stmmac_tc_restore_est(),
+   stmmac_request_irq() or netif_set_real_num_queues().
+   err_dma_resources restores priv->dma_conf = A and frees B.
+
+4. With the interface down, ethtool -G reaches
+   stmmac_reinit_ringparam(). stmmac_dma_busy() returns false, and
+   A->dma_rx_size and A->dma_tx_size are overwritten.
+
+5. On the next successful open, stmmac_put_dma_conf(A) ->
+   free_dma_desc_resources(A) frees A using the new sizes.
+
+If the new sizes are larger, dma_free_rx_skbufs() and
+dma_free_tx_skbufs() loop up to the new size. Would they then write
+buf->page = NULL and tx_skbuff_dma[i].buf = 0 past the ends of buf_pool
+and tx_skbuff_dma, and unmap or free pointers read from beyond them?
+
+Would dma_free_coherent() also be called with a size that doesn't match
+the original allocation?
+
+[ ... ]
+
+> @@ -8508,12 +8740,28 @@ void stmmac_dvr_remove(struct device *dev)
+>  {
+>  	struct net_device *ndev = dev_get_drvdata(dev);
+>  	struct stmmac_priv *priv = netdev_priv(ndev);
+> +	struct stmmac_dma_conf *dma_conf;
+> +	u32 queue;
+>  
+>  	netdev_info(priv->dev, "%s: removing driver", __func__);
+>  
+>  	pm_runtime_get_sync(dev);
+>  
+>  	unregister_netdev(ndev);
+> +	rtnl_lock();
+> +	/* A failed ndo_open has no matching ndo_stop. Its retained resources
+> +	 * still need retirement, or software-only disconnection on timeout.
+> +	 */
+> +	list_for_each_entry(dma_conf, &priv->dma_confs, list) {
+> +		free_dma_desc_resources(priv, dma_conf);
+> +		for (queue = 0; queue < MTL_MAX_RX_QUEUES; queue++) {
+> +			struct xdp_rxq_info *rxq = &dma_conf->rx_queue[queue].xdp_rxq;
+> +
+> +			if (xdp_rxq_info_is_reg(rxq))
+> +				xdp_rxq_info_unreg(rxq);
+> +		}
+> +	}
+> +	rtnl_unlock();
 
 [Severity: Medium]
-Is priv->est->btr[] still safe to write back here?
+If an earlier ndo_stop left a config dma_owned, is the stop or reset
+ever retried before stmmac_free_dma_conf() quarantines it?
 
-It was computed when the old schedule was installed, or at the last PHC
-adjust or reset replay. It is not rebased against the current PHC time
-here. stmmac_tc_restore_est() and stmmac_adjust_time() both recompute it
-from btr_reserve[] with stmmac_calc_tas_basetime().
+With the datapath already DOWN, __stmmac_release() returns early when
+unregister_netdev() calls ndo_stop:
 
-est_configure() writes cfg->btr[] directly to EST_BTR_LOW/HIGH and sets
-EEST | SSWL. The EST block only accepts a past BTR for a limited number
-of cycles (EST_GMAC5_BTRL allows 15). Beyond that it raises BTRE and does
-not switch lists.
+    if (priv->datapath == STMMAC_DATAPATH_DOWN)
+        return;
 
-User space can reach this path. One example is when
-dwmac5_fpe_map_preemption_class() rejects the SP algorithm with
-one-to-many TC mapping after EST has already been programmed.
+This loop then only calls free_dma_desc_resources(). For owned configs
+that is just the software XSK detach; neither stmmac_drain_dma() nor
+stmmac_reset() is called.
 
-In that case, could the hardware keep running the rejected schedule while
-priv->est and the returned error say the old schedule is still active?
+Further down, stmmac_dvr_remove() asserts the IP reset:
+
+    if (priv->plat->stmmac_rst)
+        reset_control_assert(priv->plat->stmmac_rst);
+
+dma_owned is never cleared, though, so the devm action
+stmmac_free_dma_conf() skips kfree() for those configs.
+
+After one transient stop/reset timeout followed by an unbind, wouldn't
+these leak until reboot?
+
+  - the coherent rings
+  - page_pool pages and TX skbs
+  - the xsk_dma references, with their UMEM pin and the device and
+    netdev references taken by xp_dma_get()
+
+The commit message describes quarantine as happening "If hardware still
+cannot stop or reset at removal". Does removal ever actually test that?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260926-submit-stmmac-reset-fixes-v1-v4-0-ec1c0250b3c9%40gmail.com
