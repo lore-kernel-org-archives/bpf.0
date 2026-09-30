@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A36B4D5963
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D408A3ED3B4
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790775800; cv=none; b=NIfJeNx0ZMK6g+exg7KPRPXRoLzkqzCJyQONCQVaXRWXiptwx3svCUP/HDh0axq44fVRIz9pEw2odG7MNxF4M9o7EsxxVPuDncikUoEAT2lBBHrroTZrisQTLRULF7vGC078GG2JlH7fAJtly4aaAmlsOtNFExocJ143bYCWLyc=
+	t=1790775863; cv=none; b=A7UEyKiiQgJ/Dst0aWbfPQ42eAiSYJkfEsAlgL/pn2MHGbguz5FZd/nHM+MpGT+H4gaCDykui6FkhXNNd3Rz+j6F94NuLg0FNRkZk4qyzcFYN/9jVQNGH20bIDfH6gfNF/KRhxrzgB8EZz1M5eI8TP+4jT9JnpyYXDiQnYWR1NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790775800; c=relaxed/simple;
-	bh=zPHMEvQ3R86ofA+ImCdYZfDXzMyTWt1GZ+fR9Zp+fDc=;
+	s=arc-20240116; t=1790775863; c=relaxed/simple;
+	bh=oqDMhLM/C2yIdS4KB2PG64gyN8ObXVY654b6epnwwVI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dxou7fgHUlXSvrzAtNUdtIZR6DUF9XP+DdHnlIpN0FnDLsJG/1324nmlRuNuW/mlotc96IdtejjiFnr+3WTWtVbb2syS9Cn7S7S5nxkjJX3qmAwWH73iRzL1X9AU3C2NG2FyjVzo5xoWcaRAcGhntTHAcsEKdn5aaEQxlVgLCwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnXcc9/c; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=iVHE38Omb8uqrEmGoSP2rzs6kIRj1oS85QCtrV+OUP15xvi0SGJH71ntZXR50HCIOArC28K0CE2kUAGAQeYuKFSrG/shPS2Nd14iks/hcggZQzR37myjcYtjdWlW+qx5oPn6Ns1WRd7ltOhRa34R6wLUtPFapT1igC5EL368u+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdNNskWF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnXcc9/c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F851F000FF;
-	Wed, 30 Sep 2026 13:43:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdNNskWF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 364141F000FF;
+	Wed, 30 Sep 2026 13:44:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790775788;
-	bh=LPDnYb6fvWl7hd3He+yD0TykIULeFFRP69i2vPA1Y0k=;
+	s=k20260515; t=1790775849;
+	bh=X1OeMG7UpyACBXd416Lt9bj2CnJ5nJJI7vkxMaIUsiU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZnXcc9/cdu5Kz34HUTk/c90O3sOHuLHVQVqzHbYkAP0zxWtifuZcESSOT6QRQ4RvD
-	 6kYv9Gant0FyRN5bTb8JohPSKGC7fM2U0f6FJXuBifSWQJxI02XMLB+fUsiHRwa3PR
-	 VI5x6HkBGXKhFsbhJsNfLSWPdF5m771C5J41gZuEqGvN5XqCi8OkCA4CKWnE8KF+pV
-	 v3ciX6FVSQ9E3Zv/4OrKU4JSjBBeVo3znjNmTITpvUew2KZdAkvzIx28lUHZprGKlJ
-	 sBjc38S6i5C9Bt+nCixRqhtMrRnix1XZTCyIUjbB6u/kWMdSsZAf0bwVh7v+24Mier
-	 yrabEIQZvCoMA==
+	b=CdNNskWF+fHV8fdMVijkAt55NOtWFy5f4B5SIVcSycs58Z4e7/KmyoAiKzX8IUYe1
+	 iKikQCtGXevtPN6j2xVNWZQXEXsLHQiGgQaJFuDZk8VcHTeNTCwTn5ROXrYlJDQDep
+	 A0E3PmEXgIOg4MhJrDAzgvGOUWsZWYX6bUcSfmcJoVPy++GMnejH35OMZPf4jZ22mp
+	 g31m+ULZT0Lm11/PzjiWFl3b2jzz8BScw2bOak62SLUcd6QE8qaxPaFOEd5wf9r2ZB
+	 WGqu1zzbly+n80m5jAHBjMtrj0COJTkAu799e7OvOaqUEfpgfQQX0rPwgabaeKlgTD
+	 eGl/gpktv0xcg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 07/17] selftests/filesystems: check that
- OPEN_TREE_NAMESPACE keeps mounts covered
+Subject: Re: [PATCH 03/17] selftests/filesystems: check that a busy submount
+ survives a synchronous umount
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Christian Brauner" <brauner@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260930-work-mount-fixes-3-v1-7-be34c83956ae@kernel.org>
+In-Reply-To: <20260930-work-mount-fixes-3-v1-3-be34c83956ae@kernel.org>
 References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
- <20260930-work-mount-fixes-3-v1-7-be34c83956ae@kernel.org>
+ <20260930-work-mount-fixes-3-v1-3-be34c83956ae@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 30 Sep 2026 13:43:08 +0000
-Message-Id: <20260930134308.85F851F000FF@smtp.kernel.org>
+Date: Wed, 30 Sep 2026 13:44:08 +0000
+Message-Id: <20260930134409.364141F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,89 +47,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests: open_tree_ns_covered_test fails instead of skipping o=
-n unsupported kernels
+- [Low] selftests: temporary directory leak on early SKIP in test setup
 --
 
-commit a67cc0a2598a800459db0d5c4bf95ad3d7f9463e
+commit 02ea3b012fe359abd8677445122fce027a20c695
 Author: Christian Brauner <brauner@kernel.org>
 
-selftests/filesystems: check that OPEN_TREE_NAMESPACE keeps mounts covered
+selftests/filesystems: check that a busy submount survives a synchronous um=
+ount
 
-This commit adds a test for open_tree(OPEN_TREE_NAMESPACE) from a user
-namespace that does not own the mount namespace it copies from, ensuring
-proper behavior of recursive and non-recursive copies.
+This commit adds a test for the shrinkable submounts of a synchronous
+umount. It verifies that a busy submount will survive a synchronous umount
+operation and result in an EBUSY error.
 
-> diff --git a/tools/testing/selftests/filesystems/open_tree_ns/open_tree_n=
-s_covered_test.c b/tools/testing/selftests/filesystems/open_tree_ns/open_tr=
-ee_ns_covered_test.c
+> diff --git a/tools/testing/selftests/filesystems/umount_propagation/shrin=
+k_submounts_test.c b/tools/testing/selftests/filesystems/umount_propagation=
+/shrink_submounts_test.c
 > new file mode 100644
+> index 0000000000000..43efb7faf95ce
 > --- /dev/null
-> +++ b/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_cover=
-ed_test.c
+> +++ b/tools/testing/selftests/filesystems/umount_propagation/shrink_submo=
+unts_test.c
+> @@ -0,0 +1,205 @@
 [ ... ]
-> +FIXTURE_SETUP(open_tree_ns_covered)
-> +{
-> +	char p[PATH_LEN];
-> +
-> +	snprintf(self->dir, sizeof(self->dir), "/tmp/open_tree_ns_covered.XXXXX=
-X");
-> +	ASSERT_NE(mkdtemp(self->dir), NULL);
-> +	if (enter_userns(getuid(), getgid()) || unshare(CLONE_NEWNS)) {
-> +		rmdir(self->dir);
-> +		SKIP(return, "test requires user namespaces");
-> +	}
-
-[Severity: Medium]
-Would it be appropriate to add a capability check here in the
-open_tree_ns_covered fixture setup for the open_tree() syscall and the
-OPEN_TREE_NAMESPACE flag before continuing?
-
-This would be analogous to the checks performed in open_tree_ns_test.c and
-might help avoid false positive failures when automated CI tests run against
-older or LTS kernels that lack support.
-
-[ ... ]
-> +/* A caller in a new user namespace that doesn't own the mount namespace=
-. */
-> +static int foreign_child(const char *dir)
+> +FIXTURE_SETUP(shrink_submounts)
 > +{
 > +	struct stat st;
-> +	int fd;
+> +	char p[PATH_LEN];
 > +
-> +	if (enter_userns(0, 0))
-> +		return CHILD_USERNS;
+> +	self->mounted =3D false;
+> +	self->fan =3D -1;
 > +
-> +	fd =3D sys_open_tree(AT_FDCWD, dir, OPEN_TREE_NAMESPACE | OPEN_TREE_CLO=
-EXEC);
-> +	if (fd >=3D 0)
-> +		return CHILD_NONREC_ALLOWED;
-> +	if (errno !=3D EINVAL)
-> +		return CHILD_NONREC_ERRNO;
+> +	if (geteuid() !=3D 0)
+> +		SKIP(return, "test requires CAP_SYS_ADMIN");
 > +
-> +	fd =3D sys_open_tree(AT_FDCWD, dir,
-> +			   OPEN_TREE_NAMESPACE | OPEN_TREE_CLOEXEC | AT_RECURSIVE);
-> +	if (fd < 0)
-> +		return CHILD_REC_REFUSED;
+> +	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
+> +	ASSERT_EQ(mount("", "/", NULL, MS_REC | MS_PRIVATE, NULL), 0);
+> +
+> +	snprintf(self->base, sizeof(self->base), "/tmp/shrink_submounts.XXXXXX"=
+);
+> +	ASSERT_NE(mkdtemp(self->base), NULL);
+> +	ASSERT_EQ(mount("tmpfs", self->base, "tmpfs", 0, NULL), 0);
+> +	self->mounted =3D true;
+> +	ASSERT_EQ(mount(NULL, self->base, NULL, MS_PRIVATE, NULL), 0);
+> +
+> +	snprintf(p, sizeof(p), "%s/dbg", self->base);
+> +	ASSERT_EQ(mkdir(p, 0755), 0);
+> +	if (mount("debugfs", p, "debugfs", 0, NULL))
+> +		SKIP(return, "test requires debugfs");
 
-[Severity: Medium]
-On older kernels lacking OPEN_TREE_NAMESPACE support (or the open_tree
-syscall entirely), will this fail the test instead of gracefully skipping i=
-t?
+[Severity: Low]
+Does this code leak the newly created temporary directory on the host?
 
-When the flag is unsupported, sys_open_tree() returns -1 with errno set to
-EINVAL. The first non-recursive call in this function expects EINVAL, so it
-silently passes the check. However, this subsequent recursive call also fai=
-ls
-with EINVAL, which returns CHILD_REC_REFUSED and triggers an assertion fail=
-ure.
+If the test skips here due to missing debugfs, the kselftest harness
+terminates the setup early and skips FIXTURE_TEARDOWN(). While memory and
+file descriptor leaks in tests are typically cleaned up by the OS on exit,
+this mkdtemp directory in /tmp persists on the host filesystem across
+test runs.
 
-If the open_tree syscall is missing entirely and returns ENOSYS, it appears
-it would fail earlier at the non-recursive call, returning CHILD_NONREC_ERR=
-NO.
+> +	snprintf(self->automount, sizeof(self->automount), "%s/dbg/tracing",
+> +		 self->base);
+> +	snprintf(p, sizeof(p), "%s/dbg/tracing/.", self->base);
+> +	if (stat(p, &st))
+> +		SKIP(return, "test requires the tracefs automount");
 
-[ ... ]
+[Severity: Low]
+Similarly, does exiting here via SKIP() leave the mkdtemp directory
+abandoned without cleanup on the host?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930-work-mount=
--fixes-3-v1-0-be34c83956ae@kernel.org?part=3D7
+-fixes-3-v1-0-be34c83956ae@kernel.org?part=3D3
