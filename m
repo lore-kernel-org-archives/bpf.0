@@ -1,38 +1,38 @@
-Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
+Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E0B35C1B0
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED7F365A19
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790733075; cv=none; b=LIshfFW7hcSWsc94HgIxKWXF2+ipFza2mmGgPPPpgPgNDRxP2+63F4FQ1QWyg9Aq7uRKT4uzgwf9wtxgfyjvCNngQcy7YDZySukCDOeOMWnv90u62+dsDywnLLXb2cjNaCp1FCa+LAdOXhq1cGguogYJ6RbCjkRASiwqibT8wuA=
+	t=1790733079; cv=none; b=WbJtIRYKAkdtWFdDzi5o+Jyjha2UHwOlvCvVTp3pSRcobrak4DWsWTWMRYuY6wx+lWXODFWuWqPjmV5OzvqQvksfCR16U17jC+bUml2rQyZRnkAayWEZrFshkhdWvv+JjBzUj0B4/YT9cKLdV8LngLH1UAHffDKn2nBmURPYcNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790733075; c=relaxed/simple;
-	bh=Ac0cs4MQ8G+IhxVeFmf330dyToqvQQAw+QZLfzvwLeM=;
+	s=arc-20240116; t=1790733079; c=relaxed/simple;
+	bh=pXJjBll2OksCs5v5RCJJTMUx8qjQjSpHCJHcrN4RUsg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GdG3/dsfKxisFP6EzwtKxHajbHzodLt9byOj8+xOeTXKIcV44EbUqwT8XgveQC9ntaHFYy1rkq0zHtceIzNtd2QQvv7qfwacnjrhUy5qZeaYEUqqHOD89mHUcETVpJl7fA4TumZy1A6EOXymj/nePDTYiS9p8yz5Su1gwY68khY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MzaM45/Z; arc=none smtp.client-ip=91.218.175.154
+	 In-Reply-To:To:Cc; b=GEnwbxZw9YrpR8JCjOEOlU0HyZ8NE+tk3eDI8aoOAkgDDDkaky77dXGe3PWEqQvMHNO337NcB/L5H+1ATkR9n3NzY41QbtnGCpJM7bw0t38pPSf9H89IsyMX4DOzuZpsjunH1fYeR2QnDKybTWvTZefXi2q4b/szcQKUJNWAGuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ndznKV4c; arc=none smtp.client-ip=91.218.175.159
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MzaM45/Z"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ndznKV4c"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Ac0cs4MQ8G+IhxVeFmf330dyToqvQQAw+QZLfzvwLeM=;
+DKIM-Signature: a=rsa-sha256; bh=pXJjBll2OksCs5v5RCJJTMUx8qjQjSpHCJHcrN4RUsg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790733070; v=1; x=1791337870;
- b=MzaM45/Z5t+kq2mBE4BWT0KcY82X3rkkXb3nd+zuXeAazzkfloA/6w8KMNBW04RolSmKCCG1
- WDSLDTuYakgbsJWNfIBXB3C92Avm1JEnPEddjD8XodxRH7i1vHsnwE0vncTg+nCZ2m6FBMxQQF3
- 6OG4YeMw3RZSOh1slJsxnrmY=
+ t=1790733075; v=1; x=1791337875;
+ b=ndznKV4cdORMQUM73aKvJlxiHIxbnHSoaODCN2mr/eQqyPv9J2Lm2B3ei67HcEzfnRh+R8+f
+ 6yIdXAFZLhX1DA8dexWcu5kgR2wrtG8FUGb5nHzzpcXdqiTrLJPWnmrHnvenNt4cKbTk831M0Az
+ WMdSPybfr32qTBMdMraZ7Ux0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e55fbe2275056d94;
-	Wed, 30 Sep 2026 01:51:10 +0000
-X-Mizu-Trace-ID: e55fbe2275056d94
+Received: by smtp.migadu.com with ESMTPS id f637a1d4c6846851;
+	Wed, 30 Sep 2026 01:51:15 +0000
+X-Mizu-Trace-ID: f637a1d4c6846851
 X-Migadu-Flow: FLOW_OUT
 From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Wed, 30 Sep 2026 09:50:53 +0800
-Subject: [PATCH net-next v3 2/6] tools: ynl: convert enum selector to
- string for sub-message parsing
+Date: Wed, 30 Sep 2026 09:50:54 +0800
+Subject: [PATCH net-next v3 3/6] netlink: specs: rt-route: add lwtunnel
+ encap sub-message support
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260930-ynl_rt_encap-v3-2-4106c21b9ee7@kylinos.cn>
+Message-Id: <20260930-ynl_rt_encap-v3-3-4106c21b9ee7@kylinos.cn>
 References: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
 In-Reply-To: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
@@ -55,102 +55,357 @@ X-Mailer: b4 0.14.3
 
 From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-YNL sub-message parsing expects a string selector for strcmp(). So for
-non-external enum selectors, convert the integer value to its string form
-via the family's {enum}_str() helper. This enables correct decoding of
-sub-messages keyed by enum values.
+Define encap-type enum (LWTUNNEL_ENCAP_*) and add encap-data sub-message
+keyed by encap-type. Add tunnel attribute sets (mpls, ip, ila, ip6, seg6,
+bpf, seg6-local, rpl, ioam6, xfrm). This spec update depends on the kernel
+side encap-type/data reorder patch.
 
-After the change, if there is no encap_type (e.g. previous ordering on
-older kernels), the code will report "Sub-message key not set". If a new
-encap_type is missing from the spec file in future kernel, the code will
-return 0 gracefully rather than fail hard. With the subsequent rt-route
-encap spec update, the newly generated code will look like:
+Keep some nested option attributes as binary in this patch to simplify
+review; they will be converted in follow-up patches.
 
-	if (!dst->_present.encap_type)
-		return ynl_submsg_failed(yarg, "encap", "encap-type");
-	encap_type_str = rt_route_encap_type_str(dst->encap_type);
-	if (!encap_type_str)
-		return 0;
-	if (rt_route_encap_data_parse(&parg, encap_type_str, attr))
-		return YNL_PARSE_CB_ERROR;
+Also add the Makefile to include uapi headers. Note the lwtunnel.h
+is guarded by _UAPI_LWTUNNEL_H_.
 
 Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 ---
+ Documentation/netlink/specs/rt-route.yaml | 287 +++++++++++++++++++++++++++++-
+ tools/net/ynl/Makefile.deps               |   9 +-
+ 2 files changed, 294 insertions(+), 2 deletions(-)
 
-For sashiko:
-
-1. For the extack error-walking path in ynl.c that doesn't handle
-   enum-keyed selectors. This series doesn't modify ynl.c, it changes
-   the code generator to emit the _str() conversion in generated parsing
-   code. The run time error-walking path is a separate concern.
-
-   Since rt-route encap is the first enum-keyed sub-message in the YNL
-   specs, this is a new limitation rather than a regression in existing
-   functionality. It can be addressed as a follow-up patch to ynl.c.
-
-2. For the selector byte-order issue. This doesn't affect the current
-   series. The encap-type selector is type: u16 with no byte-order
-   specified (native order), so the raw value passed to _str() is already
-   host-order. nftables is in GENS_UNSUP today, so no in-tree generated
-   family hits this yet. We address this as a follow-up.
----
- tools/net/ynl/pyynl/ynl_gen_c.py | 34 +++++++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
-
-diff --git a/tools/net/ynl/pyynl/ynl_gen_c.py b/tools/net/ynl/pyynl/ynl_gen_c.py
-index 15c79849c609..783242537fe4 100755
---- a/tools/net/ynl/pyynl/ynl_gen_c.py
-+++ b/tools/net/ynl/pyynl/ynl_gen_c.py
-@@ -951,13 +951,31 @@ class TypeSubMessage(TypeNest):
-             sel_var = f"_sel_{sel}"
-         else:
-             sel_var = f"{var}->{sel}"
--        get_lines = [f'if (!{sel_var})',
--                     f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
--                     f"if ({self.nested_render_name}_parse(&parg, {sel_var}, attr))",
--                     "return YNL_PARSE_CB_ERROR;"]
+diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
+index 253037ea5176..dc842a786794 100644
+--- a/Documentation/netlink/specs/rt-route.yaml
++++ b/Documentation/netlink/specs/rt-route.yaml
+@@ -99,6 +99,58 @@ definitions:
+         name: ra-withdrawn
+         doc: A Router Advertisement withdrew the route with a zero
+           lifetime.
++  -
++    name: encap-type
++    type: enum
++    name-prefix: lwtunnel-encap-
++    enum-name:
++    entries:
++      - none
++      - mpls
++      - ip
++      - ila
++      - ip6
++      - seg6
++      - bpf
++      - seg6-local
++      - rpl
++      - ioam6
++      - xfrm
 +
-+        local_vars = None
-+
-+        if self.selector.is_enum_val():
-+            enum = self.family.consts[self.selector.get_enum_name()]
-+            pres_var = f"{var}->_present.{sel}"
-+            parse_sel = f"{sel}_str"
-+            local_vars = [f'const char *{parse_sel};']
-+
-+            get_lines = [
-+                f'if (!{pres_var})',
-+                f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
-+                f'{parse_sel} = {enum.render_name}_str({sel_var});',
-+                f'if (!{parse_sel})',
-+                'return 0;']
-+        else:
-+            parse_sel = sel_var
-+            get_lines = [f'if (!{parse_sel})',
-+                         f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");']
-+
-+        get_lines += [f"if ({self.nested_render_name}_parse(&parg, {parse_sel}, attr))",
-+                      "return YNL_PARSE_CB_ERROR;"]
-         init_lines = [f"parg.rsp_policy = &{self.nested_render_name}_nest;",
-                       f"parg.data = &{var}->{self.c_name};"]
--        return get_lines, init_lines, None
-+        return get_lines, init_lines, local_vars
++sub-messages:
++  -
++    name: encap-data
++    formats:
++      -
++        value: mpls
++        attribute-set: mpls-iptunnel
++      -
++        value: ip
++        attribute-set: lwtunnel-ip
++      -
++        value: ila
++        attribute-set: ila-attrs
++      -
++        value: ip6
++        attribute-set: lwtunnel-ip6
++      -
++        value: seg6
++        attribute-set: seg6-iptunnel
++      -
++        value: bpf
++        attribute-set: lwt-bpf
++      -
++        value: seg6-local
++        attribute-set: seg6-local
++      -
++        value: rpl
++        attribute-set: rpl-iptunnel
++      -
++        value: ioam6
++        attribute-set: ioam6-iptunnel
++      -
++        value: xfrm
++        attribute-set: lwt-xfrm
  
+ attribute-sets:
+   -
+@@ -174,9 +226,12 @@ attribute-sets:
+       -
+         name: encap-type
+         type: u16
++        enum: encap-type
+       -
+         name: encap
+-        type: binary  # tunnel specific nest
++        type: sub-message
++        sub-message: encap-data
++        selector: encap-type
+       -
+         name: expires
+         type: u32
+@@ -277,6 +332,236 @@ attribute-sets:
+       -
+         name: fastopen-no-cookie
+         type: u32
++  -
++    name: mpls-iptunnel
++    name-prefix: mpls-iptunnel-
++    header: linux/mpls_iptunnel.h
++    attributes:
++      -
++        name: dst
++        type: binary
++      -
++        name: ttl
++        type: u8
++  -
++    name: lwtunnel-ip
++    name-prefix: lwtunnel-ip-
++    header: linux/lwtunnel.h
++    attributes:
++      -
++        name: id
++        type: u64
++        byte-order: big-endian
++      -
++        name: dst
++        type: u32
++        byte-order: big-endian
++        display-hint: ipv4
++      -
++        name: src
++        type: u32
++        byte-order: big-endian
++        display-hint: ipv4
++      -
++        name: ttl
++        type: u8
++      -
++        name: tos
++        type: u8
++      -
++        name: flags
++        type: u16
++        byte-order: big-endian
++      -
++        name: pad
++        type: pad
++      -
++        name: opts
++        type: binary  # lwtunnel ip nest options
++  -
++    name: ila-attrs
++    name-prefix: ila-attr-
++    header: linux/ila.h
++    attributes:
++      -
++        name: locator
++        type: u64
++        byte-order: big-endian
++      -
++        name: identifier
++        type: u64
++      -
++        name: locator-match
++        type: u64
++        byte-order: big-endian
++      -
++        name: ifindex
++        type: s32
++      -
++        name: dir
++        type: u32
++      -
++        name: pad
++        type: pad
++      -
++        name: csum-mode
++        type: u8
++      -
++        name: ident-type
++        type: u8
++      -
++        name: hook-type
++        type: u8
++  -
++    name: lwtunnel-ip6
++    name-prefix: lwtunnel-ip6-
++    header: linux/lwtunnel.h
++    attributes:
++      -
++        name: id
++        type: u64
++        byte-order: big-endian
++      -
++        name: dst
++        type: binary
++        display-hint: ipv6
++      -
++        name: src
++        type: binary
++        display-hint: ipv6
++      -
++        name: hoplimit
++        type: u8
++      -
++        name: tc
++        type: u8
++      -
++        name: flags
++        type: u16
++        byte-order: big-endian
++      -
++        name: pad
++        type: pad
++      -
++        name: opts
++        type: binary  # lwtunnel ip nest options
++  -
++    name: seg6-iptunnel
++    name-prefix: seg6-iptunnel-
++    header: linux/seg6_iptunnel.h
++    attributes:
++      -
++        name: srh
++        type: binary
++      -
++        name: src
++        type: binary
++        display-hint: ipv6
++      -
++        name: table
++        type: u32
++  -
++    name: lwt-bpf
++    name-prefix: lwt-bpf-
++    header: linux/lwtunnel.h
++    attributes:
++      -
++        name: in
++        type: binary  # bpf prog
++      -
++        name: out
++        type: binary
++      -
++        name: xmit
++        type: binary
++      -
++        name: xmit-headroom
++        type: u32
++  -
++    name: seg6-local
++    name-prefix: seg6-local-
++    header: linux/seg6_local.h
++    attributes:
++      -
++        name: action
++        type: u32
++      -
++        name: srh
++        type: binary
++      -
++        name: table
++        type: u32
++      -
++        name: nh4
++        type: u32
++        byte-order: big-endian
++        display-hint: ipv4
++      -
++        name: nh6
++        type: binary
++        display-hint: ipv6
++      -
++        name: iif
++        type: u32
++      -
++        name: oif
++        type: u32
++      -
++        name: bpf
++        type: binary
++      -
++        name: vrftable
++        type: u32
++      -
++        name: counters
++        type: binary
++      -
++        name: flavors
++        type: binary
++  -
++    name: rpl-iptunnel
++    name-prefix: rpl-iptunnel-
++    header: linux/rpl_iptunnel.h
++    attributes:
++      -
++        name: srh
++        type: binary
++  -
++    name: ioam6-iptunnel
++    name-prefix: ioam6-iptunnel-
++    header: linux/ioam6_iptunnel.h
++    attributes:
++      -
++        name: mode
++        type: u8
++      -
++        name: dst
++        type: binary
++        display-hint: ipv6
++      -
++        name: trace
++        type: binary
++      -
++        name: freq-k
++        type: u32
++      -
++        name: freq-n
++        type: u32
++      -
++        name: src
++        type: binary
++        display-hint: ipv6
++  -
++    name: lwt-xfrm
++    name-prefix: lwt-xfrm-
++    header: linux/lwtunnel.h
++    attributes:
++      -
++        name: if-id
++        type: u32
++      -
++        name: link
++        type: u32
  
- class Selector:
-@@ -979,6 +997,12 @@ class Selector:
-     def is_external(self):
-         return self._external
- 
-+    def is_enum_val(self):
-+        return self.get_enum_name() is not None
-+
-+    def get_enum_name(self):
-+        return self.attr and self.attr.attr.get("enum")
-+
- 
- class Struct:
-     def __init__(self, family, space_name, type_list=None, fixed_header=None,
+ operations:
+   enum-model: directional
+diff --git a/tools/net/ynl/Makefile.deps b/tools/net/ynl/Makefile.deps
+index 1e746e25e2bc..3eee34e0efcf 100644
+--- a/tools/net/ynl/Makefile.deps
++++ b/tools/net/ynl/Makefile.deps
+@@ -45,7 +45,14 @@ CFLAGS_rt-link:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
+ 	$(call get_hdr_inc,_LINUX_IF_LINK_H,if_link.h)
+ CFLAGS_rt-neigh:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
+ 	$(call get_hdr_inc,__LINUX_NEIGHBOUR_H,neighbour.h)
+-CFLAGS_rt-route:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h)
++CFLAGS_rt-route:=$(call get_hdr_inc,_LINUX_ILA_H,ila.h) \
++	$(call get_hdr_inc,_LINUX_IOAM6_IPTUNNEL_H,ioam6_iptunnel.h) \
++	$(call get_hdr_inc,_LINUX_MPLS_IPTUNNEL_H,mpls_iptunnel.h) \
++	$(call get_hdr_inc,_LINUX_RPL_IPTUNNEL_H,rpl_iptunnel.h) \
++	$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
++	$(call get_hdr_inc,_LINUX_SEG6_IPTUNNEL_H,seg6_iptunnel.h) \
++	$(call get_hdr_inc,_LINUX_SEG6_LOCAL_H,seg6_local.h) \
++	$(call get_hdr_inc,_LWTUNNEL_H_,lwtunnel.h)
+ CFLAGS_rt-rule:=$(call get_hdr_inc,__LINUX_FIB_RULES_H,fib_rules.h)
+ CFLAGS_tc:= $(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
+ 	$(call get_hdr_inc,__LINUX_PKT_SCHED_H,pkt_sched.h) \
 
 -- 
 2.55.0
