@@ -1,38 +1,66 @@
-Received: from mta1.migadu.com (out-18.mta1.migadu.com [95.215.58.18])
+Received: from mail-vs2-f42.google.com (mail-vs2-f42.google.com [74.125.227.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CFA36B907
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2196E78F3A
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790733090; cv=none; b=r+/O8ugK4Au3jWu7H835iQIXGiIHHknJxn6s/561zBKcXrKdb1bw+Jj5gWEktmEW0zmnbiNV7NERi1LNfrDVSZLki7AIntBVRfFv67lN7/Oj4MFFfg+c3DTEpoEV8c9NorHux4uz9v6OnL/3thivVhBuDmZ98nrc3FNXJC6xo4A=
+	t=1790733383; cv=none; b=MKy+5SCQbdMs1QKTKNjOdbaoEnZkV8A+j5GcGIH6qYD187tBFDDLMS8FA2iK4ak6/uXVMuvA4ozdbv0WZGzjgiLuUee2zRczCUZjRz3FIWY8fLbzOnHx3SP+/B/eQjRy/GY9dO5H+uViHvBpvECW3lkwvJQYrvAJThtt7fjjWno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790733090; c=relaxed/simple;
-	bh=qOFk/G/6vq5TjaCi32Irwnef+xgEl3KejhukT2/1lGQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=InrgZsC5aDD86e2Bwj9C9hAXk7kFwky2zwALrEbOeRu/exMJ33CKU2zyOGPPg7fw1qGINga5f4s/TVmDzot6//1406siNqRHbpOXKjwcNBIL8wiTJl2PlBfK+m4A95KLekSQbGy8x7rHjyyat2ilocOB8WJNNlwmp6uORCaoNw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G1tpEwcK; arc=none smtp.client-ip=95.215.58.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790733383; c=relaxed/simple;
+	bh=1X9WMm6nO73BSNX0XiXUwdgJyOm53vDdlYm4yIgxJxI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Yr8pYAqQpMCpki7se53zXP61L6TRPlHOyZlScYwCJHy4B6Dl0e7MMISIYa4wS7Oyd1nz/Ex6Io7mUA3VyYdezHTTFv8scltDD3pcXP6q/4/K4ukYgHUt3y36K5LgLi26Gs8hwAEHhLYkMWRB4YDm1EkzpjRGFNtcohvPaw0ybl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l2bUyoSJ; arc=none smtp.client-ip=74.125.227.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G1tpEwcK"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qOFk/G/6vq5TjaCi32Irwnef+xgEl3KejhukT2/1lGQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790733085; v=1; x=1791337885;
- b=G1tpEwcKsptEvEEYy3jj4tRvodocg1lUqInST3qI7f0x64wBWZlE4AVaAWuIg3dKMKrXnRfd
- 9QchpgmxOgD1oL+aJDGMcfarhuoY5w3uHCTRwvPEKugp7BB4pyEmrT3sRPUXU+sjOwSAEodXZg3
- EyiUfFOXI31wwG4A9CAAMEaE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 366241183f6c242f;
-	Wed, 30 Sep 2026 01:51:25 +0000
-X-Mizu-Trace-ID: 366241183f6c242f
-X-Migadu-Flow: FLOW_OUT
-From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Wed, 30 Sep 2026 09:50:57 +0800
-Subject: [PATCH net-next v3 6/6] netlink: specs: rt-route: describe
- seg6-local attrs
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2bUyoSJ"
+Received: by mail-vs2-f42.google.com with SMTP id 71dfb90a1353d-5c98e1942dfso4140721e0c.3
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 18:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790733380; x=1791338180; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=jiokBM+2KkCvQhixHkz/hquXLtTM2q3HiYRP1LxboyM=;
+        b=l2bUyoSJ3GvlejO212oCOWV6dxKy6yCGDY987zCfOEu5QWK1e6XbhkL8JFQDyZtQ3C
+         tSoLOx4gtgg3ck6uehyGwut5Ed0AhqyfNw1wPZtR84K/HYLjdD/UmXM8EJkoDeKZKqaQ
+         L8LiaH9ZSbPaeO4VvILrNwLhzJB68ZEWf7DQ3LhCUgyK8AWbEuszDWlKYWrfOvGb0Fdj
+         QSr6nk5uzqynJQLdKv+2LdnwCgRsZKtKG9bLmxbH8U7pCUFwB481MrLuAhD4M9Fwsk1w
+         FxicUGoh7JQIVw6VJJOnuH0XKB0kDvPs8ietoiwoq4Mv/tNOTjHvMzGD1pk/sKHZyCj0
+         8niA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790733380; x=1791338180;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=jiokBM+2KkCvQhixHkz/hquXLtTM2q3HiYRP1LxboyM=;
+        b=kEV5+C57NI3LcnsC1/u6do7yJIijjRGJ7mg64DK170PsFPaVSFzuz1Q3IKkbI36Hun
+         f5QQaNtsPaAwxarn6l2znkpkUPj9iam3sQq4BJFukjdYGi6qqfQq+RYmvyg5ZCPh/ZOM
+         uaCY8ZAcrLh0qvJFfM3Ld4XnLLVDaKjaH8xO7+qY3L9SwQUBiEpAJHhJUYGpJSc6CKb3
+         SyDtjDRxs7veD2fJV2wrnxL+5v1FHk5Ts4v9ESO8JCFgqo15rbmNWjioWKnYAk6Gj62L
+         6NZZFlxEPAQike00A8omTp8RcgIf9Hrbu+W1iR8yPVZ1or0BryHGM5aQmrXoKvC4Unef
+         3xZw==
+X-Gm-Message-State: AFq9FYKnRKJ2BM6Y01kX08+GAnF5fuadLoo3SAzKW8RtzEekSjb4zjeY
+	CTVwXudyHLZSN0lXbMZq4g0klP1b12pp9IFtuJRsygkh9HPzn4/07bK1
+X-Gm-Gg: AYBFou10+o8cDeVUvf0uaQmCl+e129EQMZLexG4PjtZZ1yZeghLeEnrglToOrGGBG9j
+	xxukOpTjO3jq7XrtXIevnvWkJdZLlFKdFRbqLTgCOCXOX/XvSUGYUnSVSSuCUNABKULbH8cizXl
+	AdTuXY70fU8hJYoFw1w4HE+lVr7qKNHx0yXesQp6+D4Rr1hGs6pJupAJjEvKIfzubGMgXYO83WH
+	EuRaBH5S9llvi2eQ5SA4P0E+lrkNItWVJkBzW+/FJhVhzH/02pTuZLjl9IP7kQuzqNkNXYZDSjr
+	YnGEkyiGERZWGC5gy48OpKaHZwI+5PAjEavl68nYp3LNFqSJU0nRAhWopiUmYUAx0RSroBiiRcY
+	lo+Y+RVnIoSGOXEFP4mAt9GTa0UnxwGbg6P75foKEwf6TJpxwcgwm5/30489VCDH03ZQfXmINjf
+	ucx7ixs5tqsmZouiDepFxw4n6RTLyUDT9sDYOu5mBBt2rFs1L5XLXAkLDIPctKMJmB3K04+ds+B
+	pQ=
+X-Received: by 2002:a05:6122:da3:b0:5c9:a60b:e5a3 with SMTP id 71dfb90a1353d-5d518d1cd80mr613221e0c.14.1790733380036;
+        Tue, 29 Sep 2026 18:56:20 -0700 (PDT)
+Received: from [127.0.1.1] ([201.162.73.164])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5d611ef88d1sm75525e0c.6.2026.09.29.18.56.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2026 18:56:19 -0700 (PDT)
+From: Luis Vieira <luisflavieira@gmail.com>
+Date: Tue, 29 Sep 2026 22:56:12 -0300
+Subject: [PATCH bpf-next] libbpf: Fix cleanup on invalid CO-RE relocation
+ offsets
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,163 +69,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260930-ynl_rt_encap-v3-6-4106c21b9ee7@kylinos.cn>
-References: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
-In-Reply-To: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
-To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Hangbin Liu <liuhangbin@kylinos.cn>
-X-Mailer: b4 0.14.3
+Message-Id: <20260929-libbpf-core-relo-cleanup-v1-1-c9cd0b5775a9@gmail.com>
+X-B4-Tracking: v=1; b=H4sIADtsvGoC/yWMwQrCMBAFf6Xs2YUaRYm/Ih7S9UVXQhKSthRK/
+ 91Uj8Mws1JFUVS6dSsVzFo1xQbHQ0fydvEF1mdjMr259NZYDjoM2bOkAi4IiSXAxSnz+ST2asU
+ Z8aCW5wKvy299pz2JWEZ6/E2dhg9k3M+0bV/ntf1IhgAAAA==
+X-Change-ID: 20260929-libbpf-core-relo-cleanup-43c979ca2cfe
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Luis Vieira <luisflavieira@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790733375; l=2003;
+ i=luisflavieira@gmail.com; s=20260913; h=from:subject:message-id;
+ bh=1X9WMm6nO73BSNX0XiXUwdgJyOm53vDdlYm4yIgxJxI=;
+ b=Bn/0lWwFEpY7S3B8Rsy+c1fIhaeeLisr7wrbpQ2S4GeqhDfo8rNM/Yhhd1XUwbm/S8Gm4PTzq
+ X2hHpAhaF39CFO+DqEdowIcI1ROjX4CDjh1r0hPVt0+nM2yIRVi9GuL
+X-Developer-Key: i=luisflavieira@gmail.com; a=ed25519;
+ pk=98MeC/NdrC6ah7zYpPnkWiQIoyj62iUP/rNuV3esCW4=
 
-From: Hangbin Liu <liuhangbin@kylinos.cn>
+bpf_object__relocate_core() allocates a CO-RE candidate cache before
+processing relocation records. Two instruction offset validation
+failures return -EINVAL directly instead of going through the common
+cleanup path.
 
-Add SEG6 local actions enums, seg6-local-flv-ops flags.
+These checks were moved into bpf_object__relocate_core() when
+bpf_core_apply_relo() was split, preserving direct returns that were
+safe in the previous helper but now bypass cleanup.
 
-Replace binary bpf/counters/flavors in seg6-local with
-nested seg6-local-bpf, seg6-local-cnt and seg6-local-flv.
+Route both failures through the out path so the candidate cache and
+target BTF override are released.
 
-Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Signed-off-by: Luis Vieira <luisflavieira@gmail.com>
 ---
- Documentation/netlink/specs/rt-route.yaml | 93 ++++++++++++++++++++++++++++++-
- 1 file changed, 90 insertions(+), 3 deletions(-)
+ tools/lib/bpf/libbpf.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
-index afec0375661f..0260fca398d2 100644
---- a/Documentation/netlink/specs/rt-route.yaml
-+++ b/Documentation/netlink/specs/rt-route.yaml
-@@ -116,6 +116,45 @@ definitions:
-       - rpl
-       - ioam6
-       - xfrm
-+  -
-+    name: seg6-local-actions
-+    type: enum
-+    name-prefix: seg6-local-action-
-+    enum-name:
-+    entries:
-+      - unspec
-+      - end
-+      - end-x
-+      - end-t
-+      - end-dx2
-+      - end-dx6
-+      - end-dx4
-+      - end-dt6
-+      - end-dt4
-+      - end-b6
-+      - end-b6-encap
-+      - end-bm
-+      - end-s
-+      - end-as
-+      - end-am
-+      - end-bpf
-+      - end-dt46
-+  -
-+    name: seg6-local-flv-ops
-+    type: flags
-+    name-prefix: seg6_local_flv_op-
-+    enum-name:
-+    entries:
-+      -
-+        name: unspec
-+      -
-+        name: psp
-+      -
-+        name: usp
-+      -
-+        name: usd
-+      -
-+        name: next-csid
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 238e35c1ee3f..fdd69aac39bd 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6255,8 +6255,11 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ 		pr_debug("sec '%s': found %u CO-RE relocations\n", sec_name, sec->num_info);
  
- sub-messages:
-   -
-@@ -490,6 +529,7 @@ attribute-sets:
-       -
-         name: action
-         type: u32
-+        enum: seg6-local-actions
-       -
-         name: srh
-         type: binary
-@@ -513,16 +553,19 @@ attribute-sets:
-         type: u32
-       -
-         name: bpf
--        type: binary
-+        type: nest
-+        nested-attributes: seg6-local-bpf
-       -
-         name: vrftable
-         type: u32
-       -
-         name: counters
--        type: binary
-+        type: nest
-+        nested-attributes: seg6-local-cnt
-       -
-         name: flavors
--        type: binary
-+        type: nest
-+        nested-attributes: seg6-local-flv
-   -
-     name: rpl-iptunnel
-     name-prefix: rpl-iptunnel-
-@@ -634,6 +677,50 @@ attribute-sets:
-       -
-         name: name
-         type: string
-+  -
-+    name: seg6-local-bpf
-+    name-prefix: seg6-local-bpf-
-+    attr-max-name: seg6-local-bpf-prog-max
-+    attributes:
-+      -
-+        name: prog
-+        type: u32
-+      -
-+        name: prog-name
-+        type: string
-+        checks:
-+          max-len: 256
-+  -
-+    name: seg6-local-cnt
-+    name-prefix: seg6-local-cnt-
-+    attributes:
-+      -
-+        name: pad
-+        type: pad
-+      -
-+        name: packets
-+        type: u64
-+      -
-+        name: bytes
-+        type: u64
-+      -
-+        name: errors
-+        type: u64
-+  -
-+    name: seg6-local-flv
-+    name-prefix: seg6-local-flv-
-+    attributes:
-+      -
-+        name: operation
-+        type: u32
-+        enum: seg6-local-flv-ops
-+        enum-as-flags: true
-+      -
-+        name: lcblock-bits
-+        type: u8
-+      -
-+        name: lcnode-fn-bits
-+        type: u8
+ 		for_each_btf_ext_rec(seg, sec, i, rec) {
+-			if (rec->insn_off % BPF_INSN_SZ)
+-				return -EINVAL;
++			if (rec->insn_off % BPF_INSN_SZ) {
++				err = -EINVAL;
++				goto out;
++			}
++
+ 			insn_idx = rec->insn_off / BPF_INSN_SZ;
+ 			prog = find_prog_by_sec_insn(obj, sec_idx, insn_idx);
+ 			if (!prog) {
+@@ -6283,8 +6286,10 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ 			 * relocated, so it's enough to just subtract in-section offset
+ 			 */
+ 			insn_idx = insn_idx - prog->sec_insn_off;
+-			if (insn_idx >= prog->insns_cnt)
+-				return -EINVAL;
++			if (insn_idx >= prog->insns_cnt) {
++				err = -EINVAL;
++				goto out;
++			}
+ 			insn = &prog->insns[insn_idx];
  
- operations:
-   enum-model: directional
+ 			if (is_ldimm64_insn(insn) && (size_t)insn_idx + 1 >= prog->insns_cnt) {
 
--- 
-2.55.0
+---
+base-commit: cc6010e6e5cbe1f743d3011991041f227d976a5e
+change-id: 20260929-libbpf-core-relo-cleanup-43c979ca2cfe
+
+Best regards,
+--  
+Luis Vieira <luisflavieira@gmail.com>
 
