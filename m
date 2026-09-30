@@ -1,37 +1,38 @@
-Received: from mta0.migadu.com (out-147.mta0.migadu.com [91.218.175.147])
+Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836AB362153
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E0B35C1B0
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790733070; cv=none; b=rLQxK6inQ9WcrfORyHjEdD08PmnspWEzmhjB24TEbTAM/pOQBbnUZcrqAq1BntECSnn3niOFjMhhQ/aKB5kbmBFamJgfQm1rPoniib/Ah93QrDX8Es5xfwHIYub4rmn89Asc4L0dCud68fZHYas5zsurI5ZaAAR8FY0Q0ymatZY=
+	t=1790733075; cv=none; b=LIshfFW7hcSWsc94HgIxKWXF2+ipFza2mmGgPPPpgPgNDRxP2+63F4FQ1QWyg9Aq7uRKT4uzgwf9wtxgfyjvCNngQcy7YDZySukCDOeOMWnv90u62+dsDywnLLXb2cjNaCp1FCa+LAdOXhq1cGguogYJ6RbCjkRASiwqibT8wuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790733070; c=relaxed/simple;
-	bh=CmSE3J2AY3c3WgRbkDwOwbC2g9/ph6TF0R7e86CvP0M=;
+	s=arc-20240116; t=1790733075; c=relaxed/simple;
+	bh=Ac0cs4MQ8G+IhxVeFmf330dyToqvQQAw+QZLfzvwLeM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G8PkKcIdbojEG/41u4KJjfaHVgCWHnpuXiBmYFHMQjChsys5lTndHWcSN9U1HJQNHg+vCQ3DSke1X4YjF+iNBOwtfw+cWNPtxImUI23fqxU8WWnLzf8QcGKSi4MRy4tGSoN8AyPMeoCK+BNe9yci15BV9SI2/g5jiduUxAzRODQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Rq1DhbUq; arc=none smtp.client-ip=91.218.175.147
+	 In-Reply-To:To:Cc; b=GdG3/dsfKxisFP6EzwtKxHajbHzodLt9byOj8+xOeTXKIcV44EbUqwT8XgveQC9ntaHFYy1rkq0zHtceIzNtd2QQvv7qfwacnjrhUy5qZeaYEUqqHOD89mHUcETVpJl7fA4TumZy1A6EOXymj/nePDTYiS9p8yz5Su1gwY68khY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MzaM45/Z; arc=none smtp.client-ip=91.218.175.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Rq1DhbUq"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MzaM45/Z"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CmSE3J2AY3c3WgRbkDwOwbC2g9/ph6TF0R7e86CvP0M=;
+DKIM-Signature: a=rsa-sha256; bh=Ac0cs4MQ8G+IhxVeFmf330dyToqvQQAw+QZLfzvwLeM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790733066; v=1; x=1791337866;
- b=Rq1DhbUqyaFBm236LDrOhgCZWFfbyVDs2T8QPNLf3LaPQ/9F/IYTLBjg1zdkY8j/PObg4Qva
- MMfqU4HOHn/hltpHsFUgky/dD5JfHTKHB5TxO6AFJKn5glVhbakdU5nF4KrUm9bShFsuIfbsnAE
- t/qx+LtuaIAz1P1EdrhHGa1c=
+ t=1790733070; v=1; x=1791337870;
+ b=MzaM45/Z5t+kq2mBE4BWT0KcY82X3rkkXb3nd+zuXeAazzkfloA/6w8KMNBW04RolSmKCCG1
+ WDSLDTuYakgbsJWNfIBXB3C92Avm1JEnPEddjD8XodxRH7i1vHsnwE0vncTg+nCZ2m6FBMxQQF3
+ 6OG4YeMw3RZSOh1slJsxnrmY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 70858a35b66a46a2;
-	Wed, 30 Sep 2026 01:51:06 +0000
-X-Mizu-Trace-ID: 70858a35b66a46a2
+Received: by smtp.migadu.com with ESMTPS id e55fbe2275056d94;
+	Wed, 30 Sep 2026 01:51:10 +0000
+X-Mizu-Trace-ID: e55fbe2275056d94
 X-Migadu-Flow: FLOW_OUT
 From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Wed, 30 Sep 2026 09:50:52 +0800
-Subject: [PATCH net-next v3 1/6] net: lwtunnel: change encap fill order
+Date: Wed, 30 Sep 2026 09:50:53 +0800
+Subject: [PATCH net-next v3 2/6] tools: ynl: convert enum selector to
+ string for sub-message parsing
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260930-ynl_rt_encap-v3-1-4106c21b9ee7@kylinos.cn>
+Message-Id: <20260930-ynl_rt_encap-v3-2-4106c21b9ee7@kylinos.cn>
 References: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
 In-Reply-To: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
@@ -54,82 +55,102 @@ X-Mailer: b4 0.14.3
 
 From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-I plan to add lwtunnel encap attributes to the YNL rt-route.yaml spec.
-When decoding submessages, YNL expects to read the "selector" (encap-type)
-first. Currently lwtunnel writes the encap payload first, which makes YNL
-fail to parse the lwtunnel encap message.
+YNL sub-message parsing expects a string selector for strcmp(). So for
+non-external enum selectors, convert the integer value to its string form
+via the family's {enum}_str() helper. This enables correct decoding of
+sub-messages keyed by enum values.
 
-Fixing this within YNL itself would be complicated. Instead, reorder the
-netlink attributes in the kernel to output encap_type first.
+After the change, if there is no encap_type (e.g. previous ordering on
+older kernels), the code will report "Sub-message key not set". If a new
+encap_type is missing from the spec file in future kernel, the code will
+return 0 gracefully rather than fail hard. With the subsequent rt-route
+encap spec update, the newly generated code will look like:
 
-This is a preparatory change for the upcoming rt-route spec updates.
+	if (!dst->_present.encap_type)
+		return ynl_submsg_failed(yarg, "encap", "encap-type");
+	encap_type_str = rt_route_encap_type_str(dst->encap_type);
+	if (!encap_type_str)
+		return 0;
+	if (rt_route_encap_data_parse(&parg, encap_type_str, attr))
+		return YNL_PARSE_CB_ERROR;
 
 Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 ---
- net/core/lwtunnel.c | 35 ++++++++++++++++++-----------------
- 1 file changed, 18 insertions(+), 17 deletions(-)
 
-diff --git a/net/core/lwtunnel.c b/net/core/lwtunnel.c
-index b01a395d9a96..8223c44f10c8 100644
---- a/net/core/lwtunnel.c
-+++ b/net/core/lwtunnel.c
-@@ -231,7 +231,7 @@ int lwtunnel_fill_encap(struct sk_buff *skb, struct lwtunnel_state *lwtstate,
- {
- 	const struct lwtunnel_encap_ops *ops;
- 	struct nlattr *nest;
--	int ret;
-+	int ret = 0;
- 
- 	if (!lwtstate)
- 		return 0;
-@@ -240,30 +240,31 @@ int lwtunnel_fill_encap(struct sk_buff *skb, struct lwtunnel_state *lwtstate,
- 	    lwtstate->type > LWTUNNEL_ENCAP_MAX)
- 		return 0;
- 
--	nest = nla_nest_start_noflag(skb, encap_attr);
--	if (!nest)
--		return -EMSGSIZE;
--
--	ret = -EOPNOTSUPP;
- 	rcu_read_lock();
+For sashiko:
+
+1. For the extack error-walking path in ynl.c that doesn't handle
+   enum-keyed selectors. This series doesn't modify ynl.c, it changes
+   the code generator to emit the _str() conversion in generated parsing
+   code. The run time error-walking path is a separate concern.
+
+   Since rt-route encap is the first enum-keyed sub-message in the YNL
+   specs, this is a new limitation rather than a regression in existing
+   functionality. It can be addressed as a follow-up patch to ynl.c.
+
+2. For the selector byte-order issue. This doesn't affect the current
+   series. The encap-type selector is type: u16 with no byte-order
+   specified (native order), so the raw value passed to _str() is already
+   host-order. nftables is in GENS_UNSUP today, so no in-tree generated
+   family hits this yet. We address this as a follow-up.
+---
+ tools/net/ynl/pyynl/ynl_gen_c.py | 34 +++++++++++++++++++++++++++++-----
+ 1 file changed, 29 insertions(+), 5 deletions(-)
+
+diff --git a/tools/net/ynl/pyynl/ynl_gen_c.py b/tools/net/ynl/pyynl/ynl_gen_c.py
+index 15c79849c609..783242537fe4 100755
+--- a/tools/net/ynl/pyynl/ynl_gen_c.py
++++ b/tools/net/ynl/pyynl/ynl_gen_c.py
+@@ -951,13 +951,31 @@ class TypeSubMessage(TypeNest):
+             sel_var = f"_sel_{sel}"
+         else:
+             sel_var = f"{var}->{sel}"
+-        get_lines = [f'if (!{sel_var})',
+-                     f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
+-                     f"if ({self.nested_render_name}_parse(&parg, {sel_var}, attr))",
+-                     "return YNL_PARSE_CB_ERROR;"]
 +
- 	ops = rcu_dereference(lwtun_encaps[lwtstate->type]);
--	if (likely(ops && ops->fill_encap))
--		ret = ops->fill_encap(skb, lwtstate);
--	rcu_read_unlock();
-+	if (unlikely(!ops || !ops->fill_encap))
-+		goto unlock_out;
++        local_vars = None
++
++        if self.selector.is_enum_val():
++            enum = self.family.consts[self.selector.get_enum_name()]
++            pres_var = f"{var}->_present.{sel}"
++            parse_sel = f"{sel}_str"
++            local_vars = [f'const char *{parse_sel};']
++
++            get_lines = [
++                f'if (!{pres_var})',
++                f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
++                f'{parse_sel} = {enum.render_name}_str({sel_var});',
++                f'if (!{parse_sel})',
++                'return 0;']
++        else:
++            parse_sel = sel_var
++            get_lines = [f'if (!{parse_sel})',
++                         f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");']
++
++        get_lines += [f"if ({self.nested_render_name}_parse(&parg, {parse_sel}, attr))",
++                      "return YNL_PARSE_CB_ERROR;"]
+         init_lines = [f"parg.rsp_policy = &{self.nested_render_name}_nest;",
+                       f"parg.data = &{var}->{self.c_name};"]
+-        return get_lines, init_lines, None
++        return get_lines, init_lines, local_vars
  
--	if (ret)
--		goto nla_put_failure;
--	nla_nest_end(skb, nest);
- 	ret = nla_put_u16(skb, encap_type_attr, lwtstate->type);
- 	if (ret)
--		goto nla_put_failure;
-+		goto unlock_out;
  
--	return 0;
-+	nest = nla_nest_start_noflag(skb, encap_attr);
-+	if (!nest) {
-+		ret = -EMSGSIZE;
-+		goto unlock_out;
-+	}
+ class Selector:
+@@ -979,6 +997,12 @@ class Selector:
+     def is_external(self):
+         return self._external
  
--nla_put_failure:
--	nla_nest_cancel(skb, nest);
-+	ret = ops->fill_encap(skb, lwtstate);
-+	if (ret)
-+		nla_nest_cancel(skb, nest);
-+	else
-+		nla_nest_end(skb, nest);
++    def is_enum_val(self):
++        return self.get_enum_name() is not None
++
++    def get_enum_name(self):
++        return self.attr and self.attr.attr.get("enum")
++
  
--	return (ret == -EOPNOTSUPP ? 0 : ret);
-+unlock_out:
-+	rcu_read_unlock();
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(lwtunnel_fill_encap);
- 
+ class Struct:
+     def __init__(self, family, space_name, type_list=None, fixed_header=None,
 
 -- 
 2.55.0
