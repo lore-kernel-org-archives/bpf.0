@@ -1,156 +1,392 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f27.google.com (mail-wr2-f27.google.com [74.125.225.91])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F0A4FD7B2;
-	Wed, 30 Sep 2026 13:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D56B4E2F30
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790773230; cv=none; b=He9hZecfCn4UFKHeMbzaINm5tMrvXpcZ8J13Vjvu7JQMvsiJuDrp8AM1P2mHNwHZgXVKkULcrRCBL/S5gKpdFgm9dh8zHRlHRdYmGjHelrpZ6DNy46peSDwzoRVXnzjGWfMnZf2OU3zpRQ03eMH1BGafC/+i3Bz45hZ759A4FQU=
+	t=1790774494; cv=none; b=BgAaaLOwLcSklNhX5Nlb1TW7qA8DnUj8QHIZy0SgfgXGiIP8u9gzVU5ZoVXBzAkVGpHMv7vZBnePFBBR9ZMS0CYCRtoo0ii3Gmn8wyENVMDecjyKA8tP4kC0mDB7dl/fe2NnFC1Xm437Z+hByj1cOIjYfyw9e6CmeRfHML7OC9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790773230; c=relaxed/simple;
-	bh=fcIdDB5bjMWLXZ2y00ZKC9osUC2I6XgmKzizTSzXlWQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uz697Dz1uwchuxh9+uzqBmsAQyy0ZoGtq2PEkTArs4FSyZ+IYFWi8mUTV6jVkLojbhLqjdz6CmRF+JH0uJcAhNpUPtopVAM5NAcIaA/38dzDVRgl14Nw2VhnP2EJqMvYV9OYCSr+aZPfmad51Q78pRTzeuW3t5mZBgKvg0T++A8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KbZOjzmZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790774494; c=relaxed/simple;
+	bh=IxA2jjxBtBn0Fkc0HP3zcazYPujV2mj/2Ddz1Ag0dQo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=tBgZXtGEcDfQo7R5ClAC2NWoDD9yGLoy6IWNfDJLK1iYvGKBkl9NAdiQfhrcdaUL39chflCIRGXEZbS4Urt+qx56oTPSOOxOJtbgKd0CgyvUKjJ9kESZFRofEBGUyPo15d0IASRNm94wZbuW4sWcxiWgN6etnBmuVDBmDm4hUDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZOd8cR+e; arc=none smtp.client-ip=74.125.225.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KbZOjzmZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997401F000FF;
-	Wed, 30 Sep 2026 13:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790773218;
-	bh=RSVQr8YzOLpc7bt1klRaSVXgRVhT34fjQ7RFxwBtGYc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KbZOjzmZn8DaYNiKsJpyDP/bCu+os1v8t9Pe0Ype9dEwbyq1UhufmzA9KrcigaUDy
-	 gceBKX+NdC0520EfshYLOAVU9vyRmeRdQxPneZHjIv8jnMqDJhm7iIiirtkDQJyQKc
-	 Rd8JTPl/w5PAlaprFCCUB+HPZNg4TfFKdTydFmbH4gWRhR7QZHUV6lFSercoddjQ5k
-	 sBhj7ft/Ga5eG7yw0KXA8PhOFD9Vq2UCiooDrCmhOJygh/g08+TW67YOaSK8xaUlDP
-	 z7MfgE//JG/FTwRfp2s5OFf3T0larzDrNnZO+X6RYaSnnGPheVFsRzVMN5BkeYZgj0
-	 At426K15olJPw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/1] kprobes: Make optprobe optimizer
- multi-generational and asynchronous
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TWFzYW1pIEhpcmFtYXRzdSAoR29vZ2xlKQ==?= <mhiramat@kernel.org>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <179077195573.424772.14623269427412523026.stgit@devnote2>
-References: <179077194409.424772.11709189894572687187.stgit@devnote2>
- <179077195573.424772.14623269427412523026.stgit@devnote2>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 30 Sep 2026 13:00:18 +0000
-Message-Id: <20260930130018.997401F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZOd8cR+e"
+Received: by mail-wr2-f27.google.com with SMTP id ffacd0b85a97d-4843796e373so3148111f8f.1
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 06:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790774476; x=1791379276; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=eY6lHduxeQXU07OpP/TmyzvlpbB/rwtfC8G5zNQ+Qew=;
+        b=ZOd8cR+eiFXLOsEVECe/rNOPedPHLEdVDAFtKtKEVS0d1m1CFa1Pto0Mpib48njTGo
+         EX4LEgfR8TQc1+Q1n9BF3EUN6oGcyR+GRTI6vED7CYG2cd7RfxlqRZ4GZ9RZlhdNCeRa
+         dXcE4ZK1f+xCvrXfA/Rytuj/R3FP9n0QDEy7QBzJFE0/A9lnilzk/tAkT0t3P2/ox0Nk
+         jKGaGyHpszw9/aP0P30Zrc0zqtRzdVUZ9HtP5lPxS27lNGNCKMcOtpzAxmDPRs7C2Ml9
+         g4SJ/Z2Z+KVg+iC7yJ9hqb1+t9VLtS+JIFkNJ74iUL9E1AWcTgdm5J7N/8q4WKzm2JFD
+         QrWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790774476; x=1791379276;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eY6lHduxeQXU07OpP/TmyzvlpbB/rwtfC8G5zNQ+Qew=;
+        b=kd+WchnVhGgc8L/yUZUWBj1jIqhxmNmhmGOkmr32Z0kJEK/+guSc96/lwiiT5oEKb/
+         DlnEEYGG6FzMjpPT9/c9HkjBYwa3JT6/+tAmhvi5oyCBISk8VuzntE08HqsuqL0yY3xz
+         vFZPV0xSLY+LRqtSi1oLBujpxpRHIi0gsX87+Mmnsav2trDVzhkrH0PCwEcucKsq9S03
+         Avz9oRvaQ90oIp5F2R5fqBfGv/4pTUiiycyYvpJ4QkVO5a4g5KY3NnG5vV4iRyG4ZVhh
+         deHGbDRbnjCZ2rvDCtb2jRDlYG4o0eAM/IX97OkX2bqg/5fNv1aOYZBgQ1uC6aqMuHt6
+         aNLw==
+X-Forwarded-Encrypted: i=1; AKwUvBw4GV3ufMoV0IeZPPUr5Up7O98QER+3XW+JMER0AtmDkt6flse7G2QVyL2kgIrveGByZqs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJflwzYfCVP5ThFpBwP2epgKHZf6HVJHi5DxithuH/Icszdq5UA
+	xYe7KZdsYC1QOaayWLJOD8JFSqUKPtbz4u5+I1DK0x2g4AKN2NcoyOz4
+X-Gm-Gg: AYBFou0dLHzycGZdqTqEByBUI51UkAA/UuoQe1PgVTevUoeoTJzh5G8CpfbjijviK3E
+	XICdE47TnqrufpaKGhwH8I26XmSsr9/Dgn0k2Yb2hx0s41ftPUTSg4fyn++B1e+/DO/Up+NM74z
+	aAT/RCxmm9kahwbkqDJjm5fYxTAv0M8yyc8gj1s6kCM68YGbRyYbw2KcC50pG9pZ0aQeLHSPYHH
+	I9bsRuVQVjHQ2tXbvmqfesE5Iwce/dQFUQ+0epIM60WrFWAiku4x3jJkN1fU+GAWVB23q4Yp13s
+	mk/CGEmlovSfbAwGoWrbDORmN1u0PyyvDCjMQ1MwGp3GR5Zf/JzOmv2aBAVOH5ciaZeQc/VYX4n
+	ReokLh7CG3VLZqMsRJ0ytVK5e3DMZf3mEWxYeV2K+4Mopd14OC3+HACCV1i6SYdyGadN5Uf5eiW
+	WpK+iQx4xNas9fU/Rfj01OH8heAefEUXCjE3tQtUyAMd1ZXxbxIQymgrNzrMBZV+OzKKabFG7ZN
+	gYWnD+MXv55yZIZcvVcNKoVwHqJ37H5C4L87AsuQ3T7AozUXm9tJr0=
+X-Received: by 2002:a05:6000:2c03:b0:48a:f59f:8b70 with SMTP id ffacd0b85a97d-48b0256514dmr3166950f8f.46.1790774476132;
+        Wed, 30 Sep 2026 06:21:16 -0700 (PDT)
+Received: from snowdrop.snailnet.com (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b029bef64sm5047284f8f.10.2026.09.30.06.21.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2026 06:21:15 -0700 (PDT)
+From: David Laight <david.laight.linux@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Jim Cromie <jim.cromie@gmail.com>,
+	Lorenzo Stoakes <ljs@kernel.org>
+Cc: Zhen Lei <thunder.leizhen@huawei.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH 2/2] kallsyms: Optimise symbol name search
+Date: Wed, 30 Sep 2026 14:21:08 +0100
+Message-Id: <20260930132109.260597-3-david.laight.linux@gmail.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20260930132109.260597-1-david.laight.linux@gmail.com>
+References: <20260930132109.260597-1-david.laight.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] kprobes: double free/list corruption via double hlist_del_rcu() on=
- freeing_list
---
+Change the alphabetically ordered lookup table (kallsyms_seqs_of_names)
+with one that indexed the table of compressed names rather than the
+array of symbol values.
+This removes all the linear scans during the binary search for the symbol
+name.
+Once the name has been found a second binary search of the 'markers' array
+followed by a linear scan for the symbols address gives the symbol value.
 
-commit 713397faac31184a877c512a3215f1d8fc48a2f8
-Author: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Subject: kprobes: Make optprobe optimizer multi-generational and asynchrono=
-us
+This linear scan is done once for each address returned, whereas the old
+code did the scan for each of the ~17 comparisons in the binary search
+(and the binary search is done at least two times for a symbol that appears
+once).
 
-This commit replaces synchronize_rcu_tasks() with call_rcu_tasks() by
-introducing a multi-generational ring buffer. The kprobe optimizer now
-unoptimizes probes and defers their cleanup asynchronously.
+For normal kernels the index table stays at 24 bits per symbol (now host
+ordered), but a 32 bit table is used if necessary (probably only for
+allyesconfig builds - needs 25 bits on x86-64).
 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 4edd8ca5c6578..33523e9beb884 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
+Seems to work.
+Build for BE kernels will correctly flip the byte order in the index table.
 
-[ ... ]
+Signed-off-by: David Laight <david.laight.linux@gmail.com>
+---
+ kernel/kallsyms.c          | 77 ++++++++++++++++++++++++++------------
+ kernel/kallsyms_internal.h |  4 +-
+ scripts/Makefile           |  1 +
+ scripts/kallsyms.c         | 50 ++++++++++++++-----------
+ 4 files changed, 85 insertions(+), 47 deletions(-)
 
-> @@ -624,67 +696,145 @@ static void do_free_cleaned_kprobes(void)
-> =20
->  static void kick_kprobe_optimizer(void);
-> =20
-> -/* Kprobe jump optimizer */
-> -static void kprobe_optimizer(void)
-> +static void optprobe_generation_rcu_cb(struct rcu_head *rcu)
->  {
-> -	guard(mutex)(&kprobe_mutex);
-> +	struct optprobe_generation *gen;
-> +
-> +	gen =3D container_of(rcu, struct optprobe_generation, rcu);
-> +	WRITE_ONCE(gen->ready, true);
-> +	wake_up(&kprobe_optimizer_wait);
-> +}
-> +
-> +static void optprobe_finalize_generation(struct optprobe_generation *gen)
-> +{
-> +	struct optimized_kprobe *op, *tmp;
-> +
-> +	lockdep_assert_held(&kprobe_mutex);
-> =20
->  	scoped_guard(cpus_read_lock) {
->  		guard(mutex)(&text_mutex);
-> =20
-> -		/*
-> -		 * Step 1: Unoptimize kprobes and collect cleaned (unused and disarmed)
-> -		 * kprobes before waiting for quiesence period.
-> -		 */
-> -		do_unoptimize_kprobes();
-> +		/* Optimization never be done when disarmed */
-> +		if (!kprobes_all_disarmed && kprobes_allow_optimization &&
-> +		    !list_empty(&gen->optimizing_list))
-> +			arch_optimize_kprobes(&gen->optimizing_list);
-> +	}
-> +
-> +	/* Free cleaned kprobes after quiescence period */
-> +	do_free_cleaned_kprobes(&gen->freeing_list);
-> +
-> +	/* Finalize unoptimized kprobes whose quiescence period completed */
-> +	list_for_each_entry_safe(op, tmp, &gen->cooling_list, list) {
-> +		if (kprobe_unused(&op->kp)) {
-> +			/*
-> +			 * Unregistered while quiescence period was in flight.
-> +			 * Remove from hash list and move to cur_gen's freeing list.
-> +			 */
-> +			hlist_del_rcu(&op->kp.hlist);
-> +			list_move(&op->list, &optprobe_gens[optprobe_cur_gen].freeing_list);
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index d18d78e626db..2f39fa850dea 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -177,6 +177,36 @@ static unsigned int get_symbol_offset(unsigned long pos)
+ 	return name - kallsyms_names;
+ }
+ 
++/*
++ * Find the value of a symbol givem the offset in the compressed stream.
++ */
++static unsigned long get_name_address(unsigned int name_offset)
++{
++	unsigned int low, pos, high;
++
++	low = 0;
++	high = kallsyms_num_syms >> 8;
++
++	while (high - low > 1) {
++		pos = low + (high - low) / 2;
++		if (name_offset >= kallsyms_markers[pos])
++			low = pos;
++		else
++			high = pos;
++	}
++
++	pos = kallsyms_markers[low];
++	for (low <<= 8; pos < name_offset; low++) {
++		unsigned int len = kallsyms_names[pos];
++		if (len & 0x80)
++			len += (kallsyms_names[pos + 1] << 7) - 0x7f;
++		pos += 1 + len;
++	}
++
++	return kallsyms_sym_address(low);
++}
++
++
+ unsigned long kallsyms_sym_address(int idx)
+ {
+ 	/* non-relocatable 32-bit kernels just embed the value directly */
+@@ -185,14 +215,11 @@ unsigned long kallsyms_sym_address(int idx)
+ 	return (unsigned long)offset_to_ptr(kallsyms_offsets + idx);
+ }
+ 
+-static unsigned int get_symbol_seq(int index)
++static unsigned int get_symbol_name(int index)
+ {
+-	unsigned int i, seq = 0;
+-
+-	for (i = 0; i < 3; i++)
+-		seq = (seq << 8) | kallsyms_seqs_of_names[3 * index + i];
+-
+-	return seq;
++	if (kallsyms_off24_of_names)
++		return kallsyms_off24_of_names[index].v;
++	return kallsyms_off32_of_names[index];
+ }
+ 
+ static int kallsyms_lookup_names(const char *name,
+@@ -201,15 +228,14 @@ static int kallsyms_lookup_names(const char *name,
+ {
+ 	int ret;
+ 	int low, mid, high;
+-	unsigned int seq, off;
++	unsigned int off;
+ 
+ 	low = 0;
+ 	high = kallsyms_num_syms - 1;
+ 
+ 	while (low <= high) {
+ 		mid = low + (high - low) / 2;
+-		seq = get_symbol_seq(mid);
+-		off = get_symbol_offset(seq);
++		off = get_symbol_name(mid);
+ 		ret = kallsyms_strcmp_symbol(off, name);
+ 		if (ret > 0)
+ 			low = mid + 1;
+@@ -220,23 +246,24 @@ static int kallsyms_lookup_names(const char *name,
+ 	}
+ 
+ 	if (low > high)
+-		return -ESRCH;
++		return -1;
++
++	ret = off;
+ 
+ 	low = mid;
+ 	while (low) {
+-		seq = get_symbol_seq(low - 1);
+-		off = get_symbol_offset(seq);
++		off = get_symbol_name(low - 1);
+ 		if (kallsyms_strcmp_symbol(off, name) != 0)
+ 			break;
+ 		low--;
++		ret = off;
+ 	}
+ 	*start = low;
+ 
+ 	if (end) {
+ 		high = mid;
+ 		while (high < kallsyms_num_syms - 1) {
+-			seq = get_symbol_seq(high + 1);
+-			off = get_symbol_offset(seq);
++			off = get_symbol_name(high + 1);
+ 			if (kallsyms_strcmp_symbol(off, name) != 0)
+ 				break;
+ 			high++;
+@@ -244,7 +271,7 @@ static int kallsyms_lookup_names(const char *name,
+ 		*end = high;
+ 	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ /* Lookup the address for this symbol. Returns 0 if not found. */
+@@ -258,8 +285,8 @@ unsigned long kallsyms_lookup_name(const char *name)
+ 		return 0;
+ 
+ 	ret = kallsyms_lookup_names(name, &i, NULL);
+-	if (!ret)
+-		return kallsyms_sym_address(get_symbol_seq(i));
++	if (ret >= 0)
++		return get_name_address(ret);
+ 
+ 	return module_kallsyms_lookup_name(name);
+ }
+@@ -289,15 +316,17 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
+ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
+ 				  const char *name, void *data)
+ {
+-	int ret;
+-	unsigned int i, start, end;
++	int name_offset, ret;
++	unsigned int sym_number, last;
+ 
+-	ret = kallsyms_lookup_names(name, &start, &end);
+-	if (ret)
++	name_offset = kallsyms_lookup_names(name, &sym_number, &last);
++	if (name_offset < 0)
+ 		return 0;
+ 
+-	for (i = start; !ret && i <= end; i++) {
+-		ret = fn(data, kallsyms_sym_address(get_symbol_seq(i)));
++	for (;; name_offset = get_symbol_name(sym_number)) {
++		ret = fn(data, get_name_address(name_offset));
++		if (ret || ++sym_number > last)
++			break;
+ 		cond_resched();
+ 	}
+ 
+diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+index 81a867dbe57d..be503f3f993f 100644
+--- a/kernel/kallsyms_internal.h
++++ b/kernel/kallsyms_internal.h
+@@ -13,6 +13,8 @@ extern const char kallsyms_token_table[];
+ extern const u16 kallsyms_token_index[];
+ 
+ extern const unsigned int kallsyms_markers[];
+-extern const u8 kallsyms_seqs_of_names[];
++
++extern struct { unsigned int v:24 __attribute__((packed)); } kallsyms_off24_of_names[] __attribute__((weak));
++extern u32 kallsyms_off32_of_names[] __attribute__((weak));
+ 
+ #endif // LINUX_KALLSYMS_INTERNAL_H_
+diff --git a/scripts/Makefile b/scripts/Makefile
+index 3434a82a119f..b481c2b291bb 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -29,6 +29,7 @@ generate_rust_target-rust := y
+ rustdoc_test_builder-rust := y
+ rustdoc_test_gen-rust := y
+ 
++HOSTCFLAGS_kallsyms.o += $(if $(CONFIG_CPU_BIG_ENDIAN),-DCONFIG_CPU_BIG_ENDIAN)
+ HOSTCFLAGS_tracepoint-update.o = -I$(srctree)/tools/include
+ HOSTCFLAGS_elf-parse.o = -I$(srctree)/tools/include
+ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 494852ade6d8..74264ead1efe 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -338,9 +338,8 @@ static void sort_symbols_by_name(void)
+ 
+ static void write_src(void)
+ {
+-	unsigned int i, k, off;
++	unsigned int i, k, off, table_size;
+ 	unsigned int best_idx[256];
+-	unsigned int *markers, markers_cnt;
+ 	char buf[KSYM_NAME_LEN];
+ 
+ 	printf("\t.section .rodata, \"a\"\n");
+@@ -349,17 +348,10 @@ static void write_src(void)
+ 	printf("\t.long\t%u\n", table_cnt);
+ 	printf("\n");
+ 
+-	/* table of offset markers, that give the offset in the compressed stream
+-	 * every 256 symbols */
+-	markers_cnt = (table_cnt + 255) / 256;
+-	markers = xmalloc(sizeof(*markers) * markers_cnt);
+-
+ 	output_label("kallsyms_names");
+ 	off = 0;
+ 	for (i = 0; i < table_cnt; i++) {
+-		if ((i & 0xFF) == 0)
+-			markers[i >> 8] = off;
+-		table[i]->seq = i;
++		table[i]->seq = off;
+ 
+ 		/* There cannot be any symbol of length zero. */
+ 		if (table[i]->len == 0) {
+@@ -396,19 +388,18 @@ static void write_src(void)
+ 		 */
+ 		expand_symbol(table[i]->sym, table[i]->len, buf);
+ 		strcpy((char *)table[i]->sym, buf);
+-		printf("\t/* %s */\n", table[i]->sym);
++		printf("\t/* %d@%d: %s */\n", i, table[i]->seq, table[i]->sym);
+ 	}
++	table_size = off;
+ 	printf(".size kallsyms_names, . - kallsyms_names\n");
+ 	printf("\n");
+ 
+ 	output_label("kallsyms_markers");
+-	for (i = 0; i < markers_cnt; i++)
+-		printf("\t.long\t%u\n", markers[i]);
++	for (i = 0; i < table_cnt; i += 256)
++		printf("\t.long\t%u\n", table[i]->seq);
+ 	printf(".size kallsyms_markers, . - kallsyms_markers\n");
+ 	printf("\n");
+ 
+-	free(markers);
+-
+ 	output_label("kallsyms_token_table");
+ 	off = 0;
+ 	for (i = 0; i < 256; i++) {
+@@ -448,13 +439,28 @@ static void write_src(void)
+ 	printf("\n");
+ 
+ 	sort_symbols_by_name();
+-	output_label("kallsyms_seqs_of_names");
+-	for (i = 0; i < table_cnt; i++)
+-		printf("\t.byte 0x%02x, 0x%02x, 0x%02x\t/* %s */\n",
+-			(unsigned char)(table[i]->seq >> 16),
+-			(unsigned char)(table[i]->seq >> 8),
+-			(unsigned char)(table[i]->seq >> 0),
+-		       table[i]->sym);
++	if (table_size < (1u << 24)) {
++		output_label("kallsyms_off24_of_names");
++		for (i = 0; i < table_cnt; i++) {
++			printf("\t.byte 0x%02x, 0x%02x, 0x%02x\t/* %s */\n",
++#ifdef CONFIG_CPU_BIG_ENDIAN
++				(unsigned char)(table[i]->seq >> 16),
++				(unsigned char)(table[i]->seq >> 8),
++				(unsigned char)(table[i]->seq >> 0),
++#else
++				(unsigned char)(table[i]->seq >> 0),
++				(unsigned char)(table[i]->seq >> 8),
++				(unsigned char)(table[i]->seq >> 16),
++#endif
++			       table[i]->sym);
++		}
++	} else {
++		output_label("kallsyms_off32_of_names");
++		for (i = 0; i < table_cnt; i++) {
++			printf("\t.long %#04x\t/* %s */\n",
++				table[i]->seq >> 16, table[i]->sym);
++		}
++	}
+ 	printf("\n");
+ }
+ 
+-- 
+2.39.5
 
-[Severity: High]
-Does this code risk list corruption via a double free?
-
-If a kprobe in the cooling_list becomes unused and is unhashed here, it is
-moved to the current generation's freeing_list.
-
-When this current generation is later dispatched, do_unoptimize_kprobes()
-will iterate over its freeing_list (passed as free_list):
-
-kernel/kprobes.c:do_unoptimize_kprobes() {
-    ...
-    list_for_each_entry_safe(op, tmp, free_list, list) {
-        ...
-        if (kprobe_unused(&op->kp)) {
-            hlist_del_rcu(&op->kp.hlist);
-        }
-        ...
-}
-
-Will this unconditionally call hlist_del_rcu() a second time on the same
-probe, causing a regression by dereferencing LIST_POISON2?
-
-> +			kick_kprobe_optimizer();
-> +		} else {
-> +			/* Still in use; now safely disarmed */
-> +			list_del_init(&op->list);
-> +			if (!kprobe_disabled(&op->kp))
-> +				optimize_kprobe(&op->kp);
-> +		}
-> +	}
-> +
-> +	gen->in_flight =3D false;
-> +	WRITE_ONCE(gen->ready, false);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/179077186716.424323=
-.12884899073547396948.stgit@devnote2?part=3D1
