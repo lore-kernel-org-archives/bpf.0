@@ -1,126 +1,116 @@
-Received: from mail-ed2-f34.google.com (mail-ed2-f34.google.com [74.125.228.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A75219E7F7
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 04:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.98
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790742378; cv=pass; b=WPIjBeJnMkg8zslXoS0Sus35DsBvs0Wfat3Wz1D2JlVk2agS3p1uy1tqO6lGCLYmulj7FcwkpatmQvLmTIz79MjVgbhf9B9uWrma1IT1Hy6cyFziYUkrutmseDiPHpkO+TBbKpvnkiUNQP2czQzeOkoDqKXOpd0EkpU2cNJcT4c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790742378; c=relaxed/simple;
-	bh=pUhjs1WoaWRbKGo9W9G3o0HlrMCCBaerub5JO2SX6QA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=qHR3c4aQSldY+50w1yZvMPbMczlToyNNxWMMzLDKA9BzMyB2SVwrXUJ8eRKFyJi+OgAbxFqm+ai8XnL7+fQJ7TWX23VeS4gJG/p7zzv/D3JxW60y8L+4Il9XbP8AxMrK+53oWdf/iDuRjPzn8d5dN5IHhMFB01SCHFj2WUXVEu0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iAlsAWwV; arc=pass smtp.client-ip=74.125.228.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71E6399000;
+	Wed, 30 Sep 2026 04:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790742921; cv=none; b=L3JidtZhdTN05mJGg6tak4M7UkQGtBrzniRXsR86ZfgTMZUm59uWQfdZ4yfZsJu6S+bqAeZ3DEkq2U2mAgUV6/ytMrDgQhElhuoHRDQgJtDpG3HUYh01XTaw/qeQlif/yhtbo5P6ZJ/wjaf3onPX8ZNstk+s6Z2NV4ZdMNN3H9I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790742921; c=relaxed/simple;
+	bh=JkHtlPokOn2BvzhlFVjlfx9DCaqfOaYocdfBH7PqihI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dtj2G8o3xfhGNLgYcmHvKQPP8GBUF4yIqU0mHUoenM8sRRDpEVfsJ+8usip0G7eXIoWQ7NZHju23v/9KhL432iUozK/Q4qA569lAqPJVx774kTy9iv+jyyrl84+yGWAdx1quPgCqvs/2AyLoxRaxcrsEZwKce8c7+oA0xCihma0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=lgC6/g+m; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iAlsAWwV"
-Received: by mail-ed2-f34.google.com with SMTP id 4fb4d7f45d1cf-6aaea1cb2e4so6054646a12.2
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2026 21:26:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790742375; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EPdmfjhCphNx2qA4BRNGq/r5QGGd8ZPgtnax3XAN/v2YiZrC7cxYUMTzBnk9AFxerG
-         DumP9z+kJg8f0xmjemPMIQhLgBtHKxgbdfFqIML32GmdDo6/Dx0dmiqfSGeJeozFpa+v
-         ERrE/pDorWXvjA+/mtkXl8Y/ElU46kUUwN+cfY8GVabjoZA4DqagoRe0ihAvJYxOuM8L
-         XjT6XFMopDLscq7OHQmsMCoQMp4+5FGLJZFGf3kQXRe5o6aED+piPRB0g8sl+Zi7BURK
-         SuQS2tNPaJv3ZoP7g0T8DrvdHqf4w7zd6Pjx08IOUAZnW1cMr51a1S7c1SuCQsrL6xkI
-         P4pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:dkim-signature;
-        bh=pUhjs1WoaWRbKGo9W9G3o0HlrMCCBaerub5JO2SX6QA=;
-        fh=NPVFJnkplS0XBaxDJfGZcLOa8RPQHO8kfhXKRMGAFb4=;
-        b=dovKi2sBC51UJ0FRmHgEZPmcyuBf/cmB+n7f0XtO6tkcuCcDaK6cc/Jv9bYiZyDnWR
-         E6FyfV5sJ8zvahb9ywp5cBTj0gEbwC1VEEUrei85Tv+pkw52wWYsXdd54FKfMpLaX4KJ
-         mWly4tMIdqm8Io0YFHbNBd1KabjwIUzHRYxBp9JwCVUlGqwjHH4bkGKlb+LgkdEVFWXq
-         82r3B/4YvJuYg9pPTVmojtjtpqd/KCKw33hNGehGFONGdiqbneikGsvcFeP5BInqlXle
-         I+jypAv3irZ54cYkXJYFp+a/V4PpoeuMp6RLghzJCt088eZU+bQzguvJNgBz8d4Hap9c
-         BaqA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790742375; x=1791347175; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:to:subject:message-id:date
-         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pUhjs1WoaWRbKGo9W9G3o0HlrMCCBaerub5JO2SX6QA=;
-        b=iAlsAWwVwdH5/Z1MLMY+ZF/0bFPWwwChRabCtVmY2JuJ/BaxsiaHFXO0OacULnUjw8
-         Xvl/wmd6lMpRIyNyesnxSOsLu/jYz5h9rPTTG43g2XsktmSJDIA9JXeJzwRrCzFc1Nn9
-         YsBkfCQwgD6th+tlng1pnHjSfHRQp9ruP2dQ6V5P9WGHxLNJoQqfTcqJ6nMF6aOJERMq
-         zQUad2f0JCa6OXuMPyZgngoAwfTDsoxVLKDguiW7F3VnW6iDvcQv5KSiW2FToejuK8xx
-         UzQyqecGCHxfGRfaRpb4ZJiNm1GbuTWthgHVugC3yFdyiMkI8kg3m8N8e7uS+09DggSY
-         5utg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790742375; x=1791347175;
-        h=content-transfer-encoding:content-type:to:subject:message-id:date
-         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pUhjs1WoaWRbKGo9W9G3o0HlrMCCBaerub5JO2SX6QA=;
-        b=TbzYVp2tZCnWi2xF6mt8sLW2SE2YfbQa7dcdtkPe/EQqgTDTHCHT+yeyMR6vS83v50
-         Oiydonm3sJBp63j/Zgl1rJhJy76dB0xL4zgk71SyGAAQZ3HtEYDmdZseKwsbKg8WKIf6
-         DlopgINCAAzTsx2OFAtl5xYawUzKcnEL+OOmMp+2oBtHil142J+3Puz+nFcRF6R9Iy0/
-         bEqbyJM8GrRQSMx7cLj9rH7NKEVCGTnadaEh2JB2Ix4/mZLJWg0L+52J7zl7wQz4kMIt
-         dCWULUfiIGYCvL76QQp9puWdAAXooHN+eA9j5w9uc3t9vwRWmVO15LXP0iWA6a8ofjas
-         uz/g==
-X-Gm-Message-State: AFq9FYLXzWB5ArtHW3uKvLIPMieq2o4pa56h03yy9sCVgu2u+6JWncf7
-	z0ZHiUfTn6gDA/5r6PPGhvWoNdNQHYrbwSn1hS57ctjxKtHl7pNDy5LpouQWz3ERFliioCYsAtT
-	WaVBYuQfGvp3OUflALDZeZvS9eHIKGC/L3Q==
-X-Gm-Gg: AYBFou0hvgYz7X1/A4GfRO+Jfc+hzL5Su1aV0TCy3LTQCU1Rc/KkCgfFOIAf7pF2ri0
-	vX8SBigN70Dfa8rsjsQZ13EEflj7hyVbCtaLW36jSMzer/S8OHeFQmav5FgpcsHasDFtiw6Qjli
-	7LlYhdUgVw59fRPwt5IO70no4zLxqEcDmv6thjt8MzdNj4ZqOTmEu/suBanMnOCiJmZ/7l3vi9S
-	joL3llvrAMMI4i8a6644AU8QOZUXANbCty7ptmkQsjCTgKpDSjxqJC/Vx4ZKfrceNsOKOecs3m0
-	9+bsmCRt40qCpxm3TUc5ONo1lqDLRp0t3SU+taAXm8eM1qqaO9ZhHXECg81DVe5s
-X-Received: by 2002:a05:6402:3886:b0:6ab:81e:e827 with SMTP id
- 4fb4d7f45d1cf-6ad59de9b62mr691793a12.43.1790742375226; Tue, 29 Sep 2026
- 21:26:15 -0700 (PDT)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 29 Sep 2026 21:26:14 -0700
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 29 Sep 2026 21:26:14 -0700
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="lgC6/g+m"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D6AF16F3;
+	Tue, 29 Sep 2026 21:35:14 -0700 (PDT)
+Received: from localhost (a085714.arm.com [10.164.19.28])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 957183F85F;
+	Tue, 29 Sep 2026 21:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790742918; bh=JkHtlPokOn2BvzhlFVjlfx9DCaqfOaYocdfBH7PqihI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lgC6/g+mujq1Di8KZWt65mHC5uA/Qzc5xT80jreFuxXslxLv02NzQrV6JYjehoAuH
+	 2P1nYefRlxZyTLzAxT6VXMQKFBlCuTP7bT5bKmsIoL0fufhFfULbvB17Y8MsgFrD5W
+	 iGRIG26gVobM8X7tH+/OJ4uUJIzt6YNGzZ9HwqE0=
+Date: Wed, 30 Sep 2026 10:05:14 +0530
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Jann Horn <jannh@google.com>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	Pedro Falcato <pfalcato@suse.de>, Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Barry Song <baohua@kernel.org>, Youngjun Park <youngjun.park@lge.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, SJ Park <sj@kernel.org>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>, 
+	Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@gentwo.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Jani Nikula <jani.nikula@linux.intel.com>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Juergen Gross <jgross@suse.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, damon@lists.linux.dev, kasan-dev@googlegroups.com, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v3 3/9] mm: use hw_pte_t for generic PTE table storage
+Message-ID: <xzlxdkrjilskjcagnl33eed7ijxrgfhoalmmmq5ks3wgjmkkhi@zchtxpr2amff>
+References: <20260922-pte0-v3-0-5670b8cb9059@arm.com>
+ <20260922-pte0-v3-3-5670b8cb9059@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Eric Robles <erobles3224@gmail.com>
-Date: Tue, 29 Sep 2026 21:26:14 -0700
-X-Gm-Features: AclHuK_JZDdnZdOzeWKKP-VUQ_UtPxcefcb-m_D7FuJgeOyfXcXlukW-VKyyKQI
-Message-ID: <CANBsAxp+1fnHf2-23PTPTMmVZkpbR4zoAn9A5JJogqHbsAPwhA@mail.gmail.com>
-Subject: [RFC] Proof-gated execution boundary using BPF-LSM
-To: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260922-pte0-v3-3-5670b8cb9059@arm.com>
 
-BPF maintainers,
+On Tue, Sep 22, 2026 at 06:12:31PM +0100, Muhammad Usama Anjum wrote:
+> Generic page-table interfaces use pte_t * for both pointers to PTE table
+> storage and pointers to software PTE values. Convert the generic
+> declarations and their MM, fs, and kernel users together so parameters,
+> return types, callbacks, and local pointers that designate table storage
+> use hw_pte_t *.
+> 
+> Include linux/pgtable_types.h from headers that expose the converted
+> interfaces. It continues to provide pgprot_t to vmalloc.h through
+> asm/page.h.
+> 
+> Keep software PTE values as pte_t and retain pte_t * for value interfaces.
+> 
+> No architecture selects ARCH_HAS_HW_PTE_T at this point, so hw_pte_t
+> remains an alias of pte_t and this changes the interface vocabulary without
+> changing representation or behavior.
+> 
+> Most of this mechanical conversion was generated with the Coccinelle script
+> included in the cover letter. The script deliberately ignores pte_t *
 
-I=E2=80=99m looking for architectural criticism, not a merge request.
-
-I implemented a live BPF-LSM execution gate around
-bprm_check_security. A process explicitly marked as governed executes
-only when a short-lived matching grant exists; the same governed path
-with no grant returns EACCES before the requested program starts.
-
-Live proof and receipts:
-https://github.com/KnowledgeeKZA3224/linux-coherence-gate/blob/main/LIVE_PR=
-OOF.md
-
-Repository:
-https://github.com/KnowledgeeKZA3224/linux-coherence-gate
-
-Separately, I have an experimental source-layer fork coherence patch:
-https://github.com/KnowledgeeKZA3224/linux-coherence-gate/blob/main/sc_pree=
-xec_gate_v2.patch
-
-Important boundary: I am not claiming that source patch as a freshly
-built and booted production kernel. The repository explicitly
-separates the live BPF-LSM proof from that source experiment.
-
-The question I want reviewed is narrower: is a one-time, state-bound
-execution grant of this kind conceptually best expressed through
-BPF-LSM, a dedicated LSM, or another existing kernel mechanism? I
-would value criticism of the boundary and failure model more than
-agreement with the terminology.
-
-Eric Robles
-Supreme Computation LLC
+Just wondering - should this Coccinelle script that converted all these
+instances be saved inside ./scripts/coccinelle/ for future referene.
