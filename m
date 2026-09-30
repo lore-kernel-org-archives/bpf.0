@@ -1,96 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CB54E9C32
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 20:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59754E77F3
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 20:22:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790799734; cv=none; b=JsBLpqN94MuCnFj4KNMWcAkg4RMRIdBer6Ghlon7bJiCr/bqVQ9mZ5+R5g1w2gxiCvju/Mc+kkawN5wAZ4/UhaRUXPYMjfNRRoX9LJbbC/nCQ57+db2bvAyEMPdxuAuWpWY4p3TFLr0kHYzyhpXFn6N7LjZ78+/0vH2RVRa/U48=
+	t=1790799736; cv=none; b=W56oEWynpOM65mfXmcJURh+8Cq+KtIeebfHpqG8tRPKoJMQUzpc8BI3PbGVN7p2UFcnEtBD60WjzTbD3i7wStPEObMbrtoXV4fl0GPmMX9Li8SfdV2E0e3YEgd+hw9C6Szt5xlDqzMwK9LhuPRG6D7TUoBxHm+Of5TvQnLIrr7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790799734; c=relaxed/simple;
-	bh=sejMhlTFp0bKQp+nBsyHvE5RauTefzuyoSkbNytPa7I=;
+	s=arc-20240116; t=1790799736; c=relaxed/simple;
+	bh=SZsJ55ewHuSYYdoAMtIPxKv/oom2tvo/sQSmOMEO9Zw=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=UgxK8YZ5RFX7eW+m7QCbYGf4QrEqKlh5ECm7S4N0R0MiQGhHJe6PFRZNV7BnAx+hE/V2WWUW8s7karuegxiYMglTc7jMftoE6ttjYMtSrfglxVzJ2UIvfzVvfJHotN7vD6fxMWub+FHFmQDg64zLlI2jvv3uqXjjqtwQugO33mU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=naSwgm/y; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=NqSF5rVErYGg3cR1tW9ZjwnxWRiunwnjLPIlOgJDXARiISgATmGnUoZ+nSFjq1fZDCiAiklZSkTs5pfzc+nJ5TQVWI2dETTcF7C4K3I2r2Y+s+BrTnUifP5XV8Sk97BMVokdhtL6YdOWa16Ppts9wC7fB8tA7z0cPVUBZwUFTNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HtWHn7eg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naSwgm/y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8641F000FF;
-	Wed, 30 Sep 2026 20:22:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HtWHn7eg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBAE01F00898;
+	Wed, 30 Sep 2026 20:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790799732;
-	bh=ZkGNz84rX5cQNm5hzBSnbs5uLz96AV8tLl8SA6XA3Mo=;
+	s=k20260515; t=1790799734;
+	bh=lPFJ9zW9p/iW2fDA9ZsbehGiUs1wfahczd8obEvE/08=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=naSwgm/yMhAyhOjrhYhe4IZO/f3y1ERs8BNV4PBg1Kzn4Tx2MBxGW376YH18SqWTR
-	 aTS/3kOlU6VeRpoEvPW6SArt66aOIs36bWl1Ho3kvFP5sRVKaXIAXVt9QQwcRnQcxi
-	 VhDh4foQh7abHnvs7oGkxnCgzZuf5pBS/WmNyvQyf2QEChn3S9ZPz1wpqdQx3WV7cP
-	 aiSNwh6p8z5HCHbOCwdDthPxg9ni2yVxVuIishYp3/mPVG7pqIYkzBqJuLA8vfrGcN
-	 JP0tLmDu3fC6NecSMg5Dx9lbFsjeiyrrkZrXWCjaxGh78PBchx5FJ4scqK4xtCxsAT
-	 48Tl3ceDH6aBQ==
-Content-Type: multipart/mixed; boundary="===============7178183494180677940=="
+	b=HtWHn7egUO1MO4zZmox6YHc1P99nghbKkISPoMsYaz9sbL5Y2YulUBTz7QWh/wrq1
+	 h6h/QTVBZROKD63IvMyROwSCP8tFREX42BpPMQnTY8bBPM9lOHTgLWG0GhRTJId2vy
+	 dKssplBoay2YwvL3sZh2M+6V7H2VboNeg5D8QqeIOAm8JhUq9ARPunrD33NH1Nb5TR
+	 +VKrA5cJ/G+7wBW4DFCxHWoLzazMOyd0KrE5sA85joL/YNc/BV5Jl9GD3kfmreW1n3
+	 txAcKXgsADfu34lmAEMmbBgTGgvKnxyk+nCCsb3zTqH1sjFQ83ZjgxkGDa/9rpEBoC
+	 F9DBqX3umMvKg==
+Content-Type: multipart/mixed; boundary="===============5057781823704840857=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <293a8af9c9209aee56a34777be1829a17b9a3ef752c9a02b9a146e03de45a26a@mail.kernel.org>
-In-Reply-To: <20260930193127.2181684-6-alexei.starovoitov@gmail.com>
-References: <20260930193127.2181684-6-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 05/14] bpf: Allow names of Rust types and functions in BTF
+Message-Id: <c5206372156f9be0095069fd1d36419148006ee6a92b5e72068dd73f01a715aa@mail.kernel.org>
+In-Reply-To: <20260930193127.2181684-5-alexei.starovoitov@gmail.com>
+References: <20260930193127.2181684-5-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 04/14] selftests/bpf: Add tests for arena access through numbers
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 30 Sep 2026 20:22:11 +0000 (UTC)
+Date: Wed, 30 Sep 2026 20:22:13 +0000 (UTC)
 
---===============7178183494180677940==
+--===============5057781823704840857==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Allow names of Rust types and functions in BTF
+> selftests/bpf: Add tests for arena access through numbers
 
-TL;DR: Nit only: btf_name_valid_identifier() now duplicates
-btf_name_valid_section() and its name and comment are stale; the review
-suggests merging the two helpers.
+TL;DR: Test-only nits in the new blinded arena test: it could live in
+verifier.c next to the existing suite (separate file also seems fine), and the
+JIT-disabled skip lacks a reason message.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c b/tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c
+> new file mode 100644
+> index 000000000000..2ac2e9a652fe
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include "sysctl_helpers.h"
+> +#include "verifier_arena_scalar.skel.h"
+> +
+> +/* The same tests with constants of the programs blinded */
+> +void serial_test_arena_scalar_blinded(void)
+> +{
 
-[ ... ]
+A subsystem guideline flags this as potentially concerning: a new, narrow
+test file for a variant of something an existing test in the same directory
+already covers.
 
-> +/* Names in BTF of Rust are not C identifiers. Allow any printable character */
->  static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
->  {
->  	/* offset must be valid */
->  	const char *src = btf_str_by_offset(btf, offset);
->  	const char *src_limit;
->
-> -	if (!__btf_name_char_ok(*src, true))
-> +	if (!isprint(*src))
->  		return false;
->
->  	/* set a limit on identifier length */
->  	src_limit = src + KSYM_NAME_LEN;
->  	src++;
->  	while (*src && src < src_limit) {
-> -		if (!__btf_name_char_ok(*src, false))
-> +		if (!isprint(*src))
->  			return false;
->  		src++;
->  	}
+prog_tests/verifier.c already includes verifier_arena_scalar.skel.h and runs
+the same programs through test_verifier_arena_scalar().  Could this be a
+serial_test_verifier_arena_scalar_blinded() placed next to it in verifier.c,
+so the two variants of the same suite sit together?  test_progs finds
+serial_test_ functions in any prog_tests/*.c file, so verifier.c would work.
 
-This isn't a bug, but btf_name_valid_identifier() now performs the same
-checks as the neighbouring btf_name_valid_section(): an empty string is
-rejected, every character up to KSYM_NAME_LEN must satisfy isprint(), and
-the result is !*src.
+Keeping it separate also looks reasonable.  The test has to be serial
+because it changes a global sysctl, and verifier.c has no serial_test_
+functions today.  One difference is that RUN() in verifier.c drops
+CAP_SYS_ADMIN while RUN_TESTS() here keeps it, but no expectation in
+verifier_arena_scalar.c appears to depend on that.
 
-The remaining '/* set a limit on identifier length */' comment and the
-'identifier' in the function name also describe a restriction that is no
-longer applied.
+> +	const char *harden = "/proc/sys/net/core/bpf_jit_harden";
+> +	char old[16] = {};
+> +
+> +	if (!is_jit_enabled()) {
+> +		test__skip();
 
-Could the two helpers be merged into one (or one call the other) under a
-name that no longer says 'identifier'?
+A subsystem guideline also flags a skip that has no reason string as
+potentially concerning.
+
+When the JIT is disabled, test__skip() is called with no message, so the
+log does not say that the prerequisite was bpf_jit_enable.  test_loader
+prints a reason for its own skips, for example in run_subtest():
+
+    printf("%s:SKIP: %s\n", __func__, spec->skip_reason);
+
+Would a one-line printf() before test__skip() help, for example:
+
+    printf("%s:SKIP: blinding needs the JIT\n", __func__);
+
+Skipping instead of failing looks right here, since constant blinding only
+happens when the JIT runs, and a bare test__skip() is also used in
+prog_tests/callx_func_ptr_map.c, prog_tests/callx_rodata_lskel.c and the
+RUN_JITED() macro in prog_tests/verifier.c.  The only gap is the missing
+reason string.
+
+> +		return;
+> +	}
+> +	if (sysctl_set_or_fail(harden, old, "2"))
+> +		return;
+> +	RUN_TESTS(verifier_arena_scalar);
+> +	sysctl_set_or_fail(harden, NULL, old);
+> +}
 
 
 ---
@@ -98,4 +124,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36768148430
---===============7178183494180677940==--
+--===============5057781823704840857==--
