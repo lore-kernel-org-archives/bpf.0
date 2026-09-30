@@ -1,219 +1,125 @@
-Received: from mta0.migadu.com (out-117.mta0.migadu.com [91.218.175.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5172A3AC00
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 00:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3FA26A1AC;
+	Wed, 30 Sep 2026 00:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790728114; cv=none; b=uq5x2mjPOr+r4Ldt+MB6oP1aMIOoG9Q6eMGl6BNKqkmN2wY8iBQYnX/fvnFUA/ZAaP9sPNCFR2jjr1cWoGe51uOHA3mOkoT1atFtZoQJOcfzphJO+rfB4TT3JfcsYBx5WVnQGnOtHtk8WbYSxBCce1dypRX/x2jNmD/Uda2KxYE=
+	t=1790728536; cv=none; b=oZez42YbHaERExk+heVUymh7k3/UncU/3EXdqwyOsaeGR+z4yq3fN0jSRSGv3ax0AZYO49lNMucm6ouiDp2w9WDJC9XJACsTdDMR84VcQURXlyDO9xw4z1DKgke+UZE9ugzK44D+9xf/HRgKY8kWRHfdpQeWOMY492aA7twHQxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790728114; c=relaxed/simple;
-	bh=H6OmdGKh1eVXFrmLOMRLKUgkSisn7WiU4uvfXhKG8pM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L2B0RmCbvn7TG+DxPCuObvL7CZFmN2QfC2Bb2w/mC0zIy5qjjjGl1+8DE3eauWcb9m9ja384AV9J+YFg6STKMkqyjo5FmjKsB89kTU8HpsRsLymt3AiwIpl8ryGo4QvQNv1/KwFxCPeeeKqb8nY5LGw8XlIhtgCDERD16BNuP+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lWGQYODn; arc=none smtp.client-ip=91.218.175.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790728536; c=relaxed/simple;
+	bh=Vr5kbx/Wxo2uiemM56xIN6W/PPs8cLnBrrHO4OmJDLA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=WECfUxYnvnsZWsuJ9eEPnE60tY5TGmJVs0NyikHRrWSp0kqWuLDazhSaf3vhExWfMufcEBHBqepD2l53w4bw+TxpfSURqD7YfV4bsla9ml4aFUMoMEupgFuAY3BlloNvl/inFiUcKS6DQoGRuR7utXCz/5bDf8lZMuvx0i7GtVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OGXI9v6a; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lWGQYODn"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=H6OmdGKh1eVXFrmLOMRLKUgkSisn7WiU4uvfXhKG8pM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790728109; v=1; x=1791332909;
- b=lWGQYODnY0L2818lC0V00K6qM4dnxBeMHZtYPsnyDLu8EZz3ZKFWivN0VLzQ991Z9S/cyWLv
- qy2CCH86/asTGdeeOqts1/K7kG/6sczGZIH1p3d+UHOkol096+AHvQ+7LaoHpC1WukZbMeE4rgB
- HotdOOTvySLfDzEfBag/l6sk=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 71debd812362a652;
-	Wed, 30 Sep 2026 00:28:29 +0000
-X-Mizu-Trace-ID: 71debd812362a652
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5c4797c6-8fdb-4072-a134-31784b8e8481@linux.dev>
-Date: Tue, 29 Sep 2026 17:28:26 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OGXI9v6a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831D81F000FF;
+	Wed, 30 Sep 2026 00:35:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790728535;
+	bh=+zMz3pARJwKwANTMZ9Ker8rEGNYg5ecscOmKVXfHuss=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=OGXI9v6aDu7NK77ISmFND7TDVDaKjmE6K1TqOA49jS2s21Xp17XrJwUjH15QgfyQa
+	 NaH4vZGX93CVY3HqTfNGeBfbSTS7aWcXXPURdpJgp+d6xbjgDlZvmlnaIKTpVROyem
+	 tCg3PjGXPtSP5/qEbA3N7yVVJbrVXKMBjD61p45lpzmkLkJzT/YorirJ8tODYVxX5S
+	 PABBXH13M/nWnRJgdWMEbtZ3/LkDOC900glf0QyUKnozOYzBkWp5vHQIM0CdEhlIVc
+	 l06t3VsehnZtmP5E5LCaAS05TjG/jLP3TnwiIgsnJh+DgceLNm9quKOj1nf5CVzgq4
+	 +06FtidTuYtMA==
+Date: Wed, 30 Sep 2026 09:35:26 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: paulmck@kernel.org
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Frederic Weisbecker <frederic@kernel.org>, Neeraj
+ Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
+ <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
+ <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, Thomas Graf
+ <tgraf@suug.ch>, Herbert Xu <herbert@gondor.apana.org.au>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Andrew Morton <akpm@linux-foundation.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, rcu@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+ bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Roman Gushchin
+ <roman.gushchin@linux.dev>, Chris Mason <clm@meta.com>
+Subject: Re: [RFC PATCH 0/3] fprobe, rcu/tasks, rhashtable: Switch fprobe
+ and BPF kprobe-multi to Tasks-Rude RCU
+Message-Id: <20260930093526.53be607c55184faf05e8d1f8@kernel.org>
+In-Reply-To: <41b37fed-af5c-4559-9e4e-696ef8ccfdd0@paulmck-laptop>
+References: <179060575297.372125.10581329083761385407.stgit@devnote2>
+	<f593867e-dcef-4f68-b609-a253f489f7b8@paulmck-laptop>
+	<20260929082828.cd9844b5e632a23fd8308dbf@kernel.org>
+	<b39d3368-fc5c-49a6-b47e-c58224a23e07@paulmck-laptop>
+	<CAEf4BzZGdpbX5TdtgbDvDZEsj4wDQiLX94dz-wKfM9aCQJHzzg@mail.gmail.com>
+	<41b37fed-af5c-4559-9e4e-696ef8ccfdd0@paulmck-laptop>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 07/22] bpf: Resume a covered call at its
- landing pad
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260929001601.3242665-1-yonghong.song@linux.dev>
- <20260929001638.3248952-1-yonghong.song@linux.dev>
- <20260929003106.3A0211F00893@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260929003106.3A0211F00893@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Mon, 28 Sep 2026 17:41:57 -0700
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
+> > > > Thanks for the clarification!
+> > > > So I think we can replace rcu_read_lock() with rcu_read_lock_sched_notrace()?
+> > > > (also, maybe we need to add rcu_is_watching() check)
+> > >
+> > > That would work, and yes, you are quite right that if !rcu_is_watching(),
+> > > RCU is studiously ignoring you completely, no matter what your preemption
+> > > state is.
+> > >
+> > > > Current code may involves lockdep in fprobe, that is not good.
+> > >
+> > > Agreed, that could be problematic in any number of contexts.  ;-)
+> > >
+> > > > BTW, if we want to trace some code in extended quiescent state, do we
+> > > > still need this Tasks-Rude RCU?
+> > >
+> > > Well, you need something other than vanilla RCU, anyway.  And Tasks Rude
+> > > RCU is one candidate, though it is also a candidate that might annoy
+> > > people wishing to minimize IPIs.
+> > 
+> > Would RCU Tasks Trace be a better candidate given uprobes and
+> > sleepable BPF depends on it? Would it work here?
 
-On 9/28/26 5:31 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Critical] bpf: landing pad state desync via discarded memory mutations allows OOB access
-> --
->
-> commit 41b3c5e14924fae7175095b7012838a14c2e5ffc
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Resume a covered call at its landing pad
->
-> This commit allows a covered call to resume at its landing pad when bpf_unwind()
-> is invoked by a subprogram. It pushes a cleanup pad branch with the caller's
-> pre-call state and handles bpf_unwind() by returning PROCESS_BPF_EXIT for
-> nested frames.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index fc3df452de2e4..ee074d4a936b5 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> @@ -19167,6 +19186,57 @@ enum {
->>   	INSN_IDX_UPDATED = 2,
->>   };
->>   
->> +static int push_cleanup_pad_branch(struct bpf_verifier_env *env, int insn_idx)
->> +{
->> +	struct bpf_verifier_state *branch;
->> +	struct bpf_func_state *frame;
->> +	int pad = bpf_exc_pad_of_call(env, insn_idx);
->> +
->> +	if (pad < 0)
->> +		return 0;
->> +	branch = push_stack(env, pad, insn_idx, false);
->> +	if (IS_ERR(branch))
->> +		return PTR_ERR(branch);
->> +	frame = branch->frame[branch->curframe];
->> +	/*
->> +	 * The state at that call with the caller-saved registers gone: the
->> +	 * callee's epilogue put r6-r9 and the stack back on the way out.
->> +	 */
->> +	clear_caller_saved_regs(env, frame->regs);
->> +	mark_reg_unknown(env, frame->regs, BPF_REG_0);
->> +	return 0;
->> +}
->> +
->> +static int process_bpf_unwind(struct bpf_verifier_env *env, int *insn_idx,
->> +			      bool *do_print_state)
->> +{
->> +	struct bpf_func_state *frame = cur_func(env);
->> +	int pad = bpf_exc_pad_of_call(env, *insn_idx);
->> +	int err;
->> +
->> +	if (pad < 0) {
->> +		err = check_resource_leak(env, false, !env->cur_state->curframe,
->> +					  "an unwind with no landing pad");
->> +		if (err)
->> +			return err;
->> +		if (env->cur_state->curframe)
->> +			return PROCESS_BPF_EXIT;
-> [Severity: Critical]
-> When process_bpf_unwind() returns PROCESS_BPF_EXIT here, the verifier stops
-> exploring the callee and discards its state. Does this discard any memory
-> mutations made by the callee to pointer arguments before calling bpf_unwind()?
+Hmm, those can be sleepable, but this is not. fprobe is based on ftrace
+so the callbacks are non preemptive.
 
-You are right. It is my mistake. The key problem is here (in v7):
+> 
+> Quite possibly!  Of course, there might be corner-case ftrace/BPF issues
+> that you and Masami would know better than would I.
+> 
+> David Woodhouse suggests the new Atomic SRCU for a vaguely similar
+> purpose:
+> 
+> https://lore.kernel.org/all/20260920211920.928306-1-dwmw2@infradead.org/
+> 
+> Now that Tasks Trace RCU is implemented in terms of SRCU-fast, there
+> might not be all that much air between David's suggestion and yours.
 
-+static int push_cleanup_pad_branch(struct bpf_verifier_env *env, int insn_idx)
-+{
-+	struct bpf_verifier_state *branch;
-+	struct bpf_func_state *frame;
-+	int pad = bpf_exc_pad_of_call(env, insn_idx);
-+
-+	if (pad < 0)
-+		return 0;
-+	branch = push_stack(env, pad, insn_idx, false);
-+	if (IS_ERR(branch))
-+		return PTR_ERR(branch);
-+	frame = branch->frame[branch->curframe];
-+	/*
-+	 * The state at that call with the caller-saved registers gone: the
-+	 * callee's epilogue put r6-r9 and the stack back on the way out.
-+	 */
-+	clear_caller_saved_regs(env, frame->regs);
-+	mark_reg_unknown(env, frame->regs, BPF_REG_0);
-+	return 0;
-+}
+OK, let me check it. But at a glance, this atomic SRCU is still a bit
+heavier than rcu_sched_notrace, for fprobe. It involves smp_mb and lockdep. 
 
-esp.
-   branch = push_stack(env, pad, insn_idx, false);
-it ignored the state change in callee, e.g., a value in stack
-may get changed. This will make verification incorrect due to
-such changed value.
+So if all of these rcu_read_lock() in fprobe are replaced with
+rcu_read_lock_sched_notrace(), isn't it enough to switch the
+synchronize_rcu() to synchronize_rcu_tasks_rude() for avoiding
+`if (!rcu_is_watching()) return;` ?
 
->
-> Since the CPU unwinds the stack without undoing memory writes at runtime,
-> could this desynchronize the verifier state from runtime state and allow
-> out-of-bounds memory accesses?
+(Note, most of replacement will be done by [1])
+[1] https://lore.kernel.org/all/179064115227.394389.16910234241400391996.stgit@devnote2/
 
-Yes, see the above.
+Thank you,
 
->
->> +		/*
->> +		 * The main program's frame returns at once, which is the
->> +		 * program returning. Mark r0 the zero the fixups leave after
->> +		 * the call, and leave through the exit, which is what holds
->> +		 * that zero to the program type.
->> +		 */
->> +		mark_reg_unknown(env, cur_regs(env), BPF_REG_0);
->> +		mark_reg_known_zero(env, cur_regs(env), BPF_REG_0);
->> +		return process_bpf_exit_full(env, do_print_state, false);
->> +	}
->> +	clear_caller_saved_regs(env, frame->regs);
->> +	mark_reg_unknown(env, frame->regs, BPF_REG_0);
->> +	*insn_idx = pad;
->> +	return INSN_IDX_UPDATED;
->> +}
->> +
-> [ ... ]
->
->> @@ -19421,7 +19491,29 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
->>   					return -EINVAL;
->>   				}
->>   			}
->> +			if (bpf_is_unwind_kfunc(insn) || bpf_is_unwind_resume_kfunc(insn)) {
->> +				err = check_kfunc_allowed_only(env, insn, env->insn_idx);
->> +				if (err)
->> +					return err;
->> +				if (bpf_is_unwind_kfunc(insn))
->> +					return process_bpf_unwind(env, &env->insn_idx,
->> +								  do_print_state);
->> +				/*
->> +				 * Mark r0 a known zero -- unknown first, as
->> +				 * the known-zero helper keeps the type it
->> +				 * finds, which here is NOT_INIT. The fixups
->> +				 * lower this to 'r0 = 0; exit', so the frame
->> +				 * returns a real zero.
->> +				 */
->> +				mark_reg_unknown(env, cur_regs(env), BPF_REG_0);
->> +				mark_reg_known_zero(env, cur_regs(env), BPF_REG_0);
->> +				return process_bpf_exit_full(env, do_print_state, false);
->> +			}
->>   			mark_reg_scratched(env, BPF_REG_0);
->> +			/* An unwind out of this call resumes at the pad. */
->> +			err = push_cleanup_pad_branch(env, env->insn_idx);
->> +			if (err)
->> +				return err;
-> [Severity: Critical]
-> push_cleanup_pad_branch() pushes a branch using a snapshot of the pre-call
-> state. If the callee modified a stack variable (e.g., an array index) and then
-> unwound the stack, does the verifier evaluate the landing pad with the original
-> unmodified value?
->
-> Could a BPF program use this to bypass bounds checks by mutating an index in
-> the callee before unwinding, causing the verifier to optimize out the checks
-> in the landing pad while using the out-of-bounds value at runtime?
-
-You are right. See the above explanation. Will fix.
-
->
->>   			if (bpf_in_stack_arg_cnt(&env->subprog_info[cur_func(env)->subprogno]))
->>   				cur_func(env)->no_stack_arg_load = true;
->>   			if (bpf_is_callx(insn))
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
