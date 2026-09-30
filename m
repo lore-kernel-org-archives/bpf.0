@@ -1,147 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C9634E75A
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3113CEB8A
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:47:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790797617; cv=none; b=sTWd3akWZIauYUYbKQ+Z7WFvx5amW0cjDb91My4MQrCtC8Tvqht2yWlROJRc92CbadQzjfLVKt0XvcsW091lsApH72GT11HjYzWe83u7ZAy+U6cfkfcfNCtdsx6DBJsteuoeEojirje/t+4hWvafptYHYVRuNgqVYk5B7xb8bmU=
+	t=1790797658; cv=none; b=fqE7z00v1dwmYVL314gD8DJGc1dGpZvigzSnXQgKff20Nr+eUxT92BueuEMBC4NNOXba5iRI5MgVINsoBRzcTHr8k/TqH2as4ajNxerBRVckihJthrWhavwipP7eNKlk9l/0wwPCBAp1la8I3Ja8FCB6m3pfmMXGq/ojm6h36C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790797617; c=relaxed/simple;
-	bh=sXHZzn+JjJJi928Htbnjq0+86tOW40SVkogmDR3DntY=;
+	s=arc-20240116; t=1790797658; c=relaxed/simple;
+	bh=39e/bpw9hI3TccX2Ab5WIUZKOhFd+zQle6Yub1Zr+Tk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=t+OiIEmTKHkVLsDewn73qqw6i5QLD9t5ks+6VzxWmdAIIwZQWcHC+MyvoyGyJPz+Ty4vGNM61soi/+qVP9bCsK7rXAGwqA/h0FaO8X02FzV0QeRCaOwfizZVICiB4ir7kD4/9s1e0NpO24Ce6mo6JrEcyQ3paJNeaAoa3uXsxnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lBhd615F; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=IE14a0pV8W2o0Vav5ZQyZ6BVbkLXEiRndbfQIIo8hf+lVBlZbXlme2mv0N4bYUmmdMOS2ubJF0PPjN8xxCyT443tdXwuYHAkHOlxeZQazpxlrVtz61DEi8pXbe/GNIksMMaN1zp5lKUUwOvFIMDqdqGT6/CHMHfBnRoPfcyG8o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWyrUjrC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lBhd615F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 865701F000FF;
-	Wed, 30 Sep 2026 19:46:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWyrUjrC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3830F1F000FF;
+	Wed, 30 Sep 2026 19:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790797615;
-	bh=/aOKH9q/QcNYdejOfaPKhln1NK3PMPKeQAbwXRIyiX0=;
+	s=k20260515; t=1790797656;
+	bh=qg3l+o/PhtzPaKzx+0rrM3Ot4NU8Koum/AAa5233kkY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lBhd615FFZgyTc+O0A388on6RI3NYf6AQrd6MjrjV227uU739WavrxT5+wYo4r0n1
-	 7N8qjwcHMBQwFTTaAgvMmexls0nL8BMkZdnTTLZ+K/VPK4xJ39NAIWVrq9YPrXwVaQ
-	 OtqpGI11fT2huzWE4xetJZvLRiM1P4zbJXkkjG/MkOcZYk9ToDUG0mbwqT/cVdraP5
-	 zfuZy424J3GKlAYnflHaPzpnEUMEe+wjHnVn3lqFsl80NEXUxfMDk7XlDdxdRupq9w
-	 MOZzZfFOQ9EdbdwOsIueB4I+hwV1XGByC4byBqftPXVuHuPoROthLQSV3Ts/r6HQIR
-	 ElZIm2icQXQUQ==
+	b=YWyrUjrCvQ8m0HOCq1nFobj5BNqdIt/91c91pO9B192lIJBFsXWGP0zzIWzVCQx3K
+	 9dEvyJsUdBhtCV7EjMualRV3xNnI18sLcz/eyfrDwN5o8QpoxZnfoRDxBzsvZ8GFgq
+	 VTbVgnceQfakVAf67ViUI7NX6etPOwuztlkztOJowpiJVvXe7pbyplRaZBy0c3rbOf
+	 nk6zmaVgPFh1XTL73vdv5AEU/vikup1V7Ho+0C5In6UNgDeidxFJPmPKKtm7M1KpBZ
+	 YuWCBqErr1Xaz5Z2IA3br8ke34T8uDm1ueUFggOpfdHU7WRBmWZZTc82a7yHZ8bBdh
+	 ZIYrnry6mWOKQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 11/14] libbpf: Keep global data in arena when
- the object has .arena.data
+Subject: Re: [PATCH bpf-next 09/14] bpf: Allow a variable in DATASEC that is
+ smaller than its type
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260930193127.2181684-12-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260930193127.2181684-10-alexei.starovoitov@gmail.com>
 References: <20260930193127.2181684-1-alexei.starovoitov@gmail.com>
- <20260930193127.2181684-12-alexei.starovoitov@gmail.com>
+ <20260930193127.2181684-10-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 30 Sep 2026 19:46:55 +0000
-Message-Id: <20260930194655.865701F000FF@smtp.kernel.org>
+Date: Wed, 30 Sep 2026 19:47:35 +0000
+Message-Id: <20260930194736.3830F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] libbpf: integer overflow in bpf_object__collect_data_ptr() allows =
-heap corruption
-- [Medium] libbpf: ARENA map bypasses pinning and reuse if data pointers ex=
-ist
+- [Medium] bpftool/perf: out-of-bounds heap read when dumping DATASEC varia=
+bles
 --
 
-commit d23345bdc249c218c8d1f72cbc12d47c5a72bd22
+commit 1b453d08464afcede36a667c89c48e99ef1d651d
 Author: Alexei Starovoitov <ast@kernel.org>
 
-libbpf: Keep global data in arena when the object has .arena.data
+bpf: Allow a variable in DATASEC that is smaller than its type
+   =20
+LLVM splits a static of a Rust program into pieces. Every piece is a VAR
+with the type of the whole static:
+   =20
+  [223] STRUCT 'BpfCell<core::option::Option<...>>' size=3D32 vlen=3D1
+  [236] VAR '..scx_cosmos9TASK_CTXS.0' type_id=3D223, linkage=3Dstatic
+  [248] DATASEC '.bss' size=3D0 vlen=3D9
+          type_id=3D236 offset=3D24648 size=3D1 (VAR '..TASK_CTXS.0')
+   =20
+and the kernel rejects such BTF with "Invalid size". Allow it.
 
-This commit introduces support for placing global data within an arena for
-objects containing a .arena.data section. It appends .data, .bss, and .roda=
-ta
-sections after __arena variables, converting relocations against these
-sections into relocations against the arena map.
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index c9d4b709380c9..0630675377aaa 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 [ ... ]
-
-> @@ -5736,6 +5954,10 @@ bpf_object__create_maps(struct bpf_object *obj)
->  			continue;
+> @@ -5412,16 +5412,16 @@ static int btf_datasec_resolve(struct btf_verifie=
+r_env *env,
+>  			return env_stack_push(env, var_type, var_type_id);
 >  		}
 > =20
-> +		/* see bpf_object__relocate_data_ptrs() */
-> +		if (map->def.type =3D=3D BPF_MAP_TYPE_ARENA && obj->arena_mapped)
-> +			continue;
-> +
+> +		/*
+> +		 * The variable can be smaller than its type. It's a piece of
+> +		 * a variable that the compiler split then, with the type of
+> +		 * the whole variable.
+> +		 */
+>  		type_id =3D var_type->type;
+> -		if (!btf_type_id_size(btf, &type_id, &type_size)) {
+> +		if (!btf_type_id_size(btf, &type_id, NULL)) {
+>  			btf_verifier_log_vsi(env, v->t, vsi, "Invalid type");
+>  			return -EINVAL;
+>  		}
+> -
+> -		if (vsi->size < type_size) {
+> -			btf_verifier_log_vsi(env, v->t, vsi, "Invalid size");
+> -			return -EINVAL;
+> -		}
 
 [Severity: Medium]
-Since bpf_object__relocate_data_ptrs() can create the ARENA map early and
-set obj->arena_mapped to true, will this skip bypass the pinning and reuse
-logic in bpf_object__reuse_map()?
+Does removing this validation expose userspace tools to out-of-bounds heap
+reads?
 
-If an application uses both data pointers and pinned ARENA maps, it appears
-the map sharing might break because the early creation unconditionally skips
-pin_path and reuse evaluations.
+By allowing vsi->size < type_size, a DATASEC variable piece's offset plus i=
+ts
+full type size can now exceed the DATASEC's total size.
 
->  		err =3D map_set_def_max_entries(map);
->  		if (err)
->  			goto err_out;
+When bpftool dumps a DATASEC:
 
-[ ... ]
+tools/bpf/bpftool/btf_dumper.c:btf_dumper_datasec() {
+    ...
+    ret =3D btf_dumper_do_type(d, vsi[i].type, 0, data + vsi[i].offset);
+    ...
+}
 
-> @@ -8067,12 +8348,84 @@ static int bpf_object__collect_map_relos(struct b=
-pf_object *obj,
+It unconditionally reads bytes based on the variable's full type size. Since
+the piece is smaller than its type, this reads past the end of the allocated
+map value buffer.
 
-[ ... ]
+Similarly, perf passes the full type size as the bounding data_sz to libbpf:
 
-> +static int bpf_object__collect_data_ptr(struct bpf_object *obj, const ch=
-ar *relo_sec_name,
-> +					int relo_idx, size_t sec_idx, const Elf64_Rel *rel,
-> +					const Elf64_Sym *sym)
-> +{
-> +	Elf_Data *scn_data =3D obj->efile.secs[sec_idx].data;
-> +	const char *sym_name =3D elf_sym_str(obj, sym->st_name) ?: "<?>";
-> +	struct data_ptr *ptrs;
-> +
-> +	if (ELF64_ST_TYPE(sym->st_info) =3D=3D STT_SECTION && sym->st_shndx < o=
-bj->efile.sec_cnt)
-> +		sym_name =3D elf_sec_name(obj, elf_sec_by_idx(obj, sym->st_shndx)) ?: =
-"<?>";
-> +
-> +	if (ELF64_R_TYPE(rel->r_info) !=3D R_BPF_64_ABS64 ||
-> +	    sym->st_shndx >=3D obj->efile.sec_cnt ||
-> +	    (sym->st_shndx !=3D obj->efile.arena_data_shndx &&
-> +	     !bpf_object__shndx_is_data(obj, sym->st_shndx)) ||
-> +	    rel->r_offset + sizeof(__u64) > scn_data->d_size) {
+tools/perf/util/bpf-event.c:format_btf_variable() {
+    ...
+    btf_size =3D btf__resolve_size(btf, t->type);
+    btf_dump__dump_type_data(d, t->type, btf_data, btf_size, &opts);
+    ...
+}
 
-[Severity: High]
-Could this bounds check overflow if rel->r_offset is maliciously large
-(e.g., UINT64_MAX - 7)?
+This incorrectly bypasses libbpf's internal bounds checks, causing libbpf
+to read out-of-bounds from map->rodata.
 
-Since both operands are unsigned 64-bit integers, the addition might wrap
-around to 0, which would incorrectly pass the > scn_data->d_size check.
-
-If this check is bypassed, the overflowed offset is later used in
-bpf_object__relocate_data_ptrs():
-
-    memcpy(&val, map->mmaped + p->sec_off, sizeof(val));
-    val +=3D addr;
-    memcpy(map->mmaped + p->sec_off, &val, sizeof(val));
-
-Can this lead to an out-of-bounds read and write against map->mmaped,
-potentially corrupting heap metadata in the process parsing the object?
-
-> +		pr_warn("sec '%s': relo #%d: can't resolve pointer to '%s' at offset %=
-zu when data is in arena\n",
-> +			relo_sec_name, relo_idx, sym_name, (size_t)rel->r_offset);
-> +		return -LIBBPF_ERRNO__RELOC;
-> +	}
+>  	}
+> =20
+>  	env_stack_pop_resolved(env, 0, 0);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930193127.2181=
-684-1-alexei.starovoitov@gmail.com?part=3D11
+684-1-alexei.starovoitov@gmail.com?part=3D9
