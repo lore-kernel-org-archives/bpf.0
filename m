@@ -1,119 +1,87 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-49.mta1.migadu.com [95.215.58.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D2248CD7F
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 10:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CA94915B9
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 11:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790764986; cv=none; b=pMNpftfswtRMyPANcIDwkb+p6//Vcohsy0eVw4tXFtDBxYykcmiDU10CJjrZjRXPzxyuYvuYq5li0BSOxcNfsJVnc9kJVFRHgN7WKUd3fwfSIKXzxXx26SBXY/BGIm8CBHK6TI7LT/EpS/HMgC6FKH4RUrX/iZ0TWZATzHQYoGQ=
+	t=1790769055; cv=none; b=JZ1jH3KwmvK2/4MPe/mVnw7JUMClZE7yZ+7q2AyIipMShTzwi7h1Z3pcj6atwzPpp7fa5UTTwD7NBWJxdi+o9asHZDocmpZAJbeHiyFQSz/DBLq3VuWp67nHVD/dNkmSsmYmrcRCxThZG99HvoHxb8y+OqcenC5tzS2XQZe7q0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790764986; c=relaxed/simple;
-	bh=soFI/8w1oGqLIedwGHhtHwuwn9kpTW6DxOdhNgm1g+A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WijtSLR4CrHErSv2aDSB6CdSkFO9U64JMFN1tAA9DpbsADOtCvU6SPMZpmtXBvfFoqV1Tx86YKbTf6dnpSETkVKyk0dZgCHedWn6AzS2/eyiOvoj7TgZte2MBGfOYZPkXyqzbG7qteb88wrH7aZrvkedHdThVgddmqFM0hAkABo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hvs7B67RNzKHMh7
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 18:42:14 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 0C9BA40888
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 18:42:52 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgBHZCeq57xqgX_xCA--.57102S2;
-	Wed, 30 Sep 2026 18:42:51 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Luke Nelson <luke.r.nels@gmail.com>,
-	Xi Wang <xi.wang@gmail.com>
-Cc: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf] MAINTAINERS: Add myself as co-maintainer of riscv bpf
-Date: Wed, 30 Sep 2026 10:46:59 +0000
-Message-Id: <20260930104659.1919027-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1790769055; c=relaxed/simple;
+	bh=s1d9s2uZpjV4NHv1E/jjK0caCmGFjqY92Yem+RWDv7k=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=O9aZYigFNCksYmadiHrOXols/J+G+vrr9X1Zl9wKgT57MI1qqkur0ad/e0uHHT4ak5pqlF5+m+hVcFxz3qbcM32dIXQf47xIJ7UDJD1IZnCAs2ZttWbRfsjpo0I2Mi84So73JIg3N0Pi6JxSzcY95dLTBKfBanKa8DgmzmZC6IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N3gHHqdz; arc=none smtp.client-ip=95.215.58.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N3gHHqdz"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=s1d9s2uZpjV4NHv1E/jjK0caCmGFjqY92Yem+RWDv7k=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790769051; v=1; x=1791373851;
+ b=N3gHHqdzfNz7vU5KTgA7+aMpWW5Ruma202AzJLsUmfhyfVWGmSVsA1uQXXFvhXUfJmt6FNci
+ zv2PDHBVah9vY36PfZtpKVVO0e8/x7iRb8Splz9jizXFd0u2NwpZZlEDhOvL/ipuBikptzv9WEk
+ gn9pUqt36Rbh6fhKr5bmr3nI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f33bd8b0dbe14da9;
+	Wed, 30 Sep 2026 11:50:50 +0000
+X-Mizu-Trace-ID: f33bd8b0dbe14da9
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <dbc80af8-f277-4180-bfe3-c7a56c265e8d@linux.dev>
+Date: Wed, 30 Sep 2026 19:50:46 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, mkoutny@suse.com, tj@kernel.org, bpf@vger.kernel.org,
+ hannes@cmpxchg.org
+Subject: Re: [RFC PATCH v8 1/4] blk-iocost: add BPF struct_ops cost model
+ support
+To: sashiko-reviews@lists.linux.dev
+References: <20260930075154.189958-1-cui.tao@linux.dev>
+ <20260930075154.189958-2-cui.tao@linux.dev>
+ <20260930081123.8CDA91F00893@smtp.kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20260930081123.8CDA91F00893@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBHZCeq57xqgX_xCA--.57102S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CrWrAr17XF1fKr1rXr48Crg_yoW8AF43pa
-	15Gw15C34kWr1xAr4rGF1jqayrA3WkG3y5CrZrW3s8AFn3Kw10gr10ka1Uua109FWrur4S
-	yry3Xr1vyaykAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-	n2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-	67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
-	MIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
-	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+Hello,
 
-Over the years, I have been actively involved in the development and
-have proactively taken on maintenance responsibilities for the RV64 JIT,
-covering the related bpf core, riscv architecture, and selftests/CI
-infrastructure. With the continuous growth of riscv bpf features and
-testing workload, adding a co-maintainer helps share the review burden
-and ensure timely patch handling.
+在 2026/9/30 16:11, sashiko-bot@kernel.org 写道:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] block: Use-After-Free in q_to_ioc() list traversal due to dropped rq_qos_mutex
+> --
 
-As for the RV32 JIT, there has been a lack of active maintainer response
-for several years, leaving incoming patches occasionally stalled. Active
-maintenance is needed to review incoming patches and ensure issues are
-addressed in a timely manner.
+The findings are confirmed; here is
+how each will be addressed in the next revision:
 
-Therefore, I would like to request taking on the co-maintainer role for
-both the RV64 and RV32 JITs. For me, being a maintainer is both an honor
-and a responsibility, and it also makes it easier for me to participate
-in riscv bpf work, where I look forward to dedicating more time and
-effort.
+1. Lockless q_to_ioc() in the attach path (sashiko, patch 1).
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- MAINTAINERS | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+   Confirmed. After blk_iocost_init() succeeds, the attach path called
+   q_to_ioc() with rq_qos_mutex released. Although the returned value was
+   not used, q_to_ioc() walks the non-RCU rq_qos list and should not be
+   called outside its synchronization. The unnecessary lookup is removed.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 140eafcbbd78..c27119500152 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4872,6 +4872,7 @@ F:	arch/powerpc/net/
- BPF JIT for RISC-V (32-bit)
- M:	Luke Nelson <luke.r.nels@gmail.com>
- M:	Xi Wang <xi.wang@gmail.com>
-+M:	Pu Lehui <pulehui@huawei.com>
- L:	bpf@vger.kernel.org
- S:	Maintained
- F:	arch/riscv/net/
-@@ -4879,7 +4880,7 @@ X:	arch/riscv/net/bpf_jit_comp64.c
- 
- BPF JIT for RISC-V (64-bit)
- M:	Björn Töpel <bjorn@kernel.org>
--R:	Pu Lehui <pulehui@huawei.com>
-+M:	Pu Lehui <pulehui@huawei.com>
- R:	Puranjay Mohan <puranjay@kernel.org>
- L:	bpf@vger.kernel.org
- S:	Maintained
--- 
-2.34.1
+2. Missing test__skip() on -EOPNOTSUPP (sashiko, patch 2).
+
+   Confirmed. Both attach paths now call test__skip() before returning so
+   skipped tests are reported correctly. The unused line[256]/word[256]
+   arrays in write_cost_model() are removed as well.
+
+3. Documentation commit message vs. text (bpf-ci, patch 4).
+
+   Confirmed. The commit message described two behaviors that were not
+   stated explicitly in the documentation. The documentation is extended
+   to say that detaching restores the builtin model, and that the ctrl
+   field accepts only "auto" and "user" and never selects the active
+   model.
+
+Thanks,
+Tao
 
