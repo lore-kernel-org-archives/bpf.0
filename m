@@ -1,132 +1,136 @@
-Received: from mta0.migadu.com (out-191.mta0.migadu.com [91.218.175.191])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E344F3EB1
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1B44DD6DB;
+	Wed, 30 Sep 2026 13:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790774922; cv=none; b=jQPioFfrebEeWNbRXAGtSKS8Il5eiGDWudzC1nK2ffYUd0q6rMylf8nHA+8ox3x7D9FR4LPwjpVdbg+zzJ7m3tANW/cN8fJgiOXYRdVMAif8zVHJmaHNr0+sWW6YUKCgYYMaxe5I9uJG0PkLbvciBeAsMHlwibc0cVn8G6VvnL8=
+	t=1790775133; cv=none; b=BWwNJAiXICsD5YeCyFr8lxBT30gQv14o9oRV6DUiHpxD63eWntR77ZJwRXnBcZynicYKk+s/xKbmlujP27FcY5vrvwNqfFdYoi0CSF/BqPYUpGnLKBPU3hJrf3ZDpUQrQm7KnwZevnkvvrw9HVhViFlJATTSQfxj6+C3V31Qvlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790774922; c=relaxed/simple;
-	bh=Hsdm4rJdIk1UsbW5gttlY7rEJh2gpgb8d3cHbDg7CKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hVjxeZptSkdmRLYeqWUQlcGk0KkJoSiMj2KmyiN5Ii//pvaI3mLsPl38hWKS7hY1C5FqxiBFD5xtqiU0AmCk+TzYWCTQVtgqLEo9dwKHC7bTn7ObeUrTmyL17JQcGhqrOGjGUv7NH7CewkPw5+oVnS2zqz7yzO5S5JBbR+Aka2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dw9rFbZO; arc=none smtp.client-ip=91.218.175.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790775133; c=relaxed/simple;
+	bh=1+tqeO8PqJ2j4hyu9XjYVjP39roEyaXvCq3aP2jqfwg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=uyxDpvjhpeYnyWJ491OzMz1qzYPUwcX7bycmqHVG+Hm/0tIFsPM1zsbiwg0ff+KRoi5bJ85AQbqnQ9vD0+S6mWN9NrPV0MaFyuPFToTM7IZoDmFl8NIBNuYjKcCXjqp1my148XevKk8Vvajb/9ixXziQH2naXO+C7hu4EbmrcJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PIciQONU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dw9rFbZO"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Hsdm4rJdIk1UsbW5gttlY7rEJh2gpgb8d3cHbDg7CKw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790774907; v=1; x=1791379707;
- b=dw9rFbZOf7XvxLNqrULbYFqI/7sEpm2RPYJqOonRKM+bEjnj1BKPUV76yuCHYg67mCK2+OXQ
- wMMl/bOPbsOOp/+ZsWSRIONsey/wvGPgOpPhjHoqgxDk8pr099nRBEDh/qaFit9hTjnLM+Slu8L
- q1JKEmWRYRONghXKspKAWN3c=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3a312f617140e728;
-	Wed, 30 Sep 2026 13:28:26 +0000
-X-Mizu-Trace-ID: 3a312f617140e728
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 30 Sep 2026 06:28:21 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Tejun Heo <tj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
-	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
- struct_ops
-Message-ID: <arw4rjVkm2ob9ioL@linux.dev>
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
- <bda525506b3fb3e61da28a112f28abba@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PIciQONU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558421F00893;
+	Wed, 30 Sep 2026 13:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790775127;
+	bh=Xvsi4k+8fFwuUMFzeW1rbUNTZdrmcW1tNsb0JEzhUvA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=PIciQONUWEMc/SjvH5wicASEKUYbBUFzFDzhnHOh5vRNDq1pGEdFAU0iK9GWzdMhb
+	 1KN7LhXsxlo3ejbwG1QRK/13gdoxSyTz+kLHja3UJ79AQj35zZ315PoT51i3t78Ijo
+	 O+roUTDipEdmKRB4I+FhH/mZR5lTMdfl6i2NCIefBXOwnTCPWGL3m7uGmJn2WHF29w
+	 PozvbKq/Yd6NqF9VfGi2pM2U5EW/qZw+OPDdAOIHXobk9MzJUVdN/fR2RRNXFVLLxt
+	 QYEokIUBTlizTWOvKzPoNt5v+9ZJXALUDlmV1MmSq0i2CE1xiwga/mMV4Gl4VbqieN
+	 tQu9duc/7sryg==
+From: Christian Brauner <brauner@kernel.org>
+Date: Wed, 30 Sep 2026 15:31:53 +0200
+Subject: [PATCH 01/17] namespace: queue a mount only once for mount
+ notifications
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bda525506b3fb3e61da28a112f28abba@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260930-work-mount-fixes-3-v1-1-be34c83956ae@kernel.org>
+References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
+In-Reply-To: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+ Chris Mason <mason@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>, 
+ Aleksa Sarai <cyphar@cyphar.com>, Amir Goldstein <amir73il@gmail.com>, 
+ bpf@vger.kernel.org, "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.17-dev-db0b7
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3144; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=1+tqeO8PqJ2j4hyu9XjYVjP39roEyaXvCq3aP2jqfwg=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTt5fdLErU0WPp+3a4vYXJZVebnFV/8nNAYvtVmevZtr
+ hkquSe+dZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAExk6iOG/7kz16vNy5qmcOX+
+ pPDAPG3W1qWSvbEp9l3fRf+++fP3tT3D/wSe41qbd7MWVfWdXpX3qav7Tff2V+WJ2pIXJvFKRx+
+ wZQcA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Mon, Sep 28, 2026 at 10:40:20AM -1000, Tejun Heo wrote:
-> Hello, Shakeel.
-> 
-> On Mon, Sep 21, 2026 at 12:25:55PM -0700, Shakeel Butt wrote:
-> > try_charge_memcg() calls __mem_cgroup_handle_over_high() before it returns,
-> > which reclaims and can throttle the task.  That happens wherever the charge
-> > happens, so a task holding a kernel lock can be stuck there, and everything
-> > waiting on that lock is stuck behind it.
-> 
-> Why not just raise the lazy bound high enough that most charges never
-> enforce inline, and maybe annotate the specific paths that can allocate a
-> lot so that they do? Inline enforcement should be the exception, not the
-> rule. Flipping that and then trying to reverse it with custom BPF policies
-> doesn't make a lot of sense.
-> 
+mnt_notify_add() puts a mount on notify_list. It doesn't check whether
+the mount is on the list already. That's fine as long as every mount is
+queued at most once per namespace_sem hold. It isn't.
 
-Please correct me if I misunderstood you. Mainly, you are saying that we
-should have a sane default behavior for memory.high. At the moment, if the
-current charging process accumulates charges totaling more than
-MEMCG_CHARGE_BATCH pages and the target memcg is over its high limit,
-memory.high is enforced synchronously. You are suggesting that we should
-increase the threshold from MEMCG_CHARGE_BATCH to some arbitrarily large
-number. In that case, synchronous enforcement of memory.high will be very
-rare.
+propagate_umount() moves a surviving overmount off a stack of mounts
+that are going away and queues it as moved. shrink_submounts() and
+mark_mounts_for_expiry() call umount_tree() for several mounts under a
+single namespace_sem hold. So the second umount_tree() can take down
+exactly the mount the first one reparented, reparent it once more and so
+end up queueing it a second time.
 
-I am fine with changing the default behavior. Actually, I have been
-contemplating whether I should propose a revert of commit c9afe31ec443e
-("memcg: synchronously enforce memory.high for large overcharges") because
-it has introduced more problems than it has solved, but that is a separate
-topic. The initial commit already mentioned that MEMCG_CHARGE_BATCH was used
-arbitrarily, so replacing it with something big might be acceptable. I want
-to keep that decision separate.
+The second list_add_tail() cuts the mounts queued in between out of the
+list while the head still points at the last of them. notify_mnt_list()
+then only visits that one mount and the others are freed after the grace
+period with notify_list still pointing at them. Every later mount
+operation on the host walks freed memory:
 
-I am not sure about annotating specific paths. I think it would impose a
-greater maintenance burden as the kernel evolves, since the annotations
-might become stale. Also, people might object to adding memcg-internal hooks
-in non-memcg code paths. In any case, this can be explored separately.
+  BUG: KASAN: slab-use-after-free in __list_add_valid_or_report
+  Read of size 8 at addr ffff8881003d57e0 by task notify_dq/162
+   __list_add_valid_or_report+0x15c/0x1a0
+   mnt_add_to_ns+0x322/0x890
+   attach_recursive_mnt.isra.0+0xf2a/0x1a00
+   path_mount+0x139c/0x1d40
 
-Returning to the actual proposal, my plan was to start small with a narrow,
-specific use case. However, my long-term plan is to provide a mechanism to
-change the default behavior for custom use cases. For example, for
-memory.high, I will provide a way for users to specify what behavior they
-want, i.e., whether or not they want more synchronous throttling. Second, I
-will introduce a mechanism to trigger async reclaim workers. I also plan to
-extend this functionality to memory.max. I just wanted to convey that I will
-keep pushing this proposal, with the use cases adjusted a bit.
+This needs a mount with MNT_SHRINKABLE to bind from. That's what
+finish_automount() creates (submounts of NFS, AFS and CIFS and the
+tracefs mount below debugfs). Bind mounts inherit the flag. A mount
+namespace with a FAN_MARK_MNTNS mark does the rest and root in a user
+namespace can have both.
 
-> > One concrete scenario which can be resolved by this new feature is the
-> > kernfs notify worker. It delivers notifications with the cgroup2
-> > kernfs_rwsem held for read, and the charge for the delivery allocation goes
-> > to the cgroup that set the watch, usually one already under pressure. So
-> > the worker reclaims while holding the lock, a waiting writer blocks every
-> > later reader, and anything touching cgroupfs stalls for seconds.
-> 
-> Slowing down the kworker inline doesn't make sense. It's charging on behalf
-> of the watcher through set_active_memcg(), which already tells us whose debt
-> it is. Wouldn't it make more sense to defer the debt to that cgroup instead
-> of slowing down the kernel thread?
-> 
+Initialize to_notify in alloc_vfsmnt() and leave a mount alone that is
+queued already. mnt_notify() looks at the state the mount has when the
+list is drained so a single entry per mount is enough. The move event
+for a mount that is unmounted under the same hold is lost. That's fine.
+The detach is what matters.
 
-Yes, that makes sense. When a non-task-context charge exceeds memory.high,
-the kernel already schedules high_work for the charged memcg. I plan to do
-the same for kthreads so they need not reclaim or throttle inline. This is
-best-effort reclaim rather than exact debt accounting; I still need to
-examine userspace tasks that charge another memcg through
-set_active_memcg(). I am addressing the reclaim worker's CPU accounting
-separately.
+Fixes: bf630c401641 ("vfs: add notifications for mount attach and detach")
+Cc: stable@vger.kernel.org # v6.15+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ fs/mount.h     | 3 +++
+ fs/namespace.c | 3 +++
+ 2 files changed, 6 insertions(+)
 
-Thanks for taking a look and providing feedback.
+diff --git a/fs/mount.h b/fs/mount.h
+index 85f136786bbc..2223fb141499 100644
+--- a/fs/mount.h
++++ b/fs/mount.h
+@@ -234,6 +234,9 @@ static inline struct mnt_namespace *to_mnt_ns(struct ns_common *ns)
+ #ifdef CONFIG_FSNOTIFY
+ static inline void mnt_notify_add(struct mount *m)
+ {
++	/* queued already under this namespace_sem hold */
++	if (!list_empty(&m->to_notify))
++		return;
+ 	/* Optimize the case where there are no watches */
+ 	if ((m->mnt_ns && m->mnt_ns->n_fsnotify_marks) ||
+ 	    (m->prev_ns && m->prev_ns->n_fsnotify_marks))
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 5b44eee28f39..2a1e77c0cb6e 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -333,6 +333,9 @@ static struct mount *alloc_vfsmnt(const char *name)
+ 		INIT_HLIST_NODE(&mnt->mnt_mp_list);
+ 		INIT_HLIST_HEAD(&mnt->mnt_stuck_children);
+ 		INIT_HLIST_NODE(&mnt->mnt_ns_visible);
++#ifdef CONFIG_FSNOTIFY
++		INIT_LIST_HEAD(&mnt->to_notify);
++#endif
+ 		RB_CLEAR_NODE(&mnt->mnt_node);
+ 		mnt->mnt.mnt_idmap = &nop_mnt_idmap;
+ 	}
+
+-- 
+2.53.0
+
