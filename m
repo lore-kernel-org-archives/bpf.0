@@ -1,109 +1,132 @@
-Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
+Received: from mta0.migadu.com (out-191.mta0.migadu.com [91.218.175.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE964F5DFD
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E344F3EB1
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790774497; cv=none; b=qyJ1pcuuVLEdJb5QetBqvaQ5cZIvv8bhUYCiwqGQWv7vbPr1r0gX7vQo5V0ncnSxiNdMoRyNqQOxtoXwANbbfXqrfu5yNoHus6NKXXLOjxbrEt0hzS1i4VocuApCn9y5QtgKH63N0rEFN7NY2/dWywxHND9AZmXhXVIxDGEpcz8=
+	t=1790774922; cv=none; b=jQPioFfrebEeWNbRXAGtSKS8Il5eiGDWudzC1nK2ffYUd0q6rMylf8nHA+8ox3x7D9FR4LPwjpVdbg+zzJ7m3tANW/cN8fJgiOXYRdVMAif8zVHJmaHNr0+sWW6YUKCgYYMaxe5I9uJG0PkLbvciBeAsMHlwibc0cVn8G6VvnL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790774497; c=relaxed/simple;
-	bh=KF7dDOx7DaLCNyQNSsul75suel+43Q9ip6d+eR3BH5A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ljQocspMuqLx462N4O8vghMa+gec0vrE5IVk7tvQuxiSTs8JTdeHdKnuU6OGhTQVFPIfLhmUCUsZlwyBJa7jbBLWJ1TM57we28jgL3ZOXrJTfvgUdxWCqOEHOzQ7I+OjLaMDYITrgBVjCk5Y+Kqu6Z26Km+APHRdtDFo4/9UDd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fplhQ7qS; arc=none smtp.client-ip=74.125.225.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790774922; c=relaxed/simple;
+	bh=Hsdm4rJdIk1UsbW5gttlY7rEJh2gpgb8d3cHbDg7CKw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hVjxeZptSkdmRLYeqWUQlcGk0KkJoSiMj2KmyiN5Ii//pvaI3mLsPl38hWKS7hY1C5FqxiBFD5xtqiU0AmCk+TzYWCTQVtgqLEo9dwKHC7bTn7ObeUrTmyL17JQcGhqrOGjGUv7NH7CewkPw5+oVnS2zqz7yzO5S5JBbR+Aka2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dw9rFbZO; arc=none smtp.client-ip=91.218.175.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fplhQ7qS"
-Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48af929e59dso1132802f8f.3
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 06:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790774471; x=1791379271; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tGm+gMifQidcQlMxmJXtxnGy2ShpN9JxNJdyz7K8Aho=;
-        b=fplhQ7qS3y/WREvjdvh6RXRkRgvXvOtCsOAJdGliy/q96tIMygouXNL24DOTuVX/RD
-         WbFpOOzuxTnz/r2T7sKC4GDLCJR2SJn2xcBrie1wfijTj94dlxbFcG77S17im+QNnTFL
-         gbJnqQNzokUkHi/etgwrVSMBDEo0hOrh/IG48vSzxaD5v8iM/l51yBFyyWUSV8na+Rn8
-         yrZxgsyzRgsTQQiN10nj9ucLYzcf6Yesn/qq0wwu4fHe2avjVQTJ2ilxDUgCmtuwJPUD
-         MbeLhWdWuhW7ttkYDOndOK6sdIeUtBoOARJILgDpXcrtAslNVUSGeb18zZbPUcJVWYPV
-         Bgig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790774471; x=1791379271;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=tGm+gMifQidcQlMxmJXtxnGy2ShpN9JxNJdyz7K8Aho=;
-        b=SFBSAt73683dtHJlpTBiuj9dFPPhNQCaRgnSNUCqmHXKQeoDT5vcBgoVZyhzxxxOxe
-         gizFe80vrRSLO6qiHmf+yZYTQSFU8RPwrWfv3gzID3uutPOxBAymhn5Y6z8PUP8swkHR
-         3SNG5gfOOFzYD/8Kn9o5yeeEyH1Py4x3X3yxGczz65r01AKvtJWjGPZw481DkQnu2Wnr
-         1hO/em77j87B6p86bBOUXapiYMYNm0zlR/GAG1fZyfbBx1zuoma4GhcdKGH2CT+u2H1b
-         bAfgCCkk0SLax5BAe9l0MWdJsTNK+N+gOtcl2dnnUGnNFPM/hDLyR65nXqbyvxA9L1Te
-         hf/A==
-X-Forwarded-Encrypted: i=1; AKwUvBwC7kL8oN4IlZLuwA8uQzh7HvV66/j4ExkYkrFdBNEyKzi+tJIJGnhwCVG8xUrG4XPZBxE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLZPemJPt5IGr2I14nSsu3z+PbRr1J6oTYsXKKiYcA1t92UMI5G
-	rDnKvQpEQNaebBacnMnZbNOdJ7yBW4YUfRQ1fvXY+WqWQ+LfhAmINCXc
-X-Gm-Gg: AYBFou29YqcgjRCiVLwlWY/ICXqYZCxmufWBevoxskB3u1W0sfzPWV7tYdcpvrPqBBB
-	9uwpGqnuWScmsJ2DNGKdMr3e0ZTwazu7P+8YyR6kiaGvDupb58FygqFT32WcnPI3WcNW2mivfwW
-	lol+mlY94gWxiNcI+oQzlD69zuOjkIyrJPEyCGzcTVQQl6vl7Zw9oCTJxlz0kc5vDrA2lmNSsMT
-	8qtSisP3Z/8bx7jjwtLqRmnM8OTAmf1fWxCmByAJdOr7cMXD2zHR5fq4g3VORBViPRIbRzUrAjb
-	puwWAiHxKqm3qcHLT6Z+uaXrHjLtIebQVDx5DD1hDg+VZi08AgrZFBTq7lnRdG0MCRXaDcyS5L2
-	Lr2Ae4aNZJhc+9rqb/QS5WK6q4xsBo07FvzzMggZqXsXwKMfPcfEnrRPhj4dDaTpRC2uYiWBgnU
-	b6Vt/LkgUxdQSZ7cQKJdnQStNNiy8hBGSBKel4yu1yp+vdz3ztMvSKzfLTau9jYqWNcFmykDmma
-	Jv6RYgsrObiPQFLSjytmScHU+UX9oFyjlKmH9BObhih5NdYMRUSxXA=
-X-Received: by 2002:a05:6000:2284:b0:488:8859:b0dc with SMTP id ffacd0b85a97d-48b02554433mr2945079f8f.56.1790774470878;
-        Wed, 30 Sep 2026 06:21:10 -0700 (PDT)
-Received: from snowdrop.snailnet.com (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b029bef64sm5047284f8f.10.2026.09.30.06.21.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 06:21:10 -0700 (PDT)
-From: David Laight <david.laight.linux@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Kees Cook <kees@kernel.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Jim Cromie <jim.cromie@gmail.com>,
-	Lorenzo Stoakes <ljs@kernel.org>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH next 0/2] kallsyms: optimise symbol search by name
-Date: Wed, 30 Sep 2026 14:21:06 +0100
-Message-Id: <20260930132109.260597-1-david.laight.linux@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dw9rFbZO"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Hsdm4rJdIk1UsbW5gttlY7rEJh2gpgb8d3cHbDg7CKw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790774907; v=1; x=1791379707;
+ b=dw9rFbZOf7XvxLNqrULbYFqI/7sEpm2RPYJqOonRKM+bEjnj1BKPUV76yuCHYg67mCK2+OXQ
+ wMMl/bOPbsOOp/+ZsWSRIONsey/wvGPgOpPhjHoqgxDk8pr099nRBEDh/qaFit9hTjnLM+Slu8L
+ q1JKEmWRYRONghXKspKAWN3c=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3a312f617140e728;
+	Wed, 30 Sep 2026 13:28:26 +0000
+X-Mizu-Trace-ID: 3a312f617140e728
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 30 Sep 2026 06:28:21 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Tejun Heo <tj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
+	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
+	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
+ struct_ops
+Message-ID: <arw4rjVkm2ob9ioL@linux.dev>
+References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
+ <bda525506b3fb3e61da28a112f28abba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bda525506b3fb3e61da28a112f28abba@kernel.org>
 
-Patch 1 is from Jim Crome, included so the patch series builds.
-This is currently in mm-nonmm-unstable
+On Mon, Sep 28, 2026 at 10:40:20AM -1000, Tejun Heo wrote:
+> Hello, Shakeel.
+> 
+> On Mon, Sep 21, 2026 at 12:25:55PM -0700, Shakeel Butt wrote:
+> > try_charge_memcg() calls __mem_cgroup_handle_over_high() before it returns,
+> > which reclaims and can throttle the task.  That happens wherever the charge
+> > happens, so a task holding a kernel lock can be stuck there, and everything
+> > waiting on that lock is stuck behind it.
+> 
+> Why not just raise the lazy bound high enough that most charges never
+> enforce inline, and maybe annotate the specific paths that can allocate a
+> lot so that they do? Inline enforcement should be the exception, not the
+> rule. Flipping that and then trying to reverse it with custom BPF policies
+> doesn't make a lot of sense.
+> 
 
-Patch 2 Removes the linear scan from the 'search by name' binary bisect.
-Data size unchanged for 'sane' kernels.
+Please correct me if I misunderstood you. Mainly, you are saying that we
+should have a sane default behavior for memory.high. At the moment, if the
+current charging process accumulates charges totaling more than
+MEMCG_CHARGE_BATCH pages and the target memcg is over its high limit,
+memory.high is enforced synchronously. You are suggesting that we should
+increase the threshold from MEMCG_CHARGE_BATCH to some arbitrarily large
+number. In that case, synchronous enforcement of memory.high will be very
+rare.
 
-Seems to work (I'm running it on this system), but I haven't got any performance
-numbers.
+I am fine with changing the default behavior. Actually, I have been
+contemplating whether I should propose a revert of commit c9afe31ec443e
+("memcg: synchronously enforce memory.high for large overcharges") because
+it has introduced more problems than it has solved, but that is a separate
+topic. The initial commit already mentioned that MEMCG_CHARGE_BATCH was used
+arbitrarily, so replacing it with something big might be acceptable. I want
+to keep that decision separate.
 
-David Laight (1):
-  kallsyms: Optimise symbol name search
+I am not sure about annotating specific paths. I think it would impose a
+greater maintenance burden as the kernel evolves, since the annotations
+might become stale. Also, people might object to adding memcg-internal hooks
+in non-memcg code paths. In any case, this can be explored separately.
 
-Jim Cromie (1):
-  kallsyms: Match compressed tokens on the fly during binary search
+Returning to the actual proposal, my plan was to start small with a narrow,
+specific use case. However, my long-term plan is to provide a mechanism to
+change the default behavior for custom use cases. For example, for
+memory.high, I will provide a way for users to specify what behavior they
+want, i.e., whether or not they want more synchronous throttling. Second, I
+will introduce a mechanism to trigger async reclaim workers. I also plan to
+extend this functionality to memory.max. I just wanted to convey that I will
+keep pushing this proposal, with the use cases adjusted a bit.
 
- kernel/kallsyms.c          | 171 ++++++++++++++++++++++++-------------
- kernel/kallsyms_internal.h |   4 +-
- scripts/Makefile           |   1 +
- scripts/kallsyms.c         |  50 ++++++-----
- 4 files changed, 144 insertions(+), 82 deletions(-)
+> > One concrete scenario which can be resolved by this new feature is the
+> > kernfs notify worker. It delivers notifications with the cgroup2
+> > kernfs_rwsem held for read, and the charge for the delivery allocation goes
+> > to the cgroup that set the watch, usually one already under pressure. So
+> > the worker reclaims while holding the lock, a waiting writer blocks every
+> > later reader, and anything touching cgroupfs stalls for seconds.
+> 
+> Slowing down the kworker inline doesn't make sense. It's charging on behalf
+> of the watcher through set_active_memcg(), which already tells us whose debt
+> it is. Wouldn't it make more sense to defer the debt to that cgroup instead
+> of slowing down the kernel thread?
+> 
 
--- 
-2.39.5
+Yes, that makes sense. When a non-task-context charge exceeds memory.high,
+the kernel already schedules high_work for the charged memcg. I plan to do
+the same for kthreads so they need not reclaim or throttle inline. This is
+best-effort reclaim rather than exact debt accounting; I still need to
+examine userspace tasks that charge another memcg through
+set_active_memcg(). I am addressing the reclaim worker's CPU accounting
+separately.
 
+Thanks for taking a look and providing feedback.
