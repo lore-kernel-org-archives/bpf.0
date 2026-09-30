@@ -1,663 +1,112 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DFE4EA39C;
-	Wed, 30 Sep 2026 13:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F8A4F4059
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790776501; cv=none; b=kGlCKBY2vZVlmaFMbxapYk7bbMXyYiOBVmPaj2f0EVyTfiZ0D7xJnD5mwvusHrN9wOcxr6xsREcw59Am6Lofwh6U5iFkzrJ6DzaQnzE2Jo6fI1wo+5ud1Js/AnWBwAxHcigboLzQYrxOgtGZetbld7glMYV2yrSBwxRhktUmvv8=
+	t=1790776677; cv=none; b=NUtaELD6pvzlwbvRyt//RXumxyr8OjSfOGgBOFoSaYJHnPRmLhAfyXZBqADVLG8X9pvG2a4xkynsEAJC7VZq8y0y7vQYthvvhKux/EXdmvtbIh61lZXBNtWAs3qcBUfEy4ZzEfiGaW/lPt8mzLwlKyAJZVlNsGUK4uCi6d9+zKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790776501; c=relaxed/simple;
-	bh=d9drHmILXEV/jetVTacifv1X2zzQVL3f9Sxkt32srjQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V994YHuWE87PT2ezvDhzkTiljqLXsInNc1nD8qX4nmTCC1TXVBA7g1vgdqfvcr+NTqQERqQ7OWJLQqn5V3DMH5A8SP/fA0PgBWioE6cmdi6Ri+X0yBLP5Hqm5cim9i44p1lYcQcB2MwIZ2QWct1JX1QGUOxYg1BoOJOxJ0dsp0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0ruPs7Sc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EcqJkjDm; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SvaSWLNe; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Z82ddSQQ; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1790776677; c=relaxed/simple;
+	bh=Nry3nFCuqVWCFegzzAFM54lalWlidIpNtwv60/kgASY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QlORt+gVDu0q4Eo2pNV+E8YuJrXb3ZWA6VfiK/+7AQtRSTlI993x5CNoOTHi/6zQoIkBDgg9aNPVHvul0oVWwVilddyia258W8gGrMng+aM51r4ycvV0HebnTGlXy++uecDO6OKtMu+hagUGUTiGDk7irHzmY3lPZ5LUEqFx348=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+tzeQBg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0ruPs7Sc";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EcqJkjDm";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SvaSWLNe";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Z82ddSQQ"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0999C1F8C2;
-	Wed, 30 Sep 2026 13:54:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790776477; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=0ruPs7ScM9TJCH495NkHx0FE9RhidyQj2qw/Vtl355amUUi/lY7mcBfuzkpHcri4mThhZ+
-	iGn9Ps6pv2b5jpQLSoG40dm0mUyqv5n4+gmWa2ceR35rl9Mb4/SkLvV7lLR3qrPRgoIIqx
-	GbQ8vm+MrHANX2nXJuocFKXOCmpDZGo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790776477;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=EcqJkjDmsf9LZBFcM9W/8Rp8revsCjDy9jISbM/mp11BHswoFQ4OCfU2mjlUiswOJx31W2
-	W3H4HiQPqC3xXwDw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790776473; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=SvaSWLNe01hQrEbga/+0cpJCyOPEU68jUzKaB9dwAS5rrhWqEImIpg5e+zCXuaWyR68tsx
-	l4XSdSHaNJB0OJiqDjV+YOhg6xSx8aFJDCWc9Kb5a1jbYkF1oV/BPChG61enZCO5NuWNTu
-	nL40mdWORTjluGiZd/wHtQ56BghUta8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790776473;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lmTgeUzU0YmUVH0feM6irFKttZnTSx5LJxFjsE4sn9o=;
-	b=Z82ddSQQCdCUJhsqzJ+H1QupVqB/5CacAkK/0Q/thF5QwvvAm2o8mvkF/GglCbvveiauAg
-	dryTk8uU31sD4ZAQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D533713722;
-	Wed, 30 Sep 2026 13:54:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id fJXpHGIUvWqUTwAAD6G6ig:T9
-	(envelope-from <fmancera@suse.de>); Wed, 30 Sep 2026 13:54:31 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: horms@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@kernel.org,
-	davem@davemloft.net,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Eric Dumazet <edumazet@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Neal Cardwell <ncardwell@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"yuan.gao" <yuan.gao@ucloud.cn>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH 08/16 net-next v3] ipv4: ping: split IPv4 specific logic into ping_ipv4.c
-Date: Wed, 30 Sep 2026 15:52:51 +0200
-Message-ID: <20260930135334.4739-9-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260930135334.4739-1-fmancera@suse.de>
-References: <20260930135334.4739-1-fmancera@suse.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+tzeQBg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2CB1F0089A;
+	Wed, 30 Sep 2026 13:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790776662;
+	bh=U2vch9xD0f4302EDVC3E40ad28K/JNd/bcQaVZtvgPs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=C+tzeQBg0tejkmYpHdzZsp2Ko5AZVHBAoy96B4zyuv4nYNaQiAgRSjXbe+xiPIeyP
+	 QR4X5FteP7N4QukgjWl9uKYD6Oe0IeBbCYfqSXX0vVYUK44LPluMFlKHR7uH0+dQGo
+	 /d6aJZhLJEpn04bFrfOcB3262L+Pk0DMMZQYqOonGbgAeWpuEnwCbYYv0Rri86miH0
+	 qyjchp1jxPba7OGEfSVMkTR6axIfhu+svdYctFMSyLknZVImx1XBm9wn33kaYf4fPi
+	 I6KgMmgcF1AVFqHG3u46U56d9d3V6fwpoL9YhP0Kx+klTY3ArSUn6aVSTEKZz3n7VX
+	 L6eKJT2Jsplug==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 14/17] fsnotify: detach the connector before destroying
+ its marks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260930-work-mount-fixes-3-v1-14-be34c83956ae@kernel.org>
+References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
+ <20260930-work-mount-fixes-3-v1-14-be34c83956ae@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 30 Sep 2026 13:57:42 +0000
+Message-Id: <20260930135742.9A2CB1F0089A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-6.78 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.18)[-0.920];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_TWO(0.00)[2];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLrr9ek4ud4f4qwi71m7motjzt)];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -6.78
-X-Spam-Level: 
-X-Spam-Flag: NO
 
-To enable compiling INET subsystem withot IPv4, ping socket IPv4
-specific functions must be isolated from the generic ping
-infrastructure.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] fsnotify: NULL pointer dereference in lockless fdinfo readers
+--
 
-This patch creates ping_ipv4.c and move all the functions for packet
-transmission and the AF_INET ping_prot definition from ping.c to the new
-file. The Makefile is updated to compile ping_ipv4.c only when
-CONFIG_IPV4 is enabled.
+commit e6a7d29740f3498c210e8d2cef8ba5c5a72ce862
+Author: Christian Brauner <brauner@kernel.org>
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
----
- net/ipv4/Makefile    |   2 +-
- net/ipv4/ping.c      | 210 +--------------------------------------
- net/ipv4/ping_ipv4.c | 228 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 234 insertions(+), 206 deletions(-)
- create mode 100644 net/ipv4/ping_ipv4.c
+fsnotify: detach the connector before destroying its marks
 
-diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
-index 651835073a29..83c25f52eb58 100644
---- a/net/ipv4/Makefile
-+++ b/net/ipv4/Makefile
-@@ -14,7 +14,7 @@ obj-y     := inetpeer.o protocol.o inet_hashtables.o inet_timewait_sock.o \
- obj-$(CONFIG_IPV4) += route.o ip_input.o ip_fragment.o ip_forward.o ip_options.o \
- 		      ip_sockglue.o tcp_ipv4.o datagram.o arp.o devinet.o igmp.o \
- 		      fib_notifier.o ip_output.o fib_frontend.o fib_semantics.o \
--		      fib_trie.o raw_ipv4.o udp_ipv4.o icmp_ipv4.o
-+		      fib_trie.o raw_ipv4.o udp_ipv4.o icmp_ipv4.o ping_ipv4.o
- 
- obj-$(CONFIG_NET_IP_TUNNEL) += ip_tunnel.o
- obj-$(CONFIG_SYSCTL) += sysctl_net_ipv4.o
-diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
-index 223a0108b74c..ada4ff932734 100644
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -285,19 +285,6 @@ void ping_close(struct sock *sk, long timeout)
- 	sk_common_release(sk);
- }
- 
--static int ping_pre_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
--			    int addr_len)
--{
--	/* This check is replicated from __ip4_datagram_connect() and
--	 * intended to prevent BPF program called below from accessing bytes
--	 * that are out of the bound specified by user in addr_len.
--	 */
--	if (addr_len < sizeof(struct sockaddr_in))
--		return -EINVAL;
--
--	return BPF_CGROUP_RUN_PROG_INET4_CONNECT_LOCK(sk, uaddr, &addr_len);
--}
--
- /* Checks the bind address and possibly modifies sk->sk_bound_dev_if. */
- static int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
- 				struct sockaddr_unsized *uaddr, int addr_len)
-@@ -308,6 +295,9 @@ static int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
- 		u32 tb_id = RT_TABLE_LOCAL;
- 		int chk_addr_ret;
- 
-+		if (!IS_ENABLED(CONFIG_IPV4))
-+			return -EAFNOSUPPORT;
-+
- 		if (addr_len < sizeof(*addr))
- 			return -EINVAL;
- 
-@@ -527,7 +517,7 @@ void ping_err(struct sk_buff *skb, int offset, u32 info)
- 	harderr = 0;
- 	inet_sock = inet_sk(sk);
- 
--	if (skb->protocol == htons(ETH_P_IP)) {
-+	if (IS_ENABLED(CONFIG_IPV4) && skb->protocol == htons(ETH_P_IP)) {
- 		switch (type) {
- 		default:
- 		case ICMP_TIME_EXCEEDED:
-@@ -580,7 +570,7 @@ void ping_err(struct sk_buff *skb, int offset, u32 info)
- 		if (!harderr || sk->sk_state != TCP_ESTABLISHED)
- 			goto out;
- 	} else {
--		if (family == AF_INET) {
-+		if (IS_ENABLED(CONFIG_IPV4) && family == AF_INET) {
- 			ip_icmp_error(sk, skb, err, 0 /* no remote port */,
- 				      info, (u8 *)icmph);
- #if IS_ENABLED(CONFIG_IPV6)
-@@ -625,21 +615,6 @@ int ping_getfrag(void *from, char *to,
- 	return 0;
- }
- 
--static int ping_v4_push_pending_frames(struct sock *sk, struct pingfakehdr *pfh,
--				       struct flowi4 *fl4)
--{
--	struct sk_buff *skb = skb_peek(&sk->sk_write_queue);
--
--	if (!skb)
--		return 0;
--	pfh->wcheck = csum_partial((char *)&pfh->icmph,
--		sizeof(struct icmphdr), pfh->wcheck);
--	pfh->icmph.checksum = csum_fold(pfh->wcheck);
--	memcpy(icmp_hdr(skb), &pfh->icmph, sizeof(struct icmphdr));
--	skb->ip_summed = CHECKSUM_NONE;
--	return ip_push_pending_frames(sk, fl4);
--}
--
- int ping_common_sendmsg(int family, struct msghdr *msg, size_t len,
- 			void *user_icmph, size_t icmph_len)
- {
-@@ -685,160 +660,6 @@ int ping_common_sendmsg(int family, struct msghdr *msg, size_t len,
- 	return 0;
- }
- 
--static int ping_v4_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
--{
--	DEFINE_RAW_FLEX(struct ip_options_rcu, opt_copy, opt.__data,
--			IP_OPTIONS_DATA_FIXED_SIZE);
--	struct net *net = sock_net(sk);
--	struct flowi4 fl4;
--	struct inet_sock *inet = inet_sk(sk);
--	struct ipcm_cookie ipc;
--	struct icmphdr user_icmph;
--	struct pingfakehdr pfh;
--	struct rtable *rt = NULL;
--	int free = 0;
--	__be32 saddr, daddr, faddr;
--	u8 scope;
--	int err;
--
--	pr_debug("ping_v4_sendmsg(sk=%p,sk->num=%u)\n", inet, inet->inet_num);
--
--	err = ping_common_sendmsg(AF_INET, msg, len, &user_icmph,
--				  sizeof(user_icmph));
--	if (err)
--		return err;
--
--	/*
--	 *	Get and verify the address.
--	 */
--
--	if (msg->msg_name) {
--		DECLARE_SOCKADDR(struct sockaddr_in *, usin, msg->msg_name);
--		if (msg->msg_namelen < sizeof(*usin))
--			return -EINVAL;
--		if (usin->sin_family != AF_INET)
--			return -EAFNOSUPPORT;
--		daddr = usin->sin_addr.s_addr;
--		/* no remote port */
--	} else {
--		if (sk->sk_state != TCP_ESTABLISHED)
--			return -EDESTADDRREQ;
--		daddr = inet->inet_daddr;
--		/* no remote port */
--	}
--
--	ipcm_init_sk(&ipc, inet);
--
--	if (msg->msg_controllen) {
--		err = ip_cmsg_send(sk, msg, &ipc, false);
--		if (unlikely(err)) {
--			kfree(ipc.opt);
--			return err;
--		}
--		if (ipc.opt)
--			free = 1;
--	}
--	if (!ipc.opt) {
--		struct ip_options_rcu *inet_opt;
--
--		rcu_read_lock();
--		inet_opt = rcu_dereference(inet->inet_opt);
--		if (inet_opt) {
--			memcpy(opt_copy, inet_opt,
--			       sizeof(*inet_opt) + inet_opt->opt.optlen);
--			ipc.opt = opt_copy;
--		}
--		rcu_read_unlock();
--	}
--
--	saddr = ipc.addr;
--	ipc.addr = faddr = daddr;
--
--	if (ipc.opt && ipc.opt->opt.srr) {
--		if (!daddr) {
--			err = -EINVAL;
--			goto out_free;
--		}
--		faddr = ipc.opt->opt.faddr;
--	}
--	scope = ip_sendmsg_scope(inet, &ipc, msg);
--
--	if (ipv4_is_multicast(daddr)) {
--		if (!ipc.oif || netif_index_is_l3_master(sock_net(sk), ipc.oif))
--			ipc.oif = READ_ONCE(inet->mc_index);
--		if (!saddr)
--			saddr = READ_ONCE(inet->mc_addr);
--	} else if (!ipc.oif)
--		ipc.oif = READ_ONCE(inet->uc_index);
--
--	flowi4_init_output(&fl4, ipc.oif, ipc.sockc.mark,
--			   ipc.tos & INET_DSCP_MASK, scope,
--			   sk->sk_protocol, inet_sk_flowi_flags(sk), faddr,
--			   saddr, 0, 0, sk_uid(sk));
--
--	fl4.fl4_icmp_type = user_icmph.type;
--	fl4.fl4_icmp_code = user_icmph.code;
--
--	security_sk_classify_flow(sk, flowi4_to_flowi_common(&fl4));
--	rt = ip_route_output_flow(net, &fl4, sk);
--	if (IS_ERR(rt)) {
--		err = PTR_ERR(rt);
--		rt = NULL;
--		if (err == -ENETUNREACH)
--			IP_INC_STATS(net, IPSTATS_MIB_OUTNOROUTES);
--		goto out;
--	}
--
--	err = -EACCES;
--	if ((rt->rt_flags & RTCF_BROADCAST) &&
--	    !sock_flag(sk, SOCK_BROADCAST))
--		goto out;
--
--	if (msg->msg_flags & MSG_CONFIRM)
--		goto do_confirm;
--back_from_confirm:
--
--	if (!ipc.addr)
--		ipc.addr = fl4.daddr;
--
--	lock_sock(sk);
--
--	pfh.icmph.type = user_icmph.type; /* already checked */
--	pfh.icmph.code = user_icmph.code; /* ditto */
--	pfh.icmph.checksum = 0;
--	pfh.icmph.un.echo.id = inet->inet_sport;
--	pfh.icmph.un.echo.sequence = user_icmph.un.echo.sequence;
--	pfh.msg = msg;
--	pfh.wcheck = 0;
--	pfh.family = AF_INET;
--
--	err = ip_append_data(sk, &fl4, ping_getfrag, &pfh, len,
--			     sizeof(struct icmphdr), &ipc, &rt,
--			     msg->msg_flags);
--	if (err)
--		ip_flush_pending_frames(sk);
--	else
--		err = ping_v4_push_pending_frames(sk, &pfh, &fl4);
--	release_sock(sk);
--
--out:
--	ip_rt_put(rt);
--out_free:
--	if (free)
--		kfree(ipc.opt);
--	if (!err)
--		return len;
--	return err;
--
--do_confirm:
--	if (msg->msg_flags & MSG_PROBE)
--		dst_confirm_neigh(&rt->dst, &fl4.daddr);
--	if (!(msg->msg_flags & MSG_PROBE) || len)
--		goto back_from_confirm;
--	err = 0;
--	goto out;
--}
--
- int ping_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags)
- {
- 	struct inet_sock *isk = inet_sk(sk);
-@@ -976,27 +797,6 @@ enum skb_drop_reason ping_rcv(struct sk_buff *skb)
- 	return SKB_DROP_REASON_NO_SOCKET;
- }
- 
--struct proto ping_prot = {
--	.name =		"PING",
--	.owner =	THIS_MODULE,
--	.init =		ping_init_sock,
--	.close =	ping_close,
--	.pre_connect =	ping_pre_connect,
--	.connect =	ip4_datagram_connect,
--	.disconnect =	__udp_disconnect,
--	.setsockopt =	ip_setsockopt,
--	.getsockopt =	ip_getsockopt,
--	.sendmsg =	ping_v4_sendmsg,
--	.recvmsg =	ping_recvmsg,
--	.bind =		ping_bind,
--	.backlog_rcv =	ping_queue_rcv_skb,
--	.release_cb =	ip4_datagram_release_cb,
--	.unhash =	ping_unhash,
--	.get_port =	ping_get_port,
--	.put_port =	ping_unhash,
--	.obj_size =	sizeof(struct inet_sock),
--};
--
- #ifdef CONFIG_PROC_FS
- 
- static struct sock *ping_get_first(struct seq_file *seq, int start)
-diff --git a/net/ipv4/ping_ipv4.c b/net/ipv4/ping_ipv4.c
-new file mode 100644
-index 000000000000..4489aa292a4e
---- /dev/null
-+++ b/net/ipv4/ping_ipv4.c
-@@ -0,0 +1,228 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * INET		An implementation of the TCP/IP protocol suite for the LINUX
-+ *		operating system.  INET is implemented using the  BSD Socket
-+ *		interface as the means of communication with the user level.
-+ *
-+ *		"Ping" sockets
-+ *
-+ *		IPv4 specific functions
-+ *
-+ *		code split from:
-+ *		net/ipv4/ping.c
-+ *
-+ *		See ping.c for author information
-+ */
-+
-+#include <linux/bpf-cgroup.h>
-+#include <linux/in.h>
-+#include <linux/socket.h>
-+#include <linux/types.h>
-+#include <net/ping.h>
-+#include <net/udp.h>
-+
-+static int ping_pre_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
-+			    int addr_len)
-+{
-+	/* This check is replicated from __ip4_datagram_connect() and
-+	 * intended to prevent BPF program called below from accessing bytes
-+	 * that are out of the bound specified by user in addr_len.
-+	 */
-+	if (addr_len < sizeof(struct sockaddr_in))
-+		return -EINVAL;
-+
-+	return BPF_CGROUP_RUN_PROG_INET4_CONNECT_LOCK(sk, uaddr, &addr_len);
-+}
-+
-+static int ping_v4_push_pending_frames(struct sock *sk, struct pingfakehdr *pfh,
-+				       struct flowi4 *fl4)
-+{
-+	struct sk_buff *skb = skb_peek(&sk->sk_write_queue);
-+
-+	if (!skb)
-+		return 0;
-+	pfh->wcheck = csum_partial((char *)&pfh->icmph,
-+				   sizeof(struct icmphdr), pfh->wcheck);
-+	pfh->icmph.checksum = csum_fold(pfh->wcheck);
-+	memcpy(icmp_hdr(skb), &pfh->icmph, sizeof(struct icmphdr));
-+	skb->ip_summed = CHECKSUM_NONE;
-+	return ip_push_pending_frames(sk, fl4);
-+}
-+
-+static int ping_v4_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-+{
-+	DEFINE_RAW_FLEX(struct ip_options_rcu, opt_copy, opt.__data,
-+			IP_OPTIONS_DATA_FIXED_SIZE);
-+	struct net *net = sock_net(sk);
-+	struct flowi4 fl4;
-+	struct inet_sock *inet = inet_sk(sk);
-+	struct ipcm_cookie ipc;
-+	struct icmphdr user_icmph;
-+	struct pingfakehdr pfh;
-+	struct rtable *rt = NULL;
-+	int free = 0;
-+	__be32 saddr, daddr, faddr;
-+	u8 scope;
-+	int err;
-+
-+	pr_debug("ping_v4_sendmsg(sk=%p,sk->num=%u)\n", inet, inet->inet_num);
-+
-+	err = ping_common_sendmsg(AF_INET, msg, len, &user_icmph,
-+				  sizeof(user_icmph));
-+	if (err)
-+		return err;
-+
-+	/*
-+	 *	Get and verify the address.
-+	 */
-+
-+	if (msg->msg_name) {
-+		DECLARE_SOCKADDR(struct sockaddr_in *, usin, msg->msg_name);
-+
-+		if (msg->msg_namelen < sizeof(*usin))
-+			return -EINVAL;
-+		if (usin->sin_family != AF_INET)
-+			return -EAFNOSUPPORT;
-+		daddr = usin->sin_addr.s_addr;
-+		/* no remote port */
-+	} else {
-+		if (sk->sk_state != TCP_ESTABLISHED)
-+			return -EDESTADDRREQ;
-+		daddr = inet->inet_daddr;
-+		/* no remote port */
-+	}
-+
-+	ipcm_init_sk(&ipc, inet);
-+
-+	if (msg->msg_controllen) {
-+		err = ip_cmsg_send(sk, msg, &ipc, false);
-+		if (unlikely(err)) {
-+			kfree(ipc.opt);
-+			return err;
-+		}
-+		if (ipc.opt)
-+			free = 1;
-+	}
-+	if (!ipc.opt) {
-+		struct ip_options_rcu *inet_opt;
-+
-+		rcu_read_lock();
-+		inet_opt = rcu_dereference(inet->inet_opt);
-+		if (inet_opt) {
-+			memcpy(opt_copy, inet_opt,
-+			       sizeof(*inet_opt) + inet_opt->opt.optlen);
-+			ipc.opt = opt_copy;
-+		}
-+		rcu_read_unlock();
-+	}
-+
-+	saddr = ipc.addr;
-+	ipc.addr = daddr;
-+	faddr = daddr;
-+
-+	if (ipc.opt && ipc.opt->opt.srr) {
-+		if (!daddr) {
-+			err = -EINVAL;
-+			goto out_free;
-+		}
-+		faddr = ipc.opt->opt.faddr;
-+	}
-+	scope = ip_sendmsg_scope(inet, &ipc, msg);
-+
-+	if (ipv4_is_multicast(daddr)) {
-+		if (!ipc.oif || netif_index_is_l3_master(sock_net(sk), ipc.oif))
-+			ipc.oif = READ_ONCE(inet->mc_index);
-+		if (!saddr)
-+			saddr = READ_ONCE(inet->mc_addr);
-+	} else if (!ipc.oif) {
-+		ipc.oif = READ_ONCE(inet->uc_index);
-+	}
-+
-+	flowi4_init_output(&fl4, ipc.oif, ipc.sockc.mark,
-+			   ipc.tos & INET_DSCP_MASK, scope,
-+			   sk->sk_protocol, inet_sk_flowi_flags(sk), faddr,
-+			   saddr, 0, 0, sk_uid(sk));
-+
-+	fl4.fl4_icmp_type = user_icmph.type;
-+	fl4.fl4_icmp_code = user_icmph.code;
-+
-+	security_sk_classify_flow(sk, flowi4_to_flowi_common(&fl4));
-+	rt = ip_route_output_flow(net, &fl4, sk);
-+	if (IS_ERR(rt)) {
-+		err = PTR_ERR(rt);
-+		rt = NULL;
-+		if (err == -ENETUNREACH)
-+			IP_INC_STATS(net, IPSTATS_MIB_OUTNOROUTES);
-+		goto out;
-+	}
-+
-+	err = -EACCES;
-+	if ((rt->rt_flags & RTCF_BROADCAST) &&
-+	    !sock_flag(sk, SOCK_BROADCAST))
-+		goto out;
-+
-+	if (msg->msg_flags & MSG_CONFIRM)
-+		goto do_confirm;
-+back_from_confirm:
-+
-+	if (!ipc.addr)
-+		ipc.addr = fl4.daddr;
-+
-+	lock_sock(sk);
-+
-+	pfh.icmph.type = user_icmph.type; /* already checked */
-+	pfh.icmph.code = user_icmph.code; /* ditto */
-+	pfh.icmph.checksum = 0;
-+	pfh.icmph.un.echo.id = inet->inet_sport;
-+	pfh.icmph.un.echo.sequence = user_icmph.un.echo.sequence;
-+	pfh.msg = msg;
-+	pfh.wcheck = 0;
-+	pfh.family = AF_INET;
-+
-+	err = ip_append_data(sk, &fl4, ping_getfrag, &pfh, len,
-+			     sizeof(struct icmphdr), &ipc, &rt,
-+			     msg->msg_flags);
-+	if (err)
-+		ip_flush_pending_frames(sk);
-+	else
-+		err = ping_v4_push_pending_frames(sk, &pfh, &fl4);
-+	release_sock(sk);
-+
-+out:
-+	ip_rt_put(rt);
-+out_free:
-+	if (free)
-+		kfree(ipc.opt);
-+	if (!err)
-+		return len;
-+	return err;
-+
-+do_confirm:
-+	if (msg->msg_flags & MSG_PROBE)
-+		dst_confirm_neigh(&rt->dst, &fl4.daddr);
-+	if (!(msg->msg_flags & MSG_PROBE) || len)
-+		goto back_from_confirm;
-+	err = 0;
-+	goto out;
-+}
-+
-+struct proto ping_prot = {
-+	.name =		"PING",
-+	.owner =	THIS_MODULE,
-+	.init =		ping_init_sock,
-+	.close =	ping_close,
-+	.pre_connect =	ping_pre_connect,
-+	.connect =	ip4_datagram_connect,
-+	.disconnect =	__udp_disconnect,
-+	.setsockopt =	ip_setsockopt,
-+	.getsockopt =	ip_getsockopt,
-+	.sendmsg =	ping_v4_sendmsg,
-+	.recvmsg =	ping_recvmsg,
-+	.bind =		ping_bind,
-+	.backlog_rcv =	ping_queue_rcv_skb,
-+	.release_cb =	ip4_datagram_release_cb,
-+	.unhash =	ping_unhash,
-+	.get_port =	ping_get_port,
-+	.put_port =	ping_unhash,
-+	.obj_size =	sizeof(struct inet_sock),
-+};
--- 
-2.55.0
+This commit moves the detachment of the fsnotify connector from the object
+to the beginning of the mark destruction process. This prevents new marks
+from being added to the connector during the destruction walk.
 
+> diff --git a/fs/notify/mark.c b/fs/notify/mark.c
+> index b2640d836a712..f6891d39e42fe 100644
+> --- a/fs/notify/mark.c
+> +++ b/fs/notify/mark.c
+> @@ -1112,6 +1112,16 @@ void fsnotify_destroy_marks(fsnotify_connp_t *conn=
+p)
+>  	conn =3D fsnotify_grab_connector(connp);
+>  	if (!conn)
+>  		return;
+> +	/*
+> +	 * Detach the connector from the object first. Once conn->lock is
+> +	 * dropped a mark could be added in front of the one we're at and the
+> +	 * walk would miss it. fsnotify_grab_connector() refuses a detached
+> +	 * connector so any mark added from now on gets a connector of its
+> +	 * own. This also stops pinning the inode until all mark references
+> +	 * get dropped. It would lead to strange results such as delaying
+> +	 * inode deletion or blocking unmount.
+> +	 */
+> +	objp =3D fsnotify_detach_connector_from_object(conn, &type);
+
+[Severity: Critical]
+Will this early detachment expose a NULL pointer to concurrent lockless
+readers?
+
+By moving fsnotify_detach_connector_from_object() to the beginning of
+fsnotify_destroy_marks(), the connector's object pointer (conn->obj) is set
+to NULL before the marks are removed from the group's list.
+
+Concurrent lockless readers iterating the group list might observe the mark,
+check the connector type, and attempt to read conn->obj. Because there is
+no lock synchronization or memory barrier enforcing the visibility of the
+detached state before conn->obj is cleared, a reader could see a valid
+type but a NULL object.
+
+This regression might be triggered if file unlinks race with reads of
+/proc/<pid>/fdinfo/<inotify_fd>. For example, could this cause a NULL
+dereference in inotify_fdinfo() via igrab()?
+
+fs/notify/fdinfo.c:inotify_fdinfo() {
+    ...
+    inode =3D igrab(fsnotify_conn_inode(mark->connector));
+    ...
+}
+
+Similar lockless access patterns appear to exist in fanotify_fdinfo() and
+when fanotify_remove_mark() locklessly evaluates the connector mask. Can we
+safely detach the connector this early without breaking these readers?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930-work-mount=
+-fixes-3-v1-0-be34c83956ae@kernel.org?part=3D14
