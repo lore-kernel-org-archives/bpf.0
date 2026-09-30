@@ -1,198 +1,104 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4F23E1D13
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 07:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C95C31A556;
+	Wed, 30 Sep 2026 07:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790752158; cv=none; b=MTYBVafijMDcrIHLMAy1om+V27kT63RWhIV7RcXHW5Hsqqr2aC59gKQu0crb2Y3IJddz+efw0TDoukl2HLNzC3yOyzNJBNagcjrsmdsjaWkJU7SB9P3DdW7Wo5K4heK1TsZQcXgNRATnFrJZ5V4QRAaTS1ygxcZRFDkz1C2MBNQ=
+	t=1790752775; cv=none; b=rkWud6Nh+1phDmSMdxUYj0vU6mf2E+0Vrcm2UoIA0R45S7+LN8gcQmnLds9WVCeY9KcHcUSnYN8arnHvQpDoK/dz7o7LpXDuWhn7R7GFP1pud7rkqKln8te2+G/vozFzz8xJNE2AwjLPbBSylEzDNtaxAhnLFTaOfkrKC6Q8V8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790752158; c=relaxed/simple;
-	bh=kUJ6AZwh1W1UbN+W0pIvxx+NYxdVnJ7wO2p2cLzdAzw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XPRb6fthCibNFIzvnZWOk4ycy55n4GgDKjqSVlozpwm5nfk6wjaDBfVX/Oc0ciijDnlGtr5vsHqipfcyRfpwE3j4RK3yaGd/nc7Q0daaAXo3af7yvtKH4NOZIc9JWpUsNMCmElT3DR45NlvLSSBmXLZZfDu4hMrzVvOgKw1/dHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bQWazhUK; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790752775; c=relaxed/simple;
+	bh=Cg//ITPdqfuNaFR91NI9QSHZ7mOe/lST6DXYQYChwZk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=HzSTrjqkv9NCK2i0lt9I5oqjAEV72OGpdVGgstqbCICaR3haiVO6c9IrDkrzHT0dhS4XXRoblnOpQ5IDMCYE4Y6MbX1lI8qJ4yVOu4vmjz243UDAtjaNZq6D3u92w7Uv8irSZJb2JyC4o7RWkeBjbI9sqQ0Z/DOLUWKju8JBRO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DpQtu1br; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bQWazhUK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790752155;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=g2+MnM/YIgixxkMmTeuWBOIVUrZVmFR9eLMZG/rNhnQ=;
-	b=bQWazhUKVliDNjStQ5bu/TY13t5ICvFscoUXPge8v63q6NOqJa3QjyUZSqhPIc1MhAOnhg
-	UFsnd8h8V281Cs5/DYxHNSEbwEP1XOUBRkSQdgFtFaV1HqJJ555zbqkHE2T32Ib1ItrcKn
-	R6CuYR3wGHo+bk2Ni3seT3UGnS+ciC8=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-14-HqjLmjYlNGKACq-MU47iYg-1; Wed,
- 30 Sep 2026 03:09:09 -0400
-X-MC-Unique: HqjLmjYlNGKACq-MU47iYg-1
-X-Mimecast-MFC-AGG-ID: HqjLmjYlNGKACq-MU47iYg_1790752146
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5522B1955EAB;
-	Wed, 30 Sep 2026 07:09:06 +0000 (UTC)
-Received: from localhost (unknown [10.74.80.98])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 21A9C180035F;
-	Wed, 30 Sep 2026 07:09:04 +0000 (UTC)
-From: Vaibhav Nagare <vnagare@redhat.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	nagarevaibhav@gmail.com,
-	Vaibhav Nagare <vnagare@redhat.com>,
-	stable@vger.kernel.org
-Subject: [PATCH net v2] bnxt_en: don't leave an XDP program installed when the open fails
-Date: Wed, 30 Sep 2026 12:39:01 +0530
-Message-ID: <20260930070901.1218980-1-vnagare@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DpQtu1br"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A9F81F000FF;
+	Wed, 30 Sep 2026 07:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790752774;
+	bh=qnv+opTRDPANaSFQkeJoX1GGPFk9FRRdrtoPqu98EGc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DpQtu1brqDYI0JzdSm5y+euWY5T9SGIo7MlwWtm639O0vN83LM1TUiqL8PwT+j1HL
+	 rKTaW1bE8EFpO/nM+5K3uo94NyyMJ2hA8rktUSNW+BXdHzBWc9OYnnY8Tw5rA9zSsQ
+	 oTGYW7LkzTfbAvT1jwjtovMl63pfrlkF5cWQTFFzkXBUVAG+7tGaoIjLdJZTtiuAU7
+	 +Fkr+75CyEJYkPNhgbJcalcnzIS40Z58ujBXjKDU0hWuignxcL6ekA+//YDI9juUVw
+	 EKePpuAd+edgnHADpNodXla6aUc2K1I0r8e5AMCy2IsMHZfnWE+8xu4CN/T/6j61kD
+	 ihuQTp4kunq1A==
+Content-Type: multipart/mixed; boundary="===============5540256240712805578=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <f5ed8c5179098109e321e1cc42ced4bf30fc4bf80603fdaeef517277f38834eb@mail.kernel.org>
+In-Reply-To: <20260930064607.1908864-4-pulehui@huaweicloud.com>
+References: <20260930064607.1908864-4-pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: Update qemu config for riscv64 in vmtest.sh
+From: bot+bpf-ci@kernel.org
+To: pulehui@huaweicloud.com,bjorn@kernel.org,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,alex@ghiti.fr,pulehui@huawei.com,pulehui@huaweicloud.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 30 Sep 2026 07:19:33 +0000 (UTC)
 
-bnxt_xdp_set() stores the new program and drops the reference on the old
-one before reopening the NIC.  If bnxt_open_nic() then fails, ndo_bpf()
-returns an error with the new program still in bp->xdp_prog.  The caller
-treats the error as "nothing was installed" and drops its own reference,
-so bp->xdp_prog is left pointing at a freed program and the next XDP
-update dereferences it:
+--===============5540256240712805578==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-  BUG: unable to handle page fault for address: ff78ecc80ddd1038
-  RIP: 0010:__bpf_prog_put+0x5/0x80
-  Call Trace:
-   bnxt_xdp_set+0xad/0x1b0 [bnxt_en]
-   dev_xdp_propagate+0x36/0xa0
-   bond_xdp_set+0xeb/0x2d0 [bonding]
-   dev_xdp_install+0x1b1/0x350
-   bpf_xdp_link_update+0xc5/0x1b0
-   link_update+0x104/0x1e0
-   __sys_bpf+0x662/0xcf0
+> selftests/bpf: Update qemu config for riscv64 in vmtest.sh
 
-Seen on a 6.12 based kernel after bnxt_alloc_mem() failed an order-4
-allocation on a fragmented host:
+TL;DR: The new '-cpu max' riscv64 option in vmtest.sh needs qemu 8.2.0+, so
+cross-runs on qemu 7.2 to 8.1 may fail; the "v7.2.0+" comment and commit
+message may be stale.
 
-  bnxt_en 0000:a0:00.1 ens4f1np1: nic open fail (rc: fffffff4)
-  bond1: (slave ens4f1np1): Error -12 calling ndo_bpf
+> diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+> --- a/tools/testing/selftests/bpf/vmtest.sh
+> +++ b/tools/testing/selftests/bpf/vmtest.sh
 
-Bonding is not required to hit this; a plain XDP attach on a bnxt
-interface takes the same path.
+[ ... ]
 
-Restore the previous program when the open fails and release it only
-once the change has been committed.  Also restore the ring and feature
-configuration that was in service before the change: without it a
-failed detach leaves bp->xdp_prog set while page mode is off, so
-bnxt_init_one_rx_ring() never assigns rxr->xdp_prog on a later open and
-the program is reported as attached while no packet ever reaches it.
+> @@ -36,13 +36,13 @@ aarch64)
+>  	;;
+>  riscv64)
+>  	# required qemu version v7.2.0+
+>  	QEMU_BINARY=qemu-system-riscv64
+>  	QEMU_CONSOLE="ttyS0,115200"
+>  	HOST_FLAGS=(-M virt -cpu host -enable-kvm -smp 8)
+> -	CROSS_FLAGS=(-M virt -cpu rv64,sscofpmf=true -smp 8)
+> +	CROSS_FLAGS=(-M virt -cpu max,sscofpmf=false -smp 8)
+>  	BZIMAGE="arch/riscv/boot/Image"
+>  	ARCH="riscv"
+>  	;;
 
-Fixes: c6d30e8391b8 ("bnxt_en: Add basic XDP support.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vaibhav Nagare <vnagare@redhat.com>
+Is the "required qemu version v7.2.0+" comment still accurate after this
+change?
+
+The riscv 'max' CPU model isn't available in qemu before v8.2.0.  In
+target/riscv/cpu.c, v7.2.0 and v8.1.0 have no riscv_max_cpu_init() and no
+TYPE_RISCV_CPU_MAX, and v8.2.0 is the release that adds:
+
+    DEFINE_DYNAMIC_CPU(TYPE_RISCV_CPU_MAX, riscv_max_cpu_init)
+
+The previous '-cpu rv64,sscofpmf=true' worked on qemu 7.2 because the
+sscofpmf property already exists there.
+
+On a non-riscv host, run-qemu takes the CROSS_FLAGS path and runs
+${QEMU_BINARY} with "${QEMU_FLAGS[@]}".  With qemu 7.2 through 8.1 (Debian 12
+ships 7.2, for example), qemu-system-riscv64 would fail with "unable to find
+CPU model 'max'" and the script would abort under 'set -e'.
+
+The commit message doesn't mention the raised minimum qemu version either.
+Should the comment be updated to v8.2.0+, or should the commit message state
+the new requirement?
+
+[ ... ]
+
+
 ---
-v2:
- - also restore the ring and feature configuration on the error path,
-   not just bp->xdp_prog, so a later successful open cannot bring the
-   device up with the driver state and the XDP program out of sync
-   (Michael Chan)
- - v1: https://lore.kernel.org/netdev/20260928131458.1012180-1-vnagare@redhat.com/
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 48 ++++++++++++-------
- 1 file changed, 32 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-index 9e5009be8e98..edfd751a601a 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-@@ -381,11 +381,31 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
- 	return nxmit;
- }
- 
-+static void bnxt_xdp_apply_cfg(struct bnxt *bp, int tx_xdp)
-+{
-+	struct net_device *dev = bp->dev;
-+	int tc = bp->num_tc ? : 1;
-+
-+	if (bp->xdp_prog) {
-+		bnxt_set_rx_skb_mode(bp, true);
-+		xdp_features_set_redirect_target_locked(dev, true);
-+	} else {
-+		xdp_features_clear_redirect_target_locked(dev);
-+		bnxt_set_rx_skb_mode(bp, false);
-+	}
-+	bp->tx_nr_rings_xdp = tx_xdp;
-+	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
-+	bnxt_set_cp_rings(bp, true);
-+	bnxt_set_tpa_flags(bp);
-+	bnxt_set_ring_params(bp);
-+}
-+
- static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
- {
- 	struct net_device *dev = bp->dev;
- 	int tx_xdp = 0, rc, tc;
- 	struct bpf_prog *old;
-+	int old_tx_xdp;
- 
- 	netdev_assert_locked(dev);
- 
-@@ -418,25 +438,21 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
- 	if (netif_running(dev))
- 		bnxt_close_nic(bp, true, false);
- 
-+	old_tx_xdp = bp->tx_nr_rings_xdp;
- 	old = xchg(&bp->xdp_prog, prog);
--	if (old)
--		bpf_prog_put(old);
--
--	if (prog) {
--		bnxt_set_rx_skb_mode(bp, true);
--		xdp_features_set_redirect_target_locked(dev, true);
--	} else {
--		xdp_features_clear_redirect_target_locked(dev);
--		bnxt_set_rx_skb_mode(bp, false);
-+	bnxt_xdp_apply_cfg(bp, tx_xdp);
-+
-+	if (netif_running(dev)) {
-+		rc = bnxt_open_nic(bp, true, false);
-+		if (rc) {
-+			WRITE_ONCE(bp->xdp_prog, old);
-+			bnxt_xdp_apply_cfg(bp, old_tx_xdp);
-+			return rc;
-+		}
- 	}
--	bp->tx_nr_rings_xdp = tx_xdp;
--	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
--	bnxt_set_cp_rings(bp, true);
--	bnxt_set_tpa_flags(bp);
--	bnxt_set_ring_params(bp);
- 
--	if (netif_running(dev))
--		return bnxt_open_nic(bp, true, false);
-+	if (old)
-+		bpf_prog_put(old);
- 
- 	return 0;
- }
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36681333169
+--===============5540256240712805578==--
