@@ -1,351 +1,659 @@
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2793D6CA3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453373BFAD4
 	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 10:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.204
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790763712; cv=pass; b=otT8IB95u/nIpQ8ZXoPBKqqoRxxvWNf9dzKFKoDhVtO2eggn51QBUEIL+lcr5mc23p4fpuwn+8MX96jEgc/y9daGH600Q2vC5f5mgUEJCl/EMLggNfkfP1F+ILqV3ba8aRxcimp5xmv3fm8u6yo/rgetNgZ+i9iVNAEIr98Wm84=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790763712; c=relaxed/simple;
-	bh=OZCwVFcLEdyzc89JwRofAKbJWZwiK73kMSkQvbIQ0EU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sBjoNCLFOVHfeXu9oPI7qWxL830TkqvpGT05Jg/yS1ukTib2UbGjt+ELwLvOxBG6djveqWAC+TMwMMDidN9dULF5FT1QuSRfGjQgAvmFII9qDDVYfZToeiBes5iadlV9/J9hg1rE2GU5wynWMzP4H3+JaCaQSVHC/fxn0fz323Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KXrmWigo; arc=pass smtp.client-ip=74.125.229.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790763713; cv=none; b=OQeB/sSSn5PThPH083YYY3KhhMCPviu2I9sOJQRuzQqANELZDruH+rHDVpDx4s6/B4rCdyWufWXWGjSGgZu1rBYnsR8//x5skMmovGW87B+BQVtqgF2s+svuN9+irbvfDGBjMFsnl05BN24PwpbyfuLgpj2RMfCdYexDBPx/Hho=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790763713; c=relaxed/simple;
+	bh=YzrXyE+KiFB9PrgEmBMX+gTIog+scwfDKhNCbcKdn0Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=qB1yiB+NFMZWz1AatxpVLFtm+D7TOo2nn+S9KP8KiODlGH1JYbZ6m22+Ub+zQUqWd51jANBCauvBdXYj+QW8LG9y1U2uqoy9S+jSD1BHLgjTcDfsuMj0v5bhmCMvYq/dfyyBoeKKL9QT/k3GYSs3etctMzeZKKhy+tyCl5KZvqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=eaW4u6Zh; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KXrmWigo"
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5ba3e27d525so378699e87.1
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 03:21:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790763708; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AhZMG/oB/PikNukaIbMB9Eg4xCAZ0EwF8uLpAEPdco8rYRDfuq+nfWOpLKNwBF19ki
-         7wAxm83bJHXaC/blEPm0Yum641waluc8t0xxLZILYdGllLyvCHf+6fQstyhnpsTZao8f
-         TyR4QQOW6Mh/9MwGi2XIIb14GqjP9KsDOWTiyAOlyglMM7pkFE8kxWdeAWmdPBty7DJv
-         jiuSTbsRqWarH9PYAxIDPd9GJjeqKCvm2Ibyoe+CEJUnz+yIqtfi9gNwHxpYmjUNucG8
-         o+2bkOb6oNb5zvT+22AeBo9+4Y5pumFOhzkaewRUQEfFbPlSpeNpFm9fTH0WOzI9PJj2
-         galg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nehh+riObSjWcaTYS+qfcz/m6mzt0XKLZn32719dpic=;
-        fh=zUBpqbYQ/aUknTMY2H9qJyxOcVrYi4c/sfL760omcZg=;
-        b=PLt8XPKwjiC1mZIC9s+XCOrE8UDa68M/8U03AryD+4Ym2VD18f3YRwf+7lpEk2l4KI
-         41zESgK1Rl9sbgByAridvOkqlv2ffkurKejE0r0ITlPS8AIZt5Kos6FQrceu53QK/b9m
-         Ij5DItsWKzms5tpUuBLytLq9X7qlfVO2C/2ofF6Jbe1lYECw5UmJ4ltM/4wgGqkstFQE
-         wmvogxJX5Kwn4+PYFwYhfy3tCFrFNaPQHGHWg1KKhDy4gXKSNEY8doDgV8WKWd/+QwuG
-         yUPzdsHr40BfKTa5sS9mTbwAMBYM3ILpe2Kkh1RY0eP/t6xNx+iqyEXk+qkVhAmA88+4
-         q+vA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790763708; x=1791368508; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=nehh+riObSjWcaTYS+qfcz/m6mzt0XKLZn32719dpic=;
-        b=KXrmWigo5hMj7ThCVcUlRoNsZQWiFhgyIc4b5SkIgMcY7NDsfptsGBAWAWWyiyQuGj
-         wMZapGCA5utkwN0pSRqZ5/gvbfpY2+1rmByGaVhLU+QZUOskMTXnXLcMMnraFw0NfTtM
-         YDBxgpvVrKdGSlIKbdbsMFqzfW9a6gdrfXWSdNGOcsXUijxZYWUJOfMhfaApMCQ/TQXs
-         zGgcxeFPJxbv3vBVwihvhleh0v3AmwJOjM9Ji8wOdeCtyPVlzx1bOYQQx76Cb+f2fxgN
-         cuI3lMmmEOBEOz9lW3RMhWNAEguGvWVNisiwmFssPU9HXDSu9jffvprmb0vQksTMbeTY
-         yZ7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790763708; x=1791368508;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nehh+riObSjWcaTYS+qfcz/m6mzt0XKLZn32719dpic=;
-        b=zPob/9J5aqw7n77xtW+2p62BAx/bJfOo9vSXwemcpKIuT8RyohaVBKjtzyxBxFcp8X
-         rRa2Iod5pdGTAD5pm0hUI2+0PmmV2D2mFYkiasbNXcY58in2/rR349jYUNRaomYH9cJc
-         L9u0B372F0m/5AOIyaVQq6iTq0Ep4l2ok8xn+uGxnHQytKApDWqIR7ujYoGXgH16ufz/
-         Xx1St+u4Al/jJdxUc07Newe2eUw+h2ukvc8/Tnite30UR/nqhaVYPt7/FzThr50lmzwN
-         Tpxg0tF5SYCUtIdvEjznBhz/uyGfUy0wdBA7WTXby9lBcxC/tuc/aBOzTyB8krS5EyPj
-         MFRA==
-X-Forwarded-Encrypted: i=1; AKwUvBwQOeLCLtLwqYzxhn1ZCrkQmIGKABoutwfySq6kVj9Oozs9s+ewnMitsuOyH+O9wRopyvs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIM1fnMxCLfQhVgWx8LqSEdiH0GzD0hswi7Oz4J4nmA/xiqVYim
-	9QFtm2Gfn/4S6SWxxJnvwyoPoVUYK72KohBge8HBDo3rvUykJNRfoIA6rGNOrWQksAVKrKgntql
-	8a12mii8Koqo8GToUPErnX5WVgh3mQuA=
-X-Gm-Gg: AYBFou0NE0hWu1O10DIFqhoEjg7bEQ8ErF/6BPB0X8RP4YVKGBL33+olvj4IbkENy91
-	DdcvwZLFTfxf27hoGiixlxxsDbktc9B5qIxJ0v7G9wwiIRz8Kj2O+h4UnypGuG+oI8dyfsHjzOw
-	MJXfunOHBs3CzGs4bBthh0ffIApjVXZSkkGTEYDzD4kOsdjBqIBlPkXQZL858sRw5hp9A6FOP6S
-	gD6h8V1fMcjVlq13+gSmYS+iak9SUvyK6mGwS8eT1gXJdKvbARr0MzDFMvGum7Mdnvrq6+8x808
-	Kl/3GDkf57QECXdxkLvrBoBSDEoAyRBE7C8MtQPXl7HYUXEztWbngGdJi1I9TcohtCwVnL35DIu
-	qMyLaPSNYQ6C4vrcHcqDjIUxcV99uAsuvw9r/dnTnmR1ppU9uJPzt5clwrnqfRwDTPHHeTw==
-X-Received: by 2002:a05:6512:66d4:10b0:5ba:3248:3e with SMTP id
- 2adb3069b0e04-5ba405ee665mr336729e87.17.1790763707497; Wed, 30 Sep 2026
- 03:21:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="eaW4u6Zh"
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260930102146epoutp04f08258ab6b3d0640871e5d7953a1c7f3~aEhp_RK_A2317223172epoutp04v
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 10:21:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260930102146epoutp04f08258ab6b3d0640871e5d7953a1c7f3~aEhp_RK_A2317223172epoutp04v
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1790763706;
+	bh=Goz+ZnZPXqlp3yHBfNf3yL8aoOM+Et1nHBDFEdLsoKk=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=eaW4u6ZhGnPRuBfgVQn7rEYlS/ckRxqGWZ6D4StPBYuyXd6+EJwbjII39CsgApuBp
+	 0KALMTNYG+I3FvRjApIhioXjohPZxEiJs1Tk1H5Ef6d55lZmPFESn7E3ekMIqlQEP+
+	 JqCinxhhU5mjbxYK0azkRg0x2NFdQhLQHi/BAiRQ=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20260930102146epcas5p28408df57497d488fe04887f1539bb856~aEhpR5wrw2824628246epcas5p24;
+	Wed, 30 Sep 2026 10:21:46 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.91]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4hvrgY2fNrz2SSKd; Wed, 30 Sep
+	2026 10:21:45 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20260930102144epcas5p419270301dba37c520277e6c6cff75def~aEhoIsn870186501865epcas5p4E;
+	Wed, 30 Sep 2026 10:21:44 +0000 (GMT)
+Received: from ws2030076956.sa.corp.samsungelectronics.net (unknown
+	[107.99.235.31]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260930102141epsmtip18dfc224628574539264afb7e0fb39036~aEhlFOjh91950619506epsmtip1V;
+	Wed, 30 Sep 2026 10:21:41 +0000 (GMT)
+From: Irlanki Sandeep <irlanki.s@samsung.com>
+To: netdev@vger.kernel.org, bpf@vger.kernel.org, kuba@kernel.org
+Cc: edumazet@google.com, davem@davemloft.net, pabeni@redhat.com,
+	ncardwell@google.com, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
+	lorenzo@google.com, maze@google.com, sporeba@google.com,
+	motomuman@google.com, madhan.raj@samsung.com, srihari.k@samsung.com,
+	g.pokhra@samsung.com, r.kumawat@samsung.com, raj.kumars@samsung.com,
+	ts413.lee@samsung.com, ramyashree.s@samsung.com, daeil2.hwang@samsung.com,
+	irlanki.s@samsung.com
+Subject: [PATCH net-next v5] tcp: add TCP_ECN and TCP_ECN_OPTION kfuncs
+Date: Wed, 30 Sep 2026 15:53:08 +0530
+Message-Id: <20260930102308.197808-1-irlanki.s@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
- <arF7FGr8rQqDw8Pj@devvm7509.cco0.facebook.com> <CAL+tcoDossUOJCVwZ-6U519L_bNMYngnd82e1_oQB-czA6rL3A@mail.gmail.com>
- <arLpc9BBv_W6nw8c@devvm7509.cco0.facebook.com> <CAL+tcoCE1MmEQKZRX2ct4zrWxZiSj53ztVuRWU_o1+9AmO7B_g@mail.gmail.com>
- <arVLfFuu02eS2Txs@devvm7509.cco0.facebook.com>
-In-Reply-To: <arVLfFuu02eS2Txs@devvm7509.cco0.facebook.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 30 Sep 2026 18:21:09 +0800
-X-Gm-Features: AclHuK8mBdfazbzlfgj_iVLcezQ7qs2nEz7htX1GaA8_RfEXLwJaczul2f7Kv_U
-Message-ID: <CAL+tcoDp7WAM8e5+4=TXTTUEy+dzvVsKFP=5Qjp7voo=+RabCg@mail.gmail.com>
-Subject: Re: [PATCH RFC net-next 0/9] net: BPF Timestamping 2.0 for TCP
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, kuniyu@google.com, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260930102144epcas5p419270301dba37c520277e6c6cff75def
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-065,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260930102144epcas5p419270301dba37c520277e6c6cff75def
+References: <CGME20260930102144epcas5p419270301dba37c520277e6c6cff75def@epcas5p4.samsung.com>
 
-On Fri, Sep 25, 2026 at 12:11=E2=80=AFAM Stanislav Fomichev
-<sdf.kernel@gmail.com> wrote:
->
-> On 09/23, Jason Xing wrote:
-> > On Wed, Sep 23, 2026 at 4:53=E2=80=AFAM Stanislav Fomichev <sdf.kernel@=
-gmail.com> wrote:
-> > >
-> > > On 09/22, Jason Xing wrote:
-> > > > On Tue, Sep 22, 2026 at 2:45=E2=80=AFAM Stanislav Fomichev <sdf.ker=
-nel@gmail.com> wrote:
-> > > > >
-> > > > > On 09/19, Jason Xing wrote:
-> > > > > > From: Jason Xing <kernelxing@gmail.com>
-> > > > > >
-> > > > > > Greeting,
-> > > > > >
-> > > > > > It's BPF Timestamping 2.0 that aims to observe the packet laten=
-cy
-> > > > > > more efficiently and simply for different protocols. The curren=
-t
-> > > > > > series is only focused on TCP protocol.
-> > > > > >
-> > > > > > At Netdev 0x1a/Netconf 2026, the history, background, motivatio=
-n and
-> > > > > > rough implementation of the feature were exhaustively introduce=
-d[1].
-> > > > > >
-> > > > > > History
-> > > > > > =3D=3D=3D=3D=3D=3D=3D
-> > > > > > - In 2009, Patrick Ohly implemented the basic infrastructure
-> > > > > > - In 2014, Willem de Bruijn enhanced the TCP latency observatio=
-n
-> > > > > > - In 2024, Jason Xing proposed its lightweight BPF version
-> > > > > > Detailed slides from 28 to 32 [1].
-> > > > > >
-> > > > > > Background
-> > > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > > > Even though BPF Timetamping 1.0 is comparatively low-overhead,
-> > > > > > transparent, it's still complicated due to a few points inherit=
-ed
-> > > > > > from the design:
-> > > > > > - Inflexible/fixed reporting phases (qdisc/driver/ack)
-> > > > > >   When we confirm the issue arises from the kernel by using att=
-ribution
-> > > > > >   ability of timestamping feature, we need to further minimize =
-the scope
-> > > > > >   until the issue is fixed. That means, we then have to resort =
-to write
-> > > > > >   a few complex BPF progs with the similar functionalities (lik=
-e skb
-> > > > > >   level tag) which should not happen.
-> > > > > > - Not enough low-overhead
-> > > > > >   Serving the sensitive applications, an always-on latency obse=
-rvation
-> > > > > >   platform should mitigate the self-impact as much as possible.=
- As we
-> > > > > >   can conclude from BPF Timestamping selftests, there are some =
-blocking
-> > > > > >   and time-consuming points like where reading/writing BPF maps=
- happen
-> > > > > >   in the extremely hot paths.
-> > > > > > - Minor flaws
-> > > > > >   There are a few minor flaws inherited from the initial design=
-, like
-> > > > > >   missing tagging the last packet[2][3][4].
-> > > > > > Detailed slides from 33 to 39 [1].
-> > > > > >
-> > > > > > Motivation
-> > > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > > > During the process of the large scale deployment over the last =
-few years,
-> > > > > > we eventually realized timestamping feature doesn't support con=
-tainer
-> > > > > > scenario and we need a finer-grained and flexible tracing tool =
-(packet
-> > > > > > basis) after a few rounds of attribution of issues.
-> > > > > >
-> > > > > > Design
-> > > > > > =3D=3D=3D=3D=3D=3D
-> > > > > > - Start time
-> > > > > >   For the specific protocol, we need to accurately set the star=
-t time of
-> > > > > >   each packet first. For TCP, we chose the entry of tcp_sendmsg=
-_locked
-> > > > > >   and the driver time as the start point, so that any BPF progr=
-am is
-> > > > > >   capable of computing the delta between start time and current=
- time.
-> > > > > > - Simplicity
-> > > > > >   Previous BPF program (like selftests) is too complex to imple=
-ment. The
-> > > > > >   core idea is to make everything as simple as possible. And it=
- should be
-> > > > > >   decoupled from BPF area and previous timestamping feature as =
-much as
-> > > > > >   possible.
-> > > > > > - Flexibility
-> > > > > >   BPF program hooking any function with skb parameter can get t=
-he latency
-> > > > > >   value, which means it's no longer bound to the pre-embeded re=
-porting
-> > > > > >   phases (see __skb_tstamp_tx)
-> > > > > > - Efficiency
-> > > > > >   Avoid the previous BPF operations as much as possible. Make s=
-ure the
-> > > > > >   feature achieves the lowest performance impact, which means o=
-nly time
-> > > > > >   operations remain.
-> > > > > > Detailed slides from 40 to 62 [1].
-> > > > > >
-> > > > > > Implementations
-> > > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > > > in-kernel
-> > > > > > - Find a suitable place to timestamp for each packet
-> > > > > > - Pick the right start time for TCP
-> > > > > > - Handle the split skb due to various reasons
-> > > > > > BPF prog
-> > > > > > - Hook any functions that carry skb parameter
-> > > > > > - Read out the start time from the skb
-> > > > > > - Generate the current time and then compute the latency
-> > > > > >
-> > > > > > Discussion?
-> > > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > > > - Do we need a kfunc to allow users to reset the start time of =
-each skb?
-> > > > > >   What I had in mind is if someone tries to observe the latency=
- between
-> > > > > >   two specific functions (rather than tcp_sendmsg_locked).
-> > > > > > - Current implementation is real hardware timestamp always wins=
-, which
-> > > > > >   means BPF prog possibly gets the hardware time that is not al=
-igned
-> > > > > >   with bpf_ktime_get_real_ns.
-> > > > > > - After the series, do we need to implement the same logic for
-> > > > > >   SYN/FIN/PROBE... As far as I know according to numerous user =
-reports,
-> > > > > >   a small handful of issues came from 3-way handshake.
-> > > > > > - Reusing the slot of hwtstamp might bring potential problems o=
-r make the
-> > > > > >   code hard to maintain. Can we add a timestamping specific fie=
-ld in
-> > > > > >   skb to deal with the latency observation?
-> > > > > > - netdev_data conflict in IGC driver. It seems unavoidable to p=
-ollute
-> > > > > >   start time when it's enabled. Should V2 feature coexist with =
-hardware
-> > > > > >   timestamping?
-> > > > > > - Should V2 coexist with net timestamping and BPF timestamping?=
- If not,
-> > > > > >   the maintenance should be easier.
-> > > > >
-> > > > > After netconf discussion, I was under the impressions that no ker=
-nel
-> > > > > changes are needed, so what changed? Is it hard to track start_ti=
-me
-> > > >
-> > > > Ah, you refered to the internal version, right? We wrote a kernel
-> > > > module implementing similar logic which differently finds/borrows a=
-n
-> > > > unused field of socket to store the start time. It's quite similar =
-to
-> > > > the series actually.
-> > > >
-> > > > After deploying it at a small scale in production, I think it's
-> > > > meaningful to upstream it. But as you noticed, there are remaining
-> > > > discussion points on which I hope we can share opinions, especially
-> > > > the future shape.
-> > > >
-> > > > > from tcp_sendmsg_locked on the bpf side that we need kernel suppo=
-rt?
-> > >
-> > > [..]
-> > >
-> > > > Sure, we need kernel support that why I'm trying to introduce the
-> > > > sk_start_time to help.
-> > > > https://lore.kernel.org/all/20260919143732.11772-4-kerneljasonxing@=
-gmail.com/
-> > >
-> > > Why can you not do this on the bpf side? There is even now a sendmsg_=
-locked
-> > > tracepoint with skb/sk argument. Or is it mostly because you can't
-> > > distinguish between cgroups? And looking at your example [1] and don'=
-t
-> > > see why a tracepoint won't be enough. Or is it too much overhead? In =
-this
-> > > case, it needs to have some numbers attached...
-> >
-> > I understand what you meant. Sure, we can generate the initial time in
-> > the tcp_sendmsg_locked() and try to pass it on to each skb in
-> > skb_entail(), which means 1) we need at least two hooks, which brings
-> > obvious overhead, 2) it's still not that easy to use as I expect it to
-> > be super easy to use/write/deploy, 3) I try to decouple it from BPF
-> > infra or complex use for the convenience. It looks like we now go back
-> > to BPF Timestamping V1.0.
-> >
-> > Adding hooks does harm to the performance to those real
-> > latency-sensitive users who were actually yelling at us. There are
-> > some interesting numbers I collected previously (Sorry, I will not be
-> > able to collect more real data because I left that company:( ):
-> > 1) The kernel module introduces around 5-15% performance impact in the
-> > real workload. After we removed the hook in tcp_sendmsg_locked, even
-> > though the module didn't have the full function to calculate the
-> > latency, the cost was decreased by ~3-5%.
-> > 2) Fentry has ~4% impact on some workloads. It's very similar to what
-> > we use netperf on loopback [1].
-> >
-> > The crucial idea behind the feature is that we're trying so hard to
-> > deploy the latency platform 7x24 without any selective sampling. It
-> > now looks like an advanced/21-century tcpdump and it can be
-> > _always-on_. If someone is just looking for one-shot tools, of course
-> > there are a few alternatives that are not good enough though.
->
-> IMO the feature as posted looks very tailored to a specific/narrow
+Currently, ECN and Accurate ECN (AccECN) configurations in the Linux
+kernel are controlled globally via the net.ipv4.tcp_ecn and
+net.ipv4.tcp_ecn_option sysctl variables. This global approach lacks the
+granularity required for per-connection ECN configuration in modern
+multi-application runtimes.
 
-Quite opposite.  Perhaps you missed reading the key part about the
-"lack of container scenario support." And the fact is that there was a
-wifi guy talking to me that he also wanted this to land and support
-the wifi.
+In diverse network environments, such as mobile operating systems like
+Android, different applications route their traffic over distinct
+physical and virtual interfaces. Certain legacy network paths or
+misconfigured middleboxes are known to blackhole packets with ECN
+negotiation flags or AccECN option headers.
 
-The new arch serves all kinds of complex scenarios that BPF
-timestamping v1 doesn't have the ability to support at all :)
+To provide granular control, introduce two new BPF kfuncs that can be
+called from sockops programs:
 
-And BPF timestamping v2 is per-packet-based, which makes everything
-different: allows admins/users to investigate stall details if they
-want.
+1. bpf_sock_ops_set_ecn_mode(): Overrides the ECN negotiation mode for
+   a socket.
 
-I believe the full explaination/theory/motivation... have been added
-in the commit message. Please if you could reread all of them
-(including the slides), I would appreciate it :)
+2. bpf_sock_ops_set_accecn_option(): Overrides the AccECN option
+   sending frequency for a socket, allowing for dynamic runtime
+   adaptation if middlebox dropping is observed.
 
-> use case. You save the sendmsg time in the socket and then use
-> it during skb allocation (with a few quirks here and there to account
-> for fragmentation/tso/cloning/etc).
->
-> For the very least, If you're looking to turn it into a non-rfc submissio=
-n,
-> I'd add numbers: tracepoint based implementation vs this kernel
-> accelerated path. And then we can discuss how much slower the tracepoints
-> are and whether you're using the proper ones... (and have an actual selft=
-est
-> example as part of the series)
+New helpers tcp_ecn_mode_eff() and tcp_accecn_option_eff() resolve the
+effective per-socket value, transparently falling back to the global
+sysctl defaults when no per-socket override is set.
 
-Sorry, as said, this is only one part of the new arch.
+The ECN mode kfunc is restricted to the CONNECT_CB and LISTEN_CB
+callbacks since the mode is only consulted during connection
+establishment, while the AccECN option kfunc may be called from any
+callback on a full socket to allow runtime adaptation. Child sockets
+are initialized with TCP_ECN_MODE_UNSPEC and do not inherit the
+listener's per-socket override; the listener's effective mode is
+consulted during SYN cookie validation and request processing instead.
 
-Sure thing, as you suggested I'm going to add a few numbers with BPF.
-Also a selftest!
+This implementation replaces the previous socket option approach with a
+more flexible BPF-native interface.
 
-Thanks,
-Jason
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Irlanki Sandeep <irlanki.s@samsung.com>
+---
+v4 -> v5:
+ - Replaced setsockopt implementation with BPF kfuncs.
+ - Placed ecn_mode/ecn_option in the cold section of tcp_sock to avoid
+   polluting hot cachelines (suggested by Eric Dumazet).
+ - Updated Documentation/networking/net_cachelines/tcp_sock.rst.
+ - Removed userspace UAPI and documentation for the sockopt.
+ - Added new selftest for the kfunc implementation.
+
+v3 -> v4:
+ - Define TCP_ECN and TCP_ECN_OPTION in bpf_tracing_net.h to fix
+   BPF selftest compilation failure in progs/setget_sockopt.c (bpf-ci).
+
+v2 -> v3:
+ - Use READ_ONCE() when reading ecn_mode and ecn_option in tcp_ecn_mode_eff()
+   and tcp_accecn_option_eff() to prevent compiler double-fetches (sashiko-bot).
+ - Move cookie_ecn_ok() to include/net/tcp_ecn.h and update syncookies.
+
+v1 -> v2:
+ - Remove unused variable 'net' in tcp_ecn_create_request() reported
+   by kernel test robot.
+---
+ .../networking/net_cachelines/tcp_sock.rst    |   2 +
+ include/linux/tcp.h                           |   6 +
+ include/net/tcp.h                             |   6 -
+ include/net/tcp_ecn.h                         |  31 ++++-
+ net/core/filter.c                             |  63 ++++++++++
+ net/ipv4/syncookies.c                         |   2 +-
+ net/ipv4/tcp.c                                |   2 +
+ net/ipv4/tcp_input.c                          |   5 +-
+ net/ipv4/tcp_output.c                         |   6 +-
+ net/ipv6/syncookies.c                         |   2 +-
+ .../bpf/prog_tests/sockops_ecn_kfunc.c        |  91 ++++++++++++++
+ .../selftests/bpf/progs/sockops_ecn_kfunc.c   | 111 ++++++++++++++++++
+ 12 files changed, 312 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
+
+diff --git a/Documentation/networking/net_cachelines/tcp_sock.rst b/Documentation/networking/net_cachelines/tcp_sock.rst
+index 0f6088c4ab8b..b12cc823b601 100644
+--- a/Documentation/networking/net_cachelines/tcp_sock.rst
++++ b/Documentation/networking/net_cachelines/tcp_sock.rst
+@@ -114,6 +114,8 @@ u8:2                          accecn_opt_demand       read_mostly         read_w
+ u8:2                          prev_ecnfield                               read_write
+ u64                           accecn_opt_tstamp       read_write
+ u8:4                          accecn_fail_mode
++u8                            ecn_mode
++u8                            ecn_option
+ u32                           lost                                        read_mostly         tcp_ack
+ u32                           app_limited             read_write          read_mostly         tcp_rate_check_app_limited,tcp_rate_skb_sent(tx);tcp_rate_gen(rx)
+ u64                           first_tx_mstamp         read_write                              tcp_rate_skb_sent
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 6a8c77719322..c9be37c01ac2 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -412,6 +412,12 @@ struct tcp_sock {
+ 	u8	keepalive_probes; /* num of allowed keep alive probes	*/
+ 	u8	accecn_fail_mode:4,	/* AccECN failure handling */
+ 		saw_accecn_opt:2;	/* An AccECN option was seen */
++	u8	ecn_mode;	/* Per-socket ECN mode set via BPF
++				 * (TCP_ECN_MODE_UNSPEC = use sysctl)
++				 */
++	u8	ecn_option;	/* Per-socket AccECN option set via BPF
++				 * (TCP_ACCECN_OPTION_UNSPEC = use sysctl)
++				 */
+ 	u32	tcp_tx_delay;	/* delay (in usec) added to TX packets */
+ 
+ /* RTT measurement */
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 96a1a23e47fa..0aa74ac92058 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -707,12 +707,6 @@ u64 cookie_init_timestamp(struct request_sock *req, u64 now);
+ bool cookie_timestamp_decode(const struct net *net,
+ 			     struct tcp_options_received *opt);
+ 
+-static inline bool cookie_ecn_ok(const struct net *net, const struct dst_entry *dst)
+-{
+-	return READ_ONCE(net->ipv4.sysctl_tcp_ecn) ||
+-		dst_feature(dst, RTAX_FEATURE_ECN);
+-}
+-
+ #if IS_ENABLED(CONFIG_BPF)
+ static inline bool cookie_bpf_ok(struct sk_buff *skb)
+ {
+diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
+index 865d5c5a7718..48e364c458b2 100644
+--- a/include/net/tcp_ecn.h
++++ b/include/net/tcp_ecn.h
+@@ -22,6 +22,7 @@ enum tcp_ecn_mode {
+ 	TCP_ECN_IN_ACCECN_OUT_ACCECN = 3,
+ 	TCP_ECN_IN_ACCECN_OUT_ECN = 4,
+ 	TCP_ECN_IN_ACCECN_OUT_NOECN = 5,
++	TCP_ECN_MODE_UNSPEC = 255,	/* Use sysctl default (per-socket) */
+ };
+ 
+ /* AccECN option sending when AccECN has been successfully negotiated */
+@@ -30,8 +31,36 @@ enum tcp_accecn_option {
+ 	TCP_ACCECN_OPTION_MINIMUM = 1,
+ 	TCP_ACCECN_OPTION_FULL = 2,
+ 	TCP_ACCECN_OPTION_PERSIST = 3,
++	TCP_ACCECN_OPTION_UNSPEC = 255,	/* Use sysctl default (per-socket) */
+ };
+ 
++/* Resolve the effective ECN mode: per-socket override or sysctl fallback */
++static inline u8 tcp_ecn_mode_eff(const struct sock *sk)
++{
++	u8 mode = READ_ONCE(tcp_sk(sk)->ecn_mode);
++
++	if (mode == TCP_ECN_MODE_UNSPEC)
++		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
++	return mode;
++}
++
++/* Resolve the effective AccECN option: per-socket override or sysctl fallback */
++static inline u8 tcp_accecn_option_eff(const struct sock *sk)
++{
++	u8 opt = READ_ONCE(tcp_sk(sk)->ecn_option);
++
++	if (opt == TCP_ACCECN_OPTION_UNSPEC)
++		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
++	return opt;
++}
++
++/* ECN support for SYN cookies: per-socket override or route feature */
++static inline bool cookie_ecn_ok(const struct sock *sk, const struct dst_entry *dst)
++{
++	return tcp_ecn_mode_eff(sk) ||
++		dst_feature(dst, RTAX_FEATURE_ECN);
++}
++
+ /* Apply either ECT(0) or ECT(1) based on TCP_CONG_ECT_1_NEGOTIATION flag */
+ static inline void INET_ECN_xmit_ect_1_negotiation(struct sock *sk)
+ {
+@@ -599,7 +628,7 @@ static inline void tcp_ecn_send_syn(struct sock *sk, struct sk_buff *skb)
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	bool bpf_needs_ecn = tcp_bpf_ca_needs_ecn(sk);
+ 	bool use_ecn, use_accecn;
+-	u8 tcp_ecn = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
++	u8 tcp_ecn = tcp_ecn_mode_eff(sk);
+ 
+ 	use_accecn = tcp_ecn == TCP_ECN_IN_ACCECN_OUT_ACCECN ||
+ 		     tcp_ca_needs_accecn(sk);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 70dc621672f2..b9dc1079aefc 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -56,6 +56,7 @@
+ #include <net/sock_reuseport.h>
+ #include <net/busy_poll.h>
+ #include <net/tcp.h>
++#include <net/tcp_ecn.h>
+ #include <net/gre.h>
+ #include <net/xfrm.h>
+ #include <net/udp.h>
+@@ -12609,6 +12610,66 @@ __bpf_kfunc int bpf_sock_ops_enable_tx_tstamp(struct bpf_sock_ops_kern *skops,
+ 	return 0;
+ }
+ 
++/**
++ * bpf_sock_ops_set_ecn_mode() - Set the per-socket TCP ECN negotiation mode.
++ * @skops: &bpf_sock_ops_kern context of the sockops program
++ * @mode: value in the range accepted by the tcp_ecn sysctl (0-5), or
++ *	TCP_ECN_MODE_UNSPEC to defer to the sysctl
++ *
++ * Overrides net.ipv4.tcp_ecn for this socket only. The mode is consulted
++ * during connection establishment, so the kfunc may only be called from
++ * BPF_SOCK_OPS_TCP_CONNECT_CB (before the SYN is built) or from
++ * BPF_SOCK_OPS_TCP_LISTEN_CB, in which case the mode is consulted for each
++ * incoming connection to decide ECN negotiation during the handshake.
++ *
++ * Return: 0 on success, -EOPNOTSUPP when called from any other sockops
++ *	callback, -EINVAL if @mode is out of range.
++ */
++__bpf_kfunc int bpf_sock_ops_set_ecn_mode(struct bpf_sock_ops_kern *skops,
++					  u32 mode)
++{
++	if (skops->op != BPF_SOCK_OPS_TCP_CONNECT_CB &&
++	    skops->op != BPF_SOCK_OPS_TCP_LISTEN_CB)
++		return -EOPNOTSUPP;
++
++	if (!skops->is_fullsock)
++		return -EOPNOTSUPP;
++
++	if (mode != TCP_ECN_MODE_UNSPEC && mode > TCP_ECN_IN_ACCECN_OUT_NOECN)
++		return -EINVAL;
++
++	WRITE_ONCE(tcp_sk(skops->sk)->ecn_mode, mode);
++	return 0;
++}
++
++/**
++ * bpf_sock_ops_set_accecn_option() - Set the per-socket AccECN option mode.
++ * @skops: &bpf_sock_ops_kern context of the sockops program
++ * @opt: value in the range accepted by the tcp_ecn_option sysctl (0-3), or
++ *	TCP_ACCECN_OPTION_UNSPEC to defer to the sysctl
++ *
++ * Overrides net.ipv4.tcp_ecn_option for this socket only. Unlike the ECN
++ * mode, the option setting is consulted for the whole lifetime of an AccECN
++ * connection, so it may be changed from any sockops callback that runs on a
++ * full socket, e.g. to stop sending the option once a middlebox is observed
++ * to drop segments carrying it.
++ *
++ * Return: 0 on success, -EOPNOTSUPP if @skops is not a full socket, -EINVAL
++ *	if @opt is out of range.
++ */
++__bpf_kfunc int bpf_sock_ops_set_accecn_option(struct bpf_sock_ops_kern *skops,
++					       u32 opt)
++{
++	if (!skops->is_fullsock)
++		return -EOPNOTSUPP;
++
++	if (opt != TCP_ACCECN_OPTION_UNSPEC && opt > TCP_ACCECN_OPTION_PERSIST)
++		return -EINVAL;
++
++	WRITE_ONCE(tcp_sk(skops->sk)->ecn_option, opt);
++	return 0;
++}
++
+ /**
+  * bpf_xdp_pull_data() - Pull in non-linear xdp data.
+  * @x: &xdp_md associated with the XDP buffer
+@@ -12822,6 +12883,8 @@ BTF_KFUNCS_END(bpf_kfunc_check_set_tcp_reqsk)
+ 
+ BTF_KFUNCS_START(bpf_kfunc_check_set_sock_ops)
+ BTF_ID_FLAGS(func, bpf_sock_ops_enable_tx_tstamp)
++BTF_ID_FLAGS(func, bpf_sock_ops_set_ecn_mode)
++BTF_ID_FLAGS(func, bpf_sock_ops_set_accecn_option)
+ BTF_KFUNCS_END(bpf_kfunc_check_set_sock_ops)
+ 
+ BTF_KFUNCS_START(bpf_kfunc_check_set_icmp_send)
+diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+index 73e129768184..ebc438bc6a46 100644
+--- a/net/ipv4/syncookies.c
++++ b/net/ipv4/syncookies.c
+@@ -490,7 +490,7 @@ struct sock *cookie_v4_check(struct sock *sk, struct sk_buff *skb)
+ 	 */
+ 	if (!req->syncookie)
+ 		ireq->rcv_wscale = rcv_wscale;
+-	ireq->ecn_ok &= cookie_ecn_ok(net, &rt->dst);
++	ireq->ecn_ok &= cookie_ecn_ok(sk, &rt->dst);
+ 	treq->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
+ 
+ 	ret = tcp_get_cookie_sock(sk, skb, req, &rt->dst);
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 3ac485685279..0303f7c2ec18 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -463,6 +463,8 @@ void tcp_init_sock(struct sock *sk)
+ 
+ 	tp->tsoffset = 0;
+ 	tp->rack.reo_wnd_steps = 1;
++	tp->ecn_mode = TCP_ECN_MODE_UNSPEC;
++	tp->ecn_option = TCP_ACCECN_OPTION_UNSPEC;
+ 
+ 	sk->sk_write_space = sk_stream_write_space;
+ 	sock_set_flag(sk, SOCK_USE_WRITE_QUEUE);
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 892ff256e235..78603f68bc5a 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -7453,13 +7453,12 @@ static void tcp_ecn_create_request(struct request_sock *req,
+ 				   const struct dst_entry *dst)
+ {
+ 	const struct tcphdr *th = tcp_hdr(skb);
+-	const struct net *net = sock_net(listen_sk);
+ 	bool th_ecn = th->ece && th->cwr;
+ 	bool ect, ecn_ok;
+ 	u32 ecn_ok_dst;
+ 
+ 	if (tcp_accecn_syn_requested(th) &&
+-	    (READ_ONCE(net->ipv4.sysctl_tcp_ecn) >= 3 ||
++	    (tcp_ecn_mode_eff(listen_sk) >= 3 ||
+ 	     tcp_ca_needs_accecn(listen_sk))) {
+ 		inet_rsk(req)->ecn_ok = 1;
+ 		tcp_rsk(req)->accecn_ok = 1;
+@@ -7473,7 +7472,7 @@ static void tcp_ecn_create_request(struct request_sock *req,
+ 
+ 	ect = !INET_ECN_is_not_ect(TCP_SKB_CB(skb)->ip_dsfield);
+ 	ecn_ok_dst = dst_feature(dst, DST_FEATURE_ECN_MASK);
+-	ecn_ok = READ_ONCE(net->ipv4.sysctl_tcp_ecn) || ecn_ok_dst;
++	ecn_ok = tcp_ecn_mode_eff(listen_sk) || ecn_ok_dst;
+ 
+ 	if (((!ect || th->res1 || th->ae) && ecn_ok) ||
+ 	    tcp_ca_needs_ecn(listen_sk) ||
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index c8865205cdc8..8833578bbd84 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -1045,7 +1045,7 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
+ 	if (unlikely((TCP_SKB_CB(skb)->tcp_flags & TCPHDR_ACK) &&
+ 		     tcp_ecn_mode_accecn(tp) &&
+ 		     inet_csk(sk)->icsk_retransmits < 2 &&
+-		     READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
++		     tcp_accecn_option_eff(sk) &&
+ 		     remaining >= TCPOLEN_ACCECN_BASE)) {
+ 		opts->use_synack_ecn_bytes = 1;
+ 		remaining -= tcp_options_fit_accecn(opts, 0, remaining);
+@@ -1133,7 +1133,7 @@ static unsigned int tcp_synack_options(const struct sock *sk,
+ 	smc_set_option_cond(tcp_sk(sk), ireq, opts, &remaining);
+ 
+ 	if (treq->accecn_ok &&
+-	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
++	    tcp_accecn_option_eff(sk) &&
+ 	    synack_type != TCP_SYNACK_RETRANS && remaining >= TCPOLEN_ACCECN_BASE) {
+ 		opts->use_synack_ecn_bytes = 1;
+ 		remaining -= tcp_options_fit_accecn(opts, 0, remaining);
+@@ -1221,7 +1221,7 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
+ 	}
+ 
+ 	if (tcp_ecn_mode_accecn(tp)) {
+-		int ecn_opt = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
++		int ecn_opt = tcp_accecn_option_eff(sk);
+ 
+ 		if (ecn_opt && tp->saw_accecn_opt &&
+ 		    (ecn_opt >= TCP_ACCECN_OPTION_PERSIST ||
+diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
+index b581cb1ee2e8..06efcbf46346 100644
+--- a/net/ipv6/syncookies.c
++++ b/net/ipv6/syncookies.c
+@@ -271,7 +271,7 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
+ 	 */
+ 	if (!req->syncookie)
+ 		ireq->rcv_wscale = rcv_wscale;
+-	ireq->ecn_ok &= cookie_ecn_ok(net, dst);
++	ireq->ecn_ok &= cookie_ecn_ok(sk, dst);
+ 	tcp_rsk(req)->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
+ 
+ 	ret = tcp_get_cookie_sock(sk, skb, req, dst);
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c b/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
+new file mode 100644
+index 000000000000..506b48e08621
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
+@@ -0,0 +1,91 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <errno.h>
++
++#include "test_progs.h"
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++#include "sockops_ecn_kfunc.skel.h"
++
++/* From include/net/tcp_ecn.h */
++#define TCP_ECN_IN_ACCECN_OUT_ACCECN	3
++#define TCP_ECN_IN_ACCECN_OUT_ECN	4
++#define TCP_ECN_MODE_UNSPEC		255
++#define TCP_ACCECN_OPTION_MINIMUM	1
++#define TCP_ACCECN_OPTION_FULL		2
++#define TCP_ACCECN_OPTION_PERSIST	3
++#define TCP_ACCECN_OPTION_UNSPEC	255
++
++void test_sockops_ecn_kfunc(void)
++{
++	struct sockops_ecn_kfunc__bss *bss;
++	struct sockops_ecn_kfunc *skel;
++	int cg_fd, sfd = -1, cfd = -1, afd = -1;
++
++	cg_fd = test__join_cgroup("/sockops_ecn_kfunc");
++	if (!ASSERT_OK_FD(cg_fd, "join_cgroup"))
++		return;
++
++	skel = sockops_ecn_kfunc__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		goto out;
++	bss = skel->bss;
++
++	skel->links.skops_ecn =
++		bpf_program__attach_cgroup(skel->progs.skops_ecn, cg_fd);
++	if (!ASSERT_OK_PTR(skel->links.skops_ecn, "attach_cgroup"))
++		goto out;
++
++	sfd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
++	if (!ASSERT_OK_FD(sfd, "start_server"))
++		goto out;
++
++	cfd = connect_to_fd(sfd, 0);
++	if (!ASSERT_OK_FD(cfd, "connect_to_fd"))
++		goto out;
++
++	/* accept() returning guarantees PASSIVE_ESTABLISHED_CB has run. */
++	afd = accept(sfd, NULL, NULL);
++	if (!ASSERT_OK_FD(afd, "accept"))
++		goto out;
++
++	/* BPF_SOCK_OPS_TCP_CONNECT_CB */
++	ASSERT_EQ(bss->connect_bad_mode_ret, -EINVAL, "connect_bad_mode_ret");
++	ASSERT_EQ(bss->connect_bad_opt_ret, -EINVAL, "connect_bad_opt_ret");
++	ASSERT_EQ(bss->connect_set_mode_ret, 0, "connect_set_mode_ret");
++	ASSERT_EQ(bss->connect_mode_read, TCP_ECN_IN_ACCECN_OUT_ACCECN,
++		  "connect_mode_read");
++	ASSERT_EQ(bss->connect_set_opt_ret, 0, "connect_set_opt_ret");
++	ASSERT_EQ(bss->connect_opt_read, TCP_ACCECN_OPTION_FULL,
++		  "connect_opt_read");
++	ASSERT_EQ(bss->connect_unspec_mode_ret, 0, "connect_unspec_mode_ret");
++	ASSERT_EQ(bss->connect_unspec_mode_read, TCP_ECN_MODE_UNSPEC,
++		  "connect_unspec_mode_read");
++
++	/* BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB */
++	ASSERT_EQ(bss->estab_set_mode_ret, -EOPNOTSUPP, "estab_set_mode_ret");
++	ASSERT_EQ(bss->estab_set_opt_ret, 0, "estab_set_opt_ret");
++	ASSERT_EQ(bss->estab_opt_read, TCP_ACCECN_OPTION_MINIMUM,
++		  "estab_opt_read");
++
++	/* BPF_SOCK_OPS_TCP_LISTEN_CB -> BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB
++	 * Listener's values are consulted for SYN negotiation, but the child
++	 * socket is initialized with UNSPEC (not inherited).
++	 */
++	ASSERT_EQ(bss->listen_set_mode_ret, 0, "listen_set_mode_ret");
++	ASSERT_EQ(bss->listen_set_opt_ret, 0, "listen_set_opt_ret");
++	ASSERT_EQ(bss->passive_mode_read, TCP_ECN_MODE_UNSPEC,
++		  "passive_mode_read");
++	ASSERT_EQ(bss->passive_opt_read, TCP_ACCECN_OPTION_UNSPEC,
++		  "passive_opt_read");
++
++out:
++	if (afd >= 0)
++		close(afd);
++	if (cfd >= 0)
++		close(cfd);
++	if (sfd >= 0)
++		close(sfd);
++	sockops_ecn_kfunc__destroy(skel);
++	close(cg_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c b/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
+new file mode 100644
+index 000000000000..32ed64ac4f3d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include "bpf_kfuncs.h"
++
++/* From include/net/tcp_ecn.h */
++#define TCP_ECN_IN_ACCECN_OUT_ACCECN	3
++#define TCP_ECN_IN_ACCECN_OUT_ECN	4
++#define TCP_ECN_IN_ACCECN_OUT_NOECN	5
++#define TCP_ECN_MODE_UNSPEC		255
++#define TCP_ACCECN_OPTION_MINIMUM	1
++#define TCP_ACCECN_OPTION_FULL		2
++#define TCP_ACCECN_OPTION_PERSIST	3
++#define TCP_ACCECN_OPTION_UNSPEC	255
++
++extern int bpf_sock_ops_set_ecn_mode(struct bpf_sock_ops_kern *skops,
++				     u32 mode) __ksym;
++extern int bpf_sock_ops_set_accecn_option(struct bpf_sock_ops_kern *skops,
++					  u32 opt) __ksym;
++
++int connect_bad_mode_ret;
++int connect_bad_opt_ret;
++int connect_set_mode_ret;
++int connect_mode_read;
++int connect_set_opt_ret;
++int connect_opt_read;
++int connect_unspec_mode_ret;
++int connect_unspec_mode_read;
++int estab_set_mode_ret;
++int estab_set_opt_ret;
++int estab_opt_read;
++int listen_set_mode_ret;
++int listen_set_opt_ret;
++int passive_mode_read;
++int passive_opt_read;
++
++SEC("sockops")
++int skops_ecn(struct bpf_sock_ops *skops)
++{
++	struct bpf_sock_ops_kern *skops_kern;
++	struct bpf_sock *sk = skops->sk;
++	struct tcp_sock *tp;
++
++	if (!sk)
++		return 1;
++
++	tp = bpf_skc_to_tcp_sock(sk);
++	if (!tp)
++		return 1;
++
++	skops_kern = bpf_cast_to_kern_ctx(skops);
++
++	switch (skops->op) {
++	case BPF_SOCK_OPS_TCP_CONNECT_CB:
++		connect_bad_mode_ret =
++			bpf_sock_ops_set_ecn_mode(skops_kern,
++						  TCP_ECN_IN_ACCECN_OUT_NOECN + 1);
++		connect_bad_opt_ret =
++			bpf_sock_ops_set_accecn_option(skops_kern,
++						       TCP_ACCECN_OPTION_PERSIST + 1);
++
++		connect_set_mode_ret =
++			bpf_sock_ops_set_ecn_mode(skops_kern,
++						  TCP_ECN_IN_ACCECN_OUT_ACCECN);
++		connect_mode_read = tp->ecn_mode;
++
++		connect_set_opt_ret =
++			bpf_sock_ops_set_accecn_option(skops_kern,
++						       TCP_ACCECN_OPTION_FULL);
++		connect_opt_read = tp->ecn_option;
++
++		/* Leave the socket on the sysctl defaults so the loopback
++		 * handshake driven by the test is not altered.
++		 */
++		connect_unspec_mode_ret =
++			bpf_sock_ops_set_ecn_mode(skops_kern, TCP_ECN_MODE_UNSPEC);
++		connect_unspec_mode_read = tp->ecn_mode;
++		bpf_sock_ops_set_accecn_option(skops_kern,
++					       TCP_ACCECN_OPTION_UNSPEC);
++		break;
++	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
++		/* The mode is handshake-only; the option is not. */
++		estab_set_mode_ret =
++			bpf_sock_ops_set_ecn_mode(skops_kern,
++						  TCP_ECN_IN_ACCECN_OUT_ACCECN);
++		estab_set_opt_ret =
++			bpf_sock_ops_set_accecn_option(skops_kern,
++						       TCP_ACCECN_OPTION_MINIMUM);
++		estab_opt_read = tp->ecn_option;
++		break;
++	case BPF_SOCK_OPS_TCP_LISTEN_CB:
++		listen_set_mode_ret =
++			bpf_sock_ops_set_ecn_mode(skops_kern,
++						  TCP_ECN_IN_ACCECN_OUT_ECN);
++		listen_set_opt_ret =
++			bpf_sock_ops_set_accecn_option(skops_kern,
++						       TCP_ACCECN_OPTION_PERSIST);
++		break;
++	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
++		/* Listener values consulted for SYN negotiation; child starts
++		 * with UNSPEC (not inherited).
++		 */
++		passive_mode_read = tp->ecn_mode;
++		passive_opt_read = tp->ecn_option;
++		break;
++	}
++
++	return 1;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.34.1
+
