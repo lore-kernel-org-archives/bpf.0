@@ -1,112 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F8A4F4059
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C094B8287
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790776677; cv=none; b=NUtaELD6pvzlwbvRyt//RXumxyr8OjSfOGgBOFoSaYJHnPRmLhAfyXZBqADVLG8X9pvG2a4xkynsEAJC7VZq8y0y7vQYthvvhKux/EXdmvtbIh61lZXBNtWAs3qcBUfEy4ZzEfiGaW/lPt8mzLwlKyAJZVlNsGUK4uCi6d9+zKo=
+	t=1790776739; cv=none; b=JJ5Duu1cjUYbwJEPgxh+irO5rAAWbIv+cFnocsRpUXlAjqdDRT/QvCNlPJccij6n3MDQ6IiEDFV6XATVfxUeBakYlm7pYQwzJyAKnLZiELvIX94dVWNUZnZIgVaHqbv1DDBiBtPbdMPxmbFSCe2ngRtgE/1sCLfqVSpNHnI4LHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790776677; c=relaxed/simple;
-	bh=Nry3nFCuqVWCFegzzAFM54lalWlidIpNtwv60/kgASY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QlORt+gVDu0q4Eo2pNV+E8YuJrXb3ZWA6VfiK/+7AQtRSTlI993x5CNoOTHi/6zQoIkBDgg9aNPVHvul0oVWwVilddyia258W8gGrMng+aM51r4ycvV0HebnTGlXy++uecDO6OKtMu+hagUGUTiGDk7irHzmY3lPZ5LUEqFx348=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+tzeQBg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790776739; c=relaxed/simple;
+	bh=JntZr9pmSOUg+ZaUxc7V4XN8+L3zHH3SeYEq4iA34Kc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GR+ZpaIniwZXi9wAsdf1yMDOtI7zNgRvW70YSnnQdAXPhQaTnTOLuKV0Ku8TfywdqHL8iabWhBVKpmLe3jURYBAWit8/flTiwsLskFrPpR+ZezBRxoN4v9pRKAzG10Y9P0ubG3VAvWjuqx+3wzkHEZ7mcj1ZfpLr4zDZ0em+dSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=WARGEQS2; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+tzeQBg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2CB1F0089A;
-	Wed, 30 Sep 2026 13:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790776662;
-	bh=U2vch9xD0f4302EDVC3E40ad28K/JNd/bcQaVZtvgPs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C+tzeQBg0tejkmYpHdzZsp2Ko5AZVHBAoy96B4zyuv4nYNaQiAgRSjXbe+xiPIeyP
-	 QR4X5FteP7N4QukgjWl9uKYD6Oe0IeBbCYfqSXX0vVYUK44LPluMFlKHR7uH0+dQGo
-	 /d6aJZhLJEpn04bFrfOcB3262L+Pk0DMMZQYqOonGbgAeWpuEnwCbYYv0Rri86miH0
-	 qyjchp1jxPba7OGEfSVMkTR6axIfhu+svdYctFMSyLknZVImx1XBm9wn33kaYf4fPi
-	 I6KgMmgcF1AVFqHG3u46U56d9d3V6fwpoL9YhP0Kx+klTY3ArSUn6aVSTEKZz3n7VX
-	 L6eKJT2Jsplug==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 14/17] fsnotify: detach the connector before destroying
- its marks
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Brauner" <brauner@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260930-work-mount-fixes-3-v1-14-be34c83956ae@kernel.org>
-References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
- <20260930-work-mount-fixes-3-v1-14-be34c83956ae@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 30 Sep 2026 13:57:42 +0000
-Message-Id: <20260930135742.9A2CB1F0089A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="WARGEQS2"
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 240CB80A0C;
+	Wed, 30 Sep 2026 15:58:50 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1BBAE46HBwV2; Wed, 30 Sep 2026 15:58:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1790776729; bh=JntZr9pmSOUg+ZaUxc7V4XN8+L3zHH3SeYEq4iA34Kc=;
+	h=From:To:Cc:Subject:Date;
+	b=WARGEQS2CY1JkUKUe4b1uxhrQR3BbeWAIDWi6Z/JBM1StxAjC1nlpVJ2wK8IuXTbE
+	 jnERLp3VZl8boxkcdITMqjeMrJKhr5DN+VpkqPIg/Kvj7+js4uovDsm4LaAtkWchrR
+	 VpzHeCrYdirc1p/EsLbxVdHKIWGkGhbusOHOfR96IHUA62I16fpTcOdTUC/b7qtS5z
+	 qV0CmyvFDssw/UtSQYCvPQrVrnfUnDvp6TlpbUL257cUv/Z99H3o0gfOmv0Ar5okpx
+	 sNWOX8GuVCwBjCv4qvCtjba/GRAE8FoA78cHAHEmQMFRQNmjb7TsaL/uCrYW5zL5eW
+	 p1uuEUppoaFxA==
+From: Masoud Aghasi <maghasi@disroot.org>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	leon.hwang@linux.dev,
+	Masoud Aghasi <maghasi@disroot.org>
+Subject: [PATCH v2 0/2] bpf: Fix incorrect handling of user flags by percpu map updates
+Date: Wed, 30 Sep 2026 14:57:51 +0100
+Message-ID: <20260930135753.1063495-1-maghasi@disroot.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] fsnotify: NULL pointer dereference in lockless fdinfo readers
---
+For BPF_MAP_TYPE_PERCPU_HASH map, htab_map_check_update_flags() and
+check_flags() are not considering the possibility of a combination of
+(BPF_NOEXIST, BPF_EXIST) flags with (BPF_F_CPU, BPF_F_ALL_CPUS) flags.
+This causes the (BPF_NOEXIST, BPF_EXIST) flags to lose their effect.
 
-commit e6a7d29740f3498c210e8d2cef8ba5c5a72ce862
-Author: Christian Brauner <brauner@kernel.org>
+For example, when using (BPF_F_CPU | BPF_EXIST) flag combination
+with bpf_map_update_elem() on a BPF_MAP_TYPE_PERCPU_HASH map, the
+BPF_EXIST flag does not prevent new insertions as expected.
 
-fsnotify: detach the connector before destroying its marks
+Also for BPF_MAP_TYPE_PERCPU_ARRAY map, using the (BPF_F_ALL_CPUS |
+BPF_EXIST) flag combination with bpf_map_update_elem() results in an
+incorrect EINVAL error response, even though the flag combination is
+valid. 
 
-This commit moves the detachment of the fsnotify connector from the object
-to the beginning of the mark destruction process. This prevents new marks
-from being added to the connector during the destruction walk.
+This series fixes the bug by adding proper flag validations and checks
+and adds regression tests.
 
-> diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-> index b2640d836a712..f6891d39e42fe 100644
-> --- a/fs/notify/mark.c
-> +++ b/fs/notify/mark.c
-> @@ -1112,6 +1112,16 @@ void fsnotify_destroy_marks(fsnotify_connp_t *conn=
-p)
->  	conn =3D fsnotify_grab_connector(connp);
->  	if (!conn)
->  		return;
-> +	/*
-> +	 * Detach the connector from the object first. Once conn->lock is
-> +	 * dropped a mark could be added in front of the one we're at and the
-> +	 * walk would miss it. fsnotify_grab_connector() refuses a detached
-> +	 * connector so any mark added from now on gets a connector of its
-> +	 * own. This also stops pinning the inode until all mark references
-> +	 * get dropped. It would lead to strange results such as delaying
-> +	 * inode deletion or blocking unmount.
-> +	 */
-> +	objp =3D fsnotify_detach_connector_from_object(conn, &type);
+Changes since v1:
+- Fix a BPF_EXIST flag check in __htab_lru_percpu_map_update_elem()
+- Add additional test for BPF_MAP_TYPE_LRU_PERCPU_HASH map
+- Add check for BPF_EXIST, BPF_NOEXIST combination in percpu array map
 
-[Severity: Critical]
-Will this early detachment expose a NULL pointer to concurrent lockless
-readers?
+Masoud Aghasi (2):
+  bpf: Fix incorrect handling of user flags by percpu map updates
+  selftests/bpf: add test for percpu map flags combination
 
-By moving fsnotify_detach_connector_from_object() to the beginning of
-fsnotify_destroy_marks(), the connector's object pointer (conn->obj) is set
-to NULL before the marks are removed from the group's list.
+ kernel/bpf/arraymap.c                         |  5 +--
+ kernel/bpf/hashtab.c                          | 11 ++++---
+ .../selftests/bpf/prog_tests/percpu_alloc.c   | 32 +++++++++++++++++++
+ 3 files changed, 42 insertions(+), 6 deletions(-)
 
-Concurrent lockless readers iterating the group list might observe the mark,
-check the connector type, and attempt to read conn->obj. Because there is
-no lock synchronization or memory barrier enforcing the visibility of the
-detached state before conn->obj is cleared, a reader could see a valid
-type but a NULL object.
+-- 
+2.47.3
 
-This regression might be triggered if file unlinks race with reads of
-/proc/<pid>/fdinfo/<inotify_fd>. For example, could this cause a NULL
-dereference in inotify_fdinfo() via igrab()?
-
-fs/notify/fdinfo.c:inotify_fdinfo() {
-    ...
-    inode =3D igrab(fsnotify_conn_inode(mark->connector));
-    ...
-}
-
-Similar lockless access patterns appear to exist in fanotify_fdinfo() and
-when fanotify_remove_mark() locklessly evaluates the connector mask. Can we
-safely detach the connector this early without breaking these readers?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930-work-mount=
--fixes-3-v1-0-be34c83956ae@kernel.org?part=3D14
