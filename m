@@ -1,93 +1,106 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152C43502A8;
-	Wed, 30 Sep 2026 06:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD96E3BFAD0;
+	Wed, 30 Sep 2026 06:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790750843; cv=none; b=KTnHkIcjIwV2BFq3IIQlUzfqG0v5eP6ZzAgfd106k/6L4Fbq2Z1GMq9Qf3JdlgShQ7ROyuR449wnuJIIxcCAss3aqnnBLegFtJVMeUrntJJkLAlEFKREJnex/4BrYftKybTz46Mj6Uhg+FaSPEiVK832MzJPzJYZdydckdzsIwA=
+	t=1790751378; cv=none; b=burm8fbiE49Ow8mfeupFG8bQPA0SnVPxYSsmSqKwZEVzVRr++u9oXE+XLjC4/Cpt5PVxNmmTvkOMIrfuKVlVAFbf9SBXcaN7DO/w5koY+E8RAQsvW6WI6t8OICnq6v0guwC963tGth1xB2Gnr4HYYvCE7+NzkXqlRWi/NWTWfrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790750843; c=relaxed/simple;
-	bh=uZbKw8POGeFl20KyakO1qWE+Jvbro+kWIARjBbqCgxY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=FzNi3Z6nr5EVeZigBOtNfCOmK4Ez/vhijHBRPWDaF//NzqDlc+JrtCeQKUPkoccT8En7UpsOb7zCKAPMf++ByZ7v5OfnxomYEFaR0bJJq2Hw0ErjhPMXteHE6CYpA8JVRk9fJHK6aafklFp9R2DbejyZjPI11EBGevvVz+2wA5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FCiyFpLf; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1790751378; c=relaxed/simple;
+	bh=O/FCAtcOOSix3cqXXADIQePkBxdLdFb+SvJpifZUruk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=srJxm6ihbkz4rLw9eA0JHpA8vUUcjMeuesi4GjStTRiopfHwPrsgjs2iCGQbGL+SgYmu+m4p9h8M5K07iy5bblgcu/MiKgc5iCYA2AM5mvDnJWItIIdAH916cqqxpyWiHEZdvSkHSTO3vhSEd74MYXN0Ziwu7bPpXR+Br7a9FOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PtY28J/r; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FCiyFpLf"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=hbGRKAiN+M+DetjoSs0ixVYVBfZRXUSaMrHD9zTQRGY=;
-	b=FCiyFpLftKLenUMsnY89EHh+viyyMUrKQXs528WFnizT89rpnmODxyJ2kKnzO65B06fkKBG7m
-	dDVvwZ5V/GTKou3Xnh+XKxp/+q8l7vQ25wu0oHxHWb6Q4M+N9Nt2eXvU5aRTQ+WZtZyX1cCXT0h
-	lPWeaZ0pwv9Tzzh810fYPYM=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4hvldt5NxRz1prLV;
-	Wed, 30 Sep 2026 14:34:58 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0D43640537;
-	Wed, 30 Sep 2026 14:47:10 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 30 Sep
- 2026 14:47:09 +0800
-Message-ID: <e887cfb6-8f68-4a0d-949b-cdf5584b1834@huawei.com>
-Date: Wed, 30 Sep 2026 14:47:08 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PtY28J/r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337AA1F000FF;
+	Wed, 30 Sep 2026 06:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790751373;
+	bh=xhqf939hx9m7+7epv447bweVCAzfzE7EVLV/ztuw/nM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=PtY28J/rIPXLmEZHNTtCCQtYpPEj0sG/nFQmG1JgSXZLww8iVWCZmurgdq5CKIgVj
+	 mXVlqHY6JyDU2p/L4E+mTpcOe9rLlV9RlUbxd8VcJX9P/eVuqOZcQvy0YbJX+wpcqE
+	 nvzW2vo2esbjbANxvasUZmwLeBCS6XbiWMyUUxIKcnWZ6JS0AoapN/fc8mO6I85BOI
+	 F8Katp6WIcl1Le0TXLR8eMexSKIM3NGyCk09QyG+giIoFTbJKawHZWmV+u7EK/bACZ
+	 5pL4Trrv+wc4AJlI9AkbCE4PomhqXD4YIRNdl6fbf1XCyZWah2AwT8t14fPUq+m5ai
+	 pQkBxi5/FSdFA==
+Date: Tue, 29 Sep 2026 23:56:12 -0700
+From: Kees Cook <kees@kernel.org>
+To: jim.cromie@gmail.com
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Zhen Lei <thunder.leizhen@huawei.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v7 3/3] kallsyms: Unroll 24-bit sequence reconstruction
+ in get_symbol_seq()
+Message-ID: <202609292329.87EE58BCF8@keescook>
+References: <20260929-ksyms-tune-v7-0-be568ceef41e@gmail.com>
+ <20260929-ksyms-tune-v7-3-be568ceef41e@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 0/2] riscv, bpf: Support indirect calls to bpf
- subprogs (callx)
-Content-Language: en-US
-To: Pu Lehui <pulehui@huaweicloud.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
-	<bjorn@kernel.org>, <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
-	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai
- Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
-	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Puranjay
- Mohan <puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>
-References: <20260929085450.1852617-1-pulehui@huaweicloud.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260929085450.1852617-1-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260929-ksyms-tune-v7-3-be568ceef41e@gmail.com>
 
-This series fail to apply, I have resent a new one.
+On Tue, Sep 29, 2026 at 12:07:32PM -0600, Jim Cromie via B4 Relay wrote:
+> Mark get_symbol_seq() as static inline and unroll the 3-byte extraction
+> into direct byte shifts: (p[0] << 16) | (p[1] << 8) | p[2]. This
+> eliminates loop induction variable maintenance and allows the compiler
+> to generate direct loads and constant shifts.
 
+So... did you actually see any difference in the output binary? This is
+such a small loop I'd expect every compiler to both inline and unroll
+it already. *time passes* I've checked; I was mostly right. :)
 
-https://lore.kernel.org/all/20260930064928.1909085-1-pulehui@huaweicloud.com/T/#t
+It's already inlined and unrolled by the compilers, but GCC weirdly
+didn't see through the array math:
 
-On 2026/9/29 16:54, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
-> 
-> This series implements support for indirect calls to bpf subprogs on
-> riscv64 and enables the corresponding selftests.
-> 
-> Meanwhile, this series also resolves the test_verifier failures
-> previously captured by riscv-bpf-daily due to missing callx support [0].
-> 
-> [0] https://github.com/pulehui/riscv-bpf-daily/issues/11
-> 
-> Pu Lehui (2):
->    riscv, bpf: Support indirect calls to bpf subprogs (callx)
->    selftests/bpf: Enable callx related testcases for RV64
-> 
->   arch/riscv/net/bpf_jit_comp64.c                      | 12 ++++++++++++
->   .../selftests/bpf/prog_tests/callx_func_ptr_map.c    |  3 ++-
->   .../selftests/bpf/prog_tests/callx_rodata_lskel.c    |  3 ++-
->   tools/testing/selftests/bpf/progs/verifier_callx.c   |  3 ++-
->   .../selftests/bpf/progs/verifier_callx_rodata.c      |  3 ++-
->   5 files changed, 20 insertions(+), 4 deletions(-)
-> 
+  At -O2 GCC (and Clang, mostly the same) on x86_64:
+
+  before                                  after
+  lea    (%rax,%rax,2),%eax               lea    (%rax,%rax,2),%edx
+  mov    %rax,%rdx                        movslq %edx,%rdx
+  movzbl seqs(%rax),%eax                  movzbl seqs(%rdx),%eax
+  lea    0x1(%rdx),%ecx                   movzbl seqs+2(%rdx),%ecx
+  add    $0x2,%edx                        movzbl seqs+1(%rdx),%edx
+  movzbl seqs(%rcx),%ecx                  shl    $0x10,%eax
+  shl    $0x8,%eax                        shl    $0x8,%edx
+  movzbl seqs(%rdx),%edx                  or     %ecx,%eax
+  or     %ecx,%eax                        or     %edx,%eax
+  shl    $0x8,%eax
+  or     %edx,%eax
+
+So it's actually the loss of the "+ i" part that does it.
+
+> -static unsigned int get_symbol_seq(int index)
+> +static inline unsigned int get_symbol_seq(int index)
+>  {
+> -	unsigned int i, seq = 0;
+> +	const u8 *p = &kallsyms_seqs_of_names[3 * index];
+>  
+> -	for (i = 0; i < 3; i++)
+> -		seq = (seq << 8) | kallsyms_seqs_of_names[3 * index + i];
+> -
+> -	return seq;
+> +	return (p[0] << 16) | (p[1] << 8) | p[2];
+>  }
+
+I'm on the fence about readability, but I think it's improved.
+
+Reviewed-by: Kees Cook <kees@kernel.org>
+
+-- 
+Kees Cook
