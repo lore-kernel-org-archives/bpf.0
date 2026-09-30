@@ -1,92 +1,86 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D740531B101
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 09:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2263AEF57
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 09:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790759391; cv=none; b=Z3hOdPaAxoK4rOBDeJ59IUJG89n78rVyb2fKjbzRq3cfYNY4eMBpI9RkMZRR8Brf0U65ljwZsKHNIwc3RjfokCYnC4APL474T3RiAtRcsGz2ppvwUH6jfnV0R9ufWPLvrNQdknRvM5SSX+NGtfspp1YQ9XCfBhKmlzoHGXGRWm0=
+	t=1790759418; cv=none; b=nC3P1MhoMjWG69X/lW0vBtwN0xglS2ectwoeelLcXYJrPtXakizndWmT/cUIIjznVvKqFhtc9KG5hWPGoojidlbRYwltKtu46m+4ZwKBZrUbnrAVjBRYMJxp4le1QLfaJmdaOxIr+iYmlp0Hhpq7RM4tvp5QnPU/EzFTGIswrKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790759391; c=relaxed/simple;
-	bh=7XZaUPvHQNr+4NrH/lnoEkZpSe8RXWKZgME0Ghq9tI0=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=ZgkG0XrWaw/6vvix8QipC73uYRWMXMk5eeGNQ6DZyUNXlnHyifwfbGTapgvv2kkA0TGOPMIR6/NbPjujcV02HKXwoxpEL8zqqguGM4nR0CQJ1BU8S98++z3851kdKEhcUTw+4jEARe64c4Hbq+lw4I3T/cKoXeMKLnaZOZtVjDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lIAXjTdx; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790759418; c=relaxed/simple;
+	bh=si4+lWXU1iKeCpH9h3ltda6q9o8LyfQw9cK6A54e+AI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Gnn3qb+3ZvpZtbfJPXRNEhjlAbauho7fw99KjxRvMJpIVn3aEey5NgyNNKpc/6YXzY4v/TFw2mMXFArMHLMzdvNQ742V1rc1E4iGmdL2jn01/U7d4W011jdF1dVVn8krGyx3aENjO6qwLnNjgRECpYPrq9woumBugxVFTmSq1/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAhUtEpR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lIAXjTdx"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccb1a98dso2889794a91.0
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 02:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790759389; x=1791364189; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7XZaUPvHQNr+4NrH/lnoEkZpSe8RXWKZgME0Ghq9tI0=;
-        b=lIAXjTdxsXRtp39gXIV5KzBrr2u9oA1dQTimJSI5ch4Ci2WNG+XFthOq2ReC5Yre2P
-         olnXd49prUGRAhwEDaf/dyczoly2JEDKl6S5L/TdiDOo8u+IwOXNdrCcwgYj4jVc41xj
-         PYBq3oNCzbkCn0iisIfuyxN6FaGQ5iqP6Fi7UlhJnQv+/gzoe/T9MLCspYrRsi4JNlg3
-         52Oy9a2hdZFva6pj3OLWM+obyRfEEp6yNRX96bQp8Vu16dcZ8JI7RJuKPIU/0rWnD6Rx
-         QyL/2nROV4J7mToV8HeuILOWNGT4w3iGacT5rcZHQk01iUZk84OuZTlwiR+qWStlpUOs
-         wgXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790759389; x=1791364189;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7XZaUPvHQNr+4NrH/lnoEkZpSe8RXWKZgME0Ghq9tI0=;
-        b=JZcuO3zDKSt1PnxGgDU30Gb5qjv60KHJEY+FdHzqHyK2jX7UlLDHXBKPBd8wJlpHS9
-         kgbYDLm6x/gU9p8R1K2vHbIQUEmZZqmsL4RJbvFcYCdzOfEmEExeXQJChDsUfuayiybx
-         sP2VPq8fCv4Hw/nEgD51tNDGPFu1OerRXQkhR+GFtae2ywoQ6LXQthg8G0LftbSuYz5W
-         1nMfLNnkZPH/dWLLzBHkfF5cCnNxzl7IPJDhH53h4oDJVI9bSuwFJXRrfKP53XjtCa5U
-         HhF6JcjqV96e0Kx1ZH9SaGXmhRYJLzs1lcsXK9Wmvfgr0GF+ple2f3Gl99k1UmPgFB0P
-         m8/A==
-X-Forwarded-Encrypted: i=1; AKwUvBymcZ6PDlVC6h8jijbO3pznt5Cp8hCsb4VqibL9xUlsFqG0zTVz7c4od/wQWd+BgYHKWWc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKHdS4bOXLK3bpg6cPxzKrMmuhng+20NPxwyHRSbU6IcLBmsUCL
-	5IQsXeHlf1/FsRXXNGDACNEOoWcnnHOA9FqlduOb4f8k08ElDiQLcMxL
-X-Gm-Gg: AYBFou1v4aq0u000JPMJxTjLSv4j5jp740wcXU6GGiTpcO2uBWAswF7XyZ20Uin9qK1
-	Cpj4lbwESYuh1ouBs8qYbESNYOLpMrB/Ai/dGmnQCOiobqj6R+BWBYJ1tItgRU8EqomQZ5mLKF1
-	S2w0tkDPfyrK30zYeFmGYe+OZyrAK6Cma3LoKumFzfwNSEvJuZ5SRsgrPwmxJa9COlaJQcSMwb8
-	NKPdxenH3+orpyptD0xzOSFkkSE7Ve8uLcKVQitbXWZoefdxSoYTDxY74ZekukmmtJwhrW75V9f
-	CyD4ifJY5K6y3EU5ppdtjdQTgoMKni4JSYRsBX4twugygVa2ZPeWmN3Q3b2lb5WSdwWGRyE5hip
-	8N6p/Ru6hqdhF0sp5pIExd3+ou3U+XwVL9MK1HJGFUefk/2IT+CfHgOXQBudroxRUop7Pv+rEox
-	GQcc4Yg7aL2LoU+88bKO12e9s2ltYKZ5eQqWxAOXsLK2CqTNTAArOwjoT8grnw1AJDFJVxlB+Qt
-	jQL6rJKh19ArwTPqUJqkKBYnKww/Qs1lTbb2HYDHjqnFBVKTO7KMqEX/LK/gxSOiA5gDA/Rk8/8
-	UXk=
-X-Received: by 2002:a17:90b:5450:b0:3a0:9aa4:f9bf with SMTP id 98e67ed59e1d1-3a4d154254bmr713552a91.12.1790759388764;
-        Wed, 30 Sep 2026 02:09:48 -0700 (PDT)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4cac131c7sm2608929a91.11.2026.09.30.02.09.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2026 02:09:48 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 30 Sep 2026 09:09:48 +0000
-Message-Id: <DLSJ81WE2HAS.28FPKEA7RBKAQ@gmail.com>
-Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next v6 0/7] Make sleepable arena paths use
- sleepable alloc_pages
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20260929183928.4896-1-emil@etsalapatis.com>
-References: <20260929183928.4896-1-emil@etsalapatis.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAhUtEpR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805191F000FF;
+	Wed, 30 Sep 2026 09:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790759416;
+	bh=gvPZffgj5IhRb13i8NNlrmkSrK5gnGWONwLYsiUaYG8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=cAhUtEpR8Bs/DocXeqbql6vlVL7xxNgv17yzL1+7GENtvVrfx4RrrOK2X4unLh7kR
+	 TD00U+WonPYMGDhr0S4OW0CyGc8sJaqRi3hXZrytg1CG9B6Y0edf1uQwEATW6bk+5A
+	 32qAQDhxosvZvVbnSOeGg/1P62eBKH+2maaS5mn9H5dwttAZI6ah5UuEkhuwDjjavF
+	 mO3wF1Je/gTGEaC0dTMN2ql1cFDJRqYU6cgAIw1eDe73rDvjU7Fr2C+fWTWXNHj6Z9
+	 /JCGzqmDuh2hW87EAxtpHJjOAWGaRiAavxemQYFzJDUtcOnAWdC7SF/jvXy9qY2n+2
+	 1SMfZbyvcHlLg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 773B439E8A77;
+	Wed, 30 Sep 2026 09:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/5] libbpf: Render decl_tags in btf_dump
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179075941528.1349208.11059576048812534137.git-patchwork-notify@kernel.org>
+Date: Wed, 30 Sep 2026 09:10:15 +0000
+References: <20260929234608.48503-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260929234608.48503-1-ihor.solodrai@linux.dev>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, memxor@gmail.com, bpf@vger.kernel.org,
+ alan.maguire@oracle.com
 
-On Tue, Sep 29, 2026 at 06:39 PM Emil Tsalapatis <emil@etsalapatis.com> wrote:
-> v5 -> v6 (https://lore.kernel.org/bpf/20260928202643.9114-1-emil@etsalapatis.com/)
->
-> - Use verifier_bug_if() for diagnostics (bot)
+Hello:
 
-The WARN_ON_ONCE()-s are still there in patch 6.
-Sent the wrong branch?
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-pw-bot: cr
+On Tue, 29 Sep 2026 16:46:03 -0700 you wrote:
+> BTF supports arbitrary __attribute__ encoding via decl tags and type
+> tags [1]. However btf_dump facility only outputs the attributes
+> encoded in BTF as type tags, which was implemented in commit
+> 2019c58318b8 ("libbpf: Check the kflag of type tags in btf_dump").
+> 
+> BTF_KIND_DECL_TAG has been left out of btf_dump entirely, independent
+> of the kflag value. An attribute a BTF producer encoded is silently
+> dropped from the C output.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2,1/5] libbpf: Walk types in btf_dump_resize(), not in mark_referenced()
+    https://git.kernel.org/bpf/bpf-next/c/1419795b98cf
+  - [bpf-next,v2,2/5] libbpf: Render decl_tags in btf_dump
+    https://git.kernel.org/bpf/bpf-next/c/76ea31239021
+  - [bpf-next,v2,3/5] selftests/bpf: Add ASSERT_TEXT_EQ()
+    https://git.kernel.org/bpf/bpf-next/c/1c36a1a41a47
+  - [bpf-next,v2,4/5] selftests/bpf: Test btf_dump rendering of decl_tags
+    https://git.kernel.org/bpf/bpf-next/c/096ee6e38267
+  - [bpf-next,v2,5/5] selftests/bpf: Show the tag kflag in the raw BTF dump helper
+    https://git.kernel.org/bpf/bpf-next/c/2c964f6c5d8e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
