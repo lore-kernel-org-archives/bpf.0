@@ -1,175 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58533501F28
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 20:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790799741; cv=none; b=kQCZPwMOKwHz+LVbDiQkCeyZIWgFYoMeTR3f+aaNcwisFr/NOfr9qCR1cqJxo6CCdQIn97VbJQWqurReulYGhukJ9v2mPAtGfd0dhG2r5p8dYweJgtyfUV/HdQuFgsKNftbm9Kr6bq27snQLrcYh0NNSwW5orHo5LJE1VgfDq9A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790799741; c=relaxed/simple;
-	bh=KinLE9TpzG+4lHiHCuEp7MHNN2XPzHeP0+fIicsEMvk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E8ZBHO+l7emvkBOBrcEIQQuaA914zbNqC87u5QCITWBKcw57Vyz1b6sh2rPA/GQ8MfNg7DqgK5cD1HxlU1q0MtwLCtSNelg3wEr/UZY4dhkW438/cfMOdPVcipzdDUQa7H9j73If+XqT+fBE8xt7MyfSz55HYrCSyK0/kLxKFO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fnPKpSMK; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321BA4E9C32
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 20:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790799829; cv=pass; b=r2wX1ZpIpkVPVICIam/Iv1XaphOGuYhQFWCKBX7kBo1G276NqGSqAlmHOrTcNU7EGEKv1XKFOVK/cYPhPS5FPHe5CFJHpNESv7MeCIo1YfJm5kLnky979oiir483p7n32LsVyD0vVudpPWZaQMR6wC4Qpi04cyaYDPa6Ldwr6tw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790799829; c=relaxed/simple;
+	bh=tjWVkCtWN1ksllcHQbdL3oVrHpjh5qWpPcUDOolq1cI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TBS3mt+NEyLXR+LATnTFXyUKi3aIniaIoAbKn0I3DqRAqPBR7tWIlC9fCtaGwK5jefujS/DcmXTc3jksO9eMPrg5f/CZ1wvJ8JorrpGfoEJL9T5gbpyvkIuxrk4VorAt31oVScaWGA3clt8wDuv2rncOOAjwfiXgiYA3rtdr+eY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sm03E8CI; arc=pass smtp.client-ip=74.125.231.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fnPKpSMK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775831F0089A;
-	Wed, 30 Sep 2026 20:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790799740;
-	bh=km8jmhjzJPy/NTq804iWYP+qjvbC1DyRRsV9uI/KqDY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fnPKpSMKkEq4quv55iQePFKdiEPUBvl+nn6DmtAgvyBO9yecrGDuR0UDVQaP9D9E9
-	 kYM5FyD6pF1zWOCZPPWK7c/c5tMGx+7vhMUFri5Hh+I003sKpr92LSHCOb1mTEEKp4
-	 wpn8kxaV9dx1G9df6faOCPTyCw1UuVQk9SnzhsukEALHErLYJhEUuzQsYNb1ImdC5h
-	 cmQzlmbJaHrvgHT46dilxwYjLqedNfY76kI6Zbur6eO2zDpKCx++YMYhwo0m06Fs0L
-	 6+AxyU0CfV8s/Wx0CNoBczVHmlQ85Xl0sOQwYTBiJXV6BH6dwoQlWIHyjZhOaM7Bhp
-	 Q7idG+/YQkCSA==
-Content-Type: multipart/mixed; boundary="===============8887992651756693883=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sm03E8CI"
+Received: by mail-oo2-f42.google.com with SMTP id 46e09a7af769-81acede04c3so2163572a34.2
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:23:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790799826; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XbbPyG1sw9dkPHT0uLuoO70VbP6fPVwFJeOE0WieUKvnDHuwMSExKJ94dWsZ+NLSn+
+         Y68GNirsYPdA/ABecc0MG+7zWs2fgd8Squ5xiOGBIZP2v87lXUHUYl/jU3GnUPGjcTsO
+         8TIbIkECtvo+ZLt/pO0pCW+eKFJ0PQmLw/GqBSlxqiV05nAqJmEbRmElBZEEnXH0Bi3D
+         y49/wn8/16k/X+dhMCfAtcGuYMefVca0fQ1sNph2DIsGUELbWwRpIXE1IKez+XMfD6Oy
+         CLrt59t5+Mi/V2bIDZKDO0L2ZgwgPmheFP2wstrX1MkLZD57T1YCZn9/IYGwU6X9a5Ce
+         nLaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3NFT0Auogh5UB9tx8XlsAJmBChn/jmV5eAEA0nyqDX4=;
+        fh=V9c9pomTpbR0oUsSJ8bN2ciV8tN9so1oJSYZPiRyWMs=;
+        b=OlofSacGIHAKvOko4nagcSii37jX2iaUAKsoPJfwtCViGn/O+ItVgotKgIJo8n2vDa
+         sKAfCrHwK6ewVy5Hr3Er9Xx46TQ+TTBJxHcOCh3gpR+OLydU3YHagmQuQ6T1dbWT3RW5
+         hxrGRezzvB0o01A/KG0uAfoO7j0LApZoe6FXjtst35o5SaIwfOYLg9sV+KYBo9LZJU+9
+         by+ijO9n0AiiF4m2dQPFlx5XL+cwkC4s/M8tZfgC3PP0paGZ1xb/M3MTG1NzRKFrNnlQ
+         yXxVlO4loPlGySFXMsqdEjjm7ob39YN8k3XUoY170uechtsU7huFA68QpPCyEFXnJhX4
+         R/2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790799826; x=1791404626; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3NFT0Auogh5UB9tx8XlsAJmBChn/jmV5eAEA0nyqDX4=;
+        b=Sm03E8CIiAErKAfcG0Ci7cfDCjiSCua7PP0hSuKhHEZdq0s5qxXQb8oxDMisK+LU/y
+         pqyxaoj3mmm8ti3Mcw3mFjXdeB7fcC7oPzvZEDp9KAQpGE/sqzP3rnxFeo+CIz8hkV4U
+         EdiPmnajp9YiNPwSQ78W/hQdr5FS//g971hrNLuOsTLJPKkNMvDMLPdSq7MNgM9Wsa3m
+         V3cfmsKzV79kP5yvheQd5vONp2bthr/W6K63iTbydGgwH6RRmhatlxx9V6D3OSTkmQKZ
+         TaPGsmQasVCz2NI+WfhZs2dUbaoDQJdfZ6WqeXZDN8OS1mGdihtwxnfRE0bwU1znk5g1
+         aVNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790799826; x=1791404626;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3NFT0Auogh5UB9tx8XlsAJmBChn/jmV5eAEA0nyqDX4=;
+        b=I+gncnfbqx+ugRBuNzh+eHtGcepulv4WGlCevicKSRocFJ2WxFgoeBj03Vnn1bEvfA
+         gbJjl0I5BVGVCfJhUNrodcd2TJlVqZkZilzBw2QG85lrkGbOH6AdLnXkY3T2fY53yNlw
+         GF496qsDQxTVLGDCo5f7f2vx75PI0m74V59W1nei99ifmFdVxrUdwWvimuI4PElZIj9+
+         AwyNeiPn0heJzgTgsLv6xcfJ4s+lXgtQQa/Ohq88YlYLqfAvhld/H+d4kYRGw8/qWtcv
+         55vYVKK123sAXM6e2CQt2oTQGbhYzN9Y1iiZo9WLVAcflB4bJS0rhfP0wT38H1v+7EaN
+         LH+A==
+X-Forwarded-Encrypted: i=1; AKwUvBx8tm6LhtELTXxS/U2tlW5SAyzs02+HiHjUwrPRyA9IIokJ+yGeaP0LtpB1kLVUnQ8W9yw=@vger.kernel.org
+X-Gm-Message-State: AFuF++nx4yyXWhBx73ZDifOqHIIuChb1EhPqkIzd7xsAwGwFEX6H49Xc
+	LGTCH5C27CLmvARvow7DZh4YActRjX4DWjJa5JVAzM5wWb8TJ5tB459ORBv2EJiwleDFfZuYNza
+	VbXnPwWGez4kWK04SwrPJvwQgYhF0M6e2VA==
+X-Gm-Gg: AYBFou1vHXD0PucOfQZclPJ+FuA1rIrwerLGiZo5wwtCj5DIa48M4UpS+aTMiWb+zhS
+	ErsHbwVszM3FB8aQm2mgaMkWyNP35iIHAw3gcC56g85aI5eoqdWuAhBPTDrGzkXQsbpTHvF5mdd
+	vArIzlg7cv6gHuFl2/HlXmpVtRghtZbmWklm5Rpy1MMoB2ivij9S48IJDy9AQgdFGAWXVylG+6a
+	c2S3KYH4sgN98tr24tMeo90Q+x+JR0uP6dC7OJ8oOwIkWsxuvgx5us2tBh9gHZfG3CS2u04tQ9D
+	0XbiKQJXmrLzgjHJoM16eovNEtoXXYdfP3NoFVeeIGmAZHC+wKCpVnQ=
+X-Received: by 2002:a05:6820:290b:b0:6b1:95fb:81e with SMTP id
+ 006d021491bc7-6dcf4559dfamr2868200eaf.22.1790799825918; Wed, 30 Sep 2026
+ 13:23:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e4bf816930960c25ce7449ed3bcf558f579aec2c93ab912bffc3a39a132e25c9@mail.kernel.org>
-In-Reply-To: <20260930193127.2181684-12-alexei.starovoitov@gmail.com>
-References: <20260930193127.2181684-12-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 11/14] libbpf: Keep global data in arena when the object has .arena.data
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 30 Sep 2026 20:22:19 +0000 (UTC)
+References: <20260930135159.3926039-1-shakeel.butt@linux.dev>
+In-Reply-To: <20260930135159.3926039-1-shakeel.butt@linux.dev>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 30 Sep 2026 13:23:35 -0700
+X-Gm-Features: AclHuK-HRG7T7XdhgKdEFkDWm3u0VW3bj7sKHiJVcbdSbgRB_tt6JD2iyN6YLbE
+Message-ID: <CAMB2axN6-sMPu++HPXXJmPp03f80G0WhgHPLe4Tx2N53V5REEA@mail.gmail.com>
+Subject: Re: [PATCH] bpf, cgroup: fix cgroup struct_ops query for a second
+ attach type
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Tejun Heo <tj@kernel.org>, Meta kernel team <kernel-team@meta.com>, cgroups@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Yafang Shao <laoar.shao@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============8887992651756693883==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Sep 30, 2026 at 6:52=E2=80=AFAM Shakeel Butt <shakeel.butt@linux.de=
+v> wrote:
+>
+> Two things in __cgroup_bpf_query() work only because CGROUP_TCP_SOCK_OPS =
+is
+> the only one struct_ops attach type.
+>
+> It calls cgroup_bpf_enabled(atype) with an atype that
+> find_atype_by_struct_ops_id() works out at runtime.  That macro is an asm
+> goto and needs a constant.  Today the compiler can see there is only one
+> value; add a second type and the build breaks with "impossible constraint=
+ in
+> 'asm'".  Add cgroup_bpf_enabled_runtime(), which reads the key instead, a=
+nd
+> use it here.  This is a syscall path, so the cost does not matter.
+>
+> And find_atype_by_struct_ops_id() matches on type_id alone.  An attach ty=
+pe
+> whose subsystem is not built keeps type_id 0, so a query for type 0 finds=
+ it
+> and returns success with nothing instead of -ENOENT.  Skip such slots.
+>
+> Fixes: 369d9dcd8fb8 ("bpf: Add infrastructure to support attaching struct=
+_ops to cgroups")
+> Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+> Acked-by: Yafang Shao <laoar.shao@gmail.com>
 
-> libbpf: Keep global data in arena when the object has .arena.data
-
-TL;DR: In libbpf, an object with __arena variables and .arena.data but no
-.maps section may get its .data/.bss/.rodata copies placed over the __arena
-variables at arena offset 0, silently aliasing them instead of failing to
-load.
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index fdd69aac39bd..335cdafeb06c 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -3081,6 +3119,129 @@ static int init_arena_map_data(struct bpf_object *obj, struct bpf_map *map,
-
-[ ... ]
-
-> +static int bpf_object__init_arena_data(struct bpf_object *obj)
-> +{
-> +	const size_t page_sz = sysconf(_SC_PAGE_SIZE);
-> +	size_t sz = obj->arena_data_sz;
-> +	struct bpf_map *map;
-> +	void *data;
-> +	int i;
-> +
-> +	if (!obj->data_in_arena)
-> +		return 0;
-> +
-> +	for (i = 0; i < obj->nr_maps; i++) {
-> +		map = &obj->maps[i];
-> +		if (map_data_goes_to_arena(obj, map))
-> +			sz = map_arena_off(obj, map, sz) + map->def.value_size;
-> +	}
-> +	if (sz == obj->arena_data_sz)
-> +		return 0;
-> +
-> +	if (obj->arena_map_idx < 0) {
-> +		map = bpf_object__add_map(obj);
-> +		if (IS_ERR(map))
-> +			return PTR_ERR(map);
-> +
-> +		map->real_name = strdup("arena");
-> +		map->name = strdup("arena");
-> +		if (!map->real_name || !map->name) {
-> +			zfree(&map->real_name);
-> +			zfree(&map->name);
-> +			return -ENOMEM;
-> +		}
-> +		map->sec_idx = -1;
-> +		map->def.type = BPF_MAP_TYPE_ARENA;
-> +		map->def.max_entries = roundup(sz, page_sz) / page_sz;
-> +		map->def.map_flags = BPF_F_MMAPABLE;
-> +		obj->arena_map_idx = map - obj->maps;
-> +	}
-
-When the object has __arena variables (.addr_space.1) and .arena.data, but
-no SEC(".maps") section, doesn't this place the .data/.bss/.rodata copies
-at arena offset 0, on top of the __arena variables?
-
-The __arena bookkeeping only happens in bpf_object__init_user_btf_maps(),
-and that function returns early when there is no .maps section:
-
-bpf_object__init_user_btf_maps() {
-    ...
-	if (obj->efile.btf_maps_shndx < 0)
-		return 0;
-    ...
-	if (obj->efile.arena_data && obj->arena_map_idx < 0) {
-		pr_warn("elf: sec '%s': to use global __arena variables the ARENA map should be explicitly declared in SEC(\".maps\")\n",
-			ARENA_SEC);
-		return -ENOENT;
-	}
-    ...
-}
-
-So in that case neither init_arena_map_data() runs, which is what copies
-.addr_space.1 into obj->arena_data and sets obj->arena_data_sz, nor does
-the -ENOENT check above fire.
-
-bpf_object__init_arena_data() then starts with sz = obj->arena_data_sz = 0,
-creates the "arena" map, and gives the first data map arena_off 0.
-
-Before this patch, bpf_program__record_reloc() failed such an object with
-"no arena maps defined", because arena_map_idx was still -1:
-
-bpf_program__record_reloc() {
-    ...
-	if (shdr_idx == obj->efile.arena_data_shndx) {
-		if (obj->arena_map_idx < 0) {
-			...
-			return -LIBBPF_ERRNO__RELOC;
-		}
-		...
-		reloc_desc->sym_off = sym->st_value;
-    ...
-}
-
-Now arena_map_idx points at the auto-created map, so that relocation
-succeeds and resolves to arena_data_off + st_value, which is the same
-address range the .data/.bss/.rodata copies now occupy.  Data pointers to
-__arena variables (targ_sec_idx == -1 in bpf_object__relocate_data_ptrs())
-resolve the same way.
-
-For example, an object with:
-
-  char d SEC(".arena.data");
-  int counter = 5;
-  int __arena avar = 11;
-
-and no maps: the program sees avar and counter at the same arena address.
-avar starts out as 5 rather than 11, and a write to one variable changes
-the other.  Previously this object was rejected at load.
-
-Should bpf_object__init_arena_data() (or bpf_object__init_user_btf_maps()
-without the early return) handle obj->efile.arena_data when there is no
-.maps section?  It could either reserve the __arena variables first or keep
-returning the -ENOENT error.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36768148430
---===============8887992651756693883==--
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
