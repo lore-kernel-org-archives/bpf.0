@@ -1,73 +1,73 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f39.google.com (mail-pj2-f39.google.com [74.125.227.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77303405C3F
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2F64052B7
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790796709; cv=none; b=qDFo/ICqrfi8jijUKCyqJtsWdKJTCD1gLbFVpP7uyeLO/JcBPr6STZsjQ5q1Q2X7R2XGft4yPU7ckqSs6UiHJgBNeAdCrgZ4cmv5tZADDFIhrWlMioPx6cBwZmtNUsLZtQtHf16JlT1MIsCsGTrAND9A4pPWI5wJdR2LBeP8Qno=
+	t=1790796711; cv=none; b=eO2/YOIPgi1GtiysSFT+7LqAwq7kxFIuF6zCxWsj47fNMtjAMzuw/YGVwt8yoL8/46uDmIH6iMeL6LphH4Kw4vxsY8jhGRbNSLTEW7u3PLBYit6/YwFXjgzajQe9gksvVdydbFpTP0ufMIAUiVg1lx6o4p0+vdjTlbqHK3DXqy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790796709; c=relaxed/simple;
-	bh=NSUO4hVvZlZma0Ke9bgBkPvoPZTLx+6Twz96Xy7OlCc=;
+	s=arc-20240116; t=1790796711; c=relaxed/simple;
+	bh=K3EeLIofe7g/58c9JRuYUukTNNq7bZsNP1LKI06JiJI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tPLpBtd8XuU34Flrvom2qhHPNxF4IMm3uaJLVq/iaH2AyEejlJ43MJfZm3f+kYhLB2biLd1de/SYOuZ9D+FxTkWKSc87RIxhcpa4eRmr2bW6xaqtjsx5meEn4nWgwNJrNHmnFahw4/DlHwmpPSC0oz9qfIZXlhl4Hsl39Ox0cK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PkQyNMc1; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=ikz28IGxm2asrhG2B0qg17/GYB4BEgOrk3zLFIp+a3MkyWO3IhjefTAhguwmYvqSyI/1wuKGe5OK+f13VZu02ed7PKvxyTp0qIW3N3wssojZMWnP/xbz8IQPyzp2TR7Fkk1Dg1b0MGoRknypSC6K92BSqDD3AwaCZFq9KvwmMtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ovWIT7kF; arc=none smtp.client-ip=74.125.227.167
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PkQyNMc1"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb751so2813865a91.2
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 12:31:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ovWIT7kF"
+Received: by mail-pj2-f39.google.com with SMTP id 98e67ed59e1d1-3a49b6bb21eso1834621a91.3
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 12:31:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790796707; x=1791401507; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790796709; x=1791401509; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7rJ00cYWuKporcFNNrBc+c9CkGMwzbHBsMvy2jda7qM=;
-        b=PkQyNMc1ZAI+klcCueTI6oMYdlB54D2fdEaW9f9z4cbe1cNdYigeoSwsHqBfe0WI7h
-         3rRUL85ixry3sOk4mDjhrY+t3HDisxtHscu1DsMa9pS0WpSIV91ym5lvtjdHK+OFc52h
-         qW4oVjbMWGUqC0ueFxDgP0/KA0r6rgEU2E3zGhbXs9+mlmqvU/Y2gM5xwsagXWb/uGoN
-         lmBTQh1gyk4UbjfmboxFyRJgF6kyycmVjgmF110tRW0U3ORpQzK/uIVJoP9euAJev822
-         2U5/ngVr33ybqQksZ5Hh60N5MG0IHTA9U1zNQN1Jq4e3MsLBTrJwh0eh3CNWMAHTGtyZ
-         8SLw==
+        bh=rZrMgVuwC79fUUzmv8j3ElA3MI6K/uZQCWy7pwDWg0Q=;
+        b=ovWIT7kFC7YVmAYEN5iCkrQ7NiLB8iVo7zT3iiyPczkmy7MujzDNe6ISw8imMTNbA8
+         DAn9t/ceLTDuA3H2HEMfRwrHkiDn0jOf7v2RP7ttj4uDdIgCiR9zy6cpv1Ti802XpYVe
+         zdGroj2yJRKTo8TZ35eLn+2Lu3WlK9p0m8zNpY9YDff0lWG5vaNhRJAmXOYyMNu2ofWM
+         4sKDjulZXmJWmz+V2Sh8EmuWNPnBmfIvycOO7/QtC9JlwEVKm7sDTL3yh9KE5t9uAiZ4
+         LkEllhE7rPA8dS42X56siO2h9EL6V2wcVJz9NKX8yf4TgOzLHC63YJ2XnNmhmi++kD8X
+         6kfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790796707; x=1791401507;
+        d=1e100.net; s=20260707; t=1790796709; x=1791401509;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7rJ00cYWuKporcFNNrBc+c9CkGMwzbHBsMvy2jda7qM=;
-        b=R1za3n4AMWPN2Dk89ApVo10c6ZemA8+FOISFKc5sEvce8sggoZfZYv5i+WldG62BpF
-         yaZ4l8v9pClbwf0eSHVjinQOGRjlKh9aoDp0xnChJy/tO8iSHpsLFMvOQGI2boEHVsyj
-         Utf7IZ1KFy7qgFaNsM2CwV+SQl2qU3UsWX/2YtFnN1nVFJfutQS7F+sR98XrtnYkezir
-         3K4l21sYX9qpXfV6yVf8uzbndVVgYmvMuWDY7RXNnRJ7lRBYLW8rhiKgZRQH/o2cQp+e
-         EF9iPRHlMd/bnxdCzjSgyIvWgWCz5P16CwZUNfJrh0xIZkcv3vajrYAfAyHNZPJnM8cr
-         IpUQ==
-X-Gm-Message-State: AFq9FYJe24VFkCp4GGYOAJAHDoG2VvFn8cu1f8gpHA62ws8WdZ3+qknC
-	K8X7K+qn+TJqMbwy3ryqQ5LlIn+eStisoHzIHIHIxy80EVhtn+D+3jqiRDTAgS2s
-X-Gm-Gg: AYBFou18qrPp5bxqfAJcBez3NeIeHkFzid+2Jbawr5TDOfemV+vejIXRLMqMc0QZlkn
-	cdcVx50iKLvuAwl0/V2PGro1EoalHplOe+v3d4uNXl4/aigcFSkPBwImJylgWsT9NUm+BfgTaC6
-	9s3E2JS7Lu3XOvHEWKJl5v39afuMkQ+pd1ytc5w0LWBGQM9/ph2LdxrGyZUX4S6Jwwzlaq8/34V
-	2lhub3E4jmbk7Y3EX7o/trKFO25rwJj/FKbnjFd8jSZiZecOAopKsmVe+7+KY/mbZBmbxj/TQy/
-	6R9MPpasdt4VeCwKhSYx2MCxltYo5QF12xZ4W7Vs3VrYCWzFF/t+m/DNlK6OdBbEu2ExKo5mQ7o
-	Asl56RMUQYZHUlkX8VrXWuJ24oeEkTGvADEw/N7yH4g+DHHEFIAM4FubNn0PZw1a2wUnVNoLCXK
-	vT+lPQF18Pnxv0Z3Txjs3gzjPqczv3j6hDvhuAXA2u/VpVqFahvOq1TomAthvhh2eDy8F9X5UEK
-	8znNjjUm6hrM+TwM+tu3n960SiCYqPEwj4nP6FBoo6O0gUpH3jPdMWcf/kwOlNzs6GMGIrMy/o0
-	rlyeYUUtXcdmY7mDW/UBRisZEgP/nBw8LqsGEmxz+FA=
-X-Received: by 2002:a17:90b:5830:b0:3a4:a045:27cb with SMTP id 98e67ed59e1d1-3a4d193d3a7mr1401936a91.46.1790796706378;
-        Wed, 30 Sep 2026 12:31:46 -0700 (PDT)
+        bh=rZrMgVuwC79fUUzmv8j3ElA3MI6K/uZQCWy7pwDWg0Q=;
+        b=LmKu4qTsnYkYF0Lg4QZ0v3iarr4dirqgsmV7aLU1P+V4/A0M4e/Adq3AAjmpkIF0GB
+         mpJarLjeDdxwh/lP4tH6D32mbBUe7C9WoPIWfgCH4mPfpQSI6FbTI+5u377AqoMAy9pG
+         19tgTlY5/XAnXYyrFYN1C2AZyMy6JJYJ+wDZpZG4WpOETqVZp5Whr/h/TdyK1nbUHjmZ
+         aS2f2U+KQhqvu4VhUWk3S+i4qWwuluY60KZD0/VTJ3rok0muvDLe5QWAn4g0cmtEMmhl
+         EaUQd3l4h5kQeilAtccCFHegMzzATGWbU/9m9wTJTLwrLudcl+OQAgEfTSpD9d8RmNIV
+         2vmQ==
+X-Gm-Message-State: AFq9FYJ7nCYxKqBbGWUwwizr+t0fAOTRGRc66l0YemQShr9XdDdqN1GM
+	IH5f6o3ojqHsFy2yh/ryCeLoPVWl9fSR6zy6w8nuR2ArdhKY+TRKi0nU1BHdiGoA
+X-Gm-Gg: AYBFou2PJhe9kFFTxNmme0Q6zu8/s8GRmBj1sZnfran5jZ1Pktif2DFjQ8JjelVo70t
+	q4glkkGEbbx1UYmKYTgC1NH5p3WoFXYYKtGLr+3ktpeEy9xzDiIi3ov1nh3SRMzN0Zl51QnEejl
+	4gHolmMdYAIgkf1QcUxTMzEynquOTu+mq5m8EqsgkRUWm89TLsH+r57fWACuBuTQMNDRT1c4NcL
+	EnxHZ3ZYjr8taPdOfOjjzR3eu0chgircG3HIMCLcc+ALPfiDv6HYK9xGAD395C2wBGVfFudKfQS
+	P/m9YKsVvfyMLgVR8TdCxuK6nY6m3uAOHmZVC2zm8ndD++Yzg/zBRsY1yaYC7aULNg+zNU1uvyx
+	4LX9c3BKh244/oaqT9s8gbJyaw8MwnMOzewmEpe3Mqx4Vt7ceuMqT/0YVxLkVcnp8CzEBcjpwpd
+	39wyRQBLrjhZM/WnlYxYQj0xoLTd+d/KyhJ/B/L2s8XKiKW8JugkXfMAR7bjoz9PycvZexOsoF1
+	lJwszBLbJyVp0FAgd+/0Ny2sbnIbOY1zT7I3PtZxtoTx1VI6CAtBjW+CpSTUwqdDC7IdLKdHz3L
+	vxek9CsLxuCKi+8LvDn17b8BAAWNLmtFl6aZg2sskrm3eKxKnv8HZA==
+X-Received: by 2002:a17:90b:3ec2:b0:3a0:b40d:827 with SMTP id 98e67ed59e1d1-3a4d059c0b5mr1569885a91.0.1790796709209;
+        Wed, 30 Sep 2026 12:31:49 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4f479dc9fsm657228a91.15.2026.09.30.12.31.45
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4f439f9f9sm729558a91.1.2026.09.30.12.31.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 12:31:46 -0700 (PDT)
+        Wed, 30 Sep 2026 12:31:48 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 05/14] bpf: Allow names of Rust types and functions in BTF
-Date: Wed, 30 Sep 2026 19:31:18 +0000
-Message-ID: <20260930193127.2181684-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 06/14] selftests/bpf: Add tests for names of Rust types and functions in BTF
+Date: Wed, 30 Sep 2026 19:31:19 +0000
+Message-ID: <20260930193127.2181684-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260930193127.2181684-1-alexei.starovoitov@gmail.com>
 References: <20260930193127.2181684-1-alexei.starovoitov@gmail.com>
@@ -81,276 +81,130 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Names of types and functions in BTF that LLVM makes for a Rust program
-are not C identifiers:
-
-  [69] STRUCT 'NonNull<str>' size=16 vlen=1
-  [147] FUNC 'write_fmt<scx_cosmos::BpfStream>' type_id=146
-
-and the kernel rejects such BTF with "Invalid name". scx_simple and
-scx_cosmos schedulers written in Rust have them in STRUCT, FWD and FUNC,
-made of letters, digits and " #&()*,:;<>[]{}", 430 characters at most.
-
-Allow any printable character in btf_name_valid_identifier(), like it's
-done for DATASEC. It checks names of types, functions, members,
-enumerators, variables and arguments, so all of them can have such
-characters now. The limit of KSYM_NAME_LEN stays.
-
-The name of FUNC is a part of the name of the program in kallsyms, where
-a space would break the parsers. Replace what is not a character of
-an identifier with '_' there.
-
-Tests in prog_tests/btf.c expect "Invalid name" for names with '!' and
-'*', which are valid now. Put a character that is not printable there.
-The type name '?foo' is expected to load.
+Check that BTF with names of STRUCT, FWD, TYPEDEF and FUNC that Rust
+makes is loaded and that the name of FUNC is an identifier in kallsyms.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/btf.c                             | 15 ++----
- kernel/bpf/core.c                            |  5 ++
- tools/testing/selftests/bpf/prog_tests/btf.c | 52 ++++++++++----------
- 3 files changed, 33 insertions(+), 39 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c  | 15 ++++
+ .../selftests/bpf/prog_tests/btf_rust.c       | 82 +++++++++++++++++++
+ 2 files changed, 97 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_rust.c
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 8cc17a1cd25c..d27af5d8e495 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -901,16 +901,6 @@ static bool btf_name_offset_valid(const struct btf *btf, u32 offset)
- 	return offset < btf->hdr.str_len;
- }
- 
--static bool __btf_name_char_ok(char c, bool first)
--{
--	if ((first ? !isalpha(c) :
--		     !isalnum(c)) &&
--	    c != '_' &&
--	    c != '.')
--		return false;
--	return true;
--}
--
- const char *btf_str_by_offset(const struct btf *btf, u32 offset)
- {
- 	while (offset < btf->start_str_off)
-@@ -923,20 +913,21 @@ const char *btf_str_by_offset(const struct btf *btf, u32 offset)
- 	return NULL;
- }
- 
-+/* Names in BTF of Rust are not C identifiers. Allow any printable character */
- static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
- {
- 	/* offset must be valid */
- 	const char *src = btf_str_by_offset(btf, offset);
- 	const char *src_limit;
- 
--	if (!__btf_name_char_ok(*src, true))
-+	if (!isprint(*src))
- 		return false;
- 
- 	/* set a limit on identifier length */
- 	src_limit = src + KSYM_NAME_LEN;
- 	src++;
- 	while (*src && src < src_limit) {
--		if (!__btf_name_char_ok(*src, false))
-+		if (!isprint(*src))
- 			return false;
- 		src++;
- 	}
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index a1721f9c0f52..36900b02d668 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -18,6 +18,7 @@
-  */
- 
- #include <uapi/linux/btf.h>
-+#include <linux/ctype.h>
- #include <linux/filter.h>
- #include <linux/sched/signal.h>
- #include <linux/skbuff.h>
-@@ -589,6 +590,10 @@ bpf_prog_ksym_set_name(struct bpf_prog *prog)
- 				      prog->aux->func_info[prog->aux->func_idx].type_id);
- 		func_name = btf_name_by_offset(prog->aux->btf, type->name_off);
- 		snprintf(sym, (size_t)(end - sym), "_%s", func_name);
-+		/* the name of a function of Rust is not an identifier */
-+		for (; *sym; sym++)
-+			if (!isalnum(*sym) && *sym != '_' && *sym != '.')
-+				*sym = '_';
- 		return;
- 	}
- 
 diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index df6ad38d287d..87b554067071 100644
+index 87b554067071..207341f4bd99 100644
 --- a/tools/testing/selftests/bpf/prog_tests/btf.c
 +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -1987,14 +1987,14 @@ static struct btf_raw_test raw_tests[] = {
- },
- 
- {
--	.descr = "typedef (invalid name, invalid identifier)",
-+	.descr = "typedef (invalid name, not printable)",
- 	.raw_types = {
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
- 		BTF_TYPEDEF_ENC(NAME_TBD, 1),			/* [2] */
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0__!int",
--	.str_sec_size = sizeof("\0__!int"),
-+	.str_sec = "\0__\7int",
-+	.str_sec_size = sizeof("\0__\7int"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "typedef_check_btf",
- 	.key_size = sizeof(int),
-@@ -2112,15 +2112,15 @@ static struct btf_raw_test raw_tests[] = {
- },
- 
- {
--	.descr = "fwd type (invalid name, invalid identifier)",
-+	.descr = "fwd type (invalid name, not printable)",
- 	.raw_types = {
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
- 		BTF_TYPE_ENC(NAME_TBD,
- 			     BTF_INFO_ENC(BTF_KIND_FWD, 0, 0), 0),	/* [2] */
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0__!skb",
--	.str_sec_size = sizeof("\0__!skb"),
-+	.str_sec = "\0__\7skb",
-+	.str_sec_size = sizeof("\0__\7skb"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "fwd_type_check_btf",
- 	.key_size = sizeof(int),
-@@ -2175,7 +2175,7 @@ static struct btf_raw_test raw_tests[] = {
- },
- 
- {
--	.descr = "struct type (invalid name, invalid identifier)",
-+	.descr = "struct type (invalid name, not printable)",
- 	.raw_types = {
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
- 		BTF_TYPE_ENC(NAME_TBD,
-@@ -2183,8 +2183,8 @@ static struct btf_raw_test raw_tests[] = {
- 		BTF_MEMBER_ENC(NAME_TBD, 1, 0),
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0A!\0B",
--	.str_sec_size = sizeof("\0A!\0B"),
-+	.str_sec = "\0A\7\0B",
-+	.str_sec_size = sizeof("\0A\7\0B"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "struct_type_check_btf",
- 	.key_size = sizeof(int),
-@@ -2217,7 +2217,7 @@ static struct btf_raw_test raw_tests[] = {
- },
- 
- {
--	.descr = "struct member (invalid name, invalid identifier)",
-+	.descr = "struct member (invalid name, not printable)",
- 	.raw_types = {
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
- 		BTF_TYPE_ENC(NAME_TBD,
-@@ -2225,8 +2225,8 @@ static struct btf_raw_test raw_tests[] = {
- 		BTF_MEMBER_ENC(NAME_TBD, 1, 0),
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0A\0B*",
--	.str_sec_size = sizeof("\0A\0B*"),
-+	.str_sec = "\0A\0B\7",
-+	.str_sec_size = sizeof("\0A\0B\7"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "struct_type_check_btf",
- 	.key_size = sizeof(int),
-@@ -2260,7 +2260,7 @@ static struct btf_raw_test raw_tests[] = {
- },
- 
- {
--	.descr = "enum type (invalid name, invalid identifier)",
-+	.descr = "enum type (invalid name, not printable)",
- 	.raw_types = {
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
- 		BTF_TYPE_ENC(NAME_TBD,
-@@ -2269,8 +2269,8 @@ static struct btf_raw_test raw_tests[] = {
- 		BTF_ENUM_ENC(NAME_TBD, 0),
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0A!\0B",
--	.str_sec_size = sizeof("\0A!\0B"),
-+	.str_sec = "\0A\7\0B",
-+	.str_sec_size = sizeof("\0A\7\0B"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "enum_type_check_btf",
- 	.key_size = sizeof(int),
-@@ -2306,7 +2306,7 @@ static struct btf_raw_test raw_tests[] = {
- },
- 
- {
--	.descr = "enum member (invalid name, invalid identifier)",
-+	.descr = "enum member (invalid name, not printable)",
- 	.raw_types = {
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
- 		BTF_TYPE_ENC(0,
-@@ -2315,8 +2315,8 @@ static struct btf_raw_test raw_tests[] = {
- 		BTF_ENUM_ENC(NAME_TBD, 0),
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0A!",
--	.str_sec_size = sizeof("\0A!"),
-+	.str_sec = "\0A\7",
-+	.str_sec_size = sizeof("\0A\7"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "enum_type_check_btf",
- 	.key_size = sizeof(int),
-@@ -2625,14 +2625,14 @@ static struct btf_raw_test raw_tests[] = {
- 	.raw_types = {
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
- 		BTF_TYPE_INT_ENC(0, 0, 0, 32, 4),		/* [2] */
--		/* void (*)(int a, unsigned int !!!) */
-+		/* void (*)(int a, unsigned int \7) */
- 		BTF_FUNC_PROTO_ENC(0, 2),			/* [3] */
- 			BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
- 			BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 2),
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0a\0!!!",
--	.str_sec_size = sizeof("\0a\0!!!"),
-+	.str_sec = "\0a\0\7",
-+	.str_sec_size = sizeof("\0a\0\7"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "func_proto_type_check_btf",
- 	.key_size = sizeof(int),
-@@ -2775,12 +2775,12 @@ static struct btf_raw_test raw_tests[] = {
- 		BTF_FUNC_PROTO_ENC(0, 2),			/* [3] */
- 			BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
- 			BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 2),
--		/* void !!!(int a, unsigned int b) */
-+		/* void \7(int a, unsigned int b) */
- 		BTF_FUNC_ENC(NAME_TBD, 3),			/* [4] */
- 		BTF_END_RAW,
- 	},
--	.str_sec = "\0a\0b\0!!!",
--	.str_sec_size = sizeof("\0a\0b\0!!!"),
-+	.str_sec = "\0a\0b\0\7",
-+	.str_sec_size = sizeof("\0a\0b\0\7"),
- 	.map_type = BPF_MAP_TYPE_ARRAY,
- 	.map_name = "func_type_check_btf",
- 	.key_size = sizeof(int),
-@@ -3585,15 +3585,13 @@ static struct btf_raw_test raw_tests[] = {
- 	.btf_load_err = true,
- },
- {
--	.descr = "type name '?foo' is not ok",
-+	.descr = "type name '?foo' is ok",
- 	.raw_types = {
- 		/* union ?foo; */
- 		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_FWD, 1, 0), 0), /* [1] */
- 		BTF_END_RAW,
+@@ -3593,6 +3593,21 @@ static struct btf_raw_test raw_tests[] = {
  	},
  	BTF_STR_SEC("\0?foo"),
--	.err_str = "Invalid name",
--	.btf_load_err = true,
  },
++{
++	.descr = "names of Rust types and functions are ok",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(NAME_NTH(1), 0, 0, 32, 4),	/* [1] */
++		BTF_STRUCT_ENC(NAME_NTH(2), 1, 4),		/* [2] */
++		BTF_MEMBER_ENC(NAME_NTH(3), 1, 0),
++		BTF_FWD_ENC(NAME_NTH(4), 0),			/* [3] */
++		BTF_TYPEDEF_ENC(NAME_NTH(5), 2),		/* [4] */
++		BTF_FUNC_PROTO_ENC(0, 1),			/* [5] */
++			BTF_FUNC_PROTO_ARG_ENC(NAME_NTH(6), 1),
++		BTF_FUNC_ENC(NAME_NTH(7), 5),			/* [6] */
++		BTF_END_RAW,
++	},
++	BTF_STR_SEC("\0u32\0Option<&str>\0__0\0*const str\0{impl#9}<[u8; 4]>\0self\0fmt<str>"),
++},
  
  {
+ 	.descr = "float test #1, well-formed",
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_rust.c b/tools/testing/selftests/bpf/prog_tests/btf_rust.c
+new file mode 100644
+index 000000000000..b0128daceaa1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/btf_rust.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <bpf/btf.h>
++
++#define FUNC_NAME "write_fmt<scx_simple::BpfStream>"
++#define KSYM_NAME "write_fmt_scx_simple__BpfStream_"
++
++static bool kallsyms_has(const char *sym)
++{
++	char line[1024], name[512];
++	bool found = false;
++	FILE *f;
++
++	f = fopen("/proc/kallsyms", "r");
++	if (!ASSERT_OK_PTR(f, "kallsyms"))
++		return false;
++	while (!found && fgets(line, sizeof(line), f))
++		found = sscanf(line, "%*s %*s %511s", name) == 1 && !strcmp(name, sym);
++	fclose(f);
++	return found;
++}
++
++/* The name of a function of Rust is a part of the name of the program in kallsyms */
++static void test_func_name(void)
++{
++	struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	LIBBPF_OPTS(bpf_prog_load_opts, opts);
++	int int_id, proto_id, prog_fd = -1, i;
++	struct bpf_func_info func_info = {};
++	struct bpf_prog_info info = {};
++	__u32 len = sizeof(info);
++	char sym[128], *p = sym;
++	struct btf *btf;
++
++	btf = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf, "btf"))
++		return;
++	int_id = btf__add_int(btf, "i32", 4, BTF_INT_SIGNED);
++	ASSERT_GT(int_id, 0, "int");
++	proto_id = btf__add_func_proto(btf, int_id);
++	ASSERT_GT(proto_id, 0, "proto");
++	ASSERT_OK(btf__add_func_param(btf, "ctx", int_id), "param");
++	func_info.type_id = btf__add_func(btf, FUNC_NAME, BTF_FUNC_STATIC, proto_id);
++	ASSERT_GT(func_info.type_id, 0, "func");
++	if (!ASSERT_OK(btf__load_into_kernel(btf), "btf load"))
++		goto out;
++
++	opts.prog_btf_fd = btf__fd(btf);
++	opts.func_info = &func_info;
++	opts.func_info_cnt = 1;
++	opts.func_info_rec_size = sizeof(func_info);
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns,
++				ARRAY_SIZE(insns), &opts);
++	if (!ASSERT_GE(prog_fd, 0, "prog load"))
++		goto out;
++	if (!ASSERT_OK(bpf_prog_get_info_by_fd(prog_fd, &info, &len), "prog info"))
++		goto out;
++	if (!info.jited_prog_len) {
++		test__skip();
++		goto out;
++	}
++
++	p += sprintf(p, "bpf_prog_");
++	for (i = 0; i < BPF_TAG_SIZE; i++)
++		p += sprintf(p, "%02x", info.tag[i]);
++	sprintf(p, "_%s", KSYM_NAME);
++	ASSERT_TRUE(kallsyms_has(sym), sym);
++out:
++	if (prog_fd >= 0)
++		close(prog_fd);
++	btf__free(btf);
++}
++
++void test_btf_rust(void)
++{
++	if (test__start_subtest("func_name"))
++		test_func_name();
++}
 -- 
 2.55.0
 
