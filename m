@@ -1,94 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-223.mta1.migadu.com [95.215.58.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D5E24293C;
-	Wed, 30 Sep 2026 01:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD4E24293C
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 01:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790731054; cv=none; b=sC6SAMOo4ddjDAgFR9qQ/ZSQnDz3FC3aimSG6oHA4wzwgwV4PLxh7dhq1vKDp3EfbO8YvBTydb8UJWqM5jqgitsHZjm4tZpCdUdI3ByV8xGYe+MWsi3jPp+w51+oGsyZZSg5sBN3wLNblBZTuPyoxN0NFN3TZbuFHOa4XX/G1e0=
+	t=1790731097; cv=none; b=ToYTyL+xxn2mnuZWkxo9y8dlhmTllN8NRs4u2TUmbHy+uA/1Z1SU0yLhr9rEgbdGLggriVcSds7L9qPSEyGZ4uBzB1WUyO2RxW4ybiyhUoWiLzZoXVMU0Cw1goeJCWBXEKBplHizos/lCp/I22EHXCkSzw9oUVcZLOL7qepqZHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790731054; c=relaxed/simple;
-	bh=VdI2m/a8nuHDN7n4LYA/dPiHQE5Jww7D4ImLctaE8mQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qorZU07/A4p0LMpsSZ9n736hDTpbs8XIrmUnw2gBiyBr9yWqQNrp1CSUYEImOdssKvfWTEZKz7yMBW5cb1OkKTkQRR/e8dpfazO+38E2Yybkx1+bl/P4jUNZNg1wni3KaJCI9R6vWD+88R3Jq9/dEmAjh3Zuy6p4IG+vxZTuQXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MwETFjAg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790731097; c=relaxed/simple;
+	bh=8dcmcOKMI2QBj1U7MAwq3Q1E9AxcGC47qpUvOgRf+00=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pJ9+yfTplWgf9pRcz7foDQ5oOPF2du10pfC5r77AWlHGIP1XSfpq7EekzpFkh2sibCnygCMFcG7qGwT2kqd/hi4GXXxbFNrsqmXqWCmRgciOcqx9P4HQv4C0D/MOse4k5M86Ft0+60CevNVjTtrkXss/ciVm5O+FoeFFgUqwQxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EE9mE6yj; arc=none smtp.client-ip=95.215.58.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MwETFjAg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A75E1F000FF;
-	Wed, 30 Sep 2026 01:17:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790731053;
-	bh=72UX9q+LRjrcmPYDrUvgInI9Dx8b61MvNOcSSkNVxqA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=MwETFjAgegF3B3DrnRWbVfYktQYvT3p8TOsnvsemm2n8pVP9BYOIpqqRpFGw2+ZdN
-	 Y2jVLkD+4cjVQ0lqZMSQTwUKAcerUNeW6p0JPYHMbwPvE5GY6qFH2MnUQ/scGRg4sp
-	 YaJKx7ysaPchx/WrSR/n2DFkNxThyDloh5NmvKx5mjyBx8/8asVQclb49ujcmKA2jm
-	 oOj4/dMQ59SxcHCR2pg0IFBdeex0ygkmBqjSoXQj3FmO2/kBd3j29JctmFBaW+yKg9
-	 Medibl5pAFZ1TbWi+zlZFQtJF4+hyOyyyjF1djs7zYi8EA8LCaBN0yOrjMp1N6XLGH
-	 TRP92RJGE7T1g==
-Content-Type: multipart/mixed; boundary="===============7906105332123239923=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EE9mE6yj"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=8dcmcOKMI2QBj1U7MAwq3Q1E9AxcGC47qpUvOgRf+00=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790731093; v=1; x=1791335893;
+ b=EE9mE6yj5XM4LT2X7p5whCcOEtJtaHeUL2JDYSaMn4ys3K6rJKKfk7BCsowSWlss9Gp5VEPh
+ h/khGiKaD/A+YFVYMJfAOh73g1KupeqrcRCn9+ESRyXhf6iTpmA9mhshkl5hy04qLZYiTzUmnqV
+ AjuzaMMVlaJF90fRV8TKpeQ4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4fa29fd6c1ba2c13;
+	Wed, 30 Sep 2026 01:18:13 +0000
+X-Mizu-Trace-ID: 4fa29fd6c1ba2c13
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c058f6de-1454-4ee3-8c49-92cbff873f7c@linux.dev>
+Date: Tue, 29 Sep 2026 18:18:09 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d3222c97d0d5e3892be54f09427ee273d31f567fcd7f09274abd39d36be115d4@mail.kernel.org>
-In-Reply-To: <20260929-ksyms-tune-v7-1-be568ceef41e@gmail.com>
-References: <20260929-ksyms-tune-v7-1-be568ceef41e@gmail.com>
-Subject: Re: [PATCH v7 1/3] kallsyms: Match compressed tokens on the fly during binary search
-From: bot+bpf-ci@kernel.org
-To: jim.cromie@gmail.com,akpm@linux-foundation.org
-Cc: pmladek@suse.com,thunder.leizhen@huawei.com,mcgrof@kernel.org,andrey.grodzovsky@crowdstrike.com,rostedt@goodmis.org,ljs@kernel.org,kees@kernel.org,david.laight.linux@gmail.com,masahiroy@kernel.org,olsajiri@gmail.com,linux-kernel@vger.kernel.org,linux-kbuild@vger.kernel.org,bpf@vger.kernel.org,jim.cromie@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 30 Sep 2026 01:17:32 +0000 (UTC)
-
---===============7906105332123239923==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 11/22] bpf: Dispatch cleanup pads by rewriting
+ return addresses
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260929001658.3251019-1-yonghong.song@linux.dev>
+ <97e6da4cbbd16c8938762c0c0cb2044b1ff910eb53cb6ed54864b46773c65eb7@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <97e6da4cbbd16c8938762c0c0cb2044b1ff910eb53cb6ed54864b46773c65eb7@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> kallsyms: Match compressed tokens on the fly during binary search
+
+
+On 9/28/26 6:14 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index 5b7fe4ba610b..bff9d2539371 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+>> @@ -1,5 +1,6 @@
+>>   // SPDX-License-Identifier: GPL-2.0-only
+>>   /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+>> +#include <linux/bitmap.h>
+> This isn't a bug, but is <linux/bitmap.h> needed? No bitmap API appears
+> in the file.
+
+Thanks. Will remove.
+
+> [ ... ]
 >
-> kallsyms_lookup_names() runs a binary search across ~184k tokenized
-> (compressed) symbols.  For each of the ~17 comparisons in the search, it
-> currently decompresses the candidate symbol into a temporary buffer on
-> the stack before calling strcmp().
->
-> Comparing tokenized symbols directly in compressed space is
-> impossible.  The BPE token table assigns values by frequency, not
-> alphabetical order (e.g. token 0x05 might expand to "zebra" while 0x42
-> expands to "apple"), so comparing raw token values scrambles
-> lexicographical order.  Even sorting the token table alphabetically
-> wouldn't help; "bpf_" and "bpf_foo_" do not *have* a determinative
-> sorting order, because the suffixes following those tokens would
-> matter.
->
-> However, full string expansion at every step is equally wasteful: of
-> the ~17 strcmps in the binary search, only the last needs to check
-> all N chars in both strings, earlier steps will know +/- outcome at
-> char 0,1,2..N-1.
->
-> However, full string expansion at every step is equally wasteful: of
-> the ~17 strcmp()s in the binary search, only the final matching step
-> needs to test all characters.  Earlier non-matching steps diverge at
-> the first differing character (0..N-1), but the baseline expands every
-> candidate symbol to the stack unconditionally, before comparing.
+>> @@ -1286,6 +1309,61 @@ static int resolve_func_ptrs(struct bpf_verifier_env *env)
+>>   	return 0;
+>>   }
+>>
+>> +static int exc_info_for_subprog(struct bpf_verifier_env *env, struct bpf_prog *sub,
+>> +				u32 subprog, u32 start, u32 end)
+>> +{
+>> +	struct bpf_cleanup_info *recs;
+>> +	u32 i, cnt = 0;
+>> +	int err;
+>> +
+>> +	if (!env->cleanup_info_cnt)
+>> +		return 0;
+>> +
+>> +	err = bpf_exc_alloc_info(sub->aux);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	for (i = start; i < end; i++) {
+>> +		if (env->insn_aux_data[i].cleanup_pad)
+>> +			cnt++;
+>> +	}
+>> +	if (!cnt)
+>> +		return 0;
+>> +
+>> +	recs = kvmalloc_array(cnt, sizeof(*recs), GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+>> +	if (!recs)
+>> +		return -ENOMEM;
+>> +
+>> +	for (i = start, cnt = 0; i < end; i++) {
+>> +		u32 pad = env->insn_aux_data[i].cleanup_pad;
+>> +
+>> +		if (!pad)
+>> +			continue;
+>> +		pad--;
+>> +		if (verifier_bug_if(pad < start || pad >= end, env,
+>> +				    "insn %u is covered by a landing pad at %u outside its subprog [%u, %u)",
+>> +				    i, pad, start, end)) {
+>> +			kvfree(recs);
+>> +			return -EFAULT;
+>> +		}
+>> +		recs[cnt].begin_off = i - start;
+>> +		recs[cnt].end_off = i - start + 1;
+>> +		recs[cnt].landing_pad_off = pad - start;
+>> +		cnt++;
+>> +	}
+>> +	err = bpf_exc_attach_info(sub->aux, recs, cnt);
+>> +	if (err)
+>> +		return err;
+>> +	return 0;
+>> +}
+> This isn't a bug, but is the subprog parameter meant to be used? The
+> function body uses only start and end, yet both callers pass a value for
+> it.
 
-Does the commit message have the same paragraph twice?  Both start with
-"However, full string expansion at every step is equally wasteful" and
-make the same point about wasteful expansion. The first version uses
-rough phrasing ("strcmps", "+/- outcome at char 0,1,2..N-1"), while the
-second version is more polished ("strcmp()s", "diverge at the first
-differing character"). Having two paragraphs in a row starting with
-"However," also makes the rationale harder to follow.
-
-Should one of the paragraphs be removed, probably the first one since the
-second is clearer?
+Will remove unused 'subprog' parameter.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36651779347
---===============7906105332123239923==--
