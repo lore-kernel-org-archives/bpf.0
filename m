@@ -1,255 +1,135 @@
-Received: from mail-oo2-f41.google.com (mail-oo2-f41.google.com [74.125.231.169])
+Received: from mta0.migadu.com (out-8.mta0.migadu.com [91.218.175.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74F04DDB40
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:49:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428232F6565
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 13:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790776163; cv=none; b=dEgo+Krg6xKM0TFSQ+YozTLzzaHStegM7m3Ad9By+N/3mUC+r1kqc9BIS7ArF/J4msPA9JRYkwfnIBnKfBzB9TU8wXYKAF0pa4BJ54bYyFUdxhZkELU/ri2v5t9ynyFcPj0Y/zg4fnXS2bfWLdOYx7Hgt8UfbYo0Ev/Vr71AgZk=
+	t=1790776357; cv=none; b=qEL0rr0AY+qkFeyi8LNcaQ19B8uTNr6hH9dPenf52DGvHHlpmGOX5hKKdbtAuy1gfVm/XQ0pPUvwj4aBfGyvHOlYZAl2LGzAPZ3PZLU+GNYH+kr+Af45e+6bxr1fqtx+JLNk56EHb3UpDwuZAU+9/TSz4fkuXf49k0DFjR+wLIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790776163; c=relaxed/simple;
-	bh=vns+8oesrCaNm7+0DgAsIp383/EmirBpC6z8L/AgF7M=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=avuEgcEZcTPvErhBe7LvWubHK2bvThGXqsh6vsN6jrY6pf92KQ+QcTMB+mBdU2dqYWwRrBRubNPBO6CulX1LuQWWI/NeRLuT0U9nqWVk//kn32MYcZGLRbKrJlnG/4vtzlBpB9AgZn6BDGMS0K2/ChNcwd00TVRMrPWpTmszx3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CJabd3ey; arc=none smtp.client-ip=74.125.231.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1790776357; c=relaxed/simple;
+	bh=AfeltYVpXCk9FWs65H6joY5ChH2MtXhQYovBE0rEmzQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zu95CkBccZfil6KgdcsWglFfN4UjPHN/uadAWrykaaNfVZWVDS3eqcshjHk+hsK17tgu0+CWtVHr83yKkBqAuX6HVKBsksIS0xYqJsDt5S/JiZXL9O7/JbKLyWhsbERgdo7LkXrL9qfbK+uMoUGoP1aCBKXaSyHKJ/fUNF/Sk70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ToJi3vCN; arc=none smtp.client-ip=91.218.175.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CJabd3ey"
-Received: by mail-oo2-f41.google.com with SMTP id 006d021491bc7-6b4bff33ceaso3136135eaf.0
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 06:49:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790776157; x=1791380957; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9WE422/LqnhCl3fPXNYCzqJOoTlv5wcGeIDmvarusck=;
-        b=CJabd3eycUimQrs2d8mvw6qjQPAbi8zcMSKtO8kLChLKiX9G5oJxgaVHmJ+4y4kvHh
-         l1U4Jxk2Lh7RALuHQf+EI21jPLWen+hT3+QHE9NKJfcp6PHCEbHMmCaA1TrcgKUFAw63
-         jVezG1EUFW4AA23D7Y0PXGzvQ9myrycClQ1yxHmrkpI69L/sNGmYPB6u1natx5BJCT1C
-         4qywE3+hgjmXIP0n+a60VeN0zmqV+IQj+Mwqxw1uBbspTmnZey6xdOPQAWEKYovQIpmG
-         OCm5u61Ud6hJUz7c2UD33xahwKnR6Gs8l5Xlz+HjuroDp0vsGUQTvFWkHBblvYIps55c
-         kchw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790776157; x=1791380957;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9WE422/LqnhCl3fPXNYCzqJOoTlv5wcGeIDmvarusck=;
-        b=C0iX6JmM/ZiVGoGAXFltybiVrJP9HVyJp4L+oqcqTbgChsuGSKbDoSX0lFP1HDcZOJ
-         txoslWEWdgsxouziSSmWSG3Ix2zMWudcxjnBjcn2nIFPRJXC+P3AnVl7WJB50fUJr6re
-         9roOscRWd2mYJ03DxEebDSJ1w7ydMoNddQbTWU5LJrbICX/04UQU/k6l6mI4aTrXEHXu
-         VWTw+rFrTNKdRfNhmzYd/OuhpRvU4vewuPcMUmxXAiJd+D9ObhusC9WxZ0rI9xwQLShB
-         NpUxBtZTjosWAovXQZ9vjUj8/topuhMLJaDGSbk+s2cJYpqcnC/2CVlvSdEivRJX2Nkr
-         B8rg==
-X-Forwarded-Encrypted: i=1; AKwUvBwsaBxvC73mWZFawO2hxPGOi1AYUAkw3wb5UqNgOQVRefGg4dRYli0fSNkA9WfGj+QP8lU=@vger.kernel.org
-X-Gm-Message-State: AFuF++kknROeiFq1g6SVKXm/oHEcvwdczqxO/UwTKoDkHZLvyP60yWhZ
-	nt/+ghdPVIMjGh+Qdu3lJCswiDDcwDkLgMbN9UEcQNf1EoHQDRDCXYY4pA9xJrPJHdQ=
-X-Gm-Gg: AYBFou2aaIXNtxXQWnDQBnSwp06HnDUNFwe2i9zY54RoyfF81BaMyqwpn2gKC7G4y9F
-	su1fS1lctEJrEf0BxckoNQyrM5MyWAOCUKramWzhIz5wywlR4xpk9aeazK/g+xWsiU9X+2FKllc
-	uR8tWAuCgtJDWUaL1OLUwplZFuEQ+7nKzCQYNSivtJ5SnwGa7Hyyokyg4CcZUncVlQLJX9QesdA
-	PMEg/yNAHwISYcVKKZpFs5+qKCFG/A7ZWQ56SJ/bqU0wayJvTnotACnZqvg+m8wb4prBAeZwisN
-	q6JOHFMyeBzjprA0NvDtf7+5JKN2Chg+RoW2ucLdFLIie+ypPWoE0QjrnuEx16R2QIP5uI+4Y6h
-	cqkC4104u1bRNt46BbB0/8pCUsPNd0CtWtvtL5fjWvKSi46C4gYviGWjJASQBohke4e0QfhHR9U
-	UxY94OncGxcU8Bo0XHW/MfAEXBUJYGyn7j0fYgwPerskw47mGXhaBK5acPVeTJSEAAJoIOjID4k
-	StuiWBF8GDL6AIxXyN+1zBBX/0vNgaGYqkmAlMH9Q4JeafOcnVuc1rq6xpUhka0gaqjI1DgtPIu
-	D/UcALI=
-X-Received: by 2002:a05:6820:1c98:b0:6dc:e1c3:b2c1 with SMTP id 006d021491bc7-6dcf5b2761cmr1487919eaf.56.1790776156586;
-        Wed, 30 Sep 2026 06:49:16 -0700 (PDT)
-Received: from [10.21.51.184] (ipagstaticip-88fc351e-cb28-db3e-3f52-ad13c70f08da.sdsl.bell.ca. [142.127.77.63])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6dd98ccc807sm52578eaf.15.2026.09.30.06.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2026 06:49:15 -0700 (PDT)
-Message-ID: <27bc999f-ef3a-450d-a4ea-57ac45508705@linaro.org>
-Date: Wed, 30 Sep 2026 15:49:12 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ToJi3vCN"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=AfeltYVpXCk9FWs65H6joY5ChH2MtXhQYovBE0rEmzQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790776331; v=1; x=1791381131;
+ b=ToJi3vCNuUoCqHi+rcgwOKcRA5B1vsUqA8h2STaI5e5DE6l9wLK2frO6jnS4TCGEUk7gci0K
+ pbqe7OP4yoIh8801/1VLNTlvFLbjqsSanby6CiXr7FmLTnyqlyVCmoyg7lHFELrzTNr7hlzz9et
+ YVZWAwql9Y/byP+4lSAdBUPw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d603edd5d970b7f4;
+	Wed, 30 Sep 2026 13:52:10 +0000
+X-Mizu-Trace-ID: d603edd5d970b7f4
+X-Migadu-Flow: FLOW_OUT
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Amery Hung <ameryhung@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	Meta kernel team <kernel-team@meta.com>,
+	cgroups@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH] bpf, cgroup: fix cgroup struct_ops query for a second attach type
+Date: Wed, 30 Sep 2026 06:51:59 -0700
+Message-ID: <20260930135159.3926039-1-shakeel.butt@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>,
- Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
- <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org> <artlIYhgbskRJXDQ@houat>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <artlIYhgbskRJXDQ@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/29/26 09:27, Maxime Ripard wrote:
-> On Mon, Sep 28, 2026 at 09:20:12PM +0200, Neil Armstrong wrote:
->> On 9/28/26 19:24, Benjamin Tissoires wrote:
->>> On Sep 28 2026, Neil Armstrong wrote:
->>>> Hi,
->>>>
->>>> On 9/28/26 18:22, Maxime Ripard wrote:
->>>>> Hi,
->>>>>
->>>>> Panels in general, and MIPI-DSI panels in particular, are pretty
->>>>> difficult to support and require pretty much a panel driver for each
->>>>> panel produced. Most of them are pretty simple, and require an opaque
->>>>> initialization sequence that is usually poorly documented.
->>>>>
->>>>> This creates a tension between OEMs and distros because OEMs will
->>>>> typically get a new panel to react to a sourcing issue during
->>>>> production, and thus need some swift turnaround between getting their
->>>>> new panel and it being operational in the OS. Distributions on the other
->>>>> hand can take years to ship a kernel with that new panel driver.
->>>>>
->>>>> To solve this, I followed the example of HID-BPF and wrote a panel
->>>>> driver that will rely on BPF programs to perform the panel
->>>>> initialization. That way, we can ship the programs separately from the
->>>>> kernel, and with a different lifecycle. If this driver is accepted, the
->>>>> plan is to have a userspace component started by udev to identify and
->>>>> load the right BPF program for the panels found on the device.
->>>>
->>>> This is kind of late for serious applications except if we manage to
->>>> solve the bootloader to Linux display engine transition.
->>>>
->>>>>
->>>>> This driver is fully functional and works with both 5" and 7" Touch
->>>>> Display 2 panels for the RaspberryPi. However, it breaks away from the
->>>>> typical panel driver in multiple ways:
->>>>>
->>>>> - BPF programs can only be loaded by userspace. This leaves us with two
->>>>>      choices:
->>>>>
->>>>>      * We prevent the driver from loading until the script itself is
->>>>>        loaded. This has the side effect of preventing any other output to
->>>>>        be used until the initramfs is ran at the earliest, and possibly
->>>>>        ever if the loader isn't installed for example.
->>>>
->>>> This adds a dependency on user-space behavior and if somehow the
->>>> initramfs doesn't load for a reason we won't have a way to display
->>>> an error.
->>>>
->>>>>
->>>>>      * Or we probe the driver all the time, but only report it as connected
->>>>>        once a program has been registered. This is somewhat unconventional,
->>>>>        but allows the other outputs to be functional, *and* allows the user
->>>>>        to force the output if their panel doesn't require any
->>>>>        initialization or during debugging. I chose this solution.
->>>>
->>>> Both options are not really great...
->>>>
->>>>>
->>>>> - It's not a panel driver, but a bridge one, which is also pretty
->>>>>      unconventional. This is required because panel drivers don't have
->>>>>      access to a detect callback that is required for the above, but I also
->>>>>      think that the recent work from Luca blurs the line from panels and
->>>>>      bridges and we'll end up going that road anyway.
->>>>
->>>> On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
->>>> the panel and the DDIC. So being a bridge is fine, but in a general way we lack
->>>> a proper way to describe the display/panel/monitor independently of the DDIC.
->>>>
->>>> At first glance it's a nice driver, but moving the timings into a blob moves something
->>>> into possible proprietary binaries with possible closed licence and distribution
->>>> restriction so it's a downgrade for the same of bringing up a panel faster.
->>>
->>> Quick answer on this, because I had the very same questions regarding
->>> HID-BPF:
->>> - in BPF, you can require (and by default it does) that only GPL
->>> 	compatible BPF programs are loaded, closing the argument of "closed
->>> 	licence and distribution restriction"
->>> - also, a BPF program can be disassembled much easier than a binary
->>> 	blob, and I remember Alexei showing me an example where you get almost
->>> 	the source code from the BPF object in just one pass.
->>
->> Right, it "solve" one of my question, but doesn't really solve the issue
->> of vendors providing "GPL" bpf programs with source available "somewhere".
-> 
-> Would you be ok if I was to make a tool to decompile a BPF program into its
-> source file equivalent?
+Two things in __cgroup_bpf_query() work only because CGROUP_TCP_SOCK_OPS is
+the only one struct_ops attach type.
 
-Not really, I don't see the point TBH.
+It calls cgroup_bpf_enabled(atype) with an atype that
+find_atype_by_struct_ops_id() works out at runtime.  That macro is an asm
+goto and needs a constant.  Today the compiler can see there is only one
+value; add a second type and the build breaks with "impossible constraint in
+'asm'".  Add cgroup_bpf_enabled_runtime(), which reads the key instead, and
+use it here.  This is a syscall path, so the cost does not matter.
 
-> 
->> Another big issue is the API, I don't want to keep the current API as-is,
->> we plan to support more advanced panel features and use try to use the
->> atomic states to support rate switching for example, and I'm not confident
->> it's a good idea since there's no "simple" and "forever valid" API
->> to initialize panels...
-> 
-> So, a couple of things here. First, I really don't think we should
-> extend the panel API, like at all. But let's discuss that at Plumbers, I
-> don't think it's very relevant to this discussion anyway.
+And find_atype_by_struct_ops_id() matches on type_id alone.  An attach type
+whose subsystem is not built keeps type_id 0, so a query for type 0 finds it
+and returns success with nothing instead of -ENOENT.  Skip such slots.
 
-It is, and I'll expose why we need to get out of this deprecated API
-as soon as possible, we are seriously keeping the ability to provide
-support for advanced panel features which are implemented in vendor
-kernels.
+Fixes: 369d9dcd8fb8 ("bpf: Add infrastructure to support attaching struct_ops to cgroups")
+Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ include/linux/bpf-cgroup.h | 9 +++++++++
+ kernel/bpf/cgroup.c        | 3 ++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-The API was ok when DSI was added and we didn't have generalized atomic
-modesetting, why would you not want panels to embrace atomic ?
-
-I don't understand, please elaborate.
-
-> 
-> Second, you don't have to use this driver, like, at all. For anything
-> more complicated than what this driver can provide, I totally expect to
-> still merge dedicated panel drivers if it makes sense. I also expect
-> that this driver would be enough for 90% of our panel drivers and
-> would allow us to support most of the cruft.
-> 
-> Finally, the BPF API is flexible. You can extend it later on and old
-> programs would still work. The verifier would fail only if a program
-> uses a new function in a kernel that doesn't support it. I was kind of
-> expecting to put drm_display_mode in there at some point, if the state
-> makes sense then why not.
-> 
-> Maxime
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 8a75a6cd7309..3b2c127d401d 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -76,6 +76,14 @@ to_cgroup_bpf_attach_type(enum bpf_attach_type attach_type)
+ 
+ extern struct static_key_false cgroup_bpf_enabled_key[MAX_CGROUP_BPF_ATTACH_TYPE];
+ #define cgroup_bpf_enabled(atype) static_branch_unlikely(&cgroup_bpf_enabled_key[atype])
++/*
++ * Same test when @atype is not a constant.  cgroup_bpf_enabled() uses
++ * static_branch_unlikely which creates jump-label site and requires statically
++ * selected key. Since key is selected dynamically, use static_key_enabled here
++ * and keep it off fast paths.
++ */
++#define cgroup_bpf_enabled_runtime(atype) \
++	static_key_enabled(&cgroup_bpf_enabled_key[atype])
+ 
+ struct bpf_cgroup_storage_map;
+ 
+@@ -508,6 +516,7 @@ static inline int cgroup_bpf_struct_ops_attach(struct bpf_map *map,
+ }
+ 
+ #define cgroup_bpf_enabled(atype) (0)
++#define cgroup_bpf_enabled_runtime(atype) (0)
+ #define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, atype, t_ctx) ({ 0; })
+ #define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, uaddrlen, atype) ({ 0; })
+ #define BPF_CGROUP_PRE_CONNECT_ENABLED(sk) (0)
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 2bbe77de89f0..4187f99ea025 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -45,6 +45,7 @@ static enum cgroup_bpf_attach_type find_atype_by_struct_ops_id(u32 type_id)
+ 
+ 	for (atype = 0; atype < MAX_CGROUP_BPF_ATTACH_TYPE; atype++) {
+ 		if (cgroup_bpf_is_struct_ops_atype(atype) &&
++		    cgroup_struct_ops[atype].type_id &&
+ 		    cgroup_struct_ops[atype].type_id == type_id)
+ 			return atype;
+ 	}
+@@ -1448,7 +1449,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+ 			return -ENOENT;
+ 		from_atype = to_atype = atype;
+ 		flags = 0;
+-		if (!cgroup_bpf_enabled(atype))
++		if (!cgroup_bpf_enabled_runtime(atype))
+ 			goto skip_count;
+ 	} else if (type == BPF_LSM_CGROUP) {
+ 		if (!effective_query && attr->query.prog_cnt &&
+-- 
+2.53.0-Meta
 
