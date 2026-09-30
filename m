@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3956F3A7597;
-	Wed, 30 Sep 2026 04:38:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DDB38E5ED;
+	Wed, 30 Sep 2026 04:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790743098; cv=none; b=d72rRyho70x8+3ek//OWExb2z/lqzNve7U9Y45Bkug+K+VWrwHgcZC9bGUj/ZPEKb3eyrjZmKG5FDb3CwWuuQDd1YE9gBiUULW/4Ke3S+qE0b6oxB701b7ngSGSJErkUxHyCHt+LoSr9lBlRKkcgrpm2QV8r0FM1v5IkrBMcgMc=
+	t=1790743100; cv=none; b=sOOIt/+F0feedYwLEIc1LPjlFSRCLVh5wZXD33FXXS0qYlqJUlHeEOFhnuUkyAI3rgIJWAVODYLJS3eKCf4xMJsCBMsI5/xQuJ26KTQ8brHC5rVYOusIOS9BxfThiYkULXlMYCz+iYRgqT5jqY4xYSl7TJCssZ5Mdr+rFxSSq3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790743098; c=relaxed/simple;
-	bh=GYT7eT1KECwmbDFaNvpJby6plAGRiWvUhiK4AYcnTek=;
+	s=arc-20240116; t=1790743100; c=relaxed/simple;
+	bh=Hl4nFr/Va+fR+63IuMlMpTP0/HB7OoF8GMNfxygWygA=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pdIF4DLctsJ3LsWNbVyDL66bAiiNTmiBBpftC82ADUvCoCWqB+r8ylu16PQBxZuuz1ZMKP+MzZfqsljn9vj/WcVaYA3XyHn+J68cqB5HA9RcQPWWXp/5ihCZZkGic0HUryqKPG5//hIXr/1zzJSllQgSu84iS3znhw5Jh7vy430=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlIVYB3M; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=ky5u3tYBeraEpd8pH62rMeFlVx4/qq7Gah2/ZADLQlktR7TXb7oUVZUwes8blQ2StC9FN3/TuNHD112oXsTgWbNeRXWzLJs79T7S1tZcgd2iv+jrrTQrXNKQp2zE8Ld/vKZWp5OEl4pr35gKPcRpXNNSdSyo/nDZ5fftBx17iJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lgu2XD3M; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlIVYB3M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065751F00893;
-	Wed, 30 Sep 2026 04:38:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lgu2XD3M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F081F000FF;
+	Wed, 30 Sep 2026 04:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790743096;
-	bh=0XtIy8zM3q+07kSNv4YHXbKWv3mSH0OFJhoXTaP+DQQ=;
+	s=k20260515; t=1790743098;
+	bh=GcbSLid+0kIeQoGJyodBytvXj4ILayJre5/BxDEOK9E=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=HlIVYB3MbTsUg2+myQHVu1qPTpBTWTEt6V2O7DrYrG3XR6pW1Qpm3qaTSI2f3+MZv
-	 e8JfF0ckvTonyrNqEoKRFXUCUbamQgux2go8kT/OblDTwHeEMSE17IEulSucAdAz+G
-	 g2pMNXvIyFeU676wDZ+Cc2uc5yMwY8VajYDUiQUw43HHjw4M/aRbbiqBjXQdhL+rc6
-	 fqC8BrQIN/qT/mArR0Gs0pVb9pxwRqpCWUIrHv3yeJRC4+dIi2/KsuqNjJwYUdcbbQ
-	 AXnnzZ3Zx3Wkt7fZzOQFatDaLI4/hl4HZcBQDDvlbt1MDlw9JdCU0Rnt/gNF7JTLtf
-	 QP55TTlMUF1MA==
-Subject: Re: [PATCH net-next 4/5] selftests/bpf: check XDP attach on a nested
- bond slave
+	b=lgu2XD3MhJyZNEokLxt7RLvJsVprGevzKmj1l/oejBJIyeNl0IrVeqXqnYxuAL9dd
+	 6ysa3+IJYyoV/XIP2SjvLQX+cWh8fAoOyQHF64Q7FUtF6/chkQNAaxodON2K10KY9c
+	 6/a7jkLRsDSEl6FC0FA/3v3BoJK0NzaJtyZ5Sp6tCJArHMvDy0Xj5AYT2Nc3VyqpFF
+	 v8YkmiWliaLjT5jOTlsYwnf3j2vkAkUQ7T3DMezgLpzbm16XkQNi6QiCfHUVVzMkn1
+	 GU5Prt5dKZue2lzqtBmGmeoQvVV6DfMExXEDlT250qcbjUEcIqGzO+Mw0EAItp8bOO
+	 uBSp0b7vMh8hQ==
+Subject:
+ Re: [PATCH net-next 5/5] net: drop GSO skbs instead of handing them to XDP
 From: netdev-bot+sashiko@kernel.org
 To: kuba@kernel.org
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
@@ -35,11 +35,11 @@ Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  hawk@kernel.org, sdf@fomichev.me, emil@etsalapatis.com, liuhangbin@gmail.com,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  willemdebruijn.kernel@gmail.com, aleksander.lobakin@intel.com
-Date: Wed, 30 Sep 2026 04:38:15 +0000
-Message-ID: <179074309557.434549.13415973847934182641@kernel.org>
-In-Reply-To: <20260928223648.2739371-5-kuba@kernel.org>
-References: <20260928223648.2739371-5-kuba@kernel.org>
-X-sashiko-severity: Low
+Date: Wed, 30 Sep 2026 04:38:17 +0000
+Message-ID: <179074309702.434549.6254450635863004021@kernel.org>
+In-Reply-To: <20260928223648.2739371-6-kuba@kernel.org>
+References: <20260928223648.2739371-6-kuba@kernel.org>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,132 +49,200 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 5 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 1 · Medium: 2 · Low: 2
 
-- [Low] The commit message and the new in-code comment in
-  test_xdp_bonding_nested()…
-- [Low] In test_xdp_bonding_nested()
-  (tools/testing/selftests/bpf/prog_tests/xdp_bonding.c:492-494) the new…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] Regression in tun/tap with native XDP attached: guest and
+  vnet_hdr TSO/USO traffic is now silently dropped.
+- [Medium] netdevsim with XDP attached now drops TCP TSO traffic from its
+  peer.
+- [Medium] veth: explicitly dropped GSO packets bypass kfree_skb
+  tracepoints
+- [Low] The patch describes and fixes a user-visible bug: generic XDP is
+  handed GRO-coalesced/GSO skbs, e.g. generic XDP on bond0 over GRO-…
+- [Low] In the generic XDP path, the new GSO check sits in
+  bpf_prog_run_generic_xdp(), which runs after…
 
 --
 
-selftests/bpf: check XDP attach on a nested bond slave
+net: drop GSO skbs instead of handing them to XDP
 
-This extends test_xdp_bonding_nested() so that it also attaches a
-program to bond_nest2 after the outer bond already has one. The new
-attach is expected to be refused. The commit message says the refusal
-works because the direct upper (bond_nest1) records the program it was
-handed.
+This commit adds xdp_skb_feature_check(). It drops GSO skbs, with a
+ratelimited warning, before they can reach an XDP program. The check is
+called from bpf_prog_run_generic_xdp() and veth_convert_skb_to_xdp_buff().
+The motivation is stacked devices such as bonding, and generic XDP on veth,
+where GRO-coalesced packets can still get to the program.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-> index c42488e445c28..486e0f9a2adac 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+> These precautions are not 100% today, and IMHO fixing
+> that is impossible. Let's explicitly drop GSO skbs on input to XDP.
 
 [ ... ]
 
-> @@ -488,10 +489,23 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
->  	if (!ASSERT_OK(err, "set bond_nest2 master"))
->  		goto out;
->  
-> +	nest2 = if_nametoindex("bond_nest2");
-> +	if (!ASSERT_GE(nest2, 0, "if_nametoindex bond_nest2"))
-> +		goto out;
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
 [Severity: Low]
-Can this check ever fail? if_nametoindex() returns 0 on failure, and
-ASSERT_GE(nest2, 0, ...) then evaluates 0 >= 0, which is true. So the
-goto out is never taken.
+The commit message describes a bug that exists today: generic XDP on bond0
+over GRO-enabled slaves, and generic XDP on veth. There is no Fixes: tag,
+though. Should one be added if this is meant for net?
 
-If the lookup did fail, nest2 would be 0, and the attach below would
-fail in bpf_xdp_link_attach() before any XDP attach restrictions are
-checked:
+The change also affects callers that send GSO skbs to generic XDP on
+purpose, such as tun and netdevsim. An origin reference would help stable
+backporters decide where the change applies.
 
-net/core/dev.c:bpf_xdp_link_attach() {
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 5c67e555f82d6..8c9dcb4126bd3 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+
+[ ... ]
+
+> @@ -5551,6 +5552,9 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+>  	u32 metalen, act;
+>  	int off;
+>  
+> +	if (unlikely(xdp_skb_feature_check(skb)))
+> +		return XDP_DROP;
+> +
+
+[Severity: Medium]
+Will anyone chasing lost packets be able to see this drop?
+
+The new branch jumps to the existing drop label. That label frees the
+skb with consume_skb() and sets *pskb to NULL. consume_skb() fires the
+consume_skb tracepoint, not kfree_skb, so dropwatch, perf on
+skb:kfree_skb and similar tools never see these packets.
+
+The caller, veth_xdp_rcv_skb(), bumps stats->rx_drops and then calls
+kfree_skb(skb) on its drop path. By then skb is already NULL, so that
+call is a no-op and the drop is still reported as a normal consume.
+
+The generic XDP call site behaves differently. There the XDP_DROP
+returned by bpf_prog_run_generic_xdp() reaches the do_drop label in
+netif_receive_generic_xdp(), which uses kfree_skb(). So the two callers
+of xdp_skb_feature_check() report the same policy drop in two different
+ways. Returning -ENOMEM is also misleading, since nothing failed to
+allocate here.
+
+The consume_skb() at the drop label predates this patch; it covers the
+skb_pp_cow_data() failure. That is arguably an error path as well.
+Would it make sense to free with kfree_skb_reason() for the GSO case?
+A dedicated drop reason for GSO skbs reaching XDP could then be used by
+both veth and the generic XDP path.
+
+[Severity: High]
+Does this break tun/tap when a native XDP program is attached?
+
+tun sends packets whose virtio_net_hdr has a gso_type to the generic XDP
+path on purpose, because its native XDP can't handle GSO:
+
+drivers/net/tun.c:tun_build_skb() {
     ...
-	dev = dev_get_by_index(net, attr->link_create.target_ifindex);
-	if (!dev) {
-		rtnl_unlock();
-		return -EINVAL;
-	}
+	if (hdr->gso_type || !xdp_prog) {
+		*skb_xdp = 1;
+		return __tun_build_skb(tfile, alloc_frag, buf, buflen, len,
+				       pad, metasize);
     ...
 }
 
-The later ASSERT_ERR_PTR(link2, ...) accepts any error. That -EINVAL
-would therefore be reported as the nested slave being correctly
-refused.
+The comment in tun_get_user() documents this:
 
-The same pattern already exists for bond. There, though, a bad ifindex
-makes the positive ASSERT_OK_PTR() fail. Here it feeds a negative
-assertion, so the result is a false pass.
+		/* For the packet that is not easy to be processed
+		 * (e.g gso or jumbo packet), we will do it at after
+		 * skb was created with generic XDP routine.
+		 */
 
-Should this be ASSERT_GT(nest2, 0, ...) instead?
+Once tun_vnet_hdr_tnl_to_skb() has set gso_size, the path becomes:
 
-> +
->  	link = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, bond);
-> -	ASSERT_OK_PTR(link, "attach program to master");
-> +	if (!ASSERT_OK_PTR(link, "attach program to master"))
-> +		goto out;
-> +
-> +	/* Attaching to a nested slave is not allowed either. Only the direct
-> +	 * upper is consulted, so this only holds if every device the program
-> +	 * was propagated to records it.
-> +	 */
-> +	link2 = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, nest2);
-> +	ASSERT_ERR_PTR(link2, "attach program to nested slave when master has program");
+tun_get_user()
+  do_xdp_generic()
+    netif_receive_generic_xdp()
+      bpf_prog_run_generic_xdp()
+        xdp_skb_feature_check() -> XDP_DROP
+
+The vhost-net batched path in tun_xdp_one() does the same:
+
+	if (xdp_prog) {
+		if (gso->gso_type) {
+			skb_xdp = true;
+			goto build;
+		}
+    ...
+	if (skb_xdp) {
+		ret = do_xdp_generic(xdp_prog, &skb);
+		if (ret != XDP_PASS) {
+			ret = 0;
+			goto out;
+
+tun treats any result other than XDP_PASS as consumed. tun_get_user()
+returns total_len and tun_xdp_one() returns 0. QEMU or vhost therefore sees
+success, but every guest TSO/USO frame is dropped. This happens even when
+the program only returns XDP_PASS.
+
+Unlike veth_xdp_set(), tun_xdp_set() does nothing to stop the writer from
+producing GSO frames. Guest TX TSO is negotiated between the guest and the
+VMM, so the admin has no receive offload to turn off. That makes the
+"receive offloads are still on" warning misleading here.
+
+The commit message says driver XDP "is not an issue", but tun's native XDP
+depends on generic XDP for GSO frames. Would tun need its own handling,
+such as segmenting or exempting these skbs?
+
+[Severity: Medium]
+Could this also blackhole TCP bulk traffic on netdevsim when XDP is
+attached?
+
+nsim_setup() advertises NETIF_F_TSO. nsim_start_xmit() only calls
+skb_linearize() before forwarding the skb to the peer, so gso_size is
+kept. The peer then runs its program through do_xdp_generic():
+
+drivers/net/netdevsim/netdev.c:nsim_rcv() {
+    ...
+			if (skb->ip_summed == CHECKSUM_PARTIAL)
+				skb_checksum_help(skb);
+			ret = do_xdp_generic(xdp_prog, &skb);
+			if (ret != XDP_PASS) {
+				dev_dstats_rx_add(dev, skblen);
+				continue;
+    ...
+}
+
+netdevsim never clears TSO on the peer when XDP is installed. Every TSO
+skb would now get XDP_DROP here and still be counted as received.
+
+For CHECKSUM_PARTIAL GSO skbs, this combination already triggered
+skb_warn_bad_offload() via skb_checksum_help() before this patch. The
+existing ping.py TCP subtests only send a short string, so they are
+unlikely to catch this.
 
 [Severity: Low]
-Do this comment and the commit message describe the check that
-actually refuses this attach?
+This isn't a bug, but should the check move to the top of
+netif_receive_generic_xdp()?
 
-The commit message says:
+GRO/GSO skbs are almost always nonlinear. By the time
+bpf_prog_run_generic_xdp() runs, netif_receive_generic_xdp() has already
+done this:
 
-  "Only the direct upper is consulted when deciding whether a device is
-  already running XDP, so with bond -> bond_nest1 -> bond_nest2 the
-  check on bond_nest2 looks at bond_nest1, and it only sees a program
-  there if bond_nest1 recorded the one it was handed."
-
-Attaching to bond propagates all the way down the chain:
-
-bond_xdp_set(bond)
-  dev_xdp_propagate(bond_nest1)
-    bond_xdp_set(bond_nest1)
-      dev_xdp_propagate(bond_nest2)
-        netif_xdp_propagate()
-          dev->xdp_from_upper = !!bpf->prog;
-
-This sets xdp_from_upper on bond_nest2 itself. The nest2 attach then
-stops in dev_xdp_attach() before the upper device walk:
-
-	/* the program belongs to an upper device */
-	if (dev->xdp_from_upper) {
-		NL_SET_ERR_MSG(extack, "Can't replace an XDP program installed by an upper device");
-		return -EBUSY;
+	if (skb_cloned(skb) || skb_is_nonlinear(skb) ||
+	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
+		if (netif_skb_check_for_xdp(pskb, xdp_prog))
+			goto do_drop;
 	}
 
-The netdev_for_each_upper_dev_rcu() loop, which would return -EEXIST
-after looking at bond_nest1, is never reached. So bond_nest1 is not
-consulted for this attach.
+If the program lacks xdp_has_frags, or the page pool copy would be too
+large, netif_skb_check_for_xdp() falls back to
+pskb_expand_head(..., GFP_ATOMIC) plus skb_linearize(). That means a
+high-order atomic allocation and a full copy of a 64KB (or BIG TCP sized)
+aggregate, and the skb is then dropped right away.
 
-ASSERT_ERR_PTR() also checks only that the attach failed, not which
-errno was returned. -EBUSY, -EEXIST and unrelated failures all pass the
-same way. The test does still catch the pre-fix behaviour, where the
-attach succeeded.
-
-Could the comment and commit message describe the xdp_from_upper
-refusal instead? And could the test check the expected errno, so the
-two rejection paths can be told apart?
-
->  
->  out:
-> +	bpf_link__destroy(link2);
->  	bpf_link__destroy(link);
->  	system("ip link del bond");
->  	system("ip link del bond_nest1");
+The veth hunk already places the check before skb_pp_cow_data().
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260928223648.2739371-1-kuba%40kernel.org
