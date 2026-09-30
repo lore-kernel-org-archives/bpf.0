@@ -1,73 +1,73 @@
-Received: from mail-pj2-f14.google.com (mail-pj2-f14.google.com [74.125.227.142])
+Received: from mail-pj2-f38.google.com (mail-pj2-f38.google.com [74.125.227.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1418A3F54CB
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524353FC5BD
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 19:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790796699; cv=none; b=JTY2j0B100ZZEWSRskxJFgH4KqKhzRsz2tEXyAb4qefwACGf4qFyNooDRvczZ+zO6zckYvWxhuE7gO4z6+DIU6F+aB8+P6vB/16yjmJi+P5sa5KUNa0XOfdMLtCjMheqPOa3FLpnaO0sK5SNod/I8QEL6yDHIxz27owjbbFI3Kk=
+	t=1790796703; cv=none; b=Yzl4pkTrAuvTJt9FEhikDe2nlbGeJMC9FcvOQGvBsnGvp63uk8EemHrAPlEO9olaMUfjVFLRpMvaBM/EeThMR1kFXDTBpoP9kogOROX3DqMLmYLzj8JocRkIYMT10ZymSFYuLKrMXyfDnYNr4UddBPAUmHfRvYpPng6tcOJ0Xs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790796699; c=relaxed/simple;
-	bh=HnILx6srqYNSVl+PVnybpHPN9GIGCOQgqJiQfnqdnsg=;
+	s=arc-20240116; t=1790796703; c=relaxed/simple;
+	bh=6VKF7hfPKow9sDewRfEOzip2c8spzF+igmKHmSBuRU0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mfzmbFudB4c5Q6qL+BOyh7J3y6O/k0n+CNVJwPhhBzNUWOwltFHhMYC6YWJRzjhv3EzFm1CD7Y2MHbTy/A3swKkW2XKqolDTZK/T8SNmWAwBSLeXPjxLccaxJ8peqyjGh56Itd10wZW+Fus+w2hVWCdTy+SsmBlAOus7t6riMVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OseE3jKd; arc=none smtp.client-ip=74.125.227.142
+	 MIME-Version; b=cjx5VpzG8gMY2QiKcihhqsy8okVbkNN8yfcHHSKPoWd+XkVWb2XIOtu5Ntcf7VMX4C4BddyrELQ8hLaEr7/DMQ26W0Ffd57bmI5V/dML5ozfQanlwcDNfPKyt4bHjgFq+f2rlU82r+D0N5qXVH2Krw8z3Zxx9PaOFI82A8yF/kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k2lUpXWt; arc=none smtp.client-ip=74.125.227.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OseE3jKd"
-Received: by mail-pj2-f14.google.com with SMTP id d9443c01a7336-2dd58e1e2c7so28095855ad.0
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 12:31:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k2lUpXWt"
+Received: by mail-pj2-f38.google.com with SMTP id 98e67ed59e1d1-3a4c0da0145so750030a91.0
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 12:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790796697; x=1791401497; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790796700; x=1791401500; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lC50uJg3JX39oNmh2zC53BH7LMSiBuHwAv317RzPsbs=;
-        b=OseE3jKd1FHjjuc0J/l/1yNdVL9adjBPEy8Y8iG+LdP5PisWESLQFtU40YAXbdUVGr
-         OxB6u88y8cYXgtVpuosBIMyYelJLWVvvAqqQyAQtreON645/ubBv8zT++QM1VR27dH8U
-         l674bgR26vFVBdoaHMY955snN1G9gcvu/bhrxk3faICRdYghw6HrHdg1r/wB+FQEM0lr
-         Dln41Q4wzwTS7wR1umIr762QjezA5WSKxLltxX8XCCBB9rb/ihyPENMTtNnYaZTwWRDL
-         WArWCs5Mso8SaukzK3EVah8bgsqG5MrbbIyvqbQfG7L7Zy2Fd+dHBjJ9INCV9vdJKR9e
-         c/qA==
+        bh=E8kHapgOPowQFVFjEyVo3jNVxBhduNwCoGZPnQmhxJw=;
+        b=k2lUpXWtXISZzQgYvSwcRjGhLGHeePPRwALm1QCzRT9UeSdcjXtA+ySDgJeVXVNkG+
+         zERQzGZR/yvu81XBhyd9IRxUtB5puwLOAttVQTnIV+SgBIL4tcOWGuwfBN+GulXe7pOr
+         n8K8Ez4mUf/r6/MHIh0dq28yq25rSKI7+/bexByZdcIMh0fqUpaFQdFi8GvvxbeNh0UB
+         8GR46zOjvjy1H3hj7v6LxHm1/vkOvWIEthZTYyx3EqZYDV71MKfoEfRgsUL7tlHSyi/C
+         +eaNkL8v8BeBY8hjZJFLIuLlAgoEW0Ctwp2lGo49s57M7VAt6qJiEGmsWmR4A8qM0f9d
+         rLsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790796697; x=1791401497;
+        d=1e100.net; s=20260707; t=1790796700; x=1791401500;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lC50uJg3JX39oNmh2zC53BH7LMSiBuHwAv317RzPsbs=;
-        b=jv9rSyDRmEPs9NxsITTpIwrRzCy8zKBHfMb9ZTFCWS3ajDQRjFUprWQvpQc1e2aQV4
-         o09Vgl5yV9DAx/Js9cW5bmfPWk5tY2FGmjng9wV8pD5m0jz9nx2zz3p9tFe1F8Cl112X
-         c4QEwQIatNx4gTsuUoGiDPF6AEBk36Yfsa/EUW6ZmJw0btvrrUeOgT/TFC0Wf0aAv8vF
-         yQqfUO6Afc+jweSyU37pSfv3E6lB4Vypx95q3ZP5oAJqXUS7XCorbIXC2rzxNS4ctKTV
-         3A730MhiClHv9fTJM8FRQk+bleZVoLHrLoM/eyb8325Db6AKGFz4Quk40JJJkEHrm5sf
-         e2yg==
-X-Gm-Message-State: AFq9FYJWHR95MzH93qxGnh6OFbAL9dtA2H0LvgzZhMf2O3Gzh04qqTRw
-	0b8FN1b/I1bjJUhGeKCcYUmHABz+EXMO2fkrCyboepyFBsywJIILePV6NUzSlI1u
-X-Gm-Gg: AYBFou2fR5MTVW748A9sTr9lzV8N9oGbo9KzGpPDcV6Il4r938w48odkXo67r098NSA
-	lMbugYD3bmXAlPW+IQ/UXUxgRc2YN+4HEJeALGP8zjhTuL24hnUUoufi3ilGdG2Pg27w3tugUOl
-	p0KUpgJSokh/gCj/DV/YTwOB1IaqdBqOF/HLkUy/9WPz7DG1j2VtIsqMjK+7M8PVF5hUnetY4Jp
-	fZl5NPVLCjZOICSF7dxOIRQvGxoEtO/zv+bAKgM6n3o51IndabCExFgvBA95tAd+YpfMgeyKmaP
-	RPNfH7IswLVt9WSi+9I1qh9EwGVEXe8PDCsRZHmV4r5ObLWeYyFrNEz5gjVlSBOX5/nboGue8Eq
-	E8NaLvuLLzfc80kUa6N/8BxPiXRc7L5mmkvMWhEbMYYKcrVLfuoSTEQziDRDMXmuPKUVu/9AdDc
-	W2XDFcXGPJOVX6o+S/77/8JcO9jKTEPiYeJxu7/x/cTKTqQ61KfkmbcjFTaIgv3EYKUDmw2/Npa
-	EfOl1USKumLvQKfb+3b8eYd6F0Zd6U9aPJvkJdo+6K2V1ORgINgpQauu1Blx7IYrtb6u8iN3dH1
-	HnHE+3K27+mpNsCxuNVLi4nLyNqF9I4caY99+yaC/qg=
-X-Received: by 2002:a17:903:4405:b0:2e2:d09f:d770 with SMTP id d9443c01a7336-2e2e4a28957mr17542965ad.26.1790796697159;
-        Wed, 30 Sep 2026 12:31:37 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e30099924bsm1726405ad.13.2026.09.30.12.31.36
+        bh=E8kHapgOPowQFVFjEyVo3jNVxBhduNwCoGZPnQmhxJw=;
+        b=XgGhl5/KdW18Pi6yxriylLyf+rTSVR0HU6jJKxYjFS9a16X5eQ2EM+3bjlqzIDfIKM
+         crWzBuiC2hEqBi54IB8qa49tuYCK8kfsg77EOL9dkldW4q5z6IpPW4ErWCUh3PPjKJiK
+         0i1wkmlnEKsGHKWPJTx6fdk2LDRLAZd6+kwkOEuyeLICKU+7V4i1Ay8aUwxxgRlvgw7n
+         4hps9OB8CvlEdzuDYFHGAb1nGsmWUwcU1ua/tx9g/skuG4FyxfYGDy2CyLmI1L2/8TCa
+         rLbLr6m+J2zmLrpouPW7bQ5sH9o9do4Qp/ILBpXyaxcrjlug+Unsp2SNgLowbo0I+dWP
+         IHiw==
+X-Gm-Message-State: AFq9FYKJM6ZQrS1EZuUoUQFVIzHywTK+Fg88NutpCrlxm/xiTo3waYTD
+	ObfZ/FZ3ZpAA8hp+FmAUMzc6rAkUrjBAyOtdA89XGODoEmqEIY/IAa6Lxbr2wH+i
+X-Gm-Gg: AYBFou0mV9E5hWSCAeedfYndU/nHz+UFqoDkKHVd6gnPd8/Ppcx7qC6sbQ+R1F3VfAY
+	yjZ8VODN91GsC4a7T34k2hBhNubAiUaKvK3WsW7G5ecX59d4T+7dDP6HAO001I0hxtKfxYpQG5R
+	FsirIcrSRMlCLpmZ0tyMxqQaHgDf8Zn28wO4hMcmg1XuV+cCVTAt739X92k5umwa8pBhenCKtTY
+	4kxO4SQdBsHVtHnJOgSAH78IE5NFlo7vyvl7dzYGT/Aj/UGqh5pormzXCZda9gWWR7jEsc+zv/f
+	5cBTLaS6ohsgXk0Nl4Eje3H3j56xx0+R7Li1NmRaxW6CjnBI8kMoMtO4j5t2xYoI5Q3KqGzPcnr
+	JreJ484x0mC4XaOaWfhVNSjiJkIYHr8JoucA4pAbBoLOJwBuuJy+P+CXenNXmcKH+vmXu/CnYm6
+	2cFZVqLpgswc2ztWZHc/n78H+4Z9JHo7DxAum5zCA/uPjsmxpAYIZdU10seybVEcgeYbLKf9XuR
+	fqYl/1Y1s4y7dfoR1h6wKXt0kjc5GLfPy4szqp0TCpG9dx9Ei8x1Rs1JJyKkObQuMsIEAzW7lC7
+	2rlviBbKEknjAbZJmarxCtOrMTiiyXZY8WDiRnJqWuo9
+X-Received: by 2002:a17:90b:3e88:b0:3a0:b312:1fbe with SMTP id 98e67ed59e1d1-3a4f7b9f9cbmr124980a91.23.1790796700279;
+        Wed, 30 Sep 2026 12:31:40 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4f446867asm768361a91.12.2026.09.30.12.31.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 12:31:36 -0700 (PDT)
+        Wed, 30 Sep 2026 12:31:39 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 02/14] selftests/bpf: Add tests for ALU on pointers with CAP_PERFMON
-Date: Wed, 30 Sep 2026 19:31:15 +0000
-Message-ID: <20260930193127.2181684-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 03/14] bpf: Treat load and store through a number as arena access
+Date: Wed, 30 Sep 2026 19:31:16 +0000
+Message-ID: <20260930193127.2181684-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260930193127.2181684-1-alexei.starovoitov@gmail.com>
 References: <20260930193127.2181684-1-alexei.starovoitov@gmail.com>
@@ -81,193 +81,435 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Check that &=, |=, ^=, >>=, *= and 32-bit &= on a pointer to map value
-produce a number for a program with CAP_PERFMON and that the number
-can't be dereferenced. They are rejected without CAP_PERFMON, with
-CAP_BPF or without it. Pointer that may be NULL and pointer to map are
-rejected as before.
+There are no address spaces in Rust. LLVM emits plain loads and stores
+for arena memory, without cast_kern:
+
+  r3 = 0x20 ll            // R_BPF_64_64 .bss, libbpf puts it into arena
+  r2 = *(u64 *)(r3 + 0)   // R3 invalid mem access 'scalar'
+  lock *(u64 *)(r2 + 8) += r1
+
+Add BPF_F_ARENA_SCALAR flag of BPF_PROG_LOAD. When the program is loaded
+with it and has an arena treat ldx, stx, st and atomics through a number
+as arena access. It's as safe as access through PTR_TO_ARENA: JIT adds
+the base of arena to the low 32 bits of the address. The program has
+an arena only with CAP_BPF and CAP_PERFMON.
+
+Registers of the program are not changed, since Rust compares and
+stores the address after the access. bpf_do_misc_fixups() copies
+the low 32 bits into BPF_REG_AX and the access goes through it:
+
+  r2 = *(u64 *)(r3 + 0)  ->  w12 = w3
+                             r2 = *(u64 *)(r12 + 0)
+
+Constant blinding needs BPF_REG_AX for immediates and leaves insns that
+use BPF_REG_AX alone. So the immediate of st through a number is not
+blinded, the rest of the program is:
+
+  *(u64 *)(r3 + 0) = 1   ->  w12 = w3
+                             *(u64 *)(r12 + 0) = 1
+
+The same insn may see PTR_TO_ARENA on another path. It works for both.
+
+It's a flag, since a number is also what the verifier makes of a pointer
+that went away when the program has CAP_PERFMON: a ringbuf record after
+bpf_ringbuf_submit(), a pointer to the packet after bpf_skb_pull_data().
+Programs in C that have an arena keep "invalid mem access 'scalar'" for
+such bugs.
+
+JIT tells with bpf_jit_supports_arena_scalar() that it takes BPF_REG_AX
+as the address of arena access. With other JITs the flag is rejected
+with -EOPNOTSUPP. x86 and arm64 do:
+- x86: the fault handler finds the register that holds the address
+  through reg2pt_regs[]. Add BPF_REG_AX, r10 of x86, there.
+- arm64: nothing else is needed. The JIT takes any register as the
+  address and the fault handler reads it by its number. Compile tested
+  only.
+
+Any number is an address of arena, NULL and small numbers included, like
+it is for PTR_TO_ARENA: arena code in C dereferences NULL and relies on
+the fault being handled.
+
+Still rejected:
+ - insn that sees a number on one path and a pointer that is not
+   PTR_TO_ARENA on another.
+ - numbers passed to helpers and kfuncs, except __arena arguments.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/progs/verifier_value_illegal_alu.c    | 165 ++++++++++++++++++
- 1 file changed, 165 insertions(+)
+ arch/arm64/net/bpf_jit_comp.c  |  5 +++
+ arch/x86/net/bpf_jit_comp.c    |  6 ++++
+ include/linux/bpf_verifier.h   |  2 ++
+ include/linux/filter.h         |  1 +
+ include/uapi/linux/bpf.h       |  6 ++++
+ kernel/bpf/core.c              |  6 ++++
+ kernel/bpf/fixups.c            | 39 ++++++++++++++++++++++
+ kernel/bpf/syscall.c           |  4 +++
+ kernel/bpf/verifier.c          | 61 +++++++++++++++++++++++++++-------
+ tools/include/uapi/linux/bpf.h |  6 ++++
+ 10 files changed, 124 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-index 9f669cf85c59..31663338866d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-@@ -165,6 +165,171 @@ __naked void map_ptr_illegal_alu_op(void)
- 	: __clobber_all);
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 475e70653454..6979c8ead0e8 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -3413,6 +3413,11 @@ bool bpf_jit_supports_arena(void)
+ 	return true;
  }
  
-+SEC("socket")
-+__description("tag in the low bit of a pointer, and, shift")
-+__success __retval(0)
-+__failure_unpriv __msg_unpriv("R1 bitwise operator &= on pointer")
-+__naked void ptr_tag_and_shift(void)
++bool bpf_jit_supports_arena_scalar(void)
 +{
-+	asm volatile ("					\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = 0;						\
-+	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r1 = r0;					\
-+	r1 &= 1;					\
-+	r2 = r0;					\
-+	r2 >>= 1;					\
-+	r3 = r0;					\
-+	r3 |= 1;					\
-+	r3 ^= 1;					\
-+	r0 = *(u32*)(r0 + 0);				\
-+	r0 = 0;						\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_48b)
-+	: __clobber_all);
++	return true;
 +}
 +
-+SEC("socket")
-+__description("tag in the low bit of a pointer, CAP_BPF without CAP_PERFMON")
-+__success __retval(0)
-+__failure_unpriv __msg_unpriv("R1 bitwise operator &= on pointer")
-+__caps_unpriv(CAP_BPF)
-+__naked void ptr_tag_cap_bpf(void)
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+ {
+ 	if (!in_arena)
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 6c7a0578760e..8199d28e2a12 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -236,6 +236,7 @@ static const int reg2pt_regs[] = {
+ 	[BPF_REG_7] = offsetof(struct pt_regs, r13),
+ 	[BPF_REG_8] = offsetof(struct pt_regs, r14),
+ 	[BPF_REG_9] = offsetof(struct pt_regs, r15),
++	[BPF_REG_AX] = offsetof(struct pt_regs, r10),
+ };
+ 
+ /*
+@@ -4667,6 +4668,11 @@ bool bpf_jit_supports_arena(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_arena_scalar(void)
 +{
-+	asm volatile ("					\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = 0;						\
-+	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r1 = r0;					\
-+	r1 &= 1;					\
-+	r0 = 0;						\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_48b)
-+	: __clobber_all);
++	return true;
 +}
 +
-+SEC("socket")
-+__description("number op= pointer")
-+__success __retval(0)
-+__failure_unpriv __msg_unpriv("R1 pointer arithmetic with *= operator")
-+__naked void number_mul_ptr(void)
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+ {
+ 	if (!in_arena)
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 811342e3c041..0074f1356c58 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -672,6 +672,7 @@ struct bpf_insn_aux_data {
+ 	bool non_sleepable; /* helper/kfunc may be called from non-sleepable context */
+ 	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
+ 	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
++	bool arena_scalar; /* ldx/stx/st/atomic through a number, it's an address in arena */
+ 	u8 alu_state; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+ 	 * pattern for a bpf_fastcall call.
+@@ -943,6 +944,7 @@ struct bpf_verifier_env {
+ 	bool strict_alignment;		/* perform strict pointer alignment checks */
+ 	bool test_state_freq;		/* test verifier with different pruning frequency */
+ 	bool test_reg_invariants;	/* fail verification on register invariants violations */
++	bool arena_scalar;		/* load and store through a number is arena access */
+ 	struct bpf_verifier_state *cur_state; /* current verifier state */
+ 	/* Search pruning optimization, array of list_heads for
+ 	 * lists of struct bpf_verifier_state_list.
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index e42eccb0990e..9339c6131f8f 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1250,6 +1250,7 @@ bool bpf_jit_supports_far_kfunc_call(void);
+ bool bpf_jit_supports_exceptions(void);
+ bool bpf_jit_supports_ptr_xchg(void);
+ bool bpf_jit_supports_arena(void);
++bool bpf_jit_supports_arena_scalar(void);
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
+ bool bpf_jit_supports_private_stack(void);
+ bool bpf_jit_supports_large_stack(void);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 4687c3310996..e0ed44b1bbcb 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1344,6 +1344,12 @@ enum bpf_perf_event_type {
+ /* The verifier internal test flag. Behavior is undefined */
+ #define BPF_F_TEST_REG_INVARIANTS	(1U << 7)
+ 
++/*
++ * Load and store through a number is an access to the arena of the program
++ * at the low 32 bits of the number. It's for programs written in Rust.
++ */
++#define BPF_F_ARENA_SCALAR	(1U << 8)
++
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+  */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index d3b8b626ec0f..a1721f9c0f52 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3429,6 +3429,12 @@ bool __weak bpf_jit_supports_arena(void)
+ 	return false;
+ }
+ 
++/* Whether JIT takes BPF_REG_AX as the address of arena access */
++bool __weak bpf_jit_supports_arena_scalar(void)
 +{
-+	asm volatile ("					\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = 0;						\
-+	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r1 = 7;						\
-+	r1 *= r0;					\
-+	r0 = 0;						\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_48b)
-+	: __clobber_all);
++	return false;
 +}
 +
-+SEC("socket")
-+__description("pointer with the tag cleared is a number")
-+__failure __msg("R0 invalid mem access 'scalar'")
-+__failure_unpriv __msg_unpriv("R0 bitwise operator |= on pointer")
-+__naked void ptr_tag_cleared_deref(void)
+ bool __weak bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+ {
+ 	return false;
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 37cf130ebb57..b4bfe5522003 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -46,6 +46,31 @@ static bool is_addr_space_cast32(struct bpf_prog *prog, const struct bpf_insn *i
+ 	return false;
+ }
+ 
++/*
++ * The insn accesses arena through a number. JITs add the base of arena
++ * to the register as it is, so the access goes through the low 32 bits of
++ * the number in BPF_REG_AX. Registers of the program are not changed: the
++ * number may be compared or stored later, and on another path the register
++ * may be PTR_TO_ARENA.
++ *
++ * Constant blinding leaves insns that use BPF_REG_AX alone, so the immediate
++ * of st through a number is not blinded.
++ */
++static int arena_scalar_access(const struct bpf_insn *insn, struct bpf_insn *buf)
 +{
-+	asm volatile ("					\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = 0;						\
-+	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r0 |= 1;					\
-+	r0 ^= 1;					\
-+	r0 = *(u32*)(r0 + 0);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_48b)
-+	: __clobber_all);
++	bool load = BPF_CLASS(insn->code) == BPF_LDX || bpf_atomic_is_load_acq(insn);
++	struct bpf_insn *patch = buf;
++
++	*patch++ = BPF_MOV32_REG(BPF_REG_AX, load ? insn->src_reg : insn->dst_reg);
++	*patch = *insn;
++	if (load)
++		patch->src_reg = BPF_REG_AX;
++	else
++		patch->dst_reg = BPF_REG_AX;
++	patch++;
++	return patch - buf;
 +}
 +
-+SEC("socket")
-+__description("shift of a pointer that may be NULL")
-+__failure __msg("R0 pointer arithmetic on map_value_or_null prohibited, null-check it first")
-+__failure_unpriv
-+__naked void ptr_or_null_shift(void)
+ /* Return the regno defined by the insn, or -1. */
+ static int insn_def_regno(const struct bpf_insn *insn)
+ {
+@@ -1785,6 +1810,20 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			/* Convert BPF_CLASS(insn->code) == BPF_ALU64 to 32-bit ALU */
+ 			insn->code = BPF_ALU | BPF_OP(insn->code) | BPF_SRC(insn->code);
+ 
++		if (env->insn_aux_data[i + delta].arena_scalar) {
++			cnt = arena_scalar_access(insn, insn_buf);
++
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta += cnt - 1;
++			prog = new_prog;
++			env->prog = prog;
++			insn = prog->insnsi + i + delta;
++			goto next_insn;
++		}
++
+ 		/* Make sdiv/smod divide-by-minus-one exceptions impossible. */
+ 		if ((insn->code == (BPF_ALU64 | BPF_MOD | BPF_K) ||
+ 		     insn->code == (BPF_ALU64 | BPF_DIV | BPF_K) ||
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ac52f4ae414c..778bca2abc04 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2948,9 +2948,13 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
+ 				 BPF_F_XDP_HAS_FRAGS |
+ 				 BPF_F_XDP_DEV_BOUND_ONLY |
+ 				 BPF_F_TEST_REG_INVARIANTS |
++				 BPF_F_ARENA_SCALAR |
+ 				 BPF_F_TOKEN_FD))
+ 		return -EINVAL;
+ 
++	if ((attr->prog_flags & BPF_F_ARENA_SCALAR) && !bpf_jit_supports_arena_scalar())
++		return -EOPNOTSUPP;
++
+ 	bpf_prog_load_fixup_attach_type(attr);
+ 
+ 	if (attr->prog_flags & BPF_F_TOKEN_FD) {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4bd14f4bcf40..4468740d4ed5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5232,6 +5232,19 @@ static bool is_arena_reg(struct bpf_verifier_env *env, int regno)
+ 	return reg->type == PTR_TO_ARENA;
+ }
+ 
++/*
++ * There are no address spaces in Rust, addresses of arena are plain numbers.
++ * When the program is loaded with BPF_F_ARENA_SCALAR and has an arena a load or
++ * a store through a number is an access to arena at the low 32 bits of it,
++ * like the access through PTR_TO_ARENA is. The register stays a number.
++ */
++static bool is_arena_scalar(struct bpf_verifier_env *env, int regno)
 +{
-+	asm volatile ("					\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = 0;						\
-+	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	r0 >>= 1;					\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_48b)
-+	: __clobber_all);
++	const struct bpf_reg_state *reg = reg_state(env, regno);
++
++	return reg->type == SCALAR_VALUE && env->arena_scalar && env->prog->aux->arena;
 +}
 +
-+SEC("socket")
-+__description("and of a pointer to map")
-+__failure __msg("R0 pointer arithmetic on map_ptr prohibited")
-+__failure_unpriv
-+__naked void map_ptr_and(void)
+ static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
+ 			       struct bpf_insn *insn)
+ {
+@@ -5262,7 +5275,7 @@ static bool atomic_ptr_type_ok(struct bpf_verifier_env *env, int regno,
+ 		return false;
+ 	if (is_sk_reg(env, regno))
+ 		return false;
+-	if (is_arena_reg(env, regno))
++	if (is_arena_reg(env, regno) || is_arena_scalar(env, regno))
+ 		return bpf_jit_supports_insn(insn, true);
+ 	if (is_load_acq_unsafe(env, regno, insn))
+ 		return false;
+@@ -7143,6 +7156,22 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type type,
+ 			     bool allow_trust_mismatch);
+ 
++/*
++ * Returns the register to check the access of the current insn with.
++ * For a number in a program with an arena that is 'arena'.
++ */
++static struct bpf_reg_state *mem_access_reg(struct bpf_verifier_env *env, int regno,
++					    struct bpf_reg_state *arena)
 +{
-+	asm volatile ("					\
-+	r0 = %[map_hash_48b] ll;			\
-+	r0 &= 1;					\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_addr(map_hash_48b)
-+	: __clobber_all);
++	if (!is_arena_scalar(env, regno))
++		return cur_regs(env) + regno;
++
++	memset(arena, 0, sizeof(*arena));
++	arena->type = PTR_TO_ARENA;
++	env->insn_aux_data[env->insn_idx].arena_scalar = true;
++	return arena;
 +}
 +
-+SEC("socket")
-+__description("32-bit and of a pointer")
-+__success __retval(0)
-+__failure_unpriv __msg_unpriv("R0 32-bit pointer arithmetic prohibited")
-+__naked void ptr_and32(void)
-+{
-+	asm volatile ("					\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = 0;						\
-+	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	w0 &= 1;					\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_48b)
-+	: __clobber_all);
-+}
+ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			  bool strict_alignment_once, bool is_ldsx,
+ 			  bool allow_trust_mismatch, const char *ctx)
+@@ -7150,6 +7179,7 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
+ 	struct bpf_reg_state *regs = cur_regs(env);
++	struct bpf_reg_state arena, *src_reg;
+ 	enum bpf_reg_type src_reg_type;
+ 	int err;
+ 
+@@ -7171,15 +7201,16 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (err)
+ 		return err;
+ 
+-	src_reg_type = regs[insn->src_reg].type;
++	src_reg = mem_access_reg(env, insn->src_reg, &arena);
++	src_reg_type = src_reg->type;
+ 
+ 	/*
+ 	 * check_stack_read_fixed_off() may refine the modification's origin to
+ 	 * the source stack slot.
+ 	 */
+ 	bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE);
+-	err = check_mem_access(env, env->insn_idx, regs + insn->src_reg, argno_from_reg(insn->src_reg), insn->off,
+-			       BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
++	err = check_mem_access(env, env->insn_idx, src_reg, argno_from_reg(insn->src_reg),
++			       insn->off, BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
+ 			       strict_alignment_once, is_ldsx);
+ 	err = err ?: save_aux_ptr_type(env, src_reg_type,
+ 				       allow_trust_mismatch);
+@@ -7196,6 +7227,7 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
+ 	struct bpf_reg_state *regs = cur_regs(env);
++	struct bpf_reg_state arena, *dst_reg;
+ 	enum bpf_reg_type dst_reg_type;
+ 	int err;
+ 
+@@ -7217,11 +7249,12 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (err)
+ 		return err;
+ 
+-	dst_reg_type = regs[insn->dst_reg].type;
++	dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
++	dst_reg_type = dst_reg->type;
+ 
+ 	/* Check if (dst_reg + off) is writeable. */
+-	err = check_mem_access(env, env->insn_idx, regs + insn->dst_reg, argno_from_reg(insn->dst_reg), insn->off,
+-			       BPF_SIZE(insn->code), BPF_WRITE, insn->src_reg,
++	err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg),
++			       insn->off, BPF_SIZE(insn->code), BPF_WRITE, insn->src_reg,
+ 			       strict_alignment_once, false);
+ 	err = err ?: save_aux_ptr_type(env, dst_reg_type, false);
+ 
+@@ -7231,7 +7264,7 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 			    struct bpf_insn *insn)
+ {
+-	struct bpf_reg_state *dst_reg;
++	struct bpf_reg_state arena, *dst_reg;
+ 	int load_reg;
+ 	int err;
+ 
+@@ -7276,6 +7309,9 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	/* load_reg may be dst_reg. Look at dst_reg before it's marked as unknown. */
++	dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
 +
- SEC("flow_dissector")
- __description("flow_keys illegal alu op with variable offset")
- __failure __msg("R7 pointer arithmetic on flow_keys prohibited")
+ 	load_reg = bpf_atomic_load_reg(insn);
+ 	if (load_reg >= 0) {
+ 		/* check and record load of old value */
+@@ -7284,8 +7320,6 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 			return err;
+ 	}
+ 
+-	dst_reg = cur_regs(env) + insn->dst_reg;
+-
+ 	/* Check whether we can read the memory, with second call for fetch
+ 	 * case to simulate the register fill.
+ 	 */
+@@ -19333,15 +19367,17 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 			return check_stack_arg_write(env, state, insn->off, NULL);
+ 		}
+ 
++		struct bpf_reg_state arena, *dst_reg;
+ 		enum bpf_reg_type dst_reg_type;
+ 
+ 		err = check_reg_arg(env, insn->dst_reg, SRC_OP);
+ 		if (err)
+ 			return err;
+ 
+-		dst_reg_type = cur_regs(env)[insn->dst_reg].type;
++		dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
++		dst_reg_type = dst_reg->type;
+ 
+-		err = check_mem_access(env, env->insn_idx, cur_regs(env) + insn->dst_reg, argno_from_reg(insn->dst_reg),
++		err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg),
+ 				       insn->off, BPF_SIZE(insn->code),
+ 				       BPF_WRITE, -1, false, false);
+ 		if (err)
+@@ -22500,6 +22536,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (is_priv)
+ 		env->test_state_freq = attr->prog_flags & BPF_F_TEST_STATE_FREQ;
+ 	env->test_reg_invariants = attr->prog_flags & BPF_F_TEST_REG_INVARIANTS;
++	env->arena_scalar = attr->prog_flags & BPF_F_ARENA_SCALAR;
+ 
+ 	env->explored_states = kvzalloc_objs(struct list_head,
+ 					     state_htab_size(env),
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4687c3310996..e0ed44b1bbcb 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1344,6 +1344,12 @@ enum bpf_perf_event_type {
+ /* The verifier internal test flag. Behavior is undefined */
+ #define BPF_F_TEST_REG_INVARIANTS	(1U << 7)
+ 
++/*
++ * Load and store through a number is an access to the arena of the program
++ * at the low 32 bits of the number. It's for programs written in Rust.
++ */
++#define BPF_F_ARENA_SCALAR	(1U << 8)
++
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+  */
 -- 
 2.55.0
 
