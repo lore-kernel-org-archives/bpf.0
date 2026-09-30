@@ -1,109 +1,125 @@
-Received: from mta1.migadu.com (out-169.mta1.migadu.com [95.215.58.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFC7459AC4
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 07:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9113AAF56
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 08:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790754756; cv=none; b=MnoMwTEvBUhUIuHiiEaJyV+mRBZnyiL3e0KQ6xD9vPiUB5q+omlUAnvw2zioxGIJj8L8i/V4seVtuN6+ci5Y3tF9HWRSDOV4y9kzdtNJRppijzhQoeClTvldRw0MJg1UDSbOOIq6n25Ow7Lrxfk2hc3DawQDpsPlN6r6yUSw59I=
+	t=1790755368; cv=none; b=d2MzJyZYjV18TYWBH5OhFombw1faUILbAiFNU6wkhH4kV20rvsv3hhTCysZm0GFXwxSwqiG7eLm0ZER2okfusJt3t13uIi2MVB5gmwgk6+qedOJJ5trNOHjgpLVL7i5YqUudNQA+qcvr1IY+BJDCuQoEM7LOn3+Vk73uPmFYwQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790754756; c=relaxed/simple;
-	bh=8ma5wy0oJIj/chbeeAhuh0ZtFGfNhOnQTVLc6I5RlKQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mbodxr+5RTPqO2WwZ0W+pBew3BbfrFYgxFnMAzvylPUk87SwZWQaqZ80xSPmf32PXjlpebd5ie19sv0Sm/J3/mm5n5I5gPDi1fVD7x71p4YguvOH5RCfnIlmDahi2okUdOjuZS76j0inmq8jWc37qocmUQsW+6xDB+W+EJDkzqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hoyIe2tV; arc=none smtp.client-ip=95.215.58.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790755368; c=relaxed/simple;
+	bh=iCR71HtiWHhYAuL9WP1MeO4TuEnkp5OShhme+BPyjAg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=TolJKJDiB8Xx34cyacEErd69CfAMnWDmJOWm0H2HilQWCu8/RcSpbqUAgfPYStQO3eZBQFtOacMBH59DPUscvzv8aWIcX/AWwI6aYYkPNREeIWGhaJEZC1IB/B1oWrB+fYiNMBJT4bmA5ByVkYCm6TgcCGAKkPcut94agqiaOx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rpjul245; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hoyIe2tV"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8ma5wy0oJIj/chbeeAhuh0ZtFGfNhOnQTVLc6I5RlKQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790754752; v=1; x=1791359552;
- b=hoyIe2tVu7LbrNdOK4BCoPaXkPloBQPEyssSc7kF0Js8c9v8xA2QemWicEDl2OqDyVZGiYzZ
- RWR6Lmt3LpI/XrLGa4RsriPvM5M9TGjN5Ne1HMCH4FxBo0OL4w7Fx7tLYDjzqCMhCY7QQM/1lB1
- 0t2AyW2lyN5zFhmrPQ54bIlI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7b477e88c5b0e9d9;
-	Wed, 30 Sep 2026 07:52:32 +0000
-X-Mizu-Trace-ID: 7b477e88c5b0e9d9
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn,
-	ameryhung@gmail.com,
-	alexei.starovoitov@gmail.com
-Subject: [RFC PATCH v8 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
-Date: Wed, 30 Sep 2026 15:51:54 +0800
-Message-ID: <20260930075154.189958-5-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260930075154.189958-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rpjul245"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D961F000FF;
+	Wed, 30 Sep 2026 08:02:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790755367;
+	bh=1i4gfw/1znGfxYK0G5krURx/9wbBU9XLh8YFfk+s1dM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Rpjul245Nu2iwk8RmCUyqd2GPYUw6J12g+GQ7A/nwYaDi196DQQNqYHnCnFnvRjMv
+	 r1IyubYA8x6TOGtheF2e98HbXYMOkAq5tVOL5p5rwn0GNctJfy9UhJE6zc+PY3PtMx
+	 lYU8Xg5SlIfyX08VtYdUv3VAQNqaK8Y6zVJ22bsSvsHE24YDMYxIE7+DQOT4oANH99
+	 k4G2JOl/zCV72IA5H6JkGvf8PwiXQh0u8qiE76oPU96/2R4PKyJPkV7dMLaohafyP+
+	 G22LaRFdFMdzUZSU3UzGMZiT6FXdgr4r/Earsvb9FTN37S2KwG0hw0FPx/WXb3JNjr
+	 Bh0ZljLb4e2WA==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v8 2/4] selftests/bpf: add iocost cost model test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tao Cui" <cui.tao@linux.dev>
+Cc: mkoutny@suse.com, bpf@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org
+In-Reply-To: <20260930075154.189958-3-cui.tao@linux.dev>
 References: <20260930075154.189958-1-cui.tao@linux.dev>
+ <20260930075154.189958-3-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 30 Sep 2026 08:02:46 +0000
+Message-Id: <20260930080246.A4D961F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Document the BPF cost model attachment in the io.cost.model section
-of the cgroup v2 documentation: attaching an iocost_model_ops
-struct_ops to a device by its major:minor, the model=bpf readback
-while attached (ctrl keeps describing the coefficients), that
-detaching restores the builtin model, and that ctrl= writes never
-select a model.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] bpf: tests exit without calling test__skip() on unsupported devi=
+ce
+- [Low] bpf: unused array variables in write_cost_model consume stack space
+--
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+commit e990a9d15cbbcc9c7a94ea98646f25abaa1003cf
+Author: Tao Cui <cui.tao@linux.dev>
+selftests/bpf: add iocost cost model test
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 7fe950425216..5e780bdcf324 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2117,8 +2117,27 @@ IO Interface Files
- 	  =====		================================
- 	  ctrl		"auto" or "user"
- 	  model		The cost model in use - "linear"
-+			or "bpf" while the BPF model
-+			is in use
- 	  =====		================================
- 
-+	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost model
-+	can be attached to a device by loading an "iocost_model_ops"
-+	struct_ops with the whole disk's major:minor in its "dev" member
-+	(a partition's major:minor is rejected).  Attaching creates the
-+	controller if needed, like an io.cost.model write does, and
-+	switches the device's pricing to the model; enabling and
-+	disabling the controller stays with io.cost.qos.  While a model
-+	is attached, "model" selects between it and the builtin model:
-+	"model=bpf" switches to the attached model and "model=linear"
-+	switches back to the builtin model, and neither detaches the
-+	struct_ops; only detaching removes the model, after which
-+	"model=bpf" fails.  "ctrl" keeps describing the builtin
-+	coefficients, which are kept while the BPF model is in use and
-+	take effect again when switched back, and the automatic profile
-+	stepping does not switch profiles while the BPF model is in
-+	use.
-+
- 	When "ctrl" is "auto", the kernel may change all parameters
- 	dynamically.  When "ctrl" is set to "user" or any other
- 	parameters are written to, "ctrl" become "user" and the
--- 
-2.43.0
+This commit adds an iocost cost model test for BPF, including a double-cost
+linear HDD formula and a multi-stream sequentiality detection model. It ver=
+ifies
+attaching, detaching, and cost readbacks on a block device.
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tool=
+s/testing/selftests/bpf/prog_tests/iocost_model.c
+> new file mode 100644
+> index 0000000000000..5b7b1282fcb74
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+[ ... ]
+> +static int write_cost_model(const char *dev, const char *what)
+> +{
+> +	char buf[128], line[256], word[256];
+
+[Severity: Low]
+Are the arrays line and word needed here? They consume 512 bytes of stack
+space but do not appear to be used anywhere in write_cost_model().
+
+> +	FILE *fp;
+> +	int err =3D 0;
+> +
+> +	snprintf(buf, sizeof(buf), "%s %s", dev, what);
+> +	fp =3D fopen("/sys/fs/cgroup/io.cost.model", "w");
+[ ... ]
+> +void serial_test_iocost_model(void)
+> +{
+> +	struct iocost_model *skel, *second;
+[ ... ]
+> +	err =3D iocost_model__attach(skel);
+> +	if (err =3D=3D -EOPNOTSUPP) {
+> +		printf("%s: device is not blk-mq or iocost unavailable, skipping\n",
+> +		       __func__);
+> +		iocost_model__destroy(skel);
+> +		return;
+
+[Severity: Medium]
+Without calling test__skip(), the test runner might incorrectly report this
+test as PASSED rather than SKIPPED when the device lacks support.
+
+Should this error path call test__skip() before returning?
+
+> +	}
+> +	if (ASSERT_OK(err, "attach")) {
+[ ... ]
+> +void serial_test_iocost_model_streams(void)
+> +{
+> +	struct iocost_ms *skel;
+[ ... ]
+> +	err =3D iocost_ms__attach(skel);
+> +	if (err =3D=3D -EOPNOTSUPP) {
+> +		printf("%s: device is not blk-mq or iocost unavailable, skipping\n",
+> +		       __func__);
+> +		iocost_ms__destroy(skel);
+> +		return;
+
+[Severity: Medium]
+Similarly, does this error path also need to call test__skip() so the test
+runner knows the execution was skipped rather than successfully passed?
+
+> +	}
+> +	if (ASSERT_OK(err, "attach")) {
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930075154.1899=
+58-1-cui.tao@linux.dev?part=3D2
