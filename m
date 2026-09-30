@@ -1,163 +1,171 @@
-Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256B047208B
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 09:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C06C30C147;
+	Wed, 30 Sep 2026 09:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790759593; cv=none; b=N59iHG3QD7y1yGg0N16tgmDwnCj7X9LDGMWL6T+iIuI9TWKS/rd7XqiUpZrJi1CSRGNa0t3oseImiTT2TO8jKOHkifbcdasGwq7SraJaRRPMPHhWuN+4aZsWePjYf0DFqGoVwkzLRpTmr7+/jeuD/1Uj180BMEl7Pm1m23UNCs0=
+	t=1790760761; cv=none; b=Kf9Zr2uNjv45FwLGm/pDi1s5K2fOqWiFNkJULWX0rtrHJR2A2ylYuyTTb6Y6CNrBQsxkHIzSVOLDvh1Wl1jHIMaDPkjhtJGP530xZog4U5RaDZ5MftPSguEzABYKK+nl4CKzV3ZyZm2VikY0kM9frmh5EZYnmgWPqK9zzcQien8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790759593; c=relaxed/simple;
-	bh=qobQeXpRTl+w3E3Mgv+CXQ5I/Xvi/dYHDAXj8cOuJvU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dauPKI5+XIwKy5QQr/UjLLGzYhMvWpg4mqXHT2NpaOsIcyfTAlKkRuEJBYg6yqCW0gu6lsG4m14Sy2oJsdCfOWGwK2Cm+9rQp0HWM7/AXWXAUkwTmnt9zOaMjT+Ip+UsXrdlrIG1xeNB3JOP36VlewLzo9w4A64EDCCwO9uIYjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A5YsHlCJ; arc=none smtp.client-ip=74.125.225.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790760761; c=relaxed/simple;
+	bh=TlzHEJQt+34xYjujqXxuq3JcjM0wYp8ZviYUagsVkog=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=garWEN3pTPZ7+NgDU1WHoJtjfajbeOywY3CMAhthbp1Wn6S/ZR7JDL1COPGG16xzzNMad5wxSVwPmmJwNRV0wutckgUP6s9N+LHPXG14nlYHw3+dWd5gAqMX8XpHnmCS89rzNhvWXYrh3iR4CfWqOLZv34HFKanSM5TiA59WRWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/WFPBAH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A5YsHlCJ"
-Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48b017a3be3so365997f8f.2
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 02:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790759590; x=1791364390; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=s9TKM9qGe17Jk+sMm66qJ+r/rf6R8Q2F3mXd7aggg48=;
-        b=A5YsHlCJTveGuuwMcIg02wMWMGDawx+op2ft3BneTMnpeYWt89+kCs9CSuaCzbiiPc
-         ih6EhpbBwEAxoGlL5/Ivg6CHreD0Hqz215hErRPcbFt94eeH8u2IDLs9SxRrR2Axv/Cd
-         sN6/TF9WuB3tmcCgP/tq8MOCwfTzhM6Xre1Dna7OFXKPI+HiN6mU1sMR8ABoq5j6d3XU
-         m3e+bJjwMWC0Trc5Lv1AhorOGD2YxekQ1wIqeUqlifH0O0IPuqTneKNJyYUKFKkkPvLy
-         CHV0e/AqviseUqynkcxES+kZROEITu/pIOFCJqaNvcofcqXjLLD8REfp0tPoI8fLYm93
-         WWpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790759590; x=1791364390;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=s9TKM9qGe17Jk+sMm66qJ+r/rf6R8Q2F3mXd7aggg48=;
-        b=qs5FHdcM13c2l8xinbsvBLykmMwlgJSKglX0t6q1VGcg3c090RKaLVo/4+3gDJA2zl
-         m5+63WL6W/OtvLaDH3F87fDHDwg0o0de8YykuiDRQCt7zlMcv1rgmS9Iu0nuf947kl+R
-         qZxm0hg3isXIBXhGpIHF6mRKAO/+1nf4kfcNsYSVD/W6psu0K4GklBCqKNqACtFoli5Y
-         v3B+KXbaay+ae6B5bfBMTQIylCYBgFPzMs3kTsCm4v/uMkWfgfHzvHEecRlEE+E7pRLJ
-         I+fLMD4WvR084RT5mulbVfJbqdGMlN/2iRwfXyWbpoNPiXqJbrUpKmocAjkgxBa1AiAa
-         qdgQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzq9MeO8jSEm8klBrWjOnb2bth7xClJBRdtZuLLeRVd8y6uU5QebHdKjnPtKuiWn/fHO68=@vger.kernel.org
-X-Gm-Message-State: AFuF++nFKTcth1uX6In4+e+0RxJdiwYWkDAKa161LdBpeTql0iY/Rc47
-	uK1PfsD3IuhzoU7wCiMabwfFVhQ5e3ssMRLtiXPp5q6jR1xqCl3JQZZO
-X-Gm-Gg: AYBFou3pODyxnDPo3YMgXQ/vj2U4wLWw5bHSG0bO2oGL6968Xvw4S2jmMSd+pb8vT0h
-	PT1A6JFuRPmV7vbA/p+V9ch0YH++Qyo9hfHzVhGZgA6b5RVvi3I8+ctMWhrUY1MCKuu6uyGkZ44
-	xlNgEixmo6ewpquN2VHvvgFlni42c0RgZBlG3wTVF8BW3ze4+4rYAO4JFwumCA3IihD9ct9rP8j
-	PnrCuO3iGyuDN13LAvSap1kPngvXjc7bBY33ETwEbcqBm8GUX5rbmFPasSPn9TUPsYXRnPMqt/H
-	FCSnYqb/0R4AdTqKQ4ZYAlK5t6g5xHRtEB7VF11Zhh4YneC+caED6lXN5rq2962WVe7sxgBpk1Z
-	P8FLPRkYa5IBSPmXOspwagm7KSRF91q+EVbZQPDi8XjvXyrbnyvbGNf//o3WcpdukJlsCOl6Eua
-	+B2JhPJmn1vIyDsSDALeuci8z8NPr0g2TEvRqxWxtYfXfqzKX7uSM0g8y8nQhUC3MZZoeUrjDZA
-	VF1bme2WuvhH4EyYukpxa3p6ToWvuOExXgBzRCjFE34PA==
-X-Received: by 2002:a05:600c:3144:b0:4a0:1c0e:b136 with SMTP id 5b1f17b1804b1-4a01c0ec65fmr5393095e9.29.1790759589700;
-        Wed, 30 Sep 2026 02:13:09 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0174d5191sm41766015e9.3.2026.09.30.02.13.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 02:13:08 -0700 (PDT)
-Date: Wed, 30 Sep 2026 10:13:07 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Kees Cook <kees@kernel.org>
-Cc: jim.cromie@gmail.com, Andrew Morton <akpm@linux-foundation.org>, Petr
- Mladek <pmladek@suse.com>, Zhen Lei <thunder.leizhen@huawei.com>, Luis
- Chamberlain <mcgrof@kernel.org>, Andrey Grodzovsky
- <andrey.grodzovsky@crowdstrike.com>, Steven Rostedt <rostedt@goodmis.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
- Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v7 3/3] kallsyms: Unroll 24-bit sequence reconstruction
- in get_symbol_seq()
-Message-ID: <20260930101307.4477e264@pumpkin>
-In-Reply-To: <202609292329.87EE58BCF8@keescook>
-References: <20260929-ksyms-tune-v7-0-be568ceef41e@gmail.com>
-	<20260929-ksyms-tune-v7-3-be568ceef41e@gmail.com>
-	<202609292329.87EE58BCF8@keescook>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/WFPBAH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD21A1F000FF;
+	Wed, 30 Sep 2026 09:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790760760;
+	bh=GUhUebTYwdNTDsFDAgKX2XUga1p/xniYtUmuBOcAkD0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=A/WFPBAH7Qma+9hcX287RuSKWlORpntiWFjFLaPigU8Y75ISxg3KEjLTfteawEyBe
+	 2g/cYh4OEqr71nkWwJpVQnorMprUQRkz1eix+QLOCr/CPst8lLD0ChCfFd8YGM4jfy
+	 Fksx04sLagSxxR88vp09QnJZCikrL8s15UEcYtyj8cHuNrsfav7blbRqRE5dyxX7SB
+	 IKNdTpYGGoAU9JjY6jjqMsEYQfRaLoK1HI3j102H2WUj2d2AjX7kJd1tm0yEuZtXim
+	 rxv3PmM3a58m4CHKDbt2tmNwqyH0M2+G0zuIAT/AqLpxmsAoL5566Xt1IaKFXihiLq
+	 k8Bhh/EDc3Mrg==
+Date: Wed, 30 Sep 2026 10:32:09 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Zi Yan <ziy@nvidia.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
+	Doug Gilbert <dgilbert@interlog.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, 
+	Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v3 34/40] mm: eliminate VMA_SPECIAL_FLAGS usage when
+ hugetlb explicitly tested
+Message-ID: <arzXDWOaouPMGtxL@gremlin>
+References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
+ <20260917-b4-mmap-prepare-vma-flag-sanify-v3-34-4583d8a23bca@kernel.org>
+ <DLSAZ4ZQY8Q3.3OKOCCOQAFVCC@nvidia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DLSAZ4ZQY8Q3.3OKOCCOQAFVCC@nvidia.com>
 
-On Tue, 29 Sep 2026 23:56:12 -0700
-Kees Cook <kees@kernel.org> wrote:
+On Tue, Sep 29, 2026 at 10:42:00PM -0400, Zi Yan wrote:
+> On Thu Sep 17, 2026 at 12:22 PM EDT, Lorenzo Stoakes (ARM) wrote:
+> > It is now an invariant that VMA_IO_BIT is not set except by kernel-owned
+> > mappings, so each existing VMA_SPECIAL_FLAGS test need only test for
+> > VMA_DONTEXPAND_BIT, VMA_PFNMAP_BIT and VMA_MIXEDMAP_BIT.
+> >
+> > This is precisely a test for a kernel-owned or fixed mapping.
+> >
+> > Update a number of callsites which already explicitly handle hugetlb
+> > mappings.
+> >
+> > vma_supports_mlock() and ksm_compatible() also explicitly bail on droppable
+> > mappings - detecting kernel-owned, fixed or droppable mappings is handled
+> > by vma_is_persistent(), so in these cases use this predicate.
+> >
+> > should_skip_vma() tests for locked, kernel-owned or fixed memory (having
+> > already excluded hugetlb mappings) so simply test for those there.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> > ---
+> >  mm/internal.h | 4 +---
+> >  mm/ksm.c      | 4 +---
+> >  mm/vmscan.c   | 3 ++-
+> >  3 files changed, 4 insertions(+), 7 deletions(-)
+> >
+>
+> <snip>
+>
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 12ed3388ee41..09ff20c3df5b 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -3477,7 +3477,8 @@ static int should_skip_vma(unsigned long start, unsigned long end, struct mm_wal
+> >  	if (!vma_has_recency(vma))
+> >  		return true;
+> >
+> > -	if (vma->vm_flags & (VM_LOCKED | VM_SPECIAL))
+> > +	if (vma_test(vma, VMA_LOCKED_BIT) || vma_is_kernel_owned(vma) ||
+>
+> At this point, mmap_lock is held, there is no mlock WIP, so
+> VMA_LOCKED_BIT is enough.
 
-> On Tue, Sep 29, 2026 at 12:07:32PM -0600, Jim Cromie via B4 Relay wrote:
-> > Mark get_symbol_seq() as static inline and unroll the 3-byte extraction
-> > into direct byte shifts: (p[0] << 16) | (p[1] << 8) | p[2]. This
-> > eliminates loop induction variable maintenance and allows the compiler
-> > to generate direct loads and constant shifts.  
-> 
-> So... did you actually see any difference in the output binary? This is
-> such a small loop I'd expect every compiler to both inline and unroll
-> it already. *time passes* I've checked; I was mostly right. :)
-> 
-> It's already inlined and unrolled by the compilers, but GCC weirdly
-> didn't see through the array math:
-> 
->   At -O2 GCC (and Clang, mostly the same) on x86_64:
-> 
->   before                                  after
->   lea    (%rax,%rax,2),%eax               lea    (%rax,%rax,2),%edx
->   mov    %rax,%rdx                        movslq %edx,%rdx
->   movzbl seqs(%rax),%eax                  movzbl seqs(%rdx),%eax
->   lea    0x1(%rdx),%ecx                   movzbl seqs+2(%rdx),%ecx
->   add    $0x2,%edx                        movzbl seqs+1(%rdx),%edx
->   movzbl seqs(%rcx),%ecx                  shl    $0x10,%eax
->   shl    $0x8,%eax                        shl    $0x8,%edx
->   movzbl seqs(%rdx),%edx                  or     %ecx,%eax
->   or     %ecx,%eax                        or     %edx,%eax
->   shl    $0x8,%eax
->   or     %edx,%eax
-> 
-> So it's actually the loss of the "+ i" part that does it.
+Yes indeed :)
 
-A quick 'register dependency chain count' gives the old as 7 and the
-new as 6.
-The annoying 'movslq' might be removable by making the parameter
-either 'unsigned int' or 'long' (and might go away if the function
-in inlined).
+>
+> > +	    vma_is_fixed_mapping(vma))
+> >  		return true;
+> >
+> >  	if (vma == get_gate_vma(vma->vm_mm))
+>
+> LGTM.
+>
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
 
-> 
-> > -static unsigned int get_symbol_seq(int index)
-> > +static inline unsigned int get_symbol_seq(int index)
-> >  {
-> > -	unsigned int i, seq = 0;
-> > +	const u8 *p = &kallsyms_seqs_of_names[3 * index];
-> >  
-> > -	for (i = 0; i < 3; i++)
-> > -		seq = (seq << 8) | kallsyms_seqs_of_names[3 * index + i];
-> > -
-> > -	return seq;
-> > +	return (p[0] << 16) | (p[1] << 8) | p[2];
-> >  }  
-> 
-> I'm on the fence about readability, but I think it's improved.
+Thanks!
 
-Ditto.
-There might be a get_unaligned_be24() but that doesn't help readability.
+>
+>
+> --
+> Best Regards,
+> Yan, Zi
+>
 
-The code would be better if the value were host-endian.
-gcc 16+ then uses a 16bit read for two of the bytes.
-That also lets the table be defined as:
-	extern struct { unsigned int v:24; } kallsyms_seqs_of_names[];
-so that accesses can just be kallsyms_seqs_of_names[n].v
-(Although even gcc 16 seems to do three reads in that case.)
-
-If the cpu supports misaligned accesses you can do a 32bit read
-and an 8bit shift.
-
-David
-
-> 
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> 
-
+--
+Cheers, Lorenzo
