@@ -1,190 +1,120 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CE538DC4C;
-	Wed, 30 Sep 2026 04:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta0.migadu.com (out-102.mta0.migadu.com [91.218.175.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B2C35C681
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 04:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790741625; cv=none; b=MkcyeIwFl0AxzmUzrqULSx6lvyIcKP4+AlC2MLWkIKo1BWkjWuYlc4mEvk3UnliJEoq+pcpvRHXDEF3H82Us4IY0h8QE6X4g1qEA8W6GVDK4LFFdNIpu9miEPmM1bJ3VS/qxB/fvlq8RehrkoEKySDDj2oWnHc2GIkmuQUbs1Fs=
+	t=1790741795; cv=none; b=N7Q3gkGsHYkXHNEzhhxnKxIEk3khBCREi8MhwalK0EHdTVBwQydMQGJzZDXOJB0+Xyylv9UKRjBMqt2Dj30QMKR/sOx5JaY3G49W9deZUOpXyNGQUgCDOgjW9wZaPb6IoDjv9IzJOT/PpkhFfmnorr4qmgXTNjq0hpFk4ro3Z4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790741625; c=relaxed/simple;
-	bh=Eo9CdH+0TtRSX/QNTJHDXco4iCbdFaKjgbzXmhi+d+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pihFSTq4nsi3b9ll6LFUX8Yv5Mwg8V2S6NckTyObtxGK32ucOrC6g/m9PpO6GKZJkNNv+0lFV+8p8/RXvyqzSTkAuaMaTw7clnOgyT6vTg9sVAbIV+GSb5ZZiJkEnOVwj3TZr4TmsELvvHwFnzXCWiq2zGy7NHPakENhgbXk+h8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=uUMCfJku; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790741795; c=relaxed/simple;
+	bh=tPVU3foMwqReFRMovxRBgLvssWCyPO87vgRcah7Bfo0=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=VFEP2pF4uBHdHDCqD5f/g5bFndNdLePLYjoJG+f9DRCCDuO5C15cNVe0yZMoohZQFsBcsVftC0AIvA+He5ysmxcythDrNIHUm5v3My8wuxJB/L2xcCDzv+vcAQklN2f3Qf7Ep22A29RPAkzZ3VQ4Twnb6lKRiAoBGYkJLZrwzeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wqHb2/ug; arc=none smtp.client-ip=91.218.175.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="uUMCfJku"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15D7016F3;
-	Tue, 29 Sep 2026 21:13:38 -0700 (PDT)
-Received: from localhost (a085714.arm.com [10.164.19.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 068A63F85F;
-	Tue, 29 Sep 2026 21:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790741621; bh=Eo9CdH+0TtRSX/QNTJHDXco4iCbdFaKjgbzXmhi+d+w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uUMCfJkuCo0kl9BpIml6ya6QFhzuY6ScFyN2rrI9OZskXRGAAufEdzszI/qQTPqg9
-	 Iguh/DHAQ4gijcI8is1MZGmQg8kO5mj99Gmt6zNO4sTw9mweCAqyNbvOWOTaW5gjPd
-	 8DmLSRkJE2jM29CtfSFlUOWDSiSDxl4euASIJUXk=
-Date: Wed, 30 Sep 2026 09:43:37 +0530
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-To: Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Jann Horn <jannh@google.com>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	Pedro Falcato <pfalcato@suse.de>, Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Barry Song <baohua@kernel.org>, Youngjun Park <youngjun.park@lge.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, SJ Park <sj@kernel.org>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>, 
-	Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Juergen Gross <jgross@suse.com>, 
-	Stefano Stabellini <sstabellini@kernel.org>, Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, damon@lists.linux.dev, kasan-dev@googlegroups.com, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v3 1/9] mm: introduce hw_pte_t for PTE table storage
-Message-ID: <snzkwnnubrx27tkroyql77iziuws3ku34dkclevfen5edef33b@wc3df3hbeuly>
-References: <20260922-pte0-v3-0-5670b8cb9059@arm.com>
- <20260922-pte0-v3-1-5670b8cb9059@arm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wqHb2/ug"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=tPVU3foMwqReFRMovxRBgLvssWCyPO87vgRcah7Bfo0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790741791; v=1; x=1791346591;
+ b=wqHb2/ughpwmo8Yqw76dAyYf7g5CO7kMsJKwMBDIduf8Fhwl3YG1mLNjo2AACvtpNK8JqrD5
+ Lvk1oFby5Xa4LsgBJzWuBuCsFK7uL/32KA9P9/F0j79yyGNCmcR1wjzuINwzmBQf9UWqy/DBUVS
+ t6DWFuxq0qbzoE379Uw4QUqE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ac3d7e7d4a45a171;
+	Wed, 30 Sep 2026 04:16:31 +0000
+X-Mizu-Trace-ID: ac3d7e7d4a45a171
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4f0e79fc-9413-4017-93a2-414b4370781f@linux.dev>
+Date: Wed, 30 Sep 2026 12:14:57 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260922-pte0-v3-1-5670b8cb9059@arm.com>
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
+ ameryhung@gmail.com, alexei.starovoitov@gmail.com
+Subject: Re: [RFC PATCH v7 1/4] blk-iocost: add BPF struct_ops cost model
+ support
+To: Tejun Heo <tj@kernel.org>
+References: <20260924054549.2271705-1-cui.tao@linux.dev>
+ <20260924054549.2271705-2-cui.tao@linux.dev>
+ <4412563645504aa9a87d3cafd544c97c@kernel.org>
+ <daf428f7-d666-447f-9b6e-a77da4194e91@linux.dev>
+ <aeb50cff4d3014a43ded85247a5786da@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <aeb50cff4d3014a43ded85247a5786da@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 22, 2026 at 06:12:29PM +0100, Muhammad Usama Anjum wrote:
-> pte_t is used both for software PTE values and for entries stored in a PTE
-> table, so pte_t * does not distinguish a pointer to a software PTE
-> value from a pointer to table storage.
-> 
-> Introduce hw_pte_t as the generic name for a PTE table element. Define it
-> as a macro alias of pte_t by default. When an architecture selects
-> ARCH_HAS_HW_PTE_T, define it as a structure containing a pte_t instead.
-> This preserves the representation while allowing converted architectures
-> to enforce the distinction at compile time.
-> 
-> Name the generic wrapper structure __hw_pte_t so architectures can
-> forward-declare it when pgtable_t must be defined before the generic
-> hw_pte_t typedef is visible. This avoids header-order dependencies.
-> 
-> Keep the C type definitions behind an __ASSEMBLY__ check because
-> architecture assembly sources can include this header indirectly. Include
-> asm/page.h so consumers such as linux/vmalloc.h retain the page definitions
-> they previously obtained from that header.
-> 
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+Hello, Tejun.
 
-LGTM
+在 2026/9/30 00:27, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> On Tue, 29 Sep 2026 21:42:51 +0800, Tao Cui wrote:
+>> That leaves one race: .unreg may observe a non-NULL ops->q before
+>> ioc_rqos_exit() clears it, then block on rq_qos_mutex while the
+>> ejection drops the last bdev reference.  This looks analogous to
+>> hid_bpf's .unreg vs. destroy_device synchronization.
+>>
+>> Does that seem acceptable here too, or would you rather have .unreg
+>> own the final reference unconditionally?
+> 
+> No, there can't be a crash window like that. The underlying problem is
+> that .unreg sleeps on a mutex inside a queue it holds no reference on. The
+> model should still be ejected when the device goes away, but exactly when
+> doesn't matter much as long as it happens in a reasonable amount of time.
+> 
+> request_queues are RCU-freed, so maybe .unreg can rcu_dereference() ops->q
+> and try to get a queue reference under rcu_read_lock()? blk_get_queue()
+> fails on a dying queue, so this would need a tryget wrapper around
+> q->refs. Holding its own reference, .unreg can then take rq_qos_mutex and
+> test ops->q for NULL to tell whether removal already ejected the model.
+> 
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+.unreg now takes a queue reference before entering the queue: it
+rcu_dereferences ops->q under rcu_read_lock() and uses a queue
+reference tryget helper to keep the queue valid across the mutex wait.  With
+the reference held, .unreg freezes and quiesces the queue, takes
+rq_qos_mutex and re-checks ops->q for NULL, so it can handle both the
+normal detach path and the case where removal has already ejected
+the model.
+> Also, when .unreg detaches, the device is still live and the BPF code may
+> be running. Freezing and quiescing the queue covers the IO paths but not
+> iocg_init() and iocg_free() called from ioc_pd_init() and ioc_pd_free(),
+> so the iocg_free() walk and clearing the model need to be synchronized
+> against those too.
+> 
 
-> ---
-> Changes since v1:
-> - Name the generic wrapper structure __hw_pte_t so architectures can
->   forward-declare it, and explain why this is required.
-> - Use software PTE value terminology.
+Clearing the model and the iocg_free() walk are now synchronized
+under q->blkcg_mutex.  This is the same mutex used when
+blkg_create() and blkg_free_workfn() invoke pd_init_fn() and
+pd_free_fn(), so the detach path is synchronized with the normal pd
+callback paths.
+
+While reworking the attach path, I also fixed two related issues I
+noticed: the attach path no longer uses the ioc after releasing
+rq_qos_mutex, and blkdev_get_no_open() failures are handled
+correctly for unknown dev_t values.
+
+v8 will follow shortly.
+
+Thanks.
+Tao
+
+> Thanks.
 > 
-> Changes since RFC v1:
-> - Add the ARCH_HAS_HW_PTE_T opt-in and generic wrapper definition.
-> - Exclude the C type definitions from assembly sources.
-> - Update the description for the new opt-in model.
-> ---
->  MAINTAINERS                   |  1 +
->  include/linux/pgtable_types.h | 17 +++++++++++++++++
->  mm/Kconfig                    |  3 +++
->  3 files changed, 21 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2133aec4a2004..da60a8bdcddb5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17140,6 +17140,7 @@ F:	include/linux/mmu_notifier.h
->  F:	include/linux/pagewalk.h
->  F:	include/linux/pgalloc.h
->  F:	include/linux/pgtable.h
-> +F:	include/linux/pgtable_types.h
->  F:	include/linux/ptdump.h
->  F:	include/linux/vmpressure.h
->  F:	include/linux/vmstat.h
-> diff --git a/include/linux/pgtable_types.h b/include/linux/pgtable_types.h
-> new file mode 100644
-> index 0000000000000..07da05d375c2c
-> --- /dev/null
-> +++ b/include/linux/pgtable_types.h
-> @@ -0,0 +1,17 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_PGTABLE_TYPES_H
-> +#define _LINUX_PGTABLE_TYPES_H
-> +
-> +#include <asm/page.h>
-> +
-> +#ifndef __ASSEMBLY__
-> +
-> +#ifdef CONFIG_ARCH_HAS_HW_PTE_T
-> +typedef struct __hw_pte_t { pte_t __pte; } hw_pte_t;
-> +#else
-> +#define hw_pte_t pte_t
-> +#endif
-> +
-> +#endif /* !__ASSEMBLY__ */
-> +
-> +#endif /* _LINUX_PGTABLE_TYPES_H */
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index c1ddf59c0d71a..5f462ec6fa5e5 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -1312,6 +1312,9 @@ comment "GUP_TEST needs to have DEBUG_FS enabled"
->  config GUP_GET_PXX_LOW_HIGH
->  	bool
->  
-> +config ARCH_HAS_HW_PTE_T
-> +	bool
-> +
->  config DMAPOOL_TEST
->  	tristate "Enable a module to run time tests on dma_pool"
->  	depends on HAS_DMA
-> 
-> -- 
-> 2.47.3
-> 
+> --
+> tejun
+
