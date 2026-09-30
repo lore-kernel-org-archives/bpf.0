@@ -1,191 +1,186 @@
-Received: from mail-ed2-f32.google.com (mail-ed2-f32.google.com [74.125.228.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F180480965
-	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 22:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.96
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790808875; cv=pass; b=ZVIicDJH8ggoWINIq5NcXzh7UmBXb7AfneONbdHjEw9odXMfLVQyta4dpfXVZzLD3ap6b/My5N2xiUVfcMFLl9JivbPuFpBeNUwjbz3Zbik3i1iUlmlSeTPmk+XhdqyfrNkczpwZPi7AfrzRE1LUjLPrXTlpjrRn2E0crT9P59s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790808875; c=relaxed/simple;
-	bh=25OW8kJVzXxMj1f7wl7vPyZB0Mh372NuIRML4c+wriE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BSrrgrfMFyGT0AY7duWffZrLCNsx7ZTVj1pACSSQ2EDdbdy3v7PhLgRN+fyDHuyPhazH1jgmo1LposgosKXmADObV1g6yJL2Pc2FxXj+dcJEnDRhdDYMkDO/zJwv+jsrQlTRDtJADBUM8x4PJeXsFBHlH6dD5LKploRFXECTueE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Zy6xGcMl; arc=pass smtp.client-ip=74.125.228.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D42C48664A
+	for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 23:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790810016; cv=none; b=cRXoTFzEJGngFeVlAVPNkP9+n0UAoosjQ2lbR2FG+5wLhmYAj0SzUA5+oVGu0g9iJ7H4dwVxEp/5qcSpHn2xBDEV6yVW7+RKB0vE6vt30VNxNO0mNZ9JETE0zBsj5VbMESJmBbk6TR2ZlIy+EgLH3Mrr77Y2Zj549I/SyF9HLPw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790810016; c=relaxed/simple;
+	bh=8mJ8guRN+jfnd/mk6kYAbNCZ8fFg9OHtX42MJ3+9pFs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YRyRKHw3LfVyHCqEkhvie3WqZdPTMUWdAia3bJsrCKPlRfpfVx1dgYtjtyCuovWvxHM+ds4B2hnITwOpmJ+HLrVmxpabLFVrftrm0kQ2DHCHuP4Dv8GY07T/yRqDnvF8A7+kytzSwzVdWrf4g9zHaewGFqg/4HYoYNT4/24P+zE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aOZSJ5UX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Zy6xGcMl"
-Received: by mail-ed2-f32.google.com with SMTP id 4fb4d7f45d1cf-6aeeccb7d59so112695a12.2
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 15:54:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790808862; cv=none;
-        d=google.com; s=arc-20260327;
-        b=QgLCbt4V4tIh+Y3VzVO9EeVoGKY0Q4FWkzz/Ix5wuk3sRv9GkKZX3NSdMwbzoae2PP
-         OeK8+flh0xgYZJhO+bvm23aTdY2jMKX/otqpbWzou0oEfbakGBYYECuGIDXnmXEmpBLR
-         HgwIuyHSf1iuOLcr4kDMZJmRRCAr7PT7W7mmSHfQEXGT0UBWx23TpOZnJuHbYbGTRxgt
-         fkGGZ0L5EFzLMIHL6fL7EMjPC0XUJvCBjiAg7NNRUoQpGeTJ5sa4zNlaT+IA/5uY6O58
-         zJ3PDqEHSphs9AvS+26R80mkVDWpXPLH29h68dKQOZDNP+JzxFiNSITckMn/fXunIz2r
-         PogQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=BMDqFIaP1O55HQyhPMTHQHywZWJn4sXJBK7hF4BIEBo=;
-        fh=HPdfSmrxlispavD4OWQDFHQ1dh4cWg1iRzAVbGrXgk0=;
-        b=PzpjhR7rHaD07UcHbqrQIwkfF/GTgtD+UH765voNAuiGTuyh7ZU41OJWFcqOQdHHCs
-         DwQ7v+Yq7DUexin1yBtNr8ZhsfKLB61yidZAMKshNUt+796L83AoEkqq96UFC1850FAs
-         QSUO3HBKvTk8prK83gD5hM1i4CHj3WgwTGEvjEPkA4I/DvitC4AqUQlt5lbmBheU5LwF
-         r2GF8MhXeuzCBOUm+uCivYYMhieocrFG28iuJvd2wLP2EGB4wMgB/O7sSbLqTtz8Gd5o
-         Uagyl61xrVid+slqF7eSPyrYmq1TV/dEGsAwFQWj+QKwhg+pyACKtBCSoIvNECDzAZ1X
-         5GJw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790808862; x=1791413662; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BMDqFIaP1O55HQyhPMTHQHywZWJn4sXJBK7hF4BIEBo=;
-        b=Zy6xGcMlXVBd+eFtXChF9aS7xQKph7IQFCB6hlxE/Gn77dVpltkC5j+60MPQi1YqRh
-         FrxcrOg6LDIi3yNq7tNq57mP4Hl0L5J+F8OBEmbEqRaxPT1wpI3r9lYTWP/rzPCeFYtZ
-         WqFkvsxL9Ouvjy55QvXZuzZVCS4YT6g8dwlVYE86YsmVsqjA02AXaRq/hyzAsa+/qLQH
-         JgCjG/XANB8/gBpMjftnf9B6EYVYV0M3xdeaKSjQQmIKHmbrNZpjaU6mlNwgTBnZzEQF
-         hGGnSovGmdHLgREBDFVpenSDsMozh1hleZCO5/f3gq2XUT9EMCJ8mrkLnrGmD0j2iBgR
-         KwRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790808862; x=1791413662;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BMDqFIaP1O55HQyhPMTHQHywZWJn4sXJBK7hF4BIEBo=;
-        b=P6mmVfTOzyfnraO8HzrVUzFPYFVqpdq4gnV6dL5Pk3j3PAljiT7OyU/me7mKVpjOHj
-         V+2cx2Vza8T/U8GehjJTk0+wid+zweH+fctVz/kdMF36yQKQYwqNXTRf7MhD/S8U6aEw
-         lMx0TNeZkKNFVteG87/g7WrzqOKCyqzyPci7BCmAJGJTVI/PZc42xDZfwQzFDDcejIYd
-         55uDz/wGmUCDv1Jnfl/Hve+5RaJOL0YDeAhTEJKZLSOuKqtLpAwwMhmdocdnmcFPFahg
-         yDXsF/wbuijoMjvkqbHogZ3tSO7qvWtu3gH1lFvsavvvCva3LUKxpOxf+0nPbiPqwT8q
-         L0WA==
-X-Forwarded-Encrypted: i=1; AKwUvBz1zRWET6WuWFkisgplMH6ocp5TJ54vu2SbT8efwztFRYZxBz0UmAjk7/eBOpmHDND3jK0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIL8buCxCtZAue4RDxgKG07VNReQ6EiqqvdD+9h+2yhyNzLes4f
-	eeVRNiPobk8/LPOmfTnjyF+t+8VyPbLrZF+4xyw06mJu2eV4dMXHJWzec9UabOp77RVJYR/seHn
-	2u5d3E4Kspv5mAbpRR89vXVUNe4/Av8g+a457Yr96
-X-Gm-Gg: AYBFou2S9YKTGPCkqpH85eeJVANsQvCB3iDw/C3cCtYiDeepNjghtj5qCjQz/e1cHAU
-	aByuJHK7Lp4dzy3jV1wmLzY3Thg0eNUgTmzd/jnBPZlNXdSA5Tm+PVz2WEuQ/2juBqvtN3k0Wtf
-	6M1NH+isomWuottbVcFpN1gnkwD4WJJFgldzwPfC5bt94S0PjAyf1efNRUBVZGUyX69138ZFaOI
-	L1qNXIEjbCnjszINp0C5PNoFiMUVYB+8E2IUDJFExVUjr9Fxz7AJYXyp4tJnRzvNw93FNOV6WJE
-	seU2DvEI8SaH8x8LhWO8vYcBh9i9bj7TkcZxV0tutiiA8B/yEbOb6yxq7jrdBplbjQaA/M8FU7I
-	ryOvCBl3WGa/s4Gk9w5aH
-X-Received: by 2002:a17:907:9449:b0:c27:420b:7c79 with SMTP id
- a640c23a62f3a-c2e23e520f1mr221873866b.48.1790808861871; Wed, 30 Sep 2026
- 15:54:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aOZSJ5UX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2051F000FF;
+	Wed, 30 Sep 2026 23:13:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790810011;
+	bh=m/dbSeY0mZJErrHNySCBFT8/+xKJbeL+wUW4O4djKng=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=aOZSJ5UXy40VBt6rMel3aHQ0t9ck/JdYrvpppZfgsrnKtTsqd8yZDsy2vFaatmaZv
+	 wlx8GFkt7+Ey3EiFhKZr2LeFWd3d12ogJDP+ydMK70h2/Vbk6XuYI+6isdSAHTRbL+
+	 Ln1s27MrnYTRWuB2APFjok1bZj916kwYPP4zNxIlyEV9tEctWYs4B+c7kvkrX4t5b8
+	 Ns3qi4Fv2zsiohs2PxAzelLZAuxSkQ848lQ5sUyk0oCpAFXJG5tv2Dntmk7rvIRDNp
+	 SyWKGlWv2mZzr7LOMfhXevE1Uh4hEiBEOKW8PXDcLJxPtOsOejPkjd7OtZs388sVuW
+	 ogbbVqG7ZmPKg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 1/2] idpf: add flow-based XDP fallback for FWs
+ without Tx FIFO support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tony Nguyen" <anthony.l.nguyen@intel.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260929231305.1515873-2-anthony.l.nguyen@intel.com>
+References: <20260929231305.1515873-1-anthony.l.nguyen@intel.com>
+ <20260929231305.1515873-2-anthony.l.nguyen@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 30 Sep 2026 23:13:30 +0000
+Message-Id: <20260930231331.1E2051F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260930214735.3288780-1-joshwash@google.com> <179080528731.31693.11268580346361726174@kernel.org>
-In-Reply-To: <179080528731.31693.11268580346361726174@kernel.org>
-From: Joshua Washington <joshwash@google.com>
-Date: Wed, 30 Sep 2026 15:54:10 -0700
-X-Gm-Features: AclHuK9fnFHxOP4qsQ_Oocv5ijMmdZLzMw5uNrAYSg6n06sJyJ3ZPqhXptnZoq4
-Message-ID: <CALuQH+VEopCYRwDmxyaLadDtMy29m5=Li9YowmjWpZha_SEMjw@mail.gmail.com>
-Subject: Re: [PATCH net v3 0/3] gve: various XDP fixes
-To: netdev-bot+sinfo@kernel.org
-Cc: netdev@vger.kernel.org, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, Jordan Rhee <jordanrhee@google.com>, 
-	Ankit Garg <nktgrg@google.com>, Tim Hostetler <thostet@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 30, 2026 at 2:54=E2=80=AFPM <netdev-bot+sinfo@kernel.org> wrote=
-:
->
-> Hi!
->
-> This is an automated message. This series looks like a fix, but its
-> commit messages seem to be missing some information:
->
->  - How the issue was discovered, e.g. hit in production, hit during
->    development, syzbot report, manual code inspection, LLM or static
->    analysis tool scan.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] idpf: data race on pending_mask and last_ntu in XDP Tx finalize
+- [High] idpf: out-of-bounds write in idpf_xdpsq_poll_fb due to unvalidated=
+ completion tag
+- [Medium] idpf: mixing goto-based cleanup and __free() in idpf_xdpsqs_get
+--
 
-(1/3) gve: fix XSK buffer leak when rings are stopped
+commit 512d4db75f1d8f6ab37619b2712b334a77a2df35
+Author: Alexander Lobakin <aleksander.lobakin@intel.com>
 
-This issue was hit in production.
+idpf: add flow-based XDP fallback for FWs without Tx FIFO support
 
-(2/3) gve: fix XSK buffer leak on error descriptor
+This commit introduces a static-key guarded flow-based XDP fallback for
+firmware that lacks queue-based scheduling support. It generates a
+completion for each Tx descriptor and serializes them using a dynamically
+allocated bitmap.
 
-This issue was caught by LLM
+> diff --git a/drivers/net/ethernet/intel/idpf/xdp.c b/drivers/net/ethernet=
+/intel/idpf/xdp.c
+> index cbccd45467681..c771663677a52 100644
+> --- a/drivers/net/ethernet/intel/idpf/xdp.c
+> +++ b/drivers/net/ethernet/intel/idpf/xdp.c
+> @@ -149,10 +151,12 @@ void idpf_xdp_copy_prog_to_rqs(const struct idpf_q_=
+vec_rsrc *rsrc,
+> =20
+>  static void idpf_xdp_tx_timer(struct work_struct *work);
+> =20
+> -int idpf_xdpsqs_get(const struct idpf_vport *vport)
+> +int idpf_xdpsqs_get(struct idpf_vport *vport)
+>  {
+>  	struct libeth_xdpsq_timer **timers __free(kvfree) =3D NULL;
+> -	struct net_device *dev;
+> +	unsigned long **masks __free(kvfree) =3D NULL;
 
-(3/3)  gve: fix napi_disable deadlock when attempting to disable XSK pools
+[ ... ]
 
-This issue was found in production.
+> +	masks =3D kvzalloc_objs(*masks, vport->num_xdp_txq);
+> +	if (!masks)
+> +		goto err_masks;
 
+[ ... ]
 
->
->  - Whether the issue was actually triggered, or is only theoretical
->    (e.g. found by code inspection). If it was triggered please include
->    the symptoms, like the stack trace or error messages.
+> +err_masks:
 
-(1/3) gve: fix XSK buffer leak when rings are stopped
+[Severity: Medium]
+Is it safe to mix goto statements with __free() scope-based cleanups in
+idpf_xdpsqs_get?
 
-This issue was actually triggered; symptoms included a buffer leak.
-Reproduced by continually performing ip link up/down on an interface
-while XSK traffic was flowing. Eventually, no more packets can pass
-because all of the XSK buffers from the UMEM pool have been leaked.
+The cleanup subsystem guidelines recommend that functions should either use
+scope-based cleanups entirely or rely on goto-based cleanups, but never
+mix both. Mixing them can lead to confusing ownership semantics and
+double-free or resource leak bugs.
 
-(2/3) gve: fix XSK buffer leak on error descriptor
+> +	vport->xdpsq_fb =3D false;
+> +
+> +	for (u32 i =3D 0; i < vport->num_xdp_txq; i++)
+> +		kfree(timers[i]);
+> +
+> +	return -ENOMEM;
+>  }
 
-This issue is theoretical, as RX error packets are extremely rare in
-my personal experience. But it is plain to see by static analysis that
-the buffer will be leaked if an RX error is returned, due to the early
-return in the driver. All other XSK-releated paths free the XSK buffer
-in gve_rx_xsk_dqo().
+[ ... ]
 
-(3/3)  gve: fix napi_disable deadlock when attempting to disable XSK pools
+> @@ -250,6 +308,65 @@ static int idpf_xdp_parse_cqe(const struct idpf_spli=
+tq_4b_tx_compl_desc *desc,
+>  	return upper_16_bits(val);
+>  }
+> =20
+> +static u32 idpf_xdpsq_poll_fb(struct idpf_tx_queue *xdpsq, u32 budget)
+> +{
 
-This one can be very easily reproduced by enabling an AF_XDP zero-copy
-socket, and disabling it. The deadlock becomes more apparent when
-attempting to enable a second AF_XDP zero-copy socket, as that
-operation will stall waiting to get the netdev instance lock.
+[ ... ]
 
-Snipped stacktrace from
-https://github.com/GoogleCloudPlatform/compute-virtual-ethernet-linux/pull/=
-96:
+> +	for (done_frames =3D 0; done_frames < budget; ) {
+> +		int ret;
+> +
+> +		ret =3D idpf_xdp_parse_cqe(&cq->comp[ntc].common, gen);
+> +		if (ret >=3D 0) {
+> +			__clear_bit(ret, mask);
 
-Workqueue: events xp_release_deferred
-napi_disable+0x1d/0x50
-gve_xsk_pool_disable+0xed/0x1d0 [gve]
-gve_xdp+0x14a/0x1c0 [gve]
-xp_disable_drv_zc+0x89/0xe0
-xp_clear_dev+0x59/0xf0
-xp_release_deferred+0x20/0x90
+[Severity: High]
+Could this result in an out-of-bounds write?
 
->
->  - What hardware the change was tested on. For driver fixes please
->    mention the device (and if relevant firmware version) used for
->    testing, or say that the change was not tested on real hardware.
+The 16-bit completion tag parsed from hardware by idpf_xdp_parse_cqe() is
+used directly as an index for __clear_bit(). Since the mask is sized based
+on desc_count, a completion tag larger than desc_count returned from the
+hardware or firmware might cause an out-of-bounds write in the kernel
+heap.
 
-All of these changes were tested on the GVE driver using the DQO RDA
-queue format.
+Should the tag value be validated against desc_count before using it as a
+bitmap index?
 
->
-> Please do not repost the series just to address the above. Instead,
-> reply to this email with the missing information, so that reviewers
-> can take it into account. If the series needs another revision for
-> other reasons, please include the information in the commit messages
-> then.
->
-> The evaluation is done by an LLM so it may be wrong, if you think
-> that is the case please reply and explain.
+> +			done_frames++;
 
 
+> diff --git a/drivers/net/ethernet/intel/idpf/xdp.h b/drivers/net/ethernet=
+/intel/idpf/xdp.h
+> index 63e56f7d43e00..95e47ea2ccba8 100644
+> --- a/drivers/net/ethernet/intel/idpf/xdp.h
+> +++ b/drivers/net/ethernet/intel/idpf/xdp.h
+> @@ -93,12 +93,34 @@ static inline void idpf_xdp_tx_xmit(struct libeth_xdp=
+_tx_desc desc, u32 i,
+>  #endif
+>  }
+> =20
+> -static inline void idpf_xdpsq_set_rs(const struct idpf_tx_queue *xdpsq)
+> +static inline void idpf_xdpsq_set_rs_fb(struct idpf_tx_queue *xdpsq)
+> +{
+> +	u32 ntu =3D xdpsq->next_to_use;
+> +	u32 old =3D xdpsq->last_ntu;
+> +
+> +	if (old > ntu) {
+> +		bitmap_set(xdpsq->pending_mask, old, xdpsq->desc_count - old);
+
+[Severity: High]
+Could there be a data race on pending_mask and last_ntu here?
+
+When idpf_xdp_tx_finalize() calls idpf_xdpsq_set_rs_fb(), the xdp_lock may
+have already been released (for example, by the bulk flush callback).
+
+If multiple CPUs submit XDP frames concurrently when xdpsq_share is true,
+it appears we could have unprotected, concurrent, non-atomic bitmap_set()
+operations and updates to last_ntu. This might also race with the
+__clear_bit() operations from the consumer context in
+idpf_xdpsq_poll_fb().
+
+> +		if (ntu)
+> +			bitmap_set(xdpsq->pending_mask, 0, ntu);
+> +	} else {
+> +		bitmap_set(xdpsq->pending_mask, old, ntu - old);
+> +	}
+> +
+> +	xdpsq->last_ntu =3D ntu;
+> +}
 
 --=20
-
-Joshua Washington | Software Engineer | joshwash@google.com | (414) 366-442=
-3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260929231305.1515=
+873-1-anthony.l.nguyen@intel.com?part=3D1
