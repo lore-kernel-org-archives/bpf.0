@@ -1,239 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5623EF0A0;
-	Thu,  1 Oct 2026 16:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790872510; cv=none; b=cFTyaWAJjEfqFmfAnWhDsAxB5tEK8YNvd/w9OyEB5axU2AM+6zIOu69fg6xFKT6JXQ2/h7Ql9hTJzAHjdjklfdI0/dMXr51zq3YiVye0+C9ifR3KQyMZ4G2J4jdrYOi0IkxocnAb7OGlmQkc86+re8bvuxiNsBOxzRbZassU80A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790872510; c=relaxed/simple;
-	bh=K9ipQYhDUImEGFkWItdOFON/xTYTCacdhdBcgKQDA/Y=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pSNHNEfqed3OWRUqUKP9eJoIUCUrAI2GMHoqbzHgW7eUV9QEtEBPR5AlmVFBkEgLALrTjFjTZ/F0loxS/TgdQgi7fZoHh/ak//cVI00cM1w2P4JiBeJjzu4rtNpm180JkJby9A6P22n8dKziB5nKZCmcntpIYorlBJC8rGCPFLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebApsIb2; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F734A3D40
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 16:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790873137; cv=pass; b=sXMRWNFeqffd4QAwguDnsne0hPqPYyw2qlCbBjtJuxjca9yjKZF+DeA3mtI/gr9nIBMXgOHIgeyNzkuffoAQS5HPPcv29s6GWU9ay05K1CQrzkMoewjPT+UMFW/4w/gHCNWFoOSDT9radRN4bAjD2WqJFeLCqvRQE/uARPOAhWo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790873137; c=relaxed/simple;
+	bh=skO6HOeEOlSoI8HYXQ1xBxBxbaOcIwy1hi5C/W8lSm4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gsviVwJ2UBbx2FlqaEnCdis/W5p7D3wqdluBRw1Et05jr8rmj07Qb1/QodCZKY3nU9sgYvf/tArrjpUHasxALsH9/+Z0StM1kQwwdhH6njHTYR2VAVM6aovbTeFK6bnT3hzDjYn5T69uxwLBtWSO9C2JyUnvGUWdBDpbTbDaYys=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dSHQvlV3; arc=pass smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebApsIb2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1151F000FF;
-	Thu,  1 Oct 2026 16:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790872508;
-	bh=u32X4VpgmHbk5ebw0Pu1w8aVte2ZcN+S8G/K2mFCaiU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ebApsIb2FOL2jH3V++g/q73QKPEF+WeYpfs7qNi/FzMfzD28r3sXO7LqFtPKaonKW
-	 V6G2lKCJBjnacRYaemv80x0CpjdbKe2hMaVP1goEJ/ySyhy12ANiPtQIRjKPGt6tZj
-	 niGv0ceupVDlwUpqDtRPLWjWoB0H2OT+ILS6z/1pPTDrEJE5jhwOVtw4bMuvolR/uN
-	 mp4+Y8+Gj2ugVa4XR6hcbLYvAU5oQioinGZwlmpmdnLb6e9ZKT5PRXz3tx3ZpMgGVC
-	 0whZkjwgqhV9enCE3oNy192dzfed+X+rVquXnHk1ZGFdUyHPv1BfIZp7etd46i6XRq
-	 TR3gfWdYgHHPg==
-Subject: Re: [PATCH net] vsock/bpf: release sock lock while waiting for data
- in recvmsg
-From: netdev-bot+sashiko@kernel.org
-To: jrmmhm.kernel@eldare.de
-Cc: sgarzare@redhat.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- bobby.eshleman@bytedance.com, mst@redhat.com, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- stable@vger.kernel.org
-Date: Thu, 01 Oct 2026 16:35:07 +0000
-Message-ID: <179087250713.434549.8388772928991296342@kernel.org>
-In-Reply-To: <20260929-kbh3-1-022-fix-v1-1-cc97cc95d269@eldare.de>
-References: <20260929-kbh3-1-022-fix-v1-1-cc97cc95d269@eldare.de>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dSHQvlV3"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-5337c7b9937so1121cf.0
+        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 09:45:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790873133; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Jg/RBVJf4qLPtGOJHmOlX+k95rKZkfCmBsybh+uYfF7lnQUYxmrwA6VQeT+kWIKFsl
+         jwE6J6amWAs8w//711BFbs4oNWF6VHZyfitHYhf/Lia1BfUaVzekXtaka8JdY4OUWQNe
+         ykeDI7xTpjONJUgFbVTUsqCtZWYyjfoX7J1T+X88oFBmn0GcpObSReHjLrAXmpjrD0BL
+         QaqOkexaeQIZEH7Ahl91MuZy0bmVdxBqN7q12oqzJEcuROd0fRu4RxILUyyE5R3UgBHi
+         TU4hc9Cs+9FtAMMrw+8XVtg9FvFnZ+tdu+o5CofSyM4Yl2nS+U1fQeHW7XsiIPb8momp
+         yZzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=XRgW/0sJOag/ZnUMEgbSJgdYp6WyDMPTuDfsAauk39E=;
+        fh=nRgXSK4WwCs/fTGo+4AIN/CIscQ7wulWfNGX3bdM7yI=;
+        b=f0Fso51l2ik/wAxxGsrU+B7IPD5Mm5cQofU9Lx7kQowFkEeeiiLWjSGHqUS94D8h/q
+         UJC3ePN0cDwFjle6Vy+gpjIilpbiKRZ3oreJ5N/NknGF0naFn/ItjBes08E6Uchq0EDl
+         ohjDJwHj9vmQImutdBNtNzrvOHVf6EHRDEqAwU+QdvMN7tMLNIrTEvTnP17KA+5CtMLT
+         XXHipD2ZtWTkJqT+b9medL5zWaeYG3V7O8gI1hgh7wqLWXk+5g/0/aPamCn2bd53sLYJ
+         1hJ8rEE8GZihDnhKWZIPrl9bWBpvp+TLZ5qngLK2JBj3CPr60jG9tHJvsqBEayM8j7p0
+         i7yg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790873133; x=1791477933; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=XRgW/0sJOag/ZnUMEgbSJgdYp6WyDMPTuDfsAauk39E=;
+        b=dSHQvlV3ttXf+p0UrKNvkc+mwmTE521P+vXOYLKzyAFQ7uoAytn8r+U1gLRKQ5iyBt
+         Gjretepz+PLrjFNLaNi9m/aNN2dfHPwCeNxI+sPGsbyY5xmyBUkyalmsoZzzWOQZTGi3
+         vzIo96mKt+QGBeyJxX2juiUd1AJZujGhWGxro0WYQG4gmF4/lcJoed/1a5KjkY4ly8SM
+         A61aUTGBspAU+wK0M/GpQRhHs4Lk4rFehX/PlJJAqgCJXUR/PuzYT0Yodf928IYWRTUv
+         wbmhVrzViTLgEteqKxdBbCSg+l6yj9TrSNj0bl9F4IpsiZSwC/tFQ3LKKDNiaLcM2vd9
+         73Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790873133; x=1791477933;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XRgW/0sJOag/ZnUMEgbSJgdYp6WyDMPTuDfsAauk39E=;
+        b=aSBqKdo1rO8iN5HnFA5nMVNjf2BYHJmpuku996vrYAHip8e6WfQJpxKN2B6l9thCaG
+         i0yWs5b22IIFeB42rUZrq95rLpoFskOIX1xNsKeUHke0PoGbySZV3Snt3sUFqIi4+vUF
+         G+GsZq7FWUphyptIocyRUxhnPSylg4f9xrKyELT6Qn7NlGnQ4p2EScubGHrFzCaA7Fz3
+         q1NWmFYFiO33XUthzYZuctau9ZS/LV0gMLlbyjClpuZZVUnmnL/dwXvsRk4vK6iNz9uK
+         V4sF33rDtQqb2qd7HF4BcPqnZk0tsepT5Cm+aSzYckrwSFjGqCUBkksxF2bgRdNq861R
+         4dKQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzBVXLOj5IgNV+lcIlu3C0u9bXeblkYyXIDbYqwJD1MymVieqOXiATfHSVHQxebtmjeySY=@vger.kernel.org
+X-Gm-Message-State: AFuF++n7zB7G2WXcsrqfiKKuJwel7BLWf3t9soQlBTy9HPyh+cDpS89I
+	bhZ54GP37pH3Wbo6Lnz5D81Ek0ley75DcqTtqSIiFWY8kAqB803+KqoSTx89Mjf7HC+/WI9kvPe
+	XRHyqQEFQojmrlBQad0YvpjW7h/RCHsb7PwaCtTlQFUq2qMnlku39/j8F
+X-Gm-Gg: AYBFou0G3hGmZ/ZDOn/lZn8uFeaHxGVVnpqlUWDSAgMHCv8/GA9wr3wd74ggBFiFpm2
+	zXy3puEBcLfIWWJN2ncSNvHP+TXbqJrU/sdzvyuUHob6GIeueMFwMDuv2vBqSq8TiuyYbi6w99w
+	KFOsPDFrGG8FVdk7cNyghPs4NhjCDwuJIN91qGTZ+4nJBLQ+acwhIILpfujwytdbV1jRstwpYWb
+	HaBM4stzVMtgVcgZWl0CwxyosnmtQPyw6HTVW8GS8Q2f+Or6P1jYM8RSUJ9diTdJAIjMPqnduZC
+	/wRI8w0+8vGuYKbp/r4/D7xYhaD78YROJdZ9t25WdCs6e9VGDdRIlekj7ZNsl+wD
+X-Received: by 2002:ac8:5cd4:0:b0:532:858d:e791 with SMTP id
+ d75a77b69052e-53389203f68mr14532881cf.8.1790873132647; Thu, 01 Oct 2026
+ 09:45:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260929182108.794434-1-irogers@google.com> <20260929222332.973435-1-irogers@google.com>
+ <20261001070755.GQ88198@noisy.programming.kicks-ass.net>
+In-Reply-To: <20261001070755.GQ88198@noisy.programming.kicks-ass.net>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 1 Oct 2026 09:45:21 -0700
+X-Gm-Features: AclHuK_uPGIN6Z6xFRRwa7F-fBv3kGJch6oICz0HkXG7IE_sZqEVpHGVInH4o1Y
+Message-ID: <CAP-5=fXCL7bd08B_i676eVwwvQ7XJua2XTvck2Nu3_ujBD=uGQ@mail.gmail.com>
+Subject: Re: [PATCH v1] perf/core: Replace perf_event_header__init_id with
+ full header init
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: acme@kernel.org, adrian.hunter@intel.com, 
+	alexander.shishkin@linux.intel.com, ast@kernel.org, bpf@vger.kernel.org, 
+	james.clark@linaro.org, jolsa@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com, 
+	namhyung@kernel.org, song@kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On Thu, Oct 1, 2026 at 12:07=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Tue, Sep 29, 2026 at 03:23:32PM -0700, Ian Rogers wrote:
+>
+> > Rather than splitting header initialization between callers and output
+> > callbacks and saving/restoring mutated header fields, replace
+> > perf_event_header__init_id() with
+> > perf_event_header__init_header_and_id(), which initializes header->type=
+,
+> > header->misc, and header->size alongside the sample_id fields on each
+> > invocation.
+>
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index 33210aff3ee6..c1b2d0c9b2af 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -8119,13 +8119,18 @@ static void __perf_event_header__init_id(struct=
+ perf_sample_data *data,
+> >       }
+> >  }
+> >
+> > -void perf_event_header__init_id(struct perf_event_header *header,
+> > -                             struct perf_sample_data *data,
+> > -                             struct perf_event *event)
+> > +void perf_event_header__init_header_and_id(struct perf_event_header *h=
+eader,
+> > +                                        struct perf_sample_data *data,
+> > +                                        u32 type, u16 misc, u16 size,
+> > +                                        struct perf_event *event)
+> >  {
+> > +     header->type =3D type;
+> > +     header->misc =3D misc;
+> >       if (event->attr.sample_id_all) {
+> > -             header->size +=3D event->id_header_size;
+> > +             header->size =3D size + event->id_header_size;
+> >               __perf_event_header__init_id(data, event, event->attr.sam=
+ple_type);
+> > +     } else {
+> > +             header->size =3D size;
+> >       }
+> >  }
+>
+> I've renamed the thing to perf_event_header__init(). Also, I've done:
+>
+>         header->size =3D size;
+>
+> and restored the:
+>
+>                 header->size +=3D event->id_header_size;
+>
+> and lost the else :-)
+>
+> But yes, this is better. Thanks!
 
-Critical: 0 · High: 0 (2) · Medium: 1 · Low: 0
+That makes sense, thanks Peter!
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] Because the patch releases the socket lock around wait_woken()
-  in vsock_msg_wait_data() (net/vmw_vsock/vsock_bpf.c:52-57), the virtio…
-
-Pre-existing issues:
-- [High] In net/vmw_vsock/vsock_bpf.c, vsock_msg_wait_data() stops
-  waiting only when the local socket has RCV_SHUTDOWN set (line 43: `if…
-- [High] vsock_bpf_recvmsg() in net/vmw_vsock/vsock_bpf.c has no zero-
-  length early return.
-
---
-
-vsock/bpf: release sock lock while waiting for data in recvmsg
-
-This commit drops the socket lock around wait_woken() in
-vsock_msg_wait_data(). The transport rx path, virtio_transport_recv_pkt(),
-can then take lock_sock() and deliver data while a sockmap reader sleeps.
-Before this change, a blocking recv() and the shared vsock delivery worker
-deadlocked on the same socket lock.
-
-> diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-> index 9049d26486460..bb7d81a95baa6 100644
-> --- a/net/vmw_vsock/vsock_bpf.c
-> +++ b/net/vmw_vsock/vsock_bpf.c
-> @@ -50,7 +50,9 @@ static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long ti
->  	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
->  	ret = vsock_has_data(sk, psock);
->  	if (!ret) {
-> +		release_sock(sk);
->  		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
-> +		lock_sock(sk);
->  		ret = vsock_has_data(sk, psock);
-
-[Severity: Medium]
-With the lock dropped here, virtio_transport_recv_pkt() can run while the
-reader sleeps. Can it wake the reader for events that carry no data?
-
-The reader sleeps on sk_sleep(sk) with woken_wake_function(), which
-ignores the poll key. virtio_transport_recv_pkt() calls sk_write_space()
-for every packet when space is available:
-
-net/vmw_vsock/virtio_transport_common.c:virtio_transport_recv_pkt() {
-    ...
-	if (space_available)
-		sk->sk_write_space(sk);
-    ...
-}
-
-OP_CREDIT_UPDATE in virtio_transport_recv_connected() does the same. For
-vsock this is sock_def_write_space(), which calls
-wake_up_interruptible_sync_poll() on the same wait queue.
-
-OP_SHUTDOWN and RST call sk_state_change(). An SK_DROP verdict or a
-redirect to another socket also wakes the reader through
-sk_psock_data_ready(), without queuing anything for it.
-
-After such a wakeup, vsock_has_data() returns false. vsock_msg_wait_data()
-then returns false without waiting again for the rest of timeo, and
-vsock_bpf_recvmsg() does this:
-
-		if (!vsock_msg_wait_data(sk, psock, timeo)) {
-			copied = -EAGAIN;
-			break;
-		}
-
-Would a blocking recv() with no SO_RCVTIMEO then fail with -EAGAIN as
-soon as the peer sends a credit update?
-
-For comparison, vsock_connectible_wait_data() loops until one of these
-happens: data arrives, sk_err is set, RCV_SHUTDOWN or peer SEND_SHUTDOWN
-is seen, the timeout expires, or a signal is pending. On a signal it
-returns sock_intr_errno().
-
-The BPF path also returns -EAGAIN when a signal is pending. That part
-existed before this patch.
-
-Should vsock_msg_wait_data() loop the same way that
-vsock_connectible_wait_data() does?
-
->  	}
->  	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-
-[Severity: High]
-This is a pre-existing issue and was not introduced by this patch. Can a
-blocking recv() still hang after the peer shuts down or resets?
-
-The only exit condition vsock_msg_wait_data() checks is a local shutdown:
-
-	if (sk->sk_shutdown & RCV_SHUTDOWN)
-		return true;
-
-The virtio, vhost and loopback transports report a peer shutdown only
-through vsk->peer_shutdown:
-
-- virtio_transport_recv_connected() sets it for OP_SHUTDOWN.
-- virtio_transport_do_close() sets peer_shutdown = SHUTDOWN_MASK and
-  SOCK_DONE for RST or a full close.
-
-sk->sk_shutdown changes only on a local shutdown().
-
-Suppose the peer has shut down and the receive and psock queues are
-empty:
-
-- vsock_bpf_recvmsg() skips the native fallback.
-- sk_msg_recvmsg() returns 0.
-- vsock_msg_wait_data() sleeps in wait_woken().
-
-vsock_remove_sock() has already removed the socket, so no further wakeups
-will arrive. The recv() sleeps until a signal arrives or a finite
-SO_RCVTIMEO expires.
-
-Meanwhile vsock_poll() reports EPOLLIN | EPOLLRDNORM on peer
-SEND_SHUTDOWN. poll() says the socket is readable while recv() blocks.
-
-If the reader is already asleep when the shutdown arrives, the
-sk_state_change() wakeup that this patch now allows makes recv() return
--EAGAIN instead of 0. A retry then hangs as described above.
-
-The native vsock_connectible_wait_data() handles this case:
-
-		if (sk->sk_err != 0 ||
-		    (sk->sk_shutdown & RCV_SHUTDOWN) ||
-		    (vsk->peer_shutdown & SEND_SHUTDOWN)) {
-			break;
-		}
-
-__vsock_connectible_recvmsg() also returns 0 for a socket that is not
-TCP_ESTABLISHED and has SOCK_DONE set.
-
-After this fix, this is the remaining case where a blocking recv() hangs
-until a signal arrives. Could it be handled while aligning with
-vsock_connectible_wait_data()?
-
-[Severity: High]
-This is also a pre-existing issue and was not introduced by this patch.
-Can vsock_bpf_recvmsg() spin forever with the socket lock held when len
-is 0?
-
-tcp_bpf, udp_bpf and unix_bpf all return early with "if (!len) return 0;",
-and __vsock_connectible_recvmsg() handles len == 0 explicitly.
-vsock_bpf_recvmsg() does neither.
-
-If psock->ingress_msg is not empty, for example after SK_PASS or an
-ingress redirect, sk_psock_queue_empty() is false. The native fallback is
-then skipped:
-
-	if (vsock_has_data(sk, psock) && sk_psock_queue_empty(psock)) {
-
-With len == 0, __sk_msg_recvmsg() never enters its
-"while (copied != len)" loop. It returns 0 without consuming anything, so
-the loop in vsock_bpf_recvmsg() repeats:
-
-	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
-	while (copied == 0) {
-		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-
-		if (!vsock_msg_wait_data(sk, psock, timeo)) {
-			copied = -EAGAIN;
-			break;
-		}
-		...
-		copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
-	}
-
-vsock_msg_wait_data() sees that vsock_has_data() is true and returns true
-without sleeping, so the loop never reaches the new release_sock(). The
-loop never calls cond_resched() or checks for signals, and it keeps
-ownership of lock_sock(sk) the whole time.
-
-Would the vsock-loopback worker or the vhost/virtio rx path then block in
-lock_sock() on this socket? That would stop rx for every socket on the
-transport, which is the symptom this commit sets out to fix.
-
-Would adding the same "if (!len) return 0;" check that the other *_bpf
-recvmsg implementations have be enough here?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260929-kbh3-1-022-fix-v1-1-cc97cc95d269%40eldare.de
+Ian
