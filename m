@@ -1,57 +1,67 @@
-Received: from mta0.migadu.com (out-30.mta0.migadu.com [91.218.175.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF69651AEED
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 14:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C0A50B43C
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 14:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790864349; cv=none; b=urt89E6GulRaH7ot5Q6pP+uyGgeWSanTYlr3HGw/isvNVdCbTnwPLHa6WGTr9Z0GZkIbXAygF3899LyB4Vt29UEQ1fl8oQmXTZD8ZnEeOREq/NK0VEwvSo0c2a28IoEf+LeyuNsiuvrVg8U3baU/Ym9LH/ZgtIgvhvdWQxwwsuI=
+	t=1790864729; cv=none; b=F14jUqYRRUuajGvNAoPdoUrRn3tCYj+5hPB/4plQ3VXH14xpkXzFZNVPrTjCq0EOycUzxGBeX3Xn4QxuulYR++qLAIzWE4yV4Arxg3rv5Hp0OaXI8u7Hf3+buhApVvGV1CmFU3N3J8ReHB0oHatNh0MTaiJTvbezZekivpheR1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790864349; c=relaxed/simple;
-	bh=weY1YjX1ml+PqTzLzYH2YTbOr+K3mljuFSCdICr58sw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rIr2rReJPNfwljZkOgXu7ccLBdMSCNXvU6rMWn0Iz3ID07RxKbHiijNDllPTuwmD/F7jlBl/snOlzUbA0BC01L29OSXjREaDPjp9AIdTqDw9Ux6znwT6gEmu7c1fcwHqLNR+bM6KgdLwZ2xB4CRSLlN0i73Mi4mh9QeO2Y8zyEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=svUEB3Up; arc=none smtp.client-ip=91.218.175.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790864729; c=relaxed/simple;
+	bh=nAXCB2HbY7Mf+wmDfZkiXREuGwS2H6D9YJ4ox3hdyYw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SasbmAExDK5VM6btyQjFzmGa9QIkF6iPdNW0C0bactrkK0s+7FkFnBbvbBY6GbEUWZEUNq5wpQMnycuw6vqDPX8XYJVNyPFOkwOBS6aMGLlNoqcoRwWUPyETpPsIpqV4FddZkm1WPJK/Iaz1UoZzKi3KNogkEiOAhDrqWtOyLSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PXECmK3k; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="svUEB3Up"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=weY1YjX1ml+PqTzLzYH2YTbOr+K3mljuFSCdICr58sw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790864345; v=1; x=1791469145;
- b=svUEB3UpUR1AmBzyPyzHyy99fmiI84MvThwHDwZnOyeYaWsmJaIER7uEmx//xCcQ3jR5u6nP
- NEUU+v6zepPSA5b9tbBvd/tO1B3jFREwmIVg/HvnaDn/GaqcdWcw4s4/X9TjeI3lhzA03aQvWHf
- fI2l5sG6ifnQP6PWIusQ0KOs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5109a60fab2357ff;
-	Thu, 01 Oct 2026 14:19:04 +0000
-X-Mizu-Trace-ID: 5109a60fab2357ff
-X-Migadu-Flow: FLOW_OUT
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Amery Hung <ameryhung@gmail.com>,
-	Tejun Heo <tj@kernel.org>,
-	Meta kernel team <kernel-team@meta.com>,
-	cgroups@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PXECmK3k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790864726;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+RQauoITMstIPGsYZHrV59o4U7Nh5j8XAKzdsfn+Yig=;
+	b=PXECmK3khYnAAIYL7LQm3a4ptt01U1uXXjDVfNS5W5CzThrXw6bOu652SNj7O6HnjLmfCY
+	n0otvT0AOyhkDbpd4JHUbwFboeWssTIU30aNBtynnLxkNexz8GNNfRDKTe21BQKadTAkyk
+	ayi5MwdiIftRYfDJecRUHACk9fweXcE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-685-9m2QvmfuMBeug2vV4AyS8A-1; Thu,
+ 01 Oct 2026 10:25:23 -0400
+X-MC-Unique: 9m2QvmfuMBeug2vV4AyS8A-1
+X-Mimecast-MFC-AGG-ID: 9m2QvmfuMBeug2vV4AyS8A_1790864721
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8513B18007FD;
+	Thu,  1 Oct 2026 14:25:20 +0000 (UTC)
+Received: from localhost (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3B16B30000E4;
+	Thu,  1 Oct 2026 14:25:18 +0000 (UTC)
+From: Vaibhav Nagare <vnagare@redhat.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v2] bpf, cgroup: fix cgroup struct_ops query for a second attach type
-Date: Thu,  1 Oct 2026 07:19:01 -0700
-Message-ID: <20261001141901.3225830-1-shakeel.butt@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	nagarevaibhav@gmail.com,
+	Vaibhav Nagare <vnagare@redhat.com>,
+	stable@vger.kernel.org
+Subject: [PATCH net v3] bnxt_en: don't leave an XDP program installed when the open fails
+Date: Thu,  1 Oct 2026 19:55:16 +0530
+Message-ID: <20261001142516.1386525-1-vnagare@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,70 +69,137 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Two things in __cgroup_bpf_query() work only because CGROUP_TCP_SOCK_OPS is
-the only struct_ops attach type.
+bnxt_xdp_set() stores the new program and drops the reference on the old
+one before reopening the NIC.  If bnxt_open_nic() then fails, ndo_bpf()
+returns an error with the new program still in bp->xdp_prog.  The caller
+treats the error as "nothing was installed" and drops its own reference,
+so bp->xdp_prog is left pointing at a freed program and the next XDP
+update dereferences it:
 
-It calls cgroup_bpf_enabled(atype) with an atype that
-find_atype_by_struct_ops_id() works out at runtime.  That macro is an asm
-goto and needs a constant.  Today the compiler can see there is only one
-value; add a second type and the build breaks with "impossible constraint
-in 'asm'".  The check is not needed anyway.  When the key is off nothing is
-attached, so progs[atype] and effective[atype] are empty and the count loop
-leaves total_cnt at 0.  The other attach types already use that loop with
-no such check.  Drop the check and the skip_count label.
+  BUG: unable to handle page fault for address: ff78ecc80ddd1038
+  RIP: 0010:__bpf_prog_put+0x5/0x80
+  Call Trace:
+   bnxt_xdp_set+0xad/0x1b0 [bnxt_en]
+   dev_xdp_propagate+0x36/0xa0
+   bond_xdp_set+0xeb/0x2d0 [bonding]
+   dev_xdp_install+0x1b1/0x350
+   bpf_xdp_link_update+0xc5/0x1b0
+   link_update+0x104/0x1e0
+   __sys_bpf+0x662/0xcf0
 
-And find_atype_by_struct_ops_id() matches on type_id alone.  An attach type
-whose subsystem is not built keeps type_id 0, so a query for type 0 finds
-it and returns success with nothing instead of -ENOENT.  Skip such slots.
+Seen on a 6.12 based kernel after bnxt_alloc_mem() failed an order-4
+allocation on a fragmented host:
 
-Fixes: 369d9dcd8fb8 ("bpf: Add infrastructure to support attaching struct_ops to cgroups")
-Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
-Acked-by: Yafang Shao <laoar.shao@gmail.com>
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-Acked-by: Tejun Heo <tj@kernel.org>
+  bnxt_en 0000:a0:00.1 ens4f1np1: nic open fail (rc: fffffff4)
+  bond1: (slave ens4f1np1): Error -12 calling ndo_bpf
+
+Bonding is not required to hit this; a plain XDP attach on a bnxt
+interface takes the same path.
+
+Restore the previous program and its ring and feature configuration
+when an attach or a replace fails, and release the old program only
+once the change has been committed.  The configuration matters because
+bnxt_init_one_rx_ring() only assigns rxr->xdp_prog in page mode, and
+__bnxt_set_rx_skb_mode() derives dev->max_mtu from the installed
+program.
+
+A detach is not undone: dev_xdp_detach_link() releases the core's
+reference whether or not the driver returns an error, so putting the
+program back would leak it and leave the driver running a program the
+core has already detached.
+
+Fixes: c6d30e8391b8 ("bnxt_en: Add basic XDP support.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vaibhav Nagare <vnagare@redhat.com>
 ---
-v2:
-- Drop the cgroup_bpf_enabled() check and the skip_count label instead of
-  adding cgroup_bpf_enabled_runtime() (Alexei).
-- Add the bpf-next subject prefix (Amery).
+  v3:
+   - don't undo a detach when the reopen fails.  dev_xdp_detach_link()
+     releases the core's reference whether or not the driver returns an
+     error, so restoring the program leaked it and left the driver running
+     a program the core had already detached (Sashiko AI review)
+   - v2: https://lore.kernel.org/netdev/20260930070901.1218980-1-vnagare@redhat.com/
+   - v1: https://lore.kernel.org/netdev/20260928131458.1012180-1-vnagare@redhat.com/
 
-v1: https://lore.kernel.org/all/20260930135159.3926039-1-shakeel.butt@linux.dev/
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 49 +++++++++++++------
+ 1 file changed, 33 insertions(+), 16 deletions(-)
 
- kernel/bpf/cgroup.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 2bbe77de89f0..ce82963bcfc7 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -45,6 +45,7 @@ static enum cgroup_bpf_attach_type find_atype_by_struct_ops_id(u32 type_id)
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+index 9e5009be8e98..430272fc0594 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+@@ -381,11 +381,31 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
+ 	return nxmit;
+ }
  
- 	for (atype = 0; atype < MAX_CGROUP_BPF_ATTACH_TYPE; atype++) {
- 		if (cgroup_bpf_is_struct_ops_atype(atype) &&
-+		    cgroup_struct_ops[atype].type_id &&
- 		    cgroup_struct_ops[atype].type_id == type_id)
- 			return atype;
- 	}
-@@ -1448,8 +1449,6 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
- 			return -ENOENT;
- 		from_atype = to_atype = atype;
- 		flags = 0;
--		if (!cgroup_bpf_enabled(atype))
--			goto skip_count;
- 	} else if (type == BPF_LSM_CGROUP) {
- 		if (!effective_query && attr->query.prog_cnt &&
- 		    prog_ids && !prog_attach_flags)
-@@ -1476,7 +1475,6 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
- 		}
- 	}
++static void bnxt_xdp_apply_cfg(struct bnxt *bp, int tx_xdp)
++{
++	struct net_device *dev = bp->dev;
++	int tc = bp->num_tc ? : 1;
++
++	if (bp->xdp_prog) {
++		bnxt_set_rx_skb_mode(bp, true);
++		xdp_features_set_redirect_target_locked(dev, true);
++	} else {
++		xdp_features_clear_redirect_target_locked(dev);
++		bnxt_set_rx_skb_mode(bp, false);
++	}
++	bp->tx_nr_rings_xdp = tx_xdp;
++	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
++	bnxt_set_cp_rings(bp, true);
++	bnxt_set_tpa_flags(bp);
++	bnxt_set_ring_params(bp);
++}
++
+ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
+ {
+ 	struct net_device *dev = bp->dev;
+ 	int tx_xdp = 0, rc, tc;
+ 	struct bpf_prog *old;
++	int old_tx_xdp;
  
--skip_count:
- 	/* always output uattr->query.attach_flags as 0 during effective query */
- 	flags = effective_query ? 0 : flags;
- 	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
-
-base-commit: 6a75c73eebd4d497ded7d08b47894f9ddbebb5a9
+ 	netdev_assert_locked(dev);
+ 
+@@ -418,25 +438,22 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
+ 	if (netif_running(dev))
+ 		bnxt_close_nic(bp, true, false);
+ 
++	old_tx_xdp = bp->tx_nr_rings_xdp;
+ 	old = xchg(&bp->xdp_prog, prog);
+-	if (old)
+-		bpf_prog_put(old);
+-
+-	if (prog) {
+-		bnxt_set_rx_skb_mode(bp, true);
+-		xdp_features_set_redirect_target_locked(dev, true);
+-	} else {
+-		xdp_features_clear_redirect_target_locked(dev);
+-		bnxt_set_rx_skb_mode(bp, false);
++	bnxt_xdp_apply_cfg(bp, tx_xdp);
++
++	if (netif_running(dev)) {
++		rc = bnxt_open_nic(bp, true, false);
++		/* dev_xdp_detach_link() drops the ref even if we fail */
++		if (rc && prog) {
++			WRITE_ONCE(bp->xdp_prog, old);
++			bnxt_xdp_apply_cfg(bp, old_tx_xdp);
++			return rc;
++		}
+ 	}
+-	bp->tx_nr_rings_xdp = tx_xdp;
+-	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
+-	bnxt_set_cp_rings(bp, true);
+-	bnxt_set_tpa_flags(bp);
+-	bnxt_set_ring_params(bp);
+ 
+-	if (netif_running(dev))
+-		return bnxt_open_nic(bp, true, false);
++	if (old)
++		bpf_prog_put(old);
+ 
+ 	return 0;
+ }
 -- 
-2.53.0-Meta
+2.55.0
 
