@@ -1,115 +1,88 @@
-Received: from mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA52B351C1C
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 01:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3800734F24E;
+	Thu,  1 Oct 2026 01:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790816455; cv=none; b=X25o38nS74ZXTn7Im0JHDvMXbJeGBmeOVYPAWHgomAf/TBIpN3DOYsweZAQsrBcxyqD4RGE9FdYNclBTbRXmCaDpo2FTsQg0DM2Bx/KuTM+xKyn92P1IPLdnr3m4PhljDSNrx+rXRXOoQhhtDSDgxWK/ePGKXgImJA5d4eITqew=
+	t=1790817015; cv=none; b=b020v2YxjCYEiDuQVlC3CqET5WtLhG4IWeKWVNzbWh+kCPNZbJyp7j5Z+kyJV2JcF3WD0MSiO/Z3uZx2ZqMfMwrOI2npaPGFJmRkL61IXqoqZ4sVAaYVnZv4pE7ZaFvBlH6JzAXczjuTuDC1oLWP6ZsC2cPTziF7GyP1ndCQrh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790816455; c=relaxed/simple;
-	bh=HaQPNgehEuldW2UhCdxSN+8tT39bgGHcvLRMMFKomVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pkrhf8tT8aSeMN2JGR9brWhkwdTW6Buafs8sIs/rB0EF9umxdLODaPKEbMo/9+PPIHa/VSA+T+tZnjLCZY+sQxIZMd3g4BpWy9wvfK0/jiQRqIa5RCDqslAJEONxruwx+LaUQRTvWnOE/QMX+MilIarhveuNIujynXyW6zm0xUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xShgBlgK; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790817015; c=relaxed/simple;
+	bh=g+8LN7aRVEwIB/kJEhZmt4SF+4i3wUn30jchAukfEko=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=SE1o8YMihQVYIUyDT7XKvyf95IwbsrqVY+cwqL8Q1HPqlXWzFptY/K+RehPJVCj1gfZplBUCCpCz4HDT7Vv554OZWpivE+YOPL562y3gKu/+ZSgLWIeLEKPUm0QAWIUsi5VGdfFFLsD8X0lC8N+h4OGqGCvqD5lxAggiZPA7Sa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mW32Rwpx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xShgBlgK"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=HaQPNgehEuldW2UhCdxSN+8tT39bgGHcvLRMMFKomVs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790816448; v=1; x=1791421248;
- b=xShgBlgKu6+XLjyZu3n6X1OOEztZFWuRNKQvyZnrkQrQuVf523VESG6Y0ZmhL7b+U/UHGC09
- /vkcndQ/mWan2KqAGYQepSqZF9slE0h9A7W/y3XoFfdT7mNPbRZrKiu9SDvtEviqZJhibdHCnlp
- Rn6DPhQrny1gA/ouQF0fbcO0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9f96ffee7864c01d;
-	Thu, 01 Oct 2026 01:00:47 +0000
-X-Mizu-Trace-ID: 9f96ffee7864c01d
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 30 Sep 2026 18:00:41 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Tejun Heo <tj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
-	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
- struct_ops
-Message-ID: <ar2kvmCPR9q31V8M@linux.dev>
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
- <bda525506b3fb3e61da28a112f28abba@kernel.org>
- <arw4rjVkm2ob9ioL@linux.dev>
- <bc6815954b8d08e75deadd43e1a2192c@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mW32Rwpx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F8D1F000FF;
+	Thu,  1 Oct 2026 01:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790817011;
+	bh=5ZzwpWnJAA51L6P5ZLDGxna7Zxy3b1JYMInm0UP1QOg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=mW32RwpxPoDvUcKskTofevvtzVj1EuQYtkZhHB7fGmtZ+Pvky9TQmvgVh3NznO9V1
+	 Ybk8w6XWbVIGhC8tpCZHkkaqV2rS+btG9t13NLHTln5C329Fcyxi86DFkUk/4ou0uF
+	 BFA8vHTSrYkuZzrLTaENU8eGrrPWeMkBJaikzO+Eo+zVitfU7gWQzrNd/rIRl723eJ
+	 fDwHZe2NGqoD9XSf6W6SeqVW1+87AHv58YyRvM5+ujJQoz88fj09gmCtykJRdnwldB
+	 IEYCzLbkLlIqzWo8BgdPBAr56Bf88SkEVkMqI/8Zz8CrR8iJ96xWiW69sZQSQwfLvR
+	 A/jFV50MuOkbQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A2BD3AA6A61;
+	Thu,  1 Oct 2026 01:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc6815954b8d08e75deadd43e1a2192c@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/4] net: mana: Add support for the CDX bus
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179081700977.2200095.10074995671789811332.git-patchwork-notify@kernel.org>
+Date: Thu, 01 Oct 2026 01:10:09 +0000
+References: <20260924173054.589291-1-mawasthi@linux.microsoft.com>
+In-Reply-To: <20260924173054.589291-1-mawasthi@linux.microsoft.com>
+To: Manish Awasthi <mawasthi@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+ decui@microsoft.com, longli@microsoft.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ kotaranov@microsoft.com, horms@kernel.org, linux-hyperv@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org, nipun.gupta@amd.com,
+ nikhil.agarwal@amd.com, gargaditya@linux.microsoft.com,
+ ernis@linux.microsoft.com, kees@kernel.org, paulros@microsoft.com,
+ mawasthi@microsoft.com
 
-On Wed, Sep 30, 2026 at 01:35:33PM -1000, Tejun Heo wrote:
-> Hello, Shakeel.
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 24 Sep 2026 17:30:50 +0000 you wrote:
+> This series adds CDX bus support to the MANA driver.
 > 
-> On Wed, Sep 30, 2026 at 06:28:21AM -0700, Shakeel Butt wrote:
-> > I am fine with changing the default behavior. Actually, I have been
-> > contemplating whether I should propose a revert of commit c9afe31ec443e
-> > ("memcg: synchronously enforce memory.high for large overcharges") because
-> > it has introduced more problems than it has solved, but that is a separate
-> > topic. The initial commit already mentioned that MEMCG_CHARGE_BATCH was used
-> > arbitrarily, so replacing it with something big might be acceptable. I want
-> > to keep that decision separate.
+> The shared GDMA and Ethernet code currently builds together with the PCI
+> transport. To add another bus without duplicating the driver or adding
+> configuration checks throughout the shared code, this series separates the
+> bus-specific operations and builds each transport independently.
 > 
-> Which kernel paths allocate enough for this to matter? Can you give specific
-> examples where the in-kernel synchronous enforcement helps?
+> [...]
 
-mlock(), madvise(POPULATE), fadvise(WILLNEED) are the obvious ones where large
-amount of memory can be allocated before returning to userspace. Now regarding
-the in-kernel sync high enforcement for these cases helps or not, I think it
-depends on what the user is trying to achieve with memory.high. One scenario I
-can think of is an overcommitted system where admin dynamically adjusts
-memory.high limits of colocated workloads based on their working set size. The
-memory spikes will be smoothen by memory.high otherwise colocated workload can
-be negatively impact. In this example, ineffective memory.high will not be able
-to avoid global pressure which can impact colocated workloads.
+Here is the summary with links:
+  - [net-next,1/4] net: mana: Introduce gdma_bus_ops for bus-specific operations
+    https://git.kernel.org/netdev/net-next/c/c03e69c95a18
+  - [net-next,2/4] net: mana: Move PCI transport code into gdma_pci.c
+    https://git.kernel.org/netdev/net-next/c/34520ae5dd57
+  - [net-next,3/4] net: mana: Build the PCI transport as a separate module
+    https://git.kernel.org/netdev/net-next/c/445927de07cd
+  - [net-next,4/4] net: mana: Add support for CDX device ID 0x00C2
+    https://git.kernel.org/netdev/net-next/c/3d6792ea4605
 
-BTW the above scenario is just an example and not something I am proposing.
-Actually I think memory overcommit in the presense sync throttling can
-potentially cause more isolation issues.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> 
-> > Returning to the actual proposal, my plan was to start small with a narrow,
-> > specific use case. However, my long-term plan is to provide a mechanism to
-> > change the default behavior for custom use cases. For example, for
-> > memory.high, I will provide a way for users to specify what behavior they
-> > want, i.e., whether or not they want more synchronous throttling.
-> 
-> This doesn't seem like a policy problem.
-
-What is "This" in the above statement?
-
-> It feels like a problem that should
-> be and can reasonably be solved for everybody, so I'm not sure whether BPF is
-> the right call for this specific purpose.
-
-Here if you meant that default behavior of memory.high should work for most (if
-not all) users then we are on same page. If some user want memory.high reclaim
-to happen in a separate thread instead of return-to-userspace or synchronously,
-this proposal provides mechanism through BPF to such users to achieve their
-goals.
 
