@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4429336B933;
-	Thu,  1 Oct 2026 11:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021053C3F48;
+	Thu,  1 Oct 2026 11:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790854521; cv=none; b=Xi8IwkzWh6UN9HhGS2SV7hJi5tQnG3GFS1qLPSwMfd8faG2mcSDA9pApJcxSc9Q5KFpUHRNNwdpLtMPSDIoY/6TSjr3PhXn5x9lpTynG1nygGPmQ5ApIcw6hVzFFWkZt258kCxdBAdabgwtldW7480GhRhBPDf/9VPgKXwNx91c=
+	t=1790854605; cv=none; b=VW7yQXu4NFXrioJWXyjTYnyl1ZT85z9O1j4LqYUc1wSBRiTShfzBzbE+I9zOQbtYf6i7XEIV5mfm8lBxgiSt3Yf5CRuPE0f6zyhZStCD0y5ssJyohlpkgOWDM96KX6iilWao/AOSETeUvqzaMoFDzstWaCX3uWNwfstKbEoTfz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790854521; c=relaxed/simple;
-	bh=Q5tuSP+IIYrohLo79wCJ7E97nKOn60f7Kh/wxPjOqHY=;
+	s=arc-20240116; t=1790854605; c=relaxed/simple;
+	bh=kKbW5m5AOpqk5dJlpcQ5qmMxulzzREz3luzUrqLklzk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=bqiEh0vrVnsXL3ZEsJ6E9K+Y7B7KqZU9g8TAOI4jty6yE6IaEyf53vVBjSZ3054ebT3xCpo6GnXGWBDRp2REHH+Ksc+87YoskEC4lSk8hCzIXWiXZdeCsdU47HfhAICs/rswB+YAD/NtXGKrCuiz4UIQlgFMCp9soL4Cqclpu3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exBCzXDy; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=lBo8+MoElJ0b11M/ypXfFb5QTuajndlrKBSjdEJtR+pT231GLGfGtADEIzpDbjSmkRW8562rjIKX5QuPI/4iFhenWOvdG//eWrirsm4/80cJvsL6s1hUIfoDkUWeLMgfS55Fg5CArB7+VQ4vOHGjKxvgCO7tXblKolIPsrndMbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXBFgjFK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exBCzXDy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3AF01F000FF;
-	Thu,  1 Oct 2026 11:35:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXBFgjFK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204A81F000FF;
+	Thu,  1 Oct 2026 11:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790854515;
-	bh=IR+/nwhsFwuNmBp3vUC3gN77geHokdiIHhVMCgtINUc=;
+	s=k20260515; t=1790854598;
+	bh=Xm4wvdZWya38Tv5HPQOs01QtbugiGek4xDtMzVs3F8w=;
 	h=Date:Subject:To:References:From:In-Reply-To;
-	b=exBCzXDy4UfhbBpIf5ElPtsGdou5G37JN1w6zO7SBcy+SQbM6GyJXwNHkbHPDnbpX
-	 IiL40C+o59OcASc4wrLOZbNwO4nID9qatgAYSxpMwSl4u+eS+DnMWbLJ5jPdhKguBz
-	 8DBRKcQwqHEVHiKYWYVCAkwFeR6Jg1rqW3UD/xHeiC7vbIPaflaLY2qYQb7tUo0sGe
-	 NmZkPEy0IidKDzc1gEE3dajCaIi9wfaS96HPGSWyAU25kIVWUG+OdoesMdrtY2EGRc
-	 t1Jpoo3+ZwnDxJMNa57kL89/A8Sb2vVsmQHZNPRrjThEc6Ig3JrTgP9deNmUZWKIqT
-	 M/Trwd49yf+nw==
-Message-ID: <819802b5-e8b0-41dc-a1d3-8ed843d9a769@kernel.org>
-Date: Thu, 1 Oct 2026 13:35:05 +0200
+	b=mXBFgjFKwBNERzVdoZjaNomeWpe3e8lQdbYE0ZfCu5nbH/GH5tEuNHS+dfHO3QrMK
+	 HaZuDubT41hg2PppQgdI3UbIcyvLh/DTUtdTvTqgVj3fvR/EZXwYiHppC+2WzbNlG9
+	 TtQcx5HbOcisqysMYBL9T5wxIMwRNr5KUruOb7hdn3Hn+DAMBpVpRjjzj4jCgcQ9/u
+	 IuJ9nzw+s61u5LY7WWsKlZbCUQHYKyMLav1uZKFJvV1QXDcYXnDHdsEV2cei8YFWv9
+	 LtJjuWuW5NFFdNYedScxnyvlri8/xtBBRdiICnaL5MMCFKblAlvJ8IoNNRRVVS/LMb
+	 WSNmnGNHDkRjg==
+Message-ID: <86dabeec-c40c-43c0-adab-b95fb7825ddc@kernel.org>
+Date: Thu, 1 Oct 2026 13:36:28 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,7 +35,7 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/7] maccess: Use a scoped guard to re-enable page faults
+Subject: Re: [PATCH 5/7] maccess: Batch TCO handling in kernel nofault loops
 To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  Mark Rutland <mark.rutland@arm.com>, Alexei Starovoitov <ast@kernel.org>,
@@ -57,7 +57,7 @@ To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  <bpf@vger.kernel.org>,
  "open list:MEMORY MANAGEMENT - CORE" <linux-mm@kvack.org>
 References: <20260824160523.3907021-1-usama.anjum@arm.com>
- <20260824160523.3907021-6-usama.anjum@arm.com>
+ <20260824160523.3907021-7-usama.anjum@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -104,26 +104,58 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260824160523.3907021-6-usama.anjum@arm.com>
+In-Reply-To: <20260824160523.3907021-7-usama.anjum@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/24/26 18:04, Muhammad Usama Anjum wrote:
-> Kernel nofault copy and string paths open-code page-fault disable and
-> enable around label-based loops, duplicating cleanup on success and
-> failure.
+> With Hardware Tag-Based KASAN in asynchronous or asymmetric mode, every
+> arm64 kernel nofault access sets and clears PSTATE.TCO. Copy and string
+> loops repeat that pair even though tag checking can stay disabled for the
+> whole operation.
 > 
-> Use a page-fault scope guard instead. Leaving the scope now re-enables
-> page faults on both paths without separate cleanup at the fault label.
+> Cover each non-empty operation with one bare nofault region and use bare
+> accessors in the loop. Leaving the region restores TCO before page faults
+> are enabled again, including after an access fault. Existing empty-work
+> checks ensure that every new region performs at least one access.
 > 
-> No functional change.
+> The number of dynamic MSR TCO executions therefore changes as follows:
+> 
+>     Work                         Before    After
+>     N nofault accesses          2N        2
+>     4 KiB nofault copy          1,024     2
+>     N-byte strncpy              2N        2
+> 
+> The 4 KiB case assumes 512 64-bit accesses. These figures come from the
+> control flow rather than a runtime measurement, so the time saved depends
+> on the CPU and workload. Generic fallbacks leave other architectures
+> unchanged.
 > 
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > ---
 
-Patch itself is fine, but the guard name is completely misleading.
+[...]
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>  Efault:
+> @@ -96,11 +100,13 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
+>  		return -ERANGE;
+>  
+>  	scoped_guard(pagefault) {
+> -		do {
+> -			__get_kernel_nofault(dst, src, u8, Efault);
+> -			dst++;
+> -			src++;
+> -		} while (dst[-1] && src - unsafe_addr < count);
+> +		scoped_guard(__kernel_nofault_bare) {
+> +			do {
+> +				__get_kernel_nofault_bare(dst, src, u8, Efault);
+> +				dst++;
+> +				src++;
+> +			} while (dst[-1] && src - unsafe_addr < count);
+> +		}
+
+Reading the same thing multiple times, why can't we have a new guard that wraps
+both these things?
 
 -- 
 Cheers,
