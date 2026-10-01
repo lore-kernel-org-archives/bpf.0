@@ -1,71 +1,85 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A913909BF;
-	Thu,  1 Oct 2026 15:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FD937646E;
+	Thu,  1 Oct 2026 15:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790869788; cv=none; b=QouiOd/M7ehOBaqR4TeG0DgAnswWqnLr+PEKDnzNgLVV4vXvXQ0UFW3jkKcAwYNIzSB7z0bgMYGdxfqaSwE3KczGSjqWTz1Sf4WPzcvnzsj8rs9Ycuuib+UGJQJgEdIwZl3hHF+VPp2XOVxMVXEN+rcniFo3TSgYmNbwjdMFDgI=
+	t=1790869810; cv=none; b=t8e5FQxssCMryMlAJuW2aZ1q0ih3Z37GXcusg3usffWZfvxe7PuqRqWoNTh66+mdoqCUlLqmySPJB4MSQBTuLTuIDc782WOFju5e1oFblOtF1JSsb/LJNiHeKvIbIdiBveYTGje6YPMyaLL94dCRm4zGSva4Yj6tou5Jri5zTSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790869788; c=relaxed/simple;
-	bh=WjKuKcb5daavebDKTVBv1ViKiif6cXNwReONapeldT0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YvnAXx8+ghw96jtkrU0/TWcUo58tGR2Pukzht+jjP7V7a61w1qdtQ7HnQ9Kcg5mf7qGfOqartsTi5/NBogR9b31LgDSgiUAmAsY51XEnnWzDTmvNrqd9exxve8/+D2dmP0Z84UCsn9AAWc0g8zLcWm4659vwO5LNp/LUZsdjeyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mB3xQ7OL; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1790869810; c=relaxed/simple;
+	bh=PdF8p2ZI2uQejqtY9aserBwe4AxQkxlkqFwob8MRz6Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=V18U8c5AYl2wa16IE7YW+AhZWu5X/gdUZ0SSOcCRBhcbIfusCn3KNccF8vuv/Ay7D14nzyu56iNfLuHHqwRfwEaTfV7Wv6R1Yy4Sct/jo6JQ2R/1Vw9juJc5UGUztBJbYxPInUQfAcop0RztkvsRwma+MpVbTLz+gJdrQ+BUjM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dp56ESLh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mB3xQ7OL"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=CwCNZwJCJdJ17fMRBLRacvbvjnwe/+Ql4dP2Gc32nCs=; b=mB3xQ7OLqbg/Kz8Qh8PyFfK9F2
-	CHugfzwiu3uarezWfDbPROBM1Ol7/L0ytpdAWL49EmZuTWGSWeq6C3xM8jpED9xNN9yj02xBt4M+T
-	nIb6mOkH9kOfMzpBU6Phh8mWJalYlsPMXrvE6tEcckkO7cM6HZhngC95ucomAb2nN8jBEKx8JC9mN
-	dP+GF4YLEzFg7D/1mDCo/1a2WKMZsS9g7kX6MVNg34NslPHkXr0AhIKdwTU5/n0PNYd93iQA3pwgZ
-	P/n67HUonp4+I5xPIJoJTP9x9n81jLgIDzc4+lg5Zw3GAcOa7Q8zkO7Rfqg2pMmI/ZUpVgphn/d4Y
-	AOFxnyqg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1xCJ2N-00000005A22-3JVy;
-	Thu, 01 Oct 2026 15:49:36 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9A2B8300390; Thu, 01 Oct 2026 17:49:34 +0200 (CEST)
-Date: Thu, 1 Oct 2026 17:49:34 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Gabriele Monaco <gmonaco@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Nam Cao <namcao@linutronix.de>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Wen Yang <wen.yang@linux.dev>,
-	Tobias Schaffner <tobias.schaffner@siemens.com>,
-	Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH v2 01/15] sched: Add task enqueue/dequeue trace points
-Message-ID: <20261001154934.GT88198@noisy.programming.kicks-ass.net>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
- <20261001152042.124445-2-gmonaco@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dp56ESLh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD7F31F000FF;
+	Thu,  1 Oct 2026 15:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790869808;
+	bh=X+57FzkOegW9YBdETSFnlMg5tct64oHtPmLHW1sZowk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Dp56ESLhx15znR8kW1wb7d2z2HKct7zLXF7vkbF5r/vugtbt4x6UqPf8rADY8bUlW
+	 4eNEFnNyaO/T/a5eAJZ2nupu9o0swBqcpPtJfMUC4VnQq/RJ0IUz9Otjrk1gSLx4r8
+	 gxKFcnrzc+OtZzgg6y/EkAnlWV2YoVEHl9S4H8HFtpCT7sruTqzHXuYfCwsonMqwfB
+	 BcNX1DvD1re523Y9jy046Jzv6z7sPnOcqG7dp3zuaWxl/GMZ1NJBdP5tBYiYdCvrj0
+	 ty29WA8Izl6C+dzzhwtwOxD8oXwnn36pEdRMNy26YxIfqJ3ZlAqgQISvkO5TCOs7Wo
+	 u4Ib2Z8vxMbLg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B4394381195F;
+	Thu,  1 Oct 2026 15:50:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261001152042.124445-2-gmonaco@redhat.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] bpf,
+ cgroup: fix cgroup struct_ops query for a second attach type
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179086980753.2537503.5108865645630186229.git-patchwork-notify@kernel.org>
+Date: Thu, 01 Oct 2026 15:50:07 +0000
+References: <20261001141901.3225830-1-shakeel.butt@linux.dev>
+In-Reply-To: <20261001141901.3225830-1-shakeel.butt@linux.dev>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, ameryhung@gmail.com,
+ tj@kernel.org, kernel-team@meta.com, cgroups@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, laoar.shao@gmail.com
 
-On Thu, Oct 01, 2026 at 05:20:28PM +0200, Gabriele Monaco wrote:
-> From: Nam Cao <namcao@linutronix.de>
-> 
-> Add trace points into enqueue_task() and dequeue_task().
-> 
-> Signed-off-by: Nam Cao <namcao@linutronix.de>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Hello:
 
-Obviously I don't remember anything at all. But also, you 'forgot' to
-send me the rest of the patches which might hold a clue. As is I'm
-clueless as to why we want this, since the Changelog also offers none.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Thu,  1 Oct 2026 07:19:01 -0700 you wrote:
+> Two things in __cgroup_bpf_query() work only because CGROUP_TCP_SOCK_OPS is
+> the only struct_ops attach type.
+> 
+> It calls cgroup_bpf_enabled(atype) with an atype that
+> find_atype_by_struct_ops_id() works out at runtime.  That macro is an asm
+> goto and needs a constant.  Today the compiler can see there is only one
+> value; add a second type and the build breaks with "impossible constraint
+> in 'asm'".  The check is not needed anyway.  When the key is off nothing is
+> attached, so progs[atype] and effective[atype] are empty and the count loop
+> leaves total_cnt at 0.  The other attach types already use that loop with
+> no such check.  Drop the check and the skip_count label.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2] bpf, cgroup: fix cgroup struct_ops query for a second attach type
+    https://git.kernel.org/bpf/bpf-next/c/b5a4aa31abd6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
