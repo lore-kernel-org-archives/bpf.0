@@ -1,145 +1,122 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D7645C704
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 14:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504C647DD7B
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 14:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790863467; cv=none; b=Lwr/ZplBD2nTLybqvLTiLXTbKrhKfteVjOK7p9MBtJcaFv7ckJnPXAs8XIcZC43IEfff/QpDgrqrdalrC8JeqM1f9DP8OV0paIMHTWgAvr6+l5XG13fEQLR/LKvTgxyLxpW+1rGBtQNSmVy1l51jeAimbdT4iqZEWveVoO+Q38Y=
+	t=1790863509; cv=none; b=cUGkk1//LboG0M4Z1GcK0Q6CGar1auhOzFgCfFbiukMAZsxDGvgeA386LMAn+4FZDvjwiqKMF+bh8kKONOtv5xQt+LH6HqdBbyJ1xt6UIaSIZwsriRKL2JEKI6N8+Kq4rR8kuM8BvuuXKs/256JWSVO/oj9iCgDnbr9zuozVIAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790863467; c=relaxed/simple;
-	bh=VVy+xnuu1jLBHpINq3c8XPnQpik7A+ZvgUPasM+R92Y=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=UbhmRyXeFttvjBODMsnuPg8RLu+lneV2z4EcTD1z8CSyx3pE6Bg05QnLqJv+jIPumv8LnGtbFvJYEPJnAeISWDAIlw3OH1I1aANtegfOWU53HhdsHUTJVlPcAnrJLOjlkc7QwYUVRBinyhaTTgDJLdu6MTaKanMxkzmIWbWWLDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=X3R/VSXi; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1790863509; c=relaxed/simple;
+	bh=5aGR/8tUpKqRkeSyUuG2N8y/7QkT31tZhP7nw3z0THU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=jhwBTaKe0IxsX2mEKze4G0u/wx5sK/BXBB8c14prAn/vfg2pe0SoXGvpjkWiD31UnnDUZVbOncnJV9WQCOUFUwTKDdpjDakE0Qhdu1QAJmvN4Rp54PQskF1L4aXjV6OJbt0Nb/GgKs9AR+z9lOYCibP7HfMDtiqg6EFKs64bz+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AgdtMaeQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="X3R/VSXi"
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20261001140422epoutp01571f7da82ff18cee9bd456fdc4b0b925~abNSQR3b62225622256epoutp01o
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 14:04:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20261001140422epoutp01571f7da82ff18cee9bd456fdc4b0b925~abNSQR3b62225622256epoutp01o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1790863462;
-	bh=VVy+xnuu1jLBHpINq3c8XPnQpik7A+ZvgUPasM+R92Y=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=X3R/VSXi8Ehh21H73wXXIsMhgW8p2z5FtJaF/Pz3ZIgo9vxxmSEzZAVFoTKP/Jdq1
-	 +NXgYJ3BnOWV/XGE2Lv6r4kF+1oplPIbqLmQasj1sUu4MnB9O6hk4Bd8K010c5CwiE
-	 PZzfl2WjWT9oX6ru+M3/T4pZdrOXBFUEgpLckzUM=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20261001140421epcas5p46ac4cfe89f234a54b8e2224df641ecd5~abNRpToK92219622196epcas5p4H;
-	Thu,  1 Oct 2026 14:04:21 +0000 (GMT)
-Received: from epcas5p1.samsung.com (unknown [182.195.38.86]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4hwYYw4dhZz3hhT3; Thu,  1 Oct
-	2026 14:04:20 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20261001140419epcas5p4883bdc79a0d8620448fd267ff1321f7f~abNQWKrJI2219622196epcas5p4D;
-	Thu,  1 Oct 2026 14:04:19 +0000 (GMT)
-Received: from SRIB8EG28RUQ1R (unknown [107.108.208.92]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20261001140417epsmtip268affc96178f61ceb12ba7d0d9e9719d~abNOVwCsM2065720657epsmtip2J;
-	Thu,  1 Oct 2026 14:04:17 +0000 (GMT)
-From: "Irlanki Sandeep" <irlanki.s@samsung.com>
-To: <sashiko-reviews@lists.linux.dev>
-Cc: <bpf@vger.kernel.org>, <lorenzo@google.com>, <maze@google.com>,
-	<sporeba@google.com>, <motomuman@google.com>, <srihari.k@samsung.com>,
-	<g.pokhra@samsung.com>, <r.kumawat@samsung.com>, <raj.kumars@samsung.com>,
-	<ts413.lee@samsung.com>, <ramyashree.s@samsung.com>,
-	<daeil2.hwang@samsung.com>, <netdev@vger.kernel.org>, <cpgs@samsung.com>,
-	<irlanki.s@samsung.com>
-In-Reply-To: <20261001102200.0BC711F000FF@smtp.kernel.org>
-Subject: RE: [PATCH net-next v5] tcp: add TCP_ECN and TCP_ECN_OPTION kfuncs
-Date: Thu, 1 Oct 2026 19:34:16 +0530
-Message-ID: <00fc01dd51ad$c0c91aa0$425b4fe0$@samsung.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AgdtMaeQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C4E1F00898;
+	Thu,  1 Oct 2026 14:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790863508;
+	bh=G6R7SfO3+UHfBlAzZxj5mft1zfDUyoCGC8t1d6lbpj4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AgdtMaeQLFQKvyaJlMil25NPPaJXyTSO5+sGCFKHNUrt/sMr4wipr2yK2Vbjij0V8
+	 Co5//eLAB13IdAw1XuY+/urF1cpFmaxS3E0NHKcpmZlvX5pEPq3mu5ay0Hxoggv2jQ
+	 etJctBBA9SjMUH7xQnBReveAtcsed4PCYQEUeZCPpL362QNmOTcWRhBxGyrC408fBU
+	 Wxgua7+0ZaHZM2lxbiL4G3UqNa0YpfacL+qjOax07pWq2YiJzqlptM5Y5XfUREiAxe
+	 bdMIVbKikIn3opEF/QHvJvdNtA/Bj0nwth2pfPxxS2ud7T5exKqiN2fvUZ2aQuKXmq
+	 ewFZx9nQ5X04Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 09/16 net-next v3] ipv4: fib: split common nexthop logic
+ to fib_core.c
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Fernando Fernandez Mancera" <fmancera@suse.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260930135334.4739-10-fmancera@suse.de>
+References: <20260930135334.4739-1-fmancera@suse.de>
+ <20260930135334.4739-10-fmancera@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 01 Oct 2026 14:05:07 +0000
+Message-Id: <20261001140507.C5C4E1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLjFife5xwdJ2PIbdsgWyeyz0v32wItTLcrAkkv7Fe0uXd2QA==
-Content-Language: en-in
-X-CMS-MailID: 20261001140419epcas5p4883bdc79a0d8620448fd267ff1321f7f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CPGSPASS: Y
-cpgsPolicy: CPGSC10-065,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260930102144epcas5p419270301dba37c520277e6c6cff75def
-References: <CGME20260930102144epcas5p419270301dba37c520277e6c6cff75def@epcas5p4.samsung.com>
-	<20260930102308.197808-1-irlanki.s@samsung.com>
-	<20261001102200.0BC711F000FF@smtp.kernel.org>
 
-> =5BSeverity: High=5D
-> Could this lead to an out-of-bounds write for non-TCP sockets?
->=20
-> When a UDP socket requests hardware timestamping, the transmission skb ge=
-ts
-> SKBTX_HW_TSTAMP set, which implicitly sets SKBTX_BPF. When the timestamp
-> is delivered, __skb_tstamp_tx() triggers bpf_skops_tx_timestamping(),
-> invoking the CGROUP_SOCK_OPS BPF program for the UDP socket with
-> is_fullsock set to 1.
->=20
-> If the BPF program calls this kfunc, it bypasses the =21is_fullsock check=
-.
-> Since there is no verification that the socket protocol is IPPROTO_TCP, i=
-t casts
-> the smaller udp_sock to a tcp_sock. Writing to ecn_option would then
-> corrupt memory past the end of the udp_sock structure.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] net: build failure due to missing IPv4 nexthop stubs
+--
 
-Thanks for catching this. Fixed in v6 by adding a sk_is_tcp() check to
-both bpf_sock_ops_set_ecn_mode() and bpf_sock_ops_set_accecn_option()
-to reject non-TCP sockets.
+commit 37eb694c7118e7af349ed67aa655f6c7aa572300
+Author: Fernando Fernandez Mancera <fmancera@suse.de>
 
-> =5BSeverity: Medium=5D
-> Will this assertion fail due to child sockets inadvertently inheriting th=
-e
-> listener's ECN overrides?
->=20
-> When a passive connection is established, tcp_create_openreq_child() in
-> net/ipv4/tcp_minisocks.c clones the listener socket via inet_csk_clone_lo=
-ck().
-> This copies the entire tcp_sock structure, including the new ecn_mode and
-> ecn_option fields.
->=20
-> Since these fields are not explicitly reset to TCP_ECN_MODE_UNSPEC during
-> the initialization block in tcp_create_openreq_child(), the child socket =
-seems
-> to retain the listener's mode, breaking the intended design and causing t=
-his
-> test assertion to fail.
+ipv4: fib: split common nexthop logic to fib_core.c
 
-You are right, thanks. The v5 description and selftest wrongly assumed
-accepted sockets go through tcp_init_sock(); they are cloned from the
-listener via inet_csk_clone_lock() and inherit both fields.
+To enable compiling INET subsystem without IPv4, shared FIB and nexthop
+logic must be accessible to IPv6 when IPv4 routing stack is omitted.
 
-Rather than reset them in tcp_create_openreq_child(), v6 keeps the
-inheritance, since that is how every other tcp_sock setting behaves
-(keepalive, TCP_NODELAY, tcp_tx_delay, and congestion control). A server-si=
-de BPF program
-that sets ecn_option on a listener expects the accepted sockets to
-follow it without re-applying it on every PASSIVE_ESTABLISHED_CB.
+This patch creates fib_core.c and move all the functions for common
+nexthop initialization and release from fib_semantics.c to fib_core.c.
+Note that fib_core.c is under net/core.
 
-The description, kernel-doc, comments, and selftest assertions are
-updated accordingly in v6.
+> diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
+> index 0a35355fb0f33..6058e53fa3dec 100644
+> --- a/include/net/ip_fib.h
+> +++ b/include/net/ip_fib.h
+[ ... ]
+> @@ -578,10 +584,23 @@ void fib_select_multipath(struct fib_result *res, i=
+nt hash,
+>  void fib_select_path(struct net *net, struct fib_result *res,
+>  		     struct flowi4 *fl4, const struct sk_buff *skb);
+> =20
+> +#if IS_ENABLED(CONFIG_IPV4)
+>  int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
+>  		struct fib_config *cfg, int nh_weight,
+>  		struct netlink_ext_ack *extack);
+>  void fib_nh_release(struct net *net, struct fib_nh *fib_nh);
+> +#else
+> +static inline int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
+> +			      struct fib_config *cfg, int nh_weight,
+> +			      struct netlink_ext_ack *extack)
+> +{
+> +	return -EAFNOSUPPORT;
+> +}
+> +
+> +static inline void fib_nh_release(struct net *net, struct fib_nh *fib_nh)
+> +{
+> +}
+> +#endif
 
-> =5BSeverity: Low=5D
-> Does this multi-line comment violate the BPF subsystem style rules? The
-> required style places the opening /* on its own line.
+[Severity: Low]
+When CONFIG_IPV4 is disabled, fib_check_nh() and fib_info_update_nhc_saddr()
+are missing fallbacks.
 
-Fixed in v6 to conform to BPF comment formatting rules in both
-selftest files.
+Because net/ipv4/nexthop.c is unconditionally built for CONFIG_INET, its
+nh_create_ipv4() function still references these functions, causing a build
+failure at link time:
 
-v6 has been submitted here:
-https://lore.kernel.org/all/20261001132759.1076145-1-irlanki.s=40samsung.co=
-m/
+net/ipv4/nexthop.c:nh_create_ipv4() {
+    ...
+	/* sets nh_dev if successful */
+	err =3D fib_check_nh(net, fib_nh, tb_id, 0, extack);
+	if (!err) {
+		nh->nh_flags =3D fib_nh->fib_nh_flags;
+		fib_info_update_nhc_saddr(net, &fib_nh->nh_common,
+					  !fib_nh->fib_nh_scope ? 0 : fib_nh->fib_nh_scope - 1);
+    ...
+}
 
-Thanks,
-Sandeep
+Should we add fallback stubs for these functions here in ip_fib.h, similar =
+to
+fib_nh_init() and fib_nh_release(), when CONFIG_IPV4 is disabled?
 
+>  int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
+>  		       struct nlattr *fc_encap, u16 fc_encap_type,
+>  		       void *cfg, gfp_t gfp_flags,
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930135334.4739=
+-1-fmancera@suse.de?part=3D9
