@@ -1,127 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-65.mta1.migadu.com [95.215.58.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A543BF695;
-	Thu,  1 Oct 2026 15:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482A0377018
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 16:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790870241; cv=none; b=Y9JQ4LAAkGwly0JMtSlddDo/yJcaMbpxCeZ8Mvb5NX/oHHCc2bByidMNBYP6AGXHM89+YE6ZW4afcAZgknRrscMrcKlNu+KiBmitPEfkb9hJe2N/VanJ2MeQavBeXrbCP1IwDHBaK2i7fbQAasDYXIXeUy3q08IfXTeENtO+2oc=
+	t=1790870409; cv=none; b=UJHcXFTgihC4uOWcgLuzWeENRBJCLbRghG8GUe2odLet/9U4nswc2BbMGthmuftx7I51r7rZt1H43zTzi56U9JgTiagkSbFTrRF75ZjBIVKGUIT7+IEOA15VuD4QkmE2MiznByOeAGZhCDAol18lhJlYwXG4hP3CTBFhdTIm0kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790870241; c=relaxed/simple;
-	bh=+WhVESneHWi1O49FjS1s+kGEkLJb8PZBEUKToWFXo74=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GILpPJyCKgNJtz0Dnf7T0Houj/kmO2iWwYHzsVpH00zmYT6YlBpGUCxsz1uRkhrCjxFrsLev+MZsCwOpT4ZFz7BAd+h2dpeqp1LAeKxxd/2BSkpNIToGlJ/ux+FiB0+Sb2jpbcmP526ZRXEWlygIUqSfFqZSKHEx/GhcbFJOl8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4+JX9aY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790870409; c=relaxed/simple;
+	bh=nQNXL5q4knr5P0PR//t77Jz5pY4phClaMKAM51WfU40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nIpE9n4YNiGsxboFT8on6/NpKoQfFWFxxg5ZLcMmF6awvlOEAPsm5N790lAFfxiIY4eCkD1h4r+zzldoYrbD5rt6JBgIy/BFx9XqU7R0Z8cJ3oOMuTvmRUxNo8wRxrnNg7goVweti23r/V+XHgMFpqmAhxpymrQHOTQNtty83ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rNHHQbU9; arc=none smtp.client-ip=95.215.58.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4+JX9aY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB41A1F000FF;
-	Thu,  1 Oct 2026 15:57:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790870238;
-	bh=QC6L2lj0u2kbGH+DClsbnkRlQ7Qn3jGavgf787UBf+4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L4+JX9aYMX8nFh0pDJSSOCZEJMaiHRrsHiPepIhk0Yu+9UMvoRKIZSCFxQSX0K/tD
-	 qRIoEnYsXr01cWgktgg1xRMA3PFlit6nEsaXEnC0jpS9pFj3UXPwqNEuoyltm5uwLD
-	 znkgT71bRIvc69j1XWdTW9os6ggIqjmdZlFkm6FO/hr3/n0XqWCiEWS1UMWSDNM5kx
-	 ilGvrSdjUbLIA4Qi0ORRyWUSFfglLoeNfUm2mZ8IuOmPWJvd9qY+XvZDAKmNIUVELn
-	 m8ujvpBfLVQUqGF2dlyjbWSC9XpEuUL286ZJNTkMyGuJtoo6x4Z29Xz3oEbWUAVhvF
-	 /+WBEPhLf7ufw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 12/15] tools/rv: Add reactors support to BPF monitors
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Gabriele Monaco" <gmonaco@redhat.com>
-Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261001152042.124445-13-gmonaco@redhat.com>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
- <20261001152042.124445-13-gmonaco@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 01 Oct 2026 15:57:18 +0000
-Message-Id: <20261001155718.AB41A1F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rNHHQbU9"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nQNXL5q4knr5P0PR//t77Jz5pY4phClaMKAM51WfU40=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790870405; v=1; x=1791475205;
+ b=rNHHQbU91vxR2GSYZRD1G8OHlE7XnK4eYXE6kj/G7461gg/TqffcehtPKaphPynQ7RNovEEi
+ CoveUSvaq9EquhgfrMD2iDMh6Tc35KUDbcREvH7wZEYXCUaW8AJMGsyqopYNdKEt1lRuoSZuEZK
+ CeS6/C9UGwXkw/kW7Ywp6VLk=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4267819c097ea3ea;
+	Thu, 01 Oct 2026 16:00:02 +0000
+X-Mizu-Trace-ID: 4267819c097ea3ea
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 1 Oct 2026 09:00:00 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ingo Molnar <mingo@redhat.com>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
+	Frederic Weisbecker <frederic@kernel.org>, Aaron Lu <ziqianlu@bytedance.com>, 
+	Daniel Jordan <daniel.m.jordan@oracle.com>, Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com, 
+	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
+ done for
+Message-ID: <ar5eUZ7hibU0Bp5o@linux.dev>
+References: <20260924184714.912181-1-shakeel.butt@linux.dev>
+ <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+ <20261001105909.GL4121339@noisy.programming.kicks-ass.net>
+ <20261001121842.GJ4121620@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261001121842.GJ4121620@noisy.programming.kicks-ass.net>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] bpf: panic reactor BPF program rejected due to PTR_TO_STACK argu=
-ment
-- [Medium] rv: NULL pointer dereference in list_reactor_action on missing B=
-TF
---
+On Thu, Oct 01, 2026 at 02:18:42PM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 01, 2026 at 12:59:09PM +0200, Peter Zijlstra wrote:
+> > On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
+> > > Hello, Shakeel.
+> > > 
+> > > On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
+> > > > This series lets a kernel thread say which cgroup it is working for.
+> > > > That cgroup then sees the CPU time in its cpu.stat and the stalls in
+> > > > its memory.pressure, and the CPU time comes out of its cpu.max quota.
+> > > > The first user is the memcg reclaim that runs from high_work.
+> > > 
+> > > This doesn't translate to net rx, which is another major source of
+> > > displaced CPU usage. Switching membership on each packet isn't going to
+> > > work there. Attribution can't happen that way. We'd much rather count
+> > > per-cgroup received packets and prorate the CPU consumption. If at all
+> > > possible, I think it'd be better to adopt an approach which can cover
+> > > both use cases.
+> > 
+> > Ideally RX would be split for each network queue, rather than lumped
+> > into the one giant softirq that nobody owns.
+> > 
+> > I know PREEMPT_RT has been wanting something like that for ages. Not all
+> > queues are created equal. Some might want RT priority while others
+> > should definitely not.
+> > 
+> > Furthermore, without ingress throttling, your RX back charge could
+> > completely deplete the actual cgroup time quota.
+> > 
+> > Anyway, if you get per queue RX processing threads, then you can move
+> > them into cgroups where so desired.
+> 
+> Gemini is trying to tell me this exists and is called Threaded NAPI.
 
-commit fed00056d145e6ae07ec2d9b2b99084fea10c012
-Author: Gabriele Monaco <gmonaco@redhat.com>
+For the accurate cpu accounting of net rx, threaded NAPI or softirq is not
+that important. I think it is steering packets of the workload/cgroup to their
+dedicated queues and only newer NICs have support for hardware rx steering.
 
-tools/rv: Add reactors support to BPF monitors
+For old NICs, we will still be getting packets for different cgroups on the
+same NIC queue and I think Tejun is asking for cgroup cpu accounting for this
+scenario to work.
 
-The commit adds reactors support to BPF monitors in the rv tool. It impleme=
-nts
-rv_react to format and pass messages to a BPF function, which can be overri=
-dden
-at load time by dynamically linking reactor object files like panic.o and
-printk.o.
-
-> diff --git a/tools/verification/rv/bpf_reactors/panic.c b/tools/verificat=
-ion/rv/bpf_reactors/panic.c
-> new file mode 100644
-> index 0000000000000..775f91a300f01
-> --- /dev/null
-> +++ b/tools/verification/rv/bpf_reactors/panic.c
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +
-> +void bpf_rv_react(char *msg)
-> +{
-> +	struct pt_regs regs =3D { 0 };
-> +
-> +	crash_kexec(&regs);
-
-[Severity: Medium]
-Will the BPF verifier reject this program? The &regs argument evaluates to a
-PTR_TO_STACK register type, but crash_kexec expects a tracked PTR_TO_BTF_ID.
-
-The verifier's check_kfunc_args strictly requires KF_ARG_PTR_TO_BTF_ID for
-regular struct pointers unless explicitly tagged, so it may reject PTR_TO_S=
-TACK.
-
-> +}
-
-[ ... ]
-
-> diff --git a/tools/verification/rv/src/bpf_monitor.c b/tools/verification=
-/rv/src/bpf_monitor.c
-> index d43ee75d3904f..35bd1f40a109c 100644
-> --- a/tools/verification/rv/src/bpf_monitor.c
-> +++ b/tools/verification/rv/src/bpf_monitor.c
-> @@ -676,12 +679,31 @@ static struct ring_buffer *bpf_setup_ring_buffer(st=
-ruct bpf_object *obj,
->  	return rb;
->  }
-> =20
-> +static void list_reactor_action(const char *name, struct bpf_object *obj)
-> +{
-> +	const struct btf *btf =3D bpf_object__btf(obj);
-> +
-> +	if (btf__find_by_name_kind(btf, BPF_REACTOR, BTF_KIND_FUNC) >=3D 0)
-
-[Severity: Medium]
-Can this cause a NULL pointer dereference? If the object file lacks BTF
-information (e.g., if it was stripped or compiled without -g), bpf_object__=
-btf()
-returns NULL.
-
-btf__find_by_name_kind() then directly dereferences this NULL pointer in
-libbpf's btf__type_cnt() without validation.
-
-> +		fprintf(stderr, "%s ", name);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001152042.1244=
-45-1-gmonaco@redhat.com?part=3D12
