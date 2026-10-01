@@ -1,122 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-211.mta1.migadu.com [95.215.58.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B094E5348;
-	Thu,  1 Oct 2026 10:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2EA24C33DE
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 10:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790850460; cv=none; b=HlluY88ai0/5r/HypZJXyEPI5EPNza1/nVJNqy2kaheuMQYQUuFlVVFXq2wrXb2pmBouKOyQ6OxTvdXJTGAY5cF1li55KCLIya/kUyyKzjS5ilUYLas+/5BpascLVdAnH+BqK+k+s+m3iWz97Qrj9O8wpRpbv75jmkAJM6+crBI=
+	t=1790850575; cv=none; b=gAAocglUoeV264qHsSrbSthd8tzRHn8sbn+lBTFvSE5/hANzXBghYs6mjVdGgkLUZPzhs5lTBbAJLbjcO/YTTdzEBJ0mbd7nrr0mJeM/MM1VjAn4b7arJWjLFy249sUK8vbC2FelpGNuCHqASd54NtnXuOC8sflvU6QnBzKOpek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790850460; c=relaxed/simple;
-	bh=x57VT8SA0pphdWEQEkM/iqc6er++BIDwNdzE0dptaJs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dDJQcaRXCaov86wRFEYV8ByU9W0ij7AkzeAEKhl7NUOn9RfAqr5Mx9OubRy8ErmM+7Y6FYnTg5oV4ngCV5LQV1HhmtQMA2Q56UOjG5lYAG1IOPm4OotVP2INGwGVlJLzxvlV3iRAc3g/FwQBDcGUi2VqJdTi2GaEbYiu+q7xynk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLkKj8MV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790850575; c=relaxed/simple;
+	bh=j0DTB35JN7w3qoE4dsr+0qEQkdEFJWnqgYt85R35l2k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=re4htDEitJJkSS/NxG3FRTZp8Jz+AJG6+QHr/rz4gDHD6xJ84mhjJgEWTDEMH9pBP+s1Yl3CIPWlsiHxSGgNL09K2a33XSSFzaUEcgd421F+yFgGYh3G5/0RbBASR0mohlUAzYOQKuFzEKLVkoCicgk2hAgUe6O9iUQ7zklL5n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ghkUP+Kk; arc=none smtp.client-ip=95.215.58.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLkKj8MV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C99C1F000FF;
-	Thu,  1 Oct 2026 10:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790850458;
-	bh=XYzs7o+5h0U9Vrf1IvIXwIIUltb94MWDVQUuaUnhbR0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SLkKj8MVGQsOdD5vsXhNNbPvVbeNGCh3UlaAOIhV4zHQbJoRvbG2VJDQgfGxhzsQs
-	 0vOr5p16ruAgjwKqSohOnvTCCwdw45AkPCvdqcmbc2hXX0hdiA0fD22qUNDEy8KUtP
-	 gO+HrqDCSxvHO7BTeF0MPxQcZM7rAVEH921LkZONFeCsY5JoZeLXydNCdA2pPvYDDa
-	 1kA5fl6noZQ/484lqxgj8PmCNJvN06IWxc/O8w7pghNiCtM3Okk8CCiLtkPz89B1QD
-	 hLUy9ZWgVVdzps66SnCaF7poGAt3ZRm8H+VRc8q91Y25RgfyfZCMwGje0TnDQuT4qK
-	 4OJ5F9AW4CNMw==
-Content-Type: multipart/mixed; boundary="===============5002025029551811504=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ghkUP+Kk"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=j0DTB35JN7w3qoE4dsr+0qEQkdEFJWnqgYt85R35l2k=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790850570; v=1; x=1791455370;
+ b=ghkUP+KkcZtesnf+8otH9691zX7aZk2GJagEeuvcoXlbC0dLyKP8QDUdrJL6ADlbmtlv5ps5
+ 7z3ToPgXoY/pFdy+xs3dR64TL/LEcKFaTuTYSQtbFWdP+dZhJ5rFdVS1CcmCxUeFNxUDzeBQP2i
+ C0l58il6vnNJMVYpL/jXojsY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9a1e96d489a4a683;
+	Thu, 01 Oct 2026 10:29:30 +0000
+X-Mizu-Trace-ID: 9a1e96d489a4a683
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com,
+	andrii@kernel.org,
+	peterz@infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	kernel-team@meta.com,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH v3] tracing: fgraph: fix the quadratic shadow stack walk
+Date: Thu,  1 Oct 2026 03:29:08 -0700
+Message-ID: <20261001102909.1152572-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <613bf6afe2483c66dd4b8f057bd7ca3ebf6211589def2a874347f1a2683aa513@mail.kernel.org>
-In-Reply-To: <20261001-bpf-verifier-patch-batch-v1-1-a12df8a09160@gmail.com>
-References: <20261001-bpf-verifier-patch-batch-v1-1-a12df8a09160@gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: Add a list of deferred instruction patches
-From: bot+bpf-ci@kernel.org
-To: odys.yuan@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  1 Oct 2026 10:27:37 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============5002025029551811504==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+alloc_retstack_tasklist() assigns a shadow stack to every thread when
+fgraph is enabled. It did so FTRACE_RETSTACK_ALLOC_SIZE (32) tasks at a
+time, and since for_each_process_thread() has no cursor, every sweep
+restarted from init_task and re-walked the tasks already served, making
+the ftrace_graph_active 0 -> 1 transition quadratic in the thread count.
+On a 60-core Sapphire Rapids machine with 400000 idle threads it took
+227 s, inside a single bpf() syscall for the kprobe_multi case.
 
-> bpf: Add a list of deferred instruction patches
+Allocating inline with GFP_NOWAIT removes the batching: a single sweep
+serves every task, 227 s -> 0.092 s.
 
-TL;DR: Nit only: patch_list_adj_aux() duplicates the aux-data propagation
-logic of adjust_insn_aux_data() in fixups.c; the review asks whether a shared
-helper could keep those rules in one place. Not a bug.
+v1: https://lore.kernel.org/all/20260922225526.1554758-1-vineet.gupta@linux.dev/
+v2: https://lore.kernel.org/all/20260929005411.4105448-1-vineet.gupta@linux.dev/
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 37cf130ebb57..39566f382510 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -404,6 +404,301 @@ struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
+Changes since v2:
+ - update the stale alloc_retstack_tasklist() comment, which still
+   described the old batch-of-32 behaviour (bot+bpf-ci)
 
-[ ... ]
+Sashiko flagged the mix of goto-based cleanup and scoped_guard() in
+this function. Peter and Andrii both considered it fine as is, so it
+is unchanged:
+https://lore.kernel.org/all/20260929080346.GR4120091@noisy.programming.kicks-ass.net/
 
-> +/*
-> + * Fill the aux data of the 'p->len' insns at 'slot' from the aux data 'old'
-> + * of the insn they replace, the same way as adjust_insn_aux_data() does.
-> + */
-> +static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
-> +			       struct bpf_insn *patch,
-> +			       const struct bpf_insn_aux_data *old,
-> +			       struct bpf_insn_aux_data *slot)
-> +{
-> +	struct bpf_insn_aux_data *last = slot + p->len - 1;
-> +	struct bpf_insn *orig = &p->orig;
-> +	u32 i;
-> +
-> +	*last = *old;
-> +	last->zext_dst = bpf_insn_def32(prog, &patch[p->len - 1]) >= 0;
-> +	memset(slot, 0, sizeof(*slot) * (p->len - 1));
-> +
-> +	for (i = 0; i < p->len - 1; i++) {
-> +		slot[i].seen = last->seen;
-> +		slot[i].zext_dst = bpf_insn_def32(prog, &patch[i]) >= 0;
-> +		if (!memcmp(&patch[i], orig, sizeof(*orig))) {
-> +			slot[i].non_stack_access = last->non_stack_access;
-> +			last->non_stack_access = false;
-> +		} else if (bpf_is_mem_insn(&patch[i])) {
-> +			slot[i].non_stack_access = true;
-> +		}
-> +	}
-> +
-> +	if (bpf_is_mem_insn(&patch[p->len - 1]) &&
-> +	    memcmp(&patch[p->len - 1], orig, sizeof(*orig)))
-> +		last->non_stack_access = true;
-> +
-> +	/* indirect jumps to the replaced insn land on the first new one */
-> +	if (last->indirect_target) {
-> +		slot[0].indirect_target = 1;
-> +		last->indirect_target = 0;
-> +	}
-> +}
+Changes since v1:
+ - replace both v1 patches with Peter's inline GFP_NOWAIT approach,
+   which removes the quadratic behaviour rather than dividing it by a
+   constant. With a single sweep there is no retry loop left, so the
+   v1 cond_resched() patch has nothing to attach to and is dropped.
+ - comment why returning from inside scoped_guard() skips the free
+   loop safely
 
-this isn't a bug, but patch_list_adj_aux() repeats the per-slot aux fill
-that adjust_insn_aux_data() already does for the BPF_PATCH_KEEP_TARGET
-case, as its own comment says.  The seen propagation, the zext_dst
-computation via bpf_insn_def32(), the non_stack_access transfer keyed on
-memcmp() against the original insn, the last-slot bpf_is_mem_insn()
-marking and the move of indirect_target to the first slot are all
-duplicated.
+Vineet Gupta (1):
+  tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
 
-Could adjust_insn_aux_data() and patch_list_adj_aux() share a small helper
-that fills 'len' aux slots from the insns that replaced 'orig' (taking the
-slot base, the patch insns and the mode), so the aux propagation rules live
-in one place?
+ kernel/trace/fgraph.c | 44 ++++++++++++++++++++++++++++---------------
+ 1 file changed, 29 insertions(+), 15 deletions(-)
 
+-- 
+2.53.0-Meta
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36845462631
---===============5002025029551811504==--
