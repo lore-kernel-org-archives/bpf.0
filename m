@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588D53B95E0;
-	Thu,  1 Oct 2026 07:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B772A547059;
+	Thu,  1 Oct 2026 07:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790838581; cv=none; b=KKAncf6Fa9S6Zfi2xvOW1+yRvkEhjHUNH39kH5f6e7F06wKUmz9qCs79L3BNV0Tn0Y87izdOO/p5r7WfdV6tLacVLlHfgg3+Zs77n/zxWSxabZiDMt9H7f11N8e/z994OSeqi+6wdiCTSZkV7qrTm4GYuvc+jV8SLIkkB9ue31Y=
+	t=1790839382; cv=none; b=bmBtKIZOU8c6MREeoIS/T39d4lhKzK9y22x0M1JWBtmn+9kDmMnB9LmC3kpz+OGNqGKDX+gN/Q8uFgHf+R5pIArCF2lyUTKhZmTTOaJq5PdhWTemQFESLcOt+NNV5VpjtBB9ROe61lZBVRcWWvX02WR2e5UR/H3WFhD1iwGNewQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790838581; c=relaxed/simple;
-	bh=XFF9m1extKl7fuxmH9zsMDX2E4Ef70rJNPT+E8HnDCk=;
+	s=arc-20240116; t=1790839382; c=relaxed/simple;
+	bh=vYPo30L+yzg4zdvP/9QG8tpdh1hu1GaLdI0m5fTJPic=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MpWJBb2xK9qlp9wg3ra1JwOAATVoWNAk4Tigw29HolAvzQpzkgwJuDC6v2ZyNSOp7Bqhf/r37w+nKVsAUaDQnkkGgh99EG0iu9LqG8lXtihgXE6BG6BGpyma1XHNuBWBrlHlJHqIFNdNyOkTxxSkQQmp4kmP8SRgXrGA0/OZFFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8TXv8sn; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=GgGPaEd/cVGmunUW8FNg0hgK9MEZltYm027T/HfQtb6RhpzrSWJ45U1Rd0fzdP5SgCzkhbUYDwIfddhqLLXeLQxj4IdgHLLbaZI9c0SJxPcPCh7noQrRSTSU21CwOxiOtSvKzkbvbU94DGc+5YnLEMUwH++0pWdjRjKFvr/JtAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJ2wVMP6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8TXv8sn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965BA1F000FF;
-	Thu,  1 Oct 2026 07:09:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJ2wVMP6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F1281F000FF;
+	Thu,  1 Oct 2026 07:22:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790838580;
-	bh=XFF9m1extKl7fuxmH9zsMDX2E4Ef70rJNPT+E8HnDCk=;
+	s=k20260515; t=1790839372;
+	bh=vYPo30L+yzg4zdvP/9QG8tpdh1hu1GaLdI0m5fTJPic=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=E8TXv8sn/bSpQE+NI1vYkKweFuPd7YNLLIzGNuQ+ceTS6EmKTPqCxr518iNn8GQ9l
-	 aXUKjLMuhGUJ03/7Yzr9S+fIWZC1/dhfZTpt/JUCnlpkuzoOP0PA8m+PKtzWDinIA7
-	 1w9ry8qGjqlCvnmNjIDocjTT7HE39m6sIKGxqAaSBs6nchvWxHnm7Bf8lNmbrRAPFo
-	 9fop9kGm+I65m2iX6nMlQY9fNRlenCMdG2dm4ebBtegIWPnT32Gno/Pol9pgkbnrba
-	 jYftS8MARMUeWwBdPBxrLlqKbfCqb8ssHOr/oNjHzJqstipUmCCbfD/1SrmJJ2uKBJ
-	 3McRuxZ1+Lv6g==
-Date: Thu, 1 Oct 2026 09:09:35 +0200
+	b=XJ2wVMP6oeCv2GMjeOm0YD3l3EXN0xvYQRaArKhqbXcJi/lNWtYs7qDSfg4TNpFHp
+	 tcHiVxH+QjxL8CjN1f+z89ZIvf1Hou6pJ+j3Gi4E0x7pkQH9tWnm9d/UEcIoEotgFM
+	 jEramHJxTxiy5ABlYpKM8jY/3lCZctNaM4HAj0ioXvpnzhunNw8rs1zD+Y1lvpO0ah
+	 zySagzh5ov5stXJ4/RdnmgKqzpmBViqdr2Aw/xyL+lqBNt0GxrcBa8WKGCkeNfiEa0
+	 KgL8Iw7YwmuN/1nwxruU2fGL9KgLKqXzIBVRIXaif+Z96HE8O2YrtJvwiBfYJm0ITH
+	 1rxAUcnnoRAVQ==
+Date: Thu, 1 Oct 2026 09:22:48 +0200
 From: Maxime Ripard <mripard@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
+To: Rob Herring <robh@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
 	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
 	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
@@ -46,12 +46,14 @@ Cc: Rob Herring <robh@kernel.org>, Jessica Zhang <jesszhan0024@gmail.com>,
 	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
 Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
  panel binding
-Message-ID: <ar4G864IgYTvfNNy@houat>
+Message-ID: <ar4HOuO-vox9VIKZ@houat>
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
  <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
  <20260928204059.GA515872-robh@kernel.org>
  <artyl8fD3zzng8Uh@houat>
- <742d5bab-51cc-49f0-825a-f299a055bb1e@linaro.org>
+ <20260929222822.GA2933878-robh@kernel.org>
+ <ary8IdL9zVXfS2fA@houat>
+ <CAL_JsqJCoWQmdBKEbekXb5LeLn1KcMiP2iG30r+npssJSZB5LA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,75 +61,104 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="s3nqed5trv4kttpt"
+	protocol="application/pgp-signature"; boundary="eh5wavyv7nnca5rg"
 Content-Disposition: inline
-In-Reply-To: <742d5bab-51cc-49f0-825a-f299a055bb1e@linaro.org>
+In-Reply-To: <CAL_JsqJCoWQmdBKEbekXb5LeLn1KcMiP2iG30r+npssJSZB5LA@mail.gmail.com>
 
 
---s3nqed5trv4kttpt
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+--eh5wavyv7nnca5rg
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
  panel binding
 MIME-Version: 1.0
 
-On Wed, Sep 30, 2026 at 03:32:19PM +0200, Neil Armstrong wrote:
-> On 9/29/26 10:39, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> >=20
-> <snip>
+On Wed, Sep 30, 2026 at 02:07:39PM -0500, Rob Herring wrote:
+> On Wed, Sep 30, 2026 at 3:04=E2=80=AFAM Maxime Ripard <mripard@kernel.org=
+> wrote:
+> >
+> > On Tue, Sep 29, 2026 at 05:28:22PM -0500, Rob Herring wrote:
+> > > On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
+> > > > On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
+> > > > > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
+> > > > > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
+> > > > > > regulators and GPIOs, perform a reset pulse with specific timin=
+g,
+> > > > > > send a vendor-supplied sequence of DSI commands, then enable the
+> > > > > > display. The only truly panel-specific part is the init sequence
+> > > > > > and power-on/off timing.
 >=20
-> >=20
-> > panel-mipi-dsi-spi is a generic panel that will load a firmware, and
-> > quite similar to this one. google,android-pipe and qcom,fastrpc don't
-> > attach to anything and will just open a tunnel to userspace, which is
-> > somewhat equivalent but more dramatic than what this driver is doing.
-> > simple-card or its variations will just instantiate a kernel driver from
-> > the DT and is used pretty much everywhere.
-> >=20
-> > I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
-> > by rob, and acked by a panel maintainer, and 4 years ago, so we're way
-> > past the "oh but we didn't know what we were doing back then" argument.
-> >=20
-> > So, let's phrase this differently: what's different about the
-> > description than panel-mipi-dsi-spi, or any other binding already in
-> > tree?
+> [snip a bunch of irrelevant shit]
 >=20
-> The panel-mipi-dsi-spi still describes a class of H/W control interface,
-> not a pure software driver implementation type.
+> > > > So, let's phrase this differently: what's different about the
+> > > > description than panel-mipi-dsi-spi, or any other binding already in
+> > > > tree?
+> > >
+> > > There's all of 3 panels supported. Compared to all the other panels we
+> > > have, hardly the rule over the exception. You can always fine "bad"
+> > > examples or exceptions.
+> > >
+> > > That one defines a single supply. Any other MIPI SPI panel with
+> > > different supplies or GPIO controls probably has its own binding. Try=
+ing
+> > > to parameterize that in DT doesn't work. We've rejected trying to do
+> > > that in DT over and over. What's your story here for that?
+> >
+> > Sigh... Look, I really don't care about an argument DT maintainers use
+> > at their discretion for this. We both know full well that it's been and
+> > still is inconsistenly applied, and you also know that it's not like
+> > I've been playing the DT game since pretty much the beginning (on ARM
+> > anyway). So it's not like I don't want to make it work, I do. But what I
+> > care about is enabling that driver to work.
+> >
+> > I reused exactly the same binding than the last major binding that was
+> > merged for panels, and support about the same number of panels. I guess
+> > that was a mistake, so sorry for that.
+> >
+> > I'm fine with reworking the binding any way you want as long as it still
+> > allows for the same use-case, but I would have hoped for a better
+> > feedback on how to do so than "oh what a huge pile of shit this is".
 >=20
-> "panel-mipi-dsi-bpf" or "panel-mipi-dsi-rust" or "panel-mipi-dsi-cplusplu=
-s"
-> would be the same problem.
+> When you can answer my question above rather than make up shit I
+> didn't say, maybe I'll reply again on this thread. Otherwise I'm done
+> here. I don't need this abuse for the thankless job of DT
+> maintainership.
 
-Rob explicitly said the bpf part wasn't the problem. Also, I don't care
-for the compatible itself, so what would be an acceptable compatible for
-you?
+It's been the whole tone of the reviews, so I'm sorry if you were caught
+in the crossfire and you didn't mean that. And I'm sorry it made your DT
+maintainership work harder than it already is.
 
-> > If it's the BPF part, BPF is not Linux-only, and there's hardware with
-> > direct BPF support these days, so it can be considered OS-agnostic and
-> > not an implementation detail.
->=20
-> If somehow panels used a standardized MIPI firmware we could define this
-> in DT, but here we're basically inventing our own type of firmware from
-> thin air.
+I do mean what I said before though. I have no problem changing the
+binding the way you want, but I need to know what to change in the first
+place, otherwise it's really no better than a NAK, or we're bound to
+have the same exchange for the v2, and I'd rather not.
 
-That's not what panel-mipi-dsi-spi is.
+I indeed missed your question, but now I'm not sure I understand what
+you mean by "paremeterize that in DT"? The supplies in the binding are
+an aggregate of all the possible supplies a panel can take. They are not
+a wildcard, but they all have their own semantics that are used by
+panels right now.
+
+I don't expect any new supply to be introduced, unless there's a major
+panel technology change such as the one we had with the introduction of
+OLED.
+
+Would you prefer to reduce the number of supplies to the minimum we need
+right now, and extend it as needed?
 
 Maxime
 
---s3nqed5trv4kttpt
+--eh5wavyv7nnca5rg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCar4HLwAKCRAnX84Zoj2+
-dl6uAYDovwkc1hvb39koGbGLJWTMCbmYcACHdaVw0R7sPvU3411ITrKE0XW6bqGC
-VstReW0Bf3SPl1Nrf6ImNbY2KvutXe9EvqIRF88l0/bekyLhlDEc+vl+24UFci5P
-jH5weB34Lw==
-=ZDWr
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCar4KSAAKCRAnX84Zoj2+
+drKVAYDR/ZDwDXBZxoJ1vN0aVjc4QVJvpsXjDFhzm6g8ERdGmINbKbE3z4HYkf8L
+rASKMl0BfRPGtCXfDtr+Ev35B1QViTxFnNv9Js2+WdypHe0kKGcY7E/8p6hiGNzS
+J8y0tgD50Q==
+=lNbO
 -----END PGP SIGNATURE-----
 
---s3nqed5trv4kttpt--
+--eh5wavyv7nnca5rg--
