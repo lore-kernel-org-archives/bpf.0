@@ -1,248 +1,224 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA5D5349BE
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 21:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790889776; cv=fail; b=l98H3RVWOK6OifZX4jhJlO7wrjQV2onc0OxRs7P0CjPbVBEuUF21NzyERKp0tFoCZVZJfi490/gtgS3Tk6JdqBFlJUjpQDqZSvx9XPSmRbYnJAtj4USds9hIxIC7/woFSh53knlkcOnNfdj1P4GOrrPPwug9TLymTlSAD4A+ap8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790889776; c=relaxed/simple;
-	bh=42KMNjndOztbmwwDoexhu0dMtE/8+6vzzt5bNYkI5J4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YPNYbdnb+SqqPaBKG1Lbaab4uo8X3XgRC5+oZW4RxaS5TX5TNXrCpNmGQB7eRkfABec4E1wTpzRW01g6mbJaF1D2fRfJBXJzcuu8KHhLw+h4XYRyVqG3q/fITWoLb7TXDOrSN8H/mOpkl/FJAmyUfunuYv5jJsytaLjIXjzEvX0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=olLdJtUC; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=q9C/+FFz; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067D6443E40;
+	Thu,  1 Oct 2026 22:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790893502; cv=none; b=ZoXy4xoTnYek1Vhuyn4zG75MN9REiDBSi49gF2oNmHmT0LoSTbVDanazYZK5KhJBDfCwmN1NwOx4vQPERrefPKjpnns9FJsQNmAKEJfCF+peEuB/LwrW0jIm0AU5FIucT2AdTa2r31LIvb27XLC7kTyquiO2axPvWg3AcXtDmuQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790893502; c=relaxed/simple;
+	bh=OtpwEJP8cA/bi8goC9l4C0DZftzdoD9aZwBjvEPnNlY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=usgka+OSzyvLNQjNm7+0HuhhG2132mI229h0DLccuayRIit+rLXuh7Pn6bkdB67O0vZDCMTpiG4DdDM1u56E75eFpBm35nO9wirj00FcLgcQShSlMCF/JsywddSKVUapFIBCcnuB2llbIzeMt2qnTTdVYueJMIJEtnTH1putUQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JK+U7wmS; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="olLdJtUC";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="q9C/+FFz"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 691KRxYm908031;
-	Thu, 1 Oct 2026 21:22:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=5ePJkSX78EZxMJAN7kHReg7QCx9ca99IBXqUk7IAM+A=; b=
-	olLdJtUCt8glBXyHkq6Cf2gRELnh29YpXzsI2kREd5h9voRbl6AazoSZlh0ULwNM
-	FED9878QJv3EskvHy1no035Tke8T4oFSiaM3ZeABiEr1Sog4o1z9g+MKIyhPAP++
-	TuOcqVFN+uwlPDg7sDz8qTIHOjinO2MfFAbHK0qIasgPV/gB2fJxKOKa3f1AFiBX
-	9IDfYqf1niK5wtMqJkh9wQvbdBpFnLuhqYeCmzLA06z57nTFe8nLNqN5OwSNy8xn
-	CsWFSu1Ggp0Ws5qDihOgDvl2T8RIYU6kiMIWLdVoJIBOIXTtL0abgJstkLWx2Clm
-	v9djphhNQigihAZQVDAHuQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gx4u2j90q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 01 Oct 2026 21:22:33 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 691LK5no027133;
-	Thu, 1 Oct 2026 21:22:32 GMT
-Received: from sa9pr02cu001.outbound.protection.outlook.com (mail-southcentralusazon11013006.outbound.protection.outlook.com [40.93.196.6])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4gx4gec9tv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 01 Oct 2026 21:22:31 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WFnME89BBoh0rTJklOMGJUc0aJxvSJjl4dFFKxfECKyDAaJhfLjgeh3KTRlVgUYL7V0xCYwn1HQod/etJ2zdsQv+B9UWjlQtsLNMz81C/ZtSnnGX4pbEBZLkJMwASdvK51CbgfuC4Yx4WKVGKoXaVjJMgi13f0mT3hELtwZ+agWE9JlAWzym7lhD09Z0mtsESEHdgSxKxiOmrrY/n5GG7UaMFFtxdM78ZaT580OEl1TXLk5xMc7t4Ki1RRSudhBBfEr+7gZZ+Za6UD12vh1Us9LyltddbHfma6h4YQKBUuHr0iNWPFGrsfYbfR+AoQ7DZpu1SXhr51EyTu6hoLQ98w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5ePJkSX78EZxMJAN7kHReg7QCx9ca99IBXqUk7IAM+A=;
- b=T1B1mUkDm1WbkqezPwA0tYxYfx2AggnA7MIIstINPu/gnHPOoVJmdxmkfb/MDBCnK3BQh1yoLg9alwPKsSHcR00BuWU/Vh3xQG+bF7NP5jepHCpWa9j+ohJCDGTjqD1wv/ivCGwwOh8Iq/Hi/iGXIxE1OBXyrz2MtrohVGxcG4ShLEcKplbVTXw5McKCYrqPeZUURrrcRjpQBcq4lTArTYMrHKFcGFc2bM2gO3Hg+m+JjAQiINdVnJIeAkcoZ2C43gqzDweVNyy7tw8HchI3SEeGzwsyIrlmtqu/ZXZxZFz8ONU9sH3peWAgdH6zn11dQSs/SboVmFRIU3PlUHgrFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5ePJkSX78EZxMJAN7kHReg7QCx9ca99IBXqUk7IAM+A=;
- b=q9C/+FFze9FZ8Os246DjKWGcKsPFWvTJHU0kMWzJz20inlXkhlIzj0YtmmqxHyLLQyMLS5VQIkWbX3Qpqjh65rA8kPGmhjN1p9E192QKULZO8wwvJUbH6CwGL1KDXCZNHS0gDbyDuXBEEDKPqLpOUavjHDVdNW3v9lbghcYB8vA=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oracle.com;
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by CYYPR10MB7567.namprd10.prod.outlook.com (2603:10b6:930:be::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.9; Thu, 1 Oct 2026
- 21:22:28 +0000
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0496.008; Thu, 1 Oct 2026
- 21:22:28 +0000
-Message-ID: <3ce2819b-183d-4890-971c-121b5a0f52da@oracle.com>
-Date: Thu, 1 Oct 2026 22:22:23 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 08/14] selftests/bpf: Add test for arguments
- without names in static functions
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-        memxor@gmail.com
-References: <20260930193127.2181684-1-alexei.starovoitov@gmail.com>
- <20260930193127.2181684-9-alexei.starovoitov@gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260930193127.2181684-9-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0134.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9e::13) To BN0PR10MB4901.namprd10.prod.outlook.com
- (2603:10b6:408:126::19)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JK+U7wmS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790893500; x=1822429500;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OtpwEJP8cA/bi8goC9l4C0DZftzdoD9aZwBjvEPnNlY=;
+  b=JK+U7wmS7C7Q6ek5pvP2kY8j9VuwmUbIfmhtVqS5I2iB4X+3cbt7lA3f
+   wACG0qSgJAprJ1M8V7h4MqLVnc6V1w1AG/fae+GDqp+cwcxLqRW3ZmEYK
+   Xf2qJ5qKb+kyBVO1oknaGjORzmcB3926Vch9pKpzSO+U7Ppe3WiefrfzQ
+   doXreJqxQuODGnEqv/hV0pLaAShFNPpaWJOUzc3JEJsvSH0dPu89bO157
+   RnvnMV1NIx0NS1CMeothPoY+fkpO6OM0b3TlRDPfFzL5UB/1x8yialFi+
+   sJj9r+wmjv3xSWc8n87wFn7D7jtOEWJW0K899xDOgYtUHZfvIzsjYpcxG
+   w==;
+X-CSE-ConnectionGUID: RQSDpRWmSDO3qlOBWiRGdQ==
+X-CSE-MsgGUID: lZzPfHp7TWqGpKU+9BVQhQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="90567682"
+X-IronPort-AV: E=Sophos;i="6.27,135,1787036400"; 
+   d="scan'208";a="90567682"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 15:24:58 -0700
+X-CSE-ConnectionGUID: kZRpaGbTS0+e0xNc1mCUlg==
+X-CSE-MsgGUID: CugmOTrMQKOCnu/6Rf6Csg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,135,1787036400"; 
+   d="scan'208";a="279863762"
+Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
+  by orviesa005.jf.intel.com with ESMTP; 01 Oct 2026 15:24:58 -0700
+From: Tony Nguyen <anthony.l.nguyen@intel.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@kernel.org,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org
+Cc: Ding Meng <meng.ding@siemens.com>,
+	anthony.l.nguyen@intel.com,
+	florian.bezdeka@siemens.com,
+	p@1g4.org,
+	tkusters@aweta.nl,
+	jiayuan.chen@linux.dev,
+	pulehui@huawei.com,
+	vinicius.gomes@intel.com,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	richardcochran@gmail.com,
+	dima.ruinskiy@intel.com,
+	stable@vger.kernel.org,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Piotr Kwapulinski <piotr.kwapulinski@intel.com>
+Subject: [PATCH net 1/6] igc: Fix RX HW timestamp reporting when NET_RX_BUSY_POLL is disabled
+Date: Thu,  1 Oct 2026 15:24:34 -0700
+Message-ID: <20261001222443.3500206-2-anthony.l.nguyen@intel.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20261001222443.3500206-1-anthony.l.nguyen@intel.com>
+References: <20261001222443.3500206-1-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|CYYPR10MB7567:EE_
-X-MS-Office365-Filtering-Correlation-Id: 15014ee8-2c1b-4784-be27-08df2002188a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|23010399003|10067099003|56012099006|6133799003|4143699003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	H/JPVUTlWgLUPjK6n6aPJSWdaeavms97O4ixc6Tz0WqytWR/rJehWOEYCfATQufpRdIRMY90C+0fzeCtMgfONsyTKSdfZkeHKSeVH8tX2Q70N3iccmvW4PQgCbsrDanpocPaj0RYyEqX3LoejRmdnqUyfEADqGU/nknxIAIuuRAELAwwj2woVE4lLaOTdQPAzeXzSUFWRUGX7xUk5pgO0xAjgF9zeL9QPUUZApL3HMOpnmrIdVx0vGkBHRr8TgKa4xZjLsWHYDvZDMeXqd3WHdqxSeEjIQhhk6GLs8yz+fNUxilsPWEbtv4Cv2Mu/lwmI/K0e3ve+r//Dq+vigL3vH1qu7h8GxfAoMKTL9FNg5thVdmrmKPKzNL8lGgeyjnZ5vwyvGdSKkC6EcFZFlfJzJr8n1or7l2TknHSqE5QQZQxFN9SMxgVzguhOQOJWA/D9J/bFCtouMgw3kZ2MQSW9nAC4OWI99eWUEr1gqgJK3LN6X0sKeHoqbXh4SzCzbNsYR94EpZ/Sn2f0ynFFBubH+r4bO8RJQoKG3T3/EXMNhXitzTL+4tFdlUBkqJXTLFlr3s4rmtUzRWe/l0bYfrBdkW6FsvsjKca0uswGNjCSzpGtFhzAXLyfs8Yuvpy5ZlVLDAbBLcOIl9ENmLAMriMwahBQeyIkhmXK+8w2q3RAqE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(23010399003)(10067099003)(56012099006)(6133799003)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UDFIZkdyRGowaDdoZThNTmwwa1l0RnlBWHQ5MTIwTm4rWEQvZzVzdGtiSnJN?=
- =?utf-8?B?S2R6d0JCc0JlRm1xcXJrYmdwdG4yQVliU09JdVhiZUt1dnV1Tzl1cXBXMXpH?=
- =?utf-8?B?SmRPOEpTd3lwVGU0cVhsei9BZnpVZmUyaC9qSmc4bmRGbllDN1RFbWtZKy9T?=
- =?utf-8?B?ZUFhaFA1Q3Nsay90YlppaUhlVy82TjNqcElDUTczSHlURlFLTTVMODFqd2Zt?=
- =?utf-8?B?c0NCZDlPeDBlVzI5NVVFUnAwUTFCQXBrWk1seVdzdlJEV05JQVJVa1NTc1Fu?=
- =?utf-8?B?dXp2eXBXWW1tbVJyUnpLVDRZK3BRR0FTaXkzMmZFTVNMTHNOckFIMFI4RUNu?=
- =?utf-8?B?NkdwQlN1YUxOMnhkbTN5YVh0NW5kZ1hOMzgvNmZ5Zm1yb3YyTDFRL25qaklZ?=
- =?utf-8?B?NHh6TWVmdXBodEZPQTduWE9EWVJTRGJJWnBYZkJ3OWZSWFJtcjc1bGxjRkU4?=
- =?utf-8?B?a2hiR2Jzb3BhdDY4dTBrby9YKzRyMDFkS2k2ZEZXVHg3UkIyZGt2NDVwMHVi?=
- =?utf-8?B?SXQxMTA4UEZvVVFiZFFJSTl4OGJhNnI2Rk9DVlR6S0dOOXdxaWRVM3plaHJB?=
- =?utf-8?B?UkZzK1Fxcno5MWlXdUNoM1l2Tk9mUUNkRHN5L09NK0RhcjdNc0FLWVhHbkUw?=
- =?utf-8?B?WkV4dmdub0ZzRVh0NUE1TStFUGZNbk5TVk83RWZwN0tWWERLSTlwYXFGeEdv?=
- =?utf-8?B?Qmhib1hyQnVaMXFWTGZwL3FxQWl1VExtYUVUL2FmYkFJWFcvTzh6V0VpN1Bw?=
- =?utf-8?B?SFBhTGk5bGduSWtOYk5QdnB5MEg3aG83bzUraWFpaFNhYUlrVFpEWlFlMFdW?=
- =?utf-8?B?Y3JlUHBkcmU4aG9POGNjbEJOeEJISnduZFFodnIwU3EwdWtydmVOMG0yNXVz?=
- =?utf-8?B?VVVwNUROWVZEU0s0OXgxT3dlTFJxT0NKZVRYZWZlYnA1aTFjaGtsdTFqTExv?=
- =?utf-8?B?dmJFWjlzcFRzSDhGZjJLTXF1NkM1djd3NFZ1S0locVhOS21yTUlydmVZWG9I?=
- =?utf-8?B?MWRvSU52VmIvSldTaFMwYWhNU1oxZDdDMmM2YWFJVm1MQWVQNVFXQ05SZmJX?=
- =?utf-8?B?RWh5VzliU2s5dFlvSURYQkJhOVZzV0xPUDY0bmU4WmpUK2dSdXFjVWFjZ2lX?=
- =?utf-8?B?QytPWWROYU0rZmhYaldGNlFhODQ3TERBdVQzZjBvM1JjYjNhZW5mM2RLbEJI?=
- =?utf-8?B?YjBqQ3N1WnZRYzBweFV4eGdWRFlTb3RQblRRVDZ0TzFaYUhDOEZYNStzczdW?=
- =?utf-8?B?T1ZmRndxekFNVDhvaWFNTTRwYUhFaDJaS2twcWNoRUV3SFpKb0R3UTN0NVpS?=
- =?utf-8?B?UXNxWVRwR1NmZkxQS3dBemMxUHgwRy9PQUZMOCtFaFY4MFN3ZHZmQStGSlZE?=
- =?utf-8?B?T2lBNlNQemI2enlNRXJ2V1ZoZ3M0OGtnQjljbFQzcUo1VDJiNE1xVmZncGlQ?=
- =?utf-8?B?QXBYeEtLK1ZnNjJha0lwdnpRZDFQcHNSMXJWc0hnaS9SZ2RiSzZnb0dSeFNT?=
- =?utf-8?B?ODh4WVFGcHdJbnBhQUxyMGFxMnpEaUQ4dTY1aktlN2xpTG92bGlEQk43bm1y?=
- =?utf-8?B?cHBhOGRlSjJmVGRIM3dnLyt5OFdmQUF5YXJXa2F3SjdpZ052YkRJSVRlTzZG?=
- =?utf-8?B?UDZmcXR6Rm5DQ3d1TDdhVnpUN3VCRDkrdkdYR0pMcGFiM0RJdWVYZFIrSEUw?=
- =?utf-8?B?d3VsTFlJRUxHVFdhVFJBWVNMZmtybWFvWWdHL3M2dzE0RVBTV3IxemFUNmx5?=
- =?utf-8?B?RGRyR0Jrd0JmMVlocVhoYjgwLzExZmxvUlNYYUU4Nnp1UHZWem1SWWZMS2xn?=
- =?utf-8?B?STZ3cSs5N1ZvbHlzUFc2V3JJN2hlVzhNZjFmSk5JQVZ6U0VkcUpoVnU4L1ho?=
- =?utf-8?B?bkhzQUJlYnMzUzNMK2dIWGp0QXFOend3b0R5SjcyZFBrMnRCTmxjRkFzNUhP?=
- =?utf-8?B?OHZYOU9JRlZEOXJITUh5NHdtNERjWUpaclB3dGs2QUx5T3VCSnJVNUhVanJI?=
- =?utf-8?B?aEh2SDJGRERjYktPWlJNazJ5V09YRE5PUWZuRkRBeGdsK0U5NlAzcjNIRjdJ?=
- =?utf-8?B?eWl1VG1sTHVnTThiTm53ZXQ4Nmc2L09sZVJXOWpBbzM4K1ZuT3hoODNEemg5?=
- =?utf-8?B?RGg1VHZlYU1vWGFkMG5iYnQ3MWFjSzQ4ZzZ2MjVjS2FNQ2Q2RDNEcnUzREVJ?=
- =?utf-8?B?YUs0NHplL0t6QUp3bC9odmlRZjFVZnd3OUdjdnlYVjhMb1RwTGdpekpOSHBi?=
- =?utf-8?B?UExVY09DclMrMEdacjBveFFMNzhkSWU0ZlRDVmNURStyN1NLdGNvMUxUY2hC?=
- =?utf-8?B?cG1XTFl4U2FjMnNOK0h2Yy9Ed2oxMmg3dDRwS25BZEtpVWVqVWlLQT09?=
-X-Exchange-RoutingPolicyChecked:
-	VujIeBDfJhbfcWDCGKxZsI6VEi9xKtsgB0xk+Yw/piuaF0jwsEtdJGeeM7dOOzjreB/lSlBwScI6icWvr7RdFrsUvObupPjIAU01Pxnv5NZ6vTq4b3BzqaoGyOPiaDRTyBdnv6MC+w6Qi/pahKl8NxjSHA1H1y0agxIzMzh81mNI9Q4FGzVBCIyHrcgHdBNyRj9Jj+60wyPhn5fDqF46f+kT1C2k+1G5j8hPV6H7g9E3GQqP/7zsSkXx5TGj59lbSac0JB/sVb5Zq/rWTPjn+upHK0wjOUAly81Ae1iUhmRXrfGedwDl4wfxuo0aCDcvk549xZFSpQz+i8A0vKzUyw==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	ON52WVUf+00lzGPtUOp/CpDGQhj27l0fqIs5HxEg4TgutHTbuTOvbW0FhAtJZgML2NvHNOgeg2/5KrrDEkoeIPJC1TDakydjqhdKUHtdQy5HAozkA7WTx7PU0Y3lIZH2Zxdl4MwPQHjXRONsHR35dmkQa/8u76WdYMo/p+aWFYy9jfztf1Z0QG8SwhQ4MhLtq/4Ncr40yc+ZN/RyYBoFAUTCmiVNq5hyGAmFIev/s7S3WNVRqT0hFiwTWB/MzZsiE8M3XmSYITSHZXazDR8QCinvEj+dlbp/tXbC3gSQox8Oqxazx1mj7u8y+zSKD2PG/J/ejLOlASmhzhP6EbOXVQ3ps9dwL0am3EFuDsD0Mjbg1gBhhu2PdxpL4tn/31TrQslFfhfe9+e6kBHxq+p5lKX65DP6VanL6zKnaSkdbUK/np2KjnZ2NVATg/Qf+hUAwEvRoHOi27K4SpvGBGRl5ztQ7c5yaEZRaaqpCInlTUBEd25+S4Rwnv2ce7Lja4cqZ2k0YeAuHtr0G89SZrYyEn+/8B1wmooWv0DDTRhKZYDuEaHYtu5kh9B9nACwrUETMxm5ZMDr9bi7AXq/Ufcsk0o2Ed7xaWsNiLIkq55l3tc=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15014ee8-2c1b-4784-be27-08df2002188a
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2026 21:22:28.5171
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GRS406ybFCu3l1HbPf3pOsrXrjlVIMD4mym0fs3TdIC7zLhIMzGbuCCOLBGXxzLQGfuJ3U70Kku5N94T9ukI/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR10MB7567
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-01_04,2026-10-01_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- mlxlogscore=999 lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0
- mlxscore=0 spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2609040000 definitions=main-2610010085
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAxMDA4NSBTYWx0ZWRfX3EiiBIUzthCl
- 8OuqasA9j7tDWfHZNNIeOD++yktjbzj1uXK8wrIh1fpYurZKSIH76iiVeoTE54OrQhGB1coeMas
- txwcD+dD5NsyPclduP6gTTqwhCLPgxgcPjdFDHVGzTTxeFYojdc/
-X-Authority-Analysis: v=2.4 cv=W9itxhWk c=1 sm=1 tr=0 ts=6abecf19 b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=660iZSQnnn4A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8
- a=yPCof4ZbAAAA:8 a=EF3nloG_pG0KPm-6790A:9 a=QEXdDO2ut3YA:10
- a=WmVTiCyuxqgg3mnwYu6p:22
-X-Proofpoint-GUID: qLlEsskaYxguxXxucTkKVKCAUpEtlGQx
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAxMDA4NSBTYWx0ZWRfX6Saq5L7mIzQZ
- ffrTgkcZyxQqW9PRrODkjS+ISY9/H8GhA9NqhWxtX6kxwkxLxM9OZ50VfaxJmNsX7WtNGAg5dzo
- krqZG6UE0fbx5O+Ms87iEAw1J0bJeEdxeDv8OqHG7665sHiQSAfEAI6xCcgkeInf5VgBckX6uZJ
- +AD1E/17VSsp3S++I1IsjqYmGjE08Uf7nP4feOtjw4kvCYmblQ94rp7+p81/jo673Nak7CKXT6I
- UwKxhucQ3ZO+Tos2zsboDr6XQ5GQnRFFYv6grAZUZ9XrUs1b2kaMihspC5acrf43+QnSkfpW5Ax
- 17vj6UQz7HrY7/7MPEKwGDSlkDgW6rohkEGgWGclBmLfyo8WolALjgsxyeeC0gzJHKO/5/KqFFQ
- ck2UMYdPyFC+5LQARVxYj4bHgm3E94EqP0QiUrt3mZDEF0niQAImkpQ6xOHazLm/dVEPOYkAvQn
- IVPq87I2nrKoLCVG01w==
-X-Proofpoint-ORIG-GUID: qLlEsskaYxguxXxucTkKVKCAUpEtlGQx
+Content-Transfer-Encoding: 8bit
 
-On 30/09/2026 20:31, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> Check that BTF with a static function that has an argument without a name
-> is loaded.
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+From: Ding Meng <meng.ding@siemens.com>
 
-Nit: a few extra comments for readability would be no harm (see below), and
-it might be useful to add a global function with a vararg parameter (signalled
-by a proto parameter with type id 0), since that allows an empty name too.
+When CONFIG_NET_RX_BUSY_POLL is deactivated, fetching RX HW timestamps
+from the NIC no longer works as expected, often resulting in incorrect
+or negative values such as "HW raw -121948.050407424".
 
+This occurs because disabling CONFIG_NET_RX_BUSY_POLL disables the
+SKB NAPI mapping in __skb_mark_napi_id(). Consequently, get_timestamp()
+fails to perform its driver lookup, and the igc driver's struct
+net_device_ops::ndo_get_tstamp is never invoked.
 
-Acked-by: Alan Maguire <alan.maguire@oracle.com>
+Instead, get_timestamp() falls back to use shhwtstamps(skb)->hwtstamp,
+a field that the driver has not populated. This results in incorrect
+timestamps.
 
-> ---
->  tools/testing/selftests/bpf/prog_tests/btf.c | 24 ++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-> index 21fdeeb23405..751cb14c1949 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-> @@ -2819,6 +2819,30 @@ static struct btf_raw_test raw_tests[] = {
->  	.err_str = "Invalid arg#2",
->  },
->  
-> +{
-> +	.descr = "func (Some arg of static func has no name)",
-> +	.raw_types = {
+Fix this by populating the hwtstamp field with the correct timestamp
+in the default timer when CONFIG_NET_RX_BUSY_POLL is disabled.
+The "igc_adapter" is passed to igc_construct_skb() to enable
+igc_ptp_rx_pktstamp() to access the necessary adapter details for
+adjusting the timestamp.
 
-		/* int */
-> +		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-		/* unsigned int */
-> +		BTF_TYPE_INT_ENC(0, 0, 0, 32, 4),		/* [2] */
-> +		/* void (*)(int a, unsigned int) */
-> +		BTF_FUNC_PROTO_ENC(0, 2),			/* [3] */
-> +			BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
-> +			BTF_FUNC_PROTO_ARG_ENC(0, 2),
-> +		/* static void func(int a, unsigned int) */
-> +		BTF_FUNC_ENC(NAME_TBD, 3),			/* [4] */
-> +		BTF_END_RAW,
-> +	},
-> +	.str_sec = "\0a\0func",
-> +	.str_sec_size = sizeof("\0a\0func"),
-> +	.map_type = BPF_MAP_TYPE_ARRAY,
-> +	.map_name = "func_type_check_btf",
-> +	.key_size = sizeof(int),
-> +	.value_size = sizeof(int),
-> +	.key_type_id = 1,
-> +	.value_type_id = 1,
-> +	.max_entries = 4,
-> +},
-> +
->  {
->  	.descr = "func (Non zero vlen)",
->  	.raw_types = {
+Test case:
+ Disable CONFIG_NET_RX_BUSY_POLL.
+ Sender:
+ # tools/testing/selftests/net/timestamping en0 \
+        SOF_TIMESTAMPING_TX_HARDWARE PTPV2 IP_MULTICAST_LOOP
+ Receiver:
+ # tools/testing/selftests/net/timestamping en0 \
+        SOF_TIMESTAMPING_RX_HARDWARE SOF_TIMESTAMPING_RAW_HARDWARE PTPV2
+
+Before patch, receiver prints
+ HW raw -121948.050407424
+After patch, receiver prints
+ HW raw 1760648763.746974064
+
+Fixes: 069b142f5819 ("igc: Add support for PTP .getcyclesx64()")
+Cc: stable@vger.kernel.org
+Co-developed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
+Signed-off-by: Florian Bezdeka <florian.bezdeka@siemens.com>
+Signed-off-by: Ding Meng <meng.ding@siemens.com>
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Reviewed-by: Piotr Kwapulinski <piotr.kwapulinski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+ drivers/net/ethernet/intel/igc/igc_main.c | 41 ++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 1fb5f3cbe93c..95f7747b347b 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -1989,7 +1989,29 @@ static struct sk_buff *igc_build_skb(struct igc_ring *rx_ring,
+ 	return skb;
+ }
+ 
+-static struct sk_buff *igc_construct_skb(struct igc_ring *rx_ring,
++static void igc_construct_skb_timestamps(struct igc_adapter *adapter,
++					 struct sk_buff *skb,
++					 struct igc_xdp_buff *ctx)
++{
++#ifndef CONFIG_NET_RX_BUSY_POLL
++	struct igc_inline_rx_tstamps *tstamps;
++#endif
++
++	if (!ctx->rx_ts)
++		return;
++
++#ifndef CONFIG_NET_RX_BUSY_POLL
++	tstamps = ctx->rx_ts;
++	skb_hwtstamps(skb)->hwtstamp = igc_ptp_rx_pktstamp(adapter,
++							   tstamps->timer0);
++#else
++	skb_shinfo(skb)->tx_flags |= SKBTX_HW_TSTAMP_NETDEV;
++	skb_hwtstamps(skb)->netdev_data = ctx->rx_ts;
++#endif
++}
++
++static struct sk_buff *igc_construct_skb(struct igc_adapter *adapter,
++					 struct igc_ring *rx_ring,
+ 					 struct igc_rx_buffer *rx_buffer,
+ 					 struct igc_xdp_buff *ctx)
+ {
+@@ -2010,10 +2032,7 @@ static struct sk_buff *igc_construct_skb(struct igc_ring *rx_ring,
+ 	if (unlikely(!skb))
+ 		return NULL;
+ 
+-	if (ctx->rx_ts) {
+-		skb_shinfo(skb)->tx_flags |= SKBTX_HW_TSTAMP_NETDEV;
+-		skb_hwtstamps(skb)->netdev_data = ctx->rx_ts;
+-	}
++	igc_construct_skb_timestamps(adapter, skb, ctx);
+ 
+ 	/* Determine available headroom for copy */
+ 	headlen = size;
+@@ -2683,7 +2702,7 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
+ 		else if (ring_uses_build_skb(rx_ring))
+ 			skb = igc_build_skb(rx_ring, rx_buffer, &ctx.xdp);
+ 		else
+-			skb = igc_construct_skb(rx_ring, rx_buffer, &ctx);
++			skb = igc_construct_skb(adapter, rx_ring, rx_buffer, &ctx);
+ 
+ 		/* exit if we failed to retrieve a buffer */
+ 		if (!xdp_res && !skb) {
+@@ -2735,7 +2754,8 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
+ 	return total_packets;
+ }
+ 
+-static struct sk_buff *igc_construct_skb_zc(struct igc_ring *ring,
++static struct sk_buff *igc_construct_skb_zc(struct igc_adapter *adapter,
++					    struct igc_ring *ring,
+ 					    struct igc_xdp_buff *ctx)
+ {
+ 	struct xdp_buff *xdp = &ctx->xdp;
+@@ -2757,10 +2777,7 @@ static struct sk_buff *igc_construct_skb_zc(struct igc_ring *ring,
+ 		__skb_pull(skb, metasize);
+ 	}
+ 
+-	if (ctx->rx_ts) {
+-		skb_shinfo(skb)->tx_flags |= SKBTX_HW_TSTAMP_NETDEV;
+-		skb_hwtstamps(skb)->netdev_data = ctx->rx_ts;
+-	}
++	igc_construct_skb_timestamps(adapter, skb, ctx);
+ 
+ 	return skb;
+ }
+@@ -2772,7 +2789,7 @@ static void igc_dispatch_skb_zc(struct igc_q_vector *q_vector,
+ 	struct igc_ring *ring = q_vector->rx.ring;
+ 	struct sk_buff *skb;
+ 
+-	skb = igc_construct_skb_zc(ring, ctx);
++	skb = igc_construct_skb_zc(q_vector->adapter, ring, ctx);
+ 	if (!skb) {
+ 		ring->rx_stats.alloc_failed++;
+ 		set_bit(IGC_RING_FLAG_RX_ALLOC_FAILED, &ring->flags);
+-- 
+2.47.1
 
