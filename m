@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4142749A3D6
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 13:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8B34BE442
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 13:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790861530; cv=none; b=MDdsTBVCfe2NLn1bpFn68Ru5iGXTTYezblzpqK25sMtYfRz3UqnI81uJNjzqjQ1cIVOcijSaHZc1f/+b/XxAFqjFTgiLSLV6BoUafT/5cSbvptIy5gNo6Q0Cazqy7P5nPPHJjDJHWf1c40sAdpRv+GLdqdRRK4HI2V+FQSlUBao=
+	t=1790861531; cv=none; b=JDXRdx1E7qe4MuU6FK/bCQPu9qhDY+Gg0MMBuhhaN1r4nGK8yO42z9jGXuBXWfvPDuqvc/gwaZj0rOjieFTIwoMcrBontaXRbSbkB7GjRI7gaUY6FEI4JCKOiF5tu8LnZosA6Gi2SGeWRd0Fbgu3mKTQi59TXq9q40G5Uy4htm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790861530; c=relaxed/simple;
-	bh=5YC5SFhp8V8x6VedGaDVXH363EYoiqdL0f4nDeBwz/k=;
+	s=arc-20240116; t=1790861531; c=relaxed/simple;
+	bh=NiyrcRi1C7cZO/SXIeOC/pDghuLKf/UvDyuzph4dvFI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M/POlwqaQ5SN96MzyLYSpGsR+z5wTvKFqxXTWbikUjmGBuRHaKAFmEcKCh+4WWmCbJVw3r2E6cPKaJMJawMhdI84aQZolsllRh0lEw/aDDLbGFnEehzqvyYTj3/bwdDZOPNXXBtNt2XS7jN9M2PXY8uM9uOMdiOydL9m3hbRf+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=QirCqu23VgoFqgUObsXogqU5952Ilo2TXf3Lk/nrHemMyf9V5i6njgzl4DypB871hfvkSusDMzcpxwirFzqYWYJjnhksmZU1tByT07JU3KeTcAwTPEpzfVbbjlMcuyGjd1NN2mZK6hbdZAkKsUHPLHob5V8uKXh/D5I0v3r22qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 4C4D72E6E12B99; Thu,  1 Oct 2026 06:31:51 -0700 (PDT)
+	id 86C9B2E6E12BEE; Thu,  1 Oct 2026 06:32:01 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v8 20/22] selftests/bpf: Add __set_global() and __ret_global() test tags
-Date: Thu,  1 Oct 2026 06:31:51 -0700
-Message-ID: <20261001133151.1346286-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v8 22/22] selftests/bpf: Load an exception cleanup program from a light skeleton
+Date: Thu,  1 Oct 2026 06:32:01 -0700
+Message-ID: <20261001133201.1347206-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261001133006.1335369-1-yonghong.song@linux.dev>
 References: <20261001133006.1335369-1-yonghong.song@linux.dev>
@@ -37,502 +37,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A test that has to look at a program's state after it ran needs a driver =
-of
-its own: open and load a skeleton, set an input, call
-bpf_prog_test_run_opts(), read a variable back, destroy the skeleton. The
-loader already does all of that for __retval(), and the only thing missin=
-g
-is reaching the program's globals.
+For a light skeleton, libbpf hands the records to bpf_gen__prog_load(),
+which writes them into a blob and emits a loader program that issues
+BPF_PROG_LOAD from inside the kernel. Nothing about that is shared with t=
+he
+ordinary path: the attr is built field by field, and the kfunc names are
+resolved by the loader program when it runs.
 
-__set_global(var, value) writes one before the run and __ret_global(var,
-value) checks one after it, and both make the loader run the program and
-check its return value; without __retval(), the program must return 0. Ea=
-ch
-tag may be given more than once, for a test with more than one input or
-more than one thing to look at afterwards; past MAX_GLOBAL_VARS a tag is
-refused rather than quietly replacing the one before it.
+So build progs/exceptions_cleanup.c as a light skeleton too, and run
+the case where foo3 unwinds through it, which runs every pad. Its table
+has several records, all inside subprograms: a table that loses some, or
+lays them out at the wrong stride, does not load, and one whose offsets
+come out wrong runs the wrong pads, which pads_ran shows.
 
-The variable is found the way veristat finds one: the map libbpf made for
-the ".bss" or ".data" section, looked up by that section name, the datase=
-c
-of the same name in the object's BTF, then the variable within it. Four
-and eight byte variables are supported, which is what a counter or a
-bitmask needs; anything else is refused rather than read at the wrong
-width.
-
-A value is held to the range its variable can represent, signedness taken
-from the BTF the way veristat's set_global_var() does, and narrowed to
-what is stored. Both tags use the one rule, so a negative literal means
-the same to each: without it __ret_global(err, -22) on an int could never
-match, the tag parsing 64 bits while the read gave back 32. Unlike
-veristat this takes no enum names and runs native-endian only.
-
-The value may be a '|' separated list of terms, so that a bitmask reads i=
-n
-the test the way it is written in the program.
-
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h |  12 +
- tools/testing/selftests/bpf/test_loader.c    | 319 ++++++++++++++++++-
- 2 files changed, 330 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile.skel     |  2 +-
+ .../bpf/prog_tests/exceptions_cleanup.c       | 31 +++++++++++++++++++
+ 2 files changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
-/selftests/bpf/progs/bpf_misc.h
-index f3dbc3b59bff..a80798a8f28f 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -103,6 +103,16 @@
-  *                   - POINTER_VALUE
-  *                   - TEST_DATA_LEN
-  * __retval_unpriv   Same, but load program in unprivileged mode.
-+ * __set_global      Set a global variable of the program to a value bef=
-ore
-+ *                   executing it. The variable has to be an int or an e=
-num,
-+ *                   live in .bss or .data and be four or eight bytes wi=
-de,
-+ *                   and the value is a number or several joined by '|',
-+ *                   without parentheses.
-+ * __ret_global      Execute the program and check that a global variabl=
-e
-+ *                   holds the given value afterwards, under the same ru=
-les.
-+ *                   __set_global and __ret_global both make the loader =
-run
-+ *                   the program and check its return value; without
-+ *                   __retval, the program must return 0.
-  *
-  * __description     Text to be used for display and as an additional fi=
-lter
-  *                   alias, while the original program name stays matcha=
-ble.
-@@ -161,6 +171,8 @@
- #define __flag(flag)		__test_tag("test_prog_flags=3D" #flag)
- #define __retval(val)		__test_tag("test_retval=3D" XSTR(val))
- #define __retval_unpriv(val)	__test_tag("test_retval_unpriv=3D" XSTR(val=
-))
-+#define __set_global(var, val)	__test_tag("test_global_set=3D" #var ":" =
-XSTR(val))
-+#define __ret_global(var, val)	__test_tag("test_global_ret=3D" #var ":" =
-XSTR(val))
- #define __auxiliary		__test_tag("test_auxiliary")
- #define __auxiliary_unpriv	__test_tag("test_auxiliary_unpriv")
- #define __btf_path(path)	__test_tag("test_btf_path=3D" path)
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
-lftests/bpf/test_loader.c
-index 25eeb1c1248b..0ff89912e6f1 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -50,6 +50,13 @@ enum stack_mode {
- 	SMALL_STACK	=3D 1 << 1,
- };
+diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/se=
+lftests/bpf/Makefile.skel
+index 2e22bb901bf3..76cd4561dd7a 100644
+--- a/tools/testing/selftests/bpf/Makefile.skel
++++ b/tools/testing/selftests/bpf/Makefile.skel
+@@ -39,7 +39,7 @@ LSKELS_SIGNED :=3D fentry_test.c fexit_test.c atomics.c
 =20
-+#define MAX_GLOBAL_VARS 8
-+
-+struct global_var {
-+	char *name;
-+	__u64 val;
-+};
-+
- struct test_subspec {
- 	char *name;
- 	char *description;
-@@ -62,6 +69,10 @@ struct test_subspec {
- 	int retval;
- 	bool execute;
- 	__u64 caps;
-+	struct global_var set_globals[MAX_GLOBAL_VARS];
-+	int set_global_cnt;
-+	struct global_var ret_globals[MAX_GLOBAL_VARS];
-+	int ret_global_cnt;
- };
+ # Generate both light skeleton and libbpf skeleton for these
+ LSKELS_EXTRA :=3D test_ksyms_module.c test_ksyms_weak.c kfunc_call_test.=
+c \
+-	kfunc_call_test_subprog.c test_global_percpu_data.c
++	kfunc_call_test_subprog.c test_global_percpu_data.c exceptions_cleanup.=
+c
+ SKEL_BLACKLIST +=3D $(LSKELS) $(LSKELS_SIGNED)
 =20
- struct test_spec {
-@@ -115,6 +126,34 @@ void free_msgs(struct expected_msgs *msgs)
- 	msgs->cnt =3D 0;
+ test_static_linked.skel.h-deps :=3D test_static_linked1.bpf.o test_stati=
+c_linked2.bpf.o
+diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
+b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+index c06ec10359b9..bb2bb8976fd9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
++++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+@@ -5,6 +5,7 @@
+ #include "exceptions_cleanup.skel.h"
+ #include "exceptions_cleanup_fail.skel.h"
+ #include "exceptions_cleanup_shapes.skel.h"
++#include "exceptions_cleanup.lskel.h"
+=20
+ /* foo3 unwound: every frame that has a pad ran it. */
+ #define PADS_FOO3_UNWOUND \
+@@ -37,6 +38,33 @@ static void run(struct exceptions_cleanup *skel, __u64=
+ input, __u32 retval,
+ 	ASSERT_EQ(skel->bss->pads_ran, pads | RAN_BUMP, "pads_ran");
  }
 =20
-+static void free_global_vars(struct global_var *vars, int *cnt)
++static void test_light_skeleton(void)
 +{
-+	int i;
++	struct exceptions_cleanup_lskel *skel;
++	__u64 ctx =3D 0;
++	int err;
 +
-+	for (i =3D 0; i < *cnt; i++) {
-+		free(vars[i].name);
-+		vars[i].name =3D NULL;
-+	}
-+	*cnt =3D 0;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		    .ctx_in =3D &ctx,
++		    .ctx_size_in =3D sizeof(ctx),
++	);
++
++	skel =3D exceptions_cleanup_lskel__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "light open_and_load"))
++		return;
++
++	/* foo3 unwinds, so every pad runs: the whole table has to arrive. */
++	skel->bss->input =3D 101;
++	err =3D bpf_prog_test_run_opts(skel->progs.entry.prog_fd, &topts);
++	if (!ASSERT_OK(err, "run"))
++		goto out;
++	ASSERT_EQ(topts.retval, 0, "retval");
++	ASSERT_EQ(skel->bss->pads_ran, PADS_FOO3_UNWOUND | RAN_BUMP,
++		  "pads_ran");
++out:
++	exceptions_cleanup_lskel__destroy(skel);
 +}
 +
-+static int clone_global_vars(struct global_var *dst, int *dst_cnt,
-+			     const struct global_var *src, int src_cnt)
-+{
-+	int i;
-+
-+	for (i =3D 0; i < src_cnt; i++) {
-+		dst[i].name =3D strdup(src[i].name);
-+		if (!dst[i].name) {
-+			free_global_vars(dst, dst_cnt);
-+			return -ENOMEM;
-+		}
-+		dst[i].val =3D src[i].val;
-+		(*dst_cnt)++;
-+	}
-+	return 0;
-+}
-+
- static void free_test_spec(struct test_spec *spec)
+ void test_exceptions_cleanup(void)
  {
- 	/* Deallocate expect_msgs arrays. */
-@@ -129,6 +168,11 @@ static void free_test_spec(struct test_spec *spec)
- 	free_msgs(&spec->unpriv.stdout);
- 	free_msgs(&spec->priv.stdout);
+ 	char log[8192] =3D {};
+@@ -82,6 +110,9 @@ void test_exceptions_cleanup(void)
 =20
-+	free_global_vars(spec->priv.set_globals, &spec->priv.set_global_cnt);
-+	free_global_vars(spec->priv.ret_globals, &spec->priv.ret_global_cnt);
-+	free_global_vars(spec->unpriv.set_globals, &spec->unpriv.set_global_cnt=
-);
-+	free_global_vars(spec->unpriv.ret_globals, &spec->unpriv.ret_global_cnt=
-);
+ 	exceptions_cleanup__destroy(skel);
+=20
++	if (test__start_subtest("light_skeleton"))
++		test_light_skeleton();
 +
- 	free(spec->priv.name);
- 	free(spec->priv.description);
- 	free(spec->unpriv.name);
-@@ -311,6 +355,236 @@ static int parse_caps(const char *str, __u64 *val, =
-const char *name)
- 	return 0;
+ 	RUN_TESTS(exceptions_cleanup_fail);
+ 	RUN_TESTS(exceptions_cleanup_shapes);
  }
-=20
-+static int parse_global_var(const char *str, struct global_var *vars, in=
-t *cnt,
-+			    const char *name)
-+{
-+	const char *colon =3D strrchr(str, ':');
-+	struct global_var *var;
-+	char *end;
-+	__u64 *val;
-+
-+	if (!colon || colon =3D=3D str) {
-+		PRINT_FAIL("expecting '<variable>:<value>' for %s, got '%s'\n", name, =
-str);
-+		return -EINVAL;
-+	}
-+	if (*cnt >=3D MAX_GLOBAL_VARS) {
-+		PRINT_FAIL("too many %s tags, at most %d are supported\n",
-+			   name, MAX_GLOBAL_VARS);
-+		return -E2BIG;
-+	}
-+
-+	var =3D &vars[*cnt];
-+	val =3D &var->val;
-+	*val =3D 0;
-+	for (const char *term =3D colon + 1;;) {
-+		__u64 v;
-+
-+		errno =3D 0;
-+		v =3D strtoull(term, &end, 0);
-+		if (errno || end =3D=3D term) {
-+			PRINT_FAIL("failed to parse %s value '%s'\n", name, colon + 1);
-+			return -EINVAL;
-+		}
-+		*val |=3D v;
-+		while (*end =3D=3D ' ')
-+			end++;
-+		if (!*end)
-+			break;
-+		if (*end !=3D '|') {
-+			PRINT_FAIL("failed to parse %s value '%s'\n", name, colon + 1);
-+			return -EINVAL;
-+		}
-+		term =3D end + 1;
-+	}
-+
-+	var->name =3D strndup(str, colon - str);
-+	if (!var->name) {
-+		PRINT_FAIL("failed to allocate %s variable name\n", name);
-+		return -ENOMEM;
-+	}
-+	(*cnt)++;
-+
-+	return 0;
-+}
-+
-+/* As veristat's is_signed_type(): anything not plainly unsigned is sign=
-ed. */
-+static bool global_var_is_signed(const struct btf_type *t)
-+{
-+	if (btf_is_int(t))
-+		return btf_int_encoding(t) & BTF_INT_SIGNED;
-+	if (btf_is_any_enum(t))
-+		return btf_kflag(t);
-+	return true;
-+}
-+
-+static int find_global_var(struct bpf_object *obj, const char *name,
-+			   struct bpf_map **map, __u32 *off, __u32 *sz,
-+			   bool *is_signed)
-+{
-+	static const char * const secs[] =3D { ".bss", ".data" };
-+	struct btf *btf =3D bpf_object__btf(obj);
-+	int i, s;
-+
-+	if (!btf) {
-+		PRINT_FAIL("no BTF for object\n");
-+		return -ENOENT;
-+	}
-+
-+	for (s =3D 0; s < ARRAY_SIZE(secs); s++) {
-+		const struct btf_type *sec, *vt;
-+		const struct btf_var_secinfo *vsi;
-+		struct bpf_map *m =3D bpf_object__find_map_by_name(obj, secs[s]);
-+		int id;
-+
-+		id =3D btf__find_by_name_kind(btf, secs[s], BTF_KIND_DATASEC);
-+		if (!m || id < 0)
-+			continue;
-+
-+		sec =3D btf__type_by_id(btf, id);
-+		vsi =3D btf_var_secinfos(sec);
-+		for (i =3D 0; i < btf_vlen(sec); i++, vsi++) {
-+			const struct btf_type *var =3D btf__type_by_id(btf, vsi->type);
-+
-+			if (strcmp(btf__name_by_offset(btf, var->name_off), name))
-+				continue;
-+			if (vsi->size !=3D 4 && vsi->size !=3D 8) {
-+				PRINT_FAIL("'%s' is %u bytes, only 4 and 8 are supported\n",
-+					   name, vsi->size);
-+				return -EINVAL;
-+			}
-+			vt =3D btf__type_by_id(btf, btf__resolve_type(btf, var->type));
-+			if (!vt || !(btf_is_int(vt) || btf_is_any_enum(vt))) {
-+				PRINT_FAIL("'%s' is not an int or an enum\n", name);
-+				return -EINVAL;
-+			}
-+			*is_signed =3D global_var_is_signed(vt);
-+			*map =3D m;
-+			*off =3D vsi->offset;
-+			*sz =3D vsi->size;
-+			return 0;
-+		}
-+	}
-+
-+	PRINT_FAIL("no global variable '%s'\n", name);
-+	return -ENOENT;
-+}
-+
-+/*
-+ * A tag's value is parsed as 64 bits, but the variable may be narrower =
-and
-+ * may be signed. Hold it to the range the variable can represent, the w=
-ay
-+ * veristat's set_global_var() does, and narrow it to what is stored.
-+ */
-+static int fit_global_var(const char *name, __u32 sz, bool is_signed, __=
-u64 *val)
-+{
-+	long long v =3D (long long)*val;
-+	long long max_val;
-+	__u32 bits;
-+
-+	if (sz >=3D sizeof(*val))
-+		return 0;
-+	bits =3D sz * 8 - (is_signed ? 1 : 0);
-+	max_val =3D 1ll << bits;
-+	if (v >=3D max_val || v < (is_signed ? -max_val : 0)) {
-+		PRINT_FAIL("value %lld for '%s' is out of range [%lld; %lld]\n",
-+			   v, name, is_signed ? -max_val : 0, max_val - 1);
-+		return -EINVAL;
-+	}
-+	*val =3D (__u32)*val;
-+	return 0;
-+}
-+
-+/* The value of @map's single element, which the caller frees. */
-+static void *global_data(struct bpf_map *map, const char *name, size_t *=
-vsz)
-+{
-+	__u32 zero =3D 0;
-+	void *buf;
-+	int err;
-+
-+	*vsz =3D bpf_map__value_size(map);
-+	buf =3D calloc(1, *vsz);
-+	if (!buf) {
-+		PRINT_FAIL("failed to allocate %zu bytes for '%s'\n", *vsz, name);
-+		return NULL;
-+	}
-+	err =3D bpf_map__lookup_elem(map, &zero, sizeof(zero), buf, *vsz, 0);
-+	if (err) {
-+		PRINT_FAIL("failed to read '%s': %d\n", name, err);
-+		free(buf);
-+		return NULL;
-+	}
-+	return buf;
-+}
-+
-+static int read_global_var(struct bpf_map *map, const char *name, __u32 =
-off,
-+			   __u32 sz, __u64 *val)
-+{
-+	size_t vsz;
-+	void *buf;
-+
-+	buf =3D global_data(map, name, &vsz);
-+	if (!buf)
-+		return -EINVAL;
-+	*val =3D sz =3D=3D 4 ? *(__u32 *)(buf + off) : *(__u64 *)(buf + off);
-+	free(buf);
-+	return 0;
-+}
-+
-+static int write_global_var(struct bpf_map *map, const char *name, __u32=
- off,
-+			    __u32 sz, __u64 val)
-+{
-+	__u32 zero =3D 0;
-+	size_t vsz;
-+	void *buf;
-+	int err;
-+
-+	buf =3D global_data(map, name, &vsz);
-+	if (!buf)
-+		return -EINVAL;
-+	if (sz =3D=3D 4)
-+		*(__u32 *)(buf + off) =3D val;
-+	else
-+		*(__u64 *)(buf + off) =3D val;
-+	err =3D bpf_map__update_elem(map, &zero, sizeof(zero), buf, vsz, 0);
-+	if (err)
-+		PRINT_FAIL("failed to write '%s': %d\n", name, err);
-+	free(buf);
-+	return err;
-+}
-+
-+/* Write a __set_global() value into the program's global variable. */
-+static int set_global_var(struct bpf_object *obj, const struct global_va=
-r *var)
-+{
-+	__u64 val =3D var->val;
-+	struct bpf_map *map;
-+	__u32 off, sz;
-+	bool is_signed;
-+
-+	if (find_global_var(obj, var->name, &map, &off, &sz, &is_signed) ||
-+	    fit_global_var(var->name, sz, is_signed, &val))
-+		return -EINVAL;
-+	return write_global_var(map, var->name, off, sz, val);
-+}
-+
-+/* Check the program's global variable against a __ret_global() value. *=
-/
-+static int check_global_var(struct bpf_object *obj, const struct global_=
-var *var)
-+{
-+	__u64 want =3D var->val, val;
-+	struct bpf_map *map;
-+	__u32 off, sz;
-+	bool is_signed;
-+
-+	if (find_global_var(obj, var->name, &map, &off, &sz, &is_signed) ||
-+	    fit_global_var(var->name, sz, is_signed, &want) ||
-+	    read_global_var(map, var->name, off, sz, &val))
-+		return -EINVAL;
-+	if (val !=3D want) {
-+		PRINT_FAIL("Unexpected %s: 0x%llx !=3D 0x%llx\n", var->name,
-+			   (unsigned long long)val, (unsigned long long)want);
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
- static int parse_retval(const char *str, int *val, const char *name)
- {
- 	/*
-@@ -557,6 +831,22 @@ static int parse_test_spec(struct test_loader *teste=
-r,
- 			spec->mode_mask |=3D UNPRIV;
- 			spec->unpriv.execute =3D true;
- 			has_unpriv_retval =3D true;
-+		} else if ((val =3D str_has_pfx(s, "test_global_set=3D"))) {
-+			err =3D parse_global_var(val, spec->priv.set_globals,
-+					       &spec->priv.set_global_cnt,
-+					       "__set_global");
-+			if (err)
-+				goto cleanup;
-+			spec->priv.execute =3D true;
-+			spec->mode_mask |=3D PRIV;
-+		} else if ((val =3D str_has_pfx(s, "test_global_ret=3D"))) {
-+			err =3D parse_global_var(val, spec->priv.ret_globals,
-+					       &spec->priv.ret_global_cnt,
-+					       "__ret_global");
-+			if (err)
-+				goto cleanup;
-+			spec->priv.execute =3D true;
-+			spec->mode_mask |=3D PRIV;
- 		} else if ((val =3D str_has_pfx(s, "test_log_level=3D"))) {
- 			err =3D parse_int(val, &spec->log_level, "test log level");
- 			if (err)
-@@ -742,6 +1032,23 @@ static int parse_test_spec(struct test_loader *test=
-er,
- 			spec->unpriv.execute =3D spec->priv.execute;
- 		}
-=20
-+		if (spec->priv.set_global_cnt && !spec->unpriv.set_global_cnt) {
-+			err =3D clone_global_vars(spec->unpriv.set_globals,
-+						&spec->unpriv.set_global_cnt,
-+						spec->priv.set_globals,
-+						spec->priv.set_global_cnt);
-+			if (err)
-+				goto cleanup;
-+		}
-+		if (spec->priv.ret_global_cnt && !spec->unpriv.ret_global_cnt) {
-+			err =3D clone_global_vars(spec->unpriv.ret_globals,
-+						&spec->unpriv.ret_global_cnt,
-+						spec->priv.ret_globals,
-+						spec->priv.ret_global_cnt);
-+			if (err)
-+				goto cleanup;
-+		}
-+
- 		if (spec->unpriv.expect_msgs.cnt =3D=3D 0)
- 			clone_msgs(&spec->priv.expect_msgs, &spec->unpriv.expect_msgs);
- 		if (spec->unpriv.expect_xlated.cnt =3D=3D 0)
-@@ -1356,7 +1663,7 @@ void run_subtest(struct test_loader *tester,
- 	struct cap_state caps =3D {};
- 	struct bpf_object *tobj;
- 	struct bpf_map *map;
--	int retval, err, i;
-+	int retval, err, i, j;
- 	int links_cnt =3D 0;
- 	bool should_load;
-=20
-@@ -1532,6 +1839,11 @@ void run_subtest(struct test_loader *tester,
- 			}
- 		}
-=20
-+		for (j =3D 0; j < subspec->set_global_cnt; j++) {
-+			if (set_global_var(tobj, &subspec->set_globals[j]))
-+				goto tobj_cleanup;
-+		}
-+
- 		err =3D do_prog_test_run(bpf_program__fd(tprog), &retval,
- 				       bpf_program__type(tprog) =3D=3D BPF_PROG_TYPE_SYSCALL ? true =
-: false,
- 				       spec->linear_sz);
-@@ -1540,6 +1852,11 @@ void run_subtest(struct test_loader *tester,
- 			goto tobj_cleanup;
- 		}
-=20
-+		for (j =3D 0; j < subspec->ret_global_cnt; j++) {
-+			if (check_global_var(tobj, &subspec->ret_globals[j]))
-+				goto tobj_cleanup;
-+		}
-+
- 		verify_stderr(bpf_program__fd(tprog), &subspec->stderr);
-=20
- 		if (subspec->stdout.cnt) {
 --=20
 2.53.0-Meta
 
