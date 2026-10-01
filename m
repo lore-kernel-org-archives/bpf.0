@@ -1,76 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B076381E89;
-	Thu,  1 Oct 2026 01:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA52B351C1C
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 01:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790816411; cv=none; b=K44QuPXk0Ut+PR/fJWXOB2FODxQeoMkPKOLnBMdbKudn6uvkDy4gLx/hT4x5vbMtpVvRDdEnoAU8OffeeaEfUVZ+1GX0XLs5Ks62GMOY84VWipwCHI/Z5rLJAhc8H8W9FG+Hc4d/4vmLx6/Dk+tA1v2pVwgGCxz5eJhOHiLrlF0=
+	t=1790816455; cv=none; b=X25o38nS74ZXTn7Im0JHDvMXbJeGBmeOVYPAWHgomAf/TBIpN3DOYsweZAQsrBcxyqD4RGE9FdYNclBTbRXmCaDpo2FTsQg0DM2Bx/KuTM+xKyn92P1IPLdnr3m4PhljDSNrx+rXRXOoQhhtDSDgxWK/ePGKXgImJA5d4eITqew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790816411; c=relaxed/simple;
-	bh=OnZnXeWf+ado418TuC58SQwvJbixZa5lXno0AvT51H0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QOHQeusQ2AvNl4EYoZmnLs3aFTA2HMKb+QJbSDztmuoa0hdunY1El6hy7tsBPCB6FPNPJZUOJOee7tULHfBZe5ViVLjPO5lRNQMpftUP3N6DEkMz8Sa+mIHtXxaydK6xYJ7X5ASErqFCcIBX4R0KHOH1HaPdBxJ5zzl7Lk87nVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GURB7chT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790816455; c=relaxed/simple;
+	bh=HaQPNgehEuldW2UhCdxSN+8tT39bgGHcvLRMMFKomVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pkrhf8tT8aSeMN2JGR9brWhkwdTW6Buafs8sIs/rB0EF9umxdLODaPKEbMo/9+PPIHa/VSA+T+tZnjLCZY+sQxIZMd3g4BpWy9wvfK0/jiQRqIa5RCDqslAJEONxruwx+LaUQRTvWnOE/QMX+MilIarhveuNIujynXyW6zm0xUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xShgBlgK; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GURB7chT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449A91F000FF;
-	Thu,  1 Oct 2026 01:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790816410;
-	bh=MvEgfPg1zsyM8W3O4GDR6R2A7Qbc06fKHIO3ddDYRpU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=GURB7chTOJh8Qo02DUuEwY8HjEXsPlWJDTwCNEa2oGo0hry/HByAN0yt94sWEDBIm
-	 I14xZetMq7utoS0VcdNIZBW+v7yWzzqZcOaaobtnkBaWr20Xoj1NsIQtSVzaiBCjsM
-	 BURIJZ3HfGBK7xveVbCjF2D1Td3lyksUs7gQfGsgJ/g97RoVJjre80nlsXAjpC5TDS
-	 QmYuUQWmYBT8RCkzpMo9GG32QrtMwK2kd5wNeoYK6KIhwv/zYaOgjmtoGXhcd9NOuv
-	 UTiYfuAg1EVgkQFShrugQ6eknEm79WzGCs+wE3ji48sdp3bS38NUq6C+e72GmNhtxH
-	 FeLAXMwrCuv0g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A2023AA6A61;
-	Thu,  1 Oct 2026 01:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xShgBlgK"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=HaQPNgehEuldW2UhCdxSN+8tT39bgGHcvLRMMFKomVs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790816448; v=1; x=1791421248;
+ b=xShgBlgKu6+XLjyZu3n6X1OOEztZFWuRNKQvyZnrkQrQuVf523VESG6Y0ZmhL7b+U/UHGC09
+ /vkcndQ/mWan2KqAGYQepSqZF9slE0h9A7W/y3XoFfdT7mNPbRZrKiu9SDvtEviqZJhibdHCnlp
+ Rn6DPhQrny1gA/ouQF0fbcO0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9f96ffee7864c01d;
+	Thu, 01 Oct 2026 01:00:47 +0000
+X-Mizu-Trace-ID: 9f96ffee7864c01d
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 30 Sep 2026 18:00:41 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Tejun Heo <tj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
+	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
+	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
+ struct_ops
+Message-ID: <ar2kvmCPR9q31V8M@linux.dev>
+References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
+ <bda525506b3fb3e61da28a112f28abba@kernel.org>
+ <arw4rjVkm2ob9ioL@linux.dev>
+ <bc6815954b8d08e75deadd43e1a2192c@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net/mlx5e: Fix AF_XDP TX timestamp teardown NULL
- dereference
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179081640877.2197065.2848520357667196654.git-patchwork-notify@kernel.org>
-Date: Thu, 01 Oct 2026 01:00:08 +0000
-References: <20260926165402.5902-1-prathameshdeshpande7@gmail.com>
-In-Reply-To: <20260926165402.5902-1-prathameshdeshpande7@gmail.com>
-To: Prathamesh Deshpande <prathameshdeshpande7@gmail.com>
-Cc: tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org, mbloch@nvidia.com,
- sdf@fomichev.me, netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc6815954b8d08e75deadd43e1a2192c@kernel.org>
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sat, 26 Sep 2026 17:53:57 +0100 you wrote:
-> From: Prathamesh Deshpande <prathameshdeshpande7@gmail.com>
+On Wed, Sep 30, 2026 at 01:35:33PM -1000, Tejun Heo wrote:
+> Hello, Shakeel.
 > 
-> During XSK TX queue teardown, outstanding descriptors are completed
-> without a CQE. If one requested a TX timestamp, the completion path
-> passes that NULL CQE to mlx5e_xsk_fill_timestamp(), which dereferences
-> it.
+> On Wed, Sep 30, 2026 at 06:28:21AM -0700, Shakeel Butt wrote:
+> > I am fine with changing the default behavior. Actually, I have been
+> > contemplating whether I should propose a revert of commit c9afe31ec443e
+> > ("memcg: synchronously enforce memory.high for large overcharges") because
+> > it has introduced more problems than it has solved, but that is a separate
+> > topic. The initial commit already mentioned that MEMCG_CHARGE_BATCH was used
+> > arbitrarily, so replacing it with something big might be acceptable. I want
+> > to keep that decision separate.
 > 
-> [...]
+> Which kernel paths allocate enough for this to matter? Can you give specific
+> examples where the in-kernel synchronous enforcement helps?
 
-Here is the summary with links:
-  - [net] net/mlx5e: Fix AF_XDP TX timestamp teardown NULL dereference
-    https://git.kernel.org/netdev/net/c/7b97273cbebe
+mlock(), madvise(POPULATE), fadvise(WILLNEED) are the obvious ones where large
+amount of memory can be allocated before returning to userspace. Now regarding
+the in-kernel sync high enforcement for these cases helps or not, I think it
+depends on what the user is trying to achieve with memory.high. One scenario I
+can think of is an overcommitted system where admin dynamically adjusts
+memory.high limits of colocated workloads based on their working set size. The
+memory spikes will be smoothen by memory.high otherwise colocated workload can
+be negatively impact. In this example, ineffective memory.high will not be able
+to avoid global pressure which can impact colocated workloads.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+BTW the above scenario is just an example and not something I am proposing.
+Actually I think memory overcommit in the presense sync throttling can
+potentially cause more isolation issues.
 
+> 
+> > Returning to the actual proposal, my plan was to start small with a narrow,
+> > specific use case. However, my long-term plan is to provide a mechanism to
+> > change the default behavior for custom use cases. For example, for
+> > memory.high, I will provide a way for users to specify what behavior they
+> > want, i.e., whether or not they want more synchronous throttling.
+> 
+> This doesn't seem like a policy problem.
+
+What is "This" in the above statement?
+
+> It feels like a problem that should
+> be and can reasonably be solved for everybody, so I'm not sure whether BPF is
+> the right call for this specific purpose.
+
+Here if you meant that default behavior of memory.high should work for most (if
+not all) users then we are on same page. If some user want memory.high reclaim
+to happen in a separate thread instead of return-to-userspace or synchronously,
+this proposal provides mechanism through BPF to such users to achieve their
+goals.
 
