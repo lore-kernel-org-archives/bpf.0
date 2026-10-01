@@ -1,183 +1,178 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981323FA5E7
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 09:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B14F4CDDEC
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 09:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790845300; cv=none; b=jVjIp+bw2iCZyTYquHfyfncq6f7uz9kXZ23wCHRlZ+mJxTCSmK/IvULbBiI8oXNFz6zo+YX61BzUkG9z2QyI/001MNZmOL1vjUi4TJ7SBDPy14M/JxmPZ8ilji6pm3NAtHl3tv+0tu2g335D0JIuyzJcb9ZHqQ5GxyPuuFI0QLk=
+	t=1790846800; cv=none; b=ZDv2Ll3pjZQPISyXpf/6Ih9oiMrYFQNbRqK9Gu82lKHzxoW220oAhQ3bvTvlBsce5+ixRtuh6dLs8vHB48fOCdnfmAFiiVMrGHJhmC6Xq8nFGzRCvM9cU7KkZpHjtjK62T6KoO/zRWjUVYCvgp4IIQTi8HxOiD8XSUe2hHC8r1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790845300; c=relaxed/simple;
-	bh=ZT6ldM6Rero3wx3eaj6hdpLUx6fVOW1BsVRzAoran5k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uh6np2wLDGXPMKXzH6kQ36aLiVxsF2FF6oyUXUj7BDTCI8aPiAlR+fWVbgbgpPVOcp33k8K+A/GvZvXwEkeFf1qb+YmiGcNuIAERIFsGw7+syNyRiqRah4c4UxHIeJcpU33c/EB/9hYKSAD6FGsLhgh2nYN7cW1gkQmVrdN4Zf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NhT2GLcL; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=gTn09Egc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790846800; c=relaxed/simple;
+	bh=NkYY+1DeiRh9z+KuLD2c3bCcQ3Wpe85neE0KaprW3qo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FN+1xxLQVVV/W0UsHrbzGc6tP87AbCzLFHtAxTyyl36L/fRoFOO6/yld6R+FeFfG/6hxXb408X/LxfIwdqiC8JkUqGgXi0l2xBuJSlCcOlFJrHEpipBrVhSgIDRihnvWRvmYPZIgY6wm9qf01lADsNxsYgyft3lgkluq1egRGeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=e9a/9ElT; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Ez1OgUjw; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NhT2GLcL";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="gTn09Egc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790845297;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3KLyDgLq+sWfesxSNS4ik2xszHhIAyJ1EGfG6IG1kIs=;
-	b=NhT2GLcLb3q13laHZKmUUFj3PFyuS+pchklnpxTpkaWQ3r4z2kYWvML59Oz/LSkKRxo2mK
-	Umng8mGKRs2f4urSV7HXQvfZXbewIrE2csKplHMYzob7zdmPk80TedEolh0iC+AxO/lXp0
-	zF+2yyRTNyMeUNGVcL1N/p9c3CBpmhg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-103-yAUnBMDVNTSpf8nhI6gAig-1; Thu, 01 Oct 2026 05:01:36 -0400
-X-MC-Unique: yAUnBMDVNTSpf8nhI6gAig-1
-X-Mimecast-MFC-AGG-ID: yAUnBMDVNTSpf8nhI6gAig_1790845295
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a021b1b561so2991175e9.1
-        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 02:01:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="e9a/9ElT";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Ez1OgUjw"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6916xmk21661065
+	for <bpf@vger.kernel.org>; Thu, 1 Oct 2026 09:26:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=vL+NGGHGnOqAqDpLAA9zVX
+	rhPezAzpq3G+BHPNIYUq8=; b=e9a/9ElTdJXAvPYX0PFefR/z5Lmp4i7RozxKNY
+	GXfzWLUPTVDTXh5wEPdyuYJTfb0mFDb6nkAjtnkKo155rPEWADOCTBiGx8+p90EQ
+	vqPzx9O1a0JFzSh3h8VeDazroXPj0b6lMfzTOZ30sYV2Mxu9BLXE7HmpoT6mNPc8
+	g+4G/NGQkSw0dbgZbHq6mHaj8MqzDeLRiZJHCpI493dq86ZDVy0L1fPKVt+cbeUo
+	Al6ARetcA2L41uqH4r9kpNFrp8aJ2rzIJmKh7jVmZ/ttRtuz3y63Z6Td9fNx9Tam
+	0/4SHcCGWhKGUyfqEahYCIcT0mW49tTj7ly1DMjQyed6feZw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h167pkjwu-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 09:26:31 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93a3f673221so1702917685a.0
+        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 02:26:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1790845295; x=1791450095; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3KLyDgLq+sWfesxSNS4ik2xszHhIAyJ1EGfG6IG1kIs=;
-        b=gTn09EgcaPcic7Yk2kjCwv7/csOhuVmQtbaIBnZgLzLxvN//yxhv2IT+5Yl2LpFiCV
-         10huUsIIONtncO5qCExIwVwNL0MAQmcSLSxPQo/4tfk7y7n+hzotL/WygY7Nv4uAuHHR
-         C6+jz7e/ZaNBFQSJdK7xP+GMHh3+3VJcJD0CsBW6Za29p+vvSmOQkODCTewFhCRyDZM2
-         nlJxT6h5YQauDdy4n74YXxH9LT6o6w9/v2ZdPwjsBhvw4BY86IEidjGVIzForOBmfcNy
-         0ByDtPuoJ+D2CyzdvUESE6dnEYHPeqOhJTkHn0WYUbEnZKxjCZdRQTR936ICz80zUUMe
-         4cVQ==
+        d=oss.qualcomm.com; s=google; t=1790846791; x=1791451591; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=vL+NGGHGnOqAqDpLAA9zVXrhPezAzpq3G+BHPNIYUq8=;
+        b=Ez1OgUjwsKgH05dlbcdAyuNtnlKq8Tbts582ML4WaJ5wNoXWmNQSuSGjBwZfkU1b0B
+         rYSGs4bNWF8uv8eebFzptivMbe3FCrCQAcs9j4WuxO/XrGBQa5Fv8mmle78jAhBvnsQX
+         V4GuODHTNUgYdIn85MopFuVxstOLWZq8YAJOJTxj3ag+5F8On49GTU6gTLeygVocnAhA
+         OwrY8djvaB9qYT0u4G7OHU+4QCCEmEjcQEk61uKGPK3dxkL8aammiBHasxLtErj3iJG0
+         ANerY76gSJ0YTlYF7vtpIlVysUUdrss8GThYNurwcsZ5Tr7h1Mbk3t1dqd5Ehc18A1er
+         s+Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790845295; x=1791450095;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3KLyDgLq+sWfesxSNS4ik2xszHhIAyJ1EGfG6IG1kIs=;
-        b=RQoql67s4oauzjg/kxWqKgdPwPFuagx5Gghd0AH3SBQD9yuN9vcn6dgqwoe769tVfZ
-         Iu7bvCtMzlfplVUSl5bIZHaF1SNC0w1XAEmQwu8GKe6iejxSIUGec8NV+tiXdTkS7/tr
-         PZs6Ev0STzX+OXksqUZL6zxeFWmG+Fj3pb1XTSJ918bPTCYVV+v/IDBYLpRdv4UvbjT6
-         H0bd9j/0y6UhkEmS9JAEwV+hNzHlZfF8ZhzEe9fF6aV4Cv4SBQ3sI+/oegTXAVvnBS8m
-         WQkGW5dPsUmHuV75cLkjY0Z/fFS3j5TS9fJMv2ywDXEkYbywtgnE/w6pKze9MXdYuOQ4
-         9RHw==
-X-Forwarded-Encrypted: i=1; AKwUvBzjpjRZ1XQ79T8VAaAD87FpBhccL5dle0YULxFczzOOje8Hmiaug7ivoDVGHdHtiXXyyOA=@vger.kernel.org
-X-Gm-Message-State: AFuF++lrVQTLVvB6UgY4mqEBAwhIlnro9JsiBfUPKwdUozyz5xG4NHH4
-	t7athIW4HBt5ubWnTf6yqbihg1DrwGKS5PKg8hAwo0mdVORBvIlcYvJ/4hiJPezxeGKJP85j2V9
-	WShOVK/pC7CrpO2qyk2GLXZ3GS88nSLrvAZaXPKIH1I+ybvvay8QlTaE9m57RqQ==
-X-Gm-Gg: AYBFou1PDDo5D6UV8l9Ymap3aGh2kGPaZpC0OHTbLgFYR89GsqxWp/WnFy0Cb0ZX4w3
-	EcqZlfHn/0WtzMCDe1kldtQFS8GTf7MqYreewqUie5/zeBSLIVxUj3JJLxHMosDmZx7baIOSJuh
-	EU8aY53h8IeUFrqcECDqlvzT4StLui1RjDuu+S+2jArrhp5Xila4naTFT5W99bHlOA9iFXfMNjt
-	C7qDydSRAV2TQnPQV/QGZuq+031Nf5aszujsM4Ow4mNkEfIHB4BUXrXO3bfmRgYSKu1kJ3KO6ur
-	skjBgvavYKOGj1oP/ZF7e3nsmAHNjBdZyKfjfkPDHFQcsKYqN81kbN8a/wSXDBiBF2yfoLxLWDY
-	G
-X-Received: by 2002:a05:600c:4e42:b0:4a0:1d:3ac4 with SMTP id 5b1f17b1804b1-4a01aff06d5mr64713495e9.6.1790845295048;
-        Thu, 01 Oct 2026 02:01:35 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e42:b0:4a0:1d:3ac4 with SMTP id 5b1f17b1804b1-4a01aff06d5mr64713135e9.6.1790845294456;
-        Thu, 01 Oct 2026 02:01:34 -0700 (PDT)
-Received: from sgarzare-redhat ([5.77.112.40])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a01feb7198sm42199885e9.1.2026.10.01.02.01.32
+        d=1e100.net; s=20260707; t=1790846791; x=1791451591;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=vL+NGGHGnOqAqDpLAA9zVXrhPezAzpq3G+BHPNIYUq8=;
+        b=k+BsmQqBpmHFAuz+TDo7Wpz8jo7MZwYX3ebwt6rtYI8PILFueDyB8PFw0N2/mGl4LN
+         LYb0MoalkNCVfKcm4S38Ufyzbf9j6ENqwCPVx8bh6sJxygulMw6XDAsQ9vdIRO2FiBAj
+         pcPv2TwNuyJ82D4xlkLRlNjI7C8nB4tJbrCVPkQCqXVo9YL4qRA7GJbTAS+zsWfE4AG1
+         kca03DpQWCoCP9C/wZ02rpxViaTz2tlXiorxrlkOvhkL371Xn43QGvFls0s5+WFRcp+H
+         gHnpwycBYNKVtf/OdsDuI0lxjEHK04OW/wymodZVHjnngC2bmdNWKLK6UGqK994EO4Zb
+         9w6g==
+X-Forwarded-Encrypted: i=1; AKwUvBwSCuZZMK/AQxaSmN5z+wbxDZyrNfrV7LBYpDveWzL0E8kRS2gaaA0fLZMhjW3lQB8i/uI=@vger.kernel.org
+X-Gm-Message-State: AFuF++n4hubU++BqOt7yTcomhObjjrPuQckqSpGq7CSp+zmBMNyvwqTZ
+	p5gbru8tpCClbOX/wcfUZFD3EDypj3OsYDnp1dzSY7mG5KkwfsHb4ZTlDwVnGhp+kkfgIoWCSmM
+	cyFYkI6uAn2pR/BWSbec24F5HS2EBwNQP0pWOGcIyCNzwjiQtcT8kYos=
+X-Gm-Gg: AYBFou3KPySeJTZjsitosdms9NShpQC2IjxFkcG0Tx7xKt18pLij5bfdakobGqHFBIS
+	t+qDNrGUNBhy4lMbRVH+ZXLX6FlZwKa4X1MrataSADL/EuQZlLE6FzoE+nFnsJEKBBRorhy0+gQ
+	6ApZKVyYdlIkDiW3qS+lDnnyuZ5bpKlWZoHM7K5EJ/B8QDGjIWp1UdJ2kUi1o3w7+EZFQam5StA
+	if4juih6T0NdQp+sFYb6OGv5MYMEmGPN4MZOUj3Akl3zSRl+dou9e0xMBx4gzZWkC1mv8naDBHi
+	76OdEl4IxkOe10SpG38MSLTXkVR7Ol2BgOQY7rYXvbeDgeLl5BY3MpQmwG/YVmuGTb5kIETEgFk
+	asfFxWL99wu9gDg==
+X-Received: by 2002:a05:620a:4504:b0:93c:6b90:1d18 with SMTP id af79cd13be357-93ca97b9304mr702908585a.62.1790846791113;
+        Thu, 01 Oct 2026 02:26:31 -0700 (PDT)
+X-Received: by 2002:a05:620a:4504:b0:93c:6b90:1d18 with SMTP id af79cd13be357-93ca97b9304mr702904385a.62.1790846790543;
+        Thu, 01 Oct 2026 02:26:30 -0700 (PDT)
+Received: from localhost ([188.216.77.92])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e31dc751dsm119255166b.67.2026.10.01.02.26.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2026 02:01:33 -0700 (PDT)
-Date: Thu, 1 Oct 2026 11:01:24 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: jrmmhm.kernel@eldare.de, Michal Luczaj <mhal@rbox.co>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Bobby Eshleman <bobby.eshleman@bytedance.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	virtualization@lists.linux.dev, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net] vsock/bpf: release sock lock while waiting for data
- in recvmsg
-Message-ID: <ar4gvlZL1JyPycg1@sgarzare-redhat>
-References: <20260929-kbh3-1-022-fix-v1-1-cc97cc95d269@eldare.de>
+        Thu, 01 Oct 2026 02:26:28 -0700 (PDT)
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Subject: [PATCH net-next v4 0/2] net: stmmac: introduce XDP multi-buff
+ support for TX path
+Date: Thu, 01 Oct 2026 11:26:11 +0200
+Message-Id: <20261001-b4-stmmac-xmit-mb-v4-0-664e0c3eb289@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260929-kbh3-1-022-fix-v1-1-cc97cc95d269@eldare.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNTQrCMBAF4KtI1k5JJumfK+8hLpI4tQHTahNLp
+ fTuhuKii7oZeDzeNzMLNDgK7HSY2UCjC67vUlDHA7Ot7u4E7pYyQ44FrxHBKAjRe21h8i6CN2B
+ MWREvKmUbxdLuOVDjptW8sI4idDRFdk1N60Lsh8/6bBRr/3PljjsKEKBLoYXNEYXCcx9C9nrrh
+ +29z9JZ0RG3kNqDMEGcS6lKUxqL+R9IbqF8D5IJsppXDceaKmF3oGVZvh6ow6ZVAQAA
+X-Change-ID: 20260922-b4-stmmac-xmit-mb-bb78e0684cf4
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Ong Boon Leong <boon.leong.ong@intel.com>
+Cc: netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Proofpoint-ORIG-GUID: Ry1dalVpaaPXO7BbIrLO6BTzmK13M00k
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAxMDAzNyBTYWx0ZWRfXxzbLORyZPeTo
+ MInfR9wTX7I0qCOEUAeE7bdMQcHjeeyJCHtv4HkAfSgqrIUR0qVE3q1py8PiWtWRid6sW46Pk0O
+ 9QZXt1Ku+/XtVfXJ0vhQa4MfP5Ro5d4=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAxMDAzNyBTYWx0ZWRfX7ntWOmM3b6Kg
+ NMO5Yudcn4sTPH+d2nTrlQy8KzgYHn29b+ov4EeCk36/NUoAeXw3exCQ5lbDrJydwzvl4AMhTh0
+ HZHVEd9D9c0MIbEFFmc4/BEX0IgwmFBHnhjaIZQvScTWir29C6ViSs6AtT3xfkFN3gavktI3GD8
+ 8kfG8SHEa/mAeNJLPJ6PPd+VMocQZKUZtKhr7++JJBtc6sGyEelmR92fFy3mtJsRn0R0Qrw0CnM
+ gb8dGtPrGSTWQtWQ224PNNZbjXFkp+hcZAB4hFYTKY+uIR3PCHreKBmyHOi4D0xuR0RT4BZ15Cy
+ 2fuCSNqYyyYlP495b4i5JiT9JsqjVih+IlySAKo5qKshUDMNSjpNO3wCJNCenMgpFEoPBGb9Vnp
+ NXo4GJsJh5vSKJgnDqcvAn6VoWosfqfQTEqTKIRig4LqcxykuUNkeW17ouyZypsE0HgGi7a6YqR
+ MMNrwgc+48nky6N951Q==
+X-Proofpoint-GUID: Ry1dalVpaaPXO7BbIrLO6BTzmK13M00k
+X-Authority-Analysis: v=2.4 cv=WpC+otfv c=1 sm=1 tr=0 ts=6abe2747 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=VKprxIfjjedsZqdkuwoA:9 a=QEXdDO2ut3YA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-01_03,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 clxscore=1015 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2610010037
 
-+cc Bobby and Michal who touched this code recently
+Extend stmmac_xdp_xmit_xdpf() to transmit XDP frames with fragments.
+Fix TX coalesce race and div-by-zero in XDP/legacy path
 
-On Tue, Sep 29, 2026 at 06:33:04PM +0200, Jerome Mohm via B4 Relay wrote:
->From: Jerome Mohm <jrmmhm.kernel@eldare.de>
->
->vsock_bpf_recvmsg() takes lock_sock(sk) and holds it across the whole
->receive loop, including vsock_msg_wait_data(), which sleeps in
->wait_woken() without dropping the lock. When data arrives, the
->transport's delivery context (the vsock-loopback worker, or the
->virtio/vhost rx path) calls virtio_transport_recv_pkt() -> lock_sock()
->on the same socket and blocks. That context is the only one that would
->queue the skb and call sk_data_ready() to wake the reader, so neither
->side makes progress. A blocking recv() hangs until a signal arrives (a
->finite SO_RCVTIMEO also breaks it); while it lasts the shared delivery
->worker is stalled, so all vsock rx on that transport stops, not only
->the affected socket. The hung-task watchdog reports the worker blocked
->in D state:
->
->  INFO: task kworker/1:3:107 blocked for more than 5 seconds.
->  task:kworker/1:3 state:D Workqueue: vsock-loopback vsock_loopback_work
->  Call Trace:
->   __schedule
->   schedule
->   __lock_sock
->   lock_sock_nested
->   virtio_transport_recv_pkt
->   vsock_loopback_work
->
->The reader holds the same sk_lock-AF_VSOCK it is waiting on, taken in
->vsock_bpf_recvmsg().
->
->This code is based on net/unix/unix_bpf.c, whose unix_msg_wait_data()
->drops u->iolock around wait_woken() and re-takes it afterwards. The
->vsock port substituted lock_sock() for that serialisation lock but
->omitted the unlock and relock. tcp_bpf and the native
->vsock_connectible_wait_data() both drop the lock across the wait;
->vsock_bpf is the only one that does not.
->
->Release the socket lock around the wait and re-acquire it before
->re-checking for data, so the caller's locking is unchanged.
->
->Fixes: 634f1a7110b4 ("vsock: support sockmap")
->Cc: stable@vger.kernel.org
->Assisted-by: LLM
->Signed-off-by: Jerome Mohm <jrmmhm.kernel@eldare.de>
->---
-> net/vmw_vsock/vsock_bpf.c | 2 ++
-> 1 file changed, 2 insertions(+)
->
->diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
->index 9049d2648646..bb7d81a95baa 100644
->--- a/net/vmw_vsock/vsock_bpf.c
->+++ b/net/vmw_vsock/vsock_bpf.c
->@@ -50,7 +50,9 @@ static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long ti
-> 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-> 	ret = vsock_has_data(sk, psock);
-> 	if (!ret) {
->+		release_sock(sk);
-> 		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
->+		lock_sock(sk);
-> 		ret = vsock_has_data(sk, psock);
-> 	}
-> 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
->
->---
->base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
->change-id: 20260929-kbh3-1-022-fix-340aa3f7f071
->
->Best regards,
->--
->Jerome Mohm <jrmmhm.kernel@eldare.de>
->
+---
+Changes in v4:
+- Add patch 1/2 to fix theoretical division by zero issue in xdp/legacy
+  tx path.
+- Link to v3: https://lore.kernel.org/r/20260925-b4-stmmac-xmit-mb-v3-1-ca08f029e81c@oss.qualcomm.com
 
-LGTM, but I'd like also Bobby and Michal opinion:
+Changes in v3:
+- Advertise NETDEV_XDP_ACT_NDO_XMIT_SG capability.
+- Add missing dma_wmb() before setting OWN bit of the first descriptor.
+- Link to v2: https://lore.kernel.org/r/20260924-b4-stmmac-xmit-mb-v2-1-003347b7bc25@oss.qualcomm.com
 
-Acked-by: Stefano Garzarella <sgarzare@redhat.com>
+Changes in v2:
+- Fix Tx coalescing logic in stmmac_xdp_xmit_xdpf()
+- Consider the max between STMMAC_TX_THRESH() and num_frames as
+  threshold in stmmac_xdp_xmit_xdpf().
+- Link to v1: https://lore.kernel.org/r/20260923-b4-stmmac-xmit-mb-v1-1-a71a1c522142@oss.qualcomm.com
 
-Thanks,
-Stefano
+---
+Lorenzo Bianconi (2):
+      net: stmmac: fix TX coalesce race and div-by-zero in XDP/legacy path
+      net: stmmac: add XDP multi-buff support for TX side
+
+ .../net/ethernet/stmicro/stmmac/stmmac_ethtool.c   |  11 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  | 160 +++++++++++++--------
+ drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c   |   2 +-
+ 3 files changed, 107 insertions(+), 66 deletions(-)
+---
+base-commit: ea3b2f0356c2f33022c10dc7ad3fd02bf4aa517c
+change-id: 20260922-b4-stmmac-xmit-mb-bb78e0684cf4
+
+Best regards,
+-- 
+Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
