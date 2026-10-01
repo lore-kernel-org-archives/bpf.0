@@ -1,76 +1,84 @@
-Received: from mail-pj2-f39.google.com (mail-pj2-f39.google.com [74.125.227.167])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398FB5328A8
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 14:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FB34B7A35
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 15:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790866384; cv=none; b=oRNssSCMIxa8hVozwA3HRh7JMBNv3LUp+iinybVrl5U074zrZ11zfd3hnX8jkPpDA9O1fLU9E1NCMoAB+NhgSaJqnPgCtUCCVzL2UohauIAsiRM2gkmjfoooKMa7xZvkwdVCL2J7f7STYH/3BJQy7q4QUfTOowwhOcVdUEwBE1U=
+	t=1790867606; cv=none; b=HOAeuoi4OhnVMUkTpIlNjxQRKgbykSIY7OI5JQhPldf1L3aOs6R7/zYYxmwiX9SJI1xVp3cl8iQD5x7fX2kHmeWOwTUKu9jE4YdPrH59mh5YYtYATPm4Ad8cLqoecjhc0TtHiJ9FGkMyrGRKUMCFCezUyZb2Dq6RewlKKeLJTMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790866384; c=relaxed/simple;
-	bh=YcmYc0v2DE3lkir2t72dOEq9zMwtDx3i5PD5d5doq90=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I6Fa2vSgr+Ji6vCgIDGktMXMZ0hAc+5aHgtgR6/n6xWkotoWkB3IUZW8tWMtRAtqMNbTrpMLh503BN8wApn+OS4Oys2Cjxsvj3weBZym24AWyYP9MJnEeQclOp/g7XZHwCtlJzXqpEIlJx46qfjt/wSlS8DAHdKFFlXGizqesKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=an9KU9Sh; arc=none smtp.client-ip=74.125.227.167
+	s=arc-20240116; t=1790867606; c=relaxed/simple;
+	bh=E3+ztsI9L8TnSfKfGghOBEwhvnL/Z5/eVhFzRSfVwfQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M2N1zuxfjSwUOQphyb8Db3uvyNK41yomZflTpM4xu/YhUBI+iAaaD8kn2fw30MFlIsPJnivBm77Bg/RLf+Gz4HDzmUJh/LjgRNDlT5fZLa4qBqX9cxHvBLkFS2BBTJvQP3vXYG25flGMF/yV2eBUXE0IqkJ2S6ogRdHbFsevnUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PoyMcaab; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="an9KU9Sh"
-Received: by mail-pj2-f39.google.com with SMTP id d9443c01a7336-2e2d42b972bso18214545ad.3
-        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 07:53:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PoyMcaab"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4cacd3409so3989439a12.2
+        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 08:13:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790866381; x=1791471181; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yJHHggK6KzkF5Hr51ChHWiCBnfxlQMycQHhPNSVfRXY=;
-        b=an9KU9Sh2Tkf3xEhLYse0TxwBaRvmH5zvVEsNQodocbTxXXUoKfcR8yqybNBWM+trj
-         YxW0IUwDi5RrUs/KTLlZKdyHOI/5f2ArSev04xN3LS7/Utt/5/J7wlj572QfACp0547Q
-         VMYeL5qhRZVv2BNQHRk5GlFWyX2fEHr4LquVUWeKWGWAisZ0Y70xoAsbxY3Mqw1+kOW1
-         CrdeW5CdglHQS+hmAVlwsSvUjXFn87pMakYaF1hX0OgWqGTv4BiyK/eHkMOuP8NNbUly
-         PQioFaxOJmGP6j/FVE0S1WwJ0Qte5APSEQpxYFxR/lM8h86TJ7cBZF5595T7N7YnQGOz
-         uYSg==
+        d=gmail.com; s=20251104; t=1790867605; x=1791472405; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BL1X3zbhdEDEFiVdKCvJlVwYpTEdcagn9KrGuz3r0JE=;
+        b=PoyMcaabx/gW0xFbl8Te+5Lz1Jyjm2pSvBuzu74WRekkfnYdcAIkWlqm11FyBlaDxG
+         /BMvhsjsSDSBnOTK3Lb3JyXDCCSSo+OWu6w42vWakqSULqEW43h7yUA0BP+n2QJXe3Lt
+         xn+W0hO0YgHil6WPbg/1+Xup9LIfnDDxFFbGQ38KuAq0ogsUgybZphaTWoTy1GwRXU2W
+         2YrCBi+NUq5z33Eo9aBF+fPLOA6eU7lJBsR/CuG21mGypc603Pwv7Q0jmmjv1m41kvuW
+         z6CMjV2cfwyQOh/Hzc1/YVjAtij7xT8leQkKE2uZ8tRYi4ITI8JXYQzFViTvf7sLZmZg
+         Eg6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790866381; x=1791471181;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yJHHggK6KzkF5Hr51ChHWiCBnfxlQMycQHhPNSVfRXY=;
-        b=yGLKiHgc+QVD5mLDWf1/KRq0IVpvakLPL4Y0sbr3JU/4k6tSz+yFqHBSXdC5z38CTr
-         3aWzptpRSS4VvHULVzqVDKoZw0gMAxf6gIDXsWQi6EhIOlUHoZN71Q47BaUc+/mCXFNs
-         opW3nKMQjNnX0woiRUa+fRf666ShnEQSGVVDUsAWmn1bao+MArOqPgHfxzaAKXqya0+/
-         biw/dJeFNBFhEX52qg2K8HIBgaecy2h4pi2lV0XEnJJk0T635ldNn8EwS+CKcXN1QYvj
-         2MVo9S7QPZvB6scrNvwBria644xaBYls+wkIAsP3eAAIWEt3NctzlVErvhADMyI3tdaO
-         XYnw==
-X-Gm-Message-State: AFq9FYIb7FFzdycc8cwjbYKRdbMDrh0pPlTdbOd3cL8FRpcPsdpaMnaT
-	+MKYawyDQeC/Wk2LW+mHEqeYJvHGrzCYkiDIIoixRTGbcB4yqbN5JKEc0ofZalod
-X-Gm-Gg: AYBFou2jctIfHtri/PSuzdqVQsIc8odTc4PKFdj3WMH19Lw7tYDWEul9tl7vLcUAoRP
-	/6wVbOtoRH110cZh1wzjDhZK4rsUNykk1Xo7EniEax1LNu1X4qUvdqQ9WGKJm9VnLD1FMMI0idy
-	Dd633TliTIqIXxte5+ijjmPCTrIHjbmWhmQowEakZPnzfpOQicZ8ZJTaZphUn/mQa9eM722KgRd
-	Gfe9mc4jO+kftOXJY8jNsY4xU4mWvJqEZ3IOrAKpj83wdTh40zv+fwwEGWmUnankM82dJSFGNbS
-	Xoue9j9TAYb2KSffFDJ97Vgk2Hmj48AHyQoOJt5tV/KpmPa1CnlI+EM3axeBY/puN5TgMabiNz4
-	nCUR+BuQkmuQ0idUOEKH0yel0AnDlZ2xBRLk3esLRln3jgzcY5eaHa9B9gvNgDYAUM9mc/AamAM
-	Eap5qaLo6nNoGu49QEOU/PRlW358Aii8TXjZGLnMtfV2+cQZFL6Ve17K3HSL62CuGoE5y1Au65b
-	APr1GWlpOkzC2iP+q4OC5jWG3bD8ZSByGZ8wL+KAt+O8x1w234oyX4FT3249v27OkITWQrU5o/f
-	CWtsp2HoMi7lE/lxfRql7ujdz+TJxtRVQXawJpi4DzPs
-X-Received: by 2002:a17:903:2c10:b0:2df:9305:8909 with SMTP id d9443c01a7336-2e2e49f7477mr41877625ad.17.1790866381064;
-        Thu, 01 Oct 2026 07:53:01 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e306c3cb2csm9889375ad.83.2026.10.01.07.53.00
+        d=1e100.net; s=20260707; t=1790867605; x=1791472405;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BL1X3zbhdEDEFiVdKCvJlVwYpTEdcagn9KrGuz3r0JE=;
+        b=tTUqKEclSdsr/5FUnhxkCat0eOKIxgXdoYaCfCUAYw2R3oWpZ+sB3zfK6YqAz8Np48
+         IfSdeZ1WXtTB3JNxxTPxGOHy+kgkK7NZ6NUbSfGo9HE4NkqGMAhTSnqH/qlE1tIotbXS
+         YZO4o3I9xIQtIh3B5nZj/vJRf+1Duct7pUF1893P0GRYyMVvlwzg2bm+jbAzo4801wXn
+         P2S+J2bzvAWnfsqjObNo3cjJCcqp6aImk6hr0rKIurnYR2hDLwfhA3IrxQgAFvoLopam
+         ZyNrho2jblwjdGId45Wb8/awqdzBxCRPh8jazAA5GqVtCinVg6jx0Wi4GcLW1No9dUV2
+         AMQA==
+X-Forwarded-Encrypted: i=1; AKwUvBx1VoWJPR8T/PRzUlZEDK2swbpTIJqwNNoKscm4KnCmDLIXK2OKfj2rgBNm1VtpsHEINSM=@vger.kernel.org
+X-Gm-Message-State: AFuF++ncwLcUK3FWS8YHZyeFtLcIa1TdkEYMoIIjIBMZ8GIAvxUFJsyX
+	z8F65DlZPHLc5h9wHtoKuvhZUL4rLTk23KWYOU6iQx3UpbOrVi4IxC2E
+X-Gm-Gg: AYBFou0s4lgYqxA3nDyQorPUb3ZdpOB6yWw2gqKqOCHVD3/8YXjAY0fzQSyITlAdA8a
+	3uFR77bqz2wl3l6KP2++mMChxJeiQ8uTegRa+T2fvpy3zoLSIfDm1/6itOIPO+BRY3Y2BtUSv8g
+	BbuM2rgICnZFwvUfKLepGn9otUolgsmsB9WfqV1f/3AGWdYlm9uYz/fJygwPJ4J+Dy4+h+9CjKu
+	HZdirfrwTBK1+euYu+viFTQO3o2ORldciGOrVhW8cW87M07hGoVpKrFsxhQ8ucfNkBLSVUMn3I/
+	UiF5WTDQrc+nM55ECe2AMUc1u+ejCfa5wcvUY4SsZ0e5KF06cp5iz35r6NZ5DleyjZcFGQ596Jz
+	3MGd/1Lk3AOujbl9yCUeGz35cjGhZSW1BYqiVyp6WCJ4QB8SsZ8QY2sGrz1cMjFqUtgqPbZmEIk
+	oJPcFTVgqeUVTDDPITgpx3ehFKlCfnIGVeQmTAXsQpKEunvMxKFlzKknBC326EdNqH0BXMuFQzl
+	DKe3OaOGv4=
+X-Received: by 2002:a05:6a21:9216:b0:3de:72d5:281f with SMTP id adf61e73a8af0-3de9e79e727mr5170098637.34.1790867604744;
+        Thu, 01 Oct 2026 08:13:24 -0700 (PDT)
+Received: from ancienth-X870E-Nova-WiFi ([125.186.72.2])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8881589a0c3sm1290039b3a.7.2026.10.01.08.13.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2026 07:53:00 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf 2/2] selftests/bpf: Test packet range of pointers sharing an id
-Date: Thu,  1 Oct 2026 14:52:55 +0000
-Message-ID: <20261001145255.855630-2-alexei.starovoitov@gmail.com>
+        Thu, 01 Oct 2026 08:13:24 -0700 (PDT)
+From: Daehyeon Ko <4ncienth@gmail.com>
+To: stefanha@redhat.com,
+	sgarzare@redhat.com
+Cc: leonardi@redhat.com,
+	mst@redhat.com,
+	jasowangio@gmail.com,
+	eperezma@redhat.com,
+	xuanzhuo@linux.alibaba.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	virtualization@lists.linux.dev,
+	kvm@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net v2] vsock/virtio: account only unread bytes in read_skb()
+Date: Fri,  2 Oct 2026 00:13:10 +0900
+Message-ID: <20261001151310.4101006-1-4ncienth@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261001145255.855630-1-alexei.starovoitov@gmail.com>
-References: <20261001145255.855630-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,268 +87,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+After a partial stream receive, rx_bytes tracks the unread suffix while
+buf_used and peer credit still cover the whole packet.
+virtio_transport_read_skb() dequeues that packet but passes pkt_len for
+both counters, underflowing rx_bytes.
 
-Add tests where two packet pointers share an id and tightening one
-pointer's umax from its var_off would put it less than their constant
-distance from the other's umax: with an index & 0x38 capped at 50, the
-base pointer keeps umax 50, so the pointer 8 bytes further on must keep
-umax 58, even though its known bits allow at most 56.
+On a connected CID_LOCAL stream with an SK_SKB verdict, a 40-byte read
+from a 100-byte packet made SIOCINQ report -40, an empty recv return
+ELOOP, and poll report the empty socket readable.  After verdict detach,
+receiving 40 bytes wrapped the counter to zero and hid those queued bytes
+until one more byte arrived.  The fixed run kept the counter balanced
+and exposed all queued data immediately.
 
-These refused a valid program or accepted an out-of-bounds access before
-the fix:
+This was found during an LLM-assisted manual source audit of VSOCK
+receive accounting while re-evaluating virtio_transport_read_skb() after
+CVE-2024-50169.
 
-- check the advanced copy, load through the base: valid, was refused;
-- check the base, load the byte at base + 1 through a copy advanced by
-  8: was accepted;
-- check base + 4, load 4 bytes at base + 2 through base + 8: reads two
-  bytes past the checked range, was accepted;
-- the same as the second with data_meta pointers checked against data:
-  was accepted.
+Subtract only skb->len minus the VSOCK offset from rx_bytes.  Retain the
+full packet length for buf_used and peer credit.
 
-These pass with and without the fix and cover nearby paths:
-
-- subtract an unknown scalar from a checked pointer and load below it
-  (the range is kept across a new id);
-- reach a load through two paths whose checks cover 8 and 7 bytes after
-  the loaded pointer; the second path must not be pruned by the first;
-- spill a copy of a pointer, check the pointer, fill the copy and load
-  one byte past the checked range: the load is refused, and the copy
-  has the range of the check.
-
+Fixes: 45ca7e9f0730 ("vsock/virtio: fix `rx_bytes` accounting for stream sockets")
+Cc: stable@vger.kernel.org
+Reviewed-by: Luigi Leonardi <leonardi@redhat.com>
 Assisted-by: LLM
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Daehyeon Ko <4ncienth@gmail.com>
 ---
- .../bpf/progs/verifier_direct_packet_access.c | 178 ++++++++++++++++++
- .../bpf/progs/verifier_meta_access.c          |  30 +++
- 2 files changed, 208 insertions(+)
+Changes in v2:
+- Narrow the subject prefix to vsock/virtio as suggested by Luigi Leonardi.
+- State that the issue was found during an LLM-assisted manual source audit.
+- Add Luigi's Reviewed-by tag.
+- No code changes.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-index 915a97072..139ff019d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-@@ -920,4 +920,182 @@ l1_%=:	r0 = *(u8*)(r9 + 0);				\
- 	: __clobber_all);
- }
+Link: https://lore.kernel.org/r/20261001121541.2983379-1-4ncienth@gmail.com
+---
+ net/vmw_vsock/virtio_transport_common.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index f225f53ed4bab..1e762a480df49 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -1927,6 +1927,7 @@ int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t recv_acto
+ 	struct sock *sk = sk_vsock(vsk);
+ 	struct virtio_vsock_hdr *hdr;
+ 	struct sk_buff *skb;
++	u32 bytes_read;
+ 	u32 pkt_len;
+ 	int off = 0;
+ 	int err;
+@@ -1946,7 +1947,8 @@ int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t recv_acto
+ 		vvs->msg_count--;
  
-+SEC("tc")
-+__description("direct packet access: 8-aligned offset, check p + 8, load 8 bytes at p")
-+__success __retval(0) __flag(BPF_F_ANY_ALIGNMENT)
-+__naked void pkt_same_id_check_copy_load_base(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	r4 &= 0x38;					\
-+	if r4 > 50 goto l0_%=;				\
-+	/* r4 is a multiple of 8, at most 48 */		\
-+	r5 = r2;					\
-+	r5 += r4;					\
-+	r6 = r5;					\
-+	r6 += 8;					\
-+	if r6 > r3 goto l0_%=;				\
-+	/* [r5, r5 + 8) is in the packet */		\
-+	r0 = *(u64*)(r5 + 0);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("direct packet access: 8-aligned offset, check p, load past it via p + 8")
-+__failure __msg("invalid access to packet, off=51 size=1")
-+__naked void pkt_same_id_check_base_load_via_copy(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	r4 &= 0x38;					\
-+	if r4 > 50 goto l0_%=;				\
-+	/* r4 is a multiple of 8, at most 48 */		\
-+	r5 = r2;					\
-+	r5 += r4;					\
-+	r6 = r5;					\
-+	r6 += 8;					\
-+	if r5 > r3 goto l0_%=;				\
-+	/* r6 - 7 is r5 + 1 */				\
-+	r0 = *(u8*)(r6 - 7);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("direct packet access: 8-aligned offset, check p + 4, 4-byte load at p + 2")
-+__failure __msg("invalid access to packet, off=52 size=4")
-+__naked void pkt_same_id_check_base_4_load_via_copy(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	r4 &= 0x38;					\
-+	if r4 > 50 goto l0_%=;				\
-+	/* r4 is a multiple of 8, at most 48 */		\
-+	r5 = r2;					\
-+	r5 += r4;					\
-+	r6 = r5;					\
-+	r6 += 8;					\
-+	r7 = r5;					\
-+	r7 += 4;					\
-+	if r7 > r3 goto l0_%=;				\
-+	/* [r5, r5 + 4) is in the packet, [r5 + 2, r5 + 6) may not be */ \
-+	r0 = *(u32*)(r6 - 6);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("direct packet access: checked pointer minus non-negative unknown keeps range")
-+__success __retval(0) __flag(BPF_F_ANY_ALIGNMENT)
-+__naked void pkt_sub_unknown_keeps_range(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	r4 &= 0x1f;					\
-+	r4 += 8;					\
-+	r5 = r2;					\
-+	r5 += 40;					\
-+	if r5 > r3 goto l0_%=;				\
-+	/* r5 is 8 to 39 bytes below the checked pointer */	\
-+	r5 -= r4;					\
-+	r0 = *(u64*)(r5 + 0);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("direct packet access: no pruning of a path whose checks prove fewer bytes")
-+__failure __msg("invalid access to packet, off=255 size=8")
-+__flag(BPF_F_ANY_ALIGNMENT) __flag(BPF_F_TEST_STATE_FREQ)
-+__naked void pkt_same_id_pruning(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	r0 = *(u32*)(r1 + %[__sk_buff_priority]);	\
-+	r4 &= 0xff;					\
-+	r5 = r2;					\
-+	r5 += r4;					\
-+	if r0 != 0 goto l1_%=;				\
-+	/* this path proves [r5, r5 + 8) */		\
-+	r6 = r5;					\
-+	r6 += 8;					\
-+	if r6 > r3 goto l0_%=;				\
-+	goto l2_%=;					\
-+l1_%=:	/* this path proves [r5, r5 + 7) */		\
-+	if r5 > r3 goto l0_%=;				\
-+	r6 = r5;					\
-+	r6 += 7;					\
-+	if r6 > r3 goto l0_%=;				\
-+l2_%=:	r0 = *(u64*)(r5 + 0);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark)),
-+	  __imm_const(__sk_buff_priority, offsetof(struct __sk_buff, priority))
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("direct packet access: spilled copy of checked pointer, load past range")
-+__failure __msg("invalid access to packet, off=262 size=1, R7(id={{[0-9]+}},off=262,r=262)")
-+__naked void pkt_spilled_copy_gets_range(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	r4 &= 0xff;					\
-+	r5 = r2;					\
-+	r5 += r4;					\
-+	*(u64*)(r10 - 8) = r5;				\
-+	/* proves only bytes before r5 */		\
-+	if r5 > r3 goto l0_%=;				\
-+	r6 = r5;					\
-+	r6 += 7;					\
-+	if r6 > r3 goto l0_%=;				\
-+	/* [r5, r5 + 7) is in the packet */		\
-+	r7 = *(u64*)(r10 - 8);				\
-+	r0 = *(u8*)(r7 + 7);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_meta_access.c b/tools/testing/selftests/bpf/progs/verifier_meta_access.c
-index 62235f032..c87e0be4b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_meta_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_meta_access.c
-@@ -281,4 +281,34 @@ l0_%=:	r0 = 0;						\
- 	: __clobber_all);
- }
+ 	pkt_len = le32_to_cpu(hdr->len);
+-	virtio_transport_dec_rx_pkt(vvs, pkt_len, pkt_len);
++	bytes_read = skb->len - VIRTIO_VSOCK_SKB_CB(skb)->offset;
++	virtio_transport_dec_rx_pkt(vvs, bytes_read, pkt_len);
+ 	spin_unlock_bh(&vvs->rx_lock);
  
-+SEC("xdp")
-+__description("meta access, 8-aligned offset, check p, load a byte at p + 1 via p + 8")
-+__failure __msg("invalid access to packet, off=51 size=1")
-+__naked void meta_access_check_base_load_via_copy(void)
-+{
-+	asm volatile ("					\
-+	r9 = r1;					\
-+	call %[bpf_get_prandom_u32];			\
-+	r4 = r0;					\
-+	r4 &= 0x38;					\
-+	if r4 > 50 goto l0_%=;				\
-+	/* r4 is a multiple of 8, at most 48 */		\
-+	r2 = *(u32*)(r9 + %[xdp_md_data_meta]);		\
-+	r3 = *(u32*)(r9 + %[xdp_md_data]);		\
-+	r5 = r2;					\
-+	r5 += r4;					\
-+	r6 = r5;					\
-+	r6 += 8;					\
-+	if r5 > r3 goto l0_%=;				\
-+	/* r6 - 7 is r5 + 1 */				\
-+	r0 = *(u8*)(r6 - 7);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm_const(xdp_md_data, offsetof(struct xdp_md, data)),
-+	  __imm_const(xdp_md_data_meta, offsetof(struct xdp_md, data_meta))
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+ 	virtio_transport_send_credit_update(vsk);
+
+base-commit: e23a64eb244356ee47c0620f0722d51bd88db522
 -- 
 2.55.0
-
