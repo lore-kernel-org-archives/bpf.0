@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BF7353A9F
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 13:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CD7376BD7
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 13:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790861440; cv=none; b=M0b/sll5Qvhdr5cu0NlBcQDKqEtW2ExI86ox/0vjPcIg3xjrM8PRrX/dVpLixwjOjqgdby7XYRJ1X0ekKPDpnsjVFEEudTk8sg35yL0CXuw17TztzeGKysfH4gHISUE+5jZxeI9/RqmZpHbPt2jsPhOxSVgAEeNh/XxZU6CgSII=
+	t=1790861441; cv=none; b=l4LvqIKyC6RjN4cflzstt41Hog4qlZsqIxVts/q8x6tK9OfS9YxKEqNB28L4er2oKzkOMuH/SX6GyP70iP0XgyunkpfgsZ4sAcOnQuH+oYOSL3T6qqi2fFqYysqPYS5WWdjLH5FH0NhgXIv7Z3KIk9JZIWFkTgb/q2E8rcBQh0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790861440; c=relaxed/simple;
-	bh=Vhx32KtHA1y7mpV40Wa/HVWo/WwLib/5kBeqx4spTLY=;
+	s=arc-20240116; t=1790861441; c=relaxed/simple;
+	bh=1RI3OYZ+3T9rPgqSbTusKAteGAsYKGTCTZz1mLGqTq8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j7XTi/JoqGvsQc0xvTPQBZmGsRMgEpHMO1OIq0mlcZsDBc3EsCWZnIx2+Ox9v8sc+qsOb/fn4uxmuvnPfWkkwL+nZg6ncl7jKKDTCaXJFeCQ5yiBDhParW+s5y9DxwZNer3IF0iaK1sNPjyLa/Afu/w9YJSPLo6gYClEGbZB3HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=FE9sSK6AdA0CSrL/HnStuf/DjF43zsV+4DTJlnyFtZkHGvTEHU9CumEvKDLGf5WqHFK1Ek7WGhN5jJT2qdpemH5qMuWeBoweKGeHCCv471MWb4VlenSWgssRroOVmm4OnHNE6avkMe3hdQYGAxR0c79rPDMic+m2AZGDILYCPB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 5017C2E6E0B8BC; Thu,  1 Oct 2026 06:30:32 -0700 (PDT)
+	id 32F082E6E0B88D; Thu,  1 Oct 2026 06:30:27 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v8 05/22] bpf: Prepare for an exception cleanup table before the CFG walk
-Date: Thu,  1 Oct 2026 06:30:32 -0700
-Message-ID: <20261001133032.1338455-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v8 04/22] bpf: Add lookups for exception cleanup resumes and landing pads
+Date: Thu,  1 Oct 2026 06:30:27 -0700
+Message-ID: <20261001133027.1338227-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261001133006.1335369-1-yonghong.song@linux.dev>
 References: <20261001133006.1335369-1-yonghong.song@linux.dev>
@@ -37,212 +37,175 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Record in insn_aux_data what the later passes need from the cleanup table=
-:
-cleanup_pad, the landing pad a frame resumes at, for every call that can
-unwind -- a BPF-to-BPF call, direct or indirect, or bpf_unwind() -- withi=
+Add the first lookups to exception.c: recognising a call to bpf_unwind() =
+or
+bpf_unwind_resume(), and asking which landing pad, if any, a call site
+unwinds to. Their users, and what fills in the pad of a call site, come i=
 n
-the [begin_off, end_off) range of a cleanup record. Helper and other kfun=
-c
-calls in the range cannot unwind and are skipped. Subsequent commits
-consume it.
+later patches.
 
-bpf_exc_prepare() runs before bpf_check_cfg(), whose walk consumes what i=
-t
-produces. It refuses a table on an offloaded program, and on one whose JI=
-T
-cannot dispatch landing pads or was not asked to compile it. What survive=
-s
-is marked jit_required: the interpreter cannot dispatch a pad.
-bpf_jit_supports_cleanup_pads() is weak here and says no; the arch patche=
-s
-provide the real ones.
-
-A table is refused for a program whose verifier_ops has a gen_epilogue, a=
-s
-bpf_qdisc's do. That epilogue is planted by rewriting the exits a program
-has when bpf_convert_ctx_accesses() runs, and the exits an unwind returns
-through are added after it, so they would skip it. A struct_ops program's
-ops, and with them gen_epilogue, are only known after the CFG walk; there
-it is the same check made again when bpf_unwind() is verified, from a lat=
-er
-patch, that refuses it.
-
-A table is also refused alongside bpf_throw(), a second answer to what ru=
-ns
-on the way out: it leaves for the exception boundary without rewriting th=
-e
-return addresses of the frames it passes, so no pad between the two would
-run. Both the tagged exception callback and the throw itself are checked =
---
-either can appear without the other -- over the whole instruction stream,
-so a throw in a subprogram is caught as well. The checks sit in
-bpf_exc_check_prog(), which a later patch also runs at every bpf_unwind()=
-,
-so they hold for a program that unwinds with no table too.
+The pad of a call site is kept in insn_aux_data, so the three places that
+move instructions around -- bpf_patch_insn_data(), verifier_remove_insns(=
+)
+and bpf_opt_remove_nops() -- learn to keep it in step.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/filter.h |  1 +
- kernel/bpf/core.c      |  5 +++
- kernel/bpf/exception.c | 79 ++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/exception.h |  2 ++
- kernel/bpf/verifier.c  |  5 +++
- 5 files changed, 92 insertions(+)
+ include/linux/bpf_verifier.h |  5 +++++
+ kernel/bpf/exception.c       | 24 ++++++++++++++++++++++++
+ kernel/bpf/exception.h       |  4 ++++
+ kernel/bpf/fixups.c          | 26 +++++++++++++++++++++++++-
+ 4 files changed, 58 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index e42eccb0990e..972b3ed2a51d 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1248,6 +1248,7 @@ bool bpf_jit_supports_stack_args(void);
- bool bpf_jit_supports_arena_args(void);
- bool bpf_jit_supports_far_kfunc_call(void);
- bool bpf_jit_supports_exceptions(void);
-+bool bpf_jit_supports_cleanup_pads(void);
- bool bpf_jit_supports_ptr_xchg(void);
- bool bpf_jit_supports_arena(void);
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index d3b8b626ec0f..d813fdde29e3 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3511,6 +3511,11 @@ void __weak arch_bpf_stack_walk(bool (*consume_fn)=
-(void *cookie, u64 ip, u64 sp,
- {
- }
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index ad0ca8047712..a22ce69e9aff 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -700,6 +700,11 @@ struct bpf_insn_aux_data {
+ 	u64 jump_target:1;
 =20
-+bool __weak bpf_jit_supports_cleanup_pads(void)
-+{
-+	return false;
-+}
-+
- bool __weak bpf_jit_supports_timed_may_goto(void)
- {
- 	return false;
+ 	unsigned int orig_idx; /* original instruction index, initialized once =
+*/
++	/*
++	 * 1 + the instruction index of the exception cleanup landing pad
++	 * this call site unwinds to, or 0 for none.
++	 */
++	u32 cleanup_pad;
+ 	/*
+ 	 * CFG strongly connected component this instruction belongs to,
+ 	 * zero if it is a singleton SCC.
 diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
-index 3ea1bff5cc90..e12cdb12cde3 100644
+index d6b8ca98e71c..3ea1bff5cc90 100644
 --- a/kernel/bpf/exception.c
 +++ b/kernel/bpf/exception.c
-@@ -141,6 +141,85 @@ int bpf_exc_check_info(struct bpf_verifier_env *env,=
- const union bpf_attr *attr,
- BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
- BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
+@@ -2,6 +2,8 @@
+ /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+ #include <linux/bpf.h>
+ #include <linux/bpf_verifier.h>
++#include <linux/btf_ids.h>
++#include <linux/filter.h>
+ #include <linux/slab.h>
+ #include "exception.h"
 =20
-+static int reject_throw(struct bpf_verifier_env *env)
-+{
-+	u32 i;
+@@ -135,3 +137,25 @@ int bpf_exc_check_info(struct bpf_verifier_env *env,=
+ const union bpf_attr *attr,
+ 	kvfree(krecord);
+ 	return ret;
+ }
 +
-+	for (i =3D 0; i < env->prog->len; i++) {
-+		if (!bpf_is_throw_kfunc(&env->prog->insnsi[i]))
-+			continue;
-+		verbose(env,
-+			"exception cleanup cannot be combined with bpf_throw at insn %u\n",
-+			i);
-+		return -EINVAL;
-+	}
-+	return 0;
++BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
++BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
++
++bool bpf_is_unwind_kfunc(const struct bpf_insn *insn)
++{
++	return bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
++	       insn->imm =3D=3D bpf_unwind_id[0];
 +}
 +
-+static void mark_call_sites(struct bpf_verifier_env *env)
++bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn)
 +{
-+	u32 i, j;
-+
-+	for (i =3D 0; i < env->cleanup_info_cnt; i++) {
-+		struct bpf_cleanup_info *rec =3D &env->cleanup_info[i];
-+
-+		for (j =3D rec->begin_off; j < rec->end_off; j++) {
-+			struct bpf_insn *insn =3D &env->prog->insnsi[j];
-+
-+			if (!bpf_pseudo_call(insn) && !bpf_is_callx(insn) &&
-+			    !bpf_is_unwind_kfunc(insn))
-+				continue;
-+			env->insn_aux_data[j].cleanup_pad =3D rec->landing_pad_off + 1;
-+		}
-+	}
++	return bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
++	       insn->imm =3D=3D bpf_unwind_resume_id[0];
 +}
 +
-+int bpf_exc_check_prog(struct bpf_verifier_env *env)
++int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx)
 +{
-+	int err;
++	u32 pad =3D env->insn_aux_data[idx].cleanup_pad;
 +
-+	if (bpf_prog_is_offloaded(env->prog->aux)) {
-+		verbose(env,
-+			"exception cleanup is not supported for offloaded programs\n");
-+		return -EINVAL;
-+	}
-+	if (!bpf_jit_supports_cleanup_pads() || !env->prog->jit_requested) {
-+		verbose(env,
-+			"exception cleanup needs a JIT that can dispatch landing pads\n");
-+		return -EOPNOTSUPP;
-+	}
-+	if (env->ops->gen_epilogue) {
-+		verbose(env,
-+			"exception cleanup is not supported for a program with an epilogue\n"=
-);
-+		return -EOPNOTSUPP;
-+	}
-+	if (env->exception_callback_subprog) {
-+		verbose(env,
-+			"exception cleanup cannot be combined with an exception callback\n");
-+		return -EINVAL;
-+	}
-+	err =3D reject_throw(env);
-+	if (err)
-+		return err;
-+	env->prog->jit_required =3D 1;
-+	return 0;
++	return pad ? (int)pad - 1 : -1;
 +}
-+
-+int bpf_exc_prepare(struct bpf_verifier_env *env)
-+{
-+	int err;
-+
-+	if (!env->cleanup_info_cnt)
-+		return 0;
-+
-+	err =3D bpf_exc_check_prog(env);
-+	if (err)
-+		return err;
-+
-+	mark_call_sites(env);
-+	return 0;
-+}
-+
- bool bpf_is_unwind_kfunc(const struct bpf_insn *insn)
- {
- 	return bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
 diff --git a/kernel/bpf/exception.h b/kernel/bpf/exception.h
-index d5c6ac459870..96dac3037d75 100644
+index cf099dcc5b74..d5c6ac459870 100644
 --- a/kernel/bpf/exception.h
 +++ b/kernel/bpf/exception.h
-@@ -12,6 +12,8 @@ struct bpf_insn;
+@@ -8,8 +8,12 @@
+=20
+ union bpf_attr;
+ struct bpf_verifier_env;
++struct bpf_insn;
 =20
  int bpf_exc_check_info(struct bpf_verifier_env *env, const union bpf_att=
 r *attr,
  		       bpfptr_t uattr);
-+int bpf_exc_prepare(struct bpf_verifier_env *env);
-+int bpf_exc_check_prog(struct bpf_verifier_env *env);
- int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx);
- bool bpf_is_unwind_kfunc(const struct bpf_insn *insn);
- bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index efc516e5ee4d..80034429fdd0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22550,6 +22550,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
++int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx);
++bool bpf_is_unwind_kfunc(const struct bpf_insn *insn);
++bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn);
 =20
-+	/* The CFG needs an edge from a call in a cleanup range to its pad. */
-+	ret =3D bpf_exc_prepare(env);
-+	if (ret < 0)
-+		goto skip_full_check;
+ #endif /* __BPF_EXCEPTION_H */
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 37cf130ebb57..5b7fe4ba610b 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -268,11 +268,18 @@ static void adjust_insn_aux_data(struct bpf_verifie=
+r_env *env,
+ 			data[i].non_stack_access =3D
+ 				data[off + cnt - 1].non_stack_access;
+ 			data[off + cnt - 1].non_stack_access =3D false;
++			data[i].cleanup_pad =3D data[off + cnt - 1].cleanup_pad;
++			data[off + cnt - 1].cleanup_pad =3D 0;
+ 		} else if (bpf_is_mem_insn(insn + i)) {
+ 			data[i].non_stack_access =3D true;
+ 		}
+ 	}
+=20
++	if (env->cleanup_info_cnt)
++		for (i =3D 0; i < prog_len; i++)
++			if (data[i].cleanup_pad > off + 1)
++				data[i].cleanup_pad +=3D cnt - 1;
 +
- 	/* Validate instructions and resolve the program's referenced resources=
-. */
- 	ret =3D check_and_resolve_insns(env);
- 	if (ret < 0)
+ 	/*
+ 	 * Last slot instruction could be a newly generated
+ 	 * BPF_ST/BPF_LDX/BPF_STX, systematically mark it for non-stack access
+@@ -619,6 +626,7 @@ static int verifier_remove_insns(struct bpf_verifier_=
+env *env, u32 off, u32 cnt)
+ 	struct bpf_insn_aux_data *aux_data =3D env->insn_aux_data;
+ 	unsigned int orig_prog_len =3D env->prog->len;
+ 	int err;
++	u32 i;
+=20
+ 	if (bpf_rewrite_must_abort())
+ 		return -EINTR;
+@@ -647,6 +655,17 @@ static int verifier_remove_insns(struct bpf_verifier=
+_env *env, u32 off, u32 cnt)
+ 		sizeof(*aux_data) * (orig_prog_len - off - cnt));
+ 	env->insn_aux_data_len -=3D cnt;
+=20
++	if (env->cleanup_info_cnt) {
++		for (i =3D 0; i < env->insn_aux_data_len; i++) {
++			u32 pad =3D aux_data[i].cleanup_pad;
++
++			if (pad > off + cnt)
++				aux_data[i].cleanup_pad =3D pad - cnt;
++			else if (pad > off)
++				aux_data[i].cleanup_pad =3D 0;
++		}
++	}
++
+ 	return 0;
+ }
+=20
+@@ -752,7 +771,7 @@ int bpf_opt_remove_nops(struct bpf_verifier_env *env)
+ 	struct bpf_insn *insn =3D env->prog->insnsi;
+ 	int insn_cnt =3D env->prog->len;
+ 	bool is_may_goto_0, is_ja;
+-	int i, err;
++	int i, j, err;
+=20
+ 	for (i =3D 0; i < insn_cnt; i++) {
+ 		is_may_goto_0 =3D !memcmp(&insn[i], &MAY_GOTO_0, sizeof(MAY_GOTO_0));
+@@ -763,6 +782,11 @@ int bpf_opt_remove_nops(struct bpf_verifier_env *env=
+)
+ 		if (aux[i].indirect_target)
+ 			continue;
+=20
++		if (env->cleanup_info_cnt)
++			for (j =3D 0; j < insn_cnt; j++)
++				if (env->insn_aux_data[j].cleanup_pad =3D=3D i + 1)
++					env->insn_aux_data[j].cleanup_pad =3D i + 2;
++
+ 		err =3D verifier_remove_insns(env, i, 1);
+ 		if (err)
+ 			return err;
 --=20
 2.53.0-Meta
 
