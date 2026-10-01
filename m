@@ -1,127 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5A23BCD0E;
-	Thu,  1 Oct 2026 10:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A6744E046;
+	Thu,  1 Oct 2026 10:54:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790851079; cv=none; b=kd4l7fAxtnStb/86ubPRRc9kcDMwu4qgR966dt5bi8AZmvQmBAudwT6qE/OF6Eq0uKo+dCLzaSqsLCCrVr/78me/VloaNn3IyD3A/uqBObiLUqYtCharv6O0o09FtmE/F8wFlU4v1KSQSt88WRUGo7EayRm7W0Mfshb4Vp35qk8=
+	t=1790852095; cv=none; b=XRmN8G+w2sN5ylXiUr9URx2ifukDeRL+odwycYKtTioKWK9JrRItMMQk3sfZ7e0SWO/gVJLx0GHlP/Za0sjujZhp1HZDZIZCwOLGAiK/fRHL4Fo1npLdxpJbuLwi6UqMcJClZA+LjRS/yn15XNpMNG1MPzHBOPLnYKJb57bcZoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790851079; c=relaxed/simple;
-	bh=hDaozcCR4RN1nJEoUk7pYsmyoc606N1f2ytFwIN6pU4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=B7CU18rU6q0IcyPvCNWowahn5uU9aB6LMG+7PCaZmfpb1XoeqvzKtuvprsiZjbNnhh0tyvfqZ3ZIJCwiQpa8oNnBAZkn2pgESqL9xcaVN2oZCM10ISpUiSGMzaecKT5nqjcZf+j+VIqJXqlTxJKwOdEkOcZfjWRY65KfU+piOxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DlJPqMAg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790852095; c=relaxed/simple;
+	bh=wTx6Mvyr5xDbxsqv9Qcf07k2wHNrFdQv99ODg9frgbA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s2wjqrGVyneVcQZiJwlvd3JpI33+4FqqhV0JfC2mhmc67Nzzeg9UNKl5sK5W86SX1lNp7q4B1Wri4VXOFmhrR2ylcmFMchxD6nWxxpZcYVH9yrEAYEJpK7Zfkx5WNIk+q+1jU3kNSnColYPdMpLOSMHf/DlJiiS7zzPgWd0by8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=la9C++oV; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DlJPqMAg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 653961F000FF;
-	Thu,  1 Oct 2026 10:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790851072;
-	bh=As3SLFsTTd3BkmHYiCD2iWsyZrxMnUXWbkatlHucL9s=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DlJPqMAgPjswboeJf2ZIyMb3gQ6nXatEo55osqdNvVcFDqljtXE77eRNkSofmCbPj
-	 XY72PX/+SX+8Fo7J73MaKaH6Zh6+cSbR8vwy0YqASElxUrRfGuz+nCFye/tdTvf1nQ
-	 le/N6yXhpL9jf4h5uikRXqm7fy3o2BFPASx5uixhD9yWq8o/5NUMrTsGFw7xZm7HQX
-	 EncNejZrT3GOjd0gkbk6rVQVmgxel6UmaSg8PIXWYlMyyJZD4jzTuhQCtH7woNU2G/
-	 DeT82FckWr5JICgiAOQYsIVFenK7UzOfo4oLU1DPMkiZ9NaXo4R/od+rLQhSIzOKyV
-	 V+1i2pkN0RQwg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/1] tracing: fgraph: allocate shadow stacks inline
- with GFP_NOWAIT
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vineet Gupta" <vineet.gupta@linux.dev>
-Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261001102909.1152572-2-vineet.gupta@linux.dev>
-References: <20261001102909.1152572-1-vineet.gupta@linux.dev>
- <20261001102909.1152572-2-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 01 Oct 2026 10:37:51 +0000
-Message-Id: <20261001103752.653961F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="la9C++oV"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=QMQi3pfWB0wiaCHgvp5eiKUKLsxkaOq5Mv0PAKIuKqE=; b=la9C++oVmy91EssZzyrMx0EQyi
+	2Z2A4CAKhpig2EEh/JoYbzxfMSZdRpsk75dwabdgBm56msfF9NGMtsXwNLbBo5Je5P38DpMMQVbCS
+	vPOQF2ukfYIISDmrJWMkKKLolN2Ksu2QsR4MXoql+tu63gXEHZcDYh8ym3Urr+98GbbbFciqI3JN7
+	V22+O8+OfAj/JqLQj40+ts5CdvGafHKZUpHuWcPStSH2DJ5+dNhaCr+MU881mU5yPCtF3H1Kuq50A
+	Ikj+NcN24Kdhfox9zWY/yzhIdsxCiCjFFP8rJVG/sMqP2K89HbjXcxOeLBcG28E4ZBuBTFpInoyq4
+	khXNRqow==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1xCEQk-00000004rjo-0GEu;
+	Thu, 01 Oct 2026 10:54:26 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B11FD3001FD; Thu, 01 Oct 2026 12:54:24 +0200 (CEST)
+Date: Thu, 1 Oct 2026 12:54:24 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Aaron Lu <ziqianlu@bytedance.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com,
+	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
+ done for
+Message-ID: <20261001105424.GK4121339@noisy.programming.kicks-ass.net>
+References: <20260924184714.912181-1-shakeel.butt@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260924184714.912181-1-shakeel.butt@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] tracing: mixing goto and scoped_guard in alloc_retstack_tasklist()
---
+On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
 
-commit eacae2b1226bb2d8684604b5c37e3ec9f073cb80
-Author: Vineet Gupta <vineet.gupta@linux.dev>
+> Options we looked at
+> ====================
+> 
+> A. Keep the shared kworker, and only charge the cgroup.
+> 
+>   A1. Measure how long the reclaim ran, then charge that time to the
+>       memcg's cgroup.
+> 
+>   A2. Let the kworker say "charge this cgroup" while it works, the
+>       same way set_active_memcg() works for memory.
+> 
+> B. Also make the cgroup's CPU limits apply.
+> 
+>   B1. Run the kworker in the cgroup's scheduling group while it works,
+>       so cpu.weight and cpu.max apply to it.
+> 
+>   B2. Run the reclaim at full speed, then take its CPU time out of the
+>       cgroup's cpu.max quota afterwards (back-charging).
+> 
+> C. Do the reclaim inside the cgroup.
+> 
+>   C1. Record the overage as a debt on the memcg, and let the memcg's
+>       own tasks pay it the next time they charge memory or return to
+>       user space.
+> 
+>   C2. Give each memcg its own reclaim thread that lives in the cgroup.
+> 
+>   C3. Use a cgroup-aware workqueue, as in [1], or per-cgroup worker
+>       pools.
 
-tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
+> What we chose and why
+> =====================
+> 
+> We chose A2, together with B2 for cpu.max.
+> 
+> We do not throttle the reclaim itself. Adding limits to it is more
+> complicated and most probably unneeded, as we envision that we will
+> need concurrent background reclaimers instead of throttling in a
+> real-world environment. We are working on developing a system to
+> balance the rate of allocations/charges with the rate of reclaim, to
+> keep the system always running effectively.
+> 
+> In addition, reclaim takes sleeping locks, like i_mmap_rwsem and the
+> anon_vma lock in rmap walks, and fs locks in shrinkers. With a low
+> cgroup weight, the kworker can be preempted while it holds them, and
+> then tasks in other cgroups wait on it. It also hurts the workqueue. A
+> kworker that is runnable but not running still counts as running, and
+> the workqueue only spots CPU hogs by the CPU time they use. So other
+> work queued on that CPU's system_wq waits too.
 
-This commit updates alloc_retstack_tasklist() to allocate return stacks
-inline using GFP_NOWAIT within an RCU read-side critical section,
-replacing the fixed-batch preallocation loop. It also replaces the
-open-coded rcu_read_lock() and rcu_read_unlock() with scoped_guard(rcu)
-to handle RCU protection implicitly.
+With proxy execution, this should be alleviated. Then all tasks waiting
+on a lock acquisition will contribute to the runnability of the lock
+holder.
 
-> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-> index 40d373d65f9b9..efb5d260334e0 100644
-> --- a/kernel/trace/fgraph.c
-> +++ b/kernel/trace/fgraph.c
+> Still, the reclaim should not be free CPU time on top of the cgroup's
+> limit. With A2 alone, the reclaim shows up in cpu.stat, but the
+> cgroup's own tasks still get their full cpu.max quota. B2 fixes that
+> without slowing the reclaim down. The kworker runs at full speed, and
+> afterwards its time is taken out of the cgroup's cpu.max quota, so the
+> cgroup's own tasks get less CPU time instead. This is the
+> back-charging Tejun described [2]. It only covers cpu.max.
+> Back-charging cpu.weight is future work.
 
-[ ... ]
+Fiddling with weight sounds like horrible garbage. If you find you need
+that, I would really rather you went C[23].
 
-> @@ -1057,26 +1060,37 @@ static int alloc_retstack_tasklist(unsigned long =
-**ret_stack_list)
->  		}
->  	}
-> =20
-> -	rcu_read_lock();
-> -	for_each_process_thread(g, t) {
-> -		if (start =3D=3D end) {
-> -			ret =3D -EAGAIN;
-> -			goto unlock;
-> -		}
-> +	scoped_guard (rcu) {
+> We did not take C2 or C3. A high_work run asks for only 64 pages,
+> which is far too little to pay for moving a thread into a cgroup
+> through the global cgroup locks. A thread per memcg means thousands of
+> threads. cgroup v2 does not allow tasks in a non-leaf domain cgroup.
+> And a kernel thread in a cgroup shows up in cgroup.procs and blocks
+> rmdir.
 
-[Severity: Low]
-Does this code mix goto-based error handling and scope-based cleanup in the
-same function?
+You don't move the threads, you spawn them on group creation and leave
+them there. I'm sure you can fudge the rmdir thing with less ugly than
+you're proposing here and in the other series.
 
-The alloc_retstack_tasklist() function still contains a goto free error
-handling path earlier in its body, and a free: cleanup label at the end.
-Adding scoped_guard() here violates the kernel cleanup subsystem guidelines,
-which state that for a given routine, usage of goto and cleanup helpers
-should never be mixed.
 
-Since returning directly from within the scoped_guard() skips the free: loop
-at the end of the function, it forces manual reasoning about whether that is
-safe. This is noted in the new comment about keeping the start =3D=3D end c=
-heck
-in step with the exhaustion logic.
-
-Is it possible to convert the initial return stack array allocation to use
-scope-based cleanup as well, or revert to open-coded RCU read locks, to
-avoid mixing the two patterns?
-
-> +		for_each_process_thread(g, t) {
-> +			unsigned long *rs;
-> +
-> +			if (t->ret_stack)
-> +				continue;
-> +
-> +			rs =3D kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
-> +			if (!rs) {
-> +				/*
-> +				 * Returning from inside scoped_guard() drops
-> +				 * the RCU read lock, but skips the free loop
-> +				 * below. That is only safe because start =3D=3D
-> +				 * end here, which leaves that loop nothing to
-> +				 * free. Keep the two in step if this
-> +				 * exhaustion check ever changes.
-> +				 */
-> +				if (start =3D=3D end)
-> +					return -EAGAIN;
-> +				rs =3D ret_stack_list[start++];
-> +			}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001102909.1152=
-572-2-vineet.gupta@linux.dev?part=3D1
