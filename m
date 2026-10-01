@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660553A3E7C;
-	Thu,  1 Oct 2026 11:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4429336B933;
+	Thu,  1 Oct 2026 11:35:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790854479; cv=none; b=Vvl16HI3pEuy9J1M6l5YTdrTjUfbT3KHj6dEjfGgIcUH9cDpdiwJ3WZ7eh+nd+NOkqXgblEolEnf+INIwf8l95do+t5Co9gQslpTEplQIK1+hFuUlaQmA5dw1IAPJ1mEq4jzI6EzMhz83rFFEjjAXFsEebfiG3SJWkxxuyDj6fw=
+	t=1790854521; cv=none; b=Xi8IwkzWh6UN9HhGS2SV7hJi5tQnG3GFS1qLPSwMfd8faG2mcSDA9pApJcxSc9Q5KFpUHRNNwdpLtMPSDIoY/6TSjr3PhXn5x9lpTynG1nygGPmQ5ApIcw6hVzFFWkZt258kCxdBAdabgwtldW7480GhRhBPDf/9VPgKXwNx91c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790854479; c=relaxed/simple;
-	bh=dUJDxjOWI0u+zILa3KzQdhzxh18ErLI2+CG3edzzWX4=;
+	s=arc-20240116; t=1790854521; c=relaxed/simple;
+	bh=Q5tuSP+IIYrohLo79wCJ7E97nKOn60f7Kh/wxPjOqHY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=PM+jcLUwCW6wAU2/tOT0evDZGIoFhliZ/rLyk78cWS7dEa1vCYI32pPrU/a0NY+UyYZaG1YQK1e1wUIZccLWlq1ReCMfNprEiVkxqMCXjo1mng/uAduFZsTY18Wk7AiPhY4co3FbnKabHod0EZ1b4Gq7i03c+YtYdrW1ZoHjUE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hU/U6Fzr; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=bqiEh0vrVnsXL3ZEsJ6E9K+Y7B7KqZU9g8TAOI4jty6yE6IaEyf53vVBjSZ3054ebT3xCpo6GnXGWBDRp2REHH+Ksc+87YoskEC4lSk8hCzIXWiXZdeCsdU47HfhAICs/rswB+YAD/NtXGKrCuiz4UIQlgFMCp9soL4Cqclpu3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exBCzXDy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hU/U6Fzr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7079C1F000FF;
-	Thu,  1 Oct 2026 11:34:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exBCzXDy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3AF01F000FF;
+	Thu,  1 Oct 2026 11:35:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790854476;
-	bh=OFUfBJhfs43LK2uJ35trWg6Dxj/vYrf6yAbtRpo/I9Q=;
+	s=k20260515; t=1790854515;
+	bh=IR+/nwhsFwuNmBp3vUC3gN77geHokdiIHhVMCgtINUc=;
 	h=Date:Subject:To:References:From:In-Reply-To;
-	b=hU/U6FzrcmDrLuYwspEuImByZobXbfI3VhwI7ef+aDvD2f2HwXe2U0G2qGEHQJzu6
-	 fgcV7rEMPAoLLQN1Q2c2AXy58ZQUD8hIexEoci4gM6Ih/uiXQxHxNonUVR69E6Z8gX
-	 ZTd2WblSoo4EGpHGIeFX6HXyLNzS/Cdpm+hpU9rUMMXmjb05OM36DMx4SfGLcf0gsY
-	 Xd5ro+jXBJIF3mVya4X9/ghB9UFUxuxmCPjf3cWIEx2a3tmZoAqGLQznV8tA3UPEsW
-	 K4ktT/2AdvhFaj3l0TnW65UsRSRYVUOIcQe3dCdHOI6V/iROn3Thy4HYnYpDvZky5p
-	 AYOKVxe1+r+vg==
-Message-ID: <10fd28a8-04e0-4e50-860b-ae094dd1e008@kernel.org>
-Date: Thu, 1 Oct 2026 13:34:25 +0200
+	b=exBCzXDy4UfhbBpIf5ElPtsGdou5G37JN1w6zO7SBcy+SQbM6GyJXwNHkbHPDnbpX
+	 IiL40C+o59OcASc4wrLOZbNwO4nID9qatgAYSxpMwSl4u+eS+DnMWbLJ5jPdhKguBz
+	 8DBRKcQwqHEVHiKYWYVCAkwFeR6Jg1rqW3UD/xHeiC7vbIPaflaLY2qYQb7tUo0sGe
+	 NmZkPEy0IidKDzc1gEE3dajCaIi9wfaS96HPGSWyAU25kIVWUG+OdoesMdrtY2EGRc
+	 t1Jpoo3+ZwnDxJMNa57kL89/A8Sb2vVsmQHZNPRrjThEc6Ig3JrTgP9deNmUZWKIqT
+	 M/Trwd49yf+nw==
+Message-ID: <819802b5-e8b0-41dc-a1d3-8ed843d9a769@kernel.org>
+Date: Thu, 1 Oct 2026 13:35:05 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,8 +35,7 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/7] maccess: Skip setup for zero-sized kernel nofault
- copies
+Subject: Re: [PATCH 4/7] maccess: Use a scoped guard to re-enable page faults
 To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  Mark Rutland <mark.rutland@arm.com>, Alexei Starovoitov <ast@kernel.org>,
@@ -58,7 +57,7 @@ To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  <bpf@vger.kernel.org>,
  "open list:MEMORY MANAGEMENT - CORE" <linux-mm@kvack.org>
 References: <20260824160523.3907021-1-usama.anjum@arm.com>
- <20260824160523.3907021-4-usama.anjum@arm.com>
+ <20260824160523.3907021-6-usama.anjum@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -105,48 +104,26 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260824160523.3907021-4-usama.anjum@arm.com>
+In-Reply-To: <20260824160523.3907021-6-usama.anjum@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/24/26 18:04, Muhammad Usama Anjum wrote:
-> A zero-sized kernel nofault copy does not enter an access loop, but it
-> still disables and re-enables page faults.
+> Kernel nofault copy and string paths open-code page-fault disable and
+> enable around label-based loops, duplicating cleanup on success and
+> failure.
 > 
-> Zero sizes are valid. BPF probe-read helpers accept them, and KGDB memory
-> packets may carry a zero length.
+> Use a page-fault scope guard instead. Leaving the scope now re-enables
+> page faults on both paths without separate cleanup at the fault label.
 > 
-> Return before changing page-fault state when there is nothing to copy.
-> For reads, keep architecture-specific address validation before the fast
-> path so its behavior is unchanged.
+> No functional change.
 > 
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > ---
->  mm/maccess.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/mm/maccess.c b/mm/maccess.c
-> index 486559d688583..c59a0e092d24a 100644
-> --- a/mm/maccess.c
-> +++ b/mm/maccess.c
-> @@ -35,6 +35,8 @@ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
->  
->  	if (!copy_from_kernel_nofault_allowed(src, size))
->  		return -ERANGE;
-> +	if (!size)
-> +		return 0;
->  
->  	pagefault_disable();
->  	if (!(align & 7))
-> @@ -65,6 +67,9 @@ long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
->  {
->  	unsigned long align = 0;
->  
-> +	if (!size)
-> +		return 0;
-> +
 
-Worth an unlikely() ? It's the corner case.
+Patch itself is fine, but the guard name is completely misleading.
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
