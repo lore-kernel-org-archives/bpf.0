@@ -1,124 +1,139 @@
-Received: from mta1.migadu.com (out-239.mta1.migadu.com [95.215.58.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807344CDDEC
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 22:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521B62F7EE0;
+	Thu,  1 Oct 2026 23:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790895413; cv=none; b=TBnza+CtCC3rmjiYfjUmGkqp3N4CAAY2mH+em9HAEVurTlXL4eh5nrEMmJvLQhiuqBdao5TT0FmGHlMHNra/s/BvbtgTPbOFo+F0QT4YUD2tFxEI4k7etcnAwGZb0affpG9VzqdA1dXw3JTZA4oLwvMvzPEajP1KQZlQKQ4ppow=
+	t=1790897354; cv=none; b=KeHE9TVj1QBJ9Sqmd5P2vuxAgRC9yPbEcwUopJeZlFvhMuwZViCYQiFdkr3gjzz0n8lqrYAtn+akNCUu5aeIEJ3qonctMw8eDOLzplCq5D1AnHwVnYR3q0Kb/vBiMpqDbAJ3NMFfvTqKidOKznOEFEwBntJHaHRuW7a/YDtoIAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790895413; c=relaxed/simple;
-	bh=LLQ8+pbOCynS3JlGqiF6iafheWllDG7Lb60tw6hvgjk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tt6P8ePioHS1eRCKn/tXfxKfZin7euBTf45qyoBj8qHFDwRCvzQQZ5zmeobxiW0km5P84BJPp6kQY40IWNuZim1ScYkpp0K5ljpIxg4ugi+YW/RzS1HO3HrdRZADZMPd0IGBQGq5WfOkq0HryAe6J8n363WevAo0uqdTTHdj5fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q+o+jMDv; arc=none smtp.client-ip=95.215.58.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790897354; c=relaxed/simple;
+	bh=F9sNR8uDTG36T1yCX+2t3qyQu6bPwVnlyLuwhWIk1YM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uDGpMsRmFHRY3mCK1fHpVdUZhsvjcDV2i+uQF8A1GK28nK7nc8Wo2i26HToCvFq3XnxMpmWdsbaPKx5AICHZnjSNiiJ17hffrs+XA1X06RwBN3zHHSVL0Ey/qbRQSWyC5cf3Syq5Lrk1oVlKEFSS7eS1hDltGR0O9Ihjg3MoHFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpeBFHqH reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q+o+jMDv"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=LLQ8+pbOCynS3JlGqiF6iafheWllDG7Lb60tw6hvgjk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790895409; v=1; x=1791500209;
- b=Q+o+jMDvVuzAdIo4XoXemkI+/mUNSF9KZFVLHjdwWllFqZOlVWQatEYuzA6inN1yO0CD7yFQ
- r0vmbDroiJX1NJDW+aWz4IRALSORsfUD7lql/HsSth/5OZpdGCQZ7rWFhLgtQQZd/7sCcB0HbnD
- KvHR68Su707/lmHt1C/sFLB4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e4abc687ef968c60;
-	Thu, 01 Oct 2026 22:56:49 +0000
-X-Mizu-Trace-ID: e4abc687ef968c60
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 1 Oct 2026 15:56:47 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Tejun Heo <tj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
-	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
- struct_ops
-Message-ID: <ar7H__jzvWVtqSn5@linux.dev>
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
- <bda525506b3fb3e61da28a112f28abba@kernel.org>
- <arw4rjVkm2ob9ioL@linux.dev>
- <bc6815954b8d08e75deadd43e1a2192c@kernel.org>
- <ar2kvmCPR9q31V8M@linux.dev>
- <31a871a07fccc99e953a2d633fc51edc@kernel.org>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpeBFHqH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE651F000FF;
+	Thu,  1 Oct 2026 23:29:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790897353;
+	bh=UCp1D+bv7tlX4Dr/jntNO+4AHuP9rt2modE0wkIcwtc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CpeBFHqHmryldip33VnRdbzF7UDAkLGKgPdQ9lHYGrW6rtOepKTkX10IheVlSV68s
+	 zP0+ZgJcG6bJNHQ09dSoiIdm4t4Q2z8WoOAAtjBk0k7/hl4Md2ZyvgW3poockTNLH2
+	 NaSj4VRTTucIRopc40Fe4twHCke9Vh2jXEzblEZ2qOYNojWt8POe7HzKlwHhLj7wD2
+	 NerpPQWJ3T/qkqRnZP6EaMXe+ywenBpGPOz4vFuzDM5605Fuz9abCJM58rGHBQDe4C
+	 ml6DhqhVjbS1yy2XEBmIPvgjYCC6tdMC0fEwobsoCpL99DTeXhZka9b3v7UpLTruYk
+	 3SBAUkOKC/JnA==
+Content-Type: multipart/mixed; boundary="===============6923769064512196432=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31a871a07fccc99e953a2d633fc51edc@kernel.org>
+Message-Id: <562cbc38006e96e7fed9d935db2dbf4849bb20353f3fc86be22980680557d9d3@mail.kernel.org>
+In-Reply-To: <20261001225214.12351-11-wanjay@amazon.com>
+References: <20261001225214.12351-11-wanjay@amazon.com>
+Subject: Re: [PATCH bpf-next v4 10/12] resolve_btfids: add --btf_link to fill in .BTF.link records
+From: bot+bpf-ci@kernel.org
+To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: alan.maguire@oracle.com,martin.lau@linux.dev,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,qmo@kernel.org,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,linux@weissschuh.net,christian@heusel.eu,mcgrof@kernel.org,petr.pavlu@suse.com,samitolvanen@google.com,linux-modules@vger.kernel.org,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,linux-trace-kernel@vger.kernel.org,acme@kernel.org,namhyung@kernel.org,irogers@google.com,linux-perf-users@vger.kernel.org,jikos@kernel.org,bentiss@kernel.org,linux-input@vger.kernel.org,tj@kernel.org,void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,sched-ext@lists.linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,ojeda@kernel.org,rust-for-linux@vger.kernel.org,arnd@arndb.de,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,mpohlack@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kern
+ el.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  1 Oct 2026 23:29:10 +0000 (UTC)
 
-On Thu, Oct 01, 2026 at 08:42:55AM -1000, Tejun Heo wrote:
-> Hello, Shakeel.
-> 
-[...]
-> 
-> > Here if you meant that default behavior of memory.high should work for most (if
-> > not all) users then we are on same page. If some user want memory.high reclaim
-> > to happen in a separate thread instead of return-to-userspace or synchronously,
-> > this proposal provides mechanism through BPF to such users to achieve their
-> > goals.
-> 
-> I think there's a common reasonable solution here, which is deciding by who
-> the charge is for. A task charging for itself gets return-to-userspace
-> enforcement plus the checks in the explicit bulk operations above. A kthread
-> or anything else charging on behalf of a cgroup shouldn't be throttled for
-> the cgroup's overrun. The overrun is attributed to the cgroup, async reclaim
-> is kicked, and the cgroup's own tasks absorb the throttling on their next
-> return to userspace. The in-charge synchronous fallback goes away. Each case
-> has one reasonable answer, so I don't see a policy choice to expose here.
-> 
+--===============6923769064512196432==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Let me list the cases explicitly to see where we agree and where we disagree:
+> resolve_btfids: add --btf_link to fill in .BTF.link records
 
-1. For the !in_task() charge path, today we trigger async reclaim and we will
-   continue to do the same in the future.
+TL;DR: Not a bug: patch_btf_link() duplicates most of patch_btfids()'s ELF
+open/find-section/update code, so each --btf_link reopens and rewrites the
+file; suggests a shared helper or a single ELF handle.
 
-2. For a kthread (or remote charging), today we throttle it similarly to user
-   threads, but we want it to be handled similarly to the !in_task() case, i.e.
-   trigger async reclaim. Regarding your statement "the cgroup's own tasks
-   absorb the throttling on their next return to userspace", I assume you meant
-   that when some other user thread of that memcg goes through the charge path,
-   it will eventually do memory.high enforcement on return to userspace.
+> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+> --- a/tools/bpf/resolve_btfids/main.c
+> +++ b/tools/bpf/resolve_btfids/main.c
 
-3. For a task, today we enforce memory.high on return to userspace, and if too
-   much charge is accumulated in a single kernel entry, we enforce the high
-   limit synchronously. You are suggesting that we remove the sync enforcement
-   and add a couple of throttling points at known bulk allocation sites.
+[ ... ]
 
-Please correct me if I misunderstood.
+> +static int patch_btf_link(const char *elf_path, const struct btf_link *link)
+> +{
 
-We are in agreement on (1) and (2) completely. For (3), I am fine with removing
-the sync enforcement, but for throttling points for bulk operation sites,
-I think we should only add them when there is an actual use case for that
-or someone complains about overrun from those sites.
+[ ... ]
 
-Now, setting aside the default behavior of memory.high, I want to provide
-additional flexibility to users for (3) specifically. One specific case is
-letting users opt in to async reclaim instead of the other forms of memory.high
-enforcement. Basically, users can specify that instead of having their
-application threads throttled, they would prefer async reclaim to bring their
-usage back below memory.high. Whether we provide this functionality through
-BPF or through something else, I am open to options.
+> +	elf_version(EV_CURRENT);
+> +	fd = open(elf_path, O_RDWR);
+> +	if (fd < 0) {
+> +		pr_err("FAILED to open %s: %s\n", elf_path, strerror(errno));
+> +		goto out_data;
+> +	}
+> +	elf = elf_begin(fd, ELF_C_RDWR_MMAP, NULL);
+> +	if (!elf) {
+> +		pr_err("FAILED cannot create ELF descriptor: %s\n", elf_errmsg(-1));
+> +		goto out_close;
+> +	}
+> +	elf_flagelf(elf, ELF_C_SET, ELF_F_LAYOUT);
 
-thanks,
-Shakeel
+[ ... ]
+
+> +	if (elf_getshdrstrndx(elf, &shdrstrndx)) {
+> +		pr_err("FAILED cannot get shdr str ndx\n");
+> +		goto out_elf;
+> +	}
+> +	while ((scn = elf_nextscn(elf, scn))) {
+> +		if (gelf_getshdr(scn, &sh) != &sh) {
+> +			pr_err("FAILED to get section header\n");
+> +			goto out_elf;
+> +		}
+> +		name = elf_strptr(elf, shdrstrndx, sh.sh_name);
+> +		if (name && !strcmp(name, section))
+> +			break;
+> +	}
+
+[ ... ]
+
+> +	elf_flagdata(data, ELF_C_SET, ELF_F_DIRTY);
+> +	if (elf_update(elf, ELF_C_WRITE) < 0) {
+> +		pr_err("FAILED to update ELF file %s: %s\n", elf_path, elf_errmsg(-1));
+> +		goto out_elf;
+> +	}
+
+[ ... ]
+
+> @@ -1773,21 +1974,28 @@ int main(int argc, const char **argv)
+[ ... ]
+> -	if (btfids_path)
+> -		return patch_btfids(btfids_path, obj.path);
+> +	if (btfids_path) {
+> +		err = patch_btfids(btfids_path, obj.path);
+> +		for (i = 0; !err && i < btf_links.cnt; i++)
+> +			err = patch_btf_link(obj.path, &btf_links.links[i]);
+> +		goto out;
+> +	}
+
+This isn't a bug, but patch_btf_link() repeats most of what patch_btfids()
+does just above it: elf_version(), open(O_RDWR), elf_begin(ELF_C_RDWR_MMAP),
+elf_flagelf(ELF_F_LAYOUT), the elf_getshdrstrndx() plus elf_nextscn() /
+gelf_getshdr() / elf_strptr() / strcmp() loop that finds a section by name,
+and the elf_flagdata(ELF_F_DIRTY) / elf_update() / elf_end() / close()
+teardown.  Only the section name and what gets written into data->d_buf
+differ.
+
+With the loop in main(), a --patch_btfids run with N --btf_link options
+opens, maps and rewrites the same ELF file N + 1 times.
+
+Could the two share a small helper that opens the ELF and returns the
+Elf_Data of a named section, or could the .BTF.link records be written while
+.BTF_ids is being patched, using the same ELF handle?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36938681172
+--===============6923769064512196432==--
