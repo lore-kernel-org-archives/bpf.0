@@ -1,160 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E473B95E0;
-	Thu,  1 Oct 2026 07:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6679547074;
+	Thu,  1 Oct 2026 07:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790838309; cv=none; b=hDGQQxjYVC/JSDm7fyOxQVVJ2cucDKkpurrTyQXK8oJ6D4Ccn7O3kkuggQ/MSffJgqgWuQqUs2Vd9YBnoiWntOks03GWU7NJhZoWtJZqDhKFLthbIaNkYdQEvgd9P0ltlg6aY7Hn4e7ZwJcEr6ShF/EWZwHhNuncIMJ4Zm0z+8M=
+	t=1790838497; cv=none; b=RKe+5wpKJcq6hiDFc+1mteUTA4Y7obz7e2gh1R+Y8N7Mbc3/wAkBLvIxSCl2K1zczC7yzfGGzLXIHLtGSPQAd+OEyyhFPscCkc2sPzO9N6iaRt06pKRyNgAObxE5WIkQDQu+Hy44NSZbQEzWwWWBhZ5qT74pAyj62d1ZEwUclUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790838309; c=relaxed/simple;
-	bh=fcQ2y1wc6VRCd4OgMADXevuJLq2I1HVoXkWDblKuYWU=;
+	s=arc-20240116; t=1790838497; c=relaxed/simple;
+	bh=nbXgcRbx4i5BTLZ8EzF2YcTdwfj6YP7znNDB2WMKF1w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qawc76gtVtIP2SbNERajrsv8br/RqDmWC73qfIyHtVwq0wR3KUAAaR0QGsOi753UGJPYrx8MKRg9qX7XPFVP4wE6SjY1Vu77lZIqGnCOy0xyvCdsxWlEh6txyQI8G74hcnGovTcyeDZ25lFyVap1gN45CQ+2/aDBCTM1ztX9gkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VdNj1j0Z; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=UOOUYh5mXZ+tPbd/CsrqrYCMlMRkWN11FzuTTezadhbP8A2aSX9X1uwYVRpRrYh4Qo9lVtvFWGBwlXY6AmFZa5V7MkEFNpHHiiAc3KJgAvju3mwNFSAwTMcG2dDY5iStQUwa0/IZAbow2xMzoqzeXh4qpknVM1vXPg6A4KosnWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Tm/Y533+; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VdNj1j0Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11CEE1F000FF;
-	Thu,  1 Oct 2026 07:05:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790838306;
-	bh=fcQ2y1wc6VRCd4OgMADXevuJLq2I1HVoXkWDblKuYWU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VdNj1j0Z2VqDtl/ZO9MIS6QjdZKZpMIEE3F5hihWOY19PVAeBxcvRrd7Dhvy9N6Dr
-	 EMg4Vze/EWbPMklL96eMj9p7tWXCbE4ivn5EiWvUOK5pClViP+fdAMNI0mtjmI3gTI
-	 CHnBvUeZ2Q6gmlgKvg9KUmq/RzHjznaH3Bbdga/Ahc0rvFxAS+Jj+9DCOpjmZSraLz
-	 nVtDW2O+bzCRITrShZ+JpQQqXSrK8XOnfYnj7Tzo5N+Xc7EjjqQtDI4d1NGQdX5Wze
-	 LXbuvSmTtj/BEwiydFeRs3oPPYZgqiSFcURqC6rfAvvRvM6YMqhkDqSqtmgNJY9NR6
-	 5/VI+13AADiJQ==
-Date: Thu, 1 Oct 2026 09:05:03 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <ar4FOkG58Efmyo99@houat>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <054ef52478fc93fc213a9dae23ea77f73094aaf2@intel.com>
- <6c581ae0-2480-47a2-b46e-97afadbc7c1f@linaro.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Tm/Y533+"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Ezn1/5i1OKioygyWwMMHCtWeGbbfzgZse0+udSMI8ss=; b=Tm/Y533+Uegl1mXDMgHAjYnLzK
+	87KbPYIyyIisz24b+9tUWbSkjr9ELrZ+QvjSoVisH7ATuTLvwZXbCMeTJWuEEc3lYhu1tZ2spYR56
+	aDKZfmptlTqG6sQYeEXk8EjqLOjoOmg1mFRJ1p/n17b8b1g561P2gawiGeDh8UDVV3IyXBqSA/5tm
+	J125TJnPzE72H4WBUk15757ip/NFtWliCfpYjxiThujImSRhyD3v/LN7ihQ2P/0hZKYvVmDWeR8CF
+	8heQI0fg1+5EpKMEZpcgYuCkqywJgt72mSVPbrXA45Xhwtney2tvDf0RdTJ2AFGuXVQ/E+4Q5kr35
+	vAFUs9dA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1xCAtY-00000005u1N-2s8c;
+	Thu, 01 Oct 2026 07:07:56 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9E4AE300390; Thu, 01 Oct 2026 09:07:55 +0200 (CEST)
+Date: Thu, 1 Oct 2026 09:07:55 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Ian Rogers <irogers@google.com>
+Cc: acme@kernel.org, adrian.hunter@intel.com,
+	alexander.shishkin@linux.intel.com, ast@kernel.org,
+	bpf@vger.kernel.org, james.clark@linaro.org, jolsa@kernel.org,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+	song@kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v1] perf/core: Replace perf_event_header__init_id with
+ full header init
+Message-ID: <20261001070755.GQ88198@noisy.programming.kicks-ass.net>
+References: <20260929182108.794434-1-irogers@google.com>
+ <20260929222332.973435-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="4fvfqvnrglbwmlpj"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6c581ae0-2480-47a2-b46e-97afadbc7c1f@linaro.org>
+In-Reply-To: <20260929222332.973435-1-irogers@google.com>
 
+On Tue, Sep 29, 2026 at 03:23:32PM -0700, Ian Rogers wrote:
 
---4fvfqvnrglbwmlpj
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-MIME-Version: 1.0
+> Rather than splitting header initialization between callers and output
+> callbacks and saving/restoring mutated header fields, replace
+> perf_event_header__init_id() with
+> perf_event_header__init_header_and_id(), which initializes header->type,
+> header->misc, and header->size alongside the sample_id fields on each
+> invocation.
 
-On Wed, Sep 30, 2026 at 04:01:52PM +0200, Neil Armstrong wrote:
-> On 9/29/26 11:03, Jani Nikula wrote:
-> > On Mon, 28 Sep 2026, Maxime Ripard <mripard@kernel.org> wrote:
-> > > Panels in general, and MIPI-DSI panels in particular, are pretty
-> > > difficult to support and require pretty much a panel driver for each
-> > > panel produced. Most of them are pretty simple, and require an opaque
-> > > initialization sequence that is usually poorly documented.
-> > >=20
-> > > This creates a tension between OEMs and distros because OEMs will
-> > > typically get a new panel to react to a sourcing issue during
-> > > production, and thus need some swift turnaround between getting their
-> > > new panel and it being operational in the OS. Distributions on the ot=
-her
-> > > hand can take years to ship a kernel with that new panel driver.
-> > >=20
-> > > To solve this, I followed the example of HID-BPF and wrote a panel
-> > > driver that will rely on BPF programs to perform the panel
-> > > initialization. That way, we can ship the programs separately from the
-> > > kernel, and with a different lifecycle. If this driver is accepted, t=
-he
-> > > plan is to have a userspace component started by udev to identify and
-> > > load the right BPF program for the panels found on the device.
-> >=20
-> > I'd think for most panels it would suffice to have a declarative
-> > language describing what to do at what points in time. For example, at
-> > poweron, enable this GPIO, wait a little, write this set of DSI
-> > commands, etc. You rarely need actual programming, or even ability to
-> > read-modify-write something.
->=20
-> Yes we could have a similar panel-simple but with init tables, but
-> in reality those panels offers much more features we don't handle because
-> the DDIC vendors and panel integrators just don't care exposing those
-> features, but they get handled by vendor implementation like for Phones.
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 33210aff3ee6..c1b2d0c9b2af 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -8119,13 +8119,18 @@ static void __perf_event_header__init_id(struct perf_sample_data *data,
+>  	}
+>  }
+>  
+> -void perf_event_header__init_id(struct perf_event_header *header,
+> -				struct perf_sample_data *data,
+> -				struct perf_event *event)
+> +void perf_event_header__init_header_and_id(struct perf_event_header *header,
+> +					   struct perf_sample_data *data,
+> +					   u32 type, u16 misc, u16 size,
+> +					   struct perf_event *event)
+>  {
+> +	header->type = type;
+> +	header->misc = misc;
+>  	if (event->attr.sample_id_all) {
+> -		header->size += event->id_header_size;
+> +		header->size = size + event->id_header_size;
+>  		__perf_event_header__init_id(data, event, event->attr.sample_type);
+> +	} else {
+> +		header->size = size;
+>  	}
+>  }
 
-It's kind of what we already do. It somewhat works, but doesn't address
-my problem.
+I've renamed the thing to perf_event_header__init(). Also, I've done:
 
-> > It could be, say, YAML converted to some binary representation. Maybe
-> > that could be in the DT, or maybe you could override it with the
-> > firmware loader. And obviously any vendor "blob" could be trivially
-> > converted back to YAML and upstreamed.
->=20
-> I don't think we want this, downstream vendors does that and we don't want
-> to go there.
->=20
-> >=20
-> > Where that falls short, you could always have a dedicated driver, or
-> > extend the declarative stuff.
-> >=20
-> > Now, the question is, how much more BPF solves over that, without
-> > requiring a dedicated driver, and is the added complexity worth it?
->=20
-> This is my global question, and this is what I'm evaluating here, and so
-> far is created more problem that solutions.
+	header->size = size;
 
-Great, more judgmental stuff. It's a v1 that hasn't been merged yet.
-What problems did it create exactly, and for who?
+and restored the:
 
-> > FWIW, on the Intel platforms that support DSI, all of the
-> > initialization, poweron/poweroff, backlight on/off etc. sequences like
-> > that are stored in the BIOS, defined by the OEM. A plethora of DSI
-> > panels, one driver. Don't look at it for examples how to implement it,
-> > but I think the basic idea is workable.
->=20
-> For _some_ panels, here, as a general solution no because we really
-> want to have full support for panel features.
+		header->size += event->id_header_size;
 
-The only one who claimed it was a generic solution was you. I've been
-pretty clear from the very beginning that I wasn't expecting it to be a
-one-size-fits-all solution.
+and lost the else :-)
 
-So if you want to review your idea of what this driver is, fine, but
-keep me out of the recipient list.
-
-Maxime
-
---4fvfqvnrglbwmlpj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCar4GHgAKCRAnX84Zoj2+
-dn3UAX9cj8V5XOZnckDiSXI52zwz3hS723YGZhAt7H9G2vCH5gpnzt9rN3xy+o/5
-NNhj5qoBgIw5OCgp6Tzq7BOrsSw2VfeymLcVpDw4SIUcWZ8fL19/9rqg1h7cxBiY
-4UA1G5YUJw==
-=rmnt
------END PGP SIGNATURE-----
-
---4fvfqvnrglbwmlpj--
+But yes, this is better. Thanks!
