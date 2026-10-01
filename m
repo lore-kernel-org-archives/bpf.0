@@ -1,250 +1,154 @@
-Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5494EDCB2
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 09:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822F93C661A
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 10:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790847363; cv=none; b=p6oKx8LMnz+xpIppsR5x8lLn8hYtS0Ge433AwZlZCmjp3lcKHaxj6iF8EsJc+M5SEhIjH3M/whOX1aS1P49FdhNVMVED6jWTRa/NQpOm/ryNldg2zJ998BIVVbAEhXohbPIB6keJ93R+SRw2ntCCK0py6AdcD/VUHW3Yv9yK5yY=
+	t=1790850121; cv=none; b=QYrxIN/M566M6qP4yZKM13LUfgjTB0zml3yDWXZ8VaJFnwZbYt0AZ/ap7xSN1sFz2iwns+H8EWL8hOSp9+mXn/2cpKfdcxj46lPwfhSd6pzMB8nK7zstmpzPaPFSwPRppKbHiw9r/gygiXSBM6s41PmLa7igGKBFW0SWCFOocX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790847363; c=relaxed/simple;
-	bh=qm//W2ACASQMMeGfzC6o5JYQ2elhZbrpfT6Jvt75e2E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=W5Y4TDBTE4Kr3U/TJraVk0L5eQ5qWrA6YTAwTWuMqa+vn36z9zJ/iT4ND3weyy4BVEAEs/fkGhemZVefhoxkXLtfvS4s7gSpS+1QdnPn+EQDRuVagSGFy/Moj5O8VpOZkRSo8wgCdYX+lDFKf5W8fo6D0HH+F9PGynxtUvTjSbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K08kD4ow; arc=none smtp.client-ip=74.125.229.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790850121; c=relaxed/simple;
+	bh=AYmHbXRU0iVjyjz03KFtEKin0VAR2WHPqji285UJTnc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Gzju2/teO8ea4bFq99adJGclB9JfywE/Nb4JUbG9zyzH20ZKvaCW3ug0OMHyk5ZukXe3b9Gmhr1lr2XvuVdQNWMXaCHXx28hFPjzmSv+gVpZMIAGuwY9rsoOxQc98EEyGCxcWgkFvmy1qjDA1DCgBBoB6kNJa2eWevTZL90jFOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USXVEQGy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K08kD4ow"
-Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-3396cec93b6so7171498eec.3
-        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 02:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790847360; x=1791452160; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=MwUOMTspkkXHgX9A+hS2Ljvlb6FdIM56gQO1o7QfI6I=;
-        b=K08kD4owIGCZSbX/GAUzwlgyWGXmOdXGiJdGMk+yu3NqfNrIqOLS6b+beDng63YN4G
-         P37Z3Ty/oERaKdbLGX4Ms86ksSwSyDNe6ouFl5YJb0IOW2xx90QmtIUDeZxoc9B+d730
-         MiAd1fhNI6cCaMv1m4yYh1Q32HsEFbvMgzWOMXGNamK6DHdK52fB4T4lEBLmnkjY1Tqp
-         MUSKwnVdtFVD2BW6YKFU9raURf5ujgAPc0cqL7RxNUPeCVec62TWqDwU0tmLYi0rftU0
-         XHDa0MpSktZlHSlCElYmpOYAhm22kfRtayPHVqth7gro9Vlt4B+JCyEuD3k6soTg9uUv
-         c9kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790847360; x=1791452160;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MwUOMTspkkXHgX9A+hS2Ljvlb6FdIM56gQO1o7QfI6I=;
-        b=bqAJ6VZRvffYsN7mx0bRQyiWYMfDw4EFUZTri14YnwVHQ1lVMD+26k0kEXn4cJxxPo
-         +UgFgN03gMWrAEVk1nyp9iArbYH9oKrLoXIxTSuEVi65cz0DiD1MRxRZD9i6cD3FLCQM
-         cBFOdjUwqaBe5n4KlrkyysIeIFaPNP403UcRp8E33hRpVmPQghJYwIw1zflalK5f2vsE
-         2G8g7FkDydu9Qj2+QmwmsrYR9B/P5kXHYqVM/2WteAhnYPhQr6ILX8cBbH5pFTCj59eJ
-         FaeVUfIRO00+OxYj2bbLI2YhOR56bVoYQ6tOmahVdp9BuFRq1S69bswneksJnr2nen4e
-         iNQw==
-X-Gm-Message-State: AFq9FYJ+vABNE4d5HLyDhAgr93scHce+eEKcN+nejfjmqTBvO9RwGNqo
-	T8+a0a5TxYT5FJISQkNH0fsGIx3IdHc+YFyT6PeEVh096pHnTlTa9Z5G
-X-Gm-Gg: AYBFou3WQftki+QFuluUuBNtcwWGbloRk1kMr6SkFFj5iEyNY36XPDDCC0NTFYZ8226
-	kAagl0Q3ZqnrxrhbZx5NAUrK7khfPwe8Ozz2A2GJ2gNJPnkNciA4fbK7H+iw9F0TUU6HZuUUyjt
-	piPrDIKVDzyAfUacz+KB7APFlKvJu4Qe0MAu3Rz8cOTnYXpdaftHcInVY39N4rgXNfbwshn/n+L
-	Z2yX9o/4xXCHxMoCYYarid701v6F5Ov32khA45GBcwvloYDCtfbx1jT1P8Wfrl5WqOytybloRLX
-	8hffO68aEMsjJa7jhEQ8VV4ZvSco57BtqMHV65BhEkqnSDGlE0A2aZ5NRYd+keCJxD4aEl0ze4V
-	K4k+x59pSj/0QJ2pTsNzARxhsvfb0vcOFjDj9dT+pVppv6w3nMYOJluKCzIyTLAQY1XazAMqqLT
-	RZn8u8HKxPHy+06x/WOriDWFE6Qs5oTpHdB19lywebucucRsDIE1BvUbEO3EH3DW/AF/CNHUFSP
-	fP0
-X-Received: by 2002:a05:7301:6196:20b0:34b:7e89:9a7 with SMTP id 5a478bee46e88-34ce0156f04mr4369034eec.20.1790847360332;
-        Thu, 01 Oct 2026 02:36:00 -0700 (PDT)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34db37507a7sm6003982eec.13.2026.10.01.02.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2026 02:36:00 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Thu, 01 Oct 2026 17:35:35 +0800
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Test jumps around patches of
- bpf_do_misc_fixups()
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USXVEQGy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC711F000FF;
+	Thu,  1 Oct 2026 10:22:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790850120;
+	bh=oO/5rU6MnZopL32OSVAKxIiKv34Gi8nDKx37yBMHp1E=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=USXVEQGy49mG7HZtbGTbYU1WFrgIujyBhVX0lkKhVCG5kOrAO22gHWyMx/iLkULke
+	 7jqz6HYZnXZsb6+4KCvWOJUyIkgn9a0pQdXHZK4wETVS1beW0qYtuC5mNx+dMFjbMa
+	 uK3cGgL/aRybf1u0kbkFGp7Ye/ZcRs2M98uk0fEcmQxOKmUt+Xsbzhiv6qYUDi0crq
+	 AI9+mo33zxsdFkP3xDU6wzgIBXISkNgDI3HuwqvP+Ngy6PFq7jDgONyJXFYWVd4qRv
+	 Cxa1LslWiiAQP5axi+DIYOv1RroL1sSqLjcSpki6pigNxP56r5xCMZaNV6gRw9q4po
+	 oAVJcdZSJimxA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v5] tcp: add TCP_ECN and TCP_ECN_OPTION kfuncs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Irlanki Sandeep" <irlanki.s@samsung.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260930102308.197808-1-irlanki.s@samsung.com>
+References: <CGME20260930102144epcas5p419270301dba37c520277e6c6cff75def@epcas5p4.samsung.com>
+ <20260930102308.197808-1-irlanki.s@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 01 Oct 2026 10:21:59 +0000
+Message-Id: <20261001102200.0BC711F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261001-bpf-verifier-patch-batch-v1-4-a12df8a09160@gmail.com>
-References: <20261001-bpf-verifier-patch-batch-v1-0-a12df8a09160@gmail.com>
-In-Reply-To: <20261001-bpf-verifier-patch-batch-v1-0-a12df8a09160@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
 
-bpf_do_misc_fixups() now queues its patches and applies them at once.
-Check the xlated code for forward and backward jumps to a patched insn,
-jumps over patches, and a may_goto whose jump leaves its own patch and
-crosses another one.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] bpf: out-of-bounds write in bpf_sock_ops_set_accecn_option() for n=
+on-TCP sockets
+- [Medium] tcp: child sockets inadvertently inherit listener's ECN overrides
+- [Low] bpf: multi-line comment style violation in selftests
+--
 
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- .../selftests/bpf/progs/verifier_patch_list.c      | 120 +++++++++++++++++++++
- 2 files changed, 122 insertions(+)
+commit c9aee50642be2579799b62e26cc528d60bbb2e33
+Author: Irlanki Sandeep <irlanki.s@samsung.com>
+Subject: tcp: add TCP_ECN and TCP_ECN_OPTION kfuncs
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8a6d341b754ac..af107b0c1595e 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -90,6 +90,7 @@
- #include "verifier_netfilter_retcode.skel.h"
- #include "verifier_bpf_fastcall.skel.h"
- #include "verifier_or_jmp32_k.skel.h"
-+#include "verifier_patch_list.skel.h"
- #include "verifier_percpu_addr.skel.h"
- #include "verifier_precision.skel.h"
- #include "verifier_prevent_map_lookup.skel.h"
-@@ -273,6 +274,7 @@ void test_verifier_netfilter_ctx(void)        { RUN(verifier_netfilter_ctx); }
- void test_verifier_netfilter_retcode(void)    { RUN(verifier_netfilter_retcode); }
- void test_verifier_bpf_fastcall(void)         { RUN(verifier_bpf_fastcall); }
- void test_verifier_or_jmp32_k(void)           { RUN(verifier_or_jmp32_k); }
-+void test_verifier_patch_list(void)           { RUN(verifier_patch_list); }
- void test_verifier_percpu_addr(void)          { RUN(verifier_percpu_addr); }
- void test_verifier_precision(void)            { RUN(verifier_precision); }
- void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-new file mode 100644
-index 0000000000000..268cebd179984
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../../../include/linux/filter.h"
-+#include "bpf_misc.h"
-+
-+/*
-+ * bpf_do_misc_fixups() guards each division by a register against division
-+ * by zero with a 4 insn patch. Jumps to a patched insn must land on the
-+ * first insn of its patch, other jumps must follow the insns they target.
-+ */
-+
-+SEC("raw_tp")
-+__description("patch list: forward jumps to and over patched insns")
-+__arch_x86_64
-+__arch_arm64
-+__success
-+__xlated("0: call")
-+__xlated("1: r1 = r0")
-+__xlated("2: r0 = 7")
-+__xlated("3: if r1 > 0x5 goto pc+1")
-+__xlated("4: r0 = 9")
-+__xlated("5: if r1 != 0x0 goto pc+2")
-+__xlated("6: w0 ^= w0")
-+__xlated("7: goto pc+1")
-+__xlated("8: r0 /= r1")
-+__xlated("9: if r0 > 0x3 goto pc+4")
-+__xlated("10: if r1 != 0x0 goto pc+2")
-+__xlated("11: w0 ^= w0")
-+__xlated("12: goto pc+1")
-+__xlated("13: r0 /= r1")
-+__xlated("14: exit")
-+__naked void patch_list_forward(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r0 = 7;"
-+	"if r1 > 5 goto l0_%=;"
-+	"r0 = 9;"
-+"l0_%=:"
-+	"r0 /= r1;"
-+	"if r0 > 3 goto l1_%=;"
-+	"r0 /= r1;"
-+"l1_%=:"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("raw_tp")
-+__description("patch list: backward jump to a patched insn")
-+__arch_x86_64
-+__arch_arm64
-+__success
-+__xlated("0: call")
-+__xlated("1: r1 = r0")
-+__xlated("2: r2 = 0")
-+__xlated("3: if r1 != 0x0 goto pc+2")
-+__xlated("4: w0 ^= w0")
-+__xlated("5: goto pc+1")
-+__xlated("6: r0 /= r1")
-+__xlated("7: r2 += 1")
-+__xlated("8: if r2 < 0x3 goto pc-6")
-+__xlated("9: exit")
-+__naked void patch_list_backward(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r2 = 0;"
-+"l0_%=:"
-+	"r0 /= r1;"
-+	"r2 += 1;"
-+	"if r2 < 3 goto l0_%=;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* The jump of may_goto leaves its own patch and crosses another one. */
-+SEC("raw_tp")
-+__description("patch list: may_goto between patched insns")
-+__arch_x86_64
-+__success
-+__xlated("0: *(u64 *)(r10 -16) = 65535")
-+__xlated("1: *(u64 *)(r10 -8) = 0")
-+__xlated("2: call")
-+__xlated("3: r1 = r0")
-+__xlated("4: if r1 != 0x0 goto pc+2")
-+__xlated("5: w0 ^= w0")
-+__xlated("6: goto pc+1")
-+__xlated("7: r0 /= r1")
-+__xlated("8: r12 = *(u64 *)(r10 -16)")
-+__xlated("9: if r12 == 0x0 goto pc+9")
-+__xlated("...")
-+__xlated("15: if r1 != 0x0 goto pc+2")
-+__xlated("16: w0 ^= w0")
-+__xlated("17: goto pc+1")
-+__xlated("18: r0 /= r1")
-+__xlated("19: exit")
-+__naked void patch_list_may_goto(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r0 /= r1;"
-+	".8byte %[may_goto];"
-+	"r0 /= r1;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1 /* offset */, 0))
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+This commit introduces two BPF kfuncs to allow per-socket overrides of ECN
+and AccECN configurations. It also adds helper functions to resolve the
+effective values, updates the TCP stack to use them, and includes selftests.
 
--- 
-2.43.0
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 70dc621672f2e..b9dc1079aefc5 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+[ ... ]
+> +__bpf_kfunc int bpf_sock_ops_set_accecn_option(struct bpf_sock_ops_kern =
+*skops,
+> +					       u32 opt)
+> +{
+> +	if (!skops->is_fullsock)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (opt !=3D TCP_ACCECN_OPTION_UNSPEC && opt > TCP_ACCECN_OPTION_PERSIS=
+T)
+> +		return -EINVAL;
+> +
+> +	WRITE_ONCE(tcp_sk(skops->sk)->ecn_option, opt);
 
+[Severity: High]
+Could this lead to an out-of-bounds write for non-TCP sockets?
+
+When a UDP socket requests hardware timestamping, the transmission skb gets
+SKBTX_HW_TSTAMP set, which implicitly sets SKBTX_BPF. When the timestamp
+is delivered, __skb_tstamp_tx() triggers bpf_skops_tx_timestamping(),
+invoking the CGROUP_SOCK_OPS BPF program for the UDP socket with
+is_fullsock set to 1.
+
+If the BPF program calls this kfunc, it bypasses the !is_fullsock check.
+Since there is no verification that the socket protocol is IPPROTO_TCP,
+it casts the smaller udp_sock to a tcp_sock. Writing to ecn_option would
+then corrupt memory past the end of the udp_sock structure.
+
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c b=
+/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
+> new file mode 100644
+> index 0000000000000..506b48e08621f
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
+[ ... ]
+> +	/* BPF_SOCK_OPS_TCP_LISTEN_CB -> BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB
+> +	 * Listener's values are consulted for SYN negotiation, but the child
+> +	 * socket is initialized with UNSPEC (not inherited).
+> +	 */
+> +	ASSERT_EQ(bss->listen_set_mode_ret, 0, "listen_set_mode_ret");
+> +	ASSERT_EQ(bss->listen_set_opt_ret, 0, "listen_set_opt_ret");
+> +	ASSERT_EQ(bss->passive_mode_read, TCP_ECN_MODE_UNSPEC,
+> +		  "passive_mode_read");
+
+[Severity: Medium]
+Will this assertion fail due to child sockets inadvertently inheriting the
+listener's ECN overrides?
+
+When a passive connection is established, tcp_create_openreq_child() in
+net/ipv4/tcp_minisocks.c clones the listener socket via
+inet_csk_clone_lock(). This copies the entire tcp_sock structure, including
+the new ecn_mode and ecn_option fields.
+
+Since these fields are not explicitly reset to TCP_ECN_MODE_UNSPEC during
+the initialization block in tcp_create_openreq_child(), the child socket
+seems to retain the listener's mode, breaking the intended design and
+causing this test assertion to fail.
+
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c b/tool=
+s/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
+> new file mode 100644
+> index 0000000000000..32ed64ac4f3d3
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
+[ ... ]
+> +		/* Leave the socket on the sysctl defaults so the loopback
+> +		 * handshake driven by the test is not altered.
+> +		 */
+
+[Severity: Low]
+Does this multi-line comment violate the BPF subsystem style rules? The
+required style places the opening /* on its own line.
+
+[ ... ]
+> +	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
+> +		/* Listener values consulted for SYN negotiation; child starts
+> +		 * with UNSPEC (not inherited).
+> +		 */
+
+[Severity: Low]
+Similarly here, should the opening /* be placed on its own line to match the
+BPF comment style?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930102308.1978=
+08-1-irlanki.s@samsung.com?part=3D1
