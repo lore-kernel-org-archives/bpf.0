@@ -1,108 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B76651614B;
-	Thu,  1 Oct 2026 17:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D508450AC33
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 17:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790874210; cv=none; b=ZzsFcdwCzB43rfsDFxX8Q2nqKIaGnJjkmXHTBJEIo0QGlh2lUus7jq/ZBz8x0tB3dgrg0ewMwZlrv/KazL82OXvbAHGhooCWy3/l4HXwtfZLDJpiXpQC7ERrLflmxva1Je9WP0LFEIevEz7F75oKOrMcGUVlut/aVEVVrOX00FE=
+	t=1790874305; cv=none; b=fKDfUX5VM2w6B84LCGt5F64Wn8xgS8XFkMpVgRRPqKvO+g/kR4FZDQVlPPv3IVZ9+L15NAAymZulFK70nbTBnTaERo9pWpJGP1FQuFxN9WYn//bFVk0ZoLeLsCSgpd6LMS3ULh0zAQiRVv6qS/rEquk6o/CubRxmnV9lqNdr8ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790874210; c=relaxed/simple;
-	bh=EX9W5RH7bDkLX7Yf39fu1DvtbQ2nox1FjQReRMWn7TU=;
+	s=arc-20240116; t=1790874305; c=relaxed/simple;
+	bh=YcQDuTEhiIHLPGehWyOnNgYb4N2LsAYjJvT2wrN5O+A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IlCtrlp7Hfd1c4KlW7GBQLfhJG8Q0i3vLvdAiU/jWPPn+7b9BIu01V6w9cdOxphbml6LrcrWLPI1idDA1/SVqxcKbQNYvPwtIpCCu7B3/esn0KMXbrCwmgdM9iDQ3dIy4iPhxkY7kKmKsyGOLefG7InNIkupaX1/JeBkotcwPXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OS3trrN5; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=apptmyGkv+YyS5ib4VaSPicnHJDrh2zyo++SiaEd9ws5ioghqFjVzu3et08QNRnuqARN3LS7X+oOSVWUYSsqwj3xA5SIpnFjP5m7dmpllhGsKXXG9gW8bsyqpUcKK1lCP2dDb8yh2LieSniIXlIDwEW6vqbJmah1dXA38abV4+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oK36QDXw; arc=none smtp.client-ip=74.125.227.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OS3trrN5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957F21F00898;
-	Thu,  1 Oct 2026 17:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790874197;
-	bh=EX9W5RH7bDkLX7Yf39fu1DvtbQ2nox1FjQReRMWn7TU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OS3trrN5b8W9fLou1Z12+BrRokT3+5lHTvluXexWclVL7xq2EcnSBAPW32lYJeQdO
-	 zghxHKTCh/sDQIDqYKZDwhOWD3y9DaYG2sYqxTYBgRLRASEpGfQsJXocSa8t2hsWyy
-	 G+p1PUH8k95nCe3AtV5co1nCAqR8B0EdZQmc/azcwbFJuWIW3FIRW5amhVP9TwmmS+
-	 iPFv+bmaeTfkG7xjr6sGD57gRTB2fGyt7l8Xw2+AUPmJn+8nQQXRzlP5ED8SKJAKT5
-	 KwhTlWo/W3qc06kx8DaYNFt1SMW5ZG+Dp0T4aw4ND2VuohGzUh7gcnf+P5759FkQPz
-	 M4XhExyAsOeQw==
-Date: Thu, 1 Oct 2026 19:03:13 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <ar6RSRd99jbTdYOR@houat>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
- <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
- <arrAqg5n87INTHE6@beelink>
- <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org>
- <artpBMeM13Dd0lLy@houat>
- <fb7ed8ab-8aea-4731-a5e5-c9476d8bfd38@linaro.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oK36QDXw"
+Received: by mail-pj2-f11.google.com with SMTP id d9443c01a7336-2df834eb96fso36390375ad.0
+        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 10:05:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790874299; x=1791479099; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=stLdMF1HFFKlJP7EW7qqWefqncCa7xTHqwJgtpV2KKY=;
+        b=oK36QDXwlyYFp3GbVh4y8K3gebagaXmINoLaZQ3FWKrfZ+gk4OFlMB7lqqqa7dAz3D
+         yT7EVtHcIfWZtb0cMoz6eVm5u/Hs4mzIQboiprjSEMGflLbrFqwxqeTNMvHRKFVZBZLz
+         L/+QcVf43Kcth4wZ5bL3Uk5pvKKt+CskaL8ObhU0xv3x0Nb7A0hk8cqgMnHff40hncaz
+         Za+tlVKn53xZ02LcfuACUgq3urwZnWi0CeoQJ0UV3RQvrTwULja2laXKbwb8iX9EIgHS
+         +9ROdi5/P/OXl+c7qcR+ujBgQVx6Lnxnfi+43o+CGho+6WPDADWbRqTmtTUb6JzrTWz2
+         u4bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790874299; x=1791479099;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=stLdMF1HFFKlJP7EW7qqWefqncCa7xTHqwJgtpV2KKY=;
+        b=Wd/KJB+i+ShvnUTB0FEr8uB572Z517w0Mv50VU7OiMcxFYtWyGviJ+mamK4w1sgmGu
+         GqlNi4lcKfL4Cm28ISCjdRoGpCcr8G6BpIzGxSeMLQ2TbVF2vTKrUj6NKZZP0Q3/NYzg
+         cDAybgLAki84Yaw/EIm2Ib63Kp0sAmjsI7iZq8KHa1PJHA9DwGmvpOEf9yS5TDoru7jO
+         j2aQYjZTcfRiESLtHYgU5/+CKOCXAGKHlsMstmfIb4+JWhk6K24RR1jBy81ygC4G+hYu
+         RjSS4HOd6R0Sh3U2rzxnamezt9DmgzMfnRtBzW4GCFcrniBDpGqsprMv/03FwjF9B/83
+         oKEw==
+X-Forwarded-Encrypted: i=1; AKwUvBxZPzCfR2J3+ah5YQRRrkqUuRyNQA/j8hIT2YVDrSHlU0EwNFUBw3oIhrZU6PW2ODu2r2k=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKJJduCpput5yV4j0Iv+7SyyaFXmmBLzxY/yI2FlUx/l9dlz04s
+	wvTKxHKsL8un0uIifJtPOBao1BjhWcfjxzIx5VkOQ+ksMK5Q2Ap1lv7T
+X-Gm-Gg: AYBFou3i4NAt5r6Ep6hQm4MLksa+oHed7MgQj8PgcrwJj2qiiv1Ncs1XzqfBeBv6AX8
+	J41tpziV79WqRIQj79MV5elIdnhFQdt+fm+UXi6Z/cDxu/psK4q3XOfnZXEYI/tJw8Ug1F3wl0E
+	ofdC9W6s3tMXgPpkr0YRldT25CvrcQ0JsoYjEchKnHcCVew58zV6bN7DfRsJ8qV3lHQKqg8A+ym
+	u+UftAcPN6N8xkFR66+zE6MBv//ZPi7SYWzWbfoeJIkRoNNE87S+LKQqGAT8yHXsYSooVnIVIEn
+	YMr/8B5ENb0wcODyRn7IJEmwZNkTCWYOCx8z6r2QU4Aq9PyLK/i/eCalMeBXMFAA1NjUBArH0N+
+	PpHlOumEuCysKWrkTbdQSifPnfqmk5osz6kcrmQ6nmp2h4zphr0ssKL5vbqQKhDtVjbYWmehM6q
+	1ZZQOQ7C90DUJE+sFuPCBHYg2e7zREkc2MB0TWGKURg7hcXw77jQq/hBCYQCvlmUXf0l6CHs9os
+	w==
+X-Received: by 2002:a17:902:da87:b0:2df:7fe1:72b8 with SMTP id d9443c01a7336-2e49b64e34bmr641665ad.16.1790874298566;
+        Thu, 01 Oct 2026 10:04:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:8::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e300b06afasm13879785ad.49.2026.10.01.10.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2026 10:04:58 -0700 (PDT)
+Date: Thu, 1 Oct 2026 10:04:53 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, daniel@iogearbox.net, 
+	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, ap420073@gmail.com, 
+	bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: make dev_xdp_sb_prog_count() see programs
+ attached through a link
+Message-ID: <ar6SryEPDgA25zKA@devvm7509.cco0.facebook.com>
+References: <20261001012559.297751-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="ddbx65bfv53pj3da"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fb7ed8ab-8aea-4731-a5e5-c9476d8bfd38@linaro.org>
+In-Reply-To: <20261001012559.297751-1-kuba@kernel.org>
 
+On 09/30, Jakub Kicinski wrote:
+> ethtool refuses to enable tcp-data-split on a device running
+> a single-buffer XDP program (which can't deal with the payload
+> landing in a separate buffer). dev_xdp_sb_prog_count() only looks
+> at xdp_state[].prog though, ignoring bpf_link integration.
+> Get the prog pointer from dev_xdp_prog(), which will consult both.
+> 
+> bpf_xdp_link_update() needs a bit of a touch-up, too, since
+> ethtool calls dev_xdp_sb_prog_count() with just the instance
+> lock (for ops-locked devices) - we now have to make sure the
+> link updates happen under that lock.
+> 
+> Spotted by AI while reviewing the XDP propagation series,
+> verified and tested on netdevsim with a C test along these lines:
+> 
+>   link = bpf_program__attach_xdp(prog, ifindex);
+>   system("ethtool -G eth0 tcp-data-split on")
+> 
+> Fixes: 197258f0ef68 ("net: ethtool: add hds_config member in ethtool_netdev_state")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
---ddbx65bfv53pj3da
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-MIME-Version: 1.0
-
-Hi Neil,
-
-Stripping the rest of the discussion that hasn't been great...
-
-On Wed, Sep 30, 2026 at 03:36:36PM +0200, Neil Armstrong wrote:
-> But I'm open to discussion, and I'll talk about display Panel in
-> XDC today, Plumbers and ELC next week so I hope we'll find time to
-> discuss about this in person!
-
-First off, I'm sorry things got that heated, and for turning the heat
-up. I definitely overreacted there, and for that I apologize as well.
-
-I really like working with you in general, our relationship goes back
-quite a while, and it deserved better. So let's indeed meet at Plumbers
-to clear the air, and hopefully patch things up.
-
-And maybe discuss these patches, but that part can wait.
-
-Maxime
-
---ddbx65bfv53pj3da
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCar6STQAKCRAnX84Zoj2+
-dspTAXwMWHCEjivmSoqKAtnrOVOnY++dhvP2+IzSZvOQ+QVbR38foJ0sc702HamI
-EP4rCl8BgKU1nXSjeAmaqM/chc9mDBRhTiWgmCSdnMOcoBacQUClBAXumDOiQitP
-K30m9foI+A==
-=fjZs
------END PGP SIGNATURE-----
-
---ddbx65bfv53pj3da--
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
