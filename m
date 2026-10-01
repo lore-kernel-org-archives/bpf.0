@@ -1,150 +1,127 @@
-Received: from mta0.migadu.com (out-35.mta0.migadu.com [91.218.175.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866443CAE60
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 10:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5A23BCD0E;
+	Thu,  1 Oct 2026 10:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790850733; cv=none; b=HB/s9wMHZfa95RKo9wkEp7gJaGjt53p9tNEnFgRT+QYAx5J/M9IAIJUV1GTRQUzEYy1RdC5tw7wIZqhGRm/Z9YOSFlJTJe8vQ4E8iU4DaqOXTMIpbnVwpiX1OJR9+KrnZKSFCkeb8UPvnuLceJ0TK4hNvY7gM/BQVVnVe5Yng4A=
+	t=1790851079; cv=none; b=kd4l7fAxtnStb/86ubPRRc9kcDMwu4qgR966dt5bi8AZmvQmBAudwT6qE/OF6Eq0uKo+dCLzaSqsLCCrVr/78me/VloaNn3IyD3A/uqBObiLUqYtCharv6O0o09FtmE/F8wFlU4v1KSQSt88WRUGo7EayRm7W0Mfshb4Vp35qk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790850733; c=relaxed/simple;
-	bh=qADmssOUqnrMjBgBqUywgXK8LLBb3PEeljOq4IAjtTY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EiiapteApmX8h32I0lmvAOAEr+3FzJDsoVC3QekaTbHRpRR4ItoUIeuMF8TRw9NTPZHbEPZjJ12xEw0kLTu156nAAcgy3QFmR8CZ3AOvXys5CatmSOtZU3VLy3K0RIZnTJisqmb5XyJBDC/8aSlD61t3dwK/hUPWtAkT3sxqRjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PrZVqwkn; arc=none smtp.client-ip=91.218.175.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790851079; c=relaxed/simple;
+	bh=hDaozcCR4RN1nJEoUk7pYsmyoc606N1f2ytFwIN6pU4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=B7CU18rU6q0IcyPvCNWowahn5uU9aB6LMG+7PCaZmfpb1XoeqvzKtuvprsiZjbNnhh0tyvfqZ3ZIJCwiQpa8oNnBAZkn2pgESqL9xcaVN2oZCM10ISpUiSGMzaecKT5nqjcZf+j+VIqJXqlTxJKwOdEkOcZfjWRY65KfU+piOxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DlJPqMAg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PrZVqwkn"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qADmssOUqnrMjBgBqUywgXK8LLBb3PEeljOq4IAjtTY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790850726; v=1; x=1791455526;
- b=PrZVqwkn066mQaTaWb3/atsUNbsZY49GZVmGNJAc5neKuU7mPWgXMlE1AabOi9kyRbGA5ZZy
- E/rQPgiDiEvp6opufn1a9GXvdyhFDWV3/GwqwYnd60F86h+kDCBfoBl2j2kJ6sT0GGn2UDdWYhd
- 1t++5jjl9GMPOTTGKykIsa9s=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id cc3e7d3ec6f85194;
-	Thu, 01 Oct 2026 10:32:05 +0000
-X-Mizu-Trace-ID: cc3e7d3ec6f85194
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a10ad8db-c344-4c24-bab6-88e9f7055f10@linux.dev>
-Date: Thu, 1 Oct 2026 03:32:05 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DlJPqMAg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 653961F000FF;
+	Thu,  1 Oct 2026 10:37:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790851072;
+	bh=As3SLFsTTd3BkmHYiCD2iWsyZrxMnUXWbkatlHucL9s=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=DlJPqMAgPjswboeJf2ZIyMb3gQ6nXatEo55osqdNvVcFDqljtXE77eRNkSofmCbPj
+	 XY72PX/+SX+8Fo7J73MaKaH6Zh6+cSbR8vwy0YqASElxUrRfGuz+nCFye/tdTvf1nQ
+	 le/N6yXhpL9jf4h5uikRXqm7fy3o2BFPASx5uixhD9yWq8o/5NUMrTsGFw7xZm7HQX
+	 EncNejZrT3GOjd0gkbk6rVQVmgxel6UmaSg8PIXWYlMyyJZD4jzTuhQCtH7woNU2G/
+	 DeT82FckWr5JICgiAOQYsIVFenK7UzOfo4oLU1DPMkiZ9NaXo4R/od+rLQhSIzOKyV
+	 V+1i2pkN0RQwg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 1/1] tracing: fgraph: allocate shadow stacks inline
+ with GFP_NOWAIT
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vineet Gupta" <vineet.gupta@linux.dev>
+Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261001102909.1152572-2-vineet.gupta@linux.dev>
+References: <20261001102909.1152572-1-vineet.gupta@linux.dev>
+ <20261001102909.1152572-2-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 01 Oct 2026 10:37:51 +0000
+Message-Id: <20261001103752.653961F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] tracing: fgraph: allocate shadow stacks inline
- with GFP_NOWAIT
-To: bot+bpf-ci@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org
-Cc: mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org,
- peterz@infradead.org, linux-trace-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com,
- stable@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260929005411.4105448-2-vineet.gupta@linux.dev>
- <2dc04cf6f1e0c474da152cb4afcd0e264930b4d1d9b969de1b7cfbdd50b1bd35@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <2dc04cf6f1e0c474da152cb4afcd0e264930b4d1d9b969de1b7cfbdd50b1bd35@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] tracing: mixing goto and scoped_guard in alloc_retstack_tasklist()
+--
 
+commit eacae2b1226bb2d8684604b5c37e3ec9f073cb80
+Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-On 9/29/26 4:46 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
->> index ed455b53513b..336f40dc6618 100644
->> --- a/kernel/trace/fgraph.c
->> +++ b/kernel/trace/fgraph.c
->> @@ -1036,10 +1036,9 @@ trace_func_graph_ent_t ftrace_graph_entry = ftrace_graph_entry_stub;
->>   /* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */
->>   static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
->>   {
-> Does this comment still match the function's behavior? Before the patch,
-> alloc_retstack_tasklist() assigned at most FTRACE_RETSTACK_ALLOC_SIZE
-> stacks per call and returned -EAGAIN to trigger another batch. After the
-> patch, it walks every thread in one pass, allocating inline with
-> GFP_NOWAIT. The FTRACE_RETSTACK_ALLOC_SIZE pre-allocated entries are now
-> only a fallback when GFP_NOWAIT fails, and in the normal case they're all
-> freed at the free: label.
+tracing: fgraph: allocate shadow stacks inline with GFP_NOWAIT
 
-Posted v3 [1] with comment fix.
+This commit updates alloc_retstack_tasklist() to allocate return stacks
+inline using GFP_NOWAIT within an RCU read-side critical section,
+replacing the fixed-batch preallocation loop. It also replaces the
+open-coded rcu_read_lock() and rcu_read_unlock() with scoped_guard(rcu)
+to handle RCU protection implicitly.
 
-Thx,
--Vineet
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index 40d373d65f9b9..efb5d260334e0 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
 
-[1] 
-https://lore.kernel.org/bpf/20261001102909.1152572-1-vineet.gupta@linux.dev/T/#t
+[ ... ]
 
->
->> -	int i;
->> -	int ret = 0;
->>   	int start = 0, end = FTRACE_RETSTACK_ALLOC_SIZE;
->>   	struct task_struct *g, *t;
->> +	int i, ret = 0;
->>
->>   	if (WARN_ON_ONCE(!fgraph_stack_cachep))
->>   		return -ENOMEM;
->> @@ -1054,26 +1053,37 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
->>   		}
->>   	}
->>
->> -	rcu_read_lock();
->> -	for_each_process_thread(g, t) {
->> -		if (start == end) {
->> -			ret = -EAGAIN;
->> -			goto unlock;
->> -		}
->> +	scoped_guard (rcu) {
->> +		for_each_process_thread(g, t) {
->> +			unsigned long *rs;
->> +
->> +			if (t->ret_stack)
->> +				continue;
->> +
->> +			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
->> +			if (!rs) {
->> +				/*
->> +				 * Returning from inside scoped_guard() drops
->> +				 * the RCU read lock, but skips the free loop
->> +				 * below. That is only safe because start ==
->> +				 * end here, which leaves that loop nothing to
->> +				 * free. Keep the two in step if this
->> +				 * exhaustion check ever changes.
->> +				 */
->> +				if (start == end)
->> +					return -EAGAIN;
->> +				rs = ret_stack_list[start++];
->> +			}
->>
->> -		if (t->ret_stack == NULL) {
->>   			atomic_set(&t->trace_overrun, 0);
->> -			ret_stack_init_task_vars(ret_stack_list[start]);
->> +			ret_stack_init_task_vars(rs);
->>   			t->curr_ret_stack = 0;
->>   			t->curr_ret_depth = -1;
->>   			/* Make sure the tasks see the 0 first: */
->> -			smp_wmb();
->> -			t->ret_stack = ret_stack_list[start++];
->> +			smp_store_release(&t->ret_stack, rs);
->>   		}
->>   	}
->>
->> -unlock:
->> -	rcu_read_unlock();
->>   free:
->>   	for (i = start; i < end; i++)
->>   		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36644771324
+> @@ -1057,26 +1060,37 @@ static int alloc_retstack_tasklist(unsigned long =
+**ret_stack_list)
+>  		}
+>  	}
+> =20
+> -	rcu_read_lock();
+> -	for_each_process_thread(g, t) {
+> -		if (start =3D=3D end) {
+> -			ret =3D -EAGAIN;
+> -			goto unlock;
+> -		}
+> +	scoped_guard (rcu) {
 
+[Severity: Low]
+Does this code mix goto-based error handling and scope-based cleanup in the
+same function?
+
+The alloc_retstack_tasklist() function still contains a goto free error
+handling path earlier in its body, and a free: cleanup label at the end.
+Adding scoped_guard() here violates the kernel cleanup subsystem guidelines,
+which state that for a given routine, usage of goto and cleanup helpers
+should never be mixed.
+
+Since returning directly from within the scoped_guard() skips the free: loop
+at the end of the function, it forces manual reasoning about whether that is
+safe. This is noted in the new comment about keeping the start =3D=3D end c=
+heck
+in step with the exhaustion logic.
+
+Is it possible to convert the initial return stack array allocation to use
+scope-based cleanup as well, or revert to open-coded RCU read locks, to
+avoid mixing the two patterns?
+
+> +		for_each_process_thread(g, t) {
+> +			unsigned long *rs;
+> +
+> +			if (t->ret_stack)
+> +				continue;
+> +
+> +			rs =3D kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
+> +			if (!rs) {
+> +				/*
+> +				 * Returning from inside scoped_guard() drops
+> +				 * the RCU read lock, but skips the free loop
+> +				 * below. That is only safe because start =3D=3D
+> +				 * end here, which leaves that loop nothing to
+> +				 * free. Keep the two in step if this
+> +				 * exhaustion check ever changes.
+> +				 */
+> +				if (start =3D=3D end)
+> +					return -EAGAIN;
+> +				rs =3D ret_stack_list[start++];
+> +			}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001102909.1152=
+572-2-vineet.gupta@linux.dev?part=3D1
