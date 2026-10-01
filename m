@@ -1,120 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D353B8105
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 07:09:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588D53B95E0;
+	Thu,  1 Oct 2026 07:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790838569; cv=none; b=Gt77O5aD7naf/4Xq6etQEh1x0Du8YOgsy0mS+c7CUPBiBXf963S3x+QEyUk7GwVUqxAfOV4TC5y6u/2l1OMAdHT44g/TyMbCSy4qjfr+6IJtuKCyNN5lefnphax7jau1xj6BM4qeL92kOZYDvI8t1Y1MvUl8vVIpmvtJ798hjmg=
+	t=1790838581; cv=none; b=KKAncf6Fa9S6Zfi2xvOW1+yRvkEhjHUNH39kH5f6e7F06wKUmz9qCs79L3BNV0Tn0Y87izdOO/p5r7WfdV6tLacVLlHfgg3+Zs77n/zxWSxabZiDMt9H7f11N8e/z994OSeqi+6wdiCTSZkV7qrTm4GYuvc+jV8SLIkkB9ue31Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790838569; c=relaxed/simple;
-	bh=bQCQXtI5gchlr1B/STLAaZrWjysoaBL5mGwl2FwchiU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hBBaM/vzMQWauR78EXkn0KE2QEk+e55EOP3VJrXKr41D6TviaTAi0FAkjVbaCMxPQiSGOAdEloA1EWKB7P0+dVbKMri/CYS5aJ17wRw5MBUwg7bBjpKXtiIB1zLvs1Ms1Vket8Tjill7dNx3Dll6uQFpsUXN+cDVIGxgJSsl3Fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HomwVeFs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790838581; c=relaxed/simple;
+	bh=XFF9m1extKl7fuxmH9zsMDX2E4Ef70rJNPT+E8HnDCk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MpWJBb2xK9qlp9wg3ra1JwOAATVoWNAk4Tigw29HolAvzQpzkgwJuDC6v2ZyNSOp7Bqhf/r37w+nKVsAUaDQnkkGgh99EG0iu9LqG8lXtihgXE6BG6BGpyma1XHNuBWBrlHlJHqIFNdNyOkTxxSkQQmp4kmP8SRgXrGA0/OZFFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8TXv8sn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HomwVeFs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF93A1F000FF;
-	Thu,  1 Oct 2026 07:09:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8TXv8sn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965BA1F000FF;
+	Thu,  1 Oct 2026 07:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790838568;
-	bh=wkXEmU8Vn+3P8Nr2FtOr5M+9aommtud78bpCJ5Ll020=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HomwVeFsRKRSO8XN2CxEImZZXlSBu7f7nVFRpQZkGV2/NvDwYrqcxryILPxlutmpm
-	 vEQtNZk90A//pV5Yaoz0AhrfpLnv9wOw4ME7jaaHc5NISuS33bMR9EpvQkYfSfFttr
-	 IQWjIzggAOSXVSh0vld8t/HZHDiEfSUCVGqf418bhi6cZ4Igy42uXprr0Hf5DdZje1
-	 HSARcYXohdPyoGhHXOkkwLR7b8wE4QKc05sgDM8wb1xU8D/g+59zAz5bq0P9YnqWMh
-	 L2ryGd4UAVV5hda6mmMLk3kEAqxpqe0afcQHZYKbzeaNp/FipIiT3gmmTyD+mSRAc3
-	 TfhibJ9owylYg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2] bnxt_en: don't leave an XDP program installed
- when the open fails
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vaibhav Nagare" <vnagare@redhat.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260930070901.1218980-1-vnagare@redhat.com>
-References: <20260930070901.1218980-1-vnagare@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 01 Oct 2026 07:09:27 +0000
-Message-Id: <20261001070927.EF93A1F000FF@smtp.kernel.org>
+	s=k20260515; t=1790838580;
+	bh=XFF9m1extKl7fuxmH9zsMDX2E4Ef70rJNPT+E8HnDCk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=E8TXv8sn/bSpQE+NI1vYkKweFuPd7YNLLIzGNuQ+ceTS6EmKTPqCxr518iNn8GQ9l
+	 aXUKjLMuhGUJ03/7Yzr9S+fIWZC1/dhfZTpt/JUCnlpkuzoOP0PA8m+PKtzWDinIA7
+	 1w9ry8qGjqlCvnmNjIDocjTT7HE39m6sIKGxqAaSBs6nchvWxHnm7Bf8lNmbrRAPFo
+	 9fop9kGm+I65m2iX6nMlQY9fNRlenCMdG2dm4ebBtegIWPnT32Gno/Pol9pgkbnrba
+	 jYftS8MARMUeWwBdPBxrLlqKbfCqb8ssHOr/oNjHzJqstipUmCCbfD/1SrmJJ2uKBJ
+	 3McRuxZ1+Lv6g==
+Date: Thu, 1 Oct 2026 09:09:35 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+Message-ID: <ar4G864IgYTvfNNy@houat>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
+ <20260928204059.GA515872-robh@kernel.org>
+ <artyl8fD3zzng8Uh@houat>
+ <742d5bab-51cc-49f0-825a-f299a055bb1e@linaro.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="s3nqed5trv4kttpt"
+Content-Disposition: inline
+In-Reply-To: <742d5bab-51cc-49f0-825a-f299a055bb1e@linaro.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: bnxt_en XDP detach memory leak and state desynchronization on=
- NIC open failure
---
 
-commit a5efe83c5d84fe92f5143236d2e982d0ce3eaec4
-Author: Vaibhav Nagare <vnagare@redhat.com>
+--s3nqed5trv4kttpt
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+MIME-Version: 1.0
 
-bnxt_en: don't leave an XDP program installed when the open fails
+On Wed, Sep 30, 2026 at 03:32:19PM +0200, Neil Armstrong wrote:
+> On 9/29/26 10:39, Maxime Ripard wrote:
+> > Hi,
+> >=20
+> >=20
+> <snip>
+>=20
+> >=20
+> > panel-mipi-dsi-spi is a generic panel that will load a firmware, and
+> > quite similar to this one. google,android-pipe and qcom,fastrpc don't
+> > attach to anything and will just open a tunnel to userspace, which is
+> > somewhat equivalent but more dramatic than what this driver is doing.
+> > simple-card or its variations will just instantiate a kernel driver from
+> > the DT and is used pretty much everywhere.
+> >=20
+> > I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
+> > by rob, and acked by a panel maintainer, and 4 years ago, so we're way
+> > past the "oh but we didn't know what we were doing back then" argument.
+> >=20
+> > So, let's phrase this differently: what's different about the
+> > description than panel-mipi-dsi-spi, or any other binding already in
+> > tree?
+>=20
+> The panel-mipi-dsi-spi still describes a class of H/W control interface,
+> not a pure software driver implementation type.
+>=20
+> "panel-mipi-dsi-bpf" or "panel-mipi-dsi-rust" or "panel-mipi-dsi-cplusplu=
+s"
+> would be the same problem.
 
-This commit restores the previous XDP program and ring configuration when
-bnxt_open_nic() fails. This prevents the driver from leaving a freed program
-in bp->xdp_prog on a failed XDP update.
+Rob explicitly said the bpf part wasn't the problem. Also, I don't care
+for the compatible itself, so what would be an acceptable compatible for
+you?
 
-Cc: stable@vger.kernel.org
+> > If it's the BPF part, BPF is not Linux-only, and there's hardware with
+> > direct BPF support these days, so it can be considered OS-agnostic and
+> > not an implementation detail.
+>=20
+> If somehow panels used a standardized MIPI firmware we could define this
+> in DT, but here we're basically inventing our own type of firmware from
+> thin air.
 
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/=
-ethernet/broadcom/bnxt/bnxt_xdp.c
-> index 9e5009be8e989..edfd751a601ab 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-[ ... ]
-> @@ -418,25 +438,21 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf=
-_prog *prog)
->  	if (netif_running(dev))
->  		bnxt_close_nic(bp, true, false);
-> =20
-> +	old_tx_xdp =3D bp->tx_nr_rings_xdp;
->  	old =3D xchg(&bp->xdp_prog, prog);
-> +	bnxt_xdp_apply_cfg(bp, tx_xdp);
-> +
-> +	if (netif_running(dev)) {
-> +		rc =3D bnxt_open_nic(bp, true, false);
-> +		if (rc) {
-> +			WRITE_ONCE(bp->xdp_prog, old);
-> +			bnxt_xdp_apply_cfg(bp, old_tx_xdp);
-> +			return rc;
+That's not what panel-mipi-dsi-spi is.
 
-[Severity: High]
-Does this error path introduce a memory leak and state desynchronization if
-the user was trying to detach the XDP program?
+Maxime
 
-If bnxt_open_nic() fails during a detach operation where prog is NULL, the
-core stack's dev_xdp_detach_link() ignores the error returned by the driver
-and forcefully unlinks the program anyway:
+--s3nqed5trv4kttpt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-net/core/dev.c:dev_xdp_detach_link() {
-    ...
-    WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
-    dev_xdp_set_link(dev, mode, NULL);
-    ...
-}
+-----BEGIN PGP SIGNATURE-----
 
-Because this error path restores old to bp->xdp_prog and returns early
-without calling bpf_prog_put(old), does the driver maintain a leaked
-reference to the BPF program?=20
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCar4HLwAKCRAnX84Zoj2+
+dl6uAYDovwkc1hvb39koGbGLJWTMCbmYcACHdaVw0R7sPvU3411ITrKE0XW6bqGC
+VstReW0Bf3SPl1Nrf6ImNbY2KvutXe9EvqIRF88l0/bekyLhlDEc+vl+24UFci5P
+jH5weB34Lw==
+=ZDWr
+-----END PGP SIGNATURE-----
 
-Would this cause the driver to continue executing a 'detached' XDP program
-when the NIC is brought up later, while the core stack considers it fully
-detached?
-
-> +		}
->  	}
-> =20
-> -	if (old)
-> -		bpf_prog_put(old);
-> =20
->  	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930070901.1218=
-980-1-vnagare@redhat.com?part=3D1
+--s3nqed5trv4kttpt--
