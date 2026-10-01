@@ -1,101 +1,147 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF7352F272
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 15:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A88352B1D2;
+	Thu,  1 Oct 2026 15:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790869047; cv=none; b=A2cghM0N7F9PKyRbicAw18vzFvvXkce1KDmBq/th9lZxZLXIZ+z2r7l97vB77DSs0Js32uM6jU1p4tkVt0kQ5TJYwFB3FUFqxFhMNMaWYKh+9EkkC3oOAp+CS1dm5Tqsp66udf7PIzWqZaa/ekL+NlE4s8zICfyqR9nbj+6muaE=
+	t=1790869231; cv=none; b=E+W30t8Nj/oy1TQf5wRL1Es1s/Sn5cawVbspUXkbUe+0zNMj4L6HFgxwmY0sq2txqzHEVyv+Bt2YESEH8M4w/i8F3uZdPqm+qakVgbXam2sFZ4nU8Lx5qv4PCYHqnNIZoux5rSKn/lKWKNUjfBRC5dddupV+PV0HAe/vc5ly8Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790869047; c=relaxed/simple;
-	bh=KbJb+zWj7bG1bYw/1KYSOO7HgAF4YpTcsUDAPaTcPxs=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=MstuiXD0vx9Uio0UZsOhFhkfQuFS4ngwYxZzMCd087Hrc0suzQJcVVosxrbfvP7+PieH9IFV7Kx4+Zk7exbexYNLpWaLVkE8d7QgTRbqNFUegKbhnVkHoPgqqBSgmxoHDB+0ZwH0tWa35xCO18x1vhRpWEGmaG41SLqo2xxSFl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pYgB2bhD; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790869231; c=relaxed/simple;
+	bh=wrdEMkqOKVODN+lCD8iZuLd9HUREZaVL67sHGn77WyU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=MNuyq/dm4k8UtZ87qWBeng4cD/Z9lvp0OvOR30N5XDK0Qlt+TIkN583v4Xwp0f1VsocWhP41uqIA45oPKH3LfxnXTm4qJpzGVJrZQkAmrtgpbJ0dZ3sGLWZZD21EJle+9oc/wPdjvyalBNMUEnTAdkZ1hCTFfVVS9R3Hkqsk59Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gl51gdLx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pYgB2bhD"
-Received: by mail-pj2-f43.google.com with SMTP id d9443c01a7336-2e2bfc2540cso16487695ad.3
-        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 08:37:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790869045; x=1791473845; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qvdlHafwL1IrC5R244EdcYMq16pDpvJN9bMBAEmPhs0=;
-        b=pYgB2bhDY6/NQGe98zsr177m4lRValKfBWRiWxZgPGy8WoqtFUfH6yuaK9HfGdmF34
-         p1ZqwZN/6DDLH8z9ka71giKuPTanY784iFUG1dCk0H8UeyJznRAeAf+Zb8G97uwYu6xM
-         nm2GSWR6u07ZbKMjLxzeeLnxbGxSCQZNnIEeGcbx3K1Do01r+zo2bJ41qhryEivDLlSn
-         +PfEOwGmAZvHR/WegxVz1Kz7lTLA0yXPrcWZeBtiyba7uJxpP+Nz/VYrYKggfvH7jvVV
-         670vj0gEtF2OVYr3D40pQ7MUvTJtrVfbEKk55jUp7ahHh41TQHBt9Ry/fcojdQFLjD06
-         1Dyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790869045; x=1791473845;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qvdlHafwL1IrC5R244EdcYMq16pDpvJN9bMBAEmPhs0=;
-        b=07sKm1Z1G0BEvMc6+1NVcZRuWcPrVIvf1CpmgyDFwWF8qp/96HoUgYDXb3twibv5Qr
-         rg1YqRinIqsDHefbvx9SwnhKLoCvFrJTs68y3kSaeTIqjZu9lbjhcH5XeEhUEI2MPC0n
-         7v1jjg7VJvkrXHHGDvqHVq7PTZPz84WSGrhWuqh7X7H3udPG1uz0KNbetNGCBlpmmyFE
-         RvEbBWOO+ZqaVskksq4ipK9mU83sp7lqxVDjH/7gLiU6lkDCFt7fF8H9hL3LHZQkwE+A
-         k8+01IibMQPOSZJmxeC0qquzyTKKYTEHIvQo0Hn9XkY3Sx/6wZFlM3DT4Joq0iQjl/+W
-         1cTg==
-X-Forwarded-Encrypted: i=1; AKwUvBxXjSWxALtPnegnom0up+3GN5zsx+ctzbzqtJ94OecHULLJdPBTzlnpkAg/IsS19S+qqjk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL6+6vOA0D54WounloRZ5dXmuO2MGIH6zZdO9gtcuASPKReRbbW
-	k26kMf3CqIBT59lvBca7HfpdwXrrc4I2PDMXBaapD9OXas4U9fK/cX1H
-X-Gm-Gg: AYBFou1JHcdKtRJDlFLMbONEA1hYEgMiV8ioHMVB/+j/3+igEWzSIUu/fg8irCweiBx
-	0JvAj4/1NHu6jlxb4Ua6p6nS26pEutOf08HWcc4FhPCZ5zuW1FqmQQ+/WJwPN4rdHC39EWaAW3g
-	h7xXrqm2kFBDmApCxrHVX9UUCOEoOB+Jkt/hW6fJgQAlxs70k9DgZTYigH5d5PkZ7z6vnih3s7m
-	5EtvqxwFHr/8iXNsgdXFVb9DyrMXRQeLuVYPs5Acm36HZFC8y3ZQdnXindZ2fQWURPTpMrB6/Lr
-	Uiyj1rRi77MXA7p3+ON+Jbd+58HUXAazKvkWgXEvhoBIFOEafcWvdobopdjI4yP1ujCRZzOL89P
-	SUqqvw96EMcFjPZcL0rcO8H/wZBoPp5Q5ODEB8mayHBD/Yj2gk7z1Y7QP1TrUu4C8Ej/5DME/BB
-	bhVuPNEf4H21Li2DOMg5r5NVCQ602yc9ercb9nYyXsul+gor2dX8Tk+GwvZd9MbhiInOV9kKh1d
-	rCwusxsHHaZf02384R6Z1iMhrUOCkVZ+trOUawLaORf8egB3CDIrWYncwvGiPl4yKa3jKSJC1uK
-	g+P7x/3jfb1ddu4=
-X-Received: by 2002:a17:903:1503:b0:2e4:9081:79e4 with SMTP id d9443c01a7336-2e490817c06mr4369245ad.25.1790869044835;
-        Thu, 01 Oct 2026 08:37:24 -0700 (PDT)
-Received: from localhost ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e300b45567sm12760055ad.65.2026.10.01.08.37.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Oct 2026 08:37:24 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 01 Oct 2026 15:37:23 +0000
-Message-Id: <DLTM3D36ENNF.3IH79JXEGYZAX@gmail.com>
-To: "Masoud Aghasi" <maghasi@disroot.org>, <bpf@vger.kernel.org>
-Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <daniel@iogearbox.net>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <leon.hwang@linux.dev>
-Subject: Re: [PATCH v2 2/2] selftests/bpf: add test for percpu map flags
- combination
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20260930135753.1063495-3-maghasi@disroot.org>
-References: <20260930135753.1063495-1-maghasi@disroot.org> <20260930135753.1063495-3-maghasi@disroot.org>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gl51gdLx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1401F000FF;
+	Thu,  1 Oct 2026 15:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790869229;
+	bh=ZjukmqZBr/Q8r3D4WjCPnBjlNxnvVv1+ak3oNNvpPfo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Gl51gdLxX+CJCy0nd3WTSOiCWHJQotoOWJaT2WDvfsLFW2LIClV09nxd80Eow5+k7
+	 EZTA1DmpfaEfjWtiYe0G5oU7ziYVAwaUoL9vl6rmVgGj463MfpA4OxY92+JUzFUgH8
+	 ylryT9roO9z2vc9QQDj/W2tuN/Y5+zUWw5Xops46hw5dj+CvSV95x1TfVSj/DzlvST
+	 ojGYW5WLVxqtK1OiPjm7Qnol6mLnKyTv9/jDO/wj2dZH4zpj/NheCR4LoVMJAVRlUj
+	 um2Fb38D7+NcXWE713JT/zudBXWIOn8JQvxKa7yi53Z8p6bWZYsFTnYJmHB3/FeC2q
+	 taxKTh2Rtke4g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 07/15] tools/rv: Implement BPF monitor discovery and
+ listing
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Gabriele Monaco" <gmonaco@redhat.com>
+Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261001152042.124445-8-gmonaco@redhat.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+ <20261001152042.124445-8-gmonaco@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 01 Oct 2026 15:40:28 +0000
+Message-Id: <20261001154029.5E1401F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, Sep 30, 2026 at 02:57 PM Masoud Aghasi <maghasi@disroot.org> wrote:
-> +	flags = BPF_F_CPU | BPF_EXIST;
-> +	err = bpf_map_update_elem(map_fd, &key, &val, flags);
-> +	ASSERT_EQ(err, -ENOENT, "bpf_map_update_elem flags_combo");
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] bpf: stack OOB access via unterminated strncpy()
+- [Low] bpf: off-by-one snprintf check and file leak
+--
 
-The map is empty, so lru_percpu_hash test passes without
-the __htab_lru_percpu_map_update_elem() hunk that v2 added to patch 1.
-The check_flags() change alone is enough to get -ENOENT.
-Insert the key first and then update it with BPF_F_CPU | BPF_EXIST.
-With max_entries == 1 prealloc_lru_pop() evicts that key and
-the update fails with -ENOENT without that hunk.
+commit 87f9013a78d7a34904987bd2e9122ad081e635b2
+Author: Gabriele Monaco <gmonaco@redhat.com>
 
-percpu_array changes are not tested at all.
-Not even BPF_F_ALL_CPUS | BPF_EXIST from the commit log of patch 1.
+tools/rv: Implement BPF monitor discovery and listing
 
-pw-bot: cr
+Implement the BPF monitor listing functionality that scans for compiled
+BPF monitor object files and displays them in the monitor list.
+
+> diff --git a/tools/verification/rv/src/bpf_monitor.c b/tools/verification=
+/rv/src/bpf_monitor.c
+> new file mode 100644
+> index 0000000000000..a1de0c1577128
+> --- /dev/null
+> +++ b/tools/verification/rv/src/bpf_monitor.c
+[ ... ]
+> +static void bpf_object_iterate_path(const char *base_path, const char *s=
+ubdir,
+> +				    void (*action)(const char *name, struct bpf_object *obj))
+> +{
+> +	char path[MAX_PATH];
+> +	struct dirent *entry;
+> +	DIR *dir;
+> +	char *ext;
+> +
+> +	snprintf(path, sizeof(path), "%s/%s", base_path, subdir);
+> +	dir =3D opendir(path);
+> +	if (!dir) {
+> +		debug_msg("bpf: error opening directory: %s\n", path);
+> +		return;
+> +	}
+> +
+> +	while ((entry =3D readdir(dir)) !=3D NULL) {
+> +		size_t size;
+> +		struct bpf_object *obj;
+> +		char name[MAX_DA_NAME_LEN], obj_path[MAX_PATH];
+> +
+> +		if (entry->d_name[0] =3D=3D '.')
+> +			continue;
+> +
+> +		ext =3D strrchr(entry->d_name, '.');
+> +		if (!ext || strcmp(ext, ".o") !=3D 0)
+> +			continue;
+> +
+> +		size =3D snprintf(obj_path, sizeof(obj_path), "%s/%s", path,
+> +				entry->d_name);
+> +		obj =3D bpf_object__open_file(obj_path, NULL);
+> +		if (!obj || size > MAX_PATH) {
+
+[Severity: Low]
+Does this logic correctly handle path truncation?
+
+The check size > MAX_PATH has an off-by-one error since snprintf() returns =
+the
+number of characters that would have been written excluding the null byte,
+meaning truncation occurs if size >=3D MAX_PATH (or sizeof(obj_path)).
+
+Also, bpf_object__open_file() is called before this check, potentially
+operating on truncated paths. If open_file succeeds on a truncated string,
+would the obj resource be leaked on the error path via the continue stateme=
+nt?
+
+> +			err_msg("bpf: error opening object file %s: %s\n",
+> +				obj_path, strerror(errno));
+> +			continue;
+> +		}
+> +
+> +		strncpy(name, entry->d_name, sizeof(name));
+> +		ext =3D strrchr(name, '.');
+> +		if (ext)
+> +			*ext =3D '\0';
+
+[Severity: Medium]
+Could this sequence result in a stack out-of-bounds read and write?
+
+If entry->d_name is exactly MAX_DA_NAME_LEN characters or longer, strncpy()
+will leave the name array without a null terminator.
+
+This causes strrchr() to scan adjacent stack memory (such as obj_path) to
+find a '.', and potentially write a '\0' out of bounds if one is found. Can
+this be triggered by a local user placing a file with a long name in the
+bpf_monitors directory?
+
+> +
+> +		action(name, obj);
+> +
+> +		bpf_object__close(obj);
+> +	}
+> +
+> +	closedir(dir);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001152042.1244=
+45-1-gmonaco@redhat.com?part=3D7
