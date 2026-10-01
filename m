@@ -1,47 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B9C4A3877;
-	Thu,  1 Oct 2026 20:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E3A361DA8;
+	Thu,  1 Oct 2026 20:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790886156; cv=none; b=pakFFgDRpmG8++q+gkVj7bSmHUUGDhiYudG2KAgdh38VUZo+B21PtObEvER5BMqF3HgSVJX0U1oWHvmBx9jVyONpJKSPhsy+l79CDlo4tFzJ8AQAqN6Zk4NFRMIv4uK8jLax8i8nxyphLfwmsnJ3NW6Ye8+r6+XsexwvsozOTdk=
+	t=1790886158; cv=none; b=O7dZ5jFtKLVBuBojptm2HRJH8YNMOpRRundu3HEOuAZMW6bUQaRIXZqCfMu1znW1m0YV4y5BSnpTadIa1ukHCVFx3VPlhsAq//EHqKG1l8LWEmyWw3u8HUqxjgxdLFebNtS8DH1AOFFf1W5AjacvICWGgd9i/XlplA5T9tNNEXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790886156; c=relaxed/simple;
-	bh=tnsHJRE0smL/TeLfFfQKK5vxh0ObgSkV97ItPjkDORc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dUJZdZtx2sgINklk4zobqeOqDNK3cXvi9Q/EEpSA5qlyhP2GLFTzWyHkpKF4TcmfAYItrlZTY23E+jPKsAN3GIpcrB1X3Iukf/ePz67YgICnIvEuyFV3ZV9rzRTD3vlvjkZMCaPI+01mnjstana2Lrbfd2IQf317YlKL35cXh5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U368KBkF; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1790886158; c=relaxed/simple;
+	bh=EuFYaVh9daXcKzhD+rKY09ifqexFTE8FfaBkx5Hr+Nk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=t9O2rtyzhbcv49nkUqmHQkG0eaQ3pVEzJQXxSDWAOrxklLiMdfFLivFlkTSUougXDSpUlQiKmIL40/A5OQfygv95PHspLCaDGy5QIGV5VdBk3iznXBSrQk5UvRVk5t403k2ZrRqNy5G6mMKphNx5VSykmZ1Tx/1ktOEtN/Qjlgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EkwQ8i7d; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U368KBkF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EkwQ8i7d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790886148; x=1822422148;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tnsHJRE0smL/TeLfFfQKK5vxh0ObgSkV97ItPjkDORc=;
-  b=U368KBkFyCmvw3zYJLFARHCTWE/NIYRPwN9/OTP92NLUyusQUt015+iJ
-   tFGLAJ0GpJD1gz/ICnat9M6gStB+yRIAILgq+BW0fZFyeYEs+sjGsc2qw
-   KNQiNSV2WnG5UGHEV6zYcNokKpiYYFoPSymLXNxJR4o+8AyBPKEPRIflQ
-   qKgeGfWSRFt/K/WdcuC3XNBlIDjEhNKfvh3Zd+0FEtVh6FT57QumwAh4u
-   66/DfrXb0VGC9W29XgzB5KuL77BQZQuf94+DgiVq+f64snRxKKZ7hEhS+
-   22YKepz/I3lsVDDPgFDkHvu9Sj/9xP53+2ViimEJCT5GJ7lhLY5ad31S+
-   w==;
-X-CSE-ConnectionGUID: EzrA5HqOTiedJiNFQQl6LQ==
-X-CSE-MsgGUID: 6Djf5s8oTkS4D9XzM+zFkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="95466786"
+  t=1790886151; x=1822422151;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=EuFYaVh9daXcKzhD+rKY09ifqexFTE8FfaBkx5Hr+Nk=;
+  b=EkwQ8i7dAg648bEH/AmDzTUFA4J4ewRNTK782Hv/ELRRUC6C2Og2XG3c
+   w41rhJ7zNAnTHia9K98LT8lSOHQsR7cqT+yijyo2chq8eEWDWDxVYMd6N
+   MRM3IKlY239Dxt8QaNI3m2Y28dnsTP1oxlD/RSaJlhaJmN2j6VOhE1jbx
+   uIXEMPJQ+5ebgigTDxaHJ6P7hRt1IeEhfkcA2+pkq6r/SeMc2y5M8xi+Y
+   xV3YPluo//HYjdBq16Qxmg3hNgxeS4plA5oWZ2QIEecz5wJwKkUEa4bXh
+   6hAWOl4V3TKlfMAVWJI7ferIJWZZQhcSfuIDqkQMSb/7rQyWj0vIWAxCM
+   Q==;
+X-CSE-ConnectionGUID: 6cF8enoeTre4hpD1JSBlcg==
+X-CSE-MsgGUID: 2y/rqJfdTEKi1g7IwP05Gg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="95466796"
 X-IronPort-AV: E=Sophos;i="6.27,135,1787036400"; 
-   d="scan'208";a="95466786"
+   d="scan'208";a="95466796"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 13:22:22 -0700
-X-CSE-ConnectionGUID: HOqGrxALRe2mOAqdRG+xVw==
-X-CSE-MsgGUID: GgIfah89TAGVKxLMDPlUtA==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 13:22:27 -0700
+X-CSE-ConnectionGUID: xyYziMo2QrOedQMygttbzQ==
+X-CSE-MsgGUID: 8y+WIt/oRz+uo6tRzdJzAQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,135,1787036400"; 
-   d="scan'208";a="275636682"
+   d="scan'208";a="275636692"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa007.jf.intel.com with ESMTP; 01 Oct 2026 13:22:20 -0700
+  by orviesa007.jf.intel.com with ESMTP; 01 Oct 2026 13:22:25 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -53,10 +54,12 @@ Cc: bpf@vger.kernel.org,
 	kerneljasonxing@gmail.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH net-next 00/13] selftests: net: migrate AF_XDP test suite over to net
-Date: Thu,  1 Oct 2026 22:21:11 +0200
-Message-Id: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
+Subject: [PATCH net-next 02/13] selftests: xsk: drop the single-interface loopback mode
+Date: Thu,  1 Oct 2026 22:21:13 +0200
+Message-Id: <20261001202124.692591-3-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
+References: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,221 +68,458 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+xskxceiver -i ethX -i ethX was dedicated for HW tests and both sockets
+were bound on queue 0 of one interface, which the kernel only allows
+with a shared UMEM setting. That mode is going away: the endpoints are
+about to become separate processes and would have to share the UMEM
+mapping and the socket fd across them.
 
-This work moves the AF_XDP test suite over to selftests/net and adds
-a hardware test on top of the python-based drv-net infrastructure.
-Since a non-zero effort went into implementing xskxceiver's (not so
-great testing app name) test cases, we did not want to completely
-abandon it and start everything from scratch within different infra.
-However, hooking it up to the networking CI will allow us to run
-cyclic tests on real HW; before that, all of our HW tests were manual
-local runs.
+Furthermore, we were forcing an interface under test to a single queue
+configuration via ethtool's set_channel op and turning on promiscuous
+mode. That setting is not very CI-friendly, we are going to handle it
+via ntuple and rss configuration from now on - this is not something
+contained in this change but rather a preparation for reader. Reason
+because it is not addressed here was because we were manually running
+these commands before test suite run. It's just that HW testing was
+only locally executed and it was the least exhausting way to do it.
 
-Tests were based on a process with two threads responsible for the RX
-and TX paths, whereas the new infra expects two separate processes for
-the DUT and remote side, where each side has either rx or tx role.
+Remove the shared-UMEM TX setup, the split UMEM addressing and the
+POLL_TXQ_FULL workaround it needed, and drop the -i IFACE option of
+test_xsk.sh that used it. XDP_SHARED_UMEM (two sockets of one endpoint)
+is unaffected.
 
-To satisfy this requirement, this series makes each xskxceiver endpoint
-a process of its own, so that the RX and TX sides of a case can run on
-different hosts, and adds drivers/net/hw/xsk.py, which runs the existing
-test cases with the DUT in zero-copy mode against an SKB-mode xskxceiver
-on a remote host. The veth test keeps its cases and moves with the
-engine from selftests/bpf to selftests/net.
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ .../selftests/bpf/prog_tests/test_xsk.c       | 97 ++++---------------
+ .../selftests/bpf/prog_tests/test_xsk.h       |  3 -
+ tools/testing/selftests/bpf/prog_tests/xsk.c  |  4 -
+ tools/testing/selftests/bpf/test_xsk.sh       | 49 +++-------
+ tools/testing/selftests/bpf/xsk_prereqs.sh    |  7 --
+ tools/testing/selftests/bpf/xskxceiver.c      |  5 -
+ 6 files changed, 33 insertions(+), 132 deletions(-)
 
-ZC tests used to expect a single NIC in loopback mode, with both
-sockets on one of its queues sharing a UMEM. Now we step away from it:
-the DUT and the remote are separate hosts, and an ntuple rule steers
-the test traffic to the AF_XDP queue.
-
-The remote endpoint is xskxceiver in SKB mode rather than a plain
-socket, so both ends keep sharing the packet stream generation and
-validation of the existing cases. This reduces the need for remote
-interface being a NIC from narrow set of NICs that are AF_XDP ZC
-capable.
-
-This implies that during the test run only one side is actually
-exercised, so let's introduce the concept of direction per test case.
-For example, this means SEND_RECEIVE in XSK_HW_RX will test
-ice_clean_rx_irq_zc() routine and in XSK_HW_TX the ice_xmit_zc().
-
-BPF's 'test_progs -t xsk' is removed, as well as single interface mode,
-which was used for ZC tests. BPF CI therefore no longer runs the
-xskxceiver cases. test_xsk.sh is kept, as it is the only run that needs
-no hardware and not all tests are currently covered by the HW test side.
-We can decide whether to keep the delta test cases, drop them or somehow
-enable within HW tests.
-
-Thread-based approach had a pacing mechanism that was a simple in-flight
-packet counter updated within critical section by both ends.
-Process-based way now is going to do this pacing via xsk_peer.
-
-xsk_peer, the control channel, carries three fixed-size messages: READY
-is the barrier between steps, PROGRESS tells TX how many packets RX has
-consumed so that TX does not overrun the RX UMEM, and ABORT stops the
-peer after a failure.
-
-test_xsk_case_defs.h lists each case with the DUT directions.
-xskxceiver builds its test table from that file, and xsk.py parses it to
-make the variants ksft_variants() named rx_<case> and tx_<case>, so -l,
--t and -T work as for any other test.
-
-
-Patches 1-3 prepare the split. Patch 1 moves the endpoint work out of
-the pthread entry points. Patches 2 and 3 drop the single-interface
-loopback mode and the test_progs wrapper, which runs both endpoints as
-threads of test_progs; neither can work with one endpoint per process.
-Nothing else runs a subset of the cases, so patch 3 also merges the
-cases that the wrapper left out into the main list.
-
-Patch 4 adds a generic rule for BPF skeletons to net/bpf.mk, as Jakub
-suggested in the review of the xdp_features move [0]; xskxceiver is
-its first user. If that series lands first with the same rule, this
-patch can be dropped.
-
-Patch 5 moves the engine, its XDP program and the veth launcher to
-selftests/net. xsk.py needs xskxceiver, and a drv-net test can only
-rely on net/lib: the selftests build pulls net/lib in for net,
-drivers/net and drivers/net/hw, while it skips selftests/bpf by
-default. The veth test is software-only, so it goes to selftests/net,
-as the drv-net README asks. selftests/bpf keeps building xsk.c from
-its new place for xdp_hw_metadata and the xdp_metadata test.
-
-Patches 6-9 split the engine. The interface capabilities move into one
-struct, so that a process can mirror them for the endpoint it does not
-own (6). main() is split into setup, run and cleanup (7). xskxceiver
-runs one case per invocation, and test_xsk.sh owns the mode x case
-matrix (8). Finally, the RX and TX endpoints become separate processes
-that meet over a small TCP control channel (9).
-
-Patch 10 adds the xskxceiver options that a two-host run needs.
-Patch 11 moves the case list into test_xsk_case_defs.h, so that
-xsk.py can read it as well, and patch 12 adds xsk.py on top of them.
-Patch 13 documents both setups.
-
-
-Tested with back-to-back ice NICs connected between separate hosts, with
-following net.config:
-
-NETIF=ens785f1np1
-LOCAL_V4=192.168.100.1
-REMOTE_V4=192.168.100.2
-REMOTE_TYPE=ssh
-REMOTE_ARGS=mfijalko@hostname
-XSK_REMOTE_BIN=/home/mfijalko/bpf-next/tools/testing/selftests/drivers/net/hw/xskxceiver
-XSK_REMOTE_SUDO=1
-
-
-Known issues:
-- Every case pays for process start-up, XDP attach and detach and, on
-  hardware, its remote commands. We used to configure resources once
-  and then execute the whole test suite; it doesn't seem to be
-  CI-friendly and it is preferred to have each case's resource
-  management separated; that on the other hand increases the
-  execution time of the whole test suite.
-
-- The XDP programs redirect every packet, so the link under test must
-  carry no other traffic. SSH and the control channel go to the
-  REMOTE_ARGS host, which has to be reached over another link.
-
-- The control channel is unauthenticated TCP, and the remote endpoint
-  listens on all addresses while its case runs.
-
-- Both endpoints get only the case number, and the control channel
-  does not check that they run the same case. By default xsk.py
-  copies the DUT's xskxceiver to the remote; it is configurable via
-  XSK_REMOTE_DEPLOY at net.config.
-
-- To avoid glibc mismatches between hosts, net/lib links xskxceiver
-  statically if the static libraries are installed; XSK_STATIC=0/1 as a
-  make argument or env variable overrides that.
-
-- busy-poll testing happens to be done via -b passed to xsk.py, however
-  i am not sure if CI uses args, we might add a shell wrapper over
-  python script ;) or it could be embedded within the cases list
-  generation.
-
-- Not on hardware yet:
- * BIDIRECTIONAL, which needs both directions set up in one case; i
-   think it should be removed as we sort of achieve the bi-directional
-   coverage via introduced XSK_HW_{R,T}X, and it currently does not fit
-   our KISS-policy on remote side;
- * XDP_SHARED_UMEM, whose XDP program picks the socket by the synthetic
-   MAC address of the veth test;
- * STAT_RX_DROPPED, STAT_RX_FULL, STAT_FILL_EMPTY, XDP_DROP_HALF,
-   XDP_METADATA_COPY_MULTI_BUFF, the XDP_ADJUST_TAIL, TX_QUEUE_CONSUMER,
-   TEARDOWN, HW_SW_MIN_RING_SIZE and HW_SW_MAX_RING_SIZE.
-
-[0] https://lore.kernel.org/netdev/20260925161547.1b57b653@kernel.org/
-
-Thanks,
-Maciej
-
-Maciej Fijalkowski (13):
-  selftests: xsk: factor endpoint work out of pthread wrappers
-  selftests: xsk: drop the single-interface loopback mode
-  selftests/bpf: drop the test_progs AF_XDP wrapper
-  selftests: net: add a generic rule for BPF skeletons
-  selftests: xsk: move the AF_XDP test suite to selftests/net
-  selftests: xsk: collect interface capabilities in struct xsk_caps
-  selftests: xsk: split xskxceiver main() into setup, run and cleanup
-  selftests: xsk: run one test case per xskxceiver invocation
-  selftests: xsk: run the RX and TX endpoints in separate processes
-  selftests: xsk: add a hardware mode to xskxceiver
-  selftests: xsk: share test case definitions with hardware runner
-  selftests: drv-net: test AF_XDP zero-copy with an SKB peer
-  selftests: xsk: document generic and hardware endpoint runs
-
- Documentation/networking/af_xdp.rst           |   6 +-
- MAINTAINERS                                   |   4 +-
- tools/testing/selftests/bpf/.gitignore        |   1 -
- tools/testing/selftests/bpf/Makefile          |  29 +-
- tools/testing/selftests/bpf/network_helpers.c |  48 --
- tools/testing/selftests/bpf/network_helpers.h |   2 -
- tools/testing/selftests/bpf/prog_tests/xsk.c  | 170 -----
- tools/testing/selftests/bpf/xskxceiver.c      | 479 -------------
- .../testing/selftests/drivers/net/README.rst  |   7 +
- .../testing/selftests/drivers/net/hw/Makefile |   1 +
- tools/testing/selftests/drivers/net/hw/config |   1 +
- tools/testing/selftests/drivers/net/hw/xsk.py | 402 +++++++++++
- tools/testing/selftests/net/Makefile          |   2 +
- tools/testing/selftests/net/bpf.mk            |   5 +
- tools/testing/selftests/net/config            |   1 +
- tools/testing/selftests/net/lib/.gitignore    |   2 +
- tools/testing/selftests/net/lib/Makefile      |  45 +-
- .../testing/selftests/net/lib/xsk/README.rst  | 130 ++++
- .../prog_tests => net/lib/xsk}/test_xsk.c     | 596 +++++++++-------
- .../prog_tests => net/lib/xsk}/test_xsk.h     | 121 ++--
- .../net/lib/xsk/test_xsk_case_defs.h          |  57 ++
- .../selftests/{bpf => net/lib/xsk}/xsk.c      |  86 ++-
- .../selftests/{bpf => net/lib/xsk}/xsk.h      |   6 +
- .../testing/selftests/net/lib/xsk/xsk_peer.c  | 272 ++++++++
- .../testing/selftests/net/lib/xsk/xsk_peer.h  |  18 +
- .../{bpf => net/lib/xsk}/xsk_xdp_common.h     |   0
- .../lib/xsk/xsk_xdp_progs.bpf.c}              |   0
- .../selftests/net/lib/xsk/xskxceiver.c        | 654 ++++++++++++++++++
- .../{bpf => net/lib/xsk}/xskxceiver.h         |   0
- .../selftests/{bpf => net}/test_xsk.sh        | 186 +++--
- .../selftests/{bpf => net}/xsk_prereqs.sh     |  64 +-
- 31 files changed, 2295 insertions(+), 1100 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/xsk.c
- delete mode 100644 tools/testing/selftests/bpf/xskxceiver.c
- create mode 100755 tools/testing/selftests/drivers/net/hw/xsk.py
- create mode 100644 tools/testing/selftests/net/lib/xsk/README.rst
- rename tools/testing/selftests/{bpf/prog_tests => net/lib/xsk}/test_xsk.c (86%)
- rename tools/testing/selftests/{bpf/prog_tests => net/lib/xsk}/test_xsk.h (67%)
- create mode 100644 tools/testing/selftests/net/lib/xsk/test_xsk_case_defs.h
- rename tools/testing/selftests/{bpf => net/lib/xsk}/xsk.c (91%)
- rename tools/testing/selftests/{bpf => net/lib/xsk}/xsk.h (95%)
- create mode 100644 tools/testing/selftests/net/lib/xsk/xsk_peer.c
- create mode 100644 tools/testing/selftests/net/lib/xsk/xsk_peer.h
- rename tools/testing/selftests/{bpf => net/lib/xsk}/xsk_xdp_common.h (100%)
- rename tools/testing/selftests/{bpf/progs/xsk_xdp_progs.c => net/lib/xsk/xsk_xdp_progs.bpf.c} (100%)
- create mode 100644 tools/testing/selftests/net/lib/xsk/xskxceiver.c
- rename tools/testing/selftests/{bpf => net/lib/xsk}/xskxceiver.h (100%)
- rename tools/testing/selftests/{bpf => net}/test_xsk.sh (57%)
- rename tools/testing/selftests/{bpf => net}/xsk_prereqs.sh (53%)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+index 2a1362874092..cee959cfe7e5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+@@ -101,10 +101,6 @@ int xsk_configure_umem(struct ifobject *ifobj, struct xsk_umem_info *umem, void
+ 		return ret;
+ 
+ 	umem->buffer = buffer;
+-	if (ifobj->shared_umem && ifobj->rx_on) {
+-		umem->base_addr = umem_size(umem);
+-		umem->next_buffer = umem_size(umem);
+-	}
+ 
+ 	return 0;
+ }
+@@ -115,8 +111,8 @@ static u64 umem_alloc_buffer(struct xsk_umem_info *umem)
+ 
+ 	addr = umem->next_buffer;
+ 	umem->next_buffer += umem->frame_size;
+-	if (umem->next_buffer >= umem->base_addr + umem_size(umem))
+-		umem->next_buffer = umem->base_addr;
++	if (umem->next_buffer >= umem_size(umem))
++		umem->next_buffer = 0;
+ 
+ 	return addr;
+ }
+@@ -207,7 +203,7 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 
+ 	for (i = 0; i < MAX_INTERFACES; i++) {
+ 		struct ifobject *ifobj = i ? ifobj_rx : ifobj_tx;
+-		struct xsk_umem_info *umem_real;
++		struct xsk_umem_info *umem;
+ 
+ 		ifobj->xsk = &ifobj->xsk_arr[0];
+ 		ifobj->use_poll = false;
+@@ -224,16 +220,14 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 			ifobj->tx_on = false;
+ 		}
+ 
+-		umem_real = ifobj->xsk_arr[0].umem_real;
+-		memset(umem_real, 0, sizeof(*umem_real));
++		umem = ifobj->xsk_arr[0].umem;
++		memset(umem, 0, sizeof(*umem));
+ 		for (j = 0; j < MAX_SOCKETS; j++) {
+ 			struct xsk_socket_info *xsk = &ifobj->xsk_arr[j];
+ 
+ 			memset(xsk, 0, sizeof(*xsk));
+ 			xsk->rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
+-			if (j == 0)
+-				xsk->umem_real = umem_real;
+-			xsk->umem = umem_real;
++			xsk->umem = umem;
+ 			xsk->batch_size = DEFAULT_BATCH_SIZE;
+ 			if (i == 0)
+ 				xsk->pkt_stream = test->tx_pkt_stream_default;
+@@ -825,8 +819,6 @@ static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 exp
+ 	void *data = xsk_umem__get_data(umem->buffer, addr);
+ 	u64 umem_sz = umem_size(umem);
+ 
+-	addr -= umem->base_addr;
+-
+ 	if (addr >= umem_sz || addr + len > umem_sz) {
+ 		ksft_print_msg("Frag invalid addr: %llx len: %u\n",
+ 			       (unsigned long long)addr, len);
+@@ -1164,7 +1156,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
+ 		       bool test_timeout)
+ {
+ 	u32 i, idx = 0, valid_pkts = 0, valid_frags = 0, buffer_len;
+-	struct xsk_umem_info *umem = ifobject->xsk_arr[0].umem_real;
++	struct xsk_umem_info *umem = ifobject->xsk_arr[0].umem;
+ 	struct pkt_stream *pkt_stream = xsk->pkt_stream;
+ 	bool use_poll = ifobject->use_poll;
+ 	struct pollfd fds = { };
+@@ -1468,12 +1460,12 @@ static int validate_tx_invalid_descs(struct ifobject *ifobject)
+ }
+ 
+ static int xsk_configure(struct test_spec *test, struct ifobject *ifobject,
+-			  struct xsk_umem_info *umem, bool tx)
++			  struct xsk_umem_info *umem)
+ {
+ 	int i, ret;
+ 
+ 	for (i = 0; i < test->nb_sockets; i++) {
+-		bool shared = (ifobject->shared_umem && tx) ? true : !!i;
++		bool shared = !!i;
+ 		u32 ctr = 0;
+ 
+ 		while (ctr++ < SOCK_RECONF_CTR) {
+@@ -1497,31 +1489,6 @@ static int xsk_configure(struct test_spec *test, struct ifobject *ifobject,
+ 	return 0;
+ }
+ 
+-static int thread_common_ops_tx(struct test_spec *test, struct ifobject *ifobject)
+-{
+-	struct xsk_umem_info *umem_rx, *umem_tx;
+-	int ret;
+-
+-	if (!test->ifobj_rx || !test->ifobj_rx->xsk_arr[0].umem->umem) {
+-		ksft_print_msg("Error: RX UMEM is not initialized before shared-UMEM TX setup\n");
+-		return -EINVAL;
+-	}
+-
+-	umem_rx = test->ifobj_rx->xsk_arr[0].umem;
+-	umem_tx = ifobject->xsk_arr[0].umem_real;
+-	memcpy(umem_tx, umem_rx, sizeof(*umem_tx));
+-	umem_tx->base_addr = 0;
+-	umem_tx->next_buffer = 0;
+-
+-	ret = xsk_configure(test, ifobject, umem_rx, true);
+-	if (ret)
+-		return ret;
+-	ifobject->xsk = &ifobject->xsk_arr[0];
+-	ifobject->xskmap = test->ifobj_rx->xskmap;
+-
+-	return 0;
+-}
+-
+ static int xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream *pkt_stream,
+ 				   bool fill_up)
+ {
+@@ -1547,7 +1514,7 @@ static int xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream
+ 			if (!pkt) {
+ 				if (!fill_up)
+ 					break;
+-				addr = filled * umem->frame_size + umem->base_addr;
++				addr = filled * umem->frame_size;
+ 			} else if (pkt->offset >= 0) {
+ 				addr = pkt->offset % umem->frame_size + umem_alloc_buffer(umem);
+ 			} else {
+@@ -1584,9 +1551,6 @@ static int thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 	if (umem->unaligned_mode)
+ 		mmap_flags |= MAP_HUGETLB | MAP_HUGE_2MB;
+ 
+-	if (ifobject->shared_umem)
+-		umem_sz *= 2;
+-
+ 	mmap_sz = umem->unaligned_mode ?
+ 		ceil_u64(umem_sz, HUGEPAGE_SIZE) * HUGEPAGE_SIZE : umem_sz;
+ 
+@@ -1600,7 +1564,7 @@ static int thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = xsk_configure(test, ifobject, umem, false);
++	ret = xsk_configure(test, ifobject, umem);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1629,10 +1593,7 @@ static int testapp_validate_tx_endpoint(struct test_spec *test,
+ 	int err;
+ 
+ 	if (test->current_step == 1) {
+-		if (!ifobject->shared_umem)
+-			err = thread_common_ops(test, ifobject);
+-		else
+-			err = thread_common_ops_tx(test, ifobject);
++		err = thread_common_ops(test, ifobject);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -1779,7 +1740,7 @@ static int xsk_attach_xdp_progs(struct test_spec *test, struct ifobject *ifobj_r
+ 			return err;
+ 	}
+ 
+-	if (!ifobj_tx || ifobj_tx->shared_umem)
++	if (!ifobj_tx)
+ 		return 0;
+ 
+ 	if (xdp_prog_changed_tx(test))
+@@ -1805,7 +1766,7 @@ static void clean_umem(struct test_spec *test, struct ifobject *ifobj1, struct i
+ 		return;
+ 
+ 	testapp_clean_xsk_umem(ifobj1);
+-	if (ifobj2 && !ifobj2->shared_umem)
++	if (ifobj2)
+ 		testapp_clean_xsk_umem(ifobj2);
+ }
+ 
+@@ -2184,12 +2145,6 @@ int testapp_invalid_desc(struct test_spec *test)
+ 		pkts[8].valid = false;
+ 	}
+ 
+-	if (test->ifobj_tx->shared_umem) {
+-		pkts[4].offset += umem_sz;
+-		pkts[5].offset += umem_sz;
+-		pkts[6].offset += umem_sz;
+-	}
+-
+ 	if (pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts)))
+ 		return TEST_FAILURE;
+ 	return testapp_validate_traffic(test);
+@@ -2248,28 +2203,14 @@ int testapp_xdp_shared_umem(struct test_spec *test)
+ 
+ int testapp_poll_txq_tmout(struct test_spec *test)
+ {
+-	bool shared_umem = test->ifobj_tx->shared_umem;
+-	int ret;
+-
+ 	test->poll_tmout = true;
+-	/*
+-	 * POLL_TXQ_FULL exercises TX timeout setup in isolation.
+-	 * Keep TX out of shared-UMEM mode here so TX setup does not require
+-	 * RX UMEM to be initialized first.
+-	 */
+-	test->ifobj_tx->shared_umem = false;
+ 	test->ifobj_tx->use_poll = true;
+ 	/* create invalid frame by set umem frame_size and pkt length equal to 2048 */
+ 	test->ifobj_tx->xsk->umem->frame_size = 2048;
+-	if (pkt_stream_replace(test, 2 * DEFAULT_PKT_CNT, 2048)) {
+-		test->ifobj_tx->shared_umem = shared_umem;
++	if (pkt_stream_replace(test, 2 * DEFAULT_PKT_CNT, 2048))
+ 		return TEST_FAILURE;
+-	}
+-
+-	ret = testapp_validate_traffic_single_thread(test, test->ifobj_tx);
+-	test->ifobj_tx->shared_umem = shared_umem;
+ 
+-	return ret;
++	return testapp_validate_traffic_single_thread(test, test->ifobj_tx);
+ }
+ 
+ int testapp_poll_rxq_tmout(struct test_spec *test)
+@@ -2653,8 +2594,8 @@ struct ifobject *ifobject_create(void)
+ 	if (!ifobj->xsk_arr)
+ 		goto out_xsk_arr;
+ 
+-	ifobj->xsk_arr[0].umem_real = calloc(1, sizeof(struct xsk_umem_info));
+-	if (!ifobj->xsk_arr[0].umem_real)
++	ifobj->xsk_arr[0].umem = calloc(1, sizeof(struct xsk_umem_info));
++	if (!ifobj->xsk_arr[0].umem)
+ 		goto out_umem;
+ 
+ 	return ifobj;
+@@ -2669,7 +2610,7 @@ struct ifobject *ifobject_create(void)
+ void ifobject_delete(struct ifobject *ifobj)
+ {
+ 	if (ifobj->xsk_arr)
+-		free(ifobj->xsk_arr[0].umem_real);
++		free(ifobj->xsk_arr[0].umem);
+ 
+ 	free(ifobj->xsk_arr);
+ 	free(ifobj);
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.h b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
+index 03753ddc5dcd..379be8481079 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.h
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
+@@ -83,7 +83,6 @@ typedef int (*test_func_t)(struct test_spec *test);
+ struct xsk_socket_info {
+ 	struct xsk_ring_cons rx;
+ 	struct xsk_ring_prod tx;
+-	struct xsk_umem_info *umem_real;
+ 	struct xsk_umem_info *umem;
+ 	struct xsk_socket *xsk;
+ 	struct pkt_stream *pkt_stream;
+@@ -108,7 +107,6 @@ struct xsk_umem_info {
+ 	u32 frame_headroom;
+ 	void *buffer;
+ 	u32 frame_size;
+-	u32 base_addr;
+ 	u32 fill_size;
+ 	u32 comp_size;
+ 	bool unaligned_mode;
+@@ -145,7 +143,6 @@ struct ifobject {
+ 	bool busy_poll;
+ 	bool use_fill_ring;
+ 	bool release_rx;
+-	bool shared_umem;
+ 	bool use_metadata;
+ 	bool unaligned_supp;
+ 	bool multi_buff_supp;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xsk.c b/tools/testing/selftests/bpf/prog_tests/xsk.c
+index 6e2f63ee2a6c..e191f84d819c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/xsk.c
+@@ -53,10 +53,6 @@ int configure_ifobj(struct ifobject *tx, struct ifobject *rx)
+ 	if (!ASSERT_OK_FD(tx->ifindex, "get TX ifindex"))
+ 		return -1;
+ 
+-	tx->shared_umem = false;
+-	rx->shared_umem = false;
+-
+-
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index 62db060298a4..69fac65f073c 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -71,9 +71,6 @@
+ # Set up veth interfaces and leave them up so xskxceiver can be launched in a debugger:
+ #   sudo ./test_xsk.sh -d
+ #
+-# Run test suite for physical device in loopback mode
+-#   sudo ./test_xsk.sh -i IFACE
+-#
+ # Run test suite in a specific mode only [skb,drv,zc]
+ #   sudo ./test_xsk.sh -m MODE
+ #
+@@ -88,14 +85,11 @@
+ 
+ . xsk_prereqs.sh
+ 
+-ETH=""
+-
+-while getopts "vi:dm:lt:h" flag
++while getopts "vdm:lt:h" flag
+ do
+ 	case "${flag}" in
+ 		v) verbose=1;;
+ 		d) debug=1;;
+-		i) ETH=${OPTARG};;
+ 		m) MODE=${OPTARG};;
+ 		l) list=1;;
+ 		t) TEST=${OPTARG};;
+@@ -157,21 +151,16 @@ if [[ $help -eq 1 ]]; then
+         exit
+ fi
+ 
+-if [ ! -z $ETH ]; then
+-	VETH0=${ETH}
+-	VETH1=${ETH}
+-else
+-	validate_root_exec
+-	validate_veth_support ${VETH0}
+-	validate_ip_utility
+-	setup_vethPairs
+-
+-	retval=$?
+-	if [ $retval -ne 0 ]; then
+-		test_status $retval "${TEST_NAME}"
+-		cleanup_exit ${VETH0} ${VETH1}
+-		exit $retval
+-	fi
++validate_root_exec
++validate_veth_support ${VETH0}
++validate_ip_utility
++setup_vethPairs
++
++retval=$?
++if [ $retval -ne 0 ]; then
++	test_status $retval "${TEST_NAME}"
++	cleanup_exit ${VETH0} ${VETH1}
++	exit $retval
+ fi
+ 
+ 
+@@ -203,11 +192,7 @@ fi
+ 
+ exec_xskxceiver
+ 
+-if [ -z $ETH ]; then
+-	cleanup_exit ${VETH0} ${VETH1}
+-else
+-	cleanup_iface ${ETH} ${MTU}
+-fi
++cleanup_exit ${VETH0} ${VETH1}
+ 
+ if [[ $list -eq 1 ]]; then
+     exit
+@@ -216,18 +201,12 @@ fi
+ TEST_NAME="XSK_SELFTESTS_${VETH0}_BUSY_POLL"
+ busy_poll=1
+ 
+-if [ -z $ETH ]; then
+-	setup_vethPairs
+-fi
++setup_vethPairs
+ exec_xskxceiver
+ 
+ ## END TESTS
+ 
+-if [ -z $ETH ]; then
+-	cleanup_exit ${VETH0} ${VETH1}
+-else
+-	cleanup_iface ${ETH} ${MTU}
+-fi
++cleanup_exit ${VETH0} ${VETH1}
+ 
+ failures=0
+ echo -e "\nSummary:"
+diff --git a/tools/testing/selftests/bpf/xsk_prereqs.sh b/tools/testing/selftests/bpf/xsk_prereqs.sh
+index 47c7b8064f38..ebff0f95d14b 100755
+--- a/tools/testing/selftests/bpf/xsk_prereqs.sh
++++ b/tools/testing/selftests/bpf/xsk_prereqs.sh
+@@ -53,13 +53,6 @@ test_exit()
+ 	exit 1
+ }
+ 
+-cleanup_iface()
+-{
+-	ip link set $1 mtu $2
+-	ip link set $1 xdp off
+-	ip link set $1 xdpgeneric off
+-}
+-
+ clear_configs()
+ {
+ 	[ $(ip link show $1 &>/dev/null; echo $?;) == 0 ] &&
+diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+index 7dad8556a722..24109dd7264e 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.c
++++ b/tools/testing/selftests/bpf/xskxceiver.c
+@@ -341,7 +341,6 @@ int main(int argc, char **argv)
+ 	u32 i, j, failed_tests = 0, nb_tests;
+ 	int modes = TEST_MODE_SKB + 1;
+ 	struct test_spec test;
+-	bool shared_netdev;
+ 	int ret;
+ 
+ 	/* Use libbpf 1.0 API mode */
+@@ -388,10 +387,6 @@ int main(int argc, char **argv)
+ 		ksft_exit_xfail();
+ 	}
+ 
+-	shared_netdev = (ifobj_tx->ifindex == ifobj_rx->ifindex);
+-	ifobj_tx->shared_umem = shared_netdev;
+-	ifobj_rx->shared_umem = shared_netdev;
+-
+ 	if (!validate_interface(ifobj_tx) || !validate_interface(ifobj_rx))
+ 		print_usage(argv);
+ 
 -- 
 2.43.0
 
