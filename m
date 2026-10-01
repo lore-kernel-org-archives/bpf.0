@@ -1,106 +1,133 @@
-Received: from mta1.migadu.com (out-65.mta1.migadu.com [95.215.58.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.smtp-ext.broadcom.com (lpdvsmtp10.broadcom.com [192.19.144.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482A0377018
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 16:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648453E1683;
+	Thu,  1 Oct 2026 16:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790870409; cv=none; b=UJHcXFTgihC4uOWcgLuzWeENRBJCLbRghG8GUe2odLet/9U4nswc2BbMGthmuftx7I51r7rZt1H43zTzi56U9JgTiagkSbFTrRF75ZjBIVKGUIT7+IEOA15VuD4QkmE2MiznByOeAGZhCDAol18lhJlYwXG4hP3CTBFhdTIm0kQ=
+	t=1790870491; cv=none; b=qMfDM4pXKEmcGmXyeuZM1vuRy+yErq3K0pV+tuio2Dm2k0ZG8e/8aAGS/PDOH9E3FbIUWiVW2fz2TgDxGgctWXiCJ6GRcHZOh1fge0y8bJ87g6iafgNmULfS6H8xcLNVPEeC+j+aczPbTnBWGTwojlglI2vN6hsjmOB3fbtP4HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790870409; c=relaxed/simple;
-	bh=nQNXL5q4knr5P0PR//t77Jz5pY4phClaMKAM51WfU40=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nIpE9n4YNiGsxboFT8on6/NpKoQfFWFxxg5ZLcMmF6awvlOEAPsm5N790lAFfxiIY4eCkD1h4r+zzldoYrbD5rt6JBgIy/BFx9XqU7R0Z8cJ3oOMuTvmRUxNo8wRxrnNg7goVweti23r/V+XHgMFpqmAhxpymrQHOTQNtty83ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rNHHQbU9; arc=none smtp.client-ip=95.215.58.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790870491; c=relaxed/simple;
+	bh=mrg825sJxux0Z7hDauCsC8TPRLfAMnT5ORicb/TqQd0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QbSt07smZwW2iWwijEjLWsYsHXjURtT/zGrJNqlHD3CrQFwApQ2dfZSWsC21S+8McWR5AaDABUOQa/3i2IraNB3/7x99vVM9rBn+wcjn93RF2AgIh/uXunzC9Tl58fNdwhUYxAvS/YLCPjzM+1RZmEq90Jp+PSt9a9tXy70oevQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ET1J7QWZ; arc=none smtp.client-ip=192.19.144.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rNHHQbU9"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nQNXL5q4knr5P0PR//t77Jz5pY4phClaMKAM51WfU40=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790870405; v=1; x=1791475205;
- b=rNHHQbU91vxR2GSYZRD1G8OHlE7XnK4eYXE6kj/G7461gg/TqffcehtPKaphPynQ7RNovEEi
- CoveUSvaq9EquhgfrMD2iDMh6Tc35KUDbcREvH7wZEYXCUaW8AJMGsyqopYNdKEt1lRuoSZuEZK
- CeS6/C9UGwXkw/kW7Ywp6VLk=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4267819c097ea3ea;
-	Thu, 01 Oct 2026 16:00:02 +0000
-X-Mizu-Trace-ID: 4267819c097ea3ea
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 1 Oct 2026 09:00:00 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ingo Molnar <mingo@redhat.com>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
-	Frederic Weisbecker <frederic@kernel.org>, Aaron Lu <ziqianlu@bytedance.com>, 
-	Daniel Jordan <daniel.m.jordan@oracle.com>, Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com, 
-	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
- done for
-Message-ID: <ar5eUZ7hibU0Bp5o@linux.dev>
-References: <20260924184714.912181-1-shakeel.butt@linux.dev>
- <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
- <20261001105909.GL4121339@noisy.programming.kicks-ass.net>
- <20261001121842.GJ4121620@noisy.programming.kicks-ass.net>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ET1J7QWZ"
+Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 209CAC0000F7;
+	Thu,  1 Oct 2026 09:01:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 209CAC0000F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1790870482;
+	bh=mrg825sJxux0Z7hDauCsC8TPRLfAMnT5ORicb/TqQd0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ET1J7QWZc2ybS/PIE3ku007veWI8KK9atAq2Yn6oa8j8vfZCGUZPGhPKNcCbbIFMI
+	 lUz/DALxa3lvkn3yI5b+Zp7dbjg8DjRnXJl62Gtsteybre+pzHrI5/fPAQZOZydeEp
+	 Cdo0J9JdVNXq7ywZnl2Qsl7kUbqZhlPGRXa7FB1o=
+Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id B0AEDAEA2;
+	Thu,  1 Oct 2026 12:01:20 -0400 (EDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: stable@vger.kernel.org
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ian Rogers <irogers@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Jan Polensky <japo@linux.ibm.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
+Subject: [PATCH stable 5.10 2/2] perf test bpf: Address error about non-null argument for epoll_pwait 2nd arg
+Date: Thu,  1 Oct 2026 09:01:14 -0700
+Message-Id: <20261001160114.801948-3-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261001160114.801948-1-florian.fainelli@broadcom.com>
+References: <20261001160114.801948-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261001121842.GJ4121620@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 01, 2026 at 02:18:42PM +0200, Peter Zijlstra wrote:
-> On Thu, Oct 01, 2026 at 12:59:09PM +0200, Peter Zijlstra wrote:
-> > On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
-> > > Hello, Shakeel.
-> > > 
-> > > On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
-> > > > This series lets a kernel thread say which cgroup it is working for.
-> > > > That cgroup then sees the CPU time in its cpu.stat and the stalls in
-> > > > its memory.pressure, and the CPU time comes out of its cpu.max quota.
-> > > > The first user is the memcg reclaim that runs from high_work.
-> > > 
-> > > This doesn't translate to net rx, which is another major source of
-> > > displaced CPU usage. Switching membership on each packet isn't going to
-> > > work there. Attribution can't happen that way. We'd much rather count
-> > > per-cgroup received packets and prorate the CPU consumption. If at all
-> > > possible, I think it'd be better to adopt an approach which can cover
-> > > both use cases.
-> > 
-> > Ideally RX would be split for each network queue, rather than lumped
-> > into the one giant softirq that nobody owns.
-> > 
-> > I know PREEMPT_RT has been wanting something like that for ages. Not all
-> > queues are created equal. Some might want RT priority while others
-> > should definitely not.
-> > 
-> > Furthermore, without ingress throttling, your RX back charge could
-> > completely deplete the actual cgroup time quota.
-> > 
-> > Anyway, if you get per queue RX processing threads, then you can move
-> > them into cgroups where so desired.
-> 
-> Gemini is trying to tell me this exists and is called Threaded NAPI.
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-For the accurate cpu accounting of net rx, threaded NAPI or softirq is not
-that important. I think it is steering packets of the workload/cgroup to their
-dedicated queues and only newer NICs have support for hardware rx steering.
+commit ed847e30f001b207013b6136c264454d7560557f upstream.
 
-For old NICs, we will still be getting packets for different cgroups on the
-same NIC queue and I think Tejun is asking for cgroup cpu accounting for this
-scenario to work.
+First noticed on Fedora Rawhide:
+
+  tests/bpf.c: In function ‘epoll_pwait_loop’:
+  tests/bpf.c:36:17: error: argument 2 null where non-null expected [-Werror=nonnull]
+     36 |                 epoll_pwait(-(i + 1), NULL, 0, 0, NULL);
+        |                 ^~~~~~~~~~~
+  In file included from tests/bpf.c:5:
+  /usr/include/sys/epoll.h:134:12: note: in a call to function ‘epoll_pwait’ declared ‘nonnull’
+    134 | extern int epoll_pwait (int __epfd, struct epoll_event *__events,
+        |            ^~~~~~~~~~~
+
+  [perfbuilder@27cfe44d67ed perf-6.5.0-rc2]$ gcc -v
+  Using built-in specs.
+  COLLECT_GCC=gcc
+  COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/13/lto-wrapper
+  OFFLOAD_TARGET_NAMES=nvptx-none
+  OFFLOAD_TARGET_DEFAULT=1
+  Target: x86_64-redhat-linux
+  Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,objc,obj-c++,ada,go,d,m2,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-13.2.1-20230728/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none --without-cuda-driver --enable-offload-defaulted --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+  Thread model: posix
+  Supported LTO compression algorithms: zlib zstd
+  gcc version 13.2.1 20230728 (Red Hat 13.2.1-1) (GCC)
+  [perfbuilder@27cfe44d67ed perf-6.5.0-rc2]$
+
+Just add that argument to address this compiler warning.
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/lkml/ZMj8+bvN86D0ZKiB@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ tools/perf/tests/bpf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/tests/bpf.c b/tools/perf/tests/bpf.c
+index e5832b74a845..96467311b1fe 100644
+--- a/tools/perf/tests/bpf.c
++++ b/tools/perf/tests/bpf.c
+@@ -29,11 +29,12 @@
+ 
+ static int epoll_pwait_loop(void)
+ {
++	struct epoll_event events;
+ 	int i;
+ 
+ 	/* Should fail NR_ITERS times */
+ 	for (i = 0; i < NR_ITERS; i++)
+-		epoll_pwait(-(i + 1), NULL, 0, 0, NULL);
++		epoll_pwait(-(i + 1), &events, 0, 0, NULL);
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
