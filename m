@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DCE4B7A37
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 13:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4142749A3D6
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 13:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790861519; cv=none; b=GxyJQZM15JvjjFGFf6K6Wqzz3u5u4OKN4BZ0AuF23O4e2rjNEy3MiwWv8VK0tETyCuCnDl2TJ2uf7IWjKgmTkK5Bd90y9YAyugsilSTjSqqNedwETogiCSQvoT/vSpTkc5imVgrLmf6v529hatRgmglg2ZxSUott/V1C6ofVr0U=
+	t=1790861530; cv=none; b=MDdsTBVCfe2NLn1bpFn68Ru5iGXTTYezblzpqK25sMtYfRz3UqnI81uJNjzqjQ1cIVOcijSaHZc1f/+b/XxAFqjFTgiLSLV6BoUafT/5cSbvptIy5gNo6Q0Cazqy7P5nPPHJjDJHWf1c40sAdpRv+GLdqdRRK4HI2V+FQSlUBao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790861519; c=relaxed/simple;
-	bh=qD/53CbTPE0XOxZtAdU/pUzj4oz2Cf2B4vFXv2ndlFY=;
+	s=arc-20240116; t=1790861530; c=relaxed/simple;
+	bh=5YC5SFhp8V8x6VedGaDVXH363EYoiqdL0f4nDeBwz/k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A7Sgt11p4/nfb0oy4L+w0Y0AoQsdgrhNK2eAd1ek217bG+sh+AaNmMBoUcU1HVgKo3StrHxLuxjdZXt+GvQjxj5Mfo868nk+CO4gvh1TqcljBxy4bFgww+3Kz43vb8Z26wBGz98bnvqp1gIMu+zpowpogkt8TqmxrFRaV4Rhbwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=M/POlwqaQ5SN96MzyLYSpGsR+z5wTvKFqxXTWbikUjmGBuRHaKAFmEcKCh+4WWmCbJVw3r2E6cPKaJMJawMhdI84aQZolsllRh0lEw/aDDLbGFnEehzqvyYTj3/bwdDZOPNXXBtNt2XS7jN9M2PXY8uM9uOMdiOydL9m3hbRf+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 2EF9F2E6E12B71; Thu,  1 Oct 2026 06:31:46 -0700 (PDT)
+	id 4C4D72E6E12B99; Thu,  1 Oct 2026 06:31:51 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v8 19/22] selftests/bpf: Add end-to-end and negative .bpf_cleanup exception tests
-Date: Thu,  1 Oct 2026 06:31:46 -0700
-Message-ID: <20261001133146.1346135-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v8 20/22] selftests/bpf: Add __set_global() and __ret_global() test tags
+Date: Thu,  1 Oct 2026 06:31:51 -0700
+Message-ID: <20261001133151.1346286-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261001133006.1335369-1-yonghong.song@linux.dev>
 References: <20261001133006.1335369-1-yonghong.song@linux.dev>
@@ -37,1399 +37,502 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-C has no unwinding, so nothing here comes out of the frontend: the frames
-that own a resource are written in inline assembly, which spells out by
-hand exactly what a frontend emits -- a call site bracketed by two labels=
-,
-a landing pad unreachable in the compiler's CFG, and a .bpf_cleanup recor=
-d
-tying them together. Most are __naked; foo3, below, is C around one asm
-block. Clang's assembler turns ".long <text label>" into the same
-R_BPF_64_NODYLD32 relocation the BPF AsmPrinter emits, and GNU as into an
-R_BPF_64_ABS32 that the static linker takes too, so libbpf and the kernel
-see an object indistinguishable from a compiler-generated one.
-
-Call chain: entry -> foo1 -> foo1v -> foo2 -> foo3. foo3 holds a
-non-preemptible section and unwinds inside it; foo2 holds an RCU read loc=
-k
-and has two call sites sharing one pad, one of them its own unwind; foo1v
-is a void frame whose pad ends in a jump to a resume block placed after a=
-n
-unrelated block that ends in a plain exit; foo1 owns nothing and gets no
-record; entry is the main program, where the unwind stops. foo2's pad
-calls drop_glue(), and bump() is a pad-less unwinder that is verified but
-never fires at run time.
-
-There are also the shapes the kernel refuses:
-
- - a catch pad, and a pad ambiguous between catch and cleanup
- - a table alongside bpf_throw() or a tagged exception callback
- - a subprogram that can unwind, used as a callback, including one that
-   calls an unwinding subprogram through a pointer read from its caller
- - a tail call, a BPF_LD_[ABS|IND] or a gotox in a pad
- - a kfunc call in a pad whose by-value argument past the argument
-   registers was never set, which the ordinary argument check refuses:
-   pad code is verified like any other
- - a second unwind while one is in flight, raised in the pad or below it
- - a resume outside a pad, and one in a subprogram the pad called
- - a jump into a pad from outside it
- - a pad inside another record's call-site range, and a record covering n=
-o
-   call that can unwind and whose pad nothing reaches
- - a frame leaving through an unwind holding what it did not hold when it
-   was entered: a pad dropping a lock its frame never took, one forgettin=
+A test that has to look at a program's state after it ran needs a driver =
+of
+its own: open and load a skeleton, set an input, call
+bpf_prog_test_run_opts(), read a variable back, destroy the skeleton. The
+loader already does all of that for __retval(), and the only thing missin=
 g
-   the lock it did take, a subprogram with no pad of its own leaving whil=
-e
-   it holds one, and a pad dropping a reference the frame never reserved
- - a pad-less unwind inside an RCU read-side region
- - a frame holding a lock or a reference across a call an unwind passes
-   through with no record over it: a lock or a reference in a subprogram'=
-s
-   frame, and a reference in the main program's
- - a pad trusting a stack slot to hold what it held at the call, after
-   the callee wrote it through a pointer and unwound, through a static
-   callee and a global callee
+is reaching the program's globals.
 
-The test skips rather than fails where the JIT cannot dispatch a landing
-pad at all.
+__set_global(var, value) writes one before the run and __ret_global(var,
+value) checks one after it, and both make the loader run the program and
+check its return value; without __retval(), the program must return 0. Ea=
+ch
+tag may be given more than once, for a test with more than one input or
+more than one thing to look at afterwards; past MAX_GLOBAL_VARS a tag is
+refused rather than quietly replacing the one before it.
 
+The variable is found the way veristat finds one: the map libbpf made for
+the ".bss" or ".data" section, looked up by that section name, the datase=
+c
+of the same name in the object's BTF, then the variable within it. Four
+and eight byte variables are supported, which is what a counter or a
+bitmask needs; anything else is refused rather than read at the wrong
+width.
+
+A value is held to the range its variable can represent, signedness taken
+from the BTF the way veristat's set_global_var() does, and narrowed to
+what is stored. Both tags use the one rule, so a negative literal means
+the same to each: without it __ret_global(err, -22) on an int could never
+match, the tag parsing 64 bits while the read gave back 32. Unlike
+veristat this takes no enum names and runs native-endian only.
+
+The value may be a '|' separated list of terms, so that a bitmask reads i=
+n
+the test the way it is written in the program.
+
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/exceptions_cleanup.h        |  27 +
- .../bpf/prog_tests/exceptions_cleanup.c       |  85 ++
- .../selftests/bpf/progs/exceptions_cleanup.c  | 160 +++
- .../bpf/progs/exceptions_cleanup_fail.c       | 978 ++++++++++++++++++
- 4 files changed, 1250 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/exceptions_cleanup.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/exceptions_cle=
-anup.c
- create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
-fail.c
+ tools/testing/selftests/bpf/progs/bpf_misc.h |  12 +
+ tools/testing/selftests/bpf/test_loader.c    | 319 ++++++++++++++++++-
+ 2 files changed, 330 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/exceptions_cleanup.h b/tools/tes=
-ting/selftests/bpf/exceptions_cleanup.h
-new file mode 100644
-index 000000000000..96effd2c1361
---- /dev/null
-+++ b/tools/testing/selftests/bpf/exceptions_cleanup.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#ifndef __EXCEPTIONS_CLEANUP_H__
-+#define __EXCEPTIONS_CLEANUP_H__
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
+/selftests/bpf/progs/bpf_misc.h
+index f3dbc3b59bff..a80798a8f28f 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -103,6 +103,16 @@
+  *                   - POINTER_VALUE
+  *                   - TEST_DATA_LEN
+  * __retval_unpriv   Same, but load program in unprivileged mode.
++ * __set_global      Set a global variable of the program to a value bef=
+ore
++ *                   executing it. The variable has to be an int or an e=
+num,
++ *                   live in .bss or .data and be four or eight bytes wi=
+de,
++ *                   and the value is a number or several joined by '|',
++ *                   without parentheses.
++ * __ret_global      Execute the program and check that a global variabl=
+e
++ *                   holds the given value afterwards, under the same ru=
+les.
++ *                   __set_global and __ret_global both make the loader =
+run
++ *                   the program and check its return value; without
++ *                   __retval, the program must return 0.
+  *
+  * __description     Text to be used for display and as an additional fi=
+lter
+  *                   alias, while the original program name stays matcha=
+ble.
+@@ -161,6 +171,8 @@
+ #define __flag(flag)		__test_tag("test_prog_flags=3D" #flag)
+ #define __retval(val)		__test_tag("test_retval=3D" XSTR(val))
+ #define __retval_unpriv(val)	__test_tag("test_retval_unpriv=3D" XSTR(val=
+))
++#define __set_global(var, val)	__test_tag("test_global_set=3D" #var ":" =
+XSTR(val))
++#define __ret_global(var, val)	__test_tag("test_global_ret=3D" #var ":" =
+XSTR(val))
+ #define __auxiliary		__test_tag("test_auxiliary")
+ #define __auxiliary_unpriv	__test_tag("test_auxiliary_unpriv")
+ #define __btf_path(path)	__test_tag("test_btf_path=3D" path)
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
+lftests/bpf/test_loader.c
+index 25eeb1c1248b..0ff89912e6f1 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -50,6 +50,13 @@ enum stack_mode {
+ 	SMALL_STACK	=3D 1 << 1,
+ };
+=20
++#define MAX_GLOBAL_VARS 8
 +
-+/* progs/exceptions_cleanup.c: one bit per function that reports it ran.=
- */
-+#define RAN_FOO3_PREEMPT	0x1
-+#define RAN_FOO2_RCU		0x2
-+#define RAN_FOO1V_PREEMPT	0x4
-+#define RAN_FOO2_DROP		0x8
-+#define RAN_BUMP		0x10
++struct global_var {
++	char *name;
++	__u64 val;
++};
 +
-+#define CLEANUP_REC(begin, end, landing_pad)			\
-+	".pushsection .bpf_cleanup,\"a\",@progbits;"		\
-+	".long " begin ";"					\
-+	".long " end ";"					\
-+	".long " landing_pad ";"				\
-+	".popsection;"
-+
-+/* Set a bit in @pads_ran. */
-+#define PAD_RAN(bit)						\
-+	"r1 =3D %[pads_ran] ll;"					\
-+	"r2 =3D *(u64 *)(r1 + 0);"				\
-+	"r2 |=3D " bit ";"					\
-+	"*(u64 *)(r1 + 0) =3D r2;"
-+
-+#endif /* __EXCEPTIONS_CLEANUP_H__ */
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
-b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-new file mode 100644
-index 000000000000..255f88d35aad
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+#include "exceptions_cleanup.h"
-+#include "exceptions_cleanup.skel.h"
-+#include "exceptions_cleanup_fail.skel.h"
-+
-+/* foo3 unwound: every frame that has a pad ran it. */
-+#define PADS_FOO3_UNWOUND \
-+	(RAN_FOO3_PREEMPT | RAN_FOO2_RCU | RAN_FOO1V_PREEMPT | RAN_FOO2_DROP)
-+
-+/* foo2 unwound after foo3 returned normally: foo3's pad must not run. *=
-/
-+#define PADS_FOO2_UNWOUND \
-+	(RAN_FOO2_RCU | RAN_FOO1V_PREEMPT | RAN_FOO2_DROP)
-+
-+static void run(struct exceptions_cleanup *skel, __u64 input, __u32 retv=
-al,
-+		__u64 pads)
+ struct test_subspec {
+ 	char *name;
+ 	char *description;
+@@ -62,6 +69,10 @@ struct test_subspec {
+ 	int retval;
+ 	bool execute;
+ 	__u64 caps;
++	struct global_var set_globals[MAX_GLOBAL_VARS];
++	int set_global_cnt;
++	struct global_var ret_globals[MAX_GLOBAL_VARS];
++	int ret_global_cnt;
+ };
+=20
+ struct test_spec {
+@@ -115,6 +126,34 @@ void free_msgs(struct expected_msgs *msgs)
+ 	msgs->cnt =3D 0;
+ }
+=20
++static void free_global_vars(struct global_var *vars, int *cnt)
 +{
-+	__u64 ctx =3D 0;
-+	int err;
++	int i;
 +
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		    .ctx_in =3D &ctx,
-+		    .ctx_size_in =3D sizeof(ctx),
-+	);
-+
-+	skel->bss->input =3D input;
-+	skel->bss->pads_ran =3D 0;
-+	skel->bss->result =3D 0;
-+
-+	err =3D bpf_prog_test_run_opts(bpf_program__fd(skel->progs.entry), &top=
-ts);
-+	if (!ASSERT_OK(err, "run"))
-+		return;
-+	ASSERT_EQ(topts.retval, retval, "retval");
-+	/* bump() is not a landing pad; it sets its bit on every run. */
-+	ASSERT_EQ(skel->bss->pads_ran, pads | RAN_BUMP, "pads_ran");
++	for (i =3D 0; i < *cnt; i++) {
++		free(vars[i].name);
++		vars[i].name =3D NULL;
++	}
++	*cnt =3D 0;
 +}
 +
-+void test_exceptions_cleanup(void)
++static int clone_global_vars(struct global_var *dst, int *dst_cnt,
++			     const struct global_var *src, int src_cnt)
 +{
-+	char log[8192] =3D {};
++	int i;
 +
-+	LIBBPF_OPTS(bpf_object_open_opts, opts,
-+		    .kernel_log_buf =3D log,
-+		    .kernel_log_size =3D sizeof(log));
-+	struct exceptions_cleanup *skel;
-+	int err;
-+
-+	skel =3D exceptions_cleanup__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+
-+	err =3D exceptions_cleanup__load(skel);
-+	if (err) {
-+		if (err =3D=3D -EOPNOTSUPP &&
-+		    strstr(log, "exception cleanup needs a JIT that can dispatch landi=
-ng pads")) {
-+			printf("%s:SKIP:JIT cannot dispatch exception cleanup landing pads\n"=
-,
-+			       __func__);
-+			test__skip();
-+		} else if (!ASSERT_OK(err, "load")) {
-+			fprintf(stderr, "%s", log);
++	for (i =3D 0; i < src_cnt; i++) {
++		dst[i].name =3D strdup(src[i].name);
++		if (!dst[i].name) {
++			free_global_vars(dst, dst_cnt);
++			return -ENOMEM;
 +		}
-+		exceptions_cleanup__destroy(skel);
-+		return;
++		dst[i].val =3D src[i].val;
++		(*dst_cnt)++;
++	}
++	return 0;
++}
++
+ static void free_test_spec(struct test_spec *spec)
+ {
+ 	/* Deallocate expect_msgs arrays. */
+@@ -129,6 +168,11 @@ static void free_test_spec(struct test_spec *spec)
+ 	free_msgs(&spec->unpriv.stdout);
+ 	free_msgs(&spec->priv.stdout);
+=20
++	free_global_vars(spec->priv.set_globals, &spec->priv.set_global_cnt);
++	free_global_vars(spec->priv.ret_globals, &spec->priv.ret_global_cnt);
++	free_global_vars(spec->unpriv.set_globals, &spec->unpriv.set_global_cnt=
+);
++	free_global_vars(spec->unpriv.ret_globals, &spec->unpriv.ret_global_cnt=
+);
++
+ 	free(spec->priv.name);
+ 	free(spec->priv.description);
+ 	free(spec->unpriv.name);
+@@ -311,6 +355,236 @@ static int parse_caps(const char *str, __u64 *val, =
+const char *name)
+ 	return 0;
+ }
+=20
++static int parse_global_var(const char *str, struct global_var *vars, in=
+t *cnt,
++			    const char *name)
++{
++	const char *colon =3D strrchr(str, ':');
++	struct global_var *var;
++	char *end;
++	__u64 *val;
++
++	if (!colon || colon =3D=3D str) {
++		PRINT_FAIL("expecting '<variable>:<value>' for %s, got '%s'\n", name, =
+str);
++		return -EINVAL;
++	}
++	if (*cnt >=3D MAX_GLOBAL_VARS) {
++		PRINT_FAIL("too many %s tags, at most %d are supported\n",
++			   name, MAX_GLOBAL_VARS);
++		return -E2BIG;
 +	}
 +
-+	/* No unwind: foo3 returns 1 ^ 1 =3D=3D 0, foo2 adds one, no pad runs. =
-*/
-+	if (test__start_subtest("no_unwind"))
-+		run(skel, 1, 1, 0);
++	var =3D &vars[*cnt];
++	val =3D &var->val;
++	*val =3D 0;
++	for (const char *term =3D colon + 1;;) {
++		__u64 v;
 +
-+	/* foo3 unwinds; every pad runs and entry returns zero. */
-+	if (test__start_subtest("unwind_from_foo3"))
-+		run(skel, 101, 0, PADS_FOO3_UNWOUND);
++		errno =3D 0;
++		v =3D strtoull(term, &end, 0);
++		if (errno || end =3D=3D term) {
++			PRINT_FAIL("failed to parse %s value '%s'\n", name, colon + 1);
++			return -EINVAL;
++		}
++		*val |=3D v;
++		while (*end =3D=3D ' ')
++			end++;
++		if (!*end)
++			break;
++		if (*end !=3D '|') {
++			PRINT_FAIL("failed to parse %s value '%s'\n", name, colon + 1);
++			return -EINVAL;
++		}
++		term =3D end + 1;
++	}
 +
-+	/*
-+	 * foo3 returns 2 ^ 1 =3D=3D 3, so foo2 unwinds from its own second reg=
-ion;
-+	 * foo3's frame is long gone, so its pad must not run.
-+	 */
-+	if (test__start_subtest("unwind_from_foo2"))
-+		run(skel, 2, 0, PADS_FOO2_UNWOUND);
++	var->name =3D strndup(str, colon - str);
++	if (!var->name) {
++		PRINT_FAIL("failed to allocate %s variable name\n", name);
++		return -ENOMEM;
++	}
++	(*cnt)++;
 +
-+	exceptions_cleanup__destroy(skel);
-+
-+	RUN_TESTS(exceptions_cleanup_fail);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup.c b/too=
-ls/testing/selftests/bpf/progs/exceptions_cleanup.c
-new file mode 100644
-index 000000000000..d065ba53c812
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "exceptions_cleanup.h"
-+
-+static __used __noinline void __kfunc_btf_anchor(void)
-+{
-+	bpf_unwind();
-+	bpf_rcu_read_lock();
-+	bpf_rcu_read_unlock();
-+	bpf_preempt_disable();
-+	bpf_preempt_enable();
-+	bpf_unwind_resume(NULL);
-+}
-+
-+__u64 input =3D 0;
-+__u64 pads_ran =3D 0;
-+__u64 result =3D 0;
-+__u64 never =3D 0;
-+
-+static __used __noinline __u64 foo3(__u64 x)
-+{
-+	bpf_preempt_disable();
-+	if (x > 100)
-+		asm volatile (
-+	"1:"	"call bpf_unwind;"		/* cleanup region */
-+	"2:"
-+		"goto 3f;"
-+	"4:"					/* landing pad */
-+		/*
-+		 * r0 at pad entry is the zero the fixups put after the
-+		 * bpf_unwind() call. It is kept in a callee-saved
-+		 * register and handed to the resume, the way a
-+		 * compiler-emitted pad passes the exception pointer to
-+		 * _Unwind_Resume. The kfunc takes it and ignores it, and
-+		 * the two pads below do without the shuffle.
-+		 */
-+		"r7 =3D r0;"
-+		"call bpf_preempt_enable;"
-+		PAD_RAN("%[ran]")
-+		"r1 =3D r7;"
-+		"call bpf_unwind_resume;"
-+	"3:"
-+		CLEANUP_REC("1b", "2b", "4b")
-+		:
-+		: [ran]"i"(RAN_FOO3_PREEMPT),
-+		  __imm_addr(pads_ran)
-+		: __clobber_all);
-+	bpf_preempt_enable();
-+	return x ^ 1;
-+}
-+
-+static __used __naked __noinline void drop_glue(void)
-+{
-+	asm volatile (
-+	PAD_RAN("%[ran]")
-+	"exit;"
-+	:
-+	: [ran]"i"(RAN_FOO2_DROP), __imm_addr(pads_ran)
-+	: __clobber_all);
-+}
-+
-+static __used __naked __noinline __u64 foo2(void)
-+{
-+	asm volatile (
-+	"r6 =3D r1;"
-+	"call bpf_rcu_read_lock;"
-+	"r1 =3D r6;"
-+"1:"	"call foo3;"			/* cleanup region #1 */
-+"2:"
-+	"r6 =3D r0;"
-+	"if r6 =3D=3D 0 goto 5f;"
-+"3:"	"call bpf_unwind;"		/* cleanup region #2 */
-+"4:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"5:"
-+	"call bpf_rcu_read_unlock;"
-+	"r0 =3D r6;"
-+	"r0 +=3D 1;"
-+	"exit;"
-+"6:"					/* landing pad, shared by both regions */
-+	"call drop_glue;"
-+	"call bpf_rcu_read_unlock;"
-+	PAD_RAN("%[ran_rcu]")
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "6b")
-+	CLEANUP_REC("3b", "4b", "6b")
-+	:
-+	: [ran_rcu]"i"(RAN_FOO2_RCU),
-+	  __imm_addr(pads_ran)
-+	: __clobber_all);
-+}
-+
-+static __used __naked __noinline void foo1v(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+	"r1 =3D %[input] ll;"
-+	"r1 =3D *(u64 *)(r1 + 0);"
-+"1:"	"call foo2;"			/* cleanup region */
-+"2:"
-+	"r6 =3D r0;"
-+	"call bpf_preempt_enable;"
-+	"r1 =3D %[result] ll;"
-+	"*(u64 *)(r1 + 0) =3D r6;"
-+	"goto 7f;"
-+"8:"					/* landing pad */
-+	"call bpf_preempt_enable;"
-+	PAD_RAN("%[ran]")
-+	"goto 9f;"
-+"7:"					/* the frame's own exit block */
-+	"r0 =3D 0;"
-+	"exit;"
-+"9:"					/* shared resume block */
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "8b")
-+	:
-+	: [ran]"i"(RAN_FOO1V_PREEMPT), __imm_addr(input),
-+	  __imm_addr(result), __imm_addr(pads_ran)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * A frame with no cleanup record: an unwind leaving it runs no pad. The
-+ * unwind never fires -- @never is global -- and the bit marks the retur=
-n path.
-+ */
-+static __used __naked __noinline void bump(void)
-+{
-+	asm volatile (
-+	PAD_RAN("%[ran]")
-+	"r1 =3D %[never] ll;"
-+	"r1 =3D *(u64 *)(r1 + 0);"
-+	"if r1 =3D=3D 0 goto 1f;"
-+	"call bpf_unwind;"
-+"1:"
-+	"exit;"				/* r0 deliberately left alone */
-+	:
-+	: [ran]"i"(RAN_BUMP), __imm_addr(never), __imm_addr(pads_ran)
-+	: __clobber_all);
-+}
-+
-+__noinline __u64 foo1(void)
-+{
-+	bump();
-+	foo1v();
-+	return result;
-+}
-+
-+SEC("syscall")
-+int entry(void *ctx)
-+{
-+	return foo1();
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c =
-b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
-new file mode 100644
-index 000000000000..4e51e3c4c5d9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
-@@ -0,0 +1,978 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_experimental.h"
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+#include "exceptions_cleanup.h"
-+
-+__u64 input =3D 0;
-+
-+static __used __noinline void __kfunc_btf_anchor(void)
-+{
-+	bpf_throw(0);
-+	bpf_unwind();
-+	bpf_preempt_disable();
-+	bpf_preempt_enable();
-+	bpf_rcu_read_lock();
-+	bpf_rcu_read_unlock();
-+	bpf_unwind_resume(NULL);
-+}
-+
-+/* An unwind raised in a callee, which is how a cleanup region gets one.=
- */
-+static __used __naked __noinline __u64 inner_unwind(void)
-+{
-+	asm volatile (
-+	"call bpf_unwind;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+static int unwinding_cb(__u32 idx, void *ctx)
-+{
-+	bpf_unwind();
 +	return 0;
 +}
 +
-+/* Gives the program a table; the refusal is at the bpf_loop() call. */
-+static __used __naked __noinline __u64 cb_frame(void)
++/* As veristat's is_signed_type(): anything not plainly unsigned is sign=
+ed. */
++static bool global_var_is_signed(const struct btf_type *t)
 +{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call unwinding_cb;"		/* cleanup region */
-+"2:"
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call bpf_preempt_enable;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
++	if (btf_is_int(t))
++		return btf_int_encoding(t) & BTF_INT_SIGNED;
++	if (btf_is_any_enum(t))
++		return btf_kflag(t);
++	return true;
 +}
 +
-+SEC("?syscall")
-+__failure __msg("may unwind and is used as a callback")
-+int callback_may_unwind(void *ctx)
++static int find_global_var(struct bpf_object *obj, const char *name,
++			   struct bpf_map **map, __u32 *off, __u32 *sz,
++			   bool *is_signed)
 +{
-+	bpf_loop(1, unwinding_cb, NULL, 0);
-+	return cb_frame();
++	static const char * const secs[] =3D { ".bss", ".data" };
++	struct btf *btf =3D bpf_object__btf(obj);
++	int i, s;
++
++	if (!btf) {
++		PRINT_FAIL("no BTF for object\n");
++		return -ENOENT;
++	}
++
++	for (s =3D 0; s < ARRAY_SIZE(secs); s++) {
++		const struct btf_type *sec, *vt;
++		const struct btf_var_secinfo *vsi;
++		struct bpf_map *m =3D bpf_object__find_map_by_name(obj, secs[s]);
++		int id;
++
++		id =3D btf__find_by_name_kind(btf, secs[s], BTF_KIND_DATASEC);
++		if (!m || id < 0)
++			continue;
++
++		sec =3D btf__type_by_id(btf, id);
++		vsi =3D btf_var_secinfos(sec);
++		for (i =3D 0; i < btf_vlen(sec); i++, vsi++) {
++			const struct btf_type *var =3D btf__type_by_id(btf, vsi->type);
++
++			if (strcmp(btf__name_by_offset(btf, var->name_off), name))
++				continue;
++			if (vsi->size !=3D 4 && vsi->size !=3D 8) {
++				PRINT_FAIL("'%s' is %u bytes, only 4 and 8 are supported\n",
++					   name, vsi->size);
++				return -EINVAL;
++			}
++			vt =3D btf__type_by_id(btf, btf__resolve_type(btf, var->type));
++			if (!vt || !(btf_is_int(vt) || btf_is_any_enum(vt))) {
++				PRINT_FAIL("'%s' is not an int or an enum\n", name);
++				return -EINVAL;
++			}
++			*is_signed =3D global_var_is_signed(vt);
++			*map =3D m;
++			*off =3D vsi->offset;
++			*sz =3D vsi->size;
++			return 0;
++		}
++	}
++
++	PRINT_FAIL("no global variable '%s'\n", name);
++	return -ENOENT;
 +}
 +
-+/* A pad that reaches both a resume and a plain exit. */
-+static __used __naked __noinline __u64 ambiguous_pad_frame(void)
++/*
++ * A tag's value is parsed as 64 bits, but the variable may be narrower =
+and
++ * may be signed. Hold it to the range the variable can represent, the w=
+ay
++ * veristat's set_global_var() does, and narrow it to what is stored.
++ */
++static int fit_global_var(const char *name, __u32 sz, bool is_signed, __=
+u64 *val)
 +{
-+	asm volatile (
-+	"r1 =3D %[input] ll;"
-+	"r6 =3D *(u64 *)(r1 + 0);"
-+	"call bpf_preempt_disable;"
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad: two ways out */
-+	"call bpf_preempt_enable;"
-+	"if r6 > 10 goto 4f;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+"4:"
-+	"r0 =3D 0;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	:
-+	: __imm_addr(input)
-+	: __clobber_all);
-+}
++	long long v =3D (long long)*val;
++	long long max_val;
++	__u32 bits;
 +
-+SEC("?syscall")
-+__failure __msg("ends a landing pad: a catch pad is not supported yet")
-+int ambiguous_landing_pad(void *ctx)
-+{
-+	return ambiguous_pad_frame();
-+}
-+
-+/* A second bpf_unwind() from inside a landing pad. */
-+static __used __naked __noinline __u64 unwind_in_pad_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad that unwinds again */
-+	"call bpf_preempt_enable;"
-+	"call bpf_unwind;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("starts a second unwind while one is in flight")
-+int unwind_from_landing_pad(void *ctx)
-+{
-+	return unwind_in_pad_frame();
-+}
-+
-+__noinline int unused_exc_cb(u64 cookie)
-+{
++	if (sz >=3D sizeof(*val))
++		return 0;
++	bits =3D sz * 8 - (is_signed ? 1 : 0);
++	max_val =3D 1ll << bits;
++	if (v >=3D max_val || v < (is_signed ? -max_val : 0)) {
++		PRINT_FAIL("value %lld for '%s' is out of range [%lld; %lld]\n",
++			   v, name, is_signed ? -max_val : 0, max_val - 1);
++		return -EINVAL;
++	}
++	*val =3D (__u32)*val;
 +	return 0;
 +}
 +
-+/* A frame with a table and a pad, for tests whose refusal lies elsewher=
-e. */
-+static __used __naked __noinline __u64 table_frame(void)
++/* The value of @map's single element, which the caller frees. */
++static void *global_data(struct bpf_map *map, const char *name, size_t *=
+vsz)
 +{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call bpf_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call bpf_preempt_enable;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
++	__u32 zero =3D 0;
++	void *buf;
++	int err;
++
++	*vsz =3D bpf_map__value_size(map);
++	buf =3D calloc(1, *vsz);
++	if (!buf) {
++		PRINT_FAIL("failed to allocate %zu bytes for '%s'\n", *vsz, name);
++		return NULL;
++	}
++	err =3D bpf_map__lookup_elem(map, &zero, sizeof(zero), buf, *vsz, 0);
++	if (err) {
++		PRINT_FAIL("failed to read '%s': %d\n", name, err);
++		free(buf);
++		return NULL;
++	}
++	return buf;
 +}
 +
-+SEC("?syscall")
-+__exception_cb(unused_exc_cb)
-+__failure __msg("cannot be combined with an exception callback")
-+int table_with_exception_cb(void *ctx)
++static int read_global_var(struct bpf_map *map, const char *name, __u32 =
+off,
++			   __u32 sz, __u64 *val)
 +{
-+	return table_frame();
++	size_t vsz;
++	void *buf;
++
++	buf =3D global_data(map, name, &vsz);
++	if (!buf)
++		return -EINVAL;
++	*val =3D sz =3D=3D 4 ? *(__u32 *)(buf + off) : *(__u64 *)(buf + off);
++	free(buf);
++	return 0;
 +}
 +
-+/*
-+ * A throw and a table, with no callback tagged: the default callback is
-+ * appended too late to stand in for the throw, so the program is scanne=
-d
-+ * for one instead.
-+ */
-+static __used __naked __noinline __u64 throw_and_table_frame(void)
++static int write_global_var(struct bpf_map *map, const char *name, __u32=
+ off,
++			    __u32 sz, __u64 val)
 +{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call bpf_preempt_enable;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
++	__u32 zero =3D 0;
++	size_t vsz;
++	void *buf;
++	int err;
++
++	buf =3D global_data(map, name, &vsz);
++	if (!buf)
++		return -EINVAL;
++	if (sz =3D=3D 4)
++		*(__u32 *)(buf + off) =3D val;
++	else
++		*(__u64 *)(buf + off) =3D val;
++	err =3D bpf_map__update_elem(map, &zero, sizeof(zero), buf, vsz, 0);
++	if (err)
++		PRINT_FAIL("failed to write '%s': %d\n", name, err);
++	free(buf);
++	return err;
 +}
 +
-+SEC("?syscall")
-+__failure __msg("cannot be combined with bpf_throw")
-+int table_with_throw(void *ctx)
++/* Write a __set_global() value into the program's global variable. */
++static int set_global_var(struct bpf_object *obj, const struct global_va=
+r *var)
 +{
-+	if (input)
-+		bpf_throw(0);
-+	return throw_and_table_frame();
++	__u64 val =3D var->val;
++	struct bpf_map *map;
++	__u32 off, sz;
++	bool is_signed;
++
++	if (find_global_var(obj, var->name, &map, &off, &sz, &is_signed) ||
++	    fit_global_var(var->name, sz, is_signed, &val))
++		return -EINVAL;
++	return write_global_var(map, var->name, off, sz, val);
 +}
 +
-+__u64 never;
-+
-+/*
-+ * A pad calling a global subprogram that can unwind. The subprogram is
-+ * verified on its own, so the pad rule is what refuses it.
-+ */
-+__noinline void pad_callee_that_unwinds(void)
-+{
-+	if (never)
-+		bpf_unwind();
-+}
-+
-+static __used __naked __noinline __u64 pad_calls_unwinder_frame(void)
-+{
-+	asm volatile (
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call pad_callee_that_unwinds;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("which can unwind while an unwind is in flight")
-+int pad_calls_unwinder(void *ctx)
-+{
-+	return pad_calls_unwinder_frame();
-+}
-+
-+/*
-+ * A pad calling a global subprogram that can throw. The throw is refuse=
-d
-+ * wherever it sits: the scan covers the subprograms too, not just the m=
-ain
-+ * program, so this never reaches the rules about pads.
-+ */
-+__noinline void pad_callee_that_throws(void)
-+{
-+	if (never)
-+		bpf_throw(0);
-+}
-+
-+static __used __naked __noinline __u64 pad_calls_thrower_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call bpf_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call pad_callee_that_throws;"	/* ...which can throw: refused */
-+	"call bpf_preempt_enable;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("cannot be combined with bpf_throw")
-+int pad_calls_thrower(void *ctx)
-+{
-+	return pad_calls_thrower_frame();
-+}
-+
-+static __used __naked __noinline __u64 catch_pad_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call bpf_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* catch pad: no resume, it stops here */
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("ends a landing pad: a catch pad is not supported yet")
-+int catch_landing_pad(void *ctx)
-+{
-+	return catch_pad_frame();
-+}
-+
-+/* A bpf_unwind_resume() outside any landing pad. */
-+SEC("?syscall")
-+__failure __msg("is not in a landing pad")
-+int resume_outside_pad(void *ctx)
-+{
-+	/* Never taken, but reachable, which is all the verifier needs. */
-+	if (never)
-+		bpf_unwind_resume(NULL);
-+	return table_frame();
-+}
-+
-+/* A bpf_unwind_resume() in a subprogram a landing pad calls. */
-+static __used __naked __noinline void resume_in_callee(void)
-+{
-+	asm volatile (
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+static __used __naked __noinline __u64 pad_calls_resumer_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call bpf_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call bpf_preempt_enable;"
-+	"call resume_in_callee;"	/* ...which resumes: refused */
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("is not in a landing pad")
-+int resume_in_pad_callee(void *ctx)
-+{
-+	return pad_calls_resumer_frame();
-+}
-+
-+static __used __naked __noinline __u64 nested_pad_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call inner_unwind;"		/* first cleanup region */
-+"2:"
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* first pad, second region's call */
-+	"call bpf_preempt_enable;"
-+"4:"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+"5:"					/* second pad */
-+	"call bpf_preempt_enable;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	CLEANUP_REC("3b", "4b", "5b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("is inside the call-site range of")
-+int nested_landing_pad(void *ctx)
-+{
-+	return nested_pad_frame();
-+}
-+
-+/* A tail call in a landing pad: the frame would never reach its resume.=
- */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} tc_map SEC(".maps");
-+
-+static __used __naked __noinline __u64 tail_call_pad_frame(void)
-+{
-+	asm volatile (
-+	"r6 =3D r1;"
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"r1 =3D r6;"
-+	"r2 =3D %[tc_map] ll;"
-+	"r3 =3D 0;"
-+	"call %[bpf_tail_call];"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	:
-+	: __imm(bpf_tail_call), __imm_addr(tc_map)
-+	: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("is a tail call, which replaces the frame, and is in a l=
-anding pad")
-+int tail_call_in_pad(void *ctx)
-+{
-+	return tail_call_pad_frame();
-+}
-+
-+#if defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+/*
-+ * A kfunc by-value argument that runs past the argument registers, in a
-+ * landing pad. The pad is not what refuses it. The C call gives the ext=
-ern
-+ * its BTF.
-+ */
-+static __used __noinline void __nofit_btf_anchor(void)
-+{
-+	struct prog_test_pair_arg s =3D {};
-+
-+	bpf_kfunc_call_test_pair_arg_nofit(1, 2, 3, 4, s);
-+}
-+
-+static __used __naked __noinline __u64 kfunc_arg_pad_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call bpf_preempt_enable;"
-+	"call bpf_kfunc_call_test_pair_arg_nofit;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("stack arg1 is not initialized")
-+int kfunc_stack_arg_in_pad(void *ctx)
-+{
-+	return kfunc_arg_pad_frame();
-+}
-+
-+#endif /* __BPF_FEATURE_STACK_ARGUMENT */
-+
-+/* A landing pad entered by ordinary control flow, with no unwind in fli=
-ght. */
-+static __used __naked __noinline __u64 jump_into_pad_frame(void)
-+{
-+	asm volatile (
-+	"r1 =3D %[input] ll;"
-+	"r6 =3D *(u64 *)(r1 + 0);"
-+	"if r6 > 7 goto 4f;"		/* an ordinary branch into the pad */
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"r7 =3D r0;"
-+"4:"					/* ... and its second instruction */
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	:
-+	: __imm_addr(input)
-+	: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("runs both inside and outside a landing pad")
-+int jump_into_pad(void *ctx)
-+{
-+	return jump_into_pad_frame();
-+}
-+
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+
-+/*
-+ * An indirect jump in a landing pad. A jump table entry is an offset fr=
-om
-+ * the program's section symbol, which has to be spelled in quotes here.
-+ */
-+SEC("?syscall")
-+__failure __msg("is an indirect jump, and is in a landing pad")
-+__naked void gotox_in_pad(void)
-+{
-+	asm volatile (
-+	".pushsection .jumptables,\"\",@progbits;"
-+"jt0_%=3D:"
-+	".quad l0_%=3D - \"?syscall\";"
-+	".quad l1_%=3D - \"?syscall\";"
-+	".size jt0_%=3D, 16;"
-+	".global jt0_%=3D;"
-+	".popsection;"
-+
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"r1 =3D jt0_%=3D ll;"
-+	"r1 +=3D 8;"
-+	"r2 =3D *(u64 *)(r1 + 0);"
-+	/*
-+	 * gotox r2, as raw bytes: the mnemonic only reached the LLVM
-+	 * assembler in llvm 22, and BPF_RAW_INSN() needs <linux/bpf.h>, which
-+	 * vmlinux.h rules out. dst_reg is the other nibble on a big-endian
-+	 * target.
-+	 */
-+#if __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
-+	".byte 0x0d, 0x20, 0, 0, 0, 0, 0, 0;"
-+#else
-+	".byte 0x0d, 0x02, 0, 0, 0, 0, 0, 0;"
-+#endif
-+"l0_%=3D:"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+"l1_%=3D:"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+#endif /* x86 || arm64 */
-+
-+/* A BPF_LD_[ABS|IND] in a pad: a failed load leaves without resuming. *=
++/* Check the program's global variable against a __ret_global() value. *=
 /
-+static __used __naked __noinline __u64 ld_abs_pad_frame(void)
++static int check_global_var(struct bpf_object *obj, const struct global_=
+var *var)
 +{
-+	asm volatile (
-+	"r6 =3D r1;"			/* the skb BPF_LD_ABS reads */
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"r0 =3D *(u32 *)skb[0];"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
++	__u64 want =3D var->val, val;
++	struct bpf_map *map;
++	__u32 off, sz;
++	bool is_signed;
 +
-+SEC("?tc")
-+__failure __msg("is a BPF_LD_[ABS|IND], which can leave through the epil=
-ogue")
-+__naked void ld_abs_in_pad(void)
-+{
-+	asm volatile (
-+	"call ld_abs_pad_frame;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/*
-+ * A subprogram a landing pad calls, which unwinds on its own. The secon=
-d
-+ * unwind would rewrite return addresses the first has already redirecte=
-d.
-+ */
-+static __used __naked __noinline __u64 own_pad_callee(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"call bpf_preempt_enable;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* its landing pad */
-+	"call bpf_preempt_enable;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+static __used __naked __noinline __u64 pad_calls_own_pad_frame(void)
-+{
-+	asm volatile (
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad, which calls the above */
-+	"call own_pad_callee;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("starts a second unwind while one is in flight")
-+int unwind_in_pad_callee(void *ctx)
-+{
-+	return pad_calls_own_pad_frame();
-+}
-+
-+/* A record whose range holds no call that can unwind. */
-+static __used __naked __noinline __u64 nounwind_rec_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+"1:"	"call bpf_preempt_enable;"	/* cleanup region: nounwind */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* landing pad, reached by nothing */
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("unreachable insn")
-+int nounwind_region(void *ctx)
-+{
-+	return nounwind_rec_frame();
-+}
-+
-+/*
-+ * An unwind with no landing pad leaves the frame with nothing run on th=
-e way
-+ * out, so what the frame holds is checked as it would be at a plain exi=
-t.
-+ */
-+SEC("?syscall")
-+__failure __msg("an unwind with no landing pad cannot be used inside bpf=
-_rcu_read_lock-ed region")
-+int unwind_no_pad_rcu(void *ctx)
-+{
-+	bpf_rcu_read_lock();
-+	bpf_unwind();
-+	bpf_rcu_read_unlock();
++	if (find_global_var(obj, var->name, &map, &off, &sz, &is_signed) ||
++	    fit_global_var(var->name, sz, is_signed, &want) ||
++	    read_global_var(map, var->name, off, sz, &val))
++		return -EINVAL;
++	if (val !=3D want) {
++		PRINT_FAIL("Unexpected %s: 0x%llx !=3D 0x%llx\n", var->name,
++			   (unsigned long long)val, (unsigned long long)want);
++		return -EINVAL;
++	}
 +	return 0;
 +}
 +
-+/*
-+ * A frame leaves through an unwind without leaving its lock or referenc=
-e
-+ * state as it found it.
-+ */
-+static __used __naked __noinline __u64 pad_drops_caller_lock_frame(void)
-+{
-+	asm volatile (
-+"1:"	"call bpf_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad: drops a lock it never took */
-+	"call bpf_rcu_read_unlock;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
+ static int parse_retval(const char *str, int *val, const char *name)
+ {
+ 	/*
+@@ -557,6 +831,22 @@ static int parse_test_spec(struct test_loader *teste=
+r,
+ 			spec->mode_mask |=3D UNPRIV;
+ 			spec->unpriv.execute =3D true;
+ 			has_unpriv_retval =3D true;
++		} else if ((val =3D str_has_pfx(s, "test_global_set=3D"))) {
++			err =3D parse_global_var(val, spec->priv.set_globals,
++					       &spec->priv.set_global_cnt,
++					       "__set_global");
++			if (err)
++				goto cleanup;
++			spec->priv.execute =3D true;
++			spec->mode_mask |=3D PRIV;
++		} else if ((val =3D str_has_pfx(s, "test_global_ret=3D"))) {
++			err =3D parse_global_var(val, spec->priv.ret_globals,
++					       &spec->priv.ret_global_cnt,
++					       "__ret_global");
++			if (err)
++				goto cleanup;
++			spec->priv.execute =3D true;
++			spec->mode_mask |=3D PRIV;
+ 		} else if ((val =3D str_has_pfx(s, "test_log_level=3D"))) {
+ 			err =3D parse_int(val, &spec->log_level, "test log level");
+ 			if (err)
+@@ -742,6 +1032,23 @@ static int parse_test_spec(struct test_loader *test=
+er,
+ 			spec->unpriv.execute =3D spec->priv.execute;
+ 		}
+=20
++		if (spec->priv.set_global_cnt && !spec->unpriv.set_global_cnt) {
++			err =3D clone_global_vars(spec->unpriv.set_globals,
++						&spec->unpriv.set_global_cnt,
++						spec->priv.set_globals,
++						spec->priv.set_global_cnt);
++			if (err)
++				goto cleanup;
++		}
++		if (spec->priv.ret_global_cnt && !spec->unpriv.ret_global_cnt) {
++			err =3D clone_global_vars(spec->unpriv.ret_globals,
++						&spec->unpriv.ret_global_cnt,
++						spec->priv.ret_globals,
++						spec->priv.ret_global_cnt);
++			if (err)
++				goto cleanup;
++		}
 +
-+static __used __naked __noinline __u64 caller_holds_lock_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_rcu_read_lock;"
-+"1:"	"call pad_drops_caller_lock_frame;"
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad */
-+	"call bpf_rcu_read_unlock;"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
+ 		if (spec->unpriv.expect_msgs.cnt =3D=3D 0)
+ 			clone_msgs(&spec->priv.expect_msgs, &spec->unpriv.expect_msgs);
+ 		if (spec->unpriv.expect_xlated.cnt =3D=3D 0)
+@@ -1356,7 +1663,7 @@ void run_subtest(struct test_loader *tester,
+ 	struct cap_state caps =3D {};
+ 	struct bpf_object *tobj;
+ 	struct bpf_map *map;
+-	int retval, err, i;
++	int retval, err, i, j;
+ 	int links_cnt =3D 0;
+ 	bool should_load;
+=20
+@@ -1532,6 +1839,11 @@ void run_subtest(struct test_loader *tester,
+ 			}
+ 		}
+=20
++		for (j =3D 0; j < subspec->set_global_cnt; j++) {
++			if (set_global_var(tobj, &subspec->set_globals[j]))
++				goto tobj_cleanup;
++		}
 +
-+SEC("?syscall")
-+__failure __msg("a resume does not leave the frame's bpf_rcu_read_lock s=
-tate as it found it")
-+int pad_drops_caller_lock(void *ctx)
-+{
-+	return caller_holds_lock_frame();
-+}
+ 		err =3D do_prog_test_run(bpf_program__fd(tprog), &retval,
+ 				       bpf_program__type(tprog) =3D=3D BPF_PROG_TYPE_SYSCALL ? true =
+: false,
+ 				       spec->linear_sz);
+@@ -1540,6 +1852,11 @@ void run_subtest(struct test_loader *tester,
+ 			goto tobj_cleanup;
+ 		}
+=20
++		for (j =3D 0; j < subspec->ret_global_cnt; j++) {
++			if (check_global_var(tobj, &subspec->ret_globals[j]))
++				goto tobj_cleanup;
++		}
 +
-+/* The other way round: a pad that does not drop what its own frame took=
-. */
-+static __used __naked __noinline __u64 pad_keeps_own_lock_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_rcu_read_lock;"
-+"1:"	"call inner_unwind;"		/* cleanup region */
-+"2:"
-+	"call bpf_rcu_read_unlock;"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad: forgets the unlock */
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("a resume does not leave the frame's bpf_rcu_read_lock s=
-tate as it found it")
-+int pad_keeps_own_lock(void *ctx)
-+{
-+	return pad_keeps_own_lock_frame();
-+}
-+
-+/* And a subprog with no pad at all, leaving through an unwind holding o=
-ne. */
-+static __used __naked __noinline __u64 no_pad_keeps_own_lock_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_rcu_read_lock;"
-+	"call bpf_unwind;"		/* no record covers it */
-+	"r0 =3D 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure
-+__msg("no landing pad does not leave the frame's bpf_rcu_read_lock state=
-")
-+int no_pad_keeps_own_lock(void *ctx)
-+{
-+	return no_pad_keeps_own_lock_frame();
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 4096);
-+} unwind_ringbuf SEC(".maps");
-+
-+/*
-+ * Always unwinds, so its caller is never returned to on the modelled pa=
-th --
-+ * which is what keeps the release below out of the caller's post-call c=
-ode.
-+ * Its pad discards the record the caller reserved.
-+ */
-+static __used __naked __noinline __u64 pad_drops_caller_ref_frame(void)
-+{
-+	asm volatile (
-+	"r6 =3D r1;"			/* the caller's reserved record */
-+"1:"	"call bpf_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad: drops what it never acquired */
-+	"r1 =3D r6;"
-+	"r2 =3D 0;"
-+	"call %[bpf_ringbuf_discard];"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	:
-+	: __imm(bpf_ringbuf_discard)
-+	: __clobber_all);
-+}
-+
-+/* And this frame's own pad drops it a second time. */
-+static __used __naked __noinline __u64 caller_holds_ref_frame(void)
-+{
-+	asm volatile (
-+	"r1 =3D %[unwind_ringbuf] ll;"
-+	"r2 =3D 8;"
-+	"r3 =3D 0;"
-+	"call %[bpf_ringbuf_reserve];"
-+	"if r0 =3D=3D 0 goto 9f;"
-+	"r6 =3D r0;"
-+	"r1 =3D r6;"
-+"1:"	"call pad_drops_caller_ref_frame;"	/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad */
-+	"r1 =3D r6;"
-+	"r2 =3D 0;"
-+	"call %[bpf_ringbuf_discard];"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+"9:"
-+	"r0 =3D 0;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	:
-+	: __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard),
-+	  __imm_addr(unwind_ringbuf)
-+	: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("a resume does not leave the frame's references as it fo=
-und it")
-+int pad_drops_caller_ref(void *ctx)
-+{
-+	return caller_holds_ref_frame();
-+}
-+
-+/*
-+ * A frame an unwind returns through without a pad is abandoned where it=
- made
-+ * the call: the JIT sends it to its epilogue, so nothing of it runs aga=
-in and
-+ * whatever it acquired is never released. It has to hold what it entere=
-d with
-+ * at every such call.
-+ */
-+static __used __naked __noinline __u64 pad_resumes_frame(void)
-+{
-+	asm volatile (
-+"1:"	"call bpf_unwind;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad */
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+static __used __naked __noinline __u64 uncovered_holds_lock_frame(void)
-+{
-+	asm volatile (
-+	"call bpf_rcu_read_lock;"
-+	"call pad_resumes_frame;"	/* no record covers this call */
-+	"call bpf_rcu_read_unlock;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure
-+__msg("through this call does not leave the frame's bpf_rcu_read_lock st=
-ate")
-+int unwind_through_call_keeps_lock(void *ctx)
-+{
-+	return uncovered_holds_lock_frame();
-+}
-+
-+static __used __naked __noinline __u64 uncovered_holds_ref_frame(void)
-+{
-+	asm volatile (
-+	"r1 =3D %[unwind_ringbuf] ll;"
-+	"r2 =3D 8;"
-+	"r3 =3D 0;"
-+	"call %[bpf_ringbuf_reserve];"
-+	"if r0 =3D=3D 0 goto 9f;"
-+	"r6 =3D r0;"
-+	"call pad_resumes_frame;"	/* no record covers this call */
-+	"r1 =3D r6;"
-+	"r2 =3D 0;"
-+	"call %[bpf_ringbuf_discard];"
-+"9:"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard),
-+	  __imm_addr(unwind_ringbuf)
-+	: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("an unwind through this call keeps the reference id=3D")
-+int unwind_through_call_keeps_ref(void *ctx)
-+{
-+	return uncovered_holds_ref_frame();
-+}
-+
-+/* The main program's frame is passed by the same way. */
-+SEC("?syscall")
-+__failure __msg("an unwind through this call keeps the reference id=3D")
-+int unwind_through_call_main_keeps_ref(void *ctx)
-+{
-+	void *rec;
-+
-+	rec =3D bpf_ringbuf_reserve(&unwind_ringbuf, 8, 0);
-+	if (!rec)
-+		return 0;
-+	pad_resumes_frame();		/* no record covers this call */
-+	bpf_ringbuf_discard(rec, 0);
-+	return 0;
-+}
-+
-+/*
-+ * A callee writes its caller's stack through a pointer argument, then
-+ * unwinds. The caller's pad runs after that write, so it cannot keep tr=
-usting
-+ * the slot to hold the zero it held at the call.
-+ */
-+static __used __naked __noinline __u64 stack_writer(void)
-+{
-+	asm volatile (
-+	"r2 =3D 0x10000000;"
-+	"*(u64 *)(r1 + 0) =3D r2;"	/* r1 is the caller's fp-8 */
-+	"call bpf_unwind;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+static __used __naked __noinline __u64 stale_stack_frame(void)
-+{
-+	asm volatile (
-+	"r6 =3D 0;"
-+	"*(u64 *)(r10 - 8) =3D r6;"
-+	"*(u64 *)(r10 - 64) =3D r6;"
-+	"r1 =3D r10;"
-+	"r1 +=3D -8;"
-+"1:"	"call stack_writer;"		/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad: fp-8 as an offset into fp-64 */
-+	"r1 =3D *(u64 *)(r10 - 8);"
-+	"r2 =3D r10;"
-+	"r2 +=3D -64;"
-+	"r2 +=3D r1;"
-+	"r0 =3D *(u8 *)(r2 + 0);"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("invalid read from stack R2 off=3D268435392 size=3D1")
-+int stale_stack_pad(void *ctx)
-+{
-+	return stale_stack_frame();
-+}
-+
-+/* The same through a global subprog, which is not walked from its calle=
-r. */
-+__noinline int global_stack_writer(__u64 *p)
-+{
-+	if (!p)
-+		return 0;
-+	*p =3D 0x10000000;
-+	bpf_unwind();
-+	return 0;
-+}
-+
-+static __used __naked __noinline __u64 global_stale_stack_frame(void)
-+{
-+	asm volatile (
-+	"r6 =3D 0;"
-+	"*(u64 *)(r10 - 8) =3D r6;"
-+	"*(u64 *)(r10 - 64) =3D r6;"
-+	"r1 =3D r10;"
-+	"r1 +=3D -8;"
-+"1:"	"call global_stack_writer;"	/* cleanup region */
-+"2:"
-+	"r0 =3D 0;"
-+	"exit;"
-+"3:"					/* pad: fp-8 as an offset into fp-64 */
-+	"r1 =3D *(u64 *)(r10 - 8);"
-+	"r2 =3D r10;"
-+	"r2 +=3D -64;"
-+	"r2 +=3D r1;"
-+	"r0 =3D *(u8 *)(r2 + 0);"
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("math between fp pointer and register with unbounded min=
- value")
-+int global_stale_stack_pad(void *ctx)
-+{
-+	return global_stale_stack_frame();
-+}
-+
-+/* gcc has no indirect calls, and only these JITs emit them */
-+#if defined(__clang__) && \
-+	(defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64))
-+
-+/*
-+ * A callback calling an unwinding subprog through a pointer it read fro=
-m its
-+ * caller's stack, rather than one it loaded itself.
-+ */
-+static __used __naked __noinline int callx_cb(void)
-+{
-+	asm volatile (
-+	"r1 =3D *(u64 *)(r2 + 0);"
-+	"callx r1;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("?syscall")
-+__failure __msg("may unwind and is used as a callback")
-+__naked int callback_callx_may_unwind(void)
-+{
-+	asm volatile (
-+	"r1 =3D %[inner_unwind] ll;"
-+	"*(u64 *)(r10 - 8) =3D r1;"
-+	"r1 =3D 1;"
-+	"r2 =3D %[callx_cb] ll;"
-+	"r3 =3D r10;"
-+	"r3 +=3D -8;"
-+	"r4 =3D 0;"
-+	"call %[bpf_loop];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm_addr(inner_unwind), __imm_addr(callx_cb), __imm(bpf_loop)
-+	: __clobber_all);
-+}
-+
-+#endif /* __clang__ && (x86 || arm64) */
-+
-+char _license[] SEC("license") =3D "GPL";
+ 		verify_stderr(bpf_program__fd(tprog), &subspec->stderr);
+=20
+ 		if (subspec->stdout.cnt) {
 --=20
 2.53.0-Meta
 
