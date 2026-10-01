@@ -1,252 +1,160 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f37.google.com (mail-pz2-f37.google.com [74.125.228.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032D6535FDF;
-	Thu,  1 Oct 2026 20:23:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790886190; cv=none; b=Tr5xn03XlxolMSk3vIVzFWtJlvhu9s886Rzkvo3iOPhtlE6WQ2/Zfu3oFhdHWPKmR4H67ZV40qVZ9ZflNY9fvAqhbtzLcYp4aZdP1troMPtXeSTYFbgZ3CNLkFyqLjqp+W9c3xwiZxWi8ycMGdIT/CORc3H08nQMK39vQDnXCWk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790886190; c=relaxed/simple;
-	bh=uECaupwzr1FypG4I4f4hVN90zQI3oHk7Uef1PP5+6+k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UssTj9KBNTUn2TP6Ln16Oc0VdJ4dM7blYqQhaa7ll/fney/gv46bz4hm5s6r/NrGjLz1A5gVKSNyFqhiPKl8/E9U/mdJjcptLERZRwWwlWlBdu6Y/034hW/VOJefEALSX5E+aafEPPoOQD5gt2/Q8Mc8mncyJlFCJzuUttPVsXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BlmC+Ek2; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB35C5304A8
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 21:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790888769; cv=pass; b=nKQgjE+keGZq/wdZizr4dLXCVCWv3cXxtpPJBShZfdT5dvphgF1cz4x250FqfKrcV1wAPUiuWmfzLWJSDurqcvKIQ4Mhz6n2X/PqQghN2SnbsrXkLl9IF3RUjBss+t5paykXxjdI/z+I0NtVH/vRK/NZeNr3DC3+q+eSi4UVLoc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790888769; c=relaxed/simple;
+	bh=xN21QYy0yGgz2sHT1nXnC/21nVEwjhkQB04Hg4E+rW8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pqvOcXbIriymqfpoZ39D30pIrbCEirkhzZW4NnN79RkFbZsQeI5LIlq3d3ZKGvjr3HIN96z92dkGeKnCYsLGQU7MNgkd4l2VF4X+vkFpRSQHUQKRkCJtk2UZjLK91KoyVj+Gtbm7AlbPCSZnMIDj9MIHPJwcH96JZYbzlTQablU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CAwV36pr; arc=pass smtp.client-ip=74.125.228.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BlmC+Ek2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790886185; x=1822422185;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uECaupwzr1FypG4I4f4hVN90zQI3oHk7Uef1PP5+6+k=;
-  b=BlmC+Ek2/8p1Nq1A7toFrPBMSp+2SXt4i+Yc4OO+xPtNQQ/JNM306b8z
-   WrY3/Y1GW+kvCuzwv/+7W1vqqEiWzntf7eKRvLaDWDQgmnLps6LgtCq+x
-   IH6vSo578+6O9IAkPvRWygvnBadvcr5SwQB7E+AvoKOH7ok8EWCvVyllc
-   vEyiy9K9/GnPPVWQYLdPG7N/XOnm23D3SLrGNM/Ixy1a6aEugSlrewaHT
-   9Nq4lzK5jGnMh+g1qMqtbxGsUsZ7UiHo4c6Y/hU/fUT+Yt0242oAz2UMi
-   w7+7tk3XpMbATtDSLxzZ9is6JMZFkZeKxuM5VOKM/gyQHJnXrizyyNpNh
-   w==;
-X-CSE-ConnectionGUID: 7zjFzd0tReerUGVxmyAbZw==
-X-CSE-MsgGUID: m6cn6x0qTBeQ4KolnfaBxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="95466853"
-X-IronPort-AV: E=Sophos;i="6.27,135,1787036400"; 
-   d="scan'208";a="95466853"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 13:22:57 -0700
-X-CSE-ConnectionGUID: RSe4uUZ5RTS8aLb2+K9ASA==
-X-CSE-MsgGUID: 5f3V3kSwRqaY+DrxwTFFCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,135,1787036400"; 
-   d="scan'208";a="275636744"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa007.jf.intel.com with ESMTP; 01 Oct 2026 13:22:55 -0700
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	stfomichev@gmail.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	tushar.vyavahare@intel.com,
-	kerneljasonxing@gmail.com,
-	bjorn@kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH net-next 13/13] selftests: xsk: document generic and hardware endpoint runs
-Date: Thu,  1 Oct 2026 22:21:24 +0200
-Message-Id: <20261001202124.692591-14-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
-References: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CAwV36pr"
+Received: by mail-pz2-f37.google.com with SMTP id d2e1a72fcca58-885f0eca6c4so1421111b3a.1
+        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 14:06:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790888767; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UpBFm2zTI8HVtn04Dt8YbMXnWkF/OL96ldNl/IPlLf2KUA1wzGGvTF2EumvUbLVh3a
+         K8FA5f5TxkAeUrQ9nr896mKLgqYydxEfRNhbWxwjJgejWG+TMwFbSSO1GhF5vJSqN0i2
+         GtGz98Szkl242+x2bCC1nxRUOcfJkkzapgZJ8lrnrsHbvU+zwtpp/8vsFdmJLuzDNEAg
+         WtZyb4TsNGbMQaZBw2B+uswyHtP+Hlf9aTFEWbid0IuYOqepAVLTOd+648WKo6z2LmHM
+         /5FinOCl59eY01r7r+IhVLtcjpQPDcfhyEuaoo5qbQOWOndr8Y/QmDMRha5dWHRhJUqX
+         cs9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zQjpYhlPNUCc8b2PKOBh4ENa5gh7HULkWsy4SYnLXSM=;
+        fh=oabitrVdmBTHDlY4wSsuoU7UiWMliQuzJPUBhj+OhzE=;
+        b=ewBbQjtyLRKiUvrOrfHenq3GiYcjqHb/pWvNTaMVXZk14hS+aZwYVb3R/4Qsc14CNX
+         nZZp4mAkuSoOI5MhoHMvN5UUP49b3H0JM6+JMJAwbvR7sMzyqfCLzn/N0eKytmGPxPga
+         MlgW+B8gkIBXXJIP0KRZIrEnsGeuhE3DeeCiubhcX4nCC11lbE756lJZaNQnnUgmDfio
+         u2ivO6nTauk9zykvuC7KeFyqF8WVlxJ+LPTQGRJfWI1e6MmombIotlrc+NT7SaX0Ky3i
+         Mf7q4/SP7IcAxOWwgVW6/2viUJjau53gWVa7LFttM+CWAZKY2Al437TJpIZhXtHfNZhj
+         rJbA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1790888767; x=1791493567; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=zQjpYhlPNUCc8b2PKOBh4ENa5gh7HULkWsy4SYnLXSM=;
+        b=CAwV36prXHOZw2NRE+aSACbPdDsBf2SHqbBYA6oNTHRxcIGcOyC/CJqkRH7LJRevOZ
+         ClcJMU2t93f7XmqqwruK0c5ZXJiXQfI/+n+w9nHyb4EcEh0EZTu11pUBC9xzrVuOqKBT
+         YsV75j7RrnJU55Z+JqH44vXWfdCbI4I+NCB8980IdTgu7vzPMxHvgU+uCw/+FxPpgY0h
+         63X1M3w+g/hILuWVI8qWSFmlSwv2NKZwGdJ2DwWfYsxtFTA/lG+C3YADiA4myoIGj7HP
+         Z1Ev8yhuTUNqN+BrgGDh8F6GLVD0gbmqkkcnf9FOFy5sLyuxAa1XjcNkIrhbHMfk8YG5
+         z0BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790888767; x=1791493567;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zQjpYhlPNUCc8b2PKOBh4ENa5gh7HULkWsy4SYnLXSM=;
+        b=GparfmN9iMZlWUoF09cal871ou7ZBEniTNH0GqRsu3HGXXyCFWCGTqyReSvL/vJxjj
+         AYKmHvgx4nxfAVXGzQCbGHJst1J79j++zHHL/9+vvMpV8ogi/eFtiJ3AFqKfc4ix4jfM
+         1DKHfKdQ44QvHj3XD8nfV40mt4x3ZjrN0Fh44fNpESazqjJL0NpJOQgUz/XmXX3PeN1o
+         No5keAmrbp4AuNiECu2e2iJNchB+VTWwBLVadK925K6LDuReuxtbhy4LqouvgEvGg3nq
+         qigKqbk7tGwucUeeOcqVGAWUAr98pHj2VgNBHBu7faJ7M13aBIa/6GjHieq6ezwTqAWp
+         YWjQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwhJgPhMlUjaMKADsUt0HyNrdhem8HDLu5lpa61PK/Ylf3bOc7ilq8Lntpr9+HLFQx2Tr8=@vger.kernel.org
+X-Gm-Message-State: AFuF++noYv3kPYCr9rwj2Hn7OCaLBdsWXuxboWzm/VLUYhh8Y9s1OyTT
+	8zg6i+4t9CrX+AR8J8u6Ld1XChbS2F9d6rxOLc2OsQ4DJkNAfFCtEM4P1nXI6BKsLraeO2RV/po
+	Caw3a3XYrUxtqecXxoGYG7sgDNbuGXqTtf9eppNWt
+X-Gm-Gg: AYBFou0CnfEb1YrXHLDZMk5XQscTgncJki5girnyUJWw8LVct88112kPFhMk/BXjP2s
+	VVMtmeAcRAZOMB9ScfBA+uebpUB/Y+x9XFqQ0fb6U9kH36bLGiZw2XiN6gS+MEE68/m1Vr5+2yU
+	vRdXcMueqUY7rMxOm0PBQz7y5/3/mIRWIqXgnD28fMv6Ex10np3dDKnIWCYUhv9VOFFQAExSf9y
+	NOh9w9ObECOKpINAed7fbSoyz//+ElFPbYk8JA9yOLMtKik5O9sUsnpG8U6vBqRYdXpwSP7KV1O
+	hf/scA+sWSqd7f1Qn5/2OkhOEnId6yppOzqFbCOIIdVOYrfKCOCkTvEFKy0hIzuoxUilzsstPfG
+	Jeo4+eP3lY1u2
+X-Received: by 2002:a05:6a00:1254:b0:881:5dcb:400e with SMTP id
+ d2e1a72fcca58-88af6d24f34mr727169b3a.56.1790888767004; Thu, 01 Oct 2026
+ 14:06:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1790088067.git.rrobaina@redhat.com>
+In-Reply-To: <cover.1790088067.git.rrobaina@redhat.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 1 Oct 2026 17:05:54 -0400
+X-Gm-Features: AclHuK923qNeclwyxHc-N96rTW9f--kU_8IWc_3FVDcJfFTXqnWMr4asd_Mjppw
+Message-ID: <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
+ SYSCALL record
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, bpf@vger.kernel.org, eparis@redhat.com, 
+	sgrubb@redhat.com, oleg@redhat.com, richard.henderson@linaro.org, 
+	mattst88@gmail.com, linmag7@gmail.com, linux@armlinux.org.uk, 
+	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
+	tsbogend@alpha.franken.de, jonas@southpole.se, 
+	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
+	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
+	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
+	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
+	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
+	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Document the per-case veth launcher and the two-host hardware setup
-where the DUT uses AF_XDP zero-copy and the remote xskxceiver uses SKB
-mode.
+On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.co=
+m> wrote:
+>
+> The SYSCALL record currently logs only four of the six syscall
+> arguments (a0-a3), silently discarding the remaining two. This
+> leads to the need for auxiliary records when audit-relevant
+> data lands in the 5th or 6th argument of a syscall.
+>
+> This series extends the SYSCALL record to log all six arguments,
+> by adding arguments a4 and a5 inline within the existing record.
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- .../testing/selftests/drivers/net/README.rst  |   7 +
- .../testing/selftests/net/lib/xsk/README.rst  | 130 ++++++++++++++++++
- .../selftests/net/lib/xsk/xskxceiver.c        |   2 +
- 3 files changed, 139 insertions(+)
- create mode 100644 tools/testing/selftests/net/lib/xsk/README.rst
+Thanks Ricardo, this looks great!
 
-diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-index c6bed9a985bc..34a5053a9816 100644
---- a/tools/testing/selftests/drivers/net/README.rst
-+++ b/tools/testing/selftests/drivers/net/README.rst
-@@ -132,6 +132,13 @@ Communication channel dependent::
-   for netns - name of the "remote" namespace
-   for ssh - name/address of the remote host
- 
-+Test specific variables
-+~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Some tests read further variables from the same environment or
-+``net.config``. ``hw/xsk.py`` and its ``XSK_*`` variables are described in
-+``tools/testing/selftests/net/lib/xsk/README.rst``.
-+
- Example
- =======
- 
-diff --git a/tools/testing/selftests/net/lib/xsk/README.rst b/tools/testing/selftests/net/lib/xsk/README.rst
-new file mode 100644
-index 000000000000..a4503e50a6c4
---- /dev/null
-+++ b/tools/testing/selftests/net/lib/xsk/README.rst
-@@ -0,0 +1,130 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========
-+xskxceiver
-+==========
-+
-+The AF_XDP engine in ``net/lib/xsk`` is built as ``net/lib/xskxceiver``.
-+The generic ``net/test_xsk.sh`` test runs SKB and DRV modes over veth.
-+
-+Generic veth test
-+=================
-+
-+Two ``xskxceiver`` processes own the TX and RX veth interfaces. The TX
-+process listens on a TCP control port and the RX process connects. The
-+shell wrapper starts a fresh process pair for each mode and case. A small
-+control channel reports readiness, packet progress, and aborts. For example::
-+
-+  make -C tools/testing/selftests/net/lib
-+  cd tools/testing/selftests/net
-+  sudo ./test_xsk.sh
-+
-+The shell wrapper creates the veth pair. ``-m skb|drv`` selects a mode,
-+``-t`` selects a test by the name or number shown by ``xskxceiver -l``,
-+and ``-p N`` selects a fixed control port instead of the default random
-+port. The generic frame format is unchanged.
-+
-+Hardware zero-copy test
-+=======================
-+
-+``test_xsk_case_defs.h`` defines the cases for both ``xskxceiver`` and
-+``drivers/net/hw/xsk.py``, and the DUT directions in which the Python
-+runner runs each of them. The runner reads this list and owns the TAP
-+results.
-+
-+It starts one ``xskxceiver`` process on each host for each case. The DUT
-+runs in ZC mode; the remote runs in SKB mode and does not need zero-copy.
-+RX and TX cases are named separately in TAP. The hardware runner skips a
-+DUT that does not advertise AF_XDP zero-copy. The DUT endpoint binds with
-+``XDP_ZEROCOPY``, which fails instead of falling back to copy mode, so an
-+advertised device that cannot bind or run a case fails it.
-+
-+The remote XSK endpoint listens on a TCP control port and the DUT connects.
-+The listener prints a line on stderr once it listens, so ``xsk.py`` starts
-+the DUT endpoint without polling the remote for the port. The small
-+per-case channel reports readiness, packet progress, and aborts. It has no
-+capabilities or verdict handshake. ``xsk.py`` chooses the case, sets the
-+timeout, and reports the result from both process exit codes.
-+
-+Both XSK endpoints generate and validate raw IPv4/UDP frames with one fixed
-+UDP port, so ntuple rules can steer the test flow. They do not use AF_INET
-+sockets. On DUT RX cases ``xsk.py`` reserves the last RX queue outside RSS
-+and steers test traffic to it. On DUT TX cases it steers traffic to queue 0
-+on the remote receiver. The XDP programs redirect every packet, so the
-+tested link must carry no other traffic; SSH and the control channel go
-+to the ``REMOTE_ARGS`` host, which has to be reached over another link.
-+Each case sets up only what its direction needs and undoes it when the
-+case ends, so a setup failure skips only the cases that need that setup.
-+Each endpoint detaches its XDP program and restores any changed ring sizes
-+and the MTU before it exits. The SKB-mode remote endpoint only raises its
-+MTU when a case needs a larger one, as changing the MTU can reset the NIC.
-+The runner restores the RSS table, ntuple setting, and huge-page count.
-+After an endpoint fails or is killed, the runner also detaches the XDP
-+program and restores the MTU. The runner does not change channel counts.
-+A one-channel DUT skips RX cases because it has no queue to reserve
-+outside RSS.
-+
-+Setup
-+-----
-+
-+Build the engine on the DUT::
-+
-+  make -C tools/testing/selftests/net/lib
-+
-+A top-level selftests build with ``TARGETS=drivers/net/hw`` includes
-+``net/lib`` as well. The binary is linked statically when the static
-+libraries are installed; ``XSK_STATIC=0`` or ``XSK_STATIC=1`` overrides the
-+probe.
-+
-+Configure the usual driver test variables in
-+``tools/testing/selftests/drivers/net/hw/net.config`` or the environment::
-+
-+  NETIF=eth0
-+  LOCAL_V4=192.0.2.1
-+  REMOTE_V4=192.0.2.2
-+  REMOTE_TYPE=ssh
-+  REMOTE_ARGS=user@remote.example.com
-+  XSK_REMOTE_BIN=/path/to/remote/xskxceiver
-+  XSK_REMOTE_SUDO=1
-+
-+Run as root on the DUT::
-+
-+  cd tools/testing/selftests/drivers/net/hw
-+  sudo ./xsk.py -t test_xsk.rx_send_receive
-+
-+``./xsk.py -l`` lists the case names. Omit ``-t`` to run the full hardware
-+matrix. Set the variables in ``net.config`` when using ``sudo`` so they are
-+available to the test process.
-+
-+``./xsk.py -b`` runs the same cases as ``test_xsk_busy_poll`` instead, with
-+the DUT endpoint busy polling as in the busy-poll pass of ``test_xsk.sh``.
-+Each case then sets ``napi_defer_hard_irqs`` and ``gro_flush_timeout`` on
-+the DUT to the values ``test_xsk.sh`` uses on veth and restores them when
-+it ends. The remote endpoint does not busy poll.
-+
-+Each case starts its remote endpoint over SSH, and a DUT TX case also adds
-+and removes a flow steering rule on the remote. SSH connection sharing for
-+the remote host (``ControlMaster``, ``ControlPath`` and ``ControlPersist``
-+in ssh_config(5)) avoids a new SSH login for each remote command. With
-+``sudo``, that is root's SSH configuration.
-+
-+The remote host needs AF_XDP in SKB mode and BPF. ``xsk.py`` copies the
-+DUT's ``xskxceiver`` binary to the remote, so both hosts must have
-+compatible architectures. ``XSK_REMOTE_BIN`` chooses a fixed destination
-+path for that copy. Set ``XSK_REMOTE_DEPLOY=0`` to use a binary built on
-+the remote from the same test case definitions instead. ``XSK_REMOTE_SUDO=1``
-+runs the remote endpoint and setup commands through passwordless ``sudo -n``;
-+omit it when SSH logs in as root. The DUT needs ntuple and RSS support for
-+RX cases, while the remote needs ntuple support for DUT TX cases. The test
-+uses ``NetDrvEpEnv`` and the networking selftest Python helpers for setup
-+and rollback.
-+
-+The DUT uses the SSH host name to connect to the remote control listener.
-+``XSK_UDP_PORT`` changes the fixed test UDP port (default 42567). The remote
-+listens on all addresses for control.
-+
-+The hardware list covers baseline traffic, 2K frames, poll, headroom,
-+invalid TX descriptors, TX invalid-descriptor statistics, metadata, 9K,
-+and unaligned traffic. For ``TOO_MANY_FRAGS``, the runner reads the DUT's
-+``xdp-zc-max-segs`` value and passes it to both endpoint processes so the
-+SKB peer validates the same packet stream without a capabilities exchange.
-diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-index 8b94dc3709ea..510cb8e4e054 100644
---- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-+++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-@@ -9,6 +9,8 @@
-  * See test_xsk.sh for detailed information on test topology
-  * and prerequisite network setup.
-  *
-+ * See README.rst for the generic and hardware test setup.
-+ *
-  * Each instance of this test program runs one endpoint, Tx or Rx, with a
-  * single socket and a unique UMEM. Two instances validate in-order packet
-  * delivery and packet content by sending packets to each other.
--- 
-2.43.0
+There are a few things in some of the individual patches which I reply
+to in a minute, but there are a couple of "global" things that I
+wanted to mention:
 
+* As pointed out by Sashiko, when you were converting all of the
+arches, it looks like you missed alpha.  I took a quick look and it
+appears that it should be a pretty straightforward conversion like
+most of the others.
+
+* We need to get ACKs from all the various arch maintainers.  Aside
+from the parisc changes all of your arch specific patches are trivial
+(and cleaner than the existing code IMO) so I don't expect anyone to
+complain, but getting ACKs will likely take some time.  Even the
+parisc patches aren't that bad, and arguably they fix a problem for
+seccomp so that should make asking for ACKs easier :)
+
+Since I expect chasing down all the various maintainers for ACKs will
+take a little while, and I'd like to start getting this patchset some
+basic testing, I'm going to merge it into dev-staging now.  While the
+dev-staging branch doesn't feed into linux-next (this isn't likely to
+land in the next merge window) it is one of the branches that gets
+tested automatically and included in my kernel-secnext RPM builds.
+This also means you won't need to worry about keeping this patchset
+up-to-date with rebasing, as I rebase dev-staging as needed (it
+intentionally isn't a stable branch).  Going forward, if there are any
+minor changes to this patchset, e.g. a few line change in one of two
+patches, please just send a fixup patchset based against
+audit/dev-staging and I'll squash it into the relevant patch in the
+series.  However, in the unlikely event that a major rewrite is
+needed, just send a new patchset ... but I'll be very surprised if
+that happens here :)
+
+--=20
+paul-moore.com
