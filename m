@@ -1,98 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs2-f36.google.com (mail-vs2-f36.google.com [74.125.227.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58AA33A700
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 01:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB2C388E63
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 03:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790819496; cv=none; b=acryp4G4sS9zTU0sjpcf5YRjFfbWfD3Biv972fC4Ox/3SV1mFgNSBACBGYo7MuEvqc1yYo8lujiP0XFHLUEXab+IaTjBbwiF3Twpjf2Fu4CVUBgIbVAP/2wB8INqm47mPTIyhk9w3/rqYmmmj5+H1mb0i8VWfICYubZYiygffyU=
+	t=1790826188; cv=none; b=cvFoMhSXsfZ2wozuvjDUJlKpeF8snxHrFGoUb28ON9juXH/QM6TjC9ox8rCIrqmbpm144hRty2tIKkA0+o5e+WdacIbOerRTEtldGuP2vxeQJyC6XWz2uvm7A/KCEPiMfp8RwS6KnAe11rHqTykZ6jhCetXTGH4Dsh/5zmEEh/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790819496; c=relaxed/simple;
-	bh=+ZTG9bHIhTaEowa7FuXsfvurN6AMObtrIin3+4ARnLo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=E5Vqq8AF9AnZuXMyQyNcYaSNy0lpootJeqe7zrszIsFcjSRcFCPNdrLgAfKdOpptpUUW9H8nqkBouO6c5u9KaqKlPFyt9VvZUacagsTCwliDz0EelStjQv/VPiBuDodk57aChacj1AAT/BVor3bRKvs+zsM8ZZM6IosOZXeyoSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cnyt7Z8k; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790826188; c=relaxed/simple;
+	bh=VjBB9Mjx5oASQrE4i18iblY/H4Bq8gvu//nBNAURB/U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=maLWiOzUdDSkcZpJ1ZduRFh2FZ9blZYuNJ06MVhPkEAMHGB36r7C0BUNkUljQQ694xMVeJUcVBiC1Hy09y85zn0jLxZLE3qTxfeNkgSzi48/N20nOfNZtCBDn7VvdVWVwFR8p1Tig+rOhUex5C181fyk/gGHr911TfxNyilzPmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7nPTnuA; arc=none smtp.client-ip=74.125.227.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cnyt7Z8k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488BE1F00899;
-	Thu,  1 Oct 2026 01:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790819495;
-	bh=qZ7NP85/gD6hlpTvLg+wrXArnYwWT/NI7RAU40/EXXI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Cnyt7Z8k559jsYOu2AqPfUQz20KkIpB80KwebM4HnPy5D5XJntWWEJdzlgprvNP98
-	 voOxubRB3DpA/OvpHpNyCkiP7KQ9l46gO6XNb1s2ko6nXQVzTFzyscnROtJun3dKe8
-	 khf1UTbAU+4Gj9zM69p/hjWTLS69hmD8JphcXdqIsxnRm8MUBKEzRGqNXqZZVQ9+vw
-	 PJ94pEAOQEP3TvSVBT4hdTmGy9rdirs5QxQabU3U590fYz0o5kmYxKR7R4Cb8XNZsl
-	 pDxLAMR4wa5kpWsP5KD3+cpeUpM8kJp72NPy29QKR9YZgRxSdbR86NhuizIC3gc8Xr
-	 XB+oZK6YPT0IQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 5/6] netlink: specs: rt-route: describe lwt
- BPF program options
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hangbin Liu" <hangbin.liu@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260930-ynl_rt_encap-v3-5-4106c21b9ee7@kylinos.cn>
-References: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
- <20260930-ynl_rt_encap-v3-5-4106c21b9ee7@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 01 Oct 2026 01:51:34 +0000
-Message-Id: <20261001015135.488BE1F00899@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7nPTnuA"
+Received: by mail-vs2-f36.google.com with SMTP id ada2fe7eead31-7bf43e81472so334409137.1
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 20:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790826186; x=1791430986; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=eCXWgSE03YdzbfSNuHGoYBX8R7odGbVzeGgJ8BFkzYY=;
+        b=S7nPTnuAPIvdo5XfMkbbflnmBeZ7I7AcLpN+/M1kCRXAl9nAkDzuWELHBjWEmvjOWy
+         adJBp8c4NkY8gV1haUUpo0ARrjEP7wQmG7GRo/UxHtyOlTtxAJnsSkMhttYnypxoYhcO
+         h0tXKqU33xFwb8driBxG4zZSmRFB64gsvChczN4HihFdcrwRIWrlwkjxkS3DIczgYqUb
+         MeywijJ7XBH3ZUE/EOzyseSosOTfz8sfdsyhgnWtkmxht4m4nGp1bg64YltHN9J44pUJ
+         dA5rK5QF+PNsMqbvQZYQdJe7xnd7GyaT+1sxc7YOV1Ak/khyY9F1gVbveYduQfsGpj78
+         A5MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790826186; x=1791430986;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=eCXWgSE03YdzbfSNuHGoYBX8R7odGbVzeGgJ8BFkzYY=;
+        b=eqQbytaqOZrqz8JSMMbEwUMNFv/0DPB8z3aR7wE1aozu7EFN0ftJeAPAHhLhUaA6Mm
+         3s0PbSMMmFEI2YArkVvN8ApYE+WvKkN7VsNR28PVED34P6bp/nU3xTgXyONvQN/1a3Wm
+         fXgNx+QN45HKQFPEwdOQmNElu1lmP2GUjR7QJJuEe5eKtKse9jyHUhgayeoIKniPhhpO
+         IVcXW2MNlJtV+elUx+Ed2juP2U+RsbokPMr5cB9VRLb9sMjD/bIHu03fYWrxBJr889tD
+         EG7L+tv4kLAoGTDtoq+3ilxozulklncP7LRs3HivIDxa04TKu1endmwXifNuYDJChpNz
+         6IPg==
+X-Gm-Message-State: AFq9FYKm+nOe1jEz2e27xqkl0nx/6NWKF6Fo6Wy1Q3ivOkdsqD4W+HUo
+	m6AHTCdS48SzZ+DylB5W+zUW8F8L+bn5yoqFJBUFi1+yBz0Wbys2gn/3
+X-Gm-Gg: AYBFou0E7eHWEWixcUHde7CVvur310weikLJp/ZGSFB1PNmpiL0ynlxeFVOYNHs1PYv
+	sv5LVIHuy9uUGrpsql88eF5NV43jwNMlWhJXDGaRKsoDmlxlAT/aJDOAxpyMlXXs7DNTS0PEkvX
+	95Qd7zTL84hRv4cgyKBbFmtcX9NLf6PAqSZsSCNF+ZjaEln9zDaR0s5jaD45VYCBCyZA1EUR2Cp
+	+s7om1QQPrt2ssnuDl06tKtghazfULR154QW+L2BpQ/p0YQyHHjR87cwKkA8FLOLalzYqSxnaA6
+	XnLdwItBNyh6PRc51nY8etsFGf0tswQRONVFBsbh3Q4Ss2zkJYsX3fXSo/9GC4RdA+AlHaBCv4V
+	Mg0SHzwqQlFZX6nTvX/24Wq3ZlLtUVs65t7UdhJxwln0RMmuaKW+uLjk7HO4QT5unHtvfW68y2O
+	kX5Em/60MbrT9hIu4DoQwzK/+TOAmrnhJHWy9MYP6TDVFd49nd+RiNam3hPuwNab51m472uo5oo
+	+Lv
+X-Received: by 2002:a05:6102:580c:b0:7b3:5cb7:49 with SMTP id ada2fe7eead31-7be7399744amr773648137.31.1790826185756;
+        Wed, 30 Sep 2026 20:43:05 -0700 (PDT)
+Received: from [127.0.1.1] ([201.162.73.164])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5d7fa499396sm1789926e0c.3.2026.09.30.20.43.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2026 20:43:05 -0700 (PDT)
+From: Luis Vieira <luisflavieira@gmail.com>
+Subject: [PATCH bpf-next v2 0/2] libbpf: Fix struct and union zero
+ detection in BTF dumper
+Date: Thu, 01 Oct 2026 00:42:57 -0300
+Message-Id: <20261001-libbpf-btf-enodata-fix-v2-0-89f6e8a0240e@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMHWvWoC/4WOwQ6CMBBEf4Xs2RqoUKon/8NwaMsCa7AlbSUYw
+ r9b8AM8zs682VkhoCcMcMtW8DhTIGeT4KcMzKBsj4zapIHnXORXLtlIWk8d07FjaF2romIdLUw
+ ZcZGFKCulJSR48pjOR/EDdsDiEqH5OeGtn2ji3rtnBwrR+c+xYS4O4t+7uWAFq0SrsDRK17W89
+ y9F49m4FzTbtn0BoWcsP9gAAAA=
+X-Change-ID: 20260928-libbpf-btf-enodata-fix-ac6381645ab8
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Luis Vieira <luisflavieira@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790826180; l=843;
+ i=luisflavieira@gmail.com; s=20260913; h=from:subject:message-id;
+ bh=VjBB9Mjx5oASQrE4i18iblY/H4Bq8gvu//nBNAURB/U=;
+ b=wJyYtsGm47gmywKsylMC/emTWOxxtBrUY/p8L/0tRMGmrKJSTDmk1cXUXUsAZ2l7fqu0Y9fyn
+ Qsxq0S3LkIxCSMBj0rYdlHtBV83VuhiBIjUGPnrkREv54fjCWnMvua5
+X-Developer-Key: i=luisflavieira@gmail.com; a=ed25519;
+ pk=98MeC/NdrC6ah7zYpPnkWiQIoyj62iUP/rNuV3esCW4=
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] netlink: missing max-len validation constraint for string attribute
---
+Fix struct and union zero detection in the BTF dumper and add the
+regression coverage in a separate selftest patch.
 
-commit f56da32d0f53d2458e2f20c65435e7f6e11b64a4
-Author: Hangbin Liu <liuhangbin@kylinos.cn>
+Changes in v2:
+- Split the regression selftest into a separate patch, as requested by
+  Andrii Nakryiko.
+- Link to v1:
+  https://patch.msgid.link/20260928-libbpf-btf-enodata-fix-v1-1-56dae4cab778@gmail.com
 
-netlink: specs: rt-route: describe lwt BPF program options
+---
+Luis Vieira (2):
+      libbpf: Fix struct and union zero detection in BTF dumper
+      selftests/bpf: Add regression test for BTF dump zero detection
 
-This patch replaces binary BPF attributes with a nested lwt-bpf-prog to
-support lwt bpf prog options in the rt-route netlink specification.
+ tools/lib/bpf/btf_dump.c                          | 2 +-
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+---
+base-commit: 6a75c73eebd4d497ded7d08b47894f9ddbebb5a9
+change-id: 20260928-libbpf-btf-enodata-fix-ac6381645ab8
 
-> diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/ne=
-tlink/specs/rt-route.yaml
-> index 7649797602eb7..afec0375661f5 100644
-> --- a/Documentation/netlink/specs/rt-route.yaml
-> +++ b/Documentation/netlink/specs/rt-route.yaml
-[ ... ]
-> @@ -621,6 +624,16 @@ attribute-sets:
->        -
->          name: hwid
->          type: u8
-> +  -
-> +    name: lwt-bpf-prog
-> +    name-prefix: lwt-bpf-prog-
-> +    attributes:
-> +      -
-> +        name: fd
-> +        type: u32
-> +      -
-> +        name: name
-> +        type: string
+Best regards,
+--  
+Luis Vieira <luisflavieira@gmail.com>
 
-[Severity: Low]
-Does this string attribute need a maximum length validation constraint?
-
-The kernel's LWT_BPF_PROG_NAME policy restricts the length to MAX_PROG_NAME
-(which is 256). For netlink string specifications, this usually means adding
-a checks section with max-len: 255.
-
-Without this declarative constraint, the generated userspace tooling will n=
-ot
-restrict the string length prior to constructing the netlink message, forci=
-ng
-the kernel to reject over-sized strings. This bypasses client-side validati=
-on.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930-ynl_rt_enc=
-ap-v3-0-4106c21b9ee7@kylinos.cn?part=3D5
