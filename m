@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021053C3F48;
-	Thu,  1 Oct 2026 11:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3069937F311;
+	Thu,  1 Oct 2026 12:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790854605; cv=none; b=VW7yQXu4NFXrioJWXyjTYnyl1ZT85z9O1j4LqYUc1wSBRiTShfzBzbE+I9zOQbtYf6i7XEIV5mfm8lBxgiSt3Yf5CRuPE0f6zyhZStCD0y5ssJyohlpkgOWDM96KX6iilWao/AOSETeUvqzaMoFDzstWaCX3uWNwfstKbEoTfz8=
+	t=1790856268; cv=none; b=AZzdE97v4hfamqJsAz/eGUoqlL1zPJSZs+95/hmcN0dOyVn3UFoAKV0euZvLkRaKiPXNWNouF6YzuMhFPXlTl+DbHTBS35wBeCV+tHTzsATOAL2yJRRRRlgwvQouGqwJ5RuD0ZXWpBDDVUtghQFISQBdnx2D8Fjvl69umK7RGx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790854605; c=relaxed/simple;
-	bh=kKbW5m5AOpqk5dJlpcQ5qmMxulzzREz3luzUrqLklzk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=lBo8+MoElJ0b11M/ypXfFb5QTuajndlrKBSjdEJtR+pT231GLGfGtADEIzpDbjSmkRW8562rjIKX5QuPI/4iFhenWOvdG//eWrirsm4/80cJvsL6s1hUIfoDkUWeLMgfS55Fg5CArB7+VQ4vOHGjKxvgCO7tXblKolIPsrndMbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXBFgjFK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790856268; c=relaxed/simple;
+	bh=CBvToYd/GEB02L8taC6XmYYZMLPqiqIVafuNtu1j4nc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m2yzLZIxjA2vPdzrdlPfkcoL8XYSmVnGsw/HM+Pk/ux1Yalmdy7cm+3dK3eblxSj/P7xyRSzJJNoOs9a3bU9j2gdVUSyuUWnyTza8dYLbAM6dwOt3tlH74v4tQ868br6H4f4IltoqUH+nrOYQX4a9FjnV2ukfKnvQ8ccgLoi03o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzEc16Qp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXBFgjFK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204A81F000FF;
-	Thu,  1 Oct 2026 11:36:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzEc16Qp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B39C71F00898;
+	Thu,  1 Oct 2026 12:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790854598;
-	bh=Xm4wvdZWya38Tv5HPQOs01QtbugiGek4xDtMzVs3F8w=;
-	h=Date:Subject:To:References:From:In-Reply-To;
-	b=mXBFgjFKwBNERzVdoZjaNomeWpe3e8lQdbYE0ZfCu5nbH/GH5tEuNHS+dfHO3QrMK
-	 HaZuDubT41hg2PppQgdI3UbIcyvLh/DTUtdTvTqgVj3fvR/EZXwYiHppC+2WzbNlG9
-	 TtQcx5HbOcisqysMYBL9T5wxIMwRNr5KUruOb7hdn3Hn+DAMBpVpRjjzj4jCgcQ9/u
-	 IuJ9nzw+s61u5LY7WWsKlZbCUQHYKyMLav1uZKFJvV1QXDcYXnDHdsEV2cei8YFWv9
-	 LtJjuWuW5NFFdNYedScxnyvlri8/xtBBRdiICnaL5MMCFKblAlvJ8IoNNRRVVS/LMb
-	 WSNmnGNHDkRjg==
-Message-ID: <86dabeec-c40c-43c0-adab-b95fb7825ddc@kernel.org>
-Date: Thu, 1 Oct 2026 13:36:28 +0200
+	s=k20260515; t=1790856267;
+	bh=16tuaIAAfr4wGiFPpZL2QS3b7vOItbJPvdfgt9EFjWY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=jzEc16QpT6y5z85CoNqayXJTgj/zcV8+4j43vVNREEjYgKaYaARNlkINFh+o2cgFo
+	 sN3NMoR6fbvOc+m/lxGiWC6qUmK/W2sqF5PMeqx+QkX9s3sVMnzDWZ/M2mm0MYJz41
+	 S3cSgkKzqx/7bn79m4vmUxCXlXwbjLyAsEIqKIlF/mizbYzyQzRqhlcK0ve8U5iSJn
+	 jaobTqj+k1b/C4rk1yKhopNUeonw8tSEDLii1LybOClMulCnzymBzlP7Dt9SdjRJKW
+	 6NQE2pAYnLiSAfrqMon7C3+Tw8a0f45b0g+nJiXE+3PnL55rzlVV8mocIqh7q0QmOr
+	 ffT/Y1YtPvXzw==
+Message-ID: <14bb5577-ee28-4770-8566-f586f3840a8d@kernel.org>
+Date: Thu, 1 Oct 2026 14:03:45 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,29 +35,90 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/7] maccess: Batch TCO handling in kernel nofault loops
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+Subject: Re: [PATCH v3 03/40] mm/vma: introduce and use
+ vma_[flags_]can_merge()
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
  Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>,
- "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)"
- <linux-arm-kernel@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
- <bpf@vger.kernel.org>,
- "open list:MEMORY MANAGEMENT - CORE" <linux-mm@kvack.org>
-References: <20260824160523.3907021-1-usama.anjum@arm.com>
- <20260824160523.3907021-7-usama.anjum@arm.com>
+ Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Paul Moore <paul@paul-moore.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>,
+ Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>,
+ Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
+ <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
+ Ying Huang <ying.huang@linux.alibaba.com>,
+ Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
+ Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>,
+ Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+ Xu Xin <xu.xin@linux.dev>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-rdma@vger.kernel.org, selinux@vger.kernel.org,
+ linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ fuse-devel@lists.linux.dev
+References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
+ <20260917-b4-mmap-prepare-vma-flag-sanify-v3-3-4583d8a23bca@kernel.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -104,58 +165,29 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260824160523.3907021-7-usama.anjum@arm.com>
+In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-3-4583d8a23bca@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/24/26 18:04, Muhammad Usama Anjum wrote:
-> With Hardware Tag-Based KASAN in asynchronous or asymmetric mode, every
-> arm64 kernel nofault access sets and clears PSTATE.TCO. Copy and string
-> loops repeat that pair even though tag checking can stay disabled for the
-> whole operation.
+On 9/17/26 18:22, Lorenzo Stoakes (ARM) wrote:
+> Replace the open-coded VMA_SPECIAL_FLAGS check in the VMA merge logic with
+> two new functions vma_flags_can_merge() and vma_can_merge() and update the
+> merge logic to use the former.
 > 
-> Cover each non-empty operation with one bare nofault region and use bare
-> accessors in the loop. Leaving the region restores TCO before page faults
-> are enabled again, including after an access fault. Existing empty-work
-> checks ensure that every new region performs at least one access.
+> This abstracts the check and expresses it in terms of the desired behaviour
+> rather than an arbitrary and confusing VMA flag.
 > 
-> The number of dynamic MSR TCO executions therefore changes as follows:
+> This also lays the groundwork for making further improvements in VMA flag
+> usage.
 > 
->     Work                         Before    After
->     N nofault accesses          2N        2
->     4 KiB nofault copy          1,024     2
->     N-byte strncpy              2N        2
+> Also update the userland VMA tests to reflect the change.
 > 
-> The 4 KiB case assumes 512 64-bit accesses. These figures come from the
-> control flow rather than a runtime measurement, so the time saved depends
-> on the CPU and workload. Generic fallbacks leave other architectures
-> unchanged.
+> No functional change intended.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 > ---
 
-[...]
-
->  Efault:
-> @@ -96,11 +100,13 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
->  		return -ERANGE;
->  
->  	scoped_guard(pagefault) {
-> -		do {
-> -			__get_kernel_nofault(dst, src, u8, Efault);
-> -			dst++;
-> -			src++;
-> -		} while (dst[-1] && src - unsafe_addr < count);
-> +		scoped_guard(__kernel_nofault_bare) {
-> +			do {
-> +				__get_kernel_nofault_bare(dst, src, u8, Efault);
-> +				dst++;
-> +				src++;
-> +			} while (dst[-1] && src - unsafe_addr < count);
-> +		}
-
-Reading the same thing multiple times, why can't we have a new guard that wraps
-both these things?
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
