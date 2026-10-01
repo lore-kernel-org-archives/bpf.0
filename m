@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F18F380FEC;
-	Thu,  1 Oct 2026 01:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B076381E89;
+	Thu,  1 Oct 2026 01:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790816410; cv=none; b=QUf2EfoTRAPkV/DuQIhQ7ItOIMCX5mV0+M/0EcuCHYLWWKFZGzyCWPLJ+WZVkEdMqEjdNmmHkJ2sHDn1MF+7Tlcc4k7cz9rs1fZbwtq27iC2sq1MBZClXSg88QAMpTKQnz2crYX9WHsB0jeHkCsXRuLS12/lprtvELNC9j/7j/w=
+	t=1790816411; cv=none; b=K44QuPXk0Ut+PR/fJWXOB2FODxQeoMkPKOLnBMdbKudn6uvkDy4gLx/hT4x5vbMtpVvRDdEnoAU8OffeeaEfUVZ+1GX0XLs5Ks62GMOY84VWipwCHI/Z5rLJAhc8H8W9FG+Hc4d/4vmLx6/Dk+tA1v2pVwgGCxz5eJhOHiLrlF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790816410; c=relaxed/simple;
-	bh=QjssFUNjMN3KBzmvOcgGs5iYtKlGXG4is9xQhbkfNKc=;
+	s=arc-20240116; t=1790816411; c=relaxed/simple;
+	bh=OnZnXeWf+ado418TuC58SQwvJbixZa5lXno0AvT51H0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Kddm7vXsLf1Dac/1fYIzXUbluOznbWsYQnzKMekEpUTMPxeFRM8h2z21RXvX5oj5B23C+1QMtwMDv5dwWJnATNw3mFeRrKQVzK8Wmcg50JLZgMvZcTijG/Xd3TkZjKb2qvcx+K5npStQdocrDfYfu1rOIsqZRSS+5XqewARqYNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BRjCZHaf; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=QOHQeusQ2AvNl4EYoZmnLs3aFTA2HMKb+QJbSDztmuoa0hdunY1El6hy7tsBPCB6FPNPJZUOJOee7tULHfBZe5ViVLjPO5lRNQMpftUP3N6DEkMz8Sa+mIHtXxaydK6xYJ7X5ASErqFCcIBX4R0KHOH1HaPdBxJ5zzl7Lk87nVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GURB7chT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BRjCZHaf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C28D21F00898;
-	Thu,  1 Oct 2026 01:00:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GURB7chT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449A91F000FF;
+	Thu,  1 Oct 2026 01:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790816408;
-	bh=2CogicdfEkwx200vrji5gm8Gm5bp6TU5jjflpxx3FBE=;
+	s=k20260515; t=1790816410;
+	bh=MvEgfPg1zsyM8W3O4GDR6R2A7Qbc06fKHIO3ddDYRpU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=BRjCZHafzgG0wGwUiKYY0UiDDXDnV21PBqKIzjhgoCDqvauYWuOR+uI6UU5PtZ6IA
-	 1zSqdAaNziFx8ZBTPJic8jnbcZZdEgbWWzhstrxb4PqBcZ8mgCKxCyNXnlXptrgsem
-	 QUiJMmMqKWNhqwM5+luKQdT6Km4HjbvtXqP6zIAfkRiRj5SGqZd8umY4nXF3TbkVOv
-	 BpNAbtD1aB0gvmIxJmnArpEgjECCQRxvdxlpDVvV1fkJx+ybX3BLUd6Wd4WDpNC1Q3
-	 QOsGDWsemYsQdqFoixQzEhX9gwRKqo+nDFkMN0/nZpzDe53cc6oGNIqLsvLQqCSjLL
-	 69T53CZ4Wabfw==
+	b=GURB7chTOJh8Qo02DUuEwY8HjEXsPlWJDTwCNEa2oGo0hry/HByAN0yt94sWEDBIm
+	 I14xZetMq7utoS0VcdNIZBW+v7yWzzqZcOaaobtnkBaWr20Xoj1NsIQtSVzaiBCjsM
+	 BURIJZ3HfGBK7xveVbCjF2D1Td3lyksUs7gQfGsgJ/g97RoVJjre80nlsXAjpC5TDS
+	 QmYuUQWmYBT8RCkzpMo9GG32QrtMwK2kd5wNeoYK6KIhwv/zYaOgjmtoGXhcd9NOuv
+	 UTiYfuAg1EVgkQFShrugQ6eknEm79WzGCs+wE3ji48sdp3bS38NUq6C+e72GmNhtxH
+	 FeLAXMwrCuv0g==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B42D23AA6A61;
-	Thu,  1 Oct 2026 01:00:08 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A2023AA6A61;
+	Thu,  1 Oct 2026 01:00:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,43 +37,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v4] net: mvneta: clear XDP pfmemalloc flag between
- frames
+Subject: Re: [PATCH net] net/mlx5e: Fix AF_XDP TX timestamp teardown NULL
+ dereference
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179081640728.2197065.5595924340439650729.git-patchwork-notify@kernel.org>
-Date: Thu, 01 Oct 2026 01:00:07 +0000
-References: 
- <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
-In-Reply-To: 
- <20260929-mvneta-xdp-clear-frag-fix-v4-1-1e63b25eeed8@oss.qualcomm.com>
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: marcin.s.wojtas@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, toke@redhat.com, lorenzo@kernel.org, horms@kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org
+ <179081640877.2197065.2848520357667196654.git-patchwork-notify@kernel.org>
+Date: Thu, 01 Oct 2026 01:00:08 +0000
+References: <20260926165402.5902-1-prathameshdeshpande7@gmail.com>
+In-Reply-To: <20260926165402.5902-1-prathameshdeshpande7@gmail.com>
+To: Prathamesh Deshpande <prathameshdeshpande7@gmail.com>
+Cc: tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org, mbloch@nvidia.com,
+ sdf@fomichev.me, netdev@vger.kernel.org, bpf@vger.kernel.org
 
 Hello:
 
 This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 29 Sep 2026 15:43:03 +0200 you wrote:
-> mvneta_swbm_add_rx_fragment() sets XDP_FLAGS_FRAGS_PF_MEMALLOC on the
-> xdp_buff when a fragment page is a pfmemalloc one (page under memory
-> pressure). The xdp_buff is reused for the next frame, but only the
-> XDP_FLAGS_HAS_FRAGS bit was cleared at frame start, so the pfmemalloc
-> bit leaked from one frame into the following ones. mvneta_swbm_build_skb()
-> propagates the flag to skb->pfmemalloc through xdp_update_skb_frags_info(),
-> so the skb of a subsequent fragmented frame could be wrongly marked as
-> pfmemalloc even if none of its pages are under pressure.
+On Sat, 26 Sep 2026 17:53:57 +0100 you wrote:
+> From: Prathamesh Deshpande <prathameshdeshpande7@gmail.com>
+> 
+> During XSK TX queue teardown, outstanding descriptors are completed
+> without a CQE. If one requested a TX timestamp, the completion path
+> passes that NULL CQE to mlx5e_xsk_fill_timestamp(), which dereferences
+> it.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,v4] net: mvneta: clear XDP pfmemalloc flag between frames
-    https://git.kernel.org/netdev/net/c/8f1c2a10500a
+  - [net] net/mlx5e: Fix AF_XDP TX timestamp teardown NULL dereference
+    https://git.kernel.org/netdev/net/c/7b97273cbebe
 
 You are awesome, thank you!
 -- 
