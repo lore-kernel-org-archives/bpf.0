@@ -1,67 +1,68 @@
 Received: from mail-vs2-f36.google.com (mail-vs2-f36.google.com [74.125.227.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB2C388E63
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 03:43:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D7B367B6E
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 03:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790826188; cv=none; b=cvFoMhSXsfZ2wozuvjDUJlKpeF8snxHrFGoUb28ON9juXH/QM6TjC9ox8rCIrqmbpm144hRty2tIKkA0+o5e+WdacIbOerRTEtldGuP2vxeQJyC6XWz2uvm7A/KCEPiMfp8RwS6KnAe11rHqTykZ6jhCetXTGH4Dsh/5zmEEh/4=
+	t=1790826194; cv=none; b=WwRge/6v3oyED/5UQGt59vtM6PFgvix77wAYCZEaF6w/WX8+AIuuxe07WSuKsrZmzA/Ij0+JpfnEQ4UCKIAlnZbGhsX4G8kr9Q8H19wY98zV/zWq1lOoxOdax5be42kkLdjnFtqHIntroJ5U77M6bvTx0owuqjxHmO70qMeQEGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790826188; c=relaxed/simple;
-	bh=VjBB9Mjx5oASQrE4i18iblY/H4Bq8gvu//nBNAURB/U=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=maLWiOzUdDSkcZpJ1ZduRFh2FZ9blZYuNJ06MVhPkEAMHGB36r7C0BUNkUljQQ694xMVeJUcVBiC1Hy09y85zn0jLxZLE3qTxfeNkgSzi48/N20nOfNZtCBDn7VvdVWVwFR8p1Tig+rOhUex5C181fyk/gGHr911TfxNyilzPmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7nPTnuA; arc=none smtp.client-ip=74.125.227.36
+	s=arc-20240116; t=1790826194; c=relaxed/simple;
+	bh=oUeXwTCQbEyPdKNvTT+R4vw8lmHVoLHGeElv1oBHK1E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=axWwbrV/KcC/+QsL8/6I3OKeG+vAlp2XtwI92fH0pW9zToYEbKrCetOsoaFUYIyPoll3EJnk4IDW10vCmUKqAHNP+jMrDMbWlDCsFjM/XpbC0ur7rNDxRM3CRK+uoC4LBl1AXvnd3/g7jW+HJDvLvsMAKUKRZmpZT7cs2qbjWjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WIut//Xc; arc=none smtp.client-ip=74.125.227.36
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7nPTnuA"
-Received: by mail-vs2-f36.google.com with SMTP id ada2fe7eead31-7bf43e81472so334409137.1
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 20:43:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WIut//Xc"
+Received: by mail-vs2-f36.google.com with SMTP id ada2fe7eead31-7bf43e81472so334431137.1
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2026 20:43:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790826186; x=1791430986; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=eCXWgSE03YdzbfSNuHGoYBX8R7odGbVzeGgJ8BFkzYY=;
-        b=S7nPTnuAPIvdo5XfMkbbflnmBeZ7I7AcLpN+/M1kCRXAl9nAkDzuWELHBjWEmvjOWy
-         adJBp8c4NkY8gV1haUUpo0ARrjEP7wQmG7GRo/UxHtyOlTtxAJnsSkMhttYnypxoYhcO
-         h0tXKqU33xFwb8driBxG4zZSmRFB64gsvChczN4HihFdcrwRIWrlwkjxkS3DIczgYqUb
-         MeywijJ7XBH3ZUE/EOzyseSosOTfz8sfdsyhgnWtkmxht4m4nGp1bg64YltHN9J44pUJ
-         dA5rK5QF+PNsMqbvQZYQdJe7xnd7GyaT+1sxc7YOV1Ak/khyY9F1gVbveYduQfsGpj78
-         A5MA==
+        d=gmail.com; s=20251104; t=1790826192; x=1791430992; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VF8cyCU4Hq6TsV+yLkED8/99mWKmZ1f8NlgpJ4jYFjM=;
+        b=WIut//XcCK5dIuf682xjG7vNPPudZsrp7mNWA5ekxpVdABjnNe0hhuDkqC6Qb8q1qZ
+         CQUbJ7wQxNgBmHsanJK210YrW3LhgFq8ZWthIabcj7cja1CbtMxh87QqsFJTJw4c0+oI
+         q1eZJfKOw1TzjYVGb8qkQ/dIsqbKcwZ2PdMBtBBpYxhi89x4xhi6tIIQxcQOBP8wAmss
+         Jt/48Eop+QO/ZR1rCk88/amKbA2JiKD7ETwBfzKJ7Az2LvWEiL2TvfwL8kVvN3DPOUBK
+         WvIGw0FTRjJeuGHFyZes7NDig3d0df46xPwRXObCyltIl/aMNlJqKNvOhT41gKY/kNuL
+         JugQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790826186; x=1791430986;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=eCXWgSE03YdzbfSNuHGoYBX8R7odGbVzeGgJ8BFkzYY=;
-        b=eqQbytaqOZrqz8JSMMbEwUMNFv/0DPB8z3aR7wE1aozu7EFN0ftJeAPAHhLhUaA6Mm
-         3s0PbSMMmFEI2YArkVvN8ApYE+WvKkN7VsNR28PVED34P6bp/nU3xTgXyONvQN/1a3Wm
-         fXgNx+QN45HKQFPEwdOQmNElu1lmP2GUjR7QJJuEe5eKtKse9jyHUhgayeoIKniPhhpO
-         IVcXW2MNlJtV+elUx+Ed2juP2U+RsbokPMr5cB9VRLb9sMjD/bIHu03fYWrxBJr889tD
-         EG7L+tv4kLAoGTDtoq+3ilxozulklncP7LRs3HivIDxa04TKu1endmwXifNuYDJChpNz
-         6IPg==
-X-Gm-Message-State: AFq9FYKm+nOe1jEz2e27xqkl0nx/6NWKF6Fo6Wy1Q3ivOkdsqD4W+HUo
-	m6AHTCdS48SzZ+DylB5W+zUW8F8L+bn5yoqFJBUFi1+yBz0Wbys2gn/3
-X-Gm-Gg: AYBFou0E7eHWEWixcUHde7CVvur310weikLJp/ZGSFB1PNmpiL0ynlxeFVOYNHs1PYv
-	sv5LVIHuy9uUGrpsql88eF5NV43jwNMlWhJXDGaRKsoDmlxlAT/aJDOAxpyMlXXs7DNTS0PEkvX
-	95Qd7zTL84hRv4cgyKBbFmtcX9NLf6PAqSZsSCNF+ZjaEln9zDaR0s5jaD45VYCBCyZA1EUR2Cp
-	+s7om1QQPrt2ssnuDl06tKtghazfULR154QW+L2BpQ/p0YQyHHjR87cwKkA8FLOLalzYqSxnaA6
-	XnLdwItBNyh6PRc51nY8etsFGf0tswQRONVFBsbh3Q4Ss2zkJYsX3fXSo/9GC4RdA+AlHaBCv4V
-	Mg0SHzwqQlFZX6nTvX/24Wq3ZlLtUVs65t7UdhJxwln0RMmuaKW+uLjk7HO4QT5unHtvfW68y2O
-	kX5Em/60MbrT9hIu4DoQwzK/+TOAmrnhJHWy9MYP6TDVFd49nd+RiNam3hPuwNab51m472uo5oo
-	+Lv
-X-Received: by 2002:a05:6102:580c:b0:7b3:5cb7:49 with SMTP id ada2fe7eead31-7be7399744amr773648137.31.1790826185756;
-        Wed, 30 Sep 2026 20:43:05 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790826192; x=1791430992;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VF8cyCU4Hq6TsV+yLkED8/99mWKmZ1f8NlgpJ4jYFjM=;
+        b=PniV0HLKayIUmkvRlocRBAEYUCKlBdAUqf+3EdI6cLaSV/+aqjFl8aTeJ3agcFkoYF
+         i06y/DrMmFF5v1pVlGXbMOZnF2RYQRTX41l0wSkF9iVCfkEckk0kR/jqo29+kNkFbvuY
+         mz+12Dy+OQULYRGtpwc2dl9hYxiNi3XhgVJ61VQ9Uywm1KA++c72LK7aAyMuSDCk3rpr
+         SIFrMcJ2UzBCqrnqt6FvL+X6Eid2xSumcPt70NdEI/7xcIqg3BgtrF8RqGk1uqWeyn37
+         STbn4fpBfQVm+wcnSvIu5WTQgTSsTukwz5rd1i7Liv9sJgc9/V49+oBmaoC7983ZQTgI
+         +Lnw==
+X-Gm-Message-State: AFq9FYJb763q+k1LR/ESSrVLxfES5sCdy15z+kdOJ4SkxDnv1tWh9Arp
+	wle7b7R1BtBhFsn1QDh+ih26aVVqu40x4ljIzAhzQsLw5O/DHUU8Kxep
+X-Gm-Gg: AYBFou26GZ4cNLwWZtU49iH3dHSah0VtPF67GvvRJcrBNdXvh0t2WlYQJnoviOojeeW
+	Kfxtix9/kMqUEWL6gBH2QUr2XDrtrKJ/wnfUkGBuxs0v5pU4DF8EcaBhfI5ltxfLA1IbUbi+fWL
+	ykZVOl8xMFusI+lAK3cnpjuh9qUznl+uKhkWjm/y+dX9kimwIccLRrpR5wlLNepy0FMTaHCik+C
+	w2Iht1eOdSyhuduGK+coNUNR/uKg6SgpX3QVNwicqWb+gONACtf1giOGsJqrqWXO6jE1BGkFEel
+	7fFC3wxgOuZd6uop7RdGVmE89GfUtjLW87prP7oz8fziheHhPZpj/quVRwJ7J87ye6HcNTWukBM
+	oddiJ4SiqYAXla8txopaj/3INSGccMLeJBpXhWTKUCuYbJX6baZ0gf9YM/t7WjCTrIgT8dA2Bdf
+	KeMwVTcZ1I48EibolGkfQpf+TlCeCO2aUyLCVz0fzBpJgUmLBTwwtjlad+o2r/pA3m2+93JbDN7
+	96KwAO+ua0Oyw==
+X-Received: by 2002:a67:e7c4:0:b0:7b7:3acf:bd3a with SMTP id ada2fe7eead31-7be61e96e8bmr728692137.4.1790826191969;
+        Wed, 30 Sep 2026 20:43:11 -0700 (PDT)
 Received: from [127.0.1.1] ([201.162.73.164])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5d7fa499396sm1789926e0c.3.2026.09.30.20.43.00
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5d7fa499396sm1789926e0c.3.2026.09.30.20.43.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 20:43:05 -0700 (PDT)
+        Wed, 30 Sep 2026 20:43:11 -0700 (PDT)
 From: Luis Vieira <luisflavieira@gmail.com>
-Subject: [PATCH bpf-next v2 0/2] libbpf: Fix struct and union zero
+Date: Thu, 01 Oct 2026 00:42:58 -0300
+Subject: [PATCH bpf-next v2 1/2] libbpf: Fix struct and union zero
  detection in BTF dumper
-Date: Thu, 01 Oct 2026 00:42:57 -0300
-Message-Id: <20261001-libbpf-btf-enodata-fix-v2-0-89f6e8a0240e@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,11 +71,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMHWvWoC/4WOwQ6CMBBEf4Xs2RqoUKon/8NwaMsCa7AlbSUYw
- r9b8AM8zs682VkhoCcMcMtW8DhTIGeT4KcMzKBsj4zapIHnXORXLtlIWk8d07FjaF2romIdLUw
- ZcZGFKCulJSR48pjOR/EDdsDiEqH5OeGtn2ji3rtnBwrR+c+xYS4O4t+7uWAFq0SrsDRK17W89
- y9F49m4FzTbtn0BoWcsP9gAAAA=
-X-Change-ID: 20260928-libbpf-btf-enodata-fix-ac6381645ab8
+Message-Id: <20261001-libbpf-btf-enodata-fix-v2-1-89f6e8a0240e@gmail.com>
+References: <20261001-libbpf-btf-enodata-fix-v2-0-89f6e8a0240e@gmail.com>
+In-Reply-To: <20261001-libbpf-btf-enodata-fix-v2-0-89f6e8a0240e@gmail.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
  Ihor Solodrai <ihor.solodrai@linux.dev>, 
@@ -86,36 +85,44 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Luis Vieira <luisflavieira@gmail.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790826180; l=843;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790826180; l=1187;
  i=luisflavieira@gmail.com; s=20260913; h=from:subject:message-id;
- bh=VjBB9Mjx5oASQrE4i18iblY/H4Bq8gvu//nBNAURB/U=;
- b=wJyYtsGm47gmywKsylMC/emTWOxxtBrUY/p8L/0tRMGmrKJSTDmk1cXUXUsAZ2l7fqu0Y9fyn
- Qsxq0S3LkIxCSMBj0rYdlHtBV83VuhiBIjUGPnrkREv54fjCWnMvua5
+ bh=oUeXwTCQbEyPdKNvTT+R4vw8lmHVoLHGeElv1oBHK1E=;
+ b=EDnrT6kKkUuj7s1mRM9dxT3GkXe/76ILO4Zdju1bN1vq6r5P5Wc85VUWqdrME4mVNlgX8AKMN
+ wCnS8zZzFJWBIMLZyZLaZIEwCpummvyQ9uO1Eit78HMurUNwbb3V+B/
 X-Developer-Key: i=luisflavieira@gmail.com; a=ed25519;
  pk=98MeC/NdrC6ah7zYpPnkWiQIoyj62iUP/rNuV3esCW4=
 
-Fix struct and union zero detection in the BTF dumper and add the
-regression coverage in a separate selftest patch.
+btf_dump_type_data_check_zero() uses -ENODATA to indicate that a value
+is zero. The array path handles this sentinel correctly, but the struct
+and union path compares the return value against positive ENODATA.
 
-Changes in v2:
-- Split the regression selftest into a separate patch, as requested by
-  Andrii Nakryiko.
-- Link to v1:
-  https://patch.msgid.link/20260928-libbpf-btf-enodata-fix-v1-1-56dae4cab778@gmail.com
+As a result, the member loop returns after examining its first member.
+A nested struct or union whose first member is zero can therefore be
+treated as entirely zero even when a later member is non-zero.
 
+Compare against -ENODATA so zero members are skipped while looking for
+a non-zero member.
+
+Signed-off-by: Luis Vieira <luisflavieira@gmail.com>
 ---
-Luis Vieira (2):
-      libbpf: Fix struct and union zero detection in BTF dumper
-      selftests/bpf: Add regression test for BTF dump zero detection
+ tools/lib/bpf/btf_dump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- tools/lib/bpf/btf_dump.c                          | 2 +-
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
----
-base-commit: 6a75c73eebd4d497ded7d08b47894f9ddbebb5a9
-change-id: 20260928-libbpf-btf-enodata-fix-ac6381645ab8
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 996e61b5f11f..ad43bbd3b442 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -2564,7 +2564,7 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
+ 			bit_sz = btf_member_bitfield_size(t, i);
+ 			err = btf_dump_type_data_check_zero(d, mtype, m->type, data + moffset / 8,
+ 							    moffset % 8, bit_sz);
+-			if (err != ENODATA)
++			if (err != -ENODATA)
+ 				return err;
+ 		}
+ 		return -ENODATA;
 
-Best regards,
---  
-Luis Vieira <luisflavieira@gmail.com>
+-- 
+2.43.0
 
