@@ -1,76 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507C5493652;
-	Thu,  1 Oct 2026 13:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7D451616F
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 13:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790862766; cv=none; b=SgiGOCUNfTe5EMkKP+QZdfUkXzt/vLyG7HsNK9HVDh5a8VQKwdb/Ir8MUbv7GKKoEcAyC8mdkQ2mvVaY4UAiGZJQCwy2HMhU77xleDM3NgqZ3n00Ex1T0dnmFO5+T1wYsBxsbEJ/8WIstYYucnRVVRuXkRSVoymVPdhLtVm5BbM=
+	t=1790862828; cv=none; b=g5R7J5zFoNAoGW4UdaL2QKEqRzIUaPEVwWqzncpeJayGv82g8fwDeEfvt6J/YojMeQmLTmoF5ANyLST+VL3c38nCsV8A6DtoHhuNmQtuzIFtRA+ghTsTCUMfUvkI7FEOrknGBuhZx25HrqRQflS+3AOWWpkIwYDqffV5FgJKKek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790862766; c=relaxed/simple;
-	bh=KI/QFFNNiXAwgYr4zENKAEVgCpZEDqJx7KVCHRmtim8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eKQKChUDuFED6zbl7xJY4GkwzQE88HQyDe3qSWX4rx8YB4Wd3io4fSsW1M4yThYxZu6yQp3HnrAcCFXx3ZNtR3K53YlXbtxPlxudvLhCxN36y0EHvlqVr+NhDCbkllHgsekppqlvaIWi/IYoKKpMHMY1eYs87PERNbgvmx6blV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nWCnZXux; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790862828; c=relaxed/simple;
+	bh=fB2RKo/w0lRhnpQBIu/fYXOtHhJLlEuIt3ZbtRK3Q2E=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Kv+cLH0R9hm9BatZ6UFuFru4FTJxxlI9+7OD5w0F7nk8pc8DaWp4zoSzAZSwOLPhc9XWWadLywjzevImZnc/ko8N0DqN9bsKafttpbVRvyDCOPLcAhV97hA/Rw3j2yKV15wXrotTyMtGHLjXz6chxNu+I4w/YZcABqw8xEsG/+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fu9rg7dw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nWCnZXux"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578671F0089B;
-	Thu,  1 Oct 2026 13:52:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fu9rg7dw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE3F1F000FF;
+	Thu,  1 Oct 2026 13:53:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790862758;
-	bh=E67Tl/yH+5uV9iIGrSXZqunBdrhk87Ysmx6mL8/6g0I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nWCnZXux1QXEQFx6YATsIbNaIZEia6eaL1syoncbj8ENw+3OtRT9bv4xrKVYnsTeP
-	 C6PoW8IaYxiaHoFJlfaPZZt1N4dRw889JHBgKRnpJIMGNB2bzePkwkdzGlrl47Fxi/
-	 AxWBoOQy0rhsZdIpfMRsdn1p9yB+hrjQjEuDWZAGiOjl7j2xXXY8VC5vnN8wswZsdE
-	 cvhsHmzM7W+C983CKLa1Dj6VvNyIGcvlkzl46EgK+AjWrrIK5jjv3JDLtlSLyeqyOk
-	 BPCI8sfXK8gwAUvI86QDKwIpLb7+Vzm8th/DAwcSXTL3qvlJ1uAO0vkAN3+CN0KU2Z
-	 rdt2v5g4BYpFw==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org
-Cc: Sasha Levin <sashal@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Nick Terrell <terrelln@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH stable 5.15 0/2] perf build warnings fixes
-Date: Thu,  1 Oct 2026 09:52:13 -0400
-Message-ID: <2026-09-30-1-daily-reply-0009-perf-build-warnings-5-15@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260929191541.264038-1-florian.fainelli@broadcom.com>
-References: <20260929191541.264038-1-florian.fainelli@broadcom.com>
+	s=k20260515; t=1790862821;
+	bh=3j8Ji/cJFkMpexvYV6YtrLDT5NVYbbXwcmB4rF1DmqI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Fu9rg7dwwcVwDtPPecTGU5yHNhcVSy3hMYNOzKK024oCNTb2vnYE4zJvbGf/G15yQ
+	 8V0E2ef/yu0hlN6FF7D5va7fZFWwLRflntvyZrMbWg3VV9EKY8VNW0X+BL3BaDcrQ4
+	 ovQuDexfLJ6NVjwIKgnOssydXE1IXZSUDaVBJZ19l9EJknoVXrdth15X4lI/vBABFI
+	 jgaqK5yO8GnT+U5T096t6XEWdI1ygENGPthISQVLw3zNQdjxsUhfvpAzi4S8AW++3T
+	 jeNxOxzvHdW9Q4THR6mVcg1QfpquA0B55om3Y7XFVKPg5+iOV2/enlXRxZN7seRqLL
+	 gXT3Mxmx4sBNg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v8 10/22] bpf: Do not use a private stack for a
+ program that can unwind
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261001133058.1340406-1-yonghong.song@linux.dev>
+References: <20261001133006.1335369-1-yonghong.song@linux.dev>
+ <20261001133058.1340406-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 01 Oct 2026 13:53:40 +0000
+Message-Id: <20261001135340.CAE3F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-> This patch series fixes the following build warnings:
-[...]
-> Arnaldo Carvalho de Melo (1):
->   perf test bpf: Address error about non-null argument for epoll_pwait
->     2nd arg
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: callee-saved register corruption via bpf_throw without cleanup
+--
+
+commit 9d2c0e8faeb024a4647980c48ca2caa933b90b1c
+Author: Yonghong Song <yonghong.song@linux.dev>
+
+bpf: Do not use a private stack for a program that can unwind
+
+This commit disables private stacks for BPF programs that can unwind
+because an unwind skips the pop instruction corresponding to the push r9
+emitted around calls. This forces NO_PRIV_STACK in check_max_stack_depth()
+for programs with cleanup records or that may unwind.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f3ed68960d70d..488ceb9dae1b6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5769,6 +5769,17 @@ static int check_max_stack_depth(struct bpf_verifi=
+er_env *env)
+>  		}
+>  	}
+> =20
+> +	/*
+> +	 * A private stack keeps its frame pointer in %r9 on x86-64, restored
+> +	 * by a pop after the call that an unwind skips. A frame resumed at a
+> +	 * pad then addresses its stack through a stale pointer, and a frame
+> +	 * sent to its epilogue instead pops its callee-saved registers one
+> +	 * slot off. Refuse a private stack for any program that can unwind,
+> +	 * on every arch for now.
+> +	 */
+> +	if (env->cleanup_info_cnt || bpf_prog_may_unwind(env))
+> +		priv_stack_mode =3D NO_PRIV_STACK;
+
+[Severity: High]
+Does this logic miss programs that call bpf_throw() without any cleanup
+records?
+
+If a privileged program uses private stacks and calls bpf_throw() without
+acquiring any resources requiring cleanup, cleanup_info_cnt will be 0.
+
+Looking at bpf_prog_may_unwind() in kernel/bpf/exception.c, it only checks
+might_unwind:
+
+kernel/bpf/exception.c:bpf_prog_may_unwind() {
+	u32 i;
+
+	for (i =3D 0; i < env->subprog_cnt; i++)
+		if (env->subprog_info[i].might_unwind)
+			return true;
+	return false;
+}
+
+Since bpf_throw() only sets might_throw, not might_unwind, it appears
+bpf_prog_may_unwind() will return false.
+
+Could this bypass the NO_PRIV_STACK enforcement and lead to the exception
+callback epilogue popping the misaligned stack (shifted by the skipped
+push r9) into the kernel's callee-saved registers?
+
+> +
+>  	if (priv_stack_mode =3D=3D PRIV_STACK_UNKNOWN)
+>  		priv_stack_mode =3D bpf_enable_priv_stack(env->prog);
 >
-> Namhyung Kim (1):
->   perf tools: Fix a asan issue in parse_events_multi_pmu_add()
 
-Queued the series for 5.15, thanks.
-
--- 
-Thanks,
-Sasha
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001133006.1335=
+369-1-yonghong.song@linux.dev?part=3D10
