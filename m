@@ -1,231 +1,424 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011036.outbound.protection.outlook.com [52.101.57.36])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE465383FB;
-	Thu,  1 Oct 2026 15:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790868138; cv=fail; b=e+E5P9o0x91OhPloo6UgVTd0pLF1BU5rymjkSKrUXzELh/Ue0iiUhO9GSPqv4ZkpX8NFk2ww2vQ4QOKhoEK9ZIyBoMEn3c9ZG8+fXNVYmg4tl8LO9W7RYPTOXm+oTwHiOsLNf79J1q+5l0khlKmbJdZZTmBKh0Mpqn7GcpOBhCY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790868138; c=relaxed/simple;
-	bh=c8VVbuJocsmmGhAtxjvHUfd8TZj9GLGStKzhwoUIg6o=;
-	h=Content-Type:Date:Message-Id:From:Subject:Cc:To:References:
-	 In-Reply-To:MIME-Version; b=BK+3BTaUqB3Fd2THBiWQQ3F3jKPS9oyw3OAAdx7KvDIGdeIoO02k2Shn14HJujfyd4Fn0LzZ0peedMcSv3RNbWnWRchxH8pVxbuNZw99p1gLyVs0Sh8NgN6vMv+tN/iTK4N7xSwkNcuJIndccf7d8t2XiUKb4qPhJNaUU+9OsRQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bIyj/F37; arc=fail smtp.client-ip=52.101.57.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB0E539771
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 15:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790868140; cv=none; b=Z6u0Y6rzM0MaKiTybls6ApjFYkOWonh2r2XH7VzDdWEuS/zKkjoTDETu8cbndv0rIpPVHDnAyCmCS3WLx08pbTNOrjzG+HDTi+bpPXvn4MOE2ZV8vn2Wb4kk7rk0GAsouIE3x71TaWlnYl77q5d0jPW1g6mHokV2+n2jLBDzf+E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790868140; c=relaxed/simple;
+	bh=K7XJKasgzSkyQ1YcQuMWO0ETg2uH16JhJ477tursQZc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o1jBXkLqY+u9MV6KP/ljfPpwgsjkw2Q6IxPrD6rxwgbTsMfDViaYIbg7ypP/jPter4KjgzUGdfS0Dw3c2+uo9DxOiMq1/u66cDvqBuwFLMMQ2nnwS7j82lVX5+rD1ICRpNck7MWGK1sratqbdZ8eKuechHW1N00ry/6oLn5qzGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bUSJVIv7; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bIyj/F37"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lqdJapunN2FX8UbpSLZggxsOfUM+QM7vNwJNz0mRY+ZQHYVeylVU1IiA/xFrFGzZYPfw2DRv9y4CqYtv83i2g1ymR7H/HXKdEWRtCWyy/3kXHN50yuUn2TsVe/l/hc4qXeNR67VNyqCE177jAKC35qot4ybIBeUrqhrNUK7OkbiOMghUXIIAkyzYAHkVpAmOmG5pOAn/rJvrMU5FNsRVkGUmVZN2bKoS69vMlpWbWeNPHh9Xri7JnRr4GxoPnFDQe6sOsx3Oz3UgRlf5o8QeliSgSoFi3iX7TSEfQg4Y4uYgaU6AWAT7DLspaFrL7WH9PQ5uwb+YxmLbult87HD0qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dSwwpTZuzMlIJHzWNmmO7R5gKL24+gVaJCqRRWqtY/8=;
- b=Z3BuHdfAnJbm87d2/HDEfXiEXh73tdpUYP4f0vSURD3zdMwcwgXFAglgq3F2cdsYTyi3xDB60ahCdRsSO1tiAAOlzC4axdGy0acfV12fYx3PF/aIL+iKA+lmLumeRhuIzlEqCYnOczVw1yhLtxkcCm2UAm9CxwOvVHPFSfw8c0RgFe/I+Hckz3Yr54kHkUcbR38Tl7o4olCfk730b6hZnQlT1D2z/T9GzxbXy3B04g7MotcKMDfzmD1QBMYBqIjLe9E68qmNVyO1VzeeJLWd34YlOJohG7JC6OvddKQgY+yyeg6jPbxxxY/0RxhJW9wZZlqvTZonyIBrUQai5LueNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dSwwpTZuzMlIJHzWNmmO7R5gKL24+gVaJCqRRWqtY/8=;
- b=bIyj/F37aw0qUuKxX5ezMXqJpQue1pyVPXKKjv1XJqD9Pn3OI+WiQOdIvNjON40rrPz0G7VTwSRECCv+QvIikvhkjPgCG6C1r07iC4RkV0/Jseb+T8OuQRKfQTXMrnykI/PntgaJFip9ZX01u79THuMNSVj1LqgQfXwLMsvnRAljFYJYDqhdOOjah1Trk1IsvXC+Mck+V+go6nKGcDto0sCiTD4duRKpu6tdIbE1eAu1K2P2g5ELowBE4/QMKcTz+j6ZxAfjk/Hjw7TmbIYEAHDwcHa5ifGLEXkkfONg86xJuzAoNwCmjnkEBCQUCzswhTMlT+KZALl/f5eEVDEyMQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by SN7PR12MB7345.namprd12.prod.outlook.com (2603:10b6:806:298::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.25; Thu, 1 Oct
- 2026 15:22:00 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0472.016; Thu, 1 Oct 2026
- 15:22:00 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 01 Oct 2026 11:21:53 -0400
-Message-Id: <DLTLRHUTDN0Q.3VYIR7MGPL5H5@nvidia.com>
-From: "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [PATCH v3 39/40] mm/huge_memory: remove vma_is_special_huge()
-Cc: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-usb@vger.kernel.org>,
- <linux-rdma@vger.kernel.org>, <selinux@vger.kernel.org>,
- <linux-sound@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-scsi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-perf-users@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <kvmarm@lists.linux.dev>, <linuxppc-dev@lists.ozlabs.org>,
- <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
- <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
- <sparclinux@vger.kernel.org>, <fuse-devel@lists.linux.dev>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka" <vbabka@kernel.org>, "Jann Horn" <jannh@google.com>,
- "Pedro Falcato" <pfalcato@suse.de>, "David Hildenbrand" <david@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan"
- <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Jonathan Corbet"
- <corbet@lwn.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>, "Jason
- Gunthorpe" <jgg@ziepe.ca>, "Leon Romanovsky" <leon@kernel.org>, "Paul
- Moore" <paul@paul-moore.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Jaroslav Kysela" <perex@perex.cz>,
- "Takashi Iwai" <tiwai@suse.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Baolin Wang"
- <baolin.wang@linux.alibaba.com>, "Nico Pache" <nico.pache@linux.dev>, "Ryan
- Roberts" <ryan.roberts@arm.com>, "Dev Jain" <dev.jain@arm.com>, "Barry
- Song" <baohua@kernel.org>, "Lance Yang" <lance.yang@linux.dev>, "Usama
- Arif" <usama.arif@linux.dev>, "Kiryl Shutsemau" <kas@kernel.org>, "Doug
- Gilbert" <dgilbert@interlog.com>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
- <mkp@kernel.org>, "Jaya Kumar" <jayalk@intworks.biz>, "Simona Vetter"
- <simona@ffwll.ch>, "Helge Deller" <deller@gmx.de>, "Sebastian Reichel"
- <sre@kernel.org>, "John Hubbard" <jhubbard@nvidia.com>, "Peter Xu"
- <peterx@redhat.com>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Oleg
- Nesterov" <oleg@redhat.com>, "Peter Zijlstra" <peterz@infradead.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "Arnaldo Carvalho de Melo"
- <acme@kernel.org>, "Namhyung Kim" <namhyung@kernel.org>, "Mark Rutland"
- <mark.rutland@arm.com>, "Rik van Riel" <riel@surriel.com>, "Harry Yoo"
- <harry@kernel.org>, "Juri Lelli" <juri.lelli@redhat.com>, "Vincent Guittot"
- <vincent.guittot@linaro.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
- "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
- <airlied@gmail.com>, "Will Deacon" <will@kernel.org>, "Aneesh Kumar K.V"
- <aneesh.kumar@kernel.org>, "Nick Piggin" <npiggin@gmail.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Muchun Song" <muchun.song@linux.dev>, "Oscar
- Salvador" <osalvador@suse.de>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>, "Jan Kara" <jack@suse.cz>, "Marc Zyngier"
- <maz@kernel.org>, "Oliver Upton" <oupton@kernel.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Anup Patel" <anup@brainfault.org>, "Paul Walmsley" <pjw@kernel.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>, "Janosch Frank"
- <frankja@linux.ibm.com>, "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>, "Gerald Schaefer"
- <gerald.schaefer@linux.ibm.com>, "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>, "David S. Miller"
- <davem@davemloft.net>, "Andreas Larsson" <andreas@gaisler.com>, "Alexander
- Viro" <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>,
- "Matthew Brost" <matthew.brost@intel.com>, "Joshua Hahn"
- <joshua.hahnjy@gmail.com>, "Rakie Kim" <rakie.kim@sk.com>, "Byungchul Park"
- <byungchul@sk.com>, "Gregory Price" <gourry@gourry.net>, "Ying Huang"
- <ying.huang@linux.alibaba.com>, "Alistair Popple" <apopple@nvidia.com>,
- "Chris Li" <chrisl@kernel.org>, "Kairui Song" <kasong@tencent.com>, "Kemeng
- Shi" <shikemeng@huaweicloud.com>, "Nhat Pham" <nphamcs@gmail.com>, "Baoquan
- He" <baoquan.he@linux.dev>, "Youngjun Park" <youngjun.park@lge.com>,
- "Johannes Weiner" <hannes@cmpxchg.org>, "Qi Zheng" <qi.zheng@linux.dev>,
- "Shakeel Butt" <shakeel.butt@linux.dev>, "Axel Rasmussen"
- <axelrasmussen@google.com>, "Yuanchu Xie" <yuanchu@google.com>, "Wei Xu"
- <weixugc@google.com>, "Chengming Zhou" <chengming.zhou@linux.dev>, "Michal
- Hocko" <mhocko@kernel.org>, "Miklos Szeredi" <miklos@szeredi.hu>, "Xu Xin"
- <xu.xin@linux.dev>
-X-Mailer: aerc 0.22.0
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org> <20260917-b4-mmap-prepare-vma-flag-sanify-v3-39-4583d8a23bca@kernel.org>
-In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-39-4583d8a23bca@kernel.org>
-X-ClientProxiedBy: YQZPR01CA0192.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:8b::13) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bUSJVIv7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790868136;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+aFN+WRSneJ32eGbt9wh/A9RgDldU/qLR/JpjwYYJ+o=;
+	b=bUSJVIv7vXgIGeHBaLvJPh671AInQ/GnJebAe5z9yY04wIUMgOw31WV/7L6CRIaL5IujxA
+	+pHKuV6TJe/eAqs+LlonFyn/SargY57qCCbqJ7rBR5EWaUJccm1iANRL6tS+PhUn3gGLq7
+	Yx7IHG0zfWPMADzonDsBe8rcpTH7/WE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-335-e1wqR3PmOi-XaT5Jds6IQg-1; Thu,
+ 01 Oct 2026 11:22:15 -0400
+X-MC-Unique: e1wqR3PmOi-XaT5Jds6IQg-1
+X-Mimecast-MFC-AGG-ID: e1wqR3PmOi-XaT5Jds6IQg_1790868134
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 000A01944AA4;
+	Thu,  1 Oct 2026 15:22:14 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3836C1800351;
+	Thu,  1 Oct 2026 15:22:10 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Nam Cao <namcao@linutronix.de>,
+	Wen Yang <wen.yang@linux.dev>,
+	Tobias Schaffner <tobias.schaffner@siemens.com>,
+	Viktor Malik <vmalik@redhat.com>
+Subject: [PATCH v2 12/15] tools/rv: Add reactors support to BPF monitors
+Date: Thu,  1 Oct 2026 17:20:39 +0200
+Message-ID: <20261001152042.124445-13-gmonaco@redhat.com>
+In-Reply-To: <20261001152042.124445-1-gmonaco@redhat.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|SN7PR12MB7345:EE_
-X-MS-Office365-Filtering-Correlation-Id: f1249e57-63b5-45e4-1d8d-08df1fcfbd17
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|7416014|376014|18002099003|22082099003|10067099003|921020|4143699003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	/kGu3lWCHo6GIad4ug2wW/YQCtqSB6c2MsqyUVDe7Dpvc0kYJt5V+eUIv1TwIsrO4aNYRGStsm38Uks2qPpqxFNcaIc73sp+ih5Kf4+rJg4Avy5DideA2hffKXULhvc5lnFk/wEb38uqX9CbHNOlzeMmdwCFqUZvmK7lkRPW6uui8ZfcPAPp6NwT/MfRSQlN7DN5TjeHiNiLUY5tvBc08JuNhZG95zbDoDVEomqsAvmDgFLin6JZHNMGX/zvf/2qtWH45jXI0MbWSFPtwV3xpjp8QKqdyDsSHhHBxSLXWmMXhvvY1EPfuuDyxAaXdRjV1ubTkjatWPQRfpjhLnbDXk1s4KwxG8C/TjUPgJrae7oySW+w3tqgAhFFlXxuUJwqYKSZJOSlEjtSh3Iv1ix73VEvFlO5PLS5QZ7wiRffHjToCZI2oC/nkoVWBa632jyEPCuiXrdUZnvJvmoOyWCytXascfqKrSs3m+MLRhB+WXWxcA/+1S7+ogGlC/q9i7qjSyQPALnPSVMghO/pbrYcBasJVHKom7H79YX/0Ati4LW9IifVai9OteRNyTRKtVUyaWc3KCNFJIdNRB/J4LgYBY7BnilmpL1f6g5h8CVx5pgA1gG1fX6ZZShBknY0pPnoxa5vnsb276nlGBilQyuJYh/3pFVa0G9S9bAu85cn/fRVU5ARC1DVU7YQ6+rWbi/jKKYDhB8atyl5JquTPPN5ew==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(7416014)(376014)(18002099003)(22082099003)(10067099003)(921020)(4143699003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WkdVNXB0dDZCZWxhckNxYkVic2M3c3E3RzFuU3l1ZFFNZ09BSENSd2g3Qnpz?=
- =?utf-8?B?L3dNY21VaFhWZnM3ZE10Z001cTdqSTRDSVQyMDdOMzhDOUoreTdKNXVJT2hZ?=
- =?utf-8?B?bU9LSUpoMWdkZUc2WFdtQU4zU2M2T2paUkpucWI3TlVzZ1R2ZmxMVjkraDJs?=
- =?utf-8?B?bGg4enBod3JhNTBzMzJXdTArc2s0bXNzS1VYUHBMemdsK2dmSWlWWXRGZU1n?=
- =?utf-8?B?RlZtbmN1cEJ1ajI5d3BKWjNsWHNkV2xsRFBCZnlvTEpOYmpkZ3B3aWlFcVZD?=
- =?utf-8?B?cnZFcnF4VWE4d1lSNnBuZTE5WFQvclc1MmRDbWFNUGxrTkppc2haTG1CWnVP?=
- =?utf-8?B?ampPdlZGZEdHQml5NWl5TEFmSytlb1lnb0w5aUtMbWl1aGhERUtlQjZFTVNF?=
- =?utf-8?B?b1BwcmZIMmp0bU1Xek1tQ21ZeVFiUERxcDhEUEw0OHQza2lkS1VLMW1scGI5?=
- =?utf-8?B?VWRUa3hSODlMckxkQ2tmRWxyQ29uRjF4dFBkUEJ2clJsZ2FmQnMzcjkwSXZR?=
- =?utf-8?B?NEZZUEVJeHp1WVRCWnpKUmNNQXVrNWw5blJFdlhtdDkvQ0QwSWxYRVBGWkxo?=
- =?utf-8?B?WEU2REVDZmR3eHJjZjdsdlV2MW9ITnpobDJRWm9oTTRSM0NPb2xLc3IzQmJk?=
- =?utf-8?B?OERIRSs0d0F4RXkwOS9tLzFEKzRueS9WOW9MUkoyVk5jNUZGT29BWGlBZ3Bo?=
- =?utf-8?B?Wnc4NXQ1eDEyY3FXMTBSVzdUSlhCNFhST1JIU3I5WG01dCtYLzJSa3FnZzJo?=
- =?utf-8?B?cFZ2QVloVkFYWG9MM1psdlV6OUpqYVYwN0FYYzV6Qy9xL3FiUHB0cFBkSXJS?=
- =?utf-8?B?bkM3QU1UWEFycHhZYlp4NFZ1Nmh6ZVVESi85cmxCbU9HWHBpQTFsb0huUEdR?=
- =?utf-8?B?c0ZncFF2RkUzOTRRQ1BSNDVyUTBpTmN3UGROSHBJeU9YUGdtdi8rZHlYeUtK?=
- =?utf-8?B?T3RtbGhkQ2FiSStSMC9oK2o4UkxRTzBadG5kUFNqOWZlRjQvT3RxQ0tYUnZ6?=
- =?utf-8?B?M3IzcjhBb29zZjRPZEhPdmtkZmNERFJaVUNRRmE3QkpPQ1BzRmRIUGdVUUFq?=
- =?utf-8?B?Qi9iT3lrclYxNEtaWTNlS1N2Z3NTMlhWbjVmYTdoRTRlOEtaKzRiUVpQYnMr?=
- =?utf-8?B?OWN4RzhRYXF1MU14bFpwN3Y0NW9NUENXQjNudGkwcmM5UWYxYTc4TGwydGhQ?=
- =?utf-8?B?dmFmVGkyK0RZMEFWbTNqRjhPUzR5bGV5enRQSnpMTXVSNjk5RDgrN2RiWStV?=
- =?utf-8?B?VlpjMGZRTy82RWV3czZ4VUFPYW9YcUE4RGxOWUpFWTVPRFVDa3RQSmVwYVBp?=
- =?utf-8?B?dHhFdFFHOGNydDdaditIdElvdjBVWVRIK1lkMmZLVHNxQ2JkUHJ0K0tJVVdQ?=
- =?utf-8?B?TG5KV2MzQktjRG1CTHRnYndHekxCZmt3K1BpdE1oVDd6ZllXSUFmYTdTR0ty?=
- =?utf-8?B?OVluTUVRcGQ2d0VqSkQrZU1IckswemZEUjZUd2FnMFBSeGlFc2RhV1RROHZJ?=
- =?utf-8?B?R2twTGd6V1U3Z1V1czlKV0dlZVBDRkEzUVpUb1MyWWwzMkN6YVNKclFvTW9t?=
- =?utf-8?B?bHhOZHhyUE5LTnlqZGJtWlV1bkVDRzZLQytHN2NFVGIzSHVGamxJUkR3ak1u?=
- =?utf-8?B?SGZ6UzZTNjdheHpzNTN6SjdpWFRYTDdYVFp6QzNYWEcrUGlBcHp0VjkwQUpD?=
- =?utf-8?B?NTZSRklhZ2RJSEp4UG5WZmlXcEhHK1czMXBlZWh6dU9ZZUdJMHg2SDhCRXl0?=
- =?utf-8?B?SWt2bmxWWEFlNjA0eHhLc3hETVFjbnVibkhZcVpTdnI1T0UrNnlGY3k4Y2Nh?=
- =?utf-8?B?WW15VkRyTThXQTd5c1dCdU9GZmNjVDFTT2t6RmZubmxkWlVkUTlrWnFqSE5Z?=
- =?utf-8?B?Q1V3Z2NvKzBIS0VaMERlRytnaEhaTEszWGs2SXh5UFoxWlRLUnk1b2dtNC9G?=
- =?utf-8?B?STVCNXkwdmhVZ2hWVkFNc3RqdWRacjVxRHo1UVllcFdnb1FucG4rVnNZWlBk?=
- =?utf-8?B?TU0vTDJWSlV1QTRmM0Y4UUsraW9RdjJKZG0zRnJFWUVHTnVtaWNHUjVmWUVa?=
- =?utf-8?B?SWh2NjBzR0tUemJjV05CeU9YNjZ6UnFGdmsxYjgxcGdwZmVicDI1eWN0Z3pp?=
- =?utf-8?B?L01lWFJtRW9HbnZjTjJCWHdWb1ZiWG9FbkorZ2VCVW9vcUozckVEb1NraGRE?=
- =?utf-8?B?ZEJid3A3TDlycGtmc28vQ0tNUWhtQ1lhU205VEN6ZWhNUlpSL3pGUCtqQklG?=
- =?utf-8?B?VFFLRE5TZktwT3doQmVtSEtYbkd2MW1HcVVoOTZQMlV5TTJvbHV1Y1NSdU03?=
- =?utf-8?Q?g+VokNu3Ag0hbksNlc?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1249e57-63b5-45e4-1d8d-08df1fcfbd17
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2026 15:22:00.3629
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VlDX1pjxR80vhPOtJ1dfpIVvnpjOO0NWNKHr18EgeN8YZ2KRVngTm/tv7x59BwIc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7345
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Thu Sep 17, 2026 at 12:22 PM EDT, Lorenzo Stoakes (ARM) wrote:
-> vma_is_special_huge() tests whether either the VMA_PFNMAP_BIT or
-> VMA_MIXEDMAP_BIT is set (i.e. whether the VMA is a kernel-owned mapping),
-> but with a DAX carve-out.
->
-> DAX however no longer sets VMA_MIXEDMAP_BIT, so this carve-out is no long=
-er
-> required.
->
-> Therefore test for vma_is_kernel_owned() instead and also drop the
-> VMA_IO_BIT check, as it is now redundant since it is enforced that only
-> kernel-owned mappings can set this flag.
->
-> This also eliminates another overloaded use of 'special' within mm.
->
-> No functional change intended.
->
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  mm/huge_memory.c | 18 ++++--------------
->  1 file changed, 4 insertions(+), 14 deletions(-)
->
-Acked-by: Zi Yan <ziy@nvidia.com>
+The BPF implementation of RV monitors cannot use standard reactors in
+the kernel and currently reactions are skipped.
 
+Add rv_react() to build the printk format using BPF macros and pass that
+to a BPF function with a single message parameter, since BPF doesn't
+support variable arguments.
+This function is defined as weak, so the rv tool can link a different
+implementation on top at load time.
 
---=20
-Best Regards,
-Yan, Zi
+Implement a printk reactor that is simply reimplementing this function
+passing the message to bpf_printk().
+
+Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+---
+ include/rv/da_monitor.h                       |   4 +-
+ tools/verification/rv/Makefile                |  12 ++-
+ tools/verification/rv/Makefile.rv             |   5 +
+ .../rv/bpf_monitors/da_monitor_bpf.h          |  12 ++-
+ tools/verification/rv/bpf_reactors/.gitignore |   2 +
+ tools/verification/rv/bpf_reactors/panic.c    |  15 +++
+ tools/verification/rv/bpf_reactors/printk.c   |  13 +++
+ tools/verification/rv/src/bpf_monitor.c       | 102 +++++++++++++++++-
+ 8 files changed, 157 insertions(+), 8 deletions(-)
+ create mode 100644 tools/verification/rv/bpf_reactors/.gitignore
+ create mode 100644 tools/verification/rv/bpf_reactors/panic.c
+ create mode 100644 tools/verification/rv/bpf_reactors/printk.c
+
+diff --git a/include/rv/da_monitor.h b/include/rv/da_monitor.h
+index ee1cec73ec85..28cff26aecfe 100644
+--- a/include/rv/da_monitor.h
++++ b/include/rv/da_monitor.h
+@@ -84,7 +84,8 @@ static struct rv_monitor rv_this;
+ 
+ #ifdef __BPF__
+ #include "da_monitor_bpf.h"
+-#else
++#endif
++
+ static void react(enum states curr_state, enum events event)
+ {
+ 	rv_react(&rv_this,
+@@ -93,7 +94,6 @@ static void react(enum states curr_state, enum events event)
+ 		 model_get_event_name(event),
+ 		 model_get_state_name(curr_state));
+ }
+-#endif
+ 
+ /*
+  * da_monitor_reset_state - reset a monitor and setting it to init state
+diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makefile
+index bb81593acd71..44b0e3af1488 100644
+--- a/tools/verification/rv/Makefile
++++ b/tools/verification/rv/Makefile
+@@ -73,8 +73,11 @@ static: $(RV_IN)
+ 	$(QUIET_LINK)$(CC) $(LDFLAGS) -o $(RV)-static $(RV_IN) $(EXTLIBS)
+ 
+ BPF_DIR		:= bpf_monitors
++BPF_REACT_DIR   := bpf_reactors
+ BPF_SOURCES	:= $(wildcard $(BPF_DIR)/*.c)
+ BPF_OBJECTS	:= $(BPF_SOURCES:.c=.o)
++BPF_REACT_SOURCES := $(wildcard $(BPF_REACT_DIR)/*.c)
++BPF_REACT_OBJECTS := $(BPF_REACT_SOURCES:.c=.o)
+ VMLINUX_H	:= $(BPF_DIR)/vmlinux.h
+ 
+ BPF_INCLUDES	:= -I$(srctree)/include/uapi
+@@ -95,9 +98,14 @@ $(BPF_DIR)/%.o: $(BPF_DIR)/%.c $(VMLINUX_H)
+ 	$(Q)$(LLVM_STRIP) -g $@
+ 	$(Q)$(LLVM_OBJCOPY) --remove-section=.rel.rodata $@
+ 
+--include $(BPF_SOURCES:.c=.d)
++$(BPF_REACT_DIR)/%.o: $(BPF_REACT_DIR)/%.c $(VMLINUX_H)
++	$(QUIET_CLANG)$(CLANG) $(BPF_CFLAGS) -c $< -o $@
++	$(Q)$(LLVM_STRIP) -g $@
++	$(Q)$(LLVM_OBJCOPY) --remove-section=.rel.rodata $@
++
++-include $(BPF_SOURCES:.c=.d) $(BPF_REACT_SOURCES:.c=.d)
+ 
+-bpf: $(BPF_OBJECTS)
++bpf: $(BPF_OBJECTS) $(BPF_REACT_OBJECTS)
+ 
+ rv.%: fixdep FORCE
+ 	make -f $(srctree)/tools/build/Makefile.build dir=. $@
+diff --git a/tools/verification/rv/Makefile.rv b/tools/verification/rv/Makefile.rv
+index 418748bc3aa1..3ac329851914 100644
+--- a/tools/verification/rv/Makefile.rv
++++ b/tools/verification/rv/Makefile.rv
+@@ -34,6 +34,7 @@ MKDIR		:= mkdir
+ STRIP		:= strip
+ BINDIR		:= /usr/bin
+ BPF_MON_DIR	:= /usr/share/rv/bpf_monitors
++BPF_REACT_DIR	:= /usr/share/rv/bpf_reactors
+ 
+ .PHONY: install
+ install: doc_install
+@@ -44,6 +45,10 @@ ifneq ($(wildcard bpf_monitors/*.o),)
+ 	$(Q)$(MKDIR) -p $(DESTDIR)$(BPF_MON_DIR)
+ 	$(call QUIET_INSTALL,bpf_monitors)$(INSTALL) bpf_monitors/*.o -m 644 $(DESTDIR)$(BPF_MON_DIR)
+ endif
++ifneq ($(wildcard bpf_reactors/*.o),)
++	$(Q)$(MKDIR) -p $(DESTDIR)$(BPF_REACT_DIR)
++	$(call QUIET_INSTALL,bpf_reactors)$(INSTALL) bpf_reactors/*.o -m 644 $(DESTDIR)$(BPF_REACT_DIR)
++endif
+ 
+ .PHONY: doc doc_clean doc_install
+ doc:
+diff --git a/tools/verification/rv/bpf_monitors/da_monitor_bpf.h b/tools/verification/rv/bpf_monitors/da_monitor_bpf.h
+index 12f0f78b9c9d..a37d11fef6f1 100644
+--- a/tools/verification/rv/bpf_monitors/da_monitor_bpf.h
++++ b/tools/verification/rv/bpf_monitors/da_monitor_bpf.h
+@@ -17,7 +17,6 @@
+ #include "bpf_atomic.h"
+ 
+ /* BPF monitors don't support these */
+-#define rv_react(...) do {} while (0)
+ #define trace_rv_retries_error(...) do {} while (0)
+ #define pr_warn(fmt, ...) bpf_printk(fmt, ##__VA_ARGS__)
+ #define rv_monitoring_on() 1
+@@ -75,8 +74,15 @@ static const struct rv_trace_entry __used *_btf_trace;
+ 
+ static inline void da_monitor_reset(struct da_monitor *da_mon);
+ 
+-/* BPF monitors do not use reactors */
+-static inline void react(enum states curr_state, enum events event) { }
++__noinline __weak void bpf_rv_react(char *msg) { }
++
++#define rv_react(mon, fmt, ...)							  \
++	({									  \
++		char ___msg[256];						  \
++										  \
++		if (BPF_SNPRINTF(___msg, sizeof(___msg), fmt, ##__VA_ARGS__) > 0) \
++			bpf_rv_react(___msg);					  \
++	})
+ 
+ /*
+  * BPF monitor implementations
+diff --git a/tools/verification/rv/bpf_reactors/.gitignore b/tools/verification/rv/bpf_reactors/.gitignore
+new file mode 100644
+index 000000000000..e5add9141ef5
+--- /dev/null
++++ b/tools/verification/rv/bpf_reactors/.gitignore
+@@ -0,0 +1,2 @@
++*.d
++vmlinux.h
+diff --git a/tools/verification/rv/bpf_reactors/panic.c b/tools/verification/rv/bpf_reactors/panic.c
+new file mode 100644
+index 000000000000..775f91a300f0
+--- /dev/null
++++ b/tools/verification/rv/bpf_reactors/panic.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++void bpf_rv_react(char *msg)
++{
++	struct pt_regs regs = { 0 };
++
++	crash_kexec(&regs);
++}
++
++char LICENSE[] SEC("license") = "GPL";
++static char DESCRIPTION[] SEC(".rodata.description") =
++	"panic the system if an exception is found.";
+diff --git a/tools/verification/rv/bpf_reactors/printk.c b/tools/verification/rv/bpf_reactors/printk.c
+new file mode 100644
+index 000000000000..580410d2a1fc
+--- /dev/null
++++ b/tools/verification/rv/bpf_reactors/printk.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++void bpf_rv_react(char *msg)
++{
++	bpf_printk("%s", msg);
++}
++
++char LICENSE[] SEC("license") = "GPL";
++static char DESCRIPTION[] SEC(".rodata.description") =
++	"prints the exception msg to the trace buffer.";
+diff --git a/tools/verification/rv/src/bpf_monitor.c b/tools/verification/rv/src/bpf_monitor.c
+index d43ee75d3904..35bd1f40a109 100644
+--- a/tools/verification/rv/src/bpf_monitor.c
++++ b/tools/verification/rv/src/bpf_monitor.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2026 Red Hat Inc, Gabriele Monaco <gmonaco@redhat.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -14,6 +15,7 @@
+ #include <libgen.h>
+ #include <errno.h>
+ #include <inttypes.h>
++#include <sys/mman.h>
+ #include <bpf/libbpf.h>
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
+@@ -36,6 +38,7 @@ static char bpf_base_paths[][MAX_PATH] = {
+ #define MAX_ENUMS 64
+ #define MAX_LINKS 16
+ #define PROG_ENABLE_MON "enable_monitor"
++#define BPF_REACTOR "bpf_rv_react"
+ #define RV_TRACE_STRUCT "rv_trace_entry"
+ #define RV_TRACE_TYPE_ENUM "rv_trace_type"
+ 
+@@ -676,12 +679,31 @@ static struct ring_buffer *bpf_setup_ring_buffer(struct bpf_object *obj,
+ 	return rb;
+ }
+ 
++static void list_reactor_action(const char *name, struct bpf_object *obj)
++{
++	const struct btf *btf = bpf_object__btf(obj);
++
++	if (btf__find_by_name_kind(btf, BPF_REACTOR, BTF_KIND_FUNC) >= 0)
++		fprintf(stderr, "%s ", name);
++}
++
++/*
++ * list_reactors_from_path - list reactors from a specific base path
++ */
++static void list_reactors_from_path(const char *base_path)
++{
++	bpf_object_iterate_path(base_path, "bpf_reactors", list_reactor_action);
++}
++
+ /*
+  * bpf_usage_print_reactors - print available BPF reactors
+  */
+ void bpf_usage_print_reactors(void)
+ {
+-	fprintf(stderr, "  available BPF reactors: nop\n");
++	fprintf(stderr, "  available BPF reactors: nop ");
++	for (int i = 0; bpf_base_paths[i][0]; i++)
++		list_reactors_from_path(bpf_base_paths[i]);
++	fprintf(stderr, "\n");
+ }
+ 
+ /*
+@@ -720,6 +742,7 @@ static struct bpf_object *open_bpf_monitor(const char *path, struct bpf_monitor_
+ 	int res;
+ 
+ 	LIBBPF_OPTS(bpf_object_open_opts, opts,
++		.object_name = ctx->monitor_name,
+ 		/* Define statically as arch is known, Kconfig may not be available */
+ #ifdef __x86_64__
+ 		.kconfig = "CONFIG_X86_64=y\n",
+@@ -795,6 +818,65 @@ static int attach_bpf_handlers(const char *monitor_name, struct bpf_object *obj,
+ 	return enable_mon_fd;
+ }
+ 
++static int find_bpf_reactor(const char *reactor_name, char *path_out, size_t path_len)
++{
++	return find_bpf_file("bpf_reactors", reactor_name, path_out, path_len);
++}
++
++/*
++ * link_bpf_reactor - link the reactor function to the monitor
++ *
++ * Reactors are objects defining the BPF_REACTOR function, link that over the
++ * weak definition present in the monitor and return a file descriptor to the
++ * final linked object in memory.
++ *
++ * Returns memfd of final object on success, -1 on error.
++ */
++static int link_bpf_reactor(const char *monitor_path, const char *reactor_path)
++{
++	struct bpf_linker *linker = NULL;
++	int memfd = -1;
++	int err = 0;
++
++	memfd = memfd_create("linked_bpf", 0);
++	if (memfd < 0) {
++		err_msg("bpf: failed to create memfd: %s\n", strerror(errno));
++		return -1;
++	}
++
++	linker = bpf_linker__new_fd(memfd, NULL);
++	if (!linker) {
++		err_msg("bpf: failed to create BPF linker\n");
++		goto out;
++	}
++
++	err = bpf_linker__add_file(linker, monitor_path, NULL);
++	if (err) {
++		err_msg("bpf: failed to add monitor file to linker: %s\n", strerror(-err));
++		goto out;
++	}
++
++	err = bpf_linker__add_file(linker, reactor_path, NULL);
++	if (err) {
++		err_msg("bpf: failed to add reactor file to linker: %s\n", strerror(-err));
++		goto out;
++	}
++
++	err = bpf_linker__finalize(linker);
++	if (err) {
++		err_msg("bpf: failed to finalize BPF linker: %s\n", strerror(-err));
++		goto out;
++	}
++
++	bpf_linker__free(linker);
++	return memfd;
++
++out:
++	bpf_linker__free(linker);
++	close(memfd);
++	return -1;
++}
++
+ /*
+  * bpf_run_monitor - load and run a BPF monitor
+  *
+@@ -808,6 +890,7 @@ int bpf_run_monitor(char *monitor_name, int argc, char **argv)
+ 	struct bpf_object *obj = NULL;
+ 	int res, link_count = 0, enable_mon_fd, retval = -1;
+ 	char monitor_path[MAX_PATH];
++	int memfd = -1;
+ 
+ 	libbpf_set_print(libbpf_print_fn);
+ 	bpf_fill_base_paths();
+@@ -830,8 +913,25 @@ int bpf_run_monitor(char *monitor_name, int argc, char **argv)
+ 
+ 	strncpy(ctx.monitor_name, monitor_name, sizeof(ctx.monitor_name) - 1);
+ 
++	if (config.reactor && strcmp(config.reactor, "nop")) {
++		char reactor_path[MAX_PATH];
++
++		if (!find_bpf_reactor(config.reactor, reactor_path, sizeof(reactor_path))) {
++			mon_usage(1, monitor_name,
++				  "bpf: failed to set %s reactor, is it available?",
++				  config.reactor);
++			goto cleanup;
++		}
++
++		memfd = link_bpf_reactor(monitor_path, reactor_path);
++		if (memfd < 0)
++			goto cleanup;
++
++		snprintf(monitor_path, sizeof(monitor_path), "/proc/self/fd/%d", memfd);
++	}
+ 
+ 	obj = open_bpf_monitor(monitor_path, &ctx);
++	close(memfd);
+ 	if (!obj)
+ 		goto cleanup;
+ 
+-- 
+2.55.0
 
