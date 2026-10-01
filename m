@@ -1,123 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7459834F24E;
-	Thu,  1 Oct 2026 01:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8884733BBCF
+	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 01:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790817969; cv=none; b=AU7N0+nKTpWIWyf8IaaPHMUN2E1evmDISTbLOStXqGTmfjXiox7BsOvCTFsJX5G3oRHR6k85YCKJAYTyjOb4sCmsUdXL+wNngNNEQ6bA65ZFeLUlnJTc787IhWjbMm9jYRIAm8gjmWGTJ4xY0pAZMVbmQRdOb/Jua+uqZobBHZo=
+	t=1790819495; cv=none; b=Q/EPYHoUD1GbEbJsJMz9syPdHztu2p33qlB6ryXIpel/meIfEfzap3qbivDwXEaZYnDKVTj6lJG6KNXf5mZVXQKq+pWlWPdjuJp0J+6RbteVdV2fqMJivsZOuJQS/MkDt9FA9+6RGzdZCRy6aniuat6Xd1B2ztvP+yDaNeZndrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790817969; c=relaxed/simple;
-	bh=WEDGXkCGGeTtmmIndd7KMFiY/AOtuAwb7+AGRTiki30=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K6pOA/hJxNj0V78zsqGjJdxJhMQjzuW+FgVoEdjq2WeQJriI42bEyI6vQxk+DO2fZogcnLGh3Kl5Q+0fnq3QTnMYJlDCDGGN3PK5X7f2OI6vhsp4PO9bUuZ+HDk1guBtUJ6CVYqrCDv1msB+fEkM59Z3YUZfbhgiA1vkrQfIY78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+2Dl0yw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790819495; c=relaxed/simple;
+	bh=C7MBiTG2wL0mOhw+7ldHD6yK8MgvGjlpsZtOnER8kMo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f+X/ElWvb1vjvsG6JmUt/OAxf4Jluwz0coxoOgo72G2sLoAtLR93gRMuw62EhYUUb24gzWE+rE14O74f6P6y+jit1/XSCgi36kSknoa2hsTWYUhsewbjarrouTsrQXMI1iIiIWfMWJtRiKDYFolYNnKTmPZF//mYqtnE9p4Q4+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1HSjXsh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+2Dl0yw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FFDA1F000FF;
-	Thu,  1 Oct 2026 01:26:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1HSjXsh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E361A1F000FF;
+	Thu,  1 Oct 2026 01:51:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790817964;
-	bh=twUEiJ/g4lCH2oTGsMXGzEknQ8y+KcaOrNrDuRnsPIg=;
-	h=From:To:Cc:Subject:Date;
-	b=R+2Dl0ywOSYdspW924BWc3j5sJih+z8B7UdUaB5jzWo+T8yZ1vRwPbxPPYnDVtcVQ
-	 GEFzgsvcmoHqPxpUwPnjddywIL95aGJ5lq8X17i8j7Un800/4CmfQuxw+lVEEySAyD
-	 sCoMe71D2VIwHOhPdP14F5+2FgLzkRQhdXo3R5c3hj77qfq8ffOEDd0dX8B6ZOGIYn
-	 d1+dPI4W1j/AwBl1L28TfsEEadh7inq+RM/DDl8/oar57bqVDPpLaS+lZ8FLMnCRSQ
-	 uCPVNklFcZ6YAVsLI5QnTX5LT7fbXYaWRQm/6JW+haZEjbq/BrHqdC0IKHpf5ZCtFR
-	 elEzikM+Ly5IQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	ap420073@gmail.com,
-	bpf@vger.kernel.org
-Subject: [PATCH net] net: make dev_xdp_sb_prog_count() see programs attached through a link
-Date: Wed, 30 Sep 2026 18:25:59 -0700
-Message-ID: <20261001012559.297751-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.55.0
+	s=k20260515; t=1790819494;
+	bh=yemv/x+oDWgtpO58lMEwXAByYMxVsBx8v645F8UyoIA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=m1HSjXshuCswQAUPV/mBjHC2Z4q+fL9mr6MVwz/595ONxw7goRiPhK8/dZ8DI1WBN
+	 bRwWEiuMCIANTV4OVaLzl97spDXqq1ShbBE0f3qsC9irUsyZ1zZHLu4HL7XaS0U9ow
+	 95p47ONVcBcgbVq0NXPeMX6fjxakdakOTSLn3AvoqfyLItuJ6qZZIM9QIGkezN5PqU
+	 Yz5lenXYWYHC46Epke6jHC+3jZh6nkJjoNRtefuq5aXXPCQw7/dSsm15uRUUa2qwkD
+	 zpYoANcB8K/RqYYnRn3sysruU+leRbuCfKS6hgE37//HHJuLJwJCxxd3FuvInXgkJj
+	 I5SbprHUL5jGw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v3 6/6] netlink: specs: rt-route: describe
+ seg6-local attrs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hangbin Liu" <hangbin.liu@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260930-ynl_rt_encap-v3-6-4106c21b9ee7@kylinos.cn>
+References: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
+ <20260930-ynl_rt_encap-v3-6-4106c21b9ee7@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 01 Oct 2026 01:51:33 +0000
+Message-Id: <20261001015133.E361A1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-ethtool refuses to enable tcp-data-split on a device running
-a single-buffer XDP program (which can't deal with the payload
-landing in a separate buffer). dev_xdp_sb_prog_count() only looks
-at xdp_state[].prog though, ignoring bpf_link integration.
-Get the prog pointer from dev_xdp_prog(), which will consult both.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] netlink: incorrect type: flags causes uAPI mismatch for seg6-local=
+-flv-ops
+- [Low] netlink: yaml naming convention violation in seg6-local-flv-ops nam=
+e-prefix
+- [Low] netlink: missing doc properties on new major yaml spec additions
+--
 
-bpf_xdp_link_update() needs a bit of a touch-up, too, since
-ethtool calls dev_xdp_sb_prog_count() with just the instance
-lock (for ops-locked devices) - we now have to make sure the
-link updates happen under that lock.
+commit 1d8d137d71e90b2ea51b5a3ae23d03831ee06b0b
+Author: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Spotted by AI while reviewing the XDP propagation series,
-verified and tested on netdevsim with a C test along these lines:
+netlink: specs: rt-route: describe seg6-local attrs
 
-  link = bpf_program__attach_xdp(prog, ifindex);
-  system("ethtool -G eth0 tcp-data-split on")
+This commit adds SEG6 local actions enums and seg6-local-flv-ops flags to t=
+he
+rt-route Netlink specification. It also replaces binary attributes with nes=
+ted
+seg6-local-bpf, seg6-local-cnt, and seg6-local-flv definitions.
 
-Fixes: 197258f0ef68 ("net: ethtool: add hds_config member in ethtool_netdev_state")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: daniel@iogearbox.net
-CC: hawk@kernel.org
-CC: john.fastabend@gmail.com
-CC: sdf@fomichev.me
-CC: ap420073@gmail.com
-CC: bpf@vger.kernel.org
----
- net/core/dev.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+> diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/ne=
+tlink/specs/rt-route.yaml
+> index afec0375661f5..0260fca398d2c 100644
+> --- a/Documentation/netlink/specs/rt-route.yaml
+> +++ b/Documentation/netlink/specs/rt-route.yaml
+> @@ -116,6 +116,45 @@ definitions:
+>        - rpl
+>        - ioam6
+>        - xfrm
+> +  -
+> +    name: seg6-local-actions
+> +    type: enum
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 79be99b52f20..030c444aee45 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10367,13 +10367,15 @@ EXPORT_SYMBOL_GPL(dev_xdp_prog_count);
- 
- u8 dev_xdp_sb_prog_count(struct net_device *dev)
- {
-+	struct bpf_prog *prog;
- 	u8 count = 0;
- 	int i;
- 
--	for (i = 0; i < __MAX_XDP_MODE; i++)
--		if (dev->xdp_state[i].prog &&
--		    !dev->xdp_state[i].prog->aux->xdp_has_frags)
-+	for (i = 0; i < __MAX_XDP_MODE; i++) {
-+		prog = dev_xdp_prog(dev, i);
-+		if (prog && !prog->aux->xdp_has_frags)
- 			count++;
-+	}
- 	return count;
- }
- 
-@@ -10753,11 +10755,12 @@ static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *new_prog,
- 	bpf_op = dev_xdp_bpf_op(xdp_link->dev, mode);
- 	err = dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
- 			      xdp_link->flags, new_prog);
-+	if (!err)
-+		old_prog = xchg(&link->prog, new_prog);
- 	netdev_unlock_ops(xdp_link->dev);
- 	if (err)
- 		goto out_unlock;
- 
--	old_prog = xchg(&link->prog, new_prog);
- 	bpf_prog_put(old_prog);
- 
- out_unlock:
--- 
-2.55.0
+[Severity: Low]
+Does this new major property need a doc field? The Netlink subsystem
+guidelines recommend that each major property should carry a doc entry to
+explain its purpose.
 
+[ ... ]
+
+> +  -
+> +    name: seg6-local-flv-ops
+> +    type: flags
+> +    name-prefix: seg6_local_flv_op-
+
+[Severity: High]
+Can using type: flags here cause a uAPI mismatch with the kernel?
+
+The kernel uAPI defines these operations as sequential values (for example,
+SEG6_LOCAL_FLV_OP_USD is 3). When type: flags is used, the YNL code
+generator will emit bitmasks (1, 2, 4, 8), resulting in
+SEG6_LOCAL_FLV_OP_USD being incorrectly defined as 8 in the generated
+headers.
+
+Would it be safer to use type: enum to ensure the generated values match
+the existing kernel constants?
+
+[Severity: Low]
+Also, could the name-prefix use dashes instead of underscores? The naming
+convention for YAML specs specifies that names should contain dashes, as
+the code generator handles converting them to underscores for the C code.
+
+[Severity: Low]
+Additionally, should seg6-local-flv-ops include a doc property?
+
+[ ... ]
+
+> @@ -634,6 +677,50 @@ attribute-sets:
+>        -
+>          name: name
+>          type: string
+> +  -
+> +    name: seg6-local-bpf
+> +    name-prefix: seg6-local-bpf-
+
+[Severity: Low]
+Would it be helpful to include a doc property for this attribute set? The
+guidelines mention that new major properties, such as seg6-local-bpf,
+seg6-local-cnt, and seg6-local-flv, should carry documentation.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930-ynl_rt_enc=
+ap-v3-0-4106c21b9ee7@kylinos.cn?part=3D6
