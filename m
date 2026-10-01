@@ -1,125 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E132989B5;
-	Thu,  1 Oct 2026 16:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21CB3E317B;
+	Thu,  1 Oct 2026 16:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790870635; cv=none; b=mg4YOyUMTS+IyPXrFyyucS888wftD3wfoulzycm4+spO8X3MFQ3dF7NFUqivw4t+dvQ1EePJqkAJH0m2Jga50VPmdu+YWLEwkNOeDdTzhkikD9M9TLkNdjFylNGcEg6IQzpPCTRSesGy6WEmUpKqzbzRNjg9yk4LKDIDBGjHXdA=
+	t=1790870832; cv=none; b=PWnudUkWX8CSXM4dfJkzHvOGDAz6qK3T54a16LnOagD1qjfih1El5AJ4ESvbz3Ro21t5SbkAERSViKquKA1LNDq5nvBV9XAdRXjt0YLsM+noy921DtxceUs0H0qys19AnP/4ktjHDK9zzcgJhetG/S5LrnuWzzpehurKv0O9Fco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790870635; c=relaxed/simple;
-	bh=jxqrgUT4INjJUQL3kGuh73zIkvLPncZGDFt9GhPhUg0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PWzegQCdFM8yNWTjeDpKfK8SX2Bl5s//8gUPjwNVQ42VhbYZu1TIC7vyS1BS2Epd5WjrHJ6oaSDxsRkNPd/76VeGsxq3YtFIhDdMdhL4LGGxNZKtzXJKk1w9hs2tnEKMxAkxnTauh5m6UL653oLF4TPvwvYYFu/xIaoPaBPq/60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cnhe6eUC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790870832; c=relaxed/simple;
+	bh=Kw+xUUu7YLWG2JjHLg/wcklmgT3yXtr7at+r6uuRM7o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Wxx6gW8dpAnHyTiuUIANflI0zp53GMmfmQWezCEg8hgg7Y9DcyPon3BNP3pYJkYEEzu4h3Epsma7QBjbOBnkjOsoqXsr6N6OiyI+dps3tAp2suT9baDK4L2bbG54c4x4lRFHHdOB9fiBoObyXg8Jr041DmTN2LbLRlr0f7Rfd7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=iKYYgaj4; arc=none smtp.client-ip=192.19.166.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cnhe6eUC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97BF11F000FF;
-	Thu,  1 Oct 2026 16:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790870633;
-	bh=lhktJrkw7K1abu839nEgQ2Xb098Mk/CNcvP0MdyL1+s=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Cnhe6eUCAD1+/KEi9OtcDggHj2aIASwe9nC0Xw9L3Gb0Gjj6sBBup6SMeozS2a6uu
-	 o5hpsjUIgNIeQsXP3nI4xC1n1IBbIhWGoyIGq6qidOlnRdD6ilsLONk/1nghOus9ie
-	 +FgjLLwMbSuPXmC6MMyumeOZhGzWoAy1OPZGljV3Qbz/SfLdm29a5R+h2kjya93IDy
-	 1w9+q39P2g8y9WOIXuLj9aWwMUzxu+qEPOSTq4nEjZtG9CuhM0syb4N5M8T5LHrLmW
-	 qrVEhqGiQhT8NxkT7nzT28PGbyTqz65m/NrAZJVGZKEm1eyIv/teVeHMxZtD1a+agX
-	 XwCuuz2bzx2iA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 14/15] tools/rv: Add selftest for rv bpf monitors
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Gabriele Monaco" <gmonaco@redhat.com>
-Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261001152042.124445-15-gmonaco@redhat.com>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
- <20261001152042.124445-15-gmonaco@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 01 Oct 2026 16:03:53 +0000
-Message-Id: <20261001160353.97BF11F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="iKYYgaj4"
+Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 1D803C0000EA;
+	Thu,  1 Oct 2026 09:01:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 1D803C0000EA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1790870479;
+	bh=Kw+xUUu7YLWG2JjHLg/wcklmgT3yXtr7at+r6uuRM7o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iKYYgaj4YEETdSkYnpM5/kRSa+cGL171DafbqFWaGyuGgFlWu0YjgW9udTnQSCSfp
+	 wFxtnETbjpI48izQneMsrjW1fgFi4PJUaLfMB/CHSH5PoZ9nTUgZQRvMwWsJMQ1kba
+	 gSK0wxM5eIONmtBB3Qt/uyaR4vSR7rTiaj9O28t0=
+Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id 7F3D4AEA2;
+	Thu,  1 Oct 2026 12:01:17 -0400 (EDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: stable@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Jan Polensky <japo@linux.ibm.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
+Subject: [PATCH stable 5.10 0/2] perf build warnings fixes
+Date: Thu,  1 Oct 2026 09:01:12 -0700
+Message-Id: <20261001160114.801948-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/rv: catch-all regex bypasses exact monitor name valida=
-tion if BPF uncompiled
-- [Medium] selftests/rv: spurious failure due to missing check for BPF moni=
-tor presence
---
+This patch series fixes the following build warnings:
 
-commit 47b33f7df8aa5888f987d177930041a5edcca5ec
-Author: Gabriele Monaco <gmonaco@redhat.com>
+tests/bpf.c: In function 'epoll_pwait_loop':
+tests/bpf.c:36:17: error: argument 2 null where non-null expected
+[-Werror=nonnull]
+   36 |                 epoll_pwait(-(i + 1), NULL, 0, 0, NULL);
+      |                 ^~~~~~~~~~~
+In file included from tests/bpf.c:5:
+../../../../per-package/linux-tools/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/sys/epoll.h:134:12:
+note: in a call to function 'epoll_pwait' declared 'nonnull'
+  134 | extern int epoll_pwait (int __epfd, struct epoll_event
+*__events,
+      |            ^~~~~~~~~~~
+cc1: all warnings being treated as errors
+In function 'parse_events_term__num',
+    inlined from 'parse_events_multi_pmu_add' at
+util/parse-events.c:1602:6:
+util/parse-events.c:2653:64: error: array subscript 'YYLTYPE[0]' is
+partly outside array bounds of 'char[8]' [-Werror=array-bounds]
+ 2653 |                 .err_term  = loc_term ? loc_term->first_column :
+0,
+      |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+util/parse-events.c: In function 'parse_events_multi_pmu_add':
+util/parse-events.c:1587:15: note: object 'config' of size 8
+ 1587 |         char *config;
+      |               ^~~~~~
+cc1: all warnings being treated as errors
 
-tools/rv: Add selftest for rv bpf monitors
+Arnaldo Carvalho de Melo (1):
+  perf test bpf: Address error about non-null argument for epoll_pwait
+    2nd arg
 
-This commit adds selftest cases for the rv userspace tool BPF monitors. It
-tests BPF monitor listing, functionality, traces, and reactors.
+Namhyung Kim (1):
+  perf tools: Fix a asan issue in parse_events_multi_pmu_add()
 
-> diff --git a/tools/verification/rv/tests/rv_list.t b/tools/verification/r=
-v/tests/rv_list.t
-> index 201af33a52ccc..3c94f2af21097 100644
-> --- a/tools/verification/rv/tests/rv_list.t
-> +++ b/tools/verification/rv/tests/rv_list.t
-> @@ -17,13 +19,15 @@ check "verify list subcommand help" \
->  all_nested=3D$(grep : $RVDIR/available_monitors | cut -d: -f2 | paste -s=
- | sed 's/\t/\\|/g')
->  all_non_nested=3D$(grep -v : $RVDIR/available_monitors | cut -d: -f2 | p=
-aste -s | sed 's/\t/\\|/g')
->  sched_monitors=3D$(grep sched: $RVDIR/available_monitors | cut -d: -f2 |=
- paste -s | sed 's/\t/\\|/g')
-> +all_bpf=3D$(find "$RVTOOL/bpf_monitors" -name "*.o" -exec basename \{} .=
-o \; | paste -s | sed 's/\t/\\|/g')
->  description_state=3D"[[:space:]]\+[[:print:]]\+\[\(OFF\|ON\)\]"
->  line_nested=3D" - \($all_nested\)${description_state}"
->  line_non_nested=3D"\($all_non_nested\)${description_state}"
-> +line_bpf=3D"\($all_bpf\)${description_state}"
-> =20
->  # List monitors and containers
->  check "list all monitors" \
-> -	"$RV list" 0 "" "" "^\($line_nested\|$line_non_nested\)$"
-> +	"$RV list" 0 "" "" "^\($line_nested\|$line_non_nested\|$line_bpf\)$"
+ tools/perf/tests/bpf.c         | 3 ++-
+ tools/perf/util/parse-events.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-[Severity: Medium]
-If the BPF monitors are not compiled, all_bpf will be empty, making line_bpf
-evaluate to "\(\)[[:space:]]\+[[:print:]]\+\[\(OFF\|ON\)\]".
-
-When this is combined in the catch-all regex "^(...) $", does this accident=
-ally
-allow any line starting with a space to pass validation instead of strictly
-enforcing the monitor names?
-
-> diff --git a/tools/verification/rv/tests/rv_mon.t b/tools/verification/rv=
-/tests/rv_mon.t
-> index cbc346c74c71a..8e14471661c7d 100644
-> --- a/tools/verification/rv/tests/rv_mon.t
-> +++ b/tools/verification/rv/tests/rv_mon.t
-> @@ -23,13 +24,34 @@ if [ -d $RVDIR/monitors/wwnr ]; then
->  check "invalid reactor name" \
->  	"$RV mon wwnr -r invalid" 1 "failed to set invalid reactor, is it avail=
-able?"
-> =20
-> +check "invalid BPF reactor name" \
-> +	"$RV mon nohz -r invalid" 1 "failed to set invalid reactor, is it avail=
-able?"
-> +
-> +check "invalid BPF reactor name check available" \
-> +	"$RV mon nohz -r invalid" 1 "available BPF reactors: nop [a-z]\+" \
-> +	"available reactors:"
-
-[Severity: Medium]
-Since this check for the nohz BPF monitor is guarded only by the presence
-of the wwnr in-kernel monitor, can it cause spurious failures if the BPF
-monitors were not built but wwnr is present?
-
-If nohz.o is missing, the command will fail with "monitor nohz does not exi=
-st"
-rather than the expected invalid reactor error.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001152042.1244=
-45-1-gmonaco@redhat.com?part=3D14
+-- 
+2.34.1
