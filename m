@@ -1,154 +1,152 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822F93C661A
-	for <bpf@vger.kernel.org>; Thu,  1 Oct 2026 10:22:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD854C226E;
+	Thu,  1 Oct 2026 10:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790850121; cv=none; b=QYrxIN/M566M6qP4yZKM13LUfgjTB0zml3yDWXZ8VaJFnwZbYt0AZ/ap7xSN1sFz2iwns+H8EWL8hOSp9+mXn/2cpKfdcxj46lPwfhSd6pzMB8nK7zstmpzPaPFSwPRppKbHiw9r/gygiXSBM6s41PmLa7igGKBFW0SWCFOocX8=
+	t=1790850457; cv=none; b=Edz6++TfVizCt0T3P9b4sLCr79a8YlgMMCUPz/fXFvHMvOjdjRQqebnNW3/QQcTu7N8cRFsymasvb2M61hqDpqUYOCzzx/IDyZosdxRXuOWXqwhDgEWFd2MAjyXC1BBTUsxEf3GYQtf9zDDSZCkPDu5sCOJTJVT5MOu5FhrEy4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790850121; c=relaxed/simple;
-	bh=AYmHbXRU0iVjyjz03KFtEKin0VAR2WHPqji285UJTnc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Gzju2/teO8ea4bFq99adJGclB9JfywE/Nb4JUbG9zyzH20ZKvaCW3ug0OMHyk5ZukXe3b9Gmhr1lr2XvuVdQNWMXaCHXx28hFPjzmSv+gVpZMIAGuwY9rsoOxQc98EEyGCxcWgkFvmy1qjDA1DCgBBoB6kNJa2eWevTZL90jFOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USXVEQGy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790850457; c=relaxed/simple;
+	bh=DPegEgRtgn9R1g/93uNCJlOctv8SOOdSe+HrHtQDT8E=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=PLkie9EkrBeK7vlsMGnuht/9+GsylnytZmBSIRke6CYpolNJ0gVvbsnj+dvMZQ76hjK9pBnMi5RriQiiylTzha+2z/XnilDdDl0gxUyiLcQKlq/uCCmCnz13VdwxiA0l5INhJ1u6Q8THJYAnVRi2rYjY7b4WOalF80MGhgmWOh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFYTBpL5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USXVEQGy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC711F000FF;
-	Thu,  1 Oct 2026 10:22:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFYTBpL5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140101F000FF;
+	Thu,  1 Oct 2026 10:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790850120;
-	bh=oO/5rU6MnZopL32OSVAKxIiKv34Gi8nDKx37yBMHp1E=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=USXVEQGy49mG7HZtbGTbYU1WFrgIujyBhVX0lkKhVCG5kOrAO22gHWyMx/iLkULke
-	 7jqz6HYZnXZsb6+4KCvWOJUyIkgn9a0pQdXHZK4wETVS1beW0qYtuC5mNx+dMFjbMa
-	 uK3cGgL/aRybf1u0kbkFGp7Ye/ZcRs2M98uk0fEcmQxOKmUt+Xsbzhiv6qYUDi0crq
-	 AI9+mo33zxsdFkP3xDU6wzgIBXISkNgDI3HuwqvP+Ngy6PFq7jDgONyJXFYWVd4qRv
-	 Cxa1LslWiiAQP5axi+DIYOv1RroL1sSqLjcSpki6pigNxP56r5xCMZaNV6gRw9q4po
-	 oAVJcdZSJimxA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v5] tcp: add TCP_ECN and TCP_ECN_OPTION kfuncs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Irlanki Sandeep" <irlanki.s@samsung.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260930102308.197808-1-irlanki.s@samsung.com>
-References: <CGME20260930102144epcas5p419270301dba37c520277e6c6cff75def@epcas5p4.samsung.com>
- <20260930102308.197808-1-irlanki.s@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 01 Oct 2026 10:21:59 +0000
-Message-Id: <20261001102200.0BC711F000FF@smtp.kernel.org>
+	s=k20260515; t=1790850456;
+	bh=lI22nm/uLj7943zA8qY0lw6CqIm8cd1MMQKYe3UqZQo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=KFYTBpL5mmXHgdSIDp2RxMI/io9mpZAh2HiSkWpR7y++2pcM5kwts+rU6SNsUyOF8
+	 Oo02rmzfI/rObFQf/UTfuJ6r2eaAr6eVKG3QyscE3BdJQpqZh+amfCe+HpolR/Z4jo
+	 cjOMPRe4OacD1FLYYra3zODaUxqhSrX8i7/15xNI04w2Nh2dVMIDlGhNN9tBrIrpv9
+	 lIfZtNp74snNJ9ecAuG2C15n/G52nM/W8kEke3aDKcSMlePRLofy+dxieuXMV+2Mml
+	 9GdBo0CAFanlAvJMDnXQ84ZQUDD18nQ7ijKzvZU81nON7oXvF2td+m7kXU6uj4kqXo
+	 zKs/QGrx+KaWA==
+Content-Type: multipart/mixed; boundary="===============6201432976462108920=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <4b74d8c73be2889b1c85c0b9819dbb7c83c535c46342b7ed11412763abda70b9@mail.kernel.org>
+In-Reply-To: <20261001-bpf-verifier-patch-batch-v1-2-a12df8a09160@gmail.com>
+References: <20261001-bpf-verifier-patch-batch-v1-2-a12df8a09160@gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] bpf: Queue the rewrites of bpf_do_misc_fixups() and apply them at once
+From: bot+bpf-ci@kernel.org
+To: odys.yuan@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  1 Oct 2026 10:27:35 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] bpf: out-of-bounds write in bpf_sock_ops_set_accecn_option() for n=
-on-TCP sockets
-- [Medium] tcp: child sockets inadvertently inherit listener's ECN overrides
-- [Low] bpf: multi-line comment style violation in selftests
---
+--===============6201432976462108920==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit c9aee50642be2579799b62e26cc528d60bbb2e33
-Author: Irlanki Sandeep <irlanki.s@samsung.com>
-Subject: tcp: add TCP_ECN and TCP_ECN_OPTION kfuncs
+> bpf: Queue the rewrites of bpf_do_misc_fixups() and apply them at once
 
-This commit introduces two BPF kfuncs to allow per-socket overrides of ECN
-and AccECN configurations. It also adds helper functions to resolve the
-effective values, updates the TCP stack to use them, and includes selftests.
+TL;DR: Possible regression in bpf_do_misc_fixups(): may_goto_expand() now sees
+unpatched offsets, so a backward may_goto at exactly -32768 may get a 16-bit
+JEQ instead of gotol, and a previously loading program may fail with -ERANGE.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 70dc621672f2e..b9dc1079aefc5 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-[ ... ]
-> +__bpf_kfunc int bpf_sock_ops_set_accecn_option(struct bpf_sock_ops_kern =
-*skops,
-> +					       u32 opt)
-> +{
-> +	if (!skops->is_fullsock)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (opt !=3D TCP_ACCECN_OPTION_UNSPEC && opt > TCP_ACCECN_OPTION_PERSIS=
-T)
-> +		return -EINVAL;
-> +
-> +	WRITE_ONCE(tcp_sk(skops->sk)->ecn_option, opt);
-
-[Severity: High]
-Could this lead to an out-of-bounds write for non-TCP sockets?
-
-When a UDP socket requests hardware timestamping, the transmission skb gets
-SKBTX_HW_TSTAMP set, which implicitly sets SKBTX_BPF. When the timestamp
-is delivered, __skb_tstamp_tx() triggers bpf_skops_tx_timestamping(),
-invoking the CGROUP_SOCK_OPS BPF program for the UDP socket with
-is_fullsock set to 1.
-
-If the BPF program calls this kfunc, it bypasses the !is_fullsock check.
-Since there is no verification that the socket protocol is IPPROTO_TCP,
-it casts the smaller udp_sock to a tcp_sock. Writing to ecn_option would
-then corrupt memory past the end of the udp_sock structure.
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 39566f382510..4b96f4ee9b3d 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
 
 [ ... ]
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c b=
-/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
-> new file mode 100644
-> index 0000000000000..506b48e08621f
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockops_ecn_kfunc.c
-[ ... ]
-> +	/* BPF_SOCK_OPS_TCP_LISTEN_CB -> BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB
-> +	 * Listener's values are consulted for SYN negotiation, but the child
-> +	 * socket is initialized with UNSPEC (not inherited).
-> +	 */
-> +	ASSERT_EQ(bss->listen_set_mode_ret, 0, "listen_set_mode_ret");
-> +	ASSERT_EQ(bss->listen_set_opt_ret, 0, "listen_set_opt_ret");
-> +	ASSERT_EQ(bss->passive_mode_read, TCP_ECN_MODE_UNSPEC,
-> +		  "passive_mode_read");
 
-[Severity: Medium]
-Will this assertion fail due to child sockets inadvertently inheriting the
-listener's ECN overrides?
+> @@ -2336,13 +2316,9 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>  			cnt = may_goto_expand(insn_buf, insn->off, stack_off_cnt,
+>  					      tail, ARRAY_SIZE(tail));
+>
+> -			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+> -			if (!new_prog)
+> -				return -ENOMEM;
+> -
+> -			delta += cnt - 1;
+> -			env->prog = prog = new_prog;
+> -			insn = new_prog->insnsi + i + delta;
+> +			insn = bpf_patch_list_add(env, i + delta, insn_buf, cnt);
+> +			if (IS_ERR(insn))
+> +				return PTR_ERR(insn);
+>  			goto next_insn;
+>  		} else if (bpf_is_may_goto_insn(insn)) {
+>  			int stack_off = -stack_depth - 8;
+> @@ -2355,13 +2331,9 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>  			cnt = may_goto_expand(insn_buf, insn->off, stack_off,
+>  					      tail, ARRAY_SIZE(tail));
+>
+> -			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+> -			if (!new_prog)
+> -				return -ENOMEM;
+> -
+> -			delta += cnt - 1;
+> -			env->prog = prog = new_prog;
+> -			insn = new_prog->insnsi + i + delta;
+> +			insn = bpf_patch_list_add(env, i + delta, insn_buf, cnt);
+> +			if (IS_ERR(insn))
+> +				return PTR_ERR(insn);
+>  			goto next_insn;
+>  		}
+>
 
-When a passive connection is established, tcp_create_openreq_child() in
-net/ipv4/tcp_minisocks.c clones the listener socket via
-inet_csk_clone_lock(). This copies the entire tcp_sock structure, including
-the new ecn_mode and ecn_option fields.
+Can this change make a program that loaded before get rejected at commit
+time?
 
-Since these fields are not explicitly reset to TCP_ECN_MODE_UNSPEC during
-the initialization block in tcp_create_openreq_child(), the child socket
-seems to retain the listener's mode, breaking the intended design and
-causing this test assertion to fail.
+may_goto_expand() picks between a 16-bit JEQ and JNE + gotol based on the
+offset it is given:
 
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c b/tool=
-s/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
-> new file mode 100644
-> index 0000000000000..32ed64ac4f3d3
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/sockops_ecn_kfunc.c
-[ ... ]
-> +		/* Leave the socket on the sysctl defaults so the loopback
-> +		 * handshake driven by the test is not altered.
-> +		 */
+    off = off >= 0 ? off + tail_cnt : off - 1;
+    ...
+    if (off == (s16)off) {
+        insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
+    } else {
+        insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
+        insn_buf[cnt++] = BPF_JMP32_A(off >= 0 ? off : off - 1);
+    }
 
-[Severity: Low]
-Does this multi-line comment violate the BPF subsystem style rules? The
-required style places the opening /* on its own line.
+Before this change every earlier rewrite was applied right away through
+bpf_patch_insn_data(), and bpf_adj_branches() updated the jumps after each
+one.  So when the loop reached a backward may_goto, insn->off already
+included all the growth between the jump target and the may_goto.  That is
+the final backward distance, and the JEQ-or-gotol choice was made on it.
 
-[ ... ]
-> +	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
-> +		/* Listener values consulted for SYN negotiation; child starts
-> +		 * with UNSPEC (not inherited).
-> +		 */
+Now the loop walks the unpatched program, so insn->off is the original,
+unpatched offset.  The real distance is only computed later, in
+patch_list_adj_insn() called from bpf_patch_list_commit():
 
-[Severity: Low]
-Similarly here, should the opening /* be placed on its own line to match the
-BPF comment style?
+    rel = (s64)new_off[tgt] - pos - 1;
+    ...
+    if (rel < S16_MIN || rel > S16_MAX)
+        return -ERANGE;
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260930102308.1978=
-08-1-irlanki.s@samsung.com?part=3D1
+Take a backward may_goto whose grown offset is exactly -32768 (S16_MIN).
+The old code saw off = -32768, computed off - 1 = -32769, which does not
+fit in s16, and emitted JNE + gotol, so the program loaded.  The new code
+sees the smaller original offset, so off - 1 fits in s16 and it emits JEQ.
+At commit the JEQ's displacement is -32769, patch_list_adj_insn() returns
+-ERANGE, and the program is rejected with "insn %d cannot be patched due to
+16-bit range".
+
+The non-timed path under bpf_is_may_goto_insn(), which also calls
+may_goto_expand(), has the same problem.  Forward may_goto behaves as
+before, since the old code also chose JEQ from the unpatched forward
+offset.  The trigger is narrow, a single exact displacement.
+
+The selftest added later in the series (f8ef7933910d) does not appear to
+cover this gotol boundary, and no later commit in the series changes it.
+Should the JEQ-or-gotol decision be deferred until the final offsets are
+known?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36845462631
+--===============6201432976462108920==--
