@@ -1,166 +1,224 @@
-Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22E3496D5A
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 15:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790956451; cv=none; b=FXB+VqcarYAmSDwXuSoGCT8svzUxtIi/Cco9W4xPlrypMVZHivBdTEqO/4ZZnOLNQQVDvOSysHOC1gkeG9L7gw31vRldZVzq0oBVPCGytwHnPNqTMSe8d0/UKAoIZK4tfd5C2BVZFCS15Yn8DyVlzs4s02OEGdpZmQf1ogMPVUc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790956451; c=relaxed/simple;
-	bh=UrJNMJCctvQ1Jn0RVEivMMg70EXY0gbc132xAwL3HpQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mhlUhanrw/3wv1b6R0hcathgD6MUI0kg6Hf/pLC50DDAHDomNUiJ/4h6Hc40fW6uixZlCc/MEQDu1RPuLNlS8IipbH/leuj6tIGfL2msAWOddFzo0h0DnIKvEYC4oC77H+9m8zhjvC2Asu7xwSDdBOs5ewt9JgN9kxs5wrE+/xM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bbxFtmHX; arc=none smtp.client-ip=74.125.227.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E13546EC9B
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 16:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790957277; cv=pass; b=VrNQKLOnbA1G4sGpX+XQz3s0bfVA6PByuwfjfSxaw4H3lXhZK4puvEj9MmQ9F9u2cQ53kFttl1cKkd+gWM3zvxKIzD+pr1wvDIfzXw8m34hkxkjEyalhNPy1/IGkeKoClh98eRi23IgCS3NWnhRjham5ZmbD2KnKAh82lkURydU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790957277; c=relaxed/simple;
+	bh=nEN1DIepvzc1Fgr9k7isyGujerQNKYhNcd2jD7tCdaA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E8t4bFP3f5TJAYQFLeUm0xVkHOiJlGwBjZbSccyQ5Vt33lgEHZyRTwxQ8XBeh1lLjwfNRC6tUvOILK6T7jCrhghTi0+wpSLMTJbUf/mUhltfTrLJb5YKUcpTV4TB3d4jiSY3Do0cEIjuhxSkdyUqrqOA2GhCWa7vWQBytWCRRKA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PExdJj7H; arc=pass smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bbxFtmHX"
-Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a0aa9d356eso5873359a91.0
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 08:54:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PExdJj7H"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a026611b2cso4505e9.1
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 09:07:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790957273; cv=none;
+        d=google.com; s=arc-20260327;
+        b=L+SFcqw+akD2Fa6wBLIvJ3UiE5oUfg85RiZUNi4A3uNzJHMdSUzwpWU8IdmDz7IuJC
+         VuR+70KIDAHR5etv0verx+WEtclDKWMtzm8kfmc7VCje4vHGL7rtqQvw38xiRtTEuPYF
+         hBRvuUzysHOgfdyzboNQH+tRg0SjPkhfGedfIiMskvajXDYskQvJELh5UWjH1zcJumZv
+         NK+LAlbckD4DsYe09mQVQl2uXwV+Nfw7Ag8hTLxYLNoyMXLEf81WCswxrYv6ToBtgii2
+         EFvwd8ukZDtAgry/cmOYZw0w8uYWlbqRB9c068aausAvaxb1TgMOSKPry2vJ+HURn+FL
+         dnLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=oBStq7HJ1HhU8r8netCSqoFuNNT8K/NJyM0kHcdEpJ8=;
+        fh=Y1TY+E1A+K+sCx5jBlItYfqMp3rluxojzI+E/k7D/pk=;
+        b=listnRL3OfHwfMkA8P7BP8/KHTI1YIjDplWAvfhb8j3VXioTNZ3ruH9ZV8xVOtlyF3
+         2n6voNNP0j6MWVgssSkvzHJWuVCA9FdC+oVmMbppPBiA2lfE/5sD4HhYE+bZ3do39tj2
+         vIrUnySKIYyS49xrsphxfoIVsID5QtKaT/kXt8TW9hDGMi1FPX7aiM8FHuZEAKHBBOtp
+         YFGdShIzXCfK3ovsdYaQAmAPEBnTDjCFsiFZy5zVH3lDaQw82ohGLx4UGU+HbddHSsMb
+         NhTF7W6JSoOMJpgJ1BJxm6b93XgC2fZwNqK8RgXGdtAbHX+oodUrfood5Eg9QsfmPdiX
+         K6Xw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790956445; x=1791561245; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=D81ZMFysfyLfU1ne8B9rWhavLRnTwYR1GpOUeU0mXqM=;
-        b=bbxFtmHX2K/mADAzUXxERuGsfWu8XsWR7Z00rURHd2f0PYSNxQFlwW7jo8kivcY5BE
-         xkJr9ar9xvCGt3D8U7QaKsas7yz6FV4H8s6g20g9DM3HKG3NOVlIiATZsL5Bm2QYLkLw
-         EDenBnjZWgdfnl35DnjHObTYw44thbOYDTf3zjEBmb7S+goczLU+qHyg6SQXKApOTFMU
-         xCN7j1dX6c1Azd6KhKrEwYfLAlpGIUhzuDb2FM7GYx04AmDkbNJtlsaa0q+t8N/+xUAu
-         9O6MyfQ4axyQISAxZvAxTGgwsJAflPcPRI4NME8F0mT6JP/s6yObTbTJOHEUsByhFBam
-         qi/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790956445; x=1791561245;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=google.com; s=20251104; t=1790957273; x=1791562073; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=D81ZMFysfyLfU1ne8B9rWhavLRnTwYR1GpOUeU0mXqM=;
-        b=YixHD5deSRfwdnvCNkv7lDqEvQjf4OH1qKqj3WZt7gRjlds8cd4+mDM1G7z8JNgskq
-         V3WPjP3Igr7K8ieF9CZhR/CFPG7N7gAO+kfgRvQFH070qB8YPvHRiwgy2SPJQTWIuLC8
-         8gw+clIcYfbty3Axr2l7QYMqBJ8iNOPqw4sWxr5anJ+6OUhQVJ0QwlUqaCumL6nKk33P
-         AszkxBbnKXUGMjVwAKbrjWRAXKY3pnngTTb6ONjd3bq/Jco6VK1UzajGF4/Cuhvqtonq
-         OSWnrnmg+J0NgoL+GIVaIkh2muppdv/BnE/9Yb6n1cuCGrqj3R9oOhkB2nii3K8T7BGB
-         h/0w==
-X-Gm-Message-State: AFq9FYIxEH/Y8iRu7plcgdw7TmoIrVBTptMD8A/KmW3wAZAfeZID0lnV
-	9yg+xJV21CTh5knH2bMtrsTg6nrnH6pJxoktQectuyX2cMLEDglu9ijU
-X-Gm-Gg: AYBFou19xpaG3ZmdvGCZwX63IFP98MbRXfCrVV9i5FJ3XCzRV8g+R/GPw21U/FoLR8d
-	amRqKM2QNGboAKlkL0I5nxe71ZX9EYmzjkxA9XDtMtZ8Z47UqlCnukBGnqHYtMlGXhRzDIMus8G
-	cKve7iOrozqSCSCYEmyxDb0x63qJrFsYHD6B1TBD4LOpbz2wsLoiQjcwGYKwf753jIa5fSndWmD
-	KE5qXysnURJA9hYtM/ZE/nihM7FQ/Z7+5rN4CTwI2MUL34g/fjQr6g81YdDJZGkrwEZEqXasOm7
-	ImnzAQVQDg6udOVAMAn8S81PkL4jExJWKt5gJTecYM2E2L42zhScJsbJ+6nstPhRHSBfzmQ9qoe
-	kVmlbuW48ga2R9+NxMTv9KqKsd1o9jqhNIlpjWJltbeczTt1kOctml3uoHZy+98MPE6dWz9zxoX
-	sEvsHUhvfZSjkpRMmfqqQy6Dim94R42ax1SO3QtXRFnl0EpNZXl9I2Y7zvCdYnIQ7bTz6I+IMYh
-	f5vP4Ji8vPMs8afLNhZrbijkJB9B5HmKZw6/kH4s5nMQwvhlFRNTqA1FWugZKNQXAF3foUW7YOx
-	FnIqAC/wf0T9TSECSiC7gvjzHCeehAFf2wOPmtm6Bgr/
-X-Received: by 2002:a17:90b:1b03:b0:3a4:7d7c:1866 with SMTP id 98e67ed59e1d1-3a6cecf77a8mr3003990a91.61.1790956444679;
-        Fri, 02 Oct 2026 08:54:04 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4f402dfbbsm9622721a91.0.2026.10.02.08.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 08:54:04 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [GIT PULL] BPF fixes for 7.3-rc6
-Date: Fri,  2 Oct 2026 15:53:57 +0000
-Message-ID: <20261002155400.661252-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        bh=oBStq7HJ1HhU8r8netCSqoFuNNT8K/NJyM0kHcdEpJ8=;
+        b=PExdJj7HUajqC/dePW08rpkWReBzXIiM5EWatRkCE/Ftaoe9f9w85cLKfgo4rIMr7h
+         UIzqF8l16tc3zy8RTpNwluEwtIpQFRIviCSWoMKeDQ1v5Xo0fksE/tYGRB+DUqpUx5dJ
+         CB4XGmnBDk2Hi41htsE6t7fRaEzEs1FD34G7P9/lQjFJrr6NdnRnSKK9Hkh+CPeKsQUU
+         gOHCAnNruoj135QMOKlxSTkec1HEnSoqRI56r6D1SB2ItiR5d8Sh/MOHXo8gYiyQWv9L
+         M5Zjd2+u4BTqc5uU8qNGalKn/tyD/MFkogT+VTl+gPVriBnLpkD9ZcrfVxtUbsuuxQR2
+         yoAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790957273; x=1791562073;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oBStq7HJ1HhU8r8netCSqoFuNNT8K/NJyM0kHcdEpJ8=;
+        b=jXVj6+XV7qrrFYO9jIc4jqqKdea74dhtVj/V2ejiLbvht3dJRlEhvF46NOPPjltjTo
+         hSd50vPwP9ZpnaL7ic2D753vz1cS4vaaC2zt0gif7LQ3yoUzL1Km4TmaUf3SYX1ReRWR
+         FMGZtFi9QoPIaAvzdmyH3QqZtkGgG/9H5CgJcYXwuMkF/PTTectLaPW/qQ9uez3vRYnX
+         ItKo8A9Qay9GQQkCPNnppdkG1f/QcCzJm1m676mL08iFReNAP8KYfAMYig81ntdxEAtO
+         fzd0YC178TkVjevbSWL/y1qHSdN/0XCOa97sRHA5/OFz9zmHlY20jGoqyTEKLGYb8jZV
+         9L3Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwagVIu8w1er9sfSLqfteaLG0EA4zjNx+OoSxsGXBlOy/dcO+s17n+6Jd3saDix5jVN8Ss=@vger.kernel.org
+X-Gm-Message-State: AFuF++kmpQZC5VY0Z7qF45zXL4adEdaqAqLBVqYm0FJjeCBaqRyjj7bq
+	UzqzCR//q/M4r8FK43KqBOQdUiCsZoF2vgMwqYu1+hG+eUVT8qTBKVWuPfd3/Y3ld2WF01pgLdj
+	ojAJ8Amtrwtm4tYCQe811ntMEPgXv2qSlO0+qaDOM
+X-Gm-Gg: AYBFou2lbYst6IpcB+T/fguYzFagKdKdh9hhF/gfNcuVxU77pVBmcc92yG24ZCdI0dl
+	0f+7HDUMhGbfnUNNY+wakHi/5EOaWBukchNpX/6RvUozynzUYwOuxYvqubWXeXgeqjL9iGPruBJ
+	RaNX6EldpDGC2VsvQorWAU8Y63/d31xl06XyyklwJ19+Bf8F6+x+dxC/sdKAYGzno8/ysDN+ChP
+	ykmUp6EOvVr/jpTgbhKL8/RTwM/Li8jY1gV3SERtaGfcqYw/HnfLw/buhI6k9zKQC8efSnV582c
+	UqWvuATiyQdBzSImkvdGOdNMX8Yy9qyQVUjGoDp9zAT3hfi4iKJmCNKIS/yW4VsfL6lLsk2etZ5
+	sXeoH/83ZQhDwoULghk+ZVVJ2rX8K9SmCQHEfNlXUJ0FVkw==
+X-Received: by 2002:a05:600c:3042:b0:4a0:1c0e:b0ce with SMTP id
+ 5b1f17b1804b1-4a03046231fmr638255e9.14.1790957272991; Fri, 02 Oct 2026
+ 09:07:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260928150121.1712559-2-tjmercier@google.com>
+ <714f119d120fb9ba4aa7e82af621edb7bc97813a760c9dd2cb5363c55b7365a9@mail.kernel.org>
+ <1b41e278-f00a-4e25-a319-ba69186d92c9@gmail.com>
+In-Reply-To: <1b41e278-f00a-4e25-a319-ba69186d92c9@gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Fri, 2 Oct 2026 18:07:39 +0200
+X-Gm-Features: AclHuK-StPJkxPtpdx6pksmBPmFtHcY7P6COXSJ7pVVXPbMDG4w62HB5ZrLWtWQ
+Message-ID: <CABdmKX37kKrOApa+cwNrfQ6YU8fn3pkFp2TjCjagFGhXPQQszw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: htab: Split htab_elem_lru and
+ htab_elem_pcpu off of htab_elem
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Mon, Sep 28, 2026 at 8:31=E2=80=AFPM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+>
+>
+> On 9/28/26 4:46 PM, bot+bpf-ci@kernel.org wrote:
+> >> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> >> index 53c99fe4f176..5db11a21ce98 100644
+> >> --- a/kernel/bpf/hashtab.c
+> >> +++ b/kernel/bpf/hashtab.c
+> >
+> > [ ... ]
+> >
+> >> @@ -828,8 +861,12 @@ static __always_inline void *__htab_lru_map_looku=
+p_elem(struct bpf_map *map,
+> >>      struct htab_elem *l =3D __htab_map_lookup_elem(map, key);
+> >>
+> >>      if (l) {
+> >> -            if (mark)
+> >> -                    bpf_lru_node_set_ref(&l->lru_node);
+> >> +            if (mark) {
+> >> +                    struct htab_elem_lru *l_lru =3D
+> >> +                            container_of(l, struct htab_elem_lru, ele=
+m);
+> >> +
+> >> +                    bpf_lru_node_set_ref(&l_lru->lru_node);
+> >> +            }
+> >>              return htab_elem_value(l, map->key_size);
+> >>      }
+> >>
+> >
+> > [ ... ]
+> >
+> >> @@ -1310,16 +1349,19 @@ static long htab_map_update_elem(struct bpf_ma=
+p *map, void *key, void *value,
+> >>
+> >>  static void htab_lru_push_free(struct bpf_htab *htab, struct htab_ele=
+m *elem)
+> >>  {
+> >> +    struct htab_elem_lru *l =3D container_of(elem, struct htab_elem_l=
+ru, elem);
+> >> +
+> >>      check_and_cancel_fields(htab, elem);
+> >>      bpf_map_dec_elem_count(&htab->map);
+> >> -    bpf_lru_push_free(&htab->lru, &elem->lru_node);
+> >> +    bpf_lru_push_free(&htab->lru, &l->lru_node);
+> >>  }
+> >>
+> >
+> > [ ... ]
+> >
+> >> @@ -1500,15 +1543,18 @@ static long __htab_lru_percpu_map_update_elem(=
+struct bpf_map *map, void *key,
+> >>              goto err;
+> >>
+> >>      if (l_old) {
+> >> -            bpf_lru_node_set_ref(&l_old->lru_node);
+> >> +            struct htab_elem_lru *l_old_lru =3D
+> >> +                    container_of(l_old, struct htab_elem_lru, elem);
+> >> +
+> >> +            bpf_lru_node_set_ref(&l_old_lru->lru_node);
+> >>
+> >>              /* per-cpu hash map can update value in-place */
+> >>              pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
+> >
+> > [ ... ]
+> >
+> >> @@ -2505,7 +2551,10 @@ static void *htab_lru_percpu_map_lookup_elem(st=
+ruct bpf_map *map, void *key)
+> >>      struct htab_elem *l =3D __htab_map_lookup_elem(map, key);
+> >>
+> >>      if (l) {
+> >> -            bpf_lru_node_set_ref(&l->lru_node);
+> >> +            struct htab_elem_lru *l_lru =3D
+> >> +                    container_of(l, struct htab_elem_lru, elem);
+> >> +
+> >> +            bpf_lru_node_set_ref(&l_lru->lru_node);
+> >>              return this_cpu_ptr(htab_elem_get_ptr(l, map->key_size));
+> >>      }
+> >>
+> >> @@ -2521,7 +2570,10 @@ static void *htab_lru_percpu_map_lookup_percpu_=
+elem(struct bpf_map *map, void *k
+> >>
+> >>      l =3D __htab_map_lookup_elem(map, key);
+> >>      if (l) {
+> >> -            bpf_lru_node_set_ref(&l->lru_node);
+> >> +            struct htab_elem_lru *l_lru =3D
+> >> +                    container_of(l, struct htab_elem_lru, elem);
+> >> +
+> >> +            bpf_lru_node_set_ref(&l_lru->lru_node);
+> >>              return per_cpu_ptr(htab_elem_get_ptr(l, map->key_size), c=
+pu);
+> >>      }
+> >>
+> >
+> > This isn't a bug, but would a small helper keep these call sites to one
+> > line, matching the pcpu accessors this patch adds? Each site now repeat=
+s
+> > the same container_of(l, struct htab_elem_lru, elem) boilerplate follow=
+ed
+> > by bpf_lru_node_set_ref(). The patch adds htab_elem_get_ptr_to_pptr() a=
+nd
+> > htab_elem_set_ptr_to_pptr() for the pcpu variant, but open-codes the
+> > container_of for the LRU variant at every site.
+> >
+>
+> this sounds like a good refactoring:
+>
+> static inline void bpf_lru_node_set_ref(struct htab_elem *l)
+> {
+>         struct htab_elem_lru *l_lru =3D
+>                 container_of(l, struct htab_elem_lru, elem);
+>
+>         if (!READ_ONCE(l_lru.lru_node->ref))
+>                 WRITE_ONCE(l_lru.lru_node, 1);
+> }
 
-The following changes since commit 5fc5768c7ca92895ccd1de94dc521e5a55ae7896:
-
-  Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2026-09-24 08:25:26 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
-
-for you to fetch changes up to de020dc8049bfb2b22e3b6d99c031feb2e22d112:
-
-  bpf: Fix missing migration protection in __rhtab_map_lookup_and_delete_batch() (2026-10-02 11:34:15 +0000)
-
-----------------------------------------------------------------
-- Fix overflow of backward jump offset in constant blinding
-  (Alexei Starovoitov)
-
-- Fix packet range of packet pointers sharing an id when var_off
-  tightens umax of one pointer and not the other (Alexei Starovoitov)
-
-- Fix objects stuck in free_by_rcu_ttrace list of bpf memalloc
-  (Alexei Starovoitov)
-
-- Fix use-after-free of progs detached from busy trampolines: wait
-  for an RCU tasks grace period before freeing trampoline progs, and
-  patch detached progs out of trampoline images that are still in use
-  (Florent Revest)
-
-- Hold map BTF for the memory allocator destructor record to fix UAF
-  in deferred bpf_mem_alloc destruction (Kumar Kartikeya Dwivedi)
-
-- Fix missing migration protection in resizable hashtab
-  lookup_and_delete batch operation (Ömer Mete Kaya)
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Alexei Starovoitov (7):
-      bpf: Fix overflow of jump offset in constant blinding
-      Merge branch 'bpf-fix-use-after-free-of-progs-detached-from-busy-trampolines'
-      bpf: Fix packet range of pointers sharing an id
-      selftests/bpf: Test packet range of pointers sharing an id
-      bpf: Factor out __do_call_rcu_ttrace()
-      bpf: Fix objects stuck in free_by_rcu_ttrace
-      selftests/bpf: Add a test for objects stuck in free_by_rcu_ttrace
-
-Florent Revest (Anthropic) (3):
-      bpf: Wait for an RCU tasks grace period before freeing trampoline progs
-      bpf: Skip detached progs in trampoline images that are still in use
-      selftests/bpf: Detach a trampoline prog while a task sleeps before it
-
-Kumar Kartikeya Dwivedi (2):
-      bpf: Hold map BTF for the memory allocator destructor record
-      Merge branch 'bpf-fix-objects-stuck-in-free_by_rcu_ttrace'
-
-Ömer Mete Kaya (1):
-      bpf: Fix missing migration protection in __rhtab_map_lookup_and_delete_batch()
-
- arch/arm64/net/bpf_jit_comp.c                      |  37 ++--
- arch/loongarch/net/bpf_jit.c                       |  60 ++++---
- arch/powerpc/net/bpf_jit_comp.c                    |  45 ++---
- arch/riscv/net/bpf_jit_comp64.c                    |  56 ++++--
- arch/s390/net/bpf_jit_comp.c                       |  46 +++--
- arch/x86/net/bpf_jit_comp.c                        |  26 +--
- include/linux/bpf.h                                |  45 ++++-
- kernel/bpf/core.c                                  |  10 +-
- kernel/bpf/hashtab.c                               |  19 ++-
- kernel/bpf/memalloc.c                              |  57 +++++--
- kernel/bpf/syscall.c                               |  19 ++-
- kernel/bpf/trampoline.c                            |  85 ++++++++--
- kernel/bpf/verifier.c                              |  10 +-
- .../selftests/bpf/prog_tests/bpf_ma_ttrace.c       |  60 +++++++
- .../selftests/bpf/prog_tests/bpf_mod_race.c        |  34 +---
- .../selftests/bpf/prog_tests/tramp_prog_detach.c   | 188 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/bpf_ma_ttrace.c  |  50 ++++++
- .../selftests/bpf/progs/tramp_prog_detach.c        |  56 ++++++
- tools/testing/selftests/bpf/progs/verifier_align.c |   6 +-
- .../bpf/progs/verifier_direct_packet_access.c      | 178 +++++++++++++++++++
- .../selftests/bpf/progs/verifier_meta_access.c     |  30 ++++
- tools/testing/selftests/bpf/testing_helpers.c      |  28 +++
- tools/testing/selftests/bpf/testing_helpers.h      |   2 +
- 23 files changed, 975 insertions(+), 172 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_ma_ttrace.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_ma_ttrace.c
- create mode 100644 tools/testing/selftests/bpf/progs/tramp_prog_detach.c
+The htab_elem type is internal to hashtab.c, so I've added a helper
+htab_elem_lru_node() which makes all the callsites Sashiko mentioned
+one liners.
