@@ -1,183 +1,162 @@
-Received: from mail-ej2-f41.google.com (mail-ej2-f41.google.com [74.125.228.169])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9447447FAE5
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 10:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790937619; cv=pass; b=FTqpLYYBx7AYCaFApM4W6lbf+5Pu6++WGOD7xs6X2Ww3cMZ+8LbqUGRuBgpD0fNU6c9wrPsb8tPV4DEL6mOJa+WfY4YWB9iKgj7r5p684Qu8UzkIs8OHjYfCEcYCspBc3aNGaURERjhdE5h7fXNuwlN/GoVO0TkdRd1QjWb0X4E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790937619; c=relaxed/simple;
-	bh=vavxIjTwCBZOVb/LPQjm56SKHMFhwdOAoimT94wdeSM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I6G4m11xZOxVyuGctRdpRTvD0ggB3Qrafvt9mG6ggTYOS9XA03RpIwDZhP5JmbBLie2YqFBjQSOO/q3hi+bw8XwcRm2J7D+dIRzGKMrWxuHLa76HCRdluKFIYc7QPyYCyTuxNotu/3YqcxTSf28eRCDzw3X9ZxljDc0TDlq/j9w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IkEFhlab; arc=pass smtp.client-ip=74.125.228.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E893C09EF;
+	Fri,  2 Oct 2026 10:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790937763; cv=none; b=OlvOgo//AzRUuMBlbbjuJEb+N7KabsXeY3V1rGSJWFWhHnx1JAYkoXBlaXyrSqiyEzpqZ446Ni3P+sa+psMTvMk/iDXDiWXuipHmDye+50j4soScJ2Vx6TZdBtkcOhedFroZT40FBclVXqhK04YvwOaEQy4y/UsjRp90s6wCX4c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790937763; c=relaxed/simple;
+	bh=MOf5ttjotxFZUcXLkswkUs5bKxaUAAx4fQEpPTn0ewg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ckX+Z4bNgqeVJVonvRKAnEYKtEdeVv/1Jrq+nTGcxH7wziqWUamoi7O+tMu9hJWCDrUJbhQIdYunoB2iCmgrRhxeCC5aNJG6gs+DSITDPO8Cf9Lp8VgZEO9xck69NzMiBESrKULGokY/obW9VOp8IKGDx/oc/kmPHg2isHoS4JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MNONvmo/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9zEiGyfp; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MaNnL5uU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DHzA805q; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IkEFhlab"
-Received: by mail-ej2-f41.google.com with SMTP id a640c23a62f3a-c2e3f641442so215243066b.0
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 03:40:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790937615; cv=none;
-        d=google.com; s=arc-20260327;
-        b=gW7SUToxAlmN643xsGX/qbQO2Q85hqttmE10yrGYQZVFnTp38Ok1g+rCjO4u5VvCNd
-         8QggIQJ/Tbehc3VAIqUPcSyDlsHi2IwOH0dNKWlzRhwny23efuB7FushykgOSGf81eVc
-         tgbL4Zp3oiPWXxauW3X4mOf4rK+C98viw/nUJq783T5Mld6/fDw+GcMHvEtBCdqrLANF
-         3VDNhwA9Cbife9pNRWHkT9O6vRPAD8A8gZxatPozujk+vSGLgZuAZC5hzMY8pJtOUQ1r
-         wGxxvPD8N0O3divRFPoVI1HFb4AT5pkMADfE1SjuU24/9QjuVUN/B/54Ls6du5Ty5Wnw
-         oXWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Aluc5VLd/GgszPlfBHVygLWYzMV/6IhocC43q7cYG8Y=;
-        fh=ynVuAC6BTFSX7fybUcYkvt3g71RzTr49vvoShUINrKI=;
-        b=psK5+aPDzYeC/1mf6I8aS1uNrLnZZLR6QNFupBBB7WOZid+dEYkDPiV3dF7Gh/Vwp5
-         UjGqBDb/lMe3XF1QzFAmWKZkMjPui4RVl4KALu1bRSHMMKIRoIzTZxUrOkXrGOG9gH5R
-         Hybul1nNGyoBixBZfBf3oHofUbYs6aDDQKhQ+dRs04XPFpFvCoDm7H+ZnpzH9hPykFOs
-         2b4n2wpyr8UhQR/1TPDHSxNA4pF4f0fjnLonvDuDtRG+4folZs9s1I5HadN+DbEj5dhd
-         5IAdlgkrYDZ8mAorgR5aUKhcKOCC/GbgkrdBdANfJ7bMH7TZy4SE46HV5IkZZ/LxdWVV
-         DYOw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790937615; x=1791542415; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Aluc5VLd/GgszPlfBHVygLWYzMV/6IhocC43q7cYG8Y=;
-        b=IkEFhlabPmFpC1Tlwe3N7oLA3hJDj3T7AQ70M6wl+fP3IlYD9uM3UaGbLJ8V2jExHC
-         4Apj90P/6wYOEpvy6d5Bp5qhHtpWRHf+6pl+EMJAk1mXZGNO0QQYGQ//aMVwqarlXTcR
-         JUAHvlUAQIizVuK4fedrvnh3DTTdXZ5BiguAEP6wMhrk+ity0fihM+SV2l+FqFnqrFTb
-         msPw81jE8PvJ5mhl2LGSJZEOu3/HcYSWIYyGRCloexk3XwBH5Zf9D0AZuR4hqD3olMyO
-         JWx1NdZ9x3nkE3KgBLOh0SpSclsweMY0nG18Rbz8lR7aOICJJtnOUZGeQI9hE2OmcJcb
-         5zqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790937615; x=1791542415;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Aluc5VLd/GgszPlfBHVygLWYzMV/6IhocC43q7cYG8Y=;
-        b=zxGutObsKBqLYeF2s62Fo08VFziMoUdiBLgGUfP+qfg0owMZ4bm2IXtV1RPVaaHXrD
-         oFgpin6LXtgM8ou6J3B9J4aVMxgEe+iKAtbs5yCnikmzEMzSV7h5yvjkqeafFAjE8iGY
-         0nYB6fzheQtk+qXvoIIUFUL16MfBDjg7QEeXq6N5ezkpl13WyQo/Xtqw66tv/4sQ9URi
-         VQ4zF/Y4KeZMuobWM+rWFXvwKs1PFvOL/fdMrxUwmCWx/5DVWq8dWSXb89LxqdGp2z5s
-         jx2Gw0GEqWB9dJEsHDoNiijCxCcjm8sVQMLiA2ZIDQdAXNJo8gW6DiRjTn7h0JxAHwDW
-         ftMw==
-X-Forwarded-Encrypted: i=1; AKwUvBxqmjY0hh4iESU3JdAEyR1iLZy71xafVuJXCX2cJVGyqsfmkQe1Tkk8NJRgaZJaLRmxCng=@vger.kernel.org
-X-Gm-Message-State: AFuF++mubetVV6kssErGSh3gcEGR9YEHhRLtZatHlHOXcnCfUrp2sXDz
-	YnlMGczD8dD3ruktpvQywLtl+pumuWQTwcS27+s2634W8dVp/liO9wgZcxcETdmBClFotw+ukjg
-	D1+otIfLU398lQy8kKToJdQNK0BxhEq4=
-X-Gm-Gg: AYBFou0cJrAJRIgDUybmJtputeKcbzAdRxa+DQ6vG6XOfiLwro3F2twa7U4on1DD6LJ
-	85ekUXWU4EayGCIjHyhJFkZ7/D9xc5co3fnE7hLxTFyFMMwkRWxQq8Wuusp3YNG6x1dbp7VzQhJ
-	diQG5yXU4ZA+FmdHlIPGW2J1mcF1XWeCW3I7TPa7KJryALHGeccFqFDW2DfKWMEdIjwn7X7AHAK
-	N80mMDukwOMj/Com/jL3ErpJlpwOh0xV5aPvwLR3wWF8zK3qA5OgNPxYsnmY88N3hI2OlzkbGFs
-	8PTcrnMJW0i3DIgN7VTohDwUOxOFBHYJPDq5tp5z90Gfgu97RdwaZLMOG5JYaaE+jA4pXJ0m
-X-Received: by 2002:a17:907:6ea4:b0:c2e:3546:516c with SMTP id
- a640c23a62f3a-c2e4b25913dmr200400366b.43.1790937614670; Fri, 02 Oct 2026
- 03:40:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MNONvmo/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9zEiGyfp";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MaNnL5uU";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DHzA805q"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CCBC621E88;
+	Fri,  2 Oct 2026 10:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790937756; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L8d0wskOPC8bqaDMsD74WV8L3K7R9l1OBqGDLyy6rFI=;
+	b=MNONvmo//Yui5lLij2JFZGxeNAnB9rIMs9p+xKn/d9FcumjDxYR2dIDTsNJol/FdbkF10T
+	NsUX09BxDDxTq4jn201X/D+Sp022nQ391nMcG7CrMaFC4/N78JEp/8yA8ROCIF4qlFMVJL
+	5tMDfJPaBzV2/GQkFEbV4C2rf9xhG0A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790937756;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L8d0wskOPC8bqaDMsD74WV8L3K7R9l1OBqGDLyy6rFI=;
+	b=9zEiGyfpW94K7GMQ5eYv5E+JxVY8cT83DV1HGonG77sFtBnm46sA5SknvAKy6z4i5YgapF
+	MAtM7MV/Nap+6uDA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790937751; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L8d0wskOPC8bqaDMsD74WV8L3K7R9l1OBqGDLyy6rFI=;
+	b=MaNnL5uUY89T6FfQLEp67gFSDGbEgAwD90I3KQ4IpCWP+gqcufgYDJ6FjecDZt4s9Pf1EV
+	x728kNuF5ys+eti2jTcZfs7U1P0Xu94Zpiwa0b5w2RaC7cmSd9CNGY9qAKK3DCvdNj2Za0
+	/gLsM3KpvKBVmACjwPajDQcDIKsj1iQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790937751;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L8d0wskOPC8bqaDMsD74WV8L3K7R9l1OBqGDLyy6rFI=;
+	b=DHzA805qo4cW/RLPXGcI8/LD8xddn1CcYn8RXvcM9Uymh7RyMSig6NyXOcrbLOYrV8K3cr
+	Hf/EmOjJK4s64pCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D60CF13C24;
+	Fri,  2 Oct 2026 10:42:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id qo8WK5aKv2qySwAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Fri, 02 Oct 2026 10:42:30 +0000
+Message-ID: <816f2ae9-e436-4b0b-ad1e-5f6067f69d70@suse.de>
+Date: Fri, 2 Oct 2026 12:41:24 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261002044050.1277356-1-thepacketgeek@gmail.com>
-In-Reply-To: <20261002044050.1277356-1-thepacketgeek@gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Fri, 2 Oct 2026 12:40:02 +0200
-X-Gm-Features: AclHuK9AVhCdx3zsz00yoixuqBqUrOwteFjJfeQNP6U0nNJc_amJox9UNxz5jVQ
-Message-ID: <CANk7y0iNFFyHW5zfTOeX23K+gozOOKgEWWWyG7Uty9Jo+VC-Yg@mail.gmail.com>
-Subject: Re: [PATCH] bpf, arm64: Fix text_mutex critical section in bpf_arch_text_poke()
-To: Matthew Wood <thepacketgeek@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Breno Leitao <leitao@debian.org>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2 1/1] ipv6: defrag: orphan skb before queuing
+To: Ren Wei <weir@nebusec.ai>, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ edumazet@kernel.org
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, joe@wand.net.nz,
+ ast@kernel.org, kafai@fb.com, vega@nebusec.ai, petalzu987@gmail.com
+References: <cover.1790850176.git.petalzu987@gmail.com>
+ <5c396b7011168cd98b9812df4d6bbd00a96048e7.1790850176.git.petalzu987@gmail.com>
+Content-Language: en-US
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <5c396b7011168cd98b9812df4d6bbd00a96048e7.1790850176.git.petalzu987@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,nvidia.com,davemloft.net,redhat.com,wand.net.nz,fb.com,nebusec.ai,gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,nebusec.ai:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Fri, Oct 2, 2026 at 5:40=E2=80=AFAM Matthew Wood <thepacketgeek@gmail.co=
-m> wrote:
->
-> Widen the text_mutex critical section in bpf_arch_text_poke() to cover
-> the page permission changes made while updating a bpf prog's plt target.
-> When a long-jump trampoline is attached to or detached from a bpf prog,
-> the plt target at the end of the prog is currently updated before
-> text_mutex is taken, by temporarily making the page writable:
->
->         set_memory_rw(page);
->         WRITE_ONCE(plt->target, plt_target);
->         set_memory_ro(page);
->
-> Leaving this outside text_mutex assumes the page belongs only to the
-> prog being poked, whose pokes are already serialized by its trampoline
-> lock. Commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
-> management") broke that assumption; it switched the arm64 JIT to the bpf
-> prog pack allocator, which packs programs into small chunks of large
-> shared allocations, without updating bpf_arch_text_poke(). Since then,
-> unrelated progs (and their plts) commonly share a page. Two CPUs
-> attaching to or detaching from different target progs in the same page
-> hold different trampoline locks, so their permission changes can
-> interleave:
->
->         CPU A                           CPU B
->         set_memory_rw(page)
->                                         set_memory_rw(page)
->                                         WRITE_ONCE(plt_B->target, ...)
->                                         set_memory_ro(page)
->         WRITE_ONCE(plt_A->target, ...)  <- permission fault
->
-> This was hit on a 64K page arm64 machine:
->
->   Unable to handle kernel write to read-only memory at virtual address ff=
-ff80008f46d5f8
->   FSC =3D 0x0f: level 3 permission fault
->   pte=3D00c00200ea5a0783
->   pc : bpf_arch_text_poke+0x214/0x238
->   Call trace:
->    bpf_arch_text_poke+0x214/0x238 (P)
->    __bpf_trampoline_link_prog+0x1c8/0x470
->    bpf_trampoline_link_prog+0x64/0x90
->    bpf_tracing_prog_attach+0x318/0x4a8
->    bpf_raw_tp_link_attach+0x104/0x258
->    bpf_raw_tracepoint_open+0x6c/0x90
->    __sys_bpf+0x134c/0x3e10
->
-> Fixes: 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management=
-")
-> Signed-off-by: Matthew Wood <thepacketgeek@gmail.com>
+On 10/2/26 11:25 AM, Ren Wei wrote:
+> From: Zixuan Chai <petalzu987@gmail.com>
+> 
+> IPv4 and nf_conntrack fragment queues orphan skbs before returning
+> -EINPROGRESS, but ip6_frag_queue() leaves the socket association intact.
+> 
+> A socket installed by bpf_sk_assign() may use SOCK_RCU_FREE and be released
+> while its fragment remains queued. The skb destructor can then dereference
+> a stale socket pointer.
+> 
+> Orphan the skb before returning -EINPROGRESS so the queued fragment no
+> longer retains the socket association.
+> 
+> Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+> Cc: stable@vger.kernel.org
+> Reported-by: Vega <vega@nebusec.ai>
+> Assisted-by: LLM
+> Signed-off-by: Zixuan Chai <petalzu987@gmail.com>
+> Signed-off-by: Ren Wei <weir@nebusec.ai>
 > ---
->  arch/arm64/net/bpf_jit_comp.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-> index 475e70653454..66fab0bfd3da 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -3338,12 +3338,20 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_po=
-ke_type old_t,
->                  */
->                 plt_target =3D (u64)&dummy_tramp;
->
-> +       /* pages of the bpf prog pack are shared between progs, so the
-> +        * set_memory_rw()/set_memory_ro() window below must be serialize=
-d
-> +        * against other pokers too.
-> +        */
-> +       mutex_lock(&text_mutex);
+>   net/ipv6/reassembly.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/net/ipv6/reassembly.c b/net/ipv6/reassembly.c
+> index 05c51f669754..a7964125c764 100644
+> --- a/net/ipv6/reassembly.c
+> +++ b/net/ipv6/reassembly.c
+> @@ -232,6 +232,7 @@ static int ip6_frag_queue(struct net *net,
+>   	}
+>   
+>   	skb_dst_drop(skb);
+> +	skb_orphan(skb);
+>   	return -EINPROGRESS;
+>   
+>   insert_error:
 
-Thanks for finding this and fixing it.
-
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
-
-Alexei,
-I am not worried about the comment style, can we merge this?
+Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
 
 Thanks,
-Puranjay
+Fernando.
+
