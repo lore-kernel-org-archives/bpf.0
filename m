@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-252.mta0.migadu.com [91.218.175.252])
+Received: from mta0.migadu.com (out-66.mta0.migadu.com [91.218.175.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2FC442392
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 20:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4D539DBE4
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 20:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790974204; cv=none; b=EFnIOjXxnfP1MgJAbX94vq11m1wcDer5YCKH4rJSSl98t3GRcC0H2rql+IsyZYJlhPFD2MpPIgRozEdd4hGmhghB27um/WQFY5MHqdUmTEy8T7zqV2QWWL2ZVx8XsI/q0DJ1H+1emOwPfR1z0Zqrs1bJdTcwHKpsDjavkXE7JWA=
+	t=1790974708; cv=none; b=unvXYbzw71mZN3XDglPuYxRYHZx3prBVEohyr/5bjgLdlfx45Dnhpvh/+NDfAdBsOHCLSXL9/weFEp69FbW/tjNFS4zmq/nS2rZbCqVCdPWd6dkgtfzCn2rkO6ddq0YnByZZow2DbVi6FPGc9TUTMiy28oKuWnh8y2yMk5xfuPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790974204; c=relaxed/simple;
-	bh=ZPf65Myl2eJmaSuCRmwkjhW/9RhzBR4xVfClE+kcfGs=;
+	s=arc-20240116; t=1790974708; c=relaxed/simple;
+	bh=cyE7xCmOBBATCOr27hlaYfNiIVy0ZG/W7o34fqS3PW0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AwD6XUPAVqn9JioYQi1Rnw43QA0Xkhu9CVDiuWCqF9t3hoD93YgNMpj/czO3w5sCBoV5OtrkKpQcouDbHBYIA+09Nznwfpt7Tj2nLnvealzBEx8xnhgNeNstMno73LbpSTApGk6hkyFmzsFMnLexXeC5Z9iqkpUXSGQtnglPJeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y5M7dhlw; arc=none smtp.client-ip=91.218.175.252
+	 In-Reply-To:Content-Type; b=D1xUuSeFJYz7NqeRzpcwC1HjzdJoBTyKcrIA3oMBCordSf//gWQAg9cZcHnPRUW6H7BjqDJS91jEOxoijJq2xlH+WBId2kb1dfSe322fC80CRmbXiHHpqND7iFF76YKHJ6AIPFpajZ2g6AUb8SaegYNBOwzlHP9e3fGjtTdJPFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P/+LF8JA; arc=none smtp.client-ip=91.218.175.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y5M7dhlw"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P/+LF8JA"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZPf65Myl2eJmaSuCRmwkjhW/9RhzBR4xVfClE+kcfGs=;
+DKIM-Signature: a=rsa-sha256; bh=cyE7xCmOBBATCOr27hlaYfNiIVy0ZG/W7o34fqS3PW0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790974195; v=1; x=1791578995;
- b=Y5M7dhlw9+16P4rzdCHz0Cv/DZsaeRkLJ7X/0yK6aJe+jVymnhqXiH7Ba1bcnLnHdGUv4kUI
- TU2ghQzTI57/snI2WwBWxXMxKhdd79H02V6NGfudgOVuWYduL2NE/QipRQbYivQPhOMt36oJJMf
- JRijN/U3A/Mb/RNQ2xDI1Sr0=
+ t=1790974700; v=1; x=1791579500;
+ b=P/+LF8JAtL/S55PfmNfVoO2iLPvvOluAdjixurWQ5W4f5BWB22jZLhoyVikeFLs2HgoOUw/W
+ 5oRAExQWGtK0Bm2IBduW1ozeh8p6+JNyDo4gF74RRSCYeMeo9NdxdoLD7Uh6CTmAprQ8WGMCmn5
+ omjO2ss6bJloR/S9/mjwY8iA=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fbb1300ba3647103;
-	Fri, 02 Oct 2026 20:49:55 +0000
-X-Mizu-Trace-ID: fbb1300ba3647103
+Received: by smtp.migadu.com with ESMTPS id 16a5b7b703a7aea2;
+	Fri, 02 Oct 2026 20:58:20 +0000
+X-Mizu-Trace-ID: 16a5b7b703a7aea2
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <5b7579be-e885-4b5d-9336-b4aaa2cc09d4@linux.dev>
-Date: Fri, 2 Oct 2026 21:49:54 +0100
+Message-ID: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
+Date: Fri, 2 Oct 2026 13:58:06 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,187 +38,200 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 07/22] bpf: Follow an unwind to its landing
- pad in the verifier
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261001133042.1339539-1-yonghong.song@linux.dev>
- <344ff8ec93e6d083a2e73cf866699be96593f5c7d7e46b704f7dc2d69e76cf48@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <344ff8ec93e6d083a2e73cf866699be96593f5c7d7e46b704f7dc2d69e76cf48@mail.kernel.org>
+Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
+ loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: alan.maguire@oracle.com, martin.lau@linux.dev, yonghong.song@linux.dev,
+ jolsa@kernel.org, qmo@kernel.org, nathan@kernel.org, nsc@kernel.org,
+ linux-kbuild@vger.kernel.org, linux@weissschuh.net, christian@heusel.eu,
+ mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
+ linux-modules@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
+ acme@kernel.org, namhyung@kernel.org, irogers@google.com,
+ linux-perf-users@vger.kernel.org, jikos@kernel.org, bentiss@kernel.org,
+ linux-input@vger.kernel.org, tj@kernel.org, void@manifault.com,
+ arighi@nvidia.com, changwoo@igalia.com, sched-ext@lists.linux.dev,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ojeda@kernel.org,
+ rust-for-linux@vger.kernel.org, arnd@arndb.de, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, abuehaze@amazon.com, doebel@amazon.de,
+ mpohlack@amazon.de, jay.wang.upstream@gmail.com
+References: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
+ <20261002073422.14253-1-wanjay@amazon.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20261002073422.14253-1-wanjay@amazon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+Hi Jay, thank you for taking the time to reply.
 
+On 2026-10-02 12:34 a.m., Jay Wang wrote:
+>> A question I had: is it really worth 2k of complicated kernel code to
+>> *maybe sometimes* save <10Mb of memory?
+> 
+> There are many reasons this is worth it.  The main ones:
+> 
+> 1. This did not start from a number we picked, but from a real use
+>     case: users who run large fleets of small instances, 1 GiB of
+>     memory or less, with their workloads sized to fit.  We are not able
+>     to disclose more detail, but for them 5.4 MB on every instance is
+>     real money, and it can be exactly what pushes a workload over its
+>     memory budget and onto the next instance size.  That is why we took
+>     this on, even though we knew it would not be a small change.
 
-On 10/1/26 7:31 AM, bot+bpf-ci@kernel.org wrote:
->> bpf: Follow an unwind to its landing pad in the verifier
-> TL;DR:
-> - Global call that unwinds without a landing pad may hit a verifier bug
->    warning in backtrack_insn() on fentry/cgroup_skb programs
-> - bpf_unwind() skips no_stack_arg_load, so a stale R9 arg-6 load may pass
->    verification
->
->> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
->> index 0e38b9575328..f5504334df90 100644
->> --- a/kernel/bpf/backtrack.c
->> +++ b/kernel/bpf/backtrack.c
-> [ ... ]
->
->> @@ -434,6 +458,24 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->>   					return -EFAULT;
->>   			}
->>
->> +			if (bpf_exc_pad_of_call(env, idx) == subseq_idx) {
->> +				/*
->> +				 * We came from the landing pad of a call to a
->> +				 * global subprog, branched to from the state
->> +				 * the call returns in: as on its return, no
->> +				 * frame was entered here. The call clobbered
->> +				 * r0-r5; r6-r9 and the stack are the caller's
->> +				 * own and keep going back from here.
->> +				 */
->> +				bt_clear_reg(bt, BPF_REG_0);
->> +				if (bt_reg_mask(bt) & BPF_REGMASK_ARGS) {
->> +					verifier_bug(env, "landing pad unexpected regs %x",
->> +						     bt_reg_mask(bt));
->> +					return -EFAULT;
->> +				}
->> +				return 0;
->> +			}
->> +
->>   			/* callx calls static subprogs only */
->>   			if (subprog >= 0 && bpf_subprog_is_global(env, subprog)) {
->>   				/* check that jump history doesn't have any
-> Can the existing idx + 1 != subseq_idx check in this global branch now fire
-> for a global call that unwinds with no landing pad?
->
->      verifier_bug_if(idx + 1 != subseq_idx, env,
->                      "extra insn from subprog");
->
-> In that case unwind_out_of_global_call() takes the pad < 0 path into
-> unwind_frames(), and when unwind_frames() reaches the main frame it pushes a
-> history entry with no flags:
->
->      env->prev_insn_idx = env->insn_idx;
->      env->insn_idx = state->insn_idx;
->      err = bpf_push_jmp_history(env, state, 0, 0, 0, NULL, 0);
->      ...
->      return process_bpf_exit_full(env, do_print_state, false);
->
-> The entry's prev_idx is the global call insn, so INSN_F_UNWIND is not set.
-> For program types where return_retval_range() returns true (fentry/fexit,
-> cgroup_skb, struct_ops), process_bpf_exit_full() -> check_return_code() calls
-> mark_chain_precision(env, BPF_REG_0).
->
-> The backtrack then reaches backtrack_insn() with idx at the global call and
-> subseq_idx at either the same insn (call in main) or the call site in main
-> (static frames popped first).  The INSN_F_UNWIND branch does not match, the
-> bpf_exc_pad_of_call() == subseq_idx branch does not match because no pad
-> covers the call, and the walk lands in the global branch above, where
-> idx + 1 != subseq_idx is true.
->
-> The result is a WARN_ONCE() (a panic with panic_on_warn) and a "verifier bug"
-> message in the log, although the program is still accepted.  An example is an
-> fentry or cgroup_skb program calling a global subprog that calls
-> bpf_unwind() with no record covering the call, or main -> static A -> global
-> G with no records.
->
-> The selftests in the series all use SEC("syscall"), where
-> return_retval_range() returns false and r0 precision is never requested at
-> exit, so they would not reach this.  Nothing later in the series touches
-> backtrack.c.
->
-> Should the main-exit history entry get its own flag, or should this global
-> branch handle that entry before applying the idx + 1 check?
+Ok, good to know there is a real customer for this.
 
-Yes, this global branch should handle that entry before applying the idx + 1
-check (global function) and we can add INSN_F_UNWIND to this jump history
-to keep later continuing doing static function.
+Obviously I don't know any details of the use-case apart from what
+you've shared. But bear with me trying the customer's hat on:
 
->
-> [ ... ]
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 80034429fdd0..c7a350be538e 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> @@ -19380,13 +19520,32 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
->>   					return -EINVAL;
->>   				}
->>   			}
->> +			if (bpf_is_unwind_kfunc(insn) || bpf_is_unwind_resume_kfunc(insn)) {
->> +				err = check_kfunc_allowed_only(env, insn, env->insn_idx);
->> +				if (err)
->> +					return err;
->> +				if (bpf_is_unwind_kfunc(insn))
->> +					return process_bpf_unwind(env, &env->insn_idx,
->> +								  do_print_state);
->> +				/*
->> +				 * The fixups lower this to 'r0 = 0; exit', and
->> +				 * the unwind goes on below this frame.
->> +				 */
->> +				return unwind_frames(env, do_print_state);
->> +			}
->>   			mark_reg_scratched(env, BPF_REG_0);
->>   			if (bpf_in_stack_arg_cnt(&env->subprog_info[cur_func(env)->subprogno]))
->>   				cur_func(env)->no_stack_arg_load = true;
-> Does this early return skip the no_stack_arg_load assignment that every
-> other call insn gets?
->
-> For bpf_unwind() with a pad in the same frame, process_bpf_unwind() goes on
-> at the pad in the frame that made the call, with no_stack_arg_load still
-> false:
->
->      clear_caller_saved_regs(env, frame->regs);
->      mark_reg_unknown(env, frame->regs, BPF_REG_0);
->      *insn_idx = pad;
->      return INSN_IDX_UPDATED;
->
-> On x86, do_jit() turns a load from BPF_REG_PARAMS at offset 8 (incoming
-> arg 6) into a read of R9, which is caller-saved and clobbered by any call.
-> check_stack_arg_read() relies on no_stack_arg_load to reject such a load
-> after a call.
->
-> So in a subprog with more than 5 args, would this sequence pass
-> verification?
->
->      call bpf_unwind        // record covers it, pad P in this frame
->    P:
->      r1 = *(u64 *)(r11 + 8) // incoming arg 6
->      r2 = *(u64 *)(r1 + 0)
->
-> check_stack_arg_read() gives r1 the type of caller->stack_arg_regs[0], which
-> can be any spilled type, including a pointer such as PTR_TO_MAP_VALUE, but
-> at run time r1 holds whatever bpf_unwind() left in R9.
->
-> Would it work to move the mark_reg_scratched() and no_stack_arg_load lines
-> above the unwind branch, or to set cur_func(env)->no_stack_arg_load in
-> process_bpf_unwind() before going on at the pad?
->
-> The unwind_out_of_global_call() pad path looks unaffected, since the
-> PSEUDO_CALL path sets the flag before check_func_call().  do_check_insn()
-> has the same ordering at the end of the series, where both kfuncs become
-> callable.
+   - I am running a workload on a legion of 1GiB instances
+   - I care about memory footprint a lot, because it directly
+     translates into the amount of compute I pay for
+   - If I know I don't need BPF on the workload, and these 5.4 MB
+     bite me, I can just turn off BPF
+   - If I know I need BPF, then those 5.4 MB must be loaded anyways, so
+     I have to look for savings elsewhere
 
-Yes, you are right. The below:
+What I find strange is for a user of this scale *to not know* whether
+BPF will be used in the workload or not, which is what lazy load may
+solve.
 
-  			mark_reg_scratched(env, BPF_REG_0);
-  			if (bpf_in_stack_arg_cnt(&env->subprog_info[cur_func(env)->subprogno]))
-  				cur_func(env)->no_stack_arg_load = true;
+One thing I can imagine is an opaque workload: untrusted (AI agents
+etc), end-user-defined (including BPF usage), or confidential.  But in
+these cases, what are the chances that BPF is used there? They are
+high, BPF is very widespread.
 
-should be moved earlier so later some prog checking can inherit some
-choices.
+I can also imagine normal workload not needing BPF, but when something
+goes wrong an observability or security thing turning on that loads
+BPF programs. But this contradicts the "5.4 MB may push workload over
+1GiB" premise: you still need to reserve/swap memory for just-in-time
+BPF-based tools, otherwise you OOM.
 
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36872142096
+I of course may be missing something, happy to be corrected.
+
+> 
+> 2. Loading code and data only when a system needs them is what kernel
+>     modules exist for.  And most of them take well under ~1 MB once
+>     loaded (nf_conntrack, overlay, vfat); even big ones like ext4, kvm
+>     and btrfs stay around 1-2.5 MB.  The vmlinux BTF is 5.4 MB.
+
+True. At the same time BPF without vmlinux BTF is barely useful. And
+it is trusted by the verifier. Both are addressed by BTF being
+built-in in the kernel image.
+
+> 
+> 3. We are not alone in trying to keep BTF out of memory until it is
+>     needed.  The inline BTF work [1] plans to deliver its data, which
+>     is even larger, through a module too.  The .BTF.link record and the
+>     resolve_btfids option that serve both are already part of this
+>     series (patch 10), so this is not machinery for the vmlinux BTF
+>     alone.
+
+The inline data is different. It's bigger by it's nature, and it has
+more specific users: tracing tools. The userspace tools are able to
+themselves decide whether to use that data. The kernel only needs to
+make it available.
+
+In comparison, as you yourself noted in the cover:
+
+     CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and bpf-lsm
+     all depend on vmlinux BTF
+
+> 
+>> Do those tiny VMs that you target run systemd with BPF LSM?
+> 
+> Not necessarily, and that is the image's choice.  Even with BPF LSM
+> built in and bpf in CONFIG_LSM, memory-conscious users can turn it off
+> at boot with an lsm= list that leaves it out, and then systemd does not
+> load restrict_fs at all.
+> 
+> And even where user space is in the way, which as above it does not
+> have to be, the answer is to fix user space so it gets this win too,
+> not to give up on it.
+> 
+>> If the answer is "yes" for the majority of them,
+> 
+> "The majority" is also hard to pin down here: what runs at boot
+> depends on the user space packages built into each image, and on the
+> workload.
+
+Yes, it is hard to pin down. Which is why we first need to figure out
+whether the alleged memory savings actually help anyone.
+
+Adding code to the kernel is not free. More complexity means bigger
+bug surface: more opportunities for concurrency bugs, security bugs
+etc. Especially runtime loads with retries and stuff. I'm sure you
+understand the future cost of all that.
+
+So the bias shouldn't be "let's implement a big thing that might
+hypothetically help someone". It's backwards IMO.
+
+> 
+> So the question should be what it takes to make this work, not whether
+> to drop it because it is complicated.  If there are ways to cut it
+> down, or issues found in the implementation, we would be happy to take
+> them and go through every one.
+
+The question is in the trade-off.
+
+Would you run a million line python program to search for a string in
+a text file? No, that's absurd. But you could.
+
+I'm not saying 2k line patch series is unacceptable in principle. It
+may be justified. But I am not convinced it is justified in this case.
+
+Let's say we (as in kernel devs) decided that we want to reduce
+vmlinux BTF size, and only load it when necessary. Here are a couple
+of alternatives, simpler in comparison to CONFIG_DEBUG_INFO_BTF=m,
+although still a bit complex:
+
+   * Compress it.
+
+     $ ls -lah /sys/kernel/btf/vmlinux
+     -r--r--r-- 1 root root 6.7M Jul 18 01:54 /sys/kernel/btf/vmlinux
+     $ tar --zstd -cf /tmp/vmlinux.btf.zstd -C /sys/kernel/btf vmlinux
+     $ ls -lah /tmp/vmlinux.btf.zstd
+     -rw-r--r-- 1 isolodrai users 2.2M Oct  2 10:11 /tmp/vmlinux.btf.zstd
+
+     3x win right there.
+
+     Keep zstd-compressed blob in the kernel image and decompress and
+     parse it synchronously on first use.
+
+     Here is a prototype (vibe-coded, obviously):
+  
+https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:vmlinux.btf.zstd-20261002
+
+   * Use an external blob.
+
+     Ship /lib/modules/$r/vmlinux.btf, checked against a SHA-256
+     recorded in the image. The catch is a synchronous file I/O under
+     caller locks, so this is less straightforward.
+     But this should cover embedded case that Alan has mentioned.
+
+     Here is a prototype:
+  
+https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:vmlinux.btf.external-20261002
+
+Both alternatives avoid kernel-module loading machine. If we think
+harder, we may come up with something even more clever.
+
+I don't particularly prefer one approach over the other, including the
+module one. Maintainers probably have a better intuition on that.
+
+The point I'm trying to make is that if you could achieve similar
+memory savings with say 500-line well encapsulated diff (or even
+better: by refactoring, simplifying, deleting code) it would have
+already landed.
+
+And if it was a 50-line patch, the discussion on whether anyone cares
+wouldn't be relevant, because it's so cheap.
+
+As it stands, it's not clear (to me at least) in what circumstances
+we'll get the promised memory savings at all.
+
+> 
+> 
+> [1] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
 
