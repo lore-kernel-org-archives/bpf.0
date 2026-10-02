@@ -1,45 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5671E498918
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 13:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A2E42E424
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 13:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790946505; cv=none; b=E8OaZhEqPfAsC2scG/gF0DpgotGgCrS9WkMEJSoKcxP3gT7P9Vnz8BYgm5Rzq0nUmIzIXhlY3dTecSeyYNotiWCid7gRYmvYj6FYr7m+qNGUkLAMQE5N9yFu9EQqb7DO1pVvfLJVnOFk3fGD/x2niEy3wSvdAzKi1Zwwcm1NYa0=
+	t=1790946511; cv=none; b=ANJwzgyvlcO00rK0QtZdKR/YnETncFQXRGJMi4oe/LCQz8nShNZiUgCzlL9irL+6YO7geCNpEypoyQZ1ALEQDtP1xqai22KewLtnI4TjoyeSdfoFWTJbHZALIvh6vu4dGUqZVqFVCEBtUbuwp2xBAqCULtKXfHgoheLVsvCcxIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790946505; c=relaxed/simple;
-	bh=5wSAEahH9cAQEKwatoSdFKO0aE9BxweuQlJhzvnO/Ps=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CIlnpoymGEKSQIs/qe9P2SJYnwLJTri32CSnO0iTyf+SaKwdnvWNxot+wEIDJXDZ+cYeUuTsEnhrYKVukEhsBAfqPojSsPA21QdBy3gi7SUWh+tZOdFCEN7I2GkVKdRMdresItijMavkNlsdPTEmbTsgeAiyOFfAm8QCW+gE6es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vmpe9hWR; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1790946511; c=relaxed/simple;
+	bh=hpORNAInQY4YIDil5qPoyicTIbpKgGs8vIsuPQzrju4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=E031tUHkKoBEfeVSSI8Im1FWA3KJwutoz6kmBtGqD47CqG8FHpc2FqCt5qt+8eW1qWzydjsrcAbW1TWriMs9lFcPlGvjcryDobpIo0RixepcZhI+T0d7+TfL6x0qp/ItJFpOGLjjGn2bpsq8TSoevc3l/QFlGLGBaMsIg0IB12I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BrDlB+xG; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vmpe9hWR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BrDlB+xG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790946494;
+	s=mimecast20190719; t=1790946500;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lUHnkDSrrfCXFMH8IJydTfHAXtd3mYVbUu8G9r9OmXs=;
-	b=Vmpe9hWRx73GmDQlvFZrniapy1j8egX8ThZG0SCrzxgZLPCWkJq4bZn+PpsEXjMsfx8KhT
-	Z03wFlfoYDbITI6cjumNkZA65gWEYTC8/WV27EmBsrg+TanqXf9kdifSMGJzICbpnyR/bP
-	NKl1eMGvrG73Qvw4CXkm3rVFH011pr8=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Zob1KtCjSCYBg2TkSrCdgcCYXcxGjfohAaytPDnT6AI=;
+	b=BrDlB+xGtW6AFVmIJ/DTvMgZE4Byrr1G8VmjWOycuagWB0lLtKokmd70RZ1yoYkngxJICk
+	D3VF4s8tXGP/xGup78Vm9XNbr/Qao7i8CMHfDLiBO2ze5gbvuRdzPnqjt9HsbOND67csTL
+	LC/5G71EVYlnkgIAiCHQMOK3Q3tDBw4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-48-VTi12gDzPNeEvE01KJKvzg-1; Fri,
- 02 Oct 2026 09:08:08 -0400
-X-MC-Unique: VTi12gDzPNeEvE01KJKvzg-1
-X-Mimecast-MFC-AGG-ID: VTi12gDzPNeEvE01KJKvzg_1790946484
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-358-PRbX39NwOhW8XAmihcVDpw-1; Fri,
+ 02 Oct 2026 09:08:15 -0400
+X-MC-Unique: PRbX39NwOhW8XAmihcVDpw-1
+X-Mimecast-MFC-AGG-ID: PRbX39NwOhW8XAmihcVDpw_1790946492
 Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E20A118F4BE8;
-	Fri,  2 Oct 2026 13:08:03 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7919E1800627;
+	Fri,  2 Oct 2026 13:08:11 +0000 (UTC)
 Received: from ShadowPeak.redhat.com (unknown [10.44.32.39])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CA859433;
-	Fri,  2 Oct 2026 13:07:55 +0000 (UTC)
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 52B8B214;
+	Fri,  2 Oct 2026 13:08:04 +0000 (UTC)
 From: Petr Oros <poros@redhat.com>
 To: netdev@vger.kernel.org
 Cc: Petr Oros <poros@redhat.com>,
@@ -67,9 +69,11 @@ Cc: Petr Oros <poros@redhat.com>,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH iwl-net 00/10] ice: port missing i40e fixes
-Date: Fri,  2 Oct 2026 15:07:42 +0200
-Message-ID: <20261002130752.2597259-1-poros@redhat.com>
+Subject: [PATCH iwl-net 01/10] ice: replay UDP tunnel ports after a core or global reset
+Date: Fri,  2 Oct 2026 15:07:43 +0200
+Message-ID: <20261002130752.2597259-2-poros@redhat.com>
+In-Reply-To: <20261002130752.2597259-1-poros@redhat.com>
+References: <20261002130752.2597259-1-poros@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,56 +83,53 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-This series fixes bugs in ice that have been fixed in i40e, some of them
-years ago, but are still present in ice. They were found by going
-through the i40e history and checking each fix against the current ice
-code.
+A CORER, GLOBR or EMPR reloads the DDP package in ice_rebuild() and
+ice_init_pkg_hints() clears hw->tnl, so every offloaded VXLAN and GENEVE
+port is gone from both the boost TCAM and the driver table. The
+udp_tunnel_nic core is never told about it and still considers the ports
+programmed, so the Rx tunnel offloads silently stop working after the
+reset. With VXLAN port 4789 offloaded, 64 flows that differ only in the
+inner headers are spread over all six Rx queues of the test port by
+RSS, after a CORER they all land in a single queue, the same as without
+the port. Removing the port later trips the WARN_ON() in
+ice_destroy_tunnel() because its table entry is no longer valid:
 
-Patches 3, 6 and 8 have no i40e counterpart. They showed up while
-verifying the ports and are kept in the series. Patch 3 was found while
-testing patch 2. With the IRQ unwind fixed the netdev still could not be
-opened again after the failed ndo_open, so patch 2 alone does not make
-that error path recoverable. Patch 6 was found while building a
-reproducer for the i40e MAC filter overflow fixes. Those are not part of
-this series, because a full switch table on E810 leaves no room for the
-promiscuous rule either. Patch 8 was found while checking the i40e PF
-reset fixes. It is an ice regression of the poll loop timeout check,
-which i40e does correctly.
+  WARNING: ice_flex_pipe.c:524 at ice_udp_tunnel_unset_port+0x56/0x280 [ice]
+  ice 0000:04:00.3 enp4s0f3np3: Error removing UDP tunnel - -5
+  ice 0000:04:00.3 enp4s0f3np3: UDP tunnel port sync failed port 4789 type vxlan: -5
 
-Every patch was checked on E810 before and after the change. Patches 1,
-4, 5 and 6 have plain reproducers, which show UDP tunnel offload lost
-after CORER, an always empty default XPS map, VF tx_dropped stuck at
-zero and multicast filters silently not programmed. Patches 2, 3, 8, 9
-and 10 need conditions the test box does not hit on its own (a failing
-request_irq, a hung PFR, a WoL capable port, counters past 2^32) and
-were verified with fault injection. Patch 7 was verified by filling the
-switch table, with debug prints for the failure analysis.
+Call udp_tunnel_nic_reset_ntf() once the main VSI is rebuilt so the core
+programs the ports again. A PF reset keeps the package and the table, so
+it is left alone. No rtnl_lock is needed since commit 1ead7501094c
+("udp_tunnel: remove rtnl_lock dependency").
 
-An LLM was used to go through the i40e history, to write the
-reproducers and fault injection hooks and to draft the patches and
-changelogs. All of it was reviewed, and every fix was tested on E810 as
-described above.
+i40e fixed the same problem in commit 1f190d936948 ("i40e: Reprogram
+port offloads after reset").
 
-Petr Oros (10):
-  ice: replay UDP tunnel ports after a core or global reset
-  ice: fix IRQ freeing in ice_vsi_req_irq_msix() error path
-  ice: stop the LAN Tx queues when ice_vsi_open() fails
-  ice: restore the default XPS map after a netdev TC change
-  ice: report VF tx_dropped with tx_errors instead of tx_discards
-  ice: keep adding MAC filters after one that already exists
-  ice: take the switch rule AQ error from the response descriptor
-  ice: detect a PF reset that does not complete
-  ice: program multicast magic wake before tearing down the main VSI
-  ice: fix unsigned stat widths
+Fixes: a4e82a81f573 ("ice: Add support for tunnel offloads")
+Assisted-by: LLM
+Signed-off-by: Petr Oros <poros@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_main.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- drivers/net/ethernet/intel/ice/ice.h        |  8 ++---
- drivers/net/ethernet/intel/ice/ice_common.c |  2 +-
- drivers/net/ethernet/intel/ice/ice_lib.c    |  6 ++++
- drivers/net/ethernet/intel/ice/ice_main.c   | 36 ++++++++++++++-------
- drivers/net/ethernet/intel/ice/ice_sriov.c  |  2 +-
- drivers/net/ethernet/intel/ice/ice_switch.c | 17 +++++++---
- 6 files changed, 49 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 8c4b0fbc790644..f2121e79fca993 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -7859,8 +7859,11 @@ static void ice_rebuild(struct ice_pf *pf, enum ice_reset_req reset_type)
+ 		ice_rebuild_arfs(pf);
+ 	}
+ 
+-	if (vsi && vsi->netdev)
++	if (vsi && vsi->netdev) {
+ 		netif_device_attach(vsi->netdev);
++		if (reset_type != ICE_RESET_PFR)
++			udp_tunnel_nic_reset_ntf(vsi->netdev);
++	}
+ 
+ 	ice_update_pf_netdev_link(pf);
+ 
 -- 
 2.55.0
 
