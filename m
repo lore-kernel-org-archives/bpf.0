@@ -1,73 +1,73 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7EC48382C
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903F846EF8F
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790945265; cv=none; b=PjNEcRL5ECdNUMGHGUJQXdt1kLmijVj2EiNEp9kzYmwILM+SmUxv2cPZq3UyepE8dDh41PBSMGCNOs3lJZMnYYDSt4LGEfCvgY4RCHPlWEm/BqqOLpVLAKHLRlCZmmJl1WbLg4tYidqlrMbOwU0pRjGNpBqo3l5cfGi5VgguVcw=
+	t=1790945267; cv=none; b=DMgdMnnzeXKQEmlkieDHW6ercW8g6B6thI8K5ew7SJADgy0t5ppW3YdwNzc8XxLLb2DRPRJL/0bT3ruGeADQ/3curUQ7mf0vaAUKQNfl8mcuJzGih2/sAI4LjHXno0Vyupd580fWVZr3HGHoxpSN+kULKZ5itMy5cCAPa4F1ISA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790945265; c=relaxed/simple;
-	bh=fVoa5FFdEpTsPAaYdOL3sUow0aaticEn1RxLrRHgPO0=;
+	s=arc-20240116; t=1790945267; c=relaxed/simple;
+	bh=cXsYLl+Q8b7d4MawPZruPSdeYinL4Su1gmiN1V7BG8I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZLnnr1CF8q4EY9PAnRX9ku8mtMymCUIt6CT4un75nXKJ4dIBpwfcV0I8RVkn3uqJkE+oedDyS/xiXWS1axXECacTIcRDMEaZ2Ow/odBNSKCdvhgEKCW6xsBz/c7ZYuUr2oqTdZQKiBoa8D6KM5EE2La96pi1iWVJEKi5/0YTSsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hkk75w55; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=Ox5aaKNyEBTJIVpijNz+TGSR8iyYZFsBfMwnf4cPLBzzqeiAXCCCszyWWsNIg3ZMPcvKnSglm+/RFFK4NbXlTn/DZUZ/Pa4eTbyWsDbbLTsD845CmAbDcrJv6nM55rshypLJ/zcNCjmxyLR1+bzd69V7nRWEqokz6DUhTVWKgIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=htpKZI5W; arc=none smtp.client-ip=74.125.227.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hkk75w55"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccdaea76so2305531a91.0
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:47:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="htpKZI5W"
+Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a6d43df6bcso369619a91.1
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790945263; x=1791550063; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790945266; x=1791550066; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=JORCgLRdBAWYfnPFtHUXchWkMBuOAZ30jdO8B2N6V+k=;
-        b=Hkk75w55xFgdYBNi7LqnqVEFekveqVvcJV4hT8XAOpjnx9OiV2fFRI2Md4dYjXdxoE
-         Uv1heO0AwIbI6oBSHz8iWYXg8bbpyQgte9lhXEoABBGTOE9eSHgbrLiJd+iaZ6dl07Za
-         u7HNrsNPlsP3y3BLcYo4XsHZ7r/nHlcTPTEI3rDDOjiHYeMF7cs9qmwr5XUl7L8uSqWM
-         bYtbu9FszsTHnP4K7fhBudxo5hk1NYWyiNnKOtwW0MNXWUgKWmNcfPpbN0rT9LXyxbtv
-         gRtOfKy8s8jRJTG/RLoOlgWdV/ZnXrm55y1t8Av6Q2Xpc8TG9uIL/A84b+b2hQSg5cbg
-         jrVg==
+        bh=nBSAjtoxhys8Ve8fY2ylGFq7eYlflq9DlF7aYF9S30Y=;
+        b=htpKZI5Wlk3rCIPfrY2SaVMbp5mA9denNuZWZcperQ0ODzsUyf1uoqvBMHWjc3nnwV
+         o7Xtd+nrosPRCAhuEoldwwgow7yK8CSOUIE/CixP8Ygc07zPuxDyrxE04m29rWbnmf2z
+         M111bruUQkkxI/UVgbRZXHdLEV7NxOCqsfCOm1DAgU1UVjes9z3vOZgQWrteWU5qXs5p
+         dKXbpgt7sAuScjbYWZ9Vi4+bufOEccLWs1AwU1+SYg5a/PzMCH5xSpQN0uVYjMZrecrv
+         EanhxLvRX9UL86tw48JHX0zULEBHW51QViEkCftUaHQ+2oII2s3UMaDhPgbK5KKDgE6W
+         qXIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790945263; x=1791550063;
+        d=1e100.net; s=20260707; t=1790945266; x=1791550066;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JORCgLRdBAWYfnPFtHUXchWkMBuOAZ30jdO8B2N6V+k=;
-        b=M1SMwBbwiTnwovWGoEpeqmcP3GwMzfCeax9ypwno11fSTsW2e9X8AJEchV41xMQ4py
-         J/BGiWRpbdUS0S861jHilLfpTaxZg+bB2tLLNHwbysLbLzXy9jtI9Jc0PsnarqM5Nd0e
-         tOvO4Nbj4/J1MwadvjqU2UHmCotk9ufcxF7WkusOipfBNqg3NtjvXRVs0D+xq00z8PqW
-         xK7wJJY89k7HEuhfq9emB9aFsudlyDzOLbuXnH6ZI/yMJcJZQQ7yEV7sd4qbZ2dhQgON
-         A34ex/Lzds0ehcmDKIdgxp2uOXWynI3N2kJ9JmQZE79CnfqqwqBwV/lKmJcCLZp6iGtB
-         LmzA==
-X-Gm-Message-State: AFq9FYIGgzYDSmtwrV0staTahuHwnZqKnqQyRJLfJbZxUMValUp+XTTL
-	Bl7dU5RIjcppLuNlldTt75aAiXF2R8GPKwF9XjXXXbKv1I8swzwij9dQ7LqT5AZacd0=
-X-Gm-Gg: AYBFou2g8/igmH123/8ObyVnElrIQSLMowY3Rvay6tau7SbhReDTtUAstTm2rDW6Vzy
-	SWN/yOwmSPtQmkVgZwc0SCt4l+tMoPFvhBTsOeJ7NYLSO4jnlCWbtEgCyosyLZy5rtFhgvi7p+m
-	e1G3dMCaNMzgoMz/JZh+ODru5Cdii9wVJBFPHmQ/6aSx6q0DU6AIxpQ+LmE2WevmURR/ZWlsPBa
-	dMVStwja10yUxuZjKtPUN0LX8KBJWgVeMnJicJdJ1M3JuTmaItlrGBrw3pOzpPYQX21MTCqutsa
-	A6rlVC9pLhmIzsCEpiifmfd+DZ1lZzqX8f69AsFLUwRvEVdXVc93uDWrIVVTE0uLMX5ApUFZWxj
-	BHUlnr3559Fu+JYs3oryih+z+Upyj8VooLqiDH5XZj5FLbd+qvx/yCxYnJZ+AcMYTA1EtJf4sgs
-	osVipZSf365B6WCqpfHo8pe6nIEZ+WN3TLhro+jG3uwtTPFjo+5Oy3Eeh/9d1qZxY7yJDkkDsvO
-	7HkEuOBG8l+O9ZiM35VQJ8vioLmv1+kcLjD2JZDDkNdXzymNXEg8cTqynZvcZ7LT2nIzDmeyeFb
-	Snt4OUQ4GWkTQDzuIDeAQpA+4IQ99MepqAr1XLJeDTQ=
-X-Received: by 2002:a17:90b:5483:b0:3a4:b509:88be with SMTP id 98e67ed59e1d1-3a6ce981729mr1455782a91.15.1790945262975;
-        Fri, 02 Oct 2026 05:47:42 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6f734ae3dsm795135a91.2.2026.10.02.05.47.42
+        bh=nBSAjtoxhys8Ve8fY2ylGFq7eYlflq9DlF7aYF9S30Y=;
+        b=t/LdB24pzJ8BcbSguE6xWTEHHty62mBVSl/svwkDtWqaJFyxN694eAI2pVE3U0vcqy
+         mJZ81kgV+OyG0whR5fH/KYUB9fFJ4xJnG2Hhewm4IQqs0J1lTqejwXEvlB3HjgFbQBwD
+         GUGgEMRQKCNVrmsBh3A+Vg2IA4Bdiwh/G3N2/E52XzMwEpuohTw3qGz9F7Kq9guV2FDf
+         L8Nd5Y0pHv4faUm8frXOlrZQLwny8dMbR8yaYfc/l+dTWZOIB7bsVxi+qI9m2Kb9Oiu5
+         j3Y0kxGIMWuM8X3H/UvSErEkEMJZnok1AfnVTy6vQmL8IUCzbHx3JQjA+0njvuGHtu+W
+         iEOQ==
+X-Gm-Message-State: AFq9FYJrbXilFPJ7GZIEAhezlyXh52VFYX3pKjjTMlsFcZAkS2S8JU3m
+	200VhouTlfKlJjJ07Cz4nPEvaK4zlKZ/gWYEaOF3V0/0Ivvv8GGJ5+JfYjnkPbZ0m3Q=
+X-Gm-Gg: AYBFou0IxbeIcjYXtGuXQ7e/Ablg4rkn1BUQc/7H5tiJGpP/NS+Qik0DYljhakU/RpW
+	IggfJRH4CFqTDfmXX+rHmrPvSnBh50L+HuopyWPySjwGIcHKiKBRwVhsy/lNSOAcbXg6WCKM6iY
+	Ih/1i8DBNQCNy+i3JcCUfsQWUC4vbZUYidDtlTBWNianzvuyiqPLeQPUiIFOQsdVyTmNt9NH2Ka
+	Alf8W9bLb1pETr4idMi+KpNnwlBxpURpAxOAHNCV5QRg0m17EQz3I7ZdSPkHsEDi9S2pJm9zEiu
+	73GgegHvYWhqiLBJufuXVnW+EPsawdXZc9muuIp1lTlr06L7H98UXcdLAzP/2riuV0D8r/PnJHB
+	nHNZD4yQ12VanL1TpWQkc4twbaqa16xO42+/L7pxSp4FuMLuQVXaNOIebDB+PmG//mspBarNaSx
+	8tTKvsKIIrn9cQPB5y/lcXUoHc6QOyHqPdn5SFadxyA4Cr2vrV+5U3OWUmplLCrTjLCwIEhSeJX
+	A7mdc/t3vZLgu/buL/bFL0gWh7K6OoT8GWlbnTk9PfvVHIAZ1c4yPZWQsJI9j+YSDvRyNhAliKZ
+	fWt+bXsPTRK6vxZVij6/Qddba1xr5B1eexpXrQms55s=
+X-Received: by 2002:a17:90b:498b:b0:3a0:a912:e759 with SMTP id 98e67ed59e1d1-3a6ceaab429mr2306505a91.25.1790945265788;
+        Fri, 02 Oct 2026 05:47:45 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6cd44c2besm3957378a91.3.2026.10.02.05.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 05:47:42 -0700 (PDT)
+        Fri, 02 Oct 2026 05:47:45 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 09/15] bpf: Allow a variable in DATASEC that is smaller than its type
-Date: Fri,  2 Oct 2026 12:47:08 +0000
-Message-ID: <20261002124714.180012-10-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 10/15] bpftool: Skip pieces of variables in DATASEC
+Date: Fri,  2 Oct 2026 12:47:09 +0000
+Message-ID: <20261002124714.180012-11-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002124714.180012-1-alexei.starovoitov@gmail.com>
 References: <20261002124714.180012-1-alexei.starovoitov@gmail.com>
@@ -81,152 +81,101 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-LLVM splits a static of a Rust program into pieces. Every piece is a VAR
-with the type of the whole static:
+The kernel accepts a variable in DATASEC that is smaller than its type.
+It's a piece of a variable that the compiler split, with the type of
+the whole variable. bpftool prints a variable by its type, so it reads
+past the piece and, when the piece is the last in the section, past
+the buffer with the value of the map:
 
-  [223] STRUCT 'BpfCell<core::option::Option<...>>' size=32 vlen=1
-  [236] VAR '..scx_cosmos9TASK_CTXS.0' type_id=223, linkage=static
-  [248] DATASEC '.bss' size=0 vlen=9
-          type_id=236 offset=24648 size=1 (VAR '..TASK_CTXS.0')
+  $ bpftool map dump pinned /sys/fs/bpf/piece
+  ".bss": [{
+          "whole": 67305985
+      },{
+          "piece.0": {
+              "a": [134678021,1994496712,32592,32,0,833,0,414764080
 
-and the kernel rejects such BTF with "Invalid size".
-
-Allow it. The size of a variable in DATASEC is used in two places:
-
-- btf_find_datasec_var() looks for timers, spin locks, kptrs and other
-  special fields. btf_find_field_one() skips a variable when its size is
-  not the size of its type, so there are no special fields in a piece.
-
-- btf_datasec_show() prints variables by their types. It would read
-  past the piece and past the end of the map value when the piece is the
-  last one. Don't print the pieces.
-
-"global data test #8" and "#10" in prog_tests/btf.c expect "Invalid
-size". BTF of both is loaded now. The map of #10 is not created, since
-its value is larger than the section.
+Only the first number is in the map. Skip the pieces in
+btf_dumper_datasec(), like btf_datasec_show() in the kernel does, and
+in show_prog_metadata().
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/btf.c                             | 31 +++++++++++++++-----
- tools/testing/selftests/bpf/prog_tests/btf.c |  9 ++----
- 2 files changed, 26 insertions(+), 14 deletions(-)
+ tools/bpf/bpftool/btf_dumper.c | 11 +++++++++++
+ tools/bpf/bpftool/main.h       |  2 ++
+ tools/bpf/bpftool/prog.c       |  4 ++--
+ 3 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index c9d4b709380c..0630675377aa 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5397,7 +5397,7 @@ static int btf_datasec_resolve(struct btf_verifier_env *env,
- 
- 	env->resolve_mode = RESOLVE_TBD;
- 	for_each_vsi_from(i, v->next_member, v->t, vsi) {
--		u32 var_type_id = vsi->type, type_id, type_size = 0;
-+		u32 var_type_id = vsi->type, type_id;
- 		const struct btf_type *var_type = btf_type_by_id(env->btf,
- 								 var_type_id);
- 		if (!var_type || !btf_type_is_var(var_type)) {
-@@ -5412,16 +5412,16 @@ static int btf_datasec_resolve(struct btf_verifier_env *env,
- 			return env_stack_push(env, var_type, var_type_id);
- 		}
- 
-+		/*
-+		 * The variable can be smaller than its type. It's a piece of
-+		 * a variable that the compiler split then, with the type of
-+		 * the whole variable.
-+		 */
- 		type_id = var_type->type;
--		if (!btf_type_id_size(btf, &type_id, &type_size)) {
-+		if (!btf_type_id_size(btf, &type_id, NULL)) {
- 			btf_verifier_log_vsi(env, v->t, vsi, "Invalid type");
- 			return -EINVAL;
- 		}
--
--		if (vsi->size < type_size) {
--			btf_verifier_log_vsi(env, v->t, vsi, "Invalid size");
--			return -EINVAL;
--		}
- 	}
- 
- 	env_stack_pop_resolved(env, 0, 0);
-@@ -5434,6 +5434,16 @@ static void btf_datasec_log(struct btf_verifier_env *env,
- 	btf_verifier_log(env, "size=%u vlen=%u", t->size, btf_type_vlen(t));
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index e4075824343f..3267163119dc 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -524,6 +524,15 @@ static int btf_dumper_var(const struct btf_dumper *d, __u32 type_id,
+ 	return ret;
  }
  
-+/* A piece of a variable is smaller than its type, which is the one of the whole variable */
-+static bool btf_var_is_piece(const struct btf *btf, const struct btf_type *var,
-+			     const struct btf_var_secinfo *vsi)
++/*
++ * The compiler splits a variable into pieces. Every piece is a VAR with the
++ * type of the whole variable, so there is less data than the type takes.
++ */
++bool btf_var_is_piece(const struct btf *btf, const struct btf_var_secinfo *vsi)
 +{
-+	u32 size;
-+
-+	return IS_ERR(btf_resolve_size(btf, btf_type_by_id(btf, var->type), &size)) ||
-+	       vsi->size < size;
++	return btf__resolve_size(btf, vsi->type) > vsi->size;
 +}
 +
- static void btf_datasec_show(const struct btf *btf,
- 			     const struct btf_type *t, u32 type_id,
- 			     void *data, u8 bits_offset,
-@@ -5441,6 +5451,7 @@ static void btf_datasec_show(const struct btf *btf,
+ static int btf_dumper_datasec(const struct btf_dumper *d, __u32 type_id,
+ 			      const void *data)
  {
- 	const struct btf_var_secinfo *vsi;
- 	const struct btf_type *var;
-+	bool comma = false;
- 	u32 i;
- 
- 	if (!btf_show_start_type(show, t, type_id, data))
-@@ -5450,8 +5461,12 @@ static void btf_datasec_show(const struct btf *btf,
- 			    __btf_name_by_offset(btf, t->name_off));
- 	for_each_vsi(i, t, vsi) {
- 		var = btf_type_by_id(btf, vsi->type);
--		if (i)
-+		/* there is less data than the type takes */
-+		if (btf_var_is_piece(btf, var, vsi))
+@@ -542,6 +551,8 @@ static int btf_dumper_datasec(const struct btf_dumper *d, __u32 type_id,
+ 	jsonw_name(d->jw, btf__name_by_offset(d->btf, t->name_off));
+ 	jsonw_start_array(d->jw);
+ 	for (i = 0; i < vlen; i++) {
++		if (btf_var_is_piece(d->btf, &vsi[i]))
 +			continue;
-+		if (comma)
- 			btf_show(show, ",");
-+		comma = true;
- 		btf_type_ops(var)->show(btf, var, vsi->type,
- 					data + vsi->offset, bits_offset, show);
- 	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index 642800b80c74..24ab62b2834a 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -424,7 +424,7 @@ static struct btf_raw_test raw_tests[] = {
- 	.err_str = "Invalid type",
- },
- {
--	.descr = "global data test #8, invalid var size",
-+	.descr = "global data test #8, var is smaller than its type",
- 	.raw_types = {
- 		/* int */
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-@@ -457,8 +457,6 @@ static struct btf_raw_test raw_tests[] = {
- 	.key_type_id = 0,
- 	.value_type_id = 7,
- 	.max_entries = 1,
--	.btf_load_err = true,
--	.err_str = "Invalid size",
- },
- {
- 	.descr = "global data test #9, invalid var size",
-@@ -498,7 +496,7 @@ static struct btf_raw_test raw_tests[] = {
- 	.err_str = "Invalid size",
- },
- {
--	.descr = "global data test #10, invalid var size",
-+	.descr = "global data test #10, section is smaller than map value",
- 	.raw_types = {
- 		/* int */
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-@@ -531,8 +529,7 @@ static struct btf_raw_test raw_tests[] = {
- 	.key_type_id = 0,
- 	.value_type_id = 7,
- 	.max_entries = 1,
--	.btf_load_err = true,
--	.err_str = "Invalid size",
-+	.map_create_err = true,
- },
- {
- 	.descr = "global data test #11, multiple section members",
+ 		ret = btf_dumper_do_type(d, vsi[i].type, 0, data + vsi[i].offset);
+ 		if (ret)
+ 			break;
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index fa2c877a3cbf..6851346a6030 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -121,6 +121,7 @@ struct obj_refs {
+ };
+ 
+ struct btf;
++struct btf_var_secinfo;
+ struct bpf_line_info;
+ 
+ int build_pinned_obj_table(struct hashmap *table,
+@@ -239,6 +240,7 @@ int btf_dumper_type(const struct btf_dumper *d, __u32 type_id,
+ 		    const void *data);
+ void btf_dumper_type_only(const struct btf *btf, __u32 func_type_id,
+ 			  char *func_only, int size);
++bool btf_var_is_piece(const struct btf *btf, const struct btf_var_secinfo *vsi);
+ 
+ void btf_dump_linfo_plain(const struct btf *btf,
+ 			  const struct bpf_line_info *linfo,
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index a60414aaa494..eb077236d2ea 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -348,7 +348,7 @@ static void show_prog_metadata(int fd, __u32 num_maps)
+ 			t_var = btf__type_by_id(btf, vsi->type);
+ 			name = btf__name_by_offset(btf, t_var->name_off);
+ 
+-			if (!has_metadata_prefix(name))
++			if (!has_metadata_prefix(name) || btf_var_is_piece(btf, vsi))
+ 				continue;
+ 
+ 			if (!printed_header) {
+@@ -377,7 +377,7 @@ static void show_prog_metadata(int fd, __u32 num_maps)
+ 			t_var = btf__type_by_id(btf, vsi->type);
+ 			name = btf__name_by_offset(btf, t_var->name_off);
+ 
+-			if (!has_metadata_prefix(name))
++			if (!has_metadata_prefix(name) || btf_var_is_piece(btf, vsi))
+ 				continue;
+ 
+ 			if (!printed_header) {
 -- 
 2.55.0
 
