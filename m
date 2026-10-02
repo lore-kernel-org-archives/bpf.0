@@ -1,76 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559C747F3AA;
-	Fri,  2 Oct 2026 09:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BBF04734E5
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 09:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790932461; cv=none; b=jXvLXSlNRMaaFnJW7jJKZOpmDNFKktyxSez6CXrnqSk4vH17spDfyGQ57PuBgASjOGbyE0A4Sdnk160l5kqILD4Rt+VRH41jBF3PWmmGTgVXf6UfgbA9G+VDJulZQzvV7eLpKELVBzyKOO+y33s7NvHSjGF01mtFzsmoRh5G/bg=
+	t=1790932470; cv=none; b=OQx5joD3nBERlTAzN34nVDEEOAy8paxk85OAI9whUQvRNypj74xtQ9y9vAmSt2l8Ydftu9EQVrqt8aqom7y/aOHD2nlr0ZeV5T1p/fZjVJ+E1ck30ofN9uLda7XZDraPoWd5EuS2j6F8pPKa2lmmnM47bjSSo/WWsf1ujBN//Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790932461; c=relaxed/simple;
-	bh=RMRK4o0+tC2VSLcsiYJL8XOxK0iUl6vp4Lc6OaSyQEQ=;
+	s=arc-20240116; t=1790932470; c=relaxed/simple;
+	bh=5rJsBMw7vDKWCs2PxnIex87WPIuK+P1IZxA6+fyNWBs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LzAmk1EvJj6Ba7Dlp4WT8lxQNrZCsxHq25JMnYhNHx3racAX/5pZy63XRApXXzEYDll7uZ28CuG9UXyn0OFgW35lGpsqT5/vUVQcpEGdGrFQS8fIE4+tPdL0cm0BWFM//q60xuoed8zusTATT7FJXAKq9Y+3DD3HqmbzNK4xhMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SsYfV20n; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Kh7+Ss/HdvahTqMMfV/i48h8G61ST8J6Nlu7VEQ8YrioTByh5PBvl4k1aptG7FbNtMrr+CAV5Zzj3szQ+XwoA4g3lul9Mvfh12X2qDzv5UAQzE0FbUaR8yTrcR0aXHm8RfC1g5XQScB0Kdaf/IgeUUXIaN7I1XUWLBou5yiVw2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYgPm+Bs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SsYfV20n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF6B1F000FF;
-	Fri,  2 Oct 2026 09:14:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYgPm+Bs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041811F000FF;
+	Fri,  2 Oct 2026 09:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790932460;
-	bh=TRvmrkCOYomY87ANP6FwDLXpBvqL1FScxqZSlWMXwwk=;
+	s=k20260515; t=1790932469;
+	bh=8p3cWqnFJYmg3geBScTsx21ZdQfrifa7V27h/M7hy4w=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SsYfV20nqz/wk14wpHhtmhgD52Yg88I2m85xioyRiik8VtK3LsymM9WNuidB2fLTQ
-	 kZ3HAyK6RBbjuzt5uN8uNjH7oVxd87u+82T4RdkZFeMbiXaeaeZ8P3gPDOz3GuCDBZ
-	 K4J+kG1qgSntu/xK0+U0rCwLOr4fwHxfnrRWe3/hNZfrBgCsziX2XrIgx8RMs75hky
-	 DBnpzOmImCmIi2wjpyXUVTfjP04BNhwGIENIvRgGNMOhFCutr2yroMzk1Auj5bZcmg
-	 h80cH/UmL80vPV3cQge1AQFxZ+liJTmkdNYxoJgFArc1gflO7POsJf8jTbldY1XbUq
-	 Q8SvR4FtmPlow==
+	b=OYgPm+BsOk/n6KL230e5lVexBR5GongeAJPPfEIRjIjpPlzoqxX+CS0VUn27Lcszx
+	 Mxf575oN/g92Jhh5oAu9n8ZNSt41T6IT34yb4QEVJJw6jZH10moxV9RIM9eiErurar
+	 ZqvOItmz9ATCgxTNiP/PpFXypoD5dt9WnSy9wtFeNdNsCjX/7DhbZoOfYLnDysGj2b
+	 kwX/9y+yAUZ5NBy8R8i+lmvz4vQOpjkZfnFHO1E/U0genvoOO36ukdgXaWOsRs5t62
+	 O/JBj9ahXw9eLsaxu0mpbRjoAwYSkM8VP+oOGevIDkXVGmftL1eWDpTdwOuWkv4O8i
+	 lFVzYb4KPORgw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 03/12] bpf: fetch the vmlinux BTF where
- kernel types enter a program
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: add XDP test for per-flow
+ LRU_HASH window updates
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jay Wang" <wanjay@amazon.com>
-Cc: linux-modules@vger.kernel.org, dmitry.torokhov@gmail.com, sched-ext@lists.linux.dev, linux-trace-kernel@vger.kernel.org, "Petr
- Pavlu" <petr.pavlu@suse.com>, linux-input@vger.kernel.org, bpf@vger.kernel.org, ojeda@kernel.org, linux-perf-users@vger.kernel.org, gary@garyguo.net
-In-Reply-To: <20261001225214.12351-4-wanjay@amazon.com>
-References: <20261001225214.12351-1-wanjay@amazon.com>
- <20261001225214.12351-4-wanjay@amazon.com>
+To: "Anil Kaushik" <anilkaushikwireless@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
+References: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 02 Oct 2026 09:14:19 +0000
-Message-Id: <20261002091419.AFF6B1F000FF@smtp.kernel.org>
+Date: Fri, 02 Oct 2026 09:14:28 +0000
+Message-Id: <20261002091429.041811F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-> bpf_check() fetches the vmlinux BTF up front for every program, whether
-> the program uses kernel types or not.  With the upcoming
-> CONFIG_DEBUG_INFO_BTF=3Dm the BTF is a module that is loaded on demand,
-> and since systemd loads socket filters at boot, a program that needs the
-> BTF only because bpf_check() asked for it would pull it in on every
-> system, whether anything uses BTF or not.
->=20
-> Stop fetching up front and fetch at the points where kernel types enter
-> the verifier state instead:
->=20
->  - bpf_add_kfunc_call(), for the first kfunc call of a program;
->  - check_pseudo_btf_id(), for ldimm64 of a kernel variable;
->  - check_ptr_to_map_access(), for accessing a map pointer's fields;
->  - check_helper_call(), when the helper's prototype takes or returns a
->    PTR_TO_BTF_ID, or is bpf_snprintf_btf()/bpf_seq_printf_btf(), which
-> [ ... ]
-> With CONFIG_DEBUG_INFO_BTF=3Dy the vmlinux BTF is parsed at boot by the
-> first kfunc registration, and without BTF the new helper check is
-> skipped, so nothing changes for either.
->=20
-> Signed-off-by: Jay Wang <wanjay@amazon.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: xdp_lru_window parses TCP header incorrectly ignoring IPv4 =
+ihl
+--
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+commit 76a8e18822036a1270d2ff9fde06bd760faa505b
+Author: Anil Kaushik <anilkaushikwireless@gmail.com>
+
+selftests/bpf: add XDP test for per-flow LRU_HASH window updates
+
+This commit introduces a new XDP program and BPF selftest to verify bounds
+checking of value-internal arrays and per-flow key isolation. It simulates =
+an
+LRU_HASH map updating a rolling window based on TCP packet lengths.
+
+> diff --git a/tools/testing/selftests/bpf/progs/xdp_lru_window.c b/tools/t=
+esting/selftests/bpf/progs/xdp_lru_window.c
+> new file mode 100644
+> index 0000000000000..27aa1509e6c02
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/xdp_lru_window.c
+
+[ ... ]
+
+> +SEC("xdp")
+> +int xdp_lru_window(struct xdp_md *ctx)
+> +{
+> +	void *data_end =3D (void *)(long)ctx->data_end;
+> +	void *data =3D (void *)(long)ctx->data;
+
+[ ... ]
+
+> +	iph =3D (void *)(eth + 1);
+> +	if ((void *)(iph + 1) > data_end)
+> +		return XDP_PASS;
+> +	if (iph->protocol !=3D IPPROTO_TCP)
+> +		return XDP_PASS;
+> +
+> +	th =3D (void *)(iph + 1);
+> +	if ((void *)(th + 1) > data_end)
+> +		return XDP_PASS;
+
+[Severity: Medium]
+Does this parsing logic incorrectly assume a fixed 20-byte IPv4 header?
+
+If an IPv4 packet contains IP options (where iph->ihl > 5), taking (iph + 1)
+statically advances by the size of the IP header struct instead of the actu=
+al
+length specified by iph->ihl * 4.=20
+
+This could cause the flow tracking logic to extract the source and destinat=
+ion
+ports from attacker-controlled IP options rather than the actual TCP header,
+potentially allowing flow pollution.
+
+Should the calculation advance by the dynamic length using iph->ihl?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001225214.1235=
-1-1-wanjay@amazon.com?part=3D3
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002042201.3483=
+076-1-anilkaushikwireless@gmail.com?part=3D1
