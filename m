@@ -1,122 +1,203 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3984F4848AD;
-	Fri,  2 Oct 2026 09:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AC9474262;
+	Fri,  2 Oct 2026 09:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790932493; cv=none; b=qj6bvPW8EDSqT31cBkKkFW+ydUibbIlCqKPvmfpZgEq9UITODB/j7eVFdF6RRKDAWy1oVQ+rIxtLxe+EwC5CoAzkk0mIgzIfCBrtdU78a7n06CHceC9n79QSnMe1v3f6J8/O5qvinNSxL5xBQJfh5UFcsTrTTsT7KYpoIk5E6SU=
+	t=1790932614; cv=none; b=BSSh1DIpKJrkYCr4Ya/GNps9P2U3SH8WV5b/5kM1AVyJrX3Z+qeAjaxuz3wuQ2d4MQwF7WrTf0R5miqQOEr904qBWe17sqDVxN6L7WcjaHZub9odZmY5v3/AyWlpZBD4QK+ISUGkPFOoprSek1IIriRPa3dBNi7F0hIr2QbyBf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790932493; c=relaxed/simple;
-	bh=V2jj3x39fXHeJwxn4UyJwJJtgmfXGlE3J/IxoBaHtMw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UhMvVAXt9Z4mhLRwHZGmk7oHR4BRPDQhBCR8Sl9Ma8/lDo2LP8N/ECH/v6rlX1FjWdA+cUBpaxIOpwr1xrZqJfVS0iKSVISCqEQMoZJZ8SerhsJ7qQ7qMlrZJcTq/uSggddsG2Tt/lM5ayYxaHSuUDnoSsnXDHNl9iDBsCi1WwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhnHZs8+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790932614; c=relaxed/simple;
+	bh=GfB4AangzbGer9ZinOHaC9/Iw6vF2BIgUKhcXiugwjs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qdw1pqRSHK8sA5sPP+ZaHVgHL4HBu3DjZgIB/jZ2iHWX++L7IwqqnJ7GRC8ejzU8Hv4cRDLJzCE9sD8ErtQ9vp9dYtUYjURFIP/gcKmZ69Nl/hCD5W9xqjyLyBesMBPYH8V3u1kSCOubCfwPOGuw5/dJYF1okmjxS7v8/FDOUXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=gLkgmP8q; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhnHZs8+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4FBC1F00893;
-	Fri,  2 Oct 2026 09:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790932492;
-	bh=ptPWMo8zJ8revgIW/Vq5XPA500wI1DerRYQgr4zUFd4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YhnHZs8+6UgjTJoLT5mhl1Y71rQ3tJdaz6yre1Ed9lcTrhluaydEVw01vbkELNx5W
-	 E2SPwZYdOVcVAchArOYqhtyUeFCxxH6o4IXK5v26rlnFMCIVyJXRDGXzoHahHg8N3t
-	 Q/y7AoFaEKDoATHD1ftzi8m8YUaSYqK9hzEzkXKHSNM3HIwAQ9IkVyfRm5DGmrE0jz
-	 ResG74wzM9VGR9O09epaCBaZnNToqoLoOZXV/bLbYftbc1LiA5K91CUD5TeYoVDNaV
-	 zFDeZixOKhP5r4IXHdbox7O0fMgjNlBvSGaVzTehnv+Pe7oHHMZRix7aYpwmVJg2x5
-	 RdUupuzx1CVFQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] module: Add stubs.c for CONFIG_MODULES=n
- module_put_and_kthread_exit()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Petr Pavlu" <petr.pavlu@suse.com>
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>
-In-Reply-To: <20261002-module-stubs-v2-1-a0d8c6ad1738@suse.com>
-References: <20261002-module-stubs-v2-1-a0d8c6ad1738@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 02 Oct 2026 09:14:51 +0000
-Message-Id: <20261002091451.D4FBC1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="gLkgmP8q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1790932612; x=1822468612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=GfB4AangzbGer9ZinOHaC9/Iw6vF2BIgUKhcXiugwjs=;
+  b=gLkgmP8qYKsFBrB8tz1TcFbpWIVoPt6zUKqM37SYlZ4x2OtNVptdcQ+F
+   MkxkotswdlBDkH08VwGO115nN5FjEKHja9Msw+1TsPzXqhD53VRtwBGDg
+   Y/YOg/QKA0VJaUGF+3u9cRIPR14CrKzYftCLNlIlBQ1oxMvW/+ew8EzB4
+   +R/7b3Nvu2zTNWig7UwBOCc489HE9RbF6cAQiEHbHzIjAfqQpnRcIDyY9
+   HcDj4lczp2u81/dvFSmY1duTwVfaQItD2Y9oUkyXZufcaLezn6owk4VrS
+   rlc1dVY6yGl5LdA8MLRVtoMcILbaJ5QS2QApooi+56It5VQrE5cRxt+1F
+   A==;
+X-CSE-ConnectionGUID: 1B6BoPspRIaa6wrCNHZR3Q==
+X-CSE-MsgGUID: ZvhM4zZUR1OcZNmWWtJ1aA==
+X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
+   d="scan'208";a="63547603"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 02:16:50 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.87.152) by
+ chn-vm-ex4.mchp-main.com (10.10.87.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.49; Fri, 2 Oct 2026 02:16:50 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Fri, 2 Oct 2026 02:16:46 -0700
+Date: Fri, 2 Oct 2026 11:16:45 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
+	<horms@kernel.org>, <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v9 15/15] misc: lan966x-pci: dts: add fdma
+ interrupt to overlay
+Message-ID: <20261002091645.tbhmk64qsf5wllni@DEN-DL-M70577>
+References: <20260928-lan966x-pci-fdma-v9-15-a17caf60f89a@microchip.com>
+ <179092642540.434549.1993526526960644611@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179092642540.434549.1993526526960644611@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] bpf: resolve_btfids build failure with CONFIG_MODULES=3Dn and LTO/GC
---
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 1 · Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] Once this overlay adds the "fdma" interrupt, PCIe instances
+>   use lan966x_fdma_pci_ops, and a teardown ordering bug in that backend…
+> 
+> --
+> 
+> misc: lan966x-pci: dts: add fdma interrupt to overlay
+> 
+> This commit adds the fdma interrupt (OIC interrupt 14) to the lan966x PCI
+> device tree overlay. This turns on FDMA-based frame injection and extraction
+> when the switch is connected over PCIe.
+> 
+> > diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
+> > index 7bb726550cafd..5bb12dbc08431 100644
+> > --- a/drivers/misc/lan966x_pci.dtso
+> > +++ b/drivers/misc/lan966x_pci.dtso
+> > @@ -141,8 +141,9 @@ switch: switch@e0000000 {
+> >  
+> >  					interrupt-parent = <&oic>;
+> >  					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
+> > +						     <14 IRQ_TYPE_LEVEL_HIGH>,
+> >  						     <9 IRQ_TYPE_LEVEL_HIGH>;
+> > -					interrupt-names = "xtr", "fdma", "ana";
+> > +					interrupt-names = "xtr", "fdma", "ana";
+> 
+> [Severity: Medium]
+> Once the "fdma" interrupt is present, PCIe instances use
+> lan966x_fdma_pci_ops. Does that make a teardown ordering problem in the PCIe
+> FDMA backend reachable?
+> 
+> lan966x_remove() tears down the FDMA before it unregisters the netdevs:
+> 
+> lan966x_main.c:lan966x_remove() {
+>     ...
+> 	lan966x->ops->fdma_deinit(lan966x);
+> 	lan966x_cleanup_ports(lan966x);
+>     ...
+> }
+> 
+> lan966x_fdma_pci_deinit() disables NAPI and frees both rings. It does not
+> clear lan966x->rx.lan966x, it does not detach the netdevs, and rtnl is not
+> held at this point:
+> 
+> lan966x_fdma_pci.c:lan966x_fdma_pci_deinit() {
+> 	if (lan966x->fdma_ndev)
+> 		napi_disable(&lan966x->napi);
+>     ...
+> 	fdma_free_coherent_and_unmap(lan966x->dma_dev, &lan966x->rx.fdma);
+> 	fdma_free_coherent_and_unmap(lan966x->dma_dev, &lan966x->tx.fdma);
+> }
+> 
+> fdma_free_coherent_and_unmap() only clears atu_region, so dcbs and dma
+> still hold their old values.
+> 
+> netif_set_mtu_ext() only checks netif_device_present(). That means an MTU
+> change that alters the max frame size can still run during this window:
+> 
+> lan966x_port_change_mtu()
+>   lan966x_fdma_pci_resize()
+>     __lan966x_fdma_pci_reload()
+>       lan966x_fdma_pci_reload()
+>         napi_disable(&lan966x->napi)
+> 
+> The resize guard is only this check:
+> 
+> 	if (!lan966x->rx.lan966x)
+> 		return 0;
+> 
+> rx.lan966x is still non-NULL after deinit. Would the second napi_disable()
+> on an already disabled NAPI spin forever while holding rtnl? That would also
+> block the unregister_netdev() that lan966x_remove() calls next.
+> 
+> The probe error path in lan966x_fdma_pci_init() looks like it has a similar
+> gap:
+> 
+> 	err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
+> 	if (err) {
+> 		fdma_free_coherent_and_unmap(lan966x->dma_dev, rx_fdma);
+> 		return err;
+> 	}
+> 
+> rx.lan966x has already been set earlier in lan966x_fdma_pci_init(). The
+> netdevs registered by lan966x_probe_port() stay live until the cleanup_ports
+> label.
+> 
+> If an MTU change arrives in that window, NAPI is still enabled from
+> lan966x_port_init(). lan966x_fdma_pci_reload() then allocates new rings and
+> does:
+> 
+> 	fdma_free_coherent_and_unmap(lan966x->dma_dev, &rx_fdma_old);
+> 
+> Is this a second dma_free_coherent() of the RX ring that the error path
+> already freed?
+> 
+> After that, reload re-arms the FDMA on the new rings. The probe error path
+> never calls fdma_deinit for them. Would the coherent memory for the new rings
+> leak, with the outbound ATU windows still mapped and DMA active after probe
+> fails?
+> 
+> The resize guard added in "net: lan966x: add PCIe FDMA MTU change support"
+> is meant to skip the resize until lan966x_fdma_pci_init() has built the
+> rings. It doesn't seem to cover rings that were torn down or only partly
+> built.
+> 
+> The shutdown callback from "net: lan966x: add shutdown callback to stop the
+> FDMA on reboot" avoids this by taking rtnl and calling netif_device_detach()
+> so that ndo_open and ndo_change_mtu can't re-enter the FDMA. Should the
+> remove and probe error paths get the same protection?
+> 
+> The platform backend already has the same remove ordering. The PCIe deinit,
+> resize and reload code is new in this series, though, and this overlay change
+> is what first makes it reachable.
+> 
+> -- 
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260928-lan966x-pci-fdma-v9-0-a17caf60f89a%40microchip.com
 
-commit caaeb9d0651743944c690c066494bb16509c01e9
-Author: Petr Pavlu <petr.pavlu@suse.com>
+Pre-existing. Lan966x_remove() is a platform function. It's a re-raise of v7
+11/14 / v8 15/15, the probe/remove ordering. The issue is real, but out-of-scope
+for this series.
 
-module: Add stubs.c for CONFIG_MODULES=3Dn module_put_and_kthread_exit()
-
-This commit introduces kernel/module/stubs.c to hold stub functions when
-CONFIG_MODULES is disabled. It moves the stub implementation for
-__module_put_and_kthread_exit() to this new file and removes the
-corresponding #ifdef from the BPF verifier's noreturn list.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 72a3f5998dd27..be70f10e49682 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -20417,9 +20417,7 @@ BTF_ID(func, __ia32_sys_exit_group)
->  BTF_ID(func, __kunit_abort)
->  BTF_ID(func, kunit_try_catch_throw)
->  #endif
-> -#ifdef CONFIG_MODULES
->  BTF_ID(func, __module_put_and_kthread_exit)
-
-[Severity: Low]
-If CONFIG_MODULES=3Dn and dead-code elimination (like CONFIG_LTO_CLANG or
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) is enabled, will this cause=20
-resolve_btfids to fail?
-
-Because the #ifdef is removed, this unconditionally requires the function to
-be present in the BTF. If there are no callers in the kernel, the linker=20
-might discard the stub function, causing a missing BTF ID and a fatal build=
-=20
-error under CONFIG_WERROR.
-
-> -#endif
->  #ifdef CONFIG_X86_64
->  BTF_ID(func, __x64_sys_exit)
->  BTF_ID(func, __x64_sys_exit_group)
-
-[ ... ]
-
-> diff --git a/kernel/module/stubs.c b/kernel/module/stubs.c
-> new file mode 100644
-> index 0000000000000..1385c87e81695
-> --- /dev/null
-> +++ b/kernel/module/stubs.c
-> @@ -0,0 +1,9 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/kthread.h>
-> +#include <linux/module.h>
-> +
-> +void __noreturn __module_put_and_kthread_exit(struct module *mod, long c=
-ode)
-> +{
-
-[Severity: Low]
-Does this stub need a __used attribute to prevent the linker from discardin=
-g=20
-it?
-
-If no code references module_put_and_kthread_exit() when CONFIG_MODULES=3Dn=
-,=20
-this function is silently discarded by the linker during dead code=20
-elimination, which leads to the resolve_btfids build failure mentioned abov=
-e.
-
-> +	kthread_exit(code);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002-module-stu=
-bs-v2-1-a0d8c6ad1738@suse.com?part=3D1
