@@ -1,241 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy2-f21.google.com (mail-dy2-f21.google.com [74.125.229.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94BFE499F2E;
-	Fri,  2 Oct 2026 13:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790946788; cv=fail; b=qm05jqsfhdKABXeTk0wHlqHwyse75JxSkthYLdLwIFaT4NkES2jh0i5DxPpIUWRD3xzfbrH5P6b5weTFRHQsanLFU2yh7EQMhzKBUaX3xWUtBxaJOLOu4NAE3+9RH3XGBzLdF54BJS8wc/5LdaVgQ1pcDyZ0XE4wAcGk3YaFJfk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790946788; c=relaxed/simple;
-	bh=xipAtwqvj4q66zTEA7UGDJ7zl8FkgJUokTpnMsrl+d4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=iJf4c6H0a3QrDAvYFBhKg+Oq/etdzKD4FqapzrHmLg47g7szObVT0vfoZsN0SGFovS40um9OJp08w19UjAR7krawb9xdsTKtp42wEzkaqNG/bO8DZh95MwxKgP20c6q3kVm0yFSY6cPH9TBdeJmCsMu+jtaHGdvQmdgQUtgjmOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RlWnhFcx; arc=fail smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A093CEBA6
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 13:25:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790947518; cv=none; b=Dvu4bWuczH5+ogjwyGUtk1RmyodxOv986xnsk3Lw3TQv/ovF//LGwdL6r+IE+bL2LRDDc8cBdyZRUT9cyvldF3diZVbHqzqxxFzcWtoEVcUCRoiESGvCv60DfEqGr18pitQlvZ9dvp6gqdtxKtmu3Jg7/Nw3FoxGMkYA165+PU4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790947518; c=relaxed/simple;
+	bh=CeUTDK8UskaWLRe6cd8YaVvVkaHfr4p4lFdGwAMcwUE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GEkLN4qIBDufWAPbMvQ8qg0gRirvqAGG2DTZxuRRaTVlSRcBzJWe6rsxAw++5NU7uLqFnYT6va8SUNuKWicQ8k1B5yOParEQmG0iPd2HYkO8zKFyhhdSXzZ6R6uals18liYok7iOJiCL+0nKRYie/junnITs6VKvrMmbc7GkGc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HR6AjEEr; arc=none smtp.client-ip=74.125.229.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RlWnhFcx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790946786; x=1822482786;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=xipAtwqvj4q66zTEA7UGDJ7zl8FkgJUokTpnMsrl+d4=;
-  b=RlWnhFcxpns4wHwUhuOAAxpyrBdQC+7Fj0VABIeE4He0ZC3Dhsw2aRz+
-   HYsI5S8oVcc3H0rT5uOI4nn5AhnSdyndWPOSr9goipZad4S4U5CiKkz4W
-   WTQN0F8FppPjtS4dEYgrCg+g4zzlEfMmAfYNn6poYhdOI7uq4bbuSFReh
-   xiTLT2FOQYWGOSzQ6rH7vmj4z/mtpXRTdr0zCHDM3JKnnKrYEexv4ZtCC
-   qvKcHHBY0H+qHrTk6oylBy8xHv6KdKyTKqjwdrZYQDfscMgYbrcwSY6XE
-   0MJnlK53JOI/uDy9kSsf953z1cHEUs9XSq/3j7vGqLDpv6NSzPXh4ON4e
-   Q==;
-X-CSE-ConnectionGUID: PFnmagAiTeeViGqbyKVTbA==
-X-CSE-MsgGUID: CsxwCBc+Th62G0N6xV5FVg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11923"; a="91574288"
-X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
-   d="scan'208";a="91574288"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 06:12:35 -0700
-X-CSE-ConnectionGUID: TWAIn5J8Smeq3lnTKWZ+yw==
-X-CSE-MsgGUID: 3UcH9HFpQdqRqO+tST6KzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
-   d="scan'208";a="314238857"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 06:12:29 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Fri, 2 Oct 2026 06:12:28 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49 via Frontend Transport; Fri, 2 Oct 2026 06:12:28 -0700
-Received: from BL2PR02CU003.outbound.protection.outlook.com (52.101.52.3) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Fri, 2 Oct 2026 06:12:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VawUJEefMwIzXBWqWrzZwDGWrBlATHh10D4bbM9kMmjN6WPKeyECuF6sq3EdNZ1/a5CRfKW/fd5OFpUuv7motgKw6tFZGfVRiZpLYxJafUjiEq8q/Mli24QPQ+npnM4xVbvKsMREP6yGgYrWVCx1rxw3mAf8hWUgxBL9bpj/e8968z/DT+UlG/2T4KzWPWw6Lre6ZbKaqxMnMBNel93UQ+MQzwipwQnLxPEfiit8LlKzxQ4EMMVz/QOpXfzYsEliNvq71sO2OI6FEeU/6c6xvbi+ZFNnGRdtVYHfevTHJPcTf4W/a/DpOFILFL3AOqawmqTfkY7LuN5kYb6pmgmIFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/IF1+UGc/Q/BchNBeAETacRXTU9Ln8WJl2+dPU0Pf9U=;
- b=Ppzv2zMJuGYijYBokKxu/Sk/K2FIbEUf+WGXWjvX5ph8A7q3ohMz2aDgvg0DJX16KQp5wqnzodYHir4ceVRmocugI1Z/kGiATVcFOf7Mnq8gRVOzD0x1IWJKuaDsAVtnI4Q1Js7Q1vt/RKp2k8/s1EGlz+siP/KX2mZ13keAOJc0syzmtYSn5ul9sYFjRo0QuIdysqHXSVfcELp6b0Wei3RFkBwSackVscgxbuZPNzV49F4p1B/355iLHbqJRJU0IO9ibO6ntcpB5VIbQRFUf57VJqzdhLojZdP/mETDr7yJcd2I5jdlcs2gQ7atqsjG4JEcHME5MaI1puKDtgP/Cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
- by DS4PR11MB308671.namprd11.prod.outlook.com (2603:10b6:8:50c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.18; Fri, 2 Oct
- 2026 13:12:19 +0000
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::e6f0:6afb:6ef9:ab5c]) by IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::e6f0:6afb:6ef9:ab5c%6]) with mapi id 15.21.0472.016; Fri, 2 Oct 2026
- 13:12:19 +0000
-From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
-To: "Oros, Petr" <poros@redhat.com>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>
-CC: "Oros, Petr" <poros@redhat.com>, "Nguyen, Anthony L"
-	<anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
-	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Lobakin,
- Aleksander" <aleksander.lobakin@intel.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Henry Tieman
-	<henry.w.tieman@intel.com>, Anirudh Venkataramanan
-	<anirudh.venkataramanan@intel.com>, Michal Swiatkowski
-	<michal.swiatkowski@linux.intel.com>, Jesse Brandeburg <jbrandeb@kernel.org>,
-	Preethi Banala <preethi.banala@intel.com>, Kiran Patil
-	<kiran.patil@intel.com>, Dan Nowlin <dan.nowlin@intel.com>, Stephen Hemminger
-	<stephen@networkplumber.org>, "intel-wired-lan@lists.osuosl.org"
-	<intel-wired-lan@lists.osuosl.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: RE: [PATCH iwl-net 10/10] ice: fix unsigned stat widths
-Thread-Topic: [PATCH iwl-net 10/10] ice: fix unsigned stat widths
-Thread-Index: AQHdUm9XxD0/wVz90k+yKBYPeLw9ALbqOj/A
-Date: Fri, 2 Oct 2026 13:12:19 +0000
-Message-ID: <IA3PR11MB8986B5CC249ABEA251FE9A5EE5892@IA3PR11MB8986.namprd11.prod.outlook.com>
-References: <20261002130752.2597259-1-poros@redhat.com>
- <20261002130752.2597259-11-poros@redhat.com>
-In-Reply-To: <20261002130752.2597259-11-poros@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|DS4PR11MB308671:EE_
-x-ms-office365-filtering-correlation-id: 9a7abd77-9b23-4441-7855-08df2086c9db
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|22082099003|18002099003|38070700021|4143699003|10067099003|56012099006|11063799006|21046099003;
-x-microsoft-antispam-message-info: Eo7hKTkFnNgE7tCN0fnr/rwso3ipmDL3G1SMJNcuwuFDWc4ozAXl/Es0+1p2ZEYOrAJE9mBf0yfL8zVrYAaoPmoaUT5fYnLsoGfedXErX+KQz8l97Z+Jhq6F+KaUHBMkVD94Yg7q9KghGCjAFJMFkpSa0uQHtnJwRGpWWYlZpFuHn5q93R2zkJfKGPqjbraeK/JmL7nrvZsfLV0eZ4q83lY1Afzzhdb9/UT5fjJUu76z3fOba+2tAdctepUmmH89gIikSXWNwpPo2A0Gi6DddXrC54c+20qjbw0usBlGTd1oNEvIW3rtZf62lWIsscSF+/CRYU5PX+ZA6X+M9YqXi7AsF/YP/y5nHcR6AlF4dEiXgenjVSC4/+6pUiLOhAQvveIInO4dV56qz9qPpylpADkETn+Oe6pfreR9VMM4L+PITumw/HgDA/UIDZo2vPBF3dfAT3b5wLbVvGSnrzZctNXLQZGPPJof6GvBlALJmqhCljyQ1X2Ix6e5j4/aUQurU4KyYHdQNyu3TjAiamaBydA9uY9UOdZfRMbyMgQJOA4IqE+LP2X9/3L+ZE0zneM7+mH40vzj5dLuBT4n7c+LfEbQ+lCyt5gTg9xRINRgGvrGVr33zTmolnX4jitNpdlBMxQexJ+2rc7CEl247PXOBPwFiKkCyXI/qodwREegHvLcWoikRz6bQcIGRi+VflJ9rkUJtrhu+WBeFKToHxdtKcM9u88rVqPk5i+8w1B/9Lo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(22082099003)(18002099003)(38070700021)(4143699003)(10067099003)(56012099006)(11063799006)(21046099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NHLd1+FHqSIrR9dQ8zsYxjsdyWCxB+SQjkSjfZ2/NwUmsLP5VkFqeIMgG0x6?=
- =?us-ascii?Q?gsNBMgf5emJQzfQgiDoz+eM7EHLI7oEGhKM0lVbePfPFlwg+D9+eP0FBgT76?=
- =?us-ascii?Q?a3lGrZx9rl3saCBVSZvrNbdmTAeGHkLfmehUp/J9sMyQj9Qd+Uar/zUNthgg?=
- =?us-ascii?Q?ukTF7PTmUh5ATa9rlt96vukqIts1T3XWr2BAoAJEO0fpRYUA7QeuIqiLoeaT?=
- =?us-ascii?Q?V1dSMjcMNdmRoFsa5MjGpwaMChfp6m3pU558Bnv7/xauFUoBzrIoVR5zaL2z?=
- =?us-ascii?Q?1nbt1blZ+HhJcMLz2mhmgxzRv/p2o7duuVCbXk+8T3kqMy5llY22BOv1g1Y/?=
- =?us-ascii?Q?gU1g4FYi+dn7uBKozH6P8As2ZGIG7Oa2erG30+9f+iFZJHIBfcPOEoZpSnPy?=
- =?us-ascii?Q?fYKy1Ax8yYxvq+sACBZJjKHq+f0xBT/qoqZxM9meDUQmsVBWH+YnwL30Q4Fu?=
- =?us-ascii?Q?F4+6REvRth1bqP59ov2gmyjOl405bp7wn3DnQXvjhOF7yZyiLePbbcS3fMAP?=
- =?us-ascii?Q?cu2LDA3ev/abwB/boB10T3XKXHufs47zGP1xjAkcaChoc8v+1f7Gj8KVqnlN?=
- =?us-ascii?Q?ri5IJ8x5zXQGmayow+71T05fAT3pOjv5JShA8jQHrYWr+ccTQc1km4ktsG0o?=
- =?us-ascii?Q?VN5zh0rUsvNRHCqsA4CQMX4pQpFAmk5jthQB9RyxkIb/0feB5u+CR2O8BwJT?=
- =?us-ascii?Q?zCgVYHB6kqTimbXHKweEpSljBsH4e4mGQ4o6dT3M6+lJLdOYsHQbiU3amHpm?=
- =?us-ascii?Q?CT/B7Mze1+Esa+HSng5taujS1KivXChWG1wjg/tkjdSO+OpxxQ9sP/imY4Pd?=
- =?us-ascii?Q?HrRyIGOpUtNg6NvaRoZk49pclB43DK5HH5bvCtoZlc91ns4INL8pFGGEFf7p?=
- =?us-ascii?Q?rOEiNoEmXSF6xrRqwzry0SAz8QXQqSQlKg2neT49aq1unrp5w9FWquUF2s68?=
- =?us-ascii?Q?ogpV8ouVV3e2OfRMgzPF38l89vvevIOVX4C6xBbxMLtL4zTzhn0E48Vdf3b6?=
- =?us-ascii?Q?OIeo1R3qjCDP9rZDWISBmNCsZpWwWrqGDP/PQim5JoygpbMSWBopeHMCgk8t?=
- =?us-ascii?Q?xiE7ivRXsXc0HLznrSffKV1G9D/vjOWAGBPOlYQayVDkK5ZsLTKTeMJD0I8N?=
- =?us-ascii?Q?WL2GP45O+W/OhrrpqbrEJJTyz2MX2/V54fIf+Dkg6DByNXA9UDoJ7UwBsSfa?=
- =?us-ascii?Q?EM4uDmM6ICf3bCgYTkrAlPLVsx1vpOITsU+DrtCelpvy4hKMyF/cw/MuJRw0?=
- =?us-ascii?Q?kPrpHlM3D3R/4mzBGMShjr39w4XsW65vU9yhx5hHO10Qku0ji+beNkqwbM/j?=
- =?us-ascii?Q?XDfzQDshti8ik5QfMw/h3V2dO6tCIZplekfZDkaH59u3D4Qa0bsDFcBqEeGr?=
- =?us-ascii?Q?ew27neuSX85lNB/D9ZiBETp7aWuOb8cJY3yvgUoA6b9EzLQon3SHIUXMu0Ot?=
- =?us-ascii?Q?pGxLEC7auiYbDsZyii+BVOawttId+5v+p1Am99BDtENeQMIBtiDIYcwd7BM7?=
- =?us-ascii?Q?jIMjiJkVJr0EWyrfcni3rOogv5Wg0xqIQxk/vO8db+g26mkuV3m25X/U8RuR?=
- =?us-ascii?Q?5ChW5qNiHU9mwmDpD19u+cFxVnfw93uCyhaheGV3Yh/YZBOVG5o5ul26aOhO?=
- =?us-ascii?Q?o/HtFqJq+l4nUyxGmOYCQTsGUY3CGkPPlk50FduQGFs2HdauVSqsFCQ+1O+w?=
- =?us-ascii?Q?0XZt1aAEsi9dLbEle8VzcjMkE0t0AQQCdiy0xVxM3bFRICtXvvrrgGq7UYG1?=
- =?us-ascii?Q?4RYEE+tW7g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HR6AjEEr"
+Received: by mail-dy2-f21.google.com with SMTP id 5a478bee46e88-33e46a156f4so4570271eec.0
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 06:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790947516; x=1791552316; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7RY0E+uq3VziEyUgNcdccbA0uSJfCvboTGuc7W3OBnE=;
+        b=HR6AjEErz2PiL7y4spse2vxZcFFHstr7SbrVIzyT/OwIUHbV7yl0K9BMdhxKMpB8ru
+         WKMSI0j2u5lNC7cgARWjtOnzsUrLqo2bHbQkfTzkQrz7UD9c4s0/qxkzwOorW41I3rX4
+         EYwpfGco0Xux6FyiSzv/LeAvTgSXDqIMQmeRBVDjsvSaKE4hsNCZ/A2y6OWt0xWkSFUF
+         H7mGyexvKrkAM6mHSBemQbhcSyteBu+TiQsKa03S56cGJVMa963sPJGKe1sp9t/sf9O7
+         Cr/n7E9SVnG9xpgxmv2uV5KjiO8PDgQastD5MDybiPLLr7w0ZFZEBaiLYGY9InnMzAri
+         ZjeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790947516; x=1791552316;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7RY0E+uq3VziEyUgNcdccbA0uSJfCvboTGuc7W3OBnE=;
+        b=mdqyyfYXupTMY0nXYbXk0YEplo6NbPlBozu1vMrtZ6dUK0M4BN2JMC2g1YVQiHu9S3
+         zJyYg+4DvrXFQGWIWDdVkVtzlQPdBLjgjBkQ5wIf3fgqCYnUzQPJVx4FcQhlZIpcg9Y1
+         wfdaJltFwgq3iBXIefWE+CAybkMXtyHSTkW3zJKJIwizLdc596iFxTFIsT1ZBKuQdThW
+         9IsMp+MYOW462GPaCteU85zQH2ytcxBvlwA1GpbBgssMhx8GWT5pmoeBRDRkWD6wVjHP
+         xOcBO5DTj5M4k25BPAXRAWpiQb6pxL6TuSsaXRAYdKTbCRSAEhOfVcaMkiT67k6G+vZT
+         rwoQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy9r3P4BVzoQNoD6Wym8lgLYtiuAaH1BRUZvNBXWHMiBbPLV+0P2dSrJfhXzZf9o42KEA0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK6jO7IPETqJFiP8GZz5HVDQp474Xyk7lAa9Zb7oddxrGuhQYGj
+	ARVA73WGSLuIb5VrtRkNEBPQd9cX07ZgqR0oxI+G5X1vRxOQmeAuM0Pb
+X-Gm-Gg: AYBFou06q23qwM8+fD8wNw+KLFTVdveS3RFjuqPGJw43RbA9jb7r5TSgnk/ecZcVp6c
+	QednjTM2B+NTJK9Tzp2nkUtw5IPkucCoRHjT5jEcAFDk77fXVpy4jQHLiwYusJjGX1dgJ3j2Ptf
+	+ix38qP134a4Yke9XqFDX9qj6K7cZROskdw9x8O4RAFuM+9caeDlBRN01etdF49X6T0IlpnxD6U
+	yH+Qa/8C9o8yzc26eT7WJLdZFPimYjFvMojNHb519hv4JKVkhUI53MTq0dPEv/Y1t10k8TYDwJ9
+	SeJJ7RmzX9tnD9lIJTQlclcTaao7f/g2BpwoN+se6BVLbP43KDvLpDU+7hE9qCWV1OmiENGCzLd
+	AYU3nteWvCxCmOI2z+HXf4d5VJ9jpCCv5sv3R9AkgLqXc0pn5AIHpUH7I4SzdQU7tlJ8kyJF6Vh
+	U91lItR6UFeQJfqZuc56eMJjxrVtPjrR7AXrUkGk+xX9dDVEok4ePAZE2XWhBv2Q==
+X-Received: by 2002:a05:693c:26cb:b0:34c:4f53:60bc with SMTP id 5a478bee46e88-34f15075fffmr2692379eec.12.1790947515566;
+        Fri, 02 Oct 2026 06:25:15 -0700 (PDT)
+Received: from ubuntu.. ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34f14f303e3sm8194198eec.5.2026.10.02.06.25.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 06:25:15 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/4] bpf: Apply the rewrites of bpf_do_misc_fixups() at once
+Date: Fri,  2 Oct 2026 21:25:06 +0800
+Message-ID: <20261002132506.4108655-1-odys.yuan@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <DLUBNPLXRU86.358M4SOQJIGWI@gmail.com>
+References: <20261001-bpf-verifier-patch-batch-v1-0-a12df8a09160@gmail.com> <DLUBNPLXRU86.358M4SOQJIGWI@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: HaeNlNBovHa75X6Fp+EC1AoL+XLGM2MN5MeCRolK+NsH5yzkjXRO3cq1KDT3Hbu5BhkCCf6RhtaxGl3s6NtIBV7xlJnQ6yx06m9M+Homj8J+OSTM5AiUiFBGHo2/SBSTKQGw9eTxManUrhaV1619LxzkV6P96MTX1U/1h1rFrVWKNJ3FLCsAkaKdMExIhdX3Vx+pgMNzq6V8OF+PNLE0BTkmEN0ozzCdwxzwJn/H+YlTLdfUBjhxeWxXYPz4ZNT+t7X/LAQhYMtLuyaiUO7x896e87bzThoDX4Q69BbaqdYXmOZvhs+h+LfsJUD07f83ZI8KL0+TxpZa4OmHw3yn8w==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a7abd77-9b23-4441-7855-08df2086c9db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2026 13:12:19.3705
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uAtcaL2Jc1xBKPUVjR5+KSLroNbmZS9yArl4pilUfgDRGod2GtLItHLAQCCe58/220I5vKaNpkZGEUaTB8htj06bq0UisAX1F1xTq+0pkNQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR11MB308671
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On Fri, Oct 02, 2026 at 11:39 AM Alexei Starovoitov wrote:
+> That's not going to fly.
+> After this series there are two implementations of the same thing.
+[...]
+> Jiong's RFC converted all passes and deleted the old code in the
+> last patch:
+> https://lore.kernel.org/bpf/1562275611-31790-1-git-send-email-jiong.wang@netronome.com/
+> Pls do the same in one series. One-off patches can be add + commit.
 
+Agreed. v2 will move all passes to the list, turn
+bpf_patch_insn_data() into add + commit, and remove
+adjust_insn_aux_data(), bpf_adj_branches() and the per-patch adjust
+helpers in the last patch. That also covers the bot's comment on
+patch 1.
 
-> -----Original Message-----
-> From: Petr Oros <poros@redhat.com>
-> Sent: Friday, October 2, 2026 3:08 PM
-> To: netdev@vger.kernel.org
-> Cc: Oros, Petr <poros@redhat.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
-> <przemyslaw.kitszel@intel.com>; Andrew Lunn <andrew+netdev@lunn.ch>;
-> David S. Miller <davem@davemloft.net>; Eric Dumazet
-> <edumazet@kernel.org>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
-> <pabeni@redhat.com>; Lobakin, Aleksander
-> <aleksander.lobakin@intel.com>; Alexei Starovoitov <ast@kernel.org>;
-> Daniel Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
-> <hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>;
-> Stanislav Fomichev <sdf@fomichev.me>; Henry Tieman
-> <henry.w.tieman@intel.com>; Anirudh Venkataramanan
-> <anirudh.venkataramanan@intel.com>; Michal Swiatkowski
-> <michal.swiatkowski@linux.intel.com>; Jesse Brandeburg
-> <jbrandeb@kernel.org>; Preethi Banala <preethi.banala@intel.com>;
-> Kiran Patil <kiran.patil@intel.com>; Dan Nowlin
-> <dan.nowlin@intel.com>; Stephen Hemminger
-> <stephen@networkplumber.org>; intel-wired-lan@lists.osuosl.org; linux-
-> kernel@vger.kernel.org; bpf@vger.kernel.org
-> Subject: [PATCH iwl-net 10/10] ice: fix unsigned stat widths
->=20
-> tx_restart, tx_busy, rx_buf_failed and rx_page_failed in struct
-> ice_vsi are u32, but ice_update_vsi_ring_stats() fills them with sums
-> of the 64-bit per ring counters. The values are truncated and the
-> ethtool statistics exported from them wrap at 2^32 while the ring
-> counters keep counting.
->=20
-> Make them u64 like tx_linearize next to them.
->=20
-> i40e fixed the same truncation in commit 3b8428b84539 ("i40e: fix
-> unsigned stat widths").
->=20
-> Fixes: fcea6f3da546 ("ice: Add stats and ethtool support")
-> Assisted-by: LLM
-> Signed-off-by: Petr Oros <poros@redhat.com>
-> ---
->  drivers/net/ethernet/intel/ice/ice.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/ice/ice.h
-> b/drivers/net/ethernet/intel/ice/ice.h
-> index 6c596e5a315175..a985b81efbe2d6 100644
-> --- a/drivers/net/ethernet/intel/ice/ice.h
-> +++ b/drivers/net/ethernet/intel/ice/ice.h
-> @@ -344,10 +344,10 @@ struct ice_vsi {
->  	u64 tx_linearize;
->  	DECLARE_BITMAP(state, ICE_VSI_STATE_NBITS);
->  	unsigned int current_netdev_flags;
-> -	u32 tx_restart;
-> -	u32 tx_busy;
-> -	u32 rx_buf_failed;
-> -	u32 rx_page_failed;
-> +	u64 tx_restart;
-> +	u64 tx_busy;
-> +	u64 rx_buf_failed;
-> +	u64 rx_page_failed;
->  	u16 num_q_vectors;
->  	/* tell if only dynamic irq allocation is allowed */
->  	bool irq_dyn_alloc;
-> --
-> 2.55.0
+> That's veristat on x86.
+> test_progs loads pyperf with BPF_F_TEST_RND_HI32, and s390, riscv,
+> powerpc need zext. bpf_opt_subreg_zext_lo32_rnd_hi32() does more
+> patches than misc_fixups there, I think, and it has one call site.
 
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Right. On x86 with BPF_F_TEST_RND_HI32:
 
+                  patches          load time
+                  zext    misc     flag off   flag on
+  pyperf180       4610     930     0.587 s    1.390 s
+  pyperf600       7620    1530     1.496 s    4.105 s
 
+Patching is 67% of the profile of pyperf180 with the flag, 57% in
+bpf_opt_subreg_zext_lo32_rnd_hi32() alone. v2 will report both cases.
+
+> That's unexpected. Pls share the perf report.
+
+perf record -F 4999 --all-kernel -g -- veristat -q pyperf180.bpf.o,
+bpf-next 6a75c73eebd4, x86_64 VM:
+
+  Children    Self
+   50.66%    0.12%  bpf_compute_live_registers
+   50.43%    0.00%  bpf_compute_subprog_arg_access
+   50.29%    0.67%  analyze_subprog
+   49.47%    8.99%  compute_subprog_args.constprop.0
+   39.08%    8.43%  arg_track_join
+   25.71%   25.67%  __arg_track_join
+   24.97%    0.62%  do_check_common
+   21.49%    0.04%  __bpf_patch_insn_data
+    4.07%    3.99%  arg_track_eq
+
+pyperf180 has 2 subprogs, on_event and the global __get_frame_data,
+but analyze_subprog() ran 458 times during that veristat run, which
+loaded 6 programs counting libbpf's probes.
