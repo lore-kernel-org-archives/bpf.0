@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F513A16AC;
-	Fri,  2 Oct 2026 19:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557683E92B7;
+	Fri,  2 Oct 2026 19:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967721; cv=none; b=BSKNcWJAhGJxhFeeUAoTJNb3UqmBjRl9mwifhrNYZrjrlGsMKln31OHTzBRWTs2F8nxpTl2cCuw0hLKUgEYuS4Attuk7UMaeSBXDV5EiOQ627H76ylHxlM4YhgF4N9QPy5Om2iBlo721hWlYQCuOSJQPTLVLYfQ4lyRhXaZ4o7c=
+	t=1790967729; cv=none; b=pf4FpIalS66tAJQboYF6dIuyFK+Ye6TQQGlQsSTYYnTn7vY3az7SWgAdhcOuI3H6j9F8CYuKCvNkBjkT6jOvdh0Teu1uBuOu3Gzs3DTCYpdd+EV/MeJ+uuFXUuIQh1GZHz7dF2VpHd+m1rqZIJvYuR8g6IFDBrFHiF+1VFhZZlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967721; c=relaxed/simple;
-	bh=a905JX6Zy8zdyeDS/+PeoxkYA6QpwbxeN1y82eQqdJo=;
+	s=arc-20240116; t=1790967729; c=relaxed/simple;
+	bh=BvaNiVyOdvaJ9lcASEKoAyouybA+BprY7ntNy364lnI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kTh1Art5gUTdNsLNpF5HwqyPWs7hwwjsz0NsO4McHackKbXcCMawbTTm29xH3gat9enujc97xp3EgimU+a6ieinPfS/VO5RsrgFe8jKzlixEFbP6j+9IqLVEcRlBGc4mvTO7310QMQCDZUw0Vq3d3qE81G+zDFOhTpVSl0aPo+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6LviN4G; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=USXWMEesW+Wvubm87eSHoBuehDnhnbsoFs+BqFLZWyE4FjK/g1LZpvQE8yThM2C8yLpGtajD3bWgCLVRa6Uh1ez5vOJYSC0XOPBHSVz0aJxDo6cZuTIFSZNurQd//R4ol5T1brQp4FrDYvAO5s0so11s70pHAocqrsV9FUibeUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NPJZe1KQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6LviN4G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922EA1F00898;
-	Fri,  2 Oct 2026 19:01:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NPJZe1KQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C731F0089D;
+	Fri,  2 Oct 2026 19:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967720;
-	bh=w1tk3U4Ob4+eGozh6kR9OqonmOqzomJQNVCBVUS2Bow=;
+	s=k20260515; t=1790967727;
+	bh=DJBZri6RwI1zh+rg8vyUOSH5xDQ/G73I5fqAWKm7xis=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=c6LviN4Ga8miCKf55RDCizMAnQBLtrVLponnwt4UDJfmMzaRue6lTU7ld8FUrFmG5
-	 Ga+6+zJPmdF1VYNYcrCEY9mISSVMLT9sIGtRU4I1pLZ9HLAubSze+jKA2KIMFxDJs5
-	 qRClcOPNuuMB8SQz4Jbs0HZcSGdaSwbi0F+PMcmR5IRQb7AQTHvJUS6Cy1uGkXesIZ
-	 /CVqJkW0ya1fu6Oe5S3h2sLGilLAQylu4wRrAe3Iyasa2cXP4y5S7krVjJ6BjOK2iY
-	 Omd5lkZTijIQAqCCiIYErQScuMFTGFgny38mZyHRAux5WDyjtw1XXAxBEwsruNTw4Y
-	 VyES2HxM3Y20Q==
+	b=NPJZe1KQwC236yQGxWyegiTTBG3NWqyqzbUWRGm2WsJB0uaBufAOozBps3P3lQoZN
+	 9C1B1HzMGtRT/ei2gRJIEXgLfaJGAXoE2/zryVtrHG0fEJYYPKbTOJfdf4lxhX3Q0g
+	 OhPgU3PSaD6YYRC0X94QLrOsRo8KBfgciOLRJ8qtre8tuO5WS1atf2nD780bVbMXe2
+	 Us1AviMaEVaGDyEL6CRt0jN1+tQrcvckLjVHb9fNPlEuwV8p7dZ3FxIxm6HtEpQkkg
+	 ejmEiADm3HTnmGLPQSgYFUzKOfdFn853vX/riZC9olKA2e0367XnCW49XPdX2xoDaf
+	 BQb8t7mPJQX9w==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -69,9 +69,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [RFC net-next 11/15] xdp: Copy provider buffers on pass and redirect
-Date: Fri,  2 Oct 2026 21:00:12 +0200
-Message-ID: <20261002190018.696925-12-bjorn@kernel.org>
+Subject: [RFC net-next 12/15] xsk: Receive provider UMEM without copying
+Date: Fri,  2 Oct 2026 21:00:13 +0200
+Message-ID: <20261002190018.696925-13-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002190018.696925-1-bjorn@kernel.org>
 References: <20261002190018.696925-1-bjorn@kernel.org>
@@ -84,300 +84,311 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A provider buffer must go back to its page pool from the NAPI poll
-that allocated it. Userspace gets UMEM ownership back through the
-FILL ring, without a reference count. An skb or xdp_frame can
-outlive the poll, so it cannot hold a provider buffer.
+When all buffers of a packet come from the provider of the target
+socket, put their UMEM addresses straight on the socket's RX ring.
+For a single-buffer packet, xsk_rcv() checks the head buffer. For a
+multi-buffer packet, every fragment is checked. A socket without
+XDP_USE_SG drops multi-buffer packets and counts them in rx_dropped.
+If any fragment comes from elsewhere, the packet is copied as
+before. Fragment descriptors carry the offset that the device used.
 
-Copy the packet, fragments included, into kernel pages on XDP_PASS and
-on redirects to targets other than XSKMAP. On redirect, split the copy
-from the release: return the provider buffer only after the target
-accepts the copy. The classic zero-copy redirect path is unchanged.
+The buffers leave page_pool ownership in batches when the socket is
+flushed. A batch is split where a queue restart changed the page
+pool.
 
-The copy and the BPF fragment helpers get a fragment's address from
-the new xdp_frag_address(). It works for pages and for provider
-net_iovs; skb_frag_address() works only for pages. The next patch
-handles delivery to an XSKMAP socket.
+The copy path now reads fragments with xdp_frag_address().
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- include/net/xdp.h |  8 +++-
- net/core/dev.h    |  5 +++
- net/core/filter.c | 28 +++++++++++---
- net/core/xdp.c    | 98 ++++++++++++++++++++++++++++++++++++++++++++---
- 4 files changed, 126 insertions(+), 13 deletions(-)
+ include/net/xdp_sock.h |  10 +++
+ net/xdp/xsk.c          | 191 ++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 198 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 80931490ca3a..4d7040debcca 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -420,11 +420,17 @@ xdp_update_skb_frags_info(struct sk_buff *skb, u8 nr_frags,
- 	skb->unreadable |= !!(xdp_flags & XDP_FLAGS_FRAGS_UNREADABLE);
+diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
+index 6e70b320b399..92a7cf49f5e3 100644
+--- a/include/net/xdp_sock.h
++++ b/include/net/xdp_sock.h
+@@ -12,10 +12,18 @@
+ #include <linux/mutex.h>
+ #include <linux/spinlock.h>
+ #include <linux/mm.h>
++#include <net/netmem.h>
+ #include <net/sock.h>
+ 
+ #define XDP_UMEM_SG_FLAG BIT(3)
+ 
++/* Bound both one maximum-SG packet and single-buffer release batching. */
++#if MAX_SKB_FRAGS < 31
++#define XSK_PP_RELEASE_BATCH 32
++#else
++#define XSK_PP_RELEASE_BATCH (MAX_SKB_FRAGS + 1)
++#endif
++
+ struct net_device;
+ struct xsk_queue;
+ struct xdp_buff;
+@@ -61,6 +69,8 @@ struct xdp_sock {
+ 		XSK_BOUND,
+ 		XSK_UNBOUND,
+ 	} state;
++	u32 pp_release_cnt;
++	netmem_ref pp_release[XSK_PP_RELEASE_BATCH];
+ 
+ 	struct xsk_queue *tx ____cacheline_aligned_in_smp;
+ 	struct list_head tx_list;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 90c98b42a18a..99bd2bc79467 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -30,6 +30,7 @@
+ #include <net/busy_poll.h>
+ #include <net/netdev_lock.h>
+ #include <net/netdev_rx_queue.h>
++#include <net/page_pool/memory_provider.h>
+ #include <net/xdp.h>
+ 
+ #include "../core/dev.h"
+@@ -267,6 +268,157 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+ 	return err;
  }
  
-+/* Page and readable provider fragments alike resolve through their netmem. */
-+static inline void *xdp_frag_address(const skb_frag_t *frag)
++static bool xsk_pp_can_xfer(struct xsk_buff_pool *pool, netmem_ref *netmems,
++			    u32 count)
 +{
-+	return netmem_address(skb_frag_netmem(frag)) + skb_frag_off(frag);
++	u32 i;
++
++	if (WARN_ON_ONCE(!count || count > MAX_SKB_FRAGS + 1))
++		return false;
++
++	for (i = 0; i < count; i++)
++		if (!xp_netmem_is_from_pool(netmems[i], pool))
++			return false;
++
++	return true;
 +}
 +
- /* Avoids inlining WARN macro in fast-path */
- void xdp_warn(const char *msg, const char *func, const int line);
- #define XDP_WARN(msg) xdp_warn(msg, __func__, __LINE__)
- 
--struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp);
-+struct sk_buff *xdp_build_skb_from_buff(struct xdp_buff *xdp);
- struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp);
- struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp);
- struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-diff --git a/net/core/dev.h b/net/core/dev.h
-index 4793a994f7f1..6598a4c5cfec 100644
---- a/net/core/dev.h
-+++ b/net/core/dev.h
-@@ -13,6 +13,11 @@ struct netlink_ext_ack;
- struct netdev_queue_config;
- struct cpumask;
- struct pp_memory_provider_params;
-+struct xdp_buff;
-+struct xdp_frame;
++static void xsk_pp_release_to_user_bulk(netmem_ref *netmems, u32 count)
++{
++	struct page_pool *pp, *next;
++	u32 first = 0, i;
 +
-+struct xdp_frame *xdp_copy_zc_to_xdp_frame(struct xdp_buff *xdp);
-+void xdp_release_zc_buff(struct xdp_buff *xdp);
- 
- /* Random bits of netdevice that don't need to be exposed */
- #define FLOW_LIMIT_HISTORY	(1 << 7)  /* must be ^2 and !overflow buckets */
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 70dc621672f2..23b3923c0869 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4221,7 +4221,7 @@ void bpf_xdp_copy_buf(struct xdp_buff *xdp, unsigned long off,
- 			break;
- 
- 		ptr_off += ptr_len;
--		ptr_buf = skb_frag_address(next_frag);
-+		ptr_buf = xdp_frag_address(next_frag);
- 		ptr_len = skb_frag_size(next_frag);
- 		next_frag++;
- 	}
-@@ -4249,7 +4249,7 @@ void *bpf_xdp_pointer(struct xdp_buff *xdp, u32 offset, u32 len)
- 		u32 frag_size = skb_frag_size(&sinfo->frags[i]);
- 
- 		if  (offset < frag_size) {
--			addr = skb_frag_address(&sinfo->frags[i]);
-+			addr = xdp_frag_address(&sinfo->frags[i]);
- 			size = frag_size;
- 			break;
- 		}
-@@ -4339,7 +4339,7 @@ static int bpf_xdp_frags_increase_tail(struct xdp_buff *xdp, int offset)
- 	if (unlikely(offset > tailroom))
- 		return -EINVAL;
- 
--	memset(skb_frag_address(frag) + skb_frag_size(frag), 0, offset);
-+	memset(xdp_frag_address(frag) + skb_frag_size(frag), 0, offset);
- 	skb_frag_size_add(frag, offset);
- 	sinfo->xdp_frags_size += offset;
- 	if (rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-@@ -4684,12 +4684,28 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- {
- 	struct bpf_redirect_info *ri = bpf_net_ctx_get_ri();
- 	enum bpf_map_type map_type = ri->map_type;
-+	struct xdp_frame *xdpf;
-+	int err;
- 
- 	if (map_type == BPF_MAP_TYPE_XSKMAP)
- 		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
- 
--	return __xdp_do_redirect_frame(ri, dev, xdp_convert_buff_to_frame(xdp),
--				       xdp_prog);
-+	if (!xdp_buff_has_netmem(xdp))
-+		return __xdp_do_redirect_frame(ri, dev,
-+					       xdp_convert_buff_to_frame(xdp),
-+					       xdp_prog);
++	if (WARN_ON_ONCE(!count || count > XSK_PP_RELEASE_BATCH))
++		return;
 +
-+	/* Return provider buffers only after the target accepts the copy. */
-+	xdpf = xdp_copy_zc_to_xdp_frame(xdp);
-+	err = __xdp_do_redirect_frame(ri, dev, xdpf, xdp_prog);
-+	if (err) {
-+		if (xdpf)
-+			xdp_return_frame_rx_napi(xdpf);
-+		return err;
++	/* One poll of one queue fills the batch, so it normally shares a
++	 * page pool. Split it where a queue replacement changed the pool.
++	 */
++	pp = netmem_get_pp(netmems[0]);
++	for (i = 1; i < count; i++) {
++		next = netmem_get_pp(netmems[i]);
++		if (next == pp)
++			continue;
++
++		net_mp_release_page_pool_bulk(pp, netmems + first, i - first);
++		pp = next;
++		first = i;
++	}
++	net_mp_release_page_pool_bulk(pp, netmems + first, count - first);
++}
++
++static void xsk_pp_flush(struct xdp_sock *xs)
++{
++	u32 count = xs->pp_release_cnt;
++
++	if (!count)
++		return;
++
++	/* Provider descriptors are the tail of the unpublished RX entries. */
++	xsk_pp_release_to_user_bulk(xs->pp_release, count);
++	xs->pp_release_cnt = 0;
++}
++
++static void xsk_pp_release(struct xdp_sock *xs, netmem_ref netmem)
++{
++	xs->pp_release[xs->pp_release_cnt++] = netmem;
++}
++
++static void xsk_rcv_pp_zc_desc(struct xdp_sock *xs, netmem_ref netmem,
++			       void *data, u32 len, u32 flags)
++{
++	__xskq_prod_reserve_desc(xs->rx, data - xs->pool->addrs, len, flags);
++	xsk_pp_release(xs, netmem);
++}
++
++static __always_inline int xsk_rcv_pp_zc_one(struct xdp_sock *xs,
++					     struct xdp_buff *xdp, u32 len)
++{
++	netmem_ref netmem = xdp_buff_get_netmem(xdp);
++
++	if (xskq_prod_nb_free(xs->rx, 1) < 1) {
++		xs->rx_queue_full++;
++		return -ENOBUFS;
++	}
++	if (unlikely(xs->pp_release_cnt == XSK_PP_RELEASE_BATCH)) {
++		xsk_pp_flush(xs);
++		xskq_prod_submit(xs->rx);
 +	}
 +
-+	xdp_release_zc_buff(xdp);
++	__xskq_prod_reserve_desc(xs->rx, xdp->data - xs->pool->addrs, len, 0);
++	xsk_pp_release(xs, netmem);
 +	return 0;
- }
- EXPORT_SYMBOL_GPL(xdp_do_redirect);
- 
-@@ -12677,7 +12693,7 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md *x, u32 len)
- 		skb_frag_t *frag = &sinfo->frags[i];
- 		u32 shrink = min_t(u32, delta, skb_frag_size(frag));
- 
--		memcpy(xdp->data_end, skb_frag_address(frag), shrink);
-+		memcpy(xdp->data_end, xdp_frag_address(frag), shrink);
- 
- 		xdp->data_end += shrink;
- 		sinfo->xdp_frags_size -= shrink;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 386240bd24c9..b7f16f44dac2 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -23,6 +23,8 @@
- #include <trace/events/xdp.h>
- #include <net/xdp_sock_drv.h>
- 
-+#include "dev.h"
++}
 +
- #define REG_STATE_NEW		0x0
- #define REG_STATE_REGISTERED	0x1
- #define REG_STATE_UNREGISTERED	0x2
-@@ -559,7 +561,8 @@ void xdp_return_buff(struct xdp_buff *xdp)
- 			     xdp->rxq->mem.type, true, xdp);
- 
- out:
--	__xdp_return(virt_to_netmem(xdp->data), xdp->rxq->mem.type, true, xdp);
-+	__xdp_return(xdp_buff_get_netmem(xdp), xdp->rxq->mem.type, true,
-+		     xdp);
- }
- EXPORT_SYMBOL_GPL(xdp_return_buff);
- 
-@@ -573,7 +576,56 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
- }
- EXPORT_SYMBOL_GPL(xdp_attachment_setup);
- 
--struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
-+static bool xdp_copy_frags_to_frame(struct xdp_frame *xdpf,
-+				    const struct xdp_buff *xdp)
++static noinline int xsk_rcv_pp_zc_sg(struct xdp_sock *xs,
++				     struct xdp_buff *xdp, u32 nr_frags)
 +{
-+	const struct skb_shared_info *xinfo;
++	netmem_ref netmems[MAX_SKB_FRAGS + 1];
 +	struct skb_shared_info *sinfo;
-+	u32 i, nr_frags;
++	u32 num_desc;
++	u32 flags;
++	u32 len;
++	u32 i;
 +
-+	xinfo = xdp_get_shared_info_from_buff(xdp);
-+	nr_frags = xinfo->nr_frags;
++	BUILD_BUG_ON(MAX_SKB_FRAGS + 1 > XSK_PP_RELEASE_BATCH);
 +
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	memset(sinfo, 0, sizeof(*sinfo));
++	if (xs->pp_release_cnt) {
++		xsk_pp_flush(xs);
++		xskq_prod_submit(xs->rx);
++	}
++
++	sinfo = xdp_get_shared_info_from_buff(xdp);
++	num_desc = nr_frags + 1;
++	netmems[0] = xdp_buff_get_netmem(xdp);
++	for (i = 0; i < nr_frags; i++)
++		netmems[i + 1] = skb_frag_netmem(&sinfo->frags[i]);
++
++	if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
++		xs->rx_queue_full++;
++		return -ENOBUFS;
++	}
++	if (!xsk_pp_can_xfer(xs->pool, netmems, num_desc))
++		return -EXDEV;
++
++	len = xdp->data_end - xdp->data;
++	flags = XDP_PKT_CONTD;
++	xsk_rcv_pp_zc_desc(xs, netmems[0], xdp->data, len, flags);
 +
 +	for (i = 0; i < nr_frags; i++) {
-+		const skb_frag_t *frag = &xinfo->frags[i];
-+		u32 len = skb_frag_size(frag);
-+		struct page *page;
++		const skb_frag_t *frag = &sinfo->frags[i];
++		void *data = xdp_frag_address(frag);
 +
-+		page = dev_alloc_page();
-+		if (!page)
-+			goto err;
++		if (i == nr_frags - 1)
++			flags = 0;
 +
-+		memcpy(page_address(page), xdp_frag_address(frag), len);
-+		__skb_fill_page_desc_noacc(sinfo, i, page, 0, len);
-+		if (page_is_pfmemalloc(page))
-+			xdpf->flags |= XDP_FLAGS_FRAGS_PF_MEMALLOC;
++		xsk_rcv_pp_zc_desc(xs, netmems[i + 1], data,
++				   skb_frag_size(frag),
++				   flags);
 +	}
++	xsk_pp_flush(xs);
++	xskq_prod_submit(xs->rx);
 +
-+	sinfo->nr_frags = nr_frags;
-+	sinfo->xdp_frags_size = xinfo->xdp_frags_size;
-+	sinfo->xdp_frags_truesize = nr_frags * PAGE_SIZE;
-+	return true;
-+
-+err:
-+	while (i--)
-+		put_page(skb_frag_page(&sinfo->frags[i]));
-+
-+	return false;
++	return 0;
 +}
 +
-+/**
-+ * xdp_copy_zc_to_xdp_frame - copy a zero-copy buff into a page-backed frame
-+ * @xdp: zero-copy &xdp_buff to copy
-+ *
-+ * The source keeps its buffers, so a caller that cannot hand the frame on
-+ * must free the frame and may still return the source to its owner.
-+ *
-+ * Return: new frame on success, %NULL on failure.
-+ */
-+struct xdp_frame *xdp_copy_zc_to_xdp_frame(struct xdp_buff *xdp)
++static int xsk_rcv_pp_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
++{
++	u32 nr_frags;
++
++	if (likely(!xdp_buff_has_frags(xdp)))
++		return xsk_rcv_pp_zc_one(xs, xdp, len);
++	if (unlikely(!xs->sg)) {
++		xs->rx_dropped++;
++		return -ENOSPC;
++	}
++
++	nr_frags = READ_ONCE(xdp_get_shared_info_from_buff(xdp)->nr_frags);
++	if (unlikely(!nr_frags || nr_frags > MAX_SKB_FRAGS))
++		return -EINVAL;
++
++	return xsk_rcv_pp_zc_sg(xs, xdp, nr_frags);
++}
++
+ static void *xsk_copy_xdp_start(struct xdp_buff *from)
  {
- 	unsigned int metasize, totsize;
- 	void *addr, *data_to_copy;
-@@ -607,7 +659,34 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
- 	xdpf->frame_sz = PAGE_SIZE;
- 	xdpf->mem_type = MEM_TYPE_PAGE_ORDER0;
+ 	if (unlikely(xdp_data_meta_unsupported(from)))
+@@ -289,7 +441,7 @@ static u32 xsk_copy_xdp(void *to, void **from, u32 to_len,
+ 			return copied;
  
--	xsk_buff_free(xdp);
-+	/* Classic zero-copy frames keep only the linear part. */
-+	if (xdp_buff_has_netmem(xdp) && xdp_buff_has_frags(xdp)) {
-+		xdpf->flags = XDP_FLAGS_HAS_FRAGS;
-+		if (!xdp_copy_frags_to_frame(xdpf, xdp)) {
-+			put_page(page);
-+			return NULL;
-+		}
-+	}
-+
-+	return xdpf;
-+}
-+
-+void xdp_release_zc_buff(struct xdp_buff *xdp)
-+{
-+	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-+		xsk_buff_free(xdp);
-+	else
-+		xdp_return_buff(xdp);
-+}
-+
-+struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
-+{
-+	struct xdp_frame *xdpf;
-+
-+	xdpf = xdp_copy_zc_to_xdp_frame(xdp);
-+	if (xdpf)
-+		xdp_release_zc_buff(xdp);
-+
- 	return xdpf;
+ 		if (*from_len == copy_len) {
+-			*from = skb_frag_address(*frag);
++			*from = xdp_frag_address(*frag);
+ 			*from_len = skb_frag_size((*frag)++);
+ 		} else {
+ 			*from += copy_len;
+@@ -461,12 +613,18 @@ static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(xdp_convert_zc_to_xdp_frame);
-@@ -627,10 +706,11 @@ EXPORT_SYMBOL_GPL(xdp_warn);
-  * &xdp_buff: allocate an skb head from the NAPI percpu cache, initialize
-  * skb data pointers and offsets, set the recycle bit if the buff is
-  * PP-backed, Rx queue index, protocol and update frags info.
-+ * Provider-backed netmem is copied into kernel memory and released.
-  *
-  * Return: new &sk_buff on success, %NULL on error.
-  */
--struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
-+struct sk_buff *xdp_build_skb_from_buff(struct xdp_buff *xdp)
+ 
+-static void xsk_flush(struct xdp_sock *xs)
++static void __xsk_flush(struct xdp_sock *xs)
  {
- 	const struct xdp_rxq_info *rxq = xdp->rxq;
- 	const struct skb_shared_info *sinfo;
-@@ -638,6 +718,9 @@ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
- 	u32 nr_frags = 0;
- 	int metalen;
- 
-+	if (xdp_buff_has_netmem(xdp))
-+		return xdp_build_skb_from_zc(xdp);
++	xsk_pp_flush(xs);
+ 	xskq_prod_submit(xs->rx);
+ 	/* Provider pools publish FILL consumption under the provider lock. */
+ 	if (!READ_ONCE(xs->pool->pp))
+ 		__xskq_cons_release(xs->pool->fq);
++}
 +
- 	if (unlikely(xdp_buff_has_frags(xdp))) {
- 		sinfo = xdp_get_shared_info_from_buff(xdp);
- 		nr_frags = sinfo->nr_frags;
-@@ -708,7 +791,7 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
- 			return false;
- 		}
++static void xsk_flush(struct xdp_sock *xs)
++{
++	__xsk_flush(xs);
+ 	sock_def_readable(&xs->sk);
+ }
  
--		memcpy(page_address(page) + offset, skb_frag_address(frag),
-+		memcpy(page_address(page) + offset, xdp_frag_address(frag),
- 		       len);
- 		__skb_fill_page_desc_noacc(sinfo, i, page, offset, len);
- 
-@@ -787,7 +870,10 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
- 		goto out;
+@@ -485,8 +643,9 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+ 		return -EOPNOTSUPP;
  	}
+ 	err = __xsk_rcv(xs, xdp, len);
+-	xsk_flush(xs);
++	__xsk_flush(xs);
+ 	spin_unlock_bh(&xs->pool->rx_lock);
++	sock_def_readable(&xs->sk);
  
--	xsk_buff_free(xdp);
-+	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-+		xsk_buff_free(xdp);
-+	else
-+		xdp_return_buff(xdp);
+ 	return err;
+ }
+@@ -520,9 +679,31 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+ 		return err;
  
- 	skb->protocol = eth_type_trans(skb, rxq->dev);
+ 	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL) {
++		if (unlikely(xs->pp_release_cnt)) {
++			xsk_pp_flush(xs);
++			xskq_prod_submit(xs->rx);
++		}
+ 		len = xdp->data_end - xdp->data;
+ 		return xsk_rcv_zc(xs, xdp, len);
+ 	}
++	if (xdp->rxq->mem.type == MEM_TYPE_PAGE_POOL &&
++	    xdp_buff_has_netmem(xdp) &&
++	    xp_netmem_is_from_pool(xdp_buff_get_netmem(xdp), xs->pool)) {
++		err = xsk_rcv_pp_zc(xs, xdp, len);
++		if (err != -EXDEV)
++			return err;
++
++		/* The redirect originates from this pool's registered RXQ, so
++		 * the copy fallback produces into the socket RX ring from the
++		 * same poll context as zero-copy delivery.
++		 */
++		xsk_pp_flush(xs);
++		xskq_prod_submit(xs->rx);
++		err = xsk_rcv_copy(xs, xdp, len);
++		if (!err)
++			xdp_return_buff(xdp);
++		return err;
++	}
  
+ 	/* The socket RX ring has a single producer, the queue's poll context.
+ 	 * Reject synthetic RX queues before their remote context produces
+@@ -532,6 +713,10 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+ 		     !xdp_rxq_info_is_reg(xdp->rxq)))
+ 		return -EINVAL;
+ 
++	if (unlikely(xs->pp_release_cnt)) {
++		xsk_pp_flush(xs);
++		xskq_prod_submit(xs->rx);
++	}
+ 	err = xsk_rcv_copy(xs, xdp, len);
+ 	if (!err)
+ 		xdp_return_buff(xdp);
 -- 
 2.55.0
 
