@@ -1,193 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f43.google.com (mail-ej2-f43.google.com [74.125.228.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B623749F7;
-	Fri,  2 Oct 2026 12:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17C83B7B71
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790944572; cv=none; b=iAfKYjVrIywhOey1SluVdstiT0EifIDBP7/Fy30HPYzOrbxUp/dWq4+128/B7Of6C2qzM9rY8Wx0TqqLf9U0yCa+xvssMfV4bKdTUMtsPGVCrVVbPI1g4D1XqWz/bAqx0lG1QGat/E1Vu2sBiLIDB0PvGfFdX56nd2sTIrF8a50=
+	t=1790944678; cv=none; b=esnDfd5ODTFU8OYo0GoYcc3VaaN9GABKZ97VgtycqCxsC1hLyGCd4+ofF6ROvy/VxRk3bkh8Wf9QlsGtwnm26hVPnroKzDbKQ/ajM9AdwC5lJl7/En3BVvWqNP2WU2FihUe95/g6eOWZ+Xmc5ZqHi8L/j9krJ5zP1ig7nT+qsm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790944572; c=relaxed/simple;
-	bh=zJdGvFnH9239op/29+uvDTEPTaYaAw90S9Cp4ykY2oc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PwojCdSfM2+t5YWTF3D61TJaZbgXcZj1oMeQwXyxfkTfXr2WVui1fWxY2dJJiKUHKkal5cxKVs8T/Yw4OKK+5UI/cLOogOpplqHiTazmbjMlOcNLQk90GH6G078ieuoY4FPx4Q7+Y/NaCBgCLpyg/4lU8USQsHqQNHgcE8/Y0Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y04Ou6XX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790944678; c=relaxed/simple;
+	bh=GWXc7aqz+JP/62ObxFDdswrcYFvTCyfgsbz2ENpfWG8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lUKHzxY2zx05sTQYRuWL+LMJmu33/JoFT7Lg4ZF7rQmFDg9t7SWAbOs1LZ6bFy39wPjwVXUbOLjX9CQ75DKhY1n0YR7rIHijpxTVhr5pCUX4/w983RCIFcxH824z4aQy21Ed45NSQeFF+Gq4JSKksXRsAX+QIt7fWRDcpvV0pXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=SFDKTC6H; arc=none smtp.client-ip=74.125.228.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y04Ou6XX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D291F000FF;
-	Fri,  2 Oct 2026 12:35:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790944571;
-	bh=gHT1eHrCeRGheckcuVuH5tVn5htGR9KNUyLnh8eDOzU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Y04Ou6XX6SdMWUWTarLUhIsaN9w+3Pqeg8oUs/7OIb31JfWW0vUEVzkHQmEdDgjhX
-	 rMOXzqjsfTki350NeAiEQUKi4/Wmdue8la++1bjfwJl0sJt9qPFQ5jP+SuL7Z0VIrT
-	 fF/q64PoEK8zQ3Hm3rGDp9dID/9LqdMIt5ul42FGVvVWpLww9nxdUXfWoDIelUsaAq
-	 8uHXbsWsAqgQEMs5R7FJEaINNCSu3zIGTrOrgwAyZ/QFIZy9pBQiDvOq7P6XMWUnTW
-	 K0nPXJCzRbOceqmLZfwrGmVvzEwYcn9zKQTP/XretUzMvEj70sWs0xCGSfo9UlqM4u
-	 t7IisLDZyS3qQ==
-Date: Fri, 2 Oct 2026 13:35:42 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
-	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
-	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
-Subject: Re: [PATCH v3 32/40] mm/uffd: use predicates for userfaultfd checks
-Message-ID: <ar-k7i_hZC-SqCLO@gremlin>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-32-4583d8a23bca@kernel.org>
- <72bbb616-e84e-4635-9d0a-336916db47e4@kernel.org>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="SFDKTC6H"
+Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2e23be09baso376353966b.1
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1790944675; x=1791549475; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=kPQTISOHvgDFG/D95e14Nk4IcEq4M+yFBnxlnHIdm/8=;
+        b=SFDKTC6HwKmxzD7/xNibsBFc1j4ff+ojy95mdWuV2mKncK/mBoPjEvtfJRfmqAUALx
+         Ohy/vqCmHL7NIvX5ZmxBKkHXxmiK0SpR9nYt7WBDwsV9UDGYJjF+v0jGzkACnWqzhw8g
+         6RoKhAk53wWP99L2ndduvSZ5zJ+nAWbMMFVImoRxxNZpMUqYExCh61O1ZPcReh0Npu6V
+         MjtsplDWVyuKY/jSOHRR7hH5KXJfPP5H0/02j9FNoO1zv4SsPW8ZNQRdjx8+/N03OGPz
+         MwAgaEiWsYaT0s9M8W992j5qvo2wwAGOc83rQJN/kHP4eT5RE998BaqIHRJO0ie1ctar
+         DpDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790944675; x=1791549475;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kPQTISOHvgDFG/D95e14Nk4IcEq4M+yFBnxlnHIdm/8=;
+        b=gFOTH8S+cmsY2YJumLMMjOBU6y7Frm8GeT9hhjXCkaT32WY8irutBPGoi+/3fUWV0+
+         MTDcIOuQBxtO+5yM9ua6GsLYvLT8umxnJ8Xp5affgd7FEQXwogWQHYGSVh5r64c1XqnI
+         T4nbg0vUIg+fg9z0NVZhF1qwxXqgbD9q86zLQtHd0JW+2o0dBbwoU9FD/ATJX9Tl2Z5H
+         LwvmbTS1WuXX+D62jb6s9K2mpsO8tbT7qN9Jprov0Jt95SoyRLw3W+B5yBQewJ2wZw2s
+         P+Fni+Iyt4PAW70RZnA6v0YDZsLZ04afTxf/KzjkK0mq2Zozpg8AOTcJpzHoFehsYHeC
+         u5+w==
+X-Forwarded-Encrypted: i=1; AKwUvBz6qdXyReASubpZ8WK7xeUlOotaw9JbXeJAdswm9Zo7R8dijKWJxJStEAv6VxJzxx2y53k=@vger.kernel.org
+X-Gm-Message-State: AFuF++kuOMTLHFODWjV1immI33ynj/tnkEZfCNC7uE6EfRZlQv6v4km+
+	eqPALTIVcQrdspHpMVykA9Ja2Wi+Mhv3/KNAUTiF+2erP8iUVDCPcEoVZaJJBmFk9dE=
+X-Gm-Gg: AYBFou0XJ+ukR/E8SyELQBjLmcP7py6eYaGhW46P+BjCECFjP903Vnl6GwP6qGJpxLC
+	67bGV0aIRM2UcFV/eXOVnBxpGa82Wngqb1Y8DpZrTDhpZFJNF4jG7vrZKpld4W3KCXhlL5QSyfc
+	dUP6fp1l/CCVLBcFYsmfNbMX3DHhGIQzt+bANLTIGVxJrXGbWaiLHhmZPo4pXn3tDJ2ctHDo/0x
+	I/8r62mkg9+1p539ZctO4gnjmTa6KQG1Wt1/2whzhKiw950DStuQW1g9PUklJH5v23CjYJ8mEer
+	mLeH7vC3NeWHwndefSLbg1O06MgrD0oeNdI0+44f8vua7NREPB7f/0dYppeuvcmiQeWza8m4s/9
+	/ENs5kr7sZG5R4/uKSdkvDRaUCDDBrMmjabZ6JHnzP/nRXt+tTVconv6WHPP9QCFLh/E62Er5c8
+	Lt3cyFh8ILzLvYAJRn5H12+GeB3xj01J2Nzdadj86/9cuOVVAQqoCwGrMn4Hl5YKQ/AylU5P1x
+X-Received: by 2002:a17:907:7a13:b0:c2a:c6fd:ec6c with SMTP id a640c23a62f3a-c2e4adbbb01mr209234366b.30.1790944673795;
+        Fri, 02 Oct 2026 05:37:53 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e4ca4e2d0sm84749966b.4.2026.10.02.05.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 05:37:53 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Jakub Kicinski" <kuba@kernel.org>,  "Daniel Zahka"
+ <daniel.zahka@gmail.com>,  <netdev@vger.kernel.org>,  "Kuniyuki Iwashima"
+ <kuniyu@google.com>,  "Paolo Abeni" <pabeni@redhat.com>,  "Stanislav
+ Fomichev" <sdf@fomichev.me>,  <bpf@vger.kernel.org>,
+  <kernel-team@cloudflare.com>,  "Daniel Borkmann" <daniel@iogearbox.net>,
+  "John Fastabend" <john.fastabend@gmail.com>,  "Andrii Nakryiko"
+ <andrii@kernel.org>,  "Eduard Zingerman" <eddyz87@gmail.com>,  "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>,  "Martin KaFai Lau"
+ <martin.lau@linux.dev>,  "Song Liu" <song@kernel.org>,  "Yonghong Song"
+ <yonghong.song@linux.dev>,  "Jiri Olsa" <jolsa@kernel.org>,  "Emil
+ Tsalapatis" <emil@etsalapatis.com>,  "David S. Miller"
+ <davem@davemloft.net>,  "Eric Dumazet" <edumazet@google.com>,  "Simon
+ Horman" <horms@kernel.org>,  "Jesper Dangaard Brouer" <hawk@kernel.org>,
+  "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,  "Florian Westphal"
+ <fw@strlen.de>,  "Jack Wang" <163wangjack@gmail.com>
+Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
+ packet scrubbing
+In-Reply-To: <DLSJ0UIY3DSY.3JWS6CS3TX0IP@gmail.com> (Alexei Starovoitov's
+	message of "Wed, 30 Sep 2026 09:00:23 +0000")
+References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
+	<20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com>
+	<DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com>
+	<DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com>
+	<20260925121849.2ac5150b@kernel.org>
+	<DLONQQN0RB03.1NVWVFHGRRWV4@gmail.com>
+	<20260925132004.171b751e@kernel.org>
+	<DLOOI89GKM5B.W4XPBNJUXRV1@gmail.com> <87jyo5bcgs.fsf@cloudflare.com>
+	<DLR2ZT65RKF3.3KZ8O8P4VKTI2@gmail.com> <87ecebbxy5.fsf@cloudflare.com>
+	<DLSJ0UIY3DSY.3JWS6CS3TX0IP@gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Fri, 02 Oct 2026 14:37:52 +0200
+Message-ID: <87ik3kl1lr.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <72bbb616-e84e-4635-9d0a-336916db47e4@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 02, 2026 at 09:04:17AM +0200, David Hildenbrand (Arm) wrote:
-> On 9/17/26 18:22, Lorenzo Stoakes (ARM) wrote:
-> > Rather than directly checking VMA flags, use the newly introduced
-> > vma_is_kernel_owned() and vma_is_persistent() helpers in userfaultfd when
-> > assessing VMA suitability for userfaultfd and UFFDIO_MOVE.
-> >
-> > Update vma_move_compatible() so it's expressed in terms of VMA
-> > characteristics rather than arbitrary flags.
-> >
-> > Additionally, update the use of the deprecated VMA flag API when checking
-> > VMA_SHADOW_STACK_BIT.
-> >
-> > A VMA_IO_BIT check is no longer required but that is fine as a hard
-> > invariant has been established that only kernel-owned mappings may set
-> > VMA_IO_BIT so the check is now redundant.
-> >
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > ---
-> >  mm/userfaultfd.c | 21 +++++++++++++++------
-> >  1 file changed, 15 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> > index 949017e60608..ddf0a4a3d399 100644
-> > --- a/mm/userfaultfd.c
-> > +++ b/mm/userfaultfd.c
-> > @@ -1754,10 +1754,18 @@ static inline bool move_splits_huge_pmd(unsigned long dst_addr,
-> >  }
-> >  #endif
-> >
-> > -static inline bool vma_move_compatible(struct vm_area_struct *vma)
-> > +static inline bool vma_move_compatible(const struct vm_area_struct *vma)
-> >  {
-> > -	return !(vma->vm_flags & (VM_PFNMAP | VM_IO |  VM_HUGETLB |
-> > -				  VM_MIXEDMAP | VM_SHADOW_STACK));
-> > +	/* uffd is generally incompatible with kernel-owned mappings. */
-> > +	if (vma_is_kernel_owned(vma))
-> > +		return false;
-> > +	/* The shadow stack should not be written to by userspace. */
-> > +	if (vma_test_single_mask(vma, VMA_SHADOW_STACK))
-> > +		return false;
-> > +	/* hugetlb mappings cannot be safely moved. */
-> > +	if (vma_is_hugetlb(vma))
-> > +		return false;
-> > +	return true;
+On Wed, Sep 30, 2026 at 09:00 AM GMT, Alexei Starovoitov wrote:
+> On Tue Sep 29, 2026 at 8:32 PM UTC, Jakub Sitnicki wrote:
+>> Everything pushed to:
+>>
+>> https://github.com/jsitnicki/skb-metadata-bench/tree/main/profile
 >
-> return !vma_is_hugetlb(vma);
+> looks like you had lockdep on, so all the data and conclusions
+> likely do not correlate to production.
+> Pls fix and remeasure everything.
 
-Ack, done for v4.
+Thanks. This makes much more sense now.
 
->
-> >  }
-> >
-> >  static int validate_move_areas(struct userfaultfd_ctx *ctx,
-> > @@ -2146,10 +2154,11 @@ static bool vma_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags,
-> >  {
-> >  	const struct vm_uffd_ops *ops = vma_uffd_ops(vma);
-> >
-> > -	if (vma->vm_flags & (VM_DROPPABLE | VM_SHADOW_STACK))
-> > +	/* Non-persistent memory is inherently not controllable by userspace. */
-> > +	if (!vma_is_persistent(vma))
-> >  		return false;
->
-> Completely confusing. Just avoid the helper and open-code this here.
+1) Lockdep was on. Fixed. Configs published to [1].
 
-See the other thread on this. I think with this as vma_is_volatile() this is a
-lot clearer.
+2) Switched from mpstat to bpf_stats since bpf-skb-ext cost was so low
+now that it was drowning in the noise. skb extension teardown is not
+accounted for.
 
->
-> > -
-> > -	if (!vma_is_hugetlb(vma) && (vma->vm_flags & VM_SPECIAL))
-> > +	/* The shadow stack should not be written to by userspace. */
-> > +	if (vma_test_single_mask(vma, VMA_SHADOW_STACK))
-> >  		return false;
-> >
-> >  	vm_flags &= __VM_UFFD_FLAGS;
-> >
->
-> Other stuff looks much better to me.
+3) With rhash, I noticed churn from auto-shrinking in map_update_elem
+(can be seen in gtpchurn profile [2]). LLM suggested a one-line fix to
+set min_size from map_extra hint. Benchmarks ran with this patch [3].
 
-Thanks!
+New results (prog runtime from bpf_stats in nsec):
 
->
->
-> --
-> Cheers,
->
-> David
+ ~/bench $ just bpfstats
+python3 tools/bpfstats.py --agg results-1 results-2 results-3
+variant          prog              results-1  results-2  results-3    total=
+ mean =C2=B1 spread
+---------------------------------------------------------------------------=
+----------------
+ext-cnt          cnt_ingress            35.9       35.6       35.5      106=
+.7 =C2=B1 2.2
+                 cnt_egress             70.3       73.5       69.2
 
---
-Cheers, Lorenzo
+ext-ext          ext_write             199.3      198.9      203.0      263=
+.8 =C2=B1 1.9
+                 ext_read               63.1       64.1       63.2
+
+gtp-cnt          cnt_ingress            34.4       34.3       34.6       94=
+.6 =C2=B1 2.5
+                 cnt_egress             59.9       58.1       62.7
+
+gtp-gtp          gtp_write             531.0      555.9      567.2      920=
+.9 =C2=B1 34.5
+                 gtp_read               85.1       87.5       91.2
+                 gtp_skb_free          267.1      283.9      293.9
+
+gtp-gtpchurn     gtp_write             784.9      782.6      830.6     1190=
+.8 =C2=B1 44.2
+                 gtp_read               82.5       82.3       88.6
+                 gtp_skb_free          297.5      294.7      328.7
+
+gtp-gtplru       gtplru_write          394.9      391.9      394.5      542=
+.8 =C2=B1 1.1
+                 gtplru_read            48.2       49.4       48.9
+                 gtplru_skb_free        99.9      100.4      100.5
+
+gtp-gtp is with nelem_hint+min_size hint set.
+gtp-gtpchurn is without it (map_extra=3D0).
+perf reports and flamegraphs also updated [4].
+
+[1] https://github.com/jsitnicki/skb-metadata-bench/tree/main/configs
+[2] https://raw.githubusercontent.com/jsitnicki/skb-metadata-bench/refs/hea=
+ds/main/profile/perf.gtp-gtpchurn.svg
+[3] https://github.com/jsitnicki/skb-metadata-bench/blob/main/patches/rht-n=
+o-shrink-churn.patch
+[4] https://github.com/jsitnicki/skb-metadata-bench/tree/main/profile
