@@ -1,268 +1,203 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8F6406269
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 19:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B7F415B7F
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 19:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790969433; cv=none; b=ACy/5PxEHvef/Oob+jdcgB6OCO6YnxHkSqMjXva+nWviY/okOgA8bBwfN16TxCrvluACV/og3HbJtIxjWVHLQ6TLu48lqnBFj7yIRLnnilkRxz+P8I5O8AwD9UDl9pkQrUARF8AcFaLxJ49s3/jZQ+6jEBOUugubDbiMIaF5I7c=
+	t=1790969485; cv=none; b=ZMSv2ybfphgha6Naqomym3eXfpPwsPV/TOFsmosP1ggVXyyOAxnIGpcRiCujRxpbkXHvqIWZW6HRGiVkDS6lTlonndGZoofQ0gDbYR0AWMK0X7XBE1Vb9+/vAuWXLpqliYl0foTQZNxNOaDZ6jzTuE8ZD9KbMB47LhEtd5Wlu5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790969433; c=relaxed/simple;
-	bh=8ud2PPO+Px1fJTR7fKOj7Cpd+e5w0q+EGfpkJKvI81I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MDea+uLWVt7f+Rs7l5UYNmsku+JtLSPr/p6i2f8EWoRaHPGXyTt65egiL8BefZ06z03xUfwwO9S98cDLzD1hQmWjJ3xNegV61TjgkHn+e1h2OKHp6MhrwoycPKLkPtEsR/QGmG79VlrFnLkxskvauLlyJeH2TxzMSUQGs25g1i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=XZIZrX2n; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
+	s=arc-20240116; t=1790969485; c=relaxed/simple;
+	bh=JJuniNom+Fw1ahPNnyFOqIw4fr13xMk4CIJNhpunTEY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E6UnmAPSPx3h4iIo7HxJrA28iemzbEHExIZEjh+vKOSB0Pl8pu+4W9+Dt/HISMNqLKcxrf6HSpy5C0slXO321pw0yrykJvXjvcVWbgMay8odWOiNAS/hyi8xpu6UG3VV5IisoEv4E6aAQgNZhe8K/JiY7dE894d7hrdXy8oF7Hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N70aTAJT; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="XZIZrX2n"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-3510f00d974so426531eec.1
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 12:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1790969430; x=1791574230; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BVzBvK/NgasRJl/U/yBTGdi7yekXwAP7/69MG2UrthM=;
-        b=XZIZrX2nwcFIYbQtJYHWp59Q5QgshZ7f2cxnzheGaqLguTsABtHW06Zlhi47Zg2cyE
-         3dXbSF8Joqh0nfRQVuKUVyFXfHxeZfw15T/ruc/Ax+pOb7PKEa9V7UxNK9wKXCdVyOWP
-         LBcxY3gUS5MkzwYb0sxkzSgh42wVF+Z7Ffq0+OW/fwDFtMhjqGNjZ3lUTd/ubq+ggpFA
-         CVHM+H5gMveYC66+zN+r/nWl6eBJeKkVIoQ3cAOLCugaO5rEDLzQSjVbywxC8bQoBxbu
-         NHjqRZpXYFmEKevfk4pAKLRs6oj5Mk4FIew3KjzVlTXifPSPldlvGc63Z4apsCRbcd91
-         i25A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790969430; x=1791574230;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BVzBvK/NgasRJl/U/yBTGdi7yekXwAP7/69MG2UrthM=;
-        b=fhi1sJSMmG8e41r1afl73UR5CYP1D20oOPgJB4RaTgDbxQOdnyXmvzxKEzgdjQfoWi
-         pI/ELNtGLLpZmHZ2mBozJyO55mPe+SbOOtyPgqyLVWzccvi3gVhpm4KRfA/wU4HZ8QdI
-         ENBnt9pnWs73YwBqsajHeZvQSxLL/j1X0QgCwAYh+4ei09rUpzLmNkBT0GkioI3Gp435
-         OzOWtLIGEQUEq1xh7tfzJj6w4BKgZBuviQLDjLCQIP6QkwdTW5JIpVCcdP5wFU4CJCts
-         mqKjgRXJqHT6Yy450afLI/EHDOucJjXVOKUaJ9vMw9WUHaHTSR0BixBfRlbG5aIPzYPg
-         o41Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwdbeXhTwSFp36BMiGLecWRMqfWJDwWCDWJH7T7HYfFnuz5IOWY8nj9LGOirzqw7St96V8=@vger.kernel.org
-X-Gm-Message-State: AFuF++kHKK4nBr7MMiq1gY+k2AZiKi+mcpgC0tzKv4RJBrvfyTo/VyBK
-	z+dgCYQ5GoV8jWpiv1/1Ap58kQ4kpLytQ0YF+/q5RQXeHVHwPOa+HoTxwTsGVrNsMrU=
-X-Gm-Gg: AYBFou3/bjECyn94pNOPaL4XwiLULd8xzUnEbScQ5bphi8p4lZ9FV3dx65eBUgA8Tse
-	gdc2adOVp4BKOZ+eU8fUDaKxahLEynvtB1a0vzefWD0BPlApT0z2aBtwkChkHnOxF2+peYW2moW
-	Pwo7QqXVPQSka9rlzvz0t4MXCeDb1NElPuJgbenXjuo9cSpT1xzvZpG53+6qZDsh9dQ6va6b6gN
-	76TQP+76i4JI4sJeS3yy4GnU60iA4xZjx22eaS0hOKLqfFQhZSPJL/slpJUZ28TmcxxQeZF6Qjh
-	Mldo9unEeBKryIX2HuOVjyT1w4zxDbDQfn6sRgxt/eQh4eUXB6Cde3imMTNXFKTLPQO21npfoAG
-	p9CM7cRp9TMDwCnbKauBLuzj1tGaqToEo7tvDxgi+dEluzssBGgv2EU7SuuCpg8mgS5u/B1BvtX
-	Lv4o/HnfWuEvihuxtaFadDVPo9bUYWsMuo/7KPch0WP+QPmHqUNm0LlxlIg4Bsrz6YX3cwZjhRe
-	4LFHAJAt3ynJk0INgLLt0irKfWNxY7PWQG/89kCSO2xLFFxGbxvLxi0gkA0dGJv2uu50V0=
-X-Received: by 2002:a05:7300:c00b:10b0:34c:fedf:ec64 with SMTP id 5a478bee46e88-351114f8a93mr644136eec.30.1790969429931;
-        Fri, 02 Oct 2026 12:30:29 -0700 (PDT)
-Received: from localhost.localdomain ([2603:8001:5f01:8bab:bcf9:6140:24a9:d1e7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34f14f660f1sm8427448eec.13.2026.10.02.12.30.28
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 02 Oct 2026 12:30:29 -0700 (PDT)
-From: Artem Dinaburg <artem@trailofbits.com>
-To: stable@vger.kernel.org
-Cc: Artem Dinaburg <artem@trailofbits.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	netdev@vger.kernel.org,
-	toke@redhat.com
-Subject: [PATCH 6.1.y 2/2] bpf: Defer work in bpf_timer_cancel_and_free
-Date: Fri,  2 Oct 2026 15:30:17 -0400
-Message-ID: <20261002193020.19392-3-artem@trailofbits.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261002193020.19392-1-artem@trailofbits.com>
-References: <20261002193020.19392-1-artem@trailofbits.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N70aTAJT"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JJuniNom+Fw1ahPNnyFOqIw4fr13xMk4CIJNhpunTEY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790969479; v=1; x=1791574279;
+ b=N70aTAJTd2Rb41o+tSMVz2h5P5dN0uAbuhqpFQCzbPkV01jmOVjfzpsoOcJaRceVeRroicDD
+ 9vblthSMXZS10lnt3zYc22a2OIsB2bOPz8RQ/o92xvJcMZYQPt0u0pKZ0AjrC353gL+MNbmjeZm
+ bNBhtUqvYcgvi1dn2/m3UNco=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 7e2376942eea0f24;
+	Fri, 02 Oct 2026 19:31:19 +0000
+X-Mizu-Trace-ID: 7e2376942eea0f24
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e4059411-8cc4-4bdf-90ca-513ba84c2c90@linux.dev>
+Date: Fri, 2 Oct 2026 20:31:19 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v8 07/22] bpf: Follow an unwind to its landing
+ pad in the verifier
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261001133006.1335369-1-yonghong.song@linux.dev>
+ <20261001133042.1339539-1-yonghong.song@linux.dev>
+ <20261001135024.39F561F00898@smtp.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20261001135024.39F561F00898@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-[ Upstream commit a6fcd19d7eac1335eb76bc16b6a66b7f574d1d69 ]
 
-Currently, the same case as previous patch (two timer callbacks trying
-to cancel each other) can be invoked through bpf_map_update_elem as
-well, or more precisely, freeing map elements containing timers. Since
-this relies on hrtimer_cancel as well, it is prone to the same deadlock
-situation as the previous patch.
+On 10/1/26 6:50 AM, sashiko-bot@kernel.org wrote:
+> Subject: bpf: Follow an unwind to its landing pad in the verifier
+>
+> This patch updates the BPF verifier to follow unwind operations to their
+> landing pads. It handles how an unwind rewrites return addresses of frames
+> and evaluates the proper precision backtracking.
+>
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>> @@ -19126,6 +19145,127 @@ enum {
+>>   	INSN_IDX_UPDATED = 2,
+>>   };
+>>   
+>> +/*
+>> + * The current frame is leaving through an unwind. Its caller's saved return
+>> + * address now points at the pad covering the call, or, with none, at the
+>> + * caller's epilogue, and so on down. Follow that from the state the frame
+>> + * leaves in -- anything it wrote into its callers' stacks included -- to the
+>> + * first pad, or to the main program's frame returning.
+>> + */
+>> +static int unwind_frames(struct bpf_verifier_env *env, bool *do_print_state)
+>> +{
+>> +	struct bpf_verifier_state *state = env->cur_state;
+>> +	u32 frameno = state->curframe;
+>> +	struct bpf_func_state *callee, *caller;
+>> +	int err, pad;
+>> +
+>> +	while (state->curframe) {
+>> +		callee = cur_func(env);
+>> +		caller = state->frame[state->curframe - 1];
+>> +		pad = bpf_exc_pad_of_call(env, callee->callsite);
+>> +		/* The caller is at its call now, not at this frame's insn. */
+>> +		state->insn_idx = callee->callsite;
+>> +		account_processed_insns(env, callee, caller);
+>> +		free_func_state(callee);
+>> +		state->frame[state->curframe--] = NULL;
+>> +		invalidate_outgoing_stack_args(env, caller);
+>> +		if (pad < 0)
+>> +			continue;
+> [Severity: Critical]
+> If a callback subprogram (such as one passed to bpf_loop()) calls
+> bpf_unwind(), does this loop incorrectly pop frames in the verifier state past
+> the C helper?
+>
+> It appears bpf_unwind() and bpf_unwind_resume() lack the callback restriction
+> that bpf_throw() has in do_check_subprogs().
+>
+> At runtime, the exception unwinder stops unwinding when it encounters the
+> non-BPF C helper frame and returns. The callback returns 0, the C helper
+> resumes, and it returns normally to the BPF program.
+>
+> However, if the verifier simulates an unwind through the C helper to the
+> caller's landing pad, it marks the normal execution path as dead code
+> and replaces it with a ja -1.
+>
+> Could this divergence between verifier state and runtime execution cause an
+> infinite loop and hang the kernel?
 
-It would be sufficient to use hrtimer_try_to_cancel to fix this problem,
-as the timer cannot be enqueued after async_cancel_and_free. Once
-async_cancel_and_free has been done, the timer must be reinitialized
-before it can be armed again. The callback running in parallel trying to
-arm the timer will fail, and freeing bpf_hrtimer without waiting is
-sufficient (given kfree_rcu), and bpf_timer_cb will return
-HRTIMER_NORESTART, preventing the timer from being rearmed again.
+This won'd happen. See
 
-However, there exists a UAF scenario where the callback arms the timer
-before entering this function, such that if cancellation fails (due to
-timer callback invoking this routine, or the target timer callback
-running concurrently). In such a case, if the timer expiration is
-significantly far in the future, the RCU grace period expiration
-happening before it will free the bpf_hrtimer state and along with it
-the struct hrtimer, that is enqueued.
+int bpf_exc_check_callback(struct bpf_verifier_env *env, int subprog)
+{
+         if (!env->subprog_info[subprog].might_unwind)
+                 return 0;
+                 
+         verbose(env, "subprog %d may unwind and is used as a callback\n", subprog);
+         return -EINVAL;
+}
 
-Hence, it is clear cancellation needs to occur after
-async_cancel_and_free, and yet it cannot be done inline due to deadlock
-issues. We thus modify bpf_timer_cancel_and_free to defer work to the
-global workqueue, adding a work_struct alongside rcu_head (both used at
-_different_ points of time, so can share space).
+If any callback function may be might_unwind which implies some callee(s)
+or further down callee(s) must be a bpf_unwind(), then bpf_exc_check_callback()
+will fail.
 
-Update existing code comments to reflect the new state of affairs.
+>
+> [ ... ]
+>> @@ -19380,13 +19520,32 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+>>   					return -EINVAL;
+>>   				}
+>>   			}
+>> +			if (bpf_is_unwind_kfunc(insn) || bpf_is_unwind_resume_kfunc(insn)) {
+>> +				err = check_kfunc_allowed_only(env, insn, env->insn_idx);
+>> +				if (err)
+>> +					return err;
+>> +				if (bpf_is_unwind_kfunc(insn))
+>> +					return process_bpf_unwind(env, &env->insn_idx,
+>> +								  do_print_state);
+>> +				/*
+>> +				 * The fixups lower this to 'r0 = 0; exit', and
+>> +				 * the unwind goes on below this frame.
+>> +				 */
+>> +				return unwind_frames(env, do_print_state);
+>> +			}
+>>   			mark_reg_scratched(env, BPF_REG_0);
+>>   			if (bpf_in_stack_arg_cnt(&env->subprog_info[cur_func(env)->subprogno]))
+>>   				cur_func(env)->no_stack_arg_load = true;
+>>   			if (bpf_is_callx(insn))
+>>   				return check_func_callx(env, insn, &env->insn_idx);
+>> -			if (insn->src_reg == BPF_PSEUDO_CALL)
+>> -				return check_func_call(env, insn, &env->insn_idx);
+>> +			if (insn->src_reg == BPF_PSEUDO_CALL) {
+>> +				int call_idx = env->insn_idx;
+>> +
+>> +				err = check_func_call(env, insn, &env->insn_idx);
+>> +				if (err)
+>> +					return err;
+>> +				return unwind_out_of_global_call(env, call_idx, do_print_state);
+>> +			}
+> [Severity: Critical]
+> If check_func_call() processes a global subprogram that is marked with both
+> might_throw and might_unwind, it evaluates might_throw, calls
+> process_bpf_exit_full(), and returns PROCESS_BPF_EXIT.
 
-[ Backport to 6.1.y: mapped deferred cancellation onto the older pre-BPF-
-  workqueue timer object layout. ]
+The global subprog is marked with both might_throw and might_unwind. The previous
+suggested like
 
-Fixes: b00628b1c7d5 ("bpf: Introduce bpf timers.")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Link: https://lore.kernel.org/r/20240709185440.1104957-3-memxor@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Assisted-by: LLM
-Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
----
-Hi Greg, Sasha, and bpf maintainers,
+         if (env->cleanup_info_cnt || bpf_prog_may_unwind(env)) {
+                 ret = bpf_exc_check_prog(env);
+                 if (ret)
+                         goto skip_full_check;
+         }
 
-I am working through the small CVE backports still missing from 6.1.y.
-This one addresses CVE-2024-41045. It defers timer destruction so callbacks
-cannot deadlock or leave an enqueued timer freed.
+and we have
 
-The corresponding 6.6.y backport is queued (6.6.158-rc1). The fix is
-already present in 6.12.y, 6.18.y, and 7.2.y, but not in 6.1.y.
-The target-specific adjustment is recorded in the bracketed note above.
+bool bpf_prog_may_unwind(const struct bpf_verifier_env *env)
+{
+         u32 i;
 
-Could you please queue it for 6.1.y?
+         for (i = 0; i < env->subprog_cnt; i++)
+                 if (env->subprog_info[i].might_unwind)
+                         return true;
+         return false;
+}
 
-CVE: CVE-2024-41045
-Upstream: a6fcd19d7eac1335eb76bc16b6a66b7f574d1d69
+so bpf_exc_check_prog() will fail if prog has both might_throw and might_unwind.
 
-AI assistance: An LLM helped identify, adapt, and validate this backport; I
-reviewed the resulting code and validation evidence.
 
-Thanks,
-Artem Dinaburg
-
- kernel/bpf/helpers.c | 58 +++++++++++++++++++++++++++++++++++---------
- 1 file changed, 46 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index af16711a731ffe..e462962a1a12be 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1113,7 +1113,10 @@ struct bpf_hrtimer {
- 	struct bpf_prog *prog;
- 	void __rcu *callback_fn;
- 	void *value;
--	struct rcu_head rcu;
-+	union {
-+		struct rcu_head rcu;
-+		struct work_struct delete_work;
-+	};
- };
- 
- /* the actual struct hidden inside uapi struct bpf_timer */
-@@ -1167,6 +1170,22 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
- 	return HRTIMER_NORESTART;
- }
- 
-+static void bpf_timer_delete_work(struct work_struct *work)
-+{
-+	struct bpf_hrtimer *t = container_of(work, struct bpf_hrtimer,
-+					     delete_work);
-+
-+	/* Cancel the timer and wait for callback to complete if it was running.
-+	 * If hrtimer_cancel() can be safely called it's safe to call
-+	 * kfree_rcu(t) right after for both preallocated and non-preallocated
-+	 * maps. The timer->timer = NULL was already done and no code path can see
-+	 * address 't' anymore. A timer armed before bpf_timer_cancel_and_free()
-+	 * will have been cancelled.
-+	 */
-+	hrtimer_cancel(&t->timer);
-+	kfree_rcu(t, rcu);
-+}
-+
- BPF_CALL_3(bpf_timer_init, struct bpf_timer_kern *, timer, struct bpf_map *, map,
- 	   u64, flags)
- {
-@@ -1204,6 +1223,7 @@ BPF_CALL_3(bpf_timer_init, struct bpf_timer_kern *, timer, struct bpf_map *, map
- 	t->prog = NULL;
- 	rcu_assign_pointer(t->callback_fn, NULL);
- 	atomic_set(&t->cancelling, 0);
-+	INIT_WORK(&t->delete_work, bpf_timer_delete_work);
- 	hrtimer_init(&t->timer, clockid, HRTIMER_MODE_REL_SOFT);
- 	t->timer.function = bpf_timer_cb;
- 	WRITE_ONCE(timer->timer, t);
-@@ -1424,14 +1444,8 @@ void bpf_timer_cancel_and_free(void *val)
- 	__bpf_spin_unlock_irqrestore(&timer->lock);
- 	if (!t)
- 		return;
--	/* Cancel the timer and wait for callback to complete if it was running.
--	 * If hrtimer_cancel() can be safely called it's safe to call kfree(t)
--	 * right after for both preallocated and non-preallocated maps.
--	 * The timer->timer = NULL was already done and no code path can
--	 * see address 't' anymore.
--	 *
--	 * Check that bpf_map_delete/update_elem() wasn't called from timer
--	 * callback_fn. In such case don't call hrtimer_cancel() (since it will
-+	/* We check that bpf_map_delete/update_elem() was called from timer
-+	 * callback_fn. In such case we don't call hrtimer_cancel() (since it will
- 	 * deadlock) and don't call hrtimer_try_to_cancel() (since it will just
- 	 * return -1). Though callback_fn is still running on this cpu it's
- 	 * safe to do kfree(t) because bpf_timer_cb() read everything it needed
-@@ -1439,10 +1453,30 @@ void bpf_timer_cancel_and_free(void *val)
- 	 * since timer->timer = NULL was already done. The timer will be
- 	 * effectively cancelled because bpf_timer_cb() will return
- 	 * HRTIMER_NORESTART.
-+	 *
-+	 * However, it is possible the timer callback_fn calling us armed the
-+	 * timer _before_ calling us, such that failing to cancel it here will
-+	 * cause it to possibly use struct hrtimer after freeing bpf_hrtimer.
-+	 * Therefore, we _need_ to cancel any outstanding timers before we do
-+	 * kfree_rcu, even though no more timers can be armed.
-+	 *
-+	 * Moreover, we need to schedule work even if timer does not belong to
-+	 * the calling callback_fn, as on two different CPUs, we can end up in a
-+	 * situation where both sides run in parallel, try to cancel one
-+	 * another, and we end up waiting on both sides in hrtimer_cancel
-+	 * without making forward progress, since timer1 depends on timer2
-+	 * callback to finish, and vice versa.
-+	 *
-+	 *  CPU 1 (timer1_cb)			CPU 2 (timer2_cb)
-+	 *  bpf_timer_cancel_and_free(timer2)	bpf_timer_cancel_and_free(timer1)
-+	 *
-+	 * To avoid these issues, punt to workqueue context when we are in a
-+	 * timer callback.
- 	 */
--	if (this_cpu_read(hrtimer_running) != t)
--		hrtimer_cancel(&t->timer);
--	kfree_rcu(t, rcu);
-+	if (this_cpu_read(hrtimer_running))
-+		queue_work(system_unbound_wq, &t->delete_work);
-+	else
-+		bpf_timer_delete_work(&t->delete_work);
- }
- 
- BPF_CALL_2(bpf_kptr_xchg, void *, map_value, void *, ptr)
--- 
-2.39.5
+>
+> Does this cause do_check_insn() to return early here with err = 1, completely
+> bypassing the unwind_out_of_global_call() logic?
+>
+> If bypassed, the landing pad associated with the call is never verified and
+> is replaced with a ja -1 (dead code). At runtime, if the global subprogram
+> calls bpf_unwind(), the exception unwinder routes execution to this unverified
+> landing pad.
+>
+> Can this result in hitting the ja -1 infinite loop and hanging the kernel?
 
