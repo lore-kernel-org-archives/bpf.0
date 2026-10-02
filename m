@@ -1,62 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68414F55AC;
-	Fri,  2 Oct 2026 16:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0D84AEBD4;
+	Fri,  2 Oct 2026 16:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790958310; cv=none; b=X/664L6odBEwQjeYrNpJzVYwo7ak9nvMGsuoVpghSCYml41SghT5txuoJljvR927/u+MCHP0Cfcjbs87Q/uP46sNBHVV3kyKFOPr1JX5GLi8Tu1AiIXFTTZPsjb1iSv7mKaa0LCC0rtHxIiXjSYQ38G7dAw71SugFWKbydswUTQ=
+	t=1790958364; cv=none; b=Q0bxrzjPvYrU4jXQTIy1uRaHY1Mn3S7bqVvPIsnGnmTMiTN21EVZSQ0bHr+HxqYljcqMPXXzXjQYWaEzyhMklhS4wDVe7/mWToRxPVou7C23v+0jqx3iEGZHNOTYDZxSa6b2rE4pCYG9+oGG2xyb7Cvmdrf9PMkvT+va7MevM9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790958310; c=relaxed/simple;
-	bh=AZChlUywntyCPFGY9lWSy9nCKlzwb5uj6pLW1/A5pqg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fnCWf32tejM7F92OkspqGBwLol6AOMKgEYCV56u4iAd5yAkAU8qyp6pLfenDpUd/eP6SbF7FcCzW0pVaexw7j/BHfm7gHtBktYjp6V2S4hFyEBVfw8UKZEtnUBydJsa/KnvAa8aVkSovAFb2PlBslh43/el+1uVi3ClRxQxinwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a7P4HPag; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790958364; c=relaxed/simple;
+	bh=qTWhSWIGJ5dKICCs3WVmVKYS9vcEorOKTNJpApVo2Hk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gaexh8L2Rm4X4guU1n3OklUs7/cIgTauDTrFiXSgbqkZJ6tk94GOa49GP21R9vOskO5+IR1r2LFQEa7NhhBZjZdK7mCaFeczwfxZnRVfUIBSIwtZvjd0EySR7AgWo6xH6n8wpuRgCST/wzyPdg2vsP4UF4tIwg2iIzIiPGvidLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XY9KBDvV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a7P4HPag"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A4FA1F00898;
-	Fri,  2 Oct 2026 16:25:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XY9KBDvV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3ADE1F000FF;
+	Fri,  2 Oct 2026 16:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790958309;
-	bh=k9QBgyctyjf1wUE5+IyBS6H1P6fbF3GcIg9RGUe3MH4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=a7P4HPag2l40BDyWAf0RSYqJLQ/nRiZl8oKP85Fm+8ZeQciaNQMy6de5OJpy4VGYr
-	 XTKl6O7W0XS26UEspaVQI2vXQect500KbWu4Bw30HLL6+aX7HP/BiJa4G2pOOaRnPm
-	 pph0MsVHgwOjr1yhliCEDQPeyuKaDmyoDsM6jBspi12905W8LJSIBPHfXa9FachT3X
-	 3Umn16tD4BV9Rxh3R7rDxkbR8vf77K9rDbAH84SPatjsGTJH+uzzyCP6z9xq0FqyTC
-	 RpXOWeNNAJceJj/8CGMl9ACsjcGVfLuF70TFiy2NVp0Gue3Z6eeuZaueKG18GGLsh8
-	 tnIIXY55lrs4Q==
-Date: Fri, 02 Oct 2026 06:25:08 -1000
-Message-ID: <c1fdbe4f99352a102b38c7d131215d5a@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev,
- Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>,
- Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org,
- bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
- struct_ops
-In-Reply-To: <ar7H__jzvWVtqSn5@linux.dev>
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
- <bda525506b3fb3e61da28a112f28abba@kernel.org>
- <arw4rjVkm2ob9ioL@linux.dev>
- <bc6815954b8d08e75deadd43e1a2192c@kernel.org>
- <ar2kvmCPR9q31V8M@linux.dev>
- <31a871a07fccc99e953a2d633fc51edc@kernel.org>
- <ar7H__jzvWVtqSn5@linux.dev>
+	s=k20260515; t=1790958363;
+	bh=Z+tczB0ff+GcvA3l0VojhNNKNUieaScKIojzODtxPxY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XY9KBDvVSP2YZ+qhLRrthzXoS2zrPh5QgexKeA0VShHs4XtkEwgMqa1CqoB5kMjOm
+	 RNN9+kCfWeElbjLWnO324pdcSJ2neko2RVlWV+625JAOleOJHyrMjGkiYIXb8pg5Go
+	 KTper5e1448RF8f0ubfmZeDYHUPfhiSRVOi24PTGD18Q4pQpE4zdLawqCL+e7HeutW
+	 cUUtfYlA1IzRtFxDIG98NoUiw9uV434HEKzSXkw5OQUvcZz1c1mYlJdI0rF8vU+CGg
+	 tzDOPCBzPhkA9q8QjdXMSzCjqkzFgy+XhVUBX9kw7J1cQvDQyvsimWVUK//T35mQau
+	 uV6RBhM77Yv9w==
+Date: Fri, 2 Oct 2026 18:25:58 +0200
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+	dwarves@vger.kernel.org
+Subject: Re: Many instances of "no BTF func for kfunc ..." and "unresolved
+ symbol ..." from resolve_btfids after pahole 1.32 upgrade
+Message-ID: <20261002162558.GB288990@ax162>
+References: <20261001224346.GA576434@ax162>
+ <efa1ae47-3ccf-4689-9fde-a0294985ccfb@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,31 +49,100 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <efa1ae47-3ccf-4689-9fde-a0294985ccfb@linux.dev>
 
-Hello, Shakeel.
+Hi Yonghong,
 
-On Thu, Oct 01, 2026 at 03:56:47PM -0700, Shakeel Butt wrote:
-> We are in agreement on (1) and (2) completely. For (3), I am fine with removing
-> the sync enforcement, but for throttling points for bulk operation sites,
-> I think we should only add them when there is an actual use case for that
-> or someone complains about overrun from those sites.
+On Fri, Oct 02, 2026 at 10:40:12AM +0100, Yonghong Song wrote:
+> Could you try the following patch to see whether it solved the issue.
+> I didn't have environment to test arm, powerpc, riscv, etc.
 
-On (3), if removing synchronous enforcement wouldn't regress anything,
-that's fine, but why was it added in the first place?
+Yes, I had to manually apply it but it does appear to resolve this
+issue. I'll put it through my full build matrix soon but should you send
+it formally, feel free to add
 
-> Now, setting aside the default behavior of memory.high, I want to provide
-> additional flexibility to users for (3) specifically. One specific case is
-> letting users opt in to async reclaim instead of the other forms of memory.high
-> enforcement. Basically, users can specify that instead of having their
-> application threads throttled, they would prefer async reclaim to bring their
-> usage back below memory.high.
+  Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 
-As for flexibility, we already have a gradient of enforcement around
-memory.high. Is the need here to make the shape of that gradient
-configurable? Can you give specific examples where this is needed?
-
-Thanks.
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index d6b9be6..2f137ee 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -2913,7 +2913,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+>                 encoder->tag_kfuncs      = conf_load->btf_decl_tag_kfuncs;
+>                 encoder->gen_distilled_base = conf_load->btf_gen_distilled_base;
+>                 encoder->encode_attributes = conf_load->btf_attributes;
+> -               encoder->true_signature = conf_load->true_signature;
+> +               encoder->true_signature = conf_load->true_signature && cu->param_loc_supported;
+>                 encoder->verbose         = verbose;
+>                 encoder->has_index_type  = false;
+>                 encoder->need_index_type = false;
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index 1e5363a..9f9b9c9 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -1518,6 +1518,22 @@ static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
+>         }
+>  }
+> +/*
+> + * Architectures whose argument register mapping has been validated for
+> + * matching clang parameter locations and reconstructing true signatures.
+> + * Other architectures keep only the basic optimized-out detection.
+> + */
+> +static bool arch__param_loc_supported(const GElf_Ehdr *ehdr)
+> +{
+> +       switch (ehdr->e_machine) {
+> +       case EM_X86_64:
+> +       case EM_AARCH64:
+> +               return true;
+> +       default:
+> +               return false;
+> +       }
+> +}
+> +
+>  static struct template_type_param *template_type_param__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+>  {
+>         struct template_type_param *ttparm = tag__alloc(cu, sizeof(*ttparm));
+> @@ -3777,7 +3793,8 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
+>  {
+>         struct ftype *ftype = &fn->proto;
+>         struct parameter *pos;
+> -       bool true_sig_enabled = conf->true_signature && ftype->signature_changed;
+> +       bool true_sig_enabled = cu->param_loc_supported && conf->true_signature &&
+> +                               ftype->signature_changed;
+>         bool check_locations = !cu->producer_clang || ftype->signature_changed;
+>         int reg_idx = 0;
+> @@ -3785,7 +3802,8 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
+>                 /* Producer is clang and the signature was not changed: match
+>                  * each parameter against its expected ABI argument register.
+>                  */
+> -               function__match_clang_parameter_locations(ftype, cu);
+> +               if (cu->param_loc_supported)
+> +                       function__match_clang_parameter_locations(ftype, cu);
+>                 return;
+>         }
+> @@ -4533,6 +4551,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
+>         cu->nr_register_params = arch__nr_register_params(&ehdr);
+>         cu->agg_use_two_regs = arch__agg_use_two_regs(&ehdr);
+>         cu->arg_align_two_regs = arch__arg_align_two_regs(&ehdr);
+> +       cu->param_loc_supported = arch__param_loc_supported(&ehdr);
+>         arch__set_register_params(&ehdr, cu);
+>         return 0;
+>  }
+> diff --git a/dwarves.h b/dwarves.h
+> index f3453ed..6b75ece 100644
+> --- a/dwarves.h
+> +++ b/dwarves.h
+> @@ -305,6 +305,7 @@ struct cu {
+>         uint8_t          producer_clang:1;
+>         uint8_t          agg_use_two_regs:1;    /* An aggregate like {long a; long b;} */
+>         uint8_t          arg_align_two_regs:1;  /* An over-aligned arg starts on an even register */
+> +       uint8_t          param_loc_supported:1; /* Parameter location analysis is validated for this arch */
+>         uint8_t          nr_register_params;
+>         int              register_params[ARCH_MAX_REGISTER_PARAMS];
+>         int              functions_saved;
+> 
 
 -- 
-tejun
+Cheers,
+Nathan
