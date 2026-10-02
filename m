@@ -1,148 +1,63 @@
-Received: from mta1.migadu.com (out-148.mta1.migadu.com [95.215.58.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65823D810F
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 21:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3836444E67E
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 21:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790975436; cv=none; b=rQZbGX3EQFq5FhwR7OYCiA2CSXeqKEBmjkvF5t9ogVjbxZilE4o6I1QFMoKdTSIfWB9gAggZ4L+XxKMH4PS79klU4qOdhC3bHFc4QH90bHZwlexgqQi8bPJsukkXa0iDHWhFU5ZyU6me7A/lgI4W5epUAk0ehNWT1hGZK7nuWbo=
+	t=1790975499; cv=none; b=YSRKJeDCjARbT0GM5TysSbibsJrpakQZazHStijJD5FtSgibfBO6x00uIWMoMdoWODQu16ld97id99BPJO1z2cBJDDBA0GnQvpTiWVzxTTRG0GU9B/VrhCTb7jQHsLVPXNUdDu7f2CkxVcV2eBAD0B6fQPZ5LJPgwUyTeS3jICA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790975436; c=relaxed/simple;
-	bh=yCw6xXyOZGegyFbAV2WEaZa8j1Ob77m6e29E3NYbfvM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jGNmlkZZNTkkYER3CAsiWwhXtoI3zhlsqMKfFCYp8qC9AP/w1CHcrnNIKvxTVakZNkGbyzuSuodOHN9PtoHsS8dXoSV57W2Vbn1Q3f8ABgDQCxJZ5S7QWXZoycvvQMg+o1SjS8bijOxlCVubs1y4vm59PFmhSMWvHB0DeN9OQbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xAl03MG8; arc=none smtp.client-ip=95.215.58.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790975499; c=relaxed/simple;
+	bh=vRSrDbhna+H+y5xGfilcW71AsHWGNCS5YqYAze2EB2s=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=TdyK+q2Q+G+rgWZsGAx4p4M9o2d5NbcUXRNlsAHoQBWJpbrErcKB89GsM7cUA2Ul3i/aRles5Gi8sCAgZg0GFkuEOOhyz1pxZWn6sW+LjZGnIKPtWdhmwQmCZ8amFcQuvsBhCKocY01odDUP5zmnRTuzPT80lMkAU0wMR3vi9MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rf6NfSRU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xAl03MG8"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yCw6xXyOZGegyFbAV2WEaZa8j1Ob77m6e29E3NYbfvM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790975431; v=1; x=1791580231;
- b=xAl03MG8SdOhXc0XjMLtn8I7mY4AWjIWtCLC63rDelScxbGscsfIlzltaA3thU0lWkPk7mb9
- LPZwAbQ+Sft+PTThb1FN8/fC34Wh+8cXHsMMpUqHsv/uStweyJ8aeEd5Iu2XX7QOrgofmSNwCCj
- Qc2mGsIyo8pbbsxy3gZRquEE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 75ff3fc86023e63b;
-	Fri, 02 Oct 2026 21:10:18 +0000
-X-Mizu-Trace-ID: 75ff3fc86023e63b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f6bd483c-a6ec-41f0-87cc-771cea8cf38d@linux.dev>
-Date: Fri, 2 Oct 2026 22:10:18 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rf6NfSRU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4031F000FF;
+	Fri,  2 Oct 2026 21:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790975495;
+	bh=5vm5KUSRIDF/HRbFDWDH78mW/Dsi6B1uzfQxQgz8WF0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=Rf6NfSRU5UV/I5KBGluI7SCcG6bzKxpoTBgC5BkywyyNI7VJlXPaMpqffFDdULrIV
+	 2t6eByO7CN7Wgtf+hqeGMRnnfgqpg554pP2ZGxOcWsNjjlzLmkSyB71oFm0MIhMm5N
+	 MCVdB3UbnNWVgX/pwKbM4dyjClk6Gqx4BLrabQV7DENkZpAsoaAvdMFWLP9Ho5dpqg
+	 OPHWm/XewE+Gl5k5l1AcgNfxDjTNbPNDRzC49k2hFFBTRIHFNI0/lu+2+lZ5mCXmbD
+	 X2onhAMlqsCmwIVe5pAkL4C+FUmwrcH7sO7ly9Uz+/ORWJPbp7EOmOhb5XFK9LOkJp
+	 S59ahZ0L6IYng==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B44743811A72;
+	Fri,  2 Oct 2026 21:11:35 +0000 (UTC)
+Subject: Re: [GIT PULL] BPF fixes for 7.3-rc6
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20261002155400.661252-1-alexei.starovoitov@gmail.com>
+References: <20261002155400.661252-1-alexei.starovoitov@gmail.com>
+X-PR-Tracked-List-Id: <bpf.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20261002155400.661252-1-alexei.starovoitov@gmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+X-PR-Tracked-Commit-Id: de020dc8049bfb2b22e3b6d99c031feb2e22d112
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8f150ccedfbd610aa25509ff42365d70fb20478f
+Message-Id: <179097549436.3587474.17085696581807915614.pr-tracker-bot@kernel.org>
+Date: Fri, 02 Oct 2026 21:11:34 +0000
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 08/22] bpf: Require an unwind to leave a frame
- holding what it entered with
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261001133047.1339752-1-yonghong.song@linux.dev>
- <a203a496c37cc672ef89f2e95a82b48c4a19863d832a055a3bfda60e3fd206ec@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <a203a496c37cc672ef89f2e95a82b48c4a19863d832a055a3bfda60e3fd206ec@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+The pull request you sent on Fri,  2 Oct 2026 15:53:57 +0000:
 
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
 
-On 10/1/26 7:31 AM, bot+bpf-ci@kernel.org wrote:
->> bpf: Require an unwind to leave a frame holding what it entered with
-> TL;DR: call_may_unwind() treats every callx as possibly unwinding, so the
-> verifier may wrongly reject valid programs that hold a reference or spin lock
-> across a callx; the exact target is available from the register.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index c7a350be538e..a7b25ab04051 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> @@ -19244,6 +19245,32 @@ static int unwind_out_of_global_call(struct bpf_verifier_env *env, int call_idx,
->>   	return INSN_IDX_UPDATED;
->>   }
->>
->> +/* Can an unwind come back out of this call? */
->> +static bool call_may_unwind(struct bpf_verifier_env *env, const struct bpf_insn *insn,
->> +			    int insn_idx)
->> +{
->> +	int subprog;
->> +
->> +	/* Which subprog a callx lands in is not known here, so any may be it. */
->> +	if (bpf_is_callx(insn))
->> +		return bpf_prog_may_unwind(env);
-> Is it true that the target of a callx is not known here?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8f150ccedfbd610aa25509ff42365d70fb20478f
 
-This is way to conservatile as if *any* subprog is marked as may_unwind, then
-it will return bpf_is_callx(insn). The best thing is to follow callx itself
-and find whether it is possible may_unwind or not.
+Thank you!
 
->
-> call_may_unwind() is reached from check_unwind_through_call() in
-> do_check_insn(), just before check_func_callx().  check_func_callx() takes
-> the exact target from the same register state a few lines later:
->
-> 	reg = reg_state(env, insn->dst_reg);
-> 	if (reg->type != PTR_TO_FUNC) ...
-> 	/* PTR_TO_FUNC is a pointer to a static subprog */
-> 	subprog = reg->subprogno;
->
-> and check_func_ptr_read() pushes one state per possible table target, each
-> with its own subprogno.  So each verified callx has exactly one target at
-> this point.  Only the CFG pass has to be conservative, and
-> mark_callx_might_unwind() already marks any target that itself contains a
-> callx.
->
-> With the current code, an uncovered callx is refused by
-> bpf_exc_check_frame_balance() whenever the calling frame has changed its
-> RCU, preempt, IRQ, spin lock or reference state since entry, as long as some
-> unrelated subprog in the program is marked might_unwind.  For example:
->
-> 	foo():
-> 	    t = bpf_task_acquire(...);  /* id > entry_id_gen */
-> 	    r1 = vtable[i];             /* PTR_TO_FUNC -> bar, no unwind in bar */
-> 	    callx r1                    /* no cleanup record covers it */
-> 	    bpf_task_release(t);
->
-> 	baz():
-> 	    bpf_unwind();               /* makes bpf_prog_may_unwind() true */
->
-> Before this patch this program was accepted.  Now it is refused with "an
-> unwind through this call keeps the reference id=N the frame acquired", even
-> though no unwind can pass through that call.  callx is also explicitly
-> allowed under a spin lock, so a frame that holds a bpf_spin_lock across a
-> callx is refused as well with "an unwind through this call does not leave
-> the frame's bpf_spin_lock state as it found it".
->
-> Could this look at the register instead, something like:
->
-> 	reg = &cur_regs(env)[insn->dst_reg];
-> 	if (reg->type == PTR_TO_FUNC)
-> 		return env->subprog_info[reg->subprogno].might_unwind;
->
-> and leave it to check_func_callx() to refuse any other register type, as it
-> does today?
->
->> +	if (insn->src_reg != BPF_PSEUDO_CALL)
->> +		return false;
->> +	subprog = bpf_find_subprog(env, insn_idx + insn->imm + 1);
->> +	return subprog >= 0 && env->subprog_info[subprog].might_unwind;
->> +}
->> +
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36872142096
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
