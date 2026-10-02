@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EFE3F0761;
-	Fri,  2 Oct 2026 19:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815A5332EBC;
+	Fri,  2 Oct 2026 19:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967690; cv=none; b=RtgKJAzDT/ofSOldW3tZj0L4XbmArDZQIjQi7HEzeUWSwgb+Gq1a3MolEpsoffPqL/1mJ9p1lvR48G2vIRZl/Hi+UZsVrR8ctm8KqGqfeSOX3jvNK5TRznx2KHo+8OAbKN62KUW0hztX6YF7yy1EsNmzWUbcch84CZPUmL/G5Og=
+	t=1790967697; cv=none; b=hMtZGc2xwNY52y+TmongciyGqHnhM6BkkopgtjQRjAwp1OtUAu2XluTz2GFIS3hOJRsp4XpOQjI2ypyH87h+kSfuw0JDbnxWADqRpm0mFnNaq19jkdYohMSdjVkCQ7y1BU3Iz3FS/QJ77q/O8L3hJm0FkaNV6p7jaxOO6LVKack=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967690; c=relaxed/simple;
-	bh=oY1C4t8RHxsBEgieoQf7ys8r0tpFhCz/rFXsBN/Nwvg=;
+	s=arc-20240116; t=1790967697; c=relaxed/simple;
+	bh=n8IEXdLVOwjM2Sd6CHBfxOpqStRbcdyxqFYtTY9XNxk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iPO2Bj0UKT0pgrO53m0LRyDWTcl42O/oL2bzIr1LltRX+HPzs7vA7LE7R8bbFfJ5AYCPKFE58sqMyMM/G6Uhwjv7gAzkunvoj94FU1jhSgBaw4SKkBpxEmX2A4kRaXSz6uy5G4Sby1dU3rfsey+UmVwsmngfaucDdb35WhCYZLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFVLoJ4A; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=LPRZjJbD51ph1I+ExPz0PGVnjOawczX5WRGqNAZqYGPdlHbc6Mumm/3EcLYXDRsvzLg0ouvqBvc4bjFW9izixIlEpBY/Mizk0JhySMwBId4TkxdxS6btyS1YrpCm5fZl/lH01hdBIJl60C0AlElzNguCO12coJtcMCCoY6KADtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MUQKqm+q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFVLoJ4A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF59B1F000FF;
-	Fri,  2 Oct 2026 19:01:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MUQKqm+q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B31C41F00893;
+	Fri,  2 Oct 2026 19:01:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967688;
-	bh=baiQBkVjONtGzJZ5YM5pTpAwSD0T6agoA0NCSrRkDY4=;
+	s=k20260515; t=1790967696;
+	bh=vDPyKmqqls6OlM5RNXLH4F4PVsliipRxsPlZk3tQZ5s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cFVLoJ4Ar8xpupS6ZWS1L2Ispyp/2M5QLAWwVet5QlZB8uyEmrc9YA5z0F4PJ+jV+
-	 roE0uilmdsiy8tZDiwWMyaeCBik3mnO+c9L7TlqVPqlGw6VSR3imWYgTtjQu2EfVzj
-	 AlIowII10vkx+6zvZRcNlayX0gNoPf+Hlioh6ZMMwfNhb3ZZdWHVqPZ4HtYn9X16qd
-	 mr2oV1KJ1aOwdMcgCerkFd3kOFYl8BlDM/t8xzb9lKFceYSU1/GFa9n84CrD6/X3eq
-	 BSK2UehKZWWOwx8CZyvMboTaXPaIEVRMBdscP+AWhuhf8uVhKsBywDj6DjaDeFxheN
-	 e0AdJD1+oov6g==
+	b=MUQKqm+q13LIQM5n5mOUREjBW86Y/wk8GIpV5BdwdjevKRRnaQMhiSiwIdguyImKq
+	 Nfk2kCV+nSq1mGZiRh4mei33xDln1r+QDqRMJYlrh7f2YLpotA33anMsi5VH3RC8jU
+	 Fi7VLhCKTDGMnCNhw2qggrEbqv8IkzeN7T25H6k6Hp++DyJCyZwT7eA7831pQVusQa
+	 n6U8CDG7h55h8Y97WdZPPlPbMZtAT/XVmvq/oBG8wTSlHf6jUqFrA33AZTtjVt5I2c
+	 vmuHlCISv9VXn7xENO7NJ9dhOARC9qep/mxQauutnoZjBtqw0SEJIm7WF5HBpJgCcq
+	 yKrwmOTvNs9fQ==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -69,9 +69,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [RFC net-next 07/15] xsk: Keep the DMA mapping in the buffer pool
-Date: Fri,  2 Oct 2026 21:00:08 +0200
-Message-ID: <20261002190018.696925-8-bjorn@kernel.org>
+Subject: [RFC net-next 08/15] xsk: Handle a detached FILL ring in RX wakeup
+Date: Fri,  2 Oct 2026 21:00:09 +0200
+Message-ID: <20261002190018.696925-9-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002190018.696925-1-bjorn@kernel.org>
 References: <20261002190018.696925-1-bjorn@kernel.org>
@@ -84,87 +84,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-At unmap, an XSK buffer pool looks up its DMA mapping again. It
-searches the UMEM's mapping list for the pool's netdev. A memory
-provider, added later in this series, can keep the mapping after the
-queue is gone. By then the netdev may be cleared, so the search is
-not reliable.
+A buffer pool used as a memory provider can live longer than its
+FILL ring, while an old page pool finishes a deferred destroy. The
+RX need-wakeup helpers use pool->fq without a NULL check.
 
-Store the mapping that xp_dma_map() picked in the pool, and unmap
-that mapping. Hold a reference on the DMA device while the mapping
-exists, so a late final unmap does not use a freed device.
-
-The reference counting of shared mappings does not change.
+Read pool->fq once and return if it is NULL. A normal pool always
+has a FILL ring here, so nothing changes for it.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- include/net/xsk_buff_pool.h | 1 +
- net/xdp/xsk_buff_pool.c     | 8 +++++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ net/xdp/xsk.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index a7df573784fd..77264c4902c0 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -67,6 +67,7 @@ struct xsk_buff_pool {
- 	 * even when they are identical.
- 	 */
- 	dma_addr_t *dma_pages;
-+	struct xsk_dma_map *dma_map;
- 	struct xdp_buff_xsk *heads;
- 	struct xdp_desc *tx_descs;
- 	u64 chunk_mask;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index f01e1de7360e..244776a72961 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -373,7 +373,7 @@ static struct xsk_dma_map *xp_create_dma_map(struct device *dev, struct net_devi
- 	}
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..b68dda9c37d1 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -50,10 +50,15 @@ static struct kmem_cache *xsk_tx_generic_cache;
  
- 	dma_map->netdev = netdev;
--	dma_map->dev = dev;
-+	dma_map->dev = get_device(dev);
- 	dma_map->dma_pages_cnt = nr_pages;
- 	refcount_set(&dma_map->users, 1);
- 	list_add(&dma_map->list, &umem->xsk_dma_list);
-@@ -384,6 +384,7 @@ static void xp_destroy_dma_map(struct xsk_dma_map *dma_map)
+ void xsk_set_rx_need_wakeup(struct xsk_buff_pool *pool)
  {
- 	list_del(&dma_map->list);
- 	kvfree(dma_map->dma_pages);
-+	put_device(dma_map->dev);
- 	kfree(dma_map);
- }
- 
-@@ -407,12 +408,11 @@ static void __xp_dma_unmap(struct xsk_dma_map *dma_map, unsigned long attrs)
- 
- void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
- {
--	struct xsk_dma_map *dma_map;
-+	struct xsk_dma_map *dma_map = pool->dma_map;
- 
- 	if (!pool->dma_pages)
++	struct xsk_queue *fq = READ_ONCE(pool->fq);
++
++	if (!fq)
++		return;
++
+ 	if (pool->cached_need_wakeup & XDP_WAKEUP_RX)
  		return;
  
--	dma_map = xp_find_dma_map(pool);
- 	if (!dma_map) {
- 		WARN(1, "Could not find dma_map for device");
- 		return;
-@@ -424,6 +424,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
- 	kvfree(pool->dma_pages);
- 	pool->dma_pages = NULL;
- 	pool->dma_pages_cnt = 0;
-+	pool->dma_map = NULL;
- 	pool->dev = NULL;
+-	pool->fq->ring->flags |= XDP_RING_NEED_WAKEUP;
++	fq->ring->flags |= XDP_RING_NEED_WAKEUP;
+ 	pool->cached_need_wakeup |= XDP_WAKEUP_RX;
  }
- EXPORT_SYMBOL(xp_dma_unmap);
-@@ -460,6 +461,7 @@ static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dma_map *dma_
- 		return -ENOMEM;
+ EXPORT_SYMBOL(xsk_set_rx_need_wakeup);
+@@ -77,10 +82,15 @@ EXPORT_SYMBOL(xsk_set_tx_need_wakeup);
  
- 	pool->dev = dma_map->dev;
-+	pool->dma_map = dma_map;
- 	pool->dma_pages_cnt = dma_map->dma_pages_cnt;
- 	memcpy(pool->dma_pages, dma_map->dma_pages,
- 	       pool->dma_pages_cnt * sizeof(*pool->dma_pages));
+ void xsk_clear_rx_need_wakeup(struct xsk_buff_pool *pool)
+ {
++	struct xsk_queue *fq = READ_ONCE(pool->fq);
++
++	if (!fq)
++		return;
++
+ 	if (!(pool->cached_need_wakeup & XDP_WAKEUP_RX))
+ 		return;
+ 
+-	pool->fq->ring->flags &= ~XDP_RING_NEED_WAKEUP;
++	fq->ring->flags &= ~XDP_RING_NEED_WAKEUP;
+ 	pool->cached_need_wakeup &= ~XDP_WAKEUP_RX;
+ }
+ EXPORT_SYMBOL(xsk_clear_rx_need_wakeup);
 -- 
 2.55.0
 
