@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480313E8C56;
-	Fri,  2 Oct 2026 19:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125813E6DF5;
+	Fri,  2 Oct 2026 19:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967673; cv=none; b=YI/OtO1IPYfr2iEgeDYRcTYXF9A4bplFBvDHJG0njmMVwLEq58qatXDPcw1YZZYeHCVARnXYMv+991ty4NzL1iUOcLHebLwlRvBF/D7TCo/D1FBmxWSSoxnvd7ygr0q/yFihBSY4L6dxXR3y7kx1A+dk7vfFGZ1dQL67SyJMZmE=
+	t=1790967675; cv=none; b=dPaSbGyRS/IzQNV5ZBH1Q/YRgGoYcAC8oqwp3cRqNSS87DY5A+8jCm9XhtPKD25i5bi/tI2nO2NG5YceYfHxeKn5gfsCQ1uvkrJO0my1aOblbVfy65D8M7oKoXzI4zDiO7UCjDycLIFiddrUYG/qzcwH0Rs3DWYpmZ6r1BwQQfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967673; c=relaxed/simple;
-	bh=kwK8mZxlSaV9ixe2+KKgpc9XBaZkpxLuhKmu0aArgEs=;
+	s=arc-20240116; t=1790967675; c=relaxed/simple;
+	bh=SzL33TGwlflVcblCic2T9ehfarJO86vXhfUJcAVUfxQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E4n1UIVH4FZdCV6hu4EnvscE5swoEMPZIjqmmSPHXuuJnYUPgX3HcKumGQ04/XnbHr3X+Hsg8H2qDGetG1lwjwsCQG1gI1dBu3p6Lb10ZJgaWGMMxWpCPTtA6wh1AicUw/KYkxXsVtWfB652nhIPOy4BsjOZoIi0lurY7/EL20A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bNyFw68C; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=HCH1r8y+voz9kaZ2y0OhMTfiNJx0d2TsYGPuDWH148XNM2SKm66rf5je+aZfodc6yrseKojSLJAswvi+ilbxD9VaCZY05EO3/smwXD6fVh6XObHY/LGkxlfCoGTFYIqtFEp/0KB9UY3UBAQlbKMJYlB4PabrPL85jzKW1Hhse80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F55qbZZ1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNyFw68C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF651F000FF;
-	Fri,  2 Oct 2026 19:00:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F55qbZZ1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319E21F0089A;
+	Fri,  2 Oct 2026 19:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967648;
-	bh=rF//GN0WCNpAcEQ2Tg52h9xgf0Rsx1ipPoTJAH+Exjo=;
+	s=k20260515; t=1790967664;
+	bh=8jyvL4A1/W2TsjCcY99GbAlKcwz5+sDMSGmpziqbmwI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bNyFw68CbrZbpHe4o0Up/4JZlFnhi8rmAt8KGulsjIZthe76td4digBEkd0PzgGJL
-	 Zppm+5LjAgIECCQ22Od0vE29pRZYa8eG/A6Y/HgKzsVqGbTF5FvhjBBEDd9FLzQ5Rm
-	 +XV4D6oSGywW85tIHsMfdeme5KCyEm2PXrmXfUb9ecre1QsGwjiM1zyu9MU6tRFe6y
-	 7f5x+sZt152scZqUvOcIrnzvyxXPFUHA+GR/v5dyRUOtzoRDZIrgcGj+P9iPYJvmzH
-	 6tLBbgAa046V91mOaOsFuXZAkbV6kDgvpMZqZwHKjWUzf4+DHZckaDK6sdtWrlEj2B
-	 ix+F7QiBunQ7g==
+	b=F55qbZZ1KVzGZdtRzh4Gcoc8OmpnQgR0JfKhJbYmyeDhjn7RbGWRunE3scB+ZhArW
+	 2QsP3CI9ip5k4xFV8CsEaINq5T/cZaJgS2ekXVie1yewkPonSz5FPwawS63aeIXzHQ
+	 RZO0cBmZQ+NbhlG49dUszrVUGDUbOtaLnQbK+w6LwnQrWv3+E5zbfT3lyGWzMBFafK
+	 AweRc5qH1lmkArc3BbH2VXkUNHg0eTPT+xib8eS1Z0b8ZesTX7TCP8dwNvpPt/sjwP
+	 Y5uqOY9AGYUcIn3LVzLsyEzGqoYYgJ6kdOvW85qlhTJG2fvSqZY9k11AYu5rupNZhp
+	 Dkg+QNgMOOkLw==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -69,9 +69,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [RFC net-next 02/15] eth: fbnic: Report the logical XDP RX queue
-Date: Fri,  2 Oct 2026 21:00:03 +0200
-Message-ID: <20261002190018.696925-3-bjorn@kernel.org>
+Subject: [RFC net-next 04/15] net: Let memory providers set RX buffer headroom
+Date: Fri,  2 Oct 2026 21:00:05 +0200
+Message-ID: <20261002190018.696925-5-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002190018.696925-1-bjorn@kernel.org>
 References: <20261002190018.696925-1-bjorn@kernel.org>
@@ -84,42 +84,99 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-XDP gives the RX queue to programs in ctx->rx_queue_index. fbnic
-fills it from the header buffer queue index. The header and payload
-buffer queues do not carry the netdev queue id, and the header queue
-index is zero. So XDP programs see queue 0 for packets on every
-queue.
+AF_XDP lets userspace choose a headroom in front of the packet data
+in each UMEM chunk, and the kernel adds XDP_PACKET_HEADROOM to it. A
+driver whose buffers come from an AF_XDP memory provider must put
+packets after this headroom. The driver sees only the page pool, so
+it has no generic way to learn the value, and nothing checks that
+the driver supports it.
 
-Programs that act on the RX queue get the wrong value. For example,
-the default AF_XDP program looks up its socket with
-ctx->rx_queue_index, so it cannot find sockets on other queues.
+Add rx_headroom to the provider parameters and to the queue
+configuration. It is the full headroom, including
+XDP_PACKET_HEADROOM; zero means the driver default. Add
+QCFG_RX_HEADROOM. A provider that sets a headroom can only be
+installed on a queue that supports it; otherwise the install fails
+with -EOPNOTSUPP. The driver checks the value with the rest of the
+queue configuration.
 
-Use the completion queue index. It is the netdev RX queue id, which
-queue steering and AF_XDP socket binding use.
-
-Tested on fbnic hardware (50G, firmware 25.08.05-004) with AF_XDP
-zero-copy from the page-pool series: sockets on queue 43, and on four
-queues at once, receive their packets.
-
-Fixes: 894d4a4ea6cb ("eth: fbnic: move xdp_rxq_info_reg() to resource alloc")
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/netdev_queues.h   | 6 ++++++
+ include/net/page_pool/types.h | 1 +
+ net/core/netdev_config.c      | 2 ++
+ net/core/netdev_rx_queue.c    | 4 ++++
+ 4 files changed, 13 insertions(+)
 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-index c62d885a678a..0c7b1ea002d8 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-@@ -2072,7 +2072,7 @@ static int fbnic_alloc_rx_qt_resources(struct fbnic_net *fbn,
+diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+index c5335e935b7d..f9eba63a5d78 100644
+--- a/include/net/netdev_queues.h
++++ b/include/net/netdev_queues.h
+@@ -45,12 +45,16 @@ struct netdev_config {
+ /**
+  * struct netdev_queue_config - rendered configuration for an RX queue
+  * @rx_page_size:	Size of one RX page-pool allocation.
++ * @rx_headroom:	Headroom before packet data in the first buffer,
++ *			including XDP_PACKET_HEADROOM. Zero selects the
++ *			driver default.
+  * @rx_ring_size:	Configured size of the regular RX ring.
+  * @rx_mini_ring_size:	Configured size of the RX mini ring.
+  * @rx_jumbo_ring_size:	Configured size of the RX jumbo ring.
+  */
+ struct netdev_queue_config {
+ 	u32	rx_page_size;
++	u32	rx_headroom;
+ 	u32	rx_ring_size;
+ 	u32	rx_mini_ring_size;
+ 	u32	rx_jumbo_ring_size;
+@@ -156,6 +160,8 @@ void netdev_stat_queue_sum(struct net_device *netdev,
+ enum {
+ 	/* The queue checks and honours the page size qcfg parameter */
+ 	QCFG_RX_PAGE_SIZE	= 0x1,
++	/* The queue checks and honours the headroom qcfg parameter */
++	QCFG_RX_HEADROOM	= 0x2,
+ };
  
- 	fbnic_bdq_set_page_size(&qt->sub1, rx_page_size);
+ /**
+diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+index a96376613dda..a673fa35febb 100644
+--- a/include/net/page_pool/types.h
++++ b/include/net/page_pool/types.h
+@@ -172,6 +172,7 @@ struct pp_memory_provider_params {
+ 	void *mp_priv;
+ 	const struct memory_provider_ops *mp_ops;
+ 	u32 rx_page_size;
++	u32 rx_headroom;
+ };
  
--	err = xdp_rxq_info_reg(&qt->xdp_rxq, fbn->netdev, qt->sub0.q_idx,
-+	err = xdp_rxq_info_reg(&qt->xdp_rxq, fbn->netdev, qt->cmpl.q_idx,
- 			       nv->napi.napi_id);
+ struct page_pool {
+diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
+index 1975de42a60d..97e33764737b 100644
+--- a/net/core/netdev_config.c
++++ b/net/core/netdev_config.c
+@@ -88,6 +88,8 @@ static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
+ 	mpp = &__netif_get_rx_queue(dev, rxq_idx)->mp_params;
+ 	if (mpp->rx_page_size)
+ 		qcfg->rx_page_size = mpp->rx_page_size;
++	if (mpp->rx_headroom)
++		qcfg->rx_headroom = mpp->rx_headroom;
+ 	err = validate_cb(dev, qcfg, extack);
  	if (err)
- 		goto free_page_pools;
+ 		return err;
+diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+index 610e31d1a717..476289000e78 100644
+--- a/net/core/netdev_rx_queue.c
++++ b/net/core/netdev_rx_queue.c
+@@ -248,6 +248,10 @@ static int __netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+ 		NL_SET_ERR_MSG(extack, "device does not support: rx_page_size");
+ 		return -EOPNOTSUPP;
+ 	}
++	if (p->rx_headroom && !(qops->supported_params & QCFG_RX_HEADROOM)) {
++		NL_SET_ERR_MSG(extack, "device does not support: rx_headroom");
++		return -EOPNOTSUPP;
++	}
+ 
+ 	rxq = __netif_get_rx_queue(dev, rxq_idx);
+ 	if (rxq->mp_params.mp_ops) {
 -- 
 2.55.0
 
