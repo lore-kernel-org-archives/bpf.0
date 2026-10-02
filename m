@@ -1,156 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B9A2AEEB;
-	Fri,  2 Oct 2026 00:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE4230569F;
+	Fri,  2 Oct 2026 00:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790901775; cv=none; b=UXuoHp+5TNDoAka4VpGMXx96G427jZWStUGGsLkolhBSRo6ZBBhS5ejydjX71DSKP5rzBFuQpmH/IV5/RGVUaLc9YVTolyPxvvLEWiRKEMITVUjQNGhvGIA4vHpsCD1/EdnnbnY9yoFF7tN7UqBA9FXzkpcHjY8r/sZVDOpd1Rw=
+	t=1790901777; cv=none; b=FcfIN5a+D/Ex9xCEI2u1C3TsRTFhXbrOrN3diSNiyC/kSi/FbLKs6dLxopHivFoFnKbB4x8XitSsFDjiS7c9HQsgrAkL7jsPtxFgaQ8LdTn+pxoQm8qWP0avNEa/SWNtnZG38N60snlnibCiUHscIl7R7SFtvke9UnlRLiespu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790901775; c=relaxed/simple;
-	bh=YbMsRWXldzYM02I8oqDcFQLZD9fdt2zozI94YuxxZaM=;
+	s=arc-20240116; t=1790901777; c=relaxed/simple;
+	bh=pRK4ka8jK0ZeIgSu7PdcXOQi3EZncukWKf668LpA+mI=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=twSFWcjvCuSEaQxF0aYCmNWLc10OMu/tuFvE7dl2P9szRVonzBv2TbCuuROxrqxB9rnq/gdGckWbOGlz+giakxemQbledAAwczStFdsGszjsXdNk2Kz8jmA6g2S7GHE4HJ9jqTXN4D84RlH1s9ja/4w5wa3Mwpyqra8wxuCCdns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGFgb3H5; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=kcO3l/F9vWBWYIToNkk6oLZpTtcQxK+Tio9iW48X8miunnq8Qolx4jIfPZ9b72zG4BxZLBLjP5V2Ni98tKkbCcqK5ly6IirHmIF7KZ3LU1u0utfS1pkpnZQuDrXLhM2XulVHo+WOeObO2eLRL6hx7ACL308+0gvI9Rgvd0NYKVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hvmFl9rm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGFgb3H5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A421F000FF;
-	Fri,  2 Oct 2026 00:42:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hvmFl9rm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A94B1F00893;
+	Fri,  2 Oct 2026 00:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790901773;
-	bh=QOzCHuJrRGWSsLn75AFrdWKS3cZSukBLofvP0LWEsAY=;
+	s=k20260515; t=1790901776;
+	bh=PFWv9Mb/M9WWb3sCkCNeBms6CokPBW/TIPVRLNq30AI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TGFgb3H5wYmgmq41GuV01uqNSUMtaynGOOn+///d+VidJWAJF8sGnebLdTAnVRNAw
-	 /ROvXN+E089U5W+rXa6rGyKJ5K0vNaJkbtU6Qdu/cTCUHZLTprF91lQGeJcyG2OIn7
-	 KbYSpRLt3j44BXXMjqKk7h7sMklILHhtQgDZkGToVfgyuVAV9sJWE3n+bQriTpDXHz
-	 oFNpWjnj0R4hXuKOmegzdwfT0Vxl6RQNGw75L2FkvuWiRxfmTPs4bVUxfBWX0gF4FC
-	 EkRoo5q32qvu1JM53ouFmfHO1OkLz8eq9zamULip60DHLEoqOxZlWPkTfHuMZX7LBT
-	 sDHRD0znSswJg==
-Content-Type: multipart/mixed; boundary="===============4958834672342477088=="
+	b=hvmFl9rmNLFRUPK5WP2Wf6ncUbp9hvp03fJLblEPjutW2IjOJ/V+MZO18Kc3vyQtg
+	 6zv1996EAp5VCS6KOYiMDijkmbYp9lKrQKWSnwLBJ97ckMLrVTmL8ymP9V2aUI5+Ly
+	 ooBFF0TQynkYD0+NEntbKQtN+uldPIf8uzYa/H+lYPDZEL7Fwc4lOHnoQIzsvjK0D+
+	 rIZvcI3y59QBrSPOnp1er7FbOr2oZqPuAU6yE/Ka/lJYBMOSWcU8PneRZ0tUwjmm9i
+	 QTUAb7PXjgOOTUvF/Yujp88b/jYIxEdXA3dLubycqwoM12sNG0avnEVrLa0NgALEvk
+	 QDyWPfQFW5O2g==
+Content-Type: multipart/mixed; boundary="===============6980895201773502507=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <462c21076d261e56293cab2b423d4ed56cb36dda5c1a47c76182df07c290af70@mail.kernel.org>
-In-Reply-To: <20261001152042.124445-8-gmonaco@redhat.com>
-References: <20261001152042.124445-8-gmonaco@redhat.com>
-Subject: Re: [PATCH v2 07/15] tools/rv: Implement BPF monitor discovery and listing
+Message-Id: <c0a78023cdd98e1d96f0b46d71dc69d3a6d63dab8dc1581ab568e756e8066227@mail.kernel.org>
+In-Reply-To: <20261001152042.124445-3-gmonaco@redhat.com>
+References: <20261001152042.124445-3-gmonaco@redhat.com>
+Subject: Re: [PATCH v2 02/15] tools/rv: Skip empty pid error in selftest if command failed
 From: bot+bpf-ci@kernel.org
 To: gmonaco@redhat.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,bpf@vger.kernel.org,rostedt@goodmis.org,gmonaco@redhat.com
 Cc: alexei.starovoitov@gmail.com,namcao@linutronix.de,wen.yang@linux.dev,tobias.schaffner@siemens.com,vmalik@redhat.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  2 Oct 2026 00:42:53 +0000 (UTC)
+Date: Fri,  2 Oct 2026 00:42:55 +0000 (UTC)
 
---===============4958834672342477088==
+--===============6980895201773502507==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> tools/rv: Implement BPF monitor discovery and listing
+> tools/rv: Skip empty pid error in selftest if command failed
 
-TL;DR:
-- "make static" may now fail to link libbpf (missing -lelf/-lz) now that BPF
-  is on by default
-- Changelog lists fewer search paths than the code scans, including a cwd
-  fallback
+TL;DR: Commit message only: the parenthetical "(exit code not what was
+expected)" looks inverted relative to the code, which reports the empty pid
+only when the exit code matches the expected one. No code bug.
 
->     tools/rv: Implement BPF monitor discovery and listing
+>     tools/rv: Skip empty pid error in selftest if command failed
 >
->     Implement the BPF monitor listing functionality that scans for compiled
->     BPF monitor object files and displays them in the monitor list.
+>     Some rv userspace selftests rely on the pid of the rv process to match
+>     with the output and fail prematurely in case the pid was not found.
+>     If the rv process failed, however, it's likely it will terminate before
+>     catching the pid, and the test reports empty pid ignoring the error that
+>     caused the process to fail.
 >
->     If enabled, running rv list shows in-kernel and BPF monitors found in
->     /usr/share/rv/bpf_monitors/ or in ./bpf_monitors/ relative to the RV
->     binary's location (used during development).
+>     Report empty pid only when the rv process succeeds (exit code not what
+>     was expected) and continue showing exit code and output otherwise.
 >
 >     Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
 
-The commit message names /usr/share/rv/bpf_monitors/ and ./bpf_monitors/
-relative to the rv binary.  Is that the complete search list?
+This isn't a bug in the code, but the parenthetical in the commit message
+looks inverted.  Is "(exit code not what was expected)" meant to read
+"(exit code is what was expected)"?
 
-bpf_list_monitors() scans every entry of bpf_base_paths[] with /bpf_monitors
-appended:
+The patch adds this condition to the empty-pid check in _check():
 
-static char bpf_base_paths[][MAX_PATH] = {
-	".",
-	"/etc/rv",
-	"/usr/local/share/rv",
-	"/usr/share/rv",
-	"", /* Marker */
-};
+    if [ -z "$pid" ] && grep -q "\$pid" <<< "$patterns" \
+            && [ $exitcode -eq "$expected_exitcode" ]; then
+            result=''
+            failure "# Empty pid for $command"
+            return 1
+    fi
 
-so /etc/rv/bpf_monitors and /usr/local/share/rv/bpf_monitors are searched
-as well.
+so "# Empty pid for $command" is reported only when the exit code equals the
+expected exit code.  When the exit code differs, the check is skipped and the
+"# Expected exit code" failure is still recorded along with the output.
 
-Entry 0 is replaced with the binary's directory only when
-readlink("/proc/self/exe") succeeds in bpf_fill_base_paths().  Otherwise it
-stays ".", and the current working directory's bpf_monitors is scanned
-instead.
+As written, the message describes the pre-patch behaviour that the change
+removes.  Something like this would match the code:
 
-All of the directories are scanned, not one or the other, so a monitor
-present in more than one of them is listed more than once.
-
-Should the changelog describe the actual search list and the working
-directory fallback, or should the list be trimmed to what is documented?
-Is /etc/rv an appropriate place to look for BPF object files?
-
-> diff --git a/tools/verification/rv/Makefile.config b/tools/verification/rv/Makefile.config
-> index 066302230eb2..0600170ac217 100644
-> --- a/tools/verification/rv/Makefile.config
-> +++ b/tools/verification/rv/Makefile.config
-
-[ ... ]
-
-> @@ -43,6 +43,29 @@ else
->    $(info libtracefs is missing. Please install libtracefs-dev/libtracefs-devel)
->  endif
->  
-> +ifndef BUILD_BPF
-> +  # BPF monitors are optional but enabled by default
-> +  BUILD_BPF := 1
-> +endif
-> +
-> +ifeq ($(BUILD_BPF),0)
-> +  $(info BPF monitor support disabled, building without BPF monitor support.)
-> +endif
-> +
-> +$(call feature_check,libbpf)
-> +ifeq ($(feature-libbpf), 1)
-> +  $(call detected,CONFIG_LIBBPF)
-> +else
-> +  $(info libbpf is missing, building without BPF monitor support.)
-> +  $(info Please install libbpf-dev/libbpf-devel)
-> +  BUILD_BPF := 0
-> +endif
-> +
-> +ifeq ($(BUILD_BPF),1)
-> +  CFLAGS += -DHAVE_LIBBPF
-> +  $(call lib_setup,bpf)
-> +endif
-> +
-
-Can this break "make static" on systems where it worked before this patch?
-
-BPF support is now on by default whenever the libbpf feature test passes,
-and lib_setup only adds the output of pkg-config --libs-only-l libbpf, which
-is just -lbpf.  libbpf.pc declares:
-
-Requires.private: libelf zlib
-
-and pkg-config only reports those with --static.  The existing static target
-in tools/verification/rv/Makefile links with -static and $(EXTLIBS):
-
-static: $(RV_IN)
-	$(eval LDFLAGS += -static)
-	$(QUIET_LINK)$(CC) $(LDFLAGS) -o $(RV)-static $(RV_IN) $(EXTLIBS)
-
-Would that link libbpf.a without -lelf and -lz and fail with unresolved
-libelf and zlib symbols, so that users now need BUILD_BPF=0 to get a static
-build?
-
-Could pkg-config be called with --static for the static target, the private
-dependencies be added, or BPF support be disabled for static builds?
+    Report empty pid only when the rv process succeeds (exit code is what
+    was expected) and continue showing exit code and output otherwise.
 
 
 ---
@@ -158,4 +95,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36944413541
---===============4958834672342477088==--
+--===============6980895201773502507==--
