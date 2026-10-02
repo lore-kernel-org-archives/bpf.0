@@ -1,199 +1,248 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3964322E1
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 07:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406FE432BC2;
+	Fri,  2 Oct 2026 07:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790926216; cv=none; b=A0kUukegNjHqszTj0X3iw27PdjQnA+aifnO9TbkbIhg7R+h9cwn4f3vjYkM+i7tWUCt+19osrBgsidp6HSIXI0aESXU29wjcQAG+5pP74Ix2zS+bUNEhvmkAnfUbPZjgyEzvq9n2Je6o2v/9U0jSbpzwp/Z+SL/ApLMOM7ANNzQ=
+	t=1790926418; cv=none; b=BDHifaRvCQAffUusU7DLim4sr1xeIdqgh8gg6YuYJSYKne9UdyPksFiFurwQix7i7DZNgVWYcDZDPY5RTKqqZnhza9FAfYcFVhGXQwSL2CfCP2z43Z5RPhF98eoa8JdJcjEEQSpWLm5tEC2tf32wg5+CvBYG6sE3JutOQ8uuw58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790926216; c=relaxed/simple;
-	bh=wMMtCDXpiqei1jhiGiPdThCggE5+d/NY6xuXJoVy9Pk=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hCbldK8TZh0nIHMPbj6vLYuoc3Wdj4yYFEL+1GR3B2uYzO3fVepT07ryMdHDoLwjqghAWKx4wor0sUbxZo0bcvxznYspJV+ELVW6hsI1MM6ZKwLy5GKkiyQkZ58tX7w8jQJpP43V2LBKYwsgT2X0bruM2Dx9D84oXFk0qIjr2tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=umkZaMEJ; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1790926418; c=relaxed/simple;
+	bh=ZvtpHeS/9vNUEOab1wIeNoTdJq+X/A2MZ377rK+g7Pg=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uMKp1xBxze85xGar/BzSOadi/qTjUSjRwxBCmZpLvpN2qpuv9Js2CQybknLQ2P+Lr5meTbdHObqUkYvY56euOO2Nj3Q9FmGhhgsLL4STckbm2gX4yPh+P2lXS7OD3h+nWk7kt8sv13sPuVhKmXu2qyYP55uHS+W0LPq4UenBykA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HkDRbHYw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="umkZaMEJ"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912df756so55135355e9.3
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 00:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790926212; x=1791531012; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pk49vmsIM+yCxOu67mrioHkagQNao6fvAH0GFEMFZCU=;
-        b=umkZaMEJ5Al0f7F3ZLgxMWyb9FTZjKUdETJBLDl0Knr//7kXuesSl4h5D9wrMKZP9j
-         FxpAprgOZeTFZ8/93fobUUOTYxey+otES5tpEAC8ARnNQbUpE7casSGWdo8lwi7UdLuf
-         SnF5MC/Nn+4oNHbLEc5UuA6F3zZKp+Yaf3PTjicKoAs+0zMhZOxSPGusDXBI77lAUsRL
-         16pKqCabdpttYX+RuXAJOnRmVXuPfRFezuEJ0TYVRyeZuIZoqT718XMcYk2iB/+d8WuO
-         YPYgvXo0uEn0kLUZhHNZOVWEffON6lIN1hFoJJxmK24LD244vVE1OZKd+vZqBrFXlrpn
-         buPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790926212; x=1791531012;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pk49vmsIM+yCxOu67mrioHkagQNao6fvAH0GFEMFZCU=;
-        b=tpMnBgjv79zF+XB7cPxanNu3DoB/FQw6tQJCQfcHXPgqiup/53ptdYd5WzidwT6gmf
-         1KBdn/g9jt6JoUHj9Mhr9DTfBhZ9QU18dgW+nkF4ldNiN+2qb2X/lUZiEnCJZiq3UtPK
-         chfKE4QI0s220FhTTUh2BMcyNfyV/Dneq9kohnI+HEJ2KcC8UxeRd1mpswhmS8crd+XW
-         /hJpQahSJMf5jcQ6U2vH0EmWFLYduk8L/M85QjkLfOGU+jLgHYM+VzE7eFc7xajyZyv2
-         TQN/vRZnO3B0xibrZJ7a0ptULU/0H5LypS3A89lPhd5uKpoPJ5MT/zqcv77FjTecgUAy
-         p3TA==
-X-Forwarded-Encrypted: i=1; AKwUvBxK6OU/3SvaLFFtZzrBA8VQnrZlq+ZB3m3oZdeUVcTUbDefPPALw+eLrbE6OVyPzaokVdc=@vger.kernel.org
-X-Gm-Message-State: AFuF++nJVZUuQPojf8a96MqrNopEoWKGB/DvepJbwe8qNjjOEczQDRIv
-	nfoQncW6kgbTttKJCVr6EMc20XFMshvN/jeS/dyoIBHmY8IulCNvN660exFogxRlpVI=
-X-Gm-Gg: AYBFou11AY4GRiQlDQFH8nf2HypOBT34SX4kw9FMVlKouFtmk/nd0tvDZhhdwVK8aJ+
-	yMO4wFsJDVX1alepSIAwOYFk2y6nvLkCn0N/YjkS8aWerBbCf0sWmU98YwI63NY3850UnJCV3Ql
-	XWbe19jjq5OfXL7H2drHzPFqlNzcWp9qZF+5dYMGlqrYcjMFXKce8mz4qdiAjV49yfPvKBxaavw
-	NvLH/+joRRjIu47ByFm7IQlyOqHiMUEoG9MFt0v7ngGfotRz7xl275fUQW13gK4uo1FTSueNE70
-	a795HY4wibQ6vrU89sUwF/3pNt1EJf/4qIo9FX4DXpMe9Pfs4hzU//bfPX/PwnX4Vyr9MJb7x4b
-	iEbJUXUhXQt0/uhm9w3VQGen3eDIYwNJ4xV6WlxiAZ/dTzrnE0nnH5Ht0NS60pW5ScEftb6V60X
-	4FvecdT6/L7kFlONnHSr5z8aSqfScC5F5Tcc+50ALY8aY71uqMLh9Sb/xU8hEOMBaMJ/0e25Zoo
-	i7KbqnN5eXXBMX6rSwX+Uo2QkwFL/rfnceGpwaOJ460xF/t3MLC
-X-Received: by 2002:a05:600c:1911:b0:49c:ffab:551f with SMTP id 5b1f17b1804b1-4a0275657a1mr32220045e9.22.1790926211263;
-        Fri, 02 Oct 2026 00:30:11 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:2f62:6d3:721b:8c9e? ([2a01:e0a:106d:1080:2f62:6d3:721b:8c9e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b38104e07sm3611058f8f.31.2026.10.02.00.30.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 00:30:10 -0700 (PDT)
-Message-ID: <2bd17843-4a65-49b0-9e10-7b73afb206b6@linaro.org>
-Date: Fri, 2 Oct 2026 09:30:09 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HkDRbHYw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544F01F000FF;
+	Fri,  2 Oct 2026 07:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790926415;
+	bh=cCVA2bphe9rgIaAkbT8Wl6DzYThQJL8+2Cs7Ytb8KGI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=HkDRbHYwFcy0jd7FZj8ra4WYZUhLGRjebT/KamkCt1t2y85ksNQuN8yMK3JFvGo1d
+	 Js2UfJbNq185oy2eZ+WLw9igoTtC6Qs3UXA7C31Udy000Rt8zXDVOi9j8J+AZ9wsWp
+	 pIOJMy5mCXF0OffFLvCWIV4y4vWNtzL9Ilj8X38vF4cTcAK0aIYOv4vJTHg3+uiXLa
+	 M1fna2or2zC+qIxEw9Mslvvoz0Mn/nNQPJRTeyfYoa/j23JI1P8CpP6lPRuG/wLt1v
+	 S1ILz9zX4N2+VUfnWSwiSV2aG5Htr/x0AirEOjGftXkK8BOU4EKcHtG+83yJxEw/uY
+	 lGbO+faFz4f/w==
+Subject:
+ Re: [PATCH net-next v9 03/15] net: microchip: fdma: add PCIe ATU support
+From: netdev-bot+sashiko@kernel.org
+To: daniel.machon@microchip.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horatiu.vultur@microchip.com,
+ steen.hegelund@microchip.com, UNGLinuxDriver@microchip.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, herve.codina@bootlin.com, arnd@arndb.de,
+ gregkh@linuxfoundation.org, mohsin.bashr@gmail.com, horms@kernel.org,
+ richardcochran@gmail.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Date: Fri, 02 Oct 2026 07:33:33 +0000
+Message-ID: <179092641379.434549.2030178310971788784@kernel.org>
+In-Reply-To: <20260928-lan966x-pci-fdma-v9-3-a17caf60f89a@microchip.com>
+References: <20260928-lan966x-pci-fdma-v9-3-a17caf60f89a@microchip.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Javier Martinez Canillas <javierm@redhat.com>,
- Benjamin Tissoires <bentiss@kernel.org>,
- Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
- <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org> <arrAqg5n87INTHE6@beelink>
- <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org> <artpBMeM13Dd0lLy@houat>
- <xlv1wls4ebjq.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
- <828c9108-2db1-45a6-9301-19159a094301@linaro.org> <ar4CRTMQGs5_nGKY@houat>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <ar4CRTMQGs5_nGKY@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 10/1/26 08:50, Maxime Ripard wrote:
-> On Wed, Sep 30, 2026 at 03:37:58PM +0200, Neil Armstrong wrote:
->> On 9/29/26 09:55, Javier Martinez Canillas wrote:
->>> Maxime Ripard <mripard@kernel.org> writes:
->>>
->>>> On Mon, Sep 28, 2026 at 10:36:18PM +0200, Neil Armstrong wrote:
->>>>> On 9/28/26 21:48, Benjamin Tissoires wrote:
->>>>>> On Sep 28 2026, Neil Armstrong wrote:
->>>>>>> On 9/28/26 19:24, Benjamin Tissoires wrote:
->>>>>>>> On Sep 28 2026, Neil Armstrong wrote:
->>>>>>>>> Hi,
->>>>>>>>>
->>>>>>>>> On 9/28/26 18:22, Maxime Ripard wrote:
->>>>>>>>>> Hi,
->>>>>>>>>>
->>>>>>>>>> Panels in general, and MIPI-DSI panels in particular, are pretty
->>>>>>>>>> difficult to support and require pretty much a panel driver for each
->>>>>>>>>> panel produced. Most of them are pretty simple, and require an opaque
->>>>>>>>>> initialization sequence that is usually poorly documented.
->>>>>>>>>>
->>>>>>>>>> This creates a tension between OEMs and distros because OEMs will
->>>>>>>>>> typically get a new panel to react to a sourcing issue during
->>>>>>>>>> production, and thus need some swift turnaround between getting their
->>>>>>>>>> new panel and it being operational in the OS. Distributions on the other
->>>>>>>>>> hand can take years to ship a kernel with that new panel driver.
->>>>>>>>>>
->>>>>>>>>> To solve this, I followed the example of HID-BPF and wrote a panel
->>>>>>>>>> driver that will rely on BPF programs to perform the panel
->>>>>>>>>> initialization. That way, we can ship the programs separately from the
->>>>>>>>>> kernel, and with a different lifecycle. If this driver is accepted, the
->>>>>>>>>> plan is to have a userspace component started by udev to identify and
->>>>>>>>>> load the right BPF program for the panels found on the device.
->>>>>>>>>
->>>>>>>>> This is kind of late for serious applications except if we manage to
->>>>>>>>> solve the bootloader to Linux display engine transition.
->>>>>>>>>
->>>
->>> Besides what Maxime already mentioned (that most general purpose Linux distributions
->>> built the drivers as modules anyways), it doesn't have to be mutually exclusive.
->>>
->>> A simple panel could be supported using this BPF-based driver and then a panel driver
->>> added to the kernel, if is found that some applications need to have it built-in and
->>> earlier in the boot path.
->>>
->>> I don't see why this would be any different than HDI-BPF or other BPF-based infra,
->>> such as sched_ext.
->>
->> I don't want to add a supplementary maintenance burden for the sake of using a cool
->> technology which has serious drawbacks and dependencies on user-space even if looks
->> really cool.
-> 
-> Spoiler alert: v2 won't. I've got the in-kernel loader to work and thus
-> you can have a built-in panel driver that works without user-space
-> intervention. So this is not a topic of discussion anymore.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-It will still have users-space dependency, meaning the BPF files will need to
-exist in the fs when drivers probes.
+Low priority / nit picks for your consideration:
 
-Neil
+- [Low] fdma_pci_atu_region_map() in
+  drivers/net/ethernet/microchip/fdma/fdma_pci.c is exported.
+- [Low] The alignment comment in fdma_pci_atu_region_map()
+  (drivers/net/ethernet/microchip/fdma/fdma_pci.c, lines 151-155) says…
+- [Low] fdma_pci_atu_region_enable() writes REGION_CTRL2 = BIT(31) with a
+  single posted writel().
+- [Low] fdma_pci_atu_configure_translation() programs LOWER/UPPER_BASE,
+  LIMIT and LOWER/UPPER_TARGET, and fdma_pci_atu_init() only clears…
 
-> 
-> Maxime
-> 
-> 
-> will work
+--
 
+net: microchip: fdma: add PCIe ATU support
+
+This commit adds PCIe ATU outbound window support to the Microchip FDMA
+library. When the switch runs as a PCIe endpoint, the lan966x (and later
+lan969x) FDMA engine can then reach host memory. The outbound space is
+split into six regions, and new helpers combine a coherent DMA allocation
+with claiming and programming a region, padding the allocation to the
+64KB ATU granularity.
+
+> diff --git a/drivers/net/ethernet/microchip/fdma/fdma_pci.c b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
+> new file mode 100644
+> index 000000000000..dd1dc46cbc9d
+> --- /dev/null
+> +++ b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
+
+[ ... ]
+
+> +/* Configure the address translation in the ATU. */
+> +static void
+> +fdma_pci_atu_configure_translation(struct fdma_pci_atu_region *region)
+> +{
+> +	struct fdma_pci_atu *atu = region->atu;
+> +	int idx = region->idx;
+> +
+> +	writel(lower_32_bits(region->base_addr),
+> +	       fdma_pci_atu_addr_get(atu->addr,
+> +				     FDMA_PCI_ATU_LWR_BASE_ADDR, idx));
+> +
+> +	writel(upper_32_bits(region->base_addr),
+> +	       fdma_pci_atu_addr_get(atu->addr,
+> +				     FDMA_PCI_ATU_UPP_BASE_ADDR, idx));
+> +
+> +	/* The OB address space lies entirely below 4GB, so the limit always
+> +	 * fits the lower limit register and the upper one is left alone.
+> +	 */
+> +	writel(region->limit_addr,
+> +	       fdma_pci_atu_addr_get(atu->addr, FDMA_PCI_ATU_LIMIT_ADDR, idx));
+
+[Severity: Low]
+Should REGION_CTRL1 (offset 0x0) and the upper limit register (offset
+0x20) be written explicitly, either here or in fdma_pci_atu_init()?
+
+Neither fdma_pci_atu_configure_translation() nor fdma_pci_atu_init()
+writes them. fdma_pci_atu_init() only clears the enable bit through
+fdma_pci_atu_region_disable(). As a result, the TLP type, function
+number, INCREASE_REGION_SIZE and the upper limit all depend on reset
+values.
+
+For comparison, dw_pcie_prog_outbound_atu() in
+drivers/pci/controller/dwc/pcie-designware.c always writes CTRL1. On
+4.60a and later it also writes the upper limit:
+
+	if (dw_pcie_ver_is_ge(pci, 460A))
+		dw_pcie_writel_atu_ob(pci, atu->index, PCIE_ATU_UPPER_LIMIT,
+				      upper_32_bits(limit_addr));
+	...
+	dw_pcie_writel_atu_ob(pci, atu->index, PCIE_ATU_REGION_CTRL1, val);
+
+This driver never changes those registers, so reloading it can't leave
+them stale. It would only matter if something else, such as endpoint-side
+firmware, had programmed the ATU before the host driver bound. No in-tree
+path doing that was found.
+
+Would writing CTRL1 = 0 at init be reasonable hardening?
+
+[ ... ]
+
+> +/* Map a host DMA address into a free outbound region. */
+> +struct fdma_pci_atu_region *
+> +fdma_pci_atu_region_map(struct fdma_pci_atu *atu, u64 target_addr, int size)
+> +{
+
+[ ... ]
+
+> +	/* The ATU region base is only ever aligned to FDMA_PCI_ATU_REGION_ALIGN;
+> +	 * require the same alignment of the host target address, since the ATU
+> +	 * translates addr - target_addr + base_addr and any misalignment here
+> +	 * would shift every translated address by the same amount.
+> +	 */
+
+[Severity: Low]
+Is the translation direction in this comment reversed?
+
+In struct fdma_pci_atu_region, base_addr is the OB window address and
+target_addr is the host DMA address. The file header says the ATU turns
+FDMA OB addresses into host DMA addresses, so the hardware computes
+target_addr + (addr - base_addr).
+
+The formula in the comment is the host to OB direction. That is what the
+software helper fdma_pci_atu_translate_addr() computes:
+
+	return region->base_addr + (addr - region->target_addr);
+
+This does not affect the code's behaviour. Could the comment instead
+describe the OB to host translation that the ATU performs?
+
+> +	if (!IS_ALIGNED(target_addr, FDMA_PCI_ATU_REGION_ALIGN))
+> +		return ERR_PTR(-EINVAL);
+
+[Severity: Low]
+Should size also be checked for FDMA_PCI_ATU_REGION_ALIGN alignment here?
+
+The prototype comment in fdma_pci.h says:
+
+  /* Map a host DMA address into a free ATU region. target_addr and size must be
+   * FDMA_PCI_ATU_REGION_ALIGN aligned; a misaligned target_addr returns -EINVAL.
+   */
+
+However, fdma_pci_atu_region_map() only rejects a misaligned target_addr.
+Any size in the range 0 < size <= fdma_pci_atu_region_size() is accepted
+and programmed directly:
+
+	region->limit_addr = region->base_addr + size - 1;
+
+The commit message says the hardware widens the limit to the 64KB
+boundary. The padding that keeps the widened window inside owned memory
+is applied only in fdma_alloc_coherent_and_map():
+
+	fdma->size = ALIGN(fdma->size, FDMA_PCI_ATU_REGION_ALIGN);
+
+That wrapper is the only caller in the series, so no current path passes
+an unaligned size. A future direct caller of the exported
+fdma_pci_atu_region_map() could, though, and that would open a window
+past the end of its buffer.
+
+Would an IS_ALIGNED(size, FDMA_PCI_ATU_REGION_ALIGN) check next to the
+target_addr check make the function match its documented contract?
+
+> +
+> +	mutex_lock(&atu->lock);
+
+[ ... ]
+
+> +	region->target_addr = target_addr;
+> +	region->limit_addr = region->base_addr + size - 1;
+> +	region->in_use = true;
+> +
+> +	fdma_pci_atu_configure_translation(region);
+> +	fdma_pci_atu_region_enable(region);
+
+[Severity: Low]
+Should the enable bit be read back before fdma_pci_atu_region_map()
+returns success?
+
+fdma_pci_atu_region_enable() is a single posted writel() of BIT(31) to
+REGION_CTRL2, and nothing checks whether it took effect.
+dw_pcie_prog_outbound_atu() programs the same register layout. It polls
+for PCIE_ATU_ENABLE and returns -ETIMEDOUT if the bit never appears:
+
+	/*
+	 * Make sure ATU enable takes effect before any subsequent config
+	 * and I/O accesses.
+	 */
+
+Unmap is similar. fdma_pci_atu_region_unmap() posts the disable with no
+flushing read, and fdma_free_coherent_and_unmap() then frees the buffer
+right away through fdma_free_coherent().
+
+In the lan966x user, fdma_pci_atu_region_map() is followed by
+non-posted reads through the same BAR before FDMA_CH_ACTIVATE, and the
+channels are polled until inactive before every unmap. That probably
+hides this in practice.
+
+Would a readback after the enable and the disable writes make the
+ordering explicit?
+
+> +
+> +	mutex_unlock(&atu->lock);
+> +
+> +	return region;
+> +}
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260928-lan966x-pci-fdma-v9-0-a17caf60f89a%40microchip.com
