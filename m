@@ -1,134 +1,230 @@
-Received: from mta1.migadu.com (out-210.mta1.migadu.com [95.215.58.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0E83A4274
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 18:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EE6223328;
+	Fri,  2 Oct 2026 19:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790965060; cv=none; b=queLXcRzn2UPh1uVEX/hfrkufWNiMvDckH6SZkyWDysGM1oqLd6HFO24w1yh0nMR7tJuou3bC8GLn0OecjyrLUfQPNL+auC2dhZT0lcYUDv5CiUFX9fKVo1mJR7PLI3TAtQBAnJxuW1KM5ekGYT6N2hyB0X5s1+Li55brDem60A=
+	t=1790967634; cv=none; b=j8wrQ2B2Qr8rDztEHn+RPxt01QwHSTDB4JCkRBnCutA2rsadIt7px0iwOJs0F39M9Fa13cmRKOLKguFHfJOEZXdEIztqSQDASDg87TTBmJ5GfcM9+rkScUb7QTWNdB5kR1D0I/nUB+Z6+c/cL59G4RlTI5oliyiF3F/Kj9vUxAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790965060; c=relaxed/simple;
-	bh=Gzc/3ojeVy036/D5ZN1i2B0XlYfgGgl6dvY7i4h1k8o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YZbyosZy6FFWoWkuB/fsgObL84S17yZfZk55cySu4mRDwvqGarOzNsgUNvIso406prxFPsB3ovIHvjkAubG7cnAGe3a+yuAccIhilCYhFtLF2KselPWNSc9eQtYA3zAQ+tIpGS946IWiQJTEgnRUj6CI1QyZfWrSgHbgdsUGrI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VXNE4Zfl; arc=none smtp.client-ip=95.215.58.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790967634; c=relaxed/simple;
+	bh=PEbJLvy7CrYN1hf9iYQ+ysoXfJ8bNcfDcQxuv4rB2lg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yz3XI57f7p8zsGrD+Xu4G9CxjXyrvCkOeyrZL3yffQBSQqQD2zsOStEepnsC/KE8m2fM4Ivneilp5vs1+n3PvnfaQeBrKogXLc/3wng2f9ygHHTkXlQyolhGuazbENL29u44eD9Krwnge99krZb+autawRW+aTil1dqJw6ppxkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxZ782g1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VXNE4Zfl"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Gzc/3ojeVy036/D5ZN1i2B0XlYfgGgl6dvY7i4h1k8o=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790965055; v=1; x=1791569855;
- b=VXNE4ZflpE1Ce8qtmHVyBIZk9xmIzGn7pwgWNhsq2D+bwpSwdDpUvWBQ39/8ffvAOZpqvE4M
- Qus/spJszaxjtxoLy+j60Uz7jMe6ajfKVmISm1qZI6xWOs3wt0zepWQHd03Dg05jh+Pge8Jvfxg
- sv/3FXOdaQE2KhLkA7ON3GVA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 56805890d06bb522;
-	Fri, 02 Oct 2026 18:17:35 +0000
-X-Mizu-Trace-ID: 56805890d06bb522
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <3beddaa2-1abd-4b2d-b220-549c3f3c7d89@linux.dev>
-Date: Fri, 2 Oct 2026 19:17:30 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxZ782g1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01321F000FF;
+	Fri,  2 Oct 2026 19:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790967633;
+	bh=Gcl/f7moFApWo3jqJXdkRteP30YDcjxwYvzQVuzmbj4=;
+	h=From:To:Cc:Subject:Date;
+	b=YxZ782g1CNQTsuUl9y3aigokBAb+oTzvb60oKfr9yAjE4mX7SFOmKq4MYxZOh4e9W
+	 XVf9EzYxllCIsiSKqGctvl7kBgkFuey+xsOpzy8vcO2ibO5m32HmdT1M7R35jJR37e
+	 w/Oba24+G+rSeVoESdLh8XsIgozwQGiTYb7a3E7XHNcrgDK5cylrWnpTOecgeJwP/P
+	 DwgeQ/q6eTHXaXu5LJ+NHeeDtRtY8ub0BgB9Y099dw80D7KyPUdlslLBl8D+wsedPa
+	 g1Kl5Y0wZrVCd9VkUdwRQibtxtJty4wK/t+s1I2SthgksK+ehtF+s2OquVE/eaOM9k
+	 Zt4/aq5PlJlIw==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	kernel-team@meta.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	io-uring@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Wei <dw@davidwei.uk>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mina Almasry <almasrymina@google.com>
+Subject: [RFC net-next 00/15] xsk: Zero copy through page-pool memory providers
+Date: Fri,  2 Oct 2026 21:00:01 +0200
+Message-ID: <20261002190018.696925-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 04/22] bpf: Add lookups for exception cleanup
- resumes and landing pads
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261001133006.1335369-1-yonghong.song@linux.dev>
- <20261001133027.1338227-1-yonghong.song@linux.dev>
- <20261001134805.EA74F1F000FF@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20261001134805.EA74F1F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Hi!
+
+Here's an RFC for you all to enjoy with your favorite Friday
+$BEVERAGE.
+
+AF_XDP zero copy needs a second receive allocator in every driver.
+The driver takes xdp_buff_xsk objects from the XSK buffer pool beside
+its page_pool path and owns their lifetime. Drivers built around
+page_pool and the queue management API, which already support devmem
+and io_uring zero-copy receive, have to duplicate their receive path.
+
+This series makes UMEM a page-pool memory provider instead. Each
+aligned 4 KiB chunk is a NET_IOV_XSK net_iov. Binding a zero-copy
+socket installs the provider on the queue through the queue
+management API. The driver keeps its page_pool allocation, DMA sync,
+recycling and refill code. The provider consumes FILL, drops invalid
+and repeated addresses, and owns RX need-wakeup.
+
+An XSKMAP redirect publishes the UMEM address when every buffer of the
+frame belongs to the socket's provider. XDP_PASS and other redirect
+targets copy into page-backed memory first. TX is unchanged; drivers
+read socket TX descriptors directly.
+
+Core changes:
+
+ - MP_CAP_READABLE and MP_CAP_FRAG. A readable provider may back
+   header and regular pools, and XDP may run on its buffers. devmem
+   and io_uring set MP_CAP_FRAG and keep their behavior.
+ - Providers request RX headroom through the queue configuration.
+ - Readable net_iov areas. netmem_address() resolves provider memory
+   with a load and a shift, without an indirect call.
+ - A refill-completion callback. The XSK provider keeps NAPI scheduled
+   while FILL has entries, and sets NEED_WAKEUP when FILL is empty.
+ - Batched page-pool release for objects handed to userspace.
+ - xdp_buff carries the netmem and a pointer to kernel-owned shared
+   info, so fragment metadata never lives in user-writable UMEM. It
+   grows from 56 to 64 bytes on 64-bit.
+
+Differences from classic zero copy:
+
+ - 4 KiB pages and aligned 4 KiB chunks only. Other layouts fail to
+   bind with -EOPNOTSUPP, but can be supported in the future.
+ - Generic XDP and CPUMAP cannot deliver to a provider-backed socket.
+
+Classic zero copy is unchanged. This does not propose converting
+existing drivers; it is for page_pool drivers without zero copy.
+
+fbnic is the only driver user, +640/-122 for RX and TX. I have bnxt
+working with AF_XDP, plus some performance patches/fixes for the
+AF_XDP core on top of this -- but let's start with these patches.
+
+Patches 1-2 fix bugs in net-next that the series hits. They are
+carried here so the series can be tested on its own.
+
+ 1. "xdp: Size zero-copy skb heads by their contents". XDP_PASS of a
+    zero-copy buffer copies it into an skb whose head is sized by the
+    XSK frame size, which leaves no room for skb_shared_info. A frame
+    that fills its buffer overwrites skb_shared_info. Provider
+    buffers take this path on XDP_PASS, which the usual AF_XDP
+    program returns when no socket is bound to the queue. Reproduced
+    on fbnic in QEMU.
+
+ 2. "eth: fbnic: Report the logical XDP RX queue". fbnic reports
+    queue 0 in rx_queue_index for every queue. AF_XDP drops frames
+    whose queue differs from the socket's, and the usual program
+    looks up its socket by that index, so zero copy works on queue 0
+    only.
+
+Feedback wanted on:
+
+ 0. General thoughts on extending the page pool provider.
+ 1. Does refill_done belong in page_pool, or should finite providers
+    keep NAPI scheduled some other way?
+ 2. PP_FLAG_ALLOW_UNREADABLE_NETMEM is how a pool picks up any
+    provider, readable or not. A driver that only wants AF_XDP must
+    set it, and then passes the core checks for devmem and io_uring
+    too if it supports header split. Drivers that set the flag today
+    may also split buffers, for example mlx5 through
+    page_pool_fragment_netmem(). Only QCFG_RX_HEADROOM keeps the
+    unsplittable XSK provider away from them. Split the flag, or let
+    drivers declare support for unsplittable providers?
+ 3. Is growing xdp_buff by 8 bytes acceptable?
+ 4. How should userspace learn the chunk constraints before bind?
+
+This is a way to move code from the drivers to the core, reducing the
+work for driver developers.
+
+I hope to see you at LPC next week! Particular the netdev and bpf MC,
+and the AF_XDP BoF on Monday.
 
 
+Björn
 
-On 10/1/26 6:48 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf: failure to adjust cleanup_pad for BPF_PATCH_MOVE_TARGET allows arbitrary read/crash
-> --
->
-> commit 1a4d7ce9c87bb54c2feec4648d42fa1046ccb8b1
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Add lookups for exception cleanup resumes and landing pads
->
-> This commit adds lookups to exception.c to recognize calls to bpf_unwind()
-> and bpf_unwind_resume(). It also updates bpf_patch_insn_data(),
-> verifier_remove_insns(), and bpf_opt_remove_nops() to keep the landing pads
-> of call sites properly synchronized.
->
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 37cf130ebb57b..5b7fe4ba610b3 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
-> [ ... ]
->> @@ -268,11 +268,18 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
->>   			data[i].non_stack_access =
->>   				data[off + cnt - 1].non_stack_access;
->>   			data[off + cnt - 1].non_stack_access = false;
->> +			data[i].cleanup_pad = data[off + cnt - 1].cleanup_pad;
->> +			data[off + cnt - 1].cleanup_pad = 0;
->>   		} else if (bpf_is_mem_insn(insn + i)) {
->>   			data[i].non_stack_access = true;
->>   		}
->>   	}
->>   
->> +	if (env->cleanup_info_cnt)
->> +		for (i = 0; i < prog_len; i++)
->> +			if (data[i].cleanup_pad > off + 1)
->> +				data[i].cleanup_pad += cnt - 1;
-> [Severity: High]
-> Could this fail to adjust the cleanup_pad correctly when the mode is
-> BPF_PATCH_MOVE_TARGET in adjust_insn_aux_data()?
->
-> The condition checks data[i].cleanup_pad > off + 1, which works well for
-> BPF_PATCH_KEEP_TARGET, but it appears to miss BPF_PATCH_MOVE_TARGET where
-> the target should follow the original instruction to the end of the patched
-> sequence.
->
-> When a prologue is inserted at offset 0 (for example, during
-> bpf_convert_ctx_accesses), exception landing pads pointing to offset 0 are
-> not shifted. If a user sets an exception landing pad at offset 0, unwinding
-> would cause execution to jump to the newly inserted prologue instead of the
-> original instruction.
->
-> Since the prologue for program types like TC expects R1 to contain the CTX
-> pointer, and R1 is a caller-saved register containing whatever was placed
-> there before calling bpf_unwind(), could dereferencing this
-> attacker-controlled R1 during an exception unwind lead to an arbitrary memory
-> read or a kernel panic?
->
-> Should this check be dependent on the mode, such as:
-> data[i].cleanup_pad > (mode == BPF_PATCH_MOVE_TARGET ? off : off + 1)
-> to properly account for both modes?
->
-This patch should be okay. The following is what I replied in v8 for this patch:
+Björn Töpel (15):
+  xdp: Size zero-copy skb heads by their contents
+  eth: fbnic: Report the logical XDP RX queue
+  net: Add memory provider capabilities
+  net: Let memory providers set RX buffer headroom
+  page_pool: Extend memory provider operations
+  xdp: Track non-page netmem in receive buffers
+  xsk: Keep the DMA mapping in the buffer pool
+  xsk: Handle a detached FILL ring in RX wakeup
+  xsk: Add a page-pool memory provider for UMEM
+  xsk: Add RX helpers for page-pool drivers
+  xdp: Copy provider buffers on pass and redirect
+  xsk: Receive provider UMEM without copying
+  eth: fbnic: Support AF_XDP zero-copy receive
+  eth: fbnic: Support AF_XDP zero-copy transmit
+  Documentation: xsk: Document page-pool zero copy
 
-Okay, commit "bpf: Retarget indirect jump targets across prologue prepends"
-introduced BPF_PATCH_MOVE_TARGET and merged last Friday. It solved three
-cases for ops->gen_epilogue, ops->gen_prologue || env->seen_direct_write, and
-stack slots for subprogs. ops->gen_epilogue has been rejected in patch 5.
-We cannot allow ops->gen_epilogue since it may silently exit.
-For other cases in "bpf: Retarget indirect jump targets across prologue prepends",
-The above commit should already handle this.
+ Documentation/networking/af_xdp.rst           |  65 ++
+ Documentation/networking/netmem.rst           |   7 +-
+ .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |   5 +
+ .../net/ethernet/meta/fbnic/fbnic_netdev.c    | 164 ++++-
+ .../net/ethernet/meta/fbnic/fbnic_netdev.h    |   4 +
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 561 ++++++++++++---
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |  24 +
+ include/net/netdev_queues.h                   |   6 +
+ include/net/netmem.h                          |  32 +-
+ include/net/page_pool/helpers.h               |  62 +-
+ include/net/page_pool/memory_provider.h       |  39 +-
+ include/net/page_pool/types.h                 |   8 +-
+ include/net/xdp.h                             |  64 +-
+ include/net/xdp_sock.h                        |  10 +
+ include/net/xdp_sock_drv.h                    |  58 +-
+ include/net/xsk_buff_pool.h                   |   7 +-
+ io_uring/zcrx.c                               |   4 +-
+ net/core/dev.c                                |   4 +-
+ net/core/dev.h                                |   5 +
+ net/core/devmem.c                             |   7 +-
+ net/core/filter.c                             |  28 +-
+ net/core/netdev_config.c                      |   2 +
+ net/core/netdev_rx_queue.c                    |  61 +-
+ net/core/page_pool.c                          |  72 +-
+ net/core/xdp.c                                | 112 ++-
+ net/ethtool/rings.c                           |  18 +-
+ net/xdp/Kconfig                               |   1 +
+ net/xdp/xsk.c                                 | 253 ++++++-
+ net/xdp/xsk.h                                 |  58 ++
+ net/xdp/xsk_buff_pool.c                       | 667 +++++++++++++++++-
+ 30 files changed, 2164 insertions(+), 244 deletions(-)
 
-For the other two, cleanup_pad == off + 1 cannot happen, because MOVE only
-patches an entry insn and a landing pad cannot start at insn 0: the entry is
-always walked outside a pad first, so reaching it again from an unwind
-fails bpf_exc_check_insn() with "insn %u runs both inside and outside a
-landing pad". Pads after off are shifted by the existing `> off + 1`, and a
-covered call at off moves with its insn_aux_data.
 
-So I think this patch should be okay.
+base-commit: 071876fd50482a68603a9460d80dd6dd58827ee1
+-- 
+2.55.0
 
