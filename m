@@ -1,176 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-196.mta1.migadu.com [95.215.58.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8973E3C4F;
-	Fri,  2 Oct 2026 19:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED4C7DA66
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 19:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967753; cv=none; b=KKiPFm8a988J6S6Cvdb+qWaotz2lZcpDmV6DfHA4mt0fJzHp9eawm0aM3TU42pehK0ktCAc0C9NlZn49phW5tv7IQpAffH4Z39QXTzBAR8zxRlez0NFRQ6QLDCpyBRadZ/aw28g2D/q2fnaoclsuppcnnNlgl5WhxZiwgRFZov8=
+	t=1790968016; cv=none; b=ZKVjCZZ3ZsITCihRmhDSKOwG2CdKMgJlBmz9HjsV9Lhe6CXQg1E7nf38JJ4iok8sh1E6mYVV/rK5PQlJkHx3n8CfSxf2HlahZVbRsoBAjLFPBo8ijTl0RzH0TRoCLiOfBAlJs33O2XSx4OUycVvNHM2eFkxMdTP54aiI6g8d9ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967753; c=relaxed/simple;
-	bh=ep0gakqrWUNOkDkSCuiUiDCh8YBSa3WIuNLOuzbb0eU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VEP1cvJPeWVJ6l8BfKH5tnXMUm3KGOXVNN3g5eH6XaCEN3W4OKumsotqwUCOyv/+qGwCClelvTNIrvo/l44jjRj+ARJvEnfCzRQaKT095JW0tu3VVPDM8WU7seL3nRqmUsx6QbUVOOlS5xakv+hSXyjT6weUQ4EjRjcXHPPZ1nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G3kj6oe3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790968016; c=relaxed/simple;
+	bh=DjzYXIoxVBzxg+kr697NRK4nOJQirBxRSWXPZQwikRI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gasxn16nTZpZSA5SxN50+1GoiaYXkzetbwLOAGiG0Tp4HgBHhuiVAxtdOuvMoAr1rRxB/yKLSapRsmiIRBgYFZL7HvURqldqyHQ965y3n68qidR9oQuU10XJXdGfZ4zXhGml4egohlCOS8W9JRgDG6PdHxs5Hh3BEsmLG8E9sHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EoHOlOTl; arc=none smtp.client-ip=95.215.58.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G3kj6oe3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DBC1F000FF;
-	Fri,  2 Oct 2026 19:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967751;
-	bh=iWcGFdgC9LNjco2uUW50o8hYtbySo0I9amNBjcQMnVE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=G3kj6oe3pXTypo/UOJ2V189bhrPf0OTBYsxFQl3s+s7E0Cw/SK28rEAJwfLnhcAUW
-	 lHUJC0C1TONRC1VQCkQHKjyVYLPgW+YKFKcRfb9/hAOL/JbyGahyqjSTnVAusUUsqH
-	 ZasMgwU5nNz2BzzHl0OkmCAs0JfVwq7KyLRtXatK4bFKphiUymCKObjq0vf5tRB8Ut
-	 38nBMPUNGqjfbaUicOCSIOxgOCmQwIcID7fe5JbTwAPEibzMpt1GbUjwjx8pAMvq6u
-	 5VOMh8R2wXrOIXiDVl3GwxxtrLMVPXZM+8r+yTz8Fpqml7fo2esOXn9XWW/I+2Aq4w
-	 S+fb1D9vbibdw==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	kernel-team@meta.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	io-uring@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
-	Weiming Shi <bestswngs@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	David Wei <dw@davidwei.uk>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mina Almasry <almasrymina@google.com>
-Subject: [RFC net-next 15/15] Documentation: xsk: Document page-pool zero copy
-Date: Fri,  2 Oct 2026 21:00:16 +0200
-Message-ID: <20261002190018.696925-16-bjorn@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261002190018.696925-1-bjorn@kernel.org>
-References: <20261002190018.696925-1-bjorn@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EoHOlOTl"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=DjzYXIoxVBzxg+kr697NRK4nOJQirBxRSWXPZQwikRI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790968011; v=1; x=1791572811;
+ b=EoHOlOTlBz4oudb9yIDe0seIP6yfFeeCm5/IGS98Gn1oVw6gT3jXiKK0G4oE1cFPfSBUBfKl
+ r4V2RhwoIu1PpJ4nE1B9A/jxWHZrNyNlkq+iwMqGcDjuvlFkDAav7h+aNi0jHDqrUq180uR/lPl
+ Lsw8EDFSEM50xSfn6dPcdMcM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 847547db9df22a20;
+	Fri, 02 Oct 2026 19:06:51 +0000
+X-Mizu-Trace-ID: 847547db9df22a20
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <24f7d004-9e71-41ca-abd3-dacf952ede23@linux.dev>
+Date: Fri, 2 Oct 2026 20:06:50 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v8 05/22] bpf: Prepare for an exception cleanup
+ table before the CFG walk
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261001133032.1338455-1-yonghong.song@linux.dev>
+ <0660232bb0b94d963dba9a2f9022669c4e97c5e0a94bd7acc674f21f18b036e6@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <0660232bb0b94d963dba9a2f9022669c4e97c5e0a94bd7acc674f21f18b036e6@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Describe AF_XDP zero copy on page-pool drivers: the aligned 4 KiB
-UMEM requirement, how the headroom reaches the driver through the
-queue configuration, the device-chosen offset in fragment
-descriptors, the scatter-gather layout, buffer ownership, provider
-locking, and the order in which a driver enables it.
 
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
----
- Documentation/networking/af_xdp.rst | 65 +++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
 
-diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-index cc3f0d16b28f..bdf4029aedeb 100644
---- a/Documentation/networking/af_xdp.rst
-+++ b/Documentation/networking/af_xdp.rst
-@@ -346,6 +346,71 @@ Note that a UMEM can be shared between sockets on the same queue id
- and device, as well as between queues on the same device and between
- devices at the same time.
- 
-+Page-pool backed zero-copy
-+--------------------------
-+
-+Drivers which use the queue management API can obtain UMEM frames through a
-+page-pool memory provider. This is selected by the driver when zero-copy mode
-+is requested and does not require a new userspace flag. The FILL ring remains
-+the source of receive buffers and all normal AF_XDP ownership rules apply.
-+Once installed, the driver remains an ordinary page-pool consumer: allocation,
-+DMA synchronization, recycling, release, and refill use the normal page-pool
-+interfaces, while provider callbacks hide the UMEM-specific operations.
-+
-+The initial provider requires 4 KiB base pages and aligned 4 KiB chunks.
-+Unaligned chunks are rejected. Configured UMEM headroom is supported. The
-+provider requests it through the queue configuration, and the driver includes
-+it in the receive DMA offset; with multi-buffer packets it applies to the first
-+descriptor as described below.
-+
-+Like the normal XSK buffer allocator, provider-backed page-pool allocation and
-+recycling run in the receive queue's NAPI context. A queue restart prepares
-+its replacement before it stops the current queue, so two page pools can use
-+one provider for a short time. A provider lock serializes FILL-ring
-+consumption and the provider's buffer stack. It is taken once per page-pool
-+refill of up to 64 buffers, not per packet. Generic XDP cannot redirect to a
-+provider-backed socket; its copy-mode receive path retains the existing XSK
-+receive lock.
-+
-+UMEM frames retain the direct XSK ownership model. The provider does not add a
-+per-frame reference count, generation, ownership bitmap, or quarantine state.
-+A frame moves between the FILL ring, the owning NAPI context, and userspace;
-+userspace must not publish a frame which it does not own. Page-pool teardown
-+accounting protects the lifetime of the pool, not ownership of an individual
-+UMEM frame.
-+
-+Provider-backed buffers do not leave that context as kernel-owned memory.
-+``XDP_PASS`` copies the packet to kernel-backed skb storage before returning
-+the UMEM buffers. Redirects other than a compatible XSKMAP target likewise
-+copy to kernel memory. A compatible XSKMAP transfer publishes the UMEM
-+descriptors directly to userspace; returning them through the FILL ring makes
-+them available to the same queue context again.
-+
-+For multi-buffer packets, fragment descriptors are assembled in transient
-+kernel-owned storage belonging to the RX queue. They are never stored in the
-+user-writable UMEM, and are consumed before the NAPI context starts the next
-+packet.
-+
-+The copy on ``XDP_PASS`` is intentional: an skb may outlive the receive NAPI
-+poll, whereas a provider frame must be returned by the context which allocated
-+it. Applications which expect most packets to pass to the network stack should
-+therefore account for this copy when choosing page-pool backed zero-copy.
-+
-+Drivers may impose additional layout and queue requirements. The initial fbnic
-+support accepts configured UMEM headroom from 0 through 256 bytes in 128-byte
-+increments (up to 512 bytes including ``XDP_PACKET_HEADROOM``).
-+Packets larger than its selected header-data-split threshold require an
-+``XDP_USE_SG`` socket and an XDP program with fragment support. Their
-+continuation descriptors start at offsets chosen by the device.
-+When these restrictions are not met, a bind forced with ``XDP_ZEROCOPY``
-+fails with an error; automatic mode may fall back to copy mode.
-+
-+On a running device, installing or removing the provider restarts the
-+selected hardware queue.
-+Applications should populate the FILL ring before binding when possible. If
-+the ring is empty, the kernel schedules the queue once after installation;
-+the usual ``XDP_USE_NEED_WAKEUP`` rules apply after that.
-+
- XDP_USE_NEED_WAKEUP bind flag
- -----------------------------
- 
--- 
-2.55.0
+On 10/1/26 7:31 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Prepare for an exception cleanup table before the CFG walk
+> TL;DR: bpf_exc_check_prog() rescans the whole program for bpf_throw, and a
+> later patch calls it at every bpf_unwind() visit, so verification time may
+> balloon on large programs; suggests caching the result.
+>
+>> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+>> index 3ea1bff5cc90..e12cdb12cde3 100644
+>> --- a/kernel/bpf/exception.c
+>> +++ b/kernel/bpf/exception.c
+>> @@ -141,6 +141,85 @@ int bpf_exc_check_info(struct bpf_verifier_env *env, const union bpf_attr *attr,
+> [ ... ]
+>
+>> +static int reject_throw(struct bpf_verifier_env *env)
+>> +{
+>> +	u32 i;
+>> +
+>> +	for (i = 0; i < env->prog->len; i++) {
+>> +		if (!bpf_is_throw_kfunc(&env->prog->insnsi[i]))
+>> +			continue;
+>> +		verbose(env,
+>> +			"exception cleanup cannot be combined with bpf_throw at insn %u\n",
+>> +			i);
+>> +		return -EINVAL;
+>> +	}
+>> +	return 0;
+>> +}
+> [ ... ]
+>
+>> +int bpf_exc_check_prog(struct bpf_verifier_env *env)
+>> +{
+>> +	int err;
+>> +
+> [ ... ]
+>
+>> +	err = reject_throw(env);
+>> +	if (err)
+>> +		return err;
+>> +	env->prog->jit_required = 1;
+>> +	return 0;
+>> +}
+> Can this scan make verification time grow with the number of bpf_unwind()
+> instructions the verifier visits?
+>
+> The commit message says the checks in bpf_exc_check_prog() are also run
+> "at every bpf_unwind()", and a later patch in the series (5de314709a62
+> "bpf: Dispatch cleanup pads by rewriting return addresses") does that from
+> process_bpf_unwind():
+>
+>      static int process_bpf_unwind(struct bpf_verifier_env *env, ...)
+>      {
+>          ...
+>          err = bpf_exc_check_prog(env);
+>
+> Each of those calls reaches reject_throw(), which walks all env->prog->len
+> instructions looking for bpf_throw.
+>
+> None of the things bpf_exc_check_prog() tests can change once do_check()
+> is running: the offload flag, jit_requested, exception_callback_subprog and
+> whether a bpf_throw insn exists are all fixed before the main pass.  Only
+> env->ops can change, and only for struct_ops, in check_attach_btf_id()
+> before do_check().
+>
+> So the scan gives the same answer each time, but every visit costs
+> O(prog->len) instead of O(1).  That means the BPF_COMPLEXITY_LIMIT_INSNS
+> budget no longer bounds verifier cost linearly; the cost becomes roughly
+> visits * prog_len.
+>
+> For example, a program with about 500K reachable insns plus a bounded loop
+> of the form "if (x == i) bpf_unwind();" could reach bpf_unwind() tens of
+> thousands of times within the 1M processed insn budget.  Each visit would
+> rescan 500K insns, which is around 10^10 to 10^11 extra iterations, or
+> tens of seconds of extra verifier CPU for a single load.
+>
+> Would it make sense to run reject_throw() once and cache the result in
+> env?  Alternatively, the bpf_unwind() path could re-check only the
+> gen_epilogue condition, which is the one that becomes known after
+> bpf_exc_prepare().
+
+As you mentioned, yes, this is an optimization issue. We can remove
+bpf_exc_check_prog() for checking per bpf_unwind() insn. We can do
+a collective checking after all insns are checked. This way
+bpf_exc_check_prog() will be called only once.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36872142096
 
