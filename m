@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-66.mta0.migadu.com [91.218.175.66])
+Received: from mta1.migadu.com (out-148.mta1.migadu.com [95.215.58.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4D539DBE4
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 20:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65823D810F
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 21:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790974708; cv=none; b=unvXYbzw71mZN3XDglPuYxRYHZx3prBVEohyr/5bjgLdlfx45Dnhpvh/+NDfAdBsOHCLSXL9/weFEp69FbW/tjNFS4zmq/nS2rZbCqVCdPWd6dkgtfzCn2rkO6ddq0YnByZZow2DbVi6FPGc9TUTMiy28oKuWnh8y2yMk5xfuPE=
+	t=1790975436; cv=none; b=rQZbGX3EQFq5FhwR7OYCiA2CSXeqKEBmjkvF5t9ogVjbxZilE4o6I1QFMoKdTSIfWB9gAggZ4L+XxKMH4PS79klU4qOdhC3bHFc4QH90bHZwlexgqQi8bPJsukkXa0iDHWhFU5ZyU6me7A/lgI4W5epUAk0ehNWT1hGZK7nuWbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790974708; c=relaxed/simple;
-	bh=cyE7xCmOBBATCOr27hlaYfNiIVy0ZG/W7o34fqS3PW0=;
+	s=arc-20240116; t=1790975436; c=relaxed/simple;
+	bh=yCw6xXyOZGegyFbAV2WEaZa8j1Ob77m6e29E3NYbfvM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D1xUuSeFJYz7NqeRzpcwC1HjzdJoBTyKcrIA3oMBCordSf//gWQAg9cZcHnPRUW6H7BjqDJS91jEOxoijJq2xlH+WBId2kb1dfSe322fC80CRmbXiHHpqND7iFF76YKHJ6AIPFpajZ2g6AUb8SaegYNBOwzlHP9e3fGjtTdJPFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P/+LF8JA; arc=none smtp.client-ip=91.218.175.66
+	 In-Reply-To:Content-Type; b=jGNmlkZZNTkkYER3CAsiWwhXtoI3zhlsqMKfFCYp8qC9AP/w1CHcrnNIKvxTVakZNkGbyzuSuodOHN9PtoHsS8dXoSV57W2Vbn1Q3f8ABgDQCxJZ5S7QWXZoycvvQMg+o1SjS8bijOxlCVubs1y4vm59PFmhSMWvHB0DeN9OQbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xAl03MG8; arc=none smtp.client-ip=95.215.58.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P/+LF8JA"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xAl03MG8"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=cyE7xCmOBBATCOr27hlaYfNiIVy0ZG/W7o34fqS3PW0=;
+DKIM-Signature: a=rsa-sha256; bh=yCw6xXyOZGegyFbAV2WEaZa8j1Ob77m6e29E3NYbfvM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790974700; v=1; x=1791579500;
- b=P/+LF8JAtL/S55PfmNfVoO2iLPvvOluAdjixurWQ5W4f5BWB22jZLhoyVikeFLs2HgoOUw/W
- 5oRAExQWGtK0Bm2IBduW1ozeh8p6+JNyDo4gF74RRSCYeMeo9NdxdoLD7Uh6CTmAprQ8WGMCmn5
- omjO2ss6bJloR/S9/mjwY8iA=
+ t=1790975431; v=1; x=1791580231;
+ b=xAl03MG8SdOhXc0XjMLtn8I7mY4AWjIWtCLC63rDelScxbGscsfIlzltaA3thU0lWkPk7mb9
+ LPZwAbQ+Sft+PTThb1FN8/fC34Wh+8cXHsMMpUqHsv/uStweyJ8aeEd5Iu2XX7QOrgofmSNwCCj
+ Qc2mGsIyo8pbbsxy3gZRquEE=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 16a5b7b703a7aea2;
-	Fri, 02 Oct 2026 20:58:20 +0000
-X-Mizu-Trace-ID: 16a5b7b703a7aea2
+Received: by smtp.migadu.com with ESMTPS id 75ff3fc86023e63b;
+	Fri, 02 Oct 2026 21:10:18 +0000
+X-Mizu-Trace-ID: 75ff3fc86023e63b
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
-Date: Fri, 2 Oct 2026 13:58:06 -0700
+Message-ID: <f6bd483c-a6ec-41f0-87cc-771cea8cf38d@linux.dev>
+Date: Fri, 2 Oct 2026 22:10:18 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,200 +38,111 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
- loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
-To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: alan.maguire@oracle.com, martin.lau@linux.dev, yonghong.song@linux.dev,
- jolsa@kernel.org, qmo@kernel.org, nathan@kernel.org, nsc@kernel.org,
- linux-kbuild@vger.kernel.org, linux@weissschuh.net, christian@heusel.eu,
- mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
- linux-modules@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
- acme@kernel.org, namhyung@kernel.org, irogers@google.com,
- linux-perf-users@vger.kernel.org, jikos@kernel.org, bentiss@kernel.org,
- linux-input@vger.kernel.org, tj@kernel.org, void@manifault.com,
- arighi@nvidia.com, changwoo@igalia.com, sched-ext@lists.linux.dev,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ojeda@kernel.org,
- rust-for-linux@vger.kernel.org, arnd@arndb.de, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, abuehaze@amazon.com, doebel@amazon.de,
- mpohlack@amazon.de, jay.wang.upstream@gmail.com
-References: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
- <20261002073422.14253-1-wanjay@amazon.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261002073422.14253-1-wanjay@amazon.com>
+Subject: Re: [PATCH bpf-next v8 08/22] bpf: Require an unwind to leave a frame
+ holding what it entered with
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261001133047.1339752-1-yonghong.song@linux.dev>
+ <a203a496c37cc672ef89f2e95a82b48c4a19863d832a055a3bfda60e3fd206ec@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <a203a496c37cc672ef89f2e95a82b48c4a19863d832a055a3bfda60e3fd206ec@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Jay, thank you for taking the time to reply.
 
-On 2026-10-02 12:34 a.m., Jay Wang wrote:
->> A question I had: is it really worth 2k of complicated kernel code to
->> *maybe sometimes* save <10Mb of memory?
-> 
-> There are many reasons this is worth it.  The main ones:
-> 
-> 1. This did not start from a number we picked, but from a real use
->     case: users who run large fleets of small instances, 1 GiB of
->     memory or less, with their workloads sized to fit.  We are not able
->     to disclose more detail, but for them 5.4 MB on every instance is
->     real money, and it can be exactly what pushes a workload over its
->     memory budget and onto the next instance size.  That is why we took
->     this on, even though we knew it would not be a small change.
 
-Ok, good to know there is a real customer for this.
+On 10/1/26 7:31 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Require an unwind to leave a frame holding what it entered with
+> TL;DR: call_may_unwind() treats every callx as possibly unwinding, so the
+> verifier may wrongly reject valid programs that hold a reference or spin lock
+> across a callx; the exact target is available from the register.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index c7a350be538e..a7b25ab04051 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>
+>> @@ -19244,6 +19245,32 @@ static int unwind_out_of_global_call(struct bpf_verifier_env *env, int call_idx,
+>>   	return INSN_IDX_UPDATED;
+>>   }
+>>
+>> +/* Can an unwind come back out of this call? */
+>> +static bool call_may_unwind(struct bpf_verifier_env *env, const struct bpf_insn *insn,
+>> +			    int insn_idx)
+>> +{
+>> +	int subprog;
+>> +
+>> +	/* Which subprog a callx lands in is not known here, so any may be it. */
+>> +	if (bpf_is_callx(insn))
+>> +		return bpf_prog_may_unwind(env);
+> Is it true that the target of a callx is not known here?
 
-Obviously I don't know any details of the use-case apart from what
-you've shared. But bear with me trying the customer's hat on:
+This is way to conservatile as if *any* subprog is marked as may_unwind, then
+it will return bpf_is_callx(insn). The best thing is to follow callx itself
+and find whether it is possible may_unwind or not.
 
-   - I am running a workload on a legion of 1GiB instances
-   - I care about memory footprint a lot, because it directly
-     translates into the amount of compute I pay for
-   - If I know I don't need BPF on the workload, and these 5.4 MB
-     bite me, I can just turn off BPF
-   - If I know I need BPF, then those 5.4 MB must be loaded anyways, so
-     I have to look for savings elsewhere
-
-What I find strange is for a user of this scale *to not know* whether
-BPF will be used in the workload or not, which is what lazy load may
-solve.
-
-One thing I can imagine is an opaque workload: untrusted (AI agents
-etc), end-user-defined (including BPF usage), or confidential.  But in
-these cases, what are the chances that BPF is used there? They are
-high, BPF is very widespread.
-
-I can also imagine normal workload not needing BPF, but when something
-goes wrong an observability or security thing turning on that loads
-BPF programs. But this contradicts the "5.4 MB may push workload over
-1GiB" premise: you still need to reserve/swap memory for just-in-time
-BPF-based tools, otherwise you OOM.
-
-I of course may be missing something, happy to be corrected.
-
-> 
-> 2. Loading code and data only when a system needs them is what kernel
->     modules exist for.  And most of them take well under ~1 MB once
->     loaded (nf_conntrack, overlay, vfat); even big ones like ext4, kvm
->     and btrfs stay around 1-2.5 MB.  The vmlinux BTF is 5.4 MB.
-
-True. At the same time BPF without vmlinux BTF is barely useful. And
-it is trusted by the verifier. Both are addressed by BTF being
-built-in in the kernel image.
-
-> 
-> 3. We are not alone in trying to keep BTF out of memory until it is
->     needed.  The inline BTF work [1] plans to deliver its data, which
->     is even larger, through a module too.  The .BTF.link record and the
->     resolve_btfids option that serve both are already part of this
->     series (patch 10), so this is not machinery for the vmlinux BTF
->     alone.
-
-The inline data is different. It's bigger by it's nature, and it has
-more specific users: tracing tools. The userspace tools are able to
-themselves decide whether to use that data. The kernel only needs to
-make it available.
-
-In comparison, as you yourself noted in the cover:
-
-     CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and bpf-lsm
-     all depend on vmlinux BTF
-
-> 
->> Do those tiny VMs that you target run systemd with BPF LSM?
-> 
-> Not necessarily, and that is the image's choice.  Even with BPF LSM
-> built in and bpf in CONFIG_LSM, memory-conscious users can turn it off
-> at boot with an lsm= list that leaves it out, and then systemd does not
-> load restrict_fs at all.
-> 
-> And even where user space is in the way, which as above it does not
-> have to be, the answer is to fix user space so it gets this win too,
-> not to give up on it.
-> 
->> If the answer is "yes" for the majority of them,
-> 
-> "The majority" is also hard to pin down here: what runs at boot
-> depends on the user space packages built into each image, and on the
-> workload.
-
-Yes, it is hard to pin down. Which is why we first need to figure out
-whether the alleged memory savings actually help anyone.
-
-Adding code to the kernel is not free. More complexity means bigger
-bug surface: more opportunities for concurrency bugs, security bugs
-etc. Especially runtime loads with retries and stuff. I'm sure you
-understand the future cost of all that.
-
-So the bias shouldn't be "let's implement a big thing that might
-hypothetically help someone". It's backwards IMO.
-
-> 
-> So the question should be what it takes to make this work, not whether
-> to drop it because it is complicated.  If there are ways to cut it
-> down, or issues found in the implementation, we would be happy to take
-> them and go through every one.
-
-The question is in the trade-off.
-
-Would you run a million line python program to search for a string in
-a text file? No, that's absurd. But you could.
-
-I'm not saying 2k line patch series is unacceptable in principle. It
-may be justified. But I am not convinced it is justified in this case.
-
-Let's say we (as in kernel devs) decided that we want to reduce
-vmlinux BTF size, and only load it when necessary. Here are a couple
-of alternatives, simpler in comparison to CONFIG_DEBUG_INFO_BTF=m,
-although still a bit complex:
-
-   * Compress it.
-
-     $ ls -lah /sys/kernel/btf/vmlinux
-     -r--r--r-- 1 root root 6.7M Jul 18 01:54 /sys/kernel/btf/vmlinux
-     $ tar --zstd -cf /tmp/vmlinux.btf.zstd -C /sys/kernel/btf vmlinux
-     $ ls -lah /tmp/vmlinux.btf.zstd
-     -rw-r--r-- 1 isolodrai users 2.2M Oct  2 10:11 /tmp/vmlinux.btf.zstd
-
-     3x win right there.
-
-     Keep zstd-compressed blob in the kernel image and decompress and
-     parse it synchronously on first use.
-
-     Here is a prototype (vibe-coded, obviously):
-  
-https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:vmlinux.btf.zstd-20261002
-
-   * Use an external blob.
-
-     Ship /lib/modules/$r/vmlinux.btf, checked against a SHA-256
-     recorded in the image. The catch is a synchronous file I/O under
-     caller locks, so this is less straightforward.
-     But this should cover embedded case that Alan has mentioned.
-
-     Here is a prototype:
-  
-https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:vmlinux.btf.external-20261002
-
-Both alternatives avoid kernel-module loading machine. If we think
-harder, we may come up with something even more clever.
-
-I don't particularly prefer one approach over the other, including the
-module one. Maintainers probably have a better intuition on that.
-
-The point I'm trying to make is that if you could achieve similar
-memory savings with say 500-line well encapsulated diff (or even
-better: by refactoring, simplifying, deleting code) it would have
-already landed.
-
-And if it was a 50-line patch, the discussion on whether anyone cares
-wouldn't be relevant, because it's so cheap.
-
-As it stands, it's not clear (to me at least) in what circumstances
-we'll get the promised memory savings at all.
-
-> 
-> 
-> [1] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
+>
+> call_may_unwind() is reached from check_unwind_through_call() in
+> do_check_insn(), just before check_func_callx().  check_func_callx() takes
+> the exact target from the same register state a few lines later:
+>
+> 	reg = reg_state(env, insn->dst_reg);
+> 	if (reg->type != PTR_TO_FUNC) ...
+> 	/* PTR_TO_FUNC is a pointer to a static subprog */
+> 	subprog = reg->subprogno;
+>
+> and check_func_ptr_read() pushes one state per possible table target, each
+> with its own subprogno.  So each verified callx has exactly one target at
+> this point.  Only the CFG pass has to be conservative, and
+> mark_callx_might_unwind() already marks any target that itself contains a
+> callx.
+>
+> With the current code, an uncovered callx is refused by
+> bpf_exc_check_frame_balance() whenever the calling frame has changed its
+> RCU, preempt, IRQ, spin lock or reference state since entry, as long as some
+> unrelated subprog in the program is marked might_unwind.  For example:
+>
+> 	foo():
+> 	    t = bpf_task_acquire(...);  /* id > entry_id_gen */
+> 	    r1 = vtable[i];             /* PTR_TO_FUNC -> bar, no unwind in bar */
+> 	    callx r1                    /* no cleanup record covers it */
+> 	    bpf_task_release(t);
+>
+> 	baz():
+> 	    bpf_unwind();               /* makes bpf_prog_may_unwind() true */
+>
+> Before this patch this program was accepted.  Now it is refused with "an
+> unwind through this call keeps the reference id=N the frame acquired", even
+> though no unwind can pass through that call.  callx is also explicitly
+> allowed under a spin lock, so a frame that holds a bpf_spin_lock across a
+> callx is refused as well with "an unwind through this call does not leave
+> the frame's bpf_spin_lock state as it found it".
+>
+> Could this look at the register instead, something like:
+>
+> 	reg = &cur_regs(env)[insn->dst_reg];
+> 	if (reg->type == PTR_TO_FUNC)
+> 		return env->subprog_info[reg->subprogno].might_unwind;
+>
+> and leave it to check_func_callx() to refuse any other register type, as it
+> does today?
+>
+>> +	if (insn->src_reg != BPF_PSEUDO_CALL)
+>> +		return false;
+>> +	subprog = bpf_find_subprog(env, insn_idx + insn->imm + 1);
+>> +	return subprog >= 0 && env->subprog_info[subprog].might_unwind;
+>> +}
+>> +
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36872142096
 
