@@ -1,167 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA492DAFAF;
-	Fri,  2 Oct 2026 05:14:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610971FDE31;
+	Fri,  2 Oct 2026 05:16:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790918083; cv=none; b=lmWdzZCi4f8ySmjRToigzU981M/nPiQICFBunfDSOipAiYQwt2EyTKM9imFDLEL+JF92aLF07NEO1NopMf2WxXPMVrUvC65UwkARr7YUel5GmO5WNTgx84n4Lg8Bj+fd4GmxsbZ6WGYsNwq0uOVT1g6ZdE/FsoS0k8kTT9lbF/w=
+	t=1790918179; cv=none; b=LuZ9cKfBrDF2uS4OXashBaM+enaTU00MSbM+8T0XCWLp3p0wqIsaEFkfwxMx0wpBw4RSzJyuZJMnUIXTkCmSCa6QIa4FdeacSS4Mf/S9MDBhp8v5rlPXTJrDKeaf22J6ahg1LjdwRs3FHP5xamt0L9zn8Zg2w0lDCGAnWgoNXu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790918083; c=relaxed/simple;
-	bh=D92WhrZH+54cjQPN+K8ltIeWhFkD/it2q9JkQccXjjQ=;
+	s=arc-20240116; t=1790918179; c=relaxed/simple;
+	bh=szMLHEIsPYGPBcNsMQqu4KTbB4Un+ASFkINpnnypcI0=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Bxbleta7Oqy59nksxVnKslgS3fxFuGPYnX1TA7yJfQxfH37MCFtWm9EPbOWP2Muv5rtg2i83E7ExXhwgomW0aZQaRJq55i1RXqKyGZFMLJpLuNoVRSInFKE9/1lyKoz6dKGjxBemq3AN7FuozMN1p/EsWzlnYNeeeoBwhEE3LhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bxa3in1P; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=pGlp518fuIH7lJ3qt5oKKJ5obNN8H5QwuXjS1Tq52MTICS5P9LogGw+ic1YYFPNZS3jGc55vekAbl5VvdIl7lhtPWZMlmV2Nc2KG6/usbE0dsP7dJfAzqlA7wasozFi1G8gx8y5QypkOvJs7s3pMfcdIBVcmSiP15jzID1cwF1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WExEL4j/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bxa3in1P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA3B1F000FF;
-	Fri,  2 Oct 2026 05:14:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WExEL4j/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD1A1F000FF;
+	Fri,  2 Oct 2026 05:16:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790918081;
-	bh=ZTPYABB2u4qxTYVrhofxTi+nKWD1avZUblAo3JWd1fA=;
+	s=k20260515; t=1790918178;
+	bh=fdbq3HRFuyvrIU82ByKul8ljBnoTsSoeLo/ZpuxDclU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Bxa3in1PDTIc9CtlCSc//T2TREVtKt53RDb2K2dmzUUofLbGS3BBPrcfI3wvZCHgK
-	 R703RSR6Alq4uXKpQqh69KSmoyFRNJG/ZSHdeaSib6AXHqCGNFk+16GyMqXeFEQItz
-	 XgF18r7u6VlMu7oygdwcHjTB8r4v8xwIYEJULwm3e5EO3pbUiA310L1jIx2AA5dG01
-	 o2p6ZAe1nRw3UzmSq7rNfZI5ksZNba8seInXyF5S6gl12iejdXrITno/CQWmrcqFvJ
-	 hx87SVQhGNsfXpV+umqu31RRYqLiJu+f+YlVD35qUWF0Rf0duiatjUZvOrgweYisLd
-	 OryKoC95ySoAQ==
-Content-Type: multipart/mixed; boundary="===============3278906847704703613=="
+	b=WExEL4j/nmjgZX+MwmgUbXFbkCu9MQ29rlxsZOcMhJC7NQkxAvsnKPvOc2O2O4wwB
+	 o6Za7Pd3IChaZ/FIDw3Zua2aIwQgVtEMxOXRkuBn9VCB77tQae91seSmx9FcE9A31P
+	 R+GMT2yhUnTK/qx3UGuwvjT8E71+3SCRi1N/vCXRUWrMHKpPd6/b/KaibkdkgOMQCy
+	 AgN4H2YbNsTJLeyehhziFdHjtD2wRRCQPPBjDa+QpiZlaWAUTTutnxzZfqbW4LXV4F
+	 TUAeE7uENVZG4VH1IYukQ5bYclyWb8e6XPpfNMKoInDrdJD0aI0icHurQFToaKCuDU
+	 M4t2lRc+o04kw==
+Content-Type: multipart/mixed; boundary="===============1405899604603047031=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <aa827bb60ac91fb2860c3307b5942aee2bf0810b21dbbc297aac5f61fb102627@mail.kernel.org>
-In-Reply-To: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
-References: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: add XDP test for per-flow LRU_HASH window updates
+Message-Id: <30d677b5656d9fe07e2dba86d2bb1f1d5f5114cfc3f36e9d96297b70c230097b@mail.kernel.org>
+In-Reply-To: <20261002044050.1277356-1-thepacketgeek@gmail.com>
+References: <20261002044050.1277356-1-thepacketgeek@gmail.com>
+Subject: Re: [PATCH] bpf, arm64: Fix text_mutex critical section in bpf_arch_text_poke()
 From: bot+bpf-ci@kernel.org
-To: anilkaushikwireless@gmail.com,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
-Cc: sdf@fomichev.me,ihor.solodrai@linux.dev,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,anilkaushikwireless@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  2 Oct 2026 05:14:40 +0000 (UTC)
+To: thepacketgeek@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,puranjay@kernel.org,xukuohai@huaweicloud.com,catalin.marinas@arm.com,will@kernel.org
+Cc: leitao@debian.org,bpf@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  2 Oct 2026 05:16:16 +0000 (UTC)
 
---===============3278906847704703613==
+--===============1405899604603047031==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: add XDP test for per-flow LRU_HASH window updates
+> bpf, arm64: Fix text_mutex critical section in bpf_arch_text_poke()
 
-TL;DR:
-- Test issue: wrap subtest uses identical packet lengths, so it can't detect a
-  wrong post-wrap index
-- trunc subtest sends a non-IPv4 frame, so it likely never reaches the
-  truncation checks
+TL;DR: Nit only: the new multi-line comment in bpf_arch_text_poke() (arm64
+JIT) should put '/*' on its own line, per BPF comment style. No functional
+problems found.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c b/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c
-> new file mode 100644
-> index 000000000000..55175c2165ec
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c
-> @@ -0,0 +1,168 @@
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
 
 [ ... ]
 
-> +static void test_one_and_wrap(void)
-> +{
-> +	struct xdp_lru_window_state st;
-> +	struct xdp_lru_window_key key;
-> +	int i, n;
+> @@ -3338,12 +3338,20 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+>  		 */
+>  		plt_target = (u64)&dummy_tramp;
+>
+> +	/* pages of the bpf prog pack are shared between progs, so the
+> +	 * set_memory_rw()/set_memory_ro() window below must be serialized
+> +	 * against other pokers too.
+> +	 */
+> +	mutex_lock(&text_mutex);
 > +
-> +	reset_map();
-> +	if (inject(1, DST_PORT))
-> +		return;
-> +	fill_key(&key, DST_PORT);
-> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &st), "lookup"))
-> +		return;
-> +	ASSERT_EQ(st.seq, 1, "seq");
-> +	ASSERT_EQ(st.pkt_len[0], sizeof(struct ipv4_packet), "len0");
-> +
-> +	n = AGGREGATION_WINDOW + 5;
-> +	if (inject(n - 1, DST_PORT))
-> +		return;
-> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &st), "lookup wrap"))
-> +		return;
-> +	ASSERT_EQ(st.seq, n, "seq wrap");
-> +	for (i = 0; i < AGGREGATION_WINDOW; i++)
-> +		ASSERT_EQ(st.pkt_len[i], sizeof(struct ipv4_packet), "slot");
-> +}
 
-Can the final "slot" loop detect a wrong post-wrap write?
+This isn't a bug, but should the new multi-line comment put '/*' on a line
+by itself, as is the convention for BPF code?
 
-Every packet sent by inject() is the same pkt_v4 copy, so every write stores
-sizeof(struct ipv4_packet) (54).  After the first 50 packets, slots 0..49
-already hold 54, and packets 51..55 write 54 into slots 0..4 again.  The
-loop therefore checks nothing that was not already true before the index
-wrapped.
-
-The "seq wrap" check only shows the program did not take the
-"idx >= AGGREGATION_WINDOW" early return.  A miscompiled modulo that
-produced a wrong but in-range index would still pass.
-
-The commit message says this subtest checks that "the bounded array wraps".
-Would it make sense to send the post-wrap packets with a different length
-(run_pkt() accepts any len >= ETH_HLEN, and the program records
-data_end - data), then check that slots 0..4 hold the new length while
-slots 5..49 keep the old one?
-
-[ ... ]
-
-> +static void test_trunc(void)
-> +{
-> +	struct xdp_lru_window_state before, after;
-> +	struct xdp_lru_window_key key, next;
-> +	unsigned char short_pkt[sizeof(struct ethhdr)] = {};
-> +	int err, retval;
-> +
-> +	reset_map();
-> +	err = run_pkt(short_pkt, sizeof(short_pkt), &retval);
-> +	if (err)
-> +		return;
-> +	ASSERT_EQ(retval, XDP_PASS, "trunc retval");
-> +	err = bpf_map_get_next_key(map_fd, NULL, &next);
-> +	ASSERT_EQ(err, -ENOENT, "trunc no insert");
-
-Does this subtest reach any of the program's truncation checks?
-
-short_pkt is 14 zero bytes, so eth->h_proto is 0.  In
-progs/xdp_lru_window.c the program passes the Ethernet bounds check and then
-returns at:
-
-    if (eth->h_proto != bpf_htons(ETH_P_IP))
-            return XDP_PASS;
-
-The IPv4 length check ((void *)(iph + 1) > data_end) and the TCP length
-check ((void *)(th + 1) > data_end) never run, here or in any other
-subtest.
-
-The "trunc no insert" and "trunc no mutate" assertions would pass the same
-way for a full-length non-IPv4 frame, so this exercises the ethertype
-filter rather than truncated-packet handling.  The commit message describes
-this subtest as checking that "a short (parse-failing) packet neither
-inserts a new entry nor mutates an existing one".
-
-Should short_pkt have h_proto set to htons(ETH_P_IP) so the IPv4 length check
-is reached?  To also reach the TCP header check, a truncated copy of pkt_v4
-of sizeof(struct ethhdr) + sizeof(struct iphdr) bytes could be sent.
-bpf_prog_test_run_xdp() only requires data_size_in >= ETH_HLEN, so both
-sizes are accepted.
-
-> +
-> +	if (inject(1, DST_PORT))
-> +		return;
-> +	fill_key(&key, DST_PORT);
-> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &before), "setup"))
-> +		return;
-> +	if (run_pkt(short_pkt, sizeof(short_pkt), &retval))
-> +		return;
-> +	ASSERT_EQ(retval, XDP_PASS, "trunc2 retval");
-> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &after), "after"))
-> +		return;
-> +	ASSERT_EQ(after.seq, before.seq, "trunc no mutate");
-> +}
+	/*
+	 * Pages of the bpf prog pack are shared between progs, so the
+	 * set_memory_rw()/set_memory_ro() window below must be serialized
+	 * against other pokers too.
+	 */
 
 [ ... ]
 
@@ -170,5 +86,5 @@ sizes are accepted.
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36965595251
---===============3278906847704703613==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36966917973
+--===============1405899604603047031==--
