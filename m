@@ -1,84 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEFF489FA6;
-	Fri,  2 Oct 2026 13:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A452C21DF
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 13:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790947556; cv=none; b=dzYJyXgpM/6q7dulzOY2mX3O7HEHkAXtmCV4ftY4AGfRzTtrHERgX7zyNLSIo9L4Bcto/lzBJbJIhX7xzFq/2rDkgzP0HomqZZUtcmRhJGqJoQFzqoJiQjYV+zLEfG1nLbM2RDGaF75mBmBeTDhbGS3hCsDe7EysITWr8CxR/as=
+	t=1790947661; cv=none; b=m/8L1Y5S5Rb/B0sNipMqs6VCGrTyoMSiokiUKd6pybKowlriGrdzzUFyt98+dRJ88IWfqfOWL/v/KgSz/0GgSjzyPxbQK87M+0YVfDx1ZOKpzVM1J0n/bOoya3ZrBY8vmyHKHIzhyKYcL7e70jIOK6XnrMZi92q5I/K7dX7rabQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790947556; c=relaxed/simple;
-	bh=la4Slf1QHZA1G1NveHjiQUPOcv5H2yRVoCeezxnImrM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DEqHbD5XzF8UgCPzwm8+BmI88d1V4Ran9bfbE30ORyb1qodqBHiVYNayzJDGYCkbWOfuULgSEks9aC8CV4wS8PjjoLriHv/7g1jU8jwlbczt64iYyMq6rV6hRmFm7d6Yp8qwOCZ22k+RA1O9SFWir+lgVcHdSoEBEkgfrjR23Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JmHxuDya; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790947661; c=relaxed/simple;
+	bh=6cblTvA9vicmoxQpyU47r+ZLsqNrbBYhPu8AgtpPDb4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=LbC460CIQ3wM6/ZERlGwej06TqJzD5uIgJ7+PF0Lbq8UZ4MSflOCNtAU96Nbqg+bfYqZB9bFp6q2fIFzLneGIWNVOpS3pr0ljcWGhbqB0zfXgB2GSjAOhtYjyxvG6M9m1Hhofvz0GUz80aFhIpMzLube7ZtkN0blVXUbhYHcf30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XAWuzS3p; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JmHxuDya"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85371F000FF;
-	Fri,  2 Oct 2026 13:25:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XAWuzS3p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C0F1F000FF;
+	Fri,  2 Oct 2026 13:27:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790947554;
-	bh=PbYSzylms7o12wuCPlSjyl59qP4qkoDF5kmaNChmMWU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JmHxuDyafXnH6yN6mdvkdJmGGHhTaFZoYT4ccKchi2fE4Z+4PokAD8XIcNBYlMYvV
-	 RSIZAUNlwRIPbZYcANRZUpqIKFhchZAkAusigMIXZutGLqGpXEmHfj7C9XXIesU0z3
-	 Sh1/onvDtHA06k2nWqnerjLTR/tu4og1uik5eKrqpCsSe74TLF9kIX87Id3e7WiOrK
-	 JZLWej9ZmCt10qyfJRfGIT5YPa4wysnkcucxRzDtgw5WzUwy8/+7Oq9GfQxWFv8edI
-	 8Zxnl8k5KWF6GDUOPX6UgoXS8MHY7XJjbDhUVETVhU2qLcR2pgVxDYmAjIeh02OvBY
-	 dYHjGwkxACS4Q==
-Date: Fri, 2 Oct 2026 14:25:48 +0100
-From: Simon Horman <horms@kernel.org>
-To: Daniel Machon <daniel.machon@microchip.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	UNGLinuxDriver@microchip.com, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v9 04/15] net: microchip: fdma: use
- little-endian types for descriptor fields
-Message-ID: <20261002132548.GH13925@horms.kernel.org>
-References: <20260928-lan966x-pci-fdma-v9-0-a17caf60f89a@microchip.com>
- <20260928-lan966x-pci-fdma-v9-4-a17caf60f89a@microchip.com>
+	s=k20260515; t=1790947660;
+	bh=SkSliecVUNU+2gOO522ibmOu8d13PAMdSTDIPmpFCSo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XAWuzS3pP+LAPLbxRQhXic7Hd+BOA4xYbxZoT64leb6k5ZLSKvxR9KYgbPl8cAP9+
+	 GdrH/zQZoas0FRcwir809SYDP00azLGFBcaG3KROJ5aQvEsXEp7dGg7t0R43TimaXy
+	 PkU6WAUnktfrwnKacZdJPBP+luGTi0vn/Jh0eaCsEYihRGMuTSh7hA/ersBwoW5Dba
+	 bclgcSyPMAj4KUpf6VzMmKUGGgyweAbf4jrtLMnWK6tvRRZ/kN2B/2ghvfbI52m4sa
+	 duxFGoHkfTqtCJ6MfFpJEKricOOJNVPFkw6iYGmM2VEz2/dB0D0nIFtzj0H0TS5xoo
+	 7AJy0relXehTQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH iwl-net 07/10] ice: take the switch rule AQ error from
+ the response descriptor
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Petr Oros" <poros@redhat.com>
+Cc: intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org
+In-Reply-To: <20261002130752.2597259-8-poros@redhat.com>
+References: <20261002130752.2597259-1-poros@redhat.com>
+ <20261002130752.2597259-8-poros@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 02 Oct 2026 13:27:39 +0000
+Message-Id: <20261002132739.B6C0F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260928-lan966x-pci-fdma-v9-4-a17caf60f89a@microchip.com>
 
-On Mon, Sep 28, 2026 at 09:32:52PM +0200, Daniel Machon wrote:
-> The FDMA engine reads and writes the DCB and DB descriptors in
-> little-endian byte order. So far the descriptors have only been produced
-> by the little-endian SoC itself, so plain u64 fields were fine. With the
-> PCIe FDMA path, the descriptors live in host memory and are written by
-> the host CPU, which may be big-endian.
-> 
-> Change the descriptor fields to __le64 and convert at the library
-> boundary: in __fdma_db_add() and __fdma_dcb_add() on write, and in the
-> fdma_db_*() accessors on read. The dataptr and nextptr callbacks keep
-> their u64 signatures, so their implementations are unchanged. Add
-> fdma_db_dataptr_get(), and convert the lan966x sites that read the
-> descriptor fields directly to use the accessors.
-> 
-> No functional change on little-endian hosts.
-> 
-> Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] ice: conflated -ENOSPC causes silent MAC filter drop on queue full
+--
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+commit 5b00f3f5a2fd8517b295e1041c4e6854bbdcfd81
+Author: Petr Oros <poros@redhat.com>
 
+ice: take the switch rule AQ error from the response descriptor
+
+This commit modifies how the driver extracts switch rule AQ errors by direc=
+tly
+reading the return code from the descriptor that ice_aq_send_cmd() copies b=
+ack,
+rather than from hw->adminq.sq_last_status. This avoids races when other
+commands complete and overwrite the shared last status variable.
+
+> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethe=
+rnet/intel/ice/ice_main.c
+> --- a/drivers/net/ethernet/intel/ice/ice_main.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
+[ ... ]
+> @@ -450,7 +448,7 @@ static int ice_vsi_sync_fltr(struct ice_vsi *vsi)
+>  		 * should go into promiscuous mode. There should be some
+>  		 * space reserved for promiscuous filters.
+>  		 */
+> -		if (hw->adminq.sq_last_status =3D=3D LIBIE_AQ_RC_ENOSPC &&
+> +		if (err =3D=3D -ENOSPC &&
+>  		    !test_and_set_bit(ICE_FLTR_OVERFLOW_PROMISC,
+>  				      vsi->state)) {
+>  			promisc_forced_on =3D true;
+
+[Severity: High]
+Does this change unintentionally catch transient software queue exhaustion
+errors?
+
+If ice_sq_send_cmd() returns a native software -ENOSPC because the control
+send queue is temporarily full (e.g., under heavy administrative queue load=
+),
+this fallback block will now catch it.
+
+Previously, this block was gated behind the hardware-specific
+hw->adminq.sq_last_status =3D=3D LIBIE_AQ_RC_ENOSPC check. By changing it to
+check err =3D=3D -ENOSPC, a temporary queue-full condition could be misiden=
+tified
+as a permanent hardware MAC filter limit.
+
+This would cause the driver to erroneously set the overflow state bit and
+return success, dropping MAC filters and leaving the hardware permanently o=
+ut
+of sync with the OS.
+
+> diff --git a/drivers/net/ethernet/intel/ice/ice_switch.c b/drivers/net/et=
+hernet/intel/ice/ice_switch.c
+> --- a/drivers/net/ethernet/intel/ice/ice_switch.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_switch.c
+[ ... ]
+> +	if (status) {
+> +		enum libie_aq_err aq_err =3D le16_to_cpu(desc.retval) & 0xff;
+> +
+> +		if (opc !=3D ice_aqc_opc_add_sw_rules &&
+> +		    aq_err =3D=3D LIBIE_AQ_RC_ENOENT)
+> +			status =3D -ENOENT;
+> +		else if (opc =3D=3D ice_aqc_opc_add_sw_rules &&
+> +			 aq_err =3D=3D LIBIE_AQ_RC_ENOSPC)
+> +			status =3D -ENOSPC;
+> +	}
+
+[Severity: High]
+Will this translation ignore hardware MAC filter exhaustion during rule
+updates?
+
+Because the error translation is strictly gated behind
+opc =3D=3D ice_aqc_opc_add_sw_rules, if a rule update command (e.g., expand=
+ing
+a VSI list) triggers hardware exhaustion, it appears it will return a gener=
+ic
+-EIO rather than -ENOSPC.
+
+Additionally, native software -ENOSPC errors returned directly by
+ice_sq_send_cmd() will pass through unchanged, leading to the conflation
+issue mentioned above in ice_vsi_sync_fltr().
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002130752.2597=
+259-1-poros@redhat.com?part=3D7
