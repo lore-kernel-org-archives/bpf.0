@@ -1,115 +1,116 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F37C3C2BB4;
-	Fri,  2 Oct 2026 19:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B36403EA5
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 19:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790968741; cv=none; b=IwY96YBhaBDiTXVcZU675r0TRSlNyzrcOacpCVr+v+Mg0YPp0kDc0T45UsYDMvIPbD5ooL9jWIXvqytgtRccOP5aV23FPiIP0kJ2gI6BMZF024do8bA+AK3P/LhPpsfmaLwdOeHo1gMtk6UbOv+xYsdseRPUyv08oq+U2IaCu4g=
+	t=1790969428; cv=none; b=lZeHokSc3vPa5c6znfyYKHw2FWzQtMQOGRlUW+FO+AjfAXbIToTbovoS7p19+wVHXirBzI//Uh8wwDhf4H5C2v5gPX2ELo4Pu5C1pbXyao+m+yD7oGb+4gPtHQe07lKO8CzzbjDs7clfhqwBbxwJoy9sqG6dgpEUsuPrnaAX9Js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790968741; c=relaxed/simple;
-	bh=jnAOeGmpazpaa6F0liOQgWuqc+WpTuXHDmlbHHSzhJI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BIJeoFxQmazMbBpY9SlOrRakavdlfticXkan6E8LfdL385fkQTunukxBJMFPyriPOaJpYenMQ3LT5gASogzB9W5ej3F1DMY1umt22626+0F8wvWNzxUILRBBTAE7SuotiGi4wkX21gQQo0ozh1z25n+Ecg2l9NxQgzW7/OMm5nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oQgd97MU; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1790969428; c=relaxed/simple;
+	bh=pLVNaTP9L662KDxDj0b3v3iNYRp0+xOAOWs+AVXQFYI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mfK9iYAh5BMGjZtJf+j5OXQVlC0uOyEsJBNMkirMSuuEONqB4jedU6AUJkfTc7tlOaLQk8VBcdolkRXaFCNipz7WfaYqqsiyfRs/ADAIHN/Fv5WkkJBogNKI4pE2a4m8Gq/olL2Bii9kX9AIJhs5f582JgBXtJM6REnnCbHegs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=AypcrKKS; arc=none smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oQgd97MU"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=y8MzMOtbyh0mzvxY+tu6OnDzIzuOy1UtRCB8aMJlZbw=; b=oQgd97MUFQeDpxNSe6MLHsukHW
-	7KNw+ycnsj4ujG4FqEpVU7uboQfHgPEK2rzpqvpNgPfnmb2m/N+XHuP+/KNeXnT0O4BtvjRE/uXW6
-	m9Q2FEnqqgxQd9oXI0k2f4/hKT8jElXUYkH8zijGpygKhmADckEuAuAXhBB1pSsl272MdFN8nFXha
-	CxYvifLBOWmiuUe0dTsNypBD3syY/iMFPJxpmVNlj4lRCJ2F7ZUK4+XWrAyLLUCTdkRAnq2SzTfvu
-	N4QjtwC79yz1abBGdBRmNVVyBdkoSS3u01RH3vODFfO6YNrYayMC9TfEhtRrjiwCnFqWvgJ+vg/H3
-	3/h+7JvQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1xCimK-00000002CL4-0aJs;
-	Fri, 02 Oct 2026 19:18:44 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0E1093008DB; Fri, 02 Oct 2026 21:18:43 +0200 (CEST)
-Date: Fri, 2 Oct 2026 21:18:42 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Gabriele Monaco <gmonaco@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Nam Cao <namcao@linutronix.de>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Wen Yang <wen.yang@linux.dev>,
-	Tobias Schaffner <tobias.schaffner@siemens.com>,
-	Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH v2 01/15] sched: Add task enqueue/dequeue trace points
-Message-ID: <20261002191842.GA1259248@noisy.programming.kicks-ass.net>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
- <20261001152042.124445-2-gmonaco@redhat.com>
- <20261001154934.GT88198@noisy.programming.kicks-ass.net>
- <d75888885e2c94c1bc717faa864f609c43db874f.camel@redhat.com>
- <20261002102939.GB2823843@noisy.programming.kicks-ass.net>
- <56972260b9221128d7aaf5bb60f90611ec9d7235.camel@redhat.com>
+	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="AypcrKKS"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-33fb4680717so7068464eec.1
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 12:30:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=trailofbits.com; s=google; t=1790969425; x=1791574225; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=bp8EWYscaHenCl5GeCUCEIO11ZClZpcPuAQp7e588A4=;
+        b=AypcrKKSdwDrZaMCBdZ5LLLGkCo6T5Q185BHhiy5AA6Xuae4D1ub8dAdecycjD1V4w
+         sdq+HjICmovro/C+KpH/dpmoMwYBVrLqORmzBxQSZvbd7W9FNVzOBWJavnvITPvnkHQd
+         WMxasEL+LUHdgfla3Yjmss656q1yPPFtJW+a4MMHzmSPbI+UHUSvtKWbQdlOsr1OUScl
+         txDBKuQwXqZGbf9iABULBIJniY4Nu/UVtGUw0HnAAFevlA78Q3Q12F2iAJ1BmDX1PCI9
+         46LlmH8RLDMbL5Li4WTG4MLGhlQj4G9yyo19t4SI26RvP49o5DLSt4aCxPM27y7/GVdb
+         5YoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790969425; x=1791574225;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bp8EWYscaHenCl5GeCUCEIO11ZClZpcPuAQp7e588A4=;
+        b=vuYXFRQ8lfN1F6fLE5Zcf2FPYqiym60sw6/dgtI2efTJrcIO4C5mFZZbAoPkK6JKFb
+         xz+Rbqno4RttvbzfqGGJpE9zcZp0Kq5E61Wr1Tu2597AKWLhzJH6ZkskoLI8T0nohzy5
+         jzCrDayTqr5r86bi3QGVU1MjUU8B8btd0KCUgUODNkjv1HHtvfd6WdJ24WZ/WxI4fcQb
+         jYMeIggxKTAN7RfULOgY1kPBhjAgM2oTzhPnSn8nkhW+G6zuq6NwIElqv22NYpH3GvBA
+         cThsEd0qh7qUvNZ4/ME4ZKrwxr3imaJQtShSxJsVtvbXecBx9X/09cqXU/SRqasznYow
+         i++w==
+X-Forwarded-Encrypted: i=1; AKwUvByWEUtR5K92Ss5z3rThKOwCzKa8VbFw1GRXLvL4yPDk+4TbfTpobOnOELyAFtaEWVd5nmI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKAlR7mXFA8f46VkctvzAjuezBADo2WtBTJlqSB+Z0A5d1kPw23
+	mRKPZW7635cVXcyawlC8DbD7Fkh60ZQ3ACfQycpqMSiaREF0dyHp1vKC7rvlczl+X78=
+X-Gm-Gg: AYBFou2hO+feMw0ouhpRMH8zv084bwPqg76K94QTWtO1vaP7ih0F8BOTgQy9L+08qJM
+	SEL9fLhzUipcfkehScg4eZvRQmoGX1aKNElRd1+WVXbTfVvORO8MvgilH0n0NXX+b8srtU5uBHj
+	yF2JPwlVRcLBR52pZq1TSFcKz4306ce0GOgA4He26fAw7PzzYr75B2J81tVqCDIx/RlPmyvhH9+
+	/osO/aPVrW9jhv243OkBlqTJrwkYsMAXtnaSdBE+2ZPuHYEjFoo92irdynwTDqWHfrJZX3Ks6sX
+	sc1b4GxNXlAz5Lcve/T2esiskE+DdjpKoZ59ICFbxz+xhnEDgNonoWH8fLRmh63p2lC/Nn4VoHN
+	5L26qKLt5vjJ5dkD6LeUgD9y78y5vl/Y3Wyp4Tc8nOtmjOlfkanrbL40NvZjstUQIHVYDD4m5sD
+	GXP3ZQ4QqALqNrlaYFUDVxS03KnK1Sf/wcnDh8fILZdn0qFIGkgry/FjTeSM6qOA1+/9SfgxW22
+	gpAEJIhz+kgeu6sE4sdQJO3r2qQ87DfTozN495WnuVIIcKTByfhx/VfV4FkdClMUUKaqQC1
+X-Received: by 2002:a05:7301:2203:b0:351:1282:3e88 with SMTP id 5a478bee46e88-351128240c1mr293459eec.20.1790969425493;
+        Fri, 02 Oct 2026 12:30:25 -0700 (PDT)
+Received: from localhost.localdomain ([2603:8001:5f01:8bab:bcf9:6140:24a9:d1e7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34f14f660f1sm8427448eec.13.2026.10.02.12.30.23
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 02 Oct 2026 12:30:24 -0700 (PDT)
+From: Artem Dinaburg <artem@trailofbits.com>
+To: stable@vger.kernel.org
+Cc: Artem Dinaburg <artem@trailofbits.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Dohyun Kim <dohyunkim@google.com>,
+	Neel Natu <neelnatu@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	netdev@vger.kernel.org,
+	toke@redhat.com
+Subject: [PATCH 6.1.y 0/2] bpf: backport CVE-2024-41045 and CVE-2024-42239 fixes
+Date: Fri,  2 Oct 2026 15:30:15 -0400
+Message-ID: <20261002193020.19392-1-artem@trailofbits.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56972260b9221128d7aaf5bb60f90611ec9d7235.camel@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 02, 2026 at 01:55:48PM +0200, Gabriele Monaco wrote:
-> On Fri, 2026-10-02 at 12:29 +0200, Peter Zijlstra wrote:
-> > So mostly I flat out out ignore partial series. It means I have to go
-> > dig around to figure out the whole picture, and anything that requires
-> > extra effort goes on the 'later' pile, and you know where that lives.
-> 
-> Alright, I guess I'm going to have to fix my to_cmd script.
-> 
-> > Now, as to 3,4; I'm confused. If I search 'enqueue' I see there is a
-> > tracepoint attach thingy in the .c file, but I don't see the
-> > corresponding bits in the .dot file. And per my understanding the .c
-> > thing is an artifact of the .dot file.
-> 
-> Yes but only partially. There isn't always a 1-1 mapping with model events and
-> tracepoints.
+Hi Greg, Sasha, and bpf maintainers,
 
-So the .c files are no longer an artifact? That seems unfortunate. I
-thought the .dot file was fully descriptive and the .c file was fully
-generated by dot2c.
+These patches are the small, ordered backport for CVE-2024-41045 and
+CVE-2024-42239 on 6.1.y. The second patch depends on the first, so I kept
+the upstream ordering instead of folding either change into the other.
 
-If we cannot fully express the automaton in .dot, we should look at
-extending the 'format' and teach dot2c new tricks.
+The first patch is already present in 6.6.y. The 6.6.y backport of the
+second patch is queued (6.6.158-rc1). Both patches are already present in
+6.12.y, 6.18.y, and 7.2.y. Could you please queue this series for 6.1.y?
 
-> Throttle uses handle_sched_enqueue() for one case of dl_defer_arm, representing
-> a fair task running not boosted, in the enqueue case, because it was running
-> with another scheduler.
-> Boost uses handle_sched_dequeue() in a similar fashion to describe fair tasks
-> that stop running on the fair runqueue (but may continue on another runqueue).
-> 
-> In both cases I'm reusing an event that can be triggered from other tracepoints
-> too, ideally to keep the model simpler.
-> 
-> Then it uses handle_sched_enqueue() for dl_server_resume[_throttled]. They are
-> both plain enqueues, in fact, so I could rename them to show what they are.
+AI assistance: An LLM helped identify, adapt, and validate these backports;
+I reviewed the resulting code and validation evidence.
 
-I'm not sure I'm following. Will you be in Prague next week?
+Thanks,
+Artem Dinaburg
 
-> > Also, IMO it would be *much* preferred if the .rst file would not exist.
-> > Just have the graph-easy and the description as a comment in the .dot
-> > file. Then you have the whole thing in one *readable* place.
-> 
-> Well, you make a fair point, I like to have it appear in the html docs, but
-> obviously no one is going to build the docs to review a patch.
-> I may look into ways to get both birds with a stone.
-
-So personally I have 0 interest or use for html. Mail is text, code is
-text, we use a text editor (neovim is my current poison of choice).
-Nowhere is there html. So then having to look at rst is just crap. rst
-gets in the way of actually reading the thing. All down-sides, no
-up-sides.
-
+Series:
+  1. bpf: Fail bpf_timer_cancel when callback is being cancelled
+  2. bpf: Defer work in bpf_timer_cancel_and_free
