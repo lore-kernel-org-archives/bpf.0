@@ -1,73 +1,73 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F332165EA
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6402FE042
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790945241; cv=none; b=pL8T9x3ZvM333RHPBjcEoN3t0WOYlcBi8WcPU0lD/aA2D1C3sO2foYQyhZO5jcCiZVaixVn7M9I1anyu9eGvzoywYF5WWTP7ZBA8zMILq7ISQW0LC2909nR0ld9otHB4Azh9Q4oO6qivlfvTyzCI4DjhtsmOvPl2Tw6jOo5XVGQ=
+	t=1790945244; cv=none; b=iloOJw8Rhmh6kINJWTjHRsPBExV99XiLcxavFbmRR2OXtcKiaSUKQGT1Z/avCPnq7+m1PupqXpy1WbAROQEJSH3Y0xQVLWuWO8B4dkz8VdolFOZSr5vyVs7Y+chSvzF937pKQZN5KbEkFrLqfoptcFG6oLXM8Rt9WFT+dnzvI9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790945241; c=relaxed/simple;
-	bh=VYwqJoXAk6UkWCGQ9MqICl8DuUu38tdIAg3PCm9XHUA=;
+	s=arc-20240116; t=1790945244; c=relaxed/simple;
+	bh=HnILx6srqYNSVl+PVnybpHPN9GIGCOQgqJiQfnqdnsg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pS9HUhMGTO7myG1AEGhm8UE7G9gpvWAHkvQ52o78nIApfZZVEWWIRarkjifzbcoDbAEUxtQ9wXiwzGS77jQmM2LbClr1WrXvNUKqBX/yABzgsppBLWn3zheHEIgobjTADWyS/0nMICDdEaoVBP0WmSwfD+CCkb5r78r6kVE609Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VjuGPb1I; arc=none smtp.client-ip=74.125.228.42
+	 MIME-Version; b=jxCb4FhY28pzCd5h+i3JFP9N2MkIdSIMeZBlQVxjNDcuHbBOQed+X4cTDsmKPNcTefGfAAF6my8ithM1pplj+dcjXE8nSe0y1MIABHuuFj/kDz3GQa1jtbPRDKXNCqh8i+jrt2XoeMg4TdaLnCgG6SJL8IRPUPfBB+tqG427diM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QqlfrX/F; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjuGPb1I"
-Received: by mail-pz2-f42.google.com with SMTP id d2e1a72fcca58-86e6d007703so3745475b3a.0
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:47:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QqlfrX/F"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396cccbba91so3666832a91.1
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:47:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790945239; x=1791550039; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790945242; x=1791550042; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DP1mlw3+PWQumSXdA7GYmWglXzdNV5GweIjhbhcHKXQ=;
-        b=VjuGPb1Ivz7/vK5zGtngKdUWjpDMvXRc4mxUpqEnnJeu9uWUMJeDNSw5V/q6zWLpwm
-         0YMOqr8NjlQuhmlxIf/pUeaV1JJPqbebI1kIrm1jPDwbpD+JPMebG7wGjfc2rI0vTgq/
-         qMzqj7FCMWkVagbm0DDNliDIN8od3GLohTdNc6vf93mXJlPCOGpcHISmDUstj4J265Br
-         r+sspk8OFi3/CgAwPB9gXCjoWWcXbOTN6TdsO6Rcli9X0jgSQeO/RI9A8jnAOcY/jKKe
-         QfUKhVOU4qplJRUSlqNEkJ8DkGDqOgKeKeBQn94HuzYPeOwg3dpoRq/qlMtEiMY18CZ1
-         mg8g==
+        bh=lC50uJg3JX39oNmh2zC53BH7LMSiBuHwAv317RzPsbs=;
+        b=QqlfrX/FrJDNpoP6xRmBueGiiI1U6Czj6B3hlszsvPXBtHIlUd6SMNNhfc5mfcuy6d
+         XD0GQJzbNKjKzCt5MKpepNMwleuq33X5k4zaX7114DrHeySqPB241SK9wK6rORuliXdB
+         d/9gtO8eFOq9mHjmHv469e5QwD0tJFz96II9xRP3QL2yi3hCu/VM5r4NRWGnbuiPhC7+
+         Zg1toLzDCWA7tqKMPlU6UCrCMXi1MHRcK5OilbR2mZw95JXpb/AwdqKrR/PXHp8pZ1rn
+         xcGo3XMuTpJOLVDX960AErhbLSm+86zvnzjoB6iRyCn48/gn3YhsH1a3MUQBQIt8BPSP
+         KcWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790945239; x=1791550039;
+        d=1e100.net; s=20260707; t=1790945242; x=1791550042;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DP1mlw3+PWQumSXdA7GYmWglXzdNV5GweIjhbhcHKXQ=;
-        b=2tTEYGHaZIdf/8x/NKvCa9sFc2IfcJkJN92HYBRCR9Ro4v/PMqONSXx6cy2DKdvCNE
-         k+I9e6BkJKzTgPj4W8XrSkV5rdljMR2HudV1elSTlkKEadhQTUzVkpHyfgQm+2P8/n0B
-         0kMLLgKmGmm9w8RG+ZZJ38oMtjlZnx7xtgpQPkDptC0C73cMSVz6239NmF5XFgHV48Y1
-         w9MtfhO4RaRrHQ2vLnIwO51q1dVAB/OhkS6Ki2o/HBq4dG0hYvPTImA+SK0Ve0Qjvkmo
-         ZnuS82IY2UOwxpg7NWK3zRgJdb6FmOIiCNfeBT02o13FphUBCxZLnV8vp3ktd5BFZJoi
-         k3GQ==
-X-Gm-Message-State: AFuF++lZABdVW2Jrn4zItU9cTZ8laGcfziL1lwFztjDdxhr4kwT9mVJ9
-	Q/mhX8xwPI+/xpjmWM5y71WReWSww9PWhIBbwQ+qiOkwJBlSmRy7hLHx18gxR7tGKnQ=
-X-Gm-Gg: AYBFou2gASI9H6hkAiSLwpato8OX3F959sByNYQUuJAgTAsoV2RNHvIP9MvqWSN2l5Q
-	+vEsKpUXFYl3XDKJ4gOu+EM5ysHKD/scurCC+JZ+yCWQvvRtaKdhsx5xVAxdgSny/LJz7TOLu4P
-	CRK1bWvks1E1TcnD2IQSdN10bz3UW+7NxB6HH/jrUbStQkExnuhXlvTcb2DxSdu/qMzd1gZX1nb
-	jrbBr35s0LbL74+JtT3U21eIQrbT9oNeEHmmjJFZYABjGdeo1eCRVHrvMzqkxk1j6Fg9/xbXcCi
-	Vn0ARb/O+8gk8V7uV/MuH3B8+XaPoRfD9u0j9pWs9AlIqD2fK/5KL/lk8WwmiIWIwdj2HEJv8+f
-	Dx7MiSH+OR+4Pt9c79/In8VSkWBDH3DxruuPJMEnORexvpYrD7SphvaU6hSGmAa2cLg8u+cAHfT
-	v1Awiiw0AZ2s0qjNeirWbZffQzSSa3FdrQjrjVT68jQjUQ0uT1ImtzYTsH2XNlMfcEIwj6Fd+2u
-	gnK1WCDF6v2mn6F1VXD4E2Ivg0l7K5j/7H+DsZafRwAohxEZhw1D7uA9TMK8rv0rPZCwk2StPlD
-	7ZTutthq3cgEqDS8iNC3cklFTxwnJTQqX6J/YnahH+I=
-X-Received: by 2002:a05:6a00:2308:b0:881:42e0:b92d with SMTP id d2e1a72fcca58-88af72eff88mr2602017b3a.57.1790945239367;
-        Fri, 02 Oct 2026 05:47:19 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-88b0b8f85bcsm853687b3a.19.2026.10.02.05.47.18
+        bh=lC50uJg3JX39oNmh2zC53BH7LMSiBuHwAv317RzPsbs=;
+        b=TrvRQYfsrhR8Bxe5dbpwH51oxY7lKsY5uOuh5RxRyUOai3nRH5Sp5NqAk/pQ8oVCX3
+         rluUyidvvP//DBIsKrNgi/mhGLKlEwIF/cEJ2dzsskk5PPWU3XpQIMB/MYQ371iAk62Q
+         mSVYqV04p/mv6zxDmC4xDP2SfBnssUx4Loa66hB9pVEzAets7E+jKXutjLaBaQ+EGUpY
+         hDAUU8vWI2LLGrmfhQ7ef3ahZT6VYxhFGnjue7iBTh1j/Ctu0fqi2Z+yqFHsJjYsmsH6
+         OHM7ypVoKTHDCXGyykE2N9uSdt2JxQTxQzf3UsbBPHoSeLJPUF4FKhW+lzW23qAF6qJV
+         MWKQ==
+X-Gm-Message-State: AFq9FYINf/RurgtuMI2lMCBFq4BVYeqHJEobGqFOsN0QkTxQK5m+p978
+	/bl3tVSXU7lGYCXZpLnvf7tkNvu9hRT3K6+aiBqAiEe4pGgC0yFiPKhF8tOSLMZGifI=
+X-Gm-Gg: AYBFou1NLZlpcHJ2uVI3W4G7roLyNE04aS0/gX28tJ7ljuVUBVKNVU7K7UXSuCSOJJ/
+	4s+S8RWrMVgvaemJG1QWK9CKCnFlRlJCWbHyF7STjnSszR9dVzRUATll/aLxwUUzQ66dLpQi8+F
+	uN7oiJATVyFIkHp2NVMgF/sH3gcGF5fBKNaszf/9qDyqo0jgVEhH8Wa9tlakdRfHlumE6paj1NQ
+	Q75Ygf+1VBbIDt3H9+bwjmah3dUMtYHez8eDMFUdcGoHnZ5eSdobCZzhNxLFW/QxmiTcUE+cct0
+	H6Phy/1/VU2DXO/T4B1I2SSY/tpoK05U2unRCC9f9zuNtDkm8pr81YY8qXuTFwb4lwIVbtz5nJN
+	60WfK6eWNLWBtLLf8yJwN/sfffupaf0Lu8+xmnqHcrrQRIE/BaU/uJOVhiDb07dOUeYaWe9QEsa
+	mDvr5Rl0XDnmCoLLb3wMujfClcd92Qc8znfm0NvC5dTt3MxgAkds7D95sE3cQL6cEGMiz6uC/IJ
+	n70Iv9zVQm/CmU5hgltyjRF5OMjVwaiR9OGMC3ZsEhw1m5mb5XUO1V3aiPtqAf+reuK577BsISl
+	viVDC1renGqQV1zFBtU+6ZJ/Pey7Om0XdSaM/WY1f1I=
+X-Received: by 2002:a17:90b:17cc:b0:3a0:bf26:f24a with SMTP id 98e67ed59e1d1-3a6ceacff1bmr2337782a91.45.1790945242415;
+        Fri, 02 Oct 2026 05:47:22 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6dd135d8asm1559798a91.3.2026.10.02.05.47.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 05:47:19 -0700 (PDT)
+        Fri, 02 Oct 2026 05:47:21 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 01/15] bpf: Allow bitwise ops, shifts and mul/div on pointers with CAP_PERFMON
-Date: Fri,  2 Oct 2026 12:47:00 +0000
-Message-ID: <20261002124714.180012-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 02/15] selftests/bpf: Add tests for ALU on pointers with CAP_PERFMON
+Date: Fri,  2 Oct 2026 12:47:01 +0000
+Message-ID: <20261002124714.180012-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002124714.180012-1-alexei.starovoitov@gmail.com>
 References: <20261002124714.180012-1-alexei.starovoitov@gmail.com>
@@ -81,103 +81,193 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Rust's core::fmt keeps a flag in the low bit of a pointer:
+Check that &=, |=, ^=, >>=, *= and 32-bit &= on a pointer to map value
+produce a number for a program with CAP_PERFMON and that the number
+can't be dereferenced. They are rejected without CAP_PERFMON, with
+CAP_BPF or without it. Pointer that may be NULL and pointer to map are
+rejected as before.
 
-  r2 = *(u64 *)(r1 + 0)
-  r3 = r2
-  r3 &= 1
-  r2 >>= 1
-
-The verifier rejects it:
-
-  r0 &= 8
-  R0 bitwise operator &= on pointer prohibited
-
-Negation and byte swap of a pointer already produce a number when
-allow_ptr_leaks is set. Do the same for bitwise ops, shifts, *=, /= and
-%=, 64-bit and 32-bit. The result is an unknown number. With CAP_PERFMON
-the program can store the pointer and load it back as a number already.
-
-+= and -= are not changed: they keep the pointer, 32-bit += is rejected.
-Pointers that allow no arithmetic and pointers that may be NULL are
-still rejected.
-
-Two tests in verifier_value_illegal_alu store through the result of
-&= and /=. They are rejected at the store now. Update expected messages.
-
-Assisted-by: 11 bots, 0 humans
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c                               | 13 ++++++++++++-
- .../bpf/progs/verifier_value_illegal_alu.c          |  8 ++++----
- 2 files changed, 16 insertions(+), 5 deletions(-)
+ .../bpf/progs/verifier_value_illegal_alu.c    | 165 ++++++++++++++++++
+ 1 file changed, 165 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b840b3eb9b22..1033167cfa93 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15561,8 +15561,14 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	u32 dst = insn->dst_reg;
- 	const char *reason;
- 	int ret, bounds_ret;
-+	bool to_scalar;
- 
- 	dst_reg = &regs[dst];
-+	/*
-+	 * Only += and -= keep a pointer. Any other op makes a number of it,
-+	 * which is fine when the program may see values of pointers anyway.
-+	 */
-+	to_scalar = opcode != BPF_ADD && opcode != BPF_SUB && env->allow_ptr_leaks;
- 
- 	if ((known && (smin_val != smax_val || umin_val != umax_val)) ||
- 	    smin_val > smax_val || umin_val > umax_val) {
-@@ -15573,7 +15579,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 		return 0;
- 	}
- 
--	if (BPF_CLASS(insn->code) != BPF_ALU64) {
-+	if (BPF_CLASS(insn->code) != BPF_ALU64 && !to_scalar) {
- 		/* 32-bit ALU ops on pointers produce (meaningless) scalars */
- 		if (opcode == BPF_SUB && env->allow_ptr_leaks) {
- 			__mark_reg_unknown(env, dst_reg);
-@@ -15639,6 +15645,11 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 		return -EACCES;
- 	}
- 
-+	if (to_scalar) {
-+		__mark_reg_unknown(env, dst_reg);
-+		return 0;
-+	}
-+
- 	/* For 'scalar += pointer', dst_reg inherits the complete pointer
- 	 * register state. Individual fields may be adjusted later by pointer
- 	 * arithmetic. Callers guarantee that below does not overwrite off_reg.
 diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-index 4d8273c258d5..9f669cf85c59 100644
+index 9f669cf85c59..31663338866d 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-@@ -22,8 +22,8 @@ struct {
+@@ -165,6 +165,171 @@ __naked void map_ptr_illegal_alu_op(void)
+ 	: __clobber_all);
+ }
  
- SEC("socket")
- __description("map element value illegal alu op, 1")
--__failure __msg("R0 bitwise operator &= on pointer")
--__failure_unpriv
++SEC("socket")
++__description("tag in the low bit of a pointer, and, shift")
++__success __retval(0)
++__failure_unpriv __msg_unpriv("R1 bitwise operator &= on pointer")
++__naked void ptr_tag_and_shift(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r1 = r0;					\
++	r1 &= 1;					\
++	r2 = r0;					\
++	r2 >>= 1;					\
++	r3 = r0;					\
++	r3 |= 1;					\
++	r3 ^= 1;					\
++	r0 = *(u32*)(r0 + 0);				\
++	r0 = 0;						\
++l0_%=:	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("tag in the low bit of a pointer, CAP_BPF without CAP_PERFMON")
++__success __retval(0)
++__failure_unpriv __msg_unpriv("R1 bitwise operator &= on pointer")
++__caps_unpriv(CAP_BPF)
++__naked void ptr_tag_cap_bpf(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r1 = r0;					\
++	r1 &= 1;					\
++	r0 = 0;						\
++l0_%=:	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("number op= pointer")
++__success __retval(0)
++__failure_unpriv __msg_unpriv("R1 pointer arithmetic with *= operator")
++__naked void number_mul_ptr(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r1 = 7;						\
++	r1 *= r0;					\
++	r0 = 0;						\
++l0_%=:	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("pointer with the tag cleared is a number")
 +__failure __msg("R0 invalid mem access 'scalar'")
-+__failure_unpriv __msg_unpriv("R0 bitwise operator &= on pointer")
- __naked void value_illegal_alu_op_1(void)
- {
- 	asm volatile ("					\
-@@ -70,8 +70,8 @@ l0_%=:	exit;						\
- 
- SEC("socket")
- __description("map element value illegal alu op, 3")
--__failure __msg("R0 pointer arithmetic with /= operator")
--__failure_unpriv
-+__failure __msg("R0 invalid mem access 'scalar'")
-+__failure_unpriv __msg_unpriv("R0 pointer arithmetic with /= operator")
- __naked void value_illegal_alu_op_3(void)
- {
- 	asm volatile ("					\
++__failure_unpriv __msg_unpriv("R0 bitwise operator |= on pointer")
++__naked void ptr_tag_cleared_deref(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r0 |= 1;					\
++	r0 ^= 1;					\
++	r0 = *(u32*)(r0 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("shift of a pointer that may be NULL")
++__failure __msg("R0 pointer arithmetic on map_value_or_null prohibited, null-check it first")
++__failure_unpriv
++__naked void ptr_or_null_shift(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	r0 >>= 1;					\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("and of a pointer to map")
++__failure __msg("R0 pointer arithmetic on map_ptr prohibited")
++__failure_unpriv
++__naked void map_ptr_and(void)
++{
++	asm volatile ("					\
++	r0 = %[map_hash_48b] ll;			\
++	r0 &= 1;					\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("32-bit and of a pointer")
++__success __retval(0)
++__failure_unpriv __msg_unpriv("R0 32-bit pointer arithmetic prohibited")
++__naked void ptr_and32(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	w0 &= 1;					\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
+ SEC("flow_dissector")
+ __description("flow_keys illegal alu op with variable offset")
+ __failure __msg("R7 pointer arithmetic on flow_keys prohibited")
 -- 
 2.55.0
 
