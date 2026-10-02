@@ -1,172 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f43.google.com (mail-oi2-f43.google.com [74.125.231.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650243A8749;
-	Fri,  2 Oct 2026 12:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B594F2D9EE7
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790942942; cv=none; b=d0hJ1zaiD0YhF1wg1eumx9EZgzz0Avywg92qzfn2LVJNmLrkKLhsCBCFBfVXjf6pbQjp+GrmcRP9b90ZFNgqgWmc3IwIQg1OBgZX32Ljjvf7HfQET4cmHvTJlVri2i5MI4DYgtrKG1FDrIZ0ddt9PVg5U01Ii/9ES1rxNK/hmaA=
+	t=1790943157; cv=none; b=CCxoNtYkjknR2pmWZrSR6FGxvm8HEQphAECH90V264k1w1WzrFKXHI2j9NHo4+69yuLcELvg3NRlFU2VhtjemJkK7vCHXIMRuD00+RQoWK1SEjfOzu114OyzuRFcjt992kbYgU39nIbZ97xlRZZLGbbJpCfdBYXNo4z3A8fH8mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790942942; c=relaxed/simple;
-	bh=8cLAuKLPmVEDjaBRTngodkkmYayv43SIGXGLFNy7e78=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=caYh3GgW+FOgjQh5euHDypy/97wXz2CORojeahXU7L+ZNSkoamUD/uXrqGoI8YCxcM1+8p/EVf2fuSg8ul4KZkMf3rOJ05d8bhw0FrOL/Zs99y8cU6nDga0DTzdJlvtaxbA0JbZlgs9OJSLb+KQPBGh1SNpZKL3lO/kYLeieaqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uy5taaAC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790943157; c=relaxed/simple;
+	bh=E1TRzDYd12tNpsM0OfO5X8br7h+EQkP9n3ZjhaF1+1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RuBfn3gkc2/MbKNTiDs4e9niiXiLRrWEdFjLm4CW6eUy0qbDu9JPssBam4UMiLFQ0V19jeEWVdkpl+GsismE/55YmqD7pMBDznC8nTNm+/24e8n0xfQUbqCdzoPkf9kVJSNXCOY40WMsy7jNKaCmc/TV2yRtB5pX3ycs1+xq9rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IoX7YFxP; arc=none smtp.client-ip=74.125.231.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uy5taaAC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14641F000FF;
-	Fri,  2 Oct 2026 12:08:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790942941;
-	bh=8XFpzUVlPtubZNxGByXwzZH4ApuR2nkpwtpFdh8/JOw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Uy5taaACkmw4lszKyU7Yeuv+r4seDzQWxkXBg+0TVdf8xxURZsAxbErhYfWWrxxpc
-	 ioGRh0AkeUlNaM0O/76kHyq/jNHajZ49qlp7kzTK/y9hmtsTG1lIh8zALpUqCprNPh
-	 blExfXgLSv3QlLino90K+6/VPwq5Sd4fz4m+VygMzwLykCThr26SJaC6bhFxWHUwuU
-	 RW3dRxgv9qthrHmsQVLnchIEH1GFQYCaQedJVw2qJ7fKb4CeudG3fK6a/HZ/Cbqk5l
-	 1HvNfpJUOxI5LDkvyRmFGaGRuDENXBtw49ZrKzFNSoza42QyfDgjqhIdIeOYrklqzK
-	 NX8pFIwFQbflg==
-Date: Fri, 2 Oct 2026 13:08:31 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
-	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
-	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
-Subject: Re: [PATCH v3 31/40] mm/vma: introduce vma[_flags]_is_persistent()
-Message-ID: <ar-b_Ug__TBzIZsb@gremlin>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-31-4583d8a23bca@kernel.org>
- <9bbdf4e8-6984-4477-a183-f0b236047381@kernel.org>
- <3557015d-23dd-41ef-9832-78b58587f3f4@kernel.org>
- <81e1e5ae-0aab-4584-81e6-3fc9c2634d07@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IoX7YFxP"
+Received: by mail-oi2-f43.google.com with SMTP id 5614622812f47-4cdcfa4d904so1369148b6e.0
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790943154; x=1791547954; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=81uGpmP7cmZ5oefPKsTcsvoJoAO1uuBsnrj4SEE2374=;
+        b=IoX7YFxPIcdu3uyAc/OBm14rDWq9jy9NfO2PeXWWKQuOA3zJ5TLojDCHFu7LP1Kyid
+         yaU5viRyfF7kEoJJIF1BI46UaRDlAJbdLHKaI4vE0EYhBjmwNEersaJarFRx9jUBYg8L
+         x+lNMWW0KeCQwONNyDEvKO9T6WVEUkc2O43opBcf4E6YL5TFJCOOeV0fdqQXB0IDjn7U
+         GOE7MuKx05sXbtlrxEpI4jb6/07yz/rkkmASm2HL3NFdUP+dxeLI5ptDWU5HXtcCVA4B
+         Yk0QINjVcR/7gnYv29NF0lpJXfHoWs7vFScLg3IxrgwvbS6PIodBgWXob8s7ywFSALGt
+         2URw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790943154; x=1791547954;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=81uGpmP7cmZ5oefPKsTcsvoJoAO1uuBsnrj4SEE2374=;
+        b=loMEhoZeKHkckzBQKwuTtEBpc6mHRD31M9fVoaBgnRXIOKfvD9lPXuSbkMbuJRAUvd
+         XktJ9BnXTxgNforaLNb4aXLE7CGXnF1pJBR7h08nqwhM0nvNdxUqyn5gP8ZbUy4pebJt
+         0+Z3Z3xLUrzGFu8zejmERMPmFHipdz2KXqBKBPlEMITIgqTotk53x0HM9AwhHUN9Axh/
+         fm2ego9xCHe0k9MsLFN0+YOkRk2uBgZS+Oj+2m1DhA50GgIFaUNY2/y1kABuaVRtVe04
+         1GlyFMEEkCj0S8g3Z2/o1ZYgnl1tEeP4b9FAB3du9GU7aAFWGcndxCnBM99UsOKggNQZ
+         +hZA==
+X-Forwarded-Encrypted: i=1; AKwUvBxhr2mrExudmQegqOh83xbsgyoXiuhC/dWjwzAKNfmsm2lJ8pnOjOTV/dw9jaExER6PDs8=@vger.kernel.org
+X-Gm-Message-State: AFuF++kGyCYhkKSbXImsR3kpxDljOfRS7cfDnuo/G671Yigt2StEt1eH
+	HYyxeb4qbRgmWPAgssgUtJpeqYa02lajLawCg3Vp4/xj+GkKrQ+bIYZp
+X-Gm-Gg: AYBFou3KjLBtkvKhhzxOlfTxtiQtVGOPcTi3y0WWlUr0pzanqczYTm9w98U1I8/jsyc
+	3o6pc8PJabTNvBaPvXSHBoUQaJ7d78RFzKrXoClldWAz6m1caKQf5KnheS7ICUhWyAvwPH5/9gE
+	YXd1wlDO+fKNWhe9UE21XubDo1pi6T4lGyeK3SqcQ0+NRx0FbpCfuTyGtCLul1NtXbygoi4S3CR
+	igNLuiS4TYXTWGxSoSXNrryLzFtqyB8J7Ze1e8DVnITEj6dmbnK70pYQ8KzNuPQIZk1BDkct1k3
+	3DW0aIoASNGCLEtrcUNGSg+YzhAwHkbYQyKBde+UNHuD5qfF0djW+cetM4i0JRypSYAU3RTz4mY
+	tjvHKYMSKe71Q93O5WYG24WE28FT5pMMIO0pZKLOo3MdKOStbycEOD5X0MBiGp0L+6kj2GxNESY
+	NuRIl15uMnEhiU+4vLmYbY/oUfbQ2SHQz2WV3wl1y7iq92UmLRKai78jtrPXB3KolAYLxr/g==
+X-Received: by 2002:a05:6808:14c2:b0:4c3:cec9:fd18 with SMTP id 5614622812f47-4f528ccf57emr1327475b6e.11.1790943154581;
+        Fri, 02 Oct 2026 05:12:34 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:43::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4f524cd09e2sm1963119b6e.14.2026.10.02.05.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 05:12:34 -0700 (PDT)
+From: Matthew Wood <thepacketgeek@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] bpf, arm64: Fix racy plt target update in bpf_arch_text_poke()
+Date: Fri,  2 Oct 2026 05:12:31 -0700
+Message-ID: <20261002121233.561368-1-thepacketgeek@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <81e1e5ae-0aab-4584-81e6-3fc9c2634d07@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 02, 2026 at 09:05:15AM +0200, David Hildenbrand (Arm) wrote:
-> On 10/2/26 09:02, David Hildenbrand (Arm) wrote:
-> > On 10/2/26 08:59, David Hildenbrand (Arm) wrote:
-> >> On 9/17/26 18:22, Lorenzo Stoakes (ARM) wrote:
-> >>> Introduce vma[_flags]_is_persistent() for the purposes of identifying
-> >>> mappings that are persistent in the sense that bytes to the mapping stay
-> >>> there, and bytes read from the mapping are the same unless changed by
-> >>> actions taken by userland.
-> >>
-> >> That's extremely confusing, sorry. We have to find a better name for that.
-> >>
-> >> Is this really all about user pages (pagecache, anon) that we would find through
-> >> the rmap?
+When a long-jump trampoline is attached to or detached from a bpf prog,
+bpf_arch_text_poke() updates the plt target at the end of the prog by
+temporarily making the page writable:
 
-No, see below.
+	set_memory_rw(page);
+	WRITE_ONCE(plt->target, plt_target);
+	set_memory_ro(page);
 
-> >>
-> >
-> > It's also about droppable mappings AFAIKs. How many more users will we have for
-> > that function?
+Since commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+management"), bpf progs are allocated from the bpf prog pack, so
+unrelated progs and their plts commonly share a page. The sequence
+above is not serialized against other pokers, it runs before text_mutex
+is taken and callers only hold the lock of the trampoline being
+updated. Two CPUs attaching to or detaching from different target progs
+in the same page can therefore race:
 
-Anything that requires stuff not to be dropped behind the user's back, which is
-at least 4 cases!
+	CPU A                           CPU B
+	set_memory_rw(page)
+	                                set_memory_rw(page)
+	                                WRITE_ONCE(plt_B->target, ...)
+	                                set_memory_ro(page)
+	WRITE_ONCE(plt_A->target, ...)  <- permission fault
 
-That being open-coded all over the place is a problem I think, and I think stuff
-like the PMD device private are a reminder that open-coding all over can cause
-problems.
+This was hit on an arm64 server with 64K pages while attaching fentry
+programs to bpf progs:
 
-> >
-> > If it's "no others" then please don't add a helper function with misleading
-> > names for it and just keep the special "dumpable" check in the new form in
-> > madvise_vma_behavior().
->
-> Talking to myself ... the more usage I see of the vma_is_persistent() the more I
-> think this shouldn't be a helper at all. Especially not one with such a
-> confusing name :P
+  Unable to handle kernel write to read-only memory at virtual address ffff80008f46d5f8
+  ESR = 0x000000009600004f
+  FSC = 0x0f: level 3 permission fault
+  pte=00c00200ea5a0783
+  Internal error: Oops: 000000009600004f [#1]  SMP
+  pc : bpf_arch_text_poke+0x214/0x238
+  lr : bpf_arch_text_poke+0x200/0x238
+  Call trace:
+   bpf_arch_text_poke+0x214/0x238 (P)
+   __bpf_trampoline_link_prog+0x1c8/0x470
+   bpf_trampoline_link_prog+0x64/0x90
+   bpf_tracing_prog_attach+0x318/0x4a8
+   bpf_raw_tp_link_attach+0x104/0x258
+   bpf_raw_tracepoint_open+0x6c/0x90
+   __sys_bpf+0x134c/0x3e10
 
-There are 4 open-coded checks that test four ad-hoc flag combinations checking
-for the same thing - 'can the kernel or a driver change things or discard stuff
-behind my back?'
+Rather than serializing the permission changes, stop changing page
+permissions altogether and write the plt target with
+aarch64_insn_write_literal_u64(). It writes through the text patching
+fixmap under patch_lock, the same way the rest of the prog pack is
+written, and performs a single-copy atomic 64-bit store. The plt target
+is naturally aligned (see build_plt()), so CPUs concurrently executing
+the plt still observe either the old or the new target. This is the
+same helper ftrace and static calls use to update 64-bit literals that
+are loaded concurrently.
 
-So abstracting that to a helper, alongside the other 'let's ask based on
-semantics' helpers, seems sensible.
+Fixes: 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management")
+Signed-off-by: Matthew Wood <thepacketgeek@gmail.com>
+---
+Changes in v2:
+- Replace page permissions change with call to aarch64_insn_write_literal_u64
+- Link to v1: https://lore.kernel.org/linux-arm-kernel/CADvopvZPO1gDMDhDOPcArjRJ0cPpSUZ5suMg-1kwRi+_-Xeitw@mail.gmail.com/
+---
+ arch/arm64/net/bpf_jit_comp.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-Maybe invert the meaning to make it clearer?
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 475e70653454..e353403cc1c3 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -3339,13 +3339,15 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ 		plt_target = (u64)&dummy_tramp;
 
-	vma_kernel_may_change_contents()?
-
-vma_contents_may_change() is shorter but easily confused with something being
-writable by userland etc.
-
-Or maybe:
-
-	vma_is_volatile()
-
-?
-
-Which is analogous to the meaning of the volatile keyword.
-
->
-> --
-> Cheers,
->
-> David
-
+ 	if (plt_target) {
+-		/* non-zero plt_target indicates we're patching a bpf prog,
+-		 * which is read only.
++		/*
++		 * non-zero plt_target indicates we're patching a bpf prog,
++		 * which is read only. The prog shares its page in the bpf
++		 * prog pack with other progs, so write the aligned target
++		 * through the text patching fixmap without flipping the
++		 * page permissions to avoid racing with concurrent pokers.
+ 		 */
+-		if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), 1))
++		if (aarch64_insn_write_literal_u64(&plt->target, plt_target))
+ 			return -EFAULT;
+-		WRITE_ONCE(plt->target, plt_target);
+-		set_memory_ro(PAGE_MASK & ((uintptr_t)&plt->target), 1);
+ 		/* since plt target points to either the new trampoline
+ 		 * or dummy_tramp, even if another CPU reads the old plt
+ 		 * target value before fetching the bl instruction to plt,
 --
-Cheers, Lorenzo
+2.53.0-Meta
