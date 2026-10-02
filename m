@@ -1,102 +1,83 @@
-Received: from mail-pz2-f37.google.com (mail-pz2-f37.google.com [74.125.228.37])
+Received: from mail-pj2-f38.google.com (mail-pj2-f38.google.com [74.125.227.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0243492E25
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:48:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800A747F764
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790941727; cv=none; b=rDnwpEZl6BAKKy+yc3RTmkEDhS3Y4nCO2Pi12l3965UhRh5MIeN/km1fiHc+0WNNw2RC/wE/vH4qqGLMR5hXqKzuzR/kG+lMVYQLg4YskWm+KH5TvKjWtYZkVV6WTB7QD2iBnjsJT6RQizjgT7OEpoUfAUDoGKsd2en3p9IW/gA=
+	t=1790941958; cv=none; b=r3sCWVWM+V13qPvrR14U3fjQBXl0uOt05jOgyAolZXY3EwIS2crhQbWiD6uAsYMpp502o9EkbFRXUCIX8ImVEeEFmc/RDX0uoHTVg5xIAkIfX1/5K8VzQO7nv3IQSTt6HiEXd0PsjqHxORjQkvEliRYqyIR1jQigo+NQ9WNh/gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790941727; c=relaxed/simple;
-	bh=gAY+ry7XQppx5kZcg+BfzcVwDqxF38v68qrWhv2EpEU=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=Ih71oMVe+75p+RnhqpJpNqxosieULtrQ6xIDh+rZQrwct7UDpjO+MknXIljueeJPFMW/kNzHnBJdKzvsjdPJDIxF0QVEGDdkoDJFvpOcL1djiaPio6xJ7fzawyd3CgNL0G8MV9zgcHGEGyTCcXtjTnHr7T8VV/39R66o6o4RGV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MeyZIhmU; arc=none smtp.client-ip=74.125.228.37
+	s=arc-20240116; t=1790941958; c=relaxed/simple;
+	bh=ZK9W3hsM2fdrVPBcEDof+c76PwgAD673MJ5we/sTLcY=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:MIME-Version; b=EQG57itjrp1jGcepAC3xLIfkV5NjFrDjCIZEvMP059QVs1qLGbJvW/Ia8uKKXDXnNUnT1A2ll9K2JX6rga/5y5xijH4c0/gYITV4/Z64+vCA8MMeJ0+Mny+4fEqRwAwDv0iK0Pp4ZR2DXfqFVnt24IYPEILVQVF6TJfdFl0VYjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=goUZhIQh; arc=none smtp.client-ip=74.125.227.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MeyZIhmU"
-Received: by mail-pz2-f37.google.com with SMTP id 41be03b00d2f7-cc7cadbe09cso2336463a12.1
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:48:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="goUZhIQh"
+Received: by mail-pj2-f38.google.com with SMTP id d9443c01a7336-2e2e688de2eso26247555ad.3
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790941724; x=1791546524; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jDgCZ93FbbC+h+9QAZpC0c3CaTDV4NHqwfDJ+8l3w7I=;
-        b=MeyZIhmU8tcw6SYtV+1UZ7tSerG+sxuHQGu95Sf+jXbAr1jEANi1Xr2UvlE2O8dFCC
-         Kz4XzfQuSc3KIwWpsVO1Wp9OmjeYf+k2zVFqFV8MrniXv/Iv8UCfKoVfgmpUA3BuiRNo
-         E09LSomNq7IqB2WCn+1NYu8sFOkvU0Cu6beoCzkTV3AHfDKdEtalVaFOtKnZkVt+FvBt
-         TdkVI6itaXRa85ogpErUJnSIghBnEdXTd3G62zvw8C3M2iygDKn2y0J1J0hsAnGP9hT8
-         3SVS+eFmQ2NIyY/3qTsvtmqitlyjb/IelUbO2q1DHTFsAfgRgFm+mHLNtvYT7EJfslZ4
-         pFVQ==
+        d=gmail.com; s=20251104; t=1790941957; x=1791546757; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ZK9W3hsM2fdrVPBcEDof+c76PwgAD673MJ5we/sTLcY=;
+        b=goUZhIQh6T+xmwIT0+JB8OE4Ev2OI+W1B1QvQnPrnbR4slXdPrPelMISBWuSzgq6s6
+         2dHWd80pi6Da/Wc1oPU8moB+YkJcefrFFNBlO39OKA0JJW8LnnRgjgh52sbJGZ8FA7Zz
+         qBnOwhch0DJOheBhxxTpHc2qMlPLPTBchZNn0TftYojJ70SvDSKxH4yvqWBnRRgcFT3Q
+         ibJ8vy9N69AdrrwLYfCrKX6qk8JEBPLy2Ol3Q+xTxZOGeVaBLJs9dcm2pPe0YubjiG10
+         oNTQgOQcEQVYORzdIiwZ+Xg5noc5m30zNqOHklur/cGMMFu3Njf5VhoWdxMOS0gkRjQE
+         n9og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790941724; x=1791546524;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1790941957; x=1791546757;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jDgCZ93FbbC+h+9QAZpC0c3CaTDV4NHqwfDJ+8l3w7I=;
-        b=hSowzQ2DCTKyD9khgrXqD3ugKGriRfGNoT5fqSN8C5i/jynclBf2txWK8QvwgtFpD6
-         x4Vc/h09TEqby3ybik0BQf/eOVhJ55CqiRvOUCBQUdn3UXBFZhMCj+uDXGH4iop6k7hu
-         vmZlaKocN5lmSeI2lSSFNcRleLGhHhBV67d/om6xouy/PkQ/vsOtFqbvsP4i2o3MegwB
-         7CmEMIFR2wCtNwQEzNZCk6UYBOh5BVqd8EekKXpZQpy5hmrLoDETLzVXNdftfTmfivNl
-         DHDqkMx2kY32kQTZtU7NMU/MQDaTk0KZV2bs4tsJc+lOjf0LEYKghoOPzH2/CP80fr08
-         GjfA==
-X-Forwarded-Encrypted: i=1; AKwUvBy1IayGXBMh2l5C4rPJJ8NUQTN6vx93jiEsTRv7lwy59QZLJmRNizl9tD/3tAAtEA2TPTs=@vger.kernel.org
-X-Gm-Message-State: AFuF++nYUySxl4WJyuhNfdYlIggcK4UWxI988j/c6Kwv48eAhG3Ei6uV
-	xPzxdTOoPW0kYs2UqTVC2EEiuSws5fzSWKggy+/fHCVEXxezj3Xiq9ke
-X-Gm-Gg: AYBFou2hSiTvoiuDgQoSemQt5SwYY8DWIVUAERIsraPYazjbWs7jb7g0gMPmmmXSg8C
-	tGWCnA0mtjEbuRw/n1Yg5q7Uk8ZiakhYTtVV3YDU+Ov4rXphe/u13kH7cVX3J+9u5zLoRl9v+ho
-	mPtLOtVT1Jc/Z/d0cCZSXnGjxHjFENa9vUq5wK2t0wwqYIpybEsbjFaYwLiQsebvPzfy1wjItjD
-	vadiImAWGuNJgwfQ/oBXO1VB6nLihag4l6JhQxUL1VWXbpShs24lucxUwGx9TzybiCOnkcXiLB4
-	30u8OXohYA+BMoBBOI7vrl52zcPfO4THeOWE14DUPcV79AXa6QC+BG+DSvS+lYPML3XKlijaAF1
-	qFm5XyyjPybh4bhu5J2DH6somaM6dvaqYiq4q7B4Wg/PbExiatSPlBYnpIKHcfTCg8bpu1PR8rb
-	khu28XGU/VVJw4H8pm6FjWl7RaOhUiLUeOc6jESJd9d6ErFfSCW6Ns1IgjMxYqlfRlE2bjjlnSV
-	Nz6995Cyl8Ov39ldeDe/3iFa7ySgat5kpljsNw7+1SVNW0On7vuD34NOP7NijOeSf4hhlHKVmrs
-	0Jc=
-X-Received: by 2002:a05:6300:210a:b0:3e0:b937:8844 with SMTP id adf61e73a8af0-3e0bd199342mr2548048637.44.1790941723843;
-        Fri, 02 Oct 2026 04:48:43 -0700 (PDT)
-Received: from localhost ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-88b0d247dbcsm743396b3a.55.2026.10.02.04.48.42
+        bh=ZK9W3hsM2fdrVPBcEDof+c76PwgAD673MJ5we/sTLcY=;
+        b=Wgpx21vbCKEB7D+U6JCFbm0qN/11b476b14iO0FPHoknNgaZvFcmeno/AyYPkP9512
+         lSJDEIzAOJjeP7yonG1ITAR0ymNg7z8/KGAewL1ymksBVsn3T23RzOxLej6SYnzGeLOQ
+         7Z+srwOwwUSKclZZ+f9jhByYs1nC8mQyOmutiunFjhUMUmc4K7lScgnu5YINyRqK/D/E
+         xAMJ9Ceb1OlSzEviBAh6BJvtPoJij21MZjEvpg1M4tgCiyeJV3G/wvXuFkly4zPeKN59
+         HBOpb/E0h9fxqHE3Noz2TYGWod9bmLBYuEbePsiF3lUfPnpCsJ96eQ6nCAIchiTdF1hS
+         ojgw==
+X-Forwarded-Encrypted: i=1; AKwUvBzWZSE5K7khU/gAaVR8hFtyFruiaheAGbE+gg1/rOZcdWHCOmPl3CaGBuLv22ovyUwtjKk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL+HJXBOpPmgkn4YeNKvYHLB+n7IDh9hDvMG/Pa84pfCZsEh/kl
+	hMPQS9BKabKGhXMvXcDgITADlTOSUSHiTmSBNX1rnUMkHSc1YR03jQD8tqnY8pwy74Y=
+X-Gm-Gg: AYBFou3tDogrSOfgy1L0mJFix5lJOC2oBA0F94Jw0eT3W1hPk/58kxjy0Mu0uX+wx0p
+	oxVpv8mZxXwx+d/q6lZdWMdO8Z/fQJeFmkNfmsEVV4zAVe1KwsgO21JHh9rLC2/EKbI9oMkwv4t
+	MVRb1sexiO+C+RdOKniNSGlme4P6NyTKJz0FkFY+dXzvZHLmEmcfNjguw/9CS7yoB4/H4K2tkS8
+	gSBk7y3K1st7hcaMlTriNaMMUChtzvupqnVP1uHZPAhQWvpyEUldpqnvoDT82ml5N2AXIPwupD3
+	ZEtfU/sPb53uN+IRa2tCWRb1Inn5ps9KQ5ivAASHBHm6P7/dIrlIzzQYiQ1tM6v3m8l8LVa+FdG
+	vh5sYuco8PMe+5A99vLfnA/24D+XCNKEMBsdmile7S+37ByHZPqYZs1uzm9ep/fT2L8ohmHMUgJ
+	ycCdUL/RlDgWDpxlUc5M5SyFx7PiUnvUxqX9dez5ACQEToiBZrHP0lt4ZNsFhNJ5h8b7BOw02a5
+	3ycR9diZBtyTsFPkk6zPSoBEH/xfTf7RgpU5J8/fncZu+xzpfbjnPFhMKcdyyOl6hE4SS13/Izj
+	t18=
+X-Received: by 2002:a17:902:f686:b0:2e3:ca8:7860 with SMTP id d9443c01a7336-2e49b6436c6mr22785045ad.22.1790941956649;
+        Fri, 02 Oct 2026 04:52:36 -0700 (PDT)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e49f6aea8csm6628535ad.35.2026.10.02.04.52.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 04:48:43 -0700 (PDT)
+        Fri, 02 Oct 2026 04:52:36 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 02 Oct 2026 11:48:42 +0000
-Message-Id: <DLUBUT40BBOG.1L6QS7A8CIE79@gmail.com>
-Cc: "Alan Maguire" <alan.maguire@oracle.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- "Quentin Monnet" <qmo@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, "Christian
- Heusel" <christian@heusel.eu>, "Luis Chamberlain" <mcgrof@kernel.org>,
- "Petr Pavlu" <petr.pavlu@suse.com>, "Sami Tolvanen"
- <samitolvanen@google.com>, <linux-modules@vger.kernel.org>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- <linux-trace-kernel@vger.kernel.org>, "Arnaldo Carvalho de Melo"
- <acme@kernel.org>, "Namhyung Kim" <namhyung@kernel.org>, "Ian Rogers"
- <irogers@google.com>, <linux-perf-users@vger.kernel.org>, "Jiri Kosina"
- <jikos@kernel.org>, "Benjamin Tissoires" <bentiss@kernel.org>,
- <linux-input@vger.kernel.org>, "Tejun Heo" <tj@kernel.org>, "David Vernet"
- <void@manifault.com>, "Andrea Righi" <arighi@nvidia.com>, "Changwoo Min"
- <changwoo@igalia.com>, <sched-ext@lists.linux.dev>, "Shuah Khan"
- <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, <rust-for-linux@vger.kernel.org>, "Arnd Bergmann"
- <arnd@arndb.de>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Hazem Mohamed Abuelfotoh"
- <abuehaze@amazon.com>, "Bjoern Doebel" <doebel@amazon.de>, "Martin Pohlack"
- <mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>
-Subject: Re: [PATCH bpf-next v4 04/12] bpf: take the vmlinux BTF from the
- btf_vmlinux module
+Date: Fri, 02 Oct 2026 11:52:35 +0000
+Message-Id: <DLUBXS5ZYG1R.1NA6CW88YS5TM@gmail.com>
+To: "Anil Kaushik" <anilkaushikwireless@gmail.com>, <daniel@iogearbox.net>,
+ <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
+ <john.fastabend@gmail.com>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <shuah@kernel.org>
+Cc: <sdf@fomichev.me>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: add XDP test for per-flow
+ LRU_HASH window updates
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jay Wang" <wanjay@amazon.com>, <bpf@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
-In-Reply-To: <20261001225214.12351-5-wanjay@amazon.com>
-References: <20261001225214.12351-1-wanjay@amazon.com> <20261001225214.12351-5-wanjay@amazon.com>
+In-Reply-To: <20261002053837.3494918-1-anilkaushikwireless@gmail.com>
+References: <20261002053837.3494918-1-anilkaushikwireless@gmail.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -106,39 +87,18 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, Oct 01, 2026 at 10:52 PM Jay Wang <wanjay@amazon.com> wrote:
-> +	err = __sys_bpf(cmd, USER_BPFPTR(uattr), size, USER_BPFPTR(uattr_common), size_common);
-> +	if (IS_MODULE(CONFIG_DEBUG_INFO_BTF) && err < 0 && bpf_btf_vmlinux_retry(cmd, misses))
-> +		err = __sys_bpf(cmd, USER_BPFPTR(uattr), size, USER_BPFPTR(uattr_common),
-> +				size_common);
+On Fri, Oct 02, 2026 at 05:38 AM Anil Kaushik <anilkaushikwireless@gmail.com> wrote:
+> The LRU_HASH selftests (test_lru_map) exercise BPF_MAP_TYPE_LRU_HASH
+> only from the syscall side. There is no coverage of an XDP program
+> updating an LRU_HASH map on the data path: inserting an entry with
+> BPF_NOEXIST on first sight of a flow, then updating a bounded array
+> inside the map value using a runtime (modulo) index.
+>
+> That pattern is common in XDP flow-tracking programs and stresses two
+> things worth testing together: the verifier's bounds checking of a
+> value-internal array indexed by a runtime value, and per-flow key
+> isolation in an LRU map driven from XDP.
 
-Running the command twice when it failed and a global counter moved
-is not going to fly.
-Missing BTF is not always an error.
-With =m and BTF not loaded yet take
-  int prog(struct xdp_md *ctx)
-with func_info. That is everything libbpf loads.
-do_check_common() calls btf_prepare_func_args(env, 0).
-find_canonical_prog_ctx_type() returns NULL, btf_is_prog_ctx_type()
-returns false, the arg becomes ARG_PTR_TO_MEM and
-func_info_aux[0].unreliable is set.
-The prog loads. err == 0. No retry.
-From then on freplace of that prog fails with
-"Cannot replace static functions" and fentry/fexit see its args
-as scalars, even after BTF is loaded.
-With =y both work.
-
-That is the only reason why "a socket filter does not load it".
-In v3 such prog loaded BTF.
-systemd built with BPF_FRAMEWORK loads
-  int sd_bind4(struct bpf_sock_addr *ctx)
-from manager_setup_cgroup() at every boot.
-
-The result of the verification cannot depend on who touched BTF first.
-
-bpf-ci is right too. The first run writes into uattr.
-
-It's starting to feel that this is dead end.
-So much complexity to save few Mbyte.
+Sorry, don't see the value in this test. LRU is already covered.
 
 pw-bot: cr
