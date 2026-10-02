@@ -1,68 +1,36 @@
-Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
+Received: from mta1.migadu.com (out-2.mta1.migadu.com [95.215.58.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FC843CEE3
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 07:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6DD35676B
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 08:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790927593; cv=none; b=Ol8fsY5x+jb2YBWyxaoGK6ZhbtBpZpNLwilOZiNlkSqs9HLE+llm8ib6lN2daq6zETYdbgLKVGDpzBUZ/VZwVOjm8lmWoOtJrY8q7V3Re+l0VXMvsRHET7UZK+yMSI2Q5IFQEt5kyfj983NSxTJAw3D0YLo9aMMp34SPkTD3d3U=
+	t=1790928228; cv=none; b=oByFQXroQnCqJPF6GiK0103gz7hfAsZ+r8925jOVZ+JEsVYjr3a8f5C0YZcd3+vxwxN0co4vKkWh6IWRmR9ywsm3jJJIbnNoXYOzoeAyDz0/jqPYz3VdS/YcSLNtnljisTzGtsJqd1rDay+2eBAZjFY5X6+BM+IIGBNnalPm1fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790927593; c=relaxed/simple;
-	bh=ag+sZnjQWuyPSA4K+zz6QgF7pFR9QYHKz6IJ/tFAQLQ=;
+	s=arc-20240116; t=1790928228; c=relaxed/simple;
+	bh=CE54ArF9CfZSFzFjBXuY+9dl8X+yjhtgmfmzwiHATzM=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=O86vhInXQRS9Y46cZWb7/pMJEsUn1YaTfUIDf1eHQaea8BxIB9ZOmf9y3/N2TeSk6E3uyk1r4aouIiToB1WKZezjyvklXi/mNEyAHbvtOFfnfxBXsgkFm8c3Abj5AriIxnnfKFYlSyaF5GvJZ0mrTak1tfyPi+FjO763DcXCC6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cqh1NaeE; arc=none smtp.client-ip=74.125.225.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 In-Reply-To:Content-Type; b=pANhQei6Yf1leGgOkCBXOqx5pWK8Br5QnGMPNKZ66UUl9B2OhwD1kXs4Aris04C/ih6t8JpshRJXRmc5fjG7fF7VXdv+EHDKi+EQ5zde47KCKa4JfsylPXoMTB29VyyAjsYfRolHV9AKSxKokZvOlNciXRX/D8PA0Yl9Eyv2ZL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ds3++d5y; arc=none smtp.client-ip=95.215.58.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cqh1NaeE"
-Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-48b05fdb2f9so1717035f8f.0
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 00:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790927590; x=1791532390; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=URK5hJaiby1L1KtEXv2HgCyxpcy+Et12hnj8ni1/g3I=;
-        b=cqh1NaeEqrQtHsMP1LF5wq/gPDJlRjc152vrjLf+zRyR8Jm64x79MrxtkpOrIra/Uz
-         vOqiRV+/BB8DkleBjvMdw5tIm3QHP/hI9BdUUjFsm/NwMrV5QJKpXKBT6p7p7sDsET5y
-         5py7yp2FWX6SCsTf3knHwW38Qpe5U6ceRW+oVgZRINv39M8Vw2ZNZQz+AArbZ3Ig8Zeg
-         4J7pS/OeK3NxIuZgntbbie+DLAgZqe5Nqtq/NAWMm/2v7Zbt8jJXMnGKX3qxkhKXnLyQ
-         FpSz6cfEUWcwl8SHF8X6WUbc1eyPBAo74S1N18xHPAzNJL+bo2hCv8fKperxOrpCsyno
-         Ywfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790927590; x=1791532390;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=URK5hJaiby1L1KtEXv2HgCyxpcy+Et12hnj8ni1/g3I=;
-        b=rVe9nNfkxMqgKd0ntZErhshcZTkcZJQhVsOvx0kdbAf2kYYzS2pS1QVq/FmVIZ9csn
-         PGBmaLHiFKMOKdw3ZTXKA/pdoPreU1PumaNVZnxVcbEC0WlNBKTy9gV89TPG89ur34eV
-         BbihhsevEg2gGbt3g93wEAEi7TBgYrbF81BmarskyJBcJaANg7PekZ9YVI/TNOE5p12C
-         tUPDM6j53B98Qj5qgTcXldJax8c4zPyq6l+Dr17V3IlChTBeI6qtz7cchdVyj046nc4V
-         L0dcvMk16E4vMwAyisjXzW90jGHe9ctS2i6ia5OKa45wyld+8I7ScnxbnMEv0pIsWSad
-         qhbw==
-X-Forwarded-Encrypted: i=1; AKwUvBzGtYB76r2EOzSR23SiVqApPY7kkaQlC69raUdRWhMRtCgsrB+vFHLOmoRY5ZSBfH+yEJg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKwnf3OJ7NBcwwmeqtKU2nyymLGslzhytLpm0209B1W5QMm4n7l
-	aVvnCfE+WWFeutma3BAU62GZpOrI+TfTgepO8WMPA9fFP9dVgFmSvn7ONika/LC/rY4=
-X-Gm-Gg: AYBFou2tSkHB9/mv00QUI2rl9Fm+pwzeiuRkJhFHjI4uyvjopW9ly8KpudWUmdpS8zK
-	4MLIBuQWnQHHQDcXCeZeWmFAmk+kumtHxiXGKgMmRqKlOI6G2qbROAoKMQrEycmeqQ92J3g9yUB
-	oe7xW2lp09BihII3q0MGF3dmSTN4/yOuqKeO99nyf8XzJiuSkMGiRC0+/Vkj5eNlglqsaODWr4e
-	0uxNCDZvc6Cbo7wqj3xo710a8gxrBY1+i98VEMrxrZ5w8jb1/PMLL4N2CSDpUQEyN6f0czngKjH
-	IK+285HV2JVJQpHUjH/Ha8KkCYSxB0FEwc8pA5bVmNkBEhdHeONlPWwIFOJc8ScG1dYQcZd82vE
-	bjmCOTnM1yrw8RUE9eEIJQF5oShYzKnFpO0QOb1csn2/RjzZ5R7g16BK9u8RA9HTGIQvfYVkPyf
-	XAYp6eZ88PIUZo2y7eqR6R1ZPdFBmb7xQM0K227uQFnDbGuhASd22MEXuvPkmDQUiKCAKe1SH+X
-	iNGaybv2ncc5sPJ3NQYHpJh29VtPx/n5fn2WHDOtp2bGcTyxRMK
-X-Received: by 2002:a05:6000:46da:b0:48b:68:592e with SMTP id ffacd0b85a97d-48b126c2526mr2669376f8f.4.1790927590269;
-        Fri, 02 Oct 2026 00:53:10 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:2f62:6d3:721b:8c9e? ([2a01:e0a:106d:1080:2f62:6d3:721b:8c9e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380f0ab7sm3840821f8f.7.2026.10.02.00.53.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 00:53:09 -0700 (PDT)
-Message-ID: <a92aa0bb-d50f-4b67-a645-942090d4fe79@linaro.org>
-Date: Fri, 2 Oct 2026 09:53:07 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ds3++d5y"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=CE54ArF9CfZSFzFjBXuY+9dl8X+yjhtgmfmzwiHATzM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790928212; v=1; x=1791533012;
+ b=Ds3++d5yfDk3weHdTLBg3OgvNzweIJnH6GRoSyfTW1ra7WqtBBSuaC1czrtFxSira0HEyujf
+ Y8HxXqfT27CknSgNDgx89MZxLDRzOu9z7WQUTgayBxIIWxxmgFdjrK+ah3ev8EZrxRsZTpkjLXO
+ vzfCowrKNNGEbhnXRi904XKc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3000c729e5b3d0a9;
+	Fri, 02 Oct 2026 08:03:32 +0000
+X-Mizu-Trace-ID: 3000c729e5b3d0a9
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4fc25ca5-bd57-4df0-a8e1-cf6bb9ba2fcb@linux.dev>
+Date: Fri, 2 Oct 2026 09:03:28 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,120 +38,96 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-To: Javier Martinez Canillas <javierm@redhat.com>,
- Maxime Ripard <mripard@kernel.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>,
- Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
- <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org> <arrAqg5n87INTHE6@beelink>
- <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org> <artpBMeM13Dd0lLy@houat>
- <xlv1wls4ebjq.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
- <828c9108-2db1-45a6-9301-19159a094301@linaro.org> <ar4CRTMQGs5_nGKY@houat>
- <2bd17843-4a65-49b0-9e10-7b73afb206b6@linaro.org>
- <xlv1cxtsft8e.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <xlv1cxtsft8e.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
+ bpf_reg_state->id [NFC]
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-2-vineet.gupta@linux.dev>
+ <DLDKB6BTHVXE.PFK87O3QY1J5@gmail.com>
+ <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev>
+ <DLH1MDZPU5G0.228555JR34D3N@gmail.com>
+ <76ca0a2e-dd9a-41c9-90e4-5fd3c9171172@linux.dev>
+ <CAADnVQKKWBV+pFMAStB_-POKveeO83RiXU+VKeua3odSu-Xrmg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAADnVQKKWBV+pFMAStB_-POKveeO83RiXU+VKeua3odSu-Xrmg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/2/26 09:37, Javier Martinez Canillas wrote:
-> Neil Armstrong <neil.armstrong@linaro.org> writes:
-> 
-> Hello Neil,
-> 
->> On 10/1/26 08:50, Maxime Ripard wrote:
-> 
-> [...]
-> 
+On 9/16/26 5:36 PM, Alexei Starovoitov wrote:
+> On Wed, Sep 16, 2026 at 2:24 PM Vineet Gupta<vineet.gupta@linux.dev> wrote:
+>> On 9/16/26 2:02 PM, Alexei Starovoitov wrote:
+>>> On Tue Sep 15, 2026 at 1:17 AM UTC, Vineet Gupta wrote:
+>>>> Back when I started, keeping it NFC made more sense. But with all the
+>>>> nuances discovered in the process, I'm inclined to drop the NFC stance
+>>> What is NFC ?
+>> non functional change aka refactoring.
+>> Like I said when I started I wanted to keep the id / flag breakout
+>> purely non functional. But given that splitting it does change one thing
+>> (mentioned below) - I'm dropping NFC attribution.
+>>
+>>>> and make functional changes - there's at least one which is the
+>>>> following accepted pre-series and now rejected.
 >>>>
->>>> I don't want to add a supplementary maintenance burden for the sake of using a cool
->>>> technology which has serious drawbacks and dependencies on user-space even if looks
->>>> really cool.
->>>
->>> Spoiler alert: v2 won't. I've got the in-kernel loader to work and thus
->>> you can have a built-in panel driver that works without user-space
->>> intervention. So this is not a topic of discussion anymore.
->>
->> It will still have users-space dependency, meaning the BPF files will need to
->> exist in the fs when drivers probes.
->>
-> 
-> It doesn't have to AFAIU. The BPF programs could be built into the kernel
-> image, just like firmware binaries could be built-in as well.
+>>>>          old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
+>>> that's a red flag, no? The refactoring patch shouldn't have
+>>> any changes to selftest and veristat numbers?
+>>> Unless I'm missing it again.
+>> Yes understood except that it is no longer refactoring.
+> NFC is gcc probably lingvo? In kernel people just put in the commit
+> log "No functional changes", so it's easier for humans and for AI
+> to review patches.
+> So pls skip such unusual tags in the future,
 
-Right so my main question still is: what does it solve exactly ?
+Yes keeping kernel's existing conventions makes sense, although LLMs 
+understand what NFC is.
 
-All the descriptions I saw so far is that it simply moves
-the panel C code to a BPF code with no other additions.
+> but keep the first patch as "No functional change".
 
-I still don't have a clear view of what is precisely solves.
+Just to rehash since the meaning of first has moved significantly.
 
-It adds some complexity to load those BPF driver, adds some
-maintenance complexities since with every API change we will
-need validate BPF still works in addition to C (and maybe one day Rust).
+1. Now the first change (patch 1/x and its test 2/x )  is no longer the 
+compound id conversion, but coerce_reg_to_size_sx / 
+coerce_subreg_to_size_sx change to fix the errno range case, as 
+suggested by you. It is a functional change, with following improvement:
 
-As the maintainer of the panels, merging a bunch of new panels at each
-releases and helping migrating to newer and modern way to interact
-with panels, I think I have the right to express my interrogations.
+    === VERDICT CHANGES: 3 ===
+        mov32sx_s8_negative_range     failure -> success
+        mov64sx_s32_negative_range    failure -> success
+        mov64sx_s8_negative_range     failure -> success
 
-I'm clearly not the oldest kernel contributor & maintainer around here,
-but the main interrogation I have when submitting, reviewing and
-merging is : does it really solve something efficiently.
+    === total_insns:  0 changed among 1242 both-passing, 0 worse ===
+    === total_states: 0 changed among 1242 both-passing, 0 worse ===
 
-I don't want people to be frustrated by my review and question,
-but I feel I'm allowed to say I'm not convinced about this solution.
+2. The second change (3/x and its test 4/x) is accumulating add_const 
+deltas (w3 = w0; w3 -=1). This makes the 32-bit link with delta special 
+handling of zext unnecessary so its a prereq for the series.
 
-Neil
+3. I guess you are referring to the patch to convert compound id to 
+broken out id + flags (5/x ) is also technically a functional change - 
+due to the state comparison behavior improvement that fell out of the 
+seemingly mechanical conversion and is clearly called out now. However I 
+verified it in isolation (on top of 4 prior of course) and there are no 
+veristat or selftest changes with it (just a cosmetic name change due to 
+base_id -> id)
 
-> 
->> Neil
->>
-> 
+    === VERDICT CHANGES: 0 ===
+    === total_insns:  0 changed among 1247 both-passing, 0 worse ===
+    === total_states: 0 changed among 1247 both-passing, 0 worse ===
+
+
+I presume that is what you were asking for ?
+
+Thx,
+-Vineet
 
