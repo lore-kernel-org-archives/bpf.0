@@ -1,209 +1,183 @@
-Received: from mta0.migadu.com (out-135.mta0.migadu.com [91.218.175.135])
+Received: from mail-oi2-f41.google.com (mail-oi2-f41.google.com [74.125.231.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB81361946
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 04:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F54D2E3FE
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 04:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790915802; cv=none; b=O+qdWBdraO7D81f8iitbxX+LdDs+KUAwjIvPiyQ6jKtAVEpimHiRzEkY+XqNEKtXSQ4+2hSztQmVqcj1HV3enXKBGe3kc8HKql+5n9hF/icDWj57RsWNxF4fNCRNcod6bSrHXoXszQ5jRXm89P9NWymqUSfPc3n90m8xF9er6x8=
+	t=1790916056; cv=none; b=XjFlauoNJUMDo+BjAiNZAZ8Qq8ci1mofzhFML4HfF1TsRkrXjVn1Cinz7oNvzFM4nkL9//49boy3u4OC5AlVVeirAfHtB3AnEpX5dxDUOegKuBrkoOp81+5zR4XHgeo5S6WSEE/YxJGtljSgJl+GmziyKiDHM9dpAz9fLH32Z28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790915802; c=relaxed/simple;
-	bh=y/0CXx9eIXXSUi0htzgjyz98uoanzac/KLtq3JYsrjo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BQfCJZVDl8WSDsOr5vNF/s1ija+8soAVsCdyfh0LaPFyLEUCLmN5cQljihAT+0szetoGJqS92lizFCcbMVN//U4IFpQ2DgqcQD/9p/jmQKryZQpknBkx/lEYCx7JUqprwcuG8saw+hFIbYPBL8+5Z6UnUsL7g20K3jJOiydd5k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xP7aSUJC; arc=none smtp.client-ip=91.218.175.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790916056; c=relaxed/simple;
+	bh=3GiF/F59t2XnQ+ScY1DItyDBwlG5LFfzw638Jucz8rk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tX0wc3ZQ8CkuNSakP6XbnFNRLIIJw2jYxZAk7xueB0n1OFyU+5+iK+pO4i2ftzxp+UoIis/Ik10lETYuweAGyhrPmvpobE4DATDt4j1laq7PSYGnWttcnGctRNCMyeb21vHEBWLWH3/ixLKyfhWzVyJZQbzzZZw44ZDgnK5K4Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cIWhJ09X; arc=none smtp.client-ip=74.125.231.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xP7aSUJC"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=y/0CXx9eIXXSUi0htzgjyz98uoanzac/KLtq3JYsrjo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790915796; v=1; x=1791520596;
- b=xP7aSUJCP1VTTt6HWpzfU6gfjbJUEIPtiK8ipSLspAPJnzEqFk/WM+JNBurF6U2QCmVsxMvG
- 3PR1iwIg3AKQMVR7+YU7efgObTMGdGBxsTGYBdZZ+wpGtupWp9dgG2wr3Cg9QLQOQHoKY73d1nf
- KBHl4A10s6law16XIbcTgVec=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d68e9918b237ea7b;
-	Fri, 02 Oct 2026 04:36:36 +0000
-X-Mizu-Trace-ID: d68e9918b237ea7b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
-Date: Thu, 1 Oct 2026 21:36:24 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cIWhJ09X"
+Received: by mail-oi2-f41.google.com with SMTP id 5614622812f47-4f24fa1585eso1140024b6e.2
+        for <bpf@vger.kernel.org>; Thu, 01 Oct 2026 21:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790916053; x=1791520853; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+aNuBHrd5RMEXmJ5WPHyWr9jcSxnvnt7cywTSQ93A8M=;
+        b=cIWhJ09XRqTYgUs3LWboT5O+SyVbVfRIb8F8TDXXIgOB7zvUhdQunaUnH1eY8y9hee
+         2oypUXvDYspNli4xf1Z3VpH0nHfr8D+rrQPW/tsdzp6XfbMlE5fn0CxFetExrS4Ss04a
+         /x3eq4/o5BQ3h9kD4MCZrtNxRfEbnRB4JMvtflW4wmr4lr1QMniMqZuuF8agTlUKEGF3
+         2LeD4IQz36zpNhBN9MQwas60Qmyovpt8o6DBtlF7ExNOY351ozi5WzMKrrW+A5nHlmCH
+         If84auHepKoZFSa3Zf8NZoWy8laTDw4DlEVUUlQQAWxqW2ZJK9a8N5L8XITvOmrFYVxK
+         g5mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790916053; x=1791520853;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+aNuBHrd5RMEXmJ5WPHyWr9jcSxnvnt7cywTSQ93A8M=;
+        b=0zYLQ8HLrb4IkbAHN3f7ZnPTtTYTh963SRJ4HvUzFJfD8rjOM7rP5Xtd/Q+OX8bQu8
+         i0v8RgBnTZlxOucmN5nmIigd4lYcQ9Kh5I1C7TNEkGBLrMGyeFEsc3dtxoCEIpRUVtGi
+         KWxZ/woBR6GPoqFAF2eWkIJRCnAb6RUPVGghJ4cJ2sx1G/fW7e5vn+b7GUmLl0naElfb
+         CabW1hgK8uTUabmNAXW+wtiUNZXVPFbCF3eBRpTU35rkSC/viZNqsYfzeF/SLo7nK7rF
+         J6MOe2HTGO+NZGTQ9GAU7TiijK2ovTtXpkw5UtdNgAZZVOEYxzYoB24z4RJri9FOgdIk
+         5/xw==
+X-Forwarded-Encrypted: i=1; AKwUvBwNVFam/Jv8U1vOAtmL0vEoIAAHWp3zijK3fGDiA+dFqW1bma3IkH5DZ+39yHUhhKUHXdY=@vger.kernel.org
+X-Gm-Message-State: AFuF++mbVAPLVRYt9L02Qo5ul/vv92gufcFX2Cg434cXQfmrL/HTdhkY
+	gxybrflQ3gAYVq8rQzretN6f9sfAI0XdOtDXIkuK8YVyAfHCJSJ40lX2
+X-Gm-Gg: AYBFou3d3s5Cv/TurFSOmYs+14mP2q/6oQzibAAlOI3k07TdQTQYisGuBzT1OFWLbnk
+	1BtTvU22tYPrGxE3repSBGFXy4v0RZ+VGHdPdJWLF5dUrHqK2j1gzttW51qcx/BB2HsVULYYSrR
+	VfsXDn7oaEGvFmIWOVNpdY5MRhtHkmLRq5k8fhaad22XrO6gQaeat9egQAGUv7hjRn7llxclufo
+	8Re1/eO/8zP30SXjVUxxiqAH/FG1PD04CBe44MRvo7mO0lJ072tsLSHhnQ4hzk5dOpEk1l3/Pco
+	Q19/aF9igBGWepNtcxGikMUEXORX4spnq4zXMZsR4WjPRMJnApzm/7U2S56Wb1LYti7UwfSbFYm
+	VDwkAGPpRMLUmpmqXBf9IYd0/Ek1UMHw7HYst90v56d9mO4lU26SJyFNyL6zoKIN64sycTZrw6O
+	+HhJ8kiGk/YVaWdrkl5k9wfMt4uBKcVytkA3p43k2YjCWyYOdfMPT+LM86gz8dnrexrOyF
+X-Received: by 2002:a05:6808:13c2:b0:4ea:bd4e:5cc5 with SMTP id 5614622812f47-4f52ab8b76amr1425589b6e.46.1790916053267;
+        Thu, 01 Oct 2026 21:40:53 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:3::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4f523da65c2sm1217527b6e.5.2026.10.01.21.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2026 21:40:52 -0700 (PDT)
+From: Matthew Wood <thepacketgeek@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf, arm64: Fix text_mutex critical section in bpf_arch_text_poke()
+Date: Thu,  1 Oct 2026 21:40:48 -0700
+Message-ID: <20261002044050.1277356-1-thepacketgeek@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
- loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
-To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Christian Heusel <christian@heusel.eu>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- sched-ext@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
- rust-for-linux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
- Bjoern Doebel <doebel@amazon.de>, Martin Pohlack <mpohlack@amazon.de>,
- jay.wang.upstream@gmail.com
-References: <20261001225214.12351-1-wanjay@amazon.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261001225214.12351-1-wanjay@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2026-10-01 3:52 p.m., Jay Wang wrote:
-> Based on and tested against bpf-next commit b5a4aa31abd6 ("bpf, cgroup:
-> Fix cgroup struct_ops query for a second attach type").
-> 
-> This series makes CONFIG_DEBUG_INFO_BTF a tristate, so that it can be
-> set to =m.  With =m the vmlinux BTF is carried by a module, btf_vmlinux,
-> that the kernel loads the first time user space asks for something that
-> needs the BTF.  On a system where nothing does, that saves ~5.4 MB of
-> RAM with a distribution config; on a system that uses BTF, it behaves as
-> with =y.  =y itself is untouched.
-> 
-> Problem
-> -------
-> 
-> The vmlinux BTF that CONFIG_DEBUG_INFO_BTF=y builds into the kernel
-> image takes ~5.4 MB of memory, resident from boot whether anything uses
-> it or not.  On small instances that is not negligible.
-> 
-> A distribution cannot simply turn it off for the users who do not need
-> it: it ships one kernel build for all its users, and BTF is not debug
-> info anymore.  CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and
-> bpf-lsm all depend on it, so =n takes those away from everyone who does
-> use them.
-> 
-> Hence this series adds CONFIG_DEBUG_INFO_BTF=m: the BTF becomes an
-> on-demand module.  Users who never use BTF get the memory back; for
-> users who do, the first request that needs it loads it, and everything
-> works as with =y.
-> 
-> [...]
-> 
->   Documentation/bpf/btf.rst                  |   68 ++
->   Makefile                                   |    8 +-
->   include/asm-generic/vmlinux.lds.h          |   32 +-
->   include/linux/bpf.h                        |   15 +
->   include/linux/btf.h                        |   11 +
->   include/linux/btf_ids.h                    |    2 +-
->   include/linux/compiler_types.h             |    2 +-
->   include/linux/module.h                     |    2 +-
->   include/trace/trace_events.h               |    2 +-
->   init/Kconfig                               |    2 +-
->   kernel/bpf/Makefile                        |    6 +-
->   kernel/bpf/bpf_struct_ops.c                |    3 +-
->   kernel/bpf/btf.c                           | 1085 ++++++++++++++++++--
->   kernel/bpf/btf_vmlinux.c                   |   23 +
->   kernel/bpf/inode.c                         |   44 +-
->   kernel/bpf/preload/Kconfig                 |    4 +
->   kernel/bpf/syscall.c                       |   51 +-
->   kernel/bpf/sysfs_btf.c                     |   97 +-
->   kernel/bpf/verifier.c                      |  172 +++-
->   kernel/module/Kconfig                      |    2 +-
->   kernel/module/main.c                       |    4 +-
->   kernel/trace/bpf_trace.c                   |    3 +-
->   kernel/trace/trace_events.c                |   10 +
->   kernel/trace/trace_output.c                |    7 +
->   kernel/trace/trace_probe.c                 |   16 +
->   kernel/trace/trace_syscalls.c              |    6 +-
->   lib/Kconfig.debug                          |   30 +-
->   net/netfilter/Makefile                     |    6 +-
->   net/xfrm/Makefile                          |    4 +-
->   samples/bpf/Makefile                       |    6 +-
->   samples/hid/Makefile                       |    6 +-
->   scripts/Makefile.modfinal                  |   28 +-
->   scripts/Makefile.vmlinux                   |    5 +
->   scripts/gen-btf.sh                         |   53 +-
->   scripts/link-vmlinux.sh                    |   25 +-
->   scripts/package/PKGBUILD                   |    7 +
->   scripts/package/kernel.spec                |    4 +
->   scripts/package/mkspec                     |    7 +
->   tools/bpf/bpftool/Makefile                 |    6 +-
->   tools/bpf/resolve_btfids/main.c            |  217 +++-
->   tools/perf/bpf_skel.mak                    |    8 +-
->   tools/sched_ext/Makefile                   |    6 +-
->   tools/testing/selftests/bpf/Makefile       |    6 +-
->   tools/testing/selftests/hid/Makefile       |    6 +-
->   tools/testing/selftests/sched_ext/Makefile |    6 +-
->   45 files changed, 1936 insertions(+), 177 deletions(-)
+Widen the text_mutex critical section in bpf_arch_text_poke() to cover
+the page permission changes made while updating a bpf prog's plt target.
+When a long-jump trampoline is attached to or detached from a bpf prog,
+the plt target at the end of the prog is currently updated before
+text_mutex is taken, by temporarily making the page writable:
 
-This series caught my attention because of the sheer amount of the code
-and the iteration speed. I've tried to read the cover (it was
-tiresome, please ask your "agent" to be concise), and fed the series
-to my bot.
+	set_memory_rw(page);
+	WRITE_ONCE(plt->target, plt_target);
+	set_memory_ro(page);
 
-A question I had: is it really worth 2k of complicated kernel code to
-*maybe sometimes* save <10Mb of memory?
+Leaving this outside text_mutex assumes the page belongs only to the
+prog being poked, whose pokes are already serialized by its trampoline
+lock. Commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+management") broke that assumption; it switched the arm64 JIT to the bpf
+prog pack allocator, which packs programs into small chunks of large
+shared allocations, without updating bpf_arch_text_poke(). Since then,
+unrelated progs (and their plts) commonly share a page. Two CPUs
+attaching to or detaching from different target progs in the same page
+hold different trampoline locks, so their permission changes can
+interleave:
 
-And then the bot found this:
+	CPU A                           CPU B
+	set_memory_rw(page)
+	                                set_memory_rw(page)
+	                                WRITE_ONCE(plt_B->target, ...)
+	                                set_memory_ro(page)
+	WRITE_ONCE(plt_A->target, ...)  <- permission fault
 
-     What systemd does at every boot
+This was hit on a 64K page arm64 machine:
 
-     PID1 loads and attaches a BTF-dependent LSM program at every boot
+  Unable to handle kernel write to read-only memory at virtual address ffff80008f46d5f8
+  FSC = 0x0f: level 3 permission fault
+  pte=00c00200ea5a0783
+  pc : bpf_arch_text_poke+0x214/0x238
+  Call trace:
+   bpf_arch_text_poke+0x214/0x238 (P)
+   __bpf_trampoline_link_prog+0x1c8/0x470
+   bpf_trampoline_link_prog+0x64/0x90
+   bpf_tracing_prog_attach+0x318/0x4a8
+   bpf_raw_tp_link_attach+0x104/0x258
+   bpf_raw_tracepoint_open+0x6c/0x90
+   __sys_bpf+0x134c/0x3e10
 
-       src/core/manager.c:1026-1059, in manager_new():
+Fixes: 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management")
+Signed-off-by: Matthew Wood <thepacketgeek@gmail.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-       if (FLAGS_SET(test_run_flags, MANAGER_TEST_RUN_MINIMAL)) {
-               ...
-       } else {
-               ...
-               (void) bpf_restrict_fs_setup(m);
-       }
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 475e70653454..66fab0bfd3da 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -3338,12 +3338,20 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ 		 */
+ 		plt_target = (u64)&dummy_tramp;
 
-https://github.com/systemd/systemd/blob/main/src/core/manager.c#L1026-L1059
-https://github.com/systemd/systemd/blob/main/src/core/bpf-restrict-fs.c#L27-L85
++	/* pages of the bpf prog pack are shared between progs, so the
++	 * set_memory_rw()/set_memory_ro() window below must be serialized
++	 * against other pokers too.
++	 */
++	mutex_lock(&text_mutex);
++
+ 	if (plt_target) {
+ 		/* non-zero plt_target indicates we're patching a bpf prog,
+ 		 * which is read only.
+ 		 */
+-		if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), 1))
+-			return -EFAULT;
++		if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), 1)) {
++			ret = -EFAULT;
++			goto out;
++		}
+ 		WRITE_ONCE(plt->target, plt_target);
+ 		set_memory_ro(PAGE_MASK & ((uintptr_t)&plt->target), 1);
+ 		/* since plt target points to either the new trampoline
+@@ -3357,10 +3365,11 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ 	/* if the old target and the new target are both long jumps, no
+ 	 * patching is required
+ 	 */
+-	if (old_insn == new_insn)
+-		return 0;
++	if (old_insn == new_insn) {
++		ret = 0;
++		goto out;
++	}
 
-Do those tiny VMs that you target run systemd with BPF LSM?
-I assume you target concrete VMs, not "small instances" in a vacuum.
-
-You can check this by booting them with =m and then:
-   $ lsmod | grep btf_vmlinux
-   $ systemctl --version  # look for +BPF_FRAMEWORK
-   $ cat /sys/kernel/security/lsm
-
-If the answer is "yes" for the majority of them, the whole project is
-moot, because the module will be loaded immediately on boot.
-
-My bot found more stuff implementation-wise...
-
-I suggest to slow down, stop burning tokens for a bit, and first try
-to figure out the important details:
-   - who will actually benefit from these memory savings and do they care?
-   - is it worth it in terms of implementation complexity?
-
-Even for LLM it's easier to deal with a 100 lines of code than with 2k.
-
-pw-bot: cr
-
->   create mode 100644 kernel/bpf/btf_vmlinux.c
-> 
-> 
-> base-commit: b5a4aa31abd6fe90009b63e35dc18c67d041ec0c
-
+-	mutex_lock(&text_mutex);
+ 	if (aarch64_insn_read(ip, &replaced)) {
+ 		ret = -EFAULT;
+ 		goto out;
+--
+2.53.0-Meta
