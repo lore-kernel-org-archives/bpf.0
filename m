@@ -1,132 +1,110 @@
-Received: from mta1.migadu.com (out-33.mta1.migadu.com [95.215.58.33])
+Received: from mta0.migadu.com (out-74.mta0.migadu.com [91.218.175.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA7B3FCB37
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 22:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0CC46D555
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 22:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790978953; cv=none; b=aetvsw3UNOHYbVCQYLahOQSp5NrkRVq8lElsB500KiuUpTV2kpI0sszHYSPXvL0cBO7Y6/i728ujxQSNkybHYNcNDEXNNS6t/B/6OUTyX2jr2d+HaNYRFPWUBFnBNUdPcnEnkxYADE52Knu2ePg81x/bt+wXq24tJ3P1A/xyBKM=
+	t=1790979590; cv=none; b=YpDaqGd4wjqXP1shrgcKhvzW5u34Yve0IGuY36JlCE0ZkYQK7tbah3sKR1xSvBx7POvzR7E+0IZGT/o3LnGDuQYng2QkCN4wmRHH2ZD48uih75J19nHm/I/dzLEhYsAwbJE/luWvmhEoh3jiFAByzQuGrXahVDC93XD1p3+2Kx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790978953; c=relaxed/simple;
-	bh=lCrM91YSYyv1hK7mWbTZ0/WGnWfhDQh0+G5pNz7vI0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j9jNd2CuCy+l0ZYKHue7+PvfkXkSfQ59/ZuHPZbze1paqlQoN/pHbOchn4etQeWg6svSadXJoKm20Ue1PQj6PF78MSmfp583iStWB1eEnh9oigMVpfYwO+uZh2oOzPP6NDbN9izsAOxFVk2P/BXcRrMN+lhp1ExltzqN4iHFWWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=f79Mw8VR; arc=none smtp.client-ip=95.215.58.33
+	s=arc-20240116; t=1790979590; c=relaxed/simple;
+	bh=LIeypzTLxZFUaXt5ugGV2tt9HvkLhl45i2GZQQOzRtA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nevp9DLgn18It4ID3aKr3YPmUOJjZQ/6IY9R+l58Afelfc322Qx8DSnIggTCPH2AOQXltkf8OC/sFC/0tq9jG8CNG5iCWcy+RZeQltRa8XLHO31FPRSJ2OoldDo2ephgkx6xaqLD454l2ZyVjKuqS9ZUP6PpiArkVzlRcWJUZEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BhepoCzX; arc=none smtp.client-ip=91.218.175.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="f79Mw8VR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BhepoCzX"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=lCrM91YSYyv1hK7mWbTZ0/WGnWfhDQh0+G5pNz7vI0E=;
+DKIM-Signature: a=rsa-sha256; bh=LIeypzTLxZFUaXt5ugGV2tt9HvkLhl45i2GZQQOzRtA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790978949; v=1; x=1791583749;
- b=f79Mw8VRmfz1bl2x/xe7X9BZs3IMz5kBLimu8y7FwYLBX53TokMGbc5bmLzZr2YpZPE+8Syw
- xmgAePCVWxm+s484xs47JHMxWJfIKWeUKlV4kRK6sHeuWTAABguxZJTGgWGDwbTkxk33RVHVa3Q
- 691IWplzA9HAlNSgKYxCuX9k=
+ t=1790979584; v=1; x=1791584384;
+ b=BhepoCzXqCV6+2aFXT/5CmOqdAoSYoHbqDxEnkF4m0Xvdqb6AWvH8+ChwpvQPvS343Ccuu3o
+ J42qH3XqO24w3NmnS8ix4Pe+F7ROpe3BO3JCMsVAwMHUneXcpT9E/0xfeCr/FHmKGgh1yIX2Baa
+ kARXwtyunWysy7L0cbgpXQKM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9d2928c1e37d3bed;
-	Fri, 02 Oct 2026 22:09:08 +0000
-X-Mizu-Trace-ID: 9d2928c1e37d3bed
+Received: by smtp.migadu.com with ESMTPS id 2a1b46a32a9d1e0a;
+	Fri, 02 Oct 2026 22:19:43 +0000
+X-Mizu-Trace-ID: 2a1b46a32a9d1e0a
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <b44147cd-cec9-4416-b622-24c05c2ba785@linux.dev>
-Date: Fri, 2 Oct 2026 23:09:07 +0100
+Date: Fri, 2 Oct 2026 15:19:38 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Tejun Heo <tj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
+	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
+	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
+ struct_ops
+Message-ID: <ar_fuYs_-qS46dVk@linux.dev>
+References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
+ <bda525506b3fb3e61da28a112f28abba@kernel.org>
+ <arw4rjVkm2ob9ioL@linux.dev>
+ <bc6815954b8d08e75deadd43e1a2192c@kernel.org>
+ <ar2kvmCPR9q31V8M@linux.dev>
+ <31a871a07fccc99e953a2d633fc51edc@kernel.org>
+ <ar7H__jzvWVtqSn5@linux.dev>
+ <c1fdbe4f99352a102b38c7d131215d5a@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 15/22] libbpf: Add cleanup_info to
- bpf_prog_load_opts
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261001133006.1335369-1-yonghong.song@linux.dev>
- <20261001133125.1344001-1-yonghong.song@linux.dev>
- <20261001134623.B9A071F000FF@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20261001134623.B9A071F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c1fdbe4f99352a102b38c7d131215d5a@kernel.org>
 
+On Fri, Oct 02, 2026 at 06:25:08AM -1000, Tejun Heo wrote:
+> Hello, Shakeel.
+> 
+> On Thu, Oct 01, 2026 at 03:56:47PM -0700, Shakeel Butt wrote:
+> > We are in agreement on (1) and (2) completely. For (3), I am fine with removing
+> > the sync enforcement, but for throttling points for bulk operation sites,
+> > I think we should only add them when there is an actual use case for that
+> > or someone complains about overrun from those sites.
+> 
+> On (3), if removing synchronous enforcement wouldn't regress anything,
+> that's fine, but why was it added in the first place?
+> 
 
+I added the sync enforcement to replace a Google internal feature which, on
+memcg OOM, allows node controller couple of seconds to either increase the max
+limit or let the memcg die. With sync enforcement, memory.high helped in simple
+benchmarks. However later testing on some realistic Google workloads, I found
+out that several thousand threads are very normal of typical Google workload and
+memory.high sync enforcement is not effective on applications with large amount
+of threads. In addition, there were workloads which on noticing blocked threads,
+keep forking more threads. At the end implementing that feature using
+memory.high didn't pan out.
 
-On 10/1/26 6:46 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf: ABI breakage due to reuse of padding in bpf_prog_load_opts
-> --
->
-> commit 71e2541e0b207ab646c97a6cfe861ce9bf16fe7f
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> libbpf: Add cleanup_info to bpf_prog_load_opts
->
-> This commit introduces an exception cleanup table to the bpf_prog_load
-> options. It adds cleanup_info_cnt, cleanup_info, and cleanup_info_rec_size
-> to struct bpf_prog_load_opts and propagates them to the kernel in
-> bpf_prog_load.
->
->> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
->> index b49822d212aed..b4031f62bdee5 100644
->> --- a/tools/lib/bpf/bpf.c
->> +++ b/tools/lib/bpf/bpf.c
-> [ ... ]
->> @@ -370,6 +370,10 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
->>   	attr.fd_array = ptr_to_u64(OPTS_GET(opts, fd_array, NULL));
->>   	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
->>   
->> +	attr.cleanup_info = ptr_to_u64(OPTS_GET(opts, cleanup_info, NULL));
->> +	attr.cleanup_info_rec_size = OPTS_GET(opts, cleanup_info_rec_size, 0);
->> +	attr.cleanup_info_cnt = OPTS_GET(opts, cleanup_info_cnt, 0);
->> +
-> [Severity: High]
-> Does this OPTS_GET macro read uninitialized padding from older applications?
-> When an application compiled against an older version of libbpf passes its
-> opts structure here, the sz field will be set to the old struct size.
->
-> If the old struct had padding at the end that the new structure replaces
-> with cleanup_info_cnt, OPTS_GET might think the field is present because
-> the sz value includes the padding, causing it to read stack garbage.
->
->>   	if (log_level) {
->>   		attr.log_buf = ptr_to_u64(log_buf);
->>   		attr.log_size = log_size;
->> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
->> index 826d9cc9ab65d..cbe56ddc8cf7d 100644
->> --- a/tools/lib/bpf/bpf.h
->> +++ b/tools/lib/bpf/bpf.h
-> [ ... ]
->> @@ -128,9 +128,14 @@ struct bpf_prog_load_opts {
->>   
->>   	/* if set, provides the length of fd_array */
->>   	__u32 fd_array_cnt;
->> +
->> +	/* exception cleanup table, from the .bpf_cleanup section */
->> +	__u32 cleanup_info_cnt;
-> [Severity: High]
-> Does placing cleanup_info_cnt immediately after fd_array_cnt break the
-> size-based backward compatibility check?
->
-> Because fd_array_cnt is a 4-byte field, the struct bpf_prog_load_opts in
-> older applications likely contained a 4-byte padding hole at the end to
-> align with the 8-byte size_t type.
->
-> An older application would pass an opts structure where sz includes those 4
-> bytes of padding. Because OPTS_HAS evaluates if sz >=
-> offsetofend(struct bpf_prog_load_opts, cleanup_info_cnt), it will evaluate
-> to true. The library will then read the uninitialized padding left by the
-> older application as the cleanup_info_cnt value.
->
-> If the padding contains garbage, the kernel could reject the program load
-> or fail unexpectedly. Could this be resolved by placing cleanup_info_cnt
-> after the pointer, or by introducing explicit padding?
->
->> +	const void *cleanup_info;
->> +	__u32 cleanup_info_rec_size;
->>   	size_t :0;
+> > Now, setting aside the default behavior of memory.high, I want to provide
+> > additional flexibility to users for (3) specifically. One specific case is
+> > letting users opt in to async reclaim instead of the other forms of memory.high
+> > enforcement. Basically, users can specify that instead of having their
+> > application threads throttled, they would prefer async reclaim to bring their
+> > usage back below memory.high.
+> 
+> As for flexibility, we already have a gradient of enforcement around
+> memory.high. Is the need here to make the shape of that gradient
+> configurable? Can you give specific examples where this is needed?
+> 
 
-I think the current implementation is okay. IIUC, 'size_t :0' will ensure
-to filling '0''s for tailing unnamed fields.
+The concrete example I have is the kswapd like async reclaimers (plural) per
+memcg. Kswapd is woken up on free pages falling below low watermark and then
+when free pages fall below min watermark, allocators get throttled (enter direct
+reclaim). I want to apply similar concept to memcg (but with right cpu
+accounting and more concurrency). 
 
