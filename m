@@ -1,104 +1,107 @@
-Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F7F46F4A7;
-	Thu,  1 Oct 2026 23:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C621F938;
+	Fri,  2 Oct 2026 00:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790898815; cv=none; b=uSK/Pqp+uDn5obRiRsaXySLeVoMReHci3Fzjay1stNUURx5pD9xWMLIT0TBP3w/W7weJ0QmWfkY1IPRwWSsZtGtHWW+Snzjd8q/DUrfIeNojKieMtr3H93GyDFW23aXxPUMWulEyLpGboCflasHYP12tlosVoT+Tu/hkKJgoOZY=
+	t=1790900726; cv=none; b=CXd+JWhJHcKjBTnrS//aETRllqBqmdXegQhrNWYUWWuklBVWNenTTaqyX89bRYceRUVmaZGio/8+f9R+JYK3fgIn/I8RxhHbyf2vB/oHC2wUly1jIF9Pl+8ORxew9584U9CMZdaSWpU9JN3w5RgO2neo3toNZhlGQ9+hSiIiquk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790898815; c=relaxed/simple;
-	bh=sxgzWa7Pg4Vu0QV7HUff5HmJa7L8rhf32QKppY3kv4k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OrXpwWOHgbI6jShMVXqPo0jj2t6jv9/GlUY6i+BhGCE/DsZlnIYfCPP3abXqBMgWY1pqbE6+Lh7PdJ3c5QVp+9DFYEcPFLIQ6EY6MKMaST85m+mEmoGPAcgGa4Um2KCVhlUOeniDN9D7ctwkvUuS9yViQhUKqxPWvvLAWuQx9Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=s71rMD84; arc=none smtp.client-ip=52.34.181.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1790900726; c=relaxed/simple;
+	bh=KDsWbS0Elry7eL2lW1U1AZfsNXSRE9lCM5nN708j6CI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=XA2rY7ghUjCNmjvKnHRokMNJ/YYfLDk7k8pzmyXAhC2GwD0Q52x0EEC+LMJiH78zEJe2fI3At/vGXaDmMZnKBclqxYQHuOEiNEiLqtP/qk3EYKFfbOgJkqGEtxwbn2Kiy7nwI3rpBo6H+A9eWdKXMWgOIppHsTnc75GYP2OZF00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXRnKH+n; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="s71rMD84"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1790898814; x=1822434814;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aKYNDJBaF/a+oEVTdroRmzbc+8LBZqR2cnhVz8NN1Ws=;
-  b=s71rMD84CQ5rDgVgCGSOdYE4S42eN2FwBQYpn107AxEPWjjzWkOHLhlw
-   kJ0VEhrL10StCtGiV8FXgN9/Ewfs0ZmlMT4jeCHBNriUxMfRtyjb1phfu
-   DDMQOzrkRXDLvxv2/ma4iUtspdnxOu2+vSt4hZAAWGbhq/P9qhCU2827E
-   qaEKZxmvgqX04N8guw00xXF3g4/h/fACKhPWjS5u3l72NION/0hauNJFk
-   bj7yQFi/S4V7OCt0U6NS1Irzu+/nU3GRP3L+5xCn7LjLKDdv74c2YIRNo
-   fBb3CfdN5GQ8QXNDcNgzZg/dhpowpkCLn3mI8sw7UdNTiwhHJnj68Hg5S
-   g==;
-X-CSE-ConnectionGUID: Scd1Ez1gQp2utnFTzEvrxw==
-X-CSE-MsgGUID: rtNnwBb8RneFt1wqoso4Og==
-X-IronPort-AV: E=Sophos;i="6.27,135,1787011200"; 
-   d="scan'208";a="30178142"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 23:53:34 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:19497]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.47.21:2525] with esmtp (Farcaster)
- id edbeb6ac-af33-4878-a212-0ac95593aed5; Thu, 1 Oct 2026 23:53:33 +0000 (UTC)
-X-Farcaster-Flow-ID: edbeb6ac-af33-4878-a212-0ac95593aed5
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Thu, 1 Oct 2026 23:53:33 +0000
-Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Thu, 1 Oct 2026 23:53:33 +0000
-From: Jay Wang <wanjay@amazon.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
-	<memxor@gmail.com>
-CC: <alan.maguire@oracle.com>, <martin.lau@linux.dev>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <nathan@kernel.org>,
-	<nsc@kernel.org>, <linux-kbuild@vger.kernel.org>, <mcgrof@kernel.org>,
-	<petr.pavlu@suse.com>, <samitolvanen@google.com>,
-	<linux-modules@vger.kernel.org>, <ojeda@kernel.org>,
-	<rust-for-linux@vger.kernel.org>, <arnd@arndb.de>,
-	<linux-kernel@vger.kernel.org>, <abuehaze@amazon.com>, <doebel@amazon.de>,
-	<mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>, <martin.lau@kernel.org>,
-	<mason@kernel.org>, <ihor.solodrai@linux.dev>, <rostedt@goodmis.org>,
-	<mhiramat@kernel.org>, <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 9/9] kbuild, bpf: allow building the vmlinux BTF as a module
-Date: Thu, 1 Oct 2026 23:53:32 +0000
-Message-ID: <20261001235332.8074-1-wanjay@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <6e565a3c5689de1d5ba05904e3d7f477373bca8e10be75fea4b6adc048ab6ac4@mail.kernel.org>
-References: <6e565a3c5689de1d5ba05904e3d7f477373bca8e10be75fea4b6adc048ab6ac4@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXRnKH+n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB941F000FF;
+	Fri,  2 Oct 2026 00:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790900725;
+	bh=e6ucH4pE0/4sZL+8neWjc294yEbL1d8sfOaBwN6QaEw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=mXRnKH+nt9ih5wtG/5UOeTjtSMs1qaN0CsqNUdGpV7Z0Ep1W3t3kdyZIABz7xNb5+
+	 jvceI0FBuLBdLWTav0ttU3s8w6Z+nj63yO1mNi6cCaxNjewLs8kZJNCRZpf/NmELUu
+	 UcZwCF+CJX3jSGT8UY5VhpozoijhNNUzWOC5jn+fGjXo9vvwGReC1m9HEO7E50QugB
+	 r3OYEHk9hCLugX6jHMnwhWF4u6zf7+bCZxFR9wcC0PmBfZC/g1enNAAEsGBSG7VZGV
+	 vvovlgx9Cipyvq9TSnn4Xbo7kIwtyYZlUAhZQksAt+P8JTcjmwuNxUr25yW29DYu81
+	 64q9Wcud6weoA==
+Content-Type: multipart/mixed; boundary="===============1186257611127603077=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D039UWB004.ant.amazon.com (10.13.138.57) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Message-Id: <7879b2bd10707aa28e33dd50e86230b4e42968b534c4c4edb1866706e1bf24c3@mail.kernel.org>
+In-Reply-To: <20261001152042.124445-14-gmonaco@redhat.com>
+References: <20261001152042.124445-14-gmonaco@redhat.com>
+Subject: Re: [PATCH v2 13/15] verification/rvgen: Add support for BPF monitors
+From: bot+bpf-ci@kernel.org
+To: gmonaco@redhat.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,bpf@vger.kernel.org,rostedt@goodmis.org,gmonaco@redhat.com
+Cc: alexei.starovoitov@gmail.com,namcao@linutronix.de,wen.yang@linux.dev,tobias.schaffner@siemens.com,vmalik@redhat.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  2 Oct 2026 00:25:24 +0000 (UTC)
 
-All three are addressed in v4:
-https://lore.kernel.org/bpf/20261001225214.12351-1-wanjay@amazon.com/
+--===============1186257611127603077==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-- The ftrace argument printer is a real problem: it can run from
-  ftrace_dump() with interrupts disabled.  print_function_args() now
-  only prints the arguments if the vmlinux BTF is already loaded
-  (bpf_peek_btf_vmlinux(), patch 5/12), like bpf_snprintf_btf(); in v4
-  the lookup it uses would not load the BTF anyway.  Tested with
-  func-args on and sysrq-z as the first thing touching BTF after boot,
-  on a kernel with CONFIG_DEBUG_ATOMIC_SLEEP.
+> verification/rvgen: Add support for BPF monitors
 
-- The opening of the changelog now names the exceptions: BPF_PRELOAD,
-  users of kernel types that run before btf_vmlinux.ko can be loaded,
-  and code that assumes the vmlinux BTF has id 1.
+TL;DR: In rvgen, with -b and -a, the printed messages and checklist point to a
+nonexistent {monitor.name}/ directory and never say the sources went to
+bpf_monitors/. Should they print that location?
 
-- btf.rst now lists the requests that load the BTF, including struct_ops
-  maps, kprobe events with BTF arguments, tracepoint btf_ids files and
-  bpffs delegate_* options.
+> diff --git a/tools/verification/rvgen/__main__.py b/tools/verification/rvgen/__main__.py
+> --- a/tools/verification/rvgen/__main__.py
+> +++ b/tools/verification/rvgen/__main__.py
 
-PROBE_EVENTS_BTF_ARGS and FUNCTION_TRACE_ARGS do stay enabled with =m,
-which is intended: creating a probe with BTF arguments loads the BTF, in
-process context, and the argument printer uses it once it is there.
+[ ... ]
 
-Jay
+> @@ -80,7 +85,9 @@ if __name__ == '__main__':
+>      print("Almost done, checklist")
+>      if params.subcmd == "monitor":
+>          print(f"  - Edit the {monitor.name}/{monitor.name}.c to add the instrumentation")
+> -        print(monitor.fill_tracepoint_tooltip())
+> -    print(monitor.fill_makefile_tooltip())
+> -    print(monitor.fill_kconfig_tooltip())
+> -    print(monitor.fill_monitor_tooltip())
+> +        if not params.bpf:
+> +            print(monitor.fill_tracepoint_tooltip())
+> +    if not params.subcmd == "monitor" or not params.bpf:
+> +        print(monitor.fill_makefile_tooltip())
+> +        print(monitor.fill_kconfig_tooltip())
+> +        print(monitor.fill_monitor_tooltip())
+
+With -b and -a, does this checklist point to a path that is never created?
+
+RVGenerator.__create_directory() returns early for this case:
+
+    if self.auto_patch:
+        if self.bpf:
+            # no directory for BPF monitors
+            return
+
+and RVGenerator._create_file() writes the files to self.rv_tool_dir, which
+resolves to tools/verification/rv/bpf_monitors/<name>.c in the kernel tree:
+
+    if self.bpf:
+        path = Path(self.rv_tool_dir) / file_name
+
+But __main__ still prints "Writing the monitor into the directory
+{monitor.name}" and "Edit the {monitor.name}/{monitor.name}.c to add the
+instrumentation", and no {monitor.name}/ directory exists anywhere.
+
+Since fill_monitor_tooltip() is now skipped for BPF monitors, which on the
+in-kernel -a path prints "Monitor created in {rv_dir}/monitors/{name}",
+nothing in the output tells the user where the generated sources were
+written.  Should the BPF -a case print the bpf_monitors/ location instead?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36944413541
+--===============1186257611127603077==--
