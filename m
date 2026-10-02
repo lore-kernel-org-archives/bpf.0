@@ -1,103 +1,150 @@
-Received: from mail-pz2-f39.google.com (mail-pz2-f39.google.com [74.125.228.39])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C3947F2FA
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.39
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790940986; cv=none; b=Cfy/DHiWHu7tiui7LMEVXIS8pnbt9KgPdHqdn7kZBJhEF3CmG7t/c79Xqa9Emaal2uvRue2M1Ow4pSvGZ0YJ4DNjm/DOfIFApYY1tLm1JAQUih8rEfkt7mqNiWjKkz6bGBnxLVTrYDcfSjZy8ZYki4C2YhAIooEXtIhkoctXLe8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790940986; c=relaxed/simple;
-	bh=BteOxFPOpp0nkSMNOZeK1hi8GF2MqFIOUNnjEamFGEc=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=t6S/Y+4Fp5wQyvbUeWuYYqS49R9y786AgFjJSixen7r1UHs3LneX7ziT38WFJEefDF9aLxatRax3AlyqSp/Lbsv6fyzbSuxXVWtEQVeWUKsxdJ49CPGdbp5c/KIVBDDaAJvTkDfhpWP8DRZf8X1KGeWUkbhkscKc7GmvSla0Dj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rMdUlf2u; arc=none smtp.client-ip=74.125.228.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E93C481A82
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790941037; cv=pass; b=DX2fkGFgkn/PSZquHmy79yCoSi/VPtFlpA5wgo+YPIuu22Oz3HVbmgCHIrm78Cg5aGITgcUIw1k+NsXrKsifYLY2vMyZAkah/2cKfC0KJnZuS3DFAlDLMNEBdFq8qWbKnZZkTVzIOknJLQ5YFJ9co7fT5hQlbQA1e5g7gqAX9wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790941037; c=relaxed/simple;
+	bh=lN1hhMdriyj7QPcla6CJIPLYTvYL+HzR6XTrpS85sv4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Re3ksdPB8O4DHlUT1Clv/S1iueYgYTwsbjke2XNU8xwXNMWmjhICZLFHqoFxLb9AXjONjJedIA8GlA14Q4UemSGVnNa8+LHqMhzfBCVaf9FJS8uZyKjBy9ZUvIsPu5fAlqOssiZhnavRrqOSlWVtYlVxvUWcGKwgcXanHyAQsao=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lOxm3lBh; arc=pass smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rMdUlf2u"
-Received: by mail-pz2-f39.google.com with SMTP id 41be03b00d2f7-cc78d59bb02so3045207a12.1
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:36:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lOxm3lBh"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-530d0d5ae11so84079961cf.0
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:37:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790941035; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FxEZMge0xTmCHQ2pnMqzr3e0YGZk/8ir+OBIX1LTZYttHrwtjXFaWkZT4Cd3wQB2nS
+         kRtLQs2ihKJf00slyQkN6aHq/SnR9SRvSkXMEn0H7tY0P9FkZinGqpO89XP7icJY2+3i
+         msQBUEM8LM/tocf6AwQjPx4gCQKJboK4bBRUAiDjxT8+0l70xC8yMtknCLvrSFb9xilR
+         hsRtweElVf0nGQUVgiOWZyED73zIySOI4Q9Jpc7PtKsNmCreiGiD/V1dXoQEN3m6wsVA
+         P44MlZkAba2mJs0Jc0YyAKFjt2dLUDpeaPaotpjoW2wQSmxINLYyEvkYtTdjbzxQ5s9P
+         VKMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sNFw6EjaVpez377CmXHJCYISmJpkLOWj2a4mkkpTO00=;
+        fh=Rq/endMIsONs0HUYHQXRgkYmwJOG10loodILNn5MtOE=;
+        b=msdzaGCTFCL6fuvkAuj/PA4a3/odblGpIn+1VjZe1zid8bkYkiskdHcBOu8vJ70Wqe
+         gPlEm4pJz9c/58iu6N67yfHvH287WveZgJg39UXz27ifzMY/Q/5vRTHaFe6tT0BvvbnB
+         jPFWfwU/Tp0V6Ouj6ioQOvxBB2FLiu1NRC/YkYdarDs+zPrRge+2dxVdjJJKqn78h239
+         c49LlZe3aGcgr/V4GznBFgkWPhi3WXwV2QGyuJJsLkOHBdN/9y3deGnb5jxEDXe2rw1u
+         0dvt3LTfVIbTdN2RhNz3Tz39J54gdSXrwx6DcAqZ6F5nSQafpxpHOSSzAPXHRauAjI5o
+         ysdQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790940984; x=1791545784; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6y1TJ6fPi3bQSRuuKZMOyZtR4mOZNb78Ee6wIn/nAq0=;
-        b=rMdUlf2uQr5j6WKmO9xB+NSj9jq078Ng+C3GTNpomdFrzBHcFwSfuPhPu5tWnlXCJn
-         UuyCC2x/gxzBkHEk4HA+GhQkBxpFiEHPqxoiyN0ay/rq3veym47Hk2K8m+jTrpWG7oOU
-         Qbz3PpHqPdO4VOZma/yFTy9EK9qSyMkMSdbfa16CVOqnsApaOM0Qc0FILbAxfqQ9x18T
-         SYMfO/KB/JbK8vNl/7SMYSSxgNHZWEovXjbcTRTzDZd4auDazGJeoTN0ofX016XmxURf
-         H9eZM3v/W0+1OiVNrN4s1eD2pGKVI8hOojZAU2RpD6L5k5ZzDPx9NHqD7vTALdViPA7Y
-         4nVg==
+        d=gmail.com; s=20251104; t=1790941035; x=1791545835; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=sNFw6EjaVpez377CmXHJCYISmJpkLOWj2a4mkkpTO00=;
+        b=lOxm3lBhcOMupkYwjD+meejO9XF0MKqtFIwKE99SPn7gnmFKRDO40jNo8I3ojztBo6
+         b9wzCD2cw5yrnPVsZDQtPe3p2f1TSxbCjj3Sr2sKK32Z3apQ5Z7pl6+x7j7J4/IQdp2C
+         EXfu9BduyuN3AbQXTDDYqsTmb17oMyd8VMzLWe5I+BVUKnejH3A3Zvo52YeXjpTZKoHH
+         mXiBST7ngy+Ck90xLxEtTN+ccuNmSDdir8zyliz3CqI6ggVk9ON/+MpwI6SZm3si4B3W
+         oj4KfcWOxkkuzgTp3svVTIU6lesxF4zzxX0Dt7bS5DDlO2DYiH3ZHEXjc19FzJbdxI32
+         m9ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790940984; x=1791545784;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1790941035; x=1791545835;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6y1TJ6fPi3bQSRuuKZMOyZtR4mOZNb78Ee6wIn/nAq0=;
-        b=YPoilVGTzgo7V8YVWB523/maQRSET+zBpn24U1/oaw1ca81hbuSLjTwJ4BJlQfvu8I
-         /qDILJ5yXqet2DfFoNYGlMUI7wkgKiRQ0j+gnH2LjsMJPb1k4GR85RXyG38eIqQ/4zWN
-         V6kBFetfLqKKwhOdvFycKvHRi9a/ji8tytiG+nhLsOH3/Jk/NAi1GwdPRfILdWQaIMy2
-         2p9Ct2DPyG6XBH1kigZi7NrwLBNMY8Fx2/ubHYv8CeIGihADUWNaz8yjKV48XL/gZgcG
-         cz9gfos9XDYe0htsyCYnivif9xYbrZYatrz0sNRQOoX+6Zaepepvv24HsiK1mVVXvY6K
-         GE3Q==
-X-Forwarded-Encrypted: i=1; AKwUvByPUqfgeTem5QWy4jeHDvxIyVBSUfzZE6k+uLb7XXUHyci+rx3gCUlV+sVSNDZL7s0+/gk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIhLH+Kza15jujoYY2FttBj4B1hl0/adGbCs03ZmlpyVIRZroK5
-	DmrhUmaglEMhDOsKERDIpewhKNmea/Wtjhtnbiicyl0zbn08sQg2YfEL
-X-Gm-Gg: AYBFou0r3EwvddMdu8u8S+v8x/FcOdxbDLBQpP4KFOfa6fBfM///+jO+l6TIXidAYMl
-	wjefbr2jAhTzb39QDh/M52AfeiJz7rsDDFRlpeQolLNnyrfyJQSX+SEusxvPAUhcYUs5tVvf09T
-	Ie8SlXpB9aJBFtI2oxk47KE8ojodpc/gyuFctQ6yNqr1UtXMHTdX3YriDc/Ym9H+tZP/R9tfY/p
-	NvmyRV9eckxLeQ3Kp7q8vduZ8F3g5/qJMMd5vA2G4PkXC0CoLbKgTHvxYST6jsOZ7yTzvxfxVU+
-	Jpj/Zdi20cqrn/wUaf1OcEEoir215EeNe1MngfmE/lQ5efC3Cd+iEbgf3cJje0FeGOwEWcqErbH
-	NR6m1sz0JtQGr1uYY20OwyyVpwE/4od89vhORmGAKRZoc2J+wM9HhfjG+twFHprHrt6ABBvXzGp
-	VWkcb9+XwkAPzsjLJuMg6SQ/SibJEWoin+xobNva8Hm+otp7wcD02a2/+vpH1Lwnb+HKkDmOI/g
-	wTO6irWAJx/B9qQ9bB1YSSnPx+npj6NxywW/Zc+KKcvp6pP/vO8c4PfJ/uJvr7I7ErWVCap676Q
-	JY04Xxjdy01W0g==
-X-Received: by 2002:a17:90b:3ec4:b0:39e:3713:c2e4 with SMTP id 98e67ed59e1d1-3a6ce6e7c05mr2068658a91.14.1790940984484;
-        Fri, 02 Oct 2026 04:36:24 -0700 (PDT)
-Received: from localhost ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4f47454cfsm8410667a91.10.2026.10.02.04.36.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 04:36:24 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 02 Oct 2026 11:36:23 +0000
-Message-Id: <DLUBLDLVFYLU.393R1ZG12F4W9@gmail.com>
-To: "Yun Lu" <luyun_611@163.com>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <jolsa@kernel.org>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>
-Cc: <yatsenko@meta.com>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v5 3/3] selftests/bpf: Add task work scheduling
- race test
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20260930085417.186729-4-luyun_611@163.com>
-References: <20260930085417.186729-1-luyun_611@163.com> <20260930085417.186729-4-luyun_611@163.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        bh=sNFw6EjaVpez377CmXHJCYISmJpkLOWj2a4mkkpTO00=;
+        b=T5YlnA0mnaNQevDHT15vKlSj1oMA1ES4zNng5sCansbwcSfyvfTmVZqEhqSV7scQO3
+         0fmwohrxFDrJ/eIINi3BTYpJudam1A1+hfmvYTIPyxvbl1OIyH5MZCKm4tYZnI36f1Ho
+         K6uCk707/ppKzl4FVCqIbcOfO1fK+pGauaYO3k/aMjowbPDplm1pvv+K62rA/9FAguYd
+         u9V4p16nD/c96YlejSOllB8m/3ml3+4NXz/UY8YjrzNsn9lmP1kDnyUM69jT52dWXGLe
+         1B2rpWxyEEabMjHusrQZFxb8GqL2HYCQXHC2Gv1wD8l22PhzLWQ7/rXse1/2bOeXUcMR
+         4VMA==
+X-Forwarded-Encrypted: i=1; AKwUvBzvKih4L3yZpq3thxfKvc02cFfB7ibveBtbxK1CaJpWTu0DRx5EkN3iloIb9eGg4x1pBlw=@vger.kernel.org
+X-Gm-Message-State: AFuF++nio4stv+ILAFi1qAYFDtuaAwZglBPPRrMtFC4V+wT9UvNIAyYK
+	+2FyYML8Mbjt/jdHgGGNZgG9z7syX0p2An7EfUrQ6mCBcfrKRDzIGEzHg0VS/E4pOwnj727MV3c
+	k+RQQSn8CYh+Sms+KPGSoExWTApeGEyE=
+X-Gm-Gg: AYBFou05lKHFMckMeeFsbLXQgUHj9L0oO6OWzCOecjSrwllgFP1dsmycmOcPkyBYVPn
+	UKSvKAcszpLm5O4rrL3b7h7SWmyC8N8xw0L26tR1PzHi8X9JBxaRNkghldCBDS0gg2HcKMpXMC4
+	KWiGjkH9hgNaJvTgtn0+HSy6eTnArt3JaQ1y2XEYsRfOhfptrMO+bbmwGG97c0pUJjurbfUgenP
+	1B/pwE8H8NP7hc1TE65kM+iLt5A+Sn7Kg0LKrsfehtwvZI5tt4/7EaDD06tRNMk7sng/HpeJi/S
+	kEp8s6MdpyNrVF4VesSiPahh6r9o0gN3OtalfnmOQVuAav2zDONTgH/i1nNdKB7aAjf5tnQ=
+X-Received: by 2002:a05:622a:4d45:b0:533:96c9:7ab6 with SMTP id
+ d75a77b69052e-533cbdb4c73mr39682471cf.54.1790941035224; Fri, 02 Oct 2026
+ 04:37:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20261002044050.1277356-1-thepacketgeek@gmail.com> <DLUBA9JR5QHY.31UKYQQ9EYMDL@gmail.com>
+In-Reply-To: <DLUBA9JR5QHY.31UKYQQ9EYMDL@gmail.com>
+From: Matthew Wood <thepacketgeek@gmail.com>
+Date: Fri, 2 Oct 2026 12:37:01 +0100
+X-Gm-Features: AclHuK_xXspU51eUha2NYmeyNcOU_aQLhOQFxxEdwFOzhD_cXYtGDGcItbka9NM
+Message-ID: <CADvopvZPO1gDMDhDOPcArjRJ0cPpSUZ5suMg-1kwRi+_-Xeitw@mail.gmail.com>
+Subject: Re: [PATCH] bpf, arm64: Fix text_mutex critical section in bpf_arch_text_poke()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, bpf@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-# DECIDE: optional, log accuracy only. 1/3 and 2/3 are unchanged from v4 and fine. Drop pw-bot if you apply 1-2. Delete this line.
-On Wed, Sep 30, 2026 at 04:54 PM Yun Lu <luyun_611@163.com> wrote:
-> Add cross-CPU stress coverage for the captured-task cancellation and
-> irq_work context-reuse fixes in this series.  Run scheduling and the
-> target callback on different CPUs, rotating through three map-value
-> lifetime patterns for 1500 rounds.
+On Fri, Oct 2, 2026 at 12:21=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Oct 01, 2026 at 09:40 PM Matthew Wood <thepacketgeek@gmail.com> w=
+rote:
+> > +     /* pages of the bpf prog pack are shared between progs, so the
+> > +      * set_memory_rw()/set_memory_ro() window below must be serialize=
+d
+> > +      * against other pokers too.
+> > +      */
+> > +     mutex_lock(&text_mutex);
+> > +
+> >       if (plt_target) {
+> >               /* non-zero plt_target indicates we're patching a bpf pro=
+g,
+> >                * which is read only.
+> >                */
+> > -             if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), =
+1))
+> > -                     return -EFAULT;
+> > +             if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), =
+1)) {
+> > +                     ret =3D -EFAULT;
+> > +                     goto out;
+> > +             }
+> >               WRITE_ONCE(plt->target, plt_target);
+> >               set_memory_ro(PAGE_MASK & ((uintptr_t)&plt->target), 1);
+>
+> The lock hides the crash, but set_memory_rw() is the actual problem.
+> The page is shared, so it makes 64K of other progs writable and
+> executable at the same time.
+> Use aarch64_insn_write_literal_u64(&plt->target, plt_target) instead.
+> That's how ftrace_rec_set_ops() and arch_static_call_transform()
+> update 64-bit literals in the text.
+> It's atomic and writes via fixmap under patch_lock, just like
+> aarch64_insn_patch_text_nosync() below.
+> No need to change page permissions and no need to move text_mutex.
+>
+> pw-bot: cr
 
-This test cannot hit the bug from patch 2.
-race_sched_work() is the only caller of bpf_task_work_schedule_signal()
-and it runs in the trigger thread only, which is pinned to one cpu.
-irq_work_queue() queues on the local cpu, so bpf_task_work_irq()
-returns before that thread gets to the next getppid().
-irq_work_is_busy() in bpf_task_work_acquire_ctx() is never true here.
-The target thread doesn't exit, so task_work_add() never fails either.
+Thank you both for the quick review! This
+aarch64_insn_write_literal_u64 makes sense,
+I'll test and submit an update shortly.
 
-Either make the test cover patch 2 or say that it's for patch 1 only.
-
-pw-bot: cr
+Regards,
+Matthew
