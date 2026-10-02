@@ -1,133 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A757F47CC6B;
-	Fri,  2 Oct 2026 10:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C2A47DD6E;
+	Fri,  2 Oct 2026 10:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790936971; cv=none; b=rzc42k3LD/8aV4wGtL2xQs8nwHqcoVOKOOkLvXqnQEbIH4ThNq/2iVa87vABo2aiSNh1ACrC8y7SbM89OTC2AMN+KN3nQN6g8WHiBaN8bCuwiWOYTHrQhDGX09H/1kUt54LnJHm8g09PMbfA5oLUCuZtRXxEP0OFjdgwJvdIcqk=
+	t=1790936997; cv=none; b=hNmnAklqWXO9+rB32hny45ZchjXuxGKIeDxhe1CGvlYZkYX9MbsqQV0hTt4oA5ojLcStFSbYwEl7cfoBpxbNYB9KWxlT6lKKtO2Bu0afD2AlgCzrHaJI5vSJXHlsO4NMOrlmKiHY0D5hyIe4qOtnJsDaPnaxyAQDAWqWceiTmtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790936971; c=relaxed/simple;
-	bh=V9pV3ZkkcUvIvt6I4RvKsPeQD9GdKmYVzQtSvVBbOEc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NANID+CJR7Xm3OG8ChIyckLOB7VsXY2Qw4STkJ1+MBhh5frRqcpUVWb2kLWRvaKIgS2Ntbkk/YAvHKS49WAqiTq7boBsWVnskPMflJk0kT0A2O6WIdN/qLtpbrlX4Cbr0NdSqOsQT9c6TkOgGDrzlGPV7+wINkTmTBuf2Vhg4lA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GdQd6SpP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790936997; c=relaxed/simple;
+	bh=4Yz9VttyjtIobBYr4zHBO6hC8p4PyUMtgFsW/tKWCxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RItKo/cp7WIS8X0eYZ2aPSLzgVAoeww2J5zqZBEsbdEk8L0Z9mVyH9N2SdTU8fgBLoTuWsb1WOMRmknsaXAYybPaXA/eMsqeHGl/70jkL6t1qtbkMn2ytscCZ5mftxh+CFw98VHM7YEh7EQYTXd9w5Xjr6yf/PjQ5Nzj4y9Gc8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=uiiqz/dG; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GdQd6SpP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D781F00893;
-	Fri,  2 Oct 2026 10:29:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790936969;
-	bh=3hd7QozUAtCgPHqY9/nDgR3yxkuQqIYoWENVU+JEeAo=;
-	h=From:To:Cc:Subject:Date;
-	b=GdQd6SpPFdBtbjy04L7nq/Ny+g0lLZBlDtqsRicYVU2KgU2Amfr8Os26H+CDRc8x/
-	 8PZRZXNnr2FYu/Cjd1gGqS0Xc9Pt7dBWdeXi5zmwmDXPLEQY33vZIUWEcCgpzIqjJo
-	 9GXj+34WNptzYXbFZHKIGte+9sWk+hoQrHB/E6sU5Y5I6lrd5ECMOph37QlEzSiqAZ
-	 nMWBWge3RWohOctGFpVooO20iwO4t6rxLxwu0ct2KfyOUe7aqOu/b+xzEFc+oKCv3F
-	 uwyPuFdXpCARvA2E45xaSNsWVRbXKnFtDYoSTxA9iTSZDJLaG03TkuVqrPthR4YnFi
-	 JFuixzqEL5VkQ==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 5C9E9F40066;
-	Fri,  2 Oct 2026 06:29:27 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 02 Oct 2026 06:29:27 -0400
-X-ME-Sender: <xms:h4e_ar7xU2ShAmF5oNXetXdM5WALbIYV6jCa2jq8K3R2LwVHJA3S9Q>
-    <xme:h4e_apsRKhlJsZcx_r9LzBzLh6jtKZxWQ_AwzHf0UxNxLSOZ5t0BUWAPZJNLaix7h
-    68FWAlfgwisrtwmgRC2WOoomJuyE7hNB1Hj_X-iAmktxebsYXd2PRY_>
-X-ME-Received: <xmr:h4e_apZ7cymsfuucgfwLHSTqqffA-pVMBg2vVQYRkiTFnE5a3o46GoiugqCj>
-X-ME-Proxy-Cause: dmFkZTF6ejqiiIIIVBwko2bAePHhMhz1ubb8sHy1I7wDnl97sVe6F6iOH3k2VCcq7bJm/b
-    rMgTnQurjYvhCWSK/AfAtC7e+ZILRvjXsFJ/7Fc3WUpSBIUe7Eki5i7Hc2y6sl9LOfzrTl
-    YKkL84eHzeS8OBDkblQUiMHhPGEMLPDZZSUK1S7C555OdZYs71SGT1/PCq684Y4FaZL4SR
-    WzQ3iqFyTURlTqms7UHgwhgYUJEaao/OwHlAu2ZXamYUJc7YgC59ilDqHCc+5Pln7LJJq5
-    Ba+nm2qzU3WqoyzZH7M3OY5gnE9/wCk5VIGcfYTPyDJPtYenTPrTW8PxTq5jZC2JbNh4Tu
-    0MyZusGxFLy32BQhC8smcy/Pbmk2DA0+b5p6HUrz3UCYbLOXdROFxxgksCjCt5+VfR8Qyi
-    SPC4vdifNZOL3Rh4c4U1unzzvmafTRLa9N+Mf1+CnrUk9G8bFOI6JWF3v0UHaun98hjCrH
-    6bFxpXegDItEIGPbOp78/8aOLJnCW0y+HQr6RoKlI9mBmlemwyLotD3MQhSMYSK3+pzp0H
-    rvtMiSE79G1s10SJqEgwmSK1rFyK4OWCl+YBfwhE3lhNxbBzHLWjfCaAxMxJxnrLUOmBsI
-    LUX7SwkZFTLIuTBFkoi1C2m7QfUxhQ5jMI/dwjfVdB4ms9kZlkLNcDaFtnvw
-X-ME-Proxy: <xmx:h4e_aluY7zPRxTnMg-F8AJ6K2crKRbUrECrHPRmTbvKvrwoP2QaCMQ>
-    <xmx:h4e_aoCYlxqtG26oZbwf8Jup3DSmwPQeSUO3E-d1lD0zsK1kpQLPWw>
-    <xmx:h4e_akPRG_n-rnSS3xuVkIKhrTN6FijyoiEG_msb5oKPiOma2-8I9g>
-    <xmx:h4e_aq6M_xF5_i2dlxKt8s5HgsAZ-BAiooeKuC_67roGyJdOvxw91w>
-    <xmx:h4e_am1YnOadiB1ZtifsIphdJXYlTNbRL905JGazwCFvnYaQ3nkTfLk->
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Oct 2026 06:29:26 -0400 (EDT)
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Ingo Molnar" <mingo@kernel.org>,	"Will Deacon" <will@kernel.org>,
-	"Boqun Feng" <boqun@kernel.org>,	"Waiman Long" <longman@redhat.com>,
-	"Gary Guo" <gary@garyguo.net>,	"Alice Ryhl" <aliceryhl@google.com>,
-	"Lyude Paul" <lyude@redhat.com>,
-	"Daniel Almeida" <daniel.almeida@collabora.com>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	"Miguel Ojeda" <ojeda@kernel.org>,	"Danilo Krummrich" <dakr@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,	linux-kselftest@vger.kernel.org,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Leon Hwang <leon.hwang@linux.dev>,	Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH v3] selftests/bpf: Use the new NMI_BITS definition
-Date: Fri,  2 Oct 2026 12:29:23 +0200
-Message-ID: <20261002102923.45846-1-boqun@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="uiiqz/dG"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=O9DRmnwiqHKYpTYCpYE+50FxaPR56rtvVjls/+jpVIE=; b=uiiqz/dGVA1i/oX5Bd6lqAAAWb
+	rf+a+NGebxFGnYuXlYKtI/e2FA9XMP2iVTZSFl79WRDhgGKM4eVedJ/5S3+uu5BAaZcmx/liU68WR
+	/jSeUpxJJ4vRLw9hGpLd/jsQLXnhPQZ1JNVS9/Cbs54FkKZtVJuTZ0nCLbs42fsXI/+rItbhyvdTh
+	vIU04khZRf1EYtUPqVvdnPfMZjQbvPLvo4beiscVCmQZRJeDbE5RudK7UYvRU8WfKhStZ1d0KDEGH
+	JBsPE2xaEYJ+BAImKhyFS5Ov21rGY5Vxve1/WTEbeGtogO1XUQ4Z75iS7qUH/xhOqNmyIDIvyNeM3
+	FKeJ+3Rg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1xCaWJ-0000000H6ZJ-3dH9;
+	Fri, 02 Oct 2026 10:29:39 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 19287300673; Fri, 02 Oct 2026 12:29:39 +0200 (CEST)
+Date: Fri, 2 Oct 2026 12:29:39 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Gabriele Monaco <gmonaco@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Nam Cao <namcao@linutronix.de>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Wen Yang <wen.yang@linux.dev>,
+	Tobias Schaffner <tobias.schaffner@siemens.com>,
+	Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH v2 01/15] sched: Add task enqueue/dequeue trace points
+Message-ID: <20261002102939.GB2823843@noisy.programming.kicks-ass.net>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+ <20261001152042.124445-2-gmonaco@redhat.com>
+ <20261001154934.GT88198@noisy.programming.kicks-ass.net>
+ <d75888885e2c94c1bc717faa864f609c43db874f.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d75888885e2c94c1bc717faa864f609c43db874f.camel@redhat.com>
 
-The definition of NMI_BITS was out of sync after the introduction of
-HAS_SEPARATE_PREEMPT_RESCHED_BITS, hence adjust it.
+On Fri, Oct 02, 2026 at 09:09:01AM +0200, Gabriele Monaco wrote:
+> On Thu, 2026-10-01 at 17:49 +0200, Peter Zijlstra wrote:
+> > On Thu, Oct 01, 2026 at 05:20:28PM +0200, Gabriele Monaco wrote:
+> > > From: Nam Cao <namcao@linutronix.de>
+> > > 
+> > > Add trace points into enqueue_task() and dequeue_task().
+> > > 
+> > > Signed-off-by: Nam Cao <namcao@linutronix.de>
+> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > 
+> > Obviously I don't remember anything at all. But also, you 'forgot' to
+> > send me the rest of the patches which might hold a clue. As is I'm
+> > clueless as to why we want this, since the Changelog also offers none.
+> 
+> Right..
+> 
+> This commit is part of [1], but borrowed from [2], which is actually more
+> interesting to understand why I need those tracepoints.
+> 
+> [2] contains 3 other RV deadline monitors, I should have at least CC'd you in
+> [3] and [4].. Essentially the enqueue and dequeue tracepoints are used to:
+> 
+>  * model the event from dl_server idle to ready (a new fair task is available)
+>  * understand when a task is moved to and from another scheduler runqueue
+> 
+> Thanks,
+> Gabriele
+> 
+> [1] - https://lore.kernel.org/lkml/20261001152042.124445-1-gmonaco@redhat.com
+> [2] - https://lore.kernel.org/lkml/20260929124908.177676-1-gmonaco@redhat.com
+> [3] - https://lore.kernel.org/lkml/20260929124908.177676-8-gmonaco@redhat.com
+> [4] - https://lore.kernel.org/lkml/20260929124908.177676-9-gmonaco@redhat.com
 
-Reported-by: Shrikanth Hegde <sshegde@linux.ibm.com>
-Fixes: 3b0e2a22d408 ("preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS")
-Reviewed-by: Shrikanth Hegde <sshegde@linux.ibm.com>
-Cc: Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Boqun Feng <boqun@kernel.org>
----
-v2: https://lore.kernel.org/lkml/20261001082519.16195-4-boqun@kernel.org/
-v2 -> v3:
+So mostly I flat out out ignore partial series. It means I have to go
+dig around to figure out the whole picture, and anything that requires
+extra effort goes on the 'later' pile, and you know where that lives.
 
-* Add Fixes tag.
-* Add CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS weak symbol because
-  CONFIG_* is not available in bpf programs.
+Now, as to 3,4; I'm confused. If I search 'enqueue' I see there is a
+tracepoint attach thingy in the .c file, but I don't see the
+corresponding bits in the .dot file. And per my understanding the .c
+thing is an artifact of the .dot file.
 
+So what gives?
 
- tools/testing/selftests/bpf/bpf_experimental.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Also, IMO it would be *much* preferred if the .rst file would not exist.
+Just have the graph-easy and the description as a comment in the .dot
+file. Then you have the whole thing in one *readable* place.
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 2893bf06ff25..a09448347966 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -367,11 +367,16 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
- extern int bpf_sock_read_xattr(struct socket *sock, const char *name__str,
- 			       struct bpf_dynptr *value_p) __weak __ksym;
- 
-+extern bool CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS __kconfig __weak;
-+
-+/* A trivial macro to make NMI_BITS exactly the same as in <linux/preempt.h> */
-+#define IS_ENABLED(cfg)	(cfg)
-+
- #define PREEMPT_BITS	8
- #define SOFTIRQ_BITS	8
- #define HARDIRQ_DISABLE_BITS	8
- #define HARDIRQ_BITS	4
--#define NMI_BITS	1
-+#define NMI_BITS	(1 + 3*IS_ENABLED(CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS))
- 
- #define PREEMPT_SHIFT	0
- #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
--- 
-2.51.0
-
+...insert rant on what a piece of shit rst is here...
