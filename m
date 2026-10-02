@@ -1,85 +1,113 @@
-Received: from mail-pj2-f38.google.com (mail-pj2-f38.google.com [74.125.227.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800A747F764
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD8F489FD1
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790941958; cv=none; b=r3sCWVWM+V13qPvrR14U3fjQBXl0uOt05jOgyAolZXY3EwIS2crhQbWiD6uAsYMpp502o9EkbFRXUCIX8ImVEeEFmc/RDX0uoHTVg5xIAkIfX1/5K8VzQO7nv3IQSTt6HiEXd0PsjqHxORjQkvEliRYqyIR1jQigo+NQ9WNh/gw=
+	t=1790942155; cv=none; b=BADRH5xQUNfIWzTPe/x7Iji1ymNYjaJG3TUHj1OlzagFPemlu79ADDIZMyyU8FVNW8ZyBjJTjy5lENR1b3xJdMOgRqLvBQawrcAra5UfDWcpngdVSGAHPgxGWvNdeNmtczfO9RJtBVDreObiEUA+I4NZ2sM1UXPidpTBMrI8iyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790941958; c=relaxed/simple;
-	bh=ZK9W3hsM2fdrVPBcEDof+c76PwgAD673MJ5we/sTLcY=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=EQG57itjrp1jGcepAC3xLIfkV5NjFrDjCIZEvMP059QVs1qLGbJvW/Ia8uKKXDXnNUnT1A2ll9K2JX6rga/5y5xijH4c0/gYITV4/Z64+vCA8MMeJ0+Mny+4fEqRwAwDv0iK0Pp4ZR2DXfqFVnt24IYPEILVQVF6TJfdFl0VYjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=goUZhIQh; arc=none smtp.client-ip=74.125.227.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790942155; c=relaxed/simple;
+	bh=pXKyCSM9FZhLXmXKCC5/hagyDn8EQ5lF9xqVMMSFVIc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lXMNOq7OWJOXvYBF0Hg21cHpHMUKDsCiN5WcF30EsE4PnZNw4gwi5+i8VjuqJcyW350eksbjFJgV5TWTlVqSe5ERaplKX50JrZwT2Xb9zxkhvpbAOJQ64ibbI7CEJGRFJg7GwWPtIdtmzO2mc4Mx8bSMkY9PCkjZ4sKEI+PVQ2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GDEdslbd; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Siwxu5MY; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="goUZhIQh"
-Received: by mail-pj2-f38.google.com with SMTP id d9443c01a7336-2e2e688de2eso26247555ad.3
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:52:37 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GDEdslbd";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Siwxu5MY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790942152;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=pXKyCSM9FZhLXmXKCC5/hagyDn8EQ5lF9xqVMMSFVIc=;
+	b=GDEdslbdqLTWxgeYrJx+CpbNg/hQhgxjfD/CdXdnSwPeJLFWTbZmmSe374XH1exFPbYFNG
+	ttcrNRLxiBA/xwr6Otso42NtQsfWJhyL0fG62q6Cc9/gs0gbFfkHnjyKQoeG3HU67Q57AJ
+	vwOFRxDjF+pVXlZdKjgv8AKcisa6PRU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-568-jxD_QokQPrSs7gVNKCcdFg-1; Fri, 02 Oct 2026 07:55:51 -0400
+X-MC-Unique: jxD_QokQPrSs7gVNKCcdFg-1
+X-Mimecast-MFC-AGG-ID: jxD_QokQPrSs7gVNKCcdFg_1790942150
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a0101292baso36409645e9.2
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:55:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790941957; x=1791546757; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ZK9W3hsM2fdrVPBcEDof+c76PwgAD673MJ5we/sTLcY=;
-        b=goUZhIQh6T+xmwIT0+JB8OE4Ev2OI+W1B1QvQnPrnbR4slXdPrPelMISBWuSzgq6s6
-         2dHWd80pi6Da/Wc1oPU8moB+YkJcefrFFNBlO39OKA0JJW8LnnRgjgh52sbJGZ8FA7Zz
-         qBnOwhch0DJOheBhxxTpHc2qMlPLPTBchZNn0TftYojJ70SvDSKxH4yvqWBnRRgcFT3Q
-         ibJ8vy9N69AdrrwLYfCrKX6qk8JEBPLy2Ol3Q+xTxZOGeVaBLJs9dcm2pPe0YubjiG10
-         oNTQgOQcEQVYORzdIiwZ+Xg5noc5m30zNqOHklur/cGMMFu3Njf5VhoWdxMOS0gkRjQE
-         n9og==
+        d=redhat.com; s=google; t=1790942150; x=1791546950; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pXKyCSM9FZhLXmXKCC5/hagyDn8EQ5lF9xqVMMSFVIc=;
+        b=Siwxu5MY7H7hXsJA3PcvpP9FgbuEkazdWt3BfEjNKclADbd6mtI+bn24AvhYrm/Y7k
+         dmT70cDSqp5p7siZCJjuQvXOvM7mQSzpXV9PxSnmpbRIkC+6OWUDK7BoxEPD2K9rF26j
+         kxfRuViZYUG8jTNYtyFDhWf4yGSqxgFZ+/e+R2+z+M7jKEADwpiDY63HUz9zWfQndByc
+         hY/ds3Dg/rv77pjtUbq46vbqVHFlCWHjL6XZLOgUgRSyeL/5PUQwHxObbVBpsH4V4gHY
+         TMSN0RTv2jE8/Pbrmh+KxxOk7jhzcVXYQggVPZqy9hdMNEeOunfbi4CWPSNytKBTMCDT
+         RTBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790941957; x=1791546757;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZK9W3hsM2fdrVPBcEDof+c76PwgAD673MJ5we/sTLcY=;
-        b=Wgpx21vbCKEB7D+U6JCFbm0qN/11b476b14iO0FPHoknNgaZvFcmeno/AyYPkP9512
-         lSJDEIzAOJjeP7yonG1ITAR0ymNg7z8/KGAewL1ymksBVsn3T23RzOxLej6SYnzGeLOQ
-         7Z+srwOwwUSKclZZ+f9jhByYs1nC8mQyOmutiunFjhUMUmc4K7lScgnu5YINyRqK/D/E
-         xAMJ9Ceb1OlSzEviBAh6BJvtPoJij21MZjEvpg1M4tgCiyeJV3G/wvXuFkly4zPeKN59
-         HBOpb/E0h9fxqHE3Noz2TYGWod9bmLBYuEbePsiF3lUfPnpCsJ96eQ6nCAIchiTdF1hS
-         ojgw==
-X-Forwarded-Encrypted: i=1; AKwUvBzWZSE5K7khU/gAaVR8hFtyFruiaheAGbE+gg1/rOZcdWHCOmPl3CaGBuLv22ovyUwtjKk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL+HJXBOpPmgkn4YeNKvYHLB+n7IDh9hDvMG/Pa84pfCZsEh/kl
-	hMPQS9BKabKGhXMvXcDgITADlTOSUSHiTmSBNX1rnUMkHSc1YR03jQD8tqnY8pwy74Y=
-X-Gm-Gg: AYBFou3tDogrSOfgy1L0mJFix5lJOC2oBA0F94Jw0eT3W1hPk/58kxjy0Mu0uX+wx0p
-	oxVpv8mZxXwx+d/q6lZdWMdO8Z/fQJeFmkNfmsEVV4zAVe1KwsgO21JHh9rLC2/EKbI9oMkwv4t
-	MVRb1sexiO+C+RdOKniNSGlme4P6NyTKJz0FkFY+dXzvZHLmEmcfNjguw/9CS7yoB4/H4K2tkS8
-	gSBk7y3K1st7hcaMlTriNaMMUChtzvupqnVP1uHZPAhQWvpyEUldpqnvoDT82ml5N2AXIPwupD3
-	ZEtfU/sPb53uN+IRa2tCWRb1Inn5ps9KQ5ivAASHBHm6P7/dIrlIzzQYiQ1tM6v3m8l8LVa+FdG
-	vh5sYuco8PMe+5A99vLfnA/24D+XCNKEMBsdmile7S+37ByHZPqYZs1uzm9ep/fT2L8ohmHMUgJ
-	ycCdUL/RlDgWDpxlUc5M5SyFx7PiUnvUxqX9dez5ACQEToiBZrHP0lt4ZNsFhNJ5h8b7BOw02a5
-	3ycR9diZBtyTsFPkk6zPSoBEH/xfTf7RgpU5J8/fncZu+xzpfbjnPFhMKcdyyOl6hE4SS13/Izj
-	t18=
-X-Received: by 2002:a17:902:f686:b0:2e3:ca8:7860 with SMTP id d9443c01a7336-2e49b6436c6mr22785045ad.22.1790941956649;
-        Fri, 02 Oct 2026 04:52:36 -0700 (PDT)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e49f6aea8csm6628535ad.35.2026.10.02.04.52.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 04:52:36 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 02 Oct 2026 11:52:35 +0000
-Message-Id: <DLUBXS5ZYG1R.1NA6CW88YS5TM@gmail.com>
-To: "Anil Kaushik" <anilkaushikwireless@gmail.com>, <daniel@iogearbox.net>,
- <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
- <john.fastabend@gmail.com>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <shuah@kernel.org>
-Cc: <sdf@fomichev.me>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: add XDP test for per-flow
- LRU_HASH window updates
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261002053837.3494918-1-anilkaushikwireless@gmail.com>
-References: <20261002053837.3494918-1-anilkaushikwireless@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1790942150; x=1791546950;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=pXKyCSM9FZhLXmXKCC5/hagyDn8EQ5lF9xqVMMSFVIc=;
+        b=JgZ45ve3wVQg46vCu4MX7XFH8JrUR+3YGGYISCYwkKbg/K7nq6P7vizCrQh+r41D9X
+         D262e0CbWngO7D3deleqXrBWv1Y4EGgYbuZfnd2WghqdGF8gmXPJMO9ZoHdVHF0P820L
+         GlYzByv8drfGgwzqy+CAAndecflOUDfdOR2plvkFVB26nnazi/arJzwXBroxNSOilv2G
+         Idh41+VCJRDDpEJQPinxWGMLKyJN/f8hq9y5avKGt9WRntPiK4sE2wy1BdwhqI/TGnsO
+         oF5lW8nMo/K20mqHN/9hAb6khVsZ+qSjihGbw2HR7lwmwm5WZU3Gz7l23xejokiF5GZI
+         uYiA==
+X-Forwarded-Encrypted: i=1; AKwUvByHHQmdI9qsDe4vqGWKxdoQb2E8ooZpzyPdIBHRGo+McdVUD15IIime61FFIZtxhiOCgwc=@vger.kernel.org
+X-Gm-Message-State: AFuF++njYr1CuYCRYHmB0vVN7RnU+4p1wFhfC7PPCVGA2Si9EZtD1KDi
+	N9/rdyYR1XCc84UQ3HtqrDnnLb/jx4078m4ehyeMFAJXJFkLlfxdEBxEG94iyt/PxViKtV0oW/k
+	Rrk0sHiGg+9uwd9DjP/LcLUFzXEBvLHJAnCS3jLoSCdxkc3mH7FwLdg==
+X-Gm-Gg: AYBFou2n/d/orPtaXp4JP5Tvm5snq9l+MSC5e7Z0P1AwxlVTp0L7HbOu8aYrC1unXDk
+	beecgTJa6VLxfZmKeJY6t6tSe+siGp/ZgQeVHuNEGFxxXz0CeWY5HqCBRRuy8CDSp7uPAAXsHG7
+	9cx0rSMsTbkPKWz01m43K5keC/c7Z5ziy+kfNwcdVUxC5RZYQOLVWEfCob7t93lks4neXdV9GJp
+	OiTtTWoP62wKEfFmM8Jv/9XivPCCqeyrQD2VKfr4iH7Q7reNwMUvmGEGtbGvpa8Uk5wxVtq5Rw2
+	L3BxxmjJvz7lgqwQ5u4r82fHhs699y1R2lvJQBI6dtTcef1iyzd14JgyT2o0+65A9kDCB5FaxuV
+	dCbQT9CjY9S7fcLW4wDhijzVFDDs=
+X-Received: by 2002:a05:600c:4e13:b0:49c:cee0:e7c1 with SMTP id 5b1f17b1804b1-4a02757999cmr45042565e9.16.1790942150020;
+        Fri, 02 Oct 2026 04:55:50 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e13:b0:49c:cee0:e7c1 with SMTP id 5b1f17b1804b1-4a02757999cmr45042315e9.16.1790942149646;
+        Fri, 02 Oct 2026 04:55:49 -0700 (PDT)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([185.168.96.228])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a03ff2280csm44473765e9.4.2026.10.02.04.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 04:55:49 -0700 (PDT)
+Message-ID: <56972260b9221128d7aaf5bb60f90611ec9d7235.camel@redhat.com>
+Subject: Re: [PATCH v2 01/15] sched: Add task enqueue/dequeue trace points
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+	 <mhiramat@kernel.org>, Ingo Molnar <mingo@redhat.com>, Nam Cao	
+ <namcao@linutronix.de>, K Prateek Nayak <kprateek.nayak@amd.com>, Alexei
+ Starovoitov <alexei.starovoitov@gmail.com>, Wen Yang <wen.yang@linux.dev>,
+ Tobias Schaffner	 <tobias.schaffner@siemens.com>, Viktor Malik
+ <vmalik@redhat.com>
+Date: Fri, 02 Oct 2026 13:55:48 +0200
+In-Reply-To: <20261002102939.GB2823843@noisy.programming.kicks-ass.net>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+	 <20261001152042.124445-2-gmonaco@redhat.com>
+	 <20261001154934.GT88198@noisy.programming.kicks-ass.net>
+	 <d75888885e2c94c1bc717faa864f609c43db874f.camel@redhat.com>
+	 <20261002102939.GB2823843@noisy.programming.kicks-ass.net>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
+ cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
+ T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
+ eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
+ 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,18 +115,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, Oct 02, 2026 at 05:38 AM Anil Kaushik <anilkaushikwireless@gmail.com> wrote:
-> The LRU_HASH selftests (test_lru_map) exercise BPF_MAP_TYPE_LRU_HASH
-> only from the syscall side. There is no coverage of an XDP program
-> updating an LRU_HASH map on the data path: inserting an entry with
-> BPF_NOEXIST on first sight of a flow, then updating a bounded array
-> inside the map value using a runtime (modulo) index.
->
-> That pattern is common in XDP flow-tracking programs and stresses two
-> things worth testing together: the verifier's bounds checking of a
-> value-internal array indexed by a runtime value, and per-flow key
-> isolation in an LRU map driven from XDP.
+On Fri, 2026-10-02 at 12:29 +0200, Peter Zijlstra wrote:
+> So mostly I flat out out ignore partial series. It means I have to go
+> dig around to figure out the whole picture, and anything that requires
+> extra effort goes on the 'later' pile, and you know where that lives.
 
-Sorry, don't see the value in this test. LRU is already covered.
+Alright, I guess I'm going to have to fix my to_cmd script.
 
-pw-bot: cr
+> Now, as to 3,4; I'm confused. If I search 'enqueue' I see there is a
+> tracepoint attach thingy in the .c file, but I don't see the
+> corresponding bits in the .dot file. And per my understanding the .c
+> thing is an artifact of the .dot file.
+
+Yes but only partially. There isn't always a 1-1 mapping with model events =
+and
+tracepoints.
+
+Throttle uses handle_sched_enqueue() for one case of dl_defer_arm, represen=
+ting
+a fair task running not boosted, in the enqueue case, because it was runnin=
+g
+with another scheduler.
+Boost uses handle_sched_dequeue() in a similar fashion to describe fair tas=
+ks
+that stop running on the fair runqueue (but may continue on another runqueu=
+e).
+
+In both cases I'm reusing an event that can be triggered from other tracepo=
+ints
+too, ideally to keep the model simpler.
+
+Then it uses handle_sched_enqueue() for dl_server_resume[_throttled]. They =
+are
+both plain enqueues, in fact, so I could rename them to show what they are.
+
+> Also, IMO it would be *much* preferred if the .rst file would not exist.
+> Just have the graph-easy and the description as a comment in the .dot
+> file. Then you have the whole thing in one *readable* place.
+
+Well, you make a fair point, I like to have it appear in the html docs, but
+obviously no one is going to build the docs to review a patch.
+I may look into ways to get both birds with a stone.
+
+Thanks,
+Gabriele
+
