@@ -1,319 +1,421 @@
-Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB4E443C14
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 08:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1881245563B;
+	Fri,  2 Oct 2026 08:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790928692; cv=none; b=caIXr5mvfe8QrXUHZ9D+0CN7AAI5We5N23D4P9ZRtB9RzuKNiQiTY2mIG3TQtKJNzt4On6FRKJxgjbxJ9ibpSu8/7VrurALC8rGHjt41O0unTolwfhWrZHnQI4d798bmd80dOAds7PPXYZvZ+eCl8KQbU98sjRTVG2fHLzl/obw=
+	t=1790929879; cv=none; b=DF/a1Ot44kp0yZerlcLl7ldHCpG368lOtNldGtiAurf9J+LY4OB2jxb6ys9/HtJqtLpM8nhZdA1H1sWgQaL0qocZw64rpdPkrlHVKClj3mNVAtTXV4ebJT9eO+rkGaDk8IopVeFvuChrjcSk09K6Zw25zOq3+LejgOj+NoOjrYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790928692; c=relaxed/simple;
-	bh=5ECWojSQ3v9QRdtfjAMX6P6Ej5xW9FLxF3YOk0JcaLA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=h6ouxTLz0/hrDEc7LiC5TcizBgI7vo6thbomGzIzZTWsD+BbwinCzt0T0o2QkG72srE3Z6xikH9xWx8QAZpoRz2/D4DW6nN1H7NZEUwyxlqnSagSZ6qU0VaQkTtpt2CxogHiZBopdTh2fxH7aNCcR7zEnTMwEeOxWRnYojZxHzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aBzDiYE1; arc=none smtp.client-ip=74.125.225.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1790929879; c=relaxed/simple;
+	bh=xGfaxgorjbhVrGN85b+Ignt28kbopsTT0bZF5QVU24M=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZW8fyRl6qRsefxjxJYIEez2iScbrywxUCaMwOHj2Un3AaDoNJcJZbEMGOFjKLmd0VSHupWDL1mxj3qudjR/pkCZCzEfqsCHJe6OQATin4s5lV+aV3/ISHpvvbcNVuV+VXC8h7EEEPvo0qNkL0EnFCSdTpzRgI3nkMUQdQaz6eY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ShzY/3t+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aBzDiYE1"
-Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-48b08452cafso1325895f8f.3
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 01:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790928677; x=1791533477; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Qa8a08zy/9EMmaSnon0+MVyVSBQZTq4II4ieN33FiZM=;
-        b=aBzDiYE1LeoVxZDabCyc08XJEVQ8EyJvl3VBeovm7D8ANau1MZexzizBNPFPpB2G6e
-         /6H1UQQM5OwNbbGzrn7IxDoiQPcfBESvqsAZZo3ZX3KdDQs6WdOY1JIigIX+UnMv9BTA
-         CcLJgDTYKZiZ9bFAvwQ0Dkya7tigcRqeJc0rDE8rfpZG4WbkEFDSuiZyjS1fajb2xV/6
-         O00tmd/0wmhC8ym6egwp6et0/cINl3ZMvrVwhcqdIEaKnFkjYvS9d0pDLYxOLdjFXxgm
-         3+4K48FS4TvAYtsqvcw8JwIO1IgcuvGLrbyCarL6VjJwcOFsuMP6kQI3UzcJ6EOcU1Ox
-         Ajbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790928677; x=1791533477;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Qa8a08zy/9EMmaSnon0+MVyVSBQZTq4II4ieN33FiZM=;
-        b=KBUTZsZdmQkJgZqEtXS7ooZGg3JPSOoXNNSUZ9ZtSQu8Mvmhq/MfFRsjo/yRegD18E
-         wQqVaDuAw2c7ZiGMH3K83TZ0yB6ZpURIi3PCKG/V6OORJaItFGKqnEm4rb0zXxaFCKsk
-         e2OeoFSOYKD3SaWGIbURlZ6F2a3BBYDnANiv7N1GETsLpjIgynkaTD5vVwsrDrY6d/Tu
-         YvpKLO+HsgMa6x/PO5X3MUA0IWBJBB2wteQsL1DuUXH7FuXm70LndSaZ2xPRvDU+I9wC
-         PiNB4Oo56nfKorvk/qarc1VcfrZ8ovUm/EFOhSN+7oBm6gfy5DR2tBRyPqoIrpnOjG+W
-         4nKA==
-X-Forwarded-Encrypted: i=1; AKwUvBzILbCx4u3btQs6IQbUEVsi+uR37CvtwEcos4c/rkdIPMaLQR8EM6vVmeh/w5nSE3UodqQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIlMh+pLlyC9QuFr2aFcxVnQLBeSCozJGLNxWgMxKIhqWgBMiqf
-	DJt5WpYIF6byYT/stXT5u9D7ojIUPjnTGt4PT1P7A25kK9Sx5oRNeGCIMqKLjSlsFLs=
-X-Gm-Gg: AYBFou0NdD7vbxelDQVDQRFTJaG+Q/kGzZruX7E2l57XXry/7WBeTRODItuLqmeD2TT
-	KQZP3r/LWRmiEKJ/rb4Bh1yauFaP41jNxsjhSd9VghT0+8RT9IilXS+eVpJQcDETEHszaZJKcyd
-	ACI2yAJ+AMJZSkLRlVxMuTzmeFtjqzj0FNOjoHW82yh1N6udFyYyWC+LsGjVLr4CjcWcK/gIuHl
-	84BgDpDV0GV5d/NDTd5f7urc3sf3fKfo3OxPFmkrIPNYghrdpmkjPP+wSYbIOMvqUDWoX7gssay
-	aESDOtx4FXPxKAmi9lauD63gwW0hwpwXxFooHvQqV/hITmV/Ek93AD+JhzGCUB/mDLuX7gfTmwS
-	B00+3B8SoCObRjRvsxD3edQBv5JQR8cwTfi0ZJbhc6KKhA4k24aka/aFTaBkg+dfClDH5xNUpND
-	tbRqWrmR1/OvUJiYOp5Zar4f6KhBobpxKZmOhbtp2+vs3ly9OUvn9unbdhwO93XeQvVoX5gc2Pj
-	JpWPhFMJkP+tESZi+E+TaIhXDaWbZoR83Gn+v9/ayjpZBkNWc8=
-X-Received: by 2002:a05:6000:480b:b0:48b:f92:1f75 with SMTP id ffacd0b85a97d-48b12726376mr3833848f8f.48.1790928676871;
-        Fri, 02 Oct 2026 01:11:16 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:2f62:6d3:721b:8c9e? ([2a01:e0a:106d:1080:2f62:6d3:721b:8c9e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380fab11sm3944624f8f.16.2026.10.02.01.11.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 01:11:16 -0700 (PDT)
-Message-ID: <116b4574-a9a7-49c6-9806-9b6424d2fd2c@linaro.org>
-Date: Fri, 2 Oct 2026 10:11:14 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ShzY/3t+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C071F000FF;
+	Fri,  2 Oct 2026 08:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790929876;
+	bh=Eg7jBxu7SnjxakHMR90WIQd6MF4hErQAhZvodeG1928=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ShzY/3t+2lJZFmLNylwcFARWqjC7rT0umIoUT27MFQPT6euw4fdFFgRTBRzu2r2Zp
+	 PD54L+G4H4YCXYXCNIGLoyn35pTyeW4XWxzye60L+m8Zci3oPvx44hlEhhph4vPihc
+	 28amvQuegR1J9D1kdUhvG1vM1O3/O7VJfWrvs3UFvQ+O6sg8U/fdAOkH3MmwyEkArL
+	 TrGxRRoGpYB64dkd2pDuDqpAamu6LCTKa/vWeJtn8d1ommMaCRw8GQzaqycct1Gb1n
+	 vgvjhw92CT0+X5YeYmsb5T5UtKogsxjAur6bb3OCCSQqIIXm7yp7eJUaWsPca9X2nE
+	 mcV+oOnfchiAQ==
+Subject: Re: [PATCH v18 net-next 1/2] octeontx2: use atomic bitops for PF/VF
+ and rep flags
+From: netdev-bot+sashiko@kernel.org
+To: rkannoth@marvell.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ andrew+netdev@lunn.ch, ast@kernel.org, daniel@iogearbox.net,
+ davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+ john.fastabend@gmail.com, kuba@kernel.org, pabeni@redhat.com, sdf@fomichev.me,
+ sgoutham@marvell.com
+Date: Fri, 02 Oct 2026 08:31:14 +0000
+Message-ID: <179092987490.434549.16075378413092077912@kernel.org>
+In-Reply-To: <20260929022915.2704627-2-rkannoth@marvell.com>
+References: <20260929022915.2704627-2-rkannoth@marvell.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
- <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Benjamin Tissoires <bentiss@kernel.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <artgrTe6wvKxnUOG@houat>
- <c75feb5d-055d-403a-8dba-3c187cdb8e7d@linaro.org> <ar4ADESgOoIx4F5d@houat>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <ar4ADESgOoIx4F5d@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 10/1/26 08:48, Maxime Ripard wrote:
-> On Wed, Sep 30, 2026 at 03:46:04PM +0200, Neil Armstrong wrote:
->> On 9/29/26 09:13, Maxime Ripard wrote:
->>> Hi Neil,
->>>
->>> On Mon, Sep 28, 2026 at 06:39:58PM +0200, Neil Armstrong wrote:
->>>> On 9/28/26 18:22, Maxime Ripard wrote:
->>>>> Panels in general, and MIPI-DSI panels in particular, are pretty
->>>>> difficult to support and require pretty much a panel driver for each
->>>>> panel produced. Most of them are pretty simple, and require an opaque
->>>>> initialization sequence that is usually poorly documented.
->>>>>
->>>>> This creates a tension between OEMs and distros because OEMs will
->>>>> typically get a new panel to react to a sourcing issue during
->>>>> production, and thus need some swift turnaround between getting their
->>>>> new panel and it being operational in the OS. Distributions on the other
->>>>> hand can take years to ship a kernel with that new panel driver.
->>>>>
->>>>> To solve this, I followed the example of HID-BPF and wrote a panel
->>>>> driver that will rely on BPF programs to perform the panel
->>>>> initialization. That way, we can ship the programs separately from the
->>>>> kernel, and with a different lifecycle. If this driver is accepted, the
->>>>> plan is to have a userspace component started by udev to identify and
->>>>> load the right BPF program for the panels found on the device.
->>>>
->>>> This is kind of late for serious applications except if we manage to
->>>> solve the bootloader to Linux display engine transition.
->>>
->>> Virtually all "generic" distributions are shipping the panel as modules
->>> today anyway, because anything else is nothing but impractical. But
->>> maybe you don't consider them serious enough. Also, applications live in
->>> userspace already, so can be ran after this driver would be initialized
->>> anyway.
->>
->> So what would this exactly solve ? keeping out-of-tree BPF driver + bindings
->> driver forever and never upstreaming then ? Is this what we really want ?
->>
->>>
->>>>> This driver is fully functional and works with both 5" and 7" Touch
->>>>> Display 2 panels for the RaspberryPi. However, it breaks away from the
->>>>> typical panel driver in multiple ways:
->>>>>
->>>>> - BPF programs can only be loaded by userspace. This leaves us with two
->>>>>      choices:
->>>>>
->>>>>      * We prevent the driver from loading until the script itself is
->>>>>        loaded. This has the side effect of preventing any other output to
->>>>>        be used until the initramfs is ran at the earliest, and possibly
->>>>>        ever if the loader isn't installed for example.
->>>>
->>>> This adds a dependency on user-space behavior and if somehow the
->>>> initramfs doesn't load for a reason we won't have a way to display
->>>> an error.
->>>
->>> Yes, if an error happens before the DRM driver loads, it won't be shown
->>> on the screen. This is already the case for any panel driver today on
->>> any major !embedded distribution. And with built-in drivers, this can
->>> also happen before or while the DRM driver loads.
->>>
->>> The solution is always the same though: load simpledrm first, move to
->>> the proper DRM device once it's functional. It still works with this
->>> solution.
->>
->> Module != bpf programs, maybe one day it will change.
-> 
-> I have exactly zero idea what your point is here. You were saying that
-> it's bad because panels get to probe later now and you wouldn't see an
-> error. I'm saying it's already what happens today with a significant
-> part of the install base and doesn't seem to bother you.
-> 
-> I'm not talking about BPF programs themselves, I'm talking about your
-> double standard.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-I just expressed that you're trying to compare modules which are already
-hard to handle since they can be loaded anytime with BPF. Adding an additional
-complexity on top of modules won't simplify things at all.
+Critical: 0 · High: 1 (3) · Medium: 1 (5) · Low: 0
 
-> 
->>>>>      * Or we probe the driver all the time, but only report it as connected
->>>>>        once a program has been registered. This is somewhat unconventional,
->>>>>        but allows the other outputs to be functional, *and* allows the user
->>>>>        to force the output if their panel doesn't require any
->>>>>        initialization or during debugging. I chose this solution.
->>>>
->>>> Both options are not really great...
->>>
->>> Feel free to make any suggestions
->>>
->>>>>
->>>>> - It's not a panel driver, but a bridge one, which is also pretty
->>>>>      unconventional. This is required because panel drivers don't have
->>>>>      access to a detect callback that is required for the above, but I also
->>>>>      think that the recent work from Luca blurs the line from panels and
->>>>>      bridges and we'll end up going that road anyway.
->>>>
->>>> On this point, DDIC _are_ bridges,
->>>
->>> I have no idea what a DDIC mean.
->>
->> The DDIC is the Display Driver Interface Controller, basically the
->> IC which received DSI packets and physically drives the display.
->>
->> It's basically a bridge to the panel, and this is mainly what we program.
-> 
-> I've been writing panel drivers longer than you did, there's no need to
-> be patronizing.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Sorry I never meant to patronize you in any way, I just explained my position
-on why DDIC are bridges. So perhaps I didn't understand your question.
+- [High] otx2_sync_flags_from_rep() (otx2_common.h:625-634) updates the
+  shared rep-PF flags word with a plain, non-atomic read-modify-write:…
+- [Medium] The patch quietly fixes a serious representor bug but gives it
+  neither a Fixes: tag nor a description.
 
-> 
->>>> but in the current panel API we blur the line between the panel and
->>>> the DDIC. So being a bridge is fine, but in a general way we lack a
->>>> proper way to describe the display/panel/monitor independently of the
->>>> DDIC.
->>>>
->>>> At first glance it's a nice driver, but moving the timings into a blob
->>>
->>> Let's not kid ourselves, it's *already* a blob. We just sugar-coated it
->>> enough that we can be happy and call it GPL.
->>
->> It's the case for most drivers, but since we don't get proper
->> documentation we're stuck using registers list and can't
->> implement advanced features. And moving this to a bpf won't solve
->> but enhance the problem by a large factor.
-> 
-> How? You keep saying those broad, alarmist statements. Look at the BPF
-> examples I provided. *How* is it "making the problem worse by a large
-> factor" exactly?
-> 
-> Just like I said to Rob, I don't mind changing that driver to accomodate
-> your fear or anxiety. But "this is shit" isn't a review, it's abusive
-> behaviour. If you plan on continuing that trend, don't.
+Pre-existing issues:
+- [High] rvu_rep_destroy() (rep.c:637-643) calls free_netdev(rep->netdev)
+  and then kfree(rep->flow_cfg).
+- [High] rep->stats_wrk is a delayed_work inside rep_dev, which is
+  net_device private data.
+- [High] rvu_rep_mcam_flow_init() (rep.c:54-91) builds and sends NPC MCAM
+  alloc mailbox messages (otx2_mbox_alloc_msg_npc_mcam_alloc_entry(),…
+- [Medium] otx2_tc_del_flow() (otx2_tc.c:1197-1198) clears
+  OTX2_FLAG_TC_MARK_ENABLED on every delete of a mark flow, even when…
+- [Medium] rvu_rep_setup_tc_cb() (rep.c:115-121) ignores the return value
+  of rvu_rep_mcam_flow_init() and then publishes rep->flow_cfg to…
+- [Medium] rvu_rep_mcam_flow_init() (rep.c:43-52) always overwrites
+  rep->flow_cfg with a new kzalloc and never frees the previous one.
+- [Medium] rvu_rep_mcam_flow_init() allocates rep->flow_cfg with kzalloc
+  and never calls refcount_set(&flow_cfg->mark_flows, 1).
+- [Medium] rvu_rep_state_evt_handler() (rep.c:297-309) uses the result of
+  rvu_rep_get_repid() as an index into priv->reps[] without checking it,…
 
-I'm sorry if you felt like this, I expressed multiple times this patchset
-is great and very well written, I only expressed some legitimate questions
-about BPF because I'm ignorant on the subject and the impact it will have
-on my volunteer DRM panel maintenance activity.
+--
 
-I'm sorry if this felt as fear, anxiety or abusive behaviour.
+octeontx2: use atomic bitops for PF/VF and rep flags
 
-> 
->>>> moves something into possible proprietary binaries with possible
->>>> closed licence and distribution restriction so it's a downgrade for
->>>> the same of bringing up a panel faster.
->>>
->>> We can already make a proprietary, out-of-tree, panel driver today. That
->>> being said, the only license we allow for BPF programs here is GPL, so
->>> if anything it would be less of a concern for this than it would be for
->>> regular panels.
->>
->> So you're on to facilitate keeping panel driver out-of-tree and never
->> upstream them ? this is awkward TBH.
-> 
-> Hahahaha, yeah, sure. I don't care about upstreaming anymore and just
-> want to scorch-earth the entire kernel to have an excuse to retire and
-> do goat farming. You got me.
-> 
-> However, given the current state of this discussion and the intention
-> you're giving me, it does sound appealing.
+This commit changes the otx2_nic and rep_dev flags words from u64 masks
+to unsigned long bitmaps, accessed with set_bit/clear_bit/test_bit. It adds
+otx2_sync_flags_from_rep(), which merges the representor-owned flags into
+the representor PF's flags with a masked WRITE_ONCE. It also moves the
+representor VF-initialized flag to bit 21.
 
-So this remark comes from directly from the cover letter arguments, which
-are mainly helping to facilitate OEMs and distros to ship panels drivers
-faster and would help "ship the programs separately from the
-kernel, and with a different lifecycle".
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> index 5850bc1870a1d..b146ca4be5db1 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
 
-Since I still don't understand how it will help OEM and distros, because I'm
-no more an OEM for while and I don't run a distro and since I maintain the
-subsystem I feel legitimate to understand exactly how it would solve
-the *real* issue you expressed.
+[ ... ]
 
-Let me be clear, I want people to upstream panel drivers, and since I took
-over the panel maintainership I have a constant driver review and merge
-rate, so perhaps it means I need to improve how I handle the susbsystem ?
-Or is writing a panel driver too hard ? Am I to strict on the review ?
-TBH I'll handle the BPF driver the same way, so again it makes me feel
-this solution is not the right way to solve this, or I should just do
-something else ?
+> @@ -593,6 +607,32 @@ struct otx2_nic {
+>  	unsigned long		*af_xdp_zc_qidx;
+>  };
+>  
+> +static inline void otx2_set_flag(struct otx2_nic *nic, unsigned int flag)
+> +{
+> +	set_bit(flag, &nic->flags);
+> +}
 
-I think we should stop arguing here, since my words were badly interpreted,
-and we should leverage the Plumbers and OSS/ELC next week to discuss this
-in-person.
+[ ... ]
 
-Thanks,
-Neil
+> +static inline void otx2_sync_flags_from_rep(struct otx2_nic *dst,
+> +					    unsigned long *src_flags)
+> +{
+> +	unsigned long src = READ_ONCE(*src_flags);
+> +	unsigned long new_flags;
+> +
+> +	new_flags = (READ_ONCE(dst->flags) & ~OTX2_REP_SYNC_FLAGS_MASK) |
+> +		    (src & OTX2_REP_SYNC_FLAGS_MASK);
+> +	WRITE_ONCE(dst->flags, new_flags);
+> +}
 
-> 
-> Maxime
+[Severity: High]
+Can this read-modify-write lose a concurrent atomic update to the same word?
+Every other writer of priv->flags now uses set_bit()/clear_bit(). This one
+reads the whole word and writes it back non-atomically.
 
+rvu_rep_setup_tc_cb() calls this under rtnl from the flower block callback.
+rvu_rep_destroy() can run from otx2_devlink_eswitch_mode_set() with only the
+devlink lock held, while the rep netdevs are still registered:
+
+CPU1 (tc callback, rtnl held)
+otx2_sync_flags_from_rep()
+    READ_ONCE(dst->flags)              <- INTF_DOWN clear
+
+CPU2 (devlink eswitch mode legacy)
+rvu_rep_destroy()
+    otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
+
+CPU1
+    WRITE_ONCE(dst->flags, new_flags)  <- INTF_DOWN cleared again
+
+After that, otx2_napi_handler() can see INTF_DOWN clear and write
+NIX_LF_CINTX_ENA_W1S during rvu_rep_free_cq_rsrc(). Later,
+rvu_rep_remove() sees !INTF_DOWN and calls rvu_rep_destroy() a second
+time, on the freed priv->reps and the NULLed qset->napi.
+
+The commit message says the helper publishes the rep flags "without
+clearing PF-owned bits". To guarantee that, would it need a cmpxchg loop,
+or assign_bit() for each bit in OTX2_REP_SYNC_FLAGS_MASK?
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> index 039fd47ebf522..ddb46b580c3b6 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+
+[ ... ]
+
+> @@ -1195,12 +1195,12 @@ static int otx2_tc_del_flow(struct otx2_nic *nic,
+>  	/* Disable TC MARK flag if they are no rules with skbedit mark action */
+>  	if (flow_node->req.match_id)
+>  		if (!refcount_dec_and_test(&flow_cfg->mark_flows))
+> -			nic->flags &= ~OTX2_FLAG_TC_MARK_ENABLED;
+> +			otx2_clear_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
+
+[Severity: Medium]
+This is a pre-existing issue, not introduced by this patch, but is this
+check inverted?
+
+otx2_mcam_entry_init() starts mark_flows at 1, and otx2_tc_parse_actions()
+increments it for every FLOW_ACTION_MARK rule. So refcount_dec_and_test()
+never reaches zero here, and the flag is cleared on every mark flow delete.
+
+With two mark rules installed (count 3), deleting one leaves the count at
+2 but still clears OTX2_FLAG_TC_MARK_ENABLED. otx2_rcv_pkt_handler() then
+stops setting skb->mark for the rule that remains:
+
+	if (otx2_test_flag(pfvf, OTX2_FLAG_TC_MARK_ENABLED))
+		skb->mark = parse->match_id;
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> index 0f5d5642d3f7a..7df82c22cc12b 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> @@ -93,9 +93,9 @@ static int rvu_rep_mcam_flow_init(struct rep_dev *rep)
+>  	rep->flow_cfg->max_flows = allocated;
+>  
+>  	if (allocated) {
+> -		rep->flags |= OTX2_FLAG_MCAM_ENTRIES_ALLOC;
+> -		rep->flags |= OTX2_FLAG_NTUPLE_SUPPORT;
+> -		rep->flags |= OTX2_FLAG_TC_FLOWER_SUPPORT;
+> +		set_bit(OTX2_FLAG_MCAM_ENTRIES_ALLOC, &rep->flags);
+> +		set_bit(OTX2_FLAG_NTUPLE_SUPPORT, &rep->flags);
+> +		set_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags);
+>  	}
+>  
+>  	INIT_LIST_HEAD(&rep->flow_cfg->flow_list);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but where is priv->mbox.lock
+taken in rvu_rep_mcam_flow_init()? The function sends the NPC MCAM alloc
+messages without the lock, then unlocks at the exit label:
+
+exit:
+	...
+	mutex_unlock(&priv->mbox.lock);
+
+Its only caller, rvu_rep_setup_tc_cb(), does not hold the lock either.
+
+The rvu_rep_get_stats() delayed work uses the same mailbox under mbox.lock
+and runs without rtnl. Suppose it holds the lock when the first flower rule
+is added on a representor. Can both contexts then build messages in the
+shared mailbox at the same time, with this mutex_unlock() releasing the
+worker's critical section?
+
+Even without that overlap, lockdep would report a bad unlock balance on
+the first flower rule added on each representor.
+
+[Severity: Medium]
+This is also a pre-existing issue, not introduced by this patch.
+rep->flow_cfg is zero-allocated here and mark_flows is never set, unlike
+in the PF path in otx2_mcam_entry_init():
+
+	refcount_set(&flow_cfg->mark_flows, 1);
+
+When a representor installs a flower rule with FLOW_ACTION_MARK,
+otx2_tc_parse_actions() does:
+
+	refcount_inc(&nic->flow_cfg->mark_flows);
+
+on a counter that is zero. Does that trigger the "refcount_t: addition on
+0; use-after-free" warning and saturate the counter?
+
+With this patch, OTX2_FLAG_TC_MARK_ENABLED is no longer wiped by each
+representor tc callback. That makes this refcount the only thing that
+clears the flag on the representor PF.
+
+> @@ -109,14 +109,14 @@ static int rvu_rep_setup_tc_cb(enum tc_setup_type type,
+>  	struct rep_dev *rep = cb_priv;
+>  	struct otx2_nic *priv = rep->mdev;
+>  
+> -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
+> +	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+>  		return -EINVAL;
+>  
+> -	if (!(rep->flags & OTX2_FLAG_TC_FLOWER_SUPPORT))
+> +	if (!test_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags))
+>  		rvu_rep_mcam_flow_init(rep);
+>  
+
+[Severity: Medium]
+This is a pre-existing issue, not introduced by this patch. The return
+value of rvu_rep_mcam_flow_init() is ignored, and rep->flow_cfg is
+published to priv->flow_cfg regardless.
+
+If the kzalloc of flow_cfg fails, rep->flow_cfg is NULL. If the kcalloc of
+flow_ent fails, the list heads stay zeroed, because INIT_LIST_HEAD() is
+only reached at the end of the function.
+
+FLOW_CLS_REPLACE returns early in otx2_tc_add_flow(), since
+TC_FLOWER_SUPPORT is clear. But fl_hw_replace_filter() then calls
+fl_hw_destroy_filter(). An ordinary tc filter del and stats queries also
+reach this callback. In those cases:
+
+otx2_tc_del_flow() / otx2_tc_get_flow_stats()
+    otx2_tc_get_entry_by_cookie()
+        list_for_each_entry(tmp, &flow_cfg->flow_list_tc, list)
+
+Can this dereference the NULL or zeroed flow_cfg?
+
+[Severity: Medium]
+This is a pre-existing issue as well, not introduced by this patch.
+rvu_rep_mcam_flow_init() always does:
+
+	rep->flow_cfg = kzalloc_objs(struct otx2_flow_config, 1);
+
+and never frees the previous flow_cfg. If the MCAM allocation returns zero
+entries, or an allocation fails, TC_FLOWER_SUPPORT stays clear. Does every
+later tc callback on that representor then leak a flow_cfg and its
+flow_ent array?
+
+rvu_rep_destroy() also only does kfree(rep->flow_cfg). That seems to leak
+flow_cfg->flow_ent on every switchdev/legacy cycle.
+
+>  	priv->netdev = rep->netdev;
+> -	priv->flags = rep->flags;
+> +	otx2_sync_flags_from_rep(priv, &rep->flags);
+
+[Severity: Medium]
+This change fixes a real bug, but the commit message describes it as a
+cleanup. Before this patch, the line:
+
+	priv->flags = rep->flags;
+
+overwrote the whole flags word of the shared representor PF. rep->flags
+only held RVU_REP_VF_INITIALIZED (BIT_ULL(0)) and the MCAM, NTUPLE and
+TC_FLOWER bits. So the first tc callback cleared the
+OTX2_FLAG_REP_MODE_ENABLED bit that rvu_rep_probe() set. It also set bit 0,
+which in the otx2_nic namespace is OTX2_FLAG_RX_TSTAMP_ENABLED.
+
+With REP_MODE_ENABLED gone, otx2_tx_napi_handler() uses pfvf->netdev, which
+is now the last representor's single-queue netdev. It also no longer
+forces qidx to 0, so netdev_get_tx_queue(ndev, qidx) can index past that
+netdev's _tx array. The RX path also starts recording the rx queue and
+setting CHECKSUM_UNNECESSARY based on the wrong netdev's features.
+
+The stray RX_TSTAMP bit also lets otx2_set_rxtstamp() dereference
+pfvf->ptp, which is never set up on the rep PF.
+
+The commit message only says:
+
+    Relocate representor VF initialization to OTX2_FLAG_REP_VF_INITIALIZED
+    (bit 21).
+
+Could the commit message describe the bug being fixed and add:
+
+    Fixes: 6c40ca957fe5 ("octeontx2-pf: Adds TC offload support")
+
+Could the fix also be split out from the mechanical bitops conversion, so
+it can be picked up for stable?
+
+The change also affects how long OTX2_FLAG_TC_MARK_ENABLED stays set on
+the rep PF. It used to be wiped on every tc callback, and now it persists.
+
+>  	priv->pcifunc = rep->pcifunc;
+>  	priv->flow_cfg = rep->flow_cfg;
+>  
+> @@ -303,9 +303,9 @@ static void rvu_rep_state_evt_handler(struct otx2_nic *priv,
+>  	rep_id = rvu_rep_get_repid(priv, info->pcifunc);
+>  	rep = priv->reps[rep_id];
+>  	if (info->evt_data.vf_state)
+> -		rep->flags |= RVU_REP_VF_INITIALIZED;
+> +		set_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags);
+>  	else
+> -		rep->flags &= ~RVU_REP_VF_INITIALIZED;
+> +		clear_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags);
+>  }
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but rvu_rep_get_repid() returns
+-EINVAL for an unknown pcifunc. rep_id is then used to index priv->reps[]
+without a check, before set_bit()/clear_bit() on rep->flags.
+
+Separately, rvu_rep_destroy() does kfree(priv->reps) without clearing the
+pointer. The AF could send a PFVF_STATE up-message just before
+rvu_eswitch_config(priv, false) is processed. Could that message be
+handled after the reps are freed, and write into freed memory here?
+
+[ ... ]
+
+> @@ -382,7 +382,7 @@ static void rvu_rep_get_stats64(struct net_device *dev,
+>  {
+>  	struct rep_dev *rep = netdev_priv(dev);
+>  
+> -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
+> +	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+>  		return;
+>  
+>  	stats->rx_packets = rep->stats.rx_frames;
+
+[Severity: High]
+This is a pre-existing issue, not introduced by this patch.
+rvu_rep_get_stats64() ends with:
+
+	schedule_delayed_work(&rep->stats_wrk, msecs_to_jiffies(100));
+
+rep->stats_wrk lives in the net_device private data. Neither
+rvu_rep_destroy() nor the exit unwind in rvu_rep_create() calls
+cancel_delayed_work_sync() before free_netdev().
+
+The teardown path itself arms the work:
+
+unregister_netdev()
+  unregister_netdevice_many_notify()
+    rtmsg_ifinfo_build_skb(RTM_DELLINK)
+      rtnl_fill_ifinfo()
+        rtnl_fill_stats()
+          dev_get_stats()
+            rvu_rep_get_stats64()
+              schedule_delayed_work(&rep->stats_wrk, ...)
+
+Does the timer then fire about 100ms after free_netdev(), on freed memory,
+with rvu_rep_get_stats() dereferencing rep->mdev and rep->stats?
+
+[ ... ]
+
+> @@ -632,7 +632,7 @@ void rvu_rep_destroy(struct otx2_nic *priv)
+>  	int rep_id;
+>  
+>  	rvu_eswitch_config(priv, false);
+> -	priv->flags |= OTX2_FLAG_INTF_DOWN;
+> +	otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
+>  	rvu_rep_free_cq_rsrc(priv);
+>  	for (rep_id = 0; rep_id < priv->rep_cnt; rep_id++) {
+>  		rep = priv->reps[rep_id];
+
+[Severity: High]
+This isn't a bug introduced by this patch, but further down this loop
+does:
+
+		free_netdev(rep->netdev);
+		kfree(rep->flow_cfg);
+
+rep is the netdev_priv() area of the netdev that rvu_rep_create() allocates
+with alloc_etherdev(sizeof(*rep)). After unregister_netdev(),
+free_netdev() normally drops the last device reference and frees that
+memory.
+
+Is rep->flow_cfg read here after rep has been freed? Freeing flow_cfg
+(and flow_cfg->flow_ent) before free_netdev() would avoid that.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260929022915.2704627-1-rkannoth%40marvell.com
