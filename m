@@ -1,119 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CC4486E7D
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70AC42E06E4
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790939200; cv=none; b=eaRqxK0jB8UVmmBKn8CrVKFAXOg5i2lhGnGEoGdFJwbXzeULOVJ/GUOJXyL4slkOeyVjbeM0hWZ+VcQ8x+WWwxttNmxIC+PeAyByV6JWYdL1chw10Xb8ruYg0eAVz6NqmD/aC45g2PR2beN7JjjsNM01wtXJGNRGx4B99xjFSZI=
+	t=1790940115; cv=none; b=N0fp22lHMfmUfG/sLvU6Lqeo/K+0lUsmhVc/GfI67iGakmp3iSpUZUe4f4yFR4XLZhqtbJP0MlpEatuQW+HUSDDS5UJZ6FUOFy1I/hhGNkdNhT8Vn123Zng0KJr7+WDPpcezeKX8xebSiWpJocZO4xttaVFUTmRvLLaZDib/pYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790939200; c=relaxed/simple;
-	bh=g1x2qhESG9DcW4Q56vU+gAZcBw3KiNY932opf/UNbaY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ogkhvJqTaEKke5YTx39lJq2O5DuoePh7EaZ+nnl7mkE1HlW2bnOeeObK6FWjSC9mGhsZeCVelZYbX5jciNOJOeuvG6N9es5LUDzCf/Rhdiy/dRE1y4UGGxHEkdTqHPnMs/zK3sPRc9+j5nySeXjD4/sEm3JpJ+dyfTImlFBKT+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VSLjFrIz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790940115; c=relaxed/simple;
+	bh=J6T6btfjWac6xfTi9g+noTaPKIEXm8WXuA9UYUGOx3g=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=flfiFyh9JWm/nFTLMq9KRY09lEjJMHYLiqDDnO4z+nA8mlLreSKhv9a3mm2VawEhd7aRHAY2CYbDPOv3ot/1ZdvJLKJ1Re3TRbyIGdvDXf/vrjxaVSB+PBtpBvsWCaEfH7vuAQHxnwBbLDfGty/X6wQSn4RHa+LTjVidYUzIQpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FM0kQSXS; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VSLjFrIz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E041F000FF;
-	Fri,  2 Oct 2026 11:06:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790939198;
-	bh=hT5yLBagSPIl7/FBy1JZ/ZvCYhQg1Xq0xsyF3/J15Oo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VSLjFrIzKlv9Y66VYZ00QvXIV0tgYm7cnvAiK7YUQoEU9JMlAVanddZME7jcQwNh4
-	 DJ3n/WaFz7u5l/HVzam68CmMOnDIFPr1dSHav2Kz/UCPB0oz18s1yHQc0B+XphRkeI
-	 JfjIzLfn/oCsFEnEgXv9WCdSYK9PIIN5DvMxzVbY2uk/N6RWBpwuMXghCsRSwlqjQQ
-	 aIBMTAOXQojbxs8ZfVU18a5XF1/IA9Urkv5ABWWFFwQ1uHc41q0w2adRlTc4ypoDoU
-	 P8xBblxdVAYVORGbqIxePvtZ2lqGumSyWBeYan9zUuJIyQL4DTap0XOq08AN4mHeK1
-	 u5VtBZqaJxkAQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [RESEND PATCH bpf-next v6 5/7] bpf: Directly store kfunc desc
- index in instruction off field
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261002105218.6171-6-emil@etsalapatis.com>
-References: <20261002105218.6171-1-emil@etsalapatis.com>
- <20261002105218.6171-6-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 02 Oct 2026 11:06:37 +0000
-Message-Id: <20261002110638.65E041F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FM0kQSXS"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccb652d7so5340244a91.0
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790940114; x=1791544914; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7Z0srYiA54A8lgqs3OX3sZSJNkoKj+lK/TSgd2dh5Xs=;
+        b=FM0kQSXSwGw0MSq+ZrKWrpBeMESi9ZPKdYkvq5Xl3PDb+psUSu5SoqSR2lZhgKqKmo
+         +4iOYfxv6w3U9pSPNY2o6ZMAARibhkXGvV8/6o1h0/4kv39aQ3k/AL9IqQRHA9R/szHi
+         fp95iMrOt6+DPd2wKtEN9liaP3QjLbeHTDf+xpAFwE9zwK0xOm8EH4q8nT3unL8T2TwR
+         Rqmqbca0juRx03aMt+MlZ3ClqotpnUjcyOhcWjZRAITUkQnLr1pbmPcXSfeP0OVoMJnL
+         E/FmXo67rvWmiJYWeESJ6xVXElJfhT9Wym8Q/sedRm5fC1DlDIgyLVfbGkqdPWjNhjs5
+         GTTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790940114; x=1791544914;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7Z0srYiA54A8lgqs3OX3sZSJNkoKj+lK/TSgd2dh5Xs=;
+        b=WgwnVoWQXC5cm+LL1RVhXznaVikt1UIEM0JK9198Eq9mZYpSUmoi2zxwFE8LXcmfRS
+         sZHgrOwZSUG29vBKQODJvpkJ3rmNIz6L6E9pTJPPehRFXaebmx/QHr8s5M+dAPL3qoxl
+         NM6IYee3eHZqOkpIEcensKwy0FZ43oiwdf0P6Z8gCEFvqgd7e8/BL7HpFlZT1K85sQkV
+         iVSuALvM2lVkPitMLnSvAMst2aQORwId1n63JsuwUkvwPhkh9vjWri6nnLaIcglsxCae
+         29wU03PB6AZatiuhfSzvyNbaqfWQOiRB2NBsHHJzKGeMmZuU4HCBPb9pawrAPBJMGWHp
+         OcPw==
+X-Forwarded-Encrypted: i=1; AKwUvBzzPVc7LeT3o2oaDvY8IoSwtMg2Emsw4M7DxjDvlRLcTYeYDCuypaWT1zXW2acLdqJufGw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKGhB8rZV/JxY+rdPRXEgufSqU2IlIlH+t1bkcdOqKeAvXR2+nk
+	CYqse++RlZVC3QyNxkpJp/Ji6f0UmMj+UXTKoFYkTFNGiiXkL8uD+yR9
+X-Gm-Gg: AYBFou3q7M9K3As4vvvr16HnTOH2bywlacijZkyhsM65QXgVChgBa+r1GndvLi23IG5
+	3gvPZ15r8YnQvlIGWRnG3UU47n+Hha2BX/5m1gMtzd3c1RlH6hHIaAMbOp0OP5xzTQJgc28kvPF
+	569prFbfgO6n/cFQCXZX8tsSX1/fhrHorOhTB+B+Ctbv+oEyI4Ujps7tFFI7woLLdpmFV4qtsyg
+	YouqcTGHS5sFV64t+pVCUkQvTNC5CQlBmF63R0ak2UbO/pphq1Wc27/9YtxUCUa69R2tiSW8d+q
+	WlJxt0fqGCkGaNbKreOCUNUWanq8eoD0DTskhCpOEhlCLZug9Lr1BmLus14gpLETMpWWHwmgVs8
+	HcynJZjk/rOSbivxyv9cCMGHaBlAlzflVlNhE7ySekYivXg241w9o4SgNCPRCfb3tCIMRwZb1ye
+	Qy26lNRDyvqq4j0c239W7i2QUMC2CmymfL0+jbFtmqD3TYNspYdkRjjgjNG+imc07ugoAjVgMSO
+	foe41KUUCsDmTYwiCBP3/uywcapm9X86cWHJffTZzzPdVXS9xMKAVnaAnzRmp+OPVjbEHCYiOop
+	bOGJ
+X-Received: by 2002:a17:90b:254c:b0:3a0:cd4d:5133 with SMTP id 98e67ed59e1d1-3a6ce3ba9f9mr1722036a91.2.1790940113693;
+        Fri, 02 Oct 2026 04:21:53 -0700 (PDT)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6cd59187csm3957416a91.10.2026.10.02.04.21.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Oct 2026 04:21:53 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 02 Oct 2026 11:21:52 +0000
+Message-Id: <DLUBA9JR5QHY.31UKYQQ9EYMDL@gmail.com>
+Cc: "Breno Leitao" <leitao@debian.org>, <bpf@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bpf, arm64: Fix text_mutex critical section in
+ bpf_arch_text_poke()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Matthew Wood" <thepacketgeek@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Puranjay Mohan"
+ <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
+In-Reply-To: <20261002044050.1277356-1-thepacketgeek@gmail.com>
+References: <20261002044050.1277356-1-thepacketgeek@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: JIT compilation fails for kfuncs emitted in prologues
---
+On Thu, Oct 01, 2026 at 09:40 PM Matthew Wood <thepacketgeek@gmail.com> wrote:
+> +	/* pages of the bpf prog pack are shared between progs, so the
+> +	 * set_memory_rw()/set_memory_ro() window below must be serialized
+> +	 * against other pokers too.
+> +	 */
+> +	mutex_lock(&text_mutex);
+> +
+>  	if (plt_target) {
+>  		/* non-zero plt_target indicates we're patching a bpf prog,
+>  		 * which is read only.
+>  		 */
+> -		if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), 1))
+> -			return -EFAULT;
+> +		if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), 1)) {
+> +			ret = -EFAULT;
+> +			goto out;
+> +		}
+>  		WRITE_ONCE(plt->target, plt_target);
+>  		set_memory_ro(PAGE_MASK & ((uintptr_t)&plt->target), 1);
 
-commit ba562be891ad9f52f9742001cfab2a791d6aefb8
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+The lock hides the crash, but set_memory_rw() is the actual problem.
+The page is shared, so it makes 64K of other progs writable and
+executable at the same time.
+Use aarch64_insn_write_literal_u64(&plt->target, plt_target) instead.
+That's how ftrace_rec_set_ops() and arch_static_call_transform()
+update 64-bit literals in the text.
+It's atomic and writes via fixmap under patch_lock, just like
+aarch64_insn_patch_text_nosync() below.
+No need to change page permissions and no need to move text_mutex.
 
-bpf: Directly store kfunc desc index in instruction off field
-   =20
-This patch modifies the verifier to store the kfunc descriptor index direct=
-ly
-in the instruction's off field. It removes the need to sort the descriptor
-table twice, simplifying subsequent function specialization patches.
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 37cf130ebb57b..cb7219ff68bd1 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-
-[ ... ]
-
->  const struct btf_func_model *
->  bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
->  			 const struct bpf_insn *insn)
->  {
-[ ... ]
->  	tab =3D prog->aux->kfunc_tab;
-> -	res =3D bsearch(&desc, tab->descs, tab->nr_descs,
-> -		      sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm_off);
-> -
-> -	return res ? &res->func_model : NULL;
-> -}
-[ ... ]
-> +	if (insn->off < 0 || insn->off >=3D tab->nr_descs)
-> +		return NULL;
-> =20
-> +	res =3D &tab->descs[insn->off];
->  	if (bpf_jit_supports_far_kfunc_call()) {
-> +		if (res->func_id !=3D insn->imm)
-> +			return NULL;
-
-[Severity: Medium]
-Will this lead to a JIT failure for kfuncs emitted in prologues or
-epilogues?
-
-When bpf_convert_ctx_accesses() calls gen_prologue(), it can emit a kfunc
-call where insn->off is 0. This is then processed by add_kfunc_in_insns(),
-which calls bpf_add_kfunc_call() to register the kfunc:
-
-kernel/bpf/fixups.c:add_kfunc_in_insns() {
-	...
-	for (i =3D 0; i < cnt; i++, insn++) {
-		if (bpf_pseudo_kfunc_call(insn)) {
-			ret =3D bpf_add_kfunc_call(env, insn->imm, insn->off);
-			if (ret < 0)
-				return ret;
-		}
-	}
-	...
-}
-
-However, add_kfunc_in_insns() does not update insn->off to the descriptor
-index returned by bpf_add_kfunc_call().
-
-Later, when the JIT compiler calls bpf_jit_find_kfunc_model() and uses
-insn->off (which is still 0) to fetch the descriptor, could it fetch the
-wrong descriptor and abort the compilation due to a func_id mismatch?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002105218.6171=
--1-emil@etsalapatis.com?part=3D5
+pw-bot: cr
