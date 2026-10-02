@@ -1,136 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0924B496D52
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 13:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5671E498918
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 13:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790946495; cv=none; b=o22Uro6/YzeAqQ2K5Nk7Z7p9Xa7QuNOydi1ma87SxLsEy8pBT9iO89rGlKFW3DnHNXt/u9crssVqOvRJavAmjpQ6x25oGf6qpsSkjsLhjwRmdVZ03f7EKEA5JR1xq3DF5SBfJoMA2t570TZrTLpdN6xCWdth9tOUjom6XjzCMlg=
+	t=1790946505; cv=none; b=E8OaZhEqPfAsC2scG/gF0DpgotGgCrS9WkMEJSoKcxP3gT7P9Vnz8BYgm5Rzq0nUmIzIXhlY3dTecSeyYNotiWCid7gRYmvYj6FYr7m+qNGUkLAMQE5N9yFu9EQqb7DO1pVvfLJVnOFk3fGD/x2niEy3wSvdAzKi1Zwwcm1NYa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790946495; c=relaxed/simple;
-	bh=tECpT6ibgUp1H7DLwczvTeWtYfLYa+5BKIrL3zcA3AU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=l4FZxMMApCnP2zpjydw3cws4RlRNTZXHiIyrbaeggrwusJYGxo82sbCgDe4ZXES2IF4PNUK2qQGW6Pi2TxD1MdhtHoq7BMdkkoq65JtGIKOgY8myffsT7xCk4Y5Xm+IBEqJIK7MK1I46i2rLhHoBzeLI9yADI3UK88FLush24eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NVLF4VVs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790946505; c=relaxed/simple;
+	bh=5wSAEahH9cAQEKwatoSdFKO0aE9BxweuQlJhzvnO/Ps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CIlnpoymGEKSQIs/qe9P2SJYnwLJTri32CSnO0iTyf+SaKwdnvWNxot+wEIDJXDZ+cYeUuTsEnhrYKVukEhsBAfqPojSsPA21QdBy3gi7SUWh+tZOdFCEN7I2GkVKdRMdresItijMavkNlsdPTEmbTsgeAiyOFfAm8QCW+gE6es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vmpe9hWR; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NVLF4VVs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0FFA1F000FF;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vmpe9hWR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790946494;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lUHnkDSrrfCXFMH8IJydTfHAXtd3mYVbUu8G9r9OmXs=;
+	b=Vmpe9hWRx73GmDQlvFZrniapy1j8egX8ThZG0SCrzxgZLPCWkJq4bZn+PpsEXjMsfx8KhT
+	Z03wFlfoYDbITI6cjumNkZA65gWEYTC8/WV27EmBsrg+TanqXf9kdifSMGJzICbpnyR/bP
+	NKl1eMGvrG73Qvw4CXkm3rVFH011pr8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-48-VTi12gDzPNeEvE01KJKvzg-1; Fri,
+ 02 Oct 2026 09:08:08 -0400
+X-MC-Unique: VTi12gDzPNeEvE01KJKvzg-1
+X-Mimecast-MFC-AGG-ID: VTi12gDzPNeEvE01KJKvzg_1790946484
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E20A118F4BE8;
 	Fri,  2 Oct 2026 13:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790946483;
-	bh=n1s0Kxw9sJBYADcbAMuDUDlgbL8AYpX37hnlALKyGd0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NVLF4VVsS/m5wf5Bdbnb852ZOrgbbRdbbCyLOp34xNM9EYHnthZ4Up1M/2cUXfdh4
-	 ZuYxGRPzmF0P4Y52w0DpHmdtk1+FDgj9DyfupQL3/8E4MmTFGdRwgCFbhizuc4hIoY
-	 Jzm4ddOzQqyHFTzk473GIC8zE+z0PIoUmqsztJznjbtiECGfIlw6Gjhqcprgxs6584
-	 iQLPHyoo//KPHNp+MwA7l2uO5ubUx82b5bfPOFnGeu5UYLaSa1/y0maeKYwPFgxFVR
-	 HT2wsXgHOLh2JaC/ob3iJH7dN89loXrqsr9nhe0DmsKvGXcbpZciPl/H2PFvsAmbxx
-	 jYapyjaI1MGOw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 02/15] selftests/bpf: Add tests for ALU on
- pointers with CAP_PERFMON
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261002124714.180012-3-alexei.starovoitov@gmail.com>
-References: <20261002124714.180012-1-alexei.starovoitov@gmail.com>
- <20261002124714.180012-3-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 02 Oct 2026 13:08:03 +0000
-Message-Id: <20261002130803.A0FFA1F000FF@smtp.kernel.org>
+Received: from ShadowPeak.redhat.com (unknown [10.44.32.39])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CA859433;
+	Fri,  2 Oct 2026 13:07:55 +0000 (UTC)
+From: Petr Oros <poros@redhat.com>
+To: netdev@vger.kernel.org
+Cc: Petr Oros <poros@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Henry Tieman <henry.w.tieman@intel.com>,
+	Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
+	Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+	Jesse Brandeburg <jbrandeb@kernel.org>,
+	Preethi Banala <preethi.banala@intel.com>,
+	Kiran Patil <kiran.patil@intel.com>,
+	Dan Nowlin <dan.nowlin@intel.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	intel-wired-lan@lists.osuosl.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH iwl-net 00/10] ice: port missing i40e fixes
+Date: Fri,  2 Oct 2026 15:07:42 +0200
+Message-ID: <20261002130752.2597259-1-poros@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf/selftests: test logic fails to verify ^=3D and *=3D on point=
-ers
---
+This series fixes bugs in ice that have been fixed in i40e, some of them
+years ago, but are still present in ice. They were found by going
+through the i40e history and checking each fix against the current ice
+code.
 
-commit f742d8e4562c4f3d08b13ad422c226ac60b38d25
-Author: Alexei Starovoitov <ast@kernel.org>
+Patches 3, 6 and 8 have no i40e counterpart. They showed up while
+verifying the ports and are kept in the series. Patch 3 was found while
+testing patch 2. With the IRQ unwind fixed the netdev still could not be
+opened again after the failed ndo_open, so patch 2 alone does not make
+that error path recoverable. Patch 6 was found while building a
+reproducer for the i40e MAC filter overflow fixes. Those are not part of
+this series, because a full switch table on E810 leaves no room for the
+promiscuous rule either. Patch 8 was found while checking the i40e PF
+reset fixes. It is an ice regression of the poll loop timeout check,
+which i40e does correctly.
 
-selftests/bpf: Add tests for ALU on pointers with CAP_PERFMON
+Every patch was checked on E810 before and after the change. Patches 1,
+4, 5 and 6 have plain reproducers, which show UDP tunnel offload lost
+after CORER, an always empty default XPS map, VF tx_dropped stuck at
+zero and multicast filters silently not programmed. Patches 2, 3, 8, 9
+and 10 need conditions the test box does not hit on its own (a failing
+request_irq, a hung PFR, a WoL capable port, counters past 2^32) and
+were verified with fault injection. Patch 7 was verified by filling the
+switch table, with debug prints for the failure analysis.
 
-This commit adds BPF selftests to check that various ALU operations
-(&=3D, |=3D, ^=3D, >>=3D, *=3D) on a pointer to a map value properly produc=
-e a scalar
-or are rejected as expected depending on capabilities.
+An LLM was used to go through the i40e history, to write the
+reproducers and fault injection hooks and to draft the patches and
+changelogs. All of it was reviewed, and every fix was tested on E810 as
+described above.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu=
-.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-> index 9f669cf85c593..31663338866d3 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-> @@ -165,6 +165,171 @@ __naked void map_ptr_illegal_alu_op(void)
->  	: __clobber_all);
->  }
-> =20
-> +SEC("socket")
-> +__description("tag in the low bit of a pointer, and, shift")
-> +__success __retval(0)
-> +__failure_unpriv __msg_unpriv("R1 bitwise operator &=3D on pointer")
-> +__naked void ptr_tag_and_shift(void)
-> +{
-> +	asm volatile ("					\
-> +	r2 =3D r10;					\
-> +	r2 +=3D -8;					\
-> +	r1 =3D 0;						\
-> +	*(u64*)(r2 + 0) =3D r1;				\
-> +	r1 =3D %[map_hash_48b] ll;			\
-> +	call %[bpf_map_lookup_elem];			\
-> +	if r0 =3D=3D 0 goto l0_%=3D;				\
-> +	r1 =3D r0;					\
-> +	r1 &=3D 1;					\
-> +	r2 =3D r0;					\
-> +	r2 >>=3D 1;					\
-> +	r3 =3D r0;					\
-> +	r3 |=3D 1;					\
-> +	r3 ^=3D 1;					\
+Petr Oros (10):
+  ice: replay UDP tunnel ports after a core or global reset
+  ice: fix IRQ freeing in ice_vsi_req_irq_msix() error path
+  ice: stop the LAN Tx queues when ice_vsi_open() fails
+  ice: restore the default XPS map after a netdev TC change
+  ice: report VF tx_dropped with tx_errors instead of tx_discards
+  ice: keep adding MAC filters after one that already exists
+  ice: take the switch rule AQ error from the response descriptor
+  ice: detect a PF reset that does not complete
+  ice: program multicast magic wake before tearing down the main VSI
+  ice: fix unsigned stat widths
 
-[Severity: Medium]
-Does this sequence correctly verify the ^=3D operation on a pointer?
+ drivers/net/ethernet/intel/ice/ice.h        |  8 ++---
+ drivers/net/ethernet/intel/ice/ice_common.c |  2 +-
+ drivers/net/ethernet/intel/ice/ice_lib.c    |  6 ++++
+ drivers/net/ethernet/intel/ice/ice_main.c   | 36 ++++++++++++++-------
+ drivers/net/ethernet/intel/ice/ice_sriov.c  |  2 +-
+ drivers/net/ethernet/intel/ice/ice_switch.c | 17 +++++++---
+ 6 files changed, 49 insertions(+), 22 deletions(-)
 
-The preceding |=3D operation converts the pointer in r3 to a scalar, which
-means the ^=3D operation is subsequently performed on a scalar rather than a
-pointer.
+-- 
+2.55.0
 
-Additionally, since this program places multiple unprivileged operations
-sequentially, wouldn't the verifier abort at the first failure (r1 &=3D 1),
-leaving the unprivileged rejection of the subsequent operations (>>=3D, |=
-=3D, ^=3D)
-completely untested?
-
-[ ... ]
-
-> +SEC("socket")
-> +__description("number op=3D pointer")
-> +__success __retval(0)
-> +__failure_unpriv __msg_unpriv("R1 pointer arithmetic with *=3D operator")
-> +__naked void number_mul_ptr(void)
-> +{
-> +	asm volatile ("					\
-> +	r2 =3D r10;					\
-> +	r2 +=3D -8;					\
-> +	r1 =3D 0;						\
-> +	*(u64*)(r2 + 0) =3D r1;				\
-> +	r1 =3D %[map_hash_48b] ll;			\
-> +	call %[bpf_map_lookup_elem];			\
-> +	if r0 =3D=3D 0 goto l0_%=3D;				\
-> +	r1 =3D 7;						\
-> +	r1 *=3D r0;					\
-
-[Severity: Medium]
-Does this actually test the verifier's handling of pointer *=3D scalar?
-
-The multiplication is applied to a scalar destination (r1) with a pointer
-source (r0). Would it be more accurate to test if applying *=3D to a pointer
-destination correctly downgrades the pointer to a scalar?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002124714.1800=
-12-1-alexei.starovoitov@gmail.com?part=3D2
