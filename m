@@ -1,171 +1,207 @@
-Received: from mail-ej2-f43.google.com (mail-ej2-f43.google.com [74.125.228.171])
+Received: from mail-pz2-f36.google.com (mail-pz2-f36.google.com [74.125.228.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17C83B7B71
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF297E0E4
+	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 12:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790944678; cv=none; b=esnDfd5ODTFU8OYo0GoYcc3VaaN9GABKZ97VgtycqCxsC1hLyGCd4+ofF6ROvy/VxRk3bkh8Wf9QlsGtwnm26hVPnroKzDbKQ/ajM9AdwC5lJl7/En3BVvWqNP2WU2FihUe95/g6eOWZ+Xmc5ZqHi8L/j9krJ5zP1ig7nT+qsm4=
+	t=1790945239; cv=none; b=EU/t7zngLyIiBKIbno81PR+fJJF7t0hCKcELXG/MiYWbMoftIS9qH0lW5965y+OyCD1BfXp3RBnxP3AZdR5/wguLSBju8Rdq9Sqejq8OUXFk9yz0xuBG8xsdA+IF4FxeLDEwLeJDCI1axXI5750jtSJRswY4kAwtnFJhQw/WqpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790944678; c=relaxed/simple;
-	bh=GWXc7aqz+JP/62ObxFDdswrcYFvTCyfgsbz2ENpfWG8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=lUKHzxY2zx05sTQYRuWL+LMJmu33/JoFT7Lg4ZF7rQmFDg9t7SWAbOs1LZ6bFy39wPjwVXUbOLjX9CQ75DKhY1n0YR7rIHijpxTVhr5pCUX4/w983RCIFcxH824z4aQy21Ed45NSQeFF+Gq4JSKksXRsAX+QIt7fWRDcpvV0pXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=SFDKTC6H; arc=none smtp.client-ip=74.125.228.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1790945239; c=relaxed/simple;
+	bh=3R4uZR0oFwkdqtx1Z/4iaTOIJkIRsp7nqh5hSEgZJ+8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TNRp925NYhrX5R2fazsXFUirmOtiEckyKzOMk7x9TfcZqrdvaJP98sijE2Ufeu5n3cEZyfLff4q/k4LRVLAE4y3wYFJkiRHF3S7rVgeelxKaORJe56badtbBaa26XbyaZPLjTP0cMTFQ9VRPm55dMJm8LtT8q+gSzy+GM9CRbsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G8q93WUk; arc=none smtp.client-ip=74.125.228.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="SFDKTC6H"
-Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2e23be09baso376353966b.1
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:37:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G8q93WUk"
+Received: by mail-pz2-f36.google.com with SMTP id d2e1a72fcca58-888caa81e9aso781177b3a.0
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 05:47:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1790944675; x=1791549475; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=kPQTISOHvgDFG/D95e14Nk4IcEq4M+yFBnxlnHIdm/8=;
-        b=SFDKTC6HwKmxzD7/xNibsBFc1j4ff+ojy95mdWuV2mKncK/mBoPjEvtfJRfmqAUALx
-         Ohy/vqCmHL7NIvX5ZmxBKkHXxmiK0SpR9nYt7WBDwsV9UDGYJjF+v0jGzkACnWqzhw8g
-         6RoKhAk53wWP99L2ndduvSZ5zJ+nAWbMMFVImoRxxNZpMUqYExCh61O1ZPcReh0Npu6V
-         MjtsplDWVyuKY/jSOHRR7hH5KXJfPP5H0/02j9FNoO1zv4SsPW8ZNQRdjx8+/N03OGPz
-         MwAgaEiWsYaT0s9M8W992j5qvo2wwAGOc83rQJN/kHP4eT5RE998BaqIHRJO0ie1ctar
-         DpDw==
+        d=gmail.com; s=20251104; t=1790945237; x=1791550037; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nSuTh2/u82i57CxX09LrjJWb8l4g7UjOFROGP7pqyGE=;
+        b=G8q93WUkE+Irtk5EWJg42HVDzQClLfkBFBrFBYTXbGRE1JLfpjB/deN9s0KJbdzHwS
+         SKijcQI6i+qsR/QREigbvPTKpRexBYx782Qy/gv2lGgpYZlq/tRvA1jUCXB1ztQGyRm/
+         q4E5OW6XjZAB4XrJ1lXrABAEsQQ24RjyhM6gv0Tezq2i7i3qofb7PtUAPoXIyJa6JXcm
+         iKPvGLwCkNI3ZmU8AwGwB8uFYWbyedIEexcdDfvwe6H3496PAWnmn2eRZdU02GAEkGdw
+         ZIN9ofN6DD0NC9sHYmJYeOUIbVt94cvMya9rxEff+76eLDwNNe210LDkbPWaa4iyhO8S
+         P/9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790944675; x=1791549475;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kPQTISOHvgDFG/D95e14Nk4IcEq4M+yFBnxlnHIdm/8=;
-        b=gFOTH8S+cmsY2YJumLMMjOBU6y7Frm8GeT9hhjXCkaT32WY8irutBPGoi+/3fUWV0+
-         MTDcIOuQBxtO+5yM9ua6GsLYvLT8umxnJ8Xp5affgd7FEQXwogWQHYGSVh5r64c1XqnI
-         T4nbg0vUIg+fg9z0NVZhF1qwxXqgbD9q86zLQtHd0JW+2o0dBbwoU9FD/ATJX9Tl2Z5H
-         LwvmbTS1WuXX+D62jb6s9K2mpsO8tbT7qN9Jprov0Jt95SoyRLw3W+B5yBQewJ2wZw2s
-         P+Fni+Iyt4PAW70RZnA6v0YDZsLZ04afTxf/KzjkK0mq2Zozpg8AOTcJpzHoFehsYHeC
-         u5+w==
-X-Forwarded-Encrypted: i=1; AKwUvBz6qdXyReASubpZ8WK7xeUlOotaw9JbXeJAdswm9Zo7R8dijKWJxJStEAv6VxJzxx2y53k=@vger.kernel.org
-X-Gm-Message-State: AFuF++kuOMTLHFODWjV1immI33ynj/tnkEZfCNC7uE6EfRZlQv6v4km+
-	eqPALTIVcQrdspHpMVykA9Ja2Wi+Mhv3/KNAUTiF+2erP8iUVDCPcEoVZaJJBmFk9dE=
-X-Gm-Gg: AYBFou0XJ+ukR/E8SyELQBjLmcP7py6eYaGhW46P+BjCECFjP903Vnl6GwP6qGJpxLC
-	67bGV0aIRM2UcFV/eXOVnBxpGa82Wngqb1Y8DpZrTDhpZFJNF4jG7vrZKpld4W3KCXhlL5QSyfc
-	dUP6fp1l/CCVLBcFYsmfNbMX3DHhGIQzt+bANLTIGVxJrXGbWaiLHhmZPo4pXn3tDJ2ctHDo/0x
-	I/8r62mkg9+1p539ZctO4gnjmTa6KQG1Wt1/2whzhKiw950DStuQW1g9PUklJH5v23CjYJ8mEer
-	mLeH7vC3NeWHwndefSLbg1O06MgrD0oeNdI0+44f8vua7NREPB7f/0dYppeuvcmiQeWza8m4s/9
-	/ENs5kr7sZG5R4/uKSdkvDRaUCDDBrMmjabZ6JHnzP/nRXt+tTVconv6WHPP9QCFLh/E62Er5c8
-	Lt3cyFh8ILzLvYAJRn5H12+GeB3xj01J2Nzdadj86/9cuOVVAQqoCwGrMn4Hl5YKQ/AylU5P1x
-X-Received: by 2002:a17:907:7a13:b0:c2a:c6fd:ec6c with SMTP id a640c23a62f3a-c2e4adbbb01mr209234366b.30.1790944673795;
-        Fri, 02 Oct 2026 05:37:53 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e4ca4e2d0sm84749966b.4.2026.10.02.05.37.52
+        d=1e100.net; s=20260707; t=1790945237; x=1791550037;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nSuTh2/u82i57CxX09LrjJWb8l4g7UjOFROGP7pqyGE=;
+        b=ew0f3i/L+y+RlpKPbdxRYEY31jCmFM2cIKjlBGETE5cmdL85A6Aci1NclpMOxFqL8B
+         u7I448MnmwCkSyLXuZ5wI0bZ4CaaSLb/7nWjvJUHl5XJBPBSjdeSe31OhfmefgmAzhwO
+         j0Q6ymcyTSyaPBPqjUiZY94vy9lzCWZbuJ/sGTddDP6/paKZN9cbpbONEreg42u0X6jC
+         GN9ul1V4lEr+0Dxe/9gi9wOmd+u57BSaHbrMTni07JpBZGsxCuIQviTcqL6HXe7DMeiB
+         4wsw1e3UeEVyhGGKl6TphC0yEDZsWwcBbqA1XL8t697PSkXX7ki5sNqbr6vyENSZwJT2
+         ENGQ==
+X-Gm-Message-State: AFuF++n216udeE/x625YRSza4hxvZC053imXskrf+piyFR9KuPB5rUQ8
+	H0RfV6S9DWiQ25Y7emo+3PeYUbwfF66J5W7VRqr4djZJ4FEVDVOj2dvROx3r2DOIdJE=
+X-Gm-Gg: AYBFou0Tka7vqI67Y5nq6B4dMpkxQ+XreWny+943miXPHHb62iqmgMhKb+xAq4BzLUL
+	BHxxB2jV99sbu8uKZES4nl5O1W9O5p09tad/heTGalPphk6ARm/K3PBKr5yrqNGH4p++k6dZJ4d
+	eSLTn5S394+lGO7hB9Zv1PTtYa13DkjOxR+p5vmMEEZldPf3IElcn0RDd8GeZ6cjv91sG1RqXI2
+	Grrjgv74sOJdr36YGYhc5TU/L5bWwFmH0lSvyyok7wGX5zLTAQvbRAe41ZNrTJlIDEFXJ+0AkHL
+	9SaLeY0Cd+IJp1k/lZGRRVzjcQsDDWFwcm8T7sWspAvE7XBCSpDMdXxErNnSfhaq8VeZvj5pPxB
+	+SJiXuY318ilnXCQWjERnVSyYDUv8dZJsYey0WItzuRPddfyKeXEv2PMWRQj7iS8lHK+PO69KdZ
+	V7HBz7XQBpFz8mQGsufk4g6J/YpT3LBAUqaeQ2TASqpjDaSrIFnKk9v4OwWSw1Ff1LkHxV8bFHx
+	9RbSZ/hRYS4llgt21vPRlMIDJ8PSkORI5+LStaX9GVV13KnuKFvd86Rv7TURaDI32Hn+uEMyUjQ
+	mWAU2zSYIPuXt28DmZVN3cibLvrxR1IrDz0OjUApxyE=
+X-Received: by 2002:a05:6a00:3388:b0:886:5938:cdd4 with SMTP id d2e1a72fcca58-88af5116b11mr2723872b3a.19.1790945236479;
+        Fri, 02 Oct 2026 05:47:16 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-88b0c3a3003sm845398b3a.29.2026.10.02.05.47.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 05:37:53 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "Jakub Kicinski" <kuba@kernel.org>,  "Daniel Zahka"
- <daniel.zahka@gmail.com>,  <netdev@vger.kernel.org>,  "Kuniyuki Iwashima"
- <kuniyu@google.com>,  "Paolo Abeni" <pabeni@redhat.com>,  "Stanislav
- Fomichev" <sdf@fomichev.me>,  <bpf@vger.kernel.org>,
-  <kernel-team@cloudflare.com>,  "Daniel Borkmann" <daniel@iogearbox.net>,
-  "John Fastabend" <john.fastabend@gmail.com>,  "Andrii Nakryiko"
- <andrii@kernel.org>,  "Eduard Zingerman" <eddyz87@gmail.com>,  "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>,  "Martin KaFai Lau"
- <martin.lau@linux.dev>,  "Song Liu" <song@kernel.org>,  "Yonghong Song"
- <yonghong.song@linux.dev>,  "Jiri Olsa" <jolsa@kernel.org>,  "Emil
- Tsalapatis" <emil@etsalapatis.com>,  "David S. Miller"
- <davem@davemloft.net>,  "Eric Dumazet" <edumazet@google.com>,  "Simon
- Horman" <horms@kernel.org>,  "Jesper Dangaard Brouer" <hawk@kernel.org>,
-  "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,  "Florian Westphal"
- <fw@strlen.de>,  "Jack Wang" <163wangjack@gmail.com>
-Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
- packet scrubbing
-In-Reply-To: <DLSJ0UIY3DSY.3JWS6CS3TX0IP@gmail.com> (Alexei Starovoitov's
-	message of "Wed, 30 Sep 2026 09:00:23 +0000")
-References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
-	<20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com>
-	<DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> <87fqyypp67.fsf@cloudflare.com>
-	<DLNZU9RYL0GW.CHHAJ4R62R9M@gmail.com>
-	<20260925121849.2ac5150b@kernel.org>
-	<DLONQQN0RB03.1NVWVFHGRRWV4@gmail.com>
-	<20260925132004.171b751e@kernel.org>
-	<DLOOI89GKM5B.W4XPBNJUXRV1@gmail.com> <87jyo5bcgs.fsf@cloudflare.com>
-	<DLR2ZT65RKF3.3KZ8O8P4VKTI2@gmail.com> <87ecebbxy5.fsf@cloudflare.com>
-	<DLSJ0UIY3DSY.3JWS6CS3TX0IP@gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Fri, 02 Oct 2026 14:37:52 +0200
-Message-ID: <87ik3kl1lr.fsf@cloudflare.com>
+        Fri, 02 Oct 2026 05:47:16 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next v2 00/15] bpf: Support programs compiled by rust-bpf
+Date: Fri,  2 Oct 2026 12:46:59 +0000
+Message-ID: <20261002124714.180012-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 30, 2026 at 09:00 AM GMT, Alexei Starovoitov wrote:
-> On Tue Sep 29, 2026 at 8:32 PM UTC, Jakub Sitnicki wrote:
->> Everything pushed to:
->>
->> https://github.com/jsitnicki/skb-metadata-bench/tree/main/profile
->
-> looks like you had lockdep on, so all the data and conclusions
-> likely do not correlate to production.
-> Pls fix and remeasure everything.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Thanks. This makes much more sense now.
+Rust programs compiled by rust-bpf keep all memory in arena and access
+it through plain numbers, since there are no address spaces in Rust.
+core tags pointers in the low bit. BTF of such program has names like
+'Option<alloc::collections::btree::map::BTreeMap<u32, u32>>'.
 
-1) Lockdep was on. Fixed. Configs published to [1].
+Patches 1-2   Allow ALU on pointers with CAP_PERFMON. The result is
+              a number.
+Patches 3-4   Treat load and store through a number as arena access
+              in programs loaded with BPF_F_ARENA_SCALAR.
+Patches 5-11  Accept BTF of Rust programs in the kernel: names of types
+              and functions that are not C identifiers, arguments of
+              static functions without names, a variable in DATASEC
+              that is smaller than its type. bpftool doesn't read
+              past such variable.
+Patches 12-14 libbpf: Keep .data, .bss and .rodata in arena when
+              the object has .arena.data section and load its programs
+              with BPF_F_ARENA_SCALAR. Format strings of bpf_printk() go
+              to .rodata.str, which stays a map.
+Patch 15      A program in Rust, built by upstream rustc, that shows why
+              the data has to be in arena.
 
-2) Switched from mpstat to bpf_stats since bpf-skb-ext cost was so low
-now that it was drowning in the noise. skb extension teardown is not
-accounted for.
+No changes for unprivileged programs. Without the flag a number is not
+an address, whether the program has an arena or not.
 
-3) With rhash, I noticed churn from auto-shrinking in map_update_elem
-(can be seen in gtpchurn profile [2]). LLM suggested a one-line fix to
-set min_size from map_extra hint. Benchmarks ran with this patch [3].
+Arena access through a number is for x86 and arm64: other JITs have to
+say that they take BPF_REG_AX as the address, the flag is rejected with
+-EOPNOTSUPP there. arm64 is compile tested only.
 
-New results (prog runtime from bpf_stats in nsec):
+With the series the kernel loads BTF of scx_simple and scx_cosmos
+schedulers written in Rust, of the unwind and of the immediate-abort
+builds. The objects call bpf_alloc(), bpf_free(), bpf_arena_memcpy() and
+bpf_arena_memcmp(), which are not in the series, so they don't load yet.
 
- ~/bench $ just bpfstats
-python3 tools/bpfstats.py --agg results-1 results-2 results-3
-variant          prog              results-1  results-2  results-3    total=
- mean =C2=B1 spread
----------------------------------------------------------------------------=
-----------------
-ext-cnt          cnt_ingress            35.9       35.6       35.5      106=
-.7 =C2=B1 2.2
-                 cnt_egress             70.3       73.5       69.2
+v1 -> v2:
+- Rebased. Added Acked-by from Alan.
+- Patch 6: the test is serial, since other tests set bpf_jit_harden and
+  programs are not in kallsyms then. Use kallsyms_find().
+- Patch 8: add comments and a test for vararg of a global function (Alan).
+- Patch 10: new. bpftool map dump and bpftool prog show read past
+  a variable in DATASEC that is smaller than its type.
+- Patch 11: check bpftool map dump.
+- Patch 12:
+  . fix overflow in the check of r_offset of a pointer in data.
+  . __arena variables in an object without .maps section were placed
+    over .data in the arena that libbpf creates. Fail the open.
+  . pin_path and bpf_map__reuse_fd() of the arena were ignored when
+    there are pointers in data. Fail the load.
+  . don't create the arena when its autocreate is off.
+- Patch 14: tests for the above.
+- Patch 15:
+  . skip the test when rustc is older than 1.87 and when clang is older
+    than LLVM of rustc, instead of breaking the build.
+  . the exit status of rustc was lost in the pipe and clang made
+    an empty object. Go through a file. Follow BPF_STRICT_BUILD=0.
 
-ext-ext          ext_write             199.3      198.9      203.0      263=
-.8 =C2=B1 1.9
-                 ext_read               63.1       64.1       63.2
+v1: https://lore.kernel.org/bpf/20260930193127.2181684-1-alexei.starovoitov@gmail.com/
 
-gtp-cnt          cnt_ingress            34.4       34.3       34.6       94=
-.6 =C2=B1 2.5
-                 cnt_egress             59.9       58.1       62.7
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-gtp-gtp          gtp_write             531.0      555.9      567.2      920=
-.9 =C2=B1 34.5
-                 gtp_read               85.1       87.5       91.2
-                 gtp_skb_free          267.1      283.9      293.9
+Alexei Starovoitov (15):
+  bpf: Allow bitwise ops, shifts and mul/div on pointers with
+    CAP_PERFMON
+  selftests/bpf: Add tests for ALU on pointers with CAP_PERFMON
+  bpf: Treat load and store through a number as arena access
+  selftests/bpf: Add tests for arena access through numbers
+  bpf: Allow names of Rust types and functions in BTF
+  selftests/bpf: Add tests for names of Rust types and functions in BTF
+  bpf: Allow arguments without names in static functions in BTF
+  selftests/bpf: Add test for arguments without names in static
+    functions
+  bpf: Allow a variable in DATASEC that is smaller than its type
+  bpftool: Skip pieces of variables in DATASEC
+  selftests/bpf: Add tests for a variable that is smaller than its type
+  libbpf: Keep global data in arena when the object has .arena.data
+  libbpf: Keep format strings of bpf_printk() in .rodata.str
+  selftests/bpf: Add test for global data in arena
+  selftests/bpf: Add test for global data of a program in Rust
 
-gtp-gtpchurn     gtp_write             784.9      782.6      830.6     1190=
-.8 =C2=B1 44.2
-                 gtp_read               82.5       82.3       88.6
-                 gtp_skb_free          297.5      294.7      328.7
+ arch/arm64/net/bpf_jit_comp.c                 |   5 +
+ arch/x86/net/bpf_jit_comp.c                   |   6 +
+ include/linux/bpf_verifier.h                  |   2 +
+ include/linux/filter.h                        |   1 +
+ include/uapi/linux/bpf.h                      |   6 +
+ kernel/bpf/btf.c                              |  50 +-
+ kernel/bpf/core.c                             |  11 +
+ kernel/bpf/fixups.c                           |  39 +
+ kernel/bpf/syscall.c                          |   4 +
+ kernel/bpf/verifier.c                         |  74 +-
+ tools/bpf/bpftool/btf_dumper.c                |  11 +
+ tools/bpf/bpftool/main.h                      |   2 +
+ tools/bpf/bpftool/prog.c                      |   4 +-
+ tools/include/uapi/linux/bpf.h                |   6 +
+ tools/lib/bpf/bpf_helpers.h                   |  18 +-
+ tools/lib/bpf/libbpf.c                        | 433 ++++++++-
+ tools/testing/selftests/bpf/Makefile          |  12 +-
+ .../testing/selftests/bpf/Makefile.buildvars  |  25 +
+ tools/testing/selftests/bpf/Makefile.skel     |  18 +-
+ .../bpf/prog_tests/arena_scalar_blinded.c     |  21 +
+ tools/testing/selftests/bpf/prog_tests/btf.c  | 132 ++-
+ .../selftests/bpf/prog_tests/btf_rust.c       | 142 +++
+ .../selftests/bpf/prog_tests/data_in_arena.c  | 216 +++++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/data_in_arena.c       | 107 ++
+ .../selftests/bpf/progs/data_in_arena_decl.c  |  37 +
+ .../bpf/progs/data_in_arena_extern.c          |  20 +
+ .../selftests/bpf/progs/data_in_arena_fail.c  |  20 +
+ .../selftests/bpf/progs/data_in_arena_nomap.c |  20 +
+ .../selftests/bpf/progs/data_in_arena_rust.rs |  70 ++
+ .../bpf/progs/verifier_arena_scalar.c         | 912 ++++++++++++++++++
+ .../bpf/progs/verifier_value_illegal_alu.c    | 173 +++-
+ tools/testing/selftests/bpf/test_loader.c     |   2 +
+ 33 files changed, 2500 insertions(+), 101 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_rust.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/data_in_arena.c
+ create mode 100644 tools/testing/selftests/bpf/progs/data_in_arena.c
+ create mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_decl.c
+ create mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_extern.c
+ create mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_nomap.c
+ create mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_rust.rs
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
 
-gtp-gtplru       gtplru_write          394.9      391.9      394.5      542=
-.8 =C2=B1 1.1
-                 gtplru_read            48.2       49.4       48.9
-                 gtplru_skb_free        99.9      100.4      100.5
 
-gtp-gtp is with nelem_hint+min_size hint set.
-gtp-gtpchurn is without it (map_extra=3D0).
-perf reports and flamegraphs also updated [4].
+base-commit: b5a4aa31abd6fe90009b63e35dc18c67d041ec0c
+-- 
+2.55.0
 
-[1] https://github.com/jsitnicki/skb-metadata-bench/tree/main/configs
-[2] https://raw.githubusercontent.com/jsitnicki/skb-metadata-bench/refs/hea=
-ds/main/profile/perf.gtp-gtpchurn.svg
-[3] https://github.com/jsitnicki/skb-metadata-bench/blob/main/patches/rht-n=
-o-shrink-churn.patch
-[4] https://github.com/jsitnicki/skb-metadata-bench/tree/main/profile
