@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D253E835F;
-	Fri,  2 Oct 2026 19:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EFE3F0761;
+	Fri,  2 Oct 2026 19:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967688; cv=none; b=eI2hwaIGDHZ0Hxc4hzOKWHtq6GsLvwmXGFQIIu9nLsDrQV6N6plqnSiCBDkPfJepwLnNcnjk+5w2XypeGCFpzIQUv8mEIJrXG8OqP4IW/7WZx9lsv7nd6Kyq1El4M3pdo63q6cY74DcN2BTZj6jD1CsdEHOXxpVlXcddaTQfcKs=
+	t=1790967690; cv=none; b=RtgKJAzDT/ofSOldW3tZj0L4XbmArDZQIjQi7HEzeUWSwgb+Gq1a3MolEpsoffPqL/1mJ9p1lvR48G2vIRZl/Hi+UZsVrR8ctm8KqGqfeSOX3jvNK5TRznx2KHo+8OAbKN62KUW0hztX6YF7yy1EsNmzWUbcch84CZPUmL/G5Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967688; c=relaxed/simple;
-	bh=sMK4HDc3Js74/ZJgUi161coOiBDj1k+OTm3we60aoV4=;
+	s=arc-20240116; t=1790967690; c=relaxed/simple;
+	bh=oY1C4t8RHxsBEgieoQf7ys8r0tpFhCz/rFXsBN/Nwvg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HT/YcTXW/zYyZKSBvnyIjkXvnt3Ah5AlBUBshN+PUF+g1mmQ/fger4kLmY428aTpFsjrar4SjFTwv+jiTg1N+L7tE71/Gw65Phn/RjJPBhjFNfOlFW/DAGsdFw3qbvSpXgjrOrmqCEDH33oT8ewojsF82knz7w/F2cQ2pQHcHw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zqpbn1WV; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=iPO2Bj0UKT0pgrO53m0LRyDWTcl42O/oL2bzIr1LltRX+HPzs7vA7LE7R8bbFfJ5AYCPKFE58sqMyMM/G6Uhwjv7gAzkunvoj94FU1jhSgBaw4SKkBpxEmX2A4kRaXSz6uy5G4Sby1dU3rfsey+UmVwsmngfaucDdb35WhCYZLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFVLoJ4A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zqpbn1WV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDFEE1F0089E;
-	Fri,  2 Oct 2026 19:01:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFVLoJ4A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF59B1F000FF;
+	Fri,  2 Oct 2026 19:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967680;
-	bh=Lx/O7p/a9bYJmB+5cEpZKxi+w5Lfd7SQrTj+574HrmY=;
+	s=k20260515; t=1790967688;
+	bh=baiQBkVjONtGzJZ5YM5pTpAwSD0T6agoA0NCSrRkDY4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Zqpbn1WV3FTnhxahUX2F08hgb4K+Q/iQndzSYcq0T7IFo8iv0gqKWVxusmUjXaH/H
-	 nQJ9rfMqi/JOIjOPRh6CvNjGNqvEZrxz/49JFP7mQ6VvwxdDuayaXEhiR3/KUgZrsq
-	 rEr7qj6n01ujzrzC2VqGHxEYZ7iCZ1R9xfat4IeEoIwDUTLrJRL+Sr36a/y3ZLMvMk
-	 HF/o3Us2OLu3U+EVfmyt/TfvhWQ7llQuwt0bg/ivCKhSPHRtlHHfXpj5u/2Ksmpiyi
-	 P8j8hiAqW6gRmkM5A8AETu/uxUQZK/asbwklmFwneDl/RbO8oQLESi+4dwQBfXXjwW
-	 G2KIaZEtj9yxw==
+	b=cFVLoJ4Ar8xpupS6ZWS1L2Ispyp/2M5QLAWwVet5QlZB8uyEmrc9YA5z0F4PJ+jV+
+	 roE0uilmdsiy8tZDiwWMyaeCBik3mnO+c9L7TlqVPqlGw6VSR3imWYgTtjQu2EfVzj
+	 AlIowII10vkx+6zvZRcNlayX0gNoPf+Hlioh6ZMMwfNhb3ZZdWHVqPZ4HtYn9X16qd
+	 mr2oV1KJ1aOwdMcgCerkFd3kOFYl8BlDM/t8xzb9lKFceYSU1/GFa9n84CrD6/X3eq
+	 BSK2UehKZWWOwx8CZyvMboTaXPaIEVRMBdscP+AWhuhf8uVhKsBywDj6DjaDeFxheN
+	 e0AdJD1+oov6g==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -69,9 +69,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [RFC net-next 06/15] xdp: Track non-page netmem in receive buffers
-Date: Fri,  2 Oct 2026 21:00:07 +0200
-Message-ID: <20261002190018.696925-7-bjorn@kernel.org>
+Subject: [RFC net-next 07/15] xsk: Keep the DMA mapping in the buffer pool
+Date: Fri,  2 Oct 2026 21:00:08 +0200
+Message-ID: <20261002190018.696925-8-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002190018.696925-1-bjorn@kernel.org>
 References: <20261002190018.696925-1-bjorn@kernel.org>
@@ -84,191 +84,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A page-pool memory provider can give net_iov buffers, and
-virt_to_page() does not work for them. An xdp_buff holds only the
-data pointer, so code that returns or converts a buffer cannot find
-its net_iov.
+At unmap, an XSK buffer pool looks up its DMA mapping again. It
+searches the UMEM's mapping list for the pool's netdev. A memory
+provider, added later in this series, can keep the mapping after the
+queue is gone. By then the netdev may be cleared, so the search is
+not reliable.
 
-Add NET_IOV_XSK, the net_iov type for AF_XDP. Add the internal flag
-XDP_FLAGS_HAS_NETMEM. When it is set, the xdp_buff holds a netmem
-reference in the union with the devmap TX queue, which only devmap
-egress uses. The flag is cleared when flags are copied to an skb or
-an xdp_frame. xdp_convert_buff_to_frame() sends such a buffer to the
-zero-copy copy path.
+Store the mapping that xp_dma_map() picked in the pool, and unmap
+that mapping. Hold a reference on the DMA device while the mapping
+exists, so a late final unmap does not use a freed device.
 
-A fragment from a readable net_iov area no longer marks the buffer's
-fragments as unreadable. The skb layer still treats every net_iov as
-unreadable, so such a buffer must be copied before it becomes an
-skb. Later patches in this series do that.
-
-skb_shared_info holds kernel pointers, so it cannot be in UMEM,
-which userspace can write. A netmem xdp_buff points to a
-skb_shared_info that the RX queue keeps in kernel memory instead.
-xdp_init_buff_from_netmem() sets this up. Page-backed buffers still
-use their tailroom.
-
-On 64-bit, struct xdp_buff grows from 56 to 64 bytes. struct
-xdp_buff_xsk stays at 128 bytes on x86-64. Where the largest
-alignment is 8 bytes, as on s390, it grows from 120 to 128 bytes, so
-a pool needs 8 more bytes per UMEM chunk. Only helpers that need the
-netmem or the fragment info test the new flag. Page-backed receive
-and return paths do not.
+The reference counting of shared mappings does not change.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- include/net/netmem.h |  1 +
- include/net/xdp.h    | 56 ++++++++++++++++++++++++++++++++++++++++----
- 2 files changed, 52 insertions(+), 5 deletions(-)
+ include/net/xsk_buff_pool.h | 1 +
+ net/xdp/xsk_buff_pool.c     | 8 +++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index e6dff0b01581..76e4fe878863 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -68,6 +68,7 @@ DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
- enum net_iov_type {
- 	NET_IOV_DMABUF,
- 	NET_IOV_IOURING,
-+	NET_IOV_XSK,
- };
- 
- /* A memory descriptor representing abstract networking I/O vectors,
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 07231adfb5f8..80931490ca3a 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -11,6 +11,7 @@
- #include <linux/netdevice.h>
- #include <linux/skbuff.h> /* skb_shared_info */
- 
-+#include <net/netmem.h>
- #include <net/page_pool/types.h>
- 
- /**
-@@ -81,6 +82,8 @@ enum xdp_buff_flags {
- 	 * XDP program is not attached.
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index a7df573784fd..77264c4902c0 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -67,6 +67,7 @@ struct xsk_buff_pool {
+ 	 * even when they are identical.
  	 */
- 	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
-+	/* The txq/netmem union contains a receive netmem reference. */
-+	XDP_FLAGS_HAS_NETMEM		= BIT(3),
- };
+ 	dma_addr_t *dma_pages;
++	struct xsk_dma_map *dma_map;
+ 	struct xdp_buff_xsk *heads;
+ 	struct xdp_desc *tx_descs;
+ 	u64 chunk_mask;
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index f01e1de7360e..244776a72961 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -373,7 +373,7 @@ static struct xsk_dma_map *xp_create_dma_map(struct device *dev, struct net_devi
+ 	}
  
- struct xdp_buff {
-@@ -89,7 +92,12 @@ struct xdp_buff {
- 	void *data_meta;
- 	void *data_hard_start;
- 	struct xdp_rxq_info *rxq;
--	struct xdp_txq_info *txq;
-+	union {
-+		/* Valid for DEVMAP egress programs. */
-+		struct xdp_txq_info *txq;
-+		/* Valid for receive buffers backed by non-page netmem. */
-+		netmem_ref netmem;
-+	};
- 
- 	union {
- 		struct {
-@@ -104,6 +112,8 @@ struct xdp_buff {
- 		u64 frame_sz_flags_init;
- #endif
- 	};
-+	/* Kernel-owned fragment metadata for non-page netmem. */
-+	struct skb_shared_info *sinfo;
- };
- 
- static __always_inline void xdp_reinit_buff(struct xdp_buff *xdp)
-@@ -138,7 +148,7 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
- 
- static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
+ 	dma_map->netdev = netdev;
+-	dma_map->dev = dev;
++	dma_map->dev = get_device(dev);
+ 	dma_map->dma_pages_cnt = nr_pages;
+ 	refcount_set(&dma_map->users, 1);
+ 	list_add(&dma_map->list, &umem->xsk_dma_list);
+@@ -384,6 +384,7 @@ static void xp_destroy_dma_map(struct xsk_dma_map *dma_map)
  {
--	return xdp->flags;
-+	return xdp->flags & ~XDP_FLAGS_HAS_NETMEM;
+ 	list_del(&dma_map->list);
+ 	kvfree(dma_map->dma_pages);
++	put_device(dma_map->dev);
+ 	kfree(dma_map);
  }
  
- static __always_inline void xdp_buff_clear_frag_pfmemalloc(struct xdp_buff *xdp)
-@@ -150,6 +160,10 @@ static __always_inline void
- xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
+@@ -407,12 +408,11 @@ static void __xp_dma_unmap(struct xsk_dma_map *dma_map, unsigned long attrs)
+ 
+ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
  {
- 	xdp->rxq = rxq;
-+	/* Do not initialize the txq/netmem union here. DEVMAP generic XDP
-+	 * sets txq before this helper is called; receive drivers set netmem
-+	 * explicitly.
-+	 */
+-	struct xsk_dma_map *dma_map;
++	struct xsk_dma_map *dma_map = pool->dma_map;
  
- #ifdef __LITTLE_ENDIAN
- 	/*
-@@ -176,6 +190,33 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
- 	xdp->data_meta = meta_valid ? data : data + 1;
+ 	if (!pool->dma_pages)
+ 		return;
+ 
+-	dma_map = xp_find_dma_map(pool);
+ 	if (!dma_map) {
+ 		WARN(1, "Could not find dma_map for device");
+ 		return;
+@@ -424,6 +424,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+ 	kvfree(pool->dma_pages);
+ 	pool->dma_pages = NULL;
+ 	pool->dma_pages_cnt = 0;
++	pool->dma_map = NULL;
+ 	pool->dev = NULL;
  }
+ EXPORT_SYMBOL(xp_dma_unmap);
+@@ -460,6 +461,7 @@ static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dma_map *dma_
+ 		return -ENOMEM;
  
-+static __always_inline bool xdp_buff_has_netmem(const struct xdp_buff *xdp)
-+{
-+	return !!(xdp->flags & XDP_FLAGS_HAS_NETMEM);
-+}
-+
-+static __always_inline netmem_ref
-+xdp_buff_get_netmem(const struct xdp_buff *xdp)
-+{
-+	if (xdp_buff_has_netmem(xdp))
-+		return xdp->netmem;
-+
-+	return virt_to_netmem(xdp->data);
-+}
-+
-+static __always_inline void
-+xdp_init_buff_from_netmem(struct xdp_buff *xdp, u32 frame_sz,
-+			  struct xdp_rxq_info *rxq, netmem_ref netmem,
-+			  struct skb_shared_info *sinfo)
-+{
-+	xdp_init_buff(xdp, frame_sz, rxq);
-+	if (netmem_is_net_iov(netmem)) {
-+		xdp->netmem = netmem;
-+		xdp->flags |= XDP_FLAGS_HAS_NETMEM;
-+		xdp->sinfo = sinfo;
-+	}
-+}
-+
- /* Reserve memory area at end-of data area.
-  *
-  * This macro reserves tailroom in the XDP buffer by limiting the
-@@ -189,6 +230,9 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
- static inline struct skb_shared_info *
- xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
- {
-+	if (xdp_buff_has_netmem(xdp))
-+		return xdp->sinfo;
-+
- 	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
- }
- 
-@@ -290,7 +334,8 @@ static inline bool xdp_buff_add_frag(struct xdp_buff *xdp, netmem_ref netmem,
- 
- 	if (unlikely(netmem_is_pfmemalloc(netmem)))
- 		xdp_buff_set_frag_pfmemalloc(xdp);
--	if (unlikely(netmem_is_net_iov(netmem)))
-+	if (unlikely(netmem_is_net_iov(netmem) &&
-+		     !net_iov_is_readable(netmem_to_net_iov(netmem))))
- 		xdp_buff_set_frag_unreadable(xdp);
- 
- 	return true;
-@@ -425,7 +470,7 @@ int xdp_update_frame_from_buff(const struct xdp_buff *xdp,
- 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
- 	xdp_frame->metasize = metasize;
- 	xdp_frame->frame_sz = xdp->frame_sz;
--	xdp_frame->flags = xdp->flags;
-+	xdp_frame->flags = xdp_buff_get_skb_flags(xdp);
- 
- 	return 0;
- }
-@@ -436,7 +481,8 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
- {
- 	struct xdp_frame *xdp_frame;
- 
--	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-+	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL ||
-+	    xdp_buff_has_netmem(xdp))
- 		return xdp_convert_zc_to_xdp_frame(xdp);
- 
- 	/* Store info in top of packet */
+ 	pool->dev = dma_map->dev;
++	pool->dma_map = dma_map;
+ 	pool->dma_pages_cnt = dma_map->dma_pages_cnt;
+ 	memcpy(pool->dma_pages, dma_map->dma_pages,
+ 	       pool->dma_pages_cnt * sizeof(*pool->dma_pages));
 -- 
 2.55.0
 
