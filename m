@@ -1,180 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853414477F7;
-	Fri,  2 Oct 2026 07:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7E843DEC6;
+	Fri,  2 Oct 2026 07:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790926428; cv=none; b=VRAcrhHbyimUsBUPkT1x57Srfvvz029asjsMRoSN75mFRpW7rUXtOT6g486WeRKzam1BTrMJ91Mmub7t1RoV1w3aV73skIGEYv4L5ouNsJUbH6Gnl/yJOPyZAXpr1snwvOK3Jq7pQGXhCDyVtmspuvUI8cNMx1fLR7nfDxg2vtY=
+	t=1790926465; cv=none; b=amkjYiYHW3DCLDIyKTUmXCMwGMWsqWbajf//YSIO7DWlmFIXitiQJhxYtyaf5oR2XzCzvg2uajjD9XtA/+tvsGP9fmwUL3aGs70gu12Hp/qhM5ESknDuFd+LrVeMtAu5V7LkPhA6Lqf730VX61N8wMpQVnKkj2eySzIvWQYa71Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790926428; c=relaxed/simple;
-	bh=FyABMAntrRW9sw2NDc68uC5+2xKrcJxUM4kaF8VNJho=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eilnOzVV/W26KUG9leky1ZpnGrZBErMzntj9TiaWLo2cO8carsL6+Y6JKW1NEo+gf/RKV6hdkT5FtE6RK14hkIAMARwVwHIx9mrnEOuqNOqGbzwRVBHtjYJnH9suep0T/56KrbhhJstfHoaSCq1SnnTM8yChDAGXzbltAEhBilQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQPt8va+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790926465; c=relaxed/simple;
+	bh=m+LVU2zi0zSOvknT2CQZ4vuI1VWQtPXUViI/XoHlI50=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M+d5T2ds2YMHYPnnG7W7IdERmZlXmNQQ+UehJrh/xK4wXjCkJ9nGxbWgjSnerfezJT8yAQdIAHbMGCrveDPen6HBhs19LPtL554nbD4YYK9TGaw22bzHGzeH3XJiEbZWfRZzwGz6GRdL4YG+8yz8ScwvwUgrm4PBZFb8u4lqh10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=pWkW/SR5; arc=none smtp.client-ip=44.246.1.125
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQPt8va+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6EA1F0089C;
-	Fri,  2 Oct 2026 07:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790926427;
-	bh=VJpRtA7YfNY7FLwRil1Tu8BDj1dU3gFaPuIMEGQpFJs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YQPt8va+VR/aMmniak9XBtA5aHiXrdataODQBNhtJAK9pReyu1sVIbL6meuFihwt7
-	 cVuyPXowZ0OEMw+SfsKD5ECJcyZBIfhxqSb9ZRwCympbilgrLrDNyuuOCW/VOT6/DK
-	 rt7xGMWzjGdgeIj1eI55yO5z1OZVEc7AwhIqLAk8h8inev2oNGHTZfhEZsCVmTngJY
-	 825O0oBwQDRTa0wtf1B1491JG7b72Z4hA/6cvH/7fTzwhiB6zy+HYmjF5WkjPB9YBd
-	 TF7ItV8iF2QowfcwI2Vd0A9/7Dffh0DUJHXP2+kcmEiJzknH83U1XFcucHA5BmdbSF
-	 fajtE+YFst7eQ==
-Subject: Re: [PATCH net-next v9 15/15] misc: lan966x-pci: dts: add fdma
- interrupt to overlay
-From: netdev-bot+sashiko@kernel.org
-To: daniel.machon@microchip.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horatiu.vultur@microchip.com,
- steen.hegelund@microchip.com, UNGLinuxDriver@microchip.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, herve.codina@bootlin.com, arnd@arndb.de,
- gregkh@linuxfoundation.org, mohsin.bashr@gmail.com, horms@kernel.org,
- richardcochran@gmail.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Date: Fri, 02 Oct 2026 07:33:45 +0000
-Message-ID: <179092642540.434549.1993526526960644611@kernel.org>
-In-Reply-To: <20260928-lan966x-pci-fdma-v9-15-a17caf60f89a@microchip.com>
-References: <20260928-lan966x-pci-fdma-v9-15-a17caf60f89a@microchip.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="pWkW/SR5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1790926463; x=1822462463;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Tpiacak94CnVvVjiQqt6BeZBKKqRNWtVDXJ5p2keyyY=;
+  b=pWkW/SR5o4ecfiiDnP7CK1rmOpiI1VeyVJ6JWRumilOAInAoMaI/m/F+
+   OEx9y8NDVUzFsmRn1Y0urdTZRVruBT+JKCIfohxUQoIF8PZUZ+zx50Cpr
+   DF4rTY2doqH2dq6PXt+krMhaO+c/CwDBtA3bIdYVgaVDXAtolsO186IdI
+   1iU3rsmUS92WZB3xOamZJTGvFsCEtIofPrb/HF1KEUtzWDbfYdv1CNLye
+   dPZll+uMcY0JB+gKg6XNPyC/SOInfqGxv2OPhrSIPh4l+sl8/5sbbST73
+   bAvDPwCSTCYUlD4bIi+c/1BbVcsaHeJZNEEt5ZMShZYxqj6PYmu2OJ1nz
+   Q==;
+X-CSE-ConnectionGUID: mQGoYcZMSYWiuYG0x9YIvQ==
+X-CSE-MsgGUID: yxmXURUMRpy+DovE+/uubw==
+X-IronPort-AV: E=Sophos;i="6.27,136,1787011200"; 
+   d="scan'208";a="30213323"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 07:34:23 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:10260]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.164:2525] with esmtp (Farcaster)
+ id c36c8b8c-7ef4-4a34-8890-c411c7f7ff52; Fri, 2 Oct 2026 07:34:23 +0000 (UTC)
+X-Farcaster-Flow-ID: c36c8b8c-7ef4-4a34-8890-c411c7f7ff52
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 2 Oct 2026 07:34:23 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 2 Oct 2026 07:34:22 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>
+CC: <alan.maguire@oracle.com>, <martin.lau@linux.dev>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <qmo@kernel.org>,
+	<nathan@kernel.org>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<linux@weissschuh.net>, <christian@heusel.eu>, <mcgrof@kernel.org>,
+	<petr.pavlu@suse.com>, <samitolvanen@google.com>,
+	<linux-modules@vger.kernel.org>, <rostedt@goodmis.org>,
+	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<linux-trace-kernel@vger.kernel.org>, <acme@kernel.org>,
+	<namhyung@kernel.org>, <irogers@google.com>,
+	<linux-perf-users@vger.kernel.org>, <jikos@kernel.org>, <bentiss@kernel.org>,
+	<linux-input@vger.kernel.org>, <tj@kernel.org>, <void@manifault.com>,
+	<arighi@nvidia.com>, <changwoo@igalia.com>, <sched-ext@lists.linux.dev>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ojeda@kernel.org>,
+	<rust-for-linux@vger.kernel.org>, <arnd@arndb.de>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<abuehaze@amazon.com>, <doebel@amazon.de>, <mpohlack@amazon.de>,
+	<jay.wang.upstream@gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+Date: Fri, 2 Oct 2026 07:34:22 +0000
+Message-ID: <20261002073422.14253-1-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
+References: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+> A question I had: is it really worth 2k of complicated kernel code to
+> *maybe sometimes* save <10Mb of memory?
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+There are many reasons this is worth it.  The main ones:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+1. This did not start from a number we picked, but from a real use
+   case: users who run large fleets of small instances, 1 GiB of
+   memory or less, with their workloads sized to fit.  We are not able
+   to disclose more detail, but for them 5.4 MB on every instance is
+   real money, and it can be exactly what pushes a workload over its
+   memory budget and onto the next instance size.  That is why we took
+   this on, even though we knew it would not be a small change.
 
-- [Medium] Once this overlay adds the "fdma" interrupt, PCIe instances
-  use lan966x_fdma_pci_ops, and a teardown ordering bug in that backend…
+2. Loading code and data only when a system needs them is what kernel
+   modules exist for.  And most of them take well under ~1 MB once
+   loaded (nf_conntrack, overlay, vfat); even big ones like ext4, kvm
+   and btrfs stay around 1-2.5 MB.  The vmlinux BTF is 5.4 MB.
 
---
+3. We are not alone in trying to keep BTF out of memory until it is
+   needed.  The inline BTF work [1] plans to deliver its data, which
+   is even larger, through a module too.  The .BTF.link record and the
+   resolve_btfids option that serve both are already part of this
+   series (patch 10), so this is not machinery for the vmlinux BTF
+   alone.
 
-misc: lan966x-pci: dts: add fdma interrupt to overlay
+> Do those tiny VMs that you target run systemd with BPF LSM?
 
-This commit adds the fdma interrupt (OIC interrupt 14) to the lan966x PCI
-device tree overlay. This turns on FDMA-based frame injection and extraction
-when the switch is connected over PCIe.
+Not necessarily, and that is the image's choice.  Even with BPF LSM
+built in and bpf in CONFIG_LSM, memory-conscious users can turn it off
+at boot with an lsm= list that leaves it out, and then systemd does not
+load restrict_fs at all.
 
-> diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-> index 7bb726550cafd..5bb12dbc08431 100644
-> --- a/drivers/misc/lan966x_pci.dtso
-> +++ b/drivers/misc/lan966x_pci.dtso
-> @@ -141,8 +141,9 @@ switch: switch@e0000000 {
->  
->  					interrupt-parent = <&oic>;
->  					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
-> +						     <14 IRQ_TYPE_LEVEL_HIGH>,
->  						     <9 IRQ_TYPE_LEVEL_HIGH>;
-> -					interrupt-names = "xtr", "fdma", "ana";
-> +					interrupt-names = "xtr", "fdma", "ana";
+And even where user space is in the way, which as above it does not
+have to be, the answer is to fix user space so it gets this win too,
+not to give up on it.
 
-[Severity: Medium]
-Once the "fdma" interrupt is present, PCIe instances use
-lan966x_fdma_pci_ops. Does that make a teardown ordering problem in the PCIe
-FDMA backend reachable?
+> If the answer is "yes" for the majority of them,
 
-lan966x_remove() tears down the FDMA before it unregisters the netdevs:
+"The majority" is also hard to pin down here: what runs at boot
+depends on the user space packages built into each image, and on the
+workload.
 
-lan966x_main.c:lan966x_remove() {
-    ...
-	lan966x->ops->fdma_deinit(lan966x);
-	lan966x_cleanup_ports(lan966x);
-    ...
-}
+So the question should be what it takes to make this work, not whether
+to drop it because it is complicated.  If there are ways to cut it
+down, or issues found in the implementation, we would be happy to take
+them and go through every one.
 
-lan966x_fdma_pci_deinit() disables NAPI and frees both rings. It does not
-clear lan966x->rx.lan966x, it does not detach the netdevs, and rtnl is not
-held at this point:
 
-lan966x_fdma_pci.c:lan966x_fdma_pci_deinit() {
-	if (lan966x->fdma_ndev)
-		napi_disable(&lan966x->napi);
-    ...
-	fdma_free_coherent_and_unmap(lan966x->dma_dev, &lan966x->rx.fdma);
-	fdma_free_coherent_and_unmap(lan966x->dma_dev, &lan966x->tx.fdma);
-}
-
-fdma_free_coherent_and_unmap() only clears atu_region, so dcbs and dma
-still hold their old values.
-
-netif_set_mtu_ext() only checks netif_device_present(). That means an MTU
-change that alters the max frame size can still run during this window:
-
-lan966x_port_change_mtu()
-  lan966x_fdma_pci_resize()
-    __lan966x_fdma_pci_reload()
-      lan966x_fdma_pci_reload()
-        napi_disable(&lan966x->napi)
-
-The resize guard is only this check:
-
-	if (!lan966x->rx.lan966x)
-		return 0;
-
-rx.lan966x is still non-NULL after deinit. Would the second napi_disable()
-on an already disabled NAPI spin forever while holding rtnl? That would also
-block the unregister_netdev() that lan966x_remove() calls next.
-
-The probe error path in lan966x_fdma_pci_init() looks like it has a similar
-gap:
-
-	err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
-	if (err) {
-		fdma_free_coherent_and_unmap(lan966x->dma_dev, rx_fdma);
-		return err;
-	}
-
-rx.lan966x has already been set earlier in lan966x_fdma_pci_init(). The
-netdevs registered by lan966x_probe_port() stay live until the cleanup_ports
-label.
-
-If an MTU change arrives in that window, NAPI is still enabled from
-lan966x_port_init(). lan966x_fdma_pci_reload() then allocates new rings and
-does:
-
-	fdma_free_coherent_and_unmap(lan966x->dma_dev, &rx_fdma_old);
-
-Is this a second dma_free_coherent() of the RX ring that the error path
-already freed?
-
-After that, reload re-arms the FDMA on the new rings. The probe error path
-never calls fdma_deinit for them. Would the coherent memory for the new rings
-leak, with the outbound ATU windows still mapped and DMA active after probe
-fails?
-
-The resize guard added in "net: lan966x: add PCIe FDMA MTU change support"
-is meant to skip the resize until lan966x_fdma_pci_init() has built the
-rings. It doesn't seem to cover rings that were torn down or only partly
-built.
-
-The shutdown callback from "net: lan966x: add shutdown callback to stop the
-FDMA on reboot" avoids this by taking rtnl and calling netif_device_detach()
-so that ndo_open and ndo_change_mtu can't re-enter the FDMA. Should the
-remove and probe error paths get the same protection?
-
-The platform backend already has the same remove ordering. The PCIe deinit,
-resize and reload code is new in this series, though, and this overlay change
-is what first makes it reachable.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260928-lan966x-pci-fdma-v9-0-a17caf60f89a%40microchip.com
+[1] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
