@@ -1,124 +1,172 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8481941DDFF
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 11:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650243A8749;
+	Fri,  2 Oct 2026 12:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790942331; cv=none; b=NbiGDIlRxf0iN5uxb1yKw05wRfDTfVmbNLoHacotXlDm/i9qBCdCUrNDGgWxcrtQ7YYxaa8gOb9VL2rFQU7/599nd+wp2Zrxvq1RwoVNL2wQz3sJhOwBV8r0/FRXQGESQWXHIOAZ8CZyEUp3U408Ubxuhgl2wkjieP0FkZ8BIGA=
+	t=1790942942; cv=none; b=d0hJ1zaiD0YhF1wg1eumx9EZgzz0Avywg92qzfn2LVJNmLrkKLhsCBCFBfVXjf6pbQjp+GrmcRP9b90ZFNgqgWmc3IwIQg1OBgZX32Ljjvf7HfQET4cmHvTJlVri2i5MI4DYgtrKG1FDrIZ0ddt9PVg5U01Ii/9ES1rxNK/hmaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790942331; c=relaxed/simple;
-	bh=LlZxGGTvdojYdT8k3tDVdc8QzvkSYhyl3Z1KAuLonF8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lz6SH+e9oZkGA4TQqq1OAb9/P1RfRGqgXYf/R+TNkKfph9GGf+NVzr5FbqT0O3Ws/wCZXV8fmwyUCChNjgCXWR1napqOU2DVaeFkWj4Ibj0elVYz15HASc8v8SrVxYLQkq/ibt7/+6NpNx8XSBUYX37mhq8gC/MMxoMXKlcKur8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JqMo3hrz; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1790942942; c=relaxed/simple;
+	bh=8cLAuKLPmVEDjaBRTngodkkmYayv43SIGXGLFNy7e78=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=caYh3GgW+FOgjQh5euHDypy/97wXz2CORojeahXU7L+ZNSkoamUD/uXrqGoI8YCxcM1+8p/EVf2fuSg8ul4KZkMf3rOJ05d8bhw0FrOL/Zs99y8cU6nDga0DTzdJlvtaxbA0JbZlgs9OJSLb+KQPBGh1SNpZKL3lO/kYLeieaqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uy5taaAC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JqMo3hrz"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6350f89so4579322f8f.3
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 04:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790942329; x=1791547129; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HuDPir+q4FERrKXQ8zp3kgZyGxkcWGZ+Inj9ACfB8ZM=;
-        b=JqMo3hrz7sWDZ2agS3eNLncKtt9asHtxtV0TwN43KVm46LnnrlccnZTxafbPUdLXnI
-         Qlcu20MPHyiDPlfoz6Ot+vgmfXA+WaDKX75fWE49/PpjvnKAOuk9bt1Tiy2K9itS/6hL
-         9uWuuQNw8dPgBXkX+LvrOJKXfTahvNkRLJ0qo3Rdisc+eJ17Oizwbqcfh+L4bkiUNo9k
-         0PAcG/T8sqT4Ft2iuy1kuqly8l55a1pscv8mqpoaQXB55H5F/j6KBX0byDurKu+lANtY
-         fEPFaUM8YKE50mpHCVVK2sEh1j6y2BxXg1VShzVXMoQGU15WOX84Bl83u/fKoCWvi2HL
-         UEVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790942329; x=1791547129;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=HuDPir+q4FERrKXQ8zp3kgZyGxkcWGZ+Inj9ACfB8ZM=;
-        b=JZMKdtNhJ/8CkzxdHB1MOTefb1F4zoeO50DURsV7kd5BL+PoUdWwjYrbaghm4o1izR
-         GuQqiiInhERtRsW8qzahGjmCxxr51D7ka1WngMCHAFjT9wgEtGGVtE0qD3SG6aWT+pCR
-         JHetiPOuPraZ595Z0ysncyVDfVH7F+Jtay4ppwUtuu5oAgd9wdmII9hheBOGaeyPM9Ix
-         EQjwAXzmqnEZYIDVlrDAszbgoCNo0NZoj5LYu8xYj5SFVBqAsAZ2vKfeB5BqTljsGCtu
-         m2MSneQJ3+xNbDetwcTyL/jQEFmH5qiyKj85O11tHsfC4O085a437+wdYXx2+jce3tjF
-         eKKA==
-X-Gm-Message-State: AFq9FYKqgjx+IYRjRHHnFQhAd9YoVpkNqOUuFDDMp0dIG8FakSCDFl7U
-	it6tVDVueur7o4uoMTddnLgU2lAL4htQq+HhtmX10kW8NQ7v9kJ0BSj9OgR7uX1OOHXPe7EOg/s
-	rmj2Lp7c=
-X-Gm-Gg: AYBFou2RiSf6DtjQpRO2vPrCY02Qesi4YApsbBpmPvWVSF3ILVBYRJrFvZJuwIxig+M
-	ujTu/MvY/XqmMyz/FCAFJelwKEvj6dRNUApwB+u8D6i3ZI1QAfPaLwT8gxYZP4QgdN299WMUBj5
-	F6FHTq8SgODHav4kwxsuVWBe7jSLrfYAkZ7ImXgVpY6hPzYP/2u4N/lyWitIppvO4JkJt9O5lH3
-	9Pw2whyYS6cLJs+7CpZhq5QelJbohPbppHpa4SaQO8wrO+5Wg9vegcPV0A1QUajIC/cfYFuolb4
-	fNu47yAZ2lY2JV6+idUaZnGKcSVGu8x5FgTkhtR0T5LVs3HVA++aSB76U1fMvswH1EAZ7CKmHNd
-	HakaCK0wPHBqPpEnzix77LYfCdi9GTW8YLzLBuHZuV41FyTOU2KGOs8SRcuFTMH64dl1EsLasWQ
-	wjCGfUCQ4TW56jUZrdyrCPXfGT+xTr8BrlLF6zZSYwa+Kl1HHu73hfLbnJ5KARx5OtqhQOyk1kl
-	+RLVnj8hjWSsT5T4EwJ4Ys0UOSAbXXQMrg=
-X-Received: by 2002:a05:6000:27cd:b0:486:f620:63bd with SMTP id ffacd0b85a97d-48b125a19fcmr3400232f8f.0.1790942328677;
-        Fri, 02 Oct 2026 04:58:48 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380faaeesm5023947f8f.18.2026.10.02.04.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 04:58:48 -0700 (PDT)
-Message-ID: <c166a29c-14f4-44ee-81ac-d79c82175fc8@suse.com>
-Date: Fri, 2 Oct 2026 13:58:48 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uy5taaAC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14641F000FF;
+	Fri,  2 Oct 2026 12:08:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790942941;
+	bh=8XFpzUVlPtubZNxGByXwzZH4ApuR2nkpwtpFdh8/JOw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Uy5taaACkmw4lszKyU7Yeuv+r4seDzQWxkXBg+0TVdf8xxURZsAxbErhYfWWrxxpc
+	 ioGRh0AkeUlNaM0O/76kHyq/jNHajZ49qlp7kzTK/y9hmtsTG1lIh8zALpUqCprNPh
+	 blExfXgLSv3QlLino90K+6/VPwq5Sd4fz4m+VygMzwLykCThr26SJaC6bhFxWHUwuU
+	 RW3dRxgv9qthrHmsQVLnchIEH1GFQYCaQedJVw2qJ7fKb4CeudG3fK6a/HZ/Cbqk5l
+	 1HvNfpJUOxI5LDkvyRmFGaGRuDENXBtw49ZrKzFNSoza42QyfDgjqhIdIeOYrklqzK
+	 NX8pFIwFQbflg==
+Date: Fri, 2 Oct 2026 13:08:31 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
+	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
+	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v3 31/40] mm/vma: introduce vma[_flags]_is_persistent()
+Message-ID: <ar-b_Ug__TBzIZsb@gremlin>
+References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
+ <20260917-b4-mmap-prepare-vma-flag-sanify-v3-31-4583d8a23bca@kernel.org>
+ <9bbdf4e8-6984-4477-a183-f0b236047381@kernel.org>
+ <3557015d-23dd-41ef-9832-78b58587f3f4@kernel.org>
+ <81e1e5ae-0aab-4584-81e6-3fc9c2634d07@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: Add stubs.c for CONFIG_MODULES=n
- module_put_and_kthread_exit()
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-References: <20261002-module-stubs-v2-1-a0d8c6ad1738@suse.com>
- <20261002091451.D4FBC1F00893@smtp.kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20261002091451.D4FBC1F00893@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <81e1e5ae-0aab-4584-81e6-3fc9c2634d07@kernel.org>
 
-On 10/2/26 11:14 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] bpf: resolve_btfids build failure with CONFIG_MODULES=n and LTO/GC
+On Fri, Oct 02, 2026 at 09:05:15AM +0200, David Hildenbrand (Arm) wrote:
+> On 10/2/26 09:02, David Hildenbrand (Arm) wrote:
+> > On 10/2/26 08:59, David Hildenbrand (Arm) wrote:
+> >> On 9/17/26 18:22, Lorenzo Stoakes (ARM) wrote:
+> >>> Introduce vma[_flags]_is_persistent() for the purposes of identifying
+> >>> mappings that are persistent in the sense that bytes to the mapping stay
+> >>> there, and bytes read from the mapping are the same unless changed by
+> >>> actions taken by userland.
+> >>
+> >> That's extremely confusing, sorry. We have to find a better name for that.
+> >>
+> >> Is this really all about user pages (pagecache, anon) that we would find through
+> >> the rmap?
+
+No, see below.
+
+> >>
+> >
+> > It's also about droppable mappings AFAIKs. How many more users will we have for
+> > that function?
+
+Anything that requires stuff not to be dropped behind the user's back, which is
+at least 4 cases!
+
+That being open-coded all over the place is a problem I think, and I think stuff
+like the PMD device private are a reminder that open-coding all over can cause
+problems.
+
+> >
+> > If it's "no others" then please don't add a helper function with misleading
+> > names for it and just keep the special "dumpable" check in the new form in
+> > madvise_vma_behavior().
+>
+> Talking to myself ... the more usage I see of the vma_is_persistent() the more I
+> think this shouldn't be a helper at all. Especially not one with such a
+> confusing name :P
+
+There are 4 open-coded checks that test four ad-hoc flag combinations checking
+for the same thing - 'can the kernel or a driver change things or discard stuff
+behind my back?'
+
+So abstracting that to a helper, alongside the other 'let's ask based on
+semantics' helpers, seems sensible.
+
+Maybe invert the meaning to make it clearer?
+
+	vma_kernel_may_change_contents()?
+
+vma_contents_may_change() is shorter but easily confused with something being
+writable by userland etc.
+
+Or maybe:
+
+	vma_is_volatile()
+
+?
+
+Which is analogous to the meaning of the volatile keyword.
+
+>
 > --
-> 
-> commit caaeb9d0651743944c690c066494bb16509c01e9
-> Author: Petr Pavlu <petr.pavlu@suse.com>
-> 
-> module: Add stubs.c for CONFIG_MODULES=n module_put_and_kthread_exit()
-> 
-> This commit introduces kernel/module/stubs.c to hold stub functions when
-> CONFIG_MODULES is disabled. It moves the stub implementation for
-> __module_put_and_kthread_exit() to this new file and removes the
-> corresponding #ifdef from the BPF verifier's noreturn list.
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 72a3f5998dd27..be70f10e49682 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -20417,9 +20417,7 @@ BTF_ID(func, __ia32_sys_exit_group)
->>  BTF_ID(func, __kunit_abort)
->>  BTF_ID(func, kunit_try_catch_throw)
->>  #endif
->> -#ifdef CONFIG_MODULES
->>  BTF_ID(func, __module_put_and_kthread_exit)
-> 
-> [Severity: Low]
-> If CONFIG_MODULES=n and dead-code elimination (like CONFIG_LTO_CLANG or
-> CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) is enabled, will this cause 
-> resolve_btfids to fail?
-> 
-> Because the #ifdef is removed, this unconditionally requires the function to
-> be present in the BTF. If there are no callers in the kernel, the linker 
-> might discard the stub function, causing a missing BTF ID and a fatal build 
-> error under CONFIG_WERROR.
+> Cheers,
+>
+> David
 
-This is a valid issue. I think a simple solution would be to mark
-__module_put_and_kthread_exit() as __retain.
-
--- Petr
+--
+Cheers, Lorenzo
