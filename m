@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EE6223328;
-	Fri,  2 Oct 2026 19:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D183B3C01;
+	Fri,  2 Oct 2026 19:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967634; cv=none; b=j8wrQ2B2Qr8rDztEHn+RPxt01QwHSTDB4JCkRBnCutA2rsadIt7px0iwOJs0F39M9Fa13cmRKOLKguFHfJOEZXdEIztqSQDASDg87TTBmJ5GfcM9+rkScUb7QTWNdB5kR1D0I/nUB+Z6+c/cL59G4RlTI5oliyiF3F/Kj9vUxAI=
+	t=1790967642; cv=none; b=LCl2ictEQEuBeRNlhp13h9LtqOlVDvsWtLo1LvFLOQpPeD7Zlcd7PjfGF+nvzb9vz0kjeJX7+qXOUVz7tYNBgwGg4VBYYQGrHxKX7ZnaPpfWd2IZuaA+FNIGxy+UHtsTydtVUedNFTQpA59v4Tz7Ozf7vEJmNisALszHo725HmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967634; c=relaxed/simple;
-	bh=PEbJLvy7CrYN1hf9iYQ+ysoXfJ8bNcfDcQxuv4rB2lg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yz3XI57f7p8zsGrD+Xu4G9CxjXyrvCkOeyrZL3yffQBSQqQD2zsOStEepnsC/KE8m2fM4Ivneilp5vs1+n3PvnfaQeBrKogXLc/3wng2f9ygHHTkXlQyolhGuazbENL29u44eD9Krwnge99krZb+autawRW+aTil1dqJw6ppxkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxZ782g1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790967642; c=relaxed/simple;
+	bh=OeYP/uD/Iq/PzT3ztRoXD6qyP1Trr1CrLpnfJEb/Dzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OA1z98UJCVQ6c2/abTP6wAZCoTgZVNrcDJVHDXH1aF6pX2JrbYxNsnQ9JfRAUyWSzVZBv/MmfHTP2VBxNm4PO/q5MTjPx0z4lDHFZX3CxPch9eJymRt7kYjoH5AkcPAkRZEACz6Y46U665qOsIJLzjeOwGxS8buUlNk4d03xrqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdRZeh0y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxZ782g1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01321F000FF;
-	Fri,  2 Oct 2026 19:00:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdRZeh0y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861DA1F00893;
+	Fri,  2 Oct 2026 19:00:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967633;
-	bh=Gcl/f7moFApWo3jqJXdkRteP30YDcjxwYvzQVuzmbj4=;
-	h=From:To:Cc:Subject:Date;
-	b=YxZ782g1CNQTsuUl9y3aigokBAb+oTzvb60oKfr9yAjE4mX7SFOmKq4MYxZOh4e9W
-	 XVf9EzYxllCIsiSKqGctvl7kBgkFuey+xsOpzy8vcO2ibO5m32HmdT1M7R35jJR37e
-	 w/Oba24+G+rSeVoESdLh8XsIgozwQGiTYb7a3E7XHNcrgDK5cylrWnpTOecgeJwP/P
-	 DwgeQ/q6eTHXaXu5LJ+NHeeDtRtY8ub0BgB9Y099dw80D7KyPUdlslLBl8D+wsedPa
-	 g1Kl5Y0wZrVCd9VkUdwRQibtxtJty4wK/t+s1I2SthgksK+ehtF+s2OquVE/eaOM9k
-	 Zt4/aq5PlJlIw==
+	s=k20260515; t=1790967641;
+	bh=vM8m9eHKdpCNE8+XE3FrhRD+fibfwpH+NukLDNp0ydQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=PdRZeh0y16PSDWZ6frirxvX7he1dE+oGFgOrlmmQRdeFZdYMe4e3yES9otn4M8N0Z
+	 kci6A9H6J+O5n5uMrha6t+60cMCSCLv39HgYvhJHuh2bZgIC7bv+YkYe24uhsyqSdz
+	 sSQQeGPMUNzQVF5TbynLmNk6f0cDuGZFyRHvPFqUJcRX2T/kH+RHy2/BfsMOZagjWq
+	 tqEmLEBRafTDYHcqNpj5jgjboVQ1vwmCX35GEvo25ooYidZdwUAOTSBWj2xyLMdpBi
+	 5qeAgzK4GklJGfSFMScFwhqaPkXB09BE2ikzgs0+f9xH6VtFK2z51eW8v2ZFSVdyyI
+	 CFu0AYOXXqAaQ==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -68,10 +69,12 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [RFC net-next 00/15] xsk: Zero copy through page-pool memory providers
-Date: Fri,  2 Oct 2026 21:00:01 +0200
-Message-ID: <20261002190018.696925-1-bjorn@kernel.org>
+Subject: [RFC net-next 01/15] xdp: Size zero-copy skb heads by their contents
+Date: Fri,  2 Oct 2026 21:00:02 +0200
+Message-ID: <20261002190018.696925-2-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261002190018.696925-1-bjorn@kernel.org>
+References: <20261002190018.696925-1-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,150 +84,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi!
+xdp_build_skb_from_zc() sizes the skb head by the XSK frame size,
+which leaves no room for skb_shared_info. With 2 KiB chunks, a
+1514 byte frame overwrites 48 bytes of it. Both copies also round
+the length up to LARGEST_ALIGN, past the end of the new buffers.
 
-Here's an RFC for you all to enjoy with your favorite Friday
-$BEVERAGE.
+Size the head from headroom plus data, copy exactly the data, and
+drop frames whose head does not fit in a page.
 
-AF_XDP zero copy needs a second receive allocator in every driver.
-The driver takes xdp_buff_xsk objects from the XSK buffer pool beside
-its page_pool path and owns their lifetime. Drivers built around
-page_pool and the queue management API, which already support devmem
-and io_uring zero-copy receive, have to duplicate their receive path.
+Discovered by an AI code review agent. Reproduced on fbnic in QEMU
+with AF_XDP zero-copy from the page-pool series: an XDP program that
+adds metadata, grows the frame to its end and passes it gets UMEM
+bytes in the skb's shared info. A new xskxceiver test,
+XDP_PASS_FULL_FRAME, checks this and passes with the fix. The test
+will be posted separately.
 
-This series makes UMEM a page-pool memory provider instead. Each
-aligned 4 KiB chunk is a NET_IOV_XSK net_iov. Binding a zero-copy
-socket installs the provider on the queue through the queue
-management API. The driver keeps its page_pool allocation, DMA sync,
-recycling and refill code. The provider consumes FILL, drops invalid
-and repeated addresses, and owns RX need-wakeup.
+Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+Signed-off-by: Björn Töpel <bjorn@kernel.org>
+---
+ net/core/xdp.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-An XSKMAP redirect publishes the UMEM address when every buffer of the
-frame belongs to the socket's provider. XDP_PASS and other redirect
-targets copy into page-backed memory first. TX is unchanged; drivers
-read socket TX descriptors directly.
-
-Core changes:
-
- - MP_CAP_READABLE and MP_CAP_FRAG. A readable provider may back
-   header and regular pools, and XDP may run on its buffers. devmem
-   and io_uring set MP_CAP_FRAG and keep their behavior.
- - Providers request RX headroom through the queue configuration.
- - Readable net_iov areas. netmem_address() resolves provider memory
-   with a load and a shift, without an indirect call.
- - A refill-completion callback. The XSK provider keeps NAPI scheduled
-   while FILL has entries, and sets NEED_WAKEUP when FILL is empty.
- - Batched page-pool release for objects handed to userspace.
- - xdp_buff carries the netmem and a pointer to kernel-owned shared
-   info, so fragment metadata never lives in user-writable UMEM. It
-   grows from 56 to 64 bytes on 64-bit.
-
-Differences from classic zero copy:
-
- - 4 KiB pages and aligned 4 KiB chunks only. Other layouts fail to
-   bind with -EOPNOTSUPP, but can be supported in the future.
- - Generic XDP and CPUMAP cannot deliver to a provider-backed socket.
-
-Classic zero copy is unchanged. This does not propose converting
-existing drivers; it is for page_pool drivers without zero copy.
-
-fbnic is the only driver user, +640/-122 for RX and TX. I have bnxt
-working with AF_XDP, plus some performance patches/fixes for the
-AF_XDP core on top of this -- but let's start with these patches.
-
-Patches 1-2 fix bugs in net-next that the series hits. They are
-carried here so the series can be tested on its own.
-
- 1. "xdp: Size zero-copy skb heads by their contents". XDP_PASS of a
-    zero-copy buffer copies it into an skb whose head is sized by the
-    XSK frame size, which leaves no room for skb_shared_info. A frame
-    that fills its buffer overwrites skb_shared_info. Provider
-    buffers take this path on XDP_PASS, which the usual AF_XDP
-    program returns when no socket is bound to the queue. Reproduced
-    on fbnic in QEMU.
-
- 2. "eth: fbnic: Report the logical XDP RX queue". fbnic reports
-    queue 0 in rx_queue_index for every queue. AF_XDP drops frames
-    whose queue differs from the socket's, and the usual program
-    looks up its socket by that index, so zero copy works on queue 0
-    only.
-
-Feedback wanted on:
-
- 0. General thoughts on extending the page pool provider.
- 1. Does refill_done belong in page_pool, or should finite providers
-    keep NAPI scheduled some other way?
- 2. PP_FLAG_ALLOW_UNREADABLE_NETMEM is how a pool picks up any
-    provider, readable or not. A driver that only wants AF_XDP must
-    set it, and then passes the core checks for devmem and io_uring
-    too if it supports header split. Drivers that set the flag today
-    may also split buffers, for example mlx5 through
-    page_pool_fragment_netmem(). Only QCFG_RX_HEADROOM keeps the
-    unsplittable XSK provider away from them. Split the flag, or let
-    drivers declare support for unsplittable providers?
- 3. Is growing xdp_buff by 8 bytes acceptable?
- 4. How should userspace learn the chunk constraints before bind?
-
-This is a way to move code from the drivers to the core, reducing the
-work for driver developers.
-
-I hope to see you at LPC next week! Particular the netdev and bpf MC,
-and the AF_XDP BoF on Monday.
-
-
-Björn
-
-Björn Töpel (15):
-  xdp: Size zero-copy skb heads by their contents
-  eth: fbnic: Report the logical XDP RX queue
-  net: Add memory provider capabilities
-  net: Let memory providers set RX buffer headroom
-  page_pool: Extend memory provider operations
-  xdp: Track non-page netmem in receive buffers
-  xsk: Keep the DMA mapping in the buffer pool
-  xsk: Handle a detached FILL ring in RX wakeup
-  xsk: Add a page-pool memory provider for UMEM
-  xsk: Add RX helpers for page-pool drivers
-  xdp: Copy provider buffers on pass and redirect
-  xsk: Receive provider UMEM without copying
-  eth: fbnic: Support AF_XDP zero-copy receive
-  eth: fbnic: Support AF_XDP zero-copy transmit
-  Documentation: xsk: Document page-pool zero copy
-
- Documentation/networking/af_xdp.rst           |  65 ++
- Documentation/networking/netmem.rst           |   7 +-
- .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |   5 +
- .../net/ethernet/meta/fbnic/fbnic_netdev.c    | 164 ++++-
- .../net/ethernet/meta/fbnic/fbnic_netdev.h    |   4 +
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 561 ++++++++++++---
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |  24 +
- include/net/netdev_queues.h                   |   6 +
- include/net/netmem.h                          |  32 +-
- include/net/page_pool/helpers.h               |  62 +-
- include/net/page_pool/memory_provider.h       |  39 +-
- include/net/page_pool/types.h                 |   8 +-
- include/net/xdp.h                             |  64 +-
- include/net/xdp_sock.h                        |  10 +
- include/net/xdp_sock_drv.h                    |  58 +-
- include/net/xsk_buff_pool.h                   |   7 +-
- io_uring/zcrx.c                               |   4 +-
- net/core/dev.c                                |   4 +-
- net/core/dev.h                                |   5 +
- net/core/devmem.c                             |   7 +-
- net/core/filter.c                             |  28 +-
- net/core/netdev_config.c                      |   2 +
- net/core/netdev_rx_queue.c                    |  61 +-
- net/core/page_pool.c                          |  72 +-
- net/core/xdp.c                                | 112 ++-
- net/ethtool/rings.c                           |  18 +-
- net/xdp/Kconfig                               |   1 +
- net/xdp/xsk.c                                 | 253 ++++++-
- net/xdp/xsk.h                                 |  58 ++
- net/xdp/xsk_buff_pool.c                       | 667 +++++++++++++++++-
- 30 files changed, 2164 insertions(+), 244 deletions(-)
-
-
-base-commit: 071876fd50482a68603a9460d80dd6dd58827ee1
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 1d679e8fd649..386240bd24c9 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -709,7 +709,7 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
+ 		}
+ 
+ 		memcpy(page_address(page) + offset, skb_frag_address(frag),
+-		       LARGEST_ALIGN(len));
++		       len);
+ 		__skb_fill_page_desc_noacc(sinfo, i, page, offset, len);
+ 
+ 		tsize += truesize;
+@@ -738,17 +738,23 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
+  */
+ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+ {
++	u32 headroom = xdp->data_meta - xdp->data_hard_start;
+ 	const struct xdp_rxq_info *rxq = xdp->rxq;
+ 	u32 len = xdp->data_end - xdp->data_meta;
+-	u32 truesize = xdp->frame_sz;
+ 	struct sk_buff *skb = NULL;
+ 	struct page_pool *pp;
++	u32 truesize;
+ 	int metalen;
+ 	void *data;
+ 
+ 	if (!IS_ENABLED(CONFIG_PAGE_POOL))
+ 		return NULL;
+ 
++	/* The XSK frame size leaves no room for skb_shared_info. */
++	truesize = SKB_HEAD_ALIGN(headroom + len);
++	if (unlikely(truesize > PAGE_SIZE))
++		return NULL;
++
+ 	local_lock_nested_bh(&system_page_pool.bh_lock);
+ 	pp = this_cpu_read(system_page_pool.pool);
+ 	data = page_pool_dev_alloc_va(pp, &truesize);
+@@ -762,9 +768,9 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+ 	}
+ 
+ 	skb_mark_for_recycle(skb);
+-	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
++	skb_reserve(skb, headroom);
+ 
+-	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
++	memcpy(__skb_put(skb, len), xdp->data_meta, len);
+ 
+ 	metalen = xdp->data - xdp->data_meta;
+ 	if (metalen > 0) {
 -- 
 2.55.0
 
