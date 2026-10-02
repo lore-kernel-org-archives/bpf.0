@@ -1,850 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABED364EAF;
-	Fri,  2 Oct 2026 04:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA492DAFAF;
+	Fri,  2 Oct 2026 05:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790916538; cv=none; b=WaN8N+vpSXXmknEvK9Ze3Wna5irZL9R2tccsDxzuHnEwCUsxvp3fQtkJ9L8dnt/XQ3TmXXfmMJr47O6E0jguxUx2JNok+EFD/UK525f8U3VB6Lnqy71ckXlJZQJjQSpLP7Vd9ft8Rrr/zjN8FGiVRjwxOY32UjzABfyVtdnBpag=
+	t=1790918083; cv=none; b=lmWdzZCi4f8ySmjRToigzU981M/nPiQICFBunfDSOipAiYQwt2EyTKM9imFDLEL+JF92aLF07NEO1NopMf2WxXPMVrUvC65UwkARr7YUel5GmO5WNTgx84n4Lg8Bj+fd4GmxsbZ6WGYsNwq0uOVT1g6ZdE/FsoS0k8kTT9lbF/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790916538; c=relaxed/simple;
-	bh=ZTd1/Zo1zwd26Oiuud0gMol4HcZZUTOTPF/q2Dphaa0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PcWa1dXCh1plQFGhLtq4h4jHKYhZmmpkgXly91bLKx+AZGJVwzSqV5h6Yrcw4knPrXQQphyG4q4FAe7wY8rTFjiSyqbR/r37ME+6ZinPKmGnLlGVZW6COa5a0jfSW4YtncbNuU4I7AQjmXO++Azytjlwl8x6DEA9AS7+20JORjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OsMkoO7r; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790918083; c=relaxed/simple;
+	bh=D92WhrZH+54cjQPN+K8ltIeWhFkD/it2q9JkQccXjjQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Bxbleta7Oqy59nksxVnKslgS3fxFuGPYnX1TA7yJfQxfH37MCFtWm9EPbOWP2Muv5rtg2i83E7ExXhwgomW0aZQaRJq55i1RXqKyGZFMLJpLuNoVRSInFKE9/1lyKoz6dKGjxBemq3AN7FuozMN1p/EsWzlnYNeeeoBwhEE3LhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bxa3in1P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OsMkoO7r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B731D1F000FF;
-	Fri,  2 Oct 2026 04:48:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bxa3in1P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA3B1F000FF;
+	Fri,  2 Oct 2026 05:14:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790916536;
-	bh=e6kaB/7Svz3BPNAU3fqbeQqSZdeauvdPDmd7yd+uVac=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=OsMkoO7rbvT7xSfF9wtlou9eGi9S3lgM3JoBCpnWdz7zt70xJgUYwYhn2gDxyMhaM
-	 vWZ9CPTajG7gYzqsnlmKcvgovGWKN9ostW2Ac/nYhvON1fJx/yZopb8kT6YIZXOJdW
-	 HhcUOaqZv//B8V4CylTxFFBKMPNg9iFsqB5VlFGjW8c3o0Wjau6SVLWguC7KJakPCQ
-	 5OpqSGOOTXyprWdroVoJj5LdrtRiIbGHL6gKuCGlWxNCUIRrcs1FOjwpd8z7SFJJXf
-	 JNyCO8alK/z3FzxHb3itUcVmqbDjmSXAk9hCaUvM713IKAIfg4IGNJV5Dgep/y30Ib
-	 OfgMbgYYIup0A==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Josef Bacik <josef@toxicpanda.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: Boqun Feng <boqun@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	rcu@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Andrea Parri <parri.andrea@gmail.com>
-Subject: [PATCH v5 1/1] kprobes: Make optprobe optimizer multi-generational and asynchronous
-Date: Fri,  2 Oct 2026 13:48:49 +0900
-Message-ID: <179091652953.526694.3402334249215311330.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <179091651785.526694.220518880874223221.stgit@devnote2>
-References: <179091651785.526694.220518880874223221.stgit@devnote2>
-User-Agent: StGit/0.19
+	s=k20260515; t=1790918081;
+	bh=ZTPYABB2u4qxTYVrhofxTi+nKWD1avZUblAo3JWd1fA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Bxa3in1PDTIc9CtlCSc//T2TREVtKt53RDb2K2dmzUUofLbGS3BBPrcfI3wvZCHgK
+	 R703RSR6Alq4uXKpQqh69KSmoyFRNJG/ZSHdeaSib6AXHqCGNFk+16GyMqXeFEQItz
+	 XgF18r7u6VlMu7oygdwcHjTB8r4v8xwIYEJULwm3e5EO3pbUiA310L1jIx2AA5dG01
+	 o2p6ZAe1nRw3UzmSq7rNfZI5ksZNba8seInXyF5S6gl12iejdXrITno/CQWmrcqFvJ
+	 hx87SVQhGNsfXpV+umqu31RRYqLiJu+f+YlVD35qUWF0Rf0duiatjUZvOrgweYisLd
+	 OryKoC95ySoAQ==
+Content-Type: multipart/mixed; boundary="===============3278906847704703613=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Message-Id: <aa827bb60ac91fb2860c3307b5942aee2bf0810b21dbbc297aac5f61fb102627@mail.kernel.org>
+In-Reply-To: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
+References: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: add XDP test for per-flow LRU_HASH window updates
+From: bot+bpf-ci@kernel.org
+To: anilkaushikwireless@gmail.com,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
+Cc: sdf@fomichev.me,ihor.solodrai@linux.dev,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,anilkaushikwireless@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  2 Oct 2026 05:14:40 +0000 (UTC)
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--===============3278906847704703613==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Currently, kprobe_optimizer() holds kprobe_mutex, text_mutex, and
-cpus_read_lock() simultaneously while executing synchronize_rcu_tasks().
-Under PREEMPT_LAZY and server workloads with long-running CPU-bound kernel
-tasks or heavy cgroup writeback loops, synchronize_rcu_tasks() can block
-for seconds to minutes. Because text_mutex and cpus_read_lock() are held
-during this entire wait, any concurrent static key updates, module
-loading/unloading, CPU hotplug, or tracing updates stall, frequently
-triggering hung-task detector panics.
+> selftests/bpf: add XDP test for per-flow LRU_HASH window updates
 
-Instead of penalizing the kernel preemption path with invasive hooks and
-global hash lookups, decouple kprobe jump optimization from synchronous
-waiting entirely:
+TL;DR:
+- Test issue: wrap subtest uses identical packet lengths, so it can't detect a
+  wrong post-wrap index
+- trunc subtest sends a non-IPv4 frame, so it likely never reaches the
+  truncation checks
 
-1. Replace synchronize_rcu_tasks() with call_rcu_tasks(). Locks
-   (text_mutex and cpus_read_lock()) are held only for the brief moment
-   needed to patch instructions via arch_unoptimize_kprobes() and
-   arch_optimize_kprobes() (microseconds), and are completely released
-   while waiting for the Tasks RCU grace period.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c b/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c
+> new file mode 100644
+> index 000000000000..55175c2165ec
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c
+> @@ -0,0 +1,168 @@
 
-2. Introduce a fixed ring of generations (optprobe_gens[OPTPROBE_GEN_MAX])
-   to avoid any dynamic memory allocation (kmalloc) or -ENOMEM failure
-   modes.
+[ ... ]
 
-3. The last generation slot in the array is reserved as a "waiting room"
-   and is not dispatched to RCU until another in-flight generation has
-   finished. While a generation is waiting for its Tasks RCU grace period,
-   any newly registered or unregistered probes accumulate in the waiting
-   room generation without blocking or requiring additional slots.
+> +static void test_one_and_wrap(void)
+> +{
+> +	struct xdp_lru_window_state st;
+> +	struct xdp_lru_window_key key;
+> +	int i, n;
+> +
+> +	reset_map();
+> +	if (inject(1, DST_PORT))
+> +		return;
+> +	fill_key(&key, DST_PORT);
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &st), "lookup"))
+> +		return;
+> +	ASSERT_EQ(st.seq, 1, "seq");
+> +	ASSERT_EQ(st.pkt_len[0], sizeof(struct ipv4_packet), "len0");
+> +
+> +	n = AGGREGATION_WINDOW + 5;
+> +	if (inject(n - 1, DST_PORT))
+> +		return;
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &st), "lookup wrap"))
+> +		return;
+> +	ASSERT_EQ(st.seq, n, "seq wrap");
+> +	for (i = 0; i < AGGREGATION_WINDOW; i++)
+> +		ASSERT_EQ(st.pkt_len[i], sizeof(struct ipv4_packet), "slot");
+> +}
 
-4. When the Tasks RCU callback fires, it marks the generation as ready
-   and wakes up the optimizer thread to finalize optimization (poking
-   the jump instructions) and free cleaned probe slots. Once finalized,
-   the generation is marked idle, allowing the waiting room generation
-   to be dispatched next.
+Can the final "slot" loop detect a wrong post-wrap write?
 
-5. Flushing via wait_for_kprobe_optimizer() waits asynchronously for all
-   in-flight and queued generations to drain without stalling other
-   kernel subsystems.
+Every packet sent by inject() is the same pkt_v4 copy, so every write stores
+sizeof(struct ipv4_packet) (54).  After the first 50 packets, slots 0..49
+already hold 54, and packets 51..55 write 54 into slots 0..4 again.  The
+loop therefore checks nothing that was not already true before the index
+wrapped.
 
-On non-preemptive kernels or configs where CONFIG_TASKS_RCU=n,
-call_rcu_tasks() transparently aliases to call_rcu(), preserving full
-portability.
+The "seq wrap" check only shows the program did not take the
+"idx >= AGGREGATION_WINDOW" early return.  A miscompiled modulo that
+produced a wrong but in-range index would still pass.
 
-Assisted-by: LLM
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+The commit message says this subtest checks that "the bounded array wraps".
+Would it make sense to send the post-wrap packets with a different length
+(run_pkt() accepts any len >= ETH_HLEN, and the program records
+data_end - data), then check that slots 0..4 hold the new length while
+slots 5..49 keep the old one?
+
+[ ... ]
+
+> +static void test_trunc(void)
+> +{
+> +	struct xdp_lru_window_state before, after;
+> +	struct xdp_lru_window_key key, next;
+> +	unsigned char short_pkt[sizeof(struct ethhdr)] = {};
+> +	int err, retval;
+> +
+> +	reset_map();
+> +	err = run_pkt(short_pkt, sizeof(short_pkt), &retval);
+> +	if (err)
+> +		return;
+> +	ASSERT_EQ(retval, XDP_PASS, "trunc retval");
+> +	err = bpf_map_get_next_key(map_fd, NULL, &next);
+> +	ASSERT_EQ(err, -ENOENT, "trunc no insert");
+
+Does this subtest reach any of the program's truncation checks?
+
+short_pkt is 14 zero bytes, so eth->h_proto is 0.  In
+progs/xdp_lru_window.c the program passes the Ethernet bounds check and then
+returns at:
+
+    if (eth->h_proto != bpf_htons(ETH_P_IP))
+            return XDP_PASS;
+
+The IPv4 length check ((void *)(iph + 1) > data_end) and the TCP length
+check ((void *)(th + 1) > data_end) never run, here or in any other
+subtest.
+
+The "trunc no insert" and "trunc no mutate" assertions would pass the same
+way for a full-length non-IPv4 frame, so this exercises the ethertype
+filter rather than truncated-packet handling.  The commit message describes
+this subtest as checking that "a short (parse-failing) packet neither
+inserts a new entry nor mutates an existing one".
+
+Should short_pkt have h_proto set to htons(ETH_P_IP) so the IPv4 length check
+is reached?  To also reach the TCP header check, a truncated copy of pkt_v4
+of sizeof(struct ethhdr) + sizeof(struct iphdr) bytes could be sent.
+bpf_prog_test_run_xdp() only requires data_size_in >= ETH_HLEN, so both
+sizes are accepted.
+
+> +
+> +	if (inject(1, DST_PORT))
+> +		return;
+> +	fill_key(&key, DST_PORT);
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &before), "setup"))
+> +		return;
+> +	if (run_pkt(short_pkt, sizeof(short_pkt), &retval))
+> +		return;
+> +	ASSERT_EQ(retval, XDP_PASS, "trunc2 retval");
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &after), "after"))
+> +		return;
+> +	ASSERT_EQ(after.seq, before.seq, "trunc no mutate");
+> +}
+
+[ ... ]
+
+
 ---
-Changes in v5:
- - Fix comments for each list in optprobe_generation.
- - Rename kprobe_queued() to kprobe_queued_unopt() and make it check
-   optprobe_queued_unopt() instead of !list_empty(&op->list).
- - In unoptimize_kprobe(), check !list_empty(&op->list) before
-   !kprobe_optimized(p) so that cooling probes (whose OPTIMIZED flag is
-   already cleared) are correctly handled rather than returning early.
- - Make sure the probes in freeing_list are removed from hash table
-   and disarmed.
-Changes in v4:
- - Fix double hlist_del_rcu() on cooling probes by removing hlist_del_rcu()
-   from optprobe_finalize_generation() and use hlist_del_init_rcu() in
-   do_unoptimize_kprobes() for safe.
-Changes in v3:
- - Avoid 100% CPU busy-loop livelock during flushes when a generation is
-   in flight:
-   - Make optprobe_dispatch_generation() return a boolean indicating
-     whether a generation was actually dispatched.
-   - In kprobe_optimizer(), only increment optimizer_passes and wake
-     flushers if actual progress was made (a generation was finalized or
-     dispatched).
-   - In wait_for_kprobe_optimizer_locked(), only wake the optimizer kthread
-     if work can be dispatched or a generation is ready, avoiding wakeups
-     when a generation is merely in-flight waiting for Tasks RCU.
-Changes in v2:
- - Rebase on Andrea Parri's fix ("kprobes: Fix permanent hang when
-   flushing the kprobe optimizer") and use optimizer_passes with
-   wait_var_event_mutex() instead of optimizer_completion.
- - Check gen->freeing_list in optprobe_has_queued_probes() so that
-   forcibly unoptimized probes are dispatched and accounted for when
-   flushing.
- - Ensure kick_kprobe_optimizer() is called when probes are moved to
-   freeing_list.
- - Dequeue from freeing_list in optimize_kprobe() before re-optimizing.
- - Introduce cooling_list in optprobe_generation to keep in-use
-   unoptimized probes attached during the Tasks RCU grace period without
-   re-adding them to unoptimizing_list. This avoids redundant calls to
-   arch_unoptimize_kprobes() and prevents premature reclamation and
-   use-after-free in unregister_kprobes().
- - Process in-flight unoptimized probes in optprobe_finalize_generation(),
-   moving any probe that became unused while in flight to the freeing
-   list and marking still-active probes as disarmed.
- - Avoid premature arch_remove_optimized_kprobe() in
-   kill_optimized_kprobe() if the probe is queued or in-flight for
-   optimizer cleanup.
----
- kernel/kprobes.c |  471 ++++++++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 353 insertions(+), 118 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 4edd8ca5c657..7de02955de20 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -43,6 +43,7 @@
- #include <linux/cleanup.h>
- #include <linux/wait.h>
- #include <linux/wait_bit.h>
-+#include <linux/rcupdate.h>
- 
- #include <asm/sections.h>
- #include <asm/cacheflush.h>
-@@ -67,7 +68,7 @@ static struct hlist_head kprobe_table[KPROBE_TABLE_SIZE];
- /* NOTE: change this value only with 'kprobe_mutex' held */
- static bool kprobes_all_disarmed;
- 
--/* This protects 'kprobe_table' and 'optimizing_list' */
-+/* This protects 'kprobe_table' and 'optprobe_gens' */
- static DEFINE_MUTEX(kprobe_mutex);
- static DEFINE_PER_CPU(struct kprobe *, kprobe_instance);
- 
-@@ -476,18 +477,6 @@ bool kprobe_disarmed(struct kprobe *p)
- 	return kprobe_disabled(p) && list_empty(&op->list);
- }
- 
--/* Return true if the probe is queued on (un)optimizing lists */
--static bool kprobe_queued(struct kprobe *p)
--{
--	struct optimized_kprobe *op;
--
--	if (kprobe_aggrprobe(p)) {
--		op = container_of(p, struct optimized_kprobe, kp);
--		if (!list_empty(&op->list))
--			return true;
--	}
--	return false;
--}
- 
- /*
-  * Return an optimized kprobe whose optimizing code replaces
-@@ -512,10 +501,39 @@ static struct kprobe *get_optimized_kprobe(kprobe_opcode_t *addr)
- 	return NULL;
- }
- 
--/* Optimization staging list, protected by 'kprobe_mutex' */
--static LIST_HEAD(optimizing_list);
--static LIST_HEAD(unoptimizing_list);
--static LIST_HEAD(freeing_list);
-+#define OPTPROBE_GEN_MAX 2
-+
-+struct optprobe_generation {
-+	/* Probes waiting for grace period to drain tasks from original text */
-+	struct list_head optimizing_list;
-+	/* Probes queued for batch unoptimization upon dispatch */
-+	struct list_head unoptimizing_list;
-+	/* In-use probes waiting for grace period to drain optinsn slot */
-+	struct list_head cooling_list;
-+	/* Unused probes unhashed and waiting for batch release */
-+	struct list_head freeing_list;
-+	/* Tasks RCU callback head for asynchronous waiting */
-+	struct rcu_head rcu;
-+	/* True if dispatched and awaiting Tasks RCU callback */
-+	bool in_flight;
-+	/* True when Tasks RCU callback has fired and ready to finalize */
-+	bool ready;
-+};
-+
-+/*
-+ * Generational ring of optprobes.
-+ *
-+ * Incoming probe requests are queued into the waiting room generation
-+ * (optprobe_gens[optprobe_cur_gen]). When dispatched, the generation
-+ * unoptimizes its probes, invokes call_rcu_tasks(), and optprobe_cur_gen
-+ * advances to the next slot.
-+ *
-+ * To ensure an idle generation is always available to collect incoming
-+ * requests without dynamic allocation, the last available generation slot
-+ * is never dispatched until another generation has finished.
-+ */
-+static struct optprobe_generation optprobe_gens[OPTPROBE_GEN_MAX];
-+static int optprobe_cur_gen;
- 
- static void optimize_kprobe(struct kprobe *p);
- static struct task_struct *kprobe_optimizer_task;
-@@ -533,49 +551,84 @@ static unsigned long optimizer_passes;
- #define OPTIMIZE_DELAY 5
- 
- /*
-- * Optimize (replace a breakpoint with a jump) kprobes listed on
-- * 'optimizing_list'.
-+ * Note: gen->cooling_list is not checked here because it is strictly
-+ * an in-flight holding list for dispatched generations, so it is always
-+ * empty in optprobe_cur_gen.
-  */
--static void do_optimize_kprobes(void)
-+static bool optprobe_has_queued_probes(void)
- {
--	lockdep_assert_held(&text_mutex);
--	/*
--	 * The optimization/unoptimization refers 'online_cpus' via
--	 * stop_machine() and cpu-hotplug modifies the 'online_cpus'.
--	 * And same time, 'text_mutex' will be held in cpu-hotplug and here.
--	 * This combination can cause a deadlock (cpu-hotplug tries to lock
--	 * 'text_mutex' but stop_machine() can not be done because
--	 * the 'online_cpus' has been changed)
--	 * To avoid this deadlock, caller must have locked cpu-hotplug
--	 * for preventing cpu-hotplug outside of 'text_mutex' locking.
--	 */
--	lockdep_assert_cpus_held();
-+	struct optprobe_generation *gen = &optprobe_gens[optprobe_cur_gen];
- 
--	/* Optimization never be done when disarmed */
--	if (kprobes_all_disarmed || !kprobes_allow_optimization ||
--	    list_empty(&optimizing_list))
--		return;
-+	return !list_empty(&gen->optimizing_list) ||
-+	       !list_empty(&gen->unoptimizing_list) ||
-+	       !list_empty(&gen->freeing_list);
-+}
-+
-+static int optprobe_active_gens_count(void)
-+{
-+	int count = 0;
-+	int i;
-+
-+	for (i = 0; i < OPTPROBE_GEN_MAX; i++) {
-+		if (optprobe_gens[i].in_flight || optprobe_gens[i].ready)
-+			count++;
-+	}
-+	return count;
-+}
-+
-+/*
-+ * The last generation must not be fired until another generation is done.
-+ * (Thus the last generation acts as the waiting room.)
-+ */
-+static bool optprobe_can_fire(void)
-+{
-+	return optprobe_active_gens_count() < OPTPROBE_GEN_MAX - 1;
-+}
-+
-+static bool optprobe_has_ready_gens(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < OPTPROBE_GEN_MAX; i++) {
-+		if (READ_ONCE(optprobe_gens[i].ready))
-+			return true;
-+	}
-+	return false;
-+}
- 
--	arch_optimize_kprobes(&optimizing_list);
-+static bool optprobe_optimizer_busy(void)
-+{
-+	return optprobe_has_queued_probes() || (optprobe_active_gens_count() > 0);
- }
- 
- /*
-  * Unoptimize (replace a jump with a breakpoint and remove the breakpoint
-- * if need) kprobes listed on 'unoptimizing_list'.
-+ * if need) kprobes listed on 'unopt_list'.
-  */
--static void do_unoptimize_kprobes(void)
-+static void do_unoptimize_kprobes(struct list_head *unopt_list,
-+				  struct list_head *free_list,
-+				  struct list_head *cooling_list)
- {
- 	struct optimized_kprobe *op, *tmp;
- 
- 	lockdep_assert_held(&text_mutex);
--	/* See comment in do_optimize_kprobes() */
-+	/*
-+	 * The optimization/unoptimization refers 'online_cpus' via
-+	 * stop_machine() and cpu-hotplug modifies the 'online_cpus'.
-+	 * And same time, 'text_mutex' will be held in cpu-hotplug and here.
-+	 * This combination can cause a deadlock (cpu-hotplug tries to lock
-+	 * 'text_mutex' but stop_machine() can not be done because
-+	 * the 'online_cpus' has been changed)
-+	 * To avoid this deadlock, caller must have locked cpu-hotplug
-+	 * for preventing cpu-hotplug outside of 'text_mutex' locking.
-+	 */
- 	lockdep_assert_cpus_held();
- 
--	if (!list_empty(&unoptimizing_list))
--		arch_unoptimize_kprobes(&unoptimizing_list, &freeing_list);
-+	if (!list_empty(unopt_list))
-+		arch_unoptimize_kprobes(unopt_list, free_list);
- 
--	/* Loop on 'freeing_list' for disarming and removing from kprobe hash list */
--	list_for_each_entry_safe(op, tmp, &freeing_list, list) {
-+	/* Loop on 'free_list' for disarming and removing from kprobe hash list */
-+	list_for_each_entry_safe(op, tmp, free_list, list) {
- 		/* Switching from detour code to origin */
- 		op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
- 		/* Disarm probes if marked disabled and not gone */
-@@ -587,18 +640,26 @@ static void do_unoptimize_kprobes(void)
- 			 * for synchronization, these probes are reclaimed.
- 			 * (reclaiming is done by do_free_cleaned_kprobes().)
- 			 */
--			hlist_del_rcu(&op->kp.hlist);
--		} else
--			list_del_init(&op->list);
-+			hlist_del_init_rcu(&op->kp.hlist);
-+		} else {
-+			/*
-+			 * Keep on cooling_list until the quiescence period
-+			 * completes so that kprobe_disarmed() remains false and
-+			 * unregister_kprobes() does not prematurely free it.
-+			 */
-+			list_move(&op->list, cooling_list);
-+		}
- 	}
- }
- 
--/* Reclaim all kprobes on the 'freeing_list' */
--static void do_free_cleaned_kprobes(void)
-+/* Reclaim all kprobes on the 'free_list' */
-+static void do_free_cleaned_kprobes(struct list_head *free_list)
- {
- 	struct optimized_kprobe *op, *tmp;
- 
--	list_for_each_entry_safe(op, tmp, &freeing_list, list) {
-+	list_for_each_entry_safe(op, tmp, free_list, list) {
-+		struct kprobe *_p;
-+
- 		list_del_init(&op->list);
- 		if (WARN_ON_ONCE(!kprobe_unused(&op->kp))) {
- 			/*
-@@ -610,11 +671,10 @@ static void do_free_cleaned_kprobes(void)
- 
- 		/*
- 		 * The aggregator was holding back another probe while it sat on the
--		 * unoptimizing/freeing lists.  Now that the aggregator has been fully
-+		 * unoptimizing/freeing lists. Now that the aggregator has been fully
- 		 * reverted we can safely retry the optimization of that sibling.
- 		 */
--
--		struct kprobe *_p = get_optimized_kprobe(op->kp.addr);
-+		_p = get_optimized_kprobe(op->kp.addr);
- 		if (unlikely(_p))
- 			optimize_kprobe(_p);
- 
-@@ -624,67 +684,146 @@ static void do_free_cleaned_kprobes(void)
- 
- static void kick_kprobe_optimizer(void);
- 
--/* Kprobe jump optimizer */
--static void kprobe_optimizer(void)
-+static void optprobe_generation_rcu_cb(struct rcu_head *rcu)
- {
--	guard(mutex)(&kprobe_mutex);
-+	struct optprobe_generation *gen;
-+
-+	gen = container_of(rcu, struct optprobe_generation, rcu);
-+	WRITE_ONCE(gen->ready, true);
-+	wake_up(&kprobe_optimizer_wait);
-+}
-+
-+static void optprobe_finalize_generation(struct optprobe_generation *gen)
-+{
-+	struct optimized_kprobe *op, *tmp;
-+
-+	lockdep_assert_held(&kprobe_mutex);
- 
- 	scoped_guard(cpus_read_lock) {
- 		guard(mutex)(&text_mutex);
- 
--		/*
--		 * Step 1: Unoptimize kprobes and collect cleaned (unused and disarmed)
--		 * kprobes before waiting for quiesence period.
--		 */
--		do_unoptimize_kprobes();
-+		/* Optimization never be done when disarmed */
-+		if (!kprobes_all_disarmed && kprobes_allow_optimization &&
-+		    !list_empty(&gen->optimizing_list))
-+			arch_optimize_kprobes(&gen->optimizing_list);
-+	}
-+
-+	/* Free cleaned kprobes after quiescence period */
-+	do_free_cleaned_kprobes(&gen->freeing_list);
-+
-+	/* Finalize unoptimized kprobes whose quiescence period completed */
-+	list_for_each_entry_safe(op, tmp, &gen->cooling_list, list) {
-+		if (kprobe_unused(&op->kp)) {
-+			/*
-+			 * Unregistered while quiescence period was in flight.
-+			 * Unhash it now and move to cur_gen's freeing list so
-+			 * it will be reclaimed after the next quiescence period.
-+			 */
-+			hlist_del_init_rcu(&op->kp.hlist);
-+			list_move(&op->list, &optprobe_gens[optprobe_cur_gen].freeing_list);
-+			kick_kprobe_optimizer();
-+		} else {
-+			/* Still in use; now safely disarmed */
-+			list_del_init(&op->list);
-+			if (!kprobe_disabled(&op->kp))
-+				optimize_kprobe(&op->kp);
-+		}
-+	}
-+
-+	gen->in_flight = false;
-+	WRITE_ONCE(gen->ready, false);
-+}
-+
-+static bool optprobe_dispatch_generation(void)
-+{
-+	struct optprobe_generation *gen;
-+
-+	lockdep_assert_held(&kprobe_mutex);
-+
-+	if (!optprobe_can_fire() || !optprobe_has_queued_probes())
-+		return false;
-+
-+	gen = &optprobe_gens[optprobe_cur_gen];
-+
-+	scoped_guard(cpus_read_lock) {
-+		guard(mutex)(&text_mutex);
- 
- 		/*
--		 * Step 2: Wait for quiesence period to ensure all potentially
--		 * preempted tasks to have normally scheduled. Because optprobe
--		 * may modify multiple instructions, there is a chance that Nth
--		 * instruction is preempted. In that case, such tasks can return
--		 * to 2nd-Nth byte of jump instruction. This wait is for avoiding it.
--		 * Note that on non-preemptive kernel, this is transparently converted
--		 * to synchronoze_sched() to wait for all interrupts to have completed.
-+		 * Unoptimize kprobes and collect cleaned (unused and disarmed)
-+		 * kprobes before waiting for quiescence period.
- 		 */
--		synchronize_rcu_tasks();
-+		do_unoptimize_kprobes(&gen->unoptimizing_list, &gen->freeing_list,
-+				      &gen->cooling_list);
-+	}
-+
-+	/* Advance cur_gen to the next generation slot */
-+	optprobe_cur_gen = (optprobe_cur_gen + 1) % OPTPROBE_GEN_MAX;
-+
-+	gen->in_flight = true;
-+	WRITE_ONCE(gen->ready, false);
-+
-+	call_rcu_tasks(&gen->rcu, optprobe_generation_rcu_cb);
-+	return true;
-+}
- 
--		/* Step 3: Optimize kprobes after quiesence period */
--		do_optimize_kprobes();
-+/* Kprobe jump optimizer */
-+static void kprobe_optimizer(void)
-+{
-+	bool progress = false;
-+	int i;
-+
-+	guard(mutex)(&kprobe_mutex);
- 
--		/* Step 4: Free cleaned kprobes after quiesence period */
--		do_free_cleaned_kprobes();
-+	/* Step 1: Finalize any generation whose Tasks RCU grace period completed */
-+	for (i = 0; i < OPTPROBE_GEN_MAX; i++) {
-+		if (READ_ONCE(optprobe_gens[i].ready)) {
-+			optprobe_finalize_generation(&optprobe_gens[i]);
-+			progress = true;
-+		}
- 	}
- 
--	/* Step 5: Wake up flushers, and kick optimizer again if needed. */
--	optimizer_passes++;
--	wake_up_var_locked(&optimizer_passes, &kprobe_mutex);
-+	/* Step 2: Dispatch waiting room generation if allowed */
-+	if (optprobe_dispatch_generation())
-+		progress = true;
-+
-+	/* Step 3: Wake up flushers if progress was made */
-+	if (progress) {
-+		optimizer_passes++;
-+		wake_up_var_locked(&optimizer_passes, &kprobe_mutex);
-+	}
- 
--	if (!list_empty(&optimizing_list) || !list_empty(&unoptimizing_list))
--		kick_kprobe_optimizer();	/*normal kick*/
-+	if (optprobe_has_queued_probes() && optprobe_can_fire()) {
-+		/* Probes remain and can be fired immediately (e.g. retried siblings) */
-+		kick_kprobe_optimizer();
-+	}
- }
- 
- static int kprobe_optimizer_thread(void *data)
- {
- 	while (!kthread_should_stop()) {
--		/* To avoid hung_task, wait in interruptible state. */
-+		/* Wait until there is work to do or a generation is ready */
- 		wait_event_interruptible(kprobe_optimizer_wait,
--			   atomic_read(&optimizer_state) != OPTIMIZER_ST_IDLE ||
--			   kthread_should_stop());
-+			atomic_read(&optimizer_state) != OPTIMIZER_ST_IDLE ||
-+			optprobe_has_ready_gens() ||
-+			kthread_should_stop());
- 
- 		if (kthread_should_stop())
- 			break;
- 
- 		/*
--		 * If it was a normal kick, wait for OPTIMIZE_DELAY.
--		 * This wait can be interrupted by a flush request.
-+		 * If it was a normal kick and no generation is ready to finalize,
-+		 * wait for OPTIMIZE_DELAY to batch incoming requests.
-+		 * This wait can be interrupted by a flush request or a ready generation.
- 		 */
--		if (atomic_read(&optimizer_state) == 1)
-+		if (atomic_read(&optimizer_state) == OPTIMIZER_ST_KICKED &&
-+		    !optprobe_has_ready_gens()) {
- 			wait_event_interruptible_timeout(
- 				kprobe_optimizer_wait,
- 				atomic_read(&optimizer_state) == OPTIMIZER_ST_FLUSHING ||
-+				optprobe_has_ready_gens() ||
- 				kthread_should_stop(),
- 				OPTIMIZE_DELAY);
-+		}
- 
- 		if (kthread_should_stop())
- 			break;
-@@ -709,20 +848,20 @@ static void wait_for_kprobe_optimizer_locked(void)
- {
- 	lockdep_assert_held(&kprobe_mutex);
- 
--	while (!list_empty(&optimizing_list) || !list_empty(&unoptimizing_list)) {
-+	while (optprobe_optimizer_busy()) {
- 		unsigned long passes = optimizer_passes;
- 
--		/*
--		 * Set state to OPTIMIZER_ST_FLUSHING and wake up the thread if it's
--		 * idle. If it's already kicked, it will see the state change.
--		 */
--		if (atomic_xchg_acquire(&optimizer_state,
--			OPTIMIZER_ST_FLUSHING) != OPTIMIZER_ST_FLUSHING)
--			wake_up(&kprobe_optimizer_wait);
-+		/* Wake up optimizer thread if it can make progress */
-+		if ((optprobe_can_fire() && optprobe_has_queued_probes()) ||
-+		    optprobe_has_ready_gens()) {
-+			if (atomic_xchg_acquire(&optimizer_state,
-+				OPTIMIZER_ST_FLUSHING) != OPTIMIZER_ST_FLUSHING)
-+				wake_up(&kprobe_optimizer_wait);
-+		}
- 
- 		/*
- 		 * kprobe_optimizer() holds 'kprobe_mutex' for a whole pass, which
--		 * this drops while sleeping, so a new count means a full pass ran.
-+		 * this drops while sleeping, so a new count means progress was made.
- 		 */
- 		wait_var_event_mutex(&optimizer_passes,
- 				     optimizer_passes != passes, &kprobe_mutex);
-@@ -740,10 +879,43 @@ void wait_for_kprobe_optimizer(void)
- bool optprobe_queued_unopt(struct optimized_kprobe *op)
- {
- 	struct optimized_kprobe *_op;
-+	int i;
- 
--	list_for_each_entry(_op, &unoptimizing_list, list) {
--		if (op == _op)
--			return true;
-+	for (i = 0; i < OPTPROBE_GEN_MAX; i++) {
-+		list_for_each_entry(_op, &optprobe_gens[i].unoptimizing_list, list) {
-+			if (op == _op)
-+				return true;
-+		}
-+	}
-+
-+	return false;
-+}
-+
-+static bool optprobe_queued_freeing(struct optimized_kprobe *op)
-+{
-+	struct optimized_kprobe *_op;
-+	int i;
-+
-+	for (i = 0; i < OPTPROBE_GEN_MAX; i++) {
-+		list_for_each_entry(_op, &optprobe_gens[i].freeing_list, list) {
-+			if (op == _op)
-+				return true;
-+		}
-+	}
-+
-+	return false;
-+}
-+
-+static bool optprobe_queued_cooling(struct optimized_kprobe *op)
-+{
-+	struct optimized_kprobe *_op;
-+	int i;
-+
-+	for (i = 0; i < OPTPROBE_GEN_MAX; i++) {
-+		list_for_each_entry(_op, &optprobe_gens[i].cooling_list, list) {
-+			if (op == _op)
-+				return true;
-+		}
- 	}
- 
- 	return false;
-@@ -777,6 +949,15 @@ static void optimize_kprobe(struct kprobe *p)
- 		}
- 		return;
- 	}
-+
-+	if (optprobe_queued_cooling(op)) {
-+		/* Under in-flight unoptimization. It will be re-optimized upon finalize */
-+		return;
-+	}
-+
-+	if (optprobe_queued_freeing(op))
-+		list_del_init(&op->list);
-+
- 	op->kp.flags |= KPROBE_FLAG_OPTIMIZED;
- 
- 	/*
-@@ -786,7 +967,7 @@ static void optimize_kprobe(struct kprobe *p)
- 	if (WARN_ON_ONCE(!list_empty(&op->list)))
- 		return;
- 
--	list_add(&op->list, &optimizing_list);
-+	list_add(&op->list, &optprobe_gens[optprobe_cur_gen].optimizing_list);
- 	kick_kprobe_optimizer();
- }
- 
-@@ -801,14 +982,14 @@ static void force_unoptimize_kprobe(struct optimized_kprobe *op)
- /* Unoptimize a kprobe if p is optimized */
- static void unoptimize_kprobe(struct kprobe *p, bool force)
- {
-+	struct optprobe_generation *cur;
- 	struct optimized_kprobe *op;
- 
- 	if (!kprobe_aggrprobe(p) || kprobe_disarmed(p))
- 		return; /* This is not an optprobe nor optimized */
- 
- 	op = container_of(p, struct optimized_kprobe, kp);
--	if (!kprobe_optimized(p))
--		return;
-+	cur = &optprobe_gens[optprobe_cur_gen];
- 
- 	if (!list_empty(&op->list)) {
- 		if (optprobe_queued_unopt(op)) {
-@@ -816,10 +997,30 @@ static void unoptimize_kprobe(struct kprobe *p, bool force)
- 			if (force) {
- 				/*
- 				 * Forcibly unoptimize the kprobe here, and queue it
--				 * in the freeing list for release afterwards.
-+				 * for cooling down (or freeing if unused).
- 				 */
- 				force_unoptimize_kprobe(op);
--				list_move(&op->list, &freeing_list);
-+				if (kprobe_unused(&op->kp)) {
-+					if (!kprobe_gone(&op->kp))
-+						arch_disarm_kprobe(&op->kp);
-+					hlist_del_init_rcu(&op->kp.hlist);
-+					list_move(&op->list, &cur->freeing_list);
-+				} else {
-+					list_move(&op->list, &cur->cooling_list);
-+				}
-+				kick_kprobe_optimizer();
-+			}
-+		} else if (optprobe_queued_cooling(op)) {
-+			if (force && kprobe_unused(&op->kp)) {
-+				/*
-+				 * Already unoptimized, move to freeing list for
-+				 * release afterwards.
-+				 */
-+				if (!kprobe_gone(&op->kp))
-+					arch_disarm_kprobe(&op->kp);
-+				hlist_del_init_rcu(&op->kp.hlist);
-+				list_move(&op->list, &cur->freeing_list);
-+				kick_kprobe_optimizer();
- 			}
- 		} else {
- 			/* Dequeue from the optimizing queue */
-@@ -829,12 +1030,15 @@ static void unoptimize_kprobe(struct kprobe *p, bool force)
- 		return;
- 	}
- 
-+	if (!kprobe_optimized(p))
-+		return;
-+
- 	/* Optimized kprobe case */
- 	if (force) {
- 		/* Forcibly update the code: this is a special case */
- 		force_unoptimize_kprobe(op);
- 	} else {
--		list_add(&op->list, &unoptimizing_list);
-+		list_add(&op->list, &cur->unoptimizing_list);
- 		kick_kprobe_optimizer();
- 	}
- }
-@@ -866,23 +1070,29 @@ static void kill_optimized_kprobe(struct kprobe *p)
- 	struct optimized_kprobe *op;
- 
- 	op = container_of(p, struct optimized_kprobe, kp);
--	if (!list_empty(&op->list))
--		/* Dequeue from the (un)optimization queue */
--		list_del_init(&op->list);
--	op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
--
--	if (kprobe_unused(p)) {
--		/*
--		 * Unused kprobe is on unoptimizing or freeing list. We move it
--		 * to freeing_list and let the kprobe_optimizer() remove it from
--		 * the kprobe hash list and free it.
--		 */
--		if (optprobe_queued_unopt(op))
--			list_move(&op->list, &freeing_list);
-+	if (!list_empty(&op->list)) {
-+		if (kprobe_unused(p)) {
-+			if (optprobe_queued_unopt(op) || optprobe_queued_cooling(op)) {
-+				hlist_del_init_rcu(&op->kp.hlist);
-+				list_move(&op->list,
-+					  &optprobe_gens[optprobe_cur_gen].freeing_list);
-+				kick_kprobe_optimizer();
-+			} else if (!optprobe_queued_freeing(op)) {
-+				list_del_init(&op->list);
-+			}
-+		} else {
-+			list_del_init(&op->list);
-+		}
- 	}
-+	op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
- 
--	/* Don't touch the code, because it is already freed. */
--	arch_remove_optimized_kprobe(op);
-+	/*
-+	 * Don't remove the slot if it is queued for freeing or unoptimization;
-+	 * the optimizer will reclaim it after the quiescence period.
-+	 */
-+	if (!optprobe_queued_freeing(op) && !optprobe_queued_unopt(op) &&
-+	    !optprobe_queued_cooling(op))
-+		arch_remove_optimized_kprobe(op);
- }
- 
- static inline
-@@ -1058,6 +1268,19 @@ static void __arm_kprobe(struct kprobe *p)
- 	optimize_kprobe(p);	/* Try to optimize (add kprobe to a list) */
- }
- 
-+/* Return true if the probe is queued on unoptimizing lists */
-+static bool kprobe_queued_unopt(struct kprobe *p)
-+{
-+	struct optimized_kprobe *op;
-+
-+	if (kprobe_aggrprobe(p)) {
-+		op = container_of(p, struct optimized_kprobe, kp);
-+		if (optprobe_queued_unopt(op))
-+			return true;
-+	}
-+	return false;
-+}
-+
- /* Remove the breakpoint of a probe. */
- static void __disarm_kprobe(struct kprobe *p, bool reopt)
- {
-@@ -1068,7 +1291,7 @@ static void __disarm_kprobe(struct kprobe *p, bool reopt)
- 	/* Try to unoptimize */
- 	unoptimize_kprobe(p, kprobes_all_disarmed);
- 
--	if (!kprobe_queued(p)) {
-+	if (!kprobe_queued_unopt(p)) {
- 		arch_disarm_kprobe(p);
- 		/* If another kprobe was blocked, re-optimize it. */
- 		_p = get_optimized_kprobe(p->addr);
-@@ -1079,11 +1302,23 @@ static void __disarm_kprobe(struct kprobe *p, bool reopt)
- 
- static void __init init_optprobe(void)
- {
-+	int i;
-+
- #ifdef __ARCH_WANT_KPROBES_INSN_SLOT
- 	/* Init 'kprobe_optinsn_slots' for allocation */
- 	kprobe_optinsn_slots.insn_size = MAX_OPTINSN_SIZE;
- #endif
- 
-+	for (i = 0; i < OPTPROBE_GEN_MAX; i++) {
-+		INIT_LIST_HEAD(&optprobe_gens[i].optimizing_list);
-+		INIT_LIST_HEAD(&optprobe_gens[i].unoptimizing_list);
-+		INIT_LIST_HEAD(&optprobe_gens[i].cooling_list);
-+		INIT_LIST_HEAD(&optprobe_gens[i].freeing_list);
-+		optprobe_gens[i].in_flight = false;
-+		optprobe_gens[i].ready = false;
-+	}
-+	optprobe_cur_gen = 0;
-+
- 	init_waitqueue_head(&kprobe_optimizer_wait);
- 	atomic_set(&optimizer_state, OPTIMIZER_ST_IDLE);
- 	kprobe_optimizer_task = kthread_run(kprobe_optimizer_thread, NULL,
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36965595251
+--===============3278906847704703613==--
