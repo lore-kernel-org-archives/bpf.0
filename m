@@ -1,75 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5803B471CF5;
-	Fri,  2 Oct 2026 09:13:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1D04746AE;
+	Fri,  2 Oct 2026 09:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790932430; cv=none; b=TJW5qdPHVrg1n8ZLEiwM2178XiYAonphvn7OeW0ATbbeLWk3F70fRx9mjgTXixAdJLwdBneVaA6V6Vw9GQrj5mX3qGB4KsoFACvlxGHJ++gN6rZmEVNNNcMVQI3s4HT0uDIlDm6I4MrBxEJfydTLA7xVEEyRkJRmkDz6eSderOw=
+	t=1790932449; cv=none; b=OO8TE/65TBrPSF9+KEJ0yVUcOQh7InFpyyUHImbx0FouAD9ZYBIMw4KrVj4gJLG+B1Fp/Gu+UKzeCyq+E0tu0ij6Ptqj34V/oYnvCx1x2K79j84kwQI8YUuOs66IxmhPxBPzkjQGO60s2fMBQMftH0wcKz6RVePuOyb5YAAESHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790932430; c=relaxed/simple;
-	bh=ip8uEEGd2i/sloSlBTYKL4V0rTbW1FiNGUJxxvZcG44=;
+	s=arc-20240116; t=1790932449; c=relaxed/simple;
+	bh=i+L6umLn8Z+swB5e/ezod3yKaQQItgE1+v82GarEcf8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RQG9MmuLTdBfkjKeT30p2UiPUfgKUR7ArwJFWzJE9JMmNorW9PS83DlP9dqZcQT9ybB+wPsJxTU8JwTDSQxMNv17vKAD6zRdm9qLE6AS5W45s1Lzgwp4LRiVOCybzMmZVJKDRTY6dlY0b/58dh6cgJaRS9hOgrwmBnmJ+83blSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q7BQYgiQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=hJHN07UDTY4/FKol0tQ4KICptw9InHxZXS1BdWPBxkzz1+wFsxBDp4qbmpE43D2wYV5fEGmar/JZAXWfsJRo9wJYLe6A755Pl9Gn7kdsefsKbRAQ2LZbcAZpSdmVHMLDuOPldTPrXW6XY8FMADcG92kjS4S6q6ezzYCYq7eJQqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PorT1Gxe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q7BQYgiQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA10A1F000FF;
-	Fri,  2 Oct 2026 09:13:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PorT1Gxe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1161F000FF;
+	Fri,  2 Oct 2026 09:14:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790932429;
-	bh=q5ovX5k/4FYWByFr9SRmFa2RyzHBD6wYNHg8fQf0rEU=;
+	s=k20260515; t=1790932447;
+	bh=5ellbPr8x94rTylTsDiFZddy2NzL3VmyKG0ClhU0u9s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Q7BQYgiQpvztwQKPBiLSFlEsX+i5LO6TKD0DvFbwL2tgraNY5XFmN9z0e7gUrlHaA
-	 tUFaxxTH9O+a0D8oMneuiBN/2m1Y0KP0k8WCriFvR2ZYDOCbWLsfrpsXMgwjefTen3
-	 Sn0t/H06jIQ5q4YPkMeLbrzsuta1Hlt68qR1GmWA+U50MAVhRfbIRlYDm7iCI420xi
-	 8Hf4tDxGSnsEVPMSGysh44RvEg5v+EcQikzSoHF8TFIPV048WQHbCTce/hcdhPKyg3
-	 kgrDxi6ON+B24urTdZi/6fF0pOIfvxLzu6E4FOCvecitGNYWKmVG/cpTQN9W87JqYA
-	 36Yyff8zI+CWw==
+	b=PorT1GxeCTQYPX519lAxP8lBCW/e9L3vsM3kOW2FhASinPrhK1PZgggB7nVem9Dye
+	 38oJDlarSF3Qq99AtrLY0+hCkpnvDAAaVZSx1p7VNjh5TNTrKOHn3TCp1gy3dBoDB5
+	 HiYwhacb6o12jQoncy8xM0Eut7oRcH+aGwKpWajJP8ISS1aLP5fH0GSR+yUyHCb3WT
+	 id3CoqEvKNyFhgiCYk2hFH4GSC20biINPIzT7y5wCukbBu9p2Drpfk8mzDZw9D2J53
+	 15qM3EqLY8CO0yXqJk031hNu6en2YgwCEeG8G19+DM0rs5PNXH4MPqIaHa1ABp+5l1
+	 GItR7pK2y7ruA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2] vsock/bpf: release sock lock while waiting for
- data in recvmsg
+Subject: Re: [PATCH bpf-next v4 10/12] resolve_btfids: add --btf_link to
+ fill in .BTF.link records
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jerome Mohm" <jrmmhm.kernel@eldare.de>
-Cc: "Eugenio Perez" <eperezma@redhat.com>, virtualization@lists.linux.dev, bpf@vger.kernel.org, "Michael
- S. Tsirkin" <mst@redhat.com>
-In-Reply-To: <20261001-kbh3-1-022-fix-v2-v1-1-cfae958a1976@eldare.de>
-References: <20261001-kbh3-1-022-fix-v2-v1-1-cfae958a1976@eldare.de>
+To: "Jay Wang" <wanjay@amazon.com>
+Cc: linux-input@vger.kernel.org, dmitry.torokhov@gmail.com, bpf@vger.kernel.org, sched-ext@lists.linux.dev, linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org, "Petr
+ Pavlu" <petr.pavlu@suse.com>, gary@garyguo.net, linux-modules@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20261001225214.12351-11-wanjay@amazon.com>
+References: <20261001225214.12351-1-wanjay@amazon.com>
+ <20261001225214.12351-11-wanjay@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 02 Oct 2026 09:13:48 +0000
-Message-Id: <20261002091348.DA10A1F000FF@smtp.kernel.org>
+Date: Fri, 02 Oct 2026 09:14:06 +0000
+Message-Id: <20261002091407.4E1161F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-> From: Jerome Mohm <jrmmhm.kernel@eldare.de>
+> From: Alan Maguire <alan.maguire@oracle.com>
 >=20
-> vsock_bpf_recvmsg() takes lock_sock(sk) and holds it across the receive
-> loop, including vsock_msg_wait_data(), which slept in wait_woken() without
-> dropping the lock. When data arrived the transport's delivery context (the
-> vsock-loopback worker, or the virtio/vhost rx path) called
-> virtio_transport_recv_pkt() -> lock_sock() on the same socket and blocked,
-> so neither side made progress and a blocking recv() hung; the hung-task
-> watchdog reported the delivery worker in D state.
+> With CONFIG_DEBUG_INFO_BTF=3Dm the vmlinux BTF is not part of the kernel
+> image but carried by a module, and the kernel has to know, before that
+> module is loaded, which module that is, how large the BTF is and which
+> BTF it was built with.  It keeps that in a .BTF.link record (struct
+> btf_link): the name of the module, NUL-padded to the target's
+> __MODULE_NAME_LEN, the SHA-256 of the BTF, and its size in the byte
+> order of the target.  Inline BTF delivered as a module, a planned
+> follow-up, needs the same for its own section, in .BTF.inline.link.
 >=20
-> Dropping the socket lock around the wait is necessary but not sufficient:
-> vsock_msg_wait_data() also did not loop and checked too few conditions,
-> which left three further problems in the same helper.
+> Fill these records in where .BTF_ids is patched, after the final link,
+> when the BTF is final: the --patch_btfids pass takes one or more
 >=20
->  - It did not loop. Once the lock is dropped, a wakeup that is not for new
+>     --btf_link <section>:<module>:<raw BTF file>
 > [ ... ]
->=20
-> Fixes: 634f1a7110b4 ("vsock: support sockmap")
-> Cc: stable@vger.kernel.org
-> Assisted-by: LLM
-> Signed-off-by: Jerome Mohm <jrmmhm.kernel@eldare.de>
+>  inline BTF changes; take the ELF class and byte order from the ELF
+>  header in patch_btf_link() rather than from elf_collect(), set up libelf
+>  there too, report each failure, refuse an overlong section name and
+>  --btf_link without --patch_btfids, document the option]
+> Signed-off-by: Jay Wang <wanjay@amazon.com>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001-kbh3-1-022=
--fix-v2-v1-1-cfae958a1976@eldare.de?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001225214.1235=
+1-1-wanjay@amazon.com?part=3D10
 
