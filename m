@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4A83EDAB3;
-	Fri,  2 Oct 2026 19:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D253E835F;
+	Fri,  2 Oct 2026 19:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967677; cv=none; b=Jb+INQEwqkYD2jsV/XZR93nQ8fBOAckTaBwPpQutfuKDfau+QdSSvhqRei2cSDB/VxO2FuUwZ7OvtCrl3M4tWRmnnfWiFcUbyPsUfvwILhUXOB5YjEu+mIYN45XQNPZ7ArEWMSnPwxXzbkOFas+26c08EcF/W47HbZtJCMbYA44=
+	t=1790967688; cv=none; b=eI2hwaIGDHZ0Hxc4hzOKWHtq6GsLvwmXGFQIIu9nLsDrQV6N6plqnSiCBDkPfJepwLnNcnjk+5w2XypeGCFpzIQUv8mEIJrXG8OqP4IW/7WZx9lsv7nd6Kyq1El4M3pdo63q6cY74DcN2BTZj6jD1CsdEHOXxpVlXcddaTQfcKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967677; c=relaxed/simple;
-	bh=NoAsYjqqkTCVmeJlMbaJVrM7ZpXMRUgtYWb57Rz+jhY=;
+	s=arc-20240116; t=1790967688; c=relaxed/simple;
+	bh=sMK4HDc3Js74/ZJgUi161coOiBDj1k+OTm3we60aoV4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N659EZJpf3b83TagHVlfjvtWfK9sgg6yY/DcpNRRKnWl11eAi52NJuCPIG8og0w/HU78YWgRFvRasjwxDMaJ53ezJ1Lk/qcsDJou/CyafQZGIoKwBTVB3cHH+AdCpC95eaPJenj/c43XirENzOeMg8iFqCt9kQyheGdHnW0iXtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AeSSalL9; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=HT/YcTXW/zYyZKSBvnyIjkXvnt3Ah5AlBUBshN+PUF+g1mmQ/fger4kLmY428aTpFsjrar4SjFTwv+jiTg1N+L7tE71/Gw65Phn/RjJPBhjFNfOlFW/DAGsdFw3qbvSpXgjrOrmqCEDH33oT8ewojsF82knz7w/F2cQ2pQHcHw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zqpbn1WV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AeSSalL9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163F01F00893;
-	Fri,  2 Oct 2026 19:01:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zqpbn1WV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDFEE1F0089E;
+	Fri,  2 Oct 2026 19:01:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967672;
-	bh=1VSnA8bBLm/1B6ZMOFTIolNf7TlyUS9LbLt2gUT91GM=;
+	s=k20260515; t=1790967680;
+	bh=Lx/O7p/a9bYJmB+5cEpZKxi+w5Lfd7SQrTj+574HrmY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AeSSalL9WxlaXeeNVyAJ8P62o+BgPpj4bLGMVDKhY9lTyaPQInmespDhAwBREWadX
-	 gf1oiPrNnBVCcFk1KyzzSCYfcIWro4Yte5fXxAGDm17PSi7SgQab0q4fYUfFdvoXNc
-	 40yE2LnFScr5CjN+XX+MiJDUvyG5/mEIqt82TGtzaA4X4vbqj1DCzv53Xjs0TubjJS
-	 YSxpzqS6TNXVLX6SnSIR6sAUEPf+BmN68sI8I9moidyAYzdKc1UtXns6yxKmrfiquh
-	 rVjjxBE+Zz+ac7LNvH3QokT6eAoWLjCu9aXoD13YlVo3KVd1h/UErzlWWza3ZBdNju
-	 9+mTWqHyB6ADw==
+	b=Zqpbn1WV3FTnhxahUX2F08hgb4K+Q/iQndzSYcq0T7IFo8iv0gqKWVxusmUjXaH/H
+	 nQJ9rfMqi/JOIjOPRh6CvNjGNqvEZrxz/49JFP7mQ6VvwxdDuayaXEhiR3/KUgZrsq
+	 rEr7qj6n01ujzrzC2VqGHxEYZ7iCZ1R9xfat4IeEoIwDUTLrJRL+Sr36a/y3ZLMvMk
+	 HF/o3Us2OLu3U+EVfmyt/TfvhWQ7llQuwt0bg/ivCKhSPHRtlHHfXpj5u/2Ksmpiyi
+	 P8j8hiAqW6gRmkM5A8AETu/uxUQZK/asbwklmFwneDl/RbO8oQLESi+4dwQBfXXjwW
+	 G2KIaZEtj9yxw==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -69,9 +69,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [RFC net-next 05/15] page_pool: Extend memory provider operations
-Date: Fri,  2 Oct 2026 21:00:06 +0200
-Message-ID: <20261002190018.696925-6-bjorn@kernel.org>
+Subject: [RFC net-next 06/15] xdp: Track non-page netmem in receive buffers
+Date: Fri,  2 Oct 2026 21:00:07 +0200
+Message-ID: <20261002190018.696925-7-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002190018.696925-1-bjorn@kernel.org>
 References: <20261002190018.696925-1-bjorn@kernel.org>
@@ -84,413 +84,191 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The current memory providers give memory that the CPU cannot read,
-and they can always refill. An AF_XDP provider is different. The CPU
-can read its memory, it has only the buffers that userspace puts in
-the FILL ring, and its buffers go back to userspace instead of being
-freed. It needs four things from page_pool:
+A page-pool memory provider can give net_iov buffers, and
+virt_to_page() does not work for them. An xdp_buff holds only the
+data pointer, so code that returns or converts a buffer cannot find
+its net_iov.
 
-- A CPU address for each net_iov. A provider can set the address of
-  the first net_iov in its net_iov_area and the size each net_iov
-  covers. netmem_address() then computes the address without a call
-  into the provider; drivers call it for every packet. A
-  net_iov_area without an address stays unreadable.
-  page_pool_is_unreadable() is false for a readable provider.
+Add NET_IOV_XSK, the net_iov type for AF_XDP. Add the internal flag
+XDP_FLAGS_HAS_NETMEM. When it is set, the xdp_buff holds a netmem
+reference in the union with the devmap TX queue, which only devmap
+egress uses. The flag is cleared when flags are copied to an skb or
+an xdp_frame. xdp_convert_buff_to_frame() sends such a buffer to the
+zero-copy copy path.
 
-- A way to say that the refill is not done. The new refill_done
-  callback tells the driver whether it may stop refilling. A
-  provider that still has buffers returns false, and the driver
-  keeps NAPI scheduled.
+A fragment from a readable net_iov area no longer marks the buffer's
+fragments as unreadable. The skb layer still treats every net_iov as
+unreadable, so such a buffer must be copied before it becomes an
+skb. Later patches in this series do that.
 
-- A way to give up a buffer without freeing it. Add a batched call
-  that ends page_pool ownership of buffers that leave through the
-  provider, for example to userspace. It clears the page_pool link,
-  so a later page pool can take the buffer. Add the matching batched
-  call that sets the link, and a DMA sync helper for drivers that
-  post a buffer again directly.
+skb_shared_info holds kernel pointers, so it cannot be in UMEM,
+which userspace can write. A netmem xdp_buff points to a
+skb_shared_info that the RX queue keeps in kernel memory instead.
+xdp_init_buff_from_netmem() sets this up. Page-backed buffers still
+use their tailroom.
 
-- No buffer splitting, because a split buffer has several owners.
-  Add MP_CAP_FRAG. page_pool refuses fragment allocation from a
-  provider without it.
-
-devmem and io_uring set MP_CAP_FRAG and keep their fragment
-behaviour. Their refill paths now use the batched call that sets the
-link.
+On 64-bit, struct xdp_buff grows from 56 to 64 bytes. struct
+xdp_buff_xsk stays at 128 bytes on x86-64. Where the largest
+alignment is 8 bytes, as on s390, it grows from 120 to 128 bytes, so
+a pool needs 8 more bytes per UMEM chunk. Only helpers that need the
+netmem or the fragment info test the new flag. Page-backed receive
+and return paths do not.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- include/net/netmem.h                    | 31 ++++++++++-
- include/net/page_pool/helpers.h         | 62 +++++++++++++++++++++-
- include/net/page_pool/memory_provider.h | 28 +++++-----
- io_uring/zcrx.c                         |  4 +-
- net/core/devmem.c                       |  7 ++-
- net/core/page_pool.c                    | 68 ++++++++++++++++++++-----
- 6 files changed, 165 insertions(+), 35 deletions(-)
+ include/net/netmem.h |  1 +
+ include/net/xdp.h    | 56 ++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 52 insertions(+), 5 deletions(-)
 
 diff --git a/include/net/netmem.h b/include/net/netmem.h
-index cc97611632dc..e6dff0b01581 100644
+index e6dff0b01581..76e4fe878863 100644
 --- a/include/net/netmem.h
 +++ b/include/net/netmem.h
-@@ -105,6 +105,12 @@ struct net_iov_area {
- 
- 	/* Offset into the dma-buf where this chunk starts.  */
- 	unsigned long base_virtual;
-+
-+	/* CPU address of the first net_iov's memory, or NULL when the CPU
-+	 * cannot read the area. Each net_iov covers 1 << @niov_shift bytes.
-+	 */
-+	void *vaddr;
-+	u8 niov_shift;
+@@ -68,6 +68,7 @@ DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
+ enum net_iov_type {
+ 	NET_IOV_DMABUF,
+ 	NET_IOV_IOURING,
++	NET_IOV_XSK,
  };
  
- static inline struct net_iov_area *net_iov_owner(const struct net_iov *niov)
-@@ -117,6 +123,23 @@ static inline unsigned int net_iov_idx(const struct net_iov *niov)
- 	return niov - net_iov_owner(niov)->niovs;
- }
+ /* A memory descriptor representing abstract networking I/O vectors,
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 07231adfb5f8..80931490ca3a 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -11,6 +11,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/skbuff.h> /* skb_shared_info */
  
-+static inline bool net_iov_is_readable(const struct net_iov *niov)
-+{
-+	return net_iov_owner(niov)->vaddr;
-+}
-+
-+static inline void *net_iov_address(const struct net_iov *niov)
-+{
-+	const struct net_iov_area *area = net_iov_owner(niov);
-+	unsigned long off;
-+
-+	if (!area->vaddr)
-+		return NULL;
-+
-+	off = (unsigned long)net_iov_idx(niov) << area->niov_shift;
-+	return area->vaddr + off;
-+}
-+
- /* Initialize a niov: stamp the owning area, the memory provider type.
-  */
- static inline void net_iov_init(struct net_iov *niov,
-@@ -335,10 +358,16 @@ static inline void *__netmem_address(netmem_ref netmem)
- 	return page_address(__netmem_to_page(netmem));
- }
- 
-+/**
-+ * netmem_address - get pointer to the memory backing @netmem
-+ * @netmem: netmem reference to get the pointer for
-+ *
-+ * Return: pointer to the memory, or NULL if the CPU cannot read @netmem.
-+ */
- static inline void *netmem_address(netmem_ref netmem)
- {
- 	if (netmem_is_net_iov(netmem))
--		return NULL;
-+		return net_iov_address(netmem_to_net_iov(netmem));
- 
- 	return __netmem_address(netmem);
- }
-diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-index cd021832c3fa..7a63671aaceb 100644
---- a/include/net/page_pool/helpers.h
-+++ b/include/net/page_pool/helpers.h
-@@ -54,6 +54,7 @@
- 
- #include <linux/dma-mapping.h>
- 
-+#include <net/page_pool/memory_provider.h>
++#include <net/netmem.h>
  #include <net/page_pool/types.h>
- #include <net/net_debug.h>
- #include <net/netmem.h>
-@@ -427,6 +428,26 @@ static inline dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem)
- 	return netmem_dma_addr_decode(netmem_get_dma_addr(netmem));
- }
  
-+/**
-+ * page_pool_refill_done - finish a provider-backed RX ring refill
-+ * @pool: page pool used by the RX ring
-+ * @full: all RX rings sharing this page pool were refilled
-+ *
-+ * Return: true if the caller may stop retrying the refill.
-+ */
-+static inline bool page_pool_refill_done(struct page_pool *pool, bool full)
-+{
-+	if (unlikely(pool->mp_ops && pool->mp_ops->refill_done))
-+		return pool->mp_ops->refill_done(pool, full);
-+
-+	return true;
-+}
-+
-+static inline bool page_pool_supports_frag(const struct page_pool *pool)
-+{
-+	return !pool->mp_ops || pool->mp_ops->caps & MP_CAP_FRAG;
-+}
-+
  /**
-  * page_pool_get_dma_addr() - Retrieve the stored DMA address.
-  * @page:	page allocated from a page pool
-@@ -481,6 +502,45 @@ page_pool_dma_sync_netmem_for_cpu(const struct page_pool *pool,
- 				     offset, dma_sync_size);
- }
- 
-+/**
-+ * page_pool_dma_sync_netmem_for_device - sync netmem before giving it to HW
-+ * @pool: page pool the netmem belongs to
-+ * @netmem: netmem to sync
-+ * @offset: offset from the pool's DMA sync start
-+ * @dma_sync_size: size of the memory area to sync
-+ *
-+ * Use when a driver reposts a netmem directly instead of returning it through
-+ * page_pool_put_netmem().
-+ */
-+static inline void
-+page_pool_dma_sync_netmem_for_device(const struct page_pool *pool,
-+				     const netmem_ref netmem, u32 offset,
-+				     u32 dma_sync_size)
-+{
-+#if defined(CONFIG_HAS_DMA) && defined(CONFIG_DMA_NEED_SYNC)
-+	dma_addr_t dma_addr;
-+
-+	if (!pool->dma_sync || !dma_dev_need_sync(pool->p.dev))
-+		return;
-+
-+	rcu_read_lock();
-+	/* Recheck under RCU to synchronize with page_pool_scrub(). */
-+	if (pool->dma_sync) {
-+		if (WARN_ON_ONCE(offset > pool->p.max_len))
-+			goto out;
-+
-+		dma_addr = page_pool_get_dma_addr_netmem(netmem);
-+		dma_sync_size = min(dma_sync_size, pool->p.max_len - offset);
-+		dma_sync_single_range_for_device(pool->p.dev, dma_addr,
-+						 offset + pool->p.offset,
-+						 dma_sync_size,
-+						 pool->p.dma_dir);
-+	}
-+out:
-+	rcu_read_unlock();
-+#endif
-+}
-+
- static inline void page_pool_get(struct page_pool *pool)
- {
- 	refcount_inc(&pool->user_cnt);
-@@ -511,7 +571,7 @@ static inline void page_pool_nid_changed(struct page_pool *pool, int new_nid)
-  */
- static inline bool page_pool_is_unreadable(struct page_pool *pool)
- {
--	return !!pool->mp_ops;
-+	return pool->mp_ops && !(pool->mp_ops->caps & MP_CAP_READABLE);
- }
- 
- #endif /* _NET_PAGE_POOL_HELPERS_H */
-diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_pool/memory_provider.h
-index d18ec079ffe2..61768f2592c9 100644
---- a/include/net/page_pool/memory_provider.h
-+++ b/include/net/page_pool/memory_provider.h
-@@ -13,14 +13,22 @@ struct sk_buff;
-  * enum mp_caps - memory provider capabilities
-  * @MP_CAP_READABLE: The CPU can access provider buffers. They may back
-  *	header and regular page pools, and XDP programs may run on them.
-+ * @MP_CAP_FRAG: Page pool fragments may split provider buffers. A
-+ *	provider without it hands out objects with a reference count of one.
-  */
- enum mp_caps {
- 	MP_CAP_READABLE		= BIT(0),
-+	MP_CAP_FRAG		= BIT(1),
- };
- 
- struct memory_provider_ops {
- 	netmem_ref (*alloc_netmems)(struct page_pool *pool, gfp_t gfp);
- 	bool (*release_netmem)(struct page_pool *pool, netmem_ref netmem);
-+	/* Called after RX refill. @full says that the caller reached its refill
-+	 * target. Return true when NAPI may complete, or false to keep it
-+	 * scheduled even without packet completions.
-+	 */
-+	bool (*refill_done)(struct page_pool *pool, bool full);
- 	int (*init)(struct page_pool *pool);
- 	void (*destroy)(struct page_pool *pool);
- 	int (*nl_fill)(void *mp_priv, struct sk_buff *rsp,
-@@ -30,7 +38,10 @@ struct memory_provider_ops {
- };
- 
- bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr);
--void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov);
-+void net_mp_netmem_set_page_pool_bulk(struct page_pool *pool,
-+				      netmem_ref *netmems, u32 count);
-+void net_mp_release_page_pool_bulk(struct page_pool *pool,
-+				   netmem_ref *netmems, u32 count);
- void net_mp_niov_clear_page_pool(struct net_iov *niov);
- bool netif_mp_lacks_cap(struct net_device *dev, u32 cap);
- 
-@@ -40,19 +51,4 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- void netif_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 			const struct pp_memory_provider_params *old_p);
- 
--/**
--  * net_mp_netmem_place_in_cache() - give a netmem to a page pool
--  * @pool:      the page pool to place the netmem into
--  * @netmem:    netmem to give
--  *
--  * Push an accounted netmem into the page pool's allocation cache. The caller
--  * must ensure that there is space in the cache. It should only be called off
--  * the mp_ops->alloc_netmems() path.
--  */
--static inline void net_mp_netmem_place_in_cache(struct page_pool *pool,
--						netmem_ref netmem)
--{
--	pool->alloc.cache[pool->alloc.count++] = netmem;
--}
--
- #endif
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index 86d580d4410d..ffffbccd517f 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -1315,10 +1315,11 @@ static unsigned io_zcrx_refill_slow(struct page_pool *pp, struct io_zcrx_ifq *if
- 			continue;
- 		}
- 
--		net_mp_niov_set_page_pool(pp, niov);
- 		netmems[allocated] = net_iov_to_netmem(niov);
- 		allocated++;
- 	}
-+	if (allocated)
-+		net_mp_netmem_set_page_pool_bulk(pp, netmems, allocated);
- 	return allocated;
- }
- 
-@@ -1476,6 +1477,7 @@ static const struct memory_provider_ops io_uring_pp_zc_ops = {
- 	.destroy		= io_pp_zc_destroy,
- 	.nl_fill		= io_pp_nl_fill,
- 	.uninstall		= io_pp_uninstall,
-+	.caps			= MP_CAP_FRAG,
- };
- 
- static unsigned zcrx_parse_rq(netmem_ref *netmem_array, unsigned nr,
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 71c83730d73d..aeb804662668 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -459,7 +459,7 @@ netmem_ref mp_dmabuf_devmem_alloc_netmems(struct page_pool *pool, gfp_t gfp)
- {
- 	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	netmem_ref *netmems = pool->alloc.cache;
--	unsigned int allocated, i;
-+	unsigned int allocated;
- 
- 	if (WARN_ON_ONCE(pool->alloc.count))
- 		return 0;
-@@ -469,9 +469,7 @@ netmem_ref mp_dmabuf_devmem_alloc_netmems(struct page_pool *pool, gfp_t gfp)
- 	if (unlikely(!allocated))
- 		return 0;
- 
--	for (i = 0; i < allocated; i++)
--		net_mp_niov_set_page_pool(pool,
--					  netmem_to_net_iov(netmems[i]));
-+	net_mp_netmem_set_page_pool_bulk(pool, netmems, allocated);
- 
- 	/* Return the last one, the rest stay in the page_pool cache. */
- 	allocated--;
-@@ -540,4 +538,5 @@ static const struct memory_provider_ops dmabuf_devmem_ops = {
- 	.release_netmem		= mp_dmabuf_devmem_release_page,
- 	.nl_fill		= mp_dmabuf_devmem_nl_fill,
- 	.uninstall		= mp_dmabuf_devmem_uninstall,
-+	.caps			= MP_CAP_FRAG,
- };
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index d7c88c0b67e5..e36ae6123adf 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -726,11 +726,9 @@ void page_pool_set_pp_info(struct page_pool *pool, netmem_ref netmem)
- 	netmem_set_pp(netmem, pool);
- 	netmem_or_pp_magic(netmem, PP_SIGNATURE);
- 
--	/* Ensuring all pages have been split into one fragment initially:
--	 * page_pool_set_pp_info() is only called once for every page when it
--	 * is allocated from the page allocator and page_pool_fragment_page()
--	 * is dirtying the same cache line as the page->pp_magic above, so
--	 * the overhead is negligible.
-+	/* Ensure all netmem starts with one fragment. The refcount and
-+	 * page-pool state initialized above share a cache line, so the overhead
-+	 * is negligible when an object is first associated with the pool.
+@@ -81,6 +82,8 @@ enum xdp_buff_flags {
+ 	 * XDP program is not attached.
  	 */
- 	page_pool_fragment_netmem(netmem, 1);
- 	if (pool->has_init_callback)
-@@ -1070,6 +1068,9 @@ netmem_ref page_pool_alloc_frag_netmem(struct page_pool *pool,
- 	unsigned int max_size = PAGE_SIZE << pool->p.order;
- 	netmem_ref netmem = pool->frag_page;
+ 	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
++	/* The txq/netmem union contains a receive netmem reference. */
++	XDP_FLAGS_HAS_NETMEM		= BIT(3),
+ };
  
-+	if (static_branch_unlikely(&page_pool_mem_providers) &&
-+	    WARN_ON_ONCE(!page_pool_supports_frag(pool)))
-+		return 0;
- 	if (WARN_ON(size > max_size))
- 		return 0;
+ struct xdp_buff {
+@@ -89,7 +92,12 @@ struct xdp_buff {
+ 	void *data_meta;
+ 	void *data_hard_start;
+ 	struct xdp_rxq_info *rxq;
+-	struct xdp_txq_info *txq;
++	union {
++		/* Valid for DEVMAP egress programs. */
++		struct xdp_txq_info *txq;
++		/* Valid for receive buffers backed by non-page netmem. */
++		netmem_ref netmem;
++	};
  
-@@ -1340,17 +1341,60 @@ bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr)
- 	return page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov), addr);
+ 	union {
+ 		struct {
+@@ -104,6 +112,8 @@ struct xdp_buff {
+ 		u64 frame_sz_flags_init;
+ #endif
+ 	};
++	/* Kernel-owned fragment metadata for non-page netmem. */
++	struct skb_shared_info *sinfo;
+ };
+ 
+ static __always_inline void xdp_reinit_buff(struct xdp_buff *xdp)
+@@ -138,7 +148,7 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
+ 
+ static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
+ {
+-	return xdp->flags;
++	return xdp->flags & ~XDP_FLAGS_HAS_NETMEM;
  }
  
--/* Associate a niov with a page pool. Should follow with a matching
-- * net_mp_niov_clear_page_pool()
-+/* Associate a batch of niovs with a page pool. Each needs a matching
-+ * net_mp_niov_clear_page_pool() or net_mp_release_page_pool_bulk().
-  */
--void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov)
-+void net_mp_netmem_set_page_pool_bulk(struct page_pool *pool,
-+				      netmem_ref *netmems, u32 count)
+ static __always_inline void xdp_buff_clear_frag_pfmemalloc(struct xdp_buff *xdp)
+@@ -150,6 +160,10 @@ static __always_inline void
+ xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
  {
--	netmem_ref netmem = net_iov_to_netmem(niov);
-+	bool trace = trace_page_pool_state_hold_enabled();
-+	netmem_ref netmem;
-+	u32 i;
+ 	xdp->rxq = rxq;
++	/* Do not initialize the txq/netmem union here. DEVMAP generic XDP
++	 * sets txq before this helper is called; receive drivers set netmem
++	 * explicitly.
++	 */
  
--	page_pool_set_pp_info(pool, netmem);
-+	for (i = 0; i < count; i++) {
-+		netmem = netmems[i];
-+		page_pool_set_pp_info(pool, netmem);
-+		if (!trace)
-+			continue;
+ #ifdef __LITTLE_ENDIAN
+ 	/*
+@@ -176,6 +190,33 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
+ 	xdp->data_meta = meta_valid ? data : data + 1;
+ }
  
--	pool->pages_state_hold_cnt++;
--	trace_page_pool_state_hold(pool, netmem, pool->pages_state_hold_cnt);
-+		pool->pages_state_hold_cnt++;
-+		trace_page_pool_state_hold(pool, netmem,
-+					   pool->pages_state_hold_cnt);
-+	}
-+	if (!trace)
-+		pool->pages_state_hold_cnt += count;
++static __always_inline bool xdp_buff_has_netmem(const struct xdp_buff *xdp)
++{
++	return !!(xdp->flags & XDP_FLAGS_HAS_NETMEM);
 +}
 +
-+/* Release page_pool ownership of netmems which a provider hands out of the
-+ * page pool, for example to userspace. All netmems in the batch must belong
-+ * to @pool. The pool may be freed once the last release is accounted.
-+ */
-+void net_mp_release_page_pool_bulk(struct page_pool *pool,
-+				   netmem_ref *netmems, u32 count)
++static __always_inline netmem_ref
++xdp_buff_get_netmem(const struct xdp_buff *xdp)
 +{
-+	bool trace = trace_page_pool_state_release_enabled();
-+	atomic_t *release_cnt;
-+	netmem_ref netmem;
-+	int released;
-+	u32 i;
++	if (xdp_buff_has_netmem(xdp))
++		return xdp->netmem;
 +
-+	if (WARN_ON_ONCE(!pool || !count))
-+		return;
++	return virt_to_netmem(xdp->data);
++}
 +
-+	release_cnt = &pool->pages_state_release_cnt;
-+
-+	for (i = 0; i < count; i++) {
-+		netmem = netmems[i];
-+		DEBUG_NET_WARN_ON_ONCE(netmem_get_pp(netmem) != pool);
-+		page_pool_clear_pp_info(netmem);
-+		if (!trace)
-+			continue;
-+
-+		released = atomic_inc_return_relaxed(release_cnt);
-+		trace_page_pool_state_release(pool, netmem, released);
++static __always_inline void
++xdp_init_buff_from_netmem(struct xdp_buff *xdp, u32 frame_sz,
++			  struct xdp_rxq_info *rxq, netmem_ref netmem,
++			  struct skb_shared_info *sinfo)
++{
++	xdp_init_buff(xdp, frame_sz, rxq);
++	if (netmem_is_net_iov(netmem)) {
++		xdp->netmem = netmem;
++		xdp->flags |= XDP_FLAGS_HAS_NETMEM;
++		xdp->sinfo = sinfo;
 +	}
-+	if (!trace)
-+		atomic_add(count, release_cnt);
++}
++
+ /* Reserve memory area at end-of data area.
+  *
+  * This macro reserves tailroom in the XDP buffer by limiting the
+@@ -189,6 +230,9 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
+ static inline struct skb_shared_info *
+ xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
+ {
++	if (xdp_buff_has_netmem(xdp))
++		return xdp->sinfo;
++
+ 	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
  }
  
- /* Disassociate a niov from a page pool. Should only be used in the
+@@ -290,7 +334,8 @@ static inline bool xdp_buff_add_frag(struct xdp_buff *xdp, netmem_ref netmem,
+ 
+ 	if (unlikely(netmem_is_pfmemalloc(netmem)))
+ 		xdp_buff_set_frag_pfmemalloc(xdp);
+-	if (unlikely(netmem_is_net_iov(netmem)))
++	if (unlikely(netmem_is_net_iov(netmem) &&
++		     !net_iov_is_readable(netmem_to_net_iov(netmem))))
+ 		xdp_buff_set_frag_unreadable(xdp);
+ 
+ 	return true;
+@@ -425,7 +470,7 @@ int xdp_update_frame_from_buff(const struct xdp_buff *xdp,
+ 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
+ 	xdp_frame->metasize = metasize;
+ 	xdp_frame->frame_sz = xdp->frame_sz;
+-	xdp_frame->flags = xdp->flags;
++	xdp_frame->flags = xdp_buff_get_skb_flags(xdp);
+ 
+ 	return 0;
+ }
+@@ -436,7 +481,8 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+ {
+ 	struct xdp_frame *xdp_frame;
+ 
+-	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
++	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL ||
++	    xdp_buff_has_netmem(xdp))
+ 		return xdp_convert_zc_to_xdp_frame(xdp);
+ 
+ 	/* Store info in top of packet */
 -- 
 2.55.0
 
