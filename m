@@ -1,148 +1,115 @@
-Received: from mta1.migadu.com (out-196.mta1.migadu.com [95.215.58.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED4C7DA66
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 19:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F37C3C2BB4;
+	Fri,  2 Oct 2026 19:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790968016; cv=none; b=ZKVjCZZ3ZsITCihRmhDSKOwG2CdKMgJlBmz9HjsV9Lhe6CXQg1E7nf38JJ4iok8sh1E6mYVV/rK5PQlJkHx3n8CfSxf2HlahZVbRsoBAjLFPBo8ijTl0RzH0TRoCLiOfBAlJs33O2XSx4OUycVvNHM2eFkxMdTP54aiI6g8d9ik=
+	t=1790968741; cv=none; b=IwY96YBhaBDiTXVcZU675r0TRSlNyzrcOacpCVr+v+Mg0YPp0kDc0T45UsYDMvIPbD5ooL9jWIXvqytgtRccOP5aV23FPiIP0kJ2gI6BMZF024do8bA+AK3P/LhPpsfmaLwdOeHo1gMtk6UbOv+xYsdseRPUyv08oq+U2IaCu4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790968016; c=relaxed/simple;
-	bh=DjzYXIoxVBzxg+kr697NRK4nOJQirBxRSWXPZQwikRI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gasxn16nTZpZSA5SxN50+1GoiaYXkzetbwLOAGiG0Tp4HgBHhuiVAxtdOuvMoAr1rRxB/yKLSapRsmiIRBgYFZL7HvURqldqyHQ965y3n68qidR9oQuU10XJXdGfZ4zXhGml4egohlCOS8W9JRgDG6PdHxs5Hh3BEsmLG8E9sHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EoHOlOTl; arc=none smtp.client-ip=95.215.58.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790968741; c=relaxed/simple;
+	bh=jnAOeGmpazpaa6F0liOQgWuqc+WpTuXHDmlbHHSzhJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BIJeoFxQmazMbBpY9SlOrRakavdlfticXkan6E8LfdL385fkQTunukxBJMFPyriPOaJpYenMQ3LT5gASogzB9W5ej3F1DMY1umt22626+0F8wvWNzxUILRBBTAE7SuotiGi4wkX21gQQo0ozh1z25n+Ecg2l9NxQgzW7/OMm5nY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oQgd97MU; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EoHOlOTl"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=DjzYXIoxVBzxg+kr697NRK4nOJQirBxRSWXPZQwikRI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790968011; v=1; x=1791572811;
- b=EoHOlOTlBz4oudb9yIDe0seIP6yfFeeCm5/IGS98Gn1oVw6gT3jXiKK0G4oE1cFPfSBUBfKl
- r4V2RhwoIu1PpJ4nE1B9A/jxWHZrNyNlkq+iwMqGcDjuvlFkDAav7h+aNi0jHDqrUq180uR/lPl
- Lsw8EDFSEM50xSfn6dPcdMcM=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 847547db9df22a20;
-	Fri, 02 Oct 2026 19:06:51 +0000
-X-Mizu-Trace-ID: 847547db9df22a20
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <24f7d004-9e71-41ca-abd3-dacf952ede23@linux.dev>
-Date: Fri, 2 Oct 2026 20:06:50 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oQgd97MU"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=y8MzMOtbyh0mzvxY+tu6OnDzIzuOy1UtRCB8aMJlZbw=; b=oQgd97MUFQeDpxNSe6MLHsukHW
+	7KNw+ycnsj4ujG4FqEpVU7uboQfHgPEK2rzpqvpNgPfnmb2m/N+XHuP+/KNeXnT0O4BtvjRE/uXW6
+	m9Q2FEnqqgxQd9oXI0k2f4/hKT8jElXUYkH8zijGpygKhmADckEuAuAXhBB1pSsl272MdFN8nFXha
+	CxYvifLBOWmiuUe0dTsNypBD3syY/iMFPJxpmVNlj4lRCJ2F7ZUK4+XWrAyLLUCTdkRAnq2SzTfvu
+	N4QjtwC79yz1abBGdBRmNVVyBdkoSS3u01RH3vODFfO6YNrYayMC9TfEhtRrjiwCnFqWvgJ+vg/H3
+	3/h+7JvQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1xCimK-00000002CL4-0aJs;
+	Fri, 02 Oct 2026 19:18:44 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 0E1093008DB; Fri, 02 Oct 2026 21:18:43 +0200 (CEST)
+Date: Fri, 2 Oct 2026 21:18:42 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Gabriele Monaco <gmonaco@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Nam Cao <namcao@linutronix.de>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Wen Yang <wen.yang@linux.dev>,
+	Tobias Schaffner <tobias.schaffner@siemens.com>,
+	Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH v2 01/15] sched: Add task enqueue/dequeue trace points
+Message-ID: <20261002191842.GA1259248@noisy.programming.kicks-ass.net>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+ <20261001152042.124445-2-gmonaco@redhat.com>
+ <20261001154934.GT88198@noisy.programming.kicks-ass.net>
+ <d75888885e2c94c1bc717faa864f609c43db874f.camel@redhat.com>
+ <20261002102939.GB2823843@noisy.programming.kicks-ass.net>
+ <56972260b9221128d7aaf5bb60f90611ec9d7235.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 05/22] bpf: Prepare for an exception cleanup
- table before the CFG walk
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261001133032.1338455-1-yonghong.song@linux.dev>
- <0660232bb0b94d963dba9a2f9022669c4e97c5e0a94bd7acc674f21f18b036e6@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <0660232bb0b94d963dba9a2f9022669c4e97c5e0a94bd7acc674f21f18b036e6@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56972260b9221128d7aaf5bb60f90611ec9d7235.camel@redhat.com>
 
+On Fri, Oct 02, 2026 at 01:55:48PM +0200, Gabriele Monaco wrote:
+> On Fri, 2026-10-02 at 12:29 +0200, Peter Zijlstra wrote:
+> > So mostly I flat out out ignore partial series. It means I have to go
+> > dig around to figure out the whole picture, and anything that requires
+> > extra effort goes on the 'later' pile, and you know where that lives.
+> 
+> Alright, I guess I'm going to have to fix my to_cmd script.
+> 
+> > Now, as to 3,4; I'm confused. If I search 'enqueue' I see there is a
+> > tracepoint attach thingy in the .c file, but I don't see the
+> > corresponding bits in the .dot file. And per my understanding the .c
+> > thing is an artifact of the .dot file.
+> 
+> Yes but only partially. There isn't always a 1-1 mapping with model events and
+> tracepoints.
 
+So the .c files are no longer an artifact? That seems unfortunate. I
+thought the .dot file was fully descriptive and the .c file was fully
+generated by dot2c.
 
-On 10/1/26 7:31 AM, bot+bpf-ci@kernel.org wrote:
->> bpf: Prepare for an exception cleanup table before the CFG walk
-> TL;DR: bpf_exc_check_prog() rescans the whole program for bpf_throw, and a
-> later patch calls it at every bpf_unwind() visit, so verification time may
-> balloon on large programs; suggests caching the result.
->
->> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
->> index 3ea1bff5cc90..e12cdb12cde3 100644
->> --- a/kernel/bpf/exception.c
->> +++ b/kernel/bpf/exception.c
->> @@ -141,6 +141,85 @@ int bpf_exc_check_info(struct bpf_verifier_env *env, const union bpf_attr *attr,
-> [ ... ]
->
->> +static int reject_throw(struct bpf_verifier_env *env)
->> +{
->> +	u32 i;
->> +
->> +	for (i = 0; i < env->prog->len; i++) {
->> +		if (!bpf_is_throw_kfunc(&env->prog->insnsi[i]))
->> +			continue;
->> +		verbose(env,
->> +			"exception cleanup cannot be combined with bpf_throw at insn %u\n",
->> +			i);
->> +		return -EINVAL;
->> +	}
->> +	return 0;
->> +}
-> [ ... ]
->
->> +int bpf_exc_check_prog(struct bpf_verifier_env *env)
->> +{
->> +	int err;
->> +
-> [ ... ]
->
->> +	err = reject_throw(env);
->> +	if (err)
->> +		return err;
->> +	env->prog->jit_required = 1;
->> +	return 0;
->> +}
-> Can this scan make verification time grow with the number of bpf_unwind()
-> instructions the verifier visits?
->
-> The commit message says the checks in bpf_exc_check_prog() are also run
-> "at every bpf_unwind()", and a later patch in the series (5de314709a62
-> "bpf: Dispatch cleanup pads by rewriting return addresses") does that from
-> process_bpf_unwind():
->
->      static int process_bpf_unwind(struct bpf_verifier_env *env, ...)
->      {
->          ...
->          err = bpf_exc_check_prog(env);
->
-> Each of those calls reaches reject_throw(), which walks all env->prog->len
-> instructions looking for bpf_throw.
->
-> None of the things bpf_exc_check_prog() tests can change once do_check()
-> is running: the offload flag, jit_requested, exception_callback_subprog and
-> whether a bpf_throw insn exists are all fixed before the main pass.  Only
-> env->ops can change, and only for struct_ops, in check_attach_btf_id()
-> before do_check().
->
-> So the scan gives the same answer each time, but every visit costs
-> O(prog->len) instead of O(1).  That means the BPF_COMPLEXITY_LIMIT_INSNS
-> budget no longer bounds verifier cost linearly; the cost becomes roughly
-> visits * prog_len.
->
-> For example, a program with about 500K reachable insns plus a bounded loop
-> of the form "if (x == i) bpf_unwind();" could reach bpf_unwind() tens of
-> thousands of times within the 1M processed insn budget.  Each visit would
-> rescan 500K insns, which is around 10^10 to 10^11 extra iterations, or
-> tens of seconds of extra verifier CPU for a single load.
->
-> Would it make sense to run reject_throw() once and cache the result in
-> env?  Alternatively, the bpf_unwind() path could re-check only the
-> gen_epilogue condition, which is the one that becomes known after
-> bpf_exc_prepare().
+If we cannot fully express the automaton in .dot, we should look at
+extending the 'format' and teach dot2c new tricks.
 
-As you mentioned, yes, this is an optimization issue. We can remove
-bpf_exc_check_prog() for checking per bpf_unwind() insn. We can do
-a collective checking after all insns are checked. This way
-bpf_exc_check_prog() will be called only once.
+> Throttle uses handle_sched_enqueue() for one case of dl_defer_arm, representing
+> a fair task running not boosted, in the enqueue case, because it was running
+> with another scheduler.
+> Boost uses handle_sched_dequeue() in a similar fashion to describe fair tasks
+> that stop running on the fair runqueue (but may continue on another runqueue).
+> 
+> In both cases I'm reusing an event that can be triggered from other tracepoints
+> too, ideally to keep the model simpler.
+> 
+> Then it uses handle_sched_enqueue() for dl_server_resume[_throttled]. They are
+> both plain enqueues, in fact, so I could rename them to show what they are.
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36872142096
+I'm not sure I'm following. Will you be in Prague next week?
+
+> > Also, IMO it would be *much* preferred if the .rst file would not exist.
+> > Just have the graph-easy and the description as a comment in the .dot
+> > file. Then you have the whole thing in one *readable* place.
+> 
+> Well, you make a fair point, I like to have it appear in the html docs, but
+> obviously no one is going to build the docs to review a patch.
+> I may look into ways to get both birds with a stone.
+
+So personally I have 0 interest or use for html. Mail is text, code is
+text, we use a text editor (neovim is my current poison of choice).
+Nowhere is there html. So then having to look at rst is just crap. rst
+gets in the way of actually reading the thing. All down-sides, no
+up-sides.
 
