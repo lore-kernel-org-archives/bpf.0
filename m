@@ -1,114 +1,108 @@
-Received: from mta0.migadu.com (out-1.mta0.migadu.com [91.218.175.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3673370ACC
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 01:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6904372B2F
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 01:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790991084; cv=none; b=Bwv6aJolC8Rzz7HMuamnOia5PIlDcyeLSR3jq7x/9EKFTHmNQ7mDWIyGPa9SPvM8wW1cwrqjUzV0f/KgABCsUrZGPMz3WAUFbVFQAUKBbtbla4Z2QKCDpX0MAV4YqSy6YbQn+4Ll8JiGQIQNUCxYdnku6bJFfbjJny6N2O0o0pg=
+	t=1790991187; cv=none; b=FCcH+UyZucwa60FtY5fiVFFl42tjUhzrQSuA+zqUrpusH+tdYI/46+yovtQDYlfE/g+61zEDUVKWNCH8vMcWpTHoM5zHVWvJhmfYRX2whRGxu7jg1yPiXxAmem67SrhS8feUWL7SvslWEfmEDeNGAU33fH2gAcOR1LeP5zu6Sdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790991084; c=relaxed/simple;
-	bh=VrUjaFpfqhbBta7NxOheeA+88Rj1Be533vYMgr2BzzY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F+kSCkpAKYnfo2LCsk0zYF4gvCl/vGbeB4bCIqWO7JsQ12jkLn9mAI3b5ti/mXSxfUxD2zMBqm4Wr9QfCSB6AHvB+acByVWehDVoHBn3LB103t3TgfTa/m4EV0Tn0YX4hUo9OdbvcApM6ueCJ3+9bboRRzwG5UtyAoQY/e1SYKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u1d9uVxc; arc=none smtp.client-ip=91.218.175.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790991187; c=relaxed/simple;
+	bh=GH8vS/4DRQM3YfVULlKjZliXQQHPQFlv4DUbkxg9c5M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=uENaq03SooepFBb6VSNXbH1jSiGy0ouzqKUxXNYD17dw6Gxto/qHFNu8sJgBj0EV/wj6lQjqlvC9q7PGaoYmkPqTyBzdaOU9MYovfWW8+mzt/6GLlYKddFOIXL8PzSnjVqm5ctitJuDwHvIJ1SzA0//evCxxcLmrkXhr7GS5gNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSRHBxg+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u1d9uVxc"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=VrUjaFpfqhbBta7NxOheeA+88Rj1Be533vYMgr2BzzY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790991079; v=1; x=1791595879;
- b=u1d9uVxcC7a/c+SWtsy3W63ylACVacB5mNkYIEnmZaMc0oWfpiSIMxnW4pQi+fzi5+tm9x/U
- d74svHx31UNJnLh08R+5XjZtumOk2znDI3b9EWiXGAj1/lgxOdrwcmK6ySRpGZb+Iz/oQqTMS41
- N4Rc6Qg8ery6wYjbSFyP+22E=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ed5ea994910a12e4;
-	Sat, 03 Oct 2026 01:31:19 +0000
-X-Mizu-Trace-ID: ed5ea994910a12e4
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn,
-	ameryhung@gmail.com,
-	alexei.starovoitov@gmail.com
-Subject: [RFC PATCH v9 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
-Date: Sat,  3 Oct 2026 09:30:33 +0800
-Message-ID: <20261003013033.149288-5-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261003013033.149288-1-cui.tao@linux.dev>
-References: <20261003013033.149288-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSRHBxg+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493601F0089A;
+	Sat,  3 Oct 2026 01:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790991186;
+	bh=KhpCb2VdorSRXLv4PgZh9sUScDdEPYGuRYeiCQz0c/I=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LSRHBxg+rLBXrWw9IvFYeU1KG/PQC8+7k3ex0+JSAdeEdqidrBl7oBUZF6LNrpcXE
+	 2nssN3Lv8qAT0wXEQ2gPvZ4yxd1Mckjwyr3nunweOorj5kjgyMBQySXzDNqGXiaOhh
+	 Mmz4a1RXQIye/UN0n4wowCX7iZWtVzV09OxcGzJC1Brm9596QE+RVOF2wOsYiTplAz
+	 lMF5nGmFFC2Ha/f73wM9E5xfKBJmMuiGy6dsPU/8TfGQMKVnsBXsWlccjOGMSBp92Q
+	 Ix40G6lKqI0SMYjUVqIREt/wkvmyHuaniqkQgRXK+o+yVuhC0FXiPvQe/Zahp+wmQe
+	 gfPKCoTR5S9Lg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 15/15] selftests/bpf: Add test for global
+ data of a program in Rust
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261002124714.180012-16-alexei.starovoitov@gmail.com>
+References: <20261002124714.180012-1-alexei.starovoitov@gmail.com>
+ <20261002124714.180012-16-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 03 Oct 2026 01:33:05 +0000
+Message-Id: <20261003013306.493601F0089A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Document the BPF cost model attachment in the io.cost.model section
-of the cgroup v2 documentation: attaching an iocost_model_ops
-struct_ops to a device by its major:minor, the model=bpf readback
-while attached (ctrl keeps describing the coefficients), that
-detaching restores the builtin model, and that ctrl= writes never
-select a model.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: missing ASSERT_OK_PTR for bpf_object__find_program_by_name
+--
 
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+commit 3ad0a944f5e1d8b874c6e4579bc0bb7941f6ed67
+Author: Alexei Starovoitov <ast@kernel.org>
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 7fe950425216c..07da465bb4ef0 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2117,8 +2117,31 @@ IO Interface Files
- 	  =====		================================
- 	  ctrl		"auto" or "user"
- 	  model		The cost model in use - "linear"
-+			or "bpf" while the BPF model
-+			is in use
- 	  =====		================================
- 
-+	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost model
-+	can be bound to a device by attaching an "iocost_model_ops"
-+	struct_ops carrying the whole disk's major:minor in its "dev"
-+	member (a partition's major:minor is rejected).  Attaching creates
-+	the
-+	controller if needed, like an io.cost.model write does, and
-+	switches the device's pricing to the model; enabling and
-+	disabling the controller stays with io.cost.qos.  While a model
-+	is attached, "model" selects between it and the builtin model:
-+	"model=bpf" switches to the attached model and "model=linear"
-+	switches back to the builtin model, and neither detaches the
-+	struct_ops; only detaching removes the model, after which
-+	"model=bpf" fails and the device prices with the builtin model
-+	again.  Device removal ejects the attached model as well, while
-+	the struct_ops link remains until userspace destroys it.  "ctrl"
-+	accepts only "auto" and "user" and never
-+	selects a model; it keeps describing the builtin coefficients,
-+	which are kept while the BPF model is in use and take effect
-+	again when switched back, and the automatic profile stepping
-+	does not switch profiles while the BPF model is in use.
-+
- 	When "ctrl" is "auto", the kernel may change all parameters
- 	dynamically.  When "ctrl" is set to "user" or any other
- 	parameters are written to, "ctrl" become "user" and the
--- 
-2.43.0
+selftests/bpf: Add test for global data of a program in Rust
 
+This commit adds a test to verify how libbpf handles global data (.data,
+.bss, .rodata) of a Rust BPF program within an arena. It introduces a
+new Rust program and dynamically loads the resulting object file using
+manual libbpf APIs in data_in_arena.c.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/data_in_arena.c b/too=
+ls/testing/selftests/bpf/prog_tests/data_in_arena.c
+> index 86dc6798bbdef..cb1023507c017 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/data_in_arena.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/data_in_arena.c
+
+[ ... ]
+
+> +/* The object is there if rustc and clang can build it, see Makefile.bui=
+ldvars */
+> +static void test_rust(void)
+> +{
+> +	const char *file =3D "./data_in_arena_rust.bpf.o";
+> +	struct bpf_object *obj;
+> +
+> +	if (access(file, R_OK)) {
+> +		test__skip();
+> +		return;
+> +	}
+> +	obj =3D bpf_object__open_file(file, NULL);
+> +	if (!ASSERT_OK_PTR(obj, "open"))
+> +		return;
+> +	if (!ASSERT_OK(bpf_object__load(obj), "load"))
+> +		goto out;
+> +	/* libbpf goes on without BTF when the kernel doesn't take it */
+> +	ASSERT_GE(bpf_object__btf_fd(obj), 0, "btf_fd");
+> +	ASSERT_EQ(run_prog(bpf_object__find_program_by_name(obj, "list_in_data"=
+)),
+> +		  100 + 20 + 3, "retval");
+
+[Severity: Medium]
+Could this result in a crash if the program is not found in the object file?
+
+bpf_object__find_program_by_name() returns NULL if the specified program is
+not found. Passing this result directly into run_prog() without prior
+validation via ASSERT_OK_PTR violates the BPF selftest guidelines for
+manual lookup APIs, and might cause the test to crash instead of failing
+cleanly.
+
+> +out:
+> +	bpf_object__close(obj);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002124714.1800=
+12-1-alexei.starovoitov@gmail.com?part=3D15
