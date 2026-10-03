@@ -1,79 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-238.mta0.migadu.com [91.218.175.238])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5411441D640;
-	Sat,  3 Oct 2026 10:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314C2395DAA
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 11:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791023489; cv=none; b=GCQ0lxT9tBoaVb+wD/PSat9g4SPJWVd/vKn3dgfP/BGa+MjcSBlBxpOHPmSLCHuZn6c7rdQmOKccO7t+dFkTYizjq81iGoFwQkQ3EvERwmomaq8z4YJF75QdIbksNYz98tGEYlq62KtCgHZ7iVuM78qalCfNJg/YM8sRRPv5VuA=
+	t=1791026166; cv=none; b=Kq+5YW/KyQ7OZWFhlZ9+9/qv9uczhql2oeKpLaPTyFxs9EcCvfnAAYvbwajJ5Zbo//HDSTba6fy2F5CmLXp9TKom/8u+1enFMXfwHgELgjhJ3pZ5gCv1SbTYMIIMUmBCUUCWQcXpL2+8GxN6Tjso+LaD9PR1bMxenhTqIH5Uqfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791023489; c=relaxed/simple;
-	bh=ygUoJLCQKFWKOx+5CSMmis9wmbifBrGa+KU1TJomdPY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rYx3CGATF8Ey92F8+BHEobUvbnReWVpZvJM0qgfSRAc5aK6/h3Lv5rpeccD2iUqv6EFOlNsJEpySqpNXIVtHR4+fSRWWchn18cDhcptqD/r5E7baYiWLq0wEBjJU6qpNpCKhLeBZLwrDkYQTGUyd9etzPe7/fieqJQqfzWfuBM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJubNwg8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791026166; c=relaxed/simple;
+	bh=7xxXDcUde6EpFAuOg1k05rK7RmlUKHgkwvpPXJYnI1I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KYUKoyYMQirZAD+zKksO8fmvxA+bTpYWdbt1IOZZZApKD019JI8CnyJK6v11wVT01XmcKrI0j1Tl/5t6klvAJy+N9uSw6d4LjYyP3UGDjqztgp/mh6EuWXOWDjJMEhaN0cX5LzHeyFiDv2tsNSecB/1KnpOne/4HjRkJmXyZjhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p00Iw8b0; arc=none smtp.client-ip=91.218.175.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJubNwg8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230911F0089C;
-	Sat,  3 Oct 2026 10:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791023476;
-	bh=JD1KrrdpLVmHcYg9pYizr+EY3Jnx/IklgTtkuzFE98c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jJubNwg8UjkFZDFCgXganeVccWeCUC64B+nvX/QJCoMYXCR46IeLHcDEoC9WXNkcA
-	 5ruXH4DMtVtjhNA3d7Uv9pKe+IwqKHYmShLEdJJbzIpK4vuV9dVpZIJ60E6msg+z9i
-	 4ti2IfPt7tuWzkUfzzC3uOvSCdCs+N7Wy58NOZc9wgMz5chltNhTn0TZzkalwkJPMG
-	 XYVBwyjFfZ1ZdXt14iY8a8VKJi/DAPbLmvDeLBF1DvlcoMfWEqbZ45BNIbuT/5yazm
-	 nRU/EDsrSmIva7nHl/5b7LeLaGnBwdw1GGhmcVLS3nQJaKo9nu1Q/zcaFKDoywybDy
-	 to4My81OLjUmQ==
-Date: Sat, 3 Oct 2026 03:31:15 -0700
-From: Kees Cook <kees@kernel.org>
-To: bot+bpf-ci@kernel.org
-Cc: morbo@google.com, willy@infradead.org, akpm@linux-foundation.org,
-	andriy.shevchenko@linux.intel.com, david@davidgow.net,
-	pmladek@suse.com, shuvampandey1@gmail.com, rostedt@goodmis.org,
-	corbet@lwn.net, senozhatsky@chromium.org, gnoack@google.com,
-	mic@digikod.net, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, jikos@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
-	ihor.solodrai@linux.dev, chleroy@kernel.org,
-	u.kleine-koenig@baylibre.com, maddy@linux.ibm.com,
-	mpe@ellerman.id.au, npiggin@gmail.com, sbhat@linux.ibm.com,
-	blum@kernel.org, alison.schofield@intel.com, dave.jiang@intel.com,
-	gregkh@linuxfoundation.org, lgs201920130244@gmail.com,
-	iweiny@kernel.org, u.kleine-koenig@pengutronix.de,
-	vishal.l.verma@intel.com, rdunlap@infradead.org,
-	skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-trace-k@lists.ozlabs.org, ernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org,
-	martin.lau@kernel.org, mason@kernel.org
-Subject: Re: [PATCH v4 08/11] seq_buf: Add seq_buf_init_append()
-Message-ID: <20261003103059.9e0b86-kees@kernel.org>
-References: <20261003035921.1918874-8-kees@kernel.org>
- <f3b5a05404cc45b59981e869a0203ed07497f6f6942e6d72cee63b37612b7cda@mail.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p00Iw8b0"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7xxXDcUde6EpFAuOg1k05rK7RmlUKHgkwvpPXJYnI1I=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791026161; v=1; x=1791630961;
+ b=p00Iw8b0Rro/s7jnrxit53ePEcVdn5/pE5F9NusamLeiK4Q/8X3FywVmFOHQs0RF/6UyJkFh
+ 1CpufYptL8gkLnNANcGKA1IoayNjp6cA2k2fs2s2n/oFyekWBYg68/HJUET8yL/qWwCFJWNXRi2
+ iT1K7x5HhzbgtNRpFbs5PJzQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 3f83462abb89ba21;
+	Sat, 03 Oct 2026 11:15:51 +0000
+X-Mizu-Trace-ID: 3f83462abb89ba21
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f3f0a7a2-9a91-4cb6-8cc2-4e5b0b914a1f@linux.dev>
+Date: Sat, 3 Oct 2026 19:15:45 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f3b5a05404cc45b59981e869a0203ed07497f6f6942e6d72cee63b37612b7cda@mail.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC v3 0/3] block: Introduce a BPF-based I/O scheduler
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Jens Axboe <axboe@kernel.dk>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Kaitao Cheng <chengkaitao@kylinos.cn>
+References: <20261003042748.33795-1-kaitao.cheng@linux.dev>
+ <DLV3OID9H5E8.2W0GIOP8FHJRN@gmail.com>
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <DLV3OID9H5E8.2W0GIOP8FHJRN@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 03, 2026 at 04:33:59AM +0000, bot+bpf-ci@kernel.org wrote:
-> This isn't a bug in the code, but is the changelog accurate when it says
-> seq_buf_init() "always sets the new buffer size to 0 via seq_buf_clear()"?
+在 2026/10/3 17:36, Alexei Starovoitov 写道:
+> On Sat, Oct 03, 2026 at 12:27 PM Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+>> PFQ gives us a concrete policy to explore how well the UFQ interface
+>> supports more involved scheduling decisions and to guide further work on
+>> the framework. It has not yet been used in production, and further testing
+>> and workload evaluation are needed.
+> 
+> Third version in six months and still not a single number.
+> v2 got replies from the bots only.
+> Without a solid use case there is no point in polishing this.
 
-Yeah, fair. It's not worded clearly. I've fixed the wording for v5
-to say seq_buf_init() 'empties the buffer (sets its "len" to 0) via
-seq_buf_clear()'.
+Thank you very much for your review. This is a fairly large patch series,
+and I have gone through several iterations because I was concerned that
+my approach might not align with the community's expectations. I wanted
+to get feedback early so that any architectural issues could be corrected
+promptly. I am not seeking inclusion at this stage; I posted the series
+for discussion. When I started developing this project, I wasn't entirely
+sure it would work either, so I have been writing and testing as I go, haha!
 
--Kees
+I have actually run some fio tests locally. Initially, moving the I/O
+scheduling policy into BPF caused a substantial performance regression.
+After three iterations, however, the current implementation can match
+the performance of native schedulers such as mq-deadline.
+
+It also performs comparably to the none scheduler on slower SSDs, but
+there is still a substantial performance gap on fast NVMe devices. My
+analysis suggests that this is because the none scheduler can frequently
+bypass ordering in the ctx queues and issue requests directly to the
+driver (see blk_mq_try_issue_directly). I'll try to optimize it further.
+
+I am also exploring and testing real-world use cases, which is why I
+developed PFQ in the third patch. Next, I plan to evaluate PFQ with
+foreground/background applications and with co-located containerized
+online services and batch workloads. I may be able to share the results
+in the next iteration.
+
+>> In particular, I would appreciate suggestions on the boundary between the
+>> UFQ framework and BPF policies, the struct_ops interface, and request
+>> ownership and fallback handling.
+> 
+> One global ufq_ops for all disks is not the best shape.
+> I'd do it like bpf_qdisc.
+
+Good suggestion. I'll give it a try. Thanks!
+
+> The ownership is the bigger problem.
+> The request sits in ctx->rq_lists and in a bpf map at the same time
+> and the kernel relies on the prog to keep the two in sync.
+> The prog holds rq->ref. rq holds q_usage_counter until
+> __blk_mq_free_request(). One request that the prog didn't return
+> from dispatch_req or left in a map and blk_mq_freeze_queue() waits
+> forever.
+> sched_ext has a watchdog that kicks the bpf scheduler out.
+> Something like that is necessary here too.
+
+When the BPF scheduler leaks an rq reference, system I/O does indeed stall.
+However, because the requests are also kept in ctx->rq_lists, everything
+returns to normal once the BPF scheduler exits. A watchdog that kicks the
+BPF scheduler out is necessary, and it's also something I was planning to
+implement. Thank you very much!
 
 -- 
-Kees Cook
+Thanks
+Kaitao Cheng
+
