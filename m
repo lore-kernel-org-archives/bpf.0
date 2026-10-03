@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A902C15BB
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 19:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EA22C15BB
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 19:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791054161; cv=none; b=LXXn1v/6c00RHcCi9nNIxBCCghfZWfIdH8FYAkow4SIZ0L8Z0G3OPSF9hZxeLgWqwB03LO/jiNn9gWJV+MZloylGAEbiwBMwqDcp6jBjzrwWLIOjEY/JtPZ4KBALo1bJxzm9jbAIQxZ+mmok2qBruaXzCeG+K1HjWl9NaCfOPNg=
+	t=1791054163; cv=none; b=iaxTlEcO+PvoxFYiatEbTeTVvP6DqSjP1+LgwXMj07r1/AMwoxDfiDJv2cfChHvPbujj/cmBlV66KOa5xUCGQnG/JHeZrt64dqLO8oAuQC5WpTablmtYLVoT6FeLsFfTkh8NYSzPVAd602ITCoz5bkv9c6ZEwSdCjai5hVIJZ2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791054161; c=relaxed/simple;
-	bh=s0hZQDN02oJEE5b/BIEpY55ZpEubIdlEu4vdzUb9JGA=;
+	s=arc-20240116; t=1791054163; c=relaxed/simple;
+	bh=6kfhr94NsYPHTY45DFOBaH6IMGmiwqrDi2tDvgmWCus=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kPL2d0fDYNtNZrUSsJoEBKJ0uW4TPZ+HZcAWKLKCX2dnpy5GGdxV3p4gCC4kNwpq/ho34/G9TkDY9aYWtqKey/W7ivKZww6elkgZLwJ9XYSp0RNRg4Ftge/xIGjjdvavJ7LVT4ownJYJNtcIE0Soa/drHXFKur4RVSgltqCemmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jv5pMW3M; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=XHKP+gBGhOusbxdEiA4S9ch16Ydot0KaUxjFXHWtHIG8sqdn5QmCgymXrk7LOKCiTjhMQ0YQ6HQf0kInDPAVGkDRrHYndKe6cBUMk77hwwrdk+6++MzqhzwSz48A5sXfTrfHnYPxYer6C/l40QN1Bewx7cc7Pu04cNKTs7+KeDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DxQchIkK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jv5pMW3M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B15771F0089C;
-	Sat,  3 Oct 2026 19:02:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DxQchIkK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D191F0089B;
+	Sat,  3 Oct 2026 19:02:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791054160;
-	bh=b5kjYcoPmpzi/BmeIyMOcLbGbqjFknDOIZmo7ir9kS8=;
+	s=k20260515; t=1791054162;
+	bh=yXrEYYqnuuSzg6gJeToU6j1y6l4C4U56qQM9TevOogE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jv5pMW3Meocif7kywB87NToj2SJMPLMmpwcyGPUou1riiL6U8DZlZOfwn9QGsvNsj
-	 3rQ11Sg+7RXtLPqh+mBm3NZhi5fzqu51zOV7GGo/5Dk/AkYHkNVQywM9CZu2URQarE
-	 Rp985ZzKeIe+nwiZBpX8ChB4rhxI8MbBa7gAxuGzuGN4Q5HDBqXw/Ghqo8SPacqgnA
-	 SmwIzGsQcUGwIgMj61j1bu7kuR/4LMhE5+Q/KIRbkdDd+yRt/2QTQsaT593/Icbcao
-	 QJsV1YdKa3YDBIG+xd6xeL3rvE5d9aZTTgfFZvIIBF2PJc+6ePiIQA+DAFSRooLm8V
-	 BBPyLR/v4m2fw==
+	b=DxQchIkKnuOgXKqBjFnqkfTXVkyjSPoxnhpij+2kmXakC36asA8SkmSk7/Sc2oGUE
+	 33sNzdr1oZoWrmGfykH07wRcn13frUuY728l8YAkJTE00C4QcQf3C1Aprt+KBnfQZy
+	 qhB87YqJ+Pog8uzdKdwSWzWN0RMTc/GMQsletpfiL51KrslF+TolsQpC1VtFdP481G
+	 ENf/aOd3fW3mqwl1NlPIGd5w/2nrpIgYYu5nRIZab0g6Qxz6Af4R5iUplpTUow4avj
+	 r16el2gh6ztlg2AO1edlGrpi1NUiyPOzq3fBKoqVzKmvwqj5mcL+hlbpp2zmOdTu6W
+	 hNxHKj2l1B2Dw==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC net-next 11/15] xdp: Copy provider buffers on pass and
- redirect
+Subject: Re: [RFC net-next 13/15] eth: fbnic: Support AF_XDP zero-copy
+ receive
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261002190018.696925-12-bjorn@kernel.org>
+In-Reply-To: <20261002190018.696925-14-bjorn@kernel.org>
 References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-12-bjorn@kernel.org>
+ <20261002190018.696925-14-bjorn@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 03 Oct 2026 19:02:38 +0000
-Message-Id: <20261003190239.B15771F0089C@smtp.kernel.org>
+Date: Sat, 03 Oct 2026 19:02:40 +0000
+Message-Id: <20261003190241.90D191F0089B@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,69 +47,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] net: xdp: payload truncation in xdp_build_skb_from_zc() when metad=
-ata unsupported
+- [High] net: deadlock on 32-bit during u64_stats_sync update with preempti=
+on enabled
 --
 
-commit a36f92358b032a7e20669d832f27102e55f9f4eb
+commit 1bc54e591deb70184971cd19a4b1a9d18715cb4e
 Author: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 
-xdp: Copy provider buffers on pass and redirect
+eth: fbnic: Support AF_XDP zero-copy receive
 
-This commit introduces logic to copy provider buffers into kernel pages
-on pass and redirects, handling fragments appropriately. It splits the
-copy from the release for redirects, maintaining the classic zero-copy
-path while resolving frag addresses through xdp_frag_address().
+This commit adds support for AF_XDP zero-copy receive in the fbnic driver.
+It integrates the XSK buffer pool as a memory provider for page_pool and
+refactors the receive ring refill loops to balance header and payload buffe=
+rs.
 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 386240bd24c98..b7f16f44dac22 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/e=
+thernet/meta/fbnic/fbnic_txrx.c
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
 [ ... ]
-> @@ -638,6 +718,9 @@ struct sk_buff *xdp_build_skb_from_buff(const struct =
-xdp_buff *xdp)
->  	u32 nr_frags =3D 0;
->  	int metalen;
+> -static void fbnic_fill_bdq(struct fbnic_ring *bdq)
+> +static bool fbnic_fill_bdq_one(struct fbnic_ring *bdq, unsigned int *tai=
+l)
+>  {
+> -	unsigned int count =3D fbnic_desc_unused(bdq);
+> -	unsigned int i =3D bdq->tail;
+> +	netmem_ref netmem;
 > =20
-> +	if (xdp_buff_has_netmem(xdp))
-> +		return xdp_build_skb_from_zc(xdp);
-> +
->  	if (unlikely(xdp_buff_has_frags(xdp))) {
+> -	if (!count)
+> -		return;
+> +	netmem =3D page_pool_dev_alloc_netmems(bdq->page_pool);
+> +	if (!netmem) {
+> +		u64_stats_update_begin(&bdq->stats.syncp);
 
 [Severity: High]
-Does generalizing xdp_build_skb_from_zc() to handle all netmem buffers cause
-a payload truncation when metadata is unsupported?
+Does this code risk a deadlock on 32-bit systems when called from process
+context with preemption enabled?
 
-Previously, xdp_build_skb_from_zc() only handled pure XSK buffers, where
-data_meta =3D=3D data is guaranteed. Now, it can receive generic provider-b=
-acked
-netmem buffers.
+If memory allocation fails here during interface bring-up (e.g., via
+ndo_open -> fbnic_up() -> fbnic_fill() -> fbnic_nv_fill() -> fbnic_fill_bdq=
+s()
+-> fbnic_fill_bdq_one()), the sequence counter is updated without disabling
+preemption.
 
-If a netmem provider driver does not support metadata and initializes the
-buffer via xdp_prepare_buff() with false, xdp->data_meta is set to
-xdp->data + 1.
+If the thread is preempted while the sequence counter is odd, and another
+thread attempts to read network statistics (like ndo_get_stats64 or
+get_queue_stats_rx), the reader will spin forever preventing the writer
+from finishing, leading to a hard deadlock.
 
-Looking at the length calculation and copy in xdp_build_skb_from_zc():
-
-struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
-{
-        u32 headroom =3D xdp->data_meta - xdp->data_hard_start;
-        ...
-        u32 len =3D xdp->data_end - xdp->data_meta;
-        ...
-        memcpy(__skb_put(skb, len), xdp->data_meta, len);
-}
-
-Without checking xdp_data_meta_unsupported(xdp), it blindly uses
-xdp->data_meta to determine the length and as the source for memcpy().
-
-Could this cause the first byte of every packet to be truncated and the
-payload to be shifted by one byte, leading to silent data corruption on
-XDP_PASS?
-
-Should xdp_build_skb_from_zc() check xdp_data_meta_unsupported(xdp) similar
-to how xdp_copy_zc_to_xdp_frame() handles it?
+> +		bdq->stats.bdq.alloc_failed++;
+> +		u64_stats_update_end(&bdq->stats.syncp);
+> +		return false;
+> +	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002190018.6969=
-25-1-bjorn@kernel.org?part=3D11
+25-1-bjorn@kernel.org?part=3D13
