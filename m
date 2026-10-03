@@ -1,128 +1,117 @@
-Received: from mta0.migadu.com (out-153.mta0.migadu.com [91.218.175.153])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C591A9FB7
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 06:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC3E3515F2
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 06:32:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791008648; cv=none; b=nPfEUMbPQo1YvZ5BsFQh5dUeHIm9cP3lpTv2swwhqL5N89ikLL7sVlVrzKTY7pS6ZksQIcwZDW/eRyx0/FuAAMJgU40+BxacRn7KH9zOnMXBfvw32dVOLIMCrp6Q5tNnmR4Oj8ukief0/QJw5kuP9acsIPMue5sggVRnCm0p9TM=
+	t=1791009146; cv=none; b=dxK0MinKYtCAQ5rq7gZLERdSEqJyjZynEC1mLggWcmHah5G0rtfYqyQ1Id8PqgpxfWRlVtjpQcJJrVMk43E+JyofHQd9WTPDLvujrV3dhxQszpgCMgjrGh0Vhd8utxKJyvTYTNTajQwil5PXxJmoRehZSfqjWmUFZfwRc58PtmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791008648; c=relaxed/simple;
-	bh=uXr2q7UZes+MeSF6RarEYCzlQMvAzuwsQ0pseuoaz2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z3Rgyn463uqxkWHwqgOOTLMsVDtPTaZOaf6aiKnOIYtux6e1S00vr3wA/SCaYy1g4ZEuLlprDskKW2c6/WNLO3vD7G9gdc9HnGQh4c4Kyq8dDGD1XhZb6p+rzloOdA2AVJU0Z3dQjnZwxipw8glDpUY3el1080jCsDPcShwJs6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I3ynhin+; arc=none smtp.client-ip=91.218.175.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791009146; c=relaxed/simple;
+	bh=VuiMGsvrxoxHYIMjTtEAMKJLNMC58E+oDp1FFjB26XU=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=dyAB5+YPK9KLyhRkb6RY1+RHqA57NSetwksESYDkKQb3An4hlxWwKkG0lCvGJqXXedQyycbWBFCQ9fYpVc7QjQdFjw70uUWDCdVLdarTPHdmrAWRmmCQuowcW6A/bkSnuScafSRYsKO4HdeE6sc5+6JuQpcViBmwdlHtOOe6OO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DL3guCmC; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I3ynhin+"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uXr2q7UZes+MeSF6RarEYCzlQMvAzuwsQ0pseuoaz2I=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791008644; v=1; x=1791613444;
- b=I3ynhin+y1MOY6yewIJDVRDoe7ViJIxwHoMLR1xw4GwlQgKju5xQSSCe6lWayNvTrUXa2efz
- Pk3KyrIaw9jPqVvQhtG/TC7xI6ejdH4dsMMvMdImiPhpgBvIbWj2OLlFLsVicPn0NFvTgb4XFzY
- PPfWp9X+tzaIsiEbGvZt7d5M=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id d7c4947124629513;
-	Sat, 03 Oct 2026 06:24:04 +0000
-X-Mizu-Trace-ID: d7c4947124629513
-X-Migadu-Flow: FLOW_OUT
-Date: Sat, 3 Oct 2026 14:23:53 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3 2/6] tools: ynl: convert enum selector to
- string for sub-message parsing
-Message-ID: <asCfefn6IADLNDtD@fedora>
-References: <20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn>
- <20260930-ynl_rt_encap-v3-2-4106c21b9ee7@kylinos.cn>
- <20261001015134.963061F00898@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DL3guCmC"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc797656e44so44314a12.2
+        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 23:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791009144; x=1791613944; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vr5KVZoPR0cul9dM0w9bT4mgxCHNEHDqUMfTuf7KfX8=;
+        b=DL3guCmCAoGGad5fqQhT+5W2N60ezuvD94VtFpob8EDuN/9oZNMQlKHDpKAkIFeIqv
+         cOYuDc2THo5GGGolhJh0u08uEpd/a0aW2pVhSbGM+DGfgBTDKm22DxkQ6LX2FkKiM7yS
+         jJV/jTe/NGZqAqIfD6TfS+NvtBajMlBp4v/HObTFUIzWKLyviiMPwG3ZAouqLj26zAwG
+         ZcJjzfa+1isefTBiR26J43dKgCqETQBDF8CPhVZde99KZyOFaecA23+M4lrbFKXIXN/C
+         dkTOqRKnWejNq/nzi8KHvYZV7R7OXmRw9eMk5898z5VOh6iUMuXoiZABMloEUTphOZXz
+         PHIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791009144; x=1791613944;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vr5KVZoPR0cul9dM0w9bT4mgxCHNEHDqUMfTuf7KfX8=;
+        b=u/hkCxfrPRZb9cQ0gxThVXONfYrpE1OUDJjKKkml5TKuYr8aDiSdWgGuwq0ClJRLuD
+         MIv5Nzd9d02o24drDGYSRwe5uaByGZJLB3oC0QHKGpdmFJgiWQ2cBgt8TjpETpAb7G/T
+         0Icl4L+QkV7kSowgx6sLL5T9D+BTwIqyhzgwl3eashWEnzHUcTrTYs+ablFpuo/m/i8c
+         gl9ZSHRGK0fWN+qSTX86ivBqFicOB/oTsk0Uu4eEokH0bCHBZZoaJ7RYCzDLNIE2m5/m
+         DI4tj/7ACN/h2nEM2nyPfoFsyMr1t1KF6dha2XUIfGHoos1EiERxEpyYj0zQuM5pu9gu
+         Xxlg==
+X-Forwarded-Encrypted: i=1; AKwUvBy0UyKkNeXesvfpuE6mcwurjRFpg31SNoJWgePTyzUTQzuI13IUTpbhiNGojEtdu/3D3oA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIAdJXoX4p2TNGBGrHpTKLlKkTIxw3GM9RhwKn4v4P2gxDGnoRG
+	IEMQBDtuoV1/QxqCs7JkaKnvjZO6yPzWjCdakSwRpG8+ppRDhMP/yR5x
+X-Gm-Gg: AYBFou1LRL0NKWdb0jZ0m9Ay0EHFc6+uwXWyC/eJAsrVkIVXNSLsLsk8RZiibxh9HED
+	iZxjcIxisCBEfPHhK+t/LoZYylqI6N5u/OLANLybMtWCBScQNQviNp69AwbefnAJPCl6r9OGAT2
+	6CaSTEqe6nAs8a1D0Wys3pKf4oUus93evIzv+x0L9qp+zzDJVKUQOsSRtjRHSfokOEKqq9zt+Zh
+	Ej6ZdwS7JtLtCYoL9JKLrGAvgvPVmgO5khFHPhaFu7auf50+6foffp5jpKhqOBQX0BE8J9CrAWb
+	rVI1VqKIKpY3ErRZtADephsii6VSleZjMrMiEF+90CKxhmkPwliQWBN1U2LQjJp/9MfXpKwU7BO
+	gsyXElp6LTbg1F+IgXGEKMsaEnKmBWPJ13MTKs6iCJ9Wf24rd+AKQjIkSnuIdQs85qvlvsG057z
+	VGQsWipeu/8akJEfHLQWjO3Lyjw3aSkxwSNtnYKd85MDGL5vCWGEhC97EG/Mhqn0bycm9bDz8EC
+	L5Dsbt85o/2KZk7RUR/swxj8cmBXNY1kIiY0Ti4754g0Uw/GFpbuf4YU061AAkxWgMQoMtkkA1t
+	ym40EecY9a0fqA==
+X-Received: by 2002:a17:90a:1650:b0:3a0:7261:d58e with SMTP id 98e67ed59e1d1-3a6e622a50cmr2049092a91.22.1791009143685;
+        Fri, 02 Oct 2026 23:32:23 -0700 (PDT)
+Received: from localhost ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a78d6b5c3dsm1823004a91.13.2026.10.02.23.32.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Oct 2026 23:32:22 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 03 Oct 2026 06:32:21 +0000
+Message-Id: <DLUZR540Z45R.3RTC4COS2IW2V@gmail.com>
+Cc: "Jonathan Corbet" <corbet@lwn.net>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "David Gow" <david@davidgow.net>, "Petr
+ Mladek" <pmladek@suse.com>, "Sergey Senozhatsky"
+ <senozhatsky@chromium.org>, "Shuvam Pandey" <shuvampandey1@gmail.com>,
+ "Steven Rostedt" <rostedt@goodmis.org>, =?utf-8?q?G=C3=BCnther_Noack?=
+ <gnoack@google.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Masami Hiramatsu"
+ <mhiramat@kernel.org>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Jiri Kosina" <jikos@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Christophe Leroy (CS GROUP)"
+ <chleroy@kernel.org>, =?utf-8?q?Uwe_Kleine-K=C3=B6nig?=
+ <u.kleine-koenig@baylibre.com>, "Madhavan Srinivasan"
+ <maddy@linux.ibm.com>, "Michael Ellerman" <mpe@ellerman.id.au>, "Nicholas
+ Piggin" <npiggin@gmail.com>, "Shivaprasad G Bhat" <sbhat@linux.ibm.com>,
+ "Thorsten Blum" <blum@kernel.org>, "Alison Schofield"
+ <alison.schofield@intel.com>, "Dave Jiang" <dave.jiang@intel.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Guangshuo Li"
+ <lgs201920130244@gmail.com>, "Ira Weiny" <iweiny@kernel.org>,
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, "Vishal
+ Verma" <vishal.l.verma@intel.com>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Shuah Khan" <skhan@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+ <nvdimm@lists.linux.dev>, <linux-doc@vger.kernel.org>,
+ <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH v4 00/11] seq_buf: Add seq_buf_strlen()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kees Cook" <kees@kernel.org>, "Bill Wendling" <morbo@google.com>
+In-Reply-To: <20261003035906.too.263-kees@kernel.org>
+References: <20261003035906.too.263-kees@kernel.org>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261001015134.963061F00898@smtp.kernel.org>
 
-On Thu, Oct 01, 2026 at 01:51:34AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] ynl: early return 0 aborts entire parsing loop on unknown sub-message
-> - [Medium] ynl: invalid C code generated for external enum selectors
-> --
-> 
-> commit f2c434cd3f008807f1723585dcbfd634aa3f28b7
-> Author: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> tools: ynl: convert enum selector to string for sub-message parsing
-> 
-> YNL sub-message parsing expects a string selector for strcmp(). So for
-> non-external enum selectors, convert the integer value to its string form
-> via the family's {enum}_str() helper. This enables correct decoding of
-> sub-messages keyed by enum values.
-> 
-> > diff --git a/tools/net/ynl/pyynl/ynl_gen_c.py b/tools/net/ynl/pyynl/ynl_gen_c.py
-> > index 15c79849c6096..783242537fe48 100755
-> > --- a/tools/net/ynl/pyynl/ynl_gen_c.py
-> > +++ b/tools/net/ynl/pyynl/ynl_gen_c.py
-> > @@ -951,13 +951,31 @@ class TypeSubMessage(TypeNest):
-> >              sel_var = f"_sel_{sel}"
-> >          else:
-> >              sel_var = f"{var}->{sel}"
-> > -        get_lines = [f'if (!{sel_var})',
-> > -                     f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
-> > -                     f"if ({self.nested_render_name}_parse(&parg, {sel_var}, attr))",
-> > -                     "return YNL_PARSE_CB_ERROR;"]
-> > +
-> > +        local_vars = None
-> > +
-> > +        if self.selector.is_enum_val():
->             ^^^^
-> 
-> [Severity: Medium]
-> Will this generate invalid C code for external enum selectors?
-> 
-> The condition doesn't check if the selector is external. If a YAML spec
-> defines a sub-message with an external enum selector, it appears this will
-> generate a non-existent structure member access for the presence variable:
-> 
->     pres_var = f"{var}->_present.{sel}"
-> 
-> and try to pass the string pointer to the enum string helper, which expects
-> an integer. Should this check include `and not self.selector.is_external()`?
+On Fri, Oct 02, 2026 at 08:59 PM Kees Cook <kees@kernel.org> wrote:
+>   seq_buf: Add seq_buf_terminate()
+>   bpf: Remove dead newline stripping from format_disasm_line()
 
-OK...
-
-> 
-> > +            enum = self.family.consts[self.selector.get_enum_name()]
-> > +            pres_var = f"{var}->_present.{sel}"
-> > +            parse_sel = f"{sel}_str"
-> > +            local_vars = [f'const char *{parse_sel};']
-> > +
-> > +            get_lines = [
-> > +                f'if (!{pres_var})',
-> > +                f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
-> > +                f'{parse_sel} = {enum.render_name}_str({sel_var});',
-> > +                f'if (!{parse_sel})',
-> > +                'return 0;']
->                  ^^^^
-> 
-> [Severity: High]
-> Does returning 0 here abort the entire parsing loop?
-> 
-> If a generated YNL parser encounters an unrecognized sub-message enum
-> selector (for example, sent by a newer kernel), it looks like `return 0;`
-> executes directly inside the attribute loop of the parsing function.
-> 
-> This would silently abort processing the remainder of the Netlink message and
-> drop all trailing attributes without returning an error. Is it possible to
-> skip the attribute and continue parsing instead?
-
-OK, I will use continue then.
-
-Thanks
-Hangbin
+For bpf bits:
+Acked-by: Alexei Starovoitov <ast@kernel.org>
