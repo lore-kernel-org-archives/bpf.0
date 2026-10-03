@@ -1,106 +1,111 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAABB31E106
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 09:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEA6EEB3
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 09:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791020914; cv=none; b=MiYk1pi98e9EWncxax2gBP4yrE3aB7lzYHZx58si45t82ovwAZyQVaiQl1XMTzW5S/6nwkWck5azv/Ch56Kb4Pr2UpmQCaMLdo5P4ZOiKUvEz2aTWOq5kdZaVTIAOdUIuVfPWCu0rziggXUQWlcVP2T/vXw9Uj6YKQrnpO99Xhc=
+	t=1791021151; cv=none; b=jhSGFU57Kqkq+mlkbqZ71nSGpCV6I36ppQpxFemdlMh3PiF+hhEHL71lhX+fecZ2RCpqAU3G4ANQ9APT4ip3urf9Q2J1t6St3KQnmnyl31qAZBP6qG50U8+t1/vU9zRt3m0SDA+3kPbe4WrIoTLqVp74XgKK/ahrEqi88c1Pors=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791020914; c=relaxed/simple;
-	bh=0RkpEcMiN488tK59s8M9JQPrxcO9lRoYuZG48QKlmNA=;
+	s=arc-20240116; t=1791021151; c=relaxed/simple;
+	bh=jweMfYQRoaoBEfkGOCvQZk+QPSNSvCLvtEJzzzW4538=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=ULprkihiCy6keBaoMT/ylCEOUrKsqBOueNewWNi19i7GZbFBZ2j/6WPzYvo/ItzGSq+AZxni/cN0Om8x6+eWZlSo+W+Up6FWkKwpeqcV7NSLlovgSr8/kOcy28i++CB7z1z0BftrCtB4tb8gEPR0jTrsFkvDowTV/B+qFYynzcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G9zKd4UF; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=proP/74Z; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-Type; b=aWjxQZdzjhg4yGwagSH/+2PuLvmGmfPa7bst51Ck2RT/FbMETmrDlJ2eHXRTt9ap8XJ9YLfblBebtOyWqiRVA+mSzqyrwdDARqfjTefRoCtK4640adAJLeO+Gb1iXUO/7/EQ9Rdmt2U3G5qRPjnVWjLsAnrD/l1k+UR1zDqcLUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cpmdls5k; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=bKPEJjeg; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G9zKd4UF";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="proP/74Z"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cpmdls5k";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="bKPEJjeg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791020911;
+	s=mimecast20190719; t=1791021148;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3MSVzV+7zvbUIA5pRFEiBSu7+i6jPYbihTCBHKNz0yo=;
-	b=G9zKd4UFYaziIDDJXyZJqy3Xx/7nxwuSSU16HGsI2pYXeklmKeQUGYF5559FVp0kRiYH7m
-	uPvlCfFgJoQ7iCXN3+rpnfsHUMn59l2awZEhnPK950f6s0OCtgLB6r/YOwNqXyN3aj0D+j
-	wIc76d8TTWaueKKaOy95e2H1PcmRFOI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=bGwiD5BsIU7SMUvm8z3LsVJJc+9NsNqtDssS4ilkK84=;
+	b=cpmdls5kI46cIEXNBJt56HU8LEMwFkBSAPhlQy/2n6rY1g+RMEM49B8ur4gCVepwNZxw5K
+	n7E/hUQWCRjd20cXFR0yb0EUjTR75RYmfLRX6stTyA3MUAtGgtro3CM4ODGFog9C/mmrjl
+	mUjTnLFFoem6cUZcWgM1WzxYMy+9mZI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-275-anF6OWxBNpOE-Dsn9_j9ww-1; Sat, 03 Oct 2026 05:48:30 -0400
-X-MC-Unique: anF6OWxBNpOE-Dsn9_j9ww-1
-X-Mimecast-MFC-AGG-ID: anF6OWxBNpOE-Dsn9_j9ww_1791020909
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a01b112fa2so8840535e9.1
-        for <bpf@vger.kernel.org>; Sat, 03 Oct 2026 02:48:30 -0700 (PDT)
+ us-mta-45-yG7zesaVPvi07ycVc4PGXw-1; Sat, 03 Oct 2026 05:52:26 -0400
+X-MC-Unique: yG7zesaVPvi07ycVc4PGXw-1
+X-Mimecast-MFC-AGG-ID: yG7zesaVPvi07ycVc4PGXw_1791021145
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-48c4d7ba211so160860f8f.3
+        for <bpf@vger.kernel.org>; Sat, 03 Oct 2026 02:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1791020909; x=1791625709; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1791021145; x=1791625945; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:message-id
          :references:in-reply-to:user-agent:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=3MSVzV+7zvbUIA5pRFEiBSu7+i6jPYbihTCBHKNz0yo=;
-        b=proP/74ZMYTLfzfDjmq2GqCA3dAJL0zBFCIUs/o7HasphM185vzRDTE5rDgUZP9YXC
-         xwrEvnaT6bVuJuJxquIx3/nSDsgVSXkghszMjO9KEMY3jntQc2Ct0dLLNWF3hWFCboQQ
-         GUfJ0HTYHYbes5VOXDWGR00sJuF1xtNwDCjkwqf5g6cXmSl5ea6ZjYKabkPhBgiFJ6yp
-         1H+p3kB1bmj92+lrkzHe1EoVb/4LYUyhdqG9gjBNYaX4C+PNkkjjEA7Pk1pA0PL+uXWb
-         7tVK76E6MEmeY4LBkHT4I31vQCscF83gP99CMuo6EIE7N2nAiS/8/qFaGQC82dVxcRxt
-         zCXw==
+        bh=bGwiD5BsIU7SMUvm8z3LsVJJc+9NsNqtDssS4ilkK84=;
+        b=bKPEJjegf22xt7UE8YfEPOgMbyGJzt5CIs8Tc5Dpxgfd1wjBgZgKgUU4gbAXqmY5x7
+         xwrd60yb0DLuTsdcLhT3haEj7DfRPe4U9q/jD2qBWWOFLVYe47GBPxRRrcIpGYnItU+j
+         8fAUeFParZrJ9N4IjROpH1CaZ4VOuAM20WLfhAjCmfvUNLNMTPquguZVw5YDH3uwvcMI
+         b3c5y9TqUGxT1wMIgykAapiAXFbJ/J23/ZZbQ9TJm3JD5cZhDd7wRvMUgXHPdsxxikgF
+         hQmFPlMhqLJShzARM6CckGgJJdRsOwyt7D8o4J/HchNrSNVeJZr3BSkXmC9QvYHcDKLw
+         RdfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791020909; x=1791625709;
+        d=1e100.net; s=20260707; t=1791021145; x=1791625945;
         h=content-transfer-encoding:content-type:mime-version:message-id
          :references:in-reply-to:user-agent:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3MSVzV+7zvbUIA5pRFEiBSu7+i6jPYbihTCBHKNz0yo=;
-        b=PH+gFWERXYXXU5kbP2pEMk8sKBP65XlxIdRNcXsnzPmiF+2Sou/kKwCny12lKOAYRU
-         SVd0MaGqcM21Cvd4HsNFSfQZ1b2j5YpPHKdGSmvUlloI5WJRYuXcKoBDbcmAeQKD6B8g
-         BPY4AvoUzYIxNlr9QuFM/H7hFSb+fNPR8Rm7IV+J5N/tEvzHso1CPJUakJoLhMjmDvbX
-         PnHhVWXGD85SOD2luZr+lb+9bcgxU20B4DfKZhWp/D5K090T5WQ/CBBZ8cWzxl6vOydc
-         CgBCtVax3hX+CmO1rFhholzkHvrhaC80gGNp3iEhjxfoWxKpuE2Zv360dptDzXM9dQEg
-         mKqw==
-X-Forwarded-Encrypted: i=1; AKwUvBx3hCw5RgC5MAGPuQoDPcmrgNtF7U/58j5GWav6YX4wonFJu4mBBnoILH202UQVa3JPac0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kwS3LHIYKEVFJURFXsIxCG2Gp1NRiJEgYQkMyKwqwwNvpI1rCc
-	2yhUqmVYD62sUg32cPNong2wFMoAEvl2GrM6oOXO/p8phMoAOdo5kuucqC27VbPGRVkHz89wqDw
-	1xVsvgtHK0p8MkNlQLqCt/GSAhgkoD2FedsEBi6n/1ot00Q8tAqBZVg==
-X-Gm-Gg: AYBFou0CQL5WlD5Zo4OG2S5HPoiZMnj5xpdAbdaJJs80ssuzaKaDH9fTzyrwj5+cyAs
-	mjYg5nk/paPUZdnqsB1sGHqFJPwDns88D3onGZsDSOIV9MQ0mEbwEV6k56Ede4IPnpQ6kWyVH9Q
-	Xu8iUKIy3rrSwJ60a9sxdEU2kSJne33nl1tnn/Wo+HM23+I+SMsINvfhEsWb807dk8PpPVcabWb
-	f3d0wrsrWSqBjhXJpHlAhsQ5BUbssaXiVjrr0nkn/23r/f7/oEV5L2G+Qgx4AmADXzD+ZkD8kU0
-	k8uzGCzxNUJxJoNY7pU0irlBZO7oPbWofPkNrhicdDWAhAkkDKqQvh95PxsMl6JTSRh8F6PRuPr
-	EdpCFL8rFe56mC/LszbxSvQWoQa+xSwGJgC9WX9Q=
-X-Received: by 2002:a05:600c:3ca4:b0:4a1:6424:41bd with SMTP id 5b1f17b1804b1-4a1681001e3mr27916875e9.27.1791020909054;
-        Sat, 03 Oct 2026 02:48:29 -0700 (PDT)
-X-Received: by 2002:a05:600c:3ca4:b0:4a1:6424:41bd with SMTP id 5b1f17b1804b1-4a1681001e3mr27916455e9.27.1791020908587;
-        Sat, 03 Oct 2026 02:48:28 -0700 (PDT)
+        bh=bGwiD5BsIU7SMUvm8z3LsVJJc+9NsNqtDssS4ilkK84=;
+        b=R9eB4J/QY0gKBg8pOMUxaO6z5Ucw2wuNDdijkwGfYl00S7CujZlnTjYXFP9PtqLRvw
+         0xEgVeKourwUpRtrvWOXQMcDO3x4H+iCeXZL9K055sI30mz/K+BRpn9bUAzbw2N1IfHp
+         iRNJfpPkr8Q7FFofPDvbpQNDLEgjp71s4cSng1a/YLqrlTi9W7y4DQVKNp36uMJZvxXI
+         WQf4EdoWsSl8+KXcMIlM5NuiZvCg0fKKMkibLJolt2Ca/jW0/ONm4erSRHtEnWVHAL1R
+         C3MqC3uLkOoPCjlW7snI1VqB3Ucn2k/r4JIDNPPoXWGe8pzHrLVnG6eVZH3Do9/AUstV
+         YjEQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxilRS+Z0//elPiIyrDXWFYP+Nw3z8dRB7S6Nu6Rcze6TNljnYFlO4wVoBXV6LCr3KAeDc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLtCLVBqJLhL3UQxYIK6SHreLQIuPDE7Kr+advMxD3H+rmk3JG0
+	dduga7yYRG8jr7QN+lxUjY7HGRIjU7FKq626Lq/lEP3za2tjBg71o3ZQPHkHLq0dT91k5GGc60N
+	eRO98Na0t9iXfubkauOfP9lxNV1f8GGW88cMauQ9USNq1fv2Yxm8SNQ==
+X-Gm-Gg: AYBFou3zoY81TmV3Jkx2uqSfdEIYZJ0pIV8s19iNJbyTtNcvx9HE+Rf4+RgHVZn0x0y
+	7zEoX0xOtcj5XggUbYwiIUq/qXMcKzHp2/1km5Z6V5LCAs4HzWxyYKj0J8nm5QTutvtSiXXtRwW
+	FmP8UuOd90sdl39lD4AKPvkbnlFo/9KTwXBSgHw6D0tWDfPFADSLYD/Xfse3aAimhcRjY6OFRFp
+	VHCzLtiqGrJx8brovVEQZ49AV96LKNSXmbjCewg3bm8ke5AnRl4z48+lxn8R9DOj3pqLaar6M24
+	Mnva3F9502drwhBtzLf6Y40H1FkleGtGr/oVNJdAaFjfSuX7i0yWlHdX9FK2TKihAfLq9P2lqGj
+	4SkaOlgwg4yAUAMHqTiWlb2f7ksio0o9pXN8SG9g=
+X-Received: by 2002:a5d:64c9:0:b0:488:8437:b8b7 with SMTP id ffacd0b85a97d-48b126f1596mr9932285f8f.7.1791021145324;
+        Sat, 03 Oct 2026 02:52:25 -0700 (PDT)
+X-Received: by 2002:a5d:64c9:0:b0:488:8437:b8b7 with SMTP id ffacd0b85a97d-48b126f1596mr9932244f8f.7.1791021144825;
+        Sat, 03 Oct 2026 02:52:24 -0700 (PDT)
 Received: from ehlo.thunderbird.net ([2a00:e580:bf11:1:2666:d874:79e6:3214])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a16bcb9a21sm37119375e9.10.2026.10.03.02.48.27
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380f0613sm12752818f8f.13.2026.10.03.02.52.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Oct 2026 02:48:28 -0700 (PDT)
-Date: Sat, 03 Oct 2026 11:48:25 +0200
+        Sat, 03 Oct 2026 02:52:24 -0700 (PDT)
+Date: Sat, 03 Oct 2026 11:52:22 +0200
 From: Ivan Vecera <ivecera@redhat.com>
-To: intel-wired-lan@osuosl.org, Petr Oros <poros@redhat.com>,
- netdev@vger.kernel.org
+To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
 CC: Tony Nguyen <anthony.l.nguyen@intel.com>,
  Przemek Kitszel <przemyslaw.kitszel@intel.com>,
  Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
  Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Jesper Dangaard Brouer <hawk@kernel.org>,
  John Fastabend <john.fastabend@gmail.com>,
  Stanislav Fomichev <sdf@fomichev.me>,
+ Henry Tieman <henry.w.tieman@intel.com>,
  Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Larysa Zaremba <larysa.zaremba@intel.com>, intel-wired-lan@lists.osuosl.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_iwl-net=5D_ice=3A_keep_the_VLAN_tag_of_p?=
- =?US-ASCII?Q?riority-tagged_frames_with_Rx_stripping_enabled?=
+ Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+ Jesse Brandeburg <jbrandeb@kernel.org>,
+ Preethi Banala <preethi.banala@intel.com>,
+ Kiran Patil <kiran.patil@intel.com>, Dan Nowlin <dan.nowlin@intel.com>,
+ Stephen Hemminger <stephen@networkplumber.org>,
+ intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_iwl-net_01/10=5D_ice=3A_replay_UDP?=
+ =?US-ASCII?Q?_tunnel_ports_after_a_core_or_global_reset?=
 User-Agent: Thunderbird for Android
-In-Reply-To: <20261002103108.2513191-1-poros@redhat.com>
-References: <20261002103108.2513191-1-poros@redhat.com>
-Message-ID: <70B89D99-E9C5-471A-BCBF-5CD56D92DDA2@redhat.com>
+In-Reply-To: <20261002130752.2597259-2-poros@redhat.com>
+References: <20261002130752.2597259-1-poros@redhat.com> <20261002130752.2597259-2-poros@redhat.com>
+Message-ID: <E2F0ABAB-6E8A-4672-8DCC-9F3C07E902A5@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -111,220 +116,60 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-
-
-On 2 October 2026 12:31:08 CEST, Petr Oros <poros@redhat=2Ecom> wrote:
->With Rx VLAN stripping enabled the hardware also strips tags with VID 0,
->but ice_receive_skb() only puts the stripped tag back when the VID is
->non-zero=2E Priority-tagged frames reach the stack as untagged and a vlan=
-0
->upper device never sees them, while the same traffic works with rxvlan
->disabled=2E
+On October 2, 2026 3:07:43 PM GMT+02:00, Petr Oros <poros@redhat=2Ecom> wro=
+te:
+>A CORER, GLOBR or EMPR reloads the DDP package in ice_rebuild() and
+>ice_init_pkg_hints() clears hw->tnl, so every offloaded VXLAN and GENEVE
+>port is gone from both the boost TCAM and the driver table=2E The
+>udp_tunnel_nic core is never told about it and still considers the ports
+>programmed, so the Rx tunnel offloads silently stop working after the
+>reset=2E With VXLAN port 4789 offloaded, 64 flows that differ only in the
+>inner headers are spread over all six Rx queues of the test port by
+>RSS, after a CORER they all land in a single queue, the same as without
+>the port=2E Removing the port later trips the WARN_ON() in
+>ice_destroy_tunnel() because its table entry is no longer valid:
 >
->Hit by our QE VLAN test on an E810-XXV, where ping over vlan0 fails and
->tcpdump on the PF shows the peer's priority-tagged ARP requests arriving
->untagged=2E Reproduced on the net tree with a PF and its VF as the peer i=
-n
->both single and double VLAN mode=2E i40e had the same bug, fixed by commi=
-t
->2a508c64ad27 ("i40e: fix VLAN=2ETCI =3D=3D 0 RX HW offload")=2E
+>  WARNING: ice_flex_pipe=2Ec:524 at ice_udp_tunnel_unset_port+0x56/0x280 =
+[ice]
+>  ice 0000:04:00=2E3 enp4s0f3np3: Error removing UDP tunnel - -5
+>  ice 0000:04:00=2E3 enp4s0f3np3: UDP tunnel port sync failed port 4789 t=
+ype vxlan: -5
 >
->Put the tag in ice_process_skb_fields() keyed on the L2TAG1P/L2TAG2P
->status bits, let ice_get_vlan_tci() report whether a tag was stripped
->(this also fixes the XDP VLAN hint for a zero TCI) and drop the now
->trivial ice_receive_skb()=2E
+>Call udp_tunnel_nic_reset_ntf() once the main VSI is rebuilt so the core
+>programs the ports again=2E A PF reset keeps the package and the table, s=
+o
+>it is left alone=2E No rtnl_lock is needed since commit 1ead7501094c
+>("udp_tunnel: remove rtnl_lock dependency")=2E
 >
->Fixes: 2b245cb29421 ("ice: Implement transmit and NAPI support")
->Fixes: 714ed949c6f3 ("ice: Implement VLAN tag hint")
+>i40e fixed the same problem in commit 1f190d936948 ("i40e: Reprogram
+>port offloads after reset")=2E
+>
+>Fixes: a4e82a81f573 ("ice: Add support for tunnel offloads")
+>Assisted-by: LLM
 >Signed-off-by: Petr Oros <poros@redhat=2Ecom>
 >---
-> drivers/net/ethernet/intel/ice/ice_txrx=2Ec     |  5 +---
-> drivers/net/ethernet/intel/ice/ice_txrx_lib=2Ec | 26 ++++--------------
-> drivers/net/ethernet/intel/ice/ice_txrx_lib=2Eh | 27 +++++++++++--------
-> drivers/net/ethernet/intel/ice/ice_xsk=2Ec      |  5 +---
-> 4 files changed, 23 insertions(+), 40 deletions(-)
+> drivers/net/ethernet/intel/ice/ice_main=2Ec | 5 ++++-
+> 1 file changed, 4 insertions(+), 1 deletion(-)
 >
->diff --git a/drivers/net/ethernet/intel/ice/ice_txrx=2Ec b/drivers/net/et=
-hernet/intel/ice/ice_txrx=2Ec
->index 31303ab5be175a=2E=2E3935ac05a251b4 100644
->--- a/drivers/net/ethernet/intel/ice/ice_txrx=2Ec
->+++ b/drivers/net/ethernet/intel/ice/ice_txrx=2Ec
->@@ -970,7 +970,6 @@ static int ice_clean_rx_irq(struct ice_rx_ring *rx_ri=
-ng, int budget)
-> 		struct sk_buff *skb;
-> 		unsigned int size;
-> 		u16 stat_err_bits;
->-		u16 vlan_tci;
-> 		bool rxe;
->=20
-> 		/* get the Rx desc from Rx ring based on 'next_to_clean' */
->@@ -1051,8 +1050,6 @@ static int ice_clean_rx_irq(struct ice_rx_ring *rx_=
-ring, int budget)
-> 			continue;
-> 		}
->=20
->-		vlan_tci =3D ice_get_vlan_tci(rx_desc);
->-
-> 		/* probably a little skewed due to removing CRC */
-> 		total_rx_bytes +=3D skb->len;
->=20
->@@ -1061,7 +1058,7 @@ static int ice_clean_rx_irq(struct ice_rx_ring *rx_=
-ring, int budget)
->=20
-> 		ice_trace(clean_rx_irq_indicate, rx_ring, rx_desc, skb);
-> 		/* send completed skb up the stack */
->-		ice_receive_skb(rx_ring, skb, vlan_tci);
->+		napi_gro_receive(&rx_ring->q_vector->napi, skb);
->=20
-> 		/* update budget accounting */
-> 		total_rx_pkts++;
->diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib=2Ec b/drivers/ne=
-t/ethernet/intel/ice/ice_txrx_lib=2Ec
->index e695a664e53d18=2E=2E19307086c238f5 100644
->--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib=2Ec
->+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib=2Ec
->@@ -218,6 +218,7 @@ ice_process_skb_fields(struct ice_rx_ring *rx_ring,
-> 		       struct sk_buff *skb)
-> {
-> 	u16 ptype =3D ice_get_ptype(rx_desc);
->+	u16 vlan_tci;
->=20
-> 	ice_rx_hash_to_skb(rx_ring, rx_desc, skb, ptype);
->=20
->@@ -238,29 +239,13 @@ ice_process_skb_fields(struct ice_rx_ring *rx_ring,
->=20
-> 	ice_rx_csum(rx_ring, skb, rx_desc, ptype);
->=20
->+	if (rx_ring->vlan_proto && ice_get_vlan_tci(rx_desc, &vlan_tci))
->+		__vlan_hwaccel_put_tag(skb, rx_ring->vlan_proto, vlan_tci);
->+
-> 	if (rx_ring->ptp_rx)
-> 		ice_ptp_rx_hwts_to_skb(rx_ring, rx_desc, skb);
-> }
->=20
->-/**
->- * ice_receive_skb - Send a completed packet up the stack
->- * @rx_ring: Rx ring in play
->- * @skb: packet to send up
->- * @vlan_tci: VLAN TCI for packet
->- *
->- * This function sends the completed packet (via=2E skb) up the stack us=
-ing
->- * gro receive functions (with/without VLAN tag)
->- */
->-void
->-ice_receive_skb(struct ice_rx_ring *rx_ring, struct sk_buff *skb, u16 vl=
-an_tci)
->-{
->-	if ((vlan_tci & VLAN_VID_MASK) && rx_ring->vlan_proto)
->-		__vlan_hwaccel_put_tag(skb, rx_ring->vlan_proto,
->-				       vlan_tci);
->-
->-	napi_gro_receive(&rx_ring->q_vector->napi, skb);
->-}
->-
-> /**
->  * ice_clean_xdp_tx_buf - Free and unmap XDP Tx buffer
->  * @dev: device for DMA mapping
->@@ -587,8 +572,7 @@ static int ice_xdp_rx_vlan_tag(const struct xdp_md *c=
-tx, __be16 *vlan_proto,
-> 	if (!*vlan_proto)
-> 		return -ENODATA;
->=20
->-	*vlan_tci =3D ice_get_vlan_tci(xdp_ext->desc);
->-	if (!*vlan_tci)
->+	if (!ice_get_vlan_tci(xdp_ext->desc, vlan_tci))
-> 		return -ENODATA;
->=20
-> 	return 0;
->diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib=2Eh b/drivers/ne=
-t/ethernet/intel/ice/ice_txrx_lib=2Eh
->index f17990b68b621d=2E=2E579ce56c0c3c0a 100644
->--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib=2Eh
->+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib=2Eh
->@@ -70,25 +70,32 @@ ice_build_tstamp_desc(u16 tx_desc, u32 tstamp)
-> /**
->  * ice_get_vlan_tci - get VLAN TCI from Rx flex descriptor
->  * @rx_desc: Rx 32b flex descriptor with RXDID=3D2
->+ * @vlan_tci: VLAN TCI stripped by hardware
->  *
->  * The OS and current PF implementation only support stripping a single =
-VLAN tag
->- * at a time, so there should only ever be 0 or 1 tags in the l2tag* fie=
-lds=2E If
->- * one is found return the tag, else return 0 to mean no VLAN tag was fo=
-und=2E
->+ * at a time, so there should only ever be 0 or 1 tags in the l2tag* fie=
-lds=2E
->+ *
->+ * Return: true if a VLAN tag was stripped and stored in @vlan_tci, fals=
-e
->+ * otherwise=2E
->  */
->-static inline u16
->-ice_get_vlan_tci(const union ice_32b_rx_flex_desc *rx_desc)
->+static inline bool
->+ice_get_vlan_tci(const union ice_32b_rx_flex_desc *rx_desc, u16 *vlan_tc=
-i)
-> {
-> 	u16 stat_err_bits;
->=20
-> 	stat_err_bits =3D BIT(ICE_RX_FLEX_DESC_STATUS0_L2TAG1P_S);
->-	if (ice_test_staterr(rx_desc->wb=2Estatus_error0, stat_err_bits))
->-		return le16_to_cpu(rx_desc->wb=2El2tag1);
->+	if (ice_test_staterr(rx_desc->wb=2Estatus_error0, stat_err_bits)) {
->+		*vlan_tci =3D le16_to_cpu(rx_desc->wb=2El2tag1);
->+		return true;
->+	}
->=20
-> 	stat_err_bits =3D BIT(ICE_RX_FLEX_DESC_STATUS1_L2TAG2P_S);
->-	if (ice_test_staterr(rx_desc->wb=2Estatus_error1, stat_err_bits))
->-		return le16_to_cpu(rx_desc->wb=2El2tag2_2nd);
->+	if (ice_test_staterr(rx_desc->wb=2Estatus_error1, stat_err_bits)) {
->+		*vlan_tci =3D le16_to_cpu(rx_desc->wb=2El2tag2_2nd);
->+		return true;
->+	}
->=20
->-	return 0;
->+	return false;
-> }
->=20
-> /**
->@@ -132,7 +139,5 @@ void
-> ice_process_skb_fields(struct ice_rx_ring *rx_ring,
-> 		       union ice_32b_rx_flex_desc *rx_desc,
-> 		       struct sk_buff *skb);
->-void
->-ice_receive_skb(struct ice_rx_ring *rx_ring, struct sk_buff *skb, u16 vl=
-an_tci);
->=20
-> #endif /* !_ICE_TXRX_LIB_H_ */
->diff --git a/drivers/net/ethernet/intel/ice/ice_xsk=2Ec b/drivers/net/eth=
-ernet/intel/ice/ice_xsk=2Ec
->index 0643017541c35a=2E=2Efd2e628a8bc95c 100644
->--- a/drivers/net/ethernet/intel/ice/ice_xsk=2Ec
->+++ b/drivers/net/ethernet/intel/ice/ice_xsk=2Ec
->@@ -591,7 +591,6 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring,
-> 		struct xdp_buff *xdp;
-> 		struct sk_buff *skb;
-> 		u16 stat_err_bits;
->-		u16 vlan_tci;
->=20
-> 		rx_desc =3D ICE_RX_DESC(rx_ring, ntc);
->=20
->@@ -667,10 +666,8 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring,
-> 		total_rx_bytes +=3D skb->len;
-> 		total_rx_packets++;
->=20
->-		vlan_tci =3D ice_get_vlan_tci(rx_desc);
->-
-> 		ice_process_skb_fields(rx_ring, rx_desc, skb);
->-		ice_receive_skb(rx_ring, skb, vlan_tci);
->+		napi_gro_receive(&rx_ring->q_vector->napi, skb);
+>diff --git a/drivers/net/ethernet/intel/ice/ice_main=2Ec b/drivers/net/et=
+hernet/intel/ice/ice_main=2Ec
+>index 8c4b0fbc790644=2E=2Ef2121e79fca993 100644
+>--- a/drivers/net/ethernet/intel/ice/ice_main=2Ec
+>+++ b/drivers/net/ethernet/intel/ice/ice_main=2Ec
+>@@ -7859,8 +7859,11 @@ static void ice_rebuild(struct ice_pf *pf, enum ic=
+e_reset_req reset_type)
+> 		ice_rebuild_arfs(pf);
 > 	}
 >=20
-> 	rx_ring->next_to_clean =3D ntc;
-
+>-	if (vsi && vsi->netdev)
+>+	if (vsi && vsi->netdev) {
+> 		netif_device_attach(vsi->netdev);
+>+		if (reset_type !=3D ICE_RESET_PFR)
+>+			udp_tunnel_nic_reset_ntf(vsi->netdev);
+>+	}
+>=20
+> 	ice_update_pf_netdev_link(pf);
+>=20
 
 Reviewed-by: Ivan Vecera <ivecera@redhat=2Ecom>
 
