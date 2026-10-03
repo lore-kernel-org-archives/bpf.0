@@ -1,86 +1,87 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951A43F99E3
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 09:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BC3336885
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 09:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791021381; cv=none; b=Fu5YUG8m6DKGEB33qlZ1sTa98vNCGcbvrM9vWhPNFck9IiR/sG0/MM+9EpHvJTImAG4/WgWtc2HBmTMock3CRBOJRYrzrhAQJPyUP+Pm1UjZ+4S1vSkzsofIilGOBty8j6zCCw4WEuUkjseoPZbN3M6rqD+R6O8YVhuOlqET5DI=
+	t=1791021395; cv=none; b=GwVtEPo8YXE8VifKw2mIJjc6FJf7Z7OJ81g033M/lVLr7M9uhsFHU7Rcq4Ax08JZaK7VwcSusz/+GGNC/ewzE2HEpSCMcA2R9dQiP6HcpGMfRQ5lfEkTl/AASb02p5PvUjbTwCei1y6Ri5e2oWIUc2i8mWZmDOq+3UIn/wMsm+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791021381; c=relaxed/simple;
-	bh=yoxZ8bT/2tnoW+aoZPk3W+kJx2jfdtxBJMrb8XM8I9A=;
+	s=arc-20240116; t=1791021395; c=relaxed/simple;
+	bh=zvB+GmvA7E1buSEhhFQSNiQiS0Ky9ds8iZsA4bX14t4=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=c1SJ7barP9ykh4Wr42Mklo0dHomo+Y8E0Q0lDmBeFp45O9KgfPWdU654FXx4wcmSzTbHFug9Ju3MURyAg5Uie5xFq6jeoQoGRrGgkqddIofFcB4pbujxwPXKGTNrYwKtaEILcRlNRTsyX9NYPWGb2YwjheZmCBCEVVx00I349QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ooi0/ZCi; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yfl8fz3r; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-Type; b=bnewAGyEVlAHF0CcH67v+BT9XV9bVmz5fLezNjZeMuSEP0N0DOvw+KHvfNwtjdXPd3lG367OpGeDVwrrmcLPggsWpMp7KsaMgO+0SD3XJz+EGy/PDGeVf2Vt9GRfsKfPuKb4W/ERND9ueuuPutI+vuPn0Y6mz7y2AClzGv6Nx1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i7Jwexww; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=O6sE7ezt; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ooi0/ZCi";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yfl8fz3r"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i7Jwexww";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="O6sE7ezt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791021378;
+	s=mimecast20190719; t=1791021392;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=i118fgept/V5HNHIJAC4nRHOFN2iHEPIInJ6/LxCKAc=;
-	b=Ooi0/ZCiFC2wP2moyqmETTm+CALGbv/CPhFEwL9qGhAlwgSyRwdXCVqBX25rl5bwdbuUeX
-	EVcv25syOKTn28C13lE8aH+kTpZyHIxIVaPzd8TVLGJfDt92AEsDaK+mKs2N6Gh9XXny9/
-	ejibjwFp3PaeVB7/TmljiZW1KfFdtt8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=CFiXTFcRpKSwbR4iF//D20N/Ft4ckAh6KBeG1mHiTBA=;
+	b=i7Jwexww7amyCTkoYi0jIu66dckbwAm18A5XQDjg6ICKAu2OMZdoa739BPf5D35vt3hT3A
+	pkZJbugshtaIfTuiVEQbyrtOBSy8r97tRHseqk3xMoSLjeH97a9PpEH4Iy6ep6RewfGX9f
+	bQLeqf67cjO6uoW72j2QKD8Mlb5GkJI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-363-v8mQrTePPliGQp3p49jJww-1; Sat, 03 Oct 2026 05:56:16 -0400
-X-MC-Unique: v8mQrTePPliGQp3p49jJww-1
-X-Mimecast-MFC-AGG-ID: v8mQrTePPliGQp3p49jJww_1791021376
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-49fcc575709so4566045e9.3
-        for <bpf@vger.kernel.org>; Sat, 03 Oct 2026 02:56:16 -0700 (PDT)
+ us-mta-583-XPk22g1COCGeO7DI-6_BLw-1; Sat, 03 Oct 2026 05:56:30 -0400
+X-MC-Unique: XPk22g1COCGeO7DI-6_BLw-1
+X-Mimecast-MFC-AGG-ID: XPk22g1COCGeO7DI-6_BLw_1791021389
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a004b70f99so3815365e9.2
+        for <bpf@vger.kernel.org>; Sat, 03 Oct 2026 02:56:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1791021376; x=1791626176; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1791021389; x=1791626189; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:message-id
          :references:in-reply-to:user-agent:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=i118fgept/V5HNHIJAC4nRHOFN2iHEPIInJ6/LxCKAc=;
-        b=Yfl8fz3rAreF7c+1ltgHTRz5XKmdvuNVMpBLRl3eld+vG831+ZJR1p8+RchwLo5WvA
-         cO4349w6TXrGQQ5NN68ElD8VB16O05noOx3oWLYrHJiLFVefach+QE3VN7/jNcqQwcGD
-         JB24Jx2a4RXrneXVMRpEs+v7PsCv+h4SpjoHoOgEV31iEVWbcNtTy+sil3aGQe2MyMyZ
-         JNtkBl8zBQWHaEN4Swvp8hYrDSvKDoqwE9N4fRZYEXv5bOXzXcnVa3xJ6fxnN9D6FiVI
-         WCJpg1ulrpiXgH1Wgi0jjxZAkX503yQlegJJ+uMIdz0htf36q4z61kkivlIfmZ/rcgAG
-         /slA==
+        bh=CFiXTFcRpKSwbR4iF//D20N/Ft4ckAh6KBeG1mHiTBA=;
+        b=O6sE7eztvXPCqRKwBKDlYIZPzBuBo9f27Zx4xFVCLG+tXG12FkTKBQuLs7qjnWKpR1
+         ImyO5J2B7Z6WDddQCxU1JZkVgDpR/U2XXolm8lcOSHdip3ejquV2dUFC62+zH/t5nAJV
+         GF5kB+ggs7/wcOq88bob++G2Dljh2douPEINiN1dcUKQc3rhzT3z4z/iMm37rAJAZYD+
+         O7tJd0O1l4sQPecCmV1AS7FUG/AHjrZ5aLhw9gw4OWPzlsHOuF5MRO0oRfMe346O1aLl
+         ecf5j3ct8J6G07XmhjJ2RcMTrduc5dBpvckvcYwLGdrhj7F2loxhIwoF7HmyCHTIP3+Z
+         0FAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791021376; x=1791626176;
+        d=1e100.net; s=20260707; t=1791021389; x=1791626189;
         h=content-transfer-encoding:content-type:mime-version:message-id
          :references:in-reply-to:user-agent:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=i118fgept/V5HNHIJAC4nRHOFN2iHEPIInJ6/LxCKAc=;
-        b=ssYY64ty5BWihivpGRXz8yWCrC55VGTznhX8VpGFgFL+FsJzG14FMSm2oJBL6g5LR9
-         Q39sh5Slbp1U/yYFUUf6+3/iuw8eaMZAF2i789Uz1jS7xL5RPBCnkwVUIEr0L7u0KMl2
-         UKLo4cP4RtjlKDAJFWsT719kC8ndZoe2kBJGPA+fCDifD9xMeXsMtDD8gCm0UAiarpg1
-         t86vg+HCkoOU36RZv+o3dKFNj2kxvmG+Q/ooxRzJstZ3o5OZVMIZF7i8ncpeWX2yyUzU
-         XS4wxM9xyn0ZOk0qa0KQ9yGeRnbvUjzNEBDbcIcRMi1GiFRSo4UK38yaNntQH7qqWxEg
-         3XeA==
-X-Forwarded-Encrypted: i=1; AKwUvBymmir5JVxvBlowylXuIr4n4z4H13yBlJ9Dqg1CJw0Vt3x7iirRSL8uhAtDjTvZpssT278=@vger.kernel.org
-X-Gm-Message-State: AFuF++lGIsQz1yWpTicsMdOhVfF561aOyuBz11uNVk6F7NzZg8EgUkWV
-	ubMLWSgyjuoO+KeM9hTOn+7IO5YWXkzW8m4zg5bdPxaHhOCit13Wi2Dr2Cl/aV/DovahHu+8pYm
-	t9DboUGrOKe6NnpzpuIVmlYaGqlqiMLigM5uqirXKvNcDeq+Dh0UBLQ==
-X-Gm-Gg: AYBFou3wSX0JkLd35XiRsrFfOIbzrmyr4MpRSVNu27OoeeDH5p8OX5+EU1fs4fF7DXY
-	WZLA8xx9GrBvombDnKn27QRtyOcDnUWbkC4ec/KjyFbgIlX+gR39WmduiWyXdNjHllbHRmMzA2t
-	/XKvMnsPo1wN7qFqgF1oK8fdcE1OYdwBv+n/D+IUhQVTsSOCnPgMI7swkSQbQSPwVN0yXWZU64g
-	opFz+8aYLOJ6FJOG8CB2+VjyPL3c6WopSq2RVVXga3PMGrBdrAA/Ez612bq1/mEtnHv/O1WhZ+m
-	DrMuOLa9NPnLAxTI0r5HVugohxU8yXjBZzuA6OQTiHkeh+uGEk9dilBfnFAOogj5HE1VuarUwJM
-	6yE/iN49GMtRms+rezVmgGmjIz3vZ+NWwS7X4ru8=
-X-Received: by 2002:a05:600c:b90:b0:4a1:62b8:9aa1 with SMTP id 5b1f17b1804b1-4a1680b5402mr30628125e9.2.1791021375700;
-        Sat, 03 Oct 2026 02:56:15 -0700 (PDT)
-X-Received: by 2002:a05:600c:b90:b0:4a1:62b8:9aa1 with SMTP id 5b1f17b1804b1-4a1680b5402mr30627735e9.2.1791021375223;
-        Sat, 03 Oct 2026 02:56:15 -0700 (PDT)
+        bh=CFiXTFcRpKSwbR4iF//D20N/Ft4ckAh6KBeG1mHiTBA=;
+        b=KCgP7nsPxAkpZI8qSQYh8YAVk8y8jNvBuucFeT7UU1O5Q8Pn7UGJpO4yVukLkDaoi4
+         w3yAdjqHuPhuQmLXR3tib7BjJxV6F3cLJgdVcgrJ/Taf+aSaV7KfilRQHHr4/FiJE5Y6
+         0qY7/I0mV1Ob2/JWbJe2GSMGwUsiyyGW0Bkpt38xCGwTSOY8yyejCEVDGV3EnNZvNYDa
+         9yU67sEw5h+ebjsOrWxJPnSw642d8hA1xYyGZ7sF+X7RRQBKJ2E+iCZRmAwO9v+j7pHM
+         RmCfjDbSb+sNePyRKrKAbuBwTv3xmfubrDEuBWAAdGyn+b+YZ79i/5Pn0nJOfO0iejfK
+         853g==
+X-Forwarded-Encrypted: i=1; AKwUvBwjqWXoztz6yG5JhsbtvjGotUOxrcXFfXE9ZEMUVSt+TUVlneN8eSztr+gThuxci6fuKEo=@vger.kernel.org
+X-Gm-Message-State: AFuF++l3BXoKYbC8IuLeKjrlyxXQyLewR5qV57gNSD8UWWLjuUPgz7gi
+	DPrV0/pjWy/arD+BbCCOCTsY9034n48aeOWvFNiP3+YN965oKlO+21dM5SXGt7id8UZhyAziNi7
+	XDVVWOq678gZrt3vYZinAOLSPZFy8ojKDxZWvHjTS7JMTw0sxokfLVQ==
+X-Gm-Gg: AYBFou12aJwLRngegZd2xcfePE8vfVJRuFc04zZlI8chlRwobj3NjyURW4eKR08SCqx
+	8BAyrwrR89bD26BbLZVXE3uQagMlBiElA55qSkNMBADsPuWGp0c6cdCd7vGQ100xd5aXj14VnkV
+	E/z0e78tA61wqbCUUJOjp0js8zLziWBIzeCDwcPfOWhRyH3SyGpRwuNoUNarBDO5eUBtN14RJD3
+	UemXWdYBVaAIW7lkRQhnTWbCF2Pkdj0bedqa39l2I4ZqfIknTCGOuRSwUZB+gsK+SzAKZj4CG24
+	+Kq955nKcZMhZolgR1wlPySR5Kk2ETV27SRhCBH8OdC2tOHCCzaAYEGjfQRqwYHgXbcdyS7ZEVj
+	M69FYVmBc/Zvpe5NgYAcQbaYpx0/cbUlLgOcdRZ4=
+X-Received: by 2002:a05:600c:3e07:b0:49f:fe39:5bc8 with SMTP id 5b1f17b1804b1-4a027585dfemr89018095e9.12.1791021389126;
+        Sat, 03 Oct 2026 02:56:29 -0700 (PDT)
+X-Received: by 2002:a05:600c:3e07:b0:49f:fe39:5bc8 with SMTP id 5b1f17b1804b1-4a027585dfemr89017735e9.12.1791021388657;
+        Sat, 03 Oct 2026 02:56:28 -0700 (PDT)
 Received: from ehlo.thunderbird.net ([2a00:e580:bf11:1:2666:d874:79e6:3214])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0394e6c5asm121786205e9.2.2026.10.03.02.56.13
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0304407d2sm106558045e9.0.2026.10.03.02.56.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Oct 2026 02:56:14 -0700 (PDT)
-Date: Sat, 03 Oct 2026 11:56:12 +0200
+        Sat, 03 Oct 2026 02:56:28 -0700 (PDT)
+Date: Sat, 03 Oct 2026 11:56:23 +0200
 From: Ivan Vecera <ivecera@redhat.com>
-To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
+To: intel-wired-lan@osuosl.org, Petr Oros <poros@redhat.com>,
+ netdev@vger.kernel.org
 CC: Tony Nguyen <anthony.l.nguyen@intel.com>,
  Przemek Kitszel <przemyslaw.kitszel@intel.com>,
  Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
@@ -100,12 +101,11 @@ CC: Tony Nguyen <anthony.l.nguyen@intel.com>,
  Stephen Hemminger <stephen@networkplumber.org>,
  intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_iwl-net_09/10=5D_ice=3A_program_multica?=
- =?US-ASCII?Q?st_magic_wake_before_tearing_down_the_main_VSI?=
+Subject: Re: [PATCH iwl-net 10/10] ice: fix unsigned stat widths
 User-Agent: Thunderbird for Android
-In-Reply-To: <20261002130752.2597259-10-poros@redhat.com>
-References: <20261002130752.2597259-1-poros@redhat.com> <20261002130752.2597259-10-poros@redhat.com>
-Message-ID: <5BEDFB6E-4B19-47EA-9CB8-893CCF103D49@redhat.com>
+In-Reply-To: <20261002130752.2597259-11-poros@redhat.com>
+References: <20261002130752.2597259-1-poros@redhat.com> <20261002130752.2597259-11-poros@redhat.com>
+Message-ID: <9235DF68-76D9-4B38-B8D9-BCFF3520E7D8@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -116,52 +116,46 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On October 2, 2026 3:07:51 PM GMT+02:00, Petr Oros <poros@redhat=2Ecom> wro=
+On October 2, 2026 3:07:52 PM GMT+02:00, Petr Oros <poros@redhat=2Ecom> wro=
 te:
->Since commit 5b246e533d01 ("ice: split probe into smaller functions")
->ice_remove() calls ice_setup_mc_magic_wake() after ice_deinit(), which
->frees pf->vsi=2E ice_get_main_vsi() then returns NULL and the function
->returns before it sends the Manage MAC Write command, so multicast magic
->packet wake and keeping a locally administered address across the PF
->reset are never set up on shutdown with WoL enabled=2E
+>tx_restart, tx_busy, rx_buf_failed and rx_page_failed in struct ice_vsi
+>are u32, but ice_update_vsi_ring_stats() fills them with sums of the
+>64-bit per ring counters=2E The values are truncated and the ethtool
+>statistics exported from them wrap at 2^32 while the ring counters keep
+>counting=2E
 >
->Program it before the netdev and the VSIs are torn down, as it was done
->before that commit, so the current netdev address is used again=2E
+>Make them u64 like tx_linearize next to them=2E
 >
->i40e had a similar problem, where the multicast magic wake setup ran
->after the admin queue had already been shut down, and fixed it in
->commit e661414c98df ("i40e: Remove duplicated prepare call in
->i40e_shutdown")=2E
+>i40e fixed the same truncation in commit 3b8428b84539 ("i40e: fix
+>unsigned stat widths")=2E
 >
->Fixes: 5b246e533d01 ("ice: split probe into smaller functions")
+>Fixes: fcea6f3da546 ("ice: Add stats and ethtool support")
 >Assisted-by: LLM
 >Signed-off-by: Petr Oros <poros@redhat=2Ecom>
 >---
-> drivers/net/ethernet/intel/ice/ice_main=2Ec | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
+> drivers/net/ethernet/intel/ice/ice=2Eh | 8 ++++----
+> 1 file changed, 4 insertions(+), 4 deletions(-)
 >
->diff --git a/drivers/net/ethernet/intel/ice/ice_main=2Ec b/drivers/net/et=
-hernet/intel/ice/ice_main=2Ec
->index ceb9fec2af21e7=2E=2Ea885b3e0baaa5d 100644
->--- a/drivers/net/ethernet/intel/ice/ice_main=2Ec
->+++ b/drivers/net/ethernet/intel/ice/ice_main=2Ec
->@@ -5456,6 +5456,8 @@ static void ice_remove(struct pci_dev *pdev)
-> 	if (!ice_is_safe_mode(pf))
-> 		ice_remove_arfs(pf);
->=20
->+	ice_setup_mc_magic_wake(pf);
->+
-> 	devl_lock(priv_to_devlink(pf));
-> 	ice_dealloc_all_dynamic_ports(pf);
-> 	ice_deinit_devlink(pf);
->@@ -5466,7 +5468,6 @@ static void ice_remove(struct pci_dev *pdev)
-> 	ice_deinit(pf);
-> 	ice_vsi_release_all(pf);
->=20
->-	ice_setup_mc_magic_wake(pf);
-> 	ice_set_wake(pf);
->=20
-> 	ice_adapter_put(pdev);
+>diff --git a/drivers/net/ethernet/intel/ice/ice=2Eh b/drivers/net/etherne=
+t/intel/ice/ice=2Eh
+>index 6c596e5a315175=2E=2Ea985b81efbe2d6 100644
+>--- a/drivers/net/ethernet/intel/ice/ice=2Eh
+>+++ b/drivers/net/ethernet/intel/ice/ice=2Eh
+>@@ -344,10 +344,10 @@ struct ice_vsi {
+> 	u64 tx_linearize;
+> 	DECLARE_BITMAP(state, ICE_VSI_STATE_NBITS);
+> 	unsigned int current_netdev_flags;
+>-	u32 tx_restart;
+>-	u32 tx_busy;
+>-	u32 rx_buf_failed;
+>-	u32 rx_page_failed;
+>+	u64 tx_restart;
+>+	u64 tx_busy;
+>+	u64 rx_buf_failed;
+>+	u64 rx_page_failed;
+> 	u16 num_q_vectors;
+> 	/* tell if only dynamic irq allocation is allowed */
+> 	bool irq_dyn_alloc;
 
 Reviewed-by: Ivan Vecera <ivecera@redhat=2Ecom>
 
