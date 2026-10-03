@@ -1,36 +1,37 @@
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973BC46A5FD
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 16:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311BB46A61E
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 16:03:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791043421; cv=none; b=O11JhKgRGU4zc0luJC1IjJ3YABNoMCW/d4cglm3OOiNdx7ZU41uttsb1P74RyTid7+rauzzQzc3ZPwr2C2L+9902ymQg0Rcckg5XR1ENJbQiV6il22/7haadDFvogbEJzh5z9zWoKVxUU90cJ3C+DZ7tQYxBa7pDuNvvEz4sUTU=
+	t=1791043423; cv=none; b=lQqN2G0onO4/KolKiC6zHybL8TSsAwwlJJxkp2bjE02WNCPkcBfgbohDzTYcYfLPWuTK8cU9OpAvsJ5BdfRr9USf4UzwMZLU8rpNjmlOnVgSiHMdqcMGb+vmcGjNOzQuc1Ovb7qyhCoqu5Q3aIID89ipZR1ogKtjK/rHeUnr8Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791043421; c=relaxed/simple;
-	bh=58IlFyHZbXY4LtMDtfnJoqJDpyVoHC6P0ZPHOmyUTis=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CkmoA8UgGuW14hfECQjLo51eoPzRzrnLmCRii2jzdfrtd/iHM0lXCSGNyBFbWDi2Eoun9cPUl8ooh+ssr0PSzapOpuXI3l+N8KQLkNO3ZMCnItSATUglRuDxY7UDVnbATwIdOFlw8HeXvNkzWbmxWG91uceEkxuR0KKnZ9JTHVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=IhnPmttV; arc=none smtp.client-ip=178.21.23.139
+	s=arc-20240116; t=1791043423; c=relaxed/simple;
+	bh=seu82InOUaXJ3EXRPnx6IM8gwm0j2OYdEIiQXNTIJC4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AiwGZpyMudbUD0/1aT8+Zhvj0pDaDwg2Bq9HIMtnLZkm6VAV9pv0JiCrN3X94HpRzfPK6+3dQcSRlEt9zXHlBx9dk8Fs0M0RhQuxEv7X48zVyF4swpoklCSDjAt6a6hakiQeDeObgbS0WLu8oFhYOnAuHhvZfC7wmXaU74zy2wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=XLMfsy+v; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="IhnPmttV"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="XLMfsy+v"
 Received: from mail01.layka.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 8186F82D90;
-	Sat, 03 Oct 2026 18:03:33 +0200 (CEST)
+	by disroot.org (Postfix) with ESMTP id 8E7E382D7C;
+	Sat, 03 Oct 2026 18:03:37 +0200 (CEST)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uHKzWHK4yiAW; Sat,  3 Oct 2026 18:03:32 +0200 (CEST)
+ id 7OCRcc37YOU0; Sat,  3 Oct 2026 18:03:36 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1791043412; bh=58IlFyHZbXY4LtMDtfnJoqJDpyVoHC6P0ZPHOmyUTis=;
-	h=From:To:Cc:Subject:Date;
-	b=IhnPmttVFvByzVR2JyxZGQbzZeS+sH9d2zslDydNJVM5DUnJU7Yo0auTEC1FEobZW
-	 ho/qy/NGFzf3c85YBM3kVexYTHMrpq1jH8kgF6Ps0GybK+B96WCr4EkNqK8q9RtF6F
-	 daFJx+blWSQL4UNGHwCHOssrOUlgrPswYAPPdUDnp4b4AyaYHC9zpe4hiL2EdozLF3
-	 MJQBLO8HtBrJPrn06vIRs9VZl8VrElm0Mb2mXaPupcR3eF1dWFFLxuNl1f6ohzB5w0
-	 FeSWng1oZgGJIIRROjvW8NRhmoWmvt7liNUZ62mY2LhtPGuZtB1PavG3cAnfibFHw2
-	 QZnyJfI12DyMA==
+	t=1791043416; bh=seu82InOUaXJ3EXRPnx6IM8gwm0j2OYdEIiQXNTIJC4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=XLMfsy+vPQIhL59l81Q4cYnimwbTWofJRzWuDH7wvZeGFP+WdT24DeZ6ISo29YEoN
+	 o7Z+2KtYLIFsLlxEZ8D9ODoEsqHsqc/F2gxjHIvnUtWfdu8iZwRboi76tyfX6BWXmh
+	 dPWfnIQd8NeZAHlkola4bdwlbvxp2hpgUKKCZtvpeMiY+jjb2zD6/E8xW4ITsgOnj+
+	 Jc5wYwjlXSw8rBH5n66J6bK5oEEsyEIKrfEGDq96x+KneX4eAzHEjDOiA9mOJr7Ue3
+	 yD9cGRjICPJnGT6agCGEW+Ad7+nz7nR3RihTnAHwoYHONgOhcvG47Nw/kIhmgMbSo9
+	 Odc9QWZExf+PQ==
 From: Masoud Aghasi <maghasi@disroot.org>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -46,9 +47,11 @@ Cc: andrii@kernel.org,
 	ihor.solodrai@linux.dev,
 	leon.hwang@linux.dev,
 	Masoud Aghasi <maghasi@disroot.org>
-Subject: [PATCH bpf v3 0/3] bpf: Fix incorrect handling of user flags by percpu map updates
-Date: Sat,  3 Oct 2026 17:02:10 +0100
-Message-ID: <20261003160213.2641506-1-maghasi@disroot.org>
+Subject: [PATCH bpf v3 1/3] bpf: Fix incorrect handling of user flags in bpf_percpu_array_update
+Date: Sat,  3 Oct 2026 17:02:11 +0100
+Message-ID: <20261003160213.2641506-2-maghasi@disroot.org>
+In-Reply-To: <20261003160213.2641506-1-maghasi@disroot.org>
+References: <20261003160213.2641506-1-maghasi@disroot.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,40 +66,41 @@ is not considering the possibility of a combination of
 This causes the (BPF_NOEXIST, BPF_EXIST) flags to lose their effect
 in some cases.
 
-For BPF_MAP_TYPE_PERCPU_HASH and BPF_MAP_TYPE_LRU_PERCPU_HASH maps,
-htab_map_check_update_flags() and check_flags() are not considering
-the possibility of a combination of (BPF_NOEXIST, BPF_EXIST) flags
-with (BPF_F_CPU, BPF_F_ALL_CPUS) flags.
-This causes the (BPF_NOEXIST, BPF_EXIST) flags to lose their effect.
+For example, using the (BPF_F_ALL_CPUS | BPF_EXIST) flag combination
+with bpf_map_update_elem() results in an incorrect EINVAL error
+response, even though the flag combination is valid.
 
-For example, when using (BPF_F_CPU | BPF_EXIST) flag combination
-with bpf_map_update_elem() on a BPF_MAP_TYPE_PERCPU_HASH map, the
-BPF_EXIST flag does not prevent new insertions as expected.
+This patch fixes the bug by adding proper flag validations and checks.
 
-This series fixes the bug by adding proper flag validations and checks
-and adds regression tests.
+Fixes: 8eb76cb03f0f ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps")
+Signed-off-by: Masoud Aghasi <maghasi@disroot.org>
+---
+ kernel/bpf/arraymap.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-V3 changes:
-- Split the fix into two separate patches for array map and hash maps
-- Extend the selftest to cover all percpu map types
-- Extend the selftest to cover all applicable flag combinations
-- Extend the selftest to cover the unnecessary delete issue of LRU map
-
-V2 changes:
-- Fix a BPF_EXIST flag check in __htab_lru_percpu_map_update_elem()
-- Add additional test for BPF_MAP_TYPE_LRU_PERCPU_HASH map
-- Add check for BPF_EXIST, BPF_NOEXIST combination in percpu array map
-
-Masoud Aghasi (3):
-  bpf: Fix incorrect handling of user flags in bpf_percpu_array_update
-  bpf: Fix incorrect handling of user flags by percpu hash map updates
-  selftests/bpf: add tests for percpu map flags combination
-
- kernel/bpf/arraymap.c                         |   5 +-
- kernel/bpf/hashtab.c                          |  11 +-
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 159 ++++++++++++++++++
- 3 files changed, 169 insertions(+), 6 deletions(-)
-
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 0fe9afd4a591..4edfde6a624c 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -438,7 +438,8 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 	u32 size;
+ 	int cpu, off = 0;
+ 
+-	if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
++	if (unlikely((map_flags & BPF_EXIST) && (map_flags & BPF_NOEXIST)) ||
++	    unlikely((u32)map_flags & ~(BPF_EXIST | BPF_NOEXIST | BPF_F_CPU | BPF_F_ALL_CPUS)))
+ 		/* unknown flags */
+ 		return -EINVAL;
+ 
+@@ -446,7 +447,7 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 		/* all elements were pre-allocated, cannot insert a new one */
+ 		return -E2BIG;
+ 
+-	if (unlikely(map_flags == BPF_NOEXIST))
++	if (unlikely(map_flags & BPF_NOEXIST))
+ 		/* all elements already exist */
+ 		return -EEXIST;
+ 
 -- 
 2.47.3
 
