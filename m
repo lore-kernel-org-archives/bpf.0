@@ -1,214 +1,196 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB75486406;
-	Sat,  3 Oct 2026 16:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB3435676A
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 17:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791045995; cv=none; b=GBg/WUFZc0VsbrvYnK6g/dNFfgt3v3kbAFDKZ1rHAZrB/GtuakzAk1+mdW2TYqVLqX1yikXyabX+TrFxI9tx/b7kpI/JnX5OvIpNrnCbsDlv/QEIa3PE/o6Fm0VnE0NAiqk2N+zmU7tanip+lZRbTBrI6eovPOLrOuZ4pTT7AbQ=
+	t=1791050169; cv=none; b=f+XTqEVplL4EY1SSm8lzcaYwMu9G0hZYjN0eAwye/OUYNHZQjgGFfwvZCo2rI4NdxwzA36ProXrbnpAOID57TaCNuoNYhT4ketxbPaSVAcSv+H2Hc5BdIYHniZxnTi8RVlmk/w+HBxrmz9RfyV6m0EoXijrV7g2HuC9g9oYSwQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791045995; c=relaxed/simple;
-	bh=I2iSzq1wq3BUA5ngKyuzaIh6bRjYfHM3M8Ib2DX8Eao=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=N8VXc6QbdNxPdBgyq84bdos6T8Nlh3uTPGhK6Aqo1Hhg7cYhlplH+ppU7/lzlKtqt2xBfOZ1MCXk0Ok5RYLjvS7ZwHLlwtIzuczFrh45OR/JQbmxMNUNEM2TLviG64A7r8C3dZhiCKQPfaeueG32qEyO3ZySUftqvqJmit2cWh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ku6FBW49; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791050169; c=relaxed/simple;
+	bh=OxpMVn5Nlxju/LinzrFO/EJtt7fpGQ3sOMm9NSFeg/Q=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=PGsMV0Zsmib3vz++9irIAKlAgCLuR8jgF5VTTwp/giBgLdGFPqegsgYD8/T3gs/aZEC4MwoZOjlOa5QlzE/OUuNXeGTa4lwey4zEkAz4sYGfL2la4xfMa9ln0QqjDykiAGxoXNgnUMib8YvqNAuEhmMJq/5aG3NybdMXePL+4RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iIjiDMKq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ku6FBW49"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4771F1F0089D;
-	Sat,  3 Oct 2026 16:46:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iIjiDMKq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D3A1F0089B;
+	Sat,  3 Oct 2026 17:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791045994;
-	bh=Q2aQUzTUuuuNI/ysultBnvmSy0Vxb53qrqOM+R0btIA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=ku6FBW49LPAkrwvQYvPuhG2A9tZpaFs5wAVnWBb1CxSYOUntmmdE1VzT+g3vHRCB/
-	 wAI8gvD2dZL3efLWLd9O8T1aBHFt76hZy4DjBEN67LI8r+TKjfTLfZ1LcfJjSoq5+D
-	 +/zObojgb5XSiK+6OwavP1gL0bJvpwBljQcr1aIibko31uj3P4WFnOTzxune1P1SGG
-	 /wBneoTIxJM0Zf2gK7F3Bw5NBWnxNSx7st9EJvqpBIDEefq704llAKSmffFlYxfLxA
-	 0Lvz4jR9pJclNhlTuW76CdWrPw9kP3j8TEfJufylQMl8ExSw15xn9ckeLY4N525Cu0
-	 //BE35soPRm+w==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Sat, 03 Oct 2026 17:33:09 +0100
-Subject: [PATCH v4 38/38] mm/huge_memory: remove vma_is_special_huge()
+	s=k20260515; t=1791050167;
+	bh=cseVix12C5qVYqzRegC4MEurSOWdWY0COo8sOKqSoss=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iIjiDMKqpchUf/JqkwfZ0qQhK5NtXwlDq/D2TV4caGdG/sE+xjVWkr2ZlQSGonuFY
+	 MvgnaEgPjk2XG7qlmqh5bzhf+rT6rLC7W2A4/tE6BdhFhCl6DX8/SOEIb9M5RSO7rR
+	 E4NeBFz4ziDlBJOujHZZIDF77RNqD9tPHui8OxkYzYgm5d3LrP7R08jCidVbAEmzkp
+	 x9P3Ne42VRdgQ/lmxCCcCROPVNo/f3mOLeWwXpd97Y09eb2XeultDwc0U4JhNevEBU
+	 ewNEqKUTq7zMxISm6A06JjHwt51fpoQuoUHWlrivs/5n2XyM+DJtlK0/RQ7JbpZtcD
+	 UchXKRs7lLEfg==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v10 1/4] blk-iocost: add BPF struct_ops cost model
+ support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tao Cui" <cui.tao@linux.dev>
+Cc: bpf@vger.kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, tj@kernel.org
+In-Reply-To: <20261003124045.1289305-2-cui.tao@linux.dev>
+References: <20261003124045.1289305-1-cui.tao@linux.dev>
+ <20261003124045.1289305-2-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 03 Oct 2026 17:56:06 +0000
+Message-Id: <20261003175607.37D3A1F0089B@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-38-a1f052500fd7@kernel.org>
-References: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-0-a1f052500fd7@kernel.org>
-In-Reply-To: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-0-a1f052500fd7@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
- David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Paul Moore <paul@paul-moore.com>, 
- Stephen Smalley <stephen.smalley.work@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
- Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, 
- Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Janosch Frank <frankja@linux.ibm.com>, 
- Claudio Imbrenda <imbrenda@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, 
- Matthew Brost <matthew.brost@intel.com>, 
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
- Ying Huang <ying.huang@linux.alibaba.com>, 
- Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, 
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
- Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
- Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>, 
- Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, 
- Xu Xin <xu.xin@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-rdma@vger.kernel.org, selinux@vger.kernel.org, 
- linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
- fuse-devel@lists.linux.dev, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2917; i=ljs@kernel.org;
- h=from:subject:message-id; bh=I2iSzq1wq3BUA5ngKyuzaIh6bRjYfHM3M8Ib2DX8Eao=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLIO6unadC65lrS76vCNF1OzrsrvEpqY9vDlynom6cMPX
- x7Sl2b/1lHKwiDGxSArpsjy/Iv4/iCRsHmdF/zdYOawMoEMYeDiFICJzPZmZFi2XDJ0sWkRt8N8
- cbMd8lv5l/B9fVSztabELN68e1nwsqeMDFv2Fth8nu96gft8z+oDq4XeefVsFD9/dSfr+Uoj04l
- H//ABAA==
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-vma_is_special_huge() tests whether either the VMA_PFNMAP_BIT or
-VMA_MIXEDMAP_BIT is set (i.e. whether the VMA is not mm-managed),
-but with a DAX carve-out.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] blk: lock inversion between rq_qos_mutex and queue freeze
+- [Low] bpf: multi-line comment style violation in BPF-related files
+--
 
-DAX however no longer sets VMA_MIXEDMAP_BIT, so this carve-out is no longer
-required.
+commit 54129eafa6fdb7e951520269403d0945a53f2d20
+Author: Tao Cui <cui.tao@linux.dev>
 
-Therefore test for !vma_is_mm_managed() instead and also drop the
-VMA_IO_BIT check, as it is now redundant since it is enforced that
-mm-managed mappings may not set VMA_IO_BIT.
+blk-iocost: add BPF struct_ops cost model support
 
-This also eliminates another overloaded use of 'special' within mm.
+This commit introduces BPF struct_ops support for the block iocost
+controller, allowing a BPF program to replace the builtin linear cost
+model. It adds attach and detach paths for the BPF model and modifies
+the cost model sysfs write path to allow switching between the linear
+and BPF models.
 
-No functional change intended.
+> diff --git a/block/blk-iocost-bpf.c b/block/blk-iocost-bpf.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/block/blk-iocost-bpf.c
+[ ... ]
+> @@ -108,13 +108,13 @@ static void bpf_iocost_unreg(void *kdata, struct bp=
+f_link *link)
+>  	struct iocost_model_ops *ops =3D kdata;
+>  	struct request_queue *q;
+> =20
+>  	/*
+>  	 * ops->q may already have been cleared by the removal ejection;
+>  	 * take a queue reference under RCU before entering the queue,
+>  	 * as the queue may be dying and its memory is only guaranteed
+>  	 * under rcu_read_lock()
+>  	 */
+>  	rcu_read_lock();
+>  	/* pairs with the smp_store_release() in the attach: a non-NULL
+>  	 * q guarantees the owning link store is visible */
 
-Acked-by: Zi Yan <ziy@nvidia.com>
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- mm/huge_memory.c | 18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
+[Severity: Low]
+This isn't a bug, but does this multi-line comment violate the BPF subsystem
+comment style? The opening /* is expected to be on its own line for
+multi-line comments in BPF-related files.
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 83dd63b04568..000c4bb50f71 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -110,14 +110,6 @@ static inline bool file_thp_enabled(const struct vm_area_struct *vma)
- 	return S_ISREG(inode->i_mode);
- }
- 
--/* If returns true, we are unable to access the VMA's folios. */
--static bool vma_is_special_huge(const struct vm_area_struct *vma)
--{
--	if (vma_is_dax(vma))
--		return false;
--	return vma_test_any(vma, VMA_PFNMAP_BIT, VMA_MIXEDMAP_BIT);
--}
--
- static bool vma_file_bypass_thp_tuneables(const struct vm_area_struct *vma,
- 		enum tva_type type)
- {
-@@ -192,7 +184,7 @@ unsigned long __thp_vma_allowable_orders(struct vm_area_struct *vma,
- 	/* Check the intersection of requested and supported orders. */
- 	if (vma_is_anonymous(vma))
- 		supported_orders = THP_ORDERS_ALL_ANON;
--	else if (vma_is_dax(vma) || vma_is_special_huge(vma))
-+	else if (vma_is_dax(vma) || !vma_is_mm_managed(vma))
- 		supported_orders = THP_ORDERS_ALL_SPECIAL_DAX;
- 	else
- 		supported_orders = THP_ORDERS_ALL_FILE_DEFAULT;
-@@ -3066,7 +3058,7 @@ int zap_huge_pud(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	orig_pud = pudp_huge_get_and_clear_full(vma, addr, pud, tlb->fullmm);
- 	arch_check_zapped_pud(vma, orig_pud);
- 	tlb_remove_pud_tlb_entry(tlb, pud, addr);
--	if (vma_is_special_huge(vma)) {
-+	if (!vma_is_mm_managed(vma)) {
- 		spin_unlock(ptl);
- 		/* No zero page support yet */
- 	} else {
-@@ -3222,7 +3214,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		 */
- 		if (arch_needs_pgtable_deposit())
- 			zap_deposited_table(mm, pmd);
--		if (vma_is_special_huge(vma))
-+		if (!vma_is_mm_managed(vma))
- 			return;
- 		if (unlikely(pmd_is_migration_entry(old_pmd))) {
- 			const softleaf_t old_entry = softleaf_from_pmd(old_pmd);
-@@ -4765,9 +4757,7 @@ static inline bool vma_not_suitable_for_thp_split(struct vm_area_struct *vma)
- {
- 	if (vma_is_dax(vma))
- 		return true;
--	if (vma_is_special_huge(vma))
--		return true;
--	if (vma_test(vma, VMA_IO_BIT))
-+	if (!vma_is_mm_managed(vma))
- 		return true;
- 	if (vma_is_hugetlb(vma))
- 		return true;
+>  	q =3D smp_load_acquire(&ops->q);
+[ ... ]
+> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> --- a/block/blk-iocost.c
+> +++ b/block/blk-iocost.c
+[ ... ]
+> @@ -3621,7 +3621,265 @@ static int ioc_cost_model_show(struct seq_file *s=
+f, void *v)
+[ ... ]
+> +int ioc_bpf_attach(struct iocost_model_ops *ops, struct bpf_link *link)
+> +{
+[ ... ]
+> +	if (!queue_is_mq(q)) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto put;
+> +	}
+> +
+> +	/*
+> +	 * the freeze is taken before rq_qos_mutex; taking the mutex
+> +	 * around the freeze instead cycles against the io.cost.qos
+> +	 * write path, which freezes with the mutex held.  Holding
+> +	 * rq_qos_mutex from the disk_live() check through the model
+> +	 * switch keeps the ioc from being freed under us.
+> +	 */
+> +	memflags =3D blk_mq_freeze_queue(q);
+> +
+> +	mutex_lock(&q->rq_qos_mutex);
 
--- 
-2.55.0
+[Severity: High]
+Could this locking sequence cause an ABBA deadlock? Here we freeze the
+queue and then acquire rq_qos_mutex. However, in ioc_cost_model_write()
+introduced further below, the order appears to be reversed.
 
+> +
+> +	/*
+> +	 * one map binds one device at a time: the ops carries a single
+[ ... ]
+> +void ioc_bpf_detach(struct iocost_model_ops *ops, struct bpf_link *link,
+> +		   struct request_queue *q)
+> +{
+[ ... ]
+> +	/*
+> +	 * the freeze is taken before rq_qos_mutex like in the attach;
+> +	 * the attachment and the link are re-checked under the mutex
+> +	 * below, as the ejection or a newer attachment through another
+> +	 * link may have won the race meanwhile
+> +	 */
+> +	memflags =3D blk_mq_freeze_queue(q);
+> +	blk_mq_quiesce_queue(q);
+> +
+> +	mutex_lock(&q->rq_qos_mutex);
+
+[Severity: High]
+Similar to ioc_bpf_attach(), this establishes the queue freeze ->
+rq_qos_mutex lock order.
+
+> +
+> +	ioc =3D q_to_ioc(q);
+[ ... ]
+> @@ -3484,6 +3907,8 @@ static ssize_t ioc_cost_model_write(struct kernfs_o=
+pen_file *of, char *input,
+>  	bool user;
+>  	char *body, *p;
+>  	int ret;
+> +	const struct iocost_model_ops *new_model =3D NULL;
+> +	bool model_write =3D false;
+> =20
+>  	blkg_conf_init(&ctx, input);
+> =20
+
+[Severity: High]
+Does this code establish a reverse locking order compared to the attach and
+detach paths?
+
+Further down in ioc_cost_model_write(), the call to blkg_conf_open_bdev()
+acquires rq_qos_mutex, and then blk_mq_freeze_queue() is called. This
+rq_qos_mutex -> queue freeze order looks like it will trigger a circular
+locking dependency warning in lockdep if someone loads a BPF struct_ops
+and writes to io.cost.model.
+
+> @@ -3536,9 +3961,25 @@ static ssize_t ioc_cost_model_write(struct kernfs_=
+open_file *of, char *input,
+>  			continue;
+>  		case COST_MODEL:
+>  			match_strlcpy(buf, &args[0], sizeof(buf));
+> -			if (strcmp(buf, "linear"))
+> -				goto unlock;
+> -			continue;
+> +			if (!strcmp(buf, "linear")) {
+> +				/* staged and committed below, so a parse
+> +				 * error later in the same write leaves
+> +				 * the model selection untouched
+> +				 */
+
+[Severity: Low]
+This isn't a bug, but this multi-line comment also appears to miss having
+the opening /* on its own line, which goes against the BPF subsystem
+formatting guidelines.
+
+> +				new_model =3D NULL;
+> +				model_write =3D true;
+> +				continue;
+> +			}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261003124045.1289=
+305-1-cui.tao@linux.dev?part=3D1
