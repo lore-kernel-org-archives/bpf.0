@@ -1,79 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8D5282F09;
-	Sat,  3 Oct 2026 08:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B62C380FD6
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 08:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791016809; cv=none; b=hbDPoLSSc+ct/4EzdGtm0/w79Mr7P/1/7bwwLbLKNLKLZRG2CfL8lSqWuA0i0+mUNrkmSDW2DS0H4ltyWhK0PomiQxw+F7/ZBD8YJVytFc+zLO3s0dLSTFzMdSJnQz5lJpnLQbqKIHiN5q4kQ8e8bWX565BfONSU/9h6s6HSsNQ=
+	t=1791017052; cv=none; b=q02h6AfmWBKOX++JkiEJV3v6UWJHcS8c3Hwik/k+v1F+7YEp+KwILdY2c6pz8JFZ+ZL17fNS7LjdSzo6q5b5oH3ATUyns+FtYh5mYT5HODi/7sa1NhJMnyyGscxUsGIKzECrOHFZxcifTu4/3KDHl3L9HBH5e4cWDXbTN8IZMJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791016809; c=relaxed/simple;
-	bh=KDyBQsWOkXVI8i8zQ1FXAXyYRI9Ss7lqHOVr994hE60=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=YRygJGM4C4ZJsfF6RiZya8Lapg2tZP7Fyqw0REkNOWDIuXwqDrHVAbYTZIUNWOm5QL6GH1jq9AZrq2nVR2SpBw+Fw68p2eao29mCsFn4a1Mku7rYQ5W0vVlhkh+hRB9GWTRAW5UaFjSwPjwlA8ttizf0kov46XRCxvlHjN8EKjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kheDDqeN; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kheDDqeN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD02F1F0089B;
-	Sat,  3 Oct 2026 08:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791016807;
-	bh=ouJddzKByPrry0D0Upehb6Z/luwfT6C8do1CMv077sM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=kheDDqeNhlKbTvCGU90UgIlAWvaZhqO9RlXdMnALYk/L2+PmT5YOe0Vs5c1uudTz0
-	 b9pzRbEaOAo2mZByLlxlMFsgsdamUMaYWgghGTcVl497bxC0fF1rufuXLlQX5/1wIs
-	 XoRzaC7Kej62OAG+zijybqg3TPA/0W/7xoxZcvxc/guhF6hiElermScTS+4A/53s0j
-	 ORmwTqXbWRA/nSIb+FjGhzrigMrQ7gHWn/REUYH8dHr5faESCVMKz533fgQEWqk5Jk
-	 VFze8NyJgdlrjyFbvmoJaGzyoJ7JlfB+wZN8/noar6oIxvjPrgPb+4AZaUevckpyr7
-	 C1jinQV1F2vgQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43EB392445F;
-	Sat,  3 Oct 2026 08:40:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1791017052; c=relaxed/simple;
+	bh=oy1m2vLEeuSOOyf5jN4vP9s1FO1NeBajNBefb1uRm+A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WWK4AIiIqOXIMUFiCVxr2uYxP0vWi558OEopYYss5WOS/lHpq1kRk0Y3kvExSsULDxWW523gt7u6Um2tO4hPdCPSn6VFGDQCiWJHm2yJlJzGY2/1/sD/5xH07Z+tVq4iegGJz+4MI2Nj4S0hjP7zQhAG0bksL0/MUrY7tmatbdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 7659E2ECE4A62E; Sat,  3 Oct 2026 01:43:57 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	kernel-team@fb.com,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH dwarves] dwarf_loader: Limit parameter location analysis to x86_64 and arm64
+Date: Sat,  3 Oct 2026 01:43:57 -0700
+Message-ID: <20261003084357.4185491-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [bpf-next v2] bpf: Roll back freplace link state when
- bpf_arch_text_poke() fails
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179101680654.10350.15119401687517610714.git-patchwork-notify@kernel.org>
-Date: Sat, 03 Oct 2026 08:40:06 +0000
-References: <20260928091121.219333-1-chenyuan_fl@163.com>
-In-Reply-To: <20260928091121.219333-1-chenyuan_fl@163.com>
-To: chenyuan <chenyuan_fl@163.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, jolsa@kernel.org,
- leon.hwang@linux.dev, linux-kernel@vger.kernel.org, chenyuan@kylinos.cn
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Since commit e96290426e18 ("dwarf_loader: Analyze per-parameter
+information for true signatures"), clang-built kernels on arm, powerpc
+and riscv lose most of their functions from BTF, and resolve_btfids
+emits thousands of warnings like:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+  WARN: resolve_btfids: no BTF func for kfunc bpf_xdp_get_xfrm_state in x=
+frm_state_kfunc_set
+  WARN: resolve_btfids: unresolved symbol bpf_xdp_get_xfrm_state
 
-On Mon, 28 Sep 2026 17:11:21 +0800 you wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
-> 
-> A freplace attach claims the target prog by bumping
-> tgt_prog->aux->freplace_link_cnt and setting tr->extension_prog.
-> bpf_arch_text_poke() then makes the extension take effect.  If the
-> poke fails, the claims are never released: the attach unwinds
-> through bpf_link_cleanup(), which clears link->prog, so
-> bpf_trampoline_unlink_prog() never runs.
-> 
-> [...]
+For clang functions whose signature did not change, the new
+function__match_clang_parameter_locations() checks that each parameter
+lives in its expected ABI argument register. arch__nr_register_params()
+returns a non-zero count for powerpc, riscv, mips, arc and sparc, but
+arch__set_register_params() only fills in the register map for s390,
+x86_64, arm and arm64, leaving the other entries at -1. Every parameter
+held in a register then fails the match, the function is marked
+unexpected_reg and is skipped. The previous per-parameter check in
+parameter__new() ignored unknown expected registers, so this is a
+regression. 32-bit arm has a register map, but it does not match
+AAPCS32 (only r0-r3 carry arguments, and 64-bit arguments need an
+even/odd register pair).
 
-Here is the summary with links:
-  - [bpf-next,v2] bpf: Roll back freplace link state when bpf_arch_text_poke() fails
-    https://git.kernel.org/bpf/bpf-next/c/5ec398d9ec8f
+The parameter location matching and true signature reconstruction have
+only been validated on x86_64 and arm64. Add cu->param_loc_supported and
+set it only for those two architectures. On other architectures, skip
+the clang register matching and do not do true signature analysis in
+the DWARF loader or the BTF encoder, keeping the basic optimized-out
+parameter detection that existed before.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With a riscv64 or powerpc64le object built by clang 22, functions such
+as int f(int a, int b) are now encoded again instead of being skipped
+with "unexpected register usage for parameter". x86_64 and arm64 output
+is unchanged, with and without true_signature.
 
+Fixes: e96290426e180703 ("dwarf_loader: Analyze per-parameter information=
+ for true signatures")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ btf_encoder.c  |  2 +-
+ dwarf_loader.c | 23 +++++++++++++++++++++--
+ dwarves.h      |  1 +
+ 3 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index d6b9be6..2f137ee 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -2913,7 +2913,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu,=
+ const char *detached_filenam
+ 		encoder->tag_kfuncs	 =3D conf_load->btf_decl_tag_kfuncs;
+ 		encoder->gen_distilled_base =3D conf_load->btf_gen_distilled_base;
+ 		encoder->encode_attributes =3D conf_load->btf_attributes;
+-		encoder->true_signature =3D conf_load->true_signature;
++		encoder->true_signature =3D conf_load->true_signature && cu->param_loc=
+_supported;
+ 		encoder->verbose	 =3D verbose;
+ 		encoder->has_index_type  =3D false;
+ 		encoder->need_index_type =3D false;
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 1e5363a..9f9b9c9 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1518,6 +1518,22 @@ static bool arch__arg_align_two_regs(const GElf_Eh=
+dr *ehdr)
+ 	}
+ }
+=20
++/*
++ * Architectures whose argument register mapping has been validated for
++ * matching clang parameter locations and reconstructing true signatures=
+.
++ * Other architectures keep only the basic optimized-out detection.
++ */
++static bool arch__param_loc_supported(const GElf_Ehdr *ehdr)
++{
++	switch (ehdr->e_machine) {
++	case EM_X86_64:
++	case EM_AARCH64:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static struct template_type_param *template_type_param__new(Dwarf_Die *d=
+ie, struct cu *cu, struct conf_load *conf)
+ {
+ 	struct template_type_param *ttparm =3D tag__alloc(cu, sizeof(*ttparm));
+@@ -3777,7 +3793,8 @@ static void function__analyze_parameter_locations(s=
+truct function *fn, struct cu
+ {
+ 	struct ftype *ftype =3D &fn->proto;
+ 	struct parameter *pos;
+-	bool true_sig_enabled =3D conf->true_signature && ftype->signature_chan=
+ged;
++	bool true_sig_enabled =3D cu->param_loc_supported && conf->true_signatu=
+re &&
++				ftype->signature_changed;
+ 	bool check_locations =3D !cu->producer_clang || ftype->signature_change=
+d;
+ 	int reg_idx =3D 0;
+=20
+@@ -3785,7 +3802,8 @@ static void function__analyze_parameter_locations(s=
+truct function *fn, struct cu
+ 		/* Producer is clang and the signature was not changed: match
+ 		 * each parameter against its expected ABI argument register.
+ 		 */
+-		function__match_clang_parameter_locations(ftype, cu);
++		if (cu->param_loc_supported)
++			function__match_clang_parameter_locations(ftype, cu);
+ 		return;
+ 	}
+=20
+@@ -4533,6 +4551,7 @@ static int cu__set_common(struct cu *cu, struct con=
+f_load *conf,
+ 	cu->nr_register_params =3D arch__nr_register_params(&ehdr);
+ 	cu->agg_use_two_regs =3D arch__agg_use_two_regs(&ehdr);
+ 	cu->arg_align_two_regs =3D arch__arg_align_two_regs(&ehdr);
++	cu->param_loc_supported =3D arch__param_loc_supported(&ehdr);
+ 	arch__set_register_params(&ehdr, cu);
+ 	return 0;
+ }
+diff --git a/dwarves.h b/dwarves.h
+index f3453ed..6b75ece 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -305,6 +305,7 @@ struct cu {
+ 	uint8_t		 producer_clang:1;
+ 	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
+ 	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an eve=
+n register */
++	uint8_t		 param_loc_supported:1;	/* Parameter location analysis is vali=
+dated for this arch */
+ 	uint8_t		 nr_register_params;
+ 	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
+ 	int		 functions_saved;
+--=20
+2.53.0-Meta
 
