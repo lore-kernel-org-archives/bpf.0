@@ -1,292 +1,303 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mta1.migadu.com (out-70.mta1.migadu.com [95.215.58.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA2C443319
-	for <bpf@vger.kernel.org>; Fri,  2 Oct 2026 23:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790983436; cv=pass; b=OfNYonWmhypY5g3TJsvbAPNmXPIAWJp2wMGjQcfIGeJugMmjEPHjOsXh/IkXI974omqhzuuL33U3qjx3QOC+6Gqy0CG+8O6fvnqQ4HRQtWwd4rHeEMK/lv5PlGK8+fXeLVq2kF/lQqzLYhM/vl60XhGJDOVTuX4BLhMjeXXPb2M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790983436; c=relaxed/simple;
-	bh=RRu9tqdBY3AuiE+QNEPO/+zvxhldBrdnI2YOZOTmnGg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ik7lFk8joDmBmCWuvfzZI7nTeep7STY7H8JgJfEzWcMroa/WlHr51MNdB+dJynhIzBumVzK4OPIJJJG3yH4Wz4MJvgAgeDX1EIHHFrzeFHQd0gajJHebBSdo1j9AFhLNF5A9eKsMCd6Ub+0dpJkrQDgC0hmpMYdmVEHKIyR2gmE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vmbQC762; arc=pass smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F5436492D
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 01:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.70
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790991053; cv=none; b=mtxCTAIQWVBuz+GHyWB2LLBNSYE5ZS7GCFpfPRoGG+5PYYn6yYt74SUlqhpsxXP0zfxAMLN66aB3cz/5gYz1ExL4Fc43YsdwuKhZ455RV1VqvBuHUIjOkZ22jPnL0EWwp785vzp3NMNrpfgIk/VnxUiXuwIkY2IYuIoabG6FUwA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790991053; c=relaxed/simple;
+	bh=bT6KCjiIQFGCgiDSw4PiZWiOJVW/59NIfnejQEbHHWc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lcbbmy6zA8k0iDFkm2q4Ac/u3aPS9v6R5PI7qw4LOwRVkTuDiEgk8xsuHhYh/wrGQ/1cnKea69iJWa6kPMdG2OxMF1mJ4ZzjDFoRMjt87+HrillG9+8mH60nSC+4Z6vU2dA8xksOKHLx0XiwdphATe1eg2CBarDzEhwMi52LDTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=swv+18O9; arc=none smtp.client-ip=95.215.58.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vmbQC762"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e2e4ef20beso22125ad.0
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2026 16:23:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790983434; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AbelD8KIAhftXjndO3Mz1+gyFh7dMFuX53ROVHrDfg6pTzqnHU4qNz/q5mXB2/vsYU
-         xTgvvKsQoaDdm+Om8ggRpC6wpUJxvTfvU/QWmb0QWu22j/vyFwB8bJytmqQtqX7bSPIk
-         b/tpUZoivnZOFq5j6IAG55Fb1KmT+Fnyx4hIzLgD0UzuGI97ylUSJDpTLAV1TFmA5bWG
-         AB5L6/btKIt2kV6+Rkm10nuTsL+EHV+EtoIUecGtt7RaKoF3ZyeqSSI/6SiP0FwCeuMo
-         bLEgNP6OT7AghZ6nDpvwR9Z+Iey7qUibHC6GrPdNlA1OKz6SdijA28tFEoXkll8gpc9G
-         AfSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=yRPB82VFJ90lfQ7njnr7XC8e8HLChtcDRi7BTmzq/ag=;
-        fh=/UGRS6eKH60YZC7jUcUbp2bcYaLbT0NeiqG2i0+UFro=;
-        b=Nw8GLq8Ys4u6CS1DO/mrOml4FCccB5GQFZ6v9G7He+SrWFSdVdcJckQ93dc3LO2KvJ
-         r47svefRasC01EP0y5PcVfE/FkwJETMLDRXrIXQS96k9dqKk081XeLtpIQtGmXh5bUcB
-         uMfv3RGqNt+lnVkz6KVZkltufU+0X8q/+N6uk5Mwl0uligsBdOU+TzhgZqHAxnGbP2Of
-         HQn2QM80Q0y8dmcUcT6v2c2523U2QkdPEZLWQ6Z1+QqWGSwKd6BBsm3hR+29x8vMiiUB
-         Mpj/+T7cFttGKz3G6ZHAPcLmXtAkZbiVVq5+tPnTq7pZubADsTEl/2b1dqMIXNP7mLwb
-         p43g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790983434; x=1791588234; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yRPB82VFJ90lfQ7njnr7XC8e8HLChtcDRi7BTmzq/ag=;
-        b=vmbQC762YIx+c+b9Jcnd2ztRovdm6zNGjHZ6GeiASMwD7pmAJ3ugMenjclUjOA3dLb
-         rJ2IdzxHW+vqGiiN30lJyeK3aZ/OmBpQJuqJRei45nG6YI2iQe4O8m8zln4qQiY1PCaZ
-         X/KboT6nAaJ90wI442SPH86gBBG9WrhYcUuD2dtXmINFla2bQP+mcQsXgwX5GkYQZghF
-         nBjbDfMZBYywTv/ogVf9WAy99T2cSG7LfWQRkzCwSfgVAGYTLDGRpwNN9YAZ3YL6NKPe
-         w+srLCT9yHBfyP9dGe2aRGF27nmApJAUCigXBZDjq6EuBvxttRjC3krG41YGyn5E6WE5
-         8GjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790983434; x=1791588234;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yRPB82VFJ90lfQ7njnr7XC8e8HLChtcDRi7BTmzq/ag=;
-        b=Fgnyl8CQ6SeNIiOtJgvTR/7J4qYH8j5q1abFeTWsuZKe/Eo/SQ/9KwQdNJob7M7H5n
-         qqHtVzgPgICplUEHQo9BLZvhX/cjZ7KFlCyUKrJDTxMiSJSHPW3DMuAiWmlbd85AU65i
-         YFbkG2UIjW0ji4cxJHOkhr4c1gzfm5lkUfPZENS7Pj5RtvdQRGZlNhYXixZkCw/YrODH
-         MsFfliVwYcFLTuy+ILxLqn2M3/0U72ay14gxyjw9Srp05cXPzqurYKbQyUYPLchF8+Qk
-         LCxqDNbhF9ErZDUBjy6K9HATTUm6fZP2sl7pwZm+nfUvDhgxk+gZrvnP2wegNvEEI1Ao
-         46iw==
-X-Forwarded-Encrypted: i=1; AKwUvBw0C+2QmYtHWYFtjtWeGlusGfBoUCFSxOxxLKKoAxaMBXy6Gw1i21m+WcErqRJKJwx/byI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJlP5H0ngIyGMtE/lGu5uYBtp0hZzy/jSCGG+cC0K8M3S427LTn
-	+F6/rOrBCJawOaldyiLvvrNq1oIc0zBUvzD+1IVbhE4xs3T8ToTSB2nMPKJvuSe9WPn+bYJBuc/
-	5x7UpCR3dfsLv/y2IWEDBHbCJZy+XIo86czrEBWWB
-X-Gm-Gg: AYBFou1Z/k2oTpniyc5i+H+YqyatLZmr6ljqlUl1xYISuGMjUvHL5tbsoteFPeSXavy
-	R7Xj0by0nO6kPNTwCMS70LNIt1TSrCDgaxmCLZ6NNm4KphYV1BMady7g6ZJBMaj2tUytwTjGxpS
-	m77XJ8nmw4Ig6kqt+fhj2b6ofylBf5HZweBxX8MGMdEthJtJa+D8f0jkoIWCdqQqW9saAF1gulU
-	foKBkrgCG0cr8pddf+7SYQKj+5lT2XDZm8iPKDo7JwCUGAxnKNm+CgtCbQgOu/MH8ONCKCZjY5o
-	+v1GlcpCv0JqJZ0I0wRaF2BBZZnosK4E7a5FBPl+UQ3Z8jVVUZWytAOjcJ7wk/9iNDHA+xxF1IJ
-	+84Km9X2S9OQuxMYcSagv2nDth7ndcU/MjZL9AKmQynRc+J083Ho9DQ==
-X-Received: by 2002:a17:903:3c2b:b0:2c9:d89f:fd98 with SMTP id
- d9443c01a7336-2e530c1b194mr2089565ad.1.1790983433055; Fri, 02 Oct 2026
- 16:23:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="swv+18O9"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=bT6KCjiIQFGCgiDSw4PiZWiOJVW/59NIfnejQEbHHWc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790991048; v=1; x=1791595848;
+ b=swv+18O91Y2eXHmY96b625N/G+rA7RqNHGMoc7qj2Sb8Ie2ITxNaKfsOYZB5vLIGTLQemihs
+ bRv6/9imv3JX+WsyDCTorKXUk6Vsq6UH/HcezLVjBFAbjRQZyRLfBgu6T7zTGJ963HIuyGECRS6
+ b/8VZatO9vD/6tWz1KZsDuAA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9ae44dfa17eba4dc;
+	Sat, 03 Oct 2026 01:30:48 +0000
+X-Mizu-Trace-ID: 9ae44dfa17eba4dc
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	josef@toxicopanda.com,
+	axboe@kernel.dk
+Cc: cgroups@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	linux-kselftest@vger.kernel.org,
+	cui.tao@linux.dev,
+	cuitao@kylinos.cn,
+	ameryhung@gmail.com,
+	alexei.starovoitov@gmail.com
+Subject: [RFC PATCH v9 0/4] blk-iocost: add BPF struct_ops cost model support
+Date: Sat,  3 Oct 2026 09:30:29 +0800
+Message-ID: <20261003013033.149288-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260930190428.1130007-6-hramamurthy@google.com> <179093559163.434549.8853251921845038273@kernel.org>
-In-Reply-To: <179093559163.434549.8853251921845038273@kernel.org>
-From: Harshitha Ramamurthy <hramamurthy@google.com>
-Date: Fri, 2 Oct 2026 16:23:41 -0700
-X-Gm-Features: AclHuK97xos_v4EowLQemIo8YleA2mrgDLsr55DFbDKD09wvx5nu-a-y-m1obAo
-Message-ID: <CAEAWyHdJiwb_SEgmUw0TMn-kh6SNzrg3Xwr9wac=E8DpXr-hCA@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 05/12] gve: refactor gve_init_priv for reset path
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com, 
-	willemb@google.com, nktgrg@google.com, maolson@google.com, thostet@google.com, 
-	jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	przemyslaw.kitszel@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 2, 2026 at 3:06=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wrot=
-e:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
->
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 (1) =C2=B7 Low: 0
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->
-> - [Medium] The commit message says "These changes are only code movement,
->   no functional change".
->
-> Pre-existing issues:
-> - [Medium] This problem wasn't introduced by this patch, but a hard reset
->   leaks the AdminQ dma_pool and its buffer.
->
-> --
->
-> gve: refactor gve_init_priv for reset path
->
-> This patch splits gve_init_priv() so that gve_probe() now does the AdminQ
-> setup (the new gve_adminq_init()) and the device property negotiation
-> (gve_adminq_get_device_properties()). Device setup moves into a new
-> gve_setup_device() helper. gve_reset_recovery() now calls
-> gve_adminq_init(), gve_adminq_verify_driver_compatibility() and
-> gve_setup_device() directly, instead of gve_init_priv(priv, true).
->
-> > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/e=
-thernet/google/gve/gve_main.c
-> > index addfd8dc1a1a2..2fe280cf7e680 100644
-> > --- a/drivers/net/ethernet/google/gve/gve_main.c
-> > +++ b/drivers/net/ethernet/google/gve/gve_main.c
->
-> [ ... ]
->
-> > @@ -2566,15 +2541,32 @@ static int gve_reset_recovery(struct gve_priv *=
-priv, bool was_up)
-> >  {
-> >       int err;
-> >
-> > -     err =3D gve_init_priv(priv, true);
-> > -     if (err)
-> > +     err =3D gve_adminq_init(priv);
->
-> [Severity: Medium]
-> This isn't a bug introduced by this patch, but does a hard reset leak the
-> AdminQ dma_pool and its buffer here?
->
-> A hard reset is gve_reset(priv, false), or gve_reset() after gve_close()
-> fails. Either way it goes through:
->
-> gve_reset_and_teardown()
->   gve_trigger_reset()
->     gve_adminq_release()
->       gve_clear_admin_queue_ok(priv);
->   gve_teardown_priv_resources()
->     gve_adminq_free()
->
-> gve_adminq_free() then returns early, because ADMIN_QUEUE_OK is already
-> clear:
->
-> void gve_adminq_free(struct gve_priv *priv)
-> {
->         if (!gve_get_admin_queue_ok(priv))
->                 return;
->         gve_adminq_release(priv);
->         dma_pool_free(priv->adminq_pool, priv->adminq, priv->adminq_bus_a=
-ddr);
->         dma_pool_destroy(priv->adminq_pool);
->         ...
-> }
->
-> So dma_pool_free() and dma_pool_destroy() never run. Then
-> gve_adminq_init() here calls gve_adminq_alloc(), which puts new
-> allocations in priv->adminq_pool and priv->adminq. The old pool and
-> buffer are lost.
->
-> The same thing seems to happen when gve_teardown_device_resources() calls
-> gve_trigger_reset() after a failed AdminQ command.
->
-> The baseline gve_init_priv(priv, true) path leaked in the same way. The
-> later "gve: simplify reset logic" patch in this series appears to fix it.
+From: Tao Cui <cuitao@kylinos.cn>
 
-Like the AI notes, this issue is pre-exisiting and most of the reset
-related issues are fixed in the following patch =E2=80=9C"gve: simplify res=
-et
-logic"  in the same series.
+This is v9 of the RFC.  A BPF program can now take over the cost
+model of one device: attaching an iocost_model_ops struct_ops creates
+the ioc if needed and switches the device to the model, io.cost.model
+selects between the attached and the builtin model, and detaching or
+device removal restores the builtin one.  The attachment, the cgroup
+callback pairing and the removal paths are serialized with what blkg
+creation and destruction actually use.
 
-> That patch makes gve_adminq_release() static and calls it only from
-> gve_adminq_free(). It also stops gve_adminq_release() from clearing
-> ADMIN_QUEUE_OK and removes gve_trigger_reset().
->
-> > +     if (err) {
-> > +             dev_err(&priv->pdev->dev,
-> > +                     "Failed to alloc admin queue: err=3D%d\n", err);
-> >               goto err;
-> > +     }
-> > +
->
-> [ ... ]
->
-> >       if (was_up) {
-> >               err =3D gve_open(priv->dev);
-> >               if (err)
-> > -                     goto err;
-> > +                     return err;
->
-> [Severity: Medium]
-> The commit message says:
->
->   These changes are only code movement, no functional change.
->
-> Is that accurate? The patch seems to change behaviour in a few places.
->
-> First, gve_adminq_init() writes the version string before it allocates
-> the AdminQ:
->
->         gve_adminq_write_version(&reg_bar->driver_version);
->         return gve_adminq_alloc(priv);
->
-> gve_reset_recovery() now calls this helper. That means the driver version
-> string is written to the BAR0 driver_version register on every reset,
-> resume and recovery. Before this patch, gve_write_version() ran only once=
-,
-> from gve_probe(). gve_recover() still does this at the end of the series.
->
-> Second, the order of device accesses in gve_probe() changes. The version
-> write now comes after the max_tx_queues/max_rx_queues ioread32be() reads
-> and after alloc_etherdev_mqs(). AdminQ registration,
-> VERIFY_DRIVER_COMPATIBILITY and DESCRIBE_DEVICE now run before ctrl_ops i=
-s
-> set, before map_db_bar() and before alloc_ordered_workqueue().
+Why a pluggable model at all
+----------------------------
 
-Both these two changes listed here prepare the driver for the addition
-of the new control plane - the version write is now done as part of
-Adminq init specifically since this won=E2=80=99t be needed in the mailbox
-mode.
+When iocost landed in 2019, its commit message already promised that
+"a later patch will also allow using bpf progs for cost models", and
+the code has carried the split for it ever since: calc_vtime_cost()
+is a dispatcher whose only implementation is calc_vtime_cost_builtin().
+Seven years later the builtin linear model is still the only one.
+This series fills that slot: builtin algorithms remain the default
+while new ones can be prototyped in BPF.
 
-And in mailbox mode,  the control plane has to be setup and the device
-properties negotiation has to happen before we try to allocate the
-net_device. Since the max TX/RX queues that the device supports comes
-from this negotiation.
->
-> Third, when gve_open() fails here, the old goto err path logged "Reset
-> failed! !!! DISABLING ALL QUEUES !!!" and called gve_turndown(). Now the
-> function just returns. Neither gve_reset() nor gve_resume() logs the
-> error, so a failed re-open after reset or resume leaves nothing in the lo=
-g.
+The measured problems
+---------------------
 
-Hmm, actually the only visible effect here is the dropping of the log
-line which will be back in the next patch. gve_turndown() does nothing
-at this point, because NAPI is already disabled and carrier is already
-off. The following patch rewrites this path anyway.
+The builtin model prices each IO with a binary sequential/random base
+picked by a single per-cgroup cursor and a 16MB seek threshold, plus
+a per-page cost.  On a virtio-blk device with the HDD autop profile,
+a 4k IO costs ~24us when judged sequential and ~2.7ms when judged
+random, a 112x spread, so a wrong judgement becomes a wrong price.
+Three classes of mispricing, all measured:
 
->
-> The only place this is mentioned is the v3 changelog below the ---
-> line, and that text is dropped when the patch is applied. The changelog
-> says "don't free device resources if gve_open() fails in the reset path".
-> The baseline err label did not free device resources either, though.
->
-> The later "gve: simplify reset logic" patch adds a "Failed to start
-> queues ... DISABLING ALL QUEUES" message in gve_recover(). At this commit=
-,
-> though, the message is missing.
->
-> Could the commit message describe these changes, instead of calling the
-> patch only code movement?
+ 1. Heuristic rigidity.  Two legitimate sequential readers in one
+    cgroup (a database with multiple tablespaces, a threaded backup)
+    ping-pong the single cursor and are all priced random: a
+    measured 89x overcharge collapses throughput under the same
+    weight.  Random IO within a hot window smaller than the 16MB
+    threshold is priced sequential: measured 107x undercharge, an
+    accounting escape for hotspot workloads.  No setting of the six
+    builtin parameters seems able to fix this: telling the streams
+    apart requires per-IO state tracking, which looks like logic
+    rather than coefficients.
 
-I can call out these changes in the commit message and bring the log
-line back if there is a need for another respin. These issues on their
-own don=E2=80=99t merit a respin IMO.
+ 2. Device nonlinearity.  SLC-cache phases, SMR band placement and
+    shared controllers (multiple NVMe namespaces multiplexing one
+    device) make the real cost of an identical IO vary by an order
+    of magnitude over time or across namespaces.  A static
+    6-parameter linear model has no way to express that.
 
->
-> >       }
-> >       return 0;
->
-> [ ... ]
->
-> --
-> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
-set/20260930190428.1130007-1-hramamurthy%40google.com
+ 3. Unpriced operations.  Flush and zone append fall through to a
+    cost of zero and bypass throttling entirely, and the same pattern
+    extends to device quirks the builtin model was never taught.
+
+Mispricing feeds directly into the control loop: vtime budgets,
+surplus donation and the vrate feedback all consume the model's
+output, so a wrong model can skew the whole controller.
+
+How
+---
+
+Attachment follows the hid_bpf_ops model: the target device is set
+in the dev member of the struct_ops from userspace before load; the
+device is looked up with blkdev_get_no_open() and disk_live() is
+checked under rq_qos_mutex, like blkg_conf_open_bdev().  Attaching
+creates the ioc if needed, like an io.cost.model write does, and
+switches the model under the same freeze and quiesce those writes
+go through; enabling stays with io.cost.qos and wbt stays with it
+too.  When the disk goes away, the model is ejected completely.
+
+Attachment is independent of the model selection and of the
+controller state: while a model is attached, "model" selects between
+it and the builtin model - "model=bpf" switches to the attached
+model, "model=linear" switches back to the builtin model, and
+neither detaches the struct_ops; only detaching removes the model,
+after which "model=bpf" fails.  "ctrl" keeps describing the builtin
+coefficients, which are kept while the BPF model is in use and take
+effect again when switched back.  Enabling and disabling the
+controller, and with it the wbt handover, remains with io.cost.qos.
+
+A bound model in use owns pricing for every charged IO on the
+device: it is called from the bio charging path and prices every
+operation including flushes.  The completion-time request sizing
+which feeds the latency met/missed accounting uses the transfer cost
+coefficients the struct_ops carries (vtime per page for reads and
+writes), so the builtin latency tracking and vrate adjustment
+follow the model's pricing while it is in use; extending the
+model to the QoS side itself is left for a later interface.
+
+The cgroup callbacks are bound to the iocg policy lifetime and pair
+up: iocg_init() is delivered to every cgroup which already has a
+blkg on the device when the model is attached, and to each one
+appearing afterwards; iocg_free() is delivered to the cgroups which
+still exist when the model is detached.  The existing iocgs are
+walked over q->blkg_list under q->blkcg_mutex, the same walk the
+blkcg policy teardown uses; cgroups without a blkg on the device
+yet are not missed, as their callbacks are delivered at blkg
+creation and destruction.
+
+    u64 calc_cost(struct bio *bio, u64 model_flags)
+
+The model reads whatever it needs from the bio itself: the
+operation flags (the operation must be extracted with a mask, and
+the REQ_* flag bits, including PREFLUSH/FUA, are part of it), the
+size, the start sector and the issuing cgroup through
+bio->bi_blkg.  model_flags carries iocost-specific metadata which
+is not a property of the bio, such as whether the cost calculation
+is for a merged request; the return value is vtime, clamped to 1
+second of device time per IO.  Per-cgroup state can be stored in
+BPF_MAP_TYPE_CGRP_STORAGE keyed by the cgroup of bi_blkg; it
+follows the cgroup lifetime.  Sleepable models are rejected at
+verification, since calc_cost() runs under RCU read lock.
+
+Patch overview:
+
+ 1/4: the BPF struct_ops cost model support: Kconfig, ops
+      definition, per-device attachment, unified dispatch and
+      verifier checks
+ 2/4: selftests with two example models (the full builtin linear
+      HDD formula at double cost, and a multi-stream sequentiality
+      model) plus a runner and the selftest kernel config entries
+ 3/4: add an iocost_ioc_tick tracepoint emitting the per-period
+      controller state, so model quality can be evaluated without
+      drgn (existing events are state-change driven and silent in
+      steady state)
+ 4/4: document the attachment in cgroup-v2.rst
+
+Does it work
+------------
+
+Mechanism, verified functionally on a virtio-blk device (HDD
+profile, sequential-read workload from a 1%-weight cgroup, builtin
+vs the 2x example model):
+
+ - per-IO charge: 2882us -> 5722us, a factor of 1.985x; the
+   completed IO count halves and total cost.usage is conserved,
+   i.e. the model output drives both charging and budgeting
+ - attachment: model=bpf readback while in use (ctrl keeps
+   describing the builtin coefficients), EBUSY for a second model
+   on the same device, a second device attaches an independent
+   model, "model=linear"/"model=bpf" switch between the attached
+   model and the builtin without detaching, detaching removes the
+   model and "model=bpf" fails afterwards
+ - edge cases: writing an unknown device fails and nothing is
+   applied; the selftest runner checks the write error and errno
+   of every step, including the restoration
+
+Workload-shape verification (same setup, 4k IOs at weight 1000,
+builtin vs the 2x example model):
+
+ - flush-heavy workload (read/write/fsync alternating): priced
+   1.99x the builtin, i.e. flushes no longer reset the cursor
+   and misjudge the following IO as random
+ - non-page-multiple IO (6 KiB): priced ~2x, matching the
+   builtin's truncating page count
+ - first IO from a high LBA (past 16 MiB): priced 2.01x, i.e.
+   a fresh cgroup's zero cursor no longer misjudges the first IO
+   as random
+
+Payoff, demonstrated with the multi-stream example model (2/4) on
+the same setup, 4k IOs at weight 1000, builtin vs the model:
+
+ - two sequential readers in one cgroup: priced 1961us/op by builtin
+   (both judged random by the single cursor) and 23us/op by the
+   model (each stream keeps its own slot); the completed IO count
+   rises by two orders of magnitude
+ - random IO inside an 8M window: priced 24us/op by builtin
+   (undercharge, an accounting escape) and 2607us/op by the model
+ - single-stream sequential and whole-disk random pricing are
+   unchanged, so the model fixes both directions of mispricing
+   without introducing a new one
+
+Non-interference, measured on enterprise NVMe: no measurable
+overhead when the BPF model is not attached.
+
+Changes in v9:
+- the attach holds rq_qos_mutex from the disk_live() check through
+  the unfreeze, like an io.cost.model write does, instead of
+  releasing it between creating the ioc and switching the model;
+  the queue reference, the second q_to_ioc() and the lockless
+  traversal it needed are gone
+- the attachment is published, cleared and the blkg list is walked
+  under blkcg_mutex and queue_lock: blkg creation runs ioc_pd_init()
+  and adds to q->blkg_list under queue_lock only, so the previous
+  blkcg_mutex-only serialization could double-deliver iocg_init() or
+  deliver iocg_free() without iocg_init().  The init walk now goes
+  parents first, like blkcg_activate_policy()
+- the device removal ejection reads ops->bdev before clearing ops->q:
+  once q is NULL .unreg returns without a lock and the map can be
+  freed, so touching ops afterwards was a use-after-free window.  The
+  ejection moved to an ioc_bpf_eject() helper
+- .unreg only detaches when the closing link is the one which owns
+  the attachment, so a map re-attached to a new device through a
+  newer link is not torn down by an old link; the v8 ops->q re-entry
+  guard at .reg is gone, a second attach of an attached map now
+  fails with -EBUSY like any other model would
+- the ioc->attached and ioc->model pointers are unconditional and
+  blk_get_queue_rcu() is declared in block/blk.h without an export,
+  which drops the local prototypes and the remaining #ifdefs
+- the unused struct_ops .init name lookup, the bdev/q cases in
+  .init_member (the core already rejects nonzero non-function members
+  it does not claim) and the unused write_cost_model() buffers are
+  gone; the -EOPNOTSUPP selftest paths call test__skip()
+- the selftest writes the dev member through the skeleton's typed
+  struct_ops access instead of assuming it is the first member, and
+  the maps are ".struct_ops.link" so closing the fd detaches; the
+  example model's seek judgement is gated on a non-zero IO size so a
+  dataless flush is priced sequentially, and write_cost_model()
+  returns the negated errno ASSERT_ERR() expects
+- the tick tracepoint's running field reports the active iocg list
+  instead of ioc->running, which has not transitioned to IOC_IDLE at
+  the emit point, so the final tick reads active=0 running=0
+- the attach and detach take the queue freeze before rq_qos_mutex,
+  like ioc_qos_write() does; taking the mutex around the freeze
+  instead formed a lockdep cycle with the io.cost.qos write path,
+  and .unreg's link recheck moved under the mutex inside
+  ioc_bpf_detach()
+- the io.cost.model documentation states that detaching restores the
+  builtin model and that ctrl only accepts "auto" and "user" and
+  never selects the model, says attaching rather than loading binds
+  the model, and that removing the device removes the model as well,
+  with the struct_ops link still having to be closed afterwards
+Link: https://lore.kernel.org/r/20260908100143.47598-1-cui.tao@linux.dev # v1
+Link: https://lore.kernel.org/r/20260910125817.223354-1-cui.tao@linux.dev # v2
+Link: https://lore.kernel.org/r/20260914073356.791518-1-cui.tao@linux.dev # v3
+Link: https://lore.kernel.org/r/20260916072302.1068871-1-cui.tao@linux.dev # v4
+Link: https://lore.kernel.org/r/20260918031751.1255420-1-cui.tao@linux.dev # v5
+Link: https://lore.kernel.org/r/20260918055001.1273840-1-cui.tao@linux.dev # v6
+Link: https://lore.kernel.org/r/20260924054549.2271705-1-cui.tao@linux.dev # v7
+Link: https://lore.kernel.org/r/20260930075154.189958-1-cui.tao@linux.dev # v8
+Tao Cui (4):
+  blk-iocost: add BPF struct_ops cost model support
+  selftests/bpf: add iocost cost model test
+  blk-iocost: add iocost_ioc_tick tracepoint for per-period device
+    summary
+  docs: cgroup-v2: document the iocost BPF cost model attachment
+
+
+
+
+
+
+
+
+
+
