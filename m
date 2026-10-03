@@ -1,95 +1,84 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A9137BE98
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 20:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3E635C6A7
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 22:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791060357; cv=none; b=ORvmRz2XioMZYM+Uyj8W+5wwcGjWFXdAkO9Z79ai4/BN0t5TEVKMRvwDoX81pVwxwnYG/NYfvV6hul085NoSEQsDneiKmxdxI22nnMUQTCFLVjBFzdVFeFe3LUrs6o9Y9icoc4TceSbNxjaqFS+4YvfKaRwRr8GLwP3RIvX0Ijc=
+	t=1791065407; cv=none; b=MZRggpE8WXG0lMZ21p0qjWsK4IeErh7seid/S+sV4bhNLLgwmg/N20KrHIognoVPYiQKUhnbS/rRor1RGWliIwogKMJZX9JgJEU+EhTNBdgiBVPRzBdAEBLcDyPnY613U7iss2nXqg8xc+rEGrIHBD0QX3l56/selus5YJkqBao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791060357; c=relaxed/simple;
-	bh=FRp4Cct50HXCeTViDVPkOvyv0qHQZnD+X0WubEU1Bpg=;
-	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:MIME-Version; b=KmIbL+4gp3DX44ZPqzR2tuK8j3c9JpI1ywK8/56t+XshDPcCvlPfXiAM15/i+HK04J5eGBX3CEY+wORQw8H0JoFQjfVhuGjG6qmQUp4t4ERnWbiUpqFt/CcOnBNO+1mcpeM78X4hGfmd54fvM4MTqT4ZVa60xXEubV9l3FrTtm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n8Zkw1si; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791065407; c=relaxed/simple;
+	bh=JmHC7ffML7wYWIhh/a6tLaagVmN0HwYJ4i2wTQZ19+0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=F3nWUNHJhNAQTVflJSnR1ot2+pH+rVhPfHG9dwo19+OPPSn45Osed/1LggTO8tcCU0G9B2XZwsBDYZMEP2gVbsoXSaMlf23CBKydUmNZh6G8KHkUhw2Rf8ijoCfX51heaG6EDH9lPjAP4EdNxx+jdYgGbuXVSPUCfxUbvzJNlOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8+FlGt9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n8Zkw1si"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d90ba1d807so4245695ad.3
-        for <bpf@vger.kernel.org>; Sat, 03 Oct 2026 13:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791060355; x=1791665155; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=FRp4Cct50HXCeTViDVPkOvyv0qHQZnD+X0WubEU1Bpg=;
-        b=n8Zkw1sihXcl4/Pod6zhjI9skgCU8j8F1VKkIOWyX5CldojzAfWimmAks5nfi9OI3O
-         LbN7M7jT2pSdPqOjAibpwHGhCfkmKEeJa16o1lM2yFRjyEhm4MeQNUwLEe02xZF4vbj4
-         NeZadT6r48WSu8JRikuJCVsKoEhQMgAxyyGz7+cPMHDGRx2a07APhzA/cXMI5ZAkknsi
-         +8Qoz0NWe0WKvKeW4oFLFGxdiBrgDzayaQPcO0bTL6xSS8av6YHG6ltu0YR4yjKo1gb2
-         gbzTkclD39paWI8LoyivQfZbiFf+84u6SYhDpdYnX/ohVVesjMuxLL5xG1Uye/24m7/6
-         Ta2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791060355; x=1791665155;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FRp4Cct50HXCeTViDVPkOvyv0qHQZnD+X0WubEU1Bpg=;
-        b=qcLWbGtguP1LYyaGvedl6AbibjFKcxdm7qeZ/U2t2boXUqcgEaCzsuHKJZXvDeOvdY
-         kbgXMWeGyKi+2LUFMkSSyxr0vILXlFCRbKJ5Z+sM6RNDcITjm0LTjHBRvAi7v3IRrPr8
-         /zR1VpSMo66fBvRldk94Eib8ItmRyvWNca65DcftBLS0B9xkXbzkHADytbHlH4VlKYD4
-         163W4BeXy4tD5Yk6xWTIwo0C/0q4qAVGw4Jlx0uiCANYbUQLFQPR3Od20kveZA8NTGuf
-         du/4Y5p47UKylFowQFErhzT411fS9AckutnbRwhmZwgrHt3kpHP1SjAv+iBPBmstRVjR
-         qXrg==
-X-Forwarded-Encrypted: i=1; AKwUvBx8tnGQxGgl0VjRfJJg8aknORBSKJz+GcfKf6EV3GkOwN8pcaN8U9raHd8Yl7fYGPTbFbQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIWYk32eatkNPD+JZx0D1V/q4qiv2N0yy1eNfHp14rnYz3y5xh1
-	tvtfZP9OSkMHp1MfwyhQZ+mG9g+QySqDlsyG10s3TxE9m4Otj9Q5gxaTWVfnEghk
-X-Gm-Gg: AYBFou3ztgvfIvA6iHjsVR9UMXEeAc37N5MzLiUwjzOmAgThPrpglNAcb2ag1hXKLNV
-	ODgnE7EJUprVYf6hsKwSIrqqlIbIkN8I41AnOX2qNfRZGlCe8llENwsrhgw8HzuajaF9ndW2gnA
-	bDGmW5VEU2PncyInjb2RA7qY4RI5m6Cm5B8wD9/L0Abw3FsaGVxyoOuNUQ89toOwnUNBZNrxFGC
-	ryRH9U0hWUjG0OTkRGSA7F+jMULdPid+tkvV50FO7GmaQXtwqPbveCwjihH4hhgB5lbgAfG/jMu
-	EOGg78g5id1MxKAFVFo/Dc0isvmJSnkwE7ntmlyH79mZxbDivo5RJA8C/u+X/BNlSxHSHQnxl6H
-	OK13nH/lX48NQirCSPPEnfjMGGcgFsqo3zNX7wK92LuNYLKVcaBsdqS4013fZEIWmAyR3bjeV3t
-	Yzt27JbClbmKiMuu1FisRt3s4wasr5R8JpQvUyQZeO7GKVK2HVEauOp9YoimtX8AsXR9mZ2zmTd
-	7ZEw2RGqbKvFs900WbrqHxj8/CnPVQIbqC5d7rDXtSBE350cu/cp30dkk32viPHCKJC5GeZ5GVZ
-	ODC92NKMP017jg==
-X-Received: by 2002:a17:902:da91:b0:2df:83ce:724f with SMTP id d9443c01a7336-2e49b615cf2mr61626695ad.30.1791060355061;
-        Sat, 03 Oct 2026 13:45:55 -0700 (PDT)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e533e8397bsm7343265ad.78.2026.10.03.13.45.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Oct 2026 13:45:54 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 03 Oct 2026 20:45:53 +0000
-Message-Id: <DLVHWNL0AVKU.NV007WEHWST8@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Tao Cui" <cui.tao@linux.dev>, <tj@kernel.org>, <josef@toxicopanda.com>,
- <axboe@kernel.dk>
-Cc: <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <daniel@iogearbox.net>,
- <linux-kselftest@vger.kernel.org>, <cuitao@kylinos.cn>,
- <ameryhung@gmail.com>
-Subject: Re: [RFC PATCH v10 1/4] blk-iocost: add BPF struct_ops cost model
- support
-In-Reply-To: <20261003124045.1289305-2-cui.tao@linux.dev>
-References: <20261003124045.1289305-1-cui.tao@linux.dev> <20261003124045.1289305-2-cui.tao@linux.dev>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8+FlGt9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD1411F0089B;
+	Sat,  3 Oct 2026 22:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791065405;
+	bh=a9Kv2Rm9I+6NZ4gbVtM6UhQYqsU+Xsd7zAqJvXaZpSw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Q8+FlGt98ageA8rJt0jlfTYppMmnxwVj/9Qud+KaRuMuBrRSFFNDc1yeCjHR1Q1zC
+	 oVtDvr+M/MLFnxebM+Bwr/avQylGu64AJ3WHtmMhUQWNMZObMzH3NbvdE5KGInzN/P
+	 M6ukVabUDtXkGLFLbf6nbthRUDfNZEFciMEB3fmqIfnGTdv4UZOKiCZT9YVEDkR1qZ
+	 uERYsJh2mUL9Ha5kGvUqoDlqYALUoEHG65vkmC3Xjv+bc1Wt9UI9mzSmwbXBRAIurs
+	 +e+XVGjaScGocaCEp5bRP3IwMVAUm/HBR6gA3JruiXnYJmtHB89+oXHhinsL0hc1vm
+	 KT9xUWvak7dUw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43943924A65;
+	Sat,  3 Oct 2026 22:10:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Format data_in_arena_rust.rs with
+ rustfmt
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179106540453.231337.18350634083826612292.git-patchwork-notify@kernel.org>
+Date: Sat, 03 Oct 2026 22:10:04 +0000
+References: <20261003203326.1086454-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261003203326.1086454-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com
 
-On Sat, Oct 03, 2026 at 08:40 PM Tao Cui <cui.tao@linux.dev> wrote:
+Hello:
 
-v10 was sent 11 hours after v9.
-Patch 1 grew from 712 to 789 lines and device removal is still
-not tested.
-Pls slow down. Wait for Tejun before sending v11.
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-pw-bot: cr
+On Sat,  3 Oct 2026 20:33:26 +0000 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> 'make rustfmtcheck' checks every .rs file in the tree and fails since
+> the test in Rust was added:
+> 
+>   Diff in tools/testing/selftests/bpf/progs/data_in_arena_rust.rs:42:
+>    #[no_mangle]
+>    static IN_RODATA: Node = Node { val: 3, next: None };
+>    #[no_mangle]
+>   -static mut IN_DATA: Node = Node { val: 20, next: Some(&IN_RODATA) };
+>   +static mut IN_DATA: Node = Node {
+>   +    val: 20,
+>   +    next: Some(&IN_RODATA),
+>   +};
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Format data_in_arena_rust.rs with rustfmt
+    https://git.kernel.org/bpf/bpf-next/c/99dc1ba54242
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
