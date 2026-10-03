@@ -1,175 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6043382CB;
-	Sat,  3 Oct 2026 15:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973BC46A5FD
+	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 16:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791041824; cv=none; b=isuWTrJ1o1wsPSCnOB6zytupWc39lz7KZlc1RxHKrkZmFEQ2Ag3unAZKeVQTsEp+PAASlr9xNtR0YwgbJnsTusNKzIJi67aZUlVPeveVi0tlGjyXfiT2oyPnd1gXDl/96+1RhsP7JabA1gu2JilhmQ6m9+CtqwAFK1shq3HE2PE=
+	t=1791043421; cv=none; b=O11JhKgRGU4zc0luJC1IjJ3YABNoMCW/d4cglm3OOiNdx7ZU41uttsb1P74RyTid7+rauzzQzc3ZPwr2C2L+9902ymQg0Rcckg5XR1ENJbQiV6il22/7haadDFvogbEJzh5z9zWoKVxUU90cJ3C+DZ7tQYxBa7pDuNvvEz4sUTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791041824; c=relaxed/simple;
-	bh=P+t00OnuGzY0L5xQoewWtaL++U09V2T+k7ZFg5Yjqtw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MYawimNwemrA+12vCe5vyDK20k589bhE/cJLjd0shihvbwqd4kcVo3vAek/h2aK7F+uoEl68iEtfA0c/P3V4/CccUQTnQ7eDgcYijV42X95OkgE0sMysCRzj6K/E6krIPSHm/aZYYRx7xkd8HlwWDR1045ig0rntYqkbAPeL8wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ExrrNucL; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1791043421; c=relaxed/simple;
+	bh=58IlFyHZbXY4LtMDtfnJoqJDpyVoHC6P0ZPHOmyUTis=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CkmoA8UgGuW14hfECQjLo51eoPzRzrnLmCRii2jzdfrtd/iHM0lXCSGNyBFbWDi2Eoun9cPUl8ooh+ssr0PSzapOpuXI3l+N8KQLkNO3ZMCnItSATUglRuDxY7UDVnbATwIdOFlw8HeXvNkzWbmxWG91uceEkxuR0KKnZ9JTHVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=IhnPmttV; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ExrrNucL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791041822; x=1822577822;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P+t00OnuGzY0L5xQoewWtaL++U09V2T+k7ZFg5Yjqtw=;
-  b=ExrrNucLni4m92ol4u70gyaDESoMNQnLJU/jVg9EbVQPQX6WEpCOArlr
-   NMGKkfMHr0nfveNHgnf39/R0S5Wx5iLHY+U1nCyjuk1GlL6G7jfBFbM0I
-   Kr3hWAqlTC4o99GfnMculhZe4HmiJF+oyKX3kvnJq0PW3mEmavU+p5+Uq
-   u+po83QT3eiULr6Eox6S728SGHVCpiamLLiQCjQdYSfcW9klKnjM6I6Nl
-   cSlCz+mQpSAGne1LL4BewCHwuiosmP72lo1sZgw9TQI/0zGz+aJGajfau
-   64H51VPYf0IhtnnqO59Ko6Lkd8MVnpYgvBFxtNSM5lbII2+0URlvhd7K1
-   Q==;
-X-CSE-ConnectionGUID: SRg+GF7ETY2DtksNRrNEsw==
-X-CSE-MsgGUID: kxMVpemcQxGSgALBi43yRA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11924"; a="79338284"
-X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
-   d="scan'208";a="79338284"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2026 08:37:01 -0700
-X-CSE-ConnectionGUID: RYv1bP9xS7udNAN9jt62PQ==
-X-CSE-MsgGUID: 2T49n9CQQDWkG0afqOemkw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
-   d="scan'208";a="280207548"
-Received: from amilburn-desk.amilburn-desk (HELO localhost) ([10.245.245.78])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2026 08:36:51 -0700
-Date: Sat, 3 Oct 2026 18:36:49 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Bill Wendling <morbo@google.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>,
-	Shuvam Pandey <shuvampandey1@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Shivaprasad G Bhat <sbhat@linux.ibm.com>,
-	Thorsten Blum <blum@kernel.org>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guangshuo Li <lgs201920130244@gmail.com>,
-	Ira Weiny <iweiny@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <asEhEe0Urb5Wx7yi@ashevche-desk.local>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="IhnPmttV"
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 8186F82D90;
+	Sat, 03 Oct 2026 18:03:33 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uHKzWHK4yiAW; Sat,  3 Oct 2026 18:03:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1791043412; bh=58IlFyHZbXY4LtMDtfnJoqJDpyVoHC6P0ZPHOmyUTis=;
+	h=From:To:Cc:Subject:Date;
+	b=IhnPmttVFvByzVR2JyxZGQbzZeS+sH9d2zslDydNJVM5DUnJU7Yo0auTEC1FEobZW
+	 ho/qy/NGFzf3c85YBM3kVexYTHMrpq1jH8kgF6Ps0GybK+B96WCr4EkNqK8q9RtF6F
+	 daFJx+blWSQL4UNGHwCHOssrOUlgrPswYAPPdUDnp4b4AyaYHC9zpe4hiL2EdozLF3
+	 MJQBLO8HtBrJPrn06vIRs9VZl8VrElm0Mb2mXaPupcR3eF1dWFFLxuNl1f6ohzB5w0
+	 FeSWng1oZgGJIIRROjvW8NRhmoWmvt7liNUZ62mY2LhtPGuZtB1PavG3cAnfibFHw2
+	 QZnyJfI12DyMA==
+From: Masoud Aghasi <maghasi@disroot.org>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	leon.hwang@linux.dev,
+	Masoud Aghasi <maghasi@disroot.org>
+Subject: [PATCH bpf v3 0/3] bpf: Fix incorrect handling of user flags by percpu map updates
+Date: Sat,  3 Oct 2026 17:02:10 +0100
+Message-ID: <20261003160213.2641506-1-maghasi@disroot.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261003035921.1918874-5-kees@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 02, 2026 at 08:59:10PM -0700, Kees Cook wrote:
-> Several strlcat() call sites being converted to seq_buf need behavior
-> seq_buf doesn't currently provide. The return from seq_buf_used() is
-> not the length of the string in a seq_buf. Once the buffer is full or
-> has overflowed it returns the buffer size, which counts the byte that
-> seq_buf_str() replaces with the NUL, so a caller that needs the string
-> and its length has to call seq_buf_str() and then walk the string with
-> strlen().
-> 
-> Move the termination out of seq_buf_str() into a helper that returns
-> where it put the NUL, and add seq_buf_strlen(), which terminates the
-> buffer in the same way and returns that offset.
-> 
-> As discussed in review, don't add WARN_ON() for seq_buf_strlen() and
-> drop it from seq_buf_str().
-> 
-> Add tests comparing seq_buf_strlen() against strlen() of seq_buf_str()
-> for empty, appended, truncated, exactly full, and overflowed buffers,
-> checking that seq_buf_strlen() alone terminates a full buffer, and
-> checking that a zero-sized seq_buf reports an empty string from both
-> accessors without touching the buffer.
-> 
-> Tests passed under qemu on ARCH=x86_64 with GCC 16.2.0 and CONFIG_KASAN=y,
-> and on big-endian ARCH=s390 with GCC s390x-linux-gnu 16.2.0.
+For BPF_MAP_TYPE_PERCPU_ARRAY map, bpf_percpu_array_update()
+is not considering the possibility of a combination of
+(BPF_NOEXIST, BPF_EXIST) flags with (BPF_F_CPU, BPF_F_ALL_CPUS) flags.
+This causes the (BPF_NOEXIST, BPF_EXIST) flags to lose their effect
+in some cases.
 
-...
+For BPF_MAP_TYPE_PERCPU_HASH and BPF_MAP_TYPE_LRU_PERCPU_HASH maps,
+htab_map_check_update_flags() and check_flags() are not considering
+the possibility of a combination of (BPF_NOEXIST, BPF_EXIST) flags
+with (BPF_F_CPU, BPF_F_ALL_CPUS) flags.
+This causes the (BPF_NOEXIST, BPF_EXIST) flags to lose their effect.
 
->  static inline const char *seq_buf_str(struct seq_buf *s)
->  {
-> -	if (WARN_ON(s->size == 0))
-> +	if (s->size == 0)
->  		return "";
->  
-> -	if (seq_buf_buffer_left(s))
-> -		s->buffer[s->len] = 0;
-> -	else
-> -		s->buffer[s->size - 1] = 0;
-> +	__seq_buf_terminate(s);
->  
->  	return s->buffer;
->  }
+For example, when using (BPF_F_CPU | BPF_EXIST) flag combination
+with bpf_map_update_elem() on a BPF_MAP_TYPE_PERCPU_HASH map, the
+BPF_EXIST flag does not prevent new insertions as expected.
 
-Looking at this again, can't it be rewritten now using _strlen()?
+This series fixes the bug by adding proper flag validations and checks
+and adds regression tests.
 
-	if (seq_buf_strlen(s))
-		return s->buffer;
+V3 changes:
+- Split the fix into two separate patches for array map and hash maps
+- Extend the selftest to cover all percpu map types
+- Extend the selftest to cover all applicable flag combinations
+- Extend the selftest to cover the unnecessary delete issue of LRU map
 
-	return "";
+V2 changes:
+- Fix a BPF_EXIST flag check in __htab_lru_percpu_map_update_elem()
+- Add additional test for BPF_MAP_TYPE_LRU_PERCPU_HASH map
+- Add check for BPF_EXIST, BPF_NOEXIST combination in percpu array map
 
-?
+Masoud Aghasi (3):
+  bpf: Fix incorrect handling of user flags in bpf_percpu_array_update
+  bpf: Fix incorrect handling of user flags by percpu hash map updates
+  selftests/bpf: add tests for percpu map flags combination
 
-...
-
-> +static inline size_t seq_buf_strlen(struct seq_buf *s)
-> +{
-> +	if (s->size == 0)
-> +		return 0;
-> +
-> +	return __seq_buf_terminate(s);
-> +}
-
-(Left for the context to the above.)
+ kernel/bpf/arraymap.c                         |   5 +-
+ kernel/bpf/hashtab.c                          |  11 +-
+ .../selftests/bpf/prog_tests/percpu_alloc.c   | 159 ++++++++++++++++++
+ 3 files changed, 169 insertions(+), 6 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.47.3
 
