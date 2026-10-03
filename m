@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAB137FF56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7813381E8B
 	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 01:33:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790991236; cv=none; b=SUAMZrmbWsXl7iABYvgIlyUCporjMStALCk/euLCDGjPXmFv/ea6wPceP34NtPAtAsMumnW3G/lQASoKyy83/yiX/74W1n9DQxjrnEHxGMpU6ak59hhDvHmmZpscckdLmeRasMxD6YwUddmA+Nap3vB0q7Vr/5LvYDkeFQwGJqw=
+	t=1790991236; cv=none; b=MfNJiqZAm82UClBeaPpEeT4U3u6JPOFIiSBs/vZkDtoiZN2eqpqSb/mbjsCA8fHaA3DuOc1MoL0dzQnzGAi4vRbySB5gF81yN2NE4VTWRkTx1P/OLNIie5h7QAKZZvODOvVY/FqOSdL2HJYbteSayMfybjLtsG92iPChTTa8yEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790991236; c=relaxed/simple;
-	bh=xyy90GAZgEP86WQk7kIifhQQRR791zCObaQt8h1FTgA=;
+	bh=sWYpgc4uc8VjyXA5HaXGC12CBtu80G/x3WW8qgpFl2E=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fBGOvntRVeMDRidG0YzPgmCu82uiZCUi0V4wVnUqst1dIIFH2xj9H8tdGjD2d8kqC37PqJN07zXEi19c5RTLui4wkMXM9RA0WoYtW6zAWF341Ff0A8jNXhHOERWHMB6p405azbM7QJxZ82LSM0s2GqNrDjHWKaSDHFpU8FqOBkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TwLH+pym; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=JtoYPv4xqVK27PYXr9HoUY6lpU5ufE1YDbJASvLlDFiFvLD4oWX+T1J1tog4Rmse9O4E3+GbwxoPyXQWoi/ojz/cdCZeCe5WBDk24b1GdYQHkw53VDUoWAasB9n1IOsT+uohh5hnvnigz9WxtqDf8zIPPpd4HLSxrSxqs1jkxaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D17KRLEM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TwLH+pym"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06831F00893;
-	Sat,  3 Oct 2026 01:33:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D17KRLEM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8333E1F000FF;
+	Sat,  3 Oct 2026 01:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1790991235;
-	bh=XFlSFfJrmOotubJwcbiSXBaAHXK7usYoSmyyoIE8dAw=;
+	bh=Maly/v3UQ4EhNReyim4hzeGfP8c1MaUjTXNWMpo9Fdc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TwLH+pym3joXLaF2M/0XGyPDVbzfp5/z763unluGzKlrStkJIfHi9ZHTB0wdLi6/F
-	 mIndgX4C0e64W0qdEHV40NRMNsO7E1AvxoVCkyXMaOFJMjt0/sMOcV6JFuD96HENJK
-	 xHnZjkSgtZXxToBas726oSVHuoVvu5OK3ZssWdhseUSXT+g4D3Gj6BSP1g301MM1Vh
-	 sbYdVrO3I7u28/zDQ/HQfmJGBWY3bbuMv4N5VllhdJREWwEHI+rrYe1pN3tfP/VFoy
-	 /MHut+vZsCt9DkQOjkI+TTfc3BXfcxBmYN6KWTcYykHgc5aWx0aMuK76BztPlmo/z9
-	 VuzYvVk5/z/Rg==
+	b=D17KRLEM4OcB7EKYHNZIexrxAhR78AmXpZFG6ApswoW3ZSs29ggmu8GNsiNcLOajH
+	 hCT/r+qZlKB7//kBM0nrVpO5t2QizK0Q9reXfsefL33ku+IHXo5yo+m20azYpPnC52
+	 uJ/pqY0wveWL+gHidxfWiKDrjn6Gta0eUKA6xsz6WwQf5PZDcsB8TMAOE2/UQLoM0u
+	 VpyGDkfV5/kKPUuXoEoBP1aUppiLLUn/wb8PIFyDHWdO1oYweNtcmghDDDXnxiHgfV
+	 atmx1JuUm0nLqG7ZkolgpyfAEy/HBV0VjwslXp5Fa+/vWpT7n0kHe+0a2o5lAQR5l/
+	 B6u8XU+5CYkBw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 09/13] selftests: xsk: run the RX and TX
- endpoints in separate processes
+Subject: Re: [PATCH net-next 10/13] selftests: xsk: add a hardware mode to
+ xskxceiver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261001202124.692591-10-maciej.fijalkowski@intel.com>
+In-Reply-To: <20261001202124.692591-11-maciej.fijalkowski@intel.com>
 References: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
- <20261001202124.692591-10-maciej.fijalkowski@intel.com>
+ <20261001202124.692591-11-maciej.fijalkowski@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 03 Oct 2026 01:33:54 +0000
-Message-Id: <20261003013354.D06831F00893@smtp.kernel.org>
+Date: Sat, 03 Oct 2026 01:33:55 +0000
+Message-Id: <20261003013355.8333E1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,123 +47,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests: xsk: infinite loop when peer process crashes
+- [Medium] selftests/xsk: malformed IP/UDP headers for multi-fragment verba=
+tim packets in hw mode
 --
 
-commit 75a72a39b57bce249cec4dee9c3d6dcc72729c6d
+commit 13a458bdc3c40c143ae3519294c27c39c89b28b0
 Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-selftests: xsk: run the RX and TX endpoints in separate processes
 
-This commit splits the xsk selftest into separate RX and TX processes that
-communicate over a TCP control channel. The endpoints exchange fixed-size
-messages to synchronize steps, track progress, and abort on failures.
+selftests: xsk: add a hardware mode to xskxceiver
 
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
+This commit introduces a hardware mode (--hw) to xskxceiver for running
+AF_XDP tests over a physical link. It wraps packets in UDP/IPv4 headers and
+adds new command line options to configure hardware runs.
 
-[ ... ]
-
-> +static int peer_drain(struct xsk_peer *peer)
-> +{
-> +	struct pollfd pfd =3D { .fd =3D peer->fd, .events =3D POLLIN };
-> +	int ret;
-> +
-> +	while (!peer->closed) {
-> +		ret =3D poll(&pfd, 1, 0);
-> +		if (ret < 0 && errno =3D=3D EINTR)
-> +			continue;
-> +		if (ret < 0)
-> +			return -errno;
-> +		if (!ret)
-> +			break;
-> +		ret =3D peer_recv_one(peer);
-> +		if (ret && !peer->closed)
-> +			return ret;
-> +	}
-> +	return 0;
-> +}
-
-[Severity: Medium]
-If the peer process crashes, peer_recv_one() detects a closed socket (like
--EPIPE), sets peer->closed to true, and returns the error code. Because
-peer->closed is now true, does this if statement suppress the error and
-cause the function to return 0 instead of propagating the failure?
-
+> diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testi=
+ng/selftests/net/lib/xsk/test_xsk.c
 > --- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
 > +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
-
 [ ... ]
-
->  static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info=
- *xsk,
->  		       bool test_timeout)
->  {
-
-[ ... ]
-
->  	buffer_len =3D pkt_get_buffer_len(umem, pkt_stream->max_pkt_len);
-> +	if (pacing_tx_sync())
-> +		return TEST_FAILURE;
-> +
->  	/* pkts_in_flight might be negative if many invalid packets are sent */
->  	if (pkts_in_flight >=3D (int)((umem_size(umem) - xsk->batch_size * buff=
-er_len) /
->  	    buffer_len) && !test_timeout) {
->  		ret =3D kick_tx(xsk);
->  		if (ret)
->  			return TEST_FAILURE;
->  		return TEST_CONTINUE;
->  	}
-
-[Severity: Medium]
-When pacing_tx_sync() calls xsk_peer_tx_sync() which relies on
-peer_drain(), the suppressed error causes pacing_tx_sync() to incorrectly
-report success.
-
-Since no PROGRESS messages are received from the crashed peer,
-pkts_in_flight remains artificially high. Will this cause __send_pkts() to
-repeatedly return TEST_CONTINUE without ever pushing packets?
-
-[ ... ]
-
->  static int send_pkts(struct test_spec *test, struct ifobject *ifobject)
->  {
-
-[ ... ]
-
->  	while (!(all_packets_sent(test, bitmap))) {
->  		for (i =3D 0; i < test->nb_sockets; i++) {
-
-[ ... ]
-
->  			ret =3D __send_pkts(ifobject, &ifobject->xsk_arr[i], test->poll_tmout=
-);
->  			if (ret !=3D TEST_CONTINUE)
->  				return ret;
-> =20
-> -			if (test->fail)
-> -				return TEST_FAILURE;
-> -
->  			if (!test->poll_tmout) {
->  				ret =3D wait_for_tx_completion(&ifobject->xsk_arr[i]);
->  				if (ret)
->  					return TEST_FAILURE;
+> @@ -1268,8 +1366,8 @@ static int __send_pkts(struct ifobject *ifobject, s=
+truct xsk_socket_info *xsk,
+>  				tx_desc->options =3D 0;
 >  			}
->  		}
->  	}
-> =20
->  	return TEST_PASS;
->  }
+>  			if (pkt->valid)
+> -				pkt_generate(xsk, umem, tx_desc->addr, tx_desc->len, pkt->pkt_nb,
+> -					     bytes_written);
+> +				pkt_generate(xsk, umem, tx_desc->addr, tx_desc->len, pkt->len,
+> +					     pkt->pkt_nb, bytes_written);
 
 [Severity: Medium]
-Because __send_pkts() returns TEST_CONTINUE over and over, and
-wait_for_tx_completion() returns instantly when no packets are sent, does
-this create an infinite loop?
+When generating multi-fragment verbatim packets in hardware mode, does this
+pass the incorrect length to pkt_generate()?
 
-If a test endpoint crashes, it appears the other endpoint will hang
-indefinitely instead of failing the test, which could permanently block
-automated CI pipelines.
+If pkt_stream->verbatim is true, pkt->len represents only the length of the
+current fragment, not the entire logical packet. Passing it as total_len he=
+re
+propagates to gen_pkt_hdr(), where it truncates the UDP and IPv4 length fie=
+lds:
+
+tools/testing/selftests/net/lib/xsk/test_xsk.c:gen_pkt_hdr() {
+    ...
+    struct udphdr udp =3D {
+        ...
+        .len =3D htons(total_len - sizeof(*eth_hdr) - sizeof(struct iphdr)),
+    };
+    struct iphdr ip =3D {
+        ...
+        .tot_len =3D htons(total_len - sizeof(*eth_hdr)),
+    };
+    ...
+}
+
+This causes malformed packets with truncated L3/L4 lengths while the physic=
+al
+frame contains all fragments, which might be dropped by NIC parsers or
+switches and lead to spurious hardware test failures (for example, in
+testapp_too_many_frags).
+
+Could the total logical packet length be passed here instead of just the
+fragment length?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261001202124.6925=
-91-1-maciej.fijalkowski@intel.com?part=3D9
+91-1-maciej.fijalkowski@intel.com?part=3D10
