@@ -1,35 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3E635C6A7
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 22:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CA635AC3B;
+	Sat,  3 Oct 2026 22:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791065407; cv=none; b=MZRggpE8WXG0lMZ21p0qjWsK4IeErh7seid/S+sV4bhNLLgwmg/N20KrHIognoVPYiQKUhnbS/rRor1RGWliIwogKMJZX9JgJEU+EhTNBdgiBVPRzBdAEBLcDyPnY613U7iss2nXqg8xc+rEGrIHBD0QX3l56/selus5YJkqBao=
+	t=1791066875; cv=none; b=tkFEs+IcVRFvMmzlBdzujkmKB43kMvDNyYAqInYVjdPyfu37UgvZ3TQd5vg9La3dThcurFr9BJmVvShR7JCM63y0Shr+E4bkUAftco62Ou6Zkodc3rdSemQODeS5oHvwl6vnV2aakXOq0yA7bBalwK4HE6k0+RbkK8y7va3t6wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791065407; c=relaxed/simple;
-	bh=JmHC7ffML7wYWIhh/a6tLaagVmN0HwYJ4i2wTQZ19+0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=F3nWUNHJhNAQTVflJSnR1ot2+pH+rVhPfHG9dwo19+OPPSn45Osed/1LggTO8tcCU0G9B2XZwsBDYZMEP2gVbsoXSaMlf23CBKydUmNZh6G8KHkUhw2Rf8ijoCfX51heaG6EDH9lPjAP4EdNxx+jdYgGbuXVSPUCfxUbvzJNlOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8+FlGt9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791066875; c=relaxed/simple;
+	bh=KvBBhm5O+htqV8yAtcsPneZ6zIbOK1dPsGy42ky7nsg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hfwEU75sg15Hp6KjKs2zPdQw3IRN0r9oKH3QHjTNKurl4Jb3gApnbnCHn9npiXKRCSNlRtWGHehv95aBX7d5D8aKoeWhy13nGs5798BTeyOGT18/N66x48QXD0dDCJ1KbURA33JIUUGcmongmLqFwnXQtyX3wfI6SNF+nutjg8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6T43gxs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8+FlGt9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD1411F0089B;
-	Sat,  3 Oct 2026 22:10:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6T43gxs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63711F0089B;
+	Sat,  3 Oct 2026 22:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791065405;
-	bh=a9Kv2Rm9I+6NZ4gbVtM6UhQYqsU+Xsd7zAqJvXaZpSw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Q8+FlGt98ageA8rJt0jlfTYppMmnxwVj/9Qud+KaRuMuBrRSFFNDc1yeCjHR1Q1zC
-	 oVtDvr+M/MLFnxebM+Bwr/avQylGu64AJ3WHtmMhUQWNMZObMzH3NbvdE5KGInzN/P
-	 M6ukVabUDtXkGLFLbf6nbthRUDfNZEFciMEB3fmqIfnGTdv4UZOKiCZT9YVEDkR1qZ
-	 uERYsJh2mUL9Ha5kGvUqoDlqYALUoEHG65vkmC3Xjv+bc1Wt9UI9mzSmwbXBRAIurs
-	 +e+XVGjaScGocaCEp5bRP3IwMVAUm/HBR6gA3JruiXnYJmtHB89+oXHhinsL0hc1vm
-	 KT9xUWvak7dUw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43943924A65;
-	Sat,  3 Oct 2026 22:10:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1791066874;
+	bh=44rApmqgvJgsmXFkykLDu5ohSH7xNM5gRY9KubCrYYs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=K6T43gxsZ2bvAL+QQpP4w6vMAb02j2M4F1p+e9+qmYHVVQxD/Vkr8eDHi/X6MEP0/
+	 7nTF0Nm74rQ4q413/yVgh2lAHFgcoIPEA+ptAX5JvW1Z0fYT2rHOQGFEB8yBm8b7Nm
+	 pjvp3N1HLcQTz4VHfV8BTuwKUaiu/UUOBrfmzKl1CtfFYSAKrPU5omXQplXboHp7XL
+	 1QfQDBoxjoBo0czcrf6byW+k2QXDmddpthNEocN/qWyJvZvyTervhbYJbkGGY02YhT
+	 6JOi/wmpDvjfu0hnrInTDgyUTd5EGLJOtpaVnZQk0eB0CEgnBYxX1WM0jn5Ws9h9GW
+	 StoMIg6ZejkWw==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org
+Cc: Sasha Levin <sashal@kernel.org>,
+	Artem Dinaburg <artem@trailofbits.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Dohyun Kim <dohyunkim@google.com>,
+	Neel Natu <neelnatu@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	netdev@vger.kernel.org,
+	toke@redhat.com
+Subject: Re: [PATCH 6.1.y 0/2] bpf: backport CVE-2024-41045 and CVE-2024-42239 fixes
+Date: Sat,  3 Oct 2026 18:32:49 -0400
+Message-ID: <2026-10-03-1-daily-reply-0008-re-bpf-timer-cve-6-1@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261002193020.19392-1-artem@trailofbits.com>
+References: <20261002193020.19392-1-artem@trailofbits.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,48 +65,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Format data_in_arena_rust.rs with
- rustfmt
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179106540453.231337.18350634083826612292.git-patchwork-notify@kernel.org>
-Date: Sat, 03 Oct 2026 22:10:04 +0000
-References: <20261003203326.1086454-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261003203326.1086454-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
 
-Hello:
+> 6.12.y, 6.18.y, and 7.2.y. Could you please queue this series for 6.1.y?
 
-This patch was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Queued the series for 6.1, thanks.
 
-On Sat,  3 Oct 2026 20:33:26 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> 'make rustfmtcheck' checks every .rs file in the tree and fails since
-> the test in Rust was added:
-> 
->   Diff in tools/testing/selftests/bpf/progs/data_in_arena_rust.rs:42:
->    #[no_mangle]
->    static IN_RODATA: Node = Node { val: 3, next: None };
->    #[no_mangle]
->   -static mut IN_DATA: Node = Node { val: 20, next: Some(&IN_RODATA) };
->   +static mut IN_DATA: Node = Node {
->   +    val: 20,
->   +    next: Some(&IN_RODATA),
->   +};
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Format data_in_arena_rust.rs with rustfmt
-    https://git.kernel.org/bpf/bpf-next/c/99dc1ba54242
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Sasha
