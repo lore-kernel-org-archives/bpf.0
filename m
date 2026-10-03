@@ -1,270 +1,205 @@
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3C8469840
-	for <bpf@vger.kernel.org>; Sat,  3 Oct 2026 16:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BF747F787;
+	Sat,  3 Oct 2026 16:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791043432; cv=none; b=YT1aRmKPP6kPS8HkMfzzamtvj5IsZQKBcDfdj2swOKDY7EvosA2Si9/Hx0V44gN2fKjZiR/kgdTtoFAnMA45Z3cTTxPThEGfw38eErKu0XepYMuO+IAZT2+tYMBrM6+gQB2jsRgpChIkZ8qlhgRFxHI51wufQS1YpoBkZDELhB8=
+	t=1791044974; cv=none; b=NZDsPNQW/MJJJJW8HPJVkB9gYBvTFDEmNRvFuGqBenGKIfQGXnc+hduyYpu+Y/3bVEddIPHg3bLLD+GcKsOUtLU0Cr5WmexxWjPNczLY3XjJ5qj0xPdTN9FQu+wnOm9Sy7MjheOor95xqu1TEVn2XKAQzDXK0j6RC7zY5XmwCKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791043432; c=relaxed/simple;
-	bh=Yh4CJ0FH9zdXYc4XcJohpevikI3ectvynvrlfRB6vOk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BB8NX6u6e7O/DjCudLmjQMFVPekDKIoy6fWa2WDPu4OFDGUNsG6edgTH2xfWZjDMn4o3HJb/XVhe9MsA06AePbBq/ktXNDta2PxJeFEHrAF5ZdjfhNDlE8lyUamPnSe8sbcKD4TdDjgLSAEsU3EdOOhKAdRlTQ+4R1yLFrG5ovg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=DB4PMp1C; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+	s=arc-20240116; t=1791044974; c=relaxed/simple;
+	bh=FZoeveIxfPmCGR3CWh0q9bKGayisvvWvxTpf7kneCr0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LVWXbsXNooU5q4x4j9qJNnM/D4ENEcMy0PgWIiwK9JZd7GmAG6gr29KmNpFT8pGf1hychCroyBmdl/plCRXM2b3N/yQKyXm91/La38e2kITeCmoidJ+f4TpZbyaFAnfJHcCN0CjNijTQWKRI305W3vpA1t0zqHUZ4wldmX8JmJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IcwMLUVr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="DB4PMp1C"
-Received: from mail01.layka.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 3430282B55;
-	Sat, 03 Oct 2026 18:03:46 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZHHjd4lRirOC; Sat,  3 Oct 2026 18:03:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1791043425; bh=Yh4CJ0FH9zdXYc4XcJohpevikI3ectvynvrlfRB6vOk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DB4PMp1C4Ezvvo2EAit10629Wno8p41css3SKr7qB69bSzg6zYW0YJGW6ADjT0qNL
-	 L3iUi5j4c0fsubkDxMAZ7Pmrs+9HXVLCxZ8ofb6QwwFFHPSlrDJDK4jE92QxfZTMZy
-	 HGuM6NzTlRgUGD91uKFmMBXmiv2UvPCsj/6MsOYg2UHBUxtOQwxr2Y069mA4PpOud0
-	 lUe0K8OV95wlu72Eid9/KK6TG3Tws5G4PGzPhH0zm0tVBK7Deqdh3Ec99hMCdgsTiY
-	 8mOOuL1Akmh6n+WpRrOdCCrwa6GnZbY8E32X8/ljBldX5mSq0fFeV6KUb8rB/iiLht
-	 Pq2amiCWZB30w==
-From: Masoud Aghasi <maghasi@disroot.org>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	leon.hwang@linux.dev,
-	Masoud Aghasi <maghasi@disroot.org>
-Subject: [PATCH bpf v3 3/3] selftests/bpf: add tests for percpu map flags combination
-Date: Sat,  3 Oct 2026 17:02:13 +0100
-Message-ID: <20261003160213.2641506-4-maghasi@disroot.org>
-In-Reply-To: <20261003160213.2641506-1-maghasi@disroot.org>
-References: <20261003160213.2641506-1-maghasi@disroot.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IcwMLUVr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7AD1F0089B;
+	Sat,  3 Oct 2026 16:29:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791044971;
+	bh=70QXKPQZm0PKLtEKZNQ8whITCMvzzbdpub1y+w3DfPM=;
+	h=From:Date:Subject:To:Cc;
+	b=IcwMLUVrubQh06EoRlIn//1YwSFTLlhmOgzkDPVKtf7ZBWj/XnF1iVPU6BmlYC5gD
+	 zKnIIc+3ndGSkJxOrvxC1M0xAx8NhJ4U4TAty8QnFnRA3GqBdL4NfpuQL2UtkggwBk
+	 iB98wKExQ60rZiRBHJqu9lExkdJUK64mKTHXodIIxtUNnoTJQZAknjCLir868nl8RI
+	 WYpVYfq7QVGjq5bnMUH7PH9OBWd+Ctm6wRuHGziHy4MM9tNLvu40MFM5flgjwK5ivR
+	 12Gr+VTrld7qVFqfkiOMwuKnp3m+uEMc/GVqGEnCajmIwCImtXCrj/ac4bg2u8Ql2W
+	 sDYKa479NI4oA==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Date: Sat, 03 Oct 2026 17:29:07 +0100
+Subject: [PATCH] perf/core: track the perf mlock gift separately
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261003-perf-locked-vm-fix-v1-1-d214dcaf0d76@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvxJ7bsEsKvpKdEhda6k0FCIQ/550n
+ IGZBJECU4SpShDo4cjeFWjqCvS+uo2QTWGQQvaNEC3eFCyeXh9k8LnQ8osjrcPYCamVMlDCO1D
+ R/3Recv4A+2VGuWQAAAA=
+X-Change-ID: 20261003-perf-locked-vm-fix-8ea78402cbbd
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "David Hildenbrand (Arm)" <david@kernel.org>, 
+ "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ bpf@vger.kernel.org, Mike Rapoport <rppt@kernel.org>, 
+ regressions@lists.linux.dev, Sasha Levin <sashal@kernel.org>, 
+ Alexander Motin <alexander.motin@truenas.com>, 
+ Ameer Hamza <ameer.hamza@truenas.com>, 
+ "Caleb St. John" <caleb.stjohn@truenas.com>, ljs@kernel.org, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5477; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=FZoeveIxfPmCGR3CWh0q9bKGayisvvWvxTpf7kneCr0=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLIO6qZ07uhIXpFy7s9x9uv/LObtfPmSa3/qK9fN1vXfn
+ oT8v2twq6OUhUGMi0FWTJHl+Rfx/UEiYfM6L/i7wcxhZQIZwsDFKQATqclg+MMxY/WayPs2IVYJ
+ WS0xKzj2FS2Ne6p/sKeJOfBq8r8uPgZGhqvyRptzF3y1rpl4odPLd4WcZYu/1VqzT1Y7HpTUB78
+ s5gUA
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-All possible combinations of (BPF_EXIST, BPF_NOEXIST) and
-(BPF_F_ALL_CPUS, BPF_F_CPU) flags are covered for all percpu map types.
+The locked_vm field in struct user_struct was originally introduced by
+commit 789f90fcf6b0 ("perf_counter: per user mlock gift") to provide an
+mlock-like budget for perf measured against mm->pinned_vm (since 2011).
 
-As BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE does not support BPF_NOEXIST and
-also in order to reduce the amount of code duplicates, I added its
-new test scenarios to the existing cpu_flag_percpu_cgroup_storage test.
+perf grants each user a 'gift' of perf_event_mlock_kb * online CPUs of
+buffer pages which is charged to user->locked_vm without any RLIMIT_MEMLOCK
+check.
 
-But for other percpu map types, I added new tests to be able to
-exercise all flag combinations and the edge cases such as percpu LRU
-unnecessary deletion issue.
+Only pages beyond the gift are checked against RLIMIT_MEMLOCK, per-mm, via
+mm->pinned_vm, which makes it different from the standard mlock() check,
+which is per-mm and made against RLIMIT_MEMLOCK.
 
-Signed-off-by: Masoud Aghasi <maghasi@disroot.org>
+However, since this was introduced, a number of other components have
+utilised this field where a shared resource needed to be limited against
+RLIMIT_MEMLOCK.
+
+The other users are currently MSG_ZEROCOPY, io_uring, AF_XDP, iommufd,
+s390 KVM zPCI and most recently, secretmem in commit 97d34aa65c29
+("mm/secretmem: properly account locked pages").
+
+This field is shared between all of these, but because the gift is not
+checked against RLIMIT_MEMLOCK, user->locked_vm alone can exceed it - 16
+CPUs * 516 KiB is already more than the default 8 MiB - after which every
+other user of the field fails unconditionally.
+
+This was reported by a user who saw secretmem failing while running a
+simultaneous perf record.
+
+Resolve the issue by simply giving perf its own field separate from the
+rest.
+
+BPF used user->locked_vm up until commit 80ee81e0403c ("bpf: Eliminate
+rlimit-based memory accounting infra for bpf maps") which landed in 5.11.
+
+Thus also eliminate the now-defunct ifdef for CONFIG_BPF_SYSCALL for
+user->locked_vm.
+
+This issue exists between all of the components which use user->locked_vm
+and perf, however secretmem is the first user who has caused a report over
+many years and has been backported, so target the fix at that.
+
+Fixes: 97d34aa65c29 ("mm/secretmem: properly account locked pages")
+Reported-by: Ameer Hamza <ameer.hamza@truenas.com>
+Closes: https://lore.kernel.org/20261002175651.811343-1-ameer.hamza@truenas.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 ---
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 159 ++++++++++++++++++
- 1 file changed, 159 insertions(+)
+ include/linux/sched/user.h |  8 +++++---
+ kernel/events/core.c       | 12 ++++++------
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-index 7b4a1e24363b..f50f51c91164 100644
---- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-@@ -449,6 +449,37 @@ static void test_lru_percpu_hash_cpu_flag_create(void)
- 	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_LRU_PERCPU_HASH, 0);
- }
+diff --git a/include/linux/sched/user.h b/include/linux/sched/user.h
+index 8d7e5521f7cd..ec262b605437 100644
+--- a/include/linux/sched/user.h
++++ b/include/linux/sched/user.h
+@@ -23,11 +23,13 @@ struct user_struct {
+ 	struct hlist_node uidhash_node;
+ 	kuid_t uid;
  
-+static void test_percpu_cgroup_storage_flags_combination(struct bpf_map *map, int nr_cpus,
-+							  struct bpf_cgroup_storage_key *key)
-+{
-+	int err;
-+	u64 flags = 0;
-+	size_t value_sz = sizeof(u32);
-+	u32 *values = NULL;
-+
-+	values = calloc(nr_cpus, value_sz);
-+	if (!ASSERT_OK_PTR(values, "calloc values"))
-+		return;
-+
-+	flags = BPF_NOEXIST | BPF_EXIST;
-+	err = bpf_map__update_elem(map, key, sizeof(*key), values, value_sz, flags);
-+	if (!ASSERT_EQ(err, -EINVAL, "bpf_map__update_elem noexist|exist"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_EXIST;
-+	err = bpf_map__update_elem(map, key, sizeof(*key), values, value_sz, flags);
-+	if (!ASSERT_OK(err, "bpf_map__update_elem all_cpus|exist"))
-+		goto out;
-+
-+	flags = BPF_F_CPU | BPF_EXIST;
-+	err = bpf_map__update_elem(map, key, sizeof(*key), values, value_sz, flags);
-+	if (!ASSERT_OK(err, "bpf_map__update_elem cpu|exist"))
-+		goto out;
-+
-+out:
-+	free(values);
-+}
-+
- static void test_percpu_cgroup_storage_cpu_flag(void)
+-#if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL) || \
+-	defined(CONFIG_NET) || defined(CONFIG_IO_URING) || \
++#if defined(CONFIG_NET) || defined(CONFIG_IO_URING) || \
+ 	defined(CONFIG_VFIO_PCI_ZDEV_KVM) || IS_ENABLED(CONFIG_IOMMUFD) || \
+ 	defined(CONFIG_SECRETMEM)
+-	atomic_long_t locked_vm;
++	atomic_long_t locked_vm;	/* pinned pages charged to RLIMIT_MEMLOCK */
++#endif
++#ifdef CONFIG_PERF_EVENTS
++	atomic_long_t perf_mlock;	/* perf buffer pages within perf_event_mlock_kb */
+ #endif
+ #ifdef CONFIG_WATCH_QUEUE
+ 	atomic_t nr_watches;	/* The number of watches this user currently has */
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 634d2ccbab82..a7da42f13d14 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7059,7 +7059,7 @@ static void perf_mmap_close(struct vm_area_struct *vma)
+ 		perf_pmu_output_stop(event);
+ 
+ 		/* now it's safe to free the pages */
+-		atomic_long_sub(rb->aux_nr_pages - rb->aux_mmap_locked, &mmap_user->locked_vm);
++		atomic_long_sub(rb->aux_nr_pages - rb->aux_mmap_locked, &mmap_user->perf_mlock);
+ 		atomic64_sub(rb->aux_mmap_locked, &vma->vm_mm->pinned_vm);
+ 
+ 		/* this has to be the last one */
+@@ -7242,11 +7242,11 @@ static bool perf_mmap_calc_limits(struct vm_area_struct *vma, long *user_extra,
+ 	/* Increase the limit linearly with more CPUs */
+ 	user_lock_limit *= num_online_cpus();
+ 
+-	user_locked = atomic_long_read(&user->locked_vm);
++	user_locked = atomic_long_read(&user->perf_mlock);
+ 
+ 	/*
+ 	 * sysctl_perf_event_mlock may have changed, so that
+-	 *     user->locked_vm > user_lock_limit
++	 *     user->perf_mlock > user_lock_limit
+ 	 */
+ 	if (user_locked > user_lock_limit)
+ 		user_locked = user_lock_limit;
+@@ -7254,7 +7254,7 @@ static bool perf_mmap_calc_limits(struct vm_area_struct *vma, long *user_extra,
+ 
+ 	if (user_locked > user_lock_limit) {
+ 		/*
+-		 * charge locked_vm until it hits user_lock_limit;
++		 * charge perf_mlock until it hits user_lock_limit;
+ 		 * charge the rest from pinned_vm
+ 		 */
+ 		*extra = user_locked - user_lock_limit;
+@@ -7272,7 +7272,7 @@ static void perf_mmap_account(struct vm_area_struct *vma, long user_extra, long
  {
- 	struct percpu_alloc_array *skel = NULL;
-@@ -489,6 +520,7 @@ static void test_percpu_cgroup_storage_cpu_flag(void)
- 		goto out;
+ 	struct user_struct *user = current_user();
  
- 	test_percpu_map_op_cpu_flag(map, &key, sizeof(key), 1, nr_cpus, false);
-+	test_percpu_cgroup_storage_flags_combination(map, nr_cpus, &key);
- out:
- 	bpf_prog_detach2(-1, cgroup, BPF_CGROUP_INET_EGRESS);
- 	close(cgroup);
-@@ -537,6 +569,127 @@ static void test_hash_cpu_flag(void)
- 	test_map_op_cpu_flag(BPF_MAP_TYPE_HASH);
+-	atomic_long_add(user_extra, &user->locked_vm);
++	atomic_long_add(user_extra, &user->perf_mlock);
+ 	atomic64_add(extra, &vma->vm_mm->pinned_vm);
  }
  
-+static void test_percpu_map_flags_combination(enum bpf_map_type map_type)
-+{
-+	size_t value_sz = 8;
-+	void *values = NULL;
-+	u32 max_entries = 3, key = 0;
-+	u64 flags = 0;
-+	int err, map_fd, nr_cpus;
-+	bool is_hash_map = (map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+			    map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	values = calloc(nr_cpus, value_sz);
-+	if (!ASSERT_OK_PTR(values, "calloc values"))
-+		return;
-+
-+	map_fd = bpf_map_create(map_type, "test_flags_combination_map",
-+				sizeof(u32), value_sz, max_entries, NULL);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create")) {
-+		free(values);
-+		return;
-+	}
-+
-+	flags = BPF_NOEXIST | BPF_EXIST;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (!ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem noexist|exist"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_NOEXIST;
-+	key = 0;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus|noexist"))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &key, values, flags);
-+		if (!ASSERT_EQ(err, -EEXIST, "bpf_map_update_elem all_cpus|noexist"))
-+			goto out;
-+	} else {
-+		if (!ASSERT_EQ(err, -EEXIST, "bpf_map_update_elem all_cpus|noexist"))
-+			goto out;
-+	}
-+
-+	flags = BPF_F_CPU | BPF_NOEXIST;
-+	key = 1;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem cpu|noexist"))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &key, values, flags);
-+		if (!ASSERT_EQ(err, -EEXIST, "bpf_map_update_elem cpu|noexist"))
-+			goto out;
-+	} else {
-+		if (!ASSERT_EQ(err, -EEXIST, "bpf_map_update_elem cpu|noexist"))
-+			goto out;
-+	}
-+
-+	flags = BPF_F_ALL_CPUS | BPF_EXIST;
-+	key = 2;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_EQ(err, -ENOENT, "bpf_map_update_elem all_cpus|exist"))
-+			goto out;
-+	} else {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus|exist"))
-+			goto out;
-+	}
-+
-+	flags = BPF_F_CPU | BPF_EXIST;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_EQ(err, -ENOENT, "bpf_map_update_elem cpu|exist"))
-+			goto out;
-+	} else {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem cpu|exist"))
-+			goto out;
-+	}
-+
-+	if (map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH)
-+		goto out;
-+
-+	/* Percpu LRU hash map should not delete old entries unnecessarily */
-+	flags = BPF_F_ALL_CPUS | BPF_NOEXIST;
-+	key = 2;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem unnecessary_deletion"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_EXIST;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem unnecessary_deletion"))
-+		goto out;
-+
-+	key = 0;
-+	err = bpf_map_lookup_elem(map_fd, &key, values);
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem unnecessary_deletion"))
-+		goto out;
-+
-+out:
-+	close(map_fd);
-+	free(values);
-+}
-+
-+static void test_percpu_hash_flags_combination(void)
-+{
-+	test_percpu_map_flags_combination(BPF_MAP_TYPE_PERCPU_HASH);
-+}
-+
-+static void test_lru_percpu_hash_flags_combination(void)
-+{
-+	test_percpu_map_flags_combination(BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+}
-+
-+static void test_percpu_array_flags_combination(void)
-+{
-+	test_percpu_map_flags_combination(BPF_MAP_TYPE_PERCPU_ARRAY);
-+}
-+
- void test_percpu_alloc(void)
- {
- 	if (test__start_subtest("array"))
-@@ -565,4 +718,10 @@ void test_percpu_alloc(void)
- 		test_array_cpu_flag();
- 	if (test__start_subtest("cpu_flag_hash"))
- 		test_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_combination_percpu_hash"))
-+		test_percpu_hash_flags_combination();
-+	if (test__start_subtest("cpu_flag_combination_lru_percpu_hash"))
-+		test_lru_percpu_hash_flags_combination();
-+	if (test__start_subtest("cpu_flag_combination_percpu_array"))
-+		test_percpu_array_flags_combination();
+@@ -7281,7 +7281,7 @@ static void perf_mmap_unaccount(struct vm_area_struct *vma, struct perf_buffer *
+ 	struct user_struct *user = rb->mmap_user;
+ 
+ 	atomic_long_sub((perf_data_size(rb) >> PAGE_SHIFT) + 1 - rb->mmap_locked,
+-			&user->locked_vm);
++			&user->perf_mlock);
+ 	atomic64_sub(rb->mmap_locked, &vma->vm_mm->pinned_vm);
  }
+ 
+
+---
+base-commit: e767a4ea70a3992c37ed604157d32f0dfbf9b1e3
+change-id: 20261003-perf-locked-vm-fix-8ea78402cbbd
+
+Cheers,
 -- 
-2.47.3
+Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
