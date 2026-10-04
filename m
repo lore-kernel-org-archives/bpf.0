@@ -1,157 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E37D3C9885;
-	Sun,  4 Oct 2026 08:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A71390C8D
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 09:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791102886; cv=none; b=TWt45NKCumVhSgisxcf5AgH8+kBsIrKAdbk1mWnxcxbbeDldeXwiWpZ28U1IFTGjMw0nygtUPbD/v96pADtBhRMBIGUYUgbyC9L2rSJ1Bmc1T5dTZvxMamqG8yWkvvViJNMh5Vc1MbQ8c4DcgiTqNlTjoDRDrTmQLaqK6cE1YPU=
+	t=1791106817; cv=none; b=KDDEzNFe4nomjTyndzpBz70eIo2/C5Fs425gcI8nweyA7kIcHaRQ6Bq65YVQ3/loqDrqzHjsai39biPTda9lEEMNLOsuLebhZiPzv856pLapR0EnEMEnxbU7QS+7e7SOkDZ9UcZcD+ECshk9v0AwUavLkb2UqnU0mceEAJbEZ8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791102886; c=relaxed/simple;
-	bh=Mhi7+Hi041UrB2MzTnYXKOXt0lQgzO82otWdLKr7WgI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d9F19MeZiPcaLQ4bjsFRt4HGg0G97eo4gmSmzr71euC72QAZlGC1RmlOTmpqNYMFpu44Nsbg4m1RxsfZHle4tB4mMP6ZQ+SCRS4IWutN+naZvusxNl41k2wBCMWVAMI6vxaulKHqhQZtKUp+9lSPBwnwvjGSL75rDbd9gTleVEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SMAXZKsr; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1791106817; c=relaxed/simple;
+	bh=nYY1beQYVkkdXo0zEiQK/2d2wu37/NSprCjt2xGqr9s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GyxU5V6UR/WX0StspzKvcy27F81aVLF9Z2jqe6pu2kWW93BBt3uIxtOjKl+MLqF4n8anaKpz4AhzsdwqDd/l9UYNozCUShVhAA4fPlN3zmXfQrIwPek+L3oaGxssUA1V1W6eEqzkxWAueguroILOyWAGnv/uMH2/CWlMScKhyNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=T/se6eHb; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMAXZKsr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791102884; x=1822638884;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Mhi7+Hi041UrB2MzTnYXKOXt0lQgzO82otWdLKr7WgI=;
-  b=SMAXZKsr7NM6Go6b3A1Mcr+c8U0Z5KCCsY3qjoUO4/0tuLcU1jVaEF0W
-   2kk0+U+FKPkRsS2AfiLkCLbQs0stivwfiMQV3bAf8+gw9YnQetdqcDlgH
-   e5i9eJAwSDJA6b8BGFH0K4gkjcZo2+vqIh88rkHX/pQnXLLD50M31+wA/
-   IOfr+cfD/4FMNh+/DbSO3+AHa8cg5ErXoQlQMlD7oGKIU9LQaXvySu9+b
-   tHV+egzUP1OqYT9mr1ZJ2KZakkb/qOknX+YsSpZAMofyqoZtXts8L80ES
-   oGHDZUI0OcULIrQRtq3qr0wLWd1iR4I/SDU7WFrnSnzRgqcSK66l0daOt
-   A==;
-X-CSE-ConnectionGUID: 6sGo83eISZ+fSdtmuN2k9Q==
-X-CSE-MsgGUID: l53SL/NJQL6xb+RhFEThOQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11924"; a="90834725"
-X-IronPort-AV: E=Sophos;i="6.27,139,1787036400"; 
-   d="scan'208";a="90834725"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 01:34:43 -0700
-X-CSE-ConnectionGUID: nrUIyO1XSTCYN10HdI6xtw==
-X-CSE-MsgGUID: HOGC8YPlQBeD01aSwPqHdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,139,1787036400"; 
-   d="scan'208";a="275678711"
-Received: from mkosciow-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.100])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 01:34:33 -0700
-Date: Sun, 4 Oct 2026 11:34:30 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Bill Wendling <morbo@google.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>,
-	Shuvam Pandey <shuvampandey1@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Shivaprasad G Bhat <sbhat@linux.ibm.com>,
-	Thorsten Blum <blum@kernel.org>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guangshuo Li <lgs201920130244@gmail.com>,
-	Ira Weiny <iweiny@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <asIPlnb0noMd33rr@ashevche-desk.local>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
- <asEhEe0Urb5Wx7yi@ashevche-desk.local>
- <202610040023.A3865A6@keescook>
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="T/se6eHb"
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id BBA3680F66;
+	Sun, 04 Oct 2026 11:40:06 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZZoA3e0z8CTB; Sun,  4 Oct 2026 11:40:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1791106806; bh=nYY1beQYVkkdXo0zEiQK/2d2wu37/NSprCjt2xGqr9s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=T/se6eHbr2jdPWkQLDBq/lSMcrhAny3fkpgEOMx2g/c0be5RReGny5NtVsJOazgvi
+	 6VEQsAQP/LANc8w9GSucM5Ripzy+FGsjLkpl6qc/+grtBGQoi12vZjgKwW2c8jai06
+	 SlzIq15Oj2JFwzL0RiGqZvMvBr2jkTT/GvLHaukcgbXRhogztQND83kHxL8Net6IAO
+	 sPeLR03S4Ts3cTTE8/KLw57Sh+MzbYHPAtjYANzxVjaNF8irIniZ60aVUmbBuOvwFM
+	 SzFTPgefb+xAvO1cOYajmQZhPTbhlcscg+Z+4L2jQVsL83R3T5gDegoqiAKPsla5ie
+	 plgHPB1Gf1hpw==
+Message-ID: <7ba947c4-d753-4c70-a496-5bc3175b84c7@disroot.org>
+Date: Sun, 4 Oct 2026 10:39:59 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202610040023.A3865A6@keescook>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 3/3] selftests/bpf: add tests for percpu map flags
+ combination
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, leon.hwang@linux.dev
+References: <20261003160213.2641506-1-maghasi@disroot.org>
+ <20261003160213.2641506-4-maghasi@disroot.org>
+Content-Language: en-US
+From: Masoud Aghasi <maghasi@disroot.org>
+In-Reply-To: <20261003160213.2641506-4-maghasi@disroot.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Oct 04, 2026 at 12:26:39AM -0700, Kees Cook wrote:
-> On Sat, Oct 03, 2026 at 06:36:49PM +0300, Andy Shevchenko wrote:
-> > On Fri, Oct 02, 2026 at 08:59:10PM -0700, Kees Cook wrote:
-
-...
-
-> > >  static inline const char *seq_buf_str(struct seq_buf *s)
-> > >  {
-> > > -	if (WARN_ON(s->size == 0))
-> > > +	if (s->size == 0)
-> > >  		return "";
-> > >  
-> > > -	if (seq_buf_buffer_left(s))
-> > > -		s->buffer[s->len] = 0;
-> > > -	else
-> > > -		s->buffer[s->size - 1] = 0;
-> > > +	__seq_buf_terminate(s);
-> > >  
-> > >  	return s->buffer;
-> > >  }
-> > 
-> > Looking at this again, can't it be rewritten now using _strlen()?
-> > 
-> > 	if (seq_buf_strlen(s))
-> > 		return s->buffer;
-> > 
-> > 	return "";
-> > 
-> > ?
-> 
-> It could, but I'm vaguely nervous about the difference between
-> 	s->buffer[0] == '\0'
-> and
-> 	.data ""
-> 
-> i.e. we only force the return of seq_buf_str() to be _not_ just
-> s->buffer when s->buffer is weirdly impossible (due to size == 0).
-> I'd rather not make all 0-len strings return the .data segment's const
-> "" string...
-
-Good point. Perhaps then to add a short note to the kernel doc,
-so we won't see patches based on the suggestion like I gave?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+I will add fixes for AI concerns in v4.
