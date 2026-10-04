@@ -1,113 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EE243DEA9
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 14:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CFE43F085
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 14:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791122575; cv=none; b=NlwrV2b8LSD1Pte007ydwm47BTrEQ+h8gDFIDx5VNGXNEJIcvTTg7Tz1J82mB3PZRGDgE3sp8E5sewzeX6jZ2Z5AteRczjIyj8MSjz41N52pAxUZ/V9zyXZKOZgB6umjLPh6tft2GvYHePEx4TgsRyImbzDjUiZHbRQCijIZP/U=
+	t=1791123870; cv=none; b=sYmLGQfv/4yN8bNTApYpsDA8mt/QgLSibuFTxN25MQwuG76KbXHoxhSWLX6pt8IThT7DhFSPK0lq1qUCJjQkCMrbMcwr0V+48vMBCbPLJsX6k02OeQMlgdIYnYtBmHP27Mg3k/Vstz6MMDgGX+TrsNq+nvekQ0yrp6S65PEgm/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791122575; c=relaxed/simple;
-	bh=dRJPXHmQIpqnXE2lMS1vaoTqRb4mhAwq99gChMQQCSY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fru2gn+Lk5Dra58L6Ml1Ega6e0gNz/4IczlEezL0U6QK24BGY1tvCKMsF6Ix/6PLnQhV591lrv9GgKbo83pvdCz3YPwrHquRT3Wakyz5UHnD6lkTfmNde4yR/gwa205X1d/4srcxvMBt0SuwazR+n9TgHRVsZIESTwSWDMOBjIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5L0Gzwf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791123870; c=relaxed/simple;
+	bh=E3JaCONRN4GG49rm29CiGOvD5g5AO4f+iKFibrREdn0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pKO+Njc0abLN/cC7HwOUakgR1FW6Ic/zLFzcR2ugkO1CavdO+DajEKF0cjwv9tMvbeivMnTyZzWlPAIG0HDNrA9OTyncliK3KSm2p2o1LbneGsVOeW3VCKF2p8Il3gMJbf0iBOY9zJycxFI6/sutbG+mAPsJF4i4Wf6y6t3vf5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IbedvmfJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5L0Gzwf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D06B1F00893;
-	Sun,  4 Oct 2026 14:02:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IbedvmfJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D211F000FF;
+	Sun,  4 Oct 2026 14:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791122574;
-	bh=A/fZigUkoqZgQ5dDw8iJCQJ2oPeEve2U+Nn2FqBO8Xk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=e5L0GzwfKfNIKLxN87LFmeMZaPjtPXNyVGXJPrfmr2Mo3qcGvbxSe7N1RY1I8ix75
-	 p9brrB+xUOOMSp4u9Yh5zPongiUnycwGTcf9nUXgd0XJcbY1wUkPAtTUIGvI1ymotU
-	 HJozi7oVVVmxNLssYYA7Mmk6KnoLxTNWa51LdQ95obL4wvp+i+fPktuho7u9Cwq8TD
-	 B6Pl+WK8JYhhQ3alqwLXVfMSugBwd+LuvM0+lPMpjvHyfVhRMGstmcLFwbSgZoJaHW
-	 KWC9yjRRFePv/bFzIKiHyjcbuiWYo4ITNonhJ/Y/jXzElOFJf44seMiOL7SXdp34Ir
-	 m7BbefLB/JI7w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 14/43] bpf: representation for intervals
- with steps
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261004-scev-minimal-rebase-v2-14-f6254e29fdf2@gmail.com>
-References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
- <20261004-scev-minimal-rebase-v2-14-f6254e29fdf2@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 04 Oct 2026 14:02:53 +0000
-Message-Id: <20261004140254.0D06B1F00893@smtp.kernel.org>
+	s=k20260515; t=1791123868;
+	bh=loCkghCTiLqekAZ3yzRQCz/pNW9XmOXQ+dNzi5TdA2A=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=IbedvmfJ8gYi0zofJV10R2P+jun5p4ypobBOe9H7yJk95U8SNAZXnAmxf52oLnq+k
+	 aHFKddhvdb6g7ku08snu85K9mZ/yTlv/5sQwmPU+scLnSIZPjnAIWDSGQapb2vDYV5
+	 o59AjA103r+hu5AUXPX8ZiNSrMpbhMEEwYVvXPwwx1jCdCWmddjZoZnhtqYHhvBkV1
+	 XRNeZhtfrOYRlCz6BWShv3hv+LiYc0ACYbqp5BK6x4gEUaYJdDGwF01/2Iy2qb0/Gv
+	 fa0+0t3D49W6uhyd4xMDv8nmrRc40rthyiUEB76+MLy8W+gsuPWn31kpXfXlvnCjbT
+	 ZIc+NiEw7QykQ==
+Content-Type: multipart/mixed; boundary="===============4624827774729853883=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <55dc0307337c95f1c09b72c32e06f69684f98ff91f2361413fde90d124a545dd@mail.kernel.org>
+In-Reply-To: <20261004-scev-minimal-rebase-v2-12-f6254e29fdf2@gmail.com>
+References: <20261004-scev-minimal-rebase-v2-12-f6254e29fdf2@gmail.com>
+Subject: Re: [PATCH bpf-next v2 12/43] bpf: expose comparison opcode transformations
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
+Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun,  4 Oct 2026 14:24:27 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: unsound scalar pruning in explore_alu_limits due to ignored s=
-tride
---
+--===============4624827774729853883==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit d4d6630f513d526c40cb9f5ea524c5bd6dd31948
-Author: Eduard Zingerman <eddyz87@gmail.com>
+> bpf: expose comparison opcode transformations
 
-bpf: representation for intervals with steps
-
-Extends scalar register tracking with base and step fields to represent
-strided values (base + step * k). Updates verifier ALU operations to
-propagate these bounds.
+TL;DR: Nit only: bpf_flip_opcode() is exported but nothing outside verifier.c
+appears to use it, so it could stay static and the commit message be adjusted.
 
 > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 4371fb3405acb..05914fcbe77cd 100644
+> index 79ca8b28a83a..4371fb3405ac 100644
 > --- a/include/linux/bpf_verifier.h
 > +++ b/include/linux/bpf_verifier.h
-> @@ -178,6 +178,13 @@ struct bpf_reg_state {
->  	 * during state comparisons.
->  	 */
->  	u32 map_uid;
-> +	/*
-> +	 * The value described by this register, interpreted as s64, lies on
-> +	 * a line described by a linear equation base + step * k.
-> +	 * Invariant: base < step.
-> +	 */
-> +	u16 base;
-> +	u16 step;
+> @@ -1872,4 +1872,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env);
+>  int bpf_do_misc_fixups(struct bpf_verifier_env *env);
+>  int bpf_insn_def32(struct bpf_prog *prog, struct bpf_insn *insn);
+>
+> +int bpf_flip_opcode(u32 opcode);
+> +u8 bpf_rev_opcode(u8 opcode);
+> +
+>  #endif /* _LINUX_BPF_VERIFIER_H */
 
-[Severity: High]
-Does adding these fields after the id field bypass the exact state comparis=
-on
-checks?
+[ ... ]
 
-Functions like regs_exact() and scalars_exact_for_widen() use
-offsetof(struct bpf_reg_state, id) for their memcmp() limit. Because
-base and step are positioned after id in the struct, they are excluded from
-the memcmp().
+> @@ -17427,7 +17425,7 @@ static int is_scalar_branch_taken(struct bpf_verifier_env *env, struct bpf_reg_s
+>  	return simulate_both_branches_taken(env, opcode, is_jmp32);
+>  }
+>
+> -static int flip_opcode(u32 opcode)
+> +int bpf_flip_opcode(u32 opcode)
+>  {
+>  	/* How can we transform "a <op> b" into "b <op> a"? */
+>  	static const u8 opcode_flip[16] = {
 
-For example, in kernel/bpf/states.c:regsafe():
+This isn't a bug, but is there a user of bpf_flip_opcode() outside of
+verifier.c?
 
-    if (env->explore_alu_limits) {
-        return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) =3D=
-=3D 0 &&
-               check_scalar_ids(rold->id, rcur->id, idmap);
-    }
+Nothing else in the series (3ece537e8490..2c96fb13421f) calls it.  The only
+external user added later is match_linear_latch() in kernel/bpf/scev.c, and
+it calls just bpf_rev_opcode():
 
-When explore_alu_limits is enabled, could the verifier incorrectly prune
-an unsafe execution branch (e.g. one with an unaligned scalar step) using
-a cached safe branch that had an aligned step? This might allow unaligned
-scalar offsets to bypass BTF array bounds alignment checks.
+    op = bpf_rev_opcode(op);
 
-A similar omission occurs in regs_exact() which could cause false-positive
-infinite loop detections, and in scalars_exact_for_widen() which might break
-loop convergence expectations. Should these exact-match functions be updated
-to explicitly compare the base and step fields?
+The commit message says "The helpers are used by SCEV logic while analyzing
+loop conditions", which appears to be true only of bpf_rev_opcode().
 
->  	/* if (!precise && SCALAR_VALUE) min/max/tnum don't affect safety */
->  	bool precise;
->  };
+Could bpf_flip_opcode() stay static, with only bpf_rev_opcode() exported and
+the commit message adjusted accordingly?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261004-scev-minim=
-al-rebase-v2-0-f6254e29fdf2@gmail.com?part=3D14
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37207249098
+--===============4624827774729853883==--
