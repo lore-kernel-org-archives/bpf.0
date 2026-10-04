@@ -1,161 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68BE3921CD
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8D539A04C
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121643; cv=none; b=nyEo6xoyTKFlBkbsGonHI0A7C6PmJkRkSaGzNBRPmr1Z0ySi04WFG6OBgLBj4fvzpmk9e6p+ITTOCHP+EQz/xfAjUDvCRFKCCl3a4PjokZwbU4SmEc49Sk6yhaDO6afaND4KAeGHRbOLTIdmfZzeuplXIx5JZxlGYTKv+jON2Os=
+	t=1791121824; cv=none; b=CScNvu1jtEt3pNwS4b0e2FTZCy9tLILUjuMjO4NevYpwfXrKTBraiNKhcba7OdJsbSStcF4fnFJtfotpwTQbA/Ltwd+DxVJzx1MNc/AZLxo3lrHY6YV1ZVZMHeJ2ZrMALWZY1C2jp4LT62kBy56l82uaDD1xQEo97EmjShTeDdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791121643; c=relaxed/simple;
-	bh=OpDLCg7Obn93vC11jb4gR4GxMDWinh0DftexZG1jS9c=;
+	s=arc-20240116; t=1791121824; c=relaxed/simple;
+	bh=Aea23bK8B6t7DCpVCGm7mQ6nilMV8pbu2Ckvlmmg/IU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=U7ioeSfPvs5vrjAFatoQsDmiz9lKCeLwpvw259/5Pm6VajSaUrwXpakQvL5KPgI6XgZ9dMWAH6p9llQjgl89GJNQwXLFz+O1E9o6rcKkfiB7cqTx69Pv0r4IMEtOgiVjdPRgEGY9x+oZDwJDskfBNhHJDn+xbvrBRBg/80nRMrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bu1PzlTZ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Zj/RfIgQl4drLFH9Qv/XB8ImZ6pSiRBn2uLOVcul8mH7JHMIjhn1C4gx/3shNCYj39dZzrtQyzOkbEAG12Do0FHGYU6rm/mHseNG1R7pRkWKFfmlkPw4EGvxKCMsjsjvEkFdxJ74UzJIUZnDFr7P1csxMPdpOxhWbHANhZ51vQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ewqsjw06; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bu1PzlTZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F0F41F000FF;
-	Sun,  4 Oct 2026 13:47:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ewqsjw06"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D7D1F000FF;
+	Sun,  4 Oct 2026 13:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791121641;
-	bh=5E5S8Vg0beLuZNVVor8Ye7VX7DY2VyLweFj8eFvL2ik=;
+	s=k20260515; t=1791121822;
+	bh=V/FNlRO9YHBzgKmnX0hF4ljHl4TmmmfVWKC7dOLTFT0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Bu1PzlTZOvmDlohLOvD6xo6Z1TtdY0OfPRIxKJn/SeAyGwmKT6uWCf0dtLtUPHxwb
-	 9tLSshqFVtHtLEr/kw6Ipu3gDec0otgSO+MW/wtpxXiT3pE7eWAsjlk2u6quAKr0w9
-	 xZAF4lLa3TtTkvyIBJwwlxGiGJF0mcJ/QgpbLEBCM3Gnz0ghl4IQiPtp7+PYGxorjh
-	 +mcpPpoB/wYL1wCeUhFbzFjqYvVUx+Ij618qhT6B9adC0BkU/Q48Xqp6yu0WtuFCBi
-	 d+jdRfSsAy/Qx36oKu74hZqaj5+sjOl28y9e7NUJX5OnsJTecr5DpPTfIU1062EuT9
-	 82Fk3IWoOAq1g==
+	b=ewqsjw06+znbGkhJ09MTbyqEGNjKoNg6deNiJ2dvq3HzbCflqRIdW2Uklv4QM3pTd
+	 nJ04vTN9dTcIhvXS81jiT3e9nJZKuVS/+E1SxB8t618s9brnysin4C3ENN996oE20v
+	 OOpCnF4a4gCqTT4Qv8XENJXY2XGP7Nfgj+Wnc1J+vNbkyjz3TbsyhmeGQzeCJUYcMR
+	 n7uFL7jEotMH77BfYPmAetGn/AYr3MW8XnxcOfa+H4LJgU1WrbN77ute4TPFlcT5xt
+	 Mpfp+Gaz50Sk8+/RCqZ1Qk0dz8OtYa1EgpU+Y4YpEm5QlpQA81s6IDLtplcbG5QkNL
+	 aHLB0EM+xNisg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 23/43] bpf: add a min-heap for ordered
- analysis worklists
+Subject: Re: [PATCH bpf-next v2 18/43] bpf: compute immediate dominators
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Eduard Zingerman" <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261004-scev-minimal-rebase-v2-23-f6254e29fdf2@gmail.com>
+In-Reply-To: <20261004-scev-minimal-rebase-v2-18-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
- <20261004-scev-minimal-rebase-v2-23-f6254e29fdf2@gmail.com>
+ <20261004-scev-minimal-rebase-v2-18-f6254e29fdf2@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 04 Oct 2026 13:47:20 +0000
-Message-Id: <20261004134721.6F0F41F000FF@smtp.kernel.org>
+Date: Sun, 04 Oct 2026 13:50:21 +0000
+Message-Id: <20261004135022.46D7D1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: bpf_min_heap backing array uses krealloc leading to -ENOMEM
-- [Low] bpf: custom min-heap reinventing generic include/linux/min_heap.h
+- [Critical] bpf: integer overflow in compute_predecessors size calculation
 --
 
-commit 962cfb7ee3152595af40dbe59bd87156cd6e55d1
+commit ce110737451057ca4a576ab4cd5332b75722cc64
 Author: Eduard Zingerman <eddyz87@gmail.com>
+bpf: compute immediate dominators
 
-bpf: add a min-heap for ordered analysis worklists
+This commit introduces a new immediate dominator tree computation for the
+BPF verifier. It analyzes each subprogram to find exit conditions that
+dominate loop backedges.
 
-This commit adds a small integer min-heap implementation for the BPF
-verifier. It orders instruction indices by their CFG ranks for SCEV basic
-block processing, growing a backing array on demand.
-
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-[ ... ]
-> +/*
-> + * Simple binary heap implementation as described by
-> + * https://en.wikipedia.org/wiki/Binary_heap
-> + */
-> +struct bpf_min_heap {
-> +	int (*compare)(int, int, void *); /* ordering function for @elements */
-> +	int *elements; /* min-heap ordered by @compare */
-> +	void *arg; /* 3rd argument passed to @compare */
-> +	int capacity;
-> +	int count;
-> +};
-
-[Severity: Low]
-Does this custom structure reinvent the generic min-heap implementation alr=
-eady
-available in include/linux/min_heap.h?
-
-The kernel already provides a well-tested API. If dynamic reallocation is
-necessary, could it be wrapped around the existing struct min_heap and its
-callbacks rather than completely duplicating the core logic?
-
-> +
-> +void bpf_min_heap_init(struct bpf_min_heap *heap, int (*compare)(int, in=
-t, void *), void *arg);
-> +void bpf_min_heap_free(struct bpf_min_heap *heap);
-> +int bpf_min_heap_push(struct bpf_min_heap *heap, int elt);
-> +bool bpf_min_heap_pop(struct bpf_min_heap *heap, int *elt);
-> +
->  #endif /* _LINUX_BPF_VERIFIER_H */
-> diff --git a/kernel/bpf/heap.c b/kernel/bpf/heap.c
+> diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
 > new file mode 100644
+> index 0000000000000..0a9e10edca871
 > --- /dev/null
-> +++ b/kernel/bpf/heap.c
-[ ... ]
-> +void bpf_min_heap_free(struct bpf_min_heap *heap)
-> +{
-> +	kfree(heap->elements);
-
-[Severity: Medium]
-If the allocation in bpf_min_heap_push() below is changed to use kvrealloc(=
-),
-does this need to be updated to kvfree() to avoid crashes?
-
-> +	heap->elements =3D NULL;
-> +	heap->capacity =3D 0;
-> +	heap->count =3D 0;
-> +}
+> +++ b/kernel/bpf/loops.c
+> @@ -0,0 +1,156 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 > +
-> +int bpf_min_heap_push(struct bpf_min_heap *heap, int elt)
+> +#include <linux/slab.h>
+> +#include <linux/sched/signal.h>
+> +#include <linux/bpf_verifier.h>
+> +
+> +static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env =
+*env)
 > +{
-> +	int new_capacity, i;
-> +	int *elements;
+> +	struct bpf_iarray *succ, *preds, **result;
+> +	struct bpf_prog *prog =3D env->prog;
+> +	u32 *num_preds, i, s, sz, len =3D prog->len;
+
+[Severity: Critical]
+Since sz is typed as a 32-bit integer, could it overflow during the size
+calculations below?
+
+> +	struct bpf_insn *insn;
 > +	void *tmp;
 > +
-> +	if (heap->count =3D=3D heap->capacity) {
-> +		new_capacity =3D heap->capacity ? heap->capacity * 2 : 16;
-> +		tmp =3D krealloc(heap->elements,
-> +			       sizeof(*heap->elements) * new_capacity,
-> +			       GFP_KERNEL_ACCOUNT);
-
-[Severity: Medium]
-Could this krealloc() fail with -ENOMEM when loading large BPF programs on
-fragmented systems?
-
-Since the backing array scales up proportionally to the number of basic
-blocks, this attempts to allocate physically contiguous memory. This can
-frequently fail for high-order allocations when dealing with complex
-programs that push the capacity to several megabytes.
-
-Would it be more reliable to use kvrealloc() here to match the scalability
-of the other SCEV verifier data structures?
-
-> +		if (!tmp)
-> +			return -ENOMEM;
-> +		heap->elements =3D tmp;
-> +		heap->capacity =3D new_capacity;
-> +	}
-[ ... ]
-> +static inline void sink_root(struct bpf_min_heap *heap)
-> +{
-> +	int *elements =3D heap->elements;
-> +	int i =3D 0;
+> +	num_preds =3D kvcalloc(prog->len, sizeof(u32), GFP_KERNEL_ACCOUNT);
+> +	if (!num_preds)
+> +		return NULL;
 > +
-> +	while ((left_child(i)  < heap->count && greater(heap, elements[i], elem=
-ents[left_child(i)])) ||
-> +	       (right_child(i) < heap->count && greater(heap, elements[i], elem=
-ents[right_child(i)]))) {
+> +	/*
+> +	 * 'result' layout:
+> +	 *  - array of pointers (struct bpf_iarray *)[len]
+> +	 *  - struct bpf_iarray one after another
+> +	 */
+> +	sz =3D sizeof(struct bpf_iarray) * len;
+> +	sz +=3D sizeof(struct bpf_iarray *) * len;
+> +	for (i =3D 0; i < len; i++) {
+> +		insn =3D env->prog->insnsi + i;
+> +		succ =3D bpf_insn_successors(env, i);
+> +		sz +=3D sizeof(u32) * succ->cnt;
 
-[Severity: Low]
-Does this function unnecessarily duplicate the sift-down logic already
-provided by min_heap_sift_down() in the core kernel API?
+[Severity: Critical]
+Because sz is accumulated here without overflow checks, can a BPF program
+with many gotox instructions sharing a large jump table repeatedly add a la=
+rge
+succ->cnt, causing sz to wrap around?
+
+> +		iarray_for_each(s, succ) {
+> +			num_preds[s]++;
+> +		}
+> +		if (bpf_is_ldimm64(insn))
+> +			i++;
+> +	}
+> +
+> +	result =3D kvzalloc(sz, GFP_KERNEL_ACCOUNT);
+> +	if (!result) {
+> +		kvfree(num_preds);
+> +		return NULL;
+> +	}
+> +
+> +	tmp =3D (void *)&result[len];
+> +	for (i =3D 0; i < len; i++) {
+> +		result[i] =3D tmp;
+
+[Severity: Critical]
+If sz wraps around and a small buffer is allocated, does tmp end up pointing
+completely out-of-bounds?
+
+Would this loop and subsequent array accesses then overwrite arbitrary kern=
+el
+heap memory, potentially leading to critical memory corruption when an
+unprivileged user loads a crafted BPF program?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261004-scev-minim=
-al-rebase-v2-0-f6254e29fdf2@gmail.com?part=3D23
+al-rebase-v2-0-f6254e29fdf2@gmail.com?part=3D18
