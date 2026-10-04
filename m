@@ -1,231 +1,212 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39573DAACD
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 18:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791139164; cv=pass; b=jYYaOk8KcmpUDVgxdVPwImqBk81EmVsrhVb4mRIHsAWTuWnjJKHlwbpjG+9lDy5BuOqSGbJ4yRU8EEKIgnqrK5iw/q+4JpNCINr6+dx0x6Sr9o5fpOCABWMeYPUQ09Ucc6Ni/5r6LnhsuTmF/3p3br+FQAsv+J1KfKUogftgNEM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791139164; c=relaxed/simple;
-	bh=Q5SKncuQynV4x7Bps+RIZqUEFmiH2TTHOAAQrnnR074=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZlIUVY+yYVdM05z73rHAF+Vzx5HYKr4bp+6DcBC+nVVaOdBiyCBPS0r4Sr/uRLYfmnMBWPWYb+PfFCpA9ecgxf968JtFpqJl3jbSZgo0LfP0UA4gES5XgsaOgQghbPYbFYB8vsNAp4F5zIpp7u1tKf9yXm6Ske6q5QTqHHTvAIg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l0iHyxjb; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l0iHyxjb"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5337fa12431so186731cf.1
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 11:39:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791139161; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Lcj/kzImnrRX3Kuz9YMGFRhyrLpf5BQbYWXoCQWnCoGZwjU9WxTQDaRQn86dne7xQH
-         kBH+XlPsvrLYjP44Nd7O5OT5ObOWfVTkgET0NTc8WC7OofVRKTqb4/Y87EXMQ60rANuk
-         fnxVuy+60BitCohYJUASZOCEKe9ANzBzVl04UvLG5xanx1Ezl0ZawHR0dvgl2I63dWts
-         1Zx9VvB8JMDFZbXSnGs7YcmVGV5pu4u1PZ3xgzqQ9FretebAPtubH4Dw0DNlKvkW5K6l
-         ZelJIabmkvl61htn++5YwMWmBe5LaKoB3kwqw8EK5PmuOvZkhlrCdBj7LZO0COXidiff
-         Z6Lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZSC0w1neootLkbih9TUxoXkKPCkBI7t1n5ZaTzyKsnU=;
-        fh=30vDy2i0D29WtlYA/Jyss40q059LX+TwfeRRfPXuGpg=;
-        b=WcMzvM+yAOCK8Av7QgyBkY/beBm64qLDv4S0bSfiCmCLLbLRnR/kPpXcoBULZKC1aV
-         PithW7k3u5wEbtKtUgwWh86VYm1OSG/M38s0MJAbatXiWQdffKCZauKk9tGe4fkpksVY
-         0MiH8Tyd8NR6jZrIgtEjBxGCWf7zgIbUBHmBpKqSVdloGTA8JPwFXx1hX6dfYLP9kyoJ
-         WH7uSGYEWO8/eX4JSmZeEtqbUWT2kU7zcEq5fHdxDc3FC+7pmmjjTkcrGzz0fvDn+XRd
-         p4pl5LEDSZKln27UZhF4g/Sw5kDAkXfsOHe86aLNPRc/RgRh85tRbjUQpGCl165BQfBY
-         9vQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791139161; x=1791743961; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ZSC0w1neootLkbih9TUxoXkKPCkBI7t1n5ZaTzyKsnU=;
-        b=l0iHyxjbrFA0mj0qSWG3UEuOwCfeu39THooR7JdjvlpS5iPbcpbOGXWgFlwrHqiq17
-         g6OREDzEJg1B4R9e3NlLt/FQGfnUhJDJq9ugUkIwHD8Ouc6I0KCAE+AjFJ5im2Q3teHM
-         xpabytF01LqRy3edoNlhxz/KOOwY/glawDCIRDkU1ItyqnPxe60feD3VqcauD0MIeU4s
-         Cvv/OfjgN/b+SrE6g8xki0vgbqOIO/2Zkxe+N05IzJfOVKCkkH4F7eFCLA6UNgq7uegJ
-         Iz6k97ECHJF0Ws6uFXO0NrKMD645vu6jOd91RLmcYxQ0T3ig64z73JKnKEdXvgZ6oM2B
-         rqAQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E5240A95F
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 20:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.69
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791144284; cv=none; b=FncD9Uq4Koe5OPCM5fJ81id3Ts6WxE8kjC+8cHyVYPZRbEdZBSiTpM4eNcBZfY5psYUn/TQOVl2OXeJnxVRZ3j79i/X6zpzjD6ekadwTvsklbGvMAGTP7C4A3YczcXtj1Hjx+VLZ0G2bYjVeB5HpiBjd20B3j2DAGYWETBiOBtU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791144284; c=relaxed/simple;
+	bh=n4dK71fHbZD7leaZRyT8idACf4yNRoYeUbjTMpP51jE=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=bxNFC1isdhXHRxgdcdlN5UMyuNZvxrdyhb5klfj2xlAvnV91eMz/5Z0fypKljthius83z+ptoYfGWlkhOpVVzoAEPtTi4WyhhIN4XzFpWJ6yPjxX4i9vT1+/LxMkft4MDd1wEsfiIVt62K3hwUUB6fBUJsQcdKSvxx5iYYPaPOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-4519ef1babeso1556974fac.2
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 13:04:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791139161; x=1791743961;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZSC0w1neootLkbih9TUxoXkKPCkBI7t1n5ZaTzyKsnU=;
-        b=uXzXQSz8HbHwWDXERpVMBRDYMScEX3FBL/tvPJAqkSoN12YbbfvrDxHE+FOAMXjc/P
-         JDm43u0pcQI8Vr4XikKM7/9xZYhlzsiRibhqZZSPYS9iwNdnFpuGmB1dj2Un+CaSJugk
-         obEkxeO7kDUeOaJp5Et2Ybv2wNSb4rSS0WhWkz8d0rA6rSf0eJRD2W0DYZRjYvU9Hdre
-         xVEG6ZvO7z1fbOthrDlazwxMlQp3CYDX5LpHeLXyKC2+tdcqV8MkHpfvbonTttXzRXo0
-         kyhMaSoiX7Zk7yWAdbq5R/5y7rwEi5FyJEUczLzcLvKarFqJVZZcB2Uw4dqOCBInaIGh
-         a2Hg==
-X-Forwarded-Encrypted: i=1; AKwUvBykDtcsbkBKHTnKth/XW1fUcm8U6qUveUoo9LwKBnbqQAWHNSA0xL1zkoEOU9Qf1FegJ3E=@vger.kernel.org
-X-Gm-Message-State: AFuF++n01UNF0LDxhrMTnHa18M+Qz/QFKZCJTFgTyDx0rAlnRlTmKWRE
-	qqGf2ZtWRsKPe2jMOOEf+E26hSwHDeoYpYEtmbiWe+NG4jl+7mEGN/C4wgqkRotIZm0TcfXXcJS
-	3OrVxbBuqbWO7IDyVCIyoRa7YXwEse6gAspaOJl/H
-X-Gm-Gg: AYBFou3Bve4IFL9JBr22WZPHKVB7tSI6m1tYJd6qjUI6G77582N326DkngGHa5/xr2o
-	y0NgClw3n7XjT8qF0EX68Jzwyhk7n7Ihl4dCzaxKUjwm2BVg7qBu3cKbDTwX0wMYqUN6aC+RBjo
-	2YwNj8BqHMO/3JSdCI1a9tJgQ/jPjYac9T2yk++R6gnb7Jr2mCsEu4yrMquYWbS5kzKkrCWa3Nu
-	Xte8BhtCkYH9/e/9sjnS/bHkeL+KS5NCYjBBhRbTSMkLs7NQHsmo5ni8ZRlZNYEujjDXxArKPtS
-	WvfaTyGFjaUBRsHrBq/zWkNpDLHe9B3V24Oa9gSdbwsYLPkZvuYx0j6p
-X-Received: by 2002:a05:622a:a16:b0:531:282:6560 with SMTP id
- d75a77b69052e-5351322e1b3mr19806961cf.15.1791139160071; Sun, 04 Oct 2026
- 11:39:20 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791144280; x=1791749080;
+        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=+WOvkjZDgDuG2i7FzYJb5lLyx97NC1k+bo0jThnIfhc=;
+        b=1gYpD8TRSLlnmB0iFeX0pCnhVBbs0Zt61moHDAlAiEMdISMvMsf3KNNgpB2wA4qS/q
+         LVsV7a8zaXg8D1xEHDezp8ZIsSu0P4QsbE5u4TDQz9KXdC6GcxHCnA/gr8YOOeGCQQEU
+         un5CzkreOb6o65AoM8PnhAkElaqxczRRorJqz9l20TwHvEjIrFOmXHiQFSnrixYxifmc
+         8HnfV9AgsoDS+xjVuoohJjqYbMuVTsz4zfh4An6EcYr9XqPJxnuTA9Iw9MT0yj3QGzBH
+         FhkRcWsZOhMEmT93hjTCiObXr5Jsdg+8avpCQicOs7VOpi7vVOCCsY6qaYlY7K6LLUsT
+         lHtw==
+X-Forwarded-Encrypted: i=1; AKwUvBwshe9J0TZ/2g7xPdy9MjdjXZpkYqgENF1xRV3ND51lkwqazUeMdFP2D+wVCAcY3JUTJQ4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lFBf2ij0k7IKXo1EClzMCXQvORR7Xgmk+8scrW84VPrtfqusku
+	zW1dqfie/KIO1vziEumg/e7Ph2GJO8dl3VW2KEOZIvxYvSs9OjkSfxGOMk3eGE8zO2HzpKkHFvn
+	h2zYAS4yp6H2gpeffgCGbldb6Q8b1rE3CECjMnA4AjSbCGhVwobr/oxYgFaM=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-0-a1f052500fd7@kernel.org>
- <20261003-b4-mmap-prepare-vma-flag-sanify-v4-21-a1f052500fd7@kernel.org>
-In-Reply-To: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-21-a1f052500fd7@kernel.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Sun, 4 Oct 2026 20:39:04 +0200
-X-Gm-Features: AclHuK-BFFMO7RL_23L1uoIyefqTPzoxo4liaojYggefG4PLZrnFo0OrrSwhSqQ
-Message-ID: <CAJuCfpGtyaqwi__OXcB=iy2+LUVzFnLo-Q=Rdxz728_EHdTaWA@mail.gmail.com>
-Subject: Re: [PATCH v4 21/38] uprobes: remove VM_IO, set VM_MIXEDMAP for
- mapped kernel pages
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
-	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
-	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
-	fuse-devel@lists.linux.dev
+X-Received: by 2002:a05:6808:c18f:b0:4d6:9283:1bdf with SMTP id
+ 5614622812f47-4f52b0a52abmr7307253b6e.60.1791144279804; Sun, 04 Oct 2026
+ 13:04:39 -0700 (PDT)
+Date: Sun, 04 Oct 2026 13:04:39 -0700
+In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6ac2b157.01314a6c.556a8.000a.GAE@google.com>
+Subject: [syzbot ci] Re: bpf: use scalar evolution to widen bounded loops
+From: syzbot ci <syzbot+ci75d83b1fd064c0a1@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, 
+	ezingerman@fb.com, kernel-team@fb.com, yonghong.song@linux.dev
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 3, 2026 at 6:40=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel.or=
-g> wrote:
->
-> These are not MMIO pages so VMA_IO_BIT is an inappropriate flag to set.
->
-> Instead, set them VMA_MIXEDMAP_BIT as they are kernel mappings and this i=
-s
-> the appropriate flag to set for those.
->
-> This provides the semantics required - no VMA merging is permitted, but
-> does not prevent GUP.
->
-> However this has no meaningful impact as these are refcounted and thus ca=
-n
-> be GUPed.
->
-> A previous commit already prevented __mm_populate() from being invoked on
-> XOL areas, which VMA_IO_BIT was previously relied upon to do, so that is =
-no
-> longer required.
->
-> Both VMAs set a VMA name, so always_dump_vma() returns true before
-> vma_dump_size() reaches its VMA_IO_BIT check, and thus there is no change
-> in core dump behaviour.
->
-> Change this for both the core xol_add_vma() function and the x86-specific
-> get_uprobe_trampoline() function.
->
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+syzbot ci has tested the following series
 
-Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+[v2] bpf: use scalar evolution to widen bounded loops
+https://lore.kernel.org/all/20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com
+* [PATCH bpf-next v2 01/43] bpf: represent stack access effects with arg_access_info
+* [PATCH bpf-next v2 02/43] bpf: describe helper stack accesses with arg_access_info
+* [PATCH bpf-next v2 03/43] bpf: describe kfunc stack accesses with arg_access_info
+* [PATCH bpf-next v2 04/43] bpf: track may_write flags in liveness
+* [PATCH bpf-next v2 05/43] bpf: summarize may write stack slots in insn_aux_data
+* [PATCH bpf-next v2 06/43] bpf: summarize live stack slots in insn_aux_data
+* [PATCH bpf-next v2 07/43] bpf: summarize regs that may hold a frame pointer in insn_aux_data
+* [PATCH bpf-next v2 08/43] bpf: record write effects for atomic operations in liveness.c
+* [PATCH bpf-next v2 09/43] bpf: add tnum_alignment()
+* [PATCH bpf-next v2 10/43] bpf: add cnum{32,64}_union()
+* [PATCH bpf-next v2 11/43] bpf: add cnum64_intersect_linear()
+* [PATCH bpf-next v2 12/43] bpf: expose comparison opcode transformations
+* [PATCH bpf-next v2 13/43] bpf: allow subrange relations for PTR_TO_STACK in regsafe()
+* [PATCH bpf-next v2 14/43] bpf: representation for intervals with steps
+* [PATCH bpf-next v2 15/43] bpf: varying offset access support for PTR_TO_BTF_ID pointers
+* [PATCH bpf-next v2 16/43] bpf: save DFS postorder numbers for program instructions
+* [PATCH bpf-next v2 17/43] bpf: move the live-register and SCC printout to a standalone function
+* [PATCH bpf-next v2 18/43] bpf: compute immediate dominators
+* [PATCH bpf-next v2 19/43] bpf: compute loop hierarchy
+* [PATCH bpf-next v2 20/43] bpf: add bpf_set_reg_range()
+* [PATCH bpf-next v2 21/43] bpf: add bpf_mark_reg_known_scalar()
+* [PATCH bpf-next v2 22/43] bpf: add bpf_reg_union()
+* [PATCH bpf-next v2 23/43] bpf: add a min-heap for ordered analysis worklists
+* [PATCH bpf-next v2 24/43] bpf: record basic-block ends in insn_aux_data
+* [PATCH bpf-next v2 25/43] bpf: add bpf_split_cur_state()
+* [PATCH bpf-next v2 26/43] bpf: add bpf_same_memory_origin()
+* [PATCH bpf-next v2 27/43] bpf: allow precision backtracking between overlapping checkpoints
+* [PATCH bpf-next v2 28/43] bpf: compute scalar evolution expressions for loops
+* [PATCH bpf-next v2 29/43] bpf: use SCEV to widen bounded loops
+* [PATCH bpf-next v2 30/43] bpf: avoid widening registers that hinder exact stack-slot tracking
+* [PATCH bpf-next v2 31/43] bpf: bpf_func_state size optimization
+* [PATCH bpf-next v2 32/43] selftests/bpf: __msg_next tag for matching messages on consecutive lines
+* [PATCH bpf-next v2 33/43] selftests/bpf: bound UNIX socket path loops by sun_path size
+* [PATCH bpf-next v2 34/43] selftests/bpf: test for stack-pointer subrange pruning
+* [PATCH bpf-next v2 35/43] selftests/bpf: tests for may_write stack-liveness tracking
+* [PATCH bpf-next v2 36/43] selftests/bpf: tests for may_def marks of atomic RMW operations
+* [PATCH bpf-next v2 37/43] selftests/bpf: tests for map special cases in bpf_helper_stack_access_bytes()
+* [PATCH bpf-next v2 38/43] selftests/bpf: tests for register base/step arithmetic
+* [PATCH bpf-next v2 39/43] selftests/bpf: tests for register base/step state pruning
+* [PATCH bpf-next v2 40/43] selftests/bpf: tests for varying offset access to PTR_TO_BTF_ID
+* [PATCH bpf-next v2 41/43] selftests/bpf: tests for loop hierarchy computation
+* [PATCH bpf-next v2 42/43] selftests/bpf: tests for immediate dominator computation
+* [PATCH bpf-next v2 43/43] selftests/bpf: tests for SCEV analysis and loop widening
+
+and found the following issue:
+general protection fault in bpf_compute_scev
+
+Full report is available here:
+https://ci.syzbot.org/series/ff81cb40-7952-4f8a-b785-1f9e875f9b1f
+
+***
+
+general protection fault in bpf_compute_scev
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      99dc1ba542420db6b8df209744f55cc52466ad91
+arch:      amd64
+compiler:  Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+config:    https://ci.syzbot.org/builds/a6050598-290a-4e4f-bba8-55721490a3a8/config
+syz repro: https://ci.syzbot.org/findings/63885d0d-bef7-464a-9e39-0d57d15cba85/syz_repro
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 UID: 0 PID: 5853 Comm: syz.1.18 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:compute_insn_scevs kernel/bpf/scev.c:1489 [inline]
+RIP: 0010:bpf_compute_scev+0x5482/0x6050 kernel/bpf/scev.c:1569
+Code: 24 08 30 04 00 00 49 81 c7 30 04 00 00 45 31 ed 48 8b 44 24 10 4e 8d 34 a8 4c 89 f0 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <0f> b6 04 08 84 c0 0f 85 af 00 00 00 41 8b 16 48 89 df 31 f6 48 8b
+RSP: 0018:ffffc9000372f6e0 EFLAGS: 00010247
+RAX: 0000000000000000 RBX: ffff8881144bad00 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000011 RDI: 0000000000000011
+RBP: ffffc9000372f910 R08: ffff888101bd0000 R09: 0000000000000004
+R10: 000000000000010f R11: 0000000000000000 R12: 0000000000000011
+R13: 0000000000000000 R14: 0000000000000004 R15: 0000000000000430
+FS:  00007fd0dc1f56c0(0000) GS:ffff88818d6b6000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd0db270050 CR3: 00000001bf29a000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ bpf_check+0x2fbe/0x3550 kernel/bpf/verifier.c:23332
+ bpf_prog_load+0x1594/0x1d60 kernel/bpf/syscall.c:3177
+ __sys_bpf+0xd86/0xe00 kernel/bpf/syscall.c:6437
+ __do_sys_bpf kernel/bpf/syscall.c:6559 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6556 [inline]
+ __x64_sys_bpf+0xba/0xd0 kernel/bpf/syscall.c:6556
+ do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+ do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fd0db39e159
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd0dc1f5028 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fd0db625fa0 RCX: 00007fd0db39e159
+RDX: 0000000000000094 RSI: 0000200000000040 RDI: 0000000000000005
+RBP: 00007fd0db43506b R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fd0db626038 R14: 00007fd0db625fa0 R15: 00007fff2dcab378
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:compute_insn_scevs kernel/bpf/scev.c:1489 [inline]
+RIP: 0010:bpf_compute_scev+0x5482/0x6050 kernel/bpf/scev.c:1569
+Code: 24 08 30 04 00 00 49 81 c7 30 04 00 00 45 31 ed 48 8b 44 24 10 4e 8d 34 a8 4c 89 f0 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <0f> b6 04 08 84 c0 0f 85 af 00 00 00 41 8b 16 48 89 df 31 f6 48 8b
+RSP: 0018:ffffc9000372f6e0 EFLAGS: 00010247
+RAX: 0000000000000000 RBX: ffff8881144bad00 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000011 RDI: 0000000000000011
+RBP: ffffc9000372f910 R08: ffff888101bd0000 R09: 0000000000000004
+R10: 000000000000010f R11: 0000000000000000 R12: 0000000000000011
+R13: 0000000000000000 R14: 0000000000000004 R15: 0000000000000430
+FS:  00007fd0dc1f56c0(0000) GS:ffff88818d6b6000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd0db270050 CR3: 00000001bf29a000 CR4: 00000000000006f0
+----------------
+Code disassembly (best guess), 4 bytes skipped:
+   0:	00 00                	add    %al,(%rax)
+   2:	49 81 c7 30 04 00 00 	add    $0x430,%r15
+   9:	45 31 ed             	xor    %r13d,%r13d
+   c:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  11:	4e 8d 34 a8          	lea    (%rax,%r13,4),%r14
+  15:	4c 89 f0             	mov    %r14,%rax
+  18:	48 c1 e8 03          	shr    $0x3,%rax
+  1c:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  23:	fc ff df
+* 26:	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax <-- trapping instruction
+  2a:	84 c0                	test   %al,%al
+  2c:	0f 85 af 00 00 00    	jne    0xe1
+  32:	41 8b 16             	mov    (%r14),%edx
+  35:	48 89 df             	mov    %rbx,%rdi
+  38:	31 f6                	xor    %esi,%esi
+  3a:	48                   	rex.W
+  3b:	8b                   	.byte 0x8b
 
 
-> ---
->  arch/x86/kernel/uprobes.c | 2 +-
->  kernel/events/uprobes.c   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> index 65a2de82ecd2..0f60c0d076b6 100644
-> --- a/arch/x86/kernel/uprobes.c
-> +++ b/arch/x86/kernel/uprobes.c
-> @@ -715,7 +715,7 @@ static struct vm_area_struct *get_uprobe_trampoline(s=
-truct mm_struct *mm, unsign
->
->         *new_mapping =3D true;
->         return _install_special_mapping(mm, vaddr, PAGE_SIZE,
-> -                               VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_=
-IO,
-> +                               VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_=
-MIXEDMAP,
->                                 &tramp_mapping);
->  }
->
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index 7709ea882477..b89cc5cee002 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -1726,8 +1726,8 @@ static int xol_add_vma(struct mm_struct *mm, struct=
- xol_area *area)
->         }
->
->         vma =3D _install_special_mapping(mm, area->vaddr, PAGE_SIZE,
-> -                               VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|VM_IO|
-> -                               VM_SEALED_SYSMAP,
-> +                               VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|
-> +                               VM_MIXEDMAP|VM_SEALED_SYSMAP,
->                                 &xol_mapping);
->         if (IS_ERR(vma)) {
->                 ret =3D PTR_ERR(vma);
->
-> --
-> 2.55.0
->
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+
+To test a fix for this bug, please reply with `#syz test`
+(on a separate line) and attach the patch to the email.
+
+Notes:
+- The patch will be applied on top of the tested series (as an
+  incremental fix).
+- To test a new version of the whole series, please send it directly
+  to syzbot@lists.linux.dev.
+- Arguments like custom git repos and branches are not supported.
