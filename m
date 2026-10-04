@@ -1,235 +1,208 @@
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2493EB105;
-	Sun,  4 Oct 2026 18:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791138160; cv=none; b=h07dJ3MPW38uARwmlEuOpJx6KgEdD1BS6z/k1x1yi9NNYZ1+m+EkMflOJ4pU1/0BWqmJsLvoAH3sR4Pvt7vYJoCmQaW+tac6n2ARz8rg8EBr36fA3b19VdFW7aReXQXXuRQdQm8OINDyfhNVB6sscPXKUekUnFAccZvWds/LNiw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791138160; c=relaxed/simple;
-	bh=45LFbBSya6acv2El62U3c+MMKUFAjzx6vOn87uaGYBk=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=SPeZTjAVl68BYVUCxkU4fm49tvoAqQnWUehQlsqV7/HTLg2z+h9BpfQRlNOxrh8Q7RluxzP8QuVlr3BXbmfK71xwqOCfKRONbkVuUmsYvSHxDCvlVmCvBpo4dxhrBPy3nyws/gXtB2WiqCcQ9p+kmIlU8ndnj7s6PMbhcq4L02s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=mcmmBy54; arc=none smtp.client-ip=51.159.188.251
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8247938F95A
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 18:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791138265; cv=pass; b=gp6VW6HC4oz0ZbqKmds3RBQCNjdOAiAJGfr/+nBUrax5taQf3bAZJywFiNPLAIdAj4M6J87OntlCHbQvndMMYKbiiCLwIGNJoWMgGThgsq3v4lCIGPrqFeMqbKGMLX06OsavBNjDNRYvJ9uTI5t4lGwrlLqYwXG3RZsYF1OtxVI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791138265; c=relaxed/simple;
+	bh=3aBRZG0J7nrNd8eWZI+tOUTLRCjKVPsGyHM+wAKTgfA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hZGJt29VtRu3+IbZjx1g+Hi+h+4eAwv2uGhoiPYYLNNl1q6ZWhMJbYx9LNqpwE4JUTUvGh8Qz9xV5ji13lbR4bQ2FsY/4MM6T4sGqkq5y+xJK5yyY061xxEFEb3CAd0Y61NjlAM+d7WjITAZl5xf+cek4oUxOLXtfsdX9ktpKzU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f8vk+6UF; arc=pass smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="mcmmBy54"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:
-	Reply-To:Sender:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=lyxtMOR60vEEsgEoCbWQ9+m2UQFGn2NRsPcpgpljIy8=; b=mcmmBy54TsIVZ32H3ohw6GLgZ3
-	aIBmHSqSwzpAuymNS1VW5Ui8fRNczyhJL3sJ72+kNcn3p/OxDslD31Hkx2VcBayj6OLF7SrW/YYmz
-	h6WSV7hF6/tIrO7H3tF1rfwYjFDaTnUTIX12sCYUDughQMIdRsVNAfMsal/ql1kFBF+rLT3WcZyHk
-	rhORTx/3F7anQvV8B0DEHlVIhpOYBCJtkJB1xZTj8IcG+wqr7lQbv/yFnR3XpGnXU4Mdv6bJN4ZEa
-	VwSe7DHZFNgWQt+eAAHmQRXhXZ7fDe6Osur8vJ64JCenO+EN9NA3Tmoyg8VVYyBCjpmIyRYZsiZ8g
-	jsjeE6qg==;
-Received: from [::1] (port=54566 helo=pf-012.whm.fr-par.scw.cloud)
-	by pf-012.whm.fr-par.scw.cloud with esmtpa (Exim 4.100.1)
-	(envelope-from <jeremy.jean@oss.cyber.gouv.fr>)
-	id 1xDQr5-00000004b8k-3ZBi;
-	Sun, 04 Oct 2026 20:22:36 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f8vk+6UF"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6aae147ef9dso7797a12.0
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 11:24:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791138260; cv=none;
+        d=google.com; s=arc-20260327;
+        b=o2AL35RHtUZAJmbM2Gsjp66x/kjNzEQz55gHlOMBC5liyHmudqVWnryHK8WPmYXsYs
+         utqqPdw19Ng8EswNvaBtADFyd5uT0trICVxEBsGjuCt3MTuk6yUYuMF8MC4JOJxpTq3l
+         WfsJ8xG7KhlF9lPfq35S9nP5ERaHNELwqVpeJ/bgPBQTAMVx8a+EtxGRWl1MrLBs9PFC
+         yQLufSJVvkorjEWVJe5EQnDDJwKcrYIh9xC6QnTghB9WdZjAbKQvIuUG0bMNVzdAgfgE
+         T+R8JN/h6yaCKFpP63Ypoj6ObZJ3jZo1t+5pKBnFRhYSvOgr5LxHdBf2i5RdRAd//5HJ
+         ac7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=COuPsBcUBk1eT8Q71dO8QdpqB3ZPgP0C77xCCCNJQiA=;
+        fh=03Y9H7ZH2a+qmVKk1h+dZRtfn/GGAF5cY+PZ1mLHv2s=;
+        b=MxSxO2EAHFfjqLlGxCfaFtR3Gl40/1QA4ai1fBPfzEpXP94ulw5Gh28DYawgLffet/
+         zo1gDU7ODNGy7HWJN81Lz1KBPhg5XIRuhGwkhW2Q/uCBvhK73bBVqfoJe9RmkMMPa7Iq
+         bF7PovhbkbzXEIJubThQjw0MlWJ64PlRKJTBbfCgI4/7fKBDmIFtHr6bbV1D/PpkKDVH
+         Nb/K7Y/zd3n8ZYIUIed9AJ40VWFTyWrlfnCzWh+/V2CisHStGa6KzO7k8OS0DmzDj6rV
+         U2w265EqLIYQo0vBnph8v8rcgx69LdzvnJBqY78ClEOq4LeyeL9x9UqyRLlO9aMDg0OG
+         xm9A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791138260; x=1791743060; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=COuPsBcUBk1eT8Q71dO8QdpqB3ZPgP0C77xCCCNJQiA=;
+        b=f8vk+6UFWZB9hoCvStnFL044+6aRT6xa5kAVBI9KkzKS7tGKQiXqW/AGoPYjSNmpfV
+         5V3att+4ZDHkm96mXkBBSDYm5zWIFpFJiQaCEfS2PL2ujDeWJw6EpyGCPiuHOKpFXRPb
+         Iurm+B2ECPgliexc3YIHy3Q02ZY8qxdRaOHTKxr+txvSie6zOeAqHIOx20yT212hGHNZ
+         8utbadwdgS+CLQNTLwD3KgZM6udmJEuCzk/IeUiu9nSTi6gLPJsUTIlzpfsm8DDXCVUC
+         fO7ppbKh9USxfk3Qu3KoZ2jgZFDjXTule4hZXiSgHMu9EwKm6oJG35ATUrk0WK8+xyVi
+         CrSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791138260; x=1791743060;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=COuPsBcUBk1eT8Q71dO8QdpqB3ZPgP0C77xCCCNJQiA=;
+        b=RuDdzAci2ImN/if8X4+loV3D5VdCKAd6ERCTvq5vKtRDNw38hGp7c584RhqqgFvx/5
+         1WYCjb2w9go90LwP5q7lLVAYejaQo6EvqNmfInJpeJmaBT+vf8zHpxk2xiDEYP7XbqCt
+         n8AyD648emI0EtVJJkgkz2JwvysKSEGdMNtedbOCsw8oWIvtV3fOol21zOKmkTPWi97+
+         fLE/ilLMVOywF2EhuJ7rCEQr3Yk8LJkp7bDbNWebQnNfxUltYrICdeUHICTY34GQKobn
+         7jq/s8SQglHYZY56P/IFQGi3OocIS0+pdY+9CC3dfv9Ed4Z65w9GnDU3l9T0yJRDOFu6
+         yNdQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx2GcySNk+ZEvew8lCCNlg8t/7PQ2bcrtfwafOnckPaW91vdyJPGUiW6A8accKP89wBwqQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLu/c1daUX71hx/TF1aXmbYNtSwm3GxeyIVwo9pvNN49mzzDNbO
+	vMWy/feZzGZLTML5koPfyVCg3THXCMuu6mt/AvuAMDtppd/aRT6u49S022d/wqB015T6YBL5Sfi
+	6tKJYierxF1nr5T8SJeKyHviFiOaH7XxPFOK5fkVj
+X-Gm-Gg: AYBFou0neXh5xknUaxRsL4epfawO6+FaMBv0Q+76lKWzNUYm/VF9QLLsP14pDNCb3N5
+	d6fAbkrjYHJ0jh/LTwLFvbtnQs/6IKaoRn2JRRzCoKn57scnDqV/dglI1ooMP9EL2pvYuE5SEJ1
+	hM29gbMjNnS8aJpxO5f+m9Isx3Qgl4kM1H+BLfQbv2BzwM0oIgpjn/jVoBsq/mFDb0ywdQ20X+9
+	BKVf59RmqlOsxIvIsz+u+avg4RKnTcJlxbsOodtZRGojHwQITqxgmnOU8CR/nu7iHYit+hakNfF
+	CPuDDTwM51n02sLL8is8Lk+Yuj5G+k9O71FV+BOik2aHC5/4krjrfkfQeYPaj1172EU=
+X-Received: by 2002:a05:6402:a2cb:10b0:6af:7a5a:97e4 with SMTP id
+ 4fb4d7f45d1cf-6afaf6bf03amr34523a12.12.1791138257648; Sun, 04 Oct 2026
+ 11:24:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sun, 04 Oct 2026 20:22:35 +0200
-From: =?UTF-8?Q?J=C3=A9r=C3=A9my_Jean?= <jeremy.jean@oss.cyber.gouv.fr>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns
-In-Reply-To: <fe9ae59b603848f59757086c6309aec9@oss.cyber.gouv.fr>
-References: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <DKYHCWYCB5XV.3MSN6ZJGOW2R7@gmail.com>
- <fe9ae59b603848f59757086c6309aec9@oss.cyber.gouv.fr>
-User-Agent: Roundcube Webmail/1.6.19
-Message-ID: <05edf76be7fac5ebe902d78d672d454c@oss.cyber.gouv.fr>
-X-Sender: jeremy.jean@oss.cyber.gouv.fr
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+References: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-0-a1f052500fd7@kernel.org>
+ <20261003-b4-mmap-prepare-vma-flag-sanify-v4-20-a1f052500fd7@kernel.org>
+In-Reply-To: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-20-a1f052500fd7@kernel.org>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Sun, 4 Oct 2026 11:24:03 -0700
+X-Gm-Features: AclHuK9H1gPgFkK4n-5s4Gd8NQjwfuvbGlNRYoPrM6gC5ICSAC1H3Sf5qTdT1bA
+Message-ID: <CAJuCfpHOo8UhAZMvO5A3dKbqxQGAWtKGMHXJ+Fc=qwH=Nm0b6w@mail.gmail.com>
+Subject: Re: [PATCH v4 20/38] mm/gup: error out early on !VMA_MAYREAD_BIT VMAs
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
+	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
+	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
+	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
+	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
+	fuse-devel@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-08-26 16:20, Jérémy Jean wrote:
-> Hello Alexei,
-> 
-> On 2026-08-26 03:22, Alexei Starovoitov wrote:
->> On Sun Aug 23, 2026 at 1:39 PM PDT, Jérémy Jean wrote:
->>> bpf_res_spin_lock() returns a 32-bit int. On failure, the verifier
->>> models R0 as a signed 64-bit value in [-MAX_ERRNO, -1].
->>> 
->>> On x86-64, returning -EDEADLK writes 0xffffffdd to EAX and clears the
->>> upper half of RAX. Since the JIT leaves the native return value 
->>> as-is,
->>> BPF sees 0x00000000ffffffdd instead of the sign-extended
->>> 0xffffffffffffffdd. A 64-bit signed comparison therefore treats the
->>> value as positive, while the verifier treats it as -35.
->>> 
->>> As a result, a signed comparison against zero can take one path 
->>> during
->>> verification and another at run time. With rqspinlock aliases, this 
->>> can
->>> lead to unmatched bpf_res_spin_unlock() calls, corrupting the per-CPU
->>> rqspinlock state and unbalancing the preemption count.
->> 
->> Is that a theory? I'm pretty sure we have selftests for negative
->> error codes from res_spin_lock.
-> 
->> I'm pretty sure we have selftests for negative
->> error codes from res_spin_lock.
-> 
-> As far as I could checked, this is not entirely covered: when the
-> returned 32-bit signed int is a negative integer in %eax
-> (0xffffffdd), it is later mapped to 64-bit register r0, which clears
-> the 32 MSB as its value is taken from %rax, and this makes the
-> negative error code a large 32-bit value stored in r0
-> (0x00000000ffffffdd). When writing raw BPF, one could check the
-> return code using r0 instead of w0, and this would introduce a
-> mismatch with the verifier that sees a real negative value.
-> 
-> In my understanding, the current selftests do not exactly verify this?
-> 
->> Pls craft a selftest if the issue is real.
-> 
-> Below is an attempt for a selftest. I got help from an LLM to write
-> the BPF instructions, and then try my best to shrink it but it is a
-> bit long; hope that's okay. The point is to craft the check on r0
-> manually after the call to bpf_res_spin_lock(), and forces the branch
-> taken to be different between the verifier and the jitted code.
-> 
-> The need for raw BPF instructions is required as the compilation from
-> C correctly uses w0 for the check. I added comments to emphasize this.
-> 
-> SEC("?tc")
-> __arch_x86_64
-> __load_if_JITed()
-> __success
-> __retval(0)
-> __naked int res_spin_lock_return_sign_extension(void)
-> {
->   asm volatile ("                                                       
-> \
->   *(u32 *)(r10 - 4) = 0;                                                
-> \
->   r2 = r10;                                                             
-> \
->   r2 += -4;                                                             
-> \
->   r9 = r2;                                                              
-> \
->   r1 = %[arrmap] ll;                                                    
-> \
->   call %[bpf_map_lookup_elem];                                          
-> \
->   if r0 == 0 goto out_%=;                                               
-> \
->   r6 = r0;                                                              
-> \
->   /* Adversarial setup: give one map value two verifier pointer IDs. */ 
-> \
->   r2 = r9;                                                              
-> \
->   r1 = %[arrmap] ll;                                                    
-> \
->   call %[bpf_map_lookup_elem];                                          
-> \
->   if r0 == 0 goto out_%=;                                               
-> \
->   r7 = r0;                                                              
-> \
->   r8 = 0;                                                               
-> \
->   r1 = r6;                                                              
-> \
->   call %[bpf_res_spin_lock];                                            
-> \
->   if w0 != 0 goto out_%=;                                               
-> \
->   r1 = r7;                                                              
-> \
->   call %[bpf_res_spin_lock];                                            
-> \
->   /* Adversarial check: treat the negative int return as 64-bit R0. */  
-> \
->   if r0 s< 0 goto unlock_%=;                                            
-> \
->   r8 = 1;                                                               
-> \
->   if r0 != 0 goto unlock_%=;                                            
-> \
->   r1 = r7;                                                              
-> \
->   call %[bpf_res_spin_unlock];                                          
-> \
-> unlock_%=:                                                              
-> \
->   r1 = r6;                                                              
-> \
->   call %[bpf_res_spin_unlock];                                          
-> \
->   r0 = r8;                                                              
-> \
->   exit;                                                                 
-> \
-> out_%=:                                                                 
-> \
->   exit;                                                                 
-> \
-> "  :
->  : __imm(bpf_map_lookup_elem),
->    __imm(bpf_res_spin_lock),
->    __imm(bpf_res_spin_unlock),
->    __imm_addr(arrmap)
->  : __clobber_all);
-> }
-> 
-> When I run the selftest (I used 9328b3b03bdc), I get:
-> 
-> #1/1     res_spin_lock_failure/res_spin_lock_arg:OK
-> #1/2     res_spin_lock_failure/res_spin_lock_AA:OK
-> #1/3     res_spin_lock_failure/res_spin_lock_cond_AA:OK
-> #1/4     res_spin_lock_failure/res_spin_lock_mismatch_1:OK
-> #1/5     res_spin_lock_failure/res_spin_lock_mismatch_2:OK
-> #1/6     res_spin_lock_failure/res_spin_lock_irq_mismatch_1:OK
-> #1/7     res_spin_lock_failure/res_spin_lock_irq_mismatch_2:OK
-> #1/8     res_spin_lock_failure/res_spin_lock_ooo:OK
-> #1/9     res_spin_lock_failure/res_spin_lock_ooo_irq:OK
-> (..snip..)
-> #1/10    res_spin_lock_failure/pin_lock_return_sign_extension:FAIL
-> #1/11    res_spin_lock_failure/res_spin_lock_ooo_unlock:OK
-> #1/12    res_spin_lock_failure/res_spin_lock_bad_off:OK
-> #1/13    res_spin_lock_failure/res_spin_lock_var_off:OK
-> #1/14    res_spin_lock_failure/res_spin_lock_no_lock_map:OK
-> #1/15    res_spin_lock_failure/res_spin_lock_no_lock_kptr:OK
-> 
-> If you confirm this is not yet covered in the selftests, I can send a
-> two-commit patch (one with the previous patch, one with the selftest).
-> 
-> Regards,
-> Jérémy
+On Sat, Oct 3, 2026 at 6:40=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel.or=
+g> wrote:
+>
+> When populating a VMA range via the aptly named populate_vma_page_range()
+> an unreadable VMA will always eventually fail with -EFAULT.
+>
+> That a VMA is accessible is always checked, however VMA_MAYREAD_BIT is no=
+t.
+>
+> All user mappings always have VMA_MAYREAD_BIT set, so this check only
+> impacts kernel mappings.
+>
+> It is implemented specifically to disallow population of uprobes XOL
+> mappings which are exec-only.
+>
+> A nasty interaction with these mappings may occur if they are mlocked, so
+> actively disallow this early.
+>
+> This allows a subsequent commit to remove the VM_IO check in
+> __mm_populate() which otherwise requires non-MMIO mappings to be wrongly
+> flagged simply as a workaround.
+>
+> Acked-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Hello,
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
-I believe this still needs patching.
-Did anyone have some time to check?
 
-Thanks,
-Jérémy
+> ---
+>  mm/gup.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/mm/gup.c b/mm/gup.c
+> index c2dfcb4744bc..e6310a7cc05b 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1836,6 +1836,10 @@ long populate_vma_page_range(struct vm_area_struct=
+ *vma,
+>         if (!vma_is_accessible(vma))
+>                 return -EFAULT;
+>
+> +       /* Unreadable VMAs also cannot be faulted in. */
+> +       if (!vma_test(vma, VMA_MAYREAD_BIT))
+> +               return -EFAULT;
+> +
+>         gup_flags =3D FOLL_TOUCH;
+>         /*
+>          * We want to touch writable mappings with a write fault in order
+>
+> --
+> 2.55.0
+>
