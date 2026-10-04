@@ -1,153 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-106102.protonmail.ch (mail-106102.protonmail.ch [79.135.106.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934CC1D6DA9;
-	Sun,  4 Oct 2026 07:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0A22AD35
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 07:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791098803; cv=none; b=QARK3jehm3+F+AZM2AMwmpJpp5JzocVl7wtcyfugqaruTZK8XO69Jg6nvW8d9Ym7D3YfSQgeFogbuSoAEARkT0AXTMLXJY5g50ofdpuY6b6V5dke9Dt1pr5bFCYA5ScKBeeBCBOOIkjwc3SppPD7/iAqQ4TA6dTRgF+oQdFQPRw=
+	t=1791099794; cv=none; b=Q47Ss9oU/g/e2UiP6dbvkzA1lScpfSo+f0XpuQfe5YmFDbsePYgA8ZkRi8d/6DYrRacs2hDb/L2ZZS3GbxV69T4K+zMPV9I4kzarg3SdaGrLuNvt4ECqSOBXaalLcIat/UaK0DlE7h2zZbf2Ioes5cfWM995s1EIAohR/pglxZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791098803; c=relaxed/simple;
-	bh=VHq+Xt/JtwMsfGBSvjM3m1W1JPpNGES8AGlkxECeziU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rJRqkrkty2KwxMmC/wyRJsWwdEJ6DXEKELavP/3ame5UiNWdvhKb0QSlxLn42yFg7CIIxw+FsnC32PyOHiTsSw+oKocRY5h9ApULC03UODwkR6P80L8JPfDCsgnOvm1Yd2uSbMKskI4Kjst5bwCDf20tH+AhTciquf5HTLnyBbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nU5ReT3j; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791099794; c=relaxed/simple;
+	bh=Qdy6vOu1A+6iXuVteDnntXtQtq/5gyAVkxhMeGuCOMc=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Eb93ni+56I3s7PwgLaayZuZvdW/vrQuO3CcWgNAWKqR1jswihph583uOy5VQie2xnQNeMhww1UkyuhfkfAEEjCzqNhq3bH48LYxNEXcuri2tVljqvxiF4E9dhYIdws58q+UwUxhaFJk243OdjaCmGup9Xvp8INtiYTgmA3jwq5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=DOd5FFhu; arc=none smtp.client-ip=79.135.106.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nU5ReT3j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 761B31F000FF;
-	Sun,  4 Oct 2026 07:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791098799;
-	bh=cgIqnoufaHq6AdaBd0wZxGfVHkwrfWk/BsoFED6yW28=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nU5ReT3jHCTKrC3vFlt6lFhBY2qzd5TcweumZDdG4PoYUxRdUjykUFoBgFNWA1PjY
-	 T9Yu+RIKP64tp84D9IUIBtDjfeFi3o967G8MkqSZgLs5zg6QgwCaZo2Pxoykxskztl
-	 biV5O05MJfDy50y8GDgflF67Yd7yP+x3fcZ/CTySFwAWfFHWKch8vNf6E6pnkc8Req
-	 OzpDMqE/uOHVQp8wJMzmgk75NkJ+Q6sBYYfXWMn9gwMNio09Jz0A1FkvjaPxByIoTx
-	 USuuhCbzR7WCiikqNFCVjzo7VO44aK7kcE+i2spiWR4WgjRoXKk74e4z7OK8rvjehn
-	 Jk/eIKWbHt2nQ==
-Date: Sun, 4 Oct 2026 00:26:39 -0700
-From: Kees Cook <kees@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Bill Wendling <morbo@google.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>,
-	Shuvam Pandey <shuvampandey1@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Shivaprasad G Bhat <sbhat@linux.ibm.com>,
-	Thorsten Blum <blum@kernel.org>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guangshuo Li <lgs201920130244@gmail.com>,
-	Ira Weiny <iweiny@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <202610040023.A3865A6@keescook>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
- <asEhEe0Urb5Wx7yi@ashevche-desk.local>
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="DOd5FFhu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail2; t=1791099783; x=1791358983;
+	bh=yifafxUrjg/Fd7QBGFO2iPLzYAKnyZdf4PUzNYV7Gb0=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=DOd5FFhunrt+zD+vNC84E4y045F/9ULue8ekFOziNsN/ICOnKF71W+hvG8WL+ICw1
+	 vrFHHHxOyohSqC5ae6Z7Myrp6pA5xlI/+3zRyJkSDX03W+GjUJaXKA8IIbtJpOelDL
+	 Ms2Mcypo7NtSJkKcBen12+yl63CnZtl8xt8OqNrYtDYvOxwXZ703PX9IVyiy6DDcqO
+	 I2E2FAfcrer5s+OI7NHPZXxNTn3INZeMkIkoVYZVyl09JM9bc6dl1jXDMlHnNDwIFJ
+	 T0wimsKioxLCJSwfiJaILlKNNJBdz58y1i1NMsE1yxvEabitQJgNIYjA887G82QB4n
+	 miYJDnKG5zs6g==
+Date: Sun, 04 Oct 2026 07:42:56 +0000
+To: Eric Dumazet <edumazet@kernel.org>
+From: quanyeyang <quanyeyang@proton.me>
+Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/2] net: annotate lockless writes to sk->sk_err
+Message-ID: <9NcBQjsEuykTInATuaBUjtFtdQznS1jzk-VuRI7-tbKzaeDqQ2Pfs4YGURFT_x8LJOwEkXgndIfjX1dV_3-hffCHBuBQHoAEFwKZGltO79A=@proton.me>
+In-Reply-To: <CAL4WiirzoFX6W01xKK4uAiQ+BzecwidVDH8uB9f3cPsiVV_iww@mail.gmail.com>
+References: <20261003-tls-fix-sk-kcsan-err-v2-0-e939a2ebdd56@proton.me> <20261003-tls-fix-sk-kcsan-err-v2-2-e939a2ebdd56@proton.me> <CAL4WiirzoFX6W01xKK4uAiQ+BzecwidVDH8uB9f3cPsiVV_iww@mail.gmail.com>
+Feedback-ID: 206494642:user:proton
+X-Pm-Message-ID: b9a41c3cb9bafcb8fcf3de09dd1d623a0e3e70ee
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <asEhEe0Urb5Wx7yi@ashevche-desk.local>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 03, 2026 at 06:36:49PM +0300, Andy Shevchenko wrote:
-> On Fri, Oct 02, 2026 at 08:59:10PM -0700, Kees Cook wrote:
-> > Several strlcat() call sites being converted to seq_buf need behavior
-> > seq_buf doesn't currently provide. The return from seq_buf_used() is
-> > not the length of the string in a seq_buf. Once the buffer is full or
-> > has overflowed it returns the buffer size, which counts the byte that
-> > seq_buf_str() replaces with the NUL, so a caller that needs the string
-> > and its length has to call seq_buf_str() and then walk the string with
-> > strlen().
-> > 
-> > Move the termination out of seq_buf_str() into a helper that returns
-> > where it put the NUL, and add seq_buf_strlen(), which terminates the
-> > buffer in the same way and returns that offset.
-> > 
-> > As discussed in review, don't add WARN_ON() for seq_buf_strlen() and
-> > drop it from seq_buf_str().
-> > 
-> > Add tests comparing seq_buf_strlen() against strlen() of seq_buf_str()
-> > for empty, appended, truncated, exactly full, and overflowed buffers,
-> > checking that seq_buf_strlen() alone terminates a full buffer, and
-> > checking that a zero-sized seq_buf reports an empty string from both
-> > accessors without touching the buffer.
-> > 
-> > Tests passed under qemu on ARCH=x86_64 with GCC 16.2.0 and CONFIG_KASAN=y,
-> > and on big-endian ARCH=s390 with GCC s390x-linux-gnu 16.2.0.
-> 
-> ...
-> 
-> >  static inline const char *seq_buf_str(struct seq_buf *s)
-> >  {
-> > -	if (WARN_ON(s->size == 0))
-> > +	if (s->size == 0)
-> >  		return "";
-> >  
-> > -	if (seq_buf_buffer_left(s))
-> > -		s->buffer[s->len] = 0;
-> > -	else
-> > -		s->buffer[s->size - 1] = 0;
-> > +	__seq_buf_terminate(s);
-> >  
-> >  	return s->buffer;
-> >  }
-> 
-> Looking at this again, can't it be rewritten now using _strlen()?
-> 
-> 	if (seq_buf_strlen(s))
-> 		return s->buffer;
-> 
-> 	return "";
-> 
-> ?
+On Sunday, October 4th, 2026 at AM 12:14, Eric Dumazet <edumazet@kernel.org=
+> wrote:
 
-It could, but I'm vaguely nervous about the difference between
-	s->buffer[0] == '\0'
-and
-	.data ""
+>=20
+> Has this patch changed between V1 and V2 ?
+>=20
+> You are supposed to carry the Acked-by and Reviewed-by tags collected
+> during prior iterations.
+On Sun, Oct 4, 2026 at ... Eric Dumazet wrote:
+> Has this patch changed between V1 and V2 ?
+>
+> You are supposed to carry the Acked-by and Reviewed-by tags collected
+> during prior iterations.
 
-i.e. we only force the return of seq_buf_str() to be _not_ just
-s->buffer when s->buffer is weirdly impossible (due to size == 0).
-I'd rather not make all 0-len strings return the .data segment's const
-"" string...
+No, 2/2 is identical to v1. Sorry for the extra pass =E2=80=94 I should hav=
+e
+said "Patch 2: unchanged" in the v2 changelog and kept your tag.
 
--- 
-Kees Cook
+Thanks for the Reviewed-by.
+
+>=20
+> Please help reviewers, they need to recover their precious time.
+
+Thanks, I'll pay attention to this next time.
+
+>=20
+> Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+>=20
+> Thank you.
+> 
