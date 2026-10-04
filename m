@@ -1,79 +1,67 @@
-Received: from mail-106102.protonmail.ch (mail-106102.protonmail.ch [79.135.106.102])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0A22AD35
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 07:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663DE2853F3;
+	Sun,  4 Oct 2026 07:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791099794; cv=none; b=Q47Ss9oU/g/e2UiP6dbvkzA1lScpfSo+f0XpuQfe5YmFDbsePYgA8ZkRi8d/6DYrRacs2hDb/L2ZZS3GbxV69T4K+zMPV9I4kzarg3SdaGrLuNvt4ECqSOBXaalLcIat/UaK0DlE7h2zZbf2Ioes5cfWM995s1EIAohR/pglxZI=
+	t=1791100380; cv=none; b=lMKkWqM5q7/+oyzd33OGlYFXf1wKV1JIrf8y1kjYJj5qQNYW9St5/FpchOoxtru9V6WDbOVImEJrm6mJ4Z8HxjOHxJBxFSsj7UruA9iUGjucs1HRNhay8dRaLgGd+HFCxYs0nXPNjZErwf+8sZ+7GvWKOBza5m6kctT9ThD079Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791099794; c=relaxed/simple;
-	bh=Qdy6vOu1A+6iXuVteDnntXtQtq/5gyAVkxhMeGuCOMc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Eb93ni+56I3s7PwgLaayZuZvdW/vrQuO3CcWgNAWKqR1jswihph583uOy5VQie2xnQNeMhww1UkyuhfkfAEEjCzqNhq3bH48LYxNEXcuri2tVljqvxiF4E9dhYIdws58q+UwUxhaFJk243OdjaCmGup9Xvp8INtiYTgmA3jwq5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=DOd5FFhu; arc=none smtp.client-ip=79.135.106.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1791100380; c=relaxed/simple;
+	bh=qaA3FCUSvghvQp4of7xy8J6K3nfjoP6YXUfDz99COFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A2eUoorOCqSadXY9fRaYXCm3ZgBCZ+1QvPk/5PV98j+RH8VWWabdmJ0bR4XbUyhrUWTNoJJffvzRmhC8I3rhxdlquRh7JYrapZjYNQNuVbja1krgIdumZjGRA3Glo3+AI5hyBTHpD6WFH9QPlsRBbJFo904hNf7xLxfQHdonYjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=JrSlqiVJ; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="DOd5FFhu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail2; t=1791099783; x=1791358983;
-	bh=yifafxUrjg/Fd7QBGFO2iPLzYAKnyZdf4PUzNYV7Gb0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=DOd5FFhunrt+zD+vNC84E4y045F/9ULue8ekFOziNsN/ICOnKF71W+hvG8WL+ICw1
-	 vrFHHHxOyohSqC5ae6Z7Myrp6pA5xlI/+3zRyJkSDX03W+GjUJaXKA8IIbtJpOelDL
-	 Ms2Mcypo7NtSJkKcBen12+yl63CnZtl8xt8OqNrYtDYvOxwXZ703PX9IVyiy6DDcqO
-	 I2E2FAfcrer5s+OI7NHPZXxNTn3INZeMkIkoVYZVyl09JM9bc6dl1jXDMlHnNDwIFJ
-	 T0wimsKioxLCJSwfiJaILlKNNJBdz58y1i1NMsE1yxvEabitQJgNIYjA887G82QB4n
-	 miYJDnKG5zs6g==
-Date: Sun, 04 Oct 2026 07:42:56 +0000
-To: Eric Dumazet <edumazet@kernel.org>
-From: quanyeyang <quanyeyang@proton.me>
-Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] net: annotate lockless writes to sk->sk_err
-Message-ID: <9NcBQjsEuykTInATuaBUjtFtdQznS1jzk-VuRI7-tbKzaeDqQ2Pfs4YGURFT_x8LJOwEkXgndIfjX1dV_3-hffCHBuBQHoAEFwKZGltO79A=@proton.me>
-In-Reply-To: <CAL4WiirzoFX6W01xKK4uAiQ+BzecwidVDH8uB9f3cPsiVV_iww@mail.gmail.com>
-References: <20261003-tls-fix-sk-kcsan-err-v2-0-e939a2ebdd56@proton.me> <20261003-tls-fix-sk-kcsan-err-v2-2-e939a2ebdd56@proton.me> <CAL4WiirzoFX6W01xKK4uAiQ+BzecwidVDH8uB9f3cPsiVV_iww@mail.gmail.com>
-Feedback-ID: 206494642:user:proton
-X-Pm-Message-ID: b9a41c3cb9bafcb8fcf3de09dd1d623a0e3e70ee
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="JrSlqiVJ"
+Received: from omf11.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 303B61C3E84;
+	Sun,  4 Oct 2026 07:45:26 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id 294762002A;
+	Sun,  4 Oct 2026 07:45:22 +0000 (UTC)
+Date: Sun, 4 Oct 2026 03:45:15 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Gabriele Monaco <gmonaco@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Masami Hiramatsu
+ <mhiramat@kernel.org>, Ingo Molnar <mingo@redhat.com>, Nam Cao
+ <namcao@linutronix.de>, K Prateek Nayak <kprateek.nayak@amd.com>, Alexei
+ Starovoitov <alexei.starovoitov@gmail.com>, Wen Yang <wen.yang@linux.dev>,
+ Tobias Schaffner <tobias.schaffner@siemens.com>, Viktor Malik
+ <vmalik@redhat.com>
+Subject: Re: [PATCH v2 01/15] sched: Add task enqueue/dequeue trace points
+Message-ID: <20261004034515.3592947c@fedora>
+In-Reply-To: <20261002102939.GB2823843@noisy.programming.kicks-ass.net>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+	<20261001152042.124445-2-gmonaco@redhat.com>
+	<20261001154934.GT88198@noisy.programming.kicks-ass.net>
+	<d75888885e2c94c1bc717faa864f609c43db874f.camel@redhat.com>
+	<20261002102939.GB2823843@noisy.programming.kicks-ass.net>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 294762002A
+X-Stat-Signature: qfwpz1gpmib1tkbxtes3gznptcofz1at
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+WjOzEIJBMoRLXH/p6Vwn+z72qSKDM+pU=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=qaA3FCUSvghvQp4of7xy8J6K3nfjoP6YXUfDz99COFE=; b=JrSlqiVJqG6g/c1IVI6fPZGUsWyQw7uLYL8Y0lkxuDwm83YeSpdR8wlAkEky0s/rybElQfEu0L49azhrOg/a1Hie9uBDiqSifOqY6/+YtK8aQrt8P56Tv2aA9WLcxKT0M/8GdgoHAcBiVjEW+J7cVz5ZEwG9f12qjMgWuUnCYyQ=
+X-HE-Tag: 1791099922-219789
+X-HE-Meta: U2FsdGVkX1+1LvFSPawVsPnS8oyr2Sx+JjRcNfYLmIG6ky6VrWp9Z1JJsULduW88gQ5JVoVdJFvZUl9ST3X4QVUllBtfr+IqdhkR+cMNFfiebtjXCxcQqSDvQKUnn0RvyimIgbLBr0nbbiBHRHPceLYT1b3xj0iQflDuWntW4aYNxHPgGrVPTtP1LgObsom+Yg+u3MJFLGXUxCEL3XpYURrZStndPiE0TMGr7wB+3JeG4FMxQhooM/5G8OKnJLnjoUCiJ1PVKtXbDjkItl6ixop3WZuRZXjL1XzgkDs3coJaI8girgzgtC+XGTIb95ta+OgecalJdDbLAP55nTS3JZ4DyJU76BaZR01zybRNbBivwKe89vhLUH4NDW8EJIpiPbHN0uvVktmryUdYVXCoaw==
 
-On Sunday, October 4th, 2026 at AM 12:14, Eric Dumazet <edumazet@kernel.org=
-> wrote:
+On Fri, 2 Oct 2026 12:29:39 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
->=20
-> Has this patch changed between V1 and V2 ?
->=20
-> You are supposed to carry the Acked-by and Reviewed-by tags collected
-> during prior iterations.
-On Sun, Oct 4, 2026 at ... Eric Dumazet wrote:
-> Has this patch changed between V1 and V2 ?
->
-> You are supposed to carry the Acked-by and Reviewed-by tags collected
-> during prior iterations.
+> ...insert rant on what a piece of shit rst is here...
 
-No, 2/2 is identical to v1. Sorry for the extra pass =E2=80=94 I should hav=
-e
-said "Patch 2: unchanged" in the v2 changelog and kept your tag.
+Rant from grumpy old guy that doesn't like the new stuff ;-)
 
-Thanks for the Reviewed-by.
-
->=20
-> Please help reviewers, they need to recover their precious time.
-
-Thanks, I'll pay attention to this next time.
-
->=20
-> Reviewed-by: Eric Dumazet <edumazet@kernel.org>
->=20
-> Thank you.
-> 
+-- Steve
