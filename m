@@ -1,64 +1,64 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+Received: from mail-pz2-f37.google.com (mail-pz2-f37.google.com [74.125.228.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7309435EE9
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE48F436361
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121132; cv=none; b=G744uGUmOPSubQ5mhcHurgkJ/eck+fzaDQZjwHqOSG9+abtRuPYOodzWAeSrh+ISAE6zSRminZPYGFOFMMbjvylV0BffQHILQ+MrdV0135Zlu82haDMPCHSmnd50p7Rxs4D49w6MuXOAI9LfPwrO4m71kGZIZBzPWduHiE9kMD8=
+	t=1791121133; cv=none; b=XUIySgM0EBBGd64T7tG1QHYUvSgH9sCfWnCn4mKSWRNz3EbXQWoeqPx1NKkuG93xE7cU/efmgTmw8LLhlLXYy8CLSygwoqb/KIFeovyndhYvdUF67F/p7c6noZLFeDRhFpsDUlDbK4ZxozsXHo57F/jYrK7OZjlHrkSqU1D9m8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791121132; c=relaxed/simple;
-	bh=WAaUUoFX8C1dzHMvzU32OdOL/UU5RlMiZEyFO+K3IYI=;
+	s=arc-20240116; t=1791121133; c=relaxed/simple;
+	bh=5rY7Zvhy0lju40FoExRO+DFdI19ouI7bPkM/wMW4pUg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U9NBN0cpYUOzeHZfJ2r0gc8y1s3n+q6XhTOhNJpNW+tpeL6eDZ7hwabzVavyo4OfoovUu54jGsjuULGE+l1HDYJ+5FagyNaokIRJqdXLtCHJ+01KpldY2v7O3Sq9+xqDCiqwgYMjeDa6oUPaG1qEPB1mwWnysgMVG6rs0JScWnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z4ZWf9zQ; arc=none smtp.client-ip=74.125.228.42
+	 MIME-Version:Content-Type; b=AZSaJQJHzY1zNGrqO4X7znTzSdqKRWDxsCMVGxlaDJvOmWTe0HcqVKku3h+sDFkHebJasSYOJDUa9ue0rAy8Z1hpqyhzfdA5Bex1igW2zfYB5CCnBU2Ww9+FjO1CohizA8U6wG4HdX/UwVQOF8SyjhKagEMuwgzUez7ooi2BpHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tJkE3SL6; arc=none smtp.client-ip=74.125.228.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z4ZWf9zQ"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4c3304784so294201a12.3
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tJkE3SL6"
+Received: by mail-pz2-f37.google.com with SMTP id 41be03b00d2f7-cc7cadbe09dso298290a12.2
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791121130; x=1791725930; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791121131; x=1791725931; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=0BJSb57Uses8ogFF7iXJEZQeJF/eI+nTz1gyI/NKl7k=;
-        b=Z4ZWf9zQFfCSeAwJj0xTmFAhcJO+jzOAeVzHKZSIwFqsn4vh9o2M+h0txUSZOBcZA8
-         m6g5zl0vfvZgtzBxjEw0sGTJGCylViFNPX54AIcEImKyGLoV1GOWtUR6S04YjBkZiVTZ
-         oS4biV7pGSZ5HPVtFZM/CaXMyRRIX4jlw3Kc6WngGWl6WP6dCKEVh/HJ3rBHebFr/F3u
-         i6oaT1xC9AtpBg+qCkehCDWFsGQi3sraMZEIx/F0/zlqBajMnUXWK/MDsAO4tGZZYnZA
-         sNDbRZe2WgvQqn+e541d9y/w1HOkqs+n/cXmkzQVCYXm7ogVLa8bhcfarqjtjeFHtdAs
-         hEtw==
+        bh=Z7pjctxEeg+GdxvgiDBBC/mxzFSZr+DY/EdCpC5SQoQ=;
+        b=tJkE3SL6EtyKl8LliILcfeLMcXTDhAWUsxYpPEtKqcwoMM+DSmNUKz4aUzitdPN8qm
+         s4ZI6DLH23UfXhZw+67L5C2VvDpU1ZVdE6ymBlMOvtwR8uJ9uLVpuQtPR+UVdeTbJgzv
+         xsXpyJEQyOJ7UQH7T7HQw99itJPcyOhiHHVwc+BmGZXQYpVV81980EKaUzK20V4v09pc
+         LsxytjMe4Lrm2ywySUdgZYyulcGCKpFgRCUOmz02G8il1evtiCKJtaKzHsQWOfzgrxs7
+         XwvT0RJ4K8GgyRnZGZYMXfkBzDUBP6qL/moe1gPu34R9bl/pGlSr92s0LyLyW02yAV7R
+         1ezA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791121130; x=1791725930;
+        d=1e100.net; s=20260707; t=1791121131; x=1791725931;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0BJSb57Uses8ogFF7iXJEZQeJF/eI+nTz1gyI/NKl7k=;
-        b=fdkhi0QdYEK9Yrda6kzyIz1S4WA9On/MkMrrXaQ6+Qh9/n6cGblHacPHBS73Wyn+Gm
-         Puo9EtfqMiTEHK6XzlVbKNPJUpAchBAFqgei/E2qJhVs3gYsOEfefzYf/3xWhV0lOV9X
-         o5XngqkihM6oKVvmrkSYY4j5LT99rB/aeu6ev2Q6rk6YBRShj3L/jWru32tM1SXqVbYt
-         36K1GsdIuNFO2Jf9KcAwWv9ahBRYGVEHblmKEQ2mmtBL4Z1aSHL2P+g6pAHWA+LR9w3B
-         G9eujXDkUzjNjcM0IB9QAlP+ijvJE5wM9KtOLtrIbr3HWMKfEccckfZqmpCcVBCl0vTP
-         seIQ==
-X-Gm-Message-State: AFuF++ncG1/CcI0JZizjtRVAbHmLH6tVx1DHS/05KpFGMnSDhdO2s63p
-	yf8VP0K8A3q5WVbdHpiTnPVZEt/p80WKls0Fcmzdba+aFAXJg5kAlXxbA2kDxg==
-X-Gm-Gg: AYBFou0ahBsQkHMO9v5dYcK3rzbesHOPGXMQXp04sirB2Laqnx8vHWJYXO0vfclmjOc
-	OfHmJbquJGemsQzYi0VYdSxQpZ4m5CwspI2OsaxxzEOviLeSrALzXrhHs4t29ih8D7czBInz6Pa
-	em2hGZWJA9lQ34OM0cLObXoXSg834JFDACbdQln/YSeb4mup3dI+hdBTAq1QE+Qxe2Oxs36q1So
-	Zw16lyrc2y8b1qrSaxYxzDtN8olIlrjJD208nwTPT84Q1/QcWQKKf0fnizf7xWszB9eNJnNG/I5
-	hyu4H/KBFno34ke6ZpnGM3bqqVkCMe6TBrClxhx4J+98l5mnDhX/oUhBKKurnOUXK/dAb1mAA2v
-	cXb2cdnC844ZCPPvaZHyzeadu3GMMh4cYUtVMpFw30xh3HbigdxSrGvPpDn3JWhXdpdgglEVNoR
-	EAZTQPC9zQOyk6OG7yrdv3bFFHNyxymKZFtpAVrUlFlyC/6ByWLrW457IWDbSWP4R0Lf21rEpX5
-	cq/FMkrzBMsP8qRUOhr4AxNGA==
-X-Received: by 2002:a05:6a21:820d:b0:3dd:a006:7b3a with SMTP id adf61e73a8af0-3e0bd3f551bmr7925217637.57.1791121129976;
-        Sun, 04 Oct 2026 06:38:49 -0700 (PDT)
+        bh=Z7pjctxEeg+GdxvgiDBBC/mxzFSZr+DY/EdCpC5SQoQ=;
+        b=BEzhqB3/WI1w+90sNMJNO2pM0HTxb8WbtFBz6I/4bxMHNjcAGB6R2JGEpWoRtSRCO2
+         oPpAUeIfNCzNLjaX959APc7SFEx+6HN9iUyFKgNC2Gk0I7jLyyobJWYhkGMfq13N/2Wo
+         VFhzpjW59cc3Zgy8PC1VFT1Bc56MEYBSBfHsZZdxTZSozgRs/mNhWCzQm707ryUc2nWl
+         NP8+xaeQsX0Ae9oefde0qlD6/jR/ZURwgkk31ghNG6WouOOivuZ0JmXbGorE4dk0Xil+
+         2mnJjqiakXxFG89zQ4jxWRuytOY1+H8wzqx2h7DprX7SUsSKpN32CeUs1nKcRuuweIQ4
+         ZAbQ==
+X-Gm-Message-State: AFuF++lz/X4pviEExhPJ3ipre4JWdnyEE73wAn50Y/3D2P93ZKLOe13V
+	cH0H+dGYEHJ0dT5pouboMlFhUaxzhrRpDEoZpuAI6tEWj5yPDgALGVEqt59rQA==
+X-Gm-Gg: AYBFou1dOpYTyApzlhN6eNCucwoEy6m47TYNcdYvtUdcSaLmJAPvCUqF3hGHJdYmrb9
+	xd8g+Xw5gda+BWaH4hi1rsb5fddCmjEBoBCm2J75sgFGzpQOhewLhb4pSNMCooNw5KRuI+yMH5r
+	Kf9Qw4TIVdzcY8iEOvRZe4PU6KcFARUoMC46w0bnDI+hSDlBfojnkTn/F1YqcAYynLisOqGzAiR
+	oBXQzslNJ4Y0xD5bfgzGeNrlZW3WCpuD3BI9TjvoQ9HjhSSuwh9Q9rrZAWWemfcq03JJJu7qXsm
+	cMrou8N45h66/KQaha5Twstw/EJyBnnjqFQp33w5rRahF2wkalWQFkUWZEUH+M6Pu7+p+GmtHXr
+	RbJ1QyjkFg3ujnMFGQ9j7qIYz2Q9aLM+nb55xFQj5OXP1XpqqFXbC5k5e2p0WNGfjZyhJ0r21rn
+	4f6m47AYvpIxX50snylyKqNE0aOZju8TcRGo8Ia1wmkMEGydw4flgaSuXdgZ0jvYtKa7HynU571
+	am7bSubT4esz5g=
+X-Received: by 2002:a05:6a21:1f8d:b0:3e0:e46f:7bab with SMTP id adf61e73a8af0-3e0e46f9077mr3250960637.32.1791121131048;
+        Sun, 04 Oct 2026 06:38:51 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.49
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 06:38:49 -0700 (PDT)
+        Sun, 04 Oct 2026 06:38:50 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 14/43] bpf: representation for intervals with steps
-Date: Sun,  4 Oct 2026 06:37:56 -0700
-Message-ID: <20261004-scev-minimal-rebase-v2-14-f6254e29fdf2@gmail.com>
+Subject: [PATCH bpf-next v2 15/43] bpf: varying offset access support for PTR_TO_BTF_ID pointers
+Date: Sun,  4 Oct 2026 06:37:57 -0700
+Message-ID: <20261004-scev-minimal-rebase-v2-15-f6254e29fdf2@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
@@ -82,506 +82,394 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Extend scalar register tracking with a linear "base + step * k" description:
-each scalar carries two u16 fields, base and step (invariant: base < step),
-recording that its value is some point on the line base + step * k.
-A fresh scalar starts as base=0, step=1, i.e. any integer.
+Relax the requirements for reads like `p->arr[i].field`, where `p` is a
+PTR_TO_BTF_ID, by allowing `i` to be a non-constant value.
+This is useful for loops over arrays accessed from a PTR_TO_BTF_ID
+when the verifier widens the loop induction variable.
 
-This lets the verifier reason about strided values, e.g. an index multiplied
-by an element size, which neither the min/max bounds nor the tnum can capture
-for a non-power-of-2 stride. Such reasoning is necessary to allow
-array access with a variable offset through PTR_TO_BTF_ID, e.g.
-for expressions like p->arr[i].field.
+Check that the access stays within array bounds based on the access
+register's min and max bounds. Check that the access is aligned with
+array elements using the register's `base` and `step`.
 
-reg_bounds_sync() uses the description in two ways:
-- deduce_bounds_64_from_step() intersects the 64-bit range with the line via
-  cnum64_intersect_linear(), snapping smin/smax to actual points on it;
-- __reg_bound_offset() clears the low bits of var_off implied by the number
-  of trailing zeros shared by base and step.
+Technically, modify btf_struct_access() such that:
+- it identifies `field` by walking BTF from the minimum offset
+  (the register's reg_smin + static instruction offset);
+- it remembers which arrays contain `field`;
+- it checks that offsets `k * step` stay within the array
+  and point to the same `field`;
+- it does not check upper bounds for flexible arrays
+  (as is already the case for constant-offset access).
 
-range_within() is extended to check whether the cur register's equation
-describes a subset of the points described by the old register's equation.
-
-Scalar ALU operations update base/step as follows:
-- ADD of a constant (including pointer + scalar): keep step, shift base;
-- MUL by a constant: scale step and base by the constant;
-- LSH by a constant: scale step and base by the corresponding power of two;
-- All other operations reset to base=0, step=1.
-
-Branch (eq/neq) checks do not take into account base/step yet.
+Support for flexible arrays nested inside trailing struct members
+(e.g. p->nested.data[i], with data declared as int data[]) is left
+for future work.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |   7 ++
- kernel/bpf/log.c             |   2 +
- kernel/bpf/states.c          |  26 ++++++-
- kernel/bpf/verifier.c        | 182 ++++++++++++++++++++++++++++++++++++++++++-
- 4 files changed, 213 insertions(+), 4 deletions(-)
+ kernel/bpf/btf.c      | 159 ++++++++++++++++++++++++++++++++++++++++++--------
+ kernel/bpf/states.c   |   1 +
+ kernel/bpf/verifier.c |  38 +++++++-----
+ 3 files changed, 159 insertions(+), 39 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 4371fb3405ac..05914fcbe77c 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -178,6 +178,13 @@ struct bpf_reg_state {
- 	 * during state comparisons.
- 	 */
- 	u32 map_uid;
-+	/*
-+	 * The value described by this register, interpreted as s64, lies on
-+	 * a line described by a linear equation base + step * k.
-+	 * Invariant: base < step.
-+	 */
-+	u16 base;
-+	u16 step;
- 	/* if (!precise && SCALAR_VALUE) min/max/tnum don't affect safety */
- 	bool precise;
- };
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index d850a7863d2e..900d1bb1988b 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -692,6 +692,8 @@ static void print_reg_state(struct bpf_verifier_env *env,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0630675377aa..f4d119f3d5ef 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -2079,7 +2079,8 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
+  * *elem_id: id of u32
+  * *total_nelems: (x * y).  Hence, individual elem size is
+  *                (*type_size / *total_nelems)
+- * *type_id: id of type if it's changed within the function, 0 if not
++ * *type_id: ID of the returned type if leading modifiers were stripped;
++ *           otherwise left unchanged.
+  *
+  * type: is not an array (e.g. const struct X)
+  * return type: type "struct X"
+@@ -2087,7 +2088,8 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
+  * *elem_type: same as return type ("struct X")
+  * *elem_id: 0
+  * *total_nelems: 1
+- * *type_id: id of type if it's changed within the function, 0 if not
++ * *type_id: ID of the returned type if leading modifiers were stripped;
++ *           otherwise left unchanged.
+  */
+ static const struct btf_type *
+ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+@@ -2120,7 +2122,8 @@ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 		case BTF_KIND_CONST:
+ 		case BTF_KIND_RESTRICT:
+ 		case BTF_KIND_TYPE_TAG:
+-			id = type->type;
++			if (!array_type)
++				id = type->type;
+ 			type = btf_type_by_id(btf, type->type);
+ 			break;
  
- 			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
- 			verbose_a("var_off=%s", tn_buf);
-+			if (reg->base != 0 || reg->step != 1)
-+				verbose_a("step=%d+%d", reg->base, reg->step);
- 		}
- 	}
- 	verbose(env, ")");
+@@ -7549,6 +7552,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ }
+ EXPORT_SYMBOL_GPL(btf_ctx_access);
+ 
++#define MAX_ARRAYS_WALK 16
++
++/* Description of an array crossed while walking a BTF access chain */
++struct array_access {
++	u32 id;		/* BTF_KIND_ARRAY type id */
++	u32 off;	/* offset of the access within the array */
++};
++
+ enum bpf_struct_walk_result {
+ 	/* < 0 error */
+ 	WALK_SCALAR = 0,
+@@ -7557,10 +7568,43 @@ enum bpf_struct_walk_result {
+ 	WALK_STRUCT,
+ };
+ 
++static const struct btf_member *find_flex_member(const struct btf *btf, const struct btf_type *t)
++{
++	const struct btf_array *array;
++	const struct btf_type *mtype;
++	const struct btf_member *member;
++	u32 vlen = btf_type_vlen(t);
++
++	if (vlen == 0)
++		return NULL;
++
++	member = btf_type_member(t) + vlen - 1;
++	mtype = btf_type_skip_modifiers(btf, member->type, NULL);
++	if (!btf_type_is_array(mtype))
++		return NULL;
++
++	array = (const struct btf_array *)(mtype + 1);
++	if (array->nelems != 0)
++		return NULL;
++
++	return member;
++}
++
++static int push_array(struct array_access *arrays, u32 *arrays_cnt, struct array_access item)
++{
++	if (arrays == NULL)
++		return 0;
++	if (*arrays_cnt == MAX_ARRAYS_WALK)
++		return -1;
++	arrays[(*arrays_cnt)++] = item;
++	return 0;
++}
++
+ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+ 			   const struct btf_type *t, int off, int size,
+ 			   u32 *next_btf_id, enum bpf_type_flag *flag,
+-			   const char **field_name, bool walk_flex_arrays)
++			   const char **field_name, bool walk_flex_arrays,
++			   struct array_access *arrays, u32 *arrays_cnt)
+ {
+ 	u32 i, moff, mtrue_end, msize = 0, total_nelems = 0;
+ 	const struct btf_type *mtype, *elem_type = NULL;
+@@ -7595,22 +7639,19 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+ 		/* If the last element is a variable size array, we may
+ 		 * need to relax the rule.
+ 		 */
+-		if (vlen == 0)
++		member = find_flex_member(btf, t);
++		if (!member)
+ 			goto error;
+ 
+-		member = btf_type_member(t) + vlen - 1;
+-		mtype = btf_type_skip_modifiers(btf, member->type,
+-						NULL);
+-		if (!btf_type_is_array(mtype))
++		moff = __btf_member_bit_offset(t, member) / 8;
++		if (off < moff)
+ 			goto error;
+ 
++		mtype = btf_type_skip_modifiers(btf, member->type, &mid);
+ 		array_elem = (struct btf_array *)(mtype + 1);
+-		if (array_elem->nelems != 0)
+-			goto error;
+ 
+-		moff = __btf_member_bit_offset(t, member) / 8;
+-		if (off < moff)
+-			goto error;
++		if (push_array(arrays, arrays_cnt, (struct array_access){ mid, off - moff }))
++			return -E2BIG;
+ 
+ 		/* allow structure and integer */
+ 		t = btf_type_skip_modifiers(btf, array_elem->type,
+@@ -7733,6 +7774,9 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+ 			 *      the array's element as long as it is
+ 			 *      within the mtrue_end boundary.
+ 			 */
++			if (push_array(arrays, arrays_cnt,
++				       (struct array_access){ mid, off - moff }))
++				return -E2BIG;
+ 
+ 			/* skip empty array */
+ 			if (moff == mtrue_end)
+@@ -7825,15 +7869,29 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+ 
+ int btf_struct_access(struct bpf_verifier_log *log,
+ 		      const struct bpf_reg_state *reg,
+-		      int off, int size, enum bpf_access_type atype __maybe_unused,
++		      int _off, int size, enum bpf_access_type atype __maybe_unused,
+ 		      u32 *next_btf_id, enum bpf_type_flag *flag,
+ 		      const char **field_name)
+ {
+ 	const struct btf *btf = reg->btf;
+ 	enum bpf_type_flag tmp_flag = 0;
++	struct array_access arrays[MAX_ARRAYS_WALK];
++	const struct btf_member *member;
+ 	const struct btf_type *t;
++	u32 i, arrays_cnt = 0;
+ 	u32 id = reg->btf_id;
+-	int err;
++	s64 min_off, max_off, flex_off;
++	int err, off, ret;
++
++	if (check_add_overflow(reg_smin(reg), (s64)_off, &min_off) ||
++	    check_add_overflow(reg_smax(reg), (s64)_off, &max_off) ||
++	    min_off != (int)min_off) {
++		bpf_log(log,
++			"offset computation overflows: register offset range is [%lld, %lld], instruction offset is %d\n",
++			reg_smin(reg), reg_smax(reg), _off);
++		return -EINVAL;
++	}
++	off = min_off;
+ 
+ 	while (type_is_alloc(reg->type)) {
+ 		struct btf_struct_meta *meta;
+@@ -7860,26 +7918,30 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 	t = btf_type_by_id(btf, id);
+ 	do {
+ 		err = btf_struct_walk(log, btf, t, off, size, &id, &tmp_flag,
+-				      field_name, !type_is_alloc(reg->type));
+-
++				      field_name, !type_is_alloc(reg->type), arrays, &arrays_cnt);
+ 		switch (err) {
+ 		case WALK_PTR:
+ 			/* For local types, the destination register cannot
+ 			 * become a pointer again.
+ 			 */
+-			if (type_is_alloc(reg->type))
+-				return SCALAR_VALUE;
++			if (type_is_alloc(reg->type)) {
++				ret = SCALAR_VALUE;
++				goto check_variable_offset;
++			}
+ 			/* If we found the pointer or scalar on t+off,
+ 			 * we're done.
+ 			 */
+ 			*next_btf_id = id;
+ 			*flag = tmp_flag;
+-			return PTR_TO_BTF_ID;
++			ret = PTR_TO_BTF_ID;
++			goto check_variable_offset;
+ 		case WALK_PTR_UNTRUSTED:
+ 			*flag = MEM_RDONLY | PTR_UNTRUSTED;
+-			return PTR_TO_MEM;
++			ret = PTR_TO_MEM;
++			goto check_variable_offset;
+ 		case WALK_SCALAR:
+-			return SCALAR_VALUE;
++			ret = SCALAR_VALUE;
++			goto check_variable_offset;
+ 		case WALK_STRUCT:
+ 			/* We found nested struct, so continue the search
+ 			 * by diving in it. At this point the offset is
+@@ -7899,6 +7961,55 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 	} while (t);
+ 
+ 	return -EINVAL;
++
++check_variable_offset:
++	if (min_off == max_off)
++		return ret;
++
++	/* Find an offset at which access would go to a flexible array tail (if any). */
++	t = btf_type_skip_modifiers(btf, reg->btf_id, NULL);
++	member = find_flex_member(btf, t);
++	flex_off = member ? __btf_member_bit_offset(t, member) / 8 : S64_MAX;
++
++	/*
++	 * If this is a varying offset access, the step recorded within a register
++	 * should correspond to one of the arrays visited while walking.
++	 */
++	for (i = 0; i < arrays_cnt; i++) {
++		s64 array_start, array_end, access_end;
++		u32 asize, esize, elem_id;
++
++		/*
++		 * 'arrays' records top-level arrays only, use __btf_resolve_size()
++		 * to get flattened representation.
++		 */
++		t = btf_type_by_id(btf, arrays[i].id);
++		if (IS_ERR(__btf_resolve_size(btf, t, &asize, NULL, &elem_id, NULL, NULL)) ||
++		    IS_ERR(btf_resolve_size(btf, btf_type_by_id(btf, elem_id), &esize)))
++			continue;
++		/* Make sure every accessed offset lands on the same field of some element. */
++		if (esize == 0 || reg->step % esize != 0)
++			continue;
++
++		array_start = min_off - arrays[i].off;
++		/* An array within the flexible tail has no upper bound to exceed */
++		if (array_start >= flex_off && btf_type_is_array(t) &&
++		    btf_type_array(t)->nelems == 0)
++			return ret;
++
++		/* the 'size' bytes read at max_off must stay within the array */
++		if (check_add_overflow(array_start, (s64)asize, &array_end) ||
++		    check_add_overflow(max_off, (s64)size, &access_end) ||
++		    access_end > array_end)
++			continue;
++		return ret;
++	}
++
++	bpf_log(log,
++		"invalid variable offset access into struct %s: offsets [%lld, %lld] size %d step %d do not match any array\n",
++		btf_name_by_offset(btf, btf_type_by_id(btf, reg->btf_id)->name_off),
++		min_off, max_off, size, reg->step);
++	return -EINVAL;
+ }
+ 
+ /* Check that two BTF types, each specified as an BTF object + id, are exactly
+@@ -7939,7 +8050,7 @@ bool btf_struct_ids_match(struct bpf_verifier_log *log,
+ 	if (!type)
+ 		return false;
+ 	err = btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL,
+-			      walk_flex_arrays);
++			      walk_flex_arrays, NULL, NULL);
+ 	if (err != WALK_STRUCT)
+ 		return false;
+ 
 diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 345079cf64d3..981328f5eb60 100644
+index 981328f5eb60..2f6a7620eb72 100644
 --- a/kernel/bpf/states.c
 +++ b/kernel/bpf/states.c
-@@ -302,8 +302,30 @@ int bpf_update_branch_counts(struct bpf_verifier_env *env, struct bpf_verifier_s
- static bool range_within(const struct bpf_reg_state *old,
- 			 const struct bpf_reg_state *cur)
- {
--	return cnum64_is_subset(old->r64, cur->r64) &&
--	       cnum32_is_subset(old->r32, cur->r32);
-+	if (!cnum64_is_subset(old->r64, cur->r64) ||
-+	    !cnum32_is_subset(old->r32, cur->r32))
-+		return false;
-+
-+	if (old->step <= 1)
-+		return true;
-+
-+	if (cnum64_is_const(cur->r64))
-+		return imod((s64)cnum64_smin(cur->r64), old->step) == old->base;
-+
-+	/*
-+	 * Both `old` and `cur` define some sets of points.
-+	 * Return true, if points defined by `cur` are a subset of points defined by `old`:
-+	 * - bounds for `cur` should be within bounds for `old`;
-+	 * - cur->step should be dividable by old->step;
-+	 * - cur->base should start at integer number of old->step
-+	 *   steps from old->base.
-+	 *
-+	 * E.g. the following ranges are compatible:
-+	 * - old [0, 10] step 2
-+	 * - new [2, 10] step 4
-+	 */
-+	return cur->step % old->step == 0 &&
-+	       (cur->base - old->base) % old->step == 0;
- }
- 
- /* If in the old state two registers had the same id, then they need to have
+@@ -633,6 +633,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 	case PTR_TO_BUF:
+ 	case PTR_TO_TP_BUFFER:
+ 	case PTR_TO_STACK:
++	case PTR_TO_BTF_ID:
+ 		/* If the new min/max/var_off satisfy the old ones and
+ 		 * everything else matches, we are OK.
+ 		 */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4dd71bf7c1d9..f71778a75f30 100644
+index f71778a75f30..27a53204696f 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -5,6 +5,7 @@
-  */
- #include <uapi/linux/btf.h>
- #include <linux/bpf-cgroup.h>
-+#include <linux/count_zeros.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/slab.h>
-@@ -1910,12 +1911,128 @@ static void bpf_diag_record_caller_saved(struct bpf_verifier_env *env,
+@@ -6521,6 +6521,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 	const char *field_name = NULL;
+ 	enum bpf_type_flag flag = 0;
+ 	u32 btf_id = 0;
++	s64 min_off;
+ 	int ret;
+ 
+ 	if (!env->allow_ptr_leaks) {
+@@ -6536,36 +6537,31 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		return -EINVAL;
  	}
- }
  
-+static void reg_step_reset(struct bpf_reg_state *reg)
-+{
-+	reg->base = 0;
-+	reg->step = 1;
-+}
-+
-+static void scalar_step_add(struct bpf_reg_state *dst_reg,
-+			    const struct bpf_reg_state *a,
-+			    const struct bpf_reg_state *b)
-+{
-+	const struct bpf_reg_state *reg;
-+	s64 amount, tmp;
-+
-+	if (tnum_is_const(b->var_off)) {
-+		reg = a;
-+		amount = (s64)b->var_off.value;
-+	} else if (tnum_is_const(a->var_off)) {
-+		reg = b;
-+		amount = (s64)a->var_off.value;
-+	} else {
-+		reg_step_reset(dst_reg);
-+		return;
-+	}
-+
-+	/*
-+	 * Let x be a possible signed value of the register,
-+	 * d = amount, s = reg->step, and b = reg->base.
-+	 * Then x mod s = b, with s > 0 and 0 <= b < s.
-+	 * If the addition causes signed underflow, the resulting value
-+	 * is x + d + 2**64.
-+	 *
-+	 * Taking the result modulo s and substituting x mod s = b gives:
-+	 *   (x + d + 2**64) mod s = (b + d + (2**64 mod s)) mod s      (1)
-+	 * Keeping reg->step = s and updating reg->base to (b + d) mod s
-+	 * requires (1) to equal (b + d) mod s, which holds if and only
-+	 * if 2**64 mod s = 0.
-+	 * Signed overflow subtracts 2**64 and has the same requirement.
-+	 *
-+	 * Conservatively reset the stride if either wrap is possible.
-+	 */
-+	if (check_add_overflow(reg_smin(reg), amount, &tmp) ||
-+	    check_add_overflow(reg_smax(reg), amount, &tmp)) {
-+		reg_step_reset(dst_reg);
-+		return;
-+	}
-+
-+	dst_reg->base = (reg->base + imod(amount, reg->step)) % reg->step;
-+	dst_reg->step = reg->step;
-+}
-+
-+static void scalar_step_scale(struct bpf_reg_state *dst_reg, u64 amount)
-+{
-+	u16 step;
-+	s64 tmp;
-+
-+	/*
-+	 * Using the same notation as scalar_step_add(), with d > 0,
-+	 * the scaled value satisfies (x * d) mod (s * d) = b * d.
-+	 * If the multiplication wraps, its signed result can be represented
-+	 * as x * d - n * 2**64 for some nonzero integer n.
-+	 *
-+	 * Taking the result modulo s * d gives:
-+	 *   (x * d - n * 2**64) mod (s * d) =
-+	 *   (b * d - (n * 2**64 mod (s * d))) mod (s * d)              (1)
-+	 * Updating dst_reg->base to b * d and dst_reg->step to s * d
-+	 * requires (1) to equal b * d, which holds if and only if
-+	 * n * 2**64 mod (s * d) = 0.
-+	 *
-+	 * Conservatively reset the stride if a wrap is possible.
-+	 */
-+	if (amount == 0 || check_mul_overflow(dst_reg->step, amount, &step) ||
-+	    check_mul_overflow(reg_smin(dst_reg), (s64)amount, &tmp) ||
-+	    check_mul_overflow(reg_smax(dst_reg), (s64)amount, &tmp)) {
-+		reg_step_reset(dst_reg);
-+		return;
-+	}
-+
-+	dst_reg->base = (dst_reg->base * amount) % step;
-+	dst_reg->step = step;
-+}
-+
-+/*
-+ * Let x be a possible signed value of the register,
-+ * s = reg->step, and b = reg->base.
-+ * Then x mod s = b, with s > 0 and 0 <= b < s.
-+ * Truncating to N bits and then zero- or sign-extending x
-+ * is equivalent to computing x + k * 2**N for some integer k.
-+ * For example, sign-extending the low 8 bits of x = 255 can
-+ * be expressed as 255 - 2**8 = -1.
-+ *
-+ * Taking the result modulo s and substituting x mod s = b gives:
-+ *   (x + k * 2**N) mod s = (b + (k * 2**N mod s)) mod s
-+ * Keeping reg->base = b and reg->step = s requires this to equal b,
-+ * which holds if and only if k * 2**N mod s = 0.
-+ * Continuing the example with s = 3 and b = 0, we have 255 mod 3 = 0,
-+ * but (-1) mod 3 = 2, so the original base and step no longer hold.
-+ *
-+ * Conservatively reset the stride unless all possible values fit in
-+ * the range where the conversion leaves them unchanged.
-+ * Call before updating the register's bounds. Requires 0 < bits < 64.
-+ */
-+static void reg_step_check_unsigned(struct bpf_reg_state *reg, u32 bits)
-+{
-+	if (reg_umax(reg) >= (1ULL << bits))
-+		reg_step_reset(reg);
-+}
-+
-+static void reg_step_check_signed(struct bpf_reg_state *reg, u32 bits)
-+{
-+	s64 limit = 1LL << (bits - 1);
-+
-+	if (reg_smin(reg) < -limit || reg_smax(reg) >= limit)
-+		reg_step_reset(reg);
-+}
-+
- /* This helper doesn't clear reg->id */
- static void ___mark_reg_known(struct bpf_reg_state *reg, u64 imm)
- {
- 	reg->var_off = tnum_const(imm);
- 	reg->r64 = cnum64_from_urange(imm, imm);
- 	reg->r32 = cnum32_from_urange((u32)imm, (u32)imm);
-+	reg_step_reset(reg);
- }
- 
- /* Mark the unknown part of a register (variable offset or scalar value) as
-@@ -2158,10 +2275,16 @@ static void deduce_bounds_64_from_32(struct bpf_reg_state *reg)
- 	reg->r64 = cnum64_cnum32_intersect(reg->r64, reg->r32);
- }
- 
-+static void deduce_bounds_64_from_step(struct bpf_reg_state *reg)
-+{
-+	reg->r64 = cnum64_intersect_linear(reg->r64, reg->base, reg->step);
-+}
-+
- static void __reg_deduce_bounds(struct bpf_reg_state *reg)
- {
- 	deduce_bounds_32_from_64(reg);
- 	deduce_bounds_64_from_32(reg);
-+	deduce_bounds_64_from_step(reg);
- }
- 
- /* Attempts to improve var_off based on unsigned min/max information */
-@@ -2173,8 +2296,18 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
- 	struct tnum var32_off = tnum_intersect(tnum_subreg(var64_off),
- 					       tnum_range(reg_u32_min(reg),
- 							  reg_u32_max(reg)));
-+	u32 trailing_zero_bits;
-+	u16 base = reg->base;
-+	u16 step = reg->step;
- 
- 	reg->var_off = tnum_or(tnum_clear_subreg(var64_off), var32_off);
-+
-+	if (base == 0)
-+		trailing_zero_bits = count_trailing_zeros(step);
-+	else
-+		trailing_zero_bits = min(count_trailing_zeros(base),
-+					 count_trailing_zeros(step));
-+	reg->var_off = tnum_and(reg->var_off, tnum_const(~0ULL << trailing_zero_bits));
- }
- 
- static bool range_bounds_violation(struct bpf_reg_state *reg);
-@@ -2250,6 +2383,7 @@ static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
- 	if (env->test_reg_invariants)
- 		return -EFAULT;
- 	__mark_reg_unbounded(reg);
-+	reg_step_reset(reg);
- 	return 0;
- }
- 
-@@ -2260,6 +2394,7 @@ void bpf_mark_reg_unknown_imprecise(struct bpf_reg_state *reg)
- 	reg->type = SCALAR_VALUE;
- 	reg->var_off = tnum_unknown;
- 	__mark_reg_unbounded(reg);
-+	reg_step_reset(reg);
- }
- 
- /* Mark a register as having a completely unknown (scalar) value,
-@@ -5894,6 +6029,7 @@ static int check_buffer_access(struct bpf_verifier_env *env,
- /* BPF architecture zero extends alu32 ops into 64-bit registesr */
- static void zext_32_to_64(struct bpf_reg_state *reg)
- {
-+	reg_step_check_unsigned(reg, 32);
- 	reg->var_off = tnum_subreg(reg->var_off);
- 	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
- }
-@@ -5903,13 +6039,14 @@ static void zext_32_to_64(struct bpf_reg_state *reg)
-  */
- static void coerce_reg_to_size(struct bpf_reg_state *reg, int size)
- {
--	u64 mask;
-+	u64 mask = (1ULL << (size * 8)) - 1;
-+
-+	reg_step_check_unsigned(reg, size * 8);
- 
- 	/* clear high bits in bit representation */
- 	reg->var_off = tnum_cast(reg->var_off, size);
- 
- 	/* fix arithmetic bounds */
--	mask = ((u64)1 << (size * 8)) - 1;
- 	if ((reg_umin(reg) & ~mask) == (reg_umax(reg) & ~mask))
- 		reg_set_urange64(reg, reg_umin(reg) & mask, reg_umax(reg) & mask);
- 	else
-@@ -5947,6 +6084,8 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
- 	u64 top_smax_value, top_smin_value;
- 	u64 num_bits = size * 8;
- 
-+	reg_step_check_signed(reg, num_bits);
-+
- 	if (tnum_is_const(reg->var_off)) {
- 		u64_cval = reg->var_off.value;
- 		if (size == 1)
-@@ -6012,6 +6151,8 @@ static void coerce_subreg_to_size_sx(struct bpf_reg_state *reg, int size)
- 	u32 top_smax_value, top_smin_value;
- 	u32 num_bits = size * 8;
- 
-+	reg_step_check_unsigned(reg, num_bits - 1);
-+
- 	if (tnum_is_const(reg->var_off)) {
- 		u32_val = reg->var_off.value;
- 		if (size == 1)
-@@ -6721,6 +6862,7 @@ static void add_scalar_to_reg(struct bpf_reg_state *dst_reg, s64 val)
- 	fake_reg.type = SCALAR_VALUE;
- 	__mark_reg_known(&fake_reg, val);
- 
-+	scalar_step_add(dst_reg, dst_reg, &fake_reg);
- 	scalar32_min_max_add(dst_reg, &fake_reg);
- 	scalar_min_max_add(dst_reg, &fake_reg);
- 	dst_reg->var_off = tnum_add(dst_reg->var_off, fake_reg.var_off);
-@@ -15591,6 +15733,24 @@ static int sanitize_check_bounds(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
-+static void scalar_step_mul(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg)
-+{
-+	if (tnum_is_const(src_reg->var_off))
-+		scalar_step_scale(dst_reg, src_reg->var_off.value);
-+	else
-+		reg_step_reset(dst_reg);
-+}
-+
-+static void scalar_step_lsh(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg)
-+{
-+	u64 amount = src_reg->var_off.value;
-+
-+	if (tnum_is_const(src_reg->var_off) && amount < 64)
-+		scalar_step_scale(dst_reg, 1ULL << amount);
-+	else
-+		reg_step_reset(dst_reg);
-+}
-+
- /* Handles arithmetic on a pointer and a scalar: computes new min/max and var_off.
-  * Caller should also handle BPF_MOV case separately.
-  * If we return -EACCES, caller may want to try again treating pointer as a
-@@ -15759,6 +15919,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 		 * added into the variable offset, and we copy the fixed offset
- 		 * from ptr_reg.
- 		 */
-+		scalar_step_add(dst_reg, ptr_reg, off_reg);
- 		dst_reg->r64 = cnum64_add(ptr_reg->r64, off_reg->r64);
- 		dst_reg->var_off = tnum_add(ptr_reg->var_off, off_reg->var_off);
- 		dst_reg->raw = ptr_reg->raw;
-@@ -15820,6 +15981,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 			if ((!known && smin_val < 0) || dst_reg->range < 0)
- 				memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
- 		}
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_AND:
- 	case BPF_OR:
-@@ -16527,6 +16689,7 @@ static void scalar_byte_swap(struct bpf_reg_state *dst_reg, struct bpf_insn *ins
- 		 * Bounds will be re-derived from the new tnum later.
- 		 */
- 		__mark_reg_unbounded(dst_reg);
-+		reg_step_reset(dst_reg);
+-	if (!tnum_is_const(reg->var_off)) {
+-		char tn_buf[48];
+-
+-		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
++	if (check_add_overflow(reg_smin(reg), off, &min_off)) {
+ 		verbose(env,
+-			"%s is ptr_%s invalid variable offset: off=%d, var_off=%s\n",
+-			reg_arg_name(env, argno), tname, off, tn_buf);
++			"%s is ptr_%s access, offset computation overflows: register's minimal offset is %lld, instruction offset is %d\n",
++			reg_arg_name(env, argno), tname, reg_smin(reg), off);
+ 		return -EACCES;
  	}
- 	/* For bswap16/32, truncate dst register to match the swapped size */
- 	if (insn->imm == 16 || insn->imm == 32)
-@@ -16653,6 +16816,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 	 */
- 	switch (opcode) {
- 	case BPF_ADD:
-+		scalar_step_add(dst_reg, dst_reg, &src_reg);
- 		scalar32_min_max_add(dst_reg, &src_reg);
- 		scalar_min_max_add(dst_reg, &src_reg);
- 		dst_reg->var_off = tnum_add(dst_reg->var_off, src_reg.var_off);
-@@ -16661,6 +16825,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		scalar32_min_max_sub(dst_reg, &src_reg);
- 		scalar_min_max_sub(dst_reg, &src_reg);
- 		dst_reg->var_off = tnum_sub(dst_reg->var_off, src_reg.var_off);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_NEG:
- 		env->fake_reg[0] = *dst_reg;
-@@ -16668,8 +16833,10 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		scalar32_min_max_sub(dst_reg, &env->fake_reg[0]);
- 		scalar_min_max_sub(dst_reg, &env->fake_reg[0]);
- 		dst_reg->var_off = tnum_neg(env->fake_reg[0].var_off);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_MUL:
-+		scalar_step_mul(dst_reg, &src_reg);
- 		dst_reg->var_off = tnum_mul(dst_reg->var_off, src_reg.var_off);
- 		scalar32_min_max_mul(dst_reg, &src_reg);
- 		scalar_min_max_mul(dst_reg, &src_reg);
-@@ -16690,6 +16857,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 				scalar_min_max_sdiv(dst_reg, &src_reg);
- 			else
- 				scalar_min_max_udiv(dst_reg, &src_reg);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_MOD:
- 		/* BPF mod specification: x % 0 = x */
-@@ -16705,6 +16873,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 				scalar_min_max_smod(dst_reg, &src_reg);
- 			else
- 				scalar_min_max_umod(dst_reg, &src_reg);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_AND:
- 		if (tnum_is_const(src_reg.var_off)) {
-@@ -16715,6 +16884,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		dst_reg->var_off = tnum_and(dst_reg->var_off, src_reg.var_off);
- 		scalar32_min_max_and(dst_reg, &src_reg);
- 		scalar_min_max_and(dst_reg, &src_reg);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_OR:
- 		if (tnum_is_const(src_reg.var_off)) {
-@@ -16725,13 +16895,16 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		dst_reg->var_off = tnum_or(dst_reg->var_off, src_reg.var_off);
- 		scalar32_min_max_or(dst_reg, &src_reg);
- 		scalar_min_max_or(dst_reg, &src_reg);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_XOR:
- 		dst_reg->var_off = tnum_xor(dst_reg->var_off, src_reg.var_off);
- 		scalar32_min_max_xor(dst_reg, &src_reg);
- 		scalar_min_max_xor(dst_reg, &src_reg);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_LSH:
-+		scalar_step_lsh(dst_reg, &src_reg);
- 		if (alu32)
- 			scalar32_min_max_lsh(dst_reg, &src_reg);
- 		else
-@@ -16742,15 +16915,18 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 			scalar32_min_max_rsh(dst_reg, &src_reg);
- 		else
- 			scalar_min_max_rsh(dst_reg, &src_reg);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_ARSH:
- 		if (alu32)
- 			scalar32_min_max_arsh(dst_reg, &src_reg);
- 		else
- 			scalar_min_max_arsh(dst_reg, &src_reg);
-+		reg_step_reset(dst_reg);
- 		break;
- 	case BPF_END:
- 		scalar_byte_swap(dst_reg, insn);
-+		reg_step_reset(dst_reg);
- 		break;
- 	default:
- 		break;
-@@ -17657,6 +17833,7 @@ static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state
- 		 * violations if we're on a dead branch.
- 		 */
- 		__mark_reg_unbounded(reg1);
-+		reg_step_reset(reg1);
- 		if (is_jmp32) {
- 			t = tnum_and(tnum_subreg(reg1->var_off), tnum_const(~val));
- 			reg1->var_off = tnum_with_subreg(reg1->var_off, t);
-@@ -17979,6 +18156,7 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
- 			reg->delta = saved_off;
- 			reg->id = saved_id;
  
-+			scalar_step_add(reg, reg, &fake_reg);
- 			scalar32_min_max_add(reg, &fake_reg);
- 			scalar_min_max_add(reg, &fake_reg);
- 			reg->var_off = tnum_add(reg->var_off, fake_reg.var_off);
+-	off += reg->var_off.value;
+-
+-	if (off < 0) {
++	if (min_off < 0) {
+ 		verbose(env,
+-			"%s is ptr_%s invalid negative access: off=%d\n",
+-			reg_arg_name(env, argno), tname, off);
++			"%s is ptr_%s invalid negative access: off=%lld\n",
++			reg_arg_name(env, argno), tname, min_off);
+ 		return -EACCES;
+ 	}
+ 
+ 	if (reg->type & MEM_USER) {
+ 		verbose(env,
+-			"%s is ptr_%s access user memory: off=%d\n",
+-			reg_arg_name(env, argno), tname, off);
++			"%s is ptr_%s access user memory\n",
++			reg_arg_name(env, argno), tname);
+ 		return -EACCES;
+ 	}
+ 
+ 	if (reg->type & MEM_PERCPU) {
+ 		verbose(env,
+-			"%s is ptr_%s access percpu memory: off=%d\n",
+-			reg_arg_name(env, argno), tname, off);
++			"%s is ptr_%s access percpu memory\n",
++			reg_arg_name(env, argno), tname);
+ 		return -EACCES;
+ 	}
+ 
+@@ -6575,6 +6571,18 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 	}
+ 
+ 	if (env->ops->btf_struct_access && !type_is_alloc(reg->type) && atype == BPF_WRITE) {
++		if (!tnum_is_const(reg->var_off)) {
++			char tn_buf[48];
++
++			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
++			verbose(env,
++				"%s is ptr_%s invalid variable offset: off=%d, var_off=%s\n",
++				reg_arg_name(env, argno), tname, off, tn_buf);
++			return -EACCES;
++		}
++
++		off += reg->var_off.value;
++
+ 		if (!btf_is_kernel(reg->btf)) {
+ 			verifier_bug(env, "reg->btf must be kernel btf");
+ 			return -EFAULT;
 
 -- 
 2.53.0
