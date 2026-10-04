@@ -1,135 +1,194 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2E539A04C
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFA143DEA3
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 14:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791122356; cv=none; b=s0stw4/wjsMhd8/Dy8/Br5ITWNzIWsNLuqi/wWY+7gWJdGxpArsdU0d2hLwpj1dUImSkfZyi3jHYELA27m8c0sTgYj+T2QcAq9J/oAqJMl1Xst8D0nTjdF6SclPumsVhSkC+bMcILCwIkE6gBvixnizBsQVZSCzyFGyXzOHZKzU=
+	t=1791122403; cv=none; b=h/UAGDVIR8t24YZoBhKvqsKwPYpHPptai2Y82Nei+uda09PKUYeRJ6hA3FbXBb7vH6xnJ5BT25z7Xr4JciKKNVBcWdNMqqCfK+BwcxA8MCfe2KKRKvLB2fucvtCfc8l4Lv2bbsvN2I0LYiyjbmYcpSuFsb1jVew9VqAMRtYVBgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791122356; c=relaxed/simple;
-	bh=F0x8Hf6DnzapFRlkqXmoL/Baz55Q4hJCpP7twCejzD8=;
+	s=arc-20240116; t=1791122403; c=relaxed/simple;
+	bh=Srf1qnVBW+wO38VLwEQyFeco0Ayi5YXhy4Nmsb5B/Bo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pwFkp4ATDDAhfQkwLBGuxafyyfyK0nrsyBhFa+dCG1BOqHOP9QcKNl1Md4wvw6ea/ICnOLGGlQs1qewtUxlx+nFrKSHuC9+9jGjxCAitAAlLxQcGu56QnjuCWbwwpPu62iszwaAjshn6QyIYWkJkupwydBanSVoZwecY2l61YPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NENq4zG1; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=WU+rNJe3ZVufc/y2U4P0H7WnEDmxCvsFTM9JIEPB3dyMbVlpin7FZJnQ+igYatny636z35l636cFXXdqeZJVK+xLBQDwt52VUWm0hTp7t9XO5NPXyVETAqa8gW8vWdvCFlqkg9AN1JdGsLSNPZzCPZ/vBLYb7/ko/WSXOi5L+QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n0jiynJD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NENq4zG1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004EE1F000FF;
-	Sun,  4 Oct 2026 13:59:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n0jiynJD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E54D51F000FF;
+	Sun,  4 Oct 2026 14:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791122355;
-	bh=iGlnzejirjVyACkQmxJFWZE7fCdKCiKcg1WloHMLtOk=;
+	s=k20260515; t=1791122401;
+	bh=ZUi+nrnT/Gmx5xfvsmZfFl4T9LIc0BWLxEsdNk7Jw+I=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NENq4zG1oHjjF6O5wIJLfEFPpk6V9HbQORYnAxNC1ecFSoa+iznRfSS50TvrzGlKT
-	 wVseg8hTgv7UypJjFQc0qUAFARUhsSKgitTxan3mpM/5iIhTkr+eJW0eTwt4qmRs7j
-	 qjuHr1BVl8lgjpf2W5TahQXssAKK6cgBp7Ak/80aXjpo4DR6H8WaBoGdDzIjDW24H4
-	 xiUMkTWMxyZXS56qOaXvZ/ZTEJVVh/PtogzFF5ZpanfxiY/QWtt7Pl28+68Szn6RwY
-	 MxaRHGaL13I0/2aAWPcA0g+4gprPftGXooeVhHwt5qtuB7usLlqq/J5wmj4K5pvW/b
-	 bewA95VnhbnYA==
+	b=n0jiynJDHzhhSvGPK7MRdam3g9mWCagE3TB+E7nsrWIQNHQ131XlbmHPRJBOHUNyB
+	 29j0Xxan/8R2AuEAnS/8AioSi62+yGBKhLg1wwSwd1+Tko012NKHmx4TVaFR9SYyRo
+	 J7i6MJFhzjNLPkvvlMBNxHwpFIUf4VUU6glGSqK9HPLRq1ubJobu1GLWDoPIyqsT1O
+	 HPd+CZxLgeJYzFY0IMblf/ZbarQzrR9SKcuykuMsCvx1IbvrtbJZxolySfAll2hFTX
+	 eVcJUP1umTYCbOfNuXNEkYK5mXgmbA82RrWCqSvk5+JpKJekdvKXO66MppI4qG1eIO
+	 l524MSrQpJfRw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 22/43] bpf: add bpf_reg_union()
+Subject: Re: [PATCH bpf-next v2 28/43] bpf: compute scalar evolution
+ expressions for loops
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Eduard Zingerman" <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261004-scev-minimal-rebase-v2-22-f6254e29fdf2@gmail.com>
+In-Reply-To: <20261004-scev-minimal-rebase-v2-28-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
- <20261004-scev-minimal-rebase-v2-22-f6254e29fdf2@gmail.com>
+ <20261004-scev-minimal-rebase-v2-28-f6254e29fdf2@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 04 Oct 2026 13:59:14 +0000
-Message-Id: <20261004135915.004EE1F000FF@smtp.kernel.org>
+Date: Sun, 04 Oct 2026 14:00:00 +0000
+Message-Id: <20261004140000.E54D51F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] bpf: division by zero in bpf_reg_union() due to step=3D0
-- [Medium] bpf: bpf_reg_union loses alignment precision by missing optimal =
-common congruence
+- [Critical] bpf: SCEV analysis overwrites initial state, bypassing bounds =
+checks on early exits
+- [High] bpf: NULL pointer dereference in compute_insn_scevs for irreducibl=
+e nested loops
+- [Medium] bpf: log_scevs incorrectly rejects valid programs with nested la=
+tches under BPF_LOG_LEVEL2
 --
 
-commit f2da61545238e5504547c2ded4955ae49831e34d
+commit 2d2f1f9c2cfacacbaf91e31cf373b1ae40a400ea
 Author: Eduard Zingerman <eddyz87@gmail.com>
 
-bpf: add bpf_reg_union()
+bpf: compute scalar evolution expressions for loops
 
-This commit adds a utility function bpf_reg_union() to merge the scalar val=
-ues
-of two registers. It combines the circular 32-bit and 64-bit bounds, tnums,=
- and
-base/step equations, synchronizing the result.
+This commit assigns algebraic expressions to loop variables to describe how
+their values evolve across iterations without unrolling the loops. The anal=
+ysis
+proceeds in two phases, analyzing innermost loops first and treating nested
+loops as opaque operations.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5fd6376da1710..28c16e35b1f36 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -17164,6 +17165,33 @@ int bpf_set_reg_range(struct bpf_verifier_env *e=
-nv, struct bpf_reg_state *reg,
->  	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
->  }
-> =20
-> +/* acc :=3D acc U src, matching types only. Caller must clear acc's scal=
-ar ID. */
-> +int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *ac=
-c,
-> +		  const struct bpf_reg_state *src)
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> new file mode 100644
+> index 0000000000000..9ef28e0d8d481
+> --- /dev/null
+> +++ b/kernel/bpf/scev.c
+[ ... ]
+> +static struct env *get_loop_env(struct scev *scev, int loop_header, int =
+insn_idx)
 > +{
-> +	u16 base, step;
+[ ... ]
+> +	e->empty =3D true;
+> +	tmp->entries[cnt].loop_header =3D loop_header;
+> +	tmp->entries[cnt].env =3D e;
+> +	tmp->cnt =3D cnt + 1;
+> +	scev->envs[insn_idx] =3D tmp;
+> +	return e;
+> +}
+[ ... ]
+> +static int setup_initial_loop_env(struct bpf_verifier_env *env, struct e=
+nv *e, int insn_idx)
+> +{
+> +	struct scev *scev =3D env->scev;
+> +	int i, err;
 > +
-> +	if (acc->type !=3D src->type) {
-> +		verifier_bug(env, "union of registers with different types");
-> +		return -EFAULT;
+> +	for (i =3D 0; i < REGS_NUM; i++) {
+> +		err =3D replace_reg(scev, e, i, expr1(scev, REG, i));
+> +		if (err)
+> +			return err;
 > +	}
-> +	acc->r64 =3D cnum64_union(acc->r64, src->r64);
-> +	acc->r32 =3D cnum32_union(acc->r32, src->r32);
-> +	acc->var_off =3D tnum_union(acc->var_off, src->var_off);
-> +
-> +	/* Retain a common congruence if the bases agree modulo the gcd. */
-> +	step =3D gcd(acc->step, src->step);
-> +	base =3D acc->base % step;
+> +	return 0;
+> +}
 
 [Severity: Critical]
-Does this code risk a division by zero exception and subsequent kernel pani=
-c?
+Could this leave the loop environment marked as empty even after it has been
+populated with the initial register state?
 
-BPF programs can create ANY nodes in Scalar Evolution (SCEV) loops. If a lo=
-op
-combines two loop-invariant pointers (e.g., PTR_TO_MAP_VALUE from different
-map lookups) in a phi-node, they are tracked by SCEV (since
-is_widenable_reg_type() permits pointers) and passed to bpf_reg_union().
+When get_loop_env() initializes the environment, it sets e->empty to true.
+Since setup_initial_loop_env() does not set e->empty to false after filling
+the registers, a subsequent call to join() on the backedge might completely
+overwrite this initial state:
 
-Because pointers are initialized via kzalloc or mark_reg_known_zero(), their
-step field is 0. Calling gcd(0, 0) returns 0, leading to a modulo by zero on
-this line.
+	if (acc->empty) {
+		memcpy(acc, cur, sizeof(*acc));
+		acc->empty =3D false;
+		return 0;
+	}
 
-> +	if (base !=3D src->base % step) {
-> +		reg_step_reset(acc);
+If the loop exits on the first iteration, could the verifier mistakenly
+assume a constant from the backedge instead of the actual entry value,
+potentially bypassing bounds checks?
+
+[ ... ]
+> +static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_h=
+eader)
+> +{
+[ ... ]
+> +	/*
+> +	 * For irreducible loops, and for loops nesting a loop with a truncated
+> +	 * exit list, just assume that everything is clobbered for now.
+> +	 */
+> +	if (!can_compute_loop_scev(cur_loop)) {
+> +		header_env =3D get_loop_env(scev, cur_header, cur_header);
+> +		if (!header_env)
+> +			return -ENOMEM;
+> +		/* The freshly allocated environment has all expressions unknown. */
+> +		header_env->empty =3D false;
+> +		return 0;
+> +	}
+[ ... ]
+> +static int compute_insn_scevs(struct bpf_verifier_env *env, struct env *=
+eheader, struct env *einsn)
+> +{
+> +	struct scev *scev =3D env->scev;
+> +	int id, reg;
+> +
+> +	for (reg =3D 0; reg < REGS_NUM; reg++) {
+> +		id =3D einsn->reg2expr[reg];
+
+[Severity: High]
+Is it possible for einsn to be NULL here?
+
+If a reducible outer loop has an exit instruction that is physically located
+inside a nested irreducible loop, compute_scev_for_loop() will skip
+allocating body environments for the inner loop.
+
+When bpf_compute_scev() iterates over instructions and calls find_loop_env()
+for this instruction, it might return NULL. This would result in passing a
+NULL pointer into compute_insn_scevs(), leading to a dereference here.
+
+> +		id =3D transform_expr_once(scev, 0, id, eheader->reg2scev, instantiate=
+_header_scevs);
+> +		if (id < 0)
+> +			return id;
+[ ... ]
+> +static int log_scevs(struct bpf_verifier_env *env)
+> +{
+[ ... ]
+> +		if (!can_compute_loop_scev(loop))
+> +			continue;
+> +		for (j =3D 0; j < loop->backedges_cnt; j++) {
+> +			latch =3D loop->backedges[j].latch;
+> +			if (latch < 0)
+> +				continue;
+> +			bpf_log(log, " scev at latch %d:\n", latch);
+> +			latch_env =3D find_loop_env(scev, i, latch);
+> +			if (verifier_bug_if(!latch_env, env, "i=3D%d, latch=3D%d", i, latch))
+> +				return -EFAULT;
 
 [Severity: Medium]
-Does this condition needlessly discard linear alignment information for val=
-id
-congruences?
+Could this trigger a verifier bug for valid programs when log level 2 is
+enabled?
 
-If bpf_reg_union() merges registers with steps 15/base 10 and step 15/base =
-5,
-it evaluates gcd(15,15)=3D15, sees 10!=3D5, and resets the step to 1.
+If an outer loop's latch is located inside a nested loop, its environment
+might not be allocated since the nested loop's body is skipped during
+evaluation. If so, find_loop_env() will return NULL, causing this check to
+fail and abort verification for otherwise valid code.
 
-The optimal step would be gcd(gcd(acc->step, src->step), abs(acc->base -
-src->base)), which would correctly yield step 5/base 0. This unnecessary
-precision loss might cause the verifier to incorrectly reject valid programs
-due to a perceived loss of alignment constraints.
-
-> +	} else {
-> +		acc->base =3D base;
-> +		acc->step =3D step;
+> +			print_env(env, latch_env, latch, PRINT_SCEV);
+> +		}
 > +	}
-> +	reg_bounds_sync(acc);
-> +	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
+> +	return 0;
 > +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261004-scev-minim=
-al-rebase-v2-0-f6254e29fdf2@gmail.com?part=3D22
+al-rebase-v2-0-f6254e29fdf2@gmail.com?part=3D28
