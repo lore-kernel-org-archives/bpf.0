@@ -1,84 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A734A7C90;
-	Sun,  4 Oct 2026 20:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B944040BCDB;
+	Sun,  4 Oct 2026 22:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.155.198.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791146953; cv=none; b=GoMo6VkMJbkDInbhgDznpNlgu5dUtXJdF6T1fw+Db51L8rO/6JrqMBDzjX/e5v4TZwi/JN+7cYJ9tmcPVkUitJ7ZyEmcCygSn1q+qG0CFFt/XbiBk31wUIL/k8X3xQOPsv0rGUCub+8wxc+2LDl3YXu7sU3fuu+JA2fFvMQITPU=
+	t=1791152503; cv=none; b=hP5NcYUQLz0SEAJoHtZvA/+7a3j3G/qmQopPJYb39DFEgyPypN20ETVfDg1uIp/diGfrAe7hPCIR1NLLN+wcOb68sjQn/gDsB1HA/GmrVbKT4HGbZ9V0y9nbsH4tXVONd3KkCZ4Y8fMnUmewpU9l91961IX0f729rgW2ZwPkD5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791146953; c=relaxed/simple;
-	bh=DxOA3K04TdGKgV9RBzwq7NMB042SfZvdvrNpiga7nYU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=in4QHYHKnPFgocRNERAYgnj/cpH69GjjqdPVLglMSnsPw5VDS8xxU4laF9rsFkzvwPuQdK18bGJ7sbeTucuZNLnmqZFEetfAjShHE2Yd8h4A0i8wYi93+L6AfefGTwNWh8rzeg48Rl99XxJc3/fJ26SijiDU4vB1k3So2o4mJ2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bQPFG1eH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791152503; c=relaxed/simple;
+	bh=8MfZas74TP4bH2JkIBPs6F1Wj3cq6DvSuL/z6D0z5ro=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XMkpqibyn48tYhDvpD2uwRxOE32m5JsEQEzT5g3o3BwcH5c+hiC2XvWc9sP8vUr1qhDP1vGwhWhG1PR4/uHxitA0S/UmlWzxXkNwIIH903s0X2ePc5gZGzaJ6G3wzp0vNaKzDUDBF3AsBSyQ60Zm9au3e1s0xQowgkT5gDOZS0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Af33HbjK; arc=none smtp.client-ip=35.155.198.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bQPFG1eH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE661F000FF;
-	Sun,  4 Oct 2026 20:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791146952;
-	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bQPFG1eH8MlS1WdA1PL227LgKW3ijDNeLX4a/hFg3A5tIJBs2R4L2pQmbea3oPOZ9
-	 uEDR4AFrQIH2K1vLGYWUh9CJMilLz4E6BfOfSRGJBSKzGh0ai4XccVHtFU6p9/ZPmb
-	 zkXGKzgGu6nyO1i3CB0N1mEuKvjeK2c3SZ+afifpbsSmpQNl7s0q4Xolxb9ZbixSaK
-	 IrCM3I0AbmC79vbvGNwfeli07npEC5loZOsPRkZqR3AiJaGnd5fZ48u+7ZdggW7ZxL
-	 bWZZwWBGsoE/EdM5OcyLiL0gcZNQjTdhO7pOrHjhZQZvDWVeZoWg/F6hqXGvZxN28T
-	 +ceI17KlLvYSA==
-From: netdev-bot+sinfo@kernel.org
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>,
- Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- James Hilliard <james.hilliard1@gmail.com>
-Subject: 
- Re: [PATCH net-next v3 0/2] net: stmmac: introduce XDP rx multi-buff support
-Date: Sun, 04 Oct 2026 20:49:10 +0000
-Message-ID: <179114695065.1402591.17659606391395950626@kernel.org>
-In-Reply-To: <20261004-stmmac-rx-mb-v3-0-50fa171af9ec@oss.qualcomm.com>
-References: <20261004-stmmac-rx-mb-v3-0-50fa171af9ec@oss.qualcomm.com>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Af33HbjK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1791152497; x=1822688497;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gGkA92gKn6Umlg7Do4va51y7OdkAYyeZaeaCQws/E94=;
+  b=Af33HbjKYOCoaBHpbzVoHqqWybQPyWBlTj0a00UAD2IeqbAc3dpdQkBL
+   mh4WA9KlMwvATVJKClsCma4kaZvyhOSZmnydGJyi+AiB5AhirTES9AkYQ
+   Bl72vIFxnHNfYbAsPgH1GOuHcyRUSMDYBjuq29vnP4tVB5c9OyDTOzTox
+   dT/QMY1RX1/1ZdkuQGmEEWrRhyvs10S/rU8Ta/PeEVA/gaw1ffZkPsuR7
+   zZ+P9C+lTnTro5hq1CDTahhEnDh1GbFv9TRyjUihioWWtkcv/5u6Edvo3
+   0bXjSK8UAustB45O2nSHSJrLvOEWZLs3GVQMCXFtI0EX6dtSIEQkq8g4n
+   g==;
+X-CSE-ConnectionGUID: bhwPuL6iQoibWn7EKQVtmQ==
+X-CSE-MsgGUID: iF4tuhgNQbWGyCqDCfgFXA==
+X-IronPort-AV: E=Sophos;i="6.27,141,1787011200"; 
+   d="scan'208";a="30278872"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 22:21:32 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:21386]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.164:2525] with esmtp (Farcaster)
+ id 0691faea-dd80-4741-bdc2-6e25b9dd697c; Sun, 4 Oct 2026 22:21:32 +0000 (UTC)
+X-Farcaster-Flow-ID: 0691faea-dd80-4741-bdc2-6e25b9dd697c
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Sun, 4 Oct 2026 22:21:31 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Sun, 4 Oct 2026 22:21:31 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>
+CC: <alan.maguire@oracle.com>, <martin.lau@linux.dev>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <qmo@kernel.org>,
+	<nathan@kernel.org>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<linux@weissschuh.net>, <christian@heusel.eu>, <mcgrof@kernel.org>,
+	<petr.pavlu@suse.com>, <samitolvanen@google.com>,
+	<linux-modules@vger.kernel.org>, <rostedt@goodmis.org>,
+	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<linux-trace-kernel@vger.kernel.org>, <acme@kernel.org>,
+	<namhyung@kernel.org>, <irogers@google.com>,
+	<linux-perf-users@vger.kernel.org>, <jikos@kernel.org>, <bentiss@kernel.org>,
+	<linux-input@vger.kernel.org>, <tj@kernel.org>, <void@manifault.com>,
+	<arighi@nvidia.com>, <changwoo@igalia.com>, <sched-ext@lists.linux.dev>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ojeda@kernel.org>,
+	<rust-for-linux@vger.kernel.org>, <arnd@arndb.de>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<abuehaze@amazon.com>, <doebel@amazon.de>, <mpohlack@amazon.de>,
+	<jay.wang.upstream@gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+Date: Sun, 4 Oct 2026 22:21:27 +0000
+Message-ID: <20261004222127.31128-1-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
+References: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Hi!
+>    - If I know I don't need BPF on the workload, and these 5.4 MB
+>      bite me, I can just turn off BPF
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+They cannot, even when they know they do not need it.  As the cover
+letter says, the cloud provider usually ships one kernel build to all of
+its customers.  Customers install their own packages and workloads around
+that kernel, but they do not build or customize the kernel.  Turning
+BPF off is not a switch they have.
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+> What I find strange is for a user of this scale *to not know* whether
+> BPF will be used in the workload or not, which is what lazy load may
+> solve.
 
- - Whether the issue was actually triggered, or is only theoretical
-   (e.g. found by code inspection). If it was triggered please include
-   the symptoms, like the stack trace or error messages.
+They do know.  They run predictable workloads on a large number of
+small instances, and BPF is not part of them.  They spread the load by
+resource usage, so at that scale every byte matters: more free memory
+on each instance means fewer instances in total.
 
- - What hardware the change was tested on. For driver fixes please
-   mention the device (and if relevant firmware version) used for
-   testing, or say that the change was not tested on real hardware.
+>    * Compress it.
+[...]
+>      Keep zstd-compressed blob in the kernel image and decompress and
+>      parse it synchronously on first use.
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account. If the series needs another revision for
-other reasons, please include the information in the commit messages
-then.
+Thanks for putting this forward.  This compression approach is simpler 
+than loading a module.  I expect the overall code complexity to stay similar
+to v3, since both need to find the first user and defer the module BTF parsing
+until then, but it should be easier to merge into mainline because it avoids
+the request_module() deadlocks.
 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+Would you like to prepare it for a formal submission, or would you
+like me to do so?  Either works for me.  Ideally it lands in time for
+the next LTS kernel, so that we can adopt it there.
+
+From what I can see, most of the work left is in that deferral.
+Whoever needs the BTF first also parses the waiting module BTFs and
+replays the queued registrations, struct_ops ->init() included, under
+whatever locks it holds at that point, e.g. event_mutex or
+bpf_verifier_lock, or inside the module notifier.  So the
+cand_cache_mutex ABBA you found may not be the only deadlock.  Besides
+that, only x86_64 was touched so far, so it needs extending to the
+other architectures as well.
