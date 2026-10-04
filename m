@@ -1,64 +1,64 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68ECC43934A
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6B443991E
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121156; cv=none; b=kq0gmbpPmV9wns9oeunGKuaSyZsbHMZTDudOmajwUpMBy/uqgdbOcswSDr6iAfkRXBCWCLe9rkLzl6VQLJ5RaWeIjC+TcW8wbzkXzfUylA43JpdLpYTFNIlNz0N8p2mAdSjg2Zb1WUjsY0XSCOR9UFo2sx/oMYqprf8UjC4P/EY=
+	t=1791121157; cv=none; b=iXjwNjm1ddLhUQGaxsn6b5LMerPnPkDsaMnapQ8QBHPzZk2qyGnCaa5MhSYQU8u1V1PzpeXUEMJWD9/dc4VjUcOSAJamvbDS2fohI9OeKD5r8ww1aSxFoa34Kyi7KDhAlEfgvbibIjiXiyZ0nA/HhY9UUS5YWFRx4TyS7xpU6zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791121156; c=relaxed/simple;
-	bh=1lQZym22aIZHGEk9TAmTrwWCDpfS2yxhG1DqzYmQR+g=;
+	s=arc-20240116; t=1791121157; c=relaxed/simple;
+	bh=CoLpJnY/U8UHrxMr7TyrfgR2deZW70aoo8583eeGtN4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pucib0YE9yfDLM91qSTMVm1BY0vaLX2MY8kEkb9/cLcB5Q2/jRhiOEyP7Hg66Iox+LtmMioHQMtkBJQPffcuxQrFhyTSwj2PUpHIBlNpNGKzG4ts0Axlp9rwvAoUpqg8a5WUfQr0Q/KKVer5Sc078PxZCTV+M1KIdMfTaLCvzHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r4bSBEpx; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version:Content-Type; b=rVQwvNX8k/jLgOjiw8SUZZbnxXcH1bm07KjCqVMVYJD6S0CHBBwv1O7zE3ujoz8eFAcOdtGLTHkF/D2WmBIOa3keFUdQC89oKNAdIYxxhTYpX+/ySoBPpxIs+SWv58uaEKYmUNyA9/gqfZCo/7xGn1pMJ71ZIMo+AyCKApIalgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9tkc6QU; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r4bSBEpx"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-88aea027391so390756b3a.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9tkc6QU"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccd66bb4so291133a91.1
         for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1791121154; x=1791725954; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=vdOXGep/s2q+e67yKieFNNRU/4c+2uKBxPn2ZPo7lms=;
-        b=r4bSBEpxlyGFGtVR51slg0krs+GQw+mqPRh0kMkGgtjJjQsyA9T7QyLwZ1g6oDD2LV
-         uKETiElVIu5bnT8Uoofp7EXoULSXSFsGdoNykmqE+KnX9VfU5kb6jnCBEdtnkbNzJpld
-         YYhDsBnrN2NRgEofjl04zBO1R/erhuAZ2xKmggbZCeNdvRt/86Enhex11cdIcDc9hYkI
-         70ku5QCIyKAsEKCVHJBTWCNtx82Bdfbmx/rigYB51secuUoePLvF53PgseJEpjAelwz4
-         VlWJq7d0IBcTuGXc/IHWuMS3RhS2aq7hR4xMOyHvFpsMypp3JCshEWdM++7E8fe8tmip
-         Bqhg==
+        bh=FUoJpnn1M77NOLYHswFvMdQPJPT45n+QErnto7jEuKI=;
+        b=F9tkc6QUiSgqn3S0oi/giiPTlx6VShUicfTR1Lzo/kdIGcRa3g2Hxm4WhAjRaaRPGX
+         /dlXINRZBKfc69NdOGv0BTRNg+8ekXsIicjGI9H1kbqP5Skba+ulHODCZbfEsKf2/kQm
+         NXjTNyqMwCgH0LXwqXH1Adq/BuFgsz0DkIvunOyJBRAGj2eVd+jHs64sjDQbOJ3XRNPo
+         K1PP/Q1M8JgazxpqJnqwziGXquVTiYsxdIJIhesiXUDhUzX9m99YpYTgvvjjZA8Xm5S8
+         hm42KyLQjjEndShwtWMfuYFbZQPNkYkRWSPsTn/CQq+wIK2T3bAjeZqVjR9XtWzLx4su
+         X4/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1791121154; x=1791725954;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vdOXGep/s2q+e67yKieFNNRU/4c+2uKBxPn2ZPo7lms=;
-        b=d8Cooe7StYEpmj4/vaHg/rSfYaIjsk/hyQHEIBlB+3RbUGtZ0A4XpnmaMH5a/F2lbY
-         3DE/VKuXqaBkpcZ0nfSJAh3DE2Ad2nS6besIH8eGX4OcI0FMn6Y0OYQoOuBaUUDAwVAI
-         /mlzbXPoTvnIbgxAZs+LRzwRitWS0uOsnnapZYN3x3nM5GvUZbbJ5dtJvgoQexjA9RSf
-         XbHU2C+UCx69AyEOeSNreaSZ++E604uD0Rc4MWc7cwu1rovGZt8FwRVCPXkA3NTW+l9w
-         pk0l6kO9NTfe5aO0DyrjhpoaakyTccBPpE9w4zBr2GBav9OJ9JQc2fjBQ74III4xvjX0
-         hH4Q==
-X-Gm-Message-State: AFuF++mbHycWHhWkkJ9qbU2a20qJ2r191Da+1aIglSLlSTZqCKCOIbYo
-	r4q8S9UOZ3+3Ko22pS6+hidUU/BNVPJ5QJRQ2iI1fADxl3/1FS2qbvfpTS7VjA==
-X-Gm-Gg: AYBFou06MlcqFALR7oxC8x/ZBtWdo7PYpZ62RFGtAAUopfwhocESg5HnhPjzHRMH8cB
-	wbpgLdJ/df6g7BG0sXE/COohETjvo7sVLcNzqm1oMUqkZmEqTSxtpIgCBzdXwML0eNj3Jsir9Tb
-	0O3rdhmbr38TGl86l5Qv+MUXV1/u09tdHQER6wITFUsx6tGve1SYc0H58+WrH/tlgkvpQE4PZ+H
-	AzsdwCzqqs6nybxE6p5eEGgLnL19+pQzBOwKTxUjJm8tbm1s0wsugRwhVWFsbDyFqpWgkTnWm8M
-	itJ/Nsq/Z7apeW4SpG0Nk/q2PKI4is7OrdB4ZN+XMa7X8MBxesZOua3DIUwu/toRpusSAXOm8rV
-	uy3WVi11zy0Dp9g0NxBc1IZKiJh3fkCXigbiY7xEVp+YMuI2NuDSjh9touezRpwANeiCn1vjZtH
-	/f5uo3MZX+/1MAiCrQwWlpvYDtIdH1YUQEHvBqDFPpXl3m/jh78zGjyngtyuhLcPJET6steE6q6
-	4NlFoRe5PStGU8=
-X-Received: by 2002:a05:6a20:a10b:b0:3de:2d39:b5fa with SMTP id adf61e73a8af0-3e0d6b5cb25mr4426073637.14.1791121153593;
-        Sun, 04 Oct 2026 06:39:13 -0700 (PDT)
+        bh=FUoJpnn1M77NOLYHswFvMdQPJPT45n+QErnto7jEuKI=;
+        b=i8K4mNVuV/bMp4pUuJiutcOQkCoVdL30uvbcVOKu17aklyY9o4w4G8AMn8RFRTd8+l
+         GA3sUG4NAMF1Xz4w+lqcGloH095c4HMeqS+bUsDlF/zZAKxgdZqC0U8kBVuT36HQmZtZ
+         2xncMERZjk+wnUNIZIVhxjmTUgiWdgYmllV3fNecT6rHHTIfgCriQPwqXkAZlPI6cV/Y
+         StvYJ1tJ8K8v8U7+YIVYdrMe7WnD6/ZlS0yXzJHWEsk0AisrEFdnl2OqfGhvpe2NW8v7
+         nrLcvCZjdV+FIb9AGRhrNo65Oaf4CGPvGyzQmxXn8X5TnKd8lc/wQt1ubO6RL8FocZMO
+         aQCQ==
+X-Gm-Message-State: AFq9FYJZuylod245b34mSury6bnIkNRbi6WAfJueepwicDA1zlj/Yiru
+	jdgrNk8nSuYUQoF4vPFSBGRxEQ8bNvRd2s06WiLnplZAaAVt/rAgdMZLvQ9tcw==
+X-Gm-Gg: AYBFou3LCD4+m0ah5bPrebki++kk3y9hV5puagTh3qTG67RzHHaYYXjm9aUU96ywh62
+	Z7z6ZsTjATPYaPqHTXvv9PpQsB0WpRZyKB+3EOV8ER6vlqHHAmXhD+2iDLiqfKJdfM64IrFW6l8
+	VfuH1NMK3iXnCO2XPZEZJwYooYf5VGhVOwNZAQdAsW3KF3FHdUR2SzCxpGTpREbszW7AxrIv6pn
+	ReD/aMBALOO8ijp4YaKuPENFprk9IpvO2jlHXJ8ndlJ7VEpA+xVev1jqwrSgtaEgnIGwbslVRso
+	5v2Gf8RIDf4nu2/AqqoYCbfIErTezmHeHqtgucRmOatvkcJjiY86jbuZGOtK9uFaYUagCkaLzCr
+	pqDzPzUzeNZyA2v93yoR0diiCEkaoN64FtZTdJjkKWEsBPjuOXI1YLPmaBn/HDEU3ew0YNwgXF7
+	zn2m9l5+UxhU6YkR0RH3t3HQUdls/oXwlrSqdRlLUTGuWwcSvL3Bawbp5LySPhfmuapqwuefQ5x
+	ibO3sTU8oJCi68=
+X-Received: by 2002:a17:90b:528d:b0:3a4:e011:d26c with SMTP id 98e67ed59e1d1-3a6ce79670emr6290241a91.29.1791121154282;
+        Sun, 04 Oct 2026 06:39:14 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.39.12
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.39.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 06:39:13 -0700 (PDT)
+        Sun, 04 Oct 2026 06:39:14 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -66,11 +66,10 @@ Cc: andrii@kernel.org,
 	daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 41/43] selftests/bpf: tests for loop hierarchy computation
-Date: Sun,  4 Oct 2026 06:38:23 -0700
-Message-ID: <20261004-scev-minimal-rebase-v2-41-f6254e29fdf2@gmail.com>
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next v2 42/43] selftests/bpf: tests for immediate dominator computation
+Date: Sun,  4 Oct 2026 06:38:24 -0700
+Message-ID: <20261004-scev-minimal-rebase-v2-42-f6254e29fdf2@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
@@ -83,261 +82,179 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Test cases covering the following branches in bpf_compute_loops():
-- Case B: simple backedge creating a loop (loop_single)
-- Case B: two independent loops (loop_two_independent)
-- Case B + D: nested loops where the inner header's loop_header points
-  to the outer header (loop_nested)
-- Case C: diamond CFG with no loops (fwd_edges_no_loop)
-- Case D: sibling inner loops within one outer loop
-  (loop_nested_siblings)
-- Three levels of loop nesting (loop_three_levels)
-- Loop with an if-else body containing forward branches
-  (loop_with_if_else)
-- Case E: An irreducible loop (loop_irreducible)
-- A self-loop (loop_self)
-- A test with sibling loops nested in outer loops
-  (loop_nested_siblings_common_ancestors)
-- A test case with outer loop's backedge originating
-  from an inner loop (loop_outer_backedge_from_inner).
+Coverage:
+- straight-line code with an ldimm64 in the middle (exercises the
+  bpf_is_ldimm64() skip in compute_predecessors());
+- an asymmetric if-then-else diamond (unequal-depth idoms_intersect());
+- a simple loop, a loop with an if-else body, and nested loops;
+- a loop header with two back edges (three predecessors);
+- an irreducible CFG (fixpoint convergence);
+- immediate dominators across subprogram boundaries, including a callee
+  whose entry instruction is itself a loop header;
+- a self-loop;
+- an indirect jump (gotox) with a two-entry jump table.
 
-Cases B, C, D and E are described in loops.c:compute_loops_in_subprog().
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-
-dominators test case
 ---
  tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- .../selftests/bpf/progs/verifier_loop_hierarchy.c  | 346 +++++++++++++++++++++
- 2 files changed, 348 insertions(+)
+ tools/testing/selftests/bpf/progs/verifier_idoms.c | 390 +++++++++++++++++++++
+ 2 files changed, 392 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 2f05a0ce829f..6b60d7720e2a 100644
+index 6b60d7720e2a..b45916e04fef 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -74,6 +74,7 @@
- #include "verifier_live_stack.skel.h"
- #include "verifier_liveness_exp.skel.h"
- #include "verifier_load_acquire.skel.h"
-+#include "verifier_loop_hierarchy.skel.h"
- #include "verifier_loops1.skel.h"
- #include "verifier_lwt.skel.h"
- #include "verifier_map_in_map.skel.h"
-@@ -261,6 +262,7 @@ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
- void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
- void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
- void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
-+void test_verifier_loop_hierarchy(void)       { RUN(verifier_loop_hierarchy); }
- void test_verifier_loops1(void)               { RUN(verifier_loops1); }
- void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
- void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
+@@ -58,6 +58,7 @@
+ #include "verifier_helper_packet_access.skel.h"
+ #include "verifier_helper_restricted.skel.h"
+ #include "verifier_helper_value_access.skel.h"
++#include "verifier_idoms.skel.h"
+ #include "verifier_int_ptr.skel.h"
+ #include "verifier_iterating_callbacks.skel.h"
+ #include "verifier_jeq_infer_not_null.skel.h"
+@@ -246,6 +247,7 @@ void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_access_var_
+ void test_verifier_helper_packet_access(void) { RUN(verifier_helper_packet_access); }
+ void test_verifier_helper_restricted(void)    { RUN(verifier_helper_restricted); }
+ void test_verifier_helper_value_access(void)  { RUN(verifier_helper_value_access); }
++void test_verifier_idoms(void)                { RUN(verifier_idoms); }
+ void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
+ void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_idoms.c b/tools/testing/selftests/bpf/progs/verifier_idoms.c
 new file mode 100644
-index 000000000000..0f49108c0e50
+index 000000000000..a29d6332baa4
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-@@ -0,0 +1,346 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_idoms.c
+@@ -0,0 +1,390 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
 +#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
 +#include "bpf_misc.h"
++#include "../../../include/linux/filter.h"
 +
 +/*
-+ * kernel/bpf/loops.c:compute_loops() distinguish between
-+ * the following cases:
-+ * - B: backedge -> simple loop
-+ * - C: cross edge to non-loop node -> no-op
-+ * - D: edge to node whose header is in DFS path -> nested loop
-+ * - E: edge to node whose header is NOT in DFS path -> irreducible
++ * kernel/bpf/loops.c:bpf_compute_idoms() computes the immediate dominator
++ * of every instruction (Cooper et al, "A Simple, Fast Dominance Algorithm").
 + *
-+ * Below test cases cover the above branches in various combinations.
++ * The immediate dominator is printed by log_program() as the numeric column
++ * immediately before the "<insn#>:" field of every "Program dump" line:
++ *
++ *   Program dump (scc? loop_header? idom insn#: live_regs_before):
++ *            -1   0: ....... (b7) r0 = 0     <- idom(0) = -1 (subprog entry)
++ *             0   1: ....... (07) r0 += 1    <- idom(1) = 0
++ *             ^^^^^^
++ *             idom insn#
++ *
++ * The __msg() patterns below wildcard the scc/loop_header/live_regs columns and
++ * anchor on "<idom>   <insn#>:" followed by the disassembled instruction, so
++ * they assert the idom value of each instruction.
 + */
 +
-+/* Case B: single bounded loop. */
++/*
++ * Straight-line code, with an ldimm64 in the middle. Instruction index 2 is
++ * the second half of the ldimm64 at index 1 and is not a CFG node; the idom of
++ * index 3 must be 1, not 2. Exercises the bpf_is_ldimm64() skip in both passes
++ * of compute_predecessors().
++ */
 +SEC("socket")
 +__success
 +__log_level(2)
-+__msg("loop at 1{{$}}")
 +__msg("Program dump")
-+__msg("         -1   0: {{.*}} (b7) r0 = 0")
-+__msg("  1       0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("          2   3: {{.*}} (95) exit")
-+__naked void loop_single(void)
++__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
++__msg("{{.*}}  0   1: {{.*}} (18) r1 = 0x1122334455667788")
++__msg("{{.*}}  1   3: {{.*}} (07) r0 += 1")
++__msg("{{.*}}  3   4: {{.*}} (0f) r0 += r1")
++__msg("{{.*}}  4   5: {{.*}} (95) exit")
++__naked void straight_line_ldimm64(void)
 +{
 +	asm volatile ("					\
 +	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < 10 goto 1b;				\
++	r1 = 0x1122334455667788 ll;			\
++	r0 += 1;					\
++	r0 += r1;					\
 +	exit;						\
 +"	::: __clobber_all);
 +}
 +
-+/* Case B: two independent loops at the same nesting level. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("loop at 1{{$}}")
-+__msg("loop at 4{{$}}")
-+__msg("Program dump")
-+__msg("         -1   0: {{.*}} (b7) r0 = 0")
-+__msg("  2       0   1: {{.*}} (07) r0 += 1")
-+__msg("  2   1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("          2   3: {{.*}} (b7) r1 = 0")
-+__msg("  1       3   4: {{.*}} (07) r1 += 1")
-+__msg("  1   4   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
-+__msg("          5   6: {{.*}} (95) exit")
-+__naked void loop_two_independent(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < 10 goto 1b;				\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 10 goto 2b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/* Case B + D: nested loops. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("loop at 1{{$}}")
-+__msg("loop at 3, nested in 1")
-+__msg("Program dump")
-+__msg("         -1   0: {{.*}} (b7) r0 = 0")
-+__msg("  1       0   1: {{.*}} (07) r0 += 1")			/* outer loop header */
-+__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")			/* outer loop insn */
-+__msg("  1   1   2   3: {{.*}} (07) r1 += 1")			/* inner loop header */
-+__msg("  1   3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")	/* inner loop insn */
-+__msg("  1   1   4   5: {{.*}} (a5) if r0 < 0xa goto pc-5")	/* outer loop insn */
-+__msg("          5   6: {{.*}} (95) exit")
-+__naked void loop_nested(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 5 goto 2b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/* Case C: forward edges, no loops. */
++/*
++ * Asymmetric if-then-else diamond: the "then" arm is 5 instructions long, the
++ * "else" arm is a single instruction. The merge point (insn 8) is dominated by
++ * the branch (insn 1), not by either arm. This forces idoms_intersect() to walk
++ * the two predecessors up unequal postorder depths before they meet.
++ */
 +SEC("socket")
 +__success
 +__log_level(2)
 +__msg("Program dump")
-+__msg("         -1   0: {{.*}} (85) call bpf_get_prandom_u32")
-+__msg("          0   1: {{.*}} (25) if r0 > 0x0 goto pc+2")
-+__msg("          1   2: {{.*}} (b7) r0 = 2")
-+__msg("          2   3: {{.*}} (05) goto pc+1")
-+__msg("          1   4: {{.*}} (b7) r0 = 3")
-+__msg("          1   5: {{.*}} (95) exit")
-+__naked void fwd_edges_no_loop(void)
++__msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
++__msg("{{.*}}  0   1: {{.*}} (25) if r0 > 0x0 goto pc+5")
++__msg("{{.*}}  1   2: {{.*}} (b7) r1 = 1")
++__msg("{{.*}}  2   3: {{.*}} (b7) r1 = 2")
++__msg("{{.*}}  3   4: {{.*}} (b7) r1 = 3")
++__msg("{{.*}}  4   5: {{.*}} (b7) r1 = 4")
++__msg("{{.*}}  5   6: {{.*}} (05) goto pc+1")
++__msg("{{.*}}  1   7: {{.*}} (b7) r1 = 9")
++__msg("{{.*}}  1   8: {{.*}} (95) exit")
++__naked void asymmetric_diamond(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
 +	if r0 > 0 goto 1f;				\
-+	r0 = 2;						\
++	r1 = 1;						\
++	r1 = 2;						\
++	r1 = 3;						\
++	r1 = 4;						\
 +	goto 2f;					\
-+1:	r0 = 3;						\
++1:	r1 = 9;						\
 +2:	exit;						\
 +"	:
 +	: __imm(bpf_get_prandom_u32)
 +	: __clobber_all);
 +}
 +
-+/* Case B + D: two sibling inner loops within one outer loop. */
++/*
++ * Simple loop: the header (insn 1) is dominated by the pre-header (insn 0). The
++ * back edge (insn 2 -> insn 1) must not change idom(1); the back-edge
++ * predecessor folds up via idoms_intersect().
++ */
 +SEC("socket")
 +__success
 +__log_level(2)
-+__msg("loop at 1{{$}}")
-+__msg("loop at 3, nested in 1")
-+__msg("loop at 6, nested in 1")
 +__msg("Program dump")
-+__msg("         -1   0: {{.*}} (b7) r0 = 0")
-+__msg("  1       0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   1   2   3: {{.*}} (07) r1 += 1")
-+__msg("  1   3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
-+__msg("  1   1   4   5: {{.*}} (b7) r2 = 0")
-+__msg("  1   1   5   6: {{.*}} (07) r2 += 1")
-+__msg("  1   6   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
-+__msg("  1   1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("          8   9: {{.*}} (95) exit")
-+__naked void loop_nested_siblings(void)
++__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
++__msg("{{.*}}  0   1: {{.*}} (07) r0 += 1")
++__msg("{{.*}}  1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
++__msg("{{.*}}  2   3: {{.*}} (95) exit")
++__naked void simple_loop(void)
 +{
 +	asm volatile ("					\
 +	r0 = 0;						\
 +1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 5 goto 2b;				\
-+	r2 = 0;						\
-+3:	r2 += 1;					\
-+	if r2 < 5 goto 3b;				\
 +	if r0 < 10 goto 1b;				\
 +	exit;						\
 +"	::: __clobber_all);
 +}
 +
-+/* Three levels of nesting. */
++/*
++ * Loop with an if-else in its body. The in-loop merge point (insn 5) is
++ * dominated by the in-loop branch (insn 3), combining a back-edge intersect
++ * with a forward-diamond intersect.
++ */
 +SEC("socket")
 +__success
 +__log_level(2)
-+__msg("loop at 1{{$}}")
-+__msg("loop at 3, nested in 1")
-+__msg("loop at 5, nested in 3")
 +__msg("Program dump")
-+__msg("         -1   0: {{.*}} (b7) r0 = 0")
-+__msg("  1       0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   1   2   3: {{.*}} (07) r1 += 1")
-+__msg("  1   3   3   4: {{.*}} (b7) r2 = 0")
-+__msg("  1   3   4   5: {{.*}} (07) r2 += 1")
-+__msg("  1   5   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
-+__msg("  1   3   6   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
-+__msg("  1   1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("          8   9: {{.*}} (95) exit")
-+__naked void loop_three_levels(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	r2 = 0;						\
-+3:	r2 += 1;					\
-+	if r2 < 3 goto 3b;				\
-+	if r1 < 5 goto 2b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/* Loop with an if-else body (forward branch inside loop, Case C). */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("loop at 1")
-+__msg("Program dump")
-+__msg("         -1   0: {{.*}} (b7) r0 = 0")
-+__msg("  1       0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   1   2: {{.*}} (bf) r1 = r0")
-+__msg("  1   1   2   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
-+__msg("  1   1   3   4: {{.*}} (b7) r1 = 1")
-+__msg("  1   1   3   5: {{.*}} (0f) r0 += r1")
-+__msg("  1   1   5   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
-+__msg("          6   7: {{.*}} (95) exit")
-+__naked void loop_with_if_else(void)
++__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
++__msg("{{.*}}  0   1: {{.*}} (07) r0 += 1")
++__msg("{{.*}}  1   2: {{.*}} (bf) r1 = r0")
++__msg("{{.*}}  2   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
++__msg("{{.*}}  3   4: {{.*}} (b7) r1 = 1")
++__msg("{{.*}}  3   5: {{.*}} (0f) r0 += r1")
++__msg("{{.*}}  5   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
++__msg("{{.*}}  6   7: {{.*}} (95) exit")
++__naked void loop_with_if_else_body(void)
 +{
 +	asm volatile ("					\
 +	r0 = 0;						\
@@ -351,22 +268,86 @@ index 000000000000..0f49108c0e50
 +"	::: __clobber_all);
 +}
 +
-+/* Case E: irreducible loop. */
++/*
++ * Nested loops: the idom chain runs inner-header -> outer-body -> outer-header
++ * -> pre-header. Exercises intersect across back edges at two nesting depths.
++ */
 +SEC("socket")
 +__success
 +__log_level(2)
-+__msg("loop at 3, irreducible")
 +__msg("Program dump")
-+__msg("         -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
-+__msg("          0   1: {{.*}} (b7) r1 = 0")
-+__msg("          1   2: {{.*}} (25) if r0 > 0x5 goto pc+2")
-+__msg("  1       2   3: {{.*}} (b7) r1 = 1")
-+__msg("  1   3   3   4: {{.*}} (05) goto pc+1")
-+__msg("          2   5: {{.*}} (b7) r1 = 2")
-+__msg("  1   3   2   6: {{.*}} (0f) r0 += r1")
-+__msg("  1   3   6   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
-+__msg("          7   8: {{.*}} (95) exit")
-+__naked void loop_irreducible(void)
++__msg("{{.*}} -1   0: {{.*}} (b7) r0 = 0")
++__msg("{{.*}}  0   1: {{.*}} (07) r0 += 1")
++__msg("{{.*}}  1   2: {{.*}} (b7) r1 = 0")
++__msg("{{.*}}  2   3: {{.*}} (07) r1 += 1")
++__msg("{{.*}}  3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
++__msg("{{.*}}  4   5: {{.*}} (a5) if r0 < 0xa goto pc-5")
++__msg("{{.*}}  5   6: {{.*}} (95) exit")
++__naked void nested_loops(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	r1 = 0;						\
++2:	r1 += 1;					\
++	if r1 < 5 goto 2b;				\
++	if r0 < 10 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * Loop header (insn 1) with two back edges (from insn 4 and insn 5), i.e. three
++ * predecessors. Both back edges route through the incrementing header, so the
++ * loop is bounded and verifies. Repeated idoms_intersect() at the header must
++ * stay stable and keep idom(1) at the pre-header (insn 0).
++ */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("{{.*}} -1   0: {{.*}} (b7) r6 = 0")
++__msg("{{.*}}  0   1: {{.*}} (07) r6 += 1")
++__msg("{{.*}}  1   2: {{.*}} (25) if r6 > 0xa goto pc+3")
++__msg("{{.*}}  2   3: {{.*}} (bf) r7 = r6")
++__msg("{{.*}}  3   4: {{.*}} (a5) if r7 < 0x5 goto pc-4")
++__msg("{{.*}}  4   5: {{.*}} (05) goto pc-5")
++__msg("{{.*}}  2   6: {{.*}} (b7) r0 = 0")
++__msg("{{.*}}  6   7: {{.*}} (95) exit")
++__naked void multi_backedge_header(void)
++{
++	asm volatile ("					\
++	r6 = 0;						\
++1:	r6 += 1;					\
++	if r6 > 10 goto 2f;				\
++	r7 = r6;					\
++	if r7 < 5 goto 1b;				\
++	goto 1b;					\
++2:	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * Irreducible CFG (loop with two entries, insn 3 and insn 5, reached from the
++ * insn 2 branch). Dominators remain well-defined; this is a convergence test
++ * for the fixpoint under irreducibility. Note insn 6 is dominated by the branch
++ * (insn 2), not by either arm.
++ */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
++__msg("{{.*}}  0   1: {{.*}} (b7) r1 = 0")
++__msg("{{.*}}  1   2: {{.*}} (25) if r0 > 0x5 goto pc+2")
++__msg("{{.*}}  2   3: {{.*}} (b7) r1 = 1")
++__msg("{{.*}}  3   4: {{.*}} (05) goto pc+1")
++__msg("{{.*}}  2   5: {{.*}} (b7) r1 = 2")
++__msg("{{.*}}  2   6: {{.*}} (0f) r0 += r1")
++__msg("{{.*}}  6   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
++__msg("{{.*}}  7   8: {{.*}} (95) exit")
++__naked void irreducible(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
@@ -383,12 +364,101 @@ index 000000000000..0f49108c0e50
 +	: __clobber_all);
 +}
 +
++/*
++ * Idoms are computed per subprog. Layout (libbpf preorder) is:
++ *   main: 0..1, sub: 2..7
++ * The callee entry (insn 2) must have idom -1 (subprog reset), and idoms inside
++ * the callee must reference only the callee's instructions, never main's. The
++ * in-callee merge (insn 7) is dominated by the in-callee branch (insn 3). The
++ * branch is on a prandom value so it is not constant-folded away.
++ */
++static __naked __noinline __used
++unsigned long idoms_diamond_sub(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	if r0 > 0 goto 1f;				\
++	r0 = 1;						\
++	goto 2f;					\
++1:	r0 = 2;						\
++2:	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("{{.*}} -1   0: {{.*}} (85) call pc+1")
++__msg("{{.*}}  0   1: {{.*}} (95) exit")
++__msg("{{.*}} -1   2: {{.*}} (85) call bpf_get_prandom_u32#7")
++__msg("{{.*}}  2   3: {{.*}} (25) if r0 > 0x0 goto pc+2")
++__msg("{{.*}}  3   4: {{.*}} (b7) r0 = 1")
++__msg("{{.*}}  4   5: {{.*}} (05) goto pc+1")
++__msg("{{.*}}  3   6: {{.*}} (b7) r0 = 2")
++__msg("{{.*}}  3   7: {{.*}} (95) exit")
++__naked void multi_subprog(void)
++{
++	asm volatile ("					\
++	call idoms_diamond_sub;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * The first instruction of a subprog (insn 3) is itself a loop header, i.e. it
++ * has an incoming back edge. Its idom must still be -1 (the subprog entry has no
++ * dominator). Exercises the idoms[start]=0 ... idoms[start]=-1 handling in
++ * compute_subprog_idoms().
++ */
++static __naked __noinline __used
++unsigned long idoms_entry_header_sub(void)
++{
++	asm volatile ("					\
++1:	r1 += 1;					\
++	if r1 < 10 goto 1b;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("{{.*}} -1   0: {{.*}} (b7) r1 = 0")
++__msg("{{.*}}  0   1: {{.*}} (85) call pc+1")
++__msg("{{.*}}  1   2: {{.*}} (95) exit")
++__msg("{{.*}} -1   3: {{.*}} (07) r1 += 1")
++__msg("{{.*}}  3   4: {{.*}} (a5) if r1 < 0xa goto pc-2")
++__msg("{{.*}}  4   5: {{.*}} (b7) r0 = 0")
++__msg("{{.*}}  5   6: {{.*}} (95) exit")
++__naked void entry_is_loop_header(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	call idoms_entry_header_sub;			\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * Self-loop: insn 1 is its own predecessor. idom(1) must be the pre-header
++ * (insn 0); the self-edge is ignored (idoms[pred] == -1 on the first pass, then
++ * idoms_intersect(a == b) short-circuits). Program is rejected later for an
++ * infinite loop, but the dump (and idoms) are printed before that.
++ */
 +SEC("socket")
 +__failure
 +__log_level(2)
-+__msg("loop at 1")
-+__msg("infinite loop detected at insn 1")
-+__naked void loop_self(void)
++__msg("Program dump")
++__msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
++__msg("{{.*}}  0   1: {{.*}} (a5) if r0 < 0xa goto pc-1")
++__msg("{{.*}}  1   2: {{.*}} (95) exit")
++__msg("infinite loop detected")
++__naked void self_loop(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
@@ -399,89 +469,51 @@ index 000000000000..0f49108c0e50
 +	: __clobber_all);
 +}
 +
++#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_powerpc)
 +/*
-+ * Loops at 5 and 7 are nested inside loops at 3 and 1.
-+ * The edge 6 -> 7 exits loop at 5 and enters loop at 7.
-+ * Check that it is logged only as an exit from loop at 5.
-+ *
-+ *  0: r0 = 0;
-+ *     do {
-+ *  1:     r0++;
-+ *  2:     r1 = 0;
-+ *         do {
-+ *  3:         r1++;
-+ *  4:         r2 = 0;
-+ *             do {
-+ *  5:             r2++;
-+ *  6:         } while (r2 < 3);
-+ *             do {
-+ *  7:             r2--;
-+ *  8:         } while (r2 != 0);
-+ *  9:     } while (r1 < 4);
-+ * 10: } while (r0 < 5);
-+ * 11: return r0;
++ * Indirect jump (gotox) with a two-entry jump table. The gotox (insn 4) has two
++ * successors (insn 5 and insn 7), so both targets have the gotox as their only
++ * predecessor and idom. Also re-exercises the ldimm64 skip: insn 2's idom is 0,
++ * the ldimm64 at index 0 (index 1 is its second half).
 + */
 +SEC("socket")
 +__success
 +__log_level(2)
-+__msg("loop at 1{{$}}")
-+__msg_next("  backedge from 10, latch at 10")
-+__msg_next("  exit from 10 to 11")
-+__msg_next("loop at 3, nested in 1")
-+__msg_next("  backedge from 9, latch at 9")
-+__msg_next("  exit from 9 to 10")
-+__msg_next("loop at 5, nested in 3")
-+__msg_next("  backedge from 6, latch at 6")
-+__msg_next("  exit from 6 to 7")
-+__msg_next("loop at 7, nested in 3")
-+__msg_next("  backedge from 8, latch at 8")
-+__msg_next("  exit from 8 to 9")
-+__naked void loop_nested_siblings_common_ancestors(void)
++__msg("Program dump")
++__msg("{{.*}} -1   0: {{.*}} (18) r0 = {{0x[0-9a-f]+}}")
++__msg("{{.*}}  0   2: {{.*}} (07) r0 += 8")
++__msg("{{.*}}  2   3: {{.*}} (79) r0 = *(u64 *)(r0 +0)")
++__msg("{{.*}}  3   4: {{.*}} (0d) gotox r0")
++__msg("{{.*}}  4   5: {{.*}} (b7) r0 = 0")
++__msg("{{.*}}  5   6: {{.*}} (95) exit")
++__msg("{{.*}}  4   7: {{.*}} (b7) r0 = 1")
++__msg("{{.*}}  7   8: {{.*}} (95) exit")
++__naked void gotox_jump_table(void)
 +{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	r2 = 0;						\
-+3:	r2 += 1;					\
-+	if r2 < 3 goto 3b;				\
-+4:	r2 += -1;					\
-+	if r2 != 0 goto 4b;				\
-+	if r1 < 4 goto 2b;				\
-+	if r0 < 5 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
++	asm volatile ("						\
++	.pushsection .jumptables,\"\",@progbits;		\
++jt0_%=:								\
++	.quad ret0_%= - socket;					\
++	.quad ret1_%= - socket;					\
++	.size jt0_%=, 16;					\
++	.global jt0_%=;						\
++	.popsection;						\
++								\
++	r0 = jt0_%= ll;						\
++	r0 += 8;						\
++	r0 = *(u64 *)(r0 + 0);					\
++	.8byte %[gotox_r0];					\
++ret0_%=:							\
++	r0 = 0;							\
++	exit;							\
++ret1_%=:							\
++	r0 = 1;							\
++	exit;							\
++"	:
++	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_0, 0, 0, 0))
++	: __clobber_all);
 +}
-+
-+/*
-+ * The outer loop backedge (4 -> 2) originates in an inner loop.
-+ * For now, latch should not be identified in such cases.
-+ */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("loop at 2{{$}}")
-+__msg_next("  backedge from 4, latch at -1")
-+__msg_next("  exit from 5 to 7")
-+__msg_next("loop at 3, nested in 2")
-+__msg_next("  backedge from 6, latch at 5")
-+__msg_next("  exit from 4 to 2")
-+__msg_next("  exit from 5 to 7")
-+__naked void loop_outer_backedge_from_inner(void)
-+{
-+	asm volatile ("					\
-+	r6 = 99;					\
-+	r2 = 2;						\
-+2:	r6 += 1;			/* loop at 2 */	\
-+3:	r2 += 1;			/* loop at 3 */	\
-+4:	if r2 == 3 goto 2b;				\
-+5:	if r6 > 100 goto 7f;				\
-+	goto 3b;					\
-+7:	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
++#endif
 +
 +char _license[] SEC("license") = "GPL";
 
