@@ -1,64 +1,64 @@
-Received: from mail-pz2-f37.google.com (mail-pz2-f37.google.com [74.125.228.37])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7434E41A919
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CA0439F73
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:39:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121141; cv=none; b=pl2JYKZ71XhUmdgd4fndaDmDIsGJ/x4zN14paPZyENIrmeljQXyGPGxFmtGq/hmEpaRAiIXmhMr1kvHxG0hWohGh8dwgCKEoDzziggg4sn9gOxDKl3CFnyBX+pAgkje1d+OS3OQLp0b+QonxPUGsiaB95usaenMhYVeEwk+7mRg=
+	t=1791121143; cv=none; b=sPjKhF+22uPE6Wn3gJ9upVd59ZQZx4yFaev7SbWriFNzH84nV/avH52XKzGD31mXscMTSTdxvEw2Dl6WeCZjcP5slbGEKJnXoFlAfYmYomV9as8WfIhhzp/X3Kaean2pL/n9rz1GF5PIQJ4VKMg/ldYl9LCirOyftgllnjUQTyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791121141; c=relaxed/simple;
-	bh=l/dzTu5cE4Bey/quqUzqPOFac1I9mKoIJG/gVVdxZBQ=;
+	s=arc-20240116; t=1791121143; c=relaxed/simple;
+	bh=0+4v2cO3iYh1+AVC3ISqMDwElhzQGyriI+Hg0NAXA4M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SO78VlYYb604CV/1QxGrW5Tvtb4DqjwJ6JiradOGhUrxZCJGVR3IZ9zZDD+ArXNGCP10EOGviHXaCmxGElMbCUADvCYL4aKPviRRk6UPRhhBGruJWJqpZTfLqjovSLqESgRF5OBTwS81ggHGW0eyC+bWAWX9x3HBQad/m7Bs+54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DNKRwmww; arc=none smtp.client-ip=74.125.228.37
+	 MIME-Version:Content-Type; b=bxqf85tStd2WP97lyK46UIUelFWpGOeK2evtJ057AU5+quMSR0jEr4dg9tXlHXLc6g4XvU5gXdCANFeEz11rBT7Ihd2ZJL0xKNIu3KI/PHZUPqRh6ojuWGiaI5kpUDa3wZzlhJyKQMN7wFwJ4qAJmhZBJT90O/hwD9vRTC0Ah44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GsEb8CYp; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DNKRwmww"
-Received: by mail-pz2-f37.google.com with SMTP id 41be03b00d2f7-cc7cadbe09dso298314a12.2
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:39:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsEb8CYp"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4bdf8abaaso461980a12.2
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:39:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791121140; x=1791725940; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791121141; x=1791725941; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=saHKoLqZNZ2EhOZG2XXWYjluid99iSWA5z4Ccp/T8yk=;
-        b=DNKRwmwwIyqLJ2C0SUkVsslV/SrC5KhJwT/pxjzLNwrcPQ7OHo7FcKGR22SGVt6CtL
-         tuRuLAsj234Rudwz31cji/xCQGd/s2tP50bkhEwzZBNf5NdPzpcqVqjySt2jcqleff7j
-         ktDlWIlz8dMgqTYhaWRHgW2EOOC7kx7yKHy+hVeHBdAYD0E7FNzaZeu2rRgBKtKPvtxz
-         uqWWguhGZuNvbIhB806qB7R2p5Ii9mXGDB4koCQoVBNSrzGJu+flpKw63pg/fELoJL0x
-         ppr7yIkSSg2v/ZZ+GFDaFx+J7xU3kjQvEoPg3kNktSPExw3FKAtGSho1j4t3GVZrh9g3
-         Yltw==
+        bh=dUnCX0gX+2UmtIKPTDfOAk5VNXM2KfGeYglpzmcapsU=;
+        b=GsEb8CYpss6tjXZGhHVePfj0SAj7GcMPmZNwtRvRMA8EoKIOgDZLHKGVDRCocVDGNx
+         lKyraZGVmq+90AqfxKoV2IOggybGAuwXzVNG63WOmg8KLTj1QLTZ1vR8w9yzE7TJnyXA
+         u30cmc75cJzrdcsVOq1jrDx+8rMfmEKfW8VrU3zbJHv030jihTYUUAHEeAN8zmzgZnfP
+         JIfRI3amxL+d/FGmk7eBuxmfkpZnMcwdPXq77Q76XR8+2ZpnoWNDnu6L9lf3OUXx33uO
+         0B9x24xqf+nfqyDvBuRJvs0oShuPsiofP7eQx4jCGy5ajcUSXV6jlQRUlHGA7wZ2iq9Q
+         Wf8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791121140; x=1791725940;
+        d=1e100.net; s=20260707; t=1791121141; x=1791725941;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=saHKoLqZNZ2EhOZG2XXWYjluid99iSWA5z4Ccp/T8yk=;
-        b=Fwwa7+88aD+svKTxZJaY+yQyUwWl+rbN+jyMMB502zmiuIePgVN7wEvN2tlxV6UIxP
-         chI8kmhRkyM+asPgxiyYeStEJO+5rvqr/L/jpAl1ENVzn8DSotkn+8Hi9EgfrAXZL+6P
-         nBM4KvhnKhEaEVcRz/3HOCCJWgzq3ezENHkhEfPxiX2hKMt8xgE0sro6B/yljlRwcKiR
-         ZXPuNppKF/7hUVunws3bc/ZI3+DXgFJhFBUINNJvBCCsjbmub/E29bLi9KoQnElBph+E
-         jx3mHPmZrI3uY0yVHpPL8nvjGUY+DXiRlRwo13wtKkB2zfNcWU20iuYFKXCMV8b5CiIh
-         B7dw==
-X-Gm-Message-State: AFuF++k6lzVcelav5xeE1J7NlXwJvyc2aU8qAzgJQ2j25nTPkQO1Tv9i
-	eGIzxER5BmUZdOhncjOTOGQOcLIALCO1veDAr9U9VhYlH+JjuwmzvNm1ZUyWAA==
-X-Gm-Gg: AYBFou0MM8VxO/CQeieansipSJ/Nim5QBWoy65X7f6092ui2ZERAc/8foS+IDEZ9aS0
-	yF0TljLfl/fnROR8J9E/8UV1ZdBS5HITeq7UT12PEg1E0zWybovFZSDK8ZCfDmM+IL2BN8fvtsT
-	0hvND8m5PdGkzoFUeyFD4Cv67sb1ys5HXsqQ+gGynxA+fhKCSGRq66jEraOASUqzkzv6i5RsrZo
-	kkXd6OsGaG/6jUF3JUIc7YiOwx5bH2DhzYLtw0FFAxQR2mtRor1oBExq5jyc1W6Zg6VIlkVTLPv
-	/F7ayid+t3AGpMjfb8DbQXtj7AM2l5iUarLGDVGxRWv1EhA+GW41ARxxQEANJj2TjzU48zvSV17
-	H5P2h1tnKcETwfwtftNxn3lNFUcMdFQbi0BRfGVZ5o99T3uS2w/fHTFcvex0cD9iUt+EerSehCC
-	FzFl0kRVBtMQ7J09nUWEUjAM1g8KjBnwLTZCUySLuHADWmEojLnCqjAs0W7rpm8NdsUXY5AdjN3
-	c6Uthn1toUVq+o=
-X-Received: by 2002:a05:6a20:d74c:b0:3de:7854:854a with SMTP id adf61e73a8af0-3e0bcaa8497mr8129416637.6.1791121139787;
-        Sun, 04 Oct 2026 06:38:59 -0700 (PDT)
+        bh=dUnCX0gX+2UmtIKPTDfOAk5VNXM2KfGeYglpzmcapsU=;
+        b=bKk7uggYplfCgB64IiyWv7pwALIL9eiehOrUB1nt7uK2MqZcj11LLwwLG/w1KtaTlY
+         8eQMPeKOuJKESqHje/gwK1QTuJdnHXfBdSuM7NAMyDrxY2evpA2oH7QSdt5so2OD7K3q
+         saVrkp10ka+ZMkjozJrQsW9mB08ucWPYNV/Ty09txJQARdnQtS53Ko7N8D7eHUkwwbGZ
+         G1CHJCneK6jWk7F7c5VOEG8pPPmc6SU4Pn2ZECkb4JcMWOYxbkouni2C/DycUCEvn/oo
+         fwzZQCEHwb7pvoUDx5r1/PDqYMc88aMcELpM47tDw5J6OQMxXbaN4jQBPY95tNUWYyK7
+         29Yg==
+X-Gm-Message-State: AFuF++lrz59cgRPlB4KlzGv6pi7qmAuwWIfZN6nI1G5VgX0+jwieiUo/
+	mIXEJYJ740XYGvyLfM4EGn062B4IY/W/wb53mHtRrr1Mc+PALBTt4wdJhm+Zvw==
+X-Gm-Gg: AYBFou36ESjp82NjGTEpFOHWSO4X0DHqCPRnayddlxyKrxei2794zqaQ0M4ibEf53uL
+	HN1wAXdBq1ul5gdVZyzzMCYjJPsmrp1v8JBIj9OYa0V/L/SDffveuZBLmTj6M7TclPmt4vbUoCT
+	l6t+pCAroR1GcXTvTyGIK0zVMtr8PnBWRLzde/1qDgmSWKUI7g33GHvjdTYRXvwjQUG8UD/uRuk
+	xU8MZwnZ1epPwYpqQdmpAEvuGaB16QNRAoANd5IUPwqr8n48/ZEI7UyZ26kahqu415fVOX+r0Zj
+	5BYRX5h8+t16Enaeq/zms2w3h1PjRSrNPMdRjO0fQE5HcZXWWkrq9j0SuaC+KlJymyFOOLvhvwk
+	fEmrRliisJ+8IPhWlbI3/F9tuVZhL76OmNQkhb30Jhgr8WoPX5jruc7+4sRsIj8MboewT4P2vbD
+	vZ0L45C/onFr3E1QRxfaRwgJD7aryrgiOf/1UM/G549ftzCjXrTuEIXpzlJ2LbREjXtJtwUpdkX
+	+sxGWwLWUPTN8FQ
+X-Received: by 2002:a05:6a21:328b:b0:3e0:f6be:1998 with SMTP id adf61e73a8af0-3e0f6be1dd4mr1216548637.57.1791121141220;
+        Sun, 04 Oct 2026 06:39:01 -0700 (PDT)
 Received: from badger ([38.34.87.7])
         by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 06:38:59 -0700 (PDT)
+        Sun, 04 Oct 2026 06:39:00 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 26/43] bpf: add bpf_same_memory_origin()
-Date: Sun,  4 Oct 2026 06:38:08 -0700
-Message-ID: <20261004-scev-minimal-rebase-v2-26-f6254e29fdf2@gmail.com>
+Subject: [PATCH bpf-next v2 27/43] bpf: allow precision backtracking between overlapping checkpoints
+Date: Sun,  4 Oct 2026 06:38:09 -0700
+Message-ID: <20261004-scev-minimal-rebase-v2-27-f6254e29fdf2@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
@@ -82,90 +82,73 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-When dealing with loops like:
+SCEV integration logic might create two consecutive checkpoints at the
+same instruction w/o processing any instructions in between.
 
-  for (ptr = ...; ptr < end_ptr; ptr += 8)
-    ...
+This happens for loop-entry checkpoint -> regular checkpoint
+sequences, where the loop-entry checkpoint has to remain unchanged
+but the regular checkpoint is used for widening.
 
-Scalar evolution needs to know if ptr and end_ptr identify a same
-memory location (possibly with different offsets). If they do,
-it is sound to attempt to infer iteration bounds for such a loop.
+This commit adapts bpf_mark_chain_precision() to support this.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/verifier.c        | 45 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+ include/linux/bpf_verifier.h | 5 ++++-
+ kernel/bpf/backtrack.c       | 5 +++++
+ kernel/bpf/states.c          | 1 +
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 13c7825bb8b5..7e858bb05dd1 100644
+index 7e858bb05dd1..c0ed92a632d1 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1814,6 +1814,8 @@ struct arg_access_info
- bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env,
- 			     struct bpf_insn *insn, int arg, int insn_idx);
- int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
-+bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
-+			    const struct bpf_reg_state *reg_b);
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 range, u16 base, u16 step);
- int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 28c16e35b1f3..9e1c08caa0db 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17153,6 +17153,51 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 	return 0;
- }
+@@ -502,7 +502,10 @@ struct bpf_verifier_state {
+ 	bool speculative;
+ 	bool in_sleepable;
  
-+/*
-+ * Many checks done by this function are quite conservative.
-+ * This is because main verification pass does not maintain
-+ * enough information to track object identities for some
-+ * of the interesting types, e.g. PTR_TO_MEM.
-+ */
-+bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
-+			    const struct bpf_reg_state *reg_b)
-+{
-+	if (reg_a == reg_b)
-+		return true;
-+	/* Require matching flags and base types. */
-+	if (reg_a->type != reg_b->type)
-+		return false;
-+	/* NULL can't be compared to some base+offset pointer. */
-+	if (type_may_be_null(reg_a->type))
-+		return false;
+-	/* first and last insn idx of this verifier state */
++	/*
++	 * First and last insn idx of this verifier state.
++	 * last_insn_idx is -1 if no instructions have been executed yet.
++	 */
+ 	u32 first_insn_idx;
+ 	u32 last_insn_idx;
+ 	/* if this state is a backedge state then equal_state
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index 0e38b9575328..43d5740034c0 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -888,6 +888,10 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
+ 		}
+ 
+ 		if (last_idx < 0) {
++			/* Consecutive checkpoints can have no instructions between them. */
++			if (st->parent)
++				goto parent;
 +
-+	switch (base_type(reg_a->type)) {
-+	case PTR_TO_STACK:
-+		return reg_a->frameno == reg_b->frameno;
-+	case PTR_TO_MAP_VALUE:
-+		if (reg_a->map_ptr != reg_b->map_ptr || reg_a->map_uid != reg_b->map_uid)
-+			return false;
-+		if (reg_a->id && reg_a->id == reg_b->id)
-+			return true;
-+		/* A plain single-element array has one stable value address. */
-+		if (reg_a->map_ptr->map_type == BPF_MAP_TYPE_ARRAY &&
-+		    reg_a->map_ptr->max_entries == 1)
-+			return true;
-+		/*
-+		 * The rules above can be simplified / relaxed if:
-+		 * - fresh IDs would always be assigned for map-value lookups;
-+		 * - direct map value loads would always have and ID of zero.
-+		 */
-+		return false;
-+	case PTR_TO_MEM:
-+	case PTR_TO_BUF:
-+		return reg_a->id && reg_a->id == reg_b->id;
-+
-+	default:
-+		return false;
-+	}
-+}
-+
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 range, u16 base, u16 step)
- {
+ 			/* we are at the entry into subprog, which
+ 			 * is expected for global funcs, but only if
+ 			 * requested precise registers are R1-R5
+@@ -952,6 +956,7 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
+ 				return -EFAULT;
+ 			}
+ 		}
++parent:
+ 		st = st->parent;
+ 		if (!st)
+ 			break;
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index b1e2daefc264..470bff8d8dc8 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -1306,6 +1306,7 @@ int bpf_split_cur_state(struct bpf_verifier_env *env)
+ 	}
+ 
+ 	cur->parent = new;
++	cur->last_insn_idx = -1;
+ 	cur->first_insn_idx = insn_idx;
+ 	cur->dfs_depth = new->dfs_depth + 1;
+ 	bpf_clear_jmp_history(cur);
 
 -- 
 2.53.0
