@@ -1,674 +1,84 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201154A7C8B
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 20:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A734A7C90;
+	Sun,  4 Oct 2026 20:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791146579; cv=none; b=K+nMZkXIeVgewxkqvudrlwqrD3J0qzVcSAT2W/O8iYkXavnUfu/W0t4NtCFpBYV/iQzIfqRlGEQLQzokYg7ltBHshODOzqaR7L7uCfo9isRw0ryEc3GfsS1VoXBdVgwjfds0ZypnOOJ5KmgHKrDGzVxPjmqKwbGe9Gt4Ali+As4=
+	t=1791146953; cv=none; b=GoMo6VkMJbkDInbhgDznpNlgu5dUtXJdF6T1fw+Db51L8rO/6JrqMBDzjX/e5v4TZwi/JN+7cYJ9tmcPVkUitJ7ZyEmcCygSn1q+qG0CFFt/XbiBk31wUIL/k8X3xQOPsv0rGUCub+8wxc+2LDl3YXu7sU3fuu+JA2fFvMQITPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791146579; c=relaxed/simple;
-	bh=oYfSsOGUJmyzD4R0WPyl4K2FEol/ywmX1Zz1WfwFYFQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tpxqQuBA6jb5xMnM5e3bUIlq/R6avJB4F/X/N1e1wQTtAXixurqaXN66jm7yJEBD1xe5e+G4WjZ3w3EE0w3Ojqw4jPf8lTDqjUy/yxXBcSDZ5Ow8MOA5F8ZOdllFYxsE5mRcKHhYeBX8+1366YKGwp6tGE2J3v8YnEB9z1bc5oE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=k/BNmkEe; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=QEUn2ocN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1791146953; c=relaxed/simple;
+	bh=DxOA3K04TdGKgV9RBzwq7NMB042SfZvdvrNpiga7nYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=in4QHYHKnPFgocRNERAYgnj/cpH69GjjqdPVLglMSnsPw5VDS8xxU4laF9rsFkzvwPuQdK18bGJ7sbeTucuZNLnmqZFEetfAjShHE2Yd8h4A0i8wYi93+L6AfefGTwNWh8rzeg48Rl99XxJc3/fJ26SijiDU4vB1k3So2o4mJ2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bQPFG1eH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="k/BNmkEe";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="QEUn2ocN"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 694IHJZj3858767
-	for <bpf@vger.kernel.org>; Sun, 4 Oct 2026 20:42:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	wOQF3KwJpXPP6Uhuf5YGNDwiIZtPQjwxBMlkXfxGx0Y=; b=k/BNmkEekNQUyb0l
-	vd30k+sDY8uGRY9UsrQzBX7lVlaP94iUCyJ1xCfdn+rSrImalrrZ9luMrDoxErb8
-	jOJIp/MCtHo0hWGnpdoyoDmFQOVvvVLJdCF1vGaXYHucaGfDtNKT8PU4rC1REW8Q
-	rM9l5QdR4pqIv7IB2ztuiOv3pHQsrQ/cLczY5LOsYFQbe3hr0I//yd5e+FGLbcHZ
-	UZCY70edyy8+jLq22FpeEG29K593jYnIrfQrAUYxnLrqWKTQ7+eskfD72pGoVtBE
-	0joorQSMzXAYY8S6GmH9DaTUNUWBIZCqhRX0+poMJ5VTQmjrzthaJzIKJRLkt0ua
-	g52s6w==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h2ssubqjp-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 20:42:55 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93e49a1d3b1so271244185a.2
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 13:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1791146575; x=1791751375; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wOQF3KwJpXPP6Uhuf5YGNDwiIZtPQjwxBMlkXfxGx0Y=;
-        b=QEUn2ocNXxw6PcrviRNucR5TGabcWg/KPMhyOCpUhZu5J5tkjJw2xDU+9Sy70de7Rv
-         o4uHL7CZqFqOb3auXqYowuD4QfiHVudNsylkF9i1B3iJrEX4DniS9qAdwnowLpYTUQto
-         574bRwTv3O37zQCe8YBshwZpKonsNT9v2x+AHhJRWBu+FSuPZTCe6aSg+i6c+BDPw/w3
-         QuFjv3DUxjOnrkM0zA11a5U9y3APiflxO58vwlmG0sw8mEYLzma4PUlVTpyzHtoenMH6
-         vmOVctIknQAEYC4nCVm7RjMiJtG7eG/rHRjF4P37sEvasi40d06Uup4SBE2QztPHRgzV
-         8h4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791146575; x=1791751375;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wOQF3KwJpXPP6Uhuf5YGNDwiIZtPQjwxBMlkXfxGx0Y=;
-        b=qdtyk+Ixxs0qX5atwuEtsQVp1tbUSH5/yEFCqfpVsOzTfrG926PlgshTg3uC7JnP23
-         orey5w7IGQQZlbDts+BeZgH+DZCx95qxPHO6PLNEuJwWHiFn/0NT3RPBBTSbK73dnkU+
-         uXbv0wTCAG6rzOfiubjqg2w3o/fGnAWlSEe34sPdpZzaftv1RKkT/CvMe3bw3BlmcAIB
-         TuYtUsmcyB2yGsgno3WG5qJNQHNbwEDMGdu6TwFsfsFBytCPv8OOsLq5YckTsIb2ZfNc
-         HfRdQsLXdHn7P57Jo9PKMNQLB8kudRyjVk4fo9uLzrs6xmyg3b9nyFhgB/AGXFC/xKEH
-         MGtg==
-X-Forwarded-Encrypted: i=1; AKwUvBzu3nriNK3oJM+qmdq+KZfswqkJ277z8FtNa7witLxxCYEorNfbHz0USvrSSuasbRAyetY=@vger.kernel.org
-X-Gm-Message-State: AFuF++myHNW9jyNpbNetN5Z8/DeUKbVidynYlyNWd5A3gw1jLOnE5KUZ
-	IdG1/fOLAbt0Hqo/VjvX4ANOJOCacxx9jpDHgWQhlVsZVm6Lp+5/vD+7+UuNeVKZKWVwOiWabow
-	EOAbUq/9SsIpe54nqBZveMshSvx5CWLbKAf4p8+FfkC/sxn0BERX6qUw=
-X-Gm-Gg: AYBFou2aFBtpG1988+DdZrE9ZjM+IUBgcvt7vtRUYhwJoBo3JNbFWoBbzSyqYr4+vDs
-	P+qnf3gRmpJDItq3joMhDdlIJW3DOWTFzTUePE9JIHV8xqzBfJ32fQch2UQ6TcVBgQjaTU8ygsA
-	2jRdL9OnCPrsmTocx53o9KK1cLmOZrqvKwAi+7GPeZ9jBfj6L5ftezJSQO+7n4nPcbTIJOYZMir
-	CEuVVRaqaH/8Cco+SqnX5pPNFtmALHd2tymf0SkwMfQFWUmdlW9bDm+wp9Y/G/4GSyWdXXVPZLj
-	YHaKrLtMyiIDwQfwfhuIRKsGW0htA/hFVtwfQcAaawDjEN2ztdn+tS49dkfiS1gxBH54poB7clt
-	ra/Tb4IpewvUllg==
-X-Received: by 2002:a05:620a:8806:b0:93c:62a9:d5d8 with SMTP id af79cd13be357-93cf19d7e66mr1682678885a.39.1791146574994;
-        Sun, 04 Oct 2026 13:42:54 -0700 (PDT)
-X-Received: by 2002:a05:620a:8806:b0:93c:62a9:d5d8 with SMTP id af79cd13be357-93cf19d7e66mr1682676285a.39.1791146574410;
-        Sun, 04 Oct 2026 13:42:54 -0700 (PDT)
-Received: from localhost ([188.216.77.92])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380f07a9sm22099856f8f.12.2026.10.04.13.42.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 13:42:52 -0700 (PDT)
-From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Date: Sun, 04 Oct 2026 22:42:02 +0200
-Subject: [PATCH net-next v3 2/2] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bQPFG1eH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE661F000FF;
+	Sun,  4 Oct 2026 20:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791146952;
+	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=bQPFG1eH8MlS1WdA1PL227LgKW3ijDNeLX4a/hFg3A5tIJBs2R4L2pQmbea3oPOZ9
+	 uEDR4AFrQIH2K1vLGYWUh9CJMilLz4E6BfOfSRGJBSKzGh0ai4XccVHtFU6p9/ZPmb
+	 zkXGKzgGu6nyO1i3CB0N1mEuKvjeK2c3SZ+afifpbsSmpQNl7s0q4Xolxb9ZbixSaK
+	 IrCM3I0AbmC79vbvGNwfeli07npEC5loZOsPRkZqR3AiJaGnd5fZ48u+7ZdggW7ZxL
+	 bWZZwWBGsoE/EdM5OcyLiL0gcZNQjTdhO7pOrHjhZQZvDWVeZoWg/F6hqXGvZxN28T
+	 +ceI17KlLvYSA==
+From: netdev-bot+sinfo@kernel.org
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>,
+ Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+ James Hilliard <james.hilliard1@gmail.com>
+Subject: 
+ Re: [PATCH net-next v3 0/2] net: stmmac: introduce XDP rx multi-buff support
+Date: Sun, 04 Oct 2026 20:49:10 +0000
+Message-ID: <179114695065.1402591.17659606391395950626@kernel.org>
+In-Reply-To: <20261004-stmmac-rx-mb-v3-0-50fa171af9ec@oss.qualcomm.com>
+References: <20261004-stmmac-rx-mb-v3-0-50fa171af9ec@oss.qualcomm.com>
+Auto-Submitted: auto-generated
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261004-stmmac-rx-mb-v3-2-50fa171af9ec@oss.qualcomm.com>
-References: <20261004-stmmac-rx-mb-v3-0-50fa171af9ec@oss.qualcomm.com>
-In-Reply-To: <20261004-stmmac-rx-mb-v3-0-50fa171af9ec@oss.qualcomm.com>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Cc: netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA0MDA4MiBTYWx0ZWRfX9aRtholweTjI
- 9OgJSl+gh1kKUZ6kOexW6G3g3bdz5Mzvw2byVVN3+sAg7oisUmUpXY0VYXkuKTFecrUkLuecWAY
- nWzPMSpN69Jut30vSB/V79wBQd9M8H4=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA0MDA4MiBTYWx0ZWRfX1MGvdjxH8uVh
- AVSUQihTNg5Fd7Dby28Qdwdx0Q+nBIXnYVumjfmBF/xzcFqsBOOTKzpSj1r+U/WTp6Jn5/hH2rB
- tjYnL1tuxIwvY5e7dO3o9lGedrpVQx3IzAaOrVLE+N6uXVuDP8TEfVwBzLjkumAk1LZ670OKITx
- Rykw9hwgXifBgxHH4E4oNYAz+joMYMG3lZ09m8S869gNBwkoKxAlJ3f6FXkdFqblcIno7Hh3a04
- tWnTPoebOmMl9ZK6h4jLPQLjQfSKAL0aTUAsmr+A4KD6R0SZpX1k8UFk4n1vpvDWuu7aN2f0PiY
- 1220Cip5AUI4xw3PJi+arvTBqeZvEWxU+L+JekfsAa96r2Cl/KTCQ2lo26MpV0R2rAu3Zmndr45
- bPgokD7GjI3MpK1uO+va0ceBJxyuQOmaa/8xL3ioDKJAC01HDncgTukBFmJgfL6Ex+Dlg3tyJNz
- ls4w0tLkHkwTdKFAs5w==
-X-Proofpoint-GUID: k34i6MGFQSpiYS6AigOWm1PfVKbR4OG5
-X-Proofpoint-ORIG-GUID: k34i6MGFQSpiYS6AigOWm1PfVKbR4OG5
-X-Authority-Analysis: v=2.4 cv=FryQbGrq c=1 sm=1 tr=0 ts=6ac2ba4f cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
- a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22
- a=EUspDBNiAAAA:8 a=3m1Th_6XD4kmAsSG_yQA:9 a=QEXdDO2ut3YA:10
- a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-04_05,2026-10-02_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 suspectscore=0 adultscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2610040082
 
-Build the xdp_buff by accumulating all the descriptors that make up a
-frame, so the XDP program runs on the full (possibly fragmented) packet
-instead of just the first buffer. When the frame is not consumed by the
-program, assemble the skb from the head buffer and the collected
-fragments via napi_build_skb()/xdp_update_skb_frags_info().
+Hi!
 
-To do so, store the in-progress xdp_buff in rx_q->state instead of the
-partially built skb, so the accumulated head and fragments survive a
-NAPI poll boundary (mid-frame dma_own or dirty_rx break). The state is
-saved only while a frame is in progress and cleared once it completes,
-leaving it untouched when the poll does not process anything (e.g.
-netpoll invoked with a zero budget).
+This is an automated message. This series looks like a fix, but its
+commit messages seem to be missing some information:
 
-In addition:
-- build the skb head with napi_build_skb() passing xdp->frame_sz, so
-  skb_shinfo() lands on the same shared_info the fragments were
-  accumulated into;
-- attach fragments with xdp_buff_add_frag(), which initializes all the
-  shared_info fields and takes care of the pfmemalloc bit;
-- release all buffers belonging to a frame when it is dropped on RX
-  errors, instead of leaking the ones already attached to the xdp_buff;
-- drop the whole frame when the number of fragments exceeds
-  MAX_SKB_FRAGS, instead of delivering a truncated one;
-- strip the Ethernet FCS from the accumulated xdp_buff with a
-  driver-local tail shrink (stmmac_xdp_shrink_tail()) for both linear
-  and fragmented frames, instead of trimming the skb or the first
-  descriptor length;
-- skip zero-length fragments, which can happen for non-first
-  descriptors when split-header (SPH) is enabled.
+ - How the issue was discovered, e.g. hit in production, hit during
+   development, syzbot report, manual code inspection, LLM or static
+   analysis tool scan.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac.h      |   3 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 348 ++++++++++++++--------
- 2 files changed, 221 insertions(+), 130 deletions(-)
+ - Whether the issue was actually triggered, or is only theoretical
+   (e.g. found by code inspection). If it was triggered please include
+   the symptoms, like the stack trace or error messages.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-index 4fc96b317d79..0148891dbcb4 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-@@ -132,7 +132,8 @@ struct stmmac_rx_queue {
- 	dma_addr_t dma_rx_phy;
- 	unsigned int state_saved;
- 	struct {
--		struct sk_buff *skb;
-+		struct xdp_buff xdp;
-+		unsigned int frames;
- 		unsigned int len;
- 		unsigned int error;
- 	} state;
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index b2d20628ed21..3098fd6df158 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -158,6 +158,9 @@ static void stmmac_flush_tx_descriptors(struct stmmac_priv *priv, int queue);
- static void stmmac_set_dma_operation_mode(struct stmmac_priv *priv, u32 txmode,
- 					  u32 rxmode, u32 chan);
- static void stmmac_vlan_restore(struct stmmac_priv *priv);
-+static void stmmac_xdp_put_buff(struct stmmac_rx_queue *rx_q,
-+				struct xdp_buff *xdp, int sync_len,
-+				bool allow_direct);
- 
- #ifdef CONFIG_DEBUG_FS
- static const struct net_device_ops stmmac_netdev_ops;
-@@ -2180,8 +2183,10 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	else
- 		dma_free_rx_skbufs(priv, dma_conf, queue);
- 
--	dev_kfree_skb_any(rx_q->state.skb);
--	rx_q->state.skb = NULL;
-+	if (rx_q->state.frames && !rx_q->xsk_pool) {
-+		stmmac_xdp_put_buff(rx_q, &rx_q->state.xdp, -1, false);
-+		rx_q->state.frames = 0;
-+	}
- 	rx_q->state_saved = false;
- 	rx_q->buf_alloc_num = 0;
- 	rx_q->xsk_pool = NULL;
-@@ -5758,6 +5763,118 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 	return failure ? limit : (int)count;
- }
- 
-+static void
-+stmmac_xdp_put_buff(struct stmmac_rx_queue *rx_q, struct xdp_buff *xdp,
-+		    int sync_len, bool allow_direct)
-+{
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-+	int i;
-+
-+	if (likely(!xdp_buff_has_frags(xdp)))
-+		goto out;
-+
-+	for (i = 0; i < sinfo->nr_frags; i++)
-+		page_pool_put_full_page(rx_q->page_pool,
-+					skb_frag_page(&sinfo->frags[i]),
-+					allow_direct);
-+out:
-+	page_pool_put_page(rx_q->page_pool, virt_to_head_page(xdp->data),
-+			   sync_len, allow_direct);
-+}
-+
-+static struct sk_buff *stmmac_build_skb(struct xdp_buff *xdp)
-+{
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-+	u32 metasize = xdp->data - xdp->data_meta;
-+	struct sk_buff *skb;
-+	u8 num_frags = 0;
-+
-+	if (unlikely(xdp_buff_has_frags(xdp)))
-+		num_frags = sinfo->nr_frags;
-+
-+	skb = napi_build_skb(xdp->data_hard_start, xdp->frame_sz);
-+	if (!skb)
-+		return NULL;
-+
-+	skb_mark_for_recycle(skb);
-+	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-+	skb_put(skb, xdp->data_end - xdp->data);
-+	if (metasize)
-+		skb_metadata_set(skb, metasize);
-+
-+	if (unlikely(xdp_buff_has_frags(xdp)))
-+		xdp_update_skb_frags_info(skb, num_frags, sinfo->xdp_frags_size,
-+					  num_frags * xdp->frame_sz,
-+					  xdp_buff_get_skb_flags(xdp));
-+	return skb;
-+}
-+
-+static bool stmmac_build_xdp_frags(struct stmmac_priv *priv,
-+				   struct stmmac_rx_queue *rx_q,
-+				   unsigned int len, struct page *page,
-+				   unsigned int offset,
-+				   enum dma_data_direction dma_dir,
-+				   struct xdp_buff *xdp)
-+{
-+	dma_addr_t dma_addr = page_pool_get_dma_addr(page) + offset;
-+
-+	dma_sync_single_for_cpu(priv->device, dma_addr, len, dma_dir);
-+	if (!xdp_buff_add_frag(xdp, page_to_netmem(page), offset, len,
-+			       xdp->frame_sz)) {
-+		page_pool_put_full_page(rx_q->page_pool, page, true);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static int stmmac_xdp_shrink_tail(struct stmmac_rx_queue *rx_q,
-+				  struct xdp_buff *xdp, int offset)
-+{
-+	struct skb_shared_info *sinfo;
-+	int i;
-+
-+	if (unlikely(offset < 0 ||
-+		     offset > (int)xdp_get_buff_len(xdp) - ETH_HLEN))
-+		return -EINVAL;
-+
-+	if (likely(!xdp_buff_has_frags(xdp))) {
-+		xdp->data_end -= offset;
-+		return 0;
-+	}
-+
-+	sinfo = xdp_get_shared_info_from_buff(xdp);
-+	for (i = sinfo->nr_frags - 1; i >= 0 && offset > 0; i--) {
-+		skb_frag_t *frag = &sinfo->frags[i];
-+		int delta = min_t(int, offset, skb_frag_size(frag));
-+
-+		if (delta == skb_frag_size(frag)) {
-+			/* The whole frag is consumed by the strip: return it
-+			 * to the page pool right away. Its ring slot still
-+			 * carries the page DMA address until stmmac_rx_refill()
-+			 * re-arms it at the end of the NAPI poll. This is
-+			 * safe because HW cannot touch the slot until then.
-+			 */
-+			page_pool_put_full_page(rx_q->page_pool,
-+						skb_frag_page(frag), true);
-+			sinfo->nr_frags--;
-+		} else {
-+			skb_frag_size_sub(frag, delta);
-+		}
-+
-+		sinfo->xdp_frags_size -= delta;
-+		offset -= delta;
-+	}
-+
-+	if (unlikely(!sinfo->nr_frags)) {
-+		xdp_buff_clear_frags_flag(xdp);
-+		xdp_buff_clear_frag_pfmemalloc(xdp);
-+		xdp->data_end -= offset;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * stmmac_rx - manage the receive process
-  * @priv: driver private structure
-@@ -5771,21 +5888,20 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 	u32 rx_errors = 0, rx_dropped = 0, rx_bytes = 0, rx_packets = 0;
- 	struct stmmac_rxq_stats *rxq_stats = &priv->xstats.rxq_stats[queue];
- 	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
-+	unsigned int frames = 0, next_entry = rx_q->cur_rx;
- 	struct stmmac_channel *ch = &priv->channel[queue];
- 	unsigned int count = 0, error = 0, len = 0;
--	unsigned int next_entry = rx_q->cur_rx;
- 	bool in_progress = rx_q->state_saved;
- 	enum dma_data_direction dma_dir;
- 	int coe = priv->hw->rx_csum;
--	unsigned int desc_size;
--	struct sk_buff *skb = NULL;
- 	struct stmmac_xdp_buff ctx;
--	bool fcs_stripped = false;
-+	unsigned int desc_size;
- 	int xdp_status = 0;
- 	int bufsz;
- 
- 	dma_dir = page_pool_get_dma_dir(rx_q->page_pool);
--	bufsz = DIV_ROUND_UP(priv->dma_conf.dma_buf_sz, PAGE_SIZE) * PAGE_SIZE;
-+	bufsz = rx_q->napi_skb_frag_size;
-+	ctx.priv = priv;
- 
- 	if (netif_msg_rx_status(priv)) {
- 		void *rx_head = stmmac_get_rx_desc(priv, rx_q, 0);
-@@ -5798,23 +5914,25 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 	}
- 
- 	if (rx_q->state_saved) {
--		skb = rx_q->state.skb;
-+		ctx.xdp = rx_q->state.xdp;
- 		error = rx_q->state.error;
-+		frames = rx_q->state.frames;
- 		len = rx_q->state.len;
--		rx_q->state.skb = NULL;
- 		rx_q->state_saved = false;
-+		rx_q->state.frames = 0;
- 	}
- 
- 	while (count < limit) {
- 		unsigned int buf1_len = 0, buf2_len = 0;
-+		unsigned int pre_len, sync_len;
- 		enum pkt_hash_types hash_type;
- 		struct stmmac_rx_buffer *buf;
- 		struct dma_desc *np, *p;
-+		struct sk_buff *skb;
- 		int entry, status;
- 		u32 hash;
- 
- 		if (!in_progress) {
--			skb = NULL;
- 			error = 0;
- 			len = 0;
- 		}
-@@ -5851,20 +5969,24 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 		if (priv->extend_desc)
- 			stmmac_rx_extended_status(priv, &priv->xstats, rx_q->dma_erx + entry);
- 		if (unlikely(status == discard_frame)) {
--			page_pool_put_page(rx_q->page_pool, buf->page, 0, true);
--			buf->page = NULL;
- 			error = 1;
- 			if (!priv->hwts_rx_en)
- 				rx_errors++;
- 		}
- 
--		if (unlikely(error && (status & rx_not_ls)))
--			goto read_again;
- 		if (unlikely(error)) {
--			dev_kfree_skb(skb);
--			skb = NULL;
--			count++;
--			continue;
-+			page_pool_put_page(rx_q->page_pool, buf->page, 0, true);
-+			buf->page = NULL;
-+			if (buf->sec_page) {
-+				page_pool_put_page(rx_q->page_pool,
-+						   buf->sec_page, 0, true);
-+				buf->sec_page = NULL;
-+			}
-+
-+			if (status & rx_not_ls)
-+				goto read_again;
-+
-+			goto error_free_frag;
- 		}
- 
- 		/* Buffer is good. Go on. */
-@@ -5874,135 +5996,94 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 		buf2_len = stmmac_rx_buf2_len(priv, p, status, len);
- 		len += buf2_len;
- 
--		/* ACS is disabled; strip manually. */
--		if (likely(!(status & rx_not_ls)))
--			len -= ETH_FCS_LEN;
--
--		if (!skb) {
--			unsigned int pre_len, sync_len;
--
--			/* Each frame starts here: reset the FCS handling */
--			fcs_stripped = false;
--
-+		if (!frames) {
- 			dma_sync_single_for_cpu(priv->device, buf->addr,
- 						buf1_len, dma_dir);
- 			net_prefetch(page_address(buf->page) +
- 				     buf->page_offset);
- 
--			if (stmmac_xdp_is_enabled(priv) && !buf2_len) {
--				buf1_len -= ETH_FCS_LEN;
--				fcs_stripped = true;
--			}
--
- 			xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
- 			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
- 					 buf->page_offset, buf1_len, true);
--
--			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
--				  buf->page_offset;
--
--			ctx.priv = priv;
--			ctx.desc = p;
--			ctx.ndesc = np;
--
--			skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
--			/* Due xdp_adjust_tail: DMA sync for_device
--			 * cover max len CPU touch
--			 */
--			sync_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
--				   buf->page_offset;
--			sync_len = max(sync_len, pre_len);
--
--			/* For Not XDP_PASS verdict */
--			if (IS_ERR(skb)) {
--				unsigned int xdp_res = -PTR_ERR(skb);
--
--				if (xdp_res & STMMAC_XDP_CONSUMED) {
--					page_pool_put_page(rx_q->page_pool,
--							   virt_to_head_page(ctx.xdp.data),
--							   sync_len, true);
--					buf->page = NULL;
--					rx_dropped++;
--
--					/* Clear skb as it was set as
--					 * status by XDP program.
--					 */
--					skb = NULL;
--
--					if (unlikely((status & rx_not_ls)))
--						goto read_again;
--
--					count++;
--					continue;
--				} else if (xdp_res & (STMMAC_XDP_TX |
--						      STMMAC_XDP_REDIRECT)) {
--					xdp_status |= xdp_res;
--					buf->page = NULL;
--					skb = NULL;
--					count++;
--					continue;
--				}
--			}
--		}
--
--		if (!skb) {
--			unsigned int head_pad_len;
--
--			/* XDP program may expand or reduce tail */
--			buf1_len = ctx.xdp.data_end - ctx.xdp.data;
--
--			skb = napi_build_skb(page_address(buf->page),
--					     rx_q->napi_skb_frag_size);
--			if (!skb) {
--				page_pool_recycle_direct(rx_q->page_pool,
--							 buf->page);
--				buf->page = NULL;
--				rx_dropped++;
--				count++;
--				goto drain_data;
--			}
--
--			/* XDP program may adjust header */
--			head_pad_len = ctx.xdp.data - ctx.xdp.data_hard_start;
--			skb_reserve(skb, head_pad_len);
--			skb_put(skb, buf1_len);
--			skb_mark_for_recycle(skb);
- 			buf->page = NULL;
- 		} else if (buf1_len) {
--			dma_sync_single_for_cpu(priv->device, buf->addr,
--						buf1_len, dma_dir);
--			skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
--					buf->page, buf->page_offset, buf1_len,
--					priv->dma_conf.dma_buf_sz);
-+			if (!stmmac_build_xdp_frags(priv, rx_q, buf1_len,
-+						    buf->page,
-+						    buf->page_offset,
-+						    dma_dir, &ctx.xdp)) {
-+				if (!error)
-+					rx_dropped++;
-+				error = 1;
-+			}
- 			buf->page = NULL;
- 		}
- 
- 		if (buf2_len) {
--			dma_sync_single_for_cpu(priv->device, buf->sec_addr,
--						buf2_len, dma_dir);
--			skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
--					buf->sec_page, 0, buf2_len,
--					priv->dma_conf.dma_buf_sz);
-+			if (!stmmac_build_xdp_frags(priv, rx_q, buf2_len,
-+						    buf->sec_page, 0,
-+						    dma_dir, &ctx.xdp)) {
-+				if (!error)
-+					rx_dropped++;
-+				error = 1;
-+			}
- 			buf->sec_page = NULL;
- 		}
-+		frames++;
- 
--drain_data:
- 		if (likely(status & rx_not_ls))
- 			goto read_again;
--		if (!skb)
--			continue;
- 
--		/* Got entire packet into SKB. Finish it. */
-+		/* ACS is disabled; strip manually. */
-+		len -= ETH_FCS_LEN;
-+		if (stmmac_xdp_shrink_tail(rx_q, &ctx.xdp, ETH_FCS_LEN)) {
-+			if (!error)
-+				rx_dropped++;
-+			error = 1;
-+		}
- 
--		/* Remove FCS if needed */
--		if (!fcs_stripped && pskb_trim(skb, len)) {
--			dev_kfree_skb_any(skb);
--			skb = NULL;
--			rx_dropped++;
-+		if (unlikely(error))
-+			goto error_free_frag;
-+
-+		pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start;
-+
-+		ctx.desc = p;
-+		ctx.ndesc = np;
-+
-+		skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
-+		/* Due xdp_adjust_tail: DMA sync for_device
-+		 * cover max len CPU touch
-+		 */
-+		sync_len = ctx.xdp.data_end - ctx.xdp.data_hard_start;
-+		sync_len = max(sync_len, pre_len);
-+
-+		/* For Not XDP_PASS verdict */
-+		if (IS_ERR(skb)) {
-+			unsigned int xdp_res = -PTR_ERR(skb);
-+
-+			if (xdp_res & STMMAC_XDP_CONSUMED) {
-+				stmmac_xdp_put_buff(rx_q, &ctx.xdp, sync_len,
-+						    true);
-+				rx_dropped++;
-+			} else if (xdp_res & (STMMAC_XDP_TX |
-+					      STMMAC_XDP_REDIRECT)) {
-+				xdp_status |= xdp_res;
-+			}
-+
-+			/* Clear skb as it was set as status by
-+			 * the XDP program
-+			 */
-+			frames = 0;
- 			count++;
- 			continue;
- 		}
- 
-+		skb = stmmac_build_skb(&ctx.xdp);
-+		if (!skb) {
-+			rx_dropped++;
-+			goto error_free_frag;
-+		}
-+
-+		/* Got entire packet into SKB. Finish it. */
- 		stmmac_get_rx_hwtstamp(priv, p, np, skb);
- 
- 		if (priv->hw->hw_vlan_en)
-@@ -6025,18 +6106,24 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 		skb_record_rx_queue(skb, queue);
- 		napi_gro_receive(&ch->rx_napi, skb);
--		skb = NULL;
--
- 		rx_packets++;
- 		rx_bytes += len;
-+		frames = 0;
-+		count++;
-+		continue;
-+error_free_frag:
-+		if (frames)
-+			stmmac_xdp_put_buff(rx_q, &ctx.xdp, -1, true);
-+		frames = 0;
- 		count++;
- 	}
- 
--	if (in_progress || skb) {
--		rx_q->state_saved = true;
--		rx_q->state.skb = skb;
-+	if (in_progress || frames) {
-+		rx_q->state.xdp = ctx.xdp;
-+		rx_q->state.frames = frames;
- 		rx_q->state.error = error;
- 		rx_q->state.len = len;
-+		rx_q->state_saved = true;
- 	}
- 
- 	stmmac_finalize_xdp_rx(priv, xdp_status);
-@@ -8352,9 +8439,12 @@ static void stmmac_reset_rx_queue(struct stmmac_priv *priv, u32 queue)
- {
- 	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
- 
--	dev_kfree_skb_any(rx_q->state.skb);
--	rx_q->state.skb = NULL;
-+	if (rx_q->state.frames && !rx_q->xsk_pool) {
-+		stmmac_xdp_put_buff(rx_q, &rx_q->state.xdp, -1, false);
-+		rx_q->state.frames = 0;
-+	}
- 	rx_q->state_saved = false;
-+
- 	rx_q->cur_rx = 0;
- 	rx_q->dirty_rx = 0;
- }
+ - What hardware the change was tested on. For driver fixes please
+   mention the device (and if relevant firmware version) used for
+   testing, or say that the change was not tested on real hardware.
 
--- 
-2.55.0
+Please do not repost the series just to address the above. Instead,
+reply to this email with the missing information, so that reviewers
+can take it into account. If the series needs another revision for
+other reasons, please include the information in the commit messages
+then.
 
+The evaluation is done by an LLM so it may be wrong, if you think
+that is the case please reply and explain.
