@@ -1,64 +1,64 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E0C439322
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A699439F88
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121139; cv=none; b=EnPekIgJZDshahZUE1oBd87+e7jMLSSM/qa7QlwRrz+QOg8b71gr8nVc9zGh+6HzJfRAfsm2fKyvJgp7vlXHeFecgNe7gGDb2sBa5xnLoy6VheI42f3fvuRglIgPi5gAM0hC83OSWtz1Vclull9uqbaDJ07/ZJ/7gw14Qc9LOhY=
+	t=1791121139; cv=none; b=LluLKDTWeeIkt72Lhno6Fk1GSo8BVKfBygh3PX4x3mNYKcxWPWZxV3xRv1+7AUD4ckIslx8N/+Hm3vDOmm3hQteLY2Tza25+WcNcW0S1VRDgGEaUmhy7UYhzM0lbo7PeXoSvJcmvnCbrCJIZB+ojr3Bpc6s88vO1JzVXj+XPt10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791121139; c=relaxed/simple;
-	bh=naAF7/nrhuJcbBovpveuM3U6TdzA91x0cdQf4O/5dwM=;
+	bh=Jjyq7OeIqXDFy2J2JdtrBOxGlckCvLh07yqIivf/+LU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NSDZJUKC5SFPx6cQ1DRVJ0UAFoEdcREBkN+U3PJmPNfMtU4wE76vJZLDLAiti6usMHgoY3pb79h0dLvg65le24//0U1lY+xJAbcDsBPaKRQMoN3ABZQ44rOXdWZNtGwalB+hGBhvMTAUyVPq3O6AL1/OdslXPBsLRkq4oueprbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C0S4u9Zd; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version:Content-Type; b=I8A/lp6ZivGJSPzQMCiYaOcXmI9iJMZxV3gHzGpaw5XzhuLa+QkKwH9mK+/uIncjQLJ6xWIBWdzZDmZUeV1kopPuWNZVK8O5c1ZQO+xUGa/PrmUaQdfi3da8FTq7eNPXelr9/wsJC+D2xGvnpsCikdVkHBI+dsrtScLC0AK24Ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HeKdljOU; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C0S4u9Zd"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-381b831d535so764715a91.0
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HeKdljOU"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-88c72646f03so388706b3a.2
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791121137; x=1791725937; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791121138; x=1791725938; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NdwazKpbHN6PcgLxQdYN3qabUPYYVZutN8bq6tFIwKY=;
-        b=C0S4u9ZdhYs54cwBVFF4K0+Q0tZIiXKLUvuaiwAU09ThEw1mqr+M5RGmHbF8nkOGod
-         U4DDmRvWM410j6NFGOSyA6YrRDI4hNpYgso86mt2LV+GMBNz3XY2bmGym2UDLBgr2F8+
-         8CVgutPpKuF0hoAddzhjYiL8m1nGeocfO16bTXui+yYWl4ubv/93ku3VJRsP+uMVM01S
-         grpaACYDsw1tgJXYa+uhJrlgw1JsJjdgAh/vGDnN0kWD0vJ2Q4utATla4A4jk+OUEDl7
-         wl+8gtfZKg1BH2vKjXk2OEQyAdLMQFb+8WTWJY9eSRbPr0H5Qtvn3LdBRNE/EbcMhdKB
-         +1yA==
+        bh=y5eczGBebgZQgnplARw62G9ctL5onzQLkJIzY/2SAJ0=;
+        b=HeKdljOUryH3vOy1z4slEEdv+uv3/NVC1IEOflofuuI9WheXOUP70SKprXGI5tPVZi
+         Z1Azw62+vNguWxcsK23siYrjPgBSY0xUz/F5ejM7+591sZtsI5NDS2EoRl6ijGMVzMqv
+         DsNExgjNj0c7Lw9Sy16tT2GgA0fcwshSzrkTkSnEzMLYqkCjp8046tRinI3uC3xLBmpW
+         ZFZsXFj05ZK2jPkZ00KESGR9oEhENUp4I+hudlVVYDVbx0TOzvHRnGzm+/pLrj0m/p4v
+         BIn1UfmG5utydA3+dVHFBX15L8F+xrObSqCSlJsA5JOmKLQiTHztd52BOnAshx44L17s
+         wA3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791121137; x=1791725937;
+        d=1e100.net; s=20260707; t=1791121138; x=1791725938;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NdwazKpbHN6PcgLxQdYN3qabUPYYVZutN8bq6tFIwKY=;
-        b=OXFqf1A8ZsCN+eGVaiije12N7LcwwjjfG6PtBLll1t4I6KQa6EmRA6FJ/wN0UX21jZ
-         TT/enHP38vs9aQl1aHe8HBVcCN0nGspbvfC1nX2mjC1EzYoPMQkYQK5/JKjUftd4iahE
-         dDpiZ0Sl5hWNIMFZGD4cZfbBlJDQE7FRlu7n3K6sh8YsfPRC/gpGfEiiHkfEnG9kHsBM
-         mXMNXhI2A2vY7vUpZn1mlazLG3tk5AKjIpr94yKWjjh5oCN/BNA/niv/Nrgct9R6bXGP
-         2xRfKPdfWXoczpqsg3nkrRhKaFl0pcES5hGZKKCc7qshgIx4GOYf10WGpzBIe2Ibo0jP
-         z5Lg==
-X-Gm-Message-State: AFq9FYI1erjHp+imfKYwlUvArlhOLdHn4IDvwfKjc3ia8zNrfLvojqUs
-	EEeee492/S2w+y9wCuAtErmYLj9WuT3k3tbBtMbNJMmlmPkgR2oreTGb9Ep3Cg==
-X-Gm-Gg: AYBFou03h/3M5K6sJqjae7ysaD2aerCcKDyeZzOw9/c8sTAABKSjCX9d0Ap0Ew3mNni
-	TGmvCB/Gh7Blcvp4lk48BwuBwMGMWuYLV+f0fqguA+umXGRZV6c09kQr35QOxi354YUv7+uqEQi
-	P3P4UBuhSyhQCm2Bw7vjWssS6wdvB6dQw7v5inNaKosBU6dXYPrNH8Wteep2dfc+Sg2pXsZR33g
-	A52xhBXCeADPGFFeQAwrOKLqWywSOH+bLEtBEUDZnj6+DSbrnO/L17924RERrFLficpuLENUNYF
-	ZBINtpg9GzTWNRlj2XS02Ty6LcZgH+Tp9HEnNpn7JQxeexKXJRi7sD7wE/W8Q8Ssezb4FfN3zjV
-	4fUlSYHsYd4y8layb8sPFHwLuxxGiVEN1kL+XzdjHUs2WN0/Iv7K/5Nxvx0N+lob37sgWp7VKDM
-	loQWGrTllXSYTzA+QP/fbs4E5a8Rz0aKuQhblMbkDUH+R81/yYAHkPY+UdLYjdMnBRTp5ITr3kd
-	b/Riw4nkuCTi2U=
-X-Received: by 2002:a17:90b:2e49:b0:39e:14db:437c with SMTP id 98e67ed59e1d1-3a786736693mr3974266a91.4.1791121136909;
-        Sun, 04 Oct 2026 06:38:56 -0700 (PDT)
+        bh=y5eczGBebgZQgnplARw62G9ctL5onzQLkJIzY/2SAJ0=;
+        b=wRpBI0X9Qzs6EevD8XE8An9EJyzR5uhRYTtiq3saj29YcaZnnegRwi0z9kIJudUssf
+         rXbAx4881+3M6ijYZ0Ab0mQg6jJhP4Qyr8AQ3YH481XENsmhx+158LoJyQ3qrxb8XBLH
+         InOG8nc32z+gXlqt7eFe5wHaKfo1eWftqQRhCBbe+vJJEeILQUaUZF/TsDdsYrqIJI48
+         zgHuAl412oXHDuokfEj0PknMuz7+r6K3MYjFVMOiVu78/fgrAi20OrxdVFg/LouAJ/p6
+         gjqOXCMmijTMH0jmFxCzK0SoznGaarssyhxqdZYpFF7QOiLdPfD2R0DIz/4W29Hw3zPi
+         WesA==
+X-Gm-Message-State: AFuF++loRwYG6pYMsgeuat7bccBELu+tvDY40LESKlRhVBLOIjMfcA9Y
+	T/n0UyOba85+nbX8UtedYXb/N4u5asDqyXHYiNENX4mNCzeMnI+denqvnkfIvg==
+X-Gm-Gg: AYBFou2SPSyZ4znZ9elhsTvl1frnUcu03MFOer2wq5BZGiF9Aw4JJL/IG7BtzC2Qgpb
+	H7NaTYLC4VbzEeuSgVIHXEfGaJ9dHqhNUUwDWXwihKxJT7uwG5jxNtcjS25Qd5hbxAc3AMVvtfw
+	mRvdkmsV/JrUeduzg0hfm4KyaDcBZ09FE+8i17In4/IGPO1WH3PYIMW/5kuIus8vMcJYSQ+xlWg
+	sh1/7JRVlK6S+oPCFwbJeOUV8s5TmxCdPmn9N1pZKIQYBUl/w8CxZDpJtBc0+eFWwAyar25Rm94
+	YIo/nFJhQCH6fM0POejTJ2OVN7PWMY8snbsv4ZSNGVGFn40ZLAGV6K6M01Y4OFidACheTI+JLtO
+	9XGEGPauE3shOzYrwNjwDiUNsjibYEfTZFZzmdQl6db1fYOxA4UbIjROqawubcycyEAmF2YSK8T
+	/kY29V4eeMbSy1j3j5u30MWibDScRsoFjGcFw8PumlzTgmYpVYnp0uxeT6GFPfND4QmHxjtMlYE
+	RoB8JiNohmlGEs=
+X-Received: by 2002:a05:6300:670b:b0:3dd:a009:3181 with SMTP id adf61e73a8af0-3e0d6cdbef9mr4223236637.41.1791121137637;
+        Sun, 04 Oct 2026 06:38:57 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.56
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 06:38:56 -0700 (PDT)
+        Sun, 04 Oct 2026 06:38:57 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 22/43] bpf: add bpf_reg_union()
-Date: Sun,  4 Oct 2026 06:38:04 -0700
-Message-ID: <20261004-scev-minimal-rebase-v2-22-f6254e29fdf2@gmail.com>
+Subject: [PATCH bpf-next v2 23/43] bpf: add a min-heap for ordered analysis worklists
+Date: Sun,  4 Oct 2026 06:38:05 -0700
+Message-ID: <20261004-scev-minimal-rebase-v2-23-f6254e29fdf2@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
@@ -82,76 +82,152 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-A utility function to take the union of two registers' scalar values:
-merge the circular 32-bit and 64-bit bounds, tnums and base/step
-of two registers, then synchronize and validate the result.
-Leave id invalidation and type validation to the caller.
+SCEV needs to process pending basic blocks in reverse postorder.
+Provide a small integer min-heap whose comparator can order instruction
+indices by their CFG ranks.
+
+Grow the backing array on demand and pass caller context to the
+comparator, so the heap need not encode the analysis-specific order.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/verifier.c        | 28 ++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+ include/linux/bpf_verifier.h | 17 +++++++++
+ kernel/bpf/Makefile          |  2 +-
+ kernel/bpf/heap.c            | 87 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 105 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 73bbd7f8f1cc..555a41c5660e 100644
+index 555a41c5660e..8f5d35fa9aab 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1814,6 +1814,8 @@ bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env,
- int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 range, u16 base, u16 step);
-+int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
-+		  const struct bpf_reg_state *src);
+@@ -1938,4 +1938,21 @@ int bpf_compute_loops(struct bpf_verifier_env *env);
+ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
+ bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
  
- int bpf_stack_liveness_init(struct bpf_verifier_env *env);
- void bpf_stack_liveness_free(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5fd6376da171..28c16e35b1f3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -31,6 +31,7 @@
- #include <linux/module.h>
- #include <linux/cpumask.h>
- #include <linux/cnum.h>
-+#include <linux/gcd.h>
- #include <linux/bpf_mem_alloc.h>
- #include <net/xdp.h>
- #include <linux/trace_events.h>
-@@ -17164,6 +17165,33 @@ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
- }
++/*
++ * Simple binary heap implementation as described by
++ * https://en.wikipedia.org/wiki/Binary_heap
++ */
++struct bpf_min_heap {
++	int (*compare)(int, int, void *); /* ordering function for @elements */
++	int *elements; /* min-heap ordered by @compare */
++	void *arg; /* 3rd argument passed to @compare */
++	int capacity;
++	int count;
++};
++
++void bpf_min_heap_init(struct bpf_min_heap *heap, int (*compare)(int, int, void *), void *arg);
++void bpf_min_heap_free(struct bpf_min_heap *heap);
++int bpf_min_heap_push(struct bpf_min_heap *heap, int elt);
++bool bpf_min_heap_pop(struct bpf_min_heap *heap, int *elt);
++
+ #endif /* _LINUX_BPF_VERIFIER_H */
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 6210601eb40b..7a2c179a9059 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
+ endif
+ CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
  
-+/* acc := acc U src, matching types only. Caller must clear acc's scalar ID. */
-+int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
-+		  const struct bpf_reg_state *src)
+-obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o
++obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o heap.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
+diff --git a/kernel/bpf/heap.c b/kernel/bpf/heap.c
+new file mode 100644
+index 000000000000..029f9217b872
+--- /dev/null
++++ b/kernel/bpf/heap.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++
++#include <linux/bpf_verifier.h>
++
++/* Indexes for binary tree encoded as an array */
++static inline int left_child(int i) { return 2 * i + 1; }
++static inline int right_child(int i) { return 2 * i + 2; }
++static inline int parent(int i) { return (i - 1) / 2; }
++
++static inline int greater(struct bpf_min_heap *heap, int a, int b)
 +{
-+	u16 base, step;
-+
-+	if (acc->type != src->type) {
-+		verifier_bug(env, "union of registers with different types");
-+		return -EFAULT;
-+	}
-+	acc->r64 = cnum64_union(acc->r64, src->r64);
-+	acc->r32 = cnum32_union(acc->r32, src->r32);
-+	acc->var_off = tnum_union(acc->var_off, src->var_off);
-+
-+	/* Retain a common congruence if the bases agree modulo the gcd. */
-+	step = gcd(acc->step, src->step);
-+	base = acc->base % step;
-+	if (base != src->base % step) {
-+		reg_step_reset(acc);
-+	} else {
-+		acc->base = base;
-+		acc->step = step;
-+	}
-+	reg_bounds_sync(acc);
-+	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
++	return heap->compare(a, b, heap->arg) > 0;
 +}
 +
- /* check validity of 32-bit and 64-bit arithmetic operations */
- static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
++void bpf_min_heap_init(struct bpf_min_heap *heap, int (*compare)(int, int, void *), void *arg)
++{
++	memset(heap, 0, sizeof(*heap));
++	heap->compare = compare;
++	heap->arg = arg;
++}
++
++void bpf_min_heap_free(struct bpf_min_heap *heap)
++{
++	kfree(heap->elements);
++	heap->elements = NULL;
++	heap->capacity = 0;
++	heap->count = 0;
++}
++
++int bpf_min_heap_push(struct bpf_min_heap *heap, int elt)
++{
++	int new_capacity, i;
++	int *elements;
++	void *tmp;
++
++	if (heap->count == heap->capacity) {
++		new_capacity = heap->capacity ? heap->capacity * 2 : 16;
++		tmp = krealloc(heap->elements,
++			       sizeof(*heap->elements) * new_capacity,
++			       GFP_KERNEL_ACCOUNT);
++		if (!tmp)
++			return -ENOMEM;
++		heap->elements = tmp;
++		heap->capacity = new_capacity;
++	}
++
++	elements = heap->elements;
++	i = heap->count;
++	elements[i] = elt;
++	heap->count++;
++	while (i != 0 && greater(heap, elements[parent(i)], elements[i])) {
++		swap(elements[i], elements[parent(i)]);
++		i = parent(i);
++	}
++	return 0;
++}
++
++static inline void sink_root(struct bpf_min_heap *heap)
++{
++	int *elements = heap->elements;
++	int i = 0;
++
++	while ((left_child(i)  < heap->count && greater(heap, elements[i], elements[left_child(i)])) ||
++	       (right_child(i) < heap->count && greater(heap, elements[i], elements[right_child(i)]))) {
++		if (right_child(i) >= heap->count || greater(heap, elements[right_child(i)], elements[left_child(i)])) {
++			swap(elements[i], elements[left_child(i)]);
++			i = left_child(i);
++		} else {
++			swap(elements[i], elements[right_child(i)]);
++			i = right_child(i);
++		}
++	}
++}
++
++bool bpf_min_heap_pop(struct bpf_min_heap *heap, int *elt)
++{
++	if (heap->count == 0)
++		return false;
++
++	int *elements = heap->elements;
++	*elt = elements[0];
++	elements[0] = elements[heap->count - 1];
++	--heap->count;
++	sink_root(heap);
++	return true;
++}
 
 -- 
 2.53.0
