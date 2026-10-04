@@ -1,64 +1,64 @@
-Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0883343849A
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997AD439F8F
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121152; cv=none; b=ScAwk0xWnbVn29RoaT82HI6YuNSkrLC+rEOeygWJiGwZtnokpy5WUa1u6uMzcu0BbYwBQvE0SdQjtbOKqYYaeTb55LF1bCcz2mNsa4OYRzENteB9qGKWl+pcEOWCnKv5VbfgtRiggjcJ6xmzHljjE8x0GnyDpnMluYGI4vpxnIc=
+	t=1791121152; cv=none; b=Z6Tl/qSLswBaNwDbksOdZYfthSC+PwlpCsIzHPSRkP8jTl7QTPmKJWR1vBnCfOe94L1hEr83Tj5z5t9dUy980AsUr3VsO5I2y/SYBWpvUqIJCAybzUKO/kEJxyTls+UmrzR+gzSwazB0M19u6VyUpwvG8zfCRukXtEQNLdDzOE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791121152; c=relaxed/simple;
-	bh=FF/X25W0C3cpp+Vvu1qrgGDfWnmFdT3QVDs3WPcoa34=;
+	bh=ytmLwE2m73Qs1Q8vwy6BpQHJxepd5pkb0fDKbWX6fB8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CW1ghhFy1Je1X9pJMjKq5wAs/m98gC2NNgzd8DIFqh1YhiCTJMSQ1BqjOVhDUQhw8mVwpi057aGKzDewVaEdOZJJJENBPjtwN5TI25t0H7hIfv4mvLZm/dltpkW1KeJbxxotnTU/fkMXRrN5ioTTzTSklTiGoJu2N9F0b9P0lpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mz1u2P1e; arc=none smtp.client-ip=74.125.227.170
+	 MIME-Version:Content-Type; b=q1AvfflZU9Mu+ahU7truWYX1TbJvU5Euj76BnuTxmuqxOuncafVfh2RKGZ1YiUDsdmt78+ULcpvga4UHrI4/jOmRr1e1LMhCj9HgHIP2+WRyhKoIZra4PjrlCWb6+GWopWHiuKwVDayRwbJjflgpfAYcgJGmWuiJH8vn5gZpKZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EfjlVrK5; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mz1u2P1e"
-Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-396ccb65437so400917a91.3
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:39:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EfjlVrK5"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4aa0f1766so421617a12.0
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791121150; x=1791725950; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791121149; x=1791725949; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=5kFRCyHgUfLVqRoY1XDChIlaNKhDMgGZKYrm7E9TkXg=;
-        b=mz1u2P1eFeKVYYp+KIIAR9B1NRLFeLQmNFeJlEq5FCvZU4s2bfsutdpZzGwxVNcFLU
-         hASuOUxIp8LGSpj6GiDqLZMZc1SKm6y0Y0yIGddEDwvgQXizxYJfWGH2Iyd4vVQIpbxa
-         G33FUhgqq2yeSjdvtcxhC90IjSIWElxiGMRVbFhdviWkgo3kFkCb/vX3zZXUVt52UC+/
-         MU3jZglGYu368WHzIPUxzEWfBhVml7ehaNlcjFmC8Qu2AhOPeZsuSydrk0QqkdQ8hNUK
-         9f2IxbzVee1gweRZ5kU/J7YkRZtMcD0sOlqPlnZjHc7BCk8uTwiGeAATk6Js927vzV3j
-         aW6Q==
+        bh=GaCxiCU7O3fKxYOQRvzPXKp2LYdrnyz5kZgHLll1rz0=;
+        b=EfjlVrK5WODDi0tFmfXBpDYMvQa/l+0fbMB3HAYyEgRjC/R5+N2mEVbjHIQI7pn5DZ
+         ZKbzHCT2THoBIzsdILXe2NKz2ELjmKteLOqoFu7ppg/I04/cMAaqDEi3VqLnocuNLbcR
+         BBHfYfGxxQriI+84lrukdk9yXuA68X+qFmxR0rREWMuta7dJEpPYcYluiy9V3PqPA7cx
+         gX/DXguCviP3dV7o9BjnpbnJxDG+V3IbuTpw8sWGq4FzcpeiKBrMYyNyyYQUP9Pi0EEF
+         qDCCepyH3JVZIYnaJPtw/YVN8XHvpoMpuH9lBp6c0TqFEfXLH/kDeP4PH0P/+G6XXoSD
+         EveQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791121150; x=1791725950;
+        d=1e100.net; s=20260707; t=1791121149; x=1791725949;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5kFRCyHgUfLVqRoY1XDChIlaNKhDMgGZKYrm7E9TkXg=;
-        b=nvAqU2XMpHWI2v6F4ihcI61fMbesE4rZvlg7pDZ+n5UhTCV8ydNa3nncPMCHENe7Px
-         4aq7CmeCmdWftpGWbhb1yRIN3ts6lxhcrDDIgCNSXldX9sAwD1IqQK+Y9oHYYnCztysE
-         OYtS+HThbA0x57foaBtOvtQpzj/8KT4S0KudHZvNTWskW2ica4is0iU/MvwL1CPEUgDd
-         GLuR/O/lXJWD3tUXapB2p4vxGtQQm+CMJirhPuBFM1blZQxvI6xIMJUq9qkfssO8JiYx
-         I7w1JviU5ekKLzIniF1rCtogyEgtaVmipGlZdBfEL16usYLQTeHRy2uoPktj5+PFneYt
-         9zjA==
-X-Gm-Message-State: AFq9FYIvA2IIoT9JC2B+fO3C+yx/HsM9njo0m2Fq0MA2tS2qKle11Hz9
-	J0UmwZsx938reevq3Fo0HrPZ9o2FM8PRabtz7O2SVRtM4KHPaJCF7DtPIdxRYQ==
-X-Gm-Gg: AYBFou0TbucEdeQpg951/vRRrUeE/b7Th3RIuwuT4qRe8TamNl6oEYiAD/X29wO2OqS
-	rjrmAQVw0xHyxlumDtoyYJz+g7zlXkwCX1PWRqmXVVLQhu0WHOIBerLNSDlGHFqCYQAun+mszq6
-	Hkf5unX0RKXtACxUUzKetHR+SVIXg7hJfFqzMUjNVZDEFD/HDf3c15g1dLDw6ie4N4qExgBHy2q
-	0eATqaxVHXxYoXvvK2eI2YGMwet2ASD976we2WfQ5089XvzcJW+XB8G9/hU7ctC0JNSrNGz7NIu
-	JyQRlI3YbcSQn7+OsutOjyKqHlLhp3GGhuASb+1Bzmj+LqAZ47YhlZtSgf0VSl29yeyPO/pvAKA
-	pwlfsaRty4E22gaQe0A1czbwY+koQuEcdIsO43g6enqFcINTmOgOkAX7ZHa9M6+IZja6uDX5Nwe
-	DApq28oVf2a/vO6GM+Jw5oHrJrE62fdYIpxwAnJk2pqDotT2PkODUVds5BgUCOFtpPQifzAE9ZX
-	goxaLGfT+us58s=
-X-Received: by 2002:a17:90a:d64b:b0:3a5:1b:34a5 with SMTP id 98e67ed59e1d1-3a6ce84450dmr6003739a91.49.1791121150131;
-        Sun, 04 Oct 2026 06:39:10 -0700 (PDT)
+        bh=GaCxiCU7O3fKxYOQRvzPXKp2LYdrnyz5kZgHLll1rz0=;
+        b=lKi2lLAZvWGJtT9zOZ4t1NJR+6OexhGk0AcpN8Ffz4e/HiVyQBuSYbfYwG67gUt0Ir
+         VfCzQ7eJpY9qFqm4yiXJhSFsibxPgHZVahticlqgzCwtYpCyCKmHB3GeHqgXHqoesXD/
+         UyQSVkdKo25aE+uLThLEdpDm4CPvlWGCdbkLaCFIZskVwQmhZM0KGRvZdVlT+uLm3y4f
+         bzuiFKExcgMkqByptl7Yvko5SNTt257l3vA0QhILjBEq5yGKHHGfjSlCwLVkY0GH99+N
+         n7oIuyPS1A3RZWdwTZubplcZAiDBHJvOUVpBewZyQ6d5b+KTda7Xu1MTuDsPRk0LjeRW
+         sA4w==
+X-Gm-Message-State: AFuF++kWI1guU8rXQE7Ub6hE538eGPBAi6edJdp167AOpDhOGgLa5770
+	PNDOdPHxcbduLgN6YQ8PT2yeEKrr0+nbYpVpQhHocEc2plRlw5vxn1GyYelomA==
+X-Gm-Gg: AYBFou3+jrMus6gMIWPgoOqk4SuUbfas/dVjdvw1O66GDALe0a3fbD8v+gRCS5y0o0M
+	WcYIFMw2tgMPfWv2R4FSauNP8cR4yzy3NTXO5NVQ6j/cqTvhk7bEIh1mYKMUJ4nuloXag3qwPvH
+	mgFFwsBM1bkl7DXFhk8cMsiRIo1BsoeidPcn+XQRQNDtPhkxyi8Y4rpRlLLLX+DKpCJ015vh+7U
+	bBKAmrLsQb1XHyh5Py/mclCG7z7ruQmL6SbYl3Jo6BTAxOpXD2g0LQ3elXzleb7FHbqd6MzjbMj
+	pD9Z615EZweioCurIb1CdjLP7mJPQleU4soYzKPNGtQgmbpxW3V3wRs2L0iVwEaAqMn8am8Ywao
+	j0VDUSFVxIkNTeVGngsYC+Nd7l1R9WJ6bOc88S/HpArUzVW0NqEIjjCmOAdfCcanBi+6A5rdjFo
+	h+ceMMivDkc0doBiUg66P8b660vbqrKs6y7qP8jfO/euM/eO2U85YS80tryJq/nVJ1KacwC4Jci
+	1hpIURXiEHRqHs=
+X-Received: by 2002:a05:6a21:670b:b0:3d8:5a37:549c with SMTP id adf61e73a8af0-3e0bc9f8ccdmr8305844637.7.1791121148709;
+        Sun, 04 Oct 2026 06:39:08 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.39.09
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.39.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 06:39:09 -0700 (PDT)
+        Sun, 04 Oct 2026 06:39:08 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 37/43] selftests/bpf: tests for map special cases in bpf_helper_stack_access_bytes()
-Date: Sun,  4 Oct 2026 06:38:19 -0700
-Message-ID: <20261004-scev-minimal-rebase-v2-37-f6254e29fdf2@gmail.com>
+Subject: [PATCH bpf-next v2 35/43] selftests/bpf: tests for may_write stack-liveness tracking
+Date: Sun,  4 Oct 2026 06:38:17 -0700
+Message-ID: <20261004-scev-minimal-rebase-v2-35-f6254e29fdf2@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
@@ -82,104 +82,292 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Tests for helper arguments whose access size or read/write effects
-depend on the map:
+Branches to cover:
+  - per-insn writes (record_stack_access_off):
+      * off_cnt==1, fully covered slots   -> def + may_def (equal)
+      * partial coverage                  -> may_def only (no def)
+      * off_cnt 2-4, precise offsets      -> may_def only, per offset
+  - whole-frame writes:
+      * off_cnt==0 (offset lost)          -> may_def SPIS_ALL
+      * ARG_IMPRECISE (frame lost)        -> may_def SPIS_ALL per frame
+  - merge_instances():
+      * both passes touch a frame         -> may_def union
+      * one pass leaves a frame untouched -> may_def preserved
+  - merge_may_write(): a callee's writes into ancestor frames are
+    summarized as may_def at the caller's call instruction
+  - analyze_subprog()                     -> may_def stack slot range
+                                             when callback is unknown.
 
-- helper_map_output_known_size checks that for a known map access
-  MEM_WRITE | MEM_UNINIT produces a must_write mark.
-- helper_map_output_merged_sizes checks that when maps with different
-  value sizes merge, MEM_WRITE | MEM_UNINIT produces use and may_def
-  marks over the maximum value size, without a def mark.
-- helper_bloom_peek_input checks that for bpf_map_peek_elem()
-  on a bloom filter the buffer is treated as an input.
+Tests exercising them:
+  - may_write_two_precise_offsets  - off_cnt 2-4 precise multi-offset
+  - imprecise_frame_write          - cross-frame ARG_IMPRECISE write,
+                                     plus its caller-side summarization
+  - merge_preserves_may_write      - map-value vs stack pointer at two
+                                     callsites: union is preserved when
+                                     one pass does not touch the frame
+  - must_write_not_same_slot       - off_cnt==0 whole-frame may_def
+  - two_byte_write_no_kill         - partial write, may_def without def
+  - kfunc_iter_stack_liveness      - full-slot def == may_def
+  - helper_output_unknown_size     - output size unknown to liveness,
+                                     may_def without use or def
+  - caller_stack_write,
+    conditional_stx_in_subprog,
+    shared_instance_must_write_overwrite
+                                   - callee writes summarized as may_def
+                                     at the call site
+  - bpf_loop_two_callbacks         - call to unknown callback marks full
+                                     stack range as may_def.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_live_stack.c      | 76 ++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ .../selftests/bpf/progs/verifier_live_stack.c      | 180 ++++++++++++++++++++-
+ 1 file changed, 175 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 5b0fcef1f571..d93bb628f65e 100644
+index 0e6f25a09b5d..a06156c18c9e 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -3145,3 +3145,79 @@ __naked void helper_output_unknown_size(void)
- 	:: __imm(bpf_get_prandom_u32), __imm(bpf_probe_read_kernel)
+@@ -83,6 +83,31 @@ __naked void must_write_not_same_slot(void)
  	: __clobber_all);
  }
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_QUEUE);
-+	__uint(max_entries, 1);
-+	__type(value, __u64);
-+} queue_8b SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_QUEUE);
-+	__uint(max_entries, 1);
-+	__type(value, __u64[2]);
-+} queue_16b SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_BLOOM_FILTER);
-+	__uint(max_entries, 16);
-+	__type(value, __u64);
-+} bloom_8b SEC(".maps");
-+
+ 
 +SEC("socket")
-+__success __log_level(2)
-+__msg("call bpf_map_pop_elem{{.*}}; def: fp0-16")
-+__naked void helper_map_output_known_size(void)
++__log_level(2)
++__msg("stack use/def subprog#0 may_write_two_precise_offsets (d0,cs0):")
++/*
++ * r1 is fp-8 or fp-16, with both offsets tracked precisely (off_cnt == 2).
++ * A write through it cannot set def, but marks both candidate slots as may_def.
++ */
++__msg("6: (7b) *(u64 *)(r1 +0) = r0         ; may_def: fp0-8 fp0-16")
++__naked void may_write_two_precise_offsets(void)
 +{
 +	asm volatile (
-+	"r1 = %[queue_8b] ll;"
-+	"r2 = r10;"
-+	"r2 += -16;"
-+	"call %[bpf_map_pop_elem];"
-+	"r0 = 0;"
++	"call %[bpf_get_prandom_u32];"
++	"r1 = r10;"
++	"if r0 > 42 goto 1f;"
++	"r1 += -8;"
++	"goto 2f;"
++"1:"
++	"r1 += -16;"
++"2:"
++	"*(u64 *)(r1 + 0) = r0;"
 +	"exit;"
-+	:: __imm_addr(queue_8b), __imm(bpf_map_pop_elem)
++	:: __imm(bpf_get_prandom_u32)
 +	: __clobber_all);
 +}
 +
-+/* The maximum map value size is not a guaranteed output extent. */
+ SEC("socket")
+ __log_level(2)
+ __msg("0: (7a) *(u64 *)(r10 -8) = 0         ; def: fp0-8")
+@@ -114,7 +139,7 @@ __log_level(2)
+ __msg("stack use/def subprog#0 caller_stack_write (d0,cs0):")
+ __msg("2: (85) call pc+1                    ; may_def: fp0-8")
+ __msg("stack use/def subprog#1 write_first_param (d1,cs2):")
+-__msg("4: (7a) *(u64 *)(r1 +0) = 7          ; def: fp0-8")
++__msg("4: (7a) *(u64 *)(r1 +0) = 7          ; def: fp0-8 may_def: fp0-8")
+ __naked void caller_stack_write(void)
+ {
+ 	asm volatile (
+@@ -134,6 +159,49 @@ static __used __naked void write_first_param(void)
+ 	::: __clobber_all);
+ }
+ 
++/*
++ * Cross-frame imprecise write: imprecise_frame_writer() receives a pointer
++ * into the caller's frame (frame 0) but conditionally replaces it with a
++ * pointer into its own frame (frame 1). At the store the two are joined into
++ * ARG_IMPRECISE (frame is unknown, mask = {0,1}), so the offset is dropped and
++ * the whole of both candidate frames is conservatively marked as may_def.
++ */
 +SEC("socket")
-+__success __log_level(2)
-+__msg("call bpf_map_pop_elem{{.*}}; use: fp0-16 fp0-24 may_def: fp0-16 fp0-24{{$}}")
-+__naked void helper_map_output_merged_sizes(void)
++__log_level(2)
++/* The callee's write into the caller frame is summarized at the call site. */
++__msg("stack use/def subprog#0 imprecise_frame_write (d0,cs0):")
++__msg("2: (85) call pc+2                    ; may_def: fp0-8..-{{(512|2048)}}")
++__msg("stack use/def subprog#1 imprecise_frame_writer (d1,cs2):")
++__msg("12: (7b) *(u64 *)(r1 +0) = r2         ; may_def: fp1-8..-{{(512|2048)}} fp0-8..-{{(512|2048)}}")
++__naked void imprecise_frame_write(void)
 +{
 +	asm volatile (
-+	"*(u64 *)(r10 - 16) = 0;"
-+	"*(u64 *)(r10 - 24) = 0;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call imprecise_frame_writer;"
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++static __used __naked void imprecise_frame_writer(void)
++{
++	asm volatile (
++	"r6 = r1;"			/* save arg: pointer into frame 0 */
 +	"call %[bpf_get_prandom_u32];"
-+	"r1 = %[queue_8b] ll;"
++	"r1 = r6;"			/* r1 = frame0-8 (arg) */
 +	"if r0 == 0 goto 1f;"
-+	"r1 = %[queue_16b] ll;"
++	"r1 = r10;"
++	"r1 += -8;"			/* r1 = frame1-8 (own frame) */
 +"1:"
++	"r2 = 0;"
++	"*(u64 *)(r1 + 0) = r2;"	/* join frame0-8 | frame1-8 -> imprecise */
++	"r0 = 0;"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ SEC("socket")
+ __log_level(2)
+ __msg("stack use/def subprog#0 caller_stack_read (d0,cs0):")
+@@ -1011,7 +1079,7 @@ __naked void four_byte_read_upper_half(void)
+  */
+ SEC("socket")
+ __log_level(2)
+-__msg("0: (7a) *(u64 *)(r10 -8) = 0         ; def: fp0-8")
++__msg("0: (7a) *(u64 *)(r10 -8) = 0         ; def: fp0-8 may_def: fp0-8")
+ /* 2-byte write only partially covers the upper half: may_def, but no def. */
+ __msg("1: (6a) *(u16 *)(r10 -4) = 0         ; may_def: fp0-4h")
+ __msg("2: (61) r0 = *(u32 *)(r10 -4)        ; use: fp0-4h")
+@@ -1364,7 +1432,7 @@ __log_level(2)
+  * fp-8 live at call: callee conditionally writes it, so the slot is not killed
+  * (no def), but the conditional write surfaces as may_def at the call site.
+  */
+-__msg("1: (7b) *(u64 *)(r10 -8) = r1        ; def: fp0-8")
++__msg("1: (7b) *(u64 *)(r10 -8) = r1        ; def: fp0-8 may_def: fp0-8")
+ __msg("4: (85) call pc+2                    ; may_def: fp0-8")
+ __msg("5: (79) r0 = *(u64 *)(r10 -8)        ; use: fp0-8")
+ __naked void conditional_stx_in_subprog(void)
+@@ -2271,11 +2339,19 @@ static __used __naked void merge_leaf_read(void)
+ 	::: __clobber_all);
+ }
+ 
+-/* Same bpf_loop instruction calls different callbacks depending on branch. */
++/*
++ * Same bpf_loop instruction calls different callbacks depending on branch.
++ * One callback writes through ctx. With no unique callback, all frames must
++ * be marked as possibly read and written, including at enclosing call sites.
++ */
+ SEC("socket")
+ __log_level(2)
+ __success
+-__msg("call bpf_loop#181            ; use: fp2-8..-{{(512|2048)}} fp1-8..-{{(512|2048)}} fp0-8..-{{(512|2048)}}")
++__msg("stack use/def subprog#0 bpf_loop_two_callbacks (d0,cs0):")
++__msg("5: (85) call pc+{{.*}};{{.*}} may_def: fp0-8..-{{(512|2048)}}{{$}}")
++__msg("8: (85) call pc+{{.*}};{{.*}} may_def: fp0-8..-{{(512|2048)}}{{$}}")
++__msg("call bpf_loop#181            ; use: fp2-8..-{{(512|2048)}} fp1-8..-{{(512|2048)}} fp0-8..-{{(512|2048)}}"
++      " may_def: fp2-8..-{{(512|2048)}} fp1-8..-{{(512|2048)}} fp0-8..-{{(512|2048)}}{{$}}")
+ __naked void bpf_loop_two_callbacks(void)
+ {
+ 	asm volatile (
+@@ -2393,6 +2469,20 @@ __flag(BPF_F_TEST_STATE_FREQ)
+ __msg("subprog#2 write_first_read_second:")
+ __msg("17: (7a) *(u64 *)(r1 +0) = 42{{$}}")
+ __msg("18: (79) r0 = *(u64 *)(r2 +0) // r1=fp0-8 r2=fp0-16{{$}}")
++/*
++ * The callee's write into the caller frame is summarized as may_def at the
++ * call sites, transitively across both frames (depth 2 -> 1 -> 0). The two
++ * call sites differ because the shared write_first_read_second instance
++ * accumulates the cross-pass union ({fp-8, fp-16}) at different points
++ * relative to each forwarding_rw's summarization.
++ */
++__msg("stack use/def subprog#0 shared_instance_must_write_overwrite (d0,cs0):")
++__msg("7: (85) call pc+7                    ; use: fp0-8 fp0-16 may_def: fp0-8 fp0-16")
++__msg("12: (85) call pc+2                    ; use: fp0-8 may_def: fp0-16")
++__msg("stack use/def subprog#1 forwarding_rw (d1,cs7):")
++__msg("15: (85) call pc+1                    ; use: fp0-8 fp0-16 may_def: fp0-8 fp0-16")
++__msg("stack use/def subprog#1 forwarding_rw (d1,cs12):")
++__msg("15: (85) call pc+1                    ; use: fp0-8 may_def: fp0-16")
+ __msg("stack use/def subprog#2 write_first_read_second (d2,cs15):")
+ /*
+  * Shared across two callsites with swapped args (r1 is fp-8 on one pass,
+@@ -2441,6 +2531,65 @@ static __used __naked void write_first_read_second(void)
+ 	::: __clobber_all);
+ }
+ 
++/*
++ * merge_instances() must preserve may_write when one pass doesn't touch a frame.
++ * mvs_leaf is reached through a single callsite (mvs_mid) from two outer chains,
++ * so it is one shared (depth,callsite) instance analyzed twice and merged:
++ * - chain A passes r2 = map value, mvs_leaf's doesn't touch stack;
++ * - chain B passes r2 = caller stack slot fp-8.
++ * The merge must keep the stack pass's may_write even though the map pass left
++ * frame 0 untouched.
++ */
++SEC("socket")
++__success
++__log_level(2)
++__msg("stack use/def subprog#2 mvs_leaf (d2,cs19):")
++__msg("21: (7a) *(u64 *)(r2 +0) = 42         ; may_def: fp0-8")
++__naked void merge_preserves_may_write(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 24) = r1;"		/* map key */
++	"r1 = %[map] ll;"
 +	"r2 = r10;"
 +	"r2 += -24;"
-+	"call %[bpf_map_pop_elem];"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 1f;"
++	/* chain A: r2 = map value (ARG_NONE, not stack) */
++	"r1 = r10;"
++	"r1 += -16;"				/* unused fp anchor */
++	"r2 = r0;"
++	"call mvs_mid;"
++	/* chain B: r2 = caller stack slot fp-8 */
++	"r1 = r10;"
++	"r1 += -16;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"call mvs_mid;"
++"1:"
 +	"r0 = 0;"
 +	"exit;"
-+	:: __imm_addr(queue_8b), __imm_addr(queue_16b),
-+	   __imm(bpf_get_prandom_u32), __imm(bpf_map_pop_elem)
++	: : __imm(bpf_map_lookup_elem), __imm_addr(map)
 +	: __clobber_all);
 +}
 +
-+/* Bloom-filter peek treats buffer as an input despite the helper's output annotation. */
-+SEC("socket")
-+__success __log_level(2)
-+__msg("call bpf_map_peek_elem{{.*}}; use: fp0-8{{$}}")
-+__naked void helper_bloom_peek_input(void)
++static __used __naked void mvs_mid(void)
 +{
 +	asm volatile (
-+	"*(u64 *)(r10 - 8) = 0;"
-+	"r1 = %[bloom_8b] ll;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"call %[bpf_map_peek_elem];"
++	"call mvs_leaf;"
++	"exit;"
++	::: __clobber_all);
++}
++
++static __used __naked void mvs_leaf(void)
++{
++	asm volatile (
++	"*(u64 *)(r2 + 0) = 42;"
 +	"r0 = 0;"
 +	"exit;"
-+	:: __imm_addr(bloom_8b), __imm(bpf_map_peek_elem)
++	::: __clobber_all);
++}
++
+ /*
+  * Shared must_write when (callsite, depth) instance is reused.
+  * Main calls fwd_to_stale_wr at two sites. fwd_to_stale_wr calls
+@@ -2949,3 +3098,24 @@ __naked void spill_below_512_stays_precise(void)
+ 	"exit;"
+ 	::: __clobber_all);
+ }
++
++/* Unknown-size outputs still carry a possible write, without a read or kill. */
++SEC("socket")
++__success __log_level(2)
++__msg("call bpf_probe_read_kernel{{.*}}; may_def: fp0-8{{$}}")
++__naked void helper_output_unknown_size(void)
++{
++	asm volatile (
++	"call %[bpf_get_prandom_u32];"
++	"r0 &= 7;"
++	"r0 += 1;"
++	"r2 = r0;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"r3 = 0;"
++	"call %[bpf_probe_read_kernel];"
++	"r0 = 0;"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32), __imm(bpf_probe_read_kernel)
 +	: __clobber_all);
 +}
 
