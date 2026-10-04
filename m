@@ -1,155 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B41448392
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 14:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA283AA1B2
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 14:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791123876; cv=none; b=dWmOwW5IIt7Kiw0K6tanRvoQHvaKpa8fUGrIgbLZPa7Wv2FIazC04BChvKXLCE2/YzpL0e+rvEVeSY8tuGss29hnCq4uJ3HNo/PW4VCz5epxfxkz9E0Y3WI+xHyAI1owGCq9fEBRkqF3Qelrq50JNb9jxo6+GPey8kWIREV10dk=
+	t=1791123879; cv=none; b=msteut50ViJzTWhj9P5zhC95CqUt3JTtPqljlZJ77G5zhuOwiiYlLvQLUtZJrBYO2uPYbrmG7CqnrhvDqp3Pk0LAHfDFRFWWBld2qxejJGQo8FPls6LKuaCQBPPWalviJEyg3mtIavraBXc3TihLlTIOeD8VYDF+refsg4Zc3nQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791123876; c=relaxed/simple;
-	bh=UP/4/dJllVL7KBvr336lmrMMzyNSbD8kBO7rGmZgc4U=;
+	s=arc-20240116; t=1791123879; c=relaxed/simple;
+	bh=OhksoQlaq98s9kAEp89TfPonGDokfau/yzstQbTzyS8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=F+AokmD0VTMovduERuSqPXIhgZGP8PwfgqP+j8UEsW9aFOdjLlSwVbk+WIwo68KQs8j98YdNKoXZ/FrqLccpiEq/xS0XcRxmNQSVcnyEKKevuCsS5ravKAArDbmlEoqRRKuwoVLUWXSrZ1EuuO3U5Lb5FYU+DAVoNE9oVu/2b6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJfYxT1T; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Up/4Rtw7PnO2nCY9XQoV8lXI7DmPoFR+Uc8enRhXZN9lmVTLscfAZ2PuQHuq5Pg6lLl+Kc0JcMbdH9FTsdTUlIozzg2Q8BSW0i6oo5k/yJc1uI6VhHO2NVJrUnwfB2DHHr9iZkXV68erm0poRCTr3ENbisVUfEhekGGIjdj9ec8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BlMhYa8H; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJfYxT1T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02711F000FF;
-	Sun,  4 Oct 2026 14:24:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BlMhYa8H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC361F000FF;
+	Sun,  4 Oct 2026 14:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791123875;
-	bh=9sBXe3S6H2vNCbrJKjve4fSHoJmtgur02/Ddqsc9Km4=;
+	s=k20260515; t=1791123878;
+	bh=YK04Tc3HyFBLnkUm3Y5sxokpXYI/RAWzAZ/odR8V7Jg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JJfYxT1TLJSwxsqZf2ogQpLlcCJXN7zgXqgXsb31NiymRQvZoXiQBnjfLwaW/FCzj
-	 R7QRGTsCXDqUjLomaQSSk+/yg5DcvXVpBIvq5yM8Vy/1+TTQXVIDCucgpDzbfI9nm0
-	 Iwa7N2Ybkc1EGPmS6hw3aX6FSLbRSS/HS84v/5h8CzlI3kmB/ECHWColj0x3S0d6vo
-	 N7nUxVfgalOLB0plv2kipBTlzP+lboTkQzsm4koJhjNW8X1DnPE85Op0DD3etA3hBW
-	 f4p81e1SAlgYkdxgt1b+SbtKWcpoBxuI8WL+hV0t5n3h+WQ2AK8QjHUiSD4YzcpcJF
-	 p828qT55pvzQA==
-Content-Type: multipart/mixed; boundary="===============2582980787160194644=="
+	b=BlMhYa8HRaecE54C1z0vIyRHBJCwQCy9qWtmghlquGY7ffCKFVm2Lz44eCwWalPDo
+	 pdAT700U5xK/TM7T2xSvoOBB9wVnU2JDkY+hpCQUfAt4pv4dvn0ot54TjF0Avw2Q/i
+	 HueUVla9vxe/w9j7x7fzklTlRkokdsdvJ6HEculeMw0VgDDOCyBW5GAJcmbFL45Ibp
+	 SoWvpSYUIoO+m0GA815Ru2xpLzAB3xah9BlYY1dmNXRcy5tZ2n5Lh5CH/zRyJvoGqQ
+	 N0bhyLo+nC+QWxpMzeSuMnaIHgNGoGL0mIHpXL/O2EFOTzulck/QilAcOF818ppyUf
+	 9e3C86d5rI+cQ==
+Content-Type: multipart/mixed; boundary="===============0766898026523053831=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6478041e6e7b752f8fce9c2c8396740d27a913409093072e0e827ba73c967baf@mail.kernel.org>
-In-Reply-To: <20261004-scev-minimal-rebase-v2-26-f6254e29fdf2@gmail.com>
-References: <20261004-scev-minimal-rebase-v2-26-f6254e29fdf2@gmail.com>
-Subject: Re: [PATCH bpf-next v2 26/43] bpf: add bpf_same_memory_origin()
+Message-Id: <c9a97fae07b8fb6df4619a230ef8d9d358e2820b310055038e203bec9a36f402@mail.kernel.org>
+In-Reply-To: <20261004-scev-minimal-rebase-v2-38-f6254e29fdf2@gmail.com>
+References: <20261004-scev-minimal-rebase-v2-38-f6254e29fdf2@gmail.com>
+Subject: Re: [PATCH bpf-next v2 38/43] selftests/bpf: tests for register base/step arithmetic
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
 Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun,  4 Oct 2026 14:24:33 +0000 (UTC)
+Date: Sun,  4 Oct 2026 14:24:36 +0000 (UTC)
 
---===============2582980787160194644==
+--===============0766898026523053831==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: add bpf_same_memory_origin()
+> selftests/bpf: tests for register base/step arithmetic
 
-TL;DR: bpf_same_memory_origin() may wrongly treat pointers into different
-elements of an inner array map (BPF_F_INNER_MAP, template max_entries == 1) as
-the same object, so SCEV loop bounds could be wrong and the verifier may
-accept out-of-bounds accesses.
+TL;DR:
+- Commit message lists tests (step_mul_non_pow2, step_lsh,
+  step_add_const_base) that don't exist
+- The "w1 = w0" selftest match may not check R1's stride
+- Comment has a wrong value (0xfffffffa)
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 28c16e35b1f3..9e1c08caa0db 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -17153,6 +17153,51 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
->  	return 0;
->  }
+> selftests/bpf: tests for register base/step arithmetic
 >
+> - step_mul_non_pow2: Retain step 3 after multiplying a bounded scalar
+>   by a non-power-of-two constant.
+> - step_lsh: Record step 4 after shifting a bounded scalar left by two.
+> - step_add_const_base: Shift the base to 1 while preserving step 4
+>   after adding a constant.
+> - step_neg_value_range: Preserve the signed range of {-3, 0, 3, 6}
+>   when intersecting with a non-power-of-two step across zero.
+> - step_arith{32,64}_overflow: Reset the stride and preserve valid
+>   bounds when a {32,64}-bit operation wraps.
+> - step_mov32_truncate: Reset the stride when MOV32 discards nonzero
+>   upper bits from positive values.
+> - step_mov32_negative: Reset the stride when MOV32 zero-extends
+>   the low 32 bits of negative signed values.
+> - step_movsx: Reset the stride when sign extension changes the
+>   register value.
+> - step_linked_regs_add64: Translate both bounds and base when
+>   propagating a comparison's refinement through a scalar-ID delta.
+>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+
+The changelog lists step_mul_non_pow2, step_lsh and step_add_const_base, but
+the patch doesn't define tests with those names, and no later patch in the
+series does either.
+
+It also doesn't mention step_arith64_no_overflow or step_arith32_no_overflow,
+which are in the patch.  Those cover MUL by 3, ADD of 1, MUL by 2 and LSH by 1
+(step=0+3 -> 1+3 -> 2+6 -> 4+12), not "step 4 after shifting a bounded scalar
+left by two" or "shift the base to 1 while preserving step 4".
+
+Should the bullet list be updated to match the tests that are actually added?
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
+> new file mode 100644
+> index 000000000000..079e34820a8f
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
+> @@ -0,0 +1,290 @@
+
+[ ... ]
+
 > +/*
-> + * Many checks done by this function are quite conservative.
-> + * This is because main verification pass does not maintain
-> + * enough information to track object identities for some
-> + * of the interesting types, e.g. PTR_TO_MEM.
+> + * Safe ALU32 multiplication and addition preserve the stride and scale its base:
+> + * step=0+3 -> step=1+3 -> step=2+6. MOV32 preserves the result.
+> + * LSH32 currently resets the stride, but must preserve the correct upper bound.
 > + */
-> +bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
-> +			    const struct bpf_reg_state *reg_b)
-> +{
+> +SEC("socket")
+> +__success __log_level(2)
+> +__msg("w0 *= 3 {{.*}}step=0+3)")
+> +__msg("w0 += 1 {{.*}}step=1+3)")
+> +__msg("w0 *= 2 {{.*}}step=2+6)")
+> +__msg("w1 = w0 {{.*}}step=2+6)")
+
+Can this match pass even if MOV32 doesn't preserve the stride?
+
+The verifier log line for this instruction prints R0 first and then R1,
+roughly:
+
+    w1 = w0 ; R0=scalar(id=1,...,step=2+6) R1=scalar(id=1,...)
+
+R0 still has step=2+6 from the previous instruction, so the regex can match
+R0's state on its own.  If the MOV32 path (check_alu_op() -> zext_32_to_64())
+started resetting the destination's stride, this assertion would still pass.
+
+step_arith32_overflow in this same file anchors the destination register:
+
+    __msg("r2 = r0 {{.*}}R0=scalar({{.*}}step=0+3) R2=scalar({{.*}}step=0+3)")
+
+Would something like "w1 = w0 {{.*}}R1=scalar({{.*}}step=2+6)" be needed
+here so the check actually tests R1?
 
 [ ... ]
 
-> +	switch (base_type(reg_a->type)) {
+> +/*
+> + * 0x49249249 * 7 wraps to U32_MAX. Keeping step=0+7 incorrectly caps the
+> + * result at 0xfffffffc instead of U32_MAX.
+> + * Adding 4 to {0xfffffffc, U32_MAX} wraps to {0, 3}; keeping step=1+3
+> + * incorrectly narrows the result to 1.
+> + * Shifting the same input left by 1 gives {0xfffffff8, 0xfffffffe};
+> + * keeping step=0+6 incorrectly narrows the result to 0xfffffffa.
+> + */
 
-[ ... ]
+This isn't a bug, but is 0xfffffffa the right value in the last sentence of
+this comment?
 
-> +	case PTR_TO_MAP_VALUE:
-> +		if (reg_a->map_ptr != reg_b->map_ptr || reg_a->map_uid != reg_b->map_uid)
-> +			return false;
-> +		if (reg_a->id && reg_a->id == reg_b->id)
-> +			return true;
-> +		/* A plain single-element array has one stable value address. */
-> +		if (reg_a->map_ptr->map_type == BPF_MAP_TYPE_ARRAY &&
-> +		    reg_a->map_ptr->max_entries == 1)
-> +			return true;
+0xfffffffa is not on the line 0+6k (0xfffffffa mod 6 == 4).  If step=0+6 were
+kept after w2 <<= 1, the range would be [0xfffffff8, 0xfffffffe], and
+cnum64_intersect_linear() would round smin up by imod(0 - 2, 6) = 4 and smax
+down by imod(2 - 0, 6) = 2, leaving the constant 0xfffffffc, the only
+multiple of 6 in that range.
 
-Can this shortcut return true for two pointers into different elements of
-the same map when map_ptr is an inner map template?
+Should this read 0xfffffffc?  The test itself still passes, since it only
+checks smax=umax=umax32=0xfffffffe and that step= is absent.
 
-bpf_map_meta_alloc() copies max_entries from the template inner map into
-inner_map_meta, and array_map_meta_equal() does not compare max_entries
-when BPF_F_INNER_MAP is set:
-
-    return meta0->map_flags & BPF_F_INNER_MAP ? true :
-           meta0->max_entries == meta1->max_entries;
-
-So an ARRAY_OF_MAPS whose template is an array map with BPF_F_INNER_MAP
-and max_entries == 1 can hold a runtime inner array with many more
-entries.  The verifier already special-cases this elsewhere:
-can_elide_value_nullness() returns false for BPF_F_INNER_MAP, and
-array_map_gen_lookup() refuses to inline it.
-
-Consider this program:
-
-    /* map_ptr = inner_map_meta, map_uid = U */
-    inner = bpf_map_lookup_elem(&outer, &zero);
-    /* id = A, map_uid = U */
-    p = bpf_map_lookup_elem(inner, &k0);
-    /* id = B, map_uid = U */
-    e = bpf_map_lookup_elem(inner, &k1);
-    if (!p || !e)
-        return 0;
-    e += 64;
-    i = 0;
-    do { use(arr[i]); i++; p += 8; } while (p < e);
-
-Here p and e share map_ptr and map_uid.  Their ids differ, so the id
-check fails, and the code falls through to the map_type == BPF_MAP_TYPE_ARRAY
-&& max_entries == 1 test on the template and returns true.  At runtime,
-p and e point at elements k0 and k1, which are (k1 - k0) * elem_size bytes
-apart.
-
-Later in this series, fd7009a2fd2e ("bpf: use SCEV to widen bounded
-loops") has scev_value_compatible() call this function before
-compute_max_iters() turns (bound - initial) / step into
-iters->max_header_count.  linear_bounds() and bpf_clamp_scev_regs() then
-use that count to widen and clamp induction variables.
-
-In the example above the verifier would bound i to about [0, 8], but at
-runtime the loop runs about (k1 - k0) * elem_size / 8 times.  Can arr[i]
-then read or write past the end of arr even though the verifier accepted
-the access?
-
-Comparing two pointers is allowed when env->allow_ptr_leaks is set, so a
-program with CAP_BPF + CAP_PERFMON (or a BPF token) can reach this.
-
-The opening comment says the checks are conservative, but this branch is
-not.  Should the shortcut also require:
-
-    !(reg_a->map_ptr->map_flags & BPF_F_INNER_MAP)
-
-the same exclusion can_elide_value_nullness() uses?  No later commit in
-2ac7d08257d4..2c96fb13421f changes this check.
-
-[ ... ]
+> +SEC("socket")
+> +__success __log_level(2)
+> +__msg("w0 *= 7 {{.*}}umax=0xffffffff,") __no_step
+> +__msg("r2 = r0 {{.*}}R0=scalar({{.*}}step=0+3) R2=scalar({{.*}}step=0+3)")
+> +__msg("w0 += 4 {{.*}}smax=umax=smax32=umax32=3,") __no_step
+> +__msg("w2 <<= 1 {{.*}}smax=umax=umax32=0xfffffffe,") __no_step
 
 
 ---
@@ -157,4 +163,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37207249098
---===============2582980787160194644==--
+--===============0766898026523053831==--
