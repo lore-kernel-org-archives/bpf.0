@@ -1,62 +1,62 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D90341A919
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EB917B425
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121125; cv=none; b=h5GYXuSOjTCT2/ikwVj0QzT2/WW9JuNtnFKBDFUPxP7n1VuuqKJG3bWIZdwGGarLj7wWz1OJC/JvHhXUWkvKO/bUrxeWKpUNbC7dhFfgqLFMFtedYKGVLf8seq85nCGs5M/KhAAkxJCGkgT8LgmBjro/hnveFPQYoWu9ND6+eCQ=
+	t=1791121126; cv=none; b=tpsp1hCK7nfLCYeGj9SQu0fUflXLPef5jEtyu3VnxteDsMMTFJPTeTC2MaMWZBMDRjhxK+8RVwoLpnUiyXqSBWSeBL7mCiMskHv7WRShJGfRDBzEPGSVhCN7oDBgfW/1CyAZ5aLUrMRKQLKMmdF6Eb6iRbno2WjOIvjtS9f63ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791121125; c=relaxed/simple;
-	bh=fbh1+8yHCftZCxdURLzMxLNS9PlHpOoq9hBXII5X0YI=;
+	s=arc-20240116; t=1791121126; c=relaxed/simple;
+	bh=iK6B2ysQno6+oJGWm/4ovrpu0gLHCRuwcYknWK1/r2Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ju3SAuN3H0V3+QQilpte0aAxoI6GYLQYz62W3JhyMWhVQBijSyqDWzV5cP4OeXO7JjftZeS0cjCpGrb7rlQzIKNkVPsinerf763smX0XsRO0vE0c3I52LoEURyxQdTtftvrKE68yP+xo1Rbzffwln+Po9pjUa6KMW1s6WDkXdtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1i/0zSk; arc=none smtp.client-ip=209.85.210.178
+	 MIME-Version:Content-Type; b=bmuaBrPU7TadrpeDfb3d/PFrZH7vXbqdiD5MiFF2YYIAE4K/wWvy9111fMoD0GgH5hAUznW/c8lmIJeW8wRYPDH/MkIwv8PMbz+amOb6jVjA6rM5768n6g8NCjZ5Tr6VVusznTpc0Di14CKBg1+PlTgbGYVWXSz8n5Cf/AqqVIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2MZShbw; arc=none smtp.client-ip=74.125.228.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1i/0zSk"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-88c72646f03so388670b3a.2
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2MZShbw"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469b355ffso239873b3a.1
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791121123; x=1791725923; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791121124; x=1791725924; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=mY2Ropo8TxLCzwGVr6QQNgzo8wEWXHzxfKH8vvG+Emc=;
-        b=N1i/0zSkRhqJqDZgBoOJDVInOHtYDM2BNvb2qzZs8cAC9h5gMlUYrb808z89/7WrC8
-         pQ0q+crQymj+WBEXbGQyY64nEOi3RzbA1A91DJF8OEGOOgHMkih9VPxOLnJTYVqGnKes
-         egf0OrUUlmHei17WIzfdmkHI8Y00TYOrOZTsHEaJPfdGkR1+Uv7FJ91+kWH+JgKW1aCQ
-         efTPXLB7m490sagGEhBA7cBhVbJLRy4OZZbMTNIb4c170FJI6QtuBMZnWNtjkrxh8HiZ
-         OCeAeO6CrG7C6/m1iSd+sn2Ns6hf+2sRgeNvYrlTJMv0QHK6XNOPdOa2HU9MrSGuu5jK
-         OGmQ==
+        bh=kySQWHun3LVMu/bdypxd0JPXyMmp8EiUJTp20UFQlQE=;
+        b=g2MZShbwVpXR2uz8NCZecOgFXcqqcQAEg5NedvMMYB3qCG7+SEokhTovUBpylFohnw
+         LgrWV+DEqcrbmWiRGwZ6861+bUhT2IihcaUJvpapVvjlPAaW0/Pr8jIznN3BSPehD8hK
+         fNrLgv/rUaPJqkBzICUfPGJtsgYB6buze8jNw5UbFBW5aHwPrURldJausqu3qslfGY67
+         O5GC0ud1RyaLId4PeDqR/8DWyEtdn5YptQNLV6RNJUWUaDEbNQ/ITi+vZP52+yG8POH8
+         /XwZZmKQGjFoTfycsI0wdPA9+B3223U8lnDXuuTiOm7YZ/rJ2xHKOHqWCmMfVgx4oDuG
+         hbRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791121123; x=1791725923;
+        d=1e100.net; s=20260707; t=1791121124; x=1791725924;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mY2Ropo8TxLCzwGVr6QQNgzo8wEWXHzxfKH8vvG+Emc=;
-        b=eYIy1826KxGrulIU76aLP1MKP5dDxY3bXMEeQMCuNCJge6UTqqMf+FgVaKwrdEf65K
-         l8TcgfkvN8BXZ0qD81U14BvF6qleqsrAB4bA14iy6ZD1Mw1I+KVSxKVYs535XUhGSVdM
-         rY9KavDnWePhjJdzG0C8qCMh45KqDWfpRYx8WmfNzoMpAmtOlHfhgnkyso97zjCP92wk
-         GMNoiav+htHiOXB1H3tyjNHiyQ8DTq1Do1AYIlsMEpI+IAfMtbXpqOtOrgVveizbJ4Ex
-         ZFNdjzTf9SJXGD4+YBlbhD/4juEdjlfX833e0aC+W4H5Ci5oPaW3LWbpKluYcmn3/up7
-         1pRQ==
-X-Gm-Message-State: AFuF++kHbQkOPufMLy9g23Cfr0Od3vGJqCPISGGswWhB+Hn4EJBEdY12
-	wBwTjMnCuVGqgA0Tgev4r4XBcOpGHciLRoDSid8CQ0Ci963WGYcJ0dSE7LeVMg==
-X-Gm-Gg: AYBFou3AgSZVaiJqyfWNUPXq6FQbX5hDFeahHCnr8OStWoRUQsW5CKPE+oyYKSJG2+m
-	mE5oYcqEhhtoCnLIgb8vtqu5gHuexovSjYDgEg7zl04B6YrMOvMTXG3y1wgQlMJZc3p13ntvpJ7
-	aaHOk/NUiYCXkWpo36BU0lSNHfu4xEs61nrFCzolya9Z8lW4SJGuDgKfd6MxA4fjiIwGOR5aJCD
-	6f63F8BONq5+X3fZBaUc+AzqVRTYOMqFbPCw3jRR6SHBfyxNxreYYtPYdCd7CZ+VpFcJ5jhWqhq
-	doaVW2u7df0B5oSATH++BRQhWUG5evyyglFpR5F7YykmPzigV0oxgsjVWcRDPdN8MovZ6JcQAlN
-	pBIbjPddztrhfe6PdRjjveFwWcLapLpirZ4rCQ+cKXS6f7hJ/vrrvgy0nrDq541uI0ohcsBpP3I
-	uvN48HCjSCy9lvpJghVn1AwX7DyGeOqTkSaQPhPHAVsUp0d91O9OLr4WyN74C9bhNnEkRQzWVXw
-	FNwJ12bCZ2Rncs=
-X-Received: by 2002:a05:6a21:394c:b0:3de:41d9:9e41 with SMTP id adf61e73a8af0-3e0d6ba68e3mr3709706637.34.1791121123488;
-        Sun, 04 Oct 2026 06:38:43 -0700 (PDT)
+        bh=kySQWHun3LVMu/bdypxd0JPXyMmp8EiUJTp20UFQlQE=;
+        b=bmloXydPXdSWonslFVhbUgXzWj8pVO4h2aQeAVQh8kLty4xWBF5e9L9ocAH9R3ULR/
+         +dxrM2NYnIykEgzk2hAkk9ovBYjQQwrOYat/JXHoZ5o0qfdS47B9FgsLeId92UbPFewK
+         uQFL/Q+JxeZhT3Ti1UsbYC4HqakxP/oj7kN+Q5sb5XKduvrAVffza+NG+URireT9zaAJ
+         G8KX5JxUXA4c1yJn+vPx1BswhQ2ypxa9bPVzR2Vcf//zrpxjgP/A2EB8ODxSldVHz9BS
+         DGGk7eBmexjwmjcx9Pf2zXstWSh1/X+0CCKWYCqofeHQIevWNzQIEr5fULSbbbIfV74a
+         XhAg==
+X-Gm-Message-State: AFuF++mVPrG1+2sgx8z8aycVu1GidnBz0qyzT/pWTKt+OJxfnqvDIfjY
+	bhcDLige481aDJTMdPZxPGA1btuywcl3cZKnalUt7Q+pFGzfY7B4l/8xYCsymg==
+X-Gm-Gg: AYBFou2OXouPG0V95W2jrtLsuiKoyFiG2oME6uta5hhooKrPo7kwvFMfL8Sl676T/Mh
+	AqzfKklo4osiVcoQy8kAJ9+MoonK/QBiCsPdkgDMbLjetD61jMlaipC2mh3jxDVOjM/79hkbTgI
+	ylcCXqNDi/JcZn+T+K1X2K2V8DYhrx5J8h88/Y/u5VQhEECzOwJfpZCxCKuiUoWdwh0rM+V8CHk
+	NrhtxUMAZmh7dKkK+DPGTf9L51d/uTbd39Axzia5xLnf9rpMkWCLw6n2In1j1hj0eUs7oY2zlvA
+	QWPp83DtsMnAMy8u/pxmaS+3C6lWjztRQT1fwhJQh0WC4Fw6WvQFPMc49qEFPMHLTKPr1PoQVTx
+	KQJJAipYD4lc2c+u28ZPNUcNooifI8S+Y7ZJBdO8ujbu6qMuIfdgxnFgo6BsZVmTg79uCmWL0p9
+	5XitX9BHZIhn8dAWWTRNzremiqHVqv9rE06s+2c3EZ5xrq1Up2XgBQ7NKxqIBbjlQ1QsQiINDW0
+	Sv8X4kEytInG9Y=
+X-Received: by 2002:a05:6a21:328c:b0:3e0:f75e:dd3b with SMTP id adf61e73a8af0-3e0f75eea96mr1181990637.59.1791121124554;
+        Sun, 04 Oct 2026 06:38:44 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.42
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 04 Oct 2026 06:38:43 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 06/43] bpf: summarize live stack slots in insn_aux_data
-Date: Sun,  4 Oct 2026 06:37:48 -0700
-Message-ID: <20261004-scev-minimal-rebase-v2-6-f6254e29fdf2@gmail.com>
+Subject: [PATCH bpf-next v2 07/43] bpf: summarize regs that may hold a frame pointer in insn_aux_data
+Date: Sun,  4 Oct 2026 06:37:49 -0700
+Message-ID: <20261004-scev-minimal-rebase-v2-7-f6254e29fdf2@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
@@ -82,62 +82,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-SCEV needs live stack information in order to skip tracking dead
-slots. Liveness tracks this per function instance, but SCEV is not
-callchain-sensitive and needs a summary across calling contexts.
+SCEV needs to know which registers might be stack pointers at a
+particular instruction. This information is used to avoid widening
+registers if that would hinder further verification.
+See the patch [1] for additional information.
 
-For each instruction, union the current-frame liveness masks from all
-analyzed function instances. Represent 8-byte slots as a summary of
-constituent halves. Store the summary in insn_aux_data.
+liveness.c:compute_subprog_args() already tracks this information.
+This commit modifies it to save the information in insn_aux_data for
+further usage.
+
+[1] "bpf: avoid widening registers that hinder exact stack-slot tracking"
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
  include/linux/bpf_verifier.h |  1 +
- kernel/bpf/liveness.c        | 10 +++++++---
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ kernel/bpf/liveness.c        | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 4cb36ee3b6f7..5b615083ffa9 100644
+index 5b615083ffa9..d31c1a500958 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -667,6 +667,7 @@ struct bpf_insn_aux_data {
- 	 * that this instruction may write to.
+@@ -668,6 +668,7 @@ struct bpf_insn_aux_data {
  	 */
  	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
-+	DECLARE_BITMAP(live_stack_before, MAX_BPF_STACK_SLOTS);
+ 	DECLARE_BITMAP(live_stack_before, MAX_BPF_STACK_SLOTS);
++	u16 stack_ptrs; /* bitmask of regs that may hold a frame pointer here (arg_track) */
  	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
  	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
  	bool nospec; /* do not execute this instruction speculatively */
 diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index ec9c8beef556..004c1f48a065 100644
+index 004c1f48a065..b9b76684906e 100644
 --- a/kernel/bpf/liveness.c
 +++ b/kernel/bpf/liveness.c
-@@ -729,8 +729,9 @@ static void half_spis_to_slots(unsigned long *slots, const unsigned long *mask,
- }
- 
- /*
-- * Precompute, for each instruction, the OR of may_write masks over its top
-- * frame across all func_instances reaching it, stash it in the insn_aux_data.
-+ * Precompute, for each instruction, the OR of may_write and live_before masks
-+ * over its top frame across all func_instances reaching it, stash them in the
-+ * insn_aux_data.
-  */
- static void compute_may_write_masks(struct bpf_verifier_env *env)
- {
-@@ -746,9 +747,12 @@ static void compute_may_write_masks(struct bpf_verifier_env *env)
- 		if (!fm)
- 			continue;
- 		nbits = frame_mask_bits(fm);
--		for (i = 0; i < instance->insn_cnt; i++)
-+		for (i = 0; i < instance->insn_cnt; i++) {
- 			half_spis_to_slots(aux[instance->subprog_start + i].may_write_mask,
- 					   rel_mask(fm, i, FM_MAY_WRITE), nbits);
-+			half_spis_to_slots(aux[instance->subprog_start + i].live_stack_before,
-+					   rel_mask(fm, i, FM_LIVE_BEFORE), nbits);
-+		}
+@@ -1896,6 +1896,17 @@ static void print_subprog_arg_access(struct bpf_verifier_env *env,
  	}
  }
  
++static void record_stack_ptrs(struct bpf_verifier_env *env, int idx, struct arg_track *at_in)
++{
++	u16 r, mask = 0;
++
++	for (r = 0; r < MAX_BPF_REG; r++)
++		if (arg_is_fp(&at_in[r]))
++			mask |= BIT(r);
++
++	env->insn_aux_data[idx].stack_ptrs |= mask;
++}
++
+ /*
+  * Compute arg tracking dataflow for a single subprog.
+  * Runs forward fixed-point with arg_track_xfer(), then records
+@@ -2045,6 +2056,8 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+ 			snap->slots = nslots;
+ 			memcpy(snap->at, &at_stack_in[(size_t)i * nslots], nslots * sizeof(*snap->at));
+ 		}
++
++		record_stack_ptrs(env, idx, at_in[i]);
+ 	}
+ 
+ 	info->at_in = at_in;
 
 -- 
 2.53.0
