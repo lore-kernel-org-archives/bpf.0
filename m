@@ -1,62 +1,62 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9BC43744F
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FED6434E5F
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 13:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791121128; cv=none; b=qqiOlxFkCVDCrLwnFwTjCGF0M2AXq6VVt/RbXwX2STZWO5guvsadVEB7YsKdbTC/GeZa6ohX6ovT3SGTHR9zse6502sAhZnqIem/iLQAxJigx1RrGZZ/5NtkP0oUrxzKNFPPUquQ05m21wp4WWIEJMcoxpCV6Cr4gHeY2jumr9w=
+	t=1791121129; cv=none; b=NjqGP0jiRIpv1JzR6rdmkVDCfo3hW24QhjhUgwI88CBjH4WGqrL8fAr5pOdGataCQosYgGkEUhoDgmHpa0DwDRfIg6al0y1rCO+r2mXfYFBJP3ZDbRtQFDrLxsaGWHpnrP5c67DNhuhrR2rUhnY/iVwNDTrPWiKVnV72mEeyC+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791121128; c=relaxed/simple;
-	bh=I4sSQfnTXzSEZ50MVAEDsmLeM66GZKdoFlkeV6vWYMk=;
+	s=arc-20240116; t=1791121129; c=relaxed/simple;
+	bh=TuOnTQNMi/XtXEodS3adlyioSZfcnetEH+Z6rue79zs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aYB0udcl79/zcxdtm10U4ZrT8ajx+6nmt1HBZ1ekmMcaqT1kyT01FHRmQudBhgZmIlV+x+8BH+kxLrSuBHGQFnO6Qp6ZBs5BbAeyTWEnyOyF1nFMvhJqZydyjQ7i2p09YahkROOoPRvpIvx2MrTnYvcTKda7DSPAC8c5YZdWjH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PQAcuF/X; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version:Content-Type; b=eAAoeggs+NMSXcmKv+qWos1HHXsH1WjIVSglx25c3sba9/P3ctVs9ULm9rP4xPm69X/SFQJMwueV8c23h+Us2z7/TIl5OOQXQ2M/T0owMGFB1Vv0bW2kDX4rREXORVROoTn6JJsJ+rMKW6wgNYWypUgaqg4IW9haWNOCqsAYBDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eLfGwMoo; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PQAcuF/X"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-381b831d535so764646a91.0
-        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eLfGwMoo"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3a49623b865so439740a91.0
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 06:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791121126; x=1791725926; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791121127; x=1791725927; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=8xfHa/khCuCmDjgWe2a8hZU60K/GdSodHnu/h+kWecc=;
-        b=PQAcuF/XUMU5HLbSyI8EC2n3QOvuWyJSNfV3TLjfMEtj4banybZH7K4pPxfqn2jP6O
-         j0g8eDOQ0fCt4aQ2NJlUfQQfS6yQ5i1uUbkO0VlnAZnPNezlNrljJyw3Z1CXMAWtiu9T
-         /3ox8vMKAOqqN1LW0J6vpzxnJjTy718ZSw724o14FBCrvAAVL2/ZlA1bwhcAZ+nHD4wy
-         b/zDikx5p3Vr5UVUhio+cKbyP66Us2Rehdj6mhVLp7667ovHbFb/XA6EqawevgnaGZSJ
-         5WheGC4kWABVYO4D9sZFre+LooYuxWb15rS175+Guf5Jy2vHsdfq+PJGykINllF11PsY
-         TdUw==
+        bh=p72f2E8ZaLO4ZyOI6LIBtbL3Tzn16u3BxVLIvBobADA=;
+        b=eLfGwMooOHo8Sb20LM9WG2PTeQD48DLpBGqDvlZm0AiLWAnfz9EgyrCoy/klaOh01h
+         qCCeY2VMZZNxfyWOWUaxDAXqL2GwGRTJM1CwmSG4b206RdbIf5Cpy0meNtXn2ImVtoWs
+         WokBb0gW0AapFZbrktvrtfBjhDWifTNUbbkfHlODujVFT/uUoMlTloityg3vSKVYN2yr
+         qjnI699nPUBqpLvc3WaJh1n+vQNPqfQ8FDw7uSGnixT4TN1Ib4D6Si8In32IA6ic71Ap
+         Xpz/Ql/vz+7VFToOYIXvDKyu9X5EcYwooCMpYTn1YrJqelUcmvX9uH90gwaOxo/ySkbh
+         6quQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791121126; x=1791725926;
+        d=1e100.net; s=20260707; t=1791121127; x=1791725927;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8xfHa/khCuCmDjgWe2a8hZU60K/GdSodHnu/h+kWecc=;
-        b=kkhWKYzxH3WbpHlblk2I/17RluwceODQwid+c+/C5XvQTzoAsPMdr09UeMK3lmEL67
-         hs7KgzHeME7em6ToyPJi3vw1vcRaX+oO6zz2A4k5B74Szf1/P1qWDVw8hqDCnNIJV9Gc
-         T84PUqDtzvcFGyTL7kP//acuivuFHn4SlTLa2K0OKB1hRw8Gpg51+42ejG3zXUXhMgy2
-         4Yn0PQVKFcaS2Yi3Ph8XYQTrOYd4RHL/DNZLt7mg1f/nWXnFLfw9i5yfrA06j26qxeUn
-         kjso3eW7Q/6JDSwykNg+JfOyri1YpiG3pOHcj4RqNuTfy4k3HCviuKtWu29spvTkI6dM
-         7ntQ==
-X-Gm-Message-State: AFq9FYJMWZebnyIVDtl3NW6LXeTD3sl5bzdao2W7Wo5Udt330fbkTjvA
-	wQLN7HnJxEA5it5BBGHR8lrhXk+mefM9ROmE6+vBxNcEBajfQ8XLuEdJ4C2iDQ==
-X-Gm-Gg: AYBFou1H9ahEkfntrHNBmcWlHOF1PlDfB6uEqm4A18X57iEEHzXOh3Lv/GGwV6ccKwE
-	rfD6hBtu9iZkYQr8/q/UMNhCzTq/tIZNXp6lpC3yWMk/ZCx4zLDLpgrRdFTc27C2h+JkPKOcTnb
-	2VLGM8zehi/69IxqhVaP0p0nTtILiN0naWHj4BodEr1CY5bnd9X8+dKwlQ50RkZbg6BdPVBL9xb
-	Nu/OpoxMOw1AORKoc1l797iT5tfeNghbWziw8lcnexDAAmLoHnAbqOkYqdarsYXZgpNprQroXa9
-	cQcNrXPqaywqkDVamfcpwS2aav29A+5YziuchGPLzYrXQ859wXwK96SQkNM3lA3iKq6sTAf826O
-	+jg7EVpD5GwYtChnuO1AiXTM0K0zWc9JyUg0xkRGS/tNGcR2OGDJtRpkrgBZGTvwu2aBDQlkAAk
-	O1helTsMQEumIegcWYng70YGUJb7F1IkgkViu7EFTIbT0RJwnrLyUuXFjKfZs/4LCdm+tDeuvep
-	c2g3hDgnlJ62Ng=
-X-Received: by 2002:a17:90a:e70f:b0:3a4:b6c2:b159 with SMTP id 98e67ed59e1d1-3a7873b0ff6mr3766792a91.34.1791121126516;
-        Sun, 04 Oct 2026 06:38:46 -0700 (PDT)
+        bh=p72f2E8ZaLO4ZyOI6LIBtbL3Tzn16u3BxVLIvBobADA=;
+        b=MWOUrb7/JSLu6OzGqMocKqnLFlALHWSn3Fb5K1Lz7TW0fY/nq9kwcscmcJkKgQ2I6p
+         0Of7Bkz25I5nH7O8tjw4DRJXfdRvibQwFiW8DLTQn4Okh/kodxWTrEChG1j3CCntgQcn
+         haktCcpdNSrcIgXSCwGTv1WIfXaCxjhQ5INAZ43yOskaI359sJnlV/Lz4ENj+b808PVy
+         mUUde9bTg5dFw6lf72Wzi1NZFD3YwAoX/rthtBBAImVoDqEKDFH40mBK2h3JXbDBpspf
+         B/j3jUGh24hnH0b2Ks7Z/AyPcsspaeHAn/ip9GI4zUElN60lPS06e5jSjLnV8z16U2dP
+         k/dw==
+X-Gm-Message-State: AFq9FYL9Vg7IqIYLWM41grzRcw/3BZUl8wjximuLZZR8/hkhoGggSFip
+	Rm2OCMIfqBJgZpW+Yp9MLtkuZYHZFX26rJ3RBjfdOKw0olxqMK/SWeO56Ngziw==
+X-Gm-Gg: AYBFou1mRk1IrjpTZLxu+4KlKG3Uu+OaJ1nyF7XbEfhjauC+o2LWOcG+wliqoKSsayg
+	w+FamWxatOsLQKi3KYUk+9gpRPEogRKfBeQMMisW4t3licVsq5IFVeRPtRYdjax2ViPp+kKZ30p
+	wGMXxAx5LwByy39XDrcmcaFAR1Tg7xoSZEXk9rrWhXadk8ArVS4Ry9DfVks4/521q8c2CDGperS
+	OzSlhSbLr0TAuY66ATUfTFcFGkHJnMWzfI/v3Uur9gQa7ilpJVSGNHDsV34s3Ti2RZSwrrQbsVD
+	yL+jRjLHA2+kJ2bQYakSu7nbyxyIsZ09l/dW6HcxZ3ojDi7HzFnQnz1jPG3/7bCFW+IsCWUeWIX
+	TGvpl7SFFyPcd8i19v/cbmaKjkLLIBrje8CCpQzubwCF0ay8gl8ZG6qhTBL2AyRWikbWuJuS2Fi
+	epu1bNq+mKcIB2HJFZPyutRYVsSMzLSE1aOKFCIa2b25MaH2mhcKDJ7PK9PeFmWXOgGv8yn10HU
+	PwA2HudqckSIZc=
+X-Received: by 2002:a17:90b:4f:b0:3a0:deda:3d07 with SMTP id 98e67ed59e1d1-3a787181df6mr3529853a91.14.1791121127451;
+        Sun, 04 Oct 2026 06:38:47 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.45
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc9f7398400sm2915173a12.25.2026.10.04.06.38.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 04 Oct 2026 06:38:46 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 10/43] bpf: add cnum{32,64}_union()
-Date: Sun,  4 Oct 2026 06:37:52 -0700
-Message-ID: <20261004-scev-minimal-rebase-v2-10-f6254e29fdf2@gmail.com>
+Subject: [PATCH bpf-next v2 11/43] bpf: add cnum64_intersect_linear()
+Date: Sun,  4 Oct 2026 06:37:53 -0700
+Message-ID: <20261004-scev-minimal-rebase-v2-11-f6254e29fdf2@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
 References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
@@ -82,135 +82,120 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Add cnum32_union() and cnum64_union() to compute a smallest circular
-range containing both inputs.
+Add cnum64_intersect_linear(), which intersects a cnum64 interval with the
+set of integers congruent to 'base' modulo 'step', i.e. the points
+base + step * k. It tightens the interval by rounding its signed minimum up
+and its signed maximum down to the nearest such point, and returns an empty
+cnum when no point falls within the interval.
 
-Do so by enumerating the following configurations in a rotated
-frame (a.base at the origin):
+The arithmetic is done on the signed bounds [smin, smax]. The line is defined
+over the integers, while a cnum64 is an arc on the u64 circle, so a u64-modular
+computation would misplace the line for negative values whenever 'step' does
+not divide 2^64. Working from the signed bounds keeps the residues consistent,
+e.g. it can reason about a range like [-9, 3] with step 3.
 
-0                                              UT_MAX
-|---------------------------------------------------|
-[= a ==============================]                |
-[= b tail =]           [= b main ===================>
-[= union ===========================================]
+Also add imod() to bpf_verifier.h: a mathematical modulo returning an
+always-non-negative residue (unlike C's '%', which follows the sign of the
+dividend). It is used by cnum64_intersect_linear() and by the base/step
+tracking added in subsequent patches.
 
-0                                              UT_MAX
-|---------------------------------------------------|
-[= a =====================]                         |
-[= b tail ======]                    [= b main =====>
-[= union tail ============]          [= union main =>
-
-0                                              UT_MAX
-|---------------------------------------------------|
-[= a =======]                                       |
-[= b tail =============]             [= b main =====>
-[= union tail =========]             [= union main =>
-
-0                                              UT_MAX
-|---------------------------------------------------|
-[= a =========================]                     |
-|                 [= b ====================]        |
-[= union ==================================]        |
-
-0                                              UT_MAX
-|---------------------------------------------------|
-[= a =====================================]         |
-|               [= b ========]                      |
-[= union =================================]         |
-
-0                                              UT_MAX
-|---------------------------------------------------|
-[= a ============]                                  |
-|                               [= b =======]       |
-
-Two possible covering arcs:
-
-[= ab ======================================]       |
-[= ba tail ======]              [= ba main =========>
-
-Pick the smaller one.
+This is a building block for tracking scalar registers whose value is known
+to lie on a line base + step * k.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/cnum.h   |  2 ++
- kernel/bpf/cnum_defs.h | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
+ include/linux/bpf_verifier.h | 14 ++++++++++++++
+ include/linux/cnum.h         |  1 +
+ kernel/bpf/cnum.c            | 36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d31c1a500958..79ca8b28a83a 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -9,6 +9,20 @@
+ #include <linux/filter.h> /* for MAX_BPF_STACK */
+ #include <linux/tnum.h>
+ #include <linux/cnum.h>
++#include <linux/math64.h> /* for div_s64_rem() */
++
++/*
++ * Mathematical modulo, the residue of 'v' modulo 'step', normalized to [0, step).
++ * This differs from C's '%' operator, which truncates the quotient toward zero
++ * and so returns a remainder with the sign of the dividend (e.g. -1 % 3 == -1, not 2).
++ */
++static inline u16 imod(s64 v, u16 step)
++{
++	s32 rem;
++
++	div_s64_rem(v, step, &rem);
++	return rem < 0 ? rem + step : rem;
++}
+ 
+ /* Maximum variable offset umax_value permitted when resolving memory accesses.
+  * In practice this is far bigger than any realistic pointer offset; this limit
 diff --git a/include/linux/cnum.h b/include/linux/cnum.h
-index 49b7d0c7645d..ddf4726841e6 100644
+index ddf4726841e6..49160318adf9 100644
 --- a/include/linux/cnum.h
 +++ b/include/linux/cnum.h
-@@ -39,6 +39,7 @@ u32 cnum32_umin(struct cnum32 cnum);
- u32 cnum32_umax(struct cnum32 cnum);
- s32 cnum32_smin(struct cnum32 cnum);
- s32 cnum32_smax(struct cnum32 cnum);
-+struct cnum32 cnum32_union(struct cnum32 a, struct cnum32 b);
- struct cnum32 cnum32_intersect(struct cnum32 a, struct cnum32 b);
- void cnum32_intersect_with(struct cnum32 *dst, struct cnum32 src);
- void cnum32_intersect_with_urange(struct cnum32 *dst, u32 min, u32 max);
-@@ -65,6 +66,7 @@ u64 cnum64_umin(struct cnum64 cnum);
- u64 cnum64_umax(struct cnum64 cnum);
- s64 cnum64_smin(struct cnum64 cnum);
- s64 cnum64_smax(struct cnum64 cnum);
-+struct cnum64 cnum64_union(struct cnum64 a, struct cnum64 b);
- struct cnum64 cnum64_intersect(struct cnum64 a, struct cnum64 b);
- void cnum64_intersect_with(struct cnum64 *dst, struct cnum64 src);
- void cnum64_intersect_with_urange(struct cnum64 *dst, u64 min, u64 max);
-diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-index 30685e43de04..05b17a8b4814 100644
---- a/kernel/bpf/cnum_defs.h
-+++ b/kernel/bpf/cnum_defs.h
-@@ -198,6 +198,50 @@ static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
- 	return cnum;
- }
+@@ -80,5 +80,6 @@ bool cnum64_is_subset(struct cnum64 outer, struct cnum64 inner);
  
-+/*
-+ * Return a smallest arc containing both 'a' and 'b'.
-+ * Break equal-size ties by choosing the smaller base.
-+ */
-+struct cnum_t FN(union)(struct cnum_t a, struct cnum_t b)
+ struct cnum32 cnum32_from_cnum64(struct cnum64 cnum);
+ struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b);
++struct cnum64 cnum64_intersect_linear(struct cnum64 in, u16 base, u16 step);
+ 
+ #endif /* _LINUX_CNUM_H */
+diff --git a/kernel/bpf/cnum.c b/kernel/bpf/cnum.c
+index 86142cb2aee5..8ec5187d7c75 100644
+--- a/kernel/bpf/cnum.c
++++ b/kernel/bpf/cnum.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+ 
+ #include <linux/bits.h>
++#include <linux/bpf_verifier.h> /* for imod() */
+ 
+ #define T 32
+ #include "cnum_defs.h"
+@@ -118,3 +119,38 @@ struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b)
+ 	}
+ 	return t;
+ }
++
++/* Intersect 'in' with the set of integers defined by equation 'base + step * k'. */
++struct cnum64 cnum64_intersect_linear(struct cnum64 in, u16 base, u16 step)
 +{
-+	struct cnum_t b1, ab, ba;
-+	ut end;
++	s64 smin = cnum64_smin(in);
++	s64 smax = cnum64_smax(in);
++	s64 lo, hi;
++	u16 d;
 +
-+	if (FN(is_empty)(a))
-+		return b;
-+	if (FN(is_empty)(b))
-+		return a;
-+
++	if (step <= 1 || cnum64_is_empty(in) || cnum64_srange_overflow(in))
++		return in;
 +	/*
-+	 * Rotate so that a1.base == 0 and a1.end == a.size.
-+	 * Normalize b1 to preserve the full-circle representation.
++	 * Round smin up to the next value congruent to 'base' modulo 'step',
++	 * i.e. increase smin by d = (base - smin) mod step:
++	 *
++	 *                 |<---- d ---->|
++	 *     |-----------|=============|...
++	 * base+step*k    smin       base+step*(k+1)
 +	 */
-+	b1 = FN(normalize)((struct cnum_t){ b.base - a.base, b.size });
-+	end = max(a.size, (ut)(b1.base + b1.size));
-+
-+	if (FN(urange_overflow)(b1)) {
-+		/* a1 reaches b1's main arc: together they cover the circle. */
-+		if (b1.base <= a.size)
-+			return (struct cnum_t){ 0, UT_MAX };
-+
-+		/* Extend b1's tail through a1's end, then rotate back. */
-+		return FN(normalize)((struct cnum_t){ b.base, end - b1.base });
-+	}
-+
-+	/* ab, rotated back, covers both nonwrapping arcs. */
-+	ab = (struct cnum_t){ a.base, end };
-+	if (b1.base <= a.size)
-+		return FN(normalize)(ab);
-+
-+	/* The arcs are disjoint; ba is the other possible covering arc. */
-+	ba = (struct cnum_t){ b.base, a.size - b1.base };
-+	if (ba.size < ab.size ||
-+	    (ba.size == ab.size && ba.base < ab.base))
-+		ab = ba;
-+
-+	return FN(normalize)(ab);
++	d = imod(base - imod(smin, step), step);
++	if ((u64)smax - (u64)smin < d)
++		return CNUM64_EMPTY;
++	lo = smin + d;
++	/*
++	 * Round smax down to the previous value congruent to 'base' modulo 'step',
++	 * i.e. decrease smax by d = (smax - base) mod step:
++	 *
++	 *     |<--- d --->|
++	 *  ...|===========|-------------|
++	 * base+step*k    smax       base+step*(k+1)
++	 */
++	d = imod(imod(smax, step) - base, step);
++	hi = smax - d;
++	return cnum64_from_srange(lo, hi);
 +}
-+
- struct cnum_t FN(add)(struct cnum_t a, struct cnum_t b)
- {
- 	if (FN(is_empty)(a) || FN(is_empty)(b))
 
 -- 
 2.53.0
