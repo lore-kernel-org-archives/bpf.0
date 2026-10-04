@@ -1,89 +1,231 @@
-Received: from mta0.migadu.com (out-132.mta0.migadu.com [91.218.175.132])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82463B6BEE
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 18:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791138545; cv=none; b=uX8RRO/1xt5+IhT90nZYPO2LFrfu5ZTEFHeIAqHWCCD6KGja0ues+94aNOMeoRLzr7r+ItZ8h/I7tkKZqFu1snrBXVx+d7Uu79dSf9E4cq3A/3djDCdTt51sA/rpt8ZaNEYws1iQG8bdWhcnKT5XJ54iHmMw5VKG8oC8I3TjM6w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791138545; c=relaxed/simple;
-	bh=/JJfxoccTSO/IWSwNFaAtt3wQ+uA3EvndcTwI0nvFEQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DS/KwKL0rXdpYbXQR2uk3dWmMaU1iRkRvSv2W/GRGEFgPXHZ5/ZKIvlxTTJvztvMxZYJI6kKRUgYwBkiQBSLrwn5gxd235G/he8gkt1f7tASsLmEacgxnLMvBGKRFR1FrjcOCN9VER//8YMVkyl+JiLzlJYbzQxgGYtEoZzA+ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mch8taTy; arc=none smtp.client-ip=91.218.175.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39573DAACD
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 18:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791139164; cv=pass; b=jYYaOk8KcmpUDVgxdVPwImqBk81EmVsrhVb4mRIHsAWTuWnjJKHlwbpjG+9lDy5BuOqSGbJ4yRU8EEKIgnqrK5iw/q+4JpNCINr6+dx0x6Sr9o5fpOCABWMeYPUQ09Ucc6Ni/5r6LnhsuTmF/3p3br+FQAsv+J1KfKUogftgNEM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791139164; c=relaxed/simple;
+	bh=Q5SKncuQynV4x7Bps+RIZqUEFmiH2TTHOAAQrnnR074=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZlIUVY+yYVdM05z73rHAF+Vzx5HYKr4bp+6DcBC+nVVaOdBiyCBPS0r4Sr/uRLYfmnMBWPWYb+PfFCpA9ecgxf968JtFpqJl3jbSZgo0LfP0UA4gES5XgsaOgQghbPYbFYB8vsNAp4F5zIpp7u1tKf9yXm6Ske6q5QTqHHTvAIg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l0iHyxjb; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mch8taTy"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/JJfxoccTSO/IWSwNFaAtt3wQ+uA3EvndcTwI0nvFEQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791138541; v=1; x=1791743341;
- b=Mch8taTyebKGmYZZPXWfNRakxzQlp7rTHHsz6IsHRx5Rrokt5Urj/14Wpjq6PKDdNyDDQOh2
- bheMQwfpC44gDKSQ9TT7ETHc2utqQXv05wZg8dh72IbbSGaX41yLfXxptQ9dlwKwHNfxe1i2hQc
- rX2X8ZpC5IqFz1njbJZU/Bac=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 13b7940f81eed236;
-	Sun, 04 Oct 2026 18:29:01 +0000
-X-Mizu-Trace-ID: 13b7940f81eed236
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4d1009ce-c031-4abd-95cd-38d6e847a71d@linux.dev>
-Date: Sun, 4 Oct 2026 20:29:00 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l0iHyxjb"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5337fa12431so186731cf.1
+        for <bpf@vger.kernel.org>; Sun, 04 Oct 2026 11:39:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791139161; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Lcj/kzImnrRX3Kuz9YMGFRhyrLpf5BQbYWXoCQWnCoGZwjU9WxTQDaRQn86dne7xQH
+         kBH+XlPsvrLYjP44Nd7O5OT5ObOWfVTkgET0NTc8WC7OofVRKTqb4/Y87EXMQ60rANuk
+         fnxVuy+60BitCohYJUASZOCEKe9ANzBzVl04UvLG5xanx1Ezl0ZawHR0dvgl2I63dWts
+         1Zx9VvB8JMDFZbXSnGs7YcmVGV5pu4u1PZ3xgzqQ9FretebAPtubH4Dw0DNlKvkW5K6l
+         ZelJIabmkvl61htn++5YwMWmBe5LaKoB3kwqw8EK5PmuOvZkhlrCdBj7LZO0COXidiff
+         Z6Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZSC0w1neootLkbih9TUxoXkKPCkBI7t1n5ZaTzyKsnU=;
+        fh=30vDy2i0D29WtlYA/Jyss40q059LX+TwfeRRfPXuGpg=;
+        b=WcMzvM+yAOCK8Av7QgyBkY/beBm64qLDv4S0bSfiCmCLLbLRnR/kPpXcoBULZKC1aV
+         PithW7k3u5wEbtKtUgwWh86VYm1OSG/M38s0MJAbatXiWQdffKCZauKk9tGe4fkpksVY
+         0MiH8Tyd8NR6jZrIgtEjBxGCWf7zgIbUBHmBpKqSVdloGTA8JPwFXx1hX6dfYLP9kyoJ
+         WH7uSGYEWO8/eX4JSmZeEtqbUWT2kU7zcEq5fHdxDc3FC+7pmmjjTkcrGzz0fvDn+XRd
+         p4pl5LEDSZKln27UZhF4g/Sw5kDAkXfsOHe86aLNPRc/RgRh85tRbjUQpGCl165BQfBY
+         9vQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791139161; x=1791743961; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZSC0w1neootLkbih9TUxoXkKPCkBI7t1n5ZaTzyKsnU=;
+        b=l0iHyxjbrFA0mj0qSWG3UEuOwCfeu39THooR7JdjvlpS5iPbcpbOGXWgFlwrHqiq17
+         g6OREDzEJg1B4R9e3NlLt/FQGfnUhJDJq9ugUkIwHD8Ouc6I0KCAE+AjFJ5im2Q3teHM
+         xpabytF01LqRy3edoNlhxz/KOOwY/glawDCIRDkU1ItyqnPxe60feD3VqcauD0MIeU4s
+         Cvv/OfjgN/b+SrE6g8xki0vgbqOIO/2Zkxe+N05IzJfOVKCkkH4F7eFCLA6UNgq7uegJ
+         Iz6k97ECHJF0Ws6uFXO0NrKMD645vu6jOd91RLmcYxQ0T3ig64z73JKnKEdXvgZ6oM2B
+         rqAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791139161; x=1791743961;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZSC0w1neootLkbih9TUxoXkKPCkBI7t1n5ZaTzyKsnU=;
+        b=uXzXQSz8HbHwWDXERpVMBRDYMScEX3FBL/tvPJAqkSoN12YbbfvrDxHE+FOAMXjc/P
+         JDm43u0pcQI8Vr4XikKM7/9xZYhlzsiRibhqZZSPYS9iwNdnFpuGmB1dj2Un+CaSJugk
+         obEkxeO7kDUeOaJp5Et2Ybv2wNSb4rSS0WhWkz8d0rA6rSf0eJRD2W0DYZRjYvU9Hdre
+         xVEG6ZvO7z1fbOthrDlazwxMlQp3CYDX5LpHeLXyKC2+tdcqV8MkHpfvbonTttXzRXo0
+         kyhMaSoiX7Zk7yWAdbq5R/5y7rwEi5FyJEUczLzcLvKarFqJVZZcB2Uw4dqOCBInaIGh
+         a2Hg==
+X-Forwarded-Encrypted: i=1; AKwUvBykDtcsbkBKHTnKth/XW1fUcm8U6qUveUoo9LwKBnbqQAWHNSA0xL1zkoEOU9Qf1FegJ3E=@vger.kernel.org
+X-Gm-Message-State: AFuF++n01UNF0LDxhrMTnHa18M+Qz/QFKZCJTFgTyDx0rAlnRlTmKWRE
+	qqGf2ZtWRsKPe2jMOOEf+E26hSwHDeoYpYEtmbiWe+NG4jl+7mEGN/C4wgqkRotIZm0TcfXXcJS
+	3OrVxbBuqbWO7IDyVCIyoRa7YXwEse6gAspaOJl/H
+X-Gm-Gg: AYBFou3Bve4IFL9JBr22WZPHKVB7tSI6m1tYJd6qjUI6G77582N326DkngGHa5/xr2o
+	y0NgClw3n7XjT8qF0EX68Jzwyhk7n7Ihl4dCzaxKUjwm2BVg7qBu3cKbDTwX0wMYqUN6aC+RBjo
+	2YwNj8BqHMO/3JSdCI1a9tJgQ/jPjYac9T2yk++R6gnb7Jr2mCsEu4yrMquYWbS5kzKkrCWa3Nu
+	Xte8BhtCkYH9/e/9sjnS/bHkeL+KS5NCYjBBhRbTSMkLs7NQHsmo5ni8ZRlZNYEujjDXxArKPtS
+	WvfaTyGFjaUBRsHrBq/zWkNpDLHe9B3V24Oa9gSdbwsYLPkZvuYx0j6p
+X-Received: by 2002:a05:622a:a16:b0:531:282:6560 with SMTP id
+ d75a77b69052e-5351322e1b3mr19806961cf.15.1791139160071; Sun, 04 Oct 2026
+ 11:39:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 11/22] bpf: Dispatch cleanup pads by rewriting
- return addresses
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, kernel-team@fb.com
-References: <20261001133006.1335369-1-yonghong.song@linux.dev>
- <20261001133103.1340994-1-yonghong.song@linux.dev>
- <DLV7AATHIGX1.2HXVWUG223ANC@gmail.com>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DLV7AATHIGX1.2HXVWUG223ANC@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-0-a1f052500fd7@kernel.org>
+ <20261003-b4-mmap-prepare-vma-flag-sanify-v4-21-a1f052500fd7@kernel.org>
+In-Reply-To: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-21-a1f052500fd7@kernel.org>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Sun, 4 Oct 2026 20:39:04 +0200
+X-Gm-Features: AclHuK-BFFMO7RL_23L1uoIyefqTPzoxo4liaojYggefG4PLZrnFo0OrrSwhSqQ
+Message-ID: <CAJuCfpGtyaqwi__OXcB=iy2+LUVzFnLo-Q=Rdxz728_EHdTaWA@mail.gmail.com>
+Subject: Re: [PATCH v4 21/38] uprobes: remove VM_IO, set VM_MIXEDMAP for
+ mapped kernel pages
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
+	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
+	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
+	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
+	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
+	fuse-devel@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 10/3/26 2:26 PM, Alexei Starovoitov wrote:
-> On Thu, Oct 01, 2026 at 06:31 AM Yonghong Song <yonghong.song@linux.dev> wrote:
->> +	if (!bpf_prog_need_blind(prog)) {
->> +		ret = bpf_exc_attach_main_prog(env, prog);
->> +		if (ret)
->> +			return ERR_PTR(ret);
->>   		return bpf_int_jit_compile(env, prog);
->> +	}
-> bpf-ci is right. The table of a prog without subprogs is never read.
-> Drop bpf_exc_attach_main_prog() and these hunks.
-
-Ok, will drop.
-
+On Sat, Oct 3, 2026 at 6:40=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel.or=
+g> wrote:
 >
-> [...]
+> These are not MMIO pages so VMA_IO_BIT is an inappropriate flag to set.
 >
->> +	rcu_read_lock();
->> +	prog = bpf_prog_ksym_find(ip);
->> +	rcu_read_unlock();
->> +	if (!prog)
->> +		return !ctx->cnt;
-> fexit attached to a subprog in the chain stops the walk here.
->    main -> A -> trampoline -> B -> C
-> C calls bpf_unwind(). The return into B is rewritten. The next ip is in
-> the trampoline, bpf_prog_ksym_find() returns NULL and the returns into
-> A and main stay as they were.
-> B returns 0 through the trampoline to A at callsite + 1.
-> The verifier didn't see that path, or removed it as dead code.
+> Instead, set them VMA_MIXEDMAP_BIT as they are kernel mappings and this i=
+s
+> the appropriate flag to set for those.
+>
+> This provides the semantics required - no VMA merging is permitted, but
+> does not prevent GUP.
+>
+> However this has no meaningful impact as these are refcounted and thus ca=
+n
+> be GUPed.
+>
+> A previous commit already prevented __mm_populate() from being invoked on
+> XOL areas, which VMA_IO_BIT was previously relied upon to do, so that is =
+no
+> longer required.
+>
+> Both VMAs set a VMA name, so always_dump_vma() returns true before
+> vma_dump_size() reaches its VMA_IO_BIT check, and thus there is no change
+> in core dump behaviour.
+>
+> Change this for both the core xol_add_vma() function and the x86-specific
+> get_uprobe_trampoline() function.
+>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-I will reject such a case (fexit, fmod_ret and fsession) as they
-all have the same issue.
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
+
+> ---
+>  arch/x86/kernel/uprobes.c | 2 +-
+>  kernel/events/uprobes.c   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> index 65a2de82ecd2..0f60c0d076b6 100644
+> --- a/arch/x86/kernel/uprobes.c
+> +++ b/arch/x86/kernel/uprobes.c
+> @@ -715,7 +715,7 @@ static struct vm_area_struct *get_uprobe_trampoline(s=
+truct mm_struct *mm, unsign
+>
+>         *new_mapping =3D true;
+>         return _install_special_mapping(mm, vaddr, PAGE_SIZE,
+> -                               VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_=
+IO,
+> +                               VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_=
+MIXEDMAP,
+>                                 &tramp_mapping);
+>  }
+>
+> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> index 7709ea882477..b89cc5cee002 100644
+> --- a/kernel/events/uprobes.c
+> +++ b/kernel/events/uprobes.c
+> @@ -1726,8 +1726,8 @@ static int xol_add_vma(struct mm_struct *mm, struct=
+ xol_area *area)
+>         }
+>
+>         vma =3D _install_special_mapping(mm, area->vaddr, PAGE_SIZE,
+> -                               VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|VM_IO|
+> -                               VM_SEALED_SYSMAP,
+> +                               VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|
+> +                               VM_MIXEDMAP|VM_SEALED_SYSMAP,
+>                                 &xol_mapping);
+>         if (IS_ERR(vma)) {
+>                 ret =3D PTR_ERR(vma);
+>
+> --
+> 2.55.0
+>
