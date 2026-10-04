@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-130.mta0.migadu.com [91.218.175.130])
+Received: from mta0.migadu.com (out-132.mta0.migadu.com [91.218.175.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6676F474246
-	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 18:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82463B6BEE
+	for <bpf@vger.kernel.org>; Sun,  4 Oct 2026 18:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791138538; cv=none; b=LAJmq3oDI78AD1m7aDisT/Tt10Nrgr5teqV6wpz4dTzYtB8/Dom0haiK4pk/9XpEYURL840FcblpNPJGVPOeh0nH7eZjOEBOGSbvGXDwQtwzI6rIeDUH1d9CG4ydDBu8CVK4ONjIaLnigIiqIu2eyqor+SPPQ9qe7JtT3Vxt4XA=
+	t=1791138545; cv=none; b=uX8RRO/1xt5+IhT90nZYPO2LFrfu5ZTEFHeIAqHWCCD6KGja0ues+94aNOMeoRLzr7r+ItZ8h/I7tkKZqFu1snrBXVx+d7Uu79dSf9E4cq3A/3djDCdTt51sA/rpt8ZaNEYws1iQG8bdWhcnKT5XJ54iHmMw5VKG8oC8I3TjM6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791138538; c=relaxed/simple;
-	bh=kkAQWjUJGnmwAIUiiUF5dx2QOJM4xnihqjaLQOSF4dc=;
+	s=arc-20240116; t=1791138545; c=relaxed/simple;
+	bh=/JJfxoccTSO/IWSwNFaAtt3wQ+uA3EvndcTwI0nvFEQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IeljPIO4kyfNlhW30Iiqvoa4GZMFSppvdw4mmDOVecl3mrunpO2s8g6fWZKAt3thwt7mDg8brDRWsVkQGxJQ3i3IX80an3v84WbuPogfIgwISlaOjAfNNbrDf/F6WPPvqskn8TWxgv3OH212I3mZeZSXh1opTrjh7rasvou7/p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EZdOJIzl; arc=none smtp.client-ip=91.218.175.130
+	 In-Reply-To:Content-Type; b=DS/KwKL0rXdpYbXQR2uk3dWmMaU1iRkRvSv2W/GRGEFgPXHZ5/ZKIvlxTTJvztvMxZYJI6kKRUgYwBkiQBSLrwn5gxd235G/he8gkt1f7tASsLmEacgxnLMvBGKRFR1FrjcOCN9VER//8YMVkyl+JiLzlJYbzQxgGYtEoZzA+ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mch8taTy; arc=none smtp.client-ip=91.218.175.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EZdOJIzl"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mch8taTy"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=kkAQWjUJGnmwAIUiiUF5dx2QOJM4xnihqjaLQOSF4dc=;
+DKIM-Signature: a=rsa-sha256; bh=/JJfxoccTSO/IWSwNFaAtt3wQ+uA3EvndcTwI0nvFEQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791138534; v=1; x=1791743334;
- b=EZdOJIzlh/iv7u0uiIvEKESiTYGicHowcehRaZMWcfJDrYUIFvcPvneFacuBJP5hT3dNXC8I
- 1Tw/x0QIyviFfAD4YI1sBJ4SyVevRW7JYy8zTV0OukyR3UD6kau9LvUiU6++OFfM6bpz5iJM5RR
- e3YI+ltHhfePym8zIxlAklz8=
+ t=1791138541; v=1; x=1791743341;
+ b=Mch8taTyebKGmYZZPXWfNRakxzQlp7rTHHsz6IsHRx5Rrokt5Urj/14Wpjq6PKDdNyDDQOh2
+ bheMQwfpC44gDKSQ9TT7ETHc2utqQXv05wZg8dh72IbbSGaX41yLfXxptQ9dlwKwHNfxe1i2hQc
+ rX2X8ZpC5IqFz1njbJZU/Bac=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 94ccf02eea5fdae3;
-	Sun, 04 Oct 2026 18:28:54 +0000
-X-Mizu-Trace-ID: 94ccf02eea5fdae3
+Received: by smtp.migadu.com with ESMTPS id 13b7940f81eed236;
+	Sun, 04 Oct 2026 18:29:01 +0000
+X-Mizu-Trace-ID: 13b7940f81eed236
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <2339982d-8b4d-4d25-8ae8-5c4ac920587c@linux.dev>
-Date: Sun, 4 Oct 2026 20:28:51 +0200
+Message-ID: <4d1009ce-c031-4abd-95cd-38d6e847a71d@linux.dev>
+Date: Sun, 4 Oct 2026 20:29:00 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,7 +66,7 @@ On 10/3/26 2:26 PM, Alexei Starovoitov wrote:
 > bpf-ci is right. The table of a prog without subprogs is never read.
 > Drop bpf_exc_attach_main_prog() and these hunks.
 
-Ok, will dropl
+Ok, will drop.
 
 >
 > [...]
