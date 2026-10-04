@@ -1,271 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4472222A9;
-	Sun,  4 Oct 2026 07:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934CC1D6DA9;
+	Sun,  4 Oct 2026 07:26:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791098621; cv=none; b=seZawnlaapBnzql8l9CTYU/wRbXvdOCCZpq2HJvRiuvz3pabrTJH4zHcrr16LoQiXrisn8ew42ERxtMapCpTKR3FtPhCQ2ioFXyfD4eHyhKIgWM9fCzfmkXj3Hf8t4MTBNo73d5oKK1/QOrhSdXxRo9klXjmTefLFmVLE2IbqQI=
+	t=1791098803; cv=none; b=QARK3jehm3+F+AZM2AMwmpJpp5JzocVl7wtcyfugqaruTZK8XO69Jg6nvW8d9Ym7D3YfSQgeFogbuSoAEARkT0AXTMLXJY5g50ofdpuY6b6V5dke9Dt1pr5bFCYA5ScKBeeBCBOOIkjwc3SppPD7/iAqQ4TA6dTRgF+oQdFQPRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791098621; c=relaxed/simple;
-	bh=HatJrxYG1cE6MuvHrUiOoYJ6rQO+Uw3uzeyQcr35xg4=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gOiWKOqyxrJPZY66sl/P82CfouEb3TVNhUIrcMtI6Qp6MxVdfz0KoRMCsDg/4pfokebnPi00Fiu9I9s9Mt8jm2ZgE1TjKYVji28/RHZhTiyYkX8mFFSKX5/0wrlMOAjL2mvQjfORbKpJZQfQNzzgbEv5AW9rvlcFRCxrsxdDmCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fU0eod16; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791098803; c=relaxed/simple;
+	bh=VHq+Xt/JtwMsfGBSvjM3m1W1JPpNGES8AGlkxECeziU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJRqkrkty2KwxMmC/wyRJsWwdEJ6DXEKELavP/3ame5UiNWdvhKb0QSlxLn42yFg7CIIxw+FsnC32PyOHiTsSw+oKocRY5h9ApULC03UODwkR6P80L8JPfDCsgnOvm1Yd2uSbMKskI4Kjst5bwCDf20tH+AhTciquf5HTLnyBbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nU5ReT3j; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fU0eod16"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE611F000FF;
-	Sun,  4 Oct 2026 07:23:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nU5ReT3j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 761B31F000FF;
+	Sun,  4 Oct 2026 07:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791098620;
-	bh=oQXwsdQpk7Vk2ih8888N0lW91mEJ/GWtcppa+56cpgg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=fU0eod16qU5qhBffAgBGHODy2bY7KKGLD0dm1YcCTPovJB7yLSnjX88ckWg1VCnXq
-	 dEnJSp3kzgq16qWFPy0r4TO67UWjmvrXWNXXtf+mXlrY0oThBXQLyAVqmXaGPAzlHR
-	 /cDv49q8oV7EVYWqEVepz2sduwhCDXz0X7J7LXOvfyw1yy8kpsg/P+mbGhnGUq+D+l
-	 j5y1pjTEYJt7l31aOHXv4lrLwjLAfFuU7ZE8WzLKugJ378GADS8AyATPNHoxsVdIDb
-	 qyxVUQaQlG2g5Z+/a9lI8ubdeSygvhvSdhtNJGwa3yKmcQkE02X7op4gA+pVosfIHE
-	 P7/nCnIGnipfg==
-Subject: Re: [PATCH net v2] bnxt_en: don't leave an XDP program installed when
- the open fails
-From: netdev-bot+sashiko@kernel.org
-To: vnagare@redhat.com
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- edumazet@google.com, michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, andrew+netdev@lunn.ch,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- nagarevaibhav@gmail.com, stable@vger.kernel.org
-Date: Sun, 04 Oct 2026 07:23:38 +0000
-Message-ID: <179109861868.434549.4936218583368176211@kernel.org>
-In-Reply-To: <20260930070901.1218980-1-vnagare@redhat.com>
-References: <20260930070901.1218980-1-vnagare@redhat.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1791098799;
+	bh=cgIqnoufaHq6AdaBd0wZxGfVHkwrfWk/BsoFED6yW28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nU5ReT3jHCTKrC3vFlt6lFhBY2qzd5TcweumZDdG4PoYUxRdUjykUFoBgFNWA1PjY
+	 T9Yu+RIKP64tp84D9IUIBtDjfeFi3o967G8MkqSZgLs5zg6QgwCaZo2Pxoykxskztl
+	 biV5O05MJfDy50y8GDgflF67Yd7yP+x3fcZ/CTySFwAWfFHWKch8vNf6E6pnkc8Req
+	 OzpDMqE/uOHVQp8wJMzmgk75NkJ+Q6sBYYfXWMn9gwMNio09Jz0A1FkvjaPxByIoTx
+	 USuuhCbzR7WCiikqNFCVjzo7VO44aK7kcE+i2spiWR4WgjRoXKk74e4z7OK8rvjehn
+	 Jk/eIKWbHt2nQ==
+Date: Sun, 4 Oct 2026 00:26:39 -0700
+From: Kees Cook <kees@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Bill Wendling <morbo@google.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>,
+	Shuvam Pandey <shuvampandey1@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Shivaprasad G Bhat <sbhat@linux.ibm.com>,
+	Thorsten Blum <blum@kernel.org>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guangshuo Li <lgs201920130244@gmail.com>,
+	Ira Weiny <iweiny@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
+Message-ID: <202610040023.A3865A6@keescook>
+References: <20261003035906.too.263-kees@kernel.org>
+ <20261003035921.1918874-5-kees@kernel.org>
+ <asEhEe0Urb5Wx7yi@ashevche-desk.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <asEhEe0Urb5Wx7yi@ashevche-desk.local>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Sat, Oct 03, 2026 at 06:36:49PM +0300, Andy Shevchenko wrote:
+> On Fri, Oct 02, 2026 at 08:59:10PM -0700, Kees Cook wrote:
+> > Several strlcat() call sites being converted to seq_buf need behavior
+> > seq_buf doesn't currently provide. The return from seq_buf_used() is
+> > not the length of the string in a seq_buf. Once the buffer is full or
+> > has overflowed it returns the buffer size, which counts the byte that
+> > seq_buf_str() replaces with the NUL, so a caller that needs the string
+> > and its length has to call seq_buf_str() and then walk the string with
+> > strlen().
+> > 
+> > Move the termination out of seq_buf_str() into a helper that returns
+> > where it put the NUL, and add seq_buf_strlen(), which terminates the
+> > buffer in the same way and returns that offset.
+> > 
+> > As discussed in review, don't add WARN_ON() for seq_buf_strlen() and
+> > drop it from seq_buf_str().
+> > 
+> > Add tests comparing seq_buf_strlen() against strlen() of seq_buf_str()
+> > for empty, appended, truncated, exactly full, and overflowed buffers,
+> > checking that seq_buf_strlen() alone terminates a full buffer, and
+> > checking that a zero-sized seq_buf reports an empty string from both
+> > accessors without touching the buffer.
+> > 
+> > Tests passed under qemu on ARCH=x86_64 with GCC 16.2.0 and CONFIG_KASAN=y,
+> > and on big-endian ARCH=s390 with GCC s390x-linux-gnu 16.2.0.
+> 
+> ...
+> 
+> >  static inline const char *seq_buf_str(struct seq_buf *s)
+> >  {
+> > -	if (WARN_ON(s->size == 0))
+> > +	if (s->size == 0)
+> >  		return "";
+> >  
+> > -	if (seq_buf_buffer_left(s))
+> > -		s->buffer[s->len] = 0;
+> > -	else
+> > -		s->buffer[s->size - 1] = 0;
+> > +	__seq_buf_terminate(s);
+> >  
+> >  	return s->buffer;
+> >  }
+> 
+> Looking at this again, can't it be rewritten now using _strlen()?
+> 
+> 	if (seq_buf_strlen(s))
+> 		return s->buffer;
+> 
+> 	return "";
+> 
+> ?
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0
+It could, but I'm vaguely nervous about the difference between
+	s->buffer[0] == '\0'
+and
+	.data ""
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] The new error path in bnxt_xdp_set() also rolls back a detach.
-- [Medium] The v2 rollback does not restore 'the ring and feature
-  configuration that was in service before the change', as the commit…
-
---
-
-bnxt_en: don't leave an XDP program installed when the open fails
-
-With this patch, when bnxt_open_nic() fails, bnxt_xdp_set() puts the
-previous XDP program back into bp->xdp_prog. The old program's reference
-is now dropped only after the change succeeds. The ring and feature setup
-moves into a new bnxt_xdp_apply_cfg() helper, and the error path runs it
-again with the previous XDP TX ring count.
-
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> index 9e5009be8e989..edfd751a601ab 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> @@ -381,11 +381,31 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
->  	return nxmit;
->  }
->  
-> +static void bnxt_xdp_apply_cfg(struct bnxt *bp, int tx_xdp)
-> +{
-> +	struct net_device *dev = bp->dev;
-> +	int tc = bp->num_tc ? : 1;
-> +
-> +	if (bp->xdp_prog) {
-> +		bnxt_set_rx_skb_mode(bp, true);
-> +		xdp_features_set_redirect_target_locked(dev, true);
-> +	} else {
-> +		xdp_features_clear_redirect_target_locked(dev);
-> +		bnxt_set_rx_skb_mode(bp, false);
-> +	}
-> +	bp->tx_nr_rings_xdp = tx_xdp;
-> +	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
-> +	bnxt_set_cp_rings(bp, true);
-> +	bnxt_set_tpa_flags(bp);
-> +	bnxt_set_ring_params(bp);
-> +}
-
-[ ... ]
-
-> @@ -418,25 +438,21 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bpf_prog *prog)
->  	if (netif_running(dev))
->  		bnxt_close_nic(bp, true, false);
->  
-> +	old_tx_xdp = bp->tx_nr_rings_xdp;
->  	old = xchg(&bp->xdp_prog, prog);
-> -	if (old)
-> -		bpf_prog_put(old);
-> -
-> -	if (prog) {
-> -		bnxt_set_rx_skb_mode(bp, true);
-> -		xdp_features_set_redirect_target_locked(dev, true);
-> -	} else {
-> -		xdp_features_clear_redirect_target_locked(dev);
-> -		bnxt_set_rx_skb_mode(bp, false);
-> +	bnxt_xdp_apply_cfg(bp, tx_xdp);
-
-[Severity: Medium]
-
-The commit message says the error path will "restore the ring and feature
-configuration that was in service before the change". Before the forward
-bnxt_xdp_apply_cfg() and bnxt_open_nic() run, though, only bp->xdp_prog
-and bp->tx_nr_rings_xdp are saved.
-
-The rollback call below rebuilds the configuration from the state that the
-forward path and the failed open left in bp. It does not restore saved
-values.
-
-Can the RX ring size get lost here? A non-frags program with MTU at or
-below BNXT_MAX_PAGE_MODE_MTU sets BNXT_FLAG_NO_AGG_RINGS. In that state,
-bnxt_set_ringparam() accepts rx_pending up to BNXT_MAX_RX_DESC_CNT and
-nothing clamps it.
-
-On detach, bnxt_set_rx_skb_mode(bp, false) clears NO_AGG_RINGS, and
-bnxt_set_tpa_flags() turns TPA back on. bnxt_set_ring_params() then
-lowers the size:
-
-bnxt_set_ring_params() {
-    ...
-	if (agg_factor) {
-		if (ring_size > BNXT_MAX_RX_DESC_CNT_JUM_ENA) {
-			ring_size = BNXT_MAX_RX_DESC_CNT_JUM_ENA;
-			...
-			bp->rx_ring_size = ring_size;
-		}
-    ...
-}
-
-Now suppose bnxt_open_nic() fails. The rollback turns page mode back on,
-but it recomputes the ring masks from the already reduced
-bp->rx_ring_size. The user's RX ring size ends up smaller even though
-ndo_bpf returned an error.
-
-What happens to the ring and TC counts? By the time bnxt_alloc_mem()
-fails, __bnxt_open_nic() has already run bnxt_reserve_rings() and
-bnxt_adj_tx_rings():
-
-- __bnxt_reserve_rings() writes the firmware-granted counts into
-  bp->tx_nr_rings, bp->rx_nr_rings and bp->cp_nr_rings.
-- bnxt_adj_tx_rings() rewrites bp->tx_nr_rings_per_tc.
-
-The TC mismatch path in bnxt_reserve_rings() also does this before
-returning:
-
-	if (tcs && (bp->tx_nr_rings_per_tc * tcs !=
-		    bp->tx_nr_rings - bp->tx_nr_rings_xdp)) {
-		netdev_err(bp->dev, "tx ring reservation failure\n");
-		netdev_reset_tc(bp->dev);
-		bp->num_tc = 0;
-		if (bp->tx_nr_rings_xdp)
-			bp->tx_nr_rings_per_tc = bp->tx_nr_rings_xdp;
-		else
-			bp->tx_nr_rings_per_tc = bp->tx_nr_rings;
-		return -ENOMEM;
-	}
-
-bnxt_xdp_apply_cfg(bp, old_tx_xdp) then computes bp->tx_nr_rings from
-these overwritten tx_nr_rings_per_tc and num_tc values. The TC map is
-not restored.
-
-For example, take a failed detach where the reservation reduced
-rx_nr_rings from r to r' < r. It would end with tx_nr_rings_xdp = r and
-rx_nr_rings = r'. The next open's bnxt_adj_tx_rings() may recompute
-tx_nr_rings_xdp, so this mismatch might not last. The rx_ring_size and
-TC changes do stay.
-
-Could rx_ring_size, tx_nr_rings_per_tc, rx_nr_rings and num_tc be saved
-before the change and restored before recomputing? Alternatively, the
-claim in the commit message could be narrowed.
-
-> +
-> +	if (netif_running(dev)) {
-> +		rc = bnxt_open_nic(bp, true, false);
-> +		if (rc) {
-> +			WRITE_ONCE(bp->xdp_prog, old);
-> +			bnxt_xdp_apply_cfg(bp, old_tx_xdp);
-> +			return rc;
-> +		}
-
-[Severity: High]
-
-Does this rollback also apply when prog == NULL, i.e. a detach? In that
-case old is put back into bp->xdp_prog, page mode comes back on, and
-bpf_prog_put(old) is skipped, so the driver keeps its reference.
-
-Some ndo_bpf callers assume a detach cannot fail and carry on anyway.
-dev_xdp_detach_link(), reached from bpf_xdp_link_release() and
-bpf_xdp_link_detach(), does this:
-
-	bpf_op = dev_xdp_bpf_op(dev, mode);
-	WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
-	dev_xdp_set_link(dev, mode, NULL);
-	return 0;
-
-dev_xdp_set_link() clears both link and prog in dev->xdp_state. Bonding
-behaves the same way in __bond_release_one():
-
-		if (dev_xdp_propagate(slave_dev, &xdp))
-			slave_warn(bond_dev, slave_dev, "failed to unload XDP program\n");
-
-Before this patch, bnxt had already dropped old and cleared
-bp->xdp_prog, so the core and the driver agreed that nothing was
-attached. After this patch they disagree.
-
-bnxt_open_nic() calls netif_close() on failure. On the next
-"ip link set up", bnxt_init_one_rx_ring() finds the program:
-
-	if (BNXT_RX_PAGE_MODE(bp) && bp->xdp_prog) {
-		bpf_prog_add(bp->xdp_prog, 1);
-		rxr->xdp_prog = bp->xdp_prog;
-	}
-
-Would the detached program then run on every RX ring again, while
-"ip link" shows no XDP program attached?
-
-A later netlink detach would not reach the driver either.
-dev_xdp_attach() skips ndo_bpf when new_prog == cur_prog, and both are
-NULL at that point. At unregister, dev_xdp_uninstall() skips modes where
-the core's prog is NULL.
-
-The only place bnxt drops bp->xdp_prog is bnxt_xdp_set(). Does that mean
-the reference to the program and its maps leaks unless another program
-is attached later?
-
-The legacy netlink path does keep the old program on error, which matches
-the new behaviour. The link release and bonding release callers above do
-not.
-
->  	}
-> -	bp->tx_nr_rings_xdp = tx_xdp;
-> -	bp->tx_nr_rings = bp->tx_nr_rings_per_tc * tc + tx_xdp;
-> -	bnxt_set_cp_rings(bp, true);
-> -	bnxt_set_tpa_flags(bp);
-> -	bnxt_set_ring_params(bp);
->  
-> -	if (netif_running(dev))
-> -		return bnxt_open_nic(bp, true, false);
-> +	if (old)
-> +		bpf_prog_put(old);
->  
->  	return 0;
->  }
+i.e. we only force the return of seq_buf_str() to be _not_ just
+s->buffer when s->buffer is weirdly impossible (due to size == 0).
+I'd rather not make all 0-len strings return the .data segment's const
+"" string...
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260930070901.1218980-1-vnagare%40redhat.com
+Kees Cook
