@@ -1,240 +1,233 @@
-Received: from mail-pj2-f0.google.com (mail-pj2-f0.google.com [74.125.227.128])
+Received: from mail-dy2-f42.google.com (mail-dy2-f42.google.com [74.125.229.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9933A309EEC
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 17:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.128
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791219725; cv=none; b=koMxiTZV/3Fn1hbOCUch6tU0wZHRy6LtEmgL7a/cwDdHULX0lATtji8a2s2AxJIxXIibMV4gd3v46+c6m7t9SNT6Bd8FZ9sTpQ853Jh/zYataS9/89Cvyhtw7GmzhZgT+5NqeK9qwIDD2Qc9Aids0tdOfoOkdgw/Pn2hm3CQNvc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791219725; c=relaxed/simple;
-	bh=p2r4gcb42xTsxaNA5xPh+LYVuA5ynBc9KIAfNKRT2l0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b3gfEm72I6hhVIOviSfC6EwPZRsOZ+wpzXT9kHD+3eEX87BLaN5dCoorYiMcw6VD6+UndD0CwBXFE/zfFgnnlX0UBnhOWCqjAmrAO0zSw6bocg/C/oQwpJM/nj8k/rBY7UtlQCf/9WzZkCFi1qMJCpmQhXBNDUNtIdTtbZVMFFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HD+Ye1YG; arc=none smtp.client-ip=74.125.227.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBEE4DD3AD
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 17:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791221227; cv=pass; b=qdSCXWGuSZh0mRqKucVVqeKONc1oKTyMH9MXU6qL28gpMVo9yqd0CA/uITCbXEAqSiLFlmcTWPqLsg0LZb5uxS1qiQ28/JiirlEqJOtIyAUjw5a7LNfa5oDfYelN2T48940/HHnpTLOADUkjEKhZlBuiuDE3DwzjyutV3VJa0HQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791221227; c=relaxed/simple;
+	bh=SvNUMArrKWFvoS8qkrww/WErXldZpTTjxx1KfsSc/OM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uZ4wB/i4EG+muMlrJodeum9vX2kvjHEk49CP0SDN2CFtH55c5V1Nkn4OwboxLzj1Dmp0WxFIssweautzcs9bXjD6PQn1GXV31RW1vXz2OwSxc9trYclt1UzxccTpr5TPHN4MoViNs/2po6jwzbjVaEjQ+dHDqdwtr1wupHk1x/A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T0g7/EXX; arc=pass smtp.client-ip=74.125.229.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HD+Ye1YG"
-Received: by mail-pj2-f0.google.com with SMTP id 98e67ed59e1d1-3a476ee8669so790173a91.0
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 10:02:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T0g7/EXX"
+Received: by mail-dy2-f42.google.com with SMTP id 5a478bee46e88-35129e4607cso1315959eec.1
+        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 10:27:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791221225; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JvHoih4TIyjki/Af263uaASLLeGNLQwcDwI8lav9ZjqmbtYVoEDPesx6tjnzmk/Mlg
+         7afk5oMtt4Kc/JRhqg8jiKPZwH0gRGE5qP9NYxgnTOJwG931szreCt1Tk8GRQ5pOtgSo
+         bL7+9OCS1QsCg/h4ZCNIyYD8356LcC1EbQQNFa7idW/6/rbS9NBCx1uucrXJCqWnBh7L
+         MtyG5jtIXdTfC09ebI6EEnDoTco+qPUvfs0DCSCsIbGdoQM93MYlIuh75plLB2EhIBD8
+         55uHJGVE3DOg878oVm3MBDrF8QNxleXZ8ydP1tiLxpEWpKX9mQezkuYr/IuhCrMESiN+
+         3nKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0fw8n8AkfovFoqxnTVJMYaNAw3G0Dz3Kg4SbR/EI24c=;
+        fh=Cpey1fQH4/mPr8SOu5E/V5E3QXVE76iTSmN/bze6uVY=;
+        b=Zux7CF2K5pPasBx4a1MnwpISLRnNum43smnqEqN5k5rphDCxEU2BGVz/OkbmbxL5IW
+         Lv4N/Q+ommk6yllJET5qFbFrvq43Tosdh77CW9Qt3wRrR0HMUM5ZYIQnEP/phrmTD75v
+         gH9Blz/pwn21/l6LeBNYvwgx/TvlC633cu04elbNiLHGURrvtxDJre7h30f9/IRFKWxe
+         rK68/gegKe6ApEMVDzOVXki4GII8GZeF/Jz22y64b21QPqT6OY+5e1g7uAFY7v1dllm8
+         52sFjrjU+4q0UM1YsXJIUVNPDZ1cfiGL+XFwJ2yUHPnV5pOcLm/YRDpOmrup9dz+m7yw
+         B9iA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791219723; x=1791824523; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZsfW1R9N4QPstXuCZT7OiJ7xuKBOf1oZsvEYYuLcZDU=;
-        b=HD+Ye1YGzIXiImlWR3zGYVXshBf+UxHvyW7WDosAG2jHVh4LfYnJv7ANuRxbCqS9aO
-         2lMPunBqHs7dLxeOQAdlsEnuw7CR3QARePr80Pz8vQe7f9vMhXqZhN+tdAmYzIgsBP9x
-         Vo9rJAM4G03+ppu0QNv7DR62GA0fsExz8xWjyPR8M6vbrqyb5RDwagt5rcs+je8xB+86
-         qXPRC5HjoJAV59b/KiHMuvnEahkwc9gQNGWhRmr4Z3UmYyEUD6dh+S+mQ68kpn+OPUJI
-         wiDWT8B8fzc+5lRXwEJVCOW4DBKFTC4m6cUmX0Gz+4OIjb6d38elRh3kDMTZqCQrOAQt
-         FxKA==
+        d=google.com; s=20251104; t=1791221225; x=1791826025; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0fw8n8AkfovFoqxnTVJMYaNAw3G0Dz3Kg4SbR/EI24c=;
+        b=T0g7/EXXJQCgVmzXibOLowcEQ7WA40dWbRs97CM00RCNGcgTAQ6VbtK9Z6ie4q/h1E
+         +Zu9T+P3xeV4aViFhKYBn++ARD6K+VOtyayBdbQCoh/QCSJvJXsRrzBi8bM9e41aX3YX
+         MHnvsS1SMq/oI8Ml+OX+2CU/v3hM1H3itcYlz4SbePZ0h9yUlUmpj4QU7SZrFve6w+sl
+         4AwMlX3To/hSqHzf6XnieFOJS3nnKjbzzTEQpZQ2UsSAYuULHKl2d/9fzIqjsrUz8Yu+
+         l2dBh0Vr4Q65dMRSytXGORkC50q7PmJ/pnJ2lV7FvSnjVwndq+2K94+xWPmwp+Yx9Twj
+         r7UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791219723; x=1791824523;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=ZsfW1R9N4QPstXuCZT7OiJ7xuKBOf1oZsvEYYuLcZDU=;
-        b=ceNNeAph4gV4Fy6DUnXOd9zJqYxG8uz/lmYI98uzrQXVzV6BFqy+QV7uZe6CHT9bR7
-         JHKWgsnbWmy1/tB/eNzoIO/ByrBUMr4q3GLOuANa9xJwmquArzsS8BirADzJZXaFgJKx
-         CpuGAxCYQpy5AeLGFvX8fV9KZ8TWzWxofUWvo3xkMxhI+lHGbjb98K+EuTxv+BnQDG4t
-         WmGQkKS0a3d34vORnieZgF1HQPSza5JrT7rnagID+O9i+xu5ao+okw5t8qh2XFMcxzsj
-         deha2OMNJmcU9rEEHDFjA4Kvf9bNDsUVMxHaSq956PiwxSYYEUTR8bgrxBJToAX0fEkd
-         UK7Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwRbD1Z39WvqcT8uz/mpEzpWytSkEGIifSBZulwoYEmV3/6vpDQU9ScvcNFsoBvviOU+88=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIQmMOsvrYbEUfGd5fci2RB4EbYNNaC06E9rXuMVrkPdKv77WyV
-	oqKJ4E5oNWmOZhnqXNcdq8YnGffTnW/e0wg2DovSP7qs3V0pkaZtESr2
-X-Gm-Gg: AYBFou1i3Aq6aZ8iGl5HrkyeRag437n9vz0lDLEWPEkvKlCaA2hvyAIFglMxKvWqNwh
-	5X2rB6LbjzAwSAf/PvUFwMB/rEbKsLv6QEz3jeXaCuOqaJm7zfLBvq+8wJ7n7xS/RJdt/qFnDhj
-	oOcLDFro3EapwN5q2DCw+KP5iC3Gz+bA7y6iS19Tw0qF1G+u881T08o5fnY3h7pDuoXkc/obMwT
-	T22T90tNOAV4LEoq0+eTrxbBA/ilhoc3CdqTR6rqr3JnNzilXRgGEVC9ZnMeWm8fNqeJtkrEASs
-	HoiOkyojNNv1HFqFbql3nJMP56E/5pJuUjMY6ldHhUNwudVyZg++HO5UgzCyowIKultNvzWXIR2
-	Rv0LQLYEKtrtwPR9zBJCND5693WwqDU7A/gtZwNyo3o07SQe1W59C8ZF1Fh3AIberDDXikohNus
-	hyPkret7TQH4TAooAdSbdYohnv0Bur6vZrsgkjNoHhTI96xTvkTbyBP0p8SPbkahg=
-X-Received: by 2002:a17:90b:57c6:b0:3a0:c276:1ec0 with SMTP id 98e67ed59e1d1-3a7872b6af0mr6425813a91.28.1791219722834;
-        Mon, 05 Oct 2026 10:02:02 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:3::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6dd0cd76bsm9240167a91.2.2026.10.05.10.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 10:02:02 -0700 (PDT)
-Date: Mon, 5 Oct 2026 10:01:57 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	io-uring@vger.kernel.org, "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, 
-	Weiming Shi <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	David Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mina Almasry <almasrymina@google.com>
-Subject: Re: [RFC net-next 06/15] xdp: Track non-page netmem in receive
- buffers
-Message-ID: <asPXa7k-_drxXiI0@devvm7509.cco0.facebook.com>
-References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-7-bjorn@kernel.org>
+        d=1e100.net; s=20260707; t=1791221225; x=1791826025;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0fw8n8AkfovFoqxnTVJMYaNAw3G0Dz3Kg4SbR/EI24c=;
+        b=nh6dUcURgx++/rXXHYf3BXXGnzGoiBfwQr/Wq7hORLaLmARL+P25uVN93gV+hbYln+
+         7UbmsAgIiFJIKr7NKlmvl4KfvMpS747TQMFxXSqLc0uPyz4jPPUD/1xz7vmLu9lNPNMw
+         LpzEsTAKGxiCC6zzYRJBD6KG1QHxO4RnS7TPTQcMT6U8Gz5MhH8I+L4qDveLZNWiSFRQ
+         qqX7bdkREpnxAUX6GJ4OLZGXNCbX2/Y5b26RxxFEIq9jIWVuGVuBmdG0vlqYI+O4GsnK
+         NHNwvS04XpYYcIkBdZPwiZCQ4HrpDwJ25Vzluh/P7R04W+WCPSRblZj2FkSM18074MQe
+         xQ1Q==
+X-Forwarded-Encrypted: i=1; AKwUvByFZc9dksIT34neXF0AG0mUB+n3Yl/KnYMHl2zcy2t+MhXXrYlMuFEGiXbeYVIRaMWt0wo=@vger.kernel.org
+X-Gm-Message-State: AFuF++kopC05UHVOYdGhzj5cZjlVFmlnedPnvyrTFFaSuzw/RGk1OGBF
+	bs0/ZIM11IbwT+7HxBSNcm9u5UX8RaZXUymmuqU8NszK3t4cUejFb4ygXUR7FY79cQ6svEAo5Yh
+	KZ8/TaH/QWmbtEFLx4x4NxFXmtdFWyROzXlIJ3KjN
+X-Gm-Gg: AYBFou2jt7z3IA0Hg0UFyNNuF9gPjcSW7lRkOkm62hol8NnuL/hVjKaAhKCWPQlRLEM
+	I6oXxcImu3TcYEdc0VBkczZ5gVgcLc0Hx0SY6xwgv+sqR91R0ZAbBiL4hiLhmNLLval85KXOkHC
+	w0TWSS/lorwLuOak2lYczFbWcL9JDw3NW6bipHjVpNn9L8p+Xcqu+mZQpl9/kTTuT5RMvcz/V2k
+	Qxu8x7qolAeUyIJjtipuKk6pdRUEj8WEP0ZUrCfWdZu9XMlNO48ali1zd4BtGI0fVbTM2hxEs1q
+	U9z4y6WNBXzz+m+DK1NDYTEvgLEtWN6X+09qGnCwCoFnDYLuNNq+VyMd22AQpFqzVyjifxZaMJl
+	0vm4OR7eVlTjV1HsLll0cGW6WA6NZTP3jePZHslkp9Sne5BOKMbNrTYqB9KzxKw15FoprG2yJK4
+	rNxdL7RPEZOfzyFNAK68CNtA==
+X-Received: by 2002:a05:701a:c909:b0:14e:d8ff:1592 with SMTP id
+ a92af1059eb24-14f58fd159dmr15279044c88.5.1791221223925; Mon, 05 Oct 2026
+ 10:27:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261002190018.696925-7-bjorn@kernel.org>
+References: <20261005154533.4147685-3-kuniyu@google.com> <7557423d5efced7e3307ed14a4ad8f364246f3ea738395123f61296ac4cc2284@mail.kernel.org>
+In-Reply-To: <7557423d5efced7e3307ed14a4ad8f364246f3ea738395123f61296ac4cc2284@mail.kernel.org>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Mon, 5 Oct 2026 10:26:52 -0700
+X-Gm-Features: AclHuK9EJNuLuqVE4teO2iA_KA3FNBEAYhgOEbqAXbKZ3GJJpU1bqQDO7AsTh4I
+Message-ID: <CAAVpQUAkMupUTZpL+-QAwYYG+awade04rNSA6jEWGQ3o5uafvg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 2/9] bpf: tcp: Add a new per-socket flag and
+ kfunc for bpf_tcp_ops.
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	ameryhung@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	sdf@fomichev.me, edumazet@kernel.org, ncardwell@google.com, 
+	willemb@google.com, ukyab@berkeley.edu, cleger@meta.com, kuni1840@gmail.com, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, martin.lau@kernel.org, 
+	mason@kernel.org, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/02, Björn Töpel wrote:
-> A page-pool memory provider can give net_iov buffers, and
-> virt_to_page() does not work for them. An xdp_buff holds only the
-> data pointer, so code that returns or converts a buffer cannot find
-> its net_iov.
-> 
-> Add NET_IOV_XSK, the net_iov type for AF_XDP. Add the internal flag
-> XDP_FLAGS_HAS_NETMEM. When it is set, the xdp_buff holds a netmem
-> reference in the union with the devmap TX queue, which only devmap
-> egress uses. The flag is cleared when flags are copied to an skb or
-> an xdp_frame. xdp_convert_buff_to_frame() sends such a buffer to the
-> zero-copy copy path.
-> 
-> A fragment from a readable net_iov area no longer marks the buffer's
-> fragments as unreadable. The skb layer still treats every net_iov as
-> unreadable, so such a buffer must be copied before it becomes an
-> skb. Later patches in this series do that.
-> 
-> skb_shared_info holds kernel pointers, so it cannot be in UMEM,
-> which userspace can write. A netmem xdp_buff points to a
-> skb_shared_info that the RX queue keeps in kernel memory instead.
-> xdp_init_buff_from_netmem() sets this up. Page-backed buffers still
-> use their tailroom.
-> 
-> On 64-bit, struct xdp_buff grows from 56 to 64 bytes. struct
-> xdp_buff_xsk stays at 128 bytes on x86-64. Where the largest
-> alignment is 8 bytes, as on s390, it grows from 120 to 128 bytes, so
-> a pool needs 8 more bytes per UMEM chunk. Only helpers that need the
-> netmem or the fragment info test the new flag. Page-backed receive
-> and return paths do not.
-> 
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
+On Mon, Oct 5, 2026 at 9:27=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+>
+> > bpf: tcp: Add a new per-socket flag and kfunc for bpf_tcp_ops.
+>
+> TL;DR: The bpf_tcp_ops_set_flags() kfunc filter seems to let cgroup_skb a=
+nd
+> sock_ops programs call it too, not just bpf_tcp_ops and cgroup_sockopt; t=
+his
+> is an API scope issue, not memory safety.
+>
+> > diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+> > --- a/net/ipv4/bpf_tcp_ops.c
+> > +++ b/net/ipv4/bpf_tcp_ops.c
+>
+> [ ... ]
+>
+> > +static int bpf_tcp_ops_set_flags_kfunc_filter(const struct bpf_prog *p=
+rog,
+> > +                                           u32 kfunc_id)
+> > +{
+> > +     if (!btf_id_set8_contains(&bpf_tcp_ops_set_flags_kfunc_set, kfunc=
+_id))
+> > +             return 0;
+> > +
+> > +     if (prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS &&
+> > +         prog->aux->st_ops !=3D &bpf_tcp_ops)
+> > +             return -EACCES;
+> > +
+> > +     return 0;
+> > +}
+>
+> [ ... ]
+>
+> >  static int __init __bpf_tcp_ops_init(void)
+> >  {
+> > -     return register_bpf_struct_ops(&bpf_tcp_ops, bpf_tcp_ops);
+> > +     int ret;
+> > +
+> > +     ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+> > +                                     &bpf_tcp_ops_set_flags_kfunc_id_s=
+et);
+> > +     ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOC=
+KOPT,
+> > +                                            &bpf_tcp_ops_set_flags_kfu=
+nc_id_set);
+>
+> The commit message says the kfunc is exposed to bpf_tcp_ops and
+> BPF_PROG_TYPE_CGROUP_SOCKOPT. Does this registration limit it to those tw=
+o
+> program types?
+>
+> register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCKOPT, ...) puts the set
+> into the shared BTF_KFUNC_HOOK_CGROUP hook.  bpf_prog_type_to_kfunc_hook(=
+)
+> in kernel/bpf/btf.c maps CGROUP_SKB, CGROUP_SOCK, CGROUP_DEVICE,
+> CGROUP_SOCK_ADDR, CGROUP_SOCKOPT, CGROUP_SYSCTL and SOCK_OPS all to that
+> one hook.
+
+Oh didn't know this.  Although it's still safe with try_cmpxchg(),
+I will update the filter like this, maybe with CGROUP_SKB allowed too.
+
+if (prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS &&
+    prog->aux->st_ops =3D=3D &bpf_tcp_ops)
+    return 0;
+
+if (prog->type =3D=3D BPF_PROG_TYPE_CGROUP_SOCKOPT)
+    return 0;
+
+return -EACCES;
+
+
+>
+> btf_kfunc_is_allowed() looks the kfunc up in that hook and then only runs
+> the hook filters, and bpf_tcp_ops_set_flags_kfunc_filter() returns 0 for
+> every program type except a STRUCT_OPS program that is not bpf_tcp_ops:
+>
+>     if (prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS &&
+>         prog->aux->st_ops !=3D &bpf_tcp_ops)
+>             return -EACCES;
+>
+>     return 0;
+>
+> That seems to let BPF_PROG_TYPE_CGROUP_SKB and BPF_PROG_TYPE_SOCK_OPS
+> programs call bpf_tcp_ops_set_flags() as well.  Both program types provid=
+e
+> bpf_tcp_sock() (cg_skb_func_proto and sock_ops_func_proto in
+> net/core/filter.c), and the verifier accepts the returned PTR_TO_TCP_SOCK
+> as a trusted struct tcp_sock * through reg2btf_ids[].
+>
+> For cgroup_skb the likely caller is an ingress program running in softirq
+> context.  The commit message mentions cgroup_skb only as a possible futur=
+e
+> use.
+>
+> The cmpxchg update keeps this memory safe, so this is about API scope:
+> once programs start using the kfunc from these other program types,
+> narrowing it later would break them.
+>
+> bpf_qdisc_kfunc_filter() and scx_kfunc_context_filter() both reject the
+> program types they do not intend to serve.  If only bpf_tcp_ops and
+> CGROUP_SOCKOPT are intended, should the filter reject prog->type values
+> other than BPF_PROG_TYPE_STRUCT_OPS and BPF_PROG_TYPE_CGROUP_SOCKOPT?
+>
+> Otherwise, could the commit message list the actual set of program types
+> that can call the kfunc?
+>
+> This filter is unchanged through 3cb5919af2b2 ("selftest: bpf: Add test f=
+or
+> bpf_tcp_ops.{enqueue,dequeue}_rcvq()."), so no later patch in the series
+> changes it.
+>
+> > +     ret =3D ret ?: register_bpf_struct_ops(&bpf_tcp_ops, bpf_tcp_ops)=
+;
+> > +
+> > +     return ret;
+> >  }
+>
+> [ ... ]
+>
+>
 > ---
->  include/net/netmem.h |  1 +
->  include/net/xdp.h    | 56 ++++++++++++++++++++++++++++++++++++++++----
->  2 files changed, 52 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> index e6dff0b01581..76e4fe878863 100644
-> --- a/include/net/netmem.h
-> +++ b/include/net/netmem.h
-> @@ -68,6 +68,7 @@ DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
->  enum net_iov_type {
->  	NET_IOV_DMABUF,
->  	NET_IOV_IOURING,
-> +	NET_IOV_XSK,
->  };
->  
->  /* A memory descriptor representing abstract networking I/O vectors,
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 07231adfb5f8..80931490ca3a 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -11,6 +11,7 @@
->  #include <linux/netdevice.h>
->  #include <linux/skbuff.h> /* skb_shared_info */
->  
-> +#include <net/netmem.h>
->  #include <net/page_pool/types.h>
->  
->  /**
-> @@ -81,6 +82,8 @@ enum xdp_buff_flags {
->  	 * XDP program is not attached.
->  	 */
->  	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
-> +	/* The txq/netmem union contains a receive netmem reference. */
-> +	XDP_FLAGS_HAS_NETMEM		= BIT(3),
->  };
->  
->  struct xdp_buff {
-> @@ -89,7 +92,12 @@ struct xdp_buff {
->  	void *data_meta;
->  	void *data_hard_start;
->  	struct xdp_rxq_info *rxq;
-> -	struct xdp_txq_info *txq;
-> +	union {
-> +		/* Valid for DEVMAP egress programs. */
-> +		struct xdp_txq_info *txq;
-> +		/* Valid for receive buffers backed by non-page netmem. */
-> +		netmem_ref netmem;
-> +	};
->  
->  	union {
->  		struct {
-> @@ -104,6 +112,8 @@ struct xdp_buff {
->  		u64 frame_sz_flags_init;
->  #endif
->  	};
-> +	/* Kernel-owned fragment metadata for non-page netmem. */
-> +	struct skb_shared_info *sinfo;
->  };
->  
->  static __always_inline void xdp_reinit_buff(struct xdp_buff *xdp)
-> @@ -138,7 +148,7 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
->  
->  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
->  {
-> -	return xdp->flags;
-> +	return xdp->flags & ~XDP_FLAGS_HAS_NETMEM;
->  }
->  
->  static __always_inline void xdp_buff_clear_frag_pfmemalloc(struct xdp_buff *xdp)
-> @@ -150,6 +160,10 @@ static __always_inline void
->  xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
->  {
->  	xdp->rxq = rxq;
-> +	/* Do not initialize the txq/netmem union here. DEVMAP generic XDP
-> +	 * sets txq before this helper is called; receive drivers set netmem
-> +	 * explicitly.
-> +	 */
->  
->  #ifdef __LITTLE_ENDIAN
->  	/*
-> @@ -176,6 +190,33 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
->  	xdp->data_meta = meta_valid ? data : data + 1;
->  }
->  
-> +static __always_inline bool xdp_buff_has_netmem(const struct xdp_buff *xdp)
-> +{
-> +	return !!(xdp->flags & XDP_FLAGS_HAS_NETMEM);
-> +}
-> +
-
-[..]
-
-> +static __always_inline netmem_ref
-> +xdp_buff_get_netmem(const struct xdp_buff *xdp)
-> +{
-> +	if (xdp_buff_has_netmem(xdp))
-> +		return xdp->netmem;
-> +
-> +	return virt_to_netmem(xdp->data);
-> +}
-
-You keep adding methods that are not used in the patch where they are added.
-I keep getting confused :-p
-
-For virt_to_netmem, maybe a meta question: does xsk pool need a treatment
-similar to the socket path? Where we did s/page/netmem_ref/ ? Then might
-be less reasons to special case?
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/373369=
+89320
