@@ -1,100 +1,192 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F915499F0E
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 15:55:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69AD4CDA3A;
+	Mon,  5 Oct 2026 15:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791215717; cv=none; b=CnWN26KVEpkX3G/Ra+8GpGXVQN2TCXnzQwPpAj0WyGeRQODGEgM3noTWvEW2lyTmAna0BYcrw6evuD2/7SCfknR57++8KQP0XGdrQPDahDEyn5k30evuGHH++lnYjc5LYL7VashrgwHqsufVssvmuMvNHZpW1gXVr7rfUgVf850=
+	t=1791215840; cv=none; b=t3gVFxQq5pqLDFZFDHhoZjLJwp8TOYJ3iCVtjne7/xkLBZtEBgTIq+/eL+sO5RGvaaAqyThjy0wYWzLDJd1RGXPpZRb0InDtyV89UrixvaKqnDr3q8avhRS3kTcLosOFWp8BHWc0/7vg/FgdFXzL2vmfDtp7T23Y6gFo7s2RuUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791215717; c=relaxed/simple;
-	bh=OItHQTxpJydXgBe7Aq8mnzJt89ss63u0izxaIZUdGWE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=tpjGwHrw3G2ikHnH37fpGAF0PBbymRAj2TUaE+V958sNJq1knHUIg9hdyRyqrJwpn4+ykCru7Un3Nm0Y/rcvFsOSc+lEYik1VLHMoGJ+nYYFis41AwtmA5Q7U6i3fG7lErcBcg49yXJ/SmsHe71k7cxwxftrE9KxzOBF2+LWpsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GBXYJrRd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791215840; c=relaxed/simple;
+	bh=Y6zIobaHfAH25spVVd3tRtK22OpsmMUzA9m4akP1URw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p6TPzK2WyeO3/MGmi1+tr21UX0Jmg1Z/BGYl4u+N5FN2p7+l7m58h6s7IEf1rysJ5iZnLe2/iQPIKqcjyeCcqrOxaXKYEPxaRoJ+K5P8cKTevTgMRGfSEAzHzic9PsEulr1jtOqwGvlWr/6r5+RR8uZdV7szzyIHz+0a2AviaEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BntoAAVe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GBXYJrRd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05E81F000FF;
-	Mon,  5 Oct 2026 15:55:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BntoAAVe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E36D1F000FF;
+	Mon,  5 Oct 2026 15:57:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791215714;
-	bh=QL+0q7AoyDveXwdlbJa/sjkik64DigNWdajB1VzhiF0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GBXYJrRd7vLl0KQeuvF6v1iY80w1LXVH27PNhOkBuIrgyndKQ5t89FM0q67OXS0Jm
-	 9orXBVl3MbmljMK78nLA55S2jZc+7R+dcT8dGHXZ7DhgBNVFcJzo+Xm3uf5OqFvGks
-	 Nle0PkBE+AqYQd8bnvFVuN3qweGIf0TnLihGU89+3vZe0eK19ncMNlsy5j8cbiq+Tf
-	 gtg462ECkmiKpwk3vG/Gee1tPIy4IcKIcVdV1akBoj9lAIBbbpMj4LY8rbYIt8TlTw
-	 uO8I0JbIuWR3d6VRM83vtdfFz6X/lfHPEX7Cv+H1tMJXc3wwqt+cVPoxsR+74UjhTj
-	 n4Vc26Vdn3jGg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 bpf-next 2/9] bpf: tcp: Add a new per-socket flag and
- kfunc for bpf_tcp_ops.
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kuniyuki Iwashima" <kuniyu@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261005154533.4147685-3-kuniyu@google.com>
-References: <20261005154533.4147685-1-kuniyu@google.com>
- <20261005154533.4147685-3-kuniyu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 05 Oct 2026 15:55:14 +0000
-Message-Id: <20261005155514.C05E81F000FF@smtp.kernel.org>
+	s=k20260515; t=1791215838;
+	bh=0Fe4ObO/b/TE5s1PNVsS4XfT/c4N/SLhXa9vwlS3HrM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=BntoAAVepFtL24WpSXFkvVOvlZQ2XNzqoMzX/oGT2IrDJ08YRNDEdVfxkOJrau6da
+	 EQDDbIKtKwkgSkG57w/z7F5/g2o2i4SHk1K5gjczqaNq7Mj7q4wnhe91LwMPnsKr0J
+	 jTylrtsI6n2YPsJoBIyMReDNFivmxb4gwbu8L97lKYCuslZr/uhtXdOYEGQh6dLWZp
+	 HGITYqSM3RSACTnQEunn2RMMxlNFeG1FPypB6Rd2Pjvy5se5L0Af5KhGl/VCVpk5CO
+	 y0EYziJr49LVrwPSh87wYHcxj8kJfwCmqzzloelO55weXDu1STfeHKJMDR9OT7qJ9R
+	 MdKxWZ8a0KSqQ==
+From: Kees Cook <kees@kernel.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Kees Cook <kees@kernel.org>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	David Gow <david@davidgow.net>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Shuvam Pandey <shuvampandey1@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v5 02/12] seq_buf: Do not pop from an overflowed seq_buf
+Date: Mon,  5 Oct 2026 08:56:52 -0700
+Message-ID: <20261005155708.1471260-2-kees@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261005155653.late.426-kees@kernel.org>
+References: <20261005155653.late.426-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4958; i=kees@kernel.org; h=from:subject; bh=Y6zIobaHfAH25spVVd3tRtK22OpsmMUzA9m4akP1URw=; b=owGbwMvMwCVmps19z/KJym7G02pJDFmHT5z6Ls15Odk1t6hwzUSLFA2OdOapKQZW95YscC1re //DN3xCRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwES8bjMyPLsV+bRr567z4tdu tz5pW/h09Y44DW0WJe56+XerVJ6ZqTP8ZjX/+q18Sr546MXit49nvXvVdpblqkYJn/zO32r7zBI 6GQE=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] tcp: missing documentation update for tcp_sock cacheline
---
+When a seq_buf has overflowed, its len is size + 1, so seq_buf_pop()
+decrements len to size and reads buffer[size], one byte past the end of
+the buffer. It also leaves len equal to size, which no longer counts as
+overflowed, so a truncated seq_buf then looks like a complete, full one.
 
-commit a581d0e37015bf601147a1857ac83871b8f4eae9
-Author: Kuniyuki Iwashima <kuniyu@google.com>
+An overflowed seq_buf logically has no last character to pop: the
+length of what was written has been lost, and the last byte of the
+buffer may be the NUL written by vsnprintf() or bytes that were never
+committed. Return -1 for an overflowed seq_buf, as for an empty one,
+and leave it overflowed, as the rest of the seq_buf API does until
+seq_buf_clear() or seq_buf_init().
 
-bpf: tcp: Add a new per-socket flag and kfunc for bpf_tcp_ops.
+The current callers do not reach this, e.g. trace_syscalls only calls
+trace_seq_pop() when the trace_seq it pops from has not overflowed, and
+kernel/bpf/diagnostics.c sets the length from strnlen() before popping.
 
-This commit introduces a new per-socket flag field, bpf_tcp_ops_flags, to
-struct tcp_sock to avoid the overhead of the legacy SOCK_OPS approach and
-support fast-path callbacks. It also adds a new kfunc,
-bpf_tcp_ops_set_flags, allowing BPF programs to atomically enable or disable
-these flags. The new field is placed within the tcp_sock_read_txrx cacheline
-group.
+Add tests for the pop corner cases.
 
-Link: https://lore.kernel.org/netdev/CAMB2axMwBuz3X4Uwn5uzZUqm91EbiMnbQX832=
-wUFOQ44fOwDnQ@mail.gmail.com/
+Tests passed under qemu on ARCH=x86_64 with GCC 16.2.0 and CONFIG_KASAN=y,
+and on big-endian ARCH=s390 with GCC s390x-linux-gnu 16.1.0.
 
-> diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-> --- a/include/linux/tcp.h
-> +++ b/include/linux/tcp.h
+Fixes: 32e0f607ac6a2 ("tracing: Add trace_seq_pop() and seq_buf_pop()")
+Assisted-by: LLM
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ include/linux/seq_buf.h   |  4 ++--
+ include/linux/trace_seq.h |  5 ++++-
+ lib/tests/seq_buf_kunit.c | 42 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+), 3 deletions(-)
 
-[ ... ]
+diff --git a/include/linux/seq_buf.h b/include/linux/seq_buf.h
+index 9f2839e73f8a..f5a350347bc5 100644
+--- a/include/linux/seq_buf.h
++++ b/include/linux/seq_buf.h
+@@ -155,11 +155,11 @@ static inline void seq_buf_commit(struct seq_buf *s, int num)
+  *
+  * Removes the last written character to the seq_buf @s.
+  *
+- * Returns the last character or -1 if it is empty.
++ * Returns the last character, or -1 if @s is empty or has overflowed.
+  */
+ static inline int seq_buf_pop(struct seq_buf *s)
+ {
+-	if (!s->len)
++	if (!s->len || seq_buf_has_overflowed(s))
+ 		return -1;
+ 
+ 	s->len--;
+diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
+index 697d619aafdc..7174ebf3f015 100644
+--- a/include/linux/trace_seq.h
++++ b/include/linux/trace_seq.h
+@@ -86,7 +86,10 @@ static inline bool trace_seq_has_overflowed(struct trace_seq *s)
+  *
+  * Removes the last written character to the trace_seq @s.
+  *
+- * Returns the last character or -1 if it is empty.
++ * Returns the last character, or -1 if the underlying seq_buf is empty or
++ * has overflowed. Note that only that buffer is consulted: a @s marked
++ * full by a write that did not fit, which trace_seq_has_overflowed()
++ * reports as overflowed, still pops the last character written.
+  */
+ static inline int trace_seq_pop(struct trace_seq *s)
+ {
+diff --git a/lib/tests/seq_buf_kunit.c b/lib/tests/seq_buf_kunit.c
+index 0934dfb602ff..de491f96c1ac 100644
+--- a/lib/tests/seq_buf_kunit.c
++++ b/lib/tests/seq_buf_kunit.c
+@@ -115,6 +115,47 @@ static void seq_buf_putc_test(struct kunit *test)
+ 	KUNIT_EXPECT_STREQ(test, seq_buf_str(&s), "");
+ }
+ 
++static void seq_buf_pop_test(struct kunit *test)
++{
++	DECLARE_SEQ_BUF(s, 8);
++	struct seq_buf t;
++	char *buf;
++
++	/* Nothing to pop. */
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), -1);
++	KUNIT_EXPECT_EQ(test, s.len, 0);
++
++	seq_buf_puts(&s, "hello");
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), 'o');
++	KUNIT_EXPECT_EQ(test, seq_buf_used(&s), 4);
++	KUNIT_EXPECT_STREQ(test, seq_buf_str(&s), "hell");
++
++	/* A 0xff byte must not be mistaken for an empty buffer. */
++	seq_buf_putc(&s, 0xff);
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), 0xff);
++
++	/* A full buffer pops its last byte. */
++	seq_buf_puts(&s, "abc");
++	seq_buf_putc(&s, 'd');
++	KUNIT_EXPECT_FALSE(test, seq_buf_has_overflowed(&s));
++	KUNIT_EXPECT_EQ(test, seq_buf_used(&s), 8);
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), 'd');
++	KUNIT_EXPECT_EQ(test, seq_buf_used(&s), 7);
++	KUNIT_EXPECT_STREQ(test, seq_buf_str(&s), "hellabc");
++
++	/*
++	 * An overflowed buffer has nothing to pop, and stays overflowed. Use
++	 * a buffer allocated at its exact size, so that KASAN reports any
++	 * read past its end.
++	 */
++	buf = kunit_kmalloc(test, 16, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, buf);
++	seq_buf_init(&t, buf, 16);
++	KUNIT_EXPECT_EQ(test, seq_buf_printf(&t, "%s", "longer than sixteen"), -1);
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&t), -1);
++	KUNIT_EXPECT_TRUE(test, seq_buf_has_overflowed(&t));
++}
++
+ static void seq_buf_printf_test(struct kunit *test)
+ {
+ 	DECLARE_SEQ_BUF(s, 32);
+@@ -354,6 +395,7 @@ static struct kunit_case seq_buf_test_cases[] = {
+ 	KUNIT_CASE(seq_buf_puts_test),
+ 	KUNIT_CASE(seq_buf_puts_overflow_test),
+ 	KUNIT_CASE(seq_buf_putc_test),
++	KUNIT_CASE(seq_buf_pop_test),
+ 	KUNIT_CASE(seq_buf_printf_test),
+ 	KUNIT_CASE(seq_buf_printf_overflow_test),
+ 	KUNIT_CASE(seq_buf_get_buf_commit_test),
+-- 
+2.55.0
 
-> @@ -233,6 +233,13 @@ struct tcp_sock {
->  		is_sack_reneg:1,    /* in recovery from loss with SACK reneg? */
->  		is_cwnd_limited:1,/* forward progress limited by snd_cwnd? */
->  		recvmsg_inq : 1;/* Indicate # of bytes in queue upon recvmsg */
-> +#ifdef CONFIG_BPF
-> +	u32	bpf_tcp_ops_flags;
-
-[Severity: Low]
-This isn't a functional bug, but should
-Documentation/networking/net_cachelines/tcp_sock.rst be updated to reflect
-the addition of the bpf_tcp_ops_flags field to the tcp_sock_read_txrx
-cacheline group?
-
-The tcp_sock structure header explicitly mentions that the document should =
-be
-updated when adding new fields.
-
-> +#define BPF_TCP_OPS_TEST_FLAG(TP, ARG) \
-> +	(READ_ONCE((TP)->bpf_tcp_ops_flags) & BPF_TCP_OPS_FLAG_ ## ARG)
-> +#else
-> +#define BPF_TCP_OPS_TEST_FLAG(TP, ARG) (0)
-> +#endif
->  	__cacheline_group_end(tcp_sock_read_txrx);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261005154533.4147=
-685-1-kuniyu@google.com?part=3D2
