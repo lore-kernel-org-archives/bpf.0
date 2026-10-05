@@ -1,226 +1,292 @@
-Received: from mail-dl2-f39.google.com (mail-dl2-f39.google.com [74.125.229.167])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CC03FC5C3
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 21:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.167
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791235447; cv=pass; b=dIE9ZlTzL4Vmke+s2JzWqeYXWY5QE2IF0NT+h7Eday/QIdFZyygf2b1YUUUzIORW7+j8umZLU+za6gtk+ty+RSzsI8IdCsJkVfV3qlBoLwveeUjh20fVsgUEdbSG/ThKzWSObfsZ1cJ2HAHnbYMaZDw4TZ7Y4x1QWhqwBXbtBzw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791235447; c=relaxed/simple;
-	bh=g2YhWs2wnEbVyHvXtNkclGjux0hLDRKsWdK5g2avxgM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lWpKZcyj6rwcRZrNR02kGFE8BZz2rjv/YuBVbnn7Vgj/X+sD2iXbYnD2BmOmi4qgu+aEzyBoXKak0FXlOLXxf3mH9MB+nLE9lh/Sa6o34XXqICQfmUXThvweCdl27+2WyH64YecPblacrUE7CEZxpqyCaBIljwtWovRKQfDmOLc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fyIeMK+X; arc=pass smtp.client-ip=74.125.229.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378B540681D;
+	Mon,  5 Oct 2026 21:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791235568; cv=none; b=dr84Vby09Pe+eYx2YaPADTwGoQa9RP4L9QOJGJiDBob9HrEtFAt1yCAeB7pqbeOVGy2+uge9xyVTxudZxFb44K0sHajPbZ2cuV5HYuMGBjAEPV8UKYzesKV3hAaZzJpZOqSZvhv1Zzzc5XOE4sa5Xdo47peQL+x8UtPNZfLd6i4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791235568; c=relaxed/simple;
+	bh=9NgEtDdJu3j+6pP0gmkv8B/r4M7eIow+qhdMXzrnJpc=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=iUxp0mHXZiRF7bRT+9PIvUYZV6GJQbJUJ4A3adP5sGcsbdx+eJPZBGJL3ErahkZ0tHoJdbtu9dzHnAX4G+w4Ps5C7fcNZUP9WXAVLBxpOZDZBwWv3518gdhiHEt4e1er/APQ5uGk4GeaDFyp5SDb4xLDdoc2I4NwlvW5b/1vaOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSH+B4XP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fyIeMK+X"
-Received: by mail-dl2-f39.google.com with SMTP id a92af1059eb24-1438cb9b3a3so2038814c88.2
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 14:24:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791235445; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VCEtxnXbwHleIoYo9Qdk8ZUKGnWlZd/8p2tzfRppswrivRdEqZp8iLEMvfsRWQEDU9
-         +s1rjgaLSIiXwsA44hInpAnDZTGQEo3pGKGVfyhQgJISdcdOyeBBWiEnvGQvQMUhYsoB
-         k6rL2cYNUWYjjusyMh+vViCYd158J5xDDmPBubnxy5uFiYAuZuP0Z176Cm4dNPDFQAr5
-         xc471dAK6kbfeWvu0p5MVWB+NxO/q6tnfSK6UfPE+1fPceh+BVio6wEpzmlClqUATiHy
-         Iwef7ReexB2j0yM0htMSw8A1Bq91md4eHeeUgL0is4uMNRQHFm/t+zJwE+4j5C4hMVQj
-         98eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Q9Phq3E4EjHS1k5cgJ6CHsGFU2VgiKXbFac8f/T1nUY=;
-        fh=qUptV3d+ZHxAC7Z16zV8CpxRARGW30OLIz4tYE05zbk=;
-        b=WTv93ISiqc0reLY05aMYfQR3i2BwNw5SwBDsMZWjCbXiuArkUySrIQwZjCr5tdrB1Z
-         pFF9JjYrhmaM91gNXTcmwRR+gSCdL+6ODkeWw/AVqmBsZCyFRbiDoDr+5sUpmvCKhAQN
-         +OptquYIflykfJD8CaSkb+kVLbO7Sx4mmJ9NmgQfOeSm1QmpKbaxi+XEmA33uRiIh8sL
-         Y93GwQIXLTW3lhv6jbpKbrRmNOUsadAE7NM6VByQFKsnf1eKlN4Vgv0iFNPp1/kjbl8r
-         UywVfYPjytDvCUD49m1pXG77AcHLC1yF++52ACo6W3/xK9L3FCzW2b8lWtFN44lXA4rh
-         8YtA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791235445; x=1791840245; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Q9Phq3E4EjHS1k5cgJ6CHsGFU2VgiKXbFac8f/T1nUY=;
-        b=fyIeMK+XOeXH0DCMj4YKk1IHojrs2Ckwo5t3BtDTi3yjtB69hcVYvb9BwngFGY71te
-         snZbnVADa5RUDGI5nhmjD4ZUGFDZyptyF541UrfzkaR5agtC8X4W6sbuvWZdIxEAFMrJ
-         WaxLYNYzz2YLnydYEykY/wKzBdJPwj8oPrqM2xsbBrfpuiiN7J6J2FnfrJsTZTqMIn+M
-         dnZwaP3Xl1hFATTR8SM/r+gNgroBpXooI42xM4JKEk3m8wmdM4DN2ySUa0tUW8JfcCmu
-         SMEkLO/cgX0NgGHDNfeNNuRO86FK2K7OBZd1ZoFPdtDLnXQgZEPiMQzAAI2XGMCNETqD
-         ffJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791235445; x=1791840245;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Q9Phq3E4EjHS1k5cgJ6CHsGFU2VgiKXbFac8f/T1nUY=;
-        b=EqFbyql+zaC0KoYSouN+33L2QD7BdqWEauigeh50NrOPsN8zhaaQezv8Z9Hjv9ETsI
-         u2W9EFVp91fhppP/kyNgauTsuox7USHdFdJNHeI9Ic4vuSnUxk1ckkOR6CWZbcqGcw1l
-         7XCo+EGEZhmzuipnayPPjKQLM+r/zB2wZ6wOHGfkqrEI6jbrmeRdbptpRWjjCNp84gN7
-         051rU4E8DgQEg0ClDkYqxOWgB0I1r0SV9yWAwZvfZEy+2zTVwykqOCbo6Ag3eQb3tkHz
-         kVJMT0GBF/sUhS+Y1J0xmbttdVQH7H1XO/72LlrOQ5Dy6ucBaptwMe9NWw/tQm3acse4
-         BUZA==
-X-Forwarded-Encrypted: i=1; AKwUvBzo2d974mdT7cUAJMfYHpD6ODtKDM4FBfe/FOjGkYmMpYufFzSNX2cgS3yo+LoP+wpWLxs=@vger.kernel.org
-X-Gm-Message-State: AFuF++mnzZiihX4pl/fzDWSy2ndSoji/OTLx3oFLzzVbcD/aMl/hqGiZ
-	yaC5cf1fUKnizvmLYOVXaQzKSBjoHGQX4W08Hl7ufyQd8Ir+NUmthxMzpykegQWLJdrxsPZhIlz
-	xcNmhhsROEjxa/bLD2ID0ccPMiHMcqIiRSVKjmXHm
-X-Gm-Gg: AYBFou0Js2CkLE0Q1gqZOKGHJti7HRY3vfoTtH8NyJ2CsO2LnlhCKb8H9Wyf8eiCOsh
-	g42njM8sF+HEb3bMzk5NkX3JdF9oSSzCmYTA610RyIecaBuDUXQ+zn7+G/wZKAozacz3/KAsjH1
-	KDxOY/8Wor2an69+h4e2I/VaW2p/P+zmYml8kUWhGx24ai09sI0bbQmVfwHqq/xDzE7NvBmzUcT
-	bno5+81kff1PwLVk5bLVwiT8+Kr4tdxRvYz5C6QwLeh4anKWEXgC8xNphxnZb7OHxdUAhCM8WiX
-	jh5Dmvka0BBph/TG34YJ1xUZzYi7ThjXRQasgfPDUTY5g0I3jFPBND7AqY5O4kB9DClapONzHJ6
-	ND+k+nlCdmXUnt7p3unlW9pKcJ7JGVqLe80MZAiRo6m8ofLHyjuEM0Fp/WUT91ak3LOd4iVzK1v
-	EMSscJtV1i5d2Bf82bi8iglw==
-X-Received: by 2002:a05:701b:2084:10b0:144:c128:4c4b with SMTP id
- a92af1059eb24-14f5cad9ffcmr14593177c88.36.1791235443545; Mon, 05 Oct 2026
- 14:24:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSH+B4XP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC0BD1F00893;
+	Mon,  5 Oct 2026 21:26:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791235564;
+	bh=8OefnokcNLrZKb9tp0wPND9CYM539M3kIWSCBZ65Krk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=lSH+B4XPCI3w9p6prGscAXpaccvgAhpXFFAGoVn2ikp9LU15gnnpDuVZuh3zbzYkB
+	 SPpCl5Lhp5RAfHC5EIFV00YN+tqiElFz7UKV7ZQG7WWaYfNfB9bkSzo5jIeVVnZ/1n
+	 GdkakOmq5drmG/YTfL7POb+wAB7ketLrT5okyFda5FF12gRP5JM7UPY/zRjKwnLW2Q
+	 pVQhZJN58P1FwYgq31AIZaRJs9t0t+naeLsvMk77ToS60oB6N6ktnMZcHk0MHb0ALR
+	 nsWFfObhSiFUK4byIe6WCkB6pRPYdfyaIISHsXT1T5J+yxiTHDyyHQW/kHB/z/WF4E
+	 r06/n1v52Fp4A==
+Subject: Re: [PATCH net v2] vsock/bpf: release sock lock while waiting for
+ data in recvmsg
+From: netdev-bot+sashiko@kernel.org
+To: jrmmhm.kernel@eldare.de
+Cc: sgarzare@redhat.com, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, mst@redhat.com,
+ bobby.eshleman@bytedance.com, virtualization@lists.linux.dev,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ mhal@rbox.co, stable@vger.kernel.org
+Date: Mon, 05 Oct 2026 21:26:03 +0000
+Message-ID: <179123556339.434549.8635789838298158117@kernel.org>
+In-Reply-To: <20261001-kbh3-1-022-fix-v2-v1-1-cfae958a1976@eldare.de>
+References: <20261001-kbh3-1-022-fix-v2-v1-1-cfae958a1976@eldare.de>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261005154533.4147685-1-kuniyu@google.com> <20261005154533.4147685-3-kuniyu@google.com>
- <CAMB2axNHoWyJYJ5QX9Gs0nmpwxs62t7y84729HRDq_+-cdjM9g@mail.gmail.com>
-In-Reply-To: <CAMB2axNHoWyJYJ5QX9Gs0nmpwxs62t7y84729HRDq_+-cdjM9g@mail.gmail.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 5 Oct 2026 14:23:50 -0700
-X-Gm-Features: AclHuK_aNSdKZM2b1C_tGQWqG8oedihzbXV33WQgRccjRZW8ShVZvUXmWxlkRz0
-Message-ID: <CAAVpQUDKTq5_1J0X=6PwBpWd1VO2A4=Kqhgj8j_n+DtdzS4xvw@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 2/9] bpf: tcp: Add a new per-socket flag and
- kfunc for bpf_tcp_ops.
-To: Amery Hung <ameryhung@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tenzin Ukyab <ukyab@berkeley.edu>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 5, 2026 at 2:19=E2=80=AFPM Amery Hung <ameryhung@gmail.com> wro=
-te:
->
-> On Mon, Oct 5, 2026 at 8:45=E2=80=AFAM Kuniyuki Iwashima <kuniyu@google.c=
-om> wrote:
-> >
-> > The legacy SOCK_OPS guards some hooks with a per-socket flag,
-> > tp->bpf_sock_ops_cb_flags.
-> >
-> > In contrast, bpf_tcp_ops was initially designed without per-socket
-> > flags so that users can simply define only the callbacks they need.
-> >
-> > However, it turned out that even attaching a bpf_tcp_ops with a NULL
-> > callback incurs measurable overhead in the fast path. [0]
-> >
-> > We could reuse tp->bpf_sock_ops_cb_flags, but it is u8 and has only
-> > 1 bit left for a new opt-in callback, while not all of the 7 existing
-> > opt-in hooks are in the fast path and really need a flag guard.
-> >
-> > Moreover, tp->bpf_sock_ops_cb_flags has two bpf helper functions to
-> > update it, both of which require sock_owned_by_me(sk):
-> >
-> >   * bpf_sock_ops_cb_flags_set()
-> >   * bpf_setsockopt(TCP_BPF_SOCK_OPS_CB_FLAGS)
-> >
-> > Both helpers only overwrite the field, which leads to reading and
-> > modifying the flags in the BPF prog and then writing them back
-> > via the helper.  This prevents future use from tc or cgroup_skb
-> > hooks where bh_lock_sock() alone cannot prevent races with process
-> > context.
-> >
-> > Let's add a new u32 field, tp->bpf_tcp_ops_flags, at the end of the
-> > tcp_sock_read_txrx cacheline group, along with a new kfunc,
-> > bpf_tcp_ops_set_flags().
-> >
-> > bpf_tcp_ops_set_flags() takes bitmasks of flags to enable and
-> > disable and updates tp->bpf_tcp_ops_flags atomically via
-> > try_cmpxchg() without relying on lock_sock().
-> >
-> > The kfunc is exposed to bpf_tcp_ops and BPF_PROG_TYPE_CGROUP_SOCKOPT.
-> > The first argument is struct tcp_sock * so that bpf_tcp_sock() is
-> > required for BPF_PROG_TYPE_CGROUP_SOCKOPT, but not for bpf_tcp_ops
-> > where struct sock * is promoted to struct tcp_sock * automatically.
-> >
-> > The fast-path callbacks will be guarded by the new flags in a later
-> > patch after updating the existing selftest to avoid breaking bisection.
-> >
-> > Link: https://lore.kernel.org/netdev/CAMB2axMwBuz3X4Uwn5uzZUqm91EbiMnbQ=
-X832wUFOQ44fOwDnQ@mail.gmail.com/ #[0]
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > ---
-> >  include/linux/tcp.h            |  7 +++++
-> >  include/net/tcp.h              |  1 +
-> >  include/uapi/linux/bpf.h       |  8 +++++
-> >  net/ipv4/bpf_tcp_ops.c         | 56 +++++++++++++++++++++++++++++++++-
-> >  net/ipv4/tcp.c                 |  3 ++
-> >  tools/include/uapi/linux/bpf.h |  8 +++++
-> >  6 files changed, 82 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-> > index 6a8c77719322..24bb751cc65a 100644
-> > --- a/include/linux/tcp.h
-> > +++ b/include/linux/tcp.h
-> > @@ -233,6 +233,13 @@ struct tcp_sock {
-> >                 is_sack_reneg:1,    /* in recovery from loss with SACK =
-reneg? */
-> >                 is_cwnd_limited:1,/* forward progress limited by snd_cw=
-nd? */
-> >                 recvmsg_inq : 1;/* Indicate # of bytes in queue upon re=
-cvmsg */
-> > +#ifdef CONFIG_BPF
-> > +       u32     bpf_tcp_ops_flags;
-> > +#define BPF_TCP_OPS_TEST_FLAG(TP, ARG) \
-> > +       (READ_ONCE((TP)->bpf_tcp_ops_flags) & BPF_TCP_OPS_FLAG_ ## ARG)
-> > +#else
-> > +#define BPF_TCP_OPS_TEST_FLAG(TP, ARG) (0)
-> > +#endif
-> >         __cacheline_group_end(tcp_sock_read_txrx);
-> >
-> >         /* RX read-mostly hotpath cache lines */
-> > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > index d61ee00052e3..f69091f5e01f 100644
-> > --- a/include/net/tcp.h
-> > +++ b/include/net/tcp.h
-> > @@ -2934,6 +2934,7 @@ static inline int tcp_call_bpf_3arg(struct sock *=
-sk, int op, u32 arg1, u32 arg2,
-> >  static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-> >  {
-> >         tcp_sk(sk)->bpf_sock_ops_cb_flags =3D 0;
-> > +       WRITE_ONCE(tcp_sk(sk)->bpf_tcp_ops_flags, 0);
-> >  }
-> >
-> >  #else
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 4687c3310996..6ff90b73dd38 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -7334,6 +7334,14 @@ enum {
-> >                                          */
-> >  };
-> >
-> > +enum {
-> > +       BPF_TCP_OPS_FLAG_RTT                    =3D (1 << 0),
-> > +       BPF_TCP_OPS_FLAG_PARSE_HDR_OPT_ALL      =3D (1 << 1),
-> > +       BPF_TCP_OPS_FLAG_PARSE_HDR_OPT_UNKNOWN  =3D (1 << 2),
-> > +       BPF_TCP_OPS_FLAG_WRITE_HDR_OPT          =3D (1 << 3),
-> > +       BPF_TCP_OPS_FLAG_ALL                    =3D (1 << 4) - 1,
-> > +};
-> > +
->
-> This series changes several existing bpf_tcp_ops callbacks from
-> enabled-by-presence to disabled by default. Since this needs a respin,
-> could you also document the opt-in semantics and update the comments
-> for the affected members of bpf_tcp_ops to name their gating flags?
->
-> It would also be useful to document that the mask is per-socket and
-> shared by all effective bpf_tcp_ops programs.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Sure, will add doc for the enum and bpf_tcp_ops members.
+Critical: 0 · High: 0 (1) · Medium: 1 · Low: 1
+
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The rewritten vsock_msg_wait_data()
+  (net/vmw_vsock/vsock_bpf.c:47-77) detects a reset only through…
+- [Low] vsock_bpf_recvmsg() (net/vmw_vsock/vsock_bpf.c:105-109) sends
+  only MSG_ERRQUEUE to the native path before the new `if (!len) return…
+
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but the patch
+  rewrites the code around it.
+
+--
+
+vsock/bpf: release sock lock while waiting for data in recvmsg
+
+This patch changes vsock_msg_wait_data() so it drops the socket lock
+around wait_woken(). It also makes the helper loop until data is ready,
+an error or shutdown is seen, the timeout expires or a signal is pending.
+In vsock_bpf_recvmsg(), MSG_ERRQUEUE now goes to the native path, and
+zero-length reads return 0 early.
+
+> diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
+> index 9049d26486460..127a20429aa6c 100644
+> --- a/net/vmw_vsock/vsock_bpf.c
+> +++ b/net/vmw_vsock/vsock_bpf.c
+> @@ -34,24 +34,46 @@ static bool vsock_has_data(struct sock *sk, struct sk_psock *psock)
+>  	return vsock_sk_has_data(sk, psock);
+>  }
+>  
+> -static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
+> +/* Returns 1 if data is ready, 0 on EOF/shutdown, or a negative error. */
+> +static int vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
+>  {
+
+[ ... ]
+
+> +	while (1) {
+> +		if (vsock_has_data(sk, psock)) {
+> +			ret = 1;
+> +			break;
+> +		}
+> +
+> +		if (sk->sk_err) {
+> +			ret = -sk->sk_err;
+> +			break;
+> +		}
+> +
+> +		if ((sk->sk_shutdown & RCV_SHUTDOWN) ||
+> +		    (vsk->peer_shutdown & SEND_SHUTDOWN)) {
+> +			ret = 0;
+> +			break;
+> +		}
+
+[Severity: Medium]
+Can this loop sleep forever on a connection that has already been reset?
+
+The only reset signal checked here is sk->sk_err. Its value can be cleared
+from userspace. virtio_vsock_reset_sock() runs on
+VIRTIO_VSOCK_EVENT_TRANSPORT_RESET (for example after live migration) and
+on device removal. It sets only the state and the error:
+
+net/vmw_vsock/virtio_transport.c:virtio_vsock_reset_sock() {
+	...
+	sk->sk_state = TCP_CLOSE;
+	sk->sk_err = ECONNRESET;
+	sk_error_report(sk);
+}
+
+It does not set any sk_shutdown or peer_shutdown bits, and the psock stays
+in place.
+
+Suppose the application then calls getsockopt(SO_ERROR). sk_getsockopt()
+calls sock_error(), which clears sk_err with xchg(). The next recv() on the
+sockmap'd socket with empty queues gets copied == 0 from sk_msg_recvmsg()
+and enters this loop. None of the exit conditions is true there. A blocking
+call waits until a signal arrives or SO_RCVTIMEO expires, and a
+non-blocking call returns -EAGAIN.
+
+The native path handles this case before it ever waits:
+
+net/vmw_vsock/af_vsock.c:__vsock_connectible_recvmsg() {
+	...
+	if (!transport || sk->sk_state != TCP_ESTABLISHED) {
+		...
+		if (sock_flag(sk, SOCK_DONE))
+			err = 0;
+		else
+			err = -ENOTCONN;
+
+		goto out;
+	}
+	...
+}
+
+The commit message says this fixes the case where "the socket errored (for
+example a reset), recv() did not notice and kept waiting". Should the loop
+also check sk->sk_state and SOCK_DONE, so that case still works after the
+error has been read?
+
+> +
+> +		if (!timeo) {
+> +			ret = -EAGAIN;
+> +			break;
+> +		}
+> +
+> +		release_sock(sk);
+> +		timeo = wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
+> +		lock_sock(sk);
+
+[ ... ]
+
+> @@ -80,6 +102,12 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+>  	struct vsock_sock *vsk;
+>  	int copied;
+>  
+> +	if (unlikely(flags & MSG_ERRQUEUE))
+> +		return __vsock_recvmsg(sk, msg, len, flags);
+> +
+> +	if (!len)
+> +		return 0;
+
+[Severity: Low]
+Should MSG_OOB be rejected here as well, next to MSG_ERRQUEUE?
+
+With this shortcut, recv(fd, buf, 0, MSG_OOB) on a sockmap'd vsock socket
+always returns 0.
+
+Before this patch, the same call reached __vsock_recvmsg() when transport
+data was pending and ingress_msg was empty. __vsock_connectible_recvmsg()
+then returned -EOPNOTSUPP before its own zero-length check:
+
+	if (flags & MSG_OOB) {
+		err = -EOPNOTSUPP;
+		goto out;
+	}
+
+The commit message cites unix_bpf_recvmsg() as a model, and it does this
+before its len == 0 guard:
+
+	if (flags & MSG_OOB)
+		return -EOPNOTSUPP;
+
+	if (!len)
+		return 0;
+
+There is also an older issue from 634f1a7110b4. With len > 0 and data in
+ingress_msg, a MSG_OOB read reaches sk_msg_recvmsg(). That function only
+looks at MSG_PEEK, so it copies and consumes ordinary stream bytes. With
+empty queues, the read blocks in the wait loop instead of failing right
+away. Rejecting MSG_OOB next to the new MSG_ERRQUEUE check would fix both
+cases.
+
+> +
+>  	psock = sk_psock_get(sk);
+>  	if (unlikely(!psock))
+>  		return __vsock_recvmsg(sk, msg, len, flags);
+
+[ ... ]
+
+> @@ -101,11 +129,14 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+>  	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+>  	while (copied == 0) {
+>  		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> +		int data = vsock_msg_wait_data(sk, psock, timeo);
+>  
+> -		if (!vsock_msg_wait_data(sk, psock, timeo)) {
+> -			copied = -EAGAIN;
+> +		if (data < 0) {
+> +			copied = data;
+>  			break;
+>  		}
+> +		if (!data)
+> +			break;
+>  
+>  		if (sk_psock_queue_empty(psock)) {
+>  			release_sock(sk);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but the patch rewrites the code
+around it. Can a blocking recv() hang here while data is waiting in
+psock->ingress_msg?
+
+vsock_msg_wait_data() returns 1 whenever vsock_has_data() is true.
+vsock_sk_has_data() counts a non-empty psock->ingress_skb as data:
+
+#define vsock_sk_has_data(__sk, __psock)				\
+		({	!skb_queue_empty(&(__sk)->sk_receive_queue) ||	\
+			!skb_queue_empty(&(__psock)->ingress_skb) ||	\
+			!list_empty(&(__psock)->ingress_msg);		\
+		})
+
+sk_psock_queue_empty(), however, only checks ingress_msg. The same pair of
+checks is also used before the loop:
+
+	if (vsock_has_data(sk, psock) && sk_psock_queue_empty(psock)) {
+
+Redirected-ingress data always passes through ingress_skb first:
+
+net/core/skmsg.c:sk_psock_skb_redirect() {
+	...
+	skb_queue_tail(&psock_other->ingress_skb, skb);
+	schedule_delayed_work(&psock_other->work, 0);
+	...
+}
+
+If the only pending data is on ingress_skb and sk_psock_backlog() has not
+run yet, the reader drops the lock and the psock reference here and falls
+into the native path:
+
+__vsock_recvmsg()
+  __vsock_connectible_recvmsg()
+    __vsock_stream_recvmsg()
+      vsock_connectible_wait_data()
+
+That native wait loop only wakes for vsock_connectible_has_data() != 0,
+sk_err or a shutdown flag. It never looks at the psock queues. When the
+backlog worker later moves the data to ingress_msg and wakes the socket,
+the native reader sees transport data == 0 and goes back to sleep.
+
+If the socket also has a verdict program, sk_psock_verdict_data_ready()
+pulls new transport data via read_skb, and an SK_PASS verdict queues it on
+ingress_msg. The transport count therefore stays at 0. The blocking recv()
+then waits until a signal arrives or SO_RCVTIMEO expires.
+
+The reader can enter this window on a fresh recv(). It can also enter it
+after a spurious wakeup, such as the credit-update sk_write_space() wakeup
+mentioned in the commit message, which now makes the loop re-check.
+
+Should this fallback also take psock->ingress_skb into account?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261001-kbh3-1-022-fix-v2-v1-1-cfae958a1976%40eldare.de
