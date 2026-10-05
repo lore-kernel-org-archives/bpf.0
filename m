@@ -1,64 +1,64 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25789492E20
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 14:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9064A2A7D
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 14:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791210159; cv=none; b=AZjYLTNYSOK0LXA57Zrl2MZy8OJ8xXof5KX+5bMguudNQW5+6sOufQiy+9TLlGO0aUl7iM+cL2hZcC/ydzz89tk7cKqesJ3VwB5B16XU7M7Zu10Iaul/KjA8+VrzBojMifAHruYPPaddLzCQZZ5nVjrzVUNoRXUbrwwFchxlYDA=
+	t=1791210160; cv=none; b=NkQU/36wiBWqWncbiarctVwS9HwnCmpX3iWzSlQrrO2UXmSnS88dXi2Jb08AOqpK5EqJKFIoNzB8ytjsAJMeSKywMpZT8IzZ0MTU0uktOmGOd9wgl09ONKpn+/gGbB56ztAEE/x08oWBs8zCYe5vWXntII77qj590xVZZYhCpdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791210159; c=relaxed/simple;
-	bh=Lt7G/mknfW9u87mpXqyhK0xm1w2okf4RGX7PbZG/JOg=;
+	s=arc-20240116; t=1791210160; c=relaxed/simple;
+	bh=N4XdGhWuHxNHH/DH5/s1/NTOoPGDS5vDWXrFZ1DW+1c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CTLuDM6X8A7b6iQ6cQvfugeVSldAskwgAVbqObksBOLCOW6YAnw3JGcvNM/eqW2+ii5fPZMERpkDYT+B8WCMwzIifqLiOxfWVuF1d/LHdddGMIbs4GgD5fsQHjpENOI98dYrpwm3ah3DnC5OMENiNPZd4n6b5ZiO2+cidSMYAjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KP1pv7vt; arc=none smtp.client-ip=74.125.225.141
+	 MIME-Version; b=c82teaYui0PS/378CJUiuFdb7Kw3gYRSN9NsEXciLBd0//v4UUtuJ42hSyHnlw8PTLLUX/Ue7JfGcqvXbbKC5jrBnwmKBecu4jL5SJbJ/+wA6Yn9oGDb9V+oOiBcTVr4MKWO++XZksW6EWpsFtilisqMQjrQSMJ92jUGbmpnP8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dK0auxcp; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KP1pv7vt"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49fe8bf173aso11161215e9.3
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 07:22:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dK0auxcp"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-4a01ff8c098so12280275e9.3
+        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 07:22:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791210149; x=1791814949; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791210151; x=1791814951; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mZQZDqoTxehiXIWg6WfJWmUQf7d3lEZqs6KGqhPBbaI=;
-        b=KP1pv7vtWbUVkq8DXoIaAYTfsz6SICz42TOdQ2qg6q16yiIh4kQueo/n0GZDQJ3ryO
-         XAK/NKh0yf/5orlQJSC7IxXZiD198Uz5ouG6Dbkqp6h36+8ugsyViXqa4uSshi1fHdgX
-         6LqxQTnzpOr0h9GnFFi5kQ8u88Dx12ACDhpInMQxGtHC7m0qpsr47nTbR/LO2FPcka23
-         pLGSSVZW3kVNx12G//qQ85EXY9dvEO55ktwSGTAu1iY3LqdCAfz7XdYDTIa8EZ4GMsZ7
-         sQR+X8Ud+9ZvnEYNE9E0XgVXSrTIAZv4jB0xQ+W8Mar0VTL83TWYKCnYE/w9ad2CRxUT
-         3NZw==
+        bh=OHnqMyBZA28OVgMK+xzMpR+Ee/alSC2HkxUl5T7L3m8=;
+        b=dK0auxcpBg7qJMnaNbaBXry+0X/lKFIhJurAJZCU1LJoYAuuyab7TWLPrx7WEsZoJX
+         6JxTlA9wrsFlPVzlZiS1WY3iqpgaNYxT1qoEC5w6+3M/6iabXrSQmIkIvcHqtSD/jMzd
+         07DajEam8glV4fa1tPTXFid3Oy01BHmBgDDhRwtXfwo0J5DOkvNGU2HiYl/f/mz0Sssh
+         cfrfttDyue9oLb1VtYD4LOWIASjJ1how2+pn0wY5HnexDN/hn7rMO7HdR3ZRpGow/poZ
+         bUBgi3IGo5lUhkLlKDMlV9sl3i0Vi2DFuqCZvUW4cWJjWEI7JjT473Mzglva1l96WUBo
+         utPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791210149; x=1791814949;
+        d=1e100.net; s=20260707; t=1791210151; x=1791814951;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mZQZDqoTxehiXIWg6WfJWmUQf7d3lEZqs6KGqhPBbaI=;
-        b=rMqHkwL9fLGya60C6h9cCrwWeBaeGhqtGHsyi0xPYpnDGzcrG/+ucNRpHqYvryxU4g
-         T7O3KJEzxRzO4QcO59EZgIeAfO79XIokVrD6XVkSyG4LDIPzGQ0D8XiOKEhuLM/0JoVN
-         NXqp06yCJ8loPCFxArbbXd4HU4e/HhXNJaJgitRRTLT+ccLQosR1xrFLNB6jtIcmd4e3
-         7Uo4bCsgkjmUn2HelJ0z0pthwl4wdKkAN0yy03TjvyM1pqmHok5hREAPZxDpx475RHjS
-         xihuncQ3HdsTYDO4um+UirDKUSkILOsCzYckSzPJi7GArWGP85qI6PlJap4+ebR4eKMN
-         /N3A==
-X-Gm-Message-State: AFuF++kuj7QDx4XE0QyxF0QkbAookNEUV+lWdeA+lvvBN/9qPC3izIDc
-	v0LOm8GSVx9KGpccOsTsyBRbIfBqm1ouVpoYDcPMYlrw72ogZ223qDHDlsnCf6TEQ5nTCn+T
-X-Gm-Gg: AYBFou0nZ48DqPDDVXq3NPFAZeozaRBPVHjzNFQ2L5E0ScBjNgWmINtVxbIAo5VPRe1
-	MnBxM1rzsnI/suq7qdVwgTah0mGAV83qbL+bnqqCc1qshChMIt9cBNhrF314pW/dho2GTP6UsoI
-	+J8YK33PLsd1KzVs6cziDkhg3QCd3GdrURycYWQ++oFjHzkOhFqWL50zjbZcSt5YB8yWKoGC/Cg
-	zdpuPB8kKT18CIiALI5/jwFmxw2g676YvxbR8pzRNJINhTm6YThkmhyZSvX6tbtqNckdPJCGlQO
-	uvtVO4u5p/74hms8hTPR8cd3AYA2e2RPkHwHhbYBzi/1MZI2zqQzi3zfyWmcwhEWQDIWjjxidXc
-	MaonqMz1QGUcq+ggHfIsG3M33/kxy4jn73Gh6Jhivyncsu081TQCJrm5HHZ7gRELAchMt8Z7L8V
-	UcPHxrgui3jzCM6/wQUM1zospBAyuJjgSGmC0i6x9VPRlha5q6SGL0LgsTbC/Dxv3mda+TQI5OH
-	mx1Y+B3khqqetSOMyBbuEjkPWJcou52uwhUYumu1AqRE8jm6W/5VFca/loTOnXSTquSFWuaSufQ
-	UsjjzGu8lp3YmGl9hiBXxShkX4GBR7HC2fbaCJ8=
-X-Received: by 2002:a05:600c:3b9f:b0:4a0:c2a:485e with SMTP id 5b1f17b1804b1-4a1780acb17mr1960815e9.33.1791210148329;
-        Mon, 05 Oct 2026 07:22:28 -0700 (PDT)
+        bh=OHnqMyBZA28OVgMK+xzMpR+Ee/alSC2HkxUl5T7L3m8=;
+        b=v9jFs+/FsDxxRTmYcH6auSdiKyIPBzPzjPxJyLKxp1Mzwmqb7raDM0uYZM7Lv3gNun
+         g0in/pvE3Omn1AfMmAX0SE240qiiO5stmilUlnouARzdnkzUyIUhvKSvKcGugoshDFCe
+         art+pVwK3uRH1H6Ps1fs5fGbT8shGO2xg12a9zixnI3i6Q8uGu6A6XhDFzrYZnjq30Ri
+         c0EnijIGqU/xfFnQSfLZ+jQsrwC3PWw0zXWv0GxMls/G0GGTbF71Jx3kxF5gNiaMIXrK
+         15W9NpTez3yk0PDEWQ3Yn9mb3WtycZO3wysEXgBeS2dq2i7cU/kIb63jcNYhos3wAbTq
+         mWvg==
+X-Gm-Message-State: AFuF++mRgdZMm3+ChPcHFZo/a3XHfgct41ULY3GoeIeJBo2ZYqvcRfnr
+	6QdQzeI92Igsq6JFcEbEXLUJXb5QjRjJ49T6W1msg/HSCasmn786Regf2hYvW9x+ZEV+1z8t
+X-Gm-Gg: AYBFou03Zg2Jzm1ESdLeo5fP/+sn583+I4JWL9wKBuRUTnDH8mfZn20R774pY9xSPNg
+	v8Ojec1HGsF8Xw59wgHEUd14GpMLlylBW9VmRE6+YHW/2HRc1JutNnGRCBAyfE4DdHIxNXBjd0i
+	VM+vpK9jYiOMFrHSm0ffbUrvgxRLQTV3lwo5ATPRZl147/+wzLYEDfqcM+WICql+zOjLW22CJIe
+	X0nBtjci9VJ2f5TFafoWYg/MxBN0RU8fW5Lg0LzX6QnNPcrF+6jaOA0P++f4KptnFGAozSFT5Yk
+	bCb9Fxwblpf7EijtRyZCN3HR2E1mx6//mn3JCipciedipp74BVzHgwE1TOxC1WZWKZSbjWt2mJU
+	x+taDjCnw+wgsK73CiqexLVVzJgNi9XLVxc/XQH1ar/uYZoqXlL+UVkDfPxkHwgRDj/ZhcMOonQ
+	jTawbi8pvXZ6TLB0FYwnuTmYhhWVEFaiBE+xNgbjQ0LsoMcqv+bckKhVZ5luod6RAxZIVIQr2hu
+	C/ckfowzNoPpxz8FoD2Vb62RfLZgghKBzPWor+gGmC4H7TdQms4BfOd9wIoAMvvDKOgPIASHEYp
+	a3BeRdJzAoXWfTuF7r3spr0mlqWvKIv4Z3p0oQ==
+X-Received: by 2002:a05:600c:a00f:b0:4a0:1a18:b742 with SMTP id 5b1f17b1804b1-4a0274e9a97mr189541035e9.2.1791210142474;
+        Mon, 05 Oct 2026 07:22:22 -0700 (PDT)
 Received: from macbook (90-182-211-1.rcp.o2.cz. [90.182.211.1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c622ab5a1sm3881623f8f.36.2026.10.05.07.22.27
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c622ab5a1sm3881623f8f.36.2026.10.05.07.22.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 07:22:28 -0700 (PDT)
+        Mon, 05 Oct 2026 07:22:21 -0700 (PDT)
 From: Yusheng Zheng <yunwei356@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -83,9 +83,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	Hao Sun <sunhao.th@gmail.com>,
 	Yusheng Zheng <yunwei356@gmail.com>
-Subject: [RFC PATCH bpf-next 5/7] bpf, x86: Add native code for some inline kfuncs
-Date: Mon,  5 Oct 2026 07:22:17 -0700
-Message-ID: <20261005142219.33451-6-yunwei356@gmail.com>
+Subject: [RFC PATCH bpf-next 1/7] bpf: Let kfunc sets give kfuncs a BPF body
+Date: Mon,  5 Oct 2026 07:22:13 -0700
+Message-ID: <20261005142219.33451-2-yunwei356@gmail.com>
 X-Mailer: git-send-email 2.54.0.windows.1
 In-Reply-To: <20261005142219.33451-1-yunwei356@gmail.com>
 References: <20261005142219.33451-1-yunwei356@gmail.com>
@@ -97,258 +97,245 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A copy of a compiled kfunc keeps constant arguments in registers and
-cannot put the result in the register of an argument. Give five of the
-kfuncs in insn_kfuncs an emit callback that writes x86-64 code: rol by
-an immediate, or rorx with BMI2 into another register; test and cmovcc,
-with the inverse condition when the result is in the register of the
-first value; mov of the control word and bextr with BMI1; movbe; and
-lea. Rotating a register in place by 13 is then "rol $13, %rbx" where a
-copy takes five instructions. Without BMI1 or MOVBE, or with constants
-that the instruction cannot take, the callback returns an error and the
-JIT copies the kfunc.
+Let a kfunc set give some of its kfuncs a body: a few BPF instructions
+that compute the kfunc from its arguments in R1-R5 into R0. The
+following patches make the verifier check each call of such a kfunc as
+its body and the JIT inline native code for the call, so that small
+kfuncs such as a rotate can be used like instructions while the
+verifier knows what they compute.
 
-The code is in insn_kfuncs/x86/insn_kfuncs.h, which bpf_insn_kfuncs.c
-includes under CONFIG_BPF_INSN_KFUNCS_ARCH, as lib/crc includes the code
-for each architecture. The prefetch and the 16-byte copy compile to the
-instructions themselves, so they have no callback.
+A kfunc set lists the bodies in .bodies and .body_cnt, next to its BTF
+ID set. A body may also have an emit callback that writes native code
+for a call, so that the native code of a kfunc comes with the kfunc and
+not from the JIT; a following patch makes the x86-64 JIT use it.
+Registration checks that each kfunc with a body is in the set and has
+no kfunc flags, that it takes each argument and returns its value in
+one register, with constant (__k) arguments in 32 bits, and that the
+body uses only R0-R5, ALU instructions, loads, stores and forward jumps
+that land within it, leaving out the cpu v4 instructions that not every
+JIT has. btf_find_kfunc_body() finds the body of a kfunc.
 
 Assisted-by: LLM
 Signed-off-by: Yusheng Zheng <yunwei356@gmail.com>
 ---
- kernel/bpf/insn_kfuncs/Kconfig           |   5 +
- kernel/bpf/insn_kfuncs/Makefile          |   3 +
- kernel/bpf/insn_kfuncs/bpf_insn_kfuncs.c |  21 ++-
- kernel/bpf/insn_kfuncs/x86/insn_kfuncs.h | 155 +++++++++++++++++++++++
- 4 files changed, 179 insertions(+), 5 deletions(-)
- create mode 100644 kernel/bpf/insn_kfuncs/x86/insn_kfuncs.h
+ include/linux/btf.h |  27 ++++++++++
+ kernel/bpf/btf.c    | 126 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 153 insertions(+)
 
-diff --git a/kernel/bpf/insn_kfuncs/Kconfig b/kernel/bpf/insn_kfuncs/Kconfig
-index b2469853899dc..179236855d652 100644
---- a/kernel/bpf/insn_kfuncs/Kconfig
-+++ b/kernel/bpf/insn_kfuncs/Kconfig
-@@ -9,3 +9,8 @@ config BPF_INSN_KFUNCS
- 	  puts native code in its place where it can.
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 4b63bb91550a1..1e7e52e778d82 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -120,10 +120,36 @@ struct bpf_prog;
  
- 	  If unsure, say N.
+ typedef int (*btf_kfunc_filter_t)(const struct bpf_prog *prog, u32 kfunc_id);
+ 
++#define BPF_KFUNC_BODY_MAX_INSNS	32
++#define BPF_KFUNC_INLINE_MAX		128
 +
-+config BPF_INSN_KFUNCS_ARCH
-+	bool
-+	depends on BPF_INSN_KFUNCS
-+	default y if X86_64
-diff --git a/kernel/bpf/insn_kfuncs/Makefile b/kernel/bpf/insn_kfuncs/Makefile
-index e397f626a17a8..31e7ef567c90f 100644
---- a/kernel/bpf/insn_kfuncs/Makefile
-+++ b/kernel/bpf/insn_kfuncs/Makefile
-@@ -1,2 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_BPF_INSN_KFUNCS) += bpf_insn_kfuncs.o
-+ifeq ($(CONFIG_BPF_INSN_KFUNCS_ARCH),y)
-+CFLAGS_bpf_insn_kfuncs.o += -I$(src)/$(SRCARCH)
-+endif
-diff --git a/kernel/bpf/insn_kfuncs/bpf_insn_kfuncs.c b/kernel/bpf/insn_kfuncs/bpf_insn_kfuncs.c
-index 1bcc049a5603f..1fcd0d7d0690c 100644
---- a/kernel/bpf/insn_kfuncs/bpf_insn_kfuncs.c
-+++ b/kernel/bpf/insn_kfuncs/bpf_insn_kfuncs.c
-@@ -118,6 +118,16 @@ static const struct bpf_insn lea64_body[] = {
- 	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_4),
++/*
++ * The body of a kfunc: len BPF instructions that compute the kfunc from its
++ * arguments in R1-R5 into R0. The verifier analyzes each call of the kfunc as
++ * the body, and the body runs in place of the call unless the JIT has native
++ * code for it, see kernel/bpf/kfunc_inline.c.
++ *
++ * emit, if set, writes native code for a call to buf, at most
++ * BPF_KFUNC_INLINE_MAX bytes, and returns its length, or an error if it has
++ * no code, for example because the CPU lacks a feature; the JIT then copies
++ * the compiled kfunc. reg[i] is the native register that the verifier bound
++ * Ri to, for R0-R5, and those of R1-R5 that are not arguments are free to
++ * use. imm[i] is the value of Ri if it is a constant (__k) argument. Like the
++ * rest of the JIT, native code is trusted to compute what the body computes.
++ */
++struct bpf_kfunc_body {
++	const u32 *id;
++	const struct bpf_insn *insns;
++	u32 len;
++	int (*emit)(const u8 *reg, const s32 *imm, u8 *buf);
++};
++
+ struct btf_kfunc_id_set {
+ 	struct module *owner;
+ 	struct btf_id_set8 *set;
+ 	btf_kfunc_filter_t filter;
++	const struct bpf_kfunc_body *bodies;
++	u32 body_cnt;
  };
  
-+#ifdef CONFIG_BPF_INSN_KFUNCS_ARCH
-+#include "insn_kfuncs.h" /* $(SRCARCH)/insn_kfuncs.h */
-+#else
-+#define rol64_emit	NULL
-+#define select64_emit	NULL
-+#define extract64_emit	NULL
-+#define load_be64_emit	NULL
-+#define lea64_emit	NULL
-+#endif
-+
- BTF_KFUNCS_START(insn_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_rol64)
- BTF_ID_FLAGS(func, bpf_select64)
-@@ -139,14 +149,15 @@ BTF_ID(func, bpf_lea64)
- 
- #define BODY(i, op, emit)	{ &body_ids[i], op##_body, ARRAY_SIZE(op##_body), emit }
- 
-+/* without emit, the JIT copies the kfunc, whose code is the instruction itself */
- static const struct bpf_kfunc_body bodies[] = {
--	BODY(0, rol64, NULL),
--	BODY(1, select64, NULL),
--	BODY(2, extract64, NULL),
--	BODY(3, load_be64, NULL),
-+	BODY(0, rol64, rol64_emit),
-+	BODY(1, select64, select64_emit),
-+	BODY(2, extract64, extract64_emit),
-+	BODY(3, load_be64, load_be64_emit),
- 	BODY(4, prefetch, NULL),
- 	BODY(5, copy16, NULL),
--	BODY(6, lea64, NULL),
-+	BODY(6, lea64, lea64_emit),
+ struct btf_id_dtor_kfunc {
+@@ -604,6 +630,7 @@ const char *btf_str_by_offset(const struct btf *btf, u32 offset);
+ struct btf *btf_parse_vmlinux(void);
+ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
+ u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_prog *prog);
++const struct bpf_kfunc_body *btf_find_kfunc_body(const struct btf *btf, u32 kfunc_btf_id);
+ int btf_kfunc_check_flag(const struct btf *btf, u32 kfunc_btf_id, u32 flag);
+ bool btf_kfunc_is_allowed(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_prog *prog);
+ u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0630675377aaa..4b729d0367bb2 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -246,6 +246,14 @@ struct btf_id_dtor_kfunc_tab {
+ 	struct btf_id_dtor_kfunc dtors[];
  };
  
- static const struct btf_kfunc_id_set insn_kfunc_set = {
-diff --git a/kernel/bpf/insn_kfuncs/x86/insn_kfuncs.h b/kernel/bpf/insn_kfuncs/x86/insn_kfuncs.h
-new file mode 100644
-index 0000000000000..5809bb69b4cd6
---- /dev/null
-+++ b/kernel/bpf/insn_kfuncs/x86/insn_kfuncs.h
-@@ -0,0 +1,155 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* x86-64 code for the kfuncs in bpf_insn_kfuncs.c, see struct bpf_kfunc_body */
-+#include <linux/cpufeature.h>
-+#include <linux/log2.h>
-+#include <linux/unaligned.h>
++struct btf_kfunc_body_tab {
++	u32 cnt;
++	struct {
++		u32 id;
++		const struct bpf_kfunc_body *body;
++	} bodies[];
++};
 +
-+static u8 *x86_rex(u8 *p, bool w, u8 reg, u8 rm)
+ struct btf_struct_ops_tab {
+ 	u32 cnt;
+ 	u32 capacity;
+@@ -269,6 +277,7 @@ struct btf {
+ 	struct rcu_head rcu;
+ 	struct btf_kfunc_set_tab *kfunc_set_tab;
+ 	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
++	struct btf_kfunc_body_tab *kfunc_body_tab;
+ 	struct btf_struct_metas *struct_meta_tab;
+ 	struct btf_struct_ops_tab *struct_ops_tab;
+ 	struct btf_layout *layout;
+@@ -1883,6 +1892,7 @@ static void btf_free(struct btf *btf)
+ 	btf_free_struct_meta_tab(btf);
+ 	btf_free_dtor_kfunc_tab(btf);
+ 	btf_free_kfunc_set_tab(btf);
++	kfree(btf->kfunc_body_tab);
+ 	btf_free_struct_ops_tab(btf);
+ 	kvfree(btf->types);
+ 	kvfree(btf->resolved_sizes);
+@@ -9695,6 +9705,118 @@ u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
+ 	return btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_FMODRET, kfunc_btf_id);
+ }
+ 
++const struct bpf_kfunc_body *btf_find_kfunc_body(const struct btf *btf, u32 kfunc_btf_id)
 +{
-+	u8 b = 0x40 | (w ? 8 : 0) | (reg & 8 ? 4 : 0) | (rm & 8 ? 1 : 0);
++	const struct btf_kfunc_body_tab *tab = btf->kfunc_body_tab;
++	u32 i;
 +
-+	if (b != 0x40)
-+		*p++ = b;
-+	return p;
++	for (i = 0; tab && i < tab->cnt; i++)
++		if (tab->bodies[i].id == kfunc_btf_id)
++			return tab->bodies[i].body;
++	return NULL;
 +}
 +
-+/* 64-bit op %reg, %rm */
-+static u8 *x86_op_rr(u8 *p, u8 op, u8 reg, u8 rm)
++/* a scalar or a pointer of one register */
++static bool btf_kfunc_reg_type(const struct btf *btf, u32 id)
 +{
-+	p = x86_rex(p, true, reg, rm);
-+	*p++ = op;
-+	*p++ = 0xc0 | (reg & 7) << 3 | (rm & 7);
-+	return p;
++	const struct btf_type *t = btf_type_skip_modifiers(btf, id, NULL);
++
++	return btf_type_is_ptr(t) ||
++	       ((btf_type_is_int(t) || btf_is_any_enum(t)) && t->size <= sizeof(u64));
 +}
 +
 +/*
-+ * ModRM, SIB and displacement of disp(%base, %index, 1 << scale), with @reg in
-+ * the reg field. An @index of 4 (%rsp) is none.
++ * A kfunc with a body takes each argument in one of R1-R5, constant (__k)
++ * ones in 32 bits for native code, and returns in R0. Its body uses R0-R5,
++ * no instruction of cpu v4, which not every JIT has, and jumps only forward
++ * within it, so that it ends by falling through the last instruction. The
++ * verifier checks the rest.
 + */
-+static u8 *x86_mem(u8 *p, u8 reg, u8 base, u8 index, u8 scale, s32 disp)
++static bool btf_check_kfunc_body(const struct btf *btf, const struct btf_type *func,
++				 const struct bpf_kfunc_body *b)
 +{
-+	u8 mod = !disp && (base & 7) != 5 ? 0 : disp == (s8)disp ? 1 : 2;
-+	bool sib = index != 4 || (base & 7) == 4;
++	const struct btf_type *proto = btf_type_by_id(btf, func->type);
++	const struct btf_param *args = btf_params(proto);
++	int i, n = btf_type_vlen(proto), len = b->len;
++	const struct bpf_insn *insn;
++	u8 op;
 +
-+	*p++ = mod << 6 | (reg & 7) << 3 | (sib ? 4 : base & 7);
-+	if (sib)
-+		*p++ = scale << 6 | (index & 7) << 3 | (base & 7);
-+	if (mod == 1)
-+		*p++ = disp;
-+	if (mod == 2) {
-+		put_unaligned_le32(disp, p);
-+		p += 4;
++	if (n > MAX_BPF_FUNC_REG_ARGS || !b->insns || !len || len > BPF_KFUNC_BODY_MAX_INSNS ||
++	    (proto->type && !btf_kfunc_reg_type(btf, proto->type)))
++		return false;
++	for (i = 0; i < n; i++)
++		if (!btf_kfunc_reg_type(btf, args[i].type) ||
++		    (btf_param_match_suffix(btf, &args[i], "__k") &&
++		     btf_type_skip_modifiers(btf, args[i].type, NULL)->size > sizeof(s32)))
++			return false;
++	for (i = 0; i < len; i++) {
++		insn = &b->insns[i];
++		op = BPF_OP(insn->code);
++		if (insn->dst_reg > BPF_REG_5 || insn->src_reg > BPF_REG_5)
++			return false;
++		switch (BPF_CLASS(insn->code)) {
++		case BPF_ALU:
++		case BPF_ALU64:		/* not movsx, sdiv, smod or bswap */
++			if (insn->off || (BPF_CLASS(insn->code) == BPF_ALU64 && op == BPF_END))
++				return false;
++			break;
++		case BPF_LDX:
++		case BPF_ST:
++		case BPF_STX:		/* not ldsx or atomics */
++			if (BPF_MODE(insn->code) != BPF_MEM)
++				return false;
++			break;
++		case BPF_JMP:
++		case BPF_JMP32:		/* forward jumps within the body, not gotol */
++			if (op == BPF_CALL || op == BPF_EXIT || op == BPF_JCOND ||
++			    (op == BPF_JA && insn->code != (BPF_JMP | BPF_JA)) ||
++			    insn->off < 0 || insn->off >= len - i - 1)
++				return false;
++			break;
++		default:		/* not ld_imm64 */
++			return false;
++		}
 +	}
-+	return p;
++	return true;
 +}
 +
-+static int rol64_emit(const u8 *reg, const s32 *imm, u8 *buf)
++static int btf_add_kfunc_bodies(struct btf *btf, const struct btf_kfunc_id_set *kset)
 +{
-+	u8 dst = reg[0], src = reg[1], n = imm[BPF_REG_2] & 63, *p = buf;
++	u32 i, id, cnt = btf->kfunc_body_tab ? btf->kfunc_body_tab->cnt : 0;
++	struct btf_kfunc_body_tab *tab;
++	const struct bpf_kfunc_body *b;
++	const struct btf_type *t;
++	u32 *pair;
 +
-+	if (n && dst != src && cpu_feature_enabled(X86_FEATURE_BMI2)) {
-+		/* rorx $(64 - n), %src, %dst */
-+		*p++ = 0xc4;
-+		*p++ = (dst & 8 ? 0 : 0x80) | 0x40 | (src & 8 ? 0 : 0x20) | 0x03;
-+		*p++ = 0xfb;
-+		*p++ = 0xf0;
-+		*p++ = 0xc0 | (dst & 7) << 3 | (src & 7);
-+		*p++ = 64 - n;
-+		return p - buf;
++	if (!kset->body_cnt)
++		return 0;
++	tab = krealloc(btf->kfunc_body_tab, struct_size(tab, bodies, cnt + kset->body_cnt),
++		       GFP_KERNEL | __GFP_NOWARN);
++	if (!tab)
++		return -ENOMEM;
++	tab->cnt = cnt;
++	btf->kfunc_body_tab = tab;
++	for (i = 0; i < kset->body_cnt; i++) {
++		b = &kset->bodies[i];
++		id = btf_relocate_id(btf, *b->id);
++		t = btf_type_by_id(btf, id);
++		pair = btf_id_set8_contains(kset->set, *b->id);
++		/* the body stands for the call, so no kfunc flags apply */
++		if (!pair || pair[1] || !t || !btf_type_is_func(t) ||
++		    !btf_check_kfunc_body(btf, t, b)) {
++			/* a set that fails to register leaves no bodies */
++			tab->cnt = cnt;
++			return -EINVAL;
++		}
++		/* a set registered for several hooks adds its bodies once */
++		if (!btf_find_kfunc_body(btf, id)) {
++			tab->bodies[tab->cnt].id = id;
++			tab->bodies[tab->cnt++].body = b;
++		}
 +	}
-+	if (dst != src || !n)
-+		p = x86_op_rr(p, 0x89, src, dst);	/* mov %src, %dst */
-+	if (n) {
-+		/* rol $n, %dst */
-+		p = x86_rex(p, true, 0, dst);
-+		*p++ = 0xc1;
-+		*p++ = 0xc0 | (dst & 7);
-+		*p++ = n;
-+	}
-+	return p - buf;
++	return 0;
 +}
 +
-+/* cmovcc %src, %dst */
-+static u8 *x86_cmov(u8 *p, u8 cc, u8 dst, u8 src)
-+{
-+	p = x86_rex(p, true, dst, src);
-+	*p++ = 0x0f;
-+	*p++ = 0x40 | cc;
-+	*p++ = 0xc0 | (dst & 7) << 3 | (src & 7);
-+	return p;
-+}
+ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 				       const struct btf_kfunc_id_set *kset)
+ {
+@@ -9714,6 +9836,10 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 			goto err_out;
+ 	}
+ 
++	ret = btf_add_kfunc_bodies(btf, kset);
++	if (ret)
++		goto err_out;
 +
-+/*
-+ * dst = cc ? a : b, after the test or compare at @p. The flags come first, so
-+ * the result may take the register of an operand they read. A result in the
-+ * register of a takes b with the inverse condition, which a copy of the
-+ * compiled kfunc cannot do.
-+ */
-+static int x86_select(u8 *buf, u8 *p, u8 cc, u8 dst, u8 a, u8 b)
-+{
-+	if (dst == a)
-+		return x86_cmov(p, cc ^ 1, dst, b) - buf;
-+	if (dst != b)
-+		p = x86_op_rr(p, 0x89, b, dst);	/* mov %b, %dst */
-+	return x86_cmov(p, cc, dst, a) - buf;
-+}
-+
-+static int select64_emit(const u8 *reg, const s32 *imm, u8 *buf)
-+{
-+	u8 cond = reg[1];
-+
-+	/* test %cond, %cond; cmovne */
-+	return x86_select(buf, x86_op_rr(buf, 0x85, cond, cond), 0x5, reg[0],
-+			   reg[2], reg[3]);
-+}
-+
-+/* R4 is free for the control word, as there are three arguments */
-+static int extract64_emit(const u8 *reg, const s32 *imm, u8 *buf)
-+{
-+	u8 dst = reg[0], src = reg[1], ctl = dst != src ? dst : reg[4];
-+	u32 start = imm[BPF_REG_2], len = imm[BPF_REG_3];
-+	u8 *p = buf;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_BMI1) || start > 63 || !len || len > 64 - start)
-+		return -EOPNOTSUPP;
-+	/* mov $(start | len << 8), %ctl */
-+	p = x86_rex(p, false, 0, ctl);
-+	*p++ = 0xb8 | (ctl & 7);
-+	put_unaligned_le32(start | len << 8, p);
-+	p += 4;
-+	/* bextr %ctl, %src, %dst */
-+	*p++ = 0xc4;
-+	*p++ = (dst & 8 ? 0 : 0x80) | 0x40 | (src & 8 ? 0 : 0x20) | 0x02;
-+	*p++ = 0x80 | (~ctl & 0xf) << 3;
-+	*p++ = 0xf7;
-+	*p++ = 0xc0 | (dst & 7) << 3 | (src & 7);
-+	return p - buf;
-+}
-+
-+static int load_be64_emit(const u8 *reg, const s32 *imm, u8 *buf)
-+{
-+	u8 dst = reg[0], base = reg[1], *p = buf;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_MOVBE))
-+		return -EOPNOTSUPP;
-+	/* movbe off(%base), %dst */
-+	p = x86_rex(p, true, dst, base);
-+	*p++ = 0x0f;
-+	*p++ = 0x38;
-+	*p++ = 0xf0;
-+	return x86_mem(p, dst, base, 4, 0, imm[BPF_REG_2]) - buf;
-+}
-+
-+static int lea64_emit(const u8 *reg, const s32 *imm, u8 *buf)
-+{
-+	u8 dst = reg[0], base = reg[1], index = reg[2], *p = buf;
-+	u32 scale = imm[BPF_REG_3];
-+
-+	/* %rsp cannot be an index, and the scale is 1, 2, 4 or 8 */
-+	if (index == 4 || !is_power_of_2(scale) || scale > 8)
-+		return -EOPNOTSUPP;
-+	/* lea disp(%base, %index, scale), %dst */
-+	*p++ = 0x48 | (dst & 8 ? 4 : 0) | (index & 8 ? 2 : 0) | (base & 8 ? 1 : 0);
-+	*p++ = 0x8d;
-+	return x86_mem(p, dst, base, index, ilog2(scale), imm[BPF_REG_4]) - buf;
-+}
+ 	ret = btf_populate_kfunc_set(btf, hook, kset);
+ 
+ err_out:
 -- 
 2.51.1
 
