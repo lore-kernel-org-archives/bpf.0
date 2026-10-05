@@ -1,613 +1,130 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16D137649D
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 07:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414191632DD;
+	Mon,  5 Oct 2026 07:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791184003; cv=none; b=neiV8garzRRISUBQsC5uHp1PY4Hye9M/c8vugrcVdLDXXAqGR6+647naOUyKQbDlPq4vOJlyzqWx+QAMXQbW9kCqxyEUF41xp5Y4c/r4F4CGEfBKRJ+F163MxASNVfhGcnnfls1ckdGiTl/ncct68op9A0Tlh9eGIoqBJeu8sCs=
+	t=1791184187; cv=none; b=cBlmos32QwKHEDS0XctirypW6HU3lPJeaQpBnQqDeKIjalJFVFVt27b3qgoE0eivOTQPni/QKsSZwiYMWGc4vaCcQmXTwzC3NfxqTkd+iUNnn/L9p9Gt4x7jBB4GVbYNv3+Lieb6B9VpoKdj4rr2pPahvwikQC3CRuFNW+NM8/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791184003; c=relaxed/simple;
-	bh=jUeOtuB74Cd2qDp6fyl4nJDnylvPrgujwz/d7BC4LUE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MvzX9qDM8AY7nTOf3j+c7+MIC1UPNPUjGW4DwWwSrlJnd+T7l7PfXkvPyHgS3HN12pkpEVVvheUctL+8Njmn/DXka45SdkENVSzjCATPBHCiJsgnyGVlCmHi7kiZZHdI3D64UM01r2sQwZHqhsnvBS5BpunS/VmwEgHb9toge0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S6jKydiQ; arc=none smtp.client-ip=74.125.225.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791184187; c=relaxed/simple;
+	bh=QmD/7Zi/H6BedLSrzeWNWjX6GB/hTA7f19Vq9NL0Kbg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F1/ueSupAAsne7GzpDJtUc9T4fDROGEuCdbBKV8qPI5LLJuSdpwge5o88Nc5k3Aoitd+ljbzm8laNtGTekqyC1F067jr8oDtQek489e9tRaiWNIifcmba4rn3INt/T+I22DED5dkQMfGFfCboonT2N214WZqymmAOuY6mCTMEjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XjUcrU4B; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IFFEXgTV; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6jKydiQ"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-4a022e9cbebso11644025e9.0
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 00:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791183997; x=1791788797; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jo7S1SVJIVFyNaxR02icLv8UsKmGCeJaeAs0M/mr6sE=;
-        b=S6jKydiQLnhi7ppF8U2zxD+08WOjsfcD3aTPdrK4pb8IKjwXtICsE+y6VcqaU+gPi2
-         LsWnQx4KMSMajFKAYTm+IuQJ404EkMDWXhmRsvXDwUrKuU2uZRQ5G+xoxnEkd0+fttA/
-         9huCOTYJ2ILZIWyk/CWXZtCUzsRP+yp1e+ljjaDYr2WpoONWcSDu0oHMuA+uMVJ9aG/M
-         hxzKAiqe1ojtCkpm0pAvK1ozQkOc6ZSeMhK5BfvGygrC4kUx2J10AQUErtpD8WLNuvpJ
-         ppWOZxx4ec9Fc9xKf2aYugYmPcahNK4tar4WClmgSudeFKB8s4AnNfuEQ6AWyiWx2Tt8
-         Lbmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791183997; x=1791788797;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jo7S1SVJIVFyNaxR02icLv8UsKmGCeJaeAs0M/mr6sE=;
-        b=sY+2Ydq38kmofpMzNvgXVn3DPZwlDiWb1WdMOpGOhmAWoKjGQfX3W9u8n7082RsbNG
-         PzAfyGKY53git4Afum1MCFGXrTI4ocqlJFyiy9yDGbMR6BcP4/ESDOjuYgxg3nyh2AWs
-         8aLhho1ynD84oEXPNtJceGL20tGF0m/nJnYnP2GsGhWB1CYbsYb+2sFyV24IYDJz+HbE
-         dpmYbXBjeBOtldeXUckJcJoJcCjp1w1uJWlPz1zIkd7v7aWJuTUyAb/p5t1pkAJvZTEt
-         7A+HGap4dYidK+FjjrQCECYRiPUFdYSdqSX2F1kTomN0xCtZN9VmEfhK9Iwk5B8LbIzm
-         TerQ==
-X-Forwarded-Encrypted: i=1; AKwUvBySE+6ySQJO/WhXA7Zqw3FXR97+j9vBae2iArsRirIvM0RhSsEMV7XI1NPTEEwPc0dN7Sg=@vger.kernel.org
-X-Gm-Message-State: AFuF++nEXKEZ7JnQOSaOfmLpPhtWUKLuYWdcQVVjVKf2otHqP3dSYn59
-	TtZygbiWIu4KjWzV9rlb7DJpuxtXNsdf5+9v5QeLwpk9m/C04Q9cmWi0
-X-Gm-Gg: AYBFou3kBSWhpktSIf0HzHUQ5FjDTqTUdVSSlbuxKvto6jum4gg5Bsrv2vSJwO5lwYm
-	wDul42jE+IILPw+HJwaSLHbyBXpFJIvLJDSn6ySmHF4v9JdkzIy1IqA3yUVQRB4Sp2ABRA8GJC8
-	1VxxxkERBo2S9pu3ZoBf8X0ZzojcugHJ2k4Xy36ggRoHQ84FOo6MzBV7wTWYGh2K6kEnevWqJup
-	+JMQUgqgZYqUp9oAMij2MJPjv5RNuJ7CiYqOspi68ucVb8c3ZFshq13xE2+97Rgydlw5VKxS4L1
-	GwhWMZbjSte6eezUNUwkkauc/Kr5K0GmBTLwSjTyE3g/zvYynNq4XUWUZFe6pQITwxwkuxmbFrY
-	M2K8Dgw3cD6BMidbyL5FwliqH4fQeDP+DP6f9wGzZF6VNXwZVSK4H3tsSOUL9YaPkKP/taALC/p
-	bTfTQrnxV+hsj6wYT3vODTGMVqyhJRWGTztyWq2Ix8ARjFg39++AacOWI+ok81PxNAB9jtDaJ6O
-	jnfOiHgpIkaBpNdrk5Pcu/HFU4lwaXORWv6co5Mn1AZu0ibpxyKjSK7fosYOTcBf3C+3xJ8nNiz
-	frwWZ6nrV+iJyMt3yMf/vucD8CGBb8Ps3KhcBZq+EHFuePooQjMy1GngBaELNXbfzj6gjSR+vz0
-	hGdE=
-X-Received: by 2002:a05:600c:c165:b0:4a0:108:3b54 with SMTP id 5b1f17b1804b1-4a02758e674mr172507215e9.32.1791183996516;
-        Mon, 05 Oct 2026 00:06:36 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a02-3100-b305-2001-39fa-3d24-821a-4eae.310.pool.telefonica.de. [2a02:3100:b305:2001:39fa:3d24:821a:4eae])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a16bcb9a21sm283461465e9.10.2026.10.05.00.06.34
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 05 Oct 2026 00:06:36 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Harry Yoo <harry@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	David Hildenbrand <david@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	David Stevens <stevensd@google.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Amery Hung <ameryhung@gmail.com>,
-	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-rt-devel@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	cgroups@vger.kernel.org
-Subject: [RFC PATCH v2 2/3] mm: use atomic RT trylocks for no-lock allocation
-Date: Mon,  5 Oct 2026 09:06:24 +0200
-Message-Id: <20261005070625.8871-3-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20261005070625.8871-1-kmehltretter@gmail.com>
-References: <20261005070625.8871-1-kmehltretter@gmail.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XjUcrU4B";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IFFEXgTV"
+From: Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1791184178;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=i5NrbbAtlTv67xpOFSXmIQUzDuIvt94sAEoPnMj9MQ0=;
+	b=XjUcrU4BmdI7QcxTLLj3idzAUbEdGZdkv73KXEvcELGX1oCfYT1EWLusFi1jNU9Ppull7O
+	jXwOnNy+tM2HRvch5PKaFVqOxIgODCdq0cftvWVtUTYcS73QGLyehfWZMJSe4bTQMo6AYc
+	aBFYyXl0dL8FJDKpiHElNLh0RrROMkdsR/OF5k5bQDluTm7zea9lp8FvtOh31qxw1mRsGT
+	iwx7rY0LJxphWwTlSk+HikrNT5mPmJfv3rj91Lzk6wLCVH4mE8BJdqukyDnLzsbWO0A1fS
+	sG+8WMM/Qvc9ilfVF4tILVzvj6VFgqd1ZdIFTEdq5CRZ/xSrl0nzpM3gFO+MCg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1791184178;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=i5NrbbAtlTv67xpOFSXmIQUzDuIvt94sAEoPnMj9MQ0=;
+	b=IFFEXgTV/vvRfAVKQCL63DRGGk9Lmhl59gAhI0uMPzP5kk6iJJjUmMWqgPeo9WEpRtcoZU
+	ZJHKrd8+pOp8QXCg==
+Subject: [PATCH net v2 0/2] net: stmmac: Fix XSK crashes on stm32mp2
+Date: Mon, 05 Oct 2026 09:09:31 +0200
+Message-Id: <20261005-stmmac_xsk_crashes-v2-0-46c60cba6421@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACtNw2oC/22NwQ6CMBBEf8Xs2ZoWKURP/ochpJRFVqWYbiEYw
+ r9b0KOXSWYyM28GRk/IcN7N4HEkpt5Fk+x3YFvjbiiojh4SmWTypFLBoeuMLSd+lNYbbpGFkib
+ Pm0ylptIQhy+PDU3b6RUcBii+IQ/VHW1Y79ZaSxx6/97Qo9rKP4r+RxmVkAJVqvWxsU3Uy5PcE
+ HzvaDrUCMWyLB+RlQ0QzwAAAA==
+X-Change-ID: 20260914-stmmac_xsk_crashes-10a77f614ab5
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Song Yoong Siang <yoong.siang.song@intel.com>, 
+ Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>, 
+ Mohd Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>, 
+ Ong Boon Leong <boon.leong.ong@intel.com>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, netdev@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+ Kurt Kanzenbach <kurt@linutronix.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1345; i=kurt@linutronix.de;
+ h=from:subject:message-id; bh=QmD/7Zi/H6BedLSrzeWNWjX6GB/hTA7f19Vq9NL0Kbg=;
+ b=owEBbQKS/ZANAwAKAcGT0fKqRnOCAcsmYgBqw00wIxj7sHUpC9Kn0b5/jMITiqoiQfaa9Xc4K
+ oEI3ewgVomJAjMEAAEKAB0WIQS8ub+yyMN909/bWZLBk9HyqkZzggUCasNNMAAKCRDBk9HyqkZz
+ guANEACA4wutcGt6XQy/oZVfMZMIpjdA/95I9qIWNLoIrg3vyo4AjywF41rXTcV5TAy0ZkY+rBB
+ X2z22BZWO0z3U+0Wj6D2StZ7eSXHvpnbsB0xUybhjnfKt3fdnKl/QFvm+R/qpQpsMh1LCM6F9jz
+ u+eWZ6NYCdtPGOvlPSGK+tNG44F85aWMTQAwPalnD6cdJo8OerHzzuJ+ixqEdqD7SPI4IpQPExv
+ HHMBSrzzg8Sf23meW0z6POvuk5tnhvsRf5yTUw3R1ulqP96d4SJwLEJnJUJR8Evs4WN1ANxMLzB
+ hrReU2ZtW9uzkkykJAwHQ6IjlSxH9UgZo8s1e+JdY6IRHOkds2liMINQAfl5blHWLXg47vPhyA0
+ 7Xlx5tSMmoKWl3Si6+M8J8z0E+ENhoZPJutfl3hjQH3aJ3JSqjggCJ5Goj2CdKR+kBCUNbHZham
+ aZ6Iss0/BtnlMSiU6W6ySogsDcXWPotY1RLVNYdwOiDSKiYVAlX/Y2wlYyED8Uk0XtLUWKPIcPH
+ Vq84CITdHOE+VJeYFjge+NdPpqQc9uaSM52L7wT0kUbfghaZTSGGLsFEn4xmIYohyyxVI1YGLxs
+ eBT6C1GtJGu07/8a1UIz74H6ja8S1DY4T0+zc1Ull7/aIuCZbWrZXGbsinz6EcXMNEq+MxrL9EK
+ kQTHGB/QrD0I9hg==
+X-Developer-Key: i=kurt@linutronix.de; a=openpgp;
+ fpr=BCB9BFB2C8C37DD3DFDB5992C193D1F2AA467382
 
-Commit 073d5f156292 ("slab: simplify kmalloc_nolock()") allowed no-lock
-slab allocation from preempt-disabled sections again on PREEMPT_RT. The
-remaining global allocator locks are backed by rtmutexes. Releasing one
-after a successful trylock can enter the rtmutex priority inheritance and
-wakeup paths.
+Hi,
 
-BPF task storage from sched_waking can reach this while try_to_wake_up()
-holds p->pi_lock:
+while looking at the TBS thingy [1], I've noticed kernel crashes. That
+happens when opening or closing an AF_XDP/ZC socket while parallel Tx
+traffic is going on.
 
-  try_to_wake_up()
-    raw_spin_lock_irqsave(&p->pi_lock)
-      bpf_task_storage_get()
-        kmalloc_nolock()
-          spin_trylock_irqsave(&n->list_lock)
-          spin_unlock_irqrestore(&n->list_lock)
-            rtmutex wakeup paths
+So far, I see two issues:
 
-The wakeup from the allocator unlock can re-enter scheduler locking and
-deadlock.
+ - Patch #1: stmmac_xdp_release() seems to have the teardown order wrong
+ - Patch #2: stmmac_xdp_(en|dis)able_pool() does not stop the Tx queue
+   at all
 
-Use spin_trylock_nolock_irqsave() for the global SLUB and page allocator
-locks. Its atomic owner state avoids the rtmutex slow path for
-non-preemptible RT callers. Preemptible callers keep regular RT spinlock
-semantics.
+The kernel crashes can be reproduced instantly on the stm32mp2 like this:
 
-Skip per-CPU allocator and memcg caches for non-preemptible RT callers.
-Their regular RT local-lock slow paths can take current->pi_lock.
+ - Run iperf3
+ - Run application which opens an AF_XDP/ZC socket
 
-Skipping the per-CPU objcg stock on every accounted no-lock allocation
-would otherwise charge a full page each time. Matching frees add prepaid
-bytes to objcg->nr_charged_bytes, but the next allocation did not consume
-them. Reuse and refill those centralized bytes with cmpxchg when the local
-stock cannot be used, and return complete pages once the retained credit
-crosses the existing thresholds.
+[1] - https://lore.kernel.org/all/20260812-stm32mp2_txtime-v1-1-f9e2462cc85d@linutronix.de/
 
-The page allocator has accepted the same contexts since its no-lock
-interface was introduced, so apply the atomic trylock rule to both slab
-and page no-lock paths. The prerequisite page-free fix keeps successful
-no-lock frees out of allocator shuffling and page-reporting notification.
-
-Bypassing the local objcg stock can make a no-lock charge reach
-memory.high handling more often. Apply this after David Stevens's pending
-change which defers memory.high work from contexts where spinning is not
-allowed. Otherwise the existing schedule_work() hazard remains. There is
-no build dependency between the changes.
-
-Fixes: 073d5f156292 ("slab: simplify kmalloc_nolock()")
-Link: https://lore.kernel.org/r/20260919171443.90512-1-kmehltretter@gmail.com
-Link: https://lore.kernel.org/r/20260904173145.2028377-1-stevensd@google.com
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
 ---
- mm/internal.h   | 27 ++++++++++-----
- mm/memcontrol.c | 90 +++++++++++++++++++++++++++++++++++++++----------
- mm/page_alloc.c | 33 +++++++++++++++---
- mm/slub.c       | 36 +++++++++++++-------
- 4 files changed, 142 insertions(+), 44 deletions(-)
+Changes in v2:
+- Remove RFC. No comments.
+- Link to v1: https://patch.msgid.link/20260915-stmmac_xsk_crashes-v1-0-e14553fcf553@linutronix.de
 
-diff --git a/mm/internal.h b/mm/internal.h
-index 38b1165212c9..5b8cabaf86df 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -1631,18 +1631,27 @@ static inline void mm_prepare_for_swap_entries(struct mm_struct *mm)
- 	}
- }
- 
-+/*
-+ * On PREEMPT_RT, local_trylock() uses a regular rtmutex-backed spinlock.
-+ * Its slow path can take current->pi_lock. Skip these caches when a no-lock
-+ * caller is already non-preemptible.
-+ */
-+#define mm_local_trylock_nolock(lock)					\
-+({									\
-+	bool __locked = false;						\
-+									\
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible())		\
-+		__locked = local_trylock(lock);				\
-+	__locked;							\
-+})
-+
- static inline bool can_spin_trylock(void)
- {
- 	/*
--	 * In PREEMPT_RT spin_trylock() will call raw_spin_lock() which is
--	 * unsafe in NMI. If spin_trylock() is called from hard IRQ the current
--	 * task may be waiting for one rt_spin_lock, but rt_spin_trylock() will
--	 * mark the task as the owner of another rt_spin_lock which will
--	 * confuse PI logic, so return immediately if called from hard IRQ or
--	 * NMI.
--	 *
--	 * Note, irqs_disabled() case is ok. spin_trylock() can be called
--	 * from raw_spin_lock_irqsave region.
-+	 * PREEMPT_RT no-lock allocation has not been validated in NMI or hard
-+	 * IRQ context. Other atomic contexts use
-+	 * spin_trylock_nolock_irqsave(), which does not enter the rtmutex PI
-+	 * machinery.
- 	 */
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT) && (in_nmi() || in_hardirq()))
- 		return false;
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 856a7d07586c..03a83664f99b 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2129,7 +2129,7 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
- 	int i;
- 
- 	if (nr_pages > MEMCG_CHARGE_BATCH ||
--	    !local_trylock(&memcg_stock.lock))
-+	    !mm_local_trylock_nolock(&memcg_stock.lock))
- 		return ret;
- 
- 	stock = this_cpu_ptr(&memcg_stock);
-@@ -2243,7 +2243,7 @@ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
- 	VM_WARN_ON_ONCE(mem_cgroup_is_root(memcg));
- 
- 	if (nr_pages > MEMCG_CHARGE_BATCH ||
--	    !local_trylock(&memcg_stock.lock)) {
-+	    !mm_local_trylock_nolock(&memcg_stock.lock)) {
- 		/*
- 		 * In case of larger than batch refill or unlikely failure to
- 		 * lock the percpu memcg_stock.lock, uncharge memcg directly.
-@@ -3232,7 +3232,7 @@ void __memcg_kmem_uncharge_page(struct page *page, int order)
- 
- static struct obj_stock_pcp *trylock_stock(void)
- {
--	if (local_trylock(&obj_stock.lock))
-+	if (mm_local_trylock_nolock(&obj_stock.lock))
- 		return this_cpu_ptr(&obj_stock);
- 
- 	return NULL;
-@@ -3336,14 +3336,64 @@ static bool __consume_obj_stock(struct obj_cgroup *objcg,
- 	return false;
- }
- 
--static bool consume_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes)
-+/*
-+ * A failed per-CPU stock trylock normally falls back to charging another
-+ * page. No-lock callers can fail that trylock on every allocation, so reuse
-+ * the centralized prepaid bytes before charging again. Paired frees return
-+ * the bytes here and keep the retained charge bounded instead of adding one
-+ * page per allocation.
-+ */
-+static bool consume_obj_stock_shared(struct obj_cgroup *objcg,
-+				     unsigned int nr_bytes)
-+{
-+	int old = atomic_read(&objcg->nr_charged_bytes);
-+
-+	do {
-+		if (old < 0 || (unsigned int)old < nr_bytes)
-+			return false;
-+	} while (!atomic_try_cmpxchg(&objcg->nr_charged_bytes, &old,
-+				     old - nr_bytes));
-+
-+	return true;
-+}
-+
-+static unsigned int refill_obj_stock_shared(struct obj_cgroup *objcg,
-+					    unsigned int nr_bytes,
-+					    bool allow_uncharge)
-+{
-+	int old = atomic_read(&objcg->nr_charged_bytes);
-+	unsigned int new, nr_pages;
-+	u64 total;
-+
-+	do {
-+		if (WARN_ON_ONCE(old < 0))
-+			return 0;
-+
-+		total = (unsigned int)old + (u64)nr_bytes;
-+		nr_pages = 0;
-+		if ((allow_uncharge && total > PAGE_SIZE) || total > U16_MAX) {
-+			nr_pages = total >> PAGE_SHIFT;
-+			new = total & (PAGE_SIZE - 1);
-+		} else {
-+			new = total;
-+		}
-+	} while (!atomic_try_cmpxchg(&objcg->nr_charged_bytes, &old, new));
-+
-+	return nr_pages;
-+}
-+
-+static bool consume_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes,
-+			      gfp_t gfp)
- {
- 	struct obj_stock_pcp *stock;
- 	bool ret = false;
- 
- 	stock = trylock_stock();
--	if (!stock)
-+	if (!stock) {
-+		if (!gfpflags_allow_spinning(gfp))
-+			ret = consume_obj_stock_shared(objcg, nr_bytes);
- 		return ret;
-+	}
- 
- 	ret = __consume_obj_stock(objcg, stock, nr_bytes);
- 	unlock_stock(stock);
-@@ -3462,9 +3512,8 @@ static void __refill_obj_stock(struct obj_cgroup *objcg,
- 	int i, slot = -1, empty_slot = -1;
- 
- 	if (!stock) {
--		nr_pages = nr_bytes >> PAGE_SHIFT;
--		nr_bytes = nr_bytes & (PAGE_SIZE - 1);
--		atomic_add(nr_bytes, &objcg->nr_charged_bytes);
-+		nr_pages = refill_obj_stock_shared(objcg, nr_bytes,
-+						   allow_uncharge);
- 		goto out;
- 	}
- 
-@@ -3548,18 +3597,18 @@ int obj_cgroup_charge(struct obj_cgroup *objcg, gfp_t gfp, size_t size)
- 	size_t remainder;
- 	int ret;
- 
--	if (likely(consume_obj_stock(objcg, size)))
-+	if (likely(consume_obj_stock(objcg, size, gfp)))
- 		return 0;
- 
- 	/*
--	 * In theory, objcg->nr_charged_bytes can have enough
--	 * pre-charged bytes to satisfy the allocation. However,
-+	 * For callers which allow spinning, objcg->nr_charged_bytes can have
-+	 * enough pre-charged bytes to satisfy the allocation. However,
- 	 * flushing objcg->nr_charged_bytes requires two atomic
- 	 * operations, and objcg->nr_charged_bytes can't be big.
- 	 * The shared objcg->nr_charged_bytes can also become a
- 	 * performance bottleneck if all tasks of the same memcg are
--	 * trying to update it. So it's better to ignore it and try
--	 * grab some new pages. The stock's nr_bytes will be flushed to
-+	 * trying to update it. So it's better for those callers to ignore it
-+	 * and try to grab some new pages. The stock's nr_bytes will be flushed to
- 	 * objcg->nr_charged_bytes later on when objcg changes.
- 	 *
- 	 * The stock's nr_bytes may contain enough pre-charged bytes
-@@ -3570,9 +3619,9 @@ int obj_cgroup_charge(struct obj_cgroup *objcg, gfp_t gfp, size_t size)
- 	 * page uncharge right after a page charge, we set the
- 	 * allow_uncharge flag to false when calling refill_obj_stock()
- 	 * to temporarily allow the pre-charged bytes to exceed the page
--	 * size limit. The maximum reachable value of the pre-charged
--	 * bytes is (sizeof(object) + PAGE_SIZE - 2) if there is no data
--	 * race.
-+	 * size limit. No-lock callers already tried the centralized bytes
-+	 * above. The maximum reachable value of the pre-charged bytes is
-+	 * (sizeof(object) + PAGE_SIZE - 2) if there is no data race.
- 	 */
- 	ret = __obj_cgroup_charge(objcg, gfp, size, &remainder);
- 	if (!ret && remainder)
-@@ -3640,6 +3689,7 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
- 		unsigned long obj_exts;
- 		struct slabobj_ext *obj_ext;
- 		struct obj_stock_pcp *stock;
-+		bool consumed;
- 
- 		slab = virt_to_slab(p[i]);
- 
-@@ -3662,7 +3712,13 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
- 		 * between iterations, with a more complicated undo
- 		 */
- 		stock = trylock_stock();
--		if (!stock || !__consume_obj_stock(objcg, stock, obj_size)) {
-+		if (stock)
-+			consumed = __consume_obj_stock(objcg, stock, obj_size);
-+		else
-+			consumed = !gfpflags_allow_spinning(flags) &&
-+				   consume_obj_stock_shared(objcg, obj_size);
-+
-+		if (!consumed) {
- 			size_t remainder;
- 
- 			unlock_stock(stock);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 3e21dc90b858..617997ed40ba 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -142,6 +142,15 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
- 	pcpu_task_unpin();						\
- })
- 
-+#define pcp_spin_trylock_nolock(ptr)					\
-+({									\
-+	struct per_cpu_pages *_ret = NULL;				\
-+									\
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible())		\
-+		_ret = pcp_spin_trylock(ptr);				\
-+	_ret;								\
-+})
-+
- /*
-  * On CONFIG_SMP=n the UP implementation of spin_trylock() never fails and thus
-  * is not compatible with our locking scheme. However we do not need pcp for
-@@ -154,6 +163,13 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
- 
- #define pcp_spin_unlock(ptr)		\
- 		BUG_ON(1)
-+
-+#define pcp_spin_trylock_nolock(ptr)		\
-+({						\
-+	(void)(ptr);				\
-+	NULL;					\
-+})
-+
- #endif
- 
- /*
-@@ -1562,7 +1578,8 @@ static void free_one_page(struct zone *zone, struct page *page,
- 	unsigned long flags;
- 
- 	if (unlikely(fpi_flags & FPI_NOLOCK)) {
--		if (!can_spin_trylock() || !spin_trylock_irqsave(&zone->lock, flags)) {
-+		if (!can_spin_trylock() ||
-+		    !spin_trylock_nolock_irqsave(&zone->lock, flags)) {
- 			add_page_to_zone_llist(zone, page, order);
- 			return;
- 		}
-@@ -2544,7 +2561,7 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
- 	int i;
- 
- 	if (unlikely(alloc_flags & ALLOC_NOLOCK)) {
--		if (!spin_trylock_irqsave(&zone->lock, flags))
-+		if (!spin_trylock_nolock_irqsave(&zone->lock, flags))
- 			return 0;
- 	} else {
- 		spin_lock_irqsave(&zone->lock, flags);
-@@ -2986,7 +3003,10 @@ static void __free_frozen_pages(struct page *page, unsigned int order,
- 		add_page_to_zone_llist(zone, page, order);
- 		return;
- 	}
--	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
-+	if (unlikely(fpi_flags & FPI_NOLOCK))
-+		pcp = pcp_spin_trylock_nolock(zone->per_cpu_pageset);
-+	else
-+		pcp = pcp_spin_trylock(zone->per_cpu_pageset);
- 	if (pcp) {
- 		if (!free_frozen_page_commit(zone, pcp, page, migratetype,
- 						order, fpi_flags))
-@@ -3231,7 +3251,7 @@ struct page *rmqueue_buddy(struct zone *preferred_zone, struct zone *zone,
- 	do {
- 		page = NULL;
- 		if (unlikely(alloc_flags & ALLOC_NOLOCK)) {
--			if (!spin_trylock_irqsave(&zone->lock, flags))
-+			if (!spin_trylock_nolock_irqsave(&zone->lock, flags))
- 				return NULL;
- 		} else {
- 			spin_lock_irqsave(&zone->lock, flags);
-@@ -3380,7 +3400,10 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
- 	struct page *page;
- 
- 	/* spin_trylock may fail due to a parallel drain or IRQ reentrancy. */
--	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
-+	if (unlikely(alloc_flags & ALLOC_NOLOCK))
-+		pcp = pcp_spin_trylock_nolock(zone->per_cpu_pageset);
-+	else
-+		pcp = pcp_spin_trylock(zone->per_cpu_pageset);
- 	if (!pcp)
- 		return NULL;
- 
-diff --git a/mm/slub.c b/mm/slub.c
-index 544cff39762c..5281f13f210b 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3149,7 +3149,7 @@ static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn,
- 
- 	if (likely(allow_spin))
- 		spin_lock_irqsave(&barn->lock, flags);
--	else if (!spin_trylock_irqsave(&barn->lock, flags))
-+	else if (!spin_trylock_nolock_irqsave(&barn->lock, flags))
- 		return NULL;
- 
- 	if (likely(barn->nr_empty)) {
-@@ -3238,7 +3238,7 @@ barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty,
- 
- 	if (likely(allow_spin))
- 		spin_lock_irqsave(&barn->lock, flags);
--	else if (!spin_trylock_irqsave(&barn->lock, flags))
-+	else if (!spin_trylock_nolock_irqsave(&barn->lock, flags))
- 		return NULL;
- 
- 	if (likely(barn->nr_full)) {
-@@ -3274,7 +3274,7 @@ barn_replace_full_sheaf(struct node_barn *barn, struct slab_sheaf *full,
- 
- 	if (likely(allow_spin))
- 		spin_lock_irqsave(&barn->lock, flags);
--	else if (!spin_trylock_irqsave(&barn->lock, flags))
-+	else if (!spin_trylock_nolock_irqsave(&barn->lock, flags))
- 		return ERR_PTR(-EBUSY);
- 
- 	if (likely(barn->nr_empty)) {
-@@ -3784,7 +3784,7 @@ static void *alloc_single_from_new_slab(struct kmem_cache *s, struct slab *slab,
- 	n = get_node(s, slab_nid(slab));
- 	if (allow_spin) {
- 		spin_lock_irqsave(&n->list_lock, flags);
--	} else if (!spin_trylock_irqsave(&n->list_lock, flags)) {
-+	} else if (!spin_trylock_nolock_irqsave(&n->list_lock, flags)) {
- 		/*
- 		 * Unlucky, discard newly allocated slab.
- 		 * The slab is not fully free, but it's fine as
-@@ -3829,7 +3829,7 @@ static bool get_partial_node_bulk(struct kmem_cache *s,
- 
- 	if (allow_spin)
- 		spin_lock_irqsave(&n->list_lock, flags);
--	else if (!spin_trylock_irqsave(&n->list_lock, flags))
-+	else if (!spin_trylock_nolock_irqsave(&n->list_lock, flags))
- 		return false;
- 
- 	list_for_each_entry_safe(slab, slab2, &n->partial, slab_list) {
-@@ -3902,7 +3902,7 @@ static void *get_from_partial_node(struct kmem_cache *s,
- 
- 	if (alloc_flags_allow_spinning(ac->alloc_flags))
- 		spin_lock_irqsave(&n->list_lock, flags);
--	else if (!spin_trylock_irqsave(&n->list_lock, flags))
-+	else if (!spin_trylock_nolock_irqsave(&n->list_lock, flags))
- 		return NULL;
- 	list_for_each_entry_safe(slab, slab2, &n->partial, slab_list) {
- 
-@@ -4506,7 +4506,7 @@ static unsigned int alloc_from_new_slab(struct kmem_cache *s, struct slab *slab,
- 
- 		if (allow_spin) {
- 			spin_lock_irqsave(&n->list_lock, flags);
--		} else if (!spin_trylock_irqsave(&n->list_lock, flags)) {
-+		} else if (!spin_trylock_nolock_irqsave(&n->list_lock, flags)) {
- 			/*
- 			 * Unlucky, discard newly allocated slab.
- 			 * The slab is not fully free, but it's fine as
-@@ -4702,6 +4702,15 @@ bool slab_post_alloc_hook(struct kmem_cache *s, gfp_t flags, size_t size,
- 	return memcg_slab_post_alloc_hook(s, flags, size, p, ac);
- }
- 
-+static __always_inline bool
-+cpu_sheaves_trylock(struct kmem_cache *s, bool allow_spin)
-+{
-+	if (allow_spin)
-+		return local_trylock(&s->cpu_sheaves->lock);
-+
-+	return mm_local_trylock_nolock(&s->cpu_sheaves->lock);
-+}
-+
- /*
-  * Replace the empty main sheaf with a (at least partially) full sheaf.
-  *
-@@ -4827,6 +4836,7 @@ static __fastpath_inline
- void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, unsigned int alloc_flags, int node)
- {
- 	struct slub_percpu_sheaves *pcs;
-+	bool allow_spin = alloc_flags_allow_spinning(alloc_flags);
- 	bool node_requested;
- 	void *object;
- 
-@@ -4841,7 +4851,7 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, unsigned int alloc_flags,
- 		return NULL;
- 	}
- 
--	if (!local_trylock(&s->cpu_sheaves->lock))
-+	if (!cpu_sheaves_trylock(s, allow_spin))
- 		return NULL;
- 
- 	pcs = this_cpu_ptr(s->cpu_sheaves);
-@@ -5477,7 +5487,7 @@ static void *__kmalloc_nolock_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t gfp_f
- 		 * But debug caches don't use that and only rely on
- 		 * kmem_cache_node->list_lock, so kmalloc_nolock() can attempt
- 		 * to allocate from debug caches by
--		 * spin_trylock_irqsave(&n->list_lock, ...)
-+		 * spin_trylock_nolock_irqsave(&n->list_lock, ...)
- 		 */
- 		return NULL;
- 
-@@ -5980,7 +5990,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
- 	if (!sheaf_try_flush_main(s))
- 		return NULL;
- 
--	if (!local_trylock(&s->cpu_sheaves->lock))
-+	if (!cpu_sheaves_trylock(s, allow_spin))
- 		return NULL;
- 
- 	pcs = this_cpu_ptr(s->cpu_sheaves);
-@@ -6016,7 +6026,7 @@ bool free_to_pcs(struct kmem_cache *s, void *object, bool allow_spin)
- {
- 	struct slub_percpu_sheaves *pcs;
- 
--	if (!local_trylock(&s->cpu_sheaves->lock))
-+	if (!cpu_sheaves_trylock(s, allow_spin))
- 		return false;
- 
- 	pcs = this_cpu_ptr(s->cpu_sheaves);
-@@ -6120,7 +6130,7 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj, unsigned int free_flags)
- 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
- 		lock_map_acquire_try(&kfree_rcu_sheaf_map);
- 
--	if (!local_trylock(&s->cpu_sheaves->lock))
-+	if (!cpu_sheaves_trylock(s, allow_spin))
- 		goto fail;
- 
- 	pcs = this_cpu_ptr(s->cpu_sheaves);
-@@ -6163,7 +6173,7 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj, unsigned int free_flags)
- 		if (!empty)
- 			goto fail;
- 
--		if (!local_trylock(&s->cpu_sheaves->lock)) {
-+		if (!cpu_sheaves_trylock(s, allow_spin)) {
- 			__free_empty_sheaf(s, empty, free_flags);
- 			goto fail;
- 		}
--- 
-2.53.0
+---
+Kurt Kanzenbach (2):
+      net: stmmac: Disable NAPI before stopping Tx queues in stmmac_xdp_release()
+      net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
+
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |  6 +++---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c  | 14 ++++++++++++++
+ 2 files changed, 17 insertions(+), 3 deletions(-)
+---
+base-commit: aaaaf87ea99b8766c9a8aa0e71aa42e6bc8a5320
+change-id: 20260914-stmmac_xsk_crashes-10a77f614ab5
+
+Best regards,
+--  
+Kurt Kanzenbach <kurt@linutronix.de>
 
