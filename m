@@ -1,131 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2149445560E;
-	Mon,  5 Oct 2026 09:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9431245D5C0;
+	Mon,  5 Oct 2026 09:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791193065; cv=none; b=YbCfTpfGeZB/IPSixLhYSHhj17NkhQy9PiwNHwb2z25QjRDEY00HCixJWd05093uVrWAD3VPXOFdsBO1Q62yMCvYcLHsF5URQrKCqAAl3DDT/hQ1Yhdr+Hn69mm6S9yLmkoLhpt9IDNqH6oG1pzXz+/XHofO9PZpn7PV9YcAAgs=
+	t=1791193679; cv=none; b=D9Z5w32YRQ5A5UTP2rlwphsAf+5RjsRm9JFOAIPT0y/d2k4a5giQoykahyzC2+QxAuk7n1TIyTGtlb93sOw8ytK0JG9N33uzqYaLXKdHKdzBie3fiUoSpMj/+EIBpKEBKlCE0VQ/F2yeV8+PjB1bsQAkAhjGy0Hhm4j7BX05uis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791193065; c=relaxed/simple;
-	bh=wJRcErGmmgxqQicRwNkQHCxmUcyx2m11gOVwZNpW3Iw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pknKQhPI//FagvERGnQKgg8WmKMipmLPxNtqvKNDlVyPvbCulSh5ejP8664r0KQ5/w6fUgczF/wioCdqzsoEl+AX8tgYW8yFkzR7TKxNS9ABQQwkuNbM0X7QlOcHKkWKAjpMaDqDXfyw0SF85KHx71n8NcTwimnwVsOBaBAoEYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVizt7DS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1791193679; c=relaxed/simple;
+	bh=8Ed+Q0wbZPB+a8w8ZM0vbOvtxPQRlNImj7KcLcrTX3w=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UPnYB3ic4Yzqo3GRvJYEJBDy/xwx0Glp26g/JphQOcc2ANQAbTEs0qsSEgSRPPDncJEZq13XsCxUcBvzpP5MydYeDgMNqQEDj3AK+SSxiUTUCWZE9rtXwWSeguOGPmZwrSlYAAVoCR2Fh7a1kf4UgXaTZX3DoGfkeiUemXuKNfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ju3bQnsD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVizt7DS"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4578C2BCC7;
-	Mon,  5 Oct 2026 09:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1791193064;
-	bh=wJRcErGmmgxqQicRwNkQHCxmUcyx2m11gOVwZNpW3Iw=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=aVizt7DSmad9nrbrS8y8zULrUXK9u7O32U9F7avM9590fygXTDsPbWGtdCpIra2Gw
-	 i5g0eb/MF0Ab7I9riqka7mS5jaLRYp8/qoHTH8M+8A90BFxHfSte2WJVThk5ptasQc
-	 Mfzzh7V7qgqZvnv9bb7VJcEyr7OCoIGMD2AcoMullTG+3TwY2YVtSF5Wx9cnn1ram5
-	 giaS8KFGpVKn60Vgk6j1epBUBMgi0/JvsxfZ7TGKCE/xEKuxvqTEfQtEDnMMA4W6+K
-	 2pE4vTZr0Xs7DmUApzqmC0psDCNKPV0NQ/Ozxo/u7M8Om3G8aq2pqSHS4kNh/OMoJL
-	 8rg24A9TaxJ2Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D021BCA5FF0;
-	Mon,  5 Oct 2026 09:37:43 +0000 (UTC)
-From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
-Date: Mon, 05 Oct 2026 16:37:40 +0700
-Subject: [PATCH bpf-next] selftests/bpf: Fix wq test by changing 50us sleep
- to polling over 1s
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ju3bQnsD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E0F1F0089D;
+	Mon,  5 Oct 2026 09:47:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791193670;
+	bh=gRcb9zLvElHXZtFmXPe9zupLvWQuZzujh+9iiVsBPh4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ju3bQnsD4MbRoBThXUmageuiqholHbCt5hOtpn8b2giUuAhnJ9GbYNxnIClxgH0+E
+	 RCDuc7sRvTT6Qxdx5ZwP2nhiSOcVr2YVvrYIdFvxBGrwQVGYQHkZT92PAR8omcq7eJ
+	 6ju/VvTuMecQxRivAVDkceF1UrWu9tI7k0tiNreINhSVNJAfnhws0HVoLKYFJGE2e6
+	 kCTRilci8KCS9f7fQ0phtH/fXSjGl9n96Rb+diZsI36ePLoNBO/Zkk2Cq3jlbEJXaX
+	 hWD1PyMf1/7RI+IE+/rKfEMjuJSUWg+LnvDeZTyv1VMSPn4E6+j+onfqxqL73MBxQp
+	 CpWJdOr0S2rRw==
+Subject: Re: [PATCH net-next v4 1/2] net: stmmac: fix TX coalesce race and
+ div-by-zero in XDP/legacy path
+From: netdev-bot+sashiko@kernel.org
+To: lorenzo.bianconi@oss.qualcomm.com
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, boon.leong.ong@intel.com, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Date: Mon, 05 Oct 2026 09:47:49 +0000
+Message-ID: <179119366947.434549.18258387588944949725@kernel.org>
+In-Reply-To: <20261001-b4-stmmac-xmit-mb-v4-1-664e0c3eb289@oss.qualcomm.com>
+References: <20261001-b4-stmmac-xmit-mb-v4-1-664e0c3eb289@oss.qualcomm.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261005-wq-poll-fix-v1-1-99ce4bac59f4@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MWwqAIBAAryL73YLaC7pK9NFjrYVQ0yghunvS5
- wzMPBApMEXoxAOBLo7sbAZVCJi30a6EvGQGLXWjpKzxPtC7fUfDCU3VzFW7TKORJeTCB8r6v/U
- weYOW0gnD+36q4uuHZwAAAA==
-X-Change-ID: 20261005-wq-poll-fix-f46c47dbaf03
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791193062; l=1776;
- i=thamrinjonathan@gmail.com; s=20261005; h=from:subject:message-id;
- bh=PyP8WYl7h3i0e+qMKJnBwJw8uVyt/3gufaH7HZJsx30=;
- b=MV6DKh4M8wIRsCymZTo6WYAbR9zbZOVVqYVtmlHYLJIaB7/jW35tryb2G0q1SP+BfBrIUpY+G
- ge/On1jAr9bD9u04c60PfH+kXWHItLZhUcQJ4hCqB++imEzQvYjlKZH
-X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
- pk=QU907bIMYty/tEI/iJF2SrD1lqOf/+2B1MI1zwJ5cBw=
-X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261005
- with auth_id=1114
-X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-Reply-To: thamrinjonathan@gmail.com
 
-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-wq test fails with ok_sleepable reading 0 instead of 2 as workqueue
-callback hasn't executed before check.
+Critical: 0 · High: 0 · Medium: 1 · Low: 0 (1)
 
-This happens as callback runs later on a kworker and 50us isn't always
-enough.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Change from 50us sleep to polling over 1s.
+- [Medium] The commit message says the stmmac_xdp_xmit_xdpf() divide-by-
+  zero is "only theoretical", but a privileged user can trigger it and…
 
-Before (usleep(50)): 3 fails out of 5000 runs
-Diagnosing issue (usleep(0)): 23 out of 100 runs
-After (Polling): 0 out of 5000 runs
-Tested using vmtest on x86_64, test pinned to one CPU with `yes` load
+Pre-existing issues:
+- [Low] __stmmac_set_coalesce() publishes tx_coal_frames[q] and
+  tx_coal_timer[q] as two separate stores and shares no synchronisation…
 
-Link: https://github.com/kernel-patches/vmtest/issues/455
+--
 
-Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/wq.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+net: stmmac: fix TX coalesce race and div-by-zero in XDP/legacy path
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
-index 84831eecc..b55d8547f 100644
---- a/tools/testing/selftests/bpf/prog_tests/wq.c
-+++ b/tools/testing/selftests/bpf/prog_tests/wq.c
-@@ -7,7 +7,7 @@
- void serial_test_wq(void)
- {
- 	struct wq *wq_skel = NULL;
--	int err, prog_fd;
-+	int err, prog_fd, tries;
- 
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
- 
-@@ -28,7 +28,13 @@ void serial_test_wq(void)
- 	ASSERT_OK(err, "test_run");
- 	ASSERT_EQ(topts.retval, 0, "test_run");
- 
--	usleep(50); /* 10 usecs should be enough, but give it extra */
-+	/* loop check over 1 sec to make sure it doesn't fail early when busy */
-+	for (tries = 1000; tries >= 0; tries--) {
-+		if (wq_skel->bss->ok_sleepable == (1 << 1))
-+			break;
-+
-+		usleep(1000);
-+	}
- 
- 	ASSERT_EQ(wq_skel->bss->ok_sleepable, (1 << 1), "ok_sleepable");
- clean_up:
+This patch wraps every access to tx_coal_frames[] in READ_ONCE() or
+WRITE_ONCE(), since ethtool writes the array while the TX fast paths read
+it without a lock. It also guards the modulo in stmmac_xdp_xmit_xdpf()
+against a zero tx_coal_frames[queue].
 
----
-base-commit: b5a4aa31abd6fe90009b63e35dc18c67d041ec0c
-change-id: 20261005-wq-poll-fix-f46c47dbaf03
+> Both issues were found by code inspection while extending the XDP TX
+> path with multi-buff support, and neither has ever been triggered, so
+> they are only theoretical. Tested on the Qualcomm RB3-gen2 board.
 
-Best regards,
+[Severity: Medium]
+
+Is the division by zero in stmmac_xdp_xmit_xdpf() really only
+theoretical?
+
+__stmmac_set_coalesce() only rejects the case where both values are zero:
+
+	if ((ec->tx_coalesce_usecs == 0) &&
+	    (ec->tx_max_coalesced_frames == 0))
+		return -EINVAL;
+
+So "ethtool -C ethX tx-frames 0" is accepted. tx-usecs keeps its default
+of STMMAC_COAL_TX_TIMER, and stmmac_ethtool_ops advertises
+ETHTOOL_COALESCE_MAX_FRAMES. After that, tx_coal_frames[queue] is 0.
+
+>From then on, before this patch, every XDP_TX verdict
+(stmmac_xdp_xmit_back()->stmmac_xdp_xmit_xdpf()) and every ndo_xdp_xmit
+redirect into the device would evaluate:
+
+	if (tx_q->tx_count_frames % priv->tx_coal_frames[queue] == 0)
+
+On x86, for example the dwmac-intel platforms that advertise XDP
+basic and redirect, this raises a divide error in NAPI softirq context.
+
+On arm64, UDIV with a zero divisor returns 0 instead of trapping. That
+may be why the RB3-gen2 board never hit it.
+
+CAP_NET_ADMIN can trigger this with standard tools. Could the commit
+message describe it as a reachable crash rather than a theoretical one?
+Would it also make sense to send the div-by-zero fix separately from the
+READ_ONCE()/WRITE_ONCE() annotations?
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
+> index 1cf0f8820b337..30e0d499326d8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
+
+[ ... ]
+
+> @@ -887,14 +888,14 @@ static int __stmmac_set_coalesce(struct net_device *dev,
+>  		int i;
+>  
+>  		for (i = 0; i < tx_cnt; i++) {
+> -			priv->tx_coal_frames[i] =
+> -				ec->tx_max_coalesced_frames;
+> +			WRITE_ONCE(priv->tx_coal_frames[i],
+> +				   ec->tx_max_coalesced_frames);
+>  			priv->tx_coal_timer[i] =
+>  				ec->tx_coalesce_usecs;
+>  		}
+>  	} else if (queue < tx_cnt) {
+> -		priv->tx_coal_frames[queue] =
+> -			ec->tx_max_coalesced_frames;
+> +		WRITE_ONCE(priv->tx_coal_frames[queue],
+> +			   ec->tx_max_coalesced_frames);
+>  		priv->tx_coal_timer[queue] =
+>  			ec->tx_coalesce_usecs;
+>  	}
+
+[Severity: Low]
+
+This is a pre-existing issue and was not introduced by this patch.
+tx_coal_frames[] and tx_coal_timer[] are still published as two separate
+stores, with no synchronisation against the TX path.
+
+Can a concurrent stmmac_xmit() see a mixed pair? Take a change from
+(frames=N, usecs=0) to (frames=0, usecs=U). The TX path could read the
+new frames value:
+
+	tx_coal = READ_ONCE(priv->tx_coal_frames[queue]);
+	...
+	else if (!tx_coal)
+		set_ic = false;
+
+It could then read the old timer value in stmmac_tx_timer_arm():
+
+	u32 tx_coal_timer = priv->tx_coal_timer[queue];
+
+	if (!tx_coal_timer)
+		return;
+
+That frame would then get neither an IC interrupt nor the completion
+timer. Its completion would wait for the next TX or NAPI activity on that
+queue. The same window exists for stmmac_tso_xmit() and
+stmmac_xdp_xmit_xdpf().
+
+READ_ONCE()/WRITE_ONCE() make each field consistent on its own, which is
+all the commit message claims. The window across the two fields is still
+there.
+
+[ ... ]
+
 -- 
-Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261001-b4-stmmac-xmit-mb-v4-0-664e0c3eb289%40oss.qualcomm.com
