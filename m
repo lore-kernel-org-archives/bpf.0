@@ -1,296 +1,258 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFFA469840
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 10:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791195139; cv=none; b=B/KIToro4CdHQYWIEKRrhLI8ZpylEkNJ81nS1bdFrkjU4LbjS96FyQ6rUjIr4vd/kwhieBd/H2fuBUP/z8j+oaQsigl9lwQJP8IDYVlJS0Cu/ZJORpBV2L8pXGRx0tF1elRgurdvTJy20HHD0dP9daZ40G1X8xjqRWsFyrSCsg0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791195139; c=relaxed/simple;
-	bh=29Ynm9Vz8sSrTkrm8NDeRK/xaPFNEqxziwHyw7DDe3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MiFUMWa4ZkJmiePzOx/cJx6GzS5e6lH6d2nz14sCMY86wkCNPs8lrpc3yIQpQj7huFtrKY11qS+1V+m9+TN3rGOPtGCC4PasdcNxn2h4Pa9Cojque3ZR9biyWDBmSGHaiLWkx8VZ5YxI/ivR/l++1IAEdVgOv7+6+DUeNzP3oao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HJspakl/; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=FRnzsBOX; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAFC468C07;
+	Mon,  5 Oct 2026 10:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791195847; cv=fail; b=YhoQC0AXw2a9yU6IA6kGZnaFbSXWnIHpKSf2hRikcYn75nyGIGVr4tTYTexZoidxdeKgRf0cv9IhvYvTi6YOuoF+SolOiPif27RF+jnmXLBGlv1qv4x9f/jSQ4R7bVX1Qje3xUbjHQKXY6orpBZNrmfNgv7r13Ck1XMUqTKGjLA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791195847; c=relaxed/simple;
+	bh=+XnLtXKHy0a1tKl1vvLLy4QcrX/3Jat22UXfFDhsOWM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=BjAFF0ZRBNL7tcatLJ5EaHGUYGSKAAG0zMqH7stVoWF2GtUYTn+M1mtLQQAto6PbJmIbiDMzaCVyCNgCLh1YoTHgOiA+jMrxOEROXhGEXMaz5vfhGlIdxCk+qjXEjQXIiDoo+WqZwUb52bsJn6C9f6GGUo/LVSG07+BzCwM5ZUw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cDFYcvmB; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HJspakl/";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="FRnzsBOX"
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6958xS4R1800268
-	for <bpf@vger.kernel.org>; Mon, 5 Oct 2026 10:12:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=wTpXd2xcXmR9jaqSnaJI/lPy
-	n8DKYRE9YWWV6/HaoMI=; b=HJspakl/D69qWYxop7Ch866rgarzmM6aBt1VrN/G
-	mcmGUKHdvQegqiobw9pjzMJyk88qynk/bAwRJ8hee69FbTgmQwjII0/kMv/4bHBi
-	yaO9LB4EE7bUhqLe6/Lp4U9zEi58ZoBb5+xJFk1dmWhi7VxQDwzH4eD7vyn0QkjG
-	DzgapdM/0CcFy+qFiD8mWVOWICllHIUFCwxj+ub9F8tixnifo0lg5M0+TiQKtK0j
-	V2Y42MEmZUtaVPGIAl0WC0p47TUY8agIlaLT/ihZPi+hvQquefxBqF5jiC3B/A2b
-	zLvU1/F2ib4w16ekdF5rLkklPU+ym0gdsIa0BnP/uw2lqA==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h2spa5f0g-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 10:12:16 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93a3f673221so358888585a.0
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 03:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1791195136; x=1791799936; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wTpXd2xcXmR9jaqSnaJI/lPyn8DKYRE9YWWV6/HaoMI=;
-        b=FRnzsBOXcpAu59qE6f6Gu6DD9r6Qck5A41lASAAz2vFd5lFM6MK8jcpzsQwhNN5x7J
-         WHmBBerYVyHc6LIoRD/5u/8+I9yd0nj3f1ptU8Rs35KkVgtuAcATTQ+0vHYY5RCT2Z7+
-         F2vGpToGYb4fTVJKWcuKzFQI9TG316otOa2r37lnd340v7dHJzM4i9Bv3pODmEOeEA23
-         TVfa9qHUFh05Tn8beu+Gg0aLllcwv9yEEkXeWbDtvDj2dxasjjOt57xnzNEXIKY8eWja
-         /BCoUm/Gyy3LXD2mshzKfdwooQzP8lZNOdvIWvRevYrwqJFK8xnFKYaaTZXE84v8mGoc
-         Tpcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791195136; x=1791799936;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wTpXd2xcXmR9jaqSnaJI/lPyn8DKYRE9YWWV6/HaoMI=;
-        b=LpaXAPSVjPQaeaJ5pw0roxpCqiqjKjOCX8yKGA7e7/slkCBWRrv079iz0+vM2Rg97a
-         jY76RCNRjlJrCk38oZFDa5E1VFp9ezleFmKsjlivpx7Nj+ljWFu0mi9oUOc43sgleVZu
-         V5xovuBlRm8kkwp5Hg7BY6GHErX0RFG5VjJGbIMZDqWTUNCuDC9D9T6k7fpy34LLuM3I
-         Jk4D+b+vaJVbBPvrkPn0hUZvtgnIPv7hzCji9Hy1aMjYOIENQookC+dMuM9FNGoiQR7x
-         WR65q2zzFy3p5yWuFKFs639y414am3gjBiimwOWAYEsl5H+DoZWsz5M4sZB+YtuXWVKv
-         z+xQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwvxpLNBQdeMqw0wP+1d6oRvjMRO9IK/zMkJE2vdRALYRTJ+4RVo7ami9xmE1yaDMxOXp8=@vger.kernel.org
-X-Gm-Message-State: AFuF++mxVO7iGbB8FAEQAHjcc+3Cst08NdhvDRD6v6/IX9j9l/fAYGQO
-	VMs0aVWqtw8Zg9x34cWh1F0+JrcEYykRc4F65iI/BddjkzBdL/euHBHYFmKUmgwR70Tp+wjg8ms
-	AS+T6c8pNT6LcZgR/PlwWLxF0YkazQAMA8Dwkv1DD5v67TvSySzs6d+A=
-X-Gm-Gg: AYBFou0kCWZIm1z0cLQWMwYDVrcIukkhpCqAAn1pGzx1JNCRxWrnhikcB6lFLDRvod1
-	KRP0E0v/7vstYOD7Ycc7fnCWS8mgl8HUTG18SErbGgBlO9C9FF/ywkPljM7B7OuBl/denDP1H/P
-	doKNTlBM3bDYQu5ZIqKu84wWi5L4eQMu4jBth4/axt3bqvtuchLuQTBEo3DuthDd7T7H7PC5psg
-	SoL0PA8vgyMe7JYPRkAh/JrFmMx9Vz8vKSmBGKSUuvF/QBt6Vf9Ri4pVZ8jIB3ROoY2rV0vHN/e
-	JhcCWQIfHc0K2aZkc9AChE7QM/Cv7YD1Wu/cprTv6meh4yAMwKGLKqe5l7XcUJ1WZ8UUY1OVu0i
-	IQRgOGyxa3++t4A==
-X-Received: by 2002:a05:620a:6f92:20b0:939:a834:98f2 with SMTP id af79cd13be357-93ce7c126d3mr1270433785a.15.1791195135297;
-        Mon, 05 Oct 2026 03:12:15 -0700 (PDT)
-X-Received: by 2002:a05:620a:6f92:20b0:939:a834:98f2 with SMTP id af79cd13be357-93ce7c126d3mr1270430585a.15.1791195134577;
-        Mon, 05 Oct 2026 03:12:14 -0700 (PDT)
-Received: from localhost ([188.216.77.92])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a162e867e8sm306620895e9.15.2026.10.05.03.12.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 03:12:13 -0700 (PDT)
-Date: Mon, 5 Oct 2026 12:12:12 +0200
-From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-        edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, sdf@fomichev.me, boon.leong.ong@intel.com,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v4 1/2] net: stmmac: fix TX coalesce race and
- div-by-zero in XDP/legacy path
-Message-ID: <asN3_ExreXflhcPN@lore-desk>
-References: <20261001-b4-stmmac-xmit-mb-v4-1-664e0c3eb289@oss.qualcomm.com>
- <179119366947.434549.18258387588944949725@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cDFYcvmB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791195846; x=1822731846;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=+XnLtXKHy0a1tKl1vvLLy4QcrX/3Jat22UXfFDhsOWM=;
+  b=cDFYcvmBsT+kxo7eazvXOuRxeunDdyJYMGLpj9Kcz2/ow9WIGn4v9mLx
+   0JKdyvHHVGexFf/ssW9cmX8GOY+IXEEEUL9lGYZHg7mdkL3jI+KDrfN/o
+   rpVHnQveoj4ixQ8IOWwrssgDCq2zhhARgl1t3aG30nRCoVT+HTqTt2/W7
+   t2HbfAgEUhoxMwpfNZlbm7kkUVe5L7deGm17B9BeRn7JYdF0aVLOYxxAC
+   L1gVqOgh8l7Q9xkNnod13WVAfeVrWEKod6YDh17CsruyA6q4lvZg3A4EE
+   rpSyZwcR6LsiYm42HooO18cI/3L7hisGr0CnJK6BJYEfnQrOVQ+Fbtwd9
+   A==;
+X-CSE-ConnectionGUID: r4Ivpe28R3WQXdmgo9hsSQ==
+X-CSE-MsgGUID: /AMitkNqRFGAo4C1BUbbVg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11925"; a="91887676"
+X-IronPort-AV: E=Sophos;i="6.27,141,1787036400"; 
+   d="scan'208";a="91887676"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2026 03:24:05 -0700
+X-CSE-ConnectionGUID: +hpH4t+wRfunGyMRouCzAA==
+X-CSE-MsgGUID: Q5u/9Qi5QmyxsUUBk7XCAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,141,1787036400"; 
+   d="scan'208";a="276877740"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2026 03:24:06 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Mon, 5 Oct 2026 03:24:04 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49 via Frontend Transport; Mon, 5 Oct 2026 03:24:04 -0700
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.61) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Mon, 5 Oct 2026 03:24:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=v+Dt5kEjnyXkhnlICnQyi9Or8t4i5GyPcuArRVsOhAtwvA1dMURNntO2FTKYT2J6SfHG2kqlAqEqqptxjxPWI1kYIz3RB2bLfJhbIrYiu+tXn4jOFpeUdSyYXcA0tht4wsCQfBFzgM/m77HsXtN8qQtsP+S92bwmGKXNOoOuqhJ3lANesz5N93Ibbvgy6QjxOCQYsbQTaaggP9CjWtKVvDG//mwqmmkdNLGMzI765i6h8XdQlFUyRbM/Nl8bSIXAfb0O+T8e+WSbW3/cKxmtL6NzNeabaHZDhzbBPpvZPDQVmLHwlvAZzJPdCipR8lecqQhscEPsf71w2WaUT7iuPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sn0/5C1CzW3urL2Gcasgyg0d4piD5GVdwUrrvIjhAXQ=;
+ b=Cr1jxiHJ0JnFPsN7nJqRrkwoFmGlm8RqRMddkkZntLzj/fwvzqTKTTWF6lUeYTzOB2jBinModsEgz0OLtmElWwymnjZUYU25Gcb2PLxlxxPG06rbmDBS3s2vvXu54usDI9u4+P8ex6qp2pcM2sI1zMpJziDAptn4ETnArOsGoi4qrZUvU/b7Tv0acUbPVzh+Cg6xGhyaKvepBVz6OPPvLZc/TQzqYNDR05jY01Veu8m3gEkC4mphPzcys7ii4amJwAHF6MlhvRxrfbVXw+MZdwYpjsfi74jq2vbVVJwXl0zYmtV3E2LqGjD5YzSiU+oJoGZ/LOX5ItKIyc6NCNGCLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
+ by MN6PR11MB8220.namprd11.prod.outlook.com (2603:10b6:208:478::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.16; Mon, 5 Oct
+ 2026 10:24:01 +0000
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c]) by IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c%6]) with mapi id 15.21.0472.016; Mon, 5 Oct 2026
+ 10:24:01 +0000
+From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+To: "Oros, Petr" <poros@redhat.com>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+CC: "Oros, Petr" <poros@redhat.com>, "Nguyen, Anthony L"
+	<anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
+	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Lobakin,
+ Aleksander" <aleksander.lobakin@intel.com>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Henry Tieman
+	<henry.w.tieman@intel.com>, Anirudh Venkataramanan
+	<anirudh.venkataramanan@intel.com>, Michal Swiatkowski
+	<michal.swiatkowski@linux.intel.com>, Jesse Brandeburg <jbrandeb@kernel.org>,
+	Preethi Banala <preethi.banala@intel.com>, Kiran Patil
+	<kiran.patil@intel.com>, Dan Nowlin <dan.nowlin@intel.com>, Stephen Hemminger
+	<stephen@networkplumber.org>, "intel-wired-lan@lists.osuosl.org"
+	<intel-wired-lan@lists.osuosl.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH iwl-net 01/10] ice: replay UDP tunnel ports after a core
+ or global reset
+Thread-Topic: [PATCH iwl-net 01/10] ice: replay UDP tunnel ports after a core
+ or global reset
+Thread-Index: AQHdUnCRlrRqvb+MEUGYh4NY7NdSrbbuwlkw
+Date: Mon, 5 Oct 2026 10:24:01 +0000
+Message-ID: <IA3PR11MB8986C71ECE278C137299773CE5962@IA3PR11MB8986.namprd11.prod.outlook.com>
+References: <20261002130752.2597259-1-poros@redhat.com>
+ <20261002130752.2597259-2-poros@redhat.com>
+In-Reply-To: <20261002130752.2597259-2-poros@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|MN6PR11MB8220:EE_
+x-ms-office365-filtering-correlation-id: 01d61a21-6ce6-45ad-b19e-08df22cac63f
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|23010399003|7416014|38070700021|56012099006|11063799006|10067099003|21046099003|18002099003|22082099003|4143699003;
+x-microsoft-antispam-message-info: m6+SyqoDZ+vMmuu1Gfhp9Tvo2dRN53iRrUtNgQ0AcwWOobSwilGLwXqJZvUjX+DOHxWZqyxBfI8h22/IVs+4OEozoM6nSOsJPWhbeF4n0rpjDFv4ao4732F33CAbjvc9Xg+RJ3v0UIMrUf7FGg8NbG3BYoHNvEVy14vXskz8VoB3vZAy67n6RbL3scz4tzVjNxeMeIKxFOrI4A8xxJbOyMQBut6My5RePyfGqQ0a15IOrlwTUEE9lZQ2ahKTHOydNOuAsZSQGLK3NjJQVPZzJ41Ns/5/qGPo8xKwdnbyl0IiGUqn5hRkUJivXNuG6sU89gzRJxTWvJ02O7gcuA8n56d9QBYfHxFEMab+fU1YOE+4J/MLbPjQGisDBEBrS6paqHdM/tYv3PlQBfApGhSUUXfqHbrC6eHYktBU16NX17TMMPIVOwORF4S/W64UixWjP6BHS9eeqj8lAQ1RlRAYg9c7XiAWoon42MLr4uZXYy//N6bRREwYlI2AOu/9GVsX7y864vuqaBziHUZB8JORLgxk8GBx4szp3vuXIZ4uCKCEA8VBzJbiyJUI/C2d9QTGfcmALxwyg6pm+ecnitN/Mdnjr1XrArvZCq41Wjm7b6VZOV6dAqIzGEI8KItUexWV0jQ0gej2yS/Fl1b7hHwDIYfNEouEBDQaJi+v7vFL5Goo1wlsnnjsKl0FkLL3sWFgGxJKs35+D9frxZLV0AviUfhMLwqIXQS6kDXs9vdj7Kw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(23010399003)(7416014)(38070700021)(56012099006)(11063799006)(10067099003)(21046099003)(18002099003)(22082099003)(4143699003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LWd4u0N6xK4IK+lsisRDnI43++ek5JuWOLE3hIH9nT97dmrGCzZlE7c7kycq?=
+ =?us-ascii?Q?Mt2T3C3nkCctJvFUxPCyKzK4RucFzHfDnE7+5JupvjLTRDYFL5ezeFAFWIfe?=
+ =?us-ascii?Q?wAO4IaRfvbsc619IWRukchFnNVVZeSRi6vBYMLxLKCdzK7y2hZ/CPaDZZJLL?=
+ =?us-ascii?Q?DQDDIVlUh/VRZ7wi2ZM+AZNXV2A3n+VE3kvx6AE70GiDjOu6UHkwnuXbxtZr?=
+ =?us-ascii?Q?PgA8iQCK1L3FtUqf1UpKHGsJVNjyrWqXjj4829LpEXT8VkGB6+UeLEMkU2Nr?=
+ =?us-ascii?Q?ia61RR/NwIY4nsbSV9yB1AT5sWneHaTOZAVlQr9biAIEcMsQBbGiU+l0La5U?=
+ =?us-ascii?Q?i73kqj2iCiKdMcqRJhTg36HTDiL/RPHKoxS8JGv6uHAc44xie82clL4KO4j2?=
+ =?us-ascii?Q?CRaZYxpy4iAFCavWrK5jyP0kwS3zEhDiZwyJa9USlks330qlJXZUfPylTKBW?=
+ =?us-ascii?Q?zdblArV2GhdSkariHSVQ0ZAy3YzGmJ/Xygtm9PjuQrIUBWDhzoQQIuqPxhm0?=
+ =?us-ascii?Q?5sQtuTVRyDDJcwnG0IUFRvmPvGVsqNb0zQLxzYa53lvMXfVitbq5BpntZWD3?=
+ =?us-ascii?Q?pHzlqAwHGBzOejlZEttlvNw0zU4Edgkyoz8D5KN+2rdGlGXMmNzhn8d07IQZ?=
+ =?us-ascii?Q?PCOJyGLDBKE0eVUpbPGsRyIXINe/yiIjnYewssS7BYPDFMnrYrmlq2elhDTI?=
+ =?us-ascii?Q?scvDmcKRtce2201/v5lb0RcQKmWKbzcf6Ko8WyQkTx4Bereta9mhMj38pYpV?=
+ =?us-ascii?Q?7X+ZCDbnYQd9KjYizW7YT07skE4BuERrLW7uKt/ETlQ6W0IvQuKDD4nt2QwS?=
+ =?us-ascii?Q?TmoidLrfJEcElu2HQyQ4KHi6V6cNUbDl18Oq2atEw8rtRzywqKG5GrK0k1P7?=
+ =?us-ascii?Q?Pn4ZdRlPWKHVnkqEo0iVfTYdoPg+ZCgyoj2wSU66oO1lZmLL+LYN5lZeECC6?=
+ =?us-ascii?Q?9gEPRcGKA9/jDx47X01pMw7WPoT8N7MndFky51Lj7BgtcI0VHyftkoTCSx45?=
+ =?us-ascii?Q?DOf75+PSv3YLE0ycnq00lDvaEHr9cfjO1A1P73uP0WxafAXB0NkN47awxFUt?=
+ =?us-ascii?Q?nEQ2IEsCigKDWx6IKbI7I5uAEg9WZ2dH7qjVMpgQX6BTfZDGkGNcUKna+ErG?=
+ =?us-ascii?Q?CnvARPE3IuivOQix7bccyb2qWVHVna2Oyw3WmuwVMzqJEWasCqOGjvxkLlZz?=
+ =?us-ascii?Q?QrtabhP6Cl6qrVf1j6jF/NjWtknBVuu8s6fmBuZb9vv4hRre+wtpQG8TIqgy?=
+ =?us-ascii?Q?XdW+0sWRH0SmY0Qi22hPNs6xhtmLTCm7JLoNR8fOSiJeTX6JD51J3xs39lxK?=
+ =?us-ascii?Q?/hOsokDhZk3Lel3xrsTufE5N45dZFR/B4LJqo4HtYnqo83iR/W5Q635ADaw7?=
+ =?us-ascii?Q?KxT06kEeLzXJkbvIrGa0LOKQCIjjuUVkozlwx4lOKLV5YNJgNtWYWKofw/TW?=
+ =?us-ascii?Q?pFpDzMDWvIjcefVuDo780Jv/Xv5OF8iG+w4FXtQoYuonhGD6p2aP0SsIKNs9?=
+ =?us-ascii?Q?IwkjD/EpnsNj4vSa5sQ5K4TapVhkLJG+i2Huougby5BKd6qsc6BkfOGajym+?=
+ =?us-ascii?Q?VBinsJVRDLnSkSorf6Satg4jTSR9xSWm2w8rz6YPoqkHuBYyGtR45KyfSq0g?=
+ =?us-ascii?Q?FO3BlM4+aOMUCC90w+3Bt6vrEJ+YxMOq9qACQWnCo65A2z4BAXKx7u27a/wL?=
+ =?us-ascii?Q?hbxZVW8qs+t2mvCJZet0ym5tFoD4QYtBJBIh9chNi/JbG0EV7+SoSnw+Kt7o?=
+ =?us-ascii?Q?+pd3++mMWkPUxJ2JBd2tVttCyxnSeqo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UfQjmt/PTQh8Ar59"
-Content-Disposition: inline
-In-Reply-To: <179119366947.434549.18258387588944949725@kernel.org>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA1MDAzOSBTYWx0ZWRfX5T46HVCH383n
- E0EI291eM2ljQjBaq0/8/nRTeAa8asm74e4/w2fkupX16EahaKp82swkQ3zI8oedPuAFXhCMor8
- cJAlsKVO2YNjgiTWpYMfQQmbBI0elI0O02evwGuvY7KLopvoZ6cfXJE+2xZEfg72Fm8K7+xezD2
- k7A0l6/CPugTrLPIjxaJTm/eXQY+I2Bd8zx76IJQXgI4Msn/rJZAnJbcqwPLwUjUZgbOktTV638
- mch3oh1m6e4S7OxCA04rxRvfMEksxmyZUGqlmjtnh6S9rrbvY7YFC8Ugwu52m8COMeeFrNCMjsj
- tRNBacO5LVvI8DfZyZI9FeBpYr5vymylV648MkXKujYdCyLVgy6/97weCKqi2OHpIlX2+udNNwb
- IxQF84TAYyP9NwvbyeB6x5hHvyYbiZi3kDT9iXBSAIACzElos2CbhPGlqsY4nKHu1TcdZX9mYek
- oKD/0pdVLLXkJVDR3wg==
-X-Authority-Analysis: v=2.4 cv=b7MncdGx c=1 sm=1 tr=0 ts=6ac37800 cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
- a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22 a=9R54UkLUAAAA:8
- a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=hMNoLFnnqX5p7295vMQA:9 a=QEXdDO2ut3YA:10
- a=UvE2pUckuqDNxODme40A:9 a=bTQJ7kPSJx9SKPbeHEYW:22 a=YTcpBFlVQWkNscrzJ_Dz:22
-X-Proofpoint-ORIG-GUID: Aa2fCwkeK7ap5LL7M1DydS_vBHrwPMtm
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA1MDAzOSBTYWx0ZWRfXxtprcdDF2Pdf
- G4SxF/6tY8ZuMaEFbA3zlmmtSentUog41Yg68SKjY/PAt94mn2UOwSNoN5b+PFjYWbzqDJM+Ov3
- B/18O3GLlMd+bCuA6G03jPUg9oPo9Yo=
-X-Proofpoint-GUID: Aa2fCwkeK7ap5LL7M1DydS_vBHrwPMtm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-05_01,2026-10-02_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 adultscore=0 clxscore=1015 phishscore=0
- bulkscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
- definitions=main-2610050039
+X-Exchange-RoutingPolicyChecked: a17mXO5/fozQckgzFXleLs5zM0VKckGapB3PE4vkg1iZN19a+L3Axj1VVwz8Au0CelzIl/NcNoTkLBrxD+y/QVSBpk6BcSSLgmUPw4fk+jXPncfH6+Lf/SxPp60wad1bFcNgtzq1Ck3opp9EWRZp+26Z7/01dutRq6wxcd6CdWoHzZr5+jwLDSLuzx9iXIErFzn7LyTeeLE0KrbgoM7s1wFM+UWGWcA/a4XDiQZKnh8EI2OixyWYa/oMUXJAKjM2zMu0NBxlzk6t9iKZsCgCznNBP0iw1NQLjG1YDoiMBhCQNlNKKlnz17H+Y3BBroleadNJpvqXaEn7FHdBrzArAg==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01d61a21-6ce6-45ad-b19e-08df22cac63f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Oct 2026 10:24:01.4208
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xVdJK0gFWu7cI6n+BjVZxWJpkdkxVUdebJFEXrH2zXjWw26PGB/Bn5H+trkDBQYmPicvQW1a9LXP/hRrZ2De+4z9YxGZxsi8sG52n9yGkvo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8220
+X-OriginatorOrg: intel.com
 
---UfQjmt/PTQh8Ar59
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Oct 05, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
+
+> -----Original Message-----
+> From: Petr Oros <poros@redhat.com>
+> Sent: Friday, October 2, 2026 3:08 PM
+> To: netdev@vger.kernel.org
+> Cc: Oros, Petr <poros@redhat.com>; Nguyen, Anthony L
+> <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
+> <przemyslaw.kitszel@intel.com>; Andrew Lunn <andrew+netdev@lunn.ch>;
+> David S. Miller <davem@davemloft.net>; Eric Dumazet
+> <edumazet@kernel.org>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
+> <pabeni@redhat.com>; Lobakin, Aleksander
+> <aleksander.lobakin@intel.com>; Alexei Starovoitov <ast@kernel.org>;
+> Daniel Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
+> <hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>;
+> Stanislav Fomichev <sdf@fomichev.me>; Henry Tieman
+> <henry.w.tieman@intel.com>; Anirudh Venkataramanan
+> <anirudh.venkataramanan@intel.com>; Michal Swiatkowski
+> <michal.swiatkowski@linux.intel.com>; Jesse Brandeburg
+> <jbrandeb@kernel.org>; Preethi Banala <preethi.banala@intel.com>;
+> Kiran Patil <kiran.patil@intel.com>; Dan Nowlin
+> <dan.nowlin@intel.com>; Stephen Hemminger
+> <stephen@networkplumber.org>; intel-wired-lan@lists.osuosl.org; linux-
+> kernel@vger.kernel.org; bpf@vger.kernel.org
+> Subject: [PATCH iwl-net 01/10] ice: replay UDP tunnel ports after a
+> core or global reset
 >=20
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0 (1)
+> A CORER, GLOBR or EMPR reloads the DDP package in ice_rebuild() and
+> ice_init_pkg_hints() clears hw->tnl, so every offloaded VXLAN and
+> GENEVE port is gone from both the boost TCAM and the driver table. The
+> udp_tunnel_nic core is never told about it and still considers the
+> ports programmed, so the Rx tunnel offloads silently stop working
+> after the reset. With VXLAN port 4789 offloaded, 64 flows that differ
+> only in the inner headers are spread over all six Rx queues of the
+> test port by RSS, after a CORER they all land in a single queue, the
+> same as without the port. Removing the port later trips the WARN_ON()
+> in
+> ice_destroy_tunnel() because its table entry is no longer valid:
 >=20
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
+>   WARNING: ice_flex_pipe.c:524 at ice_udp_tunnel_unset_port+0x56/0x280
+> [ice]
+>   ice 0000:04:00.3 enp4s0f3np3: Error removing UDP tunnel - -5
+>   ice 0000:04:00.3 enp4s0f3np3: UDP tunnel port sync failed port 4789
+> type vxlan: -5
 >=20
-> - [Medium] The commit message says the stmmac_xdp_xmit_xdpf() divide-by-
->   zero is "only theoretical", but a privileged user can trigger it and=E2=
-=80=A6
+> Call udp_tunnel_nic_reset_ntf() once the main VSI is rebuilt so the
+> core programs the ports again. A PF reset keeps the package and the
+> table, so it is left alone. No rtnl_lock is needed since commit
+> 1ead7501094c
+> ("udp_tunnel: remove rtnl_lock dependency").
 >=20
-> Pre-existing issues:
-> - [Low] __stmmac_set_coalesce() publishes tx_coal_frames[q] and
->   tx_coal_timer[q] as two separate stores and shares no synchronisation=
-=E2=80=A6
+> i40e fixed the same problem in commit 1f190d936948 ("i40e: Reprogram
+> port offloads after reset").
+>=20
+> Fixes: a4e82a81f573 ("ice: Add support for tunnel offloads")
+> Assisted-by: LLM
+> Signed-off-by: Petr Oros <poros@redhat.com>
+> ---
+>  drivers/net/ethernet/intel/ice/ice_main.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c
+> b/drivers/net/ethernet/intel/ice/ice_main.c
+> index 8c4b0fbc790644..f2121e79fca993 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_main.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
+> @@ -7859,8 +7859,11 @@ static void ice_rebuild(struct ice_pf *pf, enum
+> ice_reset_req reset_type)
+>  		ice_rebuild_arfs(pf);
+>  	}
+>=20
+> -	if (vsi && vsi->netdev)
+> +	if (vsi && vsi->netdev) {
+>  		netif_device_attach(vsi->netdev);
+> +		if (reset_type !=3D ICE_RESET_PFR)
+> +			udp_tunnel_nic_reset_ntf(vsi->netdev);
+> +	}
+>=20
+>  	ice_update_pf_netdev_link(pf);
 >=20
 > --
->=20
-> net: stmmac: fix TX coalesce race and div-by-zero in XDP/legacy path
->=20
-> This patch wraps every access to tx_coal_frames[] in READ_ONCE() or
-> WRITE_ONCE(), since ethtool writes the array while the TX fast paths read
-> it without a lock. It also guards the modulo in stmmac_xdp_xmit_xdpf()
-> against a zero tx_coal_frames[queue].
->=20
-> > Both issues were found by code inspection while extending the XDP TX
-> > path with multi-buff support, and neither has ever been triggered, so
-> > they are only theoretical. Tested on the Qualcomm RB3-gen2 board.
->=20
-> [Severity: Medium]
->=20
-> Is the division by zero in stmmac_xdp_xmit_xdpf() really only
-> theoretical?
+> 2.55.0
 
-with 'theoretical' I mean I spotted the issue with code inspection and I ha=
-ve
-never observed it in practice. I agree this is a real issue.
 
->=20
-> __stmmac_set_coalesce() only rejects the case where both values are zero:
->=20
-> 	if ((ec->tx_coalesce_usecs =3D=3D 0) &&
-> 	    (ec->tx_max_coalesced_frames =3D=3D 0))
-> 		return -EINVAL;
->=20
-> So "ethtool -C ethX tx-frames 0" is accepted. tx-usecs keeps its default
-> of STMMAC_COAL_TX_TIMER, and stmmac_ethtool_ops advertises
-> ETHTOOL_COALESCE_MAX_FRAMES. After that, tx_coal_frames[queue] is 0.
->=20
-> >From then on, before this patch, every XDP_TX verdict
-> (stmmac_xdp_xmit_back()->stmmac_xdp_xmit_xdpf()) and every ndo_xdp_xmit
-> redirect into the device would evaluate:
->=20
-> 	if (tx_q->tx_count_frames % priv->tx_coal_frames[queue] =3D=3D 0)
->=20
-> On x86, for example the dwmac-intel platforms that advertise XDP
-> basic and redirect, this raises a divide error in NAPI softirq context.
->=20
-> On arm64, UDIV with a zero divisor returns 0 instead of trapping. That
-> may be why the RB3-gen2 board never hit it.
->=20
-> CAP_NET_ADMIN can trigger this with standard tools. Could the commit
-> message describe it as a reachable crash rather than a theoretical one?
-> Would it also make sense to send the div-by-zero fix separately from the
-> READ_ONCE()/WRITE_ONCE() annotations?
->=20
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c b/dri=
-vers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
-> > index 1cf0f8820b337..30e0d499326d8 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
->=20
-> [ ... ]
->=20
-> > @@ -887,14 +888,14 @@ static int __stmmac_set_coalesce(struct net_devic=
-e *dev,
-> >  		int i;
-> > =20
-> >  		for (i =3D 0; i < tx_cnt; i++) {
-> > -			priv->tx_coal_frames[i] =3D
-> > -				ec->tx_max_coalesced_frames;
-> > +			WRITE_ONCE(priv->tx_coal_frames[i],
-> > +				   ec->tx_max_coalesced_frames);
-> >  			priv->tx_coal_timer[i] =3D
-> >  				ec->tx_coalesce_usecs;
-> >  		}
-> >  	} else if (queue < tx_cnt) {
-> > -		priv->tx_coal_frames[queue] =3D
-> > -			ec->tx_max_coalesced_frames;
-> > +		WRITE_ONCE(priv->tx_coal_frames[queue],
-> > +			   ec->tx_max_coalesced_frames);
-> >  		priv->tx_coal_timer[queue] =3D
-> >  			ec->tx_coalesce_usecs;
-> >  	}
->=20
-> [Severity: Low]
->=20
-> This is a pre-existing issue and was not introduced by this patch.
-> tx_coal_frames[] and tx_coal_timer[] are still published as two separate
-> stores, with no synchronisation against the TX path.
-
-as pointed out by sashiko, this is a pre-existing issue and it needs to be
-fixed with a dedicated patch.
-
-Regards,
-Lorenzo
-
->=20
-> Can a concurrent stmmac_xmit() see a mixed pair? Take a change from
-> (frames=3DN, usecs=3D0) to (frames=3D0, usecs=3DU). The TX path could rea=
-d the
-> new frames value:
->=20
-> 	tx_coal =3D READ_ONCE(priv->tx_coal_frames[queue]);
-> 	...
-> 	else if (!tx_coal)
-> 		set_ic =3D false;
->=20
-> It could then read the old timer value in stmmac_tx_timer_arm():
->=20
-> 	u32 tx_coal_timer =3D priv->tx_coal_timer[queue];
->=20
-> 	if (!tx_coal_timer)
-> 		return;
->=20
-> That frame would then get neither an IC interrupt nor the completion
-> timer. Its completion would wait for the next TX or NAPI activity on that
-> queue. The same window exists for stmmac_tso_xmit() and
-> stmmac_xdp_xmit_xdpf().
->=20
-> READ_ONCE()/WRITE_ONCE() make each field consistent on its own, which is
-> all the commit message claims. The window across the two fields is still
-> there.
->=20
-> [ ... ]
->=20
-> --=20
-> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
-set/20261001-b4-stmmac-xmit-mb-v4-0-664e0c3eb289%40oss.qualcomm.com
-
---UfQjmt/PTQh8Ar59
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCasN3/AAKCRA6cBh0uS2t
-rHGpAP4u5rsRmhyEgCWlJ1hLUiJ6poy7UiqYIcRNsGH2h4wwIgD/SAI26R14/nqi
-gX/DwdFmAvUo2UpQ/YeWx60UO70Togw=
-=Hpyz
------END PGP SIGNATURE-----
-
---UfQjmt/PTQh8Ar59--
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
