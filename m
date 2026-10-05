@@ -1,124 +1,106 @@
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-166.mta0.migadu.com [91.218.175.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5BC137923;
-	Mon,  5 Oct 2026 02:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C83260580
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 03:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791169155; cv=none; b=PGLA5PGfQBWXaoKYRk6gDa8QeRn1pmnS3qNhZoWcuHmVBnTvbzv4zKeHfGtnj+B5u9buhxuGXNYy6s2iJXLNbfgP1ztW0tFr86C2fK4GAR6TuRCYvkV3O7wc/HtbNFWhvkQzRPpLZ5NKhBPfFMc//D8GBlUIO0RFG6l6es7ySgM=
+	t=1791169850; cv=none; b=TfJm4gcU5wjRTPvZsxsGslHYgO2kcQtnYsLj3ov7SKDH9EQbJROp9TUP8SbQVqXxTEBxgJsRrQ9gYzKOOHakjwfhzaNdEGUQV+kJ+EpUFXA0CH3dvHo6S9UWSE8VrhUAkuDUszqJqahQklbZIzYNDKcj1wCpRGZVUoTiP7+gNjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791169155; c=relaxed/simple;
-	bh=Jfd1AEMy9MGLt026jCq56fe8IC+/6jnm9XiUU7CZEas=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=msLK6MhetO4UL6pdNAq6lP72Edzp2DsUZOqhzlgWZoiCR+smr0HYHUiWpcSExScC9Fs73/lAy/UzssVBEVQQJov2w/KNYfJZR56NBtbQMIGn0OgAjNEy414vDuJT393IAjrlInXeGoO8Dp0Sk/L6TWPuDeEylL1qHOSLzGDY1aQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=bOMJ3/Rw; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1791169850; c=relaxed/simple;
+	bh=X6h7tvpAdrFpkO+odF64DwkjPJ6152t0iAfzxo4AEfo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eM6FySGQA0fa9iwXjz5+O2ZYUry4bodUz1zL64srYdSbqAaGK00lFQlQp1kSKNBXPrJMbblBlw/sZ8jMQgDHEBOaUn+rrkLz6MXFft6tdZYIG+yjyvaGuxynPmN5YX4BOVKALB9SQb3QQ9Th8Wh3IfnpvGzNFrV22Cbri5COSpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ssH4mDS3; arc=none smtp.client-ip=91.218.175.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="bOMJ3/Rw"
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6950xHhE2705250;
-	Sun, 4 Oct 2026 19:58:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=Jfd1AEMy9MGLt026jCq56fe8I
-	C+/6jnm9XiUU7CZEas=; b=bOMJ3/RwcenwfiLHV3kNqEaWjsGvu8WQtsfAIHzea
-	N3wztVmeS3N2YywuK+ppkm+PCdZ/Y9vQcBRQTuwZRCNFYiQ+hKUsFF6GOuwOlBBr
-	Gbrs3bUmIrfurUxm+yD4Sj7KXlUgtw9yOfXT5m1rc+fQ+k5sjxFT5UD0zZDyzEr/
-	IodF09B2Bn6YJHrOx2rE8HQcsrNToOefu5GazpM/YQpDNN+dqOUFlsPnfA0vjX8K
-	wM+T8UmoJQFi/cQkRoMaQUIaOHhxIgcnAHAc+BiCq2mCYozPEbF1Za6jZioegH1D
-	Atp6Eu7DARi0eNrHu91n5JBQBPdU9kA0iEABHP6jrn9Gg==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4h2y2kweu0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 04 Oct 2026 19:58:29 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Sun, 4 Oct 2026 19:58:29 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Sun, 4 Oct 2026 19:58:28 -0700
-Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id D30DF5B6925;
-	Sun,  4 Oct 2026 19:58:23 -0700 (PDT)
-Date: Mon, 5 Oct 2026 08:28:17 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: David Laight <david.laight.linux@gmail.com>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <sdf@fomichev.me>, <sgoutham@marvell.com>
-Subject: Re: [PATCH v18 net-next 0/2] octeontx2: mqprio bandwidth offload for
- NIX TX schedulers
-Message-ID: <asMSSdIK6WBECcs_@rkannoth-OptiPlex-7090>
-References: <20260929022915.2704627-1-rkannoth@marvell.com>
- <20261002103752.006a7648@pumpkin>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ssH4mDS3"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=X6h7tvpAdrFpkO+odF64DwkjPJ6152t0iAfzxo4AEfo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791169845; v=1; x=1791774645;
+ b=ssH4mDS3ugiu5GEfdoOMbMKpt7HeCAchijKTwJrQM/5wS4cCy9tB/2Aff+jcFTKIe27jDVcb
+ CgtmmBtuRZlfqI+XXWpqMRyFGMXwHscikAVXxUNXLOQjICoS8xUqA4lIaQj2jwBjLLVaNd2Stoq
+ 724EkjTsCqaSSE5ICSYXZol8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a6876dbd3675bb7b;
+	Mon, 05 Oct 2026 03:10:22 +0000
+X-Mizu-Trace-ID: a6876dbd3675bb7b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7b661c7e-3d01-4361-8d0c-84c97866b404@linux.dev>
+Date: Mon, 5 Oct 2026 11:10:18 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20261002103752.006a7648@pumpkin>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA1MDAxMSBTYWx0ZWRfX9xRyfyvnIqfQ
- bnrt5sl0uLoplnIMQI7aIV9+StV864uNWPgCLazUO5AZsGIGUW4sTpX2LZfZEzhXk/WZmgPT1cz
- uWOmsnpQgXhC7ZuOI3iRd63hOf30sFzobpDdnUzav55PpLKLtORn5saVU10bLJ2ZmgSAFo4W8lY
- sUjaQEXCsMmWZ3+Cimdix80Y1l7ALUB8kUzO9/5AeUnsqBaSgrr1lbCzISQKCv2FOKPLE/vc1j1
- YdLVexDHZPKEKkTYJHd1R6oqDbJwrM+3yn5SYPC/mW3l1FnfF3TEl3/T2UmU9n92UZBxQ5ONXbS
- RhRsNsCiyqKvX/7WhMaOpFG7OdVujLlu5Gdr79nD4bXBCGpiuITLkG60PXXDcHSQSNNDYwj1IKv
- e5ezhK05lv8sHRCvKK4HcHdJIJ3LyBXGB1+86iaE151e7RQKaTnaolLdI7d/dip8tjyFjU/hMzH
- 6urZo9hwBKbKbkK1YuA==
-X-Proofpoint-GUID: qn-m0EM0LEDC6Y1OFMsCl585-Te4ABpb
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA1MDAxMSBTYWx0ZWRfX7LSIdgrHA3n1
- IYcNxHZQ6XpuYkbxN4ljRpM4mL3n3MPYkf6iLpH4O0kIIezfgE4yRNFRbZfE7+/aVl1cYTSEQcV
- LbwissAo0LApqnLrh9nzwd7Wqp9XYCc=
-X-Proofpoint-ORIG-GUID: qn-m0EM0LEDC6Y1OFMsCl585-Te4ABpb
-X-Authority-Analysis: v=2.4 cv=cctHPXDM c=1 sm=1 tr=0 ts=6ac31255 cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
- a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=l0iWHRpgs5sLHlkKQ1IR:22 a=EAYMVhzMl8SCOHhVQcBL:22 a=pGLkceISAAAA:8
- a=2DGdwQEehr7-gy0_57IA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-05_01,2026-10-02_02,2025-10-01_01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v4 1/3] bpf: Fix incorrect handling of user flags in
+ bpf_percpu_array_update
+To: Masoud Aghasi <maghasi@disroot.org>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev
+References: <20261004111007.3216186-1-maghasi@disroot.org>
+ <20261004111007.3216186-2-maghasi@disroot.org>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20261004111007.3216186-2-maghasi@disroot.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2026-10-02 at 15:07:52, David Laight (david.laight.linux@gmail.com) wrote:
-> > Patch 1 converts PF/VF and representor flag access to atomic bitops.
-> > Patch 2 depends on it for safe OTX2_FLAG_INTF_DOWN and OTX2_FLAG_PORT_UP
-> > updates on asynchronous mbox paths and during the mqprio netdev bounce.
->
-> Can't you just move those two flags to a separate structure member?
-> In at least one place the code separately clears one and sets the other.
-> That makes me think it should a a three-valued state not two bits.
->
-> That would save all the expensive locked operations.
+Hi Masoud,
 
-Thanks for your review.
+Please wait some time, say 24 hours, for human reviews before sending
+the next revision.
 
-I agree that atomizing the entire flags bitmap is broader than strictly required for the
-mqprio/mbox concurrency: the cross-CPU hazard is otx2_sync_flags_from_rep() doing a non-atomic
-read-modify-write on nic->flags while other CPUs update bits in the same word. Relocating
-OTX2_FLAG_INTF_DOWN and OTX2_FLAG_PORT_UP (or restricting rep sync so it cannot clobber those
-bits) would be a narrower approach than converting every OTX2_FLAG_* accessor to
-set_bit()/clear_bit().
+On 4/10/26 19:10, Masoud Aghasi wrote:
+> For BPF_MAP_TYPE_PERCPU_ARRAY map, bpf_percpu_array_update()
+> is not considering the possibility of a combination of
+> (BPF_NOEXIST, BPF_EXIST) flags with (BPF_F_CPU, BPF_F_ALL_CPUS) flags.
+> This causes the (BPF_NOEXIST, BPF_EXIST) flags to lose their effect
+> in some cases.
 
-On the three-valued model: INTF_DOWN and PORT_UP are not a single FSM in the driver today.
-INTF_DOWN reflects netdev teardown and is consulted from NAPI completion etc.
-PORT_UP is set and cleared from rep RVU_EVENT_PORT_STATE in the mbox up-handler and
-suppresses a duplicate carrier/queue bring-up in otx2_handle_link_event() when rep has already
-applied port state. Combinations such as INTF_DOWN set after otx2_stop() while PORT_UP remains
-set are deliberate, so folding the two bits into one enum would need a seperate work
-and review beyond this series.
+[...]
 
-please note that this restructuring feels somewhat orthogonal to the goals of the
-current series. Patch 1 focuses on replacing the non-atomic |=/&=~ operations on the
-stop/open and mbox paths with atomic bitops for INTF_DOWN/PORT_UP, which patch 2's netdev
-bounce depends on. The rep-flag sync behavior in otx2_sync_flags_from_rep() is a related but
-separate concern, and I'd prefer to address the lifecycle-bit layout and sync logic in a
-dedicated follow-up rather than expand the scope of this patch series.
+> @@ -438,7 +438,8 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+>  	u32 size;
+>  	int cpu, off = 0;
+>  
+> -	if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
+> +	if (unlikely((map_flags & BPF_EXIST) && (map_flags & BPF_NOEXIST)) ||
+> +	    unlikely((u32)map_flags & ~(BPF_EXIST | BPF_NOEXIST | BPF_F_CPU | BPF_F_ALL_CPUS)))
 
->
+Probably, we can add these two macros in include/linux/bpf.h.
+
+#define BPF_EXIST_FLAGS (BPF_EXIST | BPF_NOEXIST)
+#define BPF_CPU_FLAGS (BPF_F_CPU | BPF_F_ALL_CPUS)
+
+Then, this 'if' can be simplified to
+
+if (unlikely(((map_flags & BPF_EXIST_FLAGS) == BPF_EXIST_FLAGS) ||
+	     ((u32)map_flags & ~(BPF_EXIST_FLAGS | BPF_CPU_FLAGS)))
+
+Also simplify htab_map_check_update_flags() in the next patch by the
+same way.
+
+Thanks,
+Leon
+
+>  		/* unknown flags */
+>  		return -EINVAL;
+>  
+> @@ -446,7 +447,7 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+>  		/* all elements were pre-allocated, cannot insert a new one */
+>  		return -E2BIG;
+>  
+> -	if (unlikely(map_flags == BPF_NOEXIST))
+> +	if (unlikely(map_flags & BPF_NOEXIST))
+>  		/* all elements already exist */
+>  		return -EEXIST;
+>  
+
