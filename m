@@ -1,140 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F93843C058
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 09:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2149445560E;
+	Mon,  5 Oct 2026 09:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791192507; cv=none; b=hks+6ZOmtfcEyXHEKkz9A87zF2vE55niJ9woxpPtAnGEugX0lRJ6vglRUryXR/BBeTkGGpRXi/OC7cg4xBHvBjj6QYBqjt0Rq+ttIg6iOuNIRz90mrU/yeQObOnnmJds3bqjk0/nA6e6reuv7O2penfgm6y3GtI8vvnSs90QLb4=
+	t=1791193065; cv=none; b=YbCfTpfGeZB/IPSixLhYSHhj17NkhQy9PiwNHwb2z25QjRDEY00HCixJWd05093uVrWAD3VPXOFdsBO1Q62yMCvYcLHsF5URQrKCqAAl3DDT/hQ1Yhdr+Hn69mm6S9yLmkoLhpt9IDNqH6oG1pzXz+/XHofO9PZpn7PV9YcAAgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791192507; c=relaxed/simple;
-	bh=84RHb2yCb+9ZDQMEgbxigFo21wK5qUFCyTRf+s0j588=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BD95GuxNXNqzu+ovBA4jp1MjWutq7qX+rt0HdDV3OhZMUL9syPRDX+YcCWIeRjo9uMae6ibdSh+21+DOSXBfH5M1EZ9WVBb18lEZ6WOLvOVcgm9iD4BcTMTt7iJIbmVoMuckmsz7hbegAYAeWFXRy/AxOjP5aBbyfRgn4coxMjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J+wln9TF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791193065; c=relaxed/simple;
+	bh=wJRcErGmmgxqQicRwNkQHCxmUcyx2m11gOVwZNpW3Iw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pknKQhPI//FagvERGnQKgg8WmKMipmLPxNtqvKNDlVyPvbCulSh5ejP8664r0KQ5/w6fUgczF/wioCdqzsoEl+AX8tgYW8yFkzR7TKxNS9ABQQwkuNbM0X7QlOcHKkWKAjpMaDqDXfyw0SF85KHx71n8NcTwimnwVsOBaBAoEYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVizt7DS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J+wln9TF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC511F000FF;
-	Mon,  5 Oct 2026 09:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791192506;
-	bh=uJOTMVr6JIHo8Q8ETbx8Ett7aDV6pwSHA9X67nSRYn4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=J+wln9TFy25WnLdfviMdK3McpOc/DfKZRASqxGW0dgs/F0DPt/fPEhQMS7EufrYfe
-	 UB28EdIyeN7HEEHrhsFESnJpoNKqLYAK6M9fzeP6uVcZRR8IP3Kcrmpn4eaYFHc7Pv
-	 l8Vto0mdx2eee3PVFOfFSfPKuCssuIs1ueWMI/97c0uamSJ+Di1O5V5UEHIlu1omzQ
-	 sCEiGbuclwBMhyy9eXO0Vmfx07WsOI9k7a70LvlgKIL9WryL2escvC8J7rTvdzG37M
-	 ID04aaM1lEL8zCq7Hxz03H5D2zYnC4TGxLTSQ7Fl2+57cda8TtgTJCKt/7fEEczwZg
-	 x2+d5lB5/yYuQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 4/5] soundwire: amd: Add BRA/BPT firmware download
- support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Syed Saba Kareem" <syed.sabakareem@amd.com>
-Cc: bpf@vger.kernel.org, dri-devel@lists.freedesktop.org, media-ci@linuxtv.org
-In-Reply-To: <20261005091620.1390916-5-syed.sabakareem@amd.com>
-References: <20261005091620.1390916-1-syed.sabakareem@amd.com>
- <20261005091620.1390916-5-syed.sabakareem@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 05 Oct 2026 09:28:25 +0000
-Message-Id: <20261005092825.BFC511F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVizt7DS"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4578C2BCC7;
+	Mon,  5 Oct 2026 09:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1791193064;
+	bh=wJRcErGmmgxqQicRwNkQHCxmUcyx2m11gOVwZNpW3Iw=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=aVizt7DSmad9nrbrS8y8zULrUXK9u7O32U9F7avM9590fygXTDsPbWGtdCpIra2Gw
+	 i5g0eb/MF0Ab7I9riqka7mS5jaLRYp8/qoHTH8M+8A90BFxHfSte2WJVThk5ptasQc
+	 Mfzzh7V7qgqZvnv9bb7VJcEyr7OCoIGMD2AcoMullTG+3TwY2YVtSF5Wx9cnn1ram5
+	 giaS8KFGpVKn60Vgk6j1epBUBMgi0/JvsxfZ7TGKCE/xEKuxvqTEfQtEDnMMA4W6+K
+	 2pE4vTZr0Xs7DmUApzqmC0psDCNKPV0NQ/Ozxo/u7M8Om3G8aq2pqSHS4kNh/OMoJL
+	 8rg24A9TaxJ2Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D021BCA5FF0;
+	Mon,  5 Oct 2026 09:37:43 +0000 (UTC)
+From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
+Date: Mon, 05 Oct 2026 16:37:40 +0700
+Subject: [PATCH bpf-next] selftests/bpf: Fix wq test by changing 50us sleep
+ to polling over 1s
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261005-wq-poll-fix-v1-1-99ce4bac59f4@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MWwqAIBAAryL73YLaC7pK9NFjrYVQ0yghunvS5
+ wzMPBApMEXoxAOBLo7sbAZVCJi30a6EvGQGLXWjpKzxPtC7fUfDCU3VzFW7TKORJeTCB8r6v/U
+ weYOW0gnD+36q4uuHZwAAAA==
+X-Change-ID: 20261005-wq-poll-fix-f46c47dbaf03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791193062; l=1776;
+ i=thamrinjonathan@gmail.com; s=20261005; h=from:subject:message-id;
+ bh=PyP8WYl7h3i0e+qMKJnBwJw8uVyt/3gufaH7HZJsx30=;
+ b=MV6DKh4M8wIRsCymZTo6WYAbR9zbZOVVqYVtmlHYLJIaB7/jW35tryb2G0q1SP+BfBrIUpY+G
+ ge/On1jAr9bD9u04c60PfH+kXWHItLZhUcQJ4hCqB++imEzQvYjlKZH
+X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
+ pk=QU907bIMYty/tEI/iJF2SrD1lqOf/+2B1MI1zwJ5cBw=
+X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261005
+ with auth_id=1114
+X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Reply-To: thamrinjonathan@gmail.com
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] soundwire: uninitialized pointer dereference of acp_bra_wedged
---
+From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 
-commit bce4ebb14d16cc86a99aa8e0be380048484eab35
-Author: Syed Saba Kareem <Syed.SabaKareem@amd.com>
+wq test fails with ok_sleepable reading 0 instead of 2 as workqueue
+callback hasn't executed before check.
 
-soundwire: amd: Add BRA/BPT firmware download support
+This happens as callback runs later on a kworker and 50us isn't always
+enough.
 
-This commit adds Bulk Register Access (BRA) and Bulk Payload Transport
-(BPT) support for AMD SoundWire platforms. This enables high-speed
-firmware download to SoundWire peripherals via DP0, using the ACP BRA
-DMA engine.
+Change from 50us sleep to polling over 1s.
 
-> diff --git a/drivers/soundwire/amd_init.c b/drivers/soundwire/amd_init.c
-> index 8e419ddfa5161..00f4a87da7cbc 100644
-> --- a/drivers/soundwire/amd_init.c
-> +++ b/drivers/soundwire/amd_init.c
-> @@ -120,6 +120,7 @@ static struct sdw_amd_ctx *sdw_amd_probe_controller(s=
-truct sdw_amd_res *res)
-> =20
->  		sdw_pdata[index].instance =3D index;
->  		sdw_pdata[index].acp_sdw_lock =3D res->acp_lock;
-> +		sdw_pdata[index].acp_bra_lock =3D res->acp_bra_lock;
->  		sdw_pdata[index].acp_rev =3D res->acp_rev;
->  		pdevinfo[index].name =3D "amd_sdw_manager";
->  		pdevinfo[index].id =3D index;
+Before (usleep(50)): 3 fails out of 5000 runs
+Diagnosing issue (usleep(0)): 23 out of 100 runs
+After (Polling): 0 out of 5000 runs
+Tested using vmtest on x86_64, test pinned to one CPU with `yes` load
 
-[Severity: High]
-Does this code miss initializing the acp_bra_wedged field in sdw_pdata?
+Link: https://github.com/kernel-patches/vmtest/issues/455
 
-Since sdw_pdata is allocated on the stack and not zero-initialized, this le=
-aves
-the acp_bra_wedged pointer containing stack garbage.
+Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/wq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_mana=
-ger.c
-> index a3316efdf8ac2..078e13b01ac97 100644
-> --- a/drivers/soundwire/amd_manager.c
-> +++ b/drivers/soundwire/amd_manager.c
-[ ... ]
-> +static u32 amd_sdw_bra_configure_pte(struct amd_sdw_manager *amd_manager,
-> +				     dma_addr_t dma_addr, size_t size)
-> +{
-> +	u32 num_pages =3D (u32)(PAGE_ALIGN(size) >> PAGE_SHIFT);
-> +	u32 low, high, val;
-> +	u16 page_idx;
-> +	dma_addr_t addr =3D dma_addr;
-> +
-> +	if (*amd_manager->acp_bra_wedged) {
+diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
+index 84831eecc..b55d8547f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/wq.c
++++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+@@ -7,7 +7,7 @@
+ void serial_test_wq(void)
+ {
+ 	struct wq *wq_skel = NULL;
+-	int err, prog_fd;
++	int err, prog_fd, tries;
+ 
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts);
+ 
+@@ -28,7 +28,13 @@ void serial_test_wq(void)
+ 	ASSERT_OK(err, "test_run");
+ 	ASSERT_EQ(topts.retval, 0, "test_run");
+ 
+-	usleep(50); /* 10 usecs should be enough, but give it extra */
++	/* loop check over 1 sec to make sure it doesn't fail early when busy */
++	for (tries = 1000; tries >= 0; tries--) {
++		if (wq_skel->bss->ok_sleepable == (1 << 1))
++			break;
++
++		usleep(1000);
++	}
+ 
+ 	ASSERT_EQ(wq_skel->bss->ok_sleepable, (1 << 1), "ok_sleepable");
+ clean_up:
 
-[Severity: High]
-Can this dereference an uninitialized pointer and cause a kernel oops or pa=
-nic?
+---
+base-commit: b5a4aa31abd6fe90009b63e35dc18c67d041ec0c
+change-id: 20261005-wq-poll-fix-f46c47dbaf03
 
-When a BRA firmware download transfer is requested via amd_sdw_bpt_wait(), =
-it
-calls amd_sdw_bra_configure_pte() where *amd_manager->acp_bra_wedged is
-dereferenced.=20
+Best regards,
+-- 
+Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 
-Because the field wasn't initialized in sdw_amd_probe_controller(), this wi=
-ll
-dereference an invalid stack address.
 
-> +		dev_err(amd_manager->dev,
-> +			"BRA engine previously wedged; refusing to reprogram shared ATU PTEs\=
-n");
-> +		return 0;
-> +	}
-[ ... ]
-> @@ -1081,11 +2359,16 @@ static int amd_sdw_manager_probe(struct platform_=
-device *pdev)
->  	amd_manager->mmio =3D amd_manager->acp_mmio +
->  			    (amd_manager->instance * SDW_MANAGER_REG_OFFSET);
->  	amd_manager->acp_sdw_lock =3D pdata->acp_sdw_lock;
-> +	amd_manager->acp_bra_lock =3D pdata->acp_bra_lock;
-> +	amd_manager->acp_bra_wedged =3D pdata->acp_bra_wedged;
-
-[Severity: High]
-This assigns the uninitialized stack garbage from pdata to
-amd_manager->acp_bra_wedged.=20
-
-Should sdw_amd_probe_controller() be updated to properly initialize=20
-sdw_pdata[index].acp_bra_wedged before copying it here?
-
->  	amd_manager->acp_rev =3D pdata->acp_rev;
->  	amd_manager->cols_index =3D sdw_find_col_index(AMD_SDW_DEFAULT_COLUMNS);
->  	amd_manager->rows_index =3D sdw_find_row_index(AMD_SDW_DEFAULT_ROWS);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261005091620.1390=
-916-2-syed.sabakareem@amd.com?part=3D4
