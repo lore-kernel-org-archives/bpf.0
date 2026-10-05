@@ -1,109 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BCB407CF1;
-	Mon,  5 Oct 2026 23:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C6A374A0E;
+	Mon,  5 Oct 2026 23:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791243615; cv=none; b=WxPmDcvF5j/jB2rtTDpQ8X9KVJpEc/ArsK6CJqb+nlrmTSMGSEh54NvqAt90kq/91u+Seq2YCsNNOlagJD4FCiNP8Zsqgu2B6ziaOEc1HjyZQswjsDnlCmupC2tBz/yIL4p54eim4q/ig9pYc3QTIMl5d1jq8CXz3JD5kKecJJM=
+	t=1791243802; cv=none; b=MuQE6MafKHsPwCeiq8MVAD+Std/6GHmrEbJIj2H/u+oK8wfiwD64zf3UMcUG94bjcIZW2HWZXHB9EUdFoiUyGZukV5O5a4Vhl+8RQ9pEuKJifJw0mz3dOy/2MeJH5H8oXd3rK0Z5lo4ft+ToX/7L+fHio+2pan4a7shVoN8Bd5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791243615; c=relaxed/simple;
-	bh=AbcvKULNONvuc+S43VLsDin5gF5ZUyDCXAIyZ9/90Hs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=h6GYHumZ+FHoILaKY+SEGUxz5FZlPMggdva5UB+6aDJyPIs3kBdpRnmk3wsxV7cMxd83xfH87J+V5W1kOLrWRYEWVfiMaFdyFEf+BsP8EOKTpVU53pwgrPb2W1H25GWV0LnPTejQdgWhLGurUY4wMRx4qh5/ufZ2nb+riTgUsLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mznSyvN2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791243802; c=relaxed/simple;
+	bh=9DEhj3E2Z2okJQt/crAHUr/v9cEfQDABwJkEAZASsK0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=OVOtAyPzUv8zmUa06RgjviOX27Lrz1lUIzOz9rosmOTmiVrRZSpkmpQ+qmktOkMw1C8mXWUPGX7RN8CEEcYKxSbBvPhkwl46m8F6vx4AeJIx2fQJUGXfIMf6qnHZBhrjsmHq1XO1ecAXQqvxQTD8apeyCCfIpiZJWLsmw7Sdgy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHZDxiuE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mznSyvN2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2F91F000FF;
-	Mon,  5 Oct 2026 23:40:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHZDxiuE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465491F000FF;
+	Mon,  5 Oct 2026 23:43:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791243613;
-	bh=uy9SnCApjJ7biyLuvnHLy3sJnW5JMrQVnkIiOTWAsVo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=mznSyvN2Ck/Dj2CPK38qOTrUpoJfkVPgMlZ/UTd2qM/ZJnka74+O2AxKK+zAwYxyQ
-	 ii1xK2MjqwwB9HWX4eV7i9szMRGw1jEdbb2Oaw2gfObcRswv7NKWDQjk0yXGpLetXQ
-	 2R+0+WD19R36pf6K3T/8kDtMj45RzYRI9OxZsICKRyw/baOGQtFzBdTu3PKW7rjVfM
-	 P8sp9yOf4gpSrB7Xw0/0CUuwjFnftKs4PGlowoxdIgvy5qAfSe1jpq20yOjtWPb3rX
-	 SaphTGayDi9UWKdSzLBw+1p+7P1U6JTszQEY4iuP7WHIW/j6e6hhv5L+fr3auGevoG
-	 RzxiRU95EmiDQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43B2392667F;
-	Mon,  5 Oct 2026 23:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1791243801;
+	bh=zxf0bLE4pWJCsdbiay9wtqu5N/mppcBbaXd1zM7Bf5Y=;
+	h=Date:From:To:Cc:Subject:In-Reply-To;
+	b=NHZDxiuEAQHT71RANR9YkRmn9Cz1QGeAO0R347lZlOwalZUPOTOCo8x4fXxPvRQVs
+	 qHXlPdFOXKWNzA55IqHpI0V6KVYZpZoftBbU22rSDv/LfUuGIrbpYXmN5+NlPYjLlm
+	 z2zjpvoHS1IRtHMUQSjwWUGwjq3mwg4zdJ8fwGMYIs3xU9dB1sJqjER7uEC1xquwYs
+	 970ocnssRejCzuc8NDwh+aULypn85kfdnrLClU+HPT0Qhd1GLRTfvwIYKkjQeclcV3
+	 nt4k0MF2A2MXbWrpee1SC1lHT+dqidu50IZsayWLrPoSvgkrXWTkOra688kKk3ln3R
+	 MqioahbxsbmMg==
+Date: Mon, 5 Oct 2026 18:43:20 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Nikola Prica <nikola.prica@amd.com>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the
+ pci-current tree
+Message-ID: <20261005234320.GA648423@bhelgaas>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v9 00/12] gve: AdminQ mode related refactors
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179124361227.1939764.8129284780606998603.git-patchwork-notify@kernel.org>
-Date: Mon, 05 Oct 2026 23:40:12 +0000
-References: <20260930190428.1130007-1-hramamurthy@google.com>
-In-Reply-To: <20260930190428.1130007-1-hramamurthy@google.com>
-To: Harshitha Ramamurthy <hramamurthy@google.com>
-Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com,
- willemb@google.com, nktgrg@google.com, maolson@google.com,
- thostet@google.com, jacob.e.keller@intel.com, debarghyak@google.com,
- kees@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- przemyslaw.kitszel@intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <asAylbswc5WRADZ2@sirena.co.uk>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 30 Sep 2026 19:04:16 +0000 you wrote:
-> This series is preparing the driver for the addition of a new control
-> plane mode(MailboxQ) by commonizing and reusing as much code as possible.
-> MailboxQ is a new control plane infrastructure which uses mailbox queues.
-> This is a new control plane to communicate with the device when the driver
-> is running on bare-metal instances as well as newer versions of the device.
+On Sat, Oct 03, 2026 at 12:39:17AM +0200, Mark Brown wrote:
+> Hi all,
 > 
-> This series contains 2 main changes to the gve driver's existing control
-> plane(AdminQ):
-> 1) refactor some initialization/teardown path methods to make it work for
->    both control planes.
-> 2) add gve_ctrl_ops structure to the driver for various control plane
->    operations
+> Today's linux-next merge of the bpf-next tree got a conflict in:
 > 
-> [...]
+>   drivers/pci/pci.c
+> 
+> between commit:
+> 
+>   97958feb6560b ("PCI: Accept AtomicOps already enabled by the hypervisor")
+> 
+> from the pci-current tree and commit:
+> 
+>   40cce45b921f7 ("PCI: Accept AtomicOps already enabled by the hypervisor")
 
-Here is the summary with links:
-  - [net-next,v9,01/12] gve: add struct gve_device_info to hold device properties
-    https://git.kernel.org/netdev/net-next/c/130634764549
-  - [net-next,v9,02/12] gve: introduce control plane operations structure
-    https://git.kernel.org/netdev/net-next/c/d6194e4eaff9
-  - [net-next,v9,03/12] gve: introduce ctrl ops to set vectors and Qs
-    https://git.kernel.org/netdev/net-next/c/d320436137b7
-  - [net-next,v9,04/12] gve: introduce gve_adminq_get_device_properties()
-    https://git.kernel.org/netdev/net-next/c/a01cb6b77e9a
-  - [net-next,v9,05/12] gve: refactor gve_init_priv for reset path
-    https://git.kernel.org/netdev/net-next/c/fd1e72e09661
-  - [net-next,v9,06/12] gve: simplify reset logic
-    https://git.kernel.org/netdev/net-next/c/23b3b49d204b
-  - [net-next,v9,07/12] gve: add gve_ctrl_ops for gve initialization/teardown sequences
-    https://git.kernel.org/netdev/net-next/c/5914443d971b
-  - [net-next,v9,08/12] gve: split up notify block allocation and setup paths
-    https://git.kernel.org/netdev/net-next/c/fed9970a6550
-  - [net-next,v9,09/12] gve: introduce new methods to handle IRQ doorbells
-    https://git.kernel.org/netdev/net-next/c/5bc0c9796787
-  - [net-next,v9,10/12] gve: setup and teardown management interrupts
-    https://git.kernel.org/netdev/net-next/c/5e86cf5e2f24
-  - [net-next,v9,11/12] gve: add ctrl ops for queue operations
-    https://git.kernel.org/netdev/net-next/c/71f905f14b83
-  - [net-next,v9,12/12] gve: add link status/speed ctrl ops
-    https://git.kernel.org/netdev/net-next/c/bbe522b0f237
+This fixes a regression, so 40cce45b921f7 ("PCI: Accept AtomicOps
+already enabled by the hypervisor") is already upstream in v7.3-rc6.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+97958feb6560b no longer exists in pci-current.
+
+> from the bpf-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --combined drivers/pci/pci.c
+> index 62729ade496fc,8cc6a89130b53..0000000000000
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@@ -3770,10 -3770,13 +3770,10 @@@ int pci_enable_atomic_ops_to_root(struc
+>   
+>   	root = pcie_find_root_port(dev);
+>   	if (!root) {
+>  -
+>   		/*
+>  -		 * A hypervisor may expose a topology with the root port
+>  -		 * not visible to the guest.  If the hypervisor has already
+>  -		 * set AtomicOp Requester Enable in the endpoint, we assume
+>  -		 * it has verified support in the root port, so it is safe
+>  -		 * for the driver to use AtomicOps.
+>  +		 * A hypervisor may expose a headless topology with no
+>  +		 * visible root port.  If it has already set AtomicOp
+>  +		 * Requester Enable, there is nothing more to do.
+>   		 */
+>   		pcie_capability_read_dword(dev, PCI_EXP_DEVCTL2, &ctl2);
+>   		if (ctl2 & PCI_EXP_DEVCTL2_ATOMIC_REQ)
 
 
