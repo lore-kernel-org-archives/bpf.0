@@ -1,86 +1,36 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-91.mta1.migadu.com [95.215.58.91])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0E947F3C0
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 12:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2428647F3D1
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 12:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791201847; cv=none; b=YZGny/VSsQqfxBp8MPl0dgHuTg8nM73vU1xilkQw/11eTxaAl5lPnsiMAu2K4dq0jepCOVc4DN5bGW1FXjO4/zicfta90l1B7Nk2zHt2L8AVAeIKY3AxExpAX6frHRIr2bNmZVV0toEYG9OrXp+tWfgn9bSmW/hM75t1+sj+Cpk=
+	t=1791201949; cv=none; b=RH1Pmk1yY53xMLgDvRzBtLTBVGMGq41WkWiMgCUXgz8gIzyS43xJgGRsrk/vLYnL1xMJPCGMnNm0GHGemvKBpD7EL4J8lYn0kZqBzL3vm1vm7qemu9LfWV4kLUpRf3KDZLzFcAr43DprYR4ZJL5ZoPg4Znb11L5ZZuJyI19sfO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791201847; c=relaxed/simple;
-	bh=haygrbUGZc/yuuLx+pcROb+Rr2PyaZWebOApPN6gcno=;
+	s=arc-20240116; t=1791201949; c=relaxed/simple;
+	bh=acbEeQhquoGSRxYyHz2eRogK/T8TZ+zuOZdfsYzddOE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SkhJIIitDlZt+eCjkHSDPLaO23vInoBPOyLjq8IqivV2f2pIVcmwZGU5kRwaRIzHZ2lmbxjhBN4onuiYUkXz67/HDuj/94ULaRQKrz+wa/z1oJQFxMm6ngsvAyltlF5foAYhssEk9EBvK++b9zfBJOkNh5mdsms7buGc/LlY5Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FlfqY/SK; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=eGHlgj7i; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=No3pe8iUDrY0KByHnnQkuR903D5c5Q5XFKRFqDq2+zQgeQT/N1QOxqpw2F8fgkE8vRRQ/SFOHhQnWyd5AtIVsWoBRhZQvBhQebJ2deKuNPLroAn1A2CM76wo3Fz+IVYwT4YMhzuv5ZbdUdxfie6i+8RihbrT8YanUcaEStRQMkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oFWbTtHy; arc=none smtp.client-ip=95.215.58.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FlfqY/SK";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="eGHlgj7i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791201843;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vhQoza2mV1Z+1STVDq8chd2IZUgXS0fGFoZOu7nkEJQ=;
-	b=FlfqY/SKdtJVrkhANBi4UXlojkp8gTj81iF5bZGnOPT3DwH3h+ebN43w2pdFXeFGl0esE6
-	G3At9sfBxBGUHvn7CGNbnso7tVX3ZVgu6zMZdZ/0XNr17xvPZ4yJOvCogkjjijofAVuTru
-	/qL76AybzRPhU/K0aVWms8MrKoBvHjo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-477-VI_9CBFyNcS-QvMBo-QJ2w-1; Mon, 05 Oct 2026 08:04:02 -0400
-X-MC-Unique: VI_9CBFyNcS-QvMBo-QJ2w-1
-X-Mimecast-MFC-AGG-ID: VI_9CBFyNcS-QvMBo-QJ2w_1791201841
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a168a8209fso14505345e9.0
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 05:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1791201841; x=1791806641; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vhQoza2mV1Z+1STVDq8chd2IZUgXS0fGFoZOu7nkEJQ=;
-        b=eGHlgj7iAGg8QoFPi3hL21AEBUaXj8j5UL8fR46PNU96K64Xc+kTajcDh3XTZVrUoS
-         sK6+ozLvi3vPdK3N4vEl8Ri9x8272xNdyFXbv5cieiPvLBR8D/uGfxX5CbGe/racmyhV
-         UZyJm469DX0Uvm8RHDrRu145dNUt66IgR2lxBYFPMwN5E4U/MZ5zj+3MAnbxBOq20Q96
-         5ZaKoYTfJKDiVah6i8UYwh7RVxoAocKV/fbLziXKnKrenpi8+iXtHBYzZ4vbLgLhhx5x
-         //Co8MS7xL8anUoGSINmKFVl6PBg46eu/6Of1jHJtFO+ITgAYqEfc9+RGrrN3JxqhYPN
-         xeBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791201841; x=1791806641;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=vhQoza2mV1Z+1STVDq8chd2IZUgXS0fGFoZOu7nkEJQ=;
-        b=IbH786k0zV/ti/IbVtiEvjrUMuD0fchUvmLzUegOfJV5bjiXphvphUPB1JuTm+o+CS
-         927QNl5JKAdr9rUTTym6ZFD5Y3dNNLZLCgKl2MPDtTMMb9XwdgW/cQbfB80HF7SbJ+pE
-         tjSSLGbH4PVCXZoNTlRyxBrPbTlxykdS92nhcY8W4AXI8ATfpcaApe1QxgeN8D2XjtKU
-         +DR7hg1eKXNdQJKktH2cnKwRQURwYDmTnJ5SBuxaO6QP7AcM3D0V2ONq/aWPf2rQK4Rp
-         Igbpl4Z3tqhtes89J0bAa7wp/67fAMsnZKUuSRKD7W8e4kQfQB7ffX01POq8VqnpOKex
-         XYTQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwAjnx7QgaG3xu0RpleLa+SV6jDtIIW5d03HUYlIFsbZWmmPGLZ+GgOjienyz5+Z5fF/eI=@vger.kernel.org
-X-Gm-Message-State: AFuF++m85H5BkJ1Q5Ut5G9nZBo77j/OBbU4A5kKPQsA23urmY3VDZ7xp
-	rIrLWdDLoMGFkH+k6LaMJJXWDV39ZXX+ZaiowVhoRoK3oaPwm47GNHTvDE9+Dk3GxaERjbb+/70
-	/9azlL8R/p3h+hWGfR5oAeIEG8vQNlbj5IUV07hmO/VXHzn11mqCkBA==
-X-Gm-Gg: AYBFou0XzJYeIJRkpaElbGoeFyUz5ih36zQGHtx+3mH70sl6tXOmByzlmP9+gWP9Usq
-	NAf+8bpXwnuCkW+s91+GWIL7Ew+BIQKDt/YtMWtz1IvoogcYZYIFhKIBKGyLFeZTsV+aVWu4wz+
-	yy+zl2eSKQ6CfU4l92uWOTJ3Ufooab2XXqXLF2MiqFcJMfFoR8HfpPNtT3miFT9M84mlT1tH2G7
-	cuAsYfN6AZ+oKvFDsGWAKmoWO+TykjXe8zXxXMeKzb6NmKsqMpmWHx/ZXQvLlF9tWsPAd4jfRvb
-	zuro1tyFuvxxSUX6V1mgCj53kJ0wT1ko2fkRUMEQER7dUB4ar8EJ84XXk9PPF6HVSKtAAgGRUw=
-	=
-X-Received: by 2002:a05:600c:2192:b0:4a0:20b4:ba93 with SMTP id 5b1f17b1804b1-4a027569390mr123921325e9.16.1791201841050;
-        Mon, 05 Oct 2026 05:04:01 -0700 (PDT)
-X-Received: by 2002:a05:600c:2192:b0:4a0:20b4:ba93 with SMTP id 5b1f17b1804b1-4a027569390mr123920585e9.16.1791201840418;
-        Mon, 05 Oct 2026 05:04:00 -0700 (PDT)
-Received: from [192.168.2.83] ([46.175.183.46])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a16bcb9a21sm310240445e9.10.2026.10.05.05.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2026 05:03:55 -0700 (PDT)
-Message-ID: <d6c9d9f1-e693-427f-8151-d7a771c63ab2@redhat.com>
-Date: Mon, 5 Oct 2026 14:03:49 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oFWbTtHy"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=acbEeQhquoGSRxYyHz2eRogK/T8TZ+zuOZdfsYzddOE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791201944; v=1; x=1791806744;
+ b=oFWbTtHycBViLuaWNRDhKEhPFFsnTRuaSfyuWwux+sBg74d6MGugwf/W+npP+WABJFdwthPz
+ HVnwM/OXn+nZVAzEXjobaDHwqx9/YgNUiSKR9BdkBBPqdj+UefauSRws5A3raUeBJcO6I1CP5vv
+ vvHCOamgjk7PK8erIgbqoVwY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 12c376e05a24411f;
+	Mon, 05 Oct 2026 12:05:43 +0000
+X-Mizu-Trace-ID: 12c376e05a24411f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <b8ab667c-8de2-47db-8fac-49faddd18f1a@linux.dev>
+Date: Mon, 5 Oct 2026 14:04:01 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,113 +38,390 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH iwl-net 03/10] ice: stop the LAN Tx queues when
- ice_vsi_open() fails
-To: Ivan Vecera <ivecera@redhat.com>, intel-wired-lan@osuosl.org,
- netdev@vger.kernel.org
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Henry Tieman
- <henry.w.tieman@intel.com>,
- Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
- Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
- Jesse Brandeburg <jbrandeb@kernel.org>,
- Preethi Banala <preethi.banala@intel.com>,
- Kiran Patil <kiran.patil@intel.com>, Dan Nowlin <dan.nowlin@intel.com>,
- Stephen Hemminger <stephen@networkplumber.org>,
- intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20261002130752.2597259-1-poros@redhat.com>
- <20261002130752.2597259-4-poros@redhat.com>
- <1465AD22-8132-4286-A2AF-ED94E64E12C8@redhat.com>
+Subject: Re: [PATCH v3 4/5] soundwire: amd: Add BRA/BPT firmware download
+ support
+To: Syed Saba Kareem <syed.sabakareem@amd.com>, vkoul@kernel.org
+Cc: broonie@kernel.org, Sunil-kumar.Dommati@amd.com,
+ vijendar.mukunda@amd.com, Mario.Limonciello@amd.com,
+ venkataprasad.potturu@amd.com, yung-chuan.liao@linux.intel.com,
+ anson.tsao@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+ Daniel Baluta <daniel.baluta@nxp.com>,
+ Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Simon Trimmer <simont@opensource.cirrus.com>,
+ "Mario Limonciello (AMD)" <superm1@kernel.org>,
+ "open list:SOUNDWIRE SUBSYSTEM" <linux-sound@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS"
+ <sound-open-firmware@alsa-project.org>,
+ "open list:BPF [MISC]:Keyword:(?:\\b|_)bpf(?:\\b|_)" <bpf@vger.kernel.org>,
+ "open list:DMA BUFFER SHARING FRAMEWORK:Keyword:\\bdma_(?:buf|fence|resv)\\b"
+ <linux-media@vger.kernel.org>,
+ "open list:DMA BUFFER SHARING FRAMEWORK:Keyword:\\bdma_(?:buf|fence|resv)\\b"
+ <dri-devel@lists.freedesktop.org>,
+ moderated "list:DMA" BUFFER SHARING
+ "FRAMEWORK:Keyword:\\bdma_(?:buf|fence|resv)\\b"
+ <linaro-mm-sig@lists.linaro.org>
+References: <20261005091620.1390916-1-syed.sabakareem@amd.com>
+ <20261005091620.1390916-5-syed.sabakareem@amd.com>
 Content-Language: en-US
-From: Petr Oros <poros@redhat.com>
-In-Reply-To: <1465AD22-8132-4286-A2AF-ED94E64E12C8@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
+In-Reply-To: <20261005091620.1390916-5-syed.sabakareem@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+general comment: this patch is quite complex, with code needed for the
+BTP side as well as the DMA side, only interleaved. Is there a way to
+have a 'cleaner' split between DMA functionality on the ACP side and BPT
+on the SoundWire bus side?
 
-On 10/3/26 11:54, Ivan Vecera wrote:
-> On October 2, 2026 3:07:45 PM GMT+02:00, Petr Oros <poros@redhat.com> wrote:
->> ice_vsi_cfg_lan() adds the LAN (and XDP) Tx queues to the scheduler and
->> enables them in hardware. If anything after it fails in ice_vsi_open(),
->> for example requesting the MSI-X vectors, the error path only frees the
->> ring memory and leaves the queues configured. Every following open then
->> fails to add the same queues again and the netdev can not be brought up
->> until the driver is reloaded:
->>
->>   ice 0000:04:00.2: Failed to set LAN Tx queue context, error: -5
->>   ice 0000:04:00.2 enp4s0f2np2: Failed to open VSI 0x0010 on switch 0x0002
->>
->> Stop the Tx queues on the error paths that run after ice_vsi_cfg_lan().
->> The ice_up_complete() failure path already does it through ice_down(),
->> so let it skip the new step.
->>
->> There is no i40e counterpart of this fix, i40e does not add its Tx
->> queues through the admin queue. It was found while verifying the
->> previous patch. With the IRQ unwind fixed the warnings were gone, but
->> the netdev still could not be opened again after the forced
->> request_irq failure.
->>
->> Fixes: cdedef59deb0 ("ice: Configure VSIs for Tx/Rx")
->> Assisted-by: LLM
-> Which one?
-It was Claude Code with Claude Fable 5.1
+Likewise the parts dealing with contiguous and non-contiguous parts of
+the firmware should be handled at a higher level using DMA/BTP support
+lower-level routines.
 
-Thanks for the review.
+> +static int amd_sdw_execute_bra_transfer(struct amd_sdw_manager *amd_manager,
+> +					struct sdw_slave *slave,
+> +					bool *dma_unsafe)
+> +{
+> +	struct sdw_bus *bus = &amd_manager->bus;
+> +	u32 i2s_err_offset;
+> +	u32 saved_intr_mask;
+> +	u32 reg_addr, len;
+> +	u32 val;
+> +	int ret, ret_disable;
+> +
+> +	/* Read descriptor regs before enabling the DMA engine. */
+> +	reg_addr = readl(amd_manager->mmio + ACP_SW_BPT_PORT_FIRST_BYTE_ADDR);
+> +	len = readl(amd_manager->mmio + ACP_SW_BRA_TRANSFER_SIZE);
+> +
+> +	i2s_err_offset = (amd_manager->instance == 0) ?
+> +			 ACP_SW_I2S_ERROR_REASON : ACP_P1_SW_I2S_ERROR_REASON;
+> +
+> +	/*
+> +	 * Save and disable the error interrupt mask for manual error
+> +	 * checking.  acp_bra_lock is held across the whole BPT sequence by
+> +	 * amd_sdw_bpt_wait(), which serialises this shared-register
+> +	 * read-modify-write against the other manager instance.
+> +	 */
+> +	saved_intr_mask = readl(amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
+> +	writel(0, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
+> +	writel(0, amd_manager->acp_mmio + i2s_err_offset);
+> +	writel(0, amd_manager->mmio + ACP_SW_ERROR_REASON1);
+> +
+> +	/* Arm the ACP BPT DMA engine */
+> +	writel(1, amd_manager->mmio + ACP_SW_BPT_PORT_EN);
+> +
+> +	/*
+> +	 * Use the framework's sdw_enable_stream() to write CHANNELEN and
+> +	 * perform a bank switch.  The ACP BPT hardware uses the bank switch
+> +	 * as the trigger to start the DMA transfer.  The framework manages
 
-Petr
->
-> Otherwise...
->
-> Reviewed-by: Ivan Vecera <ivecera@redhat.com>
->
->
->> Signed-off-by: Petr Oros <poros@redhat.com>
->> ---
->> drivers/net/ethernet/intel/ice/ice_main.c | 10 ++++++++--
->> 1 file changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
->> index d246cde36ae726..e62a8f544345a3 100644
->> --- a/drivers/net/ethernet/intel/ice/ice_main.c
->> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
->> @@ -7561,13 +7561,13 @@ int ice_vsi_open(struct ice_vsi *vsi)
->>
->> 	err = ice_vsi_cfg_lan(vsi);
->> 	if (err)
->> -		goto err_setup_rx;
->> +		goto err_stop_tx;
->>
->> 	snprintf(int_name, sizeof(int_name) - 1, "%s-%s",
->> 		 dev_driver_string(ice_pf_to_dev(pf)), vsi->netdev->name);
->> 	err = ice_vsi_req_irq_msix(vsi, int_name);
->> 	if (err)
->> -		goto err_setup_rx;
->> +		goto err_stop_tx;
->>
->> 	if (bitmap_empty(pf->txtime_txqs, pf->max_pf_txqs))
->> 		ice_vsi_cfg_netdev_tc(vsi, vsi->tc_cfg.ena_tc);
->> @@ -7593,8 +7593,14 @@ int ice_vsi_open(struct ice_vsi *vsi)
->>
->> err_up_complete:
->> 	ice_down(vsi);
->> +	ice_vsi_free_irq(vsi);
->> +	goto err_setup_rx;
->> err_set_qs:
->> 	ice_vsi_free_irq(vsi);
->> +err_stop_tx:
->> +	ice_vsi_stop_lan_tx_rings(vsi, ICE_NO_RESET, 0);
->> +	if (vsi->xdp_rings)
->> +		ice_vsi_stop_xdp_tx_rings(vsi);
->> err_setup_rx:
->> 	ice_vsi_free_rx_rings(vsi);
->> err_setup_tx:
+do you mean to say
+a) the DMA transfer was armed and started ealier, and the bank switch
+unblocks it, ob
+b) the DMA starts fetching data from memory when the bank switch happens?
 
+the latter case would be quite racy and dependent on the time needed to
+access memory..
+
+> +	 * bank state consistently, eliminating the need for a manual bank
+> +	 * switch or DP0 bank mirror.
+> +	 */
+> +	dev_dbg(amd_manager->dev,
+> +		"BPT: pre-enable: curr_bank=%u next_bank=%u BPT_EN_STATUS=0x%x stream_state=%d\n",
+> +		bus->params.curr_bank, bus->params.next_bank,
+> +		readl(amd_manager->mmio + ACP_SW_BPT_PORT_EN_STATUS),
+> +		bus->bpt_stream->state);
+> +
+> +	ret = sdw_enable_stream(bus->bpt_stream);
+> +	if (ret < 0) {
+> +		dev_err(amd_manager->dev,
+> +			"BPT: sdw_enable_stream failed: %d\n", ret);
+> +		/*
+> +		 * Disarm the engine and wait for the port to quiesce before
+> +		 * returning: the caller (amd_sdw_bra_transfer()) then deconfigures
+> +		 * the BRA descriptor unconditionally, zeroing BASE_ADDRESS and
+> +		 * TRANSFER_SIZE, so the port must be idle first -- mirrors the
+> +		 * disable path below.
+> +		 */
+> +		writel(0, amd_manager->mmio + ACP_SW_BPT_PORT_EN);
+> +		ret_disable = readl_poll_timeout(amd_manager->mmio + ACP_SW_BPT_PORT_EN_STATUS,
+> +						 val, !val, ACP_DELAY_US, AMD_SDW_TIMEOUT);
+> +		if (ret_disable < 0) {
+> +			dev_err(amd_manager->dev, "BPT: PORT_EN disable timeout\n");
+> +			*dma_unsafe = true;
+> +		}
+> +		goto restore_intr;
+> +	}
+> +
+> +	dev_dbg(amd_manager->dev,
+> +		"BPT: DMA started: curr_bank=%u next_bank=%u BPT_EN_STATUS=0x%x stream_state=%d\n",
+> +		bus->params.curr_bank, bus->params.next_bank,
+> +		readl(amd_manager->mmio + ACP_SW_BPT_PORT_EN_STATUS),
+> +		bus->bpt_stream->state);
+> +
+> +	/* Poll DMA_BUSY until transfer completes */
+> +	{
+> +		unsigned long timeout;
+> +
+> +		timeout = jiffies + msecs_to_jiffies(BRA_DMA_TIMEOUT_MS);
+> +		do {
+> +			val = readl(amd_manager->mmio + ACP_SW_BRA_DMA_BUSY);
+> +			/*
+> +			 * Side-effectful read: reading ACP_SW_BRA_CURRENT_TRANSFER_SIZE
+> +			 * advances the BRA DMA engine to the next frame.  The value is
+> +			 * intentionally discarded (hence the (void) cast); removing this
+> +			 * read stalls multi-frame transfers, which then time out.
+> +			 */
+> +			(void)readl(amd_manager->mmio + ACP_SW_BRA_CURRENT_TRANSFER_SIZE);
+> +			if (!(val & 0x01))
+> +				break;
+> +			if (time_after(jiffies, timeout)) {
+> +				/*
+> +				 * Re-sample the busy bit before declaring a
+> +				 * timeout. cond_resched() below can park this
+> +				 * thread for longer than BRA_DMA_TIMEOUT_MS, in
+> +				 * which window the DMA may have completed; without
+> +				 * this final read a finished transfer would be
+> +				 * reported as a false timeout.
+> +				 */
+> +				val = readl(amd_manager->mmio + ACP_SW_BRA_DMA_BUSY);
+> +				if (!(val & 0x01))
+> +					break;
+> +				dev_err(amd_manager->dev,
+> +					"BPT: DMA timeout: periph=0x%08x len=%u EN_STATUS=0x%x RESP=0x%x I2S_ERR=0x%08x\n",
+> +					reg_addr, len,
+> +					readl(amd_manager->mmio + ACP_SW_BPT_PORT_EN_STATUS),
+> +					readl(amd_manager->mmio + ACP_SW_BRA_RESP),
+> +					readl(amd_manager->acp_mmio + i2s_err_offset));
+> +				ret = -ETIMEDOUT;
+> +				break;
+> +			}
+> +			/*
+> +			 * Runs in process context. Yield the CPU so a
+> +			 * multi-frame transfer cannot busy-spin for up to
+> +			 * BRA_DMA_TIMEOUT_MS and trip the soft lockup
+> +			 * watchdog on non-preemptible kernels. cond_resched()
+> +			 * keeps the poll cadence tight -- reading
+> +			 * ACP_SW_BRA_CURRENT_TRANSFER_SIZE every iteration is
+> +			 * required to advance the DMA engine between frames,
+> +			 * so usleep_range() (which would space out the reads)
+> +			 * is deliberately not used here.
+> +			 */
+> +			cond_resched();
+> +		} while (1);
+> +	}
+> +
+> +	/* Check for I2S/BRA errors */
+> +	val = readl(amd_manager->acp_mmio + i2s_err_offset);
+> +	if (val & AMD_SDW_BRA_I2S_ERROR_MASK) {
+> +		dev_err(amd_manager->dev,
+> +			"BPT: BRA failed I2S_ERROR_REASON=0x%08x (NAK=%u Clash=%u HdrResp=%u FtrResp=%u CRC=%u DMA=%u Cmd=%u)\n",
+> +			val,
+> +			!!(val & BIT(18)), !!(val & BIT(19)),
+> +			!!(val & BIT(26)), !!(val & BIT(27)),
+> +			!!(val & BIT(28)), !!(val & BIT(29)), !!(val & BIT(30)));
+> +		writel(0, amd_manager->acp_mmio + i2s_err_offset);
+> +		if (!ret)
+> +			ret = -EIO;
+> +	} else if (!ret) {
+> +		dev_dbg(amd_manager->dev,
+> +			"BPT: DMA done: periph=0x%08x len=%u\n", reg_addr, len);
+> +	}
+> +
+> +	/*
+> +	 * On an aborted or timed-out transfer the ACP BPT DMA engine can still
+> +	 * be armed (PORT_EN=1, DMA_BUSY=1). sdw_disable_stream() below performs
+> +	 * a bank switch, which is the BPT DMA start trigger, so disarm the engine
+> +	 * first -- otherwise the bank switch could (re)start a DMA write into
+> +	 * dma_buf, which amd_sdw_bpt_wait() frees as soon as this transfer
+> +	 * returns. On the success path the DMA has already completed, so this
+> +	 * early clear is a no-op.
+> +	 */
+> +	if (ret < 0)
+> +		writel(0, amd_manager->mmio + ACP_SW_BPT_PORT_EN);
+> +
+> +	/*
+> +	 * Disable the stream via framework (writes CHANNELEN=0 + bank switch).
+> +	 * This cleanly stops the port and keeps bank state consistent.
+> +	 * Propagate a disable failure: it leaves the stream in
+> +	 * SDW_STREAM_ENABLED, and sdw_enable_stream() returns 0 early for an
+> +	 * already-ENABLED stream without the bank switch that triggers the BRA
+> +	 * DMA, so the next section would be silently skipped rather than
+> +	 * transferred.  Report the failure to the caller so it stops instead of
+> +	 * chaining a section whose DMA never starts.
+> +	 */
+> +	ret_disable = sdw_disable_stream(bus->bpt_stream);
+> +	if (ret_disable < 0) {
+> +		dev_err(amd_manager->dev, "BPT: sdw_disable_stream failed: %d\n",
+> +			ret_disable);
+> +		if (!ret)
+> +			ret = ret_disable;
+> +	}
+> +
+> +	dev_dbg(amd_manager->dev,
+> +		"BPT: post-disable: curr_bank=%u next_bank=%u stream_state=%d\n",
+> +		bus->params.curr_bank, bus->params.next_bank,
+> +		bus->bpt_stream->state);
+> +
+> +	/*
+> +	 * Disarm the ACP BPT DMA engine and wait for the port to quiesce.
+> +	 * Like the manager enable/disable sequence (ACP_SW_EN paired with
+> +	 * ACP_SW_EN_STATUS), ACP_SW_BPT_PORT_EN_STATUS reflects the real port
+> +	 * state, so polling it here guarantees a non-contiguous transfer's next
+> +	 * section cannot re-arm PORT_EN before the current one has torn down.
+> +	 */
+> +	writel(0, amd_manager->mmio + ACP_SW_BPT_PORT_EN);
+> +	ret_disable = readl_poll_timeout(amd_manager->mmio + ACP_SW_BPT_PORT_EN_STATUS,
+> +					 val, !val, ACP_DELAY_US, AMD_SDW_TIMEOUT);
+> +	if (ret_disable < 0) {
+> +		dev_err(amd_manager->dev, "BPT: PORT_EN disable timeout\n");
+> +		if (!ret)
+> +			ret = ret_disable;
+> +		*dma_unsafe = true;
+> +	}
+> +	writel(0, amd_manager->acp_mmio + i2s_err_offset);
+> +	writel(0, amd_manager->mmio + ACP_SW_ERROR_REASON1);
+> +	/*
+> +	 * Clearing the immediate-command response-valid status races with the
+> +	 * immediate-command path (amd_sdw_send_cmd_get_resp()), which polls and
+> +	 * clears the same ACP_SW_IMM_CMD_STS bit under bus->msg_lock. The BPT DMA
+> +	 * poll loop above drops all locks, so a concurrent slave enumeration or
+> +	 * register access (amd_sdw_work / IRQ thread / codec regmap) can be
+> +	 * mid-command here. Take msg_lock so this teardown clear cannot erase a
+> +	 * response the command path has not yet consumed, which would make that
+> +	 * command time out. This msg_lock nests inside acp_bra_lock and bpt_lock,
+> +	 * both already held by the enclosing amd_sdw_bpt_wait(), preserving the
+> +	 * bpt_lock -> acp_bra_lock -> msg_lock order. do_bank_switch() inside
+> +	 * sdw_enable_stream()/sdw_disable_stream() only takes msg_lock for
+> +	 * multi-link managers, so this single-link manager establishes that order
+> +	 * via the explicit msg_lock here and in the non-contiguous
+> +	 * sdw_nwrite_no_pm()/sdw_nread_no_pm() fallback.
+> +	 */
+> +	mutex_lock(&bus->msg_lock);
+> +	writel(AMD_SDW_IMM_RES_VALID, amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +	mutex_unlock(&bus->msg_lock);
+> +
+> +restore_intr:
+> +	writel(saved_intr_mask, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
+> +	return ret;
+> +}
+
+[...]
+
+> +static int amd_sdw_bpt_wait(struct sdw_bus *bus,
+> +			    struct sdw_slave *slave,
+> +			    struct sdw_bpt_msg *msg)
+> +{
+> +	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
+> +	bool is_write = (msg->flags & SDW_MSG_FLAG_WRITE);
+> +	struct amd_bra_params prep_params = {0};
+> +	u32 acp_sys_addr;
+> +	dma_addr_t dma_addr = 0;
+> +	u8 *dma_buf = NULL;
+> +	size_t offset = 0;
+> +	size_t total_len = 0;
+> +	int ret = 0;
+> +	int i;
+> +	bool dma_unsafe = false;
+> +
+> +	for (i = 0; i < msg->sections; i++) {
+> +		if (msg->sec[i].len > SDW_BPT_MSG_MAX_BYTES - total_len) {
+> +			dev_err(amd_manager->dev,
+> +				"BPT msg length exceeds maximum %d bytes\n",
+> +				SDW_BPT_MSG_MAX_BYTES);
+> +			return -EINVAL;
+> +		}
+> +		total_len += msg->sec[i].len;
+> +	}
+> +
+> +	if (total_len < AMD_BPT_MSG_BYTE_MIN) {
+> +		dev_err(amd_manager->dev,
+> +			"BPT msg length %zu < minimum %d bytes\n",
+> +			total_len, AMD_BPT_MSG_BYTE_MIN);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * Take the runtime-PM reference that keeps the bus clock alive before
+> +	 * acquiring bpt_lock, not after.  When the manager is runtime
+> +	 * suspended, pm_runtime_get_sync() runs amd_resume_runtime()
+> +	 * synchronously in this task, and that callback acquires bpt_lock to
+> +	 * clear bpt_disabled.  Taking the reference while already holding
+> +	 * bpt_lock would therefore deadlock against ourselves.
+> +	 */
+> +	ret = pm_runtime_get_sync(amd_manager->dev);
+> +	/*
+> +	 * -EACCES only occurs when runtime PM is disabled, which for this
+> +	 * device happens across the system suspend/resume window.  amd_suspend()
+> +	 * sets bpt_disabled before the clock is stopped and amd_resume_runtime()
+> +	 * clears it only once the clock is back, so the bpt_disabled check below
+> +	 * rejects the transfer with -ESHUTDOWN before any BRA access whenever the
+> +	 * clock could be down.  A merely runtime-suspended manager (clock stopped,
+> +	 * PM still enabled) is resumed by the get above and returns success, not
+> +	 * -EACCES; tolerating -EACCES therefore never drives the BRA engine on a
+> +	 * stopped clock.
+> +	 */
+> +	if (ret < 0 && ret != -EACCES) {
+> +		pm_runtime_put_noidle(amd_manager->dev);
+> +		dev_err(amd_manager->dev, "BPT: pm_runtime_get failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * The ACP BRA engine is a single shared resource.  Serialise all BPT
+> +	 * transfers so concurrent slave probes do not race over the hardware.
+> +	 */
+> +	mutex_lock(&amd_manager->bpt_lock);
+> +
+> +	/*
+> +	 * Refuse the transfer if the bus is being (or has been) clock-stopped
+> +	 * for system suspend.  Driving the BRA/command channel while the clock
+> +	 * is stopping wedges the channel and leaves the peripheral unable to
+> +	 * re-enumerate on resume; the codec retries once it re-attaches.
+> +	 */
+> +	if (amd_manager->bpt_disabled) {
+> +		mutex_unlock(&amd_manager->bpt_lock);
+> +		pm_runtime_mark_last_busy(amd_manager->dev);
+> +		pm_runtime_put_autosuspend(amd_manager->dev);
+> +		return -ESHUTDOWN;
+> +	}
+> +
+> +	/* BRA always uses all available data columns (1..NC-1). */
+> +	amd_manager->bra_hstart = 1;
+> +	amd_manager->bra_hstop  = bus->params.col - 1;
+> +
+> +	/*
+> +	 * Open the BPT stream so the framework stream state machine tracks the
+> +	 * transfer.  Slave DP0 is prepared below before bra_transfer().
+> +	 */
+> +	ret = amd_sdw_bpt_open_stream(amd_manager, slave, msg);
+> +	if (ret < 0)
+> +		goto close_stream;
+> +
+> +	/* Allocate single DMA buffer for entire BPT message */
+> +	dma_buf = dma_alloc_coherent(amd_manager->dev->parent, total_len,
+> +				     &dma_addr, GFP_KERNEL);
+> +	if (!dma_buf) {
+> +		ret = -ENOMEM;
+> +		goto close_stream;
+> +	}
+> +
+> +	/*
+> +	 * The ATU GRP_1 and scratch PTE registers programmed here are
+> +	 * ACP-global and shared by both SoundWire manager instances, as is the
+> +	 * BRA DMA engine that reads through them.  bpt_lock is per-manager and
+> +	 * does not serialise across instances, so hold the ACP-wide
+> +	 * acp_bra_lock across the whole configure -> transfer -> deconfigure
+> +	 * sequence to stop the other instance reprogramming the shared PTEs
+> +	 * mid-transfer.
+
+In that case, what is the point of having a per-instance btp_lock as well?
+
+It seems from the comment that only *one* BTP transfer can take place
+across all manager instances, which defeats the purpose of a
+per-instance lock, no?
+What I am missing?
