@@ -1,95 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49710488206;
-	Mon,  5 Oct 2026 13:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C2C14A387D;
+	Mon,  5 Oct 2026 14:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791207473; cv=none; b=udy5iX3PjoCIpr7qg80CnUZLyP/g2OK1INl2bjjkGyqT5Bel0YJLVTUWOS63NHT2LxuSzrnAXmLXC57pOv5hbvoYZ+JqrMz+2zCjjflzB7pmrb75cyqid9B5Sv4GdUrn+4+iNOh0B43+SYDogAd6hdkJrVRQNh6UUkVgdd5SPZ4=
+	t=1791209821; cv=none; b=ErOEHxCtrqHEYu9UBmF+AYqny5J3Fz9pqZQ2Xh6wF10XQS7loksjb06EwGCirwTJPkiXAPOm3hYkWD6U5AZPXQzg+akdOsBD0mrNkXnte4X2MPu1z1JX4EZn46ioTMkAuCpufNRIFE1KtynvWTwWxs03tWqPV2gqBqAFtamBZuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791207473; c=relaxed/simple;
-	bh=IVJ8ZyuSC0Lbab2geB5UGXa7oruIwTAGiC5pEI/0beo=;
+	s=arc-20240116; t=1791209821; c=relaxed/simple;
+	bh=g/PvErAkWqPLLMhfdp6s6oupiEeHn6mW6CPEnvMmZuM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yd7Spbey+uhrRYIoFnyTgRlSrbc7GFBn5lv2ud8wemxwAt+gNMDPf/zF6RyM6QZNasRvMWRjXklcS7gRq7yESlp0OsA2u1vLZXkH5r+yl2V0dDdldnDM4NRvpJiBoZ6HiQXxcI+GZyKj/N70pNdQpYhrBDbR+piW0YJ5SRlYkHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OgGTCG55; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=LP9dapSPb9iCkBZVckS+hcutgls6Tbns/+JDPFGxWlV3w9ByXXBJZNo+KHnb76knDWjWgKyAxm4tWw07pZ1dSOFSHZT9ow8NCheZkfpjn0vGe+0rURKXh+NGC7IjaADX1Ol10IKs530tNyUuQVrksTpORRX5hgbHM+NP44egoLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=bgzHUU6f; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OgGTCG55"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC5BE1F000FF;
-	Mon,  5 Oct 2026 13:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791207471;
-	bh=PoXS2bbDcl2eMw/oDug2KXy7DXpxoj3j/ELZyREnj2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OgGTCG55YvOPWTv10ZYL1rlsdMkBoTqC++oSAaEM24udkUPWNCiDbuU7VL6c+9MAI
-	 QPaVRCCgB8jUxTnx4TKI48manpOQIw6Io7ceVdK0gSKAcwVM30y4zoBJIyqeXxN892
-	 7UUP15rvrgkppTcTE6P4XXNNZ0bPrMXYMwZ95uQgXF7cmFyzCqZN4Zs5WgcVcRJlkH
-	 pLZaqyopNLhP3yyr1q5ChFD3pqpHwUo12+/53lGDoRMgGZzIw4brb/RKvFKtIwHXTP
-	 4qmANx6GnOJ3j4S8LvrxipeOSgCII4lrwKqgpHdzTSIBXPDjI/SB0pvASfbIU79piR
-	 +ETUbepX1F6ug==
-Received: by traversing.sirena.org.uk (Postfix, from userid 1000)
-	id 2C788162DFDB; Mon, 05 Oct 2026 14:37:49 +0100 (BST)
-Date: Mon, 5 Oct 2026 15:37:49 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="bgzHUU6f"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1826F152B;
+	Mon,  5 Oct 2026 07:16:50 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7F253F66F;
+	Mon,  5 Oct 2026 07:16:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791209813; bh=g/PvErAkWqPLLMhfdp6s6oupiEeHn6mW6CPEnvMmZuM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bgzHUU6flQh4WV6N8wrHBOjkrnfRN1RjtIvlMsJTgnfprNOTNrWuI3ZbDwgLxQR6u
+	 v7S8MV4n/CktpjfTJ9ZhjsMfIcAKAAGxPtN1AqraVPnHJIKph8wN59edTO4IJ6CtLR
+	 dvUlUakISZh2+PUjuHQ8j7SIV0IRr3EekSiHKrfE=
+Date: Mon, 5 Oct 2026 15:16:38 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	KBuild Mailing List <linux-kbuild@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Nicolas Schier <nsc@kernel.org>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the kbuild
- tree
-Message-ID: <asOoLZf9UQkB6SS5@sirena.org.uk>
-References: <asAzcgDsbNEFIfKV@sirena.co.uk>
- <20261002230632.GA314599@ax162>
- <asA6NZ4QKp4k4nGD@sirena.co.uk>
- <20261005133224.GA1108555@ax162>
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>,
+	"open list:MEMORY MANAGEMENT - CORE" <linux-mm@kvack.org>
+Subject: Re: [PATCH 0/7] arm64: Batch PSTATE.TCO handling in kernel nofault
+ loops
+Message-ID: <asOxRkayznzX-K4c@arm.com>
+References: <20260824160523.3907021-1-usama.anjum@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tY37R1YkArQtSgOC"
-Content-Disposition: inline
-In-Reply-To: <20261005133224.GA1108555@ax162>
-X-Cookie: Use the Force, Luke.
-
-
---tY37R1YkArQtSgOC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20260824160523.3907021-1-usama.anjum@arm.com>
 
-On Mon, Oct 05, 2026 at 03:32:24PM +0200, Nathan Chancellor wrote:
+On Mon, Aug 24, 2026 at 05:04:45PM +0100, Muhammad Usama Anjum wrote:
+> With Hardware Tag-Based KASAN in asynchronous or asymmetric mode, kernel
+> nofault loops currently set and clear PSTATE.TCO around every access.
+> 
+> Introduce bare nofault accessors, batching hooks, and an internal scope
+> guard. Convert maccess page-fault cleanup to scoped form. Skip
+> page-fault setup for zero-sized kernel nofault copies and zero-length
+> BPF string operations. Then use bare primitives in the maccess and BPF
+> loops. For non-empty operations, this reduces the code-derived dynamic
+> MSR TCO execution count from 2N to 2. Two-string BPF comparisons fall
+> from 4N to 2.
+> 
+> The BPF changes and an earlier maccess implementation with explicit
+> cleanup were tested with QEMU arm64 using Hardware Tag-Based KASAN in
+> synchronous, asynchronous, and asymmetric modes. All nine arm64 MTE
+> kselftests passed in each mode, as did the 138 focused BPF string_kfuncs
+> and varlen subtests. The focused BPF tests also passed with the default
+> non-MTE arm64 CPU model. Both final maccess scoped-guard patches were
+> arm64 cross-built. Runtime tests have not been rerun after that
+> conversion.
 
-> Can you drop the fix up to scripts/Kconfig.toolchain that you added in
+TBH, I fail to see the benefit. There's a reduction in the number of
+MSR instructions executed in async/asymm mode but does it result in any
+improved benchmark numbers? Which workload hits these loops often enough
+to matter? They are mostly used by tracing and debug code.
 
->   855c706f2179 ("Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git")
+AFAIK, most people wanting to use KASAN in a non-debug environment want
+to go for sync mode, where there is no MSR and this series only saves a
+few NOPs. We might as well go for a config option to force sync mode (or
+off) and remove the unnecessary NOPs, *if* you can show any performance
+improvement.
 
-> ? I have temporarily handled this conflict in kbuild-for-next to make
-> life easier for you in
-
-Done.
-
---tY37R1YkArQtSgOC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmrDqB8ACgkQJNaLcl1U
-h9CQYwf7BGunrjlhW/LCODAWWgYBU3SQ2Wra97KybfNDt1LdxS81WGi7f/z9c6ve
-PeJ2RDjulOyZ5WO2P5in5+/EPpKZdWJWfwvD+JT/QYu6AiF5r4xMsWmilraTqt8N
-nzKA9EC+YR6YMw8IznGJjWfht/GiVKi+LZrLvHZKfryXx4w/7clxVU8c7wH5UgbY
-AORwjh8PpxhWMB7DtnIaq9ToxsrmqabJuo+fTnWrvLlHd6l17VJWD+hPyvYoZK+E
-WFLs1NrS1fAOrdOmoRVvNao+V/Pi7vt9yvmpOyZbzD/Sp9HoqfdCCG1UkFcDc3R6
-sRx6sKX2e9T71iA3gu6WU/ihZ31NfA==
-=Qv3N
------END PGP SIGNATURE-----
-
---tY37R1YkArQtSgOC--
+-- 
+Catalin
