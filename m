@@ -1,208 +1,280 @@
-Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+Received: from mail-oa2-f35.google.com (mail-oa2-f35.google.com [74.125.231.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2BF4CE67B
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 18:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368F34D9F7F
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 18:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791223619; cv=none; b=AJcdeqbJ3Xeahi1kWiYVGvSigt1QyFrKF7ZD1jyVXdtU/KXEYBeNoklea/2otHGea4/mfA7cWAs2sVdDFaKZNVea82zv/6g8y2V7zAF6vsk2YxUUfF3q4QC4Oq4XxXvrcHkgs+Fovari7vALToDEeUWY0/NSM7C272cGSu/2m8c=
+	t=1791224248; cv=none; b=mJ/H8kp/NSukUts1RrC9h3CNYTaLGyQAIpVnUsT921oJiP/PXkacbwd4WOHndcn0YmqI/0FmP2ljAtVuzP59yxGy53oxQBMbitfjZwHvUVJvIxi6xj1mWLjj7rCrjkqOJv/zXsYP5J0tCDHvWT43mfkQBk718XhQqP0wUZzkNbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791223619; c=relaxed/simple;
-	bh=/FAsQhlFlHqN2Nkl1Uwt0ZLtmve/psgYEW9sAsYXCJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pcu5dELmsgFhyonW/2hYS6NfakI1kFWrUC92nLU+3g3fSv2nNmBMzpYCPpKZhhMvKur5eFMH5zSp/a2QiNwrHI8AUCA3eoS4cdo5u06NUqdDEDJ6hGP9Z6TRUQMPeQ5bKSRFGxKws7/L1fYkSQ3bkCsjEhu+I/beMtRZdjc9w/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1cQrEBo; arc=none smtp.client-ip=74.125.227.139
+	s=arc-20240116; t=1791224248; c=relaxed/simple;
+	bh=SlfT5CpG1gfS0O6dGhXo30NrXX/THyrTJARh8LcTSNs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aW7gBbw7/V/NQ6kwfg8rIBpsvafBInyp0v/sjjI39U0WpXUxZUtYhiJDjD0Z/PrNQNNmoqP4nLToKuQ9wiDveHVwe3QzO4P8l4ce+4FzegPr+je1de0ufq/TPy8YTfpZiIxNfNtpgqf+nVAlF9ipA5svhaRyM0+uyN+h/xq5xS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GHc1A6mP; arc=none smtp.client-ip=74.125.231.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1cQrEBo"
-Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-3a0aa5e2b20so482590a91.1
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 11:06:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GHc1A6mP"
+Received: by mail-oa2-f35.google.com with SMTP id 586e51a60fabf-493cf6d8e60so735397fac.3
+        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 11:17:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791223617; x=1791828417; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7NXEHSFquRYA0GwnQVrP8+OZwHxFYO3UslI6dCtMRM4=;
-        b=D1cQrEBoxzVh3tD6SOz5lFFXvcCOP7FyROc/jvgsdh4z3GrqvnrAsbWladMMGMKYuN
-         xLTG/hWYXhKi3HjTgFmdCScwGXkv3nOPZsbg/0jfyr5L5+H/Uxm9cYmngmC18FKU1icK
-         tuXPmAiPWRLZ4byHGIApP5H80WV7YvXiI+jH89a9sEhbstpCclw6dN9zGLl0PQoilMuS
-         lt2GSnukfqXz9DA20xerB6hihP6ARQFFV4SxajbThTrsHTpm3uzj4jtcDeZ++4rDTSfk
-         oRUTUJF1zsutNBB9zw2LqLmaaGrTBFj4EwXWhr8oZjsU+6f78kVfTeE2ROFNsxP9Sfr2
-         eoqA==
+        d=gmail.com; s=20251104; t=1791224245; x=1791829045; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Rouq59a9OyBo1EeAraKbx0994ONwMJ1+oA66imSzKao=;
+        b=GHc1A6mPFwU1mQCKMjDNf+uUGZeU4DFLIqQ7sdz8bjBTnPFJ7011JJxtO0nZSKYktG
+         3+6QSHWijl+eWp4uyM4l+2MkUUet/D7BhKuSrHvAorUIXPSDrzlufyLMvXSpDG5MrT8z
+         1aYh2GxWSaz4MBe4I3Xz9OE+GyS/1zDejvxEP9UCwonjxMISA4hIKV1+nFjNprKUvbQl
+         mwmu98xVsf3m6cZBGx+kxMZHpfPJfdIJWF6F2k6+RUFCBwT2qeessGg3fB4vOSI47JKh
+         UJcMNe0vmB6azLj/KxovSf9Vwmq/SmnoH4K4Ay0Lg+gqw2UvQndHI/5UHti7zR8HYN0Z
+         9KhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791223617; x=1791828417;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7NXEHSFquRYA0GwnQVrP8+OZwHxFYO3UslI6dCtMRM4=;
-        b=NIo4RhI1FfHwboVSPVlDVUkrAXqJBfMnMscWNdB7EoPKzZ5B+09kXfaWGLDs3ABPp9
-         aeg08UUL0cOWs6RoQrhd1bkN7V3jbPmGjH1kGlZD0IWAhu4VgN1mWL+qtsKsVuwZIfLj
-         LwwDlA0wGDhybamWcZ0upAFUj0JltTr/uOd6QOn9csA3DTxtD+mlruPT58KlbfQULHLD
-         k8KY/Qt8qGdxY1+k2wLoCYnUCXM1Zf+Ma0Yg9z5nVWz6eS0i908rvwvSlTCxi4Zj1vE6
-         PM5+IJL5cpfU7ozlvHWX68GnaG9C0hTAHy3yaQlvNlmq05ADKoPvBuU1KlGrANsxKsbn
-         JfKA==
-X-Forwarded-Encrypted: i=1; AKwUvBxEIgkNNOgV62oAaBiup/PoljAQUisqOSV45yFC2qkSm6+C5dfwaV0ZF9zowVGjj228FQA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKy6PtX7rRZJCocL7I4zEct/o4mxOWd7jIiUpZfULytrv3Yn6qA
-	xNErQ7e60dHPoSR2egGwBwrfssY7Rq5K2n6a82qdVHvsX6T2LUtDHKmT
-X-Gm-Gg: AYBFou21joCQ6jhaEsUagwuGy7YoirIIjPlkl2D2xyb6RGqNXoz6bW795Cm/iIuy++u
-	tiv5gkicchx47ZA3BbMpaXyh9Wui7NPEK6ju9tMLLHwEMGqT/6UJBWU8oHbHN5oEhjKjbodc/l/
-	kvc5kFqHRvjc+p975R2p5c82+1iFDoel8RMobKJ47uvdGpc15YuVzR46AJqOeSU0BaD5JipwIOI
-	oqwqKePvReCazWRUGbesOOvB/Ni1xp3ZeOcOYeskcPtFWp55wQ6naH/vTjKacTmjKXL2EaSlS/w
-	N7+XSBYUEz5Fv7PQLu8uwPbemPDELFRbxcni/nswE2+f8c0r91GQeU3AOh+dQLriB4U+JwDryCq
-	HjtdAJYE9SDaSNWpLvTsN0PG9aD/2OrEveawXvy/vjYJHaljNJswCm/EEQJ9s0iB0G4hBAuXVvP
-	ep9t1fhqYRAj4jpPTltxetTed25wcmForGNq5TQ7Kj7KGVJjGjAuN0PQYC8K2QeiuD
-X-Received: by 2002:a17:90b:260b:b0:3a4:f1f9:1cb2 with SMTP id 98e67ed59e1d1-3a6ce6b4005mr9731383a91.13.1791223616729;
-        Mon, 05 Oct 2026 11:06:56 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:5f::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a7e4b00de6sm4423426a91.1.2026.10.05.11.06.56
+        d=1e100.net; s=20260707; t=1791224245; x=1791829045;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Rouq59a9OyBo1EeAraKbx0994ONwMJ1+oA66imSzKao=;
+        b=P97TYZVrXaOR/91c5PDj4/rcuUPWjliI9wTfhQCwE1LQ5hjjr9bc/4XB0URxyAArhY
+         BTv4wje01RC4sDleilcX38mNhJxYA47p/3rMb3zWzGzOyWp9WcXzKUbvHIt8upFa2eoo
+         pKGFcrAGNywEiLXDGg2I02AUrC7P9wuGq8boCDwgV+GEb2AV6rk+u6y8ZLgeF7ETAepI
+         z2kXW/ddeEAym0Kae+H279n4wv6ErdJmhXxN35VBu8M6VYAjBd3tNUkLzXhCpVeOLfkf
+         o0EEAwRv65eRNvn5OwH7oyJjNK/zCwP52EIVjonRT36DrDFsSEdnOGJMuTcaU7EC/qZf
+         6Zbw==
+X-Forwarded-Encrypted: i=1; AKwUvBy3Lm1VSGBVApDGhhrYdXOW4gZo0jd3CnUY3hP97hzSPwW/ieZSy41Ya6KNc+rqXnOV7dw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIcmgUACe+t7bv1tUXIw2ibISq9+7ltDs64Q/MVj3l9W8DWyTXK
+	e0dAIWFACMb3u5uV8zCpRBJXn9crUysW5WGcwqX5RMTJ0JFuqp9gDenQ
+X-Gm-Gg: AYBFou2ZiTr9QF5qqEoOWrGqwPLZb9iIKxYSwrn76qQqswqcNWig14DCUblLLOfqthy
+	9Rar2waXNlTgNqynurNVYWjNz93QHLSQzN7Ht+serZeNieHjsQtnmdqKH+1w/qornO40g63EAmF
+	cgWdCWN4i99Ph5qBEXCT/1BqIlAJksSTE76Ki0rz3MrByeUbjX40s4P6V+FTyr5uw8rcRSRHDyn
+	gEJ9JUsJRKa2D6DwTjxz1G2kJfETqJ9u7nOYJmSj0WYCn9XDlyFslnQkAA1axC0XQF/gvyY1IPi
+	g0FR/0B0HPeA9cO4sA2vD3ODaHKJU4RdkXV2gixDsA5mozobwVRmmTIZJH6IvdQRsMmu/AqO5vo
+	lu6yuNMDV2TSb0k18yXdR6wW13glN9GTp4yC0tsyH34dwU+3xwj6BrxRaUHmN1Y+LspvTN0mWEy
+	HMfe7ty5DFETZZR14yvP/oKDLH/LwGFJuGPPihXailmnUYXkbUxT2tFnff/RDD/3Lx1qwjyoB07
+	fU6a73DKu8IeBj4U/wliRUby2F5LyyDFCfHplllgR6moMWamyaUbPZDbGL4IfJQfuzKlYOdWZ0r
+	ZTr+KjPFv/PSpVV/Op8oVbFbqtWsxtP/aBpr8eblq+csyJnqJGM1iKSj1/m1C65czn3iIh+dhDB
+	1y2RJngKCKsxpRVH/xe7zgg==
+X-Received: by 2002:a05:6870:524f:b0:48f:e0f6:c465 with SMTP id 586e51a60fabf-49e15e5c8c3mr10012930fac.51.1791224244819;
+        Mon, 05 Oct 2026 11:17:24 -0700 (PDT)
+Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-49e16d60931sm10358053fac.4.2026.10.05.11.17.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 11:06:56 -0700 (PDT)
-Date: Mon, 5 Oct 2026 11:06:52 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
-	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, tushar.vyavahare@intel.com, 
-	kerneljasonxing@gmail.com, bjorn@kernel.org
-Subject: Re: [PATCH net-next 00/13] selftests: net: migrate AF_XDP test suite
- over to net
-Message-ID: <asPlpJdawXNRAGAR@devvm7509.cco0.facebook.com>
-References: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
+        Mon, 05 Oct 2026 11:17:24 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 05 Oct 2026 12:17:21 -0600
+Subject: [PATCH net v2] xsk: freeze deferred pool teardown without blocking
+ unregister
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261005-xsk-suspend-teardown-v2-1-2d87228f4329@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/32OwQ6CMBBEf4Xs2ZqlaGk5+R/Gw1IWbZSibUWN4
+ d9t0LNzm9nsm3lD5OA4QlO8IfDkoht9NnJVgD2RP7JwXfYgUSo0FYpnPIt4j1f2nUhMoRsfXhi
+ UvdEb1NZUkF+vgXv3XLB78Jzg8A0D3+65Iv0uLUUWdhwGl5qCsnpdMxnT6lopa0gTIdcl0Uaya
+ q2mbSVxYZ1cTGN4LbOncoH9XziVohSkLFltscKWd8eB3GWd2+Ewz/MHKiuLHQkBAAA=
+X-Change-ID: 20260930-xsk-suspend-teardown-902f98408c93
+To: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: Eric Dumazet <edumazet@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, James Hilliard <james.hilliard1@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>
+X-Mailer: b4 0.15.2
 
-On 10/01, Maciej Fijalkowski wrote:
-> Hi,
-> 
-> This work moves the AF_XDP test suite over to selftests/net and adds
-> a hardware test on top of the python-based drv-net infrastructure.
-> Since a non-zero effort went into implementing xskxceiver's (not so
-> great testing app name) test cases, we did not want to completely
-> abandon it and start everything from scratch within different infra.
-> However, hooking it up to the networking CI will allow us to run
-> cyclic tests on real HW; before that, all of our HW tests were manual
-> local runs.
-> 
-> Tests were based on a process with two threads responsible for the RX
-> and TX paths, whereas the new infra expects two separate processes for
-> the DUT and remote side, where each side has either rx or tx role.
-> 
-> To satisfy this requirement, this series makes each xskxceiver endpoint
-> a process of its own, so that the RX and TX sides of a case can run on
-> different hosts, and adds drivers/net/hw/xsk.py, which runs the existing
-> test cases with the DUT in zero-copy mode against an SKB-mode xskxceiver
-> on a remote host. The veth test keeps its cases and moves with the
-> engine from selftests/bpf to selftests/net.
-> 
-> ZC tests used to expect a single NIC in loopback mode, with both
-> sockets on one of its queues sharing a UMEM. Now we step away from it:
-> the DUT and the remote are separate hosts, and an ntuple rule steers
-> the test traffic to the AF_XDP queue.
-> 
-> The remote endpoint is xskxceiver in SKB mode rather than a plain
-> socket, so both ends keep sharing the packet stream generation and
-> validation of the existing cases. This reduces the need for remote
-> interface being a NIC from narrow set of NICs that are AF_XDP ZC
-> capable.
-> 
-> This implies that during the test run only one side is actually
-> exercised, so let's introduce the concept of direction per test case.
-> For example, this means SEND_RECEIVE in XSK_HW_RX will test
-> ice_clean_rx_irq_zc() routine and in XSK_HW_TX the ice_xmit_zc().
-> 
-> BPF's 'test_progs -t xsk' is removed, as well as single interface mode,
-> which was used for ZC tests. BPF CI therefore no longer runs the
-> xskxceiver cases. test_xsk.sh is kept, as it is the only run that needs
-> no hardware and not all tests are currently covered by the HW test side.
-> We can decide whether to keep the delta test cases, drop them or somehow
-> enable within HW tests.
-> 
-> Thread-based approach had a pacing mechanism that was a simple in-flight
-> packet counter updated within critical section by both ends.
-> Process-based way now is going to do this pacing via xsk_peer.
-> 
-> xsk_peer, the control channel, carries three fixed-size messages: READY
-> is the barrier between steps, PROGRESS tells TX how many packets RX has
-> consumed so that TX does not overrun the RX UMEM, and ABORT stops the
-> peer after a failure.
-> 
-> test_xsk_case_defs.h lists each case with the DUT directions.
-> xskxceiver builds its test table from that file, and xsk.py parses it to
-> make the variants ksft_variants() named rx_<case> and tx_<case>, so -l,
-> -t and -T work as for any other test.
-> 
-> 
-> Patches 1-3 prepare the split. Patch 1 moves the endpoint work out of
-> the pthread entry points. Patches 2 and 3 drop the single-interface
-> loopback mode and the test_progs wrapper, which runs both endpoints as
-> threads of test_progs; neither can work with one endpoint per process.
-> Nothing else runs a subset of the cases, so patch 3 also merges the
-> cases that the wrapper left out into the main list.
-> 
-> Patch 4 adds a generic rule for BPF skeletons to net/bpf.mk, as Jakub
-> suggested in the review of the xdp_features move [0]; xskxceiver is
-> its first user. If that series lands first with the same rule, this
-> patch can be dropped.
-> 
-> Patch 5 moves the engine, its XDP program and the veth launcher to
-> selftests/net. xsk.py needs xskxceiver, and a drv-net test can only
-> rely on net/lib: the selftests build pulls net/lib in for net,
-> drivers/net and drivers/net/hw, while it skips selftests/bpf by
-> default. The veth test is software-only, so it goes to selftests/net,
-> as the drv-net README asks. selftests/bpf keeps building xsk.c from
-> its new place for xdp_hw_metadata and the xdp_metadata test.
-> 
-> Patches 6-9 split the engine. The interface capabilities move into one
-> struct, so that a process can mirror them for the endpoint it does not
-> own (6). main() is split into setup, run and cleanup (7). xskxceiver
-> runs one case per invocation, and test_xsk.sh owns the mode x case
-> matrix (8). Finally, the RX and TX endpoints become separate processes
-> that meet over a small TCP control channel (9).
-> 
-> Patch 10 adds the xskxceiver options that a two-host run needs.
-> Patch 11 moves the case list into test_xsk_case_defs.h, so that
-> xsk.py can read it as well, and patch 12 adds xsk.py on top of them.
-> Patch 13 documents both setups.
-> 
-> 
-> Tested with back-to-back ice NICs connected between separate hosts, with
-> following net.config:
-> 
-> NETIF=ens785f1np1
-> LOCAL_V4=192.168.100.1
-> REMOTE_V4=192.168.100.2
-> REMOTE_TYPE=ssh
-> REMOTE_ARGS=mfijalko@hostname
-> XSK_REMOTE_BIN=/home/mfijalko/bpf-next/tools/testing/selftests/drivers/net/hw/xskxceiver
-> XSK_REMOTE_SUDO=1
-> 
-> 
-> Known issues:
-> - Every case pays for process start-up, XDP attach and detach and, on
->   hardware, its remote commands. We used to configure resources once
->   and then execute the whole test suite; it doesn't seem to be
->   CI-friendly and it is preferred to have each case's resource
->   management separated; that on the other hand increases the
->   execution time of the whole test suite.
+Deferred pool destruction calls ndo_bpf() under RTNL. system_wq is
+not frozen during system sleep, so that callback can run after a
+device has suspended and gated its clocks. Use system_freezable_wq
+so running destruction finishes before device suspend and new work
+waits until process thaw.
 
-[..]
+Keep assigned pools visible to NETDEV_UNREGISTER independently of
+the socket list. A released socket has already left that list, but
+its final pool put can queue destruction after workqueues freeze.
+A resume-time unregister would then wait for a device reference
+whose release cannot run until the resume completes.
 
-> - The XDP programs redirect every packet, so the link under test must
->   carry no other traffic. SSH and the control channel go to the
->   REMOTE_ARGS host, which has to be reached over another link.
+Track assigned pools per netdev under RTNL and detach remaining pools
+after the notifier socket walk, including copy-mode pools. This also
+covers leased queues without scanning pools from unrelated devices or
+network namespaces. Remove the entry on assignment failure and normal
+teardown. The deferred worker still owns the pool and later observes
+the cleared device pointer, avoiding a second driver detach or put.
 
-Will this work on NIPA?
+The lifetime problem was identified by code inspection of the deferred
+release and system-sleep paths.
 
-I took a quick pass, nothing pops us for me. The only thing I'm not sure
-is the bpftool dependency (whether we need to build it or there is
-something on the system). It looks like NIPA failed to apply and run it,
-so maybe address 'redirect every packet' and rebase+repost? As long as
-it passes HW tests we should be good :-)
+Fixes: 1c1efc2af158 ("xsk: Create and free buffer pool independently from umem")
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes in v2:
+- Track assigned pools per netdev instead of scanning a global pool list.
+- Keep deferred releases visible across queue changes and queue leases.
+- Rebase onto current net.
+- Link to v1: https://patch.msgid.link/20260930-xsk-suspend-teardown-v1-1-a6cac8c030be@gmail.com
+
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: Magnus Karlsson <magnus.karlsson@intel.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Björn Töpel <bjorn@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+---
+ include/linux/netdevice.h   |  5 +++++
+ include/net/xsk_buff_pool.h |  3 +++
+ net/xdp/xsk.c               |  5 +++++
+ net/xdp/xsk_buff_pool.c     | 25 ++++++++++++++++++++++++-
+ 4 files changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 3cff2174dc03..72091938f6e6 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -2545,6 +2545,11 @@ struct net_device {
+ 	/* protected by rtnl_lock */
+ 	struct bpf_xdp_entity	xdp_state[__MAX_XDP_MODE];
+ 
++#ifdef CONFIG_XDP_SOCKETS
++	/** @xsk_pools: assigned AF_XDP pools, protected by rtnl_lock */
++	struct hlist_head	xsk_pools;
++#endif
++
+ 	u8 dev_addr_shadow[MAX_ADDR_LEN];
+ 	netdevice_tracker	linkwatch_dev_tracker;
+ 	netdevice_tracker	watchdog_dev_tracker;
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index a7df573784fd..5cc2f61d7fdf 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -48,6 +48,8 @@ struct xsk_buff_pool {
+ 	struct device *dev;
+ 	struct net_device *netdev;
+ 	struct list_head xsk_tx_list;
++	/* Assigned pools, including deferred releases; protected by RTNL. */
++	struct hlist_node dev_node;
+ 	/* Protects modifications to the xsk_tx_list */
+ 	spinlock_t xsk_tx_list_lock;
+ 	refcount_t users;
+@@ -119,6 +121,7 @@ bool xp_put_pool(struct xsk_buff_pool *pool);
+ void xp_clear_dev(struct xsk_buff_pool *pool);
+ void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
+ void xp_del_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
++void xp_clear_dev_all(struct net_device *dev);
+ 
+ /* AF_XDP, and XDP core. */
+ void xp_free(struct xdp_buff_xsk *xskb);
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..781ba46eb152 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -2145,6 +2145,11 @@ static int xsk_notifier(struct notifier_block *this,
+ 			mutex_unlock(&xs->mutex);
+ 		}
+ 		mutex_unlock(&net->xdp.lock);
++		/*
++		 * A released socket is no longer on xdp.list. Its pool can still
++		 * hold a device reference on the frozen release workqueue.
++		 */
++		xp_clear_dev_all(dev);
+ 		break;
+ 	}
+ 	return NOTIFY_DONE;
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 9d2d94f1fb75..c4d722008670 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -204,6 +204,11 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 	pool->cached_need_wakeup = XDP_WAKEUP_TX;
+ 
+ 	dev_hold(netdev);
++	/*
++	 * Socket removal precedes the final pool put. Keep the pool visible to
++	 * NETDEV_UNREGISTER even while release work is waiting for process thaw.
++	 */
++	hlist_add_head(&pool->dev_node, &netdev->xsk_pools);
+ 
+ 	if (force_copy)
+ 		/* For copy-mode, we are done. */
+@@ -265,6 +270,8 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 		err = 0; /* fallback to copy mode */
+ 	if (err) {
+ 		xsk_clear_pool_at_qid(netdev, queue_id);
++		hlist_del(&pool->dev_node);
++		pool->netdev = NULL;
+ 		dev_put(netdev);
+ 	}
+ 	return err;
+@@ -291,17 +298,29 @@ void xp_clear_dev(struct xsk_buff_pool *pool)
+ {
+ 	struct net_device *netdev = pool->netdev;
+ 
++	ASSERT_RTNL();
+ 	if (!pool->netdev)
+ 		return;
+ 
+ 	netdev_lock_ops(netdev);
+ 	xp_disable_drv_zc(pool);
+ 	xsk_clear_pool_at_qid(pool->netdev, pool->queue_id);
++	hlist_del(&pool->dev_node);
+ 	pool->netdev = NULL;
+ 	netdev_unlock_ops(netdev);
+ 	dev_put(netdev);
+ }
+ 
++void xp_clear_dev_all(struct net_device *dev)
++{
++	struct xsk_buff_pool *pool;
++	struct hlist_node *next;
++
++	ASSERT_RTNL();
++	hlist_for_each_entry_safe(pool, next, &dev->xsk_pools, dev_node)
++		xp_clear_dev(pool);
++}
++
+ static void xp_release_deferred(struct work_struct *work)
+ {
+ 	struct xsk_buff_pool *pool = container_of(work, struct xsk_buff_pool,
+@@ -337,7 +356,11 @@ bool xp_put_pool(struct xsk_buff_pool *pool)
+ 
+ 	if (refcount_dec_and_test(&pool->users)) {
+ 		INIT_WORK(&pool->work, xp_release_deferred);
+-		schedule_work(&pool->work);
++		/*
++		 * Teardown calls ndo_bpf(), which may need powered hardware.
++		 * RTNL alone does not exclude the device's system PM callbacks.
++		 */
++		queue_work(system_freezable_wq, &pool->work);
+ 		return true;
+ 	}
+ 
+
+---
+base-commit: aaaaf87ea99b8766c9a8aa0e71aa42e6bc8a5320
+change-id: 20260930-xsk-suspend-teardown-902f98408c93
+
+Best regards,
+--  
+James Hilliard <james.hilliard1@gmail.com>
+
