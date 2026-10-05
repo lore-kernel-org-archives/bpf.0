@@ -1,111 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE3735E92F;
-	Mon,  5 Oct 2026 07:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3C337BE81
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 07:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791186795; cv=none; b=M/Vn9j8vEtTPaAYutl7Uo7F7wWKwX2YO9KUB2gfovlQL0h6DCRBJxVOyQ17l8wSSArHxgpih7LNoAdDy360XsT6pjnH1dgwoBd4fgwhpDD5BzRR+qEtyuptAtSCA9BGilJVbzR4NXvkwF6xW7n/E7VF5cUbKehbapoGUfCdL648=
+	t=1791187180; cv=none; b=mKEvXOPL21FVVDxMdtt/lUTGjtnAtcqHR8Z9hwlQ6lt3wp1MBcKKLaxY3GSngUOVAoxo0uY9u7o9ehRrPXHH1ODQA5QcGyvkHiXTXQsfqkmEzBX9KFV+NCZwLmy3V/3/dSoJkcdPgr6lfbdNQt7ly6R8V7BI/Le8jarn0r2K3a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791186795; c=relaxed/simple;
-	bh=PBXa2DuXdFqBZRICIabALpvUzRmhBpiMuPaWLmZTUGs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WzxOdAGTHAWM6xYZnoiIWysoS9mv+sipFIMWgt3rQm43yo4MkSRQMYDJ+aC0hdj9hM7lPQIYsPOBnvQ6cvkcHGo6MvVnBiYl5OCg5JwNQxjOAQO+y/jfoNj1DwQIcxt0SBAOzEUBdPwCeIX4wZ8dJilSaKSM+dPuuFtZ2u9Gjgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EEX+P8CP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791187180; c=relaxed/simple;
+	bh=jpWF2fgTTsQNMBqjrX3o9f1OjcJ8sDKl5kFBIYtr1z0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=sZl42CBXyyBbgrYfvD9enKJKsdwdLClRfhrELMeIJ2RUhDU52Ti6PFyHA4HjOxML6qZ5ZQkqugFc6lfxVlJOg795Z4TZDZGmGVMqdqUESTEjrfnOMmzH8I0Wa+7k1jGbUh2qeLz47+pWwxsaW5E9pWml/poIIMc4/eybDVAwEoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=kW049N0E; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EEX+P8CP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9521F000FF;
-	Mon,  5 Oct 2026 07:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791186793;
-	bh=p8pB98yXVn3emMjSSVc5iGuD87aD74hXLFXwrp1IR14=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EEX+P8CPFeqWLSN59RzmGW3okJrWBjL6X4WZQ29o3f4Nq0tIqMaqJhXpenBYRESYX
-	 yLr/6vNkyiB/QVgs5zLCeYF1lZ/eWykY2jayP+n3JLO0BDVzLklA2oN66POyCpJ0M8
-	 ACoSS1yP91wzs2/kkXR6AGYVCW0G3/htMwHDa56r5fUmx5ZGlnI2TlDZval00GP2vd
-	 evxYEkphbACrDVnO3o/U/I9epZ0n8riPwtBTcw9qOkk/kHJh8Lw7KxjINSemSfbp9e
-	 jjBzb3UMLUYfwz81sU923vgWgmRmwclgx/rRb5kdSlzAN6+bKnYI9hvtvI9VL3OaWd
-	 EQXmRq8LXJ6Mw==
-Content-Type: multipart/mixed; boundary="===============0647874907332121866=="
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="kW049N0E"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1xDdbY-00CW11-Th; Mon, 05 Oct 2026 09:59:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=AJpRXQHRBb4+gY4/3S+W6fpaM8ojmDIBRhQ4aGx7Imw=; b=kW049N0Ewaq+URE6huHVFmZ0di
+	5O0JtV6sqo7SlROpp2utVSdu3YzDX5lKRidExLdFTskN2YdxIyaKXQG+B9wLNElUC0aSCDYQyQTDz
+	8seBh+lh8ri+ifM0z1MWwthdR1gbJoDH8C5Twx8PQBN0rbOqvdA9w1rvfp8M0I1FJwQeTJ+O6nMVV
+	G8uPsJnnDTacK7qJUwq1tNEEKfWVYmoS46OwFI4cyb1kQz5jAZzyp7tm3I6Quw+Gm3t12A2+5paHy
+	rz3OpuC88yeL4Ik0UvyCBETAtNP4Fri4EjRfTIF4WX4bEY3JcnsKSTo8TjurZpYBWdFYr6HbiaWSL
+	1GLZjbNg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1xDdbR-0003yJ-Qv; Mon, 05 Oct 2026 09:59:17 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xDdbJ-00BpL3-Pe;
+	Mon, 05 Oct 2026 09:59:09 +0200
+Message-ID: <4dfb9200-8bd1-4806-90d8-892529b79962@rbox.co>
+Date: Mon, 5 Oct 2026 09:59:08 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3a4688cd7929354339fc61a5f4e8a0109e426a83097d9d9a2357ac6e3fe2c9ea@mail.kernel.org>
-In-Reply-To: <20261005070625.8871-4-kmehltretter@gmail.com>
-References: <20261005070625.8871-4-kmehltretter@gmail.com>
-Subject: Re: [RFC PATCH v2 3/3] selftests/bpf: exercise task storage from hrtimer_start
-From: bot+bpf-ci@kernel.org
-To: kmehltretter@gmail.com,peterz@infradead.org,tglx@linutronix.de,bigeasy@linutronix.de,akpm@linux-foundation.org,vbabka@kernel.org,harry@kernel.org,ast@kernel.org
-Cc: kmehltretter@gmail.com,mingo@redhat.com,will@kernel.org,boqun@kernel.org,longman@redhat.com,corbet@lwn.net,david@kernel.org,hannes@cmpxchg.org,shakeel.butt@linux.dev,stevensd@google.com,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,shuah@kernel.org,ameryhung@gmail.com,swarajgaikwad1925@gmail.com,clrkwllms@kernel.org,rostedt@goodmis.org,linux-kernel@vger.kernel.org,linux-doc@vger.kernel.org,linux-mm@kvack.org,linux-rt-devel@lists.linux.dev,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,cgroups@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  5 Oct 2026 07:53:09 +0000 (UTC)
-
---===============0647874907332121866==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH net] vsock/bpf: release sock lock while waiting for data
+ in recvmsg
+To: Stefano Garzarella <sgarzare@redhat.com>, jrmmhm.kernel@eldare.de,
+ Bobby Eshleman <bobbyeshleman@meta.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Bobby Eshleman <bobby.eshleman@bytedance.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, virtualization@lists.linux.dev,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20260929-kbh3-1-022-fix-v1-1-cc97cc95d269@eldare.de>
+ <ar4gvlZL1JyPycg1@sgarzare-redhat>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <ar4gvlZL1JyPycg1@sgarzare-redhat>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: exercise task storage from hrtimer_start
+On 10/1/26 11:01, Stefano Garzarella wrote:
+> +cc Bobby and Michal who touched this code recently
+> 
+> On Tue, Sep 29, 2026 at 06:33:04PM +0200, Jerome Mohm via B4 Relay wrote:
+>> From: Jerome Mohm <jrmmhm.kernel@eldare.de>
+>>
+>> vsock_bpf_recvmsg() takes lock_sock(sk) and holds it across the whole
+>> receive loop, including vsock_msg_wait_data(), which sleeps in
+>> wait_woken() without dropping the lock. When data arrives, the
+>> transport's delivery context (the vsock-loopback worker, or the
+>> virtio/vhost rx path) calls virtio_transport_recv_pkt() -> lock_sock()
+>> on the same socket and blocks. That context is the only one that would
+>> queue the skb and call sk_data_ready() to wake the reader, so neither
+>> side makes progress. A blocking recv() hangs until a signal arrives (a
+>> finite SO_RCVTIMEO also breaks it); while it lasts the shared delivery
+>> worker is stalled, so all vsock rx on that transport stops, not only
+>> the affected socket. The hung-task watchdog reports the worker blocked
+>> in D state:
+>>
+>>  INFO: task kworker/1:3:107 blocked for more than 5 seconds.
+>>  task:kworker/1:3 state:D Workqueue: vsock-loopback vsock_loopback_work
+>>  Call Trace:
+>>   __schedule
+>>   schedule
+>>   __lock_sock
+>>   lock_sock_nested
+>>   virtio_transport_recv_pkt
+>>   vsock_loopback_work
+>>
+>> The reader holds the same sk_lock-AF_VSOCK it is waiting on, taken in
+>> vsock_bpf_recvmsg().
+>>
+>> This code is based on net/unix/unix_bpf.c, whose unix_msg_wait_data()
+>> drops u->iolock around wait_woken() and re-takes it afterwards. The
+>> vsock port substituted lock_sock() for that serialisation lock but
+>> omitted the unlock and relock. tcp_bpf and the native
+>> vsock_connectible_wait_data() both drop the lock across the wait;
+>> vsock_bpf is the only one that does not.
+>>
+>> Release the socket lock around the wait and re-acquire it before
+>> re-checking for data, so the caller's locking is unchanged.
+>>
+>> Fixes: 634f1a7110b4 ("vsock: support sockmap")
+>> Cc: stable@vger.kernel.org
+>> Assisted-by: LLM
+>> Signed-off-by: Jerome Mohm <jrmmhm.kernel@eldare.de>
+>> ---
+>> net/vmw_vsock/vsock_bpf.c | 2 ++
+>> 1 file changed, 2 insertions(+)
+>>
+>> diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
+>> index 9049d2648646..bb7d81a95baa 100644
+>> --- a/net/vmw_vsock/vsock_bpf.c
+>> +++ b/net/vmw_vsock/vsock_bpf.c
+>> @@ -50,7 +50,9 @@ static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long ti
+>> 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+>> 	ret = vsock_has_data(sk, psock);
+>> 	if (!ret) {
+>> +		release_sock(sk);
+>> 		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
+>> +		lock_sock(sk);
+>> 		ret = vsock_has_data(sk, psock);
+>> 	}
+>> 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+>>
+>> ---
+>> base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
+>> change-id: 20260929-kbh3-1-022-fix-340aa3f7f071
+>>
+>> Best regards,
+>> --
+>> Jerome Mohm <jrmmhm.kernel@eldare.de>
+>>
+> 
+> LGTM, but I'd like also Bobby and Michal opinion:
+> 
+> Acked-by: Stefano Garzarella <sgarzare@redhat.com>
 
-TL;DR: Test-organization question only: should the new hrtimer task-storage
-selftest be a subtest of task_local_storage.c instead of a separate file? The
-review finds the test logic correct and the standalone file defensible.
+I took a look at v2 and I don't really have any functional comments. Well,
+besides the use of READ_ONCE, but that's probably something we need to
+tackle separately?
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_storage_hrtimer.c b/tools/testing/selftests/bpf/prog_tests/task_storage_hrtimer.c
-> new file mode 100644
-> index 000000000000..216e66263bf6
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_storage_hrtimer.c
-> @@ -0,0 +1,50 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <sys/timerfd.h>
-> +#include <unistd.h>
-> +
-> +#include <test_progs.h>
-> +#include "task_storage_hrtimer.skel.h"
-> +
-> +#define TRIGGER_COUNT 1000
-> +
-> +void test_task_storage_hrtimer(void)
-> +{
+A single-patch v2 addresses not only the original bug, but also sashiko's
+complains about the pre-existing issues (making the subject stale?), but I
+didn't know if you'd rather have all of that stuffed together, so I
+refrained from commenting to avoid confusing the author.
 
-A subsystem pattern flags this as potentially concerning: this adds a new
-top-level test file for a narrow variant of behavior that an existing test
-in the same directory already covers more generally.
-
-prog_tests/task_local_storage.c already groups the general task-local
-storage tests as subtests, including test_nodeadlock(), backed by
-progs/task_storage_nodeadlock.c.  That subtest performs the same
-bpf_task_storage_get(..., BPF_LOCAL_STORAGE_GET_F_CREATE) followed by
-bpf_task_storage_delete() sequence and counts failures, just from a
-different hook (lsm.s/socket_post_create).
-
-The only difference here is the attach point, tp_btf/hrtimer_start, which
-reaches the task storage allocator under the hrtimer base raw lock on
-PREEMPT_RT.
-
-Should this be a new subtest of test_task_local_storage() instead of a
-separate prog_tests/task_storage_hrtimer.c?
-
-For balance, the standalone file may well be defensible.  It uses its own
-skeleton, as the existing task_local_storage.c subtests also do, so folding
-it in would mostly move the test function rather than share setup.  It also
-exercises a path that no existing selftest reaches: none of the current
-programs that use task storage attach to tracepoints emitted from inside the
-hrtimer code, and the programs that do use hrtimer tracepoints
-(timer_start_deadlock.c, test_vmlinux.c) do not use task storage.
-
-The test logic itself looks correct: the tp_btf prototype matches
-TP_PROTO(hrtimer, mode, was_armed), and timerfd_settime() with a non-zero
-it_value emits one trace_hrtimer_start under cpu_base->lock, so the counter
-assertions are consistent.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37277547264
---===============0647874907332121866==--
+thanks,
+Michal
