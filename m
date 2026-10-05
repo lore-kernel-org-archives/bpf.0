@@ -1,111 +1,152 @@
-Received: from mail-pj2-f0.google.com (mail-pj2-f0.google.com [74.125.227.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C57318BB8
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 18:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.128
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39F330AAD8;
+	Mon,  5 Oct 2026 18:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791225056; cv=none; b=kTrPZGke7ISdeGhAs8sr+wZqyinibIoJQXCA5vxTfTChrUyDpvDMOQVaSvF09T+bllIb5LiP+zhLsNKl4f6aQEAzwlEs2HH4ZDRAJcurIuXHaoqmZ4oIYR2juxRf+3lPRPpAVw8EbVbj9PofBnwowNNQ2WUjc+qF63pYByxAoLk=
+	t=1791225227; cv=none; b=JWZ+TW1PGkg4vd0WKeOMadvdtewvwL394ZESpnIKwsP027fep8QvfyyJ8xfLlz1zIRmvbhS0vm8RffZxF0j2s8y7GKMxDhZVRCLn4Likc4Jp34YAE5NopjT1vZ2c8sOKm1boIl0DPm7aL51ptoy1K2ZoDc3kHFTu/ZGU+XfTRh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791225056; c=relaxed/simple;
-	bh=LHMwDqlcXSfkxv44u/ZvcB9y/jElzy1xDWD2jp55OCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dZDgYeYYyNInz9QDAOqmyQnu9KLq1agG9aaV4iKUWIpK2AF7bW8D5yaOSHBk49nI2kYixtuZu7W+F2Hd1FK1ok6miL2E8EHgobKQJCyHASagGguZ4F4BOMeAt8ODhYeLHngAj+ym8xtR0b90CWDHg8ND9lQappgUr5Wai5fHUNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cjsuemS/; arc=none smtp.client-ip=74.125.227.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791225227; c=relaxed/simple;
+	bh=Fun/YY4Lj4ooQUInoo5MERLda9ccTkcQOBVDuFQC9sw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=oAgB3HbD42N/8VwdOkXakZz703J+IVmB1oM0wIZa/OOG5/EIWs/MTH/SarkXTsXWdh/gFXUGhXdLyPKSzqjlAz5HfIXaI5zBS4xFNhMaoiL6U60X4acMqZeQ6KdFzxdIyzHGzUPC52envRibk2haOOLvCRwSI7QO1BFKU8dL5ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=RZYRNy7X; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cjsuemS/"
-Received: by mail-pj2-f0.google.com with SMTP id 98e67ed59e1d1-3a4883304bdso510516a91.1
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 11:30:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="RZYRNy7X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791225055; x=1791829855; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xS5HF65LoVsFRjbOhyoQkdS88ZjBoG/dqtGiSK55d78=;
-        b=cjsuemS/06SA9o9og9VYoXpUdF7N11RNYrc03KPI9eeguId1oKSnC4J2OfMVE9k58w
-         zdpm2d2YueSBAEHkfIyQYdYByVBzF/gxIGM+8OUkk2VbjONVB1kEQwQ3T/F6MpufvJzu
-         DYPTNEDLna5aAAk1dCOMxfm8R1VknOoFwfJGmYQhov4LNFSyUPUdbKxDqqmAiBAYOFHs
-         9ZTuNFRpfkNMl8lgoRa5ylpZcxVmHfKNB7MQJWPzYZkyuwY1+eHp/G8jh3GxhdzUzyzb
-         /wK3lG/2I+D3pKnIiUCrDfQQudw6wilOsJMENmA2r9sfIuADXKy4FGde5WDbpCAx28RA
-         vqJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791225055; x=1791829855;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xS5HF65LoVsFRjbOhyoQkdS88ZjBoG/dqtGiSK55d78=;
-        b=xGFwCx9V0fOxBN3YE7DOj2Oy7sywfvPT9C6wZcWXwYv2CuTscX4mmzh8EHvcQ1Dhlh
-         l1Fv+ZlRq+F8PLYP7nNwlVMGgqAg4gogZGOHeYLonojWE0/ZNDGXRrvozLS/Zlcs1KP7
-         oCH3KKEwrsv8F8w2LjC5XrEV01x13HurP4iuSfgoEJtPsLCU1IwONN0e6KkDJA9mx0qE
-         6bLUt/6sm0/E3mcQRWV9a5J2N/F6+Swktg6LYxuyLUzq1QZ4CIwGi3H/DkiASI3FVAC5
-         VjPCA9/TD39qCAlLrE3S9Q2T+8AEfVrdD5w0UOQ69e3sG9snOW3/Oh/awKHp0/Ul8+uI
-         nCiA==
-X-Forwarded-Encrypted: i=1; AKwUvBxrjn7j9rp2aWUTPUSjqDbHDepvX8OND8TOFbMM5rUdXIqAcWXsJqzklr9UExIxRD8tA+8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYISbrCNtCHzradEht04CR6+iq/bsb3dYBHdfmtQPAl5qYtmJXkT
-	Ymjh6tmmSgKfMvtMQ/3GrxHCyFlzVUasl36CqtzXsfhEX9barzXRvrsN
-X-Gm-Gg: AYBFou3EmD5Mi2bBjmBAWwK/XHdy8yM4NcI3Z9BztaGutXuQfPIZc/49Z/3hoko7DQq
-	+niEO4n5r2LoIHkabRL9fk/UIyUcyDK5kniMj/tB/3giepNc4sl76q0xGEs32DamkvhHfhCqpuY
-	H977TfM0c/ca8y4Of8XI+ULUETcmbzasQq5LY9jzQ0Vj4BnoySBXlqjbzPk7FSu8qxyb+ow6JR2
-	n40IVXRjdvU18A/LO4itAqOkzHoa7sgZsaCMGBaCX52ktGk1QCEOwTIZDHrSw3MP1VCZtR2bK0F
-	fOCPe7dcMVlr7eOtRV4KvNdX27ZnGldn955gq2dmxaUlQN/u75gl462W2lXPnq5jvIocDXYKOcV
-	XFXO14NoB0dmTDzTnoZcC3EFMAEcHs1ffKkObZ9fVUozbD2lfFwKdeZkijDBPs9ERHznUupZ3TU
-	SO5O5FymwXYjtefE97CVAb7ASb0uuq9m1D5HLivMcqCrVhk6tz1E/a+Yxyd8Urq97H
-X-Received: by 2002:a17:90b:4a86:b0:3a7:da33:ff3d with SMTP id 98e67ed59e1d1-3a7da34065bmr4683519a91.46.1791225054557;
-        Mon, 05 Oct 2026 11:30:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4c::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a853cea0f1sm646225a91.15.2026.10.05.11.30.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 11:30:54 -0700 (PDT)
-Date: Mon, 5 Oct 2026 11:30:46 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tenzin Ukyab <ukyab@berkeley.edu>, =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 bpf-next 2/9] bpf: tcp: Add a new per-socket flag and
- kfunc for bpf_tcp_ops.
-Message-ID: <asPsATnTIr0Fxa_b@devvm7509.cco0.facebook.com>
-References: <20261005154533.4147685-1-kuniyu@google.com>
- <20261005154533.4147685-3-kuniyu@google.com>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=BvfWz4wUp+IErnw5zVN/AdzZtRqcY8f
+	SnEXQExAZlUw=; b=RZYRNy7XKptZ48e02DwAJMnDXQb8LREf5r/v41iUPIddymB
+	Mkn3wOkMvGfnUp4L2kO2VZD4+pMvxVeP0WP1MLSOtuAJG/VuJomL4odyGPljygvz
+	nionbTFog1/kDbI1pClCpcUsEFTVvlsMPCQDEam559fzxa1/N3H3SwIzwbl0=
+Received: from [172.17.0.2] (unknown [101.6.30.195])
+	by web1 (Coremail) with SMTP id yAQGZQAXjj5z7cNqfPTAAA--.64526S4;
+	Tue, 06 Oct 2026 02:33:27 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Date: Mon, 05 Oct 2026 18:33:24 +0000
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Cover non-trusted pointer to
+ __arg_trusted subprog arg
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261005154533.4147685-3-kuniyu@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261005-a3-arg-trusted-v4-v2-2-319ce2936949@mails.tsinghua.edu.cn>
+References: <20261005-a3-arg-trusted-v4-v2-0-319ce2936949@mails.tsinghua.edu.cn>
+In-Reply-To: <20261005-a3-arg-trusted-v4-v2-0-319ce2936949@mails.tsinghua.edu.cn>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: Yonghong Song <yonghong.song@linux.dev>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Shuah Khan <shuah@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Song Liu <song@kernel.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791225207; l=2552;
+ i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
+ bh=Fun/YY4Lj4ooQUInoo5MERLda9ccTkcQOBVDuFQC9sw=;
+ b=9QHGlKc4z6GEWfqpCoaswPIomnvqBtkpo2OkU0CVgAtoOtb4qlHf3Ijc34M3Zz5Xgj/082foc
+ qKyAqwwGKXRAdU17H5/ZEkXdwwFjrYlfRQpCOjOMrbESwvGWMY4VCaU
+X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
+ pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
+X-CM-TRANSID:yAQGZQAXjj5z7cNqfPTAAA--.64526S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF4UJFyrCw4Utr4Utr1DWrg_yoW5GFW5pF
+	4kAwnxXayxtan2q34fJr47ur4SgF1rZ34rGr1fX34fuFs8JFn7Gry8KF4YqrW5Crn5KFna
+	vrWqgrZI9rnrKaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Cr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
+	x4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFV
+	AIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E74AGY7Cv6cx26r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
+	kI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxE
+	wVAFwVW5MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2IqxV
+	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+	6r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
+	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+	1UYxBIdaVFxhVjvjDU0xZFpf9x07Uh2-5UUUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On 10/05, Kuniyuki Iwashima wrote:
-> The legacy SOCK_OPS guards some hooks with a per-socket flag,
-> tp->bpf_sock_ops_cb_flags.
-> 
-> In contrast, bpf_tcp_ops was initially designed without per-socket
-> flags so that users can simply define only the callbacks they need.
-> 
-> However, it turned out that even attaching a bpf_tcp_ops with a NULL
-> callback incurs measurable overhead in the fast path. [0]
-> 
-> We could reuse tp->bpf_sock_ops_cb_flags, but it is u8 and has only
-> 1 bit left for a new opt-in callback, while not all of the 7 existing
-> opt-in hooks are in the fast path and really need a flag guard.
-> 
-> Moreover, tp->bpf_sock_ops_cb_flags has two bpf helper functions to
-> update it, both of which require sock_owned_by_me(sk):
-> 
->   * bpf_sock_ops_cb_flags_set()
->   * bpf_setsockopt(TCP_BPF_SOCK_OPS_CB_FLAGS)
+verifier_global_ptr_args.c already covers passing an untrusted pointer
+to a __arg_trusted argument, which is rejected by the register type
+match. It does not cover the bare PTR_TO_BTF_ID or MEM_RCU flavors, both
+of which the type match accepts.
 
-Can we return -EINVAL from these when used with sock_ops?
-If we keep one flag we can presumably put both tcp_call_bpf_Xarg and
-bpf_tcp_ops_call under the same if conditional?
+Add two cases. The first walks task_struct->last_wakee out of a trusted
+current task and passes the result to a __arg_trusted subprogram
+parameter; the field has no __rcu tag and is not in
+BTF_TYPE_SAFE_RCU(task_struct), so the load yields a bare PTR_TO_BTF_ID.
+The second passes task_struct->real_parent, which is __rcu and on
+BTF_TYPE_SAFE_RCU(task_struct), so the load yields
+PTR_TO_BTF_ID | MEM_RCU. Both calls are expected to be rejected with
+"must be referenced or trusted".
+
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+ .../selftests/bpf/progs/verifier_global_ptr_args.c | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+index dcc2dd46751a4..6765fd4b4a239 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+@@ -289,6 +289,46 @@ __weak int subprog_void_untrusted(void *p __arg_untrusted)
+ 	return *(int *)p;
+ }
+ 
++__weak int subprog_trusted_bare(struct task_struct *task __arg_trusted)
++{
++	return task->pid;
++}
++
++SEC("tp_btf/task_newtask")
++__failure
++__msg("R1 must be referenced or trusted")
++__msg("Caller passes invalid args into func#{{.*}} ('subprog_trusted_bare')")
++int bare_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++	struct task_struct *wakee;
++
++	if (!cur)
++		return 0;
++	wakee = cur->last_wakee;
++	if (!wakee)
++		return 0;
++	return subprog_trusted_bare(wakee);
++}
++
++/*
++ * real_parent is __rcu and on BTF_TYPE_SAFE_RCU(task_struct), so the load
++ * yields PTR_TO_BTF_ID | MEM_RCU. That is neither referenced nor trusted and
++ * must not satisfy __arg_trusted.
++ */
++SEC("tp_btf/task_newtask")
++__failure
++__msg("R1 must be referenced or trusted")
++__msg("Caller passes invalid args into func#{{.*}} ('subprog_trusted_task_nullable')")
++int memrcu_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++
++	if (!cur)
++		return 0;
++	return subprog_trusted_task_nullable(cur->real_parent);
++}
++
+ __weak int subprog_char_untrusted(char *p __arg_untrusted)
+ {
+ 	return *(int *)p;
+
+-- 
+2.43.0
+
