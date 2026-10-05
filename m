@@ -1,110 +1,148 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.187.6.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97024C14E7;
-	Mon,  5 Oct 2026 15:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.187.6.220
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6D04C33D1
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 15:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791213226; cv=none; b=L0BJNReoJGcMOZ/N+ke9uvgcaRDV3Vot6lhxAv+d1+mVV7xgerCJuBdop9+WpEj92vUUKOQYMm7jfD+DVu0DkBg4RcvUR226p3RKnqX7AEbWxQmBEv4kIL488nFUsT49F+7Tw8zWAbaUjXk+jmWYBD58dYNXW82GubbzlSVcPBA=
+	t=1791213380; cv=none; b=CspY5FZBH8Rgj+pK2kK+yaHqUfSwlMAeid66G2H9ylhSSnbm2fhXeLB2IFvkPZ0zpFM/O2Ri218kCTijmAOxA0LYQkItBWBq1BoVvpPRmqVG+I0G6hUzfZ5hYj+l0rlv9EUP2wDh5WZmqJRBdLNUz1fl5fISgFJQhyu09rDJQh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791213226; c=relaxed/simple;
-	bh=pJU3lerMSTkvker9UBB12y7U1kf54n1WOEYuByMKDFM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=h3cRhwBXIpZT+MQZEc9ytUCyXkrGS/e+TfodGpNRfUdpk8BpuqA0PwlRdHIaopdfsARwfOKnpMe47pDMHqLQKSmDtlCORNuF+GgLSiF+S9myXTdMMRIsF1/QUQwsj2QmTOhS4wYw1WJ1gNHbkM7an1qHh3iOTSJDKTBjSVtufzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ash3kpwS; arc=none smtp.client-ip=52.187.6.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1791213380; c=relaxed/simple;
+	bh=9iw8ZUv5D4s6rL/UUPqu5ipz2w+MU6JtML40NeGnyKc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=n+4z2QkUCWLXnlivstcLCDgugb8a56oz+s8s7AyLlTZrbfn5HBS+ZhS6FlqIQcAhfEf6YHIigHTlPCL+2Ay3xwa7jJ1qmZdaXl2yGFTfx+mDkU/K/bDZi3583xENCTNJ2YIr3x6E8RUIiwki0mysF+rOegomrrHyQKeDNOScGuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ROTj+Tu7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ash3kpwS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=KP7y2p56D8Q78sfri8PMDPkRWq4kUYZWd1Yi9EI/0Kk=; b=ash3kp
-	wSp6ebX9fZR6zfLdirIGJZMIhYmuamo1ktRE46Y0etjFSQ3WfZcxi2R0BexfQBlA
-	INKK1T4bzSB046hS966QMj7YkX0JqOw0+QDJKIk6YdEYOfOIlimyv1H/lhyklk2I
-	zOhk50GxjYBHFT8y6CZEIOw6K4YKyLiXTISsQ=
-Received: from [172.17.0.2] (unknown [101.6.30.195])
-	by web4 (Coremail) with SMTP id ywQGZQCHSAZ6vsNq8u+4AA--.39659S2;
-	Mon, 05 Oct 2026 23:13:05 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf 0/2] bpf: Require referenced or trusted pointer for
- __arg_trusted arg
-Date: Mon, 05 Oct 2026 15:12:56 +0000
-Message-Id: <20261005-a3-arg-trusted-v4-v1-0-50ee0268fd39@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ROTj+Tu7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC3E1F000FF;
+	Mon,  5 Oct 2026 15:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791213379;
+	bh=9N65i3XEZEubNXwVa0TWUNU80T4M2msWpjlM3pYv/fE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ROTj+Tu7SUf3EWGOeHuP/TcpdTBlRNhMxVwhdT73lMnIEvziT4pcAFcX4A7s4Po4K
+	 oeCySfwbuMy7FniEShrnJR2CAjXkVvPdAkwTsICkamrW1C2/7Rd1RHqBRBjrv5QPhM
+	 eVes3OxasoXu9wXXbxshE/zLWGljj64Wt3QGFkIZ3ptiQToJ/6BmHr82OP45OAMzd4
+	 5SKL2mLM7cLe+qJ+6KF6AmQJRMoh2oI/F84N1zczDhF3GnV57venCXUFx0+FZktsjD
+	 KqXJn6SjnfPZLf9uInBpxX6bRD1SleZ+DpCwqUK8wo/jBLCZOQ1bR0cAFN5n7hcxAs
+	 eI+faodQICwWQ==
+Content-Type: multipart/mixed; boundary="===============3639536784644879793=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <0165f4443454d5f0018f35ff645c3d7581776fe7979e84732c0eb7777ba6b6c0@mail.kernel.org>
+In-Reply-To: <20261005142219.33451-8-yunwei356@gmail.com>
+References: <20261005142219.33451-8-yunwei356@gmail.com>
+Subject: Re: [RFC PATCH bpf-next 7/7] Documentation/bpf: Describe inline kfuncs
+From: bot+bpf-ci@kernel.org
+To: yunwei356@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,x86@kernel.org,tglx@kernel.org,mingo@redhat.com,bp@alien8.de,dave.hansen@linux.intel.com,hpa@zytor.com,leon.hwang@linux.dev,puranjay@kernel.org,sunhao.th@gmail.com,yunwei356@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  5 Oct 2026 15:16:16 +0000 (UTC)
+
+--===============3639536784644879793==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHi+w2oC/x3MQQ5AMBBA0as0szZJ0QquIhalg9kg0xKJ9O4ay
- 7f4/4VAwhSgVy8I3Rz42DPKQsG8uX0lZJ8Nla6aUmuLrkYnK0a5QiSPt8HOW9+Z1pKdHOTuFFr
- 4+Z8DTOcCY0ofl+yFB2gAAAA=
-To: Eduard Zingerman <eddyz87@gmail.com>, 
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- Jiri Olsa <jolsa@kernel.org>, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>, 
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, 
- Song Liu <song@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791213186; l=1492;
- i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
- bh=pJU3lerMSTkvker9UBB12y7U1kf54n1WOEYuByMKDFM=;
- b=p+W2l2x4ve+LvoodoT89Ej+eRS9RQflsbz2vd4tFsT0MZnM+/F/Nj5b+KNj8mYqhfhEIiz5lf
- CRwFlTmmw1/APscQKve866GtDbQu78haHffOCth7XuwXY6Z8w4BUdAr
-X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
- pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
-X-CM-TRANSID:ywQGZQCHSAZ6vsNq8u+4AA--.39659S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw18JFW7CFyDKF18WFWDCFg_yoW8Xr43pF
-	48Krn0gF4kCFsFy3s3tF4Ivry3Zrs5Aay5Cr1xJayfCFs8WrWxJrWYkFWDX3WYkr95G34Y
-	vF909w1Fga4DC3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB0b7Iv0xC_KF4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
-	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-	F2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a
-	6rW5MxkIecxEwVAFwVW5WwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr
-	1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcPl1DUUUU
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-A global subprogram parameter tagged __arg_trusted is specified to accept
-only the PTR_TRUSTED flavor of PTR_TO_BTF_ID, but the call-site check also
-accepts a bare PTR_TO_BTF_ID and an MEM_RCU one.
+> Documentation/bpf: Describe inline kfuncs
 
-check_reg_type() resolves the accepted types from the base argument type
-alone without consulting arg_type's PTR_TRUSTED bit, and the trusted/RCU
-enforcement in check_func_arg() is gated on is_kfunc(meta) so it never runs
-for a subprogram call. A caller can therefore pass a pointer that is not
-trusted and the callee is verified as holding PTR_TRUSTED, which makes the
-dereference a raw load instead of a BPF_PROBE_MEM probe and lets the callee
-pass the pointer on to a kfunc that would have rejected it at the original
-call site.
+TL;DR: Documentation only: the new inline kfuncs section may be incomplete. It
+omits the CONFIG_BPF_JIT_KASAN case that blocks native code, and the
+32-instruction and 32-bit __k limits that make registration fail.
 
-Reject a PTR_TO_BTF_ID that is neither referenced nor trusted when the
-argument is marked PTR_TRUSTED. A referenced register is accepted, as in
-is_trusted_reg(). PTR_MAYBE_NULL is not counted as unsafe when __arg_nullable
-declares it, so trusted-and-nullable arguments keep working. The kfunc path
-is unchanged.
+> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> index 73578a4c3b1f..432e61a82aa9 100644
+> --- a/Documentation/bpf/kfuncs.rst
+> +++ b/Documentation/bpf/kfuncs.rst
 
-Yiyang Chen (2):
-      bpf: Require referenced or trusted pointer for __arg_trusted arg
-      selftests/bpf: Cover non-trusted pointer to __arg_trusted subprog arg
+[ ... ]
 
- kernel/bpf/verifier.c                              | 21 ++++++++++++
- .../selftests/bpf/progs/verifier_global_ptr_args.c | 40 ++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
+> @@ -695,6 +695,59 @@ verified inline, so an unassigned R2 is simply passed back to the caller as
+>  uninitialized and only a caller that reads it fails. A stack pointer left in
+>  R2 is still rejected there, just as one in R0 is.
+>
+> +2.10 Inline kfuncs
+> +------------------
 
-base-commit: d82cbceca49252bb0cd695326af8206c734e2744
+[ ... ]
 
---
-2.34.0
+> +The verifier replaces each call with the body before it analyzes the program.
+> +Only the arguments are readable at the entry of the body, and R1-R5 are not
+> +readable after it, as after a call. After the analysis, a call goes back into
+> +the program if the JIT has native code for it, with its operands bound to the
+> +registers that the moves around the call copied them from or to. The body stays
+> +when the verifier rewrites it later, for example with speculation barriers,
+> +when it accesses memory other than the stack, map values, memory and packets,
+> +and when constant blinding is on.
 
+Is this list of cases complete?  In kfunc_native_ok() in
+kernel/bpf/kfunc_inline.c, the case for PTR_TO_MAP_VALUE, PTR_TO_MEM,
+PTR_TO_PACKET and PTR_TO_PACKET_META ends with:
+
+    /* the JIT checks these accesses with KASAN, native code does not */
+    if (IS_ENABLED(CONFIG_BPF_JIT_KASAN))
+            return false;
+
+When CONFIG_BPF_JIT_KASAN=y (HAVE_EBPF_JIT_KASAN is selected on x86-64), a
+body that loads or stores through a map value, memory or packet pointer
+keeps its body and gets no native code.
+
+Of the in-tree kfuncs that covers bpf_load_be64(), bpf_prefetch() and
+bpf_copy16().  The text names movbe for bpf_load_be64() as the x86-64
+example, so a reader who finds that kfunc not inlined has nothing here to
+explain it.  Only accesses to the stack remain inlined when
+CONFIG_BPF_JIT_KASAN is set.
+
+Should CONFIG_BPF_JIT_KASAN be added to the list, for example:
+
+  ... when it accesses memory other than the stack, map values, memory and
+  packets (or any memory but the stack with CONFIG_BPF_JIT_KASAN), and when
+  constant blinding is on.
+
+[ ... ]
+
+> +Registration checks each body: it may use R0-R5, ALU instructions, loads and
+> +stores, and forward jumps that land within it, so that it ends by falling
+> +through its last instruction, but not the sign extension, signed division and
+> +byte swap of cpu v4, which not every JIT has. Each argument and the result must
+> +fit in one register, and the kfunc may have no kfunc flags. ``emit`` writes at
+> +most ``BPF_KFUNC_INLINE_MAX`` bytes. Modules give their kfuncs bodies and
+> +native code in the same way.
+
+This paragraph reads as the list of what registration checks, but
+btf_check_kfunc_body() in kernel/bpf/btf.c rejects a body in two more
+cases that are not listed.
+
+First, a body may have at most BPF_KFUNC_BODY_MAX_INSNS instructions (32,
+from include/linux/btf.h):
+
+    !len || len > BPF_KFUNC_BODY_MAX_INSNS
+
+Second, a __k argument must be at most 32 bits wide, even though a u64
+fits in one register:
+
+    btf_param_match_suffix(btf, &args[i], "__k") &&
+    btf_type_skip_modifiers(btf, args[i].type, NULL)->size > sizeof(s32)
+
+A kfunc with a "u64 n__k" argument and a two-instruction body satisfies
+every rule in the text, yet register_btf_kfunc_id_set() still fails with
+-EINVAL.  A rejected body makes btf_add_kfunc_bodies() fail, so the whole
+kfunc set is rejected, with no message pointing at the cause.
+
+The text also doesn't say that atomics, ld_imm64, call, exit, gotol and
+may_goto are not allowed in a body, although the positive list implies it.
+
+Could the 32 instruction limit and the 32-bit limit on __k arguments be
+stated next to the "Each argument and the result must fit in one register"
+rule?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37326585321
+--===============3639536784644879793==--
