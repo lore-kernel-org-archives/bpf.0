@@ -1,157 +1,135 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3C337BE81
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 07:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31C43783C8
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 08:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791187180; cv=none; b=mKEvXOPL21FVVDxMdtt/lUTGjtnAtcqHR8Z9hwlQ6lt3wp1MBcKKLaxY3GSngUOVAoxo0uY9u7o9ehRrPXHH1ODQA5QcGyvkHiXTXQsfqkmEzBX9KFV+NCZwLmy3V/3/dSoJkcdPgr6lfbdNQt7ly6R8V7BI/Le8jarn0r2K3a0=
+	t=1791188085; cv=none; b=nJ4p4fHUYeqgotOUs46VkiX/cxjz0aCV5fRMY66LngdtBNrd59KIw/Ea/e4PvgWBQa+uCvCAWQAF4GzBez8rt0cooUQPliR4GcFBgeDT44duTcqyHsdrx6i5PWBSbrEcsnwIJEwWeaTw47kuSrFWKW683zAp0hDlRKSQTGJNp6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791187180; c=relaxed/simple;
-	bh=jpWF2fgTTsQNMBqjrX3o9f1OjcJ8sDKl5kFBIYtr1z0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=sZl42CBXyyBbgrYfvD9enKJKsdwdLClRfhrELMeIJ2RUhDU52Ti6PFyHA4HjOxML6qZ5ZQkqugFc6lfxVlJOg795Z4TZDZGmGVMqdqUESTEjrfnOMmzH8I0Wa+7k1jGbUh2qeLz47+pWwxsaW5E9pWml/poIIMc4/eybDVAwEoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=kW049N0E; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1791188085; c=relaxed/simple;
+	bh=meaS8h7D68gc6KeY2ndo3A5Cb0GHOFfYlgjM6j/Z6So=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BuhQfbMQKObTEEKVNATDB3u0+4orrM+94/2Fy3fvgfAuhD2KJEqEOm2IdWC+qSyCAGMC09jnHetUhrzvFuXWT/X90OSuldwnTHkXglpE91gwQ4y/RWdmfeaDCEkw2AkdNu1AM0gfzRcP0nrrp0veFneM1a3s02ynfVZ6EXuJUeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BDEwNTc8; arc=none smtp.client-ip=74.125.225.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="kW049N0E"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1xDdbY-00CW11-Th; Mon, 05 Oct 2026 09:59:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=AJpRXQHRBb4+gY4/3S+W6fpaM8ojmDIBRhQ4aGx7Imw=; b=kW049N0Ewaq+URE6huHVFmZ0di
-	5O0JtV6sqo7SlROpp2utVSdu3YzDX5lKRidExLdFTskN2YdxIyaKXQG+B9wLNElUC0aSCDYQyQTDz
-	8seBh+lh8ri+ifM0z1MWwthdR1gbJoDH8C5Twx8PQBN0rbOqvdA9w1rvfp8M0I1FJwQeTJ+O6nMVV
-	G8uPsJnnDTacK7qJUwq1tNEEKfWVYmoS46OwFI4cyb1kQz5jAZzyp7tm3I6Quw+Gm3t12A2+5paHy
-	rz3OpuC88yeL4Ik0UvyCBETAtNP4Fri4EjRfTIF4WX4bEY3JcnsKSTo8TjurZpYBWdFYr6HbiaWSL
-	1GLZjbNg==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1xDdbR-0003yJ-Qv; Mon, 05 Oct 2026 09:59:17 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1xDdbJ-00BpL3-Pe;
-	Mon, 05 Oct 2026 09:59:09 +0200
-Message-ID: <4dfb9200-8bd1-4806-90d8-892529b79962@rbox.co>
-Date: Mon, 5 Oct 2026 09:59:08 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BDEwNTc8"
+Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48b01d89b23so637768f8f.2
+        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 01:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791188082; x=1791792882; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lJtTXJS3lNxs6KeGf0mmSgOkxFqn8ISkKtP7HIHVmNI=;
+        b=BDEwNTc8UbfNVpMfBRo2icrZbPfnvvBgGj9H1t6WZ7GqA67f3DHS+ZZyoIKyz5tSLQ
+         hsWInC5rxX01B6sK/Sm11XW9mePZXW/DayS4q9sF3Otk+/GKA1UL3QuHyMeT49Ef7XjG
+         X8FKILjOl+ct+JLA43f9jQjxwpHkdCNa2cpPqlirzFmLI31CHwFZzDWMFqD7tw87L+pR
+         5QVbEI46z205ejfDNqeovrKwZYngnvmBvSsrKn5kD1iMH5Ai+VL3lsB51Lp64x8sUtA4
+         gpGwhw16wfmjivvEHWKhetVHxet3AyWVqVuXqV7hHtIa06dpR1Ifov6HIkrZCzkdY7E4
+         Mmtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791188082; x=1791792882;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lJtTXJS3lNxs6KeGf0mmSgOkxFqn8ISkKtP7HIHVmNI=;
+        b=vMWCOx9WqhIdRzONshnh5d87nzRr83fYIsO3sZ1juj6E1QZcrYBy63eBdvzYh6nsH0
+         coydEjErMM9M4Dmf4z9lpwwg2gjrogj69aHHt5rlvEO1/igory6H8Vxy9OEMcEb3Thqb
+         WMeGwc923EYCZz9YJqolGiqRlkBegp6WnIIGK7FpGb0GEucfPCynwIi+uB3tNFsPo9GQ
+         CemuVYBlfIf+6eKjl14XaYa+olbgmLVUnkDwXe9cnYnZPPfD3cH2vzcULDx55zx5vR7c
+         4Q0+mYf4UDUQ9D3/x3pccOhLynQEfZuzZG935O4lctGiXmn08RuX3lbK7RAJomkssfNA
+         ALrQ==
+X-Gm-Message-State: AFq9FYLNR6Zki5tc51neKjKaV2gcXzAjfIiV450X0iNlQUDOROJWbPy3
+	QbvcxLnpuan2snHHp/97yOP8TCLJtfNBa08MVHFf2NwN7DFRkXeSNvbf
+X-Gm-Gg: AYBFou3DOdWO8/BEIuF/vZOMnH6n4v4ycCt7xGuzwRG5dhDXcOATfK3HZREz+EQw8g5
+	M18njqarjve6iw+aKyZa5yQ0YoocP0QhL35NgRGcIwmZhY88P/RYpLhI5PdtfsEmKT5fVzJkxK9
+	erzNmCTWsaQFf88QCnW32IMH+GiIVBZcdQUKFzLrvItUoWeeVdql/mT+v6Mqg8+r5FUItALOEFE
+	rl2JMOsbkf0o+xa70LiWHCEDYxgaif2eZReaXaCxP57HDtuUZ6GAIX4VZVy+wT+QfAeaYLs11L5
+	kBof6uTE7UyPXw98tJOoJniFs4byMKV38WGZ4P4UE8oNAJyOADiuVO/WeYZrcql9znP2QyGnDSw
+	AbDkVpS3eHH9gP/er+Lu8vDNkJgObt26NPbcUHGVD7YSPl8zFb0UPISg2+cWH50hLLoXruFedSq
+	d84WGm6DxTXNDJMyYb6iewo8FUI52/Z48bLjAYSHPGKdQU+ggmuTkmA10b3LwOrbO1YkW8p2H7M
+	XjybUXN9jmcWOpqWDUYQI1jO3CrkI798hc=
+X-Received: by 2002:a05:6000:25e5:b0:487:15a3:1cab with SMTP id ffacd0b85a97d-48b1270ff98mr16251747f8f.18.1791188081951;
+        Mon, 05 Oct 2026 01:14:41 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c622bb172sm4106826f8f.42.2026.10.05.01.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Oct 2026 01:14:41 -0700 (PDT)
+Date: Mon, 5 Oct 2026 09:14:40 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ratheesh Kannoth <rkannoth@marvell.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
+ <hawk@kernel.org>, <john.fastabend@gmail.com>, <kuba@kernel.org>,
+ <pabeni@redhat.com>, <sdf@fomichev.me>, <sgoutham@marvell.com>
+Subject: Re: [PATCH v18 net-next 0/2] octeontx2: mqprio bandwidth offload
+ for NIX TX schedulers
+Message-ID: <20261005091440.575f0eea@pumpkin>
+In-Reply-To: <asMSSdIK6WBECcs_@rkannoth-OptiPlex-7090>
+References: <20260929022915.2704627-1-rkannoth@marvell.com>
+	<20261002103752.006a7648@pumpkin>
+	<asMSSdIK6WBECcs_@rkannoth-OptiPlex-7090>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH net] vsock/bpf: release sock lock while waiting for data
- in recvmsg
-To: Stefano Garzarella <sgarzare@redhat.com>, jrmmhm.kernel@eldare.de,
- Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Bobby Eshleman <bobby.eshleman@bytedance.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260929-kbh3-1-022-fix-v1-1-cc97cc95d269@eldare.de>
- <ar4gvlZL1JyPycg1@sgarzare-redhat>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <ar4gvlZL1JyPycg1@sgarzare-redhat>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 10/1/26 11:01, Stefano Garzarella wrote:
-> +cc Bobby and Michal who touched this code recently
-> 
-> On Tue, Sep 29, 2026 at 06:33:04PM +0200, Jerome Mohm via B4 Relay wrote:
->> From: Jerome Mohm <jrmmhm.kernel@eldare.de>
->>
->> vsock_bpf_recvmsg() takes lock_sock(sk) and holds it across the whole
->> receive loop, including vsock_msg_wait_data(), which sleeps in
->> wait_woken() without dropping the lock. When data arrives, the
->> transport's delivery context (the vsock-loopback worker, or the
->> virtio/vhost rx path) calls virtio_transport_recv_pkt() -> lock_sock()
->> on the same socket and blocks. That context is the only one that would
->> queue the skb and call sk_data_ready() to wake the reader, so neither
->> side makes progress. A blocking recv() hangs until a signal arrives (a
->> finite SO_RCVTIMEO also breaks it); while it lasts the shared delivery
->> worker is stalled, so all vsock rx on that transport stops, not only
->> the affected socket. The hung-task watchdog reports the worker blocked
->> in D state:
->>
->>  INFO: task kworker/1:3:107 blocked for more than 5 seconds.
->>  task:kworker/1:3 state:D Workqueue: vsock-loopback vsock_loopback_work
->>  Call Trace:
->>   __schedule
->>   schedule
->>   __lock_sock
->>   lock_sock_nested
->>   virtio_transport_recv_pkt
->>   vsock_loopback_work
->>
->> The reader holds the same sk_lock-AF_VSOCK it is waiting on, taken in
->> vsock_bpf_recvmsg().
->>
->> This code is based on net/unix/unix_bpf.c, whose unix_msg_wait_data()
->> drops u->iolock around wait_woken() and re-takes it afterwards. The
->> vsock port substituted lock_sock() for that serialisation lock but
->> omitted the unlock and relock. tcp_bpf and the native
->> vsock_connectible_wait_data() both drop the lock across the wait;
->> vsock_bpf is the only one that does not.
->>
->> Release the socket lock around the wait and re-acquire it before
->> re-checking for data, so the caller's locking is unchanged.
->>
->> Fixes: 634f1a7110b4 ("vsock: support sockmap")
->> Cc: stable@vger.kernel.org
->> Assisted-by: LLM
->> Signed-off-by: Jerome Mohm <jrmmhm.kernel@eldare.de>
->> ---
->> net/vmw_vsock/vsock_bpf.c | 2 ++
->> 1 file changed, 2 insertions(+)
->>
->> diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
->> index 9049d2648646..bb7d81a95baa 100644
->> --- a/net/vmw_vsock/vsock_bpf.c
->> +++ b/net/vmw_vsock/vsock_bpf.c
->> @@ -50,7 +50,9 @@ static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long ti
->> 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
->> 	ret = vsock_has_data(sk, psock);
->> 	if (!ret) {
->> +		release_sock(sk);
->> 		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
->> +		lock_sock(sk);
->> 		ret = vsock_has_data(sk, psock);
->> 	}
->> 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
->>
->> ---
->> base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
->> change-id: 20260929-kbh3-1-022-fix-340aa3f7f071
->>
->> Best regards,
->> --
->> Jerome Mohm <jrmmhm.kernel@eldare.de>
->>
-> 
-> LGTM, but I'd like also Bobby and Michal opinion:
-> 
-> Acked-by: Stefano Garzarella <sgarzare@redhat.com>
+On Mon, 5 Oct 2026 08:28:17 +0530
+Ratheesh Kannoth <rkannoth@marvell.com> wrote:
 
-I took a look at v2 and I don't really have any functional comments. Well,
-besides the use of READ_ONCE, but that's probably something we need to
-tackle separately?
+> On 2026-10-02 at 15:07:52, David Laight (david.laight.linux@gmail.com) wrote:
+> > > Patch 1 converts PF/VF and representor flag access to atomic bitops.
+> > > Patch 2 depends on it for safe OTX2_FLAG_INTF_DOWN and OTX2_FLAG_PORT_UP
+> > > updates on asynchronous mbox paths and during the mqprio netdev bounce.  
+> >
+> > Can't you just move those two flags to a separate structure member?
+> > In at least one place the code separately clears one and sets the other.
+> > That makes me think it should a a three-valued state not two bits.
+> >
+> > That would save all the expensive locked operations.  
+> 
+> Thanks for your review.
+> 
+> I agree that atomizing the entire flags bitmap is broader than strictly required for the
+> mqprio/mbox concurrency: the cross-CPU hazard is otx2_sync_flags_from_rep() doing a non-atomic
+> read-modify-write on nic->flags while other CPUs update bits in the same word. Relocating
+> OTX2_FLAG_INTF_DOWN and OTX2_FLAG_PORT_UP (or restricting rep sync so it cannot clobber those
+> bits) would be a narrower approach than converting every OTX2_FLAG_* accessor to
+> set_bit()/clear_bit().
+> 
+> On the three-valued model: INTF_DOWN and PORT_UP are not a single FSM in the driver today.
+> INTF_DOWN reflects netdev teardown and is consulted from NAPI completion etc.
+> PORT_UP is set and cleared from rep RVU_EVENT_PORT_STATE in the mbox up-handler and
+> suppresses a duplicate carrier/queue bring-up in otx2_handle_link_event() when rep has already
+> applied port state. Combinations such as INTF_DOWN set after otx2_stop() while PORT_UP remains
+> set are deliberate, so folding the two bits into one enum would need a seperate work
+> and review beyond this series.
+> 
+> please note that this restructuring feels somewhat orthogonal to the goals of the
+> current series. Patch 1 focuses on replacing the non-atomic |=/&=~ operations on the
+> stop/open and mbox paths with atomic bitops for INTF_DOWN/PORT_UP, which patch 2's netdev
+> bounce depends on. The rep-flag sync behavior in otx2_sync_flags_from_rep() is a related but
+> separate concern, and I'd prefer to address the lifecycle-bit layout and sync logic in a
+> dedicated follow-up rather than expand the scope of this patch series.
 
-A single-patch v2 addresses not only the original bug, but also sashiko's
-complains about the pre-existing issues (making the subject stale?), but I
-didn't know if you'd rather have all of that stuffed together, so I
-refrained from commenting to avoid confusing the author.
+Right, but the atomic updates are are far more expensive than the non-atomic ones.
+They really are best avoided unless you really need to change/test multiple bits
+or need to limit the size of the data area.
+The patch is likely to be smaller if you remove the UP/DOWN bits from the bitmap
+since it will change far less code.
 
-thanks,
-Michal
+David
+ 
+> 
+> >  
+
