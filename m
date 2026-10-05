@@ -1,220 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A31649D5AD
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 14:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB93296BA9
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 14:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791211271; cv=none; b=Yvm/nMBvjLDSEHc3aVJny+BwCsKhC81zrc7T+Qb+d0Y+D9W8CIVTdwt1yzCn4gBV4sYdL25DwFZqafPx4W9wzRBD+cx/ZfTUDQ3K7IBgfRuatadcGXwsyAqbSJLAYB1WPu1BYut7zRrDrX+wSBBzcFpsjbDzprIYMSRD41KqfZs=
+	t=1791212336; cv=none; b=AmCFay45uO1tos/n7PCV2iDt07c+4Coet5kXws3budEC+B1cgKrNTfiWQnGd7+jYUwDxqaPQfY0edgsaNYOcXVyEQ7tPToAdbP7etFcAqturBAg/8Lng6ewyhkAcZKcAVr31npHbSryIDNRGOCAp7eTeCK6brNJ2YrZeN4hHXP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791211271; c=relaxed/simple;
-	bh=UtlEWJHGw/dKkPdUVywbwvC9VhlqSUbymO07xd3lUcY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PMLEc73+lmmVqtrVEdJrR7e3ZaJWR3hws1TppwD69ht7AA2SqH7B/9TrLVPPUhRqDclR3X+MHPoIdNo6YeYbWKl6ftGkxa6Ncbir7PQ+ax1yZq2EH988B6QXjMRXI5HcE1YDc+/l/znsP3WwER0sQJyQ5Wc2PUSyVWzZ5aVWZNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FqYpnqV/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791212336; c=relaxed/simple;
+	bh=FkejWneu860TICRiCvnW81F/s8X4+QiaaJlWG1DO1EI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MAzT8ZnfNdc217PGEzOZS++d4wuGdIVZDdDwpd3r8Esz2cDNGRnwYTG5kyZt6fFfGcEf3kH3ShJtpKrZFR5KfChyvvl94gYKcDm8k5PIgiH5aHkYsTv7YH8W7EUUfuuMCnwR/FLsfJJ3PioTeam7/JMRiyrxuVuVWBEcSktLVvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=k7TlPjaF; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FqYpnqV/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F78A1F000FF;
-	Mon,  5 Oct 2026 14:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791211267;
-	bh=NHj4+vZGC6IjOFs/5ij/G9499SyxWnCDFY2y0sQ879Y=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FqYpnqV/nUms7dFpIf7nfs8GA+tv7gChYw/LocpWW8J2APzgNOuOhE2d2f4KFvZuq
-	 2m71pWqll6AM2Dl8uoGfbowYkHuAHPufxtkwU6bjQgQrePohNq3scwHJPuNwL7GFAj
-	 WUW3L/J4u+a7AgY62Q4zsSh95iMallNkGdWOLc4/2brMDoCjEBcRLdl9OPu2t/x0EP
-	 PoJu93D1l2IbYIDVFp+SsoX8A0SOmzIuxYYuuMB60auuJue2nIoXQZEM9e7WnAttB+
-	 4me/G+xUVGlkrHfylzQP8yzStF+0Cv8X/sfTqoaRFxD929zFYLdGHppyhA6DLBd34j
-	 u0rPzn1vkeNpw==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next 2/7] bpf: Verify calls of kfuncs with a
- body through the body
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yusheng Zheng" <yunwei356@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261005142219.33451-3-yunwei356@gmail.com>
-References: <20261005142219.33451-1-yunwei356@gmail.com>
- <20261005142219.33451-3-yunwei356@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 05 Oct 2026 14:41:06 +0000
-Message-Id: <20261005144107.0F78A1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="k7TlPjaF"
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 9BFA380B79;
+	Mon, 05 Oct 2026 16:58:45 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id coUFbeWszKyz; Mon,  5 Oct 2026 16:58:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1791212325; bh=FkejWneu860TICRiCvnW81F/s8X4+QiaaJlWG1DO1EI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=k7TlPjaFRrL01kMQ86pRqtTmD6RapzcNbqJPATzt6mQMxZldQJpz3RLa6WyzbACm5
+	 P+qIzgqqjx7g8K9wEnI+hMJyTiTwhuOqKu0HexSRwCHHqWVYZDocnIsO0SP89IXir9
+	 AkeAIkC85SEdA/KDCm5lbusyMq/66kJnWi4Jo11KrFA4pivUiQgQ0dBoVcWRxdonAv
+	 9NJLICiHy5amoyleEu4I/Ol460NKJCDPcgIZmAkYU6e1oO7W037ELWAyY7c6cRcEzD
+	 d+wkiwxb3xyl68izPB8dCbHh8mKpK7IICYEeHp03GSDhVHrx4XfCrjMrkoaDw4DSd/
+	 aeDv1+VBRCycw==
+Message-ID: <e9812369-5936-4c76-90eb-1c23858d2e64@disroot.org>
+Date: Mon, 5 Oct 2026 15:58:38 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v4 1/3] bpf: Fix incorrect handling of user flags in
+ bpf_percpu_array_update
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev
+References: <20261004111007.3216186-1-maghasi@disroot.org>
+ <20261004111007.3216186-2-maghasi@disroot.org>
+ <7b661c7e-3d01-4361-8d0c-84c97866b404@linux.dev>
+Content-Language: en-US
+From: Masoud Aghasi <maghasi@disroot.org>
+In-Reply-To: <7b661c7e-3d01-4361-8d0c-84c97866b404@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] bpf: uninitialized data leak and state mismatch for void kfuncs
-- [Critical] bpf: argument checking bypass for nested kfunc calls
-- [High] bpf: value truncation of 64-bit constant arguments in kfunc_bind
---
+On 05/10/2026 04:10, Leon Hwang wrote:
+> Hi Masoud,
+> 
+> Please wait some time, say 24 hours, for human reviews before sending
+> the next revision.
 
-commit 0eafd0ff2fd1aa892e8a507b878aae0d4eedd33b
-Author: Yusheng Zheng <yunwei356@gmail.com>
+Hi Leon, noted. thanks for the review.
 
-bpf: Verify calls of kfuncs with a body through the body
+> 
+>> @@ -438,7 +438,8 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+>>  	u32 size;
+>>  	int cpu, off = 0;
+>>  
+>> -	if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
+>> +	if (unlikely((map_flags & BPF_EXIST) && (map_flags & BPF_NOEXIST)) ||
+>> +	    unlikely((u32)map_flags & ~(BPF_EXIST | BPF_NOEXIST | BPF_F_CPU | BPF_F_ALL_CPUS)))
+> 
+> Probably, we can add these two macros in include/linux/bpf.h.
+> 
+> #define BPF_EXIST_FLAGS (BPF_EXIST | BPF_NOEXIST)
+> #define BPF_CPU_FLAGS (BPF_F_CPU | BPF_F_ALL_CPUS)
+> 
+> Then, this 'if' can be simplified to
+> 
+> if (unlikely(((map_flags & BPF_EXIST_FLAGS) == BPF_EXIST_FLAGS) ||
+> 	     ((u32)map_flags & ~(BPF_EXIST_FLAGS | BPF_CPU_FLAGS)))
+> 
+> Also simplify htab_map_check_update_flags() in the next patch by the
+> same way.
+> 
+> Thanks,
+> Leon
 
-This commit allows the BPF verifier to inline the bodies of certain kfuncs
-for context-aware analysis. It updates the CFG to replace kfunc calls with
-their respective bodies before verification, tracks constant arguments, and
-attempts to natively execute these inlined kfuncs if supported by the JIT.
-
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-
-[ ... ]
-
-> +/* A call of a kfunc with a body, which the verifier replaced by the bod=
-y */
-> +struct bpf_kfunc_inline {
-> +	struct bpf_insn call;
-> +	const struct bpf_kfunc_body *body;
-> +	unsigned long addr;		/* of the compiled kfunc */
-> +	u8 *image;			/* native code for the JIT */
-> +	u32 start;
-> +	/* the BPF registers that R0-R5 are bound to, and the constant argument=
-s */
-> +	u8 reg[MAX_BPF_FUNC_REG_ARGS + 1];
-> +	s32 imm[MAX_BPF_FUNC_REG_ARGS + 1];
-
-[Severity: High]
-Is it intentional to use s32 for the constant arguments here? Since BPF
-registers hold 64-bit values, could this lead to truncating 64-bit constants
-if a kfunc expects a u64 or s64?
-
-[ ... ]
-
-> diff --git a/kernel/bpf/kfunc_inline.c b/kernel/bpf/kfunc_inline.c
-> --- a/kernel/bpf/kfunc_inline.c
-> +++ b/kernel/bpf/kfunc_inline.c
-
-[ ... ]
-
-> +int bpf_inline_kfunc_bodies(struct bpf_verifier_env *env)
-> +{
-
-[ ... ]
-
-> +		prog =3D bpf_patch_insn_data(env, i, r->body->insns, r->body->len);
-> +		if (!prog)
-> +			return -ENOMEM;
-> +		env->prog =3D prog;
-> +		for (j =3D i; j < i + r->body->len; j++)
-> +			env->insn_aux_data[j].kfunc_body =3D 1;
-> +		env->insn_aux_data[i].kfunc_body_entry =3D 1;
-> +		i +=3D r->body->len - 1;
-
-[Severity: Critical]
-Since bpf_inline_kfunc_bodies() skips over the newly inlined instructions, =
-it
-appears nested kfunc calls inside the inlined body are not inlined themselv=
-es
-and remain as standard BPF call instructions.=20
-
-Combined with the skipped prototype initialization in bpf_add_kfunc_call(),
-could this allow a user to pass arbitrary unverified arguments to the nested
-kfunc if do_check_main() later evaluates it using a zeroed descriptor?
-
-> +	}
-> +	return 0;
-> +}
-> +
-> +/*
-> + * The body of a kfunc gets only the arguments of the call and leaves R1=
--R5
-> + * like it. The constant (__k) arguments must be known, and native code =
-may
-> + * use their values.
-> + */
-> +int bpf_mark_kfunc_body_regs(struct bpf_verifier_env *env, int prev_insn=
-_idx,
-> +			     const struct bpf_insn_aux_data *aux)
-> +{
-> +	struct bpf_kfunc_inline *r =3D env->kfunc_inlines;
-> +	struct bpf_reg_state *regs =3D cur_regs(env);
-> +	u32 clobber =3D 0;
-> +	int i, err;
-> +
-> +	/* leaving the body */
-> +	if (prev_insn_idx >=3D 0 && env->insn_aux_data[prev_insn_idx].kfunc_bod=
-y &&
-> +	    (!aux->kfunc_body || aux->kfunc_body_entry))
-> +		clobber |=3D GENMASK(BPF_REG_5, BPF_REG_1);
-
-[Severity: Critical]
-Should this also clobber R0 when leaving a void kfunc?
-
-If the kfunc does not return a value, R0 appears to be left uninitialized.
-If the JIT falls back to the compiled C function, it might leave R0 with
-uninitialized garbage or a user-controlled value. Could the BPF program then
-dereference R0, leading to arbitrary memory reads or privilege escalation?
-
-> +	if (aux->kfunc_body_entry) {
-> +		while (r->start !=3D env->insn_idx)
-> +			r++;
-> +		for (i =3D BPF_REG_1; i <=3D BPF_REG_5 && !env->cur_state->speculative=
-; i++) {
-> +			if (!(r->imm_mask & BIT(i)))
-> +				continue;
-
-[ ... ]
-
-> +			err =3D mark_chain_precision(env, i);
-> +			if (err)
-> +				return err;
-> +			/* emitted code needs the same constants on every path */
-> +			if (r->entered && r->imm[i] !=3D (s32)regs[i].var_off.value)
-> +				r->copy =3D true;
-> +			r->imm[i] =3D regs[i].var_off.value;
-
-[Severity: High]
-Will this safely handle 64-bit constants?
-
-If multiple paths call the same kfunc with 64-bit constants that share the
-same lower 32 bits, the verifier might incorrectly assume they are identical
-due to the s32 cast. Could this cause the JIT to emit native code with the
-wrong constant?
-
-> +		}
-> +		r->entered =3D true;
-> +		clobber |=3D BIT(BPF_REG_0) | (GENMASK(BPF_REG_5, BPF_REG_0) &
-> +					     ~GENMASK(r->nargs, BPF_REG_0));
-> +	}
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -2990,7 +2991,10 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *en=
-v, u32 func_id, u16 offset)
->  	desc =3D &tab->descs[tab->nr_descs];
->  	memset(desc, 0, sizeof(*desc));
-> =20
-> -	err =3D gen_kfunc_arg_proto(env, &meta, &func_model, &desc->proto);
-> +	/* the body of a kfunc that the program may call checks its arguments */
-> +	body =3D kfunc.flags && btf_kfunc_is_allowed(kfunc.btf, func_id, env->p=
-rog) ?
-> +	       btf_find_kfunc_body(kfunc.btf, func_id) : NULL;
-> +	err =3D body ? 0 : gen_kfunc_arg_proto(env, &meta, &func_model, &desc->=
-proto);
-
-[Severity: Critical]
-If gen_kfunc_arg_proto() is skipped for kfuncs with bodies, desc->proto
-remains zero-initialized. Could this bypass argument validation for nested
-kfunc calls that do not get inlined?
-
->  	if (err)
->  		return err;
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261005142219.3345=
-1-1-yunwei356@gmail.com?part=3D2
+Sounds good to me. I will apply it to the v5 if there are no objections.
