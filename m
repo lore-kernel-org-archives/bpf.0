@@ -1,92 +1,74 @@
-Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
+Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB09F49502C
-	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 17:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2BF4CE67B
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 18:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791222691; cv=none; b=u8CWXoBrBHRmkZkz8hiL39la89JbgnF8UPCHWuCxvDhTAZgu/YaWbY2BO/GKlln/aG7DgnhSDa9RmTGp2ojUGgOkqb/02i4d8xf5+x1nURLsK2FJGsWgtUtCEnBeqLzkuFVWc+r3BHY7PA+lPEy2v4dcTBhg0LYUgCJ1X0cY75U=
+	t=1791223619; cv=none; b=AJcdeqbJ3Xeahi1kWiYVGvSigt1QyFrKF7ZD1jyVXdtU/KXEYBeNoklea/2otHGea4/mfA7cWAs2sVdDFaKZNVea82zv/6g8y2V7zAF6vsk2YxUUfF3q4QC4Oq4XxXvrcHkgs+Fovari7vALToDEeUWY0/NSM7C272cGSu/2m8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791222691; c=relaxed/simple;
-	bh=qTjClDFPsIOczWsIZMvAm2JlV3P09bYn+CtG/Fzce3U=;
+	s=arc-20240116; t=1791223619; c=relaxed/simple;
+	bh=/FAsQhlFlHqN2Nkl1Uwt0ZLtmve/psgYEW9sAsYXCJY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p7JO4qy+8p8ZNTFN2ANbtzueS+o/XbKjCVxs394nTMmXAJxW/cFfDcTtqN6wJKBK3tMvJNaimgnaRoVyKCa3bHYCEC57DJYMOeL13D/LxPYTnrwA2cbqRzZ2NUwnkazMzQzW17XmEpYsoctq9oDa30mcyLq0kvgyQqRVRFA/9JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tNG6fIh9; arc=none smtp.client-ip=74.125.227.132
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pcu5dELmsgFhyonW/2hYS6NfakI1kFWrUC92nLU+3g3fSv2nNmBMzpYCPpKZhhMvKur5eFMH5zSp/a2QiNwrHI8AUCA3eoS4cdo5u06NUqdDEDJ6hGP9Z6TRUQMPeQ5bKSRFGxKws7/L1fYkSQ3bkCsjEhu+I/beMtRZdjc9w/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1cQrEBo; arc=none smtp.client-ip=74.125.227.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tNG6fIh9"
-Received: by mail-pj2-f4.google.com with SMTP id 98e67ed59e1d1-3a834ff6565so130311a91.0
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 10:51:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1cQrEBo"
+Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-3a0aa5e2b20so482590a91.1
+        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 11:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791222687; x=1791827487; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A2s9btviDXFgkFzalpgxtIgBWXpEQE8bYrYjAqj6skg=;
-        b=tNG6fIh9wwutYa2HLOMDia8JQn7cOItxft2wsh1Nvtaxo6uyYA1IfGumA6WVOV3EwA
-         lDG3RGm2tfjZzvHCFrL8e+0sb7A2ZHjQwDzLreEjeBEj4Mhq8V01rKXpc30+SRiK52Sr
-         4Eurtci5I8xb6AgqnelOxnm6sTYnOObvWcgZi1XfVfAfPSFDI8fRj0LF64HLs3ONGjBT
-         YW0/2GombaHpIM0yYDkAVU0sKvf+JThwjbXlBvwY/VxjyBV7CqW+rep08UbDb0eK+YOa
-         qFXJa6AcM0krdmnWxV+mKEMEflLwsYmfeE6yroTa6ZmeLL1PATyT2/zD+L6EDpG6+nhj
-         WABA==
+        d=gmail.com; s=20251104; t=1791223617; x=1791828417; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7NXEHSFquRYA0GwnQVrP8+OZwHxFYO3UslI6dCtMRM4=;
+        b=D1cQrEBoxzVh3tD6SOz5lFFXvcCOP7FyROc/jvgsdh4z3GrqvnrAsbWladMMGMKYuN
+         xLTG/hWYXhKi3HjTgFmdCScwGXkv3nOPZsbg/0jfyr5L5+H/Uxm9cYmngmC18FKU1icK
+         tuXPmAiPWRLZ4byHGIApP5H80WV7YvXiI+jH89a9sEhbstpCclw6dN9zGLl0PQoilMuS
+         lt2GSnukfqXz9DA20xerB6hihP6ARQFFV4SxajbThTrsHTpm3uzj4jtcDeZ++4rDTSfk
+         oRUTUJF1zsutNBB9zw2LqLmaaGrTBFj4EwXWhr8oZjsU+6f78kVfTeE2ROFNsxP9Sfr2
+         eoqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791222687; x=1791827487;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=A2s9btviDXFgkFzalpgxtIgBWXpEQE8bYrYjAqj6skg=;
-        b=W62dyDsfd8Cgb8PSHbqQuvy1b0Vke86TF4TA27Dprt4seVbw9TpTxHdu1BgFak2ZmM
-         /tzYiBux8xdWeYGbNJxioefxO5W6umh70RJNGglcd6pdYOjK672WXasIPNFXfIYgjaL8
-         42GBuIsraq52KUbGMJofKbl4gcJCkX2G/5pU9QZHCAsqAGOYonXlFSUeEgSQU96mUybo
-         QQ48CZjrAytNNU10nmWjChx8Bjz8LQr2+NScFL5wvo7wLYhzxTzJ68+lemymwLaZXeBd
-         YwIgyyNlRRCPN12y1UUwnSERwT4C3HL4bCMceZjym1W4RhWmPp73m+1FsJBV5Tgrlq7Q
-         gceA==
-X-Forwarded-Encrypted: i=1; AKwUvBxZ19s7l6I7Jp4YrkZe+vrhIpOmIUUDcAjiyNZwjldTID/bP70bGpMoAPrKmsyD5TxaHZs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKVIYJDPnj5KQZCAW7xW37Fl5C7A6V6vg99UkzNvfR253QD/0+8
-	G3hcXKdluNO4ToKQOw/JdBcxZO6Gdo+0PEdKa4aaS1d+zREZ1cd+s1kb
-X-Gm-Gg: AYBFou2uafiTBXnNLtGNMUg4iC7F7yMFjTquR3Oh6FlxRe9PgJGFc7wPA8yoB97jjo2
-	0txx7Dkkms/CooENPLL0VJBL4IsDJLzPO7YxMBnOzMOvd4WFba+jbvGGlTnWgHJxf5uAdBsT74R
-	mMvEKoltWz6oxx2NfXdsttIIw5a99nCx+2v1SvA71rlXxjferqIXe/c8bb/AGKWIHqxqogkSPCi
-	/SPQf2cNzHTJNaDZDMHxplpGeOhVpg6JIXgXGV9YXbWCIm/Vo8xm1SzhzaB7I+QLwZcXDvCprW5
-	Oz90poByi4gn5tCEhyChdMXgggpvzWW5vxDLxpW1XvDDap2qXZpzN/NhsyItGYkCT975znsg46X
-	L0oWghMrCQXuM1ZTgrol+6TK6EKxEzcV2GbZLMqtfzhGR9wucff3C12atSH0sD6q4gYSEh8rzJ6
-	0a6PR5g8gILmEE4n3Lr4eyQJ/d5yqZWp5EyAsw7h04Ituj8AKPHvFOzsImWdnuexvszPU/HvtzV
-	Oc=
-X-Received: by 2002:a17:90a:ad7:b0:3a6:d850:bf16 with SMTP id 98e67ed59e1d1-3a8541509e6mr118029a91.23.1791222687218;
-        Mon, 05 Oct 2026 10:51:27 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:42::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a7ad87874esm5891628a91.0.2026.10.05.10.51.26
+        d=1e100.net; s=20260707; t=1791223617; x=1791828417;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7NXEHSFquRYA0GwnQVrP8+OZwHxFYO3UslI6dCtMRM4=;
+        b=NIo4RhI1FfHwboVSPVlDVUkrAXqJBfMnMscWNdB7EoPKzZ5B+09kXfaWGLDs3ABPp9
+         aeg08UUL0cOWs6RoQrhd1bkN7V3jbPmGjH1kGlZD0IWAhu4VgN1mWL+qtsKsVuwZIfLj
+         LwwDlA0wGDhybamWcZ0upAFUj0JltTr/uOd6QOn9csA3DTxtD+mlruPT58KlbfQULHLD
+         k8KY/Qt8qGdxY1+k2wLoCYnUCXM1Zf+Ma0Yg9z5nVWz6eS0i908rvwvSlTCxi4Zj1vE6
+         PM5+IJL5cpfU7ozlvHWX68GnaG9C0hTAHy3yaQlvNlmq05ADKoPvBuU1KlGrANsxKsbn
+         JfKA==
+X-Forwarded-Encrypted: i=1; AKwUvBxEIgkNNOgV62oAaBiup/PoljAQUisqOSV45yFC2qkSm6+C5dfwaV0ZF9zowVGjj228FQA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKy6PtX7rRZJCocL7I4zEct/o4mxOWd7jIiUpZfULytrv3Yn6qA
+	xNErQ7e60dHPoSR2egGwBwrfssY7Rq5K2n6a82qdVHvsX6T2LUtDHKmT
+X-Gm-Gg: AYBFou21joCQ6jhaEsUagwuGy7YoirIIjPlkl2D2xyb6RGqNXoz6bW795Cm/iIuy++u
+	tiv5gkicchx47ZA3BbMpaXyh9Wui7NPEK6ju9tMLLHwEMGqT/6UJBWU8oHbHN5oEhjKjbodc/l/
+	kvc5kFqHRvjc+p975R2p5c82+1iFDoel8RMobKJ47uvdGpc15YuVzR46AJqOeSU0BaD5JipwIOI
+	oqwqKePvReCazWRUGbesOOvB/Ni1xp3ZeOcOYeskcPtFWp55wQ6naH/vTjKacTmjKXL2EaSlS/w
+	N7+XSBYUEz5Fv7PQLu8uwPbemPDELFRbxcni/nswE2+f8c0r91GQeU3AOh+dQLriB4U+JwDryCq
+	HjtdAJYE9SDaSNWpLvTsN0PG9aD/2OrEveawXvy/vjYJHaljNJswCm/EEQJ9s0iB0G4hBAuXVvP
+	ep9t1fhqYRAj4jpPTltxetTed25wcmForGNq5TQ7Kj7KGVJjGjAuN0PQYC8K2QeiuD
+X-Received: by 2002:a17:90b:260b:b0:3a4:f1f9:1cb2 with SMTP id 98e67ed59e1d1-3a6ce6b4005mr9731383a91.13.1791223616729;
+        Mon, 05 Oct 2026 11:06:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a7e4b00de6sm4423426a91.1.2026.10.05.11.06.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 10:51:26 -0700 (PDT)
-Date: Mon, 5 Oct 2026 10:51:21 -0700
+        Mon, 05 Oct 2026 11:06:56 -0700 (PDT)
+Date: Mon, 5 Oct 2026 11:06:52 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	io-uring@vger.kernel.org, "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, 
-	Weiming Shi <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	David Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mina Almasry <almasrymina@google.com>
-Subject: Re: [RFC net-next 13/15] eth: fbnic: Support AF_XDP zero-copy receive
-Message-ID: <asPhAnm830qFxGMv@devvm7509.cco0.facebook.com>
-References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-14-bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
+	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, tushar.vyavahare@intel.com, 
+	kerneljasonxing@gmail.com, bjorn@kernel.org
+Subject: Re: [PATCH net-next 00/13] selftests: net: migrate AF_XDP test suite
+ over to net
+Message-ID: <asPlpJdawXNRAGAR@devvm7509.cco0.facebook.com>
+References: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -95,235 +77,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261002190018.696925-14-bjorn@kernel.org>
+In-Reply-To: <20261001202124.692591-1-maciej.fijalkowski@intel.com>
 
-On 10/02, Björn Töpel wrote:
-> fbnic gets RX buffers from page_pool. Use the XSK buffer pool as the
-> RX queue's page-pool memory provider, so allocation, DMA sync,
-> recycling and refill stay in page_pool. Only aligned 4 KiB UMEM
-> chunks are supported.
+On 10/01, Maciej Fijalkowski wrote:
+> Hi,
 > 
-> Each UMEM frame on the header queue must hold one packet. Raise the
-> header-split threshold to at least 3072 bytes, more than half of a
-> 4 KiB page, so the device finishes the frame after one header. Cap
-> it to the space left in the frame after the headroom. An MTU above
-> the threshold needs a socket with XDP_USE_SG and an XDP program with
-> frags support. With XDP_USE_SG, the payload queue also uses UMEM
-> frames, and the device uses each frame for one descriptor only.
-> Without it, the payload queue uses a normal page pool. If the device
-> does not finish a provider frame after one descriptor, drop the
-> packet.
+> This work moves the AF_XDP test suite over to selftests/net and adds
+> a hardware test on top of the python-based drv-net infrastructure.
+> Since a non-zero effort went into implementing xskxceiver's (not so
+> great testing app name) test cases, we did not want to completely
+> abandon it and start everything from scratch within different infra.
+> However, hooking it up to the networking CI will allow us to run
+> cyclic tests on real HW; before that, all of our HW tests were manual
+> local runs.
 > 
-> The BDQ refill loop now alternates header and payload buffers on all
-> queues, so two rings that share one finite provider stay balanced.
-> It keeps NAPI scheduled while the provider still has buffers.
+> Tests were based on a process with two threads responsible for the RX
+> and TX paths, whereas the new infra expects two separate processes for
+> the DUT and remote side, where each side has either rx or tx role.
 > 
-> Provider frames are never split, so they get no fragment bias. A
-> redirected frame can be recycled before its old BDQ slot is cleaned,
-> and a stale bias would corrupt the new allocation.
+> To satisfy this requirement, this series makes each xskxceiver endpoint
+> a process of its own, so that the RX and TX sides of a case can run on
+> different hosts, and adds drivers/net/hw/xsk.py, which runs the existing
+> test cases with the DUT in zero-copy mode against an SKB-mode xskxceiver
+> on a remote host. The veth test keeps its cases and moves with the
+> engine from selftests/bpf to selftests/net.
 > 
-> The headroom comes from the queue configuration. It must be at least
-> XDP_PACKET_HEADROOM, a multiple of 128 bytes, and fit the hardware
-> field; otherwise queue validation fails. MTU, ring parameter and XDP
-> program changes that do not fit an active provider are rejected.
+> ZC tests used to expect a single NIC in loopback mode, with both
+> sockets on one of its queues sharing a UMEM. Now we step away from it:
+> the DUT and the remote are separate hosts, and an ntuple rule steers
+> the test traffic to the AF_XDP queue.
 > 
-> fbnic did not support XDP_REDIRECT. Add it, with xdp_do_flush(), and
-> advertise it. This also enables copy-mode AF_XDP and the other
-> redirect targets on fbnic. Do not advertise AF_XDP zero copy until
-> TX support is added.
+> The remote endpoint is xskxceiver in SKB mode rather than a plain
+> socket, so both ends keep sharing the packet stream generation and
+> validation of the existing cases. This reduces the need for remote
+> interface being a NIC from narrow set of NICs that are AF_XDP ZC
+> capable.
 > 
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
-> ---
->  .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |   5 +
->  .../net/ethernet/meta/fbnic/fbnic_netdev.c    | 140 ++++++-
->  .../net/ethernet/meta/fbnic/fbnic_netdev.h    |   4 +
->  drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 350 +++++++++++++-----
->  drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |   6 +
->  5 files changed, 402 insertions(+), 103 deletions(-)
+> This implies that during the test run only one side is actually
+> exercised, so let's introduce the concept of direction per test case.
+> For example, this means SEND_RECEIVE in XSK_HW_RX will test
+> ice_clean_rx_irq_zc() routine and in XSK_HW_TX the ice_xmit_zc().
 > 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-> index e774740fcb5d..188abe0ead14 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-> @@ -385,6 +385,11 @@ fbnic_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
->  		return -EINVAL;
->  	}
->  
-> +	err = fbnic_xsk_validate(fbn, fbn->xdp_prog, netdev->mtu,
-> +				 kernel_ring->hds_thresh, extack);
-> +	if (err)
-> +		return err;
-> +
->  	if (!netif_running(netdev)) {
->  		fbnic_set_rings(fbn, ring, kernel_ring);
->  		return 0;
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> index 8a6703afca38..038e91ef14e4 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> @@ -5,6 +5,8 @@
->  #include <linux/ipv6.h>
->  #include <linux/types.h>
->  #include <net/netdev_queues.h>
-> +#include <net/netdev_rx_queue.h>
-> +#include <net/xdp_sock_drv.h>
->  
->  #include "fbnic.h"
->  #include "fbnic_netdev.h"
-> @@ -276,6 +278,8 @@ static int fbnic_set_mac(struct net_device *netdev, void *p)
->  static int fbnic_change_mtu(struct net_device *dev, int new_mtu)
->  {
->  	struct fbnic_net *fbn = netdev_priv(dev);
-> +	struct netlink_ext_ack extack = {};
-> +	int err;
->  
->  	if (fbnic_check_split_frames(fbn->xdp_prog, new_mtu, fbn->hds_thresh)) {
->  		dev_err(&dev->dev,
-> @@ -285,6 +289,15 @@ static int fbnic_change_mtu(struct net_device *dev, int new_mtu)
->  		return -EINVAL;
->  	}
->  
-> +	err = fbnic_xsk_validate(fbn, fbn->xdp_prog, new_mtu,
-> +				 fbn->hds_thresh, &extack);
-> +	if (err) {
-> +		if (extack._msg)
-> +			netdev_err(dev, "%s\n", extack._msg);
-> +
-> +		return err;
-> +	}
-> +
->  	WRITE_ONCE(dev->mtu, new_mtu);
->  
->  	return 0;
-> @@ -534,26 +547,123 @@ bool fbnic_check_split_frames(struct bpf_prog *prog, unsigned int mtu,
->  	return mtu + ETH_HLEN > hds_thresh;
->  }
->  
-> +u32 fbnic_xsk_hds_thresh(u32 headroom, u32 hds_thresh)
-> +{
-> +	u32 max_hds;
-> +
-> +	/* Reserve more than half a device page for each header so the device
-> +	 * retires the provider frame after one descriptor.
-> +	 */
-> +	static_assert(2 * FBNIC_XSK_HDS_THRESH > FBNIC_BD_PAGE_SIZE);
-> +
-> +	max_hds = FBNIC_BD_PAGE_SIZE - headroom - FBNIC_RX_TROOM -
-> +		  FBNIC_RX_PAD;
-> +
-> +	return min(max_t(u32, hds_thresh, FBNIC_XSK_HDS_THRESH), max_hds);
-> +}
-> +
-> +static int fbnic_xsk_validate_frames(struct xsk_buff_pool *pool,
-> +				     struct bpf_prog *prog,
-> +				     unsigned int mtu, u32 hds_thresh,
-> +				     struct netlink_ext_ack *extack)
-> +{
-> +	u32 xsk_hds_thresh;
-> +
-> +	xsk_hds_thresh = fbnic_xsk_hds_thresh(xsk_pool_get_headroom(pool),
-> +					      hds_thresh);
-> +
-> +	if (mtu + ETH_HLEN <= xsk_hds_thresh)
-> +		return 0;
-> +
-> +	if (!xsk_pool_uses_sg(pool)) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "AF_XDP zero-copy socket requires XDP_USE_SG");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (fbnic_check_split_frames(prog, mtu, xsk_hds_thresh)) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "AF_XDP zero-copy socket requires XDP frags");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int fbnic_xsk_validate(struct fbnic_net *fbn, struct bpf_prog *prog,
-> +		       unsigned int mtu, u32 hds_thresh,
-> +		       struct netlink_ext_ack *extack)
-> +{
-> +	struct net_device *netdev = fbn->netdev;
-> +	struct xsk_buff_pool *pool;
-> +	unsigned int qid;
-> +	int err;
-> +
-> +	for (qid = 0; qid < fbn->num_rx_queues; qid++) {
-> +		pool = xsk_get_pool_from_rxq(netdev, qid);
-> +		if (!pool)
-> +			continue;
-> +
-> +		err = fbnic_xsk_validate_frames(pool, prog, mtu, hds_thresh,
-> +						extack);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int fbnic_xsk_setup_pool(struct net_device *netdev,
-> +				struct xsk_buff_pool *pool, u16 queue_id,
-> +				struct netlink_ext_ack *extack)
-> +{
-> +	struct fbnic_net *fbn = netdev_priv(netdev);
-> +	int err;
-> +
-> +	if (queue_id >= fbn->num_rx_queues)
-> +		return -EINVAL;
-> +
-> +	if (!pool)
-> +		return xsk_pool_setup_page_pool(netdev, NULL, queue_id, extack);
-> +
-> +	err = fbnic_xsk_validate_frames(pool, fbn->xdp_prog, netdev->mtu,
-> +					fbn->hds_thresh, extack);
-> +	if (err)
-> +		return err;
-> +
-> +	return xsk_pool_setup_page_pool(netdev, pool, queue_id, extack);
-> +}
-> +
->  static int fbnic_bpf(struct net_device *netdev, struct netdev_bpf *bpf)
->  {
->  	struct bpf_prog *prog = bpf->prog, *prev_prog;
->  	struct fbnic_net *fbn = netdev_priv(netdev);
-> +	int err;
->  
-> -	if (bpf->command != XDP_SETUP_PROG)
-> +	switch (bpf->command) {
-> +	case XDP_SETUP_PROG:
-> +		if (fbnic_check_split_frames(prog, netdev->mtu,
-> +					     fbn->hds_thresh)) {
-> +			NL_SET_ERR_MSG_MOD(bpf->extack,
-> +					   "MTU too high, or HDS threshold is too low for single buffer XDP");
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		err = fbnic_xsk_validate(fbn, prog, netdev->mtu,
-> +					 fbn->hds_thresh, bpf->extack);
-> +		if (err)
-> +			return err;
-> +
-> +		prev_prog = xchg(&fbn->xdp_prog, prog);
-> +		if (prev_prog)
-> +			bpf_prog_put(prev_prog);
-> +		return 0;
+> BPF's 'test_progs -t xsk' is removed, as well as single interface mode,
+> which was used for ZC tests. BPF CI therefore no longer runs the
+> xskxceiver cases. test_xsk.sh is kept, as it is the only run that needs
+> no hardware and not all tests are currently covered by the HW test side.
+> We can decide whether to keep the delta test cases, drop them or somehow
+> enable within HW tests.
+> 
+> Thread-based approach had a pacing mechanism that was a simple in-flight
+> packet counter updated within critical section by both ends.
+> Process-based way now is going to do this pacing via xsk_peer.
+> 
+> xsk_peer, the control channel, carries three fixed-size messages: READY
+> is the barrier between steps, PROGRESS tells TX how many packets RX has
+> consumed so that TX does not overrun the RX UMEM, and ABORT stops the
+> peer after a failure.
+> 
+> test_xsk_case_defs.h lists each case with the DUT directions.
+> xskxceiver builds its test table from that file, and xsk.py parses it to
+> make the variants ksft_variants() named rx_<case> and tx_<case>, so -l,
+> -t and -T work as for any other test.
+> 
+> 
+> Patches 1-3 prepare the split. Patch 1 moves the endpoint work out of
+> the pthread entry points. Patches 2 and 3 drop the single-interface
+> loopback mode and the test_progs wrapper, which runs both endpoints as
+> threads of test_progs; neither can work with one endpoint per process.
+> Nothing else runs a subset of the cases, so patch 3 also merges the
+> cases that the wrapper left out into the main list.
+> 
+> Patch 4 adds a generic rule for BPF skeletons to net/bpf.mk, as Jakub
+> suggested in the review of the xdp_features move [0]; xskxceiver is
+> its first user. If that series lands first with the same rule, this
+> patch can be dropped.
+> 
+> Patch 5 moves the engine, its XDP program and the veth launcher to
+> selftests/net. xsk.py needs xskxceiver, and a drv-net test can only
+> rely on net/lib: the selftests build pulls net/lib in for net,
+> drivers/net and drivers/net/hw, while it skips selftests/bpf by
+> default. The veth test is software-only, so it goes to selftests/net,
+> as the drv-net README asks. selftests/bpf keeps building xsk.c from
+> its new place for xdp_hw_metadata and the xdp_metadata test.
+> 
+> Patches 6-9 split the engine. The interface capabilities move into one
+> struct, so that a process can mirror them for the endpoint it does not
+> own (6). main() is split into setup, run and cleanup (7). xskxceiver
+> runs one case per invocation, and test_xsk.sh owns the mode x case
+> matrix (8). Finally, the RX and TX endpoints become separate processes
+> that meet over a small TCP control channel (9).
+> 
+> Patch 10 adds the xskxceiver options that a two-host run needs.
+> Patch 11 moves the case list into test_xsk_case_defs.h, so that
+> xsk.py can read it as well, and patch 12 adds xsk.py on top of them.
+> Patch 13 documents both setups.
+> 
+> 
+> Tested with back-to-back ice NICs connected between separate hosts, with
+> following net.config:
+> 
+> NETIF=ens785f1np1
+> LOCAL_V4=192.168.100.1
+> REMOTE_V4=192.168.100.2
+> REMOTE_TYPE=ssh
+> REMOTE_ARGS=mfijalko@hostname
+> XSK_REMOTE_BIN=/home/mfijalko/bpf-next/tools/testing/selftests/drivers/net/hw/xskxceiver
+> XSK_REMOTE_SUDO=1
+> 
+> 
+> Known issues:
+> - Every case pays for process start-up, XDP attach and detach and, on
+>   hardware, its remote commands. We used to configure resources once
+>   and then execute the whole test suite; it doesn't seem to be
+>   CI-friendly and it is preferred to have each case's resource
+>   management separated; that on the other hand increases the
+>   execution time of the whole test suite.
 
 [..]
 
-> +	case XDP_SETUP_XSK_POOL:
-> +		return fbnic_xsk_setup_pool(netdev, bpf->xsk.pool,
-> +					    bpf->xsk.queue_id, bpf->extack);
+> - The XDP programs redirect every packet, so the link under test must
+>   carry no other traffic. SSH and the control channel go to the
+>   REMOTE_ARGS host, which has to be reached over another link.
 
-Is there a good reason to ask drivers to call us back with
-xsk_pool_setup_page_pool? For the PP mode, maybe we should add new
-XSK_VALIDATE_POOL or something? So most of that fbnic_xsk_setup_pool stays
-in core?
+Will this work on NIPA?
 
-I guess I'm mentally trying to have a clear separation between
-pp vs non-pp modes. Even that whole xsk_buff_pool might be legacy non-pp
-artifact? New drivers shouldn't bother with it? Or is it too much?
+I took a quick pass, nothing pops us for me. The only thing I'm not sure
+is the bpftool dependency (whether we need to build it or there is
+something on the system). It looks like NIPA failed to apply and run it,
+so maybe address 'redirect every packet' and rebase+repost? As long as
+it passes HW tests we should be good :-)
