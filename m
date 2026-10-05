@@ -1,84 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A8422AE65;
-	Mon,  5 Oct 2026 11:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2C631F989;
+	Mon,  5 Oct 2026 11:33:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791199337; cv=none; b=tlFEqoppe93eQ2gdDhAVGXT3hSKAHDEvESP6c77y0nvjtftuhN6Gr1QNFPfaACjm2q6In2d3QrwiZXInMNgEwMc6qARZeS2qGCWgkrmM5EaVyCNx0MUPUPtpVhnUnSaIJi94ztQqMC6IGEpmuk+1NoX0EqYVffIwu8eChuZbxdY=
+	t=1791200013; cv=none; b=nBW5HHe91frdpTjpBoYu2VeOtTD/4KQoaRmB90jUD5xR06gQgLcEYK1IguOBkmaxVGkrt2jMeot+Wuht0+VKPtfNNanbAmmS7RBUzRV1+vztcZwycKJNpfbn7X1uC7bsTCvYNBP9TR6MsjwPMkonUCEqbEoeASMbITl7PkvqVKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791199337; c=relaxed/simple;
-	bh=PJsoRRt69vasCHp1KnmhjyOMsfFhuS565W12waJqkX8=;
+	s=arc-20240116; t=1791200013; c=relaxed/simple;
+	bh=Wpr48c94oU5+NvzPcit0pqXalaVgtcp9KdCZNclssVY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ViM3uk4s9GPCF7TMBElldKaYcXhajX/rU1R4tEqcz8dtCcgJTs+KzRwUkGH5+XWJAv0MhlEMX2kRS1juYBzdnz259SJ/Ilr8Fpq8GF1l2mxqJxWgTe3vdbh1j5qJTGcyAbsLCJoRG5hRJKhlDzAwc7ONvQKJfdZmevR3Et1rjRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HuZWN5Us; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8jMVXeL7TlbVEZsbJU9uWLOhXOpOt6JMsIWa0kVWvta6QAIRxZBeQp76aBGFsT410PsnH523H6O8PimdwY2XCCX2vaxYkBdzKHnPmM1AYzNH5AWj2chZzdbBs0uoPz6Y4Og8ucCp+52nC2GBBm9pyfajJQ5K1VTYvzl0HV1mqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAIHjFWA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HuZWN5Us"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8451F000FF;
-	Mon,  5 Oct 2026 11:22:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAIHjFWA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80CC1F000FF;
+	Mon,  5 Oct 2026 11:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791199335;
-	bh=+Ur16o5EMFLYs3ii15Ilcb6PLqZ5R/+UrvQP8v8yGf8=;
+	s=k20260515; t=1791200012;
+	bh=CDSI1fzd06xogRlRsAAlSIYZUx/yG6yhOmXVab/hmYc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HuZWN5Us1odcgFzPDx1TIFTAMYvOaGXTqYoEoTbeWe2Om0hHL+qOzldtkgSBWUYZh
-	 QCUUJkrhwU+0MTe4I7ItSH1rv/dlyns16z4yuAikMzmF68O3Z9KaxB/LMd5tOBcu4u
-	 gL00QF+vSno8AlPdZNroFRYsvR7cqfamI3Yv5UdenzxyytF2m6YmcTY4A6049w3BH3
-	 NRQNtQI4WVy+e7ywsjNosabc+4bm9TynYJW0RG579Sf/+2uH2UmUVqWC0Lz3gre1A4
-	 KOFyx3X6NZxA7USIyXaeyKqNwwFJO6dhpM1FgdABIWZ0w+42yWAAM7DXAKkAr/h03P
-	 WlA/xczcpYn6Q==
-Date: Mon, 5 Oct 2026 04:22:15 -0700
-From: Kees Cook <kees@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Bill Wendling <morbo@google.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>,
-	Shuvam Pandey <shuvampandey1@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	b=DAIHjFWAxf3xmj/jwYqfZwZ3E1mfmWBY9gBGxuEz+hac12tLDEw1xFYEQai0vqGXr
+	 jv3ltiorrhLfi+YBk4d0asUZKPAWiQQzrw3Qbx9y9k0u9CBjZmqR3vQRqM0A4YxSAE
+	 iiovdQT0LoDxmYm/9q/caD/w+O/o18v1JgDKvZVuQmdQbgeZt13oSKtalEfh6pWnCq
+	 xyqUqNNRIsn3ptFwE7sm24QRwi1YS6P5LeHZxFJBCmGMhsTKS0RYmsY9vQ+HsINNyY
+	 QVInw/TGlIBjwKHGRD6i6noNqm8SLkI6cm2x1sWh+Q0ojxZRHXJIvUw0d5RPUF7AkF
+	 PYy1fF/7cq7zw==
+Date: Mon, 5 Oct 2026 13:17:12 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Jay Wang <wanjay@amazon.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Shivaprasad G Bhat <sbhat@linux.ibm.com>,
-	Thorsten Blum <blum@kernel.org>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guangshuo Li <lgs201920130244@gmail.com>,
-	Ira Weiny <iweiny@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <20261005112209.1e47fa-kees@kernel.org>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
- <asEhEe0Urb5Wx7yi@ashevche-desk.local>
- <202610040023.A3865A6@keescook>
- <asIPlnb0noMd33rr@ashevche-desk.local>
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Christian Heusel <christian@heusel.eu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
+	Bjoern Doebel <doebel@amazon.de>,
+	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
+Subject: Re: [PATCH bpf-next v4 11/12] tools, samples: take the vmlinux BTF
+ from vmlinux.unstripped first
+Message-ID: <asOHOPlWCp1kKZiT@derry.ads.avm.de>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
+	Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Christian Heusel <christian@heusel.eu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
+	Bjoern Doebel <doebel@amazon.de>,
+	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
+References: <20261001225214.12351-1-wanjay@amazon.com>
+ <20261001225214.12351-12-wanjay@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,24 +114,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <asIPlnb0noMd33rr@ashevche-desk.local>
+In-Reply-To: <20261001225214.12351-12-wanjay@amazon.com>
 
-On Sun, Oct 04, 2026 at 11:34:30AM +0300, Andy Shevchenko wrote:
-> On Sun, Oct 04, 2026 at 12:26:39AM -0700, Kees Cook wrote:
-> > I'd rather not make all 0-len strings return the .data segment's const
-> > "" string...
->
-> Good point. Perhaps then to add a short note to the kernel doc,
-> so we won't see patches based on the suggestion like I gave?
+On Thu, Oct 01, 2026 at 10:52:13PM +0000, Jay Wang wrote:
+> With CONFIG_DEBUG_INFO_BTF=m, which the next patch makes possible, the
+> vmlinux BTF is not part of vmlinux: scripts/Makefile.vmlinux strips .BTF
+> from it, and only vmlinux.unstripped, from which vmlinux is made, keeps
+> it.  The tools and samples that generate vmlinux.h from a kernel build
+> tree take the first vmlinux they find, so after an =m build they would
+> pick one without BTF and fail, e.g. the bpftool skeletons when bpftool is
+> built from the kernel tree right after the kernel.
+> 
+> Look for vmlinux.unstripped before vmlinux in each of these lists.  Every
+> kernel build produces it, and with =y it carries the same BTF as vmlinux,
+> so nothing changes there.  perf filters the candidates for a .BTF
+> section, but its unanchored grep also matches .BTF_ids and .BTF.link,
+> which vmlinux keeps with =m; match the section name exactly.
+> 
+> Signed-off-by: Jay Wang <wanjay@amazon.com>
+> ---
+>  samples/bpf/Makefile                       | 6 +++++-
+>  samples/hid/Makefile                       | 6 +++++-
+>  tools/bpf/bpftool/Makefile                 | 6 +++++-
+>  tools/perf/bpf_skel.mak                    | 8 ++++++--
+>  tools/sched_ext/Makefile                   | 6 +++++-
+>  tools/testing/selftests/bpf/Makefile       | 6 +++++-
+>  tools/testing/selftests/hid/Makefile       | 6 +++++-
+>  tools/testing/selftests/sched_ext/Makefile | 6 +++++-
+>  8 files changed, 41 insertions(+), 9 deletions(-)
+> 
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index c28e65046986..fb5cd2d5b6f8 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -305,8 +305,12 @@ $(obj)/$(TRACE_HELPERS): TPROGS_CFLAGS := $(TPROGS_CFLAGS) -D__must_check=
+>  
+>  -include $(BPF_SAMPLES_PATH)/Makefile.target
+>  
+> -VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux))				\
+> +# With CONFIG_DEBUG_INFO_BTF=m only vmlinux.unstripped has the BTF
+> +VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux.unstripped))		\
+> +		     $(abspath $(if $(O),$(O)/vmlinux))				\
+> +		     $(abspath $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux.unstripped))	\
+>  		     $(abspath $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux))	\
+> +		     $(abspath $(objtree)/vmlinux.unstripped)			\
+>  		     $(abspath $(objtree)/vmlinux)
 
-Yeah, reasonable. :) For v5 I've added this to seq_buf_str()'s kernel-doc:
+(out-of-scope for the concrete patch)
 
- * A zero-sized seq_buf has nowhere to put a NUL, so the empty string
- * is returned instead of writing to @s->buffer. Any other seq_buf
- * returns @s->buffer, even when it holds an empty string, so callers
- * always get their own buffer back.
+I am surprised that of these multi-ambiguous path list.  It looks to me
+as if samples/bpf/ and samples/hid/ are always built via Kbuild, thus
+there is proper management of variables like O, KBUILD_OUTPUT and
+objtree already.  I'd expect 
 
--Kees
+		     $(abspath $(objtree)/vmlinux.unstripped)			\
+  		     $(abspath $(objtree)/vmlinux)
 
--- 
-Kees Cook
+to be enough here.  But I may be missing something.
+
+
+Kind regards,
+Nicolas
