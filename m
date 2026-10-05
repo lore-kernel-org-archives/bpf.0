@@ -1,203 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632DF490BF8;
-	Mon,  5 Oct 2026 16:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3344A4CE67B
+	for <bpf@vger.kernel.org>; Mon,  5 Oct 2026 16:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791218626; cv=none; b=Nfz+paCrihJEb7GcIp+NYqQizXRav6FHWQfATeq4fb9NrJ8TnwQgZ4YvjmFZczgVuYF2tEqmOuTVKZzslj7YnevFd5n75KlZ6aInJpag/VVZzTF/5w+jHHPdmel3jOfjjmCkC4qoBm4EtU8HmcrWXTiJtETVhTeeFAUhqfbSzj8=
+	t=1791219082; cv=none; b=ckFZ2b4uXzCJ22mGbt1UmefnYbNbjbNSgIdBwagr+gDpAg7moa3eO+2lI8AkWKD4KY+a8dqRHu3PgbttD0ovS/NQyPDQYJ8EOfRc1ScFfvBoqKJgQICiMJQzgitP1XQkc5OUrbSAXGpSLBT8dPy/2l//boDdcmIgmGLfRzPHNKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791218626; c=relaxed/simple;
-	bh=QsLXyk1HZimlxMVEUGRz2zKlgMRWwGDVBqX28wTcnLA=;
+	s=arc-20240116; t=1791219082; c=relaxed/simple;
+	bh=ZtOtfI8xTZljtzEITNuddg7KMK3dN7NLgg7QIotbHg0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q9N5JBzGwHUqP8Z/s78LxSoXBOuGOFN8R+nFu+SeFuNVNhl08mWU5+wZcIrEp/kd2EXeBLnfpKsGkB65/h3YDD3soUM5uYT8eBQgKkJEB1AbGwIvD5sP8423aLBVABX8qCgo2aBNzbUTAt7cqsRxsA+xDQcca+yDj3dJ1JVSaCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8wsvnK1; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=oQvUvsoQTcvJSJa41N7ECWbyw8DYjKvsRiV7vFVBBqmtpW+B2HdTZYdkO3nmp12mW6Ufz4viSeNqTGZj0Ku2iClD8HYEEIY2yRjTNqozB04tiCmo15C4HWkeccsfE7qV40As7nefK5vn8ZwtJcVDimEFgAcJDqLbiuU9hsiZto4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jYBEAguj; arc=none smtp.client-ip=74.125.227.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8wsvnK1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D49C1F000FF;
-	Mon,  5 Oct 2026 16:43:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791218625;
-	bh=X0AfyKVoCvIdgwkopveGc4Ekelt3ZdLYde10lxY31zU=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To;
-	b=S8wsvnK1+a/xOmsDZn0LZvJlD3Bnq9DMJ3UsDAxcD9q3HXZkvhSb++WuKxwOAqzAu
-	 hrbaDWQ2TKQeK5qAuU/GCEggF3bRaVsp4sqaGr+++rvPx/+wZ0Z2Q7GaXwDA/NY9v8
-	 VKEEIXVnHH73b5warExc4DQfE3COvzbPuwvkwFys7kUtJwKL0pdKUAMEkKYt/ggiMA
-	 h8T9M/F4zTywTKPBe9aTCkC/zOvbNC9Rmiv2B7nN0szPOFCqp8uBXlMMfr5Mzw8t4H
-	 T3Dr+dtv+eAXxa9TkgXFVj7JR6K5twCoezU1EbX/6Y/45ZD9v8GfwTf7iOdVr9eYpV
-	 ZRjdfRd3HaIYA==
-Date: Mon, 5 Oct 2026 18:43:23 +0200
-From: Alejandro Colomar <alx@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Alejandro Colomar <alx+linux-hardening@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bill Wendling <morbo@google.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>, 
-	Shuvam Pandey <shuvampandey1@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Shivaprasad G Bhat <sbhat@linux.ibm.com>, 
-	Thorsten Blum <blum@kernel.org>, Alison Schofield <alison.schofield@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Guangshuo Li <lgs201920130244@gmail.com>, Ira Weiny <iweiny@kernel.org>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <asPSYn7sLqiH39Fu@debian>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
- <asEhEe0Urb5Wx7yi@ashevche-desk.local>
- <202610040023.A3865A6@keescook>
- <asIPlnb0noMd33rr@ashevche-desk.local>
- <20261005112209.1e47fa-kees@kernel.org>
- <asOKvhT01aNb5-Dg@debian>
- <20261005155839.d5d200-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYBEAguj"
+Received: by mail-pj2-f8.google.com with SMTP id 98e67ed59e1d1-398b9f722abso1144293a91.0
+        for <bpf@vger.kernel.org>; Mon, 05 Oct 2026 09:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791219080; x=1791823880; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=b4mkDJheIxHRdMD7TqVn4ykGrzx67Q/w28iQIL9i/AE=;
+        b=jYBEAguj/HXC2O9ml4GkNN/+9pMpbTf40fb8JKLkjR7FD8OKSyr70p61oJulOnjdra
+         kQaMEQjqyv7sgrI2g2fg6PPmcYTR8lSmBlH090Iui9CcaC+IW37lvow5Ppb4NrXhAkO2
+         IUUbQTvR8oSRFHXnBVOn4p7dae5R/an/Hk/XbBVSAfbNwhQWqhTg9eyVfwJuFg/U1L7j
+         TW4UrRlz0bYBlxFVVvbKXXheqRt+HGKxQJJjuqIluT7hvwbwkHHQEyKPKJCKrRlbR9jh
+         fqoadKhkTSprHmHkHPhqDaUgY3EKNIo4K78uf9PO/TOVsW6IOOw9qLPh+UHkye4inhDv
+         KQvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791219080; x=1791823880;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=b4mkDJheIxHRdMD7TqVn4ykGrzx67Q/w28iQIL9i/AE=;
+        b=xIz/4AhkOZM4N3QSUHhqOLmM+8s50tbKPWu3+kqgI1rx/DhoYceQgcEtDlH8gNo44W
+         UUUiiVkg1zQ+AHLFGD96zJipgPKyRrKurMyy235CfAyLAtTblTU8gOqgTwMOkxs/Bm1H
+         xY6XtOH16s4F5l7UixuRymbe89pfkdawuDa9z84HyzKof2NiXwWcfiFZNE+wgT8nkV+V
+         1Z/XWE3h8brXsdiXhMzsa98LskCkjTeiLt5lslHcmQwHPsvjeR8bX8MfU5lT+OwKZRxF
+         0DkcPMD7qMfD9Ju7MzvfIKhW/IOfpV5yVjjwmIitpjmgbbh0053pqJJeO/oytGdwV+Hx
+         nCvQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx+zT+i49FLbvFN8ACZC0okJG826/xyPd0MIJPayYlj9sH8XRtBZJs5D5a/HHyz7Zb2Wns=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ7A5qsg/ZUwn6bUesEC20OtDfQP7BllcNoz+tb3hF/YclMH0b9
+	CPkt9QUkDZbzBYHQSEkzPov5A4uPvi3UiZqXTPVb2Zm6jXDZIqM/3+9z
+X-Gm-Gg: AYBFou121ucXmPZIJ3Y5Dt+zhqejyrZWGUEcqOQG44dV6eFlLGXU8lJEsXd6sPk3F15
+	7DJkyYlPCFRZT3Ybt2KqAWvQVKLRAQw+Dh8SESb0Ejs2yuI3QueSk6rUlJlJ+flo996MVOG7CjM
+	HhK6zR28rPbr1zXHtrxziVNwK4OFB/R+lt+ZgRMIPqKkfIm6MUHgnzzIM/FZURCLG4vHiQBbIZt
+	14wpsopWZ4fEkKO6pQcUhn6E8zouPjGg/raEpr/qaLPVg3ULK2EN+hs+0Gjf/hu8KKaocYXFzDK
+	KR0v7gJGJAbRcswRzp/EI5R4CqdF3Vng6lRlc5hRM09c103TqW82/j5dHu6/87DSfDC5+SfRziB
+	N+5Lychb+FRAT6kC5Wx7FJI4iwT5ycncXbpTDmL9WbKoR9ddise+o1rezRFF0QN3HXsyjiwSNdt
+	RJnouqob9BDmrE8hyUdcpQci6YRXWuDP7aS3y8wQjZV8T23MPHovNyCIG3u/fqqFw=
+X-Received: by 2002:a17:90b:2ec3:b0:3a6:fec5:c184 with SMTP id 98e67ed59e1d1-3a6fec5d190mr6627900a91.7.1791219080418;
+        Mon, 05 Oct 2026 09:51:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:1::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a851525bffsm261628a91.0.2026.10.05.09.51.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Oct 2026 09:51:20 -0700 (PDT)
+Date: Mon, 5 Oct 2026 09:51:15 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	io-uring@vger.kernel.org, "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, 
+	Weiming Shi <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	David Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mina Almasry <almasrymina@google.com>
+Subject: Re: [RFC net-next 05/15] page_pool: Extend memory provider operations
+Message-ID: <asPUZ8DPllHd6Yu9@devvm7509.cco0.facebook.com>
+References: <20261002190018.696925-1-bjorn@kernel.org>
+ <20261002190018.696925-6-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mag73kyr3lvmhsn3"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261005155839.d5d200-kees@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261002190018.696925-6-bjorn@kernel.org>
 
+On 10/02, Björn Töpel wrote:
+> The current memory providers give memory that the CPU cannot read,
+> and they can always refill. An AF_XDP provider is different. The CPU
+> can read its memory, it has only the buffers that userspace puts in
+> the FILL ring, and its buffers go back to userspace instead of being
+> freed. It needs four things from page_pool:
+> 
+> - A CPU address for each net_iov. A provider can set the address of
+>   the first net_iov in its net_iov_area and the size each net_iov
+>   covers. netmem_address() then computes the address without a call
+>   into the provider; drivers call it for every packet. A
+>   net_iov_area without an address stays unreadable.
+>   page_pool_is_unreadable() is false for a readable provider.
+> 
+> - A way to say that the refill is not done. The new refill_done
+>   callback tells the driver whether it may stop refilling. A
+>   provider that still has buffers returns false, and the driver
+>   keeps NAPI scheduled.
+> 
+> - A way to give up a buffer without freeing it. Add a batched call
+>   that ends page_pool ownership of buffers that leave through the
+>   provider, for example to userspace. It clears the page_pool link,
+>   so a later page pool can take the buffer. Add the matching batched
+>   call that sets the link, and a DMA sync helper for drivers that
+>   post a buffer again directly.
+> 
+> - No buffer splitting, because a split buffer has several owners.
+>   Add MP_CAP_FRAG. page_pool refuses fragment allocation from a
+>   provider without it.
+> 
+> devmem and io_uring set MP_CAP_FRAG and keep their fragment
+> behaviour. Their refill paths now use the batched call that sets the
+> link.
+> 
+> Signed-off-by: Björn Töpel <bjorn@kernel.org>
+> ---
+>  include/net/netmem.h                    | 31 ++++++++++-
+>  include/net/page_pool/helpers.h         | 62 +++++++++++++++++++++-
+>  include/net/page_pool/memory_provider.h | 28 +++++-----
+>  io_uring/zcrx.c                         |  4 +-
+>  net/core/devmem.c                       |  7 ++-
+>  net/core/page_pool.c                    | 68 ++++++++++++++++++++-----
+>  6 files changed, 165 insertions(+), 35 deletions(-)
+> 
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index cc97611632dc..e6dff0b01581 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+> @@ -105,6 +105,12 @@ struct net_iov_area {
+>  
 
---mag73kyr3lvmhsn3
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx@kernel.org>
-To: Kees Cook <kees@kernel.org>
-List-Id: <linux-hardening.lore.kernel.org>
-Cc: Alejandro Colomar <alx+linux-hardening@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bill Wendling <morbo@google.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>, 
-	Shuvam Pandey <shuvampandey1@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Shivaprasad G Bhat <sbhat@linux.ibm.com>, 
-	Thorsten Blum <blum@kernel.org>, Alison Schofield <alison.schofield@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Guangshuo Li <lgs201920130244@gmail.com>, Ira Weiny <iweiny@kernel.org>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <asPSYn7sLqiH39Fu@debian>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
- <asEhEe0Urb5Wx7yi@ashevche-desk.local>
- <202610040023.A3865A6@keescook>
- <asIPlnb0noMd33rr@ashevche-desk.local>
- <20261005112209.1e47fa-kees@kernel.org>
- <asOKvhT01aNb5-Dg@debian>
- <20261005155839.d5d200-kees@kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20261005155839.d5d200-kees@kernel.org>
+[..]
 
-Hi Kees,
+>  	/* Offset into the dma-buf where this chunk starts.  */
+>  	unsigned long base_virtual;
 
-> Date: 2026-10-05 08:58:45-0700
-> From: Kees Cook <kees@kernel.org>
->
-> On Mon, Oct 05, 2026 at 01:34:10PM +0200, Alejandro Colomar wrote:
-> > > Yeah, reasonable. :) For v5 I've added this to seq_buf_str()'s kernel=
--doc:
-> > >
-> > >  * A zero-sized seq_buf has nowhere to put a NUL, so the empty string
-> > >  * is returned instead of writing to @s->buffer. Any other seq_buf
-> > >  * returns @s->buffer, even when it holds an empty string, so callers
-> > >  * always get their own buffer back.
-> >
-> > Are such buffers actually used on purpose anywhere?  Why not keep the
-> > WARN_ON?
->=20
-> Yes, though not often: the sched_ext debug dump builds a nested per-CPU
-> seq_buf from seq_buf_get_buf(), which returns a size of 0 once the dump
-> buffer has overflowed, and it handles that case on purpose (see the
-> "$s may already have overflowed" comment in kernel/sched/ext/ext.c).
+Will send a patch to drop this one, don't think we use it anymore..
 
-Hmmmm, so IIUC, it is a sentinel value, and not really a buffer size?
+[..]
 
-Did you consider not holding the size of the buffer, but rather an end
-pointer?  It also allows you to find how much you can write to the
-buffer, but has slightly better semantics: the end doesn't change if you
-advance the position.  'end' can only change through reallocations
-(which I don't know if you do in the kernel).
+> +	/* CPU address of the first net_iov's memory, or NULL when the CPU
+> +	 * cannot read the area. Each net_iov covers 1 << @niov_shift bytes.
+> +	 */
+> +	void *vaddr;
 
-It's fundamentally the same issue as was discussed with ARRAY_END() vs
-ARRAY_SIZE(), where ARRAY_END() is more robust.  Also, using NULL as a
-sentinel value is more readable; otherwise, you wonder why a buffer can
-have 0 bytes.
+Who is setting this? Somewhere in another patch? Can we keep it here?
 
-I think it'd simplify the implementation of the buffer.
+> +	u8 niov_shift;
 
-> Greg asked about the WARN_ON() in v2[1]: a size that comes from a device
-> or from userspace would have to be checked before every seq_buf_init(),
-> or it becomes a crash under panic_on_warn, and an empty buffer can just
-> hold the empty string. So the accessors do that instead.
+If we need niov_shift at area level, let's move the one from binding here?
+Then the existing callers can do binding->area.niov_shift.
 
-Makes sense.  Thanks for clarifying!
+>  };
+>  
+>  static inline struct net_iov_area *net_iov_owner(const struct net_iov *niov)
+> @@ -117,6 +123,23 @@ static inline unsigned int net_iov_idx(const struct net_iov *niov)
+>  	return niov - net_iov_owner(niov)->niovs;
+>  }
+>  
+> +static inline bool net_iov_is_readable(const struct net_iov *niov)
+> +{
+> +	return net_iov_owner(niov)->vaddr;
+> +}
+> +
+> +static inline void *net_iov_address(const struct net_iov *niov)
+> +{
+> +	const struct net_iov_area *area = net_iov_owner(niov);
+> +	unsigned long off;
+> +
+> +	if (!area->vaddr)
+> +		return NULL;
+> +
+> +	off = (unsigned long)net_iov_idx(niov) << area->niov_shift;
+> +	return area->vaddr + off;
 
+Or, alternatively, store dma_base in area and do:
 
-Have a lovely night!
-Alex
-
->=20
-> [1] https://lore.kernel.org/all/2026091953-cherub-empty-ef35@gregkh/
->=20
-> -Kees
->=20
-> --=20
-> Kees Cook
-
---=20
-<https://www.alejandro-colomar.es>
-
---mag73kyr3lvmhsn3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmrD06QACgkQ64mZXMKQ
-wqnpdQ//euFjtt+8eCfTbdx8D9yFA98qRQtBNJRMJkzbjRc1WHzJSyAenzDDHRW7
-1nfO+8fVD+sABW5saDwArxt4Tve6VP/xyI4ifVoNW5aAqsHaw9ShgZYIIp8xpUUU
-ACpzeCs1nelWY7X5eQegvND9U2tpW9XQ9BJ5bL/rMCPzqICH4Yk4cUkkqsUcPho4
-DYITM73/V/Rh/KZNKJm0FJwegjDCLP0G3WkI9pp/FYX0yYFt9zutVQfQdoLLCJv+
-bbA0W9u9U/bTr9yARxP6+KjjwpRXH7b4m/98g6tXng6OJ4exZXNo1XP4e2eQHqXz
-1qqjE+X4g1mDXgmD78QMUGUM9vKVzbIjFevvAXtum+qr6Nj01OExY1gOUW27QbDX
-Umt1EH/Dl5g8qwCMLuARH1jqVzUOORtqc1h408A2HIKjHqHBql4fGelGi/h5pJhO
-CbSDEaxxr6F1s4KmSWiDAZkSFTn0lLrAW4+5g8scddimgKmo2H2gvyYqAW7nX9Fu
-g6mO0PzwjtfvQf7mKhBvsjLdkkDH/V33KN23BoM89Sj/u6nONtESiARI7XMlcg8e
-jnRRASeSXKkver8374YJ0LKv/YW0zKJUJF+W42h9PmmmYumgRWDjzPZmuwCJjn+t
-0cN5QFNWVSt8LYxmBbHzPJ7q2J/bW11IibMUg7d9+0eo2N5tw8E=
-=gQBr
------END PGP SIGNATURE-----
-
---mag73kyr3lvmhsn3--
+return niov->dma_addr - area.dma_base + vadd ?
