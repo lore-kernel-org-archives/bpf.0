@@ -1,255 +1,250 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C233EB0E3;
-	Tue,  6 Oct 2026 13:53:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D47346985D
+	for <bpf@vger.kernel.org>; Tue,  6 Oct 2026 14:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791294824; cv=none; b=PpafEwYSYhTd6IxIJXJT2W+wjsdLdixe8A0WPWQsQOinZGD0ZXFRimsLVRd7XtScrlUnxBuIPEQbijSyw3noELe5U/cSjQQkPr0NwwO9ukWWVquTPHw5XwTE/Z8AC8vS8CsFr3auKTOeG2tbME+XzTAsKm4lVUrSEZm7eDCFPyk=
+	t=1791297863; cv=none; b=MFAR0KlfszSZoBIqFlqdD3AfW1M4NIykn2V1TabfgffKSXuqycDRphSC7pGMkqvYbHbFkJt01iH0pDv6bZRNc7+zOSA3pBuQ0oGn1CTF0f9PPrWnDqsEwNrH5Rswl7uvJhX8LGgrdFSE61ULlvBTtLjlKr3RRplbZKRhAylSmSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791294824; c=relaxed/simple;
-	bh=jC+DwEjR/EP/Nc4vMhGqHlE//WvyyOKP+eiXvOuchsQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DilzPUT+jfuneK5eQ0QI7TVYsUigDils0dFo6UWRTLe0b6gISK4IWYoK2XV+DhkR4TwGnRhwmUJLRtAxXgJjbqyFIzooLXLJlkrkfmQb7D5VZa4Ye8xYSenLZQJ7daO4JQkSPbm3tb3TbnQgOFfCD+GvvgDZl43zKsv2q+8s7S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16751F000FF;
-	Tue,  6 Oct 2026 13:53:36 +0000 (UTC)
-Message-ID: <342ca584-c4ef-4d73-9017-9d21bbf9ce10@linux-m68k.org>
-Date: Tue, 6 Oct 2026 23:53:22 +1000
+	s=arc-20240116; t=1791297863; c=relaxed/simple;
+	bh=xg4nVjZgK3omQ3IqcCOJ6LqQ7bDNIMVw34gz+6JR8ns=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b5eSVrSTsh9bdrOr2hrvJM9WwFU+E6r757Ro68EPRU8563Cu60LjsSUCEjgwS5eScg1gXWY/GqsBf20aFot9k2gbWGyl33aOQNAW3c9p1aaRQi6cjZH4eNKPjaeVb16Xv6++7rQLDrCr0X/X9nDXysUM8xXDRvfxJqk+MYvVf/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ik9V3upG; arc=none smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ik9V3upG"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-677dbe051d4so2493544d50.0
+        for <bpf@vger.kernel.org>; Tue, 06 Oct 2026 07:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791297860; x=1791902660; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=z16WMQi6X5ulLLprpNpp5KM6uOsUPopslq1m3ekUifc=;
+        b=ik9V3upGVtCUpR3/aqNSQoWBARrPlUwfBLwu7x9KrE+mVYYLpj3Ken17EWeqx60NaR
+         +iMWl6b77TTj7G0ski4SJd9YphF139UwmUOg4RDR+H9b4lD7h3VHi6LDwRYFbFY7ZSxg
+         fDjo2LixnKPlr6/BI03F0dIzO+XSdG8B5GiRIM2KYIWPw+9vSUTPyiktFHEq0VGBoF7p
+         846TNxDBByd08hSOj971BuKfkxmHC0W83gGQYyEDLZ3dbnSWHrM6UwrTjQzI9Ko4uiZw
+         SnK809V5siho6qbdricxw+82VnQlVUT07oJDRaFIR0qx/Inuf1uQMAKmybpOBqvd9tLc
+         jkSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791297860; x=1791902660;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=z16WMQi6X5ulLLprpNpp5KM6uOsUPopslq1m3ekUifc=;
+        b=HPbygzVmyQmsWb97dZBBxBdjrxRccWdjQeGuJD6yCwij5WEx+dl4KVaOCtdpV1VBDM
+         OU8V3fctyv3a1YBvJzhX2Sfooy0aFEqkWavmq95nLzyFvC/bxDBgfdSXnrKNCHPEaLbB
+         HrvjmVXM9bqy86ZMNYL9+ztt0zwq+prhdu4jgH0wkk457oOpoeri/lxdYy44X+6Lr4vD
+         fWEPOO+lK+2OQyiHcL8dxzMQrSdwpKIXDSgNz2jJPsITEPVJI3kUONYvOQJqTfN52JIu
+         2UY10xwIElTalQ7U/JFvUMGIDKYVdwZynBXwoOwDkPIrIVfKG5cXqpggIrSYwvJAoD/Y
+         aWfg==
+X-Forwarded-Encrypted: i=1; AKwUvBz20d4NqWrBf2vc+BhTpkt3Qw0T/36Lw0dMr8UzmDiotmGDcg4KcHm+tPQmFh1ti1I3Xas=@vger.kernel.org
+X-Gm-Message-State: AFuF++kEez8yeIqobShUXktiGYuBIgLCrlgyM30JNax+L4efXf7RwEfj
+	Hj54TV9hjY8ci+5uqULrcvvXRRFl+oZFiRNSgDlb/RL1IrnnW8y0HRfe
+X-Gm-Gg: AYBFou1KvgNowzpDQg3Sdh7h3YdR6ZnsTtDjVHgErMR4mZwcnY1xUiB4gozcdoP5oXc
+	ACoaqRwauJtd8EmRYTL/GtDZli24/+q/Mu+7zsYhHbkYzbbDdhFRYsGXIzkSRecLwkbTintr8xK
+	7cD3V8jFxFWh3fuod0j5kx/qqWEhjkjBLhYaxEuDqhBD+ZH7PJJ0ROh1CXvrA5BJh5lycQZrNFg
+	ct4II0C+GXUB8S/nwnsdGpzUZVjpQBBcRxJ9+HTjhe06ifJkweMQlLgQl3h2kJB6Rt92ijkSBfU
+	Q52VGkrhPqLMLj3jCX7Tq8DZQqyrhNDJ6QyksuaR7n4/1y65Ud3/j14K2fjFe+/vKsdIWGBLjjp
+	/H/coaXY/e1Ck5ZNRr2tVS1sT4eUeK5bEOHRxH3bLDxuVZZ6+xqn6ZXQjRuTcvffGqSvg3dNu19
+	GHZr4haothR9loTL3DncVJMXCmdUzo/6D7x0GCiMox2Uzw/020iZu/u3TpW1JzjwUPNv19FJOWG
+	g==
+X-Received: by 2002:a53:ac85:0:b0:674:11fe:cb0d with SMTP id 956f58d0204a3-678fcf01225mr679592d50.57.1791297860190;
+        Tue, 06 Oct 2026 07:44:20 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:6dc9:4ffd:1851:60b1])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-677c19b196esm4642908d50.1.2026.10.06.07.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2026 07:44:19 -0700 (PDT)
+Date: Tue, 6 Oct 2026 10:44:18 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	neil@brown.name, mic@digikod.net, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, song@kernel.org, linux-fsdevel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, gnoack@google.com, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, memxor@gmail.com, jolsa@kernel.org, jlayton@kernel.org, 
+	amir73il@gmail.com, mjguzik@gmail.com, shuah@kernel.org, m@maowtm.org, 
+	martin.lau@kernel.org, mason@kernel.org, ihor.solodrai@linux.dev
+Subject: Re: [RFC PATCH bpf-next 11/12] bpf: add a lockless path ancestor
+ iterator
+Message-ID: <asUBWNVtSzLXkXsF@zenbox>
+References: <20261006002020.2890858-12-utilityemal77@gmail.com>
+ <ea38d86f4c0b9e3a152efb949421d2af3bcc50c03c620780eddc90ef28a9ad51@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7] m68k, bpf: Add initial BPF JIT compiler support
-To: bot+bpf-ci@kernel.org, visitorckw@gmail.com, corbet@lwn.net,
- skhan@linuxfoundation.org, geert@linux-m68k.org, ast@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, andrii@kernel.org
-Cc: rdunlap@infradead.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, jserv@ccns.ncku.edu.tw, marscheng@google.com,
- eleanor15x@gmail.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- bpf@vger.kernel.org, daniel@thingy.jp, martin.lau@kernel.org,
- mason@kernel.org
-References: <20261005185251.2422114-1-visitorckw@gmail.com>
- <506b804c97aaa3a66660bb0eebd85c6041e241532c1227f1012166785d240fae@mail.kernel.org>
-Content-Language: en-US
-From: Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <506b804c97aaa3a66660bb0eebd85c6041e241532c1227f1012166785d240fae@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea38d86f4c0b9e3a152efb949421d2af3bcc50c03c620780eddc90ef28a9ad51@mail.kernel.org>
 
-Why thank you LLM review :-)
-
-On 6/10/26 05:48, bot+bpf-ci@kernel.org wrote:
->> m68k, bpf: Add initial BPF JIT compiler support
+On Tue, Oct 06, 2026 at 01:10:47AM +0000, bot+bpf-ci@kernel.org wrote:
+> > bpf: add a lockless path ancestor iterator
 > 
-> TL;DR: Nit only, not a bug: the ColdFire byte-swap instruction sequences are
-> open-coded repeatedly in emit_to_le16/32/64() in the m68k JIT; suggests small
-> shared helpers, as arm's bpf_jit_32.c does.
+> TL;DR:
+> - Verifier may give a plain trusted dentry from the lockless path iterator,
+>   risking use-after-free in sleepable kfuncs after RCU exit
+> - A failed legitimize may look like a finished walk, hiding a lost race
 > 
->> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
->> new file mode 100644
->> index 000000000000..6c40d358acd4
->> --- /dev/null
->> +++ b/arch/m68k/net/bpf_jit_comp.c
->> @@ -0,0 +1,1840 @@
-> [ ... ]
->> +static inline void emit_to_le16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
->> +{
->> +	if (CPU_IS_COLDFIRE) {
->> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
->> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
->> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
->> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
->> +		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
-> [ ... ]
->> +static inline void emit_to_le32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
->> +{
->> +	if (CPU_IS_COLDFIRE) {
->> +		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
->> +		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
->> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
->> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
->> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
->> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
->> +		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
->> +		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
->> +		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
->> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
->> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
->> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
->> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
->> +		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
->> +		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
->> +		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
-> [ ... ]
->> +static inline void emit_to_le64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
->> +{
->> +	if (CPU_IS_COLDFIRE) {
->> +		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
->> +		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
->> +
->> +		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
->> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
->> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
->> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
->> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
->> +		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
->> +		emit_16(ctx, 0x202f | (d_lo << 9));			/* move.l 4(%sp), d_lo */
->> +		emit_16(ctx, 0x0004);
->> +		emit_16(ctx, 0x2f40 | d_hi);				/* move.l d_hi, 4(%sp) */
->> +		emit_16(ctx, 0x0004);
->> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
->> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
->> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> > diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+> > index 265cb414a08a..9dad65df4267 100644
+> > --- a/fs/bpf_fs_kfuncs.c
+> > +++ b/fs/bpf_fs_kfuncs.c
+> 
 > [ ... ]
 > 
-> This isn't a bug, but the ColdFire byte-swap sequence (mvz.w / mvz.b /
-> lsr.l #8 / lsl.l #8 / or.l) is open-coded once in emit_to_le16(), twice in
-> emit_to_le32() and four times in emit_to_le64(), differing only in which
-> register receives the result. 
+> > @@ -633,6 +656,79 @@ bpf_path_ancestors_pos_flags(struct bpf_iter_path_ancestors *it__iter)
+> 
+> [ ... ]
+> 
+> > +/*
+> > + * Unlike the referenced variant, this hands out the walk's own position:
+> > + * a lockless iteration holds no references to pass on, and the verifier
+> > + * keeps the whole of it inside one RCU read-side critical section.
+> > + */
+> > +__bpf_kfunc struct path *
+> > +bpf_iter_path_ancestors_rcu_next(struct bpf_iter_path_ancestors_rcu *it)
+> > +{
+> > +	return bpf_path_ancestors_step((void *)it);
+> > +}
+> 
+> The commit message says that "nothing read out of the position may be passed
+> to a kfunc demanding a trusted argument", and the comment above struct
+> bpf_iter_path_ancestors says the same.  Does the verifier actually enforce
+> this?
+> 
+> The position returned by bpf_iter_path_ancestors_rcu_next() is typed
+> PTR_TO_BTF_ID | MEM_RCU, because check_kfunc_call() adds MEM_RCU to the
+> iter_next result of a KF_RCU_PROTECTED iterator.  Commit 7ed5aa71ad77 ("bpf:
+> mark struct path trusted") added:
+> 
+>     BTF_TYPE_SAFE_TRUSTED(struct path) {
+>             struct dentry *dentry;
+>     };
+> 
+> In check_ptr_to_btf_access(), the branch taken for
+> is_trusted_reg(env, reg) || is_rcu_reg(reg) applies type_is_trusted() and
+> sets PTR_TRUSTED on a safe-trusted field even when the base pointer is only
+> MEM_RCU.
+> 
+> So loading the dentry field of a lockless position yields a plain
+> PTR_TRUSTED dentry.  It does not keep MEM_RCU, so
+> invalidate_rcu_protected_refs() leaves it alone at bpf_rcu_read_unlock().
+> 
+> The safe-trusted rule for struct path assumes the path pins its dentry.  That
+> holds for the referenced variant, but the lockless walk takes no reference on
+> the dentry, and an ancestor's lifetime is not tied to the original path once
+> a concurrent rename moves the descendant.
+> 
+> After the program leaves the RCU read-side section, could a sleepable kfunc
+> that takes a trusted dentry (the xattr kfuncs in this set, for example) be
+> handed a dentry that has neither a reference nor RCU protection?
+> 
+> Would it work to keep MEM_RCU on fields loaded from a MEM_RCU struct path
+> (for example by applying the struct path safe-trusted rule only to trusted
+> bases), or to avoid exposing struct path as the return type of the lockless
+> iterator?  A negative selftest showing that such a load is rejected would
+> also help.
+This feedback was repeated several times, and it's real (missed this).
+I assumed that the RCU characteristic would propagate, but it does not.
 
-I did consider using helpers for these during coding, but ultimately decided
-against it. The open coded versions allow for a handful of extra instruction
-optimizations - due to that flexibility of producing the 16bit swap sequence
-result in different registers. For example I could combine a stack pop with
-the or'ing of the result, and more efficiently store an intermediate result
-into the temporary stack storage.
+Basically the issue is that the dentry is trusted even if the path is
+under rcu, so it can be stored and becomes a UAF outside the rcu
+critical section for RCU walks.
 
-The patch below gives an example of an implementation using helpers. I am not tied
-to the open coded version: Kuan-Wei if you prefer the code with helpers feel free
-to use this instead.
+Two ways this can be handled:
 
-FWIW, the to_le32 coded sequence is 1 instruction longer (17 instructions to 18).
-The to_le64 coded sequence is 5 instructions longer (34 instructions to 39).
-Total byte count differs less, due to use of offsets in the open coded versions.
+1. Don't mark the dentry as trusted. (patch 4) 
+This is the simplest fix, but limits the utility of this patchset
+as you couldn't use the dentry for kfuncs expecting trusted dentry args,
+including the xattr kfuncs.
 
-Regards
-Greg
+2. Propagate MEM_RCU for a __safe_trusted field reached from a MEM_RCU
+base. (as stated in the above suggestion)
 
+More invasive and affects existing BTF definitions. I'd have to dig
+more into this to see what this would affect.
 
+...
 
---- arch/m68k/net/bpf_jit_comp.c.org	2026-10-06 23:08:25.924094287 +1000
-+++ arch/m68k/net/bpf_jit_comp.c	2026-10-06 22:51:13.099505355 +1000
-@@ -640,14 +640,19 @@
- 	bpf_put_reg32(dst[0], d_hi, ctx);
- }
- 
-+static inline void emit_cf_swap16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
-+{
-+	emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);			/* mvz.w d_lo, d_lo */
-+	emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);			/* mvz.b d_lo, d_hi */
-+	emit_16(ctx, 0xe088 | d_lo);					/* lsr.l #8, d_lo */
-+	emit_16(ctx, 0xe188 | d_hi);					/* lsl.l #8, d_hi */
-+	emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);			/* or.l d_hi, d_lo */
-+}
-+
- static inline void emit_to_le16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
- {
- 	if (CPU_IS_COLDFIRE) {
--		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
--		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
--		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
--		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
--		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
-+		emit_cf_swap16(ctx, d_lo, d_hi);
- 	} else {
- 		emit_16(ctx, 0x0280 | d_lo);				/* andi.l #0xffff, d_lo */
- 		emit_32(ctx, 0xffff);
-@@ -657,25 +662,23 @@
- 	emit_16(ctx, 0x7000 | (d_hi << 9));				/* moveq #0, d_hi */
- }
- 
-+static inline void emit_cf_swap32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
-+{
-+	emit_16(ctx, 0x2f00 | d_lo);					/* move.l d_lo, -(%sp) */
-+	emit_16(ctx, 0x4840 | d_lo);					/* swap d_lo */
-+	emit_cf_swap16(ctx, d_lo, d_hi);
-+	emit_16(ctx, 0x2000 | (d_lo << 9) | d_hi);			/* move.l d_lo, d_hi */
-+	emit_16(ctx, 0x2017 | (d_lo << 9));				/* move.l (%sp), d_lo */
-+	emit_16(ctx, 0x2e80 | d_hi);					/* move.l d_hi, (%sp) */
-+	emit_cf_swap16(ctx, d_lo, d_hi);
-+	emit_16(ctx, 0x4840 | d_lo);					/* swap d_lo */
-+	emit_16(ctx, 0x809f | (d_lo << 9));				/* or.l (%sp)+, d_lo */
-+}
-+
- static inline void emit_to_le32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
- {
- 	if (CPU_IS_COLDFIRE) {
--		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
--		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
--		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
--		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
--		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
--		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
--		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
--		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
--		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
--		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
--		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
--		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
--		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
--		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
--		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
--		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
-+		emit_cf_swap32(ctx, d_lo, d_hi);
- 	} else {
- 		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
- 		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
-@@ -688,45 +691,12 @@
- static inline void emit_to_le64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
- {
- 	if (CPU_IS_COLDFIRE) {
--		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
- 		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
--
--		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
--		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
--		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
--		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
--		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
--		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
--		emit_16(ctx, 0x202f | (d_lo << 9));			/* move.l 4(%sp), d_lo */
--		emit_16(ctx, 0x0004);
--		emit_16(ctx, 0x2f40 | d_hi);				/* move.l d_hi, 4(%sp) */
--		emit_16(ctx, 0x0004);
--		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
--		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
--		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
--		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
--		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
--		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
--		emit_16(ctx, 0x81af | (d_lo << 9));			/* or.l d_lo, 4(%sp) */
--		emit_16(ctx, 0x0004);
--
--		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
--		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
--		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
--		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
--		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
--		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
--		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
-+		emit_cf_swap32(ctx, d_lo, d_hi);
-+		emit_16(ctx, 0x2000 | (d_lo << 9) | d_hi);		/* move.l d_lo, d_hi */
- 		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
- 		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
--		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
--		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
--		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
--		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
--		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
--		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
--		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
--
-+		emit_cf_swap32(ctx, d_lo, d_hi);
- 		emit_16(ctx, 0x201f | (d_hi << 9));			/* move.l (%sp)+, d_hi */
- 	} else {
- 		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
+Leaning towards 1. 2 can be a follow up series without breaking
+compatibility (path* equivalents of the dentry* kfuncs would work too).
+But if it's desired I can try 2.
 
+> 
+> [ ... ]
+> 
+> > + * Return: 0, -%ENOENT if the lockless iteration was not on a position, or
+> > + * -%ECHILD if it lost the race to acquire one; %BPF_PATH_ANCESTORS_RETRY is
+> > + * then also flagged, and the program has reached no conclusion about the
+> > + * ancestry.  @it__uninit is initialized whatever this returns, so a program
+> > + * need not branch on the result: a walk that could not be escalated simply
+> > + * yields no position.
+> > + */
+> > +__bpf_kfunc int
+> > +bpf_path_ancestors_legitimize(struct bpf_iter_path_ancestors *it__uninit,
+> > +			      struct bpf_iter_path_ancestors_rcu *rcu_it__iter)
+> > +{
+> > +	struct bpf_path_ancestors_kern *rcu_kit = (void *)rcu_it__iter;
+> > +	struct bpf_path_ancestors_kern *kit = (void *)it__uninit;
+> > +
+> > +	/* A zeroed walk makes destroying the iterator a no-op. */
+> > +	memset(kit, 0, sizeof(*kit));
+> > +	kit->step = 1;
+> > +
+> > +	/* Drained, or already failed: nothing to hand over. */
+> > +	if (rcu_kit->step)
+> > +		return -ENOENT;
+> > +	if (!vfs_walk_handover(&kit->aw, &rcu_kit->aw)) {
+> > +		rcu_kit->step = -ECHILD;
+> > +		return -ECHILD;
+> > +	}
+> > +	kit->step = 0;
+> > +	return 0;
+> > +}
+> 
+> When the lockless iteration had already failed with -ECHILD, or when
+> vfs_walk_handover() fails, @it__uninit is left with step == 1.  That is the
+> same state as a referenced walk that has passed the real root, so
+> bpf_iter_path_ancestors_next() returns NULL and bpf_path_ancestors_pos_flags()
+> on that iterator returns 0.
+> 
+> The documented contract of bpf_iter_path_ancestors_next() says NULL comes
+> "once the walk has passed the real root - or on an allocation failure ...
+> reported as NOMEM", so a lost race reads as a completed walk.  The kernel-doc
+> above also tells programs they "need not branch on the result".
+> 
+> Can a policy program that follows that advice and only inspects the resumed
+> iterator treat a lost race as a finished ancestry walk with no match?
+> BPF_PATH_ANCESTORS_RETRY is flagged only on the lockless iterator, which has
+> to be destroyed before the resumed iteration can run.
+> 
+> Would setting kit->step = -ECHILD on the destination in both failure paths
+> work?  Stepping would still stop (step != 0), the zeroed walk would keep
+> destroy a no-op, and bpf_path_ancestors_pos_flags() on the resumed iterator
+> would report BPF_PATH_ANCESTORS_RETRY.
+> 
+> Separately, when the source had already lost a race, the first check returns
+> -ENOENT rather than -ECHILD, which conflicts with the kernel-doc describing
+> -ENOENT as "not on a position".
+>
+This is also real, just forgot to add kit->step = -ECHILD on the failure
+paths. ~2 lines.
 
-
+Justin
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37395354107
 
