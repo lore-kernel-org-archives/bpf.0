@@ -1,109 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C6A374A0E;
-	Mon,  5 Oct 2026 23:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE29B19BC8;
+	Tue,  6 Oct 2026 00:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791243802; cv=none; b=MuQE6MafKHsPwCeiq8MVAD+Std/6GHmrEbJIj2H/u+oK8wfiwD64zf3UMcUG94bjcIZW2HWZXHB9EUdFoiUyGZukV5O5a4Vhl+8RQ9pEuKJifJw0mz3dOy/2MeJH5H8oXd3rK0Z5lo4ft+ToX/7L+fHio+2pan4a7shVoN8Bd5o=
+	t=1791245423; cv=none; b=sQ+QUCkqreF2zROvnFGcRzH4nyGmyHp4Dfie/ejTt339wel8n+4xGa/4eM93cE6XkxNK38G+5xxgayj4wclv8cXlAXSUGe02bohFFE/p58kXqVMPWJuYZE0PRmaJE7e+Ep83Rxm0Pn+6gipGvFMOaL1/KYHP0e8vzzMOPZGINiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791243802; c=relaxed/simple;
-	bh=9DEhj3E2Z2okJQt/crAHUr/v9cEfQDABwJkEAZASsK0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=OVOtAyPzUv8zmUa06RgjviOX27Lrz1lUIzOz9rosmOTmiVrRZSpkmpQ+qmktOkMw1C8mXWUPGX7RN8CEEcYKxSbBvPhkwl46m8F6vx4AeJIx2fQJUGXfIMf6qnHZBhrjsmHq1XO1ecAXQqvxQTD8apeyCCfIpiZJWLsmw7Sdgy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHZDxiuE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791245423; c=relaxed/simple;
+	bh=6IjSzqSePVbJ+JdMaCXuUoMWedxE4ZhtrPZTJDGDIsM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=QH946HY88KQhcfkf4MyCD8XLbAhYAkRt+sJ3b+6XlFLr7mYyCcWzO3V3hw/GdYB+hUDOBMjA8oR0LAzbb2vwWUqqtnG5035irv47e6IPi7K+ET5DME40wH2TC0qozp+9I9Y7IsQcSBHsXqaXTDpK1zP/pP39U6NmZiyUi04CDbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFk3qNTu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHZDxiuE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465491F000FF;
-	Mon,  5 Oct 2026 23:43:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFk3qNTu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F58D1F000FF;
+	Tue,  6 Oct 2026 00:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791243801;
-	bh=zxf0bLE4pWJCsdbiay9wtqu5N/mppcBbaXd1zM7Bf5Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To;
-	b=NHZDxiuEAQHT71RANR9YkRmn9Cz1QGeAO0R347lZlOwalZUPOTOCo8x4fXxPvRQVs
-	 qHXlPdFOXKWNzA55IqHpI0V6KVYZpZoftBbU22rSDv/LfUuGIrbpYXmN5+NlPYjLlm
-	 z2zjpvoHS1IRtHMUQSjwWUGwjq3mwg4zdJ8fwGMYIs3xU9dB1sJqjER7uEC1xquwYs
-	 970ocnssRejCzuc8NDwh+aULypn85kfdnrLClU+HPT0Qhd1GLRTfvwIYKkjQeclcV3
-	 nt4k0MF2A2MXbWrpee1SC1lHT+dqidu50IZsayWLrPoSvgkrXWTkOra688kKk3ln3R
-	 MqioahbxsbmMg==
-Date: Mon, 5 Oct 2026 18:43:20 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Nikola Prica <nikola.prica@amd.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the
- pci-current tree
-Message-ID: <20261005234320.GA648423@bhelgaas>
+	s=k20260515; t=1791245421;
+	bh=oFptFADksPAkAOdMcibRU662GWZv2QltIDg01V3uyKs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=VFk3qNTuzlbbyrY8hthZoNeu4FYqQCUXt6O6n0lNOGt72M+juQ/ZMUHu/N246+YH6
+	 BHYvCSSE0dqHnJWtXsuow8tg4fC8vZ9cnUa3oL250R9nkxSz28KdD6J32A6+vYvWU6
+	 bi+Jh5nAB+Kdm7Ti7/S99odZJpRkI5Zr69Ns0w+7w2yFNJ8qPFIteeWxwAlNz7Ufuj
+	 IsLJWv2Jop9RIN+/pE+K6Pl6fzv7nMKVWYisQ6xKrONnw+3zIsmxjpFowmZ8Ex1Lrm
+	 4Z+50Tcaru8kOU1v533bm+NT7M1ax5KlrnCjVyYiIKfzm4+nOZsPVDyFoxwKYdkE6y
+	 H8d10xwZz0QKg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 772D8392667F;
+	Tue,  6 Oct 2026 00:10:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <asAylbswc5WRADZ2@sirena.co.uk>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 0/3] gve: various XDP fixes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179124542028.1947351.5137581473727943896.git-patchwork-notify@kernel.org>
+Date: Tue, 06 Oct 2026 00:10:20 +0000
+References: <20260930214735.3288780-1-joshwash@google.com>
+In-Reply-To: <20260930214735.3288780-1-joshwash@google.com>
+To: Joshua Washington <joshwash@google.com>
+Cc: netdev@vger.kernel.org, hramamurthy@google.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ willemb@google.com, jordanrhee@google.com, nktgrg@google.com,
+ thostet@google.com, jeroendb@google.com, pkaligineedi@google.com,
+ sdf@fomichev.me, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
-On Sat, Oct 03, 2026 at 12:39:17AM +0200, Mark Brown wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the bpf-next tree got a conflict in:
-> 
->   drivers/pci/pci.c
-> 
-> between commit:
-> 
->   97958feb6560b ("PCI: Accept AtomicOps already enabled by the hypervisor")
-> 
-> from the pci-current tree and commit:
-> 
->   40cce45b921f7 ("PCI: Accept AtomicOps already enabled by the hypervisor")
+Hello:
 
-This fixes a regression, so 40cce45b921f7 ("PCI: Accept AtomicOps
-already enabled by the hypervisor") is already upstream in v7.3-rc6.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-97958feb6560b no longer exists in pci-current.
+On Wed, 30 Sep 2026 14:47:32 -0700 you wrote:
+> This patch series consists of a number of small XDP-related fixes.
+> 
+> These changes are split off from
+> https://lore.kernel.org/netdev/20260922194533.631387-1-joshwash@google.com/
+> in an effort to prevent blocking relatively simple fixes on more complex
+> fixes that will need more feedback to merge.
+> 
+> [...]
 
-> from the bpf-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> diff --combined drivers/pci/pci.c
-> index 62729ade496fc,8cc6a89130b53..0000000000000
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@@ -3770,10 -3770,13 +3770,10 @@@ int pci_enable_atomic_ops_to_root(struc
->   
->   	root = pcie_find_root_port(dev);
->   	if (!root) {
->  -
->   		/*
->  -		 * A hypervisor may expose a topology with the root port
->  -		 * not visible to the guest.  If the hypervisor has already
->  -		 * set AtomicOp Requester Enable in the endpoint, we assume
->  -		 * it has verified support in the root port, so it is safe
->  -		 * for the driver to use AtomicOps.
->  +		 * A hypervisor may expose a headless topology with no
->  +		 * visible root port.  If it has already set AtomicOp
->  +		 * Requester Enable, there is nothing more to do.
->   		 */
->   		pcie_capability_read_dword(dev, PCI_EXP_DEVCTL2, &ctl2);
->   		if (ctl2 & PCI_EXP_DEVCTL2_ATOMIC_REQ)
+Here is the summary with links:
+  - [net,v3,1/3] gve: fix XSK buffer leak when rings are stopped
+    https://git.kernel.org/netdev/net/c/73670ddb91a4
+  - [net,v3,2/3] gve: fix XSK buffer leak on error descriptor
+    https://git.kernel.org/netdev/net/c/9fed6a8ab8a5
+  - [net,v3,3/3] gve: fix napi_disable deadlock when attempting to disable XSK pools
+    https://git.kernel.org/netdev/net/c/0cb6939a4dfe
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
