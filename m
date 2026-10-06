@@ -1,360 +1,118 @@
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1353E5A2B
-	for <bpf@vger.kernel.org>; Tue,  6 Oct 2026 08:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB23A381E92
+	for <bpf@vger.kernel.org>; Tue,  6 Oct 2026 09:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791276449; cv=none; b=crYYnaVN/7gVdNPcG/akJK/CjOwLjVDZ/SNaWAV1tu4LtxfLtF3Pi+vXsm/23mW5ShC+++4O/j5uNodQU3WpDZ8NhcrYyhc3b47stflvyhiIQwexz/tVaJqa7AwAyi0Y0A964Q4pjiWO5rh4lbqm+H5NlWLNZVRXNOt8jX/UMiU=
+	t=1791278218; cv=none; b=S0CpYrqsLzkf4z90q50TsHhPRMuwxuqRuEvBdKzGifZDlPhEscbGR6B+EEjcSpu7+L4u+V8f0W2hA6UaxWDYuilituyNDEEe3qqS2rsqtg4d0KKN7XCVtXwipYPCabKWPmXqwfqsCxui7aELD1BpHgJ8bcsJWp3T0lHUJOO/y/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791276449; c=relaxed/simple;
-	bh=5ox9H7xje9c4sV2f993QsBFqEkK48umLRCrAocmJEM4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cMuIxnhfbi/bZtlEQHatiFLHb2JqC3L8QGyVdpJqG8wFUrU/w9ZYdBB8f8cJ1mxaM1lcQ/1xQ//BV1hdATOheCC+sdc9nZyAx2K3AqygGj/Hzps/jfITQJmEwveGGw4+LIHox4/HZNGq6CtnuHxfASq0Atoey3sPJ/MvJCZA9xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=SpE0RqfT; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+	s=arc-20240116; t=1791278218; c=relaxed/simple;
+	bh=axcuLUHB0k4a2KhCUfjstGSqk1hdgwH3KjINxp48V6k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=HSHC0bXG0v72d2Nb+P9PB2leXcNdCUAILqsIOvxWpGrzVRfxyoSQAvjOkPCeelXgM5hy2OABRyFAp5QHRp7aE6u9P743iJgaE26oGsmq0HDgEE8b6AITB4bqbIgm2PJgt3nL0mdK9t5UN+KWRKQGwahNIWohg5JouL+COkszIjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KiJnivKU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="SpE0RqfT"
-Received: from mail01.layka.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 7042C82B62;
-	Tue, 06 Oct 2026 10:47:25 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EuLw5X3hlXyC; Tue,  6 Oct 2026 10:47:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1791276444; bh=5ox9H7xje9c4sV2f993QsBFqEkK48umLRCrAocmJEM4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=SpE0RqfTRbv3xkkcdxlWmUkR1jmCnLTQ5kBDyKmY3JJLU+MnwKZqIXjEWOLOMUVK3
-	 F4AwfpaKnfeAn5Lv1pxVaxHnTa6IFNOhQQTXtAd2HRYlsNz2Mwit5IpUFSd7CRhBBl
-	 FNDFvq3NDHmYdSxWmsfSnYDYaMKvF3MsNB475w856dPyR2fkXCNJ7hQBViMldQ7IO6
-	 rJx78Uf7Bi6Ues5nm5KwSNKw8UPUfXEQLu98ENi/i5cX3be+wWl1QyNQOAz6LtdWU+
-	 3rPp9bGhjPYAROrIkw8piGDDdyTV2qIbCzvwN35MscnmtjdRKQxXGQKIuO5Q1ZNs07
-	 L+qpYTDnxNmuA==
-From: Masoud Aghasi <maghasi@disroot.org>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	leon.hwang@linux.dev,
-	Masoud Aghasi <maghasi@disroot.org>
-Subject: [PATCH bpf v5 3/3] selftests/bpf: add tests for percpu map flags combination
-Date: Tue,  6 Oct 2026 09:46:04 +0100
-Message-ID: <20261006084604.780456-4-maghasi@disroot.org>
-In-Reply-To: <20261006084604.780456-1-maghasi@disroot.org>
-References: <20261006084604.780456-1-maghasi@disroot.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KiJnivKU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E2271F000FF;
+	Tue,  6 Oct 2026 09:16:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791278216;
+	bh=d3J4sblRZznAwYcVBzkh+GKRvd7PAXWPvk5VNJVjGo4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=KiJnivKUl4k1CTF+nx5vEmdXnpccjQXF3LyOdsonZx/faXiAjaRwdvtPt49F3+AJU
+	 b4EX60NBVQmU2Gz9SeJARlmjoauYvWbzNzczp0XMWjQ+SMmIW/QvzKF5y3ZLliyDJh
+	 bgsaA06HuYIXIrmQIzGA4cRQoD25Du1vABzOw9/Jtl6Jwv0QBGmWiQGKAdG1M7OnIV
+	 qIECwnujDq/KtSeioopIYnSsUKC9YGmy4zt4GVxWjUJUPnnMsc13S5NdG9nR3AfRHH
+	 CKWffxHxQ2ZZkKWkYT4BKpXa2PnOa7e6YCkQnO+vgbMb3oLXO5c3s3EDgYZ/ewOsWO
+	 MaEJZHAhL85jQ==
+Content-Type: multipart/mixed; boundary="===============2241733100726128338=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <de5a36e24f7bc0709ba731a36ca665701efc411ea2e05fcc2ff708a8675d61e5@mail.kernel.org>
+In-Reply-To: <20261006084604.780456-2-maghasi@disroot.org>
+References: <20261006084604.780456-2-maghasi@disroot.org>
+Subject: Re: [PATCH bpf v5 1/3] bpf: Fix incorrect handling of user flags in bpf_percpu_array_update
+From: bot+bpf-ci@kernel.org
+To: maghasi@disroot.org,bpf@vger.kernel.org
+Cc: andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,leon.hwang@linux.dev,maghasi@disroot.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  6 Oct 2026 09:16:54 +0000 (UTC)
 
-All possible combinations of (BPF_EXIST, BPF_NOEXIST) and
-(BPF_F_ALL_CPUS, BPF_F_CPU) flags are covered for all percpu map types.
+--===============2241733100726128338==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-As BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE does not support BPF_NOEXIST and
-also in order to reduce the amount of code duplicates, I added its
-new test scenarios to the existing cpu_flag_percpu_cgroup_storage test.
+> bpf: Fix incorrect handling of user flags in bpf_percpu_array_update
 
-But for other percpu map types, I added new tests to be able to
-exercise all flag combinations and the edge cases such as percpu LRU
-unnecessary deletion issue.
+TL;DR: Commit message only: the patch also makes BPF_EXIST | BPF_NOEXIST
+return -EINVAL in bpf_percpu_array_update(), which was previously accepted,
+but the message doesn't mention it.
 
-Signed-off-by: Masoud Aghasi <maghasi@disroot.org>
+>     bpf: Fix incorrect handling of user flags in bpf_percpu_array_update
+>
+>     For BPF_MAP_TYPE_PERCPU_ARRAY map, bpf_percpu_array_update()
+>     is not considering the possibility of a combination of
+>     (BPF_NOEXIST, BPF_EXIST) flags with (BPF_F_CPU, BPF_F_ALL_CPUS) flags.
+>     This causes the (BPF_NOEXIST, BPF_EXIST) flags to lose their effect
+>     in some cases.
+>
+>     For example, using the (BPF_F_ALL_CPUS | BPF_EXIST) flag combination
+>     with bpf_map_update_elem() results in an incorrect EINVAL error
+>     response, even though the flag combination is valid.
+>
+>     This patch fixes the bug by adding proper flag validations and checks.
+>     Before this patch, bpf_percpu_array_update() rejected
+>     BPF_F_ALL_CPUS | BPF_EXIST and BPF_F_ALL_CPUS | BPF_NOEXIST with
+>     -EINVAL. Also the BPF_F_CPU | BPF_NOEXIST were accepted.
+>     After the patch BPF_F_ALL_CPUS | BPF_EXIST is accepted and
+>     BPF_F_ALL_CPUS | BPF_NOEXIST and BPF_F_CPU | BPF_NOEXIST
+>     result in -EEXIST.
+>
+>     Fixes: 8eb76cb03f0f ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps")
+>     Signed-off-by: Masoud Aghasi <maghasi@disroot.org>
+
+The before/after paragraph lists BPF_F_ALL_CPUS | BPF_EXIST,
+BPF_F_ALL_CPUS | BPF_NOEXIST and BPF_F_CPU | BPF_NOEXIST.  Is there a
+behaviour change here that isn't listed?
+
+The new check in bpf_percpu_array_update() is:
+
+    if (unlikely(((map_flags & BPF_EXIST_FLAGS) == BPF_EXIST_FLAGS) ||
+                 ((u32)map_flags & ~(BPF_EXIST_FLAGS | BPF_CPU_FLAGS))))
+            return -EINVAL;
+
+so BPF_NOEXIST | BPF_EXIST, with or without BPF_F_CPU, now returns -EINVAL.
+
+Before this patch, the old (u32)map_flags > BPF_F_ALL_CPUS test let both of
+those values through.  map_flags == BPF_NOEXIST was false for them, so the
+update went ahead and returned 0:
+
+map_update_elem()
+  bpf_map_check_op_flags(map, attr->flags, ~0)
+  bpf_map_update_value()
+    bpf_percpu_array_update()
+
+The new behaviour matches what the code did before 8eb76cb03f0f, which
+rejected map_flags > BPF_EXIST.
+
+The companion hash map patch in this series (e5859394034d, "bpf: Fix
+incorrect handling of user flags by percpu hash map updates") documents the
+same change:
+
+    This patch also starts returning -EINVAL for (BPF_EXIST | BPF_NOEXIST),
+    with or without BPF_F_CPU, which was previously accepted.
+
+Should a matching sentence be added to this commit message?
+
+
 ---
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 249 ++++++++++++++++++
- 1 file changed, 249 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-index 7b4a1e24363b..22d5e7330254 100644
---- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-@@ -449,6 +449,90 @@ static void test_lru_percpu_hash_cpu_flag_create(void)
- 	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_LRU_PERCPU_HASH, 0);
- }
- 
-+static bool verify_u32_map_value_all_cpus(int map_fd, void *key, u32 *values,
-+					  u32 expected_value, int nr_cpus)
-+{
-+	int i, err;
-+
-+	err = bpf_map_lookup_elem(map_fd, key, values);
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem all_cpus"))
-+		return false;
-+
-+	for (i = 0 ; i < nr_cpus ; i++) {
-+		if (!ASSERT_EQ(values[i * 2], expected_value, "bpf_map_lookup_elem value all_cpus"))
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+static bool verify_u32_map_value_first_cpu(int map_fd, void *key, u32 *values,
-+					   u32 expected_value, int nr_cpus)
-+{
-+	int i, err;
-+
-+	err = bpf_map_lookup_elem(map_fd, key, values);
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem cpu"))
-+		return false;
-+
-+	for (i = 1 ; i < nr_cpus ; i++) {
-+		if (!ASSERT_NEQ(values[i * 2], expected_value, "bpf_map_lookup_elem value cpu"))
-+			return false;
-+	}
-+
-+	return ASSERT_EQ(values[0], expected_value, "bpf_map_lookup_elem value cpu");
-+}
-+
-+static void test_percpu_cgroup_storage_flags_combination(struct bpf_map *map, int nr_cpus,
-+							 struct bpf_cgroup_storage_key *key)
-+{
-+	size_t value_sz = sizeof(u32), key_sz, elem_sz;
-+	u32 *values, test_value = 0xAABBCCDD;
-+	int err, map_fd;
-+	u64 flags;
-+
-+	key_sz = sizeof(*key);
-+	elem_sz = roundup(value_sz, 8);
-+	map_fd = bpf_map__fd(map);
-+	values = calloc(nr_cpus, elem_sz);
-+	if (!ASSERT_OK_PTR(values, "calloc values"))
-+		return;
-+
-+	flags = BPF_NOEXIST | BPF_EXIST;
-+	err = bpf_map__update_elem(map, key, key_sz, values, elem_sz * nr_cpus, flags);
-+	if (!ASSERT_EQ(err, -EINVAL, "bpf_map__update_elem noexist|exist"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_NOEXIST;
-+	err = bpf_map__update_elem(map, key, key_sz, values, value_sz, flags);
-+	if (!ASSERT_EQ(err, -EINVAL, "bpf_map__update_elem all_cpus|noexist"))
-+		goto out;
-+
-+	flags = BPF_F_CPU | BPF_NOEXIST;
-+	err = bpf_map__update_elem(map, key, key_sz, values, value_sz, flags);
-+	if (!ASSERT_EQ(err, -EINVAL, "bpf_map__update_elem cpu|noexist"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_EXIST;
-+	values[0] = test_value;
-+	err = bpf_map__update_elem(map, key, key_sz, values, value_sz, flags);
-+	if (!ASSERT_OK(err, "bpf_map__update_elem all_cpus|exist"))
-+		goto out;
-+
-+	if (!verify_u32_map_value_all_cpus(map_fd, key, values, test_value, nr_cpus))
-+		goto out;
-+
-+	flags = BPF_F_CPU | BPF_EXIST;
-+	values[0] = --test_value;
-+	err = bpf_map__update_elem(map, key, key_sz, values, value_sz, flags);
-+	if (!ASSERT_OK(err, "bpf_map__update_elem cpu|exist"))
-+		goto out;
-+
-+	verify_u32_map_value_first_cpu(map_fd, key, values, test_value, nr_cpus);
-+out:
-+	free(values);
-+}
-+
- static void test_percpu_cgroup_storage_cpu_flag(void)
- {
- 	struct percpu_alloc_array *skel = NULL;
-@@ -489,6 +573,7 @@ static void test_percpu_cgroup_storage_cpu_flag(void)
- 		goto out;
- 
- 	test_percpu_map_op_cpu_flag(map, &key, sizeof(key), 1, nr_cpus, false);
-+	test_percpu_cgroup_storage_flags_combination(map, nr_cpus, &key);
- out:
- 	bpf_prog_detach2(-1, cgroup, BPF_CGROUP_INET_EGRESS);
- 	close(cgroup);
-@@ -537,6 +622,164 @@ static void test_hash_cpu_flag(void)
- 	test_map_op_cpu_flag(BPF_MAP_TYPE_HASH);
- }
- 
-+static void test_percpu_map_flags_combination(enum bpf_map_type map_type)
-+{
-+	u32 max_entries = 3, key = 0, first_value = 0xAABBCCDD, test_value = first_value;
-+	size_t value_sz = sizeof(u32), elem_sz;
-+	int err, map_fd, nr_cpus;
-+	bool is_hash_map;
-+	u32 *values;
-+	u64 flags;
-+
-+	is_hash_map = (map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+		       map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	elem_sz = roundup(value_sz, 8);
-+	values = calloc(nr_cpus, elem_sz);
-+	if (!ASSERT_OK_PTR(values, "calloc values"))
-+		return;
-+
-+	map_fd = bpf_map_create(map_type, "test_flags_combination_map",
-+				sizeof(u32), value_sz, max_entries, NULL);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create")) {
-+		free(values);
-+		return;
-+	}
-+
-+	flags = BPF_NOEXIST | BPF_EXIST;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (!ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem noexist|exist"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_NOEXIST;
-+	values[0] = test_value;
-+	key = 0;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus|noexist"))
-+			goto out;
-+
-+		if (!verify_u32_map_value_all_cpus(map_fd, &key, values, test_value, nr_cpus))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	}
-+	if (!ASSERT_EQ(err, -EEXIST, "bpf_map_update_elem all_cpus|noexist"))
-+		goto out;
-+
-+	flags = BPF_F_CPU | BPF_NOEXIST;
-+	values[0] = --test_value;
-+	key = 1;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem cpu|noexist"))
-+			goto out;
-+
-+		if (!verify_u32_map_value_first_cpu(map_fd, &key, values, test_value, nr_cpus))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	}
-+	if (!ASSERT_EQ(err, -EEXIST, "bpf_map_update_elem cpu|noexist"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_EXIST;
-+	values[0] = --test_value;
-+	key = 2;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_EQ(err, -ENOENT, "bpf_map_update_elem all_cpus|exist"))
-+			goto out;
-+	} else {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus|exist"))
-+			goto out;
-+
-+		if (!verify_u32_map_value_all_cpus(map_fd, &key, values, test_value, nr_cpus))
-+			goto out;
-+	}
-+
-+	flags = BPF_F_CPU | BPF_EXIST;
-+	values[0] = --test_value;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (is_hash_map) {
-+		if (!ASSERT_EQ(err, -ENOENT, "bpf_map_update_elem cpu|exist"))
-+			goto out;
-+	} else {
-+		if (!ASSERT_OK(err, "bpf_map_update_elem cpu|exist"))
-+			goto out;
-+
-+		if (!verify_u32_map_value_first_cpu(map_fd, &key, values, test_value, nr_cpus))
-+			goto out;
-+	}
-+
-+	if (map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH)
-+		goto out;
-+
-+	/* Percpu LRU hash map should not delete old entries unnecessarily */
-+	flags = BPF_F_ALL_CPUS | BPF_NOEXIST;
-+	key = 2;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem unnecessary_deletion"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS | BPF_EXIST;
-+	err = bpf_map_update_elem(map_fd, &key, values, flags);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem unnecessary_deletion"))
-+		goto out;
-+
-+	key = 0;
-+	verify_u32_map_value_all_cpus(map_fd, &key, values, first_value, nr_cpus);
-+
-+out:
-+	close(map_fd);
-+	free(values);
-+}
-+
-+static bool pin_current_cpu(cpu_set_t *old_mask)
-+{
-+	cpu_set_t new_mask;
-+	int err, cpu;
-+
-+	err = sched_getaffinity(0, sizeof(*old_mask), old_mask);
-+	if (!ASSERT_OK(err, "sched_getaffinity"))
-+		return false;
-+
-+	cpu = sched_getcpu();
-+	if (!ASSERT_GE(cpu, 0, "sched_getcpu"))
-+		return false;
-+
-+	CPU_ZERO(&new_mask);
-+	CPU_SET(cpu, &new_mask);
-+
-+	err = sched_setaffinity(0, sizeof(new_mask), &new_mask);
-+	return ASSERT_OK(err, "sched_setaffinity");
-+}
-+
-+static void test_percpu_hash_flags_combination(void)
-+{
-+	test_percpu_map_flags_combination(BPF_MAP_TYPE_PERCPU_HASH);
-+}
-+
-+static void test_lru_percpu_hash_flags_combination(void)
-+{
-+	cpu_set_t old_mask;
-+
-+	if (!pin_current_cpu(&old_mask))
-+		return;
-+
-+	test_percpu_map_flags_combination(BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+
-+	sched_setaffinity(0, sizeof(old_mask), &old_mask);
-+}
-+
-+static void test_percpu_array_flags_combination(void)
-+{
-+	test_percpu_map_flags_combination(BPF_MAP_TYPE_PERCPU_ARRAY);
-+}
-+
- void test_percpu_alloc(void)
- {
- 	if (test__start_subtest("array"))
-@@ -565,4 +808,10 @@ void test_percpu_alloc(void)
- 		test_array_cpu_flag();
- 	if (test__start_subtest("cpu_flag_hash"))
- 		test_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_combination_percpu_hash"))
-+		test_percpu_hash_flags_combination();
-+	if (test__start_subtest("cpu_flag_combination_lru_percpu_hash"))
-+		test_lru_percpu_hash_flags_combination();
-+	if (test__start_subtest("cpu_flag_combination_percpu_array"))
-+		test_percpu_array_flags_combination();
- }
--- 
-2.47.3
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37439873908
+--===============2241733100726128338==--
