@@ -1,261 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1F737F8CB;
-	Tue,  6 Oct 2026 07:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687023CAE95;
+	Tue,  6 Oct 2026 08:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791273290; cv=none; b=Do+otLzgxPJI+mJrMeMhWFpL+gGUcgF3AzWnmFXn5NDF92wzTGA/IgCp3n6d4j9VTV+0uiVHzYEsLwiNJERY9PR11OasssW1rH6rXFNCJFeFH3LqZbyR3iFMa7v/18AU9QXnI226UlwOPk9ZCYeBlVi3SYQkjuzlZy0zHo3fW28=
+	t=1791275062; cv=none; b=gWXh76PH9ZTnd2ZGIhMKW1AP94CXWF8FNqnUiUvdG0uAd1Thc5CT405T+Lt3pKW0yKCyxRA7R7l/Ah4IgqM40drbYEoPqn6kUsAVpbMhCIe7aWgMMtoaqRTyu5GROTsUMpV8vKt6d2KA/K4ySf719h7F1wIfvXK2JTLYiYV1ybU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791273290; c=relaxed/simple;
-	bh=YNkQyaKyn6ScD9zx23d6iFoOM1y0gpFJNhhwGo6R3Ug=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pkfWhJSJePR4bEchX7sveF8pv7TdSs4dimA85spRQ9BnJogstD5xwuEfuZEUn4zZY9oNOcT9MBS8XT06uySChVPU/uIDCBhvoG5w7E+jy5MPFI/t9NC9dkIVBsp1/EFWbrklwEYAlPh86I2UCOH2OD0tuPFRvgiSVcKz7CHZfBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j7eN6KNB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791275062; c=relaxed/simple;
+	bh=CH4D7PR/Xp8IznzdajCb8YV6AqWaVYRmKa6unDJutn4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=rO3ZmgMUoGIY6uz/56pKrslKjHIQYeQlm7Mq9ytehH8gUzlAQWpPUl48481NfVEiE8V+GZSx7CaeAu8de/EdOHFx1LV97TGMKch0tikmoFniq8mC83qzyycsWpMm+33P9TWSyizuKDc3ncuiGk8NkdBiKwvP51CtfKFQ/Nfh7lE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ef4jOMuh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=b3DPDroz; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j7eN6KNB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE611F00893;
-	Tue,  6 Oct 2026 07:54:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791273289;
-	bh=fpa5+JOtkZZuP2tvDHGlTsvFx2gQANVc+3ezgz25LyQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=j7eN6KNB25i4mlxGjDOQoCaROpurempRcNbJuXmh/nqQ51MuNvsXA4+NvqamqjkNu
-	 ko7PKQMixvo9LWGc5Q/IM+ldYt+6Uc7eDp8km2LW0ETehodUboQ6VrokfocMvi8mpi
-	 BzavtxLo7O7aKTczhmGk3btQKClmIK8k2jnwgn3YdW8PFcjYBATBOPw3f3rfVP1dg/
-	 XbEXNhoyeA7PWsQCcaHA0NEp3YJ/o+F8dySd9xKioHXgcouzPFvHh4VhkZJhKOKkoT
-	 XAZYNvpjgSsScAtLUbVQutDUwmPkxjxDb7S+AFPAbVeyEC5tzSQ/XpL0NuIzQLzo8s
-	 h5azkc7oUdCgg==
-Subject: Re: [PATCH net-next 1/2] tls: annotate lockless access to sk->sk_err
-From: netdev-bot+sashiko@kernel.org
-To: quanyeyang@proton.me
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org,
- jakub@cloudflare.com, jiayuan.chen@linux.dev, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Tue, 06 Oct 2026 07:54:48 +0000
-Message-ID: <179127328838.434549.8857657858630692504@kernel.org>
-In-Reply-To: <20261002-tls-fix-sk-kcsan-err-v1-1-baa0ba056323@proton.me>
-References: <20261002-tls-fix-sk-kcsan-err-v1-1-baa0ba056323@proton.me>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ef4jOMuh";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="b3DPDroz"
+From: Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1791275058;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vr0ojwKxzexz1gExyMgKbrvTBCOsN+vgkQEaK1X+gfo=;
+	b=Ef4jOMuhmhoSFMKFG0YA+V7FibBdFdmjvO8xmHqtHDyuPnhG4nQ073ISZIF6WprthnNgEr
+	TaiKfTB18JScFG5iU9YW7N01zXVx0TLoLiOdJXZEp1ARTsCEmNOR6kHjMMAcgbxWb+1Q2t
+	lrecWJjebICUu/2e0favuozPuny81n/ScFIxOEkasul+3tZUpiljj9VLGpYoEHZfq8ZnXK
+	4AbsTWO0/uzf+LLKspG+zxRuKl106KR0woRnpuqr7a5527y8T9APXE1Dq3ZWZ64f+SfwTJ
+	Q/ZKOjFCpJZUqGCaedEJd0aTDoxy4jAXYdDoPbded4U1OupSplByd3G7gIq4MQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1791275058;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vr0ojwKxzexz1gExyMgKbrvTBCOsN+vgkQEaK1X+gfo=;
+	b=b3DPDroz9fgG0Wn+7bA4SyufMD4jrNVOnLCp0/8vX8KYsMRpd1f8g6oSJFQ8XZ+bJ9fY2l
+	T5hw9Yl6bLxfHIDQ==
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+ <edumazet@kernel.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Song Yoong Siang <yoong.siang.song@intel.com>,
+ Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>, Mohd Faizal
+ Abdul Rahim <faizal.abdul.rahim@intel.com>, Ong Boon Leong
+ <boon.leong.ong@intel.com>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] net: stmmac: Disable NAPI before stopping Tx
+ queues in stmmac_xdp_release()
+In-Reply-To: <6bb85939-ff35-46e1-88cc-1bed0034e787@bootlin.com>
+References: <20261005-stmmac_xsk_crashes-v2-0-46c60cba6421@linutronix.de>
+ <20261005-stmmac_xsk_crashes-v2-1-46c60cba6421@linutronix.de>
+ <6bb85939-ff35-46e1-88cc-1bed0034e787@bootlin.com>
+Date: Tue, 06 Oct 2026 10:24:17 +0200
+Message-ID: <87tsmzjky6.fsf@jax.kurt.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha512; protocol="application/pgp-signature"
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Critical: 0 · High: 1 · Medium: 0 (1) · Low: 1
+Hi Maxime,
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+On Mon Oct 05 2026, Maxime Chevallier wrote:
+> On 10/5/26 09:09, Kurt Kanzenbach wrote:
+>> Attaching an XDP program while Tx traffic is running results in kernel
+>> crashes in stmmac_xmit() -> dwmac4_set_addr().
+>>=20
+>> Loading an XDP program tears down and reallocates all DMA resources via
+>> stmmac_xdp_release() and stmmac_xdp_open(). stmmac_xdp_release() stops
+>> the Tx queues before disabling NAPI:
+>>=20
+>>  stmmac_xdp_release:
+>>    netif_tx_disable
+>>    stmmac_disable_all_queues
+>>    ...
+>>    free_dma_desc_resources
+>>=20
+>> A Tx NAPI poll may still be in flight at that point. stmmac_tx_clean()
+>> takes the Tx queue lock, reaps completed descriptors and wakes the queue
+>> again when it observes it stopped with enough descriptors available.
+>> Nothing stops the queue afterwards, so the Tx path resumes while
+>> free_dma_desc_resources() releases the descriptor rings underneath it.
+>>=20
+>> On non-coherent platforms dma_free_coherent() tears down the vmalloc
+>> mapping of the descriptors, so the subsequent stmmac_xmit() faults on an
+>> unmapped address instead of corrupting memory silently.
+>>=20
+>> Disable NAPI first and stop the Tx queues afterwards, which is the order
+>> already used by __stmmac_release().
+>>=20
+>> The issue can be easily reproduced by:
+>>=20
+>>  1. Run iperf
+>>  2. Run application which opens an AF_XDP/ZC socket
+>>=20
+>> Assisted-by: Claude:claude-opus-5
+>> Fixes: 77711683a504 ("net: stmmac: ensure tx function is not running in =
+stmmac_xdp_release()")
+>> Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
+>
+> This now matches the non-xdp case, great :)
 
-- [High] The fix is incomplete.
-- [Low] The title calls this an annotation change, but the patch carries
-  a user-visible behavioural fix and has no Fixes: tag.
+Thanks for the review! Yes, it does match now. We could also collapse
+the common teardown code between __stmmac_release() and
+stmmac_xdp_release() into a helper function now and reduce code
+duplication.
 
-Pre-existing issues:
-- [Medium] This problem wasn't introduced by this patch, but the async
-  receive epilogue of tls_sw_recvmsg() (net/tls/tls_sw.c) can overwrite…
+Thanks,
+Kurt
 
---
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-tls: annotate lockless access to sk->sk_err
+-----BEGIN PGP SIGNATURE-----
 
-On the no-data path, tls_rx_rec_wait() now calls sock_error() once
-instead of doing a plain sk_err check before it. The has_copied path
-keeps using READ_ONCE(). In tls_sw_sendmsg_locked(), tls_push_data() and
-bpf_exec_tx_verdict(), the two plain sk_err loads become a single
-READ_ONCE() snapshot.
-
-Link: https://lore.kernel.org/netdev/3d9d442f-f168-43da-87b0-010ad5a78365@redhat.com/
-
-> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index d1ad31986cf2c..12e4458b44bb8 100644
-> --- a/net/tls/tls_sw.c
-> +++ b/net/tls/tls_sw.c
-> @@ -704,10 +704,14 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
->  	int err;
->  
->  	err = tls_push_record(sk, flags, record_type);
-> -	if (err && err != -EINPROGRESS && sk->sk_err == EBADMSG) {
-> -		*copied -= sk_msg_free(sk, msg);
-> -		tls_free_open_rec(sk);
-> -		err = -sk->sk_err;
-> +	if (err && err != -EINPROGRESS) {
-> +		int skerr = READ_ONCE(sk->sk_err);
-> +
-> +		if (skerr == EBADMSG) {
-> +			*copied -= sk_msg_free(sk, msg);
-> +			tls_free_open_rec(sk);
-> +			err = -skerr;
-> +		}
->  	}
->  	return err;
->  }
-
-[Severity: High]
-bpf_exec_tx_verdict() now uses a single snapshot. Its async
-counterpart, tls_encrypt_done(), still loads sk->sk_err three times
-with plain loads. Is that intended?
-
-net/tls/tls_sw.c:tls_encrypt_done() {
-    ...
-	/* Check if error is previously set on socket */
-	if (err || sk->sk_err) {
-		rec = NULL;
-
-		/* If err is already set on socket, return the same code */
-		if (sk->sk_err) {
-			ctx->async_wait.err = -sk->sk_err;
-		} else {
-			ctx->async_wait.err = err;
-			tls_err_abort(sk, err);
-		}
-	}
-    ...
-}
-
-tls_encrypt_done() is the async AEAD completion callback. It runs from
-the crypto engine, softirq or a kworker without the socket lock. The
-racing side is the one the commit message names: sk_getsockopt() for
-SO_ERROR does v.val = -sock_error(sk), which clears sk_err with xchg()
-without the socket lock.
-
-Suppose err is 0, the first check sees a non-zero sk_err, and the
-xchg() clears it before the second check. The else branch then runs
-with err == 0:
-
-	ctx->async_wait.err = 0;
-	tls_err_abort(sk, 0);
-
-tls_err_abort() starts with WARN_ON_ONCE(err >= 0). Can this fire the
-warning (or panic with panic_on_warn) and then write sk_err = 0?
-
-In the other interleaving, the second check sees a non-zero value but
-the -sk->sk_err load sees 0. async_wait.err becomes 0, and if err was
-non-zero the real AEAD error is lost too. rec was already set to NULL,
-so the record is never marked tx_ready. tls_encrypt_async_wait() then
-returns 0 to the sender, and tls_tx_records() stops at the first record
-that is not tx_ready.
-
-After this patch, this looks like the last plain sk_err reader in
-net/tls. The second patch in the series, "net: annotate lockless writes
-to sk->sk_err", does not touch tls_encrypt_done() either.
-
-Could this use one snapshot as well, for example
-int skerr = READ_ONCE(sk->sk_err), for the test, the branch and the
-assignment? Then tls_err_abort() would only ever be called with a
-negative err.
-
-[ ... ]
-
-> @@ -1107,10 +1110,16 @@ tls_rx_rec_wait(struct sock *sk, bool nonblock, bool released, bool has_copied)
->  	timeo = sock_rcvtimeo(sk, nonblock);
->  
->  	while (!tls_strp_msg_ready(ctx)) {
-> -		if (sk->sk_err) {
-> -			if (has_copied)
-> -				return -READ_ONCE(sk->sk_err);
-> -			return sock_error(sk);
-> +		if (has_copied) {
-> +			int err = READ_ONCE(sk->sk_err);
-> +
-> +			if (err)
-> +				return -err;
-> +		} else {
-> +			int err = sock_error(sk);
-> +
-> +			if (err)
-> +				return err;
->  		}
-
-[Severity: Low]
-This isn't a bug, but the subject calls this an annotation change, and
-this hunk changes user-visible behavior.
-
-Before the patch, another thread could clear sk_err between the plain
-check and sock_error(). The data_race(!sk->sk_err) fast path in
-sock_error() then returned 0. With nothing copied, tls_sw_recvmsg()
-passed that 0 to userspace as EOF:
-
-	return copied ? : err;
-
-The commit message describes this ("can return 0 after another thread
-consumes the error"), but there is no Fixes: tag.
-
-The first site comes from f508262ae9f2 ("tls: Preserve sk_err across
-recvmsg() when data has been copied"), which replaced the older
-return sock_error(sk) from 35560b7f06b8. The recheck after
-sk_flush_backlog() below comes from edcf32b8a48f ("tls: Flush backlog
-before waiting for a new record").
-
-Should Fixes: tags be added so stable and backport tooling can pick up
-the spurious EOF fix?
-
->  
->  		if (ret < 0)
-> @@ -1132,10 +1141,16 @@ tls_rx_rec_wait(struct sock *sk, bool nonblock, bool released, bool has_copied)
->  		 * sk_err here so a connection abort surfaces as the
->  		 * actual error rather than a clean EOF.
->  		 */
-> -		if (sk->sk_err) {
-> -			if (has_copied)
-> -				return -READ_ONCE(sk->sk_err);
-> -			return sock_error(sk);
-> +		if (has_copied) {
-> +			int err = READ_ONCE(sk->sk_err);
-> +
-> +			if (err)
-> +				return -err;
-> +		} else {
-> +			int err = sock_error(sk);
-> +
-> +			if (err)
-> +				return err;
->  		}
->  		if (sk->sk_shutdown & RCV_SHUTDOWN)
->  			return 0;
-
-[Severity: Medium]
-This is a pre-existing issue and was not introduced by this patch. Can
-the async receive epilogue in tls_sw_recvmsg() overwrite a negative
-return from tls_rx_rec_wait() with 0?
-
-tls_rx_msg_size() only rejects data_len < cipher_overhead, so it
-accepts a TLS 1.2 application-data record with empty plaintext. Take
-ctx->async_capable with an AEAD that returns -EINPROGRESS:
-
-tls_sw_recvmsg()
-  tls_rx_one_record()          /* darg.async stays true */
-  async |= darg.async;
-  chunk = min_t(int, to_decrypt, len);     /* 0 */
-  async_copy_bytes += chunk;               /* still 0 */
-  tls_rx_rec_wait(..., has_copied=false)   /* -EAGAIN, or sock_error() */
-recv_end:
-  tls_decrypt_async_wait()                 /* 0 */
-  err = process_rx_list(ctx, msg, &control, 0,
-                        async_copy_bytes, is_peek, NULL);
-
-The peek variant passes copied + peeked and decrypted - peeked, which
-are also 0 here. With skip and len both 0, process_rx_list() skips both
-of its loops and returns 0. That value overwrites err, and since copied
-is 0, return copied ? : err returns 0.
-
-On an open socket, would a non-blocking read return 0 (EOF) instead of
--EAGAIN? Would a connection error that sock_error() already consumed in
-tls_rx_rec_wait() be lost and reported as a clean EOF?
-
-Could the original receive error be kept when the async drain produces
-no bytes and no error of its own?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261002-tls-fix-sk-kcsan-err-v1-0-baa0ba056323%40proton.me
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmrEsDETHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgrM5EACSIYb78xr0ciukoJSgoO8fP1If2Enw
+ngrIFKLHJPoEehs4zxQzcdBscw9KwtDbn1J4E2fgh2oBRA0H2Nv3Q4LFMhBcU/5M
+mVgXmqnj1gLoag8cs685ZTB4J2w6pfLvth5iKx5dDXg3XL9B32sQBlDhuarXElBE
+GCxxAowpQ+f31D1lFINRgIXkxvPujvjFDHDDbYvKCC2w9Zz8UAV5nYElkdQkT9Ii
+NP9clvFTr1ydjR6qPF8PAd2zsvPp9yq97GtQ0eM04JZINSVD/vF1kslb1XziRMZ/
+5TPWFQi44ttkdFnJiiTltYkO6+KXEwHKU1+sbRdikXHHnN662pSvwyKBGuuF2pOt
+gCktw9KNbGmEpa5qzpa5LICsWBPfBOar5D2zXdt5PKszUKsYs10f8S5E6SZhsDQ7
+cQj++6A+gYhf9QT8jWWvlhQmTmOqXEvfT0c1uzM390avpjuS2wdKjj5gDjcZE2ow
+UWzxLEgBm+VGbnNgxtGoL8Jj4h489CTIIdjEhHJmQVjMvWw5q0wSNnnHRsEjCPGd
+cY4XTkVZqSD0dO7LV2ZUj79pBpMGI7a70ASHhpIekxwdMhfinAkZCnBUIt+/sMDH
+ILxZapVvLT5dES437m0FEFQBMgYrptMo+fDbpHa7uYpywYrS2BoLif2sF6sGmJSr
+YPglKi12wAOWgA==
+=O+RA
+-----END PGP SIGNATURE-----
+--=-=-=--
