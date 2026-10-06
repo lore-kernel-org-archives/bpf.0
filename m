@@ -1,163 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B633E49EC43
-	for <bpf@vger.kernel.org>; Tue,  6 Oct 2026 16:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791304819; cv=none; b=pUO1DcWjDy6wheNBxbMptsYgu1pCPOd9AHYV7mQCBNcJL05yGv74+Fom094zI1j5b1vXq9v1lPYaVi69a85D9oI/+PLhL7RlaxJutxcr3+w5R2J1Kmw8SYwO6ksHMPEB1JydxVb1qtXoPjuMWIZcVO91mZtS3b0ai5VYFaOwojI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791304819; c=relaxed/simple;
-	bh=x5zbI32P9Vx68EdMlyyIwNjzukpTzCRAmbOU70px68E=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cs7YUyNQBj2JM5m+SHVcZrvut+zWFqnBSswvnb5ACOsVKJBkADBmbkg3U+4nKJ2baA9PD/9oB/aBdOUVTbRGjMOSRjnKDwotdyuV4E+ihhOPwQv0tdiYJWTh3ON8YrR1okdNhNFYrcH8rnIQ/gLNuY07SZDdMxXPlaBcgdREYDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnAoF7x1; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5309E34F247
+	for <bpf@vger.kernel.org>; Tue,  6 Oct 2026 16:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791305146; cv=pass; b=lWicE3VdNA/1wG6Ldk8KDI+j/VEf54spZnE3xCkR/izC0E8q3rI5Etfc31NVex7pNdV0JtrDUowpN1Poxh7qZjDe3G4pVJi6+e9xHXo+d9dsx/9dv/3sAngOsS0uvnXBmIUibEbviU1wIaot/wd0XNP/PqC8CgP2o1dsUy5mXNE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791305146; c=relaxed/simple;
+	bh=LlEiwFBpI5a1pWwuwUGxSGetmyWDWx5F8pT9P1r9ZNM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rjz67nuwXdZ60U5Xpun7/2NRxeT9ugyv9+VUKsgpbDcpf41dMw0iP8n5H3KzxZP7qJd7A0YVKkZoLwhVIu8I6QL40DGPWtD+5za67eulyd5RClkg8IO/xgs5K3WedOAs6k2pMlKX6wg7vt307XyleH7NxnbgTw3Iu8HB/nwcJH0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BvR10F6o; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnAoF7x1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440B11F0089C;
-	Tue,  6 Oct 2026 16:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791304817;
-	bh=xpCibwACVdgbhj8InqgtKrRWIJvHqYqhBNMEArbKf58=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=VnAoF7x1UNP2TkAAceAVFR3Vza9qp6CioZhS4Viq8eUv+rTXDvHluozRXy1irrSLj
-	 FnJJ4OsA+ZLath1IqQRjPjhcW959ttPd7usIU21wWOJMYc3BGqhLf2BM0lRtgQsqjy
-	 HHsw/OD9uq1Q/9Jx/mE60Pxr9Ryfi+9ZmShdwpOOFnEWgLWHdWimhWIpW4Mf8sJhgH
-	 G8/lpnN6vyX4HOp2CJBajd5SNXMp2E1+7AhgNpkjjhURV6i5flsiEqDvmUwNvtsaxv
-	 rdf3nvDb8IPi06SED5ktAwT7LCTq4BFDrF4xM1Jn2nXFmPr/8UP8HoPKzIaB4p/54z
-	 oJzB4rd5WLH7w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A29C39D60A1;
-	Tue,  6 Oct 2026 16:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BvR10F6o"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2e4b76cccafso8528025ad.2
+        for <bpf@vger.kernel.org>; Tue, 06 Oct 2026 09:45:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791305145; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YWgHdVWPXXQAeU7fb/Mucf+6f1ygSzamsxWA0lLXeXby6kmKQXv0nPXgCbzdjrNU23
+         nuGvKcT0YCsstqjTmZONAijecZBi1kvsequAN9ASPXkzJXxCl84j5lCzN+dWw0n6hgJF
+         JPsA9FL4AhCKwQyNbm0UCjK+MPwbPmDPT22cIf94KChA0Y9yj4VbQpvL4NZzeKcZ0dlT
+         NWH/aw2ikV9dkSi4iOCkQMQm1+6t5AnOQq2n+WugBc/GTnQnhUreCJpub2D0mxyugrsT
+         tnZaRzCxCR9WMxRiwOHKGnJjJv8yqv0TqMC6GLxZq1ZVLZ+DzIqhJM7eXAGmh4QeBLNd
+         jdTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LlEiwFBpI5a1pWwuwUGxSGetmyWDWx5F8pT9P1r9ZNM=;
+        fh=Ns7fIF0/ps+LpNDt5HQ9CPh9zCVEZV+CUS1P908HfgQ=;
+        b=jZnze/isfRIHeFuElZXvoOBRbR1fZz9nqzwi9Q0Lu2asOyfU7/4TcNJHKYr91SUyWn
+         COJcuYY9eYwp/qsygnLPF20zrLU2YMykRPF1ldDnGLJyPLcdE6KaIaGVlrKMARxBO9DP
+         TEC5Xouj2QTbBUqoM4ee+Pm0JOej+DKIynCVGxuvHdE05iBaUFyKgbIHq0vjXeAMlfFn
+         lxd748mJGfpBrAI78ky7PmuUujkvoT05HbBALE23IpewBm4UgTeJVC47Qqo5j48eOk3l
+         uLhk3LA1oi5dL96w0t5KyG4qJ/Sc7qbKe1SajIGna6YqcsOWgD1Q7yvfB1zP47cd5hoM
+         HmrA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791305145; x=1791909945; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LlEiwFBpI5a1pWwuwUGxSGetmyWDWx5F8pT9P1r9ZNM=;
+        b=BvR10F6oc/FK981T4tNNpmCa8CtM/O9x7VbALHd0EYeAW5ooCVckLsGCbIB97TqGvN
+         QnuN3EYS/e4CmDXpT15yD2MYPcRa3RL+OeC8SmFBU1D+rkiuBB5yf3y2xnU2UP0Ywg6U
+         BY3OIVdr+GCt7tqCIwVuGDOPGnvJu9fVvV+v4yLTVVQX7D6Qh/4H8RgvEFTFkmXxQUTv
+         /i9yfvbThKaktalN46gZDH8dRDx0zFz5y84aoxfJ0hpLlwI+cI68igchEjXfKJp0PsSg
+         L9gbQ4zhGsDw6vtfnqTEzUjuoEAhpubdilFJ0Bulm/6jS4tiu8kVm4C+QOM3878uL7zh
+         0j5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791305145; x=1791909945;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LlEiwFBpI5a1pWwuwUGxSGetmyWDWx5F8pT9P1r9ZNM=;
+        b=tr5qFFYy0L617u0n/eyY3piPeOWmOUP+EfLE8VOI/SqpIBaEHelYDrJb9x/qTK6tPh
+         dx5rr0XpbNq1hB9i1sZWQ5SlYiTx4Uxo2YPAhwMtkz5MB9fOQYhEUD/60E2ytkIdCd2o
+         IQeNOgOJa/ZgBxCVLGPS7cwGBNy+omMDgSC94LFeaTcePMQqaG7eV+bR87Vn/5pNPXzb
+         b4oYm7Q4MkBVpM3DmzoSLTRBW/l/aSev0smjhDfbc4L4nLEmcDUNTXDZTe3i3U6CRr78
+         FIJJJWmxF8PnpRfbslHkzowPYSGnDkSY/Yue3J1k6bs68qoB/hFhb8dVQa5BMej2J75t
+         Tu2g==
+X-Forwarded-Encrypted: i=1; AKwUvBzP81dQPt5WcC16P/i114aStG4LDVZJR0P0IuepRbAnIUXJ5A61dra0zAnQ7oUHhO2HKtE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLkJVEY6y7ZMv9wbgObYGfAPd0NJ6WloMdupT2gi+4PlN4P1IqJ
+	INgbUEMlC85BYYm9DIHRT5fRsZ7bKquy1hgGUp2HczBFph7KU6SWDCbn0eSvSKwgE+jDHwO5iHy
+	ozS+0Py8a4yMuQI6auX91qOYtejeIgv8=
+X-Gm-Gg: AYBFou0ZW5ftkKucBD8w3aeVQHZOXggabg7VBCfp4JZr04zblzmdt6rJUtJDvmsTu+Z
+	CoNzw3luf2+V3W8DrZO59ObHs3QoKDeW+L6MwoFJpuvksYrsk2PFLjZkbcZaFt1hOqkISkdlDPe
+	vpMrSsueGtDCUK8ggEYo9Q6a10eWgnN7a2jb+aO6zyxAOik236sYN3K/3+5Ail4L7FseHCUBM2a
+	EBO7kDnGkIVuSCkXo81zCMAREvGfmsPfEWebhRxp3iw/zEyvWBx20O6uFNmIuoenK5pR+abFGJW
+	r87KJJNRB5wD3Khf2uirb/0ZWTjEeYloJLziZaHwD/Uh0So8acMVZlXR9Ba4zBm5Dtevrz3VK38
+	fdRN7cNo4iv+EV6XQXU/enQZFy7i+E+1Go3QkEqI1/OYIHr39qwZVmhD2sPi+a7w45RWCOwASCO
+	7zSUwZugkQ
+X-Received: by 2002:a17:902:ebc6:b0:2df:accf:e873 with SMTP id
+ d9443c01a7336-2e5ffabc334mr770415ad.4.1791305144589; Tue, 06 Oct 2026
+ 09:45:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com> <179130481603.2708704.11559670764976269822.git-patchwork-notify@kernel.org>
+In-Reply-To: <179130481603.2708704.11559670764976269822.git-patchwork-notify@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 6 Oct 2026 09:45:33 -0700
+X-Gm-Features: AclHuK-ql3p0mJqAr_v2C-xkDfFBzi520PGPZTtBbL7wkcxwWn5ypYHXors70rs
+Message-ID: <CAADnVQLr0_ByvMEhgixmKNshwKBD5oXQpjQ3GixovGfu6hisPQ@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v2 00/43] bpf: use scalar evolution to widen
- bounded
- loops
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179130481603.2708704.11559670764976269822.git-patchwork-notify@kernel.org>
-Date: Tue, 06 Oct 2026 16:40:16 +0000
-References: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
-In-Reply-To: <20261004-scev-minimal-rebase-v2-0-f6254e29fdf2@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kernel-team@fb.com, yonghong.song@linux.dev
+ bounded loops
+To: patchwork-bot+netdevbpf@kernel.org
+Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kernel Team <kernel-team@fb.com>, 
+	Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Tue, Oct 6, 2026 at 9:40=E2=80=AFAM <patchwork-bot+netdevbpf@kernel.org>=
+ wrote:
+>
+> Hello:
+>
+> This series was applied to bpf/bpf-next.git (master)
+> by Alexei Starovoitov <ast@kernel.org>:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Sun,  4 Oct 2026 06:37:42 -0700 you wrote:
-> This series implements the scalar evolution (SCEV) technique for
-> verification of loops.
-> 
-> Scalar evolution is a static analysis technique that infers algebraic
-> expressions describing how variables change within a loop body.
-> These expressions can then be used to estimate the number of loop body
-> executions. This estimate can be used to represent induction variables
-> as ranges instead of enumerating each possible value.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2,01/43] bpf: represent stack access effects with arg_access_info
-    https://git.kernel.org/bpf/bpf-next/c/0672c5556244
-  - [bpf-next,v2,02/43] bpf: describe helper stack accesses with arg_access_info
-    https://git.kernel.org/bpf/bpf-next/c/32aa356d6703
-  - [bpf-next,v2,03/43] bpf: describe kfunc stack accesses with arg_access_info
-    https://git.kernel.org/bpf/bpf-next/c/9aa0211998a7
-  - [bpf-next,v2,04/43] bpf: track may_write flags in liveness
-    https://git.kernel.org/bpf/bpf-next/c/8de0510cdb1c
-  - [bpf-next,v2,05/43] bpf: summarize may write stack slots in insn_aux_data
-    https://git.kernel.org/bpf/bpf-next/c/ccd41f1e7257
-  - [bpf-next,v2,06/43] bpf: summarize live stack slots in insn_aux_data
-    https://git.kernel.org/bpf/bpf-next/c/2ff0e602d931
-  - [bpf-next,v2,07/43] bpf: summarize regs that may hold a frame pointer in insn_aux_data
-    https://git.kernel.org/bpf/bpf-next/c/440ad035bbda
-  - [bpf-next,v2,08/43] bpf: record write effects for atomic operations in liveness.c
-    https://git.kernel.org/bpf/bpf-next/c/c695981052dc
-  - [bpf-next,v2,09/43] bpf: add tnum_alignment()
-    https://git.kernel.org/bpf/bpf-next/c/61f39d3292ca
-  - [bpf-next,v2,10/43] bpf: add cnum{32,64}_union()
-    https://git.kernel.org/bpf/bpf-next/c/7372e0fd2035
-  - [bpf-next,v2,11/43] bpf: add cnum64_intersect_linear()
-    https://git.kernel.org/bpf/bpf-next/c/575fbdd131db
-  - [bpf-next,v2,12/43] bpf: expose comparison opcode transformations
-    https://git.kernel.org/bpf/bpf-next/c/f244cbfba3ea
-  - [bpf-next,v2,13/43] bpf: allow subrange relations for PTR_TO_STACK in regsafe()
-    https://git.kernel.org/bpf/bpf-next/c/7ddae43ac5e7
-  - [bpf-next,v2,14/43] bpf: representation for intervals with steps
-    https://git.kernel.org/bpf/bpf-next/c/6499523b1636
-  - [bpf-next,v2,15/43] bpf: varying offset access support for PTR_TO_BTF_ID pointers
-    https://git.kernel.org/bpf/bpf-next/c/17cd31244f50
-  - [bpf-next,v2,16/43] bpf: save DFS postorder numbers for program instructions
-    https://git.kernel.org/bpf/bpf-next/c/6bab25c91a66
-  - [bpf-next,v2,17/43] bpf: move the live-register and SCC printout to a standalone function
-    https://git.kernel.org/bpf/bpf-next/c/ba536c460daa
-  - [bpf-next,v2,18/43] bpf: compute immediate dominators
-    https://git.kernel.org/bpf/bpf-next/c/695c19b3d36e
-  - [bpf-next,v2,19/43] bpf: compute loop hierarchy
-    https://git.kernel.org/bpf/bpf-next/c/62083ae4dd10
-  - [bpf-next,v2,20/43] bpf: add bpf_set_reg_range()
-    https://git.kernel.org/bpf/bpf-next/c/651f832d9b06
-  - [bpf-next,v2,21/43] bpf: add bpf_mark_reg_known_scalar()
-    https://git.kernel.org/bpf/bpf-next/c/8767ffd4e718
-  - [bpf-next,v2,22/43] bpf: add bpf_reg_union()
-    https://git.kernel.org/bpf/bpf-next/c/297788154c13
-  - [bpf-next,v2,23/43] bpf: add a min-heap for ordered analysis worklists
-    https://git.kernel.org/bpf/bpf-next/c/5048674597c7
-  - [bpf-next,v2,24/43] bpf: record basic-block ends in insn_aux_data
-    https://git.kernel.org/bpf/bpf-next/c/141bd53be1c8
-  - [bpf-next,v2,25/43] bpf: add bpf_split_cur_state()
-    https://git.kernel.org/bpf/bpf-next/c/0547bc753c30
-  - [bpf-next,v2,26/43] bpf: add bpf_same_memory_origin()
-    https://git.kernel.org/bpf/bpf-next/c/29a555f49246
-  - [bpf-next,v2,27/43] bpf: allow precision backtracking between overlapping checkpoints
-    https://git.kernel.org/bpf/bpf-next/c/57eb802c24bf
-  - [bpf-next,v2,28/43] bpf: compute scalar evolution expressions for loops
-    https://git.kernel.org/bpf/bpf-next/c/82bcc4f665cb
-  - [bpf-next,v2,29/43] bpf: use SCEV to widen bounded loops
-    https://git.kernel.org/bpf/bpf-next/c/408aff9a0159
-  - [bpf-next,v2,30/43] bpf: avoid widening registers that hinder exact stack-slot tracking
-    https://git.kernel.org/bpf/bpf-next/c/a6474f5f8464
-  - [bpf-next,v2,31/43] bpf: bpf_func_state size optimization
-    https://git.kernel.org/bpf/bpf-next/c/422ffa508a7b
-  - [bpf-next,v2,32/43] selftests/bpf: __msg_next tag for matching messages on consecutive lines
-    https://git.kernel.org/bpf/bpf-next/c/2db7911e0e7f
-  - [bpf-next,v2,33/43] selftests/bpf: bound UNIX socket path loops by sun_path size
-    https://git.kernel.org/bpf/bpf-next/c/6a697681f8ab
-  - [bpf-next,v2,34/43] selftests/bpf: test for stack-pointer subrange pruning
-    https://git.kernel.org/bpf/bpf-next/c/a8606df987d1
-  - [bpf-next,v2,35/43] selftests/bpf: tests for may_write stack-liveness tracking
-    https://git.kernel.org/bpf/bpf-next/c/95cf9a876448
-  - [bpf-next,v2,36/43] selftests/bpf: tests for may_def marks of atomic RMW operations
-    https://git.kernel.org/bpf/bpf-next/c/64a98c9510a0
-  - [bpf-next,v2,37/43] selftests/bpf: tests for map special cases in bpf_helper_stack_access_bytes()
-    https://git.kernel.org/bpf/bpf-next/c/22a9679beb90
-  - [bpf-next,v2,38/43] selftests/bpf: tests for register base/step arithmetic
-    https://git.kernel.org/bpf/bpf-next/c/a7d81f0f457d
-  - [bpf-next,v2,39/43] selftests/bpf: tests for register base/step state pruning
-    https://git.kernel.org/bpf/bpf-next/c/ff12031da64f
-  - [bpf-next,v2,40/43] selftests/bpf: tests for varying offset access to PTR_TO_BTF_ID
-    https://git.kernel.org/bpf/bpf-next/c/295ac48d3de6
-  - [bpf-next,v2,41/43] selftests/bpf: tests for loop hierarchy computation
-    https://git.kernel.org/bpf/bpf-next/c/09b89711604a
-  - [bpf-next,v2,42/43] selftests/bpf: tests for immediate dominator computation
-    https://git.kernel.org/bpf/bpf-next/c/6f7651bd3f68
-  - [bpf-next,v2,43/43] selftests/bpf: tests for SCEV analysis and loop widening
-    https://git.kernel.org/bpf/bpf-next/c/ca78d19fd106
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+and reverted.
