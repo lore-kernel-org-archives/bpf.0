@@ -1,32 +1,33 @@
-Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B85B49D583;
+Received: from fraori-sdnproxy-3.icoremail.net (fraori-sdnproxy-3.icoremail.net [132.226.202.154])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644232FDC20;
 	Tue,  6 Oct 2026 16:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=132.226.202.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791302815; cv=none; b=p6GF+EgXadQG4s2f7GK2BNNIchUo9Dm4tHW2S8/PY9yl4ApHUFKLA06wNaUUt97EUiFGHWWxmDgpBE8m10ChM7XqvokY2W8ws9qIkYEfEz/gg0gcBhTWyMICLQIIFXcQNyb1aNXSjBl2joivvdbu6oNKMmWsY0lcCegAefP7Wo4=
+	t=1791302815; cv=none; b=mZ8rUjuvXAUNGv/Dzf0ZtfgTKzOUtsK7mY/PJfsArEQivAA1DsuM3gOnpVkn83vKJyGGaDj9b6Af87z71IxT7mHc96wieYEvOUTUxiPY7iNNqPHfUVqyczNjXYAwTAba9yJ4tP3sZpCO0sqz71hR587zNNryArjJ/CQjlTpijUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791302815; c=relaxed/simple;
-	bh=BijghkOD8KBfbykt7I1kr/gfiL7Yq0YO4UXfaqi7jV0=;
+	bh=NR25tzNBFUsS4sHTJX/HGWKYzRmLFi0hhgogY3M4RJU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mTCPYb88kuJvbZPXUPow+bAYDlhOsgubOApG0rW/bVavKLowx9T5DQFk9adfVc/DR3rTC2uLbahnIZp/FlRNJxClhqNG3/++aQVpg0D2DZ7pfkWwJaKmlk7Z3AgLyZORRTSV2oC9Gz2vQRHJOJlkUhdC+Vul/vkHbQ/ObuKj6u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ky8RspzK; arc=none smtp.client-ip=206.189.79.184
+	 In-Reply-To:To:Cc; b=itD9gTNG9wS8Sj+8dvyN1bCg2a+mVX16inSPRFp0zyxX9K7LUTrH4BT6RAWIs6njSiT6YU9T8oK2LLaieo92WVCWe3Cj7cQk3XvhDRBQbWvsbL0ih0b8e7KDZ2Sac87qhx5reZVuf3WhCL8V2Oe4OSa9F/9GJEnpwtGBuURnpks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=UUVfk7a8; arc=none smtp.client-ip=132.226.202.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ky8RspzK"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="UUVfk7a8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
 	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=VpdeiX0w1Ntv+1YhY3nFslsVMF8cIDJ
-	2QMDPjsqiEFY=; b=ky8RspzKdiL/gF1w/OWtRPmOa8c4rHA8yd9IrBvXX2Sh1j7
-	cGXqAKot8iM2tpBbq5Im4nP7oGe4PkNGCpgRJjK7wDjOrCVKdDOIwK4sUUI2gCR6
-	rsUTfx3VAov6JR81WtH7rx8ZDkvG5lCAsGteqnXW192M2+9TVpXfHMDCCSgQ=
+	References:In-Reply-To:To:Cc; bh=HQfOSQTCSqSJYyQOfBkQ35vPMlyk0FJ
+	vhkkhaDgrqQY=; b=UUVfk7a8m8sLMEGaP2eBgjbw1rzyeBhAHZiLemHWKuCHUsG
+	qNfHjRRsuczfh9W1C/XVk25IiQ+8LMczVY5IRxbxUPfO5PquhB2PQgLpTow3CQS1
+	uxiKEEcVhME6utjdgQ0casCCMSZF/0ZUKzqwr3OhoSswsOG3XSCdVUFwGF04=
 Received: from [172.17.0.2] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQBXhGiBHMVqrZhzAA--.54037S3;
+	by web2 (Coremail) with SMTP id yQQGZQBXhGiBHMVqrZhzAA--.54037S4;
 	Wed, 07 Oct 2026 00:06:32 +0800 (CST)
 From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Date: Tue, 06 Oct 2026 16:06:25 +0000
-Subject: [PATCH bpf v3 1/2] bpf: Reject bare pointer for __arg_trusted arg
+Date: Tue, 06 Oct 2026 16:06:26 +0000
+Subject: [PATCH bpf v3 2/2] selftests/bpf: Cover bare and RCU __arg_trusted
+ arguments
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,7 +36,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261006-a3-arg-trusted-v4-v3-1-4619daf30e1c@mails.tsinghua.edu.cn>
+Message-Id: <20261006-a3-arg-trusted-v4-v3-2-4619daf30e1c@mails.tsinghua.edu.cn>
 References: <20261006-a3-arg-trusted-v4-v3-0-4619daf30e1c@mails.tsinghua.edu.cn>
 In-Reply-To: <20261006-a3-arg-trusted-v4-v3-0-4619daf30e1c@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -51,96 +52,97 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Amery Hung <ameryhung@gmail.com>, 
  Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791302794; l=2852;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791302794; l=2290;
  i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
- bh=BijghkOD8KBfbykt7I1kr/gfiL7Yq0YO4UXfaqi7jV0=;
- b=s390sZUYVad6Z1sRc8ar1rgLiqDp7TLHXqIJhubTht9/GMm5HURxOupslJ9hyjyzMxGcL3ATr
- Z+w5fdyTKgZClujfHRVs2k0p9yC5DUVKm5vLLwdLitK1oXm/dsaKi7V
+ bh=NR25tzNBFUsS4sHTJX/HGWKYzRmLFi0hhgogY3M4RJU=;
+ b=H0RVA1v1lHDaVIegnNPNgBgftQ6z38VtiTDKZ2nvXfEIfcRH9pfXVFAZJu3H3n9yyFUrFTz4y
+ SCDzfD92QN0BKZC/0sZl4IXPdEq4qPSbR/uUEjegeUNUErMn+OCSiEz
 X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
  pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
-X-CM-TRANSID:yQQGZQBXhGiBHMVqrZhzAA--.54037S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxurW5Kr1kCFyUWrW8uFWrAFb_yoW5Wr13pF
-	48WFnxZr4kKr47Z3ySyF4xury5ZrWrZ3y7CFy8WFWIyFs8WF1qqrySkF47Wa4YyrsYk34a
-	qF1agrZ0qa4UCrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:yQQGZQBXhGiBHMVqrZhzAA--.54037S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr18trWkXFWrGr4fKF1kAFb_yoW8KF48pa
+	1kAw13WrWxtanFq34xJr4UCF4SgFn5Z345CF1rX34fuFs8JF1kXr18KF4Yqr15Crn0gFna
+	vrWqg39I9rnrGaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xS
-	Y4AK67AK6r1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
-	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-	JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjylkDUUUUU==
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0x
+	vYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_
+	GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zV
+	CS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkI
+	ecxEwVAFwVWUMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8I
+	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
+	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUnwZcUUUUU
 X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-A global subprogram parameter tagged __arg_trusted is specified to accept
-only lifetime-protected PTR_TO_BTF_ID registers, but the call-site check in
-btf_check_func_arg_match() also accepts a bare PTR_TO_BTF_ID.
+verifier_global_ptr_args.c already covers passing an untrusted pointer to
+a __arg_trusted argument, which is rejected by the register type match.
+It does not cover the bare PTR_TO_BTF_ID flavor that the type match also
+accepts.
 
-check_reg_type() resolves the accepted set from the base argument type
-alone and compares only MEM_RDONLY and PTR_MAYBE_NULL, so the PTR_TRUSTED
-bit of arg_type is never consulted. btf_ptr_types includes bare
-PTR_TO_BTF_ID, and nothing else on the subprogram call path rejects it.
+Add a rejection case that walks task_struct->last_wakee out of a trusted
+current task and passes the result to a __arg_trusted subprogram parameter.
+The field has no __rcu tag and is not in
+BTF_TYPE_SAFE_RCU(task_struct), so the load yields a bare PTR_TO_BTF_ID.
 
-The callee is then validated with PTR_TRUSTED set on the register while
-the caller passed a pointer without lifetime protection.
-bpf_may_fault_on_deref() is false for PTR_TRUSTED, so the dereference
-becomes a raw load instead of a BPF_PROBE_MEM probe and the callee can
-pass the pointer on as trusted.
+Also pass task_struct->real_parent to a trusted-and-nullable subprogram
+as a positive test. The field is __rcu and on
+BTF_TYPE_SAFE_RCU(task_struct), so it yields PTR_TO_BTF_ID | MEM_RCU and
+must remain accepted.
 
-Reject a bare PTR_TO_BTF_ID when the argument is marked PTR_TRUSTED. Keep
-accepting referenced, trusted, and RCU-protected registers.
-PTR_MAYBE_NULL is allowed when __arg_nullable declares it.
-
-The check runs after check_reg_type() and check_func_arg_reg_off()
-succeed so that type and offset diagnostics keep their current wording.
-The kfunc path is unchanged.
-
-Fixes: e2b3c4ff5d183da6d1863c2321413406a2752e7a ("bpf: add __arg_trusted global func arg tag")
 Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/verifier.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ .../selftests/bpf/progs/verifier_global_ptr_args.c | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5f874979b8d75..7ea181f3e8c15 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9806,6 +9806,30 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 			err = err ?: check_func_arg_reg_off(env, reg, argno, arg->arg_type);
- 			if (err)
- 				return err;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+index dcc2dd46751a4..6176b2223a0fb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+@@ -289,6 +289,40 @@ __weak int subprog_void_untrusted(void *p __arg_untrusted)
+ 	return *(int *)p;
+ }
+ 
++__weak int subprog_trusted_bare(struct task_struct *task __arg_trusted)
++{
++	return task->pid;
++}
 +
-+			/*
-+			 * A __arg_trusted argument requires a referenced, trusted, or
-+			 * RCU-protected pointer. btf_ptr_types also matches a bare
-+			 * PTR_TO_BTF_ID, but that has no lifetime protection even
-+			 * though the callee is verified with PTR_TRUSTED.
-+			 * PTR_MAYBE_NULL is allowed when __arg_nullable declares it.
-+			 *
-+			 * Checked after the type/offset match so that type and offset
-+			 * diagnostics keep their current wording.
-+			 */
-+			if (arg->arg_type & PTR_TRUSTED) {
-+				u32 flags = type_flag(reg->type);
++SEC("tp_btf/task_newtask")
++__failure
++__msg("R1 must be referenced, trusted, or RCU protected")
++__msg("Caller passes invalid args into func#{{.*}} ('subprog_trusted_bare')")
++int bare_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++	struct task_struct *wakee;
 +
-+				if (!reg_is_referenced(env, reg) &&
-+				    (!(flags & (BPF_REG_TRUSTED_MODIFIERS | MEM_RCU)) ||
-+				     (flags & ~(BPF_REG_TRUSTED_MODIFIERS | MEM_RCU |
-+						(arg->arg_type & PTR_MAYBE_NULL))))) {
-+					bpf_log(log,
-+						"%s must be referenced, trusted, or RCU protected\n",
-+						reg_arg_name(env, argno));
-+					return -EINVAL;
-+				}
-+			}
- 		} else {
- 			verifier_bug(env, "unrecognized %s type %d",
- 				     reg_arg_name(env, argno), arg->arg_type);
++	if (!cur)
++		return 0;
++	wakee = cur->last_wakee;
++	if (!wakee)
++		return 0;
++	return subprog_trusted_bare(wakee);
++}
++
++/* real_parent yields an RCU-protected pointer, which is a valid argument. */
++SEC("tp_btf/task_newtask")
++__success
++int memrcu_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++
++	if (!cur)
++		return 0;
++	return subprog_trusted_task_nullable(cur->real_parent);
++}
++
+ __weak int subprog_char_untrusted(char *p __arg_untrusted)
+ {
+ 	return *(int *)p;
 
 -- 
 2.43.0
