@@ -1,115 +1,216 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F8F38DC60
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 09:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A613B19CF
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 09:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791366308; cv=none; b=QsBZnw0o19BFVfXFA2QRr0+hiv1b3gakaAkC2vStDxQpf2oU26v191d/IXO3G7/0amYMZNOvh2oAZzmoWWtNcjY5S3kHsOMYNcmnMgVSZk9upN52ifDYHoTzxoWF8BVNZov7lPc8Rxvf1mpJbyezt9qjW9QP1HsxngP+VFJPWEU=
+	t=1791366311; cv=none; b=d6PBOL4UUMAftUt5Gh0qxblxR97jUKTfy3UqJz2vAowrrY9fGLPvLEgg8qHhp0P92wQ9tdFyU9fJGT/UUKvjQKksoDdH9ecequH11PPP4MCN/FDirJ+a1AvcJ7tNin6vVgcJX49CdAYIlRBwi+P+ZzE4GRS63JDEdlW8OY//pss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791366308; c=relaxed/simple;
-	bh=olZaaaQM7hMKbV/U3u9Mkb6ms63aUXfPQSjnLoJbYpI=;
+	s=arc-20240116; t=1791366311; c=relaxed/simple;
+	bh=2oC22v6OKQcW/ltW/fz+7NDSkHFzft9fuBdVgQobhMw=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=sr3eay7jaLLmL4sGmED375XqvEcFtV6y2QbFlzdJtYoMG6LWYxSmegFBHKoI0Sf8Q1SA7IUI6npcaKv58BIjOau+MhqjSTzBZ/Z0FzyFMDDIZ+qC2e46tjqEbd6r6wezVeoMhPVLPHtFeyD4UBu9gu8SiFqe244NkhXiJUXf2Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ItB4TcjB; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=f23+7/2le7vyhRuHjzEhjw50W/KDDbs1mXF/B0AOOAY4x6Jioxew2QVSlLY0mGB+ZLdebtmaMDcO7XdBZLbXnTFmh2NnU8AYuSOd6snu84pM1g0ySNoWe65C8yTyGnR1f/EMTkMkD1GNNmo9oMj8AdQaPCF9It86hWeZtM/RPEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MRycP4Vb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ItB4TcjB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F511F0089B;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MRycP4Vb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC0381F0089C;
 	Wed,  7 Oct 2026 09:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1791366300;
-	bh=WdMAOqu6uhL6c+EANrvjmePVCE3/z1cP2F7fGc1NyJk=;
+	bh=MgU+nAU95s7n0ZInRTvfUuiI/6j0ss1ynMGxd+AFfBw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ItB4TcjBwbgSFi/AAeisHIvPypZkNN5yCHFM1iGvHdbnQT09Ne75rfAch0E8wHZHg
-	 /k3nfQ52KL3FzKRyAfLhu6R2S7S/e4wFmcElo60pav/VmkzwsCw4JEjuSWmaAaMbjD
-	 mxoZVdz2dtSyE/7xoN/u1gydKglv2ZktJl6XSEyX1huh5ZOiq9Jb1y/G2mfZJyPeAF
-	 VComXGF1oUrHiuOrrDyJoxQrn4ERrxw4Eeqp91323In8c69wUx0MB7ZIyo2RV6AGgN
-	 8Pm6bN5AlKRHxvMX7Iewyx8UfK/RAVJmG3F8rwx6iqC9VVWhs4GSBWSdTNnfeJuSmA
-	 TNF2fneyUsXOQ==
-Message-ID: <sashiko-outbox-162816@kernel.org>
+	b=MRycP4VbFvDGnnJeKVgflVe+bZwbxyd0X7nzVsxuOfB5ZJP8AR/Qj8SCk5XyjZmFO
+	 JXfMrSgjEH47wiiXrHDfYDstih5WNlvCWYMXF7ugczVgzEU4gddqCsXn9X43ZRZDwo
+	 U1Tu9dJZhD472u7Sq31Qg2BrpyT4HNKeMS7HjdhMY0qsYPpbAVIb4zcR+pp/sisJvU
+	 K+nTGUtWzaXjnaUKw/hOE0KEhR7M4Vu7HvnIFgR+/srSC3Cw3XlEAFOxrlEQ+PxKtT
+	 BXLjIt16RcRDZvo8Gzu8CVb9D5KikhotCtyiVXOb9kRTcIHcBOH3OMKeaiRp9xoxsB
+	 /9nu0AMq/DesA==
+Message-ID: <sashiko-outbox-162817@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v19 net-next 1/2] octeontx2: use atomic bitops for PF/VF
- and rep flags
+Subject: Re: [PATCH v19 net-next 2/2] octeontx2: add mqprio bandwidth
+ offload for NIX TX schedulers
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ratheesh Kannoth" <rkannoth@marvell.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261006094357.840823-2-rkannoth@marvell.com>
+In-Reply-To: <20261006094357.840823-3-rkannoth@marvell.com>
 References: <20261006094357.840823-1-rkannoth@marvell.com>
- <20261006094357.840823-2-rkannoth@marvell.com>
+ <20261006094357.840823-3-rkannoth@marvell.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 07 Oct 2026 09:44:59 +0000
+Date: Wed, 07 Oct 2026 09:45:00 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [High] net/octeontx2: Data race losing atomic flags in otx2_sync_flags_fr=
-om_rep()
+- [High] net: Use-After-Free due to TOCTOU race in workqueue cancellation d=
+uring device removal
+- [High] tc: heap Out-of-Bounds write in otx2_mqprio_restore_old via XDP de=
+tach
+- [Medium] net: permanent lock-out of TX queue reduction due to old_mq_snap=
+ state leak
+- [Medium] tc: otx2_tc_can_offload() incorrectly evaluates hw_features inst=
+ead of features
+- [Medium] tc: inappropriate use of devm_ allocations for dynamic runtime q=
+disc configuration
 --
 
-commit 17bb449e59bb6b8b6eb031b22fd6154b7b7c7de9
+commit 1bd3302261ac3d0844dd5a4c5059dd408da6cacc
 Author: Ratheesh Kannoth <rkannoth@marvell.com>
+octeontx2: add mqprio bandwidth offload for NIX TX schedulers
 
-octeontx2: use atomic bitops for PF/VF and rep flags
+This patch adds TC_SETUP_QDISC_MQPRIO offload with TC_MQPRIO_SHAPER_BW_RATE
+on PF and VF netdevs. It programs per-queue MDQ CIR/PIR via the NIX TX
+scheduler mailbox and reconfigures the netdev to apply the changes.
 
-This commit switches PF/VF and representor flags from non-atomic u64 masks
-to unsigned long bitmaps. It also introduces otx2_sync_flags_from_rep to
-sync representor-owned flags onto the PF mailbox context locklessly.
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> @@ -2924,6 +2935,12 @@ static int otx2_xdp_setup(struct otx2_nic *pf, str=
+uct bpf_prog *prog)
+>  	bool if_up =3D netif_running(pf->netdev);
+>  	struct bpf_prog *old_prog;
+> =20
+> +	if (prog && pf->mqprio.rate_limit) {
+> +		netdev_err(dev,
+> +			   "XDP: cannot attach while mqprio bandwidth offload is active\n");
+> +		return -EOPNOTSUPP;
+> +	}
 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/d=
-rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+[Severity: High]
+Does this condition inadvertently allow XDP detach to proceed while MQPRIO
+is active? If prog is NULL during a detach, this check is bypassed.
+Detaching XDP decreases hw.non_qos_queues, which later leads to an
+out-of-bounds array access in otx2_mqprio_restore_old() when restoring the
+old layout.
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> @@ -1600,14 +1619,907 @@ static int otx2_setup_tc_block(struct net_device=
+ *netdev,
 [ ... ]
-> @@ -593,6 +607,32 @@ struct otx2_nic {
-[ ... ]
-> +static inline void otx2_sync_flags_from_rep(struct otx2_nic *dst,
-> +					    unsigned long *src_flags)
+> +static int otx2_mqprio_alloc_cache(struct otx2_nic *pfvf, bool replacing)
 > +{
-> +	unsigned long src =3D READ_ONCE(*src_flags);
-> +	unsigned long new_flags;
-> +
-> +	new_flags =3D (READ_ONCE(dst->flags) & ~OTX2_REP_SYNC_FLAGS_MASK) |
-> +		    (src & OTX2_REP_SYNC_FLAGS_MASK);
-> +	WRITE_ONCE(dst->flags, new_flags);
+> +	u16 num_txq =3D pfvf->hw.non_qos_queues;
+> +	u64 *min_rate, *max_rate;
+[ ... ]
+> +	min_rate =3D devm_kcalloc(pfvf->dev, num_txq, sizeof(*min_rate), GFP_KE=
+RNEL);
+> +	max_rate =3D devm_kcalloc(pfvf->dev, num_txq, sizeof(*max_rate), GFP_KE=
+RNEL);
+
+[Severity: Medium]
+Are devm_kcalloc() and devm_kfree() appropriate here? Since
+otx2_mqprio_alloc_cache() is called during arbitrary runtime configurations
+like adding or replacing a qdisc, using devres allocations will repeatedly
+append nodes to the device devres list and require O(N) traversals on every
+update. Should this use standard kcalloc() instead to tie the cache
+lifecycle to the qdisc rather than the device probe/remove lifecycle?
+
+> +static int otx2_mqprio_snap_copy(struct otx2_nic *pfvf,
+> +				 struct mq_offload_snap **dst,
+> +				 const struct tc_mqprio_qopt_offload *mqprio)
+> +{
+[ ... ]
+> +	if (!*dst) {
+> +		snap =3D devm_kzalloc(pfvf->dev, sizeof(*snap), GFP_KERNEL);
+
+[Severity: Medium]
+Similar to the rate cache allocations, does this dynamic allocation during
+runtime need to use devm_kzalloc()? Repeated qdisc modifications might
+endlessly append to the devres list.
+
+> +static void otx2_mqprio_defer_netdev_tc_restore(struct otx2_nic *pfvf)
+> +{
+> +	if (READ_ONCE(pfvf->mqprio.defer_tc_work))
+> +		return;
+> +	schedule_work(&pfvf->mqprio.netdev_tc_work);
 > +}
 
 [Severity: High]
-Does this non-atomic read-modify-write risk overwriting and losing
-concurrent atomic bit operations?
+Could this lockless check introduce a TOCTOU race during device removal? If
+the shutdown thread in otx2_shutdown_tc_mqprio() sets defer_tc_work and
+calls cancel_work_sync() locklessly exactly after this check evaluates to
+false but before schedule_work() runs, the work could be queued after the
+cancellation attempt.
 
-If a concurrent thread sets a flag asynchronously using atomic bitops,
-such as OTX2_FLAG_PORT_UP in otx2_mbox_up_handler_rep_event_up_notify():
+> +static int otx2_mqprio_restore_old(struct otx2_nic *pfvf)
+> +{
+> +	struct mq_offload_snap *snap =3D pfvf->old_mq_snap;
+> +	struct net_device *netdev =3D pfvf->netdev;
+> +	u16 num_txq =3D pfvf->hw.non_qos_queues;
+[ ... ]
+> +	for (tc =3D 0; tc < snap->num_tc; tc++) {
+> +		u64 min_rate =3D snap->min_rate[tc];
+> +		u64 max_rate =3D snap->max_rate[tc];
+> +
+> +		for (txq =3D snap->offset[tc];
+> +		     txq < snap->offset[tc] + snap->count[tc]; txq++) {
+> +			pfvf->mqprio.min_rate[txq] =3D min_rate;
+> +			pfvf->mqprio.max_rate[txq] =3D max_rate;
 
-drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:otx2_mbox_up_handler_r=
-ep_event_up_notify() {
-    ...
-    if (info->evt_data.port_state) {
-        otx2_set_flag(pf, OTX2_FLAG_PORT_UP);
-        netif_carrier_on(netdev);
-    ...
-}
+[Severity: High]
+Could this loop write out-of-bounds into the min_rate and max_rate arrays if
+the number of active queues is reduced while MQPRIO is active?
 
-or OTX2_FLAG_INTF_DOWN in rvu_rep_destroy():
+If an XDP program is detached, hw.non_qos_queues shrinks.
+otx2_mqprio_alloc_cache() will then allocate smaller arrays based on the
+new num_txq count, but this loop restores rates using the old, larger indic=
+es
+stored in snap->offset and snap->count.
 
-drivers/net/ethernet/marvell/octeontx2/nic/rep.c:rvu_rep_destroy() {
-    ...
-    rvu_eswitch_config(priv, false);
-    otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
-    ...
-}
+> +static void otx2_mqprio_clear_sw(struct otx2_nic *pfvf)
+> +{
+> +	struct net_device *netdev =3D pfvf->netdev;
+> +
+> +	pfvf->mqprio.rate_limit =3D false;
+> +	otx2_mqprio_clear_replace_state(pfvf);
+> +	if (!otx2_mqprio_keep_netdev_tc(pfvf))
+> +		netdev_set_num_tc(netdev, 0);
+> +	otx2_mqprio_free_cache(pfvf);
+> +}
 
-it appears the atomic change will be permanently lost if it occurs between
-the READ_ONCE() and WRITE_ONCE() in otx2_sync_flags_from_rep().=20
+[Severity: Medium]
+Is there a state leak here for pfvf->old_mq_snap? This teardown path clears
+the rate cache and resets rate_limit, but it leaves old_mq_snap allocated.
+Later, otx2_set_channels() permanently blocks TX queue reduction because
+old_mq_snap is still non-NULL, effectively locking users out of modifying
+channel counts via ethtool after removing an mqprio qdisc.
 
-Can losing state transitions like OTX2_FLAG_INTF_DOWN allow async routines
-like otx2_napi_handler() to continue executing on teardown queues that
-have already been freed, leading to a use-after-free?
+> +static bool otx2_tc_can_offload(struct net_device *netdev)
+> +{
+> +	return !!(netdev->hw_features & NETIF_F_HW_TC);
+> +}
+
+[Severity: Medium]
+Should this check netdev->features instead of netdev->hw_features? By
+evaluating device capabilities rather than the currently enabled features,
+this allows mqprio setup to succeed even if the user explicitly disabled
+hardware TC offload via ethtool.
+
+> +void otx2_shutdown_tc_mqprio(struct otx2_nic *nic)
+> +{
+> +	WRITE_ONCE(nic->mqprio.defer_tc_work, true);
+> +	/* Publish defer_tc_work before cancel_work_sync(). */
+> +	smp_wmb();
+> +	cancel_work_sync(&nic->mqprio.netdev_tc_work);
+> +	rtnl_lock();
+
+[Severity: High]
+This pairs with the lockless check in otx2_mqprio_defer_netdev_tc_restore().
+By setting the flag and calling cancel_work_sync() outside of rtnl_lock(),
+it leaves a race window where work might be scheduled immediately after
+cancellation completes. When the device is later unregistered and freed,
+the lingering queued work could execute and trigger a use-after-free on
+the freed device structure.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261006094357.8408=
-23-1-rkannoth@marvell.com?part=3D1
+23-1-rkannoth@marvell.com?part=3D2
