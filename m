@@ -1,70 +1,69 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B743B5850
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 17:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291463EDE7C
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 17:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791394591; cv=none; b=YWRz5rR04pL7VApnOaOh1ois/N4QNtVkMEYjF+O7wbGD7tkrjhifsM34BQtefwNnSYzaoBkgbtvQf99JUgoZqCdXDrwDysbhavIgK3WmJXSstV+Nk/eFeZITxK8wdtbzkzZRsB/ADz0ro4FDiE/oluFbSQFJPeyGad4c7E7b8v4=
+	t=1791394591; cv=none; b=BzHaqSex9I3BWveU5/O22YYrWQGKBCmm5dhvSRmvMdnJTUaFykCm/8+BxPkSrzskmuP4qhKaGOpUJ17k9xjm0Ya/jodo/oKsojmhMGIpjqbC1vHEnSC9qj93YUpUALSBMjEVBNnMQl82DCJo2vIP/nnmgE1Q2Z4aY8i6bm02a8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791394591; c=relaxed/simple;
-	bh=KbWyKGSxjhF5GejC0AxphlWLzf470Pn66p11+I61qxQ=;
+	bh=UfAWlPGQqg3RDuKRzGCzaCnGMtK7225kxdogm7euAY4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OOeZFnmBGfy6JAlpP/KxoSvMtN7/TzSbYkeWAcaMBPDtBdgiDxmZAhCZfh17MrdmCjDUbAK+xW3n40aOHnp/kbyd+8Z8IcGYPzFQhAYIIzP+mxAtljOho9vY0YVYm7oDpF/EQer7P9a3jneSIV+eQwNuFV7NtOBaBlXAr6Sx2sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=VwglqFwm; arc=none smtp.client-ip=209.85.219.52
+	 In-Reply-To:To:Cc; b=qGzFIkMvaxU6DGQveQlHELrMhERCyZFghQ0fWTH08ZUup9F9sJX1Oz4ui0gSqk0K08PbyzNLuZejnF1PEnda4JttkaXIzTt2GW8a02ft5Mchw8EoVqftv5qNDB7vqlLnBZ1c9DQY1omYOQ1mo2d2TuG5Ag8s8OWB3YEcKXTwmIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=Ty1RiHM+; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="VwglqFwm"
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-917a9f42283so47969536d6.0
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 10:36:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="Ty1RiHM+"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-53391786e55so28255591cf.2
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 10:36:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1791394588; x=1791999388; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1791394586; x=1791999386; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lhgCXPltKa4ugKSRt7TE6+dyJRKxsCYuMAHN+j14pAQ=;
-        b=VwglqFwmTqSFngVk+qRbOBNF0DRsJPUEVp/3Yn615xomdKHFJJiqziPd3CJVjhAs03
-         k1aXZDhOTIv46SxSO+1YaDdfseFcLFeCPtLyQCMDUlyMMgFOu5mqTSwKVlhOpxDeaUSK
-         okwDQhMk9CIvLeAGtIKT6oy0kg48PUnptobw71R5tWjsJeDfVdzRK8Ghj8QNcTg2n/PZ
-         lUvStgujOlpIhiv+k8HlphYRGk3f0Xsc6xR54yKvlzEFfrsWtUJJGzPJu4jfVBuNUHOr
-         1hnTR2WEoyEZoej4KhshFAwZ4tCm3S8yp1b1jQOXPQ5w69FCBr2lBGmpR95WtdepPSb3
-         EnwA==
+        bh=UCkGJ8vEAFX9qhjd5vmdoyoQrJArzIQbzoHlWynEGpM=;
+        b=Ty1RiHM+7f74KFnI318YzqaGSvQqlaXbHDcrNXg+wsEgexR4VB+Y/cbWGMTMtDBsNL
+         kjrJhLl7Gae5/Afdj6kvhrCZNGma1m12M5DzbH0MH9yh3X+OOsMIwe5acH3vdSR0fq5N
+         EkJky3XJswS0e0ojjwtU1ixfyMILfVVUlMRUAmXGFk/+9osyq6YdPrbb9Q6+7r9YI62U
+         oRNwLd5tiOcIaD6G9YSnb/eCIFeQFOksZ1HvK5cK4ToRjbgJPKuVchWTcAk1WJOXXzK4
+         A1mfbqlTyvUa6ekWaNV+IOzk7v8tnsTMdCuNuDkFffK6hnON9BevXC0PxT6/h1tU1wxs
+         z/Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791394588; x=1791999388;
+        d=1e100.net; s=20260707; t=1791394586; x=1791999386;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lhgCXPltKa4ugKSRt7TE6+dyJRKxsCYuMAHN+j14pAQ=;
-        b=whzPD+kWZeevLfaHMlSNXQq9rHzMSMIGwtaTtWvTKM1HEQxRftxM8kCBnc5gmLAMnl
-         REISHmy5PIAH7XCA9gBqQQ+pvZcW43IUI7eV/2fCHl/OFuIE6N/HHJo3SWKq+nPHJa0S
-         niBxmAB6q0LCxNHvXFig6u/0j0NtPhIyAht8GzLocq3G7St5VIon023F3fvqkp7bOIJC
-         XHck/icXnjkF55ZsiqP2JZJzABHDLOT9rzh6MWEHtUlpVwQolaiF1fFCXdthjtq6cnfV
-         Yy9jGaK5rrtTXi09No04dvrPDLlKh5MkeyY8TJyV7w1okQbsriBsaQTrOZcHIkOmYeW0
-         EbsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBysFj52jkzfyVSYRlv4pJ/Rf8lmzh1EHBvzIB0RIxPe3mUkq9IKToDz1VV5wZM28M9kp7c=@vger.kernel.org
-X-Gm-Message-State: AFuF++nD+arYRmX+K//Fhow2UgE7VeOkM2GPZn4XZHSM+hG2BJXHmgbY
-	MtzE4qebB2lXGFfuqLNpU2Nr3dnijQ1c1MtNY5GirHSTPhvnPcxIf3aJLgP1wBFLKuSZNmIuBPI
-	LjiTxQI8=
-X-Gm-Gg: AYBFou04tZmE48mQoVkY/arAT15S6jDR3Us8FDx9Lh7SeSb/fqd6DDAIhDkZzgNmw1v
-	pK6om+QdKA4aHjItU38ygD4MLSu7ahR9gW9LLM6KvA0JDQ2TNtam5qPeb6ijiv4qj11inbslw7L
-	NyR68r2URPnn0+kfmIAKymy3fq6l0XwtMqgTP+EybDMp4cZzi/RmhY+h6oO00qwtGE8hGOabpLW
-	19ntd7IqeC7GBEnkeBcLB+cKwKnuw5deTJHYQD83rNGDQxSkmwoGYQKcIDUldjjODXIfo9duJNO
-	EwMzBhoaRmEsneKxDtTLQy1s9uQLYPgRE6MuVfKPnAalNv1zoR6G50d3e/e/qy9vsyEMwlT0+kn
-	qYE4vQQmNNG0k8FHAnldlUSvpIPmAT2fBLM7eGBvtDjugI5ZTTuwI+UStwCl+CNxk8qmUH6hIPF
-	1Bi0vwosN2emi7kuMV1/xlN6qbel516JeaXc7JUyLffOLUxdfmrJRdJwMq23tmzodCU9omEWWku
-	lNc1eZ0i+dXDww=
-X-Received: by 2002:a05:6214:29cd:b0:917:70d7:980d with SMTP id 6a1803df08f44-919978a2b9cmr54768766d6.42.1791394588468;
-        Wed, 07 Oct 2026 10:36:28 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.243])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91996d55534sm24883916d6.35.2026.10.07.10.36.27
+        bh=UCkGJ8vEAFX9qhjd5vmdoyoQrJArzIQbzoHlWynEGpM=;
+        b=dDcdFaahLKCWHngmACj0SPwpJ6Qf3ccQyc8hJ6/zAWFdZkAIvP6EgZMC1n2cjfYuyM
+         JjtklL8PkIzyQxxvyG93NG7kRVXqusyhDzjLuSveK5urPNYwLPSSH+hLRhYo2PiQWnHo
+         9Q/03GKcdH5XwwVkuF4TjybWj7wYVij63MP4KqGzIZPl/Zbim/CWI6120G4wPKoVbhrb
+         vO7EanQn0LDe5enIo9BoOxgviDqoJkEfsdDBO8PbFNQPCRT2AxoJDyMYzMLseftkARwc
+         +eGq4v3OJPL+oR/VwB6KDim0jQD371f1p3rppgQQXmoDR0VflH/uBIECqjjE4xtcny4L
+         O0eg==
+X-Forwarded-Encrypted: i=1; AKwUvBwCJTEA8QbDNkcJq9Iaszdnxm/ZMXAAg9xgTo4pUiSEB3LSROmH3m/vIe/GpxgWKHy+FDU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kg7Oja4JpaJ6VXHEY9kCUoXtxzy7H57JFGbw73Dee9qd8xJdyY
+	O9HtMUkKbftBgpWIGjjVBzwgqOaROrnpjpxnUvJpoHcKnR1ZzPWxJumjHOKJDOL3xyE=
+X-Gm-Gg: AYBFou3vf1KwBZAO5UgFNLsh7ZZldqMiz0q1FmTt2a81e97XGqgt+9xwAEwuL903tEV
+	8uvkZkaTrTg0S0rBE/3LlWK09Qu8eBYCGWdGLu/H/6W/9L4w8vTvF/LHXqpuxm03KVd1EWFEpvY
+	mlR/BIHyCXa7okl30ZXpFcMbLJslICRtbZdHKGZrXkYnSX+CfhqWhq70EQ7iG2EID3H/n9rkAA0
+	zuXIbfysFh46KQ1lRNweAvdd89cdHcvjo1ITz/nlpjzxD5rLYNeRiZp0ih1vTdVju0Kz+Ej3T8e
+	T9bygTA5okCCl2lYl1UdebwUUNS0eh4/h65vmUuIDOcI6FK9r6YeRi/UTQn+jeJzVUXEWxI/7n3
+	/Om9MIUFi5KlK+7jVuInHrpx0QgrJaNkUBeRkUCji3qjsl0MxrSV+MlAhtupTmWdpKO9fC62tIk
+	wMLvERkJpMYA3BQ6C0A66iEgKtJizqS8Q4kqClzUA/oafaqde+OoOEMPRHIHEqAbVKTdEXs8fkP
+	yEReFHO8ou7zVk=
+X-Received: by 2002:a05:622a:4106:b0:531:164:fa73 with SMTP id d75a77b69052e-53575540ec0mr56191091cf.32.1791394585976;
+        Wed, 07 Oct 2026 10:36:25 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.250])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5357218df11sm24570571cf.23.2026.10.07.10.36.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 10:36:27 -0700 (PDT)
+        Wed, 07 Oct 2026 10:36:25 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Wed, 07 Oct 2026 17:36:06 +0000
-Subject: [PATCH net-next v2 7/8] net: skbuff: don't BUG() on a missing
- head_frag in skb_zerocopy()
+Date: Wed, 07 Oct 2026 17:36:05 +0000
+Subject: [PATCH net-next v2 6/8] net: skbuff: don't BUG() on leftover
+ length in skb_copy_and_csum_bits()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,7 +72,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261007-b4-skbuff-bug-on-v2-7-b9a5f732895b@toxicpanda.com>
+Message-Id: <20261007-b4-skbuff-bug-on-v2-6-b9a5f732895b@toxicpanda.com>
 References: <20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b@toxicpanda.com>
 In-Reply-To: <20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b@toxicpanda.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -82,45 +81,59 @@ To: "David S. Miller" <davem@davemloft.net>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  bpf@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1791394570; l=1048;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1791394570; l=1690;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=KbWyKGSxjhF5GejC0AxphlWLzf470Pn66p11+I61qxQ=;
+ bh=UfAWlPGQqg3RDuKRzGCzaCnGMtK7225kxdogm7euAY4=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QFtUcSnkhBjEUw8XnUzw4gXlovZPDbuxbbpSLWy7vpytOS4USmgR+A1/4ZSStagI1sQaqZeQzzt
- +rMkHZGEDZgQ=
+ QHwUBafMKBimgYVVN+bXxgSlOD25sS8QoKd5vmQha27+BivjekrTHnSxba4rwvfVesma/zXcoJX
+ shX51TQQ+jwA=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-skb_zerocopy() BUG()s if @from has no head_frag and the caller passed
-hlen == 0, meaning the caller didn't ask for the head to be copied and
-the head can't be referenced as a page either.  The check runs before
-anything is touched, and skb_zerocopy() already documents -EFAULT for
-bad skb geometry.  Return that, with a DEBUG_NET_WARN_ON_ONCE() for
-debug kernels.
+skb_copy_and_csum_bits() has the same check as skb_checksum(): it BUG()s
+if it runs out of skb before it runs out of @len.  This one gets hit:
+commit 7d63b6712538 ("icmp: guard against too small mtu") and commit
+f99cd56230f5 ("net: Remove acked SYN flag from packet in the transmit
+queue correctly") each fixed a crash here from icmp_glue_bits().
+
+It can't just return, though.  Its callers copy into a buffer that is
+about to go out on the wire, an ICMP error quoting the offending packet
+for example, so bailing out early would send whatever was left in the
+rest of that buffer.
+
+Zero the part of the buffer we didn't fill and return 0, with a
+DEBUG_NET_WARN_ON_ONCE() for debug kernels.  As with skb_checksum(), the
+checksum usually won't match the data, so the receiver will usually drop
+the packet, but either way it carries nothing it shouldn't.  @len is an
+int, so only zero when it is positive; a negative @len from a broken
+caller must not turn into a huge memset().
 
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- net/core/skbuff.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/core/skbuff.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 7fd2f8142cc4..629de22d98e4 100644
+index c896770203f7..7fd2f8142cc4 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
-@@ -3913,7 +3913,10 @@ skb_zerocopy(struct sk_buff *to, struct sk_buff *from, int len, int hlen)
- 	struct page *page;
- 	unsigned int offset;
- 
--	BUG_ON(!from->head_frag && !hlen);
-+	if (unlikely(!from->head_frag && !hlen)) {
+@@ -3713,7 +3713,13 @@ __wsum skb_copy_and_csum_bits(const struct sk_buff *skb, int offset,
+ 		}
+ 		start = end;
+ 	}
+-	BUG_ON(len);
++	if (unlikely(len)) {
 +		DEBUG_NET_WARN_ON_ONCE(1);
-+		return -EFAULT;
++		/* Don't hand the caller a buffer with stale bytes in it. */
++		if (len > 0)
++			memset(to, 0, len);
++		return 0;
 +	}
- 
- 	/* dont bother with small payloads */
- 	if (len <= skb_tailroom(to))
+ 	return csum;
+ }
+ EXPORT_SYMBOL(skb_copy_and_csum_bits);
 
 -- 
 2.55.0
