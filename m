@@ -1,33 +1,33 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.187.6.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 280824B95A3;
-	Wed,  7 Oct 2026 16:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.187.6.220
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA44A4C4F69;
+	Wed,  7 Oct 2026 16:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791390359; cv=none; b=UID7VjDUzK0uBXY8VLpkp9eGweHlQo3AptaNeKY+7tOI7DWyFAg56RxGrwKdnveXnpsBmkGBP+qy9GJTJRi6uYklJdRKiogmuvBiDW2/j4rgUaVE3+hBMHKlMJTMjwkFnm00U9smRmH1Iaec/E/OXQydxf52Q/dSP3ZlAj4lgqg=
+	t=1791390363; cv=none; b=B3tIQWCrOcjNcMQJloYdmQD8vzriBIBH9SUh1mx5bqdpYOCQkDT1s6TNy8j6f0YB5rB+7gj82Q5ya9ywfdA+Lv0UfJLWF2NFI+OMn59haAn/Oro6TilwG5UiU/GEq5XOuwIqofULvsTSUreqCAtOQprPDc5eADUfQISPJif3Um4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791390359; c=relaxed/simple;
-	bh=cQusPdDPNbDWGpHhwS0Fv27/F6VdnElJAJaeEcVyEXU=;
+	s=arc-20240116; t=1791390363; c=relaxed/simple;
+	bh=N5yO0NVKSV8f9ktzlTDqIWflYZHMSCBhoXpoJIf4/nU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HBt7KM7jPaiOWci3DJqyUv/gaO9lY3a+6Sb9Tapu/9HFcQzw9/t3Rj4CQFuIuK5zZrOK4Ewxzqc8Z1Ms/sJrvMc8WaQAkh/cyYlNGCj2zcR1r6HRRjGjK7Ube2Aop2lPkFt6zBceZWIGEnJnGE0/rfw+swAF3Ma7RqKKDCh6+E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ZRNfDcu2; arc=none smtp.client-ip=52.187.6.220
+	 In-Reply-To:To:Cc; b=ZIjFTKWQTYv6wztGqSYaDdf/A4gBMl8ie2LraQ49VuhugyesGQfp5XBMgSZ+Hyip1xMjKsyM5sITeNPHpKs4qBjEbUZi/x9wDZ/sTUO78qPW+F5POqW5aXYxX4R9yNi0+fpzIzTp9JHUngp4z+kXzaREJrzb0Nyj5mKbfgGSWCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=A6Qibki8; arc=none smtp.client-ip=207.46.229.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ZRNfDcu2"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="A6Qibki8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
 	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=GYk5wt7JUL6Q53FrGIkpAy+qa3LERwj
-	NY2crI+MicAE=; b=ZRNfDcu2DKzy42QY+FhAiVRm6II8Q9MzNrVLR/UVF9grMS0
-	JfudatJ1Wbk0eUXbRsd8wNQhlrOC3YJiVFhSF9PuWwbxpB5ElttqR1rPCJ8Q9SYf
-	9i5BKJ0WuX8fQCjfsDJHjPSf33eSgMiwPxAYOyHbC0ynJmqPRvW2Ul3trXZM=
+	References:In-Reply-To:To:Cc; bh=/k8zkeVCJyUHGcf6u6rtSipFetO/TAS
+	Ya+8odbyek/U=; b=A6Qibki8WxX1/iumbI1mQw+tqFKHCKx8kCsbt6UILxqznGd
+	54qT4FK5D/s4lThflUICav3a4jNYMsDPaDa8OPz9mTZt9vJTxfuQTO0m221vBRc0
+	/X7GhtF9qzi/0ptPFQpGigli3Aju0jkPugfQfl/fMNVXQlFYQzFk+a4gOvFU=
 Received: from [172.17.0.2] (unknown [101.6.30.195])
-	by web1 (Coremail) with SMTP id yAQGZQA3qzt6csZqskPbAA--.57300S3;
+	by web1 (Coremail) with SMTP id yAQGZQA3qzt6csZqskPbAA--.57300S4;
 	Thu, 08 Oct 2026 00:25:33 +0800 (CST)
 From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Date: Wed, 07 Oct 2026 16:25:29 +0000
-Subject: [PATCH bpf-next v4 1/2] bpf: Enforce trusted BTF ID argument
- provenance
+Date: Wed, 07 Oct 2026 16:25:30 +0000
+Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Cover trusted BTF ID
+ argument provenance
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,7 +36,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn>
+Message-Id: <20261007-a3-arg-trusted-v4-v4-2-253ef3a1a69a@mails.tsinghua.edu.cn>
 References: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
 In-Reply-To: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -53,135 +53,158 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  Brahmajit Das <listout@listout.xyz>, 
  Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791390334; l=4542;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791390334; l=4896;
  i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
- bh=cQusPdDPNbDWGpHhwS0Fv27/F6VdnElJAJaeEcVyEXU=;
- b=0tqs60e+kdULLAX93MtZBTKlLho5Y+oJMLJVFP5C0l2aUstzszbQil1YdCMbNMO7A5U6N8dW0
- mu/1gIVGZZvAuskgHatQBQKIkU6gJrkhx/eESXqtCJqy/CAo3+rlC1d
+ bh=N5yO0NVKSV8f9ktzlTDqIWflYZHMSCBhoXpoJIf4/nU=;
+ b=rsnNeFZma4jAxSyPz9NSxeWzElsHXmmWrpqg07LO6nPQYt06ZXLILCzxwaVLibwM7L6F1c10X
+ 6qv3kkAj1YmACeKImOTEQeIWARnfQeMtjf6YObzQGVZI3ygALlf7LCK
 X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
  pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
-X-CM-TRANSID:yAQGZQA3qzt6csZqskPbAA--.57300S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw17Wr43AF18ur4fJF1xuFg_yoWruryfpF
-	48G3sFvr48Jr43u397JF4xAry3Ka4Iq3y8Ca4ru34IkFn3WFy8tFyjkF1rZwn5CF95C342
-	vr12vrWUXw47ArJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:yAQGZQA3qzt6csZqskPbAA--.57300S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3WrW3tFWfuF18tFWxtFyUAwb_yoW7Wr4fpa
+	yxJw1qkFn7K3W3XryxJF4UuF4Skrn3ZryUCF1rG3sxCws7J3W8XF18KF4YqwnYkw4Fgrnx
+	Z34vga1fuw18J3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9C1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw20F6cxK64vIFxWle2I262
-	IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx2
-	6r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4
-	CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY
-	02Avz4vE14v_JwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr1UJr1l4I
-	8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-	xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-	AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
-	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUnwZcUUUUU
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1U
+	M28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxV
+	AIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv
+	8VW8Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II
+	8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl
+	c2xSY4AK67AK6r1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMx
+	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
+	wI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
+	vE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxK
+	x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+	0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU3Ma5UUUUU=
 X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-A global subprogram parameter tagged __arg_trusted is verified with
-PTR_TRUSTED, but the common call-site type check accepts bare PTR_TO_BTF_ID
-and MEM_RCU registers. The callee can consequently pass a pointer with
-weaker provenance to a kfunc that does not accept RCU-protected pointers.
+Extend verifier_global_ptr_args.c with calls that pass bare and
+RCU-protected task pointers to a global __arg_trusted parameter. Both
+calls must be rejected because neither pointer is referenced or trusted.
 
-RCU protection only guarantees that the object remains allocated through a
-grace period. It does not guarantee that an object's refcount is nonzero,
-so an RCU-protected pointer cannot satisfy the trusted-pointer contract.
-For example, an RCU-protected bpf_cpumask loaded from a map may have a
-zero refcount. Passing it through __arg_trusted lets the callee pass it
-to bpf_cpumask_acquire(), whose plain refcount_inc() can retain an object
-that will be freed after the grace period.
+Add paired test-module kfuncs that return and accept a nullable trusted
+task pointer. Passing the return value directly must succeed, covering
+PTR_TRUSTED | PTR_MAYBE_NULL handling in the common argument checker.
 
-Make the existing provenance check contract-driven. Mark generated BTF ID
-kfunc argument types with PTR_TRUSTED, and add MEM_RCU only for KF_RCU
-kfuncs. Normalize PTR_MAYBE_NULL when the argument contract permits it.
-Then use the argument flags to require trusted or referenced provenance
-and allow MEM_RCU only when the contract says so.
-
-Split is_trusted_reg() so the normalized type is used for type and modifier
-checks while reference lookup still uses the original register. Conversion
-of scalar-struct BTF ID arguments to fixed-size memory continues to
-construct a new ARG_PTR_TO_MEM type without PTR_TRUSTED.
-
-Fixes: e2b3c4ff5d18 ("bpf: add __arg_trusted global func arg tag")
-Suggested-by: Amery Hung <ameryhung@gmail.com>
 Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/verifier.c | 27 ++++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/progs/iters_testmod.c  | 11 +++++++
+ .../selftests/bpf/progs/verifier_global_ptr_args.c | 35 ++++++++++++++++++++++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 11 +++++++
+ .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  2 ++
+ 4 files changed, 59 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 353bde9ae2274..a0ab793f041d8 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5327,15 +5327,17 @@ static u32 *reg2btf_ids[__BPF_REG_TYPE_MAX] = {
- 	[CONST_PTR_TO_MAP] = btf_bpf_map_id,
- };
- 
--static bool is_trusted_reg(struct bpf_verifier_env *env, const struct bpf_reg_state *reg)
-+static bool is_trusted_reg_type(struct bpf_verifier_env *env,
-+				const struct bpf_reg_state *reg,
-+				enum bpf_reg_type type)
- {
- 	/* A referenced register is always trusted. */
- 	if (reg_is_referenced(env, reg))
- 		return true;
- 
- 	/* Types listed in the reg2btf_ids are always trusted */
--	if (reg2btf_ids[base_type(reg->type)] &&
--	    !bpf_type_has_unsafe_modifiers(reg->type))
-+	if (reg2btf_ids[base_type(type)] &&
-+	    !bpf_type_has_unsafe_modifiers(type))
- 		return true;
- 
- 	/* If a register is not referenced, it is trusted if it has the
-@@ -5347,8 +5349,14 @@ static bool is_trusted_reg(struct bpf_verifier_env *env, const struct bpf_reg_st
- 	 * Eventually, we should make PTR_TRUSTED the single source of truth
- 	 * for whether a register is trusted.
- 	 */
--	return type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS &&
--	       !bpf_type_has_unsafe_modifiers(reg->type);
-+	return type_flag(type) & BPF_REG_TRUSTED_MODIFIERS &&
-+	       !bpf_type_has_unsafe_modifiers(type);
-+}
-+
-+static bool is_trusted_reg(struct bpf_verifier_env *env,
-+			   const struct bpf_reg_state *reg)
-+{
-+	return is_trusted_reg_type(env, reg, reg->type);
+diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/testing/selftests/bpf/progs/iters_testmod.c
+index f65cc9766633e..145750bb64ef8 100644
+--- a/tools/testing/selftests/bpf/progs/iters_testmod.c
++++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
+@@ -46,6 +46,17 @@ int iter_next_trusted_or_null(const void *ctx)
+ 	return 0;
  }
  
- static bool is_rcu_reg(const struct bpf_reg_state *reg)
-@@ -9578,6 +9586,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
- 	{
- 		const u32 *arg_btf_id = fn->arg_btf_id[arg];
- 		const struct btf *arg_btf = is_kfunc(meta) ? meta->btf : btf_vmlinux;
-+		enum bpf_reg_type reg_type;
- 
- 		if (!meta->btf) {
- 			const struct bpf_reg_types *compatible;
-@@ -9605,8 +9614,10 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
- 			}
- 		}
- 
--		if (is_kfunc(meta) && (!is_trusted_reg(env, reg) ||
--				       bpf_type_has_unsafe_modifiers(reg->type))) {
-+		reg_type = reg->type & ~(arg_type & PTR_MAYBE_NULL);
-+		if ((arg_type & PTR_TRUSTED) &&
-+		    (!is_trusted_reg_type(env, reg, reg_type) ||
-+		     bpf_type_has_unsafe_modifiers(reg_type))) {
- 			if (!(arg_type & MEM_RCU)) {
- 				const char *actual_type, *arg_name, *expected_type;
- 
-@@ -13671,6 +13682,8 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 		else
- 			proto->arg_btf_id[arg] = ref_id_ptr;
- 
-+		arg_type |= PTR_TRUSTED;
++SEC("syscall")
++__success
++int trusted_nullable_kfunc(const void *ctx)
++{
++	struct task_struct *task;
 +
- 		/*
- 		 * A KF_RCU kfunc accepts an RCU-protected pointer where it would
- 		 * otherwise demand a referenced or trusted one. Other argument kinds
++	task = bpf_kfunc_trusted_null_test();
++	bpf_kfunc_trusted_nullable_test(task);
++	return 0;
++}
++
+ SEC("raw_tp/sys_enter")
+ __success
+ int iter_next_rcu(const void *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+index 03507eeae3cb3..4c55b70df0724 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+@@ -289,6 +289,41 @@ __weak int subprog_void_untrusted(void *p __arg_untrusted)
+ 	return *(int *)p;
+ }
+ 
++__weak int subprog_trusted_bare(struct task_struct *task __arg_trusted)
++{
++	return task->pid;
++}
++
++SEC("tp_btf/task_newtask")
++__failure
++__msg("R1 must be referenced or trusted")
++__msg("Caller passes invalid args into func#{{.*}} ('subprog_trusted_bare')")
++int bare_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++	struct task_struct *wakee;
++
++	if (!cur)
++		return 0;
++	wakee = cur->last_wakee;
++	if (!wakee)
++		return 0;
++	return subprog_trusted_bare(wakee);
++}
++
++SEC("tp_btf/task_newtask")
++__failure
++__msg("R1 must be referenced or trusted")
++__msg("Caller passes invalid args into func#{{.*}}")
++int memrcu_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++
++	if (!cur)
++		return 0;
++	return subprog_trusted_task_nullable(cur->real_parent);
++}
++
+ __weak int subprog_char_untrusted(char *p __arg_untrusted)
+ {
+ 	return *(int *)p;
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 93847ca6293b4..71d587b140570 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -313,6 +313,15 @@ __bpf_kfunc void bpf_kfunc_trusted_task_test(struct task_struct *ptr)
+ {
+ }
+ 
++__bpf_kfunc struct task_struct *bpf_kfunc_trusted_null_test(void)
++{
++	return NULL;
++}
++
++__bpf_kfunc void bpf_kfunc_trusted_nullable_test(struct task_struct *ptr__nullable)
++{
++}
++
+ __bpf_kfunc void bpf_kfunc_trusted_num_test(int *ptr)
+ {
+ }
+@@ -907,6 +916,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_zero_offset_test, KF_ACQUIRE)
+ BTF_ID_FLAGS(func, bpf_kfunc_nested_release_test, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_kfunc_trusted_vma_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_trusted_task_test)
++BTF_ID_FLAGS(func, bpf_kfunc_trusted_null_test, KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_kfunc_trusted_nullable_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_trusted_num_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_rcu_task_test, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_kfunc_ret_rcu_test, KF_RET_NULL | KF_RCU_PROTECTED)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 67c02a421d133..83abcd8e6200d 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -340,6 +340,8 @@ int bpf_kfunc_st_ops_inc10(struct st_ops_args *args) __ksym;
+ 
+ void bpf_kfunc_trusted_vma_test(struct vm_area_struct *ptr) __ksym;
+ void bpf_kfunc_trusted_task_test(struct task_struct *ptr) __ksym;
++struct task_struct *bpf_kfunc_trusted_null_test(void) __ksym;
++void bpf_kfunc_trusted_nullable_test(struct task_struct *ptr__nullable) __ksym;
+ void bpf_kfunc_trusted_num_test(int *ptr) __ksym;
+ void bpf_kfunc_rcu_task_test(struct task_struct *ptr) __ksym;
+ struct task_struct *bpf_kfunc_ret_rcu_test(void) __ksym;
 
 -- 
 2.43.0
