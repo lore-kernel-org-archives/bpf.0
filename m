@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2D83B8D7B
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 17:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BD34CA29D
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 17:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791393072; cv=none; b=J0im1rz07dxph1NEUvOxTvVJtqS+MpbZUgK3b7tU49L49np7LGvHL5+NBnqjV9eE2x72UmuS6XBGaVtBoZakMjHzwjbA5yJQOJfD0FsqGVcBjWLk9W3WoTb3x+/vF2GvtqmKnfTgNHnytdBhD3LJ3BnyhLSvJPuwiSBYPjrA7LU=
+	t=1791393073; cv=none; b=A8xwDtjEjD74VIi4bwThRUqL5MJUMSwo5eNEVL9FM+C3nScqfdwHuav5RhRmwCcmebNLJ8qUxx3+4qQIMTTj94+RZh7Aq6Elq9qQMsgeTm/H299nUHRhNyWeUj2Cxcce8uswTxjDtuxeA68C0VOVyrULSotmTRR3sB40q0HkKj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791393072; c=relaxed/simple;
-	bh=3z7yCnKFENycmyBo5iRzyxwty0CPpvVlmaKfHUo3hdc=;
+	s=arc-20240116; t=1791393073; c=relaxed/simple;
+	bh=MjVQ3N8eL1+4wSPyVvXS5nyD3bCtqVu3AHwFiabDidE=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=UwFkR4hdJEjgmFTdDWe4eRiNxguufxmfqLeMMo7Pc59XZJsyt59gydKzEMPvO5r6vv60N5AESFjT9iwikft+zbJhEbJLBcF0nnFzFcPlHpZLk7H2bqM7Ona07SedHSogEm+oA271cH4fsCNQv4GoMqltI1WH571tqfXrDCdvU7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RiupFnf5; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=NehUZceV+uGpKfIUJq5Kx5H8Miqghg2OG9PNcitddoIZWs/TMwhungk7A8fIexStX7w1y1c9/froNsCIG9VKxUCsgal2e8kv0NkXcaoZ76kSxHx++8P7q7uxYThTdVIshUEUT4UYDm9feWyZ/1PNc8RZNuUsdKQZmmQUp5e7R5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/oGPW0u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RiupFnf5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B911F000FF;
-	Wed,  7 Oct 2026 17:11:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/oGPW0u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEFC1F00893;
+	Wed,  7 Oct 2026 17:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791393071;
-	bh=m+F0y8B6vyVgb8b7flYwu3ULp4CJvWkENnlIcgkFIvw=;
+	s=k20260515; t=1791393072;
+	bh=jsrvq50hqttlIAR8w7TwrOL44W4OPq0NpzrSVP2J9bs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RiupFnf53HqHdvKSmsbOVOHEmsfPSnb0unywdksWA2INKDfyXqkmFeYq9Srt2clRA
-	 1nIIiEdbDH22nYCO6f04DNCZ5CHTQL2nkFcVmJFICZZCkCsIc4f3+ga4NeffNLUq2q
-	 eK+9Z97XZPleOcI4jvdYBSNCBd2Gkqug+UqowGPr4mvjrmNWFBdRcqK5pXLzvpZy25
-	 sAWNZavA3B6K3Op3Wu3RjwLoQprKcbXhum1jrG2FJR1emnXyOCEAaL1vpAg42/Fj4U
-	 M9SsLnxh1tbKnwVrow1cLD9ejjZPMDC5LM9iTSyKvPqyHq0dBmz2bvZ32IOaSKR+ir
-	 0XlEXV/ZYCgVA==
-Message-ID: <sashiko-outbox-163218@kernel.org>
+	b=R/oGPW0uvqbAc541tKXlofnhFnj2oURhqtVyQU87oE7hrU/d0GYQnSkD6ufu4/4C3
+	 FaftaFfH3tM3McHC0QE6tVsDZrLagepU/rUN1EAUb6XIhgP4nnLtVygoLcI+tETsFF
+	 jOlg+l9dqp72LbTLAYrSSJzYY+xB+IUvYMCIlUkGtTJizGkIX5Q8vQMUypGaHqNM7E
+	 OA+N42+j+HFPhiSb6z2WteUMslqtFo2AlRdapFKiX8REoyLS0/Noam0G9UtvR090yi
+	 UuNL/zwl7RqO/jmXAOk7L/DV8a2BChksf5lnM74HvmRIgYKai4TG4rFpqZFrn2tNGu
+	 PbNVSOjbUWm4A==
+Message-ID: <sashiko-outbox-163222@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 1/9] net: skbuff: don't leave stale bytes in
- skb_copy_and_csum_bits()
+Subject: Re: [PATCH net-next 7/9] net: skbuff: don't BUG() on leftover
+ length in skb_copy_and_csum_bits()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Josef Bacik" <josef@toxicpanda.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261006-b4-skbuff-bug-on-v1-1-1b4434c5357c@toxicpanda.com>
+In-Reply-To: <20261006-b4-skbuff-bug-on-v1-7-1b4434c5357c@toxicpanda.com>
 References: <20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com>
- <20261006-b4-skbuff-bug-on-v1-1-1b4434c5357c@toxicpanda.com>
+ <20261006-b4-skbuff-bug-on-v1-7-1b4434c5357c@toxicpanda.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Wed, 07 Oct 2026 17:11:11 +0000
@@ -47,58 +47,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] skbuff: skb_copy_and_csum_bits() discards linear part csum on un=
-readable frags
+- [High] net: incomplete defense against negative len in skb_copy_and_csum_=
+bits
 --
 
-commit 554d4ec9904f25474f32c877a62ca154d0b20324
+commit a487a003d242af9e08ff639f329ea71c902adabb
 Author: Josef Bacik <josef@toxicpanda.com>
 
-net: skbuff: don't leave stale bytes in skb_copy_and_csum_bits()
+net: skbuff: don't BUG() on leftover length in skb_copy_and_csum_bits()
 
-This commit zeroes out the remainder of a caller's buffer when
-skb_copy_and_csum_bits encounters unreadable fragments. This prevents
-stale uninitialized memory from being leaked when the buffer is
-transmitted on the wire.
+This commit replaces a BUG_ON(len) with a WARN_ON_ONCE(len) at the end of
+skb_copy_and_csum_bits(). It also clears any remaining space in the destina=
+tion
+buffer if len is positive, preventing stale bytes from being sent.
 
 > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 5c4024a03e105..512ff9cfa269f 100644
+> index c8c2c0319b87a..e29eda2eaf3f6 100644
 > --- a/net/core/skbuff.c
 > +++ b/net/core/skbuff.c
-> @@ -3633,8 +3633,12 @@ __wsum skb_copy_and_csum_bits(const struct sk_buff=
+> @@ -3709,7 +3709,12 @@ __wsum skb_copy_and_csum_bits(const struct sk_buff=
  *skb, int offset,
->  		pos	=3D copy;
+>  		}
+>  		start =3D end;
 >  	}
-> =20
-> -	if (!skb_frags_readable(skb))
-> +	if (!skb_frags_readable(skb)) {
+> -	BUG_ON(len);
+> +	if (WARN_ON_ONCE(len)) {
 > +		/* Don't hand the caller a buffer with stale bytes in it. */
 > +		if (len > 0)
 > +			memset(to, 0, len);
->  		return 0;
-
-[Severity: Medium]
-By returning 0 here instead of the accumulated csum, does this discard
-the checksum computed for the successfully copied linear part of the packet?
-
-When icmp_push_reply() uses skb_copy_and_csum_bits() via icmp_glue_bits()
-to quote an offending packet with unreadable fragments, the offending
-packet typically has its headers in the linear part. Returning 0 discards
-this partial checksum.
-
-Since the ICMP payload contains the non-zero linear part, returning 0
-causes the ICMP packet's overall checksum to be computed incorrectly,
-resulting in the error packet being silently dropped by the destination.
-
-Would it be better to return csum here instead of 0, so that the checksum
-is mathematically correct for the zero-padded buffer and allows the ICMP
-error to be successfully delivered?
-
+> +		return 0;
 > +	}
-> =20
->  	for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
->  		int end;
+
+[Severity: High]
+The commit message states that "a negative @len from a broken caller must n=
+ot
+turn into a huge memset()". If a broken caller passes a negative len, will =
+we
+actually reach this check, or will it cause memory corruption earlier in the
+function?
+
+Earlier in skb_copy_and_csum_bits(), if offset is smaller than
+skb_headlen(skb), copy starts as positive. If a broken caller passes a
+negative len, copy > len evaluates to true, forcing copy =3D len:
+
+	if (copy > 0) {
+		if (copy > len)
+			copy =3D len;
+		csum =3D csum_partial_copy_nocheck(skb->data + offset, to,
+						 copy);
+
+Could this pass the negative copy to csum_partial_copy_nocheck(), which
+interprets it as a huge unsigned size and causes a massive out-of-bounds
+read and write before ever reaching the new guard?
+
+>  	return csum;
+>  }
+>  EXPORT_SYMBOL(skb_copy_and_csum_bits);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261006-b4-skbuff-=
-bug-on-v1-0-1b4434c5357c@toxicpanda.com?part=3D1
+bug-on-v1-0-1b4434c5357c@toxicpanda.com?part=3D7
