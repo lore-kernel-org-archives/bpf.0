@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985813BBFC4
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 16:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2D83B8D7B
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 17:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791391412; cv=none; b=KexFK5lB4xPExngIpx3Kg7ff0/UptiCAh335qOfC4a8xjFKNZ/MO0BjEfjA3j+ZFRfT4x0es2c0S/RyoRO99C3ncRDQtdB1OumSWr+RE0v1xJD9D3elZokxDlRR5dNSLH0lv/ffIyw28+UBLBM85R/l9+NnECfJfLuKnOcI230E=
+	t=1791393072; cv=none; b=J0im1rz07dxph1NEUvOxTvVJtqS+MpbZUgK3b7tU49L49np7LGvHL5+NBnqjV9eE2x72UmuS6XBGaVtBoZakMjHzwjbA5yJQOJfD0FsqGVcBjWLk9W3WoTb3x+/vF2GvtqmKnfTgNHnytdBhD3LJ3BnyhLSvJPuwiSBYPjrA7LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791391412; c=relaxed/simple;
-	bh=l+KTUT3F7qrB20HOkBO/LkU5toJJGsn6NN2gz3xjaZo=;
+	s=arc-20240116; t=1791393072; c=relaxed/simple;
+	bh=3z7yCnKFENycmyBo5iRzyxwty0CPpvVlmaKfHUo3hdc=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=UfO475BRDLBiWPghPbzOBZ8ZoedlHyFcFogVRzrQ8/CBHVzM6TSELjJavGVRduA+cog1eJ5/N0z7vhoUkVg/nuPvXDnUG3GjIabYKyjlMGOdR0YSpqjwXmCKjCDb4St06W+orlEIhfGK5333gtdiY5ZWtESS9LkIIdniC0HW1gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D56DI7MC; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=UwFkR4hdJEjgmFTdDWe4eRiNxguufxmfqLeMMo7Pc59XZJsyt59gydKzEMPvO5r6vv60N5AESFjT9iwikft+zbJhEbJLBcF0nnFzFcPlHpZLk7H2bqM7Ona07SedHSogEm+oA271cH4fsCNQv4GoMqltI1WH571tqfXrDCdvU7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RiupFnf5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D56DI7MC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178A61F000FF;
-	Wed,  7 Oct 2026 16:43:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RiupFnf5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B911F000FF;
+	Wed,  7 Oct 2026 17:11:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791391411;
-	bh=MJEi6dHz8BAkxxzixvvmLE+a6r3qZabvMIiJOLt8bmY=;
+	s=k20260515; t=1791393071;
+	bh=m+F0y8B6vyVgb8b7flYwu3ULp4CJvWkENnlIcgkFIvw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D56DI7MCCgMcFjbVmr+nBcQ/VtblVvq61yyOCSsm8hhcxl5k5/fU0tThHxvoTGXOx
-	 JhWWstycCXmr23wDdgRyBwWxNIWmFJWC5FB0ShycqvCRzu/ydFkXConImUwxywVMwF
-	 laqg839mLLuvqnq1pwunVxsOMy2Rls9oA6RHljGiqI7gWI9+Q8u/iWLAXwowgwkrgR
-	 XirDbE8SAgH2HWJolvsDzjposCYHXi9k5EPH8gOmzsjcZYxG8vU/g0mEGSJ3a9JjRW
-	 VXhrcn5fxMm8K/bcEcxsz0wx023oHLnUS/1uQWRZsZvgk6IObcgNfeyVFmUKPe1zmf
-	 x3b9QApfZBb0A==
-Message-ID: <sashiko-outbox-163202@kernel.org>
+	b=RiupFnf53HqHdvKSmsbOVOHEmsfPSnb0unywdksWA2INKDfyXqkmFeYq9Srt2clRA
+	 1nIIiEdbDH22nYCO6f04DNCZ5CHTQL2nkFcVmJFICZZCkCsIc4f3+ga4NeffNLUq2q
+	 eK+9Z97XZPleOcI4jvdYBSNCBd2Gkqug+UqowGPr4mvjrmNWFBdRcqK5pXLzvpZy25
+	 sAWNZavA3B6K3Op3Wu3RjwLoQprKcbXhum1jrG2FJR1emnXyOCEAaL1vpAg42/Fj4U
+	 M9SsLnxh1tbKnwVrow1cLD9ejjZPMDC5LM9iTSyKvPqyHq0dBmz2bvZ32IOaSKR+ir
+	 0XlEXV/ZYCgVA==
+Message-ID: <sashiko-outbox-163218@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Enforce trusted BTF ID argument
- provenance
+Subject: Re: [PATCH net-next 1/9] net: skbuff: don't leave stale bytes in
+ skb_copy_and_csum_bits()
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
+To: "Josef Bacik" <josef@toxicpanda.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn>
-References: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
- <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn>
+In-Reply-To: <20261006-b4-skbuff-bug-on-v1-1-1b4434c5357c@toxicpanda.com>
+References: <20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com>
+ <20261006-b4-skbuff-bug-on-v1-1-1b4434c5357c@toxicpanda.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 07 Oct 2026 16:43:30 +0000
+Date: Wed, 07 Oct 2026 17:11:11 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,75 +47,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] bpf: check_func_arg() allows PTR_UNTRUSTED | MEM_RCU into KF_RCU k=
-funcs
+- [Medium] skbuff: skb_copy_and_csum_bits() discards linear part csum on un=
+readable frags
 --
 
-commit 1e71cf476e59d8805f3765efcab69f9c9d9bba4a
-Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+commit 554d4ec9904f25474f32c877a62ca154d0b20324
+Author: Josef Bacik <josef@toxicpanda.com>
 
-bpf: Enforce trusted BTF ID argument provenance
+net: skbuff: don't leave stale bytes in skb_copy_and_csum_bits()
 
-This commit modifies the verifier to make the provenance check contract-dri=
-ven
-by marking generated BTF ID kfunc argument types with PTR_TRUSTED and expli=
-citly
-adding MEM_RCU only for KF_RCU kfuncs. It uses the normalized type for modi=
-fier
-checks while reference lookup uses the original register.
+This commit zeroes out the remainder of a caller's buffer when
+skb_copy_and_csum_bits encounters unreadable fragments. This prevents
+stale uninitialized memory from being leaked when the buffer is
+transmitted on the wire.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 353bde9ae2274..a0ab793f041d8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -9605,8 +9614,10 @@ static int check_func_arg(struct bpf_verifier_env =
-*env, u32 arg, u32 slot, u32 p
->  			}
->  		}
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 5c4024a03e105..512ff9cfa269f 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -3633,8 +3633,12 @@ __wsum skb_copy_and_csum_bits(const struct sk_buff=
+ *skb, int offset,
+>  		pos	=3D copy;
+>  	}
 > =20
-> -		if (is_kfunc(meta) && (!is_trusted_reg(env, reg) ||
-> -				       bpf_type_has_unsafe_modifiers(reg->type))) {
-> +		reg_type =3D reg->type & ~(arg_type & PTR_MAYBE_NULL);
-> +		if ((arg_type & PTR_TRUSTED) &&
-> +		    (!is_trusted_reg_type(env, reg, reg_type) ||
-> +		     bpf_type_has_unsafe_modifiers(reg_type))) {
->  			if (!(arg_type & MEM_RCU)) {
-[ ... ]
->  				return -EINVAL;
->  			}
->  			if (!is_rcu_reg(reg)) {
-[ ... ]
->  				return -EINVAL;
->  			}
->  		}
+> -	if (!skb_frags_readable(skb))
+> +	if (!skb_frags_readable(skb)) {
+> +		/* Don't hand the caller a buffer with stale bytes in it. */
+> +		if (len > 0)
+> +			memset(to, 0, len);
+>  		return 0;
 
-[Severity: High]
-Does this allow a register with both MEM_RCU and PTR_UNTRUSTED modifiers to=
- be
-passed into KF_RCU kfuncs?
+[Severity: Medium]
+By returning 0 here instead of the accumulated csum, does this discard
+the checksum computed for the successfully copied linear part of the packet?
 
-If a BPF program loads a pointer that is marked as PTR_UNTRUSTED | MEM_RCU =
-(for
-example, when loading an __rcu pointer embedded in a union) inside an RCU
-critical section, and passes it to a KF_RCU kfunc:
+When icmp_push_reply() uses skb_copy_and_csum_bits() via icmp_glue_bits()
+to quote an offending packet with unreadable fragments, the offending
+packet typically has its headers in the linear part. Returning 0 discards
+this partial checksum.
 
-1. The arg_type has MEM_RCU, so the first inner check !(arg_type & MEM_RCU)=
- is
-   false.
-2. The register has MEM_RCU, so the second inner check !is_rcu_reg(reg) is
-   false.
-3. The validation falls through and succeeds, even though the register has =
-the
-   PTR_UNTRUSTED modifier.
+Since the ICMP payload contains the non-zero linear part, returning 0
+causes the ICMP packet's overall checksum to be computed incorrectly,
+resulting in the error packet being silently dropped by the destination.
 
-Since check_reg_type() bypasses the strict compatible_reg_types check for k=
-func
-BTF_ID arguments, this appears to leave the verifier without any checks that
-would reject the untrusted modifier here. Can this result in untrusted garb=
-age
-pointers being used as valid RCU pointers?
+Would it be better to return csum here instead of 0, so that the checksum
+is mathematically correct for the zero-padded buffer and allows the ICMP
+error to be successfully delivered?
+
+> +	}
+> =20
+>  	for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
+>  		int end;
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261007-a3-arg-tru=
-sted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261006-b4-skbuff-=
+bug-on-v1-0-1b4434c5357c@toxicpanda.com?part=3D1
