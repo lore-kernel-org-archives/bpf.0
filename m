@@ -1,211 +1,128 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA44A4C4F69;
-	Wed,  7 Oct 2026 16:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59E84AF165
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 16:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791390363; cv=none; b=B3tIQWCrOcjNcMQJloYdmQD8vzriBIBH9SUh1mx5bqdpYOCQkDT1s6TNy8j6f0YB5rB+7gj82Q5ya9ywfdA+Lv0UfJLWF2NFI+OMn59haAn/Oro6TilwG5UiU/GEq5XOuwIqofULvsTSUreqCAtOQprPDc5eADUfQISPJif3Um4=
+	t=1791390494; cv=none; b=qqKEvGP9hrGwbL9COxFo5O/RXI+LYZ3AGXA4DgtaVPWo1sIe/Cv1PVAPq1QZfCXy3o9z8JjWuUWm/RsPm2wJSXxffarcnCBZauwCMKoDG8Ef7JGthuNqoXCbbo+O+ZpZU3Uty4wQ3XZ2ZNziJW4SCtIKU63GlrGh2wUmhSitwcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791390363; c=relaxed/simple;
-	bh=N5yO0NVKSV8f9ktzlTDqIWflYZHMSCBhoXpoJIf4/nU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZIjFTKWQTYv6wztGqSYaDdf/A4gBMl8ie2LraQ49VuhugyesGQfp5XBMgSZ+Hyip1xMjKsyM5sITeNPHpKs4qBjEbUZi/x9wDZ/sTUO78qPW+F5POqW5aXYxX4R9yNi0+fpzIzTp9JHUngp4z+kXzaREJrzb0Nyj5mKbfgGSWCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=A6Qibki8; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1791390494; c=relaxed/simple;
+	bh=g24tLA/3dhshJtjhfImC89zVIL2/mIHY6gHdvT9uvno=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fuQRIHS9hWIlXkVZklbCNUAXnjd3s/WsdQ5BcycmFdOQ0JT/vub1Dwj1lvMyOc/uJOgBgwLitd1flTOjHjv1ZCCJ76uzvW72zi3awk/wwpVL+jbKzRB1ZbsqDS/bt9QqOK+YxCWJgwR2pnHyREWdizG09D+MAug3KJCMRrTK/EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aXIf6UE7; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="A6Qibki8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aXIf6UE7"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-486e8faff03so1109071f8f.1
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 09:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=/k8zkeVCJyUHGcf6u6rtSipFetO/TAS
-	Ya+8odbyek/U=; b=A6Qibki8WxX1/iumbI1mQw+tqFKHCKx8kCsbt6UILxqznGd
-	54qT4FK5D/s4lThflUICav3a4jNYMsDPaDa8OPz9mTZt9vJTxfuQTO0m221vBRc0
-	/X7GhtF9qzi/0ptPFQpGigli3Aju0jkPugfQfl/fMNVXQlFYQzFk+a4gOvFU=
-Received: from [172.17.0.2] (unknown [101.6.30.195])
-	by web1 (Coremail) with SMTP id yAQGZQA3qzt6csZqskPbAA--.57300S4;
-	Thu, 08 Oct 2026 00:25:33 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Date: Wed, 07 Oct 2026 16:25:30 +0000
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Cover trusted BTF ID
- argument provenance
+        d=gmail.com; s=20251104; t=1791390491; x=1791995291; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wITKzh5wW1j9YD2B+DIVbeYkbAtDPNXFE+j076Iz2Dc=;
+        b=aXIf6UE7BhCgHZ1CEe9HcqHdhvgW5ungWcr7UBRY+VvRh643aiNNl8BGbexkX/2YtT
+         Iowx1V6a9EnPqR5/9LyNXDdOI/C7SVlJeZKEyBkABL04x+DihAOkzmRLXQ/1eKmraLo2
+         G6qPchi10aa99XqRP2xmC0mOmodVcOmEXGdUFCpLnTh3luq2ZcNcSILfkhI1VkhFsjD4
+         wLkoJHFQ/vMlVOFkqsDnJlrWo0CrmgmX5HAwRMheLQKe0LagV83Hw2LzaJqgtu+KdrK4
+         KBf4KqSRseQObI9NQRshibiKqSfXzaTMSINbGUH3v1Ifb3m/848GJbnGOHr2N2OBG7Gk
+         SDYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791390491; x=1791995291;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wITKzh5wW1j9YD2B+DIVbeYkbAtDPNXFE+j076Iz2Dc=;
+        b=XSG7BwhvtWqjImy1mmpIwmLCwRs9KRyl3gnAf5X7DDV+JS8ZdIMUtvWJIFzglx0IhT
+         NOl/zBDo2k6OYz4oRfk570LVzhTG4kQeUfRt3dVVkGdhbHR62OiY0jvZPGOZe8bRgO70
+         Jn19DLNO+u63K0MIoMpu9MsPeYvlsa8DFONcYn92wxjfJEdMOri9HZcaWJZIKjWfI30m
+         BMefMlRIqxS/X5z30sffAkBRnnUmzuliIvBf9YPBVzlVsEqW+/lBJ2ClH1Ucc6VXyZR9
+         /pewawVb9QwRFmxZb/DLzr5D3rxjEBx1TzuZmaSV8S3Crej5lgbtqahFiaHjEnrsLYdw
+         t6kw==
+X-Forwarded-Encrypted: i=1; AKwUvBynriwE6fWLFdBdofD+APhX0pV5R+9LAaHXmA6/lVxct/c7teShn9UVcJudTOSVQ4x3emg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLYYAUWRnUpSlWMgCNMmshfwTBgSw7074sXL9Vu96eZFkjan9+E
+	KzEPC2wdZVY9c2sjBYktIrZ5AFLWdaO3UvzOgbADY/xDrkcpSktf3EY=
+X-Gm-Gg: AYBFou1CBLpsqxndyy6EdlNJ3li+jA//VlYJo/xmSP5yEXINztLmm30GogbwSz7jXpp
+	WUE2YHW0diAWKCkJ40umEh0lNLLaTKMrymY7966/bd8cBbdiwcrdJacPTFXfxv7M5EhMgQUn3xm
+	xPYRkZ2ERa88JPoNXMIU0QNCHibOC99uPRoUB5bPzEO4JmsHaKEqlO5WHUymqHutgdX+yhe6jjV
+	CxsoLk1mrqvYLav0MVeHhmJVNLGToqF1PkErux7/tTbW8Z+Ysjx6Zk4+TVDpFfes7PbdE4AeqM7
+	MFZ6Y4KY+21V0bj7ZwY+oAQwnFUTp0iu5MPncM76qKiTrror1+QbbSXr7Fgzjso8fk2uJZMnZgX
+	h+37icrTR1NrilpNK7B7PVXZqUdN7KWYwKTSV8uUeW1yec2EPFodDc8V3omf+Y4+SszkEI7bX4B
+	+f3bkahOZXtEi57977vg8tOfKamniBv60HNwhp7IY=
+X-Received: by 2002:a5d:5284:0:b0:48a:ef5c:fc2c with SMTP id ffacd0b85a97d-48c7278da82mr4164015f8f.48.1791390490777;
+        Wed, 07 Oct 2026 09:28:10 -0700 (PDT)
+Received: from debian.. ([2001:41d0:303:db6b::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d13a01sm6697451f8f.29.2026.10.07.09.28.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Oct 2026 09:28:09 -0700 (PDT)
+From: Tristan Madani <tristmd@gmail.com>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-input@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	Tristan Madani <tristan@talencesecurity.com>
+Subject: [PATCH v2] HID: core: fix device cleanup on allocation failure
+Date: Wed,  7 Oct 2026 16:28:08 +0000
+Message-ID: <20261007162808.373024-1-tristmd@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260904080524.3872926-1-tristmd@gmail.com>
+References: <20260904080524.3872926-1-tristmd@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261007-a3-arg-trusted-v4-v4-2-253ef3a1a69a@mails.tsinghua.edu.cn>
-References: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
-In-Reply-To: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Amery Hung <ameryhung@gmail.com>, 
- Brahmajit Das <listout@listout.xyz>, 
- Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791390334; l=4896;
- i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
- bh=N5yO0NVKSV8f9ktzlTDqIWflYZHMSCBhoXpoJIf4/nU=;
- b=rsnNeFZma4jAxSyPz9NSxeWzElsHXmmWrpqg07LO6nPQYt06ZXLILCzxwaVLibwM7L6F1c10X
- 6qv3kkAj1YmACeKImOTEQeIWARnfQeMtjf6YObzQGVZI3ygALlf7LCK
-X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
- pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
-X-CM-TRANSID:yAQGZQA3qzt6csZqskPbAA--.57300S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3WrW3tFWfuF18tFWxtFyUAwb_yoW7Wr4fpa
-	yxJw1qkFn7K3W3XryxJF4UuF4Skrn3ZryUCF1rG3sxCws7J3W8XF18KF4YqwnYkw4Fgrnx
-	Z34vga1fuw18J3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9C1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1U
-	M28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxV
-	AIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv
-	8VW8Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II
-	8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl
-	c2xSY4AK67AK6r1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMx
-	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-	wI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-	vE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxK
-	x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
-	0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU3Ma5UUUUU=
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+Content-Transfer-Encoding: 8bit
 
-Extend verifier_global_ptr_args.c with calls that pass bare and
-RCU-protected task pointers to a global __arg_trusted parameter. Both
-calls must be rejected because neither pointer is referenced or trusted.
+From: Tristan Madani <tristan@talencesecurity.com>
 
-Add paired test-module kfuncs that return and accept a nullable trusted
-task pointer. Passing the return value directly must succeed, covering
-PTR_TRUSTED | PTR_MAYBE_NULL handling in the common argument checker.
+hid_allocate_device() calls hid_destroy_device() in its error path when
+hid_bpf_device_init() fails.  hid_destroy_device() invokes
+hid_bpf_destroy_device(), which calls synchronize_srcu() and
+cleanup_srcu_struct() on the SRCU structure.  However,
+hid_bpf_device_init() returns the result of init_srcu_struct(), so
+when it fails, init_srcu_struct() was called but did not succeed and
+its failure path rolled the SRCU internal pointers back to NULL.
+Dereferencing them causes a general protection fault.
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Use put_device() directly in the error path to release the device
+without invoking SRCU cleanup on the failed state.
+
+Fixes: 6cd735f0e57a ("HID: bpf: protect HID-BPF prog_list access by a SRCU")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tristan Madani <tristan@talencesecurity.com>
 ---
- tools/testing/selftests/bpf/progs/iters_testmod.c  | 11 +++++++
- .../selftests/bpf/progs/verifier_global_ptr_args.c | 35 ++++++++++++++++++++++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 11 +++++++
- .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  2 ++
- 4 files changed, 59 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/testing/selftests/bpf/progs/iters_testmod.c
-index f65cc9766633e..145750bb64ef8 100644
---- a/tools/testing/selftests/bpf/progs/iters_testmod.c
-+++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
-@@ -46,6 +46,17 @@ int iter_next_trusted_or_null(const void *ctx)
- 	return 0;
- }
- 
-+SEC("syscall")
-+__success
-+int trusted_nullable_kfunc(const void *ctx)
-+{
-+	struct task_struct *task;
-+
-+	task = bpf_kfunc_trusted_null_test();
-+	bpf_kfunc_trusted_nullable_test(task);
-+	return 0;
-+}
-+
- SEC("raw_tp/sys_enter")
- __success
- int iter_next_rcu(const void *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
-index 03507eeae3cb3..4c55b70df0724 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
-@@ -289,6 +289,41 @@ __weak int subprog_void_untrusted(void *p __arg_untrusted)
- 	return *(int *)p;
- }
- 
-+__weak int subprog_trusted_bare(struct task_struct *task __arg_trusted)
-+{
-+	return task->pid;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+__failure
-+__msg("R1 must be referenced or trusted")
-+__msg("Caller passes invalid args into func#{{.*}} ('subprog_trusted_bare')")
-+int bare_to_trusted(void *ctx)
-+{
-+	struct task_struct *cur = bpf_get_current_task_btf();
-+	struct task_struct *wakee;
-+
-+	if (!cur)
-+		return 0;
-+	wakee = cur->last_wakee;
-+	if (!wakee)
-+		return 0;
-+	return subprog_trusted_bare(wakee);
-+}
-+
-+SEC("tp_btf/task_newtask")
-+__failure
-+__msg("R1 must be referenced or trusted")
-+__msg("Caller passes invalid args into func#{{.*}}")
-+int memrcu_to_trusted(void *ctx)
-+{
-+	struct task_struct *cur = bpf_get_current_task_btf();
-+
-+	if (!cur)
-+		return 0;
-+	return subprog_trusted_task_nullable(cur->real_parent);
-+}
-+
- __weak int subprog_char_untrusted(char *p __arg_untrusted)
- {
- 	return *(int *)p;
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 93847ca6293b4..71d587b140570 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -313,6 +313,15 @@ __bpf_kfunc void bpf_kfunc_trusted_task_test(struct task_struct *ptr)
- {
- }
- 
-+__bpf_kfunc struct task_struct *bpf_kfunc_trusted_null_test(void)
-+{
-+	return NULL;
-+}
-+
-+__bpf_kfunc void bpf_kfunc_trusted_nullable_test(struct task_struct *ptr__nullable)
-+{
-+}
-+
- __bpf_kfunc void bpf_kfunc_trusted_num_test(int *ptr)
- {
- }
-@@ -907,6 +916,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_zero_offset_test, KF_ACQUIRE)
- BTF_ID_FLAGS(func, bpf_kfunc_nested_release_test, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_vma_test)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_task_test)
-+BTF_ID_FLAGS(func, bpf_kfunc_trusted_null_test, KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_kfunc_trusted_nullable_test)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_num_test)
- BTF_ID_FLAGS(func, bpf_kfunc_rcu_task_test, KF_RCU)
- BTF_ID_FLAGS(func, bpf_kfunc_ret_rcu_test, KF_RET_NULL | KF_RCU_PROTECTED)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 67c02a421d133..83abcd8e6200d 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -340,6 +340,8 @@ int bpf_kfunc_st_ops_inc10(struct st_ops_args *args) __ksym;
- 
- void bpf_kfunc_trusted_vma_test(struct vm_area_struct *ptr) __ksym;
- void bpf_kfunc_trusted_task_test(struct task_struct *ptr) __ksym;
-+struct task_struct *bpf_kfunc_trusted_null_test(void) __ksym;
-+void bpf_kfunc_trusted_nullable_test(struct task_struct *ptr__nullable) __ksym;
- void bpf_kfunc_trusted_num_test(int *ptr) __ksym;
- void bpf_kfunc_rcu_task_test(struct task_struct *ptr) __ksym;
- struct task_struct *bpf_kfunc_ret_rcu_test(void) __ksym;
+Changes since v1:
+  - Updated commit message to clarify that init_srcu_struct() was called
+    but failed (rolled pointers back to NULL), not that it was never called.
+  - Updated code comment to match.
+  Per bpf-ci bot review feedback.
+ drivers/hid/hid-core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index a3ff0514f9cdf..7d1b781c6debf 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -3115,7 +3115,11 @@ struct hid_device *hid_allocate_device(void)
+ 	return hdev;
+ 
+ out_err:
+-	hid_destroy_device(hdev);
++	/* init_srcu_struct() was called but failed; the SRCU struct
++	 * is not usable.  Skip hid_destroy_device() which would call
++	 * cleanup_srcu_struct() on the failed state.
++	 */
++	put_device(&hdev->dev);
+ 	return ERR_PTR(ret);
+ }
+ EXPORT_SYMBOL_GPL(hid_allocate_device);
 -- 
-2.43.0
+2.47.3
 
