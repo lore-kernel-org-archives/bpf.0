@@ -1,95 +1,94 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6379D427FBE
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 22:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED557370ADC
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 22:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791412710; cv=pass; b=W8ioIm9m8czfvrFjBMUhtLVHxwMQYel6X9KsAZAjUQMeQvIGXyIC949jOV1ukQ8TNi6YndtGYznFm1qiQXETFG4iio5ZOKaGCxLEEsrJ+GMTw21Pl026xSiMDIwX2tSjM5zHFxDBkXUiD1GS74H1ByCAeMMtKDB1Mqv3ZTSvyWM=
+	t=1791413009; cv=pass; b=DmQusZT1x/2/aLwW0vHHTctVljtcoTbIAMTzkFVa2tkWqffFE7fW2Bl8xpfJgk4qnp6q1bYLzaiRAc0pKiKbp+TWox7ENtUhZHo2shBs+r1cajkVwbIDnzLqSI0xOfF7jE2okoMMQMkUQiRJebqVLAgyS16NoWTA/RzB12hiryU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791412710; c=relaxed/simple;
-	bh=JAEnd7RTYfgtqTDPsV5I82Kbf/tGt183J2FPTli0shQ=;
+	s=arc-20240116; t=1791413009; c=relaxed/simple;
+	bh=vDZ3cTwxqjGw1b4UnPK3GokiygaHb1AoW5HXC6qbtc4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M9Mo4W0CVbz45PZz7lP/1PK2iEJTNnBAnaMNX6eWu7UCbQ9RkbwZgbBjFawezTBYP/llw2t3iy2/8zJ/dddxZNDAEJ6InFHeMY7UQNx044Fg9rkDSx2/i/7t7EkRVAIM1pY/SbI6AL/x4d5JlSljMj9S16brs5HFYXiMAwqhoG4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LnNGPZLy; arc=pass smtp.client-ip=209.85.167.182
+	 To:Cc:Content-Type; b=iKfR+PN4OtOlkjxogxzacRErbZwO3nAnfwjf3mEYEtvBJNumfvMyT3FKiRKbWOeTw36SkgowkQliXVR0ujIj56wO1zoZE0iLk01G8ohsrvL5yZYmi0VVxm72EWcNW0sMU3Zrs9C05VptZy24ASmuY93d/m3zK8BxZKRIN7DlFFo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OigA+zYz; arc=pass smtp.client-ip=209.85.210.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LnNGPZLy"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4b28d9537bcso97463b6e.0
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 15:38:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791412708; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OigA+zYz"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-81ae6aefdceso4164857a34.0
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 15:43:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791413007; cv=none;
         d=google.com; s=arc-20260327;
-        b=G3I98CzyjiZtWgW/VjTZjXAUZ6UCrMaV2dDu1Tk/ZeiNco8Gwlz0BLiaAG+fd33aIJ
-         bT5r8+1JBk3LoS7R4QCKnVFN7rBeWRYKhVf0SuzsCjijQEp1rOGCHAxgr8ixQ2oYeDD2
-         CUzc9SzUl508E72MTkEdCgyPLn/Pxk19RZSP+QHDulAnWfnSR0WkxS3Fvu5DXQKj0fwf
-         YPheHvUN3kctvg8lv3JwRXRkvEd0wK0AybMi3Afx2nSH6UkGvj5r322bRUdRVKQZkdra
-         fpZgX6sJUwzupuUhuahvegXABzMPDs1oo1v7ONsHHfREyUQzs2F24hwaRxzvJii/3NDA
-         sDAA==
+        b=dY0VtPGvR4EMVTD+QlCNn2pPUTB9WE8K22YFE9DvR7KrH9tXJhLJDpQp7l5CRtpA93
+         3adI5cz2dLHhrUDFVyPsolKu5oV1Bx6lVfBfslHGs79B9kXuC9z8YlG5c69+v5T2/AV6
+         Qd/dLpxndv4eVj8BUzl17njnLRTxlFhWCpRgUc9G2OLPYCOvgc/yf9boXso4PshApWtV
+         wI0ozl8UYga3Yyy0+qDaWnwkg0ZCBffdFSwM7IywTQeYB6vU1DyQf7S+SZMZ3znBk3H+
+         z4rjOPMdazBsQltqBlSaCFeGITAjnyDy81ieku5bwqJ5R210YXqIMNug0YSBhj6c4vyY
+         fsjg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=0radvBLf82v1mE7u1BEv9JCaS3DV3MO4aUccMt6BE4A=;
-        fh=wrZbEjerBvvraez/ohYKBPQNSycMI8HWhuWQYkqYzQg=;
-        b=f0OGEbKaF68SIZajEitD06wj7QlfZMuABUfXnTyooJfW2xEQ9NMu5yLLjcTM57T5nW
-         0ZpYXTpr1MrZ03TNZBmQFVByCM32s0eH3JgGS4J0Rjt71QphYF/AqhhxhJoLS1INGKlu
-         nEawN7ZnoyzBIqekxjxc6wzbYtmUBcvnZa0peXaXp5sKvqySspUPhhppsdsotktBgfwn
-         TtY3/XaSIjTJIFdGr1/G2kXAkLH5HgLD9vW4/r9RymZ6oEr6ElMfZOj84zPXao8B75Yh
-         canQoj8WYZQgNNj5C7M217lK/tX0HT6vQBje/SPia60gIpP8Q8UNDSH+4heOJ/wiRIQX
-         UmBg==;
+        bh=vDZ3cTwxqjGw1b4UnPK3GokiygaHb1AoW5HXC6qbtc4=;
+        fh=wkaXIDB1Xf3LDyq4GCuokkA+wNlfc3Y8XPZe6jen8sY=;
+        b=NbOeLXosABHP5cNe1TO/KauCnev/ieL/1r40sLemZOGIyE+J9K4zKW+Ddz3kJA+uBl
+         MmmnRmqFys/opFRYfqciFuTSXng4tYZ8BrFWeavVQotBgT3DlSWQkyuIApED0h2eir+z
+         PhpGfYP9v/swil4H+Fph1UnLqi7QCcBZ7npvp3h7Jys8dGFpEaXfx0LPGE5ZDhn82uhY
+         UElcx4KRoNUCc0LCxNUjvRInbtmLTPlEthSj1P8JJri0S76M/M7c9C/JGxTooPcoyT3G
+         B+didTd2P9OpYCPhbcYd+VbAvxaHY+ejoKJGtz/c2kj1/7rOKhJ5HCwYEUbGJNVoOyOL
+         0FBw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791412708; x=1792017508; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791413007; x=1792017807; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=0radvBLf82v1mE7u1BEv9JCaS3DV3MO4aUccMt6BE4A=;
-        b=LnNGPZLy/Y/UNQxwmR4rR0/zvX0pcv0HbRGP305xVXBB/Jk0pplrAuPiBRpf4xpj+E
-         Z8QwMlZjEKRsNA4ZDwnFejcuUr0KaxJ+PgUjzBedrUeMktRX97GWzPlfyUuVLilFkqBa
-         mgmgO69Ol9pCSKNxptiRWTxMrUt1bZsgGo3TsrDpONIGIOOXAxGVwcRu7DHjYk+2eT8d
-         q/aN1gCp/AlG8c0DVHJY3rD1PjH7RIl/tjrFrNDecbCPhAsqsRwc9LlpPSa0peBzqnzt
-         Y/pCDUKspi7UqzxUlwt9pLBQlR04yZxF7q5lyc7tzlkXK8H6+USe8U589Ht9b1Ogd79h
-         9I9g==
+        bh=vDZ3cTwxqjGw1b4UnPK3GokiygaHb1AoW5HXC6qbtc4=;
+        b=OigA+zYz+K9chR+C+fYBjK+k+r8ANl9R33JEU6TO5foZlA2hWZTAs1up1Vn8JmzHgk
+         P6EX5FhHcKj/wpo7NdK3KOKIxPOWBBg6l6e7xnAYFllrFWwbH+sIYClZmhw4njy4VOEs
+         mZ8ssXJ6FbuztDpKYv4+tqZ0QdqJGF4t2hTuDjAujm9YXQucyM02isJdwOZmFcAbMBXp
+         62oES8fA5y7IIao8ULV6QTVp7dFHZlx2iNOANugOr/gAKY83udSm6ttv96tmXlzZ60Ig
+         zD+NW2PcmVQLCRll16B5N3m5KjgM4xHDq4d3o6gRYC6tfhFmvWaSHGcB0oeim9NxGIEs
+         86zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791412708; x=1792017508;
+        d=1e100.net; s=20260707; t=1791413007; x=1792017807;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0radvBLf82v1mE7u1BEv9JCaS3DV3MO4aUccMt6BE4A=;
-        b=sDh3fjln4oXb9JrbQLBIec6nqKLjQPHdPtf/a3yxZGZRsq0l3+bSuEBh+az5J4W5pP
-         06drg4aoMve5HIWRERLz/qmzdOdmXogkp+ugHDUtQjD7BRd0fLTI42y1ObYbPquNicfQ
-         3HpTg1nSdMypYQ3qCnIkBVF54JMLOadk0MKDmMkEYku00r7UGKoJLXlMvT8S/A5yWq7j
-         HnT7pNRbgGYn9jOio5bKWH1k3ipyVPIJ2abXQ2Zc10mOk/rvjfB7/vtjwOzKWxsgsVzh
-         swZqNaJ0r3Q0P1rWm55cKUvZQe5G3jy2bD98s9dpOXRkWm8R4N4sv5E43fQK0cZZHOte
-         qjZw==
-X-Forwarded-Encrypted: i=1; AKwUvBxQVIwPXrbhVRXUNK1Vi0kY7KB4U/L9/5sxG5XodXUNUGgLW8vakdgfT4JcIVNq1ta4JDk=@vger.kernel.org
-X-Gm-Message-State: AFuF++lElzU/z0vRe3AUIrEn1w7a1+so93RZCMrYmv+RERfbkUyhPs/j
-	zMRLfZvFC0iz3LmTlU7igIF01yIgnJEN+jsNXGBa8xa5oyV25hrIwTQPKJO9e4W/f3/BtsQrflC
-	fnp/rA71hzvStnKq/hRLWRF6Z2qoc/dY=
-X-Gm-Gg: AYBFou0DE0KmKGHfgae3Qf7aZsGPUe3IKC2xoUSx113GUOUE2DrXo6Cy5bhwkUcNwat
-	Ih7M8fjsV7+24zsbIm/ydyprf/aOjTEpRLR/aTfYWDzZDv0do6NLs8EGD9Q4WxaUtsQ5cNL4SSX
-	/rG5lHOD+sdBEw63cgE0atJtK+iteJ5vQ8NVUZNQ4MAMxGki76In7SA/I2+MCtgOlLNZ79pWNrF
-	ZA+7KkMfTJSDKRW0w9tUwWRgyPKlERlbZXNhXVodxriyV0hA4tqJf8DAPNqHQZmSxZHZsbvxDmf
-	I4450e+ArCnJmNkGUb2RF1B7JC4it2QcW2DlflU9aiN88YZtOvRzPa4=
-X-Received: by 2002:a05:6808:1a21:b0:4ca:9850:4dd8 with SMTP id
- 5614622812f47-504b57bbd0emr473506b6e.10.1791412708033; Wed, 07 Oct 2026
- 15:38:28 -0700 (PDT)
+        bh=vDZ3cTwxqjGw1b4UnPK3GokiygaHb1AoW5HXC6qbtc4=;
+        b=nVn9m6usWMvqvu6pmytYvN4m6afNuNPKAu1447mbjroyIS9uEwWJthciK/yMwOK4Gw
+         3zc91CMG0ggLZa98V5m2P1Dn/yqpU+E3RTwMaCHlAuU39fLYLEMVBPALaE0OWuVccLce
+         oBDb73VrUuz+4kZc+xjgyO2FfdB7gUIrgBhyWzHgaq7ahoFFykZC1dzW75HNmOUk+ONj
+         K9ScOE854fh3dJXOFstILA+55DWmYdixm51hHVoScU99xxnfQOT1oxYwoc5bMxPd7EBz
+         F8rGlReauvQ3Q4yKlF1HwpFZNU1YkHjwtSSP82CxVyPkUks1Odc8wq/MCf6IpbPCfiNQ
+         vWsA==
+X-Forwarded-Encrypted: i=1; AKwUvBy7Omk+xlu6CcxiimYDL7iynYt7Z47ghGV250T2vx4yVwCebTuGr77u5dDT+akpyaXYHDc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lbRP9o2fUXT/beaGbfaxAc9GEZKAw28iNG7GUJjXlU3qBxwYBg
+	V3MKfpWzEfh+B9Prwbo2+QDuynPZYMrrY+zthCRpckjzEuYdERMiZeYo3vItrNZCSmjNYUdbvLr
+	jBHUl/ryiW2LnemtNzqHWtzUqdY+UPvg=
+X-Gm-Gg: AYBFou2FoB5p3qOzFzfM3RBRxs+YJF3ASEqs0GFZ3VxHG3mI3n503bOySRbpQvlGx/L
+	9/ijaSHLcY+x1mZih3wjV1aLkt9u3O2n6ea8tx+mmHNjJBEFBX086Y+1pJSDF07LQJI28tBDuuQ
+	xvVeQUmv7lnpLPEMnUWV7h3dzzk9tJ7d0pWMBM2TXiHFABw7qaPCDv25139iRSpWyViZk6iT8+W
+	zwnddcEI4r2DmY+M+W2T07vLHOqlyvD4BYr1CXEDR3qWnbaAGLKdzPFGRa006ymNtk3nVx2iG8h
+	WpNDFvUYnRUchqsKZxJmF8PGI939SHCw4dB7xXvLsFG3APuXTO1cHYQ=
+X-Received: by 2002:a05:6808:3091:b0:4d5:27da:a496 with SMTP id
+ 5614622812f47-4fc46578fc2mr3900133b6e.48.1791413006632; Wed, 07 Oct 2026
+ 15:43:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261006192601.1875100-1-kuniyu@google.com> <20261006192601.1875100-6-kuniyu@google.com>
-In-Reply-To: <20261006192601.1875100-6-kuniyu@google.com>
+References: <20261006192601.1875100-1-kuniyu@google.com> <20261006192601.1875100-9-kuniyu@google.com>
+In-Reply-To: <20261006192601.1875100-9-kuniyu@google.com>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 7 Oct 2026 15:38:15 -0700
-X-Gm-Features: AclHuK_lWBEeBv6ps7ou-Z4Pk4-NURj4G_TRRW1ryhPrH584Hce6fOGQe4jabJ4
-Message-ID: <CAMB2axM17PR+6k9jyW+J+599in1zbnrV=vRxx_qBwYBmShF28Q@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 05/10] bpf: tcp: Check BPF_SOCK_OPS_TEST_FLAG()
- after cgroup_bpf_enabled(CGROUP_SOCK_OPS).
+Date: Wed, 7 Oct 2026 15:43:14 -0700
+X-Gm-Features: AclHuK-zqLiAP0MMvI13NtkINGyxCDygzMNTg_OOEX6e6HDhK58LW_vHwrQA4lg
+Message-ID: <CAMB2axPT7=34UkvddgK-dqvUsagpLWF5pkWp6Xom6PgHd3AP7A@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 08/10] bpf: mptcp: Don't support BPF_TCP_OPS_FLAG_RCVQ.
 To: Kuniyuki Iwashima <kuniyu@google.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -105,25 +104,17 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Oct 6, 2026 at 12:26=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.co=
 m> wrote:
 >
-> BPF_CGROUP_RUN_PROG_XXX() macros guard __cgroup_bpf_run_filter_XXX()
-> with cgroup_bpf_enabled().
+> The next patch exposes a new kfunc calling __tcp_set_rcvlowat()
+> to bpf_tcp_ops.
 >
-> However, even when no SOCK_OPS prog is attached, callers still
-> initialise struct bpf_sock_ops_kern (memset(), etc.) or evaluate
-> BPF_SOCK_OPS_TEST_FLAG(), which loads tp->bpf_sock_ops_cb_flags
-> from a cold cacheline near the end of struct tcp_sock.
+> MPTCP has its own sock->ops->set_rcvlowat() / mptcp_set_rcvlowat(),
+> so we should not allow calling __tcp_set_rcvlowat() on MPTCP
+> subflows.
 >
-> Similar to bpf_tcp_ops, let's check cgroup_bpf_enabled() before
-> BPF_SOCK_OPS_TEST_FLAG() and struct bpf_sock_ops_kern setup, and
-> rename BPF_CGROUP_RUN_PROG_SOCK_OPS{,_SK}() with __ prefix.
+> Let's disable BPF_TCP_OPS_FLAG_RCVQ for MPTCP for now.
 >
-> Since all direct callers of tcp_call_bpf() pass 0 and NULL for
-> nargs and args, they can be folded into the new tcp_call_bpf()
-> macro.
->
-> All callers of tcp_call_bpf_{2,3}arg() check BPF_SOCK_OPS_TEST_FLAG()
-> and do not need the return value.  These are replaced with the new
-> tcp_call_bpf_flag() macro.
+> If needed in the future, bpf_tcp_ops_set_rcvlowat() could be
+> extended to properly support MPTCP.
 >
 > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 
