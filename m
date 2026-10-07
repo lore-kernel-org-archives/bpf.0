@@ -1,64 +1,64 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD354E7801
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 19:59:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76524E77FA
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 19:59:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791403186; cv=none; b=TL3hf8uBWsIqKLHBNunJNySzTP0nRZTi6cfyRV89qjIhEWsyizrOoPCMCTidkXQ32gwHKaSoJy91N5NRye4ZA8pkXDwjNjdZr6uZwlJty5M+bI6FAZyWA0XSF/W5BPL7EPpUSMSVkuz2/DNe91ewSqlRM9QTfrd8viNVXxDLQ4c=
+	t=1791403186; cv=none; b=J5SDYjPVb0lpb1VB1tJf1OjJC42VcLwmC7ik0gmz+3WPMCplDB0jDqERj7FtXLVVk/YH4j9WX03hMjYG1KgYx1HGx3JcUYFOw0xFB1WvQe88mK0GGMyAe3N+4E4aG2Gjtz9MkgHzeCXNBj9/CCYiq+qJL3OlYtfanDG4TBRj2AM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791403186; c=relaxed/simple;
-	bh=TQc7SZqkDBQCFG0lnjA0nag40gg+xmh/Fn7XCu4lSh4=;
+	bh=EK1zeNb8sTfIf36JzFiBKb5UW3sCxWtotr6m5+yejkc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XV38aVTwNtNapoBwgmRTZTz2CAERX15dLJ20AXsOKpx9i0qqXzbRebIs6I7pmvooWSmjhXBmUP9FoduWVlPRzmy9lOE2QTcoMK2L8JMll7guKcpM2KK7sQaGntybne0veoPUTgsNYRaRpnS9OBm50ZpmgltOtg4cHMnFv9+9viU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=KFjM4r3H; arc=none smtp.client-ip=209.85.161.47
+	 MIME-Version; b=TobzFyM6E7gqd60F5xdsuUm8+9ZtseDzo/lMAZCFZZDRQXiDZ3bLl+dpGLFk8d5c3ClCkRusu4S73hNEdVQKWIyBJvTFDxyMmzuK3jCu+LW5AuN8hpVD6QgJv7o+dGdb9/xKuRIfZWDVpEy47qRKU8j6aon0hlCpCqIpX6QPZYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=oeh1CS9b; arc=none smtp.client-ip=209.85.160.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="KFjM4r3H"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6b19e291cc6so1839616eaf.2
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 12:59:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="oeh1CS9b"
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-49e5f85ce89so920526fac.0
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 12:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hammerspace.com; s=google; t=1791403180; x=1792007980; darn=vger.kernel.org;
+        d=hammerspace.com; s=google; t=1791403182; x=1792007982; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6qc+z2A1CDAkEk5V1tYJLxetVFb6K7NEYZRE6T4VBck=;
-        b=KFjM4r3HYBOh/3Bj1nDb98nxlCkTDadnHPzX79UBTWin0xTBwneAXL3BoURGULU9Qj
-         5BoxMYZSmGcFhae6W/7x9nnQyxjGysjWHEGxmaLGmTlbJgiwbO9QfE7/y64CHCQgibx8
-         nz8HjI8WwoMYlXdnd90+mCcmQQ/HPtpp+OuHNIiBVfmSk9WCOjN4xKSJ+tAr4lrSXZp5
-         x8cZH1E/CohJzUx7QRy1sIrfeedd4gTNKyIsqLD1n1SiWmQC4oelQ+uCfChzir//8jm1
-         pM0KGc90aCLlSDuXNs/N8yyiH79EoSc2kFUQ6F/pUb5QpRbbFI73q0x+XQlHOoVE+68t
-         1HoA==
+        bh=M2QNpsCC1cNKN14sgObo10I1kJuux/DlvVD2dSC+OQ4=;
+        b=oeh1CS9bxCX6KW7RN+JpiwgO2qWvAD1xywlLqEfgN83KP57vZTFyUC1qmYTi/9D4Uj
+         myTue6tHyUxiCTQcmzBZO4d/zsaqY8gb/9vALGv65XY6llJ5JsFUaDayE0HTBjmBPZu+
+         iYQptDXr1HvluFk2kmhj5IcyLvEWchJ7UWOZLhSqsa70R6gv1Ugu5vceLTVL03myHT8/
+         kf7VZ+XLT2tA5HTZK6OxLEAfOExRgSEwG/Z0w24LVwaOx0qkyXHSofZ1IO9OM1ADqwET
+         Me9A2PNG8E1gIip/FzcrR8tVlhlMK0yq8n5Shma9OmYQBh8ZJ9Bfxp1ThHhpCZTEgL0t
+         V8Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791403180; x=1792007980;
+        d=1e100.net; s=20260707; t=1791403182; x=1792007982;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6qc+z2A1CDAkEk5V1tYJLxetVFb6K7NEYZRE6T4VBck=;
-        b=b6kItVMfSpwaw4/li5Tbne9o34eZt021umZLKa3hc/DXkMCEqtUMnFJ2VxgdpFpyzk
-         3bdyUDZo/wdOtA1+VRqaPYTZUUYXbJBFp/+QGwGbsH/laypBYYIqzhXDzV48mGHyKIQo
-         G8ii83em8TEi8nhi4ZcEftI9ouTYB9lAd8Vatno1ikS0Zk9xvRzrYfCk2teoyIBWEoeV
-         A6m87XIacsCmkpXu+mDbIKLg2SDS/PmwYIm9wDAZsoEcy1Bhk8cz55MGETC+G4sjRgzo
-         HJDARuAC+AfNj34JD0jh08X/hXGKPgrzAZzkZ+Q2ee4Zgt22R2lJ58UwcJjKApMJ7PDF
-         4qqw==
-X-Forwarded-Encrypted: i=1; AKwUvBxKSjgit/Vwrg6emqE9JOMUgArQ5Bl0hTRGTNO2HRyi4IORz5VNzrIwD2saHN04LrcIYLc=@vger.kernel.org
-X-Gm-Message-State: AFuF++nim2qAseHJNgqzcG6TEezuM/H02FUcuty0qQxDt6fWr73z7D0l
-	VaRyBvpou0BtoAC/NedNC8G4vqjsfrgZB9r+JWVrtXnmyz0TVfzJ/V1apRBcvYx/FUM=
-X-Gm-Gg: AYBFou359NxPdJTmZt5mJbkrGb1KNe9ZV7tJCUwh6X+b3wB4ANd7iOf9113NoPzeqUm
-	72Q+H6otWY6bc2SOlWpdB6O5WlBEojU+VBerKGzXjxaxU5aUXfYI/CSVt60MNeUXVuQ2Uw+IIXA
-	9e/YksyqS/Zr13qWK4vtnXDxeiT9Va7Bpn6sWHfIrqn0ujWmZyAyDiOxzM10JF92cJ1nGLWMjEu
-	9CwK5xgro1GX2A4QuHDRSkecI3tDNsqTfcaC2MT3iSNKRol9m0xdiCe8msaICEGBvZoi4O+3yn3
-	xrQojdFEBOl7T5x0zoo2CAVAlY40MDjdgm8vsA+TUOdxyLNGcOy2yp3NjddFsgFYv6jDpNFq2uX
-	V/voOIlnR5zGIhi+bP0HBpEqS+V/CO8LKfg0rhAKr6ySNKH4Py7H8Ll0ckiub8AubILEB89oNWs
-	EZwQTljme22Yfj7m2Fgr2c3RVxyOF1bki/9mATTNdOmhutpU23hxgnh3zAt9n6LjWxrEVE+lR6s
-	ARIyDFXhioWRgoaunWxctpGTFRB+vgRawAKA3HS4lk=
-X-Received: by 2002:a05:6820:16a2:b0:6dd:d8be:118c with SMTP id 006d021491bc7-6e7a9258542mr3146448eaf.78.1791403179471;
-        Wed, 07 Oct 2026 12:59:39 -0700 (PDT)
+        bh=M2QNpsCC1cNKN14sgObo10I1kJuux/DlvVD2dSC+OQ4=;
+        b=x8pZRSg1h/MBptsfFvkQQS+XdknwwQinVS7wZVgjXTRlrjvuSo5qALsAQASSm7c593
+         iTnShiOefYohD6Vi0mZGBxjRVWiGML9LQQ7t4tK1ZYPtt0EjAqqC9vEplvfbtvVhegs2
+         qEA0TA59ovDhIiuBAf+wjaYOuJAQH2RQ+1KaYhbUbQdU040OzFtTo4k/TZcFLaI0isyP
+         g3/tIvz6G3k1B2RMvTJihtGvorjFWrKrlTOCjK/vXI4UnzOfY9o3eis4dYoM/mzSRbpn
+         S3t/cYM0wHQKpUCQR9vdVi3faLqFXhnKjUblXBUC18LORNeSrmPRncrnq8sH3OhDoLnR
+         jNtw==
+X-Forwarded-Encrypted: i=1; AKwUvByD0yksjhS0os5TEeplFyIXncjN+yOSyq6bJHIMEPGIpe4vvx19JJvwRIZJN+ZF1noHyAE=@vger.kernel.org
+X-Gm-Message-State: AFuF++kmY5My1JvM0/kUd68uVv7y/UZhejpbCIfFrS/0beUXFMM/aVKt
+	AneB/13poDjSceBuTiNOSczS/Diqm3DJ2nCPDC2Nk5r/tlwGbJIU5Ibmi8DXqf86krY=
+X-Gm-Gg: AYBFou1wPVvljm79n9hNRjEg2xTwRjCAvKWjlcSoWpqnD7kNcDb4b8GOrgkDETYEpH2
+	ET77iZ+WCLzwRWcV3P1mPbursI7hGF5Vj8R4pbw3JIfLkvrgTdcujgaEcHJlHODwQaWCAX3xEuW
+	ARRsG18MqHPUPg5Aii1wbl0ywbKlPtzdg4Y7sm5A0+WUTQwtzqVkkZc7sf7Fj/OMCJA4K71+bg0
+	tNLNRM5mpCNHnEjmDgsIYnnr3VnsXSLmVRryE90Ft0OqZwcK81u2Ebjbq0FY6FDTw2q80oIA7gQ
+	v6OzQbuKg0Czai45c1vAr5mbV6bCL7SGMtn3PF6J0w8N6AlPCQcI4qj4Q+iM4l5AVNPh4rQXZih
+	/dSEt0Pdvx15IMvTkW47cJ3dSgAPolp7pqiEpyQdSS9o5O6h6TaX/awB0npL5lujzYXpzfnrTWa
+	dDrcDfOpawZdnj4DJuULlmTPqn9c7ZO9jQKoiWXe02pYSfxhFdu9F1oKKSWmuFGdMzeIqYBkEtJ
+	zCsyVkv/Utsn6toHJ0ZEN1YsZ9YRBiFoY5kyvwmlA==
+X-Received: by 2002:a05:6870:46a8:b0:49d:cc3f:a9e1 with SMTP id 586e51a60fabf-4a2595ec6e9mr3051906fac.45.1791403182288;
+        Wed, 07 Oct 2026 12:59:42 -0700 (PDT)
 Received: from bcodding.csb.hammerspace.com ([66.97.168.37])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a274c9c520sm1084285fac.16.2026.10.07.12.59.38
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a274c9c520sm1084285fac.16.2026.10.07.12.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 12:59:39 -0700 (PDT)
+        Wed, 07 Oct 2026 12:59:41 -0700 (PDT)
 From: Benjamin Coddington <ben.coddington@hammerspace.com>
 To: Chuck Lever <cel@kernel.org>,
 	Jeff Layton <jlayton@kernel.org>,
@@ -67,9 +67,9 @@ Cc: linux-nfs@vger.kernel.org,
 	Daire Byrne <daire@dneg.com>,
 	bpf@vger.kernel.org,
 	Martin KaFai Lau <martin.lau@linux.dev>
-Subject: [PATCH RFC v2 2/9] SUNRPC: dispatch ready transports round-robin across clients
-Date: Wed,  7 Oct 2026 15:59:27 -0400
-Message-ID: <630a7f082a6926159e6f25f333b1420af711de31.1791402701.git.bcodding@hammerspace.com>
+Subject: [PATCH RFC v2 3/9] SUNRPC: add a BPF struct_ops hook to classify accepted transports
+Date: Wed,  7 Oct 2026 15:59:28 -0400
+Message-ID: <e4ad144ab880f7fffba5b0b27adb11710098fc01.1791402701.git.bcodding@hammerspace.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1791402701.git.bcodding@hammerspace.com>
 References: <cover.1791402701.git.bcodding@hammerspace.com>
@@ -83,225 +83,393 @@ Content-Transfer-Encoding: 8bit
 
 From: Benjamin Coddington <bcodding@hammerspace.com>
 
-A pool keeps its ready transports in one FIFO and serves one RPC per
-turn, so a peer is served in proportion to how many of its connections
-are backlogged.  A client with K connections, or a deep NFSv4.1 slot
-table spread over nconnect transports, takes K turns for every one a
-single-connection client gets, and the single-connection client's
-latency grows with everyone else's connection count.
+Which transports should share turns at a service is site policy: one
+server wants every host served alike, another wants a set of bulk
+movers to count as one peer while its interactive clients are served
+per host, and a server behind a NAT or a re-export gateway wants the
+gateway's address split some other way.  The kernel has no good basis
+for choosing, and the address table this started as would need its own
+configuration interface and a userspace tool to fill it.
 
-Queue ready transports on their client instead, and have the pool
-dispatch round-robin across clients: take the client at the head of
-the pool's client queue, dispatch one of its transports, and put the
-client back at the tail if it has more.  Every client with work queued
-gets one dispatch per round however many connections it holds, and a
-client's wait is bounded by the number of busy clients rather than by
-the number of busy connections.  Within a client, transports are still
-served in FIFO order.
+Let the administrator supply the classification instead.  Add
+struct svc_classifier, a BPF struct_ops with one callback that is
+handed each accepted svc_xprt, in process context with its peer and
+local addresses set, and returns an SVC_CLASS_* value: SVC_CLASS_NONE
+to leave the transport on the anonymous client, a class number shared
+by every transport in that class, or a class number with
+SVC_CLASS_PER_ADDR set for one client per peer address within the
+class.  A program keyed on an address-prefix map does the whole job in
+a few lines.  The callback runs under rcu_read_lock(), so sleepable
+programs are refused.
 
-Enqueue stays lockless: the transport goes on the client's per-pool
-lwq, and the client goes on the pool's lwq the first time one of its
-transports becomes ready, guarded by a per-pool SVC_CP_QUEUED bit that
-the dequeuing thread clears when it finds the client empty.  The bit is
-cleared before the client's queue is re-tested, so an enqueue that saw
-it set and did not queue the client is caught by the re-test.  Dequeue
-takes one more lwq spinlock than before.  Control events (XPT_CONN,
-XPT_CLOSE, XPT_HANDSHAKE) take turns like data: a close queued behind
-k of its own client's transports is dispatched k rounds later, where
-it used to wait behind every queued transport in the pool.
+Attaching a classifier (a struct_ops link) binds it to the attaching
+task's network namespace, one per namespace and one namespace per
+instance; a second attach fails with -EBUSY, a link update replaces
+it, detaching or closing the link removes it, and a namespace that
+exits leaves its link with nothing behind it.  The classifier applies
+to every RPC service in the namespace; a program that cares which one
+reads xpt_server->sv_name.  Transports keep the class they were given
+at accept, so a change of classifier affects new connections only.
 
-Network namespace teardown walks the pool's clients: those of the
-namespace being destroyed are drained and their transports deleted; the
-anonymous client, which may hold listeners from several namespaces, is
-filtered per transport; the rest are re-queued and a thread is woken.
+With no classifier attached, or with CONFIG_SUNRPC_BPF_CLASSIFY off,
+svc_classify() returns SVC_CLASS_NONE and nothing changes.  The
+struct_ops registers from sunrpc's module init; a module without BTF
+registers nothing, and the BPF core says so when the configuration
+promised module BTF.
 
-While nothing returns a class from svc_classify(), every transport is
-on the anonymous client, a pool's client queue holds one entry, and
-dispatch is in today's FIFO order.
-
-Suggested-by: NeilBrown <neil@brown.name>
 Signed-off-by: Benjamin Coddington <bcodding@hammerspace.com>
 ---
- include/linux/sunrpc/svc.h |  2 +-
- net/sunrpc/svc.c           |  2 +-
- net/sunrpc/svc_xprt.c      | 97 +++++++++++++++++++++++++++++---------
- 3 files changed, 77 insertions(+), 24 deletions(-)
+ include/linux/sunrpc/svc.h      |  24 ++++
+ include/linux/sunrpc/svc_xprt.h |  15 +++
+ net/sunrpc/Kconfig              |  12 ++
+ net/sunrpc/Makefile             |   1 +
+ net/sunrpc/netns.h              |   4 +
+ net/sunrpc/sunrpc_syms.c        |   4 +
+ net/sunrpc/svc_classify.c       | 200 ++++++++++++++++++++++++++++++++
+ 7 files changed, 260 insertions(+)
+ create mode 100644 net/sunrpc/svc_classify.c
 
 diff --git a/include/linux/sunrpc/svc.h b/include/linux/sunrpc/svc.h
-index e45f4fdea20b..a27dc2942167 100644
+index a27dc2942167..5d8e35c5379e 100644
 --- a/include/linux/sunrpc/svc.h
 +++ b/include/linux/sunrpc/svc.h
-@@ -38,7 +38,7 @@ struct svc_pool {
- 	unsigned int		sp_nrthreads;	/* # of threads currently running in pool */
- 	unsigned int		sp_nrthrmin;	/* Min number of threads to run per pool */
- 	unsigned int		sp_nrthrmax;	/* Max requested number of threads in pool */
--	struct lwq		sp_xprts;	/* pending transports */
-+	struct lwq		sp_clients;	/* clients with ready transports */
- 	struct list_head	sp_all_threads;	/* all server threads */
- 	struct llist_head	sp_idle_threads; /* idle server threads */
+@@ -96,6 +96,30 @@ struct svc_client {
+ #define SVC_CLASS_NONE		0
+ #define SVC_CLASS_PER_ADDR	BIT_U32(31)
  
-diff --git a/net/sunrpc/svc.c b/net/sunrpc/svc.c
-index cb2b7caaa627..4adf113d067b 100644
---- a/net/sunrpc/svc.c
-+++ b/net/sunrpc/svc.c
-@@ -477,7 +477,7 @@ __svc_create(struct svc_program *prog, int nprogs, struct svc_stat *stats,
- 				i, serv->sv_name);
- 
- 		pool->sp_id = i;
--		lwq_init(&pool->sp_xprts);
-+		lwq_init(&pool->sp_clients);
- 		INIT_LIST_HEAD(&pool->sp_all_threads);
- 		init_llist_head(&pool->sp_idle_threads);
- 
-diff --git a/net/sunrpc/svc_xprt.c b/net/sunrpc/svc_xprt.c
-index c7da55335506..735f4d92bf5d 100644
---- a/net/sunrpc/svc_xprt.c
-+++ b/net/sunrpc/svc_xprt.c
-@@ -627,6 +627,7 @@ static bool svc_xprt_ready(struct svc_xprt *xprt)
-  */
- void svc_xprt_enqueue(struct svc_xprt *xprt)
- {
-+	struct svc_client_pool *cp;
- 	struct svc_pool *pool;
- 
- 	if (!svc_xprt_ready(xprt))
-@@ -641,25 +642,56 @@ void svc_xprt_enqueue(struct svc_xprt *xprt)
- 		return;
- 
- 	pool = svc_pool_for_cpu(xprt->xpt_server);
-+	cp = &xprt->xpt_client->cl_pool[pool->sp_id];
- 
- 	percpu_counter_inc(&pool->sp_sockets_queued);
- 	xprt->xpt_qtime = ktime_get();
--	lwq_enqueue(&xprt->xpt_ready, &pool->sp_xprts);
-+	lwq_enqueue(&xprt->xpt_ready, &cp->cp_xprts);
-+	if (!test_and_set_bit(SVC_CP_QUEUED, &cp->cp_flags))
-+		lwq_enqueue(&cp->cp_ready, &pool->sp_clients);
- 
- 	svc_pool_wake_idle_thread(pool);
- }
- EXPORT_SYMBOL_GPL(svc_xprt_enqueue);
- 
- /*
-- * Dequeue the first transport, if there is one.
-+ * Put @cp back on the pool's client queue if it still has ready
-+ * transports.  Otherwise clear SVC_CP_QUEUED and look once more: an
-+ * enqueue that found the bit set has left the client for us to queue.
++#define SVC_CLASSIFIER_NAME_MAX	16
++
++struct svc_xprt;
++
++/**
++ * struct svc_classifier - BPF struct_ops that classifies accepted transports
++ * @name: a label for the instance, set by the program and not interpreted
++ * @classify: called once per accepted transport, in process context, under
++ *	rcu_read_lock(), with the peer and local addresses set; returns an
++ *	SVC_CLASS_* value
++ *
++ * Attaching one binds it to the attaching task's network namespace, where
++ * it classifies every service's transports until it is detached; one per
++ * namespace.  Transports keep the class they were given when accepted.
 + */
-+static void svc_client_pool_requeue(struct svc_pool *pool,
-+				    struct svc_client_pool *cp)
++struct svc_classifier {
++	/* private: */
++	struct net	*net;
++
++	/* public: */
++	char		name[SVC_CLASSIFIER_NAME_MAX];
++	u32		(*classify)(const struct svc_xprt *xprt);
++};
++
+ 
+ struct svc_rqst;
+ 
+diff --git a/include/linux/sunrpc/svc_xprt.h b/include/linux/sunrpc/svc_xprt.h
+index d4f6dd5c8db3..10c18e948b42 100644
+--- a/include/linux/sunrpc/svc_xprt.h
++++ b/include/linux/sunrpc/svc_xprt.h
+@@ -180,11 +180,26 @@ void	svc_xprt_destroy_all(struct svc_serv *serv, struct net *net,
+ void	svc_xprt_received(struct svc_xprt *xprt);
+ 
+ /* The class of an accepted transport; SVC_CLASS_* in svc.h. */
++#if IS_ENABLED(CONFIG_SUNRPC_BPF_CLASSIFY)
++u32	svc_classify(const struct svc_xprt *xprt);
++void	svc_classifier_exit_net(struct net *net);
++int	svc_classifier_init_module(void);
++#else
+ static inline u32 svc_classify(const struct svc_xprt *xprt)
+ {
+ 	return SVC_CLASS_NONE;
+ }
+ 
++static inline void svc_classifier_exit_net(struct net *net)
 +{
-+	if (!lwq_empty(&cp->cp_xprts)) {
-+		lwq_enqueue(&cp->cp_ready, &pool->sp_clients);
++}
++
++static inline int svc_classifier_init_module(void)
++{
++	return 0;
++}
++#endif
++
+ void	svc_xprt_enqueue(struct svc_xprt *xprt);
+ void	svc_xprt_put(struct svc_xprt *xprt);
+ void	svc_xprt_copy_addrs(struct svc_rqst *rqstp, struct svc_xprt *xprt);
+diff --git a/net/sunrpc/Kconfig b/net/sunrpc/Kconfig
+index e7808e5714dc..2b96ac8d1ba2 100644
+--- a/net/sunrpc/Kconfig
++++ b/net/sunrpc/Kconfig
+@@ -16,6 +16,18 @@ config SUNRPC_SWAP
+ 	bool
+ 	depends on SUNRPC
+ 
++config SUNRPC_BPF_CLASSIFY
++	bool "BPF classification of RPC service transports"
++	depends on SUNRPC && BPF_SYSCALL && BPF_JIT
++	default y
++	help
++	  Let a BPF struct_ops program attached in a network namespace say
++	  which accepted transports of an RPC service (NFS, NLM, the NFSv4
++	  callback service) share turns at the service's threads.  With no
++	  program attached, dispatch is unchanged.
++
++	  If unsure, say Y.
++
+ config RPCSEC_GSS_KRB5
+ 	tristate "Secure RPC: Kerberos V mechanism"
+ 	depends on SUNRPC && CRYPTO
+diff --git a/net/sunrpc/Makefile b/net/sunrpc/Makefile
+index 96727df3aa85..fdcb860b616e 100644
+--- a/net/sunrpc/Makefile
++++ b/net/sunrpc/Makefile
+@@ -19,3 +19,4 @@ sunrpc-$(CONFIG_SUNRPC_DEBUG) += debugfs.o
+ sunrpc-$(CONFIG_SUNRPC_BACKCHANNEL) += backchannel_rqst.o
+ sunrpc-$(CONFIG_PROC_FS) += stats.o
+ sunrpc-$(CONFIG_SYSCTL) += sysctl.o
++sunrpc-$(CONFIG_SUNRPC_BPF_CLASSIFY) += svc_classify.o
+diff --git a/net/sunrpc/netns.h b/net/sunrpc/netns.h
+index 4efb5f28d881..ed01bc5296dd 100644
+--- a/net/sunrpc/netns.h
++++ b/net/sunrpc/netns.h
+@@ -34,6 +34,10 @@ struct sunrpc_net {
+ 	atomic_t pipe_users;
+ 	struct proc_dir_entry *use_gssp_proc;
+ 	struct proc_dir_entry *gss_krb5_enctypes;
++
++#if IS_ENABLED(CONFIG_SUNRPC_BPF_CLASSIFY)
++	struct svc_classifier __rcu *svc_classifier;
++#endif
+ };
+ 
+ extern unsigned int sunrpc_net_id;
+diff --git a/net/sunrpc/sunrpc_syms.c b/net/sunrpc/sunrpc_syms.c
+index 1a3884a0376a..4fdb676baa30 100644
+--- a/net/sunrpc/sunrpc_syms.c
++++ b/net/sunrpc/sunrpc_syms.c
+@@ -74,6 +74,7 @@ static __net_exit void sunrpc_exit_net(struct net *net)
+ {
+ 	struct sunrpc_net *sn = net_generic(net, sunrpc_net_id);
+ 
++	svc_classifier_exit_net(net);
+ 	rpc_pipefs_exit_net(net);
+ 	unix_gid_cache_destroy(net);
+ 	ip_map_cache_destroy(net);
+@@ -122,6 +123,9 @@ init_sunrpc(void)
+ #endif
+ 	svc_init_xprt_sock();	/* svc sock transport */
+ 	init_socket_xprt();	/* clnt sock transport */
++	err = svc_classifier_init_module();
++	if (err)
++		pr_warn("RPC: no BPF transport classifier (%d)\n", err);
+ 	return 0;
+ 
+ out6:
+diff --git a/net/sunrpc/svc_classify.c b/net/sunrpc/svc_classify.c
+new file mode 100644
+index 000000000000..aa63e0a3cb95
+--- /dev/null
++++ b/net/sunrpc/svc_classify.c
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * BPF struct_ops classification of accepted RPC service transports.
++ */
++
++#include <linux/bpf.h>
++#include <linux/bpf_verifier.h>
++#include <linux/btf.h>
++#include <linux/nsproxy.h>
++#include <linux/sunrpc/svc.h>
++#include <linux/sunrpc/svc_xprt.h>
++
++#include "netns.h"
++
++/* Orders attach, detach and replacement against namespace exit. */
++static DEFINE_SPINLOCK(svc_classifier_lock);
++
++/**
++ * svc_classify - ask the namespace's classifier for a transport's class
++ * @xprt: an accepted transport, peer and local addresses set
++ *
++ * Return: an SVC_CLASS_* value; %SVC_CLASS_NONE when no classifier is
++ * attached in the transport's network namespace.
++ */
++u32 svc_classify(const struct svc_xprt *xprt)
++{
++	struct sunrpc_net *sn = net_generic(xprt->xpt_net, sunrpc_net_id);
++	struct svc_classifier *c;
++	u32 class = SVC_CLASS_NONE;
++
++	rcu_read_lock();
++	c = rcu_dereference(sn->svc_classifier);
++	if (c)
++		class = c->classify(xprt);
++	rcu_read_unlock();
++	return class;
++}
++
++/* Caller holds svc_classifier_lock. */
++static void svc_classifier_detach(struct svc_classifier *c)
++{
++	struct sunrpc_net *sn;
++
++	if (!c->net)
 +		return;
-+	}
-+	clear_bit(SVC_CP_QUEUED, &cp->cp_flags);
-+	/* the clear is visible before the re-test; see svc_xprt_enqueue() */
-+	smp_mb__after_atomic();
-+	if (!lwq_empty(&cp->cp_xprts) &&
-+	    !test_and_set_bit(SVC_CP_QUEUED, &cp->cp_flags))
-+		lwq_enqueue(&cp->cp_ready, &pool->sp_clients);
++	sn = net_generic(c->net, sunrpc_net_id);
++	RCU_INIT_POINTER(sn->svc_classifier, NULL);
++	c->net = NULL;
 +}
 +
-+/*
-+ * Dequeue the next transport: one from the client at the head of the
-+ * pool's client queue, which then goes to the tail if it has more.
-  */
- static struct svc_xprt *svc_xprt_dequeue(struct svc_pool *pool)
- {
--	struct svc_xprt	*xprt = NULL;
-+	struct svc_client_pool *cp;
-+	struct svc_xprt	*xprt;
- 
--	xprt = lwq_dequeue(&pool->sp_xprts, struct svc_xprt, xpt_ready);
--	if (xprt)
--		svc_xprt_get(xprt);
-+	do {
-+		cp = lwq_dequeue(&pool->sp_clients, struct svc_client_pool,
-+				 cp_ready);
-+		if (!cp)
-+			return NULL;
-+		xprt = lwq_dequeue(&cp->cp_xprts, struct svc_xprt, xpt_ready);
-+		svc_client_pool_requeue(pool, cp);
-+	} while (!xprt);
-+	svc_xprt_get(xprt);
- 	return xprt;
- }
- 
-@@ -886,7 +918,7 @@ svc_thread_should_sleep(struct svc_rqst *rqstp)
- 		return false;
- 
- 	/* was a socket queued? */
--	if (!lwq_empty(&pool->sp_xprts))
-+	if (!lwq_empty(&pool->sp_clients))
- 		return false;
- 
- 	/* are we shutting down? */
-@@ -1338,28 +1370,49 @@ static int svc_close_list(struct svc_serv *serv, struct list_head *xprt_list, st
- 	return ret;
- }
- 
--static void svc_clean_up_xprts(struct svc_serv *serv, struct net *net)
-+/*
-+ * Delete the ready transports of @net that are queued on @cp; the rest go
-+ * back in their order.
++/**
++ * svc_classifier_exit_net - forget the classifier of a dying namespace
++ * @net: the network namespace being torn down
++ *
++ * The attached link, if any, survives with nothing behind it.
 + */
-+static void svc_client_pool_clean(struct svc_client_pool *cp, struct net *net)
- {
-+	struct llist_node *q, **t1, *t2;
- 	struct svc_xprt *xprt;
++void svc_classifier_exit_net(struct net *net)
++{
++	struct sunrpc_net *sn = net_generic(net, sunrpc_net_id);
++	struct svc_classifier *c;
 +
-+	q = lwq_dequeue_all(&cp->cp_xprts);
-+	lwq_for_each_safe(xprt, t1, t2, &q, xpt_ready) {
-+		if (xprt->xpt_net == net) {
-+			set_bit(XPT_CLOSE, &xprt->xpt_flags);
-+			svc_delete_xprt(xprt);
-+			xprt = NULL;
-+		}
-+	}
-+	if (q)
-+		lwq_enqueue_batch(q, &cp->cp_xprts);
++	spin_lock(&svc_classifier_lock);
++	c = rcu_dereference_protected(sn->svc_classifier,
++				      lockdep_is_held(&svc_classifier_lock));
++	if (c)
++		svc_classifier_detach(c);
++	spin_unlock(&svc_classifier_lock);
 +}
 +
-+static void svc_clean_up_xprts(struct svc_serv *serv, struct net *net)
++static int svc_classifier_reg(void *kdata, struct bpf_link *link)
 +{
- 	int i;
- 
- 	for (i = 0; i < svc_serv_nrpools(serv); i++) {
- 		struct svc_pool *pool = &serv->sv_pools[i];
--		struct llist_node *q, **t1, *t2;
--
--		q = lwq_dequeue_all(&pool->sp_xprts);
--		lwq_for_each_safe(xprt, t1, t2, &q, xpt_ready) {
--			if (xprt->xpt_net == net) {
--				set_bit(XPT_CLOSE, &xprt->xpt_flags);
--				svc_delete_xprt(xprt);
--				xprt = NULL;
--			}
--		}
--
--		if (q) {
--			lwq_enqueue_batch(q, &pool->sp_xprts);
--			svc_pool_wake_idle_thread(pool);
-+		struct svc_client_pool *cp;
-+		struct svc_client *cl;
-+		struct llist_node *q;
++	struct svc_classifier *c = kdata;
++	struct net *net = current->nsproxy->net_ns;
++	struct sunrpc_net *sn = net_generic(net, sunrpc_net_id);
++	int err = 0;
 +
-+		q = lwq_dequeue_all(&pool->sp_clients);
-+		while (q) {
-+			cp = container_of(q, struct svc_client_pool, cp_ready.node);
-+			q = q->next;
-+			/* Deleting the last transport frees the client. */
-+			cl = svc_client_get(cp->cp_client);
-+			if (cl->cl_net == net || cl == serv->sv_anon_client)
-+				svc_client_pool_clean(cp, net);
-+			svc_client_pool_requeue(pool, cp);
-+			svc_client_put(serv, cl);
- 		}
-+		svc_pool_wake_idle_thread(pool);
- 	}
- }
- 
++	if (!link)
++		return -EOPNOTSUPP;
++
++	spin_lock(&svc_classifier_lock);
++	/* one namespace per classifier, one classifier per namespace */
++	if (c->net || rcu_access_pointer(sn->svc_classifier)) {
++		err = -EBUSY;
++	} else {
++		c->net = net;
++		rcu_assign_pointer(sn->svc_classifier, c);
++	}
++	spin_unlock(&svc_classifier_lock);
++	return err;
++}
++
++static void svc_classifier_unreg(void *kdata, struct bpf_link *link)
++{
++	spin_lock(&svc_classifier_lock);
++	svc_classifier_detach(kdata);
++	spin_unlock(&svc_classifier_lock);
++	synchronize_rcu();
++}
++
++static int svc_classifier_update(void *kdata, void *old_kdata,
++				 struct bpf_link *link)
++{
++	struct svc_classifier *c = kdata, *old = old_kdata;
++	struct sunrpc_net *sn;
++	int err = 0;
++
++	if (c == old)
++		return 0;
++
++	spin_lock(&svc_classifier_lock);
++	if (c->net) {
++		err = -EBUSY;
++	} else if (!old->net) {
++		err = -ENOENT;
++	} else {
++		c->net = old->net;
++		old->net = NULL;
++		sn = net_generic(c->net, sunrpc_net_id);
++		rcu_assign_pointer(sn->svc_classifier, c);
++	}
++	spin_unlock(&svc_classifier_lock);
++	if (!err)
++		synchronize_rcu();
++	return err;
++}
++
++static int svc_classifier_validate(void *kdata)
++{
++	struct svc_classifier *c = kdata;
++
++	return c->classify ? 0 : -EINVAL;
++}
++
++/* classify() runs under rcu_read_lock() */
++static int svc_classifier_check_member(const struct btf_type *t,
++				       const struct btf_member *member,
++				       const struct bpf_prog *prog)
++{
++	return prog->sleepable ? -EINVAL : 0;
++}
++
++static int svc_classifier_init_member(const struct btf_type *t,
++				      const struct btf_member *member,
++				      void *kdata, const void *udata)
++{
++	const struct svc_classifier *uc = udata;
++	struct svc_classifier *kc = kdata;
++	u32 moff = __btf_member_bit_offset(t, member) / 8;
++
++	if (moff == offsetof(struct svc_classifier, name)) {
++		if (bpf_obj_name_cpy(kc->name, uc->name, sizeof(uc->name)) <= 0)
++			return -EINVAL;
++		return 1;
++	}
++	return 0;
++}
++
++static int svc_classifier_init(struct btf *btf)
++{
++	return 0;
++}
++
++static u32 __svc_classifier_stub_classify(const struct svc_xprt *xprt)
++{
++	return SVC_CLASS_NONE;
++}
++
++static struct svc_classifier __svc_classifier_stubs = {
++	.classify	= __svc_classifier_stub_classify,
++};
++
++static const struct bpf_func_proto *
++svc_classifier_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	return bpf_base_func_proto(func_id, prog);
++}
++
++static const struct bpf_verifier_ops svc_classifier_verifier_ops = {
++	.get_func_proto		= svc_classifier_func_proto,
++	.is_valid_access	= bpf_tracing_btf_ctx_access,
++};
++
++static struct bpf_struct_ops bpf_svc_classifier_ops = {
++	.verifier_ops	= &svc_classifier_verifier_ops,
++	.init		= svc_classifier_init,
++	.check_member	= svc_classifier_check_member,
++	.init_member	= svc_classifier_init_member,
++	.reg		= svc_classifier_reg,
++	.unreg		= svc_classifier_unreg,
++	.update		= svc_classifier_update,
++	.validate	= svc_classifier_validate,
++	.cfi_stubs	= &__svc_classifier_stubs,
++	.name		= "svc_classifier",
++	.owner		= THIS_MODULE,
++};
++
++int __init svc_classifier_init_module(void)
++{
++	return register_bpf_struct_ops(&bpf_svc_classifier_ops, svc_classifier);
++}
 -- 
 2.53.0
 
