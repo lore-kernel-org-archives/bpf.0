@@ -1,111 +1,134 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1FB390218
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 15:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C573D39EF01;
+	Wed,  7 Oct 2026 15:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791385565; cv=none; b=RYQjf8861e3D5dvJuFoqPFT86YS/dviO0Zu2A9k1M0pwDmxRgXb71hczFriG6w1I83wKHkbBrrCxjhjqgufXdZZxiiXbhp9P+WnhNEcEKaTpvSxE27AmCCYqejSDmc0Q135+JDE1QjlvqZ1Q78Cq46z1y9ilQAr+gGAt776CKgo=
+	t=1791385763; cv=none; b=FqGcw53WQncDsqa7v+Tgw1igZZ0w4XP3qDPz0WqTxVmEypIgOXAL4SJZeey+T/p7qNbKrW2XiT054mbYPy8j8/+exFQ8uifecZIum+2LwHgbVR73hGFK3jrpp//Qr5Buq1jimg+AKK16pYtcHG/Qy2Bam69ZdVya25vRO7qxPYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791385565; c=relaxed/simple;
-	bh=BuxgSdj9uwuKcVpI5Xz1omLt7G33cgkXilCJZJKKC2k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NBvOupfXob2rtaHWuo8GZrogjKhDq8YOge4CUgLQ3oJ1j2qdFXix/b2/3JRjHhxyjrb3o5X1sNwrG+DPFyJk1AP79GwCPmJi1MK0zby9y80iruVbY+3bqmpU7QgNa696zcwXg2cpc/AU2fgmdkhmNI4f9bZ7sLXsfbVHK9BH1t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lIfXJsuK; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791385763; c=relaxed/simple;
+	bh=n1PlzXgKPPWXn4xBrMXursX6M7s4AJx/3w1A7rIncZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kq7/NBIFUDDrw5wyaGEZzYnrYldJcdrk+YkqGzjh59kXsXqrYTAAwVHYMK3gEEPSDvCEuDGhNeO2jxT9LhBzQecHHsp0P3265zh86LgeK1EEl1S6miiXTjClMXSGt4Gqv9CW/+WqBtJBGMqnvvI6VtNu23G2vtXd4tBDiPSXmcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dzRhiDBv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lIfXJsuK"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2dd9ec41bc4so13597615ad.2
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 08:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791385559; x=1791990359; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OaWPz8ymTndY1UM0E/ig3g/hxMbCy3R1NCdfYqgDgvc=;
-        b=lIfXJsuKpQqgidzcnIBz0v6zworzLydlmNwGljA4c57QOIotcDlfuE+ku5/dKJMhV1
-         hBQledV63yWHxyxxizpiLVeiMkoQ7AKmvlQ5AAk5klvJW362IwTSfJOzUC3AMhv/M3sq
-         05G2g5i1ItZ9DYb5j22Ab7QQIe4PA8th564UTorXJbtxo9onfZQR/95TAJNzAfjpyjbB
-         XPoTd49TsJWnnVZT5gK+itsUit2Bsa+rwZEgkAxY9JrV8Vr8lolp8oTcSbv+H7ocHeiq
-         j+x87FyjcaoGq+rqRkdpTH+wGV+PmU4HLd6IQJirxve81X25lAgDx3sHehSH28UJRnTd
-         ktog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791385559; x=1791990359;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OaWPz8ymTndY1UM0E/ig3g/hxMbCy3R1NCdfYqgDgvc=;
-        b=t1OqRFs0F9MGxQMzr8heZ04/2MjNaxmcDJPGvaXNNzu7RIvfILqW3cVU/w2unQw1Ac
-         vXS3IpdhUvgPUZlFfcjW/lSMcxxFAkObmMct+SNqRgq4KIKWzhWbTER3eAMge0asrOmA
-         ZZyFlmok+NJ6S9kYd5vVvuvVBKxP2cwyDY6prBjT37K0FD5xsAZhkd/uKvT1IOyp9vIt
-         hPhgWJcNzwMVMki+5c+IxS1XND3Qp1Hlsl6GjCLbFmJv8EM9UVS/+2jQZZIdU67/RnDr
-         WqVy7YKDehMIWiCap9Pskbn+dNjzPcnCLwmi/ekTB0/lJoCRpdLXP7/0ZAOEq5vzdGrM
-         jkJg==
-X-Gm-Message-State: AFq9FYKabsx8i8b7zD4/457pxlSHMg6EtunAPztB6UmJiV0+8n4Fi47Z
-	88qVnMVdiLRS7nJzfF2y+redB9fx46nifGst/ZgzqCZcvxU7X7b58VR+kkL1DKPKfpc=
-X-Gm-Gg: AYBFou3jS/htvEC/2NZ9Egl489vXdBETiBMDR6eF1VD79xJ8+oe4VKkOrLZLSpACueJ
-	/kkUg8GLCmVi4vLf1BpmTdxU8apq1yRQt+JtPOIusTQ+qQD/8EWVA2AS4DxZflgo/eyLTa0hx5x
-	H/GOtImcmjasx9Z7O1nLAk1rxpOSiql/P+n8cabBjF2ZEH/alSUKWYy6WjfjPsZadhi2hJfV3iS
-	3GD6IP1gaAVFo8xf9wYn3p9VCCmEvmuUBCD1GSoOLUdNvTZgjqrsLo1DaFlq2mi5/XyFOJ6BUIx
-	kZtv3ZCtmXGdFlUxR1W70sYRsKq06TWWSBuO7EQUjdqeXw6O5ypeLywfzI8MQH0KSzePCGXMweQ
-	+fijqscuduN4Sf15QnLJNm7hRoKKV3SDq8ukkYLXUjGSZmubSZPOTBe9jvY6aNW6NsZsWtfDsEA
-	/SW4lQcGVK2888piKuBO+6+9Erep0UiwCAAr0DMEgygQbAyh0ArhdGIwnQVe12pHzJjmYLyig+q
-	yx91JUmWMcEXdKnS8qwgw==
-X-Received: by 2002:a17:902:f690:b0:2d8:d4d0:792c with SMTP id d9443c01a7336-2e6003b690dmr22740805ad.16.1791385558962;
-        Wed, 07 Oct 2026 08:05:58 -0700 (PDT)
-Received: from DESKTOP-31QBR7C ([103.120.166.86])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e604b63d9bsm13249255ad.84.2026.10.07.08.05.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 08:05:57 -0700 (PDT)
-From: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	Rahad Bhuiya <rahadbhuiya2021@gmail.com>
-Subject: [PATCH bpf v2] bpf: mark kfunc memory size argument precise when buffer is null
-Date: Wed,  7 Oct 2026 21:05:49 +0600
-Message-ID: <20261007150549.1334-1-rahadbhuiya2021@gmail.com>
-X-Mailer: git-send-email 2.55.0.windows.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dzRhiDBv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC3451F000FF;
+	Wed,  7 Oct 2026 15:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791385759;
+	bh=WnK/pW8OTBOt0Pd2o1F+d7eEU1h//o2tR25a99I73TE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=dzRhiDBv72YcUM1r11uYi3PAQO/Ueytd0lm0ymmfJdcVsUeI3DxWOwxpGRU5t1jAG
+	 qU5PWSqWLhbSQeJ6s9PzwABy7evJ8KIipPs7+2aTsylKglnpr1hWD7QFSjkFqRYmZ7
+	 OnfskU211WH0B/4iyaCE/9JM4pVprgKQjzGEKkJqN3wtUD45151KH0RMHYbn9x0dc6
+	 z8IuEALhK4/sa+MPtC1xBC9O2WwKVy7EnSmfcAbRhDos3SH1Z650oEgZjV9bfhMXov
+	 182ys4RrmdMyDyb6YQKbXRHPcm7XzxfmEvs3fBYyL1PBCCaqcEJhkuzyD8YgepOZfk
+	 frOqgkL1hdMig==
+Date: Wed, 7 Oct 2026 16:09:11 +0100
+From: Simon Horman <horms@kernel.org>
+To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+Cc: netdev@vger.kernel.org, Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Konstantin Taranov <kotaranov@microsoft.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Erni Sri Satya Vennela <ernis@linux.microsoft.com>,
+	Aditya Garg <gargaditya@linux.microsoft.com>,
+	Dipayaan Roy <dipayanroy@linux.microsoft.com>,
+	Breno Leitao <leitao@debian.org>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Saurabh Sengar <ssengar@linux.microsoft.com>,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net v2] net: mana: reserve RX buffer headroom to fix
+ forwarding performance
+Message-ID: <20261007150911.GT83879@horms.kernel.org>
+References: <20261003013647.2051416-1-hamzamahfooz@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261003013647.2051416-1-hamzamahfooz@linux.microsoft.com>
 
-check_kfunc_args() allows a null buffer register paired with KF_ARG_MEM_SIZE. When buff_reg is null, check_mem_size_reg() is bypassed via break, leaving the corresponding size register at argno un-marked for precision.
+On Fri, Oct 02, 2026 at 09:36:47PM -0400, Hamza Mahfooz wrote:
+> Commit 730ff06d3f5c ("net: mana: Use page pool fragments for RX buffers
+> instead of full pages to improve memory efficiency.") started handing
+> out RX buffers with zero headroom so that two buffers fit into one page
+> at the default MTU.
+> 
+> The MANA TX path, however, stores the per scatter-gather entry DMA
+> mappings in `struct mana_skb_head` at skb->head, and mana_start_xmit()
+> therefore calls skb_cow_head(skb, MANA_HEADROOM). The port advertises
+> this requirement as ndev->needed_headroom = MANA_HEADROOM.
+> 
+> As a result every packet that is received and then forwarded out of a
+> MANA port fails the skb_cow() in ip_forward() and gets reallocated and
+> copied by pskb_expand_head(). This is invisible to a plain RX or TX
+> workload, but it puts a full skb reallocation plus memcpy on the hot
+> path of every single forwarded packet, which is exactly what a
+> router/NVA workload does.
+> 
+> Restore the headroom. Note that reserving MANA_HEADROOM (232) is not
+> enough: ip_forward() asks for LL_RESERVED_SPACE(dev), which rounds
+> hard_header_len + needed_headroom up to HH_DATA_MOD and is 256 bytes on
+> ethernet. Use LL_RESERVED_SPACE() directly so the value keeps tracking
+> both constants. Also, since LL_RESERVED_SPACE() tracks MANA_HEADROOM,
+> it grows with MAX_SKB_FRAGS and for MAX_SKB_FRAGS >= 19 it is greater
+> than 256, so we have to account for that by using the headroom the RX
+> queue actually uses (instead of assuming XDP_PACKET_HEADROOM) and
+> turning MANA_XDP_MTU_MAX into MANA_XDP_MTU_MAX(ndev) (note that at the
+> default CONFIG_MAX_SKB_FRAGS=17 they are equivalent).
+> 
+> At the default MTU on a 4K page this means a buffer no longer fits twice
+> into a page (SKB_DATA_ALIGN(1500 + MANA_RXBUF_PAD + 256) = 2112), so the
+> frag-vs-single decision is now made by computing the real buffer size
+> instead of comparing the MTU against PAGE_SIZE / 2. The page_pool
+> fragment path is still used wherever at least two buffers genuinely fit,
+> e.g. on 16K and 64K page sizes.
+> 
+> Measured on an Azure VM with a MANA NIC acting as a forwarding NVA (UDP,
+> 1400 byte payload, 4 streams, 8 Gbps offered, only the forwarding
+> node's kernel differs), 8 runs each, median:
+> 
+>                   forwarded pps    throughput
+>   before              272,830       3.06 Gbps
+>   after               390,560       4.37 Gbps   (+43%)
+> 
+> perf on the forwarding node, same workload:
+> 
+>                   memset_orig   __pi_memcpy   pskb_expand_head
+>   before             10.07%         3.96%         present
+>   after               0.94%         0.64%         gone
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 730ff06d3f5c ("net: mana: Use page pool fragments for RX buffers instead of full pages to improve memory efficiency.")
+> Signed-off-by: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+> ---
+> v2:
+> - Fix the XDP headroom mismatch with CONFIG_MAX_SKB_FRAGS >= 19,
+>   by passing rxq->headroom to xdp_prepare_buff().
+>   mana_build_skb() then picks up the correct offset via
+>   xdp->data - xdp->data_hard_start. Also, turn MANA_XDP_MTU_MAX
+>   into MANA_XDP_MTU_MAX(ndev) to account for the headroom,
+>   since it is no longer a constant. (Narcisa, Sashiko)
+> - Use the new mana_single_rxbuf_per_page_forced() helper in
+>   mana_set_priv_flags(). (Sashiko)
+> - Trim the comment above mana_get_rxbuf_headroom() and drop the stale
+>   "XDP headroom" wording from the comment above mana_get_rxbuf_cfg().
+>   (Narcisa, Sashiko)
 
-Consequently, checkpoints created along paths where a nullable buffer is null would prune against arbitrary scalar values in the size register.
-
-Mark the paired size argument precise before breaking when buff_reg is null to ensure proper state pruning.
-
-Signed-off-by: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
----
-v1 -> v2: Fix email formatting and whitespace mangling in submission.
-
- kernel/bpf/verifier.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 72a3f5998dd2..1dcca0c737e9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13191,8 +13191,12 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 				return -EINVAL;
- 			}
- 
--			if (bpf_register_is_null(buff_reg))
-+			if (bpf_register_is_null(buff_reg)) {
-+				ret = mark_arg_precision(env, argno);
-+				if (ret)
-+					return ret;
- 				break;
-+			}
- 
- 			ret = check_mem_size_reg(env, buff_reg, size_reg, buff_argno, argno,
- 						 BPF_READ | BPF_WRITE, true, meta, &failure);
--- 
-2.55.0.windows.3
+Reviewed-by: Simon Horman <horms@kernel.org>
 
