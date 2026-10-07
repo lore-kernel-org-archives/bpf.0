@@ -1,105 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF4341C30F;
-	Wed,  7 Oct 2026 07:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F8F38DC60
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 09:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791359045; cv=none; b=mUHmlGPyednDRRmnnCPuwGI22tOu58lbY8KzK5Y37SOV6TBNPDFIZLamB5Gx+KZzuJfeQ+ANK7AIdEdL0EZUf8PRxMbkD0DaPNGqzaYGGM51p1tAef0oH2cIFSb9qOx7IFilM1r4Ah3oK4CVOF25JGKpa3C0YkVXKYHy+V6lCf8=
+	t=1791366308; cv=none; b=QsBZnw0o19BFVfXFA2QRr0+hiv1b3gakaAkC2vStDxQpf2oU26v191d/IXO3G7/0amYMZNOvh2oAZzmoWWtNcjY5S3kHsOMYNcmnMgVSZk9upN52ifDYHoTzxoWF8BVNZov7lPc8Rxvf1mpJbyezt9qjW9QP1HsxngP+VFJPWEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791359045; c=relaxed/simple;
-	bh=HnI9Orr9cFzycjkpUEC5RPW2/zW7ejSYjCFK4MnW6ik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hb/aEvQLLG6LtjfMjMwJRVhdKwGeK0jrt5UiwvTsbPieyojcxWE7p8RWvX41YgC5s7ROyTuczj4vhm9fCyKW8m8amOogqcyrdgNTAdTjzFGFAbpODXJ2KAUZHbir9oXp3zvJLwrbaV5a47OnDqELFFZOpO3iruNobHdetCQY2is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aFNJjI2H; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791366308; c=relaxed/simple;
+	bh=olZaaaQM7hMKbV/U3u9Mkb6ms63aUXfPQSjnLoJbYpI=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=sr3eay7jaLLmL4sGmED375XqvEcFtV6y2QbFlzdJtYoMG6LWYxSmegFBHKoI0Sf8Q1SA7IUI6npcaKv58BIjOau+MhqjSTzBZ/Z0FzyFMDDIZ+qC2e46tjqEbd6r6wezVeoMhPVLPHtFeyD4UBu9gu8SiFqe244NkhXiJUXf2Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ItB4TcjB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aFNJjI2H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB251F0089C;
-	Wed,  7 Oct 2026 07:43:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ItB4TcjB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F511F0089B;
+	Wed,  7 Oct 2026 09:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791359035;
-	bh=e10A52x8eNlaxr8y/42fRB7ZGuOuiwnvD+s8zuy+cZc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aFNJjI2HN5zYP+wGvdq0gTjxVQeS58dPwkFtQTceZrRXzlyOa+XZXocBo5oF5MYRM
-	 YHSsXYhSrfT71ShRbctGTD+MMbpSBM8nX8NmTBkLibsieIlhPpguCh8srFcNKvS4au
-	 yF0dryWnvzdlwgmGbyeyCcI2dzscWIwbjPnjGp6kifTj4cGrTdf1XMgY72jAPw4sNB
-	 ZhlFsEldW8scrJa4k3SQghw47/vX6b/T8emjrtp7G1iMNdjv/7qWjHPKQHX7Anczl7
-	 OvNV2kjJe24xgi2Vj4vsBP2rn9QiiJ01rA33xxw8CMOflS3OMjs0HJKfWy4r9gyM/y
-	 ljpC0P91mNLIA==
-Message-ID: <4818da7c-be7e-4f97-b5a3-bee05ada500a@kernel.org>
-Date: Wed, 7 Oct 2026 09:43:49 +0200
+	s=k20260515; t=1791366300;
+	bh=WdMAOqu6uhL6c+EANrvjmePVCE3/z1cP2F7fGc1NyJk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ItB4TcjBwbgSFi/AAeisHIvPypZkNN5yCHFM1iGvHdbnQT09Ne75rfAch0E8wHZHg
+	 /k3nfQ52KL3FzKRyAfLhu6R2S7S/e4wFmcElo60pav/VmkzwsCw4JEjuSWmaAaMbjD
+	 mxoZVdz2dtSyE/7xoN/u1gydKglv2ZktJl6XSEyX1huh5ZOiq9Jb1y/G2mfZJyPeAF
+	 VComXGF1oUrHiuOrrDyJoxQrn4ERrxw4Eeqp91323In8c69wUx0MB7ZIyo2RV6AGgN
+	 8Pm6bN5AlKRHxvMX7Iewyx8UfK/RAVJmG3F8rwx6iqC9VVWhs4GSBWSdTNnfeJuSmA
+	 TNF2fneyUsXOQ==
+Message-ID: <sashiko-outbox-162816@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v19 net-next 1/2] octeontx2: use atomic bitops for PF/VF
+ and rep flags
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ratheesh Kannoth" <rkannoth@marvell.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261006094357.840823-2-rkannoth@marvell.com>
+References: <20261006094357.840823-1-rkannoth@marvell.com>
+ <20261006094357.840823-2-rkannoth@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 07 Oct 2026 09:44:59 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 1/2] net: netmem: document netmem and memory
- provider design in comments
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Luigi Rizzo <lrizzo@google.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Pavel Begunkov <asml.silence@gmail.com>
-References: <20261005004958.3603059-1-almasrymina@google.com>
- <20261005004958.3603059-2-almasrymina@google.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20261005004958.3603059-2-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] net/octeontx2: Data race losing atomic flags in otx2_sync_flags_fr=
+om_rep()
+--
 
+commit 17bb449e59bb6b8b6eb031b22fd6154b7b7c7de9
+Author: Ratheesh Kannoth <rkannoth@marvell.com>
 
-On 10/5/26 02:49, Mina Almasry wrote:
-> Clarify the netmem, memory provider, page_pool, and skb fragment design
-> principles in header and code comments:
-> 
-> - Memory providers allocate struct net_iov or struct page, cast them to
->    netmem_ref, and pass them to page_pool; page_pool, drivers, and the
->    core stack operate on netmem_ref and must not downcast to page or
->    net_iov outside dedicated netmem helpers.
-> - Memory providers are not restricted to net_iov and may supply
->    page-backed netmems.
-> - net_iov is not inherently unreadable; future readable net_iov types
->    are allowed.
-> - Per-provider logic belongs in memory_provider_ops, and per-netmem-type
->    logic belongs in netmem helpers.
-> - All frags in an skb must share the same backing netmem memory type,
->    and skbs with different frag memory types must not be coalesced.
-> 
-> Cc: Luigi Rizzo <lrizzo@google.com>
-> Cc: Björn Töpel <bjorn@kernel.org>
-> Cc: Stanislav Fomichev <sdf@fomichev.me>
-> Cc: Pavel Begunkov <asml.silence@gmail.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> ---
->   include/linux/skbuff.h                  |  4 ++++
->   include/net/netmem.h                    | 29 ++++++++++++++++---------
+octeontx2: use atomic bitops for PF/VF and rep flags
 
-./scripts/get_maintainer.pl --file include/net/netmem.h
+This commit switches PF/VF and representor flags from non-atomic u64 masks
+to unsigned long bitmaps. It also introduces otx2_sync_flags_from_rep to
+sync representor-owned flags onto the PF mailbox context locklessly.
 
-Returns "maintainer:NETWORKING [GENERAL]"
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/d=
+rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+[ ... ]
+> @@ -593,6 +607,32 @@ struct otx2_nic {
+[ ... ]
+> +static inline void otx2_sync_flags_from_rep(struct otx2_nic *dst,
+> +					    unsigned long *src_flags)
+> +{
+> +	unsigned long src =3D READ_ONCE(*src_flags);
+> +	unsigned long new_flags;
+> +
+> +	new_flags =3D (READ_ONCE(dst->flags) & ~OTX2_REP_SYNC_FLAGS_MASK) |
+> +		    (src & OTX2_REP_SYNC_FLAGS_MASK);
+> +	WRITE_ONCE(dst->flags, new_flags);
+> +}
 
->   include/net/page_pool/helpers.h         | 18 ++++++++++-----
->   include/net/page_pool/memory_provider.h |  8 +++++++
->   include/net/page_pool/types.h           |  6 ++---
->   net/core/skbuff.c                       |  3 +++
->   6 files changed, 50 insertions(+), 18 deletions(-)
+[Severity: High]
+Does this non-atomic read-modify-write risk overwriting and losing
+concurrent atomic bit operations?
 
-Changes LGTM.
+If a concurrent thread sets a flag asynchronously using atomic bitops,
+such as OTX2_FLAG_PORT_UP in otx2_mbox_up_handler_rep_event_up_notify():
 
-I suggest that you Mina is added the MAINTAINERS for PAGE POOL.
-And do we want a new section for NETMEM ?
+drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:otx2_mbox_up_handler_r=
+ep_event_up_notify() {
+    ...
+    if (info->evt_data.port_state) {
+        otx2_set_flag(pf, OTX2_FLAG_PORT_UP);
+        netif_carrier_on(netdev);
+    ...
+}
 
-Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
+or OTX2_FLAG_INTF_DOWN in rvu_rep_destroy():
 
+drivers/net/ethernet/marvell/octeontx2/nic/rep.c:rvu_rep_destroy() {
+    ...
+    rvu_eswitch_config(priv, false);
+    otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
+    ...
+}
+
+it appears the atomic change will be permanently lost if it occurs between
+the READ_ONCE() and WRITE_ONCE() in otx2_sync_flags_from_rep().=20
+
+Can losing state transitions like OTX2_FLAG_INTF_DOWN allow async routines
+like otx2_napi_handler() to continue executing on teardown queues that
+have already been freed, leading to a use-after-free?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261006094357.8408=
+23-1-rkannoth@marvell.com?part=3D1
