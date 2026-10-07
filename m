@@ -1,163 +1,271 @@
-Received: from mail-pj2-f7.google.com (mail-pj2-f7.google.com [74.125.227.135])
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FCD23A564
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 18:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4615B4E77FA
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 19:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791399086; cv=none; b=nwD6Hrc8gpRyeIBnPjque+Ov3NdNGtOQ0mH9noO9Sea95R/wKxiM3YK++J5NGmKVgXui0PPIQdHgrfKk78/Gc3VCxE6CCk1IQCEu2PQsgP5SZ5Ne9H5di3W6nu7k6vYsLA61PcelCwWHAvvs9w5wYDSB5FVfNOXhz9cRoEVsnp4=
+	t=1791403181; cv=none; b=pMmIck5zmAhOZz3vL1OfFTt4qr6PX6prT51jwr4MdX37XftPyLipFZoueSixADMlrUxCOZj/TAsaiHBFTMdWjVOXIE+I3BdwvK/ndlBU7U4HrMAVb/msvchxbpGQgbUovvNi0IqBxRSo5vhLg3qOBvyl/sVV1q8qZGbjTL16emE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791399086; c=relaxed/simple;
-	bh=ooFE7wgNH86QzW50A74Hxs0eR/QZYfgdmjGkzqzYeSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d2JIU6zS2ak3Q7xD2d8yQ7MJwQKl3DlDQ2BEjua9uCcVcVbibrD+eIFwZrnRkDr7smnomNG92LxLwGtjUNYcx14JnflEoyoy7tfLGGm5JJ47BbgsBPq81F/0haPRpzO5/TM+Ihs5X2OGsffS7Rvffxdn0B8CdPoI9D82l+vKtMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UYU9wJxU; arc=none smtp.client-ip=74.125.227.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791403181; c=relaxed/simple;
+	bh=0pPmeZyp251Lr0x3886a9pgXCkpW4jNoTcJsPjHFl9g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NNBdLr2ft0YT2cGtyckYg3GtbwMuruAcoMEYtsKEyZ9QnmMxl+Lze2Ole96SAAxnrWZBiEwE9/1bcpr/sU4zpf00mAiq6m2XrXmwu+shb7Mns7XWyfOqQD782lROthLIfyIFe0YRs9+Wr4KmUOQl5ZcU++7caHJbuQIZXElt0KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=AEcc0tmI; arc=none smtp.client-ip=209.85.161.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYU9wJxU"
-Received: by mail-pj2-f7.google.com with SMTP id 98e67ed59e1d1-39e501442e2so1618613a91.0
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 11:51:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="AEcc0tmI"
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6b1afdf5196so830473eaf.2
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 12:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791399084; x=1792003884; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=X71f5KGOL/rbhedaUKsgXlp/Wmx4B13NNF0vqiORCgc=;
-        b=UYU9wJxUW8RQY34jHuYGL+FPkvRW3Y1QTJlT6kUlCrIKZ33cSWo37k3aZJPIEtPbcS
-         iw31KIb2d+7FQI6Q+ZziZA55y7RM/YrMwHbRxH8BqMBoyUcShZ4ZfkMWHVbQ+XZpRnO7
-         M/0YLM/npZ2WdSIoKh+PS2kUsACPPJ2gqrCKu2b9ItB+d5Z9UiM2tk/t5feiZX86VWDJ
-         /29KL+C4+nsdKLD4pRCtndiKyMRN0640JoEA2+ShJ992wRIaEvV5kw2v2J/Vh2uDfxq5
-         REn95bUX+yA8WeYzTuZseAyGP+ynjCnUpz61kzeLC+LQ2odxjZQXnB/6ug7iF0uI0VUG
-         j1SA==
+        d=hammerspace.com; s=google; t=1791403177; x=1792007977; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RlvmTENnWdcvYsu4QTibTscykQ0vwVEqV2HgUrxeKRU=;
+        b=AEcc0tmIii4yPMyuUwsLkDOpjstv2xxCG4of+/7l0cZ199AW8ykghTTwgL2zuoDMn4
+         bzAPHF1QxjLMl/+q0FnO/PxZJ7SO+vQQ3N6QfYOKBYHox4poeBiXbraGpYRN1wUmMl3Y
+         /3mAejKZ8AI//NFAs77jvPcP9hSpDMY2I1BjTgKNwZ2hJyEMhOlQpbprntXyEIJPxHWM
+         YmfCD2ZMVMoTNkySxMNk6G+ApO/Po2vTx20wfsgukXgeWSCJ5y/uPYCw7h+CI6D4fjsF
+         Mf3BqDLLvjnHQ9JBgoUyrdS/seo4PA1qoZWNceGErOVLnyUkAw1p3lYBJFKPsunTWN0Q
+         CDVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791399084; x=1792003884;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=X71f5KGOL/rbhedaUKsgXlp/Wmx4B13NNF0vqiORCgc=;
-        b=CHjiSokWqtANcEoBP6r3inpGw25W2QbNP/7wdeF+CSSzIphxt/eFMyTvaC1ij9vntX
-         BhkAJsbE+NVSzSpwPglxnuMuuh+b6CN/EbC4YURadkSjVMVqaTtsrPpMY477cbRoPZ0E
-         vKsfC9dYD4G02R92EeSZPpBKu85Tjr9qw9X8iQbBElcnplMQiSc5MX/G14+slnMhRUjI
-         g3l/2UKhKkau7oggedNE39DjgtKnaywqzJ52PcKrE7bPfPnRAO3ybiyyCapeEM7QeKga
-         KheJHdNh7cBFQckJ3Vmbxl2XJ1OhGXhWYkMT3qFzcPW8vPMTP9VpsP0UAIfpyzfS3y1h
-         o34Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzPAY2zjJZ/KWMfFtssi/Ty8XgMajxLsSPumETRM8FQ/6tWkGAe4YP0B01WOkTLFC2nZfo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL+nhzvdObnukKbJsv85Fsh1oJ/xZGtab5ApZoS3M2+SnYHnPy6
-	MD3YxaqxhijWXNbSzYdFnY0MX02fn1A07/ATQRMf3MtpB/yhy01WHpzf
-X-Gm-Gg: AYBFou2UB0UlChjQCqEdk3cE+3SldzStxxVQTlRNH8c1E2WezLWcx4VKPjj9dxBD7cv
-	Hn4rbKoLynbwueSgVx8U85ky/oUKbdV22cfwkdWUHOT76XHoc/xDdBVZi1sd+CkSGun8XG4LxVL
-	ffsjTNI+6Oj0AapGc4/IWbuNO3OXNuDLlaNgl6M0jTU4wc565NJ/b1xffbxHVbhULt0H22Nzso4
-	zjHVZ9iiMF/jgy1KN3/poml8QGBeBXcfbbBQ9wSPBUUX3h2/QiwNrLT7quXCyaSSxhVFpaqpEUJ
-	WihPbSkKyX8hngxsqLo8Gyn5PvO4zAOAcWxqKhwivgX7lZLVpZT6fjFY+4zi000k3Jj4X0GhLvC
-	U+eeIbGljGW4VDK0khIXGUNpGIrVZ149sy20KAAXRGpc2Q5xEMGu4GyOyU6hfDearMupc6NMihN
-	3XgjhrVLEJorFRmHkr75rv/opLN3b+A4wUmc6X4OzAxUOEPjysqZWW+SAmJ8KhXZIH
-X-Received: by 2002:a17:90b:1812:b0:3a4:b061:2765 with SMTP id 98e67ed59e1d1-3a8a072a80dmr2823533a91.15.1791399083918;
-        Wed, 07 Oct 2026 11:51:23 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4e::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a9f1a23c82sm754330a91.1.2026.10.07.11.51.23
+        d=1e100.net; s=20260707; t=1791403177; x=1792007977;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RlvmTENnWdcvYsu4QTibTscykQ0vwVEqV2HgUrxeKRU=;
+        b=DBZ2kbc9oiXrI3vOou64rVz14m2lSrZmxId969EizcK8E8eoZ+eGxuUOvrPdC4YZJb
+         11TxiurD1iWahCg2xCeUS705MT/4AhQhWpcLn1hB6faTr0S/yuf2PiRDh49nTwFP+Qkq
+         TCtZptmVGyX0t+eIf6brS0azxr4H7W+cJQC0plRQ5xWTb7uWZC6BxIIL+MAmUq3tciNt
+         Zj0G+wumXU9JuT+S3pBPGzMIwEKmFngPDyFwZn3NEFR8mmCG4QwPTr7k81zQHNX5YbvZ
+         1F6sUp8hk5nsLxZE75D83Skc87baCIgFlmj8V7G3UcAa3Ha0srPq0+tdmHPG2NqUIzDB
+         zQ7Q==
+X-Forwarded-Encrypted: i=1; AKwUvBz+7KtnzZ5jWW8IOKfD2hjJe4ZGAw4LKr3CM4PYkrXNpt1zXBMDX4V3JwA58hIq0j5SkQc=@vger.kernel.org
+X-Gm-Message-State: AFuF++nVu8dkoquZ/25LtkejhUQ7tY1OMO7zhbJtTYzyx82PCODJk2x8
+	o0NR5NI2Q2YVpaI7O10uFm8CDv6DntSL9hfXpX61hNMUFBDfdHcW019Wp+3fVv0ogPo=
+X-Gm-Gg: AYBFou1KNJXcFat4DSN57bMsuDNvrv0ieStTL6cwXk92XJimbE3X+JtCOySHaMaqT97
+	/cs0jVsfX6a99nrdZw/JiU4kwiguUDE9THDHUu1y1GwE0vJP4pCzryBIqCvMCKMx6drI0NbBVWs
+	cbEK3Bh9nCScAOqzkIkSSuJpEH9r23GZOppCglWTLQu/C7iDAWL5vMf7rMNr/wZ+YR982x3eiDG
+	R9yiF7AOS/i205JTwEo/HvhjaEAFmSDdqB/VmTrFv533xb/qYzE8NdtDDH8d/vPUNWZoykqZ/93
+	N1oxkg9rWkaUfz+BUcImw7Thyknjz3rW8S5FL/J1yVgdOz5vN1QVceDPawIo3Yz8VtvkrECOEiz
+	w/S8GcvH8Lo5NAZDMnc0jQAcrEoJ7w0/7jWWQkaoB+fKS5dpvFNlGfELCNZJwKzW34CQbfASdYT
+	yQPpGLRKq3YtgxbuvR5cpF1e1jgktV8B6/OEY6QYZkCkXC/0ozi9zjMLkTOAE6EEPbD0dBYdEbo
+	DBER0J2K/xnWJDI16LT/M2ovNukzFJp2fiYmAgV4A==
+X-Received: by 2002:a05:6820:f011:b0:6dd:3105:1f86 with SMTP id 006d021491bc7-6e7a98932efmr3318026eaf.62.1791403176819;
+        Wed, 07 Oct 2026 12:59:36 -0700 (PDT)
+Received: from bcodding.csb.hammerspace.com ([66.97.168.37])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a274c9c520sm1084285fac.16.2026.10.07.12.59.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 11:51:23 -0700 (PDT)
-Date: Wed, 7 Oct 2026 11:51:19 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Eric Dumazet <edumazet@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Andrew Lunn <andrew+netdev@lunn.ch>
-Subject: Re: [PATCH net v2] xsk: freeze deferred pool teardown without
- blocking unregister
-Message-ID: <asaTvPO05EpmUEgN@devvm7509.cco0.facebook.com>
-References: <20261005-xsk-suspend-teardown-v2-1-2d87228f4329@gmail.com>
+        Wed, 07 Oct 2026 12:59:36 -0700 (PDT)
+From: Benjamin Coddington <ben.coddington@hammerspace.com>
+To: Chuck Lever <cel@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>
+Cc: linux-nfs@vger.kernel.org,
+	Daire Byrne <daire@dneg.com>,
+	bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Subject: [PATCH RFC v2 0/9] SUNRPC: dispatch ready transports round-robin across clients, classes from BPF
+Date: Wed,  7 Oct 2026 15:59:25 -0400
+Message-ID: <cover.1791402701.git.bcodding@hammerspace.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261005-xsk-suspend-teardown-v2-1-2d87228f4329@gmail.com>
 
-On 10/05, James Hilliard wrote:
-> Deferred pool destruction calls ndo_bpf() under RTNL. system_wq is
-> not frozen during system sleep, so that callback can run after a
-> device has suspended and gated its clocks. Use system_freezable_wq
-> so running destruction finishes before device suspend and new work
-> waits until process thaw.
-> 
-> Keep assigned pools visible to NETDEV_UNREGISTER independently of
-> the socket list. A released socket has already left that list, but
-> its final pool put can queue destruction after workqueues freeze.
-> A resume-time unregister would then wait for a device reference
-> whose release cannot run until the resume completes.
-> 
-> Track assigned pools per netdev under RTNL and detach remaining pools
-> after the notifier socket walk, including copy-mode pools. This also
-> covers leased queues without scanning pools from unrelated devices or
-> network namespaces. Remove the entry on assignment failure and normal
-> teardown. The deferred worker still owns the pool and later observes
-> the cleared device pointer, avoiding a second driver detach or put.
-> 
-> The lifetime problem was identified by code inspection of the deferred
-> release and system-sleep paths.
-> 
-> Fixes: 1c1efc2af158 ("xsk: Create and free buffer pool independently from umem")
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes in v2:
-> - Track assigned pools per netdev instead of scanning a global pool list.
-> - Keep deferred releases visible across queue changes and queue leases.
-> - Rebase onto current net.
-> - Link to v1: https://patch.msgid.link/20260930-xsk-suspend-teardown-v1-1-a6cac8c030be@gmail.com
-> 
-> To: "David S. Miller" <davem@davemloft.net>
-> To: Eric Dumazet <edumazet@kernel.org>
-> To: Jakub Kicinski <kuba@kernel.org>
-> To: Paolo Abeni <pabeni@redhat.com>
-> To: Simon Horman <horms@kernel.org>
-> To: Andrew Lunn <andrew+netdev@lunn.ch>
-> To: Magnus Karlsson <magnus.karlsson@intel.com>
-> To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> To: Stanislav Fomichev <sdf@fomichev.me>
-> To: Alexei Starovoitov <ast@kernel.org>
-> To: Daniel Borkmann <daniel@iogearbox.net>
-> To: Jesper Dangaard Brouer <hawk@kernel.org>
-> To: John Fastabend <john.fastabend@gmail.com>
-> To: Björn Töpel <bjorn@kernel.org>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: bpf@vger.kernel.org
-> ---
->  include/linux/netdevice.h   |  5 +++++
->  include/net/xsk_buff_pool.h |  3 +++
->  net/xdp/xsk.c               |  5 +++++
->  net/xdp/xsk_buff_pool.c     | 25 ++++++++++++++++++++++++-
->  4 files changed, 37 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 3cff2174dc03..72091938f6e6 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -2545,6 +2545,11 @@ struct net_device {
->  	/* protected by rtnl_lock */
->  	struct bpf_xdp_entity	xdp_state[__MAX_XDP_MODE];
->  
-> +#ifdef CONFIG_XDP_SOCKETS
-> +	/** @xsk_pools: assigned AF_XDP pools, protected by rtnl_lock */
+From: Benjamin Coddington <bcodding@hammerspace.com>
 
+This is v2 of [3], with the change I floated in that thread: the kernel
+no longer decides which transports belong together.  By default nothing
+changes.  An administrator who wants peers grouped loads a small BPF
+program that returns a class for each accepted connection, and the pool
+takes turns across classes.
 
-Can we mark this as being ops protected (net_device::lock) ?
-xp_clear_dev calls netdev_lock_ops, but xp_assign_dev
-has netdev_assert_locked_ops_compat, so maybe there needs to be a bit more
-care. We don't want to add new ASSERT_RTNL if possible (and extend new
-netdev lock semantics).
+What's different from v1
+------------------------
 
-The rest looks good.
+The table I described on [3] became a hook.  Instead of a kernel table
+of address prefixes, a netlink interface for it and an nfs-utils side,
+sunrpc registers a struct_ops with one callback: given the accepted
+svc_xprt, return a class.  0 means the anonymous client (shared with
+everything unclassified, today's order among them); any other number is
+a class every transport returning it shares; a flag bit on top means
+"and one client per peer address within that class".  So "all movers are
+one class, everybody else per host" is two entries in a prefix map, and
+the posted v1 behaviour is one entry.
+
+The hook runs once per accepted connection, in process context, after
+TCP and RDMA have both set the peer address.  Nothing runs per request.
+No program loaded means every transport is on the
+anonymous client, and with patch 6 the pool uses its old flat queue
+until a classifier attaches, so the dispatch path is today's code for
+anyone who hasn't asked for anything.  That's the answer to Chuck's cost
+question from [3]: measured on bare metal the two-level queue cost about
+half a microsecond a dispatch (1.7% at 484k IOPS on one client's eight
+connections); with no program it now costs a static branch on enqueue
+and an empty-queue test on dequeue.
+
+Attaching is a struct_ops link, bound to the attaching task's network
+namespace, one per namespace.  A second attach gets -EBUSY, a link
+update replaces the program, closing the link removes it, and a
+namespace that exits leaves its link with nothing behind.  Transports
+keep the class they got at accept; a new program only affects new
+connections.  The reference program and the attach tests are in the BPF
+selftests (patch 7).  svc-classify (patch 8) attaches the prefix
+classifier and manages its map by address prefix, so an administrator
+never touches bpftool.  The page in patch 9,
+Documentation/filesystems/nfs/rpc-server-clients.rst, has the class
+word, the install procedure, and six class maps with the share each one
+gives its clients.
+
+Still not in here: moving a transport between clients, so a v4.1
+clientid key, which Chuck asked about on [3], is not in this version.
+A multi-homed host or an IPv6 host with a prefix's worth of addresses
+is handled by the prefix map instead.
+
+Also from the [3] review: control events (accept, close, handshake) go
+ahead of data within a client (patch 5), and the dequeue tracepoint
+prints the class (patch 4).
+
+Numbers
+-------
+
+The dispatch numbers are the v1 series' on a two-socket box (2 x Xeon
+6542Y, 96 threads, no KASAN), from [3].  The dispatch code is the same
+here: v2 puts the classifier in front of it, and the flat queue behind
+a static branch when nothing is attached.  Loopback, NFSv3, 16 threads,
+10 ms injected service time with 50% jitter.  A is v7.2, B the series.
+v4.1 is within 2% in every cell.
+
+One interactive client (bursts of 32) against one host with K
+backlogged connections, burst completion p50 in ms, floor 37:
+
+    K             4      8     16     32
+    A            70    195    351    671
+    B            56     62     61     63
+
+    N (K=16)      1      8     32     64     96    128
+    A            21     98    350    690   1035   1365
+    B            11     31     62    103    144    179
+
+    M hosts x 4   1      2      4      8
+    A            70    192    351    670
+    B            57     81    121    192
+
+    S: 2x8 vs K, share   4      8     16     32
+    A                 41.0   20.0   11.1    5.9
+    B                 50.3   50.0   50.0   50.0
+
+A real NFSv3 client walking 500 files against a 16-connection
+aggressor: 37.8 s on A, 2.5 s on B, 0.12 s alone on both.
+
+Classes.  The v1 kernel keyed on source address, so on [3] I emulated
+"all movers are one class" by giving six movers one address.  With this
+series that's one map entry (the movers' prefix -> 1, everything else
+per address), and the six-address column is what "everything per
+address" gives.  Six movers at 4 or 8 connections each against
+customers, customer share of dispatches:
+
+                                 A           per address   movers one class
+    one customer, 1 conn x 16    4.0 / 2.0   14.3 / 14.3   49.9 / 49.9
+    one customer, 4 x 4         14.3 / 7.7   14.3 / 14.3   49.8 / 49.7
+    four customers, 4 x 4 each  40 / 25      40 / 40       80 / 80
+
+Burst of 32 against M busy hosts, p50 ms: hosts on their own addresses
+57 81 121 192, as one class 56 62 62 62.  A: 71 193 348 673 either way.
+
+Cost.  With a classifier attached, dispatch takes two or three more
+lock-free queue operations per request.  On the same box that's about half a
+microsecond when the enqueue and the dequeue run on different cores,
+fio 4k O_DIRECT randread over loopback, 5 x 20s:
+
+                                   A        B
+    nconnect=1, 16 jobs        152.8k   152.2k   -0.4%
+    nconnect=8, 16 jobs        483.8k   475.5k   -1.7%
+    nconnect=8, 64 jobs        584.2k   581.0k   -0.5%
+
+The serial walk and 4 jobs on one connection don't move.  With no
+classifier attached the pool is on its old flat queue (patch 6).  I only
+have my VM for that path so far (KASAN, 10 vCPUs, loopback, the same
+fio), and there the no-program kernel measures the same as v7.2 within
+the run-to-run spread: 16 jobs 94.9k vs 95.5k, 64 jobs 138.6k vs 139.0k.
+So the static branch adds nothing I can see, but that's a VM number.
+
+Not tested: RDMA.  The hook sits in the accept path TCP and RDMA share,
+but I could not bring a soft-RoCE listener up on the VM.
+
+Daire - the same nine patches on v7.2 (plus the wake fix) are at
+https://github.com/bcodding/linux branch nfsd-clientq-v2-7.2 if you
+want to run it; the loader builds from tools/net/sunrpc/svc-classify in
+that tree.
+
+The series is on nfsd-testing at 56589cdb5881, which already has the
+svc_clean_up_xprts() wake fix from [3].
+
+  patch 1  track clients by class, no change to dispatch
+  patch 2  dispatch round-robin across clients
+  patch 3  the struct_ops hook
+  patch 4  class in the svc_xprt_dequeue tracepoint
+  patch 5  control events ahead of data within a client
+  patch 6  flat queue while no classifier is attached
+  patch 7  selftests: the prefix program and the attach tests
+  patch 8  tools/net/sunrpc/svc-classify: the prefix classifier and its
+           loader (load/replace/unload, add/del/list by prefix, status)
+  patch 9  Documentation: the model, the class word, installing a
+           classifier with svc-classify, six class maps and the share
+           each gives, how it works underneath
+
+[1] https://lore.kernel.org/linux-nfs/cover.1780498019.git.bcodding@hammerspace.com
+[2] https://lore.kernel.org/linux-nfs/cover.1782314746.git.bcodding@hammerspace.com
+[3] https://lore.kernel.org/linux-nfs/cover.1790953694.git.bcodding@hammerspace.com
+
+Benjamin Coddington (9):
+  SUNRPC: track service clients by class
+  SUNRPC: dispatch ready transports round-robin across clients
+  SUNRPC: add a BPF struct_ops hook to classify accepted transports
+  SUNRPC: report the transport's class in the svc_xprt_dequeue
+    tracepoint
+  SUNRPC: dispatch control events ahead of data within a client
+  SUNRPC: keep the single transport queue while no classifier is
+    attached
+  selftests/bpf: add svc_classifier tests
+  tools/net/sunrpc: add svc-classify, a prefix classifier and its loader
+  Documentation: describe RPC server transport classes and the BPF
+    classifier
+
+ Documentation/filesystems/nfs/index.rst       |   1 +
+ .../filesystems/nfs/rpc-server-clients.rst    | 394 ++++++++++++++++++
+ include/linux/sunrpc/svc.h                    |  72 +++-
+ include/linux/sunrpc/svc_xprt.h               |  30 ++
+ include/trace/events/sunrpc.h                 |  11 +-
+ net/sunrpc/Kconfig                            |  12 +
+ net/sunrpc/Makefile                           |   1 +
+ net/sunrpc/netns.h                            |   4 +
+ net/sunrpc/sunrpc_syms.c                      |   4 +
+ net/sunrpc/svc.c                              |  36 ++
+ net/sunrpc/svc_classify.c                     | 210 ++++++++++
+ net/sunrpc/svc_xprt.c                         | 281 ++++++++++++-
+ tools/net/sunrpc/svc-classify/.gitignore      |   1 +
+ tools/net/sunrpc/svc-classify/Makefile        |  65 +++
+ tools/net/sunrpc/svc-classify/svc-classify.c  | 357 ++++++++++++++++
+ .../sunrpc/svc-classify/svc_classify.bpf.c    |  83 ++++
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/svc_classifier.c | 104 +++++
+ .../selftests/bpf/progs/bpf_svc_classifier.c  |  80 ++++
+ 19 files changed, 1724 insertions(+), 24 deletions(-)
+ create mode 100644 Documentation/filesystems/nfs/rpc-server-clients.rst
+ create mode 100644 net/sunrpc/svc_classify.c
+ create mode 100644 tools/net/sunrpc/svc-classify/.gitignore
+ create mode 100644 tools/net/sunrpc/svc-classify/Makefile
+ create mode 100644 tools/net/sunrpc/svc-classify/svc-classify.c
+ create mode 100644 tools/net/sunrpc/svc-classify/svc_classify.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/svc_classifier.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_svc_classifier.c
+
+-- 
+2.53.0
+
