@@ -1,81 +1,81 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C18440633
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 22:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F9A4334DC
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 22:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791411867; cv=pass; b=LFAr38HW7RA3wLgOWRMPZYq51LJJbbgwcN9PbnhIFEM3GfNyBY4Q1u1eoe2ClaTveSFwfE/Qoqu6EeLwz09ZGu+8foR/yyh+JV9rI2FgE/wt28JV4sDc5WtTiTVfZLnE/1+vZ3sC7MpUtxDbP08X/QVmnRVDDYNAAQ/xC3oVXsU=
+	t=1791412250; cv=pass; b=claRO9+R/KQ6bhTyFnkufEyJ571lwKRF6pimOZQjQFIkYUc9skbI1ZadK8aQqWVeN/PkrAi914IWHcdmDM++VTBOqjJlPNomTYBOl8GlFKCRuYVEUCrqu9S8Zp7w8bksMJxHBKa9XUbNUVf2LswjIT99NTIsfVryWAZ8UF+25Ck=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791411867; c=relaxed/simple;
-	bh=j1hldUczhaCmA9pPT03tsjvi/psIdM+Fkc0aCRQs3iY=;
+	s=arc-20240116; t=1791412250; c=relaxed/simple;
+	bh=Lzrn3mTs/XtnEQyVE60M0pIis479rPYQCw9kscVpK0g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ELBI6dLAVUabGyd8V9SF8mu3q8crEO1KIHojYmpCD74aLNgDmd729lSGzmX/DulpcS905UZ6ICwi9FHD8fDfHMHOEoyE++5J+MCZIm6dVrXjUm5N4Nu8Z1CDxO16BYisabgnf+XZmEEFo8uMyBbzyYe4w+1Nquasu0iZjCHwJ+E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m/dl1cB6; arc=pass smtp.client-ip=209.85.167.181
+	 To:Cc:Content-Type; b=T0Y9xyrO+C4GdfvayIrwYNDXKFCHKqvmApndFpqLychykERNVBOifbJwLcOain5xnoJanVFsRB2LT4suD9rYszZU3k+HsvihfsJSRTlLsr5jvcyv10LdUpW8T6C8+9cZPnddmniV52iFzKfSBQbp+Sb1tJ9lk9GwdxSnTg3Cj1E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLf+9oiw; arc=pass smtp.client-ip=209.85.167.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m/dl1cB6"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4f66bb2ab57so1062061b6e.3
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 15:24:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791411865; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLf+9oiw"
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-4f14642adb4so1195792b6e.1
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 15:30:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791412247; cv=none;
         d=google.com; s=arc-20260327;
-        b=CL8nwn3o5yKL4OdwKcsdiGSo//GkVNwrKrmXUlfZYxy7dex43K9ugg5R67E9egiP5F
-         pNgDWeF3aQkbQ5wXAWtYKskkmiw07Jb2mStzieV/WdwkDqd/UWpRd/9KiV72OxzU7z3T
-         pJFoDhnp6AIhCuhOjwF0xPy61gR16A895I8ykQJ5Tb3KJURgbVOFipGb/vs1wDohkFHN
-         4YX95z6qC6Wieljm+wxj7TPsUgVjAFyGQZucpG6bLOe1OJZZfgiokqqI0Zaox+TI3NHt
-         Zu4+n1tvGsiZN/JNoPzoTNXxBYyQ1OZXORUa+x3HtLK2WMx9ER5mqVi/JBEBvcxrPWA2
-         ArOg==
+        b=SJuH/TfRd7wWY5I6waPUmsSA18hOJhfic+EoZt7IVLdDgnkWivuZrNlYAJgpigSzTM
+         0mKhnhMPp+oq9FXiKVxt5CpPqCREX6dceq6TisJnZ3iQ7mhsQCiUX5MmH9hsuSt8kMPA
+         N4sxMB/z5/xHtDcwD7POxQo9A65FXsn6omQMiZtaknFEdeoVubIBDeBDMOp+RmmCwmc9
+         qCdvCJi5eYT22zZ3HihcvhYNghG6ifPdvy0XNFycAyi/0yz3RklqxPRjWEvFEYGa+msu
+         bGaHNh9x1VetdMc7HvBqvx8Z92A6AZJaK1qdd6uOWwZOsuaSCoQDekzkZ/Zz7QiPxIbW
+         fNZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=S2K8HbBhL2mL5g4N2SG5IxowUfPkOB88+AD/Ddc3DyM=;
-        fh=aBkD6WZyTTfsMP8yLE2GbSge/Q+kL379OLTdBErkPdc=;
-        b=NJAGVqVpkeBjzNML82NjqiYbb2megHajNxO160q9OrE7LbMHLjy3P2fuugN/nx51nq
-         a7yuzTYM9TmDhsS5e2O0HASXBVD8pZOcnHQIzHYDyo+ca9ExhkCj2JI3aldSdGSTkweL
-         weCNvlbswi96GuMWGZOhiAwuwhPEkA0d2VL+J8j6w+Om0dXtT9zF/uU0fokIXa6s5ZwM
-         nBoApV7HlNZa5P3zhXUUi9oHq+bOQj4z6/uJ32jFuaXuMc14kKLEQNq5ZipFjTu/sJrd
-         a3yTsiDAXFKoAjheLfUG0OIpKPbMkh1t+9ACyvvQt3ut7P4494yiOi+HUijrBPW09kFf
-         8Ojg==;
+        bh=3clTQCTCnnpY8hOc1jAjkF4nhO8A4cLiGYdk2Z3wF6s=;
+        fh=RRET7pXxm/AY07Eoz/3cK1AJoAPgt/iJYkEat2fzGJ0=;
+        b=rUzWL23hcAK0+gimI3Qk5D2uyYdXS/k6PAb0IzS3OEBYoQ5rZ5LZQmStm5kgb0AN7R
+         wkURSGxA/7WxDU8FbSDr68wf5Ii+Wn468/1ajvRdXAlCyIvqRt5WVtRiMgk/b9GmR3ZY
+         VMO8Bkr6zlrwb1aVkWQVBeqLO2Ai/ZOabhM64gtBbenyPsk60l9d6bOcT2oHIQCUgTnB
+         t4XKEeaCY9uuGKfzjbCs6HdygLdFhvJn+JiMFnlBfiq9R0lEWXMsbgUWPJi9TfBxPl4l
+         o/ghIb4cCFVBnVfJSV0GzeFtriCPqR4YIFEWCMxyTZE+n+5bksTanFWknsdlDVERBlL6
+         PXnA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791411865; x=1792016665; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791412247; x=1792017047; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=S2K8HbBhL2mL5g4N2SG5IxowUfPkOB88+AD/Ddc3DyM=;
-        b=m/dl1cB6TDZfYKeGU5JcD6RqTzO6S/5Dj4fECxD8A8ae5TgjwrK4OPDt1Eruhh063a
-         HWjqNvgBoYFSxGrE0p5SdHm5IPKitus9iZeKz0A3uB9qOFRDn5fJB+2sxXwQ9OxlbKvr
-         KcBDRMjvt1CZ6DLtEalQltXc9Ubk2SKa87agg/slsfkzS586CvJKQR1vFM1m7gXkll7c
-         UuQiAPrHx+uZ58E25DxFaU61Bxe8CVp2DgtQpDpCfrgxnsBx7BNwO4rzftkP533KhGmU
-         V+GDgX6JbZepzmCa7zq6a4hvB468N/lcxA3YKJ5fP7bvubXUe85PQogt4QGUMRSzwwNH
-         eg7A==
+        bh=3clTQCTCnnpY8hOc1jAjkF4nhO8A4cLiGYdk2Z3wF6s=;
+        b=XLf+9oiwblmiuAOVnOBfF0+S+cYq2AJsaW58B+uuT8R9/oaIaD+5ntKnKpWuBndhrQ
+         FdgYZYbEf4mkvFT8hyXIUfAIMtv7aLHcLTwtzG1+1W2xj08Hu+DnroZQJBHzABCZPrnu
+         Nw0sHdMgUaX0xvJkjLXMaq0cDHr8Q+XBSUgQBA9I2embkKJqsCi33gLvc5vF2r8by8ps
+         4jJouGL6vv0t7/NM64NAS9+trnmvFz7i6hPKKuZf+uhDMUZreN8xanrlRaEDEZzdYQUy
+         qT+5lBxXLMqRk+sy3PegRBUmEf3JpRFOEw4xKRydFu0QKJXpfFrqIkeJAl9Em5765cBd
+         UtRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791411865; x=1792016665;
+        d=1e100.net; s=20260707; t=1791412247; x=1792017047;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=S2K8HbBhL2mL5g4N2SG5IxowUfPkOB88+AD/Ddc3DyM=;
-        b=hnPT5/489LCamKOyPALioVZ7MQXaChetOTb2oCtLT8TkC6ZVC2ehUqM57sOhxvL0ZB
-         mAZb8ubFYY1sUwXIFSlULs/dyPXtNP8+xKMDFhWI+2QQ4z5Lkdc0VRPAqI8/E+zECOq3
-         AWH3+LhhCKTiu34enCRvoiCgS3Gz2/Hh5Ll7hkAp746Q6x6jiVrnpvfXodrTf+Acoeff
-         UP4VYl6d3aVFEzcCvEZEP8f/UWzR0LFJ/OMbgzYwRc0FvGDNzbB4SYtgQ0oDIJCPa92M
-         02XppfZbL+oONqHiRGbBEAWl1SLBup5iHIgQar2cv6gTod59S4wzqG5BWOPguh1ZVzWV
-         ETCg==
-X-Forwarded-Encrypted: i=1; AKwUvBwTSY/8yNI0kQiPFLZThvmHQHpuL+bfBV1FGR2CpCV0IP2Z+SkXyPxwUz77lKYiZx98GWQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++mv6F3me/QjB++SmS4I6z/laihPkHpgm6iV+EUllI9scOupqrjo
-	vI0pX3hUI630z+MBqOhj2UR25xb4tKBOByZ3ffbLcGllRJD7sxOPsYH/afuBTde5gzlvEDphwk/
-	+rsM3FLOTaUJGt0bXtCvtz2GCl1XcNLU=
-X-Gm-Gg: AYBFou2xLLUR5rMLczjjdxqioPYuO+4UVajrm2sNJbe/yyURfRYfLmmjYYHme1ploJ9
-	RGsGtu3npfETlTuUrmJ3NEf+z3/RzV3kODcglUoqKcgQ8AP4pC8u2XKIaO8hShNbGm38pM8d9YW
-	wWUGYyGshUc6DHKdZBc9qxp8KemO7VyDtUS/i3TJAvmCRwonOoJ3f1pb2ZeNd4XM63G+R/yAZXe
-	apgsF0wKTLLkGs43eATLXwZkxbinAgs5XxPyGkw9I/iLe2GfDWub9dLTbAitJPnb14fURQvCTKM
-	zsYWwnee7I6Ysn42vJvNy2rPmn0ccO6Zw0vUiQJKqUqCT8xJmPzKwoU8HsKKBt7UVA==
-X-Received: by 2002:a05:6808:c18f:b0:4f6:1336:cdf9 with SMTP id
- 5614622812f47-4fc4677cbffmr3710852b6e.35.1791411864709; Wed, 07 Oct 2026
- 15:24:24 -0700 (PDT)
+        bh=3clTQCTCnnpY8hOc1jAjkF4nhO8A4cLiGYdk2Z3wF6s=;
+        b=ke0MvoJPp4smWoU8BPQesj7fzMQyh1JBhZ0b1jSJhg6gV6vwqn9Xu3+gGm+tkzrY+0
+         sao537P0MJ0xaeHmr4f39LphsdM2x9ic9wCCVuoghb/B6qQ67OXa+DtfeNo2zYxx6vAO
+         qmqFo5C0q1X8jSGG1yvWvwc4sPRAt+WT2TT7g6nYgMCqVDXxyvCV5Z68bOBULk8fmyEx
+         1/ujeIRNpQ7IZFEPXvyTCmmx1oSiUfc+jvPZZ3H13Clo5RzoFLn2YZBESivOcDbQntgP
+         rjtuQDqrMAGkC03Z8YiQTH6kPJ34GimuaBxGRekvJEfkyT9H9/RtiwH7k2cl22HGFUvO
+         P/pA==
+X-Forwarded-Encrypted: i=1; AKwUvBwY2FSwFLmyNL3aSGfU86vixD+qiw1ICMMOI7SIBdKNqnUdaKU/X7XexUZJko5pg1S7rjk=@vger.kernel.org
+X-Gm-Message-State: AFuF++nGJ8YljhMaIebeqsXDP1qvsrK5gsuEIR6FO7Z3Ur2NlLQDp5vh
+	E9DorP4LrlfGr8hdB+zV5T6WlJGNfoUk28zQ1MQ3NAkfw6zUM3b8vrtLdXSH5bF+a7VuFkC7Z4E
+	Lc9OiC0jZEeNbZLLzUrb2T+/usg5dl+A=
+X-Gm-Gg: AYBFou2PoHAeKICtM38Ymnsrsoa6swMldEKSr387ceVZqXsRDub329HpJWisVJg6OLh
+	bJr42FzjZ/gQUA9oyb1UK6PFpcE6d7p7v03iutBnCn178tYhDSTPIchZZAD3CqBl1I+wYFyAo5u
+	HlrjhxOkCRKeobgZYGNYisqWU8mkbMAY5mAraFOhREfKvuNQtOeiql8Fo+9fu8euIDPYC4+JkvS
+	e40S3RVFL0KMTgdqE2z3oFnapCrtfnwlJytZmCoau79hwD5tWTIYkLDqSqOI3c6A+hFMWp9YtQW
+	k80yyPgXS4fuXRWh73U7gQOOf7QpNKwThbYwAsnbN1DEk1/FCtSTYAY=
+X-Received: by 2002:a05:6808:1388:b0:4f5:59e4:a8b with SMTP id
+ 5614622812f47-4fc47abd3b1mr3579325b6e.58.1791412247204; Wed, 07 Oct 2026
+ 15:30:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,14 +83,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
- <20261007-a3-arg-trusted-v4-v4-2-253ef3a1a69a@mails.tsinghua.edu.cn>
-In-Reply-To: <20261007-a3-arg-trusted-v4-v4-2-253ef3a1a69a@mails.tsinghua.edu.cn>
+ <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn>
+In-Reply-To: <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 7 Oct 2026 15:24:13 -0700
-X-Gm-Features: AclHuK9gTsp7jsRrpHs1cx8Ph74rNFmBjbvSX0u-AULTjQs9ENLQ5IRNn8neVso
-Message-ID: <CAMB2axPoPSJen57E2Suc1hFcwhHJjjEruC+8tthRA+-JhDA6Og@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Cover trusted BTF ID
- argument provenance
+Date: Wed, 7 Oct 2026 15:30:34 -0700
+X-Gm-Features: AclHuK-f8-ePnMdo-O27CR238KSTeSYc0f2p8oscdyi9_ZwyWmVUlf-VlzP_ZyY
+Message-ID: <CAMB2axPOBx+AuQ4X=rG9cikfcVaNb1Bd2o1dHKP3RNDn2=ftmg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Enforce trusted BTF ID argument provenance
 To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -106,46 +105,62 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Oct 7, 2026 at 9:25=E2=80=AFAM Yiyang Chen
 <chenyy23@mails.tsinghua.edu.cn> wrote:
 >
-> Extend verifier_global_ptr_args.c with calls that pass bare and
-> RCU-protected task pointers to a global __arg_trusted parameter. Both
-> calls must be rejected because neither pointer is referenced or trusted.
+> A global subprogram parameter tagged __arg_trusted is verified with
+> PTR_TRUSTED, but the common call-site type check accepts bare PTR_TO_BTF_=
+ID
+> and MEM_RCU registers. The callee can consequently pass a pointer with
+> weaker provenance to a kfunc that does not accept RCU-protected pointers.
 >
-> Add paired test-module kfuncs that return and accept a nullable trusted
-> task pointer. Passing the return value directly must succeed, covering
-> PTR_TRUSTED | PTR_MAYBE_NULL handling in the common argument checker.
+> RCU protection only guarantees that the object remains allocated through =
+a
+> grace period. It does not guarantee that an object's refcount is nonzero,
+> so an RCU-protected pointer cannot satisfy the trusted-pointer contract.
+> For example, an RCU-protected bpf_cpumask loaded from a map may have a
+> zero refcount. Passing it through __arg_trusted lets the callee pass it
+> to bpf_cpumask_acquire(), whose plain refcount_inc() can retain an object
+> that will be freed after the grace period.
 >
+> Make the existing provenance check contract-driven. Mark generated BTF ID
+> kfunc argument types with PTR_TRUSTED, and add MEM_RCU only for KF_RCU
+> kfuncs. Normalize PTR_MAYBE_NULL when the argument contract permits it.
+> Then use the argument flags to require trusted or referenced provenance
+> and allow MEM_RCU only when the contract says so.
+>
+> Split is_trusted_reg() so the normalized type is used for type and modifi=
+er
+> checks while reference lookup still uses the original register. Conversio=
+n
+> of scalar-struct BTF ID arguments to fixed-size memory continues to
+> construct a new ARG_PTR_TO_MEM type without PTR_TRUSTED.
+>
+> Fixes: e2b3c4ff5d18 ("bpf: add __arg_trusted global func arg tag")
+> Suggested-by: Amery Hung <ameryhung@gmail.com>
 > Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 27 ++++++++++++++++++++-------
+>  1 file changed, 20 insertions(+), 7 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 353bde9ae2274..a0ab793f041d8 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5327,15 +5327,17 @@ static u32 *reg2btf_ids[__BPF_REG_TYPE_MAX] =3D {
+>         [CONST_PTR_TO_MAP] =3D btf_bpf_map_id,
+>  };
+>
+> -static bool is_trusted_reg(struct bpf_verifier_env *env, const struct bp=
+f_reg_state *reg)
+> +static bool is_trusted_reg_type(struct bpf_verifier_env *env,
+> +                               const struct bpf_reg_state *reg,
+> +                               enum bpf_reg_type type)
+
+You might want to teach your agent that the line limit is 100 columns.
+There are several unnecessary line wrapping.
+
+The fix looks good to me. Sashiko=E2=80=99s finding is real but pre-existin=
+g,
+so it does not need to block this patch. If you respin, consider
+fixing it in a separate patch with a PTR_UNTRUSTED | MEM_RCU KF_RCU
+regression test.
 
 Reviewed-by: Amery Hung <ameryhung@gmail.com>
-
-> ---
->  tools/testing/selftests/bpf/progs/iters_testmod.c  | 11 +++++++
->  .../selftests/bpf/progs/verifier_global_ptr_args.c | 35 ++++++++++++++++=
-++++++
->  .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 11 +++++++
->  .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  2 ++
->  4 files changed, 59 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/te=
-sting/selftests/bpf/progs/iters_testmod.c
-> index f65cc9766633e..145750bb64ef8 100644
-> --- a/tools/testing/selftests/bpf/progs/iters_testmod.c
-> +++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
-> @@ -46,6 +46,17 @@ int iter_next_trusted_or_null(const void *ctx)
->         return 0;
->  }
->
-> +SEC("syscall")
-> +__success
-> +int trusted_nullable_kfunc(const void *ctx)
-> +{
-> +       struct task_struct *task;
-> +
-> +       task =3D bpf_kfunc_trusted_null_test();
-> +       bpf_kfunc_trusted_nullable_test(task);
-> +       return 0;
-> +}
-> +
-
-nit: tools/testing/selftests/bpf/progs/test_kfunc_param_nullable.c
-feels like a better place than iters_testmod.c for the test.
