@@ -1,67 +1,67 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5723F44EC
-	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 14:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA506386C25
+	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 14:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791384615; cv=none; b=HuGr4C8wUBtHRWe+BndVcgG908CK1ifqev+b5XtvItoGhRt7iOltNvA8Jhxu7SNKXTkJrCNRI9xHBYVhWGkVhSxO3fHLefxA1ZrdBFBiSZrw9eQLc5XuONxsrKbP5e7H9SrVx9wK80WOcgyXc1GGF7FD2YzBhrWUSlCJIch4XhE=
+	t=1791384672; cv=none; b=iKxoYRrzfXRYnTv4vWCYeeimqmX9Ti7ROCTIv3rZtlHh699hg+lAx4NxMY0/ZSzX/D6c6O0wYJaldGU+Y7SEdwAJJmABAN96/xle3EmbXl37t5G408CeS1n3Gj7Sbzw1EmgJapDWozeoUEDcpr9cxB1hoIJRv/WZONLFevmnIz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791384615; c=relaxed/simple;
-	bh=DtLW2TlvpGvM6hV7rxhC4fpV2L2eYZv026J/B1/JswE=;
+	s=arc-20240116; t=1791384672; c=relaxed/simple;
+	bh=zg/uWw1C9tuSxeBV3eFBhNDtdmOBp+EfUsAftSVbJTc=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=bRJTLOfaIFqAbliTdKR2+5z8TDkD0IgsWIBgwJTOQVF2SwVZhhVXm1ZOhOxm53TVLuh68tMC0WBg0AUgxriDrFq3GihTkI/4PBajgHhniDsW5W43QSa2Gu/Ukd6rdx1S1nuwfSk8B2etcc3czzxkcBU7z/LIpC1zWPWPWoXLm6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fdz264Cp; arc=none smtp.client-ip=209.85.128.174
+	 MIME-Version:Content-Type; b=En4kGsHV8igXUdWs1BkMLmxjml84dBQqw9/hOgdid44/1DImx1CgwhDui7YlyXBAKeo4hrOgRlGxjtJbYbLSst30TtcCu/SVETWnigcOYSBDnrGuSsf3QyyFxuPFmjH8ACfs9aO+zuqzB9LhsKMvqv1J4wn5O7oIhvUFRbX0Zpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c61zuYBY; arc=none smtp.client-ip=74.125.224.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fdz264Cp"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-8b056d58f2aso14340497b3.2
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 07:50:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c61zuYBY"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-66c70f69d3fso3594828d50.1
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 07:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791384608; x=1791989408; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791384667; x=1791989467; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:subject
          :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=R5S9y3rm49FcBbD2GVDr+s54p4RcgRdmhC0n7fWz+ME=;
-        b=fdz264Cp2G8Z/ltyHdIO0aIQSkeYspGBR3kVFF/2Ks4+3YFIWsJUI3x2KlmWnf6WP0
-         U8wXEbRCDfzMAsfeEvwFQ5xWZItwAvgSdXUKQ0wYqIfdGxsOsNrgdw+zz/0UlYDrUK+b
-         Stm1zUFuHsKeYuXlHG2GrHdGtJGorQ3XR+2eWcSTquM0th9QDNdubXg9omqhP+02gsgV
-         9hdcopXhkdgqWXuU0Xhu/S5vSqbRTMDR98GodN/YHgaLNZxdFfPS6ps5caVe+3b/gMQz
-         5Nbr0ObPecxrNhF38cpixnYcnyaoD7U5GbHbnLcGlcOjNUS+ySmWHzamLhT480F8aWu/
-         /hYQ==
+        bh=YACwyXnL3UskMX5dK960KQ1iZfinHNnmBFhBCvvDh5k=;
+        b=c61zuYBYytyJwqC2tJKeP6CGunPFCSNS5tS/mzIXaXxDHHi5/vQ9ceqV/PSyxVYZwI
+         Wks4N4Pt5n/kv2/Xhbg7Bdqedo+3vITLvw+1wwnM/mKFKc774lPO7rg6SMEmbQrnrXQa
+         GLEo+4AAy9AbGgnAtK8FdZy9NBJD7Xog/zqZCN2hDXdMmjJ/mcA1D8d/ZMW0zK3msV+7
+         f9zMHJDp9C2m8Jng6c2DHfWj9BoeAV3QJX9C9xLjZwUQLAixt/7YTld5bP4u0q5tPfgr
+         btMR/En/i/NnvvyyCV39B3FCi3GEUKe4nK+XT+YC90xvLPdgb4XH+Q5xZac6ZvCwvqjK
+         KNnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791384608; x=1791989408;
+        d=1e100.net; s=20260707; t=1791384667; x=1791989467;
         h=content-transfer-encoding:content-type:mime-version:subject
          :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=R5S9y3rm49FcBbD2GVDr+s54p4RcgRdmhC0n7fWz+ME=;
-        b=sqpDKotIGyH9Q5DcpA+QAfPl+Nikb5z67iFUn2OndVqcZFkW96wAIJtGEFyylQnVMB
-         /uLPQLreFWGY0DWPKEuZQ+7OhzTu910tmTzM1x/iNUQswsacKKJZKNYj8yb/mQR4F47b
-         P2xOkxa+DreFIqA4fnM5mH3i9u4UF837avQc8Cr4xV55UobMZoAjBOqB5VUg0QswmNOf
-         70bQM/xAqez1oa+ytKaJM7sfN+fqMlDStUHBudtoZ+DpiJh/iG1GDIk/8VoAtn5/jj0Z
-         3xquxihxPw5RKbkQ/UyC1KGVJBZrRZh7xRZPvB4XXktMhsoQcc4OFqt0F8RfTwx0z93S
-         wT9A==
-X-Forwarded-Encrypted: i=1; AKwUvByl5IFMLeRTL+REwln30S6khCqANt/Ls+H/qTFZ7XoZIm/Lphb4oBN1hRDSN5qGkGJuWZ4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKzvP1krr8p///WsQJRWvWrbftqCu2uzisCzdspV3A5Ro2py7b6
-	M06D8TQdEU+UmyyNsqW/kaLF74XDit2eoWQNCDe+XXMj86f60O641q+A
-X-Gm-Gg: AYBFou1AykvHEnyL1HHA8TX8o4yKsg/CQvfdB17/TJ9/eVcwMBQvUtxviuTiHM4sLzE
-	qXtBiyDESd/W4s1A3Vpnw6tK6muf4VDvGz0kCOao/570w/fUJUzjKcrGnTN/mo0oqogbMAFFJt9
-	nggqSezGLoQ3b0eqzvpKHJ7uHQZiT1GuXQQnBdcaHF65KrMLty6MvdqeNNyo9U7sdRxmTGIggfD
-	w4bzh8styA3izhavtv1jr+sUlz39OFL2Nac2DbgCq4Ikn+Kdnlkj0fEBbuDkaJPlLcBe/OuyyEL
-	CDiLjzK/wBDJpZKCfOAO0HnYk71Y2BQvDRoDdgbZckYNVa64uUJBKiGdSk8z4xc+y7JPxSO9m2L
-	xrc2Il6prKxn5D7PdM79rB+7gInRVd1HqOMJO025Y/PAbeseuwl3sbSCvdU0xx9+1ugDuoBjAUF
-	L6JIdcjW6ALczpvs03YtunrBKcS2E9efnpboOhys3amQmq0xQO6tF9+f4ofHfNh4ok7xRziWJFz
-	TGKMquenS67oN6KeF2Arl4lxwV/w3moa/9osfBFloq5OBM7sdGEUrWQm3+BIzCxKRaHqBo/D1az
-	zf9wNxEF+MWWX81E5iuYAkM1MUpJ947YA5kO2A==
-X-Received: by 2002:a05:690c:3481:b0:8ae:c3f4:3da8 with SMTP id 00721157ae682-8b05b172ff5mr16418657b3.85.1791384608412;
-        Wed, 07 Oct 2026 07:50:08 -0700 (PDT)
+        bh=YACwyXnL3UskMX5dK960KQ1iZfinHNnmBFhBCvvDh5k=;
+        b=o76Y6ukMEcf4vw/yFvV+x4vjaNb1My/V9ubb5PO+1gtRx68ZK2jB4pvTv1V+ACoEj4
+         dGyb1mMD7OLt/8kxp3XMepI6tEQtSoyNqDj5Stk9RqgvslpilHDBF3B1o16ouPbQVTYZ
+         SafrUStPDUWfTHkTJ8t+PPkZThV4xndz9GOva4Lvc7ZyxBbKXbDlV+fzpUiyv9/NzYG4
+         GuvMZ89Jm8XxRhtY/xAD6qPfNCc8PdEMNBg5JkaCjeUkKixuK0JahLcsURNUAhLRBDwr
+         ycuhv303+mrnM6r41dxCzLEq5fFkJmjGQ3JcF8Ms2w5BM17zGybCRlJkiOreo5YShVdo
+         OVsw==
+X-Forwarded-Encrypted: i=1; AKwUvByw1KkB3vsru+m9YCSwSX+ili8LKAn3OCLGLaLOfLW/bHi8EjBAM4zWyfvUWaF2wDXsgG8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJEnYZIZuuRAnVm9knOE5UOflw0IsZV2zFapyVcx0UxQ5UAndSW
+	Rj2UvoUAFkeI45ZlJIxBrAZINZLlR5o55lQgoeW0duqNT7EgdVo8dDnY
+X-Gm-Gg: AYBFou2Ul+uKNbJoORj/j3B7n63oWXahSnQMMTSGu5PsUIibhZ5tNlmIVuKXDjJ6Yj5
+	uFSoe9iiZKCTJgghsr4b+WDyR3DV6Er8awbCVlsRcdaVbcBIAgQjVeJz9CcLeFA1o7+jNB3FefU
+	KyhAouSKCQ53AI9kR5h8YBjTElbIeczvbrknxOG1/KWEXzfV8rqbsV85SQB9Lj3Z7FYUtmaPmhH
+	CnDaeXfU+goopf2+TBzfijynHh+8CYRETaUOZH+ev7WH322hVVUIYe97ojCXDNvQik9cw9tL9iC
+	SaSytfaCrlTfn9n7Cr0Ag2exMYF0Sk8SagWT8PO9ZyY7P7EvW5sCrDB/1+bWvS1vE5DyyVcpwLe
+	PUU1ym7oq24iiR7FTwY9lijA3xvycZXaYZd1zw8Lhf/WvC8hex2/rxhTauK+aZrgwtvu2WRbvp7
+	TX68GJ6zKtrbzm8WzPVsTT4/jI87kudSKIdczsnfLx5u1A7MFRu86cNk9dbLMR5UrCQ3EBfJRWI
+	Ak8H/EbLLMVnA/5cVcWn8supPTvbQMeXS+7KS6mX3mcoTi06nq8bQl4Gn+i7RzZ5SP2lQXe4I5Q
+	jaDNlsIerE8HBVrLYncMKWp+m0lcH8pAWWuWD4GdL6e1QEQD
+X-Received: by 2002:a05:690e:4893:20b0:66e:5e37:2ff2 with SMTP id 956f58d0204a3-6790a0d5b89mr877402d50.4.1791384667246;
+        Wed, 07 Oct 2026 07:51:07 -0700 (PDT)
 Received: from gmail.com (111.46.245.35.bc.googleusercontent.com. [35.245.46.111])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b05abb8b72sm9302657b3.34.2026.10.07.07.50.07
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6791afa71ddsm163923d50.4.2026.10.07.07.51.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 07:50:07 -0700 (PDT)
-Date: Wed, 07 Oct 2026 10:50:07 -0400
+        Wed, 07 Oct 2026 07:51:05 -0700 (PDT)
+Date: Wed, 07 Oct 2026 10:51:05 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Josef Bacik <josef@toxicpanda.com>, 
  "David S. Miller" <davem@davemloft.net>, 
@@ -76,12 +76,12 @@ Cc: netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, 
  bpf@vger.kernel.org, 
  Josef Bacik <josef@toxicpanda.com>
-Message-ID: <willemdebruijn.kernel.235bf1cecf85f@gmail.com>
-In-Reply-To: <20261006-b4-skbuff-bug-on-v1-1-1b4434c5357c@toxicpanda.com>
+Message-ID: <willemdebruijn.kernel.fde28dd15d34@gmail.com>
+In-Reply-To: <20261006-b4-skbuff-bug-on-v1-2-1b4434c5357c@toxicpanda.com>
 References: <20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com>
- <20261006-b4-skbuff-bug-on-v1-1-1b4434c5357c@toxicpanda.com>
-Subject: Re: [PATCH net-next 1/9] net: skbuff: don't leave stale bytes in
- skb_copy_and_csum_bits()
+ <20261006-b4-skbuff-bug-on-v1-2-1b4434c5357c@toxicpanda.com>
+Subject: Re: [PATCH net-next 2/9] net: skbuff: don't BUG() on bad arguments to
+ pskb_expand_head()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -93,21 +93,48 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Josef Bacik wrote:
-> When skb_copy_and_csum_bits() reaches unreadable frags it returns 0
-> after copying only the linear part, and the rest of the caller's buffer
-> is left as it was.  The callers copy into a buffer that is about to go
-> out on the wire: an ICMP error quoting the offending packet, or a
-> driver's TX bounce buffer in skb_copy_and_csum_dev().  Neither buffer
-> is zeroed beforehand, so whatever was in memory there gets sent.
+> pskb_expand_head() BUG()s if it is handed a negative nhead or a shared
+> skb.  Both are bugs in the caller, and both keep getting hit: commit
+> 2cbb259ec4f8 ("bpf: Reject negative head_room in __bpf_skb_change_head")
+> and commit 64e6a754d33d ("llc: do not use skb_get() before
+> dev_queue_xmit()") each fixed a crash here that took down the whole box.
 > 
-> Zero the part of the buffer we didn't fill.  The checksum is already
-> wrong in this case, so the packet still gets dropped by the receiver,
-> it just doesn't carry anything it shouldn't.  Only zero for a positive
-> @len, a negative one from a broken caller must not turn into a huge
-> memset().
+> The function already returns an error that every caller has to handle,
+> and at this point it hasn't touched the skb.  Warn once and return
+> -EINVAL instead of crashing.  Anybody running with panic_on_warn, which
+> includes syzbot, still stops right here.
 > 
-> Fixes: 65249feb6b3d ("net: add support for skbs with unreadable frags")
 > Assisted-by: LLM
 > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+> ---
+>  net/core/skbuff.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 512ff9cfa269..5d856948cef9 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -2303,9 +2303,11 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
+>  	u8 *data;
+>  	int i;
+>  
+> -	BUG_ON(nhead < 0);
+> +	if (WARN_ON_ONCE(nhead < 0))
+> +		return -EINVAL;
 
-This should be a stand-alone fix sent to net (and stable)?
+Another option besides WARN_ON_ONCE or even DEBUG_NET_WARN_ON_ONCE
+when returning an error is a net_warn_ratelimited for such cases.
+
+>  
+> -	BUG_ON(skb_shared(skb));
+> +	if (WARN_ON_ONCE(skb_shared(skb)))
+> +		return -EINVAL;
+>  
+>  	skb_zcopy_downgrade_managed(skb);
+>  
+> 
+> -- 
+> 2.55.0
+> 
+
+
