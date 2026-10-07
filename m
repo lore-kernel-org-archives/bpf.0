@@ -1,65 +1,64 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609A64DEC0E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62B6382F13
 	for <bpf@vger.kernel.org>; Wed,  7 Oct 2026 19:59:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791403190; cv=none; b=n2X9bOwP0GGDlLNaNxiLzPjYL2Y6rB+3Bx+FJeBuX6Muuvr8cKWBvBWLgH5RId5qnudb/gVL4kbqmAsbzjSG2I8BWY+DAu8o5QYX82LJcrOnIy+LUucrGpt10VyhBryWRZgCC/B/gQFZCcdfZJFaGE27u2StWEETXMC+uZSuKtE=
+	t=1791403191; cv=none; b=nYNnfRbOoOM7U1MszRMHLJ1uj0QB+xueyBKDVy2yHtKuyxbi8Brn6jt5Ow51njebbOC4iihroH1uaYHOg9e8XyqPmueIGufF+ETuPhj2fInselI3M2HklDT96LriS+40HIzwtAjNAA29OLdEN8cSJOxT6VdVVTrNX3gKdfE1heU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791403190; c=relaxed/simple;
-	bh=ovwJuZ7EJ7wjONSARifAxDAgx4Ym9sF+zZfy3Xmc8xw=;
+	s=arc-20240116; t=1791403191; c=relaxed/simple;
+	bh=qgOqAIrzkFVv3pR41i4HnBt20Mw4cWVHW1Yivzd/Wx0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dp8ULItZioDzhBRhK7khOqH6A2j6A0nUArTCiJE76u/LGAo51PfzFRe+7gyNUC1xm2jl7LPGuTvkUr1LpzkI7dYKMOYAXTnnigNknuozNlSYSYuS86d8ID/qnvYP5Zl6MSGWo1AjtzKp0V1T2Rd778bG/PaSMpR7jI1eFUuGNV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=iCzA9hes; arc=none smtp.client-ip=209.85.161.42
+	 MIME-Version; b=jkf4siUTPsiNw287H/lkNX9VtnKalRg+joO8KFBtsjrD+dPSSkstmb6hg8wd5CWHICky9otwDDBtSuPkokjM2L8gud/f4FLCk3upPQ8QhV6q1/UfvZjbb3UxvjLIOIyF/cqbyL6k0dFYWCI1f8FapOkc7CHdjbs30qLpwiH4ais=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=QOX2Ajx7; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="iCzA9hes"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6df7f544919so1493363eaf.1
+	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="QOX2Ajx7"
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6deb848ddd7so3152307eaf.0
         for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 12:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hammerspace.com; s=google; t=1791403186; x=1792007986; darn=vger.kernel.org;
+        d=hammerspace.com; s=google; t=1791403189; x=1792007989; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NmuguSQcbeAhN/rpcSMJYygZi4fbgxuPSkkmPTezGHI=;
-        b=iCzA9hesvuVKzkmkz7qhh9jpt3FnVy5N+0O3h+vRxYuQ/e+5jmAricm53rdIAAGVkw
-         m9gMK34V01eL03vHJxCK+6zJiVTQmcgKsaXeaRhZBTGSoFebwvEbGNTBULVfXDWj/muL
-         Rz7L1VxvDmbcTrKUejGL17sY3Djqxr9NoUeIXPUYmUpCq6BzOVQs8Y9JjBlwJxXxxzbh
-         envauYfZyWJ4kMqEQc7kSWfFuzo4E7+r+9PuUZcdnKHsP8kjlpzItZEQX7U5IBPx0d6i
-         lUvSO0Mznx0rbzYj/RYKVECsNSi88dtsiIfJMjbDKN/mE94zAHtsWyaABxeSPQI4o/Zy
-         klZA==
+        bh=owCAAy82Opl9I0OXoUtQLC3+594nC+cfFTkiDVH7AB8=;
+        b=QOX2Ajx7/9WZNf10PN17G4P7FU+UHEJR94i5lBnwO7tzlUV9iq3nHfqcaoy7ruHvSg
+         CbDKD1fOTcwtgIDMqXdzGjPOTPWNWBXvuBYBOLJWZNX5xuWX2RgDsvobIA3DW2axk/HU
+         faZU6qRj9BAKQwqJ3DBxFvoMlAuoJg0rvYsIB1/7BHzGE3sFqVWofnldO/Gg1DMeJ0lG
+         x3UAepsdI3EoKmfOPp9jQiL/cSw2WMhOo4/YcxACNb+X8ktJNxXI+X4Yf6WXVY8txSmt
+         /7NTKAud6wNPjMjqxvAPYggHHKJxEqmQyZqx7JXVQDm3bZ7mF1i7AtNDpZiMa2L1dadI
+         HWsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791403186; x=1792007986;
+        d=1e100.net; s=20260707; t=1791403189; x=1792007989;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NmuguSQcbeAhN/rpcSMJYygZi4fbgxuPSkkmPTezGHI=;
-        b=lGvGET9sdlxN8ALhDY9ntEWmVnLVMJee4tNbjPe8y8lBBpw4OMyCZq7QJXOK9qMOVc
-         lgQZ0wZUGjFEf3c1/s8GgJWj9ukniCZRUOqN+Osv315xHJvill1OnES9bTRtmyqIvxjq
-         lUs7wjhq02g9vTiZZB7JvJsUms0hO0RnECbFNWEsEWKaeG27IJsLxTBtKuM5zDdLDVI+
-         QaqxLRCVbmtNtT4fpjC468xFfO5BCwmnNgyFlGvfyM3QYrHH+uMbuAFuzZP6lPkBuVrq
-         I7YqA0GcXi+4X4q68EnRhZJ5K8r9iDPRaC1dhaOEieJYIbtQ9On2FHq7bkqSeEvSgxuP
-         7PaA==
-X-Forwarded-Encrypted: i=1; AKwUvBzpwh6rsFaF3mV9EwfRHSlyljS7Sz/e9ZMHrFm10XdspqaVVxN/EUzFUIkhlyddHzxqW/w=@vger.kernel.org
-X-Gm-Message-State: AFuF++kqNOC2zd591z+6atbgUZn5Eegtgw4YSNAzuQETONmKvNLC+gB1
-	7Cwa3Ts0B8RyBzRCqGxJpQ8yNJsd8zqgPgDy/UiEWp/cq8t1G9PFkAK0auGt1osBfBdwv2m32li
-	BxzPd
-X-Gm-Gg: AYBFou3WlEmkRFK1pbfKWDjneloYXW/QnH9FSzx3K43T6/4f5VnRvpPu2/2oPNEmcb0
-	34UlGl2rwemPHcUCXTZiwPvp1XCSWgPlUqBZct+CnCaJ6aR0onM4lueJLhufy1DS96Jnm2DHaR+
-	LbHHIC0aj3jotZHQX1pBYz1EXnOmNY8mC0hooTIiUiKMpk2fNtEDA27qWkYPcmEb5FrQ4TPuGsa
-	1n76XsVAJzFojF87X2cczB4epF0kE8lNq0hs7KnHdN6a1lRsSDZZ0CFb1MAHEUd69R3X+Xz0mxh
-	uAFY5LaKOfA9SgaxdOtY3iPfkCRxVKsgjJm6te7rs9LeQk214pdm3EF5HGGm650VLqPCPOvOsBL
-	3ZO0yfx1/4o7LBRz80wPXpHOOIVVuTWcfAeoB2wXXJdeAhgGR2M5MBWQgPnrWDMwB4x//JB9Ph8
-	jRCsVE3lALAb/c+9evOfX6zdTeiDSy++jcqrKD+E+NR4wSUpsW6c5x8VI/R/V40qyTfP+cg1UHb
-	uZ+Z22QL2bEMdpPWTf7mop8IcxqulJmFVJxswHe2g==
-X-Received: by 2002:a05:6820:200b:b0:6df:428f:f17e with SMTP id 006d021491bc7-6e7a65caaa2mr3346065eaf.39.1791403186071;
-        Wed, 07 Oct 2026 12:59:46 -0700 (PDT)
+        bh=owCAAy82Opl9I0OXoUtQLC3+594nC+cfFTkiDVH7AB8=;
+        b=HbfMpTY0fKvzrxkBfoo95V9jMXyWZTMOsKoQH8kHjB+47RsXJBrOEjiMtc/MrH5Bkm
+         Srj+0GsqwHY8sxnS6pjHPXkqbPHP+6GbUzfZBeLImsfNNUUei4RB7Q4HwKqokgC/WT5p
+         6M08I0olS3my1zTsBv8UNTrR6P04TUX6yZWWHRVYxeuNOFAYdEopovCAPOlIPHxZoy88
+         Bpn4v9Aw3LVAqEUmz41KTrMPcIZPKTylytffIKN2RaZnKdtaTRTZQLHa7sj4So80/qme
+         ItfibdrwoZY75pG6EQ6sfGvOj7jvw1Y4vldINQHWYF2ec1dAupm+W2oBIH2sLtWfXv2X
+         RRkg==
+X-Forwarded-Encrypted: i=1; AKwUvBx91+pkxVXVvSkvbsAo5DHul2Ek+n3TPKTcO9VpQQ5L8j1oUy6z0DOIiEzwgO4DjlzGrQA=@vger.kernel.org
+X-Gm-Message-State: AFuF++kIOfK6lxhrNpJqLUR7nyb+JqKLjZ4yQDDnMEZlft/QKBve1ACt
+	DOBrtHTolqude4EbdjZGP6TDaxS0fzaGcO5RhPZSnPvEVVM56UVVMaXU9MmN4JJnesA=
+X-Gm-Gg: AYBFou22tYzpxQbXBc+thFVB6TF2AL1q5zwA/NLfuczwsL4BLusdmYp18DIQZKN/hEO
+	Row1xzQt+qeA38YTGgxbH0QS1CzZAHhC2rMv89yWX6SiIjJie38NDQYo061y4BdnqCk3p2V/NY/
+	sXesRMe57dqTaHTvzbVacF/lI2cRoEKgLjrs9Rno2a2XxiIpanKt10CPQ3lhYLer3oCBktLlppR
+	BpH36Fo8+RgV9nSwwOU7SotYhhPMaVdUsvggqBuBOIZ+dt936b8zy3nky1cyBLyvqHm68JCvF2q
+	Awn+B+NAwwRgMrFO/OW2y0OTUd/8Zl0cN3UjDTfpVj3iFLa2mGbhGfuhKp47q17j7vkA/LATr0I
+	UBCz4JfFundiZO1yHxkZ7JdkOIZ8b8fzfUIN8+A7yNVQxcw9XTtn+Q2YmuoCljFYiZ3yecERqM/
+	GJRC9rUbrtIKJWb6+lHnJsSQwEEEAxR+iDmUaqS8oX1j1t/0NGVKPDoFfgEZ0kIKaH+mj4Zz5v8
+	9TFStDmk7wmx6hNsOi956xcss2YSt3YTMpRchbnBg==
+X-Received: by 2002:a05:6820:4cc4:b0:6cd:3ffc:e330 with SMTP id 006d021491bc7-6e7a7c25072mr3182451eaf.78.1791403188654;
+        Wed, 07 Oct 2026 12:59:48 -0700 (PDT)
 Received: from bcodding.csb.hammerspace.com ([66.97.168.37])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a274c9c520sm1084285fac.16.2026.10.07.12.59.44
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a274c9c520sm1084285fac.16.2026.10.07.12.59.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 12:59:45 -0700 (PDT)
+        Wed, 07 Oct 2026 12:59:48 -0700 (PDT)
 From: Benjamin Coddington <ben.coddington@hammerspace.com>
 To: Chuck Lever <cel@kernel.org>,
 	Jeff Layton <jlayton@kernel.org>,
@@ -68,9 +67,9 @@ Cc: linux-nfs@vger.kernel.org,
 	Daire Byrne <daire@dneg.com>,
 	bpf@vger.kernel.org,
 	Martin KaFai Lau <martin.lau@linux.dev>
-Subject: [PATCH RFC v2 5/9] SUNRPC: dispatch control events ahead of data within a client
-Date: Wed,  7 Oct 2026 15:59:30 -0400
-Message-ID: <c7a3a17e887512ce20a8ea90b706816dcbf8c785.1791402701.git.bcodding@hammerspace.com>
+Subject: [PATCH RFC v2 7/9] selftests/bpf: add svc_classifier tests
+Date: Wed,  7 Oct 2026 15:59:32 -0400
+Message-ID: <aeb501171cf5bbd04d324afefb39682387552c8c.1791402701.git.bcodding@hammerspace.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1791402701.git.bcodding@hammerspace.com>
 References: <cover.1791402701.git.bcodding@hammerspace.com>
@@ -84,198 +83,240 @@ Content-Transfer-Encoding: 8bit
 
 From: Benjamin Coddington <bcodding@hammerspace.com>
 
-A transport that needs a connection accepted, closed, or a handshake
-run waits its turn like a transport with data, behind every transport
-of its client queued before it, and a client with many connections can
-hold a close back for k rounds of all the busy clients.  None of those
-events costs the service a request's worth of work, and a close frees
-resources the sooner it is served.
+A classifier for RPC service transports that looks the peer address
+up in an LPM trie keyed by {family, address}, the reference for the
+sunrpc svc_classifier struct_ops, and tests of the attach model: a
+second attach in the same network namespace fails with -EBUSY, a link
+update replaces the classifier, a detached instance can be attached
+again, a classifier attached inside a namespace does not occupy the
+initial one, and a namespace that exits leaves its link to detach into
+nothing.  Skipped where the struct_ops is not registered.
 
-Give each client a second per-pool queue for transports with XPT_CONN,
-XPT_CLOSE or XPT_HANDSHAKE set when they are enqueued, and have the
-dispatcher serve that queue before the client's data queue.  The
-client's turn in the round-robin is unchanged; only which of its
-transports goes first.  A transport that is already queued with data
-when it is closed is served in its original order, as before.
-
-Suggested-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Benjamin Coddington <bcodding@hammerspace.com>
 ---
- include/linux/sunrpc/svc.h      |  2 ++
- include/linux/sunrpc/svc_xprt.h |  3 ++
- net/sunrpc/svc.c                |  1 +
- net/sunrpc/svc_xprt.c           | 60 +++++++++++++++++++++++++++------
- 4 files changed, 56 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/svc_classifier.c | 104 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_svc_classifier.c  |  80 ++++++++++++++
+ 3 files changed, 186 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/svc_classifier.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_svc_classifier.c
 
-diff --git a/include/linux/sunrpc/svc.h b/include/linux/sunrpc/svc.h
-index 5d8e35c5379e..02a8eb5d3357 100644
---- a/include/linux/sunrpc/svc.h
-+++ b/include/linux/sunrpc/svc.h
-@@ -66,6 +66,7 @@ enum {
-  * of the service does not grow with its connection count.
-  */
- struct svc_client_pool {
-+	struct lwq		cp_ctrl;	/* ready transports with a control event */
- 	struct lwq		cp_xprts;	/* ready transports */
- 	struct lwq_node		cp_ready;	/* link in svc_pool.sp_clients */
- 	unsigned long		cp_flags;
-@@ -74,6 +75,7 @@ struct svc_client_pool {
- 
- enum {
- 	SVC_CP_QUEUED,	/* on sp_clients, or held by the thread that took it */
-+	SVC_CP_DATA_NEXT, /* last turn served a control event; data is owed */
- };
- 
- struct svc_client {
-diff --git a/include/linux/sunrpc/svc_xprt.h b/include/linux/sunrpc/svc_xprt.h
-index 10c18e948b42..e05d7c8610ff 100644
---- a/include/linux/sunrpc/svc_xprt.h
-+++ b/include/linux/sunrpc/svc_xprt.h
-@@ -116,6 +116,9 @@ enum {
- 				 */
- };
- 
-+/* events a client's queue serves ahead of its data */
-+#define SVC_XPT_CTRL_EVENTS	(BIT(XPT_CONN) | BIT(XPT_CLOSE) | BIT(XPT_HANDSHAKE))
-+
- /*
-  * Maximum number of "tmp" connections - those without XPT_PEER_VALID -
-  * permitted on any service.
-diff --git a/net/sunrpc/svc.c b/net/sunrpc/svc.c
-index 4adf113d067b..92c6737e5905 100644
---- a/net/sunrpc/svc.c
-+++ b/net/sunrpc/svc.c
-@@ -405,6 +405,7 @@ struct svc_client *svc_client_alloc(unsigned int nrpools, gfp_t gfp)
- 	refcount_set(&cl->cl_ref, 1);
- 	INIT_HLIST_NODE(&cl->cl_hash);
- 	for (i = 0; i < nrpools; i++) {
-+		lwq_init(&cl->cl_pool[i].cp_ctrl);
- 		lwq_init(&cl->cl_pool[i].cp_xprts);
- 		cl->cl_pool[i].cp_client = cl;
- 	}
-diff --git a/net/sunrpc/svc_xprt.c b/net/sunrpc/svc_xprt.c
-index 735f4d92bf5d..14a7483886fc 100644
---- a/net/sunrpc/svc_xprt.c
-+++ b/net/sunrpc/svc_xprt.c
-@@ -646,7 +646,10 @@ void svc_xprt_enqueue(struct svc_xprt *xprt)
- 
- 	percpu_counter_inc(&pool->sp_sockets_queued);
- 	xprt->xpt_qtime = ktime_get();
--	lwq_enqueue(&xprt->xpt_ready, &cp->cp_xprts);
-+	if (READ_ONCE(xprt->xpt_flags) & SVC_XPT_CTRL_EVENTS)
-+		lwq_enqueue(&xprt->xpt_ready, &cp->cp_ctrl);
-+	else
-+		lwq_enqueue(&xprt->xpt_ready, &cp->cp_xprts);
- 	if (!test_and_set_bit(SVC_CP_QUEUED, &cp->cp_flags))
- 		lwq_enqueue(&cp->cp_ready, &pool->sp_clients);
- 
-@@ -654,6 +657,11 @@ void svc_xprt_enqueue(struct svc_xprt *xprt)
- }
- EXPORT_SYMBOL_GPL(svc_xprt_enqueue);
- 
-+static bool svc_client_pool_empty(struct svc_client_pool *cp)
-+{
-+	return lwq_empty(&cp->cp_ctrl) && lwq_empty(&cp->cp_xprts);
-+}
-+
- /*
-  * Put @cp back on the pool's client queue if it still has ready
-  * transports.  Otherwise clear SVC_CP_QUEUED and look once more: an
-@@ -662,21 +670,47 @@ EXPORT_SYMBOL_GPL(svc_xprt_enqueue);
- static void svc_client_pool_requeue(struct svc_pool *pool,
- 				    struct svc_client_pool *cp)
- {
--	if (!lwq_empty(&cp->cp_xprts)) {
-+	if (!svc_client_pool_empty(cp)) {
- 		lwq_enqueue(&cp->cp_ready, &pool->sp_clients);
- 		return;
- 	}
- 	clear_bit(SVC_CP_QUEUED, &cp->cp_flags);
- 	/* the clear is visible before the re-test; see svc_xprt_enqueue() */
- 	smp_mb__after_atomic();
--	if (!lwq_empty(&cp->cp_xprts) &&
-+	if (!svc_client_pool_empty(cp) &&
- 	    !test_and_set_bit(SVC_CP_QUEUED, &cp->cp_flags))
- 		lwq_enqueue(&cp->cp_ready, &pool->sp_clients);
- }
- 
- /*
-- * Dequeue the next transport: one from the client at the head of the
-- * pool's client queue, which then goes to the tail if it has more.
-+ * A client's control events go before its data, but not two turns in a
-+ * row while data waits: a listener re-arms XPT_CONN after every accept
-+ * and would otherwise hold the anonymous client's turns for as long as
-+ * connections keep arriving.  Only the thread holding @cp touches
-+ * SVC_CP_DATA_NEXT.
-+ */
-+static struct svc_xprt *svc_client_pool_dequeue(struct svc_client_pool *cp)
-+{
-+	struct svc_xprt *xprt = NULL;
-+	bool data_owed;
-+
-+	data_owed = test_and_clear_bit(SVC_CP_DATA_NEXT, &cp->cp_flags);
-+	if (!data_owed)
-+		xprt = lwq_dequeue(&cp->cp_ctrl, struct svc_xprt, xpt_ready);
-+	if (!xprt) {
-+		xprt = lwq_dequeue(&cp->cp_xprts, struct svc_xprt, xpt_ready);
-+		if (xprt || !data_owed)
-+			return xprt;
-+		xprt = lwq_dequeue(&cp->cp_ctrl, struct svc_xprt, xpt_ready);
-+	}
-+	if (xprt && !lwq_empty(&cp->cp_xprts))
-+		set_bit(SVC_CP_DATA_NEXT, &cp->cp_flags);
-+	return xprt;
-+}
-+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index ea7044f30adc..2cb7080d7da2 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -114,6 +114,7 @@ CONFIG_IP_NF_IPTABLES=y
+ CONFIG_IP6_NF_IPTABLES=y
+ CONFIG_IP6_NF_FILTER=y
+ CONFIG_NF_NAT=y
++CONFIG_NFS_FS=y
+ CONFIG_PACKET=y
+ CONFIG_RC_CORE=y
+ CONFIG_SAMPLES=y
+@@ -133,6 +134,7 @@ CONFIG_TCP_CONG_BBR=y
+ CONFIG_INFINIBAND=y
+ CONFIG_SMC=y
+ CONFIG_SMC_HS_CTRL_BPF=y
++CONFIG_SUNRPC_BPF_CLASSIFY=y
+ CONFIG_DIBS=y
+ CONFIG_DIBS_LO=y
+ CONFIG_PM_WAKELOCKS=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/svc_classifier.c b/tools/testing/selftests/bpf/prog_tests/svc_classifier.c
+new file mode 100644
+index 000000000000..887af29b21c7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/svc_classifier.c
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Dequeue the next transport from the pool's client queue: one from the
-+ * client at the head, which then goes to the tail if it has more.
-  */
- static struct svc_xprt *svc_xprt_dequeue(struct svc_pool *pool)
- {
-@@ -688,7 +722,7 @@ static struct svc_xprt *svc_xprt_dequeue(struct svc_pool *pool)
- 				 cp_ready);
- 		if (!cp)
- 			return NULL;
--		xprt = lwq_dequeue(&cp->cp_xprts, struct svc_xprt, xpt_ready);
-+		xprt = svc_client_pool_dequeue(cp);
- 		svc_client_pool_requeue(pool, cp);
- 	} while (!xprt);
- 	svc_xprt_get(xprt);
-@@ -1371,15 +1405,15 @@ static int svc_close_list(struct svc_serv *serv, struct list_head *xprt_list, st
- }
- 
- /*
-- * Delete the ready transports of @net that are queued on @cp; the rest go
-+ * Delete the ready transports of @net that are queued on @lq; the rest go
-  * back in their order.
-  */
--static void svc_client_pool_clean(struct svc_client_pool *cp, struct net *net)
-+static void svc_xprt_lwq_clean(struct lwq *lq, struct net *net)
- {
- 	struct llist_node *q, **t1, *t2;
- 	struct svc_xprt *xprt;
- 
--	q = lwq_dequeue_all(&cp->cp_xprts);
-+	q = lwq_dequeue_all(lq);
- 	lwq_for_each_safe(xprt, t1, t2, &q, xpt_ready) {
- 		if (xprt->xpt_net == net) {
- 			set_bit(XPT_CLOSE, &xprt->xpt_flags);
-@@ -1388,7 +1422,13 @@ static void svc_client_pool_clean(struct svc_client_pool *cp, struct net *net)
- 		}
- 	}
- 	if (q)
--		lwq_enqueue_batch(q, &cp->cp_xprts);
-+		lwq_enqueue_batch(q, lq);
++ * The svc_classifier struct_ops: one per network namespace, bound to
++ * the attaching task's namespace; replace by link update; detach by
++ * link close; a namespace that exits leaves its link empty.
++ */
++#include <test_progs.h>
++#include "bpf_svc_classifier.skel.h"
++
++static struct bpf_svc_classifier *load(void)
++{
++	struct bpf_svc_classifier *skel;
++
++	skel = bpf_svc_classifier__open_and_load();
++	if (!skel && (errno == ENOENT || errno == EINVAL || errno == EOPNOTSUPP)) {
++		test__skip();
++		return NULL;
++	}
++	ASSERT_OK_PTR(skel, "bpf_svc_classifier__open_and_load");
++	return skel;
 +}
 +
-+static void svc_client_pool_clean(struct svc_client_pool *cp, struct net *net)
++static void test_attach(void)
 +{
-+	svc_xprt_lwq_clean(&cp->cp_ctrl, net);
-+	svc_xprt_lwq_clean(&cp->cp_xprts, net);
- }
- 
- static void svc_clean_up_xprts(struct svc_serv *serv, struct net *net)
++	struct bpf_svc_classifier *one, *two;
++	struct bpf_link *link, *busy;
++	int err;
++
++	one = load();
++	if (!one)
++		return;
++	two = load();
++	if (!two)
++		goto out_one;
++
++	link = bpf_map__attach_struct_ops(one->maps.prefix);
++	if (!ASSERT_OK_PTR(link, "attach"))
++		goto out_two;
++
++	busy = bpf_map__attach_struct_ops(two->maps.prefix);
++	ASSERT_ERR_PTR(busy, "second attach");
++	ASSERT_EQ(errno, EBUSY, "second attach errno");
++
++	err = bpf_link__update_map(link, two->maps.prefix);
++	ASSERT_OK(err, "replace");
++
++	/* the replaced instance can be attached again once released */
++	bpf_link__destroy(link);
++	link = bpf_map__attach_struct_ops(one->maps.prefix);
++	ASSERT_OK_PTR(link, "attach after detach");
++	bpf_link__destroy(link);
++out_two:
++	bpf_svc_classifier__destroy(two);
++out_one:
++	bpf_svc_classifier__destroy(one);
++}
++
++static void test_netns(void)
++{
++	struct bpf_svc_classifier *inner, *outer;
++	struct netns_obj *ns;
++	struct bpf_link *link, *link2;
++
++	inner = load();
++	if (!inner)
++		return;
++	outer = load();
++	if (!outer)
++		goto out_inner;
++
++	ns = netns_new("svc_classifier_ns", true);
++	if (!ASSERT_OK_PTR(ns, "netns_new"))
++		goto out_outer;
++
++	/* attached inside the namespace */
++	link = bpf_map__attach_struct_ops(inner->maps.prefix);
++	if (!ASSERT_OK_PTR(link, "attach in netns"))
++		goto out_ns;
++
++	/* the initial namespace is free */
++	netns_free(ns);
++	ns = NULL;
++	link2 = bpf_map__attach_struct_ops(outer->maps.prefix);
++	ASSERT_OK_PTR(link2, "attach in init_net");
++	bpf_link__destroy(link2);
++
++	/* the link of the dead namespace detaches into nothing */
++	bpf_link__destroy(link);
++out_ns:
++	if (ns)
++		netns_free(ns);
++out_outer:
++	bpf_svc_classifier__destroy(outer);
++out_inner:
++	bpf_svc_classifier__destroy(inner);
++}
++
++void test_svc_classifier(void)
++{
++	if (test__start_subtest("attach"))
++		test_attach();
++	if (test__start_subtest("netns"))
++		test_netns();
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_svc_classifier.c b/tools/testing/selftests/bpf/progs/bpf_svc_classifier.c
+new file mode 100644
+index 000000000000..bae9d115ee74
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_svc_classifier.c
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * A svc_classifier for RPC service transports: the peer address is looked
++ * up in an LPM trie keyed by {family, address}; a hit returns the class
++ * word stored there, a miss returns 0, the anonymous client.  A key of
++ * prefixlen 0 is the default for every family, 8 the default for one.
++ */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++char _license[] SEC("license") = "GPL";
++
++#define AF_INET			2
++#define AF_INET6		10
++
++#define SVC_CLASSIFIER_NAME_MAX	16
++
++struct svc_xprt___local {
++	struct __kernel_sockaddr_storage xpt_remote;
++} __attribute__((preserve_access_index));
++
++struct svc_classifier___local {
++	char name[SVC_CLASSIFIER_NAME_MAX];
++	__u32 (*classify)(const struct svc_xprt___local *xprt);
++};
++
++struct prefix_key {
++	__u32 prefixlen;	/* 8 (the family byte) + address bits */
++	__u8 family;
++	__u8 addr[16];
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_LPM_TRIE);
++	__type(key, struct prefix_key);
++	__type(value, __u32);
++	__uint(max_entries, 1024);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++} prefixes SEC(".maps");
++
++__u64 classified;
++
++SEC("struct_ops/classify")
++__u32 BPF_PROG(prefix_classify, const struct svc_xprt___local *xprt)
++{
++	struct __kernel_sockaddr_storage ss;
++	struct prefix_key key = {};
++	__u32 *class;
++
++	if (bpf_core_read(&ss, sizeof(ss), &xprt->xpt_remote))
++		return 0;
++
++	key.family = ss.ss_family;
++	switch (ss.ss_family) {
++	case AF_INET:
++		/* struct sockaddr_in: port at 2, address at 4 */
++		__builtin_memcpy(key.addr, &ss.__data[2], 4);
++		key.prefixlen = 8 + 32;
++		break;
++	case AF_INET6:
++		/* struct sockaddr_in6: port at 2, flowinfo at 4, address at 8 */
++		__builtin_memcpy(key.addr, &ss.__data[6], 16);
++		key.prefixlen = 8 + 128;
++		break;
++	default:
++		return 0;
++	}
++
++	__sync_fetch_and_add(&classified, 1);
++	class = bpf_map_lookup_elem(&prefixes, &key);
++	return class ? *class : 0;
++}
++
++SEC(".struct_ops.link")
++struct svc_classifier___local prefix = {
++	.name		= "prefix",
++	.classify	= (void *)prefix_classify,
++};
 -- 
 2.53.0
 
