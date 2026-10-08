@@ -1,186 +1,189 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74A1488D95
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 09:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8516394EB0
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 09:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791453307; cv=none; b=Z0ggNTTBzZjuuEamVf5/zw3j3TDWS+2umUShaKtMTdt4pEIDspgKduz52vP8bbhRsBHe8Bz2cA4Bd87w1Z/0hMWHUQqECB8ooidmStyQ4dvtuUXVjA3e5ag/d8OHMQsNXKCyvXQ1x0DWMEuODYBdHXJvf4U+j31nMBGo1AttUGo=
+	t=1791453424; cv=none; b=mR7nP4YlBdjHlbzSXAp76OhqXQ2R9/ltxJO+Cjkxau1cHSb1ib+jIAhKmW09ubrWwmyCIN6vNpRYjgRlayMVZVD1oWsGmpFOphdLrtr94JfHU0biHD1wf7PzXeRqrsq6aiQLY2elF5Ne/vPBJFmkvf8r3JVnxBOgZPl8mcJgxOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791453307; c=relaxed/simple;
-	bh=6mKzhGDxxBQhe1L1c9AjcjAufrdgnU2foAeWHDXdGPo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cSqSBBS9/a4sM+7JL2krs5PHuO9JQ+6BR5iUQXGc1NhSRHtJ7bKCbSk5qxU5JVYXqjtsnPXswwFIdIQWcX/rCgdC9Xcp7uri5znKAnCS/IXmBKI9/guw8QeYoTLTMHxJqN1wx+YGRqZFdpb48faCVAk/yW8SkMdSOLYnXOKIw3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SFrbjmrG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=NxroKc7h; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1791453424; c=relaxed/simple;
+	bh=TBHsL/PgZQi8hSWleQHtPkNoXkclLQYAF6s/1H4mQsU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S1+ODglKttrmqmNMNbuBZ3nj2ZUhSTNfitHCeHlgh0PRvC3jbfE1+38eP1d9roxVElXzRKEsHoFzArZw69JPK2VA1SP3u0RIdbc6/DfyW93Ow+6odxlI2ldicST0tlI3y5I5SJGNLAWWjLROrUcsriQJFIRA5+PKqrg1lHaAVzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=efG8/Zev; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SFrbjmrG";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="NxroKc7h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791453304;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=2rwd4c1hFdRk+8gic1oWg1e821LH97Si/hZy7R8ff64=;
-	b=SFrbjmrGbOfxNABEf6Uk5vyt3c9AYHTLhzFeJY3s9/c8lyvssZG8EmgVSuvT0TkcF784CN
-	iXGjjr+b8rdzXH368sZPF3DOFXDKWD8zIhqip7NBR+PQJb0E28jOgfK8Xupfid+2EoMftZ
-	9Nisqi/KPt9Ke7gLzMMjOLVG//UMy7Q=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-690-FcF79VJHPNaclwrnSLWeBQ-1; Thu, 08 Oct 2026 05:55:03 -0400
-X-MC-Unique: FcF79VJHPNaclwrnSLWeBQ-1
-X-Mimecast-MFC-AGG-ID: FcF79VJHPNaclwrnSLWeBQ_1791453302
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c2e49c5ff09so562991166b.1
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 02:55:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efG8/Zev"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48c4d99c32bso2304443f8f.1
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 02:57:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1791453302; x=1792058102; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2rwd4c1hFdRk+8gic1oWg1e821LH97Si/hZy7R8ff64=;
-        b=NxroKc7hvVzpBGkQmQFsufie5p5QKFsZI4tUtA8K7KdpsJkfXLnlh2FLfzqiIZA6J1
-         +m0m+gwlK2ltmbNjw8emjWxtxJiJ9+622Qjoz8FcArXcB6iR+OG3Ipe6qi9Fj0IeAhlM
-         j4psg8q0iwB/x2k2S/2dEiG8A7WU6JwQZpt0zDiBnMyhxEI5yMxSOw4XpquUSkpA3ZwZ
-         bC+kWh826PNo1tHos5xw3akK4D3E8WAdPPz8yThnvYElB6ej54aSHQAhVDdxTkCXvONk
-         yq8eKHEDhHlUsesuc3lHMeJECn0cFqCFSaXU/qjLSlkhN1siPkbU3/kjOpqvfeXsd/My
-         Sm3g==
+        d=gmail.com; s=20251104; t=1791453421; x=1792058221; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gQ+MBIlSY5Fb8vVvV13aAvMv4bN9+NGoqvZSi+JVr+c=;
+        b=efG8/Zevxr+c/gYVg+cS/oN1EZa2cnSDRIqo9lNJJRiNszG3jUchmqACD/mcizu5q5
+         wMlBnc9AmLoT+xyay3fJ2r39+oJ9fJqSAvsZHx2z+P2wG16Ujal1g4p85zZxAkZk9PaV
+         e2NOVmDidu4uk21QggTWc6XBXtuRxv0XaoweAqc1M+QRuYNGvn5q+sTnhTqg5BXSm9mN
+         WtG3Jp+8aoa5P5php9Pp/DU18oebkg489m20vw3PGqUVeboKJVG2m83dv8IA8hIydfXT
+         aRZNN66xlqzIJwmtD7HywzEBVRimzjgP15SOxtOjkFwWQR/dvQzMWvVY2ONeMckGtnRO
+         ndUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791453302; x=1792058102;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=2rwd4c1hFdRk+8gic1oWg1e821LH97Si/hZy7R8ff64=;
-        b=LbJCcl5xg/4aEaVhLkRy33r0iBJ+T5VSib7cyqyDv9OceIjzb7FCIrWyeG0xS5Zwy8
-         hqHg3Z62BbDHnHpTOMMbM0yvn0lFTaTQ0MqaSXBhI/CoqPA7pTHXfkxLKws/4iow3WEQ
-         Znc/CWS8H0MSZAYmFV/noOORnZli24k7XF8rA0kI3UyofElXxnOMrIbeGloip/qbXS9V
-         R0zxHR2RWk0xvc4qhFQUa1zEsH+ruHaw+y57JfiolzBxkPm1Dm9RSQkg08s7WKzMvWln
-         Lv54IPkeaUIaU30uoD/91heFNPO74bax4z5UtW88e78n4PwxLzHPb9n3OH8LNi3epBbG
-         WvVw==
-X-Forwarded-Encrypted: i=1; AKwUvByJsJGexxhzR32R5d6wxlC33ECy5+Ow6zgBkTs8KAHlV7C/e+anfW0woc+PkcOWthfe/d4=@vger.kernel.org
-X-Gm-Message-State: AFuF++nz3keDMKytAyrU7ZehtHOU1cQPsA9fO9OVAu21u39gbdM3wyEH
-	YraMxjW3gFT5g9SEGEauMw1FyQu6fw5V4XlWqa1W2TeZWoMDHjUfByjazx2oiApRMNSZ+a5GpEC
-	JDFYLbD6RxrtP0NZM0YQRmih3UiUQYPQEw2ohVoSF/3dKDcdnNoTmAA==
-X-Gm-Gg: AYBFou2LK5w3bE9vfYQbiZ58tlD9jJlZgN1a+zeBUHOtkuRu7VrWnwnQpOEVA6tG/vw
-	9pdp8qvL/7bW1zrY8rE4udoCNCxAKQByZ69haLireoq5aJILiB4lCDdxg8i7rJhR5KQ6qj1T+Px
-	5lDy97dyZHv3oTcKM5OSXd3xq54Fvd2GFXzx8p0MVrvCe4DVndiH8R65M3wgo9zIn31rlDYzI25
-	HwylKrGZPSWjosllTMVD3cd14WW74pbrUX+NfulUVVvKdyuQWm8RO7ykrZr8SP2ZQkECwWfJmis
-	HQdTBkmf8iZh/tcVyQqXyrrVsJpXt/hOEwLOE49LQuL5ZCHJr/wpnHAnH2ltFRnZDw/ZxwbpmrT
-	EFkWqYDTPsqhKcUQ76XSDBZRnoMqlm1KGcDP3yPMe280iTpPu9QYr3ulljKs3ZrhjR5g7BA==
-X-Received: by 2002:a17:907:8688:b0:c2e:3f49:df04 with SMTP id a640c23a62f3a-c317bbdc08fmr523188366b.1.1791453302312;
-        Thu, 08 Oct 2026 02:55:02 -0700 (PDT)
-X-Received: by 2002:a17:907:8688:b0:c2e:3f49:df04 with SMTP id a640c23a62f3a-c317bbdc08fmr523186766b.1.1791453301931;
-        Thu, 08 Oct 2026 02:55:01 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb (212-8-243-115.hosted-by-worldstream.net. [212.8.243.115])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b00aa2b8aasm1188417a12.22.2026.10.08.02.55.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 02:55:01 -0700 (PDT)
-Message-ID: <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
-Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
-Cc: Nam Cao <namcao@linutronix.de>, Wen Yang <wen.yang@linux.dev>, Tobias
- Schaffner <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>,
- John Ogness	 <john.ogness@linutronix.de>
-Date: Thu, 08 Oct 2026 11:54:59 +0200
-In-Reply-To: <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
-	 <20261001152042.124445-11-gmonaco@redhat.com>
-	 <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
- cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
- T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
- eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
- 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        d=1e100.net; s=20260707; t=1791453421; x=1792058221;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gQ+MBIlSY5Fb8vVvV13aAvMv4bN9+NGoqvZSi+JVr+c=;
+        b=a3vo/86xZdqVrlFxmBBQpPRCirRikqEkAxtf33u+XG0B2g6A9rBvt0Trved9A+Xow/
+         /jiIkvZlPBzvd50V9lQj9vWlGveyyOsoy4MtmQLTWeu48h2hghCaWXyrPKdhOyrmnEjt
+         VXKsGW5ZuO+lv1142QivPa+do7eXWEATuABMs+u+JgLFVWnF8kqdpQ1No9/GkuzMlJwb
+         h5yl+DuRBsBLKU+fjFxYb3vsL+DLxgSSKf8tEokJ3TZOgUn/DrTuXLJjOYXhHspZ7odL
+         yxcRgMJVE8C81/Bhyi0QSnF64WRRNDNcyNP0Lz0/klP8IH4JnKDqAdIrcodEoJr/5oF/
+         uUaQ==
+X-Gm-Message-State: AFq9FYJrvv8YlVRyacFpoJfQ10vpMZVSdHZH9FxxRC6XwJF01UoAdfd6
+	m2QtgCerMQW/DKMNiT+qFJJ+Umuzi9c9sdKwI0G/HGH/BbWl8MO/jIJ9bdFQOX5i
+X-Gm-Gg: AYBFou0xQMfraqgf7LJudLoeZXrooBqYVV1SVYB2oXGa7rHBwSbtLH/me+yl9V03rMS
+	4cJMq8GNmqL88VQ4S1vqBCbaSS7/x0b89Mc/K6Mp+4QwF/yx66MniaJVCKIsUw/9RXQBclP46hB
+	Wl0wE6J5XJux9QMnFG9L5BjIlbuXVwnPD0u5lP1Kib3SxR4uXxHKaMCxQU+e00zrXF//eoKmZtK
+	kCr0BvMuuDcviXy9+gkz8juTKSM1LLPtsUeN3+LCMbbwA6S5rAHwSAiX9dwwglvIan3B05bPJZX
+	A0oUJBi521bu4XiVTZMO/cRcHo3SHVqjLTRkZV3Y7syIyELy1PRF2AbBu01aL8IQU5CreKWFZNS
+	Mqle3W2J3x4kuMTBbKIgrdrzYNg1lN1vOm6ihaMEh7P84XBL9FspeESjqhVHqZYsosgq4ssIf7j
+	LCO6RpZDiA89XjZvNWFN778jOE3MNAwydwCHO7dJHp7ebhRrc23mIQR/L7LnCvYYp+9343Dkxm6
+	WesFbCdPUNk+2EEZP/Xu4BK1GgnIM9h0pq9GUErESs7Pck=
+X-Received: by 2002:a05:6000:3106:b0:48b:fc4:e852 with SMTP id ffacd0b85a97d-48c72789260mr9641259f8f.29.1791453420953;
+        Thu, 08 Oct 2026 02:57:00 -0700 (PDT)
+Received: from MacBookAir.home.tenber.ge ([2a00:6020:a725:dc00:1436:879a:b37f:42c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1245bsm10222720f8f.26.2026.10.08.02.56.59
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 08 Oct 2026 02:57:00 -0700 (PDT)
+From: Jan-Gerd Tenberge <janten@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	jakub@cloudflare.com,
+	jiayuan.chen@linux.dev,
+	edumazet@kernel.org,
+	kuniyu@google.com,
+	pabeni@redhat.com,
+	willemb@google.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	horms@kernel.org,
+	yonghong.song@linux.dev,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH bpf] bpf, sockmap: Fix UAF when map user reference is revived
+Date: Thu,  8 Oct 2026 11:56:56 +0200
+Message-ID: <20261008095656.92793-1-janten@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-10-06 at 13:29 +0000, Alexei Starovoitov wrote:
-> On Thu, Oct 01, 2026 at 05:20 PM Gabriele Monaco <gmonaco@redhat.com> wro=
-te:
->=20
-> Overall looks much better.
-> Some of the code reimplements bpftool, but it's user space.
-> It can be cleaned up later.
+bpf_map_put_uref() invokes map_release_uref after usercnt reaches zero,
+before bpf_map_put() drops the map reference. BPF_MAP_GET_FD_BY_ID can
+find the map during that callback and raise usercnt again.
 
-Thanks for going through these.
-Indeed I tried to reduce the code reimplementing these things but probably =
-I can
-do better.
+The sockmap and sockhash release callbacks unconditionally drop programs
+without taking sockmap_mutex. A concurrent attach through the revived fd
+can therefore publish a new program before the stale callback drops it.
 
-> > +$(BPF_DIR)/%.o: $(BPF_DIR)/%.c $(VMLINUX_H)
-> > +	$(QUIET_CLANG)$(CLANG) $(BPF_CFLAGS) -c $< -o $@
-> > +	$(Q)$(LLVM_STRIP) -g $@
-> > +	$(Q)$(LLVM_OBJCOPY) --remove-section=3D.rel.rodata $@
->=20
-> What is this for?
-> Released libbpf ignores it with "skipping relo section" message.
-> Removing the section only hides that some pointer in .rodata is left
-> without relocation. What is it? libbpf in bpf-next needs .rel.rodata to
-> resolve pointers to functions. See commit b223044a68d5 ("libbpf: Resolve
-> pointers to functions in read-only data").
+For a bpf_link attachment, this leaves plink set while pprog is NULL, so
+link release warns and leaves the attachment slot unusable. The callback
+can also drop the program between sock_map_prog_update() and the later
+bpf_prog_inc(). If the program fd is closed concurrently, this removes
+the last reference and schedules an RCU free. The subsequent increment
+then resurrects a zero reference and leaves link->prog pointing to memory
+that will be freed. A KASAN reproducer triggers a slab-use-after-free when
+reading information from that link.
 
-Yeah indeed I used this to silence the warning. Apparently right now the wa=
-rning
-is gone (no relocation section even if I don't trim it), but I went back to=
- the
-initial version and it was about a bunch of .rodata.str1.1
+Triggering the race requires CAP_SYS_ADMIN in the initial user namespace,
+because reviving the map uses BPF_MAP_GET_FD_BY_ID. A deterministic KASAN
+reproducer is available privately on request. It was used to verify the
+UAF before this change and its absence afterwards.
 
-I'm going to test a bit more but I can probably remove this.
+Serialize the release callbacks with program updates using sockmap_mutex
+and recheck usercnt under the mutex. If the map was revived, leave its
+programs intact. Move the map user-reference put in link release outside
+the mutex to avoid recursively taking sockmap_mutex when it drops the last
+user reference.
 
-> > +struct {
-> > +	__uint(type, BPF_MAP_TYPE_HASH);
-> > +	__uint(max_entries, 10240);
-> > +	__type(key, da_id_type);
-> > +	__type(value, struct da_monitor_storage_bpf);
-> > +} rv_mon_map SEC(".maps");
->=20
-> Why hash by pid?
-> Use BPF_MAP_TYPE_TASK_STORAGE for per-task monitors.
-> Once there are 10240 tasks bpf_map_update_elem() in da_create_storage()
-> fails, the error is ignored, and the rest of the tasks are silently
-> not monitored.
-> Task storage is freed with the task. No need for handle_obj_cleanup,
-> id, target and PF_EXITING.
+Fixes: 699c23f02c65 ("bpf: Add bpf_link support for sk_msg and sk_skb progs")
+Assisted-by: LLM
+Cc: stable@vger.kernel.org
+Signed-off-by: Jan-Gerd Tenberge <janten@gmail.com>
+---
+ net/core/sock_map.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-Great, I wasn't aware of it and looks much neater. Will use that.
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 38df84284328..32ccf4ca3c76 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -26,7 +26,8 @@ struct bpf_stab {
+ 
+ /* This mutex is used to
+  *  - protect race between prog/link attach/detach and link prog update, and
+- *  - protect race between releasing and accessing map in bpf_link.
++ *  - protect race between releasing and accessing map in bpf_link, and
++ *  - protect race between map user-reference release and prog/link updates.
+  * A single global mutex lock is used since it is expected contention is low.
+  */
+ static DEFINE_MUTEX(sockmap_mutex);
+@@ -372,7 +373,10 @@ static void sock_map_free(struct bpf_map *map)
+ 
+ static void sock_map_release_progs(struct bpf_map *map)
+ {
+-	psock_progs_drop(&container_of(map, struct bpf_stab, map)->progs);
++	mutex_lock(&sockmap_mutex);
++	if (!atomic64_read(&map->usercnt))
++		psock_progs_drop(&container_of(map, struct bpf_stab, map)->progs);
++	mutex_unlock(&sockmap_mutex);
+ }
+ 
+ static struct sock *__sock_map_lookup_elem(struct bpf_map *map, u32 key)
+@@ -1226,7 +1230,10 @@ static void *sock_hash_lookup(struct bpf_map *map, void *key)
+ 
+ static void sock_hash_release_progs(struct bpf_map *map)
+ {
+-	psock_progs_drop(&container_of(map, struct bpf_shtab, map)->progs);
++	mutex_lock(&sockmap_mutex);
++	if (!atomic64_read(&map->usercnt))
++		psock_progs_drop(&container_of(map, struct bpf_shtab, map)->progs);
++	mutex_unlock(&sockmap_mutex);
+ }
+ 
+ BPF_CALL_4(bpf_sock_hash_update, struct bpf_sock_ops_kern *, sops,
+@@ -1743,6 +1750,7 @@ struct sockmap_link {
+ static void sock_map_link_release(struct bpf_link *link)
+ {
+ 	struct sockmap_link *sockmap_link = container_of(link, struct sockmap_link, link);
++	struct bpf_map *map = NULL;
+ 
+ 	mutex_lock(&sockmap_mutex);
+ 	if (!sockmap_link->map)
+@@ -1751,10 +1759,12 @@ static void sock_map_link_release(struct bpf_link *link)
+ 	WARN_ON_ONCE(sock_map_prog_update(sockmap_link->map, NULL, link->prog, link,
+ 					  link->attach_type));
+ 
+-	bpf_map_put_with_uref(sockmap_link->map);
++	map = sockmap_link->map;
+ 	sockmap_link->map = NULL;
+ out:
+ 	mutex_unlock(&sockmap_mutex);
++	if (map)
++		bpf_map_put_with_uref(map);
+ }
+ 
+ static int sock_map_link_detach(struct bpf_link *link)
 
-I couldn't catch you yesterday at the conference, but I can summarise here =
-what
-I really wanted to ask you:
-
-Reactors in this patch use bpf_printk(), which is in fact a trace_printk()
-instead of a real printk, is there a technical limitation forbidding us to
-create a kfunc using some flavour of printk_deferred()? Or am I missing an
-existing one? (this need was brought up by John, Cc'd here)
-
-Not needed in this patch but potentially required for more complex monitors=
-. In
-kernel, when timers are required, we allow monitors to use hrtimers (precis=
-e but
-heavy), or the timer_wheel (lightweight but less precise).
-I'm not aware of any wrapper of the wheel in BPF, but I think a few kfuncs =
-for
-these could be useful, in general, also for other programs needing a lot of
-timer instances or simply light timeouts.
-What do you think?
-
-Thanks,
-Gabriele
+base-commit: ff47652a4b66c067c765a7ad464d930b5a9367cc
+-- 
+2.52.0
 
