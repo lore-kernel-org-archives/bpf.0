@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-47.mta0.migadu.com [91.218.175.47])
+Received: from mta1.migadu.com (out-193.mta1.migadu.com [95.215.58.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02A837701A
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 16:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E0B35C680
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 16:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791476452; cv=none; b=OBWv4oC5WHO/Hi471ivzRiFd3qyRZdu15uoPHi7TDOw6lnVjY4cVFbJPeptXawCJOXYTtmt/GnUegqbDS2qaqc3mhJzyOmlAyjA2+/atuuCJwOwY/VEtUlOmYGn6kehnCGFNjFX2mUvWbJjEZ2D7bfixMBnw0CBR1H7B1anHqGs=
+	t=1791476597; cv=none; b=u1LvWdDQM2/E9ZC7W55bxnhaZm8MM6xa5caS33+lEEAASIxpIV+7vm52A0QOaJzR8DWgQJQehxzF3ymBRiUMBfafdDf2PLP/zZSPBqXthwPE9NeI0ZnISAaFbw+J2mXr0rXotc4kdCD9YBOv8kTFpzwLRxAf4AByMzIAHscV7Ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791476452; c=relaxed/simple;
-	bh=oiOvQrLrDsFAYSYqzszc4vNV5GzkvTPljnqg6ScHE7A=;
+	s=arc-20240116; t=1791476597; c=relaxed/simple;
+	bh=nuG6qc90eMk4hLv7cDdibVyrPYB5JMiuMqTDupYHmfs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EfcB3Gj42+cCkJCQbLqdEOf/cDxHwYsfB7ACscEbQhYY2nWCQmjpoOTvenRyTkLrzRnecbJ43CjCoe+FsZ+l9Uv0pn44a9HJtJquEjmsEaEZ/+KKa7vYSPJrJX+VJeuPGKehbESlVL+kEhx8Wj5yLTG4qYd23SuI+7fSUYjM1pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ATg5R08g; arc=none smtp.client-ip=91.218.175.47
+	 In-Reply-To:Content-Type; b=X55HyqufbMbalBaX+pUtMzdwHbBo9UrblPwv/zj+HHHB90suxb+7lXjvv783cYnbJ14CMu37A6uoGytbdmn+cXAm98ARE8qnj8fVa/4Mdvu6kRLCV8Vjmt1G7mM93vphWlvYkQl5VCvUDQXmKoW2VJHQcXf0YrbhfopRm6JrPJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e95idCJB; arc=none smtp.client-ip=95.215.58.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ATg5R08g"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e95idCJB"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=oiOvQrLrDsFAYSYqzszc4vNV5GzkvTPljnqg6ScHE7A=;
+DKIM-Signature: a=rsa-sha256; bh=nuG6qc90eMk4hLv7cDdibVyrPYB5JMiuMqTDupYHmfs=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791476448; v=1; x=1792081248;
- b=ATg5R08gvXyF/He4U8mOZ9ifEULID1WoAYTJF7syO2GheNP+PADLLAK+015TtICrQQbN5d/g
- mXsBLaoqYt2MR6xok0+PcxrAhxRdv6Q3sfe+wK/uUgFiR31sCFb8zRDjhB/u0K2W/2t3ngHPnY/
- DczhAkGiCeXRmOycDMIiK2tw=
+ t=1791476594; v=1; x=1792081394;
+ b=e95idCJByaevFCYOvKfad6xXKIRNYy+Kt+nmFl+AkKVGCwmP5BFc8mDkp5U88FRKED81bG6t
+ D+MRyazIXL5RznpeniLjfdV32uuMZVbDZEqqdXNQX0198hgmxm9NeA3Dem8ZT+0awGmKVDNgtqQ
+ G7UCRjKThzRjpCqs5AAnd70A=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2c88f780bbe21711;
-	Thu, 08 Oct 2026 16:20:48 +0000
-X-Mizu-Trace-ID: 2c88f780bbe21711
+Received: by smtp.migadu.com with ESMTPS id 2b4b3c8a8e2f02e2;
+	Thu, 08 Oct 2026 16:23:14 +0000
+X-Mizu-Trace-ID: 2b4b3c8a8e2f02e2
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <6fced0e8-8101-4665-a15e-8adb8615a186@linux.dev>
-Date: Thu, 8 Oct 2026 09:20:43 -0700
+Message-ID: <9691f59d-a116-43f6-8fc8-09fc1891a395@linux.dev>
+Date: Thu, 8 Oct 2026 18:23:12 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,68 +38,65 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] resolve_btfids: Fix the --fatal_warnings exit status
-To: Petr Pavlu <petr.pavlu@suse.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261008-resolve_btfids-warnings-v1-1-0d4e613ffa6e@suse.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261008-resolve_btfids-warnings-v1-1-0d4e613ffa6e@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH bpf-next v9 14/23] bpf, arm64: Dispatch exception cleanup
+ pads at run time
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261008075111.3003497-1-yonghong.song@linux.dev>
+ <e886b1d0457c718b5b198c480ed1c5040db1a43391b3c56028b659be85a82031@mail.kernel.org>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <e886b1d0457c718b5b198c480ed1c5040db1a43391b3c56028b659be85a82031@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 10/8/26 8:03 AM, Petr Pavlu wrote:
-> The resolve_btfids --fatal_warnings option is intended to make the tool
-> exit with a non-zero status if any warnings are reported. main()
-> initializes err to -1 and uses 'goto out' to return this status when
-> a sub-operation fails. If no error occurs,
-> 'if (!(fatal_warnings && warnings)) err = 0;' modifies the final status
-> depending on whether any warnings have been reported.
-> 
-> Commit 522397d05e7d ("resolve_btfids: Change in-place update with raw
-> binary output") broke this logic by assigning the return values of newly
-> added sub-operations to err. As a result, successful sub-operations
-> overwrite the initial err value of -1 with 0, causing the tool to exit
-> successfully even when --fatal_warnings is enabled and warnings have been
-> reported.
-> 
-> Fix the issue by setting the final value of err unconditionally, so the
-> code doesn't depend on its previous value.
-> 
-> Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw binary output")
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Thanks!
+On 10/8/26 10:39 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf, arm64: Dispatch exception cleanup pads at run time
+> TL;DR: Commit message only, no code issues: the changelog should open with a
+> sentence saying what this does for arm64, and one bullet ("aux->epilogue_ip
+> and the native cleanup table") lacks a verb.
+>
+>> bpf, arm64: Dispatch exception cleanup pads at run time
+>>
+>> - arch_bpf_stack_walk_ra(): walks the frame records with the kernel
+>>     unwinder, handing each return address to the consumer and storing a
+>>     new one back into the record it was read from. The first frame, whose
+>>     return into bpf_unwind() comes from the walk's own record, is
+>>     skipped.
+>>   - With CONFIG_ARM64_PTR_AUTH_KERNEL and a CPU that supports address
+>>     authentication, the new address is signed as the BPF prologue signs
+>>     the link register, with PACIASP and the record + 16 as modifier.
+>>   - aux->epilogue_ip and the native cleanup table.
+>>   - bpf_jit_supports_cleanup_pads() says yes, also with a shadow call
+>>     stack: only JITed frames' records are written, and JITed code keeps
+>>     no x18 copy of its return address.
+>>
+>> A pad needs no BTI: it is only reached as a return address.
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> this isn't a bug, but could the changelog open with a sentence on what this
+> does for arm64, instead of starting directly with a bullet list?
 
+It is my fault. Should have a small paragraph to highlight the key
+message before itemizing different cases.
+
+>
+> Also, the bullet "aux->epilogue_ip and the native cleanup table." has no
+> verb.  Could it say what is done with them, for example that the JIT records
+> each function's epilogue address in aux->epilogue_ip and fills in the native
+> cleanup ranges once the image is final?
+
+I will expand to have more detailed information for this item.
+
+>
+>
 > ---
->  tools/bpf/resolve_btfids/main.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index 37d7e7224207..2a93517ca9ec 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -1842,8 +1842,7 @@ int main(int argc, const char **argv)
->  			goto out;
->  	}
->  
-> -	if (!(fatal_warnings && warnings))
-> -		err = 0;
-> +	err = fatal_warnings && warnings ? -1 : 0;
->  out:
->  	btf__free(obj.base_btf);
->  	btf__free(obj.btf);
-> 
-> ---
-> base-commit: a90ee4305c4a5df72c11b31dacfdc76e00fcf78a
-> change-id: 20261008-resolve_btfids-warnings-a356edc7a5c6
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37747693645
 
