@@ -1,229 +1,173 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mta0.migadu.com (out-17.mta0.migadu.com [91.218.175.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF2A38AC99
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 16:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F1B2765E2
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 16:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791476018; cv=none; b=hTcz9f4GtrDbUuGIk8QCvsxIdqROXtuBY1dq5fpG2UsxNF0jvyALo5Yu61pu//POKJqt0UCyE5wGtgog6kaKS4CAWUxv8byJDLCIqt34Sh6vdYVbKQK2092xzvEkkRSeg2qFzmx3Z02UN/LNN+mpN2TrIp1MgsDPavLaYD9bX3I=
+	t=1791476382; cv=none; b=SMAYSTCBhRfNwkXC46LitpDFq1lManldpEbeB+xNf8GRKqAYFYw88XTiRiOiL+YjeD4QGx1LaserbOqMJze+WHyE2oZEuuX3fFzAEoPiTJ0ybrtgmwQkIOZO9YUG/+hrHpSooUwpbQloxw2fL0gzqJQfqkOwHx3Ou+tVMnAMPIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791476018; c=relaxed/simple;
-	bh=ctjqrT0ClDhJ4kwgUJDSm0RQ29Lw8YZNFjREtaOVINs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dPLSHmuL2Wi0mVnCfjdPRhFNUi34HBRo4KGr8b6oU9/YswmVUM4HVZmTWofLkEvFJC2wLwXH1mBYX63wujW+7BssyAMdN3Ykb9Q2q7lr+0gg75Ke6t0y3bm6UxpRtjknL3r/2JXTgpfO160QTaEUEVeEXICLmojMWdyMXx6T/7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkXuoTl4; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791476382; c=relaxed/simple;
+	bh=Vv6HjlkKaEcNeGM1J49gHvZyK7qtW1yuFOX7CcfX/ig=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fnywgx3KK18gIsiwNbz9L6RDyMDIpauh/f6nDZTjzN5fO/imMH9jnkGg5DLBoctAVZnMNNfUZjQnXOQ9xWAN9ETyav6UnfwBewgep+dwiTFuh/RFVG8uizh7+ZbjkGy3G6nZG3Jx5EXV0qTSMZQybuNaS828EadbtpvIjSs8kLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c2N3Sqx/; arc=none smtp.client-ip=91.218.175.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkXuoTl4"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48c4649b3aaso2180128f8f.2
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 09:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791476011; x=1792080811; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KnRbsO40pgOKFThX66ioZGni0tsr5d/QoIBkjkvb+Kg=;
-        b=bkXuoTl4eWiSXjN2RrMA6Ib+g470o74VfdAjkePD6r5kBQO7kLhHy3biGpxsZ+X7JT
-         8SuKLeUF/IIaS31Em75cRDNMQ7CrYEuFp3/sbMZYjuDiC/kkvoD7iPZZMRInqlUDB7/2
-         Ow0wN+2qj63VMY+88d6jFl078TDdA/Svc2CWs0xRNczLwhiszHOxcnKb/lNvlG2dCiHL
-         VrzVnQoROGvGabw1QgbROCdob5Qu8Kqa7oN69Wm3KSleTtH/07AuBWXr8NTBKMSXfjXT
-         dIdwJq6mGY3Ypj9hAVan+9ydVZiiLeVq4N1Lep/lXd9Ujsc9Ydr6B4TJNpY3M8GsGovx
-         m9Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791476011; x=1792080811;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KnRbsO40pgOKFThX66ioZGni0tsr5d/QoIBkjkvb+Kg=;
-        b=k3zV8r7R1+fKoOHDoI+maXOeCSvY0c1L1t/ECarL0mpSGIMsOn0zLPHd0VViKagHcz
-         qHWJEevzEjETFpppRCJdNTy4tCgHi4c/yDIoJ1nzPwhUwTBngK10nV3FPg+0JLm30Bq2
-         5U/nDqb2cbIWDyhZxEjNI2vhKCiP+V1d9GwajFUxOuJEmIg4+JLtgdvqYW5bxo8uEqzN
-         dKgnZw1yp12wLFmWW3AyJ77p9kQsXr5k2NM2SsPd1LS5PyB5Xv5EObk1YSFNrPcT4ECH
-         415IzVsWjY9res8A8UhW9aKZ7yJiWYm1xra42MLhrtBUvVuZLWULIsiQkPgqAVSHb1jY
-         hdrQ==
-X-Gm-Message-State: AFq9FYJD0zcIHAaUsshPao0Xl4jVnxdP6t6iYSo96jtfgZLmm0W7D+9H
-	kXXYP2brFaTGN632trjrvZuePRCqHV+ZXAjwXH7FyWa6I0pkWM5wE99bmG8xn5+yphc=
-X-Gm-Gg: AYBFou0qDqvEvlOj4mE+XMkwKWDc+1iLHj+H3DVyKAHTIqrcUVQwOAspuOCsOFyhDsQ
-	29EHcDEEhsXd19BGrUYtdnDauZL3K2H/5WaqwSk0+7ia2FSPAfPr6QH9UvHVK+cb5L55uIq+EiO
-	FMaFOU3W1JTnqmmuwRSlsEtWZ7iIfJ0rq2DMiBbs63N7T7OLuJFkYDrPxyHRuwZMdK+O1k3qiEd
-	mS4+F7/MokG9LQDwkvGHVvvk1G5ITFu29JNs3gcgOFO9YFu5RQRsHlfryTiOtjBLpK9otP7eWD2
-	ure/SSKWSV8bz97R9jFNSjkrvCacRTM1xgc9iWsLiG2qfY7lLnG0FXuk9rEfis2vpezsLxi8Kej
-	6YWFVem7JvMy4OEBuO5tYt638BpzEny5WluVboc9fS8VtKEl+UEeBS0ADEXYuNeaTNg5t3LZk3V
-	F9rV7VIJ5oTD/lTRQNMgApgc8seooswOhXZOMS0IPg8unil7UVVz9jSQ/8xM29a2z93wxNtZRRx
-	A0SlHo1kHMjS3kHbs5IAjMhIVPJqfCjBhMPHw==
-X-Received: by 2002:a5d:64c8:0:b0:48a:f52d:ca47 with SMTP id ffacd0b85a97d-48c72785207mr12533471f8f.22.1791476011230;
-        Thu, 08 Oct 2026 09:13:31 -0700 (PDT)
-Received: from MacBookAir.home.tenber.ge ([2a00:6020:a725:dc00:95bf:d5d1:d7d8:747f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48db63401desm448005f8f.0.2026.10.08.09.13.28
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Oct 2026 09:13:29 -0700 (PDT)
-From: Jan-Gerd Tenberge <janten@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jakub@cloudflare.com,
-	jiayuan.chen@linux.dev,
-	kuniyu@google.com,
-	willemb@google.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: Test iterator link target validation
-Date: Thu,  8 Oct 2026 18:13:09 +0200
-Message-ID: <20261008161309.8179-3-janten@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261008161309.8179-1-janten@gmail.com>
-References: <20261008161309.8179-1-janten@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c2N3Sqx/"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Vv6HjlkKaEcNeGM1J49gHvZyK7qtW1yuFOX7CcfX/ig=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791476377; v=1; x=1792081177;
+ b=c2N3Sqx/YNOCnK1nWcD58sk364gp0b7mM1nRTl6VjJQDR1yxP6M4dnz8l2eCHw8jXEWAPNU8
+ 198MJOHD8F8BeNSCYjsDI/X50yjOvT0gYDXUaEXI3tmp40/24mUw1h8YBZlGRrHNS3RJo7Nw5XW
+ 9GBQrzgfqydJ0delucka91+o=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f9536f640e83e639;
+	Thu, 08 Oct 2026 16:19:37 +0000
+X-Mizu-Trace-ID: f9536f640e83e639
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <673d4d17-72ed-4909-8858-d05c4e9c5e7d@linux.dev>
+Date: Thu, 8 Oct 2026 18:19:33 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 12/23] bpf: Refuse a trampoline that calls a
+ subprog that can unwind
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261008074959.2993751-1-yonghong.song@linux.dev>
+ <20261008075101.3001371-1-yonghong.song@linux.dev>
+ <sashiko-outbox-163811@kernel.org>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <sashiko-outbox-163811@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Exercise target-dependent iterator checks during BPF_LINK_UPDATE.
-Verify that updates to a program with an oversized array or socket-storage
-value access are rejected, as is an update to a sleepable program on a
-non-reschedulable hash iterator.
 
-Run each original program after the rejected update to ensure that it
-remains attached. Also verify that a compatible array iterator update
-succeeds.
 
-Assisted-by: LLM
-Signed-off-by: Jan-Gerd Tenberge <janten@gmail.com>
----
- .../selftests/bpf/prog_tests/bpf_iter.c       | 34 +++++++++++++++++--
- .../bpf/progs/bpf_iter_bpf_array_map.c        | 17 ++++++++++
- 2 files changed, 49 insertions(+), 2 deletions(-)
+On 10/8/26 10:14 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Critical] bpf: x86 exception unwinder passes wrong return address pointer causing stack corruption
+> - [High] bpf: Missing trampoline restriction for bpf_throw() leads to NULL pointer deref
+> --
+>
+> commit 554b5300d0510c78440f3ee71cad1d363c75cfaf
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf: Refuse a trampoline that calls a subprog that can unwind
+>
+> This patch refuses fexit, fmod_ret, and fsession trampoline attachments
+> to subprograms marked with might_unwind, preventing bpf_unwind() from
+> tripping over unexpected trampoline frames.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 668d811d4e4cb..3692d9b163d43 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>
+>> @@ -21600,6 +21600,22 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>>   				prog_extension ? "Extension" : "Tracing");
+>>   			return -EINVAL;
+>>   		}
+>> +		/*
+>> +		 * A trampoline that calls its target stays as a frame between a
+>> +		 * subprog and its caller, and bpf_unwind() cannot walk past it:
+>> +		 * the frames below would return after their calls rather than at
+>> +		 * their landing pads. fentry leaves no frame, and the main
+>> +		 * program's caller is below where the walk stops.
+>> +		 */
+>> +		if (aux->func && subprog && aux->func[subprog]->aux->might_unwind &&
+>> +		    (prog->expected_attach_type == BPF_TRACE_FEXIT ||
+>> +		     prog->expected_attach_type == BPF_MODIFY_RETURN ||
+>> +		     prog->expected_attach_type == BPF_TRACE_FSESSION)) {
+> [Severity: High]
+> Does this logic also need to check for bpf_throw()?
+>
+> The patch correctly prevents attachments for bpf_unwind(), which is tracked
+> by might_unwind. However, bpf_throw() seems to be missed. It uses an
+> independent might_throw flag which does not appear to be propagated to
+> bpf_prog_aux or checked here.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index c69080ca14f5..3ae5203d3fac 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -897,14 +897,22 @@ static void test_bpf_hash_map(void)
- 	/* Sleepable program is prohibited for hash map iterator */
- 	linfo.map.map_fd = map_fd;
- 	link = bpf_program__attach_iter(skel->progs.sleepable_dummy_dump, &opts);
--	if (!ASSERT_ERR_PTR(link, "attach_sleepable_prog_to_iter"))
-+	err = libbpf_get_error(link);
-+	if (!ASSERT_EQ(err, -EINVAL, "attach_sleepable_prog_to_iter")) {
-+		if (!err)
-+			bpf_link__destroy(link);
- 		goto out;
-+	}
- 
- 	linfo.map.map_fd = map_fd;
- 	link = bpf_program__attach_iter(skel->progs.dump_bpf_hash_map, &opts);
- 	if (!ASSERT_OK_PTR(link, "attach_iter"))
- 		goto out;
- 
-+	err = bpf_link__update_program(link, skel->progs.sleepable_dummy_dump);
-+	if (!ASSERT_EQ(err, -EINVAL, "update_sleepable_prog"))
-+		goto free_link;
-+
- 	iter_fd = bpf_iter_create(bpf_link__fd(link));
- 	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
- 		goto free_link;
-@@ -1023,7 +1031,7 @@ static void test_bpf_array_map(void)
- 	int err, i, map_fd, hash_fd, iter_fd;
- 	struct bpf_iter_bpf_array_map *skel;
- 	union bpf_iter_link_info linfo;
--	struct bpf_link *link;
-+	struct bpf_link *link, *bad_link;
- 	char buf[64] = {};
- 	int len, start;
- 
-@@ -1049,10 +1057,24 @@ static void test_bpf_array_map(void)
- 	linfo.map.map_fd = map_fd;
- 	opts.link_info = &linfo;
- 	opts.link_info_len = sizeof(linfo);
-+	bad_link = bpf_program__attach_iter(skel->progs.oob_write_bpf_array_map,
-+					    &opts);
-+	err = libbpf_get_error(bad_link);
-+	if (!ASSERT_EQ(err, -EACCES, "attach_oob_write_iter")) {
-+		if (!err)
-+			bpf_link__destroy(bad_link);
-+		goto out;
-+	}
-+
- 	link = bpf_program__attach_iter(skel->progs.dump_bpf_array_map, &opts);
- 	if (!ASSERT_OK_PTR(link, "attach_iter"))
- 		goto out;
- 
-+	err = bpf_link__update_program(link, skel->progs.oob_write_bpf_array_map);
-+	if (!ASSERT_EQ(err, -EACCES, "update_oob_write_iter"))
-+		goto free_link;
-+
-+	/* The rejected update must leave dump_bpf_array_map attached. */
- 	iter_fd = bpf_iter_create(bpf_link__fd(link));
- 	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
- 		goto free_link;
-@@ -1092,6 +1114,9 @@ static void test_bpf_array_map(void)
- 			goto close_iter;
- 	}
- 
-+	err = bpf_link__update_program(link, skel->progs.noop_bpf_array_map);
-+	ASSERT_OK(err, "update_valid_iter");
-+
- close_iter:
- 	close(iter_fd);
- free_link:
-@@ -1363,6 +1388,11 @@ static void test_bpf_sk_storage_map(void)
- 	if (!ASSERT_OK_PTR(link, "attach_iter"))
- 		goto out;
- 
-+	err = bpf_link__update_program(link,
-+				       skel->progs.oob_write_bpf_sk_storage_map);
-+	if (!ASSERT_EQ(err, -EACCES, "update_oob_write_iter"))
-+		goto free_link;
-+
- 	iter_fd = bpf_iter_create(bpf_link__fd(link));
- 	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
- 		goto free_link;
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
-index 19710cc0f250..beb1b714f120 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
-@@ -51,3 +51,20 @@ int dump_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
- 	*val = *key;
- 	return 0;
- }
-+
-+SEC("iter/bpf_map_elem")
-+int noop_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("iter/bpf_map_elem")
-+int oob_write_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	__u64 *val = ctx->value;
-+
-+	if (val)
-+		val[1] = 0;
-+
-+	return 0;
-+}
--- 
-2.54.0 (Apple Git-157)
+In the above, we have aux->func[subprog]->aux->might_unwind. If it is true,
+that means bpf_throw() will be rejected. So I think we should be okay.
+
+>
+> If a subprogram calls bpf_throw() and has a tracing program attached
+> (like fexit), bpf_stack_walker() encounters the trampoline frame. At that
+> point, bpf_prog_ksym_find() will return NULL, and since ctx->cnt > 0, it aborts
+> the walk before setting ctx->aux:
+>
+> kernel/bpf/helpers.c:bpf_stack_walker() {
+>      ...
+>      if (!prog)
+>          return !ctx->cnt;
+>      ...
+> }
+>
+> Because the walk is aborted early, ctx.aux remains NULL, which leads to a
+> kernel panic when dereferenced later in bpf_throw():
+>
+> kernel/bpf/helpers.c:bpf_throw() {
+>      ...
+>      ctx.aux->bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_sp_adjust,
+>                                ctx.bp, 0, 0);
+>      ...
+> }
+>
+>> +			bpf_log(log,
+>> +				"Cannot attach fexit, fmod_ret or fsession to %s, which can unwind\n",
+>> +				tname);
+>> +			return -EINVAL;
+>> +		}
+>>   		conservative = aux->func_info_aux[subprog].unreliable;
+>>   		if (prog_extension) {
+> [Severity: Critical]
+> I also have a question about the x86 exception unwinding implementation added
+> earlier in this series. Can the x86 unwinder corrupt the stack by passing the
+> wrong return address pointer?
+>
+> In arch_bpf_stack_walk_ra(), the unwinder passes the current frame's return
+> address pointer to the callback:
+>
+> arch/x86/net/bpf_jit_comp.c:arch_bpf_stack_walk_ra() {
+>      ...
+>      ra = unwind_get_return_address_ptr(&state);
+>      if (!ra)
+>          break;
+>      if (!consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 *)ra))
+>      ...
+> }
+>
+> However, bpf_unwind_rewrite() seems to expect the return address pointer
+> of the previous frame, so it can make the previous frame return directly into
+> the current frame's cleanup pad.
+>
+> By passing the current frame's return address instead, bpf_unwind_rewrite()
+> overwrites the current frame's return address with its own pad or epilogue:
+>
+> kernel/bpf/helpers.c:bpf_unwind_rewrite() {
+>      ...
+>      rec = bpf_exc_pad_for_ip(prog, ip);
+>      *ra = rec ? rec->pad : prog->aux->epilogue_ip;
+>      ...
+> }
+>
+> On x86, this causes the pad to execute after the current frame has already
+> returned via leave and ret, corrupting the caller's stack frame. For the main
+> program, its return address is overwritten with its own epilogue, leading to
+> a double-epilogue execution.
+
+The issue here seems more appropriate for commit
+"bpf: Dispatch cleanup pads by rewriting return addresses". I didn't
+find any issues. Selftest results match expectations (manually checked).
+
 
