@@ -1,155 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F25322F767;
-	Thu,  8 Oct 2026 13:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CFC4A092B
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 13:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791465209; cv=none; b=M40jGoCR+id1niTKF8SvY0k64u3++xEV+wZyvg8T+YIFA84uGz0uXg9VxbunBzBP83nR7TMBXBiMN59VxVieDUQVbwlAxDzXcvRtkrcJ7GGU1WPiyDBEhQxWzjsCoyAHJNDPukTP1JXdRWlacfGP2TwnKgdS6F3oRs3hRj0Omgk=
+	t=1791465352; cv=none; b=VKQvpAhmCnaAMjEbWzPoqUbiI5HxY9n7g//ACS90gIyDu9AlopRpEzzzAlzYHb8gp0yT7RSaBUwkR+ixe7ebfX+l1G5aZIdtOn5paPHjUhZpgvZsyu/iteUXy+Oy2NZoGRpCPJsf2G9L+qLzZx6DTs6xzq2PBUzynvU0Yvcn5ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791465209; c=relaxed/simple;
-	bh=k1TJBFkSAk3KtFliSXk0zhsSmUITNqHtxPWRH4+FByc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qRCHanlbA9zIoAIDIAfegczCSCSj82HnCFxr+oaGd6x1+clX+W6Ch8VLTK1IGHb+rIYVRsgHIBgJsjnDo4tQLTA57PRd3Vx2qn3J1AA6OXUvWGjtjF1aon3LPYpm7IH28ipcW1If1bINr/RgaUjoS8W9Ui1PL7eVtmxdv5Sttko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BkWI8EJs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791465352; c=relaxed/simple;
+	bh=IZORgLSswiz9QmuNMURLt7UkMWrabxvr9qyMUZFB970=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oOrv2ga8LWZ1XQukMPZM0MbyS7jQOZ/XALHFGvLAAlcLXe8u0YrTTvvLXI7jCrjIRI+3xARX/eOL0MrHbnoBevxuLfDVTtSjutjFHw5LBOzgv6qsbwQfmTgfiJJGBrBtIBk//2llZxd5r5NVxzMvRggFvHlRAqKU8W36vAmhqok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LD7ZoR0C; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BkWI8EJs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B790F1F000FF;
-	Thu,  8 Oct 2026 13:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791465208;
-	bh=f5PLISdsbHKFluYJ5yvZ5YvG5VrlUsaLajuhgKm/fUw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=BkWI8EJsBXHH0wrpbxOqswQs8kxgxYXVUniGBKWDEdcDw7XxDYbWym2WUHNNR0fBa
-	 fDFrOd83swNWnluQ/buMEf50XvzoHCiwdzJbAIQimdk2cMIT+Udzs3ULu4wm0HyIxR
-	 Pr1VAxeakLwNVW4MdicIz/0ZIfym5gRIU+QCjfxOj3nL2xQ/AQJZA2wGScrtzWgXEn
-	 JZDKGeaDTLeiWLTs9mSgRByKY7FP6v6yuX0ye6UkVdPljkgVIkQA5gtfioJoFBweow
-	 zvO9TUXpo8sthTAnzoH2T7GTIsYIZRF7MbLwTM6/xT/VemRN1mOLW8tyJr+Cmc1oVC
-	 HbTbi9Kdsynnw==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>, James Hilliard
- <james.hilliard1@gmail.com>
-Cc: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski
- <kuba@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Maciej
- Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Eric
- Dumazet <edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, Andrew Lunn
- <andrew+netdev@lunn.ch>
-Subject: Re: [PATCH net v2] xsk: freeze deferred pool teardown without
- blocking unregister
-In-Reply-To: <asaTvPO05EpmUEgN@devvm7509.cco0.facebook.com>
-References: <20261005-xsk-suspend-teardown-v2-1-2d87228f4329@gmail.com>
- <asaTvPO05EpmUEgN@devvm7509.cco0.facebook.com>
-Date: Thu, 08 Oct 2026 15:13:24 +0200
-Message-ID: <8733ug2v4b.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LD7ZoR0C"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-486e70f2457so2370537f8f.2
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 06:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791465349; x=1792070149; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1GZXZQLgqCvw5WtP3CtocqOoYfauPu8d359Zy0nEiQg=;
+        b=LD7ZoR0CffQAQ9pdy6beoeQ2xnS+awZSAS4Nw3T6vrj9i0ZvcnspUaDIof6FhhdcSF
+         YrY3+Lap/ELeU6uIQpIuwnSWK47V+ldHSMuzspXtQhFHByzHA+F6CVzYnwEbx4ZnsMyQ
+         3pDro/Yv9ciQJ9dBSIA2Kywbi1k+iE5lRD1DfgdwOa90eYN1FVEBg8ygdUUSO6dRTnDw
+         iOJkbzEMMflchRvFYq9ntDRVfdmvrjc9ysndKQmBCnBzHlrdb0AN4gBEAbvh4r+5KTYN
+         12vGvn3nDgrX67laM4ICmjW3GhIxAcTm4Y3uwJssTHtUpmw+0lb20Ka2xIz7V0bxcfUn
+         aXng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791465349; x=1792070149;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1GZXZQLgqCvw5WtP3CtocqOoYfauPu8d359Zy0nEiQg=;
+        b=XOaXy3MAYldz7gq+iWkJjr16HLuAHHPefpH8ZvECJcajy8cZkjtbbL+MZlVvI/ox8c
+         pHDQhkxzuRX34BAoLthCob49tQ/HhAitjNbxeoJiYxbpwtpJ7ltHrVS29QGGrsdFOyjQ
+         LUIfpuv/p4p/yPIDafv7KHq9NJD2M+drBjOol3EWL0fetSO1hfTe4SC3Aa8EJHPsTncf
+         b1DNSCv6lpXk/sjfh7K8AzNN/1SQ9Nb1mG6Jyt9Txp5FpIdylp2m9Joq+C7x77fBilHP
+         tTdG4/c5tBDhv9YeRc+Ur/KH+VQJSOq27pRfyhk7krPAvdsNs/255A3xwrINvCPBD7u2
+         d9fg==
+X-Forwarded-Encrypted: i=1; AKwUvBzJZ2XBcbYEnoQsfPPQg6ix4Iy4KbjcTvyNjFyxfZL6RGQhsI+louCmmYrfW3Ni5/Ttpm0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIG4CFsio2U6hHlnz+TnzCD7kJLNhhKModpdNgui04EYxZK8cuk
+	5F75yse+APs39rVemYDsM0ze1EGTCHbLXN7JldYXHD+KQa6OT82/xs//
+X-Gm-Gg: AYBFou2IV8Z94OS2iIHgDJ1YT+9CjLE/odBpt5n95geTZtDm4Zxvw/ibHFI76qBk+MS
+	g4y+k5NnurMzpK+ywKVUL5Cgl7MmqOoYGcHbNci1lUBles/d9zlnqUEBXF2DF0G9sS5iTGAyUIg
+	hyp6+SA+/lVDRHVFseD0M9wWVhk6IZCJkTRwst5So9Dv+7a6PnroqsYX1AnjdLBl82PNkhvhD1Q
+	+2Vag6kxe21/0sn/JLVBHCMDNBBP1fh+xFZh/+3ycXKvBUmvvPmcEFaEl1EfHnh3QJwMyZaRVgi
+	kfvWCmaCq5HGXkvcxiFl0nhrkfU9hmQ8IH6q8sRhuZaDoAg9nnpsta20+9wJWJDpdTTLfUjtSQo
+	LGzyzNcZyMU19rA1CCBnCPoFQc0GIMfhTUFR7VDN5ycc+B1N6iPOR1SFzFauo1Uh2Hx8QzY7wZg
+	BL/mnASPDkO4viBeKkOnmH23g2Gv169aXgDVqdrE2GDhj3mlpWSKYVGaXgVmUBLEWBHboiacf9+
+	g8bDrdP5iV1yN1xD1oUhsomb/fGxUyyVlAxHeGYuDIIT3ncU3GBZo3SFHwGB0X9EPjoLnj33qmE
+	MaByrAbR3TiLhS2u5jROp5+QK54EZ9B+/YtMoEss/Qj/dSju
+X-Received: by 2002:a05:6000:230f:b0:48c:7f53:960c with SMTP id ffacd0b85a97d-48c7f539971mr5090297f8f.10.1791465348301;
+        Thu, 08 Oct 2026 06:15:48 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71b786d8sm11392383f8f.0.2026.10.08.06.15.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Oct 2026 06:15:47 -0700 (PDT)
+Message-ID: <78a72b62-7c35-4eae-8d6c-ab6dd8c20db2@gmail.com>
+Date: Thu, 8 Oct 2026 14:15:38 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v1 2/2] docs: netmem: document netmem and memory
+ provider design principles
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Luigi Rizzo <lrizzo@google.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+References: <20261005004958.3603059-1-almasrymina@google.com>
+ <20261005004958.3603059-3-almasrymina@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20261005004958.3603059-3-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+On 10/5/26 01:49, Mina Almasry wrote:
+> Add a Design Principles section to Documentation/networking/netmem.rst
+> covering the netmem_ref abstraction, the prohibition on direct
+> downcasting in callers, decoupling memory providers from net_iov,
+> decoupling net_iov from unreadability, delegating provider/type logic to
+> memory_provider_ops and netmem helpers, and the homogeneous skb fragment
+> memory type invariant.
+> 
+> Cc: Luigi Rizzo <lrizzo@google.com>
+> Cc: Björn Töpel <bjorn@kernel.org>
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Cc: Pavel Begunkov <asml.silence@gmail.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> ---
+>   Documentation/networking/netmem.rst | 46 +++++++++++++++++++++++++++++
+>   1 file changed, 46 insertions(+)
+> 
+> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
+> index 217869d1108dd..57e52a947663d 100644
+> --- a/Documentation/networking/netmem.rst
+> +++ b/Documentation/networking/netmem.rst
+> @@ -19,6 +19,52 @@ Benefits of Netmem :
+>   * Simplified Development: Drivers interact with a consistent API,
+>     regardless of the underlying memory implementation.
+>   
+> +Design Principles
+> +=================
+> +
+> +Memory providers (or the default ``page_pool`` allocator) allocate underlying
+> +memory (``struct net_iov`` or ``struct page``), cast it to ``netmem_ref``, and
+> +supply it to ``page_pool``. The ``page_pool``, drivers, and networking stack
+> +operate on ``netmem_ref`` as the abstract type. Existing ``page_pool`` APIs
+> +that allocate or free ``struct page`` are legacy compatibility wrappers for
+> +drivers that do not yet support ``netmem_ref``. Code that is not yet
+> +``netmem``-aware should be converted to ``netmem_ref`` unless it will never
+> +need to support ``netmem``.
+> +
+> +1. **Operate on netmem_ref, do not downcast**: ``page_pool``, drivers, and the
+> +   core networking stack should deal with ``netmem_ref`` rather than
+> +   ``struct net_iov`` or ``struct page``. Downcasting ``netmem_ref`` to
+> +   ``struct net_iov`` or ``struct page`` is not allowed unless a code path
+> +   strictly cannot function without knowing the underlying memory type (for
+> +   example, ``kmap_local_page()``). In those cases, to keep call sites simple,
+> +   add a ``netmem`` helper that performs the operation on behalf of the caller,
+> +   cleanly handles all ``net_iov`` and ``page`` cases, and returns an error if
+> +   the ``netmem`` type cannot support the requested operation.
+> +
+> +2. **Decouple memory providers from net_iov**: Memory providers are not limited
+> +   to ``struct net_iov``. A memory provider that returns ``struct page``-backed
+> +   ``netmem_ref``\ s to upper layers is allowed. Code must not assume that using
+> +   a memory provider implies ``net_iov`` memory.
+> +
+> +3. **Decouple net_iov from unreadability**: ``struct net_iov`` is flexible and
+> +   has no inherent restrictions. While current ``net_iov`` implementations are
+> +   unreadable by the CPU, future readable ``net_iov`` implementations are
+> +   allowed. Code must not assume ``net_iov`` is unreadable; check readability
+> +   via ``netmem_address()`` or ``skb_frags_readable()`` instead.
+> +
+> +4. **Delegate complexity to the lowest layer**: Each layer must respect its
+> +   abstraction boundary. ``page_pool`` must not implement per-memory-provider
+> +   custom logic in its main code; instead, it delegates provider-specific
+> +   handling to ``struct memory_provider_ops``. Similarly, core networking code
+> +   should avoid per-``netmem``-type branching and instead delegate operations
+> +   to ``netmem`` helpers that handle the underlying memory type.
+> +
+> +5. **Homogeneous skb fragment memory types**: An ``sk_buff``'s ``frags[]`` are
+> +   always backed by ``netmem_ref``\ s of the same memory type. Mixing fragments
+> +   from different memory types within a single ``sk_buff`` is not allowed,
+> +   keeping ``sk_buff`` handling simple. Consequently, coalescing ``sk_buff``\ s
+> +   with different fragment memory types must not happen.
 
-> On 10/05, James Hilliard wrote:
->> Deferred pool destruction calls ndo_bpf() under RTNL. system_wq is
->> not frozen during system sleep, so that callback can run after a
->> device has suspended and gated its clocks. Use system_freezable_wq
->> so running destruction finishes before device suspend and new work
->> waits until process thaw.
+Would be good to expand on what's the memory type here. We have netmem
+vs net_iov, and there are different memory provider types, but we need
+to restrict it even further, sth in the lines of "if an skb contains a
+frag from a memory provider, all its frags should be belong to the same
+memory provider".
 
-...more PM suspend/resume issues...
+Otherwise,
 
-I'd say this a bad smell/poor XSK contract that we need to use wq
-freezable here. XSK capable drivers (and the core) should tolerate
-calling the pool-removal path on suspended hardware and failed
-resume/unregister.
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
-Now that poor design leaks into net_device. :/
+-- 
+Pavel Begunkov
 
->> Keep assigned pools visible to NETDEV_UNREGISTER independently of
->> the socket list. A released socket has already left that list, but
->> its final pool put can queue destruction after workqueues freeze.
->> A resume-time unregister would then wait for a device reference
->> whose release cannot run until the resume completes.
->>=20
->> Track assigned pools per netdev under RTNL and detach remaining pools
->> after the notifier socket walk, including copy-mode pools. This also
->> covers leased queues without scanning pools from unrelated devices or
->> network namespaces. Remove the entry on assignment failure and normal
->> teardown. The deferred worker still owns the pool and later observes
->> the cleared device pointer, avoiding a second driver detach or put.
->>=20
->> The lifetime problem was identified by code inspection of the deferred
->> release and system-sleep paths.
->>=20
->> Fixes: 1c1efc2af158 ("xsk: Create and free buffer pool independently fro=
-m umem")
->> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->> ---
->> Changes in v2:
->> - Track assigned pools per netdev instead of scanning a global pool list.
->> - Keep deferred releases visible across queue changes and queue leases.
->> - Rebase onto current net.
->> - Link to v1: https://patch.msgid.link/20260930-xsk-suspend-teardown-v1-=
-1-a6cac8c030be@gmail.com
->>=20
->> To: "David S. Miller" <davem@davemloft.net>
->> To: Eric Dumazet <edumazet@kernel.org>
->> To: Jakub Kicinski <kuba@kernel.org>
->> To: Paolo Abeni <pabeni@redhat.com>
->> To: Simon Horman <horms@kernel.org>
->> To: Andrew Lunn <andrew+netdev@lunn.ch>
->> To: Magnus Karlsson <magnus.karlsson@intel.com>
->> To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
->> To: Stanislav Fomichev <sdf@fomichev.me>
->> To: Alexei Starovoitov <ast@kernel.org>
->> To: Daniel Borkmann <daniel@iogearbox.net>
->> To: Jesper Dangaard Brouer <hawk@kernel.org>
->> To: John Fastabend <john.fastabend@gmail.com>
->> To: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
->> Cc: netdev@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Cc: bpf@vger.kernel.org
->> ---
->>  include/linux/netdevice.h   |  5 +++++
->>  include/net/xsk_buff_pool.h |  3 +++
->>  net/xdp/xsk.c               |  5 +++++
->>  net/xdp/xsk_buff_pool.c     | 25 ++++++++++++++++++++++++-
->>  4 files changed, 37 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
->> index 3cff2174dc03..72091938f6e6 100644
->> --- a/include/linux/netdevice.h
->> +++ b/include/linux/netdevice.h
->> @@ -2545,6 +2545,11 @@ struct net_device {
->>  	/* protected by rtnl_lock */
->>  	struct bpf_xdp_entity	xdp_state[__MAX_XDP_MODE];
->>=20=20
->> +#ifdef CONFIG_XDP_SOCKETS
->> +	/** @xsk_pools: assigned AF_XDP pools, protected by rtnl_lock */
->
->
-> Can we mark this as being ops protected (net_device::lock) ?
-
-+1
-
-> xp_clear_dev calls netdev_lock_ops, but xp_assign_dev
-> has netdev_assert_locked_ops_compat, so maybe there needs to be a bit more
-> care. We don't want to add new ASSERT_RTNL if possible (and extend new
-> netdev lock semantics).
->
-> The rest looks good.
-
-+1
-
-I've made a mental note to try to improve this, and hopefully the we can
-get rid of this in the future.
-
-
-Bj=C3=B6rn
