@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDA1490BF6;
-	Thu,  8 Oct 2026 11:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895254908C8;
+	Thu,  8 Oct 2026 11:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791460178; cv=none; b=aH6iNY7k9tPg0FW7nVudtMjaljgBNDIijtoAwnaJbwMdZEu4y/ggb8JqNXNGnJ8mWRRPTEO1idUp0q9s8qsZ71Cfi+jXowh0Mv3rAfkyMUQtyUUFIgQLnodJ6i1bA7fGjbU5qd9hx2prkAznlxiVk3t5nuxtmrbnIlk1V+fGcP4=
+	t=1791460181; cv=none; b=jnENj6JIrKKr20D5NffRfQ0dlZVCDmYhOh4rOxTxZqGYioxXc1ri2RVHQKQtpgPDgf1wGJcW3HWP5NonLjk2seV6y2cdwHyMBe7HXcB/yBkbdFILnbUYqDD35k7ZvT7lJOBkvajhXV8awT5mRFVyfGZF50qCFTL95boAmgxyTQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791460178; c=relaxed/simple;
-	bh=8bu2qJykslX+kzNszZGjAJ3MTvMhLQy8fY6IPASEWVI=;
+	s=arc-20240116; t=1791460181; c=relaxed/simple;
+	bh=b/jYnn8GCroeJ7IXW9+GqiD3hAJ29G0rPgDlUyaUpQE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TCeZ5NpWK1xGQz2SZtGWuuNV+8z4xFiHFgTvEhMoTYkoDqYwDMGWTOPP+quAIpcPhrFnKfWJBnvq1RYDwy0radp7bcJU6lmLrLkkK1SMIdNU8f5GLm29D0BfzvPeg/6fUHwG96xWeLx3UxFElAVuPuz76PNJiWl6JZ73+zXkLvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jDwRY/rW; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=Xg6x6nh85Ogq636q3ZFghK50DiI+/MMTMoXXNRgKF1jKmosJSr88J1N9S92s7JuiNC7pcKqfaSJWulTj2aKk4isdHKIclhc7+U5itc+/CQ6G1mfcRQOB4LZzqOgj2W+rram1reHcjwyz0uBulJ3h/tM3w6Gd2NcrHLZSsnEg/FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f+zv0ed2; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jDwRY/rW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f+zv0ed2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791460177; x=1822996177;
+  t=1791460179; x=1822996179;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8bu2qJykslX+kzNszZGjAJ3MTvMhLQy8fY6IPASEWVI=;
-  b=jDwRY/rWHP39ybqADPDFeB/LgG+rcfgGk0h1i+XDLyytYXDwBxowI0e1
-   stTfzer/Yz6Wfj94dHKUlLQ998jMEcPAn6b43ukefgvxChYxUt6VpsTN7
-   3RPGzih89aOU27eh4NbEb0wheWeJW+XBnGCh9Sx/MHp7T9byP3M1hlOQO
-   tI5xqd00wHLPrNPFthOBnVP1VBMOc2ug6ho3sTS0DlIgjB08MAtxbdKJe
-   uMX4H8JTFJVFr2/FLughv82OOuG7QrVRpiSaTb1/gNh5HNJCN8i4xNbir
-   eBPdAyFXzuwlLZ/8inXa9HuJGJnKi952PkmBIQAds7TXlUIbtbkbzXlUL
+  bh=b/jYnn8GCroeJ7IXW9+GqiD3hAJ29G0rPgDlUyaUpQE=;
+  b=f+zv0ed2ICyQOKeCj8XB7uflqwRHU+etzGqixytSa3eURBNnWu+d/SKu
+   RmBdW4MuRT5nSIwoQLBM/GnWpOP1O/FEpdOlnhxsZySqQUNZSM9YFwPAK
+   KU0eY0kuOW+ciSF4GkBle9oi26j2mDlc0Y6FEPHhiqqaqanUQnfH9MEan
+   ixy3XTUAIu4OGY9K7fnRWTdzRvhc+B7Irm7fkJ6X3J3JTYvOlcYLrYuuz
+   cpSja9M6WDfML0vLH+2TFL24HPlbF5Y7vUtbn+ejJmtzOzK1ms/SQHRF9
+   LdqBYDB7lSrmQd+os0/K1r6KaUnBDJ/mTCRyt1nXMDsMmGk5tH5c+z8bD
    g==;
-X-CSE-ConnectionGUID: QQD5rynBTMSNPyuh/KfApA==
-X-CSE-MsgGUID: 30WYLJCDSPirrTtCl8nubg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="124952"
+X-CSE-ConnectionGUID: ZMJRqjj3Q86WLY7yAiqMRw==
+X-CSE-MsgGUID: 5wbyuYz1RBavYVlU5+86sA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="124958"
 X-IronPort-AV: E=Sophos;i="6.27,146,1787036400"; 
-   d="scan'208";a="124952"
+   d="scan'208";a="124958"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 04:49:36 -0700
-X-CSE-ConnectionGUID: owknl+drRE+pE6Wk+E1FrQ==
-X-CSE-MsgGUID: 2e+C+SNZSUu3/DHkLO4nnA==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 04:49:39 -0700
+X-CSE-ConnectionGUID: IKSXluVDQ4SPC/QqrBAUVg==
+X-CSE-MsgGUID: Q/SQZiNCQdGe+3dVnwWVQQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,146,1787036400"; 
-   d="scan'208";a="467145"
+   d="scan'208";a="467153"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa010.jf.intel.com with ESMTP; 08 Oct 2026 04:49:34 -0700
+  by orviesa010.jf.intel.com with ESMTP; 08 Oct 2026 04:49:37 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: bpf@vger.kernel.org,
 	kerneljasonxing@gmail.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 net-next 06/14] selftests: xsk: collect interface capabilities in struct xsk_caps
-Date: Thu,  8 Oct 2026 13:49:01 +0200
-Message-Id: <20261008114909.734364-7-maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 net-next 07/14] selftests: xsk: split xskxceiver main() into setup, run and cleanup
+Date: Thu,  8 Oct 2026 13:49:02 +0200
+Message-Id: <20261008114909.734364-8-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
 References: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
@@ -68,333 +68,383 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A later patch runs the TX and RX endpoints of a test case as separate
-processes, possibly on different hosts, and each process binds only its
-own interface. The shared test code still looks at the capabilities of
-both the TX and the RX ifobject, for instance when it checks both sides
-for multi-buffer support or when it sizes the RX batch from the TX ring
-limit. The endpoints do not exchange capabilities, so a process will
-represent the other side by a shadow ifobject that mirrors the local
-capabilities.
+Prepare xskxceiver for running a single endpoint per process by
+untangling main():
 
-Prepare for that by replacing the per-interface support booleans and
-limits in struct ifobject with one struct xsk_caps holding capability
-flags and interface limits. Mirroring the local capabilities then takes
-a single struct assignment, and a capability added later cannot be left
-out of the copy. The maximum TX ring size is copied there from the
-ethtool ring parameters, which a shadow does not mirror.
+- bind_iface() resolves and initializes one interface from its -i
+  argument, so the interface list can be assigned to roles after
+  parsing; -l lists tests and exits without needing interfaces
+- detect_mode_caps() records DRV and zero-copy support and
+  detect_ifobj_caps() HW ring support as XSK_CAP flags, and
+  mode_supported() tells from them whether a mode can run
+- run_pkt_test() returns the result, and main() counts failures from
+  it rather than from test->fail, which not every failing path sets
+- cleanup_iface() restores rings, detaches and unloads per interface
+  and is safe on partially initialized objects, as is
+  pkt_stream_delete(NULL), so main() has a single exit path
 
-Add ifobj_has_cap() and ifobj_set_cap() to test and set the flags, and
-xsk_get_cap() to read a limit. Like the open-coded reads it replaces,
-xsk_get_cap() takes the limit from the TX ifobject, the only one that
-has all of them set.
+Call ksft_print_header() before ksft_set_plan(): xskxceiver never did,
+and that is where kselftest.h switches stdout to line buffering, so a
+launcher reading through a pipe only saw the output at exit.
 
-The unaligned UMEM check, which this patch rewrites anyway, now looks
-at the RX ifobject only. The flag comes from a huge page probe that does
-not depend on the interface, and test_spec_set_unaligned() switches
-both UMEMs to unaligned mode together, so checking the TX side as well
-adds nothing.
+While at it, exit with 0 for -l instead of KSFT_XPASS: listing the
+tests is not a test result, so scripts should be able to run it like
+any other command.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- .../testing/selftests/net/lib/xsk/test_xsk.c  | 84 +++++++++++--------
- .../testing/selftests/net/lib/xsk/test_xsk.h  | 34 ++++++--
- .../selftests/net/lib/xsk/xskxceiver.c        | 13 +--
- 3 files changed, 81 insertions(+), 50 deletions(-)
+ .../testing/selftests/net/lib/xsk/test_xsk.c  |  10 +
+ .../testing/selftests/net/lib/xsk/test_xsk.h  |   2 +
+ .../selftests/net/lib/xsk/xskxceiver.c        | 184 +++++++++---------
+ 3 files changed, 107 insertions(+), 89 deletions(-)
 
 diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testing/selftests/net/lib/xsk/test_xsk.c
-index 237d9e076e10..22a81723d5de 100644
+index 22a81723d5de..70a61fb511c8 100644
 --- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
 +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
-@@ -244,7 +244,7 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
- 		ifobj->xsk->umem->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
- 	}
+@@ -369,6 +369,9 @@ static struct pkt *pkt_stream_get_next_rx_pkt(struct pkt_stream *pkt_stream, u32
  
--	if (ifobj_tx->hw_ring_size_supp)
-+	if (ifobj_has_cap(ifobj_tx, XSK_CAP_HW_RING))
- 		hw_ring_size_reset(ifobj_tx);
- 
- 	test->ifobj_tx = ifobj_tx;
-@@ -1774,20 +1774,24 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
- 				      struct ifobject *ifobj2)
+ void pkt_stream_delete(struct pkt_stream *pkt_stream)
  {
- 	pthread_t t0, t1;
-+	u32 mbuf_cap;
- 	int err;
- 
--	if (test->mtu > MAX_ETH_PKT_SIZE) {
--		if (test->mode == TEST_MODE_ZC && (!ifobj1->multi_buff_zc_supp ||
--						   (ifobj2 && !ifobj2->multi_buff_zc_supp))) {
--			ksft_print_msg("Multi buffer for zero-copy not supported.\n");
--			return TEST_SKIP;
--		}
--		if (test->mode != TEST_MODE_ZC && (!ifobj1->multi_buff_supp ||
--						   (ifobj2 && !ifobj2->multi_buff_supp))) {
--			ksft_print_msg("Multi buffer not supported.\n");
--			return TEST_SKIP;
--		}
-+	if (test->mtu <= MAX_ETH_PKT_SIZE)
-+		goto skip_mbuf_check;
++	if (!pkt_stream)
++		return;
 +
-+	mbuf_cap = test->mode == TEST_MODE_ZC ? XSK_CAP_MBUF_ZC :
-+						XSK_CAP_MBUF;
-+
-+	if (!ifobj_has_cap(ifobj1, mbuf_cap) ||
-+	    (ifobj2 && !ifobj_has_cap(ifobj2, mbuf_cap))) {
-+		ksft_print_msg("Multi buffer%s not supported.\n",
-+			       mbuf_cap == XSK_CAP_MBUF_ZC ?
-+			       " for zero-copy" : "");
-+		return TEST_SKIP;
- 	}
-+
-+skip_mbuf_check:
- 	err = test_spec_set_mtu(test, test->mtu);
- 	if (err) {
- 		ksft_print_msg("Error, could not set mtu.\n");
-@@ -1852,14 +1856,14 @@ static int testapp_validate_traffic(struct test_spec *test)
- 	struct ifobject *ifobj_rx = test->ifobj_rx;
- 	struct ifobject *ifobj_tx = test->ifobj_tx;
- 
--	if ((ifobj_rx->xsk->umem->unaligned_mode && !ifobj_rx->unaligned_supp) ||
--	    (ifobj_tx->xsk->umem->unaligned_mode && !ifobj_tx->unaligned_supp)) {
-+	if (ifobj_rx->xsk->umem->unaligned_mode &&
-+	    !ifobj_has_cap(ifobj_rx, XSK_CAP_UNALIGNED)) {
- 		ksft_print_msg("No huge pages present.\n");
- 		return TEST_SKIP;
+ 	free(pkt_stream->pkts);
+ 	free(pkt_stream);
+ }
+@@ -2332,6 +2335,13 @@ static int detect_ifobj_caps(struct ifobject *ifobj)
+ 		}
  	}
  
- 	if (test->set_ring) {
--		if (ifobj_tx->hw_ring_size_supp) {
-+		if (ifobj_has_cap(ifobj_tx, XSK_CAP_HW_RING)) {
- 			if (set_ring_size(ifobj_tx)) {
- 				ksft_print_msg("Failed to change HW ring size.\n");
- 				return TEST_FAILURE;
-@@ -1965,7 +1969,7 @@ int testapp_headroom(struct test_spec *test)
- int testapp_stats_rx_dropped(struct test_spec *test)
- {
- 	struct xsk_umem_info *umem = test->ifobj_rx->xsk->umem;
--	u32 umem_tr = test->ifobj_tx->umem_tailroom;
-+	u32 umem_tr = xsk_get_cap(test, umem_tailroom);
- 
- 	if (test->mode == TEST_MODE_ZC) {
- 		ksft_print_msg("Can not run RX_DROPPED test for ZC mode\n");
-@@ -2227,9 +2231,9 @@ int testapp_too_many_frags(struct test_spec *test)
- 	int ret = TEST_FAILURE;
- 
- 	if (test->mode == TEST_MODE_ZC) {
--		max_frags = test->ifobj_tx->xdp_zc_max_segs;
-+		max_frags = xsk_get_cap(test, xdp_zc_max_segs);
- 	} else {
--		max_frags = test->ifobj_tx->max_skb_frags;
-+		max_frags = xsk_get_cap(test, max_skb_frags);
- 		max_frags += 1;
- 	}
- 
-@@ -2289,7 +2293,6 @@ static int xsk_load_xdp_programs(struct ifobject *ifobj)
++	if (!get_hw_ring_size(ifobj->ifname, &ifobj->ring)) {
++		ifobj_set_cap(ifobj, XSK_CAP_HW_RING);
++		ifobj->caps.tx_max_pending = ifobj->ring.tx_max_pending;
++		ifobj->set_ring.default_tx = ifobj->ring.tx_pending;
++		ifobj->set_ring.default_rx = ifobj->ring.rx_pending;
++	}
++
  	return 0;
  }
  
--/* Simple test */
- static bool hugepages_present(void)
+diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.h b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+index 1d17e214db91..861a2ee3b8e1 100644
+--- a/tools/testing/selftests/net/lib/xsk/test_xsk.h
++++ b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+@@ -123,6 +123,8 @@ int hw_ring_size_reset(struct ifobject *ifobj);
+ #define XSK_CAP_MBUF             (1U << 1)
+ #define XSK_CAP_MBUF_ZC          (1U << 2)
+ #define XSK_CAP_HW_RING          (1U << 3)
++#define XSK_CAP_DRV              (1U << 4)
++#define XSK_CAP_ZC               (1U << 5)
+ 
+ struct xsk_caps {
+ 	u32 flags;
+diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+index 8b3e4d18e982..afd6b242aa0d 100644
+--- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
++++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+@@ -81,7 +81,6 @@
+ #include <linux/netdev.h>
+ #include <linux/ethtool.h>
+ #include <linux/align.h>
+-#include <linux/kernel.h>
+ #include <arpa/inet.h>
+ #include <net/if.h>
+ #include <locale.h>
+@@ -101,7 +100,6 @@
+ #include "kselftest.h"
+ #include "xsk_xdp_common.h"
+ 
+-static bool opt_print_tests;
+ static enum test_mode opt_mode = TEST_MODE_ALL;
+ static u32 opt_run_test = RUN_ALL_TESTS;
+ 
+@@ -185,17 +183,40 @@ static void print_usage(char **argv)
+ 	ksft_exit_xfail();
+ }
+ 
+-static bool validate_interface(struct ifobject *ifobj)
++static void bind_iface(struct ifobject *ifobj, const char *ifname, thread_func_t func,
++		       char **argv)
  {
- 	size_t mmap_sz = 2 * DEFAULT_UMEM_BUFFERS * XSK_UMEM__DEFAULT_FRAME_SIZE;
-@@ -2305,21 +2308,13 @@ static bool hugepages_present(void)
+-	if (!strcmp(ifobj->ifname, ""))
+-		return false;
+-	return true;
++	size_t len = ifname ? strlen(ifname) : 0;
++
++	if (!len || len >= sizeof(ifobj->ifname))
++		print_usage(argv);
++
++	memcpy(ifobj->ifname, ifname, len + 1);
++	ifobj->ifindex = if_nametoindex(ifobj->ifname);
++	if (!ifobj->ifindex) {
++		ksft_print_msg("Error: cannot resolve interface %s\n", ifobj->ifname);
++		ksft_exit_fail();
++	}
++
++	if (init_iface(ifobj, func)) {
++		ksft_print_msg("Error: cannot initialize interface %s\n", ifobj->ifname);
++		ksft_exit_fail();
++	}
++}
++
++static void print_tests(void)
++{
++	u32 i;
++
++	printf("Tests:\n");
++	for (i = 0; i < ARRAY_SIZE(tests); i++)
++		printf("%u: %s\n", i, tests[i].name);
+ }
+ 
+ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj_rx, int argc,
+ 			       char **argv)
+ {
+-	struct ifobject *ifobj;
++	const char *ifname[2] = {};
+ 	u32 interface_nb = 0;
+ 	int option_index, c;
+ 
+@@ -208,21 +229,10 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+ 
+ 		switch (c) {
+ 		case 'i':
+-			if (interface_nb == 0)
+-				ifobj = ifobj_tx;
+-			else if (interface_nb == 1)
+-				ifobj = ifobj_rx;
+-			else
++			if (interface_nb >= ARRAY_SIZE(ifname))
+ 				break;
+ 
+-			memcpy(ifobj->ifname, optarg,
+-			       min_t(size_t, MAX_INTERFACE_NAME_CHARS, strlen(optarg)));
+-
+-			ifobj->ifindex = if_nametoindex(ifobj->ifname);
+-			if (!ifobj->ifindex)
+-				exit_with_error(errno);
+-
+-			interface_nb++;
++			ifname[interface_nb++] = optarg;
+ 			break;
+ 		case 'v':
+ 			opt_verbose = true;
+@@ -242,7 +252,8 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+ 				print_usage(argv);
+ 			break;
+ 		case 'l':
+-			opt_print_tests = true;
++			print_tests();
++			ksft_exit_pass();
+ 			break;
+ 		case 't':
+ 			errno = 0;
+@@ -255,6 +266,9 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+ 			print_usage(argv);
+ 		}
+ 	}
++
++	bind_iface(ifobj_tx, ifname[0], worker_testapp_validate_tx, argv);
++	bind_iface(ifobj_rx, ifname[1], worker_testapp_validate_rx, argv);
+ }
+ 
+ static void xsk_unload_xdp_programs(struct ifobject *ifobj)
+@@ -262,7 +276,7 @@ static void xsk_unload_xdp_programs(struct ifobject *ifobj)
+ 	xsk_xdp_progs__destroy(ifobj->xdp_progs);
+ }
+ 
+-static void run_pkt_test(struct test_spec *test)
++static int run_pkt_test(struct test_spec *test)
+ {
+ 	int ret;
+ 
+@@ -287,6 +301,7 @@ static void run_pkt_test(struct test_spec *test)
+ 	}
+ 
+ 	pkt_stream_restore_default(test);
++	return ret;
+ }
+ 
+ static bool is_xdp_supported(int ifindex)
+@@ -317,26 +332,46 @@ static bool is_xdp_supported(int ifindex)
  	return true;
  }
  
--int init_iface(struct ifobject *ifobj, thread_func_t func_ptr)
-+static int detect_ifobj_caps(struct ifobject *ifobj)
+-static void print_tests(void)
++static u32 detect_mode_caps(struct ifobject *ifobj)
  {
- 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
- 	int err;
+-	u32 i;
++	if (is_xdp_supported(ifobj->ifindex)) {
++		ifobj_set_cap(ifobj, XSK_CAP_DRV);
++		if (ifobj_zc_avail(ifobj))
++			ifobj_set_cap(ifobj, XSK_CAP_ZC);
++	}
  
--	ifobj->func_ptr = func_ptr;
--
--	err = xsk_load_xdp_programs(ifobj);
--	if (err) {
--		ksft_print_msg("Error loading XDP program\n");
--		return err;
--	}
--
- 	if (hugepages_present())
--		ifobj->unaligned_supp = true;
-+		ifobj_set_cap(ifobj, XSK_CAP_UNALIGNED);
- 
- 	err = bpf_xdp_query(ifobj->ifindex, XDP_FLAGS_DRV_MODE, &query_opts);
- 	if (err) {
-@@ -2327,19 +2322,34 @@ int init_iface(struct ifobject *ifobj, thread_func_t func_ptr)
- 		return err;
- 	}
- 	if (query_opts.feature_flags & NETDEV_XDP_ACT_RX_SG)
--		ifobj->multi_buff_supp = true;
-+		ifobj_set_cap(ifobj, XSK_CAP_MBUF);
- 	if (query_opts.feature_flags & NETDEV_XDP_ACT_XSK_ZEROCOPY) {
- 		if (query_opts.xdp_zc_max_segs > 1) {
--			ifobj->multi_buff_zc_supp = true;
--			ifobj->xdp_zc_max_segs = query_opts.xdp_zc_max_segs;
-+			ifobj_set_cap(ifobj, XSK_CAP_MBUF_ZC);
-+			ifobj->caps.xdp_zc_max_segs = query_opts.xdp_zc_max_segs;
- 		} else {
--			ifobj->xdp_zc_max_segs = 0;
-+			ifobj->caps.xdp_zc_max_segs = 0;
- 		}
- 	}
- 
- 	return 0;
+-	printf("Tests:\n");
+-	for (i = 0; i < ARRAY_SIZE(tests); i++)
+-		printf("%u: %s\n", i, tests[i].name);
++	return ifobj->caps.flags;
++}
++
++static bool mode_supported(enum test_mode mode, u32 caps)
++{
++	if (mode == TEST_MODE_SKB)
++		return true;
++	if (mode == TEST_MODE_DRV)
++		return caps & XSK_CAP_DRV;
++	return caps & XSK_CAP_ZC;
++}
++
++static void cleanup_iface(struct ifobject *ifobj)
++{
++	if (ifobj_has_cap(ifobj, XSK_CAP_HW_RING))
++		hw_ring_size_reset(ifobj);
++	if (ifobj->xdp_prog)
++		xsk_detach_xdp_program(ifobj->ifindex,
++				       ifobj->mode == TEST_MODE_SKB ?
++				       XDP_FLAGS_SKB_MODE : XDP_FLAGS_DRV_MODE);
++	xsk_unload_xdp_programs(ifobj);
  }
  
-+int init_iface(struct ifobject *ifobj, thread_func_t func_ptr)
-+{
-+	int err;
-+
-+	ifobj->func_ptr = func_ptr;
-+
-+	err = xsk_load_xdp_programs(ifobj);
-+	if (err) {
-+		ksft_print_msg("Error loading XDP program\n");
-+		return err;
-+	}
-+
-+	return detect_ifobj_caps(ifobj);
-+}
-+
- int testapp_send_receive(struct test_spec *test)
+ int main(int argc, char **argv)
  {
- 	return testapp_validate_traffic(test);
-@@ -2449,7 +2459,7 @@ int testapp_hw_sw_max_ring_size(struct test_spec *test)
+ 	u32 cache_line_size, max_frags, umem_tailroom;
+ 	const size_t total_tests = ARRAY_SIZE(tests);
+-	struct pkt_stream *rx_pkt_stream_default;
+-	struct pkt_stream *tx_pkt_stream_default;
+ 	struct ifobject *ifobj_tx, *ifobj_rx;
+ 	u32 i, j, failed_tests = 0, nb_tests;
+-	int modes = TEST_MODE_SKB + 1;
+-	struct test_spec test;
+-	int ret;
++	struct test_spec test = {};
++	int ret = TEST_FAILURE;
++	u32 caps, modes = 0;
  
- 	test->set_ring = true;
- 	test->total_steps = 2;
--	test->ifobj_tx->ring.tx_pending = test->ifobj_tx->ring.tx_max_pending;
-+	test->ifobj_tx->ring.tx_pending = xsk_get_cap(test, tx_max_pending);
- 	test->ifobj_tx->ring.rx_pending  = test->ifobj_tx->ring.rx_max_pending;
- 	test->ifobj_rx->xsk->umem->num_frames = max_descs;
- 	test->ifobj_rx->xsk->umem->fill_size = max_descs;
-@@ -2464,8 +2474,8 @@ int testapp_hw_sw_max_ring_size(struct test_spec *test)
- 	/* Set batch_size to 8152 for testing, as the ice HW ignores the 3 lowest bits when
- 	 * updating the Rx HW tail register.
- 	 */
--	test->ifobj_tx->xsk->batch_size = test->ifobj_tx->ring.tx_max_pending - 8;
--	test->ifobj_rx->xsk->batch_size = test->ifobj_tx->ring.tx_max_pending - 8;
-+	test->ifobj_tx->xsk->batch_size = xsk_get_cap(test, tx_max_pending) - 8;
-+	test->ifobj_rx->xsk->batch_size = xsk_get_cap(test, tx_max_pending) - 8;
- 	if (pkt_stream_replace(test, max_descs, MIN_PKT_SIZE)) {
- 		clean_sockets(test, test->ifobj_tx);
- 		clean_sockets(test, test->ifobj_rx);
-@@ -2558,7 +2568,7 @@ int testapp_adjust_tail_grow_mb(struct test_spec *test)
- 	grow_size = XSK_UMEM__MAX_FRAME_SIZE -
- 		    XSK_UMEM__LARGE_FRAME_SIZE -
- 		    XDP_PACKET_HEADROOM -
--		    test->ifobj_tx->umem_tailroom;
-+		    xsk_get_cap(test, umem_tailroom);
- 	test->mtu = MAX_ETH_JUMBO_SIZE;
- 
- 	return testapp_adjust_tail(test, grow_size, XSK_UMEM__LARGE_FRAME_SIZE * 2);
-diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.h b/tools/testing/selftests/net/lib/xsk/test_xsk.h
-index 0717d855e4df..1d17e214db91 100644
---- a/tools/testing/selftests/net/lib/xsk/test_xsk.h
-+++ b/tools/testing/selftests/net/lib/xsk/test_xsk.h
-@@ -119,8 +119,22 @@ struct set_hw_ring {
- 
- int hw_ring_size_reset(struct ifobject *ifobj);
- 
-+#define XSK_CAP_UNALIGNED        (1U << 0)
-+#define XSK_CAP_MBUF             (1U << 1)
-+#define XSK_CAP_MBUF_ZC          (1U << 2)
-+#define XSK_CAP_HW_RING          (1U << 3)
-+
-+struct xsk_caps {
-+	u32 flags;
-+	u32 xdp_zc_max_segs;
-+	u32 max_skb_frags;
-+	u32 umem_tailroom;
-+	u32 tx_max_pending;
-+};
-+
- struct ifobject {
- 	char ifname[MAX_INTERFACE_NAME_CHARS];
-+	struct xsk_caps caps;
- 	struct xsk_socket_info *xsk;
- 	struct xsk_socket_info *xsk_arr;
- 	thread_func_t func_ptr;
-@@ -134,9 +148,6 @@ struct ifobject {
- 	int ifindex;
- 	int mtu;
- 	u32 bind_flags;
--	u32 xdp_zc_max_segs;
--	u32 umem_tailroom;
--	u32 max_skb_frags;
- 	bool tx_on;
- 	bool rx_on;
- 	bool use_poll;
-@@ -144,11 +155,20 @@ struct ifobject {
- 	bool use_fill_ring;
- 	bool release_rx;
- 	bool use_metadata;
--	bool unaligned_supp;
--	bool multi_buff_supp;
--	bool multi_buff_zc_supp;
--	bool hw_ring_size_supp;
- };
-+
-+static inline bool ifobj_has_cap(const struct ifobject *ifobj, u32 cap)
-+{
-+	return ifobj && (ifobj->caps.flags & cap);
-+}
-+
-+static inline void ifobj_set_cap(struct ifobject *ifobj, u32 cap)
-+{
-+	ifobj->caps.flags |= cap;
-+}
-+
-+#define xsk_get_cap(test, cap) ((test)->ifobj_tx->caps.cap)
-+
- struct ifobject *ifobject_create(void);
- void ifobject_delete(struct ifobject *ifobj);
- int init_iface(struct ifobject *ifobj, thread_func_t func_ptr);
-diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-index f4a2f45a6752..8b3e4d18e982 100644
---- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-+++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-@@ -361,15 +361,15 @@ int main(int argc, char **argv)
- 		ksft_print_msg("Can't get MAX_SKB_FRAGS from system, using default (17)\n");
- 		max_frags = 17;
- 	}
--	ifobj_tx->max_skb_frags = max_frags;
--	ifobj_rx->max_skb_frags = max_frags;
-+	ifobj_tx->caps.max_skb_frags = max_frags;
-+	ifobj_rx->caps.max_skb_frags = max_frags;
- 
- 	/* 48 bytes is a part of skb_shared_info w/o frags array;
- 	 * 16 bytes is sizeof(skb_frag_t)
- 	 */
- 	umem_tailroom = ALIGN(48 + (max_frags * 16), cache_line_size);
--	ifobj_tx->umem_tailroom = umem_tailroom;
--	ifobj_rx->umem_tailroom = umem_tailroom;
-+	ifobj_tx->caps.umem_tailroom = umem_tailroom;
-+	ifobj_rx->caps.umem_tailroom = umem_tailroom;
+ 	/* Use libbpf 1.0 API mode */
+ 	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+@@ -373,93 +408,64 @@ int main(int argc, char **argv)
  
  	parse_command_line(ifobj_tx, ifobj_rx, argc, argv);
  
-@@ -393,7 +393,8 @@ int main(int argc, char **argv)
- 
- 	ret = get_hw_ring_size(ifobj_tx->ifname, &ifobj_tx->ring);
- 	if (!ret) {
--		ifobj_tx->hw_ring_size_supp = true;
-+		ifobj_set_cap(ifobj_tx, XSK_CAP_HW_RING);
-+		ifobj_tx->caps.tx_max_pending = ifobj_tx->ring.tx_max_pending;
- 		ifobj_tx->set_ring.default_tx = ifobj_tx->ring.tx_pending;
- 		ifobj_tx->set_ring.default_rx = ifobj_tx->ring.rx_pending;
+-	if (opt_print_tests) {
+-		print_tests();
+-		ksft_exit_xpass();
+-	}
+ 	if (opt_run_test != RUN_ALL_TESTS && opt_run_test >= total_tests) {
+ 		ksft_print_msg("Error: test %u does not exist.\n", opt_run_test);
+ 		ksft_exit_xfail();
  	}
-@@ -448,7 +449,7 @@ int main(int argc, char **argv)
+ 
+-	if (!validate_interface(ifobj_tx) || !validate_interface(ifobj_rx))
+-		print_usage(argv);
+-
+-	if (is_xdp_supported(ifobj_tx->ifindex)) {
+-		modes++;
+-		if (ifobj_zc_avail(ifobj_tx))
+-			modes++;
+-	}
++	test.tx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
++	test.rx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
++	if (!test.tx_pkt_stream_default || !test.rx_pkt_stream_default)
++		goto out;
+ 
+-	ret = get_hw_ring_size(ifobj_tx->ifname, &ifobj_tx->ring);
+-	if (!ret) {
+-		ifobj_set_cap(ifobj_tx, XSK_CAP_HW_RING);
+-		ifobj_tx->caps.tx_max_pending = ifobj_tx->ring.tx_max_pending;
+-		ifobj_tx->set_ring.default_tx = ifobj_tx->ring.tx_pending;
+-		ifobj_tx->set_ring.default_rx = ifobj_tx->ring.rx_pending;
+-	}
++	caps = detect_mode_caps(ifobj_tx);
+ 
+-	if (init_iface(ifobj_rx, worker_testapp_validate_rx) ||
+-	    init_iface(ifobj_tx, worker_testapp_validate_tx)) {
+-		ksft_print_msg("Error : can't initialize interfaces\n");
++	if (opt_mode != TEST_MODE_ALL && !mode_supported(opt_mode, caps)) {
++		if (opt_mode == TEST_MODE_DRV)
++			ksft_print_msg("Error: XDP_DRV mode not supported.\n");
++		else
++			ksft_print_msg("Error: zero-copy mode not supported.\n");
+ 		ksft_exit_xfail();
+ 	}
+ 
+-	test_init(&test, ifobj_tx, ifobj_rx, 0, &tests[0]);
+-	tx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
+-	rx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
+-	if (!tx_pkt_stream_default || !rx_pkt_stream_default)
+-		exit_with_error(ENOMEM);
+-	test.tx_pkt_stream_default = tx_pkt_stream_default;
+-	test.rx_pkt_stream_default = rx_pkt_stream_default;
+-
++	for (i = TEST_MODE_SKB; i <= TEST_MODE_ZC; i++)
++		if ((opt_mode == TEST_MODE_ALL || i == opt_mode) && mode_supported(i, caps))
++			modes++;
+ 	if (opt_run_test == RUN_ALL_TESTS)
+ 		nb_tests = total_tests;
+ 	else
+ 		nb_tests = 1;
+-	if (opt_mode == TEST_MODE_ALL) {
+-		ksft_set_plan(modes * nb_tests);
+-	} else {
+-		if (opt_mode == TEST_MODE_DRV && modes <= TEST_MODE_DRV) {
+-			ksft_print_msg("Error: XDP_DRV mode not supported.\n");
+-			ksft_exit_xfail();
+-		}
+-		if (opt_mode == TEST_MODE_ZC && modes <= TEST_MODE_ZC) {
+-			ksft_print_msg("Error: zero-copy mode not supported.\n");
+-			ksft_exit_xfail();
+-		}
+-
+-		ksft_set_plan(nb_tests);
+-	}
++	/* Line-buffer stdout so verdicts reach a capturing launcher live. */
++	ksft_print_header();
++	ksft_set_plan(modes * nb_tests);
+ 
+-	for (i = 0; i < modes; i++) {
++	for (i = TEST_MODE_SKB; i <= TEST_MODE_ZC; i++) {
+ 		if (opt_mode != TEST_MODE_ALL && i != opt_mode)
+ 			continue;
++		if (!mode_supported(i, caps))
++			continue;
+ 
+ 		for (j = 0; j < total_tests; j++) {
+ 			if (opt_run_test != RUN_ALL_TESTS && j != opt_run_test)
+ 				continue;
+ 
+ 			test_init(&test, ifobj_tx, ifobj_rx, i, &tests[j]);
+-			run_pkt_test(&test);
+-			usleep(USLEEP_MAX);
+-
+-			if (test.fail)
++			if (run_pkt_test(&test) == TEST_FAILURE)
+ 				failed_tests++;
++			usleep(USLEEP_MAX);
  		}
  	}
++	ret = failed_tests ? TEST_FAILURE : TEST_PASS;
  
--	if (ifobj_tx->hw_ring_size_supp)
-+	if (ifobj_has_cap(ifobj_tx, XSK_CAP_HW_RING))
- 		hw_ring_size_reset(ifobj_tx);
+-	if (ifobj_has_cap(ifobj_tx, XSK_CAP_HW_RING))
+-		hw_ring_size_reset(ifobj_tx);
+-
+-	pkt_stream_delete(tx_pkt_stream_default);
+-	pkt_stream_delete(rx_pkt_stream_default);
+-	xsk_unload_xdp_programs(ifobj_tx);
+-	xsk_unload_xdp_programs(ifobj_rx);
++out:
++	cleanup_iface(ifobj_tx);
++	cleanup_iface(ifobj_rx);
++	pkt_stream_delete(test.tx_pkt_stream_default);
++	pkt_stream_delete(test.rx_pkt_stream_default);
+ 	ifobject_delete(ifobj_tx);
+ 	ifobject_delete(ifobj_rx);
  
- 	pkt_stream_delete(tx_pkt_stream_default);
+-	if (failed_tests)
++	if (ret)
+ 		ksft_exit_fail();
+ 	else
+ 		ksft_exit_pass();
 -- 
 2.43.0
 
