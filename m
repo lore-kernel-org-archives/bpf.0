@@ -1,56 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAE4448BB6;
-	Thu,  8 Oct 2026 21:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A510435FF6C;
+	Thu,  8 Oct 2026 21:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791495670; cv=none; b=itOchtr3mIV7pe4tv2I/LiVl38ktGVC3N8JZQce8Py9r/eqY4Wdh8WoBuSQat2RjXG64drCPhGLq2SgilvfpenMR5wqLf4HbwrEnG5e/Nx1Q+6I+wB8YCNNdicLqZd5cXnlcx8e1TAqDfw3IbiDQDwmkHg2bKS/u1RrBmq3Rdq8=
+	t=1791495890; cv=none; b=fcbFMeqlt678+BHM11LrjCF/IwdoxczAMM2VT9A+d+FO4WDkTJcoVqGV9qqlfmV+QWT2Q08n8ULGHxkg2HLS7rkQaWB1mzwL9+lH7xt1UB1NQeFVB1jp19oho1LHBiSaRrj2G3xiDFDN6InP+zuaq+sLb0QMbBrA/zi0TqWlYls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791495670; c=relaxed/simple;
-	bh=vyiaRk3r22Apv0KEtzqOmsDJMb6ocYPX10Nl/JCuv04=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mw55gqa498qEXcCmewMp0QIahlbxtCbL+qJcD7c419Kt7kJUFXWeFgc4F7CjqSPinkfkbVa8TJrCyo0Kz8rHlzhP44nRMLCYv5n3/bW6hNphPg6KGjM6o5PJMne8wobzTGtV/L80eHs2qjNAVHYFeguqSEZdcsljfFZtBXhV8Io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hOAoIVfh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791495890; c=relaxed/simple;
+	bh=V5hyUjce0dyiGY9B38zdGs+bp16nnUtkw0t3Xbr0hrI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Zc1jSI+JvlBTzMJWpZLHb9ndSk6Tiq36RIdz8A/6Hwm1Qx0Xl2f1kOeld0/MB03kPgUyGbOWfYE/lp8KdfZ++Ra38FvLFERxNASUifTwC2LD+Fuj1tXI88xg9bo39nj2lV5HDaAjWEm+IGShbLBWCXpSDtNmtFp9MB4HLAsV3O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWzmUdqj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hOAoIVfh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38D61F000FF;
-	Thu,  8 Oct 2026 21:41:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWzmUdqj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D1BC1F000FF;
+	Thu,  8 Oct 2026 21:44:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791495669;
-	bh=/k/hxDIEN3Hzemz/rN68B4NPxOscSdDHAYKTWxfP4wE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=hOAoIVfhONzzlSdYo6eezK6BHxOLm4g4o6kQI3+bgypJtgGC8eMsRQWVXv7IvOriX
-	 f59J5bGf199S86c6YbPbHdbuevUJ2L+KEY1Wp33zp7aU1CRuB+T+Del2s9F+Kch5rZ
-	 C7tYHurdyB8k2IcI4kW4S+m2gR1dqiy1N4AvEXkzmjE1134Eegs423CaJ5+N8ai3xi
-	 sz+3MlWmU7TGmojCr7om0hUSZpftmUpFOUz0+5KF/NuAYGnZIRPLiRcY8I/ozCybyP
-	 yfBHcS/rYzIzwffR77gRb+06bQZgBeWl55C/LLj0URWV/zGMAZFZeDzKVrAZ2coXlr
-	 DjkvKqynvfL3g==
-Date: Thu, 8 Oct 2026 14:41:08 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
- stfomichev@gmail.com, pabeni@redhat.com, tushar.vyavahare@intel.com,
- kerneljasonxing@gmail.com, bjorn@kernel.org
-Subject: Re: [PATCH v2 net-next 14/14] selftests: xsk: document generic and
- hardware endpoint runs
-Message-ID: <20261008144108.164cbc6d@kernel.org>
-In-Reply-To: <20261008114909.734364-15-maciej.fijalkowski@intel.com>
-References: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
-	<20261008114909.734364-15-maciej.fijalkowski@intel.com>
+	s=k20260515; t=1791495889;
+	bh=AQbyI5xskQ8NVKHXl0zWyTvdWxuuhblMJj4vmGkU8hE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=jWzmUdqjRh7znL9SYL0fjYFqVaiT7ifzU/aR2GHWmToi4lUxGzOk3WYRxhFPAONnE
+	 9ZAnf08DAHjPniwJKjinTZiD6wVWOcac3VtD8JBj4/vncHe55h6bFFETLQCz+Qo5Fq
+	 ZeD/XucbA3D2AV1jpDWHd3lXijHNwJgFUGkRbN5PJf+axnGLzvrparOgo5PJI2i5uu
+	 nstUWvg20aN1BdU9xcUPwCX402bWFKS2as1U9XPvHUAiz7EdIW6gz5WHqb0+NET1bK
+	 JkRMbPGHfdAytedhghy5zoio6YW1UGA6Kk1lFAHjasiGk+IkYLxkz9iYZ2v1uB7Gyw
+	 WiyeVIwUFZwrA==
+Content-Type: multipart/mixed; boundary="===============6446318386397627273=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <910460850fd4163dadb804fbdf6c17f6a9dfec060f4d865a17df87336ea3e165@mail.kernel.org>
+In-Reply-To: <20261008-ajhalaney-dmverity-key-identifier-v2-1-008456d189cb@amutable.com>
+References: <20261008-ajhalaney-dmverity-key-identifier-v2-1-008456d189cb@amutable.com>
+Subject: Re: [PATCH bpf-next v2 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+From: bot+bpf-ci@kernel.org
+To: andrew@amutable.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,agk@redhat.com,snitzer@kernel.org,mpatocka@redhat.com,bmarzins@redhat.com,dhowells@redhat.com,jarkko@kernel.org,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,ebiggers@kernel.org,tytso@mit.edu,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org
+Cc: dm-devel@lists.linux.dev,linux-kernel@vger.kernel.org,keyrings@vger.kernel.org,linux-security-module@vger.kernel.org,bpf@vger.kernel.org,fsverity@lists.linux.dev,linux-doc@vger.kernel.org,andrew@amutable.com,brauner@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  8 Oct 2026 21:44:46 +0000 (UTC)
+
+--===============6446318386397627273==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Thu,  8 Oct 2026 13:49:09 +0200 Maciej Fijalkowski wrote:
-> Document the per-case veth launcher and the two-host hardware setup
-> where the DUT uses AF_XDP zero-copy and the remote xskxceiver uses SKB
-> mode.
+> keys: add KEY_SPEC_DM_VERITY_KEYRING
 
-Why all these instructions? Just make ksft run all the combinations you
-care about testing, no?
+TL;DR: Design/uapi question: was David Howells' v1 suggestion (reserved
+negative key ID block, common register functions) intentionally dropped? The
+new uapi value -10 should be settled before release.
+
+> diff --git a/include/uapi/linux/keyctl.h b/include/uapi/linux/keyctl.h
+> --- a/include/uapi/linux/keyctl.h
+> +++ b/include/uapi/linux/keyctl.h
+> @@ -25,6 +25,7 @@
+>  #define KEY_SPEC_REQKEY_AUTH_KEY	-7	/* - key ID for assumed request_key auth key */
+>  #define KEY_SPEC_REQUESTOR_KEYRING	-8	/* - key ID for request_key() dest keyring */
+>  #define KEY_SPEC_BPF_KEYRING		-9	/* - key ID for the BPF-specific keyring */
+> +#define KEY_SPEC_DM_VERITY_KEYRING	-10	/* - key ID for the .dm-verity keyring */
+
+On v1, David Howells wrote:
+
+  I have no particular objection to setting aside a block of negative key
+  IDs for special keyrings that need to be accessed a lot - though I would
+  make common reg/unreg functions that take the ID to be registered and,
+  say, set the block at -257..-512.  Moving the BFP keyring to -257 and
+  DM to -258.
+
+  (<715249.1789718726@warthog.procyon.org.uk>)
+
+The question of whether this was being asked for v2 was raised in reply, but
+there was no answer, and this version still continues the one-off -9/-10
+sequence with a dm-verity specific key_register_dm_verity_keyring() and
+dm_verity_keyring_lock.
+
+Was the suggestion to use a reserved ID block with common register and
+unregister functions intentionally dropped, or should it still be addressed?
+
+Since KEY_SPEC_DM_VERITY_KEYRING is a UAPI value, would it be possible to
+settle this before the -10 value is released?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37844805282
+--===============6446318386397627273==--
