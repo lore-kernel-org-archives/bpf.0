@@ -1,112 +1,139 @@
-Received: from mta1.migadu.com (out-169.mta1.migadu.com [95.215.58.169])
+Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD7A383320
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 21:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD7447DF8F
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 21:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791496100; cv=none; b=ijZeGShJMg21YqURyOwT/GvGiDD3ZvyDAwM3vjgNa5QWATQxG73aBuc7/cLhrrPhcH6I040LpUjtgJGutwt7Y72SGou5mdVAimtkIxS4Ge1qEJYorSqt7g3W55DEmVoDIFQGQe0V2K8D45siif2sBVeMaDc3/hb1wS3/0aXcn58=
+	t=1791496648; cv=none; b=DWmXMqnbhUUkzYiIs88w5qWytDUV8M4pGwZXa47hAVf6xCI5/DPnnOpacqHvOeRkN5aRWTRJCSRMr0JtTBrUDyd8cW4waLUwrYo0aj0JDyB/PTYWR+wszg23jmVS72vRLO5zA8P8iuqCvrXslmkilFdHsn0o8QgUlJOcyuUvK4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791496100; c=relaxed/simple;
-	bh=JHSucTSg3QijIyFlRiljDu/KhLUuZiBG3coap6ISBt0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IwLhSXcrBG7RZ/sk6ecUcDrwue90evwwp8fu919UHxSBLkyTTwq06h32nUHR6/TJGTnin4owiA978cgPIBx1TnQL8V9/ecFirhunpsH+7P794qbZgjHXqru+oRwq7V5cK6fTwVoXcbfopBu8TDlyyRNgERau6+J8pybFUEzA/8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xkSnrgLF; arc=none smtp.client-ip=95.215.58.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791496648; c=relaxed/simple;
+	bh=TinDgVFxFR2tgZfjdVwALy4/9vsweDfT6mfWVmqTMUo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j4qCMYZw9jHCUKFe12R4djaoUXBwifPiu5OlX0eqzj1ZwWc7PjXj15SWcy7/zBxxhoHSYIoEUtULyDiRTlqn4C6bcrbKbF9XnSWcbcMje1tzO9gPEbkKWzXbmTcQ1NY2UZKEXnfZ6PH6RFPQGBNN/lzS1aw887bsUNq+gXGETps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com; spf=pass smtp.mailfrom=amutable.com; dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b=z6qriq0p; arc=none smtp.client-ip=74.125.224.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xkSnrgLF"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JHSucTSg3QijIyFlRiljDu/KhLUuZiBG3coap6ISBt0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791496094; v=1; x=1792100894;
- b=xkSnrgLF/dlsQEamjwaapG2CON4B1Vul0chudMCXr48T0B1DYxYi5112t+61hanWqqLcBiRl
- Ntcfo/4UsCEC2WpdrOneHifKEpPnrOh6RVwMLRfjv1CiNvEIKzyPf4gF+6BjVQab5/WpXOUohtw
- LDnAMeGBO703HZYExiav+loQ=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 871702971b78ecae;
-	Thu, 08 Oct 2026 21:48:14 +0000
-X-Mizu-Trace-ID: 871702971b78ecae
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <e139339c-1e55-438b-86bf-0960ad4029f1@linux.dev>
-Date: Thu, 8 Oct 2026 14:48:07 -0700
+	dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b="z6qriq0p"
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-6768ced47aeso4065479d50.1
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 14:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amutable-com.20251104.gappssmtp.com; s=20251104; t=1791496646; x=1792101446; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Fco4QMlc4mAm6FzCcL+SMMWE++sU0VPdNedp39umucs=;
+        b=z6qriq0phDdFdiH+a9lOEwK2s1YMdgvpqYSYv26lJOAtdljC0S8EprwYZBciwDJkhU
+         VDZynNv/a1n044+ErEvfXTG3sPZAd/XibqG6QqOcRGh/J8OuSvDs0xtYkCPbsLFDinAk
+         Mx3FXqGd1Rzgtxvxm6RHO/A70o0pZXhsmZW2ZgDHqgvxZ11XmEzUF0flImDctfVYhDKw
+         un/tVizYPLyAR7sHKgskkf7MGVOQjN41k6K79CxXoNDjOxJjE8FcQJT9iGn4IDwjyu2K
+         1HS/Z+kzyoQGY18Iwfpr4gaiTU5TMU0HIBYlRN8QK76duawAFd+uFPXVZhxidemnLcqM
+         1bEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791496646; x=1792101446;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Fco4QMlc4mAm6FzCcL+SMMWE++sU0VPdNedp39umucs=;
+        b=SjLlePpiKkoVN7xoUH9P84XH6uZqzDs652VUyQDGSboHA45sChfkoBpBHcmY0HD4dX
+         BcTNnpo3ZR+D+MufhkrZlsTTCZ5aRjeggk2C1FrBIJ0PLq1Eod2jaCiyBO6rLckj1J2B
+         H8qYw77wS0ERYS1qGYYua8jN69bbjcCX1Z/NQXKCq/kGmJaTLH6OM4gq6qeoVwuVHcgv
+         rL/+f2qNAqgCxVB+JfnnuH4fCb/M6lkDEOsbJZpX8W4SKwcoZmjbGO4o9fvNiZQUWLUf
+         Wd/XnfIbvbq08MPnO6uj4EQmisjgQZ+18wlHRC30z6TEVJUTVfzMGPdNSGe7Z3UO9h/S
+         SNQw==
+X-Forwarded-Encrypted: i=1; AKwUvBzf7+0HfonuPI2n39hr7RGKKimPKNrlkOT2rbRJP2HtcA616uE66B8QIUeu6EJFENQslAw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIpRgYkGZC94SsWGYdg9blhNzByjBHg2FYEK2ctHvGU5TtSofNj
+	LrEvHaN3Y2dyES+ZY2vvwxLKBMa6b/FYLzEr9QtO08KBCKkXyps7HswoPkKyW0m+u8pF
+X-Gm-Gg: AYBFou3zJuAs4jEXcrVc7YvnCZrLNn/wzTvhbMDTIbUWoQ+Yct4ocL8MWe7T81aFVbQ
+	0h6b5wAnIS3+obsnXqxjBc1cZgib9WLgSx46+2eN6UL/tE35DuPCtfAOxByZdnILshk/RZFSj7R
+	SQaQJoa0mCRrYQyW0VfNCTdLS+aFIVEkqEzDPFOvBdDTUwLpJpBDnpVGxedb8htFqcnPwg/wC/B
+	CAJJNSbRZ+BU10MSaeDC4X4+Kbk3QnSCTz+e/AGTcCPCdRxzH9GyeZZ3t/gCPux1UDxBrD7dd0w
+	AbdrimhEWX9sVzdcDcysTgRamRT0F1HiM40Vu/y0coMivgxQ1u2f7ICsOmhR6LMVSPPR2kyGcce
+	pqv7PnEUMLbhnn6eBrEjGWFQ5YAs9kBlCDc/EPHud2+RKMKZzFBxIiIloy49XPUL6KJYoq6s9l4
+	H54WXjBhX/nV1dJsIzN3yzRYYFlnQLJY4Geo7uZwImkIU/PfRFiWyXu9BISrdfCZtoDjWsl2IIi
+	m1njCPdlCoGYMYSYK7FtcXgjx3vQY6IKNP23xITogehJ4B6mCznAg==
+X-Received: by 2002:a05:690e:4881:10b0:677:ed83:7ef2 with SMTP id 956f58d0204a3-679362620bemr51250d50.72.1791496645626;
+        Thu, 08 Oct 2026 14:57:25 -0700 (PDT)
+Received: from toolbx (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679356ef60fsm121969d50.21.2026.10.08.14.57.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 14:57:25 -0700 (PDT)
+Date: Thu, 8 Oct 2026 16:57:22 -0500
+From: Andrew Halaney <andrew@amutable.com>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com, bmarzins@redhat.com, 
+	dhowells@redhat.com, jarkko@kernel.org, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, ebiggers@kernel.org, tytso@mit.edu, corbet@lwn.net, 
+	skhan@linuxfoundation.org, rdunlap@infradead.org, dm-devel@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	bpf@vger.kernel.org, fsverity@lists.linux.dev, linux-doc@vger.kernel.org, 
+	brauner@kernel.org, martin.lau@kernel.org, eddyz87@gmail.com, 
+	yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next v2 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+Message-ID: <asgQxTE-6YtEgvYZ@toolbx>
+References: <20261008-ajhalaney-dmverity-key-identifier-v2-1-008456d189cb@amutable.com>
+ <910460850fd4163dadb804fbdf6c17f6a9dfec060f4d865a17df87336ea3e165@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mm/vma: keep the unlinked VMA off the file across
- unmap on mmap hook failure
-To: Oleg Keri <okerixx@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: "Liam R . Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>
-References: <20261007101800.58d50b1b20a10738e630bfd5@linux-foundation.org>
- <20261007194708.2009-1-okerixx@gmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261007194708.2009-1-okerixx@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <910460850fd4163dadb804fbdf6c17f6a9dfec060f4d865a17df87336ea3e165@mail.kernel.org>
 
-On 10/7/26 12:47 PM, Oleg Keri wrote:
-> Since commit 2ceb21171dd9 ("mm: consistently validate VMA state after
-> mmap[_prepare] hooks"), the mmap error path clears vma->vm_file only
-> after unmap_region(), so free_pgtables() unlinks the never-linked VMA
-> and drops i_mmap_writable. Once it goes negative, every later shared
-> writable mmap of that file fails with -EPERM until reboot.
+On Thu, Oct 08, 2026 at 09:44:46PM +0000, bot+bpf-ci@kernel.org wrote:
+> > keys: add KEY_SPEC_DM_VERITY_KEYRING
 > 
-> Clear vm_file across unmap_region() only, so that free_pgtables() does
-> not unlink a VMA that was never linked to the file, and restore it for
-> vma_close(): when the hook succeeded and the validation failed, the
-> driver's close() still runs and may use vma->vm_file.
+> TL;DR: Design/uapi question: was David Howells' v1 suggestion (reserved
+> negative key ID block, common register functions) intentionally dropped? The
+> new uapi value -10 should be settled before release.
 > 
-> Fixes: 2ceb21171dd9 ("mm: consistently validate VMA state after mmap[_prepare] hooks")
-> Signed-off-by: Oleg Keri <okerixx@gmail.com>
+> > diff --git a/include/uapi/linux/keyctl.h b/include/uapi/linux/keyctl.h
+> > --- a/include/uapi/linux/keyctl.h
+> > +++ b/include/uapi/linux/keyctl.h
+> > @@ -25,6 +25,7 @@
+> >  #define KEY_SPEC_REQKEY_AUTH_KEY	-7	/* - key ID for assumed request_key auth key */
+> >  #define KEY_SPEC_REQUESTOR_KEYRING	-8	/* - key ID for request_key() dest keyring */
+> >  #define KEY_SPEC_BPF_KEYRING		-9	/* - key ID for the BPF-specific keyring */
+> > +#define KEY_SPEC_DM_VERITY_KEYRING	-10	/* - key ID for the .dm-verity keyring */
+> 
+> On v1, David Howells wrote:
+> 
+>   I have no particular objection to setting aside a block of negative key
+>   IDs for special keyrings that need to be accessed a lot - though I would
+>   make common reg/unreg functions that take the ID to be registered and,
+>   say, set the block at -257..-512.  Moving the BFP keyring to -257 and
+>   DM to -258.
+> 
+>   (<715249.1789718726@warthog.procyon.org.uk>)
+> 
+> The question of whether this was being asked for v2 was raised in reply, but
+> there was no answer, and this version still continues the one-off -9/-10
+> sequence with a dm-verity specific key_register_dm_verity_keyring() and
+> dm_verity_keyring_lock.
+> 
+> Was the suggestion to use a reserved ID block with common register and
+> unregister functions intentionally dropped, or should it still be addressed?
+> 
+> Since KEY_SPEC_DM_VERITY_KEYRING is a UAPI value, would it be possible to
+> settle this before the -10 value is released?
+> 
 
-Tested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+With the BPF keyring ID already being merged here in bpf-next, plus
+Jarkko's feedback/RB, I continued following the current pattern instead of
+walking back the BPF keyring ID, and dealing with the
+builtin/module/rodata differences I alluded to that would make that
+approach a little more annoying (at least with how I thought it thru).
 
-BPF CI caught this bug on linux-next as well:
-https://github.com/kernel-patches/bpf/actions/runs/37736351874
-
-The patch fixes it:
-https://github.com/kernel-patches/bpf/actions/runs/37829434215
-
-
+> 
 > ---
-> v2: keep vm_file for vma_close(): with the hook succeeded and the
-> validation failed the driver's close() still runs. Reported by Sashiko
-> via Andrew.
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> Seen on next-20261006: one refused PCM mmap probe from alsa-lib left the
-> device unmappable, so PipeWire could not play anything.
-> 
->  mm/vma.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/mm/vma.c b/mm/vma.c
-> index dfa45c64222c..531e4f53fdd7 100644
-> --- a/mm/vma.c
-> +++ b/mm/vma.c
-> @@ -2616,12 +2616,15 @@ static int __mmap_new_file_vma(struct mmap_state *map,
->  	map->vm_file = vma->vm_file;
->  
->  	if (error) {
-> +		struct file *file = vma->vm_file;
->  		UNMAP_STATE(unmap, vmi, vma, vma->vm_start, vma->vm_end,
->  			    map->prev, map->next);
->  
-> +		vma->vm_file = NULL;
->  		vma_iter_set(vmi, vma->vm_end);
->  		/* Undo any partial mapping done by a device driver. */
->  		unmap_region(&unmap);
-> +		vma->vm_file = file;
->  		/* Only safe once unmapped. */
->  		vma_close(vma);
->  
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37844805282
 
