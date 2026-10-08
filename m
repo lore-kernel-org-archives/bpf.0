@@ -1,189 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0295F3624B3;
-	Thu,  8 Oct 2026 17:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8573B14DB
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 17:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791480830; cv=none; b=cWUY77rdyLd+h8uUP4rw65/MII9GE2zm+dFV51ngOfCV4o3YYgSYQ+wzGIZfvOK6UDgUCqfy9qvLYxW8wzvQYjvJG9+6XzBfVKPYZh/xQ38J7U/D6n8G6zPvKlzoEPhwybTZaZUn8XHl41Lq+zSHeIpFF+cpt5gAklckQpfKZqM=
+	t=1791481003; cv=none; b=a0HOkSNmmrCdxNubHWa+cYmk1scTAW3zZ1VhP1yAMy/IsqrrM2dxyyQQs//8iaNF6zUk34tjjOVPk0FJN0LBuLtw89mh0LrpsmcU+ijOTxWz2/7UmyPCrKqWdEaIsPHTzM2C2CNam9faEE2vpX1HCqD3zj2tMBXBd3IUfu9lfJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791480830; c=relaxed/simple;
-	bh=qjUkLXreYg8MXdiceVPsiNnpljXYWMTyIQ0/Bl5CPWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VxwIyO/w5ZEleo4k9PWNQPogf9PoNm1WxEqpwS5bW7nQZtWUaZoiInTsvRCDxNt4Jmdf7d7ypA0KQKxJnWJ7kbbd3V1gvoCWnzdJW+Ho6AoC6HiXGsVGWMsDpbz5S/J11AmdEZ7x2mNSKGt9QLuAVpz+QrVuruqxPt/9b8gFLmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hL8aekWD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791481003; c=relaxed/simple;
+	bh=qPY4/nVuFZiPU488KmJD6UdHlI6WQ9ZxWMihhokiHVg=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=KJeJl0uKg5khFI+k702nc8NMD600382JoY3bKhXeX3YuMyJvYFyy93onYUZOZTGic1FgPt+4gjayFjkAqNIZrzySduKYKau/aMDGj97edo5jluwaXeDSVHm8V1A7/mDlJATt9rRcwnJG8RLuvZ35E21aqAK1AArbdAowBJL6HlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihpJ83O2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hL8aekWD"
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 3E0771F000FF;
-	Thu,  8 Oct 2026 17:33:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihpJ83O2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB661F00893;
+	Thu,  8 Oct 2026 17:36:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791480828;
-	bh=G4v32k8/a/EW1WFqBk/X57CZyQESBg0MOmvtF2yjKvU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hL8aekWDig0eQ/IB3W4TdhsV9BzgYHbYp6k6GUoeKwLB0Sw94BQw6k5bNTEfG6we+
-	 CmS19CDTrA+i3vY3gxsUou4g5KeSTL6RktPkWzFyFnIACLQ9/1iJJAWRJ1SKctNQPR
-	 h5zQPYUUhBouwf/IV/JMUXzktSx3NhyHLzdEns+nlYQuUA2jrIjlD+8+orpETlNI07
-	 EUw+hF6ngIpgDdXYrw7pHI4CJBQCMnKtmD/hvFwzXYtJCtdCa2xdJ4ASq9w8KT0Y1c
-	 fvBg49iGVWPDPPI3vPl0qanx5AYZhTIYwPbz3FcES98yY3s52n6tuJdMCh5IjHo08p
-	 Q9K74wOx4Ycbg==
-Date: Thu, 8 Oct 2026 20:33:45 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Andrew Halaney <andrew@amutable.com>
-Cc: David Howells <dhowells@redhat.com>, Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, dm-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	fsverity@lists.linux.dev, linux-doc@vger.kernel.org,
-	"Christian Brauner (Amutable)" <brauner@kernel.org>
-Subject: Re: [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
-Message-ID: <asfT-SLkty5DC_Rx@kernel.org>
-References: <aqyiCavj3xeNqyAo@kernel.org>
- <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
- <20260914-ajhalaney-dmverity-key-identifier-v1-1-01922dc1366a@amutable.com>
- <715249.1789718726@warthog.procyon.org.uk>
- <aq2VxlttdlTNlHo6@toolbx>
- <arYzQN1ViuiCBemo@kernel.org>
- <asZlNEFdvidvMdJ5@toolbx>
+	s=k20260515; t=1791481002;
+	bh=jwQG4wdjUyu/EtjGzUyxPtfWfp8fpuHv1KTKQFtNSxk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ihpJ83O2stWeLSjw5ajvvcVYZEI4wM/9gin8RyzYqXIfvz3CL4Va41BZZYNY80XoS
+	 CorhqakMUfC0ACeQr0COvVR8JP2M1+dR3gnQfibNYZD4pkm9L6NoOYJcJl4wVB6Tkc
+	 jalxKMnnj3JNDlU+WNaIjV+SInZLWEoVfKW2K0xVj1AF1X4xFuzSqJ/atPf+fY70dB
+	 Dx3kIjzMtKZIQ5Kzq3uYCZ+sDWdnUq+yNQnUFZy7gL9Fhpfp4F0GOP5/SopNa+ECvQ
+	 zB+mGQSLBJIERnUtme5lYqlQYMuqE2xRn0oAMfAJkZgecElnmWbM17X+lXbQSH/CJr
+	 qrgC3ZPo1RSZQ==
+Message-ID: <sashiko-outbox-164421@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v2 6/8] net: skbuff: don't BUG() on leftover
+ length in skb_copy_and_csum_bits()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Josef Bacik" <josef@toxicpanda.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261007-b4-skbuff-bug-on-v2-6-b9a5f732895b@toxicpanda.com>
+References: <20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b@toxicpanda.com>
+ <20261007-b4-skbuff-bug-on-v2-6-b9a5f732895b@toxicpanda.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 08 Oct 2026 17:36:41 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <asZlNEFdvidvMdJ5@toolbx>
 
-On Wed, Oct 07, 2026 at 10:30:14AM -0500, Andrew Halaney wrote:
-> On Fri, Sep 25, 2026 at 11:39:28AM +0300, Jarkko Sakkinen wrote:
-> > On Fri, Sep 18, 2026 at 02:59:49PM -0500, Andrew Halaney wrote:
-> > > On Fri, Sep 18, 2026 at 09:05:26AM +0100, David Howells wrote:
-> > > > Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > 
-> > > > > This is great for discussion but what we want for the commit message
-> > > > > is just motivation and resolution.
-> > > > 
-> > > > Actually, I think it's useful that Andrew wrote up the issues in the commit
-> > > > message - and I think it shows part of the motivation.  The 'writing a fake
-> > > > /proc/keys line in the description' is something I hadn't considered.
-> > > 
-> > > I'll defer to what you all want in the message here, I found it valuable
-> > > but I trend on the side of overly verbose admittedly!
-> > > 
-> > > > 
-> > > > > I don't think we need all this just to say that /proc/keys in a racy
-> > > > > query mechanism for production, which is an issue for dm-verity, given
-> > > > > that nothing else is available.
-> > > > 
-> > > > I think at some point, we will need a system call to search all for all
-> > > > accessible keys matching certain criteria by actually walking the key
-> > > > database.  The problem there is that there may be multiple hits, so we may
-> > > > need something like:
-> > > > 
-> > > > 	int count = find_key(key_serial_t start_id,
-> > > > 			     const char *type, const char *desc_prefix,
-> > > > 			     key_serial_t *results, size_t results_size,
-> > > > 			     unsigned int flags);
-> > > > 
-> > > > Allowing you to do:
-> > > > 
-> > > > 	key_serial_t dm_key;
-> > > > 	int n = find_key(0, "keyring", ".dm_verity", &dm_key, 1,
-> > > > 			 FIND_KEY_EXACT_DESC);
-> > > > 
-> > > > This wouldn't be as fast as a direct lookup since it would have to walk the
-> > > > key tree, doing name comparisons and perm checks on each key of the type.
-> > > > 
-> > > > > And secondly special keys are meant for implicit keyrings so isn't
-> > > > > that all there's to it?
-> > > > 
-> > > > I have no particular objection to setting aside a block of negative key IDs
-> > > > for special keyrings that need to be accessed a lot - though I would make
-> > > > common reg/unreg functions that take the ID to be registered and, say, set the
-> > > > block at -257..-512.  Moving the BFP keyring to -257 and DM to -258.
-> > > 
-> > > To be clear are you suggesting I do that for v2 here? Happy to make the
-> > > change and add some reuse to the registration functions, etc. I'm
-> > > guessing its fine to change the bpf id since its still only in -next?
-> > > 
-> > > The only awkward bit with making that more generic is that dm-verity
-> > > isn't __ro_after_init since its coming from a module possibly, and
-> > > because of the module usage I also protected it with a spinlock in case
-> > > someone's accessing it while you unload the module. Could just use one
-> > > spinlock for the whole generic array, and drop the __ro_after_init I
-> > > suppose.
-> > > 
-> > > Let me know if I'm not following properly!
-> > 
-> > I just read David's response and I think he made fair arguments,
-> > and patches look fine to me.
-> > 
-> > David, did you have anything? I could pick these.
-> > 
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> 
-> Gentle ping :)
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] skb: negative len from broken caller causes OOB write before mem=
+set guard
+--
 
-Understandable :-)
+commit b6b3af33d3ca9b0598654f13d4f01d9b22cff285
+Author: Josef Bacik <josef@toxicpanda.com>
 
-> 
-> Are we happy with these to get picked up?
+net: skbuff: don't BUG() on leftover length in skb_copy_and_csum_bits()
 
-Can you just do a resend that applies on top of latest mainline
-or my tree? I.e. b4 shazam was not happy about this.
+This commit removes a BUG_ON(len) check and instead returns 0 after zeroing
+any unfilled buffer space. It explicitly aims to avoid a massive memset if
+a broken caller passes a negative length.
 
-Full log:
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index c896770203f71..7fd2f8142cc41 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -3713,7 +3713,13 @@ __wsum skb_copy_and_csum_bits(const struct sk_buff=
+ *skb, int offset,
+>  		}
+>  		start =3D end;
+>  	}
+> -	BUG_ON(len);
+> +	if (unlikely(len)) {
 
-$ b4 shazam https://lore.kernel.org/keyrings/20260914-ajhalaney-dmverity-key-identifier-v1-2-01922dc1366a@amutable.com/
-Grabbing thread from lore.kernel.org/all/20260914-ajhalaney-dmverity-key-identifier-v1-2-01922dc1366a@amutable.com/t.mbox.gz
+[Severity: Medium]
+Will this check ever be reached if a caller passes a negative len?
 
-Breaking thread to remove parents of 20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com
-Checking for newer revisions
-Grabbing search results from lore.kernel.org
-Analyzing 10 messages in the thread
-Analyzing 0 code-review messages
-Checking attestation on all messages, may take a moment...
----
-  ✗ [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
-    + Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org> (✓ DKIM/kernel.org)
-    + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
-  ✗ [PATCH 2/3] keys: add KEY_SPEC_FS_VERITY_KEYRING
-    + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
-  ✗ [PATCH 3/3] Documentation: keys: document IDs added since KEY_SPEC_REQKEY_AUTH_KEY
-    + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
-  ---
-  ✗ BADSIG: DKIM/amutable-com.20251104.gappssmtp.com
----
-Total patches: 3
----
- Base: base-commit 1a1de54f7369cd2b5bac0f265910e60ad3a6b4c3 not known, ignoring
-Applying: keys: add KEY_SPEC_DM_VERITY_KEYRING
-Patch failed at 0001 keys: add KEY_SPEC_DM_VERITY_KEYRING
-error: patch failed: include/linux/key.h:441
-error: include/linux/key.h: patch does not apply
-error: patch failed: include/uapi/linux/keyctl.h:25
-error: include/uapi/linux/keyctl.h: patch does not apply
-error: patch failed: security/keys/process_keys.c:25
-error: security/keys/process_keys.c: patch does not apply
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-hint: When you have resolved this problem, run "git am --continue".
-hint: If you prefer to skip this patch, run "git am --skip" instead.
-hint: To restore the original branch and stop patching, run "git am --abort".
-hint: Disable this message with "git config advice.mergeConflict false"
+The commit message mentions avoiding a huge memset if len is negative,
+but if len is negative, earlier loops in skb_copy_and_csum_bits() will
+clamp their copy size to this negative value:
 
-> 
-> Thanks,
-> Andrew
+net/core/skbuff.c:skb_copy_and_csum_bits() {
+    ...
+    if (copy > 0) {
+        if (copy > len)
+            copy =3D len;
+        csum =3D csum_partial_copy_nocheck(skb->data + offset, to, copy);
+    ...
+}
 
-Br, Jarkko
+This negative copy value causes csum_partial_copy_nocheck() to perform a
+massive out-of-bounds access.
+
+Similarly, in the fragment loop, a negative len makes copy negative,
+leading to an infinite loop and out-of-bounds writes in
+skb_frag_foreach_page() due to unsigned comparisons.
+
+Does this function need an early return for negative lengths at the entry
+point to truly protect against broken callers?
+
+> +		DEBUG_NET_WARN_ON_ONCE(1);
+> +		/* Don't hand the caller a buffer with stale bytes in it. */
+> +		if (len > 0)
+> +			memset(to, 0, len);
+> +		return 0;
+> +	}
+>  	return csum;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261007-b4-skbuff-=
+bug-on-v2-0-b9a5f732895b@toxicpanda.com?part=3D6
