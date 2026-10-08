@@ -1,119 +1,189 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B5E3B3C0F
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 17:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791480228; cv=pass; b=cm78OH+4bsp3RsUqz1JfcguSl16g8Km3KvUKtN33OItNsBVM5aML02Lq3uCHYvQlifh6sKOYY7VN/WVwznnvQ1By/xbFYcNh9nRKby/kpKaTc2ul7Wql6tu9piS851FUIkWKaRSLV0Pm4FyDm8o/6LVjq32VaAYap1PCGFRI34U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791480228; c=relaxed/simple;
-	bh=BHuqIf1tNL5IFXF1A87VrpQrMhtfq/QBoGyo3k89R/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZnFAbwdPpRWjoZx552EUPr3GWlrRLG4+rFaGiL4YsPSeRCyH/Jint79mls8Sb9WXxhOBKr/hjlAX3hF75fJb93BDS+93R9v91lLrqY+RQuss/15c+LfF+PGN4nL5Rc3OVbGAnr3+446DnwE93x0sQ+dOI+yJxznoJUiSd6XI+gQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IqAzqNAQ; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0295F3624B3;
+	Thu,  8 Oct 2026 17:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791480830; cv=none; b=cWUY77rdyLd+h8uUP4rw65/MII9GE2zm+dFV51ngOfCV4o3YYgSYQ+wzGIZfvOK6UDgUCqfy9qvLYxW8wzvQYjvJG9+6XzBfVKPYZh/xQ38J7U/D6n8G6zPvKlzoEPhwybTZaZUn8XHl41Lq+zSHeIpFF+cpt5gAklckQpfKZqM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791480830; c=relaxed/simple;
+	bh=qjUkLXreYg8MXdiceVPsiNnpljXYWMTyIQ0/Bl5CPWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VxwIyO/w5ZEleo4k9PWNQPogf9PoNm1WxEqpwS5bW7nQZtWUaZoiInTsvRCDxNt4Jmdf7d7ypA0KQKxJnWJ7kbbd3V1gvoCWnzdJW+Ho6AoC6HiXGsVGWMsDpbz5S/J11AmdEZ7x2mNSKGt9QLuAVpz+QrVuruqxPt/9b8gFLmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hL8aekWD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IqAzqNAQ"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1419d3416ceso10614238c88.0
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 10:23:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791480226; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KkPoHcy1JgjJdknEp5LNlsixtcwnxQj7UWeN8VTb4v5W0TvsNsdD7VP/L1dd3UQEBv
-         z2mri5fIHeBzMiPFNyGQ7R4oin7MmXkcumEYHTiX4bmjBIGs97N5ayjxoChLPryQN8iG
-         GLHI7a6+jQFlgthxdN5V/vAAvhBR3WDIr12DewBaZYwbe/OIp0KV4MoHO/UuiNRzSaXG
-         NVE/H8927qKyRaWKERJpmwSL/2g7j2ad5o1iqUcfOEcM5HUXY7hBy5Apqpiq2+2nUrXp
-         OJNKBNyuop+a6/pCVpIL+Q7duRsVnGFB7vZTPKR/GJYLBJeDkpb+y5U0BCcMqc24aeHk
-         +Lcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=BHuqIf1tNL5IFXF1A87VrpQrMhtfq/QBoGyo3k89R/Q=;
-        fh=yjE1YCWEOs+OpO0ND8pLi1U1qlyzJ2erdItSZRLKGiA=;
-        b=RTQ6uln/M4V/orv3pky2e84XuQjvJoMl0+tk7Kzb09iYcY4K4K7WQ1rPe+61mcIJb8
-         FTBRxnf5ugo2piL0uqI3iGPSu8gGb4kzqUPi2isjR5TfzDTuKSeCDvPYGdyWqlCGfmIX
-         YV4eBIzuzJOqFThjqMPaCgPUt0VqXc55OPok8yIJf+Io6prBmxBI5AJ4FUViA27zT9LS
-         Vzl6S6ocdUp8EdYbxr9PULcNqyG9E7ysu+F8g0IkVT5uzgKa+rjFKsNY0qNkLsFHn9wl
-         EwKHuzV/IXvRGK1/gOVTl1EzcpMd4+23aWpeu+zjEOE/hZyLA79Tzfj/NC8DItzHbTib
-         3Y7A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791480226; x=1792085026; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BHuqIf1tNL5IFXF1A87VrpQrMhtfq/QBoGyo3k89R/Q=;
-        b=IqAzqNAQnNWI854x7LFCrWtlAzk0S4Q9IAI1wrs/acQcz0+ir6N7uyBxFCZa3m296G
-         sBHp0fEvmrtIkHbMhAYIuNJ6ul+xLWI9PHPdAZnQMg602lDCJcwhIKbVStYx3kqWPNFH
-         lTSzFKq+Oe3uQwGIvgtye9uclyQeCBERRgMC0HwppYCPM8zeYOOEWicHZK1r4KHk/n1J
-         gkptt64FWittcYLHyeJdjZvnNM+oDiWb8p8yISdjjiJiT5PwazwoXVyX/xVwGC3QraCg
-         9rEevCsYmulYsDT7golCu75qsi5/JMfzcZsWq3q67e/eXOeesPHrXgajCf4dzLNcmk/c
-         X2zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791480226; x=1792085026;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BHuqIf1tNL5IFXF1A87VrpQrMhtfq/QBoGyo3k89R/Q=;
-        b=OcdDmf9+x6z4/uDrPfiO7VJ9SxA2jl8alM6euVVlOMFXBovyAJagMPw/d3WhqcrSZm
-         RhiNzYsreEVNsm5F/61F9y3UVaLDn3+sUiA9jlZmWMc3XiHDXXF5EQIIMPBEaH1H/OQx
-         uYn4FJQWhKdAT0KKAbkrSE+yXmiFgxCs1MSJCjPkv3plhQWo1Ol1ymqi2wIQlqtOzzva
-         kdKIUT32Na0RYPo/0CdCKVzQE4/q0XxWL5FT2bmtEoQyiUM/jRObzmPKrzDrdJcCNYCl
-         RO3rsI17p5k6IiReqUFcqsmRDKWB2gCbqKjcqYqZUT/Z8u64udhXi4ZeaTvFsJ7BdPDb
-         FcDg==
-X-Forwarded-Encrypted: i=1; AKwUvBx7hdJFIsafo1ew5LbW0+FyWzXdv+Y6ro3omLlSGn07HzAsjF0bE3y8nBK8zRqraxEQG/4=@vger.kernel.org
-X-Gm-Message-State: AFuF++kuDxrUroW2fRAFAzYkQ3FyrI/YUV9IQmKL7mtXLvjgfQo1tWPC
-	8qF/j1E57zll9YWXF5YuNlV8UvpEkiwI8F9PxZanVLsRvHahzPYgEycNGuGkXII0yDM1E8Inbu9
-	L6YVA+x6sLZ098vA/w5XHH+7D7Uh05pGtAREKVFzc
-X-Gm-Gg: AYBFou1Ota6FyBSu4HVtgSqKdHKvihb80+5+2TmklwJ3GzM1j8AjP2ZDF/3Q8jC35QV
-	cg+wtElnYVVT2m5sbp0hSPMFdyY/0/S42MU/0OMvQZp8aRtf+tUyWkEomucKKbkgTahgNrulp3Z
-	PL0tvcU0b3LFAeeSCQBEpvVhflUA90fHuHBGMqlgV14UdZRzEUEFF4izzexEpS2s80n1qYDyees
-	KAwSwAouH8Bk2gnUKWr3CvynUAyKQdUq1kZR4W7rdLRTBkHvIMOPVld6HnsNM6ETNriOGSLswss
-	kVs/hOwFgVGHfK33gbbyNlcmdIhj96SoMOktLT3gAsmtZf1U/9RTTrRti/kHl05P931Tfe+xqJA
-	8RRilI2rdzvggERWEFNYWUrq60kp0dt5bhiIJFK0qL7vVIh9NotQU20QIv1jhwfnLATeaFrf9IO
-	Q9s0FtymPmRau2msn0QJzZXvRJ
-X-Received: by 2002:a05:701b:290e:b0:166:4b25:8bbc with SMTP id
- a92af1059eb24-1664b258cabmr2798079c88.32.1791480224884; Thu, 08 Oct 2026
- 10:23:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hL8aekWD"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 3E0771F000FF;
+	Thu,  8 Oct 2026 17:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791480828;
+	bh=G4v32k8/a/EW1WFqBk/X57CZyQESBg0MOmvtF2yjKvU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hL8aekWDig0eQ/IB3W4TdhsV9BzgYHbYp6k6GUoeKwLB0Sw94BQw6k5bNTEfG6we+
+	 CmS19CDTrA+i3vY3gxsUou4g5KeSTL6RktPkWzFyFnIACLQ9/1iJJAWRJ1SKctNQPR
+	 h5zQPYUUhBouwf/IV/JMUXzktSx3NhyHLzdEns+nlYQuUA2jrIjlD+8+orpETlNI07
+	 EUw+hF6ngIpgDdXYrw7pHI4CJBQCMnKtmD/hvFwzXYtJCtdCa2xdJ4ASq9w8KT0Y1c
+	 fvBg49iGVWPDPPI3vPl0qanx5AYZhTIYwPbz3FcES98yY3s52n6tuJdMCh5IjHo08p
+	 Q9K74wOx4Ycbg==
+Date: Thu, 8 Oct 2026 20:33:45 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Andrew Halaney <andrew@amutable.com>
+Cc: David Howells <dhowells@redhat.com>, Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, dm-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	fsverity@lists.linux.dev, linux-doc@vger.kernel.org,
+	"Christian Brauner (Amutable)" <brauner@kernel.org>
+Subject: Re: [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+Message-ID: <asfT-SLkty5DC_Rx@kernel.org>
+References: <aqyiCavj3xeNqyAo@kernel.org>
+ <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
+ <20260914-ajhalaney-dmverity-key-identifier-v1-1-01922dc1366a@amutable.com>
+ <715249.1789718726@warthog.procyon.org.uk>
+ <aq2VxlttdlTNlHo6@toolbx>
+ <arYzQN1ViuiCBemo@kernel.org>
+ <asZlNEFdvidvMdJ5@toolbx>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261008-selftests-sockmap_listen-cleanup-v1-1-f6d1a4ff540d@rbox.co>
-In-Reply-To: <20261008-selftests-sockmap_listen-cleanup-v1-1-f6d1a4ff540d@rbox.co>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 8 Oct 2026 10:23:33 -0700
-X-Gm-Features: AclHuK_ZHezGCVBzzMpcKC3XD4J4SlpbuSoU0hDuFFatZm_8hkKxjtuQCg6wZOk
-Message-ID: <CAAVpQUAaNR_vJq00dG67uxe=Yp18V_RG3Vxr7KL2u=dF7fBfKw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Clean up sa_family_t-stringifier
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <asZlNEFdvidvMdJ5@toolbx>
 
-On Thu, Oct 8, 2026 at 10:12=E2=80=AFAM Michal Luczaj <mhal@rbox.co> wrote:
->
-> Following commit f3de1cf621f7 ("selftests/bpf: sockmap_listen cleanup: Dr=
-op
-> af_unix redir tests") and commit 9266e49d608c ("selftests/bpf:
-> sockmap_listen cleanup: Drop af_vsock redir tests"), sockmap_listen.c:
-> family_str() becomes functionally identical to select_reuseport.c:
-> family_str(). Move the logic to socket_helpers.h.
->
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Link: https://msgid.link/CAAVpQUDULzZh58oKkRaYqgM9bRToGb7wHrzT+cZNpRmAtM1=
-2Ow@mail.gmail.com
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+On Wed, Oct 07, 2026 at 10:30:14AM -0500, Andrew Halaney wrote:
+> On Fri, Sep 25, 2026 at 11:39:28AM +0300, Jarkko Sakkinen wrote:
+> > On Fri, Sep 18, 2026 at 02:59:49PM -0500, Andrew Halaney wrote:
+> > > On Fri, Sep 18, 2026 at 09:05:26AM +0100, David Howells wrote:
+> > > > Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > > 
+> > > > > This is great for discussion but what we want for the commit message
+> > > > > is just motivation and resolution.
+> > > > 
+> > > > Actually, I think it's useful that Andrew wrote up the issues in the commit
+> > > > message - and I think it shows part of the motivation.  The 'writing a fake
+> > > > /proc/keys line in the description' is something I hadn't considered.
+> > > 
+> > > I'll defer to what you all want in the message here, I found it valuable
+> > > but I trend on the side of overly verbose admittedly!
+> > > 
+> > > > 
+> > > > > I don't think we need all this just to say that /proc/keys in a racy
+> > > > > query mechanism for production, which is an issue for dm-verity, given
+> > > > > that nothing else is available.
+> > > > 
+> > > > I think at some point, we will need a system call to search all for all
+> > > > accessible keys matching certain criteria by actually walking the key
+> > > > database.  The problem there is that there may be multiple hits, so we may
+> > > > need something like:
+> > > > 
+> > > > 	int count = find_key(key_serial_t start_id,
+> > > > 			     const char *type, const char *desc_prefix,
+> > > > 			     key_serial_t *results, size_t results_size,
+> > > > 			     unsigned int flags);
+> > > > 
+> > > > Allowing you to do:
+> > > > 
+> > > > 	key_serial_t dm_key;
+> > > > 	int n = find_key(0, "keyring", ".dm_verity", &dm_key, 1,
+> > > > 			 FIND_KEY_EXACT_DESC);
+> > > > 
+> > > > This wouldn't be as fast as a direct lookup since it would have to walk the
+> > > > key tree, doing name comparisons and perm checks on each key of the type.
+> > > > 
+> > > > > And secondly special keys are meant for implicit keyrings so isn't
+> > > > > that all there's to it?
+> > > > 
+> > > > I have no particular objection to setting aside a block of negative key IDs
+> > > > for special keyrings that need to be accessed a lot - though I would make
+> > > > common reg/unreg functions that take the ID to be registered and, say, set the
+> > > > block at -257..-512.  Moving the BFP keyring to -257 and DM to -258.
+> > > 
+> > > To be clear are you suggesting I do that for v2 here? Happy to make the
+> > > change and add some reuse to the registration functions, etc. I'm
+> > > guessing its fine to change the bpf id since its still only in -next?
+> > > 
+> > > The only awkward bit with making that more generic is that dm-verity
+> > > isn't __ro_after_init since its coming from a module possibly, and
+> > > because of the module usage I also protected it with a spinlock in case
+> > > someone's accessing it while you unload the module. Could just use one
+> > > spinlock for the whole generic array, and drop the __ro_after_init I
+> > > suppose.
+> > > 
+> > > Let me know if I'm not following properly!
+> > 
+> > I just read David's response and I think he made fair arguments,
+> > and patches look fine to me.
+> > 
+> > David, did you have anything? I could pick these.
+> > 
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > 
+> 
+> Gentle ping :)
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Understandable :-)
+
+> 
+> Are we happy with these to get picked up?
+
+Can you just do a resend that applies on top of latest mainline
+or my tree? I.e. b4 shazam was not happy about this.
+
+Full log:
+
+$ b4 shazam https://lore.kernel.org/keyrings/20260914-ajhalaney-dmverity-key-identifier-v1-2-01922dc1366a@amutable.com/
+Grabbing thread from lore.kernel.org/all/20260914-ajhalaney-dmverity-key-identifier-v1-2-01922dc1366a@amutable.com/t.mbox.gz
+
+Breaking thread to remove parents of 20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  ✗ [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+    + Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org> (✓ DKIM/kernel.org)
+    + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
+  ✗ [PATCH 2/3] keys: add KEY_SPEC_FS_VERITY_KEYRING
+    + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
+  ✗ [PATCH 3/3] Documentation: keys: document IDs added since KEY_SPEC_REQKEY_AUTH_KEY
+    + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
+  ---
+  ✗ BADSIG: DKIM/amutable-com.20251104.gappssmtp.com
+---
+Total patches: 3
+---
+ Base: base-commit 1a1de54f7369cd2b5bac0f265910e60ad3a6b4c3 not known, ignoring
+Applying: keys: add KEY_SPEC_DM_VERITY_KEYRING
+Patch failed at 0001 keys: add KEY_SPEC_DM_VERITY_KEYRING
+error: patch failed: include/linux/key.h:441
+error: include/linux/key.h: patch does not apply
+error: patch failed: include/uapi/linux/keyctl.h:25
+error: include/uapi/linux/keyctl.h: patch does not apply
+error: patch failed: security/keys/process_keys.c:25
+error: security/keys/process_keys.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config advice.mergeConflict false"
+
+> 
+> Thanks,
+> Andrew
+
+Br, Jarkko
