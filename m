@@ -1,227 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436B23CB544;
-	Thu,  8 Oct 2026 19:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317103CCA12
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 19:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791486597; cv=none; b=X3d78+6v64hMYei3xe1jqJ2Bb4mv9UJEH5I9ZQLvAFTMER/fkWOUMYtl3U2k7KluF5TJxxhH6NcURLemiiLfhqOb6Y2SL7afqCOAX0/Kl1tVSdtUdRWglgXMX0Yr8ll58mewO5OeDpJUpKRZfzUCRaW1rBUfMtA/tVt7oBB2USY=
+	t=1791488324; cv=none; b=Xord89l/KZwd+U7LgnQ4kPuinu7CewymztPYz5bqwHigaiCzJiBlzrv+rxoCaoMASM67o24WEjNHjFHkeOrhqVB05+/MUFg9er/aYVQIUxHLvrnmBCAgZfLFRZ+YTBfxPhfES8KX8Y8sxIDCfj8s7qTgvJYlWbzkH78N5IOBxXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791486597; c=relaxed/simple;
-	bh=ZtsJ/J6og9v1sSGi5BvrXay/Rs5UivOcV4SGINHVhn8=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ifrg7h/wr4QESOjmR00BiS840+hN25X4j9hhF04BFA0/AZsdir2iCGMcBKuKTT7LPF7+qTAKBerwYbsVMEHVeBk3tNhxBMIjJ9XmJsiOeIWI9P3WyG0QiYrL8/FK7H/FlHTvAW4f69CUqK/j7Hbw/Xb/KGwk0EqmYH/F7Doth7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxmly9Nb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791488324; c=relaxed/simple;
+	bh=j1grMDLazOGsQeGC11PEDwjtUEgbyvSfnro38wh9lEI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ng24I72QiFwvdgjPunOqUcWZnWiopO7dLm/147zM3H9O1SfK9vg5h5D52EWxwwPd3vhSTv8dHFSQpXKpoiqUN6OPPxFhlJWhqBERHYY2F81Nb0G0fhLq5wbzgw6c9Tg3orZsQWXmLanyROBYabJ28TFf060x+BV1Rx9cIFut2pE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=Epv6cwtv; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxmly9Nb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E321F00893;
-	Thu,  8 Oct 2026 19:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791486596;
-	bh=wAWKGPJyRscDwvNxPVIL5+JORBwTt1tqurvLG0tb6lA=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=dxmly9Nbbo0VSAzjLtvFMu1xA4eIgxcH+tzNFwz4Wgo8RrqR/T4svmfAYk8ndnWmk
-	 v3VFU/ihyb/aji8mSwNwsH8nzmh9kxs99DOIJzQR4WxnMrE8KJK0fIUD5ygNStiFK4
-	 ACHD+vkEaKaycsy6dLqSAKs9ag3NEtnsrh0byOdqJkLh71efbFViT7uXdzRHfYVDHz
-	 KzE2ojMpWvD6dPSHKbv/Q5/xx7QYogFLf+khEi+TaUehdQ4GBswNeRlAyK7qtqjNNA
-	 5S83utmP5olrexRBqZl3ARxcoAKrQzyJp8rfeq3k3qDMA4sVHO6CfokMKHNpSagUFl
-	 cvQ7rzCvGrqUA==
-Subject: Re: [PATCH net v2 2/2] net: stmmac: Stop Tx queue when (en|dis)abling
- XSK pools
-From: netdev-bot+sashiko@kernel.org
-To: kurt@linutronix.de
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- kuba@kernel.org, pabeni@redhat.com, edumazet@kernel.org,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, yoong.siang.song@intel.com,
- noor.azura.ahmad.tarmizi@intel.com, faizal.abdul.rahim@intel.com,
- boon.leong.ong@intel.com, bigeasy@linutronix.de, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Date: Thu, 08 Oct 2026 19:09:54 +0000
-Message-ID: <179148659458.434549.12782551117834577099@kernel.org>
-In-Reply-To: <20261005-stmmac_xsk_crashes-v2-2-46c60cba6421@linutronix.de>
-References: <20261005-stmmac_xsk_crashes-v2-2-46c60cba6421@linutronix.de>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="Epv6cwtv"
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-4949f037131so1882938fac.3
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 12:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hammerspace.com; s=google; t=1791488322; x=1792093122; darn=vger.kernel.org;
+        h=content-type:mime-version:references:in-reply-to:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HgO34ewM3/AAqmWbIKVWDsugBSjlGHMPJJo84ws/m1E=;
+        b=Epv6cwtvuKNZfe1t+dmZb4FsRMC0HKIrMpi1QQ6e7k05eNp1jN3HZUNAjRwhItuqRQ
+         zu1CM1oobsahYIY8XC7nUSgI2RIH7KhB1Z02r0WgZsZFA5FPaYA4bxXWDZfLzk3z2Rmp
+         n6UUT+mPb2W/h0Vwd2fekIYAnHdPupoQ376q7hcCnT3I1crxIo/FPtfG0/3Msw2q1oSb
+         s5S8zenfQOBOM2pz2/ZGxv6EC1VSTlvQF05FE5G3HqYGA4mP8ke9pg55vhE5iEyXJUj2
+         e/A8GlDyhBMKv36fVpMwmoDAwb8IT/kMvbjmxzGUKWAzeBDpOp0veKlPfhsSqaswIuxv
+         D/oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791488322; x=1792093122;
+        h=content-type:mime-version:references:in-reply-to:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HgO34ewM3/AAqmWbIKVWDsugBSjlGHMPJJo84ws/m1E=;
+        b=xS6zZpqvZnSSIdUgv87HXlLHVKGkib1Z1Hm50MOM8DWV19GgJskQspXWeDolNvtH6L
+         BDAIrOhnx4L+kxgP0AhaxkrsDyX9WSP0VVZ3oqzk8xRrIMZTCZ52zwL6SD+Fn0YjU0qe
+         /T0jNmoDiz/O4PRX9ejHmvYAtlFj3pS0SUzvv64+hkOc1SzvGhPLgWbvHXSSRX1Q9Db8
+         klyiFEmnkwqnCes4SipygzgqLrcpqZ+5azzxGBmsv8RDOM/mPrkQCGN7sm/FtKd02DPv
+         hQXHtdMWrOPNHjpQ8IRL9l8xlYlrf7PXAnkuW9mK7NxP+O5oKBwjvPwyc7q+HDryJgU+
+         nhoA==
+X-Forwarded-Encrypted: i=1; AKwUvBzp9yjRcXIchaSrJfXHcU60vVyHtk03X6U613Su+46lqN21qAueAlGDIu0QcLGrdLL1tHI=@vger.kernel.org
+X-Gm-Message-State: AFuF++lFP6Q6jTpTtLNtkFME8pzUr4nqkZhlSOITKLmwIfwRaG4bC9it
+	vKf4lRr1Fj88uvp15RkkpSkJ92w0W3j+PY9kK3YgAWd4SyZCnqc8Qw3y4mW/l0b8VoA=
+X-Gm-Gg: AYBFou3GNjW7noW7R0/QNXsb2y4dSIGSSzTZES22uMKo54D064i/mqt1TJ99yY/qd+3
+	myA2VmPYEMmkKdbxkYdFX2vQzOF1ZJz8nfSQaanjeKbOwkYXO+pYfoduUahENZlrBlor0WOUVHx
+	q0rwTcm4wgM+jwAr6KAbtRvpw2wsOaIMh+eYNkTWjcw0Hfb0qaTXreoRjqVzbkepaK9JAdNcBhF
+	cKYBPxgQFwFm2eh3i6BYg4Ok86cvdD4NygnBBUE5aD1G+/TT1JWekXAa1+lDK5co6Sy2tu28HXP
+	Is08YwGH4OSBlps8ZZ0dNWdvx06BfzcCfS3O08s42nBwi92FgTDCclKrkR6O0W7/GZragqD5Yiz
+	X3w+nsSLpkjFtIQ9tHHzYFddO/xlI6FHIuVQJf0N3m1DSALTYme4QxYcA7YQHMCLrm35D9aaCVW
+	jW47uj1CvanhkadeBXsIqnakCU1rLoc7l7MOF2vFXu5eqRV4AAewfBdzVFE4bo8pJXeG+jfAE6Q
+	cKPiuc2FGCDMi94Cw==
+X-Received: by 2002:a05:6870:b918:b0:47b:cd37:f931 with SMTP id 586e51a60fabf-4a2a41cdf21mr354311fac.13.1791488321794;
+        Thu, 08 Oct 2026 12:38:41 -0700 (PDT)
+Received: from [192.168.254.51] ([66.97.168.37])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a2a43ca6d4sm428113fac.2.2026.10.08.12.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 12:38:41 -0700 (PDT)
+From: Benjamin Coddington <ben.coddington@hammerspace.com>
+X-Google-Original-From: Benjamin Coddington <bcodding@hammerspace.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Benjamin Coddington <ben.coddington@hammerspace.com>,
+ Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>,
+ linux-nfs@vger.kernel.org, Daire Byrne <daire@dneg.com>, bpf@vger.kernel.org,
+ Martin KaFai Lau <martin.lau@linux.dev>
+Subject: Re: [PATCH RFC v2 8/9] tools/net/sunrpc: add svc-classify, a prefix
+ classifier and its loader
+Date: Thu, 08 Oct 2026 15:38:39 -0400
+X-Mailer: MailMate (2.0r6272)
+Message-ID: <4AA1E943-B80C-4110-A8AF-97ED4697D2BE@hammerspace.com>
+In-Reply-To: <ff8194ac4128f0c972545ca19fc696aa064e68c9.camel@kernel.org>
+References: <cover.1791402701.git.bcodding@hammerspace.com>
+ <158d8194fc5ce6d1fb8fdd1196f53de7d3651d36.1791402701.git.bcodding@hammerspace.com>
+ <ff8194ac4128f0c972545ca19fc696aa064e68c9.camel@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On 8 Oct 2026, at 14:36, Jeff Layton wrote:
+> The userland programs in the kernel are often not packaged, so it seems
+> to me that svc-classify would be better integrated into nfs-utils. That
+> would allow you to more easily bundle it with the systemd service file.
+>
+> It might even make sense to integrate this functionality into nfsdctl,
+> but I guess the classifier affects all rpc_serv objects as well (e.g.
+> NLM), so it may be best to keep it as its own thing.
 
-Critical: 0 · High: 1 (1) · Medium: 0 · Low: 0
+Technically we don't need this classifer, we could just expect that if you
+want to use this feature you must write your own.  I added it to make things
+easier for potential testers - but it is limited.  For example, it doesn't
+classify on anything other than src address.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] The patch only stops the netdev Tx queue, and the driver's own
-  XDP transmit paths ignore that.
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the new wake-
-  up makes it visible: if stmmac_enable_tx_queue() fails, the Tx queue…
-
---
-
-net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
-
-This patch stops the netdev Tx queue in stmmac_xdp_enable_pool() and
-stmmac_xdp_disable_pool() while the Tx DMA descriptor resources are freed
-and reallocated. The queue is woken once the ring has been rebuilt. The goal
-is to fix crashes in stmmac_xmit() when XSK pools are toggled while Tx
-traffic is running.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> index d7e4db7224b0c..883bd3fe8089d 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> @@ -6,6 +6,16 @@
->  #include "stmmac.h"
->  #include "stmmac_xdp.h"
->  
-> +static void stmmac_xdp_stop_tx_queue(struct stmmac_priv *priv, u16 queue)
-> +{
-> +	struct netdev_queue *nq = netdev_get_tx_queue(priv->dev, queue);
-> +
-> +	__netif_tx_lock_bh(nq);
-> +	txq_trans_cond_update(nq);
-> +	netif_tx_stop_queue(nq);
-> +	__netif_tx_unlock_bh(nq);
-> +}
-
-[Severity: High]
-
-Does setting __QUEUE_STATE_DRV_XOFF here keep the driver's own XDP
-transmit paths away from the ring while it is freed and reallocated?
-
-The Tx lock is released before stmmac_disable_tx_queue() calls
-__free_dma_tx_desc_resources(). DRV_XOFF only stops callers that reach
-ndo_start_xmit through the stack.
-
-Both XDP Tx paths in stmmac_main.c choose the queue by CPU. Neither checks
-whether that queue is stopped before calling stmmac_xdp_xmit_xdpf():
-
-stmmac_xdp_xmit_back() {
-    ...
-	queue = stmmac_xdp_get_tx_queue(priv, cpu);
-	nq = netdev_get_tx_queue(priv->dev, queue);
-
-	__netif_tx_lock(nq, cpu);
-    ...
-	res = stmmac_xdp_xmit_xdpf(priv, queue, xdpf, zc);
-    ...
-}
-
-stmmac_xdp_xmit() {
-    ...
-	if (unlikely(test_bit(STMMAC_DOWN, &priv->state)))
-		return -ENETDOWN;
-    ...
-	__netif_tx_lock(nq, cpu);
-    ...
-		res = stmmac_xdp_xmit_xdpf(priv, queue, frames[i], true);
-    ...
-}
-
-need_update requires stmmac_xdp_is_enabled(), so an XDP program is always
-attached while this window is open. Only the NAPI instances of this one
-channel are disabled.
-
-Two producers can still reach this queue during the window:
-
-- RX NAPI of another channel, running on a CPU that
-  stmmac_xdp_get_tx_queue() maps to this queue, can hit XDP_TX.
-- A redirect from another device on such a CPU can enter
-  stmmac_xdp_xmit().
-
-Either path then runs:
-
-stmmac_xdp_xmit_xdpf()
-    stmmac_get_tx_desc()
-    stmmac_set_tx_dma_entry()
-    tx_q->xdpf[entry] = ...
-    stmmac_set_desc_addr()
-
-These calls can write into the descriptor ring that was released with
-dma_free_coherent() and into the kfree()'d tx_skbuff_dma array. They can
-also race with __init_dma_tx_desc_rings() while the ring is being rebuilt.
-
-In stmmac_xdp_disable_pool(), synchronize_rcu() only runs after the ring has
-already been freed:
-
-		stmmac_disable_tx_queue(priv, queue);
-		synchronize_rcu();
-
-so it cannot drain ndo_xdp_xmit callers that are in flight before the free.
-
-Would this need a per-queue gate that the XDP Tx paths check under the Tx
-lock, or a drain before the free, rather than DRV_XOFF alone?
-
-[ ... ]
-
-> @@ -46,6 +57,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
->  		stmmac_enable_rx_queue(priv, queue);
->  		stmmac_enable_tx_queue(priv, queue);
->  		napi_enable(&ch->rxtx_napi);
-> +		netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, queue));
-
-[Severity: High]
-
-This is a pre-existing issue that this patch did not introduce, but the
-new wake-up makes it more visible. What happens here if
-stmmac_enable_tx_queue() failed?
-
-stmmac_enable_tx_queue() returns void and only logs the failure:
-
-	ret = __alloc_dma_tx_desc_resources(priv, &priv->dma_conf, queue);
-	if (ret) {
-		netdev_err(priv->dev, "Failed to alloc TX desc.\n");
-		return;
-	}
-
-A failure in __init_dma_tx_desc_rings() is handled the same way. Either way
-it skips stmmac_init_tx_chan(), stmmac_start_tx_dma() and
-stmmac_enable_dma_irq().
-
-__free_dma_tx_desc_resources() never clears tx_q->dma_tx/dma_etx/dma_entx,
-tx_skbuff_dma or tx_skbuff. That leaves three problems:
-
-- If dma_alloc_coherent() fails in __alloc_dma_tx_desc_resources(), the
-  descriptor pointer still points at the freed coherent memory.
-- If the tx_skbuff allocation fails, tx_skbuff is left NULL.
-- The earlier partial allocations leak.
-
-netif_tx_wake_queue() is called unconditionally here and in
-stmmac_xdp_disable_pool(). The next stmmac_xmit() would then dereference
-tx_q->tx_skbuff[first_entry]. It would also write descriptors through
-stmmac_get_tx_desc() into the freed ring. That is the same
-dwmac4_set_addr()/dwmac4_set_vlan_tag() crash described in the commit
-message.
-
-A later stmmac_release()->free_dma_desc_resources() could also free the
-stale pointers a second time.
-
-Before this patch the queue was never stopped, so traffic hit the broken
-ring the same way.
-
-Should the failure be returned to the callers, the partial allocations
-unwound, and the queue kept stopped until a valid ring is in place?
-
->  
->  		err = stmmac_xsk_wakeup(priv->dev, queue, XDP_WAKEUP_RX);
->  		if (err)
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261005-stmmac_xsk_crashes-v2-0-46c60cba6421%40linutronix.de
+Ben
