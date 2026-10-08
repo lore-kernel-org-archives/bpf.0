@@ -1,172 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-145.mta0.migadu.com [91.218.175.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23AB361947
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 08:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF943456296
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 08:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791447278; cv=none; b=p04GgyJAIWoQz+ak3onXsfxQlgPpy9pp0uVjUf6kxpZnsKZCQYszu+ZRnjs0P3T+2wxMCn1L9aEuna9t6zMjB2MUNSeCoFvrlYCROhoYJ6DI/jVU/xzgIgWsK5rYXsEiyJET9g0yaXXayZf0x8Q7ShxUFTnh1rvicQ7F0WPUpVg=
+	t=1791447857; cv=none; b=kU73TK3g1JG5p9QZgfxWoa7ynEJuCJWGFqiOXAwbU7CzyAqfa5Gc7zgEqP3xP9O8ft3cOSSFliaUjcBiQExePFU16WQn/Q1O3XBanco/TAaS8plPAdfYU6E8J5VWhWcWm1KRLqwOn/oWf7uyPpkcJOtLl3Da8/jbQQiqTwNqDI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791447278; c=relaxed/simple;
-	bh=QhtUV3fkpEIXNd0N5wIdYcJlVMJ43d05TUI4ovk8b88=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=lnRmdIQ087AxxkLNHJ/B2av4A9j2HIiOCAXaOXaH9UifltdG50s4o2c11VOv3/iEtaabKMYsh7T0iQSLRPEgLbR14rJkqrnOaRIAl8QWtWaeH21FUWm2nzweUnzsKsmbJl3dRR5LihE3gf9ejaKW6Zx3RYP5268c2g+GKX33cwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kFjQYvM+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791447857; c=relaxed/simple;
+	bh=RMx7jFiL65ZDGqd0DZ1v3Z2cM1AED/E0YCu2i1HQI2g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=t0TTnHYKZ4qSfe6S8q2BHktEO9UYRPUh7ocUofLU+MQ+z2MnCP36FEVfjOptME9TDcdwe0kmARbqYSpc5SyDZW23a6Hh/r/RLCK7DMj89/r5/Ur19Q9aIDWbwl0vvctGKUCC9bE/7TGvtbHfg54MqfS6pnLBXvk7fk3UBC+ayHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z5PWxaKo; arc=none smtp.client-ip=91.218.175.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kFjQYvM+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E57F1F000FF;
-	Thu,  8 Oct 2026 08:14:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791447276;
-	bh=vIXnedMEVBk3zVzIVGfd80btTHGEOjiWb7p/ZyrFQvM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kFjQYvM+cK+vL9je5/4MSazk5BKFqoOOqfvpRxtuTI3aVnyjPavRLCvetJ/X9Gq/v
-	 XT739BVjstIKr140+YTAIg6tOa2AQsCD5OXdksj1HpIx3T9qEmwG6kSTH06AjP9Lro
-	 Gqj6UTIVJiqo+OPVpbEIOJ2MqRA2FWVsLsA6yuTGi5b9Ae/HKUYl13J8y8BQyMMj0/
-	 8o3eX/ln6NQF+NvnmVKUym9PTs8GwRDj+/f+9L8+pEI+4XKt9j8c9cYitwWGRVlrzR
-	 46rFDWULb7RUY4AjQGrJ3/++DTV+nEK/tDCWgMHsYm7qhtF/fXG7qLU5nfK++1jjJu
-	 gHnAvoFJXFt6g==
-Message-ID: <sashiko-outbox-163811@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v9 12/23] bpf: Refuse a trampoline that calls a
- subprog that can unwind
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261008075101.3001371-1-yonghong.song@linux.dev>
-References: <20261008074959.2993751-1-yonghong.song@linux.dev>
- <20261008075101.3001371-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 08 Oct 2026 08:14:35 +0000
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z5PWxaKo"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=RMx7jFiL65ZDGqd0DZ1v3Z2cM1AED/E0YCu2i1HQI2g=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791447851; v=1; x=1792052651;
+ b=Z5PWxaKoUGC06vBDipjkB1hzJU599uR5aNvbDcZNRB8flcIZVd0xVGne2xYUkhmfnsZRNI9+
+ wWJLjhYJ7M4FK0rDRhun9W4mrBaOuHfKo0e4MlMvLDZBEZ1VQfPf7YPx6qRDF4LB04RLUu1TPHu
+ VslM51st0uHq/Ov3EtUqsmFw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id e009485256980d37;
+	Thu, 08 Oct 2026 08:24:11 +0000
+X-Mizu-Trace-ID: e009485256980d37
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Subject: [PATCH net-next v4 0/6] netlink: add lwtunnel encap sub-message
+ support to rt-route
+Date: Thu, 08 Oct 2026 16:24:00 +0800
+Message-Id: <20261008-ynl_rt_encap-v4-0-4ed2ccf7f949@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2XNQQqDMBCF4auUrJsySeyoXfUepYimYw2VKEkQR
+ bx7g92oXT6G75+ZeXKGPLudZuZoMN50No7kfGK6Ke2buHnFzSRIhBwyPtm2cKEgq8ueK5GAAFU
+ pzEoWSe+oNuOaezBLgVsaA3vGS2N86Ny0/hnEev8lRbpPDoIDr6uKkDCDayrun6k1tvMXbdfSI
+ DdawkHLqDViUipKJdb4p9VGq6NWUScCUEtR5UTpTi/L8gWfnqhaLwEAAA==
+X-Change-ID: 20260908-ynl_rt_encap-3140103b368a
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@kernel.org>, 
+ Eric Dumazet <edumazet@kernel.org>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] bpf: x86 exception unwinder passes wrong return address pointe=
-r causing stack corruption
-- [High] bpf: Missing trampoline restriction for bpf_throw() leads to NULL =
-pointer deref
---
+This series adds YNL sub-message support for lwtunnel encap data in
+the rt-route netlink family, and describes the tunnel-specific
+attribute sets that were previously opaque binary blobs.
 
-commit 554b5300d0510c78440f3ee71cad1d363c75cfaf
-Author: Yonghong Song <yonghong.song@linux.dev>
+The kernel currently emits encap_type after the encap payload nest,
+but YNL sub-message parsing needs the selector (encap_type) first to
+dispatch on the correct attribute set. Patch 1 reorders the kernel
+output, and patch 2 teaches the YNL C code generator to convert enum
+selectors to their string form for sub-message dispatch.
 
-bpf: Refuse a trampoline that calls a subprog that can unwind
+Patches 3-6 extend the rt-route YAML spec.
 
-This patch refuses fexit, fmod_ret, and fsession trampoline attachments
-to subprograms marked with might_unwind, preventing bpf_unwind() from
-tripping over unexpected trampoline frames.
+Tested with ynl selftest and checked with following cmds
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 668d811d4e4cb..3692d9b163d43 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+ # modprobe ila
+ # modprobe xfrm_interface
+ # ip addr add 10.1.0.1/24 dev lo
+ # ip link add geneve1 type geneve id 1 remote 10.1.0.2 ttl 64
+ # ip link set geneve1 up
+ # ip route add 10.1.0.0/24 dev lo encap mpls 100 via 10.1.0.254
+ # ip route add 1.1.1.0/24 encap ip id 1 geneve_opts 1:1:1212121234567891,2:2:1212121234567892,3:3:1212121234567893 dst 10.1.0.2 dev geneve1
+ # ip route add 2001:db8:3::/64 dev lo encap ila 1:2:3:4 csum-mode no-action ident-type luid hook-type output
+ # ip route add 2001:db8:4::/64 dev lo encap ip6 id 1 dst 2001:db8::5 src 2001:db8::1 hoplimit 64
+ # ip route add 2001:db8:5::/64 dev lo encap seg6 mode inline segs 2001:db8::1
+ # ip route add 2001:db8:6::/65 dev lo encap seg6local action End flavors psp,next-csid lblen 32 nflen 16
+ # ip route add 2001:db8:7::/65 dev lo encap bpf in ob /tmp/kself/net/lib/xdp_dummy.bpf.o sec xdp
+ # ip route add 2001:db8:8::/64 dev lo encap rpl segs 2001:db8::1
+ # ip route add 2001:db8:9::/64 encap ioam6 trace prealloc type 0x800000 ns 0 size 4 dev lo
+ # ip route add 2001:db8:10::/64 dev lo encap xfrm if_id 100
+ # ip route show
+ 1.1.1.0/24  encap ip id 1 src 0.0.0.0 dst 10.1.0.2 ttl 0 tos 0
+        geneve_opts 1:1:1212121234567891,2:2:1212121234567892,3:3:1212121234567893 dev geneve1 scope link
+ 10.1.0.0/24  encap mpls  100 via 10.1.0.254 dev lo
+ # ip -6 route show
+ 2001:db8:3::/64  encap ila  1:2:3:4  csum-mode no-action  ident-type luid  hook-type output dev lo metric 1024 pref medium
+ 2001:db8:4::/64  encap ip6 id 1 src 2001:db8::1 dst 2001:db8::5 hoplimit 64 tc 0 dev lo metric 1024 pref medium
+ 2001:db8:5::/64  encap seg6 mode inline segs 2 [ 2001:db8::1 :: ] dev lo metric 1024 pref medium
+ 2001:db8:6::/65  encap seg6local action End flavors psp,next-csid lblen 32 nflen 16 dev lo metric 1024 pref medium
+ 2001:db8:7::/65  encap bpf in xdp_dummy.bpf.o:[xdp] dev lo metric 1024 pref medium
+ 2001:db8:8::/64  encap rpl segs 1 [ 2001:db8::1 ] dev lo metric 1024 pref medium
+ 2001:db8:9::/64  encap ioam6 freq 1/1 mode inline trace prealloc type 0x800000 ns 0 size 4 dev lo metric 1024 pref medium
+ 2001:db8:10::/64  encap xfrm if_id 100 dev lo metric 1024 pref medium
+ # ./tools/net/ynl/pyynl/cli.py --family rt-route --dump getroute > /tmp/route_dump.json
 
-[ ... ]
+All the result looks good.
 
-> @@ -21600,6 +21600,22 @@ int bpf_check_attach_target(struct bpf_verifier_=
-log *log,
->  				prog_extension ? "Extension" : "Tracing");
->  			return -EINVAL;
->  		}
-> +		/*
-> +		 * A trampoline that calls its target stays as a frame between a
-> +		 * subprog and its caller, and bpf_unwind() cannot walk past it:
-> +		 * the frames below would return after their calls rather than at
-> +		 * their landing pads. fentry leaves no frame, and the main
-> +		 * program's caller is below where the walk stops.
-> +		 */
-> +		if (aux->func && subprog && aux->func[subprog]->aux->might_unwind &&
-> +		    (prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT ||
-> +		     prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN ||
-> +		     prog->expected_attach_type =3D=3D BPF_TRACE_FSESSION)) {
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+---
+Changes in v4:
+- patch 02: include check `not self.selector.is_external()` for enum selectors,
+            return error when enum lookup failed. (sashiko, Jakub)
+- patch 04: set geneve options to binary due to the different format between
+            request and dump (sashiko)
+- patch 05: set max-len for lwt-bpf-prog-name (sashiko)
+- patch 06: fix seg6-local-flv-ops type and name prefix (sashiko)
+- Link to v3: https://lore.kernel.org/r/20260930-ynl_rt_encap-v3-0-4106c21b9ee7@kylinos.cn
 
-[Severity: High]
-Does this logic also need to check for bpf_throw()?
+Changes in v3:
+- patch 02: return local_vars and define new helpers is_enum_val and
+  get_enum_name (Jakub Kicinski)
+- patch 03: alphabet order for header files in Makefile (Jakub Kicinski)
+  set byte-order for ila-attrs. ILA_ATTR_IDENTIFIER is not used, so no
+  need to set byte-order. (sashiko)
+- patch 04: add multi-attr: true for geneve opts (sashiko)
+- patch 05: remove lwt-bpf-prog from seg6 local, add a seg6 specific one
+  in patch 06 (sashiko)
+- patch 06: add seg6-local-bpf and seg6-local-flv-ops. Set enum-as-flags
+  for seg6-local-flv-ops, set max-len for seg6-local-bpf-prog-name (sashiko)
+- Link to v2: https://lore.kernel.org/r/20260920-ynl_rt_encap-v2-0-c664a3e726f6@kylinos.cn
 
-The patch correctly prevents attachments for bpf_unwind(), which is tracked
-by might_unwind. However, bpf_throw() seems to be missed. It uses an
-independent might_throw flag which does not appear to be propagated to
-bpf_prog_aux or checked here.
+Changes in v2:
+- Patch 1: Check ops->fill_encap before setting encap_type_attr
+- Patch 2: Get string in generated sub-message parser and check it before reference
+- Patch 3-4: set byte-orders and max-len
+- Patch 5: include lwtunnel.h
+- Link to v1: https://lore.kernel.org/r/20260917-ynl_rt_encap-v1-0-fbbe6e680571@kylinos.cn
 
-If a subprogram calls bpf_throw() and has a tracing program attached
-(like fexit), bpf_stack_walker() encounters the trampoline frame. At that
-point, bpf_prog_ksym_find() will return NULL, and since ctx->cnt > 0, it ab=
-orts
-the walk before setting ctx->aux:
+---
+Hangbin Liu (6):
+      net: lwtunnel: change encap fill order
+      tools: ynl: convert enum selector to string for sub-message parsing
+      netlink: specs: rt-route: add lwtunnel encap sub-message support
+      netlink: specs: rt-route: describe lwtunnel IP options
+      netlink: specs: rt-route: describe lwt BPF program options
+      netlink: specs: rt-route: describe seg6-local attrs
 
-kernel/bpf/helpers.c:bpf_stack_walker() {
-    ...
-    if (!prog)
-        return !ctx->cnt;
-    ...
-}
+ Documentation/netlink/specs/rt-route.yaml | 430 +++++++++++++++++++++++++++++-
+ net/core/lwtunnel.c                       |  35 +--
+ tools/net/ynl/Makefile.deps               |   9 +-
+ tools/net/ynl/pyynl/ynl_gen_c.py          |  34 ++-
+ 4 files changed, 484 insertions(+), 24 deletions(-)
+---
+base-commit: 8df0638138d3e0344fd1fb36cf2d1ca1cf5028f0
+change-id: 20260908-ynl_rt_encap-3140103b368a
 
-Because the walk is aborted early, ctx.aux remains NULL, which leads to a
-kernel panic when dereferenced later in bpf_throw():
+Best regards,
+-- 
+Hangbin Liu <liuhangbin@kylinos.cn>
 
-kernel/bpf/helpers.c:bpf_throw() {
-    ...
-    ctx.aux->bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_sp_adjust,
-                              ctx.bp, 0, 0);
-    ...
-}
-
-> +			bpf_log(log,
-> +				"Cannot attach fexit, fmod_ret or fsession to %s, which can unwind\n=
-",
-> +				tname);
-> +			return -EINVAL;
-> +		}
->  		conservative =3D aux->func_info_aux[subprog].unreliable;
->  		if (prog_extension) {
-
-[Severity: Critical]
-I also have a question about the x86 exception unwinding implementation add=
-ed
-earlier in this series. Can the x86 unwinder corrupt the stack by passing t=
-he
-wrong return address pointer?
-
-In arch_bpf_stack_walk_ra(), the unwinder passes the current frame's return
-address pointer to the callback:
-
-arch/x86/net/bpf_jit_comp.c:arch_bpf_stack_walk_ra() {
-    ...
-    ra =3D unwind_get_return_address_ptr(&state);
-    if (!ra)
-        break;
-    if (!consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 *=
-)ra))
-    ...
-}
-
-However, bpf_unwind_rewrite() seems to expect the return address pointer
-of the previous frame, so it can make the previous frame return directly in=
-to
-the current frame's cleanup pad.
-
-By passing the current frame's return address instead, bpf_unwind_rewrite()
-overwrites the current frame's return address with its own pad or epilogue:
-
-kernel/bpf/helpers.c:bpf_unwind_rewrite() {
-    ...
-    rec =3D bpf_exc_pad_for_ip(prog, ip);
-    *ra =3D rec ? rec->pad : prog->aux->epilogue_ip;
-    ...
-}
-
-On x86, this causes the pad to execute after the current frame has already
-returned via leave and ret, corrupting the caller's stack frame. For the ma=
-in
-program, its return address is overwritten with its own epilogue, leading to
-a double-epilogue execution.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261008074959.2993=
-751-1-yonghong.song@linux.dev?part=3D12
