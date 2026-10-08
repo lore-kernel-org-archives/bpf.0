@@ -1,112 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8573B14DB
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 17:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446583B05A5
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 17:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791481003; cv=none; b=a0HOkSNmmrCdxNubHWa+cYmk1scTAW3zZ1VhP1yAMy/IsqrrM2dxyyQQs//8iaNF6zUk34tjjOVPk0FJN0LBuLtw89mh0LrpsmcU+ijOTxWz2/7UmyPCrKqWdEaIsPHTzM2C2CNam9faEE2vpX1HCqD3zj2tMBXBd3IUfu9lfJo=
+	t=1791481004; cv=none; b=i6Bopofv5x1uIi923au5l5tMMLDy9gkcfmllQKNtzV27ASbzgcRFl9AH8pHnSfFjtClussqUxIZD+zvxTyNVtg4lphIw4aKq3pXMjx5UgXkm9/SLQ5bc04Frw08BlEQK5Wn4New9J4cO3bkLRbFl8JSrlxJ1H/jwGEnBiLF9Y0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791481003; c=relaxed/simple;
-	bh=qPY4/nVuFZiPU488KmJD6UdHlI6WQ9ZxWMihhokiHVg=;
+	s=arc-20240116; t=1791481004; c=relaxed/simple;
+	bh=MDFwzyFHNPCdvJZfRG7S9x0rBFkQE43bGaBiVXq1uAc=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=KJeJl0uKg5khFI+k702nc8NMD600382JoY3bKhXeX3YuMyJvYFyy93onYUZOZTGic1FgPt+4gjayFjkAqNIZrzySduKYKau/aMDGj97edo5jluwaXeDSVHm8V1A7/mDlJATt9rRcwnJG8RLuvZ35E21aqAK1AArbdAowBJL6HlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihpJ83O2; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=nhI0/+2YlSlWHHaTNryAOZWNrTHnaXCcg0NNPhJgrBMsOL4pQllj7dtVk1VVZu21cMXyOCBNSQiN8f+0RS2ToakXk3rl2WIxrbpkk3mRab3OcJRGeGfznxb/nRP1utdpkr8TgSG3CvDVNoCw69Q9hR2dnuETc0YPfsRcMivd2Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZomEKup; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihpJ83O2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB661F00893;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZomEKup"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4821F000FF;
 	Thu,  8 Oct 2026 17:36:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791481002;
-	bh=jwQG4wdjUyu/EtjGzUyxPtfWfp8fpuHv1KTKQFtNSxk=;
+	s=k20260515; t=1791481003;
+	bh=bki/kHEQk3uVant5WXoosSQYMjj3pc7LE+5Xaceb/fQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ihpJ83O2stWeLSjw5ajvvcVYZEI4wM/9gin8RyzYqXIfvz3CL4Va41BZZYNY80XoS
-	 CorhqakMUfC0ACeQr0COvVR8JP2M1+dR3gnQfibNYZD4pkm9L6NoOYJcJl4wVB6Tkc
-	 jalxKMnnj3JNDlU+WNaIjV+SInZLWEoVfKW2K0xVj1AF1X4xFuzSqJ/atPf+fY70dB
-	 Dx3kIjzMtKZIQ5Kzq3uYCZ+sDWdnUq+yNQnUFZy7gL9Fhpfp4F0GOP5/SopNa+ECvQ
-	 zB+mGQSLBJIERnUtme5lYqlQYMuqE2xRn0oAMfAJkZgecElnmWbM17X+lXbQSH/CJr
-	 qrgC3ZPo1RSZQ==
-Message-ID: <sashiko-outbox-164421@kernel.org>
+	b=jZomEKupzkxsJuRodiDLMXGQVCWjSi/FXGLWK4Uny+TZvBBAn1KXX2ui3HNzpXXDu
+	 VAG5zj3XY/5NTx1MSNLZ5+Ksj9rkJSbcOYOG6TaF6iHsTSdBiVViBkig9Q7woBVYk/
+	 l53fKMvOd8IKSi4SLSAdyRYEWqbi4baPVVeJh7zMtlhExDwb3YysU0C+ZNirVqFpW2
+	 CvfOrf69qmw0MH5OgVpIUhrez7ZvANNZYxuQ7aeFPW52R/lOvhq9+p2hvj912sQLAE
+	 t1QOr3NJ6Toj71+8fY0uMp11w87TQtFEPQYuf1mmt6qrJJQOWnnoETJLnxGhr+Vn4m
+	 6kONsa2elOEDg==
+Message-ID: <sashiko-outbox-164424@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 6/8] net: skbuff: don't BUG() on leftover
- length in skb_copy_and_csum_bits()
+Subject: Re: [PATCH net-next v2 4/8] net: skbuff: don't BUG() on leftover
+ length in skb_checksum() and friends
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Josef Bacik" <josef@toxicpanda.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261007-b4-skbuff-bug-on-v2-6-b9a5f732895b@toxicpanda.com>
+In-Reply-To: <20261007-b4-skbuff-bug-on-v2-4-b9a5f732895b@toxicpanda.com>
 References: <20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b@toxicpanda.com>
- <20261007-b4-skbuff-bug-on-v2-6-b9a5f732895b@toxicpanda.com>
+ <20261007-b4-skbuff-bug-on-v2-4-b9a5f732895b@toxicpanda.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 08 Oct 2026 17:36:41 +0000
+Date: Thu, 08 Oct 2026 17:36:42 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] skb: negative len from broken caller causes OOB write before mem=
-set guard
+- [High] net: UAF and double-free in axienet exposed by skb_to_sgvec error =
+return
+- [Low] mt76: memory leak of skb on skb_to_sgvec() error in mt76u_tx_queue_=
+skb()
 --
 
-commit b6b3af33d3ca9b0598654f13d4f01d9b22cff285
+commit c07f21ad9448d85b0e365dbfeb75ae3c3a8b381b
 Author: Josef Bacik <josef@toxicpanda.com>
 
-net: skbuff: don't BUG() on leftover length in skb_copy_and_csum_bits()
+net: skbuff: don't BUG() on leftover length in skb_checksum() and friends
 
-This commit removes a BUG_ON(len) check and instead returns 0 after zeroing
-any unfilled buffer space. It explicitly aims to avoid a massive memset if
-a broken caller passes a negative length.
+This patch replaces system-halting BUG_ON calls with error returns in
+skb_checksum, skb_crc32c, and __skb_to_sgvec when encountering leftover
+length. It returns -EINVAL for __skb_to_sgvec and 0 for checksum functions,
+allowing the system to recover gracefully.
 
 > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index c896770203f71..7fd2f8142cc41 100644
 > --- a/net/core/skbuff.c
 > +++ b/net/core/skbuff.c
-> @@ -3713,7 +3713,13 @@ __wsum skb_copy_and_csum_bits(const struct sk_buff=
- *skb, int offset,
+[ ... ]
+> @@ -5339,7 +5345,10 @@ __skb_to_sgvec(struct sk_buff *skb, struct scatter=
+list *sg, int offset, int len,
 >  		}
 >  		start =3D end;
 >  	}
 > -	BUG_ON(len);
 > +	if (unlikely(len)) {
+> +		DEBUG_NET_WARN_ON_ONCE(1);
+> +		return -EINVAL;
+> +	}
 
-[Severity: Medium]
-Will this check ever be reached if a caller passes a negative len?
+[Severity: High]
+By replacing the BUG_ON with an error return, callers are now expected to
+cleanly handle the failure, but does this expose an existing memory
+corruption path in the axienet driver?
 
-The commit message mentions avoiding a huge memset if len is negative,
-but if len is negative, earlier loops in skb_copy_and_csum_bits() will
-clamp their copy size to this negative value:
+Looking at axienet_start_xmit_dmaengine in
+drivers/net/ethernet/xilinx/xilinx_axienet_main.c, the TX ring head is
+incremented before calling skb_to_sgvec:
 
-net/core/skbuff.c:skb_copy_and_csum_bits() {
+    lp->tx_ring_head++;
+    sg_init_table(skbuf_dma->sgl, sg_len);
+    ret =3D skb_to_sgvec(skb, skbuf_dma->sgl, 0, skb->len);
+    if (ret < 0)
+        goto xmit_error_drop_skb;
+
+On error, it jumps to xmit_error_drop_skb, frees the SKB, but fails to
+decrement lp->tx_ring_head or submit the descriptor to the DMA engine:
+
+xmit_error_drop_skb:
+    dev_kfree_skb_any(skb);
+    return NETDEV_TX_OK;
+
+When subsequent successful transmissions complete, the DMA callback
+axienet_dma_tx_cb monotonically increments lp->tx_ring_tail for each
+completion. Will it process the abandoned ring slot and double-free the
+stale skb pointer?
+
+axienet_dma_tx_cb() {
     ...
-    if (copy > 0) {
-        if (copy > len)
-            copy =3D len;
-        csum =3D csum_partial_copy_nocheck(skb->data + offset, to, copy);
+    skbuf_dma =3D axienet_get_tx_desc(lp, lp->tx_ring_tail++);
     ...
+    dev_consume_skb_any(skbuf_dma->skb);
 }
 
-This negative copy value causes csum_partial_copy_nocheck() to perform a
-massive out-of-bounds access.
+[Severity: Low]
+Does this error return also cause a memory leak in the mt76 driver?
 
-Similarly, in the fragment loop, a negative len makes copy negative,
-leading to an infinite loop and out-of-bounds writes in
-skb_frag_foreach_page() due to unsigned comparisons.
+In mt76u_tx_setup_buffers from drivers/net/wireless/mediatek/mt76/usb.c,
+the negative error bypasses the zero check:
 
-Does this function need an early return for negative lengths at the entry
-point to truly protect against broken callers?
+    urb->num_sgs =3D skb_to_sgvec(skb, urb->sg, 0, skb->len);
+    if (!urb->num_sgs)
+        return -ENOMEM;
 
-> +		DEBUG_NET_WARN_ON_ONCE(1);
-> +		/* Don't hand the caller a buffer with stale bytes in it. */
-> +		if (len > 0)
-> +			memset(to, 0, len);
-> +		return 0;
-> +	}
->  	return csum;
+    return urb->num_sgs;
+
+In mt76u_tx_queue_skb, this negative error is caught and returned upstream:
+
+    err =3D mt76u_tx_setup_buffers(dev, tx_info.skb, q->entry[idx].urb);
+    if (err < 0)
+        return err;
+
+However, the caller mt76_tx_process_mcu_queue unlinks the skb before
+attempting to queue it:
+
+    __skb_unlink(skb, head);
+    spin_unlock(&head->lock);
+
+    sta =3D wcid_to_sta(wcid);
+    spin_lock(&q->lock);
+    __mt76_tx_queue_skb(phy, qid, skb, wcid, sta, NULL);
+
+Since mt76u_tx_queue_skb aborts without calling dev_kfree_skb or
+ieee80211_tx_status, will the unlinked skb be permanently leaked?
+
+> 	return elt;
 >  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261007-b4-skbuff-=
-bug-on-v2-0-b9a5f732895b@toxicpanda.com?part=3D6
+bug-on-v2-0-b9a5f732895b@toxicpanda.com?part=3D4
