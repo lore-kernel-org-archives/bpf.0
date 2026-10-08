@@ -1,139 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039B23BB671
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 08:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23AB361947
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 08:14:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791447257; cv=none; b=tv6JZX2tjUiYp2hblB6TvgGGmeesgYLKt087RZ2OCI0Z2Uj8PcuQyiWvag8GRWa04IrXWSuNbEf6Eyyjd/qqgASL/q5ltSyI6Y9U7nXYfeQhNYe+IM4z7NhoiZq857MSuweHN3LVEMv3un7wsA9ptd50TocjEAGzcDzrY42X1yA=
+	t=1791447278; cv=none; b=p04GgyJAIWoQz+ak3onXsfxQlgPpy9pp0uVjUf6kxpZnsKZCQYszu+ZRnjs0P3T+2wxMCn1L9aEuna9t6zMjB2MUNSeCoFvrlYCROhoYJ6DI/jVU/xzgIgWsK5rYXsEiyJET9g0yaXXayZf0x8Q7ShxUFTnh1rvicQ7F0WPUpVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791447257; c=relaxed/simple;
-	bh=ZonP8+hnTohDhvC/ITWdcfQv2uZdLOCR2oD5PXlON/k=;
+	s=arc-20240116; t=1791447278; c=relaxed/simple;
+	bh=QhtUV3fkpEIXNd0N5wIdYcJlVMJ43d05TUI4ovk8b88=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=vDPi+WNiQ8+iIODHwEqiqYF64Yi9zYqHJ6R2TfXru2LstS0UzpKHMW6gOwnmXbbr7FSFAjxz8tvvzMse1cKPQYxy4yQs+zDfWvPQc1fWqJWZEebLZiy7ecZMTQdyZku8A6HWaMix6XIsBeiikvExXTj0roUgcmEec5QAVUuCOAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k2EnjQcC; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=lnRmdIQ087AxxkLNHJ/B2av4A9j2HIiOCAXaOXaH9UifltdG50s4o2c11VOv3/iEtaabKMYsh7T0iQSLRPEgLbR14rJkqrnOaRIAl8QWtWaeH21FUWm2nzweUnzsKsmbJl3dRR5LihE3gf9ejaKW6Zx3RYP5268c2g+GKX33cwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kFjQYvM+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k2EnjQcC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667621F000FF;
-	Thu,  8 Oct 2026 08:14:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kFjQYvM+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E57F1F000FF;
+	Thu,  8 Oct 2026 08:14:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791447255;
-	bh=18/MQjpHgTPTuJlyGeAyz8olBmJZs1hpNi1ukmFmQn0=;
+	s=k20260515; t=1791447276;
+	bh=vIXnedMEVBk3zVzIVGfd80btTHGEOjiWb7p/ZyrFQvM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=k2EnjQcCI54SMtcbCWue4MdJ/qZYR8GF5rKkmE6fHabqiTHA18JFK2gEXo+UPGEEz
-	 vgTp6Q3exlvavpvb/O4uUSoZqvgu8wg5KBsxu2+6/ypJUPxVbxEalc4zTfcWqgeOTP
-	 LpVlLRles1g8JFybxqojosNcHqeIBFRKiaZnL7iXHwV2pn/uS7bLYanjW4TClLVl7O
-	 Bv6RroWbQspPwrIayuXyGIXAviFguFpxiisoHhs+2/jB89Lvhnc45UH98TFSeGE0f7
-	 sX/jNAyatd7rq0+FUo2hPAtLEloNy/+Hm0zpkoXtjrdXvRpmM7sBlpz9wg0enN3tO1
-	 7FawUYFa3YVyQ==
-Message-ID: <sashiko-outbox-163810@kernel.org>
+	b=kFjQYvM+cK+vL9je5/4MSazk5BKFqoOOqfvpRxtuTI3aVnyjPavRLCvetJ/X9Gq/v
+	 XT739BVjstIKr140+YTAIg6tOa2AQsCD5OXdksj1HpIx3T9qEmwG6kSTH06AjP9Lro
+	 Gqj6UTIVJiqo+OPVpbEIOJ2MqRA2FWVsLsA6yuTGi5b9Ae/HKUYl13J8y8BQyMMj0/
+	 8o3eX/ln6NQF+NvnmVKUym9PTs8GwRDj+/f+9L8+pEI+4XKt9j8c9cYitwWGRVlrzR
+	 46rFDWULb7RUY4AjQGrJ3/++DTV+nEK/tDCWgMHsYm7qhtF/fXG7qLU5nfK++1jjJu
+	 gHnAvoFJXFt6g==
+Message-ID: <sashiko-outbox-163811@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v9 19/23] libbpf: Let the static linker carry
- .bpf_cleanup relocations
+Subject: Re: [PATCH bpf-next v9 12/23] bpf: Refuse a trampoline that calls a
+ subprog that can unwind
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261008075136.3008537-1-yonghong.song@linux.dev>
+In-Reply-To: <20261008075101.3001371-1-yonghong.song@linux.dev>
 References: <20261008074959.2993751-1-yonghong.song@linux.dev>
- <20261008075136.3008537-1-yonghong.song@linux.dev>
+ <20261008075101.3001371-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 08 Oct 2026 08:14:14 +0000
+Date: Thu, 08 Oct 2026 08:14:35 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] libbpf: OOB array access in linker_append_elf_relos via malforme=
-d ELF symbol
+- [Critical] bpf: x86 exception unwinder passes wrong return address pointe=
+r causing stack corruption
+- [High] bpf: Missing trampoline restriction for bpf_throw() leads to NULL =
+pointer deref
 --
 
-commit c7a7a96d1dd021ce6e4bcaa13fd9ec618fb1f8cf
+commit 554b5300d0510c78440f3ee71cad1d363c75cfaf
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-libbpf: Let the static linker carry .bpf_cleanup relocations
+bpf: Refuse a trampoline that calls a subprog that can unwind
 
-Each field of a .bpf_cleanup record is a byte offset into a code section: a
-32-bit relocation against that section's symbol, with the offset as the
-implicit addend. The patch updates the linker to handle R_BPF_64_NODYLD32
-and R_BPF_64_ABS32 relocations against non-executable sections.
+This patch refuses fexit, fmod_ret, and fsession trampoline attachments
+to subprograms marked with might_unwind, preventing bpf_unwind() from
+tripping over unexpected trampoline frames.
 
-> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-> index f3f71c452f007..c607f51e3cb46 100644
-> --- a/tools/lib/bpf/linker.c
-> +++ b/tools/lib/bpf/linker.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 668d811d4e4cb..3692d9b163d43 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -2297,6 +2299,39 @@ static int linker_append_elf_relos(struct bpf_link=
-er *linker, struct src_obj *ob
->  					if (linker->swapped_endian)
->  						off =3D bswap_64(off);
->  					memcpy(ptr, &off, sizeof(off));
-> +				} else if ((sym_type =3D=3D R_BPF_64_NODYLD32 ||
-> +					    sym_type =3D=3D R_BPF_64_ABS32) &&
-> +					   (sec->shdr->sh_flags & SHF_EXECINSTR)) {
+> @@ -21600,6 +21600,22 @@ int bpf_check_attach_target(struct bpf_verifier_=
+log *log,
+>  				prog_extension ? "Extension" : "Tracing");
+>  			return -EINVAL;
+>  		}
+> +		/*
+> +		 * A trampoline that calls its target stays as a frame between a
+> +		 * subprog and its caller, and bpf_unwind() cannot walk past it:
+> +		 * the frames below would return after their calls rather than at
+> +		 * their landing pads. fentry leaves no frame, and the main
+> +		 * program's caller is below where the walk stops.
+> +		 */
+> +		if (aux->func && subprog && aux->func[subprog]->aux->might_unwind &&
+> +		    (prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT ||
+> +		     prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN ||
+> +		     prog->expected_attach_type =3D=3D BPF_TRACE_FSESSION)) {
 
-[Severity: Medium]
-Could this result in an out-of-bounds memory access?
+[Severity: High]
+Does this logic also need to check for bpf_throw()?
 
-If an ELF file contains a malformed STT_SECTION symbol with an st_shndx
-value >=3D SHN_LORESERVE (such as SHN_ABS), it bypasses the bounds check ag=
-ainst
-obj->sec_cnt in linker_sanity_check_elf_symtab():
+The patch correctly prevents attachments for bpf_unwind(), which is tracked
+by might_unwind. However, bpf_throw() seems to be missed. It uses an
+independent might_throw flag which does not appear to be propagated to
+bpf_prog_aux or checked here.
 
-    if (sym->st_shndx < SHN_LORESERVE && sym->st_shndx >=3D obj->sec_cnt) {=
- ... }
+If a subprogram calls bpf_throw() and has a tracing program attached
+(like fexit), bpf_stack_walker() encounters the trampoline frame. At that
+point, bpf_prog_ksym_find() will return NULL, and since ctx->cnt > 0, it ab=
+orts
+the walk before setting ctx->aux:
 
-When processing relocations against this symbol, linker_append_elf_relos()
-indexes the obj->secs array using this out-of-bounds st_shndx:
+kernel/bpf/helpers.c:bpf_stack_walker() {
+    ...
+    if (!prog)
+        return !ctx->cnt;
+    ...
+}
 
-    struct src_sec *sec =3D &obj->secs[src_sym->st_shndx];
+Because the walk is aborted early, ctx.aux remains NULL, which leads to a
+kernel panic when dereferenced later in bpf_throw():
 
-The newly added relocation handling branch for R_BPF_64_NODYLD32 and
-R_BPF_64_ABS32 then directly dereferences the out-of-bounds sec->shdr and
-sec->dst_off pointers. Can this lead to an out-of-bounds read and a
-segmentation fault when linking an untrusted ELF file?
+kernel/bpf/helpers.c:bpf_throw() {
+    ...
+    ctx.aux->bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_sp_adjust,
+                              ctx.bp, 0, 0);
+    ...
+}
 
-> +					/*
-> +					 * A byte offset into a code section,
-> +					 * stored in place. LLVM spells this
-> +					 * relocation NODYLD32 and GNU as
-> +					 * spells it ABS32; being bytes, the
-> +					 * section's new start goes in as it
-> +					 * is, not scaled the way a call's
-> +					 * instruction index is above.
-> +					 *
-> +					 * r_offset is checked only for an
-> +					 * executable section, and SHT_NOBITS
-> +					 * has no raw_data, so bound it here --
-> +					 * subtracting, so it cannot wrap.
-> +					 */
-> +					if (!dst_linked_sec->raw_data ||
-> +					    dst_linked_sec->sec_sz < (int)sizeof(*val) ||
-> +					    dst_rel->r_offset % sizeof(*val) ||
-> +					    dst_rel->r_offset >
-> +					    (size_t)dst_linked_sec->sec_sz - sizeof(*val)) {
-> +						pr_warn("ELF relo #%d in section #%zu points outside the data of s=
-ection '%s' in %s\n",
-> +							j, src_sec->sec_idx,
-> +							dst_linked_sec->sec_name,
-> +							obj->filename);
-> +						return -EINVAL;
-> +					}
-> +					val =3D dst_linked_sec->raw_data + dst_rel->r_offset;
-> +					if (linker->swapped_endian)
-> +						*val =3D bswap_32(bswap_32(*val) + sec->dst_off);
-> +					else
-> +						*val +=3D sec->dst_off;
->  				} else {
->  					pr_warn("relocation against STT_SECTION in non-exec section is not =
-supported!\n");
->  					return -EINVAL;
+> +			bpf_log(log,
+> +				"Cannot attach fexit, fmod_ret or fsession to %s, which can unwind\n=
+",
+> +				tname);
+> +			return -EINVAL;
+> +		}
+>  		conservative =3D aux->func_info_aux[subprog].unreliable;
+>  		if (prog_extension) {
+
+[Severity: Critical]
+I also have a question about the x86 exception unwinding implementation add=
+ed
+earlier in this series. Can the x86 unwinder corrupt the stack by passing t=
+he
+wrong return address pointer?
+
+In arch_bpf_stack_walk_ra(), the unwinder passes the current frame's return
+address pointer to the callback:
+
+arch/x86/net/bpf_jit_comp.c:arch_bpf_stack_walk_ra() {
+    ...
+    ra =3D unwind_get_return_address_ptr(&state);
+    if (!ra)
+        break;
+    if (!consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 *=
+)ra))
+    ...
+}
+
+However, bpf_unwind_rewrite() seems to expect the return address pointer
+of the previous frame, so it can make the previous frame return directly in=
+to
+the current frame's cleanup pad.
+
+By passing the current frame's return address instead, bpf_unwind_rewrite()
+overwrites the current frame's return address with its own pad or epilogue:
+
+kernel/bpf/helpers.c:bpf_unwind_rewrite() {
+    ...
+    rec =3D bpf_exc_pad_for_ip(prog, ip);
+    *ra =3D rec ? rec->pad : prog->aux->epilogue_ip;
+    ...
+}
+
+On x86, this causes the pad to execute after the current frame has already
+returned via leave and ret, corrupting the caller's stack frame. For the ma=
+in
+program, its return address is overwritten with its own epilogue, leading to
+a double-epilogue execution.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261008074959.2993=
-751-1-yonghong.song@linux.dev?part=3D19
+751-1-yonghong.song@linux.dev?part=3D12
