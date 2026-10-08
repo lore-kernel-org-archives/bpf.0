@@ -1,43 +1,43 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B492449EA9;
-	Thu,  8 Oct 2026 12:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1B449E5DE;
+	Thu,  8 Oct 2026 12:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791463638; cv=none; b=uhFKhorcqxKvmbR4uFnloMCG1VyPdUuMjjl6RK5+Xsoz0kE5nv6PYCF/nJhReYkTBTItcuc4Bjyeoecq53KpZ6bUAho+FW61sj5XYLka982jw6VtJ66VoskwavYTli9og+7+EzRcdUsgkkDgXN/2yriOYUwrtOjRbhIUTtSMU0M=
+	t=1791463901; cv=none; b=WyDWHY3orQPLPYW7cl6XN7p/sSnWwsaXzLIUYfwS7D2wepIbxx+wKQXiwCyhtBnkW9WDpDXjcb28GBbVuXG/OzKYQhypul+r/h9mrAz7Iqc1n6bn7d8AcqKgtxEjAdN6GjjSZI2ZRCTPtad3uOSUr/OvHgb3vEzf+M3Hon9VMjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791463638; c=relaxed/simple;
-	bh=oOi/VXoNOdALUepvwqYPwWx1TMwRUCGJ21bll6+qzQQ=;
+	s=arc-20240116; t=1791463901; c=relaxed/simple;
+	bh=aJ9YmxBBm4ORrS2YgmUXD0ShPzanXx/nReB3KypFgIo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dlo8XsRtEeedltYZIekE/hS5rC1NLTu7XyhKoaz0O9gQK0hGz1ZrM1DV4CyiWwgm6PUtG3K5vbbKDiZsKOGFQlfnaXvrjH9OkFuOrBE5V8GyFny7SXaaDt9CCqBLZugjVYfeejUSltvQWp7oixxQADQrsBym3z6n0/rZCjHMLCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ehWPA0Ko; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Y5ApUaRk; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=jPu2aUzkSlhzY+XotkOqiRzIh9QWJgsjJ9XsQ+SqkLdpibm4TIa6rL4BMKDcVSYjTCz+ExdvxMHFiDuicNDx98+HUH0kHWV6ZuzJjlkI2u2iioGuowB6DIan3NxrNu98CuqwHqrf/vtjiPR4o6ViqHv55AqzsyuMyGl5n2rbpd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oqlV/79E; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=66s1G752; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ehWPA0Ko";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Y5ApUaRk"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oqlV/79E";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="66s1G752"
 From: Kurt Kanzenbach <kurt@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1791463635;
+	s=2020; t=1791463896;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jOqoPweHeHU1lzpTjcc24eUYqvraMAoKGPRqZIsy8v8=;
-	b=ehWPA0KonNAcuwT7BaWe+3b8O4Tw8YQgX2VztU2/E21SPkgtgdRtoY8cNnaeINNLYYLd8R
-	akBpRugjKdAu3nD7ymzBPAh+Jm3i00yC812Rc6XAb8j55zElnIHbT1UYRDu6Pd/25Qmg5X
-	yvMGfXrDpamcTHgTRGcTvsDtPfaTR0DCglWSfemDdqI1g4cnT31wOEngpeprQxkkBM59SI
-	C5nsP6h9s+lSckBEejksFi1oxQ0DGOldHHInDiIW6mkA7y+kWwRq8eEc6kXxqjtlVyjE6X
-	JsqXphRLvigBFiBUclHxuk7BiFLHf1yYQ1DbuI83rpDrCgUYv95wAecZ7UEpBg==
+	bh=MZHTc2XGNHdP9T9wX+Y/zZCgi5wtLXlmsEo+S/aR7wI=;
+	b=oqlV/79ErOldFxJBOdcaqgayLC1WO3eZpEN29TjkzEPG9yeDcs8gdtjc9MkzQWX1rpGAWk
+	5vi1xpgk3Vu29SzvFR/YejSai7+xU+PeowDuSFokRn7V/m9fbPhEE8aD+5s7FuhungAkLX
+	HbMeJzHdfeFwKXAwhxM9oFyIg9qr6KkOXcTYSQrNU0lGd9Oti6U/PMz4VlLFd7hZ73XuGI
+	82EUKS5Vy66VsQFjY+IbiWKRR0dUJir3mAfeslMBlFvb8dnf93cctKMh7opMm7fNgSu+ME
+	kQ9P8AjA8Gnw9mHgh0AlA1WbZXK+0MVp25/90RaD4W2RFUdz+FXaeyBjC8xmjQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1791463635;
+	s=2020e; t=1791463896;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jOqoPweHeHU1lzpTjcc24eUYqvraMAoKGPRqZIsy8v8=;
-	b=Y5ApUaRkm0XMX/e6BXMBb1nMYxVNmT9Xk+7F4kEJIcZIKtt0gdIJdWuodcmDqfM0bDLRmJ
-	yZYNkalCPVwDngBQ==
-To: Nicolai Buchwitz <nb@tipi-net.de>
+	bh=MZHTc2XGNHdP9T9wX+Y/zZCgi5wtLXlmsEo+S/aR7wI=;
+	b=66s1G752KnxZk6pqlIIlWCpoYLU30j4kYu9SQMwYjN5bZI5zizQmsN1mZI+ECsY0yN9TCZ
+	GNos/tFHRSHOzTDQ==
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
  <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Jakub
  Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
@@ -54,12 +54,12 @@ Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
 Subject: Re: [PATCH net v2 2/2] net: stmmac: Stop Tx queue when
  (en|dis)abling XSK pools
-In-Reply-To: <377d56dbc9be2874af7369112d9e49b9@tipi-net.de>
+In-Reply-To: <asdcORsu7HNfAZBb@boxer>
 References: <20261005-stmmac_xsk_crashes-v2-0-46c60cba6421@linutronix.de>
  <20261005-stmmac_xsk_crashes-v2-2-46c60cba6421@linutronix.de>
- <377d56dbc9be2874af7369112d9e49b9@tipi-net.de>
-Date: Thu, 08 Oct 2026 14:47:13 +0200
-Message-ID: <877bjsqrzi.fsf@jax.kurt.home>
+ <asdcORsu7HNfAZBb@boxer>
+Date: Thu, 08 Oct 2026 14:51:35 +0200
+Message-ID: <8733ugqrs8.fsf@jax.kurt.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,18 +73,16 @@ Content-Type: multipart/signed; boundary="=-=-=";
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Hi Nicolai,
+Hi Maciej,
 
-On Thu Oct 08 2026, Nicolai Buchwitz wrote:
-> On 5.10.2026 09:09, Kurt Kanzenbach wrote:
+On Thu Oct 08 2026, Maciej Fijalkowski wrote:
+> On Mon, Oct 05, 2026 at 09:09:33AM +0200, Kurt Kanzenbach wrote:
 >> When enabling or disabling XSK pools in parallel to Tx traffic, kernel
 >> crashes occur. For VLAN tagged frames that happens in stmmac_xmit() ->
 >> dwmac4_set_vlan_tag() and for normal frames in stmmac_xmit() ->
->> dwmac4_set_addr(). Both of these functions access the Tx DMA=20
->> descriptors.
+>> dwmac4_set_addr(). Both of these functions access the Tx DMA descriptors.
 >>=20
->> The XDP pool (en|dis)ablement frees and reallocates the Tx DMA=20
->> resources:
+>> The XDP pool (en|dis)ablement frees and reallocates the Tx DMA resources:
 >>=20
 >>  stmmac_disable_tx_queue:
 >>    __free_dma_tx_desc_resources
@@ -94,8 +92,7 @@ On Thu Oct 08 2026, Nicolai Buchwitz wrote:
 >>    __init_dma_tx_desc_rings
 >>=20
 >> NAPI is disabled during that allocation window, but the Tx queue is not
->> stopped. Therefore, add the stopping of the Tx queue during the=20
->> enabling
+>> stopped. Therefore, add the stopping of the Tx queue during the enabling
 >> and disabling of XSK pools. Update trans_start when stopping the queue
 >> to avoid spurious watchdog timeouts.
 >>=20
@@ -110,17 +107,17 @@ On Thu Oct 08 2026, Nicolai Buchwitz wrote:
 >>  drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c | 14 ++++++++++++++
 >>  1 file changed, 14 insertions(+)
 >>=20
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c=20
->> b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_xdp.c
 >> index d7e4db7224b0..883bd3fe8089 100644
 >> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
 >> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
 >> @@ -6,6 +6,16 @@
 >>  #include "stmmac.h"
 >>  #include "stmmac_xdp.h"
->>=20
->> +static void stmmac_xdp_stop_tx_queue(struct stmmac_priv *priv, u16=20
->> queue)
+>>=20=20
+>> +static void stmmac_xdp_stop_tx_queue(struct stmmac_priv *priv, u16 queu=
+e)
 >> +{
 >> +	struct netdev_queue *nq =3D netdev_get_tx_queue(priv->dev, queue);
 >> +
@@ -133,46 +130,22 @@ On Thu Oct 08 2026, Nicolai Buchwitz wrote:
 >>  static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
 >>  				  struct xsk_buff_pool *pool, u16 queue)
 >>  {
->> @@ -36,6 +46,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv=20
->> *priv,
+>> @@ -36,6 +46,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *=
+priv,
 >>  	if (need_update) {
 >>  		napi_disable(&ch->rx_napi);
 >>  		napi_disable(&ch->tx_napi);
 >> +		stmmac_xdp_stop_tx_queue(priv, queue);
 >
-> Unfortunately XDP_TX and ndo_xdp_xmit() ignore the stopped queue and=20
-> still
-> hit the freed ring. I can reproduce this on STM32MP215 with a veth=20
-> redirect
-> into the port while toggling the pool:
+> FWIW you can look at what I did at ice driver (ice_qp_dis()) where I used
+> a bigger hammer here; I think updating trans_start is kinda a workaround.
 >
->    pc : dwmac4_set_addr+0x8/0x18
->    lr : stmmac_xdp_xmit_xdpf+0x1d0/0x3f0
->     stmmac_xdp_xmit+0xe4/0x1a8
->     bq_xmit_all+0xa0/0x208
->     __dev_flush+0x60/0xc0
->     xdp_do_flush+0x134/0x198
->     veth_poll+0x258/0x340
+> https://lore.kernel.org/netdev/20240708221416.625850-1-anthony.l.nguyen@i=
+ntel.com/
 >
-> Both go through stmmac_xdp_xmit_xdpf() with the queue lock held, so this
-> fixes it for me:
->
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
->        dma_addr_t dma_addr;
->        bool set_ic;
->
-> +     /* Ring may be torn down for an XSK pool switch */
-> +     if (netif_tx_queue_stopped(netdev_get_tx_queue(priv->dev, queue)))
-> +             return STMMAC_XDP_CONSUMED;
-> +
->        if (stmmac_tx_avail(priv, queue) < STMMAC_TX_THRESH(priv))
->                return STMMAC_XDP_CONSUMED;
->
-> This is older than your patch, but could you fold it in / add a oatch?
 
-Thanks a lot for testing! I'll fold it in for next version.
+Actually, trans_start is already updated by netif_tx_stop_queue(). I'd
+just remove txq_trans_cond_update() for next version.
 
 Thanks,
 Kurt
@@ -182,19 +155,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmrHkNETHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgoDpEACZJagFhrsS0hj0gQ84dwHsvaFENP/j
-VGQai03xKJ56zto1rCuy7MRYXYAVuvbDAbOHv0l2Yw6g9Edm+/f4F7HK2BiypVBl
-TicFgwfl1WodVjT8LqHFjinP3+lDLfV7cAEyBXfMp25PdNUJ6HuTjvxoxvCV+yZB
-9dmzUF5mdKhufO2LedIb4mlB6nrWbCrN/4Ozuvox7VhD7IGF2zzmABPnCazEwpjS
-UMFMSOYioKvqOgW0pGlaUQVXhK2jo5KQVvOYLTl82usQwMtRYOO3h0wfqeLbQOwg
-syNJ8MvoKQN0heQpoekGoVD4uxzjfR3uJpDAC8RaF7eTKQpEWbiPnLyrSDOLTiaD
-ncsdGCe2ohs6mnN1doD88hdQzD+lYHrSUXuWnR/2bWxcfcNPZLAEksW0g9o60Wpz
-Up+ZQVoezU5u245BqwUpHSqfIWanjrWjQTYI4/IiJWvrPww8yq01KlMu94BrmB8v
-zlhcS3GKmDnK3fIUiXhTdBOLiY6zo0fGvDaVrcsc1Xl/ePvYGExqfOyISCTtEo9V
-QDnpe6bvOe9qh5lwKhu6ACK2fmihxnqIJ8r064fv6zx5Z2aWb8NONCVB3HjPSzpx
-j3hdwrHFsiA3ebLp35ycnRpWeUyzjDBRZh3iG4F5PXyreEAInJI0qjaXF+60YHJR
-7DvaKXwxOgFPog==
-=dl4i
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmrHkdcTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgmJBD/oCmsRqLOaLWkOVSVG1QP9cmCBH00WQ
+LRmmxbFk4UDutQJxHN4bezt5EZ6eJqvCf5WM/uI9WkyMlA65QMEm96UbHmGYhY/O
+2fdXL7X5W2wpY31IcZ15svH39ow99M+z+Qa7bOaZVMrZxaWWvyHEhv+qUESR4ot/
+lYvobo99/AorlX8Urfb/e+x3r1NCOXZJz5IIXq+9L4sAby16gJdQtvfvDdmfdN8Y
+Fr8DxMII4MoRHHcPjvMYxbYaAaGSDaK/H61e6DODTrRMCHE4322KkjMSqx/KxCBH
+zvXeMsqkWlnSTM0srBGuszFy/9kfOKWyk68q44fhuefGOaBv2xB8ZBGt8Xoz4aqq
+Mip7UslQqXVVjZCJfbUnH+zwcaJBIJA3QOQT0HebM5unR7YZDCPPc/oCL6q66G0Q
+Z61H3lzDorpXGBUUindVQvB4XLWkO6xOagPLN0Nu3fuHDIqirxrPYpSko3K3xKg/
+AsLDTMAGIKG29OoSOjlikRm+6gbkXtiH4E82IJWem/IWiQsrtXj27FHPkoWivHKJ
+oLhS9/3kWsoqO0VExHQLlh6/HTIH8358JForUyGvFLJzJxGGQVpjzmlKRfXplF9W
+th4/Y3yHhPZ16SPgDUFl6oKAQPXlUjbamJqkdbvHCUJ4zKtj2j3x6fDeYh3xN/Bk
+8c5IpCJvzgpfJQ==
+=3nkW
 -----END PGP SIGNATURE-----
 --=-=-=--
