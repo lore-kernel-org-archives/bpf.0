@@ -1,109 +1,215 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984AA3AFAE0
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 17:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD5B2F8E8F;
+	Thu,  8 Oct 2026 17:12:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791479340; cv=none; b=Oal7dw8m20Z8MDaRqRpx2M1ndfuNnuAgabMl4YYuyPfI03H4A4p3CKWyKbrpmgkxHWgZzWfxZt5UwppN69U9DytSlMuaYlm0sG80qPjVYvTc3C9zR0DU+zD+KIQxWp9YYsL2b66jkZzwuVdArOi7AuGJqU7iwjU/QZlv+kqb/EE=
+	t=1791479572; cv=none; b=FwFkdXE2WzJQVEFAsZ2tTl1wNobSvevyTk/ky3DBasMzUZX3LpFXB0rLSLSya0EuN8mparU4OXhRaV4cIUx83xwfg44SV2x82QDAyys1MHQfi8PhiwMfXO9ixKyqMJvnE+4bMrkyVJ78ip6lJlRYJe9D4KPr+klt9CUWVBZZDeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791479340; c=relaxed/simple;
-	bh=uzc5djF85E//odOYdOjPt2GittKhdyE9SqtN99W2ky4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=grcFZZ7EUqktgztb3Q3s/QOfXiPEFbot/wYvPOCyVM7QdsM1NrVeVtIR/HxRJHKWygV+mb/k0R6Ycl13hJiioQrA2NGjIuib18lH4JcLDrt1E0wtNFPmeECNxNV6b8+pxSQKU1dkoZMV6LIaaBg2wqaKaEGd182OWI/k9lq3938=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqFU6Tj4; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791479572; c=relaxed/simple;
+	bh=qVP//0v3O30bvMDrXzIZA3OqyjiI5lij9RLIwJfZhas=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aT3Zbj1Eiy9fwYSQE/xDAJILtqNpp0I7jFJ4PKdrvpY2MvsIt0lM/UCaOTZ2BIpdFPLoVQ99L2gSegQWVF6BNKqrnCtKJ4NSLYH6Op7ExOJ7orU1QHmGxZbVqLAFo9BZVgfpWyQOC9T6QvHQIVfprwzmQV1ZMPTaY2pW15gdaUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=ZdbVxgI6; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqFU6Tj4"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a16c1608faso11553075e9.0
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 10:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791479337; x=1792084137; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+ZzFC0Gnqf5rubheTFydiqJ9yK61ie2+Ek+jk+ivkUU=;
-        b=OqFU6Tj4844RAtOXRiQZFhIuhvFiFgK+WcpGkkPJyrbx8Cgw84W0UgzxhguYVnxfIg
-         Y9pAuO3Vbf3B4rdD40W5eXr2Btytke94hePBtgLAOc1pg48/HAnYZljSGaptcQXhz2L+
-         c5k3lWu3e4JSJrlCjmvaEGM6Pdzp5QXOHuXu4JRnfz3c/N2TgFATwup5SZ1xhULaZAmJ
-         3awzf0lH3rjHYYnxShE6NXamrzWb0amqE5zCxhmep1qxRb+mdgILKwH7X9RyaPgjWN94
-         /tPS3VEJQwtKr6NvrSkkmnW8l9DojPDsYoRjbFkVgtGx9uoQCQ/xpepXD/av0IZ4LEq0
-         x5ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791479337; x=1792084137;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+ZzFC0Gnqf5rubheTFydiqJ9yK61ie2+Ek+jk+ivkUU=;
-        b=Y91I9Xv8Aw4YYYZs0GYjY7FZqnUxzAxxpSN21OXFnp33CdolhN9y6P4pxMqZVA3YWT
-         e4t8LGiuheQX92cBf8ssYoLTTD5t6sLDXzEQzBZ8RE88arr4yPVjlnQqqBkhlurbCnNc
-         nnsixC108dM2+JhUl96Z74eOzMPE0Q/y9J6ZnhdqgPIw0crC1vGt8fqBOkfSdF8obDHa
-         9grS9YHDPuM8TBFYE4d86b3wmQkmxzJvXt9PZB2aY8q7Wv1rOW6GkKydZwLX7h3EB9vO
-         fumrMmL0MV1ORCJo3H0pR5VzkMYUeDagLsuNxj9cUxO+tmKWpwMvZxE0MuDbkDdCMqOD
-         Xg9g==
-X-Forwarded-Encrypted: i=1; AKwUvByQRLe1BY1kpdeNDL/UQjuGMfmfecQbIlDBioLPA8Y990EGbHXG3G6VfhzeSbLp2aLakuk=@vger.kernel.org
-X-Gm-Message-State: AFuF++nHNOBH6n3y1ls1/poJJ/W/1pSit2v5rsy/seWko5B0dvD3hCsw
-	tst2F0zBDyuu6lm5PQXEgRkZEs3UKZ09o0g4ap3gmK6RkGAAROMvi765
-X-Gm-Gg: AYBFou0kQUJtkKwQtukgTuKCulZ7JHiByIlAtBUFifRfLUKX/xUHeW8JaKpYA/mNtZ8
-	Nfmjg7mENzMv9aBHeEIEy4GZudw4j1p7xdW8YdcGFzqouyuPWKdsIe5qu8uJCVOOWkXEGFFUemz
-	2S5WcRmdAH/Aq2ZIETxk8XSOJfRL0MDXjhzPOTI3RRiFQQzwFsMBAXNp0WMs0+LCO4f26B7FDrV
-	DbUaJUwaSpvvF5/5jL/w1++sfsASimqgBr9S2yO5hgKLWb2ZJQgwC/2cQSbv41Qf+oSt+9hxPsg
-	gNNtNt5f5KeOcV5hmQZr/r9WJYCKhSx4gjWf2UQYxFtI95ScyBz18OB2s2G0jsPOTpQEOk1KMPw
-	6xhU0HvirBhmzxk9u8yBJJpFyd73Hq6+dEx+VNRUxJ2QdXXhAV+fq2JlQySCmrdOmBRTbVwaGtC
-	Mq/YUoqIHt09V6nUtjLw7rvYav+Gb7epNNYR5E+ppF7xDWWJ+mifWCAjd/ZeC+DrKKKlfJ7QNRY
-	mmhpt2XSuHi+ly6fPRO9dLP556wx0x/vcuACE+Xc9/FXQ==
-X-Received: by 2002:a05:600c:4755:b0:4a1:8963:b865 with SMTP id 5b1f17b1804b1-4a18963b9aemr17251305e9.1.1791479336435;
-        Thu, 08 Oct 2026 10:08:56 -0700 (PDT)
-Received: from ubuntu (ip-86-49-251-138.bb.vodafone.cz. [86.49.251.138])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1843cb261sm84563085e9.3.2026.10.08.10.08.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 10:08:53 -0700 (PDT)
-Sender: Alban Crequy <muadda@gmail.com>
-From: Alban Crequy <alban.crequy@gmail.com>
-X-Google-Original-From: Alban Crequy <albancrequy@microsoft.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Alban Crequy <albancrequy@microsoft.com>,
-	gregkh@linuxfoundation.org,
-	stable@vger.kernel.org,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Peter Jung <admin@ptr1337.dev>
-Subject: Re: [PATCH 7.1.y] Revert "tracing: perf: Fix stale head for perf syscall tracing"
-Date: Thu,  8 Oct 2026 17:08:31 +0000
-Message-ID: <20261008170831.49376-1-albancrequy@microsoft.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260817150000.2@kernel.org>
-References: <20260816133101.83109-1-admin@ptr1337.dev> <20260817150000.2@kernel.org>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="ZdbVxgI6"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1xErfZ-005Qkh-0o; Thu, 08 Oct 2026 19:12:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Subject:Date:From;
+	bh=UYOo421Yw7/Xv7jeCLkN+7Vf+jpi3svVWN1flCjNphw=; b=ZdbVxgI6Sdq7UZNPIsS6kPDJt3
+	EuOEivBEHLdaORiFX9jPEo672ygz2tL3rKlvY5G8HcqXVjrhHWZJZuZs89kV+3KZpm44qTn9Fe1DT
+	A9HNsi1u/5uF8YENETpfaFB+oVMzsVVIy9WlB17Vv6xOejD8x7NEoI2V55OErPIVvRW7U7iL8vI/X
+	bq2YKrQ6OeyXdQMLcWvCJNPeLnPLC5WoVIXOclrJlFMYcEtjfbdTw1yDeSB8KAzxZHSRc2LpmhTFV
+	QCzAJXfJuksXYp0/IEPJCfHu167kQnMdS4x8LlTPT1caJ/V3hW7NwFP6dEsW8BgFJiGzYek0Ur02R
+	KmJcmTZQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1xErfY-0001sT-BT; Thu, 08 Oct 2026 19:12:36 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xErfJ-006XMM-BQ;
+	Thu, 08 Oct 2026 19:12:21 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Thu, 08 Oct 2026 19:12:15 +0200
+Subject: [PATCH bpf-next] selftests/bpf: Clean up sa_family_t-stringifier
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261008-selftests-sockmap_listen-cleanup-v1-1-f6d1a4ff540d@rbox.co>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNUQrCMBAFr1L224U2lBa9iogk6YtGYxqyqRRK7
+ 27Uz2FgZiNB9hA6NRtlvL34OVboDg3Zu443sJ8qk2rV0I6qZ0FwBVKEZbbPl07X4KUgsg3QcUk
+ 8Oqc6HA0mO1DNpAzn19/iTCY5jlgLXf5GFvOALd8D7fsHxa9plI4AAAA=
+X-Change-ID: 20260724-selftests-sockmap_listen-cleanup-7ff21e9bedc6
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.15.2
 
-Hi Sasha, Peter,
+Following commit f3de1cf621f7 ("selftests/bpf: sockmap_listen cleanup: Drop
+af_unix redir tests") and commit 9266e49d608c ("selftests/bpf:
+sockmap_listen cleanup: Drop af_vsock redir tests"), sockmap_listen.c:
+family_str() becomes functionally identical to select_reuseport.c:
+family_str(). Move the logic to socket_helpers.h.
 
-Another data point: Ubuntu picked up the same backport in its 7.0 kernel (7.0.0-38-generic), and it breaks Inspektor Gadget and bpftrace in the same way. A BPF program on sys_enter_execve or sys_enter_openat only runs on CPU 0; sys_exit_* and sys_enter_close keep working on all CPUs. Reproducer:
+Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+Link: https://msgid.link/CAAVpQUDULzZh58oKkRaYqgM9bRToGb7wHrzT+cZNpRmAtM12Ow@mail.gmail.com
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+ .../selftests/bpf/prog_tests/select_reuseport.c    | 16 +++-------------
+ .../selftests/bpf/prog_tests/socket_helpers.h      | 12 ++++++++++++
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 22 +++-------------------
+ 3 files changed, 18 insertions(+), 32 deletions(-)
 
-  bpftrace -e 'tracepoint:syscalls:sys_enter_openat /comm == "cat"/ { @[cpu] = count(); }' &
-  for c in $(seq 0 7); do taskset -c $c cat /etc/hostname >/dev/null; done
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index 3dbcc091f16c..3b4b233e21d1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -6,6 +6,7 @@
+ #include <stdbool.h>
+ #include <string.h>
+ #include <errno.h>
++#include <error.h>
+ #include <assert.h>
+ #include <fcntl.h>
+ #include <linux/bpf.h>
+@@ -21,6 +22,7 @@
+ #include "bpf_util.h"
+ 
+ #include "test_progs.h"
++#include "socket_helpers.h"
+ #include "test_select_reuseport_common.h"
+ 
+ #define MAX_TEST_NAME 80
+@@ -740,18 +742,6 @@ static const char *maptype_str(enum bpf_map_type type)
+ 	}
+ }
+ 
+-static const char *family_str(sa_family_t family)
+-{
+-	switch (family) {
+-	case AF_INET:
+-		return "IPv4";
+-	case AF_INET6:
+-		return "IPv6";
+-	default:
+-		return "unknown";
+-	}
+-}
+-
+ static const char *sotype_str(int sotype)
+ {
+ 	switch (sotype) {
+@@ -794,7 +784,7 @@ static void test_config(int sotype, sa_family_t family, bool inany)
+ 
+ 		snprintf(s, sizeof(s), "%s %s/%s %s %s",
+ 			 maptype_str(inner_map_type),
+-			 family_str(family), sotype_str(sotype),
++			 inet_family_str(family), sotype_str(sotype),
+ 			 inany ? "INANY" : "LOOPBACK", t->name);
+ 
+ 		if (!test__start_subtest(s))
+diff --git a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+index 0d59503a0c73..4a570998612d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+@@ -470,4 +470,16 @@ static inline const char *socket_kind_to_str(int sock_fd)
+ 	return "???";
+ }
+ 
++static inline const char *inet_family_str(sa_family_t family)
++{
++	switch (family) {
++	case AF_INET:
++		return "IPv4";
++	case AF_INET6:
++		return "IPv6";
++	default:
++		return "unknown";
++	}
++}
++
+ #endif // __SOCKET_HELPERS__
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index 1c96a3cf4b97..235e1d56f044 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -1232,22 +1232,6 @@ static void test_ops_cleanup(const struct bpf_map *map)
+ 	}
+ }
+ 
+-static const char *family_str(sa_family_t family)
+-{
+-	switch (family) {
+-	case AF_INET:
+-		return "IPv4";
+-	case AF_INET6:
+-		return "IPv6";
+-	case AF_UNIX:
+-		return "Unix";
+-	case AF_VSOCK:
+-		return "VSOCK";
+-	default:
+-		return "unknown";
+-	}
+-}
+-
+ static const char *map_type_str(const struct bpf_map *map)
+ {
+ 	int type;
+@@ -1315,7 +1299,7 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 	char s[MAX_TEST_NAME];
+ 	int map_fd;
+ 
+-	family_name = family_str(family);
++	family_name = inet_family_str(family);
+ 	map_name = map_type_str(map);
+ 	sotype_name = sotype_str(sotype);
+ 	map_fd = bpf_map__fd(map);
+@@ -1355,7 +1339,7 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 	const struct redir_test *t;
+ 	char s[MAX_TEST_NAME];
+ 
+-	family_name = family_str(family);
++	family_name = inet_family_str(family);
+ 	map_name = map_type_str(map);
+ 
+ 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
+@@ -1387,7 +1371,7 @@ static void test_reuseport(struct test_sockmap_listen *skel,
+ 	const struct reuseport_test *t;
+ 	char s[MAX_TEST_NAME];
+ 
+-	family_name = family_str(family);
++	family_name = inet_family_str(family);
+ 	map_name = map_type_str(map);
+ 	sotype_name = sotype_str(sotype);
+ 
 
-Only @[0] shows up.
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20260724-selftests-sockmap_listen-cleanup-7ff21e9bedc6
 
-I also tested v7.1.13 under QEMU with 4 CPUs, using a small cilium/ebpf test that counts per-CPU hits of a tracepoint program while running 10 syscalls pinned to each CPU:
+Best regards,
+--  
+Michal Luczaj <mhal@rbox.co>
 
-  v7.1.13:          sys_enter_openat [10 0 0 0], sys_enter_close [10 10 10 10], sys_exit_openat [10 10 10 10]
-  v7.1.13 + revert: sys_enter_openat [10 10 10 10], sys_enter_close [10 10 10 10], sys_exit_openat [10 10 10 10]
-
-The revert looks right to me for 7.1.y, and for any other stable branch without 57918341dd19.
-
-Tested-by: Alban Crequy <albancrequy@microsoft.com>
-
-Alban
