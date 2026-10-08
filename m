@@ -1,77 +1,68 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mta0.migadu.com (out-102.mta0.migadu.com [91.218.175.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE26A34CCE
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 06:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE85A3BCD29
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 07:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791442671; cv=none; b=tgTG9WD6W5NmnD2WI7OCN86tEqHpfrknkR3FEcnKHTVCbuYEwp/5faK2Cla+IJbtUHKI85f07FLjZj0ZNMjVJfLXCHVwRQmeRtYhjDsAzgSZcirD81WFWKUGrgI0cz/t1FFAzkfZcuA9ySqKp9x7cqOH2Yo9WkDkCIwdBc8KMec=
+	t=1791443412; cv=none; b=tSlG43xs9H0SNN6WF+KLlPKeTs1+1OkPj0/VT4EfeRpjOOSWb4V/C5gGRYYQh0TtPOviheSdPcidRPSx0Nedk9Jm34ZVBcVXjN6C+MU8G+6FmoCLdN1BKddvoqMk9ORUyO0sImEKBf3LDkq2ez3S+MK93AlHdTWEpjGAI6cgwsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791442671; c=relaxed/simple;
-	bh=pWKokQveCiZbUe2sMg1Olkwm+yJszlcQb3hA5hJfLbQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g44GOxDH2B0MceG5haDJSIcFpa4xCuD9Q1RweeO619WleIKFsdic2JZCzUQAlD8UqkJcVxZO9Vpo8YaFsOUzuwhqsFFssjwG3RH4I9vX1aFT/CSfPnVeaJvJSelDmvytEL+L+sE56v5C+cxCaQQXU/Bbk2yWOP5T1szyaN+3Hzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RsWQtZMM; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791443412; c=relaxed/simple;
+	bh=YntmXF+RyEpeQNyhd9YG+Hc6Sc4QDta4QnwxtcdIPHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=arZPTys6Z7ZihtrVUS1wqAI25WvpW0tWxdFedMCbRES7Tir+iAyolqBkltz5G6Q5GuGgDbbqmrk6ZL1fbifj5h8T83sH0fjjcQVS/p6azyM7td3Fmwq1DRIgBStdl1VQ3JMsA2Hbra88vWxVCTpxPZRVJqY7uPxnjLgQsDckVJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nNfVAN73; arc=none smtp.client-ip=91.218.175.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RsWQtZMM"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-351775aa1c0so785284eec.0
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2026 23:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791442669; x=1792047469; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PHxj18iBrbJZyyhcrQCRwEUvWf0wl6fSDmLmfCTWWJE=;
-        b=RsWQtZMM0RSZZNqDCfAY8Ugvh9IBOad0kKaHQAYMIPyM4wHlRcklietmzSYVJe9IJX
-         uHdNS2NRgWCh70NiVIpuma0skjKgcHRuGNsU7uTf0xHibsSMWY1Xx08Z6RqDKE8Uq4ca
-         JsnQoFrpgUE5glRrIb2QQgSh7WF5i1aPxoG8cmp0cekNvcqf7Yice9lfsvdqxvGjuwU1
-         0IPJhaaYbxH+255KO4SGOgsAZCbpr3oPOkoIjBSxOldxGS4SToHvnL8HRamw/d7D+4pT
-         5FpZt4Jc/krk5MmjjWiOfzlLU0a0ctdeRI2ErEUImiZvgiMAA+4fWLmnRYHVm9NyYQHX
-         6SQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791442669; x=1792047469;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PHxj18iBrbJZyyhcrQCRwEUvWf0wl6fSDmLmfCTWWJE=;
-        b=XYB5Z5acYUr23XVFnqhX7IBTHUVV4rFCd9oUa16tIJckzPuW6wtgVaBza+wjsZdn+I
-         pizXoGXKRLkqoJcO6Z2Brx6dxk004SaoZ5qnbLOf2n4rX9KXBul4RxsLzmL1Re+GDepj
-         0rhxNlL3hBzPFkn48SDk4yd7YufJMrDXFMQ0RQ5dr/9i1jOgYgXlUI7pCeKyzErUNzeM
-         H13TTAl0+Rl+rgslp1YJlFfaKoteU3979GbySLPqLJQL5qaNjGcxUpfh33AXkj6jY5Vg
-         G7j1PPoI9uB36Yzocifiw6c/OkuOOsgi0hBkCK+8Dbf6mASJ/pRcXutYdQiDFkcgeFAO
-         9Pig==
-X-Gm-Message-State: AFuF++nK6dJMxPt3LYDunxcMJ+IfxMdGJdxrXGfZNnVGGUOVMaZPkByr
-	14sRmYw1NMN+GDOk1SQntnZwoEWC/Akm55o96XlAHOnYmGJnZPSjhP0UcjOCDa6nYVM=
-X-Gm-Gg: AYBFou3PntB5F9szj1hITR8qmsFdqYeZvYY5OZzqrPqUKviYZV1U+9DYRX92X71aXCJ
-	ebuooOku9megPZ5jAXKul36HCUdQ6NoU3upz5TvVJhdNs7H7nZYS8u1ovv7tKpQxjApaggIQy79
-	C8ymJUSuLhQtZVLrntMqXcb5ASoPfhsmrFSqqrHm3Tw82M/Kdc3bJlDaLO6aQWq+BG5iANJPe6b
-	cNRRQ5H1zg41ZI55gWdFHakhrq9P/S9wt9Yucm5O+uFvhn2JtQnSaWY6TZWyvTGguK3IzLlj6rb
-	G3v0G6Cg4XGa1Tg30+VUjGQ2MyR1+YYCCLQNHZpQ3CR3c1SsaQKt+7v1admLYBsuhEOAPhS7orG
-	nJ4dAY7P1oukC46lcixElQEgqYgMn1sy7Q1Tf1HzECXZzy7j0UeyfYaX167rrv6ZPhsF2VGXTz+
-	aAIcLkQuT2lMnGMk4DwN52tGppI6X0knFnMW6EU0g4w3YygcHPRMLmNwGjrKh9GpeOnuzrQHTIm
-	7eW0Irw2crY92fO6xTbhw==
-X-Received: by 2002:a05:701b:21c7:b0:148:722b:7cbc with SMTP id a92af1059eb24-162044bfe56mr4976301c88.14.1791442668490;
-        Wed, 07 Oct 2026 23:57:48 -0700 (PDT)
-Received: from DESKTOP-31QBR7C ([103.120.166.82])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1636849ce68sm8102857c88.21.2026.10.07.23.57.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 23:57:47 -0700 (PDT)
-From: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	Rahad Bhuiya <rahadbhuiya2021@gmail.com>
-Subject: [PATCH bpf-next v2] bpf: fix symmetric register-form NULL-pointer check in check_cond_jmp_op()
-Date: Thu,  8 Oct 2026 12:57:38 +0600
-Message-ID: <20261008065738.1093-1-rahadbhuiya2021@gmail.com>
-X-Mailer: git-send-email 2.55.0.windows.3
-In-Reply-To: <20261008063322.530-1-rahadbhuiya2021@gmail.com>
-References: <20261008063322.530-1-rahadbhuiya2021@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nNfVAN73"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=YntmXF+RyEpeQNyhd9YG+Hc6Sc4QDta4QnwxtcdIPHY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791443407; v=1; x=1792048207;
+ b=nNfVAN739+hYX1f6Uvoggy40MGs9O80Q+uehWTdOabWm7j14cdLz5enum6S9OjNCbymRU02y
+ 30mCcXBmgV1p995s0Ql2pZlrAkZMdVTXvXm0wbZO12t1Bo7/dA9yv5l6B3dG/6CoeW5FdXCb+3L
+ VcgCTvWDhJBZPLsaGK1PzrAo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id bbda05475c7c12b7;
+	Thu, 08 Oct 2026 07:10:04 +0000
+X-Mizu-Trace-ID: bbda05475c7c12b7
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v3] selftests/bpf: Add bpf_proactive_reclaim test
+Date: Thu,  8 Oct 2026 15:09:27 +0800
+Message-ID: <20261008070928.113530-1-hui.zhu@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,293 +71,231 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_cond_jmp_op() propagates PTR_MAYBE_NULL nullness through
-mark_ptr_or_null_regs() when it detects a BPF_JEQ / BPF_JNE
-comparison against zero.  The existing code handles only the
-'forward' operand order:
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-  dst_reg = nullable pointer,  src_reg = known-zero scalar
-  (e.g. 'if r0 == 0')
+bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
+unlike a write to memory.reclaim, does not retry until the goal is
+reached.
 
-The symmetric case is left unhandled:
+Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
+and check that the result is positive but well below the request: one
+pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
+4K and 64K page kernels.
 
-  dst_reg = known-zero scalar,  src_reg = nullable pointer
-  (e.g. 'if r6 == r0' where r6 has been proven zero)
+The test deliberately covers only the kfunc itself. A full example of
+the intended asynchronous use, where a BPF program watches one cgroup's
+workingset refaults and reclaims another one from bpf_wq callbacks, is
+maintained out of tree at [1], released under GPLv2.
 
-When the symmetric case occurs:
- - type_may_be_null(dst_reg->type) is false (dst is scalar zero)
- - The null-check block is skipped entirely
- - mark_ptr_or_null_regs() is never called for src_reg
- - src_reg retains PTR_MAYBE_NULL in both branches
+Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.c
+is not built at all.
 
-Additionally, the early unprivileged-mode pointer-comparison guard
-(line 18058) rejected any conditional jump where src_reg is a pointer
-type, which would have made the new block unreachable for unprivileged
-programs.  Comparing a nullable pointer against a register proven to
-be zero is not a pointer leak -- it is semantically identical to the
-already-permitted forward form 'if (r_nullable == 0)'.  Exempt the
-symmetric null check from that guard.
+[1] https://github.com/teawater/memcg-async-reclaim
 
-Fix: add an 'else if' branch that mirrors the forward logic for the
-symmetric operand order and extend the early guard to permit it.
-
-Commit 6aed0134d3cd ('bpf: Mark the zero register precise for a
-register-form NULL check') introduced the precision marking for the
-forward case; the symmetric case was overlooked there.
-
-Signed-off-by: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 ---
- kernel/bpf/verifier.c                         |  40 ++++-
- .../selftests/bpf/prog_tests/verifier.c       |   3 +
- .../bpf/progs/verifier_null_ptr_symmetric.c   | 163 ++++++++++++++++++
- 3 files changed, 203 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c
+Changelog:
+v3:
+According to the comment of Barry, use write() + fsync() to charge the
+page cache instead of ftruncate() + read().
+According to the comment of AI, skip instead of fail when no regular
+filesystem is available for the workload file.
+v2:
+According to the comment of Alexei, remove the samples/bpf sample patch.
+Ship it out-of-tree as a standalone project.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 353bde9ae227..68b23d11766d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18057,9 +18057,22 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		src_reg = &regs[insn->src_reg];
- 		if (!(reg_is_pkt_pointer_any(dst_reg) && reg_is_pkt_pointer_any(src_reg)) &&
- 		    is_pointer_value(env, insn->src_reg)) {
--			verbose(env, "R%d pointer comparison prohibited\n",
--				insn->src_reg);
--			return -EACCES;
-+			/*
-+			 * Symmetric NULL check: "if (r_zero == r_nullable)".
-+			 * Comparing a nullable pointer against a register proven
-+			 * to be zero is not a pointer leak -- it is the reversed
-+			 * form of the already-permitted "if (r_nullable == 0)".
-+			 * Permit it; reject every other src_reg pointer comparison.
-+			 */
-+			if (BPF_CLASS(insn->code) == BPF_JMP32 ||
-+			    (BPF_OP(insn->code) != BPF_JEQ &&
-+			     BPF_OP(insn->code) != BPF_JNE) ||
-+			    !type_may_be_null(src_reg->type) ||
-+			    !bpf_register_is_null(dst_reg)) {
-+				verbose(env, "R%d pointer comparison prohibited\n",
-+					insn->src_reg);
-+				return -EACCES;
-+			}
- 		}
- 
- 		if (src_reg->type == PTR_TO_STACK)
-@@ -18248,6 +18261,27 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 				      opcode == BPF_JNE);
- 		mark_ptr_or_null_regs(other_branch, insn->dst_reg,
- 				      opcode == BPF_JEQ);
-+	} else if (!is_jmp32 && BPF_SRC(insn->code) == BPF_X &&
-+		   (opcode == BPF_JEQ || opcode == BPF_JNE) &&
-+		   type_may_be_null(src_reg->type) &&
-+		   bpf_register_is_null(dst_reg)) {
-+		/*
-+		 * Symmetric case: src_reg is the nullable pointer, dst_reg is
-+		 * a register whose value is known to be zero.  This arises when
-+		 * the programmer writes the comparison in reversed operand order,
-+		 * e.g. "if (0 == map_val)" or "if (r0 == map_val)" where r0 has
-+		 * been proven zero by the verifier.
-+		 *
-+		 * The zero is a property of this execution path, so dst_reg
-+		 * must be marked precise before we propagate nullness.
-+		 */
-+		err = mark_chain_precision(env, insn->dst_reg);
-+		if (err)
-+			return err;
-+		mark_ptr_or_null_regs(this_branch, insn->src_reg,
-+				      opcode == BPF_JNE);
-+		mark_ptr_or_null_regs(other_branch, insn->src_reg,
-+				      opcode == BPF_JEQ);
- 	} else if (!try_match_pkt_pointers(insn, dst_reg, &regs[insn->src_reg],
- 					   this_branch, other_branch) &&
- 		   is_pointer_value(env, insn->dst_reg)) {
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 460ad10ddc02..834ee5da9845 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -144,6 +144,7 @@
- #include "irq.skel.h"
- #include "verifier_ctx_ptr_param.skel.h"
- #include "verifier_zext.skel.h"
-+#include "verifier_null_ptr_symmetric.skel.h"
- 
- #define MAX_ENTRIES 11
- 
-@@ -377,3 +378,5 @@ void test_verifier_value_ptr_arith(void)
- 		      verifier_value_ptr_arith__elf_bytes,
- 		      init_value_ptr_arith_maps);
- }
-+
-+void test_verifier_null_ptr_symmetric(void) { RUN(verifier_null_ptr_symmetric); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c b/tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c
+ tools/testing/selftests/bpf/config            |   1 +
+ .../bpf/prog_tests/memcg_proactive_reclaim.c  | 127 ++++++++++++++++++
+ .../bpf/progs/memcg_proactive_reclaim.c       |  34 +++++
+ 3 files changed, 162 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 2b883b388f90..5621ef94ad7e 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -57,6 +57,7 @@ CONFIG_LIRC=y
+ CONFIG_LIVEPATCH=y
+ CONFIG_LWTUNNEL=y
+ CONFIG_LWTUNNEL_BPF=y
++CONFIG_MEMCG=y
+ CONFIG_MODULE_SIG=y
+ CONFIG_MODULE_SRCVERSION_ALL=y
+ CONFIG_MODULE_UNLOAD=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
 new file mode 100644
-index 000000000000..3adf28402d73
+index 000000000000..53426833366c
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c
-@@ -0,0 +1,163 @@
++++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+@@ -0,0 +1,127 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Verifier selftests for symmetric register-form NULL-pointer checks.
-+ *
-+ * The BPF verifier's check_cond_jmp_op() handles "if R == 0" NULL checks by
-+ * calling mark_ptr_or_null_regs() to mark the nullable pointer as either safe
-+ * or unknown in each branch.  Historically only the forward case was covered:
-+ *   dst_reg = nullable pointer,  src_reg = known-zero scalar
-+ * i.e. "if (map_val == 0)".
-+ *
-+ * The symmetric case was missing:
-+ *   dst_reg = known-zero scalar, src_reg = nullable pointer
-+ * i.e. "if (0 == map_val)" or "if (r0 == map_val)" where r0 is proven zero.
-+ *
-+ * Without the fix the verifier leaves src_reg as PTR_MAYBE_NULL in both
-+ * branches, either rejecting a valid program or silently missing a required
-+ * null check.  With the fix, nullness is propagated correctly in both
-+ * directions.
-+ */
++#include <test_progs.h>
++#include <limits.h>
++#include <linux/magic.h>
++#include <sys/statfs.h>
++#include <unistd.h>
 +
-+#include <linux/bpf.h>
++#include "cgroup_helpers.h"
++#include "memcg_proactive_reclaim.skel.h"
++
++#define CG_PATH "/memcg_proactive_reclaim"
++
++/*
++ * Large enough that a single reclaim pass cannot come close to it, so that
++ * "reclaimed less than was asked for" is not page-size noise: one pass is
++ * capped at MEMCG_CHARGE_BATCH pages, which is 256 KiB on 4K pages but 4 MiB
++ * on 64K pages.
++ */
++#define FILE_SIZE (32 * 1024 * 1024UL)
++#define BUF_SIZE (64 * 1024)
++
++struct reclaim_args {
++	__u64 cgroup_id;
++	__u64 size;
++};
++
++/*
++ * The data file has to sit on a regular filesystem: tmpfs pages are charged
++ * as shmem, so whether they can be reclaimed at all depends on swap being
++ * available. /tmp is tmpfs on many systems, and test_progs is routinely run
++ * from a tmpfs working directory, so both candidates need the check.
++ */
++static const char *workload_dir(void)
++{
++	static const char * const dirs[] = { "/tmp", "." };
++	struct statfs st;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(dirs); i++)
++		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
++		    st.f_type != RAMFS_MAGIC)
++			return dirs[i];
++
++	return NULL;
++}
++
++void test_memcg_proactive_reclaim(void)
++{
++	struct memcg_proactive_reclaim *skel = NULL;
++	struct reclaim_args args = {};
++
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		    .ctx_in = &args,
++		    .ctx_size_in = sizeof(args));
++
++	char data_file[PATH_MAX];
++	static char buf[BUF_SIZE];
++	__u64 cgroup_id;
++	const char *dir;
++	off_t off;
++	int cg_fd = -1, data_fd = -1, err;
++
++	/*
++	 * Both candidate directories can be tmpfs (initramfs-based CI, for
++	 * instance). That is an environment limitation, not a test failure.
++	 */
++	dir = workload_dir();
++	if (!dir) {
++		test__skip();
++		return;
++	}
++
++	snprintf(data_file, sizeof(data_file),
++		 "%s/memcg_proactive_reclaim_XXXXXX", dir);
++	data_fd = mkstemp(data_file);
++	if (!ASSERT_GE(data_fd, 0, "mkstemp"))
++		return;
++
++	cg_fd = cgroup_setup_and_join(CG_PATH);
++	if (!ASSERT_OK_FD(cg_fd, "cgroup_setup_and_join"))
++		goto out;
++
++	cgroup_id = get_cgroup_id(CG_PATH);
++	if (!ASSERT_GT(cgroup_id, 0, "get_cgroup_id"))
++		goto out;
++
++	skel = memcg_proactive_reclaim__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		goto out;
++
++	/* Charge FILE_SIZE of clean page cache to the cgroup. */
++	for (off = 0; off < (off_t)FILE_SIZE; off += sizeof(buf))
++		if (!ASSERT_EQ(write(data_fd, buf, sizeof(buf)),
++			       (ssize_t)sizeof(buf), "write"))
++			goto out;
++	if (!ASSERT_OK(fsync(data_fd), "fsync"))
++		goto out;
++
++	args.cgroup_id = cgroup_id;
++	args.size = FILE_SIZE;
++	skel->bss->reclaimed = 0;
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.memcg_proactive_reclaim),
++				     &opts);
++	if (!ASSERT_OK(err, "test_run"))
++		goto out;
++	if (!ASSERT_EQ(opts.retval, 0, "retval"))
++		goto out;
++
++	/*
++	 * A single call is a single bounded pass: it reclaims something, but
++	 * stops well short of the requested size instead of retrying until the
++	 * goal is reached the way a write to memory.reclaim does.
++	 */
++	ASSERT_GT(skel->bss->reclaimed, 0, "reclaimed");
++	ASSERT_LT(skel->bss->reclaimed, (__s64)FILE_SIZE, "single pass");
++
++out:
++	if (skel)
++		memcg_proactive_reclaim__destroy(skel);
++	if (cg_fd >= 0)
++		close(cg_fd);
++	if (data_fd >= 0) {
++		close(data_fd);
++		unlink(data_file);
++	}
++	cleanup_cgroup_environment();
++}
+diff --git a/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+new file mode 100644
+index 000000000000..b551192526fc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
 +#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} sym_null_map SEC(".maps");
++struct reclaim_args {
++	__u64 cgroup_id;
++	__u64 size;
++};
 +
-+/* ---- Forward case (already worked before the fix) ---- */
++/* Signed, because bpf_test_run_opts.retval is a __u32. */
++__s64 reclaimed;
 +
-+/*
-+ * "if (map_val == 0)" -- dst_reg holds the nullable pointer,
-+ * src_reg is the literal-zero immediate (BPF_K).  Should be accepted.
-+ */
-+SEC("socket")
-+__description("null check: forward form (dst nullable, imm 0) accepted")
-+__success __retval(0)
-+__naked void null_check_forward_imm(void)
++SEC("syscall")
++int memcg_proactive_reclaim(struct reclaim_args *ctx)
 +{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	/* r0 = nullable ptr; forward case: if (r0 == 0) */	\
-+	if r0 == 0 goto exit;				\
-+	/* r0 is non-null here -- safe to dereference */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+exit:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
-+}
++	struct mem_cgroup *memcg;
++	struct cgroup *cgrp;
 +
-+/* ---- Symmetric case (required the new fix) ---- */
++	cgrp = bpf_cgroup_from_id(ctx->cgroup_id);
++	if (!cgrp)
++		return 0;
 +
-+/*
-+ * "if (0 == map_val)" -- src_reg holds the nullable pointer,
-+ * dst_reg is a register that the verifier has proven equals zero.
-+ * Should be accepted; before the fix it was rejected because nullness
-+ * was never propagated for src_reg.
-+ */
-+SEC("socket")
-+__description("null check: symmetric form (src nullable, dst zero reg) accepted")
-+__success __retval(0)
-+__naked void null_check_symmetric_reg(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	/* r0 = nullable ptr, r6 = known 0 */		\
-+	r6 = 0;						\
-+	/* Symmetric check: if (r6 == r0), i.e. dst=r6 (zero), src=r0 (nullable) */\
-+	if r6 == r0 goto exit;				\
-+	/* r0 is non-null here -- safe to dereference */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+exit:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
-+}
++	memcg = bpf_get_mem_cgroup(&cgrp->self);
++	if (memcg) {
++		reclaimed = bpf_proactive_reclaim(memcg, ctx->size, -1);
++		bpf_put_mem_cgroup(memcg);
++	}
++	bpf_cgroup_release(cgrp);
 +
-+/*
-+ * BPF_JNE symmetric form: "if (r6 != r0) goto use_r0;"
-+ * In the fall-through branch r0 == r6 == 0, so it is null.
-+ * In the taken branch r0 is non-null and safe to dereference.
-+ */
-+SEC("socket")
-+__description("null check: symmetric JNE form (src nullable, dst zero reg) accepted")
-+__success __retval(0)
-+__naked void null_check_symmetric_jne(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	r6 = 0;						\
-+	/* if (r6 != r0) goto use_r0 */			\
-+	if r6 != r0 goto use_r0;			\
-+	/* fall-through: r0 is null here, just exit */	\
-+	r0 = 0;						\
-+	exit;						\
-+use_r0:							\
-+	/* r0 is non-null here -- safe to dereference */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Negative test: src_reg is nullable, dst_reg is non-zero scalar.
-+ * This must NOT be treated as a null check -- the verifier should
-+ * still reject a dereference of r0 without a proper null guard.
-+ */
-+SEC("socket")
-+__description("null check: symmetric form with non-zero dst must not elide null check")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+__naked void null_check_symmetric_nonzero_dst_rejected(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	/* r6 = 1 (non-zero) -- this is NOT a null check */\
-+	r6 = 1;						\
-+	if r6 == r0 goto skip;				\
-+	/* r0 still PTR_MAYBE_NULL here, dereference must fail */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+skip:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
++	return 0;
 +}
 +
 +char _license[] SEC("license") = "GPL";
 -- 
-2.55.0.windows.3
+2.43.0
 
