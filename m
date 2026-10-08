@@ -1,143 +1,207 @@
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFAC3E9C33
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 20:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16FA37C0EC;
+	Thu,  8 Oct 2026 20:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791490244; cv=none; b=SKefzzDU2ZEBh6s/HC6rggq58810th6jBPZTzcRfWCD6fTccLbJ54fbsWw3FJRIu1OvSKe5FhKWqOGr3prXwRi7xEv/LlDkvFj2v8tLbG7vYRrim7AVjXV9VgIiF9P8+Mu7hyz1ur+HEhFcSMAa2v9mtTepy0Iwa6x32TwKYk/8=
+	t=1791490554; cv=none; b=LrT6eBdrJRam4yW1UNNj1yQxretwk+CNPKMuXWjhelQrVDJYg4ES9DEbkfl58jJ5uIjXDO1H7G9A8+9V7oTRNlQcctn+rLGFQd/3zTtDLoHiexgD36PFtMlC3dJSK9nq1TLGG1w/AY5t4L5gDW8iZJL4ogCSkBhxUz05P2MRyGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791490244; c=relaxed/simple;
-	bh=yF3jq0/vOMO/ywfXfijmGEGeer2JbGwa3Sl3cQeG6rg=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=ayoOA6OEfMaFmsqwOrs5xlGqCeMPDdVsLnKR9JPoFdeZCdb/ULNNuEvRdSm17fkW6X/xuKuxWcLqaqjf0/EkLo8/9wBw9ppm+wH+nojRsYRMBoJTcC7w4WgHVgBHTAYT6FE2O4Pt/vd3YDoGBWKWrci3bapPpFsew93uJqDTDdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ITVGTowE; arc=none smtp.client-ip=209.85.210.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791490554; c=relaxed/simple;
+	bh=bXxQnv/foLDDmbSk93eHOxtiE+zfvSULWr5EfJ1SzfQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q3qIQhFUDjUrh53DbnoJRS/6+1QgGdDkgiSuFrBk5NZ5PXn2Hk3+VxAgwaSKgyr+YMFSVfC2mSvHrVAtucmNSRXg7CZXmgcMeG277XBG21265S7CEpUxPu4ixc9zSzU1QwkDdBtmDFhSoHtwKLXrb9J3PRqwKLLF9OtMmL1N3UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqrZnUcl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ITVGTowE"
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-81ba09a5d23so5585964a34.3
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 13:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791490238; x=1792095038; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:content-type:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=yF3jq0/vOMO/ywfXfijmGEGeer2JbGwa3Sl3cQeG6rg=;
-        b=ITVGTowEuCGrUhGyQkFFfBAOvx/LzqeZsm73DAy1g3A4EsCiHo37mqaYA5RtA7Vbvk
-         Ozk2gG9Mlzg4SA1fBJmePtmZoNgNiY0Zna//6hWjNxe32msLWNvtfl4v0PZe+gVyDpAM
-         6SAuv2vZYfR+tPHSDdJoWKAbYQspmL0kSzV+ZVIT19od1ITy3zkDeZRK9ouShZtUPutP
-         4LK2U9bIMAOwgU5xqWJuRogo018tE/sp9HoqNUubX3v5iUiqVVaUxuNYuqW9vJccc2Cj
-         O48QrYPklp+onThbzOVFvq42/IeHxbOieudBGJ8YjHGeKokxLz68k6H/fkixznBGakVt
-         1VtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791490238; x=1792095038;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yF3jq0/vOMO/ywfXfijmGEGeer2JbGwa3Sl3cQeG6rg=;
-        b=lt7gDdvqPkmOEs/4cONBpeW6XnU3oHwcGYJehmjM9Mevxsy4bMfGHpVYfd66cQyefk
-         STCdw60HWbUQxfq0NLyNTY2NY2vRjiSSBE123W1u7SrRKRDBVdLRM2jVOqYiWuaMK9MJ
-         xDH+p3lvrmIpD9GfkG829s8jTbfQySydyhgQ2f6102eQ+s6yKTPGk1JMK83RIToHSCrL
-         mN0PNu7qacv2ye/YV9Pgh/pR0WBDAxeti5SfuJ1EBfrXRyCiXgDSs4TyaZ0kVscrhRSn
-         XtH1vr9TXWbNpmQ9z2yROozM1vZ326duULLdpqviGLXd5V/CL4EkCDNus2mzJYrQAHte
-         RRzA==
-X-Forwarded-Encrypted: i=1; AKwUvBychpHQbOmtLhn8zPb0+YFMOQu1Jp6qgFzJt2bIijCWNI3Up7AFCUOB6KV0mis4X7XLZ4Q=@vger.kernel.org
-X-Gm-Message-State: AFuF++mAbCpuQlZSRwV1CBG/0S6tNjtSeUT9e5D+fY35awhZSnkjnBEM
-	wblUy2PGnPNBgYwdOndDj7zhZVVjXd/zxuq9akzW8+HGpoAJ6wgffo0p
-X-Gm-Gg: AYBFou2hJqD+BCbpV4Vm+UC1gm2mCM+SMmU37/2aZTySi38lJYdOwlq1oRgi97qtQ6p
-	bSnzc18ZwOEwEoSMXNQqA7vacP8zSfKPq6HWnnL6T0wz3w+ygePtqGT3bhvyJbPsWSxu1kdP5Fj
-	pP++Qf4w7nF387KZ8E6SPOTrETWk5UzVUj7TGdWqkEf4PqxNahQtHSyZtpzNzOQNlxD3K3ta8YV
-	OksfSvOP3uzTeQ/pYrnq4KbaQGS++vrRk0HVL18THLD6Tdi8NvuwJwkjk0DFzkApDnGsyWmPcIo
-	A7ZprwI0BEkHHXFGSbMHypJnGF3UbUDwCxy5yku228xAubwsojdq6laFsQEI4LU84P4B+Q2sjuS
-	CSKFFfzsgwmgr3kEgKL/yvAVprIAvMMEXp4fANuupAxRwJOrCLfPrnnkhGkxFXAoU4wuvwaKVGt
-	S4bQw8kF8tg9klkLDJuNtrUMWMH00FlJ3JhqDQeLX8ijcNTPOMgj5ePZ27eb0Meqdjnsl1UIL7/
-	vFVu6Bk+EPgrs92JZwO7CCusxg=
-X-Received: by 2002:a05:6830:2105:b0:806:9a8d:4b9b with SMTP id 46e09a7af769-82acf49f6a5mr7338564a34.15.1791490237678;
-        Thu, 08 Oct 2026 13:10:37 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1700:220:4650:f501:3b3:565b:2d79])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-82fc7cc90aasm601054a34.4.2026.10.08.13.10.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 08 Oct 2026 13:10:37 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqrZnUcl"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 312D01F000FF;
+	Thu,  8 Oct 2026 20:15:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791490552;
+	bh=4iWC4txC/hGiO+U81FY2Efqs3MRlpdhy7EvICtlaB6c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=oqrZnUclFhqCNnr7LY2DFjptLhHSAeSnsDTIvc6sZnA2/3R7kIwFLT+8lSRxkv1za
+	 uhi3C0uIQVDxuy0XtWbsanSXMyHjiYWB7YJAeOTWjbM4Vd0sX4SeGKiDUup8Lp5Occ
+	 kNtK6T4Gg2B8Xcb6Xw5P7cXBthJeYPX0WPX3niJgWGYH23RhRXK6KuIu8T71Ei2nqY
+	 gpprUmIm5EkQLb0M/ccaMIHCKdSmbuCe4GIjf96Ocd3VyvePcbl0R6RDbzZLc0h3RN
+	 CxBCKllixOnq+GaKxeVl9iWDKe2j774G95JD9LQPZvLjuzkohID8DymdJ97I62uDpf
+	 mUdylBUj3o4mw==
+Date: Thu, 8 Oct 2026 23:15:49 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Andrew Halaney <andrew@amutable.com>
+Cc: David Howells <dhowells@redhat.com>, Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, dm-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	fsverity@lists.linux.dev, linux-doc@vger.kernel.org,
+	"Christian Brauner (Amutable)" <brauner@kernel.org>
+Subject: Re: [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+Message-ID: <asf59fhpYD1z_diw@kernel.org>
+References: <aqyiCavj3xeNqyAo@kernel.org>
+ <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
+ <20260914-ajhalaney-dmverity-key-identifier-v1-1-01922dc1366a@amutable.com>
+ <715249.1789718726@warthog.procyon.org.uk>
+ <aq2VxlttdlTNlHo6@toolbx>
+ <arYzQN1ViuiCBemo@kernel.org>
+ <asZlNEFdvidvMdJ5@toolbx>
+ <asfT-SLkty5DC_Rx@kernel.org>
+ <asfhi1DSO_mhqxWZ@toolbx>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.700.51.1.1\))
-Subject: Re: [RFC] virtio-net: AF_XDP zero-copy TX checksum offload
-From: Azadeh Aftahi <aftahi334@gmail.com>
-In-Reply-To: <1791423335.8486545-2-xuanzhuo@linux.alibaba.com>
-Date: Thu, 8 Oct 2026 15:10:26 -0500
-Cc: magnus.karlsson@intel.com,
- maciej.fijalkowski@intel.com,
- sdf@fomichev.me,
- netdev@vger.kernel.org,
- virtualization@lists.linux.dev,
- bpf@vger.kernel.org,
- mst@redhat.com,
- jasowangio@gmail.com,
- eperezma@redhat.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5FA6FB0F-51BB-407C-BD2B-A13FC2FC94BF@gmail.com>
-References: <9DB6FE89-98AB-47CF-9B57-5F47FBB6DAE8@gmail.com>
- <1791423335.8486545-2-xuanzhuo@linux.alibaba.com>
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-X-Mailer: Apple Mail (2.3864.700.51.1.1)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <asfhi1DSO_mhqxWZ@toolbx>
 
-Hi Xuan,
+On Thu, Oct 08, 2026 at 01:41:55PM -0500, Andrew Halaney wrote:
+> On Thu, Oct 08, 2026 at 08:33:45PM +0300, Jarkko Sakkinen wrote:
+> > On Wed, Oct 07, 2026 at 10:30:14AM -0500, Andrew Halaney wrote:
+> > > On Fri, Sep 25, 2026 at 11:39:28AM +0300, Jarkko Sakkinen wrote:
+> > > > On Fri, Sep 18, 2026 at 02:59:49PM -0500, Andrew Halaney wrote:
+> > > > > On Fri, Sep 18, 2026 at 09:05:26AM +0100, David Howells wrote:
+> > > > > > Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > > > > 
+> > > > > > > This is great for discussion but what we want for the commit message
+> > > > > > > is just motivation and resolution.
+> > > > > > 
+> > > > > > Actually, I think it's useful that Andrew wrote up the issues in the commit
+> > > > > > message - and I think it shows part of the motivation.  The 'writing a fake
+> > > > > > /proc/keys line in the description' is something I hadn't considered.
+> > > > > 
+> > > > > I'll defer to what you all want in the message here, I found it valuable
+> > > > > but I trend on the side of overly verbose admittedly!
+> > > > > 
+> > > > > > 
+> > > > > > > I don't think we need all this just to say that /proc/keys in a racy
+> > > > > > > query mechanism for production, which is an issue for dm-verity, given
+> > > > > > > that nothing else is available.
+> > > > > > 
+> > > > > > I think at some point, we will need a system call to search all for all
+> > > > > > accessible keys matching certain criteria by actually walking the key
+> > > > > > database.  The problem there is that there may be multiple hits, so we may
+> > > > > > need something like:
+> > > > > > 
+> > > > > > 	int count = find_key(key_serial_t start_id,
+> > > > > > 			     const char *type, const char *desc_prefix,
+> > > > > > 			     key_serial_t *results, size_t results_size,
+> > > > > > 			     unsigned int flags);
+> > > > > > 
+> > > > > > Allowing you to do:
+> > > > > > 
+> > > > > > 	key_serial_t dm_key;
+> > > > > > 	int n = find_key(0, "keyring", ".dm_verity", &dm_key, 1,
+> > > > > > 			 FIND_KEY_EXACT_DESC);
+> > > > > > 
+> > > > > > This wouldn't be as fast as a direct lookup since it would have to walk the
+> > > > > > key tree, doing name comparisons and perm checks on each key of the type.
+> > > > > > 
+> > > > > > > And secondly special keys are meant for implicit keyrings so isn't
+> > > > > > > that all there's to it?
+> > > > > > 
+> > > > > > I have no particular objection to setting aside a block of negative key IDs
+> > > > > > for special keyrings that need to be accessed a lot - though I would make
+> > > > > > common reg/unreg functions that take the ID to be registered and, say, set the
+> > > > > > block at -257..-512.  Moving the BFP keyring to -257 and DM to -258.
+> > > > > 
+> > > > > To be clear are you suggesting I do that for v2 here? Happy to make the
+> > > > > change and add some reuse to the registration functions, etc. I'm
+> > > > > guessing its fine to change the bpf id since its still only in -next?
+> > > > > 
+> > > > > The only awkward bit with making that more generic is that dm-verity
+> > > > > isn't __ro_after_init since its coming from a module possibly, and
+> > > > > because of the module usage I also protected it with a spinlock in case
+> > > > > someone's accessing it while you unload the module. Could just use one
+> > > > > spinlock for the whole generic array, and drop the __ro_after_init I
+> > > > > suppose.
+> > > > > 
+> > > > > Let me know if I'm not following properly!
+> > > > 
+> > > > I just read David's response and I think he made fair arguments,
+> > > > and patches look fine to me.
+> > > > 
+> > > > David, did you have anything? I could pick these.
+> > > > 
+> > > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > 
+> > > 
+> > > Gentle ping :)
+> > 
+> > Understandable :-)
+> > 
+> > > 
+> > > Are we happy with these to get picked up?
+> > 
+> > Can you just do a resend that applies on top of latest mainline
+> > or my tree? I.e. b4 shazam was not happy about this.
+> > 
+> > Full log:
+> > 
+> > $ b4 shazam https://lore.kernel.org/keyrings/20260914-ajhalaney-dmverity-key-identifier-v1-2-01922dc1366a@amutable.com/
+> > Grabbing thread from lore.kernel.org/all/20260914-ajhalaney-dmverity-key-identifier-v1-2-01922dc1366a@amutable.com/t.mbox.gz
+> > 
+> > Breaking thread to remove parents of 20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com
+> > Checking for newer revisions
+> > Grabbing search results from lore.kernel.org
+> > Analyzing 10 messages in the thread
+> > Analyzing 0 code-review messages
+> > Checking attestation on all messages, may take a moment...
+> > ---
+> >   ✗ [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+> >     + Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org> (✓ DKIM/kernel.org)
+> >     + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
+> >   ✗ [PATCH 2/3] keys: add KEY_SPEC_FS_VERITY_KEYRING
+> >     + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
+> >   ✗ [PATCH 3/3] Documentation: keys: document IDs added since KEY_SPEC_REQKEY_AUTH_KEY
+> >     + Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org> (✓ DKIM/kernel.org)
+> >   ---
+> >   ✗ BADSIG: DKIM/amutable-com.20251104.gappssmtp.com
+> > ---
+> > Total patches: 3
+> > ---
+> >  Base: base-commit 1a1de54f7369cd2b5bac0f265910e60ad3a6b4c3 not known, ignoring
+> > Applying: keys: add KEY_SPEC_DM_VERITY_KEYRING
+> > Patch failed at 0001 keys: add KEY_SPEC_DM_VERITY_KEYRING
+> > error: patch failed: include/linux/key.h:441
+> > error: include/linux/key.h: patch does not apply
+> > error: patch failed: include/uapi/linux/keyctl.h:25
+> > error: include/uapi/linux/keyctl.h: patch does not apply
+> > error: patch failed: security/keys/process_keys.c:25
+> > error: security/keys/process_keys.c: patch does not apply
+> > hint: Use 'git am --show-current-patch=diff' to see the failed patch
+> > hint: When you have resolved this problem, run "git am --continue".
+> > hint: If you prefer to skip this patch, run "git am --skip" instead.
+> > hint: To restore the original branch and stop patching, run "git am --abort".
+> > hint: Disable this message with "git config advice.mergeConflict false"
+> 
+> Egh, sorry I was on linux-next. I'm also realizing that the
+> KEY_SPEC_BPF_KEYRING bit this sort of depends on is only in bpf-next
+> (i.e. 264d8fd2794f ("bpf, keys: Add a bpf keyring for program signature validation")).
+> Otherwise as is this conflicts on mainline and we'd just have to skip
+> the -9 the bpf keyring is using at the moment.
+> 
+> Should I just base on bpf-next that and send thru there instead? I can't recall
+> how kernel maintainers typically handle this other than cutting a stable
+> branch that both subsystems pull from, etc.
 
-Thank you for the response and encouragement.
-I'll proceed with the single-buffer AF_XDP zero-copy TX checksum offload =
-work and share an RFC patch for review once the initial implementation =
-and tests are ready.
+I don't mind if you would take care of the PR through that route.
 
-Thanks,
-Azadeh
+You can add my r-by to each patch.
 
-> On Oct 7, 2026, at 8:35=E2=80=AFPM, Xuan Zhuo =
-<xuanzhuo@linux.alibaba.com> wrote:
->=20
-> On Mon, 5 Oct 2026 17:28:35 -0500, Azadeh Aftahi <aftahi334@gmail.com> =
-wrote:
->> Hi all,
->>=20
->> I'm planning to work on single-buffer AF_XDP zero-copy TX checksum =
-offload for virtio-net.
->>=20
->> Current net-next's virtnet_xsk_xmit_one() does not consume XSK TX =
-checksum metadata and uses the shared zeroed virtio header.
->>=20
->> I found Xuan's 2021 proposal anticipating separate headers for =
-checksum support, and the merged 2024 zero-copy TX series, but I =
-couldn't find a checksum-specific follow-up implementation.
->>=20
->> The proposed scope is to map the existing XSK checksum metadata API =
-to VIRTIO_NET_F_CSUM, using a DMA-safe per-packet virtio header whose =
-lifetime extends until TX completion, with corresponding completion, =
-reset, and unbind cleanup.
->>=20
->> I would keep the initial scope limited to single-buffer TX: no =
-multi-buffer RX, timestamps, launch time, or GSO.
->>=20
->> I'd also add checksum and header-lifetime coverage using the existing =
-XSK selftest framework with QEMU/TAP.
->>=20
->> Is anyone already working on this? If not, does this scope and =
-per-packet-header approach sound reasonable for a follow-up patch?
->=20
-> It seems no one has taken this work forward yet; I would welcome it if =
-you were
-> to do so.
->=20
-> Thanks.
->=20
->=20
->>=20
->> Thanks,
->> Azadeh
+> 
+> Thanks,
+> Andrew
 
-
+Br, Jarkko
