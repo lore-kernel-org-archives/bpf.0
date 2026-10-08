@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE3044781C;
-	Thu,  8 Oct 2026 11:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E87B3C8719;
+	Thu,  8 Oct 2026 11:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791458956; cv=none; b=O5puCGcgMpiI+v2oPl/GO4BdslNx6T3FX04O4dlEmVpeYsyom0qnMWM8nfzsOOc9R/pJ2VPFI2Z2mRXmWbW8zSAJXpFMcBpz7cGRm5BT0ePNEbV9J3NsG0W/t3/gqPcjbbU+zQ9j46xp0gSzOSBBKSW+bn1/XhHq6Frfu0wfr8o=
+	t=1791459224; cv=none; b=fqqYbcfPzHBT31ilJ/0SaiM0qNW9sMzC1DM7cM3WaB5Gqn00sOFwAMWOWXB5Xad9Xe6FrxxaGyZ9BngcSJNDHh8ZLZglAzeEGIJNVOIcI4AH7iPYDU+4HKFDhUF6/XE7CePbYGAudI9sZjpEQsYT7L9zCdmDnlif2qQBDwGzxZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791458956; c=relaxed/simple;
-	bh=CF4pxX9x1pl5xQ5PgbAjxKy8EZmkJx8mEemm3tSXWxA=;
+	s=arc-20240116; t=1791459224; c=relaxed/simple;
+	bh=ceUkDeWmmPei+btmcM9zEt7TCvFIZ6Dhd+ti4P8PXBU=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=fvJgCjb9h7pduxSf0PoWJJ8mISHsORhwpbL0omvlWLMUlqJ8NTTff0wWXY+PyUc3+B2gWZJVSgIbaP3ny2w5HUybdwhnn/ZfMIB9LcYOOyTt6zpbPn0AiPbvu2QewCMheEc8bFGVwDx3QZXOqtPpL7V8oXU0a8R7pma/hqEzBx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RpnJ3PLC; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=ow3iKqH1fDnVs+8nprPlo7FfJWuTpTLzgbXHwBIES75cIXFHYS/p5PUl9u3zzVzOMFX/WlxLbkWDn6tDY/zF4Jb2oyTQE38rtOLf1aLd7XmAyMB+rFhNz9yBwhRZHNfOZkcr71di4FZyYkUvIfmQb/xCJy7NQ4F8s2HxixSqK+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjOVT4gk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RpnJ3PLC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1301F000FF;
-	Thu,  8 Oct 2026 11:29:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjOVT4gk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE491F000FF;
+	Thu,  8 Oct 2026 11:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791458955;
-	bh=CF4pxX9x1pl5xQ5PgbAjxKy8EZmkJx8mEemm3tSXWxA=;
+	s=k20260515; t=1791459222;
+	bh=ceUkDeWmmPei+btmcM9zEt7TCvFIZ6Dhd+ti4P8PXBU=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=RpnJ3PLC82D53WwAyunL7eXzJfn3cUNAluOpF2p6KaAxFnyTKMmCz8sfyfXLWQb+f
-	 JCeNAUBIIDjAgZD2c53p7RNBAR9eE4zcQtXQqZkWZ/3S1WNBfu18pDir/Qa0i0mivQ
-	 9vL2A3AA9mpBWHJZPktzUmsbHPSLhvAg+uuJ75hx2fTnB4tUcYBje7nxa+C8afgVly
-	 nBsqoixiGGmAvxmNpfT4eDRgGIj39YikhEzeddS7WDzZiGz7Au0k24pH6l2pgtaMvK
-	 CuqyAyaKm6roCOFJI06qHcxEqMAWpRdoHSjmESJf87ro9A+nCwBKuLspKNxDzLeTIv
-	 30an0ExLpfrQQ==
+	b=mjOVT4gkvYM0zsUFBgnn5cRXTx3RR2GtLJ5oArAU1SYGay+hDJtn2B7v6ANmBlIG3
+	 QmcLytEWTJ6Mm1YX0cSolJItAIS8GEuLEFSP99eDrkOry674u1nF9Z0ZlLtN9Qmtp+
+	 D9MEhKbP/dDys6UWTKyJq6b7gXuILLhKHvF4N8ia89TPNgYXUgYstkOvtDjOlWnsB7
+	 3gV0md5tYweGFmD/vsB9bqspxG9ae1k+6LNIgVN7zq/UGL9ZNz1/rKAflKwMA9rzhN
+	 aKYUxhPdnR4hg2YFkyxfb/mGvRcHUfwqYZimkFuRBg6pD2kI8FgsTi4f66fEdcPJ1e
+	 w4pTbbVJ+i46w==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -40,13 +40,13 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller"
  Borkmann <daniel@iogearbox.net>, John Fastabend
  <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Luigi
  Rizzo <lrizzo@google.com>, Pavel Begunkov <asml.silence@gmail.com>
-Subject: Re: [PATCH net-next v2 1/2] net: netmem: document netmem and memory
- provider design in comments
-In-Reply-To: <20261008023030.1089616-2-almasrymina@google.com>
+Subject: Re: [PATCH net-next v2 2/2] docs: netmem: document netmem and
+ memory provider design principles
+In-Reply-To: <20261008023030.1089616-3-almasrymina@google.com>
 References: <20261008023030.1089616-1-almasrymina@google.com>
- <20261008023030.1089616-2-almasrymina@google.com>
-Date: Thu, 08 Oct 2026 13:29:11 +0200
-Message-ID: <87ece02zy0.fsf@all.your.base.are.belong.to.us>
+ <20261008023030.1089616-3-almasrymina@google.com>
+Date: Thu, 08 Oct 2026 13:33:40 +0200
+Message-ID: <87a4oo2zqj.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,10 +58,19 @@ Content-Transfer-Encoding: quoted-printable
 
 Mina Almasry <almasrymina@google.com> writes:
 
-> Clarify the netmem, memory provider, page_pool, and skb fragment design
-> principles in header and code comments:
+> Add a Design Principles section to Documentation/networking/netmem.rst
+> covering the netmem_ref abstraction, the prohibition on direct
+> downcasting in callers, decoupling memory providers from net_iov,
+> decoupling net_iov from unreadability, delegating provider/type logic to
+> memory_provider_ops and netmem helpers, and the homogeneous skb fragment
+> memory type invariant.
+>
+> Cc: Luigi Rizzo <lrizzo@google.com>
+> Cc: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Cc: Pavel Begunkov <asml.silence@gmail.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-Thanks, Mina. This is helpful!
+This helps (helped me at least!) -- thanks for the clarifications!
 
 Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
-
