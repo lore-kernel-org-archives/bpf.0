@@ -1,66 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609E22253B0;
-	Thu,  8 Oct 2026 00:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003E919A288;
+	Thu,  8 Oct 2026 01:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791417631; cv=none; b=dR8lxlH9fSivz/tvFisGY6KvPe1j0jMN3RpvylGLFnRo9+hAvbQHnFhXC3n/hmzcUTlmJc1W6XKHOgVmryRoN2L+paLj8cxD/h+lQ+Bg5ZfHgX7eS7hbsR6USRv8OWC7znPmlXE8w7peRW5V/7APIQHHbxTgNbg2FzbGYbXopU4=
+	t=1791423421; cv=none; b=QGD7w7/rveGeuNr78K5mCvaiqCpbEGGRnIKC6S93fbdmV7+h/+6hsUIC6T9q9QFu8n80xMUhKAQl/ZgtuvUdEc5tNAxqknTBlowxC628gp7UXaZ7re/GUa76+dLDtuDcvGGW9KOdIDsXOZXCfPD4oSrMrraxkk+pzIg4x+1c1L0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791417631; c=relaxed/simple;
-	bh=YRwerDxd3kQSJgTe5HjOwiGE5oyvlx6BcwgSNjGbF3c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=foCWLKJfT5OSWYA1OSNyl6X8njyCj15R0ahjxdF6Ng58ySxkMGBmZ1kyofy7hXGUhOOGnVNrUNKnC7H0VPrsLD+krncT7UVkDk/onrDT5PIz5E5nC6KKTtAsSGuLd9/cDnTmL5xZi0n2kNdImbr3Dyf4yvSwcGk5EZSxCsfISZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B58zzxLw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791423421; c=relaxed/simple;
+	bh=MwicRoOYV1zDQfwoWO+5FEWl54/aiijI+WJoGLBOTIg=;
+	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=qVRHzS96OYVwxmsvDPupH5sZsu1qHIrNTW0aBv2zW8q/6oryso6r7iroYFzSn4McGmmIHR/dCeQA0oDu62gPyvq9XqGtGo9ijNeb4S+9lsuN5meaeeSxkSL8Gk1QgqOMzBqnuS+9zYC0uMhURLDsUD/OP04bTShHfv8jKpkBUkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Rvs/2ugk; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B58zzxLw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5F51F000FF;
-	Thu,  8 Oct 2026 00:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791417630;
-	bh=XcuH3LG1dKuUFLwzOh6jw6CMGpNhpT6Di+aA26s77nc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=B58zzxLwrcvpS26HRCUNgu2N09L7f/YnuSSCQ0QXkAtNBS+K9V6lrjj5lvGQIAicA
-	 LRAP7+0x5EYs+DcbtTO8HQRx1tGhpE/nbnBT4K4UPGqaA1u+UCDzQJCa+FB8UWYKaC
-	 uF+tJIqLLaYEe3ELk4mUK3uhvDt5cdRFuXXF8cmE+hbbGOyvcnrp3mnaKji/9qQliM
-	 X+o6HZ6UfSz9fZQWDl/il1utihaqACh/rInvRtqOW9NS9kQ8pcKBQWdasjjK51VI90
-	 xiMMATml5GZCAjkVxEuaNAMuFsxDXda80J5+vQ+ybwjhVnoRLH4+u1IObgJ9OA9YUQ
-	 ZXJ7bLVrMg97w==
-Date: Wed, 7 Oct 2026 17:00:28 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Irlanki Sandeep <irlanki.s@samsung.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, edumazet@google.com,
- davem@davemloft.net, pabeni@redhat.com, ncardwell@google.com,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, corbet@lwn.net,
- linux-kernel@vger.kernel.org, lorenzo@google.com, maze@google.com,
- sporeba@google.com, motomuman@google.com, madhan.raj@samsung.com,
- srihari.k@samsung.com, g.pokhra@samsung.com, r.kumawat@samsung.com,
- raj.kumars@samsung.com, ts413.lee@samsung.com, ramyashree.s@samsung.com,
- daeil2.hwang@samsung.com
-Subject: Re: [PATCH net-next v6] tcp: add BPF kfuncs to set per-socket ECN
- mode and AccECN option
-Message-ID: <20261007170028.318acb6b@kernel.org>
-In-Reply-To: <20261001132759.1076145-1-irlanki.s@samsung.com>
-References: <CGME20261001132701epcas5p2da9b0fa7ca3bcef1ff84a62f255bc573@epcas5p2.samsung.com>
-	<20261001132759.1076145-1-irlanki.s@samsung.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Rvs/2ugk"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1791423416; h=Message-ID:Subject:Date:From:To;
+	bh=MwicRoOYV1zDQfwoWO+5FEWl54/aiijI+WJoGLBOTIg=;
+	b=Rvs/2ugkNOZXOBA/ZipiX/DCQFbz20MeKhsRrM7JYYZL82a3YmbmcFzm2NBwpcHX922QwIg16DppVZ0sJA0Pv6TEXKG7WziVhHaq6pppBjExlpfdtDi/7qnbM5AfC92Vk1/YcnNcP3LxZbmle5pvM22REJ+drYfRv6w0bOE1CsE=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0XCIFUV3_1791423415;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0XCIFUV3_1791423415 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 08 Oct 2026 09:36:55 +0800
+Message-ID: <1791423335.8486545-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [RFC] virtio-net: AF_XDP zero-copy TX checksum offload
+Date: Thu, 8 Oct 2026 09:35:35 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: Azadeh Aftahi <aftahi334@gmail.com>
+Cc: magnus.karlsson@intel.com,
+ maciej.fijalkowski@intel.com,
+ sdf@fomichev.me,
+ netdev@vger.kernel.org,
+ virtualization@lists.linux.dev,
+ bpf@vger.kernel.org,
+ mst@redhat.com,
+ jasowangio@gmail.com,
+ eperezma@redhat.com
+References: <9DB6FE89-98AB-47CF-9B57-5F47FBB6DAE8@gmail.com>
+In-Reply-To: <9DB6FE89-98AB-47CF-9B57-5F47FBB6DAE8@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Thu,  1 Oct 2026 18:57:59 +0530 Irlanki Sandeep wrote:
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+On Mon, 5 Oct 2026 17:28:35 -0500, Azadeh Aftahi <aftahi334@gmail.com> wrote:
+> Hi all,
+>
+> I'm planning to work on single-buffer AF_XDP zero-copy TX checksum offload for virtio-net.
+>
+> Current net-next's virtnet_xsk_xmit_one() does not consume XSK TX checksum metadata and uses the shared zeroed virtio header.
+>
+> I found Xuan's 2021 proposal anticipating separate headers for checksum support, and the merged 2024 zero-copy TX series, but I couldn't find a checksum-specific follow-up implementation.
+>
+> The proposed scope is to map the existing XSK checksum metadata API to VIRTIO_NET_F_CSUM, using a DMA-safe per-packet virtio header whose lifetime extends until TX completion, with corresponding completion, reset, and unbind cleanup.
+>
+> I would keep the initial scope limited to single-buffer TX: no multi-buffer RX, timestamps, launch time, or GSO.
+>
+> I'd also add checksum and header-lifetime coverage using the existing XSK selftest framework with QEMU/TAP.
+>
+> Is anyone already working on this? If not, does this scope and per-packet-header approach sound reasonable for a follow-up patch?
 
-This needs an ACK from TCP maintainers. If you respin please make sure
-to drop this tag, this tag is for cases where someone suggested sending
-the patch as a whole. Not for changes requested during normal course of
-review.
+It seems no one has taken this work forward yet; I would welcome it if you were
+to do so.
 
-There was a false positive from sparse regarding the use of kfunc,
-I kicked off the AI review manually, please check the results here
-in an hour or so:
-https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261001132759.1076145-1-irlanki.s@samsung.com
+Thanks.
+
+
+>
+> Thanks,
+> Azadeh
