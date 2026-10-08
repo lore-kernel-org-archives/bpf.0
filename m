@@ -1,64 +1,66 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317103CCA12
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 19:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85180502550
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 19:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791488324; cv=none; b=Xord89l/KZwd+U7LgnQ4kPuinu7CewymztPYz5bqwHigaiCzJiBlzrv+rxoCaoMASM67o24WEjNHjFHkeOrhqVB05+/MUFg9er/aYVQIUxHLvrnmBCAgZfLFRZ+YTBfxPhfES8KX8Y8sxIDCfj8s7qTgvJYlWbzkH78N5IOBxXY=
+	t=1791488451; cv=none; b=e0tg9EvufLYD6ZxuK6GIm1CJjAvEoj8zZGBHjkoasZXmxA36K+ikxqEMPAFrRIxNVxo+pqzOmIxgD2bJo7U9RRBrvJVHvolIyyizW2Txx4d7/sjUJ/8liHN6eQMiRC8tGtaJt1tx+DpXb0zFDmtGFEg5XqBowCRyQBvOSNVUfHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791488324; c=relaxed/simple;
-	bh=j1grMDLazOGsQeGC11PEDwjtUEgbyvSfnro38wh9lEI=;
+	s=arc-20240116; t=1791488451; c=relaxed/simple;
+	bh=MMEJVQyDCriVzwGMNyLd8382hryEEpnwrQFclQZlXN8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ng24I72QiFwvdgjPunOqUcWZnWiopO7dLm/147zM3H9O1SfK9vg5h5D52EWxwwPd3vhSTv8dHFSQpXKpoiqUN6OPPxFhlJWhqBERHYY2F81Nb0G0fhLq5wbzgw6c9Tg3orZsQWXmLanyROBYabJ28TFf060x+BV1Rx9cIFut2pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=Epv6cwtv; arc=none smtp.client-ip=209.85.160.44
+	 MIME-Version:Content-Type; b=Vh/ZkgJsB9cisCHSKQrzT9sajBp20MV5EUIVn1KlyQdgCXX2i065DK7wzDciTZLc+CV6xxZGIFZTYili3oi6Ce2iOqBSdTZNIqUbEI0LfN4Jtf2l+xgMpRm4wrgzyRREJAxU+9zdsKVKB347sWitj2bvwQxyhI3xZNNTtJCFTfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com; spf=pass smtp.mailfrom=hammerspace.com; dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b=UFuTY8ZU; arc=none smtp.client-ip=209.85.167.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hammerspace.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="Epv6cwtv"
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-4949f037131so1882938fac.3
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 12:38:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=hammerspace.com header.i=@hammerspace.com header.b="UFuTY8ZU"
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-4af173320f9so3159759b6e.2
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 12:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hammerspace.com; s=google; t=1791488322; x=1792093122; darn=vger.kernel.org;
-        h=content-type:mime-version:references:in-reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HgO34ewM3/AAqmWbIKVWDsugBSjlGHMPJJo84ws/m1E=;
-        b=Epv6cwtvuKNZfe1t+dmZb4FsRMC0HKIrMpi1QQ6e7k05eNp1jN3HZUNAjRwhItuqRQ
-         zu1CM1oobsahYIY8XC7nUSgI2RIH7KhB1Z02r0WgZsZFA5FPaYA4bxXWDZfLzk3z2Rmp
-         n6UUT+mPb2W/h0Vwd2fekIYAnHdPupoQ376q7hcCnT3I1crxIo/FPtfG0/3Msw2q1oSb
-         s5S8zenfQOBOM2pz2/ZGxv6EC1VSTlvQF05FE5G3HqYGA4mP8ke9pg55vhE5iEyXJUj2
-         e/A8GlDyhBMKv36fVpMwmoDAwb8IT/kMvbjmxzGUKWAzeBDpOp0veKlPfhsSqaswIuxv
-         D/oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791488322; x=1792093122;
-        h=content-type:mime-version:references:in-reply-to:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=hammerspace.com; s=google; t=1791488441; x=1792093241; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=HgO34ewM3/AAqmWbIKVWDsugBSjlGHMPJJo84ws/m1E=;
-        b=xS6zZpqvZnSSIdUgv87HXlLHVKGkib1Z1Hm50MOM8DWV19GgJskQspXWeDolNvtH6L
-         BDAIrOhnx4L+kxgP0AhaxkrsDyX9WSP0VVZ3oqzk8xRrIMZTCZ52zwL6SD+Fn0YjU0qe
-         /T0jNmoDiz/O4PRX9ejHmvYAtlFj3pS0SUzvv64+hkOc1SzvGhPLgWbvHXSSRX1Q9Db8
-         klyiFEmnkwqnCes4SipygzgqLrcpqZ+5azzxGBmsv8RDOM/mPrkQCGN7sm/FtKd02DPv
-         hQXHtdMWrOPNHjpQ8IRL9l8xlYlrf7PXAnkuW9mK7NxP+O5oKBwjvPwyc7q+HDryJgU+
-         nhoA==
-X-Forwarded-Encrypted: i=1; AKwUvBzp9yjRcXIchaSrJfXHcU60vVyHtk03X6U613Su+46lqN21qAueAlGDIu0QcLGrdLL1tHI=@vger.kernel.org
-X-Gm-Message-State: AFuF++lFP6Q6jTpTtLNtkFME8pzUr4nqkZhlSOITKLmwIfwRaG4bC9it
-	vKf4lRr1Fj88uvp15RkkpSkJ92w0W3j+PY9kK3YgAWd4SyZCnqc8Qw3y4mW/l0b8VoA=
-X-Gm-Gg: AYBFou3GNjW7noW7R0/QNXsb2y4dSIGSSzTZES22uMKo54D064i/mqt1TJ99yY/qd+3
-	myA2VmPYEMmkKdbxkYdFX2vQzOF1ZJz8nfSQaanjeKbOwkYXO+pYfoduUahENZlrBlor0WOUVHx
-	q0rwTcm4wgM+jwAr6KAbtRvpw2wsOaIMh+eYNkTWjcw0Hfb0qaTXreoRjqVzbkepaK9JAdNcBhF
-	cKYBPxgQFwFm2eh3i6BYg4Ok86cvdD4NygnBBUE5aD1G+/TT1JWekXAa1+lDK5co6Sy2tu28HXP
-	Is08YwGH4OSBlps8ZZ0dNWdvx06BfzcCfS3O08s42nBwi92FgTDCclKrkR6O0W7/GZragqD5Yiz
-	X3w+nsSLpkjFtIQ9tHHzYFddO/xlI6FHIuVQJf0N3m1DSALTYme4QxYcA7YQHMCLrm35D9aaCVW
-	jW47uj1CvanhkadeBXsIqnakCU1rLoc7l7MOF2vFXu5eqRV4AAewfBdzVFE4bo8pJXeG+jfAE6Q
-	cKPiuc2FGCDMi94Cw==
-X-Received: by 2002:a05:6870:b918:b0:47b:cd37:f931 with SMTP id 586e51a60fabf-4a2a41cdf21mr354311fac.13.1791488321794;
-        Thu, 08 Oct 2026 12:38:41 -0700 (PDT)
+        bh=uG8ZseyZcF0oG3DJsuVakiWKLz2P0jU9GThmD+dl66E=;
+        b=UFuTY8ZU2NEuLXqEU64fuFS+LG/RsNRTMP1qcl4wFgDi29rVVHVM+jTk8Zta8yBIH9
+         sVSP35TFBEQ8cf/bNHbJ5UV/MrP3h1pkwQLrJN616w+ySqAcfMqcJcClFAC/ewZ80ta8
+         xiBOyBVBhgSbX6DZbQYKSm+Ud2N8SlJGhYylY4uLQGYMAZj0RGm8eVVCdjhVEWTlTYQs
+         bOgaM6WOeKdKR3O8OUDqmWLXQr7nyKJiWVelnd47KN1WpuiwfWH3I3lutDc+xja0xwWj
+         d6hna4UHXv+ruPps0B0/hhzPe0uAceydkxAtOUgZsxgwlcUNV+aKczFBwxPsu8wvyyyB
+         A9Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791488441; x=1792093241;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uG8ZseyZcF0oG3DJsuVakiWKLz2P0jU9GThmD+dl66E=;
+        b=OQlU7RxEL3ySlcuRf0nxT7Kd4lDzlPepsxJ9NqDtmAGeVndMxXG5rtklavg2PcI9CY
+         r4g4RntK2BNnBzPuRMbQHsOsWqIhJykjkIlyUYYGNaArK8EEPY6mxegiSS2GRmQpjAhS
+         heBpAm7rZE3v4kdQ4T/fDiWtKTZ/E4+FNG4WEYH+lX4hc/lYBPSfSca9iacyCiuXKFcX
+         xvCZatJEwA32Gu8sZ1o5loPqrkO394akzDCcr3u/Gj1N/zyknikj+rUqpT5T9Mr0l38z
+         9rnKoOKE2i/gS8SMI/dOvZ2BVj8kZ6coCV33DVbiPJknBQf8QJjUhP1T+L/zQBW/FImr
+         Sdwg==
+X-Forwarded-Encrypted: i=1; AKwUvBzvXLDAGuIJPMorfEBuBj+w9kpfwSjrL6Pu2c8g6YsY1MqM5plG18o1Tad5QQNgI1mj1rs=@vger.kernel.org
+X-Gm-Message-State: AFuF++mnKzY72is9oh38qmXvhFybbjp+AsEsePHELIjCcPI5QQC0WqFS
+	5WEcmZ5zOEnQcmczIJRHOxyrThmv0dlRA2pmkoFgJsu7Dfu2xCsB2Jx1ILRlHclEwRtBf7TIgF7
+	qGNcj
+X-Gm-Gg: AYBFou1H5dWqeuZdEefZTZcRVlGGqiAV1KWQC2FcAO/9FGy23njHtoqaJVz26gcQxD1
+	QjWANUFowEJRId/cbmSTj8lGT0HrJxOvMSxnfF//TvRFcnNSysEFFZYv+ViDVYFyzeo+VwuqvTd
+	jED+/StEDuaqmCWt6AwOWgRLztI977jBVh/92Omkwe8l/dqgHFz3pIiihF4spyRPtCSYlRi/7Fz
+	pqr1nLNW4en4XsB73E7wqBKH+UprYm3Tb7mFVfuVN0oiW0qZ2CEDoCH0F8ZmsRct8jrhgm80DVQ
+	oDNwC+5JA0W+VLIN9CNjoii32g7lcJ4UOmKNNj1HC+6VB29KFazkKAuQPvnD3AKthzvT/OaaczV
+	tKfk9OM7a8F9V/rm2u4PobRvnKWxUAyW1IeO8DX37rRGxZeI8NPkLrQPzzCrb+zm6bsos3YtYjj
+	Hi8VzQm9XuIjbSInF/oWz0NN7+GmHwsMUFlGozpTRCM0h6++80RiGoIwp+ztRcGXl05Ic1cCVSN
+	SE62fvdEZR8P2lN/g==
+X-Received: by 2002:a05:6809:208:10b0:4fd:2de8:eb76 with SMTP id 5614622812f47-4fd2de91151mr3740021b6e.23.1791488440753;
+        Thu, 08 Oct 2026 12:40:40 -0700 (PDT)
 Received: from [192.168.254.51] ([66.97.168.37])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a2a43ca6d4sm428113fac.2.2026.10.08.12.38.40
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-50b570cfd89sm179206b6e.12.2026.10.08.12.40.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 12:38:41 -0700 (PDT)
+        Thu, 08 Oct 2026 12:40:39 -0700 (PDT)
 From: Benjamin Coddington <ben.coddington@hammerspace.com>
 X-Google-Original-From: Benjamin Coddington <bcodding@hammerspace.com>
 To: Jeff Layton <jlayton@kernel.org>
@@ -66,15 +68,15 @@ Cc: Benjamin Coddington <ben.coddington@hammerspace.com>,
  Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>,
  linux-nfs@vger.kernel.org, Daire Byrne <daire@dneg.com>, bpf@vger.kernel.org,
  Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH RFC v2 8/9] tools/net/sunrpc: add svc-classify, a prefix
- classifier and its loader
-Date: Thu, 08 Oct 2026 15:38:39 -0400
+Subject: Re: [PATCH RFC v2 9/9] Documentation: describe RPC server transport
+ classes and the BPF classifier
+Date: Thu, 08 Oct 2026 15:40:37 -0400
 X-Mailer: MailMate (2.0r6272)
-Message-ID: <4AA1E943-B80C-4110-A8AF-97ED4697D2BE@hammerspace.com>
-In-Reply-To: <ff8194ac4128f0c972545ca19fc696aa064e68c9.camel@kernel.org>
+Message-ID: <F684C9A2-688E-45FB-9649-8416517101AF@hammerspace.com>
+In-Reply-To: <bfc94fc2c3501dc91462e99be11495bb893af731.camel@kernel.org>
 References: <cover.1791402701.git.bcodding@hammerspace.com>
- <158d8194fc5ce6d1fb8fdd1196f53de7d3651d36.1791402701.git.bcodding@hammerspace.com>
- <ff8194ac4128f0c972545ca19fc696aa064e68c9.camel@kernel.org>
+ <ef239ae64ae4379ad9a55d4fc3642d659dad4ef8.1791402701.git.bcodding@hammerspace.com>
+ <bfc94fc2c3501dc91462e99be11495bb893af731.camel@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,19 +84,197 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On 8 Oct 2026, at 14:36, Jeff Layton wrote:
-> The userland programs in the kernel are often not packaged, so it seems
-> to me that svc-classify would be better integrated into nfs-utils. That
-> would allow you to more easily bundle it with the systemd service file.
+On 8 Oct 2026, at 14:42, Jeff Layton wrote:
+
+> On Wed, 2026-10-07 at 15:59 -0400, Benjamin Coddington wrote:
+>> From: Benjamin Coddington <bcodding@hammerspace.com>
+>>
+>> Dispatch round-robin across clients changes how a service shares its
+>> threads, and the classes come from a BPF program the administrator
+>> loads, so the administrator needs the model, the class word, and the
+>> procedure.  Add a page with those: install a classifier with
+>> svc-classify (build, attach, fill the map, check, change, remove, keep=
+
+>> across reboots), six class maps and the share each gives its clients,
+>> the tracepoint that shows the class, and how the hook, the program and=
+
+>> the attach model work underneath.
+>>
+>> Signed-off-by: Benjamin Coddington <bcodding@hammerspace.com>
+>> ---
+>>  Documentation/filesystems/nfs/index.rst       |   1 +
+>>  .../filesystems/nfs/rpc-server-clients.rst    | 394 +++++++++++++++++=
++
+>>  2 files changed, 395 insertions(+)
+>>  create mode 100644 Documentation/filesystems/nfs/rpc-server-clients.r=
+st
+>>
+>> diff --git a/Documentation/filesystems/nfs/index.rst b/Documentation/f=
+ilesystems/nfs/index.rst
+>> index a29a212b5b4d..57a61ce0533d 100644
+>> --- a/Documentation/filesystems/nfs/index.rst
+>> +++ b/Documentation/filesystems/nfs/index.rst
+>> @@ -16,3 +16,4 @@ NFS
+>>     nfsd-io-modes
+>>     knfsd-stats
+>>     reexport
+>> +   rpc-server-clients
+>> diff --git a/Documentation/filesystems/nfs/rpc-server-clients.rst b/Do=
+cumentation/filesystems/nfs/rpc-server-clients.rst
+>> new file mode 100644
+>> index 000000000000..b08351a88314
+>> --- /dev/null
+>> +++ b/Documentation/filesystems/nfs/rpc-server-clients.rst
+>> @@ -0,0 +1,394 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+>> +RPC server: per-client dispatch and transport classes
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+>> +
+>> +An RPC service thread pool serves its ready transports in FIFO order,=
+
+>> +one request per turn.  A peer with many connections (``nconnect``, a
+>> +deep NFSv4.1 slot table, a data mover with a thread per file) takes a=
+
+>> +turn per connection, and a peer with one connection waits behind all
+>> +of them.
+>> +
+>> +With a classifier attached, the pool instead serves its *clients* rou=
+nd
+>> +robin: each client with work queued gets one request per round, howev=
+er
+>> +many connections it holds.  Which transports form a client is decided=
+
+>> +by a BPF program the administrator loads, once per accepted connectio=
+n.
+>> +With no program loaded nothing changes.
+>> +
+>> +This document describes the model, how to install a classifier with
+>> +the ``svc-classify`` tool, what some class maps do, and how it works
+>> +underneath.
+>> +
+>> +Clients, classes and turns
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+>> +
+>> +A *client* is a set of transports that share one turn.  Every service=
+
+>> +(nfsd, lockd, the NFSv4 callback service) keeps its own clients, foun=
+d
+>> +by *class* and network namespace, or by class, namespace and peer
+>> +address.
+>> +
+>> +The classifier returns a 32-bit class word for each accepted transpor=
+t:
+>> +
+>> +``0``
+>> +    ``SVC_CLASS_NONE``: the transport stays on the service's *anonymo=
+us
+>> +    client*.
+>> +
+>> +``N``, 1 to 2^31 - 1
+>> +    one client for every transport of class ``N``.
+>> +
+>> +``N | SVC_CLASS_PER_ADDR``
+>> +    one client per peer address within class ``N``.  ``N`` may be 0, =
+so
+>> +    ``SVC_CLASS_PER_ADDR`` alone means one client per peer address.
+>> +
+>> +``SVC_CLASS_PER_ADDR`` is bit 31.  ``svc-classify`` and this document=
+
+>> +write a class word with the bit set as ``N+addr``; ``svc-classify``
+>> +also accepts ``addr`` for ``0+addr``.
+>> +
+>> +Dispatch rules:
+>> +
+>> +- A pool serves the clients that have transports queued round robin,
+>> +  one request per client per round.
+>> +- Within a client, transports are served in FIFO order, except that a=
+
+>> +  transport needing a connection accepted, closed, or a TLS handshake=
+
+>> +  run goes ahead of transports with data, though not two such turns i=
+n
+>> +  a row while data waits.
+>> +- A client's share of the pool does not grow with its connection coun=
+t.
+>> +  A client with one connection and a client with thirty get the same
+>> +  number of turns while both have work queued.
+>> +
+>> +Things that follow from the rules and are easy to get wrong:
+>> +
+>> +- The anonymous client is one client.  Once any classifier is attache=
+d,
+>> +  every transport whose class is ``0`` shares a single turn with ever=
+y
+>> +  other such transport of that service.  Within that one client the o=
+ld
+>> +  FIFO order applies, so those peers share the turn in proportion to
+>> +  their connection counts.  A map that classifies only the hosts it
+>> +  cares about and leaves the rest at ``0`` gives "the rest" one turn
+>> +  in total (see example 5 below).
+>> +- Per-address clients ignore the port.  Only IPv4 and IPv6 peers can =
+be
+>> +  keyed by address; a transport whose peer is anything else is left o=
+n
+>> +  the anonymous client.
+>> +- Listeners and UDP sockets are never classified; UDP traffic is serv=
+ed
+>> +  from the anonymous client.
+>> +- A transport keeps the class it was given when accepted.  Changing t=
+he
+>> +  map, or replacing or removing the classifier, affects connections
+>> +  accepted afterwards.  A connection that must be reclassified has to=
+
+>> +  reconnect.
+>> +- nfsd has one service per network namespace, so its anonymous client=
+
+>> +  is per namespace.  lockd and the NFSv4 callback service are one
+>> +  service for all namespaces; their anonymous clients span namespaces=
+=2E
+>> +- With no classifier attached anywhere, the pool uses a single FIFO;
+>> +  the per-request cost of the feature is then a static branch on
+>> +  enqueue and one empty-queue test on dequeue.
+>> +  ``CONFIG_SUNRPC_BPF_CLASSIFY`` (default y) builds the hook; without=
+
+>> +  it there is no classification.
+>> +
+>> +Installing a classifier
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+
+>> +
+>> +There is one tool to do it with: ``svc-classify``, in
+>> +``tools/net/sunrpc/svc-classify`` of the kernel source.  It carries t=
+he
+>> +classifier program inside the binary, attaches it, and manages the
+>> +class map by address prefix.  ``bpftool`` is not needed, and its
+>> +``struct_ops`` subcommands cannot be used in its place (see "How it
+>> +works").
+>> +
 >
-> It might even make sense to integrate this functionality into nfsdctl,
-> but I guess the classifier affects all rpc_serv objects as well (e.g.
-> NLM), so it may be best to keep it as its own thing.
+> "There is one tool to do it with: ..."
 
-Technically we don't need this classifer, we could just expect that if you
-want to use this feature you must write your own.  I added it to make things
-easier for potential testers - but it is limited.  For example, it doesn't
-classify on anything other than src address.
+barf.
+
+> The obviously LLM-written documentation gives me the Ick and I stopped
+> reading. There is also a lot of info in this doc that is not
+> particularly helpful, like "the things that follow from the rules and
+> are easy to get wrong".
+>
+> If you want humans to actually read this, then it probably needs to be
+> written by a human. If you think the LLM slop is actually useful for
+> other LLMs, then maybe put those bits at the end in a clearly-
+> delineated section.
+
+Yeah, you're right.  This really got spit out of the AI tubes without a l=
+ot
+of refinement by me - thanks for reading even this far.
 
 Ben
