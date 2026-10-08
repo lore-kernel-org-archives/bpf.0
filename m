@@ -1,204 +1,89 @@
-Received: from mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C336255F28
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 08:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5073BD638
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 08:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791447893; cv=none; b=OXfCZGJjDjgYPCkkHo+LApi5wEp6g68RQ2ciLCGYeR1sGCV57yzPGVQeDqyeRKDEDyTgu3CZENBdolBJcovxFh8HF7kzvpuhwS93pXciyL2UCjBcMhi96K+yEjrPp2xMI8Wh/Tbf+ORVn5hhF4SQKCc1dR32zceKwQVAQOyaH68=
+	t=1791448767; cv=none; b=Rvv7c1nPmYb7HTmlx5q0tiWsE53SWdFJfz+ILn1ivgzhCKNZAs/cOAyPsMyBTpXGgd64tv9pP7GnclsvkP+5Pi7J9Gw5HxQw3GKcgbx9Yg+gXYdAChSuGNAEOMdxGbZdZtFe8D5BncbylKpIXwmY5axNo65bRimKlZs4d2AyfJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791447893; c=relaxed/simple;
-	bh=EbHs7K1T+/vilbmfudzzAC+MPoJtTsQqpujfi+eh+ck=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NotaVXbbT2tA04Prk/eVvw7yZU2WIInlv/kW0in6VwmiLxQlTdaU2BuId0fZR0MoJc3DvCLkDXwdh5fD83khVtRg1y8/Tig6/I1NZN7BVmBk0rujrR5L5M1opkPzE5NYf+p/RwXLIXX92WafIryQ9QFs8B5XGo//DZ4iI29JNCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rsGc/RPe; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791448767; c=relaxed/simple;
+	bh=SxYxhnQ/TPUstHjmkkcJGDuMGmgYJ3cmL7kwrcohX6k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tkpP+FR1c0d8yR0CikgCth7wyx4maE5qFZ/AhPmhW7RUOQzmSgq76EkIRCNNFk01784/GELZ2ttDpUGq3Ve+8LotcPEoNsYqPzXW7RJ9r2FrbIIGoF6SKCa4xDPI+Pqhivph41yKWvgUXVMtT10DQl+bIwOpKjVFKy4mytGdFhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A9hc+S2F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rsGc/RPe"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=EbHs7K1T+/vilbmfudzzAC+MPoJtTsQqpujfi+eh+ck=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791447890; v=1; x=1792052690;
- b=rsGc/RPeDXbaAAQ6dezRbgzoyo9oDIFrKLCBdoWzNLzEfOi9rMNJ7FhB1naaWnWTmaZPcuLC
- bEzjBHfX0Cn5DTov8mFcNrWNqN7gPJbEmLSWI44mHUT+gX3CgfRVyBysuoj5my2Zt6F4NR6RmXh
- IOxYuSnmaH/80RaymKLidZJQ=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 5a9963d51d860ade;
-	Thu, 08 Oct 2026 08:24:50 +0000
-X-Mizu-Trace-ID: 5a9963d51d860ade
-X-Migadu-Flow: FLOW_OUT
-From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Thu, 08 Oct 2026 16:24:06 +0800
-Subject: [PATCH net-next v4 6/6] netlink: specs: rt-route: describe
- seg6-local attrs
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A9hc+S2F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 101BD1F000FF;
+	Thu,  8 Oct 2026 08:39:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791448766;
+	bh=L/trNmiGC915w62Z96US2AdmCenGDeGFcUzX38JYj68=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=A9hc+S2FmDhN6yKxXCduGb5A9mCepWk5yPu89tx8FnrZucyL8V9rYo1S5t7GhAfTs
+	 HaQ4yG4dPpTH+2eYrmeEAov8CuDmPcBBTIWfD3s7D185tKE+Eg99lSIc5JOkb+OKhK
+	 eWNw8dObQ+Epq0QYNieBlq43N0ihxPtdKoA39KYWLxv5ehAB5Sp7YS0vnBBd4iIrhu
+	 oP9Lk8q+P6mZEX3uBTcv5YagipVlG20YA1iuCVUjhBMyC7zK3fY3TgpLyrTGu/QvwP
+	 TjvOX5htYhxL5+0PciAEm7M/ZYKLyDRRPafp8wBGp6vY2SN53XfGU93xsDW3PthH3j
+	 IcVWMd5VJUcmQ==
+Content-Type: multipart/mixed; boundary="===============5174336129054866377=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <e886b1d0457c718b5b198c480ed1c5040db1a43391b3c56028b659be85a82031@mail.kernel.org>
+In-Reply-To: <20261008075111.3003497-1-yonghong.song@linux.dev>
+References: <20261008075111.3003497-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v9 14/23] bpf, arm64: Dispatch exception cleanup pads at run time
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  8 Oct 2026 08:39:24 +0000 (UTC)
+
+--===============5174336129054866377==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261008-ynl_rt_encap-v4-6-4ed2ccf7f949@kylinos.cn>
-References: <20261008-ynl_rt_encap-v4-0-4ed2ccf7f949@kylinos.cn>
-In-Reply-To: <20261008-ynl_rt_encap-v4-0-4ed2ccf7f949@kylinos.cn>
-To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@kernel.org>, 
- Eric Dumazet <edumazet@kernel.org>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Hangbin Liu <liuhangbin@kylinos.cn>
-X-Mailer: b4 0.14.3
 
-From: Hangbin Liu <liuhangbin@kylinos.cn>
+> bpf, arm64: Dispatch exception cleanup pads at run time
 
-Add SEG6 local actions enums, seg6-local-flv-ops flags.
+TL;DR: Commit message only, no code issues: the changelog should open with a
+sentence saying what this does for arm64, and one bullet ("aux->epilogue_ip
+and the native cleanup table") lacks a verb.
 
-Replace binary bpf/counters/flavors in seg6-local with
-nested seg6-local-bpf, seg6-local-cnt and seg6-local-flv.
+> bpf, arm64: Dispatch exception cleanup pads at run time
+>
+> - arch_bpf_stack_walk_ra(): walks the frame records with the kernel
+>    unwinder, handing each return address to the consumer and storing a
+>    new one back into the record it was read from. The first frame, whose
+>    return into bpf_unwind() comes from the walk's own record, is
+>    skipped.
+>  - With CONFIG_ARM64_PTR_AUTH_KERNEL and a CPU that supports address
+>    authentication, the new address is signed as the BPF prologue signs
+>    the link register, with PACIASP and the record + 16 as modifier.
+>  - aux->epilogue_ip and the native cleanup table.
+>  - bpf_jit_supports_cleanup_pads() says yes, also with a shadow call
+>    stack: only JITed frames' records are written, and JITed code keeps
+>    no x18 copy of its return address.
+>
+> A pad needs no BTI: it is only reached as a return address.
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+this isn't a bug, but could the changelog open with a sentence on what this
+does for arm64, instead of starting directly with a bullet list?
+
+Also, the bullet "aux->epilogue_ip and the native cleanup table." has no
+verb.  Could it say what is done with them, for example that the JIT records
+each function's epilogue address in aux->epilogue_ip and fills in the native
+cleanup ranges once the image is final?
+
+
 ---
- Documentation/netlink/specs/rt-route.yaml | 93 ++++++++++++++++++++++++++++++-
- 1 file changed, 90 insertions(+), 3 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
-index 82e59af56ecd..48d1659f20f3 100644
---- a/Documentation/netlink/specs/rt-route.yaml
-+++ b/Documentation/netlink/specs/rt-route.yaml
-@@ -116,6 +116,45 @@ definitions:
-       - rpl
-       - ioam6
-       - xfrm
-+  -
-+    name: seg6-local-actions
-+    type: enum
-+    name-prefix: seg6-local-action-
-+    enum-name:
-+    entries:
-+      - unspec
-+      - end
-+      - end-x
-+      - end-t
-+      - end-dx2
-+      - end-dx6
-+      - end-dx4
-+      - end-dt6
-+      - end-dt4
-+      - end-b6
-+      - end-b6-encap
-+      - end-bm
-+      - end-s
-+      - end-as
-+      - end-am
-+      - end-bpf
-+      - end-dt46
-+  -
-+    name: seg6-local-flv-ops
-+    type: enum
-+    name-prefix: seg6-local-flv-op-
-+    enum-name:
-+    entries:
-+      -
-+        name: unspec
-+      -
-+        name: psp
-+      -
-+        name: usp
-+      -
-+        name: usd
-+      -
-+        name: next-csid
- 
- sub-messages:
-   -
-@@ -490,6 +529,7 @@ attribute-sets:
-       -
-         name: action
-         type: u32
-+        enum: seg6-local-actions
-       -
-         name: srh
-         type: binary
-@@ -513,16 +553,19 @@ attribute-sets:
-         type: u32
-       -
-         name: bpf
--        type: binary
-+        type: nest
-+        nested-attributes: seg6-local-bpf
-       -
-         name: vrftable
-         type: u32
-       -
-         name: counters
--        type: binary
-+        type: nest
-+        nested-attributes: seg6-local-cnt
-       -
-         name: flavors
--        type: binary
-+        type: nest
-+        nested-attributes: seg6-local-flv
-   -
-     name: rpl-iptunnel
-     name-prefix: rpl-iptunnel-
-@@ -618,6 +661,50 @@ attribute-sets:
-         type: string
-         checks:
-           max-len: 256
-+  -
-+    name: seg6-local-bpf
-+    name-prefix: seg6-local-bpf-
-+    attr-max-name: seg6-local-bpf-prog-max
-+    attributes:
-+      -
-+        name: prog
-+        type: u32
-+      -
-+        name: prog-name
-+        type: string
-+        checks:
-+          max-len: 256
-+  -
-+    name: seg6-local-cnt
-+    name-prefix: seg6-local-cnt-
-+    attributes:
-+      -
-+        name: pad
-+        type: pad
-+      -
-+        name: packets
-+        type: u64
-+      -
-+        name: bytes
-+        type: u64
-+      -
-+        name: errors
-+        type: u64
-+  -
-+    name: seg6-local-flv
-+    name-prefix: seg6-local-flv-
-+    attributes:
-+      -
-+        name: operation
-+        type: u32
-+        enum: seg6-local-flv-ops
-+        enum-as-flags: true
-+      -
-+        name: lcblock-bits
-+        type: u8
-+      -
-+        name: lcnode-fn-bits
-+        type: u8
- 
- operations:
-   enum-model: directional
-
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37747693645
+--===============5174336129054866377==--
