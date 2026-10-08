@@ -1,74 +1,79 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003E919A288;
-	Thu,  8 Oct 2026 01:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F0337AA79;
+	Thu,  8 Oct 2026 01:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791423421; cv=none; b=QGD7w7/rveGeuNr78K5mCvaiqCpbEGGRnIKC6S93fbdmV7+h/+6hsUIC6T9q9QFu8n80xMUhKAQl/ZgtuvUdEc5tNAxqknTBlowxC628gp7UXaZ7re/GUa76+dLDtuDcvGGW9KOdIDsXOZXCfPD4oSrMrraxkk+pzIg4x+1c1L0=
+	t=1791424650; cv=none; b=UE3lNM9wtAasSYHRuupE8tO1pC6chI6QjHQVVF2NCR5/dLOrWTF4FaZQ6zFFdGWLKRjU8qpnXMVNSiBzDQQy3n+0vZOLI5vArIEK6a0oV4jmor/1C6Uy2zsL8OMVXC0pu25E2GcxVfQfIsXrm6HzzdmP7+5o85Rv9zN4gHXvFGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791423421; c=relaxed/simple;
-	bh=MwicRoOYV1zDQfwoWO+5FEWl54/aiijI+WJoGLBOTIg=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=qVRHzS96OYVwxmsvDPupH5sZsu1qHIrNTW0aBv2zW8q/6oryso6r7iroYFzSn4McGmmIHR/dCeQA0oDu62gPyvq9XqGtGo9ijNeb4S+9lsuN5meaeeSxkSL8Gk1QgqOMzBqnuS+9zYC0uMhURLDsUD/OP04bTShHfv8jKpkBUkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Rvs/2ugk; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1791424650; c=relaxed/simple;
+	bh=bwDRfHmL+0pbMnJR1GsK7JFfccS9jDbWsMhcIV6pmxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IzWLK7BxJptBrE7eQ4ERl0LHQw3R0GXwVUmaz/FQ0DjezckqttDZJmOL2MBH5fSo0Kmnz4aQsQkyoX6kVk4YwB8v+/zBmIfaMrbTUJ0W+i8kUJ/Bx2XMVkwAufEdxpg7+Vjz7s67Zr0zdEDj4Aa1K8m0PVNBqqOoASWC0Gq4758=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NWFzYyQq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Rvs/2ugk"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1791423416; h=Message-ID:Subject:Date:From:To;
-	bh=MwicRoOYV1zDQfwoWO+5FEWl54/aiijI+WJoGLBOTIg=;
-	b=Rvs/2ugkNOZXOBA/ZipiX/DCQFbz20MeKhsRrM7JYYZL82a3YmbmcFzm2NBwpcHX922QwIg16DppVZ0sJA0Pv6TEXKG7WziVhHaq6pppBjExlpfdtDi/7qnbM5AfC92Vk1/YcnNcP3LxZbmle5pvM22REJ+drYfRv6w0bOE1CsE=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0XCIFUV3_1791423415;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0XCIFUV3_1791423415 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 08 Oct 2026 09:36:55 +0800
-Message-ID: <1791423335.8486545-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [RFC] virtio-net: AF_XDP zero-copy TX checksum offload
-Date: Thu, 8 Oct 2026 09:35:35 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: Azadeh Aftahi <aftahi334@gmail.com>
-Cc: magnus.karlsson@intel.com,
- maciej.fijalkowski@intel.com,
- sdf@fomichev.me,
- netdev@vger.kernel.org,
- virtualization@lists.linux.dev,
- bpf@vger.kernel.org,
- mst@redhat.com,
- jasowangio@gmail.com,
- eperezma@redhat.com
-References: <9DB6FE89-98AB-47CF-9B57-5F47FBB6DAE8@gmail.com>
-In-Reply-To: <9DB6FE89-98AB-47CF-9B57-5F47FBB6DAE8@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NWFzYyQq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783F11F000FF;
+	Thu,  8 Oct 2026 01:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791424649;
+	bh=cyaBNpcWG/sN/H/GV35qpL+l/NWPhdj0dPzl1NaiBHg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=NWFzYyQq8o/+WvrLyKjRlVhFoRbgI+Tjgo2xAmC4AOFqO1Ij/QPHRJlShg0cPpeyZ
+	 B5bhOd4JOHQfv7j36CdlRIG1JZqABSJiety8It+M6BgRdZmbQv6J6tjjLfcO2xtrtX
+	 9d7te4Xw8qOfZJ43JC7eC0I7oDI/h3KKkYcFQDC3QLlGUqr5bTWp/I6KGOiXWZGoyh
+	 eiGZ1BtDKqB+CfBOQss+JTsaPIRFsF8/uOpaDiAdKjgszWUZ+bT4PdkysAcMpUeCpe
+	 uXzsDH/Rp23D3H65GoWfLveDSb+9kvpJQX0fFwlqLQjqFB78FSM3Xy5mXNdz5nUyfK
+	 8mqyyhzIebSUQ==
+Date: Wed, 7 Oct 2026 18:57:27 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: davem@davemloft.net, pabeni@redhat.com, edumazet@kernel.org,
+ andrew+netdev@lunn.ch, netdev@vger.kernel.org, Ding Meng
+ <meng.ding@siemens.com>, florian.bezdeka@siemens.com, p@1g4.org,
+ tkusters@aweta.nl, jiayuan.chen@linux.dev, pulehui@huawei.com,
+ vinicius.gomes@intel.com, maciej.fijalkowski@intel.com,
+ magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ bpf@vger.kernel.org, richardcochran@gmail.com, dima.ruinskiy@intel.com,
+ stable@vger.kernel.org, Aleksandr Loktionov
+ <aleksandr.loktionov@intel.com>, Piotr Kwapulinski
+ <piotr.kwapulinski@intel.com>
+Subject: Re: [PATCH net 1/6] igc: Fix RX HW timestamp reporting when
+ NET_RX_BUSY_POLL is disabled
+Message-ID: <20261007185727.68180ce3@kernel.org>
+In-Reply-To: <20261001222443.3500206-2-anthony.l.nguyen@intel.com>
+References: <20261001222443.3500206-1-anthony.l.nguyen@intel.com>
+	<20261001222443.3500206-2-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 5 Oct 2026 17:28:35 -0500, Azadeh Aftahi <aftahi334@gmail.com> wrote:
-> Hi all,
->
-> I'm planning to work on single-buffer AF_XDP zero-copy TX checksum offload for virtio-net.
->
-> Current net-next's virtnet_xsk_xmit_one() does not consume XSK TX checksum metadata and uses the shared zeroed virtio header.
->
-> I found Xuan's 2021 proposal anticipating separate headers for checksum support, and the merged 2024 zero-copy TX series, but I couldn't find a checksum-specific follow-up implementation.
->
-> The proposed scope is to map the existing XSK checksum metadata API to VIRTIO_NET_F_CSUM, using a DMA-safe per-packet virtio header whose lifetime extends until TX completion, with corresponding completion, reset, and unbind cleanup.
->
-> I would keep the initial scope limited to single-buffer TX: no multi-buffer RX, timestamps, launch time, or GSO.
->
-> I'd also add checksum and header-lifetime coverage using the existing XSK selftest framework with QEMU/TAP.
->
-> Is anyone already working on this? If not, does this scope and per-packet-header approach sound reasonable for a follow-up patch?
+On Thu,  1 Oct 2026 15:24:34 -0700 Tony Nguyen wrote:
+> When CONFIG_NET_RX_BUSY_POLL is deactivated, fetching RX HW timestamps
+> from the NIC no longer works as expected, often resulting in incorrect
+> or negative values such as "HW raw -121948.050407424".
+> 
+> This occurs because disabling CONFIG_NET_RX_BUSY_POLL disables the
+> SKB NAPI mapping in __skb_mark_napi_id(). Consequently, get_timestamp()
+> fails to perform its driver lookup, and the igc driver's struct
+> net_device_ops::ndo_get_tstamp is never invoked.
+> 
+> Instead, get_timestamp() falls back to use shhwtstamps(skb)->hwtstamp,
+> a field that the driver has not populated. This results in incorrect
+> timestamps.
+> 
+> Fix this by populating the hwtstamp field with the correct timestamp
+> in the default timer when CONFIG_NET_RX_BUSY_POLL is disabled.
+> The "igc_adapter" is passed to igc_construct_skb() to enable
+> igc_ptp_rx_pktstamp() to access the necessary adapter details for
+> adjusting the timestamp.
 
-It seems no one has taken this work forward yet; I would welcome it if you were
-to do so.
-
-Thanks.
-
-
->
-> Thanks,
-> Azadeh
+looks like a driver workaround for a generic problem
+a better fix is likely needed here
