@@ -1,113 +1,205 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC9C2F5A2D;
-	Thu,  8 Oct 2026 07:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1B83B6364
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 07:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791445827; cv=none; b=u5H0fM7swqES2uXj8k9BLLhcoZ1QkyxHq5mO7AiaFJBnOTF6eYJ0Ywiga2u25oXhCXJJ7NA7yvLE1VcK4deQXt7maLbFJUVohzF1P6b13ww0sGI0w35zQ+sW2VfwbqXJcq5RLRCKNkL1kAHIg2l9Ut+gb+Aly6JmrhVlMNCqcbM=
+	t=1791445834; cv=none; b=lDWZwu7o0roRovcFI6Uvmc+KgywYcfj8ZLmODxwH8EIhcsdwvQqEmsIgiggyH79857Ll+Ik/FIhY0P8bag4lOj0HMKwkf87/GcWWa7xeAEgZ+S+M0oYjcBj1Y0Dls4H0FuoMxrZ+yqy3aqdrSjfspztBiVXItO2QtLMDmfEu4RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791445827; c=relaxed/simple;
-	bh=HQTuKbcr56OWHudZYA/YmaZ399YGEzYzUHLXmXCYRyk=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=FDiGY1hRPBEerf7mdTPlNrgt5qKwO61TXt/uOVnFYfvnCsiVpMTulQ2s5+vA/6IYA8WE8+BfeM4nCEHKLBBUJaBpw5EPDe8MRmJ/OIEJ21QjWT6Kw/0naclwaYxuJhxSe618FcxSYQ4E58rPX5x9IItO/I+2Yp+qaYlEaud2hhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=g3P/M1+m; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="g3P/M1+m"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id ECF85A05A6;
-	Thu,  8 Oct 2026 09:50:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1791445821; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=IOlVfgfP6cReZbjYOfgC3BBrEq2xqxmMoSO9wrismZA=;
-	b=g3P/M1+mF5kD6hBkOKBHZoxyAkWBu+lPEehfpH8Rfpa8IeuT01zbhtt2OIcMvlGT98DBTJ
-	mzKrkXcSERT8siNk7rc7F/R0nFwU+bUw0mqwCpGPbF4nQlYQkhO21ikv+5CCgIkO+DchRz
-	lYjBWRCRkysI/X54d24qzdZTcCBC6Q646g9JGx4cia9H5nqCzPT9Sw17PM3w4JvLrd+oqL
-	fHqI27x30xOdrFnmUxzAs/QJnVrexuuFVGmTRnNzAnrrL+wbGn/GcPiBkXElSE0KCh9R0g
-	IX1a8v3l7+Ss2INEO/rpI7uGMu+ll3P9r1gyx9p2q+LK0jzDf9X1msBmi0cREQ==
+	s=arc-20240116; t=1791445834; c=relaxed/simple;
+	bh=3FFvYt9Jd2ox2ijk32URhvbfBkQj8q2NLSBWP0m/m4c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uCQv7M4rkAQ/GKnI3RCJbm5y8QmkFYmM8dKsgbts+8BZw7HyMWIYHlVQhCNP9yajzbfSYI0BB2qRHoyyGk5WEYTcoHiSgYZ9mLj/bPrO3rtmr+pB3qSI1/gdO/y/akPFI9YDgxDtaIUa9UtfFmvn26HEa2JfAuGAj4IRLKf9ta4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 26C002FDA0BDA4; Thu,  8 Oct 2026 00:50:20 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v9 04/23] bpf: Keep a call site's landing pad in insn_aux_data, add lookups
+Date: Thu,  8 Oct 2026 00:50:20 -0700
+Message-ID: <20261008075020.2996443-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261008074959.2993751-1-yonghong.song@linux.dev>
+References: <20261008074959.2993751-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 08 Oct 2026 09:50:19 +0200
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: Kurt Kanzenbach <kurt@linutronix.de>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
- <edumazet@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Song Yoong Siang
- <yoong.siang.song@intel.com>, Noor Azura Ahmad Tarmizi
- <noor.azura.ahmad.tarmizi@intel.com>, Mohd Faizal Abdul Rahim
- <faizal.abdul.rahim@intel.com>, Ong Boon Leong <boon.leong.ong@intel.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net v2 1/2] net: stmmac: Disable NAPI before stopping Tx
- queues in stmmac_xdp_release()
-In-Reply-To: <20261005-stmmac_xsk_crashes-v2-1-46c60cba6421@linutronix.de>
-References: <20261005-stmmac_xsk_crashes-v2-0-46c60cba6421@linutronix.de>
- <20261005-stmmac_xsk_crashes-v2-1-46c60cba6421@linutronix.de>
-Message-ID: <bd26a838deb15b560419d1e4a33d838b@tipi-net.de>
-X-Sender: nb@tipi-net.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kurt
+A call site's landing pad, if any, is kept in insn_aux_data as
+cleanup_pad, so the three places that move instructions --
+bpf_patch_insn_data(), verifier_remove_insns() and bpf_opt_remove_nops()
+-- keep it in step. Add lookups for it and for calls to bpf_unwind() and
+bpf_unwind_resume(); their users come in later patches.
 
-On 5.10.2026 09:09, Kurt Kanzenbach wrote:
-> Attaching an XDP program while Tx traffic is running results in kernel
-> crashes in stmmac_xmit() -> dwmac4_set_addr().
-> 
-> Loading an XDP program tears down and reallocates all DMA resources via
-> stmmac_xdp_release() and stmmac_xdp_open(). stmmac_xdp_release() stops
-> the Tx queues before disabling NAPI:
-> 
->  stmmac_xdp_release:
->    netif_tx_disable
->    stmmac_disable_all_queues
->    ...
->    free_dma_desc_resources
-> 
-> A Tx NAPI poll may still be in flight at that point. stmmac_tx_clean()
-> takes the Tx queue lock, reaps completed descriptors and wakes the 
-> queue
-> again when it observes it stopped with enough descriptors available.
-> Nothing stops the queue afterwards, so the Tx path resumes while
-> free_dma_desc_resources() releases the descriptor rings underneath it.
-> 
-> On non-coherent platforms dma_free_coherent() tears down the vmalloc
-> mapping of the descriptors, so the subsequent stmmac_xmit() faults on 
-> an
-> unmapped address instead of corrupting memory silently.
-> 
-> Disable NAPI first and stop the Tx queues afterwards, which is the 
-> order
-> already used by __stmmac_release().
-> 
-> The issue can be easily reproduced by:
-> 
->  1. Run iperf
->  2. Run application which opens an AF_XDP/ZC socket
-> 
-> Assisted-by: Claude:claude-opus-5
-> Fixes: 77711683a504 ("net: stmmac: ensure tx function is not running in 
-> stmmac_xdp_release()")
-> Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ include/linux/bpf_verifier.h |  5 +++++
+ kernel/bpf/exception.c       | 24 ++++++++++++++++++++++++
+ kernel/bpf/exception.h       |  4 ++++
+ kernel/bpf/fixups.c          | 26 +++++++++++++++++++++++++-
+ 4 files changed, 58 insertions(+), 1 deletion(-)
 
-> [...]
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index a5f493876993..e6bde421ab3b 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -701,6 +701,11 @@ struct bpf_insn_aux_data {
+ 	u64 jump_target:1;
+=20
+ 	unsigned int orig_idx; /* original instruction index, initialized once =
+*/
++	/*
++	 * 1 + the instruction index of the exception cleanup landing pad
++	 * this call site unwinds to, or 0 for none.
++	 */
++	u32 cleanup_pad;
+ 	/*
+ 	 * CFG strongly connected component this instruction belongs to,
+ 	 * zero if it is a singleton SCC.
+diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+index d6b8ca98e71c..3ea1bff5cc90 100644
+--- a/kernel/bpf/exception.c
++++ b/kernel/bpf/exception.c
+@@ -2,6 +2,8 @@
+ /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+ #include <linux/bpf.h>
+ #include <linux/bpf_verifier.h>
++#include <linux/btf_ids.h>
++#include <linux/filter.h>
+ #include <linux/slab.h>
+ #include "exception.h"
+=20
+@@ -135,3 +137,25 @@ int bpf_exc_check_info(struct bpf_verifier_env *env,=
+ const union bpf_attr *attr,
+ 	kvfree(krecord);
+ 	return ret;
+ }
++
++BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
++BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
++
++bool bpf_is_unwind_kfunc(const struct bpf_insn *insn)
++{
++	return bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
++	       insn->imm =3D=3D bpf_unwind_id[0];
++}
++
++bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn)
++{
++	return bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
++	       insn->imm =3D=3D bpf_unwind_resume_id[0];
++}
++
++int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx)
++{
++	u32 pad =3D env->insn_aux_data[idx].cleanup_pad;
++
++	return pad ? (int)pad - 1 : -1;
++}
+diff --git a/kernel/bpf/exception.h b/kernel/bpf/exception.h
+index cf099dcc5b74..d5c6ac459870 100644
+--- a/kernel/bpf/exception.h
++++ b/kernel/bpf/exception.h
+@@ -8,8 +8,12 @@
+=20
+ union bpf_attr;
+ struct bpf_verifier_env;
++struct bpf_insn;
+=20
+ int bpf_exc_check_info(struct bpf_verifier_env *env, const union bpf_att=
+r *attr,
+ 		       bpfptr_t uattr);
++int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx);
++bool bpf_is_unwind_kfunc(const struct bpf_insn *insn);
++bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn);
+=20
+ #endif /* __BPF_EXCEPTION_H */
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 206cc9a614a9..64baee1a37e6 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -244,11 +244,18 @@ static void adjust_insn_aux_data(struct bpf_verifie=
+r_env *env,
+ 			data[i].non_stack_access =3D
+ 				data[off + cnt - 1].non_stack_access;
+ 			data[off + cnt - 1].non_stack_access =3D false;
++			data[i].cleanup_pad =3D data[off + cnt - 1].cleanup_pad;
++			data[off + cnt - 1].cleanup_pad =3D 0;
+ 		} else if (bpf_is_mem_insn(insn + i)) {
+ 			data[i].non_stack_access =3D true;
+ 		}
+ 	}
+=20
++	if (env->cleanup_info_cnt)
++		for (i =3D 0; i < prog_len; i++)
++			if (data[i].cleanup_pad > off + 1)
++				data[i].cleanup_pad +=3D cnt - 1;
++
+ 	/*
+ 	 * Last slot instruction could be a newly generated
+ 	 * BPF_ST/BPF_LDX/BPF_STX, systematically mark it for non-stack access
+@@ -595,6 +602,7 @@ static int verifier_remove_insns(struct bpf_verifier_=
+env *env, u32 off, u32 cnt)
+ 	struct bpf_insn_aux_data *aux_data =3D env->insn_aux_data;
+ 	unsigned int orig_prog_len =3D env->prog->len;
+ 	int err;
++	u32 i;
+=20
+ 	if (bpf_rewrite_must_abort())
+ 		return -EINTR;
+@@ -623,6 +631,17 @@ static int verifier_remove_insns(struct bpf_verifier=
+_env *env, u32 off, u32 cnt)
+ 		sizeof(*aux_data) * (orig_prog_len - off - cnt));
+ 	env->insn_aux_data_len -=3D cnt;
+=20
++	if (env->cleanup_info_cnt) {
++		for (i =3D 0; i < env->insn_aux_data_len; i++) {
++			u32 pad =3D aux_data[i].cleanup_pad;
++
++			if (pad > off + cnt)
++				aux_data[i].cleanup_pad =3D pad - cnt;
++			else if (pad > off)
++				aux_data[i].cleanup_pad =3D 0;
++		}
++	}
++
+ 	return 0;
+ }
+=20
+@@ -728,7 +747,7 @@ int bpf_opt_remove_nops(struct bpf_verifier_env *env)
+ 	struct bpf_insn *insn =3D env->prog->insnsi;
+ 	int insn_cnt =3D env->prog->len;
+ 	bool is_may_goto_0, is_ja;
+-	int i, err;
++	int i, j, err;
+=20
+ 	for (i =3D 0; i < insn_cnt; i++) {
+ 		is_may_goto_0 =3D !memcmp(&insn[i], &MAY_GOTO_0, sizeof(MAY_GOTO_0));
+@@ -739,6 +758,11 @@ int bpf_opt_remove_nops(struct bpf_verifier_env *env=
+)
+ 		if (aux[i].indirect_target)
+ 			continue;
+=20
++		if (env->cleanup_info_cnt)
++			for (j =3D 0; j < insn_cnt; j++)
++				if (env->insn_aux_data[j].cleanup_pad =3D=3D i + 1)
++					env->insn_aux_data[j].cleanup_pad =3D i + 2;
++
+ 		err =3D verifier_remove_insns(env, i, 1);
+ 		if (err)
+ 			return err;
+--=20
+2.53.0-Meta
 
-Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
-Tested-by: Nicolai Buchwitz <nb@tipi-net.de> # stm32mp215
-
-Thanks,
-Nicolai
