@@ -1,372 +1,249 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5A43921D6
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 18:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D36C38E126;
+	Thu,  8 Oct 2026 19:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791485643; cv=none; b=QjsoHn2DVVzpzdP1AMq4VW/E9oe0QWZdYbeeh/VzAHO5Wg0F98GHCQJe8UPxxu89cRhgTFleBHYs/thvYlO8CM2rhiXyypa3TlqXhiE8PfVzPdEV/XHtP201F1mEwSq8dpoCCmACMcAkK4mUuajpmqQ622S/HQedue/bZKM3RWg=
+	t=1791486595; cv=none; b=rj5xeMRv798HVOUeMW4ewJsZopAIojqV99DtZMxEN1apGum3OgipWMmUyNyJ0fuV50AczMAgPsGbXyQ/1K1vR1KwMXL6sQFpdY8eXgQWtDZrOSJheKbPyg4jRJsZBIhqVjil9p2qPLE344GEbrPgyVU0FITwAshVS6aM0GgqTJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791485643; c=relaxed/simple;
-	bh=ZY1Op5tkgvffu1TNzPGMsKhTH6KX6v9Wk1YiWSMPNQU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BwznSjs5A36Si9pxcItW0F97bE2zuaJZZRFDcVpMf0G4upBTz/YM2ykKqtwQMZdqXmJ986HrazaupEH+UCU5h4pGXIu1tzNFY9JzqHksYGRjnhBJePbH45YLOuJwo0hcVmsjYJ1QRP9TysGGibgt8C40T5/C5UroXH5llLyhVoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qV7bOnLA; arc=none smtp.client-ip=74.125.82.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791486595; c=relaxed/simple;
+	bh=ZYF+JXCbDOy8c5Aw9v3H2uo0HuInxjrEpYJzX+UmrPg=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hN8gzYvHCG2wyH/ijYBuAO/zVpW0hIM+GXKPbU2IcwK3MAvgNHin6hTnpmP1pPJHQXKaIxG9M13ObdeWn+3WKCQjGFHJ6TDqYaCUl7yy4O/0H8Lsv3t10yRf5aecPvQxWKFnBvwovSUnE8889H4AMTT7fjsH78zVZzI+cUNyklI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUHP99dX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qV7bOnLA"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-150f88d22aeso3491618c88.0
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 11:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791485641; x=1792090441; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+UjPjSmNI6DGfWcfrnYE16Bw5iat38rbU4xmY04hbAo=;
-        b=qV7bOnLAM6exaUfeYEeA6Rlk7T/0Us2k4eyffTeC4xXZuOF28+m4f5eJcxFTEIltEq
-         8bz0SMSQi4ek6hTOg90GnPZc+CxFbefwzLMd1NSybgt9NBNjngBYYFr0EiegxJxK4TIF
-         Ey6CL4YQ88hR5upfy/uBtfkTJZFV7qLD3ODs2LyYHRQlGShh7QrNJES9eZ7NNEl+Zsvs
-         sUrV945uoewPBIj1Zx53++5XnNLJbLrUpaLzkGeHWfXZ1WEVNKKSb9yYM7vMcIHlGqBj
-         rt/DQ75CVTqokruDdiUkG1Fg1sJVUHN+knG+WxXxqYjLL8epk8MnpcSVDifFceJD8gie
-         QyHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791485641; x=1792090441;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+UjPjSmNI6DGfWcfrnYE16Bw5iat38rbU4xmY04hbAo=;
-        b=w4tzgC0VMNBV1S6LGfex3ZiMYd2OYufsiJmpOuYa2CSB81H3PMBGVDSsugOfRz2r34
-         7OO1z03pOABaxgz4VZCXf0EvkCs1uflYySp7rAYf8mkCSplhUikxlcHREeoW5RIGebOE
-         KhlmRgApKYhFStMkzHimlej2gl7sp0SaUmxujqKci97IiqdzHWi/+wNoaHjAR465CxXy
-         y9fkHfNIjxEogR34PjQn6HOExRqNXtk3pL2EsjyjpTWd6QWL9+eedZJgiYM4xwyst7gO
-         SWCP3c5ul4NB8kA5H58UVRQySIyoUvEAK966ha7ciasTPJwYXLmznrJkeOxCFsoyeCI4
-         r4hA==
-X-Gm-Message-State: AFuF++lK2zvV6PdNJLxmwRxqjNsCJRABGHWp55Y5jyXa8sz22lh9NiZ6
-	/iXS94Rutxrgy4HG03HRd+2YzaYx+Qu5AV0iSSaUGeVzNYAT4Oj0RWKGSH+HqUHDqjg=
-X-Gm-Gg: AYBFou0HW3z6zFGRf+8/+P/0XPz6kXsK6/soDRc46uwPX9bv2pluhwFVmfFjUn5MK2/
-	MatcynZ9rzv8rMrm1ir1waKL5jSxt3goMJImrdz8kqjRbdkys1yxy+LT36sHZrXauAZdBAP+fpO
-	vR6PTst+OY2ex8fxUH50CHXwR3t6SnHDf/3dY8kxdvLwCAy5Ww4pPyyolUo91dQB1VMbmZ2/mPb
-	4fM8Ds4oW9cgmpqInLPkbOqxpYdaYvMMDGHo7ls2PV9FEwfmyJmFVT7W4YkQFZ5Ep9cYrL7d+xk
-	At1/v7QHS61PE+wADyU8uQnlE/ED1b3pFF0eVwQcXyjkPFj0ApYRIsFy4XIeF0uM/rRITj3l55s
-	KlpCykd1QPgqpjW3qHaMbobcjQt1AZSnCpDc6Auftya7DiFXYh8R27/oagq+tCoqkB1YsMxBG3t
-	uvoY/5YOIW5f2r/GsXv5VMgTqAOCYwYkDGjNRATIiZ3l5pMextn+PphQIV2/hLGVfO9y8RjmZft
-	PsyFSZYWQ+KNw/sEWljSTCb6McH2Iws
-X-Received: by 2002:a05:701b:204d:10b0:143:868a:20c1 with SMTP id a92af1059eb24-1620948187fmr7466694c88.46.1791485640807;
-        Thu, 08 Oct 2026 11:54:00 -0700 (PDT)
-Received: from DESKTOP-31QBR7C ([103.120.166.82])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a442956asm269101c88.16.2026.10.08.11.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 11:54:00 -0700 (PDT)
-From: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	Rahad Bhuiya <rahadbhuiya2021@gmail.com>
-Subject: [PATCH bpf-next v3] bpf: fix symmetric register-form NULL-pointer check in check_cond_jmp_op()
-Date: Fri,  9 Oct 2026 00:53:49 +0600
-Message-ID: <20261008185349.494-1-rahadbhuiya2021@gmail.com>
-X-Mailer: git-send-email 2.55.0.windows.3
-In-Reply-To: <20261008065738.1093-1-rahadbhuiya2021@gmail.com>
-References: <20261008065738.1093-1-rahadbhuiya2021@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUHP99dX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 154161F000FF;
+	Thu,  8 Oct 2026 19:09:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791486594;
+	bh=TSE/zkvR+fZATE61FvfTd5DhcLvxDvsdlVd/W/5R1tc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=OUHP99dX2rkXYzgAURgMPosPeouo6XDclRP9HN8SvR3naf4Q0wLB2/A+gmHIhpTLh
+	 unl1GhqKsj4QP8cnfjO016xdKdF5+CSagDX3QoI3jiX5fvaPZNsFBn3zhOrCmONDMN
+	 SPmpj7gQ6sHy4GbcRGjqwG2DfRPz1hO/zcOX9qzHCKteo3N49Z/0SkTRoPTsz+kVsu
+	 Q+NX/ZPqsz4BbwLVK2chwtSSCwo1UixEVD35iiJ85aqllZccZtm6p4ZSbZpNTXdJxx
+	 oCZc8xaiR73kcl4OFHv+kuiadyRZFxLhYvGhl2OlfgPWg7FL/VBc5Rlawu8Zudmipq
+	 h0zdOrkBIFEAw==
+Subject: Re: [PATCH net v2 1/2] net: stmmac: Disable NAPI before stopping Tx
+ queues in stmmac_xdp_release()
+From: netdev-bot+sashiko@kernel.org
+To: kurt@linutronix.de
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, edumazet@kernel.org,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, yoong.siang.song@intel.com,
+ noor.azura.ahmad.tarmizi@intel.com, faizal.abdul.rahim@intel.com,
+ boon.leong.ong@intel.com, bigeasy@linutronix.de, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Date: Thu, 08 Oct 2026 19:09:52 +0000
+Message-ID: <179148659257.434549.8899547962974012240@kernel.org>
+In-Reply-To: <20261005-stmmac_xsk_crashes-v2-1-46c60cba6421@linutronix.de>
+References: <20261005-stmmac_xsk_crashes-v2-1-46c60cba6421@linutronix.de>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-check_cond_jmp_op() propagates PTR_MAYBE_NULL nullness through
-mark_ptr_or_null_regs() when it detects a BPF_JEQ / BPF_JNE
-comparison against zero.  The existing code handles only the
-'forward' operand order:
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-  dst_reg = nullable pointer,  src_reg = known-zero scalar
-  (e.g. 'if r0 == 0')
+Critical: 0 · High: 2 (1) · Medium: 0 (1) · Low: 0
 
-The symmetric case is left unhandled:
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-  dst_reg = known-zero scalar,  src_reg = nullable pointer
-  (e.g. 'if r6 == r0' where r6 has been proven zero)
+- [High] Baseline decision: false.
+- [High] This patch reorders stmmac_xdp_release() so that
+  hrtimer_cancel() on every tx_q->txtimer now runs before…
 
-When the symmetric case occurs:
- - type_may_be_null(dst_reg->type) is false (dst is scalar zero)
- - The null-check block is skipped entirely
- - mark_ptr_or_null_regs() is never called for src_reg
- - src_reg retains PTR_MAYBE_NULL in both branches
+Pre-existing issues:
+- [High] This problem was not introduced by this patch, but it is a use-
+  after-free in the same teardown sequence, and moving…
+- [Medium] Baseline decision: false.
 
-Additionally, the early unprivileged-mode pointer-comparison guard
-(line 18058) rejected any conditional jump where src_reg is a pointer
-type, which would have made the new block unreachable for unprivileged
-programs.  Comparing a nullable pointer against a register proven to
-be zero is not a pointer leak -- it is semantically identical to the
-already-permitted forward form 'if (r_nullable == 0)'.  Exempt the
-symmetric null check from that guard.
+--
 
-Fix: add an 'else if' branch that mirrors the forward logic for the
-symmetric operand order and extend the early guard to permit it.
+net: stmmac: Disable NAPI before stopping Tx queues in stmmac_xdp_release()
 
-Commit 6aed0134d3cd ('bpf: Mark the zero register precise for a
-register-form NULL check') introduced the precision marking for the
-forward case; the symmetric case was overlooked there.
+This commit reorders stmmac_xdp_release() so that NAPI is disabled and the
+Tx coalescing timers are cancelled before netif_tx_disable() is called.
+The goal is to stop an in-flight Tx NAPI poll from waking the Tx queue
+again while free_dma_desc_resources() releases the descriptor rings.
 
-Signed-off-by: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
----
- kernel/bpf/verifier.c                         |  40 ++++-
- .../selftests/bpf/prog_tests/verifier.c       |   3 +
- .../bpf/progs/verifier_null_ptr_symmetric.c   | 163 ++++++++++++++++++
- 3 files changed, 203 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 9741f97fa37a2..796817caf7af0 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -7178,15 +7178,15 @@ void stmmac_xdp_release(struct net_device *dev)
+>  	struct stmmac_priv *priv = netdev_priv(dev);
+>  	u8 chan;
+>  
+> -	/* Ensure tx function is not running */
+> -	netif_tx_disable(dev);
+> -
+>  	/* Disable NAPI process */
+>  	stmmac_disable_all_queues(priv);
+>  
+>  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+>  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+>  
+> +	/* Ensure tx function is not running */
+> +	netif_tx_disable(dev);
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 353bde9ae227..68b23d11766d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18057,9 +18057,22 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		src_reg = &regs[insn->src_reg];
- 		if (!(reg_is_pkt_pointer_any(dst_reg) && reg_is_pkt_pointer_any(src_reg)) &&
- 		    is_pointer_value(env, insn->src_reg)) {
--			verbose(env, "R%d pointer comparison prohibited\n",
--				insn->src_reg);
--			return -EACCES;
-+			/*
-+			 * Symmetric NULL check: "if (r_zero == r_nullable)".
-+			 * Comparing a nullable pointer against a register proven
-+			 * to be zero is not a pointer leak -- it is the reversed
-+			 * form of the already-permitted "if (r_nullable == 0)".
-+			 * Permit it; reject every other src_reg pointer comparison.
-+			 */
-+			if (BPF_CLASS(insn->code) == BPF_JMP32 ||
-+			    (BPF_OP(insn->code) != BPF_JEQ &&
-+			     BPF_OP(insn->code) != BPF_JNE) ||
-+			    !type_may_be_null(src_reg->type) ||
-+			    !bpf_register_is_null(dst_reg)) {
-+				verbose(env, "R%d pointer comparison prohibited\n",
-+					insn->src_reg);
-+				return -EACCES;
-+			}
- 		}
- 
- 		if (src_reg->type == PTR_TO_STACK)
-@@ -18248,6 +18261,27 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 				      opcode == BPF_JNE);
- 		mark_ptr_or_null_regs(other_branch, insn->dst_reg,
- 				      opcode == BPF_JEQ);
-+	} else if (!is_jmp32 && BPF_SRC(insn->code) == BPF_X &&
-+		   (opcode == BPF_JEQ || opcode == BPF_JNE) &&
-+		   type_may_be_null(src_reg->type) &&
-+		   bpf_register_is_null(dst_reg)) {
-+		/*
-+		 * Symmetric case: src_reg is the nullable pointer, dst_reg is
-+		 * a register whose value is known to be zero.  This arises when
-+		 * the programmer writes the comparison in reversed operand order,
-+		 * e.g. "if (0 == map_val)" or "if (r0 == map_val)" where r0 has
-+		 * been proven zero by the verifier.
-+		 *
-+		 * The zero is a property of this execution path, so dst_reg
-+		 * must be marked precise before we propagate nullness.
-+		 */
-+		err = mark_chain_precision(env, insn->dst_reg);
-+		if (err)
-+			return err;
-+		mark_ptr_or_null_regs(this_branch, insn->src_reg,
-+				      opcode == BPF_JNE);
-+		mark_ptr_or_null_regs(other_branch, insn->src_reg,
-+				      opcode == BPF_JEQ);
- 	} else if (!try_match_pkt_pointers(insn, dst_reg, &regs[insn->src_reg],
- 					   this_branch, other_branch) &&
- 		   is_pointer_value(env, insn->dst_reg)) {
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 460ad10ddc02..834ee5da9845 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -144,6 +144,7 @@
- #include "irq.skel.h"
- #include "verifier_ctx_ptr_param.skel.h"
- #include "verifier_zext.skel.h"
-+#include "verifier_null_ptr_symmetric.skel.h"
- 
- #define MAX_ENTRIES 11
- 
-@@ -377,3 +378,5 @@ void test_verifier_value_ptr_arith(void)
- 		      verifier_value_ptr_arith__elf_bytes,
- 		      init_value_ptr_arith_maps);
- }
-+
-+void test_verifier_null_ptr_symmetric(void) { RUN(verifier_null_ptr_symmetric); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c b/tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c
-new file mode 100644
-index 000000000000..e49e9918a651
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_null_ptr_symmetric.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Verifier selftests for symmetric register-form NULL-pointer checks.
-+ *
-+ * The BPF verifier's check_cond_jmp_op() handles "if R == 0" NULL checks by
-+ * calling mark_ptr_or_null_regs() to mark the nullable pointer as either safe
-+ * or unknown in each branch.  Historically only the forward case was covered:
-+ *   dst_reg = nullable pointer,  src_reg = known-zero scalar
-+ * i.e. "if (map_val == 0)".
-+ *
-+ * The symmetric case was missing:
-+ *   dst_reg = known-zero scalar, src_reg = nullable pointer
-+ * i.e. "if (0 == map_val)" or "if (r0 == map_val)" where r0 is proven zero.
-+ *
-+ * Without the fix the verifier leaves src_reg as PTR_MAYBE_NULL in both
-+ * branches, either rejecting a valid program or silently missing a required
-+ * null check.  With the fix, nullness is propagated correctly in both
-+ * directions.
-+ */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} sym_null_map SEC(".maps");
-+
-+/* ---- Forward case (already worked before the fix) ---- */
-+
-+/*
-+ * "if (map_val == 0)" -- dst_reg holds the nullable pointer,
-+ * src_reg is the literal-zero immediate (BPF_K).  Should be accepted.
-+ */
-+SEC("socket")
-+__description("null check: forward form (dst nullable, imm 0) accepted")
-+__success __retval(0)
-+__naked void null_check_forward_imm(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	/* r0 = nullable ptr; forward case: if (r0 == 0) */	\
-+	if r0 == 0 goto exit_fwd;			\
-+	/* r0 is non-null here -- safe to dereference */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+exit_fwd:						\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
-+}
-+
-+/* ---- Symmetric case (required the new fix) ---- */
-+
-+/*
-+ * "if (0 == map_val)" -- src_reg holds the nullable pointer,
-+ * dst_reg is a register that the verifier has proven equals zero.
-+ * Should be accepted; before the fix it was rejected because nullness
-+ * was never propagated for src_reg.
-+ */
-+SEC("socket")
-+__description("null check: symmetric form (src nullable, dst zero reg) accepted")
-+__success __retval(0)
-+__naked void null_check_symmetric_reg(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	/* r0 = nullable ptr, r6 = known 0 */		\
-+	r6 = 0;						\
-+	/* Symmetric check: if (r6 == r0), i.e. dst=r6 (zero), src=r0 (nullable) */\
-+	if r6 == r0 goto exit_sym;			\
-+	/* r0 is non-null here -- safe to dereference */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+exit_sym:						\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * BPF_JNE symmetric form: "if (r6 != r0) goto use_r0;"
-+ * In the fall-through branch r0 == r6 == 0, so it is null.
-+ * In the taken branch r0 is non-null and safe to dereference.
-+ */
-+SEC("socket")
-+__description("null check: symmetric JNE form (src nullable, dst zero reg) accepted")
-+__success __retval(0)
-+__naked void null_check_symmetric_jne(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	r6 = 0;						\
-+	/* if (r6 != r0) goto use_r0 */			\
-+	if r6 != r0 goto use_r0;			\
-+	/* fall-through: r0 is null here, just exit */	\
-+	r0 = 0;						\
-+	exit;						\
-+use_r0:							\
-+	/* r0 is non-null here -- safe to dereference */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Negative test: src_reg is nullable, dst_reg is non-zero scalar.
-+ * This must NOT be treated as a null check -- the verifier should
-+ * still reject a dereference of r0 without a proper null guard.
-+ */
-+SEC("socket")
-+__description("null check: symmetric form with non-zero dst must not elide null check")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+__naked void null_check_symmetric_nonzero_dst_rejected(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[sym_null_map] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	/* r6 = 1 (non-zero) -- this is NOT a null check */\
-+	r6 = 1;						\
-+	if r6 == r0 goto skip;				\
-+	/* r0 still PTR_MAYBE_NULL here, dereference must fail */\
-+	r1 = *(u32 *)(r0 + 0);				\
-+skip:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(sym_null_map)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+[Severity: High]
+Now that netif_tx_disable() runs after the hrtimer_cancel() loop, can
+stmmac_xmit() re-arm tx_q->txtimer after it has been cancelled?
+
+Before this change, netif_tx_disable() took every txq lock first. Any
+running stmmac_xmit() had finished and the queues were stopped before the
+timers were cancelled.
+
+Now stmmac_xmit() can run at the same time as stmmac_disable_all_queues()
+and the cancel loop. It always ends by calling stmmac_tx_timer_arm():
+
+stmmac_tx_timer_arm() {
+    ...
+	if (unlikely(!napi_is_scheduled(napi))) {
+		if (unlikely(!(hrtimer_active(&tx_q->txtimer))))
+			hrtimer_start(&tx_q->txtimer,
+				      STMMAC_COAL_TIMER(tx_coal_timer),
+				      HRTIMER_MODE_REL);
+    ...
+}
+
+One possible interleaving:
+
+CPU1 (stmmac_xmit)                  CPU0 (stmmac_xdp_release)
+stmmac_tx_timer_arm()
+  napi_is_scheduled() == false
+                                    stmmac_disable_all_queues()
+                                      napi_disable() sets SCHED
+                                    hrtimer_cancel(&tx_q->txtimer)
+                                      timer not armed, returns 0
+  hrtimer_start(&tx_q->txtimer)
+                                    netif_tx_disable(dev)
+
+The timer then stays queued while the rings are freed. The timeout is 5ms
+by default and up to 100ms through ethtool -C tx-usecs.
+
+stmmac_xdp_set_prog() then calls stmmac_xdp_open(), which does:
+
+	hrtimer_setup(&tx_q->txtimer, stmmac_tx_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+
+__hrtimer_setup() memsets the timer while it is still linked in the
+hrtimer base timerqueue.
+
+Could that corrupt the timerqueue rbtree when the timer expires or is
+started again?
+
+Would this order avoid the problem: disable NAPI, then netif_tx_disable(),
+then hrtimer_cancel()?
+
+__stmmac_release() is cited in the commit message as the reference order,
+but it also cancels the timers before netif_tx_disable(). It may have the
+same window.
+
+[Severity: High]
+The reproducer in the commit message opens an AF_XDP/ZC socket. When an
+XDP program is already attached, that goes through stmmac_xdp_setup_pool()
+-> stmmac_xdp_enable_pool() in stmmac_xdp.c, not stmmac_xdp_release():
+
+stmmac_xdp_enable_pool() {
+    ...
+	if (need_update) {
+		napi_disable(&ch->rx_napi);
+		napi_disable(&ch->tx_napi);
+		stmmac_disable_rx_queue(priv, queue);
+		stmmac_disable_tx_queue(priv, queue);
+	}
+    ...
+}
+
+stmmac_disable_tx_queue() frees the ring with stmmac_stop_tx_dma() and
+__free_dma_tx_desc_resources(). Nothing stops the netdev Tx queue.
+stmmac_xdp_disable_pool() follows the same pattern with ch->rxtx_napi.
+
+At this commit, can stmmac_xmit() keep writing into tx_q->dma_tx while the
+ring is freed and reallocated on these paths?
+
+The next patch in the series, "net: stmmac: Stop Tx queue when
+(en|dis)abling XSK pools", appears to address this. It adds
+stmmac_xdp_stop_tx_queue() after napi_disable() and netif_tx_wake_queue()
+after the queues are re-enabled, which closes the gap by the end of the
+series.
+
+> +
+>  	/* Free the IRQ lines */
+>  	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but the TX/DMA IRQ handlers
+stay registered after netif_tx_disable() until stmmac_free_irq() runs.
+STMMAC_DOWN is not set on this path.
+
+If a TX hard error arrives in that window, stmmac_msi_intr_tx() or
+stmmac_dma_interrupt() calls stmmac_tx_err(), which ends with:
+
+stmmac_tx_err() {
+    ...
+	priv->xstats.tx_errors++;
+	netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, chan));
+}
+
+Can that reopen the queue so that stmmac_xmit() runs on rings that
+free_dma_desc_resources() is about to release?
+
+The window existed before this patch and was larger then. Hitting it needs
+a hardware DMA TX fatal error during XDP attach or detach.
+
+[Severity: High]
+This is a pre-existing issue, not introduced by this patch. Moving
+netif_tx_disable() does not change it.
+
+When the XDP program is removed, stmmac_xdp_set_prog() does:
+
+	if (!prog)
+		xdp_features_clear_redirect_target(dev);
+
+	need_update = !!priv->xdp_prog != !!prog;
+	if (if_running && need_update)
+		stmmac_xdp_release(dev);
+
+Nothing like synchronize_rcu() or synchronize_net() runs between clearing
+the flag and the release. stmmac_disable_all_queues() calls
+synchronize_rcu() only when an rx_q->xsk_pool exists.
+
+Another device's NAPI poll may already have passed the
+NETDEV_XDP_ACT_NDO_XMIT check in __xdp_enqueue(). It can then flush its
+bulk queue from xdp_do_flush() into stmmac_xdp_xmit() after
+free_dma_desc_resources() has run.
+
+stmmac_xdp_xmit() only checks:
+
+	if (unlikely(test_bit(STMMAC_DOWN, &priv->state)))
+		return -ENETDOWN;
+
+This path never sets STMMAC_DOWN. Also, __netif_tx_lock() ignores the
+stopped state set by netif_tx_disable().
+
+Could stmmac_xdp_xmit_xdpf() then write into the freed tx_q->dma_tx and
+tx_q->tx_skbuff_dma?
+
+Would either of these close it: setting STMMAC_DOWN, or adding
+synchronize_rcu()/synchronize_net() after the redirect target is cleared
+and before the release?
+
 -- 
-2.55.0.windows.3
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261005-stmmac_xsk_crashes-v2-0-46c60cba6421%40linutronix.de
