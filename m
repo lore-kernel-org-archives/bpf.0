@@ -1,121 +1,127 @@
-Received: from mta1.migadu.com (out-18.mta1.migadu.com [95.215.58.18])
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92744493D3B
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 13:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C7E48FF9C
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 14:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791466092; cv=none; b=gwE0AHunIxNaxvHzMNLjcuu8caKneO94Rlhy1fRkOMex1mcr2nRQzIFMv/i/XQKqFH9BEDJnIMARu2TBHGqAqpfKd3xwwLnhN2OgGvT6sGGjyLNeMybIJgMfKUSDCKqy21mVeGC63v8kR90/ZqAEqTjfrQK6aTbzpxHQd08N2Xw=
+	t=1791468170; cv=none; b=uHCIlESEtlMuRLMOGjI/lZCSerexPrHOXN84y7gcCgwM1xbPeYkV/y07u0DRpxG6KZRYQu89Q2FVJ32/sMiN3RsPa6sqAuVP6LyuOQ8D6cNqgH7Ut5g4l92dRr0CHA87DSenuH7RSWvzz0SQDK0MCOqqdh8bxWgJ/NOgMZGP8RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791466092; c=relaxed/simple;
-	bh=g+hoe6ERaB/Zv07gVkZ8ZqDRbf+iRJJQAODDubsagnY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LNBBYkbHCEEpPBcw1qtAwtWPq+FnziMZHzokR6KQwLQPReem50N9BAG5l6JKw8KR2zoZBI3iWp/l4uj8y6rFwSp8y2a2aU9tsVtkoHOv8C5qb2nSP+fRLHpgHAdW2Bs04eTo0cJCB5KF6tMXWD993nlPR6igGe1VyhCZaanC190=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C5o+TOxs; arc=none smtp.client-ip=95.215.58.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791468170; c=relaxed/simple;
+	bh=bahwq3zhX8Ly6A29Jjh8zxDv/0A1k+kF3/Q6NsvVg3Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UwGiuErcbdSO2S+Ozwq9usICsPJPrfYwpouJBPqAr3io0jr9ZiFhJeeVwsBBBvfRgrtwcBD69kKWcapNglV/AaeUroIdpzU446dNLUCQfNgRplGpuZmU8J6iHKwX/KEZC1OVatMeJWTrKoa2vsBk7KpZe8dotxPfpuZ/m6uWb70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sOEJ2qos; arc=none smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C5o+TOxs"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=g+hoe6ERaB/Zv07gVkZ8ZqDRbf+iRJJQAODDubsagnY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791466087; v=1; x=1792070887;
- b=C5o+TOxs0rjnwJ76O8oyi4Yd6V5gjl4vN2xImp51jrSx5gED1DAykffd84ZHo0w+8D4Sd5Ru
- TTRllVl2l9ULUarHslUVHP1Zhor4JfSt4nF77k422DhgOnM8pRKzPPGKYwr+CigvZDswIwUUnZb
- ktG0YlVCeV4914h3cgFvXIso=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 127a244004bc9bdb;
-	Thu, 08 Oct 2026 13:28:07 +0000
-X-Mizu-Trace-ID: 127a244004bc9bdb
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2ae7b3d0-6350-4145-a5da-7a9a81a845d4@linux.dev>
-Date: Thu, 8 Oct 2026 21:28:01 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sOEJ2qos"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1419d3416ceso9996368c88.0
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 07:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791468166; x=1792072966; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=xtcAtg9RPe8ybW5E9qQpidKnLoLoxeabdblRAW5zS/w=;
+        b=sOEJ2qosSo5uonVOT5O89+SV7jQ1cyqo33WIeCa3OkAdP8zOtbaU/VyCJ6nK+rJxbC
+         zAwNehqDbtal0UpjfMUZSD9XnEu3KGxfkgQPCeVSDbGOXhzapopydSiklVPfoB7JGy12
+         bvyr10bWET6bsOU1jiluE+PCyzYKzwf5JiORrQNqOo4ovrMc306NkFynVnJ08ztkGEr0
+         LgAF4q4q6cqXBXJvmJkTeoA9cTb2Dry9pcFOPEql78fqWfAsf3XFfdZ9PR7SkYOHnx63
+         s8CTgPEkGN6/d2yiECLTHUFkFWFNC+N/+D4Q1bE8ucLhBf/cJ9xATZ4N2AQZopcInm5L
+         aY+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791468166; x=1792072966;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=xtcAtg9RPe8ybW5E9qQpidKnLoLoxeabdblRAW5zS/w=;
+        b=UemhIeIq4XNoUOLUPNBZN7BPGbhzS6nQpS/MOFO9LjDoCKzczcziOaooGZeZ6k389t
+         vJsNSlU5lzfLg5UAButc8Kw0+GUsFd/23+IuRhycdEO0t8waOoDTH7aBn/xvbyqoRygV
+         bcY/timP39Gp23yDMhthZPafsNaF9971BrQEHLvUxXXvbKd8+0x80lffa6r3kjwq9OU3
+         zO6pCyM46/UWqCrCqZfgUfG33CduxF36pno49/BfZ7YlhN9D1HRe/ANQQo02v4efIqEh
+         9WF4kIypDUceS6K9eBRUGFrv0Q1YfmCU1RmRKjgJPX28KJnJp/wI/bkCPPjnVYB0Nrj4
+         nWmg==
+X-Gm-Message-State: AFuF++niiojUQVZcbjfUIDv0FLjREb7MxMLbM8kVAbBAy/0qIffEm3bG
+	UDQct8xSb0J6fJ8X0sQO0yHqKIFnN+lqwD90VfX+YYOU2I9i5PK8d3Qb
+X-Gm-Gg: AYBFou2+sRrOKP0VDSuIAIr/5FGOUnjlcsgkb08JpImB+iRSS9XMoSC/0jU84YG6oNa
+	Rj7oT+KFwwdMb4O1Zv2KaZ5AmRxpmQgEyhcyLSGAb5e2ByKOrEOXSHQStGzFqhYvdydH2iqEZfT
+	3NgC13TShFnN9Xjqalpr+T11+/vvxbwgzK5r1tdDafxjqIoziGngOVc27lxmsUngA+neJQe0xQr
+	az5yuaMoBKS2MO4IYN7Uwx9SrY0KMmq0HHlXu83IW39qVpGc/0OAa7mAufu9bT3/kKBa2taaz+5
+	L4VniRJnQEw5kvUY36Hz6JIklKcxdhfQn1uBNTgtH3OZr2VymC9otliL2Yh+Y/F8/SY8zijcM2C
+	DPJ8Jf4hMwDFQha5t+YzmhWqs/lcc/5ea41AYflYDGbBy6Dhr07yuQjuhiTjUlC9eb2hJF30cjY
+	AhZe/mnGY9Hbgzuh1N1d7cC7Isf4QugzcHj/0HYJetGh4s9SJNPpNI33mlxDIKRQiTtTwsdDvci
+	gCv
+X-Received: by 2002:a05:701b:42c2:10b0:143:297c:276c with SMTP id a92af1059eb24-1620665f4f8mr7308989c88.33.1791468165887;
+        Thu, 08 Oct 2026 07:02:45 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-16375a1f898sm11460637c88.0.2026.10.08.07.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 07:02:44 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Date: Thu, 08 Oct 2026 22:02:39 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Use its own netns in
+ flow_dissector_skb_less_direct_attach
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v6 3/3] selftests/bpf: add tests for percpu map flags
- combination
-To: Masoud Aghasi <maghasi@disroot.org>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, john.fastabend@gmail.com
-References: <20261008120734.1565972-1-maghasi@disroot.org>
- <20261008120734.1565972-4-maghasi@disroot.org>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20261008120734.1565972-4-maghasi@disroot.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20261008-selftests-bpf-flow-dissector-netns-v1-1-5d9889aaad84@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAH6ix2oC/x2NzQrCMBAGX6Xs2YWk9Q9fRTxo+q0ulKRkFy2Uv
+ rvR4xxmZiVDVRhdupUq3mpacoO46yi97vkJ1rEx9aE/xhDObJjEYW78mIVlKh8e1QzJS+UMz8Z
+ p2J+SDBEHidRCc4Xo8p9c6WdlLE63bfsCqJKqc34AAAA=
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
-On 2026/10/8 20:07, Masoud Aghasi wrote:
-> All possible combinations of (BPF_EXIST, BPF_NOEXIST) and
-> (BPF_F_ALL_CPUS, BPF_F_CPU) flags are covered for all percpu map types.
-> 
-> As BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE does not support BPF_NOEXIST and
-> also in order to reduce the amount of code duplicates, I added its
-> new test scenarios to the existing cpu_flag_percpu_cgroup_storage test.
-> 
-> But for other percpu map types, I added new tests to be able to
-> exercise all flag combinations and the edge cases such as percpu LRU
-> unnecessary deletion issue.
-> 
-> Signed-off-by: Masoud Aghasi <maghasi@disroot.org>
+test_flow_dissector_skb_less_direct_attach() and
+test_flow_dissector_skb_less_indirect_attach() each create a netns to run
+in, and test_progs may run the two at the same time.
 
-Two concerns below, others lgtm.
+Both name their netns flow_dissector_skb_less_indirect_attach_ns. When
+the two tests overlap, one of them fails to create or open the netns, or
+loses it to the cleanup of the other one.
 
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Name the netns of the direct attach test after that test.
 
-> ---
->  .../selftests/bpf/prog_tests/percpu_alloc.c   | 254 ++++++++++++++++++
->  1 file changed, 254 insertions(+)
-> 
+Fixes: 2b044dd186f0 ("selftests/bpf: re-split main function into dedicated tests")
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[...]
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index fb48926814647..f6fefb14cda3c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -706,7 +706,7 @@ void test_flow_dissector_skb_less_direct_attach(void)
+ 	struct bpf_flow *skel;
+ 	struct netns_obj *ns;
+ 
+-	ns = netns_new("flow_dissector_skb_less_indirect_attach_ns", true);
++	ns = netns_new("flow_dissector_skb_less_direct_attach_ns", true);
+ 	if (!ASSERT_OK_PTR(ns, "create and open netns"))
+ 		return;
+ 
 
-> +
-> +	if (map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH)
-> +		goto out;
-> +
-> +	/* Percpu LRU hash map should not delete old entries unnecessarily */
-> +	flags = BPF_F_ALL_CPUS | BPF_NOEXIST;
-> +	key = 2;
-> +	err = bpf_map_update_elem(map_fd, &key, values, flags);
-> +	if (!ASSERT_OK(err, "bpf_map_update_elem lru_percpu_hash all_cpus|noexist"))
-> +		goto out;
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261008-selftests-bpf-flow-dissector-netns-c347cf31e5f1
 
-Update values[0] before update_elem(), and verify_map_value_all_cpus()?
-
-Also update values[0] before the below update_elem().
-
-> +
-> +	flags = BPF_F_ALL_CPUS | BPF_EXIST;
-> +	err = bpf_map_update_elem(map_fd, &key, values, flags);
-> +	if (!ASSERT_OK(err, "bpf_map_update_elem lru_percpu_hash all_cpus|exist"))
-> +		goto out;
-> +
-> +	key = 0;
-
-Why do you use 'k = 0' instead of '2'?
-
-I think we should update and verify using the same key.
-
-Thanks,
-Leon
-
-
-> +	verify_map_value_all_cpus(map_fd, &key, values, elem_sz, first_value, nr_cpus);
-> +
-> +out:
-> +	close(map_fd);
-> +	free(values);
-> +}
-> +
-
-[...]
+Best regards,
+-- 
+Qiliang Yuan <odys.yuan@gmail.com>
 
