@@ -1,122 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8FC3EE1F8
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 11:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE3044781C;
+	Thu,  8 Oct 2026 11:29:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791458354; cv=none; b=seJdp0pCb21FbiNINkBcgX5HBXPrzTWe/FtgAn/AAE2QzZik4xSj2s14u/VGlOvQBFUx5E3Nmqos8gW08YEEfNbDgZyEzIFvPxuxWgfQ8QKanOsF3iseAubM0eCXWJJ5YesXQ8vYmUXgJOGS2W8p7MM7OP0SCCVG6wdJM2OMY6M=
+	t=1791458956; cv=none; b=O5puCGcgMpiI+v2oPl/GO4BdslNx6T3FX04O4dlEmVpeYsyom0qnMWM8nfzsOOc9R/pJ2VPFI2Z2mRXmWbW8zSAJXpFMcBpz7cGRm5BT0ePNEbV9J3NsG0W/t3/gqPcjbbU+zQ9j46xp0gSzOSBBKSW+bn1/XhHq6Frfu0wfr8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791458354; c=relaxed/simple;
-	bh=2iWKgdjnY/WKT1NRrSPFsVEZgqb3q8rtw1j3YXKRPfs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cVgzuFA+TOEKklSNXgzwwYKk9IXvTlYwUpaNPMyHYJ+nVch8E7uTksFxA9V94f/sR3DhClntkTUNDmEEEi0+5ICv/Ff6Wove5VJGmSCnQX96wlvLzGp/4S8hfnVgMaqzQl5Vl5JTLGqIOIZeAw9wh1AvoFTZhoMPIVM2Nw3vCl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nC4yXMux; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791458956; c=relaxed/simple;
+	bh=CF4pxX9x1pl5xQ5PgbAjxKy8EZmkJx8mEemm3tSXWxA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=fvJgCjb9h7pduxSf0PoWJJ8mISHsORhwpbL0omvlWLMUlqJ8NTTff0wWXY+PyUc3+B2gWZJVSgIbaP3ny2w5HUybdwhnn/ZfMIB9LcYOOyTt6zpbPn0AiPbvu2QewCMheEc8bFGVwDx3QZXOqtPpL7V8oXU0a8R7pma/hqEzBx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RpnJ3PLC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nC4yXMux"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E121F0089C
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 11:19:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RpnJ3PLC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1301F000FF;
+	Thu,  8 Oct 2026 11:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791458352;
-	bh=NZcC7/xg5SS/eaNUvNNF7JTQ0EBiXnoG/PlgqRlweyg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=nC4yXMuxmMjU60Le+2fG+FqvSiQ7rKPZNcghMiB9i2JnmXYHvWr8CHGKo+cUg3eyC
-	 tyz9yAp6jv7crdC0S35QVoCksEC9JaXnDlY8BJ92Nf36FysG12iKwvFwx8xsakSXKy
-	 hHhua4yCU8H6sT3Xu229n9WyhY6PlU5iQcUSNzEwcKrCe/nMCecXfR8WB5n6dvNo6f
-	 h8epILmsasVrPcPpm7tSqZOm0INZWaRL80oyengNFl01gcPbbCiOhUsXqei+Xm4juT
-	 P43mQ9wQ4SqKMvX/hVwh7JPj7Cu8DxPF4NEFqi6yryVN3JWVxwD8OLfJSS7Q5cMgL0
-	 ipSoSLdzkMJ/g==
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-93e76469b93so281815985a.0
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 04:19:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwg+AemUxPNntAVpA+oSNscUzGuiciU1tEATSsTqL7pAOZqdnTNgZV6jwVaO4SgVXy4Gyo=@vger.kernel.org
-X-Gm-Message-State: AFuF++m9nIBm35gt/cr6gqvsx5vSycDEuW0AmtnnJf+RhekR7b8s9iPy
-	YCBP2Y938rAl/NLPoFjQVJRCWVN0iC/Bg+ZD3mEApM1RFj99WDKSWdh/U0zdlR1ubyhKSNYj82h
-	xYjC1JIESjEPtLv6KPH72E0Kd7NC/GRM=
-X-Received: by 2002:a05:620a:4709:b0:939:761c:4f59 with SMTP id
- af79cd13be357-93e9b76c78amr924707585a.16.1791458351308; Thu, 08 Oct 2026
- 04:19:11 -0700 (PDT)
+	s=k20260515; t=1791458955;
+	bh=CF4pxX9x1pl5xQ5PgbAjxKy8EZmkJx8mEemm3tSXWxA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=RpnJ3PLC82D53WwAyunL7eXzJfn3cUNAluOpF2p6KaAxFnyTKMmCz8sfyfXLWQb+f
+	 JCeNAUBIIDjAgZD2c53p7RNBAR9eE4zcQtXQqZkWZ/3S1WNBfu18pDir/Qa0i0mivQ
+	 9vL2A3AA9mpBWHJZPktzUmsbHPSLhvAg+uuJ75hx2fTnB4tUcYBje7nxa+C8afgVly
+	 nBsqoixiGGmAvxmNpfT4eDRgGIj39YikhEzeddS7WDzZiGz7Au0k24pH6l2pgtaMvK
+	 CuqyAyaKm6roCOFJI06qHcxEqMAWpRdoHSjmESJf87ro9A+nCwBKuLspKNxDzLeTIv
+	 30an0ExLpfrQQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Luigi
+ Rizzo <lrizzo@google.com>, Pavel Begunkov <asml.silence@gmail.com>
+Subject: Re: [PATCH net-next v2 1/2] net: netmem: document netmem and memory
+ provider design in comments
+In-Reply-To: <20261008023030.1089616-2-almasrymina@google.com>
+References: <20261008023030.1089616-1-almasrymina@google.com>
+ <20261008023030.1089616-2-almasrymina@google.com>
+Date: Thu, 08 Oct 2026 13:29:11 +0200
+Message-ID: <87ece02zy0.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261008070928.113530-1-hui.zhu@linux.dev>
-In-Reply-To: <20261008070928.113530-1-hui.zhu@linux.dev>
-From: Barry Song <baohua@kernel.org>
-Date: Thu, 8 Oct 2026 19:19:00 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4wW=XXe6=1GucvA1pUSkhLCosJh+bc0-97cYGGWW=MtPw@mail.gmail.com>
-X-Gm-Features: AclHuK9Y4gxfKhBzGtl0K9V-EYLUU5MKewRW9HUXdq9571fi07WGLf_34qgAkY8
-Message-ID: <CAGsJ_4wW=XXe6=1GucvA1pUSkhLCosJh+bc0-97cYGGWW=MtPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add bpf_proactive_reclaim test
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	Hui Zhu <zhuhui@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 8, 2026 at 3:10=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
->
-> From: Hui Zhu <zhuhui@kylinos.cn>
->
-> bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
-> unlike a write to memory.reclaim, does not retry until the goal is
-> reached.
->
-> Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
-> and check that the result is positive but well below the request: one
-> pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
-> 4K and 64K page kernels.
->
-> The test deliberately covers only the kfunc itself. A full example of
-> the intended asynchronous use, where a BPF program watches one cgroup's
-> workingset refaults and reclaims another one from bpf_wq callbacks, is
-> maintained out of tree at [1], released under GPLv2.
->
-> Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.=
-c
-> is not built at all.
->
-> [1] https://github.com/teawater/memcg-async-reclaim
->
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-[...]
+Mina Almasry <almasrymina@google.com> writes:
 
-> +
-> +       /*
-> +        * Both candidate directories can be tmpfs (initramfs-based CI, f=
-or
-> +        * instance). That is an environment limitation, not a test failu=
-re.
-> +        */
-> +       dir =3D workload_dir();
-> +       if (!dir) {
-> +               test__skip();
-> +               return;
-> +       }
-> +
-> +       snprintf(data_file, sizeof(data_file),
-> +                "%s/memcg_proactive_reclaim_XXXXXX", dir);
-> +       data_fd =3D mkstemp(data_file);
+> Clarify the netmem, memory provider, page_pool, and skb fragment design
+> principles in header and code comments:
 
-If we can't write to the directory, will `mkstemp()` fail?
-Should we check `access(dir, W_OK)` first?
+Thanks, Mina. This is helpful!
 
-> +       if (!ASSERT_GE(data_fd, 0, "mkstemp"))
-> +               return;
-> +
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 
-Best Regards
-Barry
