@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4E13C4554
-	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 07:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3C2372EF3
+	for <bpf@vger.kernel.org>; Thu,  8 Oct 2026 07:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791445821; cv=none; b=OOeZQtn9sX5lW1hjG3slt/+vvIcf6UFq4sTOSyl5ItWkEgsGWD27Ne7zgcwMi4r9wCy8qgwWy7t+L2Lg8aWHylWkFi47y+HWhgQuhHuFHyJw9bBDtvrCkZtts7S9POnOGrpBZqhIoLDUELGuunG+NNcTWoAeeZ9MNdDzokTMlLw=
+	t=1791445823; cv=none; b=A7168zh7Ybn6qTK0N2X1x6wZbRBEvR8fbkqTzlcLZotoQ0fB5ki1XLL7RXKl9/V22Dn8unsjs6nmq/uwoW6h0LZe/SonAL+ZE3t3QVkESQGThWPRk6X/ihXFquMczZ/ll+d3owbVW4MU1ZeNlLGIv6Idigs1Fsi6t91sxELbDCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791445821; c=relaxed/simple;
-	bh=7LurUQy4l1R5WJIecHEoo5hCb3p9iggCAUd43GB/lsE=;
+	s=arc-20240116; t=1791445823; c=relaxed/simple;
+	bh=gbjkncN7SLGd+gQsE8W6q7Ky6A4jYqERu8bqU3x0SuY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YMy6HdMZk1E+bVegKA+lyZwVpZPkCtb2oDhbu9s0p25B91qAaS9QnQKMK7kQ83ha7/EzrwvDnMD7aR/UaaZUKz/z1KBs6sa5ZKNxXa9NemKGEdjbESvnqga89LN9PhnibFWmDkOPpkDlBG2StoA4Yc7ZuJgVl1WVq5wmmkWaTx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=g3O7uO9yQ0cBIPHvwjR5KVe34KTca43MfvVv5DRXqIq4gO7zX8/Vi2K68c572E+RrLfjQ03LRs69S52eLzSlqgeoo40eOcJHK/3S6Q8bnUzMcMN8eDiCpnGZA2eJaDTSfWh83O5I3QGL6gYNffJxpdR3ivKjjFy6I+CkqynfmXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id C23EA2FDA0BC99; Thu,  8 Oct 2026 00:50:04 -0700 (PDT)
+	id 0980B2FDA0BD20; Thu,  8 Oct 2026 00:50:15 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v9 01/23] bpf: Pack bpf_insn_aux_data flags into bit fields
-Date: Thu,  8 Oct 2026 00:50:04 -0700
-Message-ID: <20261008075004.2994679-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v9 03/23] bpf: Add the bpf_unwind() and bpf_unwind_resume() kfuncs
+Date: Thu,  8 Oct 2026 00:50:15 -0700
+Message-ID: <20261008075015.2996034-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261008074959.2993751-1-yonghong.song@linux.dev>
 References: <20261008074959.2993751-1-yonghong.song@linux.dev>
@@ -37,102 +37,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-struct bpf_insn_aux_data spreads its flags over nine bools, a u8 of three
-bit fields and a u32 group with 25 of its 32 bits spare. Put them all in
-one u64 word, alu_state with them, with orig_idx packing into the word's
-upper half. The structure goes from 128 bytes to 120, and stays there
-when a later patch adds a u32, which takes the tail padding.
+An exception cleanup needs two terminators:
 
-No functional change.
+ - bpf_unwind() begins an unwind: the frames it leaves run their landing
+   pads on the way out to the program's exit. It is separate from
+   bpf_throw(), which discards the frames in between.
+ - bpf_unwind_resume() ends a landing pad, carrying the unwind on. The
+   compiler calls it _Unwind_Resume, which a later libbpf patch resolves
+   to this name, and passes it the exception object, which the kfunc
+   takes as ptr__ign.
 
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Neither is registered yet: that waits for the patch that dispatches pads
+at run time.
+
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h | 45 ++++++++++++++++++------------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
+ kernel/bpf/helpers.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index c51083c761cf..68636e1f048b 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -664,42 +664,43 @@ struct bpf_insn_aux_data {
- 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
- 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt *=
-/
--	bool nospec; /* do not execute this instruction speculatively */
--	bool nospec_result; /* result is unsafe under speculation, nospec must =
-follow */
--	bool zext_dst; /* this insn zero extends dst reg */
--	bool needs_zext; /* alu op needs to clear upper bits */
--	bool prevent_zext; /* alu op cannot be zext (already used with 64-bit s=
-calars) */
--	bool non_sleepable; /* helper/kfunc may be called from non-sleepable co=
-ntext */
--	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
--	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog perc=
-pu alloc */
--	bool arena_scalar; /* ldx/stx/st/atomic through a number, it's an addre=
-ss in arena */
--	u8 alu_state; /* used in combination with alu_limit */
-+	u64 nospec:1; /* do not execute this instruction speculatively */
-+	u64 nospec_result:1; /* result is unsafe under speculation, nospec must=
- follow */
-+	u64 zext_dst:1; /* this insn zero extends dst reg */
-+	u64 needs_zext:1; /* alu op needs to clear upper bits */
-+	u64 prevent_zext:1; /* alu op cannot be zext (already used with 64-bit =
-scalars) */
-+	u64 non_sleepable:1; /* helper/kfunc may be called from non-sleepable c=
-ontext */
-+	u64 is_iter_next:1; /* bpf_iter_<type>_next() kfunc call */
-+	u64 call_with_percpu_alloc_ptr:1; /* {this,per}_cpu_ptr() with prog per=
-cpu alloc */
-+	u64 arena_scalar:1; /* ldx/stx/st/atomic through a number, it's an addr=
-ess in arena */
-+	u64 alu_state:8; /* used in combination with alu_limit */
- 	/* true if STX or LDX instruction is a part of a spill/fill
- 	 * pattern for a bpf_fastcall call.
- 	 */
--	u8 fastcall_pattern:1;
-+	u64 fastcall_pattern:1;
- 	/* for CALL instructions, a number of spill/fill pairs in the
- 	 * bpf_fastcall pattern.
- 	 */
--	u8 fastcall_spills_num:3;
--	u8 arg_prog:4;
-+	u64 fastcall_spills_num:3;
-+	u64 arg_prog:4;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index a284f20c97d5..4eccd6742eba 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3424,6 +3424,10 @@ static bool bpf_stack_walker(void *cookie, u64 ip,=
+ u64 sp, u64 bp)
+ 	return false;
+ }
 =20
--	/* below fields are initialized once */
--	unsigned int orig_idx; /* original instruction index */
--	u32 jmp_point:1;
--	u32 prune_point:1;
-+	/* below flags are initialized once */
-+	u64 jmp_point:1;
-+	u64 prune_point:1;
- 	/* ensure we check state equivalence and save state checkpoint and
- 	 * this instruction, regardless of any heuristics
- 	 */
--	u32 force_checkpoint:1;
-+	u64 force_checkpoint:1;
- 	/* true if instruction is a call to a helper function that
- 	 * accepts callback function as a parameter.
- 	 */
--	u32 calls_callback:1;
--	u32 indirect_target:1; /* if it is an indirect jump target */
--	u32 non_stack_access:1; /* instruction can access non-stack memory */
-+	u64 calls_callback:1;
-+	u64 indirect_target:1; /* if it is an indirect jump target */
-+	u64 non_stack_access:1; /* instruction can access non-stack memory */
- 	/* true if some jump or call instruction targets this instruction */
--	u32 jump_target:1;
-+	u64 jump_target:1;
++__bpf_kfunc void bpf_unwind(void)
++{
++}
 +
-+	unsigned int orig_idx; /* original instruction index, initialized once =
-*/
- 	/*
- 	 * CFG strongly connected component this instruction belongs to,
- 	 * zero if it is a singleton SCC.
+ __bpf_kfunc void bpf_throw(u64 cookie)
+ {
+ 	struct bpf_throw_ctx ctx =3D {};
+@@ -3445,6 +3449,16 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+ 	WARN(1, "A call to BPF exception callback should never return\n");
+ }
+=20
++__bpf_kfunc void bpf_unwind_resume(void *ptr__ign)
++{
++	/*
++	 * Never reached: the verifier accepts this kfunc only as a frame
++	 * terminator and bpf_do_misc_fixups() lowers every one of them to
++	 * 'r0 =3D 0; exit', so no call to this body survives to run.
++	 */
++	WARN_ONCE(1, "exception cleanup resume was not lowered to a return\n");
++}
++
+ __bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *p__const_map, unsig=
+ned int flags)
+ {
+ 	struct bpf_async_kern *async =3D (struct bpf_async_kern *)wq;
 --=20
 2.53.0-Meta
 
