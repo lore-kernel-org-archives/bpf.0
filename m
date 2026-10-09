@@ -1,296 +1,159 @@
-Received: from mail-oo2-f5.google.com (mail-oo2-f5.google.com [74.125.231.133])
+Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC2D43DEC7
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 15:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDC82367DF
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 15:24:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791559400; cv=none; b=JBKLQLIkTVua/6eQn169eXrDgaAjVWh+LyHzs26GC1nyOQ9W/oGT/cbdXP4RzDaMR9hQs+XehYTO9iFynVOevySCLSZQTKaoSoUEYFqZfw/Oo75DO1vgGI36gaxFKhXKCoZm8xx7/KKvVemQp+n1vrs379S+720l6rX7jKDVOvc=
+	t=1791559462; cv=none; b=ixP/18M3urwXqwqMB8lnB6nsNeGaBYHi9++OffMquImQchfaoh+lMaCJF6QRB/o75B758eX9dMRwGBd1nxWNQdEDTWBaz6wQTVJQJdMrGTlShqg6H6rzY3DggZ0H8EKPYbEKmDZlAMfEVqd1EQC9rNAv9kgUhEEMbJPRQyBN07A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791559400; c=relaxed/simple;
-	bh=YhV1uq9nrtu3FgHNColy615Fa91X+6p1ywpKcSE46dw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=fM1dNxPUbljxv5gNDc3MMVmxw6d7/Tbb1AS1tKKtCqjRE5wKXXoEt596MDBTpm1JEySPm7BtSc7U5kdAIVTxQjBmtFZdtCTm204hZ/YKi2c/tL7EihnaE4jOjfxNi9ARG0NbPUc5uTBbjVa2kA09jMlraMNZHJqShvfrI2EmlXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NK6kbblG; arc=none smtp.client-ip=74.125.231.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791559462; c=relaxed/simple;
+	bh=K64JNADzp0N1kW7sFwREv2m/+V717OimyCitmYtVhgM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LgNfm+CPCZObaJXhCZtRq2MgBHxENAuclkQEfFwhG0sI9Vq0IYlUY5t5K15ulqFL77RMXcBjJIcvGIvzTYanAtAVA8LY+nFwhlHdcfTAb4OJaJjGwv8U86E7GlOE5pSAJVqwzFVFT68efSGMN4fYshX+lBBXOfprLz+rabbLsEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g/+eUjZH; arc=none smtp.client-ip=91.218.175.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NK6kbblG"
-Received: by mail-oo2-f5.google.com with SMTP id 006d021491bc7-6df36d0b4e1so1282081eaf.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 08:23:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791559396; x=1792164196; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=9bsEAb7rdjvTKyrPBq/ClQt9ly/O/oO1ux+7iMSVRPI=;
-        b=NK6kbblG/EGTO570MZlBoxn+LZDSD3gt0UbIRsEo3uySL9Y3CHMOOZQGDqkTJQy5V1
-         oKI0aJ33+B2BBPhy4pt2FwUTJ/L5izjz9+vEmoSCb8ngMbNnw5ZED8wlyGjDsaNtQF72
-         +2mQUlv0tgH8VNnjgavnmoSDoFIxFspXvpXKDhno1JqzdIUanUji2En4ktJ+FVfOTlBT
-         MUFk5qP3HVQjGDV7g+SksCpz32HtgDEMjx8+HhpoOSI2wVjN+bZl14dKlpRGof0DO6di
-         ykoRRCXglueoQfUK8Unqq8lKwm7OXf6JCbREmUj4kPmijzzUvHX7Pr4QFJ6g47Uak/hv
-         wi9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791559396; x=1792164196;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9bsEAb7rdjvTKyrPBq/ClQt9ly/O/oO1ux+7iMSVRPI=;
-        b=P/K6VzFHfN3vXLVBAuW60XIiD1VWXhMJU3u9BICIYJW1I3arebIaRJsqrF7MU+KsY5
-         CVeKKRjFAakipyOxKh88CbYvAP27p2yXNMTVioR4EsH518YL/EdHxTh1iBSb6yFHIXVG
-         QIfKXTpCZDW1Wdb4Y54IFsPI1Fp66SoNQfYe1uXBEO8B+V0lWz22VZxjX1l3vPbup5cf
-         MdiUcDSa7ZPWJEXleBSMQB70pFsH3bc55rQY5PF/LSO1bYQTt6NCAn83R7yNxHDOKaMr
-         B+lilpxgatYjWDyL5e0Ll/QnwjIqfdOMa7bUXEahmmLeoi/38okT+vSn+aMvlotaS+8t
-         wjDg==
-X-Gm-Message-State: AFuF++nLFFMOPwFJepks14EGT18FcQGZfZpnVwARDq1IrpfCJc3d55Y5
-	Lsw2b93CQu2XM4ubuy+yS6ySuDWK/cgsIFibbNYtgBV49VDAoejSd/MB
-X-Gm-Gg: AYBFou3kFZxn4zVjf/ThNM6jI3ffBYp6X2EPz5jr4oKeylr8iwzkVtmx0oAVN+lLwbe
-	BftZSgpJ6J3t3c7+M/7Rr3UmOxLqQh/IaRX4jEksmNy5gF2MBrqAJv+kCvRstynt7eKKQ+uI5kZ
-	F1phzir0BCnJJyAIoTCCn6ttTTMH6LaeQa8vr7kw1dbxhKq4pd7kFo5qqthFAfhqv0PbLPGRxXp
-	sSHmQpqLeNQgf2vfu4WxuJzl2ZN6IfopggLf4PoCfJxE1mHiBtlKzH4uz1ZYXFQByy4Uuyutv24
-	Sh7o0ggaTvk2NotbGoGDghJNaa7AY4xXTRv3S3+z/F/JcA2gcaicAp+KbTd+H+jnTgt4+J3Q1Uz
-	b4uo72egMMdFNxvzUqpkVqFMw8R8OvA2snxGwO03PEaNCLm28i+IUTT8AxVB6E0Up7bILO/O1/v
-	4zm71aTz51uoZOoHgW5TZiwmJGxbH+AlBrVcrJYOwuvcchQ4g9F5JidYdw/JN0/4yL+OYQIsp5M
-	xSdzsa8kOp4Tlu6/6xn5BFiVVua/ZTRI6LfvISfvfVmnNRrdfqz/0XsRMufjGodniERvsPkO5E8
-	0o6JvL5N5G00GJw=
-X-Received: by 2002:a05:6820:198a:b0:6df:10cb:2195 with SMTP id 006d021491bc7-6ef0eada12dmr1555534eaf.49.1791559395333;
-        Fri, 09 Oct 2026 08:23:15 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:52::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6ef03e39840sm1848867eaf.15.2026.10.09.08.23.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Oct 2026 08:23:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g/+eUjZH"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=K64JNADzp0N1kW7sFwREv2m/+V717OimyCitmYtVhgM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791559457; v=1; x=1792164257;
+ b=g/+eUjZH1we+3FJXrYJl9uhtAix6hoLturJVtd1gj9/CxFsy0GEiPWnUG5tNaXgfUPrnyZPE
+ mny/ZsjM83fms0Vedssfx6jRXXac2j3j4iTeXJ3sJyIKhS5UdYwJ06DTkq+ntZ/gp/LZWYOGO3v
+ d0mqaRjmlopiEQXJyzDoNTh8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2a88ffb8c053162c;
+	Fri, 09 Oct 2026 15:24:15 +0000
+X-Mizu-Trace-ID: 2a88ffb8c053162c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <859a751b-2af6-4dd5-be9b-368f697e347b@linux.dev>
+Date: Fri, 9 Oct 2026 17:24:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 09 Oct 2026 17:23:13 +0200
-Message-Id: <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups
- for user address faults under SMAP
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Borislav Petkov" <bp@alien8.de>
-Cc: <bpf@vger.kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "Andy Lutomirski" <luto@kernel.org>, "Peter
- Zijlstra" <peterz@infradead.org>, "Thomas Gleixner" <tglx@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>, <kkd@meta.com>, <kernel-team@meta.com>,
- <x86@kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.22.0
-References: <20261009024925.3169077-1-memxor@gmail.com>
- <20261009024925.3169077-2-memxor@gmail.com>
- <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local>
-In-Reply-To: <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v10 07/24] bpf: Verify an unwind through landing
+ pads and epilogues
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261009041447.17092-1-yonghong.song@linux.dev>
+ <20261009041523.26992-1-yonghong.song@linux.dev>
+ <sashiko-outbox-164848@kernel.org>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <sashiko-outbox-164848@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri Oct 9, 2026 at 6:13 AM CEST, Borislav Petkov wrote:
-> On Fri, Oct 09, 2026 at 04:49:21AM +0200, Kumar Kartikeya Dwivedi wrote:
->> With SMAP enabled, do_user_addr_fault() treats a kernel-mode fault on a
->> user address with EFLAGS.AC clear as a kernel bug: it does not consult t=
-he
->> exception table and oopses right away. That is correct for ordinary kern=
-el
->> code, where get_kernel_nofault() and the other nofault accessors never l=
-et
->> a user address reach a faulting instruction.
->>
->> JITed BPF programs are different. A privileged program may dereference a
->> pointer the verifier cannot prove valid, and the verifier marks such loa=
-ds
->> PROBE_MEM. The JIT attaches an exception table entry to each PROBE_MEM
->> load, so that a fault on an unmapped kernel address zeroes the destinati=
-on
->> register and the program continues. Since a user address would oops
->> instead, the x86 JIT also emits an address range check in front of every
->> PROBE_MEM load, which keeps user addresses, the guard page above
->> TASK_SIZE_MAX and the vsyscall page away from the load. The check
->> duplicates the fault handler's knowledge of the address space layout, go=
-t
->> the vsyscall page wrong until commit b599d7d26d6a ("bpf, x86: Fix PROBE_=
-MEM
->> runtime load check"), and costs nine instructions and 32 to 39 bytes of
->> code per load.
+
+
+On 10/9/26 6:40 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] bpf: skipped exception pad verification for global subprogs that throw and unwind
+> - [Medium] bpf: Soft lockup in mark_callx_might_unwind() due to O(N^2) instruction traversal
+> --
 >
-> I can't parse that. Why do bpf memory accesses need to be handled differe=
-ntly
-> than any other memory accesses when SMAP is enabled?
+> commit 54596ff7029b639349bb84341497b649e38e027e
+> Author: Yonghong Song <yonghong.song@linux.dev>
 >
+> bpf: Verify an unwind through landing pads and epilogues
+>
+> This commit adds verifier support for tracking control flow through
+> unwind landing pads and epilogues. It calculates whether a subprogram
+> might unwind by propagating the might_unwind flag along the CFG,
+> and integrates backtracking through these new paths.
+>
+>> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+>> --- a/kernel/bpf/cfg.c
+>> +++ b/kernel/bpf/cfg.c
+>> @@ -716,6 +753,82 @@
+> [ ... ]
+>
+>> +static void mark_callx_might_unwind(struct bpf_verifier_env *env)
+>> +{
+>> +	struct bpf_insn *insns = env->prog->insnsi;
+>> +	struct bpf_subprog_info *caller, *callee;
+>> +	int i, j, len = env->prog->len;
+>> +	struct bpf_func_ptr *ptrs;
+>> +	bool changed;
+>> +	u32 cnt;
+>> +
+>> +	if (!addr_taken_subprog_might_unwind(env))
+>> +		return;
+>> +
+>> +	for (i = 0; i < len; i++)
+>> +		if (bpf_is_callx(&insns[i]))
+>> +			bpf_find_containing_subprog(env, i)->might_unwind = true;
+>> +
+>> +	do {
+>> +		changed = false;
+>> +		for (i = 0; i < len; i++) {
+>> +			caller = bpf_find_containing_subprog(env, i);
+>> +			if (caller->might_unwind)
+>> +				continue;
+> [Severity: Medium]
+> Could this loop cause a CPU soft lockup for very large BPF programs?
+>
+> The loop iterates up to len times (which can be up to 1 million) and
+> repeatedly calls bpf_find_containing_subprog(), which performs a binary
+> search. Because this propagates upward through the call graph, the do-while
+> loop could execute many times (e.g., up to 256 for the maximum call depth).
+>
+> Without a cond_resched(), this might stall the CPU in kernel space for an
+> extended period.
 
-It requires the same handling as get_kernel_nofault() as if that were inlin=
-ed.
-The point of the patch is to be able to avoid bounds checking in the JITed =
-code.
-We can probably extend this to other nofault accessors as well, but I wante=
-d to
-keep the scope limited to BPF for now, because the cost of the bounds check=
-ing
-is significant in BPF programs.
-
-For background: Privileged programs are allowed to trace kernel code and
-dereference pointers where establishing whether the pointer is pointing to =
-a
-valid object is not possible during verification. Program authors know abou=
-t
-this behavior, most of the use cases for this are reading data, collecting
-statistics, and so on.
-
-It is a more convenient and efficient way to walk a chain of pointers than =
-to
-use the equivalent of copy_from_kernel_nofault() in a loop.
-
-get_kernel_nofault() does user address checks in software, in
-copy_from_kernel_nofault_allowed(), because the SMAP branch in
-do_user_addr_fault() treats any kernel-mode fault on a user address as a mi=
-ssing
-STAC and oopses without looking at the extable. The x86 JIT does the same t=
-oday,
-inlined, in front of every such load in a BPF program.
-
-> Perhaps you should give a concrete example.
-
-Consider this example:
-
-  SEC("fentry/tcp_retransmit_skb") <- attaches to the entry of tcp_retransm=
-it_skb()
-  int BPF_PROG(retrans, struct sock *sk)
-  {
-          struct file *f =3D sk->sk_socket->file;
-
-This program was written for doing a TCP related investigation. The first l=
-oad
-of sk is fine, but sk_socket can be NULL (orphaned socket) or stale, so the
-second load becomes a mov with an extable entry. Below is the JITed sequenc=
-e.
-
-  movq    $-10485760, %r10
-  movq    %rax, %r11
-  addq    $2200, %r11
-  subq    %r10, %r11
-  movabsq $72057594048413696, %r10
-  cmpq    %r10, %r11
-  ja      load
-  xorl    %edi, %edi
-  jmp     done
-load:
-  movq    2200(%rax), %rdi
-done:
-
-Nine instructions and 32 to 39 bytes to guard a every load instruction agai=
-nst
-an access that SMAP, when enabled, will block for us, and which we could fi=
-xup,
-if we had exception handling in its fault path.
-
-So the overall idea proposal is to eliminate this sequence and invoke the
-fixup_exception() handler for the faulting instruction instead, which will =
-zero
-the destination register and continue execution, just like it does for faul=
-ts on
-kernel addresses already.
+It is a little bit premature to add cond_resched(). If later on, we have
+such a case, we can add then.
 
 >
-> And why can't all that gunk be resolved at program load instead of going =
-all
-> the way in the #PF handler?
+> [ ... ]
 >
-
-This is what we do now, but it is a significant amount of code preceding ea=
-ch
-load instruction. If you look at some examples in the cover letter, we can =
-shave
-the text size of programs by more than half in extreme cases.
-
-Do note that we already do fixup_exception() for kernel address faults, so =
-this
-is mostly trying to mirror that behavior for the rest and eliminate the bou=
-nds
-checking.
-
->> When the faulting instruction belongs to a BPF program, resolve its
->> exception table entry instead of oopsing, exactly as is done for faults =
-on
->> kernel addresses. The is_bpf_text_address() lookup sits inside the
->> unlikely() SMAP branch that currently ends in page_fault_oops(), so no p=
-ath
->> that does not oops today executes any additional code, and the oops itse=
-lf
->> is unchanged when no entry matches. Non-BPF code keeps the existing
->> behaviour: a kernel-mode user access without STAC still oopses, extable
->> entry or not.
->>
->> The next patch uses this to drop the range check from the JIT when SMAP =
-is
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -19464,8 +19602,14 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+>>   				cur_func(env)->no_stack_arg_load = true;
+>>   			if (bpf_is_callx(insn))
+>>   				return check_func_callx(env, insn, &env->insn_idx);
+>> -			if (insn->src_reg == BPF_PSEUDO_CALL)
+>> -				return check_func_call(env, insn, &env->insn_idx);
+>> +			if (insn->src_reg == BPF_PSEUDO_CALL) {
+>> +				int call_idx = env->insn_idx;
+>> +
+>> +				err = check_func_call(env, insn, &env->insn_idx);
+>> +				if (err)
+>> +					return err;
+> [Severity: High]
+> If a global subprogram has the might_throw flag set, check_func_call()
+> simulates the exception exit and returns PROCESS_BPF_EXIT (which is 1).
 >
-> There's no next patch and previous patch in git history.
+> Because err is positive, does the check here mistakenly return early,
+> bypassing the subsequent call to process_global_call_unwind()?
+>
+> If the subprogram can both throw and unwind, its landing pad might never be
+> visited by the verifier, potentially leading to a dead code sanitization trap
+> at runtime.
 
-Yeah, I will reword this bit in the commit log for v2.
+In bpf_check(), we have
+         if (env->cleanup_info_cnt || bpf_prog_may_unwind(env)) {
+                 ret = bpf_exc_check_prog(env);
+                 if (ret)
+                         goto skip_full_check;
+         }
+where bpf_prog_may_unwind(env) is added in later patch.
+With the above 'if' condition, bpf_throw() will be rejected
+if (env->cleanup_info_cnt || bpf_prog_may_unwind(env)) is true.
 
 >
->> enabled. Nothing changes about which addresses a BPF program may read: a
->> user address never becomes readable, since SMAP forbids the access, and =
-a
->> PROBE_MEM load of a kernel address is handled as before. Without SMAP th=
-e
->> JIT keeps its range check and this path is never reached.
->>
->> Acked-by: Puranjay Mohan <puranjay@kernel.org>
->> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> ---
->>  arch/x86/mm/fault.c | 11 +++++++++++
->>  1 file changed, 11 insertions(+)
->>
->> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
->> index aa88370ce739..2060e5f35d77 100644
->> --- a/arch/x86/mm/fault.c
->> +++ b/arch/x86/mm/fault.c
->> @@ -20,6 +20,7 @@
->>  #include <linux/mm_types.h>
->>  #include <linux/mm.h>			/* find_and_lock_vma() */
->>  #include <linux/vmalloc.h>
->> +#include <linux/filter.h>		/* is_bpf_text_address()	*/
->>
->>  #include <asm/cpufeature.h>		/* boot_cpu_has, ...		*/
->>  #include <asm/traps.h>			/* dotraplinkage, ...		*/
->> @@ -1262,6 +1263,16 @@ void do_user_addr_fault(struct pt_regs *regs,
->>  	if (unlikely(cpu_feature_enabled(X86_FEATURE_SMAP) &&
->>  		     !(error_code & X86_PF_USER) &&
->>  		     !(regs->flags & X86_EFLAGS_AC))) {
->> +		/*
->> +		 * JITed BPF programs dereference untrusted pointers with loads
->> +		 * that carry an exception table entry (PROBE_MEM). SMAP makes
->> +		 * sure such a load cannot read user memory, so resolve the
->> +		 * fault through the exception table, as for an unmapped kernel
->> +		 * address, instead of oopsing.
->> +		 */
->> +		if (is_bpf_text_address(regs->ip) &&
->> +		    fixup_exception(regs, X86_TRAP_PF, error_code, address))
->> +			return;
->
-> I'm not at all amused from this adding bpf-specific handling to the #PF
-> handler, TBH...
+>> +				return process_global_call_unwind(env, call_idx, do_print_state);
+>> +			}
+>>   			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
+>>   				return check_kfunc_call(env, insn, &env->insn_idx);
+>>   			return check_helper_call(env, insn, &env->insn_idx);
 
-I understand, and perhaps this can be adjusted to be a little different, bu=
-t on
-the flip side, at this point, the kernel is about to print an OOPS. I made =
-it
-BPF specific because we really don't expect to fixup exceptions for anythin=
-g
-else here. We already invoke fixup_exception() for kernel address faults.
-
-The advantage is losing significant amount of code size in JITed programs a=
-nd
-the associated runtime overhead (you can see the numbers in the cover lette=
-r).
-
-Do note that we can make it more generic, we can follow up and optimize
-copy_from_kernel_nofault() with cpu_feature_enabled(X86_FEATURE_SMAP) as we=
-ll.
-But I didn't want to go there just yet. I am happy to work on a follow up i=
-f so
-desired.
