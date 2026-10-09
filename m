@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B88947255E
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1C64CC631
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:50:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791546615; cv=none; b=cvl93mlmNENErGzej3kUpO7CJ0qMwnCv+Ie6a5WeCbHbRjni7boVumle1QDI1Nrwfp4BLWnB3QM+W8PqpFbCoAhytFpVh29BhsnUGuif+MVbXQ7gvS3SA5HnLS/Wd7+/9lSZsy43EIfM/YhcHBpWIthvHODRry5VUf+vKnPkGs0=
+	t=1791546616; cv=none; b=F1TUJPRz5QAv5TFWczDwESZrDWnJvIFAOgJ6cL8zTDP6s9QLfGwCPTYYUJIlshGKX3fzZwIxpvL3WOdp9vKC5YAtQrhBPJrNbqXgAM7GqcRg7eNYwrdSiDlC8Bu/p7oOky9ZGYl7f1MDgwuwDbKceQFteYDP/uLFjDi8sr2KZd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791546615; c=relaxed/simple;
-	bh=amYucAcDmPCkcehcLPn9PrDcY0auZTNKBGoJiNjUlK8=;
+	s=arc-20240116; t=1791546616; c=relaxed/simple;
+	bh=d8nR3luuKBLoleUauV4pj9tQzZqcgvNJXGWtEGUZ4cs=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=nbw79GGlbQyrKzJvPPcTp0JLSUdmDRRqHfRjsoRB9+bWOlHRlHH2o6dgULwDVZKwa9c9mB/T9TjYiPft+oTRjDnWnax3YZbPgY4ezuW+JBqrulRK46kbEIRd/Eyfc03D9esOqfSbAzXjBZGm3eT7VEi143t01CbxsnKtP/DUDxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctOCWIJA; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=uLRvYRgcQessjHcI0WA6eDhsM069BQ/YUMuLFBPuJouWVAx+jvHRehk5k5Ht0L1ouQ5wEOWseqcyxSm6avdU/jxq7/NBl5huD9Wc6d464b1t0mWShCDV3vlkfBsUw8MBhP7PJTJLXFSuGf6qjoJoveVBpdXoD3wQX8trX3vw5z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqr/1SWt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ctOCWIJA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A03211F00893;
-	Fri,  9 Oct 2026 11:50:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqr/1SWt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36581F000FF;
+	Fri,  9 Oct 2026 11:50:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1791546606;
-	bh=yVyPF873XWpQxHotEmxo4fXBocBrCvo+iv9dWoB7q3M=;
+	bh=r1ODzEXXfMVfr1ktfAGyu19hoCTaxDYaY5SUiu0ZW6k=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ctOCWIJAxcqMZJBGGdoFvbXqsLNE84IQZgBSe3wqh4Y5P+3yStu9aVmITsoagWDIg
-	 Gw0e84iXqn0Y2vRc5nZi6AO0/njEMNPr/ze4GlkgQeJyv79ghf61gCF7zOhL+YhFyZ
-	 U+TygWHyqTnm8IseI9LH2j6E3kWjecbsoIBE15rRmZG2SvMn6aDhgWqdlvKCCfev5T
-	 T5SD3E4VTQB/cXlf3QDxj6zRcDR7U23DvvoPl87k3cWDQuUKWa4srC7DGL5eDl/kE1
-	 9sQdpIiyucY2CRqtYRNd1rvwhP+UZnFgz90XWWap2s/ZksgjVfI85yMaHXyHD0j2ea
-	 aqOTg2dD1n4fw==
-Message-ID: <sashiko-outbox-165429@kernel.org>
+	b=eqr/1SWthR867DfNvxpK4OFG2UhcFgmnjLJziO4VaoHPG5tnzKKMJK6p7nlzYsDVI
+	 K4tSfJBu6PZJnlR2B+hLld1wpb21ErZBZKQjf5X0xIeoAy8HkBx5H++BnToordLM3t
+	 eQzPXBlCVOBJECsvyKNgRxlgsinXczLqpN827T7vtn6LFdcQRgF/jUlztfCJXmEJfH
+	 5vDrt/hiC/umeNPDmxIJO8m9OD6MueJe8uvHBDhHGzCey2lhz3mqpoozVi8E6AJTt0
+	 FHNNFWjOMElsb7Jr3GZDDkCeq48EItOvcON6drYEbvvFDKmnxHbOCP1PFBPbOynufX
+	 WNcPUWE8AiQ5w==
+Message-ID: <sashiko-outbox-165426@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 net-next 13/14] selftests: drv-net: test AF_XDP
- zero-copy with an SKB peer
+Subject: Re: [PATCH v2 net-next 10/14] selftests: xsk: add a hardware mode
+ to xskxceiver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261008114909.734364-14-maciej.fijalkowski@intel.com>
+In-Reply-To: <20261008114909.734364-11-maciej.fijalkowski@intel.com>
 References: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
- <20261008114909.734364-14-maciej.fijalkowski@intel.com>
+ <20261008114909.734364-11-maciej.fijalkowski@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 11:50:06 +0000
+Date: Fri, 09 Oct 2026 11:50:05 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,71 +47,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] selftests: drv-net: xsk.py crashes due to missing test_xsk_case_def=
-s.h dependency
+- [Medium] selftests/xsk: hardware ring software state out of sync on reset=
+ failure
 --
 
-commit e8144917db97e8dcd48aff778b6c6ea34e332b01
+commit b6f9e6a7023dfe76a4790e608f82c3aef2c3cf4a
 Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+selftests: xsk: add a hardware mode to xskxceiver
 
-selftests: drv-net: test AF_XDP zero-copy with an SKB peer
+This commit adds a hardware testing mode to the xskxceiver selftest, passing
+physical interface parameters over UDP/IPv4. It also introduces an early=20
+return optimization in hw_ring_size_reset to skip restoring hardware rings
+if they are already at their default sizes.
 
-This commit introduces xsk.py to test hardware AF_XDP cases using a
-device under test and a remote xskxceiver pair. It adds the script to the
-drivers/net/hw selftests and utilizes Python networking helpers for remote
-execution. The runner dynamically parses test cases from the C header
-definitions in the net/lib subsystem.
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/test=
-ing/selftests/drivers/net/hw/Makefile
-> index 18ce235a77f84..02e48e74f6c6c 100644
-> --- a/tools/testing/selftests/drivers/net/hw/Makefile
-> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-> @@ -52,6 +52,7 @@ TEST_PROGS =3D \
->  	uso.py \
->  	vlan.py \
->  	xdp_metadata.py \
-> +	xsk.py \
->  	xsk_reconfig.py \
->  	#
-
-[Severity: Low]
-Does xsk.py rely on any external test files that need to be explicitly
-copied during out-of-tree builds?
-
-Because the required data file ../../../net/lib/xsk/test_xsk_case_defs.h
-is missing from TEST_INCLUDES in this Makefile, it appears this causes a
-regression where the file won't be copied during out-of-tree run_tests
-for this subsystem.
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/xsk.py b/tools/testin=
-g/selftests/drivers/net/hw/xsk.py
-> new file mode 100755
-> index 0000000000000..a33d4af869c7a
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/hw/xsk.py
+> diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testi=
+ng/selftests/net/lib/xsk/test_xsk.c
+> index 8d30c39c94c84..542c0579062a4 100644
+> --- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
+> +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
 [ ... ]
-> +SKIP_CODE =3D 4
-> +XSK_BIN =3D (Path(__file__).parent / "../../../net/lib/xskxceiver").reso=
-lve()
-> +XSK_CASES =3D XSK_BIN.parent / "xsk/test_xsk_case_defs.h"
+> @@ -218,6 +291,10 @@ static int set_ring_size(struct ifobject *ifobj)
+> =20
+>  int hw_ring_size_reset(struct ifobject *ifobj)
+>  {
+> +	if (ifobj->ring.tx_pending =3D=3D ifobj->set_ring.default_tx &&
+> +	    ifobj->ring.rx_pending =3D=3D ifobj->set_ring.default_rx)
+> +		return 0;
 > +
-> +
-> +def _hardware_cases():
-> +    defs =3D XSK_CASES.read_text()
+>  	ifobj->ring.tx_pending =3D ifobj->set_ring.default_tx;
+>  	ifobj->ring.rx_pending =3D ifobj->set_ring.default_rx;
+>  	return set_ring_size(ifobj);
 
-[Severity: Low]
-Could this cause a regression where it unconditionally throws a
-FileNotFoundError and crashes the script if the file was not deployed?
+[Severity: Medium]
+Does this early-return optimization leave the software state out of sync if
+the ioctl fails?
 
-When running an out-of-tree build where the header is omitted from
-TEST_INCLUDES (or if xskxceiver is legitimately not built), this
-read_text() call in _hardware_cases() will crash before the
-XSK_BIN.exists() graceful skip check can execute.
+If set_ring_size() fails (for example, due to EBUSY), the underlying hardwa=
+re
+retains its previous, non-default ring size. However, because
+ifobj->ring.tx_pending and ifobj->ring.rx_pending were updated optimistical=
+ly
+before the call, they are left permanently reflecting the default values.
 
-Would it be safer to verify XSK_CASES exists before reading it, or handle
-the exception gracefully?
+With this newly added early return, subsequent attempts to call
+hw_ring_size_reset() will read the corrupted software state and immediately
+return 0 without attempting to retry the ioctl. Could this leave the network
+interface with an incorrect ring size during test case cleanup?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261008114909.7343=
-64-1-maciej.fijalkowski@intel.com?part=3D13
+64-1-maciej.fijalkowski@intel.com?part=3D10
