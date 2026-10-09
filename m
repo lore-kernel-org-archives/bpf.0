@@ -1,116 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC93F3B637C
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 16:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DCE392C46;
+	Fri,  9 Oct 2026 17:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791565201; cv=none; b=a7b/dgBOqf6qtrXkGmfWo/gKS67basPRZFxAkrOSAtDjWOfpT2zMFxDJrNcmtRCapHfhsLIv7gO1kANm3egbW+k9SABHxEHMAy8eQWp0dF/TtljOEdVwUl/SkUt4Rz1FwBLOUEy9siPxwzG+b7M9nMDxSsYVyuZRiGdeZdRN0xc=
+	t=1791565470; cv=none; b=Hu9blS9K7u02rn19wfZ3aV5tCsjWaWnifNUj3sEtVsVLK6stQMtWP2SzI8DfTOAbtj5ro+tK7WDprj/SKYbjYftQ6DFWsmD5mBWuaGVDFFG8dkFGySGXmQeo+CSZJFvumY2BYdxfejbUXe0iwgkl9YKr22dBdIzDAwYwsWWVGFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791565201; c=relaxed/simple;
-	bh=g8oTqbBI0YuaZr1siNYywLwUGaXCtpJ4FigLhsMpDJ8=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=EJgSh8AF6a/oW+ULvtNVb4Kak9nEH4A4dZT3DVJ8xrP/f8s3oNOHpCKCFXZ9N3C9P0GTYaRNp2K7HtldX5jrkppsCH76/KRqMkZSug6KpAWimZplGc0xX0XYfF2kTQYpL1q/YGr/EMGiYhlsufikfvzWiAKHdTPvuyADr0jnlmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1hn7X+J; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791565470; c=relaxed/simple;
+	bh=pRBwxZ/pTxp7drinmbnO6WjD0YWUO9pajIRsaCkGJRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VExBAqFGXoUPRPqDK0di2OXPAIwB1pqn7TiwHVZfW5SnfzFqae2EMokJlvEJPVPbfNNu0i7t6Nn1aDo5FWq+b5LVUMsHPKeP90pm4Cn0NBfm9hyHwCMyX4Skh438oDLLKQ93OFtSLrGnmlWN8muhe/9lniEPFhZXwWlhG+GAV3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjXcxo5s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1hn7X+J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5241F00893;
-	Fri,  9 Oct 2026 16:59:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjXcxo5s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 439AD1F000FF;
+	Fri,  9 Oct 2026 17:04:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791565198;
-	bh=IXhv1xeXqJWgUhrEOpBKbpqlpgK0b3Q9mlodfG1ls60=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=G1hn7X+JOthyad5d+ThplGCTaOKxBldTxF0wk0eH17hppaE804ZOv7XjDrAsLNDhn
-	 9m45iqyoqDICv1+1cB6DrUlcxGe8Jn+CWSj252YErqZnvHQ3jWN3WZfwgw/dlDnfNf
-	 i/wP5shHTVyC+Eq2iy5aDynrVZ5f+HuwmUOOj8sLKxiifeg0yeQ4TgQQFss8AwmCqE
-	 1i9J/E9h2+SJzakHZe5Zl0EwIYFEkv/REUVcPQVlkVSpnWih6i+YqMcVKUFS+NrOxC
-	 Ibs8C7LGspaUNRGHZjgtMbm1zuQjH8awBBpbiwINnixwOyD+2m+3uIIqqfnoQWzcxS
-	 q1mxjePG56yGg==
-Message-ID: <sashiko-outbox-165856@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 1/1] net: lwt_bpf: preserve encap header across skb
- head realloc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ren Wei" <weir@nebusec.ai>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <68db88ada2fd01fc03f17dc7d54a705aa245ddea.1791433504.git.rakukuip@gmail.com>
-References: <cover.1791433504.git.rakukuip@gmail.com>
- <68db88ada2fd01fc03f17dc7d54a705aa245ddea.1791433504.git.rakukuip@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 16:59:57 +0000
+	s=k20260515; t=1791565469;
+	bh=pRBwxZ/pTxp7drinmbnO6WjD0YWUO9pajIRsaCkGJRY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IjXcxo5sLrTtBSJR7EkoJWJY77e88/FBq0xaObIkJ8gytFU4tpsY9YddZpjtiCGsd
+	 Yv8M15lrCBIrHMaI2fHrUx/MTCbn9RQSd+EyRFZBscjksdk+j08F1zjcIzxZwi8XEX
+	 1u+bMyBVUYF8xZLnHLuBWOhtUQ6gcltcfnPFaBFZHrUMA29WW9OLeD7kA9nJ18LluF
+	 LQpQpcea6IU0UlyakE/wazbfHT9e+xq4ueFy7q8OcrHkwJbD194frgQQN2+uHH1rhx
+	 iPEuGPyeVBHFEVlu5Tz4J1GYor8Qb5ysDSQuQNPlAubMgFFo5EC8mMYSvX4v58SYnm
+	 sWKyZYzFSEH0A==
+Date: Fri, 9 Oct 2026 18:04:24 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2] mm/vma: keep the unlinked VMA off the file across
+ unmap on mmap hook failure
+Message-ID: <askcyeoKgKb6771N@gremlin>
+References: <20261007101800.58d50b1b20a10738e630bfd5@linux-foundation.org>
+ <20261007194708.2009-1-okerixx@gmail.com>
+ <e139339c-1e55-438b-86bf-0960ad4029f1@linux.dev>
+ <asjQQF_Ok1TZPm1M@gremlin>
+ <271f7ba8-df38-4c8f-b59d-68b52ee998e9@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <271f7ba8-df38-4c8f-b59d-68b52ee998e9@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: CHECKSUM_COMPLETE corruption on IPv4 encap push
+On Fri, Oct 09, 2026 at 09:38:56AM -0700, Ihor Solodrai wrote:
+> On 2026-10-09 4:31 a.m., Lorenzo Stoakes (ARM) wrote:
+> > -cc slopper
+> >
+> > On Thu, Oct 08, 2026 at 02:48:07PM -0700, Ihor Solodrai wrote:
+> > > BPF CI caught this bug on linux-next as well:
+> > > https://github.com/kernel-patches/bpf/actions/runs/37736351874
+> >
+> > Nice that it caught it!
+> >
+> > Is there a way to automatically notify patch author that when it happens? Does
+> > it bisect, etc. or just green/red?
+>
+> For linux-next it's just green/red now.
+
+That's still nice! We have something similar in mm. I think possibly
+inspired by you guys :)
+
+>
+> We've added it to have an "upstream merge will break bpf" signal,
+> because it happened regularly.
+>
+> For bpf list we run on every incoming patch, so regressions are detected
+> quickly. Not feasible to do that for *every* upstream patch, we'd need
+> much more compute.
+>
+> An auto-bisection is something I thought about, but never got to it.
+> These days with LLMs this may be easier to set up though.
+
+yeah that'd be awesome, but obviously a nice-to-have!
+
 --
-
-commit ab70bb57bdb2ff3156beb5d15952b833dad5b175
-Author: Luxiao Xu <rakukuip@gmail.com>
-
-net: lwt_bpf: preserve encap header across skb head realloc
-
-This commit addresses a use-after-free read in BPF LWT encapsulation. It
-copies the encapsulation header into a local buffer if it points into the
-skb head, preserving it across head reallocation.
-
-Closes: https://bugtracker.nebusec.ai/f/11304
-
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-[ ... ]
-> @@ -612,6 +613,11 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void =
-*hdr, u32 len, bool ingress)
->  	if (unlikely(len < sizeof(struct iphdr) || len > LWT_BPF_MAX_HEADROOM))
->  		return -EINVAL;
-> =20
-> +	if ((u8 *)hdr >=3D skb->head && (u8 *)hdr < skb_end_pointer(skb)) {
-> +		memcpy(hdr_buf, hdr, len);
-> +		hdr =3D hdr_buf;
-> +	}
-> +
->  	/* validate protocol and length */
->  	iph =3D (struct iphdr *)hdr;
->  	if (iph->version =3D=3D 4) {
-
-[Severity: Medium]
-Does this sequence of operations corrupt CHECKSUM_COMPLETE on IPv4
-encap push?
-
-When bpf_lwt_push_ip_encap() executes on ingress, it calls
-skb_postpush_rcsum() on the user-provided hdr buffer where iph->check is 0:
-
-	if (ingress)
-		skb_postpush_rcsum(skb, iph, len);
-
-This calculates the partial checksum of the header and adds it to
-skb->csum. Later in the function, the header is modified in the packet
-buffer to contain the correct checksum:
-
-	if (ipv4) {
-		skb->protocol =3D htons(ETH_P_IP);
-		iph =3D ip_hdr(skb);
-
-		if (!iph->check)
-			iph->check =3D ip_fast_csum((unsigned char *)iph,
-						  iph->ihl);
-	}
-
-Since a valid IPv4 header sums to 0, pushing it should result in a net 0
-addition to skb->csum. However, skb->csum retains the non-zero addition
-from the earlier calculation and is never updated to compensate for the
-iph->check data mutation.
-
-Could this cause skb->csum to go out of sync with the packet payload,
-leading to netdev_rx_csum_fault warnings and packet drops when upper
-layers validate the checksum?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1791433504.gi=
-t.rakukuip@gmail.com?part=3D1
+Cheers, Lorenzo
