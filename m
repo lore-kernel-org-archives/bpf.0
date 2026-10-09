@@ -1,141 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8763C3F58
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BEB4DEC08
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:45:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791546112; cv=none; b=HCtFTKjCl0d64rTDIjz+/NMOUxQyGNLb5jGo78Tg/Qbmyvt1jpCEIwZzRaXWfSBIXshKwVhf8/pYXnLQL91nwCHV5d9RWzMdyxSJeTTIPy6Zb1TJwthUCoKu52cpA+V3jVZvameG6om6AT99PT/Kl9cMM1iAt62jIdziBHVw1wk=
+	t=1791546367; cv=none; b=crI0uuHPq6hFi483/ZuwI18pht5pHBAfrMNFk2AmVLPVF80CVaeBjKGCbWQ6ej5jCLzP1EKBUam2KzfY0R+3lULvu0kypUr8Ljwwb7yyMkLw9efhPDcK0mhwpeca4ExwQznGFowUEE6r4c8+Kmth7m9bxgOoalkP525QpjL0gmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791546112; c=relaxed/simple;
-	bh=erkB+pv5RbI0KKRL9l5UdsPsers0Kyn5gASlvVaG6yM=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=MMOc9d9odmHwQ1MxYExnaqY8x3XWtJs1ehp3kANxTcNOHZEtNA9kcDRFD6WhHnLqdOmdVeo2hDopPuMl3VKGvccmSiABgXUGv65GjL/IJl+TSWuVUr3hZBB7HtZBoj77DVb7IvPJux7NI5WeNiwxb5Ryun4fSw7VbvmNnvRUXJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VOEEeayP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791546367; c=relaxed/simple;
+	bh=nPMUZP+TYrGcPHZ8/4vtGMxqr9nDS1H0Q/hJ74uCJWQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uqypKQgUHA5zLJ/rA8F1DmCSCHIySbo76SaP8S8gdsqf7AGEY2hiQaYsbsPPePnfDA7duQiIBMDy42yoDCWBIn5F23I8Egdzg47OEvu7Z1oXJe1HrL7FuPKyYaL8nVVp9odOapHmWc2u2nqflP75BYm4Xt5xaqXQe1OoJd0edEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lQ22Nkkv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VOEEeayP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3391F000FF;
-	Fri,  9 Oct 2026 11:41:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lQ22Nkkv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D7A1F00893;
+	Fri,  9 Oct 2026 11:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791546102;
-	bh=Nt3THb/FIo4zJ0rRNJORVeM0sQ29C2HS0304Xu1qPkM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VOEEeayPNS7P9iFT0s37S/ocdhZkT1dARYtwi4KnlT5k8UFzMu2+gWqF+9+qbX+c8
-	 oRk24c7xwgHHEdc7yuEFQRY1jxiwLBr+3srezpcX9SMpl1nDyZdoVTsu+UIG0jwM7T
-	 1U53R4CRPfBLRSUeCyuLZHwxPt/tIr2SwU8LIzvTo+0odzA08Rd0i1ZaHmacBtyvxG
-	 2CNhCOkdhOUabROjobjSOpIFL8V4Wmx3+gggXkwk8mIJ6T89SGCU21NCHGHDuNvW8c
-	 wsogqzsK5L61Iyyl0w0cU9Un8r6Pa7FWo4BQaONxSRrFIy1OF1NgGwGDJa5qnW1RuN
-	 l0o7DGNFdOamA==
-Message-ID: <sashiko-outbox-165405@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 20/51] bpf: varying offset access support
- for PTR_TO_BTF_ID pointers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009-scev-minimal-rebase-v3-20-bcba9bc53ac9@gmail.com>
-References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
- <20261009-scev-minimal-rebase-v3-20-bcba9bc53ac9@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 11:41:41 +0000
+	s=k20260515; t=1791546359;
+	bh=pQslkokFxIucEeA8QayPvM30ug1P+reXnq1Mbzrbt1w=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lQ22NkkvJr/lRFQ1F8CL5EKqknzDfA5ZRnkUIUUEGD49pYuzn6p79eEpQi0xF5ufD
+	 jz3v6k++Mv8zu250h9Q6MzdO4LJO0YLkU59m7+JHumBWNhQiDrUv4yb1lrBKW2MNVQ
+	 IQELddzgR1l7E6eaMmE6dVZZAAjhXSI1794K9IuSeJ+PLo36Ri/TvV8HGB6v/d74Yr
+	 K4vlQKKGRKK//CbKeej9i/kKUwykv7FQJPnBhWC4DI5tSOtHLI9it+pS4xsAotHSJb
+	 zUi3NVN8O6rWJmbUv4sHg0N4BILpiyiNmo9Yu6Uwa6F1lBIWqV0Al2nplu7sPHF02R
+	 JFHNaOcfoxDIA==
+Content-Type: multipart/mixed; boundary="===============8559163876320752946=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <b0975ea50cfd211e9568f82b3ea75cc9f0bd57cb5332254d25784e6a7e0731ea@mail.kernel.org>
+In-Reply-To: <20261009-scev-minimal-rebase-v3-44-bcba9bc53ac9@gmail.com>
+References: <20261009-scev-minimal-rebase-v3-44-bcba9bc53ac9@gmail.com>
+Subject: Re: [PATCH bpf-next v3 44/51] selftests/bpf: tests for BTF-based global subprog stack liveness
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
+Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  9 Oct 2026 11:45:57 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] bpf: truncation of 64-bit var_off to 32-bit bypasses custom btf_st=
-ruct_access bounds
-- [High] bpf: unbounded variable offset read on trusted PTR_TO_BTF_ID bypas=
-ses PROBE_MEM
---
+--===============8559163876320752946==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit ec6d1e8a8c55dc442e46ac3d70d36a00ec8a9ffd
-Author: Eduard Zingerman <eddyz87@gmail.com>
+> selftests/bpf: tests for BTF-based global subprog stack liveness
 
-bpf: varying offset access support for PTR_TO_BTF_ID pointers
+TL;DR: Test issue: the "no stack effects" check in global_callee_btf_arg may
+never fail, since the call-line __msg pattern also matches the main verifier
+pass log, so a liveness regression could go undetected.
 
-This commit relaxes requirements for varying offset accesses to PTR_TO_BTF_=
-ID
-pointers, verifying they stay within array bounds and align with elements.
-It modifies btf_struct_access to validate minimum offsets and array spans,
-while skipping upper bounds checks for flexible arrays.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> @@ -159,6 +159,52 @@ static __used __naked void write_first_param(void)
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 0630675377aaa..f4d119f3d5ef9 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
 [ ... ]
-> @@ -7899,6 +7961,55 @@ int btf_struct_access(struct bpf_verifier_log *log,
-[ ... ]
-> +		array_start =3D min_off - arrays[i].off;
-> +		/* An array within the flexible tail has no upper bound to exceed */
-> +		if (array_start >=3D flex_off && btf_type_is_array(t) &&
-> +		    btf_type_array(t)->nelems =3D=3D 0)
-> +			return ret;
 
-[Severity: High]
-Does this allow unbounded variable offset reads on trusted pointers?
-
-This logic explicitly skips the upper bound check for flexible arrays,
-assuming PROBE_MEM will safely catch out-of-bounds page faults at runtime.
-
-However, if the pointer being accessed is trusted (meaning it has the
-PTR_TRUSTED flag and lacks PTR_UNTRUSTED), wouldn't bpf_may_fault_on_deref()
-evaluate to false?
-
-If bpf_may_fault_on_deref() is false, bpf_convert_ctx_accesses() won't
-convert the load into a PROBE_MEM exception-handled load. Passing an
-arbitrarily large offset here could result in a native load from unmapped
-memory, potentially crashing the kernel.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index f5b2500335a7b..192efb7229975 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -6608,6 +6604,18 @@ static int check_ptr_to_btf_access(struct bpf_veri=
-fier_env *env,
->  	}
-> =20
->  	if (env->ops->btf_struct_access && !type_is_alloc(reg->type) && atype =
-=3D=3D BPF_WRITE) {
-> +		if (!tnum_is_const(reg->var_off)) {
-> +			char tn_buf[48];
+> +struct task_struct { int pid; };
 > +
-> +			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
-> +			verbose(env,
-> +				"%s is ptr_%s invalid variable offset: off=3D%d, var_off=3D%s\n",
-> +				reg_arg_name(env, argno), tname, off, tn_buf);
-> +			return -EACCES;
-> +		}
+> +__noinline int global_noop_btf_arg(struct task_struct *p __arg_untrusted)
+> +{
+> +	return 0;
+> +}
 > +
-> +		off +=3D reg->var_off.value;
-> +
->  		if (!btf_is_kernel(reg->btf)) {
->  			verifier_bug(env, "reg->btf must be kernel btf");
->  			return -EFAULT;
+> +SEC("socket")
+> +__success __log_level(2)
+> +/* Untrusted BTF pointer arguments need no caller stack state. */
+> +__msg("stack use/def subprog#0 global_callee_btf_arg (d0,cs0):")
+> +__msg("3: (85) call pc+{{[0-9]+}}\n")
+> +__naked void global_callee_btf_arg(void)
 
-[Severity: High]
-Could this assignment truncate a large 64-bit value into a negative 32-bit
-offset?
+This isn't a bug, but can the absence check in global_callee_btf_arg ever
+fail?
 
-Earlier in check_ptr_to_btf_access(), the negative check for off was removed
-and replaced with min_off. Now that off +=3D reg->var_off.value is executed
-down here for BPF_WRITE with custom handlers, a very large 64-bit
-var_off.value could wrap into a negative 32-bit integer.
+The pattern __msg("3: (85) call pc+{{[0-9]+}}\n") is matched against the
+whole verifier log, not just the liveness dump.  If
+bpf_global_subprog_stack_access_bytes() regressed and the call picked up
+marks, print_instance() would emit:
 
-Since there is no negativity check immediately following this addition, the
-truncated negative offset gets passed directly into the custom
-btf_struct_access handler.
+  3: (85) call pc+1   ; use: fp0-8 may_def: fp0-8
 
-If a handler like bpf_scx_btf_struct_access compares this negative offset
-against size_t boundaries, couldn't this bypass the bounds check and
-allow out-of-bounds writes to kernel objects?
+which no longer matches.  But bpf_compute_live_registers() runs before
+do_check_main(), and do_check() later logs the same instruction as:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-scev-minim=
-al-rebase-v3-0-bcba9bc53ac9@gmail.com?part=3D20
+    verbose(env, "%d: ", env->insn_idx);
+    bpf_verbose_insn(env, insn);
+    verbose(env, "\n");
+
+That produces "3: (85) call pc+1\n", which satisfies the pattern regardless
+of what the liveness dump printed.  The test is also __success, which does
+not depend on the liveness marks.
+
+The commit message says this test verifies "No stack effects for an untrusted
+BTF pointer argument".  Would a __not_msg for the "call pc+" line with the
+"; use:" / "may_def:" suffix, placed between the header __msg and a following
+__msg, make the check effective?  That way the main-pass trace falls outside
+the checked span.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37923187511
+--===============8559163876320752946==--
