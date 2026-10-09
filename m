@@ -1,65 +1,65 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D422932C92A
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 01:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B223090C4
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 01:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791510564; cv=none; b=kw44Hd98aYBh8QOK5BKOFiC0SAgmoPmgm93+bXmuVe1fRKZfatRblfnaX2x+F7CEYzsZxcgG4SftHZ/nF8kfTz/we7j9HPwSXRUYchv/5jXnm+Zn6HwIqKh7zPCthf6KClg9gD9+h98uAJdfgjjDzQB4URCMCblYKKWLv2dL88M=
+	t=1791510571; cv=none; b=BGbxbVXephovE2NkFKoFm2f3940LPtD6GLRlmMTxCTlUfzppuzSbD0l8tA3Ri8KY1xr/SzI9kmxuxp0zS9zOQDPEwIzjvrnKYYartZ8Y2TKGK/Vkm4EysqDD2LFoQj3TZmolehsesJ76+knoEdZ8RWJK8cjk6HB2gsvE7nYrJLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791510564; c=relaxed/simple;
-	bh=72FAB5TSLVz4Thr0h+bv9d4S7Ew4e+SEyCe2IkscpHI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VXKF8u3ixAOWa/vQ3xnAGQBzYkPHTIQtDN8g/QKXzyn/9I4gqXAtB2G6pAKNSxTupBZNi/46tB+M/Vv86WJymDIwR8YlHFxGKthyTVXeeAbx49DyMUCTkTFovn6ibKS2vnGgLmVKx1ZthDie/fBlSci7pQ23Z5zBCf2V0Q/ldPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+5ED6hl; arc=none smtp.client-ip=74.125.82.174
+	s=arc-20240116; t=1791510571; c=relaxed/simple;
+	bh=QXcG3CNqcVsxyGOs8QcnTtCg3DM+0//08kfa4yW2fzs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UHWdrsimmFV3LqWPoTNaRM1SQL+/v5IvTQ6tjMBF041fOygC4xJJUpijmTvj7GK2gffq1UAqy+WdwqDtFREQ2PJtK4wYoeXE6lUWTPYMVBq1Zkw6TDtMPv3r5MrxJvfOUHYhT9xKaMIHpgyzCXzGqwIlSAscn/hJm4FZAjJF1Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y5b1KrSi; arc=none smtp.client-ip=74.125.82.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+5ED6hl"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-3514b90bb89so5635443eec.1
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 18:49:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y5b1KrSi"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-353804b591eso186662eec.0
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 18:49:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791510562; x=1792115362; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791510570; x=1792115370; darn=vger.kernel.org;
         h=cc:to:message-id:content-transfer-encoding:content-type
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=LL6VJoesIXgvO6dkBve9nwIrZ4XKjap6wkylrhkf3eY=;
-        b=I+5ED6hl2joDxXw1Q5YAxVrOqWE5mWNKYYZckxlLrcNffUcL4SZfe0MueN9l7exYVk
-         HxDHhJmGcw46oh6qwL4RTOlOYduNnLKOqb71XzjnK5W5IBgbbalw2yl68k4dHktgziRg
-         5yhUj9rpRLjfjdZnAE3hVtmkXg4XMAdQR5DLMW9SGrpOn1LwtfTZezO452jpGqMOYbJb
-         eHO6ErGuo5wl9UQUbJ0Nnk5U4wjLC4AuwAI1xJr8rpf18ghBXh8jlVZlXRS+Y8Gqt68z
-         +BlkEuQSUwo1lsvspP5jpgMh+6BbAVYfg5A4TCWlwGA4HrRta9qV+84IyOZwrS3Q/2ng
-         TvDQ==
+        bh=Wq7VN3dZejiWmjkmf/Qhm3vdAdVy0qg7yR+WR6uOQz0=;
+        b=Y5b1KrSi+yxim5VrFzFv+vcXJ9ENUZeSNZy35i1aRmEpZDukokmph3tjCUwFWbWTjm
+         6rVOIN+jccIXKMKogOIqC0mDCbYRjMoHpFEowt71eCk2ZmlUkhoFphAPhPdk4f/wXLOf
+         rujThIZpENSgd/HbYVRJfxqaS3ufNoaiP06BXkvJU+r+r8kg/IOHmqSIAKUZ2Xwd6/mG
+         fq9qtMgt0q7iujT4VU1zjIed5OGdn5ZP/8KcTzjr6uTEGgnaObfBCQAweB6UvY+kKzP0
+         QVOl+pYodQRgobD8NIXQTHryZsAO9+6B8QbVdL1Wvj5c0P+qiMm7Id+sR43eU9RvZbxj
+         MO/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791510562; x=1792115362;
+        d=1e100.net; s=20260707; t=1791510570; x=1792115370;
         h=cc:to:message-id:content-transfer-encoding:content-type
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=LL6VJoesIXgvO6dkBve9nwIrZ4XKjap6wkylrhkf3eY=;
-        b=MrirRoM6GkUb0F1CPQ3jeDcnLHvbAsWk0QPoUPDmc19o1Pd3uJPmCqRMaVELIFyqLz
-         ixrbmXuX1tmaGKJYKqsDCJOahNWitEjjvtH/ABj/TrajtnN59bE80h4tAXg7oMqNO4QP
-         ex6WkJy5PUhwXrXrwYX9QeKn8f1krtzGBzI3WvRAwDwxXv3AYrLqK/cMQpmplbDzj6sD
-         3irY2pRLgWc2go3s3HFQCHCb0KR77kVKKnBnPSfyJ+9UQaixdGn0V9U5QrssictMbp/k
-         maMBoFoaqHQc1uqECq+9Brh4nkJe01UfprvNTbZqvUGB64eItW9qN1c/5wSziMI8PNWO
-         QbeA==
-X-Gm-Message-State: AFuF++mEv9VgWMTyNmWhnA2yw0bSOBNSaDZentoPoeRi/V6/LAlIkxhR
-	BlOVLI1sWbaqvcBV4N+kfuusrOp7zgqfaFNv+KgSPQYhS6lsJ0r2PPM+YW1Rd1vK6Lc4+Q==
-X-Gm-Gg: AYBFou3TMQDxleoCf+P/qoR36drH8JDaS4W1xkDOWgQ38h+WFLM5vRM4w8S9u0JOp8X
-	2zMAVyOdkRv5sL2r3dqapcXzL5mRkLnmyYZQQVGonOqNMjTGJL8f2dbD3Xh7iM3Y6jrZWKAZoz4
-	RBdsXfvZwgNJi6PfLl6IHSyKqD74KzKcxFLXO3KdFeyw3AO0Su9SVU1cnG2wMDpamdVDTGmLRC+
-	OPNEF/iu9kIswdZMxWfxy9bqb+KreM3pxp9/2Ce5c6RZuLEMKSTQoGIPFGrznkEbijWTgu7D4aR
-	MLETeQopw+1yX84rUU8WmTm/Xi+BUY1CblUFNSO7o2/vSAO3dBA6vqvURVx/dGRaTwT6rcMeo13
-	oIEXM5bdgM8Z+y81KSKOknk5PSfHzoQde9sAMtFiPAJKF1zJ8fRBeyGxBw0wiYtzuFI1OjW3cL/
-	cCfhbm1VKJxTIeclHaRtnOmpVKvDZ71Xe79cuGz9wQxySixoHVUOs+1+NiPxxNQeUVAA==
-X-Received: by 2002:a05:701b:2908:b0:14d:ef19:246f with SMTP id a92af1059eb24-16a6309ce64mr422027c88.45.1791510561936;
-        Thu, 08 Oct 2026 18:49:21 -0700 (PDT)
+        bh=Wq7VN3dZejiWmjkmf/Qhm3vdAdVy0qg7yR+WR6uOQz0=;
+        b=VhgBQt4GTdNp+hvCmDp8X2Q0+575/W9bXbdikM5ue8F7ny3W0fR89k4FliL9iDrG+C
+         TOCRs0cbSfISp5diuRShezraAKO+y1tM2Qj3hMUai5YkNLNhpQpKq5W+fT7Cia/Dvdsw
+         GdCKMcGQHOEMr6T4f4pVt9KKO698iI6+xaL4O0xxx51u3LofqtNNCFuBJlBgujoFaLNl
+         sBxakvhzaE//K9nzVK0mBEB7ZmI8rDNFgxGQH8TlgivfhlSaAfESzclZr7ztmcRZaJ0V
+         39qJckl6GnjNMIUE2rDjUYnW0LZ55YNMPZjfh25WR2UUcGbz9u5e9QAodMjgSZRVWxFI
+         kp2g==
+X-Gm-Message-State: AFq9FYLST8UxG8JPGVTwYUHMJUOvZCRv1zXbTZ9M5NrOgrJbh4N59O48
+	WmXdrQmmzeKSYzG0Fi709TvYDxF9tnUIWsfLZSTjZyVfyk3zjJUQNCWL
+X-Gm-Gg: AYBFou1TUmif2MWkgTFDHkYWrwWjJu3GUCVEWVC759U+XmQggz/AOLmyOfWJW9/AJHD
+	3K8azZ/FsZe70ZUVOreYl4h5ifg7uooqDgk+ZHGt1sKBmAsr4V4//dFVWIq1OoUMdh9Gj6YOlYB
+	rgvdXI9D5R3XeirKV/Le9d1fbS0lDFCB1rncKP/TcO/XbNIJuwKUszYX0sUDHPEQhI1u+io7TTx
+	bm0Jhd4UHefekNry8aDs8B6cXjKIj/SW+ets/oRk/xLa+4nLHwGgL2BG6TV/qDpCIAI4KGnYO3C
+	WKNgIg7OPzhSyGsNgs4PebObPEeaBvFQwzK1kA+3skJoPrt7+oIvHDu8qRK/LFSc2VDWvToQpOI
+	BskT+csC6aNs3w+w8iCm8s65RAzxIvP9v65j/cI+X76hLd3oacD02DMohAzG1WlFjuDw0whUksr
+	/FSE2kD6qFjn1pA9N6t3CQ0yeZ6siaKZhEAigKVL+0XcsRNg1AVuf6ckyn1CKPIswYSw==
+X-Received: by 2002:a05:693c:4098:b0:351:6f76:65fe with SMTP id 5a478bee46e88-3537e11bbe1mr927945eec.28.1791510569712;
+        Thu, 08 Oct 2026 18:49:29 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a31f6be0sm3500357c88.13.2026.10.08.18.49.18
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb2fd33sm1851013eec.28.2026.10.08.18.49.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 18:49:21 -0700 (PDT)
+        Thu, 08 Oct 2026 18:49:29 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 09 Oct 2026 09:49:17 +0800
-Subject: [PATCH bpf-next] selftests/bpf: Record only the test ICMP echo in
- tc8 of tc_netkit_scrub
+Date: Fri, 09 Oct 2026 09:49:25 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Wait until the .data map of
+ test_mmap is freed
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,10 +68,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261009-selftests-bpf-tc-netkit-scrub-v1-1-f46c07a40e7c@gmail.com>
-X-B4-Tracking: v=1; b=H4sIABxIyGoC/x3MQQrCMBBG4auUWTswLUWJVxEXJv2jgxJLZpRC6
- d0bXX6L91YyVIXRuVup4qum79LQHzpKj1u5g3VqpkGGYy8S2PDKDnPjOGf2xAX+VGdL9RM5C2I
- IMk6STtQec0XW5f+/0C8oWJyu27YDgujyHHkAAAA=
+Message-Id: <20261009-selftests-bpf-mmap-wait-map-free-v1-1-96d066daea2d@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACRIyGoC/x2NQQqDMBBFryKz7kAMRdCrSBdR/7QDmoZMaAXx7
+ o3dvbd4/x9kyAqjoTko46Om71ilvTU0v0J8gnWpTt75rnWuZ8MqBVaMpyS8bSHxN2jhCyQD3E0
+ iQe6LzOKpzqQM0f1/MdLVROyFHuf5A3vpCeZ8AAAA
 To: Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
  Ihor Solodrai <ihor.solodrai@linux.dev>, 
@@ -79,62 +79,46 @@ To: Andrii Nakryiko <andrii@kernel.org>,
  Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- Nikolay Aleksandrov <razor@blackwall.org>
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-tc_netkit_scrub attaches tc8 to the primary netkit device, sends an ICMP
-echo with a mark and a priority through it, and checks the mark and the
-priority that tc8 saw against what the scrub mode lets through.
+After destroying the skeleton and dropping the last mmap of the .data
+map, test_mmap polls for the map ID to go away, up to 10000 times with
+usleep(1) in between, and then checks that the ID can't be used anymore.
 
-tc8 records the mark and priority of every packet it sees, and the
-device also carries what the system sends on its own once the device
-is up, like IPv6 neighbor discovery or the mDNS of avahi-daemon. When
-such a packet goes out after the echo, it overwrites what tc8 recorded,
-and the test finds a mark and a priority of 0.
+The map goes away only when the program that uses it is freed, which
+happens in a work item after an RCU grace period. With other tests
+running in parallel, that can take longer than the polling, and the
+test still gets an FD for the map ID.
 
-Record only IPv4 ICMP packets in tc8.
+Poll until the map ID is gone. The watchdog of test_progs kills the
+test if the map is never freed.
 
-Fixes: 716fa7dadf11 ("selftests/bpf: Extend netkit tests to validate skb meta data")
+Fixes: 642c16547027 ("selftests/bpf: Validate frozen map contents stays frozen")
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/test_tc_link.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_link.c b/tools/testing/selftests/bpf/progs/test_tc_link.c
-index 630f12e51b075..3c44ee06cfae8 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_link.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_link.c
-@@ -4,6 +4,8 @@
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+index a271d5a0f7aba..0e297ed5da0fd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -280,7 +280,7 @@ void test_mmap(void)
+ 	munmap(tmp1, map_sz);
  
- #include <linux/bpf.h>
- #include <linux/if_ether.h>
-+#include <linux/in.h>
-+#include <linux/ip.h>
- #include <linux/stddef.h>
- #include <linux/if_packet.h>
- #include <bpf/bpf_endian.h>
-@@ -119,6 +121,14 @@ SEC("tc/egress")
- int tc8(struct __sk_buff *skb)
- {
- 	struct net_device *dev = BPF_CORE_READ((struct sk_buff *)skb, dev);
-+	__u8 proto;
-+
-+	/* Look only at the ICMP echo of the test, not at IPv6 ND or mDNS */
-+	if (skb->protocol != bpf_htons(ETH_P_IP) ||
-+	    bpf_skb_load_bytes(skb, sizeof(struct ethhdr) + offsetof(struct iphdr, protocol),
-+			       &proto, sizeof(proto)) ||
-+	    proto != IPPROTO_ICMP)
-+		return TCX_PASS;
- 
- 	seen_tc8 = true;
- 	mark = skb->mark;
+ 	/* we need to wait for RCU grace period */
+-	for (i = 0; i < 10000; i++) {
++	while (true) {
+ 		__u32 id = data_map_id - 1;
+ 		if (bpf_map_get_next_id(id, &id) || id > data_map_id)
+ 			break;
 
 ---
 base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
-change-id: 20261009-selftests-bpf-tc-netkit-scrub-f0eb9904d0c7
+change-id: 20261009-selftests-bpf-mmap-wait-map-free-6bffaf4dfcf2
 
 Best regards,
 -- 
