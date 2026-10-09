@@ -1,130 +1,316 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942F6389458
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 16:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791563297; cv=pass; b=Xu4uEHLKg1zW0UID1Tzs0F5K/nWlTVdaoSZmB0KskHzW7nS7sVexsk3Qks5pi4yLg0VqPJh/IrbMUzSGy/KRoYn2umQwL3x2BkaLlWlnuPs44YfvSH9ZTRCs+UpFDrNl0+AMc8JFXWorgJZzfPIf/USElCvX+Y2MKlA3xA88YlU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791563297; c=relaxed/simple;
-	bh=aEEZOJq1YQBCl+EBhhXBbW8ir1k7qWPCFd9LKrrdcJc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ReK3tlhqE8LEkyw4Q5YPmIbM8mua6LuvfnzIsfaqx92BVtBeq5jEYO0AJ5T6rhVdaebXGFXLBPMKb2R6ApwKzsdnMNALOX2HmUb0ZUNB9X8GsYsXa6Hc9wKEsCe08X6AfukJ5nQ/0geT9b5RxhGvobLv8YL2J8sv22BjdnwcLmk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Utp7NN0a; arc=pass smtp.client-ip=74.125.82.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AFF4F0536
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 16:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791563590; cv=none; b=ss/4W6lAh8IHDZSFyHNmnlRIeebwXol79gBLyNojWGSKyxbdyiOXxA4HBhCYfivQOp5bMVxtFA3cS7XEC9eCosNUfp22TI9qYS94L9aNSulTF4+pYc2w3WS7Rr+tn4FsRVhop6HRcm2KAmvBgHiR+nXQUJGAiF7+KyeXxjTVtIs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791563590; c=relaxed/simple;
+	bh=adtJZs987/cifFrpNc95S6HlhnQjFutbkv9UM1xx51k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dODgcYavAPcI4l58sszOza7HOrUfe64Dy1Tww5WO7FX9CnsSAjc4c3FmO379lABkkKLXuNEYi4jTjDI1jFny+JlcphLWYE0gbsvEjj+QXHVcEQX7TVAA+wRu7AuUKPLCUtwQR+uM8TfFXqQHVfWh0O7K9IZ1cHMpqzZlaYoWMf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xkv2GSE4; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Utp7NN0a"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-151de818519so1618c88.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 09:28:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791563296; cv=none;
-        d=google.com; s=arc-20260327;
-        b=YuI2Rd0jjvOBxdFdWbSkWB6kZeANyh2EXeUEPiWMKHeyZLqPTsj+YNetCfhXMe3s0s
-         VqQJp9dlitS+QxnlSgmo+v7prynMQX6hljlnrrQWnHNDeDgUScZUqyd5X3EocVya0vnI
-         VSYPJGGaK5EmIKA2a4OdOkyUqEAwnHih264SSV54+HTFeljK32cL5/AjI4oB/bj8s5ow
-         mqlSkHgR2AkiRdR6oZ+14BW4slEOPdSehF/hUJVpNpQ5qEMJYCd/YUzx3m7pL18N2drU
-         2qHgxTmpi/vWvss9AdSK6vmZDdTQHPs5idR5tr2es9Tw7dlY/lslzepoKDvmapEus+rs
-         uWNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gEeyzzUSwXoU/QlTHcalzbT11R3NUJQd27RQiZ05uEw=;
-        fh=/W+Eyd0usQM0AFYjzFHnbHZMps8ujiFA7VDtvpfunGs=;
-        b=JMvDjSWv/q2uNIavpMPKgCSBLj4pb08ImHFdZ05rUPCSwCZOEBzJBh3sTD8Jcz5BFX
-         /dDFjxGPcWBr5jJdD69Zo695rQ8ggXxSdQJkZnQJp9cpV4na3lEM0QoP4buEWRPXCj72
-         u+GmttjjEO5LA9tUDtOd8VSkeDfOknqvSEIhQjHIf/nd+Mm+UmeJlL39HnY0Fiu5ShJl
-         0zE16oFBpIw0kWx1bZuBh8jCa6Hjo+yFEoGOgBhXKWc/I0hrrcv1OyIsDY6ybTAZXabO
-         GeiNEgAcD0LBOfIL8qWAR0a5XS5imrEbrRl0/+8MysGIY/hqasUwYrLIk6u+CmX4sOjc
-         6gNQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xkv2GSE4"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-53505bc6524so62845651cf.0
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 09:33:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791563296; x=1792168096; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1791563581; x=1792168381; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=gEeyzzUSwXoU/QlTHcalzbT11R3NUJQd27RQiZ05uEw=;
-        b=Utp7NN0ae3nBHl5dPegpeqPeXqV0ulz05k4PKQtpGHWZ7oKvpRXJyJhKkXAnLMyFr9
-         D/ImR+s506O2SNOevXfe2NC5tjQoXsnxDveIjCB1Fd0xzSDftTwp34gUkh2Q9/ZzYxrN
-         KBMTyM1a2fWLybA9Wye3D3tGZPZDnGvu0xTmZvLh2scvju2cWxpOY1dm4kZYGPHOhC5n
-         +tM6mQ9QH22y41vJdCCllwpCrk18MF1eRrczA4gEjP6CnpfNfmsFKOovNq/7IYHX7mDM
-         k0FVikWGGe4OaWUdc4IkSO/GFXKEhe7l3FTC7o75iGAYbdSFGfK1hzypA6h1/rg2/wyf
-         rsgA==
+        bh=9sVGgzlu6+ENWUoJYb78q+rgs2zxlV0DomchfrV7sKg=;
+        b=Xkv2GSE4g+z7SHr1obSJIZCEiaWY2EfLCAZJe7rIrqEj0QuJX0bgJEc0u+x22LbIQA
+         DhjhQzg5rVBUKdMGsHpvJed+mfZ/XRxnvmwVUWke2Lv3vFhycVbljvWUBHVyNPyugh2Q
+         oh5hZ6poIfFB2sMpU+8X9pcoIw2PpyJRcK7Q2ZHRJvfiQ5HpdG2S5Vbz9HVry6c8qSPb
+         AttF+tUCXFUcC8aEMbJByr8BOFdl/t4XOCE5OuCQFSWZcYg/pGTcoE7cPyDmIi2ts73p
+         X2wQXa3BU01PNabkM+2JUN7cW4fM1+cO3HskT4i1IH8KmroYGrK6RHwhH7nhhQYo8SWy
+         9FoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791563296; x=1792168096;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1791563581; x=1792168381;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gEeyzzUSwXoU/QlTHcalzbT11R3NUJQd27RQiZ05uEw=;
-        b=LsYL6eUZB6DVPCaXQ31Ys5BF91+VzbgCcbDQawNge23DZnLLqLWmn1AnqGdqzPYwZt
-         DG+we6H/x7udBBjtvOZcy9ZdCsh4k+2AMfczJcELGKjeIb48Bdkkq9/xWsd1W1RKRr3m
-         HwEMc2Y7/dkh/t96Evw9BXsHgqy6xMj9CqezG+k6Ie6ONJOShK+NcWrFTYr5R6w/W52I
-         6cAXsWMfif4WBmHCYhvTdT3zSZVrPeOpjEF+bucsw5KDoA1eor2WwYk7EOYXwfB76T1C
-         5pkKrvrSRGArb1kxS+iT3MpsQUhkxDgOKio5ZVyW2YbbIXNC8Ux4FCK9czj60He4e4B7
-         7jWQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy5C4YxgigEGizfIwu9UyHKZclSjsANDFq4jxkLsb6ATdUhDO8jF8GWvkWixfStQbv6CIc=@vger.kernel.org
-X-Gm-Message-State: AFuF++kj2e8eI5h1ZLbC6Ph3MDj75BMYgDpcwKFi/DNq3gJu2donQC1k
-	wFBfTZYkCOffqvlxH7hWkQHSWAsur+ss/mh7m65xv/DvHcPkPEncpWih+lXuUSanfPWy8v0U2p0
-	h1+IjyhpdN2S3+G7JzOiWsGH/5fq/qYOb0BnoE421
-X-Gm-Gg: AYBFou26U7v5UXxljwET/ZgzITqAX9kiy+/HZ0L+BBiqrurIVuneWlhekOredCDPSI/
-	5aUa25uxM+Az6UK7vlvMM8bhaAQTGAAB2L+AUqIPjK4zvSOVcKm7+Ux5i6WwsWzwcosRuObTYlj
-	nueJIoe8ocG5gVoiEwOWlHDdG9/JzHi0Ffv/YDULt8c84wtQmQOlQ5Kt9QxJf9YUdD2l9aRUTR0
-	iGN0vD8sGog0dK+/rcwg1a227gHWfcfRvJETnXp2FHNUmZTndzPPb8PbhRvD/wh4A48sGrfdK8n
-	F8x/hvx5be1xZXeUvZavSJZJcUqjn3IF249yky+W4GB/RRpw+0JjstuByoHs0gd79g==
-X-Received: by 2002:a05:7022:1506:b0:12b:ff98:1ed9 with SMTP id
- a92af1059eb24-16a4d57c474mr309609c88.12.1791563255822; Fri, 09 Oct 2026
- 09:27:35 -0700 (PDT)
+        bh=9sVGgzlu6+ENWUoJYb78q+rgs2zxlV0DomchfrV7sKg=;
+        b=CyIRXQtSkQXIEKPlThRSb7DZMbiMQdP2AraE0x9l0z37uy0M+AegckV08UoIV7/lQH
+         i+DjmoSYPSzgplLfi+H+QmM1ontzWcipRgWqfGX0m2XhNqCP957EhhftDPlqXUTaEfUh
+         ofyH2TYzLi/JG/y7CEMNAlb2Om9Fc5+vxL5j/maqhsv4zNEVqSZFD+FJg3fhUhhg1Imc
+         HP98r9N7IOA94WggtiakI6/1Y5gBCXJ5fOsYKbhQNAGZjgB2G2UvEXBTcEeCEAL5NaFE
+         zxF0d3NpKrmCBJAvTxk+bFnwD76FcFGEhvWwo6zOvTmtdwG0CxsHw+mIfFVC3UiFLron
+         nzlQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw2z5ppPlmA+gFf/WJA5goy7GEV8cLMP6uaJ1ON4RQl/m8FTjf35mz/hALgZidY7rGuaHM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL/LAhqQU3GAmmO+Y2iDHHan3Yp51mZ/z47WfHzxoEXyEaM1lPD
+	EwSW+F8+r2e8CwG/d+E44SXXbGpH02uL07I78nwMjyzhX+xwMAX+FK9e
+X-Gm-Gg: AYBFou3CPa25O8Bzm9ssChEFRf30I8DrfPC53/OPna1jf4v+A7nI9oxmm0W0lvWJa2y
+	wmR/cf07aDbTUqN34iAP+7ITsKWbww81191EBvbZZ+fHHNCV6aIfJqXxbjrSduXS+Hl31j6a8SE
+	MODB5CiZEoPWqFXPjb8+p3KqMukpiXDCOzHWmrABDhEkzJ4H4eU6uMcRXzFOkwWaNan96X1o2wU
+	B/tb/H8d4mtn9i5JEEp76IoPXIA/oQzyzYSHSAXRWqX6CgSeqVu4IZiiax6gJN8U2Gj86Xd4FhF
+	Rossnd3gxfPpFrgfRqAUtGLSNlDDCTDc+7hD0N03BaaWsEwLzogOagq7qksOfN9NKtejw0c2cXS
+	NVTpTJj2RMLh+MOWkfdGOiAOtbT3Ld0rMBKa0mz4mn5FO0hxqnYtFCSO6ZhpQCuQt0tTuiY5LSR
+	tQ3knXzN4kYoDyTmvPu+ZwiaBOn5//WELhSff7+7xn5Pu7El56/dpoJbrzSz/ZqjZMlv9m7979e
+	9lSSDOKa4QjmhlJ8ToOxOk99RtwbJwyPg==
+X-Received: by 2002:ac8:59d5:0:b0:535:1d5b:a7fa with SMTP id d75a77b69052e-535a6101048mr25000311cf.14.1791563580780;
+        Fri, 09 Oct 2026 09:33:00 -0700 (PDT)
+Received: from google.com (61-230-52-229.dynamic-ip.hinet.net. [61.230.52.229])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5359b6fa0f9sm21647561cf.8.2026.10.09.09.32.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 09:33:00 -0700 (PDT)
+Date: Sat, 10 Oct 2026 00:32:51 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Greg Ungerer <gerg@linux-m68k.org>
+Cc: bot+bpf-ci@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+	geert@linux-m68k.org, ast@kernel.org, daniel@iogearbox.net,
+	eddyz87@gmail.com, memxor@gmail.com, andrii@kernel.org,
+	rdunlap@infradead.org, martin.lau@linux.dev, song@kernel.org,
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+	ihor.solodrai@linux.dev, jserv@ccns.ncku.edu.tw,
+	marscheng@google.com, eleanor15x@gmail.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, bpf@vger.kernel.org,
+	daniel@thingy.jp, martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH v7] m68k, bpf: Add initial BPF JIT compiler support
+Message-ID: <askXM-fN-olasi7l@google.com>
+References: <20261005185251.2422114-1-visitorckw@gmail.com>
+ <506b804c97aaa3a66660bb0eebd85c6041e241532c1227f1012166785d240fae@mail.kernel.org>
+ <342ca584-c4ef-4d73-9017-9d21bbf9ce10@linux-m68k.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com> <20261006-b4-skbuff-bug-on-v1-5-1b4434c5357c@toxicpanda.com>
-In-Reply-To: <20261006-b4-skbuff-bug-on-v1-5-1b4434c5357c@toxicpanda.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 9 Oct 2026 09:27:14 -0700
-X-Gm-Features: AclHuK81ahTE51wC2Bp7FXQn_Jc8YWHqO5IFJUkY7wkhMiw-xblsjCBwxgAMBh4
-Message-ID: <CAHS8izPj0JCi=-tjNBTYH3=-ak_VLCeKeWxTrwAt7vs8LDgn5Q@mail.gmail.com>
-Subject: Re: [PATCH net-next 5/9] net: skbuff: don't BUG() on leftover length
- in skb_checksum() and friends
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <342ca584-c4ef-4d73-9017-9d21bbf9ce10@linux-m68k.org>
 
-On Tue, Oct 6, 2026 at 10:10=E2=80=AFAM Josef Bacik <josef@toxicpanda.com> =
-wrote:
->
-> skb_checksum(), skb_crc32c() and __skb_to_sgvec() walk the head, frags
-> and frag_list and BUG() if they run out of skb before they run out of
-> @len.  By then nothing has been read past the end of the skb.  The walk
-> stopped at the end of the data, and the check only tells us the caller
-> asked for a range the skb doesn't have.  commit 06a0afcfe2f5 ("xfrm: do
-> pskb_pull properly in __xfrm_transport_prep") fixed one such caller that
-> crashed in __skb_to_sgvec().
->
-> Warn once and return what each function already returns when it can't
-> do the work:
->
->  - __skb_to_sgvec() returns -EINVAL.  Every skb_to_sgvec() caller has
->    checked for a negative return since it learned to return -EMSGSIZE.
->  - skb_checksum() and skb_crc32c() return 0, as they already do for
->    unreadable frags.  The resulting checksum is wrong, so the packet
->    fails verification on receive or goes out with a bad checksum on
->    transmit, rather than taking the machine down.
->
-> Assisted-by: LLM
-> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+On Tue, Oct 06, 2026 at 11:53:22PM +1000, Greg Ungerer wrote:
+> Why thank you LLM review :-)
+> 
+> On 6/10/26 05:48, bot+bpf-ci@kernel.org wrote:
+> >> m68k, bpf: Add initial BPF JIT compiler support
+> > 
+> > TL;DR: Nit only, not a bug: the ColdFire byte-swap instruction sequences are
+> > open-coded repeatedly in emit_to_le16/32/64() in the m68k JIT; suggests small
+> > shared helpers, as arm's bpf_jit_32.c does.
+> > 
+> >> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
+> >> new file mode 100644
+> >> index 000000000000..6c40d358acd4
+> >> --- /dev/null
+> >> +++ b/arch/m68k/net/bpf_jit_comp.c
+> >> @@ -0,0 +1,1840 @@
+> > [ ... ]
+> >> +static inline void emit_to_le16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+> >> +{
+> >> +	if (CPU_IS_COLDFIRE) {
+> >> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> >> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> >> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> >> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> >> +		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
+> > [ ... ]
+> >> +static inline void emit_to_le32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+> >> +{
+> >> +	if (CPU_IS_COLDFIRE) {
+> >> +		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
+> >> +		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> >> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> >> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> >> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> >> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> >> +		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
+> >> +		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
+> >> +		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
+> >> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> >> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> >> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> >> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> >> +		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
+> >> +		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> >> +		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
+> > [ ... ]
+> >> +static inline void emit_to_le64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+> >> +{
+> >> +	if (CPU_IS_COLDFIRE) {
+> >> +		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
+> >> +		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
+> >> +
+> >> +		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> >> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> >> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> >> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> >> +		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> >> +		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
+> >> +		emit_16(ctx, 0x202f | (d_lo << 9));			/* move.l 4(%sp), d_lo */
+> >> +		emit_16(ctx, 0x0004);
+> >> +		emit_16(ctx, 0x2f40 | d_hi);				/* move.l d_hi, 4(%sp) */
+> >> +		emit_16(ctx, 0x0004);
+> >> +		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> >> +		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> >> +		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> > [ ... ]
+> > 
+> > This isn't a bug, but the ColdFire byte-swap sequence (mvz.w / mvz.b /
+> > lsr.l #8 / lsl.l #8 / or.l) is open-coded once in emit_to_le16(), twice in
+> > emit_to_le32() and four times in emit_to_le64(), differing only in which
+> > register receives the result. 
+> 
+> I did consider using helpers for these during coding, but ultimately decided
+> against it. The open coded versions allow for a handful of extra instruction
+> optimizations - due to that flexibility of producing the 16bit swap sequence
+> result in different registers. For example I could combine a stack pop with
+> the or'ing of the result, and more efficiently store an intermediate result
+> into the temporary stack storage.
+> 
+> The patch below gives an example of an implementation using helpers. I am not tied
+> to the open coded version: Kuan-Wei if you prefer the code with helpers feel free
+> to use this instead.
 
+I don't have a strong opinion either way, since it sounds like you
+already made a deliberate judgment call when writing it. Maybe I can
+switch to the helper version for now to make this already large patch a
+bit smaller. If anyone cares or if it ever shows up in benchmarks in
+the future, we can always go back to the open-coded version to optimize
+it.
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
+> 
+> FWIW, the to_le32 coded sequence is 1 instruction longer (17 instructions to 18).
+> The to_le64 coded sequence is 5 instructions longer (34 instructions to 39).
+> Total byte count differs less, due to use of offsets in the open coded versions.
+> 
+> Regards
+> Greg
+> 
+> 
+> 
+> --- arch/m68k/net/bpf_jit_comp.c.org	2026-10-06 23:08:25.924094287 +1000
+> +++ arch/m68k/net/bpf_jit_comp.c	2026-10-06 22:51:13.099505355 +1000
+> @@ -640,14 +640,19 @@
+>  	bpf_put_reg32(dst[0], d_hi, ctx);
+>  }
+>  
+> +static inline void emit_cf_swap16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+> +{
+> +	emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);			/* mvz.w d_lo, d_lo */
+> +	emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);			/* mvz.b d_lo, d_hi */
+> +	emit_16(ctx, 0xe088 | d_lo);					/* lsr.l #8, d_lo */
+> +	emit_16(ctx, 0xe188 | d_hi);					/* lsl.l #8, d_hi */
+> +	emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);			/* or.l d_hi, d_lo */
+> +}
+> +
+>  static inline void emit_to_le16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+>  {
+>  	if (CPU_IS_COLDFIRE) {
+> -		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> -		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> -		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> -		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> -		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
+> +		emit_cf_swap16(ctx, d_lo, d_hi);
+>  	} else {
+>  		emit_16(ctx, 0x0280 | d_lo);				/* andi.l #0xffff, d_lo */
+>  		emit_32(ctx, 0xffff);
+> @@ -657,25 +662,23 @@
+>  	emit_16(ctx, 0x7000 | (d_hi << 9));				/* moveq #0, d_hi */
+>  }
+>  
+> +static inline void emit_cf_swap32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+> +{
+> +	emit_16(ctx, 0x2f00 | d_lo);					/* move.l d_lo, -(%sp) */
+> +	emit_16(ctx, 0x4840 | d_lo);					/* swap d_lo */
+> +	emit_cf_swap16(ctx, d_lo, d_hi);
+> +	emit_16(ctx, 0x2000 | (d_lo << 9) | d_hi);			/* move.l d_lo, d_hi */
 
---=20
-Thanks,
-Mina
+Should be emit_16(ctx, 0x2000 | (d_hi << 9) | d_lo) ?
+
+Regards,
+Kuan-Wei
+
+> +	emit_16(ctx, 0x2017 | (d_lo << 9));				/* move.l (%sp), d_lo */
+> +	emit_16(ctx, 0x2e80 | d_hi);					/* move.l d_hi, (%sp) */
+> +	emit_cf_swap16(ctx, d_lo, d_hi);
+> +	emit_16(ctx, 0x4840 | d_lo);					/* swap d_lo */
+> +	emit_16(ctx, 0x809f | (d_lo << 9));				/* or.l (%sp)+, d_lo */
+> +}
+> +
+>  static inline void emit_to_le32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+>  {
+>  	if (CPU_IS_COLDFIRE) {
+> -		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
+> -		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> -		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> -		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> -		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> -		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> -		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
+> -		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
+> -		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
+> -		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> -		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> -		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> -		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> -		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
+> -		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> -		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
+> +		emit_cf_swap32(ctx, d_lo, d_hi);
+>  	} else {
+>  		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
+>  		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> @@ -688,45 +691,12 @@
+>  static inline void emit_to_le64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
+>  {
+>  	if (CPU_IS_COLDFIRE) {
+> -		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
+>  		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
+> -
+> -		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> -		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> -		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> -		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> -		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> -		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
+> -		emit_16(ctx, 0x202f | (d_lo << 9));			/* move.l 4(%sp), d_lo */
+> -		emit_16(ctx, 0x0004);
+> -		emit_16(ctx, 0x2f40 | d_hi);				/* move.l d_hi, 4(%sp) */
+> -		emit_16(ctx, 0x0004);
+> -		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> -		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> -		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> -		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> -		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
+> -		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> -		emit_16(ctx, 0x81af | (d_lo << 9));			/* or.l d_lo, 4(%sp) */
+> -		emit_16(ctx, 0x0004);
+> -
+> -		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
+> -		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> -		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> -		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> -		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> -		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> -		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
+> +		emit_cf_swap32(ctx, d_lo, d_hi);
+> +		emit_16(ctx, 0x2000 | (d_lo << 9) | d_hi);		/* move.l d_lo, d_hi */
+>  		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
+>  		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
+> -		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
+> -		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
+> -		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
+> -		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
+> -		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
+> -		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
+> -		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
+> -
+> +		emit_cf_swap32(ctx, d_lo, d_hi);
+>  		emit_16(ctx, 0x201f | (d_hi << 9));			/* move.l (%sp)+, d_hi */
+>  	} else {
+>  		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
+> 
+> 
+> 
+> 
