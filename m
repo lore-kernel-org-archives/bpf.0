@@ -1,51 +1,51 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEF73D6CB8;
-	Fri,  9 Oct 2026 11:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1A945563C;
+	Fri,  9 Oct 2026 11:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545071; cv=none; b=UIbSIfc5RBh0I4G51mdIGNy1tYOazUVNtpk53R4MkbAl8HkoUIlOjr9697MxeVkKP2e8HCURI1dBjcS/i0dVOdM8mix15SRk5IaahIk0cyhr7gvkaSI3WoEZvJhW7zENSk9wM9r0Zis13L5L+wuXOZyfBBkPMQ/H/ekH3CoAzhM=
+	t=1791545074; cv=none; b=U+VJKKX85txWO3u01tC9zfhNUmxlbm4a/mQclU+pdEO5gVe0bemsNyFntXHeLNRWfgbfQWBpPAsVjVMfnxmns6dD+lh4IGxl/ENwtjxUqzRIRU89ti8OM7JP42NEtUST1r213eTKUZpYfB8y85UXVdsZbCWj+Rfll1RO2hmcCNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545071; c=relaxed/simple;
-	bh=A/Xo3RVxh1ZCUOA3sgeLMFejXsw1UnydJ2Q7BZJnKkQ=;
+	s=arc-20240116; t=1791545074; c=relaxed/simple;
+	bh=JTOAe0WMVeMIfFPb9biGr/1hyvAxGzlIzCkCUbkikqk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ssy3pjsqJjEjkqSwF5hya/x2SrmcbeWn9tUQZg3y0DlZ+xOnOk4NuPUzGWec/ljdhfgstH2aDel+UL+OSIoPMe+EAtKtO31IVdAJFaIbrKNSyFRjia1QtT/AOLUTkY83G+2ZI9xJwF+Go24ddNEARMwi394Et9kiT3AAjbOOL1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PYxSCvvX; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=Yb+WUv4eqRiiWYEzONv8GVdyVVZe2jUwD12RS16s1aNwEVgX+C/G61Wmok4a5gqytiEehxNHltgsEmwS7jj1L0grNucqfLvjUtwgo1f5v/2Ti9xMb1o0lD8LOpdEqBr0piB6KHbJ3YW2xFqX6AtSy+hPv2fHLruGyIdMBcBQYMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AOonaN69; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PYxSCvvX"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6991njpm2028956;
-	Fri, 9 Oct 2026 11:23:51 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AOonaN69"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 698K9hqt1377913;
+	Fri, 9 Oct 2026 11:23:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=KC9At
-	8JoZK6PjG0DKET4GiPn7pfN2CxANcw1sZLK4cE=; b=PYxSCvvX3/IX9Tkvv5RQN
-	9z3TwZZTiFpL0E8AkzRzEN/RbaMFVQ3Pn1IouHE40et/X7DAeMOpl7A+PMIZySH5
-	PT1wvSBbTHkT8/iX9WbA5af59UcHdyadRxZBkYyKli6fQ34qL2Jbnzm/cJkgaKEn
-	5hdNK40cv28jVyvdF+9yJQnyP3ENkTg35YKf5BX+JdpbGeLhFX9W8VdXY7CS0SO4
-	fD/vlpL8ed9fdBqd3zg0G7P0gs5jMcHxEgShQieTogCE5QELLgQ+LNED/hiiQXFs
-	SHBH3YnRaXqhJJ6IMHZbACGxttlxOalX7ynkCjRVq6eJw5/nsUYKf8eMwvOo1ntO
-	Q==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=y66z2
+	bLOwa85XnfgLXjz5KVIShSicVkgR4cQw0Jd7Oc=; b=AOonaN69m6l9D3yKS/eWz
+	YBRB63c/LpgkwV0pXfcgSVfAWn47hJxnoWCfNT7n8yskvdUWHxs189QRm2FTeIcG
+	jBkdfv4GcSnmm67XmKWyK5jCozDilihbKYDbmbjoRuBSI7RTx/qfLuSaysKedmIi
+	+LORfF1X3RQsptjYCfNmI7whAElGcuE7CokXzXN6sMx7lpLdmISX+Lea+99YBA++
+	ushNd5P0kN57xqbNPnE6fWB8Pisn3l+Znk5Avq9a9FmDL5eIB9JRQdTGgSYO2xwg
+	kGAFzRCk6Uy96DVV6FErdEEr+xExaUIeEjQcI2tt9/ZIvd0VmIf3qvQFKBs8ERd7
+	g==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h5xeh31h4-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h5xeyb0jg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 09 Oct 2026 11:23:50 +0000 (GMT)
+	Fri, 09 Oct 2026 11:23:54 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 699BLkJ5039969;
-	Fri, 9 Oct 2026 11:23:50 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 699BLjSX039833;
+	Fri, 9 Oct 2026 11:23:53 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4h5xfcsnfs-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4h5xfcsngy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 09 Oct 2026 11:23:49 +0000 (GMT)
+	Fri, 09 Oct 2026 11:23:53 +0000 (GMT)
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 699BNRkc006543;
-	Fri, 9 Oct 2026 11:23:49 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 699BNRke006543;
+	Fri, 9 Oct 2026 11:23:52 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-85-231.vpn.oracle.com [10.154.85.231])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4h5xfcsn8m-7;
-	Fri, 09 Oct 2026 11:23:48 +0000 (GMT)
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4h5xfcsn8m-8;
+	Fri, 09 Oct 2026 11:23:52 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
         jolsa@kernel.org
@@ -57,9 +57,9 @@ Cc: ihor.solodrai@linux.dev, yonghong.song@linux.dev, song@kernel.org,
         ojeda@kernel.org, linux-modules@vger.kernel.org,
         arnaldo.melo@gmail.com, bpf@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4 bpf-next 6/7] selftests/bpf: Test BTF sysfs inline representations
-Date: Fri,  9 Oct 2026 12:23:23 +0100
-Message-ID: <20261009112324.1442319-7-alan.maguire@oracle.com>
+Subject: [PATCH v4 bpf-next 7/7] selftests/bpf: Add a test verifying inline information
+Date: Fri,  9 Oct 2026 12:23:24 +0100
+Message-ID: <20261009112324.1442319-8-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20261009112324.1442319-1-alan.maguire@oracle.com>
 References: <20261009112324.1442319-1-alan.maguire@oracle.com>
@@ -77,180 +77,247 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  suspectscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
  phishscore=0 lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2610020000 definitions=main-2610090045
-X-Proofpoint-GUID: xkbvtM099dU37sqgNt2DdqDpjEf0A2rZ
-X-Proofpoint-ORIG-GUID: xkbvtM099dU37sqgNt2DdqDpjEf0A2rZ
-X-Authority-Analysis: v=2.4 cv=LZ2peTfi c=1 sm=1 tr=0 ts=6ac8cec6 b=1 cx=c_pps
+X-Proofpoint-ORIG-GUID: pxBHudGmAU0hDe0in06RlnXT3Vid6ap-
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX9h/94Vi3nobv
+ Y4AtBOT/r7Og1z0sfpzt17ggS68svUPPTNoX4ofIOgydvH3hQmG+HuruAEVkaVLEOqhcFcdqTLk
+ diEW/es5ws5OxoXZ0YD8Lj/oBvkdNlqT04Hdc9mmJtQteUXkd7HQ
+X-Proofpoint-GUID: pxBHudGmAU0hDe0in06RlnXT3Vid6ap-
+X-Authority-Analysis: v=2.4 cv=e6mT2qp/ c=1 sm=1 tr=0 ts=6ac8ceca b=1 cx=c_pps
  a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
  a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=3I1J8UUJPc9JN9BFgKH3:22 a=yPCof4ZbAAAA:8 a=aUn3EfpHYzEyQR4b3IMA:9
+ a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=3OloApC0oWR4td_TvfEA:9
  a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12108
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX4a9mIQhiZNEY
- V3ebqxaHUvhwfPzWPkrmmYja/P8B6URlGKiCk/aoey6Sg+JQR7e2a68utbhRDGI+D/efrORgkCa
- G+qlJ/2XHAJN5Ug4VEib3I+2BNLtGLYZlaC5nD+tKdyJcgCxsteB
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX1UE3WfbP2uo9
- Z3M4wzYgY7FOlKzqOxBoFrS0kAXLLbftvCAwlf0++sKLC9bts0/ytfhhy32KDE3z+nDFtbNvEMg
- rRb2g7oj8fOFXUt5Gf2i08ecAkJowCK2knESREnHKXPZFRXHYSM/QfkBn67xBy2vR9HiLZTZpDk
- KNQDA+UjxipUlcpTRVdbaAVg5jLNQ0cJf7iqz/SFc1Jpc/sxN4dgZn8uvWp4soSs63g2AnbjE4K
- sKUyzPBS/ItAvt/q4J3QNbukitsE1CwQEDsUti6SHlD4Nrjnpc/xg9xpfS0TKp11dqCkTb4XRri
- mn/5qh5iF12//jj3zNLL8BHJf910Fa548BQiixVDZ8wu3j5A8b+gmfuU2h3EOz9XFBlDEEbnq7k
- EEJUCMDbXJPiXRGhY3A4DgKU5pVx53Dvbgxskpc0B3z37Jnp9ZSfZfMP/0ILrBSD0HvaUUWjihT
- YMM+4HDh2R9tlrHjrFBBCRKjyqiWAZLEiwLvUnCo=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX/ejD/da9gQQL
+ 8XSSNdnQ8SRMD21g5uOqrYHDBvgM4x6kMjFqzO8Wj4gbd/x3n/aNLG4tzAddWbIwcf4LnM3gjvX
+ JGs42ZEsOY4SqIg7dFJjMWN0g0/DAJubQGYZVPE+CeAvq14epwket/w2Va8gts3x2jxqIo5FYMR
+ reG/5WEKnFFXfYxKzvUqzhLkmxFgisxqklQNAjOyk/ZtoL4NqlU9poREy6k4DBGxDAykPwwJQud
+ qEg02qSFoW6OaHk5LtzIEhPcXQPt5+FibRCr4fRmw3zLfONIIKc4Lw1FKukWmwpYiEmnOITSodT
+ fg56MP2Mfd8HGz/e7mV6TpaGAfiWpdLfY2IKyxgfX6ln0VXWBh1yXHa0fzFyKAeJQs6saf1UneM
+ WaLNgzb6l2W5R/6cwmkNFLSwUiOTLTah62AIJdA5W0cSgLDwkLOC2HOAH+szryaHfbwAa7aUw57
+ rNckpRkWFWTplyhPEF4tBULaKikpGx/5T4QhtRCc=
 
-Load vmlinux, vmlinux.inline and all module and module.inline
-entries in /sys/fs/btf; this will allow us to sanity-check
+For bpf_testmod verify that we have inline info for an
+__always_inline'd function and it matches reasonable
+expectations (a single location parameter encoded in a
+register given that it cannot be compile-time optimized).
 
-- kernel and its inline representations
-- in-tree modules and their inline multi-split BTF representations
-- out-of-tree modules and the kernel relocation done for
-  module and module inline BTF
+Also verify that the offset of the LOCSEC descriptor makes
+sense, i.e. that it is in the range of the function where
+it was inlined.
 
-Since bpf_testmod.ko is built as an out-of-tree module, the
-combination of vmlinux, normal in-tree module BTF and out-of-tree
-testmod ensures we sanity check relocations for each case.
+Because bpf_testmod is treated as an out-of-tree module,
+the inline information will be in btf_testmod.inline which
+is relocated using bpf_testmod.ko .BTF.base.
 
-Also test mmap for vmlinux.inline.
+Test is skipped if pahole does not encode inline info.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- .../selftests/bpf/prog_tests/btf_sysfs.c      | 87 ++++++++++++++++++-
- 1 file changed, 84 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/btf_inline.c     | 113 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  11 +-
+ tools/testing/selftests/bpf/trace_helpers.c   |  20 ++++
+ tools/testing/selftests/bpf/trace_helpers.h   |   1 +
+ 4 files changed, 143 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_inline.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c b/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
-index 3923e64c4c1d..3fde8598189f 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
-@@ -3,15 +3,21 @@
- 
- #include <test_progs.h>
- #include <bpf/btf.h>
-+#include <dirent.h>
-+#include <limits.h>
- #include <sys/stat.h>
- #include <sys/mman.h>
- #include <fcntl.h>
- #include <unistd.h>
- 
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_inline.c b/tools/testing/selftests/bpf/prog_tests/btf_inline.c
+new file mode 100644
+index 000000000000..d88fab6429b1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/btf_inline.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026, Oracle and/or its affiliates. */
++
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include <bpf/libbpf.h>
++
 +#define BTF_SYSFS_DIR		"/sys/kernel/btf"
 +#define BTF_INLINE_SUFFIX	".inline"
 +
- static void test_btf_mmap_sysfs(const char *path, struct btf *base)
- {
- 	struct stat st;
- 	__u64 btf_size, end;
-+	size_t mmap_len = 0;
- 	void *raw_data = NULL;
- 	int fd = -1;
- 	long page_size;
-@@ -26,6 +32,7 @@ static void test_btf_mmap_sysfs(const char *path, struct btf *base)
- 
- 	btf_size = st.st_size;
- 	end = (btf_size + page_size - 1) / page_size * page_size;
-+	mmap_len = btf_size;
- 
- 	fd = open(path, O_RDONLY);
- 	if (!ASSERT_GE(fd, 0, "open_btf"))
-@@ -39,11 +46,13 @@ static void test_btf_mmap_sysfs(const char *path, struct btf *base)
- 	if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_shared"))
- 		goto cleanup;
- 
--	raw_data = mmap(NULL, end + 1, PROT_READ, MAP_PRIVATE, fd, 0);
-+	mmap_len = end + 1;
-+	raw_data = mmap(NULL, mmap_len, PROT_READ, MAP_PRIVATE, fd, 0);
- 	if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_invalid_size"))
- 		goto cleanup;
- 
--	raw_data = mmap(NULL, end, PROT_READ, MAP_PRIVATE, fd, 0);
-+	mmap_len = end;
-+	raw_data = mmap(NULL, mmap_len, PROT_READ, MAP_PRIVATE, fd, 0);
- 	if (!ASSERT_OK_PTR(raw_data, "mmap_btf"))
- 		goto cleanup;
- 
-@@ -70,12 +79,84 @@ static void test_btf_mmap_sysfs(const char *path, struct btf *base)
- cleanup:
- 	btf__free(btf);
- 	if (raw_data && raw_data != MAP_FAILED)
--		munmap(raw_data, btf_size);
-+		munmap(raw_data, mmap_len);
- 	if (fd >= 0)
- 		close(fd);
- }
- 
-+static void test_btf_inline_sysfs_all(void)
++/*
++ * For a specific inline site, verify we have the right function,
++ * loc proto and loc param representation and that the offset is
++ * reasonable given the caller where it was inlined.
++ */
++void test_btf_inline(void)
 +{
-+	struct btf *vmlinux_btf;
-+	struct dirent *dentry;
-+	DIR *dir;
++	struct btf *inline_btf = NULL, *btf = NULL, *vmlinux_btf = NULL;
++	const char *inline_caller = "bpf_testmod_test_write";
++	const char *inline_func = "testmod_inline_len";
++	unsigned long long caller_addr, base_addr;
++	bool skip = false, found_loc = false;
++	const struct btf_loc_param *lp;
++	int locsec_id, func_id, n, i;
++	const struct btf_type *t;
++	struct btf_loc *l;
++	const __u32 *p;
 +	int err = 0;
 +
-+	dir = opendir(BTF_SYSFS_DIR);
-+	if (!ASSERT_OK_PTR(dir, "open_btf_sysfs"))
-+		return;
-+
-+	vmlinux_btf = btf__parse(BTF_SYSFS_DIR "/vmlinux", NULL);
-+	if (!ASSERT_OK_PTR(vmlinux_btf, "parse_vmlinux_btf")) {
-+		closedir(dir);
++	if (!env.has_testmod) {
++		test__skip();
 +		return;
 +	}
 +
-+	while ((dentry = readdir(dir)) != NULL) {
-+		struct btf *base_btf = NULL, *module_btf = NULL, *inline_btf = NULL;
-+		char btf_path[PATH_MAX], inline_path[PATH_MAX];
-+		struct stat st;
++	base_addr = module_get_base_addr("bpf_testmod");
++	if (!ASSERT_NEQ(base_addr, 0, "base_addr_nonzero"))
++		return;
 +
-+		/* Skip ".", ".." and "foo.inline" */
-+		if (strstr(dentry->d_name, "."))
-+			continue;
++	if (!ASSERT_OK(kallsyms_find(inline_caller, &caller_addr),
++		       "find_inline_caller"))
++		return;
++	if (!ASSERT_NEQ(caller_addr, 0, "caller_addr_nonzero"))
++		return;
++	if (!ASSERT_GT(caller_addr, base_addr, "caller_addr_gt_base_addr"))
++		return;
++	caller_addr -= base_addr;
 +
-+		if (strcmp(dentry->d_name, "vmlinux") == 0)
-+			base_btf = vmlinux_btf;
++	vmlinux_btf = btf__load_vmlinux_btf();
++	if (!ASSERT_OK_PTR(vmlinux_btf, "vmlinux_btf"))
++		return;
 +
-+		if (snprintf(btf_path, sizeof(btf_path), "%s/%s",
-+			     BTF_SYSFS_DIR, dentry->d_name) >= sizeof(btf_path) ||
-+		    snprintf(inline_path, sizeof(inline_path), "%s/%s%s",
-+			     BTF_SYSFS_DIR, dentry->d_name, BTF_INLINE_SUFFIX) >=
-+			     sizeof(inline_path)) {
-+			ASSERT_FAIL("BTF sysfs path is too long\n");
++	btf = btf__parse_split(BTF_SYSFS_DIR "/bpf_testmod", vmlinux_btf);
++	if (!ASSERT_OK_PTR(btf, "bpf_testmod_btf"))
++		goto out;
++
++	inline_btf = btf__parse_split(BTF_SYSFS_DIR "/bpf_testmod" BTF_INLINE_SUFFIX,
++				      btf);
++	err = libbpf_get_error(inline_btf);
++	/* pahole may not have inline BTF feature support. */
++	if (err == -ENOENT) {
++		skip = true;
++		goto out;
++	}
++	if (!ASSERT_OK(err, "parse_inline_btf"))
++		goto out;
++	locsec_id = btf__find_by_name_kind(inline_btf, "inline.text", BTF_KIND_LOCSEC);
++	if (locsec_id < 0) {
++		skip = true;
++		goto out;
++	}
++	func_id = btf__find_by_name_kind(inline_btf, inline_func, BTF_KIND_FUNC);
++	if (!ASSERT_GT(func_id, 0, "inline_caller_func"))
++		goto out;
++	t = btf__type_by_id(inline_btf, locsec_id);
++	n = btf_vlen(t);
++	for (i = 0, l = btf_locsec_locs(t); i < n; i++, l++) {
++		if (l->func == func_id) {
++			found_loc = true;
 +			break;
 +		}
-+
-+		if (!base_btf) {
-+			module_btf = btf__parse_split(btf_path, vmlinux_btf);
-+			err = libbpf_get_error(module_btf);
-+			if (err) {
-+				/* A module can be unloaded while its sysfs entry is iterated. */
-+				if (err == -ENOENT)
-+					continue;
-+				ASSERT_OK(err, "parse_module_btf");
-+				continue;
-+			}
-+			base_btf = module_btf;
-+		}
-+		if (stat(inline_path, &st)) {
-+			err = errno;
-+			if (err != ENOENT)
-+				ASSERT_OK(err, "stat_inline_btf");
-+			btf__free(module_btf);
-+			continue;
-+		}
-+		if (base_btf == vmlinux_btf)
-+			test_btf_mmap_sysfs(inline_path, base_btf);
-+		inline_btf = btf__parse_split(inline_path, base_btf);
-+		err = libbpf_get_error(inline_btf);
-+		if (!err)
-+			btf__free(inline_btf);
-+		ASSERT_OK(err, "parse_inline_btf");
-+		btf__free(module_btf);
 +	}
-+	closedir(dir);
-+
++	if (!ASSERT_TRUE(found_loc, "found_loc"))
++		goto out;
++	if (!ASSERT_GT(l->loc_proto, 0, "loc_proto_id"))
++		goto out;
++	if (!ASSERT_GT(l->offset, 0, "loc_offset"))
++		goto out;
++	t = btf__type_by_id(inline_btf, l->loc_proto);
++	if (!ASSERT_OK_PTR(t, "loc_proto_ptr"))
++		goto out;
++	if (!ASSERT_EQ(btf_vlen(t), 1, "loc_proto_one_param"))
++		goto out;
++	p = btf_loc_proto_params(t);
++	if (!ASSERT_GT(*p, 0, "loc_proto_has_loc_param"))
++		goto out;
++	t = btf__type_by_id(inline_btf, *p);
++	if (!ASSERT_OK_PTR(t, "loc_param_ptr"))
++		goto out;
++	lp = btf_loc_param(t);
++	if (!ASSERT_TRUE(lp->flags & BTF_LOC_PARAM_REG, "param_has_reg"))
++		goto out;
++	if (!ASSERT_GT(l->offset, caller_addr, "inline_gt_caller"))
++		goto out;
++	/* simple sanity test to roughly ensure inline site still in function */
++	if (!ASSERT_LT(l->offset, caller_addr + 512, "inline_in_caller"))
++		goto out;
++out:
++	btf__free(inline_btf);
++	btf__free(btf);
 +	btf__free(vmlinux_btf);
++	if (skip)
++		test__skip();
++}
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 93847ca6293b..b4f0af2aeca4 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -735,6 +735,13 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ EXPORT_SYMBOL(bpf_testmod_test_read);
+ ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
+ 
++static __always_inline size_t testmod_inline_len(size_t len)
++{
++	/* Keep an instruction in the inline site without changing len. */
++	asm volatile("" : "+m"(len));
++	return len;
 +}
 +
- void test_btf_sysfs(void)
+ noinline ssize_t
+ bpf_testmod_test_write(struct file *file, struct kobject *kobj,
+ 		      const struct bin_attribute *bin_attr,
+@@ -743,7 +750,7 @@ bpf_testmod_test_write(struct file *file, struct kobject *kobj,
+ 	struct bpf_testmod_test_write_ctx ctx = {
+ 		.buf = buf,
+ 		.off = off,
+-		.len = len,
++		.len = testmod_inline_len(len),
+ 	};
+ 
+ 	trace_bpf_testmod_test_write_bare_tp(current, &ctx);
+@@ -802,7 +809,7 @@ static struct testmod_uprobe uprobe = {
+ 	.consumer.ret_handler = uprobe_ret_handler,
+ };
+ 
+-static int testmod_register_uprobe(loff_t offset)
++static __always_inline int testmod_register_uprobe(loff_t offset)
  {
- 	test_btf_mmap_sysfs("/sys/kernel/btf/vmlinux", NULL);
-+	test_btf_inline_sysfs_all();
+ 	int err = -EBUSY;
+ 
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 679008b310d9..f3a1d627699d 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -244,6 +244,26 @@ int kallsyms_find(const char *sym, unsigned long long *addr)
+ 	return err;
  }
+ 
++unsigned long long module_get_base_addr(const char *module)
++{
++	unsigned long long addr, base_addr = 0;
++	char name[500];
++	FILE *f;
++
++	f = fopen("/proc/modules", "r");
++	if (!f)
++		return 0;
++
++	while (fscanf(f, "%499s %*s %*s %*s %*s 0x%llx", name, &addr) == 2) {
++		if (strcmp(module, name) == 0) {
++			base_addr = addr;
++			break;
++		}
++	}
++	fclose(f);
++	return base_addr;
++}
++
+ #ifdef PROCMAP_QUERY
+ int env_verbosity __weak = 0;
+ 
+diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+index 01c8ecc45627..eb0d0d9804d6 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.h
++++ b/tools/testing/selftests/bpf/trace_helpers.h
+@@ -38,6 +38,7 @@ typedef int (*ksym_search_cmp_t)(const void *p1, const struct ksym *p2);
+ int load_kallsyms(void);
+ struct ksym *ksym_search(long key);
+ long ksym_get_addr(const char *name);
++unsigned long long module_get_base_addr(const char *module);
+ 
+ struct ksyms *load_kallsyms_local(void);
+ struct ksym *ksym_search_local(struct ksyms *ksyms, long key);
 -- 
 2.43.5
 
