@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869C43AE1BB
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 04:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCC53AFD1F
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 04:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791519355; cv=none; b=dxB2y4y/L44A/UspHSZpUAeUrNi4oMU52nqJqyCw/4zAuY/XJX3EAXYvAipS+XE/+B0Axablq0tXvTH6U/f4DP5sNVMl3y3aWuCPZNKnIkILkjudi6TFq9lvNWj6fVhaDDofR54/pngaRB7uRD4B0yE0Frt7sg9CVB5exJvzSiQ=
+	t=1791519360; cv=none; b=qjUriuAdd7cIIQr5Wq50iaZca49hLTRyDxXlCQyFXewHy4jD5hga5K8UhMAPeyLQ2yWP8CUvHapnyNoC9KamN0nALjqgdFzsc/+jbsmCbol4ElNlwIlIYtRHXQDrH+3Dy+FJ8iis9zd4g1jR7VZx4aAoOgGGHFWVEbyZfh1F/YM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791519355; c=relaxed/simple;
-	bh=X2L87VNE35CcxRzMw9Isk1hvOdrFWou8af531MsSfUc=;
+	s=arc-20240116; t=1791519360; c=relaxed/simple;
+	bh=3hKcSC9M9Diu6ed21PEq7WGRHdOQeoeotBvXkhY86qE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uYUGv5bjo1JIrMhru6N8uxx/dw3FCKYUBndpVz8P+joa+KkC6dm0tEGqg75vRbCZSHOOcbT2tlaBsE9UOEvxDoleqeFa+uaP8vfViCGcpBCpCNGIUltM+Z7uhcXRFOt/1OjiyojT5Cqw4Sr+okeouTgb9tb5OlsZ6iAmULuMwQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=A1arQwzAnU+g0/Pv+YIIRpxeKUhBPPJi1SaHJM16Bf11lPUPxqxCCA+HNPgr+IjCcOd04lHvJdHSEtUrNAp2lT6ketNP4ixzDwaMMRbBeyYaqA5znqy+059QcSBEnNU1PH/fFyywVh0KxzddMdNrTMi49yDxI35t/v4Of/tCStk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 2AF2D3008C4EEB; Thu,  8 Oct 2026 21:15:29 -0700 (PDT)
+	id 651003008C524A; Thu,  8 Oct 2026 21:15:39 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v10 08/24] bpf: Refuse a callback that can unwind
-Date: Thu,  8 Oct 2026 21:15:28 -0700
-Message-ID: <20261009041528.27166-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v10 10/24] bpf: Do not use a private stack for a program that can unwind
+Date: Thu,  8 Oct 2026 21:15:39 -0700
+Message-ID: <20261009041539.28288-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009041447.17092-1-yonghong.song@linux.dev>
 References: <20261009041447.17092-1-yonghong.song@linux.dev>
@@ -37,80 +37,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A callback is not called by the program but by kernel code, a helper or
-a kfunc such as bpf_loop(), which the callback returns to and which then
-returns to the program:
+A private stack keeps its frame pointer in %r9 on x86-64, saved and
+restored around every call. An unwind skips the restore: a frame resumed
+at its pad then addresses its stack through a stale pointer, and one sent
+to its epilogue pops its callee-saved registers one slot off.
 
-  main -> A -> bpf_loop() -> cb -> C          C calls bpf_unwind()
-
-Once a later patch makes bpf_unwind() dispatch pads, it rewrites the
-return address of each of the program's frames and stops at the first
-frame that is not one, here bpf_loop(): kernel code with its own frame
-and state, which the walk cannot send cb past. So cb returns into
-bpf_loop(), which goes on looping and then returns to A after its call,
-while the verifier follows the unwind from cb straight into A.
-
-Refuse a callback subprog marked might_unwind. The check does not depend
-on a cleanup table: without one, bpf_unwind() still sends every frame it
-walks through its epilogue and still stops at bpf_loop(), so the
-mismatch is the same.
+So force NO_PRIV_STACK for a program that can unwind, with a table or
+not, on every arch for now.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/exception.c | 9 +++++++++
- kernel/bpf/exception.h | 1 +
- kernel/bpf/verifier.c  | 4 ++++
- 3 files changed, 14 insertions(+)
+ kernel/bpf/exception.c | 10 ++++++++++
+ kernel/bpf/exception.h |  1 +
+ kernel/bpf/verifier.c  | 11 +++++++++++
+ 3 files changed, 22 insertions(+)
 
 diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
-index 21bc1294227c..a0f088e225ac 100644
+index 2b9640099269..f45dd3157f7f 100644
 --- a/kernel/bpf/exception.c
 +++ b/kernel/bpf/exception.c
-@@ -141,6 +141,15 @@ int bpf_exc_check_info(struct bpf_verifier_env *env,=
- const union bpf_attr *attr,
- BTF_ID_LIST_SINGLE(bpf_unwind_id, func, bpf_unwind)
- BTF_ID_LIST_SINGLE(bpf_unwind_resume_id, func, bpf_unwind_resume)
+@@ -183,6 +183,16 @@ static void mark_call_sites(struct bpf_verifier_env =
+*env)
+ 	}
+ }
 =20
-+int bpf_exc_check_callback(struct bpf_verifier_env *env, int subprog)
++bool bpf_prog_may_unwind(const struct bpf_verifier_env *env)
 +{
-+	if (!env->subprog_info[subprog].might_unwind)
-+		return 0;
++	u32 i;
 +
-+	verbose(env, "subprog %d may unwind and is used as a callback\n", subpr=
-og);
-+	return -EINVAL;
++	for (i =3D 0; i < env->subprog_cnt; i++)
++		if (env->subprog_info[i].might_unwind)
++			return true;
++	return false;
 +}
 +
- static int reject_throw(struct bpf_verifier_env *env)
+ int bpf_exc_check_prog(struct bpf_verifier_env *env)
  {
- 	u32 i;
+ 	int err;
 diff --git a/kernel/bpf/exception.h b/kernel/bpf/exception.h
-index 9b75e556c82e..983b9af16a19 100644
+index 1d7fc795619f..dea45c7e4925 100644
 --- a/kernel/bpf/exception.h
 +++ b/kernel/bpf/exception.h
-@@ -17,5 +17,6 @@ int bpf_exc_check_prog(struct bpf_verifier_env *env);
+@@ -14,6 +14,7 @@ int bpf_exc_check_info(struct bpf_verifier_env *env, co=
+nst union bpf_attr *attr,
+ 		       bpfptr_t uattr);
+ void bpf_exc_prepare(struct bpf_verifier_env *env);
+ int bpf_exc_check_prog(struct bpf_verifier_env *env);
++bool bpf_prog_may_unwind(const struct bpf_verifier_env *env);
  int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx);
  bool bpf_is_unwind_kfunc(const struct bpf_insn *insn);
  bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn);
-+int bpf_exc_check_callback(struct bpf_verifier_env *env, int subprog);
-=20
- #endif /* __BPF_EXCEPTION_H */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1553c7d5bbdb..4ab838ba21eb 100644
+index 59b275bfc949..35013a5d8401 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -10997,6 +10997,10 @@ static int push_callback_call(struct bpf_verifie=
-r_env *env, struct bpf_insn *ins
- 	 * callbacks
- 	 */
- 	env->subprog_info[subprog].is_cb =3D true;
-+	err =3D bpf_exc_check_callback(env, subprog);
-+	if (err)
-+		return err;
+@@ -5801,6 +5801,17 @@ static int check_max_stack_depth(struct bpf_verifi=
+er_env *env)
+ 		}
+ 	}
+=20
++	/*
++	 * A private stack keeps its frame pointer in %r9 on x86-64, restored
++	 * by a pop after the call that an unwind skips. A frame resumed at a
++	 * pad then addresses its stack through a stale pointer, and a frame
++	 * sent to its epilogue instead pops its callee-saved registers one
++	 * slot off. Do not use a private stack for any program that can
++	 * unwind, on every arch for now.
++	 */
++	if (env->cleanup_info_cnt || bpf_prog_may_unwind(env))
++		priv_stack_mode =3D NO_PRIV_STACK;
 +
- 	if (bpf_pseudo_kfunc_call(insn) &&
- 	    !is_callback_calling_kfunc(insn->imm)) {
- 		verifier_bug(env, "kfunc %s#%d not marked as callback-calling",
+ 	if (priv_stack_mode =3D=3D PRIV_STACK_UNKNOWN)
+ 		priv_stack_mode =3D bpf_enable_priv_stack(env->prog);
+=20
 --=20
 2.53.0-Meta
 
