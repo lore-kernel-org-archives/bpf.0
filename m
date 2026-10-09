@@ -1,173 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865FC4E2F18
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16E94E3797
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791546632; cv=none; b=UapnEPTu7AA/y/2EEuE3Eksn+CPdJRQ/teClUwYLiZhz2b89lv8krzb+1rMfZhDzpZ0zBrfOCITu6coOhqHhQvNB4MLLY6K3KQ0xEgs03bA9x10paabUpMIyoZDJKQcOJPcsQzc6telUFDWAhvE/1b0LqmWb2qfwKdK0Z+q//lU=
+	t=1791547250; cv=none; b=iHbaI2Qnk/1+LK1Mwsqo1VMN6Qi0pnUDs4hAJPm40Q9Ms/H2akO6cq5ThFAm+2AZ8/AieY73woaG+F8CNmruCtD+PhFEY1EAF+rHEzSWcyLeo9TRd3xCOdsn3kZ+s8xfhsBRHGhUkNeVJK/tbmEf1gjHN1X2LdjmNy3diohgaDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791546632; c=relaxed/simple;
-	bh=mzMSPObuZDbbHg1VlLEG1vruvJiHDMhk0bllk9INB7s=;
+	s=arc-20240116; t=1791547250; c=relaxed/simple;
+	bh=B3HI/g2nBo+Cl0+TxC6lSAGQbJije8A8+z2JXx0/Oco=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=qlEVI4ZaWtQ52pHmUaNq1pzcrCRIzyDcCwDPS/elRLKxTUS81s3V7O82wF7x3EDRqV+0pNH5/E5Rcs8kwKdoyp4fhzy0ggvkhPCpYVUaOwH6LwMOcBQY6WFIFRItxLH9PBVAUQHk0Qx1obJv2VawmqrsZwND7CQtZRNtoJ4JjN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K5mCLfkn; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=PCOvu0lLfXpBeelRn57uAmKFdpbldPEyeBkj4qBsC53gvwR660vvSaC+fuHNULIQHEC5N1uM86VRkhQGQeIyFBOQ28tUWmp1FIf90so970ggo3ao53QVqYvIzFxnM7ugVjppGk7huc6QnGrmv5KdCILh8j2vX3Kev73aQ3nNTO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1gFWgMG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K5mCLfkn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16C91F000FF;
-	Fri,  9 Oct 2026 11:50:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1gFWgMG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0511F00893;
+	Fri,  9 Oct 2026 12:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791546624;
-	bh=x/WguONcJshC045xtqrEo+z6H1RhhVI+IxdVJUjeKyA=;
+	s=k20260515; t=1791547246;
+	bh=Ge5+2vyfLAoJRhq0HAUKcrJ76EmlrDa9NsyHxcJ/Gzc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=K5mCLfknhHrPlC0Na2PY+twbj+0otZAutMECxR8/rOc3cUTsQDLOVBDsfwo/vKR99
-	 u2QpF0lmvG/LkkAIXbdP773kuaYuwJ7a+cNEttrOYmjccqxhTCshZ5Qen4sQHtrJfK
-	 sW6aaUdR1tsGgiuueQuT/IPeS54UMD9NLu0POUJ2psJSrBa6jC62UdR1UNYpaHtqIE
-	 uDv+o9+Z7zZ8Z6Z506CbDanApmhesS+AC/QxqqECb94MexXeQSDi2RfTK0pKzfSAv4
-	 G/njkGfSgTUsBna/os+q/NY4cHi8055Hck5nQ340dTnJizxylrKwqGxgujZvnhoGN0
-	 ZqNQCSmClZmdQ==
-Message-ID: <sashiko-outbox-165432@kernel.org>
+	b=I1gFWgMGaRRmjTHIABrFTzDKG1Xx8SThZElxkOlPjFHsmWGNUTojfz2pwjZmKfeGY
+	 /hFE4lZ8ZV6dPIL0NeArnPBZB9Mz7fUbEpSfexiaoR58znbZV6Nkj8eqnRgD+XqwqL
+	 hcBervr5MJYELuQbJ+XvtKuQTKPjgxHNp4DPOQO+BmjknXBT+pZ7q+eiuU3bUjA6Rr
+	 A8K1B/Er7gshy+PKLl1/Kh84P9kOUMxkTet2eQS0D2HplhmfBhHbFA1TzYo7iSAxji
+	 p//r1vDUrb5CvzcqL480mego2ox6mhKiD9Z25Uv8AuslAByEzcSTtnL/H8xYYyl/4E
+	 4jEfD3XL/vMhQ==
+Message-ID: <sashiko-outbox-165462@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/6] mm/page_owner: add bpf_iter target "page_owner"
+Subject: Re: [PATCH 3/6] mm/page_owner: add open-coded page_owner iterator
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhen Ni" <zhen.ni@easystack.cn>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009112308.240769-3-zhen.ni@easystack.cn>
+In-Reply-To: <20261009112308.240769-4-zhen.ni@easystack.cn>
 References: <20261009112308.240769-1-zhen.ni@easystack.cn>
- <20261009112308.240769-3-zhen.ni@easystack.cn>
+ <20261009112308.240769-4-zhen.ni@easystack.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 11:50:23 +0000
+Date: Fri, 09 Oct 2026 12:00:45 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] mm: vmemmap use-after-free in page_owner_next_eligible() during me=
-mory hot-remove
-- [Medium] mm: bpf_iter page_owner skips pages when seq_file buffer fills
-- [Medium] bpf: missing EOF notification for page_owner bpf_iter
-- [Medium] bpf: page_owner_iter skips records during chunked seq_read
-- [Medium] bpf: page_owner_iter lacks EOF notification and yields stale po_=
-snap
+- [Critical] bpf: buffer overflow in bpf_page_owner_stack_snprint() due to =
+missing __sz suffix
+- [High] bpf: Panic DoS and OOB read via untrusted stack depot handle in bp=
+f_page_owner_stack_snprint()
 --
 
-commit fd543af9dd8ff743b641757854c444d98608421d
+commit f5344767004d7fb48b115dd782835818e60504bc
 Author: Zhen Ni <zhen.ni@easystack.cn>
-Subject: mm/page_owner: add bpf_iter target "page_owner"
 
-This commit registers a bpf_iter target page_owner that walks the pages
-eligible for page_owner output. The attached BPF program receives the pfn,
-the page, and the page_owner record to filter and format the output.
+mm/page_owner: add open-coded page_owner iterator
 
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index bafe474f33602..eb420803a434a 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-[ ... ]
-> @@ -741,7 +717,7 @@ void __dump_page_owner(const struct page *page)
->   * must advance scan->pfn past the hit before calling again to resume
->   * the scan.
->   */
-> -static bool page_owner_next_eligible(struct page_owner_scan *scan)
-> +bool page_owner_next_eligible(struct page_owner_scan *scan)
-
-[Severity: High]
-Does exposing this function to the BPF iterator API introduce a use-after-f=
-ree
-regression during memory hot-remove?
-
-Inside page_owner_next_eligible(), pfn_valid() is used to verify memory
-sections. However, since the iteration runs without holding memory hotplug
-locks or a continuous rcu_read_lock(), the memory section can be
-concurrently hot-removed by another CPU as soon as pfn_valid() returns.
-
-If the vmemmap pages backing the page struct are unmapped and freed during
-this race, the subsequent call will dereference the unmapped page struct:
-
-	page =3D pfn_to_page(pfn);
-	if (skip_buddy_pages(&pfn, page))
-		continue;
-
-Can this cause a kernel page fault and panic?
-
-While this logic already existed in the /sys/kernel/debug/page_owner read
-path, this patch relies on it and exposes the buggy code path to the new
-BPF iterator API.
+This commit adds an open-coded bpf_iter for pages eligible for page_owner
+output. It also introduces a bpf_page_owner_stack_snprint() kfunc to render
+the stack trace for a stack_depot handle into a caller-provided buffer.
 
 > diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
-> new file mode 100644
-> index 0000000000000..33dc9dcd59dec
-> --- /dev/null
+> index 33dc9dcd59dec..80693d4174077 100644
+> --- a/mm/page_owner_iter.c
 > +++ b/mm/page_owner_iter.c
 [ ... ]
-> +static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
-> +{
-> +	struct page_owner_scan *scan =3D seq->private;
-> +
-> +	if (*posp =3D=3D 0)
-> +		scan->pfn =3D min_low_pfn;
-> +	else
-> +		scan->pfn++;
-
-[Severity: Medium]
-Can this unconditionally skip elements during chunked reads?
-
-During a seq_read iteration, if a formatted record overflows the output
-buffer, the iterator discards the overflowed record, returns to userspace,
-and later resumes by calling start() with *posp > 0.
-
-Since next() already advanced scan->pfn to point to the overflowed record,
-start() increments it again here. Does this mean userspace tools reading
-the iterator output in chunks (like cat or bpftool iter) will silently
-drop one valid page owner record at every buffer chunk boundary?
-
-> +
-> +	if (!page_owner_next_eligible(scan))
-> +		return NULL;
-> +	return scan->page;
-> +}
-> +
+> @@ -114,3 +115,54 @@ int page_owner_iter_register(void)
 [ ... ]
-> +static void page_owner_seq_stop(struct seq_file *seq, void *v)
+> +__bpf_kfunc int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
+> +					     char *buf, u32 buf_size)
 > +{
+
+[Severity: Critical]
+Does this kfunc bypass the verifier's bounds checking for the buffer?
+
+Because the buffer size argument is named buf_size instead of using the
+required __sz or __szk suffix (such as buf__sz), the BPF verifier treats it
+as an independent integer scalar. It only validates that the buffer points =
+to
+a memory region of at least 1 byte.
+
+If a BPF program passes a 1-byte valid buffer along with a maliciously large
+buf_size, stack_depot_snprint() will blindly write past the end of the buff=
+er,
+which can corrupt adjacent stack, heap, or map memory.
+
+[Severity: High]
+Is it safe to accept an untrusted depot_stack_handle_t directly from the
+BPF program here?
+
+Since the BPF verifier does not track scalar bounds for opaque handles, a
+program could pass a forged handle. If depot_fetch_stack() receives an
+invalid pool index, it unconditionally triggers a kernel warning:
+
+lib/stackdepot.c:depot_fetch_stack() {
+	if (pool_index >=3D pools_num_cached) {
+		WARN(1, "pool index %d out of bounds (%d) for stack id %08x\n",
+		     pool_index, pools_num_cached, handle);
+		return NULL;
+	}
+	...
+}
+
+This can panic systems configured with panic_on_warn=3D1.
+
+Even if the index is valid, a maximized offset could cause the stack pointer
+to point near the end of the pool allocation. Accessing the stack size and
+entries would then result in an out-of-bounds read past the allocated pool.
+This can cause a hard page fault panic, or format arbitrary kernel pointers
+into the BPF-provided buffer, which the program could then exfiltrate.
+
+Would it be better to change this kfunc to accept a trusted
+struct page_owner_scan *scan instead of a raw scalar?
+
+> +	return stack_depot_snprint(handle, buf, buf_size, 0);
 > +}
-
-[Severity: Medium]
-Are we missing an EOF notification here?
-
-Standard bpf_iter implementations invoke the BPF program with v =3D=3D NULL
-during seq_ops->stop() to notify the program of EOF, enabling summary
-aggregate output. Because this function is empty, BPF programs attached to
-the page_owner iterator cannot detect the end of iteration.
-
-Does this mean any logic relying on the standard EOF signal to output
-summary statistics or perform cleanup will never execute?
-
 > +
-> +static int page_owner_prog_seq_show(struct bpf_prog *prog,
-> +				    struct bpf_iter_meta *meta, void *v)
-> +{
-> +	struct page_owner_scan *scan =3D meta->seq->private;
-> +	struct bpf_iter__page_owner ctx;
-> +
-> +	/* @po: hit-time snapshot, no RCU window needed. */
-> +	ctx.meta =3D meta;
-> +	ctx.page =3D (struct page *)v;
-> +	ctx.po =3D &scan->po_snap;
-
-[Severity: Medium]
-If EOF were properly signaled with v =3D=3D NULL, would this unconditional
-assignment provide stale data to the BPF program?
-
-By unconditionally assigning ctx.po to the snapshot pointer, ctx.po is
-never NULL, even when v (the page) is NULL. Does this mean BPF programs
-cannot reliably use if (!ctx->po) to detect EOF, and might operate on stale
-snapshot data from the last valid page?
+> +__bpf_kfunc_end_defs();
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112308.2407=
-69-1-zhen.ni@easystack.cn?part=3D2
+69-1-zhen.ni@easystack.cn?part=3D3
