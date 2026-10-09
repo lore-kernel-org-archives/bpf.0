@@ -1,260 +1,285 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274DB4F3EA1
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 18:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEC44F68A6;
+	Fri,  9 Oct 2026 18:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791569352; cv=none; b=CLwx54tSOGNWEzWmRj7jbBSPX4LBOV8TOXwUBImArJgm+XaG6lxN1IX+dwJJGhGAYwDK6hFlX5eGJCPE6oXCrgzV9/HMqiQ96Co6aHIWoMz65Dv+VHWQtcJuFNwpOn8uZJPfq2on8XRERz18pc5LxbYZ64lHpnsajBl7fn9Pquc=
+	t=1791569371; cv=none; b=gJxeho5903NEfcTRPu65eZVJuwxi/E9g+ZGE/PkH+hY8oR/fmKFg98nvBwPth+FZAieeCTYvspPxEUT08dMVtH2llprvE6JdxtCB1wgv0p2C+x+DPHABUHvsu8MuzXxGq5FHT3dxLIAjy70n8iwp8blik83R8Lbcv/HGAIND4ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791569352; c=relaxed/simple;
-	bh=7Uosb9Zcj0EuJ9/AeETYiueCovxfBDks8QS+romqhkY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=suWPn3kvOUO27DARJ0wAxKx+gNjEEU77nWkJR2jb18GUHvbKhEeGIIbBR+WzYly4mPY1aagWZ5sM/imNpNb7Voj6wqS86/7EmkVkXOpbIopPA1eL7dRdI2PciXv+BSQap65XBYS5um5gQVXRqYo66NG/OyXks4hzYOPaH0jqZqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=fwF7O3hu; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1791569371; c=relaxed/simple;
+	bh=XtCRiQX8ziNhM0P8NcMOzuXM9n/3Y7Dt947rZjqi1cA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=bd2fLs6tezpIvaSJN20Ou15tCmB00v0Ib36Ei464wcyNluRCho6clqsB9WYANwZCDp1dLFW/e47voJjgfg+qqNsBPdybMj3/GBbrOOgmet9geQDen7PTHqGhzM8tXzcrQj9R+CZfVI2qsI1N5gv1CS0B44rqQpFzXjX4JI4vmzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+QY84XG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="fwF7O3hu"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-91054f537ccso1208096d6.1
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 11:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1791569348; x=1792174148; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=x4zLqaLOwYeBrjRP7ipUvDwTZueZzw1YjG5Ql3Qu6KI=;
-        b=fwF7O3huaCxWbwvIqOsX/PrIdB2xm6CkHqyB13etDYWWFL367Gorim2enn1H/Pxwth
-         g4pw9tLFbyPjdnHTwh+2q1GYoXGiw0qCBFDRV9aUJiwr4yT4Ud2n0M7+buBCamft+Kt/
-         iKsRsJwnzDcsVVInpjkJoSlkCNuv8rIQDQUHs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791569348; x=1792174148;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=x4zLqaLOwYeBrjRP7ipUvDwTZueZzw1YjG5Ql3Qu6KI=;
-        b=uM8rEaKP0Eu4A5Z4SIOngiHXz2Df4yWVUf3DW5cOF+kE93eOrw7ln7TLh6WznodvgK
-         n8ZtneZrJDpUrKcbcH4r1O+7Q/cLsy8G6ONxkcTxaU99jXawBhS6OmgtXWcaLXmJpfo3
-         HrTvEny9NswJiSnvfPfzeGtHLlyrfMowGrsfFMkMOecxIHP5kM2SNPg9lhBLS4tHerFa
-         J2I5RrGw6IuBPrXUDrINBPOpWE/kYLTVHxAP3GUKW39UGhBPIynqWNLAC/IjuR8ZvGQg
-         1tA5YPbtfq+GqJC+AD5J/MHs8OPnHeOzTAxSlSH7VcP7jTYkmESZxp7rUy3YImaXyZfX
-         d4Fg==
-X-Forwarded-Encrypted: i=1; AKwUvBzptUvrJ/lHUstIbOHirWtvlTbK4mGxoe1WimC2SI/mEk3dTXx8mYz7l6VPu2JszH/79U4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI1/MxFV2vOcrEuyXtJuUbyCoaqCG7azQpqmAzMBXXpC+8i80w1
-	EuNbzEV/9IpDUOfJ/R6DZ39Pr+Hx8e39L/OZvnd5aCE19gn109ePgMhqALkP/RAjng==
-X-Gm-Gg: AYBFou2REyuE6DLpqzo+wmMYX2iV8+kN37+zqFXqiyZhTuPRiMWAY3uyCp8UpcbA+2M
-	ZcPCaKEBXnaun+NADRRONhcluQYX+e2WTKf5KaLXyi9LOv/RWeyxAHkm94mMJrflu2Qq5blmMUG
-	3Ms8PIEd7P1L0+PP0ZMIqocx3QIg0kTyV89hPyd1+JqqPb5szZw4P9X/Vocv7HVmETByLuusAR/
-	EIsEytAzQaHUFRi1b5LSnIrj10sO6cUcQ2qL3k5BKPt9NY6WUzIIBNWKYPSyd+wKULWSVSyCsBK
-	84EG9oj0EYW60Py67sjyyiB4mtva4ot3SHgXHTKdL+zm4FPVn7v9NXfBZXbYQU/viKULYcE7qjF
-	SMoz08+ADBL7b/W5ZHXx+TwrBdECnkak6KTsfgtkB/xusLVaKm1PKAb0WIOkCfFmwkGMULlqQ1n
-	hrWA0V08E6J4zkrE52PiY6tRdvHWy7N4sG4iKvoS8Cr1ArfsH/2sjhF+Ydd0jsxF2/3LaD+pYgv
-	TDunYxz6ts13m/JPpzvWFozS3R3qPFMIzs2PoIvfxrq
-X-Received: by 2002:a05:6214:43c2:b0:91b:5d3b:4ac7 with SMTP id 6a1803df08f44-91b5d3b4d8dmr33796596d6.48.1791569347775;
-        Fri, 09 Oct 2026 11:09:07 -0700 (PDT)
-Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91b5511fdecsm24476976d6.48.2026.10.09.11.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 11:09:06 -0700 (PDT)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Sashiko <sashiko-bot@kernel.org>,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net v2] net/sched: clamp skb->queue_mapping before indexing the tx queue
-Date: Fri,  9 Oct 2026 14:09:03 -0400
-Message-Id: <QDISC-MD1X.v2.20261009135842@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+QY84XG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA5441F0089D;
+	Fri,  9 Oct 2026 18:09:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791569370;
+	bh=r0KWYJe9hjbal2792CpfZTBrFVJtw3v9I2TFW+N4/oI=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=G+QY84XG85ltVN0DUuViKg+meSShrA/Es2JDzNRnfupWeVD3M9ZuhwZ5082pmSh22
+	 6h4ILBxrLd5HPsW0UrNocluM9CnFJ8qx8iq6VskzxxFDnS97LJNATolSxT5eGCtvaS
+	 1hxlNHbE2Zgf3AVKypKv+XlqxgnCZoPVsYMss0cTze0S7FblZgmpdfBLVJn0xrbA2t
+	 IVduN9Q5MB5FE2M0ej59r0qeKWot444hO9EHjWpwwKUGDzFP7y8h2fOBZzqDZDgwAY
+	 ZU8z3nroc51nQHbyB9TGg4A/96xUQdtEwmRraOsZmFHw9zCcj04R3B7AR0DwSIGUN0
+	 adZSmERfebMbw==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Date: Fri, 09 Oct 2026 19:04:08 +0100
+Subject: [PATCH v5 14/38] mm/vma: add vma[_flags]_is_mm_managed()
+ predicates
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-14-923b70125b1e@kernel.org>
+References: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
+In-Reply-To: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+ David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+ Paul Moore <paul@paul-moore.com>, 
+ Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+ Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, 
+ Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
+ John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+ Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Janosch Frank <frankja@linux.ibm.com>, 
+ Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Matthew Brost <matthew.brost@intel.com>, 
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
+ Ying Huang <ying.huang@linux.alibaba.com>, 
+ Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, 
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+ Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+ Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+ Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>, 
+ Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, 
+ Xu Xin <xu.xin@linux.dev>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-rdma@vger.kernel.org, selinux@vger.kernel.org, 
+ linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+ linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
+ fuse-devel@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Bert Karwatzki <spasswolf@web.de>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5416; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=XtCRiQX8ziNhM0P8NcMOzuXM9n/3Y7Dt947rZjqi1cA=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJO6syeG7JTVfd+q3PQhUiZvQX2av9e6UVJPvX7+jbi5
+ RSd1VttO0pZGMS4GGTFFFmefxHfHyQSNq/zgr8bzBxWJpAhDFycAjCRVF6Gv5KhaYpbpHeu9Av/
+ r1Hw9UHuDh0Jlf+KipPfZwmxq61wDGb4X+DX+fqRyhlp8/OfXLtUD+wJ+sRz9JB9w8ajxknGb9b
+ uYQAA
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-This issue was caught by Sashiko (nipa). A producer-side path cap is
-already merged (ea4d4b5dddb5); this patch adds the matching consumer-side
-cap.
+Rather than referring to VMA flags with uncertain meaning, add a new
+predicate that explicitly describes what absence of the VMA_PFNMAP_BIT and
+VMA_MIXEDMAP_BIT flags means, and then refer to that function for
+determining VMA mergeability.
 
-The issue:
-The tx queue is picked and capped in netdev_core_pick_tx(), before the
-__dev_xmit_skb() qdisc enqueue path. A tc BPF program running inside
-egress qdisc (not clsact) can then change __sk_buff->queue_mapping;
-that store is never re-checked. bpf_convert_ctx_access() bounds it only
-by NO_QUEUE_MAPPING, not by the device's queue count.
+If neither of these flags are set, that means the contents of the mapping
+are managed by core mm.
 
-On dequeue, qdisc_restart() calls netdev_get_tx_queue(), which
-indexes dev->_tx[] with that value. netdev_get_tx_queue() guards it with
-just a DEBUG_NET_WARN_ON_ONCE, so sch_direct_xmit() takes the out-of-bounds
-txq->_xmit_lock and writes txq->xmit_lock_owner past the end of the
-allocation on non-lltx devices such as ifb. Drivers that index their rings
-from skb_get_queue_mapping() (ex: ifb) go out of range the same way.
+Otherwise they are instead owned by some other kernel component, usually a
+driver: the memory may be MMIO, kernel-allocated pages or even ordinary
+pages the driver maps itself, but core mm must not populate, reclaim,
+migrate, copy-on-write or merge the range itself.
 
-The Fix:
-Cap the mapping at the consumer and write the capped value back, so both
-the qdisc's _tx[] lookup and any later driver read stay in range. The cap
-folds into the dequeue path instead of a separate walk over the returned
-list: dequeue_skb() caps the head, and each bulk helper caps the element it
-appends. netdev_cap_txqueue() already logs a ratelimited notice and selects
-queue 0. The single-packet case pays one extra compare against
-real_num_tx_queues.
+We initially also treat VMA_IO_BIT as implying a mapping is not mm-managed,
+as by implication it cannot be. (mlock() also sets VMA_IO_BIT transiently
+on ordinary VMAs while locking them, which is addressed later in this
+series.)
 
-A bulk-dequeued list is transmitted under the single tx queue lock of the
-head skb, so every element must belong to that same queue. The fast bulk
-helper (TCQ_F_ONETXQUEUE, taken on BQL devices by the per-queue children
-of mq, mqprio, taprio and htb, and by any qdisc on a single-queue device
-such as the prio root in the reproducer) must therefore compare each
-capped follower against the head and requeue a mismatch, exactly as the
-slow helper already does; appending a follower that caps to a different
-queue would send it under the wrong _xmit_lock.
+However the intent is to in future remove this, as no mapping should be
+marked as an I/O mapping without also being marked with VMA_PFNMAP_BIT.
 
-Conditions to recreate the bug:
-Load a SCHED_CLS or SCHED_ACT program that stores __sk_buff->queue_mapping
-(a tc BPF action is enough), attach it to a transmit qdisc (for example a
-matchall filter on a prio root), and send a packet. With a 1-queue device a
-store of 1 indexes one past dev->_tx[]. Under KASAN with panic_on_warn=1
-the unfixed kernel faults with "BUG: KASAN: slab-out-of-bounds in
-sch_direct_xmit". Loading the program needs CAP_BPF/CAP_SYS_ADMIN, so the
-trigger is root.
+This forms the basis of further work intended to improve how we express VMA
+properties such as this.
 
-Fixes: 74e31ca850c1 ("bpf: add skb->queue_mapping write access from tc clsact")
-Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-Closes: https://lore.kernel.org/netdev/179033713973.2160803.4914570693994398206@kernel.org/
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-9R8V.v2.20260924072708%40mojatatu.com
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v1.20261005193231%40mojatatu.com
-Cc: stable@vger.kernel.org
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Also update the VMA userland tests to reflect the change.
+
+No functional change intended.
+
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 ---
-v1 -> v2:
-- try_bulk_dequeue_skb(): the fast bulk helper (TCQ_F_ONETXQUEUE) capped
-  each follower but appended it without comparing it against the head, so
-  a mismatched follower was still sent under the head's txq lock. Compare
-  the capped follower with the head and requeue a mismatch to skb_bad_txq,
-  matching try_bulk_dequeue_skb_slow(). Reported by Sashiko (nipa).
----
- net/sched/sch_generic.c | 53 ++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 48 insertions(+), 5 deletions(-)
+ include/linux/mm.h              | 53 ++++++++++++++++++++++++++++++++++++++++-
+ tools/testing/vma/include/dup.h | 29 +++++++++++++++++++++-
+ 2 files changed, 80 insertions(+), 2 deletions(-)
 
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 6f6a6f0d5eb0..b65bec7e2643 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -96,9 +96,33 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 97e1eb4fe3a4..83953757735a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1612,6 +1612,41 @@ static inline bool vma_is_shared_maywrite(const struct vm_area_struct *vma)
+ 	return is_shared_maywrite(&vma->flags);
+ }
  
- #define SKB_XOFF_MAGIC ((struct sk_buff *)1UL)
- 
-+/* A tc BPF program on a transmit qdisc can change __sk_buff->queue_mapping
-+ * after the tx queue was picked. Re-cap it against the device and write it
-+ * back, so a driver that re-reads skb_get_queue_mapping() stays in range.
++/**
++ * vma_flags_is_mm_managed() - Do the specified VMA flags indicate that the
++ * contents of the VMA are managed by core mm?
++ * @flags: The VMA flags to test.
++ *
++ * Such a mapping is one established by a simple mmap() or brk() with no driver
++ * or other kernel component involved.
++ *
++ * They are rmappable, and core mm services rmap operations including reclaim,
++ * as well as population, CoW and merge/split (if eligible).
++ *
++ * Mappings which fail this test are those where this is not the case -
++ * e.g. MMIO, user-mapped kernel pages, udmabuf (pfnmap shmem), etc.
++ *
++ * Returns: true if the flags indicate an mm-managed mapping.
 + */
-+static u16 qdisc_cap_skb_tx_queue(struct net_device *dev, struct sk_buff *skb)
++static inline bool vma_flags_is_mm_managed(const vma_flags_t *flags)
 +{
-+	u16 queue = skb_get_queue_mapping(skb);
-+	u16 capped;
-+
-+	capped = netdev_cap_txqueue(dev, queue);
-+	if (unlikely(capped != queue))
-+		skb_set_queue_mapping(skb, capped);
-+
-+	return capped;
++	return !vma_flags_test_any(flags, VMA_PFNMAP_BIT, VMA_MIXEDMAP_BIT,
++				   VMA_IO_BIT);
 +}
 +
-+static struct netdev_queue *skb_cap_tx_queue(struct net_device *dev,
-+					     struct sk_buff *skb)
++/**
++ * vma_is_mm_managed() - Are the contents of @vma managed by core mm?
++ * @vma: The VMA to test.
++ *
++ * See vma_flags_is_mm_managed() for a description of this property.
++ *
++ * Returns: true if the VMA is mm-managed.
++ */
++static inline bool vma_is_mm_managed(const struct vm_area_struct *vma)
 +{
-+	return netdev_get_tx_queue(dev, qdisc_cap_skb_tx_queue(dev, skb));
++	return vma_flags_is_mm_managed(&vma->flags);
 +}
 +
- static inline struct sk_buff *__skb_dequeue_bad_txq(struct Qdisc *q)
+ /**
+  * vma_flags_can_merge() - Do the specified VMA flags permit the VMA to be
+  * merged with another?
+@@ -1620,7 +1655,23 @@ static inline bool vma_is_shared_maywrite(const struct vm_area_struct *vma)
+  */
+ static inline bool vma_flags_can_merge(const vma_flags_t *flags)
  {
--	const struct netdev_queue *txq = q->dev_queue;
-+	const struct netdev_queue *txq;
- 	spinlock_t *lock = NULL;
- 	struct sk_buff *skb;
+-	return !vma_flags_test_any_mask(flags, VMA_SPECIAL_FLAGS);
++	/*
++	 * VMA merging assumes that a VMA's flags and fields completely describe
++	 * its state.
++	 *
++	 * However, mappings which are not mm-managed may have established state
++	 * upon mapping not embodied in any attribute of the VMA.
++	 *
++	 * Additionally, private (CoW) PFN maps encode the source PFN of the
++	 * range in vma->vm_pgoff, which may otherwise cause spurious merges.
++	 */
++	if (!vma_flags_is_mm_managed(flags))
++		return false;
++	/* VMA explicitly marked as being unmergeable. */
++	if (vma_flags_test(flags, VMA_DONTEXPAND_BIT))
++		return false;
++
++	return true;
+ }
  
-@@ -110,7 +134,8 @@ static inline struct sk_buff *__skb_dequeue_bad_txq(struct Qdisc *q)
- 	skb = skb_peek(&q->skb_bad_txq);
- 	if (skb) {
- 		/* check the reason of requeuing without tx lock first */
--		txq = skb_get_tx_queue(txq->dev, skb);
-+		/* re-cap: real_num_tx_queues may have shrunk */
-+		txq = skb_cap_tx_queue(qdisc_dev(q), skb);
- 		if (!netif_xmit_frozen_or_stopped(txq)) {
- 			skb = __skb_dequeue(&q->skb_bad_txq);
- 			if (qdisc_is_percpu_stats(q)) {
-@@ -208,6 +233,7 @@ static void try_bulk_dequeue_skb(struct Qdisc *q,
- 				 int *packets, int budget)
+ /**
+diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
+index a6a8e53c4b38..89c645a6ad60 100644
+--- a/tools/testing/vma/include/dup.h
++++ b/tools/testing/vma/include/dup.h
+@@ -1665,7 +1665,34 @@ static inline bool file_is_dev_zero(const struct file *file)
+ 	return file && file->f_op == &zero_fops;
+ }
+ 
++static inline bool vma_flags_is_mm_managed(const vma_flags_t *flags)
++{
++	return !vma_flags_test_any(flags, VMA_PFNMAP_BIT, VMA_MIXEDMAP_BIT,
++				   VMA_IO_BIT);
++}
++
++static inline bool vma_is_mm_managed(const struct vm_area_struct *vma)
++{
++	return vma_flags_is_mm_managed(&vma->flags);
++}
++
+ static inline bool vma_flags_can_merge(const vma_flags_t *flags)
  {
- 	int bytelimit = qdisc_avail_bulklimit(txq) - skb->len;
-+	struct net_device *dev = qdisc_dev(q);
- 	int cnt = 0;
- 
- 	while (bytelimit > 0) {
-@@ -216,6 +242,17 @@ static void try_bulk_dequeue_skb(struct Qdisc *q,
- 		if (!nskb)
- 			break;
- 
-+		/* Re-cap a mapping changed after pick; requeue a
-+		 * follower that no longer matches the head, which owns
-+		 * the _xmit_lock for the whole list.
-+		 */
-+		if (unlikely(qdisc_cap_skb_tx_queue(dev, nskb) !=
-+			     skb_get_queue_mapping(skb))) {
-+			qdisc_enqueue_skb_bad_txq(q, nskb);
-+			break;
-+		}
- 		bytelimit -= nskb->len; /* covers GSO len */
- 		skb->next = nskb;
- 		skb = nskb;
-@@ -233,7 +270,7 @@ static void try_bulk_dequeue_skb_slow(struct Qdisc *q,
- 				      struct sk_buff *skb,
- 				      int *packets)
- {
--	int mapping = skb_get_queue_mapping(skb);
-+	struct net_device *dev = qdisc_dev(q);
- 	struct sk_buff *nskb;
- 	int cnt = 0;
- 
-@@ -241,7 +278,11 @@ static void try_bulk_dequeue_skb_slow(struct Qdisc *q,
- 		nskb = q->dequeue(q);
- 		if (!nskb)
- 			break;
--		if (unlikely(skb_get_queue_mapping(nskb) != mapping)) {
-+		/* A tc BPF store may have changed the mapping after
-+		 * pick; cap it and keep the list on one tx queue.
-+		 */
-+		if (unlikely(qdisc_cap_skb_tx_queue(dev, nskb) !=
-+			     skb_get_queue_mapping(skb))) {
- 			qdisc_enqueue_skb_bad_txq(q, nskb);
- 			break;
- 		}
-@@ -286,7 +327,7 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
- 		if (xfrm_offload(skb))
- 			*validate = true;
- 		/* check the reason of requeuing without tx lock first */
--		txq = skb_get_tx_queue(txq->dev, skb);
-+		txq = skb_cap_tx_queue(qdisc_dev(q), skb);
- 		if (!netif_xmit_frozen_or_stopped(txq)) {
- 			skb = __skb_dequeue(&q->gso_skb);
- 			if (qdisc_is_percpu_stats(q)) {
-@@ -322,6 +363,8 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
- 	skb = q->dequeue(q);
- 	if (skb) {
- bulk:
-+		/* cap the head; the bulk helpers cap every appended element */
-+		qdisc_cap_skb_tx_queue(qdisc_dev(q), skb);
- 		if (qdisc_may_bulk(q))
- 			try_bulk_dequeue_skb(q, skb, txq, packets, budget);
- 		else
+-	return !vma_flags_test_any_mask(flags, VMA_SPECIAL_FLAGS);
++	/*
++	 * VMA merging assumes that a VMA's flags and fields completely describe
++	 * its state.
++	 *
++	 * However, mappings which are not mm-managed may have established state
++	 * upon mapping not embodied in any attribute of the VMA.
++	 *
++	 * Additionally, private (CoW) PFN maps encode the source PFN of the
++	 * range in vma->vm_pgoff, which may otherwise cause spurious merges.
++	 */
++	if (!vma_flags_is_mm_managed(flags))
++		return false;
++	/* VMA explicitly marked as being unmergeable. */
++	if (vma_flags_test(flags, VMA_DONTEXPAND_BIT))
++		return false;
++
++	return true;
+ }
+
 -- 
-2.43.0
+2.55.0
+
