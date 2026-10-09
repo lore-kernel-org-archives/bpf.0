@@ -1,64 +1,64 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD7C4C10D1
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B748F4BFE94
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542928; cv=none; b=kKiSqtaeycjBsIxnXKo7wXnVKMpsnBdwxUMnj5V29lYxHrGBw0VoSLspKm0QU46Qh+ZpgYKKZpbkYltDzMVrWr9bpvAASwoQ2ykzzFi9JY1o0YkCafugeuAhVYQhQ4mcBP37shkf2th7Ik/iIcrAjNT+c/7HWmKD/q4ZTWdT5cA=
+	t=1791542928; cv=none; b=RfV6jx1k8kKBu3sVZqqnh/MQzfYKD7FEyDHSebxx3uy3MTEZ8vKh5cGDRRbk/jNUEtDcdMsWl25E05IfaySUTpyRULNmPqfGTwuxIp11kjAyIZymE4b6TPHH4eRNBH5sT4gUERdUBXQCSJZTdLSrWhV761s9kVfTY/J7liWesCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791542928; c=relaxed/simple;
-	bh=7OgfxqzViuwGE9EkgMRzAKGDFLBdaeh49VjLxJaQ2gw=;
+	bh=bb2Mk1ARAKw7Fcx6HVfyYjcbBAnxUybfrR3AQUls5zE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IJGdetw9jE8+qDABPWAFNHUseNWso4hw6pEXp+ucZr2lagAqQhiq3tFxhuvt6OVyQGZ07n0qcrxQJdYuzxGzm2X4OyVg+jOWCzg4QN7XMAAE4ixitdPLnd2fEfWLkGPRZfA/ZS1eNiCu9e6PWVBOSZnjEvfVP/XpiDm7b54mLwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UGR+5VZZ; arc=none smtp.client-ip=209.85.216.47
+	 MIME-Version:Content-Type; b=leWdXs7LeWygFS/ZbISjkyGei2/79wkEWY6aWwd0NXnOFlMXiaPbsn09XcZr19NstwdwqG5R1KzrVzuEZ60prKCjFGCoM4DuwyS7FRJNczp9GzJ93gs5KW4zslGeW7/DGg8DFcwbkdwBTKTXSII1Lol9NhjBUKCX1zXU1ZrSAqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZZwWfpm; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGR+5VZZ"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ab60ff4273so120431a91.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZZwWfpm"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1085555a12.0
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791542913; x=1792147713; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791542915; x=1792147715; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=v74LasCAiGDkZvaGSeYfcRDyP4A4eqo8vI5tgLhh3ws=;
-        b=UGR+5VZZmEh2mDbvUVLPBez/48qQ+wRAQ/IcI21GGu4IOgdw2ChEnz/K5Opw++torQ
-         ORLpWke1I9TL/YCh8MSJxbz2ucyr9a0vM8KffuFp2naDYwMp4kySQZlA5EiJHzCxx98S
-         YfWCBzIpJSrL9nWhVyD06BvVbkNkUD3QdhV0eV1xntuwo39rid5yDVQ4Mi8kx3kO5ArH
-         NB/upsaDrEcYtCAIxPWbSVRj92HwhvLTAPv+a34IPyiEqskXdxGLYtN4dCgSIPcNdgDl
-         j0zDsUuDFAyApubXypC0CT7aR2jeV/ZR/u0J1c8bqkITOaNKenSSOmqpf3S1BkEmIyye
-         DjrQ==
+        bh=j3PwnHqMUdHhhE53YWt615kKerV1NFa0cz7MSSEVTKQ=;
+        b=lZZwWfpmSw/V1D34OZzeqMNstcXvMrUZ/pQiZ7GtE5gapAKzA9/sZAOVZ7PpiM0P9Z
+         kV10lwr7XT/2l80YiF5lIuPMOqamFnk5/T84WLHI97QACrNw/9KxCHxnyMWaVs34VfmV
+         MwI+0Nz0h2VROVMRStZ0UVGC/QAc8jo2Rp24dryL20TvTNU59ddq/yM5QnmYgV1nzodC
+         0KdhMJpmS3oQ8tNFwpciiY+WTpHL1DPaA9gH7JkUujUBa9ifGX1O+DvvMpCw0WG6PkrV
+         TR07ku6RxRN2FvQO/4+M+BfFjlJPAr1SeF4sQwZ+RlIXtkk3uwGvHrqcNZbwi2SvKOqa
+         LWYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791542913; x=1792147713;
+        d=1e100.net; s=20260707; t=1791542915; x=1792147715;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=v74LasCAiGDkZvaGSeYfcRDyP4A4eqo8vI5tgLhh3ws=;
-        b=CCXu32/YZBOVDH7a/NgoZixZ7HBxYdUfYfw0MWj9s43+OGJbdtcieJ/yQYO/0RfIfD
-         FizyIIrNLFyDlVFrji/L7WKOCDKZpPS+yyxonjPgx+JfuNLEEcON3xoOlYMMtA2knXyK
-         C/v7+qhK2Bc+JLXvarpJah82mgH3cW9BpZaYwg/lmONMj2URMMwBjdRBSVFagu6ptLJl
-         9i1NTdatLJnj6z4dEYF6Z5FADj9RpZqJmgtSEZKf8pu7ddrsU/PDMXE1YYhd4qsSLM5g
-         zzccRkM+LCGEqc3QPQLbhiIL3ghfEhfhdZMmjHwXV+OIufsTwSjc3x5vkV3PHpUjZwSu
-         KMjw==
-X-Gm-Message-State: AFq9FYLBAsXW+yKFl2xuvMnwlZuyCYfG6DrGcbdLc+qIQkqbPR2f0EHQ
-	Y4HgyGv0dCS/Cj0I2iPptDCvUU8+lVIoCIfNVtj5TpI0qiOHdLnQH4tCZn0OCA==
-X-Gm-Gg: AYBFou0YiSkjk+M3dTIrbsUnpYSCEPDXWbrfZQxe4ucwzdCzfsBX5xAArbXDo5XRrpW
-	t9+IrHFfUqA9qLZL9UKRtF9HrwCheSkK4/THSRTEgzdb58KTXAp4G7djWjw8odaA4O6VazjEr6P
-	I+OMCnmMieDYihLMD5iGaUXArq8+i7tj57q+Z96BgoQB8tNCnbrvKxWwaKou2en60PMW6WTigIk
-	G5NOVjqz+M1svANOrsTOnjsAQQGia4HF4ZS2E3LplYhcQMkAE7j/jw+FwIpw1pcU1nVzrYRYYY1
-	sBLHprZYSD5XWkxUA6yQA5bhS3vsKngT/SFx3ZUpmojMYP3hrd7r+Z3UmBp5JzJaU9cv0NN0UGG
-	or3P3UynuMepEY9NJ/N62tNYReaeLgH7e9CbVDL6i6JObA2e7gGadPuC+WQdBzgIU5jzpQbfco+
-	ZvzNk/nmq1DvRN+ysxCrkd4ATFVbqqr/K2jwu2D/9v2im1Wxj0ThImsA0kfSpiJrTqv7FbLaAF0
-	WvZmV1ANcHG9uiT4e/J0Nbxeg==
-X-Received: by 2002:a17:90b:5486:b0:39e:6a7f:1dcd with SMTP id 98e67ed59e1d1-3ab3ab1d56cmr1516515a91.41.1791542912782;
-        Fri, 09 Oct 2026 03:48:32 -0700 (PDT)
+        bh=j3PwnHqMUdHhhE53YWt615kKerV1NFa0cz7MSSEVTKQ=;
+        b=r8K7pB86tOGrS09WVtJPsZsc6vSzZOMr2Sm9kRQU+f2rEPERmB5g5ZMlrNmfTOSprR
+         OUPKpA0GDs7MV76KadK69066GIaO8TdjNTx5pVsZ9Yt5DlYX4SVznRxBmegAhMJmbSuA
+         ti0paMH1nOX7EcTdXAtWLT5/lYS7j//lg7UEs7a/f0LPcRoXyE2y7QjNqDaPWFbGb+3X
+         OmHi2aowZ/zz1fzZg4AuJFFhBjAQVqyiqiZ76QhTg1DfhWiQ9+4zrv3kBP+mz9NhJ19N
+         o9toRJlFGl0dKVOhcXP8ZrPX3XPlR/LQL2cThMz+rR/xa8NTrK4UaI5qpUJN7b13qVss
+         gUdw==
+X-Gm-Message-State: AFq9FYLO7MZgMoeBU3xJTlQg64bdZDtcP4ihoqhS5JLY3ahHzk+hK3yp
+	QmLUGnsic/ICukKXkgjMhIVfQkbRZe3+tIYKGzByzha8jnRZ+8rTOk5fGiDPwFGh
+X-Gm-Gg: AYBFou2HItMiBC6UaZsIVbju1rrWDHJDJV/ax1VoMKZiRhpveWfv1p68GAAr7r/SB0z
+	cadlBp2qxeHGqGhAkNq0ifiyb5epk2HvZY5zqzBLZFEzuE/r8Wh9JcxYArAkxwlNZiPhOM6uYwb
+	G1w+271J1DkqxfQgX9IG/FBOfmOfb42bKoDHli7YLQVHBlfor4CZqS7DIviHBLASUUShmfDiIBG
+	uJmdKm4YnamU31BFrlflGiG5D7pSbgUQCymf2VSf5Kkb11mfCHM2+PbOKin23m7L860dxOVhCzU
+	xZNXw1xQZj23EL+Ud8A7rJOFEO2L1ZJurzNEBB9QENJjnVMSX8IkQxRcarMLcOUNw5RnA95zcHp
+	jDLNRK1mDsio9kST6cB3Cw0hpK+1oayaNlyURvMOnwS7Kzm1LWyk3cI5dkqI79/ZFc8iH/qwItG
+	xWjz4DkT+bhyR/ZTgXAUeJJMsXP3BC6bjRNFj3wBFY8RsnacZb4WHz+2Qv4BIrFL9V8VY9hoBKo
+	EFdg8IcKveVu98=
+X-Received: by 2002:a17:90b:3a48:b0:3a0:2900:f55e with SMTP id 98e67ed59e1d1-3ab3ac697f1mr898010a91.29.1791542914886;
+        Fri, 09 Oct 2026 03:48:34 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.32
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:32 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:34 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 20/51] bpf: varying offset access support for PTR_TO_BTF_ID pointers
-Date: Fri,  9 Oct 2026 03:47:38 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-20-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 21/51] bpf: save DFS postorder numbers for program instructions
+Date: Fri,  9 Oct 2026 03:47:39 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-21-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,394 +82,157 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Relax the requirements for reads like `p->arr[i].field`, where `p` is a
-PTR_TO_BTF_ID, by allowing `i` to be a non-constant value.
-This is useful for loops over arrays accessed from a PTR_TO_BTF_ID
-when the verifier widens the loop induction variable.
+Dominator intersections and SCEV worklist scheduling need to compare
+instructions by their DFS postorder rank. Save per-instruction
+postorder numbers alongside the existing postorder sequence.
 
-Check that the access stays within array bounds based on the access
-register's min and max bounds. Check that the access is aligned with
-array elements using the register's `base` and `step`.
+This commit modifies bpf_compute_postorder() to actually do the DFS
+traversal, instead of scheduling traversal of all siblings at once.
 
-Technically, modify btf_struct_access() such that:
-- it identifies `field` by walking BTF from the minimum offset
-  (the register's reg_smin + static instruction offset);
-- it remembers which arrays contain `field`;
-- it checks that offsets `k * step` stay within the array
-  and point to the same `field`;
-- it does not check upper bounds for flexible arrays
-  (as is already the case for constant-offset access).
+Consider a graph:
 
-Support for flexible arrays nested inside trailing struct members
-(e.g. p->nested.data[i], with data declared as int data[]) is left
-for future work.
+  A -> B
+  A -> C
+  C -> B
 
+Old result: C, B, A
+DFS result: B, C, A
+
+Fixes: efcda22aa541 ("bpf: compute instructions postorder per subprogram")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/btf.c      | 159 ++++++++++++++++++++++++++++++++++++++++++--------
- kernel/bpf/states.c   |   1 +
- kernel/bpf/verifier.c |  38 +++++++-----
- 3 files changed, 159 insertions(+), 39 deletions(-)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/cfg.c             | 56 +++++++++++++++++++++++++++-----------------
+ kernel/bpf/const_fold.c      |  2 ++
+ kernel/bpf/verifier.c        |  1 +
+ 4 files changed, 39 insertions(+), 21 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 0630675377aa..f4d119f3d5ef 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -2079,7 +2079,8 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
-  * *elem_id: id of u32
-  * *total_nelems: (x * y).  Hence, individual elem size is
-  *                (*type_size / *total_nelems)
-- * *type_id: id of type if it's changed within the function, 0 if not
-+ * *type_id: ID of the returned type if leading modifiers were stripped;
-+ *           otherwise left unchanged.
-  *
-  * type: is not an array (e.g. const struct X)
-  * return type: type "struct X"
-@@ -2087,7 +2088,8 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
-  * *elem_type: same as return type ("struct X")
-  * *elem_id: 0
-  * *total_nelems: 1
-- * *type_id: id of type if it's changed within the function, 0 if not
-+ * *type_id: ID of the returned type if leading modifiers were stripped;
-+ *           otherwise left unchanged.
-  */
- static const struct btf_type *
- __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
-@@ -2120,7 +2122,8 @@ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
- 		case BTF_KIND_CONST:
- 		case BTF_KIND_RESTRICT:
- 		case BTF_KIND_TYPE_TAG:
--			id = type->type;
-+			if (!array_type)
-+				id = type->type;
- 			type = btf_type_by_id(btf, type->type);
- 			break;
- 
-@@ -7549,6 +7552,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 2560754ed56c..bd7733fbe930 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1036,6 +1036,7 @@ struct bpf_verifier_env {
+ 		 * see bpf_subprog_info->postorder_start.
+ 		 */
+ 		int *insn_postorder;
++		int *postorder_nums;
+ 		int cur_stack;
+ 		/* current position in the insn_postorder vector */
+ 		int cur_postorder;
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index d8a579680e5b..bce7b5abcfda 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -767,6 +767,11 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(btf_ctx_access);
  
-+#define MAX_ARRAYS_WALK 16
-+
-+/* Description of an array crossed while walking a BTF access chain */
-+struct array_access {
-+	u32 id;		/* BTF_KIND_ARRAY type id */
-+	u32 off;	/* offset of the access within the array */
++struct dfs_state {
++	u32 traversed:1;
++	u32 next_succ:31;
 +};
 +
- enum bpf_struct_walk_result {
- 	/* < 0 error */
- 	WALK_SCALAR = 0,
-@@ -7557,10 +7568,43 @@ enum bpf_struct_walk_result {
- 	WALK_STRUCT,
- };
- 
-+static const struct btf_member *find_flex_member(const struct btf *btf, const struct btf_type *t)
-+{
-+	const struct btf_array *array;
-+	const struct btf_type *mtype;
-+	const struct btf_member *member;
-+	u32 vlen = btf_type_vlen(t);
-+
-+	if (vlen == 0)
-+		return NULL;
-+
-+	member = btf_type_member(t) + vlen - 1;
-+	mtype = btf_type_skip_modifiers(btf, member->type, NULL);
-+	if (!btf_type_is_array(mtype))
-+		return NULL;
-+
-+	array = (const struct btf_array *)(mtype + 1);
-+	if (array->nelems != 0)
-+		return NULL;
-+
-+	return member;
-+}
-+
-+static int push_array(struct array_access *arrays, u32 *arrays_cnt, struct array_access item)
-+{
-+	if (arrays == NULL)
-+		return 0;
-+	if (*arrays_cnt == MAX_ARRAYS_WALK)
-+		return -1;
-+	arrays[(*arrays_cnt)++] = item;
-+	return 0;
-+}
-+
- static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 			   const struct btf_type *t, int off, int size,
- 			   u32 *next_btf_id, enum bpf_type_flag *flag,
--			   const char **field_name, bool walk_flex_arrays)
-+			   const char **field_name, bool walk_flex_arrays,
-+			   struct array_access *arrays, u32 *arrays_cnt)
+ /*
+  * For each subprogram 'i' fill array env->cfg.insn_subprogram sub-range
+  * [env->subprog_info[i].postorder_start, env->subprog_info[i+1].postorder_start)
+@@ -774,43 +779,52 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
+  */
+ int bpf_compute_postorder(struct bpf_verifier_env *env)
  {
- 	u32 i, moff, mtrue_end, msize = 0, total_nelems = 0;
- 	const struct btf_type *mtype, *elem_type = NULL;
-@@ -7595,22 +7639,19 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 		/* If the last element is a variable size array, we may
- 		 * need to relax the rule.
- 		 */
--		if (vlen == 0)
-+		member = find_flex_member(btf, t);
-+		if (!member)
- 			goto error;
+-	u32 cur_postorder, i, top, stack_sz, s;
+-	int *stack = NULL, *postorder = NULL, *state = NULL;
+-	struct bpf_iarray *succ;
++	int *stack = NULL, *postorder = NULL, *postorder_nums = NULL;
++	int subprog_idx, stack_sz, cur, s, cur_postorder, start;
++	struct dfs_state *state = NULL;
++	struct bpf_iarray *succ = NULL;
  
--		member = btf_type_member(t) + vlen - 1;
--		mtype = btf_type_skip_modifiers(btf, member->type,
--						NULL);
--		if (!btf_type_is_array(mtype))
-+		moff = __btf_member_bit_offset(t, member) / 8;
-+		if (off < moff)
- 			goto error;
- 
-+		mtype = btf_type_skip_modifiers(btf, member->type, &mid);
- 		array_elem = (struct btf_array *)(mtype + 1);
--		if (array_elem->nelems != 0)
--			goto error;
- 
--		moff = __btf_member_bit_offset(t, member) / 8;
--		if (off < moff)
--			goto error;
-+		if (push_array(arrays, arrays_cnt, (struct array_access){ mid, off - moff }))
-+			return -E2BIG;
- 
- 		/* allow structure and integer */
- 		t = btf_type_skip_modifiers(btf, array_elem->type,
-@@ -7733,6 +7774,9 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 			 *      the array's element as long as it is
- 			 *      within the mtrue_end boundary.
- 			 */
-+			if (push_array(arrays, arrays_cnt,
-+				       (struct array_access){ mid, off - moff }))
-+				return -E2BIG;
- 
- 			/* skip empty array */
- 			if (moff == mtrue_end)
-@@ -7825,15 +7869,29 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 
- int btf_struct_access(struct bpf_verifier_log *log,
- 		      const struct bpf_reg_state *reg,
--		      int off, int size, enum bpf_access_type atype __maybe_unused,
-+		      int _off, int size, enum bpf_access_type atype __maybe_unused,
- 		      u32 *next_btf_id, enum bpf_type_flag *flag,
- 		      const char **field_name)
- {
- 	const struct btf *btf = reg->btf;
- 	enum bpf_type_flag tmp_flag = 0;
-+	struct array_access arrays[MAX_ARRAYS_WALK];
-+	const struct btf_member *member;
- 	const struct btf_type *t;
-+	u32 i, arrays_cnt = 0;
- 	u32 id = reg->btf_id;
--	int err;
-+	s64 min_off, max_off, flex_off;
-+	int err, off, ret;
-+
-+	if (check_add_overflow(reg_smin(reg), (s64)_off, &min_off) ||
-+	    check_add_overflow(reg_smax(reg), (s64)_off, &max_off) ||
-+	    min_off != (int)min_off) {
-+		bpf_log(log,
-+			"offset computation overflows: register offset range is [%lld, %lld], instruction offset is %d\n",
-+			reg_smin(reg), reg_smax(reg), _off);
-+		return -EINVAL;
-+	}
-+	off = min_off;
- 
- 	while (type_is_alloc(reg->type)) {
- 		struct btf_struct_meta *meta;
-@@ -7860,26 +7918,30 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	t = btf_type_by_id(btf, id);
- 	do {
- 		err = btf_struct_walk(log, btf, t, off, size, &id, &tmp_flag,
--				      field_name, !type_is_alloc(reg->type));
--
-+				      field_name, !type_is_alloc(reg->type), arrays, &arrays_cnt);
- 		switch (err) {
- 		case WALK_PTR:
- 			/* For local types, the destination register cannot
- 			 * become a pointer again.
- 			 */
--			if (type_is_alloc(reg->type))
--				return SCALAR_VALUE;
-+			if (type_is_alloc(reg->type)) {
-+				ret = SCALAR_VALUE;
-+				goto check_variable_offset;
-+			}
- 			/* If we found the pointer or scalar on t+off,
- 			 * we're done.
- 			 */
- 			*next_btf_id = id;
- 			*flag = tmp_flag;
--			return PTR_TO_BTF_ID;
-+			ret = PTR_TO_BTF_ID;
-+			goto check_variable_offset;
- 		case WALK_PTR_UNTRUSTED:
- 			*flag = MEM_RDONLY | PTR_UNTRUSTED;
--			return PTR_TO_MEM;
-+			ret = PTR_TO_MEM;
-+			goto check_variable_offset;
- 		case WALK_SCALAR:
--			return SCALAR_VALUE;
-+			ret = SCALAR_VALUE;
-+			goto check_variable_offset;
- 		case WALK_STRUCT:
- 			/* We found nested struct, so continue the search
- 			 * by diving in it. At this point the offset is
-@@ -7899,6 +7961,55 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	} while (t);
- 
- 	return -EINVAL;
-+
-+check_variable_offset:
-+	if (min_off == max_off)
-+		return ret;
-+
-+	/* Find an offset at which access would go to a flexible array tail (if any). */
-+	t = btf_type_skip_modifiers(btf, reg->btf_id, NULL);
-+	member = find_flex_member(btf, t);
-+	flex_off = member ? __btf_member_bit_offset(t, member) / 8 : S64_MAX;
-+
-+	/*
-+	 * If this is a varying offset access, the step recorded within a register
-+	 * should correspond to one of the arrays visited while walking.
-+	 */
-+	for (i = 0; i < arrays_cnt; i++) {
-+		s64 array_start, array_end, access_end;
-+		u32 asize, esize, elem_id;
-+
-+		/*
-+		 * 'arrays' records top-level arrays only, use __btf_resolve_size()
-+		 * to get flattened representation.
-+		 */
-+		t = btf_type_by_id(btf, arrays[i].id);
-+		if (IS_ERR(__btf_resolve_size(btf, t, &asize, NULL, &elem_id, NULL, NULL)) ||
-+		    IS_ERR(btf_resolve_size(btf, btf_type_by_id(btf, elem_id), &esize)))
-+			continue;
-+		/* Make sure every accessed offset lands on the same field of some element. */
-+		if (esize == 0 || reg->step % esize != 0)
-+			continue;
-+
-+		array_start = min_off - arrays[i].off;
-+		/* An array within the flexible tail has no upper bound to exceed */
-+		if (array_start >= flex_off && btf_type_is_array(t) &&
-+		    btf_type_array(t)->nelems == 0)
-+			return ret;
-+
-+		/* the 'size' bytes read at max_off must stay within the array */
-+		if (check_add_overflow(array_start, (s64)asize, &array_end) ||
-+		    check_add_overflow(max_off, (s64)size, &access_end) ||
-+		    access_end > array_end)
-+			continue;
-+		return ret;
-+	}
-+
-+	bpf_log(log,
-+		"invalid variable offset access into struct %s: offsets [%lld, %lld] size %d step %d do not match any array\n",
-+		btf_name_by_offset(btf, btf_type_by_id(btf, reg->btf_id)->name_off),
-+		min_off, max_off, size, reg->step);
-+	return -EINVAL;
++	postorder_nums = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
+ 	postorder = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
+-	state = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
+ 	stack = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
+-	if (!postorder || !state || !stack) {
++	state = kvzalloc_objs(struct dfs_state, env->prog->len, GFP_KERNEL_ACCOUNT);
++	if (!postorder_nums || !postorder || !stack || !state) {
++		kvfree(postorder_nums);
+ 		kvfree(postorder);
+-		kvfree(state);
+ 		kvfree(stack);
++		kvfree(state);
+ 		return -ENOMEM;
+ 	}
+ 	cur_postorder = 0;
+-	for (i = 0; i < env->subprog_cnt; i++) {
+-		env->subprog_info[i].postorder_start = cur_postorder;
+-		stack[0] = env->subprog_info[i].start;
++	for (subprog_idx = 0; subprog_idx < env->subprog_cnt; subprog_idx++) {
++		start = env->subprog_info[subprog_idx].start;
++		env->subprog_info[subprog_idx].postorder_start = cur_postorder;
++		stack[0] = start;
+ 		stack_sz = 1;
++		state[start].traversed = true;
+ 		do {
+-			top = stack[stack_sz - 1];
+-			state[top] |= DISCOVERED;
+-			if (state[top] & EXPLORED) {
+-				postorder[cur_postorder++] = top;
++			cur = stack[stack_sz - 1];
++			succ = bpf_insn_successors(env, cur);
++			if (state[cur].next_succ == succ->cnt) {
++				postorder_nums[cur] = cur_postorder;
++				postorder[cur_postorder] = cur;
++				cur_postorder++;
+ 				stack_sz--;
+ 				continue;
+ 			}
+-			succ = bpf_insn_successors(env, top);
+-			for (s = 0; s < succ->cnt; ++s) {
+-				if (!state[succ->items[s]]) {
+-					stack[stack_sz++] = succ->items[s];
+-					state[succ->items[s]] |= DISCOVERED;
+-				}
++			s = succ->items[state[cur].next_succ];
++			if (!state[s].traversed) {
++				state[s].traversed = true;
++				state[s].next_succ = 0;
++				stack[stack_sz] = s;
++				stack_sz++;
++				continue;
+ 			}
+-			state[top] |= EXPLORED;
++			state[cur].next_succ++;
+ 		} while (stack_sz);
+ 	}
+-	env->subprog_info[i].postorder_start = cur_postorder;
++	env->subprog_info[subprog_idx].postorder_start = cur_postorder;
++	env->cfg.postorder_nums = postorder_nums;
+ 	env->cfg.insn_postorder = postorder;
+ 	env->cfg.cur_postorder = cur_postorder;
+ 	kvfree(stack);
+diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+index b1528adbeb79..8dd8c5958eb8 100644
+--- a/kernel/bpf/const_fold.c
++++ b/kernel/bpf/const_fold.c
+@@ -398,5 +398,7 @@ int bpf_prune_dead_branches(struct bpf_verifier_env *env)
+ 	/* recompute postorder, since CFG has changed */
+ 	kvfree(env->cfg.insn_postorder);
+ 	env->cfg.insn_postorder = NULL;
++	kvfree(env->cfg.postorder_nums);
++	env->cfg.postorder_nums = NULL;
+ 	return bpf_compute_postorder(env);
  }
- 
- /* Check that two BTF types, each specified as an BTF object + id, are exactly
-@@ -7939,7 +8050,7 @@ bool btf_struct_ids_match(struct bpf_verifier_log *log,
- 	if (!type)
- 		return false;
- 	err = btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL,
--			      walk_flex_arrays);
-+			      walk_flex_arrays, NULL, NULL);
- 	if (err != WALK_STRUCT)
- 		return false;
- 
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 981328f5eb60..2f6a7620eb72 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -633,6 +633,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 	case PTR_TO_BUF:
- 	case PTR_TO_TP_BUFFER:
- 	case PTR_TO_STACK:
-+	case PTR_TO_BTF_ID:
- 		/* If the new min/max/var_off satisfy the old ones and
- 		 * everything else matches, we are OK.
- 		 */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f5b2500335a7..192efb722997 100644
+index 192efb722997..91f114947b8b 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -6554,6 +6554,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	const char *field_name = NULL;
- 	enum bpf_type_flag flag = 0;
- 	u32 btf_id = 0;
-+	s64 min_off;
- 	int ret;
- 
- 	if (!env->allow_ptr_leaks) {
-@@ -6569,36 +6570,31 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 		return -EINVAL;
- 	}
- 
--	if (!tnum_is_const(reg->var_off)) {
--		char tn_buf[48];
--
--		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
-+	if (check_add_overflow(reg_smin(reg), off, &min_off)) {
- 		verbose(env,
--			"%s is ptr_%s invalid variable offset: off=%d, var_off=%s\n",
--			reg_arg_name(env, argno), tname, off, tn_buf);
-+			"%s is ptr_%s access, offset computation overflows: register's minimal offset is %lld, instruction offset is %d\n",
-+			reg_arg_name(env, argno), tname, reg_smin(reg), off);
- 		return -EACCES;
- 	}
- 
--	off += reg->var_off.value;
--
--	if (off < 0) {
-+	if (min_off < 0) {
- 		verbose(env,
--			"%s is ptr_%s invalid negative access: off=%d\n",
--			reg_arg_name(env, argno), tname, off);
-+			"%s is ptr_%s invalid negative access: off=%lld\n",
-+			reg_arg_name(env, argno), tname, min_off);
- 		return -EACCES;
- 	}
- 
- 	if (reg->type & MEM_USER) {
- 		verbose(env,
--			"%s is ptr_%s access user memory: off=%d\n",
--			reg_arg_name(env, argno), tname, off);
-+			"%s is ptr_%s access user memory\n",
-+			reg_arg_name(env, argno), tname);
- 		return -EACCES;
- 	}
- 
- 	if (reg->type & MEM_PERCPU) {
- 		verbose(env,
--			"%s is ptr_%s access percpu memory: off=%d\n",
--			reg_arg_name(env, argno), tname, off);
-+			"%s is ptr_%s access percpu memory\n",
-+			reg_arg_name(env, argno), tname);
- 		return -EACCES;
- 	}
- 
-@@ -6608,6 +6604,18 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	}
- 
- 	if (env->ops->btf_struct_access && !type_is_alloc(reg->type) && atype == BPF_WRITE) {
-+		if (!tnum_is_const(reg->var_off)) {
-+			char tn_buf[48];
-+
-+			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
-+			verbose(env,
-+				"%s is ptr_%s invalid variable offset: off=%d, var_off=%s\n",
-+				reg_arg_name(env, argno), tname, off, tn_buf);
-+			return -EACCES;
-+		}
-+
-+		off += reg->var_off.value;
-+
- 		if (!btf_is_kernel(reg->btf)) {
- 			verifier_bug(env, "reg->btf must be kernel btf");
- 			return -EFAULT;
+@@ -23221,6 +23221,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	vfree(env->insn_aux_data);
+ 	kvfree(env->fd_array);
+ 	bpf_stack_liveness_free(env);
++	kvfree(env->cfg.postorder_nums);
+ 	kvfree(env->cfg.insn_postorder);
+ 	kvfree(env->scc_info);
+ 	kvfree(env->succ);
 
 -- 
 2.53.0
