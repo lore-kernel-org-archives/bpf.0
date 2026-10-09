@@ -1,107 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BB22ED16D
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 01:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95616336EDA
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 02:00:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791511077; cv=none; b=RIVeGRy17N4ryG2J5vQKX+cg5WWYgqFx/0fMSsAC1BXQOpC/rW9tPScGXd0rlbUgRL6WIAN7lQjUtgdEdVpxv7BEHOtH+1HGkh24Ty6yQ5eqQXnerjuibzGSqi5ZzJN8Gyahh86iMGVjs9ihp+Eqft98eRKn172d2JnlJv/ZeXk=
+	t=1791511258; cv=none; b=bYnC9UhWSkDz88wT+TPtNMaF7PYkA8etvrrtxBd+HAZ/FV/7oLCypsYAs53SQ9NFAhQyfQilSB7g3gM948D7srHBnWFhUcg1mDi5CIg64V07GWcTQpKYsmlNJLXsxjrHolmEd9iOn7I2x6edQkq9zi9H96Qfhn2w3VscvjcNLC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791511077; c=relaxed/simple;
-	bh=1n5ilJ4462ZX19EAr5QpwS0/AuoSMAJRYZZn1KHuohc=;
+	s=arc-20240116; t=1791511258; c=relaxed/simple;
+	bh=GOwOOoLthOEQY+oLJGS5XEHegAW+7GNm5yTkXH7lRNk=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=T+YmSibzTxerxBi7uYve+bSmc3urIo9u+laRgNv14UOIWZAhZPXzJ97K3BrGpqdAJZdDJzf/zUISBAhEpriL9dMByIeV6QCdNTf40L2fjbsrPCSX++6TuzwpS9fsY0w1MSxYmxgRMfFeOQtQDUfQe1Y/UfeEjMh/GcR95AC29QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jt27CldZ; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=gSbMcOd3eUNDMALmE//QHiU+oMj0qr3dDr3UNMTNCNcCFL9QGEzPNCJgthTsBHXOHH0QFybUeHIIH2rDWPgw6mfp14cIojwk2eYSxcsQ+5BffwMT9nqcusWo7FvawKEf3+j2mG8TEqZfkuH8XueZ75+DTWkG9zePn6oI7ldZ9k8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7uAWnhR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jt27CldZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C7E1F000FF;
-	Fri,  9 Oct 2026 01:57:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7uAWnhR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02D5E1F000FF;
+	Fri,  9 Oct 2026 02:00:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791511075;
-	bh=33iuv/iAVzU3x/sZJ9QltwdiQJmP+LClOEAxqfl3X2M=;
+	s=k20260515; t=1791511257;
+	bh=kjt9/0I0jM3acq4Ge08UN/Yuez9SswF7oBJufL8uWQA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jt27CldZ2Ol9RLNzNenlz+kGSLDThXR4mW/5OltILdKGMhsMAXIuuGyXNVRF8MjSK
-	 DxjhH7dVQ6MWygMcdovLhe66w1PTOA1Z1ede2mq15ACPqQdZNCo0/UBt6BzoHSGVf4
-	 wkT+5QT6aRXJosVGAdRlkAvqSrUzUjzKVDj8uM9E5azJxxxO0fM2i1pu9hps2/i0Z8
-	 9wPuQDegmxeKMrC3VLDFa+HbpVNoyh0JMHfo2zuNmg8qpjXOCn0U3f92E/Z/uxuR3I
-	 6j78XGSFEd1qnMZwRStihpXsTH0A1u470PnrHzVn4ahiy4yyRLIksXxrM7XVCy5v9b
-	 KJjgFvRGeP3Pw==
-Message-ID: <sashiko-outbox-164714@kernel.org>
+	b=k7uAWnhRkij7CCJKmJH21xF7jWGVc5w1AgAUif+kotMOusnOmNbo7v8qgwJrULO/2
+	 iS5xURI9K9F0cwt/4u4Zd7zDKxHW3BCkrpgQSac/Vn/UF27XehgDN82n6o2K+2IhqQ
+	 A6exkzQMxxsJ99qZ6Kt6znkQ2O4cSnBCgTNhqQWOJn0obORwImBC9IgwXvcLc0XH2i
+	 c+KAh7vrn4iiD6cyD3Yi75J10IMKOVxgr78f/gP5CWcsMjcffKM5b8VgKoHz0Eo8Hh
+	 NIjNe1RdRBTKnO5Xhbigunn+20rJkdqBF6Zkbp7y0+fJK0JyyOOlyMvBfpSYkUI3JL
+	 ooLdGYlVEPE0A==
+Message-ID: <sashiko-outbox-164715@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Drop the on_enter recursion
- check of task_local_storage
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Return the lock error from
+ buddy_init() of libarena
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Qiliang Yuan" <odys.yuan@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009-selftests-bpf-task-ls-recursion-v1-1-c3a3e3c41f8c@gmail.com>
-References: <20261009-selftests-bpf-task-ls-recursion-v1-1-c3a3e3c41f8c@gmail.com>
+In-Reply-To: <20261009-selftests-bpf-libarena-nr-cpus-v1-1-e726ccc66fc6@gmail.com>
+References: <20261009-selftests-bpf-libarena-nr-cpus-v1-0-e726ccc66fc6@gmail.com>
+ <20261009-selftests-bpf-libarena-nr-cpus-v1-1-e726ccc66fc6@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 01:57:54 +0000
+Date: Fri, 09 Oct 2026 02:00:56 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] bpf: incomplete fix for flaky task_local_storage recursion test
+- [Medium] bpf: missing ASAN poisoning on chunk free in buddy_init() error =
+path
+- [Low] bpf: libarena leak of reserved vaddr on buddy_init lock failure
 --
 
-commit 93ecb8817313103c1cdb556cb288695d3d3c939c
+commit 38d07f939b85ac6851d3855b00b730195ca11736
 Author: Qiliang Yuan <odys.yuan@gmail.com>
 
-selftests/bpf: Drop the on_enter recursion check of task_local_storage
+selftests/bpf: Return the lock error from buddy_init() of libarena
 
-This commit removes the recursion misses check for the on_enter program
-in the task_local_storage test to fix test flakiness. It prevents failures
-caused by preemption-induced spurious misses when other tasks trigger
-sys_enter on the same CPU.
+This commit modifies buddy_init() to return the specific lock error from
+buddy_lock() rather than unconditionally returning -EINVAL. This helps
+distinguish between -EOPNOTSUPP, -ETIMEDOUT, and -EBUSY cases.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c =
-b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-> index 5b2b56cc3a4f3..c03ea94325d9e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-> @@ -138,12 +138,6 @@ static void test_recursion(void)
->  	ASSERT_OK(err, "get prog info");
->  	ASSERT_EQ(info.recursion_misses, 2, "on_update prog recursion");
+> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools=
+/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> index 2490ab1396de0..7bb99a7cb63ed 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> @@ -576,9 +576,10 @@ __weak int buddy_init(struct buddy __arena *buddy)
+> =20
+>  	chunk =3D buddy_chunk_get(buddy);
+> =20
+> -	if (buddy_lock(buddy, flags)) {
+> +	ret =3D buddy_lock(buddy, flags);
+> +	if (ret) {
+>  		bpf_arena_free_pages(&arena, chunk, BUDDY_CHUNK_PAGES);
 
 [Severity: Low]
-Is this exact-match assertion susceptible to the same preemption-induced
-spurious misses that this patch aims to fix for on_enter?
+Does this code leak the reserved arena virtual address space?
 
-The on_update program is an fentry program attached to the globally shared
-bpf_local_storage_update function, which also executes in a preemptible
-context (rcu_read_lock_dont_migrate()).
+Earlier in buddy_init(), buddy_reserve_arena_vaddr() is called to reserve
+enough address space. If buddy_lock() subsequently fails, the error path
+frees the allocated chunk, but it does not call buddy_unreserve_arena_vaddr=
+()
+to clean up the reserved space before returning the error.
 
-If a task is preempted while executing on_update, its prog->active recursion
-counter remains elevated on that CPU.
+[Severity: Medium]
+Could this error path leave the freed chunk memory improperly poisoned?
 
-If the preempting task (such as another selftest thread running in parallel)
-calls bpf_local_storage_update, the fentry trampoline will check the elevat=
-ed
-recursion context, increment the program's global recursion_misses counter,
-and abort before the test_pid filter inside the program is evaluated.
+When buddy_chunk_get() successfully allocates a chunk, it partially unpoiso=
+ns
+and poisons the memory for ASAN. In buddy_destroy(), the chunk is correctly
+repoisoned by calling asan_poison(chunk, BUDDY_POISONED, ...) before the
+memory is freed.
 
-This spurious miss could randomly push info.recursion_misses above 2, leavi=
-ng
-the test flaky.
+If buddy_lock() fails here and bpf_arena_free_pages() frees the chunk witho=
+ut
+first re-poisoning it, does this leave the ASAN shadow memory in a stale
+state that might cause false positives or negatives if the pages are
+subsequently reallocated within the same arena?
 
-Would it be safer to relax this check to
-ASSERT_GE(info.recursion_misses, 2, "on_update prog recursion")?
-
-> -	prog_fd =3D bpf_program__fd(skel->progs.on_enter);
-> -	memset(&info, 0, sizeof(info));
-> -	err =3D bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
-> -	ASSERT_OK(err, "get prog info");
-> -	ASSERT_EQ(info.recursion_misses, 0, "on_enter prog recursion");
-> -
->  out:
->  	close(task_fd);
->  	task_ls_recursion__destroy(skel);
+> -		return -EINVAL;
+> +		return ret;
+>  	}
+> =20
+>  	/* Chunk is already properly unpoisoned if allocated. */
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-selftests-=
-bpf-task-ls-recursion-v1-1-c3a3e3c41f8c@gmail.com?part=3D1
+bpf-libarena-nr-cpus-v1-0-e726ccc66fc6@gmail.com?part=3D1
