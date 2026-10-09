@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-127.mta1.migadu.com [95.215.58.127])
+Received: from mta0.migadu.com (out-50.mta0.migadu.com [91.218.175.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3FA4EA37A
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.127
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D614F3914
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791577730; cv=none; b=qx7Pavmzei5fsGwATSQk5DKLeI9VGgzpdxAA/ULqCgx2mhKTkUeNuvSkjmiOzobbts4bj/OvJFu2FwgN3VulXEEqSQFeRiaR/mqLFrk69peZslCUgpcahHHlp9t/OShoC/zYfszoZ3QMSeh504ohs2aNE9x3xm9kV94H8BjEYqM=
+	t=1791577734; cv=none; b=KHjL1uFyGKMoyua0CegA8qKAdPdHCOv5+fMeK4vUZ1CNULdirNFm8J09e5hoDfZAHmc6OPYafQBBWre5vgC2JTI/MTtFNpQaqf72io7fPg0LWKwQFmiK+nQXR8obiUORjOso0S+86w7jt98MKLeRsqtl8pVrG31G5CqldtXZRqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791577730; c=relaxed/simple;
-	bh=gMjaT5hA9VF+GVQsBhcMHUZOLtEqJEvu9tk5vfwqSIM=;
+	s=arc-20240116; t=1791577734; c=relaxed/simple;
+	bh=7+KSnwa+Z1D21IwaKyQTNxQ+uJU7XgpTZahbq8RJejo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mby0M0VXxLq4POC2ry89/pTVTtP/ibH/sA0T/7bloIN8hiYZJP1lwvwLye2j4+apxobpvoYqok8aENzD9JRaXT+S/BI5KtvnlAcVU4KPdBrAsuCsr1YJBqiTD3dwMGa8n2LK3BeUk0o4vnhfcaZcjuZQ8IqLVZtS1cqZQKAxOW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RcceH2OX; arc=none smtp.client-ip=95.215.58.127
+	 MIME-Version; b=DTPJ7VitnCkM4Jdhb/YWVP4IYGsrSTiOsF3/Rz07xHjv+Ddv1V34gqi3FACQ8kBqvqc/xq4sz32VDlXa1KM3IMIVh5PSoLbNTlgeuFlOTYvbGy7Ynufirm9zGDBuiiCLCGrC/RqV6vWnUkJ9QwHbL3Jhfh475Jy5eOEmM/JhNe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TrGKALJG; arc=none smtp.client-ip=91.218.175.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RcceH2OX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TrGKALJG"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gMjaT5hA9VF+GVQsBhcMHUZOLtEqJEvu9tk5vfwqSIM=;
+DKIM-Signature: a=rsa-sha256; bh=7+KSnwa+Z1D21IwaKyQTNxQ+uJU7XgpTZahbq8RJejo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791577727; v=1; x=1792182527;
- b=RcceH2OX3UDQVWiOqIIXZhRuH8/nqKtSsVBK8093DBIwi3liVpMPJIwP9k5RLHoCXP+SjoxB
- 6QiMTnJv6TJvVACl1lBqChFGedL4a386EWtnwv8o75C4Ohh30o7BnMPTxelMJP56A45aIl9f4nw
- qmSLXAdkn1rUzspH6GDxMkwg=
+ t=1791577731; v=1; x=1792182531;
+ b=TrGKALJGO2cn9NNIsniF3zhOHG2do/O+i6U2b7/S6NMIa9zeEVTwl++pEmRgh4e1Jjufzj+l
+ e2wGvbWPrBGKoyznfkTEiEgx2q3sTOZZijLdp+8h2gapBf9sGpfHxI4kQgXFDOiz9h/AYzweV2p
+ jxmyjgFCWoq42jgXhe4bGCF8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 425e0ea8813fb66f;
-	Fri, 09 Oct 2026 20:28:46 +0000
-X-Mizu-Trace-ID: 425e0ea8813fb66f
+Received: by smtp.migadu.com with ESMTPS id 1d9630834caf14b1;
+	Fri, 09 Oct 2026 20:28:50 +0000
+X-Mizu-Trace-ID: 1d9630834caf14b1
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 08/11] bpf: Scope the bpf_user_ringbuf_drain() dynptr to its callback frame
-Date: Fri,  9 Oct 2026 13:27:55 -0700
-Message-ID: <20261009202759.50520-9-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 09/11] selftests/bpf: Cover the user ringbuf callback dynptr lifetime
+Date: Fri,  9 Oct 2026 13:27:56 -0700
+Message-ID: <20261009202759.50520-10-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261009202759.50520-1-ihor.solodrai@linux.dev>
 References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
@@ -55,65 +55,215 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The dynptr argument to a bpf_user_ringbuf_drain() callback points to a
-descriptor on the helper's stack. The descriptor and the sample it
-describes are valid only during that callback invocation.
+The dynptr passed to a bpf_user_ringbuf_drain() callback, and values
+derived from it, must not be used after that callback returns.
 
-The callback can save the dynptr pointer, a slice, or a clone in the
-caller's frame and use it after the drain returns. An escaped descriptor
-pointer can allow arbitrary kernel read/write once the helper's stack
-is reused.
+Exercise escapes through the callback context, slices returned by
+bpf_dynptr_data() and bpf_dynptr_slice(), and clones stored in the
+caller's frame. Also cover an inner callback's dynptr escaping into an
+outer callback.
 
-The verifier assigns the dynptr a type and an id, but does not tie it
-or its descendants to the callback's lifetime.
+Require the callback-return diagnostic for escaped pointers and slices.
+Check the full bpf_throw() callback rejection so a frame-reference leak
+cannot satisfy the test accidentally.
 
-Anchor R1 to a frame reference so the argument and its descendants are
-invalidated when the callback frame is popped.
-
-Reported-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/verifier.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ .../selftests/bpf/progs/exceptions_fail.c     |  20 +++
+ .../selftests/bpf/progs/user_ringbuf_fail.c   | 135 ++++++++++++++++++
+ 2 files changed, 155 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c969fef2d452..edc78e50dc22 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -713,11 +713,12 @@ static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
- 	__mark_dynptr_reg(sreg2, type, false, id, parent_id);
- }
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+index 22503cf62e9f..86a0667ba348 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+@@ -31,6 +31,11 @@ struct {
+ 	__type(value, struct hmap_elem);
+ } hmap SEC(".maps");
  
--static void mark_dynptr_cb_reg(struct bpf_verifier_env *env,
--			       struct bpf_reg_state *reg,
--			       enum bpf_dynptr_type type)
-+static int mark_dynptr_cb_reg(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
-+			      struct bpf_func_state *callee, u32 regno,
-+			      enum bpf_dynptr_type type)
- {
--	__mark_dynptr_reg(reg, type, true, ++env->id_gen, 0);
-+	__mark_dynptr_reg(&callee->regs[regno], type, true, 0, 0);
-+	return mark_frame_scoped_arg(env, state, callee, regno);
- }
- 
- static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
-@@ -11456,11 +11457,15 @@ static int set_user_ringbuf_callback_state(struct bpf_verifier_env *env,
- 					   struct bpf_func_state *callee,
- 					   int insn_idx)
- {
-+	int err;
++struct {
++	__uint(type, BPF_MAP_TYPE_USER_RINGBUF);
++	__uint(max_entries, 4096);
++} user_ringbuf SEC(".maps");
 +
- 	/* bpf_user_ringbuf_drain(struct bpf_map *map, void *callback_fn, void
- 	 *			  callback_ctx, u64 flags);
- 	 * callback_fn(const struct bpf_dynptr_t* dynptr, void *callback_ctx);
- 	 */
--	mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE_LOCAL);
-+	err = mark_dynptr_cb_reg(env, state, callee, BPF_REG_1, BPF_DYNPTR_TYPE_LOCAL);
-+	if (err)
-+		return err;
- 	callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3];
+ private(A) struct bpf_spin_lock lock;
+ private(A) struct bpf_rb_root rbtree __contains(foo, node);
  
- 	callee->in_callback_fn = true;
+@@ -110,6 +115,21 @@ static int timer_cb(void *map, int *key, struct bpf_timer *timer)
+ 	return 0;
+ }
+ 
++static long drain_cb(struct bpf_dynptr *dynptr, void *context)
++{
++	bpf_throw(0);
++	return 0;
++}
++
++SEC("?tc")
++__failure
++__msg("bpf_throw kfunc (insn {{[0-9]+}}) cannot be called from callback subprog {{[0-9]+}}")
++int reject_user_ringbuf_callback_throw(struct __sk_buff *ctx)
++{
++	bpf_user_ringbuf_drain(&user_ringbuf, drain_cb, NULL, 0);
++	return 0;
++}
++
+ SEC("?tc")
+ __failure __msg("cannot be called from callback subprog")
+ int reject_async_callback_throw(struct __sk_buff *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
+index c0d0422b8030..4e0f29c2d1f2 100644
+--- a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
++++ b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
+@@ -1,9 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+ 
++#include <stdbool.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
++#include "bpf_kfuncs.h"
+ 
+ char _license[] SEC("license") = "GPL";
+ 
+@@ -243,3 +245,136 @@ int user_ringbuf_callback_const_ptr_to_dynptr_reg_off(void *ctx)
+ 			       callback_adjust_bpf_dynptr_reg_off, NULL, 0);
+ 	return 0;
+ }
++
++/* The sample goes back to the producer as soon as the callback returns. */
++struct dynptr_ctx {
++	struct bpf_dynptr *saved;
++};
++
++static long callback_park_dynptr(struct bpf_dynptr *dynptr, void *context)
++{
++	struct dynptr_ctx *c = context;
++
++	c->saved = dynptr;
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("the callback that owned this value returned")
++int user_ringbuf_callback_park_dynptr(void *ctx)
++{
++	struct dynptr_ctx c = {};
++	char buf[8] = {};
++
++	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_dynptr, &c, 0);
++	if (c.saved)
++		bpf_dynptr_read(buf, sizeof(buf), c.saved, 0, 0);
++	return buf[0];
++}
++
++struct slice_ctx {
++	char *p;
++};
++
++static long callback_park_data_slice(struct bpf_dynptr *dynptr, void *context)
++{
++	struct slice_ctx *c = context;
++
++	c->p = bpf_dynptr_data(dynptr, 0, 8);
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("the callback that owned this value returned")
++int user_ringbuf_callback_park_data_slice(void *ctx)
++{
++	struct slice_ctx c = {};
++
++	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_data_slice, &c, 0);
++	if (c.p)
++		return c.p[0];
++	return 0;
++}
++
++static long callback_park_kfunc_slice(struct bpf_dynptr *dynptr, void *context)
++{
++	struct slice_ctx *c = context;
++
++	c->p = bpf_dynptr_slice(dynptr, 0, NULL, 8);
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("the callback that owned this value returned")
++int user_ringbuf_callback_park_kfunc_slice(void *ctx)
++{
++	struct slice_ctx c = {};
++
++	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_kfunc_slice, &c, 0);
++	if (c.p)
++		return c.p[0];
++	return 0;
++}
++
++struct clone_ctx {
++	struct bpf_dynptr clone;
++	__u64 armed;
++};
++
++static long callback_park_clone(struct bpf_dynptr *dynptr, void *context)
++{
++	struct clone_ctx *c = context;
++
++	bpf_dynptr_clone(dynptr, &c->clone);
++	c->armed = 1;
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("Expected an initialized dynptr as R3")
++int user_ringbuf_callback_park_clone(void *ctx)
++{
++	struct clone_ctx c = {};
++	char buf[8] = {};
++
++	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_clone, &c, 0);
++	if (c.armed)
++		bpf_dynptr_read(buf, sizeof(buf), &c.clone, 0, 0);
++	return buf[0];
++}
++
++SEC("?raw_tp")
++__failure __msg("Expected an initialized dynptr as R1")
++int user_ringbuf_callback_park_clone_then_slice(void *ctx)
++{
++	struct clone_ctx c = {};
++	char *p;
++
++	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_clone, &c, 0);
++	if (c.armed) {
++		p = bpf_dynptr_data(&c.clone, 0, 8);
++		if (p)
++			return p[0];
++	}
++	return 0;
++}
++
++/* An inner drain's dynptr must not escape into the outer callback either. */
++static long callback_park_outer(struct bpf_dynptr *dynptr, void *context)
++{
++	struct dynptr_ctx inner = {};
++	char buf[8] = {};
++
++	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_dynptr, &inner, 0);
++	if (inner.saved)
++		bpf_dynptr_read(buf, sizeof(buf), inner.saved, 0, 0);
++	return buf[0] ? 1 : 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("the callback that owned this value returned")
++int user_ringbuf_callback_nested_park_inner(void *ctx)
++{
++	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_outer, NULL, 0);
++	return 0;
++}
 -- 
 2.56.0
 
