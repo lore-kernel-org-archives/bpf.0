@@ -1,64 +1,64 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D419B4BEE53
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E98B4A263C
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542914; cv=none; b=uXTWKZN1j1tGsMkqO+DYByjlIEAWLpMNbx4Il1aglCSj93Rg+l4FdUV3kIndDToIY1O51Z6yBdCYAuglFBpIBzZVNoBmwo6aqW1ZzOJZxYR7if4yRliLoShzPCPD1LtmjMqR3kNxD6xQlosSf6l1nrVxqpHelrNDJqvV9od5Bi4=
+	t=1791542916; cv=none; b=cLQ2kgn/vsa9QLFz0YrcTIlbm9cxjMbAxpZA43cugh5eFHDUciCV1EndDwMEQ5+pBxrhAVzTOh/yn7Eq13ymRusEqfzeRXTBQS8R2wtWl7egOBg7FHQxWaMmGa+g63PS973j6oGa0mR6CzeMbauv8m0luDC6vjmYf58t2e1Vb1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791542914; c=relaxed/simple;
-	bh=iqmehQKlLVBGKWn6F6QRxA/TrXyJZ3OUt3YIGM0qR5E=;
+	s=arc-20240116; t=1791542916; c=relaxed/simple;
+	bh=6V61tebFGob07wFLsAj3jEMkzJhVtlKSG0EeaKoAgHs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zvw1RfSae+ARE85N5fWKTmDROMeWh2I7uKdE/f59Qs9kcw0trFeSNZ6uCEyGuwYUN3Mv0UaC/e5VKVYRV4PlV/HQKbitc8zobZZHFqoFXfW4k+72+y5/DaXAVnlAGYeUbWDMCTWc2SIt4Hrqm8Uw6PYDqfZq/HCu1XgoNTx4nvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W7St+O3B; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version:Content-Type; b=rToF8QnYQGDCJx231lYl50XUxHsXTHCLPgAHq/QuutjMmOmkt/N/rApEpXIu9IW+aPvgJQNfqayitmO9SeVEzufSU/xhCfyo+s+Qh/sIfU7TGqbD+JgSuMR1tp4JsZd1btMqe7mS/uy68VK8WxLwQEA2012l4bChzJoLFIj1elE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCtCN6gN; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W7St+O3B"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc1d57602e8so1886547a12.3
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCtCN6gN"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2d6d28aa26cso30637415ad.2
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791542902; x=1792147702; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791542904; x=1792147704; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=o9dE2kwaJ+nDLD8FESjFzVFLFMIYXqiE+l8EiYwgpPI=;
-        b=W7St+O3BiUTO3+ImH+sdhs/cF9obcfP9HFHFr08HRNsyGAKPSw4Bz5TqVRnnuItKEn
-         tpW+ooQKawcLNwBVh0LtLvFSFAOWCAKlcp8XKlgrIgLGfbD9AeWgizYGvPdrIa1lonx6
-         veHBmuP43Z1MiX67dWp/ArKVz4ZLQookmyNAGzQa1lPI8haPwD2gsPcB/Hbt2gicmvyN
-         VZHYzcd0kN7T/grgaUB4iBPZbmHebcZ/2nBN5o+CgBoArHzgIH64QAQuma9+d5rOgcay
-         KG74qYOqwJWdOCBnwTeyYaJtQNrf0ta9t19VMycj+ZGwHno8L++2Z/Jmk9r62vPOGgiV
-         A8tA==
+        bh=mhkIFp2G/gfdsmhxskXUOEGulX5UGaS14ZS1T0vbLTA=;
+        b=MCtCN6gNrrBy7SJ6N0y08s6of51nAeJKXoTZk7Hzj1LTG5Z6+Yi9gJxs7EvgnYwG+C
+         Vo/XPmuhNS6evSAb79DL/LGgM3WLOSRTdhSWpqOVhLetThybBjp+EuXOCGldIk4jq6Xt
+         DIuFXa7Rgt1r31yHl33TMUbbfF4SwnA2ILtw8pgXhFg6Z3Y6QGX/QWvEXfF2K7U9I57x
+         unMM8euTjBKOUp8p4fuXVzr18yeoeEvGK9IUUd9aRLs6IiA+Fk8eRb3neGAlMiG6wQsL
+         BTh7WGu1lkZxHdGvhmzZzkFYOTRrrPnY+tTBp08EMe4gXK6gXZ/UJC0tdj8clJiBW9+C
+         sXpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791542902; x=1792147702;
+        d=1e100.net; s=20260707; t=1791542904; x=1792147704;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=o9dE2kwaJ+nDLD8FESjFzVFLFMIYXqiE+l8EiYwgpPI=;
-        b=d5hpxDST9N84TPuC+CJTqZuvk+2eYeLUEviXkX9IJ2eaCVbDlpvxCVR9sgQkhQHqRL
-         MJHlrV2FMrFDhfNXqrf0Mt38ByydihcKpeVpg3FkmJx3XBLjJgdq+qFYEuE7fnhpuKQx
-         qx6q6If+q0onADOFx27zvx0j0IP8zrO8ucjeKHu3y90qyvoy6SJlEN7c7aeGZa08Jl9d
-         ij2vH69l3yHKz5pBtr48mqG6uN0/Wv4QvwVegfy6IyLyi8vq7B4uKGZSTJHMQRn8ofjz
-         s73wicHCFJocCpa/C+S8voaSWGN6hKZSiQDnhoVfixdY7YgcjL7O6mpKI5Ej6/FYE04L
-         hyaw==
-X-Gm-Message-State: AFq9FYLzs3IhtPou3T0VM07ItF6edNIYfgsJaAJrvoJAWzCcRcaWbpRv
-	xY9XgPxJwLZutrXv7laeLjepwGSr9s95cteglrAyRcCxt9MdqHiSSfDVrZyBuPMY
-X-Gm-Gg: AYBFou3jHgX0odpD/brr/sdJk3wpvGfJD67BuXFb5+LJJFmbAAypi9l7stP+ROIR1k9
-	ZxGo7GBlZYMFCY+lxMvUTnfFmuUi9nqj7MJhQCWKfW8VeFvnJXiC87H9Q/iqY42hilXBQcIwN8T
-	BIAdOK9xCkdVgwue66bAtr2bm5jtZp3LVYRA4+5HgMTG9TtldSNzJ12oZkc07wuUBT4PbjTlEoa
-	0Xzd3pQhLI6epWjfSrfjX1nivCHGKW7Zkm/wHrK0kk5+VKJxC3EBu4W2MNqzYgtobe7FaEOA8ga
-	ZCh3e2Wt2TN4KzRuHGUaSOnx3+sCXDpoWrAq+G3t5JQyrox0CfYPFpyIybVNnYmYZObONUdiR37
-	8Qoc/JJEoB7u85nDx2UVNeMp6F/im5m3KkLyrBdJbgedfFm8STHHCzVxyK6ZcG6Xsh8Lux7zhaW
-	L2nZJrUsperVp3H9e6gTP9kzh/BeHmiVfAmL1LLBEgC1qWk/20fsiPg1HGmWk2r/xVPnyXcWYlq
-	pScfo5b+rCA+IM=
-X-Received: by 2002:a17:90b:4fcb:b0:3a6:dc2f:f07f with SMTP id 98e67ed59e1d1-3ab3a609f14mr1392916a91.10.1791542901892;
-        Fri, 09 Oct 2026 03:48:21 -0700 (PDT)
+        bh=mhkIFp2G/gfdsmhxskXUOEGulX5UGaS14ZS1T0vbLTA=;
+        b=PPQzIVHTOVM50UN29q3VqAa6yfrDuEWvLvxUZL0gPf2S7S7cnHdO5Exvq49mXqpQkd
+         FovA7rr92V7qH26BdUylLeVZbJG5z+f9QVz0RiIBNqaT/vS/ds9/0BjTQ/e497tYuasK
+         V/CJ2ikIpiKLxhk35qJB5nMW0BnCS9FCMCeiALzh/YqC/nfhM6Q2lKKXxCAUfitFcdJS
+         mPrcMP00BAyqgdPDhD77hG/Aw/4TuFNZFf8RA9o2F9zN1T3xzklbCPbvrZJ499TI2b3n
+         4zdMqjz8bJ6gJkE5q80FqaUSNIcj3SNV1jnLg9u9s3FX9hRiKTK/4unG2VJWzwrYByAE
+         Xq0Q==
+X-Gm-Message-State: AFq9FYIqLaPFKB336FhYtHiwCD6oSBdQTrUvaMEXWwXVkrQ82uhpeV8X
+	PmndDgbhN++yPp1fphzYqVltxMQ1W0vZDVcC1ndb8ZFetdXGAoXkqZ1Rah8Q2tE+
+X-Gm-Gg: AYBFou1GlfmlvFk9r9OfN7XX6sudmiu8vtkXf9x2NmjQl8NtRI0aMVH4gEOgHe5whXA
+	0aNd8PR7Jk21AtynyTCiwibliGRr3ga1uDiRa0r9bDBncOYy7CPTH//gLfmnDuGIGPPgMPfOb+w
+	x0H+b5kXsheXZsW3pUMjoZDRQ0p+s8TFCzrEWlnb9utDRRUiS3zzdpkhjPGypEsjFsRqu4RDAy7
+	4+BABC6JYYvVGfYkhGHzO/IAqeiH/E3GixW+a889a7eqd6TNPVwVeUTyoqzbuiYEhh0NNUwFk4X
+	JI4YV6IemUISox+ZnXxdxIEbhPyN7WrLqagNmSY/9ybDN1lLiS8xL6aANhbEKFdn02nJYQP8yz0
+	lcYf+5axnT+qIOBtaai0NPZ+hFzb0J3HjhxgP5kidsthpCZqPAFSgt5u1SR118w23Wjv4kR2rX0
+	wDWL5rQBVOgNVLk18f3pk/doe/eJAQrReweS3B/+7PA1rAfBYKoBo6UcRbjYuwsVzXO69exmgXr
+	kvtVExY85l02lw=
+X-Received: by 2002:a17:90b:2ec4:b0:3a0:cb48:df6b with SMTP id 98e67ed59e1d1-3ab3a955ad2mr1341005a91.34.1791542904284;
+        Fri, 09 Oct 2026 03:48:24 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:20 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:24 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 05/51] bpf: summarize may write stack slots in insn_aux_data
-Date: Fri,  9 Oct 2026 03:47:23 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-5-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 09/51] bpf: fix arg_track_xfer() for atomic stack spills and fills
+Date: Fri,  9 Oct 2026 03:47:27 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-9-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,104 +82,139 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-SCEV needs may-write information to invalidate stack expressions after
-indirect writes. Liveness tracks this per function instance,
-but SCEV is not callchain-sensitive and needs a summary across
-calling contexts.
+Track spilled stack pointers through 64-bit atomic accesses:
+- BPF_STORE_REL spills the source register.
+- BPF_LOAD_ACQ restores the spilled value into dst_reg.
+- BPF_XCHG and BPF_{ADD,AND,OR,XOR} | BPF_FETCH restore it into src_reg.
+- BPF_CMPXCHG restores it into R0.
 
-For each instruction, union the current-frame may_write masks from all
-analyzed instances. Represent 8-byte slots as a summary of constituent
-halves. Store the summary in insn_aux_data and expose it via a helper.
+This prevents missing stack accesses through pointers recovered by these
+instructions, matching the main verifier's spill/fill behavior.
 
+Fixes: bf0c571f7feb ("bpf: introduce forward arg-tracking dataflow analysis")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  6 ++++++
- kernel/bpf/liveness.c        | 41 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+ kernel/bpf/liveness.c | 91 ++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 50 insertions(+), 41 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index eafe79929dfa..4cb36ee3b6f7 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -662,6 +662,11 @@ struct bpf_insn_aux_data {
- 	};
- 	struct btf_struct_meta *kptr_struct_meta;
- 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
-+	/*
-+	 * Per-instruction summary of stack slots in the current frame
-+	 * that this instruction may write to.
-+	 */
-+	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
- 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
- 	bool nospec; /* do not execute this instruction speculatively */
-@@ -1742,6 +1747,7 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
- int bpf_stack_liveness_init(struct bpf_verifier_env *env);
- void bpf_stack_liveness_free(struct bpf_verifier_env *env);
- int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
-+const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx);
- bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi);
- int bpf_compute_live_registers(struct bpf_verifier_env *env);
- 
 diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index e18d5d86c301..ec9c8beef556 100644
+index ce74e3f16eef..52c39bbee6b1 100644
 --- a/kernel/bpf/liveness.c
 +++ b/kernel/bpf/liveness.c
-@@ -718,6 +718,45 @@ static int cmp_instances(const void *pa, const void *pb)
- 	return 0;
+@@ -1357,6 +1357,29 @@ static bool can_be_local_fp(int depth, int regno, struct arg_track *at)
+ 	       (at->frame == ARG_IMPRECISE && (at->mask & BIT(depth)));
  }
  
-+/* OR the 8-byte slots touched by a half-slot (4-byte) mask into @slots. */
-+static void half_spis_to_slots(unsigned long *slots, const unsigned long *mask, u32 nbits)
-+{
-+	u32 slot;
-+
-+	for (slot = 0; slot < MAX_BPF_STACK_SLOTS && slot * 2 + 1 < nbits; slot++)
-+		if (test_bit(slot * 2, mask) || test_bit(slot * 2 + 1, mask))
-+			__set_bit(slot, slots);
-+}
-+
 +/*
-+ * Precompute, for each instruction, the OR of may_write masks over its top
-+ * frame across all func_instances reaching it, stash it in the insn_aux_data.
++ * Model 8-byte reads through @reg, including load-acquire
++ * and the old value fetched by atomic operations.
 + */
-+static void compute_may_write_masks(struct bpf_verifier_env *env)
++static struct arg_track arg_track_deref(struct bpf_verifier_env *env, struct bpf_insn *insn,
++					struct arg_track *at_out, int reg,
++					struct arg_track *at_stack_out, u32 nslots,
++					int depth, u32 *callsites)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct bpf_liveness *liveness = env->liveness;
-+	struct func_instance *instance;
-+	struct frame_masks *fm;
-+	u32 nbits;
-+	int bkt, i;
++	struct arg_track *ptr = &at_out[reg];
 +
-+	hash_for_each(liveness->func_instances, bkt, instance, hl_node) {
-+		fm = instance->frames[instance->depth];
-+		if (!fm)
-+			continue;
-+		nbits = frame_mask_bits(fm);
-+		for (i = 0; i < instance->insn_cnt; i++)
-+			half_spis_to_slots(aux[instance->subprog_start + i].may_write_mask,
-+					   rel_mask(fm, i, FM_MAY_WRITE), nbits);
++	if (can_be_local_fp(depth, reg, ptr))
++		return fill_from_stack(insn, at_out, reg, at_stack_out, nslots, depth);
++	if (ptr->frame >= 0 && ptr->frame < depth) {
++		struct spill_snapshot *parent = env->callsite_at_stack[callsites[ptr->frame]];
++
++		return fill_from_stack(insn, at_out, reg, parent->at, parent->slots, ptr->frame);
 +	}
++	if (ptr->frame == ARG_IMPRECISE && !(ptr->mask & BIT(depth)) && ptr->mask)
++		return *ptr;
++	return (struct arg_track){ .frame = ARG_NONE };
 +}
 +
-+const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx)
-+{
-+	return env->insn_aux_data[insn_idx].may_write_mask;
-+}
+ /*
+  * Pure dataflow transfer function for arg_track state.
+  * Updates at_out[] based on how the instruction modifies registers.
+@@ -1438,56 +1461,42 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		for (r = BPF_REG_0; r <= BPF_REG_5; r++)
+ 			at_out[r] = none;
+ 	} else if (class == BPF_LDX) {
+-		u32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
+-		bool src_is_local_fp = can_be_local_fp(depth, insn->src_reg, src);
+-
+-		/*
+-		 * Reload from callee stack: if src is current-frame FP-derived
+-		 * and the load is an 8-byte BPF_MEM, try to restore the spill
+-		 * identity.  For imprecise sources fill_from_stack() returns
+-		 * ARG_IMPRECISE (off_cnt == 0).
+-		 */
+-		if (src_is_local_fp && BPF_MODE(insn->code) == BPF_MEM && sz == 8) {
+-			*dst = fill_from_stack(insn, at_out, insn->src_reg, at_stack_out, nslots,
+-					       depth);
+-		} else if (src->frame >= 0 && src->frame < depth &&
+-			   BPF_MODE(insn->code) == BPF_MEM && sz == 8) {
+-			struct spill_snapshot *parent =
+-				env->callsite_at_stack[callsites[src->frame]];
+-
+-			*dst = fill_from_stack(insn, at_out, insn->src_reg,
+-					       parent->at, parent->slots, src->frame);
+-		} else if (src->frame == ARG_IMPRECISE &&
+-			   !(src->mask & BIT(depth)) && src->mask &&
+-			   BPF_MODE(insn->code) == BPF_MEM && sz == 8) {
+-			/*
+-			 * Imprecise src with only parent-frame bits:
+-			 * conservative fallback.
+-			 */
+-			*dst = *src;
+-		} else {
++		/* Only an 8-byte BPF_MEM load can be a fill, see arg_track_deref(). */
++		if (BPF_MODE(insn->code) == BPF_MEM && BPF_SIZE(insn->code) == BPF_DW)
++			*dst = arg_track_deref(env, insn, at_out, insn->src_reg,
++					       at_stack_out, nslots, depth, callsites);
++		else
+ 			*dst = none;
+-		}
+ 	} else if (class == BPF_LD && BPF_MODE(insn->code) == BPF_IMM) {
+ 		*dst = none;
+ 	} else if (class == BPF_STX) {
+ 		u32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
+-		bool dst_is_local_fp;
+-
+-		/* Track spills to current-frame FP-derived callee stack */
+-		dst_is_local_fp = can_be_local_fp(depth, insn->dst_reg, dst);
+-		if (dst_is_local_fp && BPF_MODE(insn->code) == BPF_MEM)
+-			spill_to_stack(insn, at_out, insn->dst_reg,
+-				       at_stack_out, nslots, src, sz);
++		bool dst_is_local_fp = can_be_local_fp(depth, insn->dst_reg, dst);
++		u8 mode = BPF_MODE(insn->code);
 +
- /* print use/def slots for all instances ordered by callsite first, then by depth */
- static int print_instances(struct bpf_verifier_env *env)
- {
-@@ -2352,6 +2391,8 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
- 			goto out;
- 	}
++		if (mode == BPF_MEM || (mode == BPF_ATOMIC && insn->imm == BPF_STORE_REL)) {
++			if (dst_is_local_fp)
++				spill_to_stack(insn, at_out, insn->dst_reg,
++					       at_stack_out, nslots, src, sz);
++		} else if (mode == BPF_ATOMIC && insn->imm == BPF_LOAD_ACQ) {
++			if (sz == 8)
++				*dst = arg_track_deref(env, insn, at_out, insn->src_reg,
++						       at_stack_out, nslots, depth, callsites);
++			else
++				*dst = none;
++		} else if (mode == BPF_ATOMIC) {
++			/* BPF_XCHG, BPF_CMPXCHG or BPF_{ADD,AND,OR,XOR} | [BPF_FETCH] */
++			struct arg_track old = none;
  
-+	compute_may_write_masks(env);
-+
- 	if (env->log.level & BPF_LOG_LEVEL2)
- 		err = print_instances(env);
- 
+-		if (BPF_MODE(insn->code) == BPF_ATOMIC) {
+-			if (dst_is_local_fp && insn->imm != BPF_LOAD_ACQ)
++			r = bpf_atomic_load_reg(insn);
++			if (r >= 0 && sz == 8)
++				old = arg_track_deref(env, insn, at_out, insn->dst_reg,
++						      at_stack_out, nslots, depth, callsites);
++			if (dst_is_local_fp)
+ 				clear_stack_for_all_offs(insn, at_out, insn->dst_reg,
+ 							 at_stack_out, nslots, sz);
+-
+-			r = bpf_atomic_load_reg(insn);
+ 			if (r >= 0)
+-				at_out[r] = none;
++				at_out[r] = old;
+ 		}
+ 	} else if (class == BPF_ST && BPF_MODE(insn->code) == BPF_MEM) {
+ 		u32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
 
 -- 
 2.53.0
