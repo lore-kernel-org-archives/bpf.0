@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-43.mta0.migadu.com [91.218.175.43])
+Received: from mta1.migadu.com (out-127.mta1.migadu.com [95.215.58.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FC54FECCD
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3FA4EA37A
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.127
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791577725; cv=none; b=KdHGoARUTKxhBEjd+ql8EONO4WUdLgu4g5F7izr5G9Undo5Mew7W/RJCL0/8FsuJUvW/BeuyiDEd35dOXFeahEXud2rH4AN0GyOD84sFA1i+izwt/RDQCIGhMrPYKNuFrZyKZtovGwkQ8py4ClPBN/2Fku9Ou6Ynk8I1gryoVYo=
+	t=1791577730; cv=none; b=qx7Pavmzei5fsGwATSQk5DKLeI9VGgzpdxAA/ULqCgx2mhKTkUeNuvSkjmiOzobbts4bj/OvJFu2FwgN3VulXEEqSQFeRiaR/mqLFrk69peZslCUgpcahHHlp9t/OShoC/zYfszoZ3QMSeh504ohs2aNE9x3xm9kV94H8BjEYqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791577725; c=relaxed/simple;
-	bh=qIT7wGuTjriYnOfA2SxNY2edI9frw23hkgMBXld7w8k=;
+	s=arc-20240116; t=1791577730; c=relaxed/simple;
+	bh=gMjaT5hA9VF+GVQsBhcMHUZOLtEqJEvu9tk5vfwqSIM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IS7QWB0P0LbpM4kHRZ2PwoqaMsNNluHLG/PPfyYm1RBP0ofIz1GiAlILknVKsEgW45AEFJslKmGEhLXLxx6f5Xnsy8lIuFCJtxDUpT47J+DGDjBHgBdnvHOchlHVcx5zc382W5Eunec0M17c4kf+LNf/6NhayFmfTc+6bm8n+4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IGSbXdA5; arc=none smtp.client-ip=91.218.175.43
+	 MIME-Version; b=Mby0M0VXxLq4POC2ry89/pTVTtP/ibH/sA0T/7bloIN8hiYZJP1lwvwLye2j4+apxobpvoYqok8aENzD9JRaXT+S/BI5KtvnlAcVU4KPdBrAsuCsr1YJBqiTD3dwMGa8n2LK3BeUk0o4vnhfcaZcjuZQ8IqLVZtS1cqZQKAxOW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RcceH2OX; arc=none smtp.client-ip=95.215.58.127
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IGSbXdA5"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RcceH2OX"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qIT7wGuTjriYnOfA2SxNY2edI9frw23hkgMBXld7w8k=;
+DKIM-Signature: a=rsa-sha256; bh=gMjaT5hA9VF+GVQsBhcMHUZOLtEqJEvu9tk5vfwqSIM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791577721; v=1; x=1792182521;
- b=IGSbXdA50jKT+zZwXzsDL0t/wyZcHKKunUMvwW2YT6wx9F19Vof6cjqncX0TU0ijCrbl3/rj
- xT0WogfSop/H1/NYkiRqiodtZH4cmHqt9qfpTlrAoL9JzNHlvn89POrxsOuOgL90JkC266e/Cso
- TuG/+MsZFLB/5D6xUgeVsPrw=
+ t=1791577727; v=1; x=1792182527;
+ b=RcceH2OX3UDQVWiOqIIXZhRuH8/nqKtSsVBK8093DBIwi3liVpMPJIwP9k5RLHoCXP+SjoxB
+ 6QiMTnJv6TJvVACl1lBqChFGedL4a386EWtnwv8o75C4Ohh30o7BnMPTxelMJP56A45aIl9f4nw
+ qmSLXAdkn1rUzspH6GDxMkwg=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 605ec0ba45d85f84;
-	Fri, 09 Oct 2026 20:28:40 +0000
-X-Mizu-Trace-ID: 605ec0ba45d85f84
+Received: by smtp.migadu.com with ESMTPS id 425e0ea8813fb66f;
+	Fri, 09 Oct 2026 20:28:46 +0000
+X-Mizu-Trace-ID: 425e0ea8813fb66f
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 07/11] bpf: Introduce REF_TYPE_FRAME in the verifier
-Date: Fri,  9 Oct 2026 13:27:54 -0700
-Message-ID: <20261009202759.50520-8-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 08/11] bpf: Scope the bpf_user_ringbuf_drain() dynptr to its callback frame
+Date: Fri,  9 Oct 2026 13:27:55 -0700
+Message-ID: <20261009202759.50520-9-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261009202759.50520-1-ihor.solodrai@linux.dev>
 References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
@@ -55,241 +55,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A callback-calling helper can pass its callback a pointer that is only
-valid for the duration of the callback invocation.
+The dynptr argument to a bpf_user_ringbuf_drain() callback points to a
+descriptor on the helper's stack. The descriptor and the sample it
+describes are valid only during that callback invocation.
 
-A callback can save such a value, or something derived from it, and
-make it outlive the frame. The BPF program can then reuse it after the
-helper returns.
+The callback can save the dynptr pointer, a slice, or a clone in the
+caller's frame and use it after the drain returns. An escaped descriptor
+pointer can allow arbitrary kernel read/write once the helper's stack
+is reused.
 
-The verifier tracks the argument's register type, but does not tie its
-lifetime to the callback frame. Invalidating a value together with
-everything derived from it is what invalidate_reference() already does,
-walking reg->parent_id across every frame and stack slot. What is
-missing is a type of reference that is not an object the program
-acquired and releases.
+The verifier assigns the dynptr a type and an id, but does not tie it
+or its descendants to the callback's lifetime.
 
-Introduce REF_TYPE_FRAME: a reference owned by a callee frame.
-A set_callee_state_fn can anchor an argument to such a reference with
-mark_frame_scoped_arg(), and prepare_func_exit() drops it when the
-frame is popped, invalidating the argument and everything derived from
-it through the existing walk. The anchored register is its own parent,
-so invalidate_reference() no longer queues a register as a descendant of
-itself.
+Anchor R1 to a frame reference so the argument and its descendants are
+invalidated when the callback frame is popped.
 
+Reported-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- include/linux/bpf.h          |  2 +
- include/linux/bpf_verifier.h |  6 +--
- kernel/bpf/diagnostics.c     |  3 ++
- kernel/bpf/diagnostics.h     |  1 +
- kernel/bpf/states.c          |  4 ++
- kernel/bpf/verifier.c        | 80 +++++++++++++++++++++++++++++++++++-
- 6 files changed, 92 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d5de9d49a168..e4498e6fa88a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3188,6 +3188,8 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
- 				   struct bpf_verifier_state *state,
- 				   struct bpf_func_state *caller,
- 				   struct bpf_func_state *callee);
-+int mark_frame_scoped_arg(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
-+			  struct bpf_func_state *callee, u32 regno);
- 
- int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value, u64 flags);
- int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value, u64 flags);
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index c51083c761cf..54a4f440c33b 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -272,15 +272,13 @@ struct bpf_stack_state {
- };
- 
- struct bpf_reference_state {
--	/* Each reference object has a type. Ensure REF_TYPE_PTR is zero to
--	 * default to pointer reference on zero initialization of a state.
--	 */
- 	enum ref_state_type {
- 		REF_TYPE_PTR		= (1 << 1),
- 		REF_TYPE_IRQ		= (1 << 2),
- 		REF_TYPE_LOCK		= (1 << 3),
- 		REF_TYPE_RES_LOCK 	= (1 << 4),
- 		REF_TYPE_RES_LOCK_IRQ	= (1 << 5),
-+		REF_TYPE_FRAME		= (1 << 6),
- 		REF_TYPE_LOCK_MASK	= REF_TYPE_LOCK | REF_TYPE_RES_LOCK | REF_TYPE_RES_LOCK_IRQ,
- 	} type;
- 	/* Track each reference created with a unique id, even if the same
-@@ -298,6 +296,8 @@ struct bpf_reference_state {
- 		 * it matches on unlock.
- 		 */
- 		void *ptr;
-+		/* For REF_TYPE_FRAME */
-+		u32 frameno;
- 	};
- };
- 
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 857b668212fb..ba1a3f07d58e 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -2238,6 +2238,9 @@ static void diag_print_mod(struct bpf_verifier_env *env, const struct bpf_diag_h
- 								   "resource release invalidated "
- 								   "this value";
- 		break;
-+	case BPF_DIAG_MOD_FRAME_RELEASE:
-+		reason = "the callback that owned this value returned";
-+		break;
- 	case BPF_DIAG_MOD_PKT_DATA_CHANGE:
- 		reason = "packet data may have moved";
- 		break;
-diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index a4102fb049ec..b5cab4d79c1a 100644
---- a/kernel/bpf/diagnostics.h
-+++ b/kernel/bpf/diagnostics.h
-@@ -22,6 +22,7 @@ enum bpf_diag_mod_reason {
- 	BPF_DIAG_MOD_SPILL,
- 	BPF_DIAG_MOD_VAR_WRITE,
- 	BPF_DIAG_MOD_REF_RELEASE,
-+	BPF_DIAG_MOD_FRAME_RELEASE,
- 	BPF_DIAG_MOD_PKT_DATA_CHANGE,
- 	BPF_DIAG_MOD_NON_OWN_REF,
- 	BPF_DIAG_MOD_CALLER_SAVED,
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 18bf7b660c2f..1291824a3a7d 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -899,6 +899,10 @@ static bool refsafe(struct bpf_verifier_state *old, struct bpf_verifier_state *c
- 			break;
- 		case REF_TYPE_IRQ:
- 			break;
-+		case REF_TYPE_FRAME:
-+			if (old->refs[i].frameno != cur->refs[i].frameno)
-+				return false;
-+			break;
- 		case REF_TYPE_LOCK:
- 		case REF_TYPE_RES_LOCK:
- 		case REF_TYPE_RES_LOCK_IRQ:
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 67a61570a9ab..c969fef2d452 100644
+index c969fef2d452..edc78e50dc22 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1529,6 +1529,49 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
- 	return id;
+@@ -713,11 +713,12 @@ static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
+ 	__mark_dynptr_reg(sreg2, type, false, id, parent_id);
  }
  
-+/* Acquire a reference owned by frame @frameno of @state */
-+static int acquire_frame_reference(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
-+				   int insn_idx, u32 frameno)
-+{
-+	struct bpf_reference_state ref = {
-+		.type = REF_TYPE_FRAME,
-+		.id = ++env->id_gen,
-+		.insn_idx = insn_idx,
-+		.frameno = frameno,
-+	};
-+
-+	return acquire_reference_state(state, &ref);
-+}
-+
-+/*
-+ * Anchor @regno in @callee to a reference owned by the callee frame, so the
-+ * value and everything derived from it is invalidated when the frame is
-+ * popped. @state owns @callee; for a callback it is not env->cur_state.
-+ */
-+int mark_frame_scoped_arg(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
-+			  struct bpf_func_state *callee, u32 regno)
-+{
-+	int id;
-+
-+	if (verifier_bug_if(!callee->frameno, env,
-+			    "cannot scope an argument to frame 0"))
-+		return -EFAULT;
-+
-+	id = acquire_frame_reference(env, state, callee->callsite, callee->frameno);
-+	if (id < 0)
-+		return id;
-+	/*
-+	 * The value is its own lifetime anchor: there is no associated
-+	 * object to borrow from, only the frame. parent_id = id here
-+	 * covers both possible derived references:
-+	 *  - through the id (e.g. dynptr slice)
-+	 *  - through parent_id (e.g. dynptr clone)
-+	 */
-+	callee->regs[regno].id = id;
-+	callee->regs[regno].parent_id = id;
-+	return 0;
-+}
-+
- static int acquire_lock_state(struct bpf_verifier_env *env, int insn_idx, enum ref_state_type type,
- 			      int id, void *ptr)
+-static void mark_dynptr_cb_reg(struct bpf_verifier_env *env,
+-			       struct bpf_reg_state *reg,
+-			       enum bpf_dynptr_type type)
++static int mark_dynptr_cb_reg(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
++			      struct bpf_func_state *callee, u32 regno,
++			      enum bpf_dynptr_type type)
  {
-@@ -10705,7 +10748,7 @@ static int invalidate_reference(struct bpf_verifier_env *env, int id,
- 				continue;
- 
- 			/* Free objects derived from the current object */
--			if (reg->parent_id == id) {
-+			if (reg->parent_id == id && reg->id != id) {
- 				err = idstack_push(idstack, reg->id);
- 				if (err)
- 					return err;
-@@ -10745,6 +10788,27 @@ static int release_reference(struct bpf_verifier_env *env, int id)
- 	return invalidate_reference(env, id, BPF_DIAG_MOD_REF_RELEASE);
+-	__mark_dynptr_reg(reg, type, true, ++env->id_gen, 0);
++	__mark_dynptr_reg(&callee->regs[regno], type, true, 0, 0);
++	return mark_frame_scoped_arg(env, state, callee, regno);
  }
  
-+static int release_frame_references(struct bpf_verifier_env *env, u32 frameno)
-+{
-+	struct bpf_verifier_state *state = env->cur_state;
-+	int i, id, err;
-+
-+	for (i = 0; i < state->acquired_refs;) {
-+		if (state->refs[i].type != REF_TYPE_FRAME ||
-+		    state->refs[i].frameno != frameno) {
-+			i++;
-+			continue;
-+		}
-+		id = state->refs[i].id;
-+		release_reference_state(state, i);
-+		err = invalidate_reference(env, id, BPF_DIAG_MOD_FRAME_RELEASE);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
- static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
+ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+@@ -11456,11 +11457,15 @@ static int set_user_ringbuf_callback_state(struct bpf_verifier_env *env,
+ 					   struct bpf_func_state *callee,
+ 					   int insn_idx)
  {
- 	struct bpf_func_state *unused;
-@@ -11629,6 +11693,15 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 		verbose(env, "to caller at %d:\n", *insn_idx);
- 		print_verifier_state(env, state, caller->frameno, true);
- 	}
++	int err;
 +
-+	/*
-+	 * Values the caller only guaranteed for the duration of the call stop
-+	 * being valid here.
-+	 */
-+	err = release_frame_references(env, callee->frameno);
+ 	/* bpf_user_ringbuf_drain(struct bpf_map *map, void *callback_fn, void
+ 	 *			  callback_ctx, u64 flags);
+ 	 * callback_fn(const struct bpf_dynptr_t* dynptr, void *callback_ctx);
+ 	 */
+-	mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE_LOCAL);
++	err = mark_dynptr_cb_reg(env, state, callee, BPF_REG_1, BPF_DYNPTR_TYPE_LOCAL);
 +	if (err)
 +		return err;
-+
- 	account_processed_insns(env, callee, caller);
- 	/* clear everything in the callee. In case of exceptional exits using
- 	 * bpf_throw, this will be done by copy_verifier_state for extra frames. */
-@@ -11806,6 +11879,11 @@ static int check_reference_leak(struct bpf_verifier_env *env, bool exception_exi
- 		return 0;
+ 	callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3];
  
- 	for (i = 0; i < state->acquired_refs; i++) {
-+		if (!exception_exit && state->refs[i].type == REF_TYPE_FRAME) {
-+			verifier_bug(env, "frame %u reference id=%d alive at program exit",
-+				     state->refs[i].frameno, state->refs[i].id);
-+			return -EFAULT;
-+		}
- 		if (state->refs[i].type != REF_TYPE_PTR)
- 			continue;
- 		/* Allow struct_ops programs to return a referenced kptr back to
+ 	callee->in_callback_fn = true;
 -- 
 2.56.0
 
