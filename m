@@ -1,67 +1,67 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955B24CE68D
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63AE4D0A12
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545732; cv=none; b=FXFf4+B1Jwq9NjZ+IRrJO5u4ksFHFIE+Qa3XXbCc2af6Fq6bhtQ8tSvdTmt8ESGAXhIuFZw7UTb9OFRplQX/rf88bS+47rpy2jsDsgXFKZLOnaq0A8x40S3/ia+4NnOoXDItnDB8n8u47t8dMKp9FzhE32hgxPjBS3mj2+F4fEk=
+	t=1791545734; cv=none; b=IfB8aHlH9KBWbv3hqmd68VuKOQ4sl6nzbEOQSGH0cNHdvaqY77lxeFx0tUnOYpeje1pEtYQ+Zro6Cd/k+Y5DrW0i0+EpP4ELZsyRlPxPVwoaVYvyrxzEbUcr7aR/0ZXdPvd7fcJd5AWa6lDx9mbpIeOpCVyrPIsc6CXwBeCUEtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545732; c=relaxed/simple;
-	bh=8dxMAz/3bVniLT9GlqZAEGuXrm/1/vBKQ5LFvnkTugg=;
+	s=arc-20240116; t=1791545734; c=relaxed/simple;
+	bh=eRG8WvF1bsjLPC0MjjmZR0uNw9zvAMam79yEOqb8sT8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QPtyWii5/8qcB6xaGQbI9sJBNwyiyNs+tDP3wa30vioV9S9T/3G6hyc0HcAH1tAtuVHI6gijpNGsAeMPJJIGPuH6IMVTT1AlDegXqjL+FDliflB6TCRP8Z5jYgjiVrj9PAovigMkF0LIaaZRYcBww4+2k4wZKZOVPtO4UDvhh7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SsjQgJgf; arc=none smtp.client-ip=209.85.210.45
+	 In-Reply-To:To:Cc; b=BdNbMH4Uf//DbhegpYoQgFHN2OsZ0ZYeDUvXM15K/rjiG4jEim50cy2l2yi0STsY/knG2y8oyYI6RCYDvG40SxVp35Sr8OF93VQ6UCvSE16XQDYEheGTEd64DeJTLBrgp8cJ7A970bypMi/kSgL8qfy4khlpEImzb3Uf1zcWTcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=adjVrIgd; arc=none smtp.client-ip=209.85.161.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SsjQgJgf"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7f84a55e31aso2942446a34.2
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 04:35:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="adjVrIgd"
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6dde81a6820so4785003eaf.2
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 04:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791545718; x=1792150518; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791545721; x=1792150521; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4mHvTL1gZeI43MeOEN91Zyrc10MwgGLl2JxNH17x0Xk=;
-        b=SsjQgJgf0jfRmXBvzgC1C3x7dWYQvWGCRETZtxy5pPYoLOO7VxdSt48mT2Zh5W9TwM
-         0eqpTEUgJVErR0dlSVQvcnfW3RoisGZEMNlMzjbsyNShQBwUNC+9nzwNzU5d28Xl1aVQ
-         zsxhLyrZByAB3rc7sLzS07T3yfZsjMlUbV+QR5+g0Xb0dJR4rG6o9yreXhfROeWBFQZh
-         Q1pF5PMZVtrJPiZXSQzLzS0UdwO3yImuT4TGmih1Uw9vRvhy1/asVwzTwA8ogw3bLghg
-         Y9Qw6Z4Zs2wbVKh4qJz/SeDj43Up/aNbuSTNfA3v4Fcfhue76V7C0QPsR3Gd+n6w3Cxe
-         5Ktg==
+        bh=DS9A7YoCLm+UzG8nxic/xw1Qa1nYtCBqz/7ErKQAzHI=;
+        b=adjVrIgd83y8cPrUJst7eS0b69LiziPK1/vSXia7tR3O5dqu+hCm9IRTNPTVvoPYiF
+         2zBtKfNp7ffHSHsK6LZ08wGF5HANaS9cdTvg8mzMjVxiC7WeZ1n3J+x3rWI12VSirud5
+         FrGbUfkYu9Ub3dQUrmfFg7EHcQozJs9GTxj0vZLxpbi+4IC1am5Z7miicVjJLS2IA2zE
+         fjs6t9IFAsgTIlzZ+2qs5MaAIlhZhEDbAia9eYbT0zMDj/GByN6hiYlGwYy6tJpJwS10
+         mLsyMVHNshDc8DqPwWT28YnPEJwK5nfjeGPdrY603NGqEvgG9hL89pbgIp414wlaxSa/
+         gvjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791545718; x=1792150518;
+        d=1e100.net; s=20260707; t=1791545721; x=1792150521;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4mHvTL1gZeI43MeOEN91Zyrc10MwgGLl2JxNH17x0Xk=;
-        b=nTuseobgKXvS45mVBErxBy5x9Mi+UFT+o9kbZjX9zeqOb6aQRW7BS9+ONDozW3iZ6P
-         WvwtMFBquYYRru35G4hKr/snRixQuhDFvA+FP/Kc2aLsIAjqUeNkcjP3mAJTP6E09bGK
-         a5eJJW9nd4ED5SCU9A2Pt/u667qXQajcrZyUX07ddlNW5audlQ0l675g6Uqn9QuomAZi
-         yIhIS8XTv8OsBe0+1ek7ZuMO+47zEs7MKfBnbJg1Jh1K32DOUFDjg2btWtGOHR4c1CPc
-         zkoejM7H3xdLapvdFe6/5YVw8V1DY0vWFbXKSmXhHmXTx0lBcDuNiC4FBIw1jALFmo0V
-         g6xQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxdXXAFP5v+9djaq0u6Kh8GiLX+WkEXFTIiuVEaWyXUlwZP80Ig09yg4tUrOh9wquirpH0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kRG/6SyVzzq8MkAuHEf1tCwT+PGEqP9UYNBKj7n6RjZzLnpHP3
-	wZXQ97auMG+aV3QwdScdYowsw4zyE4wDdqqutb4pdX1SG6jVqUoReo8a
-X-Gm-Gg: AYBFou0NzdBSQ/8HPlyusdrQN0haIK1lUyr5kJ5u5T3JyCS2LKG2J4VLrssUMhA/YKd
-	0T36s5KLhEY3bVC+qg2wOBRqpic/w1f7YU26BYGG/fZQE06XqOWbnO4KvinsAzTQepaJtp9A0zV
-	8AVa9fqEaF8zWx7ubzxHojy96jK9Kk/1zyQdmapbWHfSmSqaOTlzO/XQn4T5Gtl3DAySNJV5KEx
-	fyJMznrtiNf2XuUIjq/yZ/BJMV/0z8ro2OpGPgNmWIVmullbq1G7POy/HE9lOpRHy/4vQte08/R
-	wiOYwE6ljfxF2NqYYipNxK/PIdq/1DFdJATUdiviHhr8+ZuS9cJ3Sraw/xnjwkYSCSuyiU0uB/g
-	fURuI8dujjFV2EjL0yCqt2ZsXsiGizDHMCbTzJF0vCs2ACk/D1hkTdxg5j+5oJYsKSKTnluWcTo
-	dvtc20QTR5Z+RfWXOHsS9m8WZOc61AogkzJnIkvrlIyEt5wuOHSp3sh3zj66Vrwc7lJ/s=
-X-Received: by 2002:a05:6808:4fde:b0:4f3:e98f:fa26 with SMTP id 5614622812f47-50c56deebe6mr1294753b6e.58.1791545718327;
-        Fri, 09 Oct 2026 04:35:18 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:4::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-50c1c120ae6sm1609891b6e.17.2026.10.09.04.35.16
+        bh=DS9A7YoCLm+UzG8nxic/xw1Qa1nYtCBqz/7ErKQAzHI=;
+        b=wxshoo8K61Uhufc0MQKvYituir2muFdASicpSC3DJ2iZaNbD1qNq3baRWPuwZrXkdo
+         yacE+WvQSShdGr8I3N1850Qjb6+CrNBa19+CASiMMOiOO4tZuiRGzKr5Y/q2OXZuJbMk
+         ViyROVAfwj+vkJk0kJA45s60TlS4Fmqn3iVxM0lc/n7pU6e5GJOH3AW8WwDnqP1Y7iyN
+         A3HMJeTyZNt+JOoyvI7+imMnV08HEgNlwBotkni3v6fF0JMUfHc0BQ/sejypgBJceKw+
+         zkw955LkkwIRCcVYtU71OSsTEJU2IAuvxE0TQO+hja0n3+LxryukSHpVkH+7BMq25Nhj
+         +How==
+X-Forwarded-Encrypted: i=1; AKwUvBzb2ZcnurVCLCjqQyJmfnVfdEj9VoRapPNfCqNz4KGY+InoQCN8MnKdrOJ7kG3lywCPz4g=@vger.kernel.org
+X-Gm-Message-State: AFuF++lIiz6w+vy6t6sHbZHOkF1R/1GRrWr61SQsoSxY/CFCBUuMQW1s
+	otBj+tWj7KolKZc7n30c9B+NLBxLo6dHC6ojrnBUFZxE9/NlJxkW36pS
+X-Gm-Gg: AYBFou2hY4ZGk9dUGBuN05A86DVLjONTCXug/yUDrVkvgsK/zuyXMzjy4S3myX09jzP
+	tTHQtSY24kcsGk2WVfiSNQG7xKbnoE1XhX1G1wG2o8XnfLIw7wGKImlrs/uIoGSGXndxiBxtEpI
+	J5aa+DLgHT7s9VFw7PrsPmBqcgoUHRKDs4kV9lN8eZ+uBxIctmSLK8hfoe61Ss2H/WXiSQqzjte
+	KLwpeIG/GrZQBkSnxkK9KaF60H5VSs3dR+0GBAOvRdkOFcJNk10vBsrz7Qy6FFUTHm/VTPBRkuN
+	samZUe9kwLaSg37byS1cHQpWygJPubN/CABGnRQeks8/Idqw40OYsBvuAw1rRkeBiLapCbsm3ut
+	N1NE9UWhN0TghyIASMf408vAtPC7YxIqHVu54dwbfChI0avtmC9ZOD1+Bq/amYyf0B7Cg8vTvze
+	DLVJy15UWq+LI+iBYXbUPlTcjPHVFNKb4Tp8FpjjJMMmQVAiwFV5G9WZwuSbI2u/iTKNyc
+X-Received: by 2002:a05:6820:c95:b0:6e0:1917:42f9 with SMTP id 006d021491bc7-6ef11839a31mr1124128eaf.51.1791545721421;
+        Fri, 09 Oct 2026 04:35:21 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:75::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-83039a3e016sm1452342a34.17.2026.10.09.04.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 04:35:17 -0700 (PDT)
+        Fri, 09 Oct 2026 04:35:20 -0700 (PDT)
 From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Fri, 09 Oct 2026 04:35:05 -0700
-Subject: [PATCH net-next 2/4] eth: mpnic: report per-queue stats
+Date: Fri, 09 Oct 2026 04:35:06 -0700
+Subject: [PATCH net-next 3/4] eth: mpnic: count Tx queue stops and wakes
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261009-mpnic-counters3-v1-2-7dc7644cc500@gmail.com>
+Message-Id: <20261009-mpnic-counters3-v1-3-7dc7644cc500@gmail.com>
 References: <20261009-mpnic-counters3-v1-0-7dc7644cc500@gmail.com>
 In-Reply-To: <20261009-mpnic-counters3-v1-0-7dc7644cc500@gmail.com>
 To: Alexander Duyck <alexanderduyck@fb.com>, 
@@ -86,112 +86,177 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org
 X-Mailer: b4 0.13.0
 
-Expose the per-ring packet and byte counters through the queue stats
-API. Counters for deactivated rings are reported through the base stats.
+Count how often a Tx queue is stopped for lack of descriptors and woken
+again by completions, and report the counts through the queue stats API.
+
+Stops are counted on the TWQ from the xmit path and wakes on the TCQ
+from mpnic_poll(), keeping a single writer context for each.
 
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- drivers/net/ethernet/meta/mpnic/mpnic_netdev.c | 73 ++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ drivers/net/ethernet/meta/mpnic/mpnic_netdev.c | 13 ++++++++-
+ drivers/net/ethernet/meta/mpnic/mpnic_netdev.h |  2 ++
+ drivers/net/ethernet/meta/mpnic/mpnic_txrx.c   | 37 +++++++++++++++++++-------
+ drivers/net/ethernet/meta/mpnic/mpnic_txrx.h   |  2 ++
+ 4 files changed, 44 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
-index 5164475a0f94..c2f4a326a8f0 100644
+index c2f4a326a8f0..9e262f939c79 100644
 --- a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
 +++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
-@@ -6,6 +6,7 @@
- #include <linux/netdevice.h>
- #include <linux/pci.h>
- #include <linux/types.h>
-+#include <net/netdev_lock.h>
+@@ -176,9 +176,9 @@ static void mpnic_get_queue_stats_tx(struct net_device *dev, int idx,
+ 	struct mpnic_net *mpn = netdev_priv(dev);
+ 	struct mpnic_ring *txr = mpn->tx[idx];
+ 	struct mpnic_queue_stats *stats;
++	u64 bytes, packets, stop, wake;
+ 	struct mpnic_q_triad *qt;
+ 	unsigned int start;
+-	u64 bytes, packets;
  
- #include "mpnic.h"
- #include "mpnic_netdev.h"
-@@ -146,6 +147,77 @@ static const struct net_device_ops mpnic_netdev_ops = {
- 	.ndo_get_stats64	= mpnic_get_stats64,
- };
- 
-+static void mpnic_get_queue_stats_rx(struct net_device *dev, int idx,
-+				     struct netdev_queue_stats_rx *rx)
-+{
-+	struct mpnic_net *mpn = netdev_priv(dev);
-+	struct mpnic_ring *rxr = mpn->rx[idx];
-+	struct mpnic_queue_stats *stats;
-+	unsigned int start;
-+	u64 bytes, packets;
-+
-+	if (!rxr)
-+		return;
-+
-+	stats = &rxr->stats;
-+	do {
-+		start = u64_stats_fetch_begin(&stats->syncp);
-+		bytes = u64_stats_read(&stats->rcq.bytes);
-+		packets = u64_stats_read(&stats->rcq.packets);
+ 	if (!txr)
+ 		return;
+@@ -190,10 +190,19 @@ static void mpnic_get_queue_stats_tx(struct net_device *dev, int idx,
+ 		start = u64_stats_fetch_begin(&stats->syncp);
+ 		bytes = u64_stats_read(&stats->tcq.bytes);
+ 		packets = u64_stats_read(&stats->tcq.packets);
++		wake = u64_stats_read(&stats->tcq.wake);
 +	} while (u64_stats_fetch_retry(&stats->syncp, start));
 +
-+	rx->bytes = bytes;
-+	rx->packets = packets;
-+}
-+
-+static void mpnic_get_queue_stats_tx(struct net_device *dev, int idx,
-+				     struct netdev_queue_stats_tx *tx)
-+{
-+	struct mpnic_net *mpn = netdev_priv(dev);
-+	struct mpnic_ring *txr = mpn->tx[idx];
-+	struct mpnic_queue_stats *stats;
-+	struct mpnic_q_triad *qt;
-+	unsigned int start;
-+	u64 bytes, packets;
-+
-+	if (!txr)
-+		return;
-+
-+	qt = container_of(txr, struct mpnic_q_triad, sub0);
-+
-+	stats = &qt->cmpl.stats;
++	stats = &txr->stats;
 +	do {
 +		start = u64_stats_fetch_begin(&stats->syncp);
-+		bytes = u64_stats_read(&stats->tcq.bytes);
-+		packets = u64_stats_read(&stats->tcq.packets);
-+	} while (u64_stats_fetch_retry(&stats->syncp, start));
-+
-+	tx->bytes = bytes;
-+	tx->packets = packets;
-+}
-+
-+static void mpnic_get_base_stats(struct net_device *dev,
-+				 struct netdev_queue_stats_rx *rx,
-+				 struct netdev_queue_stats_tx *tx)
++		stop = u64_stats_read(&stats->twq.stop);
+ 	} while (u64_stats_fetch_retry(&stats->syncp, start));
+ 
+ 	tx->bytes = bytes;
+ 	tx->packets = packets;
++	tx->stop = stop;
++	tx->wake = wake;
+ }
+ 
+ static void mpnic_get_base_stats(struct net_device *dev,
+@@ -207,6 +216,8 @@ static void mpnic_get_base_stats(struct net_device *dev,
+ 
+ 	tx->bytes = base->tx.bytes;
+ 	tx->packets = base->tx.packets;
++	tx->stop = base->tx.stop;
++	tx->wake = base->tx.wake;
+ 
+ 	rx->bytes = base->rx.bytes;
+ 	rx->packets = base->rx.packets;
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
+index a61249d12a04..0d1ee66dd86c 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
+@@ -16,6 +16,8 @@ struct mpnic_base_stats {
+ 		u64 packets;
+ 		u64 bytes;
+ 		u64 dropped;
++		u64 stop;
++		u64 wake;
+ 	} tx;
+ 	struct {
+ 		u64 packets;
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+index 4bf640494115..35129fc149e2 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+@@ -68,6 +68,23 @@ static struct netdev_queue *mpnic_txring_txq(const struct net_device *dev,
+ 	return netdev_get_tx_queue(dev, ring->q_idx);
+ }
+ 
++static bool
++mpnic_maybe_stop_tx(const struct net_device *dev, struct mpnic_ring *ring)
 +{
-+	struct mpnic_net *mpn = netdev_priv(dev);
-+	struct mpnic_base_stats *base;
++	int res;
 +
-+	base = netdev_lock_dereference(mpn->stats.base, dev);
++	res = netif_txq_maybe_stop(mpnic_txring_txq(dev, ring),
++				   mpnic_desc_unused(ring), MPNIC_MAX_SKB_DESC,
++				   MPNIC_TX_DESC_WAKEUP);
++	if (!res) {
++		u64_stats_update_begin(&ring->stats.syncp);
++		u64_stats_inc(&ring->stats.twq.stop);
++		u64_stats_update_end(&ring->stats.syncp);
++	}
 +
-+	tx->bytes = base->tx.bytes;
-+	tx->packets = base->tx.packets;
-+
-+	rx->bytes = base->rx.bytes;
-+	rx->packets = base->rx.packets;
++	return !res;
 +}
 +
-+static const struct netdev_stat_ops mpnic_stat_ops = {
-+	.get_queue_stats_rx	= mpnic_get_queue_stats_rx,
-+	.get_queue_stats_tx	= mpnic_get_queue_stats_tx,
-+	.get_base_stats		= mpnic_get_base_stats,
-+};
-+
- /**
-  * mpnic_netdev_free - Free the netdev associated with mpnic
-  * @mpd: Driver specific structure to free netdev from
-@@ -176,6 +248,7 @@ struct net_device *mpnic_netdev_alloc(struct mpnic_dev *mpd)
- 	mpd->netdev = netdev;
+ static void mpnic_tx_doorbell(struct mpnic_ring *ring, __le64 *meta)
+ {
+ 	*meta |= cpu_to_le64(MPNIC_TWD_FLAG_REQ_COMPLETION);
+@@ -164,9 +181,7 @@ mpnic_tx_map(struct mpnic_ring *ring, struct sk_buff *skb, __le64 *meta)
+ 	ring->tail = tail;
  
- 	netdev->netdev_ops = &mpnic_netdev_ops;
-+	netdev->stat_ops = &mpnic_stat_ops;
- 	netdev->request_ops_lock = true;
+ 	/* Verify there is room for another packet */
+-	netif_txq_maybe_stop(mpnic_txring_txq(skb->dev, ring),
+-			     mpnic_desc_unused(ring), MPNIC_MAX_SKB_DESC,
+-			     MPNIC_TX_DESC_WAKEUP);
++	mpnic_maybe_stop_tx(skb->dev, ring);
  
- 	mpn = netdev_priv(netdev);
+ 	if (__netdev_tx_sent_queue(mpnic_txring_txq(skb->dev, ring),
+ 				   MPNIC_XMIT_CB(skb)->bytecount,
+@@ -204,9 +219,7 @@ static netdev_tx_t mpnic_xmit_frame_ring(struct sk_buff *skb,
+ 	if (skb_put_padto(skb, MPNIC_MIN_FRAME_LEN))
+ 		goto err_drop;
+ 
+-	if (!netif_txq_maybe_stop(mpnic_txring_txq(skb->dev, ring),
+-				  mpnic_desc_unused(ring), MPNIC_MAX_SKB_DESC,
+-				  MPNIC_TX_DESC_WAKEUP)) {
++	if (mpnic_maybe_stop_tx(skb->dev, ring)) {
+ 		mpnic_tx_flush_doorbell(ring);
+ 		return NETDEV_TX_BUSY;
+ 	}
+@@ -310,9 +323,13 @@ static void mpnic_clean_twq0(struct mpnic_napi_vector *nv, int napi_budget,
+ 	u64_stats_update_end(&cmpl->stats.syncp);
+ 
+ 	txq = mpnic_txring_txq(nv->napi.dev, ring);
+-	netif_txq_completed_wake(txq, total_packets, total_bytes,
+-				 mpnic_desc_unused(ring),
+-				 MPNIC_TX_DESC_WAKEUP);
++	if (!netif_txq_completed_wake(txq, total_packets, total_bytes,
++				      mpnic_desc_unused(ring),
++				      MPNIC_TX_DESC_WAKEUP)) {
++		u64_stats_update_begin(&cmpl->stats.syncp);
++		u64_stats_inc(&cmpl->stats.tcq.wake);
++		u64_stats_update_end(&cmpl->stats.syncp);
++	}
+ }
+ 
+ static void mpnic_commit_cq_head(struct mpnic_ring *cmpl)
+@@ -699,6 +716,7 @@ static void mpnic_aggregate_ring_twq_counters(struct mpnic_base_stats *base,
+ 					      struct mpnic_ring *twq)
+ {
+ 	base->tx.dropped += u64_stats_read(&twq->stats.twq.dropped);
++	base->tx.stop += u64_stats_read(&twq->stats.twq.stop);
+ }
+ 
+ static void mpnic_aggregate_ring_tcq_counters(struct mpnic_base_stats *base,
+@@ -706,6 +724,7 @@ static void mpnic_aggregate_ring_tcq_counters(struct mpnic_base_stats *base,
+ {
+ 	base->tx.packets += u64_stats_read(&tcq->stats.tcq.packets);
+ 	base->tx.bytes += u64_stats_read(&tcq->stats.tcq.bytes);
++	base->tx.wake += u64_stats_read(&tcq->stats.tcq.wake);
+ }
+ 
+ static void mpnic_aggregate_ring_rcq_counters(struct mpnic_base_stats *base,
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
+index 7b44cf700e5b..764e78918b8f 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
+@@ -89,10 +89,12 @@ struct mpnic_queue_stats {
+ 	union {
+ 		struct {
+ 			u64_stats_t dropped;
++			u64_stats_t stop;
+ 		} twq;
+ 		struct {
+ 			u64_stats_t packets;
+ 			u64_stats_t bytes;
++			u64_stats_t wake;
+ 		} tcq;
+ 		struct {
+ 			u64_stats_t packets;
 
 -- 
 2.52.0
