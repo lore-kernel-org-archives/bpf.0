@@ -1,20 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3758435A84
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 06:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBED343DA26
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 06:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791528141; cv=none; b=bK9HYsyod8tlbK1Oms9S+CiyUdN/b+4mPHrCn9A3Xi+HMxImjB8HlYD62Twt72SEYd+BqwxiT/2CMYcV725/C8bcse6kN1rgizkr9BeAB+Z5SnoidD6NS6ujEaETi7DGkSkt6wy9RfEseVuuk5ukL0LqxHrZQ0TJHnTAw6AEOok=
+	t=1791528147; cv=none; b=IZyXyhdsHFGH8ApgO23ZxZzPurSTkWEWB8kh2btctQGt1qGGRxUfLyANAexJBCnFxNm3XfbdUVl0BpqSJhinQ/ziRmpSa5a3Q9R97E8pN0VPd1Gb1ydIz1Ss+A/uekMWimmuOFScId8jldaB8FFyyq3f6a00uP2a6jj4tfpvuZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791528141; c=relaxed/simple;
-	bh=JcFgMTgLNxhIVgutjEwNLyy8GBt/Rbk57yQzJP9STyU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n7Xmj6HTQQIIsRlaZFQ1+EOokCyMAxEAb8NhUdM5qq1CZGAMYUtLBz8I/+MkLXMI1JMTgiEgQFf7/LgFxfTGWB+o4dwvg0Hn/7zPoIZ8DxSRQCY8Ceh9psiRRfwvl94Or1knQbWjvR/Dlbe5gpAkArl24YdzTf7yR7zaOW6bNS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	s=arc-20240116; t=1791528147; c=relaxed/simple;
+	bh=nlV794rurPXXw5E2RrJ2nNNGmT31STIxssYtelw2QZo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=h6wgeKWX2zgQY0XFNfHsNrPxZBUN+vx+yM7IHuBEk3rVTsimnywR9ZXhkBN3Zsz8IqwVpSjynXITTmJKQ12PGHCEHCiKLjuIRATcM6Wc2pZ2vwDxp3xlbd2/tUnW8yTKuqcZ/FGcmdHes6rjKlAev3byiwnLNPGsQGpU8cRTldM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 70687300E25898; Thu,  8 Oct 2026 23:42:06 -0700 (PDT)
+	id 86AD3300E258E9; Thu,  8 Oct 2026 23:42:11 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,10 +23,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 0/5] bpf: Follow up by-value struct and __int128 argument support
-Date: Thu,  8 Oct 2026 23:42:06 -0700
-Message-ID: <20261009064206.1238047-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 1/5] selftests/bpf: Test by-value __int128 kfunc arguments at an odd slot
+Date: Thu,  8 Oct 2026 23:42:11 -0700
+Message-ID: <20261009064211.1239307-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261009064206.1238047-1-yonghong.song@linux.dev>
+References: <20261009064206.1238047-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,69 +37,239 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-This is a follow-up to the series "bpf: Support by-value struct and
-__int128 arguments" [1], which placed kfunc arguments by the kernel
-calling convention in the x86-64 and arm64 JITs, and made the arm64
-trampoline place an argument aligned to 16 bytes: an __int128, or an
-aggregate holding one. This series covers what was left:
+This follows up the series "bpf: Support by-value struct and __int128
+arguments" [1]. The __int128 kfunc tests it added pass the __int128 at
+an even argument slot, after two u64s, or past the argument registers,
+where it lands on an even arm64 stack slot. So neither the AAPCS64 rule
+that rounds the register number up to an even one for an argument
+aligned to 16 bytes, nor the same rule for a stack slot, is exercised.
+Each leaves a hole the arm64 JIT has to open by moving the __int128 and
+every argument after it up a slot.
 
-  - The x86-64 trampoline. x86-64 starts such an argument passed on the
-    stack at a 16-byte aligned slot, which can leave an empty slot
-    before it, but the trampoline copied the stack arguments as if
-    there were none. A bpf program attached to such a function read the
-    wrong values from the empty slot on, and with fexit, where the
-    trampoline calls the traced function itself, that function got its
-    stack arguments one slot off as well.
+Add three kfuncs. Like the earlier ones, each weighs its arguments by
+argument slot, so that two eightbytes landing in each other's slots are
+caught as well as one landing in a hole:
 
-  - A trampoline on a BPF function. BPF code calls one with the
-    arguments in the BPF convention, one slot after another, but the
-    arm64 trampoline placed them by the kernel convention, and the
-    x86-64 fix above would have done the same.
+  - bpf_kfunc_call_test_i128_arg_odd(): the __int128 at an odd register
+    slot.
+  - bpf_kfunc_call_test_i128_arg_odd_many(): the same, with arguments
+    after it that arm64 shifts onto its stack, and a second __int128 at
+    an odd arm64 stack slot.
+  - bpf_kfunc_call_test_i128_arg_stack_hole(): a struct holding an
+    __int128 at an odd stack slot on both x86-64 and arm64, after x86-64
+    gives R9 back to an argument following a 16-byte struct.
 
-  - Tests with an __int128 at an odd slot, where arm64 leaves a register
-    or a stack slot empty. On arm64 such a kfunc gets BTF only with the
-    pahole patch [2], now in pahole master after v1.32, so these tests
-    were not part of [1].
+x86-64 has no register alignment rule and places the first two like the
+BPF convention, so they check that its JIT leaves them where they are.
+The last two need more than the five BPF argument registers and are only
+built with a compiler that supports stack arguments.
 
-Patch 1 adds the odd-slot kfunc tests. Patch 2 keeps a BPF function's
-trampoline arguments in the BPF convention, and patch 3 places the
-x86-64 trampoline arguments by the calling convention. Patches 4 and 5
-test trampolines on kernel functions and on BPF functions with an
-argument after a 16-byte aligned one.
+On arm64 the first two kfuncs get BTF only with the pahole patch
+"dwarf_loader: Skip the argument register the arm64 ABI leaves as a hole"
+[2], in pahole master after v1.32. An older pahole finds the argument
+after the __int128 in an unexpected register, x4 rather than x3, and
+leaves the function out of BTF, so the tests fail to load there.
 
-Tested on x86-64 with test_progs.
+Link: https://lore.kernel.org/bpf/20260912195156.980886-1-yonghong.song@l=
+inux.dev/ [1]
+Link: https://lore.kernel.org/dwarves/20260917164043.1577508-1-yonghong.s=
+ong@linux.dev/ [2]
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ .../selftests/bpf/progs/aggregate_arg_kfunc.c | 71 +++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 26 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        | 13 ++++
+ 3 files changed, 110 insertions(+)
 
-  [1] https://lore.kernel.org/bpf/20260912195156.980886-1-yonghong.song@l=
-inux.dev/
-  [2] https://lore.kernel.org/dwarves/20260917164043.1577508-1-yonghong.s=
-ong@linux.dev/
-
-Yonghong Song (5):
-  selftests/bpf: Test by-value __int128 kfunc arguments at an odd slot
-  bpf: Keep the BPF calling convention for a trampoline on a BPF
-    function
-  bpf, x86: Place trampoline arguments by the x86-64 calling convention
-  selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
-  selftests/bpf: Test trampoline args of a BPF function at an odd slot
-
- arch/x86/net/bpf_jit_comp.c                   | 189 +++++++++---------
- include/linux/bpf.h                           |   2 +
- kernel/bpf/btf.c                              |   1 +
- kernel/bpf/core.c                             |  12 ++
- kernel/bpf/verifier.c                         |   1 +
- .../selftests/bpf/prog_tests/tracing_struct.c |  96 ++++++++-
- .../selftests/bpf/progs/aggregate_arg_kfunc.c |  71 +++++++
- .../bpf/progs/tracing_struct_int128.c         |  45 +++++
- .../bpf/progs/tracing_struct_int128_tgt.c     |  68 +++++++
- .../bpf/progs/tracing_struct_int128_tracer.c  |  44 ++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  69 +++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  13 ++
- 12 files changed, 515 insertions(+), 96 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
-28_tgt.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
-28_tracer.c
-
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c b/to=
+ols/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
+index 52d3d5d53946..c87e886423f4 100644
+--- a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
+@@ -50,6 +50,27 @@ int aggregate_arg_kfunc_int128(struct __sk_buff *skb)
+ 	return 0;
+ }
+=20
++/*
++ * arm64 rounds the register number up to an even one for an argument
++ * aligned to 16 bytes, so it wants this __int128 in x2 and x3, leaving =
+x1
++ * empty, and the last argument in x4. The x86-64 ABI has no such rule.
++ */
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++int aggregate_arg_kfunc_int128_odd(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	u128 v =3D ((u128)a << 64) | b;
++
++	if (bpf_kfunc_call_test_i128_arg_odd(1, v, 2) !=3D 1 + 2 * b + 3 * a + =
+4 * 2)
++		return 1;
++
++	return 0;
++}
++
+ #endif /* __SIZEOF_INT128__ */
+=20
+ #if defined(__clang__) && defined(__BPF_FEATURE_STACK_ARGUMENT)
+@@ -131,6 +152,56 @@ int aggregate_arg_kfunc_split8(struct __sk_buff *skb=
+)
+=20
+ #ifdef __SIZEOF_INT128__
+=20
++/*
++ * The hole of aggregate_arg_kfunc_int128_odd, with arguments after it t=
+hat
++ * arm64 shifts through x5 to x7, where its JIT keeps the BPF stack slot=
+s,
++ * and onto its stack. The second __int128 then leaves the second arm64
++ * stack slot empty. x86-64 packs the eightbytes like the BPF convention=
+,
++ * so nothing moves there.
++ */
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++int aggregate_arg_kfunc_int128_odd_many(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	u128 v =3D ((u128)a << 64) | b;
++	u128 w =3D ((u128)~a << 64) | ~b;
++
++	if (bpf_kfunc_call_test_i128_arg_odd_many(1, v, 2, 3, 4, 5, 6, w) !=3D
++	    1 + 2 * b + 3 * a + 4 * 2 + 5 * 3 + 6 * 4 + 7 * 5 + 8 * 6 +
++	    9 * ~b + 10 * ~a)
++		return 1;
++
++	return 0;
++}
++
++/*
++ * x86-64 moves s to the stack and gives R9 back to the seventh argument=
+.
++ * w, aligned to 16 bytes by the __int128 it holds, then leaves a stack =
+slot
++ * empty before it: the fourth on x86-64, the second on arm64.
++ */
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++int aggregate_arg_kfunc_int128_stack_hole(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct prog_test_pair_arg s =3D { .lo =3D a, .hi =3D b };
++	struct prog_test_i128_arg w =3D { .v =3D ((u128)~a << 64) | ~b };
++
++	if (bpf_kfunc_call_test_i128_arg_stack_hole(1, 2, 3, 4, 5, s, 6, 7, w) =
+!=3D
++	    1 + 2 * 2 + 3 * 3 + 4 * 4 + 5 * 5 + 6 * a + 7 * b + 8 * 6 + 9 * 7 +
++	    10 * ~b + 11 * ~a)
++		return 1;
++
++	return 0;
++}
++
+ /*
+  * Both conventions pad the stack to align this __int128, and the BPF
+  * convention pads for neither, so both JITs move it up an eightbyte.
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 93847ca6293b..54a5fc39e0e2 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1040,6 +1040,29 @@ __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg(u64 a=
+, u64 b, __int128 v)
+ 	return a + b * 2 + (u64)v * 3 + (u64)((unsigned __int128)v >> 64) * 4;
+ }
+=20
++__bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_odd(u64 a, __int128 v, u64 =
+b)
++{
++	return a + (u64)v * 2 + (u64)((unsigned __int128)v >> 64) * 3 + b * 4;
++}
++
++__bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_odd_many(u64 a, __int128 v,=
+ u64 b, u64 c,
++						      u64 d, u64 e, u64 f, __int128 w)
++{
++	return a + (u64)v * 2 + (u64)((unsigned __int128)v >> 64) * 3 +
++	       b * 4 + c * 5 + d * 6 + e * 7 + f * 8 +
++	       (u64)w * 9 + (u64)((unsigned __int128)w >> 64) * 10;
++}
++
++__bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_stack_hole(u64 a, u64 b, u6=
+4 c, u64 d, u64 e,
++							struct prog_test_pair_arg s,
++							u64 f, u64 g,
++							struct prog_test_i128_arg w)
++{
++	return a + b * 2 + c * 3 + d * 4 + e * 5 + s.lo * 6 + s.hi * 7 +
++	       f * 8 + g * 9 + (u64)w.v * 10 +
++	       (u64)((unsigned __int128)w.v >> 64) * 11;
++}
++
+ __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_pad(u64 a, u64 b, u64 c, u6=
+4 d, u64 e,
+ 						 u64 f, u64 g, __int128 v)
+ {
+@@ -1763,6 +1786,9 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_deep)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ii)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd_many)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_stack_hole)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_pad)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_nofit)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_tail)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
+/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 67c02a421d13..a6a93c901416 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -66,6 +66,12 @@ struct prog_test_pair_arg {	/* 16 bytes: two argument =
+registers */
+ 	__u64 hi;
+ };
+=20
++#ifdef __SIZEOF_INT128__
++struct prog_test_i128_arg {	/* 16 bytes, aligned to 16 like its member *=
+/
++	__int128 v;
++};
++#endif
++
+ struct prog_test_ptr_arg {	/* 16 bytes, but holds a pointer */
+ 	void *p;
+ 	__u64 x;
+@@ -234,6 +240,13 @@ struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(i=
+nt a, int b) __ksym;
+ __u64 bpf_kfunc_call_test_pair_arg(__u64 a, struct prog_test_pair_arg s,=
+ __u64 b) __ksym;
+ #ifdef __SIZEOF_INT128__
+ __u64 bpf_kfunc_call_test_i128_arg(__u64 a, __u64 b, __int128 v) __ksym;
++__u64 bpf_kfunc_call_test_i128_arg_odd(__u64 a, __int128 v, __u64 b) __k=
+sym;
++__u64 bpf_kfunc_call_test_i128_arg_odd_many(__u64 a, __int128 v, __u64 b=
+, __u64 c,
++					    __u64 d, __u64 e, __u64 f, __int128 w) __ksym;
++__u64 bpf_kfunc_call_test_i128_arg_stack_hole(__u64 a, __u64 b, __u64 c,=
+ __u64 d,
++					      __u64 e, struct prog_test_pair_arg s,
++					      __u64 f, __u64 g,
++					      struct prog_test_i128_arg w) __ksym;
+ __u64 bpf_kfunc_call_test_i128_arg_pad(__u64 a, __u64 b, __u64 c, __u64 =
+d, __u64 e,
+ 				       __u64 f, __u64 g, __int128 v) __ksym;
+ #endif
 --=20
 2.53.0-Meta
 
