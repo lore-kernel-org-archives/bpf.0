@@ -1,141 +1,116 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4393264C2;
-	Fri,  9 Oct 2026 02:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BDF33BBBD
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 02:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791512722; cv=none; b=CxlU/Y2IskQL9kqtkpcjvCtxf/ULlfBSMJr/WcVC68rMLg3BAEBhlWXfEHa1+2R2B9McFipxTjPYazhoTIpdjDwec37F5UApk4XsOIWywTajqfzyJb8IjkO2TkxLOsgOPYboWZfwulxE3F3VOi7qkJskVQl3oBiCJagjGFbV+Sw=
+	t=1791513040; cv=none; b=So0wKphBonb9psnnptyynNmOXMMnS40F8TgRkMzppZu4JWxM7hjvfVsSVcdE9k6+5AkMoMQjXbsmONHG2GSFfKQ/nNmS50jwIeGQyvKYRdD29gMGWtpUo/PkSH3UWusWo71mzTolHuAXqY3i3IUEkZ33jKzCo06vfxo991AQ8Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791512722; c=relaxed/simple;
-	bh=+kgzwJLXtNYuinTXgM5BIMh3ahPWu6TJGtbmxw62iF4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kfMmHsep/jo1AeHKLwJJwggBJPmCvfOEY9Uxon4cy+pvflt1haLvjPOxCo8DO8xMw5jvKb/YrnpV/DDrGsVMxDlKTutf1lweVzHT/WJ0+m3SGBo3eIeSiBdQwpVojTzHey/IgejWrzEvuqNOwmCLPDyiZCug6d0eGtWSS2F9NOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=JrmXsnBk; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1791513040; c=relaxed/simple;
+	bh=dX/McukFhHVwfBJrYKGs9rVZ5eLM+2TcYjBQI0cGXi4=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=Yc/5wFJdf8la8BROydY9xqeSCxfzFHqL9jiFXNWNmu18D9Y8Ut2ly1N/aIT8NC25vc8UoVh9Tdyy5nz4sEWaIWGbP+Edr1xIsGPvvBPfU4Ur4YbUH6QLKBfiqgdnkhLiP6cKa4HzqpogBZAIpMFKGcD03hPhWLx33QUEVk10/EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VD0nrIij; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="JrmXsnBk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=zu
-	odmoDna2YP5TZPTMiSatU0+irviWPiLxuftQFzhoI=; b=JrmXsnBkda06bp+YB7
-	36WIW4tmum8N+IMC8YbYwxi+nzXx//o7iemJw8duhJq8TkVlMkodrfQ00L0GkwV1
-	wgfz+mJStsGsu554YdTv5xUkn3AbEx6MNTfVcXqyTdPLaMVHkaaDK8IvEXC4UgG2
-	gJJEjbw9gTHENqX0jXWQYcg4s=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wDHr41jUMhqi4mXDQ--.14934S2;
-	Fri, 09 Oct 2026 10:24:36 +0800 (CST)
-From: Yuan Chen <chenyuan@kylinos.cn>
-To: daniel@iogearbox.net,
-	bpf@vger.kernel.org
-Cc: yonghong.song@linux.dev,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	jolsa@kernel.org,
-	ihor.solodrai@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH v2 bpf-next] bpf: Claim the per-CPU send_signal irq_work before filling it
-Date: Fri,  9 Oct 2026 10:24:27 +0800
-Message-ID: <20261009022427.968304-1-chenyuan@kylinos.cn>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <DLUBI6OS1J07.Z498VKY5084C@gmail.com>
-References: <DLUBI6OS1J07.Z498VKY5084C@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VD0nrIij"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C211F000FF;
+	Fri,  9 Oct 2026 02:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791513037;
+	bh=UkJyRsQFMenCjoQw2Yxf4QhcjNvSExxEFhuS3IoM9lg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VD0nrIijhUmGDzqZD3KwGuakYG/7k8y/ygYUWEH5PvCj0nABUQSNnw5c1xfFITPYz
+	 v8Qw75fSlW/AgMd9xUPh9XvUQ2P8CtDooNkM5/4Hckc5LCaSyvJ4drGUb3IeDmrwBI
+	 cpDU0TZIpm3y9zSk8sw0ez6Ptp3cMSRxmptDdKX5rZ1HCbpq02LZf0RliOyO22YiDe
+	 RpNpF/2ZYKqRz6snQtSi1puoQNwXkUl0Lw+eRdK84CZdIyq4eVD92iWbIWU8XThmww
+	 3dFbuNjaMbsgEOtO5Ac5tKTqE0fpvDYf+nNW5b1V+dDvUnTu3Lb+EHJy/sw5JSAT19
+	 Qlg4NVN6mN35g==
+Message-ID: <sashiko-outbox-164727@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v2 1/2] net: netmem: document netmem and memory
+ provider design in comments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mina Almasry" <almasrymina@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261008023030.1089616-2-almasrymina@google.com>
+References: <20261008023030.1089616-1-almasrymina@google.com>
+ <20261008023030.1089616-2-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 09 Oct 2026 02:30:37 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDHr41jUMhqi4mXDQ--.14934S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZFy3Xry3Kw4kKrWUWFWUCFg_yoW5Zw17pF
-	ZxX3s5Cw4kJw4v9rnrWw4ku34Sk3Z5XrWUKrs5G34fKF45Xr1I9ry7tFy2vw1rJrZ2qas8
-	Zr4jvrW7Kr4Uur7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbR67UUUUU=
-Sender: chenyuan_fl@163.com
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQT5t2rIUGQ97wAA3P
 
-irq_work_is_busy() cannot see the per-CPU send_signal_work while
-it is being filled: the check only matches after irq_work_queue()
-has claimed the work. A concurrent caller therefore passes it, both
-callers race for the same irq_work, and the loser's signal is
-silently lost along with its task reference while the queued work
-runs with a mix of both callers' fields.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] net: skb_try_coalesce() mixes page and net_iov frags, deadlocking =
+tcp_recvmsg()
+--
 
-kprobe, tracepoint and perf_event programs exclude each other on
-the same CPU through bpf_prog_active, so for two callers to meet,
-one of the programs has to be a raw tracepoint or an fentry one.
-And since commit 87c544108b61 ("bpf: Send signals asynchronously
-if !preemptible") this path runs with IRQs enabled too, so a hard
-IRQ can interrupt the fill as well, not only an NMI. Found by code
-inspection and reproduced with a perf_event NMI program racing an
-fentry one.
+commit 9c60c371b94dbd05fff282258637a7b536efd5da
+Author: Mina Almasry <almasrymina@google.com>
 
-Claim the work through work->task itself: cmpxchg() it from NULL
-to the target task before touching the other fields, and set it
-back to NULL once the callback has consumed them. A context
-finding the work claimed returns the documented -EBUSY.
+net: netmem: document netmem and memory provider design in comments
 
-Fixes: 1bc7896e9ef4 ("bpf: Fix deadlock with rq_lock in bpf_send_signal()")
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
-Changes in v2:
-- Drop the irq_work_queue() return-value handling, which is dead
-  code: irq_work_single() clears IRQ_WORK_PENDING before the
-  callback runs and the claim is only released after it, so the
-  queue cannot fail while the claim is held.
-- Use work->task itself as the claim gate, cmpxchg()ing it from
-  NULL and back, so no extra field is needed.
-- Describe which program pairs can actually race and that a hard
-  IRQ can interrupt the fill since 87c544108b61, not only an NMI.
----
- kernel/trace/bpf_trace.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Clarify the netmem, memory provider, page_pool, and skb fragment design
+principles in header and code comments. It documents that all fragments in
+an skb must share the same backing memory type and adds a check to avoid
+coalescing skbs with different fragment memory types.
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 195f78db9bda..5465e7eba238 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -823,6 +823,7 @@ const struct bpf_func_proto bpf_task_pt_regs_proto = {
- 
- struct send_signal_irq_work {
- 	struct irq_work irq_work;
-+	/* The claim: NULL marks the slot free for the next caller. */
- 	struct task_struct *task;
- 	u32 sig;
- 	enum pid_type type;
-@@ -842,6 +843,8 @@ static void do_bpf_send_signal(struct irq_work *entry)
- 
- 	group_send_sig_info(work->sig, siginfo, work->task, work->type);
- 	put_task_struct(work->task);
-+	/* Release once the fields are consumed. */
-+	smp_store_release(&work->task, NULL);
- }
- 
- static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struct *task, u64 value)
-@@ -885,14 +888,14 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
- 			return -EINVAL;
- 
- 		work = this_cpu_ptr(&send_signal_work);
--		if (irq_work_is_busy(&work->irq_work))
-+		if (cmpxchg(&work->task, NULL, task))
- 			return -EBUSY;
- 
- 		/* Add the current task, which is the target of sending signal,
- 		 * to the irq_work. The current task may change when queued
- 		 * irq works get executed.
- 		 */
--		work->task = get_task_struct(task);
-+		get_task_struct(task);
- 		work->has_siginfo = siginfo == &info;
- 		if (work->has_siginfo)
- 			copy_siginfo(&work->info, &info);
--- 
-2.54.0
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 43ebe61c7fc48..2c42a218dcc00 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -6206,6 +6206,9 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk=
+_buff *from,
+>  	if (to->pp_recycle !=3D from->pp_recycle)
+>  		return false;
+> =20
+> +	/* All frags in an skb must have the same backing netmem memory type;
+> +	 * do not coalesce skbs with different frag memory types.
+> +	 */
+>  	if (skb_frags_readable(from) !=3D skb_frags_readable(to))
+>  		return false;
+> =20
 
+[Severity: High]
+Does this fully prevent mixing fragment types if the source skb has
+linear payload?
+
+If both skbs are unreadable, they pass this check. But if the source skb
+has linear payload, skb_try_coalesce() unconditionally converts the
+linear payload into a struct page fragment and appends it to the target skb:
+
+skb_try_coalesce() {
+    ...
+    if (skb_headlen(from) !=3D 0) {
+        ...
+        page =3D virt_to_head_page(from->head);
+        ...
+        skb_fill_page_desc(to, to_shinfo->nr_frags,
+                           page, offset, skb_headlen(from));
+        ...
+    }
+}
+
+Would this result in the unreadable target skb containing a mix of net_iov
+fragments and a struct page fragment?
+
+If this mixed skb reaches tcp_recvmsg_locked(), could it cause a permanent
+socket deadlock? An skb marked unreadable forces reads through
+tcp_recvmsg_dmabuf(), which aborts upon encountering a readable struct page
+fragment. This causes recvmsg to repeatedly return -EFAULT without advancing
+the offset.
+
+Additionally, on transmit paths, validate_xmit_unreadable_skb() only checks
+the first fragment. Could mixed skbs bypass these transmit checks and reach
+drivers, potentially causing issues if they incorrectly cast the page to
+net_iov?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261008023030.1089=
+616-1-almasrymina@google.com?part=3D1
