@@ -1,62 +1,62 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C7B4B2044
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129724C6F04
 	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542933; cv=none; b=MyTMLEQcI8XoFkLQIlRxFoizTWR6hhRELrmK4Q7Bmd0rFEgapuig8ap6dkjBnCByHX5xFdbLf4yEYtmwnqwM72lczxEsNIRgHiRuAj1TMrEUaBBqefk/GLLCucie3NX+aHqvAz+ZLOmDp4Cy9YgSZL8FRK4ihScdel7SLzzBKiw=
+	t=1791542935; cv=none; b=Rw4KvO6P7rrca1ZNjCkwppRcTkttYH9nsmo2rmouktKLuV+TT7QXrSHZXRGbRDGQLEW0QmIDbJMy9s7dxi6X5udAosAOPBFSbESHo3AYgjBV0Gpg46CExWZVBL/7LA15V/8N0N5T8XjG1y2D5unMaVr8jo2MR6tuuIg6MVQThMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791542933; c=relaxed/simple;
-	bh=B1qMlwjQFsUJGKweD4YU5BsmnPJtl8z2aM1VrE9ElbE=;
+	s=arc-20240116; t=1791542935; c=relaxed/simple;
+	bh=uQI7xSPqRXoszFdoZM6PnEE1Zw6sFSNRpO2wfknBPVs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uoJNhxHze3q5IaOcClFWKjtoezt3DVk3AqsSRMbf/rWQSSZud0TFszwdtBrEogVnW/7DgotZiZNJxouAkygAddkW1Y0Vf6Tl7sbVOlJLZtxnHWcEA+7TYFRALHgmHwMwp8eObuhI+xp+SNOmkSmfCNzrpcuJgZflueyWwaBaCRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTMW7c/3; arc=none smtp.client-ip=209.85.216.43
+	 MIME-Version:Content-Type; b=NW6mENKprl4XxM+Rr7dSVsT0FwnBQthmbNTHTs5tJh5QIweBYhrN0EWggKCH8Qp6yKWYjVq9ltSHAiTijsnf4zvYZC5uwlZ4CbHMqc+Vl58YRYLU+4SfJOLOaiO8YSDD0AIQd0Pv5diulJz0q9hqb0ua5/fq+oO5M1t+R3uN9U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a8GM0juY; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTMW7c/3"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-398a5aad413so4405932a91.3
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a8GM0juY"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cc502d509c0so2544213a12.2
         for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791542919; x=1792147719; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791542920; x=1792147720; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=nWhvNJXf35rFulqnEEswGH/47TRX+yQFzBBkHaTltJA=;
-        b=HTMW7c/3alvzeIdmoCTo6py8GYjPg1OGQTQQ+ty4omordSjzpHwd59vJ5OqX1yPtl1
-         ICGyLgTLIzrhIUeFu1hlUV625q1UQcYUTnJ9+DQA1UvyEVT4y8UMnCLP2VkunRLATQ61
-         fY+xvcL+ir2lxl6GGkSbF5nLFZLCwLly5DY0DnOmd2X524MT5yGtcORiCnRUcE5G5KIt
-         1d9WvvA2gCAnAL7+pe7hXPg8b6IVlT3LHDbMbfVaWM3cto5s90NItPW6GUCHBcae3jlU
-         gQQWTQGr9TItdV3yAKiBwIVchAAivgjer1YjOQZWlVcGXlTpXCnFMdlGCwZQ42bpSNrs
-         NQGw==
+        bh=YTyEPHY7hoUSbHXNJJkAXEk6wJpFT0+23x1bFbd/gL0=;
+        b=a8GM0juYOr4QQuxiSb0jEZjV5fAXxSgwF4I3d5odx85xbMuazmdOP1+yqLB2hGLjzP
+         YTn3WpJjXaSuMxbnfYxGWQpgidopMJRhh4DPz9WGj+2wWPLQH1qSiYnpShOBmrXylEOw
+         0w5UULP6QJb5YD3tmSaRzGpGFZKU4eHZ9cApNW9DrpW7pDn23coQqlVh13jwKjUCwc6M
+         sw1kRzfv6HCzKg8zth0N0keTB2ieHIE1l6bD2KiU22T/s+GUiTpnB68AirMVFztTJPJo
+         trMTNGqFCEtkXDozYmzeQB8Yyc1LfSHlgOSNbdeQJnstUYKYvzY94laRePCco3ycrj1o
+         BVKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791542919; x=1792147719;
+        d=1e100.net; s=20260707; t=1791542920; x=1792147720;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nWhvNJXf35rFulqnEEswGH/47TRX+yQFzBBkHaTltJA=;
-        b=UeQ6TnAveaDCBze5YEW5/ZJasAF1747J/TruHUxgJ3bR2uLQd+/5FnWhhIMjzUc3LC
-         dN++NfHe+Jd0/e3HVh439p556M+vAC/x8maHx5b2c4mAaVYrB+aekWifsxNQgTUu4vzX
-         81zauOA1RqDi/b5Gs7CY1teizb/QKiSvkgbGnEUqYJkPq8heOq5v1H6QjvXh/jcbkeWg
-         xPkg53ghjJLbqldKDWNrKvujStQbjGcJqioDpC5ZbHUdS6ieGtqVZ5drX5uno2mhr0xf
-         PXPma90oy/NM4zyHGSmPEa2HF+r9pOgFt0rj+bgvsCNObrrHUWn4v8i86aUh8JLm307H
-         9iEQ==
-X-Gm-Message-State: AFq9FYIIi+J4Qr8IF76UVN6ncsKOKNmYm8TpP+1HvKzWKkS7R+S3lj7v
-	6C0VE61sjqErJutT3jaFhFUAAEOsKAPNato2AS8xtbOni9EUT3jhPKk+86IhibTn
-X-Gm-Gg: AYBFou1tAgZbmDYUGHnzIIGK1xm6RiIjPOmolStA0HcQ8h1xdPSwmcRD+3eNSIkYhhP
-	GkV10GisM5IvCykHPvI5Rh4W0VuINSaMDIaYYtqHcjFK2yymim9CTuEUkJMjPxK2Ig9/OSFqYuD
-	XfU1LBLQJJenMWMzTrJguJNvQfbQQlhEtCoUVKBGGLjft5Dt0vxtMP4uAIEa0385ZgUoWpQamC2
-	69AaRcd6OaARM8Kd7dVQCV5IV1eNRv1gJW3EBUtt7ifW1RzRH/Abdxsg0ihnqURIwK21jKbtxlv
-	uUiuzhFiYEiBRE5sYJarXdFvAM8I0UBOvdWg2Ljf/ulEpgL6UU+alNU8UukaWLe07kx4V/HwUrd
-	rNfu0Nci65x6m0Nzk9pF2xTklQ3Wpl9r/Pe5G2AOxBQkWzwsOqHvU1IBGg4xZaS9NS6N/a02yCi
-	ijn7qnRx27+wCWFm2RIzFkq9KsllHHA/nKS/0BJ2D5sbatSBuHuVjPLPuE/fbQu1xxDYbzYokjI
-	F83h5585nPuvPmFrSVIvFEa6g==
-X-Received: by 2002:a17:90b:4ace:b0:3a8:59d3:530f with SMTP id 98e67ed59e1d1-3ab3a97a06bmr1581097a91.57.1791542919453;
-        Fri, 09 Oct 2026 03:48:39 -0700 (PDT)
+        bh=YTyEPHY7hoUSbHXNJJkAXEk6wJpFT0+23x1bFbd/gL0=;
+        b=y+hc3I9/xRG7gMiiOJqsJSliB7zOaxsitMrvaPREtRj7//L2lUVXc0TvYv75byr+26
+         2ln4NkoEB5Gxwht94gSC/tqVg0dEx+avTXw88M95duq61ZvFRj5PJ9armt+OUCo7f1qL
+         lPJE6VfNGsQ4fjLd5M+QWFLQqb4n+NIJdcuEsxldY0a+bxnyGqBRAJHQvXtNWqRPMiwY
+         6FXiTW+Vlw0jEZn/vDpFRtG1BKNr5FQP0P9hGZHx5WDbv7Bzkoix9KEvI66COK18grAq
+         6cAs+0AfJnxxPKAOOhGlaLR01FdjwN/RGi6kUxsa8Wryv+OLUiGxfwtx8apByLRBNA6Z
+         kz0Q==
+X-Gm-Message-State: AFq9FYLl8miW9wPTw4uakflYUUrFxVBCUMUpOuhRrXLbMGcwRatElNWX
+	cwRxQkrUy+ObeVAI7B538CwvlmTfianNjcEKEjspqyk55aCKyvBJUGYBtKydD59N
+X-Gm-Gg: AYBFou1ivrHm6/xa+0gpLwAeU23oYSaBMaV5AdQ3MDD6g6lhJZgM42V04SYlx9v4V+S
+	8shMkKbRShq5AOMzta/F+3wID2J2bVmj9jsNveYZN9jhh9cLJ57MHw3Fx+URKM1Y7wBvutbW1zC
+	yGV+wiLm1HXI8jGYsFkws4LmgTEe78p5V+BCJzl2b4Aczlj1HVK+uEnG8sAcx0IZHBW0tZIc3z5
+	3xP3vHitHvqAex71hZnsYpxbU86MYlWFqD/9sH9gnWO6RyCt/QVDrVkCHEaENA1Fj7rl0yhJcJq
+	yl6zHNK1lkVTKx0IftftidJ3AfOp96eOgQSvUoym9Vzb+CMMntEtb0IBdnPaR4QxjiR9pUw8G37
+	zPOUPIEG+fRr14rm3+oC8qwGthFwK0tIvPXXbItfTrP0+cSUOCZmitTv6swl6nhMxrLiEya7WZ9
+	M+QQ53Hi29h2QA3U0OeJVEzk1qlqPE6YWIgvp6AJrF2YOJzvJS8k43iIv18/2MDzNbIfvcyknSX
+	GYIqU60HTq7bv8=
+X-Received: by 2002:a17:90b:384a:b0:3a8:bb56:f1ef with SMTP id 98e67ed59e1d1-3ab3a2902a2mr1411696a91.2.1791542920079;
+        Fri, 09 Oct 2026 03:48:40 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.38
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 09 Oct 2026 03:48:39 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 28/51] bpf: add bpf_split_cur_state()
-Date: Fri,  9 Oct 2026 03:47:46 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-28-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 29/51] bpf: add bpf_same_memory_origin()
+Date: Fri,  9 Oct 2026 03:47:47 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-29-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,143 +82,94 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-SCEV widening needs an explicit checkpoint preserving the original
-loop-entry state, independently of ordinary state-cache heuristics.
-This commit extracts checkpoint creation logic from
-bpf_is_state_visited() into a separate utility function.
+When dealing with loops like:
+
+  for (ptr = ...; ptr < end_ptr; ptr += 8)
+    ...
+
+Scalar evolution needs to know if ptr and end_ptr identify a same
+memory location (possibly with different offsets). If they do,
+it is sound to attempt to infer iteration bounds for such a loop.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/states.c          | 95 ++++++++++++++++++++++++--------------------
- 2 files changed, 54 insertions(+), 42 deletions(-)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/verifier.c        | 49 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 1d0a0b64b1f3..711a4cb24c06 100644
+index 711a4cb24c06..6daa0c826f25 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1339,6 +1339,7 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
- int mark_chain_precision(struct bpf_verifier_env *env, int regno);
- 
- int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx);
-+int bpf_split_cur_state(struct bpf_verifier_env *env);
- int bpf_update_branch_counts(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
- 
- void bpf_clear_jmp_history(struct bpf_verifier_state *state);
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 2f6a7620eb72..b1e2daefc264 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -1262,11 +1262,61 @@ static void mark_all_scalars_imprecise(struct bpf_verifier_env *env, struct bpf_
- 	}
+@@ -1822,6 +1822,8 @@ struct arg_access_info
+ bpf_global_subprog_stack_access_bytes(struct bpf_verifier_env *env,
+ 				      struct bpf_insn *insn, int arg, int insn_idx);
+ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
++bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
++			    const struct bpf_reg_state *reg_b);
+ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		      struct cnum64 range, u16 base, u16 step);
+ bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_reg_state *b);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f8e6b40c2121..bf0722752e76 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17280,6 +17280,55 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 	return 0;
  }
  
--int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
-+int bpf_split_cur_state(struct bpf_verifier_env *env)
- {
-+	struct bpf_verifier_state *cur = env->cur_state, *new;
- 	struct bpf_verifier_state_list *new_sl;
-+	struct list_head *head;
-+	int insn_idx = cur->insn_idx;
-+	int err;
++/*
++ * Many checks done by this function are quite conservative.
++ * This is because main verification pass does not maintain
++ * enough information to track object identities for some
++ * of the interesting types, e.g. PTR_TO_MEM.
++ */
++bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
++			    const struct bpf_reg_state *reg_b)
++{
++	if (reg_a == reg_b)
++		return true;
++	/* Require matching flags and base types. */
++	if (reg_a->type != reg_b->type)
++		return false;
++	/* NULL can't be compared to some base+offset pointer. */
++	if (type_may_be_null(reg_a->type))
++		return false;
 +
-+	head = bpf_explored_state(env, insn_idx);
-+	new_sl = kzalloc_obj(struct bpf_verifier_state_list, GFP_KERNEL_ACCOUNT);
-+	if (!new_sl)
-+		return -ENOMEM;
-+	env->total_states++;
-+	env->explored_states_size++;
-+	update_peak_states(env);
-+	env->prev_jmps_processed = env->jmps_processed;
-+	env->prev_insn_processed = env->insn_processed;
++	switch (base_type(reg_a->type)) {
++	case PTR_TO_STACK:
++		return reg_a->frameno == reg_b->frameno;
++	case PTR_TO_MAP_VALUE:
++		if (reg_a->map_ptr != reg_b->map_ptr || reg_a->map_uid != reg_b->map_uid)
++			return false;
++		if (reg_a->id && reg_a->id == reg_b->id)
++			return true;
++		/*
++		 * A plain single-element array has one stable value address,
++		 * but not when BPF_F_INNER_MAP is set, see arraymap.c:array_map_meta_equal().
++		 */
++		if (reg_a->map_ptr->map_type == BPF_MAP_TYPE_ARRAY &&
++		    reg_a->map_ptr->max_entries == 1 &&
++		    !(reg_a->map_ptr->map_flags & BPF_F_INNER_MAP))
++			return true;
++		/*
++		 * The rules above can be simplified / relaxed if:
++		 * - fresh IDs would always be assigned for map-value lookups;
++		 * - direct map value loads would always have and ID of zero.
++		 */
++		return false;
++	case PTR_TO_MEM:
++	case PTR_TO_BUF:
++		return reg_a->id && reg_a->id == reg_b->id;
 +
-+	/* forget precise markings we inherited, see __mark_chain_precision */
-+	if (env->bpf_capable)
-+		mark_all_scalars_imprecise(env, cur);
-+
-+	bpf_clear_singular_ids(env, cur);
-+
-+	/* add new state to the head of linked list */
-+	new = &new_sl->state;
-+	err = bpf_copy_verifier_state(new, cur);
-+	if (err) {
-+		bpf_free_verifier_state(new, false);
-+		kfree(new_sl);
-+		return err;
++	default:
++		return false;
 +	}
-+	new->insn_idx = insn_idx;
-+	verifier_bug_if(new->branches != 1, env,
-+			"%s:branches_to_explore=%d insn %d",
-+			__func__, new->branches, insn_idx);
-+	err = maybe_enter_scc(env, new);
-+	if (err) {
-+		bpf_free_verifier_state(new, false);
-+		kfree(new_sl);
-+		return err;
-+	}
-+
-+	cur->parent = new;
-+	cur->first_insn_idx = insn_idx;
-+	cur->dfs_depth = new->dfs_depth + 1;
-+	bpf_clear_jmp_history(cur);
-+	list_add(&new_sl->node, head);
-+	return 0;
 +}
 +
-+int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
-+{
- 	struct bpf_verifier_state_list *sl;
--	struct bpf_verifier_state *cur = env->cur_state, *new;
-+	struct bpf_verifier_state *cur = env->cur_state;
- 	bool force_new_state, add_new_state, loop;
- 	int n, err, states_cnt = 0;
- 	struct list_head *pos, *tmp, *head;
-@@ -1594,44 +1644,5 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
- 	 * When looping the sl->state.branches will be > 0 and this state
- 	 * will not be considered for equivalence until branches == 0.
- 	 */
--	new_sl = kzalloc_obj(struct bpf_verifier_state_list, GFP_KERNEL_ACCOUNT);
--	if (!new_sl)
--		return -ENOMEM;
--	env->total_states++;
--	env->explored_states_size++;
--	update_peak_states(env);
--	env->prev_jmps_processed = env->jmps_processed;
--	env->prev_insn_processed = env->insn_processed;
--
--	/* forget precise markings we inherited, see __mark_chain_precision */
--	if (env->bpf_capable)
--		mark_all_scalars_imprecise(env, cur);
--
--	bpf_clear_singular_ids(env, cur);
--
--	/* add new state to the head of linked list */
--	new = &new_sl->state;
--	err = bpf_copy_verifier_state(new, cur);
--	if (err) {
--		bpf_free_verifier_state(new, false);
--		kfree(new_sl);
--		return err;
--	}
--	new->insn_idx = insn_idx;
--	verifier_bug_if(new->branches != 1, env,
--			"%s:branches_to_explore=%d insn %d",
--			__func__, new->branches, insn_idx);
--	err = maybe_enter_scc(env, new);
--	if (err) {
--		bpf_free_verifier_state(new, false);
--		kfree(new_sl);
--		return err;
--	}
--
--	cur->parent = new;
--	cur->first_insn_idx = insn_idx;
--	cur->dfs_depth = new->dfs_depth + 1;
--	bpf_clear_jmp_history(cur);
--	list_add(&new_sl->node, head);
--	return 0;
-+	return bpf_split_cur_state(env);
- }
+ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		      struct cnum64 range, u16 base, u16 step)
+ {
 
 -- 
 2.53.0
