@@ -1,142 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E613E1688;
-	Fri,  9 Oct 2026 12:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2263AD53F
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547985; cv=none; b=nZ6GPzxfpezYPDXvcGjtFGDrAlBgr9o3E3mX7pqFLPMRaNvGhB/zGwG48PRPw0D9oQY4Kg8j1O7tq7Y7EaYGTzwWuY3BxpamDN0mVY45/jlb4mZFUg083n6TCRKINZMt53h9I0fpkoaFBsnpZo6Qi+LiV5bn4Ube4Rp/tzp+WBI=
+	t=1791548464; cv=none; b=PtLNhJTp4v3jr4xazb2/OpbVWpcFolpsGwBh/JKTYh7oHHGf5tJuwp+8Ai66JFgP+kNHuYhXdll+LnAO2mkV+fFnzIidBYCFBxZxP8CX/V9Cyfkscp6X+nNOVoT2RggEzCT3pfwDGCBAU6/QDiNXXvkIohTttMLEJ4DuNoZp5Ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547985; c=relaxed/simple;
-	bh=HA6ElQkQmLxART6l0FM2pn+3b6US7P3oeOJ8fPUvL+0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=B861O/gEbnOsql4f7ldRhswEGTYqxeyHZmYfOFEHBjsDy9d1RTggTHL3oj10QucBZGwcTBsrn9zu0GxLAOE2uN2HElAdptwdVijNA5ZmEFHnwUCjNJ9H3PrI3cjvHVNhNWvNoqScqFCSCHlzOADJTCuFvO+xKQOpdhYPd91f24A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z8uhyrF4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791548464; c=relaxed/simple;
+	bh=MUn79RLViINWd56X9iqSJ33XnQ4X78ln2vdv6HtyOmk=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=CzDKlghEE97bCdv9rWP7xjxwdtCuBPGv8jLJiDmQp6JWxP1ZVDsXDICzQQzHrs9aicqKPfdJOBPGrACDXOJndqQgv0c9fztewzQMJbg+sGIM4/4x5TqwWBqOCTk9uuJnBf59eKDJfHbUd+uRgk3tPYo9Q2Sdcfpm6UCOVuILMQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JvDCNe7T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z8uhyrF4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4374B1F00893;
-	Fri,  9 Oct 2026 12:12:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JvDCNe7T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845E71F000FF;
+	Fri,  9 Oct 2026 12:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791547975;
-	bh=5DgSawWwcWZTCLSsTzXPu9dHG4TFqomzTXZm0QKw3jo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Z8uhyrF4VrpVPeiqWN2o/HjZw41C/IDZ67obtl6YYNHWK1es+/YTgGtT+AKfmZuft
-	 bHgLQuSxuHf4y0FXs3i+fvaC6umAs9uTlE+czX2QW9gRi86xk6JdrWmKQvIWp5c7/d
-	 tyV9/2BavTVh8yppT8cI1QPsTvQeiwPR/AviUgHClx5RscGvd12j4LzrTCgIjGz5J5
-	 ZErrYH2yCCpgey3N/NzUc/HrCII3oHIOuXNUoxoUT+sb5PadWAwXLvucqusF/awD6p
-	 OulF1/D9a+C7woVQ+2yS1bUgDpzr5GsobXE5ebyc5gmPfD2B1Cp0gT6M2MmCpJfPqB
-	 nM9vLKwY9p4ag==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
- kuba@kernel.org, pabeni@redhat.com, tushar.vyavahare@intel.com,
- kerneljasonxing@gmail.com, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>
-Subject: Re: [PATCH v2 net-next 12/14] selftests: xsk: share test case
- definitions with hardware runner
-In-Reply-To: <20261008114909.734364-13-maciej.fijalkowski@intel.com>
-References: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
- <20261008114909.734364-13-maciej.fijalkowski@intel.com>
-Date: Fri, 09 Oct 2026 14:12:52 +0200
-Message-ID: <875wzbqdh7.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1791548459;
+	bh=X3FCm5djJS/J1jOz7zZOYXzfvsTap79I2iF0U47L5Z0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=JvDCNe7TBTIpcxPiEYqFEeITsMQyCox/pFPhkPRFl/l0P06EpyWIouLRyzsDDTfr3
+	 NlvuLI+c7hPTZK4nQZWx1+gxs+PfdYginFEnppEWUGfed6RzVqQsB8mRLbe338uhHO
+	 2p8onzgmYjzseZ+tY9ZhFfECnbffdDgUH2TkriNqPQKrJaM3UyOcD8HhTVsGU9emJm
+	 IyMJjFcX2zlrO3TTJVyUwMkKkKjgCo8eX8BL+mMZEkN1ET/r+RQfQFciJCkpQ+e3cl
+	 rBbHH75jbPN/TvvJ1Ms6tAa6oCmm/ZCSN4x+rzfS8c5LARIyZrEKIbhVGUwrKKgLvx
+	 30eHdSn3Q558w==
+Message-ID: <sashiko-outbox-165521@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 4/6] mm/page_owner: add bpf_page_owner_get_nid() kfunc
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zhen Ni" <zhen.ni@easystack.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261009112308.240769-5-zhen.ni@easystack.cn>
+References: <20261009112308.240769-1-zhen.ni@easystack.cn>
+ <20261009112308.240769-5-zhen.ni@easystack.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 09 Oct 2026 12:20:59 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
 
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] bpf: arbitrary kernel memory read via page_owner_scan stack aliasi=
+ng
+- [High] bpf: bpf_page_owner_get_nid() oops on unmapped struct page
+--
 
-> Keep case names, functions, and hardware directions in an X-macro
-> header. The C test table keeps its order, so the test IDs do not
-> change. This allows the Python runner added by the next patch to read
-> the same definitions. Only the runner uses the hardware directions,
-> the DUT roles in which it runs a case; xskxceiver ignores them.
->
-> Install the header with selftests so the Python runner can read it
-> from an installed tree.
->
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
->  tools/testing/selftests/net/lib/Makefile      |  2 +-
->  .../testing/selftests/net/lib/xsk/test_xsk.h  | 46 ++-------------
->  .../net/lib/xsk/test_xsk_case_defs.h          | 57 +++++++++++++++++++
->  3 files changed, 62 insertions(+), 43 deletions(-)
->  create mode 100644 tools/testing/selftests/net/lib/xsk/test_xsk_case_defs.h
->
-> diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
-> index 066d011c478a..15353021cecf 100644
-> --- a/tools/testing/selftests/net/lib/Makefile
-> +++ b/tools/testing/selftests/net/lib/Makefile
-> @@ -28,7 +28,7 @@ TEST_GEN_FILES := \
->  	xdp_helper \
->  # end of TEST_GEN_FILES
->  
-> -TEST_INCLUDES := $(wildcard py/*.py sh/*.sh)
-> +TEST_INCLUDES := $(wildcard py/*.py sh/*.sh) xsk/test_xsk_case_defs.h
->  
->  include ../../lib.mk
->  
-> diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.h b/tools/testing/selftests/net/lib/xsk/test_xsk.h
-> index c37423030eb6..e1ffd054c8f7 100644
-> --- a/tools/testing/selftests/net/lib/xsk/test_xsk.h
-> +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.h
-> @@ -309,48 +309,10 @@ int worker_testapp_validate_rx(struct test_spec *test);
->  int worker_testapp_validate_tx(struct test_spec *test);
->  
->  static const struct test_spec tests[] = {
-> -	{.name = "SEND_RECEIVE", .test_func = testapp_send_receive},
-> -	{.name = "SEND_RECEIVE_2K_FRAME", .test_func = testapp_send_receive_2k_frame},
-> -	{.name = "SEND_RECEIVE_SINGLE_PKT", .test_func = testapp_single_pkt},
-> -	{.name = "POLL_RX", .test_func = testapp_poll_rx},
-> -	{.name = "POLL_TX", .test_func = testapp_poll_tx},
-> -	{.name = "POLL_RXQ_FULL", .test_func = testapp_poll_rxq_tmout},
-> -	{.name = "POLL_TXQ_FULL", .test_func = testapp_poll_txq_tmout},
-> -	{.name = "ALIGNED_INV_DESC", .test_func = testapp_aligned_inv_desc},
-> -	{.name = "ALIGNED_INV_DESC_2K_FRAME_SIZE", .test_func = testapp_aligned_inv_desc_2k_frame},
-> -	{.name = "UMEM_HEADROOM", .test_func = testapp_headroom},
-> -	{.name = "BIDIRECTIONAL", .test_func = testapp_bidirectional},
-> -	{.name = "STAT_RX_DROPPED", .test_func = testapp_stats_rx_dropped},
-> -	{.name = "STAT_TX_INVALID", .test_func = testapp_stats_tx_invalid_descs},
-> -	{.name = "STAT_RX_FULL", .test_func = testapp_stats_rx_full},
-> -	{.name = "STAT_FILL_EMPTY", .test_func = testapp_stats_fill_empty},
-> -	{.name = "XDP_PROG_CLEANUP", .test_func = testapp_xdp_prog_cleanup},
-> -	{.name = "XDP_DROP_HALF", .test_func = testapp_xdp_drop},
-> -	{.name = "XDP_SHARED_UMEM", .test_func = testapp_xdp_shared_umem},
-> -	{.name = "XDP_METADATA_COPY", .test_func = testapp_xdp_metadata},
-> -	{.name = "XDP_METADATA_COPY_MULTI_BUFF", .test_func = testapp_xdp_metadata_mb},
-> -	{.name = "ALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_aligned_inv_desc_mb},
-> -	{.name = "TOO_MANY_FRAGS", .test_func = testapp_too_many_frags},
-> -	{.name = "XDP_ADJUST_TAIL_SHRINK", .test_func = testapp_adjust_tail_shrink},
-> -	{.name = "TX_QUEUE_CONSUMER", .test_func = testapp_tx_queue_consumer},
-> -	/* Flaky tests */
-> -	{.name = "XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF", .test_func = testapp_adjust_tail_shrink_mb},
-> -	{.name = "XDP_ADJUST_TAIL_GROW", .test_func = testapp_adjust_tail_grow},
-> -	{.name = "XDP_ADJUST_TAIL_GROW_MULTI_BUFF", .test_func = testapp_adjust_tail_grow_mb},
-> -	{.name = "SEND_RECEIVE_9K_PACKETS", .test_func = testapp_send_receive_mb},
-> -	/* Tests with huge page dependency */
-> -	{.name = "SEND_RECEIVE_UNALIGNED", .test_func = testapp_send_receive_unaligned},
-> -	{.name = "UNALIGNED_INV_DESC", .test_func = testapp_unaligned_inv_desc},
-> -	{.name = "UNALIGNED_INV_DESC_4001_FRAME_SIZE",
-> -	 .test_func = testapp_unaligned_inv_desc_4001_frame},
-> -	{.name = "SEND_RECEIVE_UNALIGNED_9K_PACKETS",
-> -	 .test_func = testapp_send_receive_unaligned_mb},
-> -	{.name = "UNALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_unaligned_inv_desc_mb},
-> -	/* Test with HW ring size dependency */
-> -	{.name = "HW_SW_MIN_RING_SIZE", .test_func = testapp_hw_sw_min_ring_size},
-> -	{.name = "HW_SW_MAX_RING_SIZE", .test_func = testapp_hw_sw_max_ring_size},
-> -	/* Too long test */
-> -	{.name = "TEARDOWN", .test_func = testapp_teardown},
-> +#define XSK_TEST_CASE(_name, _func, ...) \
-> +	{ .name = #_name, .test_func = _func },
-> +#include "test_xsk_case_defs.h"
-> +#undef XSK_TEST_CASE
->  };
+commit 86f6fa9f642d356a9518f6b22fec24555b1e1568
+Author: Zhen Ni <zhen.ni@easystack.cn>
 
-Hmm. Maybe not for this revision, but I'm getting a vibe that we're
-mixing reusable operations with test receipes.
+mm/page_owner: add bpf_page_owner_get_nid() kfunc
 
-Ideally the operations would reside in the C-code, and the recipes in
-Python...
+This commit extracts the NUMA node lookup from read_page_owner() into a sha=
+red
+page_owner_get_nid() helper. It then exposes this helper to BPF programs vi=
+a a
+new bpf_page_owner_get_nid() kfunc.
+
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index eb420803a434a..43a722678accf 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+[ ... ]
+> @@ -711,6 +711,19 @@ void __dump_page_owner(const struct page *page)
+>  	page_ext_put(page_ext);
+>  }
+> =20
+> +/*
+> + * NUMA node of @page, bypassing PF_POISONED_CHECK() in page_to_nid() to
+> + * avoid VM_BUG_ON on poisoned pages; -1 for poisoned pages.
+> + */
+> +int page_owner_get_nid(struct page *page)
+> +{
+> +	memdesc_flags_t page_flags =3D READ_ONCE(page->flags);
+
+[Severity: High]
+Can this trigger a kernel oops on an unmapped struct page?
+
+The KF_SLEEPABLE flag on bpf_iter_page_owner_next() allows the BPF program =
+to
+be preempted or to explicitly sleep while holding the scan object.
+
+If memory is hot-removed while the program sleeps, the vmemmap region backi=
+ng
+the struct page pointer inside the scan object could be unmapped.
+
+When the program wakes up and calls bpf_page_owner_get_nid(), this raw
+READ_ONCE(page->flags) would dereference the potentially unmapped pointer a=
+nd
+crash the kernel.
+
+Should bpf_page_owner_get_nid() use copy_from_kernel_nofault() or BPF probe
+read semantics to safely probe the memory instead?
+
+> +
+> +	if (page_flags.f =3D=3D PAGE_POISON_PATTERN)
+> +		return -1;
+> +	return memdesc_nid(&page_flags);
+> +}
+> +
+
+> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
+> index 80693d4174077..907517a291443 100644
+> --- a/mm/page_owner_iter.c
+> +++ b/mm/page_owner_iter.c
+[ ... ]
+> @@ -165,4 +165,9 @@ __bpf_kfunc int bpf_page_owner_stack_snprint(depot_st=
+ack_handle_t handle,
+>  	return stack_depot_snprint(handle, buf, buf_size, 0);
+>  }
+> =20
+> +__bpf_kfunc int bpf_page_owner_get_nid(struct page_owner_scan *scan)
+> +{
+> +	return page_owner_get_nid(scan->page);
+> +}
+
+[Severity: High]
+Is there a risk of an arbitrary kernel memory read here?
+
+Because the scan object physically resides on the BPF program's stack (as
+returned by bpf_iter_page_owner_next()), a BPF program can overwrite the
+scan->page pointer with an arbitrary kernel address using normal BPF stack
+pointers (PTR_TO_STACK).
+
+If the program then passes the aliased PTR_TO_BTF_ID to
+bpf_page_owner_get_nid(), wouldn't this kfunc blindly dereference the forged
+pointer, bypassing verifier safety checks?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112308.2407=
+69-1-zhen.ni@easystack.cn?part=3D4
