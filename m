@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
+Received: from mta0.migadu.com (out-82.mta0.migadu.com [91.218.175.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDC82367DF
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 15:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F02336166A
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 15:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791559462; cv=none; b=ixP/18M3urwXqwqMB8lnB6nsNeGaBYHi9++OffMquImQchfaoh+lMaCJF6QRB/o75B758eX9dMRwGBd1nxWNQdEDTWBaz6wQTVJQJdMrGTlShqg6H6rzY3DggZ0H8EKPYbEKmDZlAMfEVqd1EQC9rNAv9kgUhEEMbJPRQyBN07A=
+	t=1791559573; cv=none; b=T0OpMdzrjjElWNWi4wddWTUkrGpBuqg9n1pvrSYPjdg7V/hqXeeTldfLkp8/BlczKf3DJKJo3JD0gHpAPjcQBQzJNvOqMMIOeuYPbljKiXIgxsg7TF8ISFNq86pO15+famiPvgfNRE48iYgQGrmkDjDsK2ImaQ54CHj+1JEtvAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791559462; c=relaxed/simple;
-	bh=K64JNADzp0N1kW7sFwREv2m/+V717OimyCitmYtVhgM=;
+	s=arc-20240116; t=1791559573; c=relaxed/simple;
+	bh=uQt9Wkm5K6X1ONckwJEa5XYHD9ehhkS60OVN3YbNSZE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LgNfm+CPCZObaJXhCZtRq2MgBHxENAuclkQEfFwhG0sI9Vq0IYlUY5t5K15ulqFL77RMXcBjJIcvGIvzTYanAtAVA8LY+nFwhlHdcfTAb4OJaJjGwv8U86E7GlOE5pSAJVqwzFVFT68efSGMN4fYshX+lBBXOfprLz+rabbLsEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g/+eUjZH; arc=none smtp.client-ip=91.218.175.159
+	 In-Reply-To:Content-Type; b=t1KFdpzdDbHqbNxg3CEfgYYXMPxjEH1WVm/jGeQZnZZsGtYW2fdkVNWLOx/mc1cvJhVLgybLyBxkSUUYaX8Fe1i7o15BStAEgWG1tN4vd8GQX44o6wwEeZkW6E/ycFVP9q2Qyhro9LvX2PoyapoHDUT3TEwkGIPmUSJJ8gJiw6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ouGWEFbB; arc=none smtp.client-ip=91.218.175.82
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g/+eUjZH"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ouGWEFbB"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=K64JNADzp0N1kW7sFwREv2m/+V717OimyCitmYtVhgM=;
+DKIM-Signature: a=rsa-sha256; bh=uQt9Wkm5K6X1ONckwJEa5XYHD9ehhkS60OVN3YbNSZE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791559457; v=1; x=1792164257;
- b=g/+eUjZH1we+3FJXrYJl9uhtAix6hoLturJVtd1gj9/CxFsy0GEiPWnUG5tNaXgfUPrnyZPE
- mny/ZsjM83fms0Vedssfx6jRXXac2j3j4iTeXJ3sJyIKhS5UdYwJ06DTkq+ntZ/gp/LZWYOGO3v
- d0mqaRjmlopiEQXJyzDoNTh8=
+ t=1791559570; v=1; x=1792164370;
+ b=ouGWEFbBiHvu6aGyxW4mjV1apnlD6gPiijhhc1dU1v0EQwp8hf96mN4JMRTb2n5GTeegD3rr
+ xmx+OhZo+S39S4BxRxekishM2KvAG68DKAYNVKgdqRWB0Vo6te/byLvI/CTMFg5Tb9yUmgGx0jG
+ bxGp6Nab/5cYK/zTKGNjMQmM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2a88ffb8c053162c;
-	Fri, 09 Oct 2026 15:24:15 +0000
-X-Mizu-Trace-ID: 2a88ffb8c053162c
+Received: by smtp.migadu.com with ESMTPS id 49a596fdf5ea5fa1;
+	Fri, 09 Oct 2026 15:26:04 +0000
+X-Mizu-Trace-ID: 49a596fdf5ea5fa1
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <859a751b-2af6-4dd5-be9b-368f697e347b@linux.dev>
-Date: Fri, 9 Oct 2026 17:24:15 +0200
+Message-ID: <1f517342-2123-4a51-8581-99d04108c0d9@linux.dev>
+Date: Fri, 9 Oct 2026 17:25:58 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -40,120 +40,64 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf-next v10 07/24] bpf: Verify an unwind through landing
  pads and epilogues
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261009041447.17092-1-yonghong.song@linux.dev>
- <20261009041523.26992-1-yonghong.song@linux.dev>
- <sashiko-outbox-164848@kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261009041523.26992-1-yonghong.song@linux.dev>
+ <59c036011bdc8e7bee4cdb78ab4ed375729668c9e99f62a82b7c156c80967bc9@mail.kernel.org>
 Content-Language: en-GB
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <sashiko-outbox-164848@kernel.org>
+In-Reply-To: <59c036011bdc8e7bee4cdb78ab4ed375729668c9e99f62a82b7c156c80967bc9@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 10/9/26 6:40 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] bpf: skipped exception pad verification for global subprogs that throw and unwind
-> - [Medium] bpf: Soft lockup in mark_callx_might_unwind() due to O(N^2) instruction traversal
-> --
->
-> commit 54596ff7029b639349bb84341497b649e38e027e
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Verify an unwind through landing pads and epilogues
->
-> This commit adds verifier support for tracking control flow through
-> unwind landing pads and epilogues. It calculates whether a subprogram
-> might unwind by propagating the might_unwind flag along the CFG,
-> and integrates backtracking through these new paths.
->
->> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
->> --- a/kernel/bpf/cfg.c
->> +++ b/kernel/bpf/cfg.c
->> @@ -716,6 +753,82 @@
-> [ ... ]
->
->> +static void mark_callx_might_unwind(struct bpf_verifier_env *env)
->> +{
->> +	struct bpf_insn *insns = env->prog->insnsi;
->> +	struct bpf_subprog_info *caller, *callee;
->> +	int i, j, len = env->prog->len;
->> +	struct bpf_func_ptr *ptrs;
->> +	bool changed;
->> +	u32 cnt;
->> +
->> +	if (!addr_taken_subprog_might_unwind(env))
->> +		return;
->> +
->> +	for (i = 0; i < len; i++)
->> +		if (bpf_is_callx(&insns[i]))
->> +			bpf_find_containing_subprog(env, i)->might_unwind = true;
->> +
->> +	do {
->> +		changed = false;
->> +		for (i = 0; i < len; i++) {
->> +			caller = bpf_find_containing_subprog(env, i);
->> +			if (caller->might_unwind)
->> +				continue;
-> [Severity: Medium]
-> Could this loop cause a CPU soft lockup for very large BPF programs?
->
-> The loop iterates up to len times (which can be up to 1 million) and
-> repeatedly calls bpf_find_containing_subprog(), which performs a binary
-> search. Because this propagates upward through the call graph, the do-while
-> loop could execute many times (e.g., up to 256 for the maximum call depth).
->
-> Without a cond_resched(), this might stall the CPU in kernel space for an
-> extended period.
-
-It is a little bit premature to add cond_resched(). If later on, we have
-such a case, we can add then.
-
->
-> [ ... ]
+On 10/9/26 7:13 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Verify an unwind through landing pads and epilogues
+> TL;DR: Nit only: unwind_frames() sets r0 to zero in two calls;
+> __mark_reg_const_zero() could do it in one, as process_iter_next_call() does,
+> and the explanatory comment could go. No bug.
 >
 >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 0cf30220b777..1553c7d5bbdb 100644
 >> --- a/kernel/bpf/verifier.c
 >> +++ b/kernel/bpf/verifier.c
->> @@ -19464,8 +19602,14 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
->>   				cur_func(env)->no_stack_arg_load = true;
->>   			if (bpf_is_callx(insn))
->>   				return check_func_callx(env, insn, &env->insn_idx);
->> -			if (insn->src_reg == BPF_PSEUDO_CALL)
->> -				return check_func_call(env, insn, &env->insn_idx);
->> +			if (insn->src_reg == BPF_PSEUDO_CALL) {
->> +				int call_idx = env->insn_idx;
->> +
->> +				err = check_func_call(env, insn, &env->insn_idx);
->> +				if (err)
->> +					return err;
-> [Severity: High]
-> If a global subprogram has the might_throw flag set, check_func_call()
-> simulates the exception exit and returns PROCESS_BPF_EXIT (which is 1).
+> [ ... ]
 >
-> Because err is positive, does the check here mistakenly return early,
-> bypassing the subsequent call to process_global_call_unwind()?
+>> @@ -19203,6 +19212,135 @@ enum {
+> [ ... ]
+>> +static int unwind_frames(struct bpf_verifier_env *env, bool *do_print_state)
+>> +{
+> [ ... ]
 >
-> If the subprogram can both throw and unwind, its landing pad might never be
-> visited by the verifier, potentially leading to a dead code sanitization trap
-> at runtime.
+>> +	/*
+>> +	 * The call clobbered r1-r5, and r0 holds the zero the fixups put
+>> +	 * there. Mark r0 unknown first: the known-zero helper keeps a NOT_INIT
+>> +	 * type.
+>> +	 */
+>> +	clear_caller_saved_regs(env, cur_regs(env));
+>> +	mark_reg_unknown(env, cur_regs(env), BPF_REG_0);
+>> +	mark_reg_known_zero(env, cur_regs(env), BPF_REG_0);
+> this isn't a bug, but could this use __mark_reg_const_zero(env,
+> &cur_regs(env)[BPF_REG_0]), as process_iter_next_call() does, and drop
+> the part of the comment that explains why two calls are needed?
+>
+> unwind_frames() sets r0 to a scalar zero in two steps here:
+> mark_reg_unknown() sets the SCALAR_VALUE type, then mark_reg_known_zero()
+> sets the value.  __mark_reg_const_zero() already sets the type to
+> SCALAR_VALUE, the value to known zero, and precise to !bpf_capable in one
+> call.  process_iter_next_call() and check_kfunc_call() both use it for
+> r0 this way.
 
-In bpf_check(), we have
-         if (env->cleanup_info_cnt || bpf_prog_may_unwind(env)) {
-                 ret = bpf_exc_check_prog(env);
-                 if (ret)
-                         goto skip_full_check;
-         }
-where bpf_prog_may_unwind(env) is added in later patch.
-With the above 'if' condition, bpf_throw() will be rejected
-if (env->cleanup_info_cnt || bpf_prog_may_unwind(env)) is true.
+Okay, will do (with better code) in the next revision.
 
 >
->> +				return process_global_call_unwind(env, call_idx, do_print_state);
->> +			}
->>   			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
->>   				return check_kfunc_call(env, insn, &env->insn_idx);
->>   			return check_helper_call(env, insn, &env->insn_idx);
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37884246994
 
