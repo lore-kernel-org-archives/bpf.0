@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-31.mta0.migadu.com [91.218.175.31])
+Received: from mta1.migadu.com (out-112.mta1.migadu.com [95.215.58.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC895012B5
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C74A5013D9
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791577714; cv=none; b=HVcoqmrW/kauojeyemtVb0DqVzunsVO0/Ua62sKxdTEUfOqCg5CCNKu9H0rho5BMjsZe4fyncqn925CPmqj5QK63HYIAJGbb6a8tTE5thpfE3B1ercbwRbdo+MbFbhTFcUT+LF3ENL8yoda59D7jFdDJiu3ZKW3zRO5/+dRqLeg=
+	t=1791577716; cv=none; b=adOxY2fc5oBT7ZfUi+A2Cl9Tq5NXLzJR0UfHq0zKA7c/p+F+6/oixA0YW1vCZJPzn6kr357ncb2Oz+S5hy+W6jN7yJdfoQRLVkTRnaNnDZ05DxeBQdYn5lJcGB6yn/VygFWSt5HhrHOiy2ClZRZSQv5S2rOIyQWdrM/6+edFu84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791577714; c=relaxed/simple;
-	bh=i1b57pRh/t8JW15i8kWsi10Trxaun8ksv67rkEKKzeQ=;
+	s=arc-20240116; t=1791577716; c=relaxed/simple;
+	bh=Z/pnQxaO0ZsDQbWqF4dfR/oPgnGmum+cqmjOqjzJDc0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KjB6+vURhN66MnVOZZQfDsn1JyDjYa7MzCBAKSM5hXJKtmvGYs2fgBvgiKZ+ySL43C2qry4x301ouIIv5UqMv+OEfZZeXM/JBhH2flqDmwYZKCotshdE2vKGwvQqIJra9eVKn6gmpZh4PvsX6sKvUWh3TkVKBYhfdRSXaCNOCms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lJMWTqVn; arc=none smtp.client-ip=91.218.175.31
+	 MIME-Version; b=Sq72cRE//1F5b/Fr4kgggkOF7HCAm8RZ3RJYvpR7xDlpH5MERV1LBMwOMfWT3t4qXhbAqaR2qeQ9LZcZ8mn0PPzbIlLhel7FVb/YB4W3P0CxeFsBWxEpui99uHb9d0vwvXGy8ugYWijYpEU6TYaH+fSVyBA9jvPSgKcCqssqbe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qvUd8ZIn; arc=none smtp.client-ip=95.215.58.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lJMWTqVn"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qvUd8ZIn"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=i1b57pRh/t8JW15i8kWsi10Trxaun8ksv67rkEKKzeQ=;
+DKIM-Signature: a=rsa-sha256; bh=Z/pnQxaO0ZsDQbWqF4dfR/oPgnGmum+cqmjOqjzJDc0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791577707; v=1; x=1792182507;
- b=lJMWTqVnFESnlDMNccpnOIuqrBKmdug85Uzvqjc4784Y8u+CPF/HMFM/lLI+9OUMwuvpoS5j
- 7qMs6kg4ZYF5l4qO1nMWD4n/AHFLVt+cigzwIiZzxI9DdwMq4ssE2fzTJSgMK+6rq3v96/dbMmv
- mH4ZQxBvBMidwKZwpFXaB+e0=
+ t=1791577710; v=1; x=1792182510;
+ b=qvUd8ZInFipgIX5umrsV2EEtWgyj476uh5/8kvmTOCx0BX/hsHoDLkupXZ9DLMEeY39y2DCK
+ zVShJRs6+ht6Ia2y7yptt01UhKhkx0PUIe6k7+wgJci1BN8L9VsESqIuQEe9uUTyEnMVAF3FsYH
+ qUmSyc/BDb+ZszIP7q9SwaRo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 403d3f4752775e56;
-	Fri, 09 Oct 2026 20:28:27 +0000
-X-Mizu-Trace-ID: 403d3f4752775e56
+Received: by smtp.migadu.com with ESMTPS id fd81eeedee0a48e4;
+	Fri, 09 Oct 2026 20:28:30 +0000
+X-Mizu-Trace-ID: fd81eeedee0a48e4
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 03/11] bpf: Append complete reference states
-Date: Fri,  9 Oct 2026 13:27:50 -0700
-Message-ID: <20261009202759.50520-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 04/11] bpf: Separate reference removal from descendant invalidation
+Date: Fri,  9 Oct 2026 13:27:51 -0700
+Message-ID: <20261009202759.50520-5-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261009202759.50520-1-ihor.solodrai@linux.dev>
 References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
@@ -55,135 +55,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Reference acquisition exposes an uninitialized entry for each caller to
-fill after insertion.
+Reference release removes a program-owned reference and invalidates all
+values derived from it in one operation.
 
-Accept a complete reference entry and return its id after insertion. Keep
-lock and IRQ accounting and acquisition diagnostics in their callers.
-Take the target state directly so acquisition can also serve queued
-callback states.
+Frame-owned values will need the same descendant walk without object
+release semantics. Separate the walk from reference removal and pass its
+diagnostic reason explicitly. Keep object-reference removal and the
+existing release reason in release_reference().
 
 No functional change.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/verifier.c | 73 +++++++++++++++++++++++--------------------
- 1 file changed, 39 insertions(+), 34 deletions(-)
+ kernel/bpf/verifier.c | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8d6812fee0c9..62b991f3c39a 100644
+index 62b991f3c39a..88b86f658e4a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1497,51 +1497,53 @@ static int grow_stack_arg_slots(struct bpf_verifier_env *env,
+@@ -10668,8 +10668,9 @@ static int idstack_pop(struct bpf_idmap *idmap)
+ 	return idmap->map[--idmap->cnt].old;
+ }
+ 
+-/* Release id and objects derived from it iteratively in a DFS manner */
+-static int release_reference(struct bpf_verifier_env *env, int id)
++/* Invalidate id and values derived from it iteratively in a DFS manner. */
++static int invalidate_reference(struct bpf_verifier_env *env, int id,
++				enum bpf_diag_mod_reason reason)
+ {
+ 	u32 mask = (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+@@ -10684,11 +10685,6 @@ static int release_reference(struct bpf_verifier_env *env, int id)
+ 	if (err)
+ 		return err;
+ 
+-	if (find_reference_state(vstate, id)) {
+-		err = release_reference_nomark(env, id);
+-		WARN_ON_ONCE(err);
+-	}
+-
+ 	while ((id = idstack_pop(idstack))) {
+ 		/*
+ 		 * Child references are inaccessible after parent is released,
+@@ -10724,14 +10720,12 @@ static int release_reference(struct bpf_verifier_env *env, int id)
+ 
+ 				if (reg->dynptr.first_slot)
+ 					dyn_stack--;
+-				bpf_diag_record_scrub(env, &dyn_stack[0].spilled_ptr,
+-						      BPF_DIAG_MOD_REF_RELEASE);
+-				bpf_diag_record_scrub(env, &dyn_stack[1].spilled_ptr,
+-						      BPF_DIAG_MOD_REF_RELEASE);
++				bpf_diag_record_scrub(env, &dyn_stack[0].spilled_ptr, reason);
++				bpf_diag_record_scrub(env, &dyn_stack[1].spilled_ptr, reason);
+ 				invalidate_dynptr(env, dyn_stack);
+ 				continue;
+ 			}
+-			bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_REF_RELEASE);
++			bpf_diag_record_scrub(env, reg, reason);
+ 			if (!stack || stack->slot_type[BPF_REG_SIZE - 1] == STACK_SPILL)
+ 				mark_reg_invalid(env, reg);
+ 		}));
+@@ -10740,6 +10734,17 @@ static int release_reference(struct bpf_verifier_env *env, int id)
  	return 0;
  }
  
--/* Acquire a pointer id from the env and update the state->refs to include
-- * this new pointer reference.
-- * On success, returns a valid pointer id to associate with the register
-- * On failure, returns a negative errno.
-+/*
-+ * Append @ref to @state->refs. Return its id, or a negative errno.
-  */
--static struct bpf_reference_state *acquire_reference_state(struct bpf_verifier_env *env, int insn_idx)
-+static int acquire_reference_state(struct bpf_verifier_state *state,
-+				   const struct bpf_reference_state *ref)
- {
--	struct bpf_verifier_state *state = env->cur_state;
- 	int new_ofs = state->acquired_refs;
- 	int err;
- 
- 	err = resize_reference_state(state, state->acquired_refs + 1);
- 	if (err)
--		return NULL;
--	state->refs[new_ofs].insn_idx = insn_idx;
--
--	return &state->refs[new_ofs];
-+		return err;
-+	state->refs[new_ofs] = *ref;
-+	return ref->id;
- }
- 
- static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int parent_id)
- {
--	struct bpf_reference_state *s;
-+	struct bpf_reference_state ref = {
-+		.type = REF_TYPE_PTR,
-+		.id = ++env->id_gen,
-+		.insn_idx = insn_idx,
-+		.parent_id = parent_id,
-+	};
-+	int id;
- 
--	s = acquire_reference_state(env, insn_idx);
--	if (!s)
--		return -ENOMEM;
--	s->type = REF_TYPE_PTR;
--	s->id = ++env->id_gen;
--	s->parent_id = parent_id;
--	bpf_diag_record_ref_acquire(env, insn_idx, s->id);
--	return s->id;
-+	id = acquire_reference_state(env->cur_state, &ref);
-+	if (id >= 0)
-+		bpf_diag_record_ref_acquire(env, insn_idx, id);
-+	return id;
- }
- 
- static int acquire_lock_state(struct bpf_verifier_env *env, int insn_idx, enum ref_state_type type,
- 			      int id, void *ptr)
- {
- 	struct bpf_verifier_state *state = env->cur_state;
--	struct bpf_reference_state *s;
-+	struct bpf_reference_state ref = {
-+		.type = type,
-+		.id = id,
-+		.insn_idx = insn_idx,
-+		.ptr = ptr,
-+	};
++static int release_reference(struct bpf_verifier_env *env, int id)
++{
 +	int err;
- 
--	s = acquire_reference_state(env, insn_idx);
--	if (!s)
--		return -ENOMEM;
--	s->type = type;
--	s->id = id;
--	s->ptr = ptr;
-+	err = acquire_reference_state(state, &ref);
-+	if (err < 0)
-+		return err;
- 
- 	state->active_locks++;
- 	state->active_lock_id = id;
-@@ -1554,18 +1556,21 @@ static int acquire_lock_state(struct bpf_verifier_env *env, int insn_idx, enum r
- static int acquire_irq_state(struct bpf_verifier_env *env, int insn_idx)
++
++	if (find_reference_state(env->cur_state, id)) {
++		err = release_reference_nomark(env, id);
++		WARN_ON_ONCE(err);
++	}
++	return invalidate_reference(env, id, BPF_DIAG_MOD_REF_RELEASE);
++}
++
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
  {
- 	struct bpf_verifier_state *state = env->cur_state;
--	struct bpf_reference_state *s;
-+	struct bpf_reference_state ref = {
-+		.type = REF_TYPE_IRQ,
-+		.id = ++env->id_gen,
-+		.insn_idx = insn_idx,
-+	};
-+	int id;
- 
--	s = acquire_reference_state(env, insn_idx);
--	if (!s)
--		return -ENOMEM;
--	s->type = REF_TYPE_IRQ;
--	s->id = ++env->id_gen;
-+	id = acquire_reference_state(state, &ref);
-+	if (id < 0)
-+		return id;
- 
--	state->active_irq_id = s->id;
-+	state->active_irq_id = id;
- 	bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_IRQ, true,
- 				bpf_diag_irq_depth(state));
--	return s->id;
-+	return id;
- }
- 
- static void release_reference_state(struct bpf_verifier_state *state, int idx)
+ 	struct bpf_func_state *unused;
 -- 
 2.56.0
 
