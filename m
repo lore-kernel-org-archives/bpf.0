@@ -1,234 +1,287 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E208E4DAF86;
-	Fri,  9 Oct 2026 14:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791554481; cv=fail; b=HRsNDRR6BPoVOGCS+1qxyYaSKm84EDkca/iZSPtJmkFlhEKwIeTJb0+MDhwOzSPM8oTVG2WK25+j4MCTFRoj2H8WVOQ8ODL2kSSD0w/HITMJ2qPvj7bI+Ltsh1Qi9Ivb1xiR/KUUySvbhxPlAh0ixfVP+gHF83tNFqu9wSURE3Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791554481; c=relaxed/simple;
-	bh=vVmaIjXfIEHXo9JcGhA4LNCJF9XkfbugcxNEiKkRag8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=QfLfbkNhp05Fj4VBzni7H7Go1VLv2sfiLvVY/kEiiF66h2TA6H9V+IoQjsYFhunQ6g8L7Z+stmHXQd/qYPJYrTMlWieJQYmShgE2yzninq6/r5eWO51ON62WbhJ5BWef9vNoW584yufkC33URklJnVnbuyRAzGxxQJzCq+fUrl0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LR5WxDzn; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=FjtMP1zr; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7DA3D9DDB;
+	Fri,  9 Oct 2026 14:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791556896; cv=none; b=OkmBmEh4JXqVpb/l+GWY+PqqPE0gh8evLRVOpeYzWRl5nf6lpj95pllEhSCcRmlO8GRKkWsKqRRTIx2I6bJiya0jrXVnIzDdf4Q5UXgKXfqq8EsFzTMjqZzzvXa68D9QMJdO1thauyu8gtHzTsSHKOSt5qgMZjnBPCt7iYgqM88=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791556896; c=relaxed/simple;
+	bh=FxjMmnD+gLqBuGzQ+pTCHPesOvc1TvitPvcQKadYu/k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aNw1cp1lTOXyLuEortC27EJjYMIEahO9XGWTVp6Y9SnopzsmLZLkw/GXLp4Fz9mKNYDgP78pIUwumv+2cheMQ+0x3oIIAq8WKCsx1E+q5GTaZlOoc65jcBpdAUBmgoxEKix2YbsyBNj/x9SH5wufGZaj90pANA2EIWo72I/JAq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=bPWiD0ta; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LR5WxDzn";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="FjtMP1zr"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 699Du2Gw3159836;
-	Fri, 9 Oct 2026 14:01:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=O5393Nv5F96OIeGRoIbJIOEyBmw9sIkWqCr+FhSxzj8=; b=
-	LR5WxDzn0Wq7AxvTM5/flEkzoFNn5TrQAOB8AuDAc9ymlKOgvCd2fT1scw9owbTJ
-	9PbtaFrTcU72BAAw2RItq1356Xn8nxYonPRvrvNwDobv8UpSa9VFO28UGuYxSW2g
-	Y4t35SHvjh2VxHO6YicBTaPRqc3sUloAnfj1yayXt3dKPyRMKqIyFSj9OPLAp8DI
-	fyYp2lBSbGN8XKvlbmlYuEUWAIMqC5RK+z8YoStnfzsE9SGtRceDUB/zO4duG7++
-	x51VlHx8Ask3Wn1i9noQv0oFM94OdrG5uAqBJsPIVZ9meZe5wp6hTooGy4LOFkh2
-	IHR6R4QOyjzQc2QTH7+EOw==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h5xeyb9ax-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 09 Oct 2026 14:01:15 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 699DpApD037103;
-	Fri, 9 Oct 2026 14:01:14 GMT
-Received: from ch4pr04cu002.outbound.protection.outlook.com (mail-northcentralusazon11013055.outbound.protection.outlook.com [40.107.201.55])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4h5xexesx5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 09 Oct 2026 14:01:14 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Gjg5maBckjjOUrOlS8GR2HbTQ5/ie4dQen0f3AG9hGWxN0JryOVrwSt2INGCBTmMVXAl/eN67hiBjFu7UUsEyXimiUMlFDW6FSsvovUvti6V+CLXN7/H801l8X44jvTIkXa8UTdMieENHnO0nbDcVr676oC++jqbihqVqu3pvsGkYWlHglmIpTIDHDjcSv735TKyHyrfAb1qtsYQlse97va7izrLt/7ET/LhDJeQ3sYxHGzd2UsMenmz8umQYlSTLqqlQd+mTZ5KP6XjMGVBy31XnnTe821wfCjaXh2ZQd8StRnEpyTD/62JVGJiGZ1ZwWTrBXFyaP0tGoFD1ekT3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O5393Nv5F96OIeGRoIbJIOEyBmw9sIkWqCr+FhSxzj8=;
- b=mb4mB0sBfya3mb1XIrYjPz3tdRiT3t2JKdlE2dN/aOXcSyaDZnf43i6SudPNt4CMDh8HAagb6SviQ3reK6zEZzTi6jQ7EWwXbYSwyhycuHrM5MR5DK9v4wgov9W5EEmXNhcU8+7nkS3kjzv3OazwtFzXG1aXRoC0/lGCOkSWYls/XC+4RdMjNzUweFA8W9Y8C3sHcVlS3maHP+d9+rVyTI2lHi0PI0dzzhA93rO+kJb7sTerIsEfonKuwI/iQjgBGwr9SETm4kM4O92aYLZWeCUMkRoeUWUYiKsbns8bXV4hnjEEeuWydBpJhAi1GkCZ6yJjAXTc2s3F+c6LbMDMfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O5393Nv5F96OIeGRoIbJIOEyBmw9sIkWqCr+FhSxzj8=;
- b=FjtMP1zrSkHgIGgu1z+bfUkh3MIn8OHimfr0JmxWwZQrqlXzfZnccc75qY+ey32X4xKKeonYaQfipu7IZ+lBZyenjb8fCf68iyo6/AJVNEaZPX4jiKDOPudp0QBHGjjgjy8TR1z7AtFMkg+WN/PsDLupzcpK/5gjmZj7TBSFfPE=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oracle.com;
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by MW5PR10MB5873.namprd10.prod.outlook.com (2603:10b6:303:19b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.6; Fri, 9 Oct 2026
- 14:00:52 +0000
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0522.002; Fri, 9 Oct 2026
- 14:00:49 +0000
-Message-ID: <18c33c30-a9ee-4617-8828-c6896bf1c121@oracle.com>
-Date: Fri, 9 Oct 2026 15:00:40 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 bpf-next 4/7] btf: Preserve string relocation maps for
- split BTF
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org,
-        Petr Pavlu <petr.pavlu@suse.com>
-References: <20261009112324.1442319-1-alan.maguire@oracle.com>
- <20261009112324.1442319-5-alan.maguire@oracle.com>
- <sashiko-outbox-165464@kernel.org>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <sashiko-outbox-165464@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0347.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f4::15) To BN0PR10MB4901.namprd10.prod.outlook.com
- (2603:10b6:408:126::19)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="bPWiD0ta"
+Received: from weh-cvm-dev-vm.y50bckvjo0hefgfnzfztsfttff.phxx.internal.cloudapp.net (unknown [20.169.55.37])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 6CC2A20B7168;
+	Fri,  9 Oct 2026 07:41:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6CC2A20B7168
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1791556892;
+	bh=VoxhCJB/AnphS4ZE+WEIY55vqJIIsHw0TnFSqlfetUo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bPWiD0taBZ9DkDwN7WIwtUgJTWCfIz3o2PgBNhOr5rxyDUI4sbpfAuU8GHDlrXXgw
+	 X7zf5dRZNBNM9SJAo+snhF7tGqDkr2MWwjIeMPNWpptKpePQGnlxQO7fgyQH0RHmSE
+	 mXUYJaRt8UNByhcPVauZHazN/93Iy11TCIEkKD0U=
+From: Wei Hu <weh@linux.microsoft.com>
+To: longli@kernel.org,
+	kotaranov@microsoft.com,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	jgg@ziepe.ca,
+	leon@kernel.org,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	shradhagupta@linux.microsoft.com,
+	horms@kernel.org,
+	ernis@linux.microsoft.com,
+	stephen@networkplumber.org
+Cc: netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	dipayanroy@linux.microsoft.com,
+	bpf@vger.kernel.org,
+	sdf@fomichev.me,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	ast@kernel.org,
+	john.fastabend@gmail.com,
+	weh@microsoft.com
+Subject: [PATCH net-next v6 00/13] net: mana: reconfigure by replacing the queue set
+Date: Fri,  9 Oct 2026 14:41:11 +0000
+Message-ID: <cover.1790795005.git.weh@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|MW5PR10MB5873:EE_
-X-MS-Office365-Filtering-Correlation-Id: 073d0465-b828-48e7-2751-08df260db8c2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|366016|1800799024|10067099003|56012099006|4143699003|6133799003|10063799003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	5BaADQ7SYogacOptCRK4j5FJ7DVIswah/ssVpbTaKZ8VHzj8kraj2zXMVMVPVH/tiTjvYDGRoyWYjzqqpy/q3/pCMohBjrIvdUIHfwwhfrcyU+UvHZoBlv0ndnffVQkrS82bmH1Hb2O5yAg4e7WSuOJB+X3Z2p21vfh+9Qg3VDgzqr+0OAwbjqBaZXEwCIDU0kz8Zkp5jHlgoaW92tBcz65eZPqgmZVPdNAtBHdPmhU01pQ8Qh9mbLGZPB1yKPdyplzVXY/fws605qxa13ZLGqPNsZ1s5dgrstNAV+WubqUHlq6yvvkXTtnhlR6QTQ+Fr3pDfPA62OFZcjyzTB1t61sGYr5Kcb1ZBNLDTCXY4y3cMJB5+hcK/Lg9ba9luU9d/A5d3WvbA9hlf41VvLXQlVen34eUYmvDbhsmSu6dLiQwRLfiC9oM/hyykc7ZXk+9TQg27NvzcjS44o4k3hIw7S4RNS8sCofW63rJYEQQ8zfXoHSwYhXvhRYrvaK1ZgkU6u2/mbigG2AGpuM3ZJ7UNjFYzIEWJ8ya5lff/sasQbbTcjYRYUTQPfKEbpds7U+Ca2pFt8QbhAAFa1D4VCQTHUF/oU48SgNz5n+bKiBJ0Wetx3oOQBQ4LsHzbqYUHl4sSSwCzG9LFTUFb2wrfm1/JCLZBd9vLEB4/KX4HZFIqXY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(366016)(1800799024)(10067099003)(56012099006)(4143699003)(6133799003)(10063799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZlZmWGxIU202MHNwUXF2eEcwSjR2bm5kK0cxdjNwbXFEN3VCTm05Z0hyeWl5?=
- =?utf-8?B?ck0xVmNXNm1xSWdNNWgrNFhiWUhnYmd6VUxWdEFsU2srenBDY1JwTFJoeStB?=
- =?utf-8?B?MzZmb3dITEtCK21LWU5tK2k1Q0JHTkRSb1h4TnNxK1FqOVVXSmR4VHc3aFE2?=
- =?utf-8?B?cVRUMk1TeVNlUUcyZHVJMytBdnk1YkN2bjd6SUMxYVlzZWUzOGNta3VOQzRo?=
- =?utf-8?B?MVlabFVjdG80bDlML012aFUycTdOTXlQL2VMMDB5cWRsbUd4TGVhdHVxeEpM?=
- =?utf-8?B?MEE3MjhCYjAzTWFHZVRmTzZ0WEhBSVJSVEZHZjh4TzdzamZmQVphMzh2T3Rq?=
- =?utf-8?B?a3Y3VzBDRWRHbkEzQ3grSkdDK1JJTHA2SU5PeXAyaVV6ZHl2UUsvTnhGa05Z?=
- =?utf-8?B?SHJ0Y2l6OGpXU01hMHhSd1JxWkxGK0QxWHZjM1Fwbzkvd1ZBKzJoNG0yMkJY?=
- =?utf-8?B?aWM5N0ovbit6V0RXeTE2OTVNVVNwT3NUZ2NnYzVHOElYWHFnYXo0Z1BQNjdM?=
- =?utf-8?B?OWI2RlZQOThlcXRPSnlESjgwUkYyYlJrcmJjUnNuQVZQd1grMU9VNythQUdR?=
- =?utf-8?B?eGQ5OFNNS1RTdVErR3F5L2hnWnRRcXpBeDA2WjVjc29sbmt0QmtSdk8ycGJD?=
- =?utf-8?B?V1dNK0ZSRXRqVlc3VlA5MFRjNnZPb0VmcTVsZFkySmU1a1ByMTlhaVhZbFRP?=
- =?utf-8?B?Sk1yN3NtMUxrM0xPVU9iZnRkSEw0VG1QazhGTks4MzJYcTJUUksremxpODJJ?=
- =?utf-8?B?dkpSTSsyNnNmSmE2Wnh2YlhCMjA4Nk4wTDN0VHdEVUJkV3VubWtia0thbWZC?=
- =?utf-8?B?UkpidGRXUFZNRWpPc0tlNTRyd3p2ZUwvdVpoZ3BrbnVhYkkwL3JQQVd6NW9Y?=
- =?utf-8?B?SmhjdUNaNklxMlFvSUlJd3R0eWVWTlVEYUswZmF0TFRuZHYvM25SNDdrNnVU?=
- =?utf-8?B?bXJsWStlUzlCWTF3dXRtQUlIWkwwRDI1dnZ1UGhoVEppL0pKWlYwUFBBQlZj?=
- =?utf-8?B?N0VjNi9IT3BpSHVyWnptU1RTdFpydGc4MWpvc1VLMnllYVAwVUM5bTh6RVFV?=
- =?utf-8?B?QnpvaUxQWWxHck9zbk1yK0xnMkZiQVBtVkthS3FLZ0p5QXVUblUvL3JEMlNT?=
- =?utf-8?B?OWtmM0hSODc5Ylhzc3A5MHRiTUFkbUlpUThxY042V1Z4blFvREl3U2Fidm1i?=
- =?utf-8?B?SXhUYTR2dWxYWGJXRFl5aFBvNkJzN3JhZDVReWdOSWx1YXVNVk56MklzU0ZV?=
- =?utf-8?B?TzlxdkRodnM2TTM0anJyWnFvcHhvL0JORUwxbWdnYjBCV1IzTkorelVQZTFn?=
- =?utf-8?B?K0FhMUpDRzI4Uys1TEZ3cnRpZCtRSWpEOStMM25XSkpnSnE2SU9WTkxFLzBY?=
- =?utf-8?B?QUN1d3dBc3RUNG9FVnExNzlyVnpPT1R5NXRyVHFGNURTWkVBMDVUWE1ESjFI?=
- =?utf-8?B?WnZSRDBUaU0rWjBIWUlUMTh4dmZ0bnBXYmkydWVmOTRrUW9lOFRSaDJZdmRF?=
- =?utf-8?B?YWJKRGVFNi9idldRZVkxL3B1ODQyZlNEaWJ4M3c4blk3VEN5QXcvUERvN3VX?=
- =?utf-8?B?Tkc1SzNzcG4zK0RvNVQrTlVYY2VsaG52cmJTRmxmWnlvMEx4N0tNVm5ZTXE3?=
- =?utf-8?B?RkVyWXhBOEZjM0w5M1lxeUdKZmRKOWh0TWRucEhiQy9CU0h3SitWS0dOY20v?=
- =?utf-8?B?TGR6N1NzL2d6bzU5STZyNkZ2ZlNHYzJ5NnhGQ3YzZk8vUzVaRUhJbzZmaDQ5?=
- =?utf-8?B?c2Z5aGxTbzBJRldCMk5WOUJUc2tleDc2NWl4S0dSU0t3NHhmUTdxYWxhU2M5?=
- =?utf-8?B?UjVEYXJRZzNDaE5BYXVmbHJnU2k1S1VuYXFVcloxc1NWdXR1bkNvK2FLTzMy?=
- =?utf-8?B?ZHNodVdSV3NYaXRUNVBGZ1pnb281bWE5aHdObVhKMEVpWVdtTU9ZeTNzYkM0?=
- =?utf-8?B?a2EzbXFMWFNyS010bFJxZ29wc3VKSG5HQytzYzJkU2JOOWUyVmNQVzRKR3ZQ?=
- =?utf-8?B?R0xLZk5vNkp1QS9BUFJZY3h1S2o0R1RyUGVET0xiOUV4R1JRVG1oYkgyM1FZ?=
- =?utf-8?B?dnIvd2E3RVF1VUg4NUQxNFNpSUZaSXFCZkJmMlp0dGV3eVVQR2cyWVE1Qjcx?=
- =?utf-8?B?WVZwSVp2NmhJdWN1bVNVV01FaVhqMFVOYlhFc0JYVndnQ0J3amd6M1JzVi9J?=
- =?utf-8?B?UEt2cFk1YTRHSWZTL2NadjB4RFNoN1lFb2RmTFhtZEFwQkJmdHowWW1md2ls?=
- =?utf-8?B?SFZpYUJTYmFIU20va09UMSsveHJEZGMwWTNkdC9SRUFTOFZwbzJ5Uk52UjhW?=
- =?utf-8?B?V0tqaVMzRzlNRzJFa1NYWUhuWFdzWE1tSUlid0FDNTZNZHpJUk53dz09?=
-X-Exchange-RoutingPolicyChecked:
-	qN/JR26EFG5ogOPLsbuqoaXylW33OWJgJyuTrmnVDCXwFYxGGDQEQvyAaV6ogbrN3Ay4/3rAmE5yi9YHQLiWImzN0Vf9NqlaRUo/h0MRQkstOWBVxv+gx96PiWQREBkuJPRuwJPMK3+PvswY0C3QkctIyVdNcwfe6x8wdfqQfT3nKE/b4CavjssmaaOyWoXN6X7TAUri2wFfCHfPTj9bJihFj0EeZ3AU7Vw6YddKzDKnGeqnUYX6yCYdb4xsRKDrT8qJ2wKdGnl2Z9WFiUMEPpK4X4uh8hXI0BiFBNcB9GORZaMt9XdRh6zxtOtZgyv+tP4AsOPOk+BEidHREUeGuw==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	A27V1EmfKmfpbHGdaRwS4zxNqO9B5cGGE4mlSn1gUf+9W7Bwk93+rHpm4AKddW8V6acOg/CFjr7A2lCuAZSbEquD7WEz2iypIrVTV+0KVedl6RwLhIjuhMWrnagA0hZGOMCmOlykkR2veI9uhrBXVr/QbUno87btfXwUyt0AOyZeGxTER7pW+Yt/TWlItFGkjlFUByp1nh41s+0C4bWFyy5dwN/BPJQDysGOAvKv9hM+f4EpqshYjis6YuKl3RYEahYbmVtz/4N1Ui3uhVGkeDeZjKQMO96iqM5305JjlKMU+Z3FFSgd5iSA9kMdX25M4m4WzFCjLW5UbocIQGPXr95o6Wvahfns+tYSe0Jm8+EloUby/RPcYaI/kINYfi4QBWKu2JwEReZjRES1QvSwKK+lxGK9sO/Y0/F9Z7JkIyoP4QVp32QLZ8xwKeeEMLZK/zD1boPq+HeLu8CLceG85Wje6oAtVk9nPEP+hxk7cWBTzyASQBwK7rqogn1qD/FKVtGN+Hncz6aaYcrUYPLN19go5iz507ZNROI1/2u6OJl6s++CWNtGz6mj8MfyQ0e4Rj8L4OmhDmDFk9/mwxo9Ms9vCdj+UK/LmOXBo6DIS94=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 073d0465-b828-48e7-2751-08df260db8c2
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2026 14:00:49.1152
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3RVWAF3ATORaPv6Tjv/oxvs6OCcglwKNPiQBEnmFE3SUZueV7mlpWYK7GeJDb9BfZudd/3hiTL/X3Hi24uFkyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5873
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-09_04,2026-10-08_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2610020000 definitions=main-2610090055
-X-Proofpoint-ORIG-GUID: zo7k63eR8JJNQgQY9hpit81_4Ec39SiT
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA5MDA1NSBTYWx0ZWRfX2a7IGgh+FVWn
- soc9/qtt/8uKzakk86g3AqKYChIrstqQyKcTifTa9jpgP5ccUxWWMavtbIbsvVBuIKiJ+9jpdZk
- tN2v2V/u/ldaZaMEG3enqw4fJwEI9pSe6hw5hrlVsUsPkpqYfT6y
-X-Proofpoint-GUID: zo7k63eR8JJNQgQY9hpit81_4Ec39SiT
-X-Authority-Analysis: v=2.4 cv=e6mT2qp/ c=1 sm=1 tr=0 ts=6ac8f3ab b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=660iZSQnnn4A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=x4eqshVgHu-cdnggieHk:22 a=VwQbUJbxAAAA:8
- a=yPCof4ZbAAAA:8 a=1qgnjoeLtzMld6vI9fkA:9 a=QEXdDO2ut3YA:10
- a=WmVTiCyuxqgg3mnwYu6p:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA5MDA1NSBTYWx0ZWRfX1tzpR1S2ecmV
- T9kF2zuhq5kKA48DWlGuxGADJ9d0JSzTII9lBiWugRb4RfiX/humUPGis2+KNhlQJ36nnogJI/G
- Ha8pngxeflKD5QGsUldMgTg10oy7gVl5K0sBmXRogDYF1xlV0POVSIFPsEIFkp02/mFFQ2/e2tw
- CbzRQ7/t20eo0y4uDZpzxYKvvPJZPlZZpq2uo5HnAVNsnltMJGFcz9Z+WeRCfA+zkYlWDGRjG7k
- eHpLGRQof1X2JYnslsPDI/TaxZS8jUUqg4ASBjxGFXxLLWDqORfR9rytwoI8n+MfwnBXrTfiY30
- qmfIdN9rk5xCl7YlLWkR8kC9/DcFDw0TKoAMP5b9Pu0Pdlwbt4anm5LI5sMnQyigke+xu4frqgN
- 9VlELR43Roo3wJ910XWOxLwDJHK08w0lkJ6GUXrd2wWayOQLxTTbVwIOyZywWl3omTiT/yU4ip+
- 44lpl6EIdvKSlbOBQcw==
+Content-Transfer-Encoding: 8bit
 
-On 09/10/2026 13:01, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
-> - [High] btf: memory corruption and invalid string offsets with split base BTF
-> - [High] bpf: heap buffer overflow in btf_relocate_map_distilled_base() on split BTF
-> - [Medium] libbpf: NULL pointer dereference in btf_relocate() when btf has no base
-> - [Low] bpf: btf_relocate_rewrite_strs prints empty string in warning
-> --
-> 
-> commit 5e8ac630aea03f4aa4b3a237792c60ad3c7a0956
-> Author: Alan Maguire <alan.maguire@oracle.com>
-> 
-> btf: Preserve string relocation maps for split BTF
-> 
-> Make btf_relocate() optionally return the string-offset map it builds
-> while relocating a BTF relative to a distilled base. A subsequent split
-> BTF object can use that map to rebase references to base strings.
-> 
-> Also account for the accumulated base string offset when assigning a
-> new BTF base. This is required when the base is itself split.
-> 
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index 592b71a838410..22dd123450c3e 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -1936,7 +1936,7 @@ void btf_set_base_btf(struct btf *btf, const struct btf *base_btf)
->>  {
->>  	btf->base_btf = (struct btf *)base_btf;
->>  	btf->start_id = btf_nr_types(base_btf);
->> -	btf->start_str_off = base_btf->hdr.str_len;
->> +	btf->start_str_off = base_btf->start_str_off + base_btf->hdr.str_len;
->>  }
-> 
-> [Severity: High]
-> Since this allows using a split BTF as the base, will it cause out-of-bounds
-> heap writes in tools/lib/bpf/btf_relocate.c:btf_relocate_map_distilled_base()?
-> 
+I am carrying Long Li's queue-set reconfiguration series forward for this
+revision. Long remains the author of twelve patches, and Dipayaan Roy
+remains the author of the detach change. Their authorship and signoffs
+are retained; I have added my signoff for this revision.
 
-It is technically true that if we used split BTF as the basis for a distilled
-.BTF.base, the string offset would be a problem. However we never do.
-The reason .BTF.base exists is because we want a way to create stable base
-BTF references for split BTF after potential base vmlinux changes.
+Replace detach/attach reconfiguration with pre-allocation and queue-set
+replacement. Allocation failure leaves the running configuration intact.
+Publication failure attempts rollback; a failed rollback closes the port
+and holds carrier down until a successful reopen.
+
+EQs and statistics belong to the port. Valid user-configured RSS tables
+survive queue rebuilds. Channel-count changes reuse surviving queues:
+reductions retire the tail and increases allocate only the added queues.
+Ring, MTU, private-flag and XDP layout changes still perform full rebuilds.
+
+This series does not depend on the pending HWC concurrency/dynamic-depth
+v6 series linked below. Their CQ-publication changes overlap in
+gdma_main.c and hw_channel.c; whichever series lands second will need a
+rebase preserving both table-publication and per-CQ lifetime guarantees.
+Related HWC series:
+https://lore.kernel.org/all/cover.1790665894.git.weh@linux.microsoft.com/
+
+Changes since v5:
+
+  - Rebase the independent queue-set series onto net-next base
+    47a1446725732cd3996edf607e8739334bbf4d78.
+  - Drain ALL old TX queues after closing the TX/XDP gate and waiting for
+    readers, but before publishing pointers, counts or RSS. A shared
+    120-second drain deadline rejects a replacement by resuming the old
+    configuration without reprogramming RSS or resetting the function.
+    Retirement does not use FLR. Ordinary mana_dealloc_queues() remains
+    byte-identical to this base: existing reset policy and independent
+    failed-FLR hardening are deliberately not changed.
+  - Complete the shared EQ/CQ lifetime prerequisite in patch 2. Initialize
+    EQ state before IRQ publication. After stopping a retiring CQ's NAPI
+    and work and tearing down its WQ object, flush its actual parent EQ
+    while the CQ callback is still published. Clear its table entry and
+    wait for RCU IRQ readers before freeing the CQ and callback owner.
+    Pair IRQ lookups with release publication at all CQ publishers;
+    Ethernet publication follows NAPI/DIM initialization. Matching HWC
+    and RDMA publication stores do not change their recovery policies.
+  - Move port-lifetime statistics preparation ahead of the first live
+    swap, now patch 3. Introduce RX retirement, writer handoff and folding
+    atomically with the first swap in patch 4, rather than relying on a
+    later patch to make intermediate statistics readers safe.
+  - Keep publication barriers consistent with open/attach. Latch forced
+    carrier shutdown regardless of the previous carrier state and clear
+    it only after successful reopen. Retain the rollback reader grace
+    period after restoring old pointers, before callers discard scratch
+    state.
+  - Join TX queue selection to the publication gate in patch 4. Acquire
+    port_is_up before count/RSS reads and snapshot real_num_tx_queues.
+    Retiring tail RQs can outlive a TX-count reduction; when a recorded
+    RX index no longer fits the live TX count, use the current RSS mapping
+    instead of returning that stale index.
+  - Clear DRV_XOFF on inactive allocated TX queues in patch 4's cold-path
+    restart helper, using netif_tx_start_queue() while preserving the
+    availability checks and wake behavior for active queues. Publication
+    stops all allocated queues, and the netdev watchdog scans allocated
+    num_tx_queues, not just real_num_tx_queues. Leaving the inactive tail
+    stopped after a channel shrink caused a watchdog timeout and recovery
+    on the previous release candidate.
+  - Keep old RX statistics retired until rollback steering restoration
+    succeeds. Restart DIM only for RXQs actually returning from retirement,
+    with NAPI disabled, work cancelled and DIM reinitialized; carried RXQs
+    and their counters are not reset.
+  - Reserve live MTU/XDP replacement with channel_changing under the
+    existing vport_mutex through queue, fail-close and scratch cleanup.
+    This excludes concurrent RDMA RAW-QP vport admission without changing
+    early validation, no-op or down-port paths.
+  - Correct the full-page RX shortcut description to include all existing
+    early-return conditions.
+
+Resource and control-path costs:
+
+Full rebuilds temporarily retain both sets of SQ/RQ/CQ objects, RX buffers
+and page pools. The port-owned EQ pool is shared, not doubled. Device
+resource limits can reject this temporary peak; no fixed hardware queue
+threshold is assumed. Allocation failure preserves the live configuration.
+The pre-publication TX drain can also reject a replacement without changing
+the live pointer/count/RSS configuration.
+
+CQ retirement adds parent-EQ marker operations and RCU reader waits on the
+control path; these are not free and no latency improvement is claimed.
+The IRQ lookup uses an acquire load, not a new per-packet lock. This series
+does not introduce a general recovery policy for failed hardware commands.
+
+Patch layout:
+  1:     Queue-set helpers, preserving ordinary deallocation policy.
+  2:     Shared EQ pool and EQ/CQ publication/retirement prerequisite.
+  3:     Port-lifetime statistics preparation.
+  4:     First live swap, nonreset drain, RX handoff and safe TX restart.
+  5-8:   Ring, private-flag, MTU and XDP reconfiguration.
+  9:     Remove the unreachable detach early return.
+  10-11: Release unused EQs and preserve user RSS tables.
+  12-13: Reuse queues across channel-count reductions and increases.
+
+Overlap with separately submitted net fixes:
+
+The XDP pre-allocation pointer fix is subsumed by patch 8's queue-set path,
+which leaves the live program unchanged during allocation:
+https://lore.kernel.org/all/20260904202640.3900685-1-longli@microsoft.com/
+
+The user-RSS-table fix overlaps patch 11. Keep the three-argument
+mana_rss_table_keep() and its queue-set callers in the overlapping blocks;
+the RTNL RSS requirement is shared with the standalone net submission:
+https://lore.kernel.org/all/20260905004401.3937066-1-longli@microsoft.com/
+
+Neither submission is resent as a standalone patch here. These merge
+notes do not prescribe changes to unrelated net-tree code.
+
+History:
+  v5: https://lore.kernel.org/all/20260909222416.884246-1-longli@microsoft.com/
+  v4: https://lore.kernel.org/all/20260908032843.397667-1-longli@microsoft.com/
+  v3: https://lore.kernel.org/all/20260901014442.2945689-1-longli@microsoft.com/
+  v2 repost:
+      https://lore.kernel.org/all/20260813050418.2906468-1-longli@microsoft.com/
+  v2 earlier posting:
+      https://lore.kernel.org/all/20260811063506.2428213-1-longli@microsoft.com/
+  Full-page RX predecessor (v12, not a queue-set v1):
+      https://lore.kernel.org/all/20260711041415.3008868-1-dipayanroy@linux.microsoft.com/
+
+The link labelled "v1" in the old queue-set covers actually points to the
+four-patch full-page RX v12 predecessor, not an earlier 13-patch queue-set
+posting.
+
+Testing:
+
+Submission tip d7c25bddfea3 differs from the tested production history
+only by removing attribution/session trailers. All thirteen intermediate
+source trees are identical; build/runtime identities below are unchanged.
+
+Production 6243b02cc714, kernel 7.3.0-rc4-mana-qset-v6-g6243b02cc714,
+passed 39 native functional cases per DUT on VM5 and VM6: >=35-second
+reduced-channel watchdog dwells, queue ownership, real IPv4 DF jumbo
+traffic at MTU 2000/payload 1972, and native XDP PASS/DROP/TX/REDIRECT.
+
+The separate KASAN/DMA memory/fault fixture,
+7.3.0-rc4-mana-qset-memdiag-rethook-g9d9757ecf25c, completed
+64 PASS/2 UNSUPPORTED/0 FAIL/0 NOT_RUN per DUT, including all 25 fault
+cases with each token consumed exactly once. VM5 also completed twelve
+>=180-second warning-reproduction trials with attributed security probes
+active and untouched. No unexpected warning, KASAN/DMA-debug error or
+peer-health failure was observed. Fault4 recovered locally; its independent
+fallback was armed, verified and canceled, not executed.
+
+That fixture's four-line FP64 rethook metadata correction and fault hooks
+are test-only, not in these thirteen patches or a production dependency.
+The entry window is unchanged; no global unwinding guarantee is claimed.
+Full-locking remains baseline-blocked: unmodified 47a reproduced the
+platform checker failure, and this fixture has no LOCKDEP/PROVE_RAW/
+PROVE_RCU coverage. DIM enable returned EOPNOTSUPP. Native verbs is
+UNSUPPORTED in the memory matrix because no approved native baseline
+probe/result was supplied; RDMA sanity/link health is covered, not native
+verbs transfer. PF/non-host-mode and multiport hardware remain untested.
+
+A final forward-UDP receiver comparison completed five release6243 and
+five baseline47a samples with complete raw records, matching identities,
+nested windows and valid client/server completion; no rows were rejected.
+Adjusted TGID CPU averaged 4056.4 versus 4188.4 USER_HZ ticks. Per iperf
+summary application Gbit it was 901.422346 versus 930.754115 (~3.15% lower);
+per native full-window path Gbit, 518.165386 versus 543.335320 (~4.63% lower).
+The process interval includes omit time; iperf's application summary does
+not. These are distinct denominators, not interval-matched application
+efficiency. Throughput was 99.9980098 versus 99.9980650 Mbit/s, with loss
+0.000689492% versus 0.001422219% (release versus baseline).
+
+This measures guest-scheduler-attributed process runtime, not whole-guest,
+driver or physical CPU efficiency. Aggregate /proc/stat is observational
+and need not conserve against adjusted process time. A separate earlier
+five-plus-five sender crossover did not reproduce the initial ~9% signal;
+observer/context and phase confounds remain. These bounded results are
+not a no-effect or blanket regression-free guarantee.
+
+Current P4-P13 passed forced GCC W=1 builds, 150/150 target translation
+units; unchanged P1-P3 retain their original complete proof. Smatch is
+not credited: its frontend fails a valid type assertion on both baseline
+and feature. Historical supported Sparse coverage is not relabeled as a
+new current-tip run. Full-mail lint was rerun after removing the
+Copilot attribution/session trailers at the submitter's request.
+Hardware-command failure/recovery policies remain scoped as described
+above; these tests do not establish recovery from every device failure.
+
+Full evidence, fixture identities and historical limitations are in the
+package's RUNTIME-HANDOFF.txt and audit/final-evidence.json. Public v5
+review freshness was checked on 2026-10-02: all 21 findings and 28 thread
+messages were unchanged, with no new human replies. No actual Sashiko
+approval is claimed.
+
+Signed-off-by: Wei Hu <weh@microsoft.com>
+
+Dipayaan Roy (1):
+  net: mana: do not bail out of mana_detach on dealloc failure
+
+Long Li (12):
+  net: mana: add queue-set allocation and teardown helpers
+  net: mana: share the EQ pool across a queue-set swap
+  net: mana: keep per-queue statistics in the port context
+  net: mana: swap queue sets in mana_set_channels
+  net: mana: swap queue sets in mana_set_ringparam
+  net: mana: swap queue sets in mana_set_priv_flags
+  net: mana: swap queue sets in mana_change_mtu
+  net: mana: swap queue sets in mana_xdp_set
+  net: mana: release EQs left idle by a channel-count reduction
+  net: mana: keep a user-configured RSS table across a queue rebuild
+  net: mana: keep the surviving queues when the channel count is reduced
+  net: mana: keep the existing queues when the channel count is raised
+
+ drivers/infiniband/hw/mana/cq.c               |    3 +-
+ .../net/ethernet/microsoft/mana/gdma_main.c   |   22 +-
+ .../net/ethernet/microsoft/mana/hw_channel.c  |    3 +-
+ .../net/ethernet/microsoft/mana/mana_bpf.c    |  108 +-
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 1328 +++++++++++++++--
+ .../ethernet/microsoft/mana/mana_ethtool.c    |  314 ++--
+ include/net/mana/gdma.h                       |    8 +-
+ include/net/mana/mana.h                       |   97 +-
+ 8 files changed, 1610 insertions(+), 273 deletions(-)
 
 
+base-commit: 47a1446725732cd3996edf607e8739334bbf4d78
