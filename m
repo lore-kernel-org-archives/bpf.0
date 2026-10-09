@@ -1,118 +1,141 @@
-Received: from mail-m118211.qiye.163.com (mail-m118211.qiye.163.com [115.236.118.211])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7AF3DB333;
-	Fri,  9 Oct 2026 11:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.118.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8763C3F58
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545952; cv=none; b=ob/V/7cm3xr52vx3bGpxPsq0EJG0IbzhwLQp8Ha8K/5iX9tdyMuH6Egugj8V+ftsmU89e/IdYcCZmwMiFX1aZgKP6yYfvosT/XYD3tERRzknx8lqtEFA4kRC7B60P2R9N+zcKVMbx5KCQowss3qeMDxCoBaEvjw9m6mp7/Qk+ec=
+	t=1791546112; cv=none; b=HCtFTKjCl0d64rTDIjz+/NMOUxQyGNLb5jGo78Tg/Qbmyvt1jpCEIwZzRaXWfSBIXshKwVhf8/pYXnLQL91nwCHV5d9RWzMdyxSJeTTIPy6Zb1TJwthUCoKu52cpA+V3jVZvameG6om6AT99PT/Kl9cMM1iAt62jIdziBHVw1wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545952; c=relaxed/simple;
-	bh=cOvv2AQaQEiOSaVHJ5X0j5TdSvyQhjN5cDZ17xIYu0k=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aRcKYLK9LKJx9iese+a+4fQsFTt4qXjaScX872UZ4Ogwa5uFQ6P+atcF007mxuUyT3ToT3aKxVFchTUeSbPYVHL1HW4AvCByxxbacvJd0KbEJxeHhuSAlEjnmA+Kf/8+02J7KuNUBmKj+IpcAvQKwUoKcPHvXodha0MIbQs7HdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.118.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe29019d;
-	Fri, 9 Oct 2026 19:23:24 +0800 (GMT+08:00)
-From: Zhen Ni <zhen.ni@easystack.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	akpm@linux-foundation.org,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	brendan.jackman@linux.dev,
-	hannes@cmpxchg.org,
-	ziy@nvidia.com,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH 0/6] mm/page_owner: add bpf_iter and kfuncs
-Date: Fri,  9 Oct 2026 19:23:02 +0800
-Message-Id: <20261009112308.240769-1-zhen.ni@easystack.cn>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1791546112; c=relaxed/simple;
+	bh=erkB+pv5RbI0KKRL9l5UdsPsers0Kyn5gASlvVaG6yM=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=MMOc9d9odmHwQ1MxYExnaqY8x3XWtJs1ehp3kANxTcNOHZEtNA9kcDRFD6WhHnLqdOmdVeo2hDopPuMl3VKGvccmSiABgXUGv65GjL/IJl+TSWuVUr3hZBB7HtZBoj77DVb7IvPJux7NI5WeNiwxb5Ryun4fSw7VbvmNnvRUXJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VOEEeayP; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VOEEeayP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3391F000FF;
+	Fri,  9 Oct 2026 11:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791546102;
+	bh=Nt3THb/FIo4zJ0rRNJORVeM0sQ29C2HS0304Xu1qPkM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VOEEeayPNS7P9iFT0s37S/ocdhZkT1dARYtwi4KnlT5k8UFzMu2+gWqF+9+qbX+c8
+	 oRk24c7xwgHHEdc7yuEFQRY1jxiwLBr+3srezpcX9SMpl1nDyZdoVTsu+UIG0jwM7T
+	 1U53R4CRPfBLRSUeCyuLZHwxPt/tIr2SwU8LIzvTo+0odzA08Rd0i1ZaHmacBtyvxG
+	 2CNhCOkdhOUabROjobjSOpIFL8V4Wmx3+gggXkwk8mIJ6T89SGCU21NCHGHDuNvW8c
+	 wsogqzsK5L61Iyyl0w0cU9Un8r6Pa7FWo4BQaONxSRrFIy1OF1NgGwGDJa5qnW1RuN
+	 l0o7DGNFdOamA==
+Message-ID: <sashiko-outbox-165405@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 20/51] bpf: varying offset access support
+ for PTR_TO_BTF_ID pointers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261009-scev-minimal-rebase-v3-20-bcba9bc53ac9@gmail.com>
+References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
+ <20261009-scev-minimal-rebase-v3-20-bcba9bc53ac9@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 09 Oct 2026 11:41:41 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa1206750320229kunmd33b3e054cb272
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTE5OVh1NSBgaTh0eQhhOQ1YVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
-	lPT09IVUpLS1VKQktLWQY+
 
-Hi all,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] bpf: truncation of 64-bit var_off to 32-bit bypasses custom btf_st=
+ruct_access bounds
+- [High] bpf: unbounded variable offset read on trusted PTR_TO_BTF_ID bypas=
+ses PROBE_MEM
+--
 
-Introduction
-============
+commit ec6d1e8a8c55dc442e46ac3d70d36a00ec8a9ffd
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-page_owner records who allocated every page and is a core memory-debug
-facility, but it currently reaches userspace as the debugfs flat dump:
-slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
-means streaming and parsing the entire file in userspace, which is
-expensive on large hosts and hard to query live.
+bpf: varying offset access support for PTR_TO_BTF_ID pointers
 
-Exposing the same walk to eBPF lets a program filter and aggregate in
-the kernel and surface only the records it cares about. This series
-adds that access as a seq_file bpf_iter target and an open-coded
-iterator.
+This commit relaxes requirements for varying offset accesses to PTR_TO_BTF_=
+ID
+pointers, verifying they stay within array bounds and align with elements.
+It modifies btf_struct_access to validate minimum offsets and array spans,
+while skipping upper bounds checks for flexible arrays.
 
-Implementation
-==============
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 0630675377aaa..f4d119f3d5ef9 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+[ ... ]
+> @@ -7899,6 +7961,55 @@ int btf_struct_access(struct bpf_verifier_log *log,
+[ ... ]
+> +		array_start =3D min_off - arrays[i].off;
+> +		/* An array within the flexible tail has no upper bound to exceed */
+> +		if (array_start >=3D flex_off && btf_type_is_array(t) &&
+> +		    btf_type_array(t)->nelems =3D=3D 0)
+> +			return ret;
 
-The page walk is factored into page_owner_next_eligible(), shared by
-the read path and the iterators so eligibility stays identical. Three
-kfuncs expose information that a BPF program cannot decode from the
-snapshot alone: the NUMA node, per-page memcg info including the full
-cgroup path, and the stack trace behind a stack_depot handle. Each
-record is snapshotted under the page_ext RCU lock, so consumers read
-a consistent copy.
+[Severity: High]
+Does this allow unbounded variable offset reads on trusted pointers?
 
-Testing
-=======
+This logic explicitly skips the upper bound check for flexible arrays,
+assuming PROBE_MEM will safely catch out-of-bounds page faults at runtime.
 
-The selftest exercises the seq_file and open-coded iterators, and
-validates the get_nid, stack_snprint and get_memcg_info kfuncs.
+However, if the pointer being accessed is trusted (meaning it has the
+PTR_TRUSTED flag and lacks PTR_UNTRUSTED), wouldn't bpf_may_fault_on_deref()
+evaluate to false?
 
-Zhen Ni (6):
-  mm/page_owner: extract page_owner_next_eligible() from read loop
-  mm/page_owner: add bpf_iter target "page_owner"
-  mm/page_owner: add open-coded page_owner iterator
-  mm/page_owner: add bpf_page_owner_get_nid() kfunc
-  mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
-  selftests/bpf: add tests for the page_owner bpf_iter target
+If bpf_may_fault_on_deref() is false, bpf_convert_ctx_accesses() won't
+convert the load into a PROBE_MEM exception-handled load. Passing an
+arbitrarily large offset here could result in a native load from unmapped
+memory, potentially crashing the kernel.
 
- kernel/bpf/helpers.c                          |   8 +
- mm/Makefile                                   |   3 +
- mm/page_owner.c                               | 219 +++++++++++-------
- mm/page_owner.h                               |  58 +++++
- mm/page_owner_iter.c                          | 180 ++++++++++++++
- .../bpf/prog_tests/page_owner_iter.c          | 173 ++++++++++++++
- .../selftests/bpf/progs/bpf_iter_page_owner.c | 161 +++++++++++++
- 7 files changed, 722 insertions(+), 80 deletions(-)
- create mode 100644 mm/page_owner.h
- create mode 100644 mm/page_owner_iter.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f5b2500335a7b..192efb7229975 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -6608,6 +6604,18 @@ static int check_ptr_to_btf_access(struct bpf_veri=
+fier_env *env,
+>  	}
+> =20
+>  	if (env->ops->btf_struct_access && !type_is_alloc(reg->type) && atype =
+=3D=3D BPF_WRITE) {
+> +		if (!tnum_is_const(reg->var_off)) {
+> +			char tn_buf[48];
+> +
+> +			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
+> +			verbose(env,
+> +				"%s is ptr_%s invalid variable offset: off=3D%d, var_off=3D%s\n",
+> +				reg_arg_name(env, argno), tname, off, tn_buf);
+> +			return -EACCES;
+> +		}
+> +
+> +		off +=3D reg->var_off.value;
+> +
+>  		if (!btf_is_kernel(reg->btf)) {
+>  			verifier_bug(env, "reg->btf must be kernel btf");
+>  			return -EFAULT;
 
--- 
-2.20.1
+[Severity: High]
+Could this assignment truncate a large 64-bit value into a negative 32-bit
+offset?
 
+Earlier in check_ptr_to_btf_access(), the negative check for off was removed
+and replaced with min_off. Now that off +=3D reg->var_off.value is executed
+down here for BPF_WRITE with custom handlers, a very large 64-bit
+var_off.value could wrap into a negative 32-bit integer.
+
+Since there is no negativity check immediately following this addition, the
+truncated negative offset gets passed directly into the custom
+btf_struct_access handler.
+
+If a handler like bpf_scx_btf_struct_access compares this negative offset
+against size_t boundaries, couldn't this bypass the bounds check and
+allow out-of-bounds writes to kernel objects?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-scev-minim=
+al-rebase-v3-0-bcba9bc53ac9@gmail.com?part=3D20
