@@ -1,124 +1,178 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16E94E3797
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B45B4E1C61;
+	Fri,  9 Oct 2026 12:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547250; cv=none; b=iHbaI2Qnk/1+LK1Mwsqo1VMN6Qi0pnUDs4hAJPm40Q9Ms/H2akO6cq5ThFAm+2AZ8/AieY73woaG+F8CNmruCtD+PhFEY1EAF+rHEzSWcyLeo9TRd3xCOdsn3kZ+s8xfhsBRHGhUkNeVJK/tbmEf1gjHN1X2LdjmNy3diohgaDQ=
+	t=1791547317; cv=none; b=LM/0DzwF6XKXiMX/omMRE7ANLnfpIwPdmNbYJIW2WM1gR9uFmwEO0NB7R1QQMCrNJXuimLJNiuanYRrMf8/e9FdcteR7IK8GraE6BKh2H4n1Uqe+8IbEby2jN07/Biaxi5YCcCaeg0fZQ3tRnqh6GvZiNy8RgpfUenX4mzXLMb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547250; c=relaxed/simple;
-	bh=B3HI/g2nBo+Cl0+TxC6lSAGQbJije8A8+z2JXx0/Oco=;
+	s=arc-20240116; t=1791547317; c=relaxed/simple;
+	bh=kWMME6oo51ZWLhEEuLGEHk+ALABso4VacarviwVxuqY=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=PCOvu0lLfXpBeelRn57uAmKFdpbldPEyeBkj4qBsC53gvwR660vvSaC+fuHNULIQHEC5N1uM86VRkhQGQeIyFBOQ28tUWmp1FIf90so970ggo3ao53QVqYvIzFxnM7ugVjppGk7huc6QnGrmv5KdCILh8j2vX3Kev73aQ3nNTO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1gFWgMG; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=VNS3jl7H5QWiQ7c4ArOGchbwyaCr0VsTvvZnhtlOY1ZOCnnKXePVdOPsglVI0om+pXcZFbfr0uvrHGBiZYgcufhg8fgDZAKMNTvOBmoO4CyAg7DgX5d2hoq1V2I1JTeWKWXIq0PyOZ2VisVo0HZ6AehRWhB9KRsQwsZ6Rybkduk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j09YlFAx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1gFWgMG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0511F00893;
-	Fri,  9 Oct 2026 12:00:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j09YlFAx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 395991F000FF;
+	Fri,  9 Oct 2026 12:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791547246;
-	bh=Ge5+2vyfLAoJRhq0HAUKcrJ76EmlrDa9NsyHxcJ/Gzc=;
+	s=k20260515; t=1791547308;
+	bh=msJ9U2+D0K9Sksl3SMcYGQxyJraA87PnSs7nZTVG3YY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=I1gFWgMGaRRmjTHIABrFTzDKG1Xx8SThZElxkOlPjFHsmWGNUTojfz2pwjZmKfeGY
-	 /hFE4lZ8ZV6dPIL0NeArnPBZB9Mz7fUbEpSfexiaoR58znbZV6Nkj8eqnRgD+XqwqL
-	 hcBervr5MJYELuQbJ+XvtKuQTKPjgxHNp4DPOQO+BmjknXBT+pZ7q+eiuU3bUjA6Rr
-	 A8K1B/Er7gshy+PKLl1/Kh84P9kOUMxkTet2eQS0D2HplhmfBhHbFA1TzYo7iSAxji
-	 p//r1vDUrb5CvzcqL480mego2ox6mhKiD9Z25Uv8AuslAByEzcSTtnL/H8xYYyl/4E
-	 4jEfD3XL/vMhQ==
-Message-ID: <sashiko-outbox-165462@kernel.org>
+	b=j09YlFAxrRT0GGDlIiQ7eYkU5IFm+0Xq5WR2oOu+w6GDIpIuI3ULE9S5ahQER7Ww6
+	 PpzVOlUAX5fSqWKA/6AIuStDY0oJaGQFGAH6JbtJy1K2V2Mk2rDgvQwrnftUZv11Ij
+	 08Nf/eWVFlEu8nMSUjdFuPDapWXGoye0OB9a5HvjP1yLd9iQfMagyBO8wfRhC8xGeS
+	 E3vku2a4PDULBWCq/vMmxSSSDEnCb95JQqA4Vzy5Of87pMZyNnhw/kS9duvCYxcPEo
+	 fsiXhtWXPGy2JityHWMCbSmjHAN88gD1BXVes8ZSD+MNDf5O2zTtRuvBWU0Yf59GEn
+	 6k1dcnxSX+nlg==
+Message-ID: <sashiko-outbox-165464@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/6] mm/page_owner: add open-coded page_owner iterator
+Subject: Re: [PATCH v4 bpf-next 4/7] btf: Preserve string relocation maps
+ for split BTF
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhen Ni" <zhen.ni@easystack.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009112308.240769-4-zhen.ni@easystack.cn>
-References: <20261009112308.240769-1-zhen.ni@easystack.cn>
- <20261009112308.240769-4-zhen.ni@easystack.cn>
+To: "Alan Maguire" <alan.maguire@oracle.com>
+Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>
+In-Reply-To: <20261009112324.1442319-5-alan.maguire@oracle.com>
+References: <20261009112324.1442319-1-alan.maguire@oracle.com>
+ <20261009112324.1442319-5-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 12:00:45 +0000
+Date: Fri, 09 Oct 2026 12:01:47 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [Critical] bpf: buffer overflow in bpf_page_owner_stack_snprint() due to =
-missing __sz suffix
-- [High] bpf: Panic DoS and OOB read via untrusted stack depot handle in bp=
-f_page_owner_stack_snprint()
+- [High] btf: memory corruption and invalid string offsets with split base =
+BTF
+- [High] bpf: heap buffer overflow in btf_relocate_map_distilled_base() on =
+split BTF
+- [Medium] libbpf: NULL pointer dereference in btf_relocate() when btf has =
+no base
+- [Low] bpf: btf_relocate_rewrite_strs prints empty string in warning
 --
 
-commit f5344767004d7fb48b115dd782835818e60504bc
-Author: Zhen Ni <zhen.ni@easystack.cn>
+commit 5e8ac630aea03f4aa4b3a237792c60ad3c7a0956
+Author: Alan Maguire <alan.maguire@oracle.com>
 
-mm/page_owner: add open-coded page_owner iterator
+btf: Preserve string relocation maps for split BTF
 
-This commit adds an open-coded bpf_iter for pages eligible for page_owner
-output. It also introduces a bpf_page_owner_stack_snprint() kfunc to render
-the stack trace for a stack_depot handle into a caller-provided buffer.
+Make btf_relocate() optionally return the string-offset map it builds
+while relocating a BTF relative to a distilled base. A subsequent split
+BTF object can use that map to rebase references to base strings.
 
-> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
-> index 33dc9dcd59dec..80693d4174077 100644
-> --- a/mm/page_owner_iter.c
-> +++ b/mm/page_owner_iter.c
-[ ... ]
-> @@ -114,3 +115,54 @@ int page_owner_iter_register(void)
-[ ... ]
-> +__bpf_kfunc int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
-> +					     char *buf, u32 buf_size)
-> +{
+Also account for the accumulated base string offset when assigning a
+new BTF base. This is required when the base is itself split.
 
-[Severity: Critical]
-Does this kfunc bypass the verifier's bounds checking for the buffer?
-
-Because the buffer size argument is named buf_size instead of using the
-required __sz or __szk suffix (such as buf__sz), the BPF verifier treats it
-as an independent integer scalar. It only validates that the buffer points =
-to
-a memory region of at least 1 byte.
-
-If a BPF program passes a 1-byte valid buffer along with a maliciously large
-buf_size, stack_depot_snprint() will blindly write past the end of the buff=
-er,
-which can corrupt adjacent stack, heap, or map memory.
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 592b71a838410..22dd123450c3e 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -1936,7 +1936,7 @@ void btf_set_base_btf(struct btf *btf, const struct=
+ btf *base_btf)
+>  {
+>  	btf->base_btf =3D (struct btf *)base_btf;
+>  	btf->start_id =3D btf_nr_types(base_btf);
+> -	btf->start_str_off =3D base_btf->hdr.str_len;
+> +	btf->start_str_off =3D base_btf->start_str_off + base_btf->hdr.str_len;
+>  }
 
 [Severity: High]
-Is it safe to accept an untrusted depot_stack_handle_t directly from the
-BPF program here?
+Since this allows using a split BTF as the base, will it cause out-of-bounds
+heap writes in tools/lib/bpf/btf_relocate.c:btf_relocate_map_distilled_base=
+()?
 
-Since the BPF verifier does not track scalar bounds for opaque handles, a
-program could pass a forged handle. If depot_fetch_stack() receives an
-invalid pool index, it unconditionally triggers a kernel warning:
+When relocating against a split base BTF, the function allocates an array
+using only the local string section length of the target base BTF:
 
-lib/stackdepot.c:depot_fetch_stack() {
-	if (pool_index >=3D pools_num_cached) {
-		WARN(1, "pool index %d out of bounds (%d) for stack id %08x\n",
-		     pool_index, pools_num_cached, handle);
-		return NULL;
-	}
-	...
-}
+	base_name_cnt =3D calloc(r->base_str_len, sizeof(*base_name_cnt));
 
-This can panic systems configured with panic_on_warn=3D1.
+It then iterates over all types in the BTF hierarchy, indexing into this
+array using the absolute name_off of inherited types:
 
-Even if the index is valid, a maximized offset could cause the stack pointer
-to point near the end of the pool allocation. Accessing the stack size and
-entries would then result in an out-of-bounds read past the allocated pool.
-This can cause a hard page fault panic, or format arbitrary kernel pointers
-into the BPF-provided buffer, which the program could then exfiltrate.
+	if (base_name_cnt[base_t->name_off] < 255)
+		base_name_cnt[base_t->name_off]++;
 
-Would it be better to change this kfunc to accept a trusted
-struct page_owner_scan *scan instead of a raw scalar?
+Because the absolute name_off can span up to the total accumulated string
+length (up to millions of bytes for vmlinux), this index can far exceed
+the local string length and corrupt the heap.
 
-> +	return stack_depot_snprint(handle, buf, buf_size, 0);
-> +}
-> +
-> +__bpf_kfunc_end_defs();
+Additionally, in btf_relocate_rewrite_strs(), local string offsets are
+incremented using only the local string section length:
+
+	*str_off +=3D r->base_str_len - r->dist_str_len;
+
+Does this need to account for base_btf->start_str_off as well, to prevent
+the rewritten offsets from incorrectly pointing into the base BTF's bounds?
+
+[ ... ]
+
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 512b3962f75f8..d2ff6f5d6d5b6 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -6640,7 +6640,7 @@ void btf_set_base_btf(struct btf *btf, const struct=
+ btf *base_btf)
+> =20
+>  int btf__relocate(struct btf *btf, const struct btf *base_btf)
+>  {
+> -	int err =3D btf_relocate(btf, base_btf, NULL);
+> +	int err =3D btf_relocate(btf, base_btf, NULL, NULL);
+
+[Severity: Medium]
+If a user calls btf__relocate() with a root BTF (which has no base BTF),
+will this cause a NULL pointer dereference?
+
+Inside btf_relocate(), r.dist_base_btf is populated using btf__base_btf(btf=
+),
+which returns NULL for a root BTF. However, the function proceeds to
+dereference it without checking:
+
+	r.str_map =3D calloc(btf_header(r.dist_base_btf)->str_len,
+			   sizeof(*r.str_map));
+
+Since btf_header(NULL) returns a near-NULL pointer, accessing str_len will
+trigger a page fault and crash the caller.
+
+[ ... ]
+
+> diff --git a/tools/lib/bpf/btf_relocate.c b/tools/lib/bpf/btf_relocate.c
+> index df5fa4bd87d69..e55dd75f6c950 100644
+> --- a/tools/lib/bpf/btf_relocate.c
+> +++ b/tools/lib/bpf/btf_relocate.c
+> @@ -441,7 +441,8 @@ static int btf_relocate_rewrite_strs(struct btf_reloc=
+ate *r, __u32 i)
+>  /* If successful, output of relocation is updated BTF with base BTF poin=
+ting
+>   * at base_btf, and type ids, strings adjusted accordingly.
+>   */
+> -int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **id=
+_map)
+> +int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **id=
+_map,
+> +		 __u32 **str_map)
+>  {
+
+[Severity: Low]
+When strings fail to map in btf_relocate_rewrite_strs() during relocation,
+does the warning message print an empty string instead of the actual unmapp=
+ed
+string?
+
+	off =3D r->str_map[*str_off];
+	if (!off) {
+		pr_warn("string '%s' [offset %u] is not mapped to base BTF\n",
+			btf__str_by_offset(r->btf, off), *str_off);
+
+Since off is guaranteed to be 0 here, and offset 0 in BTF always corresponds
+to the empty string, the warning will always print "string '' [offset X]".
+
+Should this use *str_off to retrieve and print the correct unmapped string?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112308.2407=
-69-1-zhen.ni@easystack.cn?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112324.1442=
+319-1-alan.maguire@oracle.com?part=3D4
