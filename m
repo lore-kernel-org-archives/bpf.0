@@ -1,64 +1,64 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995974C6526
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB104C6535
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542948; cv=none; b=t4cjY0A3zYFZRsasALTkQr5qZeM2bWSR/0RZDbym4tI0C96OKErzcLPzPOdbJCtJw1H/+OzgaKJ6b6dub0KwJtGw8NQTTZwL4eG+JawPZQDNfW8Zcxjo80HKND83atwvVXjwhVXN2eMfPCI9szpeDGWdNou/HGRyYIB2/DYgQMk=
+	t=1791542948; cv=none; b=Ofpfzm984WoCoV00+Vn/ETSuhtZzgWHLKHS2OJ1G5aAY/YamC3wTh2HICrfjsqmlTz3k0c4VgNmyuY1LSOVE8/gwhS3i/pCRHdOIaB0d7Y8oF8l/A9la4Bb07Fa0PkujM1Mwa+eILcxiw8Lo49ZPegYWVxavminA7dPDo6qGGKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791542948; c=relaxed/simple;
-	bh=ipS6otRBWE4qdqNUG7HBypsQhmPzpiqgxSRofHpaPK0=;
+	bh=Rnl25DzF8N139Kkxe3Q+NrW8/L/YRcb4wVZmYuSpVhk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aHnrX15SxGN9p0za9zoccieITkfHPQerq07ZPRxUg/d17usxkTAoYuyoYjudiRZIJUTszAYSZfSy23+kWdkdJ6Iaj3ZY3rEwsfhIhVLeo5heTXfJjngtLmsEUflr9ZcJPwiH20ZCKYCR0Mr9SHFQfYEBLZ5Qrw2MhCnUgecBu/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BWcrOAgl; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version:Content-Type; b=Hm8fT2KVlS3xbHrcOmEgeAz3buN9yhXDbQ51Y4vR9QKnNU30NJxm/fMOC9y5DRknGsVRMYOY+Rx2QcUujNCS0I045piZgMVkLSxLHXImatuz7Ka4TAq0TNrtl7TRPms0fBvfUn4BO9ax9cA7qI7Ea49LMZlHaJMZmEXs5TqJxcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TVWDVJD8; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWcrOAgl"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cfbbdfa60bso38505665ad.3
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TVWDVJD8"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-39647aa9d52so1353176a91.0
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791542929; x=1792147729; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791542932; x=1792147732; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=OLtNlR+Smj3WVPL3U5SZw/LV/RXz8P/JjOqmbl0LWxU=;
-        b=BWcrOAglPUWyQHVA4lbdlrbQCr6kwSmNAJ+96+qHiL2VBJHmz6w8O5My+mAoL9p1rd
-         +hyPYpA535/RvPdy95P7cPHhHbE3BXRoRQDX7/msQFfGI44He+dN8d25oqfIr3p2F3mG
-         BnvLg8yfZdvt/nIOgjQxhpG5av8yx1YjvIye5gEhopvFKk7Rq9W5vr4cPhUUMX6Zt5UM
-         ScXM8YUy3hh1RpXuO4rXKU9O6FwFrFLZPabX4WsG0SAEbE6ak+9Eq/zGX6HfboZBHJ2Q
-         ioYf0FWeCbPCekVPJB47WXiMkSFNpMGeObrZEnZgIjB2Pu1ov0AZTGe4ybFnQ2OjiLC5
-         D1jg==
+        bh=SwldsgZt22zk5Xb2d67Mk0ZkB0q/MObvg6/m/MNvLYU=;
+        b=TVWDVJD8onDv/Lul69MLys0ztX0c5gDvwmwOpYjFhN7YlNH7UQQmaB0dV5WwYyMkj2
+         8KSPGNoEgTUxeAtuUB38gFawMrfsrboZU1NIVWa3ve+o8hCidGAwZ5EgdTCs8YYcXH29
+         O4QW28xIuKQ6m8VOyj7lIapQ6Cz/yoL7hgLRdiwxRvCKcouEC8EtL/0a/vZu9WXsWi8P
+         dhQbiQ7CrsCCm0GReYenTb3xaNvCjJ9AH3GD0/9Fqk+cxf/QatGzpgIzRMdndr0WysYg
+         G2YHH4+Ok4uR78uRtnrM76nJJ9DPzybvmmPk7WjoGGlfXHssW7Pa934IC4rguek/FAJc
+         QUOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791542929; x=1792147729;
+        d=1e100.net; s=20260707; t=1791542932; x=1792147732;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OLtNlR+Smj3WVPL3U5SZw/LV/RXz8P/JjOqmbl0LWxU=;
-        b=diZ/yfQ6r5/ihBhNrAJ3MJXqZYFkS9pSdj4Ax4RtM8mLLFgYnKkJIQugM0fNOQ4GtE
-         ZsrYiVd4PwNhX4U1RCjcmjYNErM1PxQlLuLfPrwsJSXWgClQ+hOuJ+6aF+QJ4HJX7C6C
-         o7M8xGCL+ql+AsQYbcGddYLNwssQ1jYnk6gmw9JFusjH5DKh5qFS06rBZy5KMEB2LOvY
-         CLzLzFBwjHVoknB3eZyKFD+GPWeg9FOxLt8/5fRZEZCNPADzr5LOlXiHG7P695VoguKF
-         FeNtarPTm73zdaFatS9m6qiMXI4zWK7DzXV8u9BAyI6dBQZEKUF3thtINNL/rXrf6LNa
-         zuZQ==
-X-Gm-Message-State: AFq9FYK/9QNaMD5nvJDyGmzFpWUqz1ao5oTzlatcjKkSnY1Jwc9Gx+UT
-	0q/CTmHwxW9hf1pORiUP5JUSyUwzCb85eb8szS1wPqgwiWtcBYD5P4s/1AkNqOQT
-X-Gm-Gg: AYBFou3mOuozNO9h7ayBudQIJneO15ooRaJtTb0q9tDNDnqEZWkCsEtN7VpUUdLBs7I
-	EDS6lwv56Bn5mqcn27GE1pNjeoaGdbj6SA2aimGx7D1DWwfK0mIZ9ivPvj1FMMDTJkoS9eXb4Nx
-	6l0LgpZ6DeNMAqdVodgbcUzc3a0VVhyFQnuiFC6DKo9B7o2Di65HhE1KlARetiuS68BTwqftezu
-	UOlRrGcP4gUjsArTjweNbMs1noIyHL8CBn3A++kFyYS3KoovShtFcavG9AscIt4+X5lFGdC1Y59
-	k0NNAW7IImcibwdBBpwdqTKeIlauStZip9fq+wz8ejiRhgAyPa639NMWh8FYKt74B4HOj3ck7h0
-	Sdw7BpNFj5x9V2fNwM9U1AHzG6nZ9el5wRtJaj3srYlNY7HM3Cq1XVTMfa1Olwb0Rn54jFzXrw4
-	mZMSGjVqqCmI57V/Nct+GdKhIlxAgeKX5e+IFQW4cgwxpJUQrXWjod1KGVfM33enIKzztl1EHFK
-	jK2haiP/yeO/z0=
-X-Received: by 2002:a17:90b:3d48:b0:3ab:22db:1c0c with SMTP id 98e67ed59e1d1-3ab3a7a1531mr1385406a91.31.1791542928722;
-        Fri, 09 Oct 2026 03:48:48 -0700 (PDT)
+        bh=SwldsgZt22zk5Xb2d67Mk0ZkB0q/MObvg6/m/MNvLYU=;
+        b=C+nREDjTh6XiXVkHSZjLAkoHHiEXFG/+d4BqZykQQuYnuZGp4t486rYMOKs3ldha0O
+         KojFMd22wyODIRB/Zh+UzgiFZJoq0gcgSYdQXiydGWg6b4jAA3CFbEmlVklpZbzg/cGS
+         cNpekjNEAnwdJ27HvhWg2/WKTfm3LR4uuJVnAjVnEwCYAWECkFvUDjis5VRXFtQZICNP
+         v08+vkDN6Vquqs1bgEVympgb9hmArhLglJbVDn3AtJGL+20MizekUPOeJ/ce8QcNHLLV
+         jK1HlFYwu/V3XKCjMHCwpwL1Q5QGLB5KyORInyfQkRFkf1Tny+fTAFSx7Or+66tblfvP
+         m6Rg==
+X-Gm-Message-State: AFq9FYKZ17UGJ9LEn3NZd6CBVWSbCx/bLxWvq7HD5Ystx5JBSAr7S8eJ
+	rLEAy6GHjNbogB2Ctk0Yj03jhFURtIn3tLRzpR14cxurWRkwXTxmy26WWqwgC3re
+X-Gm-Gg: AYBFou3m17MdwottMTg/PDMJPTjZQlnTgFvR3vdX2UsW59dWoSOZ8ZXHFARC3EKDeyC
+	2rhIxnTLmc3mEYdBkjsLSZwGvEdVbt/C1DTT2/zQNg0DJkTSk7T6SFQUTBesO6wyxafr18TQ+I+
+	6C97CdoZk0FruPJHcNqog+sanGVQaTwq7nxksuOIoGnPEMTTSL0pyeH9l8aa3F35/8nL+Z/j6jJ
+	MUZO0Uh3jcEBLs9/T4jeYUPkk2ExbhaMaEXfKEHlQn+TRqCzBc6v/AEnLBJ+YJoqHp3RmduB72v
+	elSEpaO9JqUs0NOAqojJOnCug6HGmuX67yiYBLNUs5GWX3LDLtVMH5x8kz1xQ3o+B0pjsR8IeYY
+	xkLSFAE7Cm/+LnhlN2vkQ3E0VI2z/WPShe5GMBj/HAoQ/DC1kWWQdlty20l/MM9wDmhMO75XQZa
+	o/8gePRX/VIISwwXJXekmgbhfbRhoxIiGR0FDcqhC9Fiuz2gDsVsKjdGiHXidW0ZYj8rIGFhuYK
+	R7FIlpI8hbXnPA=
+X-Received: by 2002:a17:90b:1a82:b0:3a0:d82b:237b with SMTP id 98e67ed59e1d1-3ab3ab209f3mr818423a91.25.1791542932195;
+        Fri, 09 Oct 2026 03:48:52 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.48
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:48 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:51 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 39/51] selftests/bpf: test for stack-pointer subrange pruning
-Date: Fri,  9 Oct 2026 03:47:57 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-39-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 44/51] selftests/bpf: tests for BTF-based global subprog stack liveness
+Date: Fri,  9 Oct 2026 03:48:02 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-44-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,62 +82,75 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Validate changes from:
-"bpf: allow subrange relations for PTR_TO_STACK in regsafe()".
-Add a test case that checks that a widened stack pointer with range
-[-72, -16] is considered a superset of a stack pointer with range
-[-64, -16].
+Check that passing a stack pointer to a no-op global callee produces:
+- use, def and may_def marks for a fixed-size memory argument.
+- No stack effects for an untrusted BTF pointer argument.
+
+This verifies that call effects follow the declared argument types
+rather than the callee's body.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_stack_ptr.c       | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ .../selftests/bpf/progs/verifier_live_stack.c      | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-index 3e0bea9819ca..3e9d8fc606ae 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-@@ -586,4 +586,40 @@ __naked void stack_check_size_512_with_may_goto(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index 0fbc43a5d4f4..3d88cb28b8fe 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -159,6 +159,52 @@ static __used __naked void write_first_param(void)
+ 	::: __clobber_all);
  }
- #endif
  
-+/*
-+ * Verify that old PTR_TO_STACK state is considered a super-set of
-+ * new PTR_TO_STACK state when new variable range is a sub-range
-+ * of the old range, e.g. old [-72, -16] vs new [-64, -16].
-+ */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+/*
-+ * r7 is widened to [-72, -16] at the loop header (insn 3),
-+ * the loop body sees [-64, -8] after 'r7 += 8'
-+ */
-+__msg("loop header at 3, widening r7 to -72..-16 step 8")
-+__msg("R7=fp(smin=smin32=-64,smax=smax32=-8")
-+/*
-+ * back-edge state is clamped to the remaining iterations and pruned
-+ * at the header, because [-64, -16] is within the widened [-72, -16]
-+ */
-+__msg("loop header at 3, clamping r7 to -64..-16 step 8")
-+__msg("from 5 to 3: safe")
-+__msg("processed 9 insns")
-+__naked void stack_ptr_subrange_in_loop(void)
++struct cnt8 { long v; };
++
++__noinline int global_noop_arg(struct cnt8 *p)
 +{
-+	asm volatile ("					\
-+	r7 = r10;					\
-+	r7 += -72;					\
-+	r6 = 0;						\
-+	r7 += 8;					\
-+	r6 += 1;					\
-+	if r6 < 8 goto -3;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
++	return 0;
 +}
 +
- char _license[] SEC("license") = "GPL";
++SEC("socket")
++__log_level(2)
++/* Call to a global function: the argument is described by its declared type. */
++__msg("stack use/def subprog#0 global_callee_arg (d0,cs0):")
++__msg("3: (85) call pc+{{.*}}; use: fp0-8 def: fp0-8 may_def: fp0-8")
++__naked void global_callee_arg(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 8) = 0;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call global_noop_arg;"
++	"exit;"
++	::: __clobber_all);
++}
++
++struct task_struct { int pid; };
++
++__noinline int global_noop_btf_arg(struct task_struct *p __arg_untrusted)
++{
++	return 0;
++}
++
++SEC("socket")
++__success __log_level(2)
++/* Untrusted BTF pointer arguments need no caller stack state. */
++__msg("stack use/def subprog#0 global_callee_btf_arg (d0,cs0):")
++__msg("3: (85) call pc+{{[0-9]+}}\n")
++__naked void global_callee_btf_arg(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 8) = 0;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call global_noop_btf_arg;"
++	"exit;"
++	::: __clobber_all);
++}
++
+ /*
+  * Cross-frame imprecise write: imprecise_frame_writer() receives a pointer
+  * into the caller's frame (frame 0) but conditionally replaces it with a
 
 -- 
 2.53.0
