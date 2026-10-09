@@ -1,81 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65E44ABBCF;
-	Fri,  9 Oct 2026 11:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB784C33C5
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545123; cv=none; b=r3UPLFLFQ7qTeNbdzbB9irzBnKQDoN05SPbKTpw9iqEujgdROcKZ/2RaB1DrOshccszWRenuZTsoOlw5ZraI9/a8oA9bTnpIJOujpO4zmqR2n04MEpWgVyPAenmrbHp56kuz4R9nK8jAfzlhrcIRSOoXkO0etHKRdVcJT5sKnd8=
+	t=1791545180; cv=none; b=o5BntAx23NKY+B6Y26S5lQPy6bQEmXr1sudqMkRjUhLH8wQn0FCZKoZxahlcI+mNQBamogyHjbxAQi02mlUDQIsTAS6AfnFYpqTA6P3a/sAGJXP21qXEi/sn2rwnlGkU28ZWdY5OUYGz7nBBC11Cyla6k7Lrov88XQND/WkG6D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545123; c=relaxed/simple;
-	bh=KcUh4MZHrnR4a63nZHmMtJNNZuW4M3LW4ICa3IFGebM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UvSnenacWPw0Kh1V7RUdwbZLvUdW2q0PVBqSOt6WFdOysjDj/1RmXNpPihXANKXU82Fqa+zYlQ5EJXysYEQepWxXIR6ew50gqiDaSA5jq9x95Cz9t5zvOTl1Sn0pOTvGFsIkL4BiSUlWbxyQcrhj4pfHKaBgrwestmfXBg+LHew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mwt+9Jdr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791545180; c=relaxed/simple;
+	bh=ulHPuTkycrSkJUi+/eA0BvHAvJ7Xx0TlP5V7VJPj2Ow=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=ir6WQwUQijfftnFiSmCNpFYz6CBiaZjSPBsiK42Y9C6Aoj1/vxXSlmLq7/VFrAtRLYCEqNeis1oZ4s2z2W0kc2XnZmLF7v38HRAJYNY564l+psIDfCDp7BsbeYJ5pFoDB9btZClxnyr8haW02wdlEKr/rAr/U+Jn50GoCLDXu+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V71WyQpo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mwt+9Jdr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82DCC1F00900;
-	Fri,  9 Oct 2026 11:25:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V71WyQpo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF5A1F000FF;
+	Fri,  9 Oct 2026 11:26:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791545112;
-	bh=U4xMwr/21zOdESeEfZbI6IrEzozFKelIIS7HuFvLYLQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Mwt+9JdrtTOlF0MG7e82+80luCEzOr14WKUw4gs6fwvAZO9j9m2J4rQuo8wFxOtT5
-	 QsVqqT2zizDjJ7jB9kH7alH6rGY7zR4w2no7JzJh7c0Yd/aXSugs3KWksMovoP7MNS
-	 yNY9Fek1Tcx5nX75iL3MlFFt8xY0QKpI++UCg/nHQdpC8f2oxfwFpjQLtX/45zLQpr
-	 QMk9m6G+XwvNeFtlGs4n77xTAALOrYssxm6GE2Tf3HNNbjxF0agp+WDGcc0Zfq4ABc
-	 D6EK/t7bYkvkwrLnN88Gc6/G5t4Zla/SG7S+VddcZi/ja6TWF0DHzdL8CPSsRFCZOj
-	 dgmYJxPfj4mNQ==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
- kuba@kernel.org, pabeni@redhat.com, tushar.vyavahare@intel.com,
- kerneljasonxing@gmail.com, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>
-Subject: Re: [PATCH v2 net-next 08/14] selftests: xsk: run one test case per
- xskxceiver invocation
-In-Reply-To: <20261008114909.734364-9-maciej.fijalkowski@intel.com>
-References: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
- <20261008114909.734364-9-maciej.fijalkowski@intel.com>
-Date: Fri, 09 Oct 2026 13:25:08 +0200
-Message-ID: <87mrsnqfor.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1791545170;
+	bh=0C2yp3+g+a0Cp6Xk/x+oxmBF7XnSgyowyLxawe2ZGUA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=V71WyQpoeLjuYX3i5eHKZbV9xSo+tsevOgvibU6gWVm77VHj3NUxHranxSzH6IEo3
+	 1zCbB2fdDEazMNMEwqkbBeLmGZk9v0L3THBbvcSat+vArzZl0oIs7hHUmVwftFHhUk
+	 j93AknQUs5vQm5OnReb6WGB3aK0D3GuEFNu57AEClZb9tflspbRCSgYlJsURIZGzca
+	 vGEtuWr72KzO+3cse809oAfHQpXbOji0exVPZWk7hNpwsEa9nFG/i1mWLMFLg0nObP
+	 5xw+9ZcJGhtXCElTjStoG8RciIkb92XUiF9Ym0IGCzCTPv3dGhgkJ3ZMyn+V60hwo2
+	 KIbNd3ezQQHCw==
+Message-ID: <sashiko-outbox-165368@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 11/51] bpf: compute parameters liveness in
+ bpf_compute_live_registers()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261009-scev-minimal-rebase-v3-11-bcba9bc53ac9@gmail.com>
+References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
+ <20261009-scev-minimal-rebase-v3-11-bcba9bc53ac9@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 09 Oct 2026 11:26:09 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: state pruning bypasses NOT_INIT check for static subprog args
+--
 
-> Make test_xsk.sh own the mode x case matrix and run xskxceiver once per
-> case, so that every case starts from a fresh process and a case that
-> crashes fails only itself. A single case is also the unit that the next
-> patch splits into separate RX and TX endpoint processes.
->
-> xskxceiver now requires -m and -t and runs exactly that case. It
-> reports one KTAP result and exits with its verdict. An unsupported mode
-> skips the case instead of exiting with XFAIL.
->
-> test_xsk.sh runs every case in the skb and drv modes, or in the one
-> given with -m, in both the softirq and the busy-poll pass, and prints a
-> summary of the passed, skipped and failed cases. -t also accepts a test
-> name, which is resolved through xskxceiver -l. Only skb and drv modes
-> are accepted, as veth has no zero-copy support, and the script skips
-> when xskxceiver was not built. As ARGS is now rebuilt for every case,
-> exec_xskxceiver() adds -b to a local copy of it.
->
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
->  .../selftests/net/lib/xsk/xskxceiver.c        |  52 ++++-----
->  tools/testing/selftests/net/test_xsk.sh       | 102 ++++++++++++++----
->  tools/testing/selftests/net/xsk_prereqs.sh    |   6 +-
->  3 files changed, 103 insertions(+), 57 deletions(-)
+commit 9fa2cdb3328d1fdeb0246efe76e84a8ecaca85e6
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-Again, Python please. Maybe carry the bash side over in the first
-commit, and here introduce a new, shiny Python test driver?
+bpf: compute parameters liveness in bpf_compute_live_registers()
 
+This commit changes the verifier to compute exact liveness for the
+arguments of calls to subprograms instead of assuming r1..r5 are read.
+It adds a separate pass to prepare BTF function arguments early so that
+liveness can be accurately determined.
 
-Bj=C3=B6rn
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index a359e457e6c0c..8d8428ccc5052 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+
+[ ... ]
+
+> @@ -2613,8 +2620,18 @@ static void compute_insn_live_regs(struct bpf_veri=
+fier_env *env,
+>  		case BPF_CALL:
+>  			def =3D ALL_CALLER_SAVED_REGS;
+>  			use =3D def & ~BIT(BPF_REG_0);
+> -			if (bpf_get_call_summary(env, insn, &cs))
+> +			if (bpf_get_call_summary(env, insn, &cs)) {
+>  				use =3D GENMASK(min_t(u8, cs.arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS), 1=
+);
+> +			} else if (bpf_pseudo_call(insn)) {
+> +				/* a static callee's reads are added in bpf_compute_live_registers()=
+ */
+> +				subprog =3D callee_subprog(env, insn);
+> +				if (bpf_subprog_is_global(env, subprog)) {
+> +					reg_args =3D min_t(u8, env->subprog_info[subprog].arg_slot_cnt, MAX=
+_BPF_FUNC_REG_ARGS);
+> +					use =3D GENMASK(reg_args, 1);
+> +				} else {
+> +					use =3D 0;
+> +				}
+> +			}
+
+[Severity: High]
+Does marking these unused arguments as not live for static subprograms
+interact poorly with verifier state pruning?=20
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a5456a6e26946..50cb564be9f74 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -10939,6 +10940,15 @@ static int btf_check_func_arg_match(struct bpf_v=
+erifier_env *env, int subprog, s
+>  	meta.fn =3D fn;
+>  	meta.func_proto =3D func_proto;
+> =20
+> +	/*
+> +	 * Check if all register arguments declared in BTF are initialized.
+> +	 * If they aren't the BTF is unreliable.
+> +	 */
+> +	if (!bpf_subprog_is_global(env, subprog)) {
+> +		for (i =3D 0; i < min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS)=
+; i++)
+> +			if (caller->regs[BPF_REG_1 + i].type =3D=3D NOT_INIT)
+> +				return -EINVAL;
+> +	}
+>  	return check_func_args(env, &meta, env->insn_idx);
+>  }
+
+[Severity: High]
+Because unused arguments are no longer marked as live due to the change
+in compute_insn_live_regs(), can this NOT_INIT check be completely
+bypassed by regsafe()?
+
+If the verifier first explores a path where the argument is initialized,
+the subprogram is not marked unreliable. If it subsequently explores
+another path where the argument is left NOT_INIT, this second path
+will be pruned before evaluating the BPF_CALL instruction and hitting
+btf_check_func_arg_match().
+
+Could this result in the subprogram remaining "reliable", allowing
+fentry/freplace extension programs to attach to it and potentially
+leak uninitialized kernel memory via the BTF context?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-scev-minim=
+al-rebase-v3-0-bcba9bc53ac9@gmail.com?part=3D11
