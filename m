@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-50.mta0.migadu.com [91.218.175.50])
+Received: from mta1.migadu.com (out-135.mta1.migadu.com [95.215.58.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D614F3914
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670EF501F45
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791577734; cv=none; b=KHjL1uFyGKMoyua0CegA8qKAdPdHCOv5+fMeK4vUZ1CNULdirNFm8J09e5hoDfZAHmc6OPYafQBBWre5vgC2JTI/MTtFNpQaqf72io7fPg0LWKwQFmiK+nQXR8obiUORjOso0S+86w7jt98MKLeRsqtl8pVrG31G5CqldtXZRqo=
+	t=1791577738; cv=none; b=P1/8UD6Gzg0ue6rHq2RW6gvl/0UpG83h7eavdFY4IY5j85vUDQesoZmBhOupKkF7EAarUeyxQf2Vu4LwuiQMhsxzu2tppPS8U3tQC6uUv3K4cuV0PyAsbMoHRBpnwW/THnr9DLVmwpd3ygJOMX4JaEZTUyWfNpqrIfenp8hiehU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791577734; c=relaxed/simple;
-	bh=7+KSnwa+Z1D21IwaKyQTNxQ+uJU7XgpTZahbq8RJejo=;
+	s=arc-20240116; t=1791577738; c=relaxed/simple;
+	bh=1yL3Z2OLKbyYnjZa62IL5GKkqDdD1ltLx9OpUVvOYQ8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DTPJ7VitnCkM4Jdhb/YWVP4IYGsrSTiOsF3/Rz07xHjv+Ddv1V34gqi3FACQ8kBqvqc/xq4sz32VDlXa1KM3IMIVh5PSoLbNTlgeuFlOTYvbGy7Ynufirm9zGDBuiiCLCGrC/RqV6vWnUkJ9QwHbL3Jhfh475Jy5eOEmM/JhNe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TrGKALJG; arc=none smtp.client-ip=91.218.175.50
+	 MIME-Version; b=NAy8s8cpHphWrrikif5h6zNUzJcmDQVdNX45kTrkd4Kl+vSPi0Tk8GZaP00gnXoMZXe/AFhnRUNgG/9BMWghKGVWMolYLBSSyjuLZtxzh+DHx/yoG/Oeb+NLR0KFIQNwQJfx2Ki2o/XAdZB/t0a7EpNY/F2Vt9FTJsK8koUL5g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e/VOB+5l; arc=none smtp.client-ip=95.215.58.135
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TrGKALJG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e/VOB+5l"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7+KSnwa+Z1D21IwaKyQTNxQ+uJU7XgpTZahbq8RJejo=;
+DKIM-Signature: a=rsa-sha256; bh=1yL3Z2OLKbyYnjZa62IL5GKkqDdD1ltLx9OpUVvOYQ8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791577731; v=1; x=1792182531;
- b=TrGKALJGO2cn9NNIsniF3zhOHG2do/O+i6U2b7/S6NMIa9zeEVTwl++pEmRgh4e1Jjufzj+l
- e2wGvbWPrBGKoyznfkTEiEgx2q3sTOZZijLdp+8h2gapBf9sGpfHxI4kQgXFDOiz9h/AYzweV2p
- jxmyjgFCWoq42jgXhe4bGCF8=
+ t=1791577734; v=1; x=1792182534;
+ b=e/VOB+5l/bRBUSMjeDMF8I70LdW41IJXggMN4OVbKEgCvdYGNgmn+j77pr6YXFR+Oe64lFm/
+ YZrO1HdUkZ2M4MmN47LI21xcO47JtdOv/ZTgVwTKN2l9WGj3JQG449nelTKUc67PkOj9xKOffCk
+ FjxRDFP4j1/RArVf4IyZUKZY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1d9630834caf14b1;
-	Fri, 09 Oct 2026 20:28:50 +0000
-X-Mizu-Trace-ID: 1d9630834caf14b1
+Received: by smtp.migadu.com with ESMTPS id d2d9d0e243bb2c79;
+	Fri, 09 Oct 2026 20:28:54 +0000
+X-Mizu-Trace-ID: d2d9d0e243bb2c79
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 09/11] selftests/bpf: Cover the user ringbuf callback dynptr lifetime
-Date: Fri,  9 Oct 2026 13:27:56 -0700
-Message-ID: <20261009202759.50520-10-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 10/11] bpf: Scope the bpf_for_each_map_elem() array key to the callback frame
+Date: Fri,  9 Oct 2026 13:27:57 -0700
+Message-ID: <20261009202759.50520-11-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261009202759.50520-1-ihor.solodrai@linux.dev>
 References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
@@ -55,215 +55,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The dynptr passed to a bpf_user_ringbuf_drain() callback, and values
-derived from it, must not be used after that callback returns.
+bpf_for_each_map_elem() passes array and per-CPU array callbacks the
+address of a key on the helper's stack.
 
-Exercise escapes through the callback context, slices returned by
-bpf_dynptr_data() and bpf_dynptr_slice(), and clones stored in the
-caller's frame. Also cover an inner callback's dynptr escaping into an
-outer callback.
+A callback can save that pointer in its context and dereference it
+after the helper returns. Loads through PTR_TO_MAP_KEY are not
+fault-protected, allowing a four-byte read-only leak of reused kernel
+stack.
 
-Require the callback-return diagnostic for escaped pointers and slices.
-Check the full bpf_throw() callback rejection so a frame-reference leak
-cannot satisfy the test accidentally.
+The verifier tracks the pointer's type and key size, but does not tie
+its lifetime to the callback invocation.
 
+Anchor R2 to a frame reference in the array map callback setup so the
+key and its copies are invalidated on callback return. Leave hash keys
+and map values unchanged, since their storage is not callback-local.
+
+Reported-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../selftests/bpf/progs/exceptions_fail.c     |  20 +++
- .../selftests/bpf/progs/user_ringbuf_fail.c   | 135 ++++++++++++++++++
- 2 files changed, 155 insertions(+)
+ kernel/bpf/arraymap.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-index 22503cf62e9f..86a0667ba348 100644
---- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-@@ -31,6 +31,11 @@ struct {
- 	__type(value, struct hmap_elem);
- } hmap SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_USER_RINGBUF);
-+	__uint(max_entries, 4096);
-+} user_ringbuf SEC(".maps");
-+
- private(A) struct bpf_spin_lock lock;
- private(A) struct bpf_rb_root rbtree __contains(foo, node);
- 
-@@ -110,6 +115,21 @@ static int timer_cb(void *map, int *key, struct bpf_timer *timer)
- 	return 0;
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 0fe9afd4a591..5e8669e311b6 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -855,6 +855,20 @@ static u64 array_map_mem_usage(const struct bpf_map *map)
+ 	return usage;
  }
  
-+static long drain_cb(struct bpf_dynptr *dynptr, void *context)
++static int array_map_set_for_each_callback_args(struct bpf_verifier_env *env,
++						struct bpf_verifier_state *state,
++						struct bpf_func_state *caller,
++						struct bpf_func_state *callee)
 +{
-+	bpf_throw(0);
-+	return 0;
++	int err;
++
++	err = map_set_for_each_callback_args(env, state, caller, callee);
++	if (err)
++		return err;
++
++	return mark_frame_scoped_arg(env, state, callee, BPF_REG_2);
 +}
 +
-+SEC("?tc")
-+__failure
-+__msg("bpf_throw kfunc (insn {{[0-9]+}}) cannot be called from callback subprog {{[0-9]+}}")
-+int reject_user_ringbuf_callback_throw(struct __sk_buff *ctx)
-+{
-+	bpf_user_ringbuf_drain(&user_ringbuf, drain_cb, NULL, 0);
-+	return 0;
-+}
-+
- SEC("?tc")
- __failure __msg("cannot be called from callback subprog")
- int reject_async_callback_throw(struct __sk_buff *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
-index c0d0422b8030..4e0f29c2d1f2 100644
---- a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
-+++ b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
-@@ -1,9 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
- 
-+#include <stdbool.h>
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
-+#include "bpf_kfuncs.h"
- 
- char _license[] SEC("license") = "GPL";
- 
-@@ -243,3 +245,136 @@ int user_ringbuf_callback_const_ptr_to_dynptr_reg_off(void *ctx)
- 			       callback_adjust_bpf_dynptr_reg_off, NULL, 0);
- 	return 0;
- }
-+
-+/* The sample goes back to the producer as soon as the callback returns. */
-+struct dynptr_ctx {
-+	struct bpf_dynptr *saved;
-+};
-+
-+static long callback_park_dynptr(struct bpf_dynptr *dynptr, void *context)
-+{
-+	struct dynptr_ctx *c = context;
-+
-+	c->saved = dynptr;
-+	return 0;
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("the callback that owned this value returned")
-+int user_ringbuf_callback_park_dynptr(void *ctx)
-+{
-+	struct dynptr_ctx c = {};
-+	char buf[8] = {};
-+
-+	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_dynptr, &c, 0);
-+	if (c.saved)
-+		bpf_dynptr_read(buf, sizeof(buf), c.saved, 0, 0);
-+	return buf[0];
-+}
-+
-+struct slice_ctx {
-+	char *p;
-+};
-+
-+static long callback_park_data_slice(struct bpf_dynptr *dynptr, void *context)
-+{
-+	struct slice_ctx *c = context;
-+
-+	c->p = bpf_dynptr_data(dynptr, 0, 8);
-+	return 0;
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("the callback that owned this value returned")
-+int user_ringbuf_callback_park_data_slice(void *ctx)
-+{
-+	struct slice_ctx c = {};
-+
-+	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_data_slice, &c, 0);
-+	if (c.p)
-+		return c.p[0];
-+	return 0;
-+}
-+
-+static long callback_park_kfunc_slice(struct bpf_dynptr *dynptr, void *context)
-+{
-+	struct slice_ctx *c = context;
-+
-+	c->p = bpf_dynptr_slice(dynptr, 0, NULL, 8);
-+	return 0;
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("the callback that owned this value returned")
-+int user_ringbuf_callback_park_kfunc_slice(void *ctx)
-+{
-+	struct slice_ctx c = {};
-+
-+	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_kfunc_slice, &c, 0);
-+	if (c.p)
-+		return c.p[0];
-+	return 0;
-+}
-+
-+struct clone_ctx {
-+	struct bpf_dynptr clone;
-+	__u64 armed;
-+};
-+
-+static long callback_park_clone(struct bpf_dynptr *dynptr, void *context)
-+{
-+	struct clone_ctx *c = context;
-+
-+	bpf_dynptr_clone(dynptr, &c->clone);
-+	c->armed = 1;
-+	return 0;
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("Expected an initialized dynptr as R3")
-+int user_ringbuf_callback_park_clone(void *ctx)
-+{
-+	struct clone_ctx c = {};
-+	char buf[8] = {};
-+
-+	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_clone, &c, 0);
-+	if (c.armed)
-+		bpf_dynptr_read(buf, sizeof(buf), &c.clone, 0, 0);
-+	return buf[0];
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("Expected an initialized dynptr as R1")
-+int user_ringbuf_callback_park_clone_then_slice(void *ctx)
-+{
-+	struct clone_ctx c = {};
-+	char *p;
-+
-+	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_clone, &c, 0);
-+	if (c.armed) {
-+		p = bpf_dynptr_data(&c.clone, 0, 8);
-+		if (p)
-+			return p[0];
-+	}
-+	return 0;
-+}
-+
-+/* An inner drain's dynptr must not escape into the outer callback either. */
-+static long callback_park_outer(struct bpf_dynptr *dynptr, void *context)
-+{
-+	struct dynptr_ctx inner = {};
-+	char buf[8] = {};
-+
-+	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_dynptr, &inner, 0);
-+	if (inner.saved)
-+		bpf_dynptr_read(buf, sizeof(buf), inner.saved, 0, 0);
-+	return buf[0] ? 1 : 0;
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("the callback that owned this value returned")
-+int user_ringbuf_callback_nested_park_inner(void *ctx)
-+{
-+	bpf_user_ringbuf_drain(&user_ringbuf, callback_park_outer, NULL, 0);
-+	return 0;
-+}
+ BTF_ID_LIST_SINGLE(array_map_btf_ids, struct, bpf_array)
+ const struct bpf_map_ops array_map_ops = {
+ 	.map_meta_equal = array_map_meta_equal,
+@@ -875,7 +889,7 @@ const struct bpf_map_ops array_map_ops = {
+ 	.map_check_btf = array_map_check_btf,
+ 	.map_lookup_batch = generic_map_lookup_batch,
+ 	.map_update_batch = generic_map_update_batch,
+-	.map_set_for_each_callback_args = map_set_for_each_callback_args,
++	.map_set_for_each_callback_args = array_map_set_for_each_callback_args,
+ 	.map_for_each_callback = bpf_for_each_array_elem,
+ 	.map_mem_usage = array_map_mem_usage,
+ 	.map_btf_id = &array_map_btf_ids[0],
+@@ -900,7 +914,7 @@ const struct bpf_map_ops percpu_array_map_ops = {
+ 	.map_check_btf = array_map_check_btf,
+ 	.map_lookup_batch = generic_map_lookup_batch,
+ 	.map_update_batch = generic_map_update_batch,
+-	.map_set_for_each_callback_args = map_set_for_each_callback_args,
++	.map_set_for_each_callback_args = array_map_set_for_each_callback_args,
+ 	.map_for_each_callback = bpf_for_each_array_elem,
+ 	.map_mem_usage = array_map_mem_usage,
+ 	.map_btf_id = &array_map_btf_ids[0],
 -- 
 2.56.0
 
