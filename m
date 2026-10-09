@@ -1,64 +1,64 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B748F4BFE94
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B49C4C1500
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542928; cv=none; b=RfV6jx1k8kKBu3sVZqqnh/MQzfYKD7FEyDHSebxx3uy3MTEZ8vKh5cGDRRbk/jNUEtDcdMsWl25E05IfaySUTpyRULNmPqfGTwuxIp11kjAyIZymE4b6TPHH4eRNBH5sT4gUERdUBXQCSJZTdLSrWhV761s9kVfTY/J7liWesCg=
+	t=1791542929; cv=none; b=hNMRy0c31fKCY2mN5KpcC9O15MHnTnTT9v/mLVTQ1/5y+FFXe+Tjkh8ojwMVUcX6vbxhwAUHt9ODO94DUgpZhkXKr47dw11ct2Bsn6e7K8dVc8DMmSWrIHzs04DKOkWiq9uJAzRTnACGQMEFpHFzPxmwUMQoX9HpZSDl2ENiky4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791542928; c=relaxed/simple;
-	bh=bb2Mk1ARAKw7Fcx6HVfyYjcbBAnxUybfrR3AQUls5zE=;
+	s=arc-20240116; t=1791542929; c=relaxed/simple;
+	bh=lASMIKQGuAXa6hMt2B8juyDwiHZ3Hk03wB51iawgp8A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=leWdXs7LeWygFS/ZbISjkyGei2/79wkEWY6aWwd0NXnOFlMXiaPbsn09XcZr19NstwdwqG5R1KzrVzuEZ60prKCjFGCoM4DuwyS7FRJNczp9GzJ93gs5KW4zslGeW7/DGg8DFcwbkdwBTKTXSII1Lol9NhjBUKCX1zXU1ZrSAqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZZwWfpm; arc=none smtp.client-ip=209.85.215.170
+	 MIME-Version:Content-Type; b=Cn26cM5o0ZLLLAl75XEp4ME9tn1ZFska9PZAMdGbSCKYFR1Mka8pkU0UsuUU8yNUJQIL5+VvgehCkeJHzlm6ctgWEscwy8wHBRQEO7/bJP6t6sJStfw6REw2CQ9vDZiN/GxRxvmhMTXJLMLOA3Y5aOg4IRw2oi8UZuNi8RP+Rww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iBhManIq; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZZwWfpm"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1085555a12.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iBhManIq"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso3584719a91.1
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791542915; x=1792147715; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791542911; x=1792147711; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=j3PwnHqMUdHhhE53YWt615kKerV1NFa0cz7MSSEVTKQ=;
-        b=lZZwWfpmSw/V1D34OZzeqMNstcXvMrUZ/pQiZ7GtE5gapAKzA9/sZAOVZ7PpiM0P9Z
-         kV10lwr7XT/2l80YiF5lIuPMOqamFnk5/T84WLHI97QACrNw/9KxCHxnyMWaVs34VfmV
-         MwI+0Nz0h2VROVMRStZ0UVGC/QAc8jo2Rp24dryL20TvTNU59ddq/yM5QnmYgV1nzodC
-         0KdhMJpmS3oQ8tNFwpciiY+WTpHL1DPaA9gH7JkUujUBa9ifGX1O+DvvMpCw0WG6PkrV
-         TR07ku6RxRN2FvQO/4+M+BfFjlJPAr1SeF4sQwZ+RlIXtkk3uwGvHrqcNZbwi2SvKOqa
-         LWYw==
+        bh=qwhqaKVxZ2Q8ed0UZ1NYDlCyyasIiiEgBnJNZ8HUlxY=;
+        b=iBhManIqM1DYpLryGCztCsXbS3caTd8pnK+IaTVxuhOiq+jCQORhZqbjCiVg0QiqJL
+         Gtfmb50mLQKAoJKwm50yj0bDd4QtLDRLJwndvxnioy6q3t9e5wkLvQ0gDaJ37nuu2RU6
+         20DnVc5b2kVRNQ1jtognwX5U1u/Ut7DIRIMkRPAyimyj1QfwDueu0ZkoG49GABRU3w3c
+         b+cBIVTwhrqn5Q6eJDSWUxTVlM9hYF30I/H1XoLX/mLZzcfQcC5BRiT0RU22RdfPXiGF
+         KWeAH+VyxIMzAtPInOf5b3itveVriDJcaiqcwH1iho+LvXBewktyhtrUHnqny9XemRhM
+         Y9ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791542915; x=1792147715;
+        d=1e100.net; s=20260707; t=1791542911; x=1792147711;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=j3PwnHqMUdHhhE53YWt615kKerV1NFa0cz7MSSEVTKQ=;
-        b=r8K7pB86tOGrS09WVtJPsZsc6vSzZOMr2Sm9kRQU+f2rEPERmB5g5ZMlrNmfTOSprR
-         OUPKpA0GDs7MV76KadK69066GIaO8TdjNTx5pVsZ9Yt5DlYX4SVznRxBmegAhMJmbSuA
-         ti0paMH1nOX7EcTdXAtWLT5/lYS7j//lg7UEs7a/f0LPcRoXyE2y7QjNqDaPWFbGb+3X
-         OmHi2aowZ/zz1fzZg4AuJFFhBjAQVqyiqiZ76QhTg1DfhWiQ9+4zrv3kBP+mz9NhJ19N
-         o9toRJlFGl0dKVOhcXP8ZrPX3XPlR/LQL2cThMz+rR/xa8NTrK4UaI5qpUJN7b13qVss
-         gUdw==
-X-Gm-Message-State: AFq9FYLO7MZgMoeBU3xJTlQg64bdZDtcP4ihoqhS5JLY3ahHzk+hK3yp
-	QmLUGnsic/ICukKXkgjMhIVfQkbRZe3+tIYKGzByzha8jnRZ+8rTOk5fGiDPwFGh
-X-Gm-Gg: AYBFou2HItMiBC6UaZsIVbju1rrWDHJDJV/ax1VoMKZiRhpveWfv1p68GAAr7r/SB0z
-	cadlBp2qxeHGqGhAkNq0ifiyb5epk2HvZY5zqzBLZFEzuE/r8Wh9JcxYArAkxwlNZiPhOM6uYwb
-	G1w+271J1DkqxfQgX9IG/FBOfmOfb42bKoDHli7YLQVHBlfor4CZqS7DIviHBLASUUShmfDiIBG
-	uJmdKm4YnamU31BFrlflGiG5D7pSbgUQCymf2VSf5Kkb11mfCHM2+PbOKin23m7L860dxOVhCzU
-	xZNXw1xQZj23EL+Ud8A7rJOFEO2L1ZJurzNEBB9QENJjnVMSX8IkQxRcarMLcOUNw5RnA95zcHp
-	jDLNRK1mDsio9kST6cB3Cw0hpK+1oayaNlyURvMOnwS7Kzm1LWyk3cI5dkqI79/ZFc8iH/qwItG
-	xWjz4DkT+bhyR/ZTgXAUeJJMsXP3BC6bjRNFj3wBFY8RsnacZb4WHz+2Qv4BIrFL9V8VY9hoBKo
-	EFdg8IcKveVu98=
-X-Received: by 2002:a17:90b:3a48:b0:3a0:2900:f55e with SMTP id 98e67ed59e1d1-3ab3ac697f1mr898010a91.29.1791542914886;
-        Fri, 09 Oct 2026 03:48:34 -0700 (PDT)
+        bh=qwhqaKVxZ2Q8ed0UZ1NYDlCyyasIiiEgBnJNZ8HUlxY=;
+        b=uda1sEiaZN0xUtY5F5ljkU0qxeu8Itq76P+E5QGKUUc9Qk6/srX5sc78Ou+wRFwOR4
+         RZSG81G76qrAUP6/EPUAk/jhB/2kiUTws8LMClu6nWMq7EeoDmKiI4f+o8c/dC8POxPI
+         jriEHROgrd61NccqMCVJCrHOQzl45JBUTe3xAvSffMgkAeyfd5IFbTprGWgov8OmTFy2
+         fo2GHXJswwjFUJpWRfdv67UEKkSbaVbxKWJvAu9JbhhL2rR8Pwp4F95WvPM2LnmMmrkB
+         85xRfoxzGdMxLpAfUoJicHc9MQB3b/SB2P8ZVCQpcMgoL4Nxf2y4EqWxq763bI4FU/h1
+         Ag3Q==
+X-Gm-Message-State: AFq9FYJ8itT9QJOYsgN+Rx54oDh5Bf5i7xMMi4QGzrs2Pe3m0TyD3gDf
+	Aql2gw8VWzTHC8e13i6si6uem+WDHt2o4gBJQhRH3XIcpkwyb/ZMvxBGxpgJQNAx
+X-Gm-Gg: AYBFou331FDG5cVIurgI+8zHce3MVPs2WSxf1BxmOGTHh7dLHOqNgiL5DxO6vqqYw5r
+	ItXUewPXcY8z/6QszYkQx3B5+sDSgy0IiLE4mr0yk25Ohn6JBF+EHbB7slBBfpYG2RWLnLpRUQd
+	DuhpLQBMe9Wuiz94MjrL6nbR+nsp3YQyeqp968gXwKTLHqMHjlXT3ToA6bO9AzpcrdFMLiIYk8d
+	+5Q41YEc2hyD7JxG5yT1Zs10QxkkZSZ8WXoZLx/IG2T84PtKbuZyiDxxA2SS9jRp0ziJdGnE4QA
+	7YkQz0rOI0hs1BFEqWT4MfU+NkZmFf/UjxwMcNA4QAxnLdhwfAmW/bXalUDvfxv3JyYk5Sb8tF8
+	irazEoFHNdZCoTGpZOR3HEayTsL2kmoC7IeTqMaLpEHLmaXmwIw6XO3ZBpOp/PtrtSAbZZnzz9q
+	l4R/AfzCbiWskENwILvHCZbavSKJ1JtTUZ/mJV9pfCdXA1cUN6BoGaqQdf1CvHtf3cM5Wfj9ghf
+	i9CA1+RiE/0eKTT
+X-Received: by 2002:a17:90a:d006:b0:3aa:fc22:8aac with SMTP id 98e67ed59e1d1-3ab3a9325f8mr1450255a91.51.1791542910784;
+        Fri, 09 Oct 2026 03:48:30 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.34
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:34 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:30 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 21/51] bpf: save DFS postorder numbers for program instructions
-Date: Fri,  9 Oct 2026 03:47:39 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-21-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 17/51] bpf: expose bpf_verbose_snum()
+Date: Fri,  9 Oct 2026 03:47:35 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-17-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,157 +82,84 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Dominator intersections and SCEV worklist scheduling need to compare
-instructions by their DFS postorder rank. Save per-instruction
-postorder numbers alongside the existing postorder sequence.
+For use in SCEV logging to make large widened bounds more readable.
 
-This commit modifies bpf_compute_postorder() to actually do the DFS
-traversal, instead of scheduling traversal of all siblings at once.
-
-Consider a graph:
-
-  A -> B
-  A -> C
-  C -> B
-
-Old result: C, B, A
-DFS result: B, C, A
-
-Fixes: efcda22aa541 ("bpf: compute instructions postorder per subprogram")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
  include/linux/bpf_verifier.h |  1 +
- kernel/bpf/cfg.c             | 56 +++++++++++++++++++++++++++-----------------
- kernel/bpf/const_fold.c      |  2 ++
- kernel/bpf/verifier.c        |  1 +
- 4 files changed, 39 insertions(+), 21 deletions(-)
+ kernel/bpf/log.c             | 12 ++++++------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2560754ed56c..bd7733fbe930 100644
+index ab86b75888c3..b4396867c6f3 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1036,6 +1036,7 @@ struct bpf_verifier_env {
- 		 * see bpf_subprog_info->postorder_start.
- 		 */
- 		int *insn_postorder;
-+		int *postorder_nums;
- 		int cur_stack;
- 		/* current position in the insn_postorder vector */
- 		int cur_postorder;
-diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-index d8a579680e5b..bce7b5abcfda 100644
---- a/kernel/bpf/cfg.c
-+++ b/kernel/bpf/cfg.c
-@@ -767,6 +767,11 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
- 	return ret;
+@@ -1165,6 +1165,7 @@ int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual);
+ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
+ 				  u32 insn_off,
+ 				  const char *prefix_fmt, ...);
++void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num);
+ 
+ #define verifier_bug_if(cond, env, fmt, args...)						\
+ 	({											\
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index d850a7863d2e..87d137734db1 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -527,7 +527,7 @@ static void verbose_unum(struct bpf_verifier_env *env, u64 num)
+ 		verbose(env, "%#llx", num);
  }
  
-+struct dfs_state {
-+	u32 traversed:1;
-+	u32 next_succ:31;
-+};
-+
- /*
-  * For each subprogram 'i' fill array env->cfg.insn_subprogram sub-range
-  * [env->subprog_info[i].postorder_start, env->subprog_info[i+1].postorder_start)
-@@ -774,43 +779,52 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
-  */
- int bpf_compute_postorder(struct bpf_verifier_env *env)
+-static void verbose_snum(struct bpf_verifier_env *env, s64 num)
++void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num)
  {
--	u32 cur_postorder, i, top, stack_sz, s;
--	int *stack = NULL, *postorder = NULL, *state = NULL;
--	struct bpf_iarray *succ;
-+	int *stack = NULL, *postorder = NULL, *postorder_nums = NULL;
-+	int subprog_idx, stack_sz, cur, s, cur_postorder, start;
-+	struct dfs_state *state = NULL;
-+	struct bpf_iarray *succ = NULL;
+ 	if (is_snum_decimal(num))
+ 		verbose(env, "%lld", num);
+@@ -609,7 +609,7 @@ static void print_scalar_ranges(struct bpf_verifier_env *env,
+ 		}
  
-+	postorder_nums = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
- 	postorder = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
--	state = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
- 	stack = kvzalloc_objs(int, env->prog->len, GFP_KERNEL_ACCOUNT);
--	if (!postorder || !state || !stack) {
-+	state = kvzalloc_objs(struct dfs_state, env->prog->len, GFP_KERNEL_ACCOUNT);
-+	if (!postorder_nums || !postorder || !stack || !state) {
-+		kvfree(postorder_nums);
- 		kvfree(postorder);
--		kvfree(state);
- 		kvfree(stack);
-+		kvfree(state);
- 		return -ENOMEM;
+ 		if (m1->name[0] == 's')
+-			verbose_snum(env, m1->val);
++			bpf_verbose_snum(env, m1->val);
+ 		else
+ 			verbose_unum(env, m1->val);
  	}
- 	cur_postorder = 0;
--	for (i = 0; i < env->subprog_cnt; i++) {
--		env->subprog_info[i].postorder_start = cur_postorder;
--		stack[0] = env->subprog_info[i].start;
-+	for (subprog_idx = 0; subprog_idx < env->subprog_cnt; subprog_idx++) {
-+		start = env->subprog_info[subprog_idx].start;
-+		env->subprog_info[subprog_idx].postorder_start = cur_postorder;
-+		stack[0] = start;
- 		stack_sz = 1;
-+		state[start].traversed = true;
- 		do {
--			top = stack[stack_sz - 1];
--			state[top] |= DISCOVERED;
--			if (state[top] & EXPLORED) {
--				postorder[cur_postorder++] = top;
-+			cur = stack[stack_sz - 1];
-+			succ = bpf_insn_successors(env, cur);
-+			if (state[cur].next_succ == succ->cnt) {
-+				postorder_nums[cur] = cur_postorder;
-+				postorder[cur_postorder] = cur;
-+				cur_postorder++;
- 				stack_sz--;
- 				continue;
- 			}
--			succ = bpf_insn_successors(env, top);
--			for (s = 0; s < succ->cnt; ++s) {
--				if (!state[succ->items[s]]) {
--					stack[stack_sz++] = succ->items[s];
--					state[succ->items[s]] |= DISCOVERED;
--				}
-+			s = succ->items[state[cur].next_succ];
-+			if (!state[s].traversed) {
-+				state[s].traversed = true;
-+				state[s].next_succ = 0;
-+				stack[stack_sz] = s;
-+				stack_sz++;
-+				continue;
- 			}
--			state[top] |= EXPLORED;
-+			state[cur].next_succ++;
- 		} while (stack_sz);
+@@ -632,7 +632,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 	if (t == SCALAR_VALUE && reg->precise)
+ 		verbose(env, "P");
+ 	if (t == SCALAR_VALUE && tnum_is_const(reg->var_off)) {
+-		verbose_snum(env, reg->var_off.value);
++		bpf_verbose_snum(env, reg->var_off.value);
+ 		return;
  	}
--	env->subprog_info[i].postorder_start = cur_postorder;
-+	env->subprog_info[subprog_idx].postorder_start = cur_postorder;
-+	env->cfg.postorder_nums = postorder_nums;
- 	env->cfg.insn_postorder = postorder;
- 	env->cfg.cur_postorder = cur_postorder;
- 	kvfree(stack);
-diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-index b1528adbeb79..8dd8c5958eb8 100644
---- a/kernel/bpf/const_fold.c
-+++ b/kernel/bpf/const_fold.c
-@@ -398,5 +398,7 @@ int bpf_prune_dead_branches(struct bpf_verifier_env *env)
- 	/* recompute postorder, since CFG has changed */
- 	kvfree(env->cfg.insn_postorder);
- 	env->cfg.insn_postorder = NULL;
-+	kvfree(env->cfg.postorder_nums);
-+	env->cfg.postorder_nums = NULL;
- 	return bpf_compute_postorder(env);
- }
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 192efb722997..91f114947b8b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23221,6 +23221,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	vfree(env->insn_aux_data);
- 	kvfree(env->fd_array);
- 	bpf_stack_liveness_free(env);
-+	kvfree(env->cfg.postorder_nums);
- 	kvfree(env->cfg.insn_postorder);
- 	kvfree(env->scc_info);
- 	kvfree(env->succ);
+ 
+@@ -643,7 +643,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 		if (state->frameno != reg->frameno)
+ 			verbose(env, "[%d]", reg->frameno);
+ 		if (tnum_is_const(reg->var_off)) {
+-			verbose_snum(env, reg->var_off.value + reg->delta);
++			bpf_verbose_snum(env, reg->var_off.value + reg->delta);
+ 			return;
+ 		}
+ 	}
+@@ -667,7 +667,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 	}
+ 	if (t != SCALAR_VALUE && reg->delta) {
+ 		verbose_a("off=");
+-		verbose_snum(env, reg->delta);
++		bpf_verbose_snum(env, reg->delta);
+ 	}
+ 	if (type_is_pkt_pointer(t)) {
+ 		verbose_a("r=");
+@@ -683,7 +683,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 		/* a pointer register with fixed offset */
+ 		if (reg->var_off.value) {
+ 			verbose_a("imm=");
+-			verbose_snum(env, reg->var_off.value);
++			bpf_verbose_snum(env, reg->var_off.value);
+ 		}
+ 	} else {
+ 		print_scalar_ranges(env, reg, &sep);
 
 -- 
 2.53.0
