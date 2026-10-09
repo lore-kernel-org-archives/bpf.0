@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-135.mta1.migadu.com [95.215.58.135])
+Received: from mta0.migadu.com (out-57.mta0.migadu.com [91.218.175.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670EF501F45
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977834EA37A
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791577738; cv=none; b=P1/8UD6Gzg0ue6rHq2RW6gvl/0UpG83h7eavdFY4IY5j85vUDQesoZmBhOupKkF7EAarUeyxQf2Vu4LwuiQMhsxzu2tppPS8U3tQC6uUv3K4cuV0PyAsbMoHRBpnwW/THnr9DLVmwpd3ygJOMX4JaEZTUyWfNpqrIfenp8hiehU=
+	t=1791577745; cv=none; b=UucT0WMbbaxNirU4ac42vwinD+pg+jLQlqa7zPyeef0XDuDJYHMkkCk2Wz6HyKOfayJoh2sn2yxuHOidlE5B4/Fc3B1DY/zliweVBI9XyZCSe+31K7xnC281A2ojDkJRhrj+8JniVxzuBl/ruBEeS/JwdI3ghcU93pZEUerOOws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791577738; c=relaxed/simple;
-	bh=1yL3Z2OLKbyYnjZa62IL5GKkqDdD1ltLx9OpUVvOYQ8=;
+	s=arc-20240116; t=1791577745; c=relaxed/simple;
+	bh=XB0Lc26fKCWw5hSHh/qAWzBPbxx7L+ehGElIudcNCyA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NAy8s8cpHphWrrikif5h6zNUzJcmDQVdNX45kTrkd4Kl+vSPi0Tk8GZaP00gnXoMZXe/AFhnRUNgG/9BMWghKGVWMolYLBSSyjuLZtxzh+DHx/yoG/Oeb+NLR0KFIQNwQJfx2Ki2o/XAdZB/t0a7EpNY/F2Vt9FTJsK8koUL5g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e/VOB+5l; arc=none smtp.client-ip=95.215.58.135
+	 MIME-Version; b=W8MsVcRovqYwnrRHWRoSbfDtJxuNKvWP/NelDfR7BlvdVz47WTn50ABNzxW1a25gGbDO9fS7vgz0FgGQjXO7VYca0g899kuZuHKYIYAAR4v0vkwNwl8+T7rB6rv/XmIXgih+bNXXYMgSA2sOha8VLOPq+mjOGiZcPIE+jxz3mM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VwPxTHFs; arc=none smtp.client-ip=91.218.175.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e/VOB+5l"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VwPxTHFs"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1yL3Z2OLKbyYnjZa62IL5GKkqDdD1ltLx9OpUVvOYQ8=;
+DKIM-Signature: a=rsa-sha256; bh=XB0Lc26fKCWw5hSHh/qAWzBPbxx7L+ehGElIudcNCyA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791577734; v=1; x=1792182534;
- b=e/VOB+5l/bRBUSMjeDMF8I70LdW41IJXggMN4OVbKEgCvdYGNgmn+j77pr6YXFR+Oe64lFm/
- YZrO1HdUkZ2M4MmN47LI21xcO47JtdOv/ZTgVwTKN2l9WGj3JQG449nelTKUc67PkOj9xKOffCk
- FjxRDFP4j1/RArVf4IyZUKZY=
+ t=1791577741; v=1; x=1792182541;
+ b=VwPxTHFsBCJkoqW5PL5SUlrGwPqzxjD6itPkAQ/x3N0j6CdbXxCLqRE9G0ohAshajvPyKM+J
+ 2OHmfhilpwUH/p6WBicuY5J6+xc28XdYNz4rlJVFNYN3j+4HIqoZ4v0YMTRG0nYLoR6HBRH9VBX
+ SvwxcZfawgywlhwSNKBxEgsc=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d2d9d0e243bb2c79;
-	Fri, 09 Oct 2026 20:28:54 +0000
-X-Mizu-Trace-ID: d2d9d0e243bb2c79
+Received: by smtp.migadu.com with ESMTPS id 6e81207e6bf561dc;
+	Fri, 09 Oct 2026 20:29:01 +0000
+X-Mizu-Trace-ID: 6e81207e6bf561dc
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 10/11] bpf: Scope the bpf_for_each_map_elem() array key to the callback frame
-Date: Fri,  9 Oct 2026 13:27:57 -0700
-Message-ID: <20261009202759.50520-11-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 11/11] selftests/bpf: Cover callback-frame map key lifetime
+Date: Fri,  9 Oct 2026 13:27:58 -0700
+Message-ID: <20261009202759.50520-12-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261009202759.50520-1-ihor.solodrai@linux.dev>
 References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
@@ -55,70 +55,128 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_for_each_map_elem() passes array and per-CPU array callbacks the
-address of a key on the helper's stack.
+Array and per-CPU array callbacks to bpf_for_each_map_elem() receive
+a key on the helper's stack.
 
-A callback can save that pointer in its context and dereference it
-after the helper returns. Loads through PTR_TO_MAP_KEY are not
-fault-protected, allowing a four-byte read-only leak of reused kernel
-stack.
+Check that saving this key in the callback context and dereferencing
+it after iteration is rejected.
 
-The verifier tracks the pointer's type and key size, but does not tie
-its lifetime to the callback invocation.
+Also require the same pattern to keep verifying for a hash key and
+an array value, whose storage outlives the callback. These controls
+guard the array-only and key-only scope of the lifetime restriction.
 
-Anchor R2 to a frame reference in the array map callback setup so the
-key and its copies are invalidated on callback return. Leave hash keys
-and map values unchanged, since their storage is not callback-local.
-
-Reported-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/arraymap.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ .../bpf/progs/verifier_iterating_callbacks.c  | 91 +++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 0fe9afd4a591..5e8669e311b6 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -855,6 +855,20 @@ static u64 array_map_mem_usage(const struct bpf_map *map)
- 	return usage;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+index 1fbcc5228306..2e0c56888953 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@ -9,6 +9,20 @@ struct {
+ 	__type(value, __u64);
+ } map SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 8);
++	__type(key, __u32);
++	__type(value, __u64);
++} percpu_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 8);
++	__type(key, __u32);
++	__type(value, __u64);
++} hash_map SEC(".maps");
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_USER_RINGBUF);
+ 	__uint(max_entries, 8);
+@@ -800,4 +814,81 @@ __naked void check_add_const_regsafe_off(void)
+ 	: __clobber_common);
  }
  
-+static int array_map_set_for_each_callback_args(struct bpf_verifier_env *env,
-+						struct bpf_verifier_state *state,
-+						struct bpf_func_state *caller,
-+						struct bpf_func_state *callee)
++struct key_ctx {
++	__u32 *key;
++};
++
++static long park_key_cb(struct bpf_map *map, __u32 *key, __u64 *value,
++			void *context)
 +{
-+	int err;
++	struct key_ctx *c = context;
 +
-+	err = map_set_for_each_callback_args(env, state, caller, callee);
-+	if (err)
-+		return err;
-+
-+	return mark_frame_scoped_arg(env, state, callee, BPF_REG_2);
++	c->key = key;
++	return 0;
 +}
 +
- BTF_ID_LIST_SINGLE(array_map_btf_ids, struct, bpf_array)
- const struct bpf_map_ops array_map_ops = {
- 	.map_meta_equal = array_map_meta_equal,
-@@ -875,7 +889,7 @@ const struct bpf_map_ops array_map_ops = {
- 	.map_check_btf = array_map_check_btf,
- 	.map_lookup_batch = generic_map_lookup_batch,
- 	.map_update_batch = generic_map_update_batch,
--	.map_set_for_each_callback_args = map_set_for_each_callback_args,
-+	.map_set_for_each_callback_args = array_map_set_for_each_callback_args,
- 	.map_for_each_callback = bpf_for_each_array_elem,
- 	.map_mem_usage = array_map_mem_usage,
- 	.map_btf_id = &array_map_btf_ids[0],
-@@ -900,7 +914,7 @@ const struct bpf_map_ops percpu_array_map_ops = {
- 	.map_check_btf = array_map_check_btf,
- 	.map_lookup_batch = generic_map_lookup_batch,
- 	.map_update_batch = generic_map_update_batch,
--	.map_set_for_each_callback_args = map_set_for_each_callback_args,
-+	.map_set_for_each_callback_args = array_map_set_for_each_callback_args,
- 	.map_for_each_callback = bpf_for_each_array_elem,
- 	.map_mem_usage = array_map_mem_usage,
- 	.map_btf_id = &array_map_btf_ids[0],
++/* bpf_for_each_array_elem() passes a key from its own stack frame. */
++SEC("?raw_tp")
++__failure __msg("invalid mem access 'scalar'")
++int array_park_map_key(void *ctx)
++{
++	struct key_ctx c = {};
++
++	bpf_for_each_map_elem(&map, park_key_cb, &c, 0);
++	if (c.key)
++		return *c.key;
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("invalid mem access 'scalar'")
++int percpu_array_park_map_key(void *ctx)
++{
++	struct key_ctx c = {};
++
++	bpf_for_each_map_elem(&percpu_map, park_key_cb, &c, 0);
++	if (c.key)
++		return *c.key;
++	return 0;
++}
++
++/* A hash key points into the element, which outlives the callback. */
++SEC("?raw_tp")
++__success
++int hash_park_map_key(void *ctx)
++{
++	struct key_ctx c = {};
++
++	bpf_for_each_map_elem(&hash_map, park_key_cb, &c, 0);
++	if (c.key)
++		return *c.key;
++	return 0;
++}
++
++struct value_ctx {
++	__u64 *value;
++};
++
++static long park_value_cb(struct bpf_map *map, __u32 *key, __u64 *value,
++			  void *context)
++{
++	struct value_ctx *c = context;
++
++	c->value = value;
++	return 0;
++}
++
++/* Only the key is frame-scoped; the element lives until map teardown. */
++SEC("?raw_tp")
++__success
++int array_park_map_value(void *ctx)
++{
++	struct value_ctx c = {};
++
++	bpf_for_each_map_elem(&map, park_value_cb, &c, 0);
++	if (c.value)
++		return *c.value;
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.56.0
 
