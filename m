@@ -1,64 +1,64 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996AE4746A5
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F184C9001
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542939; cv=none; b=VB9ZFbGBGjBSQ4GhKC+YTp39KUjYB2e2zEy98e/HbAHbxLdKA3vOTyJ+j6ldnGoS7wBHoWCidaegcVr1KHWcWkTGgmZv6r0XKe+jOJHLiwrKdRacWuRU2WJCtFM/b/w6RwTY1zEKCOj0EFXafF7kpTH7Wdzc9xC7KvuMRWVoZcM=
+	t=1791542939; cv=none; b=u89t5YNfFiyvcJhqlmTx4uf/4DSgQSiv1YgcudkXPJP2RDpdltQJPETFosEgtrOkOf5BzXGVcIgb9jSnDW3+uly2wri3sHnrXfWCTaOh+igfhynLo+h9b+ics6RnPH/gkMR81fnEOzSrG0pvwk1S/3xJeXinl4eG47FCJIUf7kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791542939; c=relaxed/simple;
-	bh=5nL+5NOHWDoLpB1U0/nGcg6BKVvXft4dcZaYD2sk+HI=;
+	bh=zg9+1ICoiE1IU/xDkzARfILsF0H4Ph4VkeR6KqRd5g8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o7Y0sTbkgugz5lijesLgabLsruafurKiT0eRIvxAB1EQhUchtNpNu2c6sfzSsC/+VToZQj8+Ya/WMczrRJKxifwyIL/n5WXeTWIwVMfNHQc3Lu0zXeAokAVqEPZDF4ttnB40ShlkJsfKsooTAz61xTlvBvxBnyTDReYMubgOVUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CKNkFSR+; arc=none smtp.client-ip=209.85.216.50
+	 MIME-Version:Content-Type; b=EWE4S12LEdrVQrOPjiXmt7o/rmWVKAfSf3+9imDlVgJORnxKHFYL5sZlm/nWnY15Bb/u3MPcr8nUfGBbINxYIv4ShoZW3X3TNwBvPwrOAml3uUnVEPbGptfRrY4Nr81BGPRrb4Ftr4hsV1wiPhGiF8lcln7cJVPNwLK1i6LQtJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=faatfUOj; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CKNkFSR+"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3ab60ff4273so120561a91.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="faatfUOj"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3a813079a55so1037900a91.0
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1791542927; x=1792147727; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=bPcWjW8SfitsvQJAv0HnXXadXcqaOEEt3i9T9NXuSrs=;
-        b=CKNkFSR+HB0H3L0sMmVAeCbr6EkzZZCKeEmHpwvCqWoIMipWs9nduBQtAsRd5Vhndc
-         PPN2QFUGvMlGidjMW/XJ7yx2YSzxt4BIb1YZs/mlVXCwHETa7Bm8bqlrMXa4rVW3sOku
-         tOdPXyPTkGxqF/kdFwt7UvUZUYQiKhuKZopthswJEbjgcM8HYCV8+231UIUf+bhqrcwy
-         XRg4VFa7xIKqH9fvfEZBqfNnawH8CZlnQYh1Qvh9Rmmu5+PA9wjE+gFfZus7A8xq3uIs
-         2ZTze2YFDqHDGIrgWKJV/lhK96vQPPWGJjwaFl6Bm8aS4Rq1JO5fP1SEp08sQNGsGz2c
-         5n7w==
+        bh=rOQSbcfSZ2k6XJxvW79/agWIRahgHN3lVChbdd9N4Vg=;
+        b=faatfUOjRdB0bwSDb8izeSNXKRSFotzsPPIGOdhhfOT53VwO/W5vZLxX9cweKyQRvY
+         gt6RRnn+e57DFNgCELJ2q3CVFbOmmNKCSVFPRkDI3JrjwLiBmyAvkyvVzpglEky6HDEM
+         irb2zanb4okqZ9FaGTpa7ehjgsneHiN8q+lu9NlINdMEgPvjHi2EbAOA5NiB8PD7eS7q
+         4X/m/JXu9LCxwsx5uNujoc52aglYAziNXzaa/ZE9ZAuskKDhLNOT8OmkBq3ulP9rNfh2
+         Wpe8rlzNvzFwsOG0ckDnFoMt69yRUkAnRHAaZSPkHlJq0bBoODpepEEyOEkdZGphA9Lf
+         2W3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1791542927; x=1792147727;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bPcWjW8SfitsvQJAv0HnXXadXcqaOEEt3i9T9NXuSrs=;
-        b=KTvmyhkcZD3jFFbdDbVR0P2ORR9EBDH3Ll3JvSZ4L5MvqK2Z2buYgxwEdXo1dBEHRh
-         L7E39XXMByc3VqGaTctMA9JpgUttxus8wuhGD3bSSBNT7oWwNCPrmExH7l5IfDA1xdHu
-         y67P3OsKbb2cxf4uAJQqOGGSuoJoIGhhVmLXd9YCo/uUZLEWmkZ+b1pXwPFuSnrSxLfh
-         alvfcVJp1YDNjDS2O17gOiiFM1MRwoDHz0v6TbmZ1q032equ+e5B3JXt7sdwrp8odHfV
-         Hk+Q+2lo99k1fF9kQN59xVzoeZrqWMVywIxR/MxtVyJkr0svZiey33UmJZhV4jz8RHqu
-         5bCg==
-X-Gm-Message-State: AFq9FYJWSwz21F2Bg5x2hfZrGhqNdj8pk3H3tgqVe7MYBI+e21Esm0AK
-	n+DHlcKZoy569MHmh+QPn9uwenzXG3Ne8C1HWI7L9nM1lFWX9ugNEz2V8vqcvJlh
-X-Gm-Gg: AYBFou2CrOVxKjgqHfphGvcT6Sy5JTe0fM87aLdmHYpzBQchyAexiz6vOxRaprBJXjA
-	m+9i9g+fys42n32YK0Z2lgWOeC6i6CpGdg8lB9Tk8qvjxp5JvBSVHE1d/ejCGkmsWb7nWp+oQLo
-	daGUn7yGxFY0+UGCv8Ykf9+m8DDI7JQNidKUuSfr20JdPnGa8rQKSIwWxYF5Asvt/iH+CdegKfq
-	n/OqPCqtSYaJt/uHX2+2787zWdkqmIjSpqIuOufB9qXmSKgaWq3fn6enjGCnKWb+UlMEsx3pyxz
-	rYbkF3/dbcp4XxGzXy9zfZsFokHpLjH49dFIOCg883WPNtOmnFipyfyk3Wyz4ZYFtI0t4svzuA5
-	LWIRTuFWHtSf0X5+1Pi7xt6NX6p2y13nzV42foUTZyjGx38ZXcd4Cz9hsMb9xxaDrvhiKrnJSno
-	/giBrDGsxstk+5YLEsU84c+kCLOg7ry1eviquRrqrflix2tQzffRdye1HxcwEkB0+pMyXok/jYv
-	91eB3SVXZcbEw8=
-X-Received: by 2002:a17:90b:1dc1:b0:3aa:f4af:1e14 with SMTP id 98e67ed59e1d1-3ab3ac7eeb8mr1460781a91.51.1791542926757;
-        Fri, 09 Oct 2026 03:48:46 -0700 (PDT)
+        bh=rOQSbcfSZ2k6XJxvW79/agWIRahgHN3lVChbdd9N4Vg=;
+        b=sfvGtp7jSdt4jg8evNYKq3OWGOnDYdnfSS2crPBvdJRLLgA5MT4elesyFhkS88S2DI
+         fcneuLpuuhKN8D1qeG+AD/rCeIZg0orExkbylHh7wKZmVjTTMxvB3pvIHpfHUnrP6rXe
+         eqHWZ9qnY/jnbne3HgXvpYWHatcbxyEXNU+TxN0lmjFEAMrlFRMYMBxIzPwdmKi2Gdtz
+         X6gD9zDe6zHM8wgSMtoBagSOsD7fS1KJu1yww5bnos9hBumSOWieZ3M3qeXiNxZcL9Cg
+         9Oe5Foe8YmFUVq35eqdptGVWe6s2QZE1i6u2EuGafo+2/z9k/SF0lC/f6KLRO8UE4qEm
+         zNSQ==
+X-Gm-Message-State: AFq9FYJgkQlqrKOa2xFTtM6YvkO/sLA8c9fx+lof/0NmKYO28oxTj1ze
+	qRNqFtYyN9OhPPZR7JJIwHTsve7c54nkGHdKfg7KL0mAYWsM4SI9suDbvRm2QQ==
+X-Gm-Gg: AYBFou0ukIs90GG4RQoQLJgrj0t68JGv74wBv532URl9c75HC33f1r040dacIcGXpjJ
+	UcJzeHNAz0O6rbUUjWMJ6VUd7OpziWmA3VgQ7sqTaOOUd5NRSKFsxeaJjxpI1WPn0PUD+lgQl6H
+	SKl+Hy1NOGrk29Yr78aNmGEGp7rNqTwIgoQhCV7vJypIVdV6mlkZOXWitT1V8XhQ18EIst88oU9
+	coB4uZHtrmc55nZcgYiLeLhRp3d/NvM/ZcmpplWZGNAXl21wxqKHPHpl1YHHSNm8f50zTQAPg0P
+	Ytc6mcgE9Q8+STF2y7iebF3TZszFF3ivCqHoXrecfN2TtSC6NCiWcg8T4ZOmqB+UnEmkjPg1wkQ
+	OIBlN9/4IPAB+AboBN3O38d5EN3ByPHa0CjPII6rRTAoYyYGC/pe4BdM59Sf4vYI+hGbYt8lblM
+	QwN21r+IT7HO8gEO1TaOCGzfWVeC6XA1uSvzuTw3QS2MXY+0IXTQUl0Af7pnXUJ/baWvT2nfRk1
+	EX4vuhvTWKa4iU=
+X-Received: by 2002:a17:90b:2d82:b0:39e:6c68:fd91 with SMTP id 98e67ed59e1d1-3ab3acdc391mr821075a91.38.1791542927373;
+        Fri, 09 Oct 2026 03:48:47 -0700 (PDT)
 Received: from badger ([38.34.87.7])
         by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:46 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:47 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 36/51] bpf: bpf_func_state size optimization
-Date: Fri,  9 Oct 2026 03:47:54 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-36-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 37/51] selftests/bpf: __msg_next tag for matching messages on consecutive lines
+Date: Fri,  9 Oct 2026 03:47:55 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-37-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,50 +82,82 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Pack bpf_reg_state to bring it's size from 88 bytes to 80.
-Consequently, bpf_func_state changes from 1048 to 960.
-Thus bpf_func_state moves from 2K to 1K allocator bucket.
-1K bucket is the one it fit before the SCEV series.
+Same as __msg, but expects the match on the line immediately after
+the last match, not just any later line.
+E.g.:
 
-With this optimization SCEV increases memory consumption on a subset
-of Meta internal programs by 3%, without this optimization the
-increase is 48%.
+  __msg_next("a")
+  __msg_next("c")
+
+This would match consecutive output "a\n" "c\n",
+but would not match output "a\n" "b\n" "c\n".
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h | 4 ++--
- kernel/bpf/states.c          | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_misc.h |  6 ++++++
+ tools/testing/selftests/bpf/test_loader.c    | 11 +++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 308e779c3f74..54cb6d3d0653 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -184,9 +184,9 @@ struct bpf_reg_state {
- 	 * other registers. Kept outside the metadata union for ID remapping
- 	 * during state comparisons.
- 	 */
--	u32 map_uid;
-+	u32 map_uid:31;
- 	/* if (!precise && SCALAR_VALUE) min/max/tnum don't affect safety */
--	bool precise;
-+	u32 precise:1;
- };
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index f3dbc3b59bff..d7f706c3bc4a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -43,6 +43,10 @@
+  * __msg_unpriv      Same as __msg but for unprivileged mode.
+  * __not_msg_unpriv  Same as __not_msg but for unprivileged mode.
+  *
++ * __msg_next        Same as __msg but expects the match to be on the next
++ * __msg_next_unpriv log line compared to the last match, not just some line
++ *                   after the last match.
++ *
+  * __stderr          Message expected to be found in bpf stderr stream. The
+  *                   same regex rules apply like __msg.
+  * __stderr_unpriv   Same as __stderr but for unpriveleged mode.
+@@ -145,6 +149,7 @@
  
- static inline s64 reg_smin(const struct bpf_reg_state *reg)
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index c62ea992967b..953700822fa7 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -1171,7 +1171,7 @@ static bool states_maybe_looping(struct bpf_verifier_state *old,
- 	fcur = cur->frame[fr];
- 	for (i = 0; i < MAX_BPF_REG; i++)
- 		if (memcmp(&fold->regs[i], &fcur->regs[i],
--			   offsetof(struct bpf_reg_state, precise)))
-+			   offsetofend(struct bpf_reg_state, step)))
- 			return false;
- 	return true;
- }
+ #define __msg(msg)		__test_tag("test_expect_msg=" msg)
+ #define __not_msg(msg)		__test_tag("test_expect_not_msg=" msg)
++#define __msg_next(msg)		__test_tag("test_expect_msg_next=" msg)
+ #define __xlated(msg)		__test_tag("test_expect_xlated=" msg)
+ #define __jited(msg)		__test_tag("test_jited=" msg)
+ #define __failure		__test_tag("test_expect_failure")
+@@ -153,6 +158,7 @@
+ #define __skip(reason)		__test_tag("test_skip=" reason)
+ #define __msg_unpriv(msg)	__test_tag("test_expect_msg_unpriv=" msg)
+ #define __not_msg_unpriv(msg)	__test_tag("test_expect_not_msg_unpriv=" msg)
++#define __msg_next_unpriv(msg)	__test_tag("test_expect_msg_next_unpriv=" msg)
+ #define __xlated_unpriv(msg)	__test_tag("test_expect_xlated_unpriv=" msg)
+ #define __jited_unpriv(msg)	__test_tag("test_jited_unpriv=" msg)
+ #define __failure_unpriv	__test_tag("test_expect_failure_unpriv")
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index a89890cd56d8..18d47e925400 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -508,6 +508,16 @@ static int parse_test_spec(struct test_loader *tester,
+ 			if (err)
+ 				goto cleanup;
+ 			spec->mode_mask |= UNPRIV;
++		} else if ((msg = str_has_pfx(s, "test_expect_msg_next="))) {
++			err = __push_msg(msg, true, false, &spec->priv.expect_msgs);
++			if (err)
++				goto cleanup;
++			spec->mode_mask |= PRIV;
++		} else if ((msg = str_has_pfx(s, "test_expect_msg_next_unpriv="))) {
++			err = __push_msg(msg, true, false, &spec->unpriv.expect_msgs);
++			if (err)
++				goto cleanup;
++			spec->mode_mask |= UNPRIV;
+ 		} else if ((msg = str_has_pfx(s, "test_jited="))) {
+ 			if (arch_mask == 0) {
+ 				PRINT_FAIL("__jited used before __arch_*");
+@@ -998,6 +1008,7 @@ void validate_msgs(const char *log_buf, struct expected_msgs *msgs,
+ 
+ 		no_match   = !msg->negative && !match->start;
+ 		wrong_line = !msg->negative &&
++			     match->start &&
+ 			     msg->on_next_line &&
+ 			     prev_match && prev_match->line + 1 != match->line;
+ 		unexpected = msg->negative && match->start;
 
 -- 
 2.53.0
