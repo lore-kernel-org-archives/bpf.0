@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB5220ED
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 02:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7F424676D
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 03:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791514607; cv=none; b=P6kzYQw//lCsgdA50AthVE2IBQZCf4hDGOPgXRIHHNc9GQBkh64nyVeIzLkqDDgutPtVk6F0YYcOipnMmk7MxsWJZ35JZbskWpDqncat6YzP1Q6QSvZIjIO6uU6V+lWu7R8WNmIEZaVhaUdGEJzau9zW7txkAt4IqYDNxW68CHg=
+	t=1791515012; cv=none; b=iOUn5I7CyYLLTOZTPXMfZNUsu25hs9GlpHvDpOYNhpZ0RBWNV+d08SrWEbzgZT+tLZV4lR2raabIYga5Emd+ovpXEXdVNLxdKhUZG5cOGRp/FwygxLXlpvMa3t7nUq5skAYMR02iMdiWyxPPveBGTzAo5mYd0ArmOFvTQ3e45eU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791514607; c=relaxed/simple;
-	bh=BgpHcmFlo30/Lwv9uNNycEaC7c7DBwAsQqiQTs6IQqQ=;
+	s=arc-20240116; t=1791515012; c=relaxed/simple;
+	bh=LQsE0qgA8mJ8do1o+uk2Fw/AXz7xSGNHWmAPo+Any2k=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=VJvs8dlfKSdvwhgWJPwA94Ly+htUNeBmZ1jJ7cQeMQFvPKJhXpCypYKQVYsY3YcrZart6S59kSQpQxjVsSbuxe4AQ8ijqhjIC4HBpbH09Zcn9OehRhSSZ/I6FmRoKy3TA9CWjZ/fz7I5Qwho40kvuOmvbNyjNaAcmbRM6d6vNdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bkscCtfQ; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=Xc1CKrqk79M9DvXaKeRVnKUSr7v6TRnFmbd2YDcnJpV0/gmRlXotLT7Nfns+85afADUQOmIJ8qhI+n82UM5sNIJLPd5/6jBqzQd0mDu3DVSPek0/1d7RgB4J7U7Ncl/rVREkPwmFKBTKzWCQAL5RbYFJqWnIzWdk3++MJ5SiOjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLS3Am4i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bkscCtfQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8644E1F000FF;
-	Fri,  9 Oct 2026 02:56:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLS3Am4i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31B11F000FF;
+	Fri,  9 Oct 2026 03:03:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791514605;
-	bh=QVqYhpAruLgPAJ2lQBOm81DBQa+kQPUUIAixzO1e6mU=;
+	s=k20260515; t=1791515011;
+	bh=5BsGMJBQvQPLnXSlxYTIB1gL3gYZB10TN7LDP6A1SUA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bkscCtfQiojp4vZ75J4IS6gPpQS7NQm+97ZI1NADNdSAqUCxUCCVyt+1Np1E6VfgM
-	 AzPjLhILWsEGHfPeQZXwRfHxBqymQ/IYA+5Rj0fbPxg+7X79816Gboo+fg6Z8/+lCL
-	 qhG+SO+uxmwH115Mz9su1WC1rASD3sgXA7Ublm5qpIeR3S9U8qghKY4wYIjzLyECeK
-	 zAhZ6ePzhj33+JGx6vtWop1qPArQ5IuGb+VZqT/pD1I0ILu0nWZZg6CgGKsgf5csgg
-	 IeEWVe1R1lNGCe1ENuL9oN/wsqiMRkACCCeSmK5jQjCfpXMWoL/4ljce+sDy/7vao1
-	 xHnsaubcvLNnQ==
-Message-ID: <sashiko-outbox-164736@kernel.org>
+	b=gLS3Am4icR6J76g1AdZ+ADhxAJ7quPmrLALb15GsrPQIbnTlLYMd2vN0eqTOullbZ
+	 yQ0BeqN4uovi9Xr+gD8d1rwO/SU+2DgLJv2Ufzqrqp0gnEn2/0xuphCLEkf1JOLC27
+	 0ZZRwJgRTELi0qp4HkhKTnvQgz5Nku73/aSr1669TOzvz0vqgQoVd04863cYrZ0mrT
+	 XNvlAYMc4ExwwQMFyEEVUOZ9/3jcH7+ELk1+AvMaQkGLeCswokcuLXIY2vhW/sN70O
+	 QiPhU2PlBe7ofJYFL7r8N0BV0UeE5kpoQ4ExOfnHepBV2HuvgDtOTUk1umeCLpbsum
+	 kxamTy8pB4ujw==
+Message-ID: <sashiko-outbox-164740@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 3/3] selftests/bpf: Test PROBE_MEM loads
- from invalid addresses
+Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups
+ for user address faults under SMAP
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009024925.3169077-4-memxor@gmail.com>
+In-Reply-To: <20261009024925.3169077-2-memxor@gmail.com>
 References: <20261009024925.3169077-1-memxor@gmail.com>
- <20261009024925.3169077-4-memxor@gmail.com>
+ <20261009024925.3169077-2-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 02:56:45 +0000
+Date: Fri, 09 Oct 2026 03:03:30 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,94 +47,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests/bpf: shift-count overflow and skeleton layout mismatch=
- on 32-bit hosts
+- [High] bpf: PROBE_MEM oops during RCU grace period due to early kallsyms =
+removal
 --
 
-commit 96530723e8030fb7a1b5acdb7814f68def3240b2
+commit 9e4e375ce4c3205ad3741d292c6701b8a1d5a5c3
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-selftests/bpf: Test PROBE_MEM loads from invalid addresses
+x86/mm: Resolve BPF exception fixups for user address faults under SMAP
 
-This commit adds a BPF selftest that verifies whether PROBE_MEM loads from
-various invalid addresses properly yield zero and prevent the kernel from
-crashing. It does this by testing loads of three sizes through a pointer
-value chosen by userspace.
+This commit allows the x86 page fault handler to resolve BPF PROBE_MEM
+exception table entries for user address faults when SMAP is enabled, avoid=
+ing
+an immediate oops. It paves the way for dropping the JIT-emitted address
+range checks.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/probe_mem_fault.c b/t=
-ools/testing/selftests/bpf/prog_tests/probe_mem_fault.c
-> new file mode 100644
-> index 0000000000000..57a313e35eb62
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/probe_mem_fault.c
-> @@ -0,0 +1,69 @@
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index aa88370ce7394..2060e5f35d77a 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
 
 [ ... ]
 
-> +/*
-> + * Addresses a PROBE_MEM load has to survive. Either the JIT's address c=
-heck
-> + * or the fault handler must turn each load into a zero result.
-> + */
-> +static const struct {
-> +	const char *name;
-> +	unsigned long addr;
+> @@ -1262,6 +1263,16 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  	if (unlikely(cpu_feature_enabled(X86_FEATURE_SMAP) &&
+>  		     !(error_code & X86_PF_USER) &&
+>  		     !(regs->flags & X86_EFLAGS_AC))) {
+> +		/*
+> +		 * JITed BPF programs dereference untrusted pointers with loads
+> +		 * that carry an exception table entry (PROBE_MEM). SMAP makes
+> +		 * sure such a load cannot read user memory, so resolve the
+> +		 * fault through the exception table, as for an unmapped kernel
+> +		 * address, instead of oopsing.
+> +		 */
+> +		if (is_bpf_text_address(regs->ip) &&
+> +		    fixup_exception(regs, X86_TRAP_PF, error_code, address))
+> +			return;
 
-[Severity: Medium]
-On 32-bit architectures, unsigned long is 32 bits wide. Could this truncate
-64-bit addresses and cause a misalignment of the BSS structure on those
-platforms?
+[Severity: High]
+Does this introduce a race condition during BPF program destruction?
 
-> +} bad_addrs[] =3D {
-> +	{ "null", 0 },
-> +	{ "low_user", 4096 },
-> +	{ "last_user_page", (1UL << 47) - 4096 },
+If a BPF program with PROBE_MEM loads has its reference count drop to zero,
+__bpf_prog_put_noref() synchronously removes it from the global bpf_tree via
+bpf_prog_kallsyms_del_all() before waiting for the RCU grace period:
 
-[Severity: Medium]
-Will shifting a 32-bit 1UL by 47 bits trigger a -Wshift-count-overflow
-compiler warning on 32-bit architectures? Under -Werror, this would cause
-a build failure.
+kernel/bpf/syscall.c:__bpf_prog_put_noref() {
+    ...
+    bpf_prog_kallsyms_del_all(prog);
+    ...
+    if (deferred) {
+        ...
+        call_rcu(&prog->aux->rcu, __bpf_prog_put_rcu);
+    ...
+}
 
-Could the ULL suffix be used here instead?
+If a CPU is still executing this program inside an RCU read-side critical
+section and hits a PROBE_MEM fault, could the page fault handler fail to fi=
+nd
+the actively executing program?
 
-> +	{ "non_canonical", 1UL << 63 },
+The handler calls is_bpf_text_address() and then fixup_exception(), which
+eventually searches for the program using bpf_prog_ksym_find():
 
-[Severity: Medium]
-Does the same shift-count overflow issue occur here on 32-bit platforms when
-shifting 1UL by 63 bits?
+kernel/bpf/core.c:search_bpf_extables() {
+    rcu_read_lock();
+    prog =3D bpf_prog_ksym_find(addr);
+    if (!prog)
+        goto out;
+    ...
+}
 
-> +#if defined(__x86_64__)
-> +	{ "vsyscall", VSYSCALL_ADDR },
+Because the program was already cleared from bpf_tree, is_bpf_text_address()
+and fixup_exception() will fail to resolve the exception, causing the kerne=
+l to
+incorrectly fall through to page_fault_oops() instead.
 
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/probe_mem_fault.c b/tools/=
-testing/selftests/bpf/progs/probe_mem_fault.c
-> new file mode 100644
-> index 0000000000000..748be45418f5a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/probe_mem_fault.c
-> @@ -0,0 +1,41 @@
-
-[ ... ]
-
-> +int target_pid;
-> +bool use_current_task;
-> +unsigned long addr;
-
-[Severity: Medium]
-If this 8-byte BPF variable is declared as unsigned long, does bpftool emit=
- a
-4-byte struct field when building on 32-bit hosts?
-
-If so, this appears to misalign the skeleton bss layout and could cause
-subsequent fields like val_dw to be corrupted during runtime reads. Would
-__u64 be a safer type here?
-
-> +int runs;
-> +__u64 val_dw;
-> +__u32 val_w;
+>  		/*
+>  		 * No extable entry here.  This was a kernel access to an
+>  		 * invalid pointer.  get_kernel_nofault() will not get here.
+>  		 */
+>  		page_fault_oops(regs, error_code, address);
+>  		return;
+>  	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009024925.3169=
-077-1-memxor@gmail.com?part=3D3
+077-1-memxor@gmail.com?part=3D1
