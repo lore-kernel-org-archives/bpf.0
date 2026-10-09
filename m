@@ -1,64 +1,64 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0434C651F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0CE4BEE53
 	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542930; cv=none; b=Pu/bYRXqmLNiJ2Ynt3EDGs1Wbh+ZrACEmSx69ar0iwp/WWF69Dvm4HqKgxamZ2ln/7UC89r0u7rUBHQSnbtUNIoYk1oB7WI4cvWJmJxBUlEyHqJIV9sNqOop8htRtScfIqiv8JnTkRIzRciksilpqwptnwJoD0BMwZrYHmLYvyQ=
+	t=1791542930; cv=none; b=EmFjoxFs5DXil/mrYvuILp8VLJ7ZuMu7Ft9hcE4HHm1PvicoxmzL42zFMjgCxlUUmxVmKfHTtyNLik2n42vEk3Oi1uxX5fdLJyL480UH4l2kasPu/w4u/x7CgKiEyM11HNyPwary80UjF/qdwxeQVLbsggh+Kf9IqY3x31IJecs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791542930; c=relaxed/simple;
-	bh=8RkcTkkzpbs1RgRrzvI15oDaHJrDN+nbYAv+EtYsSPA=;
+	bh=N/SD4swNzeqwiiGGCeSovSQb2i8AXKNngxdjuTG+hJI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VLt0FkDbwB1GVrrIg47wQFPEpY/YBOPb0S1p6yBqcHqWvD29VG2yGVbyD7Cm39zRfp4GjsFUOkQ0XsoS2jtilq47cH68srj3JGwhocK57LRe0XpL08YKe9YHsNQvSCqNgabmAuklpADefV26DfRssx+fjty07RCoYxWCUogW4cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IzvW35zu; arc=none smtp.client-ip=209.85.216.41
+	 MIME-Version:Content-Type; b=nB6lgfDVUoD79xIldr5wPGR1Xz8SBt2llv1SJlj+SB0Wc+ufa7KoFB/bSHQcrO4qGq8MBe9utmuJEePV3FLUNfS09dN7wg4nJuY6fb1kprUyCvJHVR+Us9usBLp5ysRYQ8jPbqTqG9RltQ2+8SRoQ/bJ/RJB2N8wnLTg8813lAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jUFQM8Rz; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IzvW35zu"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38759bcd877so3256129a91.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jUFQM8Rz"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ab3260b35dso453915a91.1
         for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1791542916; x=1792147716; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=3K6a8350OIcZ3KEI5J78QHAlyKpGUZ98PAhyWCaCkyk=;
-        b=IzvW35zuew5jj2AUmkt8NczdnoMcarbt1OlrvH//38OBh1LEfxwWT38VfyWJFL3XGQ
-         NC792lGloHuMhYbqDwMao5ZUGpUgXog9T9lfoQS/nmiqDOMfc3+TUYEw07O3rGja65yo
-         UA0lTrFeTI0bhhTUTHsaVlSG+OLa00DaelTUUKV0pipPLByAMFlQJMy/aP1V8V7bpvGT
-         8bGdMRONSLPvrPT3ZeAU9/1N6HcQsqlda4RFwoW3zITzWrh+GP2Y33LmfxuZngih2/XV
-         PF8VCOwBIo4wCfESUHOwfmA1pdWLf1LWOIyymOLkQzLcSjOEn9Ds27yFZrDSybgVMFsC
-         Ss/w==
+        bh=WZzhHW44DlJZlafoaIVcPdei6JXhqxwsTAgaeT1BBps=;
+        b=jUFQM8RzDX6r0KrEX1QEfc6dBGIkesVqEEehys8SfFoUmkdpS+KfIxAdU6h5LceDTN
+         +Qk3Ugt6IZ8MhLD17ymM1bLpA2EJBffOJ0eFuEIQ7qQ5JQRVEErbb5nHRSpVf0NjDg0G
+         AtvcVP7NV920gWiEl9KtnkX8qeq0u/ZH1PhD8xiwCeC27G66L7T616B07982GhvHa/S5
+         jHSOEgpW5L4gT42jalEMXTRvL9c8oppU5TIwWCsbQVzruk0IC+7VgEZCN+KDyRJqKllS
+         IAPzGHATiNdN0urkI0cMr0LcQDMp+YOeZQCa9JuonxfJlHrYzHAVlkkW8uyR1VztgBhE
+         RjYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1791542916; x=1792147716;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3K6a8350OIcZ3KEI5J78QHAlyKpGUZ98PAhyWCaCkyk=;
-        b=StSxbfeUXWP+NcYH5WRNVndYO/wez7US4SmaA4NIP7SwOYzbuYxt+m/SOHhbBIHpIS
-         O1VCvXhIdS01HqDTTh0OzOaPLO7N/i+Q45x2a+OjD0RvaW4KSI7nEMqeHYwQDcPxdgHL
-         rApq+fwIPTw1UsGdEfBA86trL+E1/uMLnOK8UWTTQCCxC306kZCHcCSDQ2tXA0MZl1mT
-         5mcP5e9RrFmxu1z9E4+4I7iVkYIVvGDhUn4kvvPzs8MwVWgFmdFKaWaQJVVDpO1gLHe+
-         FPTSvzc8KgtlLJqBBNO45VCj3mUQpLhsE6WcD2CgoTFE6G8c2P5MxucGi1E1rsGiFcuV
-         iyUw==
-X-Gm-Message-State: AFq9FYKron97ugOnTt/sSj3+9vd1qGrVYy340IRTnNLyh2YLKtU6cYbz
-	tzBAR2Y0NgzIqhI1YQlMKKCSQFSHLgx3eINCO0Hn+ZzKYH3BbmlGo6aNWpRzB/ej
-X-Gm-Gg: AYBFou39ODI6Q15xTLagC9eLfFRSo9BEooNS4h2jmUht9QIcZhdKEZWk0Fv0PBanRZR
-	ZiSEBQFXOuYs+oYS6Djj61SdZTA6hfef4uu7ls+X0OWGhTZh0+AH/Kr2dI3BYLwq2oIS6zJ/h+n
-	L5WSjaJZuoLg0fFAI9GO29mGkhp+3OSNBap6piIR7OBZT54iQwEiSLH22lqfgZlS39c0e5e0csk
-	3BExFu/d1hFQ1suXiHjXHcRdbTJ18Y1StwAF+ebxY4JZDukC2f9W9GYDV+E7W+p5HfID9z1x1cm
-	d4vlYYSGtn4EX7ee2pZ39LloIQsMR8Ok9HwdYckhiQd9KbaVz46nxEwleHkV5jqsYeq7uwz3wHD
-	bJvvwBF5rISSMdaVCvNSirBBQ3IDvxDsI9kuM1R5UO73qait4ByXWLCfezKp5/SKiC7SIDhXkRP
-	gt/h7D++ttSMSmFCqW6BnqqhUUMbtX0ZgL9KxLKPQ54PLlci/3Yqc3kXbfVf18O+CXn2wqgTRSV
-	b7SkPdHxaJDyMQ=
-X-Received: by 2002:a17:90b:5403:b0:3a6:fe14:4790 with SMTP id 98e67ed59e1d1-3ab3ac9f78fmr1417167a91.28.1791542916241;
-        Fri, 09 Oct 2026 03:48:36 -0700 (PDT)
+        bh=WZzhHW44DlJZlafoaIVcPdei6JXhqxwsTAgaeT1BBps=;
+        b=TANJNv893n/BHDFW1TUTVNHivSB9h7ezbb4sDvr2ZiW6LhCg+vOpZmKKMvy6AL8xpY
+         bxJrfi147xD1RSEGLKHvpSixPWDbpG1HWL1ymG3e8PWAmDflE3c5TFqMwxmVhUvpe4Z+
+         jZdb629OSZuB73WtCWuELrlVoNoJKupT0x8f/eATaacU9KVHl/6pr0vYdEyx7eMizfkU
+         CuzCwL6UdMxyjFavQGCnStQsfmxGQkrDk35nScUByZDjltPR7L7s/1AYBR1u3OMMnOI0
+         SnDI/sOH/SlA+WfuJKoZibVLj3IoIOG2IBsP2W8tqn5xsiwslDC34hUSb4AHeFY3OUHt
+         W24g==
+X-Gm-Message-State: AFq9FYIO2Q8aVYB45Tfcys24ckVJTV3DwdaFTGcsq0TOVA6rIUhMurPT
+	CL3b9IID7QInGTWSQee8m02AC6oXSbyjQRJ/m8T2k6vUL1EfPj+fi63npTX7pXG/
+X-Gm-Gg: AYBFou3fDASp7R8JsbE5jIyA9JsmJPNujS/4TG9iMVbVVdLytuM5oDufQWvJ6pkYmhe
+	ipdMugdYNB1NIHSyGSXpl1++lt+XAykBZmsROZ4WzMxwfGm0PKZ2f8SXb3dFwBA6/r7HFpCqvcf
+	FACrOsLzrnxk7eB28SMnstROVyNixungdTYZgMLnro15m3ZSDAiwjYzxmPcwL4ZpT2QNCiat1gw
+	izUBI+2JXtSFMT7yJkoUOhYnKxWkiXa2mhKhzvRN341IBbf+Bp6GzMH+hZxlR1v+1Ulg9Bwsf6i
+	RMwynWIjt/jj1aW81kWWPmPYHUEI5gBF6i+vYUWyUT8tVxfE9vquMRZimsKm+JEnRYwgLh/ewT9
+	Xf6UxFaJPFwUg/RnkeMp8yz8UwN3vKAu+gl9CK7pQijUA0dmG7oXb+fAnDczZLxsxiYdyM9gmS3
+	IxvmGkCjxbNKE0+quAF+NfWqxPan4xJzhv61FPmjnePNeAD6AiDCwX/33dg35q+XazjWhkjI1Ub
+	1lSi2Ikb/xvWwA=
+X-Received: by 2002:a17:90b:4a90:b0:3a0:345a:3646 with SMTP id 98e67ed59e1d1-3ab3a903353mr1565926a91.45.1791542915633;
+        Fri, 09 Oct 2026 03:48:35 -0700 (PDT)
 Received: from badger ([38.34.87.7])
         by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:36 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:35 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -66,10 +66,11 @@ Cc: andrii@kernel.org,
 	daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 23/51] bpf: compute immediate dominators
-Date: Fri,  9 Oct 2026 03:47:41 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-23-bcba9bc53ac9@gmail.com>
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 22/51] bpf: move the live-register and SCC printout to a standalone function
+Date: Fri,  9 Oct 2026 03:47:40 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-22-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,268 +83,139 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-SCEV needs to find an exit condition that dominates a loop's backedge;
-such conditions bound every loop iteration. Compute the immediate
-dominator tree as a prerequisite for identifying such conditions.
+Tests for multiple analyses performed by the verifier need the
+verifier log to contain analysis results alongside the program
+disassembly. This patch moves the log-level-2 program dump from
+bpf_compute_live_registers() to a standalone function called from
+bpf_check(), in order to provide a common logging function for such
+analyses (and thus avoid printing program disassembly multiple times).
 
-Use the iterative reverse-postorder algorithm from:
-"A Simple, Fast Dominance Algorithm" by Cooper et al.
+Rename the dump header from "Live regs before insn:" to
+"Program dump (scc? insn#: live_regs_before):" and print available
+source-line information before the corresponding instructions.
 
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |   8 +++
- kernel/bpf/Makefile          |   2 +-
- kernel/bpf/loops.c           | 158 +++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        |   8 ++-
- 4 files changed, 174 insertions(+), 2 deletions(-)
+ kernel/bpf/liveness.c                              | 28 +---------------
+ kernel/bpf/verifier.c                              | 37 ++++++++++++++++++++++
+ .../selftests/bpf/progs/verifier_live_stack.c      |  2 +-
+ 3 files changed, 39 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index bd7733fbe930..59c0670af0e9 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -650,6 +650,11 @@ struct bpf_iarray {
- 	u32 items[];
- };
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 8d8428ccc505..e657e6d95408 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -2664,8 +2664,7 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	struct insn_live_regs *state;
+ 	int insn_cnt = env->prog->len;
+-	u64 pos, insn_pos;
+-	int err = 0, i, j, subprog, start, end;
++	int err = 0, i, subprog, start, end;
+ 	bool changed, ret_reg_pair;
  
-+#define iarray_for_each(item, arr)						\
-+	for (int ___idx = 0;							\
-+	     ___idx < (arr)->cnt && ({ item = (arr)->items[___idx]; 1; });	\
-+	     ___idx++)
-+
- struct bpf_insn_aux_data {
- 	union {
- 		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
-@@ -1112,6 +1117,7 @@ struct bpf_verifier_env {
- 	u32 scc_cnt;
- 	struct bpf_iarray *succ;
- 	struct bpf_iarray *gotox_tmp_buf;
-+	int *idoms;
- };
+ 	/* Use the following algorithm:
+@@ -2754,31 +2753,6 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 		insn_aux[i].zext_dst = def32 >= 0 && (mask_hi(out) & BIT(def32));
+ 	}
  
- static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
-@@ -1888,4 +1894,6 @@ int bpf_insn_def32(struct bpf_prog *prog, struct bpf_insn *insn);
- int bpf_flip_opcode(u32 opcode);
- u8 bpf_rev_opcode(u8 opcode);
- 
-+int bpf_compute_idoms(struct bpf_verifier_env *env);
-+
- #endif /* _LINUX_BPF_VERIFIER_H */
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index c1f9b0d3468d..6210601eb40b 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
- 
--obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o
-+obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-new file mode 100644
-index 000000000000..0db823ee42f7
---- /dev/null
-+++ b/kernel/bpf/loops.c
-@@ -0,0 +1,158 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/slab.h>
-+#include <linux/sched/signal.h>
-+#include <linux/bpf_verifier.h>
-+
-+static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env *env)
-+{
-+	struct bpf_iarray *succ, *preds, **result;
-+	struct bpf_prog *prog = env->prog;
-+	u32 *num_preds, i, s, len = prog->len;
-+	struct bpf_insn *insn;
-+	size_t sz;
-+	void *tmp;
-+
-+	num_preds = kvcalloc(prog->len, sizeof(u32), GFP_KERNEL_ACCOUNT);
-+	if (!num_preds)
-+		return NULL;
-+
-+	/*
-+	 * 'result' layout:
-+	 *  - array of pointers (struct bpf_iarray *)[len]
-+	 *  - struct bpf_iarray one after another
-+	 */
-+	sz = size_mul(len, sizeof(*result) + sizeof(**result));
-+	for (i = 0; i < len; i++) {
-+		insn = env->prog->insnsi + i;
-+		succ = bpf_insn_successors(env, i);
-+		sz = size_add(sz, array_size(succ->cnt, sizeof(*succ->items)));
-+		iarray_for_each(s, succ) {
-+			num_preds[s]++;
-+		}
-+		if (bpf_is_ldimm64(insn))
-+			i++;
-+	}
-+
-+	result = kvzalloc(sz, GFP_KERNEL_ACCOUNT);
-+	if (!result) {
-+		kvfree(num_preds);
-+		return NULL;
-+	}
-+
-+	tmp = (void *)&result[len];
-+	for (i = 0; i < len; i++) {
-+		result[i] = tmp;
-+		tmp += struct_size(result[i], items, num_preds[i]);
-+	}
-+
-+	for (i = 0; i < len; i++) {
-+		insn = env->prog->insnsi + i;
-+		succ = bpf_insn_successors(env, i);
-+		iarray_for_each(s, succ) {
-+			preds = result[s];
-+			preds->items[preds->cnt++] = i;
-+		}
-+		if (bpf_is_ldimm64(insn))
-+			i++;
-+	}
-+
-+	kvfree(num_preds);
-+	return result;
-+}
-+
-+static int idoms_intersect(struct bpf_verifier_env *env, int a, int b)
-+{
-+	int *postorder_nums = env->cfg.postorder_nums;
-+	int *idoms = env->idoms;
-+
-+	while (a != b) {
-+		while (postorder_nums[a] < postorder_nums[b]) {
-+			a = idoms[a];
-+		}
-+		while (postorder_nums[b] < postorder_nums[a]) {
-+			b = idoms[b];
-+		}
-+	}
-+	return a;
-+}
-+
-+/* See "A Simple, Fast Dominance Algorithm" by Cooper et al. for details. */
-+static int compute_subprog_idoms(struct bpf_verifier_env *env, struct bpf_iarray **preds,
-+				int subprog_idx)
-+{
-+	struct bpf_subprog_info *subprog = &env->subprog_info[subprog_idx];
-+	int start = subprog->start;
-+	int po_first = subprog->postorder_start;
-+	int po_last = (subprog + 1)->postorder_start - 1;
-+	int *idoms = env->idoms;
-+	int po_num, pred;
-+	u32 work = 0;
-+	bool changed;
-+
-+	idoms[start] = start;
-+	changed = true;
-+	do {
-+		changed = false;
-+		/*
-+		 * Iterate in reverse postorder, skipping the subprog entry:
-+		 * insn_postorder[po_last] is the subprogram entry.
-+		 */
-+		for (po_num = po_last - 1; po_num >= po_first; po_num--) {
-+			int idx = env->cfg.insn_postorder[po_num];
-+			int new_idom = -1;
-+
-+			iarray_for_each(pred, preds[idx]) {
-+				if (++work % 1024 == 0) {
-+					if (signal_pending(current))
-+						return -EAGAIN;
-+					cond_resched();
-+				}
-+
-+				if (idoms[pred] == -1)
-+					continue;
-+				if (new_idom == -1)
-+					new_idom = pred;
-+				else
-+					new_idom = idoms_intersect(env, pred, new_idom);
-+			}
-+			if (new_idom != -1 && idoms[idx] != new_idom) {
-+				idoms[idx] = new_idom;
-+				changed = true;
-+			}
-+		}
-+	} while (changed);
-+	idoms[start] = -1;
-+	return 0;
-+}
-+
-+int bpf_compute_idoms(struct bpf_verifier_env *env)
-+{
-+	struct bpf_iarray **preds;
-+	u32 len = env->prog->len;
-+	int *idoms, i, err = 0;
-+
-+	preds = compute_predecessors(env);
-+	if (!preds)
-+		return -ENOMEM;
-+
-+	idoms = kvcalloc(len, sizeof(*idoms), GFP_KERNEL_ACCOUNT);
-+	if (!idoms) {
-+		kvfree(preds);
-+		return -ENOMEM;
-+	}
-+
-+	env->idoms = idoms;
-+	for (i = 0; i < len; i++)
-+		idoms[i] = -1;
-+
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		err = compute_subprog_idoms(env, preds, i);
-+		if (err)
-+			break;
-+	}
-+
-+	kvfree(preds);
-+	return err;
-+}
+-	if (env->log.level & BPF_LOG_LEVEL2) {
+-		verbose(env, "Live regs before insn:\n");
+-		for (i = 0; i < insn_cnt; ++i) {
+-			if (env->insn_aux_data[i].scc)
+-				verbose(env, "%3d ", env->insn_aux_data[i].scc);
+-			else
+-				verbose(env, "    ");
+-			verbose(env, "%3d: ", i);
+-			for (j = BPF_REG_0; j < BPF_REG_10; ++j)
+-				if (insn_aux[i].live_regs_before & BIT(j))
+-					verbose(env, "%d", j);
+-				else
+-					verbose(env, ".");
+-			verbose(env, " ");
+-			pos = env->log.end_pos;
+-			bpf_verbose_insn(env, &insns[i]);
+-			insn_pos = env->log.end_pos;
+-			if (insn_aux[i].zext_dst)
+-				verbose(env, "%*c; zext", bpf_vlog_alignment(insn_pos - pos), ' ');
+-			verbose(env, "\n");
+-			if (bpf_is_ldimm64(&insns[i]))
+-				i++;
+-		}
+-	}
+-
+ out:
+ 	kvfree(state);
+ 	return err;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9260ee290072..5a29d05c523c 100644
+index 91f114947b8b..9260ee290072 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -22872,13 +22872,14 @@ static void log_program(struct bpf_verifier_env *env)
- 	u64 pos, insn_pos;
- 	u32 i, j;
+@@ -22863,6 +22863,40 @@ static bool bpf_prog_reenters_datapath(const struct bpf_prog *prog)
+ 	return false;
+ }
  
--	verbose(env, "Program dump (scc? insn#: live_regs_before):\n");
-+	verbose(env, "Program dump (scc? idom insn#: live_regs_before):\n");
- 	for (i = 0; i < insn_cnt; ++i) {
- 		verbose_linfo(env, i, "    ; ");
- 		if (env->insn_aux_data[i].scc)
- 			verbose(env, "%3d ", env->insn_aux_data[i].scc);
- 		else
- 			verbose(env, "    ");
-+		verbose(env, "%3d ", env->idoms[i]);
- 		verbose(env, "%3d: ", i);
- 		for (j = BPF_REG_0; j < BPF_REG_10; ++j)
- 			if (insn_aux[i].live_regs_before & BIT(j))
-@@ -23103,6 +23104,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 
- 	prepare_subprog_args(env);
- 
-+	ret = bpf_compute_idoms(env);
-+	if (ret < 0)
-+		goto skip_full_check;
++/* Various log level 2 information about the program */
++static void log_program(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *insn_aux = env->insn_aux_data;
++	struct bpf_insn *insns = env->prog->insnsi;
++	u32 insn_cnt = env->prog->len;
++	u64 pos, insn_pos;
++	u32 i, j;
 +
- 	ret = bpf_compute_live_registers(env);
++	verbose(env, "Program dump (scc? insn#: live_regs_before):\n");
++	for (i = 0; i < insn_cnt; ++i) {
++		verbose_linfo(env, i, "    ; ");
++		if (env->insn_aux_data[i].scc)
++			verbose(env, "%3d ", env->insn_aux_data[i].scc);
++		else
++			verbose(env, "    ");
++		verbose(env, "%3d: ", i);
++		for (j = BPF_REG_0; j < BPF_REG_10; ++j)
++			if (insn_aux[i].live_regs_before & BIT(j))
++				verbose(env, "%d", j);
++			else
++				verbose(env, ".");
++		verbose(env, " ");
++		pos = env->log.end_pos;
++		bpf_verbose_insn(env, &insns[i]);
++		insn_pos = env->log.end_pos;
++		if (insn_aux[i].zext_dst)
++			verbose(env, "%*c; zext", bpf_vlog_alignment(insn_pos - pos), ' ');
++		verbose(env, "\n");
++		if (bpf_is_ldimm64(&insns[i]))
++			i++;
++	}
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	      struct bpf_log_attr *attr_log)
+ {
+@@ -23073,6 +23107,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
  	if (ret < 0)
  		goto skip_full_check;
-@@ -23266,6 +23271,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	kvfree(env->callx_edges);
- 	kvfree(env->func_ptrs);
- 	bpf_diag_free(env);
-+	kvfree(env->idoms);
- 	kvfree(env);
- 	return ret;
- }
+ 
++	if (env->log.level & BPF_LOG_LEVEL2)
++		log_program(env);
++
+ 	ret = mark_fastcall_patterns(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index 3abe08cc6595..6e8f50618580 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -66,7 +66,7 @@ __msg("stack use/def subprog#0 must_write_not_same_slot (d0,cs0):")
+  * but the write conservatively marks the whole frame as may_def.
+  */
+ __msg("6: (7b) *(u64 *)(r2 +0) = r0         ; may_def: fp0-8..-{{(512|2048)}}")
+-__msg("Live regs before insn:")
++__msg("Program dump")
+ __naked void must_write_not_same_slot(void)
+ {
+ 	asm volatile (
 
 -- 
 2.53.0
