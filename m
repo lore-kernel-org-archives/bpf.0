@@ -1,51 +1,51 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F50945563C;
-	Fri,  9 Oct 2026 11:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C314C10D1;
+	Fri,  9 Oct 2026 11:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545058; cv=none; b=KzvUlSgKXO/8u2DLxLnAvpyS1GK01aUXOGM1jTrK0JfVf6ekCuiSUXtMdd2+yykBf0xVkPB9uQUtccxGo2BnJcn6NkWZ8WAPwQi4wQcXGrSG46TlD2Zt1X2A0xmAq1DmssrAaRL66B2khZVBHCa3VKsEzzICeH8atttliR12E3I=
+	t=1791545069; cv=none; b=EC/lF2/D5xRdRl7O17zVvLumiBaQAv870821slqUvccbQcXEWS8wGK5NxhLqmjP3WQ8S7J20CeH0m3lT0/130pOgsLkYsH1UxrmDR2E/eGCThLUNONlYJY560RuQQORc/4M8bUiuDFjQIqUVJTuwmGAOKOgSYP1Ze6hwSyAdO4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545058; c=relaxed/simple;
-	bh=3KyRV5fNR7vIe427aCO0nVO+jT3N2xo/nkkZoCJhOMc=;
+	s=arc-20240116; t=1791545069; c=relaxed/simple;
+	bh=AzVd9wnWD6jcccjp3JCAwuGQ1k1go9RNA4Fllq1Z96E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EHq3LtKXrG2lsIu87SPf27IHWFwQeTlgqYFmIvHfZiAxL3tTX7L2uNU2Nnt88MV00NuyOhItouCcSgD+ZGvIlvjueMp/eAs+5JVHGxfFyUkx2TZuTBCoknEiecwXqUuv+ebJLN6OV4HM/pb6MHXDdBbWYRdWud9BCVdaUwKAX7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=rbxbZeL7; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=u2kQm6/05p3rD4Eh89fZkoFZPbujeBMuYObAQR8qrpnwZINnyRjA4Npb3JLBV1qJwGAKlNlOcqagmQmPDySp2uGH4UI9R23TCx8Xm6K12c7UuTmwDivEZHQuRE70b8Hwuq1sxnpFAIA9fhYTRMb7WEDhfcpLMc5XtQops/DZ5l0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=kB/44KNQ; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rbxbZeL7"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 698K9p5H2257839;
-	Fri, 9 Oct 2026 11:23:37 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kB/44KNQ"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 698K9oPI1464856;
+	Fri, 9 Oct 2026 11:23:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=10Ndk
-	0qd9qFRN9ato391uuq3ZjpYI9RlN+fGKD+UEnQ=; b=rbxbZeL7qy3Jg0I8iTy67
-	5DLtV5PzMx3IQvFFo4zsoN2hGualdg4RNAMn1WAtebdS4YlTqHhnudoxyWgefKiD
-	S8E9hUs93LrWu8XpRcS2W37O5jB0L0ICe/yfEzCkaN/4/NAHUXZ8qa6bO01ypxlQ
-	ubWN4JmvDiVOxRYYWvGTU1YEWyAPFHXyGUIt7qVATb+DXkQeYAeiVJ2Iu/TrGmdC
-	qfLGdrdkBJePtxQme4rXQfzSKNhg1EpQf1o7Hq06YbFajoQ4M554wcFHybvX+6qk
-	cmQfIPNBL/tj4pG1VTQalCeAru1skTRJ/Xi1ot1CcohkTaBCM/aB3B5LonhK5JsW
-	Q==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=KV1XP
+	8JQQFuZ1gBuZgBgYeVlR8yqzpOaTznd7+yooaQ=; b=kB/44KNQIiPuatotV/E+w
+	34sFwJmYicnIMNJQKJECFbDjTMwuf0vKdrJbOj6RB/C6USSQ595CDLEZO0h11lnD
+	p6b3K4La2Ae7JSGFxpPrWpEwSxGA/HbXfk+F6ehuE2lQGIM+9oNj+GOIQLeC2fjy
+	LMUCVCj1rrzk/c3lHn9JGiow0UlEEmL5vh1vmJ1uTfbVri69nHlfNTbj1ba5Kiiz
+	F+rt+ziIHt7oJ4MbpfoOYFkKg5xXlcvGr96KVEHoBUH0PGryws+MQbzjAON6XhG8
+	ibLMpAvis5v1UMK4PSSxQvqUxOY/y+ZMQf2cFS4oAdd7vTitgewuthk2mcFvL4Rg
+	A==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h5xegjy68-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h5xeh31gt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 09 Oct 2026 11:23:37 +0000 (GMT)
+	Fri, 09 Oct 2026 11:23:40 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 699BLkSs039873;
-	Fri, 9 Oct 2026 11:23:36 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 699BLlkA040060;
+	Fri, 9 Oct 2026 11:23:39 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4h5xfcsnby-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4h5xfcsnd4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 09 Oct 2026 11:23:35 +0000 (GMT)
+	Fri, 09 Oct 2026 11:23:39 +0000 (GMT)
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 699BNRkU006543;
-	Fri, 9 Oct 2026 11:23:35 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 699BNRkW006543;
+	Fri, 9 Oct 2026 11:23:38 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-85-231.vpn.oracle.com [10.154.85.231])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4h5xfcsn8m-3;
-	Fri, 09 Oct 2026 11:23:35 +0000 (GMT)
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4h5xfcsn8m-4;
+	Fri, 09 Oct 2026 11:23:38 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
         jolsa@kernel.org
@@ -57,9 +57,9 @@ Cc: ihor.solodrai@linux.dev, yonghong.song@linux.dev, song@kernel.org,
         ojeda@kernel.org, linux-modules@vger.kernel.org,
         arnaldo.melo@gmail.com, bpf@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4 bpf-next 2/7] resolve_btfids: Populate BTF link section
-Date: Fri,  9 Oct 2026 12:23:19 +0100
-Message-ID: <20261009112324.1442319-3-alan.maguire@oracle.com>
+Subject: [PATCH v4 bpf-next 3/7] kbuild, btf: Expose vmlinux inline BTF through sysfs
+Date: Fri,  9 Oct 2026 12:23:20 +0100
+Message-ID: <20261009112324.1442319-4-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20261009112324.1442319-1-alan.maguire@oracle.com>
 References: <20261009112324.1442319-1-alan.maguire@oracle.com>
@@ -77,394 +77,886 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  suspectscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
  phishscore=0 lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2610020000 definitions=main-2610090045
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX3qL07T2EiSjr
- lzwU0pvEf+RfGVYZXQYLYgTe7xvUBVoki5wS9fuBtI+x7bkG82zcScUntvcZVO6AbTaHPjIaOmD
- 1sqf8tEMP9rVQuLYvBEdOKgIgi0AU4IjMIrHVXX13m2C6nqJSwgl/WQSWduT2SgAytgr98Mv7gI
- gB2UzoGcPfkxzE2HaEfccC6SKmmsJy87m5umcBCZ8n773N4lQScsJjMcVlUuvazmj+GAOQF2hOZ
- /64YxE7591fKoYD76ZJX4rAsEXoeJlz88xxQTAstVG8Y8QLB5ma1tskudV7RsVR1CUEmMn8nrcv
- ESTVLEOGu5lkbFtsb1u4awZaubjVpQKhr8uZliOPGsLLCJi4W9E3hrO8AeanFp3jfgKe6UhnyzG
- TUndYrWo0Exe6GUIKUikfdhTJT0YsQboJGujbGwcYzmVFU2/IfRHI333tgclNd6kbmlxG4slW69
- ScUC9kgZmmOqx1+P8354QQYSQdIHLuTUf2DcUM54=
-X-Authority-Analysis: v=2.4 cv=OtfaWC/t c=1 sm=1 tr=0 ts=6ac8ceb9 b=1 cx=c_pps
+X-Proofpoint-GUID: -r44zi-lcJ0FWk_9Piw2V8ApfjDg4Cd5
+X-Proofpoint-ORIG-GUID: -r44zi-lcJ0FWk_9Piw2V8ApfjDg4Cd5
+X-Authority-Analysis: v=2.4 cv=LZ2peTfi c=1 sm=1 tr=0 ts=6ac8cebc b=1 cx=c_pps
  a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
  a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x0eKOSpe3m1H3M0S9YoZ:22 a=yPCof4ZbAAAA:8 a=MyPM3S7XMLX627TPedsA:9
+ a=3I1J8UUJPc9JN9BFgKH3:22 a=yPCof4ZbAAAA:8 a=dWvMgMDXqIRcTJ4HnX4A:9
  a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12108
-X-Proofpoint-ORIG-GUID: B169sCwh8EuRkwMi3e8oKthbMog2R65m
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfX0kIJlZrIBXzz
- nse3NzvFOIMZSFPTU0WdMP2VplEoxt2cfNHy9NArbFltgm4c8LKARDySTW1I6v6G/uZhyK3igAt
- l8ISplGDQqnyvWKQsyvqbjMbWORjBYZbuNOkQzvGjBf8qI9K36le
-X-Proofpoint-GUID: B169sCwh8EuRkwMi3e8oKthbMog2R65m
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfXwzptFCQ1Mchp
+ Mgh8/bEeNrWKMmU8mN6Bl6vyBX4oYSR11j4CpRRhE84P9kC2lHIC8EGCSqyFCzB7tiYRlL6EK8w
+ OyePwWbt8kioerO9SdkogZp80jC0l0DNUrplwGqloFV7ms3L+Wtc
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA5MDA0NSBTYWx0ZWRfXwPSCiDTnrKw/
+ BUXmMW5RZ/zprR0ClVIoO3bQnHm8s4Ho3Qvy9VuSC9X5TM8zPYJ734d0IdtRNVA+Y7Fs3QgpQgO
+ F4umLgy5ZUQbOnXpdeiANKTxkJByq/CU5UI0YAC8R3WW1VZ5Ya8OXwT5kHpyIXHns4kXZdGcP4J
+ HIVCxpq8nRbnKg+eXnlgU4QUlyYG57pIFc6zmbjtpK7Ub02wG9CVQ0gBTl5sVBYhXuQW5FPeAQh
+ cXLbg6lynEVs8ezc5jdY0pNTxOs18LPu3f1aD+mLIEf9Q1DbX6nXhfCbp99PYvDuecxnGzPzORj
+ TkOpS5co5xBnODqbLfUpEb6qAgXuMkZ2EUtAcbyDe3RkMXm8srifL3lHvPEDh7UyMrY+bBMSe1L
+ uTQRUqA98OfyayqS+gibCrNIAGlE2gZ9UuXR20SfXSKnYmEvapDe555wHbfQTHq+ucVx5dbeulF
+ mV+Rpdsbsb0miEnm1b3s9p6+1oV7ky0w5gngqhak=
 
-Allow the final BTF patch pass to populate one or more BTF link
-records.  A link identifies the BTF section to be delivered, its
-carrier module, and the raw finalized BTF payload:
+Expose BTF inline-location information from vmlinux .BTF.inline
+sections in /sys/kernel/btf as vmlinux.inline. Embedded vmlinux
+inline BTF supports read-only mmap().
 
-    --btf_link <section>:<module>:<raw-btf-file>
+Provide runtime support for a module-delivered vmlinux inline BTF
+carrier. Its link record binds the carrier module name, BTF size, and
+SHA-256 digest to the running kernel before its data is made available
+through a lazy vmlinux.inline sysfs attribute. The carrier is handled
+before ordinary module BTF registration, so its incidental .BTF data is
+not exposed.
 
-Use the raw file size and SHA-256 digest to populate the corresponding
-<section>.link record.  This avoids reparsing BTF during final ELF
-patching and supports inline vmlinux BTF linking.
+Make CONFIG_DEBUG_INFO_BTF_INLINE tristate. When configured as a
+module, retain vmlinux final split inline BTF for
+btf_vmlinux_inline.ko instead of embedding it in vmlinux.
+
+Reserve .BTF.inline.link in vmlinux and extend the final
+resolve_btfids patch pass to bind btf_vmlinux_inline to the raw
+vmlinux.BTF.inline payload. This preserves the normal built-in
+configuration while allowing the large inline BTF payload to load on
+demand.
+
+Normal module inline BTF is handled separately, after its
+references have been relocated against the final module BTF.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Assisted-by: OpenAI Codex (GPT 5.6)
+Assisted-by: OpenAI Codex (GPT-5.6)
 ---
- tools/bpf/resolve_btfids/btf_colors.c |   6 +
- tools/bpf/resolve_btfids/btf_colors.h |   4 +
- tools/bpf/resolve_btfids/main.c       | 234 +++++++++++++++++++++++++-
- 3 files changed, 241 insertions(+), 3 deletions(-)
+ .gitignore                        |   1 +
+ Makefile                          |   1 +
+ include/asm-generic/vmlinux.lds.h |  31 ++++++
+ include/linux/btf.h               |  37 +++++++
+ include/linux/module.h            |   4 +
+ kernel/bpf/Makefile               |   1 +
+ kernel/bpf/btf.c                  | 160 ++++++++++++++++++++++++------
+ kernel/bpf/btf_vmlinux_inline.c   |  29 ++++++
+ kernel/bpf/sysfs_btf.c            | 149 ++++++++++++++++++++++++++--
+ kernel/module/main.c              |   7 ++
+ lib/Kconfig.debug                 |  18 ++++
+ scripts/Makefile.btf              |   7 ++
+ scripts/gen-btf.sh                |  34 ++++++-
+ scripts/link-vmlinux.sh           |   8 +-
+ scripts/package/kernel.spec       |  10 +-
+ 15 files changed, 446 insertions(+), 51 deletions(-)
+ create mode 100644 kernel/bpf/btf_vmlinux_inline.c
 
-diff --git a/tools/bpf/resolve_btfids/btf_colors.c b/tools/bpf/resolve_btfids/btf_colors.c
-index 347ae85d6bc7..5d307d70e7f2 100644
---- a/tools/bpf/resolve_btfids/btf_colors.c
-+++ b/tools/bpf/resolve_btfids/btf_colors.c
-@@ -7,6 +7,12 @@
-  * which can't be included in main.c because of the u32 poison and pr_warn macro conflicts.
-  */
- 
-+void btf_sha256(const void *data, size_t len,
-+		__u8 out[BTF_SHA256_DIGEST_LENGTH])
-+{
-+	libbpf_sha256(data, len, out);
-+}
-+
+diff --git a/.gitignore b/.gitignore
+index 9875120ea7bd..d54bdaac9981 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -72,6 +72,7 @@ modules.order
+ /vmlinux.symvers
+ /vmlinux.thinlto-index
+ /vmlinux.unstripped
++/vmlinux.BTF.inline
+ /vmlinux-gdb.py
+ /vmlinuz
+ /System.map
+diff --git a/Makefile b/Makefile
+index 6b8b812f23b9..b3053dd3c105 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1769,6 +1769,7 @@ endif # CONFIG_MODULES
+ CLEAN_FILES += vmlinux.symvers modules-only.symvers \
+ 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
+ 	       modules.builtin.ranges vmlinux.o.map vmlinux.unstripped \
++	       vmlinux.BTF.inline \
+ 	       vmlinux.thinlto-index builtin.order \
+ 	       compile_commands.json rust/test \
+ 	       rust-project.json .vmlinux.objs .vmlinux.export.c \
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index b2988aa12f66..b17251bc63f5 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -675,12 +675,43 @@
  /*
-  * Marks `root_id` and local types reachable from it with `color`.
-  * `colors` is indexed by source ID; worklist has room for every local type.
-diff --git a/tools/bpf/resolve_btfids/btf_colors.h b/tools/bpf/resolve_btfids/btf_colors.h
-index 9cea757cb356..56a85a242d6b 100644
---- a/tools/bpf/resolve_btfids/btf_colors.h
-+++ b/tools/bpf/resolve_btfids/btf_colors.h
-@@ -11,6 +11,10 @@ enum btf_color {
- 	BTF_COLOR_SHARED = BTF_COLOR_MAIN | BTF_COLOR_LOC,
- };
- 
-+#define BTF_SHA256_DIGEST_LENGTH	32
+  * .BTF
+  */
++#ifdef CONFIG_DEBUG_INFO_BTF_INLINE
++#define BTF_INLINE							\
++	. = ALIGN(PAGE_SIZE);						\
++	.BTF.inline : AT(ADDR(.BTF.inline) - LOAD_OFFSET) {		\
++		BOUNDED_SECTION_BY(.BTF.inline, _BTF_inline)		\
++	}
++#else
++#define BTF_INLINE
++#endif
 +
-+void btf_sha256(const void *data, size_t len,
-+		__u8 out[BTF_SHA256_DIGEST_LENGTH]);
- void btf_mark_reachable(struct btf *btf, __u32 root, enum btf_color color,
- 			__u8 *colors, __u32 *worklist);
++#ifdef CONFIG_DEBUG_INFO_BTF_INLINE_MODULE
++/* __MODULE_NAME_LEN + SHA-256 digest + u32 BTF size */
++#ifdef CONFIG_64BIT
++#define BTF_LINK_SIZE	(64 - 8 + 32 + 4)
++#else
++#define BTF_LINK_SIZE	(64 - 4 + 32 + 4)
++#endif
++#define BTF_INLINE_LINK						\
++	. = ALIGN(PAGE_SIZE);					\
++	.BTF.inline.link : AT(ADDR(.BTF.inline.link) - LOAD_OFFSET) { \
++		__start_BTF_inline_link = .;				\
++		BYTE(0)						\
++		. += BTF_LINK_SIZE - 1;					\
++		__stop_BTF_inline_link = .;				\
++	}
++#else
++#define BTF_INLINE_LINK
++#endif
++
+ #ifdef CONFIG_DEBUG_INFO_BTF
+ #define BTF								\
+ 	. = ALIGN(PAGE_SIZE);						\
+ 	.BTF : AT(ADDR(.BTF) - LOAD_OFFSET) {				\
+ 		BOUNDED_SECTION_BY(.BTF, _BTF)				\
+ 	}								\
++	BTF_INLINE							\
++	BTF_INLINE_LINK						\
+ 	. = ALIGN(PAGE_SIZE);						\
+ 	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
+ 		*(.BTF_ids)						\
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 4b63bb91550a..f731c7a5f14c 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -5,6 +5,7 @@
+ #define _LINUX_BTF_H 1
  
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 15e7be13061f..f737fac60fa2 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -93,6 +93,7 @@
- #include <subcmd/parse-options.h>
+ #include <linux/types.h>
++#include <linux/module.h>
+ #include <linux/bpfptr.h>
+ #include <linux/bsearch.h>
+ #include <linux/btf_ids.h>
+@@ -118,6 +119,19 @@ struct btf_show;
+ struct btf_id_set;
+ struct bpf_prog;
  
- #define BTF_IDS_SECTION	".BTF_ids"
-+#define BTF_LINK_MODULE_NAME_MAX	64
- #define BTF_ID_PREFIX	"__BTF_ID__"
- 
- #define BTF_STRUCT	"struct"
-@@ -158,6 +159,7 @@ struct object {
- 		size_t		 strtabidx;
- 		unsigned long	 idlist_addr;
- 		int		 encoding;
-+		int		 elf_class;
- 		const char	**func_symbols;
- 		u32		 func_symbols_cnt;
- 		u32		 func_symbols_cap;
-@@ -180,6 +182,19 @@ struct object {
- 	u32 addr_syms_cap;
- };
- 
++#define BTF_LINK_SHA256_LEN	32
++
++/*
++ * A .BTF.link or .BTF.inline.link section identifies the module which
++ * carries a vmlinux BTF section.  The module name is NUL terminated and the
++ * field is padded to __MODULE_NAME_LEN.
++ */
 +struct btf_link {
-+	char *value;
-+	char *section;
-+	char *module;
-+	char *btf_path;
-+};
++	char module_name[__MODULE_NAME_LEN];
++	u8 sha256[BTF_LINK_SHA256_LEN];
++	u32 btf_size;
++} __packed;
 +
-+struct btf_links {
-+	struct btf_link *links;
-+	u32 cnt;
-+	u32 cap;
-+};
-+
- #define DECL_TAG_FASTCALL "bpf_fastcall"
- #define DECL_TAG_KFUNC "bpf_kfunc"
+ typedef int (*btf_kfunc_filter_t)(const struct bpf_prog *prog, u32 kfunc_id);
  
-@@ -267,6 +282,49 @@ static int __ensure_mem(void **data, u32 *cap, u32 cnt, size_t elem_sz)
- #define ensure_mem(arr_ptr, cap_ptr, cnt) \
- 	__ensure_mem((void **)(arr_ptr), (cap_ptr), (cnt), sizeof(**(arr_ptr)))
+ struct btf_kfunc_id_set {
+@@ -624,6 +638,29 @@ bool btf_types_are_same(const struct btf *btf1, u32 id1,
+ 			const struct btf *btf2, u32 id2);
+ int btf_check_iter_arg(struct btf *btf, const struct btf_type *func, int arg_idx);
  
-+static int parse_btf_link(const struct option *opt, const char *arg, int unset)
++#if IS_ENABLED(CONFIG_SYSFS)
++struct bin_attribute *sysfs_btf_add(const char *name, void *data, size_t data_size,
++				    bool mmap, const char *lazy_module_name);
++bool sysfs_btf_update(struct bin_attribute *attr, void *data);
++void sysfs_btf_remove(struct bin_attribute *attr);
++#else
++static inline struct bin_attribute *
++sysfs_btf_add(const char *name, void *data, size_t data_size, bool mmap,
++	      const char *lazy_module_name)
 +{
-+	struct btf_links *links = opt->value;
-+	struct btf_link *link;
-+	char *separator;
-+
-+	if (unset)
-+		return -EINVAL;
-+	if (__ensure_mem((void **)&links->links, &links->cap, links->cnt + 1,
-+			 sizeof(*links->links)))
-+		return -ENOMEM;
-+	link = &links->links[links->cnt];
-+	memset(link, 0, sizeof(*link));
-+	link->value = strdup(arg);
-+	if (!link->value)
-+		return -ENOMEM;
-+	link->section = link->value;
-+	separator = strchr(link->section, ':');
-+	if (!separator || separator == link->section)
-+		goto err_value;
-+	*separator++ = '\0';
-+	link->module = separator;
-+	separator = strchr(link->module, ':');
-+	if (!separator || separator == link->module || !separator[1])
-+		goto err_value;
-+	*separator++ = '\0';
-+	link->btf_path = separator;
-+	links->cnt++;
-+	return 0;
-+err_value:
-+	free(link->value);
-+	return -EINVAL;
++	return NULL;
 +}
 +
-+static void free_btf_links(struct btf_links *links)
++static inline bool sysfs_btf_update(struct bin_attribute *attr, void *data)
 +{
-+	u32 i;
-+
-+	for (i = 0; i < links->cnt; i++)
-+		free(links->links[i].value);
-+	free(links->links);
++	return false;
 +}
 +
- static bool is_btf_id(const char *name)
++static inline void sysfs_btf_remove(struct bin_attribute *attr)
++{
++}
++#endif
++
+ static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
  {
- 	return name && !strncmp(name, BTF_ID_PREFIX, sizeof(BTF_ID_PREFIX) - 1);
-@@ -488,6 +546,7 @@ static int elf_collect(struct object *obj)
- 		return -1;
- 	}
- 	obj->efile.encoding = ehdr.e_ident[EI_DATA];
-+	obj->efile.elf_class = ehdr.e_ident[EI_CLASS];
+ 	if (!btf_type_is_ptr(t))
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 96cc98568eea..a6abde12a458 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -503,6 +503,10 @@ struct module {
+ 	void *btf_data;
+ 	void *btf_base_data;
+ #endif
++#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_INLINE)
++	unsigned int btf_inline_data_size;
++	void *btf_inline_data;
++#endif
+ #ifdef CONFIG_JUMP_LABEL
+ 	struct jump_entry *jump_entries;
+ 	unsigned int num_jump_entries;
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index c1f9b0d3468d..37e62ef45079 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -42,6 +42,7 @@ obj-$(CONFIG_BPF_SYSCALL) += reuseport_array.o
+ endif
+ ifeq ($(CONFIG_SYSFS),y)
+ obj-$(CONFIG_DEBUG_INFO_BTF) += sysfs_btf.o
++obj-$(CONFIG_DEBUG_INFO_BTF_INLINE) += btf_vmlinux_inline.o
+ endif
+ ifeq ($(CONFIG_BPF_JIT),y)
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_struct_ops.o
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0630675377aa..592b71a83841 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -25,11 +25,12 @@
+ #include <linux/skmsg.h>
+ #include <linux/perf_event.h>
+ #include <linux/bsearch.h>
+-#include <linux/kobject.h>
+ #include <linux/string.h>
+-#include <linux/sysfs.h>
+ #include <linux/overflow.h>
+ #include <linux/bitops.h>
++#include <linux/unaligned.h>
++#include <linux/vmalloc.h>
++#include <crypto/sha2.h>
  
- 	/*
- 	 * Scan all the elf sections and look for save data
-@@ -1030,6 +1089,153 @@ static int dump_raw_btf(struct btf *btf, const char *out_path)
+ #include <net/netfilter/nf_bpf_link.h>
+ 
+@@ -9015,21 +9016,132 @@ static DEFINE_MUTEX(btf_module_mutex);
+ 
+ static void purge_cand_cache(struct btf *btf);
+ 
++#if IS_MODULE(CONFIG_DEBUG_INFO_BTF_INLINE)
++extern char __start_BTF_inline_link[];
++extern char __stop_BTF_inline_link[];
++
++static struct bin_attribute *vmlinux_inline_attr;
++static const struct btf_link *vmlinux_inline_link;
++
++static const struct btf_link *btf_parse_link(void *start, unsigned int size)
++{
++	const struct btf_link *link = start;
++	unsigned int module_name_len;
++
++	if (!link || size != sizeof(*link) || link->btf_size == 0)
++		return NULL;
++
++	module_name_len = strnlen(link->module_name, sizeof(link->module_name));
++	if (!module_name_len || module_name_len == sizeof(link->module_name) ||
++	    memchr_inv(link->module_name + module_name_len + 1, 0,
++		       sizeof(link->module_name) - module_name_len - 1))
++		return NULL;
++	return link;
++}
++
++static bool btf_verify_link(const struct btf_link *link, const struct module *mod,
++			    const void *data, size_t data_size)
++{
++	u8 actual_digest[BTF_LINK_SHA256_LEN];
++
++	if (!link || data_size != link->btf_size) {
++		pr_warn(" BTF link from module [%s] missing or has unexpected size\n", mod->name);
++		return false;
++	}
++	sha256(data, data_size, actual_digest);
++	if (memcmp(actual_digest, link->sha256, sizeof(actual_digest))) {
++		pr_warn("BTF link from module [%s] has unexpected digest\n", mod->name);
++		return false;
++	}
++
++	return true;
++}
++
++static void btf_vmlinux_inline_lazy_init(void)
++{
++	vmlinux_inline_link = btf_parse_link(__start_BTF_inline_link,
++					     __stop_BTF_inline_link -
++					     __start_BTF_inline_link);
++	if (!vmlinux_inline_link) {
++		pr_warn("invalid vmlinux inline BTF link\n");
++		return;
++	}
++	vmlinux_inline_attr = sysfs_btf_add("vmlinux.inline", NULL,
++					    vmlinux_inline_link->btf_size, true,
++					    vmlinux_inline_link->module_name);
++	if (IS_ERR(vmlinux_inline_attr)) {
++		pr_warn("failed to register vmlinux inline BTF in sysfs: %ld\n",
++			PTR_ERR(vmlinux_inline_attr));
++		vmlinux_inline_attr = NULL;
++	}
++}
++
++static bool btf_module_is_vmlinux_inline(const struct module *mod)
++{
++	return vmlinux_inline_link && !strcmp(mod->name, vmlinux_inline_link->module_name);
++}
++
++static int btf_module_handle_vmlinux_inline(const struct module *mod)
++{
++	void *data;
++
++	if (!mod->btf_inline_data ||
++	    mod->btf_inline_data_size != vmlinux_inline_link->btf_size)
++		return -EINVAL;
++
++	data = vmalloc_user(mod->btf_inline_data_size);
++	if (!data)
++		return -ENOMEM;
++	memcpy(data, mod->btf_inline_data, mod->btf_inline_data_size);
++
++	if (!btf_verify_link(vmlinux_inline_link, mod, data, mod->btf_inline_data_size) ||
++	    !sysfs_btf_update(vmlinux_inline_attr, data)) {
++		kvfree(data);
++		return -EINVAL;
++	}
++	return 0;
++}
++
++#else
++
++static bool btf_module_is_vmlinux_inline(const struct module *mod)
++{
++	return false;
++}
++
++static int btf_module_handle_vmlinux_inline(const struct module *mod)
++{
++	return 0;
++}
++
++static void btf_vmlinux_inline_lazy_init(void)
++{
++}
++
++#endif /* IS_MODULE(CONFIG_DEBUG_INFO_BTF_INLINE) */
++
+ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 			     void *module)
+ {
+ 	struct btf_module *btf_mod, *tmp;
+ 	struct module *mod = module;
++	struct bin_attribute *attr;
+ 	struct btf *btf;
+ 	int err = 0;
+ 
+-	if (mod->btf_data_size == 0 ||
+-	    (op != MODULE_STATE_COMING && op != MODULE_STATE_LIVE &&
+-	     op != MODULE_STATE_GOING))
++	if (op != MODULE_STATE_COMING && op != MODULE_STATE_LIVE &&
++	    op != MODULE_STATE_GOING)
+ 		goto out;
+ 
+ 	switch (op) {
+ 	case MODULE_STATE_COMING:
++		if (btf_module_is_vmlinux_inline(mod)) {
++			err = btf_module_handle_vmlinux_inline(mod);
++			break;
++		}
++
++		if (!mod->btf_data_size)
++			break;
+ 		btf_mod = kzalloc_obj(*btf_mod);
+ 		if (!btf_mod) {
+ 			err = -ENOMEM;
+@@ -9062,34 +9174,16 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 		list_add(&btf_mod->list, &btf_modules);
+ 		mutex_unlock(&btf_module_mutex);
+ 
+-		if (IS_ENABLED(CONFIG_SYSFS)) {
+-			struct bin_attribute *attr;
+-
+-			attr = kzalloc_obj(*attr);
+-			if (!attr)
+-				goto out;
+-
+-			sysfs_bin_attr_init(attr);
+-			attr->attr.name = btf->name;
+-			attr->attr.mode = 0444;
+-			attr->size = btf->data_size;
+-			attr->private = btf->data;
+-			attr->read = sysfs_bin_attr_simple_read;
+-
+-			err = sysfs_create_bin_file(btf_kobj, attr);
+-			if (err) {
+-				pr_warn("failed to register module [%s] BTF in sysfs: %d\n",
+-					mod->name, err);
+-				kfree(attr);
+-				err = 0;
+-				goto out;
+-			}
+-
+-			btf_mod->sysfs_attr = attr;
++		attr = sysfs_btf_add(btf->name, btf->data, btf->data_size, false, NULL);
++		if (IS_ERR(attr)) {
++			err = 0;
++			goto out;
+ 		}
+-
++		btf_mod->sysfs_attr = attr;
+ 		break;
+ 	case MODULE_STATE_LIVE:
++		if (!mod->btf_data_size)
++			break;
+ 		mutex_lock(&btf_module_mutex);
+ 		list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+ 			if (btf_mod->module != module)
+@@ -9101,6 +9195,8 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 		mutex_unlock(&btf_module_mutex);
+ 		break;
+ 	case MODULE_STATE_GOING:
++		if (!mod->btf_data_size)
++			break;
+ 		mutex_lock(&btf_module_mutex);
+ 		list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+ 			if (btf_mod->module != module)
+@@ -9115,10 +9211,9 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 			btf_free_id(btf_mod->btf);
+ 			list_del(&btf_mod->list);
+ 			if (btf_mod->sysfs_attr)
+-				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
++				sysfs_btf_remove(btf_mod->sysfs_attr);
+ 			purge_cand_cache(btf_mod->btf);
+ 			btf_put(btf_mod->btf);
+-			kfree(btf_mod->sysfs_attr);
+ 			kfree(btf_mod);
+ 			break;
+ 		}
+@@ -9135,6 +9230,7 @@ static struct notifier_block btf_module_nb = {
+ 
+ static int __init btf_module_init(void)
+ {
++	btf_vmlinux_inline_lazy_init();
+ 	register_module_notifier(&btf_module_nb);
  	return 0;
  }
- 
-+static int patch_btf_link(struct object *obj, const struct btf_link *link)
+diff --git a/kernel/bpf/btf_vmlinux_inline.c b/kernel/bpf/btf_vmlinux_inline.c
+new file mode 100644
+index 000000000000..d5c599d9f729
+--- /dev/null
++++ b/kernel/bpf/btf_vmlinux_inline.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026, Oracle and/or its affiliates. */
++/*
++ * Provide kernel BTF inline function information for use by BPF tools.
++ */
++#include <linux/btf.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++
++#if IS_BUILTIN(CONFIG_DEBUG_INFO_BTF_INLINE)
++extern char __start_BTF_inline[];
++extern char __stop_BTF_inline[];
++#endif
++
++static int __init btf_vmlinux_inline_init(void)
 +{
-+	char section[128];
-+	void *raw_btf_data = NULL;
-+	size_t shdrstrndx, module_name_len;
-+	int fd = -1, len, err = -1;
-+	FILE *btf_file = NULL;
-+	Elf_Scn *scn = NULL;
-+	u32 raw_btf_size;
-+	struct stat st;
-+	Elf_Data *data;
-+	GElf_Shdr sh;
-+	char *name;
-+	Elf *elf = NULL;
-+	u8 *size;
++#if IS_BUILTIN(CONFIG_DEBUG_INFO_BTF_INLINE)
++	size_t data_size = __stop_BTF_inline - __start_BTF_inline;
 +
-+	if (stat(link->btf_path, &st)) {
-+		err = -errno;
-+		pr_err("FAILED to stat BTF file %s: %s\n",
-+		       link->btf_path, strerror(errno));
-+		return err;
-+	}
-+	if (!S_ISREG(st.st_mode) || st.st_size <= 0 || st.st_size > UINT_MAX) {
-+		pr_err("FAILED: invalid BTF file size or type: %s\n", link->btf_path);
-+		return -EINVAL;
-+	}
-+	raw_btf_size = st.st_size;
-+	raw_btf_data = malloc(raw_btf_size);
-+	if (!raw_btf_data) {
-+		pr_err("FAILED to allocate %u bytes for BTF file %s\n",
-+		       raw_btf_size, link->btf_path);
-+		return -ENOMEM;
-+	}
-+	btf_file = fopen(link->btf_path, "rb");
-+	if (!btf_file) {
-+		err = -errno;
-+		pr_err("FAILED to open BTF file %s: %s\n",
-+		       link->btf_path, strerror(errno));
-+		goto out;
-+	}
-+	if (fread(raw_btf_data, raw_btf_size, 1, btf_file) != 1) {
-+		err = -EIO;
-+		pr_err("FAILED to read BTF file %s\n", link->btf_path);
-+		goto out;
-+	}
-+	fclose(btf_file);
-+	btf_file = NULL;
-+	if (obj->efile.elf_class == ELFCLASS32) {
-+		module_name_len = BTF_LINK_MODULE_NAME_MAX - 4;
-+	} else if (obj->efile.elf_class == ELFCLASS64) {
-+		module_name_len = BTF_LINK_MODULE_NAME_MAX - 8;
-+	} else {
-+		err = -EINVAL;
-+		pr_err("FAILED: unsupported ELF class %u in %s\n",
-+		       obj->efile.elf_class, obj->path);
-+		goto out;
-+	}
-+	if (strlen(link->module) >= module_name_len) {
-+		err = -EINVAL;
-+		pr_err("FAILED: module name too long for BTF link: %s\n", link->module);
-+		goto out;
-+	}
-+	len = snprintf(section, sizeof(section), "%s.link", link->section);
-+	if (len < 0 || len >= sizeof(section)) {
-+		err = -ENAMETOOLONG;
-+		pr_err("FAILED: BTF link section name too long: %s.link\n", link->section);
-+		goto out;
-+	}
++	if (data_size)
++		sysfs_btf_add("vmlinux.inline", __start_BTF_inline, data_size, true, NULL);
++#endif
++	return 0;
++}
++subsys_initcall(btf_vmlinux_inline_init);
 +
-+	fd = open(obj->path, O_RDWR);
-+	if (fd < 0) {
-+		err = -errno;
-+		pr_err("FAILED to open %s: %s\n", obj->path, strerror(errno));
-+		goto out;
-+	}
-+	elf = elf_begin(fd, ELF_C_RDWR_MMAP, NULL);
-+	if (!elf) {
-+		err = -EINVAL;
-+		pr_err("FAILED to create ELF descriptor for %s: %s\n",
-+		       obj->path, elf_errmsg(-1));
-+		goto out;
-+	}
-+	elf_flagelf(elf, ELF_C_SET, ELF_F_LAYOUT);
-+	if (elf_getshdrstrndx(elf, &shdrstrndx)) {
-+		pr_err("FAILED to get section name index from %s: %s\n",
-+		       obj->path, elf_errmsg(-1));
-+		goto out;
-+	}
-+	while ((scn = elf_nextscn(elf, scn))) {
-+		if (gelf_getshdr(scn, &sh) != &sh) {
-+			pr_err("FAILED to get section header from %s: %s\n",
-+			       obj->path, elf_errmsg(-1));
-+			goto out;
-+		}
-+		name = elf_strptr(elf, shdrstrndx, sh.sh_name);
-+		if (name && !strcmp(name, section))
-+			break;
-+	}
-+	if (!scn) {
-+		pr_err("FAILED: section %s not found in %s\n", section, obj->path);
-+		goto out;
-+	}
-+	data = elf_getdata(scn, NULL);
-+	if (sh.sh_type != SHT_PROGBITS || !data || !data->d_buf ||
-+	    data->d_size != module_name_len +
-+		BTF_SHA256_DIGEST_LENGTH + sizeof(u32)) {
-+		pr_err("FAILED: section %s is not a writable BTF link\n", section);
-+		goto out;
-+	}
-+	memset(data->d_buf, 0, data->d_size);
-+	memcpy(data->d_buf, link->module, strlen(link->module) + 1);
-+	btf_sha256(raw_btf_data, raw_btf_size,
-+		   (u8 *)data->d_buf + module_name_len);
-+	size = (u8 *)data->d_buf + module_name_len + BTF_SHA256_DIGEST_LENGTH;
-+	if (obj->efile.encoding == ELFDATA2LSB) {
-+		size[0] = raw_btf_size;
-+		size[1] = raw_btf_size >> 8;
-+		size[2] = raw_btf_size >> 16;
-+		size[3] = raw_btf_size >> 24;
-+	} else if (obj->efile.encoding == ELFDATA2MSB) {
-+		size[0] = raw_btf_size >> 24;
-+		size[1] = raw_btf_size >> 16;
-+		size[2] = raw_btf_size >> 8;
-+		size[3] = raw_btf_size;
-+	} else {
-+		pr_err("FAILED: unsupported ELF data encoding %u in %s\n",
-+		       obj->efile.encoding, obj->path);
-+		goto out;
-+	}
-+	elf_flagdata(data, ELF_C_SET, ELF_F_DIRTY);
-+	if (elf_update(elf, ELF_C_WRITE) < 0) {
-+		pr_err("FAILED to update ELF file %s: %s\n",
-+		       obj->path, elf_errmsg(-1));
-+		goto out;
-+	}
-+	err = 0;
-+out:
-+	if (elf)
-+		elf_end(elf);
-+	if (fd >= 0)
-+		close(fd);
-+	if (btf_file)
-+		fclose(btf_file);
-+	free(raw_btf_data);
-+	return err;
++MODULE_DESCRIPTION("BTF inline information for vmlinux");
++MODULE_LICENSE("GPL");
+diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+index 9cbe15ce3540..556fe92c3649 100644
+--- a/kernel/bpf/sysfs_btf.c
++++ b/kernel/bpf/sysfs_btf.c
+@@ -6,8 +6,10 @@
+ #include <linux/module.h>
+ #include <linux/kobject.h>
+ #include <linux/init.h>
++#include <linux/slab.h>
+ #include <linux/sysfs.h>
+ #include <linux/mm.h>
++#include <linux/vmalloc.h>
+ #include <linux/io.h>
+ #include <linux/btf.h>
+ 
+@@ -15,16 +17,12 @@
+ extern char __start_BTF[];
+ extern char __stop_BTF[];
+ 
+-static int btf_sysfs_vmlinux_mmap(struct file *filp, struct kobject *kobj,
+-				  const struct bin_attribute *attr,
+-				  struct vm_area_struct *vma)
++static int btf_sysfs_mmap_check(void *data, size_t size, struct vm_area_struct *vma)
+ {
+-	unsigned long pages = PAGE_ALIGN(attr->size) >> PAGE_SHIFT;
++	unsigned long pages = PAGE_ALIGN(size) >> PAGE_SHIFT;
+ 	size_t vm_size = vma->vm_end - vma->vm_start;
+-	phys_addr_t addr = __pa_symbol(__start_BTF);
+-	unsigned long pfn = addr >> PAGE_SHIFT;
+ 
+-	if (attr->private != __start_BTF || !PAGE_ALIGNED(addr))
++	if (!data || !PAGE_ALIGNED((unsigned long)data))
+ 		return -EINVAL;
+ 
+ 	if (vma->vm_pgoff)
+@@ -33,24 +31,153 @@ static int btf_sysfs_vmlinux_mmap(struct file *filp, struct kobject *kobj,
+ 	if (vma->vm_flags & (VM_WRITE | VM_EXEC | VM_MAYSHARE))
+ 		return -EACCES;
+ 
+-	if (pfn + pages < pfn)
+-		return -EINVAL;
+-
+ 	if ((vm_size >> PAGE_SHIFT) > pages)
+ 		return -EINVAL;
+ 
+ 	vm_flags_mod(vma, VM_DONTDUMP, VM_MAYEXEC | VM_MAYWRITE);
++	return 0;
 +}
 +
- static const struct btf_type *btf_type_skip_qualifiers(const struct btf *btf, s32 type_id)
- {
- 	const struct btf_type *t = btf__type_by_id(btf, type_id);
-@@ -1871,7 +2077,7 @@ static int patch_btfids(const char *btfids_path, const char *elf_path)
++static int btf_sysfs_mmap_image(struct file *filp, struct kobject *kobj,
++				const struct bin_attribute *attr,
++				struct vm_area_struct *vma)
++{
++	void *data = READ_ONCE(attr->private);
++	phys_addr_t addr;
++	unsigned long pfn;
++	size_t vm_size = vma->vm_end - vma->vm_start;
++	int err;
++
++	err = btf_sysfs_mmap_check(data, attr->size, vma);
++	if (err)
++		return err;
++
++	/* Kernel image addresses can lie inside the vmalloc range on arm64. */
++	addr = __pa_symbol(data);
++	pfn = addr >> PAGE_SHIFT;
++	if (pfn + (PAGE_ALIGN(attr->size) >> PAGE_SHIFT) < pfn)
++		return -EINVAL;
++
+ 	return remap_pfn_range(vma, vma->vm_start, pfn, vm_size, vma->vm_page_prot);
+ }
  
- static const char * const resolve_btfids_usage[] = {
- 	"resolve_btfids [<options>] <ELF object>",
--	"resolve_btfids --patch_btfids <.BTF_ids file> <ELF object>",
-+	"resolve_btfids --patch_btfids <.BTF_ids file> [--btf_link <section:module:btf-file>] <ELF object>",
- 	NULL
+ static struct bin_attribute bin_attr_btf_vmlinux __ro_after_init = {
+ 	.attr = { .name = "vmlinux", .mode = 0444, },
+ 	.read = sysfs_bin_attr_simple_read,
+-	.mmap = btf_sysfs_vmlinux_mmap,
++	.mmap = btf_sysfs_mmap_image,
  };
  
-@@ -1889,6 +2095,7 @@ int main(int argc, const char **argv)
- 		.sets     = RB_ROOT,
- 	};
- 	const char *btfids_path = NULL;
-+	struct btf_links btf_links = {};
- 	bool fatal_warnings = false;
- 	bool resolve_btfids = true;
- 	char out_path[PATH_MAX];
-@@ -1906,6 +2113,8 @@ int main(int argc, const char **argv)
- 			    "distill --btf_base and emit .BTF.base section data"),
- 		OPT_BOOLEAN(0, "inline", &obj.extract_inline,
- 			    "extract location BTF into a .BTF.inline file"),
-+		OPT_CALLBACK(0, "btf_link", &btf_links, "section:module:btf-file",
-+			     "patch a BTF link with --patch_btfids", parse_btf_link),
- 		OPT_STRING(0, "patch_btfids", &btfids_path, "file",
- 			   "path to .BTF_ids section data blob to patch into ELF file"),
- 		OPT_END()
-@@ -1916,12 +2125,30 @@ int main(int argc, const char **argv)
- 			     PARSE_OPT_STOP_AT_NON_OPTION);
- 	if (argc != 1)
- 		usage_with_options(resolve_btfids_usage, btfid_options);
-+	if (btf_links.cnt && !btfids_path) {
-+		pr_err("--btf_link requires --patch_btfids\n");
-+		goto out;
+ struct kobject *btf_kobj;
+ 
++struct btf_sysfs_entry {
++	struct bin_attribute attr;
++	char *module_name;
++};
++
++static void *btf_sysfs_lazy_data(const struct bin_attribute *attr)
++{
++	struct btf_sysfs_entry *entry = container_of(attr, struct btf_sysfs_entry, attr);
++	void *data;
++
++	data = smp_load_acquire(&attr->private);
++	if (!data) {
++		request_module("%s", entry->module_name);
++		data = smp_load_acquire(&attr->private);
 +	}
- 
- 	obj.path = argv[0];
- 
--	if (btfids_path)
--		return patch_btfids(btfids_path, obj.path);
-+	if (btfids_path) {
-+		err = patch_btfids(btfids_path, obj.path);
-+		if (err || !btf_links.cnt)
-+			goto out;
-+		if (elf_collect(&obj)) {
-+			err = -EINVAL;
-+			goto out;
-+		}
-+		for (u32 i = 0; i < btf_links.cnt; i++) {
-+			struct btf_link *link = &btf_links.links[i];
- 
-+			err = patch_btf_link(&obj, link);
-+			if (err)
-+				break;
-+		}
-+		goto out;
++	return data;
++}
++
++static ssize_t btf_sysfs_read_lazy(struct file *filp, struct kobject *kobj,
++				   const struct bin_attribute *attr, char *buf,
++				   loff_t off, size_t count)
++{
++	void *data = btf_sysfs_lazy_data(attr);
++
++	if (!data)
++		return -ENODEV;
++
++	return memory_read_from_buffer(buf, count, &off, data, attr->size);
++}
++
++static int btf_sysfs_mmap_lazy(struct file *filp, struct kobject *kobj,
++			       const struct bin_attribute *attr,
++			       struct vm_area_struct *vma)
++{
++	void *data = btf_sysfs_lazy_data(attr);
++	int err;
++
++	if (!data)
++		return -ENODEV;
++
++	err = btf_sysfs_mmap_check(data, attr->size, vma);
++	if (err)
++		return err;
++
++	return remap_vmalloc_range(vma, data, 0);
++}
++
++struct bin_attribute *sysfs_btf_add(const char *name, void *data, size_t data_size,
++				    bool mmap, const char *lazy_module_name)
++{
++	struct btf_sysfs_entry *entry;
++	struct bin_attribute *attr;
++	int err;
++
++	entry = kzalloc_obj(*entry);
++	if (!entry)
++		return ERR_PTR(-ENOMEM);
++
++	attr = &entry->attr;
++	sysfs_bin_attr_init(attr);
++	attr->attr.mode = 0444;
++	attr->size = data_size;
++	attr->private = data;
++	attr->read = lazy_module_name ? btf_sysfs_read_lazy : sysfs_bin_attr_simple_read;
++	if (mmap)
++		attr->mmap = lazy_module_name ? btf_sysfs_mmap_lazy : btf_sysfs_mmap_image;
++	attr->attr.name = kstrdup(name, GFP_KERNEL);
++	if (!attr->attr.name) {
++		err = -ENOMEM;
++		goto err_free;
 +	}
- 	if (elf_collect(&obj))
- 		goto out;
- 	if (obj.extract_inline && collect_func_symbols(&obj))
-@@ -1986,6 +2213,7 @@ int main(int argc, const char **argv)
- 	if (!(fatal_warnings && warnings))
- 		err = 0;
- out:
-+	free_btf_links(&btf_links);
++	if (lazy_module_name) {
++		entry->module_name = kstrdup(lazy_module_name, GFP_KERNEL);
++		if (!entry->module_name) {
++			err = -ENOMEM;
++			goto err_free;
++		}
++	}
++
++	err = sysfs_create_bin_file(btf_kobj, attr);
++	if (err) {
++		pr_warn("failed to register [%s] BTF in sysfs: %d\n", name, err);
++		goto err_free;
++	}
++
++	return attr;
++
++err_free:
++	kfree(entry->module_name);
++	kfree(attr->attr.name);
++	kfree(entry);
++	return ERR_PTR(err);
++}
++
++bool sysfs_btf_update(struct bin_attribute *attr, void *data)
++{
++	return attr && !cmpxchg(&attr->private, NULL, data);
++}
++
++void sysfs_btf_remove(struct bin_attribute *attr)
++{
++	struct btf_sysfs_entry *entry = container_of(attr, struct btf_sysfs_entry, attr);
++
++	sysfs_remove_bin_file(btf_kobj, attr);
++	kfree(entry->module_name);
++	kfree(attr->attr.name);
++	kfree(entry);
++}
++
+ static int __init btf_vmlinux_init(void)
+ {
+ 	bin_attr_btf_vmlinux.private = __start_BTF;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c1b34dc1e89a..5b9eb56164b2 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2723,6 +2723,10 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 	mod->btf_base_data = any_section_objs(info, ".BTF.base", 1,
+ 					      &mod->btf_base_data_size);
+ #endif
++#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_INLINE)
++	mod->btf_inline_data = any_section_objs(info, ".BTF.inline", 1,
++						&mod->btf_inline_data_size);
++#endif
+ #ifdef CONFIG_JUMP_LABEL
+ 	mod->jump_entries = section_objs(info, "__jump_table",
+ 					sizeof(*mod->jump_entries),
+@@ -3176,6 +3180,9 @@ static noinline int do_init_module(struct module *mod)
+ 	/* .BTF is not SHF_ALLOC and will get removed, so sanitize pointers */
+ 	mod->btf_data = NULL;
+ 	mod->btf_base_data = NULL;
++#endif
++#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_INLINE)
++	mod->btf_inline_data = NULL;
+ #endif
  	/*
- 	 * Free BTFs in reverse dependency order.  inline_btf borrows obj.btf;
- 	 * obj.btf can borrow a base owned by orig_btf or obj.base_btf, and
+ 	 * We want to free module_init, but be aware that kallsyms may be
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 134b15a44625..2f34619905b6 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -425,6 +425,12 @@ config PAHOLE_HAS_LANG_EXCLUDE
+ 	  otherwise it would emit malformed kernel and module binaries when
+ 	  using DEBUG_INFO_BTF_MODULES.
+ 
++config PAHOLE_HAS_INLINE
++	def_bool PAHOLE_VERSION >= 132
++	help
++	  Support for the "inline" BTF feature is available. It encodes
++	  information about inline sites and how to retrieve their parameters.
++
+ config DEBUG_INFO_BTF_MODULES
+ 	bool "Generate BTF type information for kernel modules"
+ 	default y
+@@ -432,6 +438,18 @@ config DEBUG_INFO_BTF_MODULES
+ 	help
+ 	  Generate compact split BTF type information for kernel modules.
+ 
++config DEBUG_INFO_BTF_INLINE
++	tristate "Provide information about inline sites in BTF"
++	default n
++	depends on DEBUG_INFO_BTF && PAHOLE_HAS_INLINE && SYSFS
++	select DEBUG_INFO_BTF_MODULES if MODULES
++	help
++	  Generate information about inline sites in .BTF.inline sections.
++	  These sections contain split BTF relative to the kernel or module BTF
++	  and are made available in /sys/kernel/btf with a ".inline" suffix.
++	  The information describes inline locations and how to retrieve their
++	  associated parameters.
++
+ config MODULE_ALLOW_BTF_MISMATCH
+ 	bool "Allow loading modules with non-matching BTF type info"
+ 	depends on DEBUG_INFO_BTF_MODULES
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index a1812985a61a..98012344a81e 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -22,7 +22,14 @@ endif
+ 
+ pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
+ 
++btf-inline := $(CONFIG_DEBUG_INFO_BTF_INLINE)
++ifneq ($(btf-inline),)
++btf-inline-feat := inline
++pahole-flags-$(call test-ge, $(pahole-ver), 132) += --btf_features=$(btf-inline-feat)
++endif
++
+ export PAHOLE_FLAGS := $(pahole-flags-y)
++export BTF_INLINE := $(btf-inline)
+ 
+ resolve-btfids-flags-y :=
+ resolve-btfids-flags-$(CONFIG_WERROR) += --fatal_warnings
+diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+index 8ca96eb10a69..e638291753d0 100755
+--- a/scripts/gen-btf.sh
++++ b/scripts/gen-btf.sh
+@@ -68,6 +68,10 @@ esac
+ 
+ gen_btf_data()
+ {
++	inline=""
++	if [ -n "${BTF_INLINE}" ] && [ -z "${BTF_BASE}" ]; then
++		inline="--inline"
++	fi
+ 	btf1="${ELF_FILE}.BTF.1"
+ 	${PAHOLE} -J ${PAHOLE_FLAGS}			\
+ 		${BTF_BASE:+--btf_base ${BTF_BASE}}	\
+@@ -76,6 +80,7 @@ gen_btf_data()
+ 
+ 	${RESOLVE_BTFIDS} ${RESOLVE_BTFIDS_FLAGS}	\
+ 		${BTF_BASE:+--btf_base ${BTF_BASE}}	\
++		${inline}				\
+ 		--btf ${btf1} "${ELF_FILE}"
+ }
+ 
+@@ -83,14 +88,28 @@ gen_btf_o()
+ {
+ 	btf_data=${ELF_FILE}.btf.o
+ 
+-	# Create ${btf_data} which contains just .BTF section but no symbols. Add
++	# Create ${btf_data} which contains just BTF sections but no symbols. Add
+ 	# SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
+ 	# deletes all symbols including __start_BTF and __stop_BTF, which will
+ 	# be redefined in the linker script.
+ 	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CPPFLAGS} ${KBUILD_CFLAGS} -fno-lto -c -x c -o ${btf_data} -
+ 	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
+ 		--set-section-flags .BTF=alloc,readonly ${btf_data}
+-	${OBJCOPY} --only-section=.BTF --strip-all ${btf_data}
++	ONLY_SEC="--only-section=.BTF"
++	btf_inline=${ELF_FILE}.BTF.inline
++	if [ "${BTF_INLINE}" = "m" ]; then
++		if [ -f "${btf_inline}" ]; then
++			cp "${btf_inline}" "${objtree}/vmlinux.BTF.inline"
++		else
++			rm -f "${objtree}/vmlinux.BTF.inline"
++		fi
++	fi
++	if [ "${BTF_INLINE}" = "y" ] && [ -f "${btf_inline}" ]; then
++		${OBJCOPY} --add-section .BTF.inline=${btf_inline} \
++			--set-section-flags .BTF.inline=alloc,readonly ${btf_data}
++		ONLY_SEC="${ONLY_SEC} --only-section=.BTF.inline"
++	fi
++	${OBJCOPY} ${ONLY_SEC} --strip-all ${btf_data}
+ 
+ 	# Change e_type to ET_REL so that it can be used to link final vmlinux.
+ 	# GNU ld 2.35+ and lld do not allow an ET_EXEC input.
+@@ -111,6 +130,15 @@ embed_btf_data()
+ 	if [ -f "${btf_base}" ]; then
+ 		${OBJCOPY} --add-section .BTF.base=${btf_base} ${ELF_FILE}
+ 	fi
++	btf_inline=""
++	case "${ELF_FILE}" in
++	*/btf_vmlinux_inline.ko)
++		btf_inline=${BTF_BASE}.BTF.inline
++		;;
++	esac
++	if [ -n "${BTF_INLINE}" ] && [ -f "${btf_inline}" ]; then
++		${OBJCOPY} --add-section .BTF.inline=${btf_inline} ${ELF_FILE}
++	fi
+ 	btf_ids="${ELF_FILE}.BTF_ids"
+ 	if [ -f "${btf_ids}" ]; then
+ 		${RESOLVE_BTFIDS} --patch_btfids ${btf_ids} ${ELF_FILE}
+@@ -121,6 +149,8 @@ cleanup()
+ {
+ 	rm -f "${ELF_FILE}.BTF.1"
+ 	rm -f "${ELF_FILE}.BTF"
++	rm -f "${ELF_FILE}.BTF.inline"
++	rm -f "${ELF_FILE}.BTF.inline.link"
+ 	if [ "${BTFGEN_MODE}" = "module" ]; then
+ 		rm -f "${ELF_FILE}.BTF.base"
+ 		rm -f "${ELF_FILE}.BTF_ids"
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index ab0b8125c8cb..5424caf5135b 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -289,7 +289,13 @@ vmlinux_link "${VMLINUX}"
+ 
+ if is_enabled CONFIG_DEBUG_INFO_BTF; then
+ 	info BTFIDS ${VMLINUX}
+-	${RESOLVE_BTFIDS} --patch_btfids ${btfids_vmlinux} ${VMLINUX}
++	if [ "${BTF_INLINE}" = "m" ]; then
++		${RESOLVE_BTFIDS} --patch_btfids ${btfids_vmlinux} \
++			--btf_link .BTF.inline:btf_vmlinux_inline:vmlinux.BTF.inline \
++			${VMLINUX}
++	else
++		${RESOLVE_BTFIDS} --patch_btfids ${btfids_vmlinux} ${VMLINUX}
++	fi
+ fi
+ 
+ mksysmap "${VMLINUX}" System.map
+diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
+index 46e80970f723..8f0933cbbe45 100644
+--- a/scripts/package/kernel.spec
++++ b/scripts/package/kernel.spec
+@@ -68,13 +68,13 @@ This package provides debug information for the kernel image and modules from th
+ %undefine _debugsource_packages
+ %undefine _debuginfo_subpackages
+ 
+-# Preserve .BTF and .BTF.base sections in kernel modules during debuginfo
+-# stripping. find-debuginfo.sh uses eu-strip which removes non-allocated ELF
+-# sections like .BTF by default. .BTF.base is required for BTF distillation
+-# support; without it, module BTF validation fails.
++# Preserve .BTF,  .BTF.base and .BTF.inline sections in kernel modules during
++# debuginfo stripping. find-debuginfo.sh uses eu-strip which removes
++# non-allocated ELF sections like .BTF by default. .BTF.base is required for
++# BTF distillation support; without it, module BTF validation fails.
+ %global with_keep_section %(%{__find_debuginfo} --help 2>&1 | grep -c keep-section)
+ %if %{with_keep_section}
+-%global _find_debuginfo_opts -r --keep-section .BTF --keep-section .BTF.base
++%global _find_debuginfo_opts -r --keep-section .BTF --keep-section .BTF.base --keep-section .BTF.inline
+ %else
+ %global _find_debuginfo_opts -r
+ %endif
 -- 
 2.43.5
 
