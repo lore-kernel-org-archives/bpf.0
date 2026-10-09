@@ -1,120 +1,307 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-104.mta0.migadu.com [91.218.175.104])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036F34071DE
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 05:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F73343E9D5
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 06:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791525464; cv=none; b=oI9h0cN/6YOtU8/EsL1newXKb8gj6V+cO+RerDgJKRqbqPBpXqZsYx8i1jc6Ltk+HoF0+fhlG8siGGvlud9rKTT1U6hcWa7p5EtOhul0bf3A8REuWr3cRDPWFzBrQX7E4p4RcSatXxNK7qdSx6dAW2qprIbKxTwJYT6iRQGT86I=
+	t=1791527223; cv=none; b=VDAYcgWYgbTDacUi3YtWBpdhxPpDHs7d82Yp8dYsWm7jv7wMHryiKBdG1f1vCfVr4+DH74QgOrtQfV43UJun4sJALg1eVcNYSU0qaD813Z37aXmESxoqnALPeRPFuxrzhcEqLjwuh/okj1CPXYbJj9+T06sVliltIL84YRldIp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791525464; c=relaxed/simple;
-	bh=pzSWlkxr+IBJ714I+HsRgIBaBJSNpWEaRy7q792BUsA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fwJOD/9i4ABbV5kIZDlX3F5mtzROTv2TxAENX4+NwNpPGA4CNl9s3SAir37VqUlF+9uxfqxi13CAuNktjT5eL+7IBsR2ZrmeMzC6tnZt93qcuHORHQ6Y8x37DrJXjnCLxJpiDYXbkQvicxbUCz2d5jAEYuUvh8DLy6G3zw5gXfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yf3V4f+P; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791527223; c=relaxed/simple;
+	bh=4J2Oujq0h9Tdxh5Fs82Gko1VDMQdbho/Ty/hsMPCfKU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YciMLtHKXtoKke5L37CO5sgodb/iOEw9A8eCX9xb7NRUKwppNPOALvD1GFCYqeAdL7KqIo6Gz0fx5RsjHMY7DKwBOID1hsZBSmPkeqWWy4TF/dioXmeVR4Ofg/PsGYlYmJ2J48dodXCry+PguK6zJOVZfCd3ZuAZHg/6etl0fzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LMklH/zs; arc=none smtp.client-ip=91.218.175.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yf3V4f+P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C3F41F00893;
-	Fri,  9 Oct 2026 05:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791525462;
-	bh=yNWVHIZVCtQdRZW7s1GCtUXD0dTOnpqx6TkEnelDACQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Yf3V4f+Pb8kgFf0C5dBaQ+nYDKFRuUd8jFFG2oUdzDSQgG96r4AAUMJnLsCK11pEd
-	 Bq7L/RWbFtZNTK37NKatFdBAqWhyU9aXy9wCQRCdrQiUtKsfk0J7tkheBqxNaHzjHB
-	 xsvDxWONqjlTY0KmjRQbRHVvek1d1oZVPsTrXfHCLZnhNO82yhDjiJocxK6it9t1UL
-	 86d/zIaQUJfgkMHmZrV4in+nsObFlTq9YdlacESZ5P+r8LwTNAOSMdUpj6Ygdgjn4C
-	 DSVWm4ldqs9zbGz2JQQ07DgCKgG7+J+9DmpMGxO6TNByh0LgMxpZyVluCTFpCfiXsg
-	 iLXXpPJxYp/GQ==
-Content-Type: multipart/mixed; boundary="===============6888835219003920083=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LMklH/zs"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=4J2Oujq0h9Tdxh5Fs82Gko1VDMQdbho/Ty/hsMPCfKU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791527217; v=1; x=1792132017;
+ b=LMklH/zs2AewPti66CHbdlRmVAfSRS9XoIxpBqCNyNjEm0KeJhGzLORrXNop/6mC9xmqkFYD
+ WeTydWE+U/YYzx4aMIOVjASDXFg4jX5hYj0ZS+4j3FLwRQ/kOzqjleyuBVewuxxJ0Q+y0wwwyi0
+ O1VPy1bn91hpCpuY8buxvy1M=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 04d29327fff06515;
+	Fri, 09 Oct 2026 06:26:57 +0000
+X-Mizu-Trace-ID: 04d29327fff06515
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v4] selftests/bpf: Add bpf_proactive_reclaim test
+Date: Fri,  9 Oct 2026 14:26:37 +0800
+Message-ID: <20261009062637.176005-1-hui.zhu@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c0280b36e7167eeb1789de6086d94607e6ba53918fe9bdd4c712c1ef628af488@mail.kernel.org>
-In-Reply-To: <20261009043819.1208-1-rahadbhuiya2021@gmail.com>
-References: <20261009043819.1208-1-rahadbhuiya2021@gmail.com>
-Subject: Re: [PATCH bpf-next v4] bpf: fix symmetric register-form NULL-pointer check in check_cond_jmp_op()
-From: bot+bpf-ci@kernel.org
-To: rahadbhuiya2021@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,rahadbhuiya2021@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  9 Oct 2026 05:57:41 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============6888835219003920083==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-> bpf: fix symmetric register-form NULL-pointer check in check_cond_jmp_op()
+bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
+unlike a write to memory.reclaim, does not retry until the goal is
+reached.
 
-TL;DR: Commit message only: it doesn't name a real program or compiler output
-that produces the zero-in-dst register NULL check, which clang doesn't seem to
-emit, plus two minor wording nits.
+Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
+and check that the result is positive but well below the request: one
+pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
+4K and 64K page kernels.
 
-> bpf: fix symmetric register-form NULL-pointer check in check_cond_jmp_op()
->
-> check_cond_jmp_op() propagates PTR_MAYBE_NULL nullness through
-> mark_ptr_or_null_regs() when it detects a BPF_JEQ / BPF_JNE
-> comparison against zero.  The existing code handles only the
-> 'forward' operand order:
->
->   dst_reg = nullable pointer,  src_reg = known-zero scalar
->   (e.g. 'if r0 == 0')
->
-> The symmetric case is left unhandled:
->
->   dst_reg = known-zero scalar,  src_reg = nullable pointer
->   (e.g. 'if r6 == r0' where r6 has been proven zero)
->
-> When the symmetric case occurs:
->  - type_may_be_null(dst_reg->type) is false (dst is scalar zero)
->  - The null-check block is skipped entirely
->  - mark_ptr_or_null_regs() is never called for src_reg
->  - src_reg retains PTR_MAYBE_NULL in both branches
->
-> Additionally, the early unprivileged-mode pointer-comparison guard
-> (line 18058) rejected any conditional jump where src_reg is a pointer
-> type, which would have made the new block unreachable for unprivileged
-> programs.  Comparing a nullable pointer against a register proven to
-> be zero is not a pointer leak -- it is semantically identical to the
-> already-permitted forward form 'if (r_nullable == 0)'.  Exempt the
-> symmetric null check from that guard.
->
-> Fix: add an 'else if' branch that mirrors the forward logic for the
-> symmetric operand order and extend the early guard to permit it.
-> Add corresponding symmetric JEQ, JNE, and negative non-zero dst test
-> cases into verifier_jeq_infer_not_null.c with __success_unpriv to
-> exercise both privileged and unprivileged paths.
->
-> Commit 6aed0134d3cd ('bpf: Mark the zero register precise for a
-> register-form NULL check') introduced the precision marking for the
-> forward case; the symmetric case was overlooked there.
->
-> Signed-off-by: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
+The test deliberately covers only the kfunc itself. A full example of
+the intended asynchronous use, where a BPF program watches one cgroup's
+workingset refaults and reclaims another one from bpf_wq callbacks, is
+maintained out of tree at [1], released under GPLv2.
 
-This isn't a bug, but the changelog mostly walks through the code paths and
-doesn't name a program or compiler output that produces the symmetric form.
+Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.c
+is not built at all.
 
-Clang emits 'if rX == 0' for both 'p == 0' and '0 == p', so the zero-in-dst
-register compare doesn't appear to come from ordinary C source.
+[1] https://github.com/teawater/memcg-async-reclaim
 
-Could the changelog say what real-world program or toolchain output hits
-the 'if rZero == rNullable' form?
-
-Two smaller points on the same text.  The '(line ...)' reference in the
-paragraph about the early guard is a source line number that will go stale,
-so could it be dropped?
-
-Also, the forward-case example 'if r0 == 0' is the BPF_K form rather than
-the register-form check this message is about.  Would an example using
-'if r0 == rN' read more clearly there?
-
-
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Changelog:
+v4:
+According to the comment of Barry, test skips instead of failing on a
+read-only mount.
+v3:
+According to the comment of Barry, use write() + fsync() to charge the
+page cache instead of ftruncate() + read().
+According to the comment of AI, skip instead of fail when no regular
+filesystem is available for the workload file.
+v2:
+According to the comment of Alexei, remove the samples/bpf sample patch.
+Ship it out-of-tree as a standalone project.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37887809131
---===============6888835219003920083==--
+ tools/testing/selftests/bpf/config            |   1 +
+ .../bpf/prog_tests/memcg_proactive_reclaim.c  | 130 ++++++++++++++++++
+ .../bpf/progs/memcg_proactive_reclaim.c       |  34 +++++
+ 3 files changed, 165 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 2b883b388f90..5621ef94ad7e 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -57,6 +57,7 @@ CONFIG_LIRC=y
+ CONFIG_LIVEPATCH=y
+ CONFIG_LWTUNNEL=y
+ CONFIG_LWTUNNEL_BPF=y
++CONFIG_MEMCG=y
+ CONFIG_MODULE_SIG=y
+ CONFIG_MODULE_SRCVERSION_ALL=y
+ CONFIG_MODULE_UNLOAD=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+new file mode 100644
+index 000000000000..c22dcfabe856
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+@@ -0,0 +1,130 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <limits.h>
++#include <linux/magic.h>
++#include <sys/statfs.h>
++#include <unistd.h>
++
++#include "cgroup_helpers.h"
++#include "memcg_proactive_reclaim.skel.h"
++
++#define CG_PATH "/memcg_proactive_reclaim"
++
++/*
++ * Large enough that a single reclaim pass cannot come close to it, so that
++ * "reclaimed less than was asked for" is not page-size noise: one pass is
++ * capped at MEMCG_CHARGE_BATCH pages, which is 256 KiB on 4K pages but 4 MiB
++ * on 64K pages.
++ */
++#define FILE_SIZE (32 * 1024 * 1024UL)
++#define BUF_SIZE (64 * 1024)
++
++struct reclaim_args {
++	__u64 cgroup_id;
++	__u64 size;
++};
++
++/*
++ * The data file has to sit on a writable regular filesystem: tmpfs pages are
++ * charged as shmem, so whether they can be reclaimed at all depends on swap
++ * being available, and a read-only mount cannot host the file at all (EROFS
++ * applies to root too). /tmp is tmpfs on many systems, and test_progs is
++ * routinely run from a tmpfs working directory, so both candidates need the
++ * check.
++ */
++static const char *workload_dir(void)
++{
++	static const char * const dirs[] = { "/tmp", "." };
++	struct statfs st;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(dirs); i++)
++		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
++		    st.f_type != RAMFS_MAGIC && !access(dirs[i], W_OK))
++			return dirs[i];
++
++	return NULL;
++}
++
++void test_memcg_proactive_reclaim(void)
++{
++	struct memcg_proactive_reclaim *skel = NULL;
++	struct reclaim_args args = {};
++
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		    .ctx_in = &args,
++		    .ctx_size_in = sizeof(args));
++
++	char data_file[PATH_MAX];
++	static char buf[BUF_SIZE];
++	__u64 cgroup_id;
++	const char *dir;
++	off_t off;
++	int cg_fd = -1, data_fd = -1, err;
++
++	/*
++	 * Both candidate directories can be unusable: tmpfs (initramfs-based
++	 * CI, for instance) or a read-only mount. That is an environment
++	 * limitation, not a test failure.
++	 */
++	dir = workload_dir();
++	if (!dir) {
++		test__skip();
++		return;
++	}
++
++	snprintf(data_file, sizeof(data_file),
++		 "%s/memcg_proactive_reclaim_XXXXXX", dir);
++	data_fd = mkstemp(data_file);
++	if (!ASSERT_GE(data_fd, 0, "mkstemp"))
++		return;
++
++	cg_fd = cgroup_setup_and_join(CG_PATH);
++	if (!ASSERT_OK_FD(cg_fd, "cgroup_setup_and_join"))
++		goto out;
++
++	cgroup_id = get_cgroup_id(CG_PATH);
++	if (!ASSERT_GT(cgroup_id, 0, "get_cgroup_id"))
++		goto out;
++
++	skel = memcg_proactive_reclaim__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		goto out;
++
++	/* Charge FILE_SIZE of clean page cache to the cgroup. */
++	for (off = 0; off < (off_t)FILE_SIZE; off += sizeof(buf))
++		if (!ASSERT_EQ(write(data_fd, buf, sizeof(buf)),
++			       (ssize_t)sizeof(buf), "write"))
++			goto out;
++	if (!ASSERT_OK(fsync(data_fd), "fsync"))
++		goto out;
++
++	args.cgroup_id = cgroup_id;
++	args.size = FILE_SIZE;
++	skel->bss->reclaimed = 0;
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.memcg_proactive_reclaim),
++				     &opts);
++	if (!ASSERT_OK(err, "test_run"))
++		goto out;
++	if (!ASSERT_EQ(opts.retval, 0, "retval"))
++		goto out;
++
++	/*
++	 * A single call is a single bounded pass: it reclaims something, but
++	 * stops well short of the requested size instead of retrying until the
++	 * goal is reached the way a write to memory.reclaim does.
++	 */
++	ASSERT_GT(skel->bss->reclaimed, 0, "reclaimed");
++	ASSERT_LT(skel->bss->reclaimed, (__s64)FILE_SIZE, "single pass");
++
++out:
++	if (skel)
++		memcg_proactive_reclaim__destroy(skel);
++	if (cg_fd >= 0)
++		close(cg_fd);
++	if (data_fd >= 0) {
++		close(data_fd);
++		unlink(data_file);
++	}
++	cleanup_cgroup_environment();
++}
+diff --git a/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+new file mode 100644
+index 000000000000..b551192526fc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct reclaim_args {
++	__u64 cgroup_id;
++	__u64 size;
++};
++
++/* Signed, because bpf_test_run_opts.retval is a __u32. */
++__s64 reclaimed;
++
++SEC("syscall")
++int memcg_proactive_reclaim(struct reclaim_args *ctx)
++{
++	struct mem_cgroup *memcg;
++	struct cgroup *cgrp;
++
++	cgrp = bpf_cgroup_from_id(ctx->cgroup_id);
++	if (!cgrp)
++		return 0;
++
++	memcg = bpf_get_mem_cgroup(&cgrp->self);
++	if (memcg) {
++		reclaimed = bpf_proactive_reclaim(memcg, ctx->size, -1);
++		bpf_put_mem_cgroup(memcg);
++	}
++	bpf_cgroup_release(cgrp);
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.43.0
+
