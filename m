@@ -1,138 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6B83546F2
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC444A49BC
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:07:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547677; cv=none; b=jbSp1SJXOorEWUUyqMNvGthnDPFnIlWvWFP+FxiQBNpdKLwDLThMSP1OmhWvsfhN3ZsuzOuw/FxzGgh9esRN0NP1gadRxO/+IwVbjvWLmeWxlIBholPcsutMoMZH5yONftCYe+ndbU/TR9/cF23S/TDGKjZfDRbYeHQ9YtWDWw4=
+	t=1791547680; cv=none; b=TCUrrh42pZavYj9nQa4qhQMnEKPzvujf1vwUeArXeXbbe2CH9tZGwvpn+jsmCi0zDuoybq/eESuH/Z7TnMQHtSwum9H8DTQW6Z5tkzDdMULaoHwKY8ZU6WkZRdiIytTrletnSiAp0jsjSaCZsDJcLBXM5SHke9QuC1b/wtweMAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547677; c=relaxed/simple;
-	bh=XX6V6S7d3KJeFhpgAI8IrtN/i+4u2vNxIhGw82xbQOI=;
+	s=arc-20240116; t=1791547680; c=relaxed/simple;
+	bh=OJ6e6YcpuLxdxJlCfVW8vDOT0bNk/Kc7pFScWsncpbg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EV/dVDUcxM+vZb2YWFZLj0h3tst5CzmoURezQi7FwljdDFOGCIclnsgPQZfNUJveVgpnjIkzRIRboV5dqq28lmcUi6xPS7C/kKeeV925SUcb6Ri76POzCNZWqTpeg/zBPkkFPYzMC234PSjm1lVGPrX5nhMA41Zp2qgp6q9abxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WtwQlm5d; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=q7scSDEI2NGqZVzH6e5puww8u2ll0yAPpUzqji04328dJ9mp+NgrlzY5q9a/ftVokBu910vFjTzpWVGmMHbPUPCuMd+wLwNDKkElfz6C1UVS/LYzanRbCw0yRnfu8iIt4+vo1+vszeqqz2FTkKvDxnGkCoyFDW8U2NnKGEGm8f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wogc4rL6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WtwQlm5d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E3CD1F00893;
-	Fri,  9 Oct 2026 12:07:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wogc4rL6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB161F00898;
+	Fri,  9 Oct 2026 12:07:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791547672;
-	bh=w9njv6tAURKAjuyJG6NRYU81DDCt0smXNby/5kOQ9IE=;
+	s=k20260515; t=1791547675;
+	bh=5Dk0tnZFhXOKvpEEF/ZEcV756xJ+1AxrI4nlTSFIHgU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WtwQlm5dQUfoAGFjzNkoi/QoaIV50f+ba0O5JBhBfqXM18++EtoSXjOOV1LDW/7ey
-	 UVbIyV3TsZOpsOiYVE6B8s3bxf5eT8845rqChgZU50v3rdJRBjy+sHjKtm0/hrIuk+
-	 QOriSKPvjcK2eKTqHl6YSR/IrxUNTmbv32/O3zI6suctO1uYOq1GNuYhVTz7CfQa0/
-	 hlruJzdaiR+pdv6Vvn+aMhxofoY+9NEkUyxu7w952SzbqR3bvgcaVfcTHWlWTVgZPF
-	 uT+6hCGvTJrc2zlCuwVBYKeddvMB3k9Go33z2Rixp/DQgkQxa0PcEzWvRwnSS1egql
-	 813k0mKMQzTbQ==
-Content-Type: multipart/mixed; boundary="===============1212706349099477161=="
+	b=Wogc4rL6xjWPdUMb8LZ5q1JGKIkuTUcUstlONpkWj7YZG1UunJdNVaFWj6ZCWKRH7
+	 VFdY0/xdaLDuT8uOra5rikJL6X349Y5hYqkLAyVAp1OLQMnNRoDvDX73SuVxDzQ5WH
+	 bESZe3ZrQn39tBOHzEgB5YuOBi9VLb/frZ1aFp8Nfdohah6lQCvVlTD8dH9aKqiYwU
+	 V6GdCugXu9k1FrJ9W/i5j9zfaZJz9yIcoQKmAGhS2a32192UlR9moVZ0Q5Z/XPdV9+
+	 hl+QoHSZutwLtPht6+bY0FHiwipz8kGUb7HTybFFAVz9iiHYe9OWN6o4X5vFvdUBlP
+	 AGytfjbH1Newg==
+Content-Type: multipart/mixed; boundary="===============4501707364632007112=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <12bdbe361c0dac1e815745e4394dbac721526b99d0dcd8a6b587086d29bb39ea@mail.kernel.org>
-In-Reply-To: <20261009-scev-minimal-rebase-v3-10-bcba9bc53ac9@gmail.com>
-References: <20261009-scev-minimal-rebase-v3-10-bcba9bc53ac9@gmail.com>
-Subject: Re: [PATCH bpf-next v3 10/51] bpf: derive global subprog stack liveness from BTF signatures
+Message-Id: <262b226e1056a727be3794037a29a5dea962ee31c053f7ce5777834baf9fb9bc@mail.kernel.org>
+In-Reply-To: <20261009-scev-minimal-rebase-v3-33-bcba9bc53ac9@gmail.com>
+References: <20261009-scev-minimal-rebase-v3-33-bcba9bc53ac9@gmail.com>
+Subject: Re: [PATCH bpf-next v3 33/51] bpf: compute scalar evolution expressions for loops
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
 Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  9 Oct 2026 12:07:51 +0000 (UTC)
+Date: Fri,  9 Oct 2026 12:07:54 +0000 (UTC)
 
---===============1212706349099477161==
+--===============4501707364632007112==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: derive global subprog stack liveness from BTF signatures
+> bpf: compute scalar evolution expressions for loops
 
-TL;DR: bpf_global_subprog_stack_access_bytes() likely matches ARG_ANYTHING
-where btf_prepare_func_args() assigns ARG_SCALAR, so scalar args may get the
-conservative read/write-all result; safe but less precise liveness.
+TL;DR: The new need_scev bool in struct bpf_insn_aux_data may grow it from 208
+to 216 bytes, about 8MB more for a 1M-insn program; a bitfield would avoid
+that. Also lacks a comment.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8987c9a69d10..a5456a6e2694 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -14571,6 +14571,72 @@ bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *insn
->  	return info;
->  }
->
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 963106328791..52f72e92eb0c 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
 [ ... ]
 
-> +struct arg_access_info
-> +bpf_global_subprog_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *insn,
-> +				      int arg, int insn_idx)
-> +{
+> @@ -745,6 +745,7 @@ struct bpf_insn_aux_data {
+>  	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
+>  	bool arena_scalar; /* ldx/stx/st/atomic through a number, it's an address in arena */
+>  	bool bb_end; /* last instruction of a basic block */
+> +	bool need_scev;
 
-[ ... ]
+Does this new bool grow struct bpf_insn_aux_data?
 
-> +	switch (base_type(sub->args[arg].arg_type)) {
-> +	case ARG_UNUSED:	/* Not an argument slot. */
-> +	case ARG_ANYTHING:	/* A scalar, the callee can't dereference it. */
-> +		return (struct arg_access_info) {};
-                 ^^^^
+Before this patch, the ten bools after 'u32 seen', plus 'u8 alu_state' and
+the u8 fastcall bitfield byte, filled exactly 12 bytes, so 'unsigned int
+orig_idx' followed them with no padding.  With one more bool, orig_idx and
+every field after it move forward by 4 bytes, and because the trailing
+'struct bpf_loop *loop' needs 8-byte alignment, the struct goes from 208 to
+216 bytes on x86_64 (orig_idx moves from offset 136 to 140).
 
-Can this case ARG_ANYTHING ever match?  btf_prepare_func_args() doesn't
-assign ARG_ANYTHING to a subprog argument.  It encodes scalar parameters,
-including both halves of a 16-byte struct passed by value, as ARG_SCALAR:
+bpf_check() allocates this struct once per instruction:
 
-kernel/bpf/btf.c:btf_prepare_func_args() {
-    ...
-            while (nslots--)
-                    sub->args[slots_used++].arg_type = ARG_SCALAR;
-    ...
-}
+    __vmalloc(array_size(sizeof(struct bpf_insn_aux_data), len))
 
-do_check_common() and the exception callback check test for ARG_SCALAR too,
-and ARG_SCALAR and ARG_ANYTHING are separate values in enum bpf_arg_type.
+and adjust_insn_aux_data() memmoves it on every patch, so a 1M instruction
+program uses about 8MB more memory.  Nothing later in the series
+(71f4568a6476..726d0559f576) touches the struct again, so the growth
+remains.
 
-A scalar argument slot would therefore fall through to the default label,
-which returns the conservative result (size = U32_MAX, may_read, may_write)
-rather than the empty access described by the comment.
+There is room that would cost nothing: a 2-byte hole after 'u16
+stack_ptrs', and 25 unused bits in the 'u32 jmp_point:1 ... jump_target:1'
+word.  That word holds the other flags set once in the pre-pass, such as
+prune_point, and need_scev is also set only once, by mark_latches().  Would
+'u32 need_scev:1;' there keep the struct at its current size?
 
-For example, with allow_ptr_leaks the main pass accepts a stack-derived
-scalar here:
+This isn't a bug, but this is also the only member in this block without a
+comment.  Could one be added saying that the flag marks loop headers,
+latches and in-loop exit sources where SCEVs are materialized, and that it
+also forces a basic-block split in compute_scev_for_loop()?
 
-    r1 = r10
-    r2 = r10
-    r2 += -8
-    r1 -= r2
-    call global_func(int x)
-
-Pointer minus pointer becomes an unknown scalar, so the ARG_SCALAR check
-passes.  arg_track_alu64() keeps the frame identity (dst->frame ==
-src->frame sets dst->off_cnt = 0), so arg_is_fp() is still true for r1.
-
-record_arg_access() then calls record_stack_access() with off_cnt == 0,
-which does mark_stack_read_all() and mark_stack_may_write_all() for the
-whole caller frame at the call.  Before this patch the callee was analyzed
-in context and made no stack accesses through its scalar parameter.
-
-The result is safe but less precise.  More stack slots stay live, every
-stack slot may be written at the call, and SCEV can no longer keep
-stack-based recurrences across the call.
-
-Should this be case ARG_SCALAR: instead?  That looks sound, since neither
-the callee nor an freplace body can dereference a scalar argument.  No later
-commit in the series (up to 726d0559f576) changes this.
-
-> +	case ARG_PTR_TO_BTF_ID:
-> +		/*
-> +		 * Trusted arguments cannot be stack pointers.
-> +		 * Untrusted arguments use ARG_IGNORE:
-> +		 * probe reads need no caller stack state, writes are prohibited.
-> +		 */
-> +		return (struct arg_access_info) {};
-
-[ ... ]
+>  	u8 alu_state; /* used in combination with alu_limit */
+>  	/* true if STX or LDX instruction is a part of a spill/fill
+>  	 * pattern for a bpf_fastcall call.
 
 
 ---
@@ -140,4 +105,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37923187511
---===============1212706349099477161==--
+--===============4501707364632007112==--
