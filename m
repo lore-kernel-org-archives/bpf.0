@@ -1,160 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C76741D103
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E613E1688;
+	Fri,  9 Oct 2026 12:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547707; cv=none; b=TYd6o7OV5IpzEmAI3o7uYFpKsOfXUGOIlOV0h/uOrwtYs7t4AKlPuuNib3DzibwmGq4gG4cmV3T9go5YiebrRHKENfj73IgBw+K1P1RrVJynLMePyFthPM4+hqB1Apejg7D38Nnmj5gTfQN5X73Qw66SXp/ulLFTsnJvGu6ryos=
+	t=1791547985; cv=none; b=nZ6GPzxfpezYPDXvcGjtFGDrAlBgr9o3E3mX7pqFLPMRaNvGhB/zGwG48PRPw0D9oQY4Kg8j1O7tq7Y7EaYGTzwWuY3BxpamDN0mVY45/jlb4mZFUg083n6TCRKINZMt53h9I0fpkoaFBsnpZo6Qi+LiV5bn4Ube4Rp/tzp+WBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547707; c=relaxed/simple;
-	bh=bTkUDBTqkMR1dBFmEnhlUUmTiS+JtlMqaIWOoJtgals=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=PzveLFZpXnMD5D/XnjAHOI2kRyBagOw8CrJ3nE6bvZDE/E1dZx3oqe+9nc4kP0gxvlB8D/+35rKoVI5kfrh3jYrQkDOpVY+/6lZZfLy6XNv+JdAt2NgMXXx/ergunVeCHvirUvpAboNH+yguTEGXT2PiIPki6+f/GYhnir1uYE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOst67Qd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791547985; c=relaxed/simple;
+	bh=HA6ElQkQmLxART6l0FM2pn+3b6US7P3oeOJ8fPUvL+0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=B861O/gEbnOsql4f7ldRhswEGTYqxeyHZmYfOFEHBjsDy9d1RTggTHL3oj10QucBZGwcTBsrn9zu0GxLAOE2uN2HElAdptwdVijNA5ZmEFHnwUCjNJ9H3PrI3cjvHVNhNWvNoqScqFCSCHlzOADJTCuFvO+xKQOpdhYPd91f24A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z8uhyrF4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOst67Qd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04D381F000FF;
-	Fri,  9 Oct 2026 12:08:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z8uhyrF4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4374B1F00893;
+	Fri,  9 Oct 2026 12:12:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791547698;
-	bh=ODrTLw0B1i/92F9RVHk9QY7sseuVnL4PaD1fUMoViHM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fOst67QdtPIouxwvaEoEESSbhbF5o7113j0U6iNO/DS34Pe25pYfWzwyu16WeIqil
-	 XRXxCFRf48UtQpOtBO9GKqPWRfnEsJHG8FhR+nN1E7Ttp7xpCZ9iZmoTA5Dzt5Nmff
-	 DbvNbERH1Xnt5IGk3nhkX3csJQIxRgps+UIWF20NxU1MvUFsvJ49n7ZQFr1KpvUxuU
-	 dzKPVwxw52y3VeuIRzARQfehocVeh7fS6Ah19pbWCQ2a3zqeA/tPhNxxtB4K+Nz2ia
-	 zl3lGs4Q37+qhk19Fz4cOMUr+8BeNkmes7jiU7eBBv+XocdY6MM6y0H9R30u4tYb75
-	 JjZm5SVp4Kv/A==
-Message-ID: <sashiko-outbox-165481@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 35/51] bpf: avoid widening registers that
- hinder exact stack-slot tracking
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009-scev-minimal-rebase-v3-35-bcba9bc53ac9@gmail.com>
-References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
- <20261009-scev-minimal-rebase-v3-35-bcba9bc53ac9@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 12:08:17 +0000
+	s=k20260515; t=1791547975;
+	bh=5DgSawWwcWZTCLSsTzXPu9dHG4TFqomzTXZm0QKw3jo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=Z8uhyrF4VrpVPeiqWN2o/HjZw41C/IDZ67obtl6YYNHWK1es+/YTgGtT+AKfmZuft
+	 bHgLQuSxuHf4y0FXs3i+fvaC6umAs9uTlE+czX2QW9gRi86xk6JdrWmKQvIWp5c7/d
+	 tyV9/2BavTVh8yppT8cI1QPsTvQeiwPR/AviUgHClx5RscGvd12j4LzrTCgIjGz5J5
+	 ZErrYH2yCCpgey3N/NzUc/HrCII3oHIOuXNUoxoUT+sb5PadWAwXLvucqusF/awD6p
+	 OulF1/D9a+C7woVQ+2yS1bUgDpzr5GsobXE5ebyc5gmPfD2B1Cp0gT6M2MmCpJfPqB
+	 nM9vLKwY9p4ag==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
+ kuba@kernel.org, pabeni@redhat.com, tushar.vyavahare@intel.com,
+ kerneljasonxing@gmail.com, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH v2 net-next 12/14] selftests: xsk: share test case
+ definitions with hardware runner
+In-Reply-To: <20261008114909.734364-13-maciej.fijalkowski@intel.com>
+References: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
+ <20261008114909.734364-13-maciej.fijalkowski@intel.com>
+Date: Fri, 09 Oct 2026 14:12:52 +0200
+Message-ID: <875wzbqdh7.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] bpf: call_params_mask clobbers callee-saved registers for kfuncs=
- with >5 args
-- [Medium] bpf: bpf_needs_fixed_stack_off ignores module kfuncs and stack d=
-ynptrs
---
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-commit c21aed6872d1b94060c148c7501830216020d7e4
-Author: Eduard Zingerman <eddyz87@gmail.com>
+> Keep case names, functions, and hardware directions in an X-macro
+> header. The C test table keeps its order, so the test IDs do not
+> change. This allows the Python runner added by the next patch to read
+> the same definitions. Only the runner uses the hardware directions,
+> the DUT roles in which it runs a case; xskxceiver ignores them.
+>
+> Install the header with selftests so the Python runner can read it
+> from an installed tree.
+>
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  tools/testing/selftests/net/lib/Makefile      |  2 +-
+>  .../testing/selftests/net/lib/xsk/test_xsk.h  | 46 ++-------------
+>  .../net/lib/xsk/test_xsk_case_defs.h          | 57 +++++++++++++++++++
+>  3 files changed, 62 insertions(+), 43 deletions(-)
+>  create mode 100644 tools/testing/selftests/net/lib/xsk/test_xsk_case_defs.h
+>
+> diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
+> index 066d011c478a..15353021cecf 100644
+> --- a/tools/testing/selftests/net/lib/Makefile
+> +++ b/tools/testing/selftests/net/lib/Makefile
+> @@ -28,7 +28,7 @@ TEST_GEN_FILES := \
+>  	xdp_helper \
+>  # end of TEST_GEN_FILES
+>  
+> -TEST_INCLUDES := $(wildcard py/*.py sh/*.sh)
+> +TEST_INCLUDES := $(wildcard py/*.py sh/*.sh) xsk/test_xsk_case_defs.h
+>  
+>  include ../../lib.mk
+>  
+> diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.h b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+> index c37423030eb6..e1ffd054c8f7 100644
+> --- a/tools/testing/selftests/net/lib/xsk/test_xsk.h
+> +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+> @@ -309,48 +309,10 @@ int worker_testapp_validate_rx(struct test_spec *test);
+>  int worker_testapp_validate_tx(struct test_spec *test);
+>  
+>  static const struct test_spec tests[] = {
+> -	{.name = "SEND_RECEIVE", .test_func = testapp_send_receive},
+> -	{.name = "SEND_RECEIVE_2K_FRAME", .test_func = testapp_send_receive_2k_frame},
+> -	{.name = "SEND_RECEIVE_SINGLE_PKT", .test_func = testapp_single_pkt},
+> -	{.name = "POLL_RX", .test_func = testapp_poll_rx},
+> -	{.name = "POLL_TX", .test_func = testapp_poll_tx},
+> -	{.name = "POLL_RXQ_FULL", .test_func = testapp_poll_rxq_tmout},
+> -	{.name = "POLL_TXQ_FULL", .test_func = testapp_poll_txq_tmout},
+> -	{.name = "ALIGNED_INV_DESC", .test_func = testapp_aligned_inv_desc},
+> -	{.name = "ALIGNED_INV_DESC_2K_FRAME_SIZE", .test_func = testapp_aligned_inv_desc_2k_frame},
+> -	{.name = "UMEM_HEADROOM", .test_func = testapp_headroom},
+> -	{.name = "BIDIRECTIONAL", .test_func = testapp_bidirectional},
+> -	{.name = "STAT_RX_DROPPED", .test_func = testapp_stats_rx_dropped},
+> -	{.name = "STAT_TX_INVALID", .test_func = testapp_stats_tx_invalid_descs},
+> -	{.name = "STAT_RX_FULL", .test_func = testapp_stats_rx_full},
+> -	{.name = "STAT_FILL_EMPTY", .test_func = testapp_stats_fill_empty},
+> -	{.name = "XDP_PROG_CLEANUP", .test_func = testapp_xdp_prog_cleanup},
+> -	{.name = "XDP_DROP_HALF", .test_func = testapp_xdp_drop},
+> -	{.name = "XDP_SHARED_UMEM", .test_func = testapp_xdp_shared_umem},
+> -	{.name = "XDP_METADATA_COPY", .test_func = testapp_xdp_metadata},
+> -	{.name = "XDP_METADATA_COPY_MULTI_BUFF", .test_func = testapp_xdp_metadata_mb},
+> -	{.name = "ALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_aligned_inv_desc_mb},
+> -	{.name = "TOO_MANY_FRAGS", .test_func = testapp_too_many_frags},
+> -	{.name = "XDP_ADJUST_TAIL_SHRINK", .test_func = testapp_adjust_tail_shrink},
+> -	{.name = "TX_QUEUE_CONSUMER", .test_func = testapp_tx_queue_consumer},
+> -	/* Flaky tests */
+> -	{.name = "XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF", .test_func = testapp_adjust_tail_shrink_mb},
+> -	{.name = "XDP_ADJUST_TAIL_GROW", .test_func = testapp_adjust_tail_grow},
+> -	{.name = "XDP_ADJUST_TAIL_GROW_MULTI_BUFF", .test_func = testapp_adjust_tail_grow_mb},
+> -	{.name = "SEND_RECEIVE_9K_PACKETS", .test_func = testapp_send_receive_mb},
+> -	/* Tests with huge page dependency */
+> -	{.name = "SEND_RECEIVE_UNALIGNED", .test_func = testapp_send_receive_unaligned},
+> -	{.name = "UNALIGNED_INV_DESC", .test_func = testapp_unaligned_inv_desc},
+> -	{.name = "UNALIGNED_INV_DESC_4001_FRAME_SIZE",
+> -	 .test_func = testapp_unaligned_inv_desc_4001_frame},
+> -	{.name = "SEND_RECEIVE_UNALIGNED_9K_PACKETS",
+> -	 .test_func = testapp_send_receive_unaligned_mb},
+> -	{.name = "UNALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_unaligned_inv_desc_mb},
+> -	/* Test with HW ring size dependency */
+> -	{.name = "HW_SW_MIN_RING_SIZE", .test_func = testapp_hw_sw_min_ring_size},
+> -	{.name = "HW_SW_MAX_RING_SIZE", .test_func = testapp_hw_sw_max_ring_size},
+> -	/* Too long test */
+> -	{.name = "TEARDOWN", .test_func = testapp_teardown},
+> +#define XSK_TEST_CASE(_name, _func, ...) \
+> +	{ .name = #_name, .test_func = _func },
+> +#include "test_xsk_case_defs.h"
+> +#undef XSK_TEST_CASE
+>  };
 
-bpf: avoid widening registers that hinder exact stack-slot tracking
+Hmm. Maybe not for this revision, but I'm getting a vibe that we're
+mixing reusable operations with test receipes.
 
-This commit adds logic to avoid widening registers used by stack-accessing
-instructions during SCEV-based loop analysis. This prevents replacing
-constant-offset stack accesses with varying-offset accesses, preserving
-verifier precision for spills, fills, and calls requiring fixed stack
-offsets.
-
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> index 05dd8e439609b..adad32d8cb124 100644
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
-[ ... ]
-> @@ -1100,6 +1100,70 @@ static void reset_scevs_at_indirect_writes(struct =
-bpf_verifier_env *env, struct
-[ ... ]
-> +/* Mask of argument registers (R1..R5) a call at 'idx' passes by registe=
-r. */
-> +static u16 call_params_mask(struct bpf_verifier_env *env, int idx)
-> +{
-> +	struct bpf_insn *insn =3D &env->prog->insnsi[idx];
-> +	struct bpf_call_summary cs;
-> +	int n =3D bpf_get_call_summary(env, insn, &cs) ? cs.arg_slot_cnt : MAX_=
-BPF_FUNC_REG_ARGS;
-> +
-> +	return n ? GENMASK(BPF_REG_1 + n - 1, BPF_REG_1) : 0;
-> +}
-
-[Severity: Medium]
-Does this code overflow the bitmask into callee-saved registers when a
-kfunc takes arguments on the stack?
-
-bpf_get_call_summary() returns the total number of arguments in
-cs.arg_slot_cnt, which can exceed 5 (MAX_BPF_FUNC_REG_ARGS) for kfuncs
-that accept stack arguments.
-
-Since GENMASK(BPF_REG_1 + n - 1, BPF_REG_1) does not cap 'n', an 'n'
-greater than 5 will set bits for callee-saved registers (R6-R10).
-
-If one of these unrelated registers happens to hold a stack pointer,
-collect_store_base_regs() might erroneously record it as a base register
-for the call. This could falsely prevent SCEV from widening unrelated
-loops, causing the verifier to unnecessarily unroll the loop and
-potentially hit complexity limits.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index a597a8c189723..2f190abe34489 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -14257,6 +14257,55 @@ static bool kfunc_spin_allowed(struct bpf_verifi=
-er_env *env, s32 func_id, s16 of
-[ ... ]
-> +bool bpf_needs_fixed_stack_off(struct bpf_verifier_env *env, int insn_id=
-x)
-> +{
-> +	const struct bpf_insn *insn =3D &env->prog->insnsi[insn_idx];
-[ ... ]
-> +	/* Both initialized and uninitialized stack dynptrs need a fixed offset=
-. */
-> +	for (i =3D 0; i < ARRAY_SIZE(fn->arg_type); i++)
-> +		if (arg_type_is_dynptr(fn->arg_type[i]))
-> +			return true;
-
-[Severity: Medium]
-Does this loop miss dynptrs that are passed on the stack?
-
-Because fn->arg_type is strictly bounded to 5 elements, this iteration
-will skip checking a dynptr if it is passed as a 6th argument (or later)
-on the stack.
-
-If missed, collect_store_base_regs() fails to record the base registers,
-allowing the SCEV pass to widen the stack pointer and turn its constant
-offset into a variable range. The verifier will then reject the dynptr
-call because it strictly enforces a constant offset.
-
-> +
-> +	/* vmlinux kfuncs only */
-> +	if (!bpf_pseudo_kfunc_call(insn) || insn->off !=3D 0)
-> +		return false;
-
-[Severity: Medium]
-Will this check skip BPF module iterators?
-
-By returning false if insn->off !=3D 0, this explicitly ignores any kfuncs
-exposed by BPF modules. Modules can provide their own iterators (like
-bpf_iter_testmod_seq_new with KF_ITER_NEW).
-
-Similar to the dynptr issue above, skipping these iterators means the
-base registers won't be recorded. This causes the stack pointer to be
-widened and leads to valid programs utilizing module iterators being
-falsely rejected by the verifier.
-
-> +	btf_id =3D insn->imm;
-> +
-> +	flags =3D btf_kfunc_flags(btf_vmlinux, btf_id, env->prog);
-> +	if (flags && (*flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY)))
-> +		return true;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-scev-minim=
-al-rebase-v3-0-bcba9bc53ac9@gmail.com?part=3D35
+Ideally the operations would reside in the C-code, and the recipes in
+Python...
