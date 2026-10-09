@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0151B3ACA77
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 04:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7B538DC65
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 04:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791519343; cv=none; b=Gwn+EE93WPeP6EuZMDed3VChLPNXVrb8nm+qPkmZuXQDaQuNBpHCV/gTx4S3uC/DO6oEzPOPvQV6KLykBGNonFRea0YTOcllb4MBC7O6yTWhRv1cOiTqWyeDGrjszATjVCODcWkRMg+KezC/poWMXdxfDNa3n0IENn7lvaj08n4=
+	t=1791519350; cv=none; b=Fx2SBt39BqW8nbv95irF/gKK5TzBx33bjLabC9FVRcivT4n20oyhnIa2a9RhNTNNNMd/7OVDgc6/lpAZsx/Jyv6/jgzDHw6bI19tN/iOyy5CegY8JcjzhH6scnWKKGBMLYFXZbvl31tlo6BxANrc6AokHB1s1Xa3VoGpOCKphfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791519343; c=relaxed/simple;
-	bh=5gMz9k8Lglq6zjlAs088xZEpmw2CvTpjiZn5LY4jxUU=;
+	s=arc-20240116; t=1791519350; c=relaxed/simple;
+	bh=h3vmVjvf8k/fha4itihgB6xYFK0vCJedDcuulzvweGI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j6LH9H5NtB2F2Mp38VxY6pxPGCVzKQEa4/7MuBLM5TZLqitKWStVsJLrI+2UemtpViZohuKgRhS3B36WaRrnEYnq/61NjnMwexlmhNP01WMcFvjlTgEur4ZvT1KnvQYYNo5tEa9nQY8BKE/6dp17jUnzskjyinCGae3IISIoc+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=CzckMHHtYl7+rt2X3vrI/MOeUz8nA7fQb37Zfu+qYQCSV+pIsw3ZsMAyJdA3LkU4N7eGqOvrxSkDEMIRGSU8widSa7G0/E0i13AuYqoVpghvJbyCHVYcksr8jp5cMoISzV/7moyX8jRQ2GW6OJbcyjqh6xW6zcBe3br4+Qx0iBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id BC59A3008C4E93; Thu,  8 Oct 2026 21:15:18 -0700 (PDT)
+	id 47AF23008C5216; Thu,  8 Oct 2026 21:15:34 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v10 06/24] bpf: Make exception landing pads reachable in the CFG
-Date: Thu,  8 Oct 2026 21:15:18 -0700
-Message-ID: <20261009041518.26503-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v10 09/24] bpf: Refuse a landing pad that does not resume
+Date: Thu,  8 Oct 2026 21:15:34 -0700
+Message-ID: <20261009041534.27944-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009041447.17092-1-yonghong.song@linux.dev>
 References: <20261009041447.17092-1-yonghong.song@linux.dev>
@@ -37,156 +37,223 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A call that a cleanup record covers can also reach the record's landing
-pad. Add that edge to the CFG walk, to bpf_insn_successors(), and to
-stack liveness, where a slot is alive across a call when the call's pad
-reads it.
+A cleanup pad runs drop glue and calls bpf_unwind_resume(), so its frame
+returns and the unwind goes on. A catch pad carries on in its frame
+instead. Only the first is supported: bpf_unwind() rewrites every frame's
+return address in one pass, so a catch pad's caller would still resume
+at a pad.
 
-The CFG walk pushes the pad in a visit of its own, and the fall-through
-on the next visit. bpf_check_cfg() re-visits the top of its stack until
-DONE_EXPLORING, so a visit pushing both would leave the pad DISCOVERED
-off the current path, and push_insn() would take a branch from one pad
-into another -- how a frame with two regions chains them -- for a
-back-edge.
+Nothing in the record says which kind a pad is, but the code does: a
+cleanup pad reaches _Unwind_Resume, a catch pad a return. So the unwind
+marks the frame whose pad it enters, and refuses in the marked code:
 
-Without the liveness change, a slot only the pad reads looked dead, and
-clean_verifier_state() poisoned it while the callee ran.
+  refused                                  where
+  ---------------------------------------  ----------------------------
+  an exit: how a catch pad ends            the pad's own frame
+  a tail call, a BPF_LD_[ABS|IND]: it      the pad's own frame
+    leaves through an exit on a failed
+    load
+  an indirect jump: nothing a compiler     the pad's own frame
+    frontend emits in a pad needs one
+  a bpf_unwind(), a call to a global       the pad and its callees
+    subprog that might_unwind
+  a bpf_unwind_resume() outside a pad      any program
+
+The first three are refused only in the pad's own frame: a subprog the
+pad calls may do them and still come back.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/cfg.c      | 38 ++++++++++++++++++++++++++++++++++++++
- kernel/bpf/liveness.c | 24 +++++++++++++++++++++++-
- 2 files changed, 61 insertions(+), 1 deletion(-)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/exception.c       | 59 ++++++++++++++++++++++++++++++++++++
+ kernel/bpf/exception.h       |  1 +
+ kernel/bpf/states.c          |  3 ++
+ kernel/bpf/verifier.c        | 20 +++++++++++-
+ 5 files changed, 83 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-index d8a579680e5b..63afbc5fb296 100644
---- a/kernel/bpf/cfg.c
-+++ b/kernel/bpf/cfg.c
-@@ -6,6 +6,7 @@
- #include <linux/sort.h>
-=20
- #include "diagnostics.h"
-+#include "exception.h"
-=20
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##ar=
-gs)
-=20
-@@ -160,6 +161,38 @@ static int push_insn(int t, int w, int e, struct bpf=
-_verifier_env *env)
- 	return DONE_EXPLORING;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d3740ad20235..6449e4babc60 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -339,6 +339,7 @@ struct bpf_func_state {
+ 	bool in_async_callback_fn;
+ 	bool in_exception_callback_fn;
+ 	bool no_stack_arg_load;
++	bool in_pad;
+ 	/* For callback calling functions that limit number of possible
+ 	 * callback executions (e.g. bpf_loop) keeps track of current
+ 	 * simulated iteration number.
+diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+index a0f088e225ac..2b9640099269 100644
+--- a/kernel/bpf/exception.c
++++ b/kernel/bpf/exception.c
+@@ -232,6 +232,65 @@ bool bpf_is_unwind_resume_kfunc(const struct bpf_ins=
+n *insn)
+ 	       insn->imm =3D=3D bpf_unwind_resume_id[0];
  }
 =20
-+static int visit_cleanup_pad_edge(int t, struct bpf_verifier_env *env)
++static bool unwinding(const struct bpf_verifier_state *state)
 +{
-+	int *insn_stack =3D env->cfg.insn_stack;
-+	int *insn_state =3D env->cfg.insn_state;
-+	int w;
++	u32 i;
 +
-+	if (!env->cleanup_info_cnt)
-+		return DONE_EXPLORING;
-+	w =3D bpf_exc_pad_of_call(env, t);
-+	if (w < 0)
-+		return DONE_EXPLORING;
-+
-+	/*
-+	 * @t is a call that may branch here, and @w is the target of that
-+	 * branch, so both are prune points. @w especially: every covered call
-+	 * site in a region unwinds to the same pad, and without a prune point
-+	 * at its head the verifier walks the pad again for each of them.
-+	 */
-+	mark_prune_point(env, t);
-+	mark_prune_point(env, w);
-+	mark_jmp_point(env, w);
-+	mark_jump_target(env, w);
-+
-+	if (insn_state[w])
-+		return DONE_EXPLORING;
-+	if (env->cfg.cur_stack >=3D env->prog->len)
-+		return -E2BIG;
-+	insn_stack[env->cfg.cur_stack++] =3D w;
-+	insn_state[w] |=3D DISCOVERED;
-+	return KEEP_EXPLORING;
++	for (i =3D 0; i <=3D state->curframe; i++)
++		if (state->frame[i]->in_pad)
++			return true;
++	return false;
 +}
 +
- static int visit_func_call_insn(int t, struct bpf_insn *insns,
- 				struct bpf_verifier_env *env,
- 				bool visit_callee)
-@@ -167,6 +200,11 @@ static int visit_func_call_insn(int t, struct bpf_in=
-sn *insns,
- 	int ret, insn_sz;
- 	int w;
-=20
-+	/* One push per visit: @t is revisited once the pad is explored. */
-+	ret =3D visit_cleanup_pad_edge(t, env);
-+	if (ret !=3D DONE_EXPLORING)
-+		return ret;
++int bpf_exc_check_insn(struct bpf_verifier_env *env, struct bpf_insn *in=
+sn)
++{
++	bool in_pad =3D cur_func(env)->in_pad;
++	u32 i =3D env->insn_idx;
++	const char *why =3D NULL;
 +
- 	insn_sz =3D bpf_is_ldimm64(&insns[t]) ? 2 : 1;
- 	ret =3D push_insn(t, t + insn_sz, FALLTHROUGH, env);
- 	if (ret)
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index cd9523f69298..2e7eead71c93 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -8,6 +8,8 @@
- #include <linux/slab.h>
- #include <linux/sort.h>
-=20
-+#include "exception.h"
++	if (unwinding(env->cur_state)) {
++		if (bpf_is_unwind_kfunc(insn)) {
++			verbose(env, "insn %u starts a second unwind while one is in flight\n=
+", i);
++			return -EINVAL;
++		}
++		if (bpf_pseudo_call(insn)) {
++			int subprog =3D bpf_find_subprog(env, i + insn->imm + 1);
 +
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##ar=
-gs)
-=20
- /*
-@@ -384,6 +386,18 @@ bpf_insn_successors(struct bpf_verifier_env *env, u3=
-2 idx)
- 			succ->items[succ->cnt++] =3D exit_idx;
- 	}
-=20
-+	/*
-+	 * A covered call can also leave through its landing pad. Only a call t=
-o
-+	 * a subprog or to bpf_unwind() is covered, so the two entries of
-+	 * env->succ are enough.
-+	 */
-+	if (unlikely(env->cleanup_info_cnt)) {
-+		int pad =3D bpf_exc_pad_of_call(env, idx);
-+
-+		if (pad >=3D 0)
-+			succ->items[succ->cnt++] =3D pad;
++			if (subprog >=3D 0 && bpf_subprog_is_global(env, subprog) &&
++			    env->subprog_info[subprog].might_unwind) {
++				verbose(env,
++					"insn %u calls global subprog %d, which can unwind while an unwind =
+is in flight\n",
++					i, subprog);
++				return -EINVAL;
++			}
++		}
 +	}
 +
- 	return succ;
- }
++	if (!in_pad)
++		return 0;
++
++	if (insn->code =3D=3D (BPF_JMP | BPF_EXIT)) {
++		verbose(env,
++			"exit at insn %u ends a landing pad: a catch pad is not supported yet=
+, only cleanup pads that resume\n",
++			i);
++		return -EINVAL;
++	}
++	if (bpf_helper_call(insn) && insn->imm =3D=3D BPF_FUNC_tail_call)
++		why =3D "is a tail call, which replaces the frame";
++	else if (BPF_CLASS(insn->code) =3D=3D BPF_LD &&
++		 (BPF_MODE(insn->code) =3D=3D BPF_ABS || BPF_MODE(insn->code) =3D=3D B=
+PF_IND))
++		why =3D "is a BPF_LD_[ABS|IND], which can leave through the epilogue";
++	else if (insn->code =3D=3D (BPF_JMP | BPF_JA | BPF_X) ||
++		 insn->code =3D=3D (BPF_JMP32 | BPF_JA | BPF_X))
++		why =3D "is an indirect jump, which nothing a compiler frontend emits =
+in a pad needs";
++
++	if (!why)
++		return 0;
++
++	verbose(env, "insn %u %s, and is in a landing pad\n", i, why);
++	return -EINVAL;
++}
++
+ int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx)
+ {
+ 	u32 pad =3D env->insn_aux_data[idx].cleanup_pad;
+diff --git a/kernel/bpf/exception.h b/kernel/bpf/exception.h
+index 983b9af16a19..1d7fc795619f 100644
+--- a/kernel/bpf/exception.h
++++ b/kernel/bpf/exception.h
+@@ -18,5 +18,6 @@ int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u=
+32 idx);
+ bool bpf_is_unwind_kfunc(const struct bpf_insn *insn);
+ bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn);
+ int bpf_exc_check_callback(struct bpf_verifier_env *env, int subprog);
++int bpf_exc_check_insn(struct bpf_verifier_env *env, struct bpf_insn *in=
+sn);
 =20
-@@ -510,7 +524,8 @@ bool bpf_stack_slot_alive(struct bpf_verifier_env *en=
-v, u32 frameno, u32 half_sp
- 	 * Slot is alive if it is read before q->insn_idx in current func insta=
-nce,
- 	 * or if for some outer func instance:
- 	 * - alive before callsite if callsite calls callback or is callx, othe=
-rwise
--	 * - alive after callsite
-+	 * - alive after callsite,
-+	 * - or alive at the landing pad a cleanup record gives the callsite
- 	 */
- 	struct live_stack_query *q =3D &env->liveness->live_stack_query;
- 	struct func_instance *instance, *curframe_instance;
-@@ -545,6 +560,13 @@ bool bpf_stack_slot_alive(struct bpf_verifier_env *e=
-nv, u32 frameno, u32 half_sp
- 		alive =3D callee_stack_access_at_callsite(env, callsite)
- 			? is_live_before(instance, callsite, rel, half_spi)
- 			: is_live_before(instance, callsite + 1, rel, half_spi);
+ #endif /* __BPF_EXCEPTION_H */
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 4ffa5b7ebf0f..eaf95d6e81bc 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -956,6 +956,9 @@ static bool func_states_equal(struct bpf_verifier_env=
+ *env, struct bpf_func_stat
+ 	if (!old->no_stack_arg_load && cur->no_stack_arg_load)
+ 		return false;
+=20
++	if (old->in_pad !=3D cur->in_pad)
++		return false;
 +
-+		if (!alive && unlikely(env->cleanup_info_cnt)) {
-+			int pad =3D bpf_exc_pad_of_call(env, callsite);
-+
-+			if (pad >=3D 0)
-+				alive =3D is_live_before(instance, pad, rel, half_spi);
+ 	for (i =3D 0; i < MAX_BPF_REG; i++)
+ 		if (((1 << i) & live_regs) &&
+ 		    !regsafe(env, &old->regs[i], &cur->regs[i],
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4ab838ba21eb..59b275bfc949 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -15243,8 +15243,13 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+=20
+ 	if (bpf_is_unwind_kfunc(insn))
+ 		return process_bpf_unwind(env, insn_idx_p, NULL);
+-	if (bpf_is_unwind_resume_kfunc(insn))
++	if (bpf_is_unwind_resume_kfunc(insn)) {
++		if (!cur_func(env)->in_pad) {
++			verbose(env, "resume at insn %d is not in a landing pad\n", insn_idx)=
+;
++			return -EINVAL;
 +		}
- 		if (alive)
- 			return true;
- 	}
+ 		return unwind_frames(env, NULL);
++	}
+=20
+ 	return 0;
+ }
+@@ -19251,6 +19256,7 @@ static int unwind_frames(struct bpf_verifier_env =
+*env, bool *do_print_state)
+ 			return err;
+ 		clear_caller_saved_regs(env, caller->regs);
+ 		mark_reg_unknown(env, caller->regs, BPF_REG_0);
++		caller->in_pad =3D true;
+ 		env->insn_idx =3D pad;
+ 		if (do_print_state)
+ 			*do_print_state =3D true;
+@@ -19326,6 +19332,7 @@ static int process_global_call_unwind(struct bpf_=
+verifier_env *env,
+ 	frame =3D cur_func(env);
+ 	clear_caller_saved_regs(env, frame->regs);
+ 	mark_reg_unknown(env, frame->regs, BPF_REG_0);
++	frame->in_pad =3D true;
+ 	env->insn_idx =3D pad;
+ 	*do_print_state =3D true;
+ 	return INSN_IDX_UPDATED;
+@@ -19341,6 +19348,7 @@ static int process_bpf_unwind(struct bpf_verifier=
+_env *env, int *insn_idx,
+ 		return unwind_frames(env, do_print_state);
+ 	clear_caller_saved_regs(env, frame->regs);
+ 	mark_reg_unknown(env, frame->regs, BPF_REG_0);
++	frame->in_pad =3D true;
+ 	*insn_idx =3D pad;
+ 	return INSN_IDX_UPDATED;
+ }
+@@ -19712,6 +19720,16 @@ static int do_check(struct bpf_verifier_env *env=
+)
+ 			}
+ 		}
+=20
++		if (unlikely(env->cleanup_info_cnt)) {
++			err =3D bpf_exc_check_insn(env, insn);
++			if (error_recoverable_with_nospec(err) && state->speculative) {
++				insn_aux->nospec =3D true;
++				goto process_bpf_exit;
++			}
++			if (err)
++				return err;
++		}
++
+ 		if (bpf_is_prune_point(env, env->insn_idx)) {
+ 			err =3D bpf_is_state_visited(env, env->insn_idx);
+ 			if (err < 0)
 --=20
 2.53.0-Meta
 
