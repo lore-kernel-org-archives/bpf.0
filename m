@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9BD2931F5
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 06:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1126132E68D
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 07:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791528682; cv=none; b=PmGmZfq/1fqtRD1NPbQfPJmvfcgRQnoH0zXWx26g2b4x7MFg5rqNpmxBv/+QtBkQvUObijg8JUptzSwQHHu+XPFmnWqN2QQNpYVykOtMYXLOox7tcQNLDCrZBWlquPHjugMp3OTafzx6AZ/YrohlSYC7uI2N2D71VvPxVuBo3GQ=
+	t=1791529705; cv=none; b=oAjx1p0C6LH3HtLj3NR7niSo+2gEk+OTV/73msIUoQmdzb/skiziPtqLln/WCLkv8uSol7R4q2SoLB3i/vgDiK+Cp3yDV5NNOLnh08rHRvH58mpAr3i+GuCGZZfSSDGVcRvW1H3Q6fr8wl3wG+eV98v51w9Nzrn8rx3H2lEpuEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791528682; c=relaxed/simple;
-	bh=lV4Fw7L5M8ocYO2yN8RmL56rCraFK161h/Ur+mfwHac=;
+	s=arc-20240116; t=1791529705; c=relaxed/simple;
+	bh=/sBPhyg3ToLxxOq89HghXKwqykczmnxPmHoJTOkGv00=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=KVeOFq0ZoyRJK60xkcpr0e3CnNn5Yr4xz2JyL+1tTV4nAJwOlBqjQbFEitXaSmeE9H7Z0ONcpWadZAi1l2a/vZDTfGC+634zRTHUZkAaIP3rE8utKlQHu7X+q52f+avNOPNGuTYhSmsDVaWlnymNN55+6xutpLaPSu9dQTLi7f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDik/kTe; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=gOp+XhNciJVqUtVX97oxr1ZDPw3uD3swGbcF0XFg9S2QyvtPnDdcUXQuZxCTOPL4+izhUXrZNwlzKu8EMYghnpIzPb2/cgdKHh4++ZQ03/MVZioSJXH01KWJtaB2nczIL/3FczJgkacDvQG3LEvsoBR3gmTN7+pMuB6MJSuRyxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QKt7gOGy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lDik/kTe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AD41F000FF;
-	Fri,  9 Oct 2026 06:51:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QKt7gOGy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E42E1F000FF;
+	Fri,  9 Oct 2026 07:08:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791528677;
-	bh=y5mwJb9qeDjHhJTz4J3fJmyIojt1HMnwHDHYQggw0Co=;
+	s=k20260515; t=1791529703;
+	bh=A/Z9Zijr4eLnTKkURXm7uaq2yBYRiy6/hrMrctujIQA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lDik/kTe1+CJavFdG1IZZql19QyQSFPCJXhdIjJBCaaHbCiK8FHkD507IHRpxf1il
-	 GaDWfpxYzS+BVK0LF/Cn5035lYgkKCVYKSOf6pEjWihXTd+kejFhGv+Xfh3cRychW4
-	 BV05JuK1oUmhvIVTE8J4egZreN2bN7xl/3lCnBhqMffT+6LSBI0u4XBSVgUkva0rnY
-	 1O4W1K2tzymQQEkFJoauoLqEZhfVkrPj4QHvDsW+CJ9ZqfsoAle/4r/eo4rIzpUUsy
-	 68GQfnLcpVEl6A+bkFq/wj8ZWLMKrywPiAr1jnmnouq5z9M1excbPP3DFyBgjv3D4/
-	 bxMTxeoEBP1DA==
-Message-ID: <sashiko-outbox-164968@kernel.org>
+	b=QKt7gOGypFgaMAu1BjOSTGJcHvTghX0GQcdkEsM0A7VYROTmXwkqE67pII+xWhJhh
+	 8sBC37/JRY0G2R5SuYqrdzLIy5KK6RHvpKec3DZ1PkayKA2QpihUNs9Fbp23iU6ZTf
+	 MNAM8qdOjML1XseS85gxmQs0I8jdlFVZ3hjM1YE7i5iHfiBDzWIOFY/nkBfqrbO0sJ
+	 O/+ldLk0A94NRvTRbvg37tDI7BQwjGX9A6FrWNblZTj7n5Pc6a0zUqn8UKNY5nQigS
+	 /Np7wbQtJkLGGzADsNKsIUQAr8zIdH5SSffFhZdI97hXV/N+qvbFTprALuo7vzx1Fy
+	 WGBYpSOnKOu8A==
+Message-ID: <sashiko-outbox-164976@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Test trampoline args around
- a 16-byte aligned stack arg
+Subject: Re: [PATCH bpf-next 3/5] bpf, x86: Place trampoline arguments by
+ the x86-64 calling convention
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009064228.1240628-1-yonghong.song@linux.dev>
+In-Reply-To: <20261009064221.1240081-1-yonghong.song@linux.dev>
 References: <20261009064206.1238047-1-yonghong.song@linux.dev>
- <20261009064228.1240628-1-yonghong.song@linux.dev>
+ <20261009064221.1240081-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 06:51:17 +0000
+Date: Fri, 09 Oct 2026 07:08:23 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,132 +47,136 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] bpf: endianness mismatch when reading __int128 in selftests on b=
-ig-endian
-- [Medium] selftests/bpf: data race on bpf_testmod_test_struct_arg_result
+- [High] bpf, x86: stack arguments offset mismatch and misalignment with BP=
+F_TRAMP_F_TAIL_CALL_CTX
+- [Medium] bpf: info leak of uninitialized kernel stack memory due to missi=
+ng garbage cleanup
 --
 
-commit 44831c6b1a0172e1d0713d17a8e105c4b30d6d64
+commit ffb54c9ff7ace6fffcfc471ab2c2927e34131e44
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
+bpf, x86: Place trampoline arguments by the x86-64 calling convention
 
-This commit introduces two new bpf_testmod functions to test trampoline
-argument handling for 16-byte aligned stack arguments, specifically targeti=
-ng
-__int128 structures. It also adds fentry and fexit programs to verify that
-arguments are correctly packed in the context array according to BPF
-conventions on x86-64 and arm64.
+This commit updates the BPF trampoline to place on-stack arguments
+according to the x86-64 calling convention. It introduces a backfill
+mechanism using bpf_jit_place_args() to handle arguments like __int128
+that may span stack slots and create alignment holes.
 
-> diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c b/=
-tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-> index 4638dfec1f38e..5520ee500c01d 100644
-> --- a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-> +++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-> @@ -15,4 +15,49 @@ int test_int128_arg_fexit(unsigned long long *ctx)
->  	return 0;
->  }
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 083fcd6cf15b7..0fc7715e569b5 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+[ ... ]
+> @@ -3472,8 +3479,35 @@ static void save_args(const struct btf_func_model =
+*m, u8 **prog,
+>  		 *
+>  		 * the arg1-5,arg7 will be passed by regs, and arg6 will
+>  		 * by stack.
+> +		 *
+> +		 * An argument aligned to 16 bytes, an __int128 or a struct
+> +		 * holding one, also starts at an even stack slot, which can
+> +		 * leave a hole before it. bpf_jit_place_args() worked out
+> +		 * where each eightbyte is.
+>  		 */
+> -		if (nr_regs + arg_regs > 6) {
+> +		for (j =3D 0; j < arg_regs; j++, slot++, bargs_off -=3D 8) {
+> +			u8 pos =3D pos_of_slot[slot];
+> +			u32 src;
+> +
+> +			if (!x86_arg_on_stack(pos)) {
+[ ... ]
+> +			/* copy function arguments from origin stack frame
+> +			 * into current stack frame.
+[ ... ]
+> +			 *
+> +			 * The area for the origin call mirrors the incoming
+> +			 * one, hole and all; only the bpf program takes the
+> +			 * arguments packed.
+>  			 */
+> -			for (j =3D 0; j < arg_regs; j++) {
+> -				emit_ldx(prog, BPF_DW, BPF_REG_0, BPF_REG_FP,
+> -					 nr_stack_slots * 8 + stack_args_off);
+> -				if (arena_arg)
+> -					emit_arena_arg_conv(prog, BPF_REG_0, nullable,
+> -							    (u32)arena_base);
+> -				emit_stx(prog, BPF_DW, BPF_REG_FP, BPF_REG_0,
+> -					 -stack_size);
+> -
+> -				if (!nr_stack_slots)
+> -					first_off =3D stack_size;
+> -				stack_size -=3D 8;
+> -				nr_stack_slots++;
+> -			}
+> +			off =3D x86_arg_stack_off(pos);
+> +			doff =3D for_call_origin ? stack_size - off : bargs_off;
+> +			emit_ldx(prog, BPF_DW, BPF_REG_0, BPF_REG_FP,
+> +				 stack_args_off + off);
+> +			if (arena_arg)
+> +				emit_arena_arg_conv(prog, BPF_REG_0, nullable,
+> +						    (u32)arena_base);
+> +			emit_stx(prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -doff);
+> +
+> +			if (!nr_stack_slots)
+> +				first_off =3D doff;
+> +			nr_stack_slots++;
+>  		}
+>  	}
 > =20
-> +/*
-> + * The arguments come packed in the BPF convention whatever holes the
-> + * kernel convention left between them: an eightbyte each, and two for t=
-he
-> + * struct holding an __int128.
-> + */
-> +long s_g, s_h_lo, s_h_hi, s_i, s_ret;
-> +
-> +SEC("fentry/bpf_testmod_test_int128_stack")
-> +int test_int128_stack_fentry(unsigned long long *ctx)
-> +{
-> +	s_g =3D ctx[6];
-> +	s_h_lo =3D ctx[7];
-> +	s_h_hi =3D ctx[8];
-[Severity: Medium]
-Will this little-endian assumption cause the selftest to fail on big-endian
-systems? On big-endian arm64 (aarch64_be), the high 64 bits of the 16-byte
-struct would be at the lower memory address, so reading ctx[7] as the low
-64 bits and ctx[8] as the high 64 bits might be reversed.
+>  	clean_stack_garbage(m, prog, nr_stack_slots, first_off);
+>  }
 
-> +	s_i =3D ctx[9];
-> +	return 0;
-> +}
-> +
+[Severity: Medium]
+Does this code leak uninitialized kernel stack memory?
+
+The x86-64 ABI allocates 8-byte stack slots for arguments, but compilers
+frequently use 32-bit instructions to place 32-bit arguments, leaving the u=
+pper
+4 bytes of the slot uninitialized.
+
+Since clean_stack_garbage() explicitly returns early when nr_stack_slots !=
+=3D 1,
+copying the full 64 bits with emit_ldx(..., BPF_DW, ...) captures this
+uninitialized kernel memory into the BPF context. Can this leak kernel stack
+memory to privileged BPF users if there are multiple stack arguments?
 
 [ ... ]
+> @@ -4011,8 +4014,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
+_tramp_image *im, void *rw_im
+>  	}
+> =20
+>  	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+> -		restore_regs(m, &prog, regs_off);
+> -		save_args(m, &prog, arg_stack_off, true, flags, 0);
+> +		restore_regs(&prog, pos_of_slot, nr_regs, regs_off);
+> +		save_args(m, &prog, pos_of_slot, arg_stack_off, true, flags, 0);
+> =20
+>  		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX) {
+>  			/* Before calling the original function, load the
 
-> +long b_f_a, b_f_b, b_g, b_h, b_i_lo, b_i_hi, b_ret;
-> +
-> +SEC("fentry/bpf_testmod_test_int128_backfill")
-> +int test_int128_backfill_fentry(unsigned long long *ctx)
-> +{
-> +	b_f_a =3D ctx[5];
-> +	b_f_b =3D ctx[6];
-> +	b_g =3D ctx[7];
-> +	b_h =3D ctx[8];
-> +	b_i_lo =3D ctx[9];
-> +	b_i_hi =3D ctx[10];
-[Severity: Medium]
-Does this have the same endianness mismatch on big-endian architectures?
-Extracting the 16-byte struct here from ctx[9] and ctx[10] also seems to
-assume a little-endian memory layout.
+[Severity: High]
+Are stack arguments misaligned here if BPF_TRAMP_F_TAIL_CALL_CTX is active?
 
-> +	return 0;
-> +}
+When __arch_prepare_bpf_trampoline() executes, it checks for
+BPF_TRAMP_F_TAIL_CALL_CTX and emits a push rax instruction (pushing 8 bytes)
+after sub rsp, stack_size, which permanently shifts RSP down by 8 bytes.
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 54a5fc39e0e27..23a2c88d3e7c1 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+However, the updated save_args() calculates the stack argument offsets base=
+d on
+the original stack_size (doff =3D stack_size - off) without accounting for =
+this
+extra 8-byte shift.
 
-[ ... ]
-
-> +noinline long
-> +bpf_testmod_test_int128_stack(u64 a, u64 b, u64 c, u64 d, u64 e, u64 f,
-> +			      u64 g, struct bpf_testmod_struct_int128 h, u64 i)
-> +{
-> +	bpf_testmod_test_struct_arg_result =3D a + b * 2 + c * 3 + d * 4 + e * =
-5 +
-> +		f * 6 + g * 7 + (u64)h.a * 8 +
-> +		(u64)((unsigned __int128)h.a >> 64) * 9 + i * 10;
-> +	return bpf_testmod_test_struct_arg_result;
-> +}
-[Severity: Medium]
-Can concurrent execution of tests (like test_progs -j) lead to a data race =
+Because the push rax is unpopped before call orig_call, the original functi=
 on
-this global variable? If one test thread computes the result in
-bpf_testmod_test_int128_stack() and another thread overwrites
-bpf_testmod_test_struct_arg_result in a different function before the first
-returns, it could cause the BPF fexit hook to read an incorrect return value
-into s_ret, leading to flaky ASSERT_EQ failures.
+will read its first stack argument from [RSP + 8]. Due to the 8-byte shift,
+this points to the tail call counter pointer instead of the actual first st=
+ack
+argument, corrupting all on-stack arguments.
 
-> +
-> +/*
-> + * x86-64 has no register left for f after e, so f goes to the stack and=
- g
-> + * takes R9 back; h goes to the third stack slot and i, aligned to 16
-> + * bytes, to the fifth and sixth. arm64 has registers up to g, puts h in
-> + * the first stack slot and i in the third and fourth.
-> + */
-> +noinline long
-> +bpf_testmod_test_int128_backfill(u64 a, u64 b, u64 c, u64 d, u64 e,
-> +				 struct bpf_testmod_struct_arg_2 f, u64 g, u64 h,
-> +				 struct bpf_testmod_struct_int128 i)
-> +{
-> +	bpf_testmod_test_struct_arg_result =3D a + b * 2 + c * 3 + d * 4 + e * =
-5 +
-> +		f.a * 6 + f.b * 7 + g * 8 + h * 9 + (u64)i.a * 10 +
-> +		(u64)((unsigned __int128)i.a >> 64) * 11;
-> +	return bpf_testmod_test_struct_arg_result;
-[Severity: Medium]
-Since this function also writes to the unprotected global variable
-bpf_testmod_test_struct_arg_result and immediately returns it, could this
-contribute to the same data race when multiple test processes run
-trigger_module_test_read() concurrently?
-
-> +}
->  #endif
+Additionally, doesn't this 8-byte shift break the required 16-byte stack
+alignment on function entry for x86-64?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009064206.1238=
-047-1-yonghong.song@linux.dev?part=3D4
+047-1-yonghong.song@linux.dev?part=3D3
