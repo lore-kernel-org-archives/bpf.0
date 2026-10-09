@@ -1,139 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7CD4963BA
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5B3175A74
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:07:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547660; cv=none; b=EPm9RdGDTEofmFs7J7MX2UM6yqfENBePJlCVy4KyAOnjZyvV2DBqZo2cX1si2azKDfRU3UAM5XdIcwlQ5284VL0+KSgoYN8A06h/0vwjrpNqP1wTC80DEhp9FLvYY/el4RFAsRfpfnBGicgrPKkYNKpbw5/NIwDD+Uxr6quAlxk=
+	t=1791547662; cv=none; b=aVf94s8b/jWGx6RHAgPyxuWQZhwCVhuOAXP2020LOfLEd6lADVBtsS4PBQmv7244IijEVnZtshlCGZim0bwyHsuOEmPHTty074nEb5EuOpBgT3b79y7s+LqcmbicPfzDbd7F9khcdVlqG0SO3leDnRBRvUfz7cWZqyqywiGGbfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547660; c=relaxed/simple;
-	bh=Ija+x2+9/04ij24lxWWPCVY0WG29/ZBlXmEa7EE5VSo=;
+	s=arc-20240116; t=1791547662; c=relaxed/simple;
+	bh=pWTQ7nn3cpndcudPS/VgOfUj6Pr80h6G09MufYQwdsg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=cDOMi8ZUvKAbvQt5jNOo34kwI3Ow16OYOjhIugqXfFEwjk4IJj7yqtaM/LIPLMVlc64/vGALkZ2ZXtNWq4hQa66jidq2FBNANCNuJ5fpQdnnV+fuo+AbD60i4Hgl6OFCVBw+ktG3gOiEtPacCxJEJ5DNk8kAsBvEkL6In+lIB3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBcajnPx; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=ijTvD+PVDpMEarDFRR3Kf1Cn61ztYKzvyDxt8QpNe+Btgc2nnaNgFJ6h//5YDofyFmBa5xYeVp3HGE4C96CkRXSNk61De5z8iP8Ou2i9H8FoMNeJeUJACcdTJvmOIyvl7d3bkAxoaWPPztS/r0mytXzhzAbXDJQmA78qxb7bLAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4ACAkG4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBcajnPx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2320D1F00898;
-	Fri,  9 Oct 2026 12:07:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4ACAkG4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433E91F00893;
+	Fri,  9 Oct 2026 12:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791547655;
-	bh=KzecLxjIsif+1Ju/I2n4EkSW/UlaJFQFmRUHOlw7od4=;
+	s=k20260515; t=1791547658;
+	bh=fvPsbpCZu+JPqGGn1WP47IrrmsCyvb6/MW+hXn1qLxA=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=oBcajnPxc1ZRzsS09/CATnk1EY1aQbQ0HHqFjHG6UzWSTRzPtXNzHulwIL+UwtbR2
-	 E70No+N6odaSNL5RKRnsls7b0WaDMKcvaWwZkhjTVOymd+yzKkNvWYTTWuls/J7zGT
-	 Wf4d0TcWN8UpcSjhlY0oVHI/foTRi2axEdHKWZQ3zijNFeHJ8rMtYBR4GTZgeQ1qaJ
-	 hrv3I/9WWOtCrfSaX+g1OxR3rmWmdZmY+qqhSnjeRxWaxA6MWH6G/qvTD7xiBZ58aj
-	 KB4eTRF93/r5X4jNjSzwPLLSsya0R9+KfX31Mcru9gzDm3JysFpLL2LHzz7u7t+TvF
-	 9461jfNXBeCSw==
-Content-Type: multipart/mixed; boundary="===============5968056736597149628=="
+	b=P4ACAkG4nRcm4+I+79EB8o5hKO4tsqmDN23nNdVHd1td0iOgNPiunzoWeO0qWZUz1
+	 zAyuMzHWDOwffcbgRVhULYKABXuS7nzcNPenhlUeKHR4p9anB1dWBxg6Wuy4D3Skfq
+	 XLS4MoQlOcC0SHi60kvx7dDzGN2E5qpUO8+shYsTTrJ22pMMoq92yLe4HoN/+tysPm
+	 mNW8roIzPxLQSRJtVJTlgefJTwWuDg/DkAo8BoQ+b8sW23BTQUU03PDxPC2oBSFV48
+	 /mjW50EHZbpTGxEhj0hE/alZDNWqaUVkRgrqhrYt9s+aVLhGBikmsU3VKb3WVx4Kqp
+	 CbXBnx6SJPiEA==
+Content-Type: multipart/mixed; boundary="===============8136878846837868456=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0f50c90c981387ec8a1dc3e39ed271189360de0f156d6b61962c015eb97ef591@mail.kernel.org>
-In-Reply-To: <20261009-scev-minimal-rebase-v3-36-bcba9bc53ac9@gmail.com>
-References: <20261009-scev-minimal-rebase-v3-36-bcba9bc53ac9@gmail.com>
-Subject: Re: [PATCH bpf-next v3 36/51] bpf: bpf_func_state size optimization
+Message-Id: <4529fd5f4041ff049e3af1d58a1d94a229fb4a63c0ccf6e9295c470ec2ec4148@mail.kernel.org>
+In-Reply-To: <20261009-scev-minimal-rebase-v3-48-bcba9bc53ac9@gmail.com>
+References: <20261009-scev-minimal-rebase-v3-48-bcba9bc53ac9@gmail.com>
+Subject: Re: [PATCH bpf-next v3 48/51] selftests/bpf: tests for varying offset access to PTR_TO_BTF_ID
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
 Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  9 Oct 2026 12:07:34 +0000 (UTC)
+Date: Fri,  9 Oct 2026 12:07:37 +0000 (UTC)
 
---===============5968056736597149628==
+--===============8136878846837868456==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: bpf_func_state size optimization
+> selftests/bpf: tests for varying offset access to PTR_TO_BTF_ID
 
-TL;DR: The narrower memcmp prefix in states_maybe_looping() may stop comparing
-id, parent_id and map_uid, so a terminating program accepted before could be
-wrongly rejected as an "infinite loop"; the commit message doesn't mention it.
+TL;DR: Test issue: byte_array_size_spanning may fail with a misaligned-access
+message instead of the expected one on strict-alignment architectures
+(riscv64, mips, loongarch); it may need __flag(BPF_F_ANY_ALIGNMENT).
 
-> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> index c62ea992967b..953700822fa7 100644
-> --- a/kernel/bpf/states.c
-> +++ b/kernel/bpf/states.c
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+> new file mode 100644
+> index 000000000000..be001cc77f81
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
 
 [ ... ]
 
-> @@ -1171,7 +1171,7 @@ static bool states_maybe_looping(struct bpf_verifier_state *old,
->  	fcur = cur->frame[fr];
->  	for (i = 0; i < MAX_BPF_REG; i++)
->  		if (memcmp(&fold->regs[i], &fcur->regs[i],
-> -			   offsetof(struct bpf_reg_state, precise)))
-> +			   offsetofend(struct bpf_reg_state, step)))
->  			return false;
->  	return true;
->  }
+> +/*
+> + * bytes[i], i in [0, 31], read as 4 bytes: min_off is valid within the array,
+> + * but the 4-byte read at max_off runs past the array end. Exercises the
+> + * size-aware bound in btf_struct_access().
+> + */
+> +SEC("syscall")
+> +__failure
+> +__msg("invalid variable offset access into struct outer")
+> +int byte_array_size_spanning(void *ctx)
+> +{
+> +	unsigned long i = bpf_get_prandom_u32();
+> +	struct outer *o;
+> +	int val = 0;
+> +
+> +	o = bpf_obj_new(typeof(*o));
+> +	if (!o)
+> +		return 0;
+> +	asm volatile ("						\
+> +	r1 = %[o];						\
+> +	r2 = %[i];						\
+> +	r2 &= 31;						\
+> +	r1 += r2;						\
+> +	%[val] = *(u32 *)(r1 + 64);				\
+> +"	: [val] "=r"(val)
+> +	: [o] "r"(o), [i] "r"(i)
+> +	: "r1", "r2");
+> +	bpf_obj_drop(o);
 
-Does this narrower prefix drop id, parent_id and map_uid from the
-comparison?
+byte_array_size_spanning() does a 4-byte load at a variable offset,
+var_off (0x0; 0x1f) + 64, and expects btf_struct_access() to reject it with
+"invalid variable offset access into struct outer".
 
-The old length, offsetof(struct bpf_reg_state, precise), was 80 bytes and
-covered the raw id, parent_id and map_uid.  The new
-offsetofend(struct bpf_reg_state, step) is 68 bytes, and id, parent_id and
-map_uid are all declared after step in the struct, so none of them are
-compared any more.  offsetof() cannot name the precise bitfield, but
-offsetofend(struct bpf_reg_state, parent_id) would have kept id and
-parent_id in the comparison.
+check_mem_access() calls check_ptr_alignment() before it reaches
+check_ptr_to_btf_access(), and bpf_check() turns on strict alignment when
+CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS is not set:
 
-Commit 8901cee9316d said this prefix comparison "continues to cover the
-complete value state", and this commit message does not mention that the
-comparison is being narrowed.
+    env->strict_alignment = !!(attr->prog_flags & BPF_F_STRICT_ALIGNMENT);
+    if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
+        env->strict_alignment = true;
+    if (attr->prog_flags & BPF_F_ANY_ALIGNMENT)
+        env->strict_alignment = false;
 
-Before this change, the current frame's registers had to carry identical
-raw ids before infinite-loop detection could fire.  Now the decision rests
-on states_equal(env, &sl->state, cur, EXACT).  In EXACT mode regs_exact()
-compares ids only with plain check_ids():
+On such configurations (riscv64 with the default
+RISCV_PROBE_UNALIGNED_ACCESS, mips, loongarch with ARCH_STRICT_ALIGN) the
+load would be rejected first with:
 
-    return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
-           check_ids(rold->id, rcur->id, idmap) && ...
+    misaligned access off (0x0; 0x1f)+64 size 4
 
-That skips the extra checks that regsafe()/check_scalar_ids() do for
-scalars: the ADD_CONST flags must match, and the base id (with the flag
-stripped) must map consistently.  The comment above check_scalar_ids()
-describes this exact gap: "Without the base check, idmap gets two
-independent entries A->B and A|flag->C|flag, missing that A->C conflicts
-with A->B."
+__failure would still hold, but __msg("invalid variable offset access into
+struct outer") would not match.
 
-Can a program that terminates, and was accepted before, now be rejected
-with "infinite loop detected"?  For example (privileged, so ADD_CONST
-linking is active):
-
-  r6 = rand&7; r7 = r6          (r6,r7 id A)
-  r8 = rand&7; r9 = r8; r9 += 1 (r8 id C, r9 id C|ADD64, delta 1)
- L: if r6 > 3 goto out
-    if r9 <= 4 goto out          (on entry r9 is tied to r8, so both
-                                  branches are possible)
-    r6 = rand&7; r7 = r6; r9 = r6; r9 += 1
-                                 (r9 is now tied to r6: id B|ADD64)
-    r8 = rand&7                  (id D)
-    goto L
- out: use r6..r9; exit
-
-On the second visit to L the register values match the checkpoint exactly,
-and only the ids differ (A->B, C|ADD->B|ADD, C->D).  check_ids() accepts
-this mapping even though r9 now depends on r6 instead of r8.
-
-The old raw-id prefilter rejected the match (r6 id A != B), so exploration
-went on: r6 <= 3 forces r9 <= 4 through sync_linked_regs(), every path from
-the second visit reaches exit, and the program was accepted.
-
-With this patch, states_maybe_looping() returns true, states_equal(EXACT)
-succeeds, and bpf_is_state_visited() returns -EINVAL.
-
-The same weakness could already be reached before this patch through ids
-in stack spills or caller frames, which the prefilter never covered.  This
-patch extends it to registers in the current frame.
-
-Should this compare up to offsetofend(struct bpf_reg_state, parent_id) and
-compare map_uid separately?  Alternatively, if dropping the ids is
-intended, could the commit message say so, and could regs_exact() check
-ids the way check_scalar_ids() does?
+Should this test add __flag(BPF_F_ANY_ALIGNMENT), as the negative tests in
+verifier_array_access.c do when their expected message isn't about
+alignment, so the size-aware bound is what gets checked on every
+architecture?
 
 
 ---
@@ -141,4 +123,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37923187511
---===============5968056736597149628==--
+--===============8136878846837868456==--
