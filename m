@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-115.mta1.migadu.com [95.215.58.115])
+Received: from mta1.migadu.com (out-119.mta1.migadu.com [95.215.58.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316AA48595E
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAD83D3CE6
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791577718; cv=none; b=Xf8yPddQOihugFYoo4sRnLk+BpehoQY5HXABTPUuzsJfUk4foS2FokzIlK4VmzumOK0oRMkTRevrQJFUpo6mDELLHloeL5pL5q8vCMJemvkeWhZoATCsoIcFmjgQZYGQmJCJwlXkZJeXMDsCgqnAV1F0WCbEw9RXCNd+9j4AsZw=
+	t=1791577721; cv=none; b=VVu5PsgPSlKmBPoptaqdr1ChqS8L6W2ggd02liXKtbCopNoBeVnozfMIn87nc5AVX4s30mlCceEwi8p1+i41xNDwSk1O5C/qwJcelFFai0PEySTRCez7sExiaGgDaHuhf6D/bfWmx7IwixiiqZlJxhfi0EcyL6R50yj52/Cai2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791577718; c=relaxed/simple;
-	bh=Fk6IbwxLCRHyqNLGA9vr1AJAvk3XKFCLsDSugFuHLNk=;
+	s=arc-20240116; t=1791577721; c=relaxed/simple;
+	bh=6Re81oY0edmO+AhjHDJZGAzC1BS3SW0NiWS+BFYBwEc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pNhrZJjKlCLZ75mBOgRztj2UwqDBamtipMX+JMYHYcWaQI3avkvWkROfrdf2GTBSkJg9OmNctCGzsLYjIs/TBA3xlqUjmSttmoIb/i1D+bIy0BkyO/5aqEgLjPAdhkx6YS8knARoziDa2+At+IR9j9UaIkGepUY8qSGVD39bZP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SQK60uN0; arc=none smtp.client-ip=95.215.58.115
+	 MIME-Version; b=ZU+KORZXhy8grFegaAtKVRAVNS6ms1ezmLo/27yA06ZYfdMH+YLS027JwGS4m6LK9Nb4AA4Ty3av9zo+Tf3dfwltdON+MECs4Es+QHNdCVqXLsvOKdhKcWd9U/UKSMKXfBufDWF4d8bfD9TY5eLHLSknTIChEKhSy/MNp+z6uks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rBN2Xkl5; arc=none smtp.client-ip=95.215.58.119
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SQK60uN0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rBN2Xkl5"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Fk6IbwxLCRHyqNLGA9vr1AJAvk3XKFCLsDSugFuHLNk=;
+DKIM-Signature: a=rsa-sha256; bh=6Re81oY0edmO+AhjHDJZGAzC1BS3SW0NiWS+BFYBwEc=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791577714; v=1; x=1792182514;
- b=SQK60uN09Q7+o41eKlR0kkuV8TmrUGnfuKTJ4BPz33M4zCoXv90jslBYXqyuFprhvWmX6wwM
- U4owtclq9Wkdcct9m4N6AfZQ2I0rJXWV4UiVW+mIt4Gz4F0cKABiOxrd3fPHRsyEP/eNbsZcTPq
- kDeDfZ9Fx7nnFaABNUj875/c=
+ t=1791577718; v=1; x=1792182518;
+ b=rBN2Xkl58xlvW88+ZapqZKlawAuLegyMiPDzwhV2sNODY2+fdKRSbRcGOZkTg7nuJ0DqIxvo
+ VSFzGyzXoTpdMUvR7fj3CFVK8HfVDD8MP3VtxFkFeRl+L/dmCYzYq1nbORfeL3bQ1xwdfePBP1+
+ WbrcmXJdfnqnJmDCF2pSwXo4=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a40a8b37256890ac;
-	Fri, 09 Oct 2026 20:28:34 +0000
-X-Mizu-Trace-ID: a40a8b37256890ac
+Received: by smtp.migadu.com with ESMTPS id 79d63f40f98a50de;
+	Fri, 09 Oct 2026 20:28:37 +0000
+X-Mizu-Trace-ID: 79d63f40f98a50de
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 05/11] bpf: Share map-backed callback register setup
-Date: Fri,  9 Oct 2026 13:27:52 -0700
-Message-ID: <20261009202759.50520-6-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 06/11] bpf: Rely on callback frame initialization defaults
+Date: Fri,  9 Oct 2026 13:27:53 -0700
+Message-ID: <20261009202759.50520-7-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261009202759.50520-1-ihor.solodrai@linux.dev>
 References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
@@ -55,148 +55,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Map iteration, timer, task-work and RCU callbacks repeat the same register
-type, offset and map-metadata setup for their map, key and value arguments.
+Both callback entry paths call init_func_state(), which initializes all
+registers to NOT_INIT and the callback return range to zero.
 
-Use one initializer for map-backed callback registers. Leave argument
-selection, value ids and callback-specific policy in each setter.
+Callback setters repeat resets for unused registers, and the timer setter
+repeats the default return range. Leave those defaults to frame
+initialization and set only arguments and callback-specific state in the
+setters.
 
 No functional change.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/verifier.c | 81 +++++++++++--------------------------------
- 1 file changed, 21 insertions(+), 60 deletions(-)
+ kernel/bpf/verifier.c | 31 -------------------------------
+ 1 file changed, 31 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 88b86f658e4a..8f2125c6e348 100644
+index 8f2125c6e348..67a61570a9ab 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11267,6 +11267,16 @@ static int check_func_callx(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	return check_static_func_call(env, subprog, insn_idx);
- }
- 
-+static void mark_map_callback_reg(struct bpf_reg_state *reg,
-+				  const struct bpf_reg_state *map_reg,
-+				  enum bpf_reg_type type)
-+{
-+	reg->type = type;
-+	__mark_reg_known_zero(reg);
-+	reg->map_ptr = map_reg->map_ptr;
-+	reg->map_uid = map_reg->map_uid;
-+}
-+
- int map_set_for_each_callback_args(struct bpf_verifier_env *env,
- 				   struct bpf_verifier_state *state,
- 				   struct bpf_func_state *caller,
-@@ -11279,15 +11289,8 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
- 	 */
- 	callee->regs[BPF_REG_1] = caller->regs[BPF_REG_1];
- 
--	callee->regs[BPF_REG_2].type = PTR_TO_MAP_KEY;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
--	callee->regs[BPF_REG_2].map_ptr = caller->regs[BPF_REG_1].map_ptr;
--	callee->regs[BPF_REG_2].map_uid = caller->regs[BPF_REG_1].map_uid;
--
--	callee->regs[BPF_REG_3].type = PTR_TO_MAP_VALUE;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
--	callee->regs[BPF_REG_3].map_ptr = caller->regs[BPF_REG_1].map_ptr;
--	callee->regs[BPF_REG_3].map_uid = caller->regs[BPF_REG_1].map_uid;
-+	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_1], PTR_TO_MAP_KEY);
-+	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_1], PTR_TO_MAP_VALUE);
- 	callee->regs[BPF_REG_3].id = ++env->id_gen;
+@@ -11295,9 +11295,6 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
  
  	/* pointer to stack or null */
-@@ -11354,26 +11357,12 @@ static int set_timer_callback_state(struct bpf_verifier_env *env,
- 				    struct bpf_func_state *callee,
- 				    int insn_idx)
- {
--	struct bpf_map *map_ptr = caller->regs[BPF_REG_1].map_ptr;
--	u32 map_uid = caller->regs[BPF_REG_1].map_uid;
+ 	callee->regs[BPF_REG_4] = caller->regs[BPF_REG_3];
 -
- 	/* bpf_timer_set_callback(struct bpf_timer *timer, void *callback_fn);
- 	 * callback_fn(struct bpf_map *map, void *key, void *value);
- 	 */
--	callee->regs[BPF_REG_1].type = CONST_PTR_TO_MAP;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_1]);
--	callee->regs[BPF_REG_1].map_ptr = map_ptr;
--	callee->regs[BPF_REG_1].map_uid = map_uid;
+-	/* unused */
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+ 	return 0;
+ }
+ 
+@@ -11341,11 +11338,6 @@ static int set_loop_callback_state(struct bpf_verifier_env *env,
+ 	callee->regs[BPF_REG_1].type = SCALAR_VALUE;
+ 	callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3];
+ 
+-	/* unused */
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_3]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
 -
--	callee->regs[BPF_REG_2].type = PTR_TO_MAP_KEY;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
--	callee->regs[BPF_REG_2].map_ptr = map_ptr;
--	callee->regs[BPF_REG_2].map_uid = map_uid;
--
--	callee->regs[BPF_REG_3].type = PTR_TO_MAP_VALUE;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
--	callee->regs[BPF_REG_3].map_ptr = map_ptr;
--	callee->regs[BPF_REG_3].map_uid = map_uid;
-+	mark_map_callback_reg(&callee->regs[BPF_REG_1], &caller->regs[BPF_REG_1], CONST_PTR_TO_MAP);
-+	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_1], PTR_TO_MAP_KEY);
-+	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_1], PTR_TO_MAP_VALUE);
+ 	callee->in_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(0, 1);
+ 	return 0;
+@@ -11365,11 +11357,7 @@ static int set_timer_callback_state(struct bpf_verifier_env *env,
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_1], PTR_TO_MAP_VALUE);
  	callee->regs[BPF_REG_3].id = ++env->id_gen;
  
- 	/* unused */
-@@ -11477,26 +11466,12 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
- 						 struct bpf_func_state *callee,
- 						 int insn_idx)
- {
--	struct bpf_map *map_ptr = caller->regs[BPF_REG_3].map_ptr;
--	u32 map_uid = caller->regs[BPF_REG_3].map_uid;
+-	/* unused */
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+ 	callee->in_async_callback_fn = true;
+-	callee->callback_ret_range = retval_range(0, 0);
+ 	return 0;
+ }
+ 
+@@ -11393,10 +11381,6 @@ static int set_find_vma_callback_state(struct bpf_verifier_env *env,
+ 
+ 	/* pointer to stack or null */
+ 	callee->regs[BPF_REG_3] = caller->regs[BPF_REG_4];
 -
- 	/*
- 	 * callback_fn(struct bpf_map *map, void *key, void *value);
+-	/* unused */
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+ 	callee->in_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(0, 1);
+ 	return 0;
+@@ -11412,15 +11396,9 @@ static int set_user_ringbuf_callback_state(struct bpf_verifier_env *env,
+ 	 *			  callback_ctx, u64 flags);
+ 	 * callback_fn(const struct bpf_dynptr_t* dynptr, void *callback_ctx);
  	 */
--	callee->regs[BPF_REG_1].type = CONST_PTR_TO_MAP;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_1]);
--	callee->regs[BPF_REG_1].map_ptr = map_ptr;
--	callee->regs[BPF_REG_1].map_uid = map_uid;
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_0]);
+ 	mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE_LOCAL);
+ 	callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3];
+ 
+-	/* unused */
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_3]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
 -
--	callee->regs[BPF_REG_2].type = PTR_TO_MAP_KEY;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
--	callee->regs[BPF_REG_2].map_ptr = map_ptr;
--	callee->regs[BPF_REG_2].map_uid = map_uid;
--
--	callee->regs[BPF_REG_3].type = PTR_TO_MAP_VALUE;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
--	callee->regs[BPF_REG_3].map_ptr = map_ptr;
--	callee->regs[BPF_REG_3].map_uid = map_uid;
-+	mark_map_callback_reg(&callee->regs[BPF_REG_1], &caller->regs[BPF_REG_3], CONST_PTR_TO_MAP);
-+	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_3], PTR_TO_MAP_KEY);
-+	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_3], PTR_TO_MAP_VALUE);
+ 	callee->in_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(0, 1);
+ 	return 0;
+@@ -11452,9 +11430,6 @@ static int set_rbtree_add_callback_state(struct bpf_verifier_env *env,
+ 	mark_reg_graph_node(callee->regs, BPF_REG_2, &field->graph_root);
+ 	ref_set_non_owning(env, &callee->regs[BPF_REG_2]);
+ 
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_3]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+ 	callee->in_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(0, 1);
+ 	return 0;
+@@ -11474,9 +11449,6 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_3], PTR_TO_MAP_VALUE);
  	callee->regs[BPF_REG_3].id = ++env->id_gen;
  
- 	/* unused */
-@@ -11513,26 +11488,12 @@ static int set_rcu_callback_state(struct bpf_verifier_env *env,
- 				  struct bpf_func_state *callee,
- 				  int insn_idx)
- {
--	struct bpf_map *map_ptr = caller->regs[BPF_REG_2].map_ptr;
--	u32 map_uid = caller->regs[BPF_REG_2].map_uid;
--
- 	/*
- 	 * callback_fn(struct bpf_map *map, void *key, void *value);
- 	 */
--	callee->regs[BPF_REG_1].type = CONST_PTR_TO_MAP;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_1]);
--	callee->regs[BPF_REG_1].map_ptr = map_ptr;
--	callee->regs[BPF_REG_1].map_uid = map_uid;
--
--	callee->regs[BPF_REG_2].type = PTR_TO_MAP_KEY;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
--	callee->regs[BPF_REG_2].map_ptr = map_ptr;
--	callee->regs[BPF_REG_2].map_uid = map_uid;
--
--	callee->regs[BPF_REG_3].type = PTR_TO_MAP_VALUE;
--	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
--	callee->regs[BPF_REG_3].map_ptr = map_ptr;
--	callee->regs[BPF_REG_3].map_uid = map_uid;
-+	mark_map_callback_reg(&callee->regs[BPF_REG_1], &caller->regs[BPF_REG_2], CONST_PTR_TO_MAP);
-+	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_2], PTR_TO_MAP_KEY);
-+	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_2], PTR_TO_MAP_VALUE);
+-	/* unused */
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+ 	callee->in_async_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(S32_MIN, S32_MAX);
+ 	return 0;
+@@ -11495,9 +11467,6 @@ static int set_rcu_callback_state(struct bpf_verifier_env *env,
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_2], PTR_TO_MAP_KEY);
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_2], PTR_TO_MAP_VALUE);
  
- 	/* unused */
- 	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	/* unused */
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+-	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+ 	callee->in_async_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(S32_MIN, S32_MAX);
+ 	return 0;
 -- 
 2.56.0
 
