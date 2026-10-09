@@ -1,149 +1,141 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E134A498A
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159DC345EAE
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791540281; cv=none; b=fu07xgNHg1zhY3p3YcdfcvNhub/ECqptDgGu8UOyEibTcxkwqtgUlkRtwFECmJgHE0cciEHgeZNKm5iJrfHg0Rf1Ztq3l+FWNX5neVJcQi3UC7/xzGGDJUmNyCShD1LUwDXlGyeaeZzfmb63NXA9Io6qJLUSdHZ/eND2Dwk3XKM=
+	t=1791540589; cv=none; b=q7TRjpFkL8B4/e/mn1BtyRtQmU2WsxCoQHAYIM11BLvdimSoYgXkG0i05j+JWwNL+3btARZ2DLbFpO4GiOjU8jszAx5HEn5k1TsAZ0alMKH5T4XwNCjMPMgwDFQu5TpollVtUG6pRibrkhnJrv2kQtb2DSTKu9lMhV6GeJAJ9dY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791540281; c=relaxed/simple;
-	bh=5yLkz2OZBQ4ipEjXEN7/lCEXtkQpCiwl45030Q1M6lA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K21634kKaJZyZiQOoGd25UMC6Xq+7XIrsNnp87y0YfmfGi/W+3/Lr1kMgHWIkVYMnxJeBBTEEiyMVvBwGWlZiGks15f5OqJmuSw6HmLlFcvCiRPaEkLi0j/7+pxkHkRQQcNA+oij9MRO+/bGG/XIjyECs31IbWv6kCIiuem1ZDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mv0bXuY/; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791540589; c=relaxed/simple;
+	bh=DIYzQ1EPfmvk0HXDvk5SB0xtF59iHApk08ybYe83kU0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mv3aAys/ZsUGx8jj0I+necHwRviLsR7lGNjXhjJwX57LTokjsl5IaZLf9aa3nmnbyeqoPEknuBQpVt/dJy7HvEXNx4AAA+XJwJYmsxCsCFyEKjiR3HaQ8JvrSnnpCSYAxHf8HDKkVsQ0Cfxd1ldWfqqvKGOb4fCK04FufSLOGCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H9NthN4w; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=mBoZwzHB; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mv0bXuY/"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-48afe75f055so5582800f8f.2
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:04:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H9NthN4w";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="mBoZwzHB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1791540587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=DIYzQ1EPfmvk0HXDvk5SB0xtF59iHApk08ybYe83kU0=;
+	b=H9NthN4wmnC9Pcmj0Ri57PImOnmfhPmePnxznpUcmwoZVm2r188H6KkSYx4d2+gdK7BaBV
+	yqm9atwifhOTkuYDWecDUqB+rsNmT7jft6DDvhBvQow+2jCNuOv3NE1sos9Z7KfPcu+hXA
+	hDuNVPVvhcBfe0M/CHPdj78CER/7L5A=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-215-gi1hwzzlMdCodUe97wdQ9w-1; Fri, 9 Oct 2026 10:09:45 +0000
+X-MC-Unique: gi1hwzzlMdCodUe97wdQ9w-1
+X-Mimecast-MFC-AGG-ID: gi1hwzzlMdCodUe97wdQ9w_1791540584
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-48b008137d8so1050210f8f.0
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:09:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791540276; x=1792145076; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WCfrYFQWaB6ljrpcA5mB+GvPCr6ztXX1INv06kJj6BA=;
-        b=Mv0bXuY/dbslJrVlIeMtcxPdMhLIu3/yZLmI50/So5GHoEeQlXlcQKfT0SUHwVk5Kx
-         R+6aWsPXaKh/7fFnAtl0/YG7zxU8j2j3kckVubW399a9rtWIpvskoUxAs+X9xngQygCx
-         a87s25iG26dO4mAjyHuF+kQ5cJQzgxTIO5J10VcL44URFMev9rQ5ejJNZmdKtmIVQS79
-         ueEOTvGWtd0OeaYefX23YBmg4pzUxHliPw8wAeyYfjXk9OmTmGyJvy41qBBG1HPkACTt
-         q1rc+IgaRF5GB88OVPs2YFDDbyW2l/GfwVAgW5E6rPwMieA0a+R+g2K8thOHn0su1y/G
-         YWOg==
+        d=redhat.com; s=google; t=1791540584; x=1792145384; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DIYzQ1EPfmvk0HXDvk5SB0xtF59iHApk08ybYe83kU0=;
+        b=mBoZwzHB6t0JxVDnJjopLZDbV6IoUBq6h8m7CYGH6/Kxwj82pBQu5ImtPiNvo5jLMT
+         DBSw4WtGX3bWMuztpqnyMLitxnHbOdArxAhb2j6Ae4zhD9CiONG7VOvKWn03Jka68Uex
+         qnjuR7Bu/ce+zGNL+5RsjraTeuwYvzyDCSXXhcFQqF2PY4AxqcwB6v6ZvfdPSh+3VB/N
+         PKWuSGQh4KuKkAtU1Wth2Dn4f+eRSvRjT76/as6/e4sL3CgSfPhWKW5frDTLWq/vj7WE
+         u4IRzaz0D5NZ0SvEeoIj0nHbgqqmFNKLHV35CFjpnVj6qlPIRUXeLQAcM8cA4kmHb8Wm
+         cySQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791540276; x=1792145076;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WCfrYFQWaB6ljrpcA5mB+GvPCr6ztXX1INv06kJj6BA=;
-        b=vO1tflIiMvA2B2fV5w0alZc8q1lO8kfGFffAtjMU7HX9TnHAJWbqTqh9NuPy5soWBv
-         FzTSev6rKvtmLL55NijncuZFzT5YW6V+Izhrs67X5F8175HHsBMGwlqCLH/HNreVtOn5
-         sklbQIyfeuqKsA+ulsgxzFmzAmHbO5KHkTAKYhrvLV4ZfpwygwjeI44hD/jYkaSpji4T
-         rd+p57apO2V1m9Cz8cJrKmzoVSr41RfOuofbxyZdHDWGv05cYqpHUWAxIMLQMZVyzMOH
-         Kspilb3QFflgZ8BAHaK1KNXrEL1e113mwSFhgRPwoZT0viSpbe9gUP8bZjeJAxfwAD9a
-         2DLw==
-X-Forwarded-Encrypted: i=1; AKwUvBxTV4h9OHQFtpZJ1Tjn26zcGT+jsHX4P3rKty0yWkbFvMAq++VVemCeIUUDymGaOJacgEQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++mu9m4CuD6pVzesKNP/GiVj/UpHtYyhFLwXpengKxO7GicVzaHl
-	AHsi0fvR5a78vZjM4jy8EdjIzziaQ6ZTPh58Nv1cS5HyYOsl+Q8U3vyd
-X-Gm-Gg: AYBFou2lENq5xQ7L0f0GGzLgfWkVD9t3gorPiUAb6f0Jwo3fWnO4ieK144Tb06sEYE+
-	UtxeMMIliLh4WDtBMftdXmHEihQCmvkxoJtxc2A7ptz0MmJ1AzoQ2vKzQ4sVfqQV5boLUy4Oxp1
-	Eq1wJqCb6UPNTkGT/qQvxjAjRlFkEUVs8JItkJPD1MiqkiETszY3wP/r6NJWiEFgkOcE3RHXfL4
-	UzIYW8SvPXG4AZsOisAG5M8aCf6MMhDO6brDCx95xqNFbUxRlLyvX2oFz9sef8XfgtpG4ggYol5
-	PeQXw+ywonNfd7vwBlcJ3K/aFt7KvmIKcFjMHwe/oBcFM/1Ia4ylgZwvpaU5D4PqDRevX5XYl9b
-	nOSSaLZHAu5zmu/Z3VAH/ZBIjEkwEIoCk189JTV3P88BdPrWlb2iu/Od2YzmVGAgdNofmO2+wC9
-	srXUrWCRh3yOX2A4Kpr5sk6vdSCYnVaRRoYzrzKj11iwHWPWVrkHn+5Q2vMtEDIsD0MEtRQKsFn
-	fZK86YFq3Qv1a9zwppH48jadyM7arPsr63LxxSLdvV70hPn/3vGtxxpcHPaxcLx6xRdOZJYQrta
-	qZ4RrEGLQHtu7SZP5N/7lTddU4M8WYTN/bst1o7iDmT72aUs9MXuEX7Cw7RIWtRBzqlD7doj+mD
-	V+yRtAwy/2TSmkOk=
-X-Received: by 2002:a05:600c:3f16:b0:4a0:2150:55fb with SMTP id 5b1f17b1804b1-4a18e44395bmr24842945e9.4.1791540276044;
-        Fri, 09 Oct 2026 03:04:36 -0700 (PDT)
-Received: from unknown748F3CBA5068 (dynamic-2a02-3100-a128-aa01-297a-7094-853e-a20c.310.pool.telefonica.de. [2a02:3100:a128:aa01:297a:7094:853e:a20c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18bf2caf4sm53382635e9.10.2026.10.09.03.04.34
+        d=1e100.net; s=20260707; t=1791540584; x=1792145384;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=DIYzQ1EPfmvk0HXDvk5SB0xtF59iHApk08ybYe83kU0=;
+        b=WbsFY4EFVsaV/2khof4Mve3eSfezCa4yUcU+6IsEMjSHlOXEUaHiPE6w9blMhuxSsJ
+         2iqQ1z3TI3G4QCoCqP5ob9yYS1k56NPvYzBKmYFcA9aW8SfwG+H2UGFafWaaumwU4zzB
+         SzD/ATpX0i4EuyanBjIsumzr01wjqgrzL08+mntcVe2Oi7wSiF5SlAJP+Eg+HdQE15d9
+         uGKBnHGZ5H0qVQ7wE0H7zPX3cbV6xY+FDY0JsdQaUhpI+uuoWIjJfrb6Br6WYAAQuLut
+         4y9eoSYOhAprpjo3zIpgJz1/sjx2p6bqNq84iD8hjIGgFdxfMaFwBcZElIFQVD0guYi9
+         qOqA==
+X-Forwarded-Encrypted: i=1; AKwUvBw+4fQ3iDevnwcjOqve5eAjga+WGG8t41N+LN0Lh438CINCKrWt9xkJRJYzwfCGdk5pTLo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKoZxu6pcFlkxFLq4izgiDNAKuvW/3nH+XlQI07Lq2YL50x3rgV
+	lau7SbfkftTdtUXjlvznq2jRRrn9k4Kpq9lkra3yxABcb5F83nyE11kuH7Zi+PHzaxE4yC5wiNA
+	X4JZjAXbdUbeGtjzUQBRA9B7bxaGrPfNMKlc6Fjd/JobXJEZLnSWt7qdjBJH66g==
+X-Gm-Gg: AYBFou0OPOPSl5ckK7Ts5HzaLwZXKOMIT3E8NjlcTQgFJpak8cSuQA9N1ZcTsM1vS4v
+	Rhtb1Ee8fD1yspFA1uMvsqExs5dIUw3DOiLey5V20PXp+VAGJpO/AjiaX8ra4BgvPBjvzRl4P6r
+	GwziKR86XGjHcAE6/fCIy3QwyL8a5yX+yM7FYq7ILk1hVleJ6wpsu8t58W4hciP2u4EpeGcISrL
+	xhQJAonW3YGJPtJDLa1nFbb5XL7MEdGT7cGAEdOGp5rhhi8kEbUKKtnL0X79Dyzmaj72fD6b2Yf
+	aKh1BssTCbL5gZa8x6rNTDFep3j1itCaTE56Zjntshe59VbIraabm+MZUUxY/ySxgqT/I4fVB6J
+	fInqzH4GZ6mHzC97NejDZSrtfIPM=
+X-Received: by 2002:a05:6000:4683:b0:487:146f:7c88 with SMTP id ffacd0b85a97d-48dba9e6381mr1934016f8f.4.1791540584333;
+        Fri, 09 Oct 2026 03:09:44 -0700 (PDT)
+X-Received: by 2002:a05:6000:4683:b0:487:146f:7c88 with SMTP id ffacd0b85a97d-48dba9e6381mr1933990f8f.4.1791540584008;
+        Fri, 09 Oct 2026 03:09:44 -0700 (PDT)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([185.168.96.228])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48db9ada3edsm3163180f8f.53.2026.10.09.03.09.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:04:35 -0700 (PDT)
-Date: Fri, 9 Oct 2026 12:04:33 +0200
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Harry Yoo <harry@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	David Stevens <stevensd@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
-	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>, Clark Williams <clrkwllms@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-mm@kvack.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/3] locking, mm: Add atomic allocator trylocks on
- RT
-Message-ID: <asi6Kj3TcCd6HAM5@gmail.com>
-References: <20261005070625.8871-1-kmehltretter@gmail.com>
- <asZ8jmWNoGk5tYce@thinkpad>
+        Fri, 09 Oct 2026 03:09:43 -0700 (PDT)
+Message-ID: <76753c2dd66792ec6eb94d00741e61366df426cb.camel@redhat.com>
+Subject: Re: [PATCH v2 09/15] tools/rv: Copy stripped bpf_atomic.h from
+ libarena
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Nam Cao <namcao@linutronix.de>, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Steven Rostedt
+	 <rostedt@goodmis.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Wen Yang
+	 <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>, 
+ Viktor Malik <vmalik@redhat.com>
+Date: Fri, 09 Oct 2026 12:09:42 +0200
+In-Reply-To: <87fqygl9we.fsf@yellow.woof>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+	 <20261001152042.124445-10-gmonaco@redhat.com> <87ld89wtrx.fsf@yellow.woof>
+	 <4F009BB7-58C2-4AB1-8FEF-61FA4B5281A2@redhat.com>
+	 <87fqygl9we.fsf@yellow.woof>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
+ cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
+ T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
+ eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
+ 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <asZ8jmWNoGk5tYce@thinkpad>
 
-On Wed, Oct 07, 2026 at 07:15:29PM +0100, Harry Yoo wrote:
-> > This RFC instead adds an atomic owner state for bounded PREEMPT_RT spinlock
-> > trylocks. Atomic acquisition succeeds only from the completely free state.
-> 
-> Please don't skip discussion stage and jump into submitting a very
-> intrusive change across locking and mm, assisted by LLM? :/
-> 
-> I don't think attempts to tackle this problem will make progress without
-> discussing and getting buy-in from (PREEMPT_RT) locking folks.
-> 
+On Thu, 2026-10-08 at 13:16 +0200, Nam Cao wrote:
+> Gabriele Monaco <gmonaco@redhat.com> writes:
+> > Mmh, I'm not too familiar with them, but they wouldn't be drop-in
+> > replacements as far as I understand. I'd need to use C11 atomic types
+> > and that would diverge further from the kernel implementation.
+>=20
+> I am thinking we should migrate to BPF entirely. Keeping both in-kernel
+> and BPF will be a bit painful.
 
-Sorry, I should have followed up on the additional v1 replies before
-posting this v2.
+Yeah that's a valid point, though I'm considering it more like a longer ter=
+m
+goal. I'd rather avoid rushing the migration until we're sure BPF is perfec=
+tly
+capable to handle absolutely everything and we can cover every usecase.
 
-On the alternatives in [1], Alexei [2] preferred detecting
-scheduler-lock contexts and returning NULL. He confirmed that NULL
-returns are allowed, rejected restoring the local-storage allocator, and
-raised the RT unlock/wakeup objection.
+There's a common belief considering BPF a prototyping playground, where "re=
+al"
+things should eventually end up in the kernel.
+Now, I don't agree with it (look at the many sched_ext policies used in
+production), but I'd want to assess if dropping kernel support could drive =
+users
+away (e.g. industry/automotive which keeps popping out) and understand the
+various not purely technical reasons.
 
-I initially tried that detection, tracking pi_lock, rtmutex wait_lock
-and rq locks. With RT, lockdep and slab_debug enabled, task-storage
-allocation under an independently held hrtimer base lock reported this
-cycle:
+Gabriele
 
-  hrtimer_bases.lock -> rtmutex wait_lock -> pi_lock -> rq->__lock
-    -> hrtimer_bases.lock
-
-I don't know whether my changes introduced or exposed the dependency.
-The timer lock was not covered by that guard. This was a lockdep warning
-and the workload completed.
-
-I then tried atomic ownership in v2 to avoid that unlock path, at
-the cost of IRQ-disabled spinning without PI boosting of the owner.
-
-One possible interpretation of "raw_local_trylock_t" would be preserving
-the non-RT local_trylock semantics on RT for short per-CPU cache
-operations, with allocation failing when it needs an rtmutex-backed
-fallback.
-
-Would that be worth exploring? Sebastian suggested
-consolidating the existing local-lock variants first. What should that
-cover?
-
-For arena user faults, backing-page allocation failure returns
-VM_FAULT_SIGSEGV on the RFC base. next-20261007 preallocates outside the
-raw lock. Failed fallback allocation returns VM_FAULT_SIGBUS. If
-restricting that fallback increases fault failures, is that acceptable?
-
-Thanks,
-Karl
-
-[1] https://lore.kernel.org/r/arIY0wMQjCCsqidI@gmail.com
-[2] https://lore.kernel.org/r/DLO3RV3IQUOV.21BNLF4QS9T4W@gmail.com
