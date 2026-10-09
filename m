@@ -1,117 +1,128 @@
-Received: from mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C64F34CFC6
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 16:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7532A2D8378;
+	Fri,  9 Oct 2026 16:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791564910; cv=none; b=Ucuw7Bhj5pd2nPWSAKNFfj0WbzyOKU7K0z2rc1AITA1qajvwbdgB2/RjzTWSYCkwXpL6OGhcQGUdsBrT9yEqhDS5S4HIOwfqI5qP5w1QQCQtf0r3UzM2bpJCsLcNucP3Z4sfVkrvtLzj3+VUEBzp7u8ShMw1kbaNWnwX33uZ4QM=
+	t=1791564992; cv=none; b=elEOgTtEHsPhwjmcjbQep2msLS/L+KTzU4uVeWecuz+Tk7AQU+E93GTQoGXA2kxAzKKaXIRA/afUyQlA/o9NrXFYpDsz3lesUcs/X9hNHR+XQ+RQyY3WwIXHDpoI3OsgutVqDFWaZ6SDVXBQTlTHW4RFvGYejBq0bDnkL+12WJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791564910; c=relaxed/simple;
-	bh=HzLQm8yceXsU5YEI2nQ/qHhRGvX9rm0DubbnNySS5yI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ufcBcFEs4gZNkui/MJugV/Ldf7HSvZ9yHjaRjvASIBBgGiE4ak3soICw9Z/qZwcJ6Ktv4o00fPbEkMa3madTiPvnls0ZQuG8zQNu3gv14tfTMiWCB8bqdtjNbJMyhUApqSckeuCmCoUgeUd71Ilh1rtpCLwp7DY9yeyfoBSHPgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g9D90MrY; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791564992; c=relaxed/simple;
+	bh=Gsc13vUDcqHhR9WqLn+uEOJ3bL2AXkQlfX0gpVkBRts=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MkvG/1pLRqmKNPgkDjWOd+M2g2fz3TDtk49oOlUHUdVn96aty4ScJ6PblUBstN+NcMwmtEoa0RfWT9hpXFio6RF0m7tWe5JTU1O2J0NJII8pn0waq0LXE0axgTItNb+SkByVBBnslwEb28h/8Nenj6UzPP8um5c4a0lx/WhTP7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUsl9XnU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g9D90MrY"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=HzLQm8yceXsU5YEI2nQ/qHhRGvX9rm0DubbnNySS5yI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791564907; v=1; x=1792169707;
- b=g9D90MrYOTnWJhSxszRCRf0Kz2Sj1SnNT5dfigiqgIhpZtW0s3hh9XlpqqQFAGn68QXlfied
- w+n8ThrSXlw3pfiGM2Ew8f1lLYyNlvHbDPKyhTGYnbw3RIw1/HaUUSQ4/MyRORulRwb35QXB1bV
- ko9bCBNDjPwdhPyCLSNUFoF4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9c78e18c0828b795;
-	Fri, 09 Oct 2026 16:55:06 +0000
-X-Mizu-Trace-ID: 9c78e18c0828b795
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <6b77fcc9-93d0-47e6-be94-6087fa96e2ee@linux.dev>
-Date: Fri, 9 Oct 2026 18:55:06 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUsl9XnU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2421F000FF;
+	Fri,  9 Oct 2026 16:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791564991;
+	bh=fE0OAfD+VvZZQlsp7SZETT3KsGTWZ99jT3uHHIgYDkQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RUsl9XnUQdex4hYDI/nvqZumtgOTjlWiX0N56fVGal9ZXTElbzreII28hFeRkApJB
+	 NHo6FTkv1s0R1SKHMxFh2yoyGgEj94FI2YTZ5R2m7lwDx9O3N5/dtVzHCZ7rRFHg+b
+	 AtSEfYi+n++t5xP6H8VImwwnXKYhoLn2R1W0Koa99MOWI+o8HHqK2kIurxPlAU0Yri
+	 ygANXuDjupNkgl+uor72EiN8FZ3fmo02D0/KSu5wQ2x84hwaNSlHgKIyyR/PugD/c9
+	 1rQuaM8k2AyO9mDtnEOKbWctVlZ0WY0IhSQdg1dl1SdQIKXtdsg79DgnHAMkLcGLF5
+	 UTDY8ujTUNlMg==
+Date: Fri, 9 Oct 2026 17:56:08 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
+	Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v4 07/38] mm: add mmap action for discontiguous kernel
+ page mapping
+Message-ID: <askajMD6aWnRZzwK@gremlin>
+References: <20261003-b4-mmap-prepare-vma-flag-sanify-v4-0-a1f052500fd7@kernel.org>
+ <20261003-b4-mmap-prepare-vma-flag-sanify-v4-7-a1f052500fd7@kernel.org>
+ <CAJuCfpGj2Q092+zB=Z-d1iAOD6n1_HXVZQAL+YM6x_CeUEMpcw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v10 15/24] bpf, arm64: Dispatch exception cleanup
- pads at run time
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261009041447.17092-1-yonghong.song@linux.dev>
- <20261009041605.33513-1-yonghong.song@linux.dev>
- <sashiko-outbox-164834@kernel.org>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <sashiko-outbox-164834@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpGj2Q092+zB=Z-d1iAOD6n1_HXVZQAL+YM6x_CeUEMpcw@mail.gmail.com>
 
+On Sun, Oct 04, 2026 at 10:11:18AM -0700, Suren Baghdasaryan wrote:
+> On Sat, Oct 3, 2026 at 6:35 PM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
 
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 448342883e9d..45b21bb04a18 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
 
-On 10/9/26 6:30 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] arm64/bpf: PAC modifier mismatch for bpf_throw's C frame causes FPAC panic
-> --
+> > +static void __map_kernel_pages_prepare(struct vm_area_desc *desc)
+> > +{
+> > +       if (vma_desc_test(desc, VMA_MIXEDMAP_BIT))
+> > +               return;
+> > +
+> > +       VM_WARN_ON_ONCE(mmap_read_trylock(desc->mm));
 >
-> commit 2f751c03b321c9d53d97196968f653cf6c3fa289
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf, arm64: Dispatch exception cleanup pads at run time
->
-> This commit adds arm64 support for unwinding BPF frames and redirecting
-> their return addresses to cleanup pads. It signs the modified return
-> addresses using PAC when address authentication is enabled.
->
->> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
->> index 3ebcf8c53fb04..56d1310eca323 100644
->> --- a/arch/arm64/kernel/stacktrace.c
->> +++ b/arch/arm64/kernel/stacktrace.c
-> [ ... ]
->
->> +/* PACIASP's modifier is the entry sp, record + 16 for a BPF prologue. */
->> +static void bpf_unwind_store_ra(unsigned long record, u64 ra)
->> +{
->> +	struct frame_record *rec = (struct frame_record *)record;
->> +
->> +	/*
->> +	 * Whether the slot holds a signed address is a property of the build,
->> +	 * not one to be read off the value: a PAC can come out equal to the
->> +	 * bits stripping puts back, and a signed address would then be taken
->> +	 * for an unsigned one. What signs is CONFIG_ARM64_PTR_AUTH_KERNEL --
->> +	 * the prologue here, and -mbranch-protection for everything the
->> +	 * compiler emits.
->> +	 */
->> +	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
->> +	    system_supports_address_auth())
->> +		ra = bpf_unwind_sign_ra(ra, record + sizeof(struct frame_record));
-> [Severity: High]
-> Will this hardcoded PAC modifier cause an FPAC panic when returning from
-> bpf_throw()?
+> Sorry I missed this before and it is pre-existing code but is this a
+> weird way of asserting that mmap_lock is write-locked? If so, why not
+> just use mmap_assert_write_locked()?
 
-bpf_throw() cannot go together with bpf_unwind().
+Ah yeah, this weirdness is duplicated from the existing code. Will fix up on
+resin!
 
->
-> The unwinder uses bpf_unwind_store_ra() to redirect the return address for
-> the first BPF frame. The caller of this first BPF frame is the C function
-> bpf_throw().
->
-> While record + sizeof(struct frame_record) correctly assumes a strict BPF
-> JIT prologue where the entry SP is FP + 16, bpf_throw() is a compiled C
-> function. Its actual frame size is compiler-dependent and may be larger
-> than 16 bytes due to local variables.
->
-> When bpf_throw() returns, its epilogue will authenticate the return address
-> using its actual entry SP. If we sign it here using FP + 16 instead of the
-> actual entry SP, could authentication fail and trigger a kernel panic on
-> PAC-enabled kernels?
->
->> +	WRITE_ONCE(rec->lr, ra);
->> +}
-> [ ... ]
->
-
+--
+Cheers, Lorenzo
