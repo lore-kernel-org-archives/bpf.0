@@ -1,274 +1,178 @@
-Received: from mta0.migadu.com (out-250.mta0.migadu.com [91.218.175.250])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0008441F5E6
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 09:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.250
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B7549DBB9;
+	Fri,  9 Oct 2026 09:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791538849; cv=none; b=NuzbH5GRNbeX3rwBaGnmboL9fNz+uBJTwNyQOCA7TJQKoc126HO5iZzQMdL83yxSg7RPpmOUhvtSGY3DauKpT/+HPIKqu8QINIB6wRdZGvy3Vq7Vatllzj1fi08pD6ntqkftAtnCxymlw5U0MgeqcRpBzRaYHSZRX2EOWtBIP5g=
+	t=1791538979; cv=none; b=np9F9SIyF/4nSL92Bc6fAqmkjII6hlk8nAtTrw2xLrK5z4NGtmAfMbDtdUEApG05hF4U8QM+DPkaRFvJ2Ag0mIBkvp8yRdxNboV/wB3KR/M/GdEXFDQj85ZocYI8hrei0mUZEU096ckyd6sRBTTyK2L1tvQeYm/hY9Q+GAmJX/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791538849; c=relaxed/simple;
-	bh=xVrnhRmotXNnJn/Ot+2DF2PbMo6NgLhFJQaiiZmxOfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bD+nFP3GcHgk16QOWOh4xl2WUQ6Hg4xBH/JJ/3VeeAH5p1W9wDnpeHAjAOG0ev5E4nqDtKuHem6umEZRfLEXrwhjZzDdopvZEEF9T+WTiN4Xg9/bBkLtkrssfxt8rxvqdO2mdrZMQoMYa96UnWzPZxoWM2LhJ9iECwDm17N2NAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TDyQVfFG; arc=none smtp.client-ip=91.218.175.250
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791538979; c=relaxed/simple;
+	bh=yhOjj/wrjjiaYAgabEvaYOFm/8b7bCIzioUlA5BSq/U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QyZhij95/8VgtRwuV8YqRIgh1GmXSvaybiQHg2x90ccss8hM+WVvpzOXMvK41WmjczGHn2G97J9/WYDHJRwy8kLo6jRQ0oatbSIVq+jRaqHEJFzJ6fz3w87BEgSgxTbgQZZboYPYm9IZ09SMg7DOG5A+pzbNVhIyBkrJzUAdJ3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=Of3Cg7mi; arc=none smtp.client-ip=220.197.31.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TDyQVfFG"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=xVrnhRmotXNnJn/Ot+2DF2PbMo6NgLhFJQaiiZmxOfo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791538840; v=1; x=1792143640;
- b=TDyQVfFGaIP1LjsAXdzexZspOMyXtLYh0qJmN+uOphvzPuZURGpoCnqCEzLXjADqOEhGyT4h
- bikxxFvWf5nUW3JGxI8aSNE1pQPcaR/7MyNgzddLvkC2mZMr2r4Z5rXxGDmDG1qV52kq1F4b3Tp
- jYMFtyUqgtiBgPBx6g1JYGas=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id fc0f941f014be6ba;
-	Fri, 09 Oct 2026 09:40:36 +0000
-X-Mizu-Trace-ID: fc0f941f014be6ba
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 9 Oct 2026 17:40:23 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: netdev-bot+sashiko@kernel.org
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	donald.hunter@gmail.com, edumazet@kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, liuhangbin@kylinos.cn
-Subject: Re: [PATCH net-next v4 2/6] tools: ynl: convert enum selector to
- string for sub-message parsing
-Message-ID: <asi2h4Rd7f4FXo1s@fedora>
-References: <20261008-ynl_rt_encap-v4-2-4ed2ccf7f949@kylinos.cn>
- <179153681840.434549.374414508868008982@kernel.org>
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="Of3Cg7mi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=comNi0bq8Of/dXYDxEHJTvUJcWhZQ1Sp8DE5wIR2vhA=;
+	b=Of3Cg7miPOXJ2jb0AeB8OOfPqw94BzyQiG5igLTjey/F5NEhxjHsOL2jXKdaAR
+	iKM2VQntpfJBFotx+3JBc3RuhsIk7Eafyyfr8/9JxEXBW1ozXRGxLb0/CwChpKR4
+	HmsNmt/WvY/2VyAIZK194DLatWI6J+R/0jX+u8MKdhBDE=
+Message-ID: <544bc0d9-c1c8-461d-aba8-6065409cb53c@126.com>
+Date: Fri, 9 Oct 2026 17:31:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 02/19] net: stmmac: request the MDIO reset
+ GPIO only once
+To: James Hilliard <james.hilliard1@gmail.com>,
+ Linus Walleij <linusw@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
+ Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Christian Marangi <ansuelsmth@gmail.com>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Serge Semin <fancer.lancer@gmail.com>,
+ Suraj Jaiswal <quic_jsuraj@quicinc.com>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Joao Pinto <Joao.Pinto@synopsys.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>,
+ Ong Boon Leong <boon.leong.ong@intel.com>,
+ Voon Weifeng <weifeng.voon@intel.com>,
+ "Song, Yoong Siang" <yoong.siang.song@intel.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Simon Horman <horms@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Thierry Reding <thierry.reding@kernel.org>,
+ Jonathan Hunter <jonathanh@nvidia.com>, Chen-Yu Tsai <wens@kernel.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>, Jose Abreu <Jose.Abreu@synopsys.com>,
+ Yao Zi <me@ziyao.cc>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Richard Genoud <richard.genoud@bootlin.com>,
+ Alastair D'Silva <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+ ZhaoJinming <zhaojinming@uniontech.com>,
+ Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+ Ding Hui <dinghui1111@163.com>, Linkui Xiao <xiaolinkui@kylinos.cn>,
+ linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev,
+ stable@vger.kernel.org
+References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
+ <20260927-submit-stmmac-reset-fixes-v1-v5-2-feec6c14dd06@gmail.com>
+ <CAD++jL=6Ov5BPK1naX6orzMsrJPm_g6SkdRaU6Ji+okXMFaZdQ@mail.gmail.com>
+ <CADvTj4pU6EXgx1-dupQoQBm8OrrvAeR5NyCk4of7zya2V=yvEw@mail.gmail.com>
+Content-Language: en-US
+From: Linkui Xiao <xiaolinkui@126.com>
+In-Reply-To: <CADvTj4pU6EXgx1-dupQoQBm8OrrvAeR5NyCk4of7zya2V=yvEw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <179153681840.434549.374414508868008982@kernel.org>
+X-CM-TRANSID:_____wDnT_lttMhqfcDGAw--.25712S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXFyxtr43KF15GF47ZFy5Arb_yoWrXw1kpF
+	Waqa1YyrZ5XrWxAws2qw1UZFyjvFs0yr43Xr1jkrWxCF98CFyfJr1xtr4Y9F97Cry8Ww1Y
+	vF4vva47uan0yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Ur3ktUUUUU=
+X-CM-SenderInfo: p0ld0z5lqn3xa6rslhhfrp/xtbBqRAW7GrItHDUxQAA30
 
-On Fri, Oct 09, 2026 at 09:06:58AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 2 · Low: 2
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] An unknown enum selector value now aborts the whole message or
->   dump.
-> - [Medium] The new enum-to-string conversion ignores byte order.
-> - [Low] When the enum lookup fails, the error message is misleading.
-> - [Low] The generator now produces working response parsing for enum-
->   keyed sub-messages.
-> 
-> --
-> 
-> tools: ynl: convert enum selector to string for sub-message parsing
-> 
-> This patch changes the YNL C code generator for sub-messages keyed by a
-> non-external enum selector. The integer selector value is converted to a
-> string with the family's {enum}_str() helper before the sub-message parse
-> function is called. A missing selector or a failed enum lookup is
-> reported through ynl_submsg_failed().
-> 
-> > diff --git a/tools/net/ynl/pyynl/ynl_gen_c.py b/tools/net/ynl/pyynl/ynl_gen_c.py
-> > index 15c79849c6096..4aca51396a9e2 100755
-> > --- a/tools/net/ynl/pyynl/ynl_gen_c.py
-> > +++ b/tools/net/ynl/pyynl/ynl_gen_c.py
-> > @@ -951,13 +951,31 @@ class TypeSubMessage(TypeNest):
-> 
-> [ ... ]
-> 
-> > +        if self.selector.is_enum_val() and not self.selector.is_external():
-> > +            enum = self.family.consts[self.selector.get_enum_name()]
-> > +            pres_var = f"{var}->_present.{sel}"
-> > +            parse_sel = f"{sel}_str"
-> > +            local_vars = [f'const char *{parse_sel};']
-> > +
-> > +            get_lines = [
-> > +                f'if (!{pres_var})',
-> > +                f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
-> > +                f'{parse_sel} = {enum.render_name}_str({sel_var});',
-> 
-> [Severity: Medium]
-> Does this handle selectors declared with byte-order: big-endian?
 
-This doesn't affect the current series. The encap-type selector is
-type: u16 with no byte-order specified (native order), so the raw value
-passed to _str() is already host-order. nftables is in GENS_UNSUP today,
-so no in-tree generated family hits this yet. We address this as a follow-up.
 
+On 2026/9/28 07:49, James Hilliard wrote:
+> On Sun, Sep 27, 2026 at 5:35â€¯PM Linus Walleij <linusw@kernel.org> wrote:
+>>
+>> Hi James,
+>>
+>> On Sun, Sep 27, 2026 at 11:59â€¯PM James Hilliard
+>> <james.hilliard1@gmail.com> wrote:
+>>
+>>> From: Linkui Xiao <xiaolinkui@kylinos.cn>
+>>>
+>>> stmmac_mdio_reset() calls devm_gpiod_get_optional() every time it runs.
+>>> A GPIO line can only be requested once, so from the second call on
+>>> gpiod_request_commit() returns -EBUSY. devm_gpiod_get_optional() only
+>>> turns -ENOENT into NULL, hence the error is passed straight back and
+>>> stmmac_mdio_reset() bails out before pulsing "snps,reset" and before
+>>> running the STE101P MDC workaround.
+>>>
+>>> The first call, made by of_mdiobus_register(), succeeds, so the failure
+>>> is only visible later on: every resume that does not use WoL goes
+>>> through stmmac_resume() -> stmmac_mdio_reset(), and that caller ignores
+>>> the return value, so the PHY silently stays un-reset.
+>>>
+>>> The descriptor used to be requested exactly once: stmmac_mdio_reset()
+>>> resolved "snps,reset-gpio" itself and cached the GPIO number in
+>>> stmmac_mdio_bus_data::reset_gpio, and commit ae26c1c6cb9b ("stmmac: fix
+>>> PHY reset during resume") relies on that cache to reuse the line on
+>>> every call. commit 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in
+>>> stmmac_mdio_reset") replaced it with a devm_gpiod_get_optional() that
+>>> caches nothing, so the request is repeated on every call and fails from
+>>> the second one on.
+>>>
+>>> Parse the whole reset description, the GPIO and "snps,reset-delays-us",
+>>> in stmmac_mdio_register() at probe time, and keep it in struct
+>>> stmmac_priv. This is where devm-gpiod is meant to be used: the line is
+>>> acquired with the device and released with it, and any failure to
+>>> acquire it is reported during probe instead of being ignored by
+>>> stmmac_resume(). stmmac_mdio_reset() then only pulses the cached line,
+>>> with the delays that were read once and for all at probe time.
+>>>
+>>> Cache the request and delays for DT devices regardless of
+>>> mdio_bus_data->needs_reset. That flag controls the registration-time
+>>> bus reset callback, but system resume calls stmmac_mdio_reset()
+>>> directly. The reset routine no longer looks at the device tree: where
+>>> the description is absent the cached descriptor is NULL and the delays
+>>> are zero, so the pulse remains a no-op.
+>>>
+>>> Keep acquisition conditional on CONFIG_STMMAC_PLATFORM, matching the
+>>> reset callback, so non-platform configurations do not request an unused
+>>> GPIO. Also skip acquisition for a disabled MDIO child: registering that
+>>> bus returns -ENODEV without calling its reset callback, and the driver
+>>> must retain the existing disabled-bus success path even if the unused
+>>> GPIO is unavailable. Remove the unnecessary gpio_desc forward declaration.
+>>>
+>>> Fixes: 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in stmmac_mdio_reset")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
+>>> Co-developed-by: James Hilliard <james.hilliard1@gmail.com>
+>>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>>
+>> Dostoyevsky commit message, I didn't read it. Ask the agent
+>> to be terse.
 > 
-> TypeScalar._attr_get() loads the value in {sel_var} with a plain
-> ynl_attr_get_u32() or ynl_attr_get_u16(), which is a native load. In
-> TypeScalar.__init__(), byte-order only becomes a C comment through
-> byte_order_comment. The struct member therefore holds the value in wire
-> order.
-> 
-> On a little-endian host, a big-endian selector value of 1 arrives as
-> 0x01000000. That fails the range check in the generated {enum}_str():
-> 
->     if (value < 0 || value >= (int)YNL_ARRAY_SIZE(map))
->         return NULL;
-> 
-> So every sub-message would fail with "enum-lookup-failed".
-> 
-> This combination already exists in-tree. obj-attrs in
-> Documentation/netlink/specs/nftables.yaml has:
-> 
->     name: type
->     type: u32
->     enum: object-type
->     byte-order: big-endian
->     ...
->     name: data
->     type: sub-message
->     sub-message: obj-data
->     selector: type
-> 
-> nftables is listed in GENS_UNSUP in tools/net/ynl/generated/Makefile, so
-> the default build does not generate it.
-> 
-> Before this patch, though, the generator passed the u32 as the
-> const char *sel argument, which failed at compile time. Now it silently
-> emits code that cannot decode these sub-messages.
-> 
-> Should the conversion normalize the byte order first, or should the
-> generator reject such specs?
-> 
-> Because of obj-attrs, the note below the commit message saying rt-route
-> encap is "the first enum-keyed sub-message in the YNL specs" also does
-> not seem accurate.
-> 
-> > +                f'if (!{parse_sel})',
-> > +                f'return ynl_submsg_failed(yarg, "{self.name}", "enum-lookup-failed");']
-> 
-> [Severity: Medium]
-> Is it intended that an unknown enum value aborts the whole message or
-> dump?
+> That commit message style mostly just came from the imported patch,
+> I'll change it to be more terse in the next revision:
+> https://lore.kernel.org/all/20260921015727.2643540-1-xiaolinkui@126.com/Hi James,
 
-Yes, this is intended. The same with string lookup fails.
+Thanks for picking this up. Agreed the commit message is too long;
+I'm fine with you trimming it for the next revision. Linus already
+gave his Reviewed-by on the code, so the logic is settled.
+
+Thanks,
+Linkui
 
 > 
-> ynl_submsg_failed() always returns YNL_PARSE_CB_ERROR.
-> ynl_dump_trampoline() passes that up, and __ynl_sock_read_msgs() stops
-> processing.
-> 
-> The string selector path behaves differently. parse_rsp_submsg() emits a
-> strcmp() chain that ends in return 0. An unknown string key, such as a
-> new rt-link kind, is skipped and parsing continues.
-> 
-> The enum path is also inconsistent within itself. A value that is in the
-> enum but has no formats entry falls through the strcmp() chain and
-> returns 0. A value outside the enum is a hard error.
-> 
-> Take the rt-route spec from this series. If a future kernel adds a new
-> LWTUNNEL_ENCAP_* type, wouldn't the generated client fail the entire
-> route dump as soon as one route uses that encap? Leaving the encap
-> undecoded would match the rest of YNL.
-> 
-> The commit message says:
-> 
->     or a new encap_type is missing from the spec file in future kernel,
->     the code will report "Sub-message key not set", the same with string
->     lookup fails.
-> 
-> This doesn't match the string path, which skips unknown keys silently.
+>> I looked at the code and from a GPIO PoV it does the right
+>> thing: use 1 as asserted and 0 as de-asserted RESET line.
+>>
+>> Reviewed-by: Linus Walleij <linusw@kernel.org>
+>>
+>> Yours,
+>> Linus Walleij
 
-The string patch used to failed like
-
-	if (!{sel_var})
-		return ynl_submsg_failed(yarg, "{self.name}", "{selector}");
-
-> 
-> Could this skip the sub-message instead, leaving it unset and returning
-> success, when the enum lookup misses?
-
-Jakub has suggested to use the current way other than *continue* to skip.
-
-Thanks
-Hangbin
-
-> 
-> [Severity: Low]
-> Is "enum-lookup-failed" the right value for the selector name argument?
-> ynl_submsg_failed() always uses this format with YNL_ERROR_SUBMSG_KEY:
-> 
->     "Parsing error: Sub-message key not set (msg %s, key %s)"
-> 
-> The user would see "Sub-message key not set (msg encap, key
-> enum-lookup-failed)". In this case the key was present but held an
-> unknown value.
-> 
-> The message also loses the real selector name (encap-type) and does not
-> report the numeric value that failed. To the caller, this looks the same
-> as a missing selector.
-> 
-> > +        else:
-> > +            parse_sel = sel_var
-> 
-> [ ... ]
-> 
-> > @@ -979,6 +997,12 @@ class Selector:
-> >      def is_external(self):
-> >          return self._external
-> >  
-> > +    def is_enum_val(self):
-> > +        return self.get_enum_name() is not None
-> > +
-> > +    def get_enum_name(self):
-> > +        return self.attr and self.attr.attr.get("enum")
-> > +
-> 
-> [Severity: Low]
-> Response parsing now supports enum selectors. Should the policy side be
-> addressed, or at least documented? TypeSubMessage._attr_typol() still
-> says:
-> 
->     # Reverse-parsing of the policy (ynl_err_walk() in ynl.c) does not
->     # support external selectors. No family uses sub-messages with external
->     # selector for requests so this is fine for now.
-> 
-> Only TypeString._attr_typol() emits .is_selector = 1.
-> TypeScalar._attr_typol() emits only .type = YNL_PT_U<N>, so the u16
-> encap-type selector never gets the flag.
-> 
-> As a result, ynl_err_walk_is_sel() never records the selector. For any
-> extack offset inside RTA_ENCAP, ynl_err_walk_report_one() then reaches
-> this code and the attribute path is cut off at .encap:
-> 
->     if (!selector) {
->         if (*n < str_sz)
->             *n += snprintf(str, str_sz, "(!selector)");
->         return 1;
->     }
-> 
-> For NLMSGERR_ATTR_MISS_NEST inside the encap nest, ynl_ext_ack_check()
-> leaves nest_pol at the outer route-attrs policy. The missing attribute
-> would then be named from the wrong policy.
-> 
-> newroute and delroute requests carry encap. The kernel does return
-> extack offsets inside RTA_ENCAP, for example NL_SET_ERR_MSG_ATTR on
-> tb[IOAM6_IPTUNNEL_*] in net/ipv6/ioam6_iptunnel.c.
-> 
-> ynl_err_walk_sel_policy() also assumes a string selector
-> (ynl_attr_get_str() plus strcmp()). It would need enum-to-string support
-> before is_selector could be set for scalar selectors.
-> 
-> The note below the commit message says this will be a follow-up. Could
-> the comment in _attr_typol() be updated to mention the enum/integer
-> selector limitation too?
-> 
-> -- 
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261008-ynl_rt_encap-v4-0-4ed2ccf7f949%40kylinos.cn
