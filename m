@@ -1,95 +1,95 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3CD33B6FB
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 16:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8939F4DEC0D
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 16:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791562233; cv=pass; b=dLSqFX/qBEyXzfcaj2oSBKzBIeZFsJPp41+sRF7oYEsDLjxh1snIlOlQaRnx+qQGtpKyu0qAFMA8GUxQqpDpCYi/vnxWGmz/QE6VvxX0lkWYHo5rf3KViNydlx2VKBMDo0Df+6tpd3vPZWrsRSKAbl3ntaMHrepWocVxLbZ/XYg=
+	t=1791562299; cv=pass; b=pU7keW7J6RNWkdgm5Bi0ehP+u1f4A7loxJgZIb5uaDzZ7GjhcRJFRX4m8azJs+f/EF2VTkmGL/fOgJFpqGI9nBdXJXCR4px0Fr82t8doLsUiogrvjDeK34xVKfsl7nW2YlKshfzgsQRnwICfgy03y7ZoEBHzl6zXzrfn2gAEHII=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791562233; c=relaxed/simple;
-	bh=l/2NvT8wAaZjhTPr/ZhLk8DKnV44dtAlDJhAZmm/nMg=;
+	s=arc-20240116; t=1791562299; c=relaxed/simple;
+	bh=wruMCtXy7SaidqAshqYiUfIEclThOLN0o3WVP1sMiRA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j6iUU1S5jFvnCJ5TyXNHo66o1BTUIs9LVe0l/kKTR9pgXhMxzMeV9JMiB1TzgJPuEPsHacmBq0xcoNZSL+foZkHJUpSY0xr/7aWLrZYP81d5W92sE34MkQu/0gg6zONXTbWMfh27RUu2r06v+WPkx0D66F8LKlpqqSmtieFSOaY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rnnKx1YM; arc=pass smtp.client-ip=209.85.208.45
+	 To:Cc:Content-Type; b=gyU2KRIJ1qrvRmlRBpXfL6ILyr8X/ZQLdUHHGQw/d19cs4zgl/glCrqpYneWOTsVqn/YQ7oyxDl9AOo8khhy67uIU3wOHBjQQYeSI93A/d66J0CxmJc0SH3dZVzp1RWz/mMKDmFalj+2Ou8S1iel/MJ2uf5cSD8E9t0i4emybNc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VbAIioPv; arc=pass smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rnnKx1YM"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6aae147ef9dso13107a12.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 09:10:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791562231; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VbAIioPv"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6afac79b3a3so12021a12.1
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 09:11:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791562296; cv=none;
         d=google.com; s=arc-20260327;
-        b=V74vgvuPZzeNtJM6jQzoYElpOTGox+8uYsiBxZHbMcPhr4j4lVIEX1SoSiTMTZMmt6
-         yU4xh04enqKXnQmLvRfYiPi/Py1yDpeRb/Sf7G0m7uALwXJq/LgKBhykcvBOs4nka1Pn
-         m5T/in8Xhg4J+mJV9z1yi9iajJkShWWV9/B3zeX2yo0t0WpLoXi6cwb0/Y/0njlZHNky
-         uvxGuTdiIs43aO6bUzX5KSvpqmHuDIzpSmRsoL8uSm2ug0i4+dcaTkKofnuQY8DAhZYP
-         rnvbbVoZ/V/66zofm0FmMQImvPdq9jW3GZxc+kPOd74JwsLbT+bro//Cc/NKW6iyRv0S
-         YOAw==
+        b=njh9LjL0BjVI77Q8cgL8LyMVyVpS9uUGx878lqQoloBVpK9yltDFZ2XKzaRkkOU4xd
+         l3yxYMD0QYdIE2evHPS6KU3DsMOhOs+Cmp90rFh2HpYc/44s4eO/wFaaAmY0sl+5uSAl
+         l1AZGnPfTNcSBPGSuRG4Qz+ZKL43aXKGKlz7SX5R9+6Dfz/GUMcjDgCLe2jIQmYZBuOy
+         xxNy5lpfCBpJvItos8t/PAOzcLNUWK0OjGOaMenvTNhZvrecBr7YibaFTwS/gtteNtap
+         V8wGoDUdSiia1q5OwwG2QxSCXNfZckWiVk7K2+byLOzYW4fx4G5bTwzcwhq7IqPqiEuu
+         UTVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Shr7ewCDcxmR41j8pJezsmsxST+IY4eGTxrK4PfmAFg=;
-        fh=J19r0BP5XvfEW6CeUVs7C7OWBV2h/VlT2wF8WET/Ggw=;
-        b=VVvS6tT0wPTOcQkxAZObFdWDCzRZQVNoKXn5rBSMTvlRcDbpHEnDzf/NEWJRX80/aJ
-         mHzNjfAp9eRbhQvk6aL2/M0yweAi/2LlfCnX94K3kEgKGjwrxk1rrIaL4iH8Innj03Eq
-         +NP744MNysCialfg867Q7PuQtCrCwt5KQ/gX/g057GZxPQ7Kz97h+YL6yBxlfTEQvWOw
-         ospyYTZoUFO98yZq7Zs+QQXRhMzCaViQ7LNEjFuc0uAVc1UoeEm3v2IXgoJ/qnM2Io5C
-         gyEvPymptqarK2QREn00m3jhSSNzyL+AUTJwdr9CTGM0Aw3jF6D7z80OiIP6yX2xTFjO
-         gyzw==;
+        bh=FMY8+4K3G/+VX3FzbqjT/yR5SuMJ7etOIbd7i1CeENM=;
+        fh=Xl4Z2tU1YTLP8q5GI+WE7F/DaXrvYkcUhQrzHiF61qE=;
+        b=BXWFhzYsO8WSLsfLLtXDj2L8aIC4BdyN21ucVUDYH8PXMDxJ8VTqOp8eAGO9yK/yzo
+         CYc0nL7fbRksdvfdPVMt31k4i62Ry37FZYiqwrzf1sQXMaXJXjUqXc3Y6uuqUXc8qUKW
+         BNV/nNm8RwIMgWTHZAdUZu3FsFuGkexkPoG3Ne9qvstshH7A8yRSLGwemX/pc1EaYmnC
+         W/NVmUuSXDrBspLYtfD5EHuOdPhkaoRBBp2LAqCL+byX0AaZU36nsBA+4C36T6jSmt0o
+         47ty4J8OW4wrKV/8ZvtfpUFxiMrz8m4h/NR9EX3WC8qV22Yi0c2+TmT2aHUu0Nol9lhc
+         Ktfw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791562231; x=1792167031; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1791562296; x=1792167096; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Shr7ewCDcxmR41j8pJezsmsxST+IY4eGTxrK4PfmAFg=;
-        b=rnnKx1YMGVv6LcMJI3ni0RBJ05j7UP7eLxF05QYbTCPY68PYu3RkbGwhfVwUP+tUvT
-         J4ENfjUQ+uk/qDOkoVAJRD8pZE2r8wnE6egJBWtXyph5GL0iP8hfeePVnoFehAnNRdB0
-         83CR/klE+scGAMTSJlNxV/ChReMXOFomQoKlcsYhypiSR+BxJkNYpJokIhlvnF8sKqzT
-         W1bJIvvgQwgYo0pL82adLeuASsykp1cSogmisXOR0bmlzYhI7hi0X4jzXflkmGCCz8VK
-         Ox+0lh3rObmzoGPJ+0S745nRmAvA+cGeEHIj3FGU0ayWU4H11nyBan1Boky+fZf6/s0/
-         ReXw==
+        bh=FMY8+4K3G/+VX3FzbqjT/yR5SuMJ7etOIbd7i1CeENM=;
+        b=VbAIioPv5ZrQGr2UOclc2HATlUsoTuE/N7m6AKiGDp3g7O7YsQ6hHfnOE8YR1XQCpb
+         2IzR/dN3t0QE/8paeKo4ph5JmVzXv9u8JoIFRwq37ewzgIL/R3jI7QxpjOA1BgDJE79S
+         C8GKR9P7K088GxbjT6jaIMXWfnoTjtbDkbj2YeRxQhmvuydZF529udmbmMJY2v3xo5bJ
+         UKEvMtA2SIecJn0WiZmcQJWtKl2x/vu/T7CV0CU2SRv7dRvzl37KMFgwgH9mnb1JZD2Q
+         MfrXwHqYbcGKdTFt4B24/3mRCaDnf7QxWS1D8u9TCMWmGLO4ODyp9yo9j46/Sm6LmUsG
+         yefg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791562231; x=1792167031;
+        d=1e100.net; s=20260707; t=1791562296; x=1792167096;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Shr7ewCDcxmR41j8pJezsmsxST+IY4eGTxrK4PfmAFg=;
-        b=ijp73qEsYoi/3ATiEUEopm8OZywXSbiTLDy2scD+SvcRG0RfPuG/5ZeEzeJoIDJtNs
-         Bi2mmAYsEjhGfrtniTmffEh06r0APNECiQfYStN46PwnUnTcNunui5WGVHrk2ModIjLw
-         egWVDHd1NArtr1xrJaZylumuo0PHQORIX+kPCvWBjgVPiF3XK1MS2rJsGK7Wz+QrJ1H9
-         LNmB+MkZGgz/GG65APe1Aek4be5C5m+2ABmmTWxzg6Q5llWLI2FRpi+PWmOtPwWdlz8c
-         7y0dWA6b1QQm3pZq1Yuo0h1XneYKgA691bunw41LQWApktGJXOjD83j0HXLPGY7AjPKf
-         QcOA==
-X-Forwarded-Encrypted: i=1; AKwUvBzyy33a4sEAobq9PyXC9gIOMth/B+RaDm3l7eWYaCKlTG566INN+qplYqhAZpLpvUYl5iU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKNkxTvtcEU3wgTZZm08vwGbtv8qLtTBI40fjO3p8Wr98BHqm7e
-	FWyr6J+DzbY5gTBJQjo6ELevaURneQzAVlzlnl0f3Yj5L/0RGTqJ2WB9TrnuP1cVSpDnErTve2T
-	s4uORJPySGgOzea8ZDGiszaOrKj+TLlOo6wiTEnht
-X-Gm-Gg: AYBFou3IKUL2tSuesxgPUpO19tb7Rm9mkNJz3DgvO4HzBzRsbb5ZH6HyavwG31+SySw
-	Cna91y12lTF42ssfvxZ8FbrelhEsK+OKTN/KkomMBNjLVTjJ4BYEFW3nMvEQg9k4aX0sOLSeg3h
-	3IdlXH2H/p7N5jHVv9/PtjbMQo3pQGI5+M4GSNQ8JfzfieEk4knz2R7UAu6d0lNToYjgAThv1MT
-	t38rUfU+qUJZ2jZQ9MIT58DrhSodcLj/WfZT3yuFhfucIhMc6rQcu5NApgW2Jpjn33wsDKSFJXV
-	gY1nBM4UwZNG7DQo6DnASTlDK9IgOYzyYyjmejt0suj51SBT/lgY0Q==
-X-Received: by 2002:aa7:d743:0:b0:6a6:7dff:61ab with SMTP id
- 4fb4d7f45d1cf-6b17b963117mr42270a12.15.1791562230138; Fri, 09 Oct 2026
- 09:10:30 -0700 (PDT)
+        bh=FMY8+4K3G/+VX3FzbqjT/yR5SuMJ7etOIbd7i1CeENM=;
+        b=JqstUS2idzxBC84vHBzhxK6Vk7Ain51rO7doDIUuhp+YqFRvPMQ1nTWUAviV80oANX
+         no4PLvLKrwS9mZSNOoflrWFTjufuUiIFT3KiErlvETkxm3nORMZ/ldartK1PEZ+xMKJK
+         TfA/xxmncIGTvF79wi00jRcTd9Kxm0bef7TYIZl73TQTAplo1+gumxX6IaDr0OrcvgiX
+         2YLSZva6don4pC4FFxDx7BhHSwC7JAoZsez6aXFISAj8VNmvzE7vybMtlJndqp7/G3ze
+         j4mKKczPSiatDkjW38QcceIcmKoIvdCVHp2KG5gAyQoGhmKVsVYqKSFEmCHCo9365Enk
+         rPXQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw7DS8tjgQfWYCN3bTd7PXdh/XB3JycJzkJIWFinA/aUe7M37rwFgy1AsH3FS9nLYV+ttk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI15qVTOnK+Po8oOL9RfiJU/m5T69gcGp606upnPAf9aoWsPmGx
+	DaojrG4KYgQgi1IJwPijUiRryWYU9t6u+MSlFDtlqzhox/J04m86QAQpBuJ2uIHIhhGmawf8++y
+	jev2AFdyB5doVyqccGPPfzDbdgwHN26Kh0qpDxbguuJ/B5OnQqJRj+tyT
+X-Gm-Gg: AYBFou0Fl7UNET84KT8UIAQtLREw17WlS2X5j04S5L4MnPoUw42pXktDujB7cOOzhB0
+	hMFwwQERzD4S9AL5dEKt80uAw0oyy4XwJPH7m7DSG/60ieQGK0rk7jQAU+EMIifIRBBq13gftGA
+	yFvVifB1NaqzJErNtUFxJqO5VwLx5PqThU8l9/vRceOyO4UCDr/hxZ5Vrl8EZL61Ft0JwVs8v7F
+	Pub7v06jUQE3QITObLME5upmQSp1dXObVRwKcR6iaZBCBzAUCudkpjs+qLfvwC1AxX43TuJyCAb
+	cJYUwXUB05qRInOwjWTLwYAH7oG/++Gbf5hEqHOVJyj/H/9+iEps7yc=
+X-Received: by 2002:a05:6402:404e:20b0:6a9:f353:ef65 with SMTP id
+ 4fb4d7f45d1cf-6b177f1c488mr52368a12.5.1791562295275; Fri, 09 Oct 2026
+ 09:11:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com> <20261006-b4-skbuff-bug-on-v1-3-1b4434c5357c@toxicpanda.com>
-In-Reply-To: <20261006-b4-skbuff-bug-on-v1-3-1b4434c5357c@toxicpanda.com>
+References: <20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com> <20261006-b4-skbuff-bug-on-v1-8-1b4434c5357c@toxicpanda.com>
+In-Reply-To: <20261006-b4-skbuff-bug-on-v1-8-1b4434c5357c@toxicpanda.com>
 From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 9 Oct 2026 09:10:18 -0700
-X-Gm-Features: AclHuK--6z6-8oIyC9Y_LYzNmkmzq3sx298S05qv9PBQ53pFLOBymcY5H1fz2x8
-Message-ID: <CAHS8izMK_RDcYBZq3AZEDcxnRHWRt3ctOkPMvoA40XUmCs7swQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/9] net: skbuff: don't BUG() on a bad frag_list
- layout in skb_segment()
+Date: Fri, 9 Oct 2026 09:11:23 -0700
+X-Gm-Features: AclHuK9fcYwhDbADMIDURGeGAhGxa_d-APkp5QvjpXYNwtTkKCU00ou2GsgfiEU
+Message-ID: <CAHS8izPxwo35ExaJvK5FgGG3TGFS5uGybk5O=ZoY_1=z15Z-ug@mail.gmail.com>
+Subject: Re: [PATCH net-next 8/9] net: skbuff: don't BUG() on a missing
+ head_frag in skb_zerocopy()
 To: Josef Bacik <josef@toxicpanda.com>
 Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
@@ -101,24 +101,18 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Oct 6, 2026 at 10:10=E2=80=AFAM Josef Bacik <josef@toxicpanda.com> =
 wrote:
 >
-> skb_segment()'s frag_list walk assumes the GRO-shaped layout it expects
-> and BUG()s when the layout doesn't match.  Anybody who can get a
-> malformed GSO skb to a segmentation point gets to crash the box.  Most
-> recently commit d5dc1e69fd72 ("inet: frags: strip GSO state from
-> fragments before reassembly") fixed one that an unprivileged user could
-> trigger with two writes to a tap device in their own user namespace.
-> commit 3382a1ed7f77 ("net: fix udp gso skb_segment after pull from
-> frag_list") fixed another.
->
-> skb_segment() already has an error path for a bad layout: the
-> too-many-frags check sets -EINVAL and frees the partial segment list.
-> Warn once and take that path for the four layout checks.  The packet
-> gets dropped, which is what should happen to a packet we can't segment.
->
-> The one check that runs after skb_clone() and before the clone is
-> linked into the segment list frees the clone itself.
+> skb_zerocopy() BUG()s if @from has no head_frag and the caller passed
+> hlen =3D=3D 0, meaning the caller didn't ask for the head to be copied an=
+d
+> the head can't be referenced as a page either.  The check runs before
+> anything is touched, and skb_zerocopy() already documents -EFAULT for
+> bad skb geometry.  Warn once and return that.
 >
 > Assisted-by: LLM
 > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 
 Reviewed-by: Mina Almasry <almasrymina@google.com>
+
+--=20
+Thanks,
+Mina
