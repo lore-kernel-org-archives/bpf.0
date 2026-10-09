@@ -1,64 +1,64 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129724C6F04
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EBD4CA28B
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542935; cv=none; b=Rw4KvO6P7rrca1ZNjCkwppRcTkttYH9nsmo2rmouktKLuV+TT7QXrSHZXRGbRDGQLEW0QmIDbJMy9s7dxi6X5udAosAOPBFSbESHo3AYgjBV0Gpg46CExWZVBL/7LA15V/8N0N5T8XjG1y2D5unMaVr8jo2MR6tuuIg6MVQThMA=
+	t=1791542935; cv=none; b=FkComnsW7/fQ+byUswj6RK/W+p09JRpwECKVj7dfZfQsvvl1OhwfnfifYE5jXAQuJQv6kEgQ8AzzrFQX19R2yyrTEmCTVu/Ve8hbn+c/FcbWfPwtdM+Xr7tJKKtJHyuOg+z4u9KySCw0XXyKuT2awtvQmkxuw6iDdCNxsMdiyDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791542935; c=relaxed/simple;
-	bh=uQI7xSPqRXoszFdoZM6PnEE1Zw6sFSNRpO2wfknBPVs=;
+	bh=xkrC+Y4jVPlkvkZnDpEA6iV72nVEtBfJtdDK8kY5jhc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NW6mENKprl4XxM+Rr7dSVsT0FwnBQthmbNTHTs5tJh5QIweBYhrN0EWggKCH8Qp6yKWYjVq9ltSHAiTijsnf4zvYZC5uwlZ4CbHMqc+Vl58YRYLU+4SfJOLOaiO8YSDD0AIQd0Pv5diulJz0q9hqb0ua5/fq+oO5M1t+R3uN9U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a8GM0juY; arc=none smtp.client-ip=209.85.215.171
+	 MIME-Version:Content-Type; b=m4LPgPBYb2UZg39pUjT2t6YGU9aD4IndSJNLBWITnU2PodAR5DX8BIxeSpUFSiyyQz9XD2G0hBy8G7nHE4j4PWhGHCRXm2ZD7qz0gD1+8dEurQYj0h7PAqfHJmsVrMa2D3hWdlSgn3FcD4wKzZcc0xA8QczGIUU82obPhcD/m2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iQGLnmNs; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a8GM0juY"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cc502d509c0so2544213a12.2
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iQGLnmNs"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3a02551822eso1374739a91.1
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791542920; x=1792147720; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791542921; x=1792147721; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=YTyEPHY7hoUSbHXNJJkAXEk6wJpFT0+23x1bFbd/gL0=;
-        b=a8GM0juYOr4QQuxiSb0jEZjV5fAXxSgwF4I3d5odx85xbMuazmdOP1+yqLB2hGLjzP
-         YTn3WpJjXaSuMxbnfYxGWQpgidopMJRhh4DPz9WGj+2wWPLQH1qSiYnpShOBmrXylEOw
-         0w5UULP6QJb5YD3tmSaRzGpGFZKU4eHZ9cApNW9DrpW7pDn23coQqlVh13jwKjUCwc6M
-         sw1kRzfv6HCzKg8zth0N0keTB2ieHIE1l6bD2KiU22T/s+GUiTpnB68AirMVFztTJPJo
-         trMTNGqFCEtkXDozYmzeQB8Yyc1LfSHlgOSNbdeQJnstUYKYvzY94laRePCco3ycrj1o
-         BVKg==
+        bh=BrMLDIMrZWokS8TNhrYInniTae1NmAetXK3y9Hw/tEY=;
+        b=iQGLnmNsFkNVxErls8LbdfCh3bABH7dSe4egW+gYW3lxGHMQMqpLy0d23ddhEKu1Lb
+         gWhYM0R/1NaV6b6LZ5JyJ4beu/X14ncofzsjci39tTwOAgFQQIFPpYJMhtLjM9rtGTUd
+         Hn5CyrpZK/dxy2f9OqLoh7A/Pe1N2HmeoU33XlGCP3866cWz5gY7+THnmWZfSOK1ozlM
+         YWSUAJXBN9e26lONgOnrU1UG7S0RqvYxbgAI+RFPUY9cstd7qI/mLLcTtreRl6qTTm4T
+         oi4ml1JkK78GZgCymEy1v8lpkK1LZ1D1JZ1WDb1r/KepgaCOVtTk+20ShnnOXMibB4AP
+         G6yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791542920; x=1792147720;
+        d=1e100.net; s=20260707; t=1791542921; x=1792147721;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YTyEPHY7hoUSbHXNJJkAXEk6wJpFT0+23x1bFbd/gL0=;
-        b=y+hc3I9/xRG7gMiiOJqsJSliB7zOaxsitMrvaPREtRj7//L2lUVXc0TvYv75byr+26
-         2ln4NkoEB5Gxwht94gSC/tqVg0dEx+avTXw88M95duq61ZvFRj5PJ9armt+OUCo7f1qL
-         lPJE6VfNGsQ4fjLd5M+QWFLQqb4n+NIJdcuEsxldY0a+bxnyGqBRAJHQvXtNWqRPMiwY
-         6FXiTW+Vlw0jEZn/vDpFRtG1BKNr5FQP0P9hGZHx5WDbv7Bzkoix9KEvI66COK18grAq
-         6cAs+0AfJnxxPKAOOhGlaLR01FdjwN/RGi6kUxsa8Wryv+OLUiGxfwtx8apByLRBNA6Z
-         kz0Q==
-X-Gm-Message-State: AFq9FYLl8miW9wPTw4uakflYUUrFxVBCUMUpOuhRrXLbMGcwRatElNWX
-	cwRxQkrUy+ObeVAI7B538CwvlmTfianNjcEKEjspqyk55aCKyvBJUGYBtKydD59N
-X-Gm-Gg: AYBFou1ivrHm6/xa+0gpLwAeU23oYSaBMaV5AdQ3MDD6g6lhJZgM42V04SYlx9v4V+S
-	8shMkKbRShq5AOMzta/F+3wID2J2bVmj9jsNveYZN9jhh9cLJ57MHw3Fx+URKM1Y7wBvutbW1zC
-	yGV+wiLm1HXI8jGYsFkws4LmgTEe78p5V+BCJzl2b4Aczlj1HVK+uEnG8sAcx0IZHBW0tZIc3z5
-	3xP3vHitHvqAex71hZnsYpxbU86MYlWFqD/9sH9gnWO6RyCt/QVDrVkCHEaENA1Fj7rl0yhJcJq
-	yl6zHNK1lkVTKx0IftftidJ3AfOp96eOgQSvUoym9Vzb+CMMntEtb0IBdnPaR4QxjiR9pUw8G37
-	zPOUPIEG+fRr14rm3+oC8qwGthFwK0tIvPXXbItfTrP0+cSUOCZmitTv6swl6nhMxrLiEya7WZ9
-	M+QQ53Hi29h2QA3U0OeJVEzk1qlqPE6YWIgvp6AJrF2YOJzvJS8k43iIv18/2MDzNbIfvcyknSX
-	GYIqU60HTq7bv8=
-X-Received: by 2002:a17:90b:384a:b0:3a8:bb56:f1ef with SMTP id 98e67ed59e1d1-3ab3a2902a2mr1411696a91.2.1791542920079;
-        Fri, 09 Oct 2026 03:48:40 -0700 (PDT)
+        bh=BrMLDIMrZWokS8TNhrYInniTae1NmAetXK3y9Hw/tEY=;
+        b=M092huSF8DthLtmIUu3rLsYKC0MFB5YUpR+qH9reVkNwG9WN3fjY0AhWVtR61Un0DV
+         egSI7c91ZsGgKCs0Yc6mDJfEfSj8CUarmOMBlABxgvOwQTCNsUYrlHW9PXSLj6Eandgw
+         8iNNqmAJkGCz79KNgJVHr7KXQ15rnIes0zxuearmvn/ACCu0WUhiVtd7vZZU8zcOULFl
+         99u3qhpzxeb3ZZqjF3Ij4I+WdsERgUi/W4e8FbnFOG3RVuQssHuWyvIfm17J5wvl0al2
+         k0+LJ8awMqOKbXFFAop8r1c3nrSI8eUlq8xPrnDce0IN054T9WON5ZIHqO13/EKCSAKP
+         wnWA==
+X-Gm-Message-State: AFq9FYIO59ChePUukRabyWjv0OUoe8Dq4Hj5rKb4N7WIZGJ4954iAUlp
+	huvPViYQk6WPE+d9If3twkorWcbiUtJqRutSoM+apC7HFW2Rllzruq4TVbbzC3HM
+X-Gm-Gg: AYBFou0R5oeflPzz6oGwli1kylPjjH6y+7/SR3/fMqVcLJ0D0K/4IQJfLGDER0fAyMk
+	BTrIhd/ydT7X7SJ6sEjIPipFChFwQ0iBTuR9koscYqLw/28nUD8CiuzihL5ZoRsyVp07TBgHwnt
+	HBO5gTmWUQ6kfamcmkZN8p+YijsSwx4JwIP3Tt7GVDZB3IwlP7Zd3xwVhaEqEP48f+jVQ65TBkL
+	UdR9WowwksrBwhO23+0ul/JZyh2NUfBFRFEnl6f28eiaDdsNRNbNZt+9WB49L+qenKueDepj/0K
+	Ew/lraWwTfuyXKXqWzeJ9gKuDZZwH4xKicsldz+W/dDXTIM8L2YiRDXyMiU6Kgy9QpgY2JvQWp7
+	MsbbG0EAQS8Wg+AxwtMzp+A9oLc4t59mIaApjSidrpYDPyYvrKBEtwRQksh5hOYqgGJNAfB7poe
+	7CU5Dxfm6+kcpi7MuleIuyWSOvxI2plZS2KYop/4/1zkWZluGnp/nCSJtxlKyNZheWUgL2b7buV
+	SDQZCfHV3ep59c=
+X-Received: by 2002:a17:90b:384b:b0:3a0:295e:6e61 with SMTP id 98e67ed59e1d1-3ab3a953717mr885510a91.12.1791542921508;
+        Fri, 09 Oct 2026 03:48:41 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.39
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:39 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:41 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -66,10 +66,11 @@ Cc: andrii@kernel.org,
 	daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
+	Eduard Zingerman <ezingerman@fb.com>,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 29/51] bpf: add bpf_same_memory_origin()
-Date: Fri,  9 Oct 2026 03:47:47 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-29-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 31/51] bpf: record basic-block ends in insn_aux_data
+Date: Fri,  9 Oct 2026 03:47:49 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-31-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,94 +83,72 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-When dealing with loops like:
+From: Eduard Zingerman <ezingerman@fb.com>
 
-  for (ptr = ...; ptr < end_ptr; ptr += 8)
-    ...
-
-Scalar evolution needs to know if ptr and end_ptr identify a same
-memory location (possibly with different offsets). If they do,
-it is sound to attempt to infer iteration bounds for such a loop.
+SCEV needs information about the program's basic-block structure.
+Piggyback on compute_predecessors() and set
+insn_aux_data->bb_end for an instruction if:
+- it has multiple successors, or
+- its sole successor has multiple predecessors, or
+- it is a jump instruction.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/verifier.c        | 49 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 51 insertions(+)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/loops.c           | 19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 711a4cb24c06..6daa0c826f25 100644
+index 7fb1e315de48..1458e50a1ad1 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1822,6 +1822,8 @@ struct arg_access_info
- bpf_global_subprog_stack_access_bytes(struct bpf_verifier_env *env,
- 				      struct bpf_insn *insn, int arg, int insn_idx);
- int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
-+bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
-+			    const struct bpf_reg_state *reg_b);
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 range, u16 base, u16 step);
- bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_reg_state *b);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f8e6b40c2121..bf0722752e76 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17280,6 +17280,55 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 	return 0;
- }
+@@ -741,6 +741,7 @@ struct bpf_insn_aux_data {
+ 	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
+ 	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
+ 	bool arena_scalar; /* ldx/stx/st/atomic through a number, it's an address in arena */
++	bool bb_end; /* last instruction of a basic block */
+ 	u8 alu_state; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+ 	 * pattern for a bpf_fastcall call.
+diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+index 8a6dc805e559..2568079c2945 100644
+--- a/kernel/bpf/loops.c
++++ b/kernel/bpf/loops.c
+@@ -5,8 +5,23 @@
+ #include <linux/sched/signal.h>
+ #include <linux/bpf_verifier.h>
  
-+/*
-+ * Many checks done by this function are quite conservative.
-+ * This is because main verification pass does not maintain
-+ * enough information to track object identities for some
-+ * of the interesting types, e.g. PTR_TO_MEM.
-+ */
-+bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
-+			    const struct bpf_reg_state *reg_b)
++static bool is_cfg_jump(struct bpf_insn *insn)
 +{
-+	if (reg_a == reg_b)
-+		return true;
-+	/* Require matching flags and base types. */
-+	if (reg_a->type != reg_b->type)
-+		return false;
-+	/* NULL can't be compared to some base+offset pointer. */
-+	if (type_may_be_null(reg_a->type))
-+		return false;
++	u8 class = BPF_CLASS(insn->code);
++	u8 opcode = BPF_OP(insn->code);
 +
-+	switch (base_type(reg_a->type)) {
-+	case PTR_TO_STACK:
-+		return reg_a->frameno == reg_b->frameno;
-+	case PTR_TO_MAP_VALUE:
-+		if (reg_a->map_ptr != reg_b->map_ptr || reg_a->map_uid != reg_b->map_uid)
-+			return false;
-+		if (reg_a->id && reg_a->id == reg_b->id)
-+			return true;
-+		/*
-+		 * A plain single-element array has one stable value address,
-+		 * but not when BPF_F_INNER_MAP is set, see arraymap.c:array_map_meta_equal().
-+		 */
-+		if (reg_a->map_ptr->map_type == BPF_MAP_TYPE_ARRAY &&
-+		    reg_a->map_ptr->max_entries == 1 &&
-+		    !(reg_a->map_ptr->map_flags & BPF_F_INNER_MAP))
-+			return true;
-+		/*
-+		 * The rules above can be simplified / relaxed if:
-+		 * - fresh IDs would always be assigned for map-value lookups;
-+		 * - direct map value loads would always have and ID of zero.
-+		 */
-+		return false;
-+	case PTR_TO_MEM:
-+	case PTR_TO_BUF:
-+		return reg_a->id && reg_a->id == reg_b->id;
-+
++	switch (class) {
++	case BPF_JMP:
++	case BPF_JMP32:
++		return opcode != BPF_CALL;
 +	default:
 +		return false;
 +	}
 +}
 +
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 range, u16 base, u16 step)
+ static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env *env)
  {
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+ 	struct bpf_iarray *succ, *preds, **result;
+ 	struct bpf_prog *prog = env->prog;
+ 	u32 *num_preds, i, s, len = prog->len;
+@@ -54,6 +69,10 @@ static struct bpf_iarray **compute_predecessors(struct bpf_verifier_env *env)
+ 			preds = result[s];
+ 			preds->items[preds->cnt++] = i;
+ 		}
++		if (succ->cnt > 1 ||
++		    (succ->cnt == 1 && num_preds[succ->items[0]] > 1) ||
++		    is_cfg_jump(insn))
++			aux[i].bb_end = true;
+ 		if (bpf_is_ldimm64(insn))
+ 			i++;
+ 	}
 
 -- 
 2.53.0
