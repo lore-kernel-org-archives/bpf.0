@@ -1,84 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B904DE702
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:45:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B88947255E
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791546368; cv=none; b=snE7lxST2T45MEjHiozlul/ZQtXXLWcuS/XwCcF2zaON1UWH4o2ckWhQsbmHZnuhwEYKCxGNNd9MF+qhRYxB0x60WE20ATa7MQLm54n5E+mrVQUMnYyjtYHG6AK9/mODmes4OTIimum1RBsiFUcCD6uXAvG4fj4Gwu7KuDt9bYk=
+	t=1791546615; cv=none; b=cvl93mlmNENErGzej3kUpO7CJ0qMwnCv+Ie6a5WeCbHbRjni7boVumle1QDI1Nrwfp4BLWnB3QM+W8PqpFbCoAhytFpVh29BhsnUGuif+MVbXQ7gvS3SA5HnLS/Wd7+/9lSZsy43EIfM/YhcHBpWIthvHODRry5VUf+vKnPkGs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791546368; c=relaxed/simple;
-	bh=NVPaqSDIXSTjy8fxRkeSMAdK+zG0lBRDo1RFRH1yotE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=lIPfYjRpBWhZavCQDH8XOgs5QJuBFWq/3DPL9a/5ITZyatVbB1efftQe0BP3hX36M5E1zCmPo0xrfGJOcl4DcY7skeSK/zLrBbZa+o7ttXz5Jvn0JuWY910zNNqKGP6bXFYxrSdkuxS//NSkKNqaPKNmxyvdWXemRjjizz7sw/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/9VbafY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791546615; c=relaxed/simple;
+	bh=amYucAcDmPCkcehcLPn9PrDcY0auZTNKBGoJiNjUlK8=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=nbw79GGlbQyrKzJvPPcTp0JLSUdmDRRqHfRjsoRB9+bWOlHRlHH2o6dgULwDVZKwa9c9mB/T9TjYiPft+oTRjDnWnax3YZbPgY4ezuW+JBqrulRK46kbEIRd/Eyfc03D9esOqfSbAzXjBZGm3eT7VEi143t01CbxsnKtP/DUDxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctOCWIJA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/9VbafY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CFF41F000FF;
-	Fri,  9 Oct 2026 11:45:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ctOCWIJA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A03211F00893;
+	Fri,  9 Oct 2026 11:50:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791546356;
-	bh=cNt3RcynQHus0N86hrMSjPweI0aptdlWhaUg7CB8GfY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=j/9VbafYay+M0CB599ZyvoQH8nak5vOGKHJB8ryus55fGuuGZN9Eo/pWqaWeY182a
-	 cdih0qz4zvxrfru3nPQbczDNAW0mUmHd8rWV3ZH3AXYQABN0LF9643zuhdv4XeIVaL
-	 xnB4R2ZZNaO9OOaEugNJR3e+f3m+IsCq8Ey/AP1rqT1pVwtsn9vQDl4Iw4CefwnttT
-	 eyg0uuHrWdNChtiu02lO8CumtoHiTKskvPGtC8DT3+m0AWPH0y8ARtZHxAeOvVyR8q
-	 uDC2kGIwQHUVZ9bERGb9m/JDtJbwiatzBQQmlkW+aTZYDJth16dDagSL9Fnbq4rVAl
-	 8iQsyMIg3ooFA==
-Content-Type: multipart/mixed; boundary="===============7849088717470891536=="
+	s=k20260515; t=1791546606;
+	bh=yVyPF873XWpQxHotEmxo4fXBocBrCvo+iv9dWoB7q3M=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ctOCWIJAxcqMZJBGGdoFvbXqsLNE84IQZgBSe3wqh4Y5P+3yStu9aVmITsoagWDIg
+	 Gw0e84iXqn0Y2vRc5nZi6AO0/njEMNPr/ze4GlkgQeJyv79ghf61gCF7zOhL+YhFyZ
+	 U+TygWHyqTnm8IseI9LH2j6E3kWjecbsoIBE15rRmZG2SvMn6aDhgWqdlvKCCfev5T
+	 T5SD3E4VTQB/cXlf3QDxj6zRcDR7U23DvvoPl87k3cWDQuUKWa4srC7DGL5eDl/kE1
+	 9sQdpIiyucY2CRqtYRNd1rvwhP+UZnFgz90XWWap2s/ZksgjVfI85yMaHXyHD0j2ea
+	 aqOTg2dD1n4fw==
+Message-ID: <sashiko-outbox-165429@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 net-next 13/14] selftests: drv-net: test AF_XDP
+ zero-copy with an SKB peer
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261008114909.734364-14-maciej.fijalkowski@intel.com>
+References: <20261008114909.734364-1-maciej.fijalkowski@intel.com>
+ <20261008114909.734364-14-maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 09 Oct 2026 11:50:06 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <032678d06a32de910489f24f09b23b7c9bbcd523faf3f99af3beabe27bc95758@mail.kernel.org>
-In-Reply-To: <20261009-scev-minimal-rebase-v3-31-bcba9bc53ac9@gmail.com>
-References: <20261009-scev-minimal-rebase-v3-31-bcba9bc53ac9@gmail.com>
-Subject: Re: [PATCH bpf-next v3 31/51] bpf: record basic-block ends in insn_aux_data
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
-Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,ezingerman@fb.com,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  9 Oct 2026 11:45:54 +0000 (UTC)
 
---===============7849088717470891536==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] selftests: drv-net: xsk.py crashes due to missing test_xsk_case_def=
+s.h dependency
+--
 
-> bpf: record basic-block ends in insn_aux_data
+commit e8144917db97e8dcd48aff778b6c6ea34e332b01
+Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-TL;DR: Commit message only: author email (ezingerman@fb.com) doesn't match the
-Signed-off-by (eddyz87@gmail.com); no code bug. Reset the author or add a
-matching Signed-off-by?
+selftests: drv-net: test AF_XDP zero-copy with an SKB peer
 
-> bpf: record basic-block ends in insn_aux_data
->
-> SCEV needs information about the program's basic-block structure.
-> Piggyback on compute_predecessors() and set
-> insn_aux_data->bb_end for an instruction if:
-> - it has multiple successors, or
-> - its sole successor has multiple predecessors, or
-> - it is a jump instruction.
->
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+This commit introduces xsk.py to test hardware AF_XDP cases using a
+device under test and a remote xskxceiver pair. It adds the script to the
+drivers/net/hw selftests and utilizes Python networking helpers for remote
+execution. The runner dynamically parses test cases from the C header
+definitions in the net/lib subsystem.
 
-This isn't a bug in the code, but the commit author is
-Eduard Zingerman <ezingerman@fb.com> while the only Signed-off-by is
-Eduard Zingerman <eddyz87@gmail.com>.
+> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/test=
+ing/selftests/drivers/net/hw/Makefile
+> index 18ce235a77f84..02e48e74f6c6c 100644
+> --- a/tools/testing/selftests/drivers/net/hw/Makefile
+> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
+> @@ -52,6 +52,7 @@ TEST_PROGS =3D \
+>  	uso.py \
+>  	vlan.py \
+>  	xdp_metadata.py \
+> +	xsk.py \
+>  	xsk_reconfig.py \
+>  	#
 
-checkpatch.pl reports this as a "From:/Signed-off-by: email address
-mismatch".  The other commits in this series use eddyz87@gmail.com as the
-author.
+[Severity: Low]
+Does xsk.py rely on any external test files that need to be explicitly
+copied during out-of-tree builds?
 
-Should the author be reset to eddyz87@gmail.com, or should a Signed-off-by
-for ezingerman@fb.com be added?
+Because the required data file ../../../net/lib/xsk/test_xsk_case_defs.h
+is missing from TEST_INCLUDES in this Makefile, it appears this causes a
+regression where the file won't be copied during out-of-tree run_tests
+for this subsystem.
 
+> diff --git a/tools/testing/selftests/drivers/net/hw/xsk.py b/tools/testin=
+g/selftests/drivers/net/hw/xsk.py
+> new file mode 100755
+> index 0000000000000..a33d4af869c7a
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/xsk.py
+[ ... ]
+> +SKIP_CODE =3D 4
+> +XSK_BIN =3D (Path(__file__).parent / "../../../net/lib/xskxceiver").reso=
+lve()
+> +XSK_CASES =3D XSK_BIN.parent / "xsk/test_xsk_case_defs.h"
+> +
+> +
+> +def _hardware_cases():
+> +    defs =3D XSK_CASES.read_text()
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[Severity: Low]
+Could this cause a regression where it unconditionally throws a
+FileNotFoundError and crashes the script if the file was not deployed?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37923187511
---===============7849088717470891536==--
+When running an out-of-tree build where the header is omitted from
+TEST_INCLUDES (or if xskxceiver is legitimately not built), this
+read_text() call in _hardware_cases() will crash before the
+XSK_BIN.exists() graceful skip check can execute.
+
+Would it be safer to verify XSK_CASES exists before reading it, or handle
+the exception gracefully?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261008114909.7343=
+64-1-maciej.fijalkowski@intel.com?part=3D13
