@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AA61ACED5
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 02:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41C51ACED5
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 02:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791511976; cv=none; b=me5WEJFOd8nwkg5dPcm8rGJLdeKAAznEVio+tptNQXsLkzEBUL/a5pQojYS69CKjmXfcW/DStxGjVAGqkkV/35kb8mCDnsWrBnojvHnS1dvqE5PXMpIdjRdTuPk0xUhEFQ3HqxgYiEHt8YVZYkropvzuQWmij+9NbGXqt6DueUU=
+	t=1791512022; cv=none; b=fYjojFpOuAjWhW+IW5Grvdgds796TLNUa5NU5T8LH37LjxZYFlbvYBux9RNxQhG2CFpHX8SEp+o9kFlultoqFbC6lK5sskYCBa2cSAy2cnkxbEWTkEoE0O3C2tDVK3eySfLo16MVEeAVO93JRecuWFcIk5ptIJS9S+86K7k3ndA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791511976; c=relaxed/simple;
-	bh=erPAOdYtn+jItFvJABi9LhUVrpR4DNEknctCqs+oMyg=;
+	s=arc-20240116; t=1791512022; c=relaxed/simple;
+	bh=KIUe9EaYGEvu33yY/1sNzuyHV+d50uA5AKrc5ooyGfA=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=RLJLOEgnzN6EXtM2R2cmkNKOXbNttgt4EracWbMFnbwvitPMhSSBWB3bqCKrdd3UKH6Uwd8FyJ7gmV1RHMEK6kezwrii7konAsXL7dazzxLaPIr1Sn02TSfs6RbbG21aCy3W2Y/2A3VuWJ8QMrshROwqHdDoFuZ9d+bngl0gNOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWzwd5JT; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=bDkZyaYwLQEl+MFJ/bw/O32p5DlPZX4qF2R74YuqQxxVWp7416xqrBCQi6j+yseKqCp1bzLSxQ16rNNP58DF+qjV3yf3IDlC06tbslS9Q8T10Qh9sPgUz6FJYSF2uR8TPUVnGNG22+kHh+RDZGTe95ZApAfhZ4PU2/Fiv4V6/yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HuwGv2t2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWzwd5JT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E641F000FF;
-	Fri,  9 Oct 2026 02:12:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HuwGv2t2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41AAC1F000FF;
+	Fri,  9 Oct 2026 02:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791511975;
-	bh=FyJiT/LaOi8f+LHWHCq/UYlhOYEvw0nkh7NGo0s3lrs=;
+	s=k20260515; t=1791512021;
+	bh=aexn86OEGS0Njo2cVXQH6bp258Pqy0I6kkkvMtm4MAc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kWzwd5JTqj4RJR+ZS0dxXoWK7fjHYWP2tbuFoKmtQwGUYDKUNysW+OT47ouVfGDw3
-	 jD3UBFCtq9euj02+a46jeh7i3oHQhCd1se5QcYAtCPt8RBcaaIgemlGMB/jB/vv2jg
-	 IxEF8XgxCvV9JKGwpbW2RqTWkQavGiKiJpc+rp/Wi+8cZch+tPuyY2dB1953IgDO4H
-	 3g2K2W5/gXdkFAlfncT5a2z6uAigW6Ep10RrSOGl5ehE90JkHK7oEihd+Lk9NGGiJa
-	 2JwUrBpA1EcjCflppeVHaYZ5VN+EP08ltFnU6SSZKhb0Wfo6FmHr38vlgd+691Bdca
-	 jcQd1omws4yGQ==
-Message-ID: <sashiko-outbox-164719@kernel.org>
+	b=HuwGv2t24E3w+JU0MxaFytvZP02JT/ccnAxWMLee4Rcf2YAqHnWOTrJccVwJy9zA0
+	 PLMJCzlMRlrAF1OMa1VFkYkZNfQA6VtjK1/roU7jS/u4poosCmEi9HOZo0pnvruHbA
+	 lVU2u3VYOncsvQYMY+JQaFWU2mrR8bPEXwTZgzrKksSUH1moVenP4Q+2pKj4S5wH6V
+	 s0SrlyeoQcGeqNEZI1nAjfzONGeedkdXtCwrdkgYiLWrP0TYyruXPHYvPcBtvzj5gy
+	 4M1ha5bZcgLLrXVOz3w1RUEkq9R3SuaCW/iZa+ZU5S4M3KG4Cy56FojHajwDRw7DIn
+	 73hvqa832mSjA==
+Message-ID: <sashiko-outbox-164721@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/2] selftests/bpf: Keep the bpffs of
- cgroup_hierarchical_stats private
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Run the enable_stats program
+ with BPF_PROG_TEST_RUN
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Qiliang Yuan" <odys.yuan@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009-selftests-bpf-cgroup-stats-bpffs-v2-1-f93a111da992@gmail.com>
-References: <20261009-selftests-bpf-cgroup-stats-bpffs-v2-0-f93a111da992@gmail.com>
- <20261009-selftests-bpf-cgroup-stats-bpffs-v2-1-f93a111da992@gmail.com>
+In-Reply-To: <20261009-selftests-bpf-enable-stats-inflight-v2-1-691ee379e511@gmail.com>
+References: <20261009-selftests-bpf-enable-stats-inflight-v2-1-691ee379e511@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 02:12:54 +0000
+Date: Fri, 09 Oct 2026 02:13:40 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,49 +46,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] bpf: unbalanced lifecycle in destroy_hierarchy() teardown
+- [Low] bpf: selftests: use of deprecated CHECK macro instead of ASSERT_*
 --
 
-commit be18155cbccd124da201337ba01f9571021f8d5c
+commit 2195ab7af2e709db01f39a1419b8eb0dd3b3c741
 Author: Qiliang Yuan <odys.yuan@gmail.com>
 
-selftests/bpf: Keep the bpffs of cgroup_hierarchical_stats private
+selftests/bpf: Run the enable_stats program with BPF_PROG_TEST_RUN
+   =20
+This commit changes the test_enable_stats test to run its program with
+BPF_PROG_TEST_RUN rather than attaching it to sys_enter. This ensures that
+counts are final and avoids race conditions with parallel tests.
 
-setup_hierarchy() mounts a bpffs on /sys/fs/bpf with setup_bpffs(), and
-then sets up the cgroups with setup_cgroups(), which moves the test into
-a private mount namespace. The patch sets up the cgroups first, so that
-the bpffs is mounted in the private mount namespace.
+Link: https://lore.kernel.org/r/20261008-selftests-bpf-enable-stats-infligh=
+t-v1-1-0cb92ee2c6d3@gmail.com
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_s=
-tats.c b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> index 3bd27d2ea668c..ad19d6d41918a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> @@ -151,7 +151,7 @@ static void cleanup_cgroups(void)
->  /* Sets up cgroup hiearchary, returns 0 on success. */
->  static int setup_hierarchy(void)
->  {
-> -	return setup_bpffs() || setup_cgroups();
-> +	return setup_cgroups() || setup_bpffs();
->  }
-> =20
->  static void destroy_hierarchy(void)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/enable_stats.c b/tool=
+s/testing/selftests/bpf/prog_tests/enable_stats.c
+> index 75f85d0fe74a4..691a82a4d6d20 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/enable_stats.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/enable_stats.c
+[ ... ]
+> @@ -20,18 +21,23 @@ void test_enable_stats(void)
+[ ... ]
+> +	do {
+> +		err =3D bpf_prog_test_run_opts(prog_fd, &topts);
+> +		if (err)
+> +			break;
+> +
+> +		memset(&info, 0, info_len);
+> +		err =3D bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
+> +	} while (!err && info.run_cnt && !info.run_time_ns);
+> +	if (CHECK(err, "run_and_get_prog_info", "err %d\n", err))
 
 [Severity: Low]
-Does destroy_hierarchy() need to be updated to reverse the teardown order?
+Does this newly added error path use the deprecated CHECK() macro? The BPF
+subsystem selftest guidelines prefer using modern assertions like ASSERT_OK=
+()
+for new code instead of CHECK().
 
-Because the setup order has been changed to initialize cgroups before bpffs,
-the test is placed in a private mount namespace before mounting the BPF
-filesystem.=20
+>  		goto cleanup;
 
-However, destroy_hierarchy() continues to execute teardown in FIFO order
-(cleanup_cgroups() followed by cleanup_bpffs()) instead of LIFO order.
-
-While cleanup_cgroups() does not fully destroy the namespace until process
-exit (preventing immediate crashes during cleanup_bpffs()), should
-cleanup_bpffs() be called before cleanup_cgroups() to properly mirror the
-new initialization order?
+[Severity: Low]
+This problem wasn't introduced by this patch, but while updating the
+test_enable_stats() logic, would it be worth migrating the existing
+CHECK(info.run_cnt !=3D skel->bss->count, ...) to a modern assertion like
+ASSERT_NEQ() to help reduce technical debt?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-selftests-=
-bpf-cgroup-stats-bpffs-v2-0-f93a111da992@gmail.com?part=3D1
+bpf-enable-stats-inflight-v2-1-691ee379e511@gmail.com?part=3D1
