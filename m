@@ -1,98 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA10A3B47F0
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 07:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8B5478E49
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 07:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791531027; cv=none; b=F/vYoxY65Bp+soDTHnlOAguc4cePdALjRzo+YsXaqAlTzWkSujyy5gSyrxM3lU3+UmhzgR/8iFJ6VTkJmPdD1jjI5QM9d5NX7Nu80dVu/6eX+WSus6woLziOAXKbTA46FE+5ho2Z6OqBKVMMIKlM+EpcOil8jpslLRC5zYmotPg=
+	t=1791531549; cv=none; b=BveHWgkLrrJzsosOMsjKIkxi3j3ypZHQWKoROHvLYyJCXz9FeGQHBN6K9xG8F/ZCogiMjg0zQOeVGlD9QNrfkgsHMXELbNj+lq1+adKrRaTD2Keg1U1OScAbA4tatAu7iWLgrfob+4c70LNhJxHU0zFvhzRmIWpowA3yEUVV1nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791531027; c=relaxed/simple;
-	bh=VYDZY2uGKu33vKOyYd6NW2GKWHjdqDv69Ge3kjWDmHg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IKjpRRHGFuxh7PkdGQl0HEDQYalIe9DmEhf/rtet/b6912uUm73yIqnMlGSNRb4K+wzfzQJJ4MS/rjAs3sLkjyfLDqcghNGgBzgVs5Aqc2Ev4UHO+eizTzlkxP8W1+Q4M7r9luBsAhSApqQoQMqxlQKUv9bHDzharveEJA4o9IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JwIUDr3s; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791531549; c=relaxed/simple;
+	bh=75gYT7s2UZ9FC1DCawQnEq6vEfWx8UCP3g9f6w5NjyM=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=OkbpuUfl32109BiA8oesicaIV13cgosvLsNJldXhooGZzIXvILaiXKuODHB9rqoWDAo66j2j/cTm1x5Y7NmbsPl2G4FHrk0mATYXcIpRej4n5DNDxP2SSOgZUFNOGA/kSWUD3z+ldtCLlgsisL7imDp8SgxkmeOA3zoLHxhyagk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HM8ZRbyu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JwIUDr3s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A10DC1F00893
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 07:30:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HM8ZRbyu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2281F000FF;
+	Fri,  9 Oct 2026 07:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791531026;
-	bh=VYDZY2uGKu33vKOyYd6NW2GKWHjdqDv69Ge3kjWDmHg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=JwIUDr3s/MfSM7kcKnUID52hZC5kSpTTuEkc+3ww3rh3REqeBLTEOlZBf7UExohXk
-	 +ijBF1puacoxRVPWtk0LaU/94rCUSoT5K3cvAilB+Zz0MHDfI/Yo28jkhr2a6cRlDp
-	 V42CMcttMu55r75vyi06asWkSVicuIkNE5b+hm6t2i+9L+HUK3/9o28y1FwlHhl+dg
-	 u2FOqySJdm4iM+LdE+eyTYYNTnfmMi2tYlsNDVfxeYuj+uBbxR7Q+kNVfkGmOGYRw3
-	 +plZLYhbBRrMmbUfgBO2bGQohQRCbUuHjMNyoS/p8rlHGES0lkj/bs9zM8LUcLizOr
-	 7/kwdUfQ5x4MA==
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93e56c287b3so492115785a.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 00:30:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBx/NHdmOtek9dH3jq7VLwpMqW2qt0Dn2EKwD0WMVURndonp2OqWdRBEJau2v3DlYkYlbrM=@vger.kernel.org
-X-Gm-Message-State: AFuF++mvj+k66IQYmAL47v4k1KMGwhrRad9nkNzz2z/5VN+AHuljQubf
-	x9MJKycgZUp3xs9IMZM2LAADb5woqRLjfwuJ4dGWrG7Q905vBmSoWwc8+nEOcQ2kx4K+TRhTQ/W
-	CCeoaBt6mUyAZe+d9fb265VgFrUhT3E4=
-X-Received: by 2002:a05:620a:a416:20b0:93e:c12c:9b76 with SMTP id
- af79cd13be357-93ec12c9f3cmr30877285a.81.1791531025574; Fri, 09 Oct 2026
- 00:30:25 -0700 (PDT)
+	s=k20260515; t=1791531548;
+	bh=1tqZpVZYJ7i/1hgC9P1EQI10FlsWvC9kRmDlutsirnU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=HM8ZRbyuWqQajNTmUVQ7VOPhSIIC9eyd/IJy6om3/KT3tp7vEhT6ImrPXcc+etRYG
+	 3lwi8joWbX15mGJA87iDbIZTxFM6g+7tZqkBztYJZlKF5lOH/PLho4rkyoAG0N7b8e
+	 +CDwRAt9E24GqBOrMP08IjVwor4qzEkN62+NgLXFPmK9xJp93PFWL3SZCvlFh5Eu47
+	 w4DjSFVcdatz6g1JbShmTOCO4Weqx3PdX4HZ37P4ZaSkdoWF/j3a44XoLqyAa2zoY/
+	 VdmzfmEHI+VNA0RqVGcpWkOcEoieYvNX6ZX/eHzHCLy7Z2wfc1yTHAjxetSz4reqDg
+	 NKTARZl+Kbl1g==
+Message-ID: <sashiko-outbox-165022@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: Propagate precision for outgoing stack
+ arguments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jan-Gerd Tenberge" <janten@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261009072752.21037-1-janten@gmail.com>
+References: <20261009072752.21037-1-janten@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 09 Oct 2026 07:39:07 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20261009062637.176005-1-hui.zhu@linux.dev>
-In-Reply-To: <20261009062637.176005-1-hui.zhu@linux.dev>
-From: Barry Song <baohua@kernel.org>
-Date: Fri, 9 Oct 2026 15:30:14 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4xYGDXMKjbcnkvZAVf3GEd_bnjdJY=84dfyak=rmQVA1Q@mail.gmail.com>
-X-Gm-Features: AclHuK-MFYBp2Fx57JVqeSVV6ggA-SIdiDol7zrPg6odH2nr65hN0ZFPuJg2TWo
-Message-ID: <CAGsJ_4xYGDXMKjbcnkvZAVf3GEd_bnjdJY=84dfyak=rmQVA1Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4] selftests/bpf: Add bpf_proactive_reclaim test
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	Hui Zhu <zhuhui@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 9, 2026 at 2:27=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
->
-> From: Hui Zhu <zhuhui@kylinos.cn>
->
-> bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
-> unlike a write to memory.reclaim, does not retry until the goal is
-> reached.
->
-> Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
-> and check that the result is positive but well below the request: one
-> pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
-> 4K and 64K page kernels.
->
-> The test deliberately covers only the kfunc itself. A full example of
-> the intended asynchronous use, where a BPF program watches one cgroup's
-> workingset refaults and reclaims another one from bpf_wq callbacks, is
-> maintained out of tree at [1], released under GPLv2.
->
-> Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.=
-c
-> is not built at all.
->
-> [1] https://github.com/teawater/memcg-async-reclaim
->
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: mark_all_scalars_imprecise() omits stack arguments, causing=
+ state explosion
+--
 
-Thanks very much!
+commit 6af07cea664bce39c3788fcfdd7a5a9e4adbc1e1
+Author: Jan-Gerd Tenberge <janten@gmail.com>
+Subject: bpf: Propagate precision for outgoing stack arguments
 
-Reviewed-by: Barry Song <baohua@kernel.org>
+BPF subprogram arguments beyond r1-r5 are kept separately in stack_arg_regs.
+This commit includes precise outgoing stack arguments in the backtracking s=
+eed
+used by propagate_precision(), and marks them precise in the fallback path
+as well. This prevents the verifier from missing value-dependent safety che=
+cks.
+
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> index 18bf7b660c2f6..c62bc9fe2e325 100644
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
+> @@ -1063,6 +1063,20 @@ static int propagate_precision(struct bpf_verifier=
+_env *env,
+>  			bpf_bt_set_frame_slot(&env->bt, fr, i);
+>  			first =3D false;
+>  		}
+> +
+> +		bpf_for_each_spilled_stack_arg(i, state, state_reg) {
+> +			if (!state_reg || state_reg->type !=3D SCALAR_VALUE ||
+> +			    !state_reg->precise)
+> +				continue;
+> +			if (env->log.level & BPF_LOG_LEVEL2) {
+> +				if (first)
+> +					verbose(env, "frame %d: propagating sa%d", fr, i);
+> +				else
+> +					verbose(env, ",sa%d", i);
+> +			}
+> +			bt_set_frame_stack_arg_slot(&env->bt, fr, i);
+> +			first =3D false;
+> +		}
+>  		if (!first && (env->log.level & BPF_LOG_LEVEL2))
+>  			verbose(env, "\n");
+>  	}
+
+[Severity: Medium]
+Does this patch also need to update mark_all_scalars_imprecise() in this
+same file?
+
+When a state is added to the explored states cache, mark_all_scalars_imprec=
+ise()
+clears precision marks to ensure maximum pruning efficiency. It currently
+iterates over standard registers and stack slots, but misses stack_arg_regs:
+
+kernel/bpf/states.c:mark_all_scalars_imprecise() {
+    ...
+		for (j =3D 0; j < bpf_stack_nr_slots(func); j++) {
+			struct bpf_stack_state *ss =3D bpf_stack_slot(func, j);
+
+			if (!bpf_is_spilled_reg(ss))
+				continue;
+			reg =3D &ss->spilled_ptr;
+			if (reg->type !=3D SCALAR_VALUE)
+				continue;
+			reg->precise =3D false;
+		}
+    ...
+}
+
+Because this patch allows stack arguments to be marked precise, wouldn't any
+precise stack argument enter the cache with precise =3D true?=20
+
+When a later verification path compares against this cached state via
+regsafe(), the old stack argument having precise =3D true would enforce tig=
+ht
+bounds checks or an exact memory match.
+
+Could this cause state explosion by preventing pruning for any state with
+different scalar values?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009072752.2103=
+7-1-janten@gmail.com?part=3D1
