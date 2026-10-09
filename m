@@ -1,89 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E736D3ECBE4;
-	Fri,  9 Oct 2026 18:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061493AAF55
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 18:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791571499; cv=none; b=gThBHbH4U+Th/gqwpevI+kLY5vmjqOCS702yD4ODmxZmxnYuT634yM7J22Cb3njUdBUPWtgt3AFxBcuQrdlQ8rYc4riGPgaOZ+LJzSRhfGYDtU9EMQQcUQLhz8hLoe02vGajfs0+BU2/FeUXppZXRSdINj9VthOGptCiV29UK9k=
+	t=1791571569; cv=none; b=tpfkz5479zIKTSm+HQ/IJbsOGp9Z/8ThvgZ2sLMQNslxhcXjLKiQyiUNsGgTljlDSoYQcSCWW+U0o60YHb2SRASEzF2XSH6R7g5V08QqB8A3NWTYR5uEKp/SJIMxzJT1Py5MfQitzx4TDJE/gviivlQ7OSbK93Gdl+H7sK66/tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791571499; c=relaxed/simple;
-	bh=ocrMeNkMQZu7lUW0ZX/nXGH/6NYNDpKamVvMXgsOpXg=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=CJ8eA3Vyt6ssKgMVNFST+vu1oEW/Y6c+B3MaQCMGLeEHdHKtZfOn87LmOXSDWpNupSNU3/CuY5KiYq4kj1oTMUnwOwtVmLRAX5mVvXClP0CLugAxAU5LrDhcRbC3gdO1g/SCx4eIyNncQRKs10S3GnA1riBqOt8hRvBtqU4PsWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HvNJBZy9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791571569; c=relaxed/simple;
+	bh=wZod1qP4w1aqsDdgDezPpakELxIm8vqk6zVUSsSiTGM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Fp7Fd0Xm1KxlwrwlEPPZg+8sF+Pk0V2RxvIvQJj5ByQeGMoI46+TFGlE8xzZSYBaJOzlnV0aefktdthmBmT4XZVmHFOKYDeFqaRjZfvkuN+HDfu3lPjro72fm5SWmXXWeU4PDRYG5mw+7suQFlMhbwLKlLqfNAvZQFVOWOLmPHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DFlS9Ny5; arc=none smtp.client-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvNJBZy9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E99B1F000FF;
-	Fri,  9 Oct 2026 18:44:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791571498;
-	bh=ocrMeNkMQZu7lUW0ZX/nXGH/6NYNDpKamVvMXgsOpXg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HvNJBZy9Tsu7oES9CdsfR4f/4C+IE4xqTb5dLbuMSUyzbZsJ/yjMXR+167f3p//XP
-	 ob9okM/QutTRXss9bRhSy32e9t+A72Lx1PrRuFf2/GmmRAXiVDVbwzemFvMgRSZxYa
-	 mGBdpo12ahOey7dmJZEFs/eqKDPFLTw8kz22QIdmMIpU+qXV5ZLU0U9IUSkRL5i3rL
-	 OIqQh4UappTglas5pgF9N8JI7YpuUHe0ZFJNh7EvC7+IM75vMMXflYmgSLcwMErzNk
-	 4EiUwDS9kMlOCoyBbclPjMXyO/PYSmG2FK5aCTN1dnk9a11R8DFOwhl0lX7LvS5qgh
-	 DL5Mh9PLzrdVQ==
-Message-ID: <sashiko-outbox-165968@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 17/38] scsi: sg: convert mmap hook to mmap_prepare
- and rework
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
-Cc: bpf@vger.kernel.org, kvmarm@lists.linux.dev, "Vasily Gorbik" <gor@linux.ibm.com>, linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, linux-s390@vger.kernel.org, linux-usb@vger.kernel.org, "Marc
- Zyngier" <maz@kernel.org>, linux-rdma@vger.kernel.org, selinux@vger.kernel.org, "Heiko
- Carstens" <hca@linux.ibm.com>, dri-devel@lists.freedesktop.org, "Oliver
- Upton" <oupton@kernel.org>, "Christian Borntraeger" <borntraeger@linux.ibm.com>, linux-trace-kernel@vger.kernel.org, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, linux-scsi@vger.kernel.org
-In-Reply-To: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-17-923b70125b1e@kernel.org>
-References: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
- <20261009-b4-mmap-prepare-vma-flag-sanify-v5-17-923b70125b1e@kernel.org>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DFlS9Ny5"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-3516c82e96cso18363eec.0
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 11:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791571567; x=1792176367; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=RdnMVkZ01fdHhx2FatP4rLX8DB7tZD+RKSIs68YHMRI=;
+        b=DFlS9Ny5y6aDe8vv6uJz5ElOx/U+XRmaVT2sGuBYnZLgdN3YCt9fO9V4o/63T7etig
+         VqGFu6vfY33Ykuw90FD6P118X7R0dSsRkh+P1N+g+bxoApjxc37RYVHnmtuGXWStmhLP
+         lcPhme7uNRnnbOdyHj4FrGDqRhCNnZ4SIGeno1Q6OcqAyifRLucwMibsmGky/Xcg1FlE
+         uv6koNg4kj5/8jFZWzYTXrEtrkeN00DSqz3x9+Ucs8RCqt01lVP0vhPQLwiVKfLe1dMa
+         N62qDNNzMbVw/MqLqpDmqODmWbzafhy6JgPv0cgTCCsRNa7Wzh28QT0oxFzZBrq2TmDX
+         DLcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791571567; x=1792176367;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RdnMVkZ01fdHhx2FatP4rLX8DB7tZD+RKSIs68YHMRI=;
+        b=E8a6fhu1NFb2N8fUJItc3+5X/u6NTh7e6Qu13AVIbP9IsC001A12nu5XO9AAu6WTjQ
+         XXtEQYrxEYkwqDSvEKUTc6U1RD/DokGz0Ntc1yj2gH2UHKZJWMWz6wpZWhmnqqXdGhyq
+         0UPPxlogBEVfqVRmcGwsVZWW9xZJZjgAqRdaB4p2SZjW/lQK01vLgn1Bl2QJhQJZDO1+
+         3tTXTm/nejn7PJx4Q7YGkZTDxeqLGtdXTFOsuw9A8AaxT0QgBaR6KyDma4g5EK/xX4AC
+         7xMc8l83rP0KQ7Ld3B5JGudp/WFKQyxfgRHka5uMRxHzkt1rGzJf7CGjg47CfFykO5SL
+         f2XA==
+X-Gm-Message-State: AFuF++ms6tSgi6lkH7/cHdlbNiVe+spBrHpZkoojuQuA3frRrhHumilI
+	YzsJ4CynNNMilndRyXiJhG5fkh7g26a/BfoJdDCm3R9wsAoCIsj77WXk
+X-Gm-Gg: AYBFou2IAuGodoiVQMRxAiSGwvYXNX36JobPyYn9132VlVTgxJi+fEfPSrcPo8Ug/45
+	KvzCKFAvP+YDwxZdt8swR3tLslRbM+bEC+8cdNF8wRYMjwjrCOvNKBRZL+hrM+kbKmR5jykNCdi
+	5Nl+wbxG9RRRySAlBJ/TdOEVoT5gNV/kdBJOBek21eEmQeCmSsU+j21c3kKJfbt0cCmaxKu9+at
+	U5+ynDhYyNtrFjYt0L+t8fo6otzWGj69oiIzNlweu/KkpRhMI1K4dAPYrl/6EvcBBZjvwUudHgX
+	Tg6EzafWC0y41s24O17UgTExE2XG9bOo0QqWXITkKEjw9UPm6Bcnou+uylNdRbtvWwI5iEnNymk
+	pV4cNkVI6lYqGEXd75Z7IeHL29F3gGncsqRO9nj5reSeYzZXUmP6fU8WYqdZv0ZETWa3StxmD5M
+	tqo8EmePw9h+FPlFPLZoE316dqGzyYDy8CMe3MM0X++3DF7NoXxcOPXeaH5fEa3OGFsx53hUrZG
+	gyZ6Epeahe4h8pd7lV7X1tU41BFb5sbZBNnMvC/lY8Bv6cVmac9mEBG
+X-Received: by 2002:a05:7300:f3c5:b0:351:7c99:c239 with SMTP id 5a478bee46e88-3537ddd42f9mr3791541eec.5.1791571566660;
+        Fri, 09 Oct 2026 11:46:06 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:26fd:a5f6:5f7e:c6b7? ([2620:10d:c090:500::4:66bf])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb1e02asm8437400eec.27.2026.10.09.11.46.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 11:46:06 -0700 (PDT)
+Message-ID: <147015d9dd64f4dc1bcb01b59c027f34a41cadf2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 11/51] bpf: compute parameters liveness in
+ bpf_compute_live_registers()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Date: Fri, 09 Oct 2026 11:46:05 -0700
+In-Reply-To: <sashiko-outbox-165368@kernel.org>
+References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
+	 <20261009-scev-minimal-rebase-v3-11-bcba9bc53ac9@gmail.com>
+	 <sashiko-outbox-165368@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 18:44:56 +0000
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-> Move from the deprecated mmap hook to the new mmap_prepare hook.
->=20
-> We are mapping kernel pages here, so use the discontiguous kernel mapping
-> mmap action to do so.
->=20
-> Unwind the rather confusing loop and instead map as many pages as we can =
-at
-> one time.
->=20
-> Note that we do not need to pay attention to rsv_schp->k_use_sg here, as
-> the pages are populated for the length of the buffer at
-> rsv_schp->page_order granularity as compound pages.
->=20
-> The discontiguous kernel page mapping logic handles the compound pages for
-> us.
->=20
-> sfp->mmap_called keeps the buffer stable for us. As before it is never
-> cleared, so a failed mmap also leaves it set.
->=20
-> We also remove some useless vma, vma->vm_file NULL checks - these will
-> always be non-NULL if you reached the mmap hook logic.
->=20
-> We retain log output for consistency, but change what's output on page
-> mapping to indicate that sg_discontig_get() does the work now.
->=20
-> Note that we drop the VMA_IO_BIT flag for the VMA here. It was never
-> necessary as we invoke alloc_pages() which gives us refcounted folios that
-> are fine for GUP to access (VMA_IO_BIT would prevent that).
->=20
-> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+On Fri, 2026-10-09 at 11:26 +0000, sashiko-bot@kernel.org wrote:
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+...
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-b4-mmap-pr=
-epare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org?part=3D17
+> > @@ -10939,6 +10940,15 @@ static int btf_check_func_arg_match(struct bpf=
+_verifier_env *env, int subprog, s
+> >  	meta.fn =3D fn;
+> >  	meta.func_proto =3D func_proto;
+> > =20
+> > +	/*
+> > +	 * Check if all register arguments declared in BTF are initialized.
+> > +	 * If they aren't the BTF is unreliable.
+> > +	 */
+> > +	if (!bpf_subprog_is_global(env, subprog)) {
+> > +		for (i =3D 0; i < min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARG=
+S); i++)
+> > +			if (caller->regs[BPF_REG_1 + i].type =3D=3D NOT_INIT)
+> > +				return -EINVAL;
+> > +	}
+> >  	return check_func_args(env, &meta, env->insn_idx);
+> >  }
+>=20
+> [Severity: High]
+> Because unused arguments are no longer marked as live due to the change
+> in compute_insn_live_regs(), can this NOT_INIT check be completely
+> bypassed by regsafe()?
+>=20
+> If the verifier first explores a path where the argument is initialized,
+> the subprogram is not marked unreliable. If it subsequently explores
+> another path where the argument is left NOT_INIT, this second path
+> will be pruned before evaluating the BPF_CALL instruction and hitting
+> btf_check_func_arg_match().
+>=20
+> Could this result in the subprogram remaining "reliable", allowing
+> fentry/freplace extension programs to attach to it and potentially
+> leak uninitialized kernel memory via the BTF context?
 
+This is a valid point.
+I should OR live[subprog_entry].in with BTF type mask.
