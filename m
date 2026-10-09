@@ -1,162 +1,433 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-m1973198.qiye.163.com (mail-m1973198.qiye.163.com [220.197.31.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C824D7D37;
-	Fri,  9 Oct 2026 12:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4B24D37B3;
+	Fri,  9 Oct 2026 12:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791549238; cv=none; b=ofEMXPooWUdaxxy3pJqiKMWeBe/FoEVPnYlXObe4K09CPlxSb1vv2XyHUq4Dd1dePdjArx/o9Ff772FvG8aD9FijPRy3PybEUo1cScnrXTy46LdWf6jlrmwqF3MeDdFV+9geNF0Cay5BgIWK1IoquV4Z52zzANlin629LnCuy/I=
+	t=1791549567; cv=none; b=Eq7lKQh4O3E5LZh438Sl/QD9bIZiPLlWoN+rYmh6O5ux77quEKJoonXsS8tW1MYDsoFs1CCrMsurXceAevDJ/OvhByQhNLcQToaZnyyAYkQaDoFD+2oQ1Rj6a6v3A0BNbxIt7C97eZsZ+0BNeeOiAJv8MbAhY0c80YLLdZ0NHuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791549238; c=relaxed/simple;
-	bh=W4COJCSqVm3t3PuXOJ2Wby+X+kuGaXzXHl6bHXJTd2I=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=k2hkhsV8CKNCihGPF2aciMOemDLr2RV+Z4l1u5LMmCjeWzzOaG+1bgerltgC9JEj89v2I9yUK0WzzS7eEBen7CTw135G9KMTTCoSRUuOkr9oZ5xgx4ss1LN6pKtvgvCNh28JxzV91oEvo152EBOQofEqMgHRtvrJdslznFNoiug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OrAoFN/T; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OrAoFN/T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A1C21F000FF;
-	Fri,  9 Oct 2026 12:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791549234;
-	bh=LOdUM7r3dR6O0OPTg3vzG72dTNl5T+oRoNk1NwDGyeA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OrAoFN/T9lZcwopurnEV953Gmo6TFhirx1OTQP253oKMnM2aiM/Ie8/mlX2TYGg1J
-	 p2EWX5ndTdlI46eWDJG3GBiCd0vWHkI06kWqtV4DxYL3Gp3JjyJ0yxgxJGZBA37BwW
-	 ylvJ4TeY2HzHekVVpGppza4cMZaehwCoO3xOqS+r8biU2mv8Kf0ZffdwErlwjdyUiy
-	 iDRVpxmBuGDcp2z5gFEhcDvOwK2HXUnQa2e2/nD6QLeusetGrzOo9ZTBc1fJC2tKSu
-	 bUBiZno9yWlKLX3vfiAFoVjHfagGcotCPSomiURX+2IDYeH+ALT+k4XbJHgQnU/oKl
-	 pbM3snHr67jpg==
-Message-ID: <sashiko-outbox-165544@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 bpf-next 7/7] selftests/bpf: Add a test verifying
- inline information
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alan Maguire" <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>
-In-Reply-To: <20261009112324.1442319-8-alan.maguire@oracle.com>
-References: <20261009112324.1442319-1-alan.maguire@oracle.com>
- <20261009112324.1442319-8-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 12:33:54 +0000
+	s=arc-20240116; t=1791549567; c=relaxed/simple;
+	bh=36R2gIevv+gNJ9JHGkNR4b0oPzf5iWxYXe0kNa1FjQY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZNYykmsk1CFgWNIqWUS2CakJD849tqt9fYE5G17LSIiuG4iAqbcydqf9Advtfy03PbZG83/q2nk6ntPBzLNHKW7ggKbAQQYh+foPvT2mHSDvCC7JhYhOWMkkw2dhHyg3/m4J/lkRBHiUgfK8TKk4fPGy5Pn3r/I+2RmGWPcBKfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=220.197.31.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe2901a8;
+	Fri, 9 Oct 2026 19:23:32 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH 6/6] selftests/bpf: add tests for the page_owner bpf_iter target
+Date: Fri,  9 Oct 2026 19:23:08 +0800
+Message-Id: <20261009112308.240769-7-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20261009112308.240769-1-zhen.ni@easystack.cn>
+References: <20261009112308.240769-1-zhen.ni@easystack.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa12067716e0229kunmd33b3e054cb292
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCQx8fVktPGE5JGR9KQhkZH1YVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: module_get_base_addr() desyncs on trailing /proc/=
-modules tokens
-- [Medium] bpf: btf_inline test incorrectly allows memory-spilled parameter
---
+Add a sleepable BPF program and a userspace runner covering the seq_file
+and open-coded page_owner iterators and the get_nid, stack_snprint and
+get_memcg_info kfuncs. The test checks:
 
-commit 4adb006744e35941ca2b357431675f3202d1100f
-Author: Alan Maguire <alan.maguire@oracle.com>
-Subject: selftests/bpf: Add a test verifying inline information
+  - seq_file walk, unfiltered and pid-filtered: records read back from
+    the iterator fd match the lines the program printed.
+  - open-coded iterator parity with the seq path.
+  - the kfuncs' contracts: valid nid per page, a non-empty stack
+    trace, and memcg classification.
 
-This commit adds a selftest to verify inline information for bpf_testmod.
-It checks that an always-inlined function has a single location parameter
-encoded in a register, and that the LOCSEC descriptor offset is within the
-expected range.
+Skipped when debugfs page_owner is unavailable.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_inline.c b/tools/=
-testing/selftests/bpf/prog_tests/btf_inline.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_inline.c
-[ ... ]
-> +	lp =3D btf_loc_param(t);
-> +	if (!ASSERT_TRUE(lp->flags & BTF_LOC_PARAM_REG, "param_has_reg"))
-> +		goto out;
+Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
+---
+ .../bpf/prog_tests/page_owner_iter.c          | 173 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_page_owner.c | 161 ++++++++++++++++
+ 2 files changed, 334 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
 
-[Severity: Medium]
-Because the variable in testmod_inline_len() below is forced into memory, i=
-ts
-BTF location is encoded as a register-relative memory offset, which sets bo=
-th
-BTF_LOC_PARAM_REG and BTF_LOC_PARAM_OFFSET.
+diff --git a/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c b/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+new file mode 100644
+index 000000000000..a621712272bc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+@@ -0,0 +1,173 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 */
++
++#include <test_progs.h>
++#include "bpf_iter_page_owner.skel.h"
++
++#define DEBUGFS_PAGE_OWNER	"/sys/kernel/debug/page_owner"
++
++static bool page_owner_available(void)
++{
++	return access(DEBUGFS_PAGE_OWNER, R_OK) == 0;
++}
++
++/* Count link_fd output lines; -1 on error. */
++static long iter_record_count(int link_fd)
++{
++	char *line = NULL;
++	size_t len = 0;
++	long count = 0;
++	int iter_fd, err;
++	FILE *f;
++
++	iter_fd = bpf_iter_create(link_fd);
++	if (!ASSERT_GE(iter_fd, 0, "bpf_iter_create"))
++		return -1;
++
++	f = fdopen(iter_fd, "r");
++	if (!f) {
++		close(iter_fd);
++		return -1;
++	}
++	while (getline(&line, &len, f) > 0)
++		count++;
++	err = ferror(f);
++	free(line);
++	fclose(f);
++	return err ? -1 : count;
++}
++
++/* Validate bpf_page_owner_get_memcg_info() results from the open-coded run. */
++static void check_memcg_skel(struct bpf_iter_page_owner *skel)
++{
++	fprintf(stderr,
++		"memcg: seen=%u charged=%u online=%u nodata=%u notsup=%u bad=%u first='%s' name='%s' flags=%u\n",
++		skel->bss->memcg_seen, skel->bss->memcg_charged,
++		skel->bss->memcg_online, skel->bss->memcg_nodata,
++		skel->bss->memcg_notsup, skel->bss->memcg_bad,
++		skel->bss->memcg_first_path, skel->bss->memcg_first_name,
++		skel->bss->memcg_first_flags);
++
++	if (!ASSERT_GT(skel->bss->memcg_seen, 0, "memcg_seen_gt_0"))
++		return;
++
++	/* all -EOPNOTSUPP: CONFIG_MEMCG is off */
++	if (skel->bss->memcg_notsup == skel->bss->memcg_seen) {
++		ASSERT_EQ(skel->bss->memcg_bad, 0, "memcg_stub_invariants");
++		return;
++	}
++
++	if (!ASSERT_EQ(skel->bss->memcg_bad, 0, "memcg_kfunc_invariants"))
++		return;
++
++	/* Every call is either charged or nodata */
++	if (!ASSERT_EQ(skel->bss->memcg_charged + skel->bss->memcg_nodata,
++		       skel->bss->memcg_seen, "memcg_ret_classified"))
++		return;
++
++	if (!skel->bss->memcg_first_saved)
++		return;
++
++	if (!ASSERT_EQ(skel->bss->memcg_first_path[0], '/',
++		       "memcg_first_path_abs"))
++		return;
++
++	if (skel->bss->memcg_first_name[0])
++		ASSERT_OK_PTR(strstr(skel->bss->memcg_first_path,
++				    skel->bss->memcg_first_name),
++			      "memcg_name_in_path");
++}
++
++void serial_test_page_owner_iter(void)
++{
++	struct bpf_iter_page_owner *skel = NULL;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	long iter_count, unfiltered_count, oc_diff, pid;
++	unsigned int printed_before;
++	int link_fd, prog_fd;
++
++	if (!page_owner_available()) {
++		test__skip();
++		return;
++	}
++
++	skel = bpf_iter_page_owner__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_page_owner__open_and_load"))
++		return;
++
++	/* --- seq file iterator: unfiltered run --- */
++	skel->bss->filter_en = 0;
++
++	if (!ASSERT_OK(bpf_iter_page_owner__attach(skel), "skel_attach"))
++		goto destroy;
++
++	link_fd = bpf_link__fd(skel->links.dump_page_owner);
++	iter_count = iter_record_count(link_fd);
++	if (iter_count < 0)
++		goto destroy;
++	unfiltered_count = iter_count;
++
++	fprintf(stderr, "iter_count=%ld printed_lines=%u total_seen=%u\n",
++		iter_count, skel->bss->printed_lines, skel->bss->total_seen);
++
++	ASSERT_GT(iter_count, 0, "unfiltered_lines_gt_0");
++
++	ASSERT_EQ((long)skel->bss->printed_lines, iter_count,
++		  "lines_match_printed");
++
++	/* unfiltered: every visited page is printed, so the two must match */
++	ASSERT_EQ(skel->bss->total_seen, skel->bss->printed_lines,
++		  "unfiltered_all_printed");
++
++	/* --- seq file iterator: pid-filtered run --- */
++	pid = getpid();
++	skel->bss->filter_en = 1;
++	skel->bss->filter_pid = (pid_t)pid;
++
++	/* printed_lines is cumulative across runs: compare the delta */
++	printed_before = skel->bss->printed_lines;
++	iter_count = iter_record_count(link_fd);
++	if (iter_count < 0)
++		goto destroy;
++
++	fprintf(stderr,
++		"pid=%ld iter_count=%ld printed_delta=%u\n",
++		pid, iter_count, skel->bss->printed_lines - printed_before);
++
++	ASSERT_GT(iter_count, 0, "filtered_lines_gt_0");
++	ASSERT_EQ(skel->bss->printed_lines - printed_before, iter_count,
++		  "filtered_printed_match");
++
++	/* --- open-coded iterator parity --- */
++	prog_fd = bpf_program__fd(skel->progs.scan_open_coded);
++
++	ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &opts), "prog_test_run");
++	fprintf(stderr,
++		"open_coded_seen=%u nid_seen=%u first_nid=%d "
++		"stack_bytes=%u stack=[\n%s]\n",
++		skel->bss->open_coded_seen, skel->bss->nid_seen,
++		skel->data->first_nid, skel->bss->stack_bytes,
++		skel->bss->stack_text);
++
++	/* same eligibility as the seq path: counts must be close */
++	ASSERT_GT(skel->bss->open_coded_seen, 0, "oc_seen_gt_0");
++	oc_diff = (long)skel->bss->open_coded_seen - unfiltered_count;
++	if (oc_diff < 0)
++		oc_diff = -oc_diff;
++	ASSERT_LE(oc_diff, unfiltered_count / 100 + 64,
++		  "oc_seen_close_to_iter");
++
++	/* the nid kfunc returned a valid node for every page */
++	ASSERT_EQ(skel->bss->nid_seen, skel->bss->open_coded_seen,
++		  "nid_valid_all");
++	ASSERT_GE(skel->data->first_nid, 0, "first_nid_valid");
++
++	ASSERT_GT(skel->bss->stack_bytes, 0, "stack_snprint_ok");
++	ASSERT_OK_PTR(strstr(skel->bss->stack_text, "+0x"), "stack_frames");
++	ASSERT_OK_PTR(strchr(skel->bss->stack_text, '\n'), "stack_lines");
++
++	check_memcg_skel(skel);
++
++destroy:
++	bpf_iter_page_owner__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+new file mode 100644
+index 000000000000..fada6a314a15
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+@@ -0,0 +1,161 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++__u32 filter_en;
++__u32 filter_pid;
++__u32 total_seen;
++__u32 printed_lines;
++
++__u32 open_coded_seen;
++__u32 nid_seen;
++__s32 first_nid = -1;
++char stack_text[2048];
++__u32 stack_bytes;
++
++__u32 memcg_seen;
++__u32 memcg_charged;
++__u32 memcg_online;
++__u32 memcg_nodata;
++__u32 memcg_notsup;
++__u32 memcg_bad;
++__u32 memcg_first_saved;
++__u32 memcg_first_flags;	/* bit0 is_online, bit1 is_kmem */
++__u32 memcg_first_path_len;
++char memcg_pathbuf[4096];
++char memcg_first_path[4096];
++char memcg_first_name[80];
++
++#define MEMCG_ENODATA 61
++#define MEMCG_EOPNOTSUPP 95
++
++#define MEMCG_F_ONLINE	(1 << 0)
++#define MEMCG_F_OBJCG	(1 << 1)
++
++extern int bpf_iter_page_owner_new(struct bpf_iter_page_owner *it) __ksym;
++extern struct page_owner_scan *
++bpf_iter_page_owner_next(struct bpf_iter_page_owner *it) __ksym;
++extern void bpf_iter_page_owner_destroy(struct bpf_iter_page_owner *it) __ksym;
++extern int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
++					char *buf, u32 buf_size) __ksym;
++extern int bpf_page_owner_get_nid(struct page_owner_scan *scan) __ksym;
++extern int bpf_page_owner_get_memcg_info(struct page_owner_scan *scan,
++					 struct memcg_info *info,
++					 char *buf, u32 size) __ksym;
++
++static __u32 copy_str(char *dst, const char *src, const __u32 max)
++{
++	__u32 i = 0;
++
++	while (i + 1 < max && src[i]) {
++		dst[i] = src[i];
++		i++;
++	}
++	dst[i] = '\0';
++	return i;
++}
++
++/*
++ * Exercise bpf_page_owner_get_memcg_info() until 32 pages charged to an
++ * ONLINE memcg have been seen, checking its per-return contract:
++ *  - 0:          buf holds an absolute cgroup path;
++ *  - -ENODATA:   buf was NUL-terminated;
++ *  - -EOPNOTSUPP: counted (CONFIG_MEMCG is off);
++ *
++ * The first online charged sample is saved for userspace to print and
++ * cross-check (name vs basename of path).
++ */
++static void check_memcg(struct page_owner_scan *scan)
++{
++	static struct memcg_info info;
++	int err;
++
++	err = bpf_page_owner_get_memcg_info(scan, &info, memcg_pathbuf,
++					    sizeof(memcg_pathbuf));
++	memcg_seen++;
++
++	if (err == 0) {
++		memcg_charged++;
++
++		if (memcg_pathbuf[0] != '/') {
++			memcg_bad++;
++			return;
++		}
++
++		if (!info.is_online)
++			return;
++		memcg_online++;
++
++		/* keep the first online sample for userspace */
++		if (!memcg_first_saved) {
++			memcg_first_path_len = copy_str(memcg_first_path,
++							memcg_pathbuf,
++							sizeof(memcg_first_path));
++			copy_str(memcg_first_name, info.name,
++				 sizeof(memcg_first_name));
++			memcg_first_flags = MEMCG_F_ONLINE |
++					    (info.is_kmem ? MEMCG_F_OBJCG : 0);
++			memcg_first_saved = 1;
++		}
++	} else if (err == -MEMCG_ENODATA) {
++		memcg_nodata++;
++		if (memcg_pathbuf[0] != '\0')
++			memcg_bad++;
++	} else if (err == -MEMCG_EOPNOTSUPP) {
++		memcg_notsup++;
++		if (memcg_pathbuf[0] != '\0')
++			memcg_bad++;
++	} else {
++		memcg_bad++;
++	}
++}
++
++SEC("syscall")
++int scan_open_coded(const void *ctx)
++{
++	struct bpf_iter_page_owner it;
++	struct page_owner_scan *scan;
++
++	bpf_iter_page_owner_new(&it);
++
++	while ((scan = bpf_iter_page_owner_next(&it))) {
++		open_coded_seen++;
++		if (bpf_page_owner_get_nid(scan) >= 0)
++			nid_seen++;
++		if (memcg_online < 32)
++			check_memcg(scan);
++		/* grab the stack of the 100th page for userspace to check */
++		if (open_coded_seen == 100) {
++			first_nid = bpf_page_owner_get_nid(scan);
++			if (scan->po_snap.handle)
++				stack_bytes = bpf_page_owner_stack_snprint(
++					scan->po_snap.handle,
++					stack_text, sizeof(stack_text));
++		}
++	}
++	bpf_iter_page_owner_destroy(&it);
++	return 0;
++}
++
++SEC("iter/page_owner")
++int dump_page_owner(struct bpf_iter__page_owner *ctx)
++{
++	struct page_owner *po = ctx->po;
++
++	if (!po)
++		return 0;
++
++	total_seen++;
++
++	if (filter_en && po->pid != (pid_t)filter_pid)
++		return 0;
++
++	BPF_SEQ_PRINTF(ctx->meta->seq, "pfn %llu pid %d comm %s\n",
++		       ctx->pfn, po->pid, po->comm);
++	printed_lines++;
++	return 0;
++}
+-- 
+2.20.1
 
-Does this bitwise AND accidentally pass for memory offsets since they have a
-base register? If so, this check might be masking the fact that the paramet=
-er
-was actually spilled to the stack instead of being purely encoded in a
-register as the commit message describes.
-
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 93847ca6293b4..b4f0af2aeca45 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-[ ... ]
-> @@ -735,6 +735,13 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
->  EXPORT_SYMBOL(bpf_testmod_test_read);
->  ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
-> =20
-> +static __always_inline size_t testmod_inline_len(size_t len)
-> +{
-> +	/* Keep an instruction in the inline site without changing len. */
-> +	asm volatile("" : "+m"(len));
-
-[Severity: Medium]
-Does the "+m" constraint here force the len variable into memory rather
-than a register? The commit message explicitly states the intent is to veri=
-fy
-a parameter "encoded in a register", but this constraint forces a stack spi=
-ll
-instead.
-
-> +	return len;
-> +}
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
-selftests/bpf/trace_helpers.c
-> index 679008b310d9a..f3a1d627699da 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.c
-> +++ b/tools/testing/selftests/bpf/trace_helpers.c
-[ ... ]
-> +unsigned long long module_get_base_addr(const char *module)
-> +{
-> +	unsigned long long addr, base_addr =3D 0;
-> +	char name[500];
-> +	FILE *f;
-> +
-> +	f =3D fopen("/proc/modules", "r");
-> +	if (!f)
-> +		return 0;
-> +
-> +	while (fscanf(f, "%499s %*s %*s %*s %*s 0x%llx", name, &addr) =3D=3D 2)=
- {
-
-[Severity: Medium]
-Will this loop terminate prematurely if it encounters trailing data on a li=
-ne
-in /proc/modules?
-
-If a module (like an out-of-tree or unsigned module) has an optional traili=
-ng
-taint string such as "(O)", this fscanf format lacks a line consumer (like
-%*[^\n]\n) to read to the end of the line.
-
-On the next iteration, the %499s token will mistakenly consume the leftover
-taint string instead of the next module's name, shifting all subsequent fie=
-lds
-by one token. When the 0x%llx field then attempts to parse the state string
-(e.g., "Live"), it will fail to match the "0x" prefix and return 1, causing
-the loop to exit early and return 0 instead of the correct base address.
-
-> +		if (strcmp(module, name) =3D=3D 0) {
-> +			base_addr =3D addr;
-> +			break;
-> +		}
-> +	}
-> +	fclose(f);
-> +	return base_addr;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112324.1442=
-319-1-alan.maguire@oracle.com?part=3D7
