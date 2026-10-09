@@ -1,65 +1,65 @@
 Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE312ED16D
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 01:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EFF318146
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 01:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791510531; cv=none; b=l8NbWHNWvpwAj7+YgRCXBCyfWizhp/plUQWoUr0DPKbr6/G6rBx13rHLo3vkW0LPF1/2g92DdeIe119+/3slRz/etgUkD+sU9PygDK99NvaPvi6+AaXIJxopX/v2OkBiJbobXwRDZolVfc6wBaoyQtVkigL8/yAwl71vIRaGom8=
+	t=1791510539; cv=none; b=J1rKLzcZYwiv8ijIZyOZtzVmfHIj+WjGFEzDq7Zvj3nxICuJLAo9jmU3iH2fHMp1efbkDyj8Y+KaV+3QcWM7/OhZU6ZUW+D6ICs/da1fzt+4haPxkBhmTlogXlwnndDR1R7rDBhfuJktsqJO8IGOm7uuwOLQRemHmdVpvlpMVY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791510531; c=relaxed/simple;
-	bh=4zQauuLYgJxsEKUHN3tTR9O77uoUU+rw59u++kdpCYo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Wzkaowmgk4sF+EMM0HaA3kgA4qgIDrYeKFcPHPnfUUdW9W8pJwdUh7+2t9ht1+Ga+9VwFcvW07T7NuXaAYXCE5te6WC2DNFENaB3fst7TXm6hd40u3QW5l5ffPedb1QEOesMNjlA2pIto1WxIfuh3r8dCYXtzFgn5Uuaruhks3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h00h1Y1p; arc=none smtp.client-ip=74.125.82.181
+	s=arc-20240116; t=1791510539; c=relaxed/simple;
+	bh=q1A+5bY9JKcAap1X2UpIetoUf5WvQvLMS3llETCRifs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YPPLBmxJ7cg1vZwpOC67tNFYPKAzDUobhO80QEfwo161eREycU/PFrfh1nMlVTe8J/AZ2XwaITVMYj1DXWt0CKL3lS7qyVjBB2rKBhfdCxknyPEXoOu/B32tgZy2ad5wqVk7rB87PvVr4rFkSSZi5NIftUoAVqdwc5+hRAWbJag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iIZk5ZLC; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h00h1Y1p"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-351767ef18cso2052677eec.1
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 18:48:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iIZk5ZLC"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-34bb8b31647so9154789eec.0
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 18:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791510529; x=1792115329; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791510537; x=1792115337; darn=vger.kernel.org;
         h=cc:to:message-id:content-transfer-encoding:content-type
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=RK4flvPJYAEK9lSesneRcUolXiSZW1erKx163yiShyo=;
-        b=h00h1Y1p+NYY99+JyvYJlEPJel2UuhWgsf/NlkhWcJGuY/QjjNsTr2oCBmfGDS8ix7
-         ZCM+HH6BnOV8cR6ldjt7MrxxVisDLcVbN0dL0pr2NbhlpHgkrPWvQlnP24NYX2aUMR30
-         Nr7LKaYIO+HNd6tqcSozdYcM0pHQX1K2SvsfUYePX5mgy1K0gGW3WMnG/BM2VCYkESrf
-         PwroNQVygUAeNIKGoeDEYrXd3m3TLbIYSx5dvoxfvDgjkSe6fj2Xm9sj+C7jARrYOb9y
-         vK8zwsms9IFjDUGSu39hPgxbEoHTVr7DJs7oPKNiQShqRRN5nGBT1UW64ovSfaRAf1jV
-         JNcg==
+        bh=FOAUYQsivtnmX6gmnt+M/vxUdyS2XU3fcOO6GL4Vu+I=;
+        b=iIZk5ZLCHtxc1El6cXqOMUNkBvunOMsa5tPoRz1nyS2XArqx/i5FWD8jvuFl5IFyZ3
+         1iVIWgqn0Hnz/naNugv2AvtT1v1Kl+s+xU98AWHa6Y4OdFPd+hyQkjWhroARDGkZOoWN
+         SJaxPSvkOur3fIcnKiTrLqunsT/YE7pAG2NsyiwZosq0BDDpk+Bvu+GIQ109uV8eJaDv
+         a+HQ9XtbyfTvHskK45FQ7xRJR5IeqfLdDV0uU1e1YWuTkjUTRPFM7/oh9K8ZuQ0MmPX8
+         b1Bwg8yUiYK6oURkwAjvWFdnO2P53GNOj0lB9Q4GzYEGWY+egP6DHitvsFN6CzVNC0k2
+         lQDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791510529; x=1792115329;
+        d=1e100.net; s=20260707; t=1791510537; x=1792115337;
         h=cc:to:message-id:content-transfer-encoding:content-type
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=RK4flvPJYAEK9lSesneRcUolXiSZW1erKx163yiShyo=;
-        b=hb6XMVuLwxkk66b6LsGH/D5Sirfg8tXNmu4un7Yy+PMmSK5zjOR+W3Hg4w16cqewAJ
-         ogRZp1Qj4dVE+noGq20w2ZEfx77SvZKUirt4alRRgT65GcFrAcTk0/clgYaGlxikbOPs
-         Gc6VLq+1QSUpghmxvMsvhRx9LxFCwdgbwLtdjyAd8lrWpqqhsYlrDLrxL/p2xNFkIivK
-         s8eiwmvAA3naCJGmyP/zeueCx8hzdoReeUw/QAx18ORXcCBKWACtPXMLnORYz1gx5Yp8
-         tZ6Rx/eCDQckOf+zTsg1LCew8trqz6FDWwarC8kKwemEHbFZzxPaVijpIgBVVYq2kiBR
-         HOEg==
-X-Gm-Message-State: AFuF++nS5GGQ5THizKIVCcPIlVUezN0fQj/vEVAElalqa1I0DXaesZBC
-	M6+CEsA1dmOTxhrFSjAowtxpFv+XjBOtNnGZm8wQupmLJXKVNFlzrG7K
-X-Gm-Gg: AYBFou0UCrdwPHsKDi49bCBdgpMYnCAc/+5HcAUoePIVyldNIm5nccU6aLmw0FK1f5+
-	XMrrp1pWhcEgG6xFOKUzbqPF9LV20pfSVgXp17gQvfvglbQIr7gBqxLKTaTd8DfFw6rbkjAh5CX
-	bUE/bOQLNb7BhVE/Z7UPu/wY0C55afq9q+Hufah7IztszsyVqlTZvyrFxT5lCyHqtG9Xa+83Gq6
-	M+YZQu4b9UWb0iBNuP+y7jp3LM4TfVl74jYo3tyJEYUH97qfNBFgMKxOulqyetg3nYvxftGYYOc
-	e+QRcxNlqaM1qQEkpzb2egE03+nk9E1wZusyPPmxy7qj2kd6ismTNcIH4cL4uSWhyflI1Xe+Rj7
-	GsfCPvK61iXc/6CqKAx308tz3PUIyP7fgeQEULFQkQAkMeHltLGyqNBOVL/PkKLUuo0ttXKw1GD
-	ax4KPUxg7D6h1K8ATm5OcXLrXuAm3fKzIF43lt7p1ZIxI6jGYQa8OfPTBrqUdoFSRsVA==
-X-Received: by 2002:a05:7300:d089:b0:351:55c3:6896 with SMTP id 5a478bee46e88-3537dfd8a93mr802366eec.16.1791510529366;
-        Thu, 08 Oct 2026 18:48:49 -0700 (PDT)
+        bh=FOAUYQsivtnmX6gmnt+M/vxUdyS2XU3fcOO6GL4Vu+I=;
+        b=Px59GSxuXua51xdAgRG++tprLQ8DgPyvTe+zyIx8pG4Lr082+P2uCG+cFHoP74F5rz
+         dRw2CMlFlD5DOS1566AX01lAIWfyiDX5jHUzxvOOM2uUicU3gjTAu2Wd9vTRtm7363iu
+         p5mpDqlGGYeSYEHo76sJjBwBTc9HiQzINbjw14JPRcQSQ5+L17pUE8QaihlT65Qo3I4S
+         MvPyOMDTqtCRsDb7ft91Bp1UOITKBK/HnJuifT20NFib/Ops/UWN6ZmcXKnsvYgEy7Us
+         aQJGw9CGm+lXL/pN84wAZZyFbdXnKdn9Cs9AOHUCuI3QcmNzM2D3KdRNv9FPDm078JbP
+         Tj7Q==
+X-Gm-Message-State: AFq9FYKmQkBApP88OrM+h+fZMlt5Rmk5JGmCBMODt82heiqwwfnGqpV2
+	g0HB8g2JQdZuia5X5pfqRaEenfZG59muvCHDwVhwrRgcj5iZq5bramok
+X-Gm-Gg: AYBFou2QlFNPrS3q1pHBxWO3B6rlHJzrjkRHyd90rCPafF4RIbZdUbPoGyTYWeuxodv
+	fCZ9yQvtXX2upGnZYqdgTMkgvLaqBCYyLnCIQ86HXM3a9eeZsaul/KV0Arq/qzHxQH7Iqd7Ab9j
+	p/0nGO3URbLIwf5bmbuw6GQjqw7CLSNUVYsCbvnYQyZ6L9fcbHtexyDsUcfkwH14YYB9QTTb5Sq
+	pjJBTgwH1+X72ethiYKprqTd26NezSfFs3SFf3AVEIxo8wyO/Y+LpPSlvmskPTQHMv8oOJ+wt7i
+	i/v2vzCmllDYhtwiW5/g1eb5KX2eqf74DMwaT4bxLLDXagUtsSMyhZUlcsVBLVdVjP9TFmtINTp
+	4/hKQ1jjvag/mw/Ect1rp1gfOJ/uGubaFoWjQSLRw7eZY2XhWnMDrUsjywa+9R0c1/BlzDuUhbL
+	ydK9SmPIGkJ17/QUyE3dgBsh+bt5QI0swnTzmTXztnoCYd0R/vNiqbo4k5A9U7DC2hxQ==
+X-Received: by 2002:a05:7300:ec8e:b0:351:7e90:6035 with SMTP id 5a478bee46e88-3537ddf9efemr908440eec.4.1791510537009;
+        Thu, 08 Oct 2026 18:48:57 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537ca1cc25sm2189280eec.8.2026.10.08.18.48.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537ca1b53dsm1829232eec.6.2026.10.08.18.48.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 18:48:49 -0700 (PDT)
+        Thu, 08 Oct 2026 18:48:56 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 09 Oct 2026 09:48:44 +0800
-Subject: [PATCH bpf-next] selftests/bpf: Create the vxlan devices of
- test_tunnel with their MAC
+Date: Fri, 09 Oct 2026 09:48:52 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Wait for the struct_ops map to be
+ freed in assoc_in_timer
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,10 +68,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261009-selftests-bpf-tunnel-vxlan-mac-v1-1-624dd769c334@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAPtHyGoC/x2NQQrCMBAAv1L27EISbFC/Ih6SdqMLcS3ZtARK/
- 270OIeZ2UGpMCnchh0Kbaz8kQ72NMD0CvIk5LkzOOO8NeaKSjlV0qoYl4R1FaGMW8tB8B0m9JH
- iJZ29s6OHHlkKJW7/wR1+hlCr8DiOL7I4gKh6AAAA
+Message-Id: <20261009-selftests-bpf-struct-ops-assoc-timer-v1-1-9a97a9b3d1db@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAANIyGoC/x2NwQrCMBAFf6Xs2YVtpEL9FfHQxhdd0CRkVymU/
+ rvV4xxmZiVDUxidu5UaPmpa8g79oaP4mPIdrLedKUg49SIjG57JYW4818Tm7R2dSzWezEpk1xc
+ aD5gljAPiUYT2VG1Iuvw3F/p5GYvTddu+mTqEOYAAAAA=
 To: Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
  Ihor Solodrai <ihor.solodrai@linux.dev>, 
@@ -80,66 +80,76 @@ To: Andrii Nakryiko <andrii@kernel.org>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
  Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- Kaixi Fan <fankaixi.li@bytedance.com>
+ Amery Hung <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-The vxlan tests of test_tunnel create a tunnel device in the initial
-netns with "ip link add", and then give it the MAC address that the
-static neighbor entry at the other end points to with "ip link set".
+st_ops_assoc_in_timer_no_uref runs .test_1, which starts a timer to
+call it again 500ms later, drops every reference to the struct_ops map,
+and expects the timer callback to find no struct_ops associated with
+its program anymore.
 
-systemd-udevd assigns new devices of the initial netns a MAC address of
-its own, following its MACAddressPolicy, when it handles their uevent.
-When it gets to that after the test set the address, the replies sent
-to the configured MAC are dropped as meant for another host, and the
-ping of vxlan_tunnel fails after 10 seconds.
+The association goes away only when the map is freed, which happens in
+a work item after an RCU grace period. With other tests running in
+parallel, that can take longer than 500ms, and the callback still
+reaches the struct_ops and gets MAP_MAGIC instead of -1.
 
-Pass the address to "ip link add". udevd leaves alone the address of a
-device that was created with one.
+Restart the timer from its callback until the map is gone.
 
-Fixes: 1ee7efd40abf ("selftests/bpf: Move vxlan tunnel testcases to test_progs")
+Fixes: 0e841d19263a ("selftests/bpf: Test getting associated struct_ops in timer callback")
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/test_tunnel.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c | 4 +++-
+ tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c  | 7 +++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-index eb93099312720..7b35bf9498056 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-@@ -161,9 +161,9 @@ static int add_vxlan_tunnel(void)
- 	    IP4_ADDR2_VETH1, MAC_VETH1);
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
+index 461ded7223515..84da2c8651bec 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
+@@ -158,9 +158,11 @@ static void test_st_ops_assoc_in_timer_no_uref(void)
+ 	 * Run .test_1 by calling kfunc bpf_kfunc_multi_st_ops_test_1_prog_arg() and checks
+ 	 * the return value. .test_1 will also schedule timer_cb that runs .test_1 again.
+ 	 * timer_cb will run 500ms after syscall_prog runs, when the user space no longer
+-	 * holds a reference to st_ops_map.
++	 * holds a reference to st_ops_map, and every 500ms after that until the map is
++	 * freed.
+ 	 */
+ 	skel->bss->timer_ns = 500000000;
++	skel->bss->wait_map_free = 1;
+ 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.syscall_prog), NULL);
+ 	ASSERT_OK(err, "bpf_prog_test_run_opts");
  
- 	/* root namespace */
--	SYS(fail, "ip link add dev %s type vxlan external gbp dstport 4789",
--	    VXLAN_TUNL_DEV1);
--	SYS(fail, "ip link set dev %s address %s up", VXLAN_TUNL_DEV1, MAC_TUNL_DEV1);
-+	SYS(fail, "ip link add dev %s address %s type vxlan external gbp dstport 4789",
-+	    VXLAN_TUNL_DEV1, MAC_TUNL_DEV1);
-+	SYS(fail, "ip link set dev %s up", VXLAN_TUNL_DEV1);
- 	SYS(fail, "ip addr add dev %s %s/24", VXLAN_TUNL_DEV1, IP4_ADDR_TUNL_DEV1);
- 	SYS(fail, "ip neigh add %s lladdr %s dev %s",
- 	    IP4_ADDR_TUNL_DEV0, MAC_TUNL_DEV0, VXLAN_TUNL_DEV1);
-@@ -198,11 +198,10 @@ static int add_ip6vxlan_tunnel(void)
- 	    IP6VXLAN_TUNL_DEV0, MAC_TUNL_DEV0);
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c b/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c
+index 0bed49e9f2170..9f3124acd9b04 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c
+@@ -25,6 +25,7 @@ int test_err;
+ int timer_ns;
+ int timer_test_1_ret;
+ int timer_cb_run;
++int wait_map_free;
  
- 	/* root namespace */
--	SYS(fail, "ip link add dev %s type vxlan external dstport 4789",
--	    IP6VXLAN_TUNL_DEV1);
--	SYS(fail, "ip addr add dev %s %s/24", IP6VXLAN_TUNL_DEV1, IP4_ADDR_TUNL_DEV1);
--	SYS(fail, "ip link set dev %s address %s up",
-+	SYS(fail, "ip link add dev %s address %s type vxlan external dstport 4789",
- 	    IP6VXLAN_TUNL_DEV1, MAC_TUNL_DEV1);
-+	SYS(fail, "ip addr add dev %s %s/24", IP6VXLAN_TUNL_DEV1, IP4_ADDR_TUNL_DEV1);
-+	SYS(fail, "ip link set dev %s up", IP6VXLAN_TUNL_DEV1);
+ __noinline static int timer_cb(void *map, int *key, struct bpf_timer *timer)
+ {
+@@ -34,6 +35,12 @@ __noinline static int timer_cb(void *map, int *key, struct bpf_timer *timer)
+ 	timer_test_1_ret = bpf_kfunc_multi_st_ops_test_1_assoc(&args);
+ 	recur--;
+ 
++	/* Try again later until the map is freed */
++	if (wait_map_free && timer_test_1_ret != -1) {
++		bpf_timer_start(timer, timer_ns, 0);
++		return 0;
++	}
++
+ 	timer_cb_run++;
  
  	return 0;
- fail:
 
 ---
 base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
-change-id: 20261009-selftests-bpf-tunnel-vxlan-mac-6beb8f462156
+change-id: 20261009-selftests-bpf-struct-ops-assoc-timer-5eb0295ec300
 
 Best regards,
 -- 
