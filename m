@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52ED489FBE;
-	Fri,  9 Oct 2026 09:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187CD47D952;
+	Fri,  9 Oct 2026 09:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791536826; cv=none; b=QBqEnjwR+jgADwkoUBrZ2hkMZbUNwfFtg06xJMh2tGTC0wL+Lj9f3dnzIeyosdqgDaCt8dz7OMJybbmXI+3z6BTVKG4SoF/6B63rzb+ADnQok0y1yMbuMAfFutV5cQCRh8YSbAh+74b+YyniWGgf+wObVx6+tHjw/EU8+ZpNfAQ=
+	t=1791536826; cv=none; b=fb/ApRGVxMVkh0rALSafbYOoxR1F83Fg4ZgQ5WEM+bAofPsa4iV3KHFfy6oepxvY7E4T2k1TcWJe0iHHNi2dIw4JFPJVgjEXrJLQ0UTyogNIpjsTKBQYrr0OaVma/TFej6xtCWBmUcViJ5F0jszK412Tjk7GvbakOWIpg1YznG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791536826; c=relaxed/simple;
-	bh=k1hq2ZrITAhrC0xGLKX26Gw3XmXodcKy3pPd6n1qcv0=;
+	bh=D9aQCZgEOpiW/UOeN9XbBpogFsbO+a4F7OXJPZiLQCM=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mBicltRBxEaaM7kgCTKavNC6llOw63qrNDhOwt9Qpn8+OLI7RWMMO7vbzz3wBga3O8+bSTV5BWXrMm2tGMuiaISZBpBqVsUE+LljsHhjFCW23+D51tJJOp3ZVX0AKhZqhV+l73Sv4xx8xNsXgeOon2t3ALVqAjsZfo3udzqbyps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwWT3BIp; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=oCZ/e5DblMOM4WAYeEkVmi+2IrerHhm6gOI6MPuwrwPP3F1D29Bn8ZQ8gaVnPBGiXGexH7ClnLgCsFJbPTuNiGbVj0J8EFj/HxMExO9N50Ae9ejDiTrVgQw3N2215998cp/YgsPbikJAtMmnRjoRFmazfTxYxGZoeY9x20LNkXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LgSMSL35; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwWT3BIp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B39BB1F00898;
-	Fri,  9 Oct 2026 09:07:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LgSMSL35"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE11F1F000FF;
+	Fri,  9 Oct 2026 09:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791536822;
-	bh=i5SG3DjCiuIVoPKei06jHIrsTmo/IkuSfI2PQWR6iVs=;
+	s=k20260515; t=1791536819;
+	bh=KQw+BtnJtB9yAcbepjBm3Yio0Ta84nBHRmiXSxpySu4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VwWT3BIpUW54BgL7iE+VnSEHXF3CumKFIhs5k03o18ZAwwh6pTbPOhz+eV/OCDIHT
-	 cXRQaeioeg6ilrrHukPh+AEvRv3i4uuUhfZ5j48Fn5WB0EoGdA9C0EsfdFlTqDYSzh
-	 q7IIZrKmrDlAOvB/ws6vZ1prFmlQh6w2lfggPxZoNSIbrxOSSUm0rhr5AuOc2GK/ID
-	 tOfxnqNT0NVuH1w/kELnnxRsQTyb3rI7TMLSC5MaksLzpBBL+c140QMe1vZrksrZSy
-	 PGhG5ZakkWgqKnccJg+0TUD49NTHPQgHavfZDQYtcW4VGK3i4cbxSt/8t5mdQI4qBW
-	 uFi0ekWUodGTQ==
-Subject: Re: [PATCH net-next v4 4/6] netlink: specs: rt-route: describe
- lwtunnel IP options
+	b=LgSMSL35H8O+//mWLmp7qTVNuIbTqaogw3Pf2SZBaUEch5dnqaCa0yA6KRejsVZpO
+	 IlgIcP+/dZINdvlR03YmcdGTozPW2Thn/mZLIVRMeC+u/VKwwtG6hFD2Z34P4wz9ei
+	 qjQMPJKgI0uvJwQ+oJDOVtqNgur9iKIFoVCifgJ2RkStR+BZ3QSBIGn9jsmxeGYP5j
+	 Yqxqiym90pH2M6xZrU5ViQFBcwyTotWn2OAVFy+m8v0KF6t0yhHRMmmBkFB3cE2ZiS
+	 SY5/3KbpD2yEELles+WzCEFD3JQaGa5hUVeiexAoaOueqIAIUyfRcwwF7qAnjdpXlU
+	 zu+gGgkNcf7Ow==
+Subject: Re: [PATCH net-next v4 2/6] tools: ynl: convert enum selector to
+ string for sub-message parsing
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, donald.hunter@gmail.com,
  edumazet@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, liuhangbin@kylinos.cn
-Date: Fri, 09 Oct 2026 09:07:01 +0000
-Message-ID: <179153682125.434549.6402494415316907824@kernel.org>
-In-Reply-To: <20261008-ynl_rt_encap-v4-4-4ed2ccf7f949@kylinos.cn>
-References: <20261008-ynl_rt_encap-v4-4-4ed2ccf7f949@kylinos.cn>
+Date: Fri, 09 Oct 2026 09:06:58 +0000
+Message-ID: <179153681840.434549.374414508868008982@kernel.org>
+In-Reply-To: <20261008-ynl_rt_encap-v4-2-4ed2ccf7f949@kylinos.cn>
+References: <20261008-ynl_rt_encap-v4-2-4ed2ccf7f949@kylinos.cn>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,10 +48,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Critical: 0 · High: 0 · Medium: 2 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -59,146 +59,189 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] Under this spec, YNL cannot send a request that sets Geneve
-  tunnel options; the kernel rejects it.
-- [Low] The new `lwtunnel-ip-opts` set declares `geneve` as one `binary`
-  attribute without `multi-attr: true`.
-- [Low] The commit message contradicts itself.
+- [Medium] An unknown enum selector value now aborts the whole message or
+  dump.
+- [Medium] The new enum-to-string conversion ignores byte order.
+- [Low] When the enum lookup fails, the error message is misleading.
+- [Low] The generator now produces working response parsing for enum-
+  keyed sub-messages.
 
 --
 
-netlink: specs: rt-route: describe lwtunnel IP options
+tools: ynl: convert enum selector to string for sub-message parsing
 
-This commit changes the binary opts attribute in lwtunnel-ip and
-lwtunnel-ip6 into a nest of a new lwtunnel-ip-opts set. It adds vxlan and
-erspan option sets. Geneve options stay binary because the kernel uses a
-different layout for requests and for dumps.
+This patch changes the YNL C code generator for sub-messages keyed by a
+non-external enum selector. The integer selector value is converted to a
+string with the family's {enum}_str() helper before the sub-message parse
+function is called. A missing selector or a failed enum lookup is
+reported through ynl_submsg_failed().
 
-> Replace binary opts in lwtunnel-ip and lwtunnel-ip6 with a nested
-> lwtunnel-ip-opts set. Add attribute sets for geneve, vxlan, and erspan
-> IP options to match linux/lwtunnel.h.
-
-[Severity: Low]
-The first paragraph says attribute sets are added for geneve, vxlan and
-erspan. The diff adds lwtunnel-ip-opts, lwtunnel-ip-opt-vxlan and
-lwtunnel-ip-opt-erspan, but no lwtunnel-ip-opt-geneve set, and the
-second paragraph says geneve is omitted.
-
-Could the first paragraph say something like "Add attribute sets for
-vxlan and erspan IP options; keep geneve as binary (see below)"?
-
-> diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
-> index dc842a786794a..ea6711292c9b6 100644
-> --- a/Documentation/netlink/specs/rt-route.yaml
-> +++ b/Documentation/netlink/specs/rt-route.yaml
-> @@ -377,7 +377,8 @@ attribute-sets:
->          type: pad
->        -
->          name: opts
-> -        type: binary  # lwtunnel ip nest options
-> +        type: nest
-> +        nested-attributes: lwtunnel-ip-opts
->    -
->      name: ila-attrs
->      name-prefix: ila-attr-
+> diff --git a/tools/net/ynl/pyynl/ynl_gen_c.py b/tools/net/ynl/pyynl/ynl_gen_c.py
+> index 15c79849c6096..4aca51396a9e2 100755
+> --- a/tools/net/ynl/pyynl/ynl_gen_c.py
+> +++ b/tools/net/ynl/pyynl/ynl_gen_c.py
+> @@ -951,13 +951,31 @@ class TypeSubMessage(TypeNest):
 
 [ ... ]
 
-> @@ -562,6 +564,45 @@ attribute-sets:
->        -
->          name: link
->          type: u32
-> +  -
-> +    name: lwtunnel-ip-opts
-> +    name-prefix: lwtunnel-ip-opts-
-> +    attributes:
-> +      -
-> +        name: geneve
-> +        type: binary
+> +        if self.selector.is_enum_val() and not self.selector.is_external():
+> +            enum = self.family.consts[self.selector.get_enum_name()]
+> +            pres_var = f"{var}->_present.{sel}"
+> +            parse_sel = f"{sel}_str"
+> +            local_vars = [f'const char *{parse_sel};']
+> +
+> +            get_lines = [
+> +                f'if (!{pres_var})',
+> +                f'return ynl_submsg_failed(yarg, "{self.name}", "{selector}");',
+> +                f'{parse_sel} = {enum.render_name}_str({sel_var});',
 
 [Severity: Medium]
-With geneve declared as binary, can YNL still send a route request that
-carries Geneve options?
+Does this handle selectors declared with byte-order: big-endian?
 
-In tools/net/ynl/pyynl/lib/ynl.py, YnlFamily._add_attr() sets
-NLA_F_NESTED only in the nest branch. The binary branch copies the payload
-and leaves the flag out of the header:
+TypeScalar._attr_get() loads the value in {sel_var} with a plain
+ynl_attr_get_u32() or ynl_attr_get_u16(), which is a native load. In
+TypeScalar.__init__(), byte-order only becomes a C comment through
+byte_order_comment. The struct member therefore holds the value in wire
+order.
 
-    if attr["type"] == 'nest':
-        nl_type |= Netlink.NLA_F_NESTED
+On a little-endian host, a big-endian selector value of 1 arrives as
+0x01000000. That fails the range check in the generated {enum}_str():
+
+    if (value < 0 || value >= (int)YNL_ARRAY_SIZE(map))
+        return NULL;
+
+So every sub-message would fail with "enum-lookup-failed".
+
+This combination already exists in-tree. obj-attrs in
+Documentation/netlink/specs/nftables.yaml has:
+
+    name: type
+    type: u32
+    enum: object-type
+    byte-order: big-endian
     ...
-    elif attr["type"] == 'binary':
-        ...
-            attr_payload = value
+    name: data
+    type: sub-message
+    sub-message: obj-data
+    selector: type
 
-In the kernel, ip_opts_policy types GENEVE as nested:
+nftables is listed in GENS_UNSUP in tools/net/ynl/generated/Makefile, so
+the default build does not generate it.
 
-net/ipv4/ip_tunnel_core.c:
-    [LWTUNNEL_IP_OPTS_GENEVE]	= { .type = NLA_NESTED },
+Before this patch, though, the generator passed the u32 as the
+const char *sel argument, which failed at compile time. Now it silently
+emits code that cannot decode these sub-messages.
 
-ip_tun_parse_opts() validates the payload in strict mode:
+Should the conversion normalize the byte order first, or should the
+generator reject such specs?
 
-    err = nla_validate(nla_data(attr), nla_len(attr), LWTUNNEL_IP_OPTS_MAX,
-                       ip_opts_policy, extack);
+Because of obj-attrs, the note below the commit message saying rt-route
+encap is "the first enum-keyed sub-message in the YNL specs" also does
+not seem accurate.
 
-NL_VALIDATE_STRICT includes NL_VALIDATE_NESTED, so validate_nla() in
-lib/nlattr.c rejects the attribute:
+> +                f'if (!{parse_sel})',
+> +                f'return ynl_submsg_failed(yarg, "{self.name}", "enum-lookup-failed");']
 
-    if (validate & NL_VALIDATE_NESTED) {
-        if ((pt->type == NLA_NESTED || pt->type == NLA_NESTED_ARRAY) &&
-            !(nla->nla_type & NLA_F_NESTED)) {
+[Severity: Medium]
+Is it intended that an unknown enum value aborts the whole message or
+dump?
 
-ip_tun_parse_opts_geneve() then calls nla_parse_nested(), which does the
-same check. So a newroute with encap type ip or ip6 and encap.opts.geneve
-set to bytes fails with -EINVAL, even if the bytes hold a well-formed
-CLASS/TYPE/DATA triplet.
+ynl_submsg_failed() always returns YNL_PARSE_CB_ERROR.
+ynl_dump_trampoline() passes that up, and __ynl_sock_read_msgs() stops
+processing.
 
-Before this patch the whole opts attribute was binary. A caller could
-pass the raw LWTUNNEL_IP_OPTS payload with NLA_F_NESTED already set on the
-inner GENEVE header. The outer attribute is parsed with
-nla_parse_nested_deprecated(), so the missing flag there was not checked.
+The string selector path behaves differently. parse_rsp_submsg() emits a
+strcmp() chain that ends in return 0. An unknown string key, such as a
+new rt-link kind, is skipped and parsing continues.
 
-Is this a regression for YNL users who configure Geneve options? Dumps
-still decode, because ip_tun_fill_encap_opts_geneve() uses
-nla_nest_start_noflag(). Later patches in the series do not change this,
-and the final rt-route.yaml still has geneve as binary.
+The enum path is also inconsistent within itself. A value that is in the
+enum but has no formats entry falls through the strcmp() chain and
+returns 0. A value outside the enum is a hard error.
+
+Take the rt-route spec from this series. If a future kernel adds a new
+LWTUNNEL_ENCAP_* type, wouldn't the generated client fail the entire
+route dump as soon as one route uses that encap? Leaving the encap
+undecoded would match the rest of YNL.
+
+The commit message says:
+
+    or a new encap_type is missing from the spec file in future kernel,
+    the code will report "Sub-message key not set", the same with string
+    lookup fails.
+
+This doesn't match the string path, which skips unknown keys silently.
+
+Could this skip the sub-message instead, leaving it unset and returning
+success, when the enum lookup misses?
 
 [Severity: Low]
-Can this spec describe a request with more than one Geneve option?
+Is "enum-lookup-failed" the right value for the selector name argument?
+ynl_submsg_failed() always uses this format with YNL_ERROR_SUBMSG_KEY:
 
-On the request path, ip_tun_parse_opts() walks every attribute in the
-opts nest. It passes each LWTUNNEL_IP_OPTS_GENEVE to
-ip_tun_parse_opts_geneve(), which reads exactly one CLASS/TYPE/DATA
-option:
+    "Parsing error: Sub-message key not set (msg %s, key %s)"
 
-    nla_for_each_attr(nla, nla_data(attr), nla_len(attr), rem) {
-        switch (nla_type(nla)) {
-        case LWTUNNEL_IP_OPTS_GENEVE:
-            ...
-            opts_len += opt_len;
-            if (opts_len > IP_TUNNEL_OPTS_MAX)
+The user would see "Sub-message key not set (msg encap, key
+enum-lookup-failed)". In this case the key was present but held an
+unknown value.
 
-So a request sends several Geneve options by repeating the GENEVE
-attribute. The uAPI also defines a structured inner set for it, which
-geneve_opt_policy enforces:
+The message also loses the real selector name (encap-type) and does not
+report the numeric value that failed. To the caller, this looks the same
+as a missing selector.
 
-    [LWTUNNEL_IP_OPT_GENEVE_CLASS]	= { .type = NLA_U16 },
-    [LWTUNNEL_IP_OPT_GENEVE_TYPE]	= { .type = NLA_U8 },
-    [LWTUNNEL_IP_OPT_GENEVE_DATA]	= { .type = NLA_BINARY, .len = 127 },
-
-The geneve entry here has no multi-attr. YnlFamily._add_attr() only turns
-a list value into repeated attributes when attr.is_multi is set, so two
-Geneve options on one route cannot be expressed.
-
-Adding multi-attr alone would not make requests work, because of the
-NLA_F_NESTED problem above. Nothing later in the series changes this.
-
-> +      -
-> +        name: vxlan
-> +        type: nest
-> +        nested-attributes: lwtunnel-ip-opt-vxlan
+> +        else:
+> +            parse_sel = sel_var
 
 [ ... ]
+
+> @@ -979,6 +997,12 @@ class Selector:
+>      def is_external(self):
+>          return self._external
+>  
+> +    def is_enum_val(self):
+> +        return self.get_enum_name() is not None
+> +
+> +    def get_enum_name(self):
+> +        return self.attr and self.attr.attr.get("enum")
+> +
+
+[Severity: Low]
+Response parsing now supports enum selectors. Should the policy side be
+addressed, or at least documented? TypeSubMessage._attr_typol() still
+says:
+
+    # Reverse-parsing of the policy (ynl_err_walk() in ynl.c) does not
+    # support external selectors. No family uses sub-messages with external
+    # selector for requests so this is fine for now.
+
+Only TypeString._attr_typol() emits .is_selector = 1.
+TypeScalar._attr_typol() emits only .type = YNL_PT_U<N>, so the u16
+encap-type selector never gets the flag.
+
+As a result, ynl_err_walk_is_sel() never records the selector. For any
+extack offset inside RTA_ENCAP, ynl_err_walk_report_one() then reaches
+this code and the attribute path is cut off at .encap:
+
+    if (!selector) {
+        if (*n < str_sz)
+            *n += snprintf(str, str_sz, "(!selector)");
+        return 1;
+    }
+
+For NLMSGERR_ATTR_MISS_NEST inside the encap nest, ynl_ext_ack_check()
+leaves nest_pol at the outer route-attrs policy. The missing attribute
+would then be named from the wrong policy.
+
+newroute and delroute requests carry encap. The kernel does return
+extack offsets inside RTA_ENCAP, for example NL_SET_ERR_MSG_ATTR on
+tb[IOAM6_IPTUNNEL_*] in net/ipv6/ioam6_iptunnel.c.
+
+ynl_err_walk_sel_policy() also assumes a string selector
+(ynl_attr_get_str() plus strcmp()). It would need enum-to-string support
+before is_selector could be set for scalar selectors.
+
+The note below the commit message says this will be a follow-up. Could
+the comment in _attr_typol() be updated to mention the enum/integer
+selector limitation too?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261008-ynl_rt_encap-v4-0-4ed2ccf7f949%40kylinos.cn
