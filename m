@@ -1,173 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB2F175A74
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA664A498A
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547685; cv=none; b=aVFtrVBqxaxZeL/5cLHPpo99mS6LSESmxIQW0MXWTsXKcX31bonALkcTD7gZrkYjuwoLHNbZuU9bHqKw15RRE0MjkoqYHiKR2aDBWyZNcUFbvMFVrPrO0Wq4nsf47nPGRZ3u9/gohswwt12S2Q0T3EVfrqxeQfeaBnZdDhfG/kI=
+	t=1791547687; cv=none; b=O560rCurw3QA9B8jAA1Ys7d20VqZfUB+TWeX6r5HNCD69RaXFYg9tlAu4KGBuJIR1c8KmPbPnzkEKAmYCeo6GS2TXD6YZsw1bW0VzX0j1ZNlhKaAbW1gCTGO0bMU7UqxLAG60+Z7Q4HTJiAxTkR51TZk7D+HMUjzYQx8YlPBQHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547685; c=relaxed/simple;
-	bh=htPsQARnsYqBSL2nkoSdR4ahf7fb2p0McQWED/H21No=;
+	s=arc-20240116; t=1791547687; c=relaxed/simple;
+	bh=9WeY4wdaYyjy5ueo/V24OoJ0xDUQLShcaUStzoL2cuY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f/u/qxS6W/daKDctxwcb4FOG5f64Z8B2czMLi30SCocKXzFFJxw3bZPXFrhJrFrysXnrb+IAZQA87ABFY5fKAgA2qu1ZUxtsWXRvhrLQ4bCzAr+w14AHZXsY+WtpzvT9pQbI8A2GTXUPKIwAScfhTSSGxJmUqzGpo6HCDhK5WN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hl/OMX0x; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=lzYGA2LHxl8RI3nvqsypFeayrWSpAtrbFGJ1kjTfD6EMtIzFZHMLjDXls+q1dGHedF3FZmr9cEdPtt4084CB8iTtblQlf9rO1WKOBs023TMYFXJie5PZRU8pSxcMxRMfEcsJU+BX7BDWF3ZOoUfRBNUjk0UKsiDqtMfJUq9zFz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AALbx1h7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hl/OMX0x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B0E41F000FF;
-	Fri,  9 Oct 2026 12:07:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AALbx1h7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FBF1F00893;
+	Fri,  9 Oct 2026 12:08:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791547679;
-	bh=S9609TGrm+BAdB8im6otpsSdKzUjSKodklqds9+XZNg=;
+	s=k20260515; t=1791547683;
+	bh=YMwIWVVzHS51g5vROdFKprGdLXZEwcCBGemsno6XYsA=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Hl/OMX0xN2qZte7M/WVdwOu7HJZmBKt/VazmI6wKne21CzCQAzwqyVYWGdeSjZJXY
-	 cmW+/GVo5yCRkYhaxj30KO3ufiO8RtO7tAFwkQlf3fYp1vWlultcnXQ2PrMkHYId2H
-	 mIBkKnSHfAobpOVXdwCJWifjldBo58+GDAXSOqnGWnFv9WDaJecQ7mJshHs4Uoyrpj
-	 obKwTjwSL5e+jqp8YuKsqNUbkPLwlXwRt65GGYik1R59ss2q7Uj7E5U+NryUobuaTQ
-	 isiicYVEl3FTWlNmAsZXYfJreVaFOPtPD8mJrHbyxEcknW3esILszwInP3WyUwxXHq
-	 AsDwKpnkYnK3w==
-Content-Type: multipart/mixed; boundary="===============2713618016317183260=="
+	b=AALbx1h7QUp3XbdmvjfJQMPCu2KbUu2fNh9sUl0y8J5aFE2cYPo3RLMex/TVIoSDL
+	 YTlKNL2c9Q30FSBJPS3ZeKTfv0w3cMioQUh3AlNSWFGJDbA56+Bs292hxqXC/3oZrm
+	 RURIcFLfINjPtVchoX/8gIaOEBZkvAqcZC1CreGUl2Yy4MsbVj3CLetdeIgvLtPzrG
+	 pnC8tLnCs6QnM3f5y8oBi8LuCMexjGctBmjD51Ws6MvsejexjbH0CcGHNDSKNh81Id
+	 43wfLvgdXvyHFGOSEY8R+PVNQY55Ae4dT6F9PNcEDELfCtYlrkr75518x+xogSxkML
+	 Y39NInJkPDgGA==
+Content-Type: multipart/mixed; boundary="===============2689709681121741076=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <debf620cc082978bcb926bf13fa5af72f46e25607f0ca9289f4bb41ca15530d3@mail.kernel.org>
-In-Reply-To: <20261009-scev-minimal-rebase-v3-19-bcba9bc53ac9@gmail.com>
-References: <20261009-scev-minimal-rebase-v3-19-bcba9bc53ac9@gmail.com>
-Subject: Re: [PATCH bpf-next v3 19/51] bpf: representation for intervals with steps
+Message-Id: <d70a6efdaf710f840fae80da3db4d74f7fd2a7fc247d3f646f00c462053ebc8a@mail.kernel.org>
+In-Reply-To: <20261009-scev-minimal-rebase-v3-34-bcba9bc53ac9@gmail.com>
+References: <20261009-scev-minimal-rebase-v3-34-bcba9bc53ac9@gmail.com>
+Subject: Re: [PATCH bpf-next v3 34/51] bpf: use SCEV to widen bounded loops
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
 Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  9 Oct 2026 12:07:58 +0000 (UTC)
+Date: Fri,  9 Oct 2026 12:08:01 +0000 (UTC)
 
---===============2713618016317183260==
+--===============2689709681121741076==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: representation for intervals with steps
+> bpf: use SCEV to widen bounded loops
 
 TL;DR:
-- Commit message says eq/neq branches ignore base/step, but they appear to
-  change branch pruning
-- Comment in reg_bounds_sync() names reg_umin() where reg_smin() seems
-  intended (nit)
+- Loop widening may turn stack accesses variable-offset, so programs that
+  loaded before (dynptr loops, pointer spills) could be rejected until a later
+  patch fixes it
+- nit: __FUNCTION__ vs __func__
 
->     bpf: representation for intervals with steps
->
->     Extend scalar register tracking with a linear "base + step * k" description:
->     each scalar carries two u16 fields, base and step (invariant: base < step),
->     recording that its value is some point on the line base + step * k.
->     A fresh scalar starts as base=0, step=1, i.e. any integer.
->
->     This lets the verifier reason about strided values, e.g. an index multiplied
->     by an element size, which neither the min/max bounds nor the tnum can capture
->     for a non-power-of-2 stride. Such reasoning is necessary to allow
->     array access with a variable offset through PTR_TO_BTF_ID, e.g.
->     for expressions like p->arr[i].field.
->
->     reg_bounds_sync() uses the description in two ways:
->     - __reg_bound_offset() clears the low bits of var_off implied by the number
->       of trailing zeros shared by base and step.
->     - __update_bounds_from_step() intersects the 64-bit range with the line via
->       cnum64_intersect_linear(), snapping smin/smax to actual points on it.
->       This is the last step of the sync, as refining the range from var_off
->       can move the bounds off the line.
->
->     range_within() is extended to check whether the cur register's equation
->     describes a subset of the points described by the old register's equation.
->
->     Scalar ALU operations update base/step as follows:
->     - ADD of a constant (including pointer + scalar): keep step, shift base;
->     - MUL by a constant: scale step and base by the constant;
->     - LSH by a constant: scale step and base by the corresponding power of two;
->     - sign extension: keep the register unchanged if all values fit the target
->       type, reset to base=0, step=1 otherwise;
->     - All other operations reset to base=0, step=1.
->
->     Branch (eq/neq) checks do not take into account base/step yet.
->
->     Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-
-The changelog says "Branch (eq/neq) checks do not take into account base/step
-yet."  Is that accurate for this patch?
-
-is_scalar_branch_taken() ends by calling simulate_both_branches_taken().  That
-function runs regs_refine_cond_op() and reg_bounds_sync() on copies of the
-registers, and treats range_bounds_violation() as proof that a branch is dead.
-
-reg_bounds_sync() now ends with __update_bounds_from_step(), and
-cnum64_intersect_linear() returns CNUM64_EMPTY when the refined range holds no
-point of base + step * k.
-
-For example, take r1 in [0, 30] with step=3, base=0 (say from r0 *= 3 with r0
-in [0, 10]), followed by:
-
-    if r1 == 4 goto L
-
-The tnum and min/max checks cannot decide this.  In
-simulate_both_branches_taken() the true branch refines r64 to [4, 4], and then
-in cnum64_intersect_linear():
-
-    d = imod(base - imod(smin, step), step);   /* imod(0 - 1, 3) == 2 */
-    if ((u64)smax - (u64)smin < d)              /* 0 < 2 */
-            return CNUM64_EMPTY;
-
-So the JEQ branch is treated as dead (pred = 0) purely because of
-base/step.  JNE behaves the same way, and JNE against a range edge now snaps
-the bound onto the line ([0, 29] becomes [0, 27]).
-
-This looks sound as long as base/step are sound, but it is a real change to
-branch pruning, and mark_chain_precision() is called on the compared registers
-whenever pred >= 0.  Should the changelog describe this instead of saying
-eq/neq branches ignore base/step?
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 47a632a6749a..f5b2500335a7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> index 2d2a84156180..05dd8e439609 100644
+> --- a/kernel/bpf/scev.c
+> +++ b/kernel/bpf/scev.c
+> @@ -1638,3 +1646,1034 @@ int bpf_init_scev(struct bpf_verifier_env *env)
 [ ... ]
 
-> @@ -2208,6 +2337,15 @@ static void reg_bounds_sync(struct bpf_reg_state *reg)
->  	 * then new var_off is (0; 0x7f...fc) which improves our umax.
->  	 */
->  	__update_reg_bounds(reg);
-> +	/*
-> +	 * Both tnum and base+step define a sequence of points,
-> +	 * potentially w/o intersection, or intersecting after N
-> +	 * tnum_step()'s, where N can be large. On the other hand,
-> +	 * step+base *must* be in sync with r64 in order for
-> +	 * array traversal logic starting at reg_umin() to be sound.
-                                          ^^^^^^^^^^
+> +int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+> +			   struct bpf_loop_iters *iters)
+[ ... ]
 
-This isn't a bug, but is reg_umin() the right function to name here?  The
-array traversal logic isn't part of this patch.
+> +		r_scev = header_env->reg2scev[r];
+> +		reg = scev_reg_for_linear(cur_func, r);
+> +		/* If SCEV for r is (linear <reg> <slope>) */
+> +		if (is_simple_linear(scev, r_scev, &base_reg, &slope_imm) &&
+> +		    reg && is_widenable_reg_type(reg)) {
+> +			continue;
+> +		}
+> +
+> +		/* rA = rA, loop does not change this reg */
+> +		if (is_reg(scev, r_scev, &ra) && r == ra)
+> +			continue;
+> +
+> +		/* (any 1 (any 2 (any 3 4))) */
+> +		if (is_widenable_any(env, cur_func, header_env, r, r_scev)) {
+> +			continue;
+> +		}
+[ ... ]
 
-It is added later in the series by b312df27df3b ("bpf: varying offset access
-support for PTR_TO_BTF_ID pointers"), and that code starts from the signed
-minimum rather than reg_umin():
+Can widening here break stack accesses that used to verify?
 
-    if (check_add_overflow(reg_smin(reg), (s64)_off, &min_off) || ...
+bpf_compute_loop_iters() accepts a linear or (any ...) register based only on
+its SCEV shape and register type.  It does not look at how the loop uses the
+register.  If the register is used to build a stack address (r2 = r10;
+r2 += -16; r2 += r7), widening turns constant-offset stack accesses into
+variable-offset ones, and that is handled less precisely in the main pass:
 
-cnum64_intersect_linear() also snaps the signed bounds (cnum64_smin() and
-cnum64_smax()).  For ranges with negative values, reg_umin() is not on the
-line at all.  For example, [-5, 7] with step=3, base=1 has umin 0, and
-0 mod 3 != 1.
+  - A variable-offset fill of a spilled pointer ends up in
+    mark_reg_stack_read(), which falls back to mark_reg_unknown(), so the
+    pointer becomes a scalar.
 
-The claim that step+base "*must* be in sync with r64" also does not seem to
-hold for signed-wrapping ranges, since cnum64_intersect_linear() returns those
-unchanged when cnum64_srange_overflow() is true.
+  - A variable-offset spill marks the slots STACK_MISC, so the stored value
+    is lost.
 
-Could the comment refer to reg_smin() and the smin/smax snapping instead?
+  - dynptr, iterator, irq and res_spin_lock stack objects go through
+    stack_slot_obj_get_spi(), which rejects a non-constant var_off with
+    "has to be at a constant offset".
 
-> +	 * Hence, place this as a final step in the reg_bounds_sync().
-> +	 */
-> +	__update_bounds_from_step(reg);
->  }
->
+For example:
+
+        *(u64 *)(r10 - 16) = r1;
+        *(u64 *)(r10 - 8) = r1;
+        r7 = 0;
+        r8 = 0;
+    1:  r2 = r10;
+        r2 += -16;
+        r2 += r7;
+        r3 = *(u64 *)(r2 + 0);
+        r0 = *(u32 *)(r3 + 0);
+        if r8 != 0 goto 2f;
+        r7 = 8;
+    2:  r8 += 1;
+        if r8 < 2 goto 1b;
+
+Here r8 is (linear r8 1) and r7 is (any r7 8), so r7 is widened to {0,8}.
+The fill through r2 now has a variable offset and yields a scalar, and the
+load through r3 is rejected.  Before this patch each iteration was explored
+with a constant r7 and the program verified.
+
+The same happens with a C loop such as:
+
+    for (i = 0; i < 4; i++)
+        bpf_dynptr_from_xdp(ctx, 0, &dptrs[i]);
+
+which now fails with "dynptr has to be at a constant offset".  Spilling
+pointers through a widened stack pointer fails in the same way.
+
+A later patch in the series, 42d577fd54e2 ("bpf: avoid widening registers
+that hinder exact stack-slot tracking"), adds store_base_regs and makes
+bpf_compute_loop_iters() refuse to widen such registers.  Until then, programs
+that loaded before are rejected.  Should that check be part of this patch?
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 60287049cfe4..a597a8c18972 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -19916,6 +19921,178 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+[ ... ]
+
+> +static int maybe_clamp_scev_regs(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_func_state *frame = cur_func(env);
+> +	struct loop_stack_entry *entry;
+> +
+> +	if (frame->loop_stack_cnt == 0) {
+> +		verifier_bug(env, "%s: loop stack empty at %d", __FUNCTION__, env->insn_idx);
+> +		return -EFAULT;
+> +	}
+
+this isn't a bug, but should __FUNCTION__ be __func__ here?  checkpatch
+flags the gcc specific spelling, and the other verifier_bug() callers in
+verifier.c use __func__.
 
 
 ---
@@ -175,4 +164,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37923187511
---===============2713618016317183260==--
+--===============2689709681121741076==--
