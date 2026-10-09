@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-102.mta1.migadu.com [95.215.58.102])
+Received: from mta0.migadu.com (out-29.mta0.migadu.com [91.218.175.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC1A5012BE
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F2C48595E
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 20:28:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791577705; cv=none; b=fI+ZqkeDZBdDj2fjLsDuG1ThU1qZC6sGx1aJGK0+uZGTKpOPhx0/YnVQWcVlboSEwcEAf2surpalGUXhIGgeJUXha+8HWC1LReV7m6Ct2ax+qd77niE5uGpwQL6nHQGoTppFxcYUHo01hB0E3EJKF4FOe/tEfAnA7PdMDKjMoJw=
+	t=1791577709; cv=none; b=IHXswBXpbRKoN3f4zOXTKImYxLtd5dNX9fio2FUUHBNxx6KMEuooAsKCRCFUYsSLf8l9H7iisPuRCw/WUZmHh6wXcfFn+ZqoReyAtumLFmVVlqzne+peRT1bPKFZT+7HLzG+npNItTs1ynNpR9qnL1prFAFO5Cu2ILZ+yh1SPyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791577705; c=relaxed/simple;
-	bh=RnTN0WqJHc30mYPXgRMzpCnBfDU3HJINk3ADYJn26NM=;
+	s=arc-20240116; t=1791577709; c=relaxed/simple;
+	bh=rysPVt9Yj5zECxDbpVQd2+z8Osam3sGqEDKMm0ia2GM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h1q0xHDv+yVs9kDEm8HghUtp1Cmm3XMa4QR4EFvM9ZtuHebgmEGm6OPMRDoGOQIYVl+fCMgc2/+XtczCTMppLYsApSef0iUSRa0cVOEBJZBXwRQDjv8edQweDRrMuXSLNw9oe92GjIXLLyVAIi5Y2P57ECMprEv0aCBoACy7XLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=S4YH2BfO; arc=none smtp.client-ip=95.215.58.102
+	 MIME-Version; b=cRt/vzFckJFNqY+uyhCgdz1xwmJ5WMVuqgKt4sKbYzz1prqkFOwNs8FIIWwBu2F/f/cBMQZsZblhnpszc/ck00QFPJ45G+V9QijAQFW/b7C1T0Focd38+sngGsq88N11xR6EunKAnHzfnnRPTVQfD0edJ4jjx5krVwmfljX8vrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VG2gCpW0; arc=none smtp.client-ip=91.218.175.29
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="S4YH2BfO"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VG2gCpW0"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RnTN0WqJHc30mYPXgRMzpCnBfDU3HJINk3ADYJn26NM=;
+DKIM-Signature: a=rsa-sha256; bh=rysPVt9Yj5zECxDbpVQd2+z8Osam3sGqEDKMm0ia2GM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791577700; v=1; x=1792182500;
- b=S4YH2BfOBT1Nr7KlkCKRdnD0TrTgOCguB9DaShQPH1URJ/8126Ci3fhxfLDGkNjdJ+hnShGS
- gJsLx7b0NqNWTNVtDAy58CjUxKQ9G63BRuJvqd9smhrm1l48aqL67qP4WuF976KaXDXsbBY59Bp
- D4xVlnRXMMg0GvGJ6s++oDYw=
+ t=1791577703; v=1; x=1792182503;
+ b=VG2gCpW0Pmf53OwG+kioEqmikYDvunX4/PwugnuZFBZ0qDAx0DdfHiyLDIrSMZVfMrj8TwwF
+ WONKIolWNPhH9FfpS5vD/QVDAj+A53pSd3fVBHMyUAb48780poVWhTCgPPn6bkrn1M0TQP/hCWR
+ F2lR6E4UCGmlEMeDo4n5rlfg=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9ff79169a2ba3382;
-	Fri, 09 Oct 2026 20:28:20 +0000
-X-Mizu-Trace-ID: 9ff79169a2ba3382
+Received: by smtp.migadu.com with ESMTPS id 227650c8984a35b4;
+	Fri, 09 Oct 2026 20:28:23 +0000
+X-Mizu-Trace-ID: 227650c8984a35b4
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 01/11] bpf: Set up callee state outside of setup_func_entry()
-Date: Fri,  9 Oct 2026 13:27:48 -0700
-Message-ID: <20261009202759.50520-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 02/11] bpf: Pass the owning verifier state to callback setters
+Date: Fri,  9 Oct 2026 13:27:49 -0700
+Message-ID: <20261009202759.50520-3-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261009202759.50520-1-ihor.solodrai@linux.dev>
 References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
@@ -55,162 +55,161 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Callback argument setup may need to attach bookkeeping to the verifier
-state owning the callee frame. The frame should be current in that
-state before the arguments are set up.
+Callback setters receive the caller and callee frames, but not the
+verifier state that owns the callee. Synchronous callbacks use a queued
+state and asynchronous callbacks use a separate state, neither of which
+is env->cur_state.
 
-For sync callbacks, the setter runs inside setup_func_entry() before
-the new frame becomes current. Async callback setters already run on a
-complete state, directly from push_callback_call().
-
-Move sync callback argument setup to push_callback_call() after the
-frame is in place. Leave setup_func_entry() responsible for pushing the
-frame, and copy static-call arguments directly.
+Callback-local bookkeeping needs to be recorded in that owning state.
+Pass it through the callback setters and the map callback setup hook.
 
 No functional change.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/verifier.c | 69 +++++++++++++------------------------------
- 1 file changed, 20 insertions(+), 49 deletions(-)
+ include/linux/bpf.h   |  3 +++
+ kernel/bpf/verifier.c | 16 +++++++++++++---
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 54144372281c..d5de9d49a168 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -39,6 +39,7 @@
+ #include <asm/rqspinlock.h>
+ 
+ struct bpf_verifier_env;
++struct bpf_verifier_state;
+ struct bpf_verifier_log;
+ struct perf_event;
+ struct bpf_prog;
+@@ -178,6 +179,7 @@ struct bpf_map_ops {
+ 
+ 
+ 	int (*map_set_for_each_callback_args)(struct bpf_verifier_env *env,
++					      struct bpf_verifier_state *state,
+ 					      struct bpf_func_state *caller,
+ 					      struct bpf_func_state *callee);
+ 	long (*map_for_each_callback)(struct bpf_map *map,
+@@ -3183,6 +3185,7 @@ int bpf_iter_map_fill_link_info(const struct bpf_iter_aux_info *aux,
+ 				struct bpf_link_info *info);
+ 
+ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
++				   struct bpf_verifier_state *state,
+ 				   struct bpf_func_state *caller,
+ 				   struct bpf_func_state *callee);
+ 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 353bde9ae227..a0310e093880 100644
+index a0310e093880..8d6812fee0c9 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -10821,32 +10821,25 @@ typedef int (*set_callee_state_fn)(struct bpf_verifier_env *env,
- 				   struct bpf_func_state *callee,
- 				   int insn_idx);
- 
--static int set_callee_state(struct bpf_verifier_env *env,
--			    struct bpf_func_state *caller,
--			    struct bpf_func_state *callee, int insn_idx);
--
--static int setup_func_entry(struct bpf_verifier_env *env, int subprog, int callsite,
--			    set_callee_state_fn set_callee_state_cb,
--			    struct bpf_verifier_state *state)
-+static struct bpf_func_state *setup_func_entry(struct bpf_verifier_env *env, int subprog,
-+					       int callsite, struct bpf_verifier_state *state)
- {
--	struct bpf_func_state *caller, *callee;
--	int err;
-+	struct bpf_func_state *callee;
- 
- 	if (state->curframe + 1 >= MAX_CALL_FRAMES) {
- 		verbose(env, "the call stack of %d frames is too deep\n",
- 			state->curframe + 2);
--		return -E2BIG;
-+		return ERR_PTR(-E2BIG);
- 	}
- 
- 	if (state->frame[state->curframe + 1]) {
- 		verifier_bug(env, "Frame %d already allocated", state->curframe + 1);
--		return -EFAULT;
-+		return ERR_PTR(-EFAULT);
- 	}
- 
--	caller = state->frame[state->curframe];
- 	callee = kzalloc_obj(*callee, GFP_KERNEL_ACCOUNT);
- 	if (!callee)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 	state->frame[state->curframe + 1] = callee;
- 
- 	/* callee cannot access r0, r6 - r9 for reading and has to write
-@@ -10858,19 +10851,9 @@ static int setup_func_entry(struct bpf_verifier_env *env, int subprog, int calls
- 			callsite,
- 			state->curframe + 1 /* frameno within this callchain */,
- 			subprog /* subprog number within this prog */);
--	err = set_callee_state_cb(env, caller, callee, callsite);
--	if (err)
--		goto err_out;
--
--	/* only increment it after check_reg_arg() finished */
- 	state->curframe++;
- 
--	return 0;
--
--err_out:
--	free_func_state(callee);
--	state->frame[state->curframe + 1] = NULL;
--	return err;
-+	return callee;
+@@ -10817,6 +10817,7 @@ static void invalidate_outgoing_stack_args(struct bpf_verifier_env *env,
  }
  
- static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const struct btf *btf,
-@@ -10990,10 +10973,6 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	if (err == -EFAULT)
- 		return err;
+ typedef int (*set_callee_state_fn)(struct bpf_verifier_env *env,
++				   struct bpf_verifier_state *state,
+ 				   struct bpf_func_state *caller,
+ 				   struct bpf_func_state *callee,
+ 				   int insn_idx);
+@@ -11000,7 +11001,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 		callee->async_entry_cnt = state->frame[0]->async_entry_cnt + 1;
  
--	/* set_callee_state is used for direct subprog calls, but we are
--	 * interested in validating only BPF helpers that can call subprogs as
--	 * callbacks
--	 */
- 	env->subprog_info[subprog].is_cb = true;
- 	if (bpf_pseudo_kfunc_call(insn) &&
- 	    !is_callback_calling_kfunc(insn->imm)) {
-@@ -11044,8 +11023,11 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	if (IS_ERR(callback_state))
- 		return PTR_ERR(callback_state);
+ 		/* Convert bpf_timer_set_callback() args into timer callback args */
+-		err = set_callee_state_cb(env, caller, callee, insn_idx);
++		err = set_callee_state_cb(env, async_cb, caller, callee, insn_idx);
+ 		if (err)
+ 			return err;
  
--	err = setup_func_entry(env, subprog, insn_idx, set_callee_state_cb,
--			       callback_state);
-+	callee = setup_func_entry(env, subprog, insn_idx, callback_state);
-+	if (IS_ERR(callee))
-+		return PTR_ERR(callee);
-+
-+	err = set_callee_state_cb(env, caller, callee, insn_idx);
+@@ -11027,7 +11028,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 	if (IS_ERR(callee))
+ 		return PTR_ERR(callee);
+ 
+-	err = set_callee_state_cb(env, caller, callee, insn_idx);
++	err = set_callee_state_cb(env, callback_state, caller, callee, insn_idx);
  	if (err)
  		return err;
  
-@@ -11069,8 +11051,8 @@ static int check_static_func_call(struct bpf_verifier_env *env, int subprog,
- 	struct bpf_verifier_state *state = env->cur_state;
- 	struct bpf_subprog_info *caller_info;
- 	u16 callee_incoming, stack_arg_cnt;
--	struct bpf_func_state *caller;
--	int err;
-+	struct bpf_func_state *caller, *callee;
-+	int i;
- 
- 	caller = state->frame[state->curframe];
- 
-@@ -11088,9 +11070,12 @@ static int check_static_func_call(struct bpf_verifier_env *env, int subprog,
- 	 * For regular function entry setup new frame and continue
- 	 * from that frame.
- 	 */
--	err = setup_func_entry(env, subprog, *insn_idx, set_callee_state, state);
--	if (err)
--		return err;
-+	callee = setup_func_entry(env, subprog, *insn_idx, state);
-+	if (IS_ERR(callee))
-+		return PTR_ERR(callee);
-+
-+	for (i = BPF_REG_1; i <= BPF_REG_5; i++)
-+		callee->regs[i] = caller->regs[i];
- 
- 	bpf_diag_record_scrub(env, &caller->regs[BPF_REG_0], BPF_DIAG_MOD_CALLER_SAVED);
- 	clear_caller_saved_regs(env, caller->regs);
-@@ -11301,20 +11286,6 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
- 	return 0;
+@@ -11257,6 +11258,7 @@ static int check_func_callx(struct bpf_verifier_env *env, struct bpf_insn *insn,
  }
  
--static int set_callee_state(struct bpf_verifier_env *env,
--			    struct bpf_func_state *caller,
--			    struct bpf_func_state *callee, int insn_idx)
--{
--	int i;
--
--	/* copy r1 - r5 args that callee can access.  The copy includes parent
--	 * pointers, which connects us up to the liveness chain
--	 */
--	for (i = BPF_REG_1; i <= BPF_REG_5; i++)
--		callee->regs[i] = caller->regs[i];
--	return 0;
--}
--
+ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
++				   struct bpf_verifier_state *state,
+ 				   struct bpf_func_state *caller,
+ 				   struct bpf_func_state *callee)
+ {
+@@ -11287,6 +11289,7 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
+ }
+ 
  static int set_map_elem_callback_state(struct bpf_verifier_env *env,
++				       struct bpf_verifier_state *state,
  				       struct bpf_func_state *caller,
  				       struct bpf_func_state *callee,
+ 				       int insn_idx)
+@@ -11303,7 +11306,7 @@ static int set_map_elem_callback_state(struct bpf_verifier_env *env,
+ 		return -ENOTSUPP;
+ 	}
+ 
+-	err = map->ops->map_set_for_each_callback_args(env, caller, callee);
++	err = map->ops->map_set_for_each_callback_args(env, state, caller, callee);
+ 	if (err)
+ 		return err;
+ 
+@@ -11313,6 +11316,7 @@ static int set_map_elem_callback_state(struct bpf_verifier_env *env,
+ }
+ 
+ static int set_loop_callback_state(struct bpf_verifier_env *env,
++				   struct bpf_verifier_state *state,
+ 				   struct bpf_func_state *caller,
+ 				   struct bpf_func_state *callee,
+ 				   int insn_idx)
+@@ -11335,6 +11339,7 @@ static int set_loop_callback_state(struct bpf_verifier_env *env,
+ }
+ 
+ static int set_timer_callback_state(struct bpf_verifier_env *env,
++				    struct bpf_verifier_state *state,
+ 				    struct bpf_func_state *caller,
+ 				    struct bpf_func_state *callee,
+ 				    int insn_idx)
+@@ -11370,6 +11375,7 @@ static int set_timer_callback_state(struct bpf_verifier_env *env,
+ }
+ 
+ static int set_find_vma_callback_state(struct bpf_verifier_env *env,
++				       struct bpf_verifier_state *state,
+ 				       struct bpf_func_state *caller,
+ 				       struct bpf_func_state *callee,
+ 				       int insn_idx)
+@@ -11398,6 +11404,7 @@ static int set_find_vma_callback_state(struct bpf_verifier_env *env,
+ }
+ 
+ static int set_user_ringbuf_callback_state(struct bpf_verifier_env *env,
++					   struct bpf_verifier_state *state,
+ 					   struct bpf_func_state *caller,
+ 					   struct bpf_func_state *callee,
+ 					   int insn_idx)
+@@ -11421,6 +11428,7 @@ static int set_user_ringbuf_callback_state(struct bpf_verifier_env *env,
+ }
+ 
+ static int set_rbtree_add_callback_state(struct bpf_verifier_env *env,
++					 struct bpf_verifier_state *state,
+ 					 struct bpf_func_state *caller,
+ 					 struct bpf_func_state *callee,
+ 					 int insn_idx)
+@@ -11454,6 +11462,7 @@ static int set_rbtree_add_callback_state(struct bpf_verifier_env *env,
+ }
+ 
+ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
++						 struct bpf_verifier_state *state,
+ 						 struct bpf_func_state *caller,
+ 						 struct bpf_func_state *callee,
+ 						 int insn_idx)
+@@ -11489,6 +11498,7 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
+ }
+ 
+ static int set_rcu_callback_state(struct bpf_verifier_env *env,
++				  struct bpf_verifier_state *state,
+ 				  struct bpf_func_state *caller,
+ 				  struct bpf_func_state *callee,
+ 				  int insn_idx)
 -- 
 2.56.0
 
