@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-134.mta0.migadu.com [91.218.175.134])
+Received: from mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F84351C11
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 15:10:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49B23BB69D
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 15:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791558618; cv=none; b=LiMitltpcna5HPzQh4SWxB2xhtWZw3BZtlisIB3zCRVqSrLIIimEp0R//6D6mMOqZRXPZYbz4yqpvjDZMpvUp2MFH+AH2I2jWxd1FXcdGrBZS/BPcKEtBOK19wUju07OE+BM3LR83xxuT5RrHQKy5oGPZt7aLN9znc0Yz+NHihA=
+	t=1791558793; cv=none; b=dlOB2tnoHLzE1wGGQxJozQFM6l1gxrESaF6aNF41MixCgnUVZhBNba4Jd/uCn39rmSlmQQQbhktWxJhnXBmY3SZRLJbBGTJ0WHZqMweZLHp39qZ4nGBy3uhDLUKwBBfUhK70mDfL55Ar8HDMs0FR7P0s7d79kAkg2ZH5c6GD1E8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791558618; c=relaxed/simple;
-	bh=JXHbvHdJ+pNlt3vZOl2uWCmVdhCz9quuyejIJCOTWEg=;
+	s=arc-20240116; t=1791558793; c=relaxed/simple;
+	bh=ES5C2zU9/owZ4m8OOip0v8LNQt+RScqdFXyLvYSW780=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gpe+InQMhQa7AMYLbR9qa+Puu7e77YNedFk88Gx4ru0LsfF+eyyfIR2Sv+Y7FIv+ZDrh8A42ZdQISM9/dbWFn72oHhwce7xBpSoElPSKE2ZG8yYIyUujatH2kVV1P+6mXlvAmBQxpHx7MFdCH6slN1IkeyuxFeg4drMSy9zC8bI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uzTR9S3t; arc=none smtp.client-ip=91.218.175.134
+	 In-Reply-To:Content-Type; b=IJplRIx1mV4HBHWUDBO5pJi6kd+Gm8NOlfefMqUpHxr9GeqPHR0h/Qn4vnW9MbUMRHGlU8rZb23ld5ZYZDrljSASczOn19ORfcJLWG/hmgt3C+ZdZAKLIXFfVrRNmtKVuYZI5EIBXKAn/CipvnjyGpJHq74/OIHIDH/v2AqaLGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FtBeLo/g; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uzTR9S3t"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FtBeLo/g"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JXHbvHdJ+pNlt3vZOl2uWCmVdhCz9quuyejIJCOTWEg=;
+DKIM-Signature: a=rsa-sha256; bh=ES5C2zU9/owZ4m8OOip0v8LNQt+RScqdFXyLvYSW780=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791558614; v=1; x=1792163414;
- b=uzTR9S3tWdpmvKVi/POT6bcg+A6ayDsw4977BA3XTL+L0h9ilP8S2B75Xde/MPGpkXNBo5Bc
- b2hVESuIpPx+YbWqKm4fBs+CjznOjHGW3g+n4vhjuv6/V3sjXYSjIkIh07zN/Biu9JJuza6flMS
- /kRRsurbsNOHJ0aLI9h0Q+EY=
+ t=1791558789; v=1; x=1792163589;
+ b=FtBeLo/gNfFJJoHy4sZzOwir1Xl2G9XmxI58V2U9lxX3NR4TPN7FijLIwNP4FEBEFl+TTvIC
+ zxi8Id4pq4G1T1IJotFTuCVBkkK+99Wqv6Mk+qvUJ7gs/C8iSuPnO6uzMQL+iNJIF2QloAQ8AD8
+ UZgE9I0dwcco05kuDiHi0d0Q=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6ffb09638a1a6eac;
-	Fri, 09 Oct 2026 15:10:13 +0000
-X-Mizu-Trace-ID: 6ffb09638a1a6eac
+Received: by smtp.migadu.com with ESMTPS id a2210f97bc26ebe3;
+	Fri, 09 Oct 2026 15:13:09 +0000
+X-Mizu-Trace-ID: a2210f97bc26ebe3
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <6a42f97c-66ac-4f44-90be-79e3359b2444@linux.dev>
-Date: Fri, 9 Oct 2026 17:10:12 +0200
+Message-ID: <90e57268-b5c3-4113-b45b-25dcb6b132b5@linux.dev>
+Date: Fri, 9 Oct 2026 17:13:09 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,98 +38,78 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v10 04/24] bpf: Keep a call site's landing pad in
- insn_aux_data, add lookups
+Subject: Re: [PATCH bpf-next v10 05/24] bpf: Mark covered call sites and check
+ a program can take a table
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20261009041447.17092-1-yonghong.song@linux.dev>
- <20261009041508.23246-1-yonghong.song@linux.dev>
- <sashiko-outbox-164829@kernel.org>
+ <20261009041513.24198-1-yonghong.song@linux.dev>
+ <sashiko-outbox-164845@kernel.org>
 Content-Language: en-GB
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <sashiko-outbox-164829@kernel.org>
+In-Reply-To: <sashiko-outbox-164845@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 10/9/26 6:28 AM, sashiko-bot@kernel.org wrote:
+On 10/9/26 6:34 AM, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf: adjust_insn_aux_data fails to shift cleanup_pad for BPF_PATCH_MOVE_TARGET
+> - [High] bpf: exception landing pad target fails to shift under BPF_PATCH_MOVE_TARGET
 > --
 >
-> commit 8654da066c194611f7e2de5fef00da7ac62a0070
+> commit 12354911ea762dbd3bb3462885368e582fd7efd5
 > Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> bpf: Keep a call site's landing pad in insn_aux_data, add lookups
+> bpf: Mark covered call sites and check a program can take a table
 >
-> This commit tracks a call site's landing pad in insn_aux_data as cleanup_pad.
-> It updates adjust_insn_aux_data(), verifier_remove_insns(), and
-> bpf_opt_remove_nops() to keep this data in sync when instructions are patched
-> or removed.
+> bpf_exc_prepare() records the landing pad of every call in a cleanup record's
+> range. bpf_exc_check_prog() refuses offloaded programs, programs without
+> JIT support, and programs with epilogues or exception callbacks.
 >
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 206cc9a614a95..64baee1a37e60 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
+>> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+>> index 2fef417dc090f..21bc1294227c1 100644
+>> --- a/kernel/bpf/exception.c
+>> +++ b/kernel/bpf/exception.c
+>> @@ -141,6 +141,76 @@ int bpf_exc_check_info(struct bpf_verifier_env *env, const union bpf_attr *attr,
 > [ ... ]
->
->> @@ -244,11 +244,18 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
->>   			data[i].non_stack_access =
->>   				data[off + cnt - 1].non_stack_access;
->>   			data[off + cnt - 1].non_stack_access = false;
->> +			data[i].cleanup_pad = data[off + cnt - 1].cleanup_pad;
->> +			data[off + cnt - 1].cleanup_pad = 0;
->>   		} else if (bpf_is_mem_insn(insn + i)) {
->>   			data[i].non_stack_access = true;
->>   		}
->>   	}
->>   
->> +	if (env->cleanup_info_cnt)
->> +		for (i = 0; i < prog_len; i++)
->> +			if (data[i].cleanup_pad > off + 1)
->> +				data[i].cleanup_pad += cnt - 1;
+>> +static void mark_call_sites(struct bpf_verifier_env *env)
+>> +{
+>> +	u32 i, j;
+>> +
+>> +	for (i = 0; i < env->cleanup_info_cnt; i++) {
+>> +		struct bpf_cleanup_info *rec = &env->cleanup_info[i];
+>> +
+>> +		for (j = rec->begin_off; j < rec->end_off; j++) {
+>> +			struct bpf_insn *insn = &env->prog->insnsi[j];
+>> +
+>> +			if (!bpf_pseudo_call(insn) && !bpf_is_callx(insn) &&
+>> +			    !bpf_is_unwind_kfunc(insn))
+>> +				continue;
+>> +			env->insn_aux_data[j].cleanup_pad = rec->landing_pad_off + 1;
 > [Severity: High]
-> Does this check properly account for the BPF_PATCH_MOVE_TARGET patch mode?
+> If a landing pad is at the exact start of the program or subprogram
+> (landing_pad_off == 0), how does this interact with BPF_PATCH_MOVE_TARGET
+> when prepending instructions?
 >
-> When bpf_patch_insn_data() is called with BPF_PATCH_MOVE_TARGET (for example,
-> when inserting a prologue), the original instruction is shifted to the end of
-> the newly inserted sequence. If a landing pad points exactly to the patched
-> instruction:
+> Because kernel/bpf/exception.c:bpf_exc_check_info() permits landing_pad_off
+> to be 0 or subprog_start, this structural layout is possible. When it
+> happens, the shift logic in kernel/bpf/fixups.c:adjust_insn_aux_data() uses
+> a strict greater-than condition:
 >
->      data[i].cleanup_pad == off + 1
+>      if (env->cleanup_info_cnt)
+>          for (i = 0; i < prog_len; i++)
+>              if (data[i].cleanup_pad > off + 1)
+>                  data[i].cleanup_pad += cnt - 1;
 >
-> This condition would evaluate to false, leaving the cleanup_pad unadjusted.
+> If cleanup_pad == off + 1 (e.g., when off=0), it doesn't get shifted.
+> But BPF_PATCH_MOVE_TARGET prepends instructions at off=0, such as
+> when gen_prologue is called in kernel/bpf/fixups.c:bpf_convert_ctx_accesses().
 >
-> As a result, if a subprogram with a landing pad at its first instruction
-> receives a prologue, wouldn't the unwinder incorrectly jump to the prologue
-> instead of the original instruction?
->
-> Could this lead to stack or frame pointer corruption by re-executing prologue
-> stack setups during unwinding? Other locations handling jumps typically use a
-> ternary to handle this, such as checking if it is greater than:
->
->      (mode == BPF_PATCH_MOVE_TARGET) ? off : off + 1
+> Will this leave the unwinder jumping into the newly prepended verifier
+> instructions rather than the program's original first instruction,
+> potentially causing issues like out-of-bounds reads or infinite loops if
+> registers are clobbered?
 
-Looks like there are no new change with BPF_PATCH_MOVE_TARGET, so I think
-we do not need to do the above. The below is the comment in v9:
-
-====
-
-Okay, commit "bpf: Retarget indirect jump targets across prologue prepends"
-introduced BPF_PATCH_MOVE_TARGET and merged last Friday. It solved three
-cases for ops->gen_epilogue, ops->gen_prologue || env->seen_direct_write, and
-stack slots for subprogs. ops->gen_epilogue has been rejected in patch 5.
-We cannot allow ops->gen_epilogue since it may silently exit.
-For other cases in "bpf: Retarget indirect jump targets across prologue prepends",
-The above commit should already handle this.
-
-For the other two, cleanup_pad == off + 1 cannot happen, because MOVE only
-patches an entry insn and a landing pad cannot start at insn 0: the entry is
-always walked outside a pad first, so reaching it again from an unwind
-fails bpf_exc_check_insn() with "insn %u runs both inside and outside a
-landing pad". Pads after off are shifted by the existing `> off + 1`, and a
-covered call at off moves with its insn_aux_data.
-
-====
+The same as patch 4, BPF_PATCH_MOVE_TARGET is not needed.
 
