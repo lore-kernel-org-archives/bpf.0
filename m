@@ -1,67 +1,64 @@
 Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED97033F383
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 01:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4A331E844
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 01:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791510606; cv=none; b=UtddxVJgwcXKoOuEymsWImZY/XEtfP3nE4vSZE7c8OaXIIj0NoLwrT3YelgsGo+wtuOoJTAWmsV3FpdCJJVA+CttJG4vhb8iU4Mww5ErzPAMraCEJBgQ62RBwH0L/Sc1fUNYn4bhjcHuXAOFcfPhNDfvBEQ8EPg47huyJ+N9o44=
+	t=1791510617; cv=none; b=lHaPi0hKstWM4riLlIQWxJUq6AOS4g5iejQwzUOfITpn40G82k2NeUOAMrML7S4X3hhL8On5CjI7p4Fz1XVGtkjPouhfLgqFm9ltkSo/dvqgMLKDatCkI55c96YZUBzzQJtTuywHPFd17FO0Q04Xn8rkAMlx/FlxY1Yrxt96dBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791510606; c=relaxed/simple;
-	bh=+/4v1kWb9Z8LHSl6fJMTJEt4Wi+ztr3HQBgQiwBNDv0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Xh3SKQe98bS8V9iHFr647BT9iypTfSm8TN5UMAnnfUWZLeLBlAHMRT4FaByFgT6R8EJgPucYFQ6ejf9P/1TUE2JrTgozpUHFgz7Qc0TBQxDm0O/5wWEY/xmWFlfQnVaswOXyyTR4PbxF5oQSm4Hec8Vy+tfsFG856nkJuk7zkmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VNZzUIIm; arc=none smtp.client-ip=74.125.82.172
+	s=arc-20240116; t=1791510617; c=relaxed/simple;
+	bh=om+GUUwBH6ToUbY7jlQ4dCRdnqUsjvHMbCMe/jqcWHI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Kv50xZ6rYxRTfAuJvJYiu+d9wlaBptJ7N6EJMeIM3dIdLNO76+972bRpIaz3delsxzbFTuBOGya6eHVhbHVjqyXHOMf2cMFErlPsHO7vdtbrC0DL0lR3rBj4gXLPkb2aTtf8uGcw6uDHXNQR2ly95Y1HSjdedUfNPkKUdQ1205g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RYnRVJgf; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VNZzUIIm"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-3514b90bb89so5636415eec.1
-        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 18:50:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYnRVJgf"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-33e6279a1d7so3949663eec.1
+        for <bpf@vger.kernel.org>; Thu, 08 Oct 2026 18:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791510604; x=1792115404; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kUd5celQ1xRRVvSTT7TnMsIc0Rmu+vm1iEQ8dUANTn4=;
-        b=VNZzUIImYtk6fROQvo8fMFqpfR+vd0qtnStqibwDZ10TvTAf1PadA5Zou4bBB8xP1u
-         mc4KYe3oKA+YtDAPA7GTjgSwwU1xfaQ86f3jGst894XGnKokg3Ex5mOQMlFJ8CS2O4jN
-         DsaL7k/KCcUiMdP+SiaGxQMqGHyd7u5WaHsmwfKQwqNsq7ab3jD+lZobyDsZRAzSYqz7
-         B7h9k+1u6l2u7Eb04zMR8RUnv1W122eIwBP8sk50xwX8Zso4L3c9G1T44s62VsJRPc2L
-         G4JX8O4PHEuYG1MDPNJ+wLokCVRXjb/BEcoA2CTPfVfTj1Df9QMKIOwAv3+L4u/uxyC6
-         q/7w==
+        d=gmail.com; s=20251104; t=1791510614; x=1792115414; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=lV+huXTZ0xAteNiAHITrqOnDsRbJzozwdaHfD5FZYMc=;
+        b=RYnRVJgfmZjR0MfiaMShD93coy7/vpnP9Kd6hqtIK6bvlvCSltZ7cug/e8SlSzOpZO
+         GyRSBH9Hy1GCJIQHRsZ13AQyK9eHmxPjW9HwD/boqfIVFo3iM3KLdnnyBK9m9xh4bURM
+         vNhmWsEjRXI2sF0g2DTgtKdU77W6zhaquANGicZWQKv71DWn+WurZxMZkxDtjuRQw4si
+         BbvLIPmf+whfcKdWsx1ZVA2KqI8dtGf54DjkwGoCsXUcbnkMGX+bXfqnbk+L/aIDqtom
+         xbcEXhefFJmzPNMJESF7aDeRm0I8q9REJKmkPioKs3j7DHWvbtiabSGh1B2m+G6mn27q
+         SArg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791510604; x=1792115404;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kUd5celQ1xRRVvSTT7TnMsIc0Rmu+vm1iEQ8dUANTn4=;
-        b=Zm/ekWT0KqmEcyzLPW38UV8IiESr65NTKaA59hGzvT55PDr8pFKZr3o6EujR+aMPCy
-         LUpxNpUxwPzXo81cZYLkOKnDD7YfypvK7G2qziFUF0NCcw6P7BVEC6YCd6bAu6XFi09V
-         Up2RnEJrICMIJlKOtY8U9w4DxYGPm3jHGvv/IL5gyxoo8QcGgVqtLoDLoD2puE7pGLgR
-         0YARvVKVxAsNgexmljNyY1c7EUckoGDLGPYZ7LuGouuiWops6YaVBtV3bXzjCKvKPqOQ
-         UiCutI3MDQuSa+Vf5w1lm2SSjRLmBoeszhXoD5YNjHyZndUv9C1CgMlOsJFZ4tzrwF3c
-         BQwQ==
-X-Gm-Message-State: AFuF++mK5V6cHH6bOlNV/oQf2tp39yyVmCpjQov6V1RXTtkTcr5/i8ql
-	3DdmmbLnt4H9adILVUWXWauwnOHeFTCg/y+BWTBeGq01NPt4ndpo7Rbd
-X-Gm-Gg: AYBFou3bwDJ6/bKN/g95H8bJV1Pl99XjYalQ5ftblJYRVLt4bv7l0RXwou2gfDxsgty
-	hivCyVKqV97IdGv3LFq5jIwcvPfL444py6X0xiCveIVH9LNjj2p4IiQMd+Fzkqss4ZN3xKUt18k
-	nmxV0jJHjqir5GU/J+UQNi4h2O4pvgub/uj2Ja9o9MaC5GNbyVhA9sLmGnh0XE2vKXfTm+Gwmsf
-	fREIdPB04ar4S/Xtnxe0I/Shf9cEamFRFqPp9edHwA5/NkkEtY3gY8Q2gVPmFKkRQg+Ss/2IlS2
-	+R+MJsIBUs672/AOuPQURuaccRmaXufjbrqE9GABdnryUk3UlpnhWVyROzGSRLS/VK7jxJLqAVX
-	V7dAtnrEeSB91WRcrtwKIPJudch50ovhh+vxgpO+q784qq9nCX4pWuY8UVu8HFhDz2sxILO1GdW
-	+InRLRjqRvjoPP/o/iFt8NRhE7pjViRQpUwb+aU6yP7EQbTMpMceFy1XhsuAcgCk2MsA==
-X-Received: by 2002:a05:7022:7e83:b0:147:8a40:cdf3 with SMTP id a92af1059eb24-16a60fcd68bmr770017c88.24.1791510603880;
-        Thu, 08 Oct 2026 18:50:03 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791510614; x=1792115414;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=lV+huXTZ0xAteNiAHITrqOnDsRbJzozwdaHfD5FZYMc=;
+        b=Sl+p6eTbYtYRIeK+xsXg56TBSCbKpmGp+WV0R2FuVGn8ZNwoaP+XHjyeb8lTwIGRiH
+         ElmqGLDb38iBx7C9DImovcACDuhGD8RF8OVTGUyjCgmK3oiFrEPNjgPcd3XwV9hDwhPf
+         SefIiLG/EjTxPXTiPnlFo1xm9OzFyiOu6II6XG+U9UxdU40jewFN5My16hMYkHYS6PIZ
+         Mw962/1kiGr3bERcCJLWv82VKqy93cYJGEMug4m7LKTUzQHmgEplu9A/7bzMzKuc5F77
+         qyRo6Mn9PkOftvVeJMVUm50NRaCNDMcpaP1kFv2x9agEx6juY4XEKwJaAqGmmig0BoEu
+         47ww==
+X-Gm-Message-State: AFuF++l+2ObfTeEfU9WP1hyDgwZsPpknWigKz8KG2TdL6fW3gGshdejL
+	o3XNaQ2B6357uI/ygaikBShX402GX+hH8AjEmmL51Fyglc5U0Tm8cNRI
+X-Gm-Gg: AYBFou33XDxjgOD2dFlx/4pdyEkCGRXPYF01ebkJTQiupXiAiVJv43JOQnwySgqlLPJ
+	Rm4MmlhKf4k3V/QKBdsm6w4DNjoIZvQAPCJhOdaWyhslc7oBcyo8gU+Ou8NExobbVrYZS/2jzKu
+	QjZuEvUlseVMbhiBW/Jvsq9SVpMdSLZEQYCug163+kPvoGOCQ/q7G9gL/Y+38dYaCcPkgrLLzGY
+	FpL/BHTnXDuajcjntxtklTb45eS2yR+vero31JwUmgS7J5ibCjNh1HKzmBmulzjCpf6mEo0Dz8W
+	YeX2n4AUOGv3zQkVN8DskKm6L9Sj2Yf76rZwn0SiO7amOtjNLEIphTuCwbSiiN2ZFyXtEsrlJk7
+	jTqe2yp0EW1zR2LC6PLnt7B3OWz6UF8Luo/sXMcVKsqa/CpvSYGZK2C4BjbpnOgYvLR0R9aQrfH
+	pHbQD7rj2mz2TPqaUmeqGaBCqGKYQowFrFQm8zYYeloztORvUlWaKzox4rsMAUcCszqQ==
+X-Received: by 2002:a05:701b:4588:20b0:151:ceb3:e0f2 with SMTP id a92af1059eb24-16a64aa0fc5mr502094c88.38.1791510613961;
+        Thu, 08 Oct 2026 18:50:13 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb1d6e6sm1984845eec.24.2026.10.08.18.50.00
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb1e02asm2015555eec.27.2026.10.08.18.50.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 18:50:03 -0700 (PDT)
+        Thu, 08 Oct 2026 18:50:12 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 09 Oct 2026 09:49:52 +0800
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Skip libarena on kernels with
- too many possible CPUs
+Date: Fri, 09 Oct 2026 09:50:07 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Run tc_edt serially
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,9 +67,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261009-selftests-bpf-libarena-nr-cpus-v1-2-e726ccc66fc6@gmail.com>
-References: <20261009-selftests-bpf-libarena-nr-cpus-v1-0-e726ccc66fc6@gmail.com>
-In-Reply-To: <20261009-selftests-bpf-libarena-nr-cpus-v1-0-e726ccc66fc6@gmail.com>
+Message-Id: <20261009-selftests-bpf-tc-edt-serial-v1-1-f72e045f2465@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAE5IyGoC/x3M0QqDMAxA0V+RPC/QirrprwwfuppsAanSBBHEf
+ 7fu8cLlHKCUhRSG6oBMm6gsqYR/VBB/IX0JZSoNtas771yPSjMbqSl+VkaLSJPhjYQZ+9i1gZ+
+ eX00LRVgzsex//Q33nmg3GM/zApVBAT13AAAA
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -80,50 +78,48 @@ To: Alexei Starovoitov <ast@kernel.org>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
  Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-serial_test_libarena runs every test program of libarena, most of them
-after resetting the buddy allocator with arena_buddy_reset.
+tc_edt shapes the traffic of a TCP connection between two netns to
+5Mbps with a BPF program, and checks that the rate it measures from the
+userspace sender and receiver is within 2% of the target.
 
-The buddy allocator takes an arena spin lock, which fails with
--EOPNOTSUPP on kernels built with more than 1024 possible CPUs, as
-distributions commonly configure them. Every test then fails at
-arena_buddy_reset, while the arena_spin_lock test already skips in that
-case.
+The measured time includes the time the sender and the receiver take to
+run. When test_progs runs other tests in parallel, the sender and the
+receiver compete with those for the CPUs, the transfer takes longer,
+and the measured rate falls outside of the 2% margin.
 
-Reset the allocator once before running the tests, and skip them when
-that returns -EOPNOTSUPP.
+Make tc_edt a serial test.
 
-Fixes: b1487dc1b181 ("selftests/bpf: Add selftests for libarena buddy allocator")
+Fixes: b0f82e7ab6fb ("selftests/bpf: integrate test_tc_edt into test_progs")
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/libarena.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/test_tc_edt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
-index daade4150af66..070a08856ee04 100644
---- a/tools/testing/selftests/bpf/prog_tests/libarena.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
-@@ -240,6 +240,15 @@ void serial_test_libarena(void)
- 	if (!ASSERT_OK(ret, "arena_alloc_reserve"))
- 		goto out;
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c b/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
+index 462512fb191f1..1e82d88c987a7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
+@@ -127,7 +127,7 @@ static void run_test(void)
+ 		  "rate error is lower than threshold");
+ }
  
-+	/* Skip on kernels with more possible CPUs than arena spin locks support */
-+	ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_buddy_reset));
-+	if (ret == -EOPNOTSUPP) {
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK(ret, "arena_buddy_reset"))
-+		goto out;
-+
- 	bpf_object__for_each_program(prog, skel->obj) {
- 		const char *name = bpf_program__name(prog);
+-void test_tc_edt(void)
++void serial_test_tc_edt(void)
+ {
+ 	struct test_tc_edt *skel;
  
 
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261009-selftests-bpf-tc-edt-serial-9c65af71f845
+
+Best regards,
 -- 
-2.43.0
+Qiliang Yuan <odys.yuan@gmail.com>
 
