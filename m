@@ -1,65 +1,53 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583924EDCD8;
-	Fri,  9 Oct 2026 14:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-m4920.qiye.163.com (mail-m4920.qiye.163.com [45.254.49.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E0534D3BE;
+	Fri,  9 Oct 2026 14:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791556922; cv=none; b=RJYAL1h0y1g3x/lW1bNO6AssradnotxAoGbPYIOnDxGM46UWPn8DwccwwqH8XYqFMy9dG1j3UVPJFL2cx+WaRmP2UWnJm52odRE5kqxZfzxMpBZZyunij64uU6vPpUsyLON1tX/eO8/DCXU/QdG7DJ8ykEvTgumP4/vJhY5oLDY=
+	t=1791557572; cv=none; b=gX/xGIFTrf6MEF9OIdoKnXp0Xc7ZNBUN94x8JANfFh8A1Ay+mgvyZ3dn7fQa568Is48y4+B5Sg/WdgKY9s2n7LpYMfwSYOtAQ58qMoL1fKytq+y/RYny1KpzJoCC4qb+d1Sb0kJ6l9OBgWIZ8rS3HOHRBmx9lP6YarS3z4IGDAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791556922; c=relaxed/simple;
-	bh=mlRnTGrxCtR+7T4lmk41OPh2WW3NTcE3nhLpfNsmfQA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cC/xzRgqesY3b5MrIVgGRQHONxaa+Od2k06V8fIgp+aOxVdVr0krLJTn+JKkWKGjyCU20YwWDLAtCOVVV02wdJansXb+VGvUNWUZMNykL9J6hY5Ciq+SLAgwwQtNylO4rUk4kqaBbz+G3wG1pAjTkGQEco+SpH+FJVXYWYEWGG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Ed+BUcT2; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ed+BUcT2"
-Received: from weh-cvm-dev-vm.y50bckvjo0hefgfnzfztsfttff.phxx.internal.cloudapp.net (unknown [20.169.55.37])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 4AF7F20B717A;
-	Fri,  9 Oct 2026 07:41:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4AF7F20B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1791556918;
-	bh=RyTfBSSc1V8eyMXfvpu3tv4hT7SofScxxwVaYUTug3I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ed+BUcT2GyEV0PnvrOEStmXMo54OGnOiESObBdmiogPshNwXjBBrzS2sF4pt5YFcp
-	 ZvgOwTcjyTR11CvimJ3ANCd100PH1VaQEKbJyibx6wWO1P5TE8+l+IOzhPRoNdp7IC
-	 vu+ooSBrY3w2le4C1oQIk04CXT8w9tCrXS+tI+QM=
-From: Wei Hu <weh@linux.microsoft.com>
-To: longli@kernel.org,
-	kotaranov@microsoft.com,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	jgg@ziepe.ca,
-	leon@kernel.org,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	shradhagupta@linux.microsoft.com,
-	horms@kernel.org,
-	ernis@linux.microsoft.com,
-	stephen@networkplumber.org
-Cc: netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	dipayanroy@linux.microsoft.com,
-	bpf@vger.kernel.org,
-	sdf@fomichev.me,
+	s=arc-20240116; t=1791557572; c=relaxed/simple;
+	bh=sA/DsWao9GwTHZp1eDTeWcxf7HKsdYenxCEWajcGEu0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YnimbbQFQ/xJOrLUI2D7W9XcnvsXUkdCO979SgnQIQHNRU9594vGTchwojGyRkjTSuWFw/f00VMkTzNBN5S9UuSl+IBy61KMQZfNyn54bf2B9ypR8+hhZ/qtc98RShxDgS9pxQJ42aGmCqCBcv/Z/BgSWihz6k2eZFhCRuamlaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=45.254.49.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe2901a0;
+	Fri, 9 Oct 2026 19:23:27 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
 	daniel@iogearbox.net,
-	hawk@kernel.org,
-	ast@kernel.org,
-	john.fastabend@gmail.com,
-	weh@microsoft.com
-Subject: [PATCH net-next v6 13/13] net: mana: keep the existing queues when the channel count is raised
-Date: Fri,  9 Oct 2026 14:41:24 +0000
-Message-ID: <6243b02cc7140a9ff340dbdb8b770d22b19ddb9b.1790795005.git.weh@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1790795005.git.weh@linux.microsoft.com>
-References: <cover.1790795005.git.weh@linux.microsoft.com>
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH 2/6] mm/page_owner: add bpf_iter target "page_owner"
+Date: Fri,  9 Oct 2026 19:23:04 +0800
+Message-Id: <20261009112308.240769-3-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20261009112308.240769-1-zhen.ni@easystack.cn>
+References: <20261009112308.240769-1-zhen.ni@easystack.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,536 +55,300 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa120675c160229kunmd33b3e054cb27e
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDTx5KVhlDT0wYTE5DHklNSFYVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
-From: Long Li <longli@microsoft.com>
+Register a bpf_iter target "page_owner" that walks the pages eligible
+for page_owner output, with the same eligibility rules as the
+/sys/kernel/debug/page_owner read path.
 
-Keep existing queues and allocate only the added tail. Growing N to M
-now needs M SQ/RQ pairs at peak, rather than N + M.
+For each eligible page the attached BPF program receives the pfn, the
+page and the page_owner record, and can freely filter and format output.
 
-Track the fresh queues separately for failure cleanup and XDP references.
-Wait for TX-selection readers before freeing old containers, and clear
-slots during partial teardown. Full rebuilds now keep the current count.
+The po_snap record in the scan cursor is taken inside the page_ext
+RCU window and handed to the BPF program as a copy, so no RCU window
+is needed at consumption time. Torn reads remain possible if the
+record is concurrently updated while it is copied, but this is the
+same best-effort behavior as the read path has always had.
 
-Advertise in-driver resize recovery after converting the live resize
-paths. Failed rollback still requires recovery.
+The target is registered from pageowner_init() when both
+CONFIG_PAGE_OWNER and CONFIG_BPF_SYSCALL are enabled; a registration
+failure only disables the bpf_iter target.
 
-Signed-off-by: Long Li <longli@microsoft.com>
-Signed-off-by: Wei Hu <weh@microsoft.com>
+Userspace tools such as bpftrace can attach to this target like any
+other bpf_iter. For example, to count pages owned by init (pid 1):
+
+    bpftrace -e 'iter:page_owner / ctx->po->pid == 1 / { @ = count(); }'
+
+Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
 ---
- .../net/ethernet/microsoft/mana/mana_bpf.c    |   2 +-
- drivers/net/ethernet/microsoft/mana/mana_en.c | 209 +++++++++++++++---
- .../ethernet/microsoft/mana/mana_ethtool.c    |  31 ++-
- include/net/mana/gdma.h                       |   8 +-
- include/net/mana/mana.h                       |   7 +-
- 5 files changed, 217 insertions(+), 40 deletions(-)
+ mm/Makefile          |   3 ++
+ mm/page_owner.c      |  33 +++---------
+ mm/page_owner.h      |  48 ++++++++++++++++++
+ mm/page_owner_iter.c | 116 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 174 insertions(+), 26 deletions(-)
+ create mode 100644 mm/page_owner.h
+ create mode 100644 mm/page_owner_iter.c
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-index 0ad3a0fa6747..798f0dc485f8 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-@@ -216,7 +216,7 @@ static int mana_xdp_set(struct net_device *ndev, struct bpf_prog *prog,
- 			goto clear_flag;
- 		}
+diff --git a/mm/Makefile b/mm/Makefile
+index e7245cb88c66..d7307b5a964c 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -115,6 +115,9 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += kmemleak.o
+ obj-$(CONFIG_DEBUG_RODATA_TEST) += rodata_test.o
+ obj-$(CONFIG_DEBUG_VM_PGTABLE) += debug_vm_pgtable.o
+ obj-$(CONFIG_PAGE_OWNER) += page_owner.o
++ifdef CONFIG_BPF_SYSCALL
++obj-$(CONFIG_PAGE_OWNER) += page_owner_iter.o
++endif
+ obj-$(CONFIG_MEMORY_ISOLATION) += page_isolation.o
+ obj-$(CONFIG_ZSMALLOC)	+= zsmalloc.o
+ obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index bafe474f3360..eb420803a434 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -14,6 +14,7 @@
+ #include <linux/sched/clock.h>
  
--		err = mana_alloc_qset(apc, scratch, apc->num_queues,
-+		err = mana_alloc_qset(apc, scratch,
- 				      apc->rx_queue_size, apc->tx_queue_size,
- 				      apc->priv_flags, apc->configured_mtu,
- 				      prog, &newq);
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index 2fe53adda119..5fbadc4dccbc 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -952,7 +952,7 @@ static int mana_change_mtu(struct net_device *ndev, int new_mtu)
- 		goto clear_flag;
- 	}
+ #include "page_alloc.h"
++#include "page_owner.h"
  
--	err = mana_alloc_qset(mpc, scratch, mpc->num_queues, mpc->rx_queue_size,
-+	err = mana_alloc_qset(mpc, scratch, mpc->rx_queue_size,
- 			      mpc->tx_queue_size, mpc->priv_flags, new_mtu,
- 			      mpc->bpf_prog, &newq);
- 	if (err)
-@@ -2920,7 +2920,9 @@ static void mana_deinit_txq(struct mana_port_context *apc, struct mana_txq *txq)
- 	mana_gd_destroy_queue(gd->gdma_context, txq->gdma_sq);
- }
+ /*
+  * TODO: teach PAGE_OWNER_STACK_DEPTH (__dump_page_owner and save_stack)
+@@ -21,31 +22,6 @@
+  */
+ #define PAGE_OWNER_STACK_DEPTH (16)
  
--static void mana_destroy_txq(struct mana_port_context *apc)
-+/* Keep the array and queues below @first; clear freed slots. */
-+static void mana_destroy_txq_from(struct mana_port_context *apc,
-+				  unsigned int first)
- {
- 	struct napi_struct *napi;
- 	int i;
-@@ -2928,7 +2930,7 @@ static void mana_destroy_txq(struct mana_port_context *apc)
- 	if (!apc->tx_qp)
- 		return;
- 
--	for (i = 0; i < apc->num_queues; i++) {
-+	for (i = first; i < apc->num_queues; i++) {
- 		if (!apc->tx_qp[i])
- 			continue;
- 
-@@ -2952,7 +2954,16 @@ static void mana_destroy_txq(struct mana_port_context *apc)
- 		mana_deinit_txq(apc, &apc->tx_qp[i]->txq);
- 
- 		kvfree(apc->tx_qp[i]);
-+		apc->tx_qp[i] = NULL;
- 	}
-+}
-+
-+static void mana_destroy_txq(struct mana_port_context *apc)
-+{
-+	if (!apc->tx_qp)
-+		return;
-+
-+	mana_destroy_txq_from(apc, 0);
- 
- 	kfree(apc->tx_qp);
- 	apc->tx_qp = NULL;
-@@ -2983,8 +2994,11 @@ static void mana_create_txq_debugfs(struct mana_port_context *apc, int idx)
- 			    tx_qp->tx_cq.gdma_cq, &mana_dbg_q_fops);
- }
- 
-+/* With @first nonzero, use the existing array and unwind only new queues on
-+ * failure.
-+ */
- static int mana_create_txq(struct mana_port_context *apc,
--			   struct net_device *net)
-+			   struct net_device *net, unsigned int first)
- {
- 	struct mana_context *ac = apc->ac;
- 	struct gdma_dev *gd = ac->gdma_dev;
-@@ -2999,9 +3013,14 @@ static int mana_create_txq(struct mana_port_context *apc,
- 	int err;
- 	int i;
- 
--	apc->tx_qp = kzalloc_objs(struct mana_tx_qp *, apc->num_queues);
--	if (!apc->tx_qp)
--		return -ENOMEM;
-+	if (first) {
-+		if (WARN_ON(!apc->tx_qp))
-+			return -EINVAL;
-+	} else {
-+		apc->tx_qp = kzalloc_objs(struct mana_tx_qp *, apc->num_queues);
-+		if (!apc->tx_qp)
-+			return -ENOMEM;
-+	}
- 
- 	/*  The minimum size of the WQE is 32 bytes, hence
- 	 *  apc->tx_queue_size represents the maximum number of WQEs
-@@ -3018,7 +3037,7 @@ static int mana_create_txq(struct mana_port_context *apc,
- 
- 	gc = gd->gdma_context;
- 
--	for (i = 0; i < apc->num_queues; i++) {
-+	for (i = first; i < apc->num_queues; i++) {
- 		apc->tx_qp[i] = kvzalloc_obj(*apc->tx_qp[i]);
- 		if (!apc->tx_qp[i]) {
- 			err = -ENOMEM;
-@@ -3126,7 +3145,10 @@ static int mana_create_txq(struct mana_port_context *apc,
- out:
- 	netdev_err(net, "Failed to create %d TX queues, %d\n",
- 		   apc->num_queues, err);
--	mana_destroy_txq(apc);
-+	if (first)
-+		mana_destroy_txq_from(apc, first);
-+	else
-+		mana_destroy_txq(apc);
- 	return err;
- }
- 
-@@ -3487,14 +3509,15 @@ static void mana_create_rxq_debugfs(struct mana_port_context *apc, int idx)
- 			    &mana_dbg_q_fops);
- }
- 
-+/* The caller must destroy queues added before a failure. */
- static int mana_add_rx_queues(struct mana_port_context *apc,
--			      struct net_device *ndev)
-+			      struct net_device *ndev, unsigned int first)
- {
- 	struct mana_rxq *rxq;
- 	int err = 0;
- 	int i;
- 
--	for (i = 0; i < apc->num_queues; i++) {
-+	for (i = first; i < apc->num_queues; i++) {
- 		rxq = mana_create_rxq(apc, i, &apc->eqs[i], ndev);
- 		if (IS_ERR(rxq)) {
- 			err = PTR_ERR(rxq);
-@@ -3512,14 +3535,15 @@ static int mana_add_rx_queues(struct mana_port_context *apc,
- 	return err;
- }
- 
--static void mana_destroy_rxqs(struct mana_port_context *apc)
-+static void mana_destroy_rxqs_from(struct mana_port_context *apc,
-+				   unsigned int first)
- {
- 	struct mana_rxq *rxq;
- 	u32 rxq_idx;
- 
- 	if (apc->rxqs) {
- 
--		for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
-+		for (rxq_idx = first; rxq_idx < apc->num_queues; rxq_idx++) {
- 			rxq = apc->rxqs[rxq_idx];
- 			if (!rxq)
- 				continue;
-@@ -3530,6 +3554,11 @@ static void mana_destroy_rxqs(struct mana_port_context *apc)
- 	}
- }
- 
-+static void mana_destroy_rxqs(struct mana_port_context *apc)
-+{
-+	mana_destroy_rxqs_from(apc, 0);
-+}
-+
- static void mana_destroy_vport(struct mana_port_context *apc)
- {
- 	struct gdma_dev *gd = apc->ac->gdma_dev;
-@@ -3903,7 +3932,7 @@ int mana_alloc_queues(struct net_device *ndev)
- 		goto destroy_vport;
- 	}
- 
--	err = mana_create_txq(apc, ndev);
-+	err = mana_create_txq(apc, ndev, 0);
- 	if (err) {
- 		netdev_err(ndev, "Failed to create TXQ on vPort %u: %d\n",
- 			   apc->port_idx, err);
-@@ -3918,7 +3947,7 @@ int mana_alloc_queues(struct net_device *ndev)
- 		goto destroy_txq;
- 	}
- 
--	err = mana_add_rx_queues(apc, ndev);
-+	err = mana_add_rx_queues(apc, ndev, 0);
- 	if (err)
- 		goto destroy_rxq;
- 
-@@ -4257,8 +4286,137 @@ void mana_discard_split(struct mana_qset *newq, struct mana_qset *tailq)
- 	memset(tailq, 0, sizeof(*tailq));
- }
- 
-+/* Carry existing queues into @out_new; allocate only the tail. @out_fresh
-+ * isolates new queues for cleanup after a failed publish.
-+ */
-+int mana_grow_qset(struct mana_port_context *apc,
-+		   struct mana_port_context *scratch, unsigned int new_count,
-+		   struct mana_qset *out_new, struct mana_qset *out_fresh)
-+{
-+	unsigned int old_count = apc->num_queues;
-+	struct mana_tx_qp **new_tx, **fresh_tx;
-+	struct mana_rxq **new_rx, **fresh_rx;
-+	struct net_device *ndev = apc->ndev;
-+	unsigned int fresh_count;
-+	bool indir_lost;
-+	unsigned int i;
-+	int err;
-+
-+	ASSERT_RTNL();
-+
-+	if (WARN_ON(new_count <= old_count))
-+		return -EINVAL;
-+	if (WARN_ON(!apc->tx_qp || !apc->rxqs))
-+		return -EINVAL;
-+
-+	fresh_count = new_count - old_count;
-+
-+	new_tx = kzalloc_objs(struct mana_tx_qp *, new_count);
-+	new_rx = kzalloc_objs(struct mana_rxq *, new_count);
-+	fresh_tx = kzalloc_objs(struct mana_tx_qp *, fresh_count);
-+	fresh_rx = kzalloc_objs(struct mana_rxq *, fresh_count);
-+	if (!new_tx || !new_rx || !fresh_tx || !fresh_rx) {
-+		err = -ENOMEM;
-+		goto free_arrays;
-+	}
-+
-+	for (i = 0; i < old_count; i++) {
-+		new_tx[i] = apc->tx_qp[i];
-+		new_rx[i] = apc->rxqs[i];
-+	}
-+
-+	scratch->num_queues = new_count;
-+	scratch->tx_qp = new_tx;
-+	scratch->rxqs = new_rx;
-+
-+	err = mana_rss_table_alloc(scratch);
-+	if (err)
-+		goto free_arrays;
-+
-+	err = mana_grow_eqs(apc, new_count);
-+	if (err)
-+		goto cleanup_rss;
-+
-+	scratch->eqs = apc->eqs;
-+	scratch->num_eqs = apc->num_eqs;
-+
-+	err = mana_create_txq(scratch, ndev, old_count);
-+	if (err)
-+		goto cleanup_rss;
-+
-+	err = mana_add_rx_queues(scratch, ndev, old_count);
-+	if (err)
-+		goto cleanup_rxq;
-+
-+	if (mana_rss_table_keep(apc, new_count, &indir_lost))
-+		memcpy(scratch->indir_table, apc->indir_table,
-+		       apc->indir_table_sz * sizeof(*apc->indir_table));
-+	else
-+		mana_rss_table_init(scratch);
-+
-+	mana_qset_snapshot(scratch, out_new);
-+	out_new->rxfh_indir_lost = indir_lost;
-+
-+	for (i = 0; i < fresh_count; i++) {
-+		fresh_tx[i] = new_tx[old_count + i];
-+		fresh_rx[i] = new_rx[old_count + i];
-+	}
-+
-+	memset(out_fresh, 0, sizeof(*out_fresh));
-+	out_fresh->tx_qp	= fresh_tx;
-+	out_fresh->rxqs		= fresh_rx;
-+	out_fresh->default_rxobj = INVALID_MANA_HANDLE;
-+	out_fresh->num_queues	= fresh_count;
-+	out_fresh->rx_queue_size = apc->rx_queue_size;
-+	out_fresh->tx_queue_size = apc->tx_queue_size;
-+	out_fresh->priv_flags	= apc->priv_flags;
-+	out_fresh->mtu		= apc->configured_mtu;
-+	out_fresh->bpf_prog	= apc->bpf_prog;
-+
-+	/* Take XDP refs on fresh RXQs only. On the merged set,
-+	 * mana_chn_setxdp() returns early on the carried rxqs[0].
-+	 */
-+	mana_qset_install(scratch, out_fresh);
-+	mana_chn_setxdp(scratch, mana_xdp_get(apc));
-+
-+	return 0;
-+
-+cleanup_rxq:
-+	mana_destroy_rxqs_from(scratch, old_count);
-+	mana_destroy_txq_from(scratch, old_count);
-+cleanup_rss:
-+	mana_cleanup_indir_table(scratch);
-+free_arrays:
-+	/* Free containers only; carried queues remain live. */
-+	scratch->tx_qp = NULL;
-+	scratch->rxqs = NULL;
-+	kfree(new_tx);
-+	kfree(new_rx);
-+	kfree(fresh_tx);
-+	kfree(fresh_rx);
-+
-+	mana_shrink_eqs(apc, apc->num_queues);
-+
-+	netdev_err(ndev, "%s(num_queues=%u) failed: %d\n", __func__,
-+		   new_count, err);
-+	return err;
-+}
-+
-+/* Free merged containers only, not carried queues. The caller must retire fresh
-+ * queues separately.
-+ */
-+void mana_discard_grow(struct mana_qset *newq)
-+{
-+	kfree(newq->tx_qp);
-+	kfree(newq->rxqs);
-+	kfree(newq->indir_table);
-+	kfree(newq->rxobj_table);
-+	memset(newq, 0, sizeof(*newq));
-+}
-+
-+/* Rebuild at the current count; resize uses split/grow. */
- int mana_alloc_qset(struct mana_port_context *apc,
--		    struct mana_port_context *scratch, unsigned int num_queues,
-+		    struct mana_port_context *scratch,
- 		    unsigned int rx_queue_size, unsigned int tx_queue_size,
- 		    u32 priv_flags, int mtu, struct bpf_prog *bpf_prog,
- 		    struct mana_qset *out)
-@@ -4269,7 +4427,7 @@ int mana_alloc_qset(struct mana_port_context *apc,
- 
- 	ASSERT_RTNL();
- 
--	scratch->num_queues	= num_queues;
-+	scratch->num_queues	= apc->num_queues;
- 	scratch->rx_queue_size	= rx_queue_size;
- 	scratch->tx_queue_size	= tx_queue_size;
- 	scratch->priv_flags	= priv_flags;
-@@ -4285,22 +4443,19 @@ int mana_alloc_qset(struct mana_port_context *apc,
- 	if (err)
- 		goto cleanup_rxq_array;
- 
--	err = mana_grow_eqs(apc, num_queues);
--	if (err)
--		goto cleanup_rss;
+-struct page_owner {
+-	unsigned short order;
+-	short last_migrate_reason;
+-	gfp_t gfp_mask;
+-	depot_stack_handle_t handle;
+-	depot_stack_handle_t free_handle;
+-	u64 ts_nsec;
+-	u64 free_ts_nsec;
+-	char comm[TASK_COMM_LEN];
+-	pid_t pid;
+-	pid_t tgid;
+-	pid_t free_pid;
+-	pid_t free_tgid;
+-};
 -
-+	/* Reuse the existing EQ pool; the queue count is unchanged. */
- 	scratch->eqs = apc->eqs;
- 	scratch->num_eqs = apc->num_eqs;
- 
--	err = mana_create_txq(scratch, ndev);
-+	err = mana_create_txq(scratch, ndev, 0);
- 	if (err)
- 		goto cleanup_rss;
- 
--	err = mana_add_rx_queues(scratch, ndev);
-+	err = mana_add_rx_queues(scratch, ndev, 0);
- 	if (err)
- 		goto cleanup_rxq;
- 
--	if (mana_rss_table_keep(apc, num_queues, &indir_lost))
-+	if (mana_rss_table_keep(apc, scratch->num_queues, &indir_lost))
- 		memcpy(scratch->indir_table, apc->indir_table,
- 		       apc->indir_table_sz * sizeof(*apc->indir_table));
- 	else
-@@ -4319,10 +4474,8 @@ int mana_alloc_qset(struct mana_port_context *apc,
- 	kfree(scratch->rxqs);
- 	scratch->rxqs = NULL;
- out_err:
--	mana_shrink_eqs(apc, apc->num_queues);
+-/*
+- * Cursor and per-page result of page_owner_next_eligible().
+- */
+-struct page_owner_scan {
+-	/* resume point */
+-	unsigned long pfn;
+-	struct page *page;
+-	struct page_owner po_snap;
+-};
 -
- 	netdev_err(ndev, "%s(num_queues=%u) failed: %d\n", __func__,
--		   num_queues, err);
-+		   apc->num_queues, err);
- 	return err;
- }
- 
-@@ -4607,7 +4760,7 @@ int mana_publish_qset(struct mana_port_context *apc, struct mana_qset *newq,
- }
- 
- /* Create missing debugfs nodes once retiring names are gone. */
--static void mana_qset_debugfs_publish(struct mana_port_context *apc)
-+void mana_qset_debugfs_publish(struct mana_port_context *apc)
+ struct stack {
+ 	struct stack_record *stack_record;
+ 	struct stack *next;
+@@ -741,7 +717,7 @@ void __dump_page_owner(const struct page *page)
+  * must advance scan->pfn past the hit before calling again to resume
+  * the scan.
+  */
+-static bool page_owner_next_eligible(struct page_owner_scan *scan)
++bool page_owner_next_eligible(struct page_owner_scan *scan)
  {
- 	unsigned int i;
+ 	unsigned long pfn = scan->pfn;
  
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-index d3e465ea9428..ec76a75268ac 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-@@ -684,7 +684,7 @@ static int mana_set_channels(struct net_device *ndev,
- 	struct mana_port_context *apc = netdev_priv(ndev);
- 	unsigned int new_count = channels->combined_count;
- 	struct mana_port_context *scratch;
--	struct mana_qset newq, oldq;
-+	struct mana_qset newq, oldq, freshq;
- 	int err;
- 
- 	if (new_count < 1 || new_count > apc->max_queues) {
-@@ -767,19 +767,33 @@ static int mana_set_channels(struct net_device *ndev,
- 		goto free_scratch;
- 	}
- 
--	err = mana_alloc_qset(apc, scratch, new_count, apc->rx_queue_size,
--			      apc->tx_queue_size, apc->priv_flags,
--			      apc->configured_mtu, apc->bpf_prog, &newq);
-+	err = mana_grow_qset(apc, scratch, new_count, &newq, &freshq);
- 	if (err)
- 		goto free_scratch;
- 
- 	err = mana_publish_qset(apc, &newq, &oldq);
- 	if (err) {
--		mana_free_qset(scratch, &newq);
-+		/* Free only the new queues, then discard the merged containers.
-+		 */
-+		mana_free_qset(scratch, &freshq);
-+		mana_discard_grow(&newq);
- 		goto free_scratch;
- 	}
- 
--	mana_free_qset(scratch, &oldq);
-+	/* Wait for ndo_select_queue() readers of oldq.indir_table. All queues
-+	 * are now live in newq; free only the old and fresh containers.
-+	 */
-+	synchronize_net();
+@@ -1196,6 +1172,11 @@ static int __init pageowner_init(void)
+ 			    &stack_fops);
+ 	debugfs_create_file("count_threshold", 0600, dir, NULL,
+ 			    &threshold_fops);
 +
-+	kfree(oldq.tx_qp);
-+	kfree(oldq.rxqs);
-+	kfree(oldq.indir_table);
-+	kfree(oldq.rxobj_table);
-+	kfree(freshq.tx_qp);
-+	kfree(freshq.rxqs);
-+
-+	/* No retirement runs to publish the new queues' debugfs nodes. */
-+	mana_qset_debugfs_publish(apc);
- 
- free_scratch:
- 	mana_publish_close_if_needed(apc);
-@@ -856,7 +870,7 @@ static int mana_set_ringparam(struct net_device *ndev,
- 		goto clear_flag;
- 	}
- 
--	err = mana_alloc_qset(apc, scratch, apc->num_queues, new_rx, new_tx,
-+	err = mana_alloc_qset(apc, scratch, new_rx, new_tx,
- 			      apc->priv_flags, apc->configured_mtu,
- 			      apc->bpf_prog, &newq);
- 	if (err) {
-@@ -876,7 +890,6 @@ static int mana_set_ringparam(struct net_device *ndev,
- 	mana_free_qset(scratch, &oldq);
- 
- free_scratch:
--	/* Release unpublished queues before closing their shared EQ pool. */
- 	mana_publish_close_if_needed(apc);
- 	mana_qset_scratch_free(scratch);
- clear_flag:
-@@ -948,7 +961,7 @@ static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
- 		goto clear_flag;
- 	}
- 
--	err = mana_alloc_qset(apc, scratch, apc->num_queues, apc->rx_queue_size,
-+	err = mana_alloc_qset(apc, scratch, apc->rx_queue_size,
- 			      apc->tx_queue_size, priv_flags,
- 			      apc->configured_mtu, apc->bpf_prog, &newq);
- 	if (err)
-diff --git a/include/net/mana/gdma.h b/include/net/mana/gdma.h
-index 308950f9b54b..666565ffb26a 100644
---- a/include/net/mana/gdma.h
-+++ b/include/net/mana/gdma.h
-@@ -686,6 +686,11 @@ enum {
- /* Driver supports non-contiguous queue buffers */
- #define GDMA_DRV_CAP_FLAG_1_NON_CONTIGUOUS_BUFFERS BIT(30)
- 
-+/* Resize failures are handled in-driver; a failed rollback still needs
-+ * recovery.
-+ */
-+#define GDMA_DRV_CAP_FLAG_1_SELF_RECOVERY_ON_QUEUE_RESIZE_FAILURE BIT(31)
-+
- #define GDMA_DRV_CAP_FLAGS1 \
- 	(GDMA_DRV_CAP_FLAG_1_EQ_SHARING_MULTI_VPORT | \
- 	 GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX | \
-@@ -703,7 +708,8 @@ enum {
- 	 GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECOVERY | \
- 	 GDMA_DRV_CAP_FLAG_1_EQ_MSI_UNSHARE_MULTI_VPORT | \
- 	 GDMA_DRV_CAP_FLAG_1_DYN_INTERRUPT_MODERATION | \
--	 GDMA_DRV_CAP_FLAG_1_NON_CONTIGUOUS_BUFFERS)
-+	 GDMA_DRV_CAP_FLAG_1_NON_CONTIGUOUS_BUFFERS | \
-+	 GDMA_DRV_CAP_FLAG_1_SELF_RECOVERY_ON_QUEUE_RESIZE_FAILURE)
- 
- #define GDMA_DRV_CAP_FLAGS2 0
- 
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index fef800bea2c0..2e101730e40c 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -731,7 +731,7 @@ static inline struct mana_stats_rx *mana_rxq_stats(struct mana_rxq *rxq)
++#ifdef CONFIG_BPF_SYSCALL
++	if (page_owner_iter_register())
++		pr_warn("page_owner: failed to register bpf_iter target\n");
++#endif
+ 	return 0;
  }
- 
- int mana_alloc_qset(struct mana_port_context *apc,
--		    struct mana_port_context *scratch, unsigned int num_queues,
-+		    struct mana_port_context *scratch,
- 		    unsigned int rx_queue_size, unsigned int tx_queue_size,
- 		    u32 priv_flags, int mtu, struct bpf_prog *bpf_prog,
- 		    struct mana_qset *out);
-@@ -739,10 +739,15 @@ int mana_split_qset(struct mana_port_context *apc,
- 		    struct mana_port_context *scratch, unsigned int new_count,
- 		    struct mana_qset *out_new, struct mana_qset *out_tail);
- void mana_discard_split(struct mana_qset *newq, struct mana_qset *tailq);
-+int mana_grow_qset(struct mana_port_context *apc,
-+		   struct mana_port_context *scratch, unsigned int new_count,
-+		   struct mana_qset *out_new, struct mana_qset *out_fresh);
-+void mana_discard_grow(struct mana_qset *newq);
- int mana_publish_qset(struct mana_port_context *apc, struct mana_qset *newq,
- 		      struct mana_qset *out_old);
- void mana_publish_close_if_needed(struct mana_port_context *apc);
- void mana_free_qset(struct mana_port_context *scratch, struct mana_qset *qset);
-+void mana_qset_debugfs_publish(struct mana_port_context *apc);
- 
- void mana_dim_change(struct mana_cq *cq, bool enable);
- 
+ late_initcall(pageowner_init)
+diff --git a/mm/page_owner.h b/mm/page_owner.h
+new file mode 100644
+index 000000000000..fda83be69275
+--- /dev/null
++++ b/mm/page_owner.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * mm/ internal page_owner and page_owner_iter declarations
++ */
++
++#ifndef __MM_PAGE_OWNER_H
++#define __MM_PAGE_OWNER_H
++
++#include <linux/page_ext.h>
++#include <linux/sched.h>
++#include <linux/stackdepot.h>
++
++/*
++ * mm/page_owner.c
++ */
++struct page_owner {
++	unsigned short order;
++	short last_migrate_reason;
++	gfp_t gfp_mask;
++	depot_stack_handle_t handle;
++	depot_stack_handle_t free_handle;
++	u64 ts_nsec;
++	u64 free_ts_nsec;
++	char comm[TASK_COMM_LEN];
++	pid_t pid;
++	pid_t tgid;
++	pid_t free_pid;
++	pid_t free_tgid;
++};
++
++/*
++ * Cursor and per-page result of page_owner_next_eligible().
++ */
++struct page_owner_scan {
++	/* resume point */
++	unsigned long pfn;
++	struct page *page;
++	struct page_owner po_snap;
++};
++
++bool page_owner_next_eligible(struct page_owner_scan *scan);
++
++/*
++ * mm/page_owner_iter.c
++ */
++int page_owner_iter_register(void);
++
++#endif /* __MM_PAGE_OWNER_H */
+diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
+new file mode 100644
+index 000000000000..33dc9dcd59de
+--- /dev/null
++++ b/mm/page_owner_iter.c
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/memblock.h>
++#include <linux/mm.h>
++#include <linux/seq_file.h>
++
++#include "page_owner.h"
++
++struct bpf_iter__page_owner {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct page *, page);
++	__bpf_md_ptr(struct page_owner *, po);
++	u64 pfn;
++};
++
++DEFINE_BPF_ITER_FUNC(page_owner, struct bpf_iter_meta *meta,
++		     struct page *page, struct page_owner *po, u64 pfn)
++
++static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
++{
++	struct page_owner_scan *scan = seq->private;
++
++	if (*posp == 0)
++		scan->pfn = min_low_pfn;
++	else
++		scan->pfn++;
++
++	if (!page_owner_next_eligible(scan))
++		return NULL;
++	return scan->page;
++}
++
++static void *page_owner_seq_next(struct seq_file *seq, void *v, loff_t *posp)
++{
++	struct page_owner_scan *scan = seq->private;
++
++	++*posp;
++	scan->pfn++;
++	if (!page_owner_next_eligible(scan))
++		return NULL;
++
++	return scan->page;
++}
++
++static void page_owner_seq_stop(struct seq_file *seq, void *v)
++{
++}
++
++static int page_owner_prog_seq_show(struct bpf_prog *prog,
++				    struct bpf_iter_meta *meta, void *v)
++{
++	struct page_owner_scan *scan = meta->seq->private;
++	struct bpf_iter__page_owner ctx;
++
++	/* @po: hit-time snapshot, no RCU window needed. */
++	ctx.meta = meta;
++	ctx.page = (struct page *)v;
++	ctx.po = &scan->po_snap;
++	ctx.pfn = scan->pfn;
++
++	return bpf_iter_run_prog(prog, &ctx);
++}
++
++static int page_owner_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++
++	meta.seq = seq;
++	prog = bpf_iter_get_info(&meta, false);
++	if (!prog)
++		return 0;
++
++	return page_owner_prog_seq_show(prog, &meta, v);
++}
++
++static const struct seq_operations page_owner_iter_seq_ops = {
++	.start	= page_owner_seq_start,
++	.next	= page_owner_seq_next,
++	.stop	= page_owner_seq_stop,
++	.show	= page_owner_seq_show,
++};
++
++static const struct bpf_iter_seq_info page_owner_iter_seq_info = {
++	.seq_ops		= &page_owner_iter_seq_ops,
++	.init_seq_private	= NULL,
++	.fini_seq_private	= NULL,
++	.seq_priv_size		= sizeof(struct page_owner_scan),
++};
++
++static struct bpf_iter_reg page_owner_iter_reg_info = {
++	.target			= "page_owner",
++	.ctx_arg_info_size	= 2,
++	.ctx_arg_info		= {
++		{ offsetof(struct bpf_iter__page_owner, page),
++		  PTR_TO_BTF_ID_OR_NULL },
++		{ offsetof(struct bpf_iter__page_owner, po),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
++	.seq_info		= &page_owner_iter_seq_info,
++};
++
++BTF_ID_LIST(page_owner_btf_ids)
++BTF_ID(struct, page)
++BTF_ID(struct, page_owner)
++
++int page_owner_iter_register(void)
++{
++	page_owner_iter_reg_info.ctx_arg_info[0].btf_id =
++		page_owner_btf_ids[0];
++	page_owner_iter_reg_info.ctx_arg_info[1].btf_id =
++		page_owner_btf_ids[1];
++
++	return bpf_iter_reg_target(&page_owner_iter_reg_info);
++}
+-- 
+2.20.1
+
