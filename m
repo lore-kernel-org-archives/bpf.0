@@ -1,178 +1,220 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-230.mta1.migadu.com [95.215.58.230])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B7549DBB9;
-	Fri,  9 Oct 2026 09:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9404B49E5FA
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 09:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.230
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791538979; cv=none; b=np9F9SIyF/4nSL92Bc6fAqmkjII6hlk8nAtTrw2xLrK5z4NGtmAfMbDtdUEApG05hF4U8QM+DPkaRFvJ2Ag0mIBkvp8yRdxNboV/wB3KR/M/GdEXFDQj85ZocYI8hrei0mUZEU096ckyd6sRBTTyK2L1tvQeYm/hY9Q+GAmJX/o=
+	t=1791539121; cv=none; b=ZRaDUOvOXlj8vByaozHZSg3OZvwP5trPmeBCEdXFXOHjYQ5PdzUJ5/uWA4malwOzyUMI70YR1pnukQAUNBietclIF64mOOK0+OxtVCEIqdFdZUi1YWKQ25GGCXO29PXcwdKT5eGuvUQ4XNX1UYGUf4pMmPAoitq4x6Z2ie/iZR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791538979; c=relaxed/simple;
-	bh=yhOjj/wrjjiaYAgabEvaYOFm/8b7bCIzioUlA5BSq/U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QyZhij95/8VgtRwuV8YqRIgh1GmXSvaybiQHg2x90ccss8hM+WVvpzOXMvK41WmjczGHn2G97J9/WYDHJRwy8kLo6jRQ0oatbSIVq+jRaqHEJFzJ6fz3w87BEgSgxTbgQZZboYPYm9IZ09SMg7DOG5A+pzbNVhIyBkrJzUAdJ3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=Of3Cg7mi; arc=none smtp.client-ip=220.197.31.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	s=arc-20240116; t=1791539121; c=relaxed/simple;
+	bh=Ya+lCXbP1pgn175bZ6iGNPPZUQBznlWGEZ6lafUQ9JM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aHoVMjxuu/b7Oeb+vwKN53bT9t7r5XjoOs+LANFArBnmwSi+0R0G/xpV3QFu5tlQUS2BLB8byW5Y9J3r9tVYKa9bibqQAnFd/+odPCRveKXBuZbSkx2QmrloDf98sF7kKjsEqTgBpwn+ji6uL3dp8QCCXScZXMQY1/+wAqB9Axk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jbnUCDxX; arc=none smtp.client-ip=95.215.58.230
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="Of3Cg7mi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=comNi0bq8Of/dXYDxEHJTvUJcWhZQ1Sp8DE5wIR2vhA=;
-	b=Of3Cg7miPOXJ2jb0AeB8OOfPqw94BzyQiG5igLTjey/F5NEhxjHsOL2jXKdaAR
-	iKM2VQntpfJBFotx+3JBc3RuhsIk7Eafyyfr8/9JxEXBW1ozXRGxLb0/CwChpKR4
-	HmsNmt/WvY/2VyAIZK194DLatWI6J+R/0jX+u8MKdhBDE=
-Message-ID: <544bc0d9-c1c8-461d-aba8-6065409cb53c@126.com>
-Date: Fri, 9 Oct 2026 17:31:23 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jbnUCDxX"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Ya+lCXbP1pgn175bZ6iGNPPZUQBznlWGEZ6lafUQ9JM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791539105; v=1; x=1792143905;
+ b=jbnUCDxXfuEEO3g8GtXN+y+Ou0ToLfEygItQZTv4t7KkVL0t4zD8RjbFOsAJO22vUOoPA8YM
+ 3gsdARLYUgrgb//NhzrpvU3F/mk3JttuCSIUTp22gbundylF91erX9U6Tvz2MoaoQBUCzXopI6s
+ JmHJQONcRZYyOxCyXzcFYYIQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 3618e950e467ceb9;
+	Fri, 09 Oct 2026 09:45:03 +0000
+X-Mizu-Trace-ID: 3618e950e467ceb9
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 9 Oct 2026 17:44:56 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: netdev-bot+sashiko@kernel.org
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	donald.hunter@gmail.com, edumazet@kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, liuhangbin@kylinos.cn
+Subject: Re: [PATCH net-next v4 4/6] netlink: specs: rt-route: describe
+ lwtunnel IP options
+Message-ID: <asi3mNcz1H6wJPOB@fedora>
+References: <20261008-ynl_rt_encap-v4-4-4ed2ccf7f949@kylinos.cn>
+ <179153682125.434549.6402494415316907824@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 02/19] net: stmmac: request the MDIO reset
- GPIO only once
-To: James Hilliard <james.hilliard1@gmail.com>,
- Linus Walleij <linusw@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
- Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Christian Marangi <ansuelsmth@gmail.com>,
- Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Serge Semin <fancer.lancer@gmail.com>,
- Suraj Jaiswal <quic_jsuraj@quicinc.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Joao Pinto <Joao.Pinto@synopsys.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>,
- Ong Boon Leong <boon.leong.ong@intel.com>,
- Voon Weifeng <weifeng.voon@intel.com>,
- "Song, Yoong Siang" <yoong.siang.song@intel.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Simon Horman <horms@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Thierry Reding <thierry.reding@kernel.org>,
- Jonathan Hunter <jonathanh@nvidia.com>, Chen-Yu Tsai <wens@kernel.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Jose Abreu <Jose.Abreu@synopsys.com>,
- Yao Zi <me@ziyao.cc>, Philipp Zabel <p.zabel@pengutronix.de>,
- Richard Genoud <richard.genoud@bootlin.com>,
- Alastair D'Silva <alastair@d-silva.org>, Maxime Ripard <mripard@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- ZhaoJinming <zhaojinming@uniontech.com>,
- Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
- Ding Hui <dinghui1111@163.com>, Linkui Xiao <xiaolinkui@kylinos.cn>,
- linux-tegra@vger.kernel.org, linux-sunxi@lists.linux.dev,
- stable@vger.kernel.org
-References: <20260927-submit-stmmac-reset-fixes-v1-v5-0-feec6c14dd06@gmail.com>
- <20260927-submit-stmmac-reset-fixes-v1-v5-2-feec6c14dd06@gmail.com>
- <CAD++jL=6Ov5BPK1naX6orzMsrJPm_g6SkdRaU6Ji+okXMFaZdQ@mail.gmail.com>
- <CADvTj4pU6EXgx1-dupQoQBm8OrrvAeR5NyCk4of7zya2V=yvEw@mail.gmail.com>
-Content-Language: en-US
-From: Linkui Xiao <xiaolinkui@126.com>
-In-Reply-To: <CADvTj4pU6EXgx1-dupQoQBm8OrrvAeR5NyCk4of7zya2V=yvEw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnT_lttMhqfcDGAw--.25712S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXFyxtr43KF15GF47ZFy5Arb_yoWrXw1kpF
-	Waqa1YyrZ5XrWxAws2qw1UZFyjvFs0yr43Xr1jkrWxCF98CFyfJr1xtr4Y9F97Cry8Ww1Y
-	vF4vva47uan0yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Ur3ktUUUUU=
-X-CM-SenderInfo: p0ld0z5lqn3xa6rslhhfrp/xtbBqRAW7GrItHDUxQAA30
+In-Reply-To: <179153682125.434549.6402494415316907824@kernel.org>
 
-
-
-On 2026/9/28 07:49, James Hilliard wrote:
-> On Sun, Sep 27, 2026 at 5:35â€¯PM Linus Walleij <linusw@kernel.org> wrote:
->>
->> Hi James,
->>
->> On Sun, Sep 27, 2026 at 11:59â€¯PM James Hilliard
->> <james.hilliard1@gmail.com> wrote:
->>
->>> From: Linkui Xiao <xiaolinkui@kylinos.cn>
->>>
->>> stmmac_mdio_reset() calls devm_gpiod_get_optional() every time it runs.
->>> A GPIO line can only be requested once, so from the second call on
->>> gpiod_request_commit() returns -EBUSY. devm_gpiod_get_optional() only
->>> turns -ENOENT into NULL, hence the error is passed straight back and
->>> stmmac_mdio_reset() bails out before pulsing "snps,reset" and before
->>> running the STE101P MDC workaround.
->>>
->>> The first call, made by of_mdiobus_register(), succeeds, so the failure
->>> is only visible later on: every resume that does not use WoL goes
->>> through stmmac_resume() -> stmmac_mdio_reset(), and that caller ignores
->>> the return value, so the PHY silently stays un-reset.
->>>
->>> The descriptor used to be requested exactly once: stmmac_mdio_reset()
->>> resolved "snps,reset-gpio" itself and cached the GPIO number in
->>> stmmac_mdio_bus_data::reset_gpio, and commit ae26c1c6cb9b ("stmmac: fix
->>> PHY reset during resume") relies on that cache to reuse the line on
->>> every call. commit 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in
->>> stmmac_mdio_reset") replaced it with a devm_gpiod_get_optional() that
->>> caches nothing, so the request is repeated on every call and fails from
->>> the second one on.
->>>
->>> Parse the whole reset description, the GPIO and "snps,reset-delays-us",
->>> in stmmac_mdio_register() at probe time, and keep it in struct
->>> stmmac_priv. This is where devm-gpiod is meant to be used: the line is
->>> acquired with the device and released with it, and any failure to
->>> acquire it is reported during probe instead of being ignored by
->>> stmmac_resume(). stmmac_mdio_reset() then only pulses the cached line,
->>> with the delays that were read once and for all at probe time.
->>>
->>> Cache the request and delays for DT devices regardless of
->>> mdio_bus_data->needs_reset. That flag controls the registration-time
->>> bus reset callback, but system resume calls stmmac_mdio_reset()
->>> directly. The reset routine no longer looks at the device tree: where
->>> the description is absent the cached descriptor is NULL and the delays
->>> are zero, so the pulse remains a no-op.
->>>
->>> Keep acquisition conditional on CONFIG_STMMAC_PLATFORM, matching the
->>> reset callback, so non-platform configurations do not request an unused
->>> GPIO. Also skip acquisition for a disabled MDIO child: registering that
->>> bus returns -ENODEV without calling its reset callback, and the driver
->>> must retain the existing disabled-bus success path even if the unused
->>> GPIO is unavailable. Remove the unnecessary gpio_desc forward declaration.
->>>
->>> Fixes: 7c86f20d15b7 ("net: stmmac: use GPIO descriptors in stmmac_mdio_reset")
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
->>> Co-developed-by: James Hilliard <james.hilliard1@gmail.com>
->>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->>
->> Dostoyevsky commit message, I didn't read it. Ask the agent
->> to be terse.
+On Fri, Oct 09, 2026 at 09:07:01AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
 > 
-> That commit message style mostly just came from the imported patch,
-> I'll change it to be more terse in the next revision:
-> https://lore.kernel.org/all/20260921015727.2643540-1-xiaolinkui@126.com/Hi James,
+> Critical: 0 · High: 0 · Medium: 1 · Low: 2
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] Under this spec, YNL cannot send a request that sets Geneve
+>   tunnel options; the kernel rejects it.
+> - [Low] The new `lwtunnel-ip-opts` set declares `geneve` as one `binary`
+>   attribute without `multi-attr: true`.
+> - [Low] The commit message contradicts itself.
+> 
+> --
+> 
+> netlink: specs: rt-route: describe lwtunnel IP options
+> 
+> This commit changes the binary opts attribute in lwtunnel-ip and
+> lwtunnel-ip6 into a nest of a new lwtunnel-ip-opts set. It adds vxlan and
+> erspan option sets. Geneve options stay binary because the kernel uses a
+> different layout for requests and for dumps.
+> 
+> > Replace binary opts in lwtunnel-ip and lwtunnel-ip6 with a nested
+> > lwtunnel-ip-opts set. Add attribute sets for geneve, vxlan, and erspan
+> > IP options to match linux/lwtunnel.h.
+> 
+> [Severity: Low]
+> The first paragraph says attribute sets are added for geneve, vxlan and
+> erspan. The diff adds lwtunnel-ip-opts, lwtunnel-ip-opt-vxlan and
+> lwtunnel-ip-opt-erspan, but no lwtunnel-ip-opt-geneve set, and the
+> second paragraph says geneve is omitted.
 
-Thanks for picking this up. Agreed the commit message is too long;
-I'm fine with you trimming it for the next revision. Linus already
-gave his Reviewed-by on the code, so the logic is settled.
-
-Thanks,
-Linkui
+I mean add geneve attr. I didn't add lwtunnel-ip-opt-geneve.
 
 > 
->> I looked at the code and from a GPIO PoV it does the right
->> thing: use 1 as asserted and 0 as de-asserted RESET line.
->>
->> Reviewed-by: Linus Walleij <linusw@kernel.org>
->>
->> Yours,
->> Linus Walleij
+> Could the first paragraph say something like "Add attribute sets for
+> vxlan and erspan IP options; keep geneve as binary (see below)"?
+> 
+> > diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
+> > index dc842a786794a..ea6711292c9b6 100644
+> > --- a/Documentation/netlink/specs/rt-route.yaml
+> > +++ b/Documentation/netlink/specs/rt-route.yaml
+> > @@ -377,7 +377,8 @@ attribute-sets:
+> >          type: pad
+> >        -
+> >          name: opts
+> > -        type: binary  # lwtunnel ip nest options
+> > +        type: nest
+> > +        nested-attributes: lwtunnel-ip-opts
+> >    -
+> >      name: ila-attrs
+> >      name-prefix: ila-attr-
+> 
+> [ ... ]
+> 
+> > @@ -562,6 +564,45 @@ attribute-sets:
+> >        -
+> >          name: link
+> >          type: u32
+> > +  -
+> > +    name: lwtunnel-ip-opts
+> > +    name-prefix: lwtunnel-ip-opts-
+> > +    attributes:
+> > +      -
+> > +        name: geneve
+> > +        type: binary
+> 
+> [Severity: Medium]
+> With geneve declared as binary, can YNL still send a route request that
+> carries Geneve options?
 
+No, before this patch, the whole encap data is binary. We now support
+all the encap types other than geneve, which encodes LWTUNNEL_IP_OPTS_GENEVE
+differently for requests and dumps.
+
+Thanks
+Hangbin
+> 
+> In tools/net/ynl/pyynl/lib/ynl.py, YnlFamily._add_attr() sets
+> NLA_F_NESTED only in the nest branch. The binary branch copies the payload
+> and leaves the flag out of the header:
+> 
+>     if attr["type"] == 'nest':
+>         nl_type |= Netlink.NLA_F_NESTED
+>     ...
+>     elif attr["type"] == 'binary':
+>         ...
+>             attr_payload = value
+> 
+> In the kernel, ip_opts_policy types GENEVE as nested:
+> 
+> net/ipv4/ip_tunnel_core.c:
+>     [LWTUNNEL_IP_OPTS_GENEVE]	= { .type = NLA_NESTED },
+> 
+> ip_tun_parse_opts() validates the payload in strict mode:
+> 
+>     err = nla_validate(nla_data(attr), nla_len(attr), LWTUNNEL_IP_OPTS_MAX,
+>                        ip_opts_policy, extack);
+> 
+> NL_VALIDATE_STRICT includes NL_VALIDATE_NESTED, so validate_nla() in
+> lib/nlattr.c rejects the attribute:
+> 
+>     if (validate & NL_VALIDATE_NESTED) {
+>         if ((pt->type == NLA_NESTED || pt->type == NLA_NESTED_ARRAY) &&
+>             !(nla->nla_type & NLA_F_NESTED)) {
+> 
+> ip_tun_parse_opts_geneve() then calls nla_parse_nested(), which does the
+> same check. So a newroute with encap type ip or ip6 and encap.opts.geneve
+> set to bytes fails with -EINVAL, even if the bytes hold a well-formed
+> CLASS/TYPE/DATA triplet.
+> 
+> Before this patch the whole opts attribute was binary. A caller could
+> pass the raw LWTUNNEL_IP_OPTS payload with NLA_F_NESTED already set on the
+> inner GENEVE header. The outer attribute is parsed with
+> nla_parse_nested_deprecated(), so the missing flag there was not checked.
+> 
+> Is this a regression for YNL users who configure Geneve options? Dumps
+> still decode, because ip_tun_fill_encap_opts_geneve() uses
+> nla_nest_start_noflag(). Later patches in the series do not change this,
+> and the final rt-route.yaml still has geneve as binary.
+> 
+> [Severity: Low]
+> Can this spec describe a request with more than one Geneve option?
+> 
+> On the request path, ip_tun_parse_opts() walks every attribute in the
+> opts nest. It passes each LWTUNNEL_IP_OPTS_GENEVE to
+> ip_tun_parse_opts_geneve(), which reads exactly one CLASS/TYPE/DATA
+> option:
+> 
+>     nla_for_each_attr(nla, nla_data(attr), nla_len(attr), rem) {
+>         switch (nla_type(nla)) {
+>         case LWTUNNEL_IP_OPTS_GENEVE:
+>             ...
+>             opts_len += opt_len;
+>             if (opts_len > IP_TUNNEL_OPTS_MAX)
+> 
+> So a request sends several Geneve options by repeating the GENEVE
+> attribute. The uAPI also defines a structured inner set for it, which
+> geneve_opt_policy enforces:
+> 
+>     [LWTUNNEL_IP_OPT_GENEVE_CLASS]	= { .type = NLA_U16 },
+>     [LWTUNNEL_IP_OPT_GENEVE_TYPE]	= { .type = NLA_U8 },
+>     [LWTUNNEL_IP_OPT_GENEVE_DATA]	= { .type = NLA_BINARY, .len = 127 },
+> 
+> The geneve entry here has no multi-attr. YnlFamily._add_attr() only turns
+> a list value into repeated attributes when attr.is_multi is set, so two
+> Geneve options on one route cannot be expressed.
+> 
+> Adding multi-attr alone would not make requests work, because of the
+> NLA_F_NESTED problem above. Nothing later in the series changes this.
+> 
+> > +      -
+> > +        name: vxlan
+> > +        type: nest
+> > +        nested-attributes: lwtunnel-ip-opt-vxlan
+> 
+> [ ... ]
+> 
+> -- 
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261008-ynl_rt_encap-v4-0-4ed2ccf7f949%40kylinos.cn
