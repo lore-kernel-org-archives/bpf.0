@@ -1,150 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C68849AA3D;
-	Fri,  9 Oct 2026 09:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1300D392C2C;
+	Fri,  9 Oct 2026 09:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791536837; cv=none; b=n/UTXrqRjK2o3nyUSelHCfLQDVymprtNCS3ntZWGyX0Gw3YanrYg/leQxv4YQsB6z+6ESPUPbmeMr+1uqSBwRuvbf2R/VTUA5GFAOVvx13Z6MjFi8DBSi33btisCe3C63+wIvKjkQVQdY2s9fC9WtpHAFDXODgGoX0dqcp7o++s=
+	t=1791536947; cv=none; b=iEuARoBHqmoyNGEjWwTBmusHfpk5LO38gTIW83R2il9bBiMaetKOk4D6PXYLS6hXjAZVB6r5ctLAxmBa+1o5/hHhI96OdnC4U6kJqc5il4bThmgWLlOCra/7r5nNJ/X+wopwuRAMSqmjUZjVtxlzChHAA9XzO/mCzvp2BWoeeco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791536837; c=relaxed/simple;
-	bh=M4yQQp2c4hqBfuD4lPz28Or5PCvY5ToidFbuqMdBTgo=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TqbYMIovn85s0WfqCKWcvSX67KkECiViP6di5BzCiMuOCSMZkn0mii/5Kexu+cGqD1PaHkN1juKBP9G9ygPxodudQjJ9MqpD1i9r3zWZGqKh9NHkqchKJjsGzho8RFWPvFysuTg4v9T+BIjtX4/PJ3gS5XsL/f6DONdkTv4nE6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z15tYIFE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791536947; c=relaxed/simple;
+	bh=UssMmlpVtkPI5Wr6neO959SSjUtPHjWJdh77WyJr1rM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=hQlCCIu8fSEoh/D+3f3QuA0DDKCm/5y+HOCHQyi2FVq2x0jPLMPIztHhEcSxI3ywferF3bKL3Obboy6Ci6hmT67/KZAGkYwhzbzvs37OOAUJ36+dWK7AWqy/wTHmdWC8GL96c0ECDwUF29gOEL1gQZys9AQo9PzL+VT0LxitXrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=DR8d+5vx; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z15tYIFE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3449C1F00899;
-	Fri,  9 Oct 2026 09:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791536823;
-	bh=1vjgACArY1cpH1//1yksYo85oD0arQPVKFNjR+zxkNA=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Z15tYIFEWrB2xTfPlWnqDP1pE9AKf9p6LR90SbaQ5UNFX6f0DixPw/B+1M7W3aU3p
-	 5t+22jUhGItBDb2bO4lpdIgHDFigOpnS9wdiKh5w9jRf141uvMae1IHbkh9KMNVBiG
-	 XjZRFAcZFSumSoMNl+GwvgNkYLPrBDA9DTKL7OORxHWWYBTzR2hzM/QRnsjZg2DuTD
-	 bBP+AHfbw6x3+o0RGi+X4v4RbJS5pdSGtBzlfuw4HlzJrYKUFHvHkGu5+IFnLyCzSJ
-	 xHXgi2AE3+cOvPH4Jnk5wUfDiBzD8geSiF0i4X5x3QLEaskB8WVj4kL6YsFZKg4BTP
-	 7l/rD0dZyjt8A==
-Subject: Re: [PATCH net-next v4 6/6] netlink: specs: rt-route: describe
- seg6-local attrs
-From: netdev-bot+sashiko@kernel.org
-To: hangbin.liu@linux.dev
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, donald.hunter@gmail.com,
- edumazet@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, liuhangbin@kylinos.cn
-Date: Fri, 09 Oct 2026 09:07:02 +0000
-Message-ID: <179153682273.434549.16560900955866234642@kernel.org>
-In-Reply-To: <20261008-ynl_rt_encap-v4-6-4ed2ccf7f949@kylinos.cn>
-References: <20261008-ynl_rt_encap-v4-6-4ed2ccf7f949@kylinos.cn>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="DR8d+5vx"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=g1HSaSuXUDV17Nv/I4lWWspoQoSuGywUd6SpKuR4wJY=; b=DR8d+5vxo4pibCgG9MYD7Za0iA
+	dl3rsgfGikRa/6/+wx1NeHkfxmASPMW0JOE1csSYMP5XusjIZLeY7TqTgfD6/QpabeBr8bYKKB+79
+	53kA2n6cNi4axMbcz63OsCpNzpIf47gM19FI5/vngfsBI0Reqsbxrq2U/POOE1vSThpluyMCskNjw
+	GGaLm0Hm34PItlvPxupjSqQCIdkzFZ+lMYnNjF43FJtrDwtlhUcKpDGzF96OUoqEOOuc6AJ1SZWvS
+	+cF09Xgck70VgW/iYkF5kfPW573GpOfYAWS7X9/J1tunHzYcE0UkPQHcKq7ssRQCOp/X8IL/LPlFc
+	lKYZ2bTw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xF6aq-000QDB-2h;
+	Fri, 09 Oct 2026 09:08:45 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Fri, 09 Oct 2026 01:53:35 -0700
+Subject: [PATCH net-next v2 1/7] ipv6: treat a negative optlen as 4 in
+ do_ipv6_getsockopt()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261009-sockopt_expand_out_v2-v2-1-8ac08c469ecb@debian.org>
+References: <20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb@debian.org>
+In-Reply-To: <20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb@debian.org>
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, 
+ Eric Dumazet <edumazet@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.16-dev-f8e9d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2091; i=leitao@debian.org;
+ h=from:subject:message-id; bh=UssMmlpVtkPI5Wr6neO959SSjUtPHjWJdh77WyJr1rM=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqyK8N7gbgS47YCjeeENEWvwqFa2drZykdowiQy
+ OFABDV6m7qJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCasivDQAKCRA1o5Of/Hh3
+ belREACXeK3CiefomWL2OShRO38fWPwn84Hz/Weo8k/9D3gq+0wzoVla8ADCW5W4kINgWSSIk4V
+ q8VCwaRIJFYkTwle4WMDNButYWbIsNveClRmw8XF4fYQYPr/L3OGSifR1J3m+HFARYDttt3sJFF
+ 8yU7d5lM5fFtBzAa5Jx2N2CildLktXg/SRbNueyz8Rf3Hdv7AKtDK+Xsjq53vZ83a8E+zKqNip2
+ lGRyIJvMji+/KfwXC8id2JthCzi3pKrx5mS9NoMAC2GSQlp/E63569z2jBLSmWDi9fDbki4aZsh
+ jttxLoveqUs8C/9VpcU/vFHfnyLpbgLZ//fMpVjqlR2TsGawWPEMnEyjhwJ9JsywjgMBb+rLpmH
+ w2xTA3haUoUhcoMVIlhEQEGwWmjidFpSRIDVbCjP9yh+5q+ViknEfQxILF9yJ+6jkn7zwaZrson
+ cMPH5cIIX/j+prFuD2Iz2BjrS++5J9JzkASeu/bToBB82BNM/FDrr3M0+VFnJ4c1Uoux5cBpLtl
+ k4gRr/j2qN21lQUZIe0m+uspRP5YbE93kNBq/WBfijq/qoyKsiaWE8QVcwTnoj6Zcdhj3CAMdCc
+ uh9pwGyKTzIAt6X0744fnummnRwynhhLUlS9EXFZeRoDvsqJkJcutQDybm+uy6jUXnln02oqP7o
+ GIhFlwdzR0waSMg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+do_ipv6_getsockopt() reads optlen into an int and never checks its
+sign. Most of what consumes len compares it as unsigned, so a negative
+optlen reads as a huge buffer, and the reply depends on the option.
 
-Low priority / nit picks for your consideration:
+The int options clamp it to their own size:
 
-- [Low] The patch adds the `seg6-local-flv-ops` enum to
-  Documentation/netlink/specs/rt-route.yaml with `unspec` as its first…
+	len = min_t(unsigned int, sizeof(int), len);
 
---
+so getsockopt(fd, SOL_IPV6, IPV6_TCLASS, buf, &len) with len set to -1
+answers 4 bytes and reports 4, rather than failing.
 
-netlink: specs: rt-route: describe seg6-local attrs
+The other options see a huge buffer. The sticky options reply with
+their whole header, IPV6_2292PKTOPTIONS writes every pending control
+message without a limit, and IPV6_PATHMTU and IPV6_FLOWLABEL_MGR pass
+their length check.
 
-This commit adds two enums to the rt-route spec: the SEG6 local actions and
-the seg6-local flavor operations. It also changes the bpf, counters and
-flavors attributes in seg6-local from binary to nested attribute sets
-(seg6-local-bpf, seg6-local-cnt and seg6-local-flv).
+do_ip_getsockopt() rejects a negative optlen, but doing that here would
+turn a call that works today into an error for a caller that passes an
+uninitialized length. Answer it as 4, as the int options do, for every
+option.
 
-> diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
-> index 82e59af56ecdb..48d1659f20f34 100644
-> --- a/Documentation/netlink/specs/rt-route.yaml
-> +++ b/Documentation/netlink/specs/rt-route.yaml
-> @@ -116,6 +116,45 @@ definitions:
+That leaves the int options as they are. The sticky headers are cut to
+4 bytes, IPV6_2292PKTOPTIONS gets a 4 byte control buffer, and
+IPV6_PATHMTU and IPV6_FLOWLABEL_MGR fail with -EINVAL, as they do for
+any other undersized buffer.
 
-[ ... ]
+The conversion of this function to sockopt_t builds its buffers from
+optlen, which the standard helpers reject when negative, so the answer
+has to be settled before that.
 
-> +  -
-> +    name: seg6-local-flv-ops
-> +    type: enum
-> +    name-prefix: seg6-local-flv-op-
-> +    enum-name:
-> +    entries:
-> +      -
-> +        name: unspec
-> +      -
-> +        name: psp
-> +      -
-> +        name: usp
-> +      -
-> +        name: usd
-> +      -
-> +        name: next-csid
+Suggested-by: David Laight <david.laight.linux@gmail.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ net/ipv6/ipv6_sockglue.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-[ ... ]
-
-> @@ -618,6 +661,50 @@ attribute-sets:
-
-[ ... ]
-
-> +  -
-> +    name: seg6-local-flv
-> +    name-prefix: seg6-local-flv-
-> +    attributes:
-> +      -
-> +        name: operation
-> +        type: u32
-> +        enum: seg6-local-flv-ops
-> +        enum-as-flags: true
-
-[Severity: Low]
-With enum-as-flags set, should unspec still be the first entry of
-seg6-local-flv-ops?
-
-YNL turns each entry's value into a bit position in this mode:
-
-tools/net/ynl/pyynl/lib/nlspec.py:EnumEntry.user_value() {
-        if self.enum_set['type'] == 'flags' or as_flags:
-            return 1 << self.value
-}
-
-The flag values come out as unspec=0x1, psp=0x2, usp=0x4, usd=0x8 and
-next-csid=0x10.
-
-The psp through next-csid bits line up with the kernel's
-SEG6_F_LOCAL_FLV_OP(flvname), which is BIT(SEG6_LOCAL_FLV_OP_##flvname). Bit
-0 (UNSPEC), however, is not a real flavor operation. The supported masks in
-net/ipv6/seg6_local.c contain only NEXT_CSID and PSP:
-
-#define SEG6_LOCAL_END_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
-					 SEG6_LOCAL_FLV8986_SUPP_OPS)
-#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
-
-parse_nla_flavors() rejects every bit outside these masks:
-
-	if (rc < 0 || (fops & ~supp_fops)) {
-		NL_SET_ERR_MSG(extack, "Unsupported Flavor operation(s)");
-		return -EOPNOTSUPP;
-	}
-
-As a result, the spec offers an "unspec" flag that the kernel never reports
-in a dump. When it is sent in a request, the kernel always rejects it with
--EOPNOTSUPP.
-
-devlink.yaml's reload-action enum is also used with enum-as-flags, and it
-handles this by leaving out unspec and setting value: 1 on its first entry.
-Could this spec do the same? Dropping unspec and giving psp value: 1 would
-keep every real bit in place.
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 4b3536571c9804..4091d1521cc09f 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -1002,6 +1002,11 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+ 
+ 	if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 		return -EFAULT;
++	/* Historic bug compatibility: the int options have always taken a
++	 * negative optlen as 4, so take it as 4 everywhere.
++	 */
++	if (len < 0)
++		len = 4;
+ 	switch (optname) {
+ 	case MCAST_MSFILTER:
+ 		if (in_compat_syscall())
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261008-ynl_rt_encap-v4-0-4ed2ccf7f949%40kylinos.cn
+2.53.0-Meta
+
