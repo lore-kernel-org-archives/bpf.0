@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F7837E317;
-	Fri,  9 Oct 2026 09:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283AB49AA35;
+	Fri,  9 Oct 2026 09:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791536947; cv=none; b=bfIYirjC+5YM/9NkBUiPKVfcN9sFicQ1LXQAaf6+JuL+4rf5hesdA2EsJo0963fDq8e4xubTKggoQx5RzvCyAGPSFwUBbAJsGYgLSgU0Yt9+ymiglTT/TxpsPEDdMFPklGarCmlGmp6lMqSZePFHxQ6GQF3e7oLdkqG3JIYNaFY=
+	t=1791536951; cv=none; b=mMJvaursTu78YTihGsEP8yYuAg4Dto08QHizhlRmDKX6ByhsK4oZjCjei/QE6IoYzZj3fKFyfoRfEprfLh4sbt+4o0I9X0UO673zP2hJXnvT/E4KBkcOvQwueuKeL3UiaSk+4Wv7kd6k/dX9OGsi3a8M/iqjvXEUBeGa42tSdRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791536947; c=relaxed/simple;
-	bh=gX5pcCVzVcNKDBaeae9zQCp0h+h+RTX03m8beg0799E=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hqkaS4RJVUWmvHEjaLdxbuGyNhDMHRvcOrTIiihsDLvR/uOso6odZu31WJDHOW2aHNoYghxPYRSy4PhFtTVF4JuhKTdrlqrO1Qabcj4gcFuVq6bK62gKtdX56aLEuf2Hfnc13cWGyWombPLZfdEbo57H2XoW5Pilm66BRWdk3YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=mXl8PQ8R; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1791536951; c=relaxed/simple;
+	bh=PkslookZmOEAsO/zLp1hyjxSUvEuiAClTznXsClXGJo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=HqPiKQY7qF7vbZrljzn7FEu+gdF7SZLfgRSMjAfyZjfK/KTuKLB8adIYoJzAvGBrp2UuA5LAVf5X5eLrbAPr82mWKdehcOdcPql10S1R5mhfUPc3AMuWG1QEzjRw1njVKsQxubMH9UQ7PXyWrF7UYrm/gymsc2aqLLl9YLzWuxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=EkCD0Xl7; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="mXl8PQ8R"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="EkCD0Xl7"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=BIPcv72plFQhhYcp1xMn5j7TxCofgL9oG5R3/1n0Q6k=; b=mXl8PQ8RRPbGNxmjRPUThioApT
-	jixsPoGswzSuUIARnt/KHaokg9nUDFRrsIQlxbZrLq/PyXNU0Symt8akCbqmu3deLEwCttGcmdIrf
-	1F/1mYbCMbBbF87lUVQIX4GDohUctiHFXAAzmpPZ+4+21Vfp0db+cNMyK6OIfIRKDCQPLzU9oedfW
-	BYeZLgm37EsPe2WCqcyjSVBptRnrHYaNutF97DwStupuK2JcAJH5iEcYOd3f+/NMbM0xmqD6TGNut
-	X6AUj0+JBMn7ofnpDH87nqCdnj/TmVb6WQhJZusxpm1RuluM1LSD4eltuc1xGBNGjcx7vfLyHmDl3
-	3xopcLkQ==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=uTbBQO/mPp1jVqoiUKrSJ5YHsDWbvfv67v9Nx+aEG9k=; b=EkCD0Xl7oB/rsddjzICrVOECIc
+	IYPM+cV5zRfNrr+V8OkeU4KzzMGthmYbpL5cQU42/PitZub6+TotBUU80UjKI6cKIBMq9z+aWhdHt
+	VovqTbhEYXBpjNJbcfchYbaV4+zHI4/lRob/CvRyCfRbvxNkg2sXN3E39fK1lSW5bHpIj12dSfRce
+	kPbc8SR2nsN/KL6utkzKIrNszbritWVtMfJOTHq/iDb743qXbq9gyE6HBiZmhxhfE2hhfGkTnilMR
+	5Ks8wXVsdcmK/RNJln+Mbi7Rpw9vO2ZlFeZRB/K6YO/a1QVvYOw3DtrwKoeF4jHZ7i6wDUkhVyzY6
+	1ZoSY+6A==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1xF6aj-000QD1-2D;
-	Fri, 09 Oct 2026 09:08:38 +0000
+	id 1xF6aw-000QEP-2v;
+	Fri, 09 Oct 2026 09:08:51 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v2 0/7] ipv4,ipv6: convert the getsockopt switches
- to sockopt_t
-Date: Fri, 09 Oct 2026 01:53:34 -0700
-Message-Id: <20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb@debian.org>
+Date: Fri, 09 Oct 2026 01:53:36 -0700
+Subject: [PATCH net-next v2 2/7] net: cap sockopt_expand_out() at
+ MAX_RW_COUNT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,11 +44,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAI+ryGoC/3XN0QqDIBiG4VuR/ziHWW2so93HiFD7KhmoqJNGd
- O+D2OmOX3jenRKiRaKe7RRRbLLeUc9kxcisyi3gdqKekRTyKu6y5cmblw95xBaUm0b/zmORHGi
- 1uWnVGiiqGIWI2W6n+ySHzB22TEPFaLUp+/g5h6U++8/u/til5oKbBrNEo3VnxGOCtspdfFxoO
- I7jC3hYHg7FAAAA
-X-Change-ID: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
+Message-Id: <20261009-sockopt_expand_out_v2-v2-2-8ac08c469ecb@debian.org>
+References: <20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb@debian.org>
+In-Reply-To: <20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb@debian.org>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
  "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
@@ -67,128 +65,74 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4810; i=leitao@debian.org;
- h=from:subject:message-id; bh=gX5pcCVzVcNKDBaeae9zQCp0h+h+RTX03m8beg0799E=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqyK8N3Ukp0KuzzsNG3FdC2ZSqHGO82PfCfBm3Q
- JIEFrxwVDSJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCasivDQAKCRA1o5Of/Hh3
- bc8fEACFD+9vnmQF+nvH+AgiTdtHPn+A2CJVE9vcc7fCwKeFDhE+e+1+AQ1N0mWn2FdPETcOezA
- Xv5OnChtma/5i8iFq55aXfi8ZV57F8xIeg4EGx58IwzNdofoK+jNXArr2mKj2ddgdG5Z3KBjC5F
- 7ohXIjhj+bopolHyDTw7CShIp58cCd3jqlJVxY4Vvf/tX1pg9GvPeXBg19dOOfOSxVfFqncSQia
- 5feG+cLuEIf3BFJRcnBsC++O1fHomFgFONK9/u7ALJw0XR8WO5Si+3b1pGTxPZDYj7C/YMeeA7b
- /Ng+7q1epmyGaU843pt2H8RODAXglGKNokQYJCAzGz9GdvnrNY5QhT+pAT9mG3/CtG48Or7co4a
- QuuiXedepnHxpK6Dz1amOd4RmcI3c5PYQj2DLiUzPeuIRwaOkmlzwEGJnIAU850vvDu+pUB+tMn
- LysMWRx429qBfBnV5sf2Xq4mcxNa3BivykRpN0zApLhf1enAEGLg94Cip/qPGyBB/+Be1VPZpKB
- +8L8cGBlPRtVr2vs4CnCRew6Zlom1Uj4dh2VfUWPZ4+2rOFNsiH7rydC5Hl/yErWkAVQd5+pwIH
- Zv7iovnGwsE+TstNRp9iD+3ie7tJVET5da/LLxULcOLUs4cKIpLfxqT98jkvu4u/6j+ddeXi57V
- 7w08o8fyqtiPoFA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1842; i=leitao@debian.org;
+ h=from:subject:message-id; bh=PkslookZmOEAsO/zLp1hyjxSUvEuiAClTznXsClXGJo=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqyK8NK1DqJTPGZPj1XWBTQAToGrkHQtUv73nHJ
+ j2BO6BD6WaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCasivDQAKCRA1o5Of/Hh3
+ bY1PD/4i7qSIdf7AjKAcg869RE126w0eqQaGm3bGielCalXRg7s+jypawKF9vJkmn2wzjAWNaOR
+ kF2xu+0i073N3mvtNDA/m8n5+OMOWyAhNKZDOCtfesyuRCzXtHbnVBj1AvtJ8I0jT/URepxpL5s
+ H966gNLfq4xQ+0DEScTp+TEOY/M4UJ7wAooanWVvq9qFwivmp0dNKgXzZyadyoeZSiway9iWT3a
+ JtaRZ5Nk9weFj3p9/xtNfFVgWzNneyrxr7xwyvO+J2oE8SMrzPtNzG5s3hM+lY+KxU8i/bYiNDW
+ G2uD6xSlWHOYnNxpisuGJYxzwMA+3doDtMI03HnO+ou2rsmm+VtLJJm08TrshV7Mgszry/CZafq
+ HVhPqofkpVfZp4E5XYjC7lBRPboVfxB4XaXESsF5x/jnmq3Bb9QJoUkVIe0K1OyMCq9mB/8lA9N
+ qlsEmcTVo0qXBPiLssmHLFUpCh/HpsSmC+XlGSInAVYToAhnR/HVhF/nUela3/N+A5vP4O0/e60
+ r+q2pPua94WS6DhXfSGL75jWQAfp+VF0Ffobv5uoYwQJKhk3mLGu8fl7xfZrlXD0U4Bsf1XoyfD
+ EC5aI0gvpZG1v4hZZA0CMO0LHPIObv6MrswiCG2QtaOZh1hozAn7gpKYLkEZ6LQmD7hYp8txAlj
+ RSMnzUMn//CTIoA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-This series continues the migration to sockopt_t, as described in [1].
-do_ip_getsockopt() and do_ipv6_getsockopt() are the last two switches
-still taking a sockptr_t pair, and everything they forward to now takes
-a sockopt_t, so convert them both.
+sockopt_expand_out() grows the output iterator up to INT_MAX, but its
+callers rewind it with iov_iter_revert() once they know the real reply
+size. iov_iter_revert() refuses to unroll past MAX_RW_COUNT:
 
-Patch 1 settles what a negative optlen means on SOL_IPV6 before the
-conversion makes it matter. do_ip_getsockopt() rejects it, but
-do_ipv6_getsockopt() never has, and the int options answer it as 4.
-Treat it as 4, as David Laight suggested, instead of failing callers
-that rely on it.
+	if (WARN_ON(unroll > MAX_RW_COUNT))
+		return;
 
-Patch 2 fixes a latent bug in sockopt_expand_out() [2] itself: it caps
-the expansion at INT_MAX, but iov_iter_revert() refuses to unroll past
-the smaller MAX_RW_COUNT.
+MAX_RW_COUNT is INT_MAX rounded down to a page boundary, so a caller
+that expands into the (MAX_RW_COUNT, INT_MAX] range and then reverts
+hits that WARN_ON, and the iterator is left where it was instead of
+rewound. So does a caller whose optlen already covers such a size.
 
-MCAST_MSFILTER has to move before the switches above it. It is the last
-option with the quirk sockopt_expand_out() was added for [2]: optlen only
-covers the fixed part, and the real reply size comes from the gf_numsrc
-field inside it. Patches 3 and 4 convert it on both families, and store
-the reply length only after the final copy succeeds, so a copy failure
-can't report a changed optlen.
+Cap the size at MAX_RW_COUNT instead, before the early return for an
+optlen that already covers it, so a size that could never be reverted
+later is rejected up front.
 
-Patches 5 and 6 convert the switches themselves. Each wrapper keeps its
-__user prototype and builds the sockopt_t, so the proto layer is
-untouched. ipv6_getsockopt() cannot use sockopt_init_user(), which
-rejects a negative optlen, so patch 6 moves the clamp of patch 1 up
-there and builds the sockopt_t after it.
+This was detected by sashiko, and I fits in this patchset/net-next,
+given this doesn't seem to be a big deal.
 
-Patch 7 grows the selftest with an ip and an ipv6 fixture, pinning the
-returned length, errno and reply bytes.
-
-The temporary sockptr_t-to-sockopt_t glue can go away once the higher
-level callers take sockopt_t too. For now, the series keeps the proto
-callbacks unchanged and converts only the leaf helpers.
-
-Link: https://lore.kernel.org/all/20260401-getsockopt-v2-0-611df6771aff@debian.org/ [1]
-Link: https://lore.kernel.org/all/20260914-getsockopt_phase6-v2-0-e48befc9602e@debian.org/ [2]
-
-To: David Ahern <dsahern@kernel.org>
-To: Ido Schimmel <idosch@nvidia.com>
-To: David S. Miller <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Simon Horman <horms@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: david.laight.linux@gmail.com
-
+Fixes: 0093f7db9c47 ("net: add sockopt_expand_out()")
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v2:
-- Treat a negative optlen as 4 instead of rejecting it with
-  -EINVAL as v1 did, per David Laight and Stanislav Fomichev. 
-- Fix sashiko findings
-- Link to v1: https://patch.msgid.link/20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org
+ include/linux/net.h | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
----
-Breno Leitao (7):
-      ipv6: treat a negative optlen as 4 in do_ipv6_getsockopt()
-      net: cap sockopt_expand_out() at MAX_RW_COUNT
-      ipv6: mcast: convert ip6_mc_msfget() to sockopt_t
-      ipv4: igmp: convert ip_mc_gsfget() to sockopt_t
-      ipv4: convert do_ip_getsockopt() to sockopt_t
-      ipv6: convert do_ipv6_getsockopt() to sockopt_t
-      selftests: net: getsockopt_iter: cover ip and ipv6
+diff --git a/include/linux/net.h b/include/linux/net.h
+index e2a866fbcfa5ea..461137bdc8817e 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -84,12 +84,16 @@ static inline int sockopt_init_user(sockopt_t *opt, char __user *optval,
+  */
+ static inline int sockopt_expand_out(sockopt_t *opt, size_t size)
+ {
++	/* iov_iter_revert() refuses to unroll past MAX_RW_COUNT, so a size
++	 * beyond that could never be reverted back to the fixed part later,
++	 * even when optlen already covers it.
++	 */
++	if (size > MAX_RW_COUNT)
++		return -EINVAL;
++
+ 	if (size <= (size_t)opt->optlen)
+ 		return 0;
+ 
+-	if (size > INT_MAX)
+-		return -EINVAL;
+-
+ 	/* Re-anchoring reads iter_out.ubuf, so the iterator has to be a user
+ 	 * buffer that nothing has written through yet.
+ 	 */
 
- include/linux/igmp.h                          |   2 +-
- include/linux/mroute.h                        |   4 +-
- include/linux/mroute6.h                       |   5 +-
- include/linux/net.h                           |  27 +-
- include/net/ip.h                              |   3 +-
- include/net/ipv6.h                            |   4 +-
- net/core/filter.c                             |  36 ++-
- net/ipv4/igmp.c                               |  23 +-
- net/ipv4/ip_sockglue.c                        | 118 ++++-----
- net/ipv4/ipmr.c                               |  11 +-
- net/ipv6/ip6mr.c                              |  13 +-
- net/ipv6/ipv6_sockglue.c                      | 117 +++++----
- net/ipv6/mcast.c                              |  19 +-
- tools/testing/selftests/net/getsockopt_iter.c | 359 ++++++++++++++++++++++++++
- 14 files changed, 577 insertions(+), 164 deletions(-)
----
-base-commit: aac26bee2287c88af5be5a5ff96d783b19a28790
-change-id: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.53.0-Meta
 
