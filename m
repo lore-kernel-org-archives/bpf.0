@@ -1,117 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBC74C650B
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7524CDDC9
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 11:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545721; cv=none; b=U8w1Q//qAu9TOPROnrtbXXY40Fn/D1K3+eBl5UG5u1rHCAIJHVUL8aE4Flh+StiX52vNSeTDcUMOhwRMB51QBb+WEoN0pnbFYPgvdPpRfNf5bTNWsZPBQAQuOU8/ZuXdUOnopG8noM3aajltJH72/1j1Wdu0NbH5jMnn+fn27+8=
+	t=1791545722; cv=none; b=p0jCZy/VCrvf+dNsfatVD5xb/yVO2cVChLTNoWGQTTND2l/XjEX6tnrLqlGb2Oto6J/Krg9ZgoW7Uz5mLaLJcSxDmtmXxJ9HjhRXqNYlY1yk/3A/SFbUA2PzT0nrHUnlA6ZHI9FTm2fblTVcRlyUC6NlrLG8FdzwYXnpC0Hdr7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545721; c=relaxed/simple;
-	bh=DS9T197J6smEJKdQJEolczf3SYe8Yko36KC2CkFGNYM=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=i2JWChhyPDKuvRzsU4DLXzSh9d4H2yMKX8jJNmyuZL0jx04HScoRyJd608JmJoDWlVTSkOGyItKXEFTi27KJ9/qZvfsug/zqQiuLzy27J9TpaB4t/uXzDfG6tn2SczFYqIAXRSzmYeL5KHBbrZLBxJMaLfYkYh15BJuN9StUzzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCsA8J22; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791545722; c=relaxed/simple;
+	bh=2R2FAHfjSDMObepA1OdjpbsG4zBRUy4e93IUDKml36g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pqX0Ei+78DbA1OTaNJL2dWMv8GiIwNOcGr35svBt8d+4JRWvjb3r6UbMRpSVmPmJGgkmrynVme6nFPE9X3ve8UosXAhlFyjLpFwm9rK16kj3OqmJp2XWDIdS1JNKFK99zhrB2SKQAAKgNZBQtGdChSQ/ijyNwpAWDNfwBBaPNlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HO2gQITE; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCsA8J22"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FFF1F00893;
-	Fri,  9 Oct 2026 11:35:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791545713;
-	bh=yqY70+PsiU25prNPnUb+vu3CtkLJrk7/cZu1vrVm0VA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CCsA8J22BQb8DRdIfCdJvXetOo8uAHXU46JJAPeBwXCfhbKIvw4+mpyiBHESBjc7A
-	 /LSXgn/LIyi4vKs0fTfswkcoDCyM2D8h1k4BH5n9ruKjZzTFezQlJe0JkD+z7E8/bX
-	 gVV0Oy3tqOCfKkL+cNGO7D5wiPoZI5pc62chTDya2+2kzuOSoQUdjDU0wfVBm4m64g
-	 Oy76yLteyBii5FflrCxWnOYFdTSZqOLkbaSY68Z+O6LbOQ5xvgbRfskTqViWG7qq5C
-	 YsOCNv/Pfu+PXRx+nGGNfisDNYxj2rU8tJgt87yYjInQ9w01b56yqCHIgEbpmMnp7q
-	 SEWqlILxpW8oQ==
-Message-ID: <sashiko-outbox-165395@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/6] mm/page_owner: extract page_owner_next_eligible()
- from read loop
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhen Ni" <zhen.ni@easystack.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009112308.240769-2-zhen.ni@easystack.cn>
-References: <20261009112308.240769-1-zhen.ni@easystack.cn>
- <20261009112308.240769-2-zhen.ni@easystack.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 09 Oct 2026 11:35:12 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HO2gQITE"
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-48ed0b68895so2388245fac.1
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 04:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791545711; x=1792150511; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=q8+wh/N/g5AwFI5ghv77Z+PvaYgxRtZHcThuJwPsrFA=;
+        b=HO2gQITE6M1SH9xUCNzNQJmFKHcCDtSeBKmKu45Dg9SGlPa+718IEjjg/aP4uf4XZ0
+         o3WQLWzTAlJ6TsN71f7APaoYDH+0o1RX8p7bdHLjvjPtgOxkBFllEu4wUYKDrI2xCswi
+         AV3EiFtx0wsLzloyqgptEPzQbfgamq/lquZBSR8KyZ7PxQSAc2U/HFG+I2tP+MEaI/cC
+         UZH5sGdQhxvvo21Ls6xEAIhG6dizoj3PC9dvrr8k+ALc5qkzF5ldppdtMd9o+B1YFJpV
+         vpOSiBak8qySBJfz8ul6zhgUlQEC/tD+bz/NGAsecC/Nw/OYedNQo/hOKGWEFIAj97B7
+         Yk9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791545711; x=1792150511;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=q8+wh/N/g5AwFI5ghv77Z+PvaYgxRtZHcThuJwPsrFA=;
+        b=QPsAS4+kq2nEI+ircRHoTgxrmYr6xg35FeXA1JWxuvgiuPsnPvG1Qpvb5fDumUIR9p
+         AMoaL7BdHb4yXdobXcT4DtzD9qzsLCa11f2gTHLvc7SWgmJg3efrbSUF34wreUyI2mmc
+         cGXcqLy7dc/EFntrY/VboGg6uHrCvtNl7sZ6s6IL4BIpLmpsWZBwAWaNcHXrwgBxUVer
+         FTJFSTzgTyNUbH3j58lHYXB3lLv4XnJ8Hfs2ryXofY3iQjL3NccAqyrET3EPefYW+bvP
+         CerCVR0+Qy/bJ8GqJT6uE1HhSian6250Es+pjs/ckO+vO1GviEK0ayHrq/Ly0ppEZ9Jj
+         pl+w==
+X-Forwarded-Encrypted: i=1; AKwUvByoIbeKQrQh3TmuO5t2Ni2BNLv0DthJ6UucU+a76lOyXl01gxdCUz6UGZR4TYb5KT25OpE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL8p/IzNsEDpAVABLDkw4V8v4+NBLWCx2FwkhDXeETmlVWBgpRj
+	nf08quAN75cgeO4pF/5nWkz4VrfhiMHBNGUddbTupkthLkW7/nnmn+Lf
+X-Gm-Gg: AYBFou2IYrCAh0caNIsbB7Urf80g9Pd9pT6Tv6ASVNu5myIsT1t+eXvoYY7T/YJRp6g
+	CSlUYvUqqsESg6gRwemG3eZxwsOQFPT6/dHhN5DArUAD73E1xgn3PGxNjAUqesc6Buh1y1OX+Ar
+	YqDCBs1hXB63dqzXQDm3xmm3rSBd58bcCJoc/zgnxAJ8gaSVPOTAIjmTcZjcgtrhyFcoXT5KDxd
+	RVLcevPdTSiRTt3+gzuYgtGiMjLcoMEsGdEkzE0qz1PRg1dYFi3J8sIjgSg+q3TcDCAC1t7t0F5
+	6QaVEDne0PXNI6vYlqG1s8ajJIJQoRj7Uoadsc8Z/+AHjid0fseahY0pGJc93E84ju9prcm4UQQ
+	353hdDWoHHJKaep3qmIvo+g3u9XXvfyDbB4yYyaFNe+xry77+T62m+Ok9+Z9L0DmsSAMup8r/Q4
+	E4fcDJ6r1dOUCB5GC+aJvyU2XW+ZVn40NU4rY4QLwWs3eMaB/5MOEIm/GSYnCvLz9QPO8F
+X-Received: by 2002:a05:6870:2803:b0:49d:6a41:29ff with SMTP id 586e51a60fabf-4a2a89b4321mr1308706fac.51.1791545711234;
+        Fri, 09 Oct 2026 04:35:11 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:71::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a2a84a1457sm1374829fac.4.2026.10.09.04.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 04:35:09 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+Subject: [PATCH net-next 0/4] eth: mpnic: add basic netdev statistics
+Date: Fri, 09 Oct 2026 04:35:03 -0700
+Message-Id: <20261009-mpnic-counters3-v1-0-7dc7644cc500@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGjRyGoC/x3MQQ5AMBBA0avIrE1SbUK5ilhQg1kY0pY0EXfXW
+ L7F/w8E8kwBuuIBTzcHPiSjKgtw2ygrIc/ZoJWuK6U07qewQ3dcEskHg7Oy1pqprU2jIVenp4X
+ Tf+xBKKJQijC87wd+6+YgawAAAA==
+To: Alexander Duyck <alexanderduyck@fb.com>, 
+ Jakub Kicinski <kuba@kernel.org>, kernel-team@meta.com, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@kernel.org>, 
+ Eric Dumazet <edumazet@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org
+X-Mailer: b4 0.13.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] mm: soft lockup in page_owner_next_eligible() due to missing cond_=
-resched()
---
+Add basic netdev statistics and report them via ndo_get_stats64 and
+netdev_stat_ops.
 
-commit 303a10c305ed333982228df86334f12bd6d8a3c2
-Author: Zhen Ni <zhen.ni@easystack.cn>
+Track per queue netdev statistics such as Tx/Rx: packets, bytes, drops,
+etc. The driver keeps per-queue state for statistics that is updated
+mostly from the NAPI poll and ndo_start_xmit paths. The stats are made
+available through the usual driver APIs.
 
-mm/page_owner: extract page_owner_next_eligible() from read loop
+When the netif is transitioned down, the per-queue stat counters are
+folded into a global per-device set of counters, and then when the netif
+is brought back up, the per-queue counters start counting again from 0.
 
-This commit extracts the page scanning logic from read_page_owner() into a
-dedicated helper, page_owner_next_eligible(). It advances a cursor to the
-next eligible page and takes a snapshot of the page_owner record inside the
-page_ext RCU window.
+Extra care is needed for implementing ndo_get_stats64 since the instance
+lock is not taken. When ndo_get_stats64 races against ndo_stop and
+ndo_open, the reader can attempt to read per-queue stats while the queue
+count is changing. To deal with this, the writer publishes the
+aggregated base stats and the active queue counts in a single RCU
+versioned object.
 
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index fbbda7ba914ba..bafe474f33602 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+---
+Daniel Zahka (4):
+      eth: mpnic: count packets, bytes, and drops per ring
+      eth: mpnic: report per-queue stats
+      eth: mpnic: count Tx queue stops and wakes
+      eth: mpnic: count Rx allocation failures
 
-[ ... ]
+ drivers/net/ethernet/meta/mpnic/mpnic_netdev.c | 182 ++++++++++++++++++++++++
+ drivers/net/ethernet/meta/mpnic/mpnic_netdev.h |  29 ++++
+ drivers/net/ethernet/meta/mpnic/mpnic_txrx.c   | 185 ++++++++++++++++++++++---
+ drivers/net/ethernet/meta/mpnic/mpnic_txrx.h   |  30 ++++
+ 4 files changed, 408 insertions(+), 18 deletions(-)
+---
+base-commit: d8674294aefef02266c4d47ad10131f1bffbe534
+change-id: 20261002-mpnic-counters3-d08883b96372
 
-> @@ -798,37 +795,67 @@ read_page_owner(struct file *file, char __user *buf=
-, size_t count, loff_t *ppos)
->  			goto ext_put_continue;
-> =20
->  		/*
-> -		 * Access to page_ext->handle isn't synchronous so we should
-> -		 * be careful to access it.
-> +		 * Take a snapshot of the page_owner record inside the RCU
-> +		 * window, then validate it, so that print_page_owner()
-> +		 * reads the checked handle from the same snapshot.
->  		 */
-> -		handle =3D READ_ONCE(page_owner->handle);
-> -		if (!handle)
-> -			goto ext_put_continue;
-> +		scan->pfn =3D pfn;
-> +		scan->page =3D page;
-> +		scan->po_snap =3D *page_owner;
-> +		page_ext_put(page_ext);
-> =20
-> +		if (!scan->po_snap.handle)
-> +			continue;
+Best regards,
+-- 
+Daniel Zahka <daniel.zahka@gmail.com>
 
-[Severity: High]
-Could this cause a soft lockup? By using a continue statement here in
-page_owner_next_eligible(), we jump directly to the next loop iteration
-(advancing pfn) without executing cond_resched() at the end of the loop
-block.
-
-If a large contiguous sequence of allocated pages lacks stack handles
-(e.g., if stack depot is exhausted or during early non-tracked allocations),
-the kernel could iterate over millions of pages without yielding.
-
-The original implementation used goto ext_put_continue; which correctly
-yielded. Does this need to be updated to explicitly yield or use the
-goto instead?
-
-> +
-> +		return true;
-> +
-> +ext_put_continue:
-> +		page_ext_put(page_ext);
-> +		cond_resched();
-> +	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009112308.2407=
-69-1-zhen.ni@easystack.cn?part=3D1
