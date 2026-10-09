@@ -1,64 +1,64 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023054C6531
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C604C753A
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 10:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791542924; cv=none; b=XkBtyNCqy1PvH28B28b3qfan/Ia42u/kKgR/G8q1DMy/P6cztLEJEnCNKKPPELeErXxWPPF1uUeNt46yosO2AYxK/RXJO5xYfjESQx+vSgA3SzdGfGkFyB8Ip5FN4EmDzPJ9IHLTKOvae60mNwq4i0tbCh/fq3R85K7i11hi5Os=
+	t=1791542926; cv=none; b=c8BwkNvdLY3aWZaRqgSzwSjak4+8QKxZSoHQwQGUjdY/X+9O2vf4hXMJefftlearF0k3out/KvQqatTc+S8f8rRVIa2SAX48c0JfTz1dsaA3Hb3qWXf1kgde7hVy97DuJYX0pci6EXSix/HRDedLb41/CGMpQhWMnwFj7IDHsiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791542924; c=relaxed/simple;
-	bh=IQwsFkcW9oS/4Ckta/Qx9Ds62lvNaPDGjSRSpZEtjyA=;
+	s=arc-20240116; t=1791542926; c=relaxed/simple;
+	bh=7AfKJg2xbwRmTIffnycazXz8lToGJEQ8RwSTR6Grj40=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PiLcGBvtKHvtY4gY/THLsG4tAFzhGq/wfkHpLjsVmFpqqMkgigJ+uHw+AxQ6NT3K4S9UtMKZ9KDCzVooaa1eQdlg1s00vUqW+tpfIhckXZvzF6Ojyx5fkkaYkGw/P5Y4vpIJM+y8eppHnKA9b8VbpV38TlRJr/m+8uwjVhKJ4CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fQBZdTRi; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version:Content-Type; b=B05CIiBxf1+2EJL/8bKNT+f0qThK3gsaOuhHTp5YLVgDQrnX4C9Pa0Oo4a/R0CPOS9A8Obd/lqDHEqZXahlRbzRz5j/6JPeHA1i9ynVvSmfmwh98hcluUSXsug7QWwUmrY5LvHxsmFlr+omVhOsT/1fyIQrth2se2Ls0efkN/H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIgkGVUJ; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fQBZdTRi"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-381b831d535so6250219a91.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIgkGVUJ"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-ccce967aa8dso2781715a12.1
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 03:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791542910; x=1792147710; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791542911; x=1792147711; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=WtGQ+WqgXKrFef+L9zxfGghIHt/+lb5ctIYIomiT8os=;
-        b=fQBZdTRi5eCWpY74U81OQDQyULBOIqGJsECC60IA2HcnXTZgi/c8ArZ+vOOncSOQpB
-         so1iWPY0SZh2/7b0Vu6CoSP3zqdBBwQnyE7pL7aFClzVC6d+np9NW7WtFQqUulJdqJRD
-         wLGNP9ZSS9rEngn1giLOeIPgH5/cUvKEPaau39Ufx8DALabkN8WXIDC2tdg1rI4ZHT4n
-         +bLW884aIQLbwteJRdUaYWrYbSRbVNxshVfzqE8KTN36ehLtPmMDHjxWK6mQqeNNLC1w
-         /bFBtFmZ+XNVKatxOWTEFuuka4q0Ykp3ZHyKJbWqJUBNBUsycYsapUYz/eEXOmkp7Tes
-         s+WA==
+        bh=WSVLSqDuY9NLn0hGTQ8/+lMGSF1GZL4tWD/AntUCQwU=;
+        b=JIgkGVUJlUZKJwE4hrssAoj5/FWwAgw7dSGv4JqQmlCa2ZKi1/tqhafEirFxt6ARu9
+         jXmISNf8Xs4zSsZUW41xhwkCvdJOFbNWRsnzL8c5yVNhOT9ILZdjNtIQ0rSwfqAcJ8Nc
+         9OWG2vDewmEg5NlSAdn8p7zfwuazfCW+9QY96XefRMWTR9uorlaCIk/V/6gcPooDf+WG
+         2eEoNPfJobrLMUQ7WxoP/L453pOFXLMBL6O3aTatK/6iy0CbnqBpOLvhgNxmfJfoX7om
+         2IZVfQit3sdqkT/07yxy280rBXuF9R/FVoy4SbLzmoO81a3uEkkNVR9/MoW/SodIrd7J
+         jTCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791542910; x=1792147710;
+        d=1e100.net; s=20260707; t=1791542911; x=1792147711;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WtGQ+WqgXKrFef+L9zxfGghIHt/+lb5ctIYIomiT8os=;
-        b=nOhEAnWQZqgbaEyb9O9qhImSfAEGdNbsUvxWXw05bmAyN4AgW8SIG4b4wWKh0GVY7A
-         9hGifm07KEXCyOk8vgAQoVM35CRipAWTzY/NqfnNhmQfOJIy5T7ljmrgQRrx+T1Dwq8J
-         kKT2lywWd/2fCiaMz8zzlVa5Jl6HGMNpMrvqlQv4FGSirtcUv8lAf8bCdbGydLlcDWVb
-         hEZITv8KU1+/1coPOa7It4RF1JCnhA/zXJzU5HP2oFoVf6TKFlZVD+NraMuOqnuEd4Ba
-         UiWJLYGYtYvt7YxmVOpCE0meB4E0svCs9ckkm1CfcSc1bLVO24GNgciqmyWuQm/Wqw/b
-         kpQw==
-X-Gm-Message-State: AFq9FYJACZvllbghQcRxJxtfFUsrQ+lIC5gWwjHG7QJ5vMcB48Jfu3NI
-	toIEMWzCsxgkewOjPUvgrElyfXrV2LQx6kYEKCaErQHaq23bVWkR8EMlRbOxBA==
-X-Gm-Gg: AYBFou2xfYrn2b44VOMx2qJvAlQf2CZdaktgLGS8lDdJncMSAYPZ9FI+VCBNQc1WQc/
-	k+6siDB67CsbNeqEYwnUSu88xGRC4BR4ngnwLHwa+q4jGKsnzYVFxc+p7i0Fjy7AVvfuRAKlSc4
-	iPFufSwKsej56Ch0QzmNW9bGb5ustyG+WnlL5vmRcZX2PaL8R5ysQYrLOsP5yPEKgIJ8lFyZPu6
-	eNgjPOQtAdSHVvLhvwanpSrIKHUT16RBLoq22rCro0aP2KKVfvbonMl+swEmDuviKvy9pUA/btH
-	cMSMy57fAks43dJEE6R8HJxQzxEaif9g6ipMS0A0nJK+Xu3n7Vkd6sBGnG91idZrMiA1czDSVgE
-	p9eBdHdiJBO0jZipc9/z9KxFK6+pbiamRFqEuyLk0QWq4koACIVKroBWUeFK/njyp4w1hIvxtKK
-	jAwx+RFMJZceypkfza+y6d60GE78rRDesbsNRVIX6xxEhsS5LEm9XPOt4X+RhowFMD1hIkfDb8Z
-	5bEU0MWK5V7HXU=
-X-Received: by 2002:a17:90b:224c:b0:3a8:bbc2:5551 with SMTP id 98e67ed59e1d1-3ab3a0f0a1dmr1589395a91.0.1791542910250;
-        Fri, 09 Oct 2026 03:48:30 -0700 (PDT)
+        bh=WSVLSqDuY9NLn0hGTQ8/+lMGSF1GZL4tWD/AntUCQwU=;
+        b=c7LRJF0tEHLdWnSEUJhILcQ7+r+JPVXtDZs9FQi7PPgGFGztxtj8PqwV72v4x33njM
+         Wx+OtDEybZezz4jlQN29z7eqND75WkZEQW9yWVBpazI4MSpsWiiAbe2wNLRjt/va8eFa
+         745THGPLupl5aHvzoqbDHzT/76l/R4hGteJMGAkKZyaenn4bbf41FM7i25TH301v8P3N
+         Y6BXgvhVmVPOcpFU4k3wc5/dEjf19XkF/p2uoJUnpTVUO6aMk1ULhkqIIaXNNCZ/sTBZ
+         xGww2asWmUXrYvL8h/ABnvAUoRiO6s5r9WuhDvEIjFpaRi6e7JuI9HqUb7wYhrJBttin
+         4MIg==
+X-Gm-Message-State: AFq9FYKNVmuI+hon5WPWlcsXAdhNC4VpndmIFmlMCA1taenwi5PQ16o6
+	tfx1usQW0H/Y/4f6WE64fDoSqEeXffmkYuJ6NQqjEsmpLkHEB7+6GLEFBgDfzjQA
+X-Gm-Gg: AYBFou0EYqR3kvyzN4n9aS05+hnbzo0qIl8Gq4GEDaNoSW6snGep75wnV6p30jPtpaA
+	rkedzIw3nTLTzEJDX44Kv2t+7RX5JKIeE3dmQ5SpzsUFO1mTXYrzggsUym5wcF++sKHcyr6EikQ
+	59T12EYxyJrchy86205xb1gA61sbdgpWPDxTE99Bjva70/rMqT0UJbSwXQycEb03mQL5HezINO6
+	3uYVFCUxp/NU0F8lhlqdjBOiAoxRTz6UFps0QtqTsuZUHQpz6ZJmJTAzERVLEG2MDC/YN9tBOpD
+	31o6/ZtpeTGJr50l3CgeAmvjPWe7nBYD2UiFKu3AEjIDhl9TzOsVKHUNDQSbEwHQU2p3BXOb1Ac
+	cR4HhqVuyx/5QOdVmbseied/35v5jIUS8zICPWBl8hdwk0ZeNnUNtjYSgX7LuoTp8d7get3JjIC
+	IW1+OmA5AOkn4Egv5sRYizMH0uASl7WO2M7EXeA+flZmIX/n13Qfow1l6ZK88UHEdgdmcggDJu/
+	7ydFonqqp8lgXBe++wUMGK2PA==
+X-Received: by 2002:a17:90b:1e4a:b0:3aa:9a32:5051 with SMTP id 98e67ed59e1d1-3ab3ab329bcmr1335825a91.45.1791542911424;
+        Fri, 09 Oct 2026 03:48:31 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm3050107a91.4.2026.10.09.03.48.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 03:48:30 -0700 (PDT)
+        Fri, 09 Oct 2026 03:48:31 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 16/51] bpf: expose bpf_grow_stack_state()
-Date: Fri,  9 Oct 2026 03:47:34 -0700
-Message-ID: <20261009-scev-minimal-rebase-v3-16-bcba9bc53ac9@gmail.com>
+Subject: [PATCH bpf-next v3 18/51] bpf: allow subrange relations for PTR_TO_STACK in regsafe()
+Date: Fri,  9 Oct 2026 03:47:36 -0700
+Message-ID: <20261009-scev-minimal-rebase-v3-18-bcba9bc53ac9@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
 References: <20261009-scev-minimal-rebase-v3-0-bcba9bc53ac9@gmail.com>
@@ -82,59 +82,45 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-When windening SCEV expressions like *fp-8 -> (any *fp-8 *fp-16),
-fp-8 might be not yet allocated. Expose a utility function such
-that widening logic can handle this.
+regsafe() currently requires an exact match for PTR_TO_STACK registers.
+This prevents an explored state from pruning a current state whose
+variable-offset range is a subset of the explored range.
+
+This change allows a checkpoint containing a widened stack pointer to
+cover narrower offsets reached on subsequent loop iterations,
+for example [-56, -8] within [-64, -8].
+
+Merge the PTR_TO_STACK case with PTR_TO_MEM and others, as the set of
+necessary checks is almost identical. The only difference is a map_uid
+check, which is not needed for PTR_TO_STACK. All locations that
+produce PTR_TO_STACK reset map_uid to zero.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h | 3 ++-
- kernel/bpf/verifier.c        | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ kernel/bpf/states.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5ec9495d42b1..ab86b75888c3 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -522,7 +522,7 @@ static inline u32 bpf_stack_nr_slots(const struct bpf_func_state *frame)
- 
- /*
-  * Stack slot @spi of @frame, covering bytes [fp - (spi + 1) * 8, fp - spi * 8).
-- * The caller must ensure spi < bpf_stack_nr_slots(frame), see grow_stack_state().
-+ * The caller must ensure spi < bpf_stack_nr_slots(frame), see bpf_grow_stack_state().
-  */
- static inline struct bpf_stack_state *bpf_stack_slot(const struct bpf_func_state *frame, u32 spi)
- {
-@@ -1297,6 +1297,7 @@ void bpf_bt_sync_linked_regs(struct backtrack_state *bt, struct bpf_jmp_history_
- void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
- 			   struct bpf_reg_state *reg);
- void bpf_mark_reg_unknown_imprecise(struct bpf_reg_state *reg);
-+int bpf_grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size);
- void bpf_mark_all_scalars_precise(struct bpf_verifier_env *env,
- 				  struct bpf_verifier_state *st);
- void bpf_clear_singular_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e317cdae749e..47a632a6749a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1456,7 +1456,7 @@ static int resize_reference_state(struct bpf_verifier_state *state, size_t n)
- /* Possibly update state->allocated_stack to be at least size bytes. Also
-  * possibly update the function's high-water mark in its bpf_subprog_info.
-  */
--static int grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size)
-+int bpf_grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size)
- {
- 	size_t old_n = bpf_stack_nr_slots(state), n;
- 
-@@ -6705,7 +6705,7 @@ static int check_stack_access_within_bounds(
- 	/* Note that there is no stack access with offset zero, so the needed stack
- 	 * size is -min_off, not -min_off+1.
- 	 */
--	return grow_stack_state(env, state, -min_off /* size */);
-+	return bpf_grow_stack_state(env, state, -min_off /* size */);
- }
- 
- static bool get_func_retval_range(struct bpf_prog *prog,
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 18bf7b660c2f..345079cf64d3 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -610,6 +610,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 	case PTR_TO_MEM:
+ 	case PTR_TO_BUF:
+ 	case PTR_TO_TP_BUFFER:
++	case PTR_TO_STACK:
+ 		/* If the new min/max/var_off satisfy the old ones and
+ 		 * everything else matches, we are OK.
+ 		 */
+@@ -643,8 +644,6 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		/* new val must satisfy old val knowledge */
+ 		return range_within(rold, rcur) &&
+ 		       tnum_in(rold->var_off, rcur->var_off);
+-	case PTR_TO_STACK:
+-		return regs_exact(rold, rcur, idmap);
+ 	case PTR_TO_ARENA:
+ 		return true;
+ 	case PTR_TO_INSN:
 
 -- 
 2.53.0
