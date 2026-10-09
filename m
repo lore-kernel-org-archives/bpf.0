@@ -1,119 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2C4432BD6
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7CD4963BA
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 12:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547658; cv=none; b=lQRfblnzF1vHsOaNJW6gS6bBMU4sFkFy0MfjVUxRrrnIYHoGT0C+25VAh0vSSt8crWxYZ5f2O9wagVUVoCtcUOcyiOHVuFDC3WtFUsn7R9zpixcBiOM4ROV7B2TNoOkUVosoq7z3nFJ1xN9QM7H3wx/WQRn5rSq/T9J++9euBMA=
+	t=1791547660; cv=none; b=EPm9RdGDTEofmFs7J7MX2UM6yqfENBePJlCVy4KyAOnjZyvV2DBqZo2cX1si2azKDfRU3UAM5XdIcwlQ5284VL0+KSgoYN8A06h/0vwjrpNqP1wTC80DEhp9FLvYY/el4RFAsRfpfnBGicgrPKkYNKpbw5/NIwDD+Uxr6quAlxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547658; c=relaxed/simple;
-	bh=EckT4ecjnXvhfTOYR+5voDL47gbtUjba8WvnsT0bjUc=;
+	s=arc-20240116; t=1791547660; c=relaxed/simple;
+	bh=Ija+x2+9/04ij24lxWWPCVY0WG29/ZBlXmEa7EE5VSo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=idWGg3kClJ6FBGckjQkmK5R2t+GGet63AlCQ+/KfaNtBPH/4PdHJolnNYvpsF2CgP9nz4Js4kKskKuZ1ge0PGva3o6pAJlB6u91+5KS3+qVSiNSxuDUodN1bz5VUWZjrlp7a3MSyjrbzEquma+qO7SBP/72ChPOuy31BYrmUqAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSIvS5JC; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=cDOMi8ZUvKAbvQt5jNOo34kwI3Ow16OYOjhIugqXfFEwjk4IJj7yqtaM/LIPLMVlc64/vGALkZ2ZXtNWq4hQa66jidq2FBNANCNuJ5fpQdnnV+fuo+AbD60i4Hgl6OFCVBw+ktG3gOiEtPacCxJEJ5DNk8kAsBvEkL6In+lIB3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBcajnPx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSIvS5JC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C81581F000FF;
-	Fri,  9 Oct 2026 12:07:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBcajnPx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2320D1F00898;
+	Fri,  9 Oct 2026 12:07:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791547652;
-	bh=7kJB/hirga2rTmGVF1x3CnXU37xp3cXTgGnJIbUPthE=;
+	s=k20260515; t=1791547655;
+	bh=KzecLxjIsif+1Ju/I2n4EkSW/UlaJFQFmRUHOlw7od4=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=dSIvS5JCkP8Z7KjURBDXsfceurOHK6Y7xomXTkRUvxYgEuLlytvlnAQakZFfT7Z4F
-	 p2VLZMnpwDvtna/j8c6cA76RMGLwjqG0nrE82T2Xhps7wTRftASK5sZ+/BdfFKrIas
-	 JWCARVUx6igvbtP72vsgKMgJWHwHalxdUjyLUx2pnTD3W5xid96Tfun8SStwOIxVTd
-	 YuBIbVH/208zm2hneO5D9gXPxo1/ErEKdUBGlxZ7Gdh4G1dXe/iaTI38872pa8T64Q
-	 MV8gxI+Wcj1SxnHC2hmDt0odvo7bMHia00Uu7z7T8+CgxfPdsW/9lB5/anZAgaPPOs
-	 LZU1DodJk58Bg==
-Content-Type: multipart/mixed; boundary="===============3592105562042583579=="
+	b=oBcajnPxc1ZRzsS09/CATnk1EY1aQbQ0HHqFjHG6UzWSTRzPtXNzHulwIL+UwtbR2
+	 E70No+N6odaSNL5RKRnsls7b0WaDMKcvaWwZkhjTVOymd+yzKkNvWYTTWuls/J7zGT
+	 Wf4d0TcWN8UpcSjhlY0oVHI/foTRi2axEdHKWZQ3zijNFeHJ8rMtYBR4GTZgeQ1qaJ
+	 hrv3I/9WWOtCrfSaX+g1OxR3rmWmdZmY+qqhSnjeRxWaxA6MWH6G/qvTD7xiBZ58aj
+	 KB4eTRF93/r5X4jNjSzwPLLSsya0R9+KfX31Mcru9gzDm3JysFpLL2LHzz7u7t+TvF
+	 9461jfNXBeCSw==
+Content-Type: multipart/mixed; boundary="===============5968056736597149628=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e552bb2846575b625bfb8db88a7d567467a337e1c42a1a6c75829b34909b44a3@mail.kernel.org>
-In-Reply-To: <20261009-scev-minimal-rebase-v3-46-bcba9bc53ac9@gmail.com>
-References: <20261009-scev-minimal-rebase-v3-46-bcba9bc53ac9@gmail.com>
-Subject: Re: [PATCH bpf-next v3 46/51] selftests/bpf: tests for register base/step arithmetic
+Message-Id: <0f50c90c981387ec8a1dc3e39ed271189360de0f156d6b61962c015eb97ef591@mail.kernel.org>
+In-Reply-To: <20261009-scev-minimal-rebase-v3-36-bcba9bc53ac9@gmail.com>
+References: <20261009-scev-minimal-rebase-v3-36-bcba9bc53ac9@gmail.com>
+Subject: Re: [PATCH bpf-next v3 36/51] bpf: bpf_func_state size optimization
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
 Cc: andrii@kernel.org,daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  9 Oct 2026 12:07:30 +0000 (UTC)
+Date: Fri,  9 Oct 2026 12:07:34 +0000 (UTC)
 
---===============3592105562042583579==
+--===============5968056736597149628==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: tests for register base/step arithmetic
+> bpf: bpf_func_state size optimization
 
-TL;DR: In verifier_bounds_step.c, the __no_step check on the "w5 = (s8)w1"
-pattern looks unable to fail, since the trailing {{.*}}) swallows any "step="
-text, so a missing step reset in sign-extension would go undetected.
+TL;DR: The narrower memcmp prefix in states_maybe_looping() may stop comparing
+id, parent_id and map_uid, so a terminating program accepted before could be
+wrongly rejected as an "infinite loop"; the commit message doesn't mention it.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-> new file mode 100644
-> index 000000000000..3a0d22aa4fb8
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-> @@ -0,0 +1,363 @@
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> index c62ea992967b..953700822fa7 100644
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
 
 [ ... ]
 
-> + * w4 = (s16)w1  -> [0, 168]    step=0+24
-> + * w5 = (s8)w1   -> [-128, 127] no step
-> + * Bounds and step stay in sync, the step is dropped when the value does not fit.
-> + */
-> +SEC("socket")
-> +__success __log_level(2)
+> @@ -1171,7 +1171,7 @@ static bool states_maybe_looping(struct bpf_verifier_state *old,
+>  	fcur = cur->frame[fr];
+>  	for (i = 0; i < MAX_BPF_REG; i++)
+>  		if (memcmp(&fold->regs[i], &fcur->regs[i],
+> -			   offsetof(struct bpf_reg_state, precise)))
+> +			   offsetofend(struct bpf_reg_state, step)))
+>  			return false;
+>  	return true;
+>  }
 
-[ ... ]
+Does this narrower prefix drop id, parent_id and map_uid from the
+comparison?
 
-> +__msg("r3 = (s8)r0 {{.*}}R3=scalar(smin=smin32=-128,smax=smax32=127)") __no_step
-> +__msg("w4 = (s16)w1 {{.*}}R4=scalar(id={{[0-9]+}},smin=smin32=0,smax=umax=smax32=umax32=168,{{.*}}step=0+24)")
-> +__msg("w5 = (s8)w1 {{.*}}R5=scalar({{.*}}smin32=-128,smax32=127,{{.*}})") __no_step
+The old length, offsetof(struct bpf_reg_state, precise), was 80 bytes and
+covered the raw id, parent_id and map_uid.  The new
+offsetofend(struct bpf_reg_state, step) is 68 bytes, and id, parent_id and
+map_uid are all declared after step in the struct, so none of them are
+compared any more.  offsetof() cannot name the precise bitfield, but
+offsetofend(struct bpf_reg_state, parent_id) would have kept id and
+parent_id in the comparison.
 
-Can the __no_step check after the w5 = (s8)w1 pattern ever fail?  It looks
-like it would pass even if a step were left on R5.
+Commit 8901cee9316d said this prefix comparison "continues to cover the
+complete value state", and this commit message does not mention that the
+comparison is being narrowed.
 
-__no_step expands to __not_msg("step=") __msg("\n"), and
-match_negative_msgs() in test_loader.c only looks for "step=" between the
-end of the previous positive match and the next newline.  The positive
-pattern here ends in {{.*}}), and with leftmost-longest matching that
-trailing .*\) runs to the last ')' on the line.
+Before this change, the current frame's registers had to carry identical
+raw ids before infinite-loop detection could fire.  Now the decision rests
+on states_equal(env, &sl->state, cur, EXACT).  In EXACT mode regs_exact()
+compares ids only with plain check_ids():
 
-R5 is the highest-numbered scratched register at this insn, so the last
-')' is the one closing R5=scalar(...).  print_reg_state() emits
-"step=%d+%d" just before that closing ')', so any step text is swallowed
-by the {{.*}} and the span left for the negative check is empty.
+    return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+           check_ids(rold->id, rcur->id, idmap) && ...
 
-For example, if the reg_step_reset() in coerce_subreg_to_size_sx() were
-removed, R5 would keep step=0+24.  zext_32_to_64() would not drop it
-either, because reg_umax() at that point is still the copied 64-bit umax
-of 168.  The log line would then be:
+That skips the extra checks that regsafe()/check_scalar_ids() do for
+scalars: the ADD_CONST flags must match, and the base id (with the flag
+stripped) must map consistently.  The comment above check_scalar_ids()
+describes this exact gap: "Without the base check, idmap gets two
+independent entries A->B and A|flag->C|flag, missing that A->C conflicts
+with A->B."
 
-  R5=scalar(smin=0,smax=umax=0xfffffff0,smin32=-128,smax32=127,var_off=(0x0; 0xffffffff),step=0+24)
+Can a program that terminates, and was accepted before, now be rejected
+with "infinite loop detected"?  For example (privileged, so ADD_CONST
+linking is active):
 
-and the test would still pass.  I checked this with libc regcomp/regexec
-on a log line built the same way.
+  r6 = rand&7; r7 = r6          (r6,r7 id A)
+  r8 = rand&7; r9 = r8; r9 += 1 (r8 id C, r9 id C|ADD64, delta 1)
+ L: if r6 > 3 goto out
+    if r9 <= 4 goto out          (on entry r9 is tied to r8, so both
+                                  branches are possible)
+    r6 = rand&7; r7 = r6; r9 = r6; r9 += 1
+                                 (r9 is now tied to r6: id B|ADD64)
+    r8 = rand&7                  (id D)
+    goto L
+ out: use r6..r9; exit
 
-The comment above the test says "w5 = (s8)w1 -> [-128, 127] no step", but
-no other test in the file covers the coerce_subreg_to_size_sx() reset:
-step_movsx only uses 64-bit sign extension, and w4 = (s16)w1 takes the
-no-op path.
+On the second visit to L the register values match the checkpoint exactly,
+and only the ids differ (A->B, C|ADD->B|ADD, C->D).  check_ids() accepts
+this mapping even though r9 now depends on r6 instead of r8.
 
-The R3 check a couple of lines earlier works only because its pattern ends
-in an explicit "127)".  Would dropping the trailing {{.*}}) from the R5
-pattern, e.g.:
+The old raw-id prefilter rejected the match (r6 id A != B), so exploration
+went on: r6 <= 3 forces r9 <= 4 through sync_linked_regs(), every path from
+the second visit reaches exit, and the program was accepted.
 
-  __msg("w5 = (s8)w1 {{.*}}R5=scalar({{.*}}smin32=-128,smax32=127,") __no_step
+With this patch, states_maybe_looping() returns true, states_equal(EXACT)
+succeeds, and bpf_is_state_visited() returns -EINVAL.
 
-let __no_step see the rest of R5's state (var_off=...) and fail when a
-step is present?  I checked this as well.  The later series commit
-c7b36680c7d9 ("selftests/bpf: tests for register base/step state
-pruning") only appends to this file and does not change this pattern.
+The same weakness could already be reached before this patch through ids
+in stack spills or caller frames, which the prefilter never covered.  This
+patch extends it to registers in the current frame.
+
+Should this compare up to offsetofend(struct bpf_reg_state, parent_id) and
+compare map_uid separately?  Alternatively, if dropping the ids is
+intended, could the commit message say so, and could regs_exact() check
+ids the way check_scalar_ids() does?
 
 
 ---
@@ -121,4 +141,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37923187511
---===============3592105562042583579==--
+--===============5968056736597149628==--
