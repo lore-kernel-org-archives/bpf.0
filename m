@@ -1,307 +1,102 @@
-Received: from mta0.migadu.com (out-104.mta0.migadu.com [91.218.175.104])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F73343E9D5
-	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 06:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3758435A84
+	for <bpf@vger.kernel.org>; Fri,  9 Oct 2026 06:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791527223; cv=none; b=VDAYcgWYgbTDacUi3YtWBpdhxPpDHs7d82Yp8dYsWm7jv7wMHryiKBdG1f1vCfVr4+DH74QgOrtQfV43UJun4sJALg1eVcNYSU0qaD813Z37aXmESxoqnALPeRPFuxrzhcEqLjwuh/okj1CPXYbJj9+T06sVliltIL84YRldIp4=
+	t=1791528141; cv=none; b=bK9HYsyod8tlbK1Oms9S+CiyUdN/b+4mPHrCn9A3Xi+HMxImjB8HlYD62Twt72SEYd+BqwxiT/2CMYcV725/C8bcse6kN1rgizkr9BeAB+Z5SnoidD6NS6ujEaETi7DGkSkt6wy9RfEseVuuk5ukL0LqxHrZQ0TJHnTAw6AEOok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791527223; c=relaxed/simple;
-	bh=4J2Oujq0h9Tdxh5Fs82Gko1VDMQdbho/Ty/hsMPCfKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YciMLtHKXtoKke5L37CO5sgodb/iOEw9A8eCX9xb7NRUKwppNPOALvD1GFCYqeAdL7KqIo6Gz0fx5RsjHMY7DKwBOID1hsZBSmPkeqWWy4TF/dioXmeVR4Ofg/PsGYlYmJ2J48dodXCry+PguK6zJOVZfCd3ZuAZHg/6etl0fzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LMklH/zs; arc=none smtp.client-ip=91.218.175.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LMklH/zs"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=4J2Oujq0h9Tdxh5Fs82Gko1VDMQdbho/Ty/hsMPCfKU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791527217; v=1; x=1792132017;
- b=LMklH/zs2AewPti66CHbdlRmVAfSRS9XoIxpBqCNyNjEm0KeJhGzLORrXNop/6mC9xmqkFYD
- WeTydWE+U/YYzx4aMIOVjASDXFg4jX5hYj0ZS+4j3FLwRQ/kOzqjleyuBVewuxxJ0Q+y0wwwyi0
- O1VPy1bn91hpCpuY8buxvy1M=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 04d29327fff06515;
-	Fri, 09 Oct 2026 06:26:57 +0000
-X-Mizu-Trace-ID: 04d29327fff06515
-X-Migadu-Flow: FLOW_OUT
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Roman Gushchin <roman.gushchin@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
+	s=arc-20240116; t=1791528141; c=relaxed/simple;
+	bh=JcFgMTgLNxhIVgutjEwNLyy8GBt/Rbk57yQzJP9STyU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n7Xmj6HTQQIIsRlaZFQ1+EOokCyMAxEAb8NhUdM5qq1CZGAMYUtLBz8I/+MkLXMI1JMTgiEgQFf7/LgFxfTGWB+o4dwvg0Hn/7zPoIZ8DxSRQCY8Ceh9psiRRfwvl94Or1knQbWjvR/Dlbe5gpAkArl24YdzTf7yR7zaOW6bNS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 70687300E25898; Thu,  8 Oct 2026 23:42:06 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Barry Song <baohua@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v4] selftests/bpf: Add bpf_proactive_reclaim test
-Date: Fri,  9 Oct 2026 14:26:37 +0800
-Message-ID: <20261009062637.176005-1-hui.zhu@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next 0/5] bpf: Follow up by-value struct and __int128 argument support
+Date: Thu,  8 Oct 2026 23:42:06 -0700
+Message-ID: <20261009064206.1238047-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+This is a follow-up to the series "bpf: Support by-value struct and
+__int128 arguments" [1], which placed kfunc arguments by the kernel
+calling convention in the x86-64 and arm64 JITs, and made the arm64
+trampoline place an argument aligned to 16 bytes: an __int128, or an
+aggregate holding one. This series covers what was left:
 
-bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
-unlike a write to memory.reclaim, does not retry until the goal is
-reached.
+  - The x86-64 trampoline. x86-64 starts such an argument passed on the
+    stack at a 16-byte aligned slot, which can leave an empty slot
+    before it, but the trampoline copied the stack arguments as if
+    there were none. A bpf program attached to such a function read the
+    wrong values from the empty slot on, and with fexit, where the
+    trampoline calls the traced function itself, that function got its
+    stack arguments one slot off as well.
 
-Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
-and check that the result is positive but well below the request: one
-pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
-4K and 64K page kernels.
+  - A trampoline on a BPF function. BPF code calls one with the
+    arguments in the BPF convention, one slot after another, but the
+    arm64 trampoline placed them by the kernel convention, and the
+    x86-64 fix above would have done the same.
 
-The test deliberately covers only the kfunc itself. A full example of
-the intended asynchronous use, where a BPF program watches one cgroup's
-workingset refaults and reclaims another one from bpf_wq callbacks, is
-maintained out of tree at [1], released under GPLv2.
+  - Tests with an __int128 at an odd slot, where arm64 leaves a register
+    or a stack slot empty. On arm64 such a kfunc gets BTF only with the
+    pahole patch [2], now in pahole master after v1.32, so these tests
+    were not part of [1].
 
-Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.c
-is not built at all.
+Patch 1 adds the odd-slot kfunc tests. Patch 2 keeps a BPF function's
+trampoline arguments in the BPF convention, and patch 3 places the
+x86-64 trampoline arguments by the calling convention. Patches 4 and 5
+test trampolines on kernel functions and on BPF functions with an
+argument after a 16-byte aligned one.
 
-[1] https://github.com/teawater/memcg-async-reclaim
+Tested on x86-64 with test_progs.
 
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
----
-Changelog:
-v4:
-According to the comment of Barry, test skips instead of failing on a
-read-only mount.
-v3:
-According to the comment of Barry, use write() + fsync() to charge the
-page cache instead of ftruncate() + read().
-According to the comment of AI, skip instead of fail when no regular
-filesystem is available for the workload file.
-v2:
-According to the comment of Alexei, remove the samples/bpf sample patch.
-Ship it out-of-tree as a standalone project.
+  [1] https://lore.kernel.org/bpf/20260912195156.980886-1-yonghong.song@l=
+inux.dev/
+  [2] https://lore.kernel.org/dwarves/20260917164043.1577508-1-yonghong.s=
+ong@linux.dev/
 
- tools/testing/selftests/bpf/config            |   1 +
- .../bpf/prog_tests/memcg_proactive_reclaim.c  | 130 ++++++++++++++++++
- .../bpf/progs/memcg_proactive_reclaim.c       |  34 +++++
- 3 files changed, 165 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+Yonghong Song (5):
+  selftests/bpf: Test by-value __int128 kfunc arguments at an odd slot
+  bpf: Keep the BPF calling convention for a trampoline on a BPF
+    function
+  bpf, x86: Place trampoline arguments by the x86-64 calling convention
+  selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
+  selftests/bpf: Test trampoline args of a BPF function at an odd slot
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 2b883b388f90..5621ef94ad7e 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -57,6 +57,7 @@ CONFIG_LIRC=y
- CONFIG_LIVEPATCH=y
- CONFIG_LWTUNNEL=y
- CONFIG_LWTUNNEL_BPF=y
-+CONFIG_MEMCG=y
- CONFIG_MODULE_SIG=y
- CONFIG_MODULE_SRCVERSION_ALL=y
- CONFIG_MODULE_UNLOAD=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-new file mode 100644
-index 000000000000..c22dcfabe856
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <limits.h>
-+#include <linux/magic.h>
-+#include <sys/statfs.h>
-+#include <unistd.h>
-+
-+#include "cgroup_helpers.h"
-+#include "memcg_proactive_reclaim.skel.h"
-+
-+#define CG_PATH "/memcg_proactive_reclaim"
-+
-+/*
-+ * Large enough that a single reclaim pass cannot come close to it, so that
-+ * "reclaimed less than was asked for" is not page-size noise: one pass is
-+ * capped at MEMCG_CHARGE_BATCH pages, which is 256 KiB on 4K pages but 4 MiB
-+ * on 64K pages.
-+ */
-+#define FILE_SIZE (32 * 1024 * 1024UL)
-+#define BUF_SIZE (64 * 1024)
-+
-+struct reclaim_args {
-+	__u64 cgroup_id;
-+	__u64 size;
-+};
-+
-+/*
-+ * The data file has to sit on a writable regular filesystem: tmpfs pages are
-+ * charged as shmem, so whether they can be reclaimed at all depends on swap
-+ * being available, and a read-only mount cannot host the file at all (EROFS
-+ * applies to root too). /tmp is tmpfs on many systems, and test_progs is
-+ * routinely run from a tmpfs working directory, so both candidates need the
-+ * check.
-+ */
-+static const char *workload_dir(void)
-+{
-+	static const char * const dirs[] = { "/tmp", "." };
-+	struct statfs st;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dirs); i++)
-+		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
-+		    st.f_type != RAMFS_MAGIC && !access(dirs[i], W_OK))
-+			return dirs[i];
-+
-+	return NULL;
-+}
-+
-+void test_memcg_proactive_reclaim(void)
-+{
-+	struct memcg_proactive_reclaim *skel = NULL;
-+	struct reclaim_args args = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		    .ctx_in = &args,
-+		    .ctx_size_in = sizeof(args));
-+
-+	char data_file[PATH_MAX];
-+	static char buf[BUF_SIZE];
-+	__u64 cgroup_id;
-+	const char *dir;
-+	off_t off;
-+	int cg_fd = -1, data_fd = -1, err;
-+
-+	/*
-+	 * Both candidate directories can be unusable: tmpfs (initramfs-based
-+	 * CI, for instance) or a read-only mount. That is an environment
-+	 * limitation, not a test failure.
-+	 */
-+	dir = workload_dir();
-+	if (!dir) {
-+		test__skip();
-+		return;
-+	}
-+
-+	snprintf(data_file, sizeof(data_file),
-+		 "%s/memcg_proactive_reclaim_XXXXXX", dir);
-+	data_fd = mkstemp(data_file);
-+	if (!ASSERT_GE(data_fd, 0, "mkstemp"))
-+		return;
-+
-+	cg_fd = cgroup_setup_and_join(CG_PATH);
-+	if (!ASSERT_OK_FD(cg_fd, "cgroup_setup_and_join"))
-+		goto out;
-+
-+	cgroup_id = get_cgroup_id(CG_PATH);
-+	if (!ASSERT_GT(cgroup_id, 0, "get_cgroup_id"))
-+		goto out;
-+
-+	skel = memcg_proactive_reclaim__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto out;
-+
-+	/* Charge FILE_SIZE of clean page cache to the cgroup. */
-+	for (off = 0; off < (off_t)FILE_SIZE; off += sizeof(buf))
-+		if (!ASSERT_EQ(write(data_fd, buf, sizeof(buf)),
-+			       (ssize_t)sizeof(buf), "write"))
-+			goto out;
-+	if (!ASSERT_OK(fsync(data_fd), "fsync"))
-+		goto out;
-+
-+	args.cgroup_id = cgroup_id;
-+	args.size = FILE_SIZE;
-+	skel->bss->reclaimed = 0;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.memcg_proactive_reclaim),
-+				     &opts);
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto out;
-+	if (!ASSERT_EQ(opts.retval, 0, "retval"))
-+		goto out;
-+
-+	/*
-+	 * A single call is a single bounded pass: it reclaims something, but
-+	 * stops well short of the requested size instead of retrying until the
-+	 * goal is reached the way a write to memory.reclaim does.
-+	 */
-+	ASSERT_GT(skel->bss->reclaimed, 0, "reclaimed");
-+	ASSERT_LT(skel->bss->reclaimed, (__s64)FILE_SIZE, "single pass");
-+
-+out:
-+	if (skel)
-+		memcg_proactive_reclaim__destroy(skel);
-+	if (cg_fd >= 0)
-+		close(cg_fd);
-+	if (data_fd >= 0) {
-+		close(data_fd);
-+		unlink(data_file);
-+	}
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
-new file mode 100644
-index 000000000000..b551192526fc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct reclaim_args {
-+	__u64 cgroup_id;
-+	__u64 size;
-+};
-+
-+/* Signed, because bpf_test_run_opts.retval is a __u32. */
-+__s64 reclaimed;
-+
-+SEC("syscall")
-+int memcg_proactive_reclaim(struct reclaim_args *ctx)
-+{
-+	struct mem_cgroup *memcg;
-+	struct cgroup *cgrp;
-+
-+	cgrp = bpf_cgroup_from_id(ctx->cgroup_id);
-+	if (!cgrp)
-+		return 0;
-+
-+	memcg = bpf_get_mem_cgroup(&cgrp->self);
-+	if (memcg) {
-+		reclaimed = bpf_proactive_reclaim(memcg, ctx->size, -1);
-+		bpf_put_mem_cgroup(memcg);
-+	}
-+	bpf_cgroup_release(cgrp);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+ arch/x86/net/bpf_jit_comp.c                   | 189 +++++++++---------
+ include/linux/bpf.h                           |   2 +
+ kernel/bpf/btf.c                              |   1 +
+ kernel/bpf/core.c                             |  12 ++
+ kernel/bpf/verifier.c                         |   1 +
+ .../selftests/bpf/prog_tests/tracing_struct.c |  96 ++++++++-
+ .../selftests/bpf/progs/aggregate_arg_kfunc.c |  71 +++++++
+ .../bpf/progs/tracing_struct_int128.c         |  45 +++++
+ .../bpf/progs/tracing_struct_int128_tgt.c     |  68 +++++++
+ .../bpf/progs/tracing_struct_int128_tracer.c  |  44 ++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  69 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  13 ++
+ 12 files changed, 515 insertions(+), 96 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tracer.c
+
+--=20
+2.53.0-Meta
 
