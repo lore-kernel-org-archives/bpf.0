@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0599143F4AD;
-	Sat, 10 Oct 2026 09:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1B943A809;
+	Sat, 10 Oct 2026 09:12:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791623578; cv=none; b=Ul8rWpqKaw1dgSKz6EdcfUh9VGx+Qm9pCUtoG1T0PTvwqfb9kOan1tvYhMaeXHwaCB1i+DalzTbiSxhUDUha7ZAwJnexHY93/RWnhNkEJTiU926NCfy08S796srfPs9w71nZj0s/qST7mplUk1qYYuQwv0Tava9mkmlx/oe1GAw=
+	t=1791623580; cv=none; b=QUVxj66PUSSfQ9oTtVTIEBERg62Fx8ha8LwWSgc6NqkMUPXCBt4yafwkVjlQFMK2bVtZyhB9woUrOBMWBlIC3L4N3RdOWBYrBrsLfaZc468SInZY4JfFMd3k7grQFq0pwTff/CCVOTItnUdq+6guDXYOqu2Htvfl+owm1MFJspo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791623578; c=relaxed/simple;
-	bh=4rbHja6V6uJPJge/FBMjVQiDVIAL/w7Fk4fAo5iBOKo=;
+	s=arc-20240116; t=1791623580; c=relaxed/simple;
+	bh=+Qp0NfL7bUiNxcnvhbz1Hn4/uJqLLLXkgA3LHyJAXdw=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=o6A7L/DZ0yUaZ/uiUIcVmTfC2VDNAbU5Xyiko8tMAjn2P2CBPYRXA31gL0pD+bkAEXgL1fArqg9xA7xCQhOp9t+EXKPDTQceeQs7fTPi6JZ05d3x8cLUxA+uBTkSB8TLfzPVjnK2F7OXzTq31jlDeswHB+jRe6AUBkdbW5nIx08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYUaFQ1Z; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=he1bLh2lAOlMTRHcgx7LphE/sN4IeGSiO8HkWRDaHKaKGKmzk+LwoOeqsNLz1qUrPgL5nvvh0CqAx1gy8i3ZX4lOwQQ50Az+pU78aoxtSDscMe/ny7r3B4uAbbUIu/NHBxSLb8K85CPtGd73Cd9zCOcp/hK7QgZinawvPgyktvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eHlex1Yh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYUaFQ1Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF97F1F000FF;
-	Sat, 10 Oct 2026 09:12:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eHlex1Yh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399091F00893;
+	Sat, 10 Oct 2026 09:12:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791623576;
-	bh=TJhxxtNiYuWjBaXSrJYPSLPaCSBUqRIZ3ID1IfTSBO4=;
+	s=k20260515; t=1791623578;
+	bh=xdn5aL86PRtScK6uYjQu/5FHrPPrkOYJq5HqsAyPgFc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=aYUaFQ1Z1WPxgDsYvR8hxW/xZ65gajL1iccl/yeEbGAEbVRp5kbNUBrDILJNob/H0
-	 +hkceUHBdpT2naF0fbJNYKpu23yymKo1LZ3ULLuF0ne2q4/Qc7IVUZ2ifGa/ptYwjw
-	 KRsq/bqMTb795Uoma6DS9DCcI9yHxAu9yVVCvEZOfGUGiS+BArnBDmGJFgcYWTQXlz
-	 tMPCw40I2CbaREmOFy/cWEQijsD7ZK3NwtuTmvXrxnUMpXHFGUNtLzKMjzhV2sDRrZ
-	 CCXTo915V99e38DxXoV/4NYZu59+yyDupeXz0/Q9mJsifg6TVfhkF7YlFMf9PMj6IG
-	 Fbp2hj2qWixgw==
+	b=eHlex1YhMI1dW1YGEECmfvZEkAAX5eMD2johHjrVwIR4uv2HJUcgBb4LlQP4Rgice
+	 xoV+42CGh6W0N6eqk9mrLcJTBzs78tQ4U6F9cP7CBi+1w+1O/xXWrUIXE/CR46De60
+	 OUXDFn8U02kRV7abz6iz+V9PU/Zy7bJ6yzAUfETWTe0ButeH57ntGhmE4sWv6/yy/G
+	 WUWY+CadCBDYyYCTOzaMvXy+sD7rxgbhTCWHDBHB7A7cSm2Lb5y0CJj7lenhrPkBFY
+	 UIR+E6z2Fj+aOn1yhuHvODltDmcDNAFni6Zgy3rAu/UplNgPRtLBq/ZidRv4INpxe6
+	 BOojbf5BP0dFQ==
 Subject:
- Re: [PATCH net-next v2 5/7] ipv4: convert do_ip_getsockopt() to sockopt_t
+ Re: [PATCH net-next v2 6/7] ipv6: convert do_ipv6_getsockopt() to sockopt_t
 From: netdev-bot+sashiko@kernel.org
 To: leitao@debian.org
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
@@ -39,11 +39,11 @@ Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  edumazet@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  david.laight.linux@gmail.com, kernel-team@meta.com
-Date: Sat, 10 Oct 2026 09:12:54 +0000
-Message-ID: <179162357442.434549.2735086321626235140@kernel.org>
-In-Reply-To: <20261009-sockopt_expand_out_v2-v2-5-8ac08c469ecb@debian.org>
-References: <20261009-sockopt_expand_out_v2-v2-5-8ac08c469ecb@debian.org>
-X-sashiko-severity: Low
+Date: Sat, 10 Oct 2026 09:12:56 +0000
+Message-ID: <179162357674.434549.6706954274592631376@kernel.org>
+In-Reply-To: <20261009-sockopt_expand_out_v2-v2-6-8ac08c469ecb@debian.org>
+References: <20261009-sockopt_expand_out_v2-v2-6-8ac08c469ecb@debian.org>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -53,163 +53,205 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
-- [Low] Undisclosed errno change on calls that already fail.
-- [Low] The commit message leaves out two behaviour-relevant parts of the
-  patch.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] ipv6_getsockopt() now reads optlen and replaces a negative
+  value with 4 before it calls do_ipv6_getsockopt().
+- [Low] When the caller passes a negative optlen, ipv6_getsockopt() sets
+  sopt.optlen to 4 and then always runs `put_user(sopt.optlen, optlen)`,…
+- [Low] The commit message explains why sockopt_init_user() cannot be
+  used by pointing to 'See discussion in the previous patch/commit.' The…
+- [Low] ipv6_getsockopt() now declares `int len, err;` at function scope
+  (line 1359) and then declares `int len = sopt.optlen;` again inside…
 
 --
 
-ipv4: convert do_ip_getsockopt() to sockopt_t
+ipv6: convert do_ipv6_getsockopt() to sockopt_t
 
-This converts do_ip_getsockopt() and ip_mroute_getsockopt() from a
-sockptr_t pair to sockopt_t and removes the IP_MSFILTER and
-MCAST_MSFILTER bridges. ip_getsockopt() now builds the sockopt_t with
-sockopt_init_user() and always writes optlen back. sol_ip_sockopt()
-converts its kernel buffers with sockptr_to_sockopt().
+This commit converts do_ipv6_getsockopt(), ip6_mroute_getsockopt() and
+ipv6_getsockopt_sticky() from sockptr_t to sockopt_t. ipv6_getsockopt()
+now reads optlen itself and treats a negative value as 4. It builds a
+user-backed sockopt_t with a new sockopt_set_user() helper and always
+writes optlen back, while sol_ipv6_sockopt() builds its sockopt_t with
+sockptr_to_sockopt().
 
-> diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
-> index d573c5bf8f038..bf00810cdd7a1 100644
-> --- a/net/ipv4/igmp.c
-> +++ b/net/ipv4/igmp.c
-> @@ -2763,12 +2763,13 @@ int ip_mc_msfget(struct sock *sk, struct ip_msfilter *msf, sockopt_t *opt)
->  	if (err)
->  		return err;
->  
-> -	opt->optlen = msf_size;
->  	if (copy_to_iter(msf, IP_MSFILTER_SIZE(0), &opt->iter_out) !=
->  	    IP_MSFILTER_SIZE(0))
->  		return -EFAULT;
->  	if (len && copy_to_iter(psl->sl_addr, len, &opt->iter_out) != len)
->  		return -EFAULT;
-> +
-> +	opt->optlen = msf_size;
->  	return 0;
->  done:
->  	return err;
+> ipv6_getsockopt() cannot use sockopt_init_user() as its IPv4 sibling
+> does, since that rejects a negative optlen and this level answers it as
+> 4. See discussion in the previous patch/commit.
 
 [Severity: Low]
 
-This isn't a bug, but the commit message doesn't explain this hunk. The
-move appears to be needed because ip_getsockopt() now always writes
-optlen back. The old IP_MSFILTER bridge only wrote it back on success:
+Which commit is "the previous patch/commit"? The patch right before this
+one in the series is "ipv4: convert do_ip_getsockopt() to sockopt_t", and
+it does not discuss negative optlen.
 
-    err = ip_mc_msfget(sk, &msf, &opt);
-    if (!err && copy_to_sockptr(optlen, &opt.optlen, sizeof(int)))
-        err = -EFAULT;
+The reasoning appears to be in "ipv6: treat a negative optlen as 4 in
+do_ipv6_getsockopt()", which is several patches earlier. Could the message
+name that commit directly?
 
-Without the move, a fault while copying the reply would report msf_size
-to userspace along with -EFAULT. The previous patch in the series
-("ipv4: igmp: convert ip_mc_gsfget() to sockopt_t") explained the same
-reasoning for MCAST_MSFILTER. Could this commit message say so as well?
+The message also doesn't mention the new sockopt_set_user() helper. It is
+added to include/linux/net.h by splitting it out of sockopt_init_user().
 
-There is also a user-visible fix here that the message doesn't mention.
-The old IP_OPTIONS empty path and the old IP_PKTOPTIONS tail in
-do_ip_getsockopt() returned the result of copy_to_sockptr() directly:
-
-    return copy_to_sockptr(optlen, &len, sizeof(int));
-
-For a user pointer, that result is the number of bytes not copied. So if
-optlen was readable but not writable, getsockopt() could return 4
-instead of -EFAULT. Now those paths return 0, and put_user() in
-ip_getsockopt() turns the failed write into -EFAULT. Would it be worth
-noting this in the changelog?
-
-Also, this sentence in the commit message is missing its final period:
-
-    ip_getsockopt() builds the sockopt_t with sockopt_init_user() and
-    writes optlen back unconditionally
-
-> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-> index 1b7461f1569c3..90d0b5bee68b5 100644
-> --- a/net/ipv4/ip_sockglue.c
-> +++ b/net/ipv4/ip_sockglue.c
+> diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+> index b488391496af3..c9787579531f6 100644
+> --- a/net/ipv6/ipv6_sockglue.c
+> +++ b/net/ipv6/ipv6_sockglue.c
 
 [ ... ]
 
-> @@ -1783,19 +1759,22 @@ int do_ip_getsockopt(struct sock *sk, int level, int optname,
->  int ip_getsockopt(struct sock *sk, int level,
->  		  int optname, char __user *optval, int __user *optlen)
->  {
-> +	sockopt_t opt;
->  	int err;
+> @@ -998,42 +998,21 @@ static int compat_ipv6_get_msfilter(struct sock *sk, sockopt_t *opt)
+>  	return 0;
+>  }
 >  
-> -	err = do_ip_getsockopt(sk, level, optname,
-> -			       USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
-> +	err = sockopt_init_user(&opt, optval, optlen);
-> +	if (err)
-> +		return err;
+> -int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+> -		       sockptr_t optval, sockptr_t optlen)
+> +int do_ipv6_getsockopt(struct sock *sk, int level, int optname, sockopt_t *sopt)
+>  {
+>  	struct ipv6_pinfo *np = inet6_sk(sk);
+>  	int len;
+>  	int val;
+>  
+>  	if (ip6_mroute_opt(optname))
+> -		return ip6_mroute_getsockopt(sk, optname, optval, optlen);
+> +		return ip6_mroute_getsockopt(sk, optname, sopt);
+>  
+> -	if (copy_from_sockptr(&len, optlen, sizeof(int)))
+> -		return -EFAULT;
+> -	/* Historic bug compatibility: the int options have always taken a
+> -	 * negative optlen as 4, so take it as 4 everywhere.
+> -	 */
+> -	if (len < 0)
+> -		len = 4;
+> +	len = sopt->optlen;
+
+[Severity: Medium]
+
+Before this patch, the negative-optlen-as-4 handling ran after the
+ip6_mroute_opt() dispatch, so MRT6_VERSION, MRT6_PIM and MRT6_ASSERT never
+saw it. Now that the handling lives in ipv6_getsockopt(), does it also
+apply to the mroute options?
+
+ipv6_getsockopt()
+    if (len < 0)
+        len = 4;
+    sockopt_set_user(&sopt, optval, len);
+  do_ipv6_getsockopt()
+    ip6_mroute_getsockopt()
+        olr = min_t(int, sopt->optlen, sizeof(int));
+        if (olr < 0)
+            return -EINVAL;
+
+The old ip6_mroute_getsockopt() read the raw user optlen and returned
+-EINVAL for a negative value. When the caller passes -1, olr is now 4.
+On a raw ICMPv6 socket, getsockopt(SOL_IPV6, MRT6_VERSION) with
+optlen = -1 now succeeds, writes 4 bytes into optval and sets optlen
+to 4.
+
+The other caller, sol_ipv6_sockopt(), goes through sockptr_to_sockopt().
+That already rejects a negative length, so the olr < 0 check in
+ip6_mroute_getsockopt() looks unreachable now.
+
+The IPv4 side still rejects this input. ip_getsockopt() uses
+sockopt_init_user(), which returns -EINVAL for len < 0, and
+ip_mroute_getsockopt() keeps its own olr < 0 check. Is the difference
+between IPv4 and IPv6 intended?
+
+The comment moved into ipv6_getsockopt() says "the int options have
+always taken a negative optlen as 4", which was not true for MRT6_*.
+
+The order of operations also changes for these options. On a socket that
+isn't raw ICMPv6, the old code returned -EOPNOTSUPP without touching
+optlen. Now get_user() and put_user() on optlen run first, so an
+unreadable or unwritable optlen gives -EFAULT instead.
+
+Should the mroute options skip the negative-to-4 conversion? If not,
+could the commit message describe this behavior change?
+
+[ ... ]
+
+> @@ -1377,7 +1355,8 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+>  int ipv6_getsockopt(struct sock *sk, int level, int optname,
+>  		    char __user *optval, int __user *optlen)
+>  {
+> -	int err;
+> +	sockopt_t sopt;
+> +	int len, err;
+>  
+>  	if (level == SOL_IP && sk->sk_type != SOCK_RAW)
+>  		return ip_getsockopt(sk, level, optname, optval, optlen);
+> @@ -1385,15 +1364,22 @@ int ipv6_getsockopt(struct sock *sk, int level, int optname,
+>  	if (level != SOL_IPV6)
+>  		return -ENOPROTOOPT;
+>  
+> -	err = do_ipv6_getsockopt(sk, level, optname,
+> -				 USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
+> +	if (get_user(len, optlen))
+> +		return -EFAULT;
+> +	/* Historic bug compatibility: the int options have always taken a
+> +	 * negative optlen as 4, so take it as 4 everywhere.
+> +	 */
+> +	if (len < 0)
+> +		len = 4;
+> +	sockopt_set_user(&sopt, optval, len);
 > +
-> +	err = do_ip_getsockopt(sk, level, optname, &opt);
-> +	if (put_user(opt.optlen, optlen))
+> +	err = do_ipv6_getsockopt(sk, level, optname, &sopt);
+> +	if (put_user(sopt.optlen, optlen))
 > +		return -EFAULT;
 
 [Severity: Low]
 
-Reading optlen in sockopt_init_user() before do_ip_getsockopt() runs
-seems to change the errno for calls that were already going to fail.
-Is that intended?
+When the caller passes a negative optlen, sopt.optlen is 4 at this point,
+and put_user() runs whatever err is. Do failing calls now change the
+caller's optlen from -1 to 4?
 
-Before this patch, do_ip_getsockopt() returned before touching optlen in
-these cases:
+For example, IPV6_PATHMTU with optlen = -1 fails the
+"len < sizeof(mtuinfo)" check and returns -EINVAL, and then
+put_user(4, optlen) runs. The same happens for:
 
-    if (level != SOL_IP)
-        return -EOPNOTSUPP;
+- -ENOTCONN from IPV6_MTU
+- -EINVAL from IPV6_FLOWLABEL_MGR and MCAST_MSFILTER
+- -EOPNOTSUPP and -ENOENT from the MRT6_* options
+- the default -ENOPROTOOPT
 
-    if (ip_mroute_opt(optname))
-        return ip_mroute_getsockopt(sk, optname, optval, optlen);
+In the parent commit, none of these paths wrote optlen. For MCAST_MSFILTER,
+sockptr_to_sockopt() rejected a negative optlen and left optlen alone.
+Earlier patches in the series described this as leaving "the caller's
+optlen word unchanged".
 
-ip_mroute_getsockopt() did not read optlen either before returning
--EOPNOTSUPP (not a raw IGMP socket), -ENOENT (no mr table) or
--ENOPROTOOPT (unknown MRT_* option).
+The netfilter fallback below now gets 4 instead of the caller's original
+value. If nf_getsockopt() fails, optlen has already been overwritten.
 
-Any level other than the socket's own protocol level ends up here. For
-example, tcp_getsockopt() does:
+The commit message mentions the unconditional write-back. It doesn't say
+that the stored value can differ from the caller's input on failure. Is
+that intended?
 
-    if (level != SOL_TCP)
-        return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level,
-                                    optname, optval, optlen);
+>  #ifdef CONFIG_NETFILTER
+>  	/* we need to exclude all possible ENOPROTOOPTs except default case */
+>  	if (err == -ENOPROTOOPT && optname != IPV6_2292PKTOPTIONS) {
+> -		int len;
+> -
+> -		if (get_user(len, optlen))
+> -			return -EFAULT;
+> +		int len = sopt.optlen;
 
-udp_getsockopt() and raw_getsockopt() do the same for levels other than
-SOL_UDP and SOL_RAW.
+[Severity: Low]
 
-With this patch, getsockopt(tcp4_fd, SOL_IPV6, X, buf, &len) with
-len < 0 returns -EINVAL instead of -EOPNOTSUPP. The same applies to an
-MRT_* option on a socket that is not raw IGMP. An unreadable optlen
-(for example NULL) now returns -EFAULT.
+This isn't a bug, but this inner int len shadows the int len that this
+patch adds at the top of ipv6_getsockopt(). Could it simply be
+"len = sopt.optlen;"? W=2 builds with -Wshadow will warn here.
 
-The commit message only describes the unwritable-optlen case. Could it
-mention these errno changes too?
-
-The selftest added later in the series ("selftests: net: getsockopt_iter:
-cover ip and ipv6") only checks MRT_VERSION returning EOPNOTSUPP with a
-valid optlen, so it would not catch this. The code is unchanged at the
-end of the series.
-
-Also, these negative checks look unreachable now. In
-do_ip_getsockopt():
-
-    len = sopt->optlen;
-    if (len < 0)
-        return -EINVAL;
-
-and in ip_mroute_getsockopt():
-
-    olr = opt->optlen;
-    if (olr < 0)
-        return -EINVAL;
-
-Both callers of do_ip_getsockopt() already reject a negative optlen:
-ip_getsockopt() through sockopt_init_user() and sol_ip_sockopt()
-through sockptr_to_sockopt(). ip_mroute_getsockopt() is only called
-from do_ip_getsockopt(). Are these checks still needed?
-
-[ ... ]
+>  
+>  		err = nf_getsockopt(sk, PF_INET6, optname, optval, &len);
+>  		if (err >= 0)
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb%40debian.org
