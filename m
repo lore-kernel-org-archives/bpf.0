@@ -1,106 +1,87 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E453A4F30
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 15:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C8F3A4F30;
+	Sat, 10 Oct 2026 15:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791644939; cv=none; b=uaSGwT4HIk1GmM67NJQ6DQeI57tKq895ftiDcG8rTnuNeN+29DaXtfosH7xqPFk22Ixgi/5sV02zWea+Mfxn8ZkIhDHHBIIOzpRUm4ycXfNP5ek4o+RiYJUrHXi3ZjCdehp4HMOq78uwJEaydDnSoYTWMByDa/7mU12cOnQ+9y8=
+	t=1791645008; cv=none; b=i4qUgv8CtOXkv5HhPiOQU+9pFXIjbFkF3RFv4y8IAo52hoJFT8vt5e4VUVFxJiDDocLwZHaS6zkbnlp6nDelYLU4e0qX9au/rE6sQ6YNCBswIuRPbJVNyxub3lCyHW0egyOHQdgYeBsO4znN/u6589teC2ZPIrOhQnrlBdqgylE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791644939; c=relaxed/simple;
-	bh=H0P1lScVtFSMySsNOqFf/6qMKHyoD1CpaabjlkW2qvw=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=UT9WXLZ2RGkB2OYrj2Q5EhHAcRQNch7oPVftWKlkC3nlSCyPOHiygHLiHD1sF4QUkPHIZ5TfEnGGcvgQ5Ui6Ui24iIi+5NT8hUPrsjpxRPFYJCK5OCrjsPryfFAE0aqCk4iK55Ihn0RoYuQvNvIFpNP2cs69YLO9g4jA0Ps4wWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MU/gFZL/; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791645008; c=relaxed/simple;
+	bh=7TzmRUknXQSJrq9WJMQRYRamiQx4i6DwhPve3C9Gzi4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Few3P7A8GH/u8nl/ey7V2eIPsGqBme1g6cvLDyNQsVr8u+azmFevLcxysv3A3ejeEGDBHh/hSLf1E6OMRup6nGBgi73dD3zJKtJpQ/vKsAKL0Pm/XDhC6rDrD6Pcl0yGhJCK955z2ELt2FFEvLbVZD5OzRmLTgTVTLv19KHeIqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XgRvk6hy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MU/gFZL/"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd5d2dafeccso172947a12.2
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 08:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791644937; x=1792249737; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EqH0KjkRiFwhrTqfoRFXIO2xXhT9bjtUTDJStvgxeGo=;
-        b=MU/gFZL/X1maFjFLMeW4UGebDGCe6XTK30txt/nfOxCfMY0n/Xx+HFOwP2I4OBRLzo
-         OqB4M31zSQrmdE22JI6xUWU/88zXReYE/Q1T1CYNJOrnpn0LeliCjETri1TvXpgqKP5q
-         9oPw0wjrHHuTknvJKoCvqEgnnVJnMSqDpSKqxureluWntOyEwXD1l2xuzHjK7OYzwBC1
-         PAy9jcLtuUq1sMM4cOOuSNusTcaV08bB0dJRWbbSLYOVkZhWLxflc2XtN00n+xe2lmak
-         pJoK+Nw9RW06uppQOat55DK1opivY3pQIPKlG4pROVEAzzxrorm2PeVro+Kp9sAr7DEt
-         fy7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791644937; x=1792249737;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EqH0KjkRiFwhrTqfoRFXIO2xXhT9bjtUTDJStvgxeGo=;
-        b=v2+6KXLwYjJ7LAHxLOL/WW6PTEH7fGmr8B4utiXvCTb8qOxpFEdM4xBIPpdvgjNOxt
-         0rk2rrcC8FjJFpC4uOomR0U3mUenkv7oW8m1CLlH336gixbupA7GTCzczkNGf4zw26aJ
-         kUaBSkoUWvVB489o3buJxUztbXQlGBuCkHj8N58iuPZI9SFQSHg51oAZeygO+msDvmLV
-         HpcadsTsNsOsBOnMMDIL5bd18XrG7QojC9QOimS7x6+eF0ZMSkhD/wK7wI8/A22NQCbs
-         JgqyIbsPLYvg9AyyjCZIWyTAuXeWzCEsK1MTdRzE7W1wfx6dGYS8ZktZnwp7gUXrlkVX
-         kQZQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy5gpvo94oY/aQhTRD9N82oZv07SozwZdvF5r23MwSpOJwJYAvkMWYYAR5XVnyWxObsejo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJwJBiBOvRxRSAGfF7QcwagrCSNTwiUbxNqqQfjT4mDrZN+9Vtp
-	MxHytUP532kzwggsH2kj5VbCs6I7OlcXzAelX0palopOJuTXZb9TNMjNYUDcS+ERq78=
-X-Gm-Gg: AYBFou2C7DdX6MY36BTvDSveGOv16FP4W/jkiPgSxlKtUx8R5YdRpt2xdVpIr/Xi+n9
-	7H/FWBGOw7DEh2LqZxDOm+icZvk8UeXoAf6Iroty5VZpR84t6/DTTa9ZsZE/pJt5HuYet22tTfE
-	3u9t6EQZS0C9Odwl2uCXNsYzUbYs7aKHH6Tn4TQAhbRr2R/sQlSqjcDJ5zWgn+Qiey3MQWBe/qI
-	XGe1ntqX/iXaB/SZ/OiNFVo4hxVi7MFTMmKlxqqr9+IHokjgGa65Sod1It94Tt9axd5ZlAHTDAM
-	UmdUhIyY7g99Y5B6vZiEQ82/TMvbK/GabwQKjMX1xgLJleFsYgNyXqA5GGOu8DsCMgGUNFMsQpz
-	H69iDe7fCv+jY20/XzCXIkoW7d96bvRFdUme2Kz2mr+o9jN4csN6Alq03elUBJw8yRjUcyH1Ddt
-	rmvDQg+nrZ3Rhb8HxSFuD1I8/v2u331HmxF1lAyLXehdjMyxjIdUxPMzIVVx5uJPzJ9cqgHPOP/
-	eSwajUS2OeI0vHjuqSGaHaoE5RHorxooLdRNWRNpe2JHuJI6tW5tTP7m+N4NQ/mxkCKYCcag32y
-	oLY=
-X-Received: by 2002:a17:90a:510:b0:3ab:6ac7:64a with SMTP id 98e67ed59e1d1-3ab6ac70b98mr1638690a91.34.1791644936933;
-        Sat, 10 Oct 2026 08:08:56 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab3781d581sm8738413a91.1.2026.10.10.08.08.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Oct 2026 08:08:56 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 10 Oct 2026 15:08:55 +0000
-Message-Id: <DM194GWC0XHZ.10Q1AUS5TQYNO@gmail.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
- <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v10 09/24] bpf: Refuse a landing pad that does
- not resume
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-In-Reply-To: <20261009041534.27944-1-yonghong.song@linux.dev>
-References: <20261009041447.17092-1-yonghong.song@linux.dev> <20261009041534.27944-1-yonghong.song@linux.dev>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XgRvk6hy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B7B1F000FF;
+	Sat, 10 Oct 2026 15:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791645007;
+	bh=jdRqn0CteQ8ui9tg7Wb1RJhtBeZiOr+dZgR8ULZBbjc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=XgRvk6hyb7XLEne/8laQzOCK2H32X7IGWq2ONyNb3O5aZ2/Ol1LlhNf9+kzwcM9jO
+	 rMFwa+02/jltfu4hVpsnyzxFb2WnXzAitKGKdza8BJLXMI68yC81agWI4wJvihx5wR
+	 neYxkSgVHVyPSRVkn4PkJM6Ig4ApVXLCNTA0hNHNMg82L5P3s8FXzuzELKF7+rJ4He
+	 7JbwQcP9NT+eZ+abMS8B/9GcVHGdNDoTliSIuhyXqO7vfyTqrmSydZmkuRrbChFKlF
+	 a8wH5Fh3mu5Ibk3Yb8lj+CCdGpHlmFUZ+Ero08agROQfhmgqFhaevfpISJ78ZCf6IR
+	 00i5jLpMHhQAA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F140B380DBDA;
+	Sat, 10 Oct 2026 15:10:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2 0/2] bpf: test_run: Fix false -EBADMSG with
+ BPF_F_TEST_SKB_CHECKSUM_COMPLETE
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179164500577.1749710.5161743070579518895.git-patchwork-notify@kernel.org>
+Date: Sat, 10 Oct 2026 15:10:05 +0000
+References: <20261009174755.22026-1-skokovmaksimevg@gmail.com>
+In-Reply-To: <20261009174755.22026-1-skokovmaksimevg@gmail.com>
+To: Maxim Skokov <skokovmaksimevg@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, vadim.fedorenko@linux.dev, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-# CARRIED OVER from the unsent v9 draft (leftover of your v8 09 mail). Delete this line, or the file if you dropped it on purpose.
-On Thu, Oct 08, 2026 at 09:15 PM Yonghong Song <yonghong.song@linux.dev> wrote:
-> +		if (unlikely(env->cleanup_info_cnt)) {
-> +			err = bpf_exc_check_insn(env, insn);
-> +			if (error_recoverable_with_nospec(err) && state->speculative) {
-> +				insn_aux->nospec = true;
-> +				goto process_bpf_exit;
-> +			}
-> +			if (err)
-> +				return err;
-> +		}
-> +
->  		if (bpf_is_prune_point(env, env->insn_idx)) {
+Hello:
 
-since you're going to respin consider the following feedback:
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-The special case for speculative paths is still here.
-in_pad is compared in func_states_equal() now, so there is no need
-to check before pruning.
-Call bpf_exc_check_insn() from do_check_insn() ?
-error_recoverable_with_nospec() after it does the same thing,
-and the error will be printed after the insn instead of before it.
+On Fri,  9 Oct 2026 20:47:46 +0300 you wrote:
+> BPF_PROG_TEST_RUN with BPF_F_TEST_SKB_CHECKSUM_COMPLETE returns -EBADMSG
+> for correct tc programs that call bpf_skb_change_tail(). The helper
+> moves the skb to CHECKSUM_NONE and leaves skb->csum stale, but the
+> post-run check added by commit a3cfe84cca28 ("bpf: Add CHECKSUM_COMPLETE
+> to bpf test progs") still compares against it.
+> 
+> Patch 1 only does the check while the skb is still CHECKSUM_COMPLETE.
+> Patch 2 adds selftests for a trim, a grow followed by a write, and a
+> negative case that keeps the skb CHECKSUM_COMPLETE with a stale
+> skb->csum.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v2,1/2] bpf: test_run: Fix false -EBADMSG after skb leaves CHECKSUM_COMPLETE
+    https://git.kernel.org/bpf/bpf-next/c/36edb1c7738d
+  - [bpf,v2,2/2] selftests/bpf: Cover test_run csum validation after bpf_skb_change_tail()
+    https://git.kernel.org/bpf/bpf-next/c/2e6be13e8ca4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
