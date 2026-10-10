@@ -1,173 +1,135 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717E43803DB
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 08:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791620815; cv=pass; b=ZXthVKuIJkD76vI+quqEd/UF4TVAefa5u3AtJk8JfK/Kn4kjELXCo4NMNo9sW8ZUE4FkbKrYUr+XEV92Ck68IGTJSGf7JpKrC0J9hsxu2rVeTV/qI97dpbimMTvII5xSMiS8wev/ic2bWTlW9PID0eUzOspn2goD3ERqU9pKe/Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791620815; c=relaxed/simple;
-	bh=yGZl/hG9BKBfhYLh3HnO3WHa8MfR6nQRzFQuvrh40GQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mU0S4WfJd6e5MgvgzimaglLkV1Zrn+6Ih+1zu7m/8hkmXlHxV1MqeJlqKL5H5bMQwp2Gl6ji8JGWYIhpAU9yZ+q84XBFAj1xuG9cC7VK1TngVFOu5p1my5uOA6O+8+mmZ7aW8vwD0VkcNiMkd+ebToAYl58Bs/h6EGgk955SeL8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ORs8aide; arc=pass smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A333B0587
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 08:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.69
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791621579; cv=none; b=SiBcq+JoT8Yfa6WPZ00cNO69dF3MVviPQwdeY/FJtQcT2sDgYmnV5GlXMkGzVUdwzAkKw7Hi2Etumk1+km2rHK/ACD8wOpb8AFupwGo5Mn/ojxH3UHV6QMbxVFKkf9IkKgdRPQdiKyxHb0LIvWZpUwEqwXR7GY/Sub8WWQwGNx8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791621579; c=relaxed/simple;
+	bh=yJPx+2NjK9QXSRZnpkECYqzwogeVBJ5CYjQo9wXfUBE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=pG/F5o2JhIJlApYfU5zhe+0fiZhQ7OaAg6Pw3eXqnQq6H3PY/wKX2U8ikQLmP50tWqLoEdWzV0iAb4hUDZCinL1//EwxY1oHWZ7XzN9g52hZgoHQgqnKbPT9ZuG+Y1Cyf8FaOFyzB0AhYs+BqFBMS2qMaHE+npNnGC7G3+J+Ixg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b7lxaZKr; arc=none smtp.client-ip=74.125.82.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ORs8aide"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-677b5148acaso322697d50.0
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 01:26:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791620813; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UaZPh4ZRiZqGRN7JRgEEtfK7IfPAK3aQlMBPKsuzjhLGf9mZ4jq8VMn9GXNv5zsnjW
-         88zPAYIae05rOk04nsF/8PrHscbpP1VJXy4YT8+LdQsDuaf2hLbJZKUDNY1doz6s2QJj
-         Pf2oW2BGB7Ksr7h7sxdBV7CC/aOp+BwJrAUJ0wdQUe9bHo6vrzoCAZAvN8x2BW6KVvsW
-         0P0PPr64/kEPExkaYbcQWn4iX3yxy7NLxrsNc8k8z3YYMpQNXmlP3C8BPO7B7du9HUZN
-         3p20rJEwjhVwNs6mO83jDRt1oAdmNxYJvAAfjlsQNXyKmVIPerDxrpNe60nh+a2SYZR4
-         P8hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=D4taFzx4ZqDR2SeWluPXbnOCCuhe1kKvXHPzkXYOhyQ=;
-        fh=KQhFS8yoK1+IAXzND5oL/spUL/N06beKTfMwYnkqKM8=;
-        b=eJOrxKs8XDvwE7eg6treOk1J/CurMdDQBXO7S3+5HSio4lciBNkFkOSBqEEU97Fs+c
-         E99nDA+HCXSbrunbPz7D/bnuJ8Yak2yYtf2UwDfyjFtUAvxfVuUZtQaXLkel4JntNPac
-         NEwNytH1lmDE3EQU03Zadkut42x1Vvvn1oPZRmxLXUYHzBjnw6jcDK2QG3eQaI8CJWSV
-         Hmt9nlqo1UbFvkyB4KwrPjjnFOHITYVyxtzzPbKrhyGX4kOgXiGHfVXQZ72lMfQUwIN3
-         4jTaD3tPFolKGteW0nE7WlYz5YXnVEO3iCpRx3Nzso70owCpFcd4txoq5D2ize5M+0pR
-         I1Og==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b7lxaZKr"
+Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-151ba226e1bso610082c88.0
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 01:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791620813; x=1792225613; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=D4taFzx4ZqDR2SeWluPXbnOCCuhe1kKvXHPzkXYOhyQ=;
-        b=ORs8aideBmBB1h38hkdkCylGRgVfxJuy/GiNMkBM0ERFVL095utIXEVQeGP9gYnpmL
-         EbnCaj6uFHnpaj/OdBjyF1kB4fWiat2x7SbRTVbFYhe8Qxj+RzoivzDzIIbFK5GqvaRZ
-         KU/s94esjxgmAENHJfuQcpjNVtr3BfqXQTD/b/QUB5QaGRj5hg9TQ3WLzKnJpgxdrZr0
-         JTNh+Ynfm0xmcUAf34jjNigmimxCq7WnMd0OrpBsrMG6FvlUgOzAsq/rSSXGAN5FaB6S
-         dqq3k3ojaOAxjY5XPYPlRYIe0ah0naUyA/s46jvqw0Rt+GffxLidH6G82eSk6Vo+9iJF
-         TBfg==
+        d=google.com; s=20251104; t=1791621576; x=1792226376; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=konKcecyvECbbvQ18/L6qLdUB40zhoOLVBmrCxo31fE=;
+        b=b7lxaZKrxD3UFktzJ8sRFkFV8gE4uhVI6zQcdpYLyeLYRcY/vWA37CPaV/aGikukwT
+         EBr0laY3dWgi5Sr5ndLKHg8v3x0U9bYep7QVZ6SzNJPUABKFMt6mwrrOiBClQqla012E
+         EL7BSezCnvV80Y2VsetELf0caUo3WoolwDjBYuQX/a5GaLAqEZYyA/ui2yvFd6hanawr
+         1j8n8Xx41o8xC4+X2do7bTPY06JA4iq6/APdjcgZ4B36eaa/LWRJeiRDMc+7MzoxX1G/
+         QdUNNar+0uGDBmE5ylHglov+UO4B/HIQ6Yz68IsB4uSsrxEtwy+P09Gx+o4KZxX9D4qL
+         lXng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791620813; x=1792225613;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1791621576; x=1792226376;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=D4taFzx4ZqDR2SeWluPXbnOCCuhe1kKvXHPzkXYOhyQ=;
-        b=VMnB+gQGvrU2zx7wGCZFH/nXlSYZQfLoaCYqAbpjrZozwob6fSbDqdg4de/S1uG5cC
-         GC6ETL0x64yPX1+tR1ozUOB+rTWDUjnC9egWzygiQRqC4uxcibt/Sp5oZwEpfWPhE765
-         EpOWmnf9v2VoorZuhR/vz1Kl0D1LxCv5p+BxDjSMLnQW3e2EgdskSdlP6IkJaxF8vyEf
-         ltHJY/ieVizVB0mlYnz0sf/J/Bk8feTroE5iHn/Co58c+7PykKGXFuH9HLHN7H+Z9QPu
-         w7zUaYPHO2OPbrNdJ/6EmShFCVBg8g2GsFHgJrtc46K533E7KIxAPh+j6okeNOhCo4z3
-         nmUA==
-X-Gm-Message-State: AFq9FYLI4RarYaOSAvlXK1HuJ3eNj6T3amqkgpWnSlglW0bltE4IfOrM
-	nxxpvn4or6APdzqyGaEkAx+iiCCCeFVuK36PxvwfWqsk+sZwF2ErqbJpGLjfBWFrjQCiSSmj1qt
-	0YSmCvbNFaTqZ32i7EPg0bpXHxsJckNI=
-X-Gm-Gg: AYBFou3PFsoLkyU1+IVmNA0T5HVK+e1cLIdHQwQWopwpcvx7tx7DqCO/vhsLeKEMuJj
-	UmgMM9QXMwaE/N6DDBOuhOhUTOpZz6KQcLliggbVj9O1bT4oSUAKc68Xo12e2QEvO2VK0Dcz5cJ
-	rh9OhrD/wrC6yaMShwAdo6pNDBULu1h5xc02iQy659m8UYGBcgnPknY8oZJQBaAAyp6reNIStcc
-	KFPo1J9XT9UboSTCGSPe/XJ+TK9hchZii6ntiBv1Ks31THS1bX8Z3F/pAn9wunQ/rmf5GZbVbCA
-	FzFh2+WetHl9ogJLvUMP8W4OA7WLlBBJyzIYu5xcaulnPS5UGyzINcfCoC6c1ZfRNdqF/IkYCOB
-	8I/wEqBxh7Q==
-X-Received: by 2002:a05:690e:4006:b0:677:cb98:35b7 with SMTP id
- 956f58d0204a3-679362b7d1fmr1253901d50.131.1791620812785; Sat, 10 Oct 2026
- 01:26:52 -0700 (PDT)
+        bh=konKcecyvECbbvQ18/L6qLdUB40zhoOLVBmrCxo31fE=;
+        b=ev92QAlWeL04N0KGSBpSZRJhRtpGYieEjJWQbjfRyiU8zs0NAUlN4lNq92a9L95gzU
+         ArWZWi13m/XI4IAkUtig6AF83Y5V5h8fAouqsWqUqggE4xCkMnmo41Iuum6aSJlM5BwX
+         cvxdH8siGoCU4fDtXWmQRPN26oZwyCPOJmI1aAYNybRUBSfKnQrypccYhrcytI1FYZHO
+         1k2eKwdnlR9/XwdLLPW9H1qc7NviKBB3Z8PIUvmZhEoaaIXi+fk0dgRkDdFTq7JxIoVS
+         G2WNvlsQ+NiA1iCtAuCpASsufOGcrQ9ka88gV7MMPoFoMg+Buf+WwSdl2TQ9JIMAZzwB
+         +QhA==
+X-Forwarded-Encrypted: i=1; AKwUvByjVa/U/AOIiem+0wNirECpJhhKZdX0WqDM9LUF4Ay7PNeyp5I9xk6Kzq+U6XLARbzMsRw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ0JP10z5ouWOqzC1CLGV5HKD+/Ho8Z9Qv6w+qI6N4dn0gfOEkr
+	65w4L7ZQZ3VdYdburnd+ZQgVCf19j4GqbRavGx7Gs/v+4s8B35NiWVxygw1W8hKJkm5gsST4LSA
+	xCtiz6VIjTr456DWj3aSSWsNaqA==
+X-Received: from dli5-n2.prod.google.com ([2002:a05:7022:285:20b0:165:ba5:ba2b])
+ (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7023:a4b:20b0:158:b944:b20 with SMTP id a92af1059eb24-16a5dcf5a57mr5509841c88.11.1791621575725;
+ Sat, 10 Oct 2026 01:39:35 -0700 (PDT)
+Date: Sat, 10 Oct 2026 08:38:41 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20261010074435.1415234-1-chenyuan_fl@163.com>
-In-Reply-To: <20261010074435.1415234-1-chenyuan_fl@163.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sat, 10 Oct 2026 16:26:15 +0800
-X-Gm-Features: AclHuK8LRVqGX5xgGPuub-kHsmJVaM2UaUqdcVwN-6BAA3YlW_5CH8aqwEhPU-c
-Message-ID: <CALOAHbD8v=d-QwtjbyJ7DEBCiUZxhUDsrkdfehyUchHzAzsyyg@mail.gmail.com>
-Subject: Re: [PATCH] bpftool: Fix out-of-bounds read in kprobe_multi link info dump
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org, qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, linux-kernel@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.385.gd3acb90ef8-goog
+Message-ID: <20261010083935.3274178-1-almasrymina@google.com>
+Subject: [PATCH net-next v1 0/6] net: unify symmetric netmem and page_pool refcounting
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, Ayush Sawal <ayush.sawal@chelsio.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Tariq Toukan <tariqt@nvidia.com>, Simon Horman <horms@kernel.org>, 
+	Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Sabrina Dubroca <sd@queasysnail.net>, 
+	Eric Biggers <ebiggers@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Michael Grzeschik <mgr@kernel.org>, 
+	"=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?=" <u.kleine-koenig@baylibre.com>, Petr Machata <petrm@nvidia.com>, 
+	Arend van Spriel <arend.vanspriel@broadcom.com>, Jakub Raczynski <j.raczynski@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 10, 2026 at 3:45=E2=80=AFPM <chenyuan_fl@163.com> wrote:
->
-> From: Yuan Chen <chenyuan@kylinos.cn>
->
-> show_kprobe_multi_{plain,json}() walk the sorted kallsyms array against
-> the sorted addr/cookie array with j as a cursor into the latter. The
-> loop terminating condition is checked after the cursor has already been
-> used to access the array:
->
->     if (j++ =3D=3D info->kprobe_multi.count)
->             break;
->
-> After all count entries have been printed, j has been bumped to count,
-> but the loop keeps running and dereferences data[count] -- one element
-> past the end of the calloc(count, sizeof(*data)) allocation -- while
-> comparing every remaining kallsyms symbol. If the out-of-bounds value
-> happens to match a symbol address, a bogus entry with a garbage
-> addr/cookie pair is printed to boot.
->
-> Fix the off-by-one by advancing the cursor before the comparison, so the
-> loop terminates as soon as the last entry has been printed.
->
-> Verified with an ASAN build of bpftool against a live kprobe_multi link
-> of 3 symbols:
->
->   before: ERROR: AddressSanitizer: heap-buffer-overflow READ of size 8
->           at link.c:860 (show_kprobe_multi_plain) and link.c:352
->           (show_kprobe_multi_json), 0 bytes after the 48-byte
->           get_addr_cookie_array() allocation
->   after:  clean output, no ASAN report
->
-> Fixes: edd7f49bb884 ("bpftool: Show kprobe_multi link info")
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+netmems (pages and net_iovs) have two independent refcounts: a non-pp
+refcount (page._refcount or binding->ref) governing backing memory
+lifetime, and pp_ref_count governing recycling within a page_pool while
+page_pool holds a single backing non-pp reference. SKBs with
+pp_recycle=1 own pp_ref_count references on page_pool fragments; SKBs
+with pp_recycle=0 own non-pp references.
 
-Nice catch!
+Core helpers currently mix these two refcounts asymmetrically:
+skb_frag_ref() always increments the non-pp refcount via get_netmem(),
+whereas skb_frag_unref() decrements pp_ref_count when skb->pp_recycle
+is set. Any path that refs a fragment on a pp_recycle=1 SKB (or unrefs
+with a hardcoded recycle=false) increments one counter and decrements
+the other, leaking the backing memory while underflowing pp_ref_count
+(e.g., IP-TFS [1], skb_split(), skb_shift(), and cloned SKB uncloning).
+Unclear core APIs also led drivers and ULPs to open-code pp_ref_count
+manipulations or add one-off helpers like skb_pp_frag_ref().
 
-Acked-by: Yafang Shao <laoar.shao@gmail.com>
+Unify fragment refcounting into symmetric pairs where each layer clearly
+specifies which refcount it touches:
 
-> ---
->  tools/bpf/bpftool/link.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> index 088d1d206065..5cffa2d283b4 100644
-> --- a/tools/bpf/bpftool/link.c
-> +++ b/tools/bpf/bpftool/link.c
-> @@ -364,7 +364,7 @@ show_kprobe_multi_json(struct bpf_link_info *info, js=
-on_writer_t *wtr)
->                 }
->                 jsonw_uint_field(json_wtr, "cookie", data[j].cookie);
->                 jsonw_end_object(json_wtr);
-> -               if (j++ =3D=3D info->kprobe_multi.count)
-> +               if (++j =3D=3D info->kprobe_multi.count)
->                         break;
->         }
->         jsonw_end_array(json_wtr);
-> @@ -867,7 +867,7 @@ static void show_kprobe_multi_plain(struct bpf_link_i=
-nfo *info)
->                 else
->                         printf("  ");
->
-> -               if (j++ =3D=3D info->kprobe_multi.count)
-> +               if (++j =3D=3D info->kprobe_multi.count)
->                         break;
->         }
->  error:
-> --
-> 2.54.0
->
+- Non-PP refcount: get/put_page(), get/put_net_iov(), get/put_netmem()
+- PP refcount:     napi_pp_get/put_page()
+- SKB netmem:      skb_netmem_ref/unref(netmem, recycle)
+- SKB fragment:    skb_frag_ref/unref(skb, f)
+
+[1] https://lore.kernel.org/netdev/xfrm-iptfs-pp_ref_count-underflow-v4-1-912fa72106f0@secunet.com/
+
+Mina Almasry (6):
+  netmem: rename __get/__put_netmem() to get/put_net_iov()
+  net: skbuff: add napi_pp_get_page() and use it in tcp_recvmsg_dmabuf()
+  net: skbuff: replace skb_page_unref() and __skb_frag_unref() with
+    skb_netmem_unref()
+  net: skbuff: replace __skb_frag_ref() with symmetric skb_netmem_ref()
+  net: skbuff: use skb_frag_ref() in skb_try_coalesce()
+  net: kunit: test netmem, page_pool, and skb frag refcounting
+
+ .../chelsio/inline_crypto/ch_ktls/chcr_ktls.c |   2 +-
+ drivers/net/ethernet/marvell/sky2.c           |   2 +-
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    |   2 +-
+ drivers/net/ethernet/sun/cassini.c            |   4 +-
+ drivers/net/veth.c                            |   2 +-
+ include/linux/skbuff_ref.h                    |  64 +-
+ include/net/netmem.h                          |  24 +-
+ net/core/net_test.c                           | 747 ++++++++++++++++++
+ net/core/skbuff.c                             | 145 ++--
+ net/ipv4/esp4.c                               |   4 +-
+ net/ipv4/tcp.c                                |   6 +-
+ net/ipv6/esp6.c                               |   4 +-
+ net/tls/tls_device.c                          |   2 +-
+ net/tls/tls_device_fallback.c                 |   2 +-
+ net/tls/tls_strp.c                            |   2 +-
+ net/xfrm/xfrm_iptfs.c                         |   3 +-
+ 16 files changed, 900 insertions(+), 115 deletions(-)
 
 
---=20
-Regards
-Yafang
+base-commit: d8674294aefef02266c4d47ad10131f1bffbe534
+-- 
+2.56.0.385.gd3acb90ef8-goog
+
