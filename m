@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40A13ED3CF
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 11:35:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A54848F84F
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 11:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791632135; cv=none; b=Ia737uozeMAhbBU3UKLqbW7lPpXkLoOrvJgvdGTiHoYbWIy+w4qcx8TUMiWRUXrwo0EV0PiCztrf028l1ehLEj9jb4Yh/Zk14sIVcl1pLU19hKL9QLrd/HObdVn0z+zzaX3d6fiXXkXq8eqVMSIXtZzGkjPOtie4tYlZS/WVlLI=
+	t=1791632136; cv=none; b=BbIKsBsUVVM7bq9qQXGMApqw2GqQdlFoxi6JuPAenpLJJ4Brkq3XCEVR0jHW5FMiZUJxgAJz/Gld3DEclA4ZlvunkOq/ZrFd5ds03zGSnHB4TtUvKcYOJpVp9+i0ma8dkpRAdUa4vgRkohnf5eMWJUtIOTNX0C1ModkCSzItgNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791632135; c=relaxed/simple;
-	bh=6DD7bMWPRM+qPmnMPKrsOtABTCTTTl275HsH59XBW5I=;
+	s=arc-20240116; t=1791632136; c=relaxed/simple;
+	bh=zpop4oigONxEbMsSKCGLNwSZSwMzxUg7O06JACxhw2Q=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=HICrqqxy63HPsS1nX8aa7oY/BF8huiPtszFq2qj6P7xzNA97rJr7f+xLWGgbRaSQkKztuDlvedNXjOvo70RW122EsmOgp0HBA3Y1mqL2zYoTzqe83zdd5xM2mda65WIsQrkT9DXKdMwB1eN5vQRT51ntFhtEoZIC5rzen0rxHys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGBKabCZ; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=qg8ppk9cP4D4uCRe4YvFhSRyBzMUQRX2KjKjBLIiZ8cXcAqLfFfXYWze8taoyuDNAeqO17jocj1Piox859mtx08cz5qFg8nGCeZIb+h54LEwXa/RpuCsjhmh9L2707gQtdM1/3OamixghV2hZW2nqkTO5NUpD7bBXXG5tB1fyZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4n4v/nd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGBKabCZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19FBC1F00893;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4n4v/nd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D416C1F000FF;
 	Sat, 10 Oct 2026 11:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791632134;
-	bh=1ft3hQhyqeBk9SZrjkgJOrPzFniWjWpxxvRzcWLk3Yo=;
+	s=k20260515; t=1791632135;
+	bh=Bu5XjpqHvx2AfYLpWOr5DyYsI01BFUGb+nR6vccYaZQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bGBKabCZY7VwLYPCAX6E9HaJ/v5S8vsntXU5isazG3YYreiAP7eLtRKRy6bSj0yNq
-	 CsRXxO6114E4LYLGbZkdQrGqISWO+LRvrr67pR9dDt3x+quMlk72q9weybxHH7RmHk
-	 o5B6c3Wyraz14Zrfp/ff4xrwXspnoGOQqJ28HPhcb/0/FBLZmBzhFzcWjpCq6y1rKW
-	 g9rfy4644BmxouydO3AFKuXAjKTNZKk2JEG4IOuie3QxSYLJ0gl2CsTELAkEvaF9Xw
-	 mIWvwL44RIXQvuVGR56ks2DqERUZNwQAJtVBgx6fIGWMyCUKZNtPNnLu8J1bEAcu25
-	 5ZalCQ70NiiNA==
-Message-ID: <sashiko-outbox-166468@kernel.org>
+	b=L4n4v/ndEjvpja20wn4WKd+O0oaoEoIL5Zs7cJgks6uQ2CkCCl0DxMWsTPipemZaL
+	 mFm0kTHzMjCm5nfy68f6wDcCegtlAWHD3rqn2VRBtynE1M8OJlB7B5RPP/XW1RhLk4
+	 puLksLJ9CoxUQHUd70X1u+Y23O7TVRFzWm/a8Jbf353SS1n3FZn7Isz/8baJfb5iEy
+	 iFqJXQPquMSj+ZSsR67dA9LMbHNGSgvQ1fg4ZrIMxcMb+EeCTQpMF7r0sB79Obx16b
+	 1AwkIS9Zxr8L8sbo9raAI19+4M9vbZk24tnPQDJ652JyGc+udXAPBB8F7ZlfcKmTeh
+	 NNKsTqq4RCXzg==
+Message-ID: <sashiko-outbox-166469@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 1/4] eth: mpnic: count packets, bytes, and
- drops per ring
+Subject: Re: [PATCH net-next 2/4] eth: mpnic: report per-queue stats
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Zahka" <daniel.zahka@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261009-mpnic-counters3-v1-1-7dc7644cc500@gmail.com>
+In-Reply-To: <20261009-mpnic-counters3-v1-2-7dc7644cc500@gmail.com>
 References: <20261009-mpnic-counters3-v1-0-7dc7644cc500@gmail.com>
- <20261009-mpnic-counters3-v1-1-7dc7644cc500@gmail.com>
+ <20261009-mpnic-counters3-v1-2-7dc7644cc500@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 10 Oct 2026 11:35:33 +0000
+Date: Sat, 10 Oct 2026 11:35:34 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,56 +46,107 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] locking: u64_stats_sync deadlock in mpnic_clean_twq0() due to soft=
-irq reader
+- [Medium] eth: mpnic: missing drops and errors in queue stats reporting
 --
 
-commit b438863957f763895e3efd300c4e2cd81b9bb11b
+commit cda12cc259f9eb77d108f5cb4427efce257c6e0b
 Author: Daniel Zahka <daniel.zahka@gmail.com>
 
-eth: mpnic: count packets, bytes, and drops per ring
+eth: mpnic: report per-queue stats
 
-Keep packet, byte and drop counters on each Tx work, Tx completion, and
-Rx completion queue. Report them to the core via the rtnl_link_stats64
-interface using an RCU approach.
+This commit exposes the per-ring packet and byte counters through the
+queue stats API. It also reports counters for deactivated rings through
+the base stats callback.
 
-> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/e=
-thernet/meta/mpnic/mpnic_txrx.c
-> --- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c b/drivers/net=
+/ethernet/meta/mpnic/mpnic_netdev.c
+> index 5164475a0f943..c2f4a326a8f0f 100644
+> --- a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
+> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
 [ ... ]
-> @@ -288,8 +295,19 @@ static void mpnic_clean_twq0(struct mpnic_napi_vecto=
-r *nv, int napi_budget,
-> =20
->  	ring->head =3D head;
-> =20
-> -	if (discard)
-> +	if (discard) {
-> +		preempt_disable();
-> +		u64_stats_update_begin(&ring->stats.syncp);
-> +		u64_stats_add(&ring->stats.twq.dropped, total_packets);
-> +		u64_stats_update_end(&ring->stats.syncp);
-> +		preempt_enable();
->  		return;
-> +	}
+> +static void mpnic_get_queue_stats_rx(struct net_device *dev, int idx,
+> +				     struct netdev_queue_stats_rx *rx)
+> +{
+> +	struct mpnic_net *mpn =3D netdev_priv(dev);
+> +	struct mpnic_ring *rxr =3D mpn->rx[idx];
+> +	struct mpnic_queue_stats *stats;
+> +	unsigned int start;
+> +	u64 bytes, packets;
+> +
+> +	if (!rxr)
+> +		return;
+> +
+> +	stats =3D &rxr->stats;
+> +	do {
+> +		start =3D u64_stats_fetch_begin(&stats->syncp);
+> +		bytes =3D u64_stats_read(&stats->rcq.bytes);
+> +		packets =3D u64_stats_read(&stats->rcq.packets);
+> +	} while (u64_stats_fetch_retry(&stats->syncp, start));
+> +
+> +	rx->bytes =3D bytes;
+> +	rx->packets =3D packets;
 
-[Severity: High]
-Can this cause a deadlock on 32-bit systems if a softirq preempts the write=
-r?
+[Severity: Medium]
+Should this also read stats->rcq.dropped and stats->rcq.errors from the
+queue stats and assign them to rx->hw_drops or similar fields? The
+driver collects these internal stats, but they appear to be missing from
+the queue stats API reporting here.
 
-Writers to u64_stats_sync must be serialized against readers. On 32-bit
-systems, readers spin in a retry loop while the sequence counter is odd
-(mid-update). The preempt_disable() call disables process preemption but
-leaves softirqs enabled.=20
+> +}
+> +
+> +static void mpnic_get_queue_stats_tx(struct net_device *dev, int idx,
+> +				     struct netdev_queue_stats_tx *tx)
+> +{
+> +	struct mpnic_net *mpn =3D netdev_priv(dev);
+> +	struct mpnic_ring *txr =3D mpn->tx[idx];
+> +	struct mpnic_queue_stats *stats;
+> +	struct mpnic_q_triad *qt;
+> +	unsigned int start;
+> +	u64 bytes, packets;
+> +
+> +	if (!txr)
+> +		return;
+> +
+> +	qt =3D container_of(txr, struct mpnic_q_triad, sub0);
+> +
+> +	stats =3D &qt->cmpl.stats;
+> +	do {
+> +		start =3D u64_stats_fetch_begin(&stats->syncp);
+> +		bytes =3D u64_stats_read(&stats->tcq.bytes);
+> +		packets =3D u64_stats_read(&stats->tcq.packets);
+> +	} while (u64_stats_fetch_retry(&stats->syncp, start));
+> +
+> +	tx->bytes =3D bytes;
+> +	tx->packets =3D packets;
 
-If a reader like dev_get_stats is invoked from network receive or BPF softi=
-rq
-contexts on the same CPU, it might interrupt this writer while the sequence
-counter is odd. The reader would then spin infinitely waiting for the count
-to become even, resulting in a deadlock.
+[Severity: Medium]
+Does this miss assigning stats->twq.dropped from the transmission queue
+stats to tx->hw_drops or tx->hw_drop_errors?
 
-Should this use local_bh_disable() to protect against BH-context readers?
+> +}
+> +
+> +static void mpnic_get_base_stats(struct net_device *dev,
+> +				 struct netdev_queue_stats_rx *rx,
+> +				 struct netdev_queue_stats_tx *tx)
+> +{
+> +	struct mpnic_net *mpn =3D netdev_priv(dev);
+> +	struct mpnic_base_stats *base;
+> +
+> +	base =3D netdev_lock_dereference(mpn->stats.base, dev);
+> +
+> +	tx->bytes =3D base->tx.bytes;
+> +	tx->packets =3D base->tx.packets;
+> +
+> +	rx->bytes =3D base->rx.bytes;
+> +	rx->packets =3D base->rx.packets;
+
+[Severity: Medium]
+Since the deactivated rings collect drop and error counts internally,
+should this also map base->tx.dropped, base->rx.dropped, and
+base->rx.errors to the corresponding rx and tx struct fields?
+
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261009-mpnic-coun=
-ters3-v1-0-7dc7644cc500@gmail.com?part=3D1
+ters3-v1-0-7dc7644cc500@gmail.com?part=3D2
