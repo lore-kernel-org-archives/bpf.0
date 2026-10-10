@@ -1,111 +1,95 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F745253B42
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B45A353A8E
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791643972; cv=none; b=mEBNPwhjz941y1DDR9bQM7kVO/yV5A5UiHLEn0Tg8q0uFJYwe+j3pdBNku1BaSN12G07x5pVEQP6TPIH1CX+cNxm44XqyE3FkDAOr7I52X0mvNXZXRBrQi/3wODKYiClidZWcni8atDPtCvj2+aOv/uQ5nMuX1lGPu+rFTC0C2c=
+	t=1791644142; cv=none; b=Tf6advVsPXFCrv6ElAQQyfjsfrnumR+cpaaDqMHrxCj0EeKfBMBkE3vC7dgFAF7ctUIjTMUz31xxXAh3e42Uv9BJl7C3HukwlDqQrUHyD6mCug7n6IZOvlph5reZimzZOrNaBL41BXCSz1XdvYHGZe1cocaTAgYQnUqI1M4CcVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791643972; c=relaxed/simple;
-	bh=AeM2PZvSpqM/Pqkdr9E4RpsA26gArP9LHLwDJeNBEro=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mT6HUn0dPQyulSefGRWu3PQNwfCIkAv3mcnknN5jKblpzs5cT7mEiAzOckWk0BG4tewDrCPKTOT7H5qPe1Vi060olhGgajK5lH1XFqgmlxb3XFGW6JTkN9PUgrNBHuRHFGgANfyZF0TYyrxVqrsM13Usw4diOclCywq7upR9TIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=Zxll25+4; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1791644142; c=relaxed/simple;
+	bh=K1anK7ermLyljJdUOnkPbudUZBD0dhcLb1MXiyRyuos=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=oD9z6Qmh5Jx0SZgKl5miAVpOOvDCFkUQquyEjSrSHnWffDPDs7dowRWkucMa5mlsybQXNWl1aHJBfwfsz9/OHVsqGQiKFMrK8vrJI+NcZtQq3NPDVI7H3lem781ednvfwcrTchIVBW8k53yoZ8Ljj4QvPX0wSxPAd0dCMfnh9gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o6X4S+0o; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="Zxll25+4"
-Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69ADLh4E3015047;
-	Sat, 10 Oct 2026 14:32:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=qQfEIeJdAQpQAAsysYpvcLM9ZhcscDqyxImGD0VHjms=; b=Zxll
-	25+4XKLE1LWdbPHAmKY9BXovXG5b5pqA+IEL+qQ7OId8mTOeLlG8oLzowzMW0RhF
-	ogeylJC0cx97AkXjZ7F0EPcUakDFkfy/NxqSepmw40Q3KhcEZg1xVUNPfMD0jize
-	WFUiXt96aTFb0o5oqzqrpd5Z1wNSAOU15cTOjX+zADYXICAB4AzhXYpujX6u8OIb
-	OvsLKr53uFSeEdG49cTYl53IlMq8qOnzJnQAEfCAg+D0jlPiPFQqig7AAlIh//65
-	X1Ug7dbJ7CMl1tH3u/gntzkd+sqBmsaK3ke3ujEb7a4PIjAL+Ruwb1ezoM9Em2d1
-	ehU8j7yy4pBU9jgO5Q==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4h74uftuhk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 10 Oct 2026 14:32:00 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Sat, 10 Oct 2026 14:31:58 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>, <andrii@kernel.org>, <ast@kernel.org>
-CC: <martin.kelly@crowdstrike.com>, <slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next v6 1/7] libbpf: Reject gen_loader set after PREPARE step.
-Date: Sat, 10 Oct 2026 10:31:50 -0400
-Message-ID: <20261010143156.379864-2-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com>
-References: <20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o6X4S+0o"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc4aa18f9afso208880a12.3
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 07:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791644141; x=1792248941; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Y9MdWwrL6HyhifnAJtfaGhfthnB3rL3CnMKkRHEj95k=;
+        b=o6X4S+0oqhzURTEeTPbyBpn7MxwF85lzqqLfk98XnA1s9CxuAls6oox1rrehIrXORg
+         NIyqbHx3nv7aZ8BInStvSA+8BQz+gMF2jbwNc7UdSblpcQZl6cTqUNFx3SESYMDj5nQ8
+         M84cayQeaTiaHUh07QmCAiIY6ep5Edpi3jpuottDCxtskvJQX3neF1p5RZhHffvNrvP5
+         44LRhNjT/+ekavSMUuGlym1DnsGUiAxHnxXAFwi1+ggeb6zgGwWh7By94OnQzfY5jdZF
+         gj/jfgIoULu1JfEPvKkjeWvwp1HkM/y09G65XIfb9APnuoMTix+luSFI5DFeVzR7lc9a
+         SWzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791644141; x=1792248941;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Y9MdWwrL6HyhifnAJtfaGhfthnB3rL3CnMKkRHEj95k=;
+        b=JrFM43ZLNNhAe3IjbkbLpyhA/Y25aU8x6BOl0GiWxd/8ogpQ7StORLqTAezWkwIgiv
+         L0hsauICNH+nI9i/10RoGEjeOOiCwOJe2gG8HRJ9QEk3FuYCSPmu5fziv7ABuPF5oUj/
+         BAyxhRuY1Y77vpdEcIr4WeRGOxcAb7HQbZRMzZRnJ9gTURBUcyiOC4OEw4CNVbtnCwI5
+         R2ofMnlVbhYGfSlY8zmUntzKSvu9Wpr5XnYMCfjjSkTC4PJtdyPLAlSVafISIGB/xHyO
+         q2fZQpsBF2rLXNZTyplxT7/pPnkfg9iZ472jXMEzI8nDKK5yseq8tbdVhp3uLI4I3yEG
+         fpzw==
+X-Forwarded-Encrypted: i=1; AKwUvBywgvmGFWOswslR2uLcwQB30x4jK0+zc1guWDaXJ8dJRBX643vtO7wnBphY2QxDpAOSV30=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJuD7MDFIBePZ4WViiLKSZSj27AYvQeVRpdyidaH1SupvduiF3l
+	wZ5MNZDDbK3SU+kMjlAVChAqSDaGXKuDcp7mux2mYXUBffoz9LnotmzStbKCL/EPktk=
+X-Gm-Gg: AYBFou1XTBsRi9o7qWd/fzQoliPm51q9U+qAaSE/+AbR4V5aMs8FzUXkb41xlTD+W+S
+	TVYJDcLampYt6qaELBe6KvaZpO2EpD6gqmYaf1RCrZrGI6eSxK1AIei0OfH/d7pyXnvMXJrGMNV
+	PgraVjxffJeOkz6fBXo55LKeDHmo33j/ey/AmzRc1MtjVDBOotIyKwkH6//R4c9LfJM5mVMCh5c
+	gqhF7gj5M5e0rjvSu3c3usKbrTBnzM/+YLTRfhqGDjvwZaa/MEMbjrhdG7CyVz2NmY/RZw2bNRR
+	nxxZIQpHnt/h1NzIselOCQOTDMMtl1mlGCj/9mdwFYbEzU6wOhXbFOjoORetFKbShVXe/oDWbyA
+	JqTTvtQL7iGvcsQvH+fsIbBr9pDdvClg8VSH4FJ48yNX3a2B2N38w2V3d+Nw9AcsiM2WHp3Fv20
+	oc7QPnQarcwL8k+pqbGiRRYdSGMtDgoUmFMhvjmml+ZUvmgL8QZUlgmEX3HmywluJeBo629rqS9
+	vZWqrQCpo+rvqEBmdTYeFwBPWZNLtSF4g3LoU05QmujbKSqPPo9Pm5AO89qPOR1ppct5lR13kHL
+	jyY=
+X-Received: by 2002:a17:90b:4b:b0:3ab:2c2b:1030 with SMTP id 98e67ed59e1d1-3ab3a747cfcmr3883080a91.22.1791644140387;
+        Sat, 10 Oct 2026 07:55:40 -0700 (PDT)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36f46dfesm8487649a91.8.2026.10.10.07.55.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Oct 2026 07:55:39 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 10 Oct 2026 14:55:39 +0000
+Message-Id: <DM18UAZECYI9.1RYCRB2FYDW8S@gmail.com>
+Cc: <oe-kbuild-all@lists.linux.dev>, <andrii@kernel.org>,
+ <daniel@iogearbox.net>, <kernel-team@fb.com>, <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 34/51] bpf: use SCEV to widen bounded loops
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "kernel test robot" <lkp@intel.com>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <202610100928.qjEH6jQv-lkp@intel.com>
+References: <20261009-scev-minimal-rebase-v3-34-bcba9bc53ac9@gmail.com> <202610100928.qjEH6jQv-lkp@intel.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEwMDA1NyBTYWx0ZWRfXx16CWxiS+3G6
- NUBujUpjT0SPRseowDqZqwbqBcCW+N5vHpGZCdHKPqRwUa1OAZxW19zYiSqAtXA2vEgraq/Rd8J
- 3uvusO721NKJyRIt15n1KkG+XsD5irpBQciTLAMf8aWBKtgk3nvsO9y+ONY8cvVPlRYce/robUb
- QOswa0eOoBpXZEUm9lTYOmJljdH0uphssbfgIo59XLJaTmx65nOwQsz88O3u6Ccdk4nlmlgemw4
- jV+sSpO8jdMWXjcv1DPUUAQsIaeXafpmh12SMPi+GOHdulmlh/gGBXtTBdxFjpy16VOQJqRrFlj
- em6EZnEJWhqlk0D0TM9PXsQWB2IZ66L4lV0tAqRo85aq9ILe4Gra3v9JWRv+AJ0TMqvPtrsjDth
- m0KSthnwaFP3rzElyVBzElWh5E4a8NEQUeXI3y29V3qUdLHkbKDZGZ+binBDmS3oOoaBNIyhn3q
- lf2Xg4xcZTLTb4apn6A==
-X-Proofpoint-GUID: 3zrlxAZq7jN7Pgb0lfFmu8Klna6cIQ0B
-X-Authority-Analysis: v=2.4 cv=Qv7LTlyd c=1 sm=1 tr=0 ts=6aca4c60 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=2KvRFfd_T_-xjmS8C1aD:22 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=Hex6BOfvPCKN9fOGxmQA:9
-X-Proofpoint-ORIG-GUID: 3zrlxAZq7jN7Pgb0lfFmu8Klna6cIQ0B
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEwMDA1NyBTYWx0ZWRfX9PkFgfOz9Hdc
- HgbE2UOI7OmqYM1tHXD4eZpLF2gvc1xHVhhyYVZyvA1pkard5x9WDmsg2jwg7fz3PbGn9943DnS
- +F/7/CJHmJbaTw2K17l5w86uOlDYTXV9sQgiEA7YjpXlfveplpXM
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11931
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 impostorscore=0
- malwarescore=0 adultscore=0 bulkscore=0 clxscore=1015 phishscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2610080000
- definitions=main-2610100057
 
-It's wrong running the loader post prepare
-as most of the recording happens there.
+On Sat, Oct 10, 2026 at 09:25 AM kernel test robot <lkp@intel.com> wrote:
+>    ld: kernel/bpf/scev.o: in function `compute_max_iters':
+>>> kernel/bpf/scev.c:2062:(.text+0x1193): undefined reference to `__udivdi3'
+>>> ld: kernel/bpf/scev.c:2067:(.text+0x11b7): undefined reference to `__udivdi3'
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- tools/lib/bpf/libbpf.c | 3 +++
- 1 file changed, 3 insertions(+)
+Eduard,
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index cb09ded90773..647f205a354d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -10637,6 +10637,9 @@ int bpf_object__gen_loader(struct bpf_object *obj, struct gen_loader_opts *opts)
- 		return libbpf_err(-EFAULT);
- 	if (!OPTS_VALID(opts, gen_loader_opts))
- 		return libbpf_err(-EINVAL);
-+	if (obj->state >= OBJ_PREPARED)
-+		return libbpf_err(-EINVAL);
-+
- 	gen = calloc(1, sizeof(*gen));
- 	if (!gen)
- 		return libbpf_err(-ENOMEM);
--- 
-2.34.1
-
+the series is in bpf-next, so all 32-bit builds with BPF_SYSCALL=y
+are broken there now. Pls send a follow up asap.
+Every u64 '/' and the '%' in compute_max_iters() need div64_u64()
+and div64_u64_rem().
+The rest looks fine. base/step are u16 and imod() uses div_s64_rem().
