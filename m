@@ -1,416 +1,297 @@
-Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3932264A3
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 00:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FEE33A9D6
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 01:26:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791593558; cv=none; b=nJZN4x3dxs7xFy5M3HwxSDulS1RT1R1l1+d6h0VJNV896O9mVu5+36LQ/hUpIlmiMFcLp3AjaSkA/IDJKjYNeUk3Wk3aUtiCKS32FSQCmvn/5MIurLECCOo0RqH+ZrNXf4VHkqhCOOCj/pnzfwTiMa5IaVb+PtiYgiT4hzqCYVQ=
+	t=1791595579; cv=none; b=jm7r0esDOTpgoOIcZTGf9dXTU/X/ySWQ7Q4c7/IqpWuNwme2cGoj8HLfCQXNJVL0fSot/BuEcRtXfwyL+H55dJoEMy4q8GRg+WeQ+rcv021vmGPHd0CTVmfPutIAMdAsI6JMv+1Kt697SBmZ5L4LHx2tShr2ny+qFxDRwylMd+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791593558; c=relaxed/simple;
-	bh=hm4bF6UTpInUG6tKa2h6eAFUkcFgdtBnKfgaoaSDPy8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cOjYVZ26/B7U2tiYe1i5tmNMQsWpSD/DF8VZk4WzRVUsXpT/JJT0x43Cilp9bgv+xRlm8Mvz3hqc6tf6v9oKhCqqvigHAhxxghY83QE/bK9r8dgiyTKtutz9HK2sJZ5cnaInMKkcHdL3OUO1/wdMLG230z/cXyvmgS3vzdUw61w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alanderk.com; spf=pass smtp.mailfrom=alanderk.com; dkim=pass (2048-bit key) header.d=alanderk.com header.i=@alanderk.com header.b=KN2rBOdV; arc=none smtp.client-ip=74.125.227.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alanderk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alanderk.com
+	s=arc-20240116; t=1791595579; c=relaxed/simple;
+	bh=/V5wlvPKWQKAkVjopIho6YkU9YilScMH8CxZAO2lAJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7e2CUql/lGRvFpKGDA0lGlkHykbFF2vNdxlvrKLyh77VaRyIWn2na+cs1TRDe7fu1D/CrPwMyoEHxyoK5qKXmbGFz8eedcHoHAMBWB68mrVguAYFLOqZg/pMvlCWVfAACD088uyjFNGZ216azCdzu+bCTO99zve4GO6sSBbJFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BFFtk0pI; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alanderk.com header.i=@alanderk.com header.b="KN2rBOdV"
-Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-39569e136f9so61303a91.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 17:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=alanderk.com; s=googol; t=1791593555; x=1792198355; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=V/AM8O9CHJtX62I5NgY34KmbH4WPnu861vwy2c/kGu4=;
-        b=KN2rBOdVYSLb8NiEyk+tsvgv//sQOR184XKV9y5FYbskQ8a4UMRhccNu0AnyVzCxN6
-         lCL4qL201jDRZVfwNxA6u3ePAhBLwNK1tPfXJfr37xxP0IuxqJnrMO8lyh2LAqeqPmzy
-         XtKQczvYPT1ksWY3YDCnWiMY3Z0tQDUzNYo7jh7l2R/13ie72Za1vWqkB8a1ffUU+3RK
-         TNs9VRpMWMZaGBnxXEfDr46cd8YMjri7udhvenegFZQMmx4XlLLOn7WBVUNONjkXZAF/
-         qUs+0Xo9qa+b+4KNGv8Z1VpJkebRawizwTeKoO4jH6rWDJGGBb7q3I6HfuEXold7lz9T
-         f2CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791593555; x=1792198355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=V/AM8O9CHJtX62I5NgY34KmbH4WPnu861vwy2c/kGu4=;
-        b=JCDaW7aUTKwmmQh3r9LSZaGEOdVJOadQi/ZI+PIzoq8AcTbhjRuDuMdPZIwW6waeKB
-         X3Jh8lpWtt9VLT2zLOl6vf48BUVPkT6X+VgaCR80tGfCmwq4YYaWEVCFsrUAjzs7LoSo
-         h8U0eETcL0zYVT3W/wCMi968xm1rxuWk00H4/cOoV/C1VRzZ8p1dwJA16srmm8H9seBs
-         cImpm7co9lSbMvZe3IVbcV/Xoyp4qkom+mM13inlVWBr1Biu4fAQ5Xoqp0j0zabXJyzH
-         XJwzJkr9fvW8LVzCZrLpKL2glj2XTWfvaxzYt0+qVziliK4g3FZittXNUeVy51ONCogS
-         WV+g==
-X-Forwarded-Encrypted: i=1; AKwUvBwhRjEWY7GhSJiizWp9mYwQRxxGpPv9s+RgbYKElI6Z3Nupex5CHRWWlZP3P7Bt0A1Z8b4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKCQooDIojy3VVpioRneUsCoXHRkL4lwDb/0527ecqWJcVJ1yVF
-	OVRNH6qG+O4i+EqxsEbwXfCt5PHWe3gl1v02Do04NKsEifIEItYF20955QvtqqXGrhUe/xdNHYZ
-	SJ7aymvcI4XgysoM=
-X-Gm-Gg: AYBFou2oidJlO95LFzt5uPY0mkBlrdnMVxHJ504WEYyk/aYg7c9V7i+iRsJWZ85D5va
-	PEJEjlYftt7EG5/+YKa0LW0Os8BfzuU4P4vpdQqD9isPlV3TbcvTHzc9klUMwtcFLsEy5K6BWSC
-	DEDTxKoy9s3p0/sN35hmJA5TbaKtIQEDRiRMvGpz8kN4inmfBod6NcJt0yXBTek/WI1KL4Yhzmy
-	MfwVFIuJWNwZ6VQ9PTARksFFSEXCnwAn56OKAe09tBwwhp/cMR86sTZHMQbUwtgQbASM2c2n1g1
-	VfC0e2+8ngkAjuUMJQgBgxmn3WQl4zwWNPrWBkDtpZWLRH+V4RioOx8j/sqBGV4tWKtG+7dPZMp
-	P7RYyPe6mV5oGI2Rwm79l8mmeeJCBwLWqmXZWtFkZPMyExiG1x8HsMPjmug2MzE027N8sZnDs4B
-	cnP/B8YPp4Ebs//ASbIlxAcXm8Ik/pWqnVzmfBGmvPShdPrlYyc5UJ0CyWjHzlLx71fYtCPcSbo
-	Ag2JLJmdGAFnvBKfACCAxH/cCrP69BSNQ==
-X-Received: by 2002:a17:90b:224c:b0:3a6:f1d2:57f8 with SMTP id 98e67ed59e1d1-3ab3a23c95bmr3158692a91.2.1791593555370;
-        Fri, 09 Oct 2026 17:52:35 -0700 (PDT)
-Received: from macmini4.tapir-palermo.ts.net ([138.199.43.94])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab50ce9d98sm4078226a91.9.2026.10.09.17.52.34
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 09 Oct 2026 17:52:34 -0700 (PDT)
-From: Alan Derk <linux@alanderk.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>
-Cc: dwarves@vger.kernel.org,
-	bpf@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: [PATCH dwarves v2 2/2] dwarf_loader: Load types that kept CUs use from excluded CUs
-Date: Sat, 10 Oct 2026 00:52:27 +0000
-Message-ID: <20261010005227.976-3-linux@alanderk.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261010005227.976-1-linux@alanderk.com>
-References: <20261010005227.976-1-linux@alanderk.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BFFtk0pI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791595575; x=1823131575;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/V5wlvPKWQKAkVjopIho6YkU9YilScMH8CxZAO2lAJ8=;
+  b=BFFtk0pIoFbkvMCRDsp+xO8f8oLtwjCL69WmodhsiR88pERueNagXeer
+   ivyRnoLyBJahMF0f4rs+3iPnoiWdFDCZd6g6Pjr7cigxKWgWLfadnCCZu
+   hSFAzZWfSvu1srJQ7ilSAMThU5hH3xENhRN5XPgDqRO0tpO60MlOQ22Tm
+   VwYrCjgyiPPvuoxpLXmd5Flx+983SyPUm/P8C26sVutVjmgP+k3giuEft
+   Zj419y4BI4zEpglYT/f6BBup8SO08TgPF0LP+aS0X7531IHeB8XxHwf4s
+   Xxggi5AdUZZD0ZY2UmVUX8su2U58N12k9Imoo9tkFU7Pzp75gz/lEgzLd
+   w==;
+X-CSE-ConnectionGUID: 8Qd927x8S8eb38RO/C+eag==
+X-CSE-MsgGUID: hmJZ+tBJQFKQI6vbr/7qzg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="494683"
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="494683"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 18:26:15 -0700
+X-CSE-ConnectionGUID: +IGKHK0FRq+QDhYz4IF47A==
+X-CSE-MsgGUID: 4y38ppWpTQOUfw0Wh1FU6A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="568324"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 09 Oct 2026 18:26:12 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xFLqj-000000006NA-1RGO;
+	Sat, 10 Oct 2026 01:26:09 +0000
+Date: Sat, 10 Oct 2026 09:25:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, andrii@kernel.org, daniel@iogearbox.net,
+	kernel-team@fb.com, yonghong.song@linux.dev,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf-next v3 34/51] bpf: use SCEV to widen bounded loops
+Message-ID: <202610100928.qjEH6jQv-lkp@intel.com>
+References: <20261009-scev-minimal-rebase-v3-34-bcba9bc53ac9@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261009-scev-minimal-rebase-v3-34-bcba9bc53ac9@gmail.com>
 
-With clang LTO, LLVM emits a type such as int once, in the first CU
-that uses it, and other CUs refer to it with DW_FORM_ref_addr. Since
-commit b98565e7b17ec24d ("dwarf_loader: Honour --lang_exclude when
-merging LTO built CUs") the DIEs of the CUs that --lang_exclude filters
-out are skipped when merging, so a kept CU that uses a type from one of
-them is left with a dangling reference. Members that use such a type
-end up typed void: pahole crashes printing them, and -J encodes them
-with type_id 0 and exits 0.
+Hi Eduard,
 
-  $ head zero.c first.cpp second.c
-  ==> zero.c <==
-  char zero_c;
+kernel test robot noticed the following build errors:
 
-  ==> first.cpp <==
-  int cpp_int;
+[auto build test ERROR on e1d84a37cba984388988d2f1ddc84561413f0db2]
 
-  ==> second.c <==
-  struct c_only { int b; } c_var;
-  $ clang -flto -g -c zero.c second.c; clang++ -flto -g -c first.cpp
-  $ clang -flto -fuse-ld=lld -shared -o three.so zero.o first.o second.o
-  $ pahole --lang_exclude=c++14 three.so
-  namespace__recode_dwarf_types: couldn't find 0x57 type for 0x8a (member)!
-  struct c_only {
-  	<ERROR(__class__fprintf:1838): 0 not found!>
-  Segmentation fault
+url:    https://github.com/intel-lab-lkp/linux/commits/Eduard-Zingerman/bpf-represent-stack-access-effects-with-arg_access_info/20261009-034719
+base:   e1d84a37cba984388988d2f1ddc84561413f0db2
+patch link:    https://lore.kernel.org/r/20261009-scev-minimal-rebase-v3-34-bcba9bc53ac9%40gmail.com
+patch subject: [PATCH bpf-next v3 34/51] bpf: use SCEV to widen bounded loops
+config: i386-buildonly-randconfig-1002-20261010 (https://download.01.org/0day-ci/archive/20261010/202610100928.qjEH6jQv-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261010/202610100928.qjEH6jQv-lkp@intel.com/reproduce)
 
-Remember the offsets of the CUs that the filter skips, and when a type
-lookup misses an offset in one of them, load that DIE if it is a type.
-The types it refers to are looked up when it is recoded, so they are
-loaded too. As this adds types while recoding, cu__recode_dwarf_types()
-now repeats its passes until no new tags show up.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610100928.qjEH6jQv-lkp@intel.com/
 
-After:
+All errors (new ones prefixed by >>):
 
-  $ pahole --lang_exclude=c++14 three.so
-  struct c_only {
-  	int                        b;                    /*     0     4 */
-  ...
+   ld: kernel/bpf/scev.o: in function `compute_max_iters':
+>> kernel/bpf/scev.c:2062:(.text+0x1193): undefined reference to `__udivdi3'
+>> ld: kernel/bpf/scev.c:2067:(.text+0x11b7): undefined reference to `__udivdi3'
+   ld: kernel/bpf/scev.c:2074:(.text+0x11e3): undefined reference to `__udivdi3'
+   ld: kernel/bpf/scev.c:2075:(.text+0x1207): undefined reference to `__udivdi3'
+   ld: kernel/bpf/scev.c:2081:(.text+0x123e): undefined reference to `__udivdi3'
+   ld: kernel/bpf/scev.o:kernel/bpf/scev.c:2089: more undefined references to `__udivdi3' follow
+   ld: kernel/bpf/scev.o: in function `compute_max_iters':
+   kernel/bpf/scev.c:2141:(.text+0x1464): undefined reference to `__udivmoddi4'
 
-Only types are loaded. References to functions and variables in
-excluded CUs, such as the abstract origin of a function inlined across
-CUs or the function that a C++ using declaration names, still print
-"couldn't find", as loading them would add functions in the excluded
-language to the output. A nested C++ type that a kept CU refers to
-directly is loaded as a top-level type.
 
-Without --lang_exclude, or when no kept CU refers to an excluded one,
-nothing is loaded and the output does not change.
+vim +2062 kernel/bpf/scev.c
 
-Add tests/lang_exclude_lto_refs.sh for this.
+  1980	
+  1981	/*
+  1982	 * Loop with post-condition:
+  1983	 *
+  1984	 *    r0 = 0
+  1985	 * l: ...                r0 ∈ [0,1,2] header executed 3 times
+  1986	 *    r0 += 1            r0 ∈ [0,1,2]
+  1987	 *    ...                r0 ∈ [1,2,3]
+  1988	 *    if r0 != 3 goto l  r0 ∈ [1,2,3] backedge taken 2 times
+  1989	 *    ...                r0 ∈ [3]
+  1990	 *
+  1991	 * SCEV at header: r0 = k
+  1992	 * SCEV at latch:  r0 = 1 + k
+  1993	 *
+  1994	 * Loop with pre-condition:
+  1995	 *
+  1996	 *    r0 = 0
+  1997	 * l: ...                r0 ∈ [0,1,2,3] header executed 4 times
+  1998	 *    if r0 == 3 goto e  r0 ∈ [0,1,2,3] backedge taken 3 times
+  1999	 *    r0 += 1            r0 ∈ [0,1,2]
+  2000	 *    ...                r0 ∈ [1,2,3]
+  2001	 *    goto l             r0 ∈ [1,2,3]
+  2002	 * e: ...                r0 ∈ [3]
+  2003	 *
+  2004	 * SCEV at header: r0 = k
+  2005	 * SCEV at latch:  r0 = k
+  2006	 */
+  2007	static bool compute_max_iters(struct bpf_verifier_env *env,
+  2008				      struct bpf_func_state *st,
+  2009				      struct linear_latch *latch,
+  2010				      struct bpf_loop_iters *iters)
+  2011	{
+  2012		struct bpf_insn_aux_data *aux = env->insn_aux_data;
+  2013		struct bpf_loop *loop = aux[bpf_loop_at_index(env, latch->insn_idx)].loop;
+  2014		struct scev *scev = env->scev;
+  2015		struct scev_value initial_val, step_val, bound_val;
+  2016		u64 step, diff, bound, initial, backedge_taken_count;
+  2017		u8 op = latch->op;
+  2018		bool up, down;
+  2019	
+  2020		if (!eval_expr(env, scev, st, latch->base_expr, &initial_val) ||
+  2021		    !eval_expr(env, scev, st, latch->step_expr, &step_val) ||
+  2022		    !eval_expr(env, scev, st, latch->bound_expr, &bound_val))
+  2023			return false;
+  2024	
+  2025		if (step_val.ptr_reg >= 0) {
+  2026			if (env->log.level & BPF_LOG_LEVEL2) {
+  2027				bpf_log(&env->log, "scev: latch step is a pointer ");
+  2028				log_scev_value(env, st, &step_val);
+  2029				bpf_log(&env->log, "\n");
+  2030			}
+  2031			return false;
+  2032		}
+  2033		if (!scev_value_compatible(env, st, &initial_val, &bound_val))
+  2034			return false;
+  2035	
+  2036		initial = initial_val.value;
+  2037		step = step_val.value;
+  2038		bound = bound_val.value;
+  2039	
+  2040		if (step == 0)
+  2041			return false;
+  2042		down = (s64)step < 0;
+  2043		up = (s64)step > 0;
+  2044		diff = bound - initial;
+  2045		switch (op) {
+  2046		case BPF_JLT:
+  2047			/*
+  2048			 * E.g.: 3 + 2*i < 7 ⇔ 2*i < 4 ⇔ i ∈ [0,1].
+  2049			 * Here the inequality describes a set of values `i` might take
+  2050			 * while the latch condition remains true (the backedge is taken).
+  2051			 * The backedge_taken_count is the size of this set.
+  2052			 */
+  2053			if (/*
+  2054			     * If the condition is initially true, decreasing values won't
+  2055			     * change that without underflow. If the condition is initially false,
+  2056			     * the main pass would do a single iteration anyway.
+  2057			     */
+  2058			    down ||
+  2059			    /* Is the latch condition false on the first iteration? */
+  2060			    initial >= bound ||
+  2061			    /* Count iterations satisfying the strict inequality, including i=0. */
+> 2062			    check_add_overflow((diff - 1) / step, 1, &backedge_taken_count) ||
+  2063			    /*
+  2064			     * Check if the last iteration overflows the counter:
+  2065			     *   initial + backedge_taken_count * step > U64_MAX
+  2066			     */
+> 2067			    backedge_taken_count > (U64_MAX - initial) / step)
+  2068				return false;
+  2069			break;
+  2070		case BPF_JLE:
+  2071			/* E.g.: 3 + 2*i ≤ 7 ⇔ 2*i ≤ 4 ⇔ i ∈ [0,1,2]. */
+  2072			if (down || initial > bound ||
+  2073			    /* Count iterations satisfying the non-strict inequality. */
+  2074			    check_add_overflow(diff / step, 1, &backedge_taken_count) ||
+  2075			    backedge_taken_count > (U64_MAX - initial) / step)
+  2076				return false;
+  2077			break;
+  2078		case BPF_JGT:
+  2079			/* E.g.: 7 - 2*i > 3 ⇔ 2*i < 4 ⇔ i ∈ [0,1]. */
+  2080			if (up || initial <= bound ||
+  2081			    check_add_overflow((-diff - 1) / -step, 1, &backedge_taken_count) ||
+  2082			    /*
+  2083			     * The last iteration underflows the counter if:
+  2084			     *   initial + backedge_taken_count * step < 0 ⇔
+  2085			     *             backedge_taken_count * step < -initial ⇔
+  2086			     *                    backedge_taken_count > initial / -step
+  2087			     * (direction flips because step < 0)
+  2088			     */
+  2089			    backedge_taken_count > initial / -step)
+  2090				return false;
+  2091			break;
+  2092		case BPF_JGE:
+  2093			/* E.g.: 7 - 2*i ≥ 3 ⇔ 2*i ≤ 4 ⇔ i ∈ [0,1,2]. */
+  2094			if (up || initial < bound ||
+  2095			    check_add_overflow(-diff / -step, 1, &backedge_taken_count) ||
+  2096			    backedge_taken_count > initial / -step)
+  2097				return false;
+  2098			break;
+  2099		case BPF_JSLT:
+  2100			if (down || (s64)initial >= (s64)bound ||
+  2101			    check_add_overflow((diff - 1) / step, 1, &backedge_taken_count) ||
+  2102			    /*
+  2103			     * Check if the last iteration overflows the signed counter:
+  2104			     *   (s64)initial + backedge_taken_count * step > S64_MAX
+  2105			     */
+  2106			    backedge_taken_count > ((u64)S64_MAX - initial) / step)
+  2107				return false;
+  2108			break;
+  2109		case BPF_JSLE:
+  2110			if (down || (s64)initial > (s64)bound ||
+  2111			    check_add_overflow(diff / step, 1, &backedge_taken_count) ||
+  2112			    backedge_taken_count > ((u64)S64_MAX - initial) / step)
+  2113				return false;
+  2114			break;
+  2115		case BPF_JSGT:
+  2116			if (up || (s64)initial <= (s64)bound ||
+  2117			    check_add_overflow((-diff - 1) / -step, 1, &backedge_taken_count) ||
+  2118			    /*
+  2119			     * The last iteration underflows the signed counter if:
+  2120			     *   (s64)initial + backedge_taken_count * step < S64_MIN ⇔
+  2121			     *                  backedge_taken_count * step < S64_MIN - (s64)initial ⇔
+  2122			     *                         backedge_taken_count > initial - (u64)S64_MIN / -step
+  2123			     *	 (direction flips because step < 0)
+  2124			     */
+  2125			    backedge_taken_count > (initial - (u64)S64_MIN) / -step)
+  2126				return false;
+  2127			break;
+  2128		case BPF_JSGE:
+  2129			if (up || (s64)initial < (s64)bound ||
+  2130			    check_add_overflow(-diff / -step, 1, &backedge_taken_count) ||
+  2131			    backedge_taken_count > (initial - (u64)S64_MIN) / -step)
+  2132				return false;
+  2133			break;
+  2134		case BPF_JNE:
+  2135			/*
+  2136			 * For a decreasing counter flip the diff and step:
+  2137			 *   7 - 2*i ≠ 3 ⇔ 2*i ≠ 7 - 3.
+  2138			 */
+  2139			diff = down ? -diff : diff;
+  2140			step = down ? -step : step;
+  2141			if (diff == 0 || diff % step)
+  2142				return false;
+  2143			backedge_taken_count = diff / step;
+  2144			break;
+  2145		default:
+  2146			return false;
+  2147		}
+  2148	
+  2149		/*
+  2150		 * max_header_count is u32 and U32_MAX means "infinite",
+  2151		 * check to avoid overflow below.
+  2152		 */
+  2153		if (backedge_taken_count >= U32_MAX - 1)
+  2154			return false;
+  2155	
+  2156		/* The header executes once on entry and once for each taken backedge, hence +1. */
+  2157		iters->max_header_count = backedge_taken_count + 1;
+  2158		/*
+  2159		 * The latch is a conditional jump with one jump target exiting the loop.
+  2160		 * Linear latch is matched only if the loop has a single backedge.
+  2161		 * The loop still, however can have multiple exits.
+  2162		 * In such case, conservatively assume that non-latch exit can happen
+  2163		 * at any iteration, thus setting minimal number of iterations as 0.
+  2164		 */
+  2165		iters->min_header_count = loop->exits_cnt == 1 ? iters->max_header_count : 0;
+  2166		return true;
+  2167	}
+  2168	
 
-Tested with clang 21 full LTO and ThinLTO builds of a C++/C program
-in both link orders. Only base types (int, char, long) were loaded, and
-apart from the order of the types the output matches that of the other
-link order: text and BTF with C++ excluded, text with C excluded. Two
-C++ objects built with -std=c++11 and -std=c++17 that include <cstdio>
-give the same text with c++11 excluded in either order; there the C
-library types they share, such as FILE, are loaded too. ASan reports no
-errors on these apart from a leak with -J that predates this series.
-gcc 16 LTO, Rust+C ThinLTO and Debian debuginfo processed by dwz load
-nothing and do not change, and neither does the BTF of 7.2.9 x86_64 and
-arm64 ThinLTO kernels with Rust enabled.
-
-Fixes: b98565e7b17ec24d ("dwarf_loader: Honour --lang_exclude when merging LTO built CUs")
-Assisted-by: LLM
-Signed-off-by: Alan Derk <linux@alanderk.com>
----
- dwarf_loader.c                 | 95 +++++++++++++++++++++++++++++++---
- tests/lang_exclude_lto_refs.sh | 76 +++++++++++++++++++++++++++
- 2 files changed, 164 insertions(+), 7 deletions(-)
- create mode 100755 tests/lang_exclude_lto_refs.sh
-
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index fbed36e..10ab37a 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -169,6 +169,11 @@ struct alt_pu {
- 	bool	  hit;		/* referenced by main CUs? */
- };
- 
-+struct excluded_cu {
-+	Dwarf_Off start;
-+	Dwarf_Off end;
-+};
-+
- struct dwarf_cu {
- 	struct hlist_head *hash_tags;	/* tags (functions, etc.) keyed by DWARF offset */
- 	struct hlist_head *hash_types;	/* types keyed by DWARF offset */
-@@ -183,6 +188,10 @@ struct dwarf_cu {
- 	uint32_t  nr_alt_pus;
- 	uint32_t  allocated_alt_pus;
- 	bool	  processing_alt;	/* true while processing alt-file DIEs */
-+	struct excluded_cu *excluded_cus;	/* skipped by early_cu_filter when merging */
-+	uint32_t  nr_excluded_cus;
-+	Dwarf	  *dw;
-+	struct conf_load *conf;
- };
- 
- static int dwarf_cu__init(struct dwarf_cu *dcu, struct cu *cu)
-@@ -215,6 +224,8 @@ static int dwarf_cu__init(struct dwarf_cu *dcu, struct cu *cu)
- 	dcu->alt_pus = NULL;
- 	dcu->nr_alt_pus = 0;
- 	dcu->allocated_alt_pus = 0;
-+	dcu->excluded_cus = NULL;
-+	dcu->nr_excluded_cus = 0;
- 	/*
- 	 * processing_alt is per-merged-CU state, not thread-safe.
- 	 * The merged-CU path (cus__merge_and_process_cu) is
-@@ -249,6 +260,7 @@ static void dwarf_cu__delete(struct cu *cu)
- 
- 	zfree(&dcu->imported_units);
- 	zfree(&dcu->alt_pus);
-+	zfree(&dcu->excluded_cus);
- 	if (dcu->alt) {
- 		cu__free(cu, dcu->alt->hash_tags);
- 		cu__free(cu, dcu->alt->hash_types);
-@@ -475,6 +487,8 @@ static struct dwarf_tag *__dwarf_cu__find_tag_by_ref(const struct dwarf_cu *cu,
- 				    dtag->from_types_section.field, \
- 				    dtag->from_alt.field)
- 
-+static struct dwarf_tag *dwarf_cu__load_excluded_type(struct dwarf_cu *dcu, Dwarf_Off ref);
-+
- /* Same as __dwarf_cu__find_tag_by_ref but for type lookups (hash_types). */
- static struct dwarf_tag *__dwarf_cu__find_type_by_ref(struct dwarf_cu *dcu,
- 						      const Dwarf_Off ref,
-@@ -497,6 +511,8 @@ static struct dwarf_tag *__dwarf_cu__find_type_by_ref(struct dwarf_cu *dcu,
- 
- 	struct dwarf_tag *dtag = hashtags__find(dcu->hash_types, ref);
- 
-+	if (dtag == NULL)
-+		dtag = dwarf_cu__load_excluded_type(dcu, ref);
- 	if (dtag)
- 		dcu->last_type_lookup = dtag;
- 
-@@ -3693,6 +3709,62 @@ static int die__process_unit(Dwarf_Die *die, struct cu *cu, struct conf_load *co
- 	return 0;
- }
- 
-+static int dwarf_cu__add_excluded_cu(struct dwarf_cu *dcu, Dwarf_Off start, Dwarf_Off end)
-+{
-+	struct excluded_cu *cus = realloc(dcu->excluded_cus,
-+					  (dcu->nr_excluded_cus + 1) * sizeof(*cus));
-+
-+	if (cus == NULL)
-+		return -ENOMEM;
-+
-+	cus[dcu->nr_excluded_cus++] = (struct excluded_cu){ .start = start, .end = end };
-+	dcu->excluded_cus = cus;
-+	return 0;
-+}
-+
-+static bool dwarf_cu__in_excluded_cu(const struct dwarf_cu *dcu, Dwarf_Off offset)
-+{
-+	for (uint32_t i = 0; i < dcu->nr_excluded_cus; i++)
-+		if (offset >= dcu->excluded_cus[i].start && offset < dcu->excluded_cus[i].end)
-+			return true;
-+	return false;
-+}
-+
-+/*
-+ * With LTO, LLVM emits a type such as int once, in the first CU that uses it,
-+ * and other CUs refer to it with DW_FORM_ref_addr. So the CUs kept when merging
-+ * can refer to types in CUs that early_cu_filter excluded. Load those types
-+ * when they are looked up, and nothing else from the excluded CUs.
-+ */
-+static struct dwarf_tag *dwarf_cu__load_excluded_type(struct dwarf_cu *dcu, Dwarf_Off ref)
-+{
-+	struct tag *tag, die_tag = {};
-+	uint32_t id = 0;
-+	Dwarf_Die die;
-+
-+	if (!dwarf_cu__in_excluded_cu(dcu, ref) || dwarf_offdie(dcu->dw, ref, &die) == NULL)
-+		return NULL;
-+
-+	/*
-+	 * A using declaration can name a function, and processing a function
-+	 * adds its parameters to the CU's tables, so check the tag first.
-+	 */
-+	die_tag.tag = dwarf_tag(&die);
-+	if (!tag__is_tag_type(&die_tag))
-+		return NULL;
-+
-+	tag = die__process_tag(&die, dcu->cu, 1, dcu->conf);
-+	if (tag == NULL || tag == &unsupported_tag)
-+		return NULL;
-+
-+	/* As in die__process_unit(). */
-+	if (tag->tag != DW_TAG_unspecified_type)
-+		cu__add_tag(dcu->cu, tag, &id);
-+	cu__hash(dcu->cu, tag);
-+	tag__dwarf(tag)->small_id = id;
-+	return tag__dwarf(tag);
-+}
-+
- static void ftype__recode_dwarf_types(struct tag *tag, struct cu *cu);
- 
- static int namespace__recode_dwarf_types(struct tag *tag, struct cu *cu)
-@@ -4497,10 +4569,10 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct conf_load
- 
- static int cu__recode_dwarf_types_table(struct cu *cu,
- 					struct ptr_table *pt,
--					uint32_t i)
-+					uint32_t *i)
- {
--	for (; i < pt->nr_entries; ++i) {
--		struct tag *tag = pt->entries[i];
-+	for (; *i < pt->nr_entries; ++*i) {
-+		struct tag *tag = pt->entries[*i];
- 
- 		if (tag != NULL) /* void, see cu__new */
- 			if (tag__recode_dwarf_type(tag, cu))
-@@ -4512,10 +4584,15 @@ static int cu__recode_dwarf_types_table(struct cu *cu,
- 
- static int cu__recode_dwarf_types(struct cu *cu)
- {
--	if (cu__recode_dwarf_types_table(cu, &cu->types_table, 1) ||
--	    cu__recode_dwarf_types_table(cu, &cu->tags_table, 0) ||
--	    cu__recode_dwarf_types_table(cu, &cu->functions_table, 0))
--		return -1;
-+	uint32_t types = 1, tags = 0, functions = 0;
-+
-+	/* Recoding can add tags, see dwarf_cu__load_excluded_type(). */
-+	do {
-+		if (cu__recode_dwarf_types_table(cu, &cu->types_table, &types) ||
-+		    cu__recode_dwarf_types_table(cu, &cu->tags_table, &tags) ||
-+		    cu__recode_dwarf_types_table(cu, &cu->functions_table, &functions))
-+			return -1;
-+	} while (types < cu->types_table.nr_entries || tags < cu->tags_table.nr_entries);
- 	return 0;
- }
- 
-@@ -5366,6 +5443,8 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
- 
- 			dcu->cu = cu;
- 			dcu->type_unit = type_dcu;
-+			dcu->dw = dw;
-+			dcu->conf = conf;
- 			cu->priv = dcu;
- 			cu->dfops = &dwarf__ops;
- 
-@@ -5451,6 +5530,8 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
- 			};
- 
- 			filtered = conf->early_cu_filter(&unmerged_cu) == NULL;
-+			if (filtered && dwarf_cu__add_excluded_cu(dcu, off, noff))
-+				goto out_abort;
- 		}
- 
- 		/*
-diff --git a/tests/lang_exclude_lto_refs.sh b/tests/lang_exclude_lto_refs.sh
-new file mode 100755
-index 0000000..56bcb7b
---- /dev/null
-+++ b/tests/lang_exclude_lto_refs.sh
-@@ -0,0 +1,76 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Test --lang_exclude on clang LTO objects, where a kept CU refers to a type
-+# in an excluded CU: LLVM emits int once, in the first CU that uses it.
-+
-+. "$(dirname "$0")/test_lib.sh"
-+outdir=$(make_tmpdir)
-+
-+trap cleanup EXIT
-+
-+title_log "Language filtering of LTO CUs that refer to excluded CUs."
-+
-+for tool in clang clang++ ld.lld; do
-+	if ! command -v $tool > /dev/null 2>&1; then
-+		info_log "skip: $tool not available"
-+		test_skip
-+	fi
-+done
-+
-+echo 'char zero_c;' > "$outdir/zero.c"
-+
-+cat > "$outdir/first.cpp" << 'EOF'
-+struct cpp_only {
-+	int	a;
-+};
-+
-+struct cpp_only cpp_var;
-+EOF
-+
-+cat > "$outdir/second.c" << 'EOF'
-+struct c_only {
-+	int	b;
-+};
-+
-+struct c_only c_var;
-+EOF
-+
-+obj="$outdir/lto.so"
-+
-+if ! clang -flto -g -c -o "$outdir/zero.o" "$outdir/zero.c" 2>/dev/null ||
-+   ! clang++ -flto -g -c -o "$outdir/first.o" "$outdir/first.cpp" 2>/dev/null ||
-+   ! clang -flto -g -c -o "$outdir/second.o" "$outdir/second.c" 2>/dev/null ||
-+   ! clang -flto -fuse-ld=lld -shared -o "$obj" "$outdir/zero.o" \
-+	"$outdir/first.o" "$outdir/second.o" 2>/dev/null; then
-+	error_log "FAIL: compilation failed"
-+	test_fail
-+fi
-+
-+lang_exclude=c++,c++03,c++11,c++14
-+btf="$outdir/lto.btf"
-+
-+check()
-+{
-+	if [ $1 -ne 0 ]; then
-+		error_log "FAIL: $2: pahole failed"
-+		test_fail
-+	fi
-+	if echo "$3" | grep -q "struct cpp_only"; then
-+		error_log "FAIL: $2: --lang_exclude=c++ kept the C++ CU"
-+		test_fail
-+	fi
-+	if ! echo "$3" | grep -Eq "^[[:space:]]+int[[:space:]]+b;"; then
-+		error_log "FAIL: $2: c_only.b lost its type, int from the C++ CU"
-+		test_fail
-+	fi
-+}
-+
-+output=$(pahole -F dwarf --lang_exclude=$lang_exclude "$obj" 2>/dev/null)
-+check $? "DWARF" "$output"
-+
-+pahole -J --btf_encode_detached="$btf" --lang_exclude=$lang_exclude "$obj" > /dev/null 2>&1
-+output=$(pahole -F btf "$btf" 2>/dev/null)
-+check $? "BTF" "$output"
-+
-+test_pass
--- 
-2.55.0
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
