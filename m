@@ -1,557 +1,141 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3EEE2E7369
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90543A8755
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 15:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791644148; cv=none; b=IlQv2hppBQdZTWXn1MzkqM6pZkeyeygMs+c/qZpL+gUXbFE62yc0DWT9dmvWjS/WICcPK5uByLEFpC8JQhJMF5f7hsFXwJ9/cmenK36yryAiJOVbgLUBwfQCoj1uYSh9fuBYvJr1Cy7vjH/y0u2U7L1R4JU/EbyztyrAveCsymk=
+	t=1791644436; cv=none; b=R18beFzu50rko26hfPA0lml2T31V5TMbFnEOs6gVhy1/O9zBPXdVIRV/WS0bjd2bES92erLiT/Gt5cpPA+/gkiAGTCitP0RVWfiffYC9jrhsXxRDcNTJUK1PM91GSSjvE6/Bul0rnYB2drSl7mqcqAnAj1WoMEDEYhOcqINYAjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791644148; c=relaxed/simple;
-	bh=BHB3B51+rXw5/tBw/d8ym0nDhmVNyxpDg66GLey4QkM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SZ8m+Cgi8XsOg3bL68Y2L5//Y+5RjCXyVFVX3mjFztWf5doPWVvTbwYmtOUOLI1K92fJbqOOajUTlxQ9VQjNxFhBbUvO7ZunUmJX1uYWDBG/j0+HdNciPCqWLkzc2burRAAZKd5a8VpNqwYhb5mdSh2CityyjbVb2SgA8D1pPSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=i/8EBP4M; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1791644436; c=relaxed/simple;
+	bh=B0puN/FDsJY5TEQ/Kuq07Nvd+eja123QVpOLIbOD4nM=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=kaHzWTBLbV43xEzokiaqvuSrHUA3waQOA2v7VvVJLxUI1XW58GWjmQ7GchhelLy/exDf6Deos1P3NeNh/g/NYXEoebjaE2F8DDeRrQADW1FeZlMC/M/FNrDJCc9Lpw9efQtN8KmdwN9C5XHRd0g4iZUik2LgrfzYn17CmJVXCB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gJ2FqTwL; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="i/8EBP4M"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69ADKhaM1828981;
-	Sat, 10 Oct 2026 14:32:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=v3DHcKvNhtB0S49xVB6HA7tVagBKeVN5x6dBRdFWJWA=; b=i/8E
-	BP4MDoKTPrTMl6tI+V2PxWf+gfjZHx60KJmWUAMCuZ8yYEBG/RQB7ReAXnmiwCef
-	bQ+O2YoFaWeRyoKyE1CmH0zX8bFFPJMeiQFcd3R+k9G1IaFre+2D3rjQr4a6sy7k
-	uReY9vnyhYJcBbPu5iLg9RqTeNLZeCeIjv+RX8j14S+MjuOlDXWdZKNrULGYEaz6
-	XHbvnUTwZiszXlooejF/NHPuecSbew1x3UapjGJAloJltLOLVknHflEQ6xX0beqE
-	sTkOD/zwTzFRvbmTcqgsUgIIX3A7xtUKwanChlalqCbU+w4rIIivE40iEptsP2tf
-	deRdc/Zglm5nO5jPbg==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4h74uhanbv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 10 Oct 2026 14:32:04 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Sat, 10 Oct 2026 14:32:03 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>, <andrii@kernel.org>, <ast@kernel.org>
-CC: <martin.kelly@crowdstrike.com>, <slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next v6 6/7] selftests/bpf: Cover BPF program manual loading
-Date: Sat, 10 Oct 2026 10:31:55 -0400
-Message-ID: <20261010143156.379864-7-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com>
-References: <20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gJ2FqTwL"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ab8309dcbaso435848a91.1
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 08:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791644434; x=1792249234; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=XMQ+OGI/6GVu8E8/99VApxuW7P1BOocjGpZ4BHxc+9I=;
+        b=gJ2FqTwLIb47u57FaVFmwLHHON8QSVPxMnXkVSdlQ0BqsnjB2/1YmF0uWDgxRzXTtk
+         t7SPc/gfbEhszU87bVMiwTzmRG8EfcjSgT1qjP0sAxjRqQWwq0jdkWVD7oWPqCLx50nC
+         8Pbvg/H22dpoKuNGdabtb+hQTJgJEGIIsWz/bw8x72Ms3QB6HOIeKR6+HWSaQAFON2rU
+         6qHjITQ3wJm5vezLyccldQqiOe+XBnpCuBvcipKfZvG264dDCnSoiWx2YV9O8L+mZNtk
+         uwSeTjWuk13EOjBiWCSmdmJ45GUeGjHAetb3kagQO4K8tjfeTgMrKK0fyUMTqKaIMcSu
+         tR/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791644434; x=1792249234;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XMQ+OGI/6GVu8E8/99VApxuW7P1BOocjGpZ4BHxc+9I=;
+        b=OXhuhe/RMBv+IkRUVMpr8IRNFtle92qhJKFWsA33H1HvfVagh3NmuzXBvlF1BVSJLI
+         +G8/RHFNEy7JDLZR8E++OtVtnJAfVMXb++4NxO2bQlq7x7KWADmAaHhNOp0duZu75cNY
+         Nb4gCkqBgeP0A/a98ltMsLLNvn61AQLLmbXxIY0y4u/1ZX9VNKCUAF0G/GiYDekN+cDH
+         VbWIyaCEmUEFL0amiMlLed1YnrxlV4n3RQ/Fy0KlnqsMiNWX70LAVq9YF0R2eBr3vL9n
+         UFQWmiYtVHpM1SgYSG/9KtGNzoYlEPiQi0DkcGMw6zKp/ee+Hw8G/IamZLyiVzHXdKDy
+         sang==
+X-Forwarded-Encrypted: i=1; AKwUvBzvoqpgIdBrKDwklrb7nKOSIpYYD1hs0cGBOAV7n6AyEPfZVavMw7sM3Vs6ge+R2cETFs4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKLOTMyS6Xk0DPGlvuQWSSPVda5hwJ7Gvr6wLBe9vmcXzVHte0D
+	ykBDkSJFX3xvsibNGECn1h2KZdd4F5F+P2O8RwFrZyclY8VBLI8TPVld
+X-Gm-Gg: AYBFou2pQRecVL2d2qWLO5CHCXYukFNFNDI+Q5endhDX6QsoTSZAwtSEPdSmhfsLjMa
+	so6h2e2RtU+4e2BSzyvzijPCY81iZcVC940qZfIrCFX3o2A6UDo4E81c+49CqVH1lC3pFY3jUuF
+	5OB6LSUW68mcq4izxzxPfe1D+oRtLKyyUJBeCVYZNqhvnBd8m1nSzx06tBKvYRqAgS8eoqeIQ4m
+	JjVr4YgLK26MDqO4pMMCgxPY3qVqYwhHepijzhOm4zRJAU9gPo0KgbVDEaFjpraxFhprfIVaJ7b
+	E4CaUeXJPCmZGpE/5lw1tGqdcDBQJXdYTheEwVm96dlyVmoBDgBvDgcbz6FY1vmCHy92H8ttYCo
+	vN+Gl/SZ+2M+7GswPp+sRwCkIml8CzmdMPB3J9poCrBwPwRPxatC0QwTyxDr5EyQhJ2euzcfX4i
+	31ZqtrUji3oooadsBpA6pIq/x3JSCMaaIk54oE5jH6ecDC24GmdyUfxHIfY32LFUb7ys7T5B8j9
+	60kG0wV4te0XzwW5b41ZyJErbhrotvSvxmpA4eGZaYyP9UsoC2u0RHzVKAH2gDUrI+lOI98iLEe
+	WnU=
+X-Received: by 2002:a17:90b:1a8a:b0:3a0:cca0:4a8c with SMTP id 98e67ed59e1d1-3ab3a9529c8mr3001446a91.7.1791644433960;
+        Sat, 10 Oct 2026 08:00:33 -0700 (PDT)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab39533ee7sm5089610a91.4.2026.10.10.08.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Oct 2026 08:00:32 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 10 Oct 2026 15:00:31 +0000
+Message-Id: <DM18Y176CAXH.ODHX8RNC3W06@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 2/5] bpf: Keep the BPF calling convention for a
+ trampoline on a BPF function
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20261009064216.1239645-1-yonghong.song@linux.dev>
+References: <20261009064206.1238047-1-yonghong.song@linux.dev> <20261009064216.1239645-1-yonghong.song@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEwMDA1NyBTYWx0ZWRfX+7/iPGA6FGcM
- DgOudtfqZ4dJUWK3CXTNzW3AZRcKwyJWtt0p71U5gKKmE0Ue4z/NmOeYNDAQzfY1O0ahaEX1npn
- lzzXd4kTNjwJ+xfRKAPdFeyxJrAiXJjk5Sqla+YxWZjxqlRgDV1iQfMwj3nLdKL4EsP4c0OxtDd
- 4Wby2oSWj0hk3etWSrkX2dJHdCXSKNQKF68pICxe4NSYoVw/DtBbpCrlF0D2SKeXmW1C392rGlN
- rYBxL1tma8srWIHlWXyS1GpR5N6iFGNTbztzFv3jNFFwE4PmgHFoLTCsyimCtl2hxEB1lt68JMI
- JrIhY5TxzUWvaesnSbo2aAm3FLebL6kNkx6vadP9H/hOnfW3lMzu9mxjTZiWhlhVUh1ISyfoWW+
- PAeuvu21nzCmB23X0ULHd+JWvOVUx6E2fwVDEYsPDaTsOm8ZcgrsF7y2nbUAOZW0wmbOzQHb51o
- uY8+UPXWFrr/C00NsSw==
-X-Proofpoint-GUID: 7H__gMXD5uOgBT-fKzVBwNdSOH3Rbp9j
-X-Authority-Analysis: v=2.4 cv=DOcacCNb c=1 sm=1 tr=0 ts=6aca4c64 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=pl6vuDidAAAA:8
- a=b8NVzrSy56oiLsuFWlwA:9
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEwMDA1NyBTYWx0ZWRfX6dKlkaX8aaz+
- d2AKVehQJDhiE02eMCtKElAdwMI9eQgDM7jWTHu8TW/n2CzVWvYJfP2dlaXiEZpZuTTD8395kaN
- ETrmG8ogFRqHC3C60heIH3oMBF7E5ZXyVBGcCXN37LiYCas9tooN
-X-Proofpoint-ORIG-GUID: 7H__gMXD5uOgBT-fKzVBwNdSOH3Rbp9j
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11931
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0 spamscore=0
- bulkscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610100057
 
-Add manual load test covering the manual load/attach/detach/reload
-cycle, declarative MANUAL via SEC("!...") and its imperative
-override, bpf_object__prepare() alone being sufficient for manual
-load, and a deferred load of a module BTF attach target.
+On Thu, Oct 08, 2026 at 11:42 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+> Mark the model of a target program's function as bpf_tgt_prog, and have
+> bpf_jit_place_args() leave every slot of such a model where the BPF
+> convention put it. That is where both JITs pass it in a call from one
+> BPF function to another: slot N where the kernel convention passes its
+> Nth eightbyte, in a register or a stack slot. The x86-64 trampoline does
+> not use bpf_jit_place_args() yet; the next patch makes it, and this
+> keeps it right for a BPF target.
 
-Also add a signed_loader test verifying bpf_object__load() fails
-with gen loader object and a MANUAL program.
+can we drop the flag and for tgt_prog rewrite the model in
+bpf_check_attach_target() as one u64 arg per argument slot ?
+Every convention places N u64 args in slot order,
+so no arch has to know about BPF targets.
 
-Assisted-by: Claude:claude-sonnet-5
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- .../selftests/bpf/prog_tests/manual_load.c    | 336 ++++++++++++++++++
- .../selftests/bpf/prog_tests/signed_loader.c  |  32 ++
- .../selftests/bpf/progs/test_manual_load.c    |  54 +++
- 3 files changed, 422 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/manual_load.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_manual_load.c
+The flag fixes bpf_jit_place_args() only.
+calc_arg_aux() on arm64 picks reg vs stack per argument by looking
+at its first slot. In callee_stack() from patch 5 'h' is in slots 7 and 8.
+pos_of_slot[7] is x7, so the whole 'h' is counted in args_in_regs and
+save_args() emits 'str x8' for the second half. x8 is BPF R0.
+ctx[8] is garbage. For fexit it does 'ldr x8' and the first outgoing
+stack slot is never written, so callee_stack() runs with garbage
+in the upper half of 'h'. The test should fail on arm64.
+CI uses clang 21 without stack args and won't catch it.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/manual_load.c b/tools/testing/selftests/bpf/prog_tests/manual_load.c
-new file mode 100644
-index 000000000000..e5bdf7e0f04e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/manual_load.c
-@@ -0,0 +1,336 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <time.h>
-+#include "test_manual_load.skel.h"
-+
-+#define READ_SZ 456
-+
-+/*
-+ * prog4 is marked SEC("!...") in the source instead of being set
-+ * imperatively; verify that an explicit bpf_program__set_load_strategy() call
-+ * before load overrides the declarative default.
-+ */
-+static void manual_load_verify_override(void)
-+{
-+	struct test_manual_load *skel;
-+	int err;
-+
-+	skel = test_manual_load__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	err = bpf_program__set_load_strategy(skel->progs.prog4, BPF_PROG_LOAD_STRATEGY_DISABLED);
-+	if (!ASSERT_OK(err, "set_load_strategy_disabled"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(bpf_program__load_strategy(skel->progs.prog4),
-+		       BPF_PROG_LOAD_STRATEGY_DISABLED, "prog4_load_strategy_overridden"))
-+		goto cleanup;
-+
-+	err = test_manual_load__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	/*
-+	 * prog4 was overridden to DISABLED, so its load_strategy != MANUAL
-+	 * and load() must reject it
-+	 */
-+	if (!ASSERT_EQ(bpf_program__fd(skel->progs.prog4), -ENOENT, "prog4_not_loaded"))
-+		goto cleanup;
-+
-+	err = bpf_program__load(skel->progs.prog4);
-+	ASSERT_EQ(err, -EINVAL, "load_after_override");
-+
-+cleanup:
-+	test_manual_load__destroy(skel);
-+}
-+
-+/*
-+ * prog4 is MANUAL via its SEC("!...") marker; verify that
-+ * bpf_object__prepare() alone -- without ever calling bpf_object__load() --
-+ * is sufficient for bpf_program__load() to succeed, since BTF
-+ * loading, map creation, and relocation of MANUAL programs are all
-+ * completed by prepare() already.
-+ */
-+static void manual_load_verify_prepare_only(void)
-+{
-+	struct test_manual_load *skel;
-+	struct bpf_link *link = NULL;
-+	int err;
-+
-+	skel = test_manual_load__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	err = bpf_object__prepare(skel->obj);
-+	if (!ASSERT_OK(err, "bpf_object__prepare"))
-+		goto cleanup;
-+
-+	err = bpf_program__load(skel->progs.prog4);
-+	if (!ASSERT_OK(err, "load_after_prepare"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GE(bpf_program__fd(skel->progs.prog4), 0, "prog4_fd_after_prepare"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach(skel->progs.prog4);
-+	if (!ASSERT_OK_PTR(link, "attach_after_prepare"))
-+		goto cleanup;
-+
-+	usleep(1);
-+
-+	if (!ASSERT_TRUE(skel->bss->prog4_called, "prog4_called_after_prepare"))
-+		goto cleanup;
-+
-+	err = bpf_link__destroy(link);
-+	link = NULL;
-+	if (!ASSERT_OK(err, "link_destroy_after_prepare"))
-+		goto cleanup;
-+
-+	bpf_program__unload(skel->progs.prog4);
-+	ASSERT_LT(bpf_program__fd(skel->progs.prog4), 0, "prog4_fd_closed_after_unload");
-+
-+cleanup:
-+	if (link)
-+		bpf_link__destroy(link);
-+	test_manual_load__destroy(skel);
-+}
-+
-+/*
-+ * prog5 is disabled at parse time; resolve its attach target against
-+ * module BTF via bpf_program__set_attach_target() before switching it
-+ * to MANUAL and deferring its load past the bulk bpf_object__load().
-+ * Regression test for the module BTF fd/array lifetime.
-+ */
-+static void manual_load_verify_module_btf(void)
-+{
-+	struct test_manual_load *skel;
-+	struct bpf_link *link;
-+	int err;
-+
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_manual_load__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	err = bpf_program__set_attach_target(skel->progs.prog5, 0,
-+					     "bpf_testmod:bpf_testmod_test_read");
-+	if (!ASSERT_OK(err, "set_attach_target"))
-+		goto cleanup;
-+
-+	err = bpf_program__set_load_strategy(skel->progs.prog5, BPF_PROG_LOAD_STRATEGY_MANUAL);
-+	if (!ASSERT_OK(err, "set_load_strategy_manual"))
-+		goto cleanup;
-+
-+	/* keep the other autoload programs out of the way of this load */
-+	bpf_program__set_load_strategy(skel->progs.prog1, BPF_PROG_LOAD_STRATEGY_DISABLED);
-+	bpf_program__set_load_strategy(skel->progs.prog2, BPF_PROG_LOAD_STRATEGY_DISABLED);
-+	bpf_program__set_load_strategy(skel->progs.prog3, BPF_PROG_LOAD_STRATEGY_DISABLED);
-+
-+	/*
-+	 * bulk load: prog5 itself is skipped (MANUAL), but this is where
-+	 * module BTF gets torn down if not correctly deferred
-+	 */
-+	err = test_manual_load__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	/*
-+	 * deferred load must still succeed: the module BTF fd cached above
-+	 * by set_attach_target() must still be a valid, open fd here
-+	 */
-+	err = bpf_program__load(skel->progs.prog5);
-+	if (!ASSERT_OK(err, "load_module_btf"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach(skel->progs.prog5);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		goto cleanup;
-+
-+	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
-+	ASSERT_EQ(skel->bss->prog5_sz, READ_SZ, "prog5_sz");
-+
-+	bpf_link__destroy(link);
-+
-+cleanup:
-+	test_manual_load__destroy(skel);
-+}
-+
-+static void manual_load_verify_main_cycle(void)
-+{
-+	struct bpf_link *link = NULL;
-+	struct test_manual_load *skel;
-+	int err;
-+
-+	skel = test_manual_load__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	/*
-+	 * the SEC("!...") prefix alone, with no imperative call, must set
-+	 * prog4's load strategy before it is ever touched below
-+	 */
-+	if (!ASSERT_EQ(bpf_program__load_strategy(skel->progs.prog4),
-+		       BPF_PROG_LOAD_STRATEGY_MANUAL, "prog4_prefix_load_strategy"))
-+		goto cleanup;
-+
-+	/* don't load prog1 */
-+	bpf_program__set_load_strategy(skel->progs.prog1, BPF_PROG_LOAD_STRATEGY_DISABLED);
-+
-+	/* prog2 is autoload */
-+	bpf_program__set_load_strategy(skel->progs.prog2, BPF_PROG_LOAD_STRATEGY_AUTO);
-+
-+	/* prog3 is manually loaded */
-+	bpf_program__set_load_strategy(skel->progs.prog3, BPF_PROG_LOAD_STRATEGY_MANUAL);
-+
-+	err = test_manual_load__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	err = test_manual_load__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* trigger the BPF programs */
-+	usleep(1);
-+
-+	ASSERT_FALSE(skel->bss->prog1_called, "prog1_called");
-+	ASSERT_TRUE(skel->bss->prog2_called, "prog2_called");
-+	ASSERT_FALSE(skel->bss->prog3_called, "prog3_called");
-+	ASSERT_FALSE(skel->bss->prog4_called, "prog4_called");
-+
-+	/* prog1 is disabled for load */
-+	if (!ASSERT_EQ(bpf_program__fd(skel->progs.prog1), -ENOENT, "prog1_not_loaded"))
-+		goto cleanup;
-+
-+	err = bpf_program__load(skel->progs.prog1);
-+	if (!ASSERT_EQ(err, -EINVAL, "load_disabled"))
-+		goto cleanup;
-+
-+	/* prog2 is autoload */
-+	err = bpf_program__load(skel->progs.prog2);
-+	if (!ASSERT_EQ(err, -EINVAL, "load_autoload"))
-+		goto cleanup;
-+
-+	/*
-+	 * bpf_program__unload() no longer rejects based on load strategy:
-+	 * calling it on prog2 (AUTO, currently loaded and attached) performs
-+	 * a full, irreversible unload instead of returning an error
-+	 */
-+	bpf_program__unload(skel->progs.prog2);
-+	ASSERT_LT(bpf_program__fd(skel->progs.prog2), 0, "prog2_fd_closed_after_unload");
-+
-+	/* load prog3 */
-+	err = bpf_program__load(skel->progs.prog3);
-+	if (!ASSERT_OK(err, "load"))
-+		goto cleanup;
-+
-+	/* attach prog3 */
-+	link = bpf_program__attach(skel->progs.prog3);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		goto cleanup;
-+
-+	usleep(1);
-+
-+	if (!ASSERT_TRUE(skel->bss->prog3_called, "prog3_called"))
-+		goto cleanup;
-+
-+	/*
-+	 * detach prog3 explicitly: its link is kept in a local variable, not in
-+	 * skel->links, so test_manual_load__destroy() has nothing to detach
-+	 */
-+	err = bpf_link__destroy(link);
-+	link = NULL;
-+	if (!ASSERT_OK(err, "link_destroy"))
-+		goto cleanup;
-+
-+	/* reset the call flag after detach */
-+	skel->bss->prog3_called = false;
-+
-+	usleep(1);
-+
-+	ASSERT_FALSE(skel->bss->prog3_called, "prog3_called");
-+
-+	/* unload prog3; MANUAL strategy means its data is retained for reload */
-+	bpf_program__unload(skel->progs.prog3);
-+
-+	/* reload prog3 */
-+	err = bpf_program__load(skel->progs.prog3);
-+	if (!ASSERT_OK(err, "load_reload"))
-+		goto cleanup;
-+
-+	/* reattach prog3 */
-+	link = bpf_program__attach(skel->progs.prog3);
-+	if (!ASSERT_OK_PTR(link, "reattach"))
-+		goto cleanup;
-+
-+	usleep(1);
-+
-+	if (!ASSERT_TRUE(skel->bss->prog3_called, "prog3_called_reattach"))
-+		goto cleanup;
-+
-+	err = bpf_link__destroy(link);
-+	link = NULL;
-+	if (!ASSERT_OK(err, "link_destroy_reattach"))
-+		goto cleanup;
-+
-+	/* reset the call flag after detach */
-+	skel->bss->prog3_called = false;
-+
-+	usleep(1);
-+
-+	ASSERT_FALSE(skel->bss->prog3_called, "prog3_called");
-+
-+	/*
-+	 * run prog4 (declaratively marked) through the same manual
-+	 * load/attach/trigger/detach/unload cycle as prog3
-+	 */
-+	err = bpf_program__load(skel->progs.prog4);
-+	if (!ASSERT_OK(err, "prog4_load"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach(skel->progs.prog4);
-+	if (!ASSERT_OK_PTR(link, "prog4_attach"))
-+		goto cleanup;
-+
-+	usleep(1);
-+
-+	if (!ASSERT_TRUE(skel->bss->prog4_called, "prog4_called"))
-+		goto cleanup;
-+
-+	err = bpf_link__destroy(link);
-+	link = NULL;
-+	if (!ASSERT_OK(err, "prog4_link_destroy"))
-+		goto cleanup;
-+
-+	bpf_program__unload(skel->progs.prog4);
-+
-+	test_manual_load__destroy(skel);
-+	return;
-+
-+cleanup:
-+	if (link)
-+		bpf_link__destroy(link);
-+	test_manual_load__destroy(skel);
-+}
-+
-+void test_manual_load(void)
-+{
-+	if (test__start_subtest("main_cycle"))
-+		manual_load_verify_main_cycle();
-+
-+	if (test__start_subtest("verify_override"))
-+		manual_load_verify_override();
-+
-+	if (test__start_subtest("verify_prepare_only"))
-+		manual_load_verify_prepare_only();
-+
-+	if (test__start_subtest("verify_module_btf"))
-+		manual_load_verify_module_btf();
-+}
-+
-diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-index a0f93756e717..0fbaa2d60aaa 100644
---- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-+++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-@@ -2168,6 +2168,37 @@ static void signed_module_kfunc_rejected(void)
- 	run_setup("cleanup", dir);
- }
- 
-+/*
-+ * gen_loader only records programs loaded by bpf_object__load_progs(), which
-+ * skips MANUAL ones, so an object with a MANUAL program must fail to load
-+ * instead of generating a skeleton whose prog_fd slots no longer line up
-+ * with the object's programs
-+ */
-+static void manual_prog_rejected(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gopts, .gen_hash = true);
-+	struct test_signed_loader *skel;
-+	int err;
-+
-+	skel = test_signed_loader__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	err = bpf_program__set_load_strategy(skel->progs.probe, BPF_PROG_LOAD_STRATEGY_MANUAL);
-+	if (!ASSERT_OK(err, "set_load_strategy_manual"))
-+		goto cleanup;
-+
-+	err = bpf_object__gen_loader(skel->obj, &gopts);
-+	if (!ASSERT_OK(err, "gen_loader"))
-+		goto cleanup;
-+
-+	err = bpf_object__load(skel->obj);
-+	ASSERT_EQ(err, -EOPNOTSUPP, "load_rejected");
-+
-+cleanup:
-+	test_signed_loader__destroy(skel);
-+}
-+
- enum subtest_boot {
- 	BOOT_ANY,
- 	BOOT_SEALED,
-@@ -2211,6 +2242,7 @@ static const struct {
- 	{ "signed_map_by_fd_rejected", signed_map_by_fd_rejected, BOOT_SEALED },
- 	{ "signed_sparse_fd_array_rejected", signed_sparse_fd_array_rejected, BOOT_SEALED },
- 	{ "bpf_keyring_provisioned", bpf_keyring_provisioned, BOOT_UNSEALED },
-+	{ "manual_prog_rejected", manual_prog_rejected, BOOT_ANY },
- };
- 
- void test_signed_loader(void)
-diff --git a/tools/testing/selftests/bpf/progs/test_manual_load.c b/tools/testing/selftests/bpf/progs/test_manual_load.c
-new file mode 100644
-index 000000000000..6cdbfc21ca37
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_manual_load.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+bool prog1_called = false;
-+bool prog2_called = false;
-+bool prog3_called = false;
-+bool prog4_called = false;
-+__u32 prog5_sz = 0;
-+
-+SEC("raw_tp/sys_enter")
-+int prog1(const void *ctx)
-+{
-+	prog1_called = true;
-+	return 0;
-+}
-+
-+SEC("raw_tp/sys_enter")
-+int prog2(const void *ctx)
-+{
-+	prog2_called = true;
-+	return 0;
-+}
-+
-+SEC("raw_tp/sys_enter")
-+int prog3(const void *ctx)
-+{
-+	prog3_called = true;
-+	return 0;
-+}
-+
-+SEC("!raw_tp/sys_enter")
-+int prog4(const void *ctx)
-+{
-+	prog4_called = true;
-+	return 0;
-+}
-+
-+/*
-+ * disabled at parse time; its attach target is resolved against module
-+ * BTF via bpf_program__set_attach_target() before it is switched to
-+ * MANUAL and loaded
-+ */
-+SEC("?fentry")
-+int BPF_PROG(prog5, struct file *file, struct kobject *kobj,
-+	     const struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
-+{
-+	prog5_sz = len;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
+s390 trampoline doesn't use bpf_jit_place_args().
+s390 ABI passes 16 byte arg by reference, so it does:
+  mvc bpf_arg_off(16,%r15),0(%arg)
+For callee_odd() that is a load from address 8.
+It also saves and restores nr_args == 3 registers,
+while callee_odd() takes 4.
 
+With the flat model arm64, s390 and the r9/stack split on x86
+are fixed without touching arch code.
+
+> @@ -21620,6 +21620,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  		ret = btf_distill_func_proto(log, btf, t, tname, &tgt_info->fmodel);
+>  		if (ret < 0)
+>  			return ret;
+> +		tgt_info->fmodel.bpf_tgt_prog = !!tgt_prog;
+
+There is one more issue with BPF targets. Few lines above:
+	if (tgt_prog && conservative)
+		t = NULL;
+and the model is 5 u64.
+A static function with 6+ args where one of them is a plain pointer
+is 'unreliable', since btf_prepare_func_args() returns -EINVAL,
+but it still takes stack args.
+The trampoline saves and restores 5 registers. After fentry prog
+r9 on x86 and x5-x7 on arm64 have whatever __bpf_prog_exit() left there.
+With fexit the stack slots are not copied either.
+The function continues with garbage in the args that the verifier
+checked as pointers, I think.
+Reject such attach ?
+
+Pls tell your agent to test on arm64 too.
+
+pw-bot: cr
