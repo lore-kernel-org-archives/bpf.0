@@ -1,82 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F267C449B01;
-	Sat, 10 Oct 2026 15:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0FA395AD3
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 15:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791645009; cv=none; b=DpADJMEcpMMAU3O9pVNG+RQroKonpoJTi0yorJ1ErO9SBNVa6J3pLJ388NpX1KTDc05eVP9LRxjYoCS3BHnmazTD/G5MWPED6b81jPonMC3V/rRiyzQyq5cti/BlWc2STaFXtuSVC4q3QxUrxGbg430e0ks/fiWL5DpY5qlOt90=
+	t=1791645313; cv=none; b=PP1kLwelnAvoHxr1oJPO20OCcZxcRslleT81BmTaRBuqxH0fzFiP7WLT/wOIydJcr0x1g65ozMLusN0M58MwaX1nIaUXUDDi3j2yczgf2t5VUaBUnLPn44wxkKkEomwTOwmbHRWvsESvKK2vI9Xxuh0dWV9c1Y7cuiQOLHp5XSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791645009; c=relaxed/simple;
-	bh=uDLPYu4jDpSnWThkhJB7UKaGkDwOWKS7FZMSGvt8Dq0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PrANriIjxAlgezO9yg9cCGC6ULt3uaF5xam8KuxTruE8imQinogqFG8VpKbs+pIn+vIi6t5xikXC0GQKSwe9ynfImPc1igfunDoJ954K5pqEN7YwI9arTq3gyqGrDtTBLEYdSskw8m+cXXz/omY57MLUXhwezNn7o576ceurzGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/2X/yKl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791645313; c=relaxed/simple;
+	bh=gbtaKOrX7mCRAugDbyYx553EgyuRZhqyQOnUZJgo3Rk=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:MIME-Version; b=NsCapAmb+S2p2DimJL52FThXm369GmdjR2BM7IX/YHOSQ8QZVe2qZzFHuTaizzaa+0UkP27QjNxS7/ZaqDvKFgZoA//uJvuKv43cs8bz6liYrvFe79oYqopOTkg1jRl1nQu780R/aHlIwND43Y9tnHhStGdukmS3KARCN6mgL5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HKRlbSXF; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/2X/yKl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5FD1F000FF;
-	Sat, 10 Oct 2026 15:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791645008;
-	bh=iek8VipYwbptAyUrMEWu1ntqexeiiQemt/HWdWWCSec=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=N/2X/yKlCQBzE0039rrT3agz6Cj3CWMvqOlT9HQxvHkEp+tSVbI1b/fY2V+FtghAG
-	 ySXod3OSWF7zgEoXh6jzTD0OcLawU3mDe7bLf9trSFpvMo4xt1dU7Tm8YEZrp5vahO
-	 XVr3ayaDQ2T/5wBj7SfHBhYZACtFpvLyNwM3lipHzove8WnJdpc+tl2OovWzSGB6qN
-	 wni/4FhxDYqyTxKZ0v1PNBsoSxgmB8RUgt+ODPenVGYvalhSVEYfrHKPLmvJ0HPh4/
-	 ruDE5h6siC/tIAwOTfdAFaXJr5LLedFpKX6ly5xOycPaDiiF5AyC0VlORNGLH0oWRP
-	 PdjHiphnZFwTA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 772EB380DBDA;
-	Sat, 10 Oct 2026 15:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HKRlbSXF"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-887a58523e6so138782b3a.3
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 08:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791645312; x=1792250112; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PA1SeCKCJVM/ga+przkjEyBFpbrA00Lf9TqlwG/r05o=;
+        b=HKRlbSXFsXw1WfiqvgpGwkFOZDYFHBzP6cSJXaBzJ+niWp691gizuJw+/ovrnlmSii
+         iMIAgNQ5Nc3+xlUfIQlgw6LRFbv+mwHJg7Dk00hePG4Jw6pfxcO8peojRRiYgXIatYJK
+         emcSC6JVcOD4pNC41j0Q0CQBDoI1ffKj/uanRPVDBRwZKiGvuNEoneV0NM8+DxrjozFt
+         Um2MxtzvmOVLHKoB7ZxkipsfKmkAyvSSg+a5qLI0Sji1jLlCQvW0UfLoS6JNt/uSV/NE
+         t3aUDQviHfh9zsCLZB7G44tTpzeFk0UT7c2a5qqVr8rzL6RHOYlfBcSwKEQS7fWbjrDH
+         SsXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791645312; x=1792250112;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PA1SeCKCJVM/ga+przkjEyBFpbrA00Lf9TqlwG/r05o=;
+        b=edYPHCRJHnQyjE88zIxJX/kuPj7TqXrq7qMnO6PHeFNisz2a3l8cwQkeXNVtCsspel
+         y3F7i4CNE57QMI5Rae7Ir7nJOPxy7U/7sF9AlpAGAtQcpIJSKHT2PS/ivBtnwi40Ex3g
+         63/GGM/92jqLMQJq/MzrkBtcw2z3MkfqLaPACIH8sRA7razN5np3kfSPWdVmmjOaQO8W
+         G/6QVXB3Z9+3aMZ9AW9yi+cvuPtis30HpRaxY8Fa89SxeP4odKmFypobP/itivDlWV5T
+         mX3fUNSrn6CyAv1TwhTaLJeeTBmE2u/aeg1RHk2GGMMPG/oD0upGeSadTZ61ZcUohJpw
+         4Nyw==
+X-Forwarded-Encrypted: i=1; AKwUvBz4XV+wI8Jls487IN4/yAd4TVdfMhkOYrq6CHUYjmQrW2duKb156vKIKEeHRrxpb2H7F7A=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKeRBlce3D/A6ReFaQYzY2aDHMm62XjumYBhovo3Jd8HHVjzcol
+	Hk6LOa1xEYRecqchHbew4vOU3Orco3wDcsdwB+Af/DFfy/wLkfu5o86otQ8nS3/qcxY=
+X-Gm-Gg: AYBFou2FjRGRIgr7ZcRDjEGkQbW7ceNx/jHaRzhQ5lDNWMyr9UlVV7y3vsb7c4Qs1jC
+	1jZLGjmX2m8KCZ9Wu3TcLn2fcQ1AMJy+WMrlhSPq9JR0xEWramSIArwmTQddCYr+BaSnKDLBSfg
+	uWTwbWgHWF7G3GGc7oqGOxdAs9/M2ArPDlTlSGqU1I2S6bJwV92KETbmlK51EN3AD1xzg5tWiso
+	PmqUSJkIVdoKsvgVTwUFh/1CmRPr9iA5aeaZns4zLqvzPm0l5Cm1RHQCMaqNyRnmn2Z4+MPTE9j
+	faSflLYSFQfMIfF5iE/Q0VrXm5dQ3gDBHcpOVLElUyIHttaBLR+CKCQmzeF6qhTQ/ZPykPRcwsq
+	I4gOEZkbnZW5UvwlGI0eD5Wz94Xnto7k6veIjrGvbVMhRzPTqppAAJ7dMHULFB8S3cGRTEcdEit
+	rAXXABrlHA92GWeoJOpwRd9xb8m0yU3kkmFHayfbcAgV2Coyyee8qajoHoiUpmkgsAU9rnlcSoe
+	15a85wztU0frsdDY65eNbN8pO9zAXQTTUIVk7rgw7pFbWtxklpI6glVf3WGHD72n+A3bx94oACP
+	zXc=
+X-Received: by 2002:a05:6a20:4393:b0:3bf:63af:855 with SMTP id adf61e73a8af0-3e16bb0935bmr4508143637.1.1791645311805;
+        Sat, 10 Oct 2026 08:15:11 -0700 (PDT)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd3d9e42f9bsm2265320a12.21.2026.10.10.08.15.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Oct 2026 08:15:11 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 10 Oct 2026 15:15:11 +0000
+Message-Id: <DM19999Y1AUY.1DBGK5HO3G8QR@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next v10 00/24] bpf: Run exception cleanup landing
+ pads when bpf_unwind() unwinds
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20261009041447.17092-1-yonghong.song@linux.dev>
+References: <20261009041447.17092-1-yonghong.song@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3] bpf,
- arm64: Fix racy plt target update in bpf_arch_text_poke()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179164500701.1749710.14140149592072860929.git-patchwork-notify@kernel.org>
-Date: Sat, 10 Oct 2026 15:10:07 +0000
-References: <20261009173802.1248441-1-thepacketgeek@gmail.com>
-In-Reply-To: <20261009173802.1248441-1-thepacketgeek@gmail.com>
-To: Matthew Wood <thepacketgeek@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, puranjay@kernel.org, xukuohai@huaweicloud.com,
- catalin.marinas@arm.com, will@kernel.org, leitao@debian.org,
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
 
-Hello:
+# CARRIED OVER from the unsent v9 draft (nothing was sent on v9, v10 has only bot fixes). Delete this line, or the file if you dropped it on purpose.
+On Thu, Oct 08, 2026 at 09:14 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>   - A subprog an unwind passes through must have an exit.
+>   - Until the Rust toolchain supports BPF exception handling, the selftests
+>     write their tables by hand in inline asm.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+rustc can do it already.
+For example,
+take RUSTC_BPF from selftests/bpf/Makefile.buildvars, replace
+panic=abort with panic=unwind, build core, then --emit=llvm-bc and
+clang -c like Makefile.skel does for progs/*.rs.
 
-On Fri,  9 Oct 2026 10:37:59 -0700 you wrote:
-> When a long-jump trampoline is attached to or detached from a bpf prog,
-> bpf_arch_text_poke() updates the plt target at the end of the prog by
-> temporarily making the page writable:
-> 
-> 	set_memory_rw(page);
-> 	WRITE_ONCE(plt->target, plt_target);
-> 	set_memory_ro(page);
-> 
-> [...]
+  #[inline(never)]
+  fn fail() -> ! { unsafe { bpf_unwind() }; loop {} }
 
-Here is the summary with links:
-  - [bpf,v3] bpf, arm64: Fix racy plt target update in bpf_arch_text_poke()
-    https://git.kernel.org/bpf/bpf-next/c/6335e6719fd3
+  #[inline(never)]
+  fn check(i: u32) -> u32 { if i > 7 { fail() } i }
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  pub extern "C-unwind" fn prog(ctx: *const u32) -> u32 {
+      let _g = RcuReadGuard::new();
+      check(unsafe { *ctx })
+  }
 
+The object has .bpf_cleanup with the right record and this code:
 
+  fail:
+      call bpf_unwind
+  L0: goto L0
+  check:
+      if w1 > 0x7 goto L0
+      w0 = w1
+      exit
+  L0: call fail
+  prog:
+      r6 = r1
+      call bpf_rcu_read_lock
+      w6 = *(u32 *)(r6 + 0x0)
+      w1 = w6
+      call check
+      call bpf_rcu_read_unlock
+      w0 = w6
+      exit
+      r6 = r0
+      call bpf_rcu_read_unlock
+      r1 = r6
+      call _Unwind_Resume
+
+They won't pass the verifier,
+because
+_Unwind_Resume() and fail() don't return, so LLVM emits nothing after
+the call. check_subprogs() refuses prog() and check() with
+"last insn is not an exit or jmp".
+rust-bpf hack adds 'exit' and replaces call with 'call bpf_unwind_resume'.
+We need to get rid of rust-bpf IR rewrite,
+so let's try to do so now?
+'call _Unwind_Resume' can be replaced by LLVM, by libbpf, or by the verifier
+with an exit. I feel that the verifier is right place to do it,
+but open to suggestions.
+
+but since rustc doesn't emit debug info for extern fn, so there is no BTF
+for _Unwind_Resume, so libbpf may be a better place?
+Not sure, let's discuss.
+
+pw-bot: cr
