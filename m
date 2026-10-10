@@ -1,78 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07BA4A9D49;
-	Sat, 10 Oct 2026 14:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE0F36728F;
+	Sat, 10 Oct 2026 14:42:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791643169; cv=none; b=p73SJv9hMfae8pckibIbjLnJBaDlHMKMcHANuk7sZ9rMzyIvPHp23v9n+i5PEZldW+OVea7Q3o7o2o/xPJJUyH95u3Ra66f4z+VOw3zMEJ3VgslaKC+AVUc5DhMOH3Vz6pvgOgVQhx9UlJWw4ZqVValHpIgbJbfBw59ry7DbDb8=
+	t=1791643323; cv=none; b=ij9ehX2vL6kThe1tuCu7YF1dfjuPC9t4AbbQDn/+mYvln+YJm3+AH3CqO7jldgljSLcFbXVBaCuFYdeDXliE0nPKMoVfkdbYQBQmfZ2q+IA+UZkXS+FgbxCOMeUn4t7Ib1+y6bDifSMrEBA/gMxGJsgQms4r6PFiI6aW2TJUiaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791643169; c=relaxed/simple;
-	bh=uVUA1XsbirmFtp1MWpJ9obl2KTmxX7wj88ccSzNbqcQ=;
+	s=arc-20240116; t=1791643323; c=relaxed/simple;
+	bh=8Kb5Hbd2jVSIe6A02YK5HMoqmcs8c3JEcaRqxXceN1o=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=hvKVhknx1LoiNE/1yKPw5pKbjzJnH9eKQ1uVVqzV1oFb9MkHjF9qy8JtvsDf+liPAXOTZ9q+Tshsp/s5yaw1XbZC3Kv8xECS+6BEAfziPsNnwtMR/aNfdEMkvuiWbGVrN3F5rXYlNvIKZQ1xMFwkS+CI3tPORBZP2CFL11wY8gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQg2Hch5; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=RwD/u+y/ll3Qi6vQq25Jh5BEDzDylHSgrw6yBZ0bXB3l2u3S6VrRl25J4EywmAnNuZW1x40DibdySgTWs0XhMf70B+Hf8E2CkwlC6ZPn44/oJe5LzHs39oGyl4Gn7ufReWW2K70Xx7ZI1/t/lIdndQjGC4hwc33V1krPXgLWVGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FONNrp6+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQg2Hch5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781931F000FF;
-	Sat, 10 Oct 2026 14:39:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FONNrp6+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148B21F000FF;
+	Sat, 10 Oct 2026 14:42:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791643164;
-	bh=uVUA1XsbirmFtp1MWpJ9obl2KTmxX7wj88ccSzNbqcQ=;
+	s=k20260515; t=1791643322;
+	bh=8Kb5Hbd2jVSIe6A02YK5HMoqmcs8c3JEcaRqxXceN1o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CQg2Hch5cRjrDmBKfGClW9KaHXrt0fSMp4uyIrpKd6ORjb+4LderCp7sBaKPqElTi
-	 yTls3JfZ9V0eCNura4iwXBSAYQAphCzaaNDAARCTpk8rqPxb/tLUVSvRIoEZTYwqZb
-	 4IbyiIRlkriG4jEx6OB337d2kRvokpUsrL06g1UYg+U2oF6kRPsdTNU8YHzDaVWhVu
-	 H0x7+OMpf20k/+YJ+iFwfhNujcfxa90ee6o7djI7ZGIppX2ZYNF92WyRhmjTGpOe7Z
-	 NK6i1LcleEDlUdAThJIHZHuKnEddujz65Pw8Ki96kpResz/H4kDgk8M6BWGV0ht8Fu
-	 1w2k728sN+FOg==
-Message-ID: <sashiko-outbox-166654@kernel.org>
+	b=FONNrp6+az8+MhXKAm3cK1PHh/q4FPMjL8rFVsVmR0FQ80e0r0lK5AytALzPH19Qb
+	 q0ymoofHnKcuZnRomF+SAJgGu6fTVZ6b5WhLJnGp8c66/0TWbNx9u6s6zAAcIaKcHc
+	 i3Ps1RCOjxzSOAdQ4/Nf9r3mw++sYnjOOJjT4QP/NdvSL2pItcOjeHpcVEeL1l9rXU
+	 ffrUkNlQ1PcmFN0FXxj23vy09N+PbC9SaViFHUbV2tk+NxhBa4ZcRmrz57US0xfCqc
+	 ANoBR4oHV2thAOE8Ci/kkwN9n+YllDfkanb0+dvLWcVYvSKv4PpU8N6iD287dJa1lu
+	 5ZSTmXcLtybOQ==
+Message-ID: <sashiko-outbox-166656@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 4/5] vsock/virtio: coalesce RX write-space
- notifications in lock batches
+Subject: Re: [PATCH net-next v6 08/13] net: mana: swap queue sets in
+ mana_xdp_set
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jia Jia" <physicalmtea@gmail.com>
-Cc: virtualization@lists.linux.dev, "Eugenio Perez" <eperezma@redhat.com>, bpf@vger.kernel.org, "Michael
- S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-In-Reply-To: <20261010142247.99223-5-physicalmtea@gmail.com>
-References: <20261010142247.99223-1-physicalmtea@gmail.com>
- <20261010142247.99223-5-physicalmtea@gmail.com>
+To: "Wei Hu" <weh@linux.microsoft.com>
+Cc: linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <3d43962ea65efad5e6bc8652f887b1b21dec4178.1790795005.git.weh@linux.microsoft.com>
+References: <cover.1790795005.git.weh@linux.microsoft.com>
+ <3d43962ea65efad5e6bc8652f887b1b21dec4178.1790795005.git.weh@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 10 Oct 2026 14:39:24 +0000
+Date: Sat, 10 Oct 2026 14:42:01 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-> Each received packet updates peer credit and calls sk_write_space() when
-> send space is available. A writer cannot use the newly advertised credit
-> until the socket lock is released, so repeated callbacks within one lock
-> batch cannot let it make progress sooner.
+> From: Long Li <longli@microsoft.com>
 >=20
-> For the callback installed by sock_init_data(), record one pending
-> write-space notification and deliver it through the saved default callback
-> before release_sock(). If the callback has been replaced by batch finish,
-> invoke the replacement as well. This keeps the native writer wakeup from
-> being lost across a sockmap callback change while still notifying sockmap.
+> Carry the XDP program with the queue set and install its per-queue
+> references before redirecting RSS. This keeps the RX buffer layout and
+> program together during publication and rollback.
 >=20
-> Save the initial sock_def_write_space() callback when the AF_VSOCK socket
-> is created because it is not visible to virtio_transport_common when built
-> as a module. The fast path uses READ_ONCE() and adds no callback lock.
+> Do not replace the live program during allocation. This also avoids the
+> pre-existing failed-preallocation stale-pointer bug; its standalone net
+> fix is linked below.
 >=20
-> Set the batch socket before processing its first packet so a batch ending
-> on that packet cannot lose the notification.
+> This full rebuild temporarily keeps both sets of SQ/RQ/CQ objects,
+> RX buffers and page pools live. The port-owned EQ pool is shared,
+> not doubled. Device resource limits may reject this temporary peak;
+> allocation failure preserves the live queues and configuration.
 >=20
-> Packets outside the eligible STREAM/RW batch path retain per-packet
-> notification behavior. The 64-packet and 64K limits cap the packets whose
-> notifications can be coalesced.
+> Reserve RAW-QP admission under vport_mutex for the entire live
+> replacement, including unpublished queues, fail-close and scratch
+> cleanup. Preserve validation, no-op and down-port behavior.
 >=20
-> Signed-off-by: Jia Jia <physicalmtea@gmail.com>
+> Link: https://lore.kernel.org/all/20260904202640.3900685-1-longli@microso=
+ft.com/
+>=20
+> Signed-off-by: Long Li <longli@microsoft.com>
+> Signed-off-by: Wei Hu <weh@microsoft.com>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261010142247.9922=
-3-1-physicalmtea@gmail.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1790795005.gi=
+t.weh@linux.microsoft.com?part=3D8
 
