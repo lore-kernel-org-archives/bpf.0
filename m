@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279CC26ED3E;
-	Sat, 10 Oct 2026 14:46:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27AFB36E467;
+	Sat, 10 Oct 2026 14:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791643596; cv=none; b=unWWST3T+ZqXqgV1b0VvsbSqqHD50xM/AcJQoIYZ1UoYtVJHT82vVUunkHFCh5RmJayh0Q9TMdVhJzUk1TFEa7fV1coWvZM7LSo43RtBbwij+/A2I662R8IFGna1AOFSq3VCuP/ud158aPr9RCgQTYosWDaRlX0GEteXrmvcJ00=
+	t=1791643596; cv=none; b=Mu9GODmwzPYtZRu3KikP140Hel2PBEE/YlBqaRC1m0L4ZCtJ5N9XmYIbZq3RbInKoxwylfociXJzntiyHB5Ht0gs3rwFzmkBwh+mtlJDjrIuGeC0Mp2sL8OQroib0TGkPX3dilOTt4Yv5EqG5qEUai07g03bALwQkYJ+Gzw0ZcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791643596; c=relaxed/simple;
-	bh=O9tReunjV/TkBzh0/rwM2bzREpHWpmAvIoVIbQKSr2E=;
+	bh=6Pnkji9+C3LHn1Eo3bFDJpcSdQKou14K0FEREsN4rXk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZkjcgzhtkChJn3Qv1qYxXpg7SAzMVvqOm4+UrbQ80vyUbRACaMa7PqRf9p12iD8ESdeJstfjjktsArnCWFRoqUQZlGPWIC3RO2JADcYpBwRhvrwJvEtuBxBlGdBijYP7N9otSqjyJ9M4FmnxtRB8X7lBTb3BEMaNEVpVAe1wJzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jShDoeX+; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=HYELM9obrGh6CGflKPD7DJLb3wDbcUkUb3e3rp+2EU2Kgf5/GOkmQIsvw9Atj1UpTLlJwhmVC7gOaXdbrcolfYxHGjxY9tkeIkCVVTjUixqSdz6Zuu2MRcgFfL3hVd83YcK2s6Kr7Ga4FgtQNxe5VTodepnMoRrKlKvaaxaNGvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=baT6hvbX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jShDoeX+"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C1EE6C2BCB9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="baT6hvbX"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D410FC2BCFB;
 	Sat, 10 Oct 2026 14:46:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1791643595;
-	bh=O9tReunjV/TkBzh0/rwM2bzREpHWpmAvIoVIbQKSr2E=;
+	bh=6Pnkji9+C3LHn1Eo3bFDJpcSdQKou14K0FEREsN4rXk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=jShDoeX+4Ae0JXGD5cjFUhXpBZnpbUXOU9KdjKLbSpm95KN6+ct55yXosTdo2cFw+
-	 ELGts7nP43D/Izzv9HAMtMmJJxEvLd86MqhzblPv/QBlnMWgKoaEjgImE3cmN3YH+v
-	 3w4IHnvzzaVzgQpqWZyjK9tQ7V82ia6CQ9S62nx7jiijycBgIhrXSYqgR9eXE2mJIT
-	 piDZKZE+C3p8atQr96qF+bVJah9vPdbMiAFywy/TWcx6sKhFvjI/I4hpfrlKZ9rw6L
-	 ZxyUsBma+6i05CMTq8JsFbxBr0mXnD4HhOzMLRkG0IJZ4MZO2yXJmXdUpn/VU0WOxE
-	 /OEKIHlSYgf2w==
+	b=baT6hvbXEyek5oPNh7FlCSnc1B6LQgbZpogf2uTqOdRsC2Z9JYo5FICL90yBjpoSb
+	 8wf1WTIqX4QDWo4bulVPqlihiqE04jJfdukaxE1g25WPCGVwAkfy+kr0enLdPGY+6s
+	 6Ok1Rvjx6P8SKk4ngbrspak+pGBHM6L/PpDDWkm0nKruRYi8otbN0BgfCCig1N8Pc7
+	 qHgkB7KeDjryz7ghlmfN1tR1qkCHm1rEC+kB5pi4nUxQGzMZpZmXhqJVS+lClVdlZf
+	 84I0GtD42H2SdklLr2PXuywmFTDPealmTXslOscCtv2wPIXcy58+Xj5H2+oHpuhzlz
+	 8lIFas2VGYiRQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4D44CA9EBE;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B676ECA9EC7;
 	Sat, 10 Oct 2026 14:46:35 +0000 (UTC)
 From: Quanye Yang via B4 Relay <devnull+quanyeyang.proton.me@kernel.org>
-Date: Sat, 10 Oct 2026 07:46:28 -0700
-Subject: [PATCH net-next v3 1/2] tls: annotate lockless access to
+Date: Sat, 10 Oct 2026 07:46:29 -0700
+Subject: [PATCH net-next v3 2/2] net: annotate lockless writes to
  sk->sk_err
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261010-tls-fix-sk-kcsan-err-v3-1-e28aadeb31ad@proton.me>
+Message-Id: <20261010-tls-fix-sk-kcsan-err-v3-2-e28aadeb31ad@proton.me>
 References: <20261010-tls-fix-sk-kcsan-err-v3-0-e28aadeb31ad@proton.me>
 In-Reply-To: <20261010-tls-fix-sk-kcsan-err-v3-0-e28aadeb31ad@proton.me>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -53,11 +53,11 @@ To: John Fastabend <john.fastabend@gmail.com>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  bpf@vger.kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791643590; l=4423;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791643590; l=2452;
  i=quanyeyang@proton.me; s=20260801; h=from:subject:message-id;
- bh=oyeMQXlYZ5OEpzoZY0Ba7hIry6yUmLmTMWGSVMly/Fw=;
- b=TMsLvdjn/QacxSqsZGsbKF1rS8ehvGN72WoxHJir1whjEPigAhCuu6YlxACj8x4Oqi7fGocpY
- 0RLG+rdbfU6BxVG7YBW0U6+djPd/4r3w7Fufbao22bgzjTBh5yOXFgd
+ bh=xhyr/APrQP/DN3UvFtImVGyApw1ErZ/6ymmTvs2y5mo=;
+ b=RXyTgZ1n6sPdCnsPGG9dt2sqeO9ID7CGpiC7zAyDMpjM3ZcKsUaM8ufrvG8o0oqZGlcBx5syE
+ OrIT4y1rpbkAJBdIdiaVYKrBcjEp4J8T3b3TrfXliWSg9PmO+FXXHvE
 X-Developer-Key: i=quanyeyang@proton.me; a=ed25519;
  pk=9L9FrcvzMgxPaBRU6XV0EnqTgjDqVO596rQKSZ9qZoY=
 X-Endpoint-Received: by B4 Relay for quanyeyang@proton.me/20260801 with
@@ -67,149 +67,75 @@ Reply-To: quanyeyang@proton.me
 
 From: Quanye Yang <quanyeyang@proton.me>
 
-kTLS sits on the same struct sock as TCP. do_recvmmsg() and
-getsockopt(SO_ERROR) still call sock_error() without the socket lock
-and clear sk_err with xchg().
+do_recvmmsg() and getsockopt(SO_ERROR) clear sk_err with xchg()
+without the socket lock. TCP, MPTCP and kTLS already peek the same
+field with READ_ONCE() or consume it via sock_error().
 
-tls_rx_rec_wait() already peeks when data has been copied and consumes
-otherwise, but the outer if (sk_err) is an unmarked load. On the
-no-data path that check-then-sock_error() window can return 0 after
-another thread consumes the error. Call sock_error() once and only
-return when it is non-zero; keep READ_ONCE() on the peek path.
+sock_dequeue_err_skb() still uses plain stores. tcp_recvmsg() can
+call it via MSG_ERRQUEUE before lock_sock(), so those writes race
+with the annotated readers and with sock_error(). The same unmarked
+stores exist in strp_abort_strp() and sk_psock_report_error(), which
+run on the TCP/TLS socket.
 
-tls_sw_sendmsg_locked(), tls_push_data(), bpf_exec_tx_verdict() and
-tls_encrypt_done() read sk_err more than once. Fold those unmarked loads
-into one READ_ONCE() and use that value as the returned errno. The field is
-still not consumed there.
+Annotate those writers with WRITE_ONCE(). No extra ordering is
+needed; this does not change who wins when ICMP error-queue entries
+overwrite sk_err.
 
 Link: https://lore.kernel.org/netdev/3d9d442f-f168-43da-87b0-010ad5a78365@redhat.com/
 Signed-off-by: Quanye Yang <quanyeyang@proton.me>
+Reviewed-by: Eric Dumazet <edumazet@kernel.org>
 ---
- net/tls/tls_device.c |  5 +++--
- net/tls/tls_sw.c     | 54 ++++++++++++++++++++++++++++++++++------------------
- 2 files changed, 39 insertions(+), 20 deletions(-)
+ include/linux/skmsg.h     | 2 +-
+ net/core/skbuff.c         | 5 +++--
+ net/strparser/strparser.c | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index f11d0528fc43..03ce83a9d4e9 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -444,8 +444,9 @@ static int tls_push_data(struct sock *sk,
- 	if ((flags & (MSG_MORE | MSG_EOR)) == (MSG_MORE | MSG_EOR))
- 		return -EINVAL;
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index d5e35f24738d..52ce45f25f5a 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -429,7 +429,7 @@ static inline void sk_psock_report_error(struct sk_psock *psock, int err)
+ {
+ 	struct sock *sk = psock->sk;
  
--	if (unlikely(sk->sk_err))
--		return -sk->sk_err;
-+	rc = -READ_ONCE(sk->sk_err);
-+	if (unlikely(rc))
-+		return rc;
- 
- 	flags |= MSG_SENDPAGE_DECRYPTED;
- 	tls_push_record_flags = flags | MSG_MORE;
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 312e51270f29..a2be1283ca93 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -473,6 +473,7 @@ static void tls_encrypt_done(void *data, int err)
- 	struct scatterlist *sge;
- 	struct sk_msg *msg_en;
- 	struct sock *sk;
-+	int skerr;
- 
- 	if (err == -EINPROGRESS) /* see the comment in tls_decrypt_done() */
- 		return;
-@@ -488,13 +489,15 @@ static void tls_encrypt_done(void *data, int err)
- 	sge->offset -= prot->prepend_size;
- 	sge->length += prot->prepend_size;
- 
-+	skerr = READ_ONCE(sk->sk_err);
-+
- 	/* Check if error is previously set on socket */
--	if (err || sk->sk_err) {
-+	if (err || skerr) {
- 		rec = NULL;
- 
- 		/* If err is already set on socket, return the same code */
--		if (sk->sk_err) {
--			ctx->async_wait.err = -sk->sk_err;
-+		if (skerr) {
-+			ctx->async_wait.err = -skerr;
- 		} else {
- 			ctx->async_wait.err = err;
- 			tls_err_abort(sk, err);
-@@ -704,10 +707,14 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
- 	int err;
- 
- 	err = tls_push_record(sk, flags, record_type);
--	if (err && err != -EINPROGRESS && sk->sk_err == EBADMSG) {
--		*copied -= sk_msg_free(sk, msg);
--		tls_free_open_rec(sk);
--		err = -sk->sk_err;
-+	if (err && err != -EINPROGRESS) {
-+		int skerr = READ_ONCE(sk->sk_err);
-+
-+		if (skerr == EBADMSG) {
-+			*copied -= sk_msg_free(sk, msg);
-+			tls_free_open_rec(sk);
-+			err = -skerr;
-+		}
- 	}
- 	return err;
+-	sk->sk_err = err;
++	WRITE_ONCE(sk->sk_err, err);
+ 	sk_error_report(sk);
  }
-@@ -800,10 +807,9 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index d56f4f0102f7..a6c9cf57bc3b 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -5539,12 +5539,13 @@ struct sk_buff *sock_dequeue_err_skb(struct sock *sk)
+ 	if (skb && (skb_next = skb_peek(q))) {
+ 		icmp_next = is_icmp_err_skb(skb_next);
+ 		if (icmp_next)
+-			sk->sk_err = SKB_EXT_ERR(skb_next)->ee.ee_errno;
++			WRITE_ONCE(sk->sk_err,
++				   SKB_EXT_ERR(skb_next)->ee.ee_errno);
  	}
+ 	spin_unlock_irqrestore(&q->lock, flags);
  
- 	while (msg_data_left(msg)) {
--		if (sk->sk_err) {
--			ret = -sk->sk_err;
-+		ret = -READ_ONCE(sk->sk_err);
-+		if (ret)
- 			goto send_end;
--		}
+ 	if (is_icmp_err_skb(skb) && !icmp_next)
+-		sk->sk_err = 0;
++		WRITE_ONCE(sk->sk_err, 0);
  
- 		if (ctx->open_rec)
- 			rec = ctx->open_rec;
-@@ -1107,10 +1113,16 @@ tls_rx_rec_wait(struct sock *sk, bool nonblock, bool released, bool has_copied)
- 	timeo = sock_rcvtimeo(sk, nonblock);
+ 	if (skb_next)
+ 		sk_error_report(sk);
+diff --git a/net/strparser/strparser.c b/net/strparser/strparser.c
+index 9c1559d7923f..5f1da32b152f 100644
+--- a/net/strparser/strparser.c
++++ b/net/strparser/strparser.c
+@@ -56,7 +56,7 @@ static void strp_abort_strp(struct strparser *strp, int err)
+ 	strp->need_bytes = 0;
  
- 	while (!tls_strp_msg_ready(ctx)) {
--		if (sk->sk_err) {
--			if (has_copied)
--				return -READ_ONCE(sk->sk_err);
--			return sock_error(sk);
-+		if (has_copied) {
-+			int err = READ_ONCE(sk->sk_err);
-+
-+			if (err)
-+				return -err;
-+		} else {
-+			int err = sock_error(sk);
-+
-+			if (err)
-+				return err;
- 		}
+ 	/* Report an error on the lower socket */
+-	sk->sk_err = -err;
++	WRITE_ONCE(sk->sk_err, -err);
+ 	sk_error_report(sk);
+ }
  
- 		if (ret < 0)
-@@ -1132,10 +1144,16 @@ tls_rx_rec_wait(struct sock *sk, bool nonblock, bool released, bool has_copied)
- 		 * sk_err here so a connection abort surfaces as the
- 		 * actual error rather than a clean EOF.
- 		 */
--		if (sk->sk_err) {
--			if (has_copied)
--				return -READ_ONCE(sk->sk_err);
--			return sock_error(sk);
-+		if (has_copied) {
-+			int err = READ_ONCE(sk->sk_err);
-+
-+			if (err)
-+				return -err;
-+		} else {
-+			int err = sock_error(sk);
-+
-+			if (err)
-+				return err;
- 		}
- 		if (sk->sk_shutdown & RCV_SHUTDOWN)
- 			return 0;
 
 -- 
 2.55.0
