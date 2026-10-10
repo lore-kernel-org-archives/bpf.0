@@ -1,82 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C869E386552
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 15:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64623783C4;
+	Sat, 10 Oct 2026 16:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791645718; cv=none; b=kY67mcwdds8BpDMBByHagu1rOm/ZMWV6FHsSQIZbItKTBgeD1P6sSpg3+nYcqs4B2sWDjlKgj0NWx5ejhBU6sl31Ni3y4JjiWxVRGbC+9R9/IOky/IH2Un7jNEXWASw8BsuIhz2ik6URq9BUpufltW8yUYq6t8gGKyms64ibpBk=
+	t=1791649743; cv=none; b=ZZIWfkCvN5fVTfJNPXDoYqtQzwjWRBPRkNRShQsxe10IIULcpxItbO4EZ0h/ol8wWWMqE4fnXAl9IW7QHvOTpL8HCNcfEiWeBpwZD9ILk5c0w4Ag37GQ6PONviMkGR+fya8zJp6bRKzRR6WnkqwJK326CCQpLXT+ZQ9U7web7Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791645718; c=relaxed/simple;
-	bh=r6HVocPWHCBOkuUcDvVY/5gSnlL0V60eoh86qJkXWo4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Z+6U21Noubq+bmlITnS90L4E3NR6frvvWSBnrpmEQ3ESbHDReNtpDv5HsSDM4ARIJPw048tUjxTA1GNQWddMLng0OfNzqxYrcS2N4vIrRQd5gWL+aYg1Q6okh1etiSsVXq4dwf2IUeHyK/3mfDxnSU0pBsJsY95lCMBZS/z9BSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cm3dtjvK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791649743; c=relaxed/simple;
+	bh=upnNnvvd65lyRz//cR6oXD5ptZrwqd3R+JgdBPLEgAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RTDHYzox8Dmszwq2rTM2G/OXGvXg8fwszgPbkV5TQ+crzu8AU99FnNy6V4WiJGkgmHepKWLB8RUiLfyz3HLEvMvVF7isOMwGwvhE1cm47AEyLxUvx7684mbTgDfwobbNdi7ANHUqmMaVlryDQD/RuCg/v1baAVUcYmp66xrtvC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G6sph4zz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cm3dtjvK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51DE61F000FF;
-	Sat, 10 Oct 2026 15:21:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G6sph4zz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC3C1F000FF;
+	Sat, 10 Oct 2026 16:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791645717;
-	bh=5cvI4RBOU5VRljwtOWEqGsHUPpgzoJomYd/gf1FO0tI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Cm3dtjvKwhxfGIkus91XEp5eZp++Ps5xl504m+Hv99EN4r6tNdtyxSFpfdmbLv3B4
-	 lAsXyaw8vgHPmcl/GMtCHmzZM18BQRjtdgQxNS/Pzk5a3kM9brSBskgVAIPusgc4/5
-	 i0GXdhW1EXj72hYE9N/i158YwHbNHNRIIgQ68Wu1y5o6FpnlfKM786CfqndjA/4UES
-	 D19ZLda3V8FjUj87mjFS4g0Im9gogaBlJYZwK0WvWDhfXh2QXCeACQW3vBnggHU9+0
-	 hy0pRjyMmYao6vZMHcRSUcHBSYbtsUMYm5eW8nijgRsSyXbCu+pFoNE/+G7EN85MAW
-	 8Wl6g4Ta7HKCg==
-Content-Type: multipart/mixed; boundary="===============4987142490103924903=="
+	s=k20260515; t=1791649742;
+	bh=i2wb2UWPupDZ/mUYyrqhwi0WMeSN3U+R59Znavn3hWo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=G6sph4zzh6BClUIKGDOPlKmH8/DK71ojEwWPNML39pPH+1VTRJXAQQrXCRXvWJG4L
+	 89+BXnsUgEV3yWXUGm+UyUSm59/S20D+PiAZDXNV3iu6ZzyDodDrH7lcr6TeBWeAUD
+	 f82ZSZO+7cFYz/xaLLfdmf8uZNN/YqLBqjiWeRlVsO0xZchftuzJLwr/S0j89wxibR
+	 wrDx87HaxlQoN3hmkFDyE7QoO3Tsv1AKwE1Jx/y2nPjQdsiOcnkHWCkU7KyBdS2Bc/
+	 49DsXZ3h6c9qza0tXfb2pgicW4r1FBmuRDtEBsiaHpObgwWpYtUpVXhyp3psuTcgyP
+	 BlC5vqOmtIQiQ==
+Date: Sat, 10 Oct 2026 17:28:55 +0100
+From: Simon Horman <horms@kernel.org>
+To: Wei Hu <weh@linux.microsoft.com>
+Cc: longli@kernel.org, kotaranov@microsoft.com, kuba@kernel.org,
+	davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
+	andrew+netdev@lunn.ch, jgg@ziepe.ca, leon@kernel.org,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	shradhagupta@linux.microsoft.com, ernis@linux.microsoft.com,
+	stephen@networkplumber.org, netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dipayanroy@linux.microsoft.com,
+	bpf@vger.kernel.org, sdf@fomichev.me, daniel@iogearbox.net,
+	hawk@kernel.org, ast@kernel.org, john.fastabend@gmail.com,
+	weh@microsoft.com
+Subject: Re: [PATCH net-next v6 00/13] net: mana: reconfigure by replacing
+ the queue set
+Message-ID: <20261010162855.GU83879@horms.kernel.org>
+References: <cover.1790795005.git.weh@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ac05874f317b38b72dc1378b1c27a14669a75cf05b19fb7a3cdce307c954d637@mail.kernel.org>
-In-Reply-To: <20261010143156.379864-2-andrey.grodzovsky@crowdstrike.com>
-References: <20261010143156.379864-2-andrey.grodzovsky@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v6 1/7] libbpf: Reject gen_loader set after PREPARE step.
-From: bot+bpf-ci@kernel.org
-To: andrey.grodzovsky@crowdstrike.com,bpf@vger.kernel.org,andrii@kernel.org,ast@kernel.org
-Cc: martin.kelly@crowdstrike.com,slava.imameev@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 10 Oct 2026 15:21:56 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1790795005.git.weh@linux.microsoft.com>
 
---===============4987142490103924903==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Oct 09, 2026 at 02:41:11PM +0000, Wei Hu wrote:
+> I am carrying Long Li's queue-set reconfiguration series forward for this
+> revision. Long remains the author of twelve patches, and Dipayaan Roy
+> remains the author of the detach change. Their authorship and signoffs
+> are retained; I have added my signoff for this revision.
+> 
+> Replace detach/attach reconfiguration with pre-allocation and queue-set
+> replacement. Allocation failure leaves the running configuration intact.
+> Publication failure attempts rollback; a failed rollback closes the port
+> and holds carrier down until a successful reopen.
+> 
+> EQs and statistics belong to the port. Valid user-configured RSS tables
+> survive queue rebuilds. Channel-count changes reuse surviving queues:
+> reductions retire the tail and increases allocate only the added queues.
+> Ring, MTU, private-flag and XDP layout changes still perform full rebuilds.
+> 
+> This series does not depend on the pending HWC concurrency/dynamic-depth
+> v6 series linked below. Their CQ-publication changes overlap in
+> gdma_main.c and hw_channel.c; whichever series lands second will need a
+> rebase preserving both table-publication and per-CQ lifetime guarantees.
+> Related HWC series:
+> https://lore.kernel.org/all/cover.1790665894.git.weh@linux.microsoft.com/
 
-> libbpf: Reject gen_loader set after PREPARE step.
+Hi Wei,
 
-TL;DR: Commit message only, not a bug: the changelog could say what breaks
-when gen_loader is enabled after bpf_object__prepare() (earlier steps go
-unrecorded), and "running the loader" wording is unclear.
+Unfortunately this patch-set did not apply cleanly to net-next,
+and thus our CI did not run.
 
-> libbpf: Reject gen_loader set after PREPARE step.
->
-> It's wrong running the loader post prepare
-> as most of the recording happens there.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Please rebase and repost.
 
-This isn't a bug, but could the changelog say what actually breaks when
-gen_loader is enabled after bpf_object__prepare()?
+...
 
-For example, bpf_object_load() calls bpf_gen__init() and then only records
-the program loads, so the BTF load, map creation, and extern and CO-RE
-relocation recording done inside bpf_object_prepare() never make it into the
-generated loader.
-
-Also, the wording "running the loader" reads as executing the generated
-loader, while the code change is about enabling gen_loader recording.  Could
-that be tightened to describe the recording?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38061962076
---===============4987142490103924903==--
+--
+pw-bot: changes-requested
