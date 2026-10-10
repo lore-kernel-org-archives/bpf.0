@@ -1,92 +1,85 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583DA34104E
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 21:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC33331A48
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 21:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791666177; cv=none; b=EUugPlwiVYK32KV2S65Ezgi4N5TfNqbZMGxsGAcfmqXdS1ExbZOfnLYqwD5Oax4CYPCZdihPjuUY37CpUSFs+CzzBtJ+DboZ3+TtUIBSNIIn2s/lIPLmL1hENCWkhXcvPaEhcz1AHmgmhTO0vnlknAQqAqU6swvPzaJkE5RPuCg=
+	t=1791666182; cv=none; b=EYLa1G1ZWLtMVsojMwxz6CtDMFb8YYhQdw1BY4u6AfA+8Y4aBoz4+nyaR4/2rQ2FtpllrMDONu7+V3hS+Mv3t0DGcvF1QbEyYsMR9va9kIdM2Sg/qoSL+DhVJtAFI9jyLzaV5wFUwW5AA2QPmu9NJu9IjmqrhMkrq5CXwPwALyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791666177; c=relaxed/simple;
-	bh=CWB005W1JYdLCvsKy7Ozq6WQtnMeMg9lxlm/MnPEdhw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lEqRGst+jXFJRQCsiHLc7ji7sz8yCWDyeTqx0yLWUR0VLm7YApJxBTtft8F/shwAo0dA1Xgx6VjVim0PIXYVrs6TZy1mXFump+qgF8mF+bw/VZWAtn7uLFApTth0YIoGu+bw+RyaoJDM2kLPVpLZByWwW14pwOsY051Ul+dKPkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=idIOcLWG; arc=none smtp.client-ip=209.85.222.173
+	s=arc-20240116; t=1791666182; c=relaxed/simple;
+	bh=wDwpMO5bfAe2juj7XnYLO+oUSR0JSDrrz7wnSP6mO6s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=corBxT/EZAvc6XZyVOwl1+ETNbua0G7kVoy3tDIFWtL5S7TO34+HR95tzy8SyWmuL4XvL+8Iw1HAPVc9CYez9soi5fm8azRE/QSGeRWDRhlFoz6GHnj5orU3v/Bk3LLmtw1SGABsWqqOyiop70sXTBazL5F8Esub441YVowpZYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=FRlis76N; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="idIOcLWG"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-93e63ee7b4cso72047985a.2
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:02:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="FRlis76N"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93cc31c18ebso52025585a.0
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:03:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1791666175; x=1792270975; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jcVxPsPHkMv7myJPq9OeT+TVrTGAJUgIg48UHobGlpI=;
-        b=idIOcLWG+QVHdypSONwQHE+9TeUQXC+vWFNEG61iof8GBQis7IpCJyFlCtPp13vgHA
-         Zrj419D1emcp+DDAWYeSZ7i+8kOLuw9ijFtrlzvZszjte/x4h5KtBXlCblMKwd08l8vk
-         PVHprpU36Qq75rE2KoIUOBvm0o1JN5HoE3WGQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791666175; x=1792270975;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=mojatatu.com; s=google; t=1791666180; x=1792270980; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jcVxPsPHkMv7myJPq9OeT+TVrTGAJUgIg48UHobGlpI=;
-        b=Y5utXh0aOieWTrITloHtwS4qJJNHVz4SlWPLMeNAoTZNmXQy7qrJE0hLzx/vjFmHbD
-         5srI21mGvFWFgxMhRC8gqvDmXq5vRbfR5aeD3Cpt+NgBqNtSUt7hqoi2oLmlM8UJhS4P
-         rN3cSV8CqiJC8gCT0HUyAhhZpZAyI6e/0fP9ALsGKc3NSnBSYRk4P8qWNzVad30ZRsVR
-         FbWGyfTXX1B5hQrgiAprnZ5mI3YJHbDlRSwVAo9asefvW1q7ei9tzx71nv/BS2HZ5OWW
-         UPsVs//bzbHnMNA0d/zXQReFEAFFAvqe4KZBAfJzhq3GgsFDOmotzLMf/SRs883c599f
-         WS9A==
-X-Forwarded-Encrypted: i=1; AKwUvByM5fOyd/6b2FTOH2Vb1ju0p45Tr7WmCrcRPhKgw118M3iNqiSXEY/yQdSrpvq8ek86d5A=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLaLhxAgZIThXz5hXt4Uv5VLC3N9QhJVAPpbVRoE6rqr1bTJsts
-	X052lC4nnn0iHwF4/zagLAft4Wvy5kaSLpP1/yb+svF8I1m1eSC72kFbiEY4OiXpKQ==
-X-Gm-Gg: AYBFou3/uVTggWNc4peKJPOJAFlCf8ZCcm1G7IacoUjzcvq0ZXZ9B6QmT+H7/SRn1Q8
-	7r6pkYZliPVNSNUysKwIP6KJFdCAZN/9WmJXQNChclm+GzoThJOWYjjkq7rhTvwsDqNuDzvx7+t
-	r1jEbQUA2vEPLr2JEHRAV7duUsRAVUXd+ej5Kv7+nWuGoL6MW2zwnq/ebdgIBaD/biDIJfM13fW
-	8e5eQycqM7aqFB2lew0rpaL23+zGS3Cjzu1kDuoqc/bOMA8y3VsnwrihdymhG9F5kJINROfSDVg
-	rQAdivaLy3tuBImgDLI7389X62iHooIfLJU1xHBiuG3SdnDv7Ojvui0aHgKjI2aS1Pz0Bm8Ag0f
-	4Gwgs4qilNK92z/R5q1nLiRi60JKWiTQVVz8pxPapxJGHWHyetlrH53U8Kmqtfo4FGQr7WZGaSn
-	nLG11M5yL+/ExToKHJVg8KmjMyJ7SWIk+hV8JIA3+BBoOqODNcRze1byhUj8BG3jbN8OURk1ew6
-	fzM2WMGnNfuEBJaGNnIh9E/UkTa7EIcw7JSl1BGvPif
-X-Received: by 2002:a05:620a:2b8b:b0:93e:c12c:f12a with SMTP id af79cd13be357-93ec12d08ebmr821334685a.69.1791666174924;
-        Sat, 10 Oct 2026 14:02:54 -0700 (PDT)
+        bh=PH2ZNztxpOnnAOmdxAya78mHgVtF5bOllPXI+YQjWm4=;
+        b=FRlis76NAmqidXFhAi68DEp0YJeNUVyZ5Bbn/h9AGOKCfTAjpLA9AVChTjhSN4fV+m
+         rAvNX22RYXCMHvR0zmShljjhB7kZBXbBTSi4Ayv+151IAvojiiSjJGFr9ntxJoPJPWAE
+         pWc+L2JBMhgm+FKZDko8ptpGuQtJBu73unjH8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791666180; x=1792270980;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PH2ZNztxpOnnAOmdxAya78mHgVtF5bOllPXI+YQjWm4=;
+        b=DS1bpIUsMeUd21TDxKsss/1aWMEENfxfLoJUi5AcfgGlNsmAYk0swPD9cCUDbaFdQC
+         7l7LwdawDdqtzafajyPYDjfewG/RqnfaUI+mzNgdIb63umtjvc7EmDJpwj4RY0ubOqh6
+         Yl4KNeGvaKYN4zqNmIOcC6mSiCdSQwhptuTYx80gfDyKguvXIuBy7dUAjY0WM34+PLSh
+         T1D+5UvOK70DLaQucpIka7DkFt+z/+FKz/q9Hugcu/H7sPaOuN2fk2HWkvE7d7DTBzCt
+         Cmrxe/AZI3ISNtAO9tRJ+RZI9ht0YImTVGCzwQczQx4/aHb1U2KTLJNpIGj3GS1i/rPl
+         3bBQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzYtF9Izv9Y1K56A2pBK3r3JEi1h636Hlql57T7Meul+VN+60GjOjMMYnk2MvkrMRMB/DU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJb+5gFcW/2kaVQJdBocmoy59XO6xlHjFUsT5KAVKig1kko8cNi
+	xuO05ObesiPTK/4n4WeRlHRXzI++QWXJUP/wW1wklZ3EXFDawYxtCetZcbd6H0Dhaw==
+X-Gm-Gg: AYBFou0cIZzjP89g7bX2RPwurDwAj4axvTlEUoVKO+k+uPvDYHHy7aL2bub9+uNFBWv
+	Rz4WHt6o1S76BnydrXT4x2A3d1jWKnOVXkL10OwoiMECfygPlYHNuapAEhNgnpoORAuoby/7p6G
+	htYPRFyxdFJENrj3iym6kT3PEQkytOK+gpM1w22rtG0+hjbpqqFjpT0OjNCk767j11vSyZCsTrr
+	Mtz2lwBCoLHbe4zFBQlfCbkR6kRoT+aXixuEgFwyA6l3awv7VJiRZIBu06mxbL/GQpcGIvIC2Ht
+	ttsXUiL49fv3mRJdyWHvy4IndpscI5NlE2hmj7yRXEJ7QwbXqf0a4N3s3Faf1wjrYlNW94V+A0i
+	jpaQR+Qx+aM5ZlFywj3vam90EvqJKudlfYwuMVpRqMTb/PWxXhN7xX49PDyd6aA4UTvKGBAlof1
+	AlYsX+XhEPBBol6fiKNCvMnfF6QVkVuLsJIh8J9jB2gbNELDTbKOa2l+elGL/zc/sYt+c4ejdPw
+	s3frk6af442PRy6jnNwJqAQ6PtEKOWDJ8KUPvui9350
+X-Received: by 2002:a05:620a:44c1:b0:93e:6e59:ad16 with SMTP id af79cd13be357-93ebd1dfd74mr921864985a.29.1791666179722;
+        Sat, 10 Oct 2026 14:02:59 -0700 (PDT)
 Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb984845csm498538085a.14.2026.10.10.14.02.52
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb984845csm498538085a.14.2026.10.10.14.02.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Oct 2026 14:02:54 -0700 (PDT)
+        Sat, 10 Oct 2026 14:02:58 -0700 (PDT)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
+	kuba@kernel.org,
+	andrew+netdev@lunn.ch,
 	davem@davemloft.net,
 	edumazet@kernel.org,
-	kuba@kernel.org,
 	pabeni@redhat.com,
+	sdf@fomichev.me,
+	martin.lau@kernel.org,
+	daniel@iogearbox.net,
 	horms@kernel.org,
-	jiri@resnulli.us,
+	qmo@kernel.org,
 	bpf@vger.kernel.org,
+	jiri@resnulli.us,
 	stable@vger.kernel.org,
 	sashiko-bot@kernel.org,
-	victor@mojatatu.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	andrew+netdev@lunn.ch
-Subject: [PATCH net v2 0/3] net/sched: cls_bpf: accept dev-bound programs on shared blocks
-Date: Sat, 10 Oct 2026 17:02:47 -0400
-Message-Id: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
+	victor@mojatatu.com
+Subject: [PATCH net v2 1/3] netdevsim: reject cls_bpf programs bound to another device
+Date: Sat, 10 Oct 2026 17:02:48 -0400
+Message-Id: <QDISC-PYC7.v2.20261010165947-2@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
+References: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -95,53 +88,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series fixes the regression where a device-bound SCHED_CLS program
-attached through a shared block is rejected even when it is bound to a
-netdev that owns the block, and closes the bind/reoffload replay hole a
-later-joining device would otherwise exploit.
+The issue:
+nsim_bpf_setup_tc_block_cb() installs any device-bound SCHED_CLS program
+without checking that its offload device matches the target netdev.  The
+core cls_bpf attach path rejects a mismatching program, but a netdev that
+joins a shared block later is replayed the stored filter by
+cls_bpf_reoffload() before it is inserted into block->ports, so the
+attach-time check cannot see it.  The driver callback is the
+authoritative per-device acceptance boundary and must enforce the match
+itself, as nfp already does in nfp_net_bpf_offload().
 
-Patch 1 gives netdevsim's cls_bpf TC block callback the device-match
-check nfp already has; the callback is the authoritative per-device
-acceptance boundary and the defect there predates the cls_bpf core
-change.
+Without the check, replaying a device-bound program onto a different
+bpf_offload_dev installs it into that device's netdevsim state, which
+trips the WARN in nsim_bpf_uninit() (ns->bpf_offloaded set on a foreign
+device) and can dereference a NULL prog->aux->offload in
+nsim_prog_set_loaded().
 
-Patch 2 makes the core attach-time check derive the target device from
-the shared block's member set (block->q is NULL for a shared block) and
-require every member to match, mirroring the broadcast fan-out of the
-offload path.  Patch 1 is a prerequisite of patch 2 on v7.2+ trees:
-commit 120977e2c096 ("net/sched: cls_bpf: reject dev-bound programs
-bound to a different device") made the replay path unreachable through
-shared blocks as a side effect, and patch 2 re-exposes it, so a stable
-tree must take both together.
+The Fix:
+Reject a device-bound program whose offload device does not match the
+target netdev, with -EINVAL and an extack so the rejected replay is not
+silent.  The check is intentionally narrower than nfp's: it fires only
+for a dev-bound program, so nsim's bpf_tc_non_bound_accept mode (which
+admits an unbound program onto the device) is unaffected.  Teardown is
+never blocked: the guard is on the program being installed and an unbind
+passes cls_bpf.prog = NULL.
 
-Patch 3 adds shared-block and late-join coverage to bpf_offload.py; it
-uses the existing sample_ret0.bpf.o with an explicit `type classifier`
-override instead of adding a new sample object.
+Conditions to recreate the bug:
+  - CONFIG_NETDEVSIM=y, CONFIG_NET_CLS_BPF=y
+  - load and pin a dev-bound SCHED_CLS program for netdevsim device B
+  - install the program on a shared block owned by B
+  - add an independently backed netdevsim device C to that block; the
+    bind replays the filter to C's callback, and C's
+    ports/0/bpf_offloaded_id takes the B-bound program id.
 
+The reported Sashiko review is at
+https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260809094418.901607-1-jhs@mojatatu.com
+
+Fixes: 31d3ad832948 ("netdevsim: add bpf offload support")
+Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
+Link: https://lore.kernel.org/netdev/20260809094418.901607-1-jhs@mojatatu.com/
+Link: https://lore.kernel.org/netdev/QDISC-PYC7.v1.20261003103747@mojatatu.com/
+Cc: stable@vger.kernel.org
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
-Changelog:
+v1 -> v2 (v2 of an on-list patch; v1 posted 2026-10-04):
 
-v1 -> v2
-- Patch 1 (netdevsim): enforce bpf_offload_dev_match() on the cls_bpf TC
-  block callback, closing the bind/reoffload replay path (nipa High).
-- Patch 2 (cls_bpf): reject an empty shared block; reformat the comment
-  (gemini + nipa Low).
-- Patch 3 (selftests): new shared-block + late-join coverage in
-  bpf_offload.py.
-- Split the v2 draft into three patches; patches 1 and 2 each carry their
-  own Fixes: and stable metadata (the selftest companion carries neither).
+- Finding (nipa Sashiko High, v1) -- FIXED: the
+  every-member predicate is enforced only at add/replace, but a netdev
+  joining a shared block later is replayed the stored filter by
+  cls_bpf_reoffload() before it is inserted into block->ports
+  (tcf_block_offload_bind precedes the xa_insert).  Neither
+  cls_bpf_reoffload() nor nsim_bpf_setup_tc_block_cb() checked
+  bpf_offload_dev_match(), so the B-bound program was installed on the
+  joining device (re-opening the 120977e2c096 mixed-block defect).
+  Fixed by enforcing the device match in nsim_bpf_setup_tc_block_cb()
+  (drivers/net/netdevsim/bpf.c), mirroring nfp.
+- Style (gemini + nipa Low) -- FIXED: the shared-block comment opens with
+  /* on its own line.
+- The companion selftest exercises shared-block and late-join coverage,
+  pinning both the all-members predicate and this callback's replay gate.
+- Split the single v2 draft into [PATCH net v2 1/3] netdevsim,
+  2/3 cls_bpf and 3/3 selftests, each with its own Fixes: and stable
+  metadata.
+---
+ drivers/net/netdevsim/bpf.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Jamal Hadi Salim (3):
-  netdevsim: reject cls_bpf programs bound to another device
-  net/sched: cls_bpf: accept dev-bound programs on shared blocks
-  selftests: net: exercise dev-bound cls_bpf on shared blocks
-
-
- drivers/net/netdevsim/bpf.c                |  12 ++
- net/sched/cls_bpf.c                        |  28 ++++-
- tools/testing/selftests/net/bpf_offload.py | 139 +++++++++++++++++++++
- 3 files changed, 175 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
+index 16aa88278398..a73ea8b07682 100644
+--- a/drivers/net/netdevsim/bpf.c
++++ b/drivers/net/netdevsim/bpf.c
+@@ -144,6 +144,18 @@ int nsim_bpf_setup_tc_block_cb(enum tc_setup_type type,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
++	/*
++	 * A dev-bound program can be replayed here when a netdev joins a
++	 * shared block, after the core attach-time check has run; enforce
++	 * the device match as nfp does.
++	 */
++	if (prog && bpf_prog_is_dev_bound(prog->aux) &&
++	    !bpf_offload_dev_match(prog, ns->netdev)) {
++		NSIM_EA(cls_bpf->common.extack,
++			"program bound to a different device");
++		return -EINVAL;
++	}
++
+ 	if (cls_bpf->command != TC_CLSBPF_OFFLOAD)
+ 		return -EOPNOTSUPP;
+ 
 -- 
 2.43.0
 
