@@ -1,129 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6AB3CF963
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 23:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891A83D34B3
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 23:00:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791673250; cv=none; b=jR1y9xuWzXRM1IeallvrZnYHZx6BaoIFoZew0Lb/uX6xKlLaQf98zq8EB2tiQMDkPDx9We+MGISL0NQp0WIqrbuWNf6arfd5Go867/aK+XUtpzAge8AyfvhdL+laV+/Us7RwRkGnxEQX0ki8ybXQAyNHJB5T5Ud15jhp3GyEHG8=
+	t=1791673256; cv=none; b=Hqu74VINNEmxqim5vI5n5ZIW+XVE+glIJYzBuyz0RL0pjWiXUEehSWXwCjwAUpMnNlcQH1v6ywtzQKtPBPrGHCHsdQ0egzUOwIU5a4zSYqP1hLWOERJ2JG7H6VQVtBC+kvzPb2AAjGMugPwH0FM0vsjzA83RizKCTcpg3MJSJ7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791673250; c=relaxed/simple;
-	bh=AWxUVweQ/ujapXjCAPFmRwZvWT8pa6VItSdXPvBrlgA=;
+	s=arc-20240116; t=1791673256; c=relaxed/simple;
+	bh=VVEkbKwiBsYRD3iZyme183Vq4Bpw4Atk8uxtGQMx8Fs=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=W7dUe6zKqSt4wN/n1bJpKPj0by2wk3BnYZJYhL4d2ZXAT01a2YBa8rqDZtn4te1q2WBsZlMy9Wq55XAVqlkyUf6nj3odxgEGbG4UAqPWR1Xk30G+0p11hXfrDC9Hu6s9ZgIKeH8U2X2yG/9Qn2/G5hnxoKZpty3yJuCkumFG0GE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O/UNE13L; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=UqpeU33DPhLXmMdZ7yfdJT1KDz97nZKfAYVqIDaRZirMRB893MpOzavkqvV9YUikI0+AtLRUBxAIsHJcPbKyifwZQiETK6pSH9ghLlWWiRAkHSyTgPjym0Iu4d6i1uVXYHygIuQGdqOhEWYsTYQuwUS3R+fEtkZd+A087ocbNdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7QC7UFY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O/UNE13L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0721A1F000FF;
-	Sat, 10 Oct 2026 23:00:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7QC7UFY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC721F00893;
+	Sat, 10 Oct 2026 23:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791673242;
-	bh=oZVdC3jLdlTYhiGabKwA95L8N9LAw0LR2b0d2P/olMs=;
+	s=k20260515; t=1791673243;
+	bh=lX8Cz6quQi404J9wRU5A73B2+FHjCIKZhUPOjUWndKk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=O/UNE13LhQU8junLCT60zH4hSFrrmUC7gkjxR+uDYzhGUr6fu7qbUfDSvxMTQC0JX
-	 9DJ/HwaFeKn0Y30S7qMtHSQ98+BHrpXHSXYt6GDIdWetbG5SIX3bOyZ7xcR8TmPzWy
-	 I3l+LmBqgwLBoUg7FqiVCqWmemp//0NII6rpxO2I1C9MPVIJlA1DYWKM5OyB+ZYAzs
-	 X7OkhMSeEXRUrEOXuqritl3z5qSdG52mKTqwFOnFhSDInhVajRLr8hXdddMChobGed
-	 2dsSLRhjT+iWU8sKz1Jkw9Zs9N5Aj/1avtF9xdrFRoJOsDxudhtWMEeUgoRucdOuSC
-	 8CLFOIEiaJDKw==
-Message-ID: <sashiko-outbox-166916@kernel.org>
+	b=b7QC7UFYSV3zVafQX5NM8iVYwS3ik/2s9RW+EDGW3KlA4Fdiij3sflUFXMUSduvGh
+	 mvxgLA9UVK9M5WRMlCAGvAoYOYgg2NJfvc0LS+jWjf7yVxzeXApyrv8kiB4pozdOra
+	 4BQMcWAZi2YR24Pu0NkffY/DTWKNKvOFDk50sNBaOfW4grcwxii+3L/PsQVYalCaV8
+	 lEYwByUTVTuBbxMf1ThKO7+kWlDRz/HWZfPDLhgmLcit9h+aj71o+t1yczupqClOus
+	 e5lek0iAaA1FMn1zigH7irdUVoiUkBEO+YLeGv0Do7yvQ0pqjo25KtK5btgnaOLirM
+	 rZpMmq4WiLTCQ==
+Message-ID: <sashiko-outbox-166917@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/5] bpf: Add an arena flag to retain allocated pages
+Subject: Re: [PATCH 5/5] selftests/bpf: Test two-way arena access with two
+ guests
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Andrea Righi" <arighi@nvidia.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261010224902.1232178-2-arighi@nvidia.com>
+In-Reply-To: <20261010224902.1232178-6-arighi@nvidia.com>
 References: <20261010224902.1232178-1-arighi@nvidia.com>
- <20261010224902.1232178-2-arighi@nvidia.com>
+ <20261010224902.1232178-6-arighi@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 10 Oct 2026 23:00:41 +0000
+Date: Sat, 10 Oct 2026 23:00:42 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: BPF_F_ARENA_NO_FREE breaks virtual address unreservation and =
-kernel error rollbacks
+- [Medium] selftests/bpf: unaligned cmsghdr buffer causes undefined behavio=
+r and SIGBUS
+- [Medium] bpf: virtme-ng --numa argument risks unit mismatch in QEMU memor=
+y allocation
 --
 
-commit 9eb2222524999c1d26f887b5ad559236c846afe7
+commit f89b47f73364f408524cec1a644bd3003fa751ab
 Author: Andrea Righi <arighi@nvidia.com>
 
-bpf: Add an arena flag to retain allocated pages
+selftests/bpf: Test two-way arena access with two guests
 
-This commit adds BPF_F_ARENA_NO_FREE to retain arena pages until the map is
-destroyed. It modifies BPF page-free operations to be no-ops in both sleepa=
-ble
-and non-sleepable programs when the flag is set.
+This patch adds a selftest to verify two-way memory access between
+two simultaneous virtme-ng guests using a shared pinned host arena.
+It establishes mutual memory exchanges using direct BPF loads and stores.
 
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 0ff707707da04..343e84139ec29 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
+> diff --git a/tools/testing/selftests/bpf/arena_kvm.py b/tools/testing/sel=
+ftests/bpf/arena_kvm.py
+> --- a/tools/testing/selftests/bpf/arena_kvm.py
+> +++ b/tools/testing/selftests/bpf/arena_kvm.py
 [ ... ]
-> @@ -1134,7 +1135,8 @@ __bpf_kfunc void bpf_arena_free_pages(void *p__map,=
- void *ptr__ign, u32 page_cnt
->  	struct bpf_map *map =3D p__map;
->  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
-> =20
-> -	if (map->map_type !=3D BPF_MAP_TYPE_ARENA || !page_cnt || !ptr__ign)
-> +	if (map->map_type !=3D BPF_MAP_TYPE_ARENA || !page_cnt || !ptr__ign ||
-> +	    (map->map_flags & BPF_F_ARENA_NO_FREE))
->  		return;
+> +def start_guest(pin, build, kernel, index, vng, env, guests):
+> +    node0_size =3D GUEST_MEMORY - SLICE_SIZE
+> +    base =3D GUEST_RAM_BASES[os.uname().machine] + node0_size
+> +    progress(f"Starting guest {index}: {SLICE_SIZE // (1024 * 1024)} MiB=
+ "
+> +             f"slice at file offset {index * SLICE_SIZE:#x}, "
+> +             f"NUMA node 1 physical base {base:#x}")
+> +    qemu_opts =3D (
+> +        f"-object memory-backend-file,id=3Dsignal,size=3D{SLICE_SIZE},sh=
+are=3Don,"
+> +        f"offset=3D{index * SLICE_SIZE},mem-path=3D{pin} "
+> +        "-numa node,nodeid=3D1,memdev=3Dsignal"
+> +    )
+> +    guest_command =3D [str(build / "arena_kvm_guest-init"),
+> +                     str(build / "arena_kvm_guest.bpf.o")]
+> +    command =3D [
+> +        vng, "--verbose", "--run", str(kernel), "--cpus", "2",
+> +        "--memory", f"{GUEST_MEMORY // (1024 * 1024)}M",
+> +        "--numa", str(node0_size),
 
-[Severity: High]
-Does unconditionally skipping arena_free_pages() prevent virtual address
-unreservation?
+[Severity: Medium]
+Will this --numa argument cause a unit mismatch in QEMU's memory allocation?
 
-When bpf_arena_free_pages() returns early, it skips range_tree_set().
+The --numa argument is passed a raw byte count (node0_size), while --memory
+is explicitly passed in megabytes with an M suffix. Since QEMU's legacy
+-numa node,mem=3D option defaults to megabytes if no unit is specified,
+passing a large byte count could be interpreted as terabytes. This could
+potentially cause the virtme-ng VM launch to fail immediately.
 
-This leaves the virtual addresses perpetually locked in the range tree as
-"allocated", causing subsequent bpf_arena_alloc_pages() calls on that
-address to fail with -EBUSY.
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/arena_kvm_host.c b/tools/testing=
+/selftests/bpf/arena_kvm_host.c
+> --- a/tools/testing/selftests/bpf/arena_kvm_host.c
+> +++ b/tools/testing/selftests/bpf/arena_kvm_host.c
+[ ... ]
+> +static int create_arena(const char *pin, int socket_fd, unsigned int pag=
+es)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts,
+> +		.map_flags =3D BPF_F_MMAPABLE | BPF_F_ARENA_NO_FREE |
+> +			     BPF_F_ARENA_EXPORT);
+> +	char control[CMSG_SPACE(sizeof(int))] =3D {};
+> +	char byte =3D 0;
+> +	struct iovec iov =3D { .iov_base =3D &byte, .iov_len =3D 1 };
+> +	struct msghdr msg =3D {
+> +		.msg_iov =3D &iov,
+> +		.msg_iovlen =3D 1,
+> +		.msg_control =3D control,
+> +		.msg_controllen =3D sizeof(control),
+> +	};
+> +	struct cmsghdr *cmsg =3D CMSG_FIRSTHDR(&msg);
 
->  	arena_free_pages(arena, (long)ptr__ign, page_cnt, true);
->  }
-> @@ -1144,7 +1146,8 @@ void bpf_arena_free_pages_non_sleepable(void *p__ma=
-p, void *ptr__ign, u32 page_c
->  	struct bpf_map *map =3D p__map;
->  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
-> =20
-> -	if (map->map_type !=3D BPF_MAP_TYPE_ARENA || !page_cnt || !ptr__ign)
-> +	if (map->map_type !=3D BPF_MAP_TYPE_ARENA || !page_cnt || !ptr__ign ||
-> +	    (map->map_flags & BPF_F_ARENA_NO_FREE))
->  		return;
+[Severity: Medium]
+Does declaring the control buffer as a plain char array risk alignment faul=
+ts?
 
-[Severity: High]
-Does unconditionally skipping arena_free_pages() here break external kernel
-callers that rely on this function for error rollbacks?
+The control array defaults to 1-byte alignment, but CMSG_FIRSTHDR casts it
+to a struct cmsghdr pointer. Accessing its members (such as cmsg_level and
+cmsg_type) requires the pointer to be aligned to the architecture's word
+boundary.
 
-For example, subsystems like sched_ext use bpf_arena_free_pages_non_sleepab=
-le()
-to roll back partial allocations:
-
-kernel/sched/ext/arena.c:scx_arena_grow() {
-    ...
-	ret =3D gen_pool_add(sch->arena_pool, ...);
-	if (ret) {
-		bpf_arena_free_pages_non_sleepable(sch->arena_map, p, page_cnt);
-		return ret;
-	}
-    ...
-}
-
-In this kernel error path, if gen_pool_add() fails, the rollback becomes a
-silent no-op.
-
-The physical pages and virtual address range remain allocated in the arena,
-but the pointer is dropped, permanently leaking capacity within the arena.
-
->  	arena_free_pages(arena, (long)ptr__ign, page_cnt, false);
->  }
+If the compiler places the char array at an unaligned address, this could
+invoke undefined behavior and cause a SIGBUS on architectures with strict
+alignment requirements. Using a union or proper alignment attributes would
+satisfy POSIX and C standards here.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261010224902.1232=
-178-1-arighi@nvidia.com?part=3D1
+178-1-arighi@nvidia.com?part=3D5
