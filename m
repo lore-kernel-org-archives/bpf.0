@@ -1,72 +1,77 @@
-Received: from mail-pj2-f7.google.com (mail-pj2-f7.google.com [74.125.227.135])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E71C1A724C
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 00:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B67282F20
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 00:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791593554; cv=none; b=J4xFxscZsc2g+4qiQ1qsm+eHeWa/4wmzoTEK5H9Jo/kPwL/sqa5a1bDkOaHvO7q+4APDnStSbd4a3QYUE1BnToO1WAqMfktVXS8fsbIzHqlRMW7OoZCdjb4qxbvjd5XR+SNYXPbhGIk62pDCSE45dHnm6NqnCwpQU5VPCK8/dos=
+	t=1791593556; cv=none; b=qZ40OtaUfsL48oKEYRaydQf2xaRKfAqGyCnx7JriRl2xn9CupRQQ0EWTDuxyLlMf+nEknxvjcrQN1FYe7YSYXLANTCBCitqNcfdafRopqvaeOgWZ5o3KykYhKbc94qBv3hn8cr6egqI7AajiNmPeTL+66B2rXESeDKvfUyzzo2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791593554; c=relaxed/simple;
-	bh=D+QBlXfaJAUuhqc0hqAKzFkFktZSCD48uzIGapZcrPQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CjvrjObph2rehEIgtatvsm0Upv+M/HK46a2dSaL0R/Ad/Umn2iAG0GdHlr6hDcYdINx+pI4fjJ/VG31P36miMOmEyVFp+IjGv05uQFrrTLXhBJIPSngUgrHbtXPOZ0jrvI+L5DgL7MoWo6OLYGy3kn36BDT4VoWbSwJdyN63A6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alanderk.com; spf=pass smtp.mailfrom=alanderk.com; dkim=pass (2048-bit key) header.d=alanderk.com header.i=@alanderk.com header.b=yoVF+14X; arc=none smtp.client-ip=74.125.227.135
+	s=arc-20240116; t=1791593556; c=relaxed/simple;
+	bh=Jsp6LgbTK4cfWWmLeUTZqtKixJIB0Y9Ie/1lUZvCJv4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WZMzYbQQsIIFhZDV8dDl12GO1RG9GlRXV4gEX/V+rpN7gLxzoKvVIt6AV/FODnBbbb9lpetwj9JGDEBgGf0haRrvnQeJi5ONcUbi+FE/aHR7hrL1SPjYnnNkpBtTmjlQnIIDDv3JqauHpsEC6kjVFtNe2FBayDhpYAIri9tUWzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alanderk.com; spf=pass smtp.mailfrom=alanderk.com; dkim=pass (2048-bit key) header.d=alanderk.com header.i=@alanderk.com header.b=q+WFkCR9; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alanderk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alanderk.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alanderk.com header.i=@alanderk.com header.b="yoVF+14X"
-Received: by mail-pj2-f7.google.com with SMTP id 98e67ed59e1d1-39e501442e2so225609a91.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 17:52:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=alanderk.com header.i=@alanderk.com header.b="q+WFkCR9"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ab450c0873so216445a91.3
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2026 17:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=alanderk.com; s=googol; t=1791593551; x=1792198351; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=b+nv/ahniPVLz5y7JEZBuVoxLuh0JYLRNflwWsXXIGk=;
-        b=yoVF+14XteZRFdXLE7G1aOL0rU6FjbWpcvH+rp/ofbc0zbTQzDbYqfWBJz2bX4NfHx
-         oKh+mRolm4Nn+fvL/M5CuZLBwH+lZiSKNGEYJwFIDX9E9Tnr2DHElEKI7mUFdKJJl0IX
-         n+zTVOBP4P/LCg/sE+43RlTIqZgHGzT5LX9Tzck/eEt6qZ5JLMfBACq9hU1hacvZYRk2
-         8wMHzqvNw6QNEy7grVR1UG1zji2BH7mYEC14TvGXqIVnZ5cVAMZ8poguzx7Mc9/iR4aK
-         9REhRFCrGu5AlwGP3e5TdBUQD9VyWtYH9fwsZykA/eklVaorzaHqaPMa7WQKBmqeKOcf
-         x5SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791593551; x=1792198351;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=alanderk.com; s=googol; t=1791593554; x=1792198354; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=b+nv/ahniPVLz5y7JEZBuVoxLuh0JYLRNflwWsXXIGk=;
-        b=g3pmjb9JZp+RFSGtxiUR3og2sBCVk5mEvCOE9HsLydT4yi2eod652iwpio9NTYgasl
-         /sbM3H7jZDg70QzIOhPwKRcD4FvPAKeXLTxGnc0mi5GgTcNCYgdhFr2f2diFe1R9/xha
-         mArv5z7poUXAnzW9UsGbtdSeHGfSDhJKQ3gWnuv/BdrdIDyaB77Y3GMXqiT1pqGLeRm3
-         4PCbGdi7Vx4XJE34zxoyihP7j3z6uqP187nj4f6YfwdnXWI9dqb5oA66Y4f+ZzUU5gSb
-         PHQsag60Ks0SFiqCofpXnSGxOKchfho6Ril2mN95nOcDH6jDIwmcB6IeNzqKtM5dd48v
-         sY2g==
-X-Forwarded-Encrypted: i=1; AKwUvByp0FvLXlpv0SFa0ivqe4a8swFguXab8VOW/ZmsOe36irg1kXpXmobDYPgRKCfcPS576lU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKpoMfERcpUymW7s5pJvgRNY5fLn5JSBxOoAMTVWN6OXPTSG5rB
-	cX3AxPON1IfZd2d6lkQkd8/fOZYT2TMaNBgu0lxuK7q4e7n4RTd3VpsyrO7TvdAv/dc=
-X-Gm-Gg: AYBFou20EdQAro048fxk2MoosncPslr3gPivQnE9/1W5KrzxSyJ2+TE/ZkcC5lAeSXg
-	FtIHI8mOi243Bio5I5yINX7hUXHFagK9DIon5sej+G66kKxWw/mSy41HU+yPUv+mAPsKDqsRgXU
-	lqj20qgdplBKZnyxbloBamoE3xA1tdtxT0f2+g2gJG8l4aTA3FwLaUmG2rTm3UnUNWOHX//mKR+
-	SEyTcpx89HmPB8X3BSZDK9S/bZCXs1hb0AU9mkr3e4G0Ga2CeQH5OrvHwYnkdnEtI7783FZzOBf
-	KVCY8uppujS7HCr2/AuRaMZbt1pRtTUccBgicAgYbey8opHI6TO/wjqkyAvEYU+414o6SHwdyIX
-	aGfe7LpVXyqsvoh2O38wJjMIRjj1sdNLIVemcfx0R2n1LyWZn1xS+OU10jSQcoaJaf6vGqsWCtm
-	akMtR8GVxLsUxZg46ZkIJUqPooXaq7w9a2/6EQrMiXgIGCKlfy2AkeLBZHcbzTO/N7PyNflFEeA
-	DAJp31CwBMujUJJTQ5gMVuBs8a9Kz6NrA==
-X-Received: by 2002:a17:90b:48c7:b0:3ab:8b2:72bf with SMTP id 98e67ed59e1d1-3ab3a928525mr3305305a91.50.1791593551362;
-        Fri, 09 Oct 2026 17:52:31 -0700 (PDT)
+        bh=azgHsYvqsrDkaxXDY0hb9Qx2rxZr9Q0YSKH5ea/vOcw=;
+        b=q+WFkCR9Q0N3SfJ53hzM7L+p3nfAcMOQPyfhfsk60XS60HzxgTOS6MHnPOTSvSA4T+
+         ot3wHcMyQ9PQdDhu4y7jnoGGObzqmL6UNeFvPA48n8Gvh0Lk71usvpqdJAy5foOsBkV2
+         c4occv7lwExxyM5fAgmLK9JA0RIKzZujwhGBOBRSv/f33k+hRHoZdjBS0p/Re7Cljgc4
+         Go38huxnrFMtBu93hJAENaxQvORRbBfjEK3qekPwYNAglfgEw/FsEgZ2ifYmeA9u8Ues
+         KAlj8yI1xLWnf6esUmLlFnEgdqHgW/a6dcF217DbuCa+6JqUadL41hmd35OjWOUiZcmV
+         vNLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791593554; x=1792198354;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=azgHsYvqsrDkaxXDY0hb9Qx2rxZr9Q0YSKH5ea/vOcw=;
+        b=g2GZfmoA9fgJ16OmlZeklm5CctVbJ6xiRfycXLqMdE+CIVmYQPCcxfiYNMPF6KPSt6
+         RTnsUBN0R/Xg8z3AOFHNA7McZ2SRdmCbRc70AvC9/lmdFu845mn+SqNsvSAOSKe5JtxL
+         Y8l7gGIFA/lQCLdGjY3aN3rqtQ36KK2b4aQ8sCLmiLPuKp2YQgKWOnraCTUTqaa8nsu2
+         c3yx94gDp8YH9ukpM4I8OlehXA+AhlTVumKtTDXoJjNXyL870FSbGz7lfz1iBfLUmJSv
+         w8H05Ey86s2zLXMZYxNszQs5nvrLHvkaAVnczZEfQrc7Pq9pBlR9El9QqSYsFP1xGFya
+         v4tg==
+X-Forwarded-Encrypted: i=1; AKwUvBw2f5rorm8WBTKLfOTtL7Y0gBTiNg04t0x7KfdV8zqx+rziQ/m+IGVh5z2rX/zavtkjvfA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYICgGn1L8t1u4KbtDPhSY9ZbjSU+aNdus7wfgtTAQNi1fnc8+A0
+	Vj5IDTvKzxQASn5OLHBtDTGzVIl4SKQVfhrKS9bXC0oQ+w6l0/8UhrSHFOBB6q75uNxR8DWYFRm
+	wNFDj/49/RIf/
+X-Gm-Gg: AYBFou3IlnluVs6FUTANdBwrqFQ5BWnKnDjKAGtOEI1pUcXgsKTSCtKIwY2X7wqp904
+	9SwPSFmQZbknuzjAAj2GIIQnZZdlG4+k1ikg06N0vnsuYpu4kT8TQ3w57iZKkprU7LsDaZydopz
+	Ow1LMy7XefApjUZG7iWjrKtDmFQnPQ0w3mp5YZXNKVTMm/oiVn+zup9sycw5xgEyxT9YUGh5nnE
+	BvYNjLIEj2N/obd8mtBaxlHioyp6tA2zFiRJ6+PZgN+LzGNkAtIZel34r+AD2w0xqTy66EINjVr
+	/thwbL8heYrrYxPbeIs2leJfs7MuOGEjsi8Cy3QROBAO+iVfqAyX1VXBBGq/KZkAyId8tFa7n2n
+	KTQ21tXI8e7R2VUV9g/+AZgxGnQP/ZrT3QZ4heKUDmpvPxlXJDrFY8J1ij8kabF7S3M8L+I+Zph
+	BZSECy89nAx+y4G+8E6dU02+ErAB6ZQb+4cQvuPZB0omR420K0UvHD4aQwKgbNLWHwnc857X2CS
+	5EwLyn0MgCCfqBROl/gsRuHaTvtdDIRrA==
+X-Received: by 2002:a17:90a:e7ca:b0:3a4:f75d:d194 with SMTP id 98e67ed59e1d1-3ab3a8ce801mr3278439a91.36.1791593554040;
+        Fri, 09 Oct 2026 17:52:34 -0700 (PDT)
 Received: from macmini4.tapir-palermo.ts.net ([138.199.43.94])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab50ce9d98sm4078226a91.9.2026.10.09.17.52.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab50ce9d98sm4078226a91.9.2026.10.09.17.52.31
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 09 Oct 2026 17:52:30 -0700 (PDT)
+        Fri, 09 Oct 2026 17:52:33 -0700 (PDT)
 From: Alan Derk <linux@alanderk.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Alan Maguire <alan.maguire@oracle.com>
 Cc: dwarves@vger.kernel.org,
 	bpf@vger.kernel.org,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH dwarves v2 0/2] dwarf_loader: Fix --lang_exclude on merged CUs
-Date: Sat, 10 Oct 2026 00:52:25 +0000
-Message-ID: <20261010005227.976-1-linux@alanderk.com>
+Subject: [PATCH dwarves v2 1/2] dwarf_loader: Take the merged CU language from a CU that is kept
+Date: Sat, 10 Oct 2026 00:52:26 +0000
+Message-ID: <20261010005227.976-2-linux@alanderk.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261010005227.976-1-linux@alanderk.com>
+References: <20261010005227.976-1-linux@alanderk.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,55 +80,204 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Two fixes for --lang_exclude when CUs are merged, as for LTO objects.
+When the CUs of an object are merged, as for clang LTO objects, the
+merged CU takes the language of the first CU. Since commit
+b98565e7b17ec24d ("dwarf_loader: Honour --lang_exclude when merging LTO
+built CUs") the DIEs of excluded CUs are skipped while merging, but
+pahole_stealer() then applies the same filter to the merged CU. If the
+first CU is in an excluded language, the whole merged CU is dropped,
+including the CUs that were kept, and with -J pahole writes no BTF and
+still exits 0.
 
-Patch 1 takes the merged CU's language from a CU that is kept, so that
-excluding the language of the first CU no longer drops the whole
-object. With LTO, this is what makes BTF generation fail for kernel
-modules that mix Rust and C.
+Kernel modules mixing Rust and C hit this in clang LTO builds with
+CONFIG_DEBUG_INFO_BTF_MODULES: kbuild passes --lang_exclude=rust, and
+the Rust CU comes first in the linked module even when the Rust object
+is listed last, as the C objects are bitcode compiled at link time.
+scripts/gen-btf.sh then fails, here for a Rust sample module:
 
-Patch 2 fixes a second bug from the same commit, which I found while
-testing userspace LTO objects after sending v1. With clang LTO, a type
-such as int is emitted once and shared through DW_FORM_ref_addr, so
-skipping the excluded CUs left references into them dangling: pahole
-crashed printing such members, and -J encoded them as void. Patch 2
-loads the types that kept CUs use from the excluded CUs. Output without
---lang_exclude does not change, and neither does the BTF of the LTO
-kernels I tested.
+  FAILED: load BTF from samples/rust/rust_minimal.ko.BTF.1: No such file or directory
 
-Patch 1 exposes this bug in one more link order. For a C++ object
-linked before a C one, pahole used to drop the C types without any
-error; with patch 1 alone it keeps them, and then crashes printing them,
-or encodes them as void with -J. Please apply the two together.
+This is what is left of the problem behind kernel commit 5daa0c35a1f0
+("rust: Disallow BTF generation with Rust + LTO"), which keeps RUST off
+when LTO and BTF are both on. With pahole 1.32 a ThinLTO vmlinux with
+Rust built in gets clean BTF, but its Rust modules fail as above, so
+that restriction can't be relaxed yet. Distributions with LTO kernels,
+such as CachyOS's default kernel, keep BTF for sched_ext and BPF tools
+and go without Rust; out-of-tree modules that build their own Rust
+objects there hit this today.
 
-As far as I know, patch 1 removes the last thing that keeps the kernel's
-RUST option off when LTO and BTF are both on. Once these fixes are in a
-release, I'd like to propose relaxing that dependency to something like:
+Take the merged CU's language from the first CU the filter keeps, and
+its producer too, as producer_clang also steers how the merged DIEs are
+processed. Run the filter before checking for DIEs, as the unmerged
+path does, so that a first CU without DIEs, such as an assembler CU,
+still counts and the output without --lang_exclude does not change. If
+every CU is filtered out, the merged CU keeps the first CU's language
+and is dropped as before.
 
-  depends on !DEBUG_INFO_BTF || (PAHOLE_HAS_LANG_EXCLUDE && (!LTO || PAHOLE_VERSION >= 133))
+Before, with a C++ object linked before a C one:
 
-assuming they land in 1.33. The kernel tests in patch 1 ran with
-"&& !LTO" dropped from that line, hence the Cc to rust-for-linux.
+  $ pahole -V --btf_features=force_cu_merging --lang_exclude=c++14 merged.o
+  Filtering CU first.cpp written in c++14.
+  Filtering CU  written in c++14.
 
-Changes in v2:
-- Add patch 2.
-- Patch 1 is unchanged; its note about the Kconfig follow-up moved here.
+After:
 
-v1: https://lore.kernel.org/all/20261009201032.40105-1-linux@alanderk.com/
+  $ pahole -V --btf_features=force_cu_merging --lang_exclude=c++14 merged.o
+  Filtering CU first.cpp written in c++14.
+  struct c_only {
+  	int                        b;                    /*     0     4 */
+  ...
 
-Alan Derk (2):
-  dwarf_loader: Take the merged CU language from a CU that is kept
-  dwarf_loader: Load types that kept CUs use from excluded CUs
+Add tests/lang_exclude_merged_cu.sh for this.
 
- dwarf_loader.c                  | 129 +++++++++++++++++++++++++++-----
- tests/lang_exclude_lto_refs.sh  |  76 +++++++++++++++++++
- tests/lang_exclude_merged_cu.sh |  67 +++++++++++++++++
- 3 files changed, 253 insertions(+), 19 deletions(-)
- create mode 100755 tests/lang_exclude_lto_refs.sh
+Tested with clang 21 builds of 7.2.9 with RUST enabled: x86_64 with
+ThinLTO (DWARF 4 and 5), full LTO and distributed ThinLTO, and arm64
+and riscv64 with ThinLTO. The Rust sample modules get BTF and load with
+MODULE_ALLOW_BTF_MISMATCH=n, and the BTF of vmlinux and of the C
+modules does not change.
+
+Fixes: b98565e7b17ec24d ("dwarf_loader: Honour --lang_exclude when merging LTO built CUs")
+Assisted-by: LLM
+Signed-off-by: Alan Derk <linux@alanderk.com>
+---
+Part of the dwarf_loader.c diff is re-indentation; git show -w is easier
+to read.
+
+ dwarf_loader.c                  | 34 +++++++++++------
+ tests/lang_exclude_merged_cu.sh | 67 +++++++++++++++++++++++++++++++++
+ 2 files changed, 89 insertions(+), 12 deletions(-)
  create mode 100755 tests/lang_exclude_merged_cu.sh
 
-
-base-commit: 1e342ac44979748bcf5bb37f84ea055e7f4d7184
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 01049e9..fbed36e 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -5329,6 +5329,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+ 	struct dwarf_cu *dcu = NULL;
+ 	Dwarf_Off off = 0, noff;
+ 	struct cu *cu = NULL;
++	bool kept_cu = false;
+ 	size_t cuhl;
+ 
+ 	while (dwarf_nextcu(dw, off, &noff, &cuhl, NULL, &pointer_size,
+@@ -5441,23 +5442,32 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+ 			cus__add(cus, cu);
+ 		}
+ 
+-		Dwarf_Die child;
+-		if (dwarf_child(cu_die, &child) == 0) {
+-			bool filtered = false;
++		bool filtered = false;
+ 
+-			if (conf->early_cu_filter) {
+-				struct cu unmerged_cu = {
+-					.name	  = attr_string(cu_die, DW_AT_name, conf),
+-					.language = attr_numeric(cu_die, DW_AT_language),
+-				};
++		if (conf->early_cu_filter) {
++			struct cu unmerged_cu = {
++				.name	  = attr_string(cu_die, DW_AT_name, conf),
++				.language = attr_numeric(cu_die, DW_AT_language),
++			};
+ 
+-				filtered = conf->early_cu_filter(&unmerged_cu) == NULL;
+-			}
++			filtered = conf->early_cu_filter(&unmerged_cu) == NULL;
++		}
+ 
+-			if (!filtered && die__process_unit(&child, cu, conf, 0) != 0)
+-				goto out_abort;
++		/*
++		 * pahole filters the merged CU by language again, so it must
++		 * not keep the language of a CU filtered out here.
++		 */
++		if (!filtered && !kept_cu) {
++			cu->language = attr_numeric(cu_die, DW_AT_language);
++			cu->producer_clang = attr_producer_clang(cu_die);
++			kept_cu = true;
+ 		}
+ 
++		Dwarf_Die child;
++		if (!filtered && dwarf_child(cu_die, &child) == 0 &&
++		    die__process_unit(&child, cu, conf, 0) != 0)
++			goto out_abort;
++
+ 		off = noff;
+ 	}
+ 
+diff --git a/tests/lang_exclude_merged_cu.sh b/tests/lang_exclude_merged_cu.sh
+new file mode 100755
+index 0000000..507c6ac
+--- /dev/null
++++ b/tests/lang_exclude_merged_cu.sh
+@@ -0,0 +1,67 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Test --lang_exclude when CUs are merged, as for LTO objects: excluding the
++# language of the first CU must not drop the CUs that follow it.
++
++. "$(dirname "$0")/test_lib.sh"
++outdir=$(make_tmpdir)
++
++trap cleanup EXIT
++
++title_log "Language filtering of merged CUs."
++
++CC=${CC:-gcc}
++CXX=${CXX:-g++}
++LD=${LD:-ld}
++for tool in "$CC" "$CXX" "$LD"; do
++	if ! command -v "${tool%% *}" > /dev/null 2>&1; then
++		info_log "skip: $tool not available"
++		test_skip
++	fi
++done
++
++cat > "$outdir/first.cpp" << 'EOF'
++struct cpp_only {
++	int	a;
++};
++
++struct cpp_only cpp_var;
++EOF
++
++cat > "$outdir/second.c" << 'EOF'
++struct c_only {
++	int	b;
++};
++
++struct c_only c_var;
++EOF
++
++obj="$outdir/merged.o"
++
++if ! $CXX -g -c -o "$outdir/first.o" "$outdir/first.cpp" 2>/dev/null ||
++   ! $CC -g -c -o "$outdir/second.o" "$outdir/second.c" 2>/dev/null ||
++   ! $LD -r -o "$obj" "$outdir/first.o" "$outdir/second.o" 2>/dev/null; then
++	error_log "FAIL: compilation failed"
++	test_fail
++fi
++
++output=$(pahole --btf_features=force_cu_merging -F dwarf "$obj" 2>/dev/null)
++if ! echo "$output" | grep -q "struct cpp_only" ||
++   ! echo "$output" | grep -q "struct c_only"; then
++	error_log "FAIL: merged CU lacks types without --lang_exclude"
++	test_fail
++fi
++
++output=$(pahole --btf_features=force_cu_merging -F dwarf \
++	--lang_exclude=c++,c++03,c++11,c++14 "$obj" 2>/dev/null)
++if echo "$output" | grep -q "struct cpp_only"; then
++	error_log "FAIL: --lang_exclude=c++ kept the C++ CU"
++	test_fail
++fi
++if ! echo "$output" | grep -q "struct c_only"; then
++	error_log "FAIL: --lang_exclude=c++ dropped the C CU merged after it"
++	test_fail
++fi
++
++test_pass
 -- 
 2.55.0
 
