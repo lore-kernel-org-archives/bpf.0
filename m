@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CEF52DECBF;
-	Sat, 10 Oct 2026 09:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921E543CE51;
+	Sat, 10 Oct 2026 09:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791623573; cv=none; b=avtcuS+K1En80aB1s4X9g+MHiwf10vbIX0+jYA3ov2hIuuaW011lt+WnGVaaW5ou37hLlwHAI3CllqYfCQcBTSgnDBOdcI/V5gpxXyfes4uPR4dPVcJrN3d3/HhSYWEJbYrMazs3+vx+ryUhkLDc2Ts6IjuWpejXQKqk0SK3zWY=
+	t=1791623575; cv=none; b=IhVAhtMUqAsQR8UAqcV82xh6SbNXykQdPZqvWP2iP5Nv7cetPYEbDTkl+SNTvQB7l854EHZEe95dMofoaPHx0lEjfUNktxLbNHdijM+KV6iTNXa3eHBocvlnOJ10F100hEI0lNjXm2D2pNOWFkk2wD+PC+NSlH6qi3qDiVe/lVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791623573; c=relaxed/simple;
-	bh=ESx+wOsSwAkFTsu7/2rkU2635ZUQFumEzakJg4MWSOQ=;
+	s=arc-20240116; t=1791623575; c=relaxed/simple;
+	bh=w+e/d+wQw75cJdstYI7Azks7iyQurhcuMUttp4+JpZE=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=E3fTCkugwTIR34XJYSgKlmY4O7rSMb/C6lmQ/cv+rd3XJfkJ4eagVha7xC0rKGcRcqrysxyN+dtSM0EXM+5fhVqpPonSju821uT2R2t3l4czsmhoQMS+6faVZ16NPvsevEHV0rswlhsRVXKCFCi5EC9nnrVqhZwmWFOB23fyolI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1NuFwfY; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=OddX0rrhTWJ2lCZRJdY7CgE3PwZHQ0gQtE5ZIWkWmz95pKnhBq8A51hxU8gmaouC4OECxutd5KepDgwrf6ROva3/1I/6t+SRTLVkUQFXRnIrBXDPk4IPfAe8/JlYYQmZGiYrLkR1zGqs9TyeyLVx3aUje5agKuXbI5a29J3kpJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SaHp22Qu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1NuFwfY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2AD1F000FF;
-	Sat, 10 Oct 2026 09:12:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SaHp22Qu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B49B1F00893;
+	Sat, 10 Oct 2026 09:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791623571;
-	bh=LxQcqkgepHngPEMm5i4F/BPaAna/2NbVXxMS3TiZSEc=;
+	s=k20260515; t=1791623574;
+	bh=9sxNpLCRy7SFX3hDkefEHGLKXPHk5XrB53mfGHysokg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=P1NuFwfYKgsU/i3+ikr/MT5Fag8gHWINknS9qCmd58m3PyMDA2aD2+76g2F+iP78o
-	 FG6JQTfzonc1iXoHOsdRwbv4MNfM5Xb8vmVMujm+FWLsybt5uzMLRZNFwxMKME8Zp6
-	 ewageeZPEzy9qHRxyKRiIHdKYpBd5/kh0Zzy/jg7j8txGEdc5jq0paEtYZo62Bnn7C
-	 mYPsqO1T0OD81OqgDRduRXko07pWK3jm/8OJUVv9vv1Jq3dEsNnCo0yCllIznVVd8S
-	 LywPYt0LBEhx+2SSMpv8WKZ8gKeBJ2geUvdPcGLma3a1lRoNQgsHGZHTNt8k7EDqTt
-	 UpalwrRNBZwuw==
-Subject: Re: [PATCH net-next v2 1/7] ipv6: treat a negative optlen as 4 in
- do_ipv6_getsockopt()
+	b=SaHp22QugWnUGJS1a2wj3Bx96X+rEtDNL4aV5WJJZLJVy9b2X6U3oHhrYBRqbLAVc
+	 oFQC7aFkn/FpX1UqAfNXuiUVaXqwPIDvf/MwS/OfkxtTYl2qwUpq5w5dVqcCBt7Wjx
+	 ug4U7Eo4kF7O1hYpZV7Hg3EttxtW+2T9SeGNK0i/wyEqcUu6qOZNcIvHSRHxfTCKNo
+	 ribGSUQSesMwIvW/WBDZALgRis+MIWdW7ix13kxOsMkdvIOztmhw+jJftABD+70yYs
+	 kDDTAbuMBUzWLl1ldlGPaT7nb9XtwlgJat7FC8n8GvH5MgC+6rvafwBNv5l2sWdWwA
+	 OHdomLtYdaNPw==
+Subject:
+ Re: [PATCH net-next v2 2/7] net: cap sockopt_expand_out() at MAX_RW_COUNT
 From: netdev-bot+sashiko@kernel.org
 To: leitao@debian.org
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
@@ -39,10 +39,10 @@ Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  edumazet@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  david.laight.linux@gmail.com, kernel-team@meta.com
-Date: Sat, 10 Oct 2026 09:12:49 +0000
-Message-ID: <179162356933.434549.9128206075467468309@kernel.org>
-In-Reply-To: <20261009-sockopt_expand_out_v2-v2-1-8ac08c469ecb@debian.org>
-References: <20261009-sockopt_expand_out_v2-v2-1-8ac08c469ecb@debian.org>
+Date: Sat, 10 Oct 2026 09:12:51 +0000
+Message-ID: <179162357191.434549.9383804148666639080@kernel.org>
+In-Reply-To: <20261009-sockopt_expand_out_v2-v2-2-8ac08c469ecb@debian.org>
+References: <20261009-sockopt_expand_out_v2-v2-2-8ac08c469ecb@debian.org>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,118 +59,61 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] This commit's message says a negative optlen is answered as 4
-  'for every option', and its new comment says 'take it as 4 everywhere'.
-- [Low] The commit fixes old behaviour where do_ipv6_getsockopt() treated
-  a negative optlen as a huge buffer: IPV6_2292PKTOPTIONS wrote control…
+- [Low] Most of this concern does not hold once the whole series is
+  applied.
 
 --
 
-ipv6: treat a negative optlen as 4 in do_ipv6_getsockopt()
+net: cap sockopt_expand_out() at MAX_RW_COUNT
 
-This patch makes do_ipv6_getsockopt() treat a negative optlen as 4. The
-int options already behaved this way through their unsigned min_t()
-clamp. Sticky headers and the IPV6_2292PKTOPTIONS control buffer are now
-cut to 4 bytes, and IPV6_PATHMTU and IPV6_FLOWLABEL_MGR now fail with
--EINVAL, as preparation for the sockopt_t conversion.
+This patch moves the size check in sockopt_expand_out() so it runs before
+the optlen early return. It also lowers the limit from INT_MAX to
+MAX_RW_COUNT. Any size that iov_iter_revert() could not unroll later is
+now rejected up front.
 
-> Suggested-by: David Laight <david.laight.linux@gmail.com>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-
-[Severity: Low]
-The commit message describes old behaviour that this patch fixes:
-
-- IPV6_2292PKTOPTIONS writes control messages without a limit.
-- IPV6_PATHMTU and IPV6_FLOWLABEL_MGR pass their size checks.
-- Sticky headers are copied in full.
-
-There is no Fixes: tag or stable guidance, though. Should one be added,
-or a note saying this is not meant for stable?
-
-The code involved predates git (1da177e4c3f4). The old behaviour only
-wrote to buffers that userspace supplied. This patch also changes results
-that userspace can see. For example, IPV6_PATHMTU with a negative optlen
-now returns -EINVAL.
-
-Another patch in this series, "net: cap sockopt_expand_out() at
-MAX_RW_COUNT", does carry a Fixes: tag.
-
-> diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-> index 4b3536571c980..4091d1521cc09 100644
-> --- a/net/ipv6/ipv6_sockglue.c
-> +++ b/net/ipv6/ipv6_sockglue.c
-> @@ -1002,6 +1002,11 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
->  
->  	if (copy_from_sockptr(&len, optlen, sizeof(int)))
->  		return -EFAULT;
-> +	/* Historic bug compatibility: the int options have always taken a
-> +	 * negative optlen as 4, so take it as 4 everywhere.
-> +	 */
-> +	if (len < 0)
-> +		len = 4;
-
-[Severity: Low]
-Is "take it as 4 everywhere" accurate at this commit? The commit message
-also says a negative optlen is answered as 4 "for every option".
-
-The mroute dispatch at the top of do_ipv6_getsockopt() returns before
-the new clamp runs:
-
-net/ipv6/ipv6_sockglue.c:do_ipv6_getsockopt() {
-    ...
-	if (ip6_mroute_opt(optname))
-		return ip6_mroute_getsockopt(sk, optname, optval, optlen);
-    ...
-}
-
-ip6_mroute_getsockopt() then reads optlen again and rejects a negative
-value:
-
-net/ipv6/ip6mr.c:ip6_mroute_getsockopt() {
-    ...
-	olr = min_t(int, olr, sizeof(int));
-	if (olr < 0)
-		return -EINVAL;
-    ...
-}
-
-So on a raw ICMPv6 socket, MRT6_VERSION, MRT6_PIM and MRT6_ASSERT still
-fail with len = -1, even though they are int options. IPV6_TCLASS
-answers 4 bytes in the same case.
-
-This also seems to contradict the part of the comment that says "the int
-options have always taken a negative optlen as 4". The MRT6_* int options
-have always returned -EINVAL.
-
-The clamp also only changes the local len. When do_ipv6_getsockopt()
-returns -ENOPROTOOPT, ipv6_getsockopt() reads the raw optlen again before
-it calls nf_getsockopt():
-
-net/ipv6/ipv6_sockglue.c:ipv6_getsockopt() {
-    ...
-		if (get_user(len, optlen))
-			return -EFAULT;
-
-		err = nf_getsockopt(sk, PF_INET6, optname, optval, &len);
-    ...
-}
-
-The ip6_tables and conntrack handlers reached from there seem to reject a
-negative length themselves. So this looks like a mismatch in wording, not
-a functional problem.
-
-A later patch in this series, "ipv6: convert do_ipv6_getsockopt() to
-sockopt_t", moves the clamp into ipv6_getsockopt(). There it runs before
-both the mroute dispatch and the netfilter fallback, which closes the gap.
-
-Could the comment and commit message here be changed to describe what
-this commit actually does?
-
->  	switch (optname) {
->  	case MCAST_MSFILTER:
->  		if (in_compat_syscall())
+> sockopt_expand_out() grows the output iterator up to INT_MAX, but its
+> callers rewind it with iov_iter_revert() once they know the real reply
+> size. iov_iter_revert() refuses to unroll past MAX_RW_COUNT:
 
 [ ... ]
+
+> Fixes: 0093f7db9c47 ("net: add sockopt_expand_out()")
+
+[Severity: Low]
+Is the present tense accurate at this point in the series?
+
+At this commit, ip_mc_msfget() in net/ipv4/igmp.c is the only caller of
+sockopt_expand_out(). It writes forward through opt->iter_out and never
+calls iov_iter_revert(). The same holds at 0093f7db9c47, so neither
+commit can reach the WARN_ON in iov_iter_revert().
+
+The callers that rewind come from later patches in this series: "ipv6:
+mcast: convert ip6_mc_msfget() to sockopt_t" and "ipv4: igmp: convert
+ip_mc_gsfget() to sockopt_t". For example:
+
+ip_get_mcast_msfilter()
+    iov_iter_revert(&opt->iter_out, gsf_size);
+
+ipv6_get_msfilter()
+    iov_iter_revert(&opt->iter_out, len);
+
+The same applies to compat_ip_get_mcast_msfilter() and
+compat_ipv6_get_msfilter(). Once those patches land, the new cap does
+protect these callers.
+
+Would it be more accurate to say the cap is for callers converted later
+in the series? Another option is to move this patch next to those
+conversions. The Fixes: tag pointing at 0093f7db9c47 has the same
+problem.
+
+Also, the header comment above sockopt_expand_out() in include/linux/net.h
+still only describes the kernel-backed -EINVAL case:
+
+ * the head of optval. Only a user buffer can be longer than the optlen the
+ * caller declared, so a kernel-backed optval is refused with -EINVAL.
+
+Could it mention the MAX_RW_COUNT rejection as well? The new comment
+inside the function already explains it.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb%40debian.org
