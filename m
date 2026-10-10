@@ -1,286 +1,269 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52396369D4F
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 21:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DD91A683D;
+	Sat, 10 Oct 2026 22:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791666191; cv=none; b=cu+zwVfauvTEr4hln289BENvdJSD5Gz+gPfEPHL3bi2iS340/dCJEiSWR3so4msXZ+BUK5ihWlRjcpObuOTI/YBICawtqo2RXujqqzKuMT/m3f5wjnunAP1KUSpRL6diKNEi/mTsdBY8QRxBBhDY0b+dxJNGbPTJGa5EBglWcMo=
+	t=1791669627; cv=none; b=pvoSx4+58RJt/pZ3LW/aDh8aVfcXnvuIsCVf4SMHeUqU03UIF60qOlHr2fBnANy53S5xaYPwrwCaK9vVXDrbYfWO5AZ3riFu3LwKYe/ymIgpa8AJsQtPAcajJPMkUj30jqmLPhKLkSP4AthoXZGWHZoifKuhq5mOzXwjoAht/Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791666191; c=relaxed/simple;
-	bh=v/XlPMN4fPBfmAxkgYIsWzQxkY2uLOFx2Hx425yLdCQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rs3LPG8wnCPU3922ut9rMnwCnzqGgTA46BuPIzoBERjVtNvL4Sc8NERnX+BieIp/vn1328K4yR+2Ax3H3VSUhsZhQSHM95ARIvaGPDVorYFRMQxzjUfOgjsnyNXXL/8fOGjXq1Ze8cxbhLBjyRUST0EwMwJKzdW1x6Tm9a7mWyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=WzislntM; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1791669627; c=relaxed/simple;
+	bh=uTIIgXvNGRKidYtT9y9d/j9O/uWBWM1pGuwQpiO4cmw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=LxMbN4FMd8LTIFjiPea+nzZKCbl9pWue4MSjHuNEHXw8edbBTn5aa++6NGrRpEtSCEfwX13SoWeZ2wNQ3RrWp5xUIhhJ+2XPHi7ITvpMZa1z5TZgNagyttUk0wpBrTgKFuexBZfsUQWi2ziBmDZ6ZWxse3V+cxAJqVpfdWWVHLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ffP+TPLt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="WzislntM"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-93e4e37788cso85194985a.2
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:03:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ffP+TPLt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AADC1F000FF;
+	Sat, 10 Oct 2026 22:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1791666187; x=1792270987; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jz2Hc1XYfp2QYZMfwSM35lC+Lb6h+/doZovOemukty0=;
-        b=WzislntMaHvjSpMec8Vc4/i1wBjX75zqKLRZm8lu7uOqz+NWFO7XkasklP/+dZREZi
-         uDbltHc4CpnJC5bQaR2Gppt6X4OPs7+AYqq5K02IdmxhRllw7n6h279iavp9ibm2MIg8
-         NtSzaICuv3MnSEXaaIHBfkkcEVJ7SqfmA3SfI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791666187; x=1792270987;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jz2Hc1XYfp2QYZMfwSM35lC+Lb6h+/doZovOemukty0=;
-        b=ExInyhRKLiQCUx4SDJ0AuBLBBYmt0VroVBkI1DxD+sL3H6aWvxjyJV0RNQkfRSsXd7
-         uwu9THj7VYGfS1LuiYAknw5+tBCQk4SszJH125bKeIM29JzGP05437epNHQ+iKLYhT4q
-         8UE50eQj8bdpSaPjf29hC7p2OMWhPIY978tVycV+RJmIBkwfvkMzuoDuRxwlNrOp3dOt
-         qDHU7Wehl2dHHaiw9gvjqs8cC28vUg35AOsoYXbUZmw1LWa48qTZSrfFDNyI/rH3se19
-         r8PL11RFld35w6F14mPppF7IuP4HZgEkRH+tjQO+DmU0bLwMGTVS2DvvJZhehnhEKoL4
-         AWCw==
-X-Forwarded-Encrypted: i=1; AKwUvBwl6c2gfhlkIMhOickxIY4i3VyeUj4rbUgDXZJSEfNbMQyMvZEZ6Gug28NDIcD8niNkt74=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKXMo1KQEdQCtLlagMFbwOkk4SQSg3uhHXmyQNiZ5wgAc4k5U2f
-	zito2sliLKl0jCaZ0VDkQxoOT8YGYJyl/QQMsbcIWAIrUQc+GDZeLxhPW9ie/cGFBw==
-X-Gm-Gg: AYBFou0XEicUvsOqk/WAK09e4tM8vTpA5jyGfObHBrh8wUvBwPrAPd8DrMeBBKl8Hv1
-	zROnsfWwHBUY6aWUgGIWFB3LoEdnzyKD7Jr5/JmNU9Jr3bk1OkIerYPcAv69pQvRnue/Hgliv8i
-	2HWjxwB5BxGjbbkY6l2YK4snsfDkUb/DacLjOen/dJSpZvmYRz4sUHbWuowR9o2Kx38fCQuVKIy
-	dQ3f0k7g6tN4SDqcN1svWUwr6wDPie7jjOsmSolZAQ85gFxemYC8JJb7xYXjtWesDTOpbBV7LB7
-	57CRU9i6v8n0AfOMWxIttHBzHGwjEal+qgi+fdIRWJGO+1oC8lFsNWa1OGwpSGcOU2wGDGNfn3X
-	8WP9y1cKt5MPHgTneyxIANQ3RrN6d3Y5vgmQ4bqfGf6T9dRfjaMa4VHE/18mI2juzU0d04ezpJh
-	AWl+n+KCkRtUi77UkValCSsVlUN7W/uu7Z8zRIiovK6IwOosQK8Pt0RXoMwioGu8GqxRcgs5Zbo
-	nItXB5UyOcwI8Zwht8Y7RQ2OjF+RnIgHDX77frZIBtQ
-X-Received: by 2002:a05:620a:17a0:b0:93e:c12c:f13b with SMTP id af79cd13be357-93ec12d085amr843885885a.69.1791666186988;
-        Sat, 10 Oct 2026 14:03:06 -0700 (PDT)
-Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb984845csm498538085a.14.2026.10.10.14.03.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Oct 2026 14:03:06 -0700 (PDT)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jiri@resnulli.us,
-	bpf@vger.kernel.org,
-	victor@mojatatu.com
-Subject: [PATCH net v2 3/3] selftests: net: exercise dev-bound cls_bpf on shared blocks
-Date: Sat, 10 Oct 2026 17:02:50 -0400
-Message-Id: <QDISC-PYC7.v2.20261010165947-4@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
-References: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
+	d=linux-foundation.org; s=korg; t=1791669625;
+	bh=N2jYfqmPt2es1xuCkTol8NOahRHgRnTcTOUiwhGzkTU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=ffP+TPLt1hBG2zdntJGpA4a6eo1Kktyl63gUdmTPWoDV5PB8j6QZDH7O5pu6DND18
+	 83jrFOWryJ2h63yrCPBw+Uh9wavAQ633twrY1q8Eu4fcsINr1B1dFygd9ev9/B+B/N
+	 PiED0VbjIV4o5yPrrgsINTWJg6/2ZfXlko4ls4sM=
+Date: Sat, 10 Oct 2026 15:00:20 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
+ <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, David Hildenbrand <david@kernel.org>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+ <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Dennis Dalessandro
+ <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela
+ <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, Ryan
+ Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
+ <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Usama Arif
+ <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert
+ <dgilbert@interlog.com>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
+ <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, Helge Deller
+ <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, John Hubbard
+ <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra
+ <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo
+ <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
+ <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann
+ <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, Oscar Salvador
+ <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan
+ Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul
+ Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda
+ <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens
+ <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller"
+ <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Matthew Brost <matthew.brost@intel.com>, Joshua Hahn
+ <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park
+ <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, Ying Huang
+ <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, Chris
+ Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, Kemeng Shi
+ <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He
+ <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, Johannes
+ Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt
+ <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>,
+ Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Chengming
+ Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, Miklos
+ Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org,
+ selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ fuse-devel@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>, Bert
+ Karwatzki <spasswolf@web.de>, Takashi Iwai <tiwai@suse.de>, Emil Tsalapatis
+ <emil@etsalapatis.com>
+Subject: Re: [PATCH v5 00/38] mm: make VMA flag semantics explicit,
+ eliminate VM_SPECIAL
+Message-Id: <20261010150020.cbd6ce3038e3b6d72e2c92c9@linux-foundation.org>
+In-Reply-To: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
+References: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The issue:
-bpf_offload.py only exercises per-device ingress qdiscs today, so neither
-the shared-block accept path nor the late-join replay is tested.
+On Fri, 09 Oct 2026 19:03:54 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
 
-The Fix:
-Add a test for a device-bound SCHED_CLS program attached through a shared
-block.  It loads a dev-bound SCHED_CLS program for a netdevsim device and
-checks:
-  - the program attaches to a shared block owned by its device, and the
-    filter teardown leaves the device unloaded;
-  - a block that also holds an independently backed device rejects the
-    attach, because the offload path broadcasts the program to all
-    members;
-  - an independently backed device that joins a populated block is not
-    loaded by the bind/replay path, and the driver's extack is asserted;
-  - a second port of the same netdevsim device (same offload device) is
-    accepted together with the bound port.
+> The VM_SPECIAL / VMA_SPECIAL_FLAGS mask conflates several unrelated
+> properties:
+> 
+> * Is this managed by core mm, or by a driver mapping MMIO, kernel-allocated
+>   pages, or even ordinary pages itself?
+> * Can it be expanded or merged?
+> * Is this a 'weird' case like mlock where migration might race and we
+>   'have' to set invalid flags to notify?
+> * Is it another 'weird' case where we just want to stop GUP from touching
+>   it?
+> 
+> Driver writers have often been confused about this, and who can blame them?
+> 
+> It also interacts badly with the eternal edgecase known as hugetlb - which
+> sets VMA_DONTEXPAND_BIT but doesn't also want to be treated like a
+> 'special' flag.
+> 
+> Another issue is that we cannot make sensible assumptions about flag
+> use. It's not possible to assume VMA_IO_BIT means iommu because drivers
+> abuse it and mlock abuses it.
+> 
+> Special is also an overloaded term in mm. VDSO and VVAR mappings are also
+> called 'special' but they're special in a... special way.
+> 
+> Sometimes things are called special that are a subset of
+> VMA_SPECIAL_FLAGS (VMA_PFNMAP_BIT and VMA_MIXEDMAP_BIT for instance when it
+> comes to zapping or vm_normal_folio()).
+> 
+> There's a specific kind of special for THP too, which considers
+> PFN map, mixed map 'special' but DAX not.
+> 
+> It's all rather a mess.
+> 
+> This series brings some order to things by both limiting what drivers can
+> do with VMA flags and switching to using predicates that describe
+> behaviour, not arbitrary flags.
 
-The program is loaded from the existing sample_ret0.bpf.o with an explicit
-`type classifier` override, so no new sample object is needed.
+Thanks, I've updated mm-unstable to this version.
 
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
-v1 -> v2 (v2 of an on-list patch; v1 posted 2026-10-04):
+For some reason, new versions of this series aren't applying when I
+drop the new series in place of the old.  I made the same old bunch of
+reject-fixups, so the below interdiff will show if I messed any of them up.
 
-- New selftest: shared-block + late-join coverage in bpf_offload.py.
-- Split the single v2 draft into three patches; this companion carries no
-  Fixes: and no Cc: stable (a selftest is not backported; it depends on
-  both code patches).
----
- tools/testing/selftests/net/bpf_offload.py | 139 +++++++++++++++++++++
- 1 file changed, 139 insertions(+)
+> v5:
+> * Applied tags (thanks everybody!)
+> * Updated 3/38 to fix a bug in __mmap_new_file_vma() by zapping + closing
+>   the VMA before setting vma->vm_file NULL to avoid an i_mmap_writable
+>   imbalance. A repro was tested before/after and confirmed fixed.
+> * Updated 7/38 to make __map_kernel_pages_prepare() use
+>   mmap_assert_write_locked() rather than the weird
+>   assert-on-mmap_read_trylock() pattern, as per Suren.
+> * Also update vm_insert_page(), vm_insert_pages() to fix the same pattern
+>   and to use the new VMA API, and converted a BUG_ON to a
+>   VM_WARN_ON_ONCE().
 
-diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
-index c856d266c8f3..87e244d8ff05 100755
---- a/tools/testing/selftests/net/bpf_offload.py
-+++ b/tools/testing/selftests/net/bpf_offload.py
-@@ -452,6 +452,38 @@ class BpfNetdevSim(NetdevSim):
-         self.tc_add_ingress()
-         self.wait_for_flush(bound=bound, total=total)
+Here's how v5 altered mm.git:
+
+ mm/memory.c                       |   20 +++++++++++---------
+ mm/vma.c                          |   16 ++++++++--------
+ tools/testing/vma/include/stubs.h |    4 ++++
+ 3 files changed, 23 insertions(+), 17 deletions(-)
+
+--- a/mm/memory.c~b
++++ a/mm/memory.c
+@@ -2611,10 +2611,11 @@ int vm_insert_pages(struct vm_area_struc
  
-+    def tc_add_block(self, block, fail=True, include_stderr=False):
-+        return tc("qdisc add dev %s ingress_block %d clsact" %
-+                  (self['ifname'], block), fail=fail,
-+                  include_stderr=include_stderr)
-+
-+    def tc_del_block(self, block):
-+        tc("qdisc del dev %s clsact" % (self['ifname']), fail=False)
-+
-+    def tc_add_block_filter(self, block, bpf, op="add", prio=None, handle=None,
-+                            da=False, verbose=False, skip_sw=False,
-+                            skip_hw=False, fail=True, include_stderr=False):
-+        spec = ""
-+        if prio is not None:
-+            spec += " prio %d" % (prio)
-+        if handle:
-+            spec += " handle %s" % (handle)
-+
-+        params = ""
-+        if da:
-+            params += " da"
-+        if verbose:
-+            params += " verbose"
-+        if skip_sw:
-+            params += " skip_sw"
-+        if skip_hw:
-+            params += " skip_hw"
-+
-+        return tc("filter {op} block {block} {spec} bpf {bpf} {params}"
-+                  .format(op=op, block=block, spec=spec, bpf=bpf,
-+                          params=params),
-+                  fail=fail, include_stderr=include_stderr)
-+
-     def tc_show_ingress(self, expected=None):
-         # No JSON support, oh well...
-         flags = ["skip_sw", "skip_hw", "in_hw"]
-@@ -629,6 +661,111 @@ def test_spurios_extack(sim, obj, skip_hw, needle):
-                             include_stderr=True)
-     check_no_extack(res, needle)
+ 	if (!range_in_vma(vma, addr, end))
+ 		return -EFAULT;
+-	if (!(vma->vm_flags & VM_MIXEDMAP)) {
+-		VM_WARN_ON_ONCE(mmap_read_trylock(vma->vm_mm));
+-		VM_WARN_ON_ONCE(vma->vm_flags & VM_PFNMAP);
+-		vm_flags_set(vma, VM_MIXEDMAP);
++	if (!vma_test(vma, VMA_MIXEDMAP_BIT)) {
++		mmap_assert_write_locked(vma->vm_mm);
++		VM_WARN_ON_ONCE(vma_test(vma, VMA_PFNMAP_BIT));
++		vma_start_write(vma);
++		vma_set_flags(vma, VMA_MIXEDMAP_BIT);
+ 	}
+ 	/* Defer page refcount checking till we're about to map that page. */
+ 	return insert_pages(vma, addr, pages, num, vma->vm_page_prot);
+@@ -2626,7 +2627,7 @@ static void __map_kernel_pages_prepare(s
+ 	if (vma_desc_test(desc, VMA_MIXEDMAP_BIT))
+ 		return;
  
-+def test_tc_shared_block():
-+    """
-+    Device-bound cls_bpf program attached through a shared block.
-+    """
-+    # A shared block has no qdisc, so the target device is derived from the
-+    # block's bound netdevs and the program must match every member, since
-+    # the offload path broadcasts it to every callback on the block.  A
-+    # netdev joining a populated block later is replayed the stored filter
-+    # before it is inserted into block->ports, so the driver callback must
-+    # enforce the device match as well.
-+    simdev = BpfNetdevSimDev()
-+    sim, = simdev.nsims
-+    sim.set_ethtool_tc_offloads(True)
-+
-+    start_test("Test TC shared-block load dev-bound program...")
-+    bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/tc_shared",
-+                      prog_type="classifier", dev=sim['ifname'])
-+
-+    start_test("Test TC shared-block dev-bound attach...")
-+    # The pinned program is dev-bound to this device; attaching it through
-+    # a shared block must succeed even though block->q is NULL.
-+    sim.tc_add_block(22)
-+    # err is kept (include_stderr) for post-mortem value on a failure.
-+    ret, _, err = sim.tc_add_block_filter(22, bpf_pinned("/sys/fs/bpf/tc_shared"),
-+                                          da=True, skip_sw=True,
-+                                          fail=False, include_stderr=True)
-+    fail(ret != 0, "dev-bound program rejected on a matching shared block")
-+    fail(sim.dfs_read("bpf_offloaded_id") == "0",
-+         "dev-bound program not offloaded on a matching shared block")
-+    sim.tc_del_block(22)
-+
-+    start_test("Test TC shared-block broadcast to a foreign member...")
-+    # Add an independently backed device to the SAME block before the
-+    # attach.  The program is bound to sim's device only, and the offload
-+    # path fans it out to every member, so the attach must be rejected.
-+    simdev2 = BpfNetdevSimDev()
-+    sim2, = simdev2.nsims
-+    sim2.set_ethtool_tc_offloads(True)
-+    sim.tc_add_block(40)
-+    sim2.tc_add_block(40)
-+    ret, _, err = sim.tc_add_block_filter(40, bpf_pinned("/sys/fs/bpf/tc_shared"),
-+                                          da=True, skip_sw=True,
-+                                          fail=False, include_stderr=True)
-+    fail(ret == 0, "dev-bound program broadcast to a foreign shared-block member")
-+    check_extack(err, "Program is not bound to every device in the block.", args)
-+    sim2.tc_del_block(40)
-+    sim.tc_del_block(40)
-+    simdev2.remove()
-+
-+    start_test("Test TC shared-block late join replay...")
-+    # Build a block owned by sim's device with the matching program
-+    # installed, then let an independently backed device join it.  The
-+    # join replays the stored filter to the joining device's callback
-+    # before the device is recorded in block->ports; the driver must
-+    # reject the replay so the foreign device is never loaded.
-+    # sim2 is created here (not inherited) so the TC-offload state it
-+    # depends on is explicit.
-+    simdev2 = BpfNetdevSimDev()
-+    sim2, = simdev2.nsims
-+    sim2.set_ethtool_tc_offloads(True)
-+    sim.tc_add_block(30)
-+    ret, _, err = sim.tc_add_block_filter(30, bpf_pinned("/sys/fs/bpf/tc_shared"),
-+                                          da=True, skip_sw=True,
-+                                          fail=False, include_stderr=True)
-+    fail(ret != 0, "dev-bound program rejected on a matching shared block")
-+    ret, _, err = sim2.tc_add_block(30, fail=False, include_stderr=True)
-+    fail(ret == 0, "foreign device joined a populated dev-bound shared block")
-+    check_extack_nsim(err, "program bound to a different device.", args)
-+    fail(sim2.dfs_read("bpf_offloaded_id") != "0",
-+         "replayed program loaded onto a foreign device")
-+    # The add above was expected to fail, so the qdisc may not exist; the
-+    # delete is harmless and only cleans up when it does.
-+    sim2.tc_del_block(30)
-+    sim.tc_del_block(30)
-+    simdev2.remove()
-+
-+    start_test("Test TC shared-block same-offload-device member...")
-+    # A second port of the same netdevsim device shares the offload device,
-+    # so a program bound to one port may legitimately be offloaded to both.
-+    simdev3 = BpfNetdevSimDev(2)
-+    sim3, sim3b = simdev3.nsims
-+    sim3.set_ethtool_tc_offloads(True)
-+    sim3b.set_ethtool_tc_offloads(True)
-+    bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/tc_shared_multi",
-+                      prog_type="classifier", dev=sim3['ifname'])
-+    sim3.tc_add_block(50)
-+    sim3b.tc_add_block(50)
-+    # err kept for post-mortem value on a failure.
-+    ret, _, err = sim3.tc_add_block_filter(50, bpf_pinned("/sys/fs/bpf/tc_shared_multi"),
-+                                           da=True, skip_sw=True,
-+                                           fail=False, include_stderr=True)
-+    fail(ret != 0, "same-offload-device member rejected on a shared block")
-+    fail(sim3.dfs_read("bpf_offloaded_id") == "0",
-+         "program not offloaded to the bound port")
-+    fail(sim3b.dfs_read("bpf_offloaded_id") == "0",
-+         "program not offloaded to the same-offload-device port")
-+    sim3b.tc_del_block(50)
-+    sim3.tc_del_block(50)
-+
-+    simdev3.remove()
-+    simdev.remove()
-+    rm("/sys/fs/bpf/tc_shared_multi")
-+    rm("/sys/fs/bpf/tc_shared")
-+    bpftool_prog_list_wait(expected=0)
-+
- def test_multi_prog(simdev, sim, obj, modename, modeid):
-     start_test("Test multi-attachment XDP - %s + offload..." %
-                (modename or "default", ))
-@@ -1349,6 +1486,8 @@ try:
-     ret, out = bpftool("prog show %s" % (progB), fail=False)
-     fail(ret != 0, "couldn't get information about orphaned program")
+-	VM_WARN_ON_ONCE(mmap_read_trylock(desc->mm));
++	mmap_assert_write_locked(desc->mm);
+ 	VM_WARN_ON_ONCE(vma_desc_test(desc, VMA_PFNMAP_BIT));
+ 	vma_desc_set_flags(desc, VMA_MIXEDMAP_BIT);
+ }
+@@ -2785,10 +2786,11 @@ int vm_insert_page(struct vm_area_struct
+ {
+ 	if (addr < vma->vm_start || addr >= vma->vm_end)
+ 		return -EFAULT;
+-	if (!(vma->vm_flags & VM_MIXEDMAP)) {
+-		BUG_ON(mmap_read_trylock(vma->vm_mm));
+-		BUG_ON(vma->vm_flags & VM_PFNMAP);
+-		vm_flags_set(vma, VM_MIXEDMAP);
++	if (!vma_test(vma, VMA_MIXEDMAP_BIT)) {
++		mmap_assert_write_locked(vma->vm_mm);
++		VM_WARN_ON_ONCE(vma_test(vma, VMA_PFNMAP_BIT));
++		vma_start_write(vma);
++		vma_set_flags(vma, VMA_MIXEDMAP_BIT);
+ 	}
+ 	return insert_page(vma, addr, page, vma->vm_page_prot, false);
+ }
+--- a/mm/vma.c~b
++++ a/mm/vma.c
+@@ -2631,21 +2631,21 @@ static int __mmap_new_file_vma(struct mm
+ 	map->vm_file = vma->vm_file;
  
-+    test_tc_shared_block()
-+
-     print("%s: OK" % (os.path.basename(__file__)))
+ 	if (error) {
+-		struct file *file = vma->vm_file;
+ 		UNMAP_STATE(unmap, vmi, vma, vma->vm_start, vma->vm_end,
+ 			    map->prev, map->next);
  
- finally:
--- 
-2.43.0
++		if (vma->vm_ops->close) {
++			zap_vma(vma);
++			/* Safe, because VMA zapped. */
++			vma_close(vma);
++		}
++		if (map_same_file(map))
++			fput(map->vm_file);
++
+ 		vma->vm_file = NULL;
+ 		vma_iter_set(vmi, vma->vm_end);
+ 		/* Undo any partial mapping done by a device driver. */
+ 		unmap_region(&unmap);
+-		vma->vm_file = file;
+-		/* Only safe once unmapped. */
+-		vma_close(vma);
+-
+-		if (map_same_file(map))
+-			fput(map->vm_file);
+-		vma->vm_file = NULL;
+ 		return error;
+ 	}
+ 
+--- a/tools/testing/vma/include/stubs.h~b
++++ a/tools/testing/vma/include/stubs.h
+@@ -329,6 +329,10 @@ static inline void vma_close(struct vm_a
+ {
+ }
+ 
++static inline void zap_vma(struct vm_area_struct *vma)
++{
++}
++
+ static inline int mmap_file(struct file *file, struct vm_area_struct *vma)
+ {
+ 	return 0;
+_
 
