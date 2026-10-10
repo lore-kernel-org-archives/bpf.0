@@ -1,47 +1,47 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011010.outbound.protection.outlook.com [52.101.57.10])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012004.outbound.protection.outlook.com [40.93.195.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F3F336F8F0;
-	Sat, 10 Oct 2026 22:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4866C39CCFA;
+	Sat, 10 Oct 2026 22:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.4
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791672564; cv=fail; b=sOWjIh9PLKZYZVrwKtrS6yatUZJsQmAaespgJ9bnwh9a+AR+Yfp5mQXLJOlly/MuE0rUHObH0Tvr2noZhxcybvb1jE/wwIxarYpmUwk/gKUJvUQkcmHcCwsfkj7YxQLbDwFO/X6o9xKBeFAkyWEWDecc4SXY7F1LjsGPg6jPUX0=
+	t=1791672572; cv=fail; b=frIVplhLaJktFD49/291N2SqXVPJsl6V9ZaURFon+RK5TqGyyMJc+BovIg2KsNoLd/2tWo9BvrEQnX3DEKCCjNH31CKdlwENH83l7VWrhyoTXmOCU5qc3aobg8w0nrOtPo6jfjTU1zlcbnJ6H7R1N+eCEiKbRqNA0e/D5trWhDw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791672564; c=relaxed/simple;
-	bh=Jvwv66Sb0bdgsG1L22D9HQlMAgEJAnh94SC9Cm3CwBE=;
+	s=arc-20240116; t=1791672572; c=relaxed/simple;
+	bh=FQ5FvwzL+Q83c5fBs73vEkuM2+eyKIyjckWRiimjQz0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iVhJTDruTTFbNmSK9GPAmDeYKjjVn26+1zxLxVvigouNPyP6esTzuADBQREV2qvEhjvqqDn51U/AyHcf/qnM5ACNpHjUR91fGGLJXvlNa+NEQefzzPWtUyO6gmIyarHTVRi/MyH94PkYIfBRP9N1pYRkvjTbEhPkuHU7b/5ge2w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=R0IKLlLn; arc=fail smtp.client-ip=52.101.57.10
+	 Content-Type:MIME-Version; b=BgQfTIwj168kIDPFmQBqFK1X0Z+XAmsxDSKAuvF9H3teNT81Z2AzN+6tqWdz+KTfVvvzE3vdJKepp3XkKrzEwQ/4rnSUUBBYY4BoJrBXbN2n1oGa5dDv77I9TzaFmTkUIBi4aj/oLfLTbUNtxMRLY5KMgP65cIVlhvv8t8C9/oY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SchdgU61; arc=fail smtp.client-ip=40.93.195.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="R0IKLlLn"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SchdgU61"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CljYe9Fs4tzCDkR6Ej/8c6Qfm/yBwBBO3+T8K02VEYpJi/qPfL+RaL+Ytf/+lH+HZyZr1tOwR0NZil1z+33ponp3UjdT5i4xTkWFyF/cGUar0ezR7ajAyu+uXDg8D5pNdjCKsP5nrkGsYmTIirLwUc4iI0VjquSRZn0ST2UNATuFbIBPRssLIw/bySicmZvacL1Gx/5sAJNZP4F9ilsG/2higvo7Rp/TfcQB8jKszzimySHpp9DrkgSGytD7CI9HbxDc+qh5eJ7GPTewOXkh7xSrVsL49B88AKbWv4gQCkNJn3mdEQ4k9PBu1yS5rQi7jUKWR3B/fxubYfbQX8aafw==
+ b=TgOAGLC6FIBFj58xf3FgAQLoyDTgGPGwFDxzgZ8SxB5SMKf15DwtEENMyI1iJyqS1g7L+DCRKrbOTWZdrbSUY8u2T+qoExupYn3PBiFU6UeGnFN7+zhnFo6+NH4QrRkn68H9o4HHax9eVINsrOuHCl1TCGkMm0shuCCUBpHyxmutq/WNn7DNLClSzQ5ZXWT7rG278ShKB1G+yI/VJDx+yzB90TWjOQwaJ4g3CJrmIY6vlKFaVPordZ1qUgAJJhz5G1Z5QHWV824K9E5vwxkl9OaId6u5yznQ4VhnGLW9j8IwQVhfo5RDxqAl3TIsVpMKLLe4uzxPIfp7KK+yDCP68g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6bE9yN0jR5nhmsyNVRLxmxz2m3Ygbc9msyMwzU6ygyE=;
- b=xCjSXn7ZS19UHWtAk/KNtTklXjKckUmGFbNUJiDWnELh9VsjhsD/D3Cytrwzmwh4mz390al/fYAXTsd2hOo06WKP0SgOoOvVrYZOWlSM7JBz9jY8DvudOzx2S73CqOp5cOPy6Xx5uk5T8O3/jNptc+qL4thiOTN6GPAz+J5MclT9ZbyDJRGirbRPE2V2q1YTocB3ruqPd78ty56UmlMnlelNYYT4JONh0a0CwbCiNdjzPZMlTO6hC6AdBsvPaIHr4sHwXBBjaTFyZ80FZfhB1lq27wkN+1Ff7/7O+FMbXhk+nV4dj7IyEZkh/79OKbLEDIIFMUuQ3M/V2fec3/SG8g==
+ bh=md6L3QUglkgoqWxSmZjW6WKQ2EJGTnkPGeHmea2sS5U=;
+ b=waU4nDLKV71qrqNxgX1V0XVCm1ONqYuO7uFP53WNF1YKdG/5qE9mK3d55QTIb1TtkuNUd44+nIazI0r/1iv0Zr46xOJ5VsiAwrzhc0jp5x1RePqfbAjwApiGHXh4gzEkhtFB/U/fCzfcGyEOntd59qFAJCyEQU7b38IL6ckzWpYJFXDG0tlPgdLYbrdyjJpAGbkU+0lWS1nMMs1nSbjyIJw6Q5KFLCcDW5pTLovmwhpAoKD6hUo7AWERHgOTEXZTbe2uVDyvTwWQ3XyaEdd2KCjR2n/bhXs+BoBwAtGoqfAlvrBSEQH/uXtvuhk1tL+eB68mEB2uZotlJZbNSnFSeQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6bE9yN0jR5nhmsyNVRLxmxz2m3Ygbc9msyMwzU6ygyE=;
- b=R0IKLlLnYaAwyM3+//Vs7yJzf7CkeB/306fcNFB4h23qyzNPZdT8RzbBSmO20qpkxH7vzgzaXtnMuvrB0/AzP746bErxph9ozRAI45O7KNGEcPc2OYK6A9vqgKCk+M6pgrmZVw3Zv/CvB+8Erzz8MT3dZCY5jLor2EPSHeUnznAoZigHSmsIj8Id80gCwaPLpBNeF/JYt4huzkoJGGXzUbQnzkSwJ5OYUfcjsHw85Zjm26/1Dy559o9mVqcB8aWLKLLuD+Fn8IS0ar2zSgMztDHZ6c1Io3FV7dRjHsYFfCaS9NToNzXu8jLH2964mqkmQQPt8YnOOhw9pEfNgjcmmA==
+ bh=md6L3QUglkgoqWxSmZjW6WKQ2EJGTnkPGeHmea2sS5U=;
+ b=SchdgU61h5+uvvJuYbBRKxi7rg0OHD1r3EqSEhjDVuH8xdZqxngHnM5HVuMlwZ0k1ZeJtixT+PTX07RiKaqtjYzKfAqPgmr8wgaTAFMMNBPhmdBPCyGU47HRlZOKugfn1b5ggAW4ojgRfl8m0A3/jk33Z6yOhmtLCIJCt2XHlN9R5XL1JXBMiUdE58N02vkw0HP0Rxad8EwCS7D6GspllIsFdbm0CB5h+cZwYpRFwfeeABW5PySvoQaS/+XTYvzSJaar69bAC1D2ec4dhZEJ7uRp5nVbDApxTPNIftAHLc/yQPfvBkxAkTKTVwVpxVCB6exkYMJGGJ70Nu4lpiXu/g==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
  by CY5PR12MB6453.namprd12.prod.outlook.com (2603:10b6:930:37::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.17; Sat, 10 Oct
- 2026 22:49:19 +0000
+ 2026 22:49:23 +0000
 Received: from BL1PR12MB5174.namprd12.prod.outlook.com
  ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
  ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0496.018; Sat, 10 Oct 2026
- 22:49:19 +0000
+ 22:49:23 +0000
 From: Andrea Righi <arighi@nvidia.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -63,16 +63,16 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	NchangRoy <royfru44@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] docs/bpf: Document pinned arena file mappings
-Date: Sun, 11 Oct 2026 00:45:58 +0200
-Message-ID: <20261010224902.1232178-4-arighi@nvidia.com>
+Subject: [PATCH 4/5] selftests/bpf: Test pinned arena file mappings
+Date: Sun, 11 Oct 2026 00:45:59 +0200
+Message-ID: <20261010224902.1232178-5-arighi@nvidia.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261010224902.1232178-1-arighi@nvidia.com>
 References: <20261010224902.1232178-1-arighi@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: ZR0P278CA0151.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:41::12) To BL1PR12MB5174.namprd12.prod.outlook.com
+X-ClientProxiedBy: ZR0P278CA0089.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:22::22) To BL1PR12MB5174.namprd12.prod.outlook.com
  (2603:10b6:208:31c::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -82,209 +82,541 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|CY5PR12MB6453:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ace6adf-fcba-4234-fcbe-08df2720b7f4
+X-MS-Office365-Filtering-Correlation-Id: 174c4f8e-9403-4596-50a4-08df2720ba5f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|3023799007|6133799003|22082099003|18002099003|11063799006|56012099006|10067099003|261009223027099003;
 X-Microsoft-Antispam-Message-Info:
-	GbwI5uRQyzJAps2aLdZSdzo7nzytLPB0RvHL801eZLx2GYjdNLyNFY9ZTMTsrmxZso7itnlf4iyn205QG2ArifVdbYcOYBPZdQ+n3kr3tkBpYHY2CCBfgf0bXqKnRA6rqRgFOThHMM8OJyUd5QHy+lKnJE2gCnU8G/j93jborLBBgGTYRzSqEs51wCTkKHpOrF/np0dHn/DWrtUn1s9QQAPb4CxUnuOPA2cBFLmgxV1e2LI7qhswDIT3fBAAyVszqDHxoqYjpT0v5xY5APYzFxF0MH2RFCy3EiMcgBib+ze1vxRKaZWj4oEQXFoJt+hepWAMd3TYON5+Ftxb73eRzkgWBaLR3ncfFkHOSpEoGwKG8PQLR0BAwsRWxMjt02e2VzY4D80enGFRvUh92yGrVK6iHafn+D7QJs6aKrhsQY+qSw+dpUghT7zCrg1UnWNK38ewBdGy5TQfBX2nBFa0jxnRz4aOi8wAvJ9gIYP/QzPBne4qCwxP+xhXawezMDvP+3D3DQmodHIU0nHCSwPXHkHzTB82cAIQot3dP0OpGgaLj7Uaclmm5MXiwh+pyDPCXEAOpJZSKDXT+FRJ03BSy2a+PejJdZNhCwRyU9ihxYEtxocPGRLCINs4BSy+ZUr4tderwwdqD8Z8QjqO3jn4eq5gqgAR5tj7Se93c0y/FY8=
+	jJquAj15wD11b/m3M/BotuM5TAYGUrOuThBwDL2FCJhfNySpAnhaE95E6At+V2l/4kzd68sSdqtz0+2FpYSDz3ydIyZE7Y+yaI2t49vd7IRF88M+UfvJEwvYec5RGbIwuFmDLDrgbLyL0Lj+zmR+KGXyEklgmPhdnZ1P81CEHa7cxtgSAqGNwX0d/AT6tE2vwenHITf66j0Vl6lZesugUCcaHiqCzZ+3Kfx6S1AH6PUeVM0qhPeRztGDw20RZwPbT3eBkvmIM+Go0uQQaBhdkpzDgtUEGU5CqJmb4bkGYUCVwfuWLX1FYaU6LTTY9DWuHkuSQzFdIQVa5pWnqfm0ETme6xgv3LVGk+6UajB8wRS0NQKi5WLtjC7nUNSa5ni/sKvL9wXrNiMhRZcooFfHs+ABT7URkkTZMEacZD5biK0Yimembe0MDhClNgY4uu0BGvqfVQwpYJpTmloG5WxgBsdlvlYhF7ZKFJ6KAfcoP0hc+Oc3sCCWf70a5Kbs+sdYkCd7d2R3WTsvvSLS/5gx7SbI5qBsTrkB36//DXgfvU3Lq0cRRFTutCZeMHrMTW+dySxu0sFMSdshdvuI3An/gjj/wJk4hct+7gvy8YcJHvN3CVstdQaCyLXlwSihaZz0YymHWjmnW8ZKZaHOdcObpFG80dTRZ2v6xYwZSRBWM7A=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(3023799007)(6133799003)(22082099003)(18002099003)(11063799006)(56012099006)(10067099003)(261009223027099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/kTDQlZclccbGcoIlnvEYlNLNqgvOiXGTlq7C8WoiMs/WUeIvTmBqeNXP1ng?=
- =?us-ascii?Q?wSDq3tNSZry5jR9ho9KXfbLRKglgJsJeIdK3WT/XmC4Y+wNGFF+5J/rFIhX7?=
- =?us-ascii?Q?DsOvMu+Z7KHczNW8jHBW0slndo7BU46LvGIcFam1Z+LtVZ3MycLrKIwmnWio?=
- =?us-ascii?Q?ZtKsCuMc/DUXiBP7mimiNlk6vAdq0FdsTQABpp8uZDTwpkkjoOTyztdFS3lm?=
- =?us-ascii?Q?Mjso8gXcFpUoqOXuFbU7t1oKnvU7vaA14JBxPOiTOLFFtpBmiFIZdZQUPejm?=
- =?us-ascii?Q?gIDryezMLtDwZDsvssDktnucEcVS/eWVNdWxn8Dc7a7dCEsGnN2UVXd8TQ3k?=
- =?us-ascii?Q?Mee/y3ZHE+CPodD2IvVd+3vojOLWHBMyC4+u4VSgSIjQDJpMWiJ21CZDrVmn?=
- =?us-ascii?Q?rxi9WSQLWJDB5jGi0GC5Y+tvb1UIgbSJG6LBR8CttLEjj4hQiR68fePUWSrv?=
- =?us-ascii?Q?l1OWYXmKZEKKMNV4USR+vKghyr2Rf5BdAaukq7gr3OCJRyoI+BOoGOV0ue1D?=
- =?us-ascii?Q?NkVh3bZ0nhFZJFnwPNDE9XwfCwwQQicQMtrCotT/mtZlba7irnhs5Opnjcor?=
- =?us-ascii?Q?gmpL8RznESa8OZ+Yn6pH9nULCyzwa2HyHJZbnvl8hsF7ZY+DPfeNW9uU/3Ba?=
- =?us-ascii?Q?ZcyL4na9w0aSLrUVRTQTdp9enyC3sVfMNOHJfayJel2D0O2UhxNTfkF2Peog?=
- =?us-ascii?Q?1ixwxZ1v70FVPYBnp19P5GwNSsLn16VepwhB6QiKv0TkB0iaCqRHc7wsIEbu?=
- =?us-ascii?Q?oWW2xM2qzGhVDjzPDcEHHxY+7/zMXZK/5/rj5Hf5bTKfcu6d18Iz4fNnri7u?=
- =?us-ascii?Q?F3mgDzshUP77ic7hMIBa51/xJVMHwrA5kPTabnBhO2YEJhWno7K9Z5FBkNcQ?=
- =?us-ascii?Q?SxVvMGu/nhfk4pZtTJrS/5vN83ldLRxBCe7ePhn28Et/l37RCibKte3kSo6A?=
- =?us-ascii?Q?NnbFSFiADPboC09+/Txis1N4VHQHyodfeHDl2G2wii2WP6TBvQ6kGyGsN76K?=
- =?us-ascii?Q?s0+1PQPrJEBXBSdT84tjm6OE9yJE8BzqobTCvJFtfiHsjOFpv0Ck3tc1D94j?=
- =?us-ascii?Q?FIgndG5HoDlgRRcYCh0dOp3aW+umJUJBg/apLXPuHwNt7akHhqmo+ai58Id/?=
- =?us-ascii?Q?ItctKgo7lQ8WYsNJOBlmw42IEqvGYsNwzyqc6/zu3xA8214t0YYgCTbQMDjQ?=
- =?us-ascii?Q?7vxXtwk0ac5qP8L/sEz4KTo6XPK3+EtdE6iUnO15RG6vqPAoPL/p256FVEsP?=
- =?us-ascii?Q?7G7IL5vzubZG5Xs3uo6k9xp+OHTAB8VReQ+7ucT0Qb8CWkuS20oEjk0BtUaR?=
- =?us-ascii?Q?e1C+EZblsozeC4cRszIQK7AoYosQJNDf9lqe1gx9P9CLp+7Kj7AepQLa7STk?=
- =?us-ascii?Q?RgLT1+5NUJMunY2vCcY8Ae8LTW7A1ZToEgo0fvYW5v1BV7wkPSLKViJrGRLd?=
- =?us-ascii?Q?G/u8/Jz7mIRMIFttJIttbASmxqJrDClPhFOGgITCAa9XR6NA9nueTI+Xh3NR?=
- =?us-ascii?Q?YM+mnkyj8FcJ1pCAL+1hWQSRefNrlXt1Gb0XGw0FoUoP8LxC54VdXpuOWFum?=
- =?us-ascii?Q?AvBsD3nNNiqKL6Ce0vv0LKoCmWnmdaLZVRI6FRRhaIl9yMYIiWabQlue5AAh?=
- =?us-ascii?Q?Wu/AMKCk1owdbaHdLlrnHN/o5ykzmCnwnMhd9HMhOwIZC2QCTYNs28ZXuO0c?=
- =?us-ascii?Q?B6EQVZ5ceImvt1lFEXYabDCVYJPp4vkNVw/pYQ5MPcqgyRBp?=
+	=?us-ascii?Q?EDh0Br2OAuLTv/oRDkU3ggnxaDdnOBg2VW818/UVyeW2QT1Ry609c1yEf27R?=
+ =?us-ascii?Q?7OmjFpL97M2xmyBcaef/Cb+8alfGlNYew/DRLzOKPDOkG4bQu7n/n4oeqLWE?=
+ =?us-ascii?Q?4jdCOfqn0RPax1XH83A1Vn6CM/0xECJPJdAP/VQzsPsSAc1sjNKVnZEbWSAC?=
+ =?us-ascii?Q?HQdtDkJWoA3GWsEeVJNQNmNl4nHpEhbRumCnbeZFLcR+F2Z1cgUcWMX5ZwQY?=
+ =?us-ascii?Q?86SmuTKYbUqzmZOwl0kKTmYcBzegIFnSnptuXIGg8mX6d+cUWxNAUg21FHky?=
+ =?us-ascii?Q?GAatrBIFpjY0gaixbpTcX2JCdH77FloXsR5Vzn7+UjAbmgkQLtmdUBfG6xc1?=
+ =?us-ascii?Q?28spAqwfrGrUNfV1easdD5rh3z+51VYtf+3CzYSAZ+q9FW+A3xV1+k+UkvIq?=
+ =?us-ascii?Q?0Ij/Cz+/hY1rUDF6R6GkAWj5pSq+m2bknCjMgQLYdlHsisR7a0jCzx9E20bB?=
+ =?us-ascii?Q?OF4ZoZh5Y6B5Kizd3pcEaWbM5WPE559c/QFMx7+O00VTCRoAYWJ3HIZRYMmN?=
+ =?us-ascii?Q?5ALduJ2WeKtaI36+iTPnEU3ZUTd7Qvdj+dMi+wETDJMfmpeMeA057qYzuVhK?=
+ =?us-ascii?Q?oeqDycgNcUbBuNq0jxRZL/6R+lPe7S2aK+cMe7wIw4kaV5atXdX5aIWkQJM7?=
+ =?us-ascii?Q?vsYQPD76N2ZsIbCJZtlSU/thQEaCyH/0HjNc9cQ4RxEHVToYqDx3V1Qeihf6?=
+ =?us-ascii?Q?vb6oqnqP42IleZxlNxoV9ddBLM3t8ljKbQ+VaFwjnWwZqm72DaJfMdXNGxJo?=
+ =?us-ascii?Q?0CGxIHSf/FxH4eL0PkWidC0VrKkNNGaRyXdBUJoRNoRzopIF3ePy7Qeo6y/n?=
+ =?us-ascii?Q?tfngnyWL+xRL9Lma3+B/yO0fGfkWjuOkrRMfKD82RIFchMoea4R/NMQcC2E6?=
+ =?us-ascii?Q?kQ1kyJj0/I2AToZD7tZQBqdNK2+WEXTEHM/eWcrtHf3C5hC6vFnq/IEkcd1V?=
+ =?us-ascii?Q?Q/pfupOvJxWpd0+K6uxzYgw/5eiejMeRHZwJRWKWr6vEBjZAKw3QBR4Fwu7p?=
+ =?us-ascii?Q?fS3n1Dve1viUaMXzLlaFuJvXq22/URoR6/HVKUQc8mRGgiyk9Ng3Tvg9IkJx?=
+ =?us-ascii?Q?7P91ZNgy9XkEFr5Uc/imTntWhvlgpNCUn3TGhIj3/59HMdA5JXem2cPDoo/0?=
+ =?us-ascii?Q?SbbO4YH0IqUcKxWxhAClJfDny7UUQR1ACKnrDXpWRclVYsWdFJtuvuolzTCI?=
+ =?us-ascii?Q?ZauMedhHrnIefcaTWAR7Dd9kj1KFEQESvPRH01ZfVMIs57V0ODCpoiFwqA2r?=
+ =?us-ascii?Q?ZLdt6y0r4V0DhkbvQ3qsPdMqN+0g32FzRWDAcRX1RuTpfUQBFVCOESF1nqz5?=
+ =?us-ascii?Q?nhJwBJuVPC9SaVScEUS87hHu98+SUYAQIsIu1iVm2oxEfm2POXuAi9hDGL8s?=
+ =?us-ascii?Q?6XjgwW4RnFO6Lxk8oecYJGIDrWBth8rlT3eE92JgIgHhOmBu89YJFGyoMzq5?=
+ =?us-ascii?Q?RG1kcRlNby2vCxhe9q+iFPEv7pzAwJqbc/8NBz6KXYNyG/5NiamwBqBKYhl1?=
+ =?us-ascii?Q?oP0ApyN/ueH1XrGHfF/nv8+iq6j3A3lKlm4JFSJZ/MbjyHo4RcJUGMMxp14A?=
+ =?us-ascii?Q?SrpK4m6vZTgul/5w1AEgd5AAJR4lsncVyUbzM4oQk4S81IB+PtKCIB262jw1?=
+ =?us-ascii?Q?F84OslJy+By1tW9i3A6AnEU1jMvwrOsMeSAfeMQomv5sQ2UwLLfbQGN7ub2Y?=
+ =?us-ascii?Q?FVKlSh9UH8tzqnjDLSTt4ZU67Nh4y4Ez2HVhHEfmttU6+Au3?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ace6adf-fcba-4234-fcbe-08df2720b7f4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 174c4f8e-9403-4596-50a4-08df2720ba5f
 X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2026 22:49:19.0573
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2026 22:49:23.0693
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2U5D/6JrEyu41gSqgPAfEyQNhh+RbHlqvP3uvHnm6hCiXALfqNxuG7PBOpK2i8OXyWDbwotLEZPlupuw9vmM1w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: weClu4cr0EX8jo+wmIxwI6Yx6OSc0PHyy8hZk9ZY+w4Ebf4As3ryNuCwyIcPYktvX7fQyDfpplKeVHZMqG/ZsA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6453
 
-Describe how consumers can access pinned BPF arenas as sized bpffs files
-and establish the canonical BPF address range before mapping them.
-Explain slice bounds, access permissions, fixed file size, and mapping
-lifetime so consumers can use the shared-memory interface correctly.
+Add native tests for pinned arena files, covering canonical range setup
+via map FD mmap and map_extra, exported slice bounds, full-capacity
+canonical mappings, and mapping lifetime after unpinning. Check that
+oversized mapping requests fail cleanly and that size changes are
+rejected without zapping mappings, while permission updates and
+BPF_OBJ_GET still work.
 
-Document fixed-size seeking and the inherited arena VMA restrictions:
-no fork inheritance, splitting, expansion, or relocation.
+Reject canonical mapping lengths that differ from the exported arena's
+capacity and map the entire size reported by fstat(). Preserve short
+canonical mappings for ordinary and retention-only arenas. Drop other
+mappings, the pin, and open FDs before checking that the exported slice
+retains the arena. Change the pin's mode from its creation permissions
+to verify that metadata updates take effect.
 
+Test O_RDONLY pin mappings with MAP_SHARED and MAP_SHARED_VALIDATE.
+Verify that readers observe writer updates, retain access after closing
+the FD, and cannot request writable or private mappings or upgrade a
+mapping with mprotect().
+
+Check that ordinary and retention-only arenas keep their existing pin
+behavior, while BPF_F_ARENA_EXPORT requires BPF_F_ARENA_NO_FREE.
+
+Check fixed-size seeking, canonical setup at address zero when security
+policy permits it, and the exported mapping lifecycle restrictions.
+Verify that partial unmap and protection changes, MADV_DOFORK, and
+relocation fail, while fork leaves the parent's mapping intact without
+inheriting it in the child.
+
+Assisted-by: LLM
 Signed-off-by: Andrea Righi <arighi@nvidia.com>
 ---
- Documentation/bpf/map_arena.rst | 131 ++++++++++++++++++++++++++++++++
- 1 file changed, 131 insertions(+)
- create mode 100644 Documentation/bpf/map_arena.rst
+ .../selftests/bpf/prog_tests/arena_pinned.c   | 442 ++++++++++++++++++
+ 1 file changed, 442 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_pinned.c
 
-diff --git a/Documentation/bpf/map_arena.rst b/Documentation/bpf/map_arena.rst
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_pinned.c b/tools/testing/selftests/bpf/prog_tests/arena_pinned.c
 new file mode 100644
-index 0000000000000..1b9eadd5fb3a1
+index 0000000000000..8b7ca90211296
 --- /dev/null
-+++ b/Documentation/bpf/map_arena.rst
-@@ -0,0 +1,131 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/bpf/prog_tests/arena_pinned.c
+@@ -0,0 +1,442 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES
++ */
++#include <test_progs.h>
++#include <fcntl.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/wait.h>
 +
-+==================
-+BPF_MAP_TYPE_ARENA
-+==================
++#define ARENA_PAGES 4
 +
-+A BPF arena provides shared memory that BPF programs and userspace can
-+access directly. Create the map with zero key and value sizes and
-+``BPF_F_MMAPABLE``. ``max_entries`` specifies its capacity in pages, up to
-+4 GiB. The canonical BPF address range must not cross a 4 GiB boundary.
++struct arena_file {
++	int map_fd;
++	int file_fd;
++	char pin[128];
++	void *canonical;
++	size_t len;
++	bool pinned;
++};
 +
-+Pinned arena files
-+==================
++static void cleanup(struct arena_file *file)
++{
++	if (file->canonical != MAP_FAILED)
++		munmap(file->canonical, file->len);
++	if (file->file_fd >= 0)
++		close(file->file_fd);
++	if (file->pinned)
++		unlink(file->pin);
++	if (file->map_fd >= 0)
++		close(file->map_fd);
++}
 +
-+An arena created with ``BPF_F_ARENA_EXPORT`` can be pinned in bpffs and
-+opened as a sized file. Its size is ``max_entries * PAGE_SIZE``. Export
-+requires ``BPF_F_ARENA_NO_FREE`` so BPF programs cannot release backing
-+pages while external consumers may still use them. Creating an arena with
-+``BPF_F_ARENA_EXPORT`` alone fails with ``EINVAL``. Arenas without the
-+export flag retain their existing bpffs behavior and cannot be opened
-+this way, including arenas created with ``BPF_F_ARENA_NO_FREE`` alone.
++static void reject_mapping(int fd, size_t len, int flags, off_t offset,
++			   const char *name)
++{
++	void *addr;
++	int err;
 +
-+Establish the canonical BPF address range before mapping the pinned file:
++	addr = mmap(NULL, len, PROT_READ | PROT_WRITE, flags, fd, offset);
++	err = errno;
++	if (ASSERT_EQ(addr, MAP_FAILED, name))
++		ASSERT_EQ(err, EINVAL, "mmap_errno");
++	else
++		munmap(addr, len);
++}
 +
-+* Set ``map_extra`` to a nonzero, page-aligned address at map creation.
-+  The canonical range then covers the full map capacity, even if the map
-+  FD has not been mmaped.
-+* Alternatively, leave ``map_extra`` zero and mmap the map FD first. This
-+  mapping establishes the canonical address and must cover the full map
-+  capacity. Shorter canonical mappings fail with ``EINVAL``.
++static bool setup(struct arena_file *file, __u64 map_extra, bool zero)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		.map_flags = BPF_F_MMAPABLE | BPF_F_ARENA_NO_FREE |
++			     BPF_F_ARENA_EXPORT,
++		.map_extra = map_extra);
 +
-+A canonical map FD mapping may start at address zero if the system's
-+low-address mapping policy permits it.
++	memset(file, 0, sizeof(*file));
++	file->map_fd = -1;
++	file->file_fd = -1;
++	file->canonical = MAP_FAILED;
++	file->len = ARENA_PAGES * getpagesize();
++	snprintf(file->pin, sizeof(file->pin), "/sys/fs/bpf/arena_pinned_%d", getpid());
++	file->map_fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_pinned",
++				      0, 0, ARENA_PAGES, &opts);
++	if (file->map_fd < 0 && errno == EOPNOTSUPP) {
++		test__skip();
++		return false;
++	}
++	if (!ASSERT_GE(file->map_fd, 0, "map_create"))
++		return false;
++	if (!ASSERT_OK(bpf_obj_pin(file->map_fd, file->pin), "obj_pin"))
++		return false;
++	file->pinned = true;
++	file->file_fd = open(file->pin, O_RDWR);
++	if (!ASSERT_GE(file->file_fd, 0, "open_pin"))
++		return false;
++	reject_mapping(file->map_fd, getpagesize(), MAP_SHARED, 0, "short_canonical");
++	reject_mapping(file->map_fd, file->len + getpagesize(), MAP_SHARED,
++		       0, "large_canonical");
++	if (map_extra)
++		return true;
 +
-+Mapping the pinned file before either step fails with ``EINVAL``. Exported
-+mappings do not establish or change the canonical BPF address range.
++	reject_mapping(file->file_fd, getpagesize(), MAP_SHARED, 0, "uninitialized");
++	file->canonical = mmap(NULL, file->len, PROT_READ | PROT_WRITE,
++			       MAP_SHARED | (zero ? MAP_FIXED_NOREPLACE : 0),
++			       file->map_fd, 0);
++	if (zero && file->canonical == MAP_FAILED &&
++	    (errno == EPERM || errno == EACCES)) {
++		test__skip();
++		return false;
++	}
++	return ASSERT_NEQ(file->canonical, MAP_FAILED, "canonical_mmap");
++}
 +
-+Once the canonical range is established, it covers the entire capacity
-+reported by ``fstat()``. Consumers can map the full file or smaller slices.
-+Establishing the full canonical mapping reserves virtual address space;
-+it does not populate every arena page. Arenas without
-+``BPF_F_ARENA_EXPORT`` can still establish shorter canonical mappings.
++static void test_mappings(__u64 map_extra)
++{
++	struct arena_file file;
++	size_t ps = getpagesize();
++	struct stat st;
++	char *alias = MAP_FAILED;
++	char *full = MAP_FAILED;
++	int expected = 91;
 +
-+Open the pin with ``O_RDONLY`` for read-only access or ``O_RDWR`` for
-+writable access, and mmap it with ``MAP_SHARED``. An exported
-+mapping may use a different virtual address from the canonical mapping.
-+Its offset must be page-aligned, and its offset and length must fit within
-+both the map capacity and the established canonical range. Consumers can
-+map disjoint slices of one arena. Oversized or out-of-range mappings fail
-+with ``EINVAL``. ``MAP_PRIVATE`` mappings are unsupported.
++	if (!setup(&file, map_extra, false))
++		goto out;
++	if (!ASSERT_OK(fstat(file.file_fd, &st), "stat_pin"))
++		goto out;
++	ASSERT_EQ(st.st_size, ARENA_PAGES * ps, "pin_size");
++	reject_mapping(file.file_fd, 8ULL << 30, MAP_SHARED, 0, "oversized");
++	reject_mapping(file.file_fd, ps, MAP_SHARED, ARENA_PAGES * ps, "past_capacity");
++	reject_mapping(file.file_fd, ps * 2, MAP_SHARED,
++		       (ARENA_PAGES - 1) * ps, "past_capacity_end");
++	reject_mapping(file.file_fd, ps, MAP_PRIVATE, 0, "private_mapping");
++	full = mmap(NULL, st.st_size, PROT_READ | PROT_WRITE, MAP_SHARED,
++		    file.file_fd, 0);
++	if (!ASSERT_NEQ(full, MAP_FAILED, "full_file_mmap"))
++		goto out;
++	full[0] = 17;
++	full[file.len - 1] = 62;
 +
-+Exported mappings share the bytes of the arena without relocating pointers
-+stored in those bytes. Arena pointers produced by a BPF program use that
-+arena's canonical address representation, based on ``user_vm_start``.
-+A consumer mapping a slice at another address must translate such pointers
-+before dereferencing them. A guest BPF arena has its own canonical range;
-+sharing the backing pages does not make host arena pointers valid in the
-+guest arena, or vice versa. Communication structures can use offsets
-+relative to the shared slice, with each side validating the offsets and
-+translating them to addresses in its own mapping or arena.
++	alias = mmap(NULL, ps, PROT_READ | PROT_WRITE, MAP_SHARED,
++		     file.file_fd, (ARENA_PAGES - 1) * ps);
++	if (!ASSERT_NEQ(alias, MAP_FAILED, "last_page_slice"))
++		goto out;
++	alias[0] = 91;
++	ASSERT_OK(msync(alias, ps, MS_SYNC), "msync_slice");
++	ASSERT_OK(fsync(file.file_fd), "fsync_pin");
++	ASSERT_OK(fdatasync(file.file_fd), "fdatasync_pin");
++	ASSERT_EQ(alias[ps - 1], 62, "full_file_last_page");
++	if (file.canonical != MAP_FAILED) {
++		char *canonical = file.canonical;
 +
-+A pin opened with ``O_RDONLY`` supports read-only shared mappings, which
-+observe updates made by BPF programs and other writable mappings. Requests
-+for ``PROT_WRITE`` through that FD fail with ``EACCES``. A mapping made
-+without ``PROT_WRITE`` cannot subsequently acquire write permission with
-+``mprotect()``, even when the pin was opened with ``O_RDWR``.
++		ASSERT_EQ(canonical[0], 17, "full_file_first_page");
++		ASSERT_EQ(canonical[(ARENA_PAGES - 1) * ps], 91, "alias_write");
++		canonical[(ARENA_PAGES - 1) * ps] = 42;
++		ASSERT_EQ(alias[0], 42, "canonical_write");
++		expected = 42;
++		if (!ASSERT_OK(munmap(file.canonical, file.len), "unmap_canonical"))
++			goto out;
++		file.canonical = MAP_FAILED;
++	}
++	if (!ASSERT_OK(munmap(full, file.len), "unmap_full_file"))
++		goto out;
++	full = MAP_FAILED;
++	if (!ASSERT_OK(unlink(file.pin), "unlink_pin"))
++		goto out;
++	file.pinned = false;
++	close(file.file_fd);
++	file.file_fd = -1;
++	close(file.map_fd);
++	file.map_fd = -1;
++	ASSERT_EQ(alias[0], expected, "unpin_lifetime");
++	alias[0] = 73;
++out:
++	if (full != MAP_FAILED)
++		munmap(full, file.len);
++	if (alias != MAP_FAILED)
++		munmap(alias, ps);
++	cleanup(&file);
++}
 +
-+Pin permissions can grant readers access independently of writers. For
-+example, mode ``0640`` permits the owner to open the pin for writable
-+access and the group to open it for read-only access, subject to the
-+applicable LSM checks. Changing permissions does not revoke access through
-+existing FDs or mappings.
++static void test_unexported_pin(__u32 flags)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		.map_flags = BPF_F_MMAPABLE | flags);
++	char pin[128];
++	struct stat st;
++	char *canonical = MAP_FAILED;
++	size_t ps = getpagesize();
++	int map_fd, fd, err;
 +
-+The file has a fixed size. ``truncate()``, ``ftruncate()``, and ``O_TRUNC``
-+cannot change it. A truncate request that leaves the size unchanged is
-+allowed. Permission and ownership changes remain available.
-+Consumers can discover the capacity with ``fstat()`` or
-+``lseek(fd, 0, SEEK_END)``. Seeking supports ``SEEK_SET``, ``SEEK_CUR``, and
-+``SEEK_END`` within the file bounds; it does not enable ``read()`` or
-+``write()`` access to the memory.
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_unexported",
++			       0, 0, ARENA_PAGES, &opts);
++	if (map_fd < 0 && errno == EOPNOTSUPP) {
++		test__skip();
++		return;
++	}
++	if (!ASSERT_GE(map_fd, 0, "unexported_create"))
++		return;
++	canonical = mmap(NULL, ps, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
++	if (!ASSERT_NEQ(canonical, MAP_FAILED, "unexported_short_mmap"))
++		goto out;
++	canonical[0] = 42;
++	ASSERT_EQ(canonical[0], 42, "unexported_short_access");
++	snprintf(pin, sizeof(pin), "/sys/fs/bpf/arena_unexported_%d", getpid());
++	if (!ASSERT_OK(bpf_obj_pin(map_fd, pin), "unexported_pin"))
++		goto out;
++	if (ASSERT_OK(stat(pin, &st), "unexported_stat"))
++		ASSERT_EQ(st.st_size, 0, "unexported_size");
++	fd = open(pin, O_RDONLY);
++	err = errno;
++	if (ASSERT_EQ(fd, -1, "unexported_open"))
++		ASSERT_EQ(err, EIO, "unexported_open_errno");
++	else
++		close(fd);
++	fd = bpf_obj_get(pin);
++	if (ASSERT_GE(fd, 0, "unexported_obj_get"))
++		close(fd);
++	ASSERT_OK(unlink(pin), "unexported_unlink");
++out:
++	if (canonical != MAP_FAILED)
++		munmap(canonical, ps);
++	close(map_fd);
++}
 +
-+``fsync()``, ``fdatasync()``, and ``msync(..., MS_SYNC)`` succeed without
-+performing writeback: arena memory is volatile and has no persistent
-+backing. These calls do not synchronize access between consumers or BPF
-+programs; shared-memory protocols still need appropriate memory ordering.
++static void test_export_requires_no_free(void)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		.map_flags = BPF_F_MMAPABLE | BPF_F_ARENA_EXPORT);
++	int fd;
 +
-+Exported mappings inherit the arena's mapping lifecycle restrictions.
-+They are not inherited across ``fork()``, and ``MADV_DOFORK`` cannot enable
-+inheritance. Consumers must create their own mappings in a child process.
-+Mappings cannot be split, expanded, or relocated with ``mremap()``.
-+Partial unmapping and protection changes that require splitting a mapping
-+fail with ``EINVAL``. Unmapping an entire mapping remains supported, as do
-+protection changes that do not require a split and satisfy the access
-+restrictions above. Consumers needing independently managed regions
-+should create separate slice mappings.
++	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_export",
++			    0, 0, ARENA_PAGES, &opts);
++	if (fd == -EOPNOTSUPP) {
++		test__skip();
++		return;
++	}
++	ASSERT_EQ(fd, -EINVAL, "export_requires_no_free");
++	if (fd >= 0)
++		close(fd);
++}
 +
-+Access control and lifetime
-+===========================
++static void test_read_only(int flags)
++{
++	struct arena_file file;
++	size_t ps = getpagesize();
++	char *alias = MAP_FAILED;
++	void *addr;
++	int fd = -1, err, ret;
 +
-+Opening the pin uses ordinary filesystem permissions and file LSM checks,
-+as well as ``security_bpf_map()`` for the requested access mode. Mapping it
-+also passes the ordinary mmap LSM checks. Writable mappings remain subject
-+to the BPF map's frozen state and program-read-only restrictions.
++	if (!setup(&file, 0, false))
++		goto out;
++	if (!ASSERT_OK(fchmod(file.file_fd, 0400), "chmod_read_only"))
++		goto out;
++	fd = open(file.pin, O_RDONLY);
++	if (!ASSERT_GE(fd, 0, "open_read_only"))
++		goto out;
++	alias = mmap(NULL, ps, PROT_READ, flags, fd, ps);
++	if (!ASSERT_NEQ(alias, MAP_FAILED, "read_only_mmap"))
++		goto out;
++	ASSERT_EQ(alias[0], 0, "read_only_fault");
++	((char *)file.canonical)[ps] = 42;
++	ASSERT_EQ(alias[0], 42, "read_only_shared_update");
 +
-+Consumers use ``open()`` and ``mmap()`` rather than ``bpf(BPF_OBJ_GET)``.
-+Consequently, seccomp rules and LSM policies specific to the ``bpf()``
-+syscall do not govern this file interface. Grant access through the pin's
-+permissions and the applicable file, mmap, and BPF map LSM policies.
-+A process prohibited from calling ``bpf()`` can still access the arena
-+through this interface if those permissions and checks allow it.
-+``unprivileged_bpf_disabled`` restricts unprivileged map and program
-+creation; it does not generally prohibit access to existing maps.
++	addr = mmap(NULL, ps, PROT_READ | PROT_WRITE, flags, fd, ps);
++	err = errno;
++	if (ASSERT_EQ(addr, MAP_FAILED, "read_only_writable_mmap"))
++		ASSERT_EQ(err, EACCES, "read_only_writable_errno");
++	else
++		munmap(addr, ps);
++	ret = mprotect(alias, ps, PROT_READ | PROT_WRITE);
++	err = errno;
++	ASSERT_EQ(ret, -1, "read_only_mprotect");
++	ASSERT_EQ(err, EACCES, "read_only_mprotect_errno");
++	addr = mmap(NULL, ps, PROT_READ, MAP_PRIVATE, fd, ps);
++	err = errno;
++	if (ASSERT_EQ(addr, MAP_FAILED, "read_only_private_mmap"))
++		ASSERT_EQ(err, EINVAL, "read_only_private_errno");
++	else
++		munmap(addr, ps);
 +
-+``BPF_F_ARENA_NO_FREE`` makes ``bpf_arena_free_pages()`` a no-op in both
-+sleepable and non-sleepable BPF programs. The free operation returns no
-+indication that pages were retained. Programs using this flag must not
-+rely on freeing pages to restore arena allocation capacity. Arena pages
-+are retained until the map is destroyed. Open map and pin FDs, mappings,
-+and other map references retain the arena, including after the pin is
-+unlinked. Removing the pin therefore does not revoke existing mappings or
-+free their pages.
++	close(fd);
++	fd = -1;
++	((char *)file.canonical)[ps] = 73;
++	ASSERT_EQ(alias[0], 73, "read_only_after_close");
++out:
++	if (alias != MAP_FAILED)
++		munmap(alias, ps);
++	if (fd >= 0)
++		close(fd);
++	cleanup(&file);
++}
 +
-+The retention flag does not itself expose the pin as a sized file.
-+``BPF_F_ARENA_EXPORT`` opts into that interface and must be combined with
-+``BPF_F_ARENA_NO_FREE``. Retention-only arenas can still share memory
-+through ordinary map FD mappings and manage reusable objects within
-+their retained pages.
++static void test_fixed_size(void)
++{
++	struct arena_file file;
++	size_t ps = getpagesize();
++	struct stat st;
++	unsigned char resident;
++	char *alias = MAP_FAILED;
++	int err, fd, ret;
 +
-+For example, a consumer such as QEMU can use an exported slice as a shared
-+file-backed guest RAM backend. The file interface provides shared memory;
-+consumers must supply their own allocation and communication protocol.
++	if (!setup(&file, 0, false))
++		goto out;
++	alias = mmap(NULL, ps, PROT_READ | PROT_WRITE, MAP_SHARED, file.file_fd, 0);
++	if (!ASSERT_NEQ(alias, MAP_FAILED, "alias_mmap"))
++		goto out;
++	alias[0] = 42;
++	ret = ftruncate(file.file_fd, 0);
++	err = errno;
++	ASSERT_EQ(ret, -1, "ftruncate_shrink");
++	ASSERT_EQ(err, EINVAL, "ftruncate_shrink_errno");
++	ret = ftruncate(file.file_fd, file.len + ps);
++	err = errno;
++	ASSERT_EQ(ret, -1, "ftruncate_grow");
++	ASSERT_EQ(err, EINVAL, "ftruncate_grow_errno");
++	ret = truncate(file.pin, 0);
++	err = errno;
++	ASSERT_EQ(ret, -1, "truncate_pin");
++	ASSERT_EQ(err, EINVAL, "truncate_pin_errno");
++	fd = open(file.pin, O_RDWR | O_TRUNC);
++	err = errno;
++	if (ASSERT_EQ(fd, -1, "open_trunc"))
++		ASSERT_EQ(err, EINVAL, "open_trunc_errno");
++	else
++		close(fd);
++	ASSERT_OK(ftruncate(file.file_fd, file.len), "ftruncate_same_size");
++	if (!ASSERT_OK(mincore(alias, ps, &resident), "mincore"))
++		goto out;
++	ASSERT_EQ(resident & 1, 1, "mapping_not_zapped");
++	ASSERT_EQ(alias[0], 42, "mapping_value");
++	ASSERT_OK(fchmod(file.file_fd, 0640), "chmod_pin");
++	if (ASSERT_OK(fstat(file.file_fd, &st), "stat_pin")) {
++		ASSERT_EQ(st.st_size, file.len, "fixed_size");
++		ASSERT_EQ(st.st_mode & 0777, 0640, "pin_mode");
++	}
++	ASSERT_EQ(lseek(file.file_fd, 0, SEEK_END), file.len, "seek_capacity");
++	ASSERT_EQ(lseek(file.file_fd, -(off_t)ps, SEEK_CUR), file.len - ps, "seek_back");
++	ASSERT_EQ(lseek(file.file_fd, ps, SEEK_SET), ps, "seek_offset");
++	errno = 0;
++	ASSERT_EQ(lseek(file.file_fd, file.len + 1, SEEK_SET), -1, "seek_past_end");
++	ASSERT_EQ(errno, EINVAL, "seek_past_end_errno");
++	errno = 0;
++	ASSERT_EQ(lseek(file.file_fd, -1, SEEK_SET), -1, "seek_before_start");
++	ASSERT_EQ(errno, EINVAL, "seek_before_start_errno");
++	fd = bpf_obj_get(file.pin);
++	if (ASSERT_GE(fd, 0, "obj_get_after_chmod"))
++		close(fd);
++out:
++	if (alias != MAP_FAILED)
++		munmap(alias, ps);
++	cleanup(&file);
++}
++
++static void test_zero_canonical(void)
++{
++	struct arena_file file;
++	size_t ps = getpagesize();
++	char *alias = MAP_FAILED;
++	void *addr;
++
++	if (!setup(&file, 0, true))
++		goto out;
++	if (!ASSERT_EQ((unsigned long)file.canonical, 0, "zero_canonical"))
++		goto out;
++	alias = mmap(NULL, ps, PROT_READ | PROT_WRITE, MAP_SHARED, file.file_fd, ps);
++	if (!ASSERT_NEQ(alias, MAP_FAILED, "zero_canonical_export"))
++		goto out;
++	alias[0] = 42;
++	ASSERT_EQ(alias[0], 42, "zero_canonical_fault");
++	addr = mmap((void *)ps, file.len, PROT_READ | PROT_WRITE,
++		    MAP_SHARED | MAP_FIXED_NOREPLACE, file.map_fd, 0);
++	if (ASSERT_EQ(addr, MAP_FAILED, "canonical_cannot_move"))
++		ASSERT_EQ(errno, EINVAL, "canonical_cannot_move_errno");
++	else
++		munmap(addr, file.len);
++out:
++	if (alias != MAP_FAILED)
++		munmap(alias, ps);
++	cleanup(&file);
++}
++
++static void test_lifecycle(void)
++{
++	struct arena_file file;
++	size_t ps = getpagesize();
++	char *alias = MAP_FAILED;
++	void *target = MAP_FAILED, *addr;
++	pid_t child;
++	int status, ret, err;
++
++	if (!setup(&file, 0, false))
++		goto out;
++	alias = mmap(NULL, ps * 2, PROT_READ | PROT_WRITE, MAP_SHARED,
++		     file.file_fd, 0);
++	if (!ASSERT_NEQ(alias, MAP_FAILED, "lifecycle_mmap"))
++		goto out;
++	alias[0] = 42;
++	ret = munmap(alias, ps);
++	err = errno;
++	ASSERT_EQ(ret, -1, "partial_unmap");
++	ASSERT_EQ(err, EINVAL, "partial_unmap_errno");
++	ret = mprotect(alias, ps, PROT_READ);
++	err = errno;
++	ASSERT_EQ(ret, -1, "partial_mprotect");
++	ASSERT_EQ(err, EINVAL, "partial_mprotect_errno");
++	ret = madvise(alias, ps * 2, MADV_DOFORK);
++	err = errno;
++	ASSERT_EQ(ret, -1, "enable_inheritance");
++	ASSERT_EQ(err, EINVAL, "enable_inheritance_errno");
++	target = mmap(NULL, ps * 2, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (!ASSERT_NEQ(target, MAP_FAILED, "reserve_remap_target"))
++		goto out;
++	addr = mremap(alias, ps * 2, ps * 2, MREMAP_MAYMOVE | MREMAP_FIXED, target);
++	err = errno;
++	if (!ASSERT_EQ(addr, MAP_FAILED, "relocate_mapping")) {
++		alias = addr;
++		target = MAP_FAILED;
++	}
++	ASSERT_EQ(err, EINVAL, "relocate_mapping_errno");
++	child = fork();
++	if (!ASSERT_GE(child, 0, "fork"))
++		goto out;
++	if (!child) {
++		unsigned char resident[2];
++
++		ret = mincore(alias, ps * 2, resident);
++		_exit(ret == -1 && errno == ENOMEM ? 0 : 1);
++	}
++	if (ASSERT_EQ(waitpid(child, &status, 0), child, "wait_child") &&
++	    ASSERT_TRUE(WIFEXITED(status), "child_exited"))
++		ASSERT_EQ(WEXITSTATUS(status), 0, "mapping_not_inherited");
++	ASSERT_EQ(alias[0], 42, "parent_mapping_retained");
++out:
++	if (target != MAP_FAILED)
++		munmap(target, ps * 2);
++	if (alias != MAP_FAILED)
++		munmap(alias, ps * 2);
++	cleanup(&file);
++}
++
++void serial_test_arena_pinned(void)
++{
++	if (test__start_subtest("ordinary_pin"))
++		test_unexported_pin(0);
++	if (test__start_subtest("retained_pin"))
++		test_unexported_pin(BPF_F_ARENA_NO_FREE);
++	if (test__start_subtest("export_requires_no_free"))
++		test_export_requires_no_free();
++	if (test__start_subtest("mappings"))
++		test_mappings(0);
++	if (test__start_subtest("map_extra"))
++		test_mappings(1ULL << 32);
++	if (test__start_subtest("fixed_size"))
++		test_fixed_size();
++	if (test__start_subtest("read_only"))
++		test_read_only(MAP_SHARED);
++	if (test__start_subtest("read_only_validate"))
++		test_read_only(MAP_SHARED_VALIDATE);
++	if (test__start_subtest("zero_canonical"))
++		test_zero_canonical();
++	if (test__start_subtest("lifecycle"))
++		test_lifecycle();
++}
 -- 
 2.56.0
 
