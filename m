@@ -1,77 +1,66 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698812F1FDE
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 21:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52396369D4F
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 21:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791666188; cv=none; b=RF17Ts435Z8nKXLGIa5pHx9SDcYxTtPu7zXdlpNFv6P8Q+ggy9eS2f48sgN+0BsXfLkp0/37aJD47S03fydnndh5d4UsmEOoJezqRLTqlLYWRWpgx5BlDo/1mnTLTJCjW4mOxBv4XpZab7CEme2pYLfi+w+KbbWdeQBcjjNB2Wo=
+	t=1791666191; cv=none; b=cu+zwVfauvTEr4hln289BENvdJSD5Gz+gPfEPHL3bi2iS340/dCJEiSWR3so4msXZ+BUK5ihWlRjcpObuOTI/YBICawtqo2RXujqqzKuMT/m3f5wjnunAP1KUSpRL6diKNEi/mTsdBY8QRxBBhDY0b+dxJNGbPTJGa5EBglWcMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791666188; c=relaxed/simple;
-	bh=nFM1yEWaP6vg23VPHbRfkQhYXP1jb3683txd71NEY5w=;
+	s=arc-20240116; t=1791666191; c=relaxed/simple;
+	bh=v/XlPMN4fPBfmAxkgYIsWzQxkY2uLOFx2Hx425yLdCQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ym2yvZa6BRGXh3QspRqPjSl9B5BXd+eUqtAALNMRdHNBMApRXSRTJDgjlpXRYEGBiXoMUGftmpmvfINt4nzHs4GAs61Pc6Z0SpE4tnWGuj/3Oirwf+2Pz4WBFFgrY3Pg8/VXVeX4a0KsKyd3mw6AFIUleHwp3TQZTy8nA6bXW2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=yUn9ZO1d; arc=none smtp.client-ip=209.85.219.52
+	 MIME-Version; b=rs3LPG8wnCPU3922ut9rMnwCnzqGgTA46BuPIzoBERjVtNvL4Sc8NERnX+BieIp/vn1328K4yR+2Ax3H3VSUhsZhQSHM95ARIvaGPDVorYFRMQxzjUfOgjsnyNXXL/8fOGjXq1Ze8cxbhLBjyRUST0EwMwJKzdW1x6Tm9a7mWyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=WzislntM; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="yUn9ZO1d"
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-91b63bd2030so12240646d6.3
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:03:05 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="WzislntM"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-93e4e37788cso85194985a.2
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 14:03:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1791666184; x=1792270984; darn=vger.kernel.org;
+        d=mojatatu.com; s=google; t=1791666187; x=1792270987; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XtRkR4RkEnODcw9fcyE1cbkI9LnR6v3FBNCmsOCW3Ig=;
-        b=yUn9ZO1dLEzAix/BD74ioOkhSPK4v9N67AYkm2PlbB3vlMVjtCp/YBBhlwzDQcHBgT
-         PLf+8gYHuk8jPUph192jisY7eHtN4yFYw2dmv9/+3/vu/GeT2TsGmqfGuN9LtZMbRHfO
-         W0ktGAE1GhG5F14vFzY8yLLooV398FOXdIObg=
+        bh=jz2Hc1XYfp2QYZMfwSM35lC+Lb6h+/doZovOemukty0=;
+        b=WzislntMaHvjSpMec8Vc4/i1wBjX75zqKLRZm8lu7uOqz+NWFO7XkasklP/+dZREZi
+         uDbltHc4CpnJC5bQaR2Gppt6X4OPs7+AYqq5K02IdmxhRllw7n6h279iavp9ibm2MIg8
+         NtSzaICuv3MnSEXaaIHBfkkcEVJ7SqfmA3SfI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791666184; x=1792270984;
+        d=1e100.net; s=20260707; t=1791666187; x=1792270987;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XtRkR4RkEnODcw9fcyE1cbkI9LnR6v3FBNCmsOCW3Ig=;
-        b=pAeiwt6ik0Srgt0qfdY8DA4lhoh2Yia15kPxEuMsaC2GHopkXVJV4OxfSpPy59UXtX
-         01RgRkOWcWJPnibj16X7xUb6QDbC4nob1Ltq+/6l1O5GTWkHkD6/LB9oW1/Arj3mDeNT
-         8l5GGsG0jbDnS1xQuI4Q0bE8jNJ6xWPhjYTUzkfklxDBHyjthoI/iMKroEQkGKmrhqSB
-         oSiWksuW2cJC18k2yxtpiraiW3LdYBgKmz00/ekZK6i5Z5NtvPXgzrunFZtpOhRMiBuK
-         YsSIlcreBG89f6rggp/W37JB+o6NpEynIdUlXYzHqSEkk7wiKE19JPOXuGUQljJYuTIq
-         T5FA==
-X-Forwarded-Encrypted: i=1; AKwUvBxevqIj/f1B4hFFcRx1NgsObYRyBskJad9lx0LYIhZJEib4Z5qWl+Ie8P7J2t+V+DYSWOY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKoi0POMyJK4AbPRgFi2wQ8mzxcanyIjkOunrZvhO9M0ywfxeEX
-	GCk3SMuP5k4JlqOXTAGgCLdaHfFr+kw3hMta5SNCMa7YqYWXR1RXJ1RYzWu+4iqezg==
-X-Gm-Gg: AYBFou1kH9E4kUqYyB76byuGy4NXeFsYv4i44llQZ4Tbz84lPZvqhFdoCBloTA7ahT7
-	2IoKFOyqhLTgMKoT5Q51F4+cZalQ7wYk6xzD2TW+i0NzNg/mEtVo8MwCviu9n45SOw9vK85dfaT
-	qVQ1OiEahO0B0MXsuAvgYFu1mSuzxY0akR3SyHJgFmr4idqMIwGMnlQK1/feiEqOwGAb75fKic+
-	ulhPG2huqe1n2upeM0ImsgeshFzrFFnguClKy+tczUFQ4+3I3Lp9ZwatXefZ7FX0BMvtJZTh/wy
-	9473aNa9mzcFs/7gzfndL0Dm5W4/CWgPnY/Rt4KmWQV6nkazFO5qRerNALVYdkBb9KZHWk8vXpD
-	avS20Kjajf/XkvIKSdj5T39gP8GtxdbL8kDRoOtXRAWRCBqUVIxfD8xMfLzWtrRKcgc/CMFeEvd
-	+qPsKvq9GSm5twjK4ScNw6puDiijwvElNG30Ft5byQaamo++bOxto9o/pW8Jy0/NOsKmJUAJdd9
-	cTDHvFrxfPn3PGnMwm+hin5X+I021GWCF+Dk34XztD7
-X-Received: by 2002:a05:620a:17a3:b0:93c:89a0:bf82 with SMTP id af79cd13be357-93ebd209171mr987739885a.43.1791666184083;
-        Sat, 10 Oct 2026 14:03:04 -0700 (PDT)
+        bh=jz2Hc1XYfp2QYZMfwSM35lC+Lb6h+/doZovOemukty0=;
+        b=ExInyhRKLiQCUx4SDJ0AuBLBBYmt0VroVBkI1DxD+sL3H6aWvxjyJV0RNQkfRSsXd7
+         uwu9THj7VYGfS1LuiYAknw5+tBCQk4SszJH125bKeIM29JzGP05437epNHQ+iKLYhT4q
+         8UE50eQj8bdpSaPjf29hC7p2OMWhPIY978tVycV+RJmIBkwfvkMzuoDuRxwlNrOp3dOt
+         qDHU7Wehl2dHHaiw9gvjqs8cC28vUg35AOsoYXbUZmw1LWa48qTZSrfFDNyI/rH3se19
+         r8PL11RFld35w6F14mPppF7IuP4HZgEkRH+tjQO+DmU0bLwMGTVS2DvvJZhehnhEKoL4
+         AWCw==
+X-Forwarded-Encrypted: i=1; AKwUvBwl6c2gfhlkIMhOickxIY4i3VyeUj4rbUgDXZJSEfNbMQyMvZEZ6Gug28NDIcD8niNkt74=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKXMo1KQEdQCtLlagMFbwOkk4SQSg3uhHXmyQNiZ5wgAc4k5U2f
+	zito2sliLKl0jCaZ0VDkQxoOT8YGYJyl/QQMsbcIWAIrUQc+GDZeLxhPW9ie/cGFBw==
+X-Gm-Gg: AYBFou0XEicUvsOqk/WAK09e4tM8vTpA5jyGfObHBrh8wUvBwPrAPd8DrMeBBKl8Hv1
+	zROnsfWwHBUY6aWUgGIWFB3LoEdnzyKD7Jr5/JmNU9Jr3bk1OkIerYPcAv69pQvRnue/Hgliv8i
+	2HWjxwB5BxGjbbkY6l2YK4snsfDkUb/DacLjOen/dJSpZvmYRz4sUHbWuowR9o2Kx38fCQuVKIy
+	dQ3f0k7g6tN4SDqcN1svWUwr6wDPie7jjOsmSolZAQ85gFxemYC8JJb7xYXjtWesDTOpbBV7LB7
+	57CRU9i6v8n0AfOMWxIttHBzHGwjEal+qgi+fdIRWJGO+1oC8lFsNWa1OGwpSGcOU2wGDGNfn3X
+	8WP9y1cKt5MPHgTneyxIANQ3RrN6d3Y5vgmQ4bqfGf6T9dRfjaMa4VHE/18mI2juzU0d04ezpJh
+	AWl+n+KCkRtUi77UkValCSsVlUN7W/uu7Z8zRIiovK6IwOosQK8Pt0RXoMwioGu8GqxRcgs5Zbo
+	nItXB5UyOcwI8Zwht8Y7RQ2OjF+RnIgHDX77frZIBtQ
+X-Received: by 2002:a05:620a:17a0:b0:93e:c12c:f13b with SMTP id af79cd13be357-93ec12d085amr843885885a.69.1791666186988;
+        Sat, 10 Oct 2026 14:03:06 -0700 (PDT)
 Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb984845csm498538085a.14.2026.10.10.14.03.01
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb984845csm498538085a.14.2026.10.10.14.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Oct 2026 14:03:03 -0700 (PDT)
+        Sat, 10 Oct 2026 14:03:06 -0700 (PDT)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
 	davem@davemloft.net,
 	edumazet@kernel.org,
 	kuba@kernel.org,
@@ -79,12 +68,10 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	horms@kernel.org,
 	jiri@resnulli.us,
 	bpf@vger.kernel.org,
-	stable@vger.kernel.org,
-	sashiko-bot@kernel.org,
 	victor@mojatatu.com
-Subject: [PATCH net v2 2/3] net/sched: cls_bpf: accept dev-bound programs on shared blocks
-Date: Sat, 10 Oct 2026 17:02:49 -0400
-Message-Id: <QDISC-PYC7.v2.20261010165947-3@mojatatu.com>
+Subject: [PATCH net v2 3/3] selftests: net: exercise dev-bound cls_bpf on shared blocks
+Date: Sat, 10 Oct 2026 17:02:50 -0400
+Message-Id: <QDISC-PYC7.v2.20261010165947-4@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
 References: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
@@ -97,124 +84,203 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 The issue:
-Follow-up to commit 120977e2c096 ("net/sched: cls_bpf: reject dev-bound
-programs bound to a different device"), which derived the target device
-from block->q:
-
-	dev = block->q ? qdisc_dev(block->q) : NULL;
-
-tcf_block_create() leaves block->q NULL for shared blocks, so a
-device-bound program attached through a shared block is rejected with
--EINVAL even when it is bound to a netdev that owns the block.  The
-offload path (cls_bpf_offload_cmd()) never consults block->q and drives
-the per-device callbacks for shared blocks as before.
+bpf_offload.py only exercises per-device ingress qdiscs today, so neither
+the shared-block accept path nor the late-join replay is tested.
 
 The Fix:
-Accept the attach on a shared block when bpf_offload_dev_match() matches
-every netdev bound to the block, and reject an empty block.  Every member
-must match because the offload path broadcasts the program to every
-callback registered on the block, so an any-member check would re-admit
-the wrong-device attach on a mixed block.  Every dev-bound SCHED_CLS
-attach is skip_sw, which becomes err_stop and aborts the offload on the
-first failing callback, so the all-members rule is the offload path's own
-semantics.
+Add a test for a device-bound SCHED_CLS program attached through a shared
+block.  It loads a dev-bound SCHED_CLS program for a netdevsim device and
+checks:
+  - the program attaches to a shared block owned by its device, and the
+    filter teardown leaves the device unloaded;
+  - a block that also holds an independently backed device rejects the
+    attach, because the offload path broadcasts the program to all
+    members;
+  - an independently backed device that joins a populated block is not
+    loaded by the bind/replay path, and the driver's extack is asserted;
+  - a second port of the same netdevsim device (same offload device) is
+    accepted together with the bound port.
 
-Iterate the public block->ports xarray (913b47d3424e, v6.8-rc1) rather
-than block->owner_list, which is private to cls_api.c.  The shared-block
-rejection reports "Program is not bound to every device in the block",
-distinct from the non-shared message, because a member can exist without
-a registered callback (netdevsim registers its block callback
-ingress-only).
+The program is loaded from the existing sample_ret0.bpf.o with an explicit
+`type classifier` override, so no new sample object is needed.
 
-Context note:
-This patch is not an independent fix: it re-exposes the shared-block
-replay path that commit 120977e2c096 ("net/sched: cls_bpf: reject
-dev-bound programs bound to a different device") had closed, so patch 1
-must be applied first, including in stable.  A stable tree taking this
-patch alone would re-enable shared-block attaches on a kernel whose
-netdevsim callback is still unchecked.
-
-Conditions to recreate the bug:
-  - CONFIG_NETDEVSIM=y, CONFIG_NET_CLS_BPF=y
-  - load a dev-bound SCHED_CLS program for netdevsim device B
-    (prog_ifindex=B), pin it in bpffs
-  - tc qdisc add dev B ingress_block 22 clsact
-  - tc filter add block 22 ingress bpf da object-pinned <pin> skip_sw
-  Unfixed, the filter add fails with -EINVAL ("Program is bound to a
-  different device"); fixed, it succeeds.  Adding a second, independently
-  backed netdevsim device to the same block makes the attach fail again.
-
-Fixes: 120977e2c096 ("net/sched: cls_bpf: reject dev-bound programs bound to a different device")
-Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/netdev/20260809094418.901607-1-jhs@mojatatu.com/
-Link: https://lore.kernel.org/netdev/QDISC-PYC7.v1.20261003103747@mojatatu.com/
-Cc: stable@vger.kernel.org
 Reviewed-by: Victor Nogueira <victor@mojatatu.com>
 Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
 v1 -> v2 (v2 of an on-list patch; v1 posted 2026-10-04):
 
-- Finding (nipa Sashiko High, v1) -- FIXED: the
-  every-member predicate is enforced only at add/replace, but a netdev
-  joining a shared block later is replayed the stored filter by
-  cls_bpf_reoffload() before it is inserted into block->ports
-  (tcf_block_offload_bind precedes the xa_insert).  Neither
-  cls_bpf_reoffload() nor nsim_bpf_setup_tc_block_cb() checked
-  bpf_offload_dev_match(), so the B-bound program was installed on the
-  joining device (re-opening the 120977e2c096 mixed-block defect).
-  Fixed by enforcing the device match in nsim_bpf_setup_tc_block_cb()
-  (drivers/net/netdevsim/bpf.c), mirroring nfp.
-- Style (gemini + nipa Low) -- FIXED: the shared-block comment opens with
-  /* on its own line.
-- The companion selftest exercises shared-block and late-join coverage,
-  pinning both the all-members predicate and this callback's replay gate.
-- Split the single v2 draft into [PATCH net v2 1/3] netdevsim,
-  2/3 cls_bpf and 3/3 selftests, each with its own Fixes: and stable
-  metadata.
+- New selftest: shared-block + late-join coverage in bpf_offload.py.
+- Split the single v2 draft into three patches; this companion carries no
+  Fixes: and no Cc: stable (a selftest is not backported; it depends on
+  both code patches).
 ---
- net/sched/cls_bpf.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/bpf_offload.py | 139 +++++++++++++++++++++
+ 1 file changed, 139 insertions(+)
 
-diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
-index 188cf0f949dd..bbd2dc2f518f 100644
---- a/net/sched/cls_bpf.c
-+++ b/net/sched/cls_bpf.c
-@@ -392,11 +392,31 @@ static int cls_bpf_prog_from_efd(struct nlattr **tb, struct cls_bpf_prog *prog,
- 	if (bpf_prog_is_dev_bound(fp->aux)) {
- 		struct tcf_block *block = tp->chain->block;
- 		struct net_device *dev;
-+		unsigned long ifindex;
-+		bool match = false;
-+
-+		/* A shared block has no qdisc of its own, but it may bind
-+		 * several netdevs and the program is offloaded to all of them;
-+		 * require a match with every member.
-+		 */
-+		if (!tcf_block_shared(block)) {
-+			dev = qdisc_dev(tcf_block_q(block));
-+			match = bpf_offload_dev_match(fp, dev);
-+			if (!match)
-+				NL_SET_ERR_MSG(extack,
-+					       "Program is bound to a different device");
-+		} else {
-+			xa_for_each(&block->ports, ifindex, dev) {
-+				match = bpf_offload_dev_match(fp, dev);
-+				if (!match)
-+					break;
-+			}
-+			if (!match)
-+				NL_SET_ERR_MSG(extack,
-+					       "Program is not bound to every device in the block");
-+		}
+diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
+index c856d266c8f3..87e244d8ff05 100755
+--- a/tools/testing/selftests/net/bpf_offload.py
++++ b/tools/testing/selftests/net/bpf_offload.py
+@@ -452,6 +452,38 @@ class BpfNetdevSim(NetdevSim):
+         self.tc_add_ingress()
+         self.wait_for_flush(bound=bound, total=total)
  
--		dev = block->q ? qdisc_dev(block->q) : NULL;
--		if (!dev || !bpf_offload_dev_match(fp, dev)) {
--			NL_SET_ERR_MSG(extack,
--				       "Program is bound to a different device");
-+		if (!match) {
- 			bpf_prog_put(fp);
- 			return -EINVAL;
- 		}
++    def tc_add_block(self, block, fail=True, include_stderr=False):
++        return tc("qdisc add dev %s ingress_block %d clsact" %
++                  (self['ifname'], block), fail=fail,
++                  include_stderr=include_stderr)
++
++    def tc_del_block(self, block):
++        tc("qdisc del dev %s clsact" % (self['ifname']), fail=False)
++
++    def tc_add_block_filter(self, block, bpf, op="add", prio=None, handle=None,
++                            da=False, verbose=False, skip_sw=False,
++                            skip_hw=False, fail=True, include_stderr=False):
++        spec = ""
++        if prio is not None:
++            spec += " prio %d" % (prio)
++        if handle:
++            spec += " handle %s" % (handle)
++
++        params = ""
++        if da:
++            params += " da"
++        if verbose:
++            params += " verbose"
++        if skip_sw:
++            params += " skip_sw"
++        if skip_hw:
++            params += " skip_hw"
++
++        return tc("filter {op} block {block} {spec} bpf {bpf} {params}"
++                  .format(op=op, block=block, spec=spec, bpf=bpf,
++                          params=params),
++                  fail=fail, include_stderr=include_stderr)
++
+     def tc_show_ingress(self, expected=None):
+         # No JSON support, oh well...
+         flags = ["skip_sw", "skip_hw", "in_hw"]
+@@ -629,6 +661,111 @@ def test_spurios_extack(sim, obj, skip_hw, needle):
+                             include_stderr=True)
+     check_no_extack(res, needle)
+ 
++def test_tc_shared_block():
++    """
++    Device-bound cls_bpf program attached through a shared block.
++    """
++    # A shared block has no qdisc, so the target device is derived from the
++    # block's bound netdevs and the program must match every member, since
++    # the offload path broadcasts it to every callback on the block.  A
++    # netdev joining a populated block later is replayed the stored filter
++    # before it is inserted into block->ports, so the driver callback must
++    # enforce the device match as well.
++    simdev = BpfNetdevSimDev()
++    sim, = simdev.nsims
++    sim.set_ethtool_tc_offloads(True)
++
++    start_test("Test TC shared-block load dev-bound program...")
++    bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/tc_shared",
++                      prog_type="classifier", dev=sim['ifname'])
++
++    start_test("Test TC shared-block dev-bound attach...")
++    # The pinned program is dev-bound to this device; attaching it through
++    # a shared block must succeed even though block->q is NULL.
++    sim.tc_add_block(22)
++    # err is kept (include_stderr) for post-mortem value on a failure.
++    ret, _, err = sim.tc_add_block_filter(22, bpf_pinned("/sys/fs/bpf/tc_shared"),
++                                          da=True, skip_sw=True,
++                                          fail=False, include_stderr=True)
++    fail(ret != 0, "dev-bound program rejected on a matching shared block")
++    fail(sim.dfs_read("bpf_offloaded_id") == "0",
++         "dev-bound program not offloaded on a matching shared block")
++    sim.tc_del_block(22)
++
++    start_test("Test TC shared-block broadcast to a foreign member...")
++    # Add an independently backed device to the SAME block before the
++    # attach.  The program is bound to sim's device only, and the offload
++    # path fans it out to every member, so the attach must be rejected.
++    simdev2 = BpfNetdevSimDev()
++    sim2, = simdev2.nsims
++    sim2.set_ethtool_tc_offloads(True)
++    sim.tc_add_block(40)
++    sim2.tc_add_block(40)
++    ret, _, err = sim.tc_add_block_filter(40, bpf_pinned("/sys/fs/bpf/tc_shared"),
++                                          da=True, skip_sw=True,
++                                          fail=False, include_stderr=True)
++    fail(ret == 0, "dev-bound program broadcast to a foreign shared-block member")
++    check_extack(err, "Program is not bound to every device in the block.", args)
++    sim2.tc_del_block(40)
++    sim.tc_del_block(40)
++    simdev2.remove()
++
++    start_test("Test TC shared-block late join replay...")
++    # Build a block owned by sim's device with the matching program
++    # installed, then let an independently backed device join it.  The
++    # join replays the stored filter to the joining device's callback
++    # before the device is recorded in block->ports; the driver must
++    # reject the replay so the foreign device is never loaded.
++    # sim2 is created here (not inherited) so the TC-offload state it
++    # depends on is explicit.
++    simdev2 = BpfNetdevSimDev()
++    sim2, = simdev2.nsims
++    sim2.set_ethtool_tc_offloads(True)
++    sim.tc_add_block(30)
++    ret, _, err = sim.tc_add_block_filter(30, bpf_pinned("/sys/fs/bpf/tc_shared"),
++                                          da=True, skip_sw=True,
++                                          fail=False, include_stderr=True)
++    fail(ret != 0, "dev-bound program rejected on a matching shared block")
++    ret, _, err = sim2.tc_add_block(30, fail=False, include_stderr=True)
++    fail(ret == 0, "foreign device joined a populated dev-bound shared block")
++    check_extack_nsim(err, "program bound to a different device.", args)
++    fail(sim2.dfs_read("bpf_offloaded_id") != "0",
++         "replayed program loaded onto a foreign device")
++    # The add above was expected to fail, so the qdisc may not exist; the
++    # delete is harmless and only cleans up when it does.
++    sim2.tc_del_block(30)
++    sim.tc_del_block(30)
++    simdev2.remove()
++
++    start_test("Test TC shared-block same-offload-device member...")
++    # A second port of the same netdevsim device shares the offload device,
++    # so a program bound to one port may legitimately be offloaded to both.
++    simdev3 = BpfNetdevSimDev(2)
++    sim3, sim3b = simdev3.nsims
++    sim3.set_ethtool_tc_offloads(True)
++    sim3b.set_ethtool_tc_offloads(True)
++    bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/tc_shared_multi",
++                      prog_type="classifier", dev=sim3['ifname'])
++    sim3.tc_add_block(50)
++    sim3b.tc_add_block(50)
++    # err kept for post-mortem value on a failure.
++    ret, _, err = sim3.tc_add_block_filter(50, bpf_pinned("/sys/fs/bpf/tc_shared_multi"),
++                                           da=True, skip_sw=True,
++                                           fail=False, include_stderr=True)
++    fail(ret != 0, "same-offload-device member rejected on a shared block")
++    fail(sim3.dfs_read("bpf_offloaded_id") == "0",
++         "program not offloaded to the bound port")
++    fail(sim3b.dfs_read("bpf_offloaded_id") == "0",
++         "program not offloaded to the same-offload-device port")
++    sim3b.tc_del_block(50)
++    sim3.tc_del_block(50)
++
++    simdev3.remove()
++    simdev.remove()
++    rm("/sys/fs/bpf/tc_shared_multi")
++    rm("/sys/fs/bpf/tc_shared")
++    bpftool_prog_list_wait(expected=0)
++
+ def test_multi_prog(simdev, sim, obj, modename, modeid):
+     start_test("Test multi-attachment XDP - %s + offload..." %
+                (modename or "default", ))
+@@ -1349,6 +1486,8 @@ try:
+     ret, out = bpftool("prog show %s" % (progB), fail=False)
+     fail(ret != 0, "couldn't get information about orphaned program")
+ 
++    test_tc_shared_block()
++
+     print("%s: OK" % (os.path.basename(__file__)))
+ 
+ finally:
 -- 
 2.43.0
 
