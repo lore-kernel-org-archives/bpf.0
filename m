@@ -1,150 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4C6364927
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 15:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E453A4F30
+	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 15:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791644932; cv=none; b=Xpv6bpa7BCbRkRKfFy4nkzX8pVyOORyYvNr7NfupR6bKfY63MZ4gUAPmqjH2slftGsU+7Re8ALl4EdydlNHcULqDV58EzgQ0NtkPXwdFa8xNYptZ5VlTjFAdA47BTWHBS4kR+ZlhXE/Dj8H9Z6l+V4zsndIlz4k7uA+9L4Ngx1o=
+	t=1791644939; cv=none; b=uaSGwT4HIk1GmM67NJQ6DQeI57tKq895ftiDcG8rTnuNeN+29DaXtfosH7xqPFk22Ixgi/5sV02zWea+Mfxn8ZkIhDHHBIIOzpRUm4ycXfNP5ek4o+RiYJUrHXi3ZjCdehp4HMOq78uwJEaydDnSoYTWMByDa/7mU12cOnQ+9y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791644932; c=relaxed/simple;
-	bh=qFvCp69MA6ATmyRUIxjDlMiYwkPSFx0MslAORicGbU0=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=oM5o3OSINDLrDYYCvH/4o0HLeW7S0Emk6DcoSwlaYUgnwbZa+xi8XKu4QDe7zs/GdcMaRu0E6MmMv91pWAzMp92ELwsuhcpDe4UxjnzyEKEeoNkzo5ERHf+u01+iRj2mEApqvakpDp5Riw0bh0LgS0bLiA943+XjDelr4jrtzHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OWShqzE/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791644939; c=relaxed/simple;
+	bh=H0P1lScVtFSMySsNOqFf/6qMKHyoD1CpaabjlkW2qvw=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=UT9WXLZ2RGkB2OYrj2Q5EhHAcRQNch7oPVftWKlkC3nlSCyPOHiygHLiHD1sF4QUkPHIZ5TfEnGGcvgQ5Ui6Ui24iIi+5NT8hUPrsjpxRPFYJCK5OCrjsPryfFAE0aqCk4iK55Ihn0RoYuQvNvIFpNP2cs69YLO9g4jA0Ps4wWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MU/gFZL/; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OWShqzE/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E151F000FF;
-	Sat, 10 Oct 2026 15:08:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791644931;
-	bh=d+b3PnSgW5837uDU+SvEhPa+UftDDhASZcFUd3ZfXJ0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OWShqzE/Xku5f8t0qIa7Sk6uSHphbPsFDDAuTDwCLrX2j4RfkELW1Si5J96/N244e
-	 rwrBWe3hCAaiuUrW5R6gPGWt8xow0OK4VLuapKcOcFqmwZVBBkyS3upeT+0G5i94Li
-	 8F2l/om4aJl32zv1Boj7F0ntNMtvg5dpzqeIjAtEGVoyYQ2YCp5k4TBf1OTHf7u/t1
-	 heOZk6eZ7RaNKxuwsLmoywNQ1KznXBQ4Xvc3ANClTZzPM05Oy2dO6+iJ8eq8KSkmgi
-	 uLIysimq2ngsXdWsIisyl6PgcXZP6Q+aqvJd0n1MQ3VDxhhFyW8JSL5NXuzDgU3UGp
-	 I7BSlCfRhwhsA==
-Message-ID: <sashiko-outbox-166685@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 7/7] selftests/bpf: Convert veristat to
- BPF_PROG_LOAD_STRATEGY_MANUAL
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261010143156.379864-8-andrey.grodzovsky@crowdstrike.com>
-References: <20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com>
- <20261010143156.379864-8-andrey.grodzovsky@crowdstrike.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 10 Oct 2026 15:08:50 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MU/gFZL/"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd5d2dafeccso172947a12.2
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 08:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791644937; x=1792249737; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EqH0KjkRiFwhrTqfoRFXIO2xXhT9bjtUTDJStvgxeGo=;
+        b=MU/gFZL/X1maFjFLMeW4UGebDGCe6XTK30txt/nfOxCfMY0n/Xx+HFOwP2I4OBRLzo
+         OqB4M31zSQrmdE22JI6xUWU/88zXReYE/Q1T1CYNJOrnpn0LeliCjETri1TvXpgqKP5q
+         9oPw0wjrHHuTknvJKoCvqEgnnVJnMSqDpSKqxureluWntOyEwXD1l2xuzHjK7OYzwBC1
+         PAy9jcLtuUq1sMM4cOOuSNusTcaV08bB0dJRWbbSLYOVkZhWLxflc2XtN00n+xe2lmak
+         pJoK+Nw9RW06uppQOat55DK1opivY3pQIPKlG4pROVEAzzxrorm2PeVro+Kp9sAr7DEt
+         fy7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791644937; x=1792249737;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EqH0KjkRiFwhrTqfoRFXIO2xXhT9bjtUTDJStvgxeGo=;
+        b=v2+6KXLwYjJ7LAHxLOL/WW6PTEH7fGmr8B4utiXvCTb8qOxpFEdM4xBIPpdvgjNOxt
+         0rk2rrcC8FjJFpC4uOomR0U3mUenkv7oW8m1CLlH336gixbupA7GTCzczkNGf4zw26aJ
+         kUaBSkoUWvVB489o3buJxUztbXQlGBuCkHj8N58iuPZI9SFQSHg51oAZeygO+msDvmLV
+         HpcadsTsNsOsBOnMMDIL5bd18XrG7QojC9QOimS7x6+eF0ZMSkhD/wK7wI8/A22NQCbs
+         JgqyIbsPLYvg9AyyjCZIWyTAuXeWzCEsK1MTdRzE7W1wfx6dGYS8ZktZnwp7gUXrlkVX
+         kQZQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy5gpvo94oY/aQhTRD9N82oZv07SozwZdvF5r23MwSpOJwJYAvkMWYYAR5XVnyWxObsejo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJwJBiBOvRxRSAGfF7QcwagrCSNTwiUbxNqqQfjT4mDrZN+9Vtp
+	MxHytUP532kzwggsH2kj5VbCs6I7OlcXzAelX0palopOJuTXZb9TNMjNYUDcS+ERq78=
+X-Gm-Gg: AYBFou2C7DdX6MY36BTvDSveGOv16FP4W/jkiPgSxlKtUx8R5YdRpt2xdVpIr/Xi+n9
+	7H/FWBGOw7DEh2LqZxDOm+icZvk8UeXoAf6Iroty5VZpR84t6/DTTa9ZsZE/pJt5HuYet22tTfE
+	3u9t6EQZS0C9Odwl2uCXNsYzUbYs7aKHH6Tn4TQAhbRr2R/sQlSqjcDJ5zWgn+Qiey3MQWBe/qI
+	XGe1ntqX/iXaB/SZ/OiNFVo4hxVi7MFTMmKlxqqr9+IHokjgGa65Sod1It94Tt9axd5ZlAHTDAM
+	UmdUhIyY7g99Y5B6vZiEQ82/TMvbK/GabwQKjMX1xgLJleFsYgNyXqA5GGOu8DsCMgGUNFMsQpz
+	H69iDe7fCv+jY20/XzCXIkoW7d96bvRFdUme2Kz2mr+o9jN4csN6Alq03elUBJw8yRjUcyH1Ddt
+	rmvDQg+nrZ3Rhb8HxSFuD1I8/v2u331HmxF1lAyLXehdjMyxjIdUxPMzIVVx5uJPzJ9cqgHPOP/
+	eSwajUS2OeI0vHjuqSGaHaoE5RHorxooLdRNWRNpe2JHuJI6tW5tTP7m+N4NQ/mxkCKYCcag32y
+	oLY=
+X-Received: by 2002:a17:90a:510:b0:3ab:6ac7:64a with SMTP id 98e67ed59e1d1-3ab6ac70b98mr1638690a91.34.1791644936933;
+        Sat, 10 Oct 2026 08:08:56 -0700 (PDT)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab3781d581sm8738413a91.1.2026.10.10.08.08.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Oct 2026 08:08:56 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 10 Oct 2026 15:08:55 +0000
+Message-Id: <DM194GWC0XHZ.10Q1AUS5TQYNO@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next v10 09/24] bpf: Refuse a landing pad that does
+ not resume
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20261009041534.27944-1-yonghong.song@linux.dev>
+References: <20261009041447.17092-1-yonghong.song@linux.dev> <20261009041534.27944-1-yonghong.song@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] bpf: veristat uninitialized memory read of log buffer on early l=
-oad failure
-- [Low] bpf: veristat skips cleanup and info retrieval when BPF program fd =
-is 0
---
+# CARRIED OVER from the unsent v9 draft (leftover of your v8 09 mail). Delete this line, or the file if you dropped it on purpose.
+On Thu, Oct 08, 2026 at 09:15 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+> +		if (unlikely(env->cleanup_info_cnt)) {
+> +			err = bpf_exc_check_insn(env, insn);
+> +			if (error_recoverable_with_nospec(err) && state->speculative) {
+> +				insn_aux->nospec = true;
+> +				goto process_bpf_exit;
+> +			}
+> +			if (err)
+> +				return err;
+> +		}
+> +
+>  		if (bpf_is_prune_point(env, env->insn_idx)) {
 
-commit 9ac34aec88e7eee9b39c53e8055bc5989345ce5b
-Author: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Subject: selftests/bpf: Convert veristat to BPF_PROG_LOAD_STRATEGY_MANUAL
+since you're going to respin consider the following feedback:
 
-This commit updates the veristat utility to verify programs using
-BPF_PROG_LOAD_STRATEGY_MANUAL alongside bpf_program__load() and
-bpf_program__unload(). It replaces the previous use of bpf_program__clone(),
-ensuring RODATA maps are properly bound during verification and subsequently
-dropped upon unload.
-
-> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
-ests/bpf/veristat.c
-> index 9cfc9b4b41c12..0cd19b59037f6 100644
-> --- a/tools/testing/selftests/bpf/veristat.c
-> +++ b/tools/testing/selftests/bpf/veristat.c
-[ ... ]
-> @@ -1726,18 +1725,15 @@ static int process_prog(const char *filename, str=
-uct bpf_object *obj, struct bpf
->  	if (env.force_reg_invariants)
->  		bpf_program__add_flags(prog, BPF_F_TEST_REG_INVARIANTS);
-> =20
-> -	opts.log_buf =3D buf;
-> -	opts.log_size =3D buf_sz;
-> -	opts.log_level =3D log_level;
-> +	bpf_program__set_log_buf(prog, buf, buf_sz);
-> +	bpf_program__set_log_level(prog, log_level);
-> =20
->  	cgroup_err =3D reset_stat_cgroup();
->  	mem_peak_a =3D cgroup_memory_peak();
-> -	fd =3D bpf_program__clone(prog, &opts);
-> -	if (fd < 0) {
-> -		err =3D fd;
-> -		if (env.verbose)
-> -			fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
-> -	}
-> +	err =3D bpf_program__load(prog);
-
-[Severity: Medium]
-If bpf_program__load() returns an early error (e.g. from libbpf without
-calling the kernel), could the dynamically allocated buf remain
-uninitialized?
-
-When env.verbose or env.top_src_lines > 0 is set, buf is allocated
-via malloc() but the fallback initialization only null-terminates the
-static array:
-
-	if (env.verbose || env.top_src_lines > 0) {
-		buf =3D malloc(buf_sz);
-	...
-	verif_log_buf[0] =3D '\0';
-
-If bpf_program__load() returns early without modifying the buffer,
-parse_verif_log(buf, ...) will read this uninitialized memory. Could
-buf[0] =3D '\0' be set directly on buf before loading?
-
-> +	fd =3D err =3D=3D 0 ? bpf_program__fd(prog) : -1;
-
-[Severity: Low]
-If standard input is closed, can bpf_program__load() assign file descriptor
-0 to the loaded program?
-
-If fd 0 is assigned, later checks will explicitly skip handling it:
-
-	if (fd > 0 && bpf_prog_get_info_by_fd(fd, &info, &info_len) =3D=3D 0)
-
-This causes the program's JIT statistics to be skipped. Should this check
-test for fd >=3D 0 instead of fd > 0?
-
-> +	if (err && env.verbose)
-> +		fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
->  	mem_peak_b =3D cgroup_memory_peak();
->  	if (!cgroup_err && mem_peak_a >=3D 0 && mem_peak_b >=3D 0)
->  		mem_peak =3D mem_peak_b - mem_peak_a;
-[ ... ]
-> @@ -1774,7 +1770,7 @@ static int process_prog(const char *filename, struc=
-t bpf_object *obj, struct bpf
->  	if (verif_log_buf !=3D buf)
->  		free(buf);
->  	if (fd > 0)
-> -		close(fd);
-> +		bpf_program__unload(prog);
-
-[Severity: Low]
-Similar to the issue above, if fd is 0, will this prevent the program from
-being immediately unloaded and leave it in the kernel until the entire
-BPF object is closed?
-
-Should this check also use if (fd >=3D 0) to ensure cleanup occurs?
-
->  	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261010143156.3798=
-64-1-andrey.grodzovsky@crowdstrike.com?part=3D7
+The special case for speculative paths is still here.
+in_pad is compared in func_states_equal() now, so there is no need
+to check before pruning.
+Call bpf_exc_check_insn() from do_check_insn() ?
+error_recoverable_with_nospec() after it does the same thing,
+and the error will be printed after the insn instead of before it.
