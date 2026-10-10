@@ -1,162 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C896136F911;
-	Sat, 10 Oct 2026 07:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EF21FE471;
+	Sat, 10 Oct 2026 07:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791616369; cv=none; b=mWg+/FYcRdtCzvtqlM2wqZF1eFzCghgMYjJA2ve4xrYunq1x0WXBQzaNNRPij/+tixgk4kKWk8NbZuPWeCB3V2H99CTL3ZNhObRvfAzLFp+9bldXZwY30YIkehVWNHnZpwL5aRHv+e5OolAwvw4qsiLk4oD0mjzWB4AN47vuoa4=
+	t=1791618347; cv=none; b=r/Mzm4jSUEnGSTF3W26tpOvNpCNuBDQlxcbw7ZZJRTtksA9l/QivSVIHfwRyIfQYSoeCK8P+Q/pC4H1NLVE58kvEXrreliGSlHcbwkKUakaw2VGlOXAjpk8CiT1W1xsaeghoBMbPekUxSR3ei/nUHECNBYiVASjnitoaK54pBlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791616369; c=relaxed/simple;
-	bh=RhAjYseecgmquDdNkSU+RBLZLf9ZvOzPVrFTM8UdEhI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E+Tm0fEVvbbqtF92FuR/fEFiqmVdRoifMDJFliMUQD4qQlKtqXHlAI24Cb3TN7Zlid7UCcknUWQtCcjmSp31KJu9ataMx/rcdN4Afjmuf/71ZSIhafE7n8xZi+xP3y9+ZtnrByxuIl26jXXXwT7/L75WJukSKdvl4CAlt2ZFn38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YNC84y/l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791618347; c=relaxed/simple;
+	bh=T+Z00RH3HIxelQRmyMXv776EBhq38v2IrgliGcUP9iA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EGx3QM2hb9vTKFSUO5W+wabyBUKVbiJ71BvtWehwyfog05Ed7DbfgE9EuDFdBhKdLX9IAeFyB6l/VoOI1heU8uTW76Q1T6Tnzk6GRCHqQDf7IToCIXYbqbIVSJGWtsA6Fd7tRS8+GXlJ0ITwoST4UNSKtf15lchlt84YzADp34s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Ehd87S22; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YNC84y/l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBEA1F000FF;
-	Sat, 10 Oct 2026 07:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791616368;
-	bh=QMcgnnuWgqpbS2VoYj7i+y0eQKVMONCmXNCk4hNAjoM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=YNC84y/lmQV5ndDsmGdJW70Oj+7t80giQMLxNGmVDFey2oVsrGz0c5tQwatXGiCCl
-	 Hj54RY4/SoFDbwCnfbwA3WtsUnGbiBeNxyKQrRJK8BCMCOZ7nmzbbTw5kSpHft3xtX
-	 OzIkUThGW76okfhTTqxIHHGPSLrugXT1RCIF2Pup14U0q76qua0t2xrR2GcT7hy3UW
-	 kMoWrDvZGh9jZ5aywnAWEJiX9hyFCt2RIf8WdfVI2SX5rQrLxfnwk/PQdmv4qbACH+
-	 vbjRo+udCVN7ledr3LWCVnGsfU2CShj50xVEAbY1OG4ZkVwrJVgVyK07oFm8sXsgHn
-	 Zc8WuE5E6kKOQ==
-Content-Type: multipart/mixed; boundary="===============1321710191781011159=="
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Ehd87S22"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=wa
+	cfHBcFH1tmaxMAaJaDd5DCKfunSWSOW0nEYzna8Hw=; b=Ehd87S225WX9XrxSBY
+	Bore4b0nP8kMZMMmd+lC8cxB9CXwHVuMzaoNgy3WD0uqwWxJY+0ygxMNSq4z7l8q
+	+2sSWIQizYR67YL4GnFSkGMf/Xal598+s7lYGA3LsS8JZBrMvzvJx8orRr7gU2sb
+	qFqUkYcVmzYPDLzDqd7f2O9i8=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id PigvCgDXX+Tr7Mlq0R5VDw--.36602S2;
+	Sat, 10 Oct 2026 15:44:44 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: qmo@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	laoar.shao@gmail.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] bpftool: Fix out-of-bounds read in kprobe_multi link info dump
+Date: Sat, 10 Oct 2026 15:44:35 +0800
+Message-ID: <20261010074435.1415234-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9588d40e70791e4231860ceda453a8fa80c46a5c841107ab59ad0ca7c5d03c38@mail.kernel.org>
-In-Reply-To: <20261010-selftests-bpf-struct-ops-assoc-timer-v2-1-d7a43896dbf1@gmail.com>
-References: <20261010-selftests-bpf-struct-ops-assoc-timer-v2-1-d7a43896dbf1@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Defer freeing a struct_ops map until its progs are done
-From: bot+bpf-ci@kernel.org
-To: odys.yuan@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,ameryhung@gmail.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 10 Oct 2026 07:12:46 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PigvCgDXX+Tr7Mlq0R5VDw--.36602S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ury7ZFW8GFyxKF45XFWrKrg_yoW8uFy3pa
+	n8tw45KFs5XF15ur17Aa1rWFWYvFs7ZrWrCFy7Gw17Zrn8JFn0vFnrKFW0vF13urn5t3yU
+	Arnxury3ZFWfZ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnb18UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5QyDQWrJ7OzDTQAA3G
 
---===============1321710191781011159==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-> bpf: Defer freeing a struct_ops map until its progs are done
+show_kprobe_multi_{plain,json}() walk the sorted kallsyms array against
+the sorted addr/cookie array with j as a cursor into the latter. The
+loop terminating condition is checked after the cursor has already been
+used to access the array:
 
-TL;DR: Possible use-after-free of struct_ops kdata/trampoline: the deferred
-free uses call_rcu(), which doesn't wait for rcu_read_lock_trace readers
-(bpf_wq, task_work, sleepable progs); always using call_rcu_tasks_trace() may
-fix it.
+    if (j++ == info->kprobe_multi.count)
+            break;
 
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
+After all count entries have been printed, j has been bumped to count,
+but the loop keeps running and dereferences data[count] -- one element
+past the end of the calloc(count, sizeof(*data)) allocation -- while
+comparing every remaining kallsyms symbol. If the out-of-bounds value
+happens to match a symbol address, a bogus entry with a garbage
+addr/cookie pair is printed to boot.
 
-[ ... ]
+Fix the off-by-one by advancing the cursor before the comparison, so the
+loop terminates as soon as the last entry has been printed.
 
-> @@ -1050,7 +1070,15 @@ static void bpf_struct_ops_map_free(struct bpf_map *map)
->  	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
->  		synchronize_rcu_tasks();
->
-> -	__bpf_struct_ops_map_free(map);
-> +	/*
-> +	 * A prog may have read the association before it was cleared above,
-> +	 * e.g. from a timer callback, and may still be running the struct_ops.
-> +	 * Free the map only after a grace period that waits for such a prog.
-> +	 */
-> +	if (map->free_after_mult_rcu_gp)
-> +		call_rcu_tasks_trace(&st_map->free_rcu, bpf_struct_ops_map_free_rcu_gp);
-> +	else
-> +		call_rcu(&st_map->free_rcu, bpf_struct_ops_map_free_rcu_gp);
-                ^^^^
+Verified with an ASAN build of bpftool against a live kprobe_multi link
+of 3 symbols:
 
-Does this grace period wait for every reader of the association?
+  before: ERROR: AddressSanitizer: heap-buffer-overflow READ of size 8
+          at link.c:860 (show_kprobe_multi_plain) and link.c:352
+          (show_kprobe_multi_json), 0 bytes after the 48-byte
+          get_addr_cookie_array() allocation
+  after:  clean output, no ASAN report
 
-The commit message says the grace period is "a tasks trace one if the progs
-of the map may sleep", but the code does not look at whether the progs may
-sleep.  It tests map->free_after_mult_rcu_gp, which is copied from
-st_ops->free_after_mult_rcu_gp in bpf_struct_ops_map_alloc().  git grep
-finds no in-tree struct_ops that sets that flag (bpf_tcp_ca only sets
-free_after_tasks_rcu_gp), so every in-tree struct_ops map, including
-bpf_testmod's multi_st_ops and sched_ext, takes the call_rcu() branch.
-
-bpf_prog_get_assoc_struct_ops() reads aux->st_ops_assoc under
-bpf_rcu_lock_held(), which also accepts rcu_read_lock_trace().  Async
-callbacks of a struct_ops prog run with only that lock held:
-
-  static void bpf_wq_work(struct work_struct *work)
-  {
-      ...
-      rcu_read_lock_trace();
-      migrate_disable();
-      callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
-      migrate_enable();
-      rcu_read_unlock_trace();
-  }
-
-bpf_task_work_callback() works the same way (guard(rcu_tasks_trace)() plus
-migrate_disable()), and is_async_cb_sleepable() in verifier.c says "bpf_wq
-and bpf_task_work callbacks are always sleepable".  The bpf_wq kfuncs are
-in common_btf_ids, which is registered for BPF_PROG_TYPE_UNSPEC, and
-bpf_kfunc_multi_st_ops_test_1_assoc() is registered for
-BPF_PROG_TYPE_STRUCT_OPS.
-
-Can this sequence occur on a CONFIG_PREEMPT_RCU kernel, with the
-st_ops_assoc_in_timer_free test written with bpf_wq_start() instead of
-bpf_timer_start()?
-
-kworker (bpf_wq_work, rcu_read_lock_trace only)
-    st_ops = bpf_prog_get_assoc_struct_ops(aux)
-        -> &S->kvalue.data
-    <preempted, or after __bpf_prog_exit()'s rcu_read_unlock() in the
-     trampoline tail>
-
-free path
-    bpf_map_put(S) -> ... -> bpf_struct_ops_map_free()
-        dissoc_progs();
-        call_rcu(&st_map->free_rcu)
-    GP ends: this reader is not an RCU reader
-    bpf_struct_ops_map_free_rcu_gp() -> queue_work()
-        __bpf_struct_ops_map_free()
-            bpf_struct_ops_map_free_image();
-            bpf_map_area_free(st_map)
-
-kworker
-    st_ops->test_1(args)    <- reads freed kdata, or returns into the
-                               freed trampoline
-
-sched_ext looks affected the same way, since scx_prog_sched() reads
-ops->priv from the kdata that bpf_prog_get_assoc_struct_ops() returns.
-
-struct_ops progs take no reference on the map when they are associated;
-bpf_prog_assoc_struct_ops() calls bpf_map_inc() only for non-struct_ops
-progs.  So the grace period here is the only thing keeping the map alive,
-and call_rcu() does not wait for rcu_read_lock_trace() sections.
-
-This also seems to fix less than the code before the Fixes: commit.  Before
-5db69b0fbdc8, bpf_struct_ops_map_free() ran
-synchronize_rcu_mult(call_rcu, call_rcu_tasks) after the dissoc, which also
-waited for preempted tasks and so covered the trampoline tail for these
-preemptible readers.
-
-Since 57b23c0f612d ("bpf: Retire rcu_trace_implies_rcu_gp()") a tasks trace
-grace period implies a regular RCU grace period.  Would always using
-call_rcu_tasks_trace() here cover all of the readers: BH (bpf_timer), plain
-RCU, and tasks trace (bpf_wq, bpf_task_work, sleepable progs)?
-
-The two later commits in the series (49210cd1ca6f and 17c1f2ff6e23) only
-change selftests and do not address this.
-
-
+Fixes: edd7f49bb884 ("bpftool: Show kprobe_multi link info")
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ tools/bpf/bpftool/link.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38031235772
---===============1321710191781011159==--
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 088d1d206065..5cffa2d283b4 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -364,7 +364,7 @@ show_kprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
+ 		}
+ 		jsonw_uint_field(json_wtr, "cookie", data[j].cookie);
+ 		jsonw_end_object(json_wtr);
+-		if (j++ == info->kprobe_multi.count)
++		if (++j == info->kprobe_multi.count)
+ 			break;
+ 	}
+ 	jsonw_end_array(json_wtr);
+@@ -867,7 +867,7 @@ static void show_kprobe_multi_plain(struct bpf_link_info *info)
+ 		else
+ 			printf("  ");
+ 
+-		if (j++ == info->kprobe_multi.count)
++		if (++j == info->kprobe_multi.count)
+ 			break;
+ 	}
+ error:
+-- 
+2.54.0
+
