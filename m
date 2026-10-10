@@ -1,167 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7612B2DECBF;
-	Sat, 10 Oct 2026 23:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F1F37F319;
+	Sat, 10 Oct 2026 23:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791675644; cv=none; b=fPYfH6F3gGTsPl6PQj+gANtvN0osYNgki451OCfgkxz8JCcWqMeEwELoSCtQZMsHSblCrVBGhoNVgWJlMaaIO24/K5AnxulvyDN9wvcC4T9axoal7nFWE3IDBj1hYc4c19RpNGuveH3VIzcF5emIDra4kTAnK0oJ6ujx7u5vGRY=
+	t=1791675648; cv=none; b=DzSiJOPBuN7A8cXwyxGidjIQs4TOYkT5ySkTuAeUDPoPRHIsFFuQBr4D5BBCqNJ5AXnR2RN/b7brBI6+xq4gbI+cRKveoqZtn5YvQ6VK6X/h8peKk3ykDNi65qs9us4ohmT5IMuCL6ynZfTbVbg/lOSr7OGCGUeCtWmEXah7NRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791675644; c=relaxed/simple;
-	bh=ZN0ZAZtTISUaQRKFc89HkZJxB0gd+IbVVs+w9gTnym0=;
+	s=arc-20240116; t=1791675648; c=relaxed/simple;
+	bh=cCGVpa3cjIorPjYe7dv2CaBei4qsdGmMTfRi40sDobM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=u08xAW3l8J6ibBBeyvH5A4tuU165zh5MUvDaqIpYDNb+FB9wefnmxDtDHxoqybCAMQDWKigy1vrWfwQfZGqrTZIbnelmf6T5BSXDgVBca6yyHQdLKOgSkSM2eGMGSxGw38Jf+TzoGv3Pd11HyNaYWQl/ciHIJVXd+NJB3XrEveE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YEIh6PpI; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Krbde1NYreAvQNdvsrrBU1AadJBH1qOTs6eTsb4uN2nvk5b9khTNvoBUxMrPYO4GwMQ2xrrt/Vs7Jd8++OHWQTQMInHWvZvzituB7Cp85rMhvBStWN0EU9uABApiWx/YesMS4AazdpARobKl+WmomDxwfktvoJzRwmkjdG1TyXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlPaTm1+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YEIh6PpI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA8F01F000FF;
-	Sat, 10 Oct 2026 23:40:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlPaTm1+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051DD1F000FF;
+	Sat, 10 Oct 2026 23:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791675643;
-	bh=O08No+ZLnddMNkvkaDcN+wNc2a2NNQMCgwswGt0fy+A=;
+	s=k20260515; t=1791675647;
+	bh=OreBSGS80y/hd6Y5endPjEJzRHLPPEwd3kdmF9dj9PA=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=YEIh6PpIHh92qwKFhjktLWI1COUDgwnCdFqf0ycrWfz0UZX8LNBUFmzZsuJKYbG6y
-	 o8QN3Ip321wnYo/resJVcsNIIG6BUusoLIsocbc+IKtsBd9bWGRi87RNSIGDgvfqjv
-	 nrQp1I6hLmrRsPV8Q0NksjWfQ1JTqwshvCTLC36Z6ooFKlOw+qudiacPbU76Ice5DY
-	 04eSQU+hKOUMMDRzlHE2p3Wie4Hj4gcC0p/Ow4aWlqkAqEKG1/EG7fgEau6ZrIZ5HD
-	 U+ZXNMZJgaddYdiXeTVdrp7LadWtvfCHQ0l8ZlSEgaRP4dNszJI3/+K8v+AvD/Utl8
-	 11xXwDVD2v93Q==
-Content-Type: multipart/mixed; boundary="===============5396071750237871502=="
+	b=HlPaTm1+jQW6IpXrCcUZ6tuWzxOrlIkNXJFgxjk+IQ7f59BTYPYcxYfEOhmY1mNB9
+	 0MWkzHAkYHwYOVJONAWZb1MOR49V24+1yvAu4efCV/yQk06SjoPXRKGxcvdeRr5PHu
+	 m+FuKXaE73EQRGClbQspuPpIxpp2qXmA5pVscnL587VTmsoa1GtCPxZtPfMWVbCCID
+	 U+CHAN1ZW6Wf+H5gW92kMSc4e1zlIWxLO77JvTP4DQybaxOOI4lOfueEnNzlLI7fpG
+	 dBTMo0buitR4BuJZlUdf9N62haF93TuvvmWmaZ1G3ps4ru6Znj/tij6PZx2v4Bgm5i
+	 ZhSU4ea8i6ZQg==
+Content-Type: multipart/mixed; boundary="===============0129429668757689411=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <431ff6251cc556b2c294aad5492f3aac4998bb448d22b1a7a6ab8d84c6240c5a@mail.kernel.org>
-In-Reply-To: <20261010224902.1232178-5-arighi@nvidia.com>
-References: <20261010224902.1232178-5-arighi@nvidia.com>
-Subject: Re: [PATCH 4/5] selftests/bpf: Test pinned arena file mappings
+Message-Id: <88f1b3b6f56a9b090cb25116c323256cc936b2f2ae2fd310221e4d7e5d77564b@mail.kernel.org>
+In-Reply-To: <20261010224902.1232178-3-arighi@nvidia.com>
+References: <20261010224902.1232178-3-arighi@nvidia.com>
+Subject: Re: [PATCH 2/5] bpf: Expose pinned arenas as sized bpffs files
 From: bot+bpf-ci@kernel.org
 To: arighi@nvidia.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
 Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,joshdon@google.com,vineethrp@google.com,balbirs@nvidia.com,skolothumtho@nvidia.com,himadrics@protonmail.com,royfru44@gmail.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 10 Oct 2026 23:40:40 +0000 (UTC)
+Date: Sat, 10 Oct 2026 23:40:44 +0000 (UTC)
 
---===============5396071750237871502==
+--===============0129429668757689411==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Test pinned arena file mappings
+> bpf: Expose pinned arenas as sized bpffs files
 
-TL;DR:
-- Commit message second paragraph uses imperatives that read like kernel
-  changes and repeats other paragraphs
-- Selftest skips print no reason, so address-0 and unsupported-arena skips
-  look identical
+TL;DR: Nits only in bpf_mkmap() in kernel/bpf/inode.c: the nested ternary
+could be an early return, continuation indentation is off, and the
+arena-export predicate duplicated in bpf_map_setattr() could be shared.
 
->     selftests/bpf: Test pinned arena file mappings
->
->     Add native tests for pinned arena files, covering canonical range setup
->     via map FD mmap and map_extra, exported slice bounds, full-capacity
->     canonical mappings, and mapping lifetime after unpinning. Check that
->     oversized mapping requests fail cleanly and that size changes are
->     rejected without zapping mappings, while permission updates and
->     BPF_OBJ_GET still work.
->
->     Reject canonical mapping lengths that differ from the exported arena's
->     capacity and map the entire size reported by fstat(). Preserve short
->     canonical mappings for ordinary and retention-only arenas. Drop other
->     mappings, the pin, and open FDs before checking that the exported slice
->     retains the arena. Change the pin's mode from its creation permissions
->     to verify that metadata updates take effect.
->
->     Test O_RDONLY pin mappings with MAP_SHARED and MAP_SHARED_VALIDATE.
->     Verify that readers observe writer updates, retain access after closing
->     the FD, and cannot request writable or private mappings or upgrade a
->     mapping with mprotect().
->
->     Check that ordinary and retention-only arenas keep their existing pin
->     behavior, while BPF_F_ARENA_EXPORT requires BPF_F_ARENA_NO_FREE.
->
->     Check fixed-size seeking, canonical setup at address zero when security
->     policy permits it, and the exported mapping lifecycle restrictions.
->     Verify that partial unmap and protection changes, MADV_DOFORK, and
->     relocation fail, while fork leaves the parent's mapping intact without
->     inheriting it in the child.
->
->     Assisted-by: LLM
->     Signed-off-by: Andrea Righi <arighi@nvidia.com>
-
-This isn't a bug, but the second paragraph of the changelog uses
-imperatives ("Reject canonical mapping lengths...", "Preserve short
-canonical mappings...", "Drop other mappings...", "Change the pin's
-mode...") that read like kernel behaviour changes, even though this patch
-only adds a selftest.
-
-Could the second paragraph be reworded to say what the tests check, for
-example "Check that canonical mappings whose length differs from the
-exported capacity are rejected ...", and merged with the first paragraph?
-It also repeats items already listed there ("full-capacity canonical
-mappings", "permission updates") and in a later paragraph ("ordinary and
-retention-only arenas").  Any version-to-version notes could go below the
---- line.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_pinned.c b/tools/testing/selftests/bpf/prog_tests/arena_pinned.c
-> new file mode 100644
-> index 000000000000..8b7ca9021129
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_pinned.c
-> @@ -0,0 +1,442 @@
+> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+> index 7837968c0842..d3dc6f70e32a 100644
+> --- a/kernel/bpf/inode.c
+> +++ b/kernel/bpf/inode.c
 
 [ ... ]
 
-> +static bool setup(struct arena_file *file, __u64 map_extra, bool zero)
-> +{
+> @@ -390,16 +469,20 @@ static int bpf_mkobj_ops(struct dentry *dentry, umode_t mode, void *raw,
+>  static int bpf_mkprog(struct dentry *dentry, umode_t mode, void *arg)
+>  {
+>  	return bpf_mkobj_ops(dentry, mode, arg, &bpf_prog_iops,
+> -			     &bpffs_obj_fops);
+> +			     &bpffs_obj_fops, 0);
+>  }
+>
+>  static int bpf_mkmap(struct dentry *dentry, umode_t mode, void *arg)
+>  {
+>  	struct bpf_map *map = arg;
+> +	bool shared_arena = map->map_type == BPF_MAP_TYPE_ARENA &&
+> +			    (map->map_flags & BPF_F_ARENA_EXPORT);
+>
+>  	return bpf_mkobj_ops(dentry, mode, arg, &bpf_map_iops,
+> -			     bpf_map_support_seq_show(map) ?
+> -			     &bpffs_map_fops : &bpffs_obj_fops);
+> +			    shared_arena ? &bpffs_arena_fops :
+> +			    bpf_map_support_seq_show(map) ?
+> +			    &bpffs_map_fops : &bpffs_obj_fops,
+> +			    shared_arena ? (loff_t)map->max_entries * PAGE_SIZE : 0);
+>  }
 
-[ ... ]
+This isn't a bug, but would it read more simply to handle the exported arena
+case with an early return in bpf_mkmap(), rather than testing shared_arena
+twice inside a nested ternary in the argument list?
 
-> +	file->map_fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_pinned",
-> +				      0, 0, ARENA_PAGES, &opts);
-> +	if (file->map_fd < 0 && errno == EOPNOTSUPP) {
-> +		test__skip();
-> +		return false;
-> +	}
+The continuation lines here are also indented one column short of the open
+parenthesis, unlike the matching call in bpf_mklink().
 
-[ ... ]
-
-> +	file->canonical = mmap(NULL, file->len, PROT_READ | PROT_WRITE,
-> +			       MAP_SHARED | (zero ? MAP_FIXED_NOREPLACE : 0),
-> +			       file->map_fd, 0);
-> +	if (zero && file->canonical == MAP_FAILED &&
-> +	    (errno == EPERM || errno == EACCES)) {
-> +		test__skip();
-> +		return false;
-> +	}
-> +	return ASSERT_NEQ(file->canonical, MAP_FAILED, "canonical_mmap");
-> +}
-
-A subsystem pattern flags this as potentially concerning: a skip that
-prints no reason.  This isn't a bug, but every skip path in this file is a
-bare test__skip(), so test_progs only reports SKIP for the subtest.
-
-For the zero_canonical subtest this skip is taken whenever mmap_min_addr
-or an LSM refuses a mapping at address 0, and the log cannot tell that
-apart from the arena-unsupported skip taken after bpf_map_create() returns
-EOPNOTSUPP.  The same bare test__skip() appears after the EOPNOTSUPP
-checks in test_unexported_pin() and test_export_requires_no_free().
-
-Other arena tests print the reason first, for example arena_htab.c:
-
-	printf("%s:SKIP:compiler doesn't support arena_cast\n", __func__);
-	test__skip();
-
-and arena_memcg.c:
-
-	fprintf(stderr, "%s:SKIP:no memory controller or other env error\n",
-		__func__);
-	test__skip();
-
-The bare test__skip() after an arena bpf_map_create() returning
-EOPNOTSUPP does match existing usage in arena_direct_value.c, so the main
-gap is the environment-dependent zero-canonical skip.  Would a short
-reason such as "mapping at address 0 not permitted" or "arena not
-supported" be worth printing before each test__skip() here?
+The same 'map->map_type == BPF_MAP_TYPE_ARENA && (map->map_flags &
+BPF_F_ARENA_EXPORT)' predicate is repeated in bpf_map_setattr().  Could it be
+shared through a small helper, or could bpf_map_setattr() check
+inode->i_fop == &bpffs_arena_fops instead?
 
 
 ---
@@ -169,4 +101,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38093513563
---===============5396071750237871502==--
+--===============0129429668757689411==--
