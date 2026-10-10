@@ -1,154 +1,120 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0994C3AFCF7
-	for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 08:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791622292; cv=pass; b=DxRTmaLmhpbSDerOa3XIfF9DG6WByOPCM1xO9G2IbwLxbOcEFzcHKLKfkfn8sJ0YkCDgSGFWriUQ8sNnlJIEzfwKItx2lERp/01kqeu9Ws+1YsW52Lt+dsVFx41aSRFHoiTmyKo5rLu26pF+IZP2/1tcC1+RQWN0f4EeeeTNzgY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791622292; c=relaxed/simple;
-	bh=u6d7SFXuP1ZVnuQoZ762H6ZqDSQEKstty+kgOiz1vSM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQzXzWaiMDz+ijpLTRKi6qKQ0czaFZSZUy8X6B6JcVV/IRAxBBvZoozZdwonHwEF/8CeKBWgjBQcUY0j2YubEBHDiksGlZwZvKfJ062bFTlZR7k7kFuHbUUUPnZR1eNntFAb2rUbIdAogYloazub0I/70zQDCUkdSl0ZggBjWwg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YvwAxthP; arc=pass smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6A13C09F7;
+	Sat, 10 Oct 2026 08:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791622565; cv=none; b=rchoMxzXe423oexUoL1ob8ibaY/jVCbs4oO3VIk92HvVvevNTarZcpOuq0P3C6nVaytaTYxMU8kXF4W9adJFpjhX/CE43U1JNIIhpSHC5RbV6WuY9RcQ2gKi2nySsme27IPJikWW6NKkf/FPdUyTgNutvmYxeCMtQhQV7TULPVQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791622565; c=relaxed/simple;
+	bh=S1eX0RBN5WE4yYzba4O/NKEmsuWm+oBdkGM258TU794=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RNLVb9EPI9kiyKm7fS/ry3cPGa+HsWuhtACRsYVV/NKWRnaBu+cwXN+6wK+PpEvM52VS8e468O0+IVVopwI044+Xn+8b69u8U6PX4gOnyhnVgdHm3e03I2kGCdDVPjGtSTx/ayPl5fRtlqmNkcN9yY6wRfrNJ4re/8qTrGb3IpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lmgNtCMd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YvwAxthP"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6ab0140ecb2so2538a12.0
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 01:51:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791622289; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kg7//KnNAzFdWH6BgXLa9pehoDLbPKH6Zh4QizEnsxNVIF0oaY4+caymwr4Hajt7DJ
-         WWfzgKAlyELIQqbqo1U0zPyvLP0il++aTiiYXwj0rYttDye/vLhKrY+QCt+tAiF1iO36
-         kx54R0fVoukM+RhQp503goDMy1cdCqT3JEKRsz3phF40s+wV8qYwdUXPwW/Ej2A6qP3F
-         V3ygS2lFrP8is+DFBWjJKEkvDMW14fisezHXOtorpAxBVfm65VswA3h5QvnIhVueCXIm
-         zWdT54n7AxrxHEvwp5BuhrzZovpl9qJQMy17H6lAGEgB5Wq7ZiEbLwZXPHIXBaD6/olb
-         EBLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1qzTr0YbnBfbPj9+5K148QJC7O1RDLZnnS+cEO+oPi8=;
-        fh=X2DIljf3i6UiJqziLxdNerbkqceAXInbly0NJXSwHb8=;
-        b=JIV433LnEnBVtrh7Nw7I8b/mAOdtHnG00ffybBiyeXUq1fdpccS8iVYMuNzm1coEL6
-         rtFVKPmgcsYVDljhRzGp1IY1vS6QuIs6oC6IopB+UC/RMOWLWf4acw8ssyV+9T/EqMWp
-         tsHp66LbIMfXkzX3ihp+wpGIcZjZNxpfaKAafABlXYM1ZxFC3/+bWM03hb0bpe7UvIKF
-         C0vL0RXjNF0VvqWOhaDgCM/VDkoVMJzEf2K2MyaKH1RR0VGzx2Q3eXxQBsbK9vRihVnH
-         hlNFPrCUg4ZbaSG3Gb7eKDv9BBZ7iFfBBdtLI/66ZJlHaNqJbqMS1KAdx5IDhIFbeUTr
-         CSAw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791622289; x=1792227089; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=1qzTr0YbnBfbPj9+5K148QJC7O1RDLZnnS+cEO+oPi8=;
-        b=YvwAxthPJyhOL4eFMPj0oYntTOJvVIk9w6WH9Kt1na3Q8Wgx4rZMnn9dxOU49RjCKr
-         CO0sEt9yZ/E7IjKLXwLT5Y83fZ3rqqiMxVfKkAXqAtusxKuuSC3RJxzOHeb3JfGiLciL
-         KFXvToowiYRZkcD5JR9G8fThOogDpnD+lPlzyEScANN8zpz4f5jjHswzU7leUSYxVWQP
-         yFnsGOluSCCxaSRpXhIqn/dOweHPSCbD1K9BOrQXQnRqGJYKCM1GUaf4cj8TkSN13ayP
-         YNc8Yndp9eBUghyyjftch4P6OF/fGHjktFbAfr2FDPxvVSLNB20orh0BWXSJb6kD38Js
-         GBjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791622289; x=1792227089;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1qzTr0YbnBfbPj9+5K148QJC7O1RDLZnnS+cEO+oPi8=;
-        b=Ch9xJjU4PMnDSOZfAFSIFQOv15pWM18nHa1tIOhvznXDa0NM3Gu1n3m2COFwUE8W1B
-         II4YUSybC/3IkZyu/esNz7+CY07uoy0/g5ZONxvlAFuoWS1Ul2wbe4IqKIicZP6IoGfY
-         SeIo6SxIC/qn1tvUM8z4R3iDrfkMt45/lCf70rxpoQFsUlWdovjn39hXVNO3wYAA1K3L
-         vOzOwkoVNXMxcatvD5KAeYI7qKpXJDvcPG5LoPY9bsbRclHB7G8PaGXiSqEZagsZ1WYH
-         Z/TZpMd3awxioO5g9Z33cn0k+A3FbTutmQptWLxrTGkEdxDmVO1X2XZTRzMq0mG9zlV5
-         W+CQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx6SaJ5J0/nTvQhA9295obdPDHm3AdTDE0Cmxa9tZtz4eMrvHQXrAj94wAxwSWKxFE4fGI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJQVhuLqD4CatMMboqSYgOkF/CaG+Ogh/Ty68aFJ7VyIRjtOYB+
-	yKfmiEVG2AHqn8IDbxD5WaCkur8C9t1M8v5bJUkFovuY2QJRgPnoKlimMf8s8QRdHevOxoL1swh
-	1TG3jeID7GFCiCQI5AYJLW3mc7tGeiBEIy/hWRMjn
-X-Gm-Gg: AYBFou2Y6XIJ8/B6enRqB9tPeSaXvENVb5ssrjD1ZsKf8ab/f6FN8/4Tls8KmRNgr+d
-	pxENzI767FIF9ypHJn1b0rnh81BbaAMNOiJ9pnWnUBB/XG4NWhi67LmXAiJBP9pjFmwisO43cqf
-	2IVP8/NnvPZsqmpznEHQkDpL1Lc10jN4g/HMWxtk+JQPUzpyGzfXmL1eW4fNLY/u4CCMFDiu5hf
-	NEZm+bnmcWbNEFwwFBwHZcUZBRSVQuRqIq08BqsVwCah1NHhOpI14FOJ0diAgzJHYVWJvR+65GW
-	NKd/3gh0mi3ff7Z4m0RmGQRaaVpzo0tPMAFZEFaAHdTdIudwjveJrQ==
-X-Received: by 2002:a05:6402:c4ce:10b0:6af:97a9:224a with SMTP id
- 4fb4d7f45d1cf-6b19883993fmr15040a12.2.1791622288658; Sat, 10 Oct 2026
- 01:51:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lmgNtCMd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDDF1F000FF;
+	Sat, 10 Oct 2026 08:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791622563;
+	bh=PXGECzpbsrEqal5CMwGLH6DcA0sQT7TM47DRVm6PlDI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lmgNtCMdUXmVBhtWGQgR9b98gZvv3xhL/Yr88RmtdNy8VD+p5IqHlshCrJo7hVIiE
+	 eITZTE0i4rWL5a9JbAzxpI2yMxSCt6BEkWrK8DnQ55zMl3jQsvcZTQCOjIuioHd/Xg
+	 TRd8YZeGqWZ0YhhwLVx+7a0B84L00q15mggRh/uqPDBBN/T/YBOqT9AyRNdTZr54xy
+	 Q5r2jmVKrkFxAj53LVCOwj5yTVzRSMF1CdfQKidPtmtTnJ6OfB44UFZELs0ux8lCgY
+	 +WUdVTQNvnL85A6zpqcHgX1Mqgvv3zLkFy69oVZRve2jHBWyYvRgZAe9x9kLLiN85j
+	 LXvSlEyjPgBHQ==
+Content-Type: multipart/mixed; boundary="===============1628657098954736497=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261010083935.3274178-1-almasrymina@google.com> <179162194176.2527009.17837283221529280785@kernel.org>
-In-Reply-To: <179162194176.2527009.17837283221529280785@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Sat, 10 Oct 2026 01:51:17 -0700
-X-Gm-Features: AclHuK_yiP687Fitsz3qcW8jp5keSTQlvPwHmngAicI8BRA9_47JLCvvHXQHfsY
-Message-ID: <CAHS8izO=MW1Hy0k0yjm4HbJ0P9F5_oOQieLvFA5T4SzBDdDP1w@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 0/6] net: unify symmetric netmem and page_pool refcounting
-To: netdev-bot+sinfo@kernel.org
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
-	Ayush Sawal <ayush.sawal@chelsio.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Simon Horman <horms@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Neal Cardwell <ncardwell@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Sabrina Dubroca <sd@queasysnail.net>, Eric Biggers <ebiggers@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Michael Grzeschik <mgr@kernel.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>, 
-	Petr Machata <petrm@nvidia.com>, Arend van Spriel <arend.vanspriel@broadcom.com>, 
-	Jakub Raczynski <j.raczynski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <b31863a31621c860cc2d857b65d8478058ccd088f3b3178ea19582dbbb1331fc@mail.kernel.org>
+In-Reply-To: <20261010075448.3150878-1-visitorckw@gmail.com>
+References: <20261010075448.3150878-1-visitorckw@gmail.com>
+Subject: Re: [PATCH v8] m68k, bpf: Add initial BPF JIT compiler support
+From: bot+bpf-ci@kernel.org
+To: visitorckw@gmail.com,corbet@lwn.net,skhan@linuxfoundation.org,geert@linux-m68k.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,andrii@kernel.org,gerg@linux-m68k.org
+Cc: rdunlap@infradead.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,jserv@ccns.ncku.edu.tw,marscheng@google.com,eleanor15x@gmail.com,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-m68k@lists.linux-m68k.org,bpf@vger.kernel.org,visitorckw@gmail.com,daniel@thingy.jp,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 10 Oct 2026 08:56:00 +0000 (UTC)
 
-On Sat, Oct 10, 2026 at 1:45=E2=80=AFAM <netdev-bot+sinfo@kernel.org> wrote=
-:
->
-> Hi!
->
-> This is an automated message. This series looks like a fix, but its
-> commit messages seem to be missing some information:
->
->  - How the issue was discovered, e.g. hit in production, hit during
->    development, syzbot report, manual code inspection, LLM or static
->    analysis tool scan.
->
->  - Whether the issue was actually triggered, or is only theoretical
->    (e.g. found by code inspection). If it was triggered please include
->    the symptoms, like the stack trace or error messages.
->
->  - What hardware the change was tested on. For driver fixes please
->    mention the device (and if relevant firmware version) used for
->    testing, or say that the change was not tested on real hardware.
->
-> Please do not repost the series just to address the above. Instead,
-> reply to this email with the missing information, so that reviewers
-> can take it into account. If the series needs another revision for
-> other reasons, please include the information in the commit messages
-> then.
->
-> The evaluation is done by an LLM so it may be wrong, if you think
-> that is the case please reply and explain.
+--===============1628657098954736497==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I was reminded what I complicated mess skb frag accounting currently
-is when I looked at this patch:
+> m68k, bpf: Add initial BPF JIT compiler support
 
-[1] https://lore.kernel.org/netdev/xfrm-iptfs-pp_ref_count-underflow-v4-1-9=
-12fa72106f0@secunet.com/
+TL;DR: m68k JIT returns true from bpf_jit_needs_zext() but still zero-extends
+after every ALU32 op and load, so verifier-inserted zexts only add code.
+Results stay correct; should it honour verifier_zext or drop the override?
+
+> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
+> new file mode 100644
+> index 000000000000..debbf5fbe95b
+> --- /dev/null
+> +++ b/arch/m68k/net/bpf_jit_comp.c
+> @@ -0,0 +1,1810 @@
+
+[ ... ]
+
+> +static void emit_alu32_x(const struct bpf_insn *insn, struct jit_ctx *ctx)
+> +{
+
+[ ... ]
+
+> +	}
+> +
+> +	bpf_put_reg32(dst[1], d_reg, ctx);
+> +	emit_16(ctx, 0x7000 | (tmp1[0] << 9));			/* moveq #0, tmp1 */
+> +	bpf_put_reg32(dst[0], tmp1[0], ctx);
+> +}
+
+emit_alu32_k() ends with the same three lines.  Is it necessary to clear the
+upper 32 bits after every ALU32 operation here?
+
+The file also has:
+
+> +bool bpf_jit_needs_zext(void)
+> +{
+> +	return true;
+> +}
+
+Because bpf_jit_needs_zext() returns true, bpf_opt_subreg_zext_lo32_rnd_hi32()
+adds a BPF_ZEXT_REG(dst) after every 32-bit def whose upper half is read
+later, and it sets prog->aux->verifier_zext.  Nothing in this JIT reads
+verifier_zext, so each inserted zext goes through emit_alu32_x() as a plain
+mov32 and clears the high word a second time.
+
+For a stack-backed register (R1-R9, AX) the inserted zext costs six extra
+instructions, about 20 bytes and four memory accesses:
+
+  move.l d16(%fp),%d2
+  move.l d16(%fp),%d4
+  move.l %d4,%d2
+  move.l %d2,d16(%fp)
+  moveq #0,%d3
+  move.l %d3,d16(%fp)
+
+The other 32-bit JITs that return true from bpf_jit_needs_zext() skip the
+high word clear when verifier_zext is set, for example arm32
+(emit_a32_alu_r64 and the special mov32 for zext case), x86-32, riscv32
+(bpf_put_reg32) and powerpc32.  emit_ldx() also always zero-extends here.
+
+Results are still correct, but the opt-in only adds code.  Should
+emit_alu32_x(), emit_alu32_k() and emit_ldx() honour
+ctx->prog->aux->verifier_zext, with the imm == 1 zext mov clearing only the
+high word?  Alternatively, since the JIT already zero-extends everywhere,
+could the bpf_jit_needs_zext() override be dropped?
 
 
-And saw that the author was trying to write their own skb frag helper
-inside the driver because core didn't provide one that made sense :/
-code inspection + LLM written tests for accounting confirmed the
-issues. I worked with the LLM to fix the discovered issues. Not hit in
-production or reproduced organically. Only code inspection and
-artificial tests.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
---=20
-Thanks,
-Mina
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38037161364
+--===============1628657098954736497==--
