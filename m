@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FA4353A65;
-	Sun, 11 Oct 2026 17:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97E030596F;
+	Sun, 11 Oct 2026 17:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791738047; cv=none; b=LH2Zn+dzYNDlOrAauYvjgQ7QlD/aAoA/royHYFnevjW3HLH+xM7ybJPUMOV6u51qfvuKGznrjeF3b3FcGyJYzMsatxipWxBCRfAQ4Swi65vOXqVrW+CdQtKQKc+vIefHfQL4JRjZDoa1/ncQH9UWyr1tEWK5h1xsHwBSePZP9aE=
+	t=1791738049; cv=none; b=ZaF2YcYedM4IbqDK6yKcJ4ksI6auGseccEt7sWKEE3QpIKkx6+nQaK57brj2wlZP35QXkKBFTENJqY+hE2YhJ0jaGcoPDUFbTMitGAF60dXnCQxQb1xcP4YhQXfPVEydsfqe7BELMrQr9Pd3udLqUy91iDf07TaBl8RxCojmsU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791738047; c=relaxed/simple;
-	bh=ByLiojNBjsIaGV0p4pEXQGgwAFssr0vIAKGe0bJbjt4=;
+	s=arc-20240116; t=1791738049; c=relaxed/simple;
+	bh=vWIV+Qu1QZXIFLkm1LrRDf3K8Bdnt5ppT5W9LquwC0Q=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CKQTKzf8l1B8UnVpj1xoRkqo6CkO/EMmGzbrT4xfb8SV4Zfe1Q7k6OuTrdVHH4EVP5nVehntuBB01cM4MMseiRMtzg9DXmvPuC62SogF3fKGF3tDOP3uF5DvKH/ifWs005FfI0znuTAsxCtSq2n8MhBDsQlK8tkYGFK3NuUNysQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIqmEN3+; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=gHX0T0fJbymPough35lLBB1SQXru7tE23Q8jzqjzKWkB7heESY2EwusJjUB2WrmRf3PM+7b5vKPs8YP6ezogM3jmX6n5U0y4AUn8EpM5MQBbp0TyvvMG1ir2whkp769qGMSWyerB4a0nisFRTpgwVg1eIQRaS9703EHLXI7P2+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GR4DgoSE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIqmEN3+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1041F0089B;
-	Sun, 11 Oct 2026 17:00:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GR4DgoSE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A1E1F0089F;
+	Sun, 11 Oct 2026 17:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791738045;
-	bh=xMbu6g9PgdIm67LVG4W6Tv2hrcIoP9hS1f/lY+PN8yA=;
+	s=k20260515; t=1791738046;
+	bh=hzo3X3q6qdgOl/s8/aTDbRQYDi7NPN9uDiY0NH1L1Uo=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YIqmEN3+w9cx8GgxIPSGTxphiwswebpAOjfnnF5+b328nW+vTiMjqmjsEHKYm3/ix
-	 L8SrpK9HPVFl4w5BhQHo78R36B3/Ak41R+OBWpwFaHIeGiI8kRlmp5+Cup4mVzss6A
-	 jfG0vzQ4GGkXoaE7wEkjNuGZvCFfvCq46/U+9a4TV2QhuY6XV0qVAWpvItk8aC+LJS
-	 MkZosCUfvdfvixAmuRe6a2lUVTMuQc9aYM2rRB7isYkpUTXBU0n2dF7ET30XkMDWab
-	 SA8aAXi/umOGvJuBGC3/oiq6bR2CAcaENFLZnqPbBhmRYDCWOkmDfQY3BbzK96wfKf
-	 IaldnUG5xceXQ==
-Subject: Re: [PATCH net-next v2 2/8] net: skbuff: don't BUG() on a bad
- frag_list layout in skb_segment()
+	b=GR4DgoSEKF+6sbeblAmVzkr1Z5w4DJxBf4fkh55/ghu1kGpPgWNFUkbe2vNU0KeJa
+	 wBwRMqqoDHgqb11fhlMYsswo33Q1zIU+oI2r3nIuMQ6DZjwx3UaAPWqoFyomZRplYW
+	 N7G3r/p3gFTSAYptURUzv8IOKWmG6KkYChhpnaa1VBuVWmHj1ThRNUiYOjhGfNwDLA
+	 OBT2isVyDnjuvm30nfFeU/kQgYICY1T6RW8/H7/gb0cLr9/05TNXw5ByAIf0uctgek
+	 P+fZuBA8X8csr6GyK1W+wBMBLfQPl29PtuDyLhcESzmKBrIb64o8g0ZZpfcz6+U1Me
+	 HEEXErCmisKKg==
+Subject: Re: [PATCH net-next v2 3/8] net: skbuff: don't BUG() when
+ skb_copy_bits() fails in copy helpers
 From: netdev-bot+sashiko@kernel.org
 To: josef@toxicpanda.com
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Sun, 11 Oct 2026 17:00:44 +0000
-Message-ID: <179173804472.434549.15534694092186867608@kernel.org>
-In-Reply-To: <20261007-b4-skbuff-bug-on-v2-2-b9a5f732895b@toxicpanda.com>
-References: <20261007-b4-skbuff-bug-on-v2-2-b9a5f732895b@toxicpanda.com>
+Date: Sun, 11 Oct 2026 17:00:45 +0000
+Message-ID: <179173804578.434549.12357016377866471421@kernel.org>
+In-Reply-To: <20261007-b4-skbuff-bug-on-v2-3-b9a5f732895b@toxicpanda.com>
+References: <20261007-b4-skbuff-bug-on-v2-3-b9a5f732895b@toxicpanda.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -47,10 +47,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Critical: 0 · High: 0 · Medium: 1 (1) · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -58,160 +58,131 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The patch is incomplete.
-- [Low] This patch makes the comment in bpf_skb_net_grow()
-  (net/core/filter.c:3698-3702) out of date.
-- [Low] This patch makes the KUnit GSO test comment in gso_test_func()
-  (net/core/net_test.c:223-227) out of date.
+- [Medium] skb_try_coalesce() in net/core/skbuff.c stores the unsigned
+  `from->len` in `int len`.
+
+Pre-existing issues:
+- [Medium] This problem wasn't introduced by this patch, but bounce_skb()
+  in drivers/net/xen-netfront.c is an open-coded copy of skb_copy().
 
 --
 
-net: skbuff: don't BUG() on a bad frag_list layout in skb_segment()
+net: skbuff: don't BUG() when skb_copy_bits() fails in copy helpers
 
-This commit changes the four BUG_ON() layout checks in the frag_list walk
-of skb_segment() to use the existing -EINVAL error path, adding a
-DEBUG_NET_WARN_ON_ONCE() for debug kernels. The check that runs after
-skb_clone() also frees the clone, which has not been linked yet, before
-it bails out.
+This patch removes the BUG_ON(skb_copy_bits()) calls from skb_copy(),
+skb_copy_expand() and skb_try_coalesce(). On failure, skb_copy() and
+skb_copy_expand() now free the new skb and return NULL, and
+skb_try_coalesce() returns false. skb_try_coalesce() now copies into the
+tailroom before calling skb_put(), so that @to is left untouched on failure.
 
 > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index d226fe77d4847..a6821ab139691 100644
+> index a6821ab139691..ffc78b1a8ab85 100644
 > --- a/net/core/skbuff.c
 > +++ b/net/core/skbuff.c
-> @@ -4916,7 +4916,11 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
->  
->  		if (hsize <= 0 && i >= nfrags && skb_headlen(list_skb) &&
->  		    (skb_headlen(list_skb) == len || sg)) {
-> -			BUG_ON(skb_headlen(list_skb) > len);
-> +			if (unlikely(skb_headlen(list_skb) > len)) {
-> +				DEBUG_NET_WARN_ON_ONCE(1);
-> +				err = -EINVAL;
-> +				goto err;
-> +			}
-
-[Severity: Low]
-This isn't a bug, but with this BUG_ON() and the head_frag BUG_ON() below
-both converted, the comment in bpf_skb_net_grow() looks out of date:
-
-net/core/filter.c:bpf_skb_net_grow() {
-    ...
-		/* Due to header growth, MSS needs to be downgraded.
-		 * There is a BUG_ON() when segmenting the frag_list with
-		 * head_frag true, so linearize the skb after downgrading
-		 * the MSS.
-		 */
-    ...
-}
-
-The linearize is still needed, because the packet would otherwise be
-dropped with -EINVAL. Should the comment say the packet is dropped
-instead of referring to a BUG_ON()? No later patch in the series appears
-to touch this comment.
-
->  
->  			nskb = skb_clone(list_skb, GFP_ATOMIC);
->  			if (unlikely(!nskb))
-> @@ -4929,7 +4933,12 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
->  			pos += skb_headlen(list_skb);
->  
->  			while (pos < offset + len) {
-> -				BUG_ON(i >= nfrags);
-> +				if (unlikely(i >= nfrags)) {
-> +					DEBUG_NET_WARN_ON_ONCE(1);
-> +					kfree_skb(nskb);
-> +					err = -EINVAL;
-> +					goto err;
-> +				}
-
-[Severity: Low]
-This isn't a bug, but the KUnit GSO test still names this assertion:
-
-net/core/net_test.c:gso_test_func() {
-    ...
-	/* TODO: this should also work with SG,
-	 * rather than hit BUG_ON(i >= nfrags)
-	 */
-	if (tcase->id == GSO_TEST_FRAG_LIST_NON_UNIFORM)
-		features &= ~NETIF_F_SG;
-    ...
-}
-
-Should this comment be updated now that BUG_ON(i >= nfrags) is gone? It
-is still unchanged at the end of the series.
-
-Also, since the test clears NETIF_F_SG for this case, no in-tree test
-seems to exercise the new kfree_skb(nskb) unwind or the
-kfree_skb_list(segs) / ERR_PTR(-EINVAL) return. Would a negative test
-case for this path be worth adding?
-
->  
->  				size = skb_frag_size(frag);
->  				if (pos + size > offset + len)
-> @@ -5036,9 +5045,17 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
->  				skb_shinfo(nskb)->flags |= skb_shinfo(frag_skb)->flags & SKBFL_SHARED_FRAG;
->  
->  				if (!skb_headlen(list_skb)) {
-> -					BUG_ON(!nfrags);
-> +					if (unlikely(!nfrags)) {
-> +						DEBUG_NET_WARN_ON_ONCE(1);
-> +						err = -EINVAL;
-> +						goto err;
-> +					}
->  				} else {
-> -					BUG_ON(!list_skb->head_frag);
-> +					if (unlikely(!list_skb->head_frag)) {
-> +						DEBUG_NET_WARN_ON_ONCE(1);
-> +						err = -EINVAL;
-> +						goto err;
-> +					}
+> @@ -2201,7 +2201,12 @@ struct sk_buff *skb_copy(const struct sk_buff *skb, gfp_t gfp_mask)
+>  	/* Set the tail pointer and length */
+>  	skb_put(n, skb->len);
+>
+> -	BUG_ON(skb_copy_bits(skb, -headerlen, n->head, headerlen + skb->len));
+> +	if (unlikely(skb_copy_bits(skb, -headerlen, n->head,
+> +				   headerlen + skb->len))) {
+> +		DEBUG_NET_WARN_ON_ONCE(1);
+> +		kfree_skb(n);
+> +		return NULL;
+> +	}
+>
+>  	skb_copy_header(n, skb);
+>  	return n;
 
 [Severity: Medium]
-Can skb_segment() still oops on a malformed frag_list through a NULL
-list_skb?
+This isn't a bug introduced by this patch, but bounce_skb() in
+drivers/net/xen-netfront.c is an open-coded copy of skb_copy(), and it
+still has the same BUG_ON():
 
-For each frag_list member, the walk counts the linear part and frags[].
-It never descends into a member's own nested frag_list, but
-head_skb->len includes those bytes. With a nested frag_list, list_skb can
-become NULL while bytes are still owed, and nothing checks for that.
+drivers/net/xen-netfront.c:bounce_skb() {
+    ...
+	/* Set the data pointer */
+	skb_reserve(n, headerlen);
+	/* Set the tail pointer and length */
+	skb_put(n, skb->len);
 
-In the SG loop, take a member with headlen 0, one page frag and a nested
-frag_list. It passes the new !nfrags check, and list_skb advances to
-NULL. Once that frag is used up, the next pass does this:
+	BUG_ON(skb_copy_bits(skb, -headerlen, n->head, headerlen + skb->len));
+    ...
+}
 
-		while (pos < offset + len) {
-			if (i >= nfrags) {
-				if (skb_orphan_frags(list_skb, GFP_ATOMIC) ||
-				    skb_zerocopy_clone(nskb, list_skb,
-						       GFP_ATOMIC))
-					goto err;
+bounce_skb() already frees n and returns NULL on the misaligned head path,
+and xennet_start_xmit() handles that:
 
-				i = 0;
-				nfrags = skb_shinfo(list_skb)->nr_frags;
+	nskb = bounce_skb(skb);
+	if (!nskb)
+		goto drop;
 
-skb_orphan_frags(NULL) and skb_zerocopy_clone(nskb, NULL) both return 0,
-because skb_zcopy() checks skb first. skb_shinfo(NULL) is then
-dereferenced before the new !nfrags and !head_frag checks can run.
+Could bounce_skb() get the same NULL-return conversion, either in this
+patch or in a follow-up? No later patch in the series touches this site.
 
-The clone branch has the same problem. Take a member with headlen == len,
-no page frags, and a nested frag_list. The new > len check passes, the
-inner while loop never runs, and list_skb = list_skb->next sets it to
-NULL. pskb_trim() also drops the nested data from the clone. Since
-offset + len is still below head_skb->len, the next iteration evaluates:
+The other remaining BUG_ON(skb_copy_bits()) calls in net/ipv4/icmp.c and
+net/ipv6/ip6_output.c look like a different case. There, the length is
+checked beforehand or the destination fragment is already sized for the
+copy.
 
-		if (hsize <= 0 && i >= nfrags && skb_headlen(list_skb) &&
+[ ... ]
 
-with list_skb == NULL. In the gso_by_frags case, len = list_skb->len at
-the top of the loop has the same issue.
+> @@ -6233,8 +6243,15 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
+>  		return false;
+>
+>  	if (len <= skb_tailroom(to) && skb_frags_readable(from)) {
+> -		if (len)
+> -			BUG_ON(skb_copy_bits(from, 0, skb_put(to, len), len));
+> +		if (len) {
+> +			if (unlikely(skb_copy_bits(from, 0,
+> +						   skb_tail_pointer(to),
+> +						   len))) {
+> +				DEBUG_NET_WARN_ON_ONCE(1);
+> +				return false;
+> +			}
+> +			skb_put(to, len);
 
-tcp_gso_segment() appears to pass such an skb to skb_segment() unchanged.
-I couldn't find an in-tree producer of nested frag_lists that reaches
-here with NETIF_F_SG set. GRO sets NAPI_GRO_CB(skb)->flush when the skb
-already has a frag_list.
+[Severity: Medium]
+If from->len is corrupt, can copying before skb_put() turn it into an
+out-of-bounds write past the tailroom of to?
 
-Since the goal is to stop malformed layouts from crashing the box, should
-the walk return -EINVAL when list_skb is NULL before each use, or reject
-nested frag_lists up front? Later patches in the series don't appear to
-add such a check.
+skb_try_coalesce() stores the unsigned from->len in an int:
+
+	int i, delta, len = from->len;
+
+If from->len is above INT_MAX, len is negative. A negative len passes the
+check above, because skb_tailroom() returns int.
+
+It also gets past the first check in skb_copy_bits(). With offset 0 and
+len == (int)skb->len, this compares 0 > 0:
+
+	if (offset > (int)skb->len - len)
+		goto fault;
+
+After that, copy = start - offset is positive (headlen), copy > len is
+true, and so copy is set to the negative len.
+skb_copy_from_linear_data_offset() takes a const unsigned int len, so the
+memcpy() into skb_tail_pointer(to) becomes roughly 2 GiB. When headlen is 0,
+the frag path does the same thing through skb_frag_foreach_page().
+
+Before this patch, skb_put(to, len) ran first. With the offset-based tail
+on 64-bit, any from->len in roughly [2^31, 2^32 - tail) hit skb_over_panic()
+before anything was copied.
+
+This needs skb metadata that is already corrupt, for example a driver
+passing a bogus frag size to skb_add_rx_frag(). No concrete producer has
+been found. It also doesn't match this line in the commit message:
+
+  "Copy into the tailroom before skb_put() so that @to is untouched on
+   failure."
+
+Would it work to reject len < 0, or to compare from->len as unsigned
+against skb_tailroom(to), before the copy?
+
+> +		}
+>  		*delta_truesize = 0;
+>  		return true;
+>  	}
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b%40toxicpanda.com
