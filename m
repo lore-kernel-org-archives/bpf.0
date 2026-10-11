@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93EFF23BF91;
-	Sun, 11 Oct 2026 21:03:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA33368276;
+	Sun, 11 Oct 2026 21:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791752608; cv=none; b=Qa/afQ5kcGKFZyOvVq/v/MIKERy7+Smc3S79cjrJOm9bCe3FPquHpa+pu+A2UUK6ONMwGYC0QkoI2DIfoV4NbAkkeWfPq1iD4nUlBL1S8HkDH+UXoCntu/5yz7o90v5LpqfIPWVtFULHjpdb6NX3t+jzQYCJ3+kTGHtY3u6VB7g=
+	t=1791752610; cv=none; b=po31O/aQIkTwcjtmubO4rM2i8kvfGf2sRk+lys61+FTKPzSuEDD5fCJdOsTdm79Fbp/izj/Rw1kG9qO1j2Zr5WNlB9+oOxMQcBwpJY+XBMOqyPjRa2OrG0hQMAxGNB3ctmv4uxVlG3sFUBweyaL+uB5FhMBBZlexWHN83Qp08CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791752608; c=relaxed/simple;
-	bh=bswT0S63YlePvBFM2lMlO+52qZriGmzpbAk4EbJEGA0=;
+	s=arc-20240116; t=1791752610; c=relaxed/simple;
+	bh=OgI/bHo4oc1y8HnUI1Vvb2ubbaY+msprP5OU7osb4FE=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JsOa4J4afrmxodxyIs65x284gN1wEulVn3HXO2aPUAHD8i3H9I//o7Er2lcwXExkyWVZQWCfqWW1NCuRdXZ5pYvhW5jjQgaVbMDHD4KsAY/7/KG7T8cUf06SpiM6xEzzIOgq/3W40IshCN0ezVfmtIncHQLcGs1IDgGgaBvW+xM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AXxJdXgJ; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=cFBAqtko89tbBoK0YF6nWBlDbDriM1VxtLQl6ndf5/77GEmP6Kw6FZMqbQZJqaf/o239DyjVY4+ZqCr8QrBaba14NGy8ATi29+pZQucHdrxufcfvqdyc2vXRtoZDddVtTZfWqE0agollONbsyfa6m35Y7tE7HoayraOm6wWPKs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9GZyS89; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AXxJdXgJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03611F0089C;
-	Sun, 11 Oct 2026 21:03:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9GZyS89"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0235E1F0089B;
+	Sun, 11 Oct 2026 21:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791752607;
-	bh=8A+M96fdlI8d50+SALX2cmt9CUoylt217eigY0FGaqo=;
+	s=k20260515; t=1791752608;
+	bh=i6K2rse2GTNWdify1/eu62I2wM0NylsqCkleWxwlDno=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=AXxJdXgJH9cBoFzhxYY5dfPmLZNkL5tMvbOiPt9RRzCZzWNNssgwj4GMtLrEznUR9
-	 b6iWmzzKHvBUdokCAFoQ3KMniimO7W5o7mBORd0kV6+Nqpwpb3W+UTUYfWOimdkA0P
-	 jD36QWx+aTCNebqpdS8fl0l7R+4aq6TnRvBbvZM3KUFImlybFMu9XhJtY1zL4nnlxH
-	 OZ7Now8yiUsbunqhTlYDmFJTO3N+tgXBBpeQcRul3A4Rl/LiTvSE4y1qgIlL/1I/Qk
-	 y2Ggys5Dsg2gEkkluLWojcIsCsMR3ndwWo8h4ibCRrFaTNRLksgZbYUV20jPsyLG/i
-	 uljds5ay9jG6g==
-Subject: Re: [PATCH net v2 2/3] net/sched: cls_bpf: accept dev-bound programs
- on shared blocks
+	b=a9GZyS8903uT1G1SBIcBy4EGypHZwjmieYJRTScAa2xqd8wM6qcKGKfZNXNU1I7AQ
+	 GdDCgpGRpTu0kGzdaxezida9Z/D9Aq5eRjdKdC5KjhddUQkJrUoin+4fwngRS7p785
+	 8ir3GYLInvlI+xLDQ/OzyrtENQaTyBYoF95jTFPNtTsC267nfLnbUjP6acM3UmMHlu
+	 4oIgahQ+2aJ0NBUdyUV6/mQwNq8zcX+YPJcMwHjirDKRuyZS0sqh41J70nqQE7ZBOy
+	 HRJ+1hMU80swfz15I0V6LYiP8WH/SPjfO3quPiZjIjnZX7bMnM1TFn/rDUrZEANycF
+	 YHVFPfEw0jBtg==
+Subject: Re: [PATCH net v2 3/3] selftests: net: exercise dev-bound cls_bpf on
+ shared blocks
 From: netdev-bot+sashiko@kernel.org
 To: jhs@mojatatu.com
 Cc: netdev@vger.kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  horms@kernel.org, jiri@resnulli.us, bpf@vger.kernel.org, victor@mojatatu.com
-Date: Sun, 11 Oct 2026 21:03:26 +0000
-Message-ID: <179175260626.434549.15434445852177291195@kernel.org>
-In-Reply-To: <QDISC-PYC7.v2.20261010165947-3@mojatatu.com>
-References: <QDISC-PYC7.v2.20261010165947-3@mojatatu.com>
-X-sashiko-severity: Low
+Date: Sun, 11 Oct 2026 21:03:27 +0000
+Message-ID: <179175260755.434549.1147971569759277746@kernel.org>
+In-Reply-To: <QDISC-PYC7.v2.20261010165947-4@mojatatu.com>
+References: <QDISC-PYC7.v2.20261010165947-4@mojatatu.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -47,156 +47,234 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 (1) · Low: 0 (2)
 
-- [Low] The v1->v2 notes say: "Style (gemini + nipa Low) -- FIXED: the
-  shared-block comment opens with /* on its own line." The diff does not…
-- [Low] The commit message ("matches every netdev bound to the block"),
-  the code comment ("require a match with every member") and the extack…
-- [Low] The stable metadata does not express the patch's known
-  dependencies.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The commit message says the first subtest checks that "the
+  program attaches to a shared block owned by its device, and the filter…
+
+Pre-existing issues:
+- [Medium] This problem wasn't introduced by this patch, but the late-
+  join subtest (block 30) runs a core offload-accounting imbalance and…
+- [Low] This problem wasn't introduced by this patch, but the same-
+  offload-device subtest hits a netdevsim state-tracking defect.
+- [Low] This problem wasn't introduced by this patch, but if one of the
+  new subtests fails, a netdevsim device can be left behind.
 
 --
 
-net/sched: cls_bpf: accept dev-bound programs on shared blocks
+selftests: net: exercise dev-bound cls_bpf on shared blocks
 
-This patch follows up commit 120977e2c096, which took the target device
-from block->q and so rejected every dev-bound cls_bpf program attached
-through a shared block. On shared blocks, cls_bpf_prog_from_efd() now
-walks block->ports and accepts the attach only when
-bpf_offload_dev_match() succeeds for every entry. It rejects an empty
-block.
+This adds test_tc_shared_block() to bpf_offload.py. The test attaches a
+device-bound SCHED_CLS program to netdevsim through shared tc blocks. It
+covers four cases: attach on a block owned by the bound device, rejection
+when a foreign device is a member, rejection of a foreign device that
+joins late during replay, and acceptance on a second port of the same
+netdevsim device.
 
-Link: https://lore.kernel.org/netdev/20260809094418.901607-1-jhs@mojatatu.com/
-Link: https://lore.kernel.org/netdev/QDISC-PYC7.v1.20261003103747@mojatatu.com/
+> diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
+> index c856d266c8f36..8c1da9b51be5a 100755
+> --- a/tools/testing/selftests/net/bpf_offload.py
+> +++ b/tools/testing/selftests/net/bpf_offload.py
 
-> Fixes: 120977e2c096 ("net/sched: cls_bpf: reject dev-bound programs bound to a different device")
-> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-> [ ... ]
-> Cc: stable@vger.kernel.org
+[ ... ]
 
-[Severity: Low]
-Do these tags give stable tooling enough to backport this safely?
+> @@ -629,6 +661,111 @@ def test_spurios_extack(sim, obj, skip_hw, needle):
+>                              include_stderr=True)
+>      check_no_extack(res, needle)
+>  
+> +def test_tc_shared_block():
 
-Commit 120977e2c096 carries "Fixes: 2b3486bc2d23" ("bpf: Introduce
-device-bound XDP programs", v6.3). Stable trees from v6.3 onward, such
-as 6.6.y, can therefore pick it up and inherit the shared-block
-rejection.
+[ ... ]
 
-This follow-up iterates block->ports in cls_bpf_prog_from_efd(). That
-field was added by 913b47d3424e ("net/sched: Introduce tc block netdev
-tracking infra", v6.8-rc1), so the patch will not build on those older
-trees. They would keep rejecting every dev-bound attach on a shared
-block.
+> +    start_test("Test TC shared-block dev-bound attach...")
+> +    # The pinned program is dev-bound to this device; attaching it through
+> +    # a shared block must succeed even though block->q is NULL.
+> +    sim.tc_add_block(22)
+> +    # err is kept (include_stderr) for post-mortem value on a failure.
+> +    ret, _, err = sim.tc_add_block_filter(22, bpf_pinned("/sys/fs/bpf/tc_shared"),
+> +                                          da=True, skip_sw=True,
+> +                                          fail=False, include_stderr=True)
+> +    fail(ret != 0, "dev-bound program rejected on a matching shared block")
+> +    fail(sim.dfs_read("bpf_offloaded_id") == "0",
+> +         "dev-bound program not offloaded on a matching shared block")
+> +    sim.tc_del_block(22)
 
-The ordering against the netdevsim patch ("patch 1 must be applied
-first, including in stable") is only stated in prose. Would a version
-bound on the Cc: stable line, or a prerequisite annotation, express
-both dependencies in a form the tooling can use?
+[Severity: Medium]
+The commit message says this subtest checks that "the program attaches to
+a shared block owned by its device, and the filter teardown leaves the
+device unloaded". Is the teardown part checked anywhere?
 
-> diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
-> index 188cf0f949dd4..07ad9556889d4 100644
-> --- a/net/sched/cls_bpf.c
-> +++ b/net/sched/cls_bpf.c
-> @@ -392,11 +392,31 @@ static int cls_bpf_prog_from_efd(struct nlattr **tb, struct cls_bpf_prog *prog,
->  	if (bpf_prog_is_dev_bound(fp->aux)) {
->  		struct tcf_block *block = tp->chain->block;
->  		struct net_device *dev;
-> +		unsigned long ifindex;
-> +		bool match = false;
+After sim.tc_del_block(22), nothing reads bpf_offloaded_id again or waits
+for the flush. sim.tc_del_block(30) has the same gap. So does the
+sim3b.tc_del_block(50) / sim3.tc_del_block(50) pair, which covers the
+unbind remove replay and the last-member block destroy.
+
+The tc_del_block() helper also ignores failure:
+
+    def tc_del_block(self, block):
+        tc("qdisc del dev %s clsact" % (self['ifname']), fail=False)
+
+The only check left is bpftool_prog_list_wait(expected=0) at the end. It
+runs after simdev3.remove(), simdev.remove() and the rm of both pins. It
+counts programs, not per-port offload state, so it can't tell an unload
+caused by filter teardown from one caused by device removal.
+
+Suppose the remove replay through
+cls_bpf_reoffload()->nsim_bpf_setup_tc_block_cb()->nsim_bpf_offload(ns,
+NULL, true) stopped clearing ns->bpf_offloaded:
+
+For blocks 30 and 50, the only sign would be the
+WARN_ON(ns->bpf_offloaded) in nsim_bpf_uninit() in dmesg.
+
+For block 22, the failure would show up later as -EBUSY ("driver and
+netdev offload states mismatch") on the block 30 attach. The test would
+then report it as "dev-bound program rejected on a matching shared block".
+
+Could a check like this be added after each tc_del_block() for sim, sim3
+and sim3b, while the devices still exist?
+
+    fail(sim.dfs_read("bpf_offloaded_id") != "0", ...)
+
+It could also be worth checking that sim3 is still loaded after sim3b
+leaves block 50. Otherwise, the teardown claim could be dropped from the
+commit message.
+
 > +
-> +		/* A shared block has no qdisc of its own, but it may bind
-> +		 * several netdevs and the program is offloaded to all of them;
-> +		 * require a match with every member.
-> +		 */
+> +    start_test("Test TC shared-block broadcast to a foreign member...")
+> +    # Add an independently backed device to the SAME block before the
+> +    # attach.  The program is bound to sim's device only, and the offload
+> +    # path fans it out to every member, so the attach must be rejected.
+> +    simdev2 = BpfNetdevSimDev()
 
 [Severity: Low]
-This isn't a bug, but the v1 -> v2 notes say:
+This is a pre-existing issue, not one introduced by this patch, but can a
+failure in one of these subtests leave a netdevsim device behind?
 
-  Style (gemini + nipa Low) -- FIXED: the shared-block comment opens
-  with /* on its own line.
+clean_up() loops over the same list that each removal modifies:
 
-This comment in cls_bpf_prog_from_efd() still has text on the opening
-line. The only new comment in the series with /* on its own line is in
-nsim_bpf_setup_tc_block_cb(), in the netdevsim patch.
+    for dev in devs:
+        dev.remove()
 
-Was the style fix lost when v2 was split into three patches?
+and BpfNetdevSimDev.remove() does:
 
-> +		if (!tcf_block_shared(block)) {
-> +			dev = qdisc_dev(tcf_block_q(block));
-> +			match = bpf_offload_dev_match(fp, dev);
-> +			if (!match)
-> +				NL_SET_ERR_MSG(extack,
-> +					       "Program is bound to a different device");
-> +		} else {
-> +			xa_for_each(&block->ports, ifindex, dev) {
-> +				match = bpf_offload_dev_match(fp, dev);
-> +				if (!match)
-> +					break;
-> +			}
+    def remove(self):
+        super().remove()
+        devs.remove(self)
 
-[Severity: Low]
-Does block->ports really hold every netdev bound to the shared block?
-The commit message ("matches every netdev bound to the block"), the
-comment above and the extack text all assume it does.
+As a result, every removal skips the next entry in the list.
 
-In tcf_block_get_ext(), the offload callback is bound for every binder
-type, but the device only goes into ports when tcf_block_tracks_dev()
-is true:
+Here simdev and simdev2 (or simdev3) are both alive. A fail() in the
+broadcast, late-join or same-offload-device subtest raises before the
+local simdevN.remove(). The outer finally then calls clean_up(), which
+removes the first device and skips the second. The second device and its
+clsact qdisc are left in place.
 
-net/sched/cls_api.c:tcf_block_get_ext() {
+Looping over a copy of the list (for dev in list(devs):) would avoid
+this.
+
+[ ... ]
+
+> +    sim.tc_add_block(30)
+> +    ret, _, err = sim.tc_add_block_filter(30, bpf_pinned("/sys/fs/bpf/tc_shared"),
+> +                                          da=True, skip_sw=True,
+> +                                          fail=False, include_stderr=True)
+> +    fail(ret != 0, "dev-bound program rejected on a matching shared block")
+> +    ret, _, err = sim2.tc_add_block(30, fail=False, include_stderr=True)
+> +    fail(ret == 0, "foreign device joined a populated dev-bound shared block")
+> +    check_extack_nsim(err, "program bound to a different device.", args)
+> +    fail(sim2.dfs_read("bpf_offloaded_id") != "0",
+> +         "replayed program loaded onto a foreign device")
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but the rejected join here
+seems to break the core offload accounting, and these assertions can't
+catch it.
+
+When sim2 joins block 30, tcf_block_bind()->tcf_block_playback_offloads()
+with add=true replays the filter to sim2's callback. The callback rejects
+it with -EINVAL. Because the filter is skip_sw, tc_setup_cb_reoffload()
+returns the error and the playback unwinds:
+
+net/sched/cls_api.c:tcf_block_playback_offloads() {
     ...
-	err = tcf_block_offload_bind(block, q, ei, extack);
-	if (err)
-		goto err_block_offload_bind;
-
-	if (tcf_block_tracks_dev(block, ei)) {
-		err = xa_insert(&block->ports, dev->ifindex, dev, GFP_KERNEL);
+err_playback_remove:
+	tcf_proto_put(tp, true, NULL);
+	tcf_chain_put(chain);
+	tcf_block_playback_offloads(block, cb, cb_priv, false, offload_in_use,
+				    extack);
     ...
 }
 
-tcf_block_tracks_dev() only accepts FLOW_BLOCK_BINDER_TYPE_CLSACT_INGRESS
-and FLOW_BLOCK_BINDER_TYPE_CLSACT_EGRESS.
+This sends a remove to the same sim2 callback, including for the tp whose
+add just failed. nsim returns success for removing a program it never
+held:
 
-sch_red binds shared blocks through tcf_qevent_init() using
-FLOW_BLOCK_BINDER_TYPE_RED_EARLY_DROP and FLOW_BLOCK_BINDER_TYPE_RED_MARK.
-Those netdevs own the block and receive the cls_bpf offload broadcast,
-but this loop never visits them.
+drivers/net/netdevsim/bpf.c:nsim_bpf_setup_tc_block_cb() {
+    ...
+	if (ns->bpf_offloaded != oldprog) {
+		oldprog = NULL;
+		if (!cls_bpf->prog)
+			return 0;
+    ...
+}
 
-That leads to two cases:
+So tc_setup_cb_reoffload() calls tc_cls_offload_cnt_update() with
+add=false. The filter's in_hw_count drops from 1 (sim's real offload) to
+0. TCA_CLS_FLAGS_IN_HW is cleared and block->offloadcnt drops to 0, while
+sim still has the program loaded.
 
-- If a block's only binders are RED qevents, ports is empty. A dev-bound
-  attach then fails with "Program is not bound to every device in the
-  block", which is misleading. The old code also returned -EINVAL here,
-  so the return value has not changed.
+When sim.tc_del_block(30) runs, the unbind decrements in_hw_count again.
+The u32 wraps to 0xFFFFFFFF and stays there until block destruction calls
+tc_cls_offload_cnt_reset(). Until then, tcf_block_offload_in_use() is
+false, so tcf_block_offload_bind() skips its "dev has offload disabled"
+check.
 
-- On a mixed clsact plus qevent block, the check passes without looking
-  at the qevent member.
+Would it be worth also checking sim's offload state and the filter's
+in_hw flag after the rejected join?
 
-The mixed case is safe in-tree today only because of other checks. nfp
-and netdevsim register their callbacks ingress-only, so a qevent bind
-raises nooffloaddevcnt, and tc_setup_cb_add() rejects skip_sw:
+The same remove-returns-0 behaviour can already be reached through nsim's
+-EBUSY add rejection path, and nfp's callback has the same shape.
 
-	/* Make sure all netdevs sharing this block are offload-capable. */
-	if (block->nooffloaddevcnt && err_stop) {
-		ok_count = -EOPNOTSUPP;
-		goto err_unlock;
-	}
+[ ... ]
 
-Both drivers also re-check bpf_offload_dev_match() in their callbacks.
+> +    fail(sim3b.dfs_read("bpf_offloaded_id") == "0",
+> +         "program not offloaded to the same-offload-device port")
+> +    sim3b.tc_del_block(50)
+> +    sim3.tc_del_block(50)
 
-Should the commit message, comment and extack say that this check only
-covers clsact-tracked members? The rest of the protection comes from
-nooffloaddevcnt and the driver callbacks.
+[Severity: Low]
+This is a pre-existing netdevsim issue, not one introduced by this patch,
+but with this teardown order the program's debugfs loaded state is wrong
+while sim3 is still offloaded.
 
-> +			if (!match)
-> +				NL_SET_ERR_MSG(extack,
-> +					       "Program is not bound to every device in the block");
-> +		}
+netdevsim tracks loaded state in a single per-program boolean that every
+port shares:
+
+drivers/net/netdevsim/bpf.c:nsim_prog_set_loaded() {
+    ...
+	state = prog->aux->offload->dev_priv;
+	state->is_loaded = loaded;
+}
+
+sim3b.tc_del_block(50) replays a remove to sim3b. That runs
+nsim_bpf_offload(ns, NULL, true), which calls
+nsim_prog_set_loaded(ns->bpf_offloaded, false). This clears is_loaded
+even though sim3's ns->bpf_offloaded still points at the program.
+
+Until sim3 leaves the block, bpf_bound_progs/<id>/loaded reads as not
+loaded. The WARN(state->is_loaded, ...) in nsim_bpf_destroy_prog() also
+won't fire in this case.
+
+The existing XDP multi-dev ASIC tests already follow the same pattern.
 
 [ ... ]
 
