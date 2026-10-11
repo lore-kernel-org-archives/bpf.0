@@ -1,157 +1,250 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537BD31280C
-	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 15:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137262868B5
+	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 15:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791734176; cv=pass; b=ezOZJOlI9rmpuRp2a8KBtTYTtT4PYZ+GRmMQkiRTbvUiP296nKMOZuPX2kp3B0Ige8Ix44EB0sqzeqmdD0iWgYZJGqEugc7YiGxlgwIeExqgzxic2+ta/jkRQowVg5djYqU3JFQCuiVtbJX1WD1csz1pxaM7796G/tvtfvcH3fs=
+	t=1791734197; cv=pass; b=hhPi6rSLGn3g7IKNKB44jzQvgm4Ryy7vX4xri1jFq04feE01xftNKo5BjjDhBlZcQNeGDwecN/+2fP9at980l3YBxjdhP7QCn2+Ha0AXP5D6na23pWeH60m81P61EwiksA7PyOU/WECZ7lPZPsrcCtrDPN2+5EaVq3R9t0q243A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791734176; c=relaxed/simple;
-	bh=/JK+8oneyHjSUbJbc3j9nJhc1e8XAgMgQI7ekpEsvxg=;
+	s=arc-20240116; t=1791734197; c=relaxed/simple;
+	bh=b/XiBDakbF89lmmL/yg7QBDutdCfHhvS3E5SYWziYTQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d34dQ5FOslHrvEQfSZvzBM1KzK6Fn7GSKlgtp/+WvceK6naiYa0gX37jk4aFRXU6mDVXipH4EBTE/6rSwEvXD6G74cTLUKJBXaY1HkswKPUI4/GzbhcWYHwX1WiCSgwn7rmY6Wp+ntOl+3kqxIlhPPrf/49iddqzCW2pfxoBdKU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DTWt42B5; arc=pass smtp.client-ip=209.85.208.42
+	 To:Cc:Content-Type; b=sIFX+nRt9nzXBrcipxcJ0eNOkm/VSiAaDvO/bomUCjMvZqUgjWBmFxj4UUJcNpfl9XF1UFBq9iiSlKf95ZXsS0j07o+2dqt0BQRIk5XiUDv6teLtj6JB6dKxW515FuBhbO2RyyiyhiXZ2Fal1mMkhv5/vkIM5oVrN7drehCIkDw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DEv6hdiv; arc=pass smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DTWt42B5"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6b1b12de661so1406a12.0
-        for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 08:56:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791734173; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DEv6hdiv"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c2e43f3d1fdso160616166b.3
+        for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 08:56:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791734194; cv=none;
         d=google.com; s=arc-20260327;
-        b=XI5UORdSINtZkHLGMfHX4k5lQXiaxb3VA1OWM4fa7hzRrF5gDrxHi0g1waYKTBExMq
-         tUQbNVixQ88pwUG9Lf7yO+2kLnTixxZBTqNYQ1kws/p+TpYT+mhr/EACUG3WmTNe0xZi
-         +zSf7BK80aI7lIREXCz3gjUzrWe3nT9c8NG7zaXJBHCKhrV29zbP5qc2zcibmn513Sdr
-         s1BaVe630NzwV7Do4+ohcNKHF/G6bu0lwqmlb4v5SmaQblvvHtiaQtcNZ9uiKdievwbX
-         tavF264/Hwd95A6K3m9BmGc/EZ5JTE24RNEJX+qE/y06cd4ODJqUgIjE29+Fcl+l09f2
-         v5HQ==
+        b=ratq6lSxXac72aSjowk6UkmhveP7yq+VavWOYDk9zrAindocoZBCdmRD7xMwkGbNPn
+         NUxI8CoUWPJxfF+CNJkHhsDXko413IyXMDOIFPzQRanp0zxGHedUXGO7uxhA/NHlDs0U
+         Us4IUY1pbJ8HvmRSGCvIiYihb3zZ4hG8R0i3+YRiG2txzFRZaTh4jnB6xG2EzXTENwnu
+         w+aEJCVk1Mf/rE52r/kuBXzFFe4xuqRt6L+z+clv8D1gGz8mHkEAneMXmcFSoTwXFi5F
+         yqUyFSZFBrwDxGhNJTj2k5/HGpzZMVISAO95ioQqBJiwmRafSWF/R1k7whwWTW3ykk/B
+         io5w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=/JK+8oneyHjSUbJbc3j9nJhc1e8XAgMgQI7ekpEsvxg=;
-        fh=J+0XOIl+sQO8hnrIkrdI6v7rv03nY9YVD6oPCRBNGNk=;
-        b=Oc6GxIdXwe4yMqsdDShVOHu4Zg9sq+S+6lahBjXteTqkPHToXKYIPSsZ9x/sQfOP4F
-         fFxSXZG0qDwjtEX19xBP3IOK0s50g7mikS0ri+SAmSgt/uCZ4egQgPdK+sYLeGjqTEut
-         VS3UVzNre4ZbZnDdiwlHKGFN5uK77vnAmgZIUmXH3VeNRnfAIUNujBaWSRnF8cY6mZjT
-         erj9B8t2cVO1/Sr8UhgyoiSegjuIbw2KkLRfrTFpFaNw3/BLstBKB/mtt8oMDNBxq07s
-         h6jV/gijFAhd3sw+8beP1KEd3zle2ViU4VA+0Ow1F/rXficLF/PWBeMCNEF/RYTN2IDB
-         ivHg==;
+        bh=69mUEVb+FPSu/fh8u3XwQJFXzwo7HE5rlDkjRk+VJx4=;
+        fh=oZ3BxK76ZdAHbSTs1Yw9lnZWi868jle93RDK+B7l+Gc=;
+        b=d04PRmoiZeamn/7nqVpeY1esHWcMjeVEsQIOBVyeu1JmuLy+XcwUPVXN45ezTFHELf
+         tarBqkfc9+2KyP5KeFFH78f150mh5B1Rx58rMxYglaeZJdyL1/pZdvdqCWEDZZZ7/mNd
+         f8OTmm3wRtyuULJcSy1jWf3n5YW52bnczPksU9CTaNh/OeLQjC4Bj51Np6IeDnOAPNK6
+         RO9TaQFB3G9jWNEJWg5/9687J+iBBaVg4iaILOWEFxDHgNVIq1tePak9fm3lovLPBea4
+         i08F9MsF5RO5G2z41cXZWWC+xhnmMlTlWNCeCfk6eyL/BX7NjhwWur1xWx8A5xIzTIJt
+         /3Dg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791734173; x=1792338973; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1791734194; x=1792338994; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=/JK+8oneyHjSUbJbc3j9nJhc1e8XAgMgQI7ekpEsvxg=;
-        b=DTWt42B5LkI2szJVPHCoQxA+Ac9vBYc6SBWESIZtpg0A6M6a8RT8GcUSfOOWCsGs75
-         1ElnUKHWQxBsMojffPmn4/7vrKZGkFGfRej6G80p5Dc8oDiPhOiPLFEzPTZleb0KB1wR
-         w1MNTSyitfqoa4yQYzOclHcoYGiCdyObcXvh7WStRl6zZpJEHWljr5qkW8b7ZBtg7NQf
-         qkGoifDy2ENyTHLGAu4PegXqs/yleRxehBp1GMlZDcZ8ifc6aLwbOp1mul7RMPKktwfY
-         rWVBM6EijA2+WlVAK08KB7NM/7e5bhm5DSzg+AImqIB378URTIAZZ6a5zTmIRxI73JdF
-         vf7w==
+        bh=69mUEVb+FPSu/fh8u3XwQJFXzwo7HE5rlDkjRk+VJx4=;
+        b=DEv6hdivWOIUDBOfjkaN2ljL4FgSuKZ9iXuDBaadkosY34a3Uv6hDy47qsu3AkSsd6
+         K5cj8v4JDoZAQIlC1VABbfoSA0YwPwKCe0Cx370qMv8ouoxpTfeQqkjnK4rx8uyv+5To
+         iOIQZRw2NL3oRh7TWx6IkRWN1/xhG5/UNDST3F5sROTngGeGrOAU2AOMLAC/sTT8kyJQ
+         zGJSgUAZmR/4gVgKwyKLw4Xssftzz0tPehR2F7M/YmWAbVWD75v1ispzPwU98R2fkOMK
+         ZFUc26YFLeddkER1czVQGMhgJpGI8Qp07aeeJsCUmKhMFuFsknkNjtLo70Xj/BP1kDDZ
+         srFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791734173; x=1792338973;
+        d=1e100.net; s=20260707; t=1791734194; x=1792338994;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/JK+8oneyHjSUbJbc3j9nJhc1e8XAgMgQI7ekpEsvxg=;
-        b=kP4cw7uw3HZPz/UpPgdSM3NNbMZWv1++OfueubDrPxooo1p1Kjaj3AUcICWg1wXcN3
-         1GvCcIF8nwQbyRiNL6Sty5pj/fr+Bh01i7DaUIHBOg9tuxJKtit8nUHyKHTPkkZYV7Gs
-         J2g5pkUQka0gF0ImiIx8LxX1lKRs0UkZS0DmMAyhn3S7dpBylFseoRqMm4/+e9Kyo2Mx
-         lql+eEkBAq0sbQos7Zt81NEMu2F/BOaoC23Lf+Oe8DSW/nwHA1FsPBhH/AcFzrvcaTEA
-         yvyZ4wi73KOL5gcIL8QmTKtJBeP/YLqmndpHbDH5KfS0TLZo52v7zWunGJyJRGfuR2lh
-         vwJA==
-X-Forwarded-Encrypted: i=1; AKwUvBz4PyrK0Ytq9kWq55scfnrK1fADZQjA2ojTlg6CyN0phgXQrDvNlXN5SiUuh7LweVMQf+Q=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLAVGwx1GaYuAvEp1rITvNNIIwx14vEye9DvK7/bUr1jisYik+y
-	Uz3mnE1iY+LI8VEA1jdJRTIMIy0i4AZlFFZ04U7FEzxJv46WIHE2t36ZLCsQe1BlZq8pfuFnhr+
-	IA+lor08zq7rRit81dUgsRGdIlixwPLboDk0kNEhW
-X-Gm-Gg: AYBFou1K8OAS9JjoVzPd+1cpeec1f5JLACCqGxRUOAQq6B11Z+2zSr7OJW094234Ygm
-	bKORfK9UV6qB6eeilKfK7UyEa1v/hOq/vx8IgOFUnhrotFExBYGXH959Pp4bpPWRuh8ZAfIU/un
-	GQbja5dnjaoCpZnhU75r5uwZm2KmC0Co5w+Djz0VBxBvPX02zc2u4S1ihmspQOIWFQNlPm+eJws
-	TtScp630uqeEScU95AiBoh2eL3exHq0H0lpQh4WVXt6FcRt+KDJHUoudpMh9mBwZsDQgf7lm4ON
-	1q7zif/cCt2THqprScdJk7aHHN2J8OYD5dCUkVnUb+83WmzlPW0LTeHBiqLPAC2p
-X-Received: by 2002:a05:6402:548f:b0:6aa:b72b:d762 with SMTP id
- 4fb4d7f45d1cf-6b198823fcfmr54337a12.1.1791734172609; Sun, 11 Oct 2026
- 08:56:12 -0700 (PDT)
+        bh=69mUEVb+FPSu/fh8u3XwQJFXzwo7HE5rlDkjRk+VJx4=;
+        b=aUxBKUDP6THRi4Ksdy3c1o4Nyyh1JnvybTWG8RH8Sf58Daj8BzYrT6e9dlxbafjZRp
+         P7zVOhiOIvnwG7fx8CnQwXHGNS0kpss+1YFx7uFl0oXqA7tZfP0S/7yKGaCuzvqd8bYI
+         t/ODJhbK+Bnjwdoyqw023iPP8qonwanofkQNdOvMn4SoHYsUHrrN3R//2S5cEEJvGwg7
+         SVXVUVZzWT9Rs6zXXIihWZPwXoC5J6iOg9i9bkLJ/iMEBqgpfpQ0hn5kxM89Hq0aNw5m
+         zVMDDpJwcYizCOaNx+cEPR2w36PJx4zmNV+IHDQY81V7e9CNctytMuui9d793YIcgZB3
+         4YFQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwtnc5Nl6DAvJ/Y9z+c2D9dO0HC7h/V4Dpf4KrfeVmZLe19lPncaoMBuDBu3DzwMKkVrt4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIjon712knfNjfwvxg9rqgdqK1u6LGIwMehFYvY2JeorzT/EPBd
+	OeDRRybPom/rm3iLAFN3QcfsxQuNheyPv6u2jA3enH5iiQFSjNsFIiZh3NcDNRPIU8//fxe4OCm
+	nXlHWwDjmub/5aITDN36IlJtOB4o6oOs0hm0FqcvV
+X-Gm-Gg: AYBFou3lQuVsFk2oSDKhjgzaTSDMK9Ljc4/MuC3/qn87Lj0dxB+yAPSzFATqAgMBvkv
+	Bgml9sxOuz6iFvHgynYNhMRQk2lDKptRkptSOyeZ4wYfebY0crBgG6gwkxYhJK/wbM67ZA7Y7dO
+	uOasGyuDrcTiIp0AiDzh3icit08YEr5VCLmtlwh9eTJ7Pty1dj+i+9O4suKSSJCJpF5c2Q3bnmL
+	v4lUP+T2uOBsrRtVkFKqm0zdNeJrs5djp5xYERxYHHpI4LGXNMIE1jYrWt2qoh+JqvxG+Ad5E7w
+	+7AVCbV30+TNcFWe2B95jaRIgzLNg9qUCQ0cLoCXv1YBbFnjw729OQHz1XYJeuBE9Q==
+X-Received: by 2002:a17:907:9723:b0:c2e:46d0:b802 with SMTP id
+ a640c23a62f3a-c31aa0ae873mr706555166b.40.1791734193812; Sun, 11 Oct 2026
+ 08:56:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261010083935.3274178-1-almasrymina@google.com> <20261010083935.3274178-7-almasrymina@google.com>
-In-Reply-To: <20261010083935.3274178-7-almasrymina@google.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Sun, 11 Oct 2026 08:56:01 -0700
-X-Gm-Features: AclHuK9SxZyeBfW-6W6d1kton3R7TtfUwblUvnT30CCIbrIv1iqXLpJDIRaE5ao
-Message-ID: <CAHS8izP58-H+bGw+4RJazukywpeDX5jMKaH9coMwcXh-mFa7AQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 6/6] net: kunit: test netmem, page_pool, and
- skb frag refcounting
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org
-Cc: Ayush Sawal <ayush.sawal@chelsio.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Simon Horman <horms@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Neal Cardwell <ncardwell@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Sabrina Dubroca <sd@queasysnail.net>, Eric Biggers <ebiggers@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Michael Grzeschik <mgr@kernel.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>, 
-	Petr Machata <petrm@nvidia.com>, Arend van Spriel <arend.vanspriel@broadcom.com>, 
-	Jakub Raczynski <j.raczynski@samsung.com>
+References: <20261009130708.1370675-1-wusamuel@google.com> <c090cb17-9bed-4742-a1c1-92cae6ee239e@oracle.com>
+In-Reply-To: <c090cb17-9bed-4742-a1c1-92cae6ee239e@oracle.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Sun, 11 Oct 2026 17:56:22 +0200
+X-Gm-Features: AclHuK894UnY-2bV_b83ssiEWSWy2XODSINmzaUO32jvF7mSXzupNuemdMAaH0I
+Message-ID: <CAG2KctozPSev+EXSpHitM3JWfjufQaEjsPJHS_1HJ1wSm7sJ1w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Resolve typeless ksyms in the kernel
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 10, 2026 at 1:39=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
+On Sat, Oct 10, 2026 at 12:09=E2=80=AFPM Alan Maguire <alan.maguire@oracle.=
+com> wrote:
 >
-> Verify that non-pp (page._refcount / binding->ref) and page_pool
-> (pp_ref_count) references stay balanced without cross-counter leaks or
-> underflows across regular pages, page_pool pages, non-pp net_iovs, and
-> page_pool net_iovs with both pp_recycle=3D0 and pp_recycle=3D1.
+> On 09/10/2026 14:07, Samuel Wu wrote:
+> > libbpf resolves typeless symbols by parsing /proc/kallsyms, which
+> > dominates load time for BPF programs with typeless symbols. This mostly
+> > comes from needing to do thousands of syscalls and a linear scan of
+> > kallsyms.
+> >
+> > Call bpf_kallsyms_lookup_name() from BPF_PROG_TYPE_SYSCALL, such that
+> > the resolution can be done with a couple of syscalls and a binary
+> > search. This is a similar approach to what the light skeleton does. The
+> > fast path passes the name and result through ctx, which requires commit
+> > ae5ef001aa98 ("bpf: Support variable offsets for syscall PTR_TO_CTX").
+> >
+> > Any fast path error (e.g. kernels without ae5ef001aa98) falls back to
+> > the legacy /proc/kallsyms scan, including strong misses, since the
+> > kernel doesn't match LTO "<name>.llvm.<hash>" symbols. Weak misses
+> > default to zero.
+> >
+> > Depending on the device, I see ~9-11x loading speedup when resolving a
+> > BPF program with 11 typeless lock externs.
+> >   - x86_64 VM, 6.18 + ae5ef001aa98: 147ms -> 17ms
+> >   - ARM64 phone, 7.1: 626ms -> 55ms
+> >
+> > Signed-off-by: Samuel Wu <wusamuel@google.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 59 +++++++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 58 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index cb09ded90773..7564ec6bde64 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -9590,6 +9590,58 @@ static int bpf_object__read_kallsyms_file(struct=
+ bpf_object *obj)
+> >       return libbpf_kallsyms_parse(kallsyms_cb, obj);
+> >  }
+> >
+> > +static int bpf_object__resolve_ksyms_in_kernel(struct bpf_object *obj)
+> > +{
+> > +     struct extern_desc *ext;
+> > +     int i, prog_fd, err =3D 0;
+> > +     struct {
+> > +             __u64 addr;
+> > +             char name[512];
+> > +     } ctx =3D {};
+> > +     LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags =3D BPF_F_SLEEP=
+ABLE);
+> > +     LIBBPF_OPTS(bpf_test_run_opts, topts, .ctx_in =3D &ctx, .ctx_size=
+_in =3D sizeof(ctx));
+> > +     /* bpf_kallsyms_lookup_name(ctx.name, sizeof(ctx.name), 0, &ctx.a=
+ddr) */
+> > +     static const struct bpf_insn insns[] =3D {
+> > +             BPF_MOV64_REG(BPF_REG_4, BPF_REG_1),
+> > +             BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
+> > +             BPF_MOV64_IMM(BPF_REG_2, sizeof(ctx.name)),
+> > +             BPF_MOV64_IMM(BPF_REG_3, 0),
+> > +             BPF_EMIT_CALL(BPF_FUNC_kallsyms_lookup_name),
+> > +             BPF_EXIT_INSN(),
+> > +     };
+> > +
+> > +     if (obj->gen_loader || obj->token_fd)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL",
+> > +                             insns, ARRAY_SIZE(insns), &opts);
+> > +     if (prog_fd < 0)
+> > +             return prog_fd;
+> > +
+> > +     for (i =3D 0; i < obj->nr_extern; i++) {
+> > +             ext =3D &obj->externs[i];
+> > +             if (ext->type !=3D EXT_KSYM || ext->ksym.type_id)
+> > +                     continue;
+> > +             if (snprintf(ctx.name, sizeof(ctx.name), "%s", ext->name)=
+ >=3D sizeof(ctx.name)) {
+> > +                     err =3D -ENAMETOOLONG;
+> > +                     break;
+> > +             }
+> > +             err =3D bpf_prog_test_run_opts(prog_fd, &topts) ?: (int)t=
+opts.retval;
+> > +             if (err =3D=3D -ENOENT && ext->is_weak) {
+> > +                     err =3D 0;
+> > +                     continue;
+> > +             }
+> > +             if (err)
+> > +                     break;
+> > +             ext->is_set =3D true;
+> > +             ext->ksym.addr =3D ctx.addr;
+> > +             pr_debug("extern (ksym) '%s': resolved in kernel to 0x%ll=
+x\n",
+> > +                      ext->name, ext->ksym.addr);
+> > +     }
 >
-> Cover get/put_net_iov(), get/put_netmem(), napi_pp_get/put_page(),
-> skb_netmem_ref/unref(), skb_frag_ref/unref(), pskb_copy(),
-> skb_zerocopy(), skb_shift(), skb_split(), skb_release_data() (clones,
-> unclone ordering, pskb_extract(), and skb_morph()), and skb_segment().
+> Great to see the win in terms of resolution time, but I wonder if we coul=
+d
+> speed things up further by resolving multiple symbols at once, since we h=
+ave
+> all the externs available (either by dynamically creating your program th=
+at
+> does symbol resolution as a side-effect, or adding a more direct resoluti=
+on method)?
 >
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> A single syscall could provide an even faster speedup, so might be worth =
+a look.
 
-This patch introduced warnings in patchwork:
+I tried resolving multiple symbols in one pass, but unfortunately the
+impact was negligible and made the code much more complex. I profiled
+a few numbers, and turns out it's because resolving typeless symbols
+is down to ~1% of total load time (from ~90%), with the remaining time
+mostly spent on BTF loading, CORE relocation, and BPF verification.
 
-Documentation/.renames.txt: warning: ignored by one of the .gitignore files
-Documentation/.renames.txt: warning: ignored by one of the .gitignore files
-ERROR: modpost: net/core/net_test.ko: symbol 'skb_shift' undefined!
-make[3]: *** [../scripts/Makefile.modpost:147: Module.symvers] Error 1
-make[2]: *** [/srv/nipa-poller/net-next/wt-1/Makefile:2179: modpost] Error =
-2
-make[1]: *** [/srv/nipa-poller/net-next/wt-1/Makefile:248: __sub-make] Erro=
-r 2
-make: *** [Makefile:248: __sub-make] Error 2
-New errors added
---- /tmp/tmp.UjTzqx5Cgh 2026-10-10 05:13:14.877336904 -0400
-+++ /tmp/tmp.2YswE6nv11 2026-10-10 05:13:32.781257136 -0400
-@@ -1,0 +2,5 @@
-+ERROR: modpost: net/core/net_test.ko: symbol 'skb_shift' undefined!
-+make[3]: *** [../scripts/Makefile.modpost:147: Module.symvers] Error 1
-+make[2]: *** [/srv/nipa-poller/net-next/wt-1/Makefile:2179: modpost] Error=
- 2
-+make[1]: *** [/srv/nipa-poller/net-next/wt-1/Makefile:248: __sub-make] Err=
-or 2
-+make: *** [Makefile:248: __sub-make] Error 2
-Per-file breakdown
+> Another concern would be a lot of production kernels won't have BPF test =
+run
+> support baked in, so relying on that without fallback would be a problem.
 
-We're not instructed to pw-bot: cr our patches on patchwork errors for
-non-sashiko failures, but it seems the maintainers will want this
-fixed anyway, so i'll pw-bot: cr myself and let me know if you don't
-want that.
+Are you referring to BPF_PROG_TEST_RUN when mentioning "BPF test run
+support", or something else? And totally agreed in that we need a
+fallback, of which it currently falls back to reading /proc/kallsyms
+on any error during the new fast path.
 
-pw-bot: cr
-
---=20
-Thanks,
-Mina
+> > +     close(prog_fd);
+> > +     return err;
+> > +}
+> > +
+> >  static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_n=
+ame,
+> >                           __u16 kind, struct btf **res_btf,
+> >                           struct module_btf **res_mod_btf)
+> > @@ -9863,7 +9915,12 @@ static int bpf_object__resolve_externs(struct bp=
+f_object *obj,
+> >                       return -EINVAL;
+> >       }
+> >       if (need_kallsyms) {
+> > -             err =3D bpf_object__read_kallsyms_file(obj);
+> > +             err =3D bpf_object__resolve_ksyms_in_kernel(obj);
+> > +             if (err) {
+> > +                     pr_debug("failed to resolve ksyms in kernel: %s, =
+falling back to /proc/kallsyms\n",
+> > +                              errstr(err));
+> > +                     err =3D bpf_object__read_kallsyms_file(obj);
+> > +             }
+> >               if (err)
+> >                       return -EINVAL;
+> >       }
+>
