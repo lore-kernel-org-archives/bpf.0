@@ -1,89 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018934657D0;
-	Sun, 11 Oct 2026 22:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443BB234973
+	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 22:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791758049; cv=none; b=LiPjJr0xhTYFxv85ugpz2WOYTVOgv8OX4YZRrpCfjeTC+HEj9zqQAT2w5r3O78ypAQ3p9ertDsUDR3cxpXl/lDrG7iQ4FjGbu7xgIAnSedaSmR0XbhvMgn4RKRzFGphbWI/Cif37WBI9KkesZ9Zv5swffmeJIY+44UCDWPDwKXs=
+	t=1791758615; cv=none; b=gfRXT0DS8ciyS0teY6B3I0lTWMgH/POsPf3UP/GHMDIIesZ0ADOLqJlTaBBOB28QU8Z63WTdDWQAlKN9+07hxsKiAQfcdkl8Sy957W9bG+H7xt29n+mKuCYK/ruXOydOGw6RzZsr/i+2ND/wMCYvPtSS24Aqm5ffOy9jK4MeJh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791758049; c=relaxed/simple;
-	bh=o1+v7Sz1ngSUQFXjenftpDZyVoDzwAMbydX+OrkDo2s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z4AIdudthnlk4iW3IPIsQWOViRbx/GqFnBBTU0qcokZu+loHR81jWUPgOr7YH7l2pF7J5VZ/mypaONCPYMEjdJxcO9k3L1hT9+yv9Dx2GDiQVAAcONr1/ekFkol6mvnY32JEJcyfpuWBiY4Bdj7guQAfYWUuhbIqISx18vpV+zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OU5yzbnI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791758615; c=relaxed/simple;
+	bh=w0z/NDoxIlaoOdZZdORv4xGwVgdTVe7SQGfoqffz2Mo=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=OKaCyvi8/zvJabFYEj8xU4vjnjJvgO9oHLyyNPqdXn/ugZmuWGYEIYMjS4fTVj2tz2nCj5Qqhyfc9bBSDg4MKOsXld2HIUnfCfsIuPRUgSLa5u0dMwyaPj9Q3jhRUQcQ/NpUv/mMwEu/Slg1pg0qyyk1+wQpwBlgphZd2Trao+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MhOf7Pkk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OU5yzbnI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F2D1F0089C;
-	Sun, 11 Oct 2026 22:34:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MhOf7Pkk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC5F1F0089B;
+	Sun, 11 Oct 2026 22:43:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791758048;
-	bh=FQ5LhxSlGfDYZPptBMBWJk+3azBNynEB4pGObOBbqno=;
-	h=From:To:Cc:Subject:Date;
-	b=OU5yzbnIo7CNHGCr/MNFPfuHWkQ2AdnE06NlLk6ZZ3S5m6J2OJUk9T9UOCCOF6W58
-	 dRQyHrZf17P+1jSsXAJe6sxk8R2G2hB/fM3emXheO/g0/93oGm0ep3YYtlFBD2FdsA
-	 HJjl9yUBAvNhBUZpExgbJFgqmiPqDA9vPUZ5NCffKQlWCs2BKdAqxQ0VhhsJ83DdpI
-	 AndzQP3KOyZa3kZF7WZzgH+RJd1FUW01f/AvXGrhUnZXCqsujEeWmgot+3lKwN+oB+
-	 xzy3nvBTmkSLRWtTsrjgz+1A1Bx956BoO5DuBvuqTtf4/wniw+K/iKkdnhaXKVR1uw
-	 XSDOiCtRsK/VQ==
-From: Sasha Levin <sashal@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: Sasha Levin <sashal@kernel.org>,
-	stable@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH] tools: gpio: fix building from the top level with O=
-Date: Sun, 11 Oct 2026 18:33:33 -0400
-Message-ID: <20261011223358.2327625-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20260515; t=1791758614;
+	bh=TQlzcIAfz5DCgzqvsgvtjKsYU5bWLPIzsRB/cfSohe8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MhOf7PkkIAmSrWC6IyzUoutpl1PO1cRBCEehXy+Qf3tNJJSEWr9n62wzUmOCicyq2
+	 Z/5+G0fF1TaFOmd2Y4RQpGxqI1I0DNuzRnRnPbgSlxZ7KsPJZI/I0eBqhL3P6MEQY2
+	 8y+TB/joeTg3+cy2ZSB5L9sMNR8OD98hzKMX2QMilvBuSvVJTUOsNp5KeHuablSsIN
+	 mCziZ8KPF5bSt9ZvvfMJmGSuJAC/RT3yhAlEPoE4xDaBUJTB+WYZdmyjMni/zvYGjG
+	 Pp1WQnEp5GtlIGlAuSW2ww74n5UAuBfAnsjO5RXhixKzciRX7v6cf/yJgjszHzNBlK
+	 H/qxeV1LNIy4Q==
+Message-ID: <sashiko-outbox-167498@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] tools/dma: fix building from the top level with O=
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sasha Levin" <sashal@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261011223358.2327625-4-sashal@kernel.org>
+References: <20261011223358.2327625-4-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 11 Oct 2026 22:43:33 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-"make O=<dir> tools/gpio" fails:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] tools/dma: incomplete fix for out-of-tree (O=3D) builds
+--
 
-  Makefile:27: /tools/build/Makefile.include: No such file or directory
+commit f9ebfb989b6d469df7135b7ea719817656f0b606
+Author: Sasha Levin <sashal@kernel.org>
 
-tools/Makefile clears srctree, and the gpio Makefile only works it out
-again when building_out_of_srctree is not set, which the top-level
-Makefile sets for O= builds.
+tools/dma: fix building from the top level with O=3D
 
-Also work out srctree when it is empty, as tools/bpf/Makefile does
-since commit a89b2cbf71d64 ("tools, bpf: Fix build for 'make -s
-tools/bpf O=<dir>'").
+This commit attempts to fix the out-of-tree build for tools/dma when using
+O=3D<dir> by correctly setting the srctree variable. It ensures that srctree
+is worked out even when it is empty or when building_out_of_srctree is set.
 
-Fixes: 4a6a6f5c4aeed ("tools: gpio: Use !building_out_of_srctree to determine srctree")
-Cc: stable@vger.kernel.org
-Assisted-by: LLM
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/gpio/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+> diff --git a/tools/dma/Makefile b/tools/dma/Makefile
+> index e4abf37bf020c..b5fe6e2625eef 100644
+> --- a/tools/dma/Makefile
+> +++ b/tools/dma/Makefile
+> @@ -7,7 +7,13 @@ bindir ?=3D /usr/bin
+>  # isn't set and when invoked from selftests build, where srctree
+>  # is set to ".". building_out_of_srctree is undefined for in srctree
+>  # builds
+> +ifeq ($(srctree),)
+> +update_srctree :=3D 1
+> +endif
+>  ifndef building_out_of_srctree
+> +update_srctree :=3D 1
+> +endif
+> +ifeq ($(update_srctree),1)
+>  srctree :=3D $(patsubst %/,%,$(dir $(CURDIR)))
+>  srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
+>  endif
 
-diff --git a/tools/gpio/Makefile b/tools/gpio/Makefile
-index 342e056c8c665..1cd7636b9cac5 100644
---- a/tools/gpio/Makefile
-+++ b/tools/gpio/Makefile
-@@ -7,7 +7,13 @@ bindir ?= /usr/bin
- # isn't set and when invoked from selftests build, where srctree
- # is set to ".". building_out_of_srctree is undefined for in srctree
- # builds
-+ifeq ($(srctree),)
-+update_srctree := 1
-+endif
- ifndef building_out_of_srctree
-+update_srctree := 1
-+endif
-+ifeq ($(update_srctree),1)
- srctree := $(patsubst %/,%,$(dir $(CURDIR)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
--- 
-2.53.0
+[Severity: Low]
+Does this commit completely fix the out-of-tree (O=3D) builds?
 
+While this resolves the srctree issue to successfully locate Makefile.inclu=
+de,
+an out-of-tree build via O=3D<dir> will still fail immediately afterwards.
+
+The default all target depends on $(ALL_PROGRAMS), which correctly expands =
+to
+include $(OUTPUT) (e.g., out/.../dma_map_benchmark). However, the explicit
+build rule for $(DMA_MAP_BENCHMARK) lacks the $(OUTPUT) prefix:
+
+tools/dma/Makefile:
+    DMA_MAP_BENCHMARK =3D dma_map_benchmark
+    $(DMA_MAP_BENCHMARK): prepare FORCE
+        $(CC) $(CFLAGS) $(DMA_MAP_BENCHMARK).c -o $(DMA_MAP_BENCHMARK)
+
+As a result, Make will abort with a 'No rule to make target' error.
+
+Furthermore, the compilation command places the resulting binary back in the
+source tree instead of the requested output directory.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261011223358.2327=
+625-4-sashal@kernel.org?part=3D1
