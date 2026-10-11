@@ -1,183 +1,111 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064AE362149;
-	Sun, 11 Oct 2026 17:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA6A40855
+	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 18:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791739976; cv=none; b=ZK6xPVEuI9U8ylllvsiiho8K05Ogr1KU5z+1jy7u5IW33uO/QLRIxgc7PbwceR6Ztjqd0JjeuZz3ydbbHDbfZjQfbWvlcA/nwhA78B0tsrMy6fbn1bo9O/Ss0JiwQzkQuXt45vg8Avdvf3Krkxd6RA6zyzx9TifYek3wkHm2Bzs=
+	t=1791742547; cv=none; b=nl3Y2DT+fHHETE6EyopHMYGGzTVWwG+CB5Ap8xTRqIJiujDdp55X8gJWsj0lh9HOCHXa9WGY4WYAg879XX07S7RKdrXwYFfYR1ticg4Y7nzHZQ5mqT31ZP9I35zpTv2Q59McFkloYjsxTMw/CVWAqg7xF6ZTL4uWoIK61fpVfeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791739976; c=relaxed/simple;
-	bh=uxkiMGeKj2/KNZ5mRlfBZkMbBLhC+o62WN6eC7D3UUc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jl0RY27LqdvdZE1KujOVdhKcFUrFNcJc+vOLmfV1lps4mu093hs30GCOrnBqE2i4ex4hO54g++Ho9AstBduT84duPpmA6/jUpIYO1GbHEP+4uDjmm0NvqqgL0BjamiJkUdoUhrTocn/zgVzCjOF0wLT4kofu1R+cDoQHqV99e04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=P9QclTJ9; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1791742547; c=relaxed/simple;
+	bh=weK8sD6lcPva7/knSegaeoRf+ram8jaIrm0xX1NICzg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tlf/h2ifv2Xgywql6AMk9yhAL6Y/c5BT7xw7aBOV7AL89+5R4HNuPQFpd4KgyIKmRlBvq42sKmMg0frZ8QXXGfGy9r/WmnRo0DsfC0ATP6Y74Xg4NMX+fkO5jThcAaUoCjtWVManbVi/VZZz49RzvsYUJp6p7dDBCejWLyfssgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FmlJ0uTK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="P9QclTJ9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=WJ
-	Ib1jyh78r4I8mWZyE1xujU9RHwd3wnfLdlk+WKTxY=; b=P9QclTJ9fdmCIfOjk3
-	lZv7Oc11Xo8QYuEHeW9ZUQoxVKqc3hxu/Zn78jCOJwc9ZDCm4cArUCwFWnwuxIm8
-	yzYSHaV0JEv1n7XJ2reL4TLgd94EwlgS63epaKVYlj53hZTEe2IOpTy/LvuiYPTo
-	n9iQ3n+NcTpD5Pl/Y47Z1Zsps=
-Received: from localhost (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3B8jTx8tq95gFEA--.10939S2;
-	Mon, 12 Oct 2026 01:31:00 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: tj@kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	kprateek.nayak@amd.com,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	sh_def@163.com,
-	stable@vger.kernel.org
-Subject: [PATCH v3] sched_ext: idle: Respect task affinity in restricted CPU selection
-Date: Mon, 12 Oct 2026 02:31:00 +0900
-Message-ID: <20261011173100.2090211-1-sh_def@163.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FmlJ0uTK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996921F0089B;
+	Sun, 11 Oct 2026 18:15:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791742545;
+	bh=K3P7hxQHyfbccUervGCZcEwBb6pcTM+GpbCsLAfOGy0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FmlJ0uTKZQnYALDRnm3WVQyvbnXN5Gs+w9QblrL+eZ2seITpW4ZMMFZgRPOJOjaem
+	 xuPY71LYq7SyVbVKOS0e9OGzbLM70XvX3yeVFqPsfv/YbgZECtC1zl7GTmH4Uv+gNC
+	 ZIAK+6tvZYfPQjbZvrMNHI31gEbX2144xAKl3kGLsMtrrHwUWKzi+O2E07oYBtRAKL
+	 sxIT2r8K7AVIR32IfmJwpX81Qy+bDerWtJXAhRsknoupNpc1VKzD9Soxk1cZfQGVcQ
+	 wP4a5+/yuo5xFHryHWgwGmddTPOYRFl0W6y4gB30iZCYUvW1CsUK4iSbq1r+eHmDpg
+	 ArodNM8eQO4qw==
+Content-Type: multipart/mixed; boundary="===============5233060581224098274=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3B8jTx8tq95gFEA--.10939S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxury5Ar4fWry7Gw4DKr45Jrb_yoWrWFWxpr
-	97K3yagw4UXa1Iqa13AaykJw15ur1kA3yfKrWfWF4SyFsxGryF9r9Yq3ZrXF93Grn5ZF12
-	9FnrtF4fKF4jywUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi7GYPUUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwhW0FGrLx9U83gAA3m
+Message-Id: <d51031962737267f48d83c86738616656b3024c9c7bed42330c77b3c6936cae1@mail.kernel.org>
+In-Reply-To: <20261011164836.2233874-3-alexei.starovoitov@gmail.com>
+References: <20261011164836.2233874-3-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test tracing_multi link with BTF ids of the same address
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 11 Oct 2026 18:15:44 +0000 (UTC)
 
-The restricted select_cpu kfunc path handles single-CPU and
-migration-disabled tasks without going through scx_select_cpu_dfl().
+--===============5233060581224098274==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-It currently uses prev_cpu as the candidate, even though prev_cpu is only a
-hint and may no longer be usable after an affinity change. With a
-caller-provided @allowed mask, this can also return an idle CPU outside
-p->cpus_ptr.
+> selftests/bpf: Test tracing_multi link with BTF ids of the same address
 
-Derive the candidate from task state instead: use the sole CPU in
-p->cpus_ptr for single-CPU tasks and task_cpu(p) for migration-disabled
-tasks. Validate it against p->cpus_ptr and @allowed before claiming its
-idle state.
+TL;DR: Test nit only: the attach_same_addr subtest skips without printing a
+reason, so a SKIP is hard to interpret. A printf() before test__skip() could
+help, though the review says a bare skip may be acceptable.
 
-Since the derived candidate may be on a different NUMA node from
-prev_cpu, also preserve SCX_PICK_IDLE_IN_NODE by rejecting cross-node
-candidates.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
 
-Perform all checks before scx_idle_test_and_clear_cpu(), as a successful
-call consumes the CPU's idle bit.
+[ ... ]
 
-Fixes: 683d2d0faba1 ("sched_ext: idle: Introduce scx_bpf_select_cpu_and()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hui Su <sh_def@163.com>
+> @@ -662,6 +662,97 @@ static void test_attach_api_fails(void)
+>  	free(ids2);
+>  }
+>
+[ ... ]
+> +static void test_attach_same_addr(void)
+> +{
+> +	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+> +	struct tracing_multi_fail *skel;
+> +	struct bpf_link *link;
+> +	__u32 ids[2];
+> +	int i;
+> +
+> +	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+> +		return;
+> +
+> +	if (!get_same_addr_ids(ids)) {
+> +		test__skip();
+> +		return;
+> +	}
+
+A subsystem pattern flags this skip as potentially concerning.  The
+selftests guide says to report a test that skips silently with no
+message.
+
+When get_same_addr_ids() finds no __x64_sys_X / __do_sys_X pair that has
+BTF FUNC entries and shares an address, test__skip() is called without
+printing a reason.  The commit message says which pairs exist depends on
+the compiler, so this skip can happen on some toolchains.
+
+Someone looking at an "attach_same_addr:SKIP" line cannot tell whether
+vmlinux BTF lacks the aliases or kallsyms did not resolve them.  Would a
+one-line printf() before test__skip() make the skip self-explanatory?  For
+example:
+
+	printf("no __x64_sys_/__do_sys_ alias pair with BTF ids\n");
+
+On the other side, test__skip() takes no arguments and the framework does
+print a SKIP line for the subtest.  A bare test__skip() is a common idiom
+in prog_tests/, and this file already uses it twice for the non-x86_64
+skip, so this may be acceptable as is.
+
+[ ... ]
+
 ---
-Tested on x86_64 KVM/QEMU:
-- Private BPF harness passed affinity, stale-prev_cpu, caller-mask, and
-  cross-NUMA SCX_PICK_IDLE_IN_NODE cases; v2 returned CPU2 across nodes,
-  while v3 returned -EBUSY.
-- Build coverage passed with CONFIG_PREEMPT_RCU=y/n and CONFIG_SMP=n.
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Changes in v3:
-- Factor restricted selection into select_cpu_restricted().
-- Preserve SCX_PICK_IDLE_IN_NODE and add cross-NUMA validation.
-
-v2: https://lore.kernel.org/lkml/20261011131700.1351541-1-sh_def@163.com/
-
- kernel/sched/ext/idle.c | 50 ++++++++++++++++++++++++++++++++---------
- 1 file changed, 39 insertions(+), 11 deletions(-)
-
-diff --git a/kernel/sched/ext/idle.c b/kernel/sched/ext/idle.c
-index aa9fb6de0ad6..28ed9e327085 100644
---- a/kernel/sched/ext/idle.c
-+++ b/kernel/sched/ext/idle.c
-@@ -952,12 +952,43 @@ static bool is_bpf_migration_disabled(const struct task_struct *p)
- 	return p->migration_disabled;
- }
- 
-+static s32 select_cpu_restricted(struct task_struct *p, s32 prev_cpu,
-+				 const struct cpumask *allowed, u64 flags,
-+				 bool migration_disabled)
-+{
-+	s32 cpu;
-+
-+	if (migration_disabled)
-+		cpu = task_cpu(p);
-+	else
-+		cpu = cpumask_first(p->cpus_ptr);
-+
-+	if (!cpumask_test_cpu(cpu, p->cpus_ptr))
-+		return -EBUSY;
-+
-+	if (allowed && !cpumask_test_cpu(cpu, allowed))
-+		return -EBUSY;
-+
-+	if (flags & SCX_PICK_IDLE_IN_NODE) {
-+		int node = scx_cpu_node_if_enabled(prev_cpu);
-+
-+		if (scx_cpu_node_if_enabled(cpu) != node)
-+			return -EBUSY;
-+	}
-+
-+	if (!scx_idle_test_and_clear_cpu(cpu))
-+		return -EBUSY;
-+
-+	return cpu;
-+}
-+
- static s32 select_cpu_from_kfunc(struct scx_sched *sch, struct task_struct *p,
- 				 s32 prev_cpu, u64 wake_flags,
- 				 const struct cpumask *allowed, u64 flags)
- {
- 	unsigned long irq_flags;
- 	bool we_locked = false;
-+	bool migration_disabled;
- 	s32 cpu;
- 
- 	if (!scx_cpu_valid(sch, prev_cpu, NULL))
-@@ -994,20 +1025,17 @@ static s32 select_cpu_from_kfunc(struct scx_sched *sch, struct task_struct *p,
- 
- 	/*
- 	 * This may also be called from ops.enqueue(), so we need to handle
--	 * per-CPU tasks as well. For these tasks, we can skip all idle CPU
--	 * selection optimizations and simply check whether the previously
--	 * used CPU is idle and within the allowed cpumask.
-+	 * per-CPU tasks as well. For these tasks, skip general idle CPU
-+	 * selection and validate the task's only usable CPU directly.
- 	 */
--	if (p->nr_cpus_allowed == 1 || is_bpf_migration_disabled(p)) {
--		if (cpumask_test_cpu(prev_cpu, allowed ?: p->cpus_ptr) &&
--		    scx_idle_test_and_clear_cpu(prev_cpu))
--			cpu = prev_cpu;
--		else
--			cpu = -EBUSY;
--	} else {
-+	migration_disabled = is_bpf_migration_disabled(p);
-+
-+	if (p->nr_cpus_allowed == 1 || migration_disabled)
-+		cpu = select_cpu_restricted(p, prev_cpu, allowed, flags,
-+					    migration_disabled);
-+	else
- 		cpu = scx_select_cpu_dfl(p, prev_cpu, wake_flags,
- 					 allowed ?: p->cpus_ptr, flags);
--	}
- 
- 	if (we_locked)
- 		raw_spin_unlock_irqrestore(&p->pi_lock, irq_flags);
-
-base-commit: 7b63ef2d55f24519e7e9e5f4d15dbea03f126e40
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38159103930
+--===============5233060581224098274==--
