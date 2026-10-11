@@ -1,64 +1,64 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8F43DD854
-	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 06:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260443CF963
+	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 06:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791699723; cv=none; b=QQNOuIFfNEQRbjPvXbEGjbwkw5cKCsQdOuE5PMCw6l7OcqtmazurI28LdT9/zTQm6RriKSmw9ulLn0+aaQi7sKD+w8eP+r35fYqCrbHiN3TND62etBmya+sVvvUgfGeAnFd0g5vpA/LGjk1rkgr7fTw2+Whyiu9awnJAAJbV3p4=
+	t=1791699725; cv=none; b=R3OePB9Bq6J4go+Uhten4vowSwrKvvxOVheKWF0ytg1sqCTh5piXZzSqrjUptdbul6I+Wqi9DbL1WYXDcc7hyaXrQIIqZ/LeTEty5VzPf5Y5q5WJqWvlQAwrjjm2owDmr4Y/A39uWuiPc0xqn1UWo7eqbA2PGZxePlwoMEOLjJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791699723; c=relaxed/simple;
-	bh=GeN5HfsOZ0YhBvtCtM85XCULZjJ0izFrO2P824Pi0vo=;
+	s=arc-20240116; t=1791699725; c=relaxed/simple;
+	bh=wT9KfUxDTOAu89c4sxAb8wXWXUXJ/Df7bwfvcjApo4g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B4bHwiWCFIglrRXiqEgUHKFv7d9aR3ERS05itMdsrm5+CVdhIZWoaPZqZWNx2hhrb6zuDErMxtxgVE0z8raUwDd6mxu5REfFUxQzqyI9g07PKu0OqtO0JR5ip/34GwmwKMXsonZIuZA60/8npjG86n4ZeiRd75vFQ/77khj0gq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o78X1Y5h; arc=none smtp.client-ip=209.85.210.178
+	 MIME-Version:Content-Type; b=Cdjmv3hnstW0cx3NGrlzdfvSSHsfi36BA1qhA2e4EzONm8ESM2VFtU9GNkGXplIZmUJ83KpMeAMRwpfMEOy7fWTeNa736cZSeOJOY5vklo3il8XEu3tZAn/QFkPXTADsuyt+uznz3fw6voag0q7/ibFcbOOSR+9+SHJJmRWo/T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b+6cGRGE; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o78X1Y5h"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-88b7d853b11so470300b3a.1
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 23:22:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b+6cGRGE"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-878b44611ffso581974b3a.3
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2026 23:22:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791699722; x=1792304522; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791699723; x=1792304523; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=8DSP2N/a61a8Xd/LK2XwQoroQeJQVJ5U02uGaDkv9lA=;
-        b=o78X1Y5hHSfYrIbQ0H20E0nzlBRUwBWiZ2zkN/yF+/9INFzniLBKb4jnKm42tIz3W0
-         cAWZoBJ20UmhE6naEkyia/UOr/wtAOMgbWWTdVB0g8xeVodKYNiRUcOkXq/b6MPUfC+z
-         9UifQ75d3/6wKeskWehvhH46czH9NyGyHMiYYvh9Zti7ku+pNKP0r4+pSFayYV3xEMxC
-         PZ4+/9c72Z1tpHUInnu3VeNBr83jmnRRLpjSWVkb0y+/pAswfAYsJYqXkaiI2sOtDMOg
-         cagPgjzv/2+SE072Of/qDA8vyFDKstGg019Rr6l7I49iMuaDtI3P2JlROq3n4V3bTDvK
-         98MA==
+        bh=O77XLMAdbvfeLp1j1TgVELADlqP4W7JqNL9jlyw258M=;
+        b=b+6cGRGEK+GNMjM9Rd5qgfE3Q4Z1DDvJuH4dTYiHL78sdFTuhXJdQ9GHHm1w4czHpe
+         ki2RtQRENW8amyBgoS3+shkteQTGdrRg6rl6y1x4rY4Kc20F6k0FSlJRa6Q9XxYi1beu
+         tpVpRr/Y0XajQSPEvSXmK2jhFa9EGX6mcnSRgfMBZVMaOS7l+SJ26mNT46CGd2Bq9OZ9
+         Y9Jb/VxQPw7cnB51zLz6UUTze8iajw3vR//O3dz1v+mGIkqCbVxT5GpMAeR8Okj5oLxl
+         bZKYtDNbRTe4OZ3qJqX7SQU45dWuE1Aqrkll0wPqCVQ7S7erB7FHpKb9kQ9jeB2QpECZ
+         YLnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791699722; x=1792304522;
+        d=1e100.net; s=20260707; t=1791699723; x=1792304523;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8DSP2N/a61a8Xd/LK2XwQoroQeJQVJ5U02uGaDkv9lA=;
-        b=KeMTrTXnfGivkIUv69jBphrOy8IeuIfDhTyJOioIwq9g0Wia0r5vrR4ubUTsh2JF42
-         E0wvEK0WZdQCVeTnQNt3PuzmpYbPHwB7U3vK9sESIHEUZGkvEXC+wa6B6JwvrEoVBk9O
-         0y7KA4qwkFLa2AAvss88cKPGgBQ+hgMwIasFIn9biG76TjugtbgmqNBKL+udc1w94BQV
-         bbGgeBIB8jwMAIReNtZQCxMiuuxmPdOTUeqJIWf0oP4c3gFotjY1zerorswRdFWqiibS
-         pLw0sBdgtKW9hjsLTTJGdohXuPIviUAJbMVEfR/dIhC+QobRrfWJ/CfApAFSSGUzIqEP
-         wQJQ==
-X-Gm-Message-State: AFq9FYLIrSuak6C7SBnCZ7yaczgV3XQ3fdSAPy+l18ZOx5mARHzUYG5x
-	/NjbH7ptr9EYzA4Go6NdY4jLdMsNhQAPo9MlkxRRF3f99+5+NaXqul68xaUbqA==
-X-Gm-Gg: AYBFou0dzUfso8Y8xcJhxVL9n5P7s7ynb2k9ffph/rZn9i8m64mmZn01qUfe/rE2UNj
-	g16IRHzvKSmxW8hJZA4uAutA0l9Q+/s02dsozdRZTqgBfKsV3tOhN2e5T3zcr5TUdz9BLqXjV83
-	VI7uqa7cW4KBaHxKwVuluhdgLvMifodGWWC4BR5ZiQfjaOU63jAfKXeiKNXqcy6hJB4Z7NrZbim
-	EMxiN9MmjM83fVobOdJNixPko7su4UrNG7vr6iUNEBn6YQOlD3UCRRKGgNT0roCmBBFyHi6dQzk
-	lR620yIi+N13JXZyp7mKQZLrrClGxbRUwkLHBG5bTvwdn/V7l0T6WrOZz3NO88XbFDUXECmHA5N
-	YBG6YjH3WVOsgSgqO78WmpwpfutPpdnsBYfmIcBkUKWDRsltNMBxP0ZOkjxoelUJ49Xu9mK9f2q
-	WsW1YFCUVWwCcrdaIWppwtKOUDCCRU7Na3i/6SknlE69E4nNf8WVncqb/vXKjuO4v4EYtMyCGz6
-	ZM7eHgm66v+38I=
-X-Received: by 2002:a05:6a00:8c3:b0:882:1b4d:1847 with SMTP id d2e1a72fcca58-897c7ec5c9dmr5012677b3a.39.1791699722207;
-        Sat, 10 Oct 2026 23:22:02 -0700 (PDT)
+        bh=O77XLMAdbvfeLp1j1TgVELADlqP4W7JqNL9jlyw258M=;
+        b=gPtwHxMZMw+izfuKBrOkLKVoXLHoN+Qu2jAi+ibjXGI9uVuTs1R/RmqPI5zoFV8gT7
+         4WXFx36b0YQOtW9w+R1vRt6nfJADfrFNDOOvNVhj3QiTO3yMSYrUHTKD7WbhXc12tf8w
+         aLLbaX/jvy+d7X4QdaNrotqnu7D85Knllb52pfczx6M3F1ATxbu3kHB08oImIB7x0Ytx
+         9A1TtKlWCDXboWj3evyW3zMikB1FaDscxzXqpezsd3NjIw3yWElaIr+UL9PNXe5HD4z9
+         BZrBim/vF51fhi7NZMU3TKseLt/ftff3QHdLceuhVzqv2/+TSjYNpG7xptFg92r5U/Wm
+         eH0Q==
+X-Gm-Message-State: AFq9FYJATE2YwStPT2ZE6LYKZ9heOszSjc/qtf51dqvyb9BqDUtEbplA
+	+877huLmaZ+zoIG6MfYCEQu8OUFGfi3RIRv0Vx9VwQDBptwnkWB2E+5vGsRo5Q==
+X-Gm-Gg: AYBFou0PzQRKcC5h0lGRAsM7gf+EkZ56HPvWfT2uJWjS+cWAoHcK15G6TTmAvLoNrVK
+	7SubI95BBKqF1o5XUzC9/iodyGVubeLHsC+7OJs9Lwf1FILc7747WafdCTHwe+RWBEx3ZgmBp+0
+	8JJ45f2S5Aif+LjMJZii+oS/5qAw0rafZZlbEDMe34Tj9iGmYTm6jBGlM+lQ0oh4bkagQiysh4a
+	aXC2yIPlYjIqjfhg9f/XJJUuJxrAp0gEsEjKJw5ueptwS6tUnD4wqJCKXc8Uu+rLh+e2zBDE1qI
+	Obyd0jKrOfYmYns7CTCi0MGubVrw77KNCTXA/OVHWPsxWtlDwjOL/kx584m7Y67Ix9Fy3bmzXaa
+	eZsohZfWO5o8e/VTccBpzGLi690K/+6QiwVBISHi3Y5u5qIMSKJ6NoFUVdeR4Rwkvh0NNHuI5Xj
+	uUEB4yyktphQYwvg+r1MgpSFjKhIgMIafComBabudkSa1UNtQElDSoCKCLWLzz3eBom3hHo40zZ
+	jmaD9tI/VwqtHTy
+X-Received: by 2002:a05:6a20:a124:b0:3de:4b0c:65e4 with SMTP id adf61e73a8af0-3e16bab9c9emr5679039637.4.1791699723524;
+        Sat, 10 Oct 2026 23:22:03 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-896c31071absm2854341b3a.15.2026.10.10.23.22.00
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-896c31071absm2854341b3a.15.2026.10.10.23.22.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Oct 2026 23:22:01 -0700 (PDT)
+        Sat, 10 Oct 2026 23:22:02 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 8/9] selftests/bpf: harden __msg patterns for step_movsx_bounds_on_line
-Date: Sat, 10 Oct 2026 23:21:42 -0700
-Message-ID: <20261010-scev-minimal-v3-followups-v1-8-6000e95ef993@gmail.com>
+Subject: [PATCH bpf-next 9/9] selftests/bpf: BPF_F_ANY_ALIGNMENT for byte_array_size_spanning()
+Date: Sat, 10 Oct 2026 23:21:43 -0700
+Message-ID: <20261010-scev-minimal-v3-followups-v1-9-6000e95ef993@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261010-scev-minimal-v3-followups-v1-0-6000e95ef993@gmail.com>
 References: <20261010-scev-minimal-v3-followups-v1-0-6000e95ef993@gmail.com>
@@ -82,33 +82,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The `{{.*}}` in the pattern for R5 below might hide the `step=...`
-logging from the __no_step annotation. Replace it with full expected
-log instead. Also drop __no_step for R3 above, where it is
-unnecessary.
+The test case indexes inside `char bytes[32]` array with unaligned
+offset. Use BPF_F_ANY_ALIGNMENT flag to avoid the test rejection for
+unrelated reason.
 
-Fixes: 2db5837f9ada ("selftests/bpf: Tests for register base/step arithmetic")
+Fixes: e187fac8ac6b ("selftests/bpf: Tests for varying offset access to PTR_TO_BTF_ID")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_bounds_step.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_btf_array_access.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-index c9ee1c7efcbb..d824a5d48a39 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-@@ -338,9 +338,9 @@ SEC("socket")
- __success __log_level(2)
- __msg("r1 = (s16)r0 {{.*}}R1=scalar(id={{[0-9]+}},smin=smin32=0,smax=umax=smax32=umax32=168,{{.*}}step=0+24)")
- __msg("r2 = (s16)r0 {{.*}}R2=scalar(smin=smin32=-24,smax=smax32=144,{{.*}}step=0+24)")
--__msg("r3 = (s8)r0 {{.*}}R3=scalar(smin=smin32=-128,smax=smax32=127)") __no_step
-+__msg("r3 = (s8)r0 {{.*}}R3=scalar(smin=smin32=-128,smax=smax32=127)")
- __msg("w4 = (s16)w1 {{.*}}R4=scalar(id={{[0-9]+}},smin=smin32=0,smax=umax=smax32=umax32=168,{{.*}}step=0+24)")
--__msg("w5 = (s8)w1 {{.*}}R5=scalar({{.*}}smin32=-128,smax32=127,{{.*}})") __no_step
-+__msg("w5 = (s8)w1 {{.*}}R5=scalar({{.*}}smin32=-128,smax32=127,var_off=(0x0; 0xffffffff))")
- __naked void step_movsx_bounds_on_line(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+index be001cc77f81..9dc2c9a5f8b7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+@@ -114,6 +114,7 @@ int long_array_in_bounds(void *ctx)
+  */
+ SEC("syscall")
+ __failure
++__flag(BPF_F_ANY_ALIGNMENT)
+ __msg("invalid variable offset access into struct outer")
+ int byte_array_size_spanning(void *ctx)
  {
- 	asm volatile ("					\
 
 -- 
 2.53.0
