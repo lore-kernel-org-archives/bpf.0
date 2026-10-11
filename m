@@ -1,107 +1,124 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E818628690;
-	Sun, 11 Oct 2026 02:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256E82D46CE
+	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 03:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791687290; cv=none; b=KwC11uHGoqODcmW+6xzU5anSkQecjUAiKpSo55H8+oFz1nEXg4v6B51YhHeGxQrzH3q35n8GPn/MUx1BhLLRerIMb+YNIfcPzcyUcVxGwVTVWNA6WII2t4qQcwBJfnyM85ku4v5ZQ1kuE0lY+JaEJIgg/X3GApDYL3k07NFihh4=
+	t=1791689803; cv=none; b=kug1shnWSUyDdFTtdYFxjIjvDR6ijDwcPcNpLiUOzVdwW9u37rv05C5IcVI1HDifg40Up7i1GmVmMu7I4yfxLnX7t39Q4S+H9WyLO2a+d8kaukULeA4scIM8Zv+o4tAU1C6gr1d1fn8R10DD9/W5OIAhuVPch8Ck3pRy4Z3638E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791687290; c=relaxed/simple;
-	bh=hrAhgN+WxuZzsvJRuRPU3XKL8xQZzdQoWxjDGdqoFzY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HMhzXGhCLjGcKbnn+hInwfMUr0VR9vPmExpu22VLy1JUy8Z4lC5RZuVNxxE6CmlZzeCcTtMjnspB8hS1iCSUmmc2AeLCOCH/o+n14Sobzj+q/3TZQXGieM49pkYmqZ9W8KrGL2x4Z0f5xIaw1pVmYRIU368wvhWIYIZ551SeEzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NgyAQ4Wi; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1791689803; c=relaxed/simple;
+	bh=Tx1otybjQRr7JU7XAK4xurO0IrZZuCar/iFoQC+XX/w=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=F2iDvKLntlzlYKI8094/Z4/xdwZwlyGHm0UvRiCYQ8WBM2rGO8CXv9VgAJz3P0a9yEDgxDrS3STZ8E/ofgGeYmwpHkjhKrv6Lj/4Vrqs2xJuURJdncdCbDMTC7tR11sSfh88iYTQnrop/e3AKOGfKQlBeu9MUwrPhu4PJuH4S9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orbA6zhQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NgyAQ4Wi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=gT
-	k4+pqBCprUe3qNcnVbCqhWfZmhAWbxb4XHLPlkfgM=; b=NgyAQ4WiIqmT284aZw
-	Pu+Kys78gOEpIjrIxfkvnL8sv/+1qJP6i7iJ6xclNTMB6Ma5umPBnzoV/k9ViXuy
-	r3rHP/XGliee58oo9n1tF8/44l1kd5aNHxX/KmExU2J6bdnWCHMBrCKL72dUAeIY
-	J9I2ncudEg821/pRB5ePYBpA8=
-Received: from localhost (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wA3Q7oH+spqDdsmDw--.308S2;
-	Sun, 11 Oct 2026 10:52:57 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: tj@kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	kprateek.nayak@amd.com,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Hui Su <sh_def@163.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] sched_ext: idle: Respect task affinity in restricted CPU selection
-Date: Sun, 11 Oct 2026 11:52:56 +0900
-Message-ID: <20261011025256.4180374-1-sh_def@163.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orbA6zhQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FF51F000FF;
+	Sun, 11 Oct 2026 03:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791689801;
+	bh=GWne1mmwTU+fVH8H3u3GXuaZ0+d31xnxSqCzMF6EG+c=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=orbA6zhQMHMrbP0+xTFxMaLy5hasAYMuiklq8jOEkahL40Yfllfh6YFVFeycBbOD4
+	 DYTxXwod9Y0822/8VtZVjIKc3Cmqf3WyRSLB1RhcrSWGzRqihzsD6wj+gVGuiJez8L
+	 Bdu5EvAvPN6QkoikrrMc3/NW/fu8R39ZrQvWdmzvsfZrmdVjGrlXzZT8XEpDBgYL9n
+	 WXch8Rk92q8YHLnxsrNNAT14Gx/Dg8vuITrKPb7umIUSWCTZ9ffBeC8KlRn3LwkXG3
+	 UpX3oa5tTOZP3Rm98Tue36CzKcqvASJUr73OLqfuRQnIWfrA9fyQrBjPcMsuS1vv/g
+	 Hj2wmmHqHW1RA==
+Message-ID: <sashiko-outbox-166995@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v3 1/2] net: netmem: document netmem and memory
+ provider design in comments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mina Almasry" <almasrymina@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261010033630.1171692-2-almasrymina@google.com>
+References: <20261010033630.1171692-1-almasrymina@google.com>
+ <20261010033630.1171692-2-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 11 Oct 2026 03:36:40 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wA3Q7oH+spqDdsmDw--.308S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw4rZF1ftryxury5WF17KFg_yoW8AF4UpF
-	Wkt3y7KrsrJa10y3sxtaykKa45ur4kGw13KF1rWF4Syrs8Xr4FvrZ0q3Wagr90grsYvrWa
-	kFnFqr4xtw4DtaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi75r7UUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwQkObWrK+gmWEgAA38
 
-The restricted select_cpu kfunc path handles single-CPU and
-migration-disabled tasks without going through scx_select_cpu_dfl().
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] net: skb_try_coalesce() allows mixing fragments from different mem=
+ory providers
+--
 
-When a caller supplies @allowed, the path currently checks prev_cpu only
-against that mask. It can therefore return an idle prev_cpu which isn't
-in p->cpus_ptr.
+commit e4f91f2e0cb9de813eeecc8b5549e79dc322d463
+Author: Mina Almasry <almasrymina@google.com>
 
-Require prev_cpu to belong to both p->cpus_ptr and the caller-provided
-mask before consuming its idle state.
+net: netmem: document netmem and memory provider design in comments
 
-Fixes: 683d2d0faba1 ("sched_ext: idle: Introduce scx_bpf_select_cpu_and()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hui Su <sh_def@163.com>
----
-Testing:
-- x86_64 KVM/QEMU.
-- A private regression harness pinned the task to CPU 0 and called
-  scx_bpf_select_cpu_and() with an idle CPU 1 outside the task affinity
-  but inside the caller-provided mask.
-- On the baseline kernel, the helper returned CPU 1.
-- With this fix, the helper rejected the out-of-affinity CPU.
-- The existing allowed_cpus selftest passed with the fix.
+Clarify the netmem, memory provider, page_pool, and skb fragment design
+principles in header and code comments. It documents that all frags in an
+skb must either all be struct page-backed or all belong to the same memory
+provider instance, and adds a check in skb_try_coalesce() to enforce this.
 
- kernel/sched/ext/idle.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Link: https://lore.kernel.org/netdev/20261008023030.1089616-1-almasrymina@g=
+oogle.com/
+Link: https://lore.kernel.org/netdev/20261005004958.3603059-1-almasrymina@g=
+oogle.com/
 
-diff --git a/kernel/sched/ext/idle.c b/kernel/sched/ext/idle.c
-index aa9fb6de0ad6..20efa463cafa 100644
---- a/kernel/sched/ext/idle.c
-+++ b/kernel/sched/ext/idle.c
-@@ -999,7 +999,8 @@ static s32 select_cpu_from_kfunc(struct scx_sched *sch, struct task_struct *p,
- 	 * used CPU is idle and within the allowed cpumask.
- 	 */
- 	if (p->nr_cpus_allowed == 1 || is_bpf_migration_disabled(p)) {
--		if (cpumask_test_cpu(prev_cpu, allowed ?: p->cpus_ptr) &&
-+		if (cpumask_test_cpu(prev_cpu, p->cpus_ptr) &&
-+		    (!allowed || cpumask_test_cpu(prev_cpu, allowed)) &&
- 		    scx_idle_test_and_clear_cpu(prev_cpu))
- 			cpu = prev_cpu;
- 		else
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index d56f4f0102f75..69d3d27e29d97 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
 
-base-commit: 7b63ef2d55f24519e7e9e5f4d15dbea03f126e40
+[ ... ]
 
+> @@ -6210,6 +6210,10 @@ bool skb_try_coalesce(struct sk_buff *to, struct s=
+k_buff *from,
+>  	if (to->pp_recycle !=3D from->pp_recycle)
+>  		return false;
+> =20
+> +	/* All frags in an skb must either all be struct page-backed or all
+> +	 * belong to the same memory provider instance; do not coalesce skbs
+> +	 * that would mix them.
+> +	 */
+> +	if (skb_frags_readable(from) !=3D skb_frags_readable(to))
+> +		return false;
+
+[Severity: High]
+Does this check reliably prevent mixing fragments from different memory
+providers?
+
+If a socket receives packets from multiple RX queues (e.g., via RPS/RFS or
+multipath) where one queue is bound to a devmem provider and another to an
+io_uring provider, both packets will have skb_frags_readable =3D=3D false. =
+This
+condition then evaluates to false !=3D false and allows skb_try_coalesce() =
+to
+successfully merge them into a single SKB.
+
+If this coalesced SKB is processed by the TCP receive path, it can cause a
+failure. When tcp_recvmsg_dmabuf() iterates over the fragments and encounte=
+rs
+the io_uring fragment, it will trigger the following check:
+
+net/ipv4/tcp.c:tcp_recvmsg_dmabuf() {
+    ...
+            niov =3D skb_frag_net_iov(frag);
+            if (!net_is_devmem_iov(niov)) {
+                err =3D -ENODEV;
+                goto out;
+            }
+    ...
+}
+
+This breaks the receive path and drops the payload.=20
+
+Additionally, if memory providers supply CPU-readable netmems (as
+architecturally allowed by this commit), the check evaluates to true !=3D t=
+rue,
+which fails to prevent mixing system pages with memory-provider fragments.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261010033630.1171=
+692-1-almasrymina@google.com?part=3D1
