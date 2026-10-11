@@ -1,73 +1,73 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3C63242D4
-	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 16:48:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0B0359A6D
+	for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 16:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791737330; cv=none; b=qYuDFzo06bH2sNJ0dyctuviKKDRxv4rrdAOb9g3bPNJyzH8vMGg0fpWIE3tRDXu/Lorea2tGATqhVMGMDqmMdpxG31fAu8j0UJrfkkqViTA67Py35ZM87MgJnevYHr6KGV+jKOMt9ZfKgJ1M0+k3GUqZwH/yPxPOcyk4zTteZOs=
+	t=1791737330; cv=none; b=JOQ0rWr2ME7zwV32Ld2tN2TuuCvOCPYOYhleHj41aEkmvdQCITVJDXE1mf3n1y8DiXLZuRWIjlpfX1xCAbOyftBjEyeF3Pr0DcSdDUgDIRmaiTsqrEE2//3ngb5yXADluYQJhqE2bqwcazwmoLudLOA7HGFw9hZ50dStz+mXtrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791737330; c=relaxed/simple;
-	bh=qKOflWo6bGul0YeRr52Vj3tnG01XHDQz8NMnBgm0NsU=;
+	bh=+CBvNUiTSmOb8wgesxgUgTkMkniAVeogmRUswrXtXR0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Nz1mwKaOaWywJeusG0rgMD0x/ieHpURkgIlFwJRlghLzqH0spNqEb01u7mJsxuqts25D9e0FVS5kEznrA23OiUdSQ23tVUbPLrSsX115zXmJIuyjU15lMxI6vfKifQ+zZHQfOKPhVaDa0PVg805K3BFQreGAx8LynzwhoEo1sw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bMfuwgk1; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=e5A/MddJa52pfah1h40BhIrXcp1n5UCSkbm1rGXHkaq0RW2r/EQE9Dcud5PcXcIrDdN0FUexvHseY/kanC9fMAvBdzEcMRkpbmvgqNvKp3jp8MvOAOR/4JjESqKal0WPr631+hMSs61qOhU2tEL3uuIPl4esvwNG6cK+2zy9DlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kgcdhO+R; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bMfuwgk1"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2dd9ec41bc4so6260615ad.2
-        for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 09:48:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kgcdhO+R"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-ccce967aa8dso490440a12.1
+        for <bpf@vger.kernel.org>; Sun, 11 Oct 2026 09:48:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791737322; x=1792342122; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791737325; x=1792342125; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=o1ZKitZJAuXF56oh9s5pwGuPKOuwLZ/iyg13fiOcScE=;
-        b=bMfuwgk1IOLQgEAyvnC3+Mm/7PGpv/fhIor+9WiTrrM3aiiLo3DGDeuiE9Tm0HzC94
-         Ss8lLWKkfgPBZ+Q6dzFp3FmWJUdi3MIjHtlVILFmWAvBLSHworTXUgA9KK7OTkF7hcVl
-         ge9Y5yvr3s1C4lIIPhSI0XqAWE+ArUQ60Ga7bFhnYbByXuU93Rj0T9xQNtLuBycQhk66
-         gDrTqDHG0jmwvcfpRPa/B/Nayp/hbL0O9POB535LTwvR2kdlONnbQSIsdTSjFWiJzf8A
-         vh9TfYxNvwE3Yye9zYrc+YnoLgTCbDTHL9r8knR1/tAsoKH2C2S5khI7mJc7mBKW4zTg
-         TUkQ==
+        bh=Bu1uFXy7MfZO5yHU2XvzJsdWGBGl7lshba6a4TyW1P0=;
+        b=kgcdhO+R3sIYGjzHF2jD6bWWIToh5JG8Q2oKYXYcuhZy93HF1/63+vmpz8Sp1yoIfh
+         YZM5PpagAPMB4ZAoea1j4lZEf5IVVqrAylh+9oh51YDrtvfbpgu9QvnM1YzRPaY1/UIv
+         LemMwf+uUJsj442GNsZIAGznwMhsSaE340+4kSsdff7jToQ8FE5TeFkv03HX5fDraBSM
+         NMTqrxhpwBdVm35xp6QXCJKq8vtXa9YbEJzYGQkwzpSbJaMu7pD6UCKWhq/OtdbK4NIv
+         Rl0cRHk2DUy4zhY4UHNRGw0iPb2lmZz0D7xC+BC7S5PjilPrz/KuKoi5n6rlrtYwoFJV
+         f+GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791737322; x=1792342122;
+        d=1e100.net; s=20260707; t=1791737325; x=1792342125;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=o1ZKitZJAuXF56oh9s5pwGuPKOuwLZ/iyg13fiOcScE=;
-        b=DvMeGJGZoCWX/xBRQGWaIjCRuKy3sVpSiSomwvgR7SCQJerG3oh7haixLMc4jOliBT
-         lr/4H+QTh7hWCrkKQ4X8zbZuF16LlBGq7lRuFPDKXu+7Y4na9I4JVEGN53j7tJV3bpKT
-         qYnPkUFk/nSY5f+mCEy4QfQQRUtp2NLb+qleU31kFRNxZVuKHw9N13wIQcOOc9dI6qNZ
-         Fhy1Jvt+eJtTe6LZmLS2ySxCKSf3Xr+xOY0GP2g6onPpzsf8eTPo7dpB/FxVyIohFPvl
-         oWg45IF6vCP1H7ixaLQrWJhe9p+WWUFmHvfIcTCoANTa5e/5Ud8m+/w0/TxcrMgS7A45
-         kWMQ==
-X-Gm-Message-State: AFq9FYIj+bH1XARCZHXlBef7AuZ7nYrapaqtTqlyYb/2fVSoiNaBsbtN
-	wypU1aXYJrND1WM9r+WPT0IV29Z96AL0IfBqsyK7vj8qUaW6lkHWydAXquJaDN19WhA=
-X-Gm-Gg: AYBFou05gXEFR3CJ2W6U9rtuNmOATxahjpxgVHesCHUL7FEwHxoUGiKCx/ih0ecTsLh
-	i5ISybyjehisEsdckwQH3Qa/1GWoG9uK6TgcMpeZiIdqd3CXmJRB6g4YT7P3joCVFvZ5a75sQAx
-	4AZFB1O5j8rKPi/OnbSyUiTrPOD+RxRiDvaHdj6Oa5tAzm3coBccvwIb5V3+DMN3pWDK6kHwYVz
-	kQotbygJJ82VE073UePEMlBJ9F0QeHz4suqGdK/ZRluXk/aJlgTBRopmtU6nq8ZoSTbl8ssbS77
-	9HlFiOplIRT4ib+4LQOJizWlVRt4zV9f4vmkByJDhwZPDc8LgugXZcyBt/Wwdzfb4+ClIq6+Udm
-	jnXLHKtc4tHE0xDje7nZlhF7ioclA3tCtcd7xtcYzfzmhyQMs4Me0wzZTjJdzJLh2cLtBv07oEK
-	rtCllYnSap47BueYQ/RYc7ec152PWEnG2z9Bi3Pnc4AHMeVspEAQDGo+E2GXXeS+DEUacE+F+gH
-	GZAGI9V2RX5CaJaMqXetmp2W3VryQCZws1T6+6gGWaYDjKVDm1qXGpr4PVHMNKUcUT+QN3g6P+A
-	uHIU6Ts0YeMH3x3nDilRReKtCX3eJwcEoiGz0CGNIbo=
-X-Received: by 2002:a17:903:3550:b0:2e5:cb9d:3207 with SMTP id d9443c01a7336-2e842805bcdmr62059765ad.1.1791737321844;
-        Sun, 11 Oct 2026 09:48:41 -0700 (PDT)
+        bh=Bu1uFXy7MfZO5yHU2XvzJsdWGBGl7lshba6a4TyW1P0=;
+        b=pDdv3wSyAIdRsn72NHzl5Svu4b/ri2J97i8BQXb/wN1wLebTFaNo5m89Hz59XQdxwG
+         Q+MSIepTz5DEd6yPtTylL62C5AGOQmXjmF654hbiJ7cMlyaTTAsGDUnjiNA+LNb8DDA+
+         ux/MGRb7+leSjLg3NwtxeZ+woSdH8EUCSxHdXSuzYzfNb/xuugFR5CHLFyZC3+mkRb3x
+         gpM5noTYjCm/4bTKjIrfdttHcA95otSA+RJ0P1sdt3UKfH6zjS5e6a3IRwtf5t8tK31u
+         UnAdtxLsPfK/JwYiKjSVLcnCITUrGihqNrVd/DswAORXKMpLP4mKyDGoQldaVMZFfNf9
+         /naA==
+X-Gm-Message-State: AFq9FYKAdS9+GizYI08Q0EJODtAfFQra3Rda5DtbrocebKHlTTX8iZwO
+	3m4ZZVtezuLhHg1wzg/YSe2nPSSj0fIwL4lHXhSg3OMgkdiBycwd8JG1p5hbjWnyXhY=
+X-Gm-Gg: AYBFou1PHK5JyjlEifJKyeiJJS6BSGQol5uTcjxHe+pQL9Ei+JxPBsxM1Aar5SKhW40
+	cLcVB+MpbMIQDMzi+rw3k3xX318+/bcnK38GZEnSN5Z1C6uLSgJ8Zl2FUCG8qCyC6Xao7Tg61Nj
+	14vk2NQys+N2TOimu4V+a7B7+YyepO9CF86oIpTzqxi74mKyNFn97DW8dNCHyXJXcwjzn5A541x
+	vP4CnuLqXmMa537JbN5eklMOddwXCK6FGYvu7rEs5WDi1Y6QQzR3P5ABV0FJV8WKkyciKrIzJlp
+	6Xy1430JGZNIJumgtooE4n52PlrsJK4vL6NxCu+5DpSKQmN22Wjn/zrJEQOPqxLb98LdiHoaz7n
+	lDRHATJe3qWia8GS9+BBshFpyLuFK5vdPzk8tJsDbddwMxshY+851exNrug9EAxSq6jmQoLr2S2
+	FJ1OzV2gYsTGBlJoE8PxRiZXqulZVqn+Wacb3gUwIMrOQHBv8Qjcw3os1tPz7uFZud87pDwH+IF
+	lGDAj4yLxF5TrecGfq7GMKEJjtZpOI2bsux+Fj5rFp1BuZk6Kw5GBoFmsS8GKaLwN6mdTJHdGnk
+	Bmjpogcbr9qp0Rhz4aTF0sm7TuhcCVTyJha/WhnDYGo=
+X-Received: by 2002:a17:90b:2ec3:b0:3ab:365f:ebe2 with SMTP id 98e67ed59e1d1-3ab3a9553c0mr6434709a91.32.1791737324680;
+        Sun, 11 Oct 2026 09:48:44 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e8421ae999sm33580835ad.31.2026.10.11.09.48.41
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed040dsm15642642a91.6.2026.10.11.09.48.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Oct 2026 09:48:41 -0700 (PDT)
+        Sun, 11 Oct 2026 09:48:44 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 1/2] bpf: Reject BTF ids with the same address in tracing_multi link
-Date: Sun, 11 Oct 2026 16:48:35 +0000
-Message-ID: <20261011164836.2233874-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Test tracing_multi link with BTF ids of the same address
+Date: Sun, 11 Oct 2026 16:48:36 +0000
+Message-ID: <20261011164836.2233874-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261011164836.2233874-1-alexei.starovoitov@gmail.com>
 References: <20261011164836.2233874-1-alexei.starovoitov@gmail.com>
@@ -81,101 +81,151 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-check_dup_ids() rejects equal BTF ids, but different ids can resolve to
-the same address. Aliases:
+The stub of a syscall without arguments is an alias of its __do_sys_
+function. Find such pair where both have BTF ids. Which ones do depends
+on the compiler, so don't hard code the names. Check that each id can be
+attached and that the attach of both in one link fails with -EINVAL.
 
-  ffffffff8161b6b0 t __do_sys_munlockall
-  ffffffff8161b6b0 T __ia32_sys_munlockall
-  ffffffff8161b6b0 T __x64_sys_munlockall
+With CONFIG_DEBUG_INFO_BTF_INLINE vmlinux BTF has 26 names with more
+than one BTF_KIND_FUNC:
 
-or several BTF_KIND_FUNC with the same name that vmlinux BTF has when
-CONFIG_DEBUG_INFO_BTF_INLINE is set.
+  [117318] FUNC 'hash' type_id=76715 linkage=static
+  [117319] FUNC 'hash' type_id=76722 linkage=static
+  [117320] FUNC 'hash' type_id=76789 linkage=static
 
-Each id gets its own trampoline and register_fentry_multi() adds them to
-data->reg with the same ip. update_ftrace_direct_add() checks that new
-entries are not in direct_functions, but doesn't compare them with each
-other, so the attach succeeds. At detach update_ftrace_direct_del() sees
-that 'direct' of one of the entries doesn't match and returns -EINVAL:
+while there is one 'hash' in kallsyms. tracing_multi_bench_attach skips
+the names that are not unique in kallsyms only and passes all three ids
+to the kernel. Take the first id of the name.
 
-  WARNING: kernel/bpf/trampoline.c:1845 at bpf_trampoline_multi_detach+0x24c/0x280
-  Call Trace:
-   bpf_link_free+0x51/0x110
-   bpf_link_release+0x18/0x20
-   __fput+0x103/0x2d0
-   __x64_sys_close+0x3d/0x80
-
-The images are freed anyway, while ftrace still calls them:
-
-  Oops: int3: 0000 [#1] SMP NOPTI
-  RIP: 0010:0xffffffffc042b201
-  Call Trace:
-   ? __audit_syscall_exit+0x9/0x100
-   ? do_syscall_64+0x5ab/0x5e0
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
-  Kernel panic - not syncing: Fatal exception in interrupt
-
-Return -EINVAL from register_fentry_multi() when ip is already in
-data->reg. When such ids are attached via different links the second
-attach already fails with -EINVAL in update_ftrace_direct_add().
-
-Move the declaration of ftrace_lookup_ip() to include/linux/ftrace.h.
-
-The lookup adds 60 msec to the attach of 64480 functions in
-tracing_multi_bench_attach: 1.34 -> 1.40 sec.
-
-Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/ftrace.h  | 1 +
- kernel/bpf/trampoline.c | 8 ++++++++
- kernel/trace/trace.h    | 3 ---
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/tracing_multi.c  | 99 +++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index bd76a16a63af..b041d9142d2b 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -416,6 +416,7 @@ void free_ftrace_hash(struct ftrace_hash *hash);
- struct ftrace_func_entry *add_ftrace_hash_entry_direct(struct ftrace_hash *hash,
- 						       unsigned long ip, unsigned long direct);
- void add_ftrace_hash_entry(struct ftrace_hash *hash, struct ftrace_func_entry *entry);
-+struct ftrace_func_entry *ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip);
- void ftrace_hash_remove(struct ftrace_hash *hash);
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+index 0aa9532a05cf..cc727011f3a2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+@@ -662,6 +662,97 @@ static void test_attach_api_fails(void)
+ 	free(ids2);
+ }
  
- /* The hash used to know what functions callbacks trace */
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index fc94d6062109..24edb59238f3 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -1638,6 +1638,14 @@ static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_ima
- 	unsigned long ip = ftrace_location(tr->ip);
- 	struct bpf_tracing_multi_data *data = ptr;
- 
-+	/*
-+	 * Different BTF ids get different trampolines, but they can still
-+	 * resolve to the same address (aliases, functions of the same name).
-+	 * There's only one call site to attach to.
-+	 */
-+	if (ftrace_lookup_ip(data->reg, ip))
-+		return -EINVAL;
++/*
++ * Find two BTF ids that resolve to the same address. The stub of a syscall
++ * without arguments is an alias of its __do_sys_ function.
++ */
++static bool get_same_addr_ids(__u32 *ids)
++{
++	const char *prefix = "__x64_sys_";
++	__u32 nr, type_id;
++	bool found = false;
++	struct btf *btf;
++	char alias[128];
 +
- 	if (bpf_trampoline_use_jmp(tr->flags))
- 		addr = ftrace_jmp_set(addr);
- 
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 3749485a7d85..9044f03fe2d9 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1006,9 +1006,6 @@ struct ftrace_hash {
- 	struct rcu_head		rcu;
- };
- 
--struct ftrace_func_entry *
--ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip);
--
- static __always_inline bool ftrace_hash_empty(struct ftrace_hash *hash)
++	btf = btf__load_vmlinux_btf();
++	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
++		return false;
++
++	nr = btf__type_cnt(btf);
++	for (type_id = 1; type_id < nr && !found; type_id++) {
++		const struct btf_type *type = btf__type_by_id(btf, type_id);
++		const char *str;
++		long addr;
++		__s32 id;
++
++		if (!btf_is_func(type))
++			continue;
++
++		str = btf__name_by_offset(btf, type->name_off);
++		if (!str || strncmp(str, prefix, strlen(prefix)))
++			continue;
++
++		snprintf(alias, sizeof(alias), "__do_sys_%s", str + strlen(prefix));
++		id = btf__find_by_name_kind(btf, alias, BTF_KIND_FUNC);
++		if (id <= 0)
++			continue;
++
++		addr = ksym_get_addr(str);
++		if (!addr || addr != ksym_get_addr(alias))
++			continue;
++
++		ids[0] = type_id;
++		ids[1] = id;
++		found = true;
++	}
++
++	btf__free(btf);
++	return found;
++}
++
++static void test_attach_same_addr(void)
++{
++	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
++	struct tracing_multi_fail *skel;
++	struct bpf_link *link;
++	__u32 ids[2];
++	int i;
++
++	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
++		return;
++
++	if (!get_same_addr_ids(ids)) {
++		test__skip();
++		return;
++	}
++
++	skel = tracing_multi_fail__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "tracing_multi_fail__open_and_load"))
++		return;
++
++	/* Each id attaches fine on its own.. */
++	for (i = 0; i < 2; i++) {
++		opts.ids = &ids[i];
++		opts.cnt = 1;
++
++		link = bpf_program__attach_tracing_multi(skel->progs.test_fentry, NULL, &opts);
++		if (!ASSERT_OK_PTR(link, "attach_single"))
++			goto cleanup;
++		bpf_link__destroy(link);
++	}
++
++	/* ..but there's only one call site, so not both of them. */
++	opts.ids = ids;
++	opts.cnt = 2;
++
++	link = bpf_program__attach_tracing_multi(skel->progs.test_fentry, NULL, &opts);
++	if (!ASSERT_EQ(libbpf_get_error(link), -EINVAL, "attach_same_addr"))
++		bpf_link__destroy(link);
++
++cleanup:
++	tracing_multi_fail__destroy(skel);
++}
++
+ void serial_test_tracing_multi_bench_attach(void)
  {
- 	return !hash || !(hash->count || (hash->flags & FTRACE_HASH_FL_MOD));
+ 	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+@@ -748,6 +839,12 @@ void serial_test_tracing_multi_bench_attach(void)
+ 		if (!btf_type_is_traceable_func(btf, type))
+ 			continue;
+ 
++		/*
++		 * BTF can have more functions of the same name and they all
++		 * resolve to the same address, take just the first one.
++		 */
++		tdelete(&str, &root, compare);
++
+ 		err = libbpf_ensure_mem((void **) &ids, &cap, sizeof(*ids), cnt + 1);
+ 		if (err)
+ 			goto cleanup;
+@@ -1023,6 +1120,8 @@ void test_tracing_multi_test(void)
+ 		test_session();
+ 	if (test__start_subtest("attach_api_fails"))
+ 		test_attach_api_fails();
++	if (test__start_subtest("attach_same_addr"))
++		test_attach_same_addr();
+ 	RUN_TESTS(tracing_multi_verifier);
+ 	if (test__start_subtest("fentry_after_multi"))
+ 		test_fentry_after_multi();
 -- 
 2.55.0
 
