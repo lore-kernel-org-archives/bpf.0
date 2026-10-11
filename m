@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3276F25B0AA;
-	Sun, 11 Oct 2026 03:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755643BFE2B;
+	Sun, 11 Oct 2026 03:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791690677; cv=none; b=pKfoAkR/JBU3BLVyZS3pGX6JW7Fm0+PnOpvY+aXVrjy267al5ZMcNIJHaPl0FAT0t/8QDURYxzdQIR5COJYhwLkkdwLqNpljrg9bB7wpNUy03V/RiAeP12Vz4Ux5gpD+4k63TV79pa9w1Ajf8kc8pUt3oCayBzQpGylxaEc3dFw=
+	t=1791690679; cv=none; b=dCmjjIgrjdOqEQ4O8qKY/6E6b1C6q0UD35O4i+43B7snO6dFt/Pu9PlJbnUz9Zk5GvwJgCHbyVHPia+nnRaABBCz7vktakp5BNsNkNsHuHlHjYj7pSix0p/ZrD7BpbVczudzqgwoJUlT8PJ3cdlPv+wzUjeVA8TG8sh0tmj/vhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791690677; c=relaxed/simple;
-	bh=X5Ixg3fxEMwvNPAQRx75yKDpZg12oGnkj05165U+2Rg=;
+	s=arc-20240116; t=1791690679; c=relaxed/simple;
+	bh=ZvqOF+v/s082r9S8506nNWLLgfVXF4V04WTvyqOsRDE=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NHKHRudAT2igXJyESYgcazQEuwJENQfdyLFAEknShox2BSA1O3UPEBsIMFhKFtRaPWi1LqvScNFcRlikyXUGEP0KrlT+OzvvgDlDR3AoGf2EP4Cf21SOanGOYp23aFJ7dIUoKsC31FGjnEa7HOC5QNflhX5DasdNHCvTWnxDmMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gKpMiS/0; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=qUeuGOydKgyWUQYb6XWtmY3vL8jBxVJVG4WOFmeb6wn75dy1gRiRscMPdW740HjeaJ1PQc3VhuQ16J5kHGAlK1QTKJwTGOFXoZJX0pL49000eNMHRNzh22FSk8y3RDnOPudG4+zlBrxeWYElVqJOY3BsHjgQvs4/1TQZOoP1CyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b510PXK8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gKpMiS/0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EECF1F000FF;
-	Sun, 11 Oct 2026 03:51:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b510PXK8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D86C1F00893;
+	Sun, 11 Oct 2026 03:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791690675;
-	bh=ajuPNc6AYdRFyH5XN7//XCC/5UxqIs3E6g54pV9bOBY=;
+	s=k20260515; t=1791690677;
+	bh=BxIG9RGXtPeoCRfraWyVT7uMTEzIpuY6URyi2+XVd/I=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=gKpMiS/0srXIO2nTPd+iwB3R2xkU2gjbOEnc+D3XsQPRZG0hxFQEHt2ikVKbH97b5
-	 rA4gMGBE3kFfp+IJTZ0gSX7usJ3hGyefrQvMXLFya/bzgRwwFgY8lKn7wFVSNqLqlh
-	 rNsBRv+8mgrCXz6k/X8oUMmxAoD45aaPw/gU9rjoooJ7H6xbmOoHYZQZlP3IMCnNEH
-	 8WVtyqbZqf2v677nRpz3HOtdLrKiduOjTrttgJq6bjjvry7DilADIBqhPK60ZtRysc
-	 UO3BKMnN12BgbnS5yH9QwuAzm2W1YB53h/2i2+E4Ls4EZ28CiN2fFnWot86IuJkj2i
-	 /KcBUY3JnIxnA==
-Subject: Re: [PATCH net-next v3 1/2] net: netmem: document netmem and memory
- provider design in comments
+	b=b510PXK8t7+e5mIzuaKO7Ly8zesK021UNW57R1CeMEbqp4pAfZSvRQdG/oeWkRkbo
+	 Yih1wVc9W/Y2hVbWXTmkH4NNNrcbHpWBKNb8Fv/qLnFh4z9L+yhpG9Ddej1u2vw+6u
+	 JIKlSFC+ZYTOM5slXJXobtDAV6n0Qaslt0gDG1wqQmstX/mrQlmEgODLRyiwntGT39
+	 ePaIUTT8i3lBKwAXtVRI7UKJttIOEWTQYriEbCVDUGMs+/zKD6us5NJoIzzQ48TygH
+	 o4bLuzptQZQM6UQktHNo1fccCxik0jbhySsOzqBBaox8RiGZGX3kSxHObIsTuHw2vw
+	 oJ5ytWqxcGNgg==
+Subject: Re: [PATCH net-next v3 2/2] docs: netmem: document netmem and memory
+ provider design principles
 From: netdev-bot+sashiko@kernel.org
 To: almasrymina@google.com
 Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -37,10 +37,10 @@ Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
  hawk@kernel.org, ilias.apalodimas@linaro.org, ast@kernel.org,
  daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
  lrizzo@google.com, bjorn@kernel.org, asml.silence@gmail.com
-Date: Sun, 11 Oct 2026 03:51:13 +0000
-Message-ID: <179169067381.434549.11136857943175735340@kernel.org>
-In-Reply-To: <20261010033630.1171692-2-almasrymina@google.com>
-References: <20261010033630.1171692-2-almasrymina@google.com>
+Date: Sun, 11 Oct 2026 03:51:15 +0000
+Message-ID: <179169067595.434549.16209693488880004107@kernel.org>
+In-Reply-To: <20261010033630.1171692-3-almasrymina@google.com>
+References: <20261010033630.1171692-3-almasrymina@google.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -51,10 +51,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -62,128 +62,156 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The patch adds a comment in skb_try_coalesce()
-  (net/core/skbuff.c, lines 6213-6216).
-- [Low] The new skb_frag_t comment (include/linux/skbuff.h:361-363) gives
-  'the same io_uring area' as an example of 'the same memory provider…
+- [Medium] Item 5 of the new Design Principles section in
+  Documentation/networking/netmem.rst says every frag in an skb must be…
+- [Low] Items 2 and 5 of the new Design Principles section contradict
+  each other once a page-backed memory provider exists.
+- [Low] Item 3 of netmem.rst, and the matching net_iov comment in
+  include/net/netmem.h added by the commit "net: netmem: document netmem…
 
 --
 
-net: netmem: document netmem and memory provider design in comments
+docs: netmem: document netmem and memory provider design principles
 
-This commit adds comments describing the design principles for netmem,
-memory providers, page_pool and skb frags. It documents that all frags in
-an skb must be page-backed or come from the same memory provider instance.
-It also adds a comment to that effect in skb_try_coalesce().
+This commit adds a Design Principles section to
+Documentation/networking/netmem.rst. The section covers the netmem_ref
+abstraction, the rule against downcasting, decoupling memory providers
+from net_iov and net_iov from unreadability, and delegating type-specific
+logic to the lower layers. It also adds a rule against mixing skb fragment
+memory sources.
 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 27ec1e38c8283..af1cbc2799b77 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -358,6 +358,12 @@ struct sk_buff;
->   */
->  #define GSO_BY_FRAGS	0xFFFF
->  
-> +/* All frags in an skb must either all be struct page-backed or all belong to
-> + * the same memory provider instance (e.g. the same devmem binding or io_uring
-> + * area). Mixing page and memory-provider frags, or mixing frags from different
-
-[Severity: Low]
-Is "io_uring area" the right example here? For io_uring zcrx, the provider
-instance is the ifq, not the area:
-
-io_uring/zcrx.c:io_pp_to_ifq() {
-	return pp->mp_priv;
-}
-
-io_zcrx_recv_frag() also checks identity per ifq:
-
-	if (!pp || pp->mp_ops != &io_uring_pp_zc_ops || io_pp_to_ifq(pp) != ifq)
-		return -EFAULT;
-
-One ifq can own several areas. io_zcrx_append_area() grows ifq->areas[] up
-to ZCRX_MAX_AREAS, and userspace can add areas to an existing ifq with
-ZCRX_CTRL_ADD_AREA. Frags from two areas of the same ifq share one provider
-instance and one page_pool, and nothing stops them from sharing an skb.
-
-Read literally, the example says those frags must not share an skb. Would
-"the same io_uring zcrx ifq" be more accurate?
-
-The later commit "docs: netmem: document netmem and memory provider design
-principles" repeats this example in Documentation/networking/netmem.rst.
-
-> + * memory providers within a single skb (including via coalescing), is not
-> + * allowed.
-> + */
->  typedef struct skb_frag {
->  	netmem_ref netmem;
->  	unsigned int len;
+> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
+> index 217869d1108dd..6871dcdd700cc 100644
+> --- a/Documentation/networking/netmem.rst
+> +++ b/Documentation/networking/netmem.rst
+> @@ -19,6 +19,59 @@ Benefits of Netmem :
 
 [ ... ]
 
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index d56f4f0102f75..69d3d27e29d97 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -6210,6 +6210,10 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
->  	if (to->pp_recycle != from->pp_recycle)
->  		return false;
->  
-> +	/* All frags in an skb must either all be struct page-backed or all
-> +	 * belong to the same memory provider instance; do not coalesce skbs
-> +	 * that would mix them.
-> +	 */
->  	if (skb_frags_readable(from) != skb_frags_readable(to))
->  		return false;
+> +3. **Decouple net_iov from unreadability**: ``struct net_iov`` is flexible and
+> +   has no inherent restrictions; it may represent either CPU-readable or
+> +   unreadable memory. Today, in-tree ``net_iov`` implementations are unreadable
+> +   by the CPU (``netmem_address()`` returns ``NULL``) and some existing code
+> +   still reflects that limitation, but new code must not assume ``net_iov``
+> +   implies unreadable memory (check readability via ``netmem_address()`` or
+> +   ``skb_frags_readable()`` instead) and should, as much as possible, generalize
+> +   existing limitations to match the design principles.
 
-[Severity: Medium]
-Does this check enforce the rule stated in the comment above it?
-skb_frags_readable() only looks at a single bit:
+[Severity: Low]
+Can netmem_address() reliably test readability for page-backed netmem?
+For pages, it ends up calling page_address():
 
-include/linux/skbuff.h:skb_frags_readable() {
-	return !skb->unreadable;
+include/net/netmem.h:netmem_address() {
+	if (netmem_is_net_iov(netmem))
+		return NULL;
+
+	return __netmem_address(netmem);
 }
 
-Nothing in skb_try_coalesce() compares pp->mp_priv, the devmem binding or
-the zcrx ifq of to and from.
+With CONFIG_HIGHMEM, page_address() in mm/highmem.c returns NULL for a
+highmem page that has no permanent mapping. The CPU can still read that
+page through kmap_local_page(), which item 1 uses as its example.
 
-Two unreadable skbs from different provider instances would pass this
-check, and their frag arrays would be memcpy'd together. For example, two
-devmem bindings, or a devmem binding and a zcrx ifq, could reach one TCP
-socket through different RX queues via
-tcp_try_coalesce()->skb_try_coalesce().
+Highmem page frags are normal in skbs on 32-bit kernels. They come from
+sendfile/splice or from MSG_ZEROCOPY user pages.
 
-Also, when an unreadable from skb has a non-zero, stealable linear head,
-the skb_headlen(from) != 0 branch adds the head page as a page frag next to
-the net_iov frags:
+Could new code that follows this advice and treats a NULL return from
+netmem_address() as "unreadable" wrongly reject or skip valid highmem page
+frags?
 
-	page = virt_to_head_page(from->head);
-	...
-	skb_fill_page_desc(to, to_shinfo->nr_frags,
-			   page, offset, skb_headlen(from));
+The same advice appears in the struct net_iov comment in
+include/net/netmem.h. That comment was added by "net: netmem: document
+netmem and memory provider design in comments".
 
-skb_gro_receive() in net/core/gro.c is another coalescing path. It checks
-only pp_recycle and skb_zcopy, with no readability or provider check.
+Would it be more accurate to say that a NULL netmem_address() means "no
+permanent kernel mapping"? Another option is to point only to
+skb_frags_readable() or to a dedicated netmem readability helper.
 
-Existing consumers already handle mixed skbs one frag at a time:
-io_zcrx_recv_frag() rejects frags from another ifq, and
-tcp_recvmsg_dmabuf() re-checks each frag with skb_frag_net_iov().
+[ ... ]
 
-The same patch also says providers may supply page-backed netmems and that
-net_iovs may be readable. Under those principles, readability alone can't
-tell page frags from provider frags.
+> +5. **Do not mix skb fragment memory sources**: All ``frags[]`` in an
+> +   ``sk_buff`` must either be ``struct page``-backed or belong to the same
+> +   memory provider instance (for example, the same ``devmem`` binding or
+> +   ``io_uring`` area). Mixing ``struct page`` and memory-provider fragments,
+> +   or mixing fragments from different memory providers within a single
+> +   ``sk_buff``, is not allowed (including when coalescing ``sk_buff``\ s).
 
-The new skb_frag_t comment and the commit message state this as a hard
-invariant ("is not allowed", "including via coalescing"). Could the wording
-describe what the code currently guarantees instead? Otherwise the per-frag
-checks above might later be removed because of it.
+[Severity: Medium]
+Is this invariant enforced anywhere today? Items 2 and 3 note that some
+existing code does not follow them yet, but this item has no such note.
 
-Or should skb_try_coalesce() and skb_gro_receive() actually compare
-provider identity?
+The companion commit "net: netmem: document netmem and memory provider
+design in comments" adds this comment in skb_try_coalesce():
 
-The later commit "docs: netmem: document netmem and memory provider design
-principles" repeats the same claim in Documentation/networking/netmem.rst.
-The comment here is not corrected anywhere in the series.
+net/core/skbuff.c:skb_try_coalesce() {
+    ...
+	/* All frags in an skb must either all be struct page-backed or all
+	 * belong to the same memory provider instance; do not coalesce skbs
+	 * that would mix them.
+	 */
+	if (skb_frags_readable(from) != skb_frags_readable(to))
+		return false;
+    ...
+}
+
+skb_frags_readable() only returns !skb->unreadable. Two unreadable skbs
+can carry net_iovs from different devmem bindings, or from a devmem
+binding and an io_uring zcrx area. Both would pass this check, and their
+frags would then be merged.
+
+Other places look similar:
+
+- tcp_skb_can_collapse() in include/net/tcp.h compares only readability.
+- skb_gro_receive() in net/core/gro.c checks pp_recycle and skb_zcopy(),
+  but not readability or provider identity.
+
+On TX, tcp_sendmsg_locked() looks up the binding again on every sendmsg
+call with net_devmem_get_binding(sk, sockc.dmabuf_id). Before it appends
+to the tail skb, it only checks:
+
+	if (copy <= 0 || !tcp_skb_can_collapse_to(skb) ||
+	    unlikely(skb_frags_readable(skb) != !binding)) {
+
+msg_zerocopy_realloc() then extends the tail skb's uarg. Because of that,
+the -EEXIST check in skb_zerocopy_iter_stream() never triggers.
+
+bind-tx does not require privileges. Could a user bind two dmabufs to one
+netdev, then send two back-to-back MSG_ZEROCOPY sendmsg calls with
+different dmabuf_ids? That would leave net_iovs from two bindings in one
+skb.
+
+validate_xmit_unreadable_skb() in net/core/dev.c already relies on this
+invariant, because it only checks frags[0]:
+
+	niov = netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
+	if (net_is_devmem_iov(niov) &&
+	    READ_ONCE(net_devmem_iov_binding(niov)->dev) != dev)
+		goto out_free;
+
+Should these places get a provider-identity check? Otherwise, could this
+item and the skb_try_coalesce() comment say that only readability is
+enforced today, the way items 2 and 3 describe their own limitations?
+
+[Severity: Low]
+Do items 2 and 5 conflict once a page-backed memory provider exists?
+
+Item 2 says "a memory provider that returns struct page-backed
+netmem_refs to upper layers is allowed". A frag from such a provider
+fits both categories in the first sentence here: "struct page-backed"
+and "same memory provider instance". Read that way, it could share an
+skb with ordinary page frags, or with page frags from a different
+page-backed provider. skb_try_coalesce() would allow that today.
+
+The second sentence, however, forbids "Mixing struct page and
+memory-provider fragments, or mixing fragments from different memory
+providers".
+
+The new skb_frag_t comment in include/linux/skbuff.h uses the same
+wording.
+
+Could the two categories be stated so they don't overlap? For example,
+"non-provider struct pages" versus "frags from a single provider
+instance, whatever their backing".
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261010033630.1171692-1-almasrymina%40google.com
