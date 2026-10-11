@@ -1,99 +1,213 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2158312831;
-	Sun, 11 Oct 2026 14:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B5A39CD1C;
+	Sun, 11 Oct 2026 15:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791729615; cv=none; b=cYucM2bwQnmAUWMei9H3wsTl0JBM15OQ4HeAM53K1dCfqn7OiofYhvP/m0S8iMc5+Wrq3eWvYizIoNTYhaPYA4JiW+UH38j0Rvsz9aJmXwsd7AmZkjOerhx4N3129qmLv+bYtb4Q5hZnCvJx4OqLkegfHRYu1uupEM8I7sCVqU0=
+	t=1791731408; cv=none; b=hdlEW0IpPOPTuYZMPLVeqqYddmfHLJ68PUI14v6BdqVdeDP9HZ5Mqff+kmDPwZxx2V2Ukh1DADHTf7Omzne9jH+F84UW3T3SfWlT/wqc9ZK6AU5db7qVLGlWtq4V9HScpSb6uzlEDJVP6f8qO4/O4F0zdpE/NgYzMA0ZL2RvmoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791729615; c=relaxed/simple;
-	bh=Z1OVY4OUF8Of/CX3we9KSbqm9WZQzj8SosoxBGN/H2E=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fKTogI8Xg0J3l30hd3PUAj4MArbomxENlSZBYzhPNo0hMNeC24dFSENjDSz7Ck6cNUTJ99YOdyaGYDRXdXyQOfbetyKe3r0hxyrdX9PweFpr8HnYV2wCis3LaQNqP/4TlXQS19ccqaChoALp1I8YtBsTecPMu+TOSX6x5GWcmpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I2XEARt2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791731408; c=relaxed/simple;
+	bh=Ie7oaV1g4DpCKkWn8CuiYPNNi1a4U341Yz+I8WZTpjQ=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uGZ09HeZS/KKbgrg7+MBMVLWNlXM1Wwda4+9e7e6bx4O/7MlgKcTHrorABSMbhZcDxzezE7sIulGEkGLljH8li/rNgsZzex7eSBm369g709IeAYpIsbH7mO53QwCIzxIbOn+xD5I9qoEX/YXaimxg4Gb3W+t6JgLc1qw7h/eogE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmnX3AtI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I2XEARt2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD801F0089B;
-	Sun, 11 Oct 2026 14:40:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmnX3AtI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F6F41F0089B;
+	Sun, 11 Oct 2026 15:10:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791729614;
-	bh=ktsNKPGL6JlMq864QckXCxNTZWD3FqCQk4ps5BpQc+8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=I2XEARt23cZ6dV8ATDqAiY0sdO5b8DFiYScBgJuc92CPdxtUpI8Ov74qJ96Oh3NyG
-	 RxXS4Xmw5mlkMJCDmSKNivBsW5e5eCZ+j6bgfRw45zSW43Cegq1tksRYBu4s1bW6WA
-	 AJq+Q41q08y+nb8WyE9HI5WaHxkgs8gYlLm7Mi7Gp3E294xN7cH0zzUkZApBklaobQ
-	 MPzWDmZ8dqDxKaNDzeqSKHi17wfgBUCVj+Pyxjc346l6rYqFg7pUftZzR9Il9UD2c/
-	 YVv0tfdRdUbtj8o+Bp6cwyT18CZiFLNnYiW4CkVVjlFFAANni4IEgz9VX8elM82EU8
-	 7i61A1wSTOopw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B432938119C4;
-	Sun, 11 Oct 2026 14:40:14 +0000 (UTC)
+	s=k20260515; t=1791731406;
+	bh=fie1+6L/GTg9gjNOky/N34SwpRXzg59gsiBRdtWg8u4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=jmnX3AtIE6erXrs7B0u1i8HQDXO7hwldHM5gvqNVudpRMqFOjVceEv78xukHzT3aZ
+	 M1pC8O3H+8AFTgVIwPmrxZv2mQq6dFG7nCD0sVkRV5A2gTHc+gIL6aQvVq0z0ExRCG
+	 +V2PhGSOj2nlX3jgbSZT0jThqHoA3PTLvQPJaVDpiM4H4AANAh4Gf9pIr2RbZcMVtE
+	 ZaUWiqLfHsgmgMwld9woGWlOPx+rofJxpqYVkNOKEzvb+MDY3iw3GG9tyqofgWgiwl
+	 TFq8iXWgfKZf7+FDhUbUWWcrkxqCfa992xoU+AwVCFSY7k16Sbr/xK3fUYRDOQZTPa
+	 11eIjHcCDNUVg==
+Subject:
+ Re: [PATCH net-next v3 1/2] tls: annotate lockless access to sk->sk_err
+From: netdev-bot+sashiko@kernel.org
+To: quanyeyang@proton.me
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ jakub@cloudflare.com, jiayuan.chen@linux.dev, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Date: Sun, 11 Oct 2026 15:10:05 +0000
+Message-ID: <179173140561.434549.1271106969659357254@kernel.org>
+In-Reply-To: <20261010-tls-fix-sk-kcsan-err-v3-1-e28aadeb31ad@proton.me>
+References: <20261010-tls-fix-sk-kcsan-err-v3-1-e28aadeb31ad@proton.me>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 bpf-next 0/7] kbuild, bpf: Support inline info in BTF
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179172961326.2072230.906820075160340410.git-patchwork-notify@kernel.org>
-Date: Sun, 11 Oct 2026 14:40:13 +0000
-References: <20261009112324.1442319-1-alan.maguire@oracle.com>
-In-Reply-To: <20261009112324.1442319-1-alan.maguire@oracle.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, jolsa@kernel.org, ihor.solodrai@linux.dev,
- yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
- martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
- mcgrof@kernel.org, petr.pavlu@suse.com, tj@kernel.org, kees@kernel.org,
- nathan@kernel.org, arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
- atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org,
- arnaldo.melo@gmail.com, bpf@vger.kernel.org
 
-Hello:
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Low priority / nit picks for your consideration:
 
-On Fri,  9 Oct 2026 12:23:17 +0100 you wrote:
-> If CONFIG_DEBUG_INFO_BTF_INLINE=y|m, add the "inline" BTF feature
-> and encode inline site info in BTF alongside standard BTF data.
-> resolve_btfids will then partition into non- and inline-related
-> info and split BTF will be used to store inline info in a
-> .BTF.inline section in vmlinux and modules.  For
-> CONFIG_DEBUG_INFO_BTF=m, vmlinux inline info will be stored
-> in btf_vmlinux_inline.ko and will be loaded on-demand if used
-> via /sys/kernel/btf/vmlinux.inline.  A .BTF.inline.link section
-> in vmlinux stores the module name, the SHA of the BTF and the
-> size so that even without loading the kernel can size the
-> sysfs representation correctly.  This approach is based on [1]
-> and the .BTF.inline.link section is modeled on .GNU_debuglink.
-> 
-> [...]
+- [Low] The commit body describes a user-visible bug: tls_rx_rec_wait()
+  "can return 0 after another thread consumes the error".
 
-Here is the summary with links:
-  - [v4,bpf-next,1/7] resolve_btfids: Build separate main and inline BTF objects
-    https://git.kernel.org/bpf/bpf-next/c/cf91a7db92c6
-  - [v4,bpf-next,2/7] resolve_btfids: Populate BTF link section
-    https://git.kernel.org/bpf/bpf-next/c/aac67645215d
-  - [v4,bpf-next,3/7] kbuild, btf: Expose vmlinux inline BTF through sysfs
-    https://git.kernel.org/bpf/bpf-next/c/672981f4aec1
-  - [v4,bpf-next,4/7] btf: Preserve string relocation maps for split BTF
-    https://git.kernel.org/bpf/bpf-next/c/5876080366ae
-  - [v4,bpf-next,5/7] btf: Relocate and expose module inline BTF
-    https://git.kernel.org/bpf/bpf-next/c/42d7153fcb44
-  - [v4,bpf-next,6/7] selftests/bpf: Test BTF sysfs inline representations
-    https://git.kernel.org/bpf/bpf-next/c/d0de4dc51247
-  - [v4,bpf-next,7/7] selftests/bpf: Add a test verifying inline information
-    https://git.kernel.org/bpf/bpf-next/c/400f0881c912
+Pre-existing issues:
+- [Medium] This problem was not introduced by this patch, but the patch
+  edits the line involved.
 
-You are awesome, thank you!
+--
+
+tls: annotate lockless access to sk->sk_err
+
+In the kTLS TX paths, this patch replaces repeated unmarked loads of
+sk->sk_err with a single READ_ONCE() snapshot. On the no-data path of
+tls_rx_rec_wait(), it drops the "if (sk->sk_err)" pre-check and calls
+sock_error() just once, so another thread that consumes sk_err can no
+longer turn the error into a 0 return.
+
+Link: https://lore.kernel.org/netdev/3d9d442f-f168-43da-87b0-010ad5a78365@redhat.com/
+
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 312e51270f293..a2be1283ca930 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+
+[ ... ]
+
+> @@ -704,10 +707,14 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+>  	int err;
+>  
+>  	err = tls_push_record(sk, flags, record_type);
+> -	if (err && err != -EINPROGRESS && sk->sk_err == EBADMSG) {
+> -		*copied -= sk_msg_free(sk, msg);
+> -		tls_free_open_rec(sk);
+> -		err = -sk->sk_err;
+> +	if (err && err != -EINPROGRESS) {
+> +		int skerr = READ_ONCE(sk->sk_err);
+> +
+> +		if (skerr == EBADMSG) {
+> +			*copied -= sk_msg_free(sk, msg);
+> +			tls_free_open_rec(sk);
+> +			err = -skerr;
+> +		}
+>  	}
+>  	return err;
+>  }
+
+[Severity: Medium]
+This is a pre-existing issue and was not introduced by this patch, but the
+patch touches this line. Can the EBADMSG test in bpf_exec_tx_verdict() miss
+a synchronous encryption failure?
+
+tls_push_record() reports the failure by writing sk_err, then returns the
+raw crypto rc:
+
+net/tls/tls_sw.c:tls_push_record() {
+    ...
+	rc = tls_do_encryption(sk, tls_ctx, ctx, req,
+			       msg_pl->sg.size + prot->tail_size, i);
+	if (rc < 0) {
+		if (rc != -EINPROGRESS)
+			tls_err_abort(sk, -EBADMSG);
+		ctx->async_capable = 1;
+		return rc;
+	}
+    ...
+}
+
+bpf_exec_tx_verdict() then reads sk_err back to decide whether to clean up.
+Some writers that don't hold lock_sock can change sk_err between
+tls_err_abort() and the READ_ONCE() here:
+
+  getsockopt(SO_ERROR): sk_getsockopt()->sock_error() does
+  xchg(&sk->sk_err, 0)
+
+  do_recvmmsg() or MSG_ERRQUEUE, via sock_dequeue_err_skb()
+
+  tls_encrypt_done() for an earlier async record, which can overwrite
+  sk_err with its own error via tls_err_abort()
+
+If one of these lands in the window, sk_msg_free() and tls_free_open_rec()
+are skipped. *copied then still counts bytes that were never encrypted or
+sent.
+
+ctx->open_rec also keeps pointing at the failed record. On this error path
+tls_do_encryption() has already done list_del(&rec->list) and returned
+without clearing ctx->open_rec.
+
+If sk_err was cleared, the next sendmsg passes the loop-top sk_err check in
+tls_sw_sendmsg_locked() and reuses that record. Its scatterlists were
+already end-marked and chained by the earlier tls_push_record().
+
+The single READ_ONCE() snapshot removes the old double load, but it doesn't
+close this window between the write and the read-back. Would it be more
+robust for tls_push_record() to report the encryption failure to its caller
+directly, instead of passing it through sk_err?
+
+[ ... ]
+
+> @@ -1132,10 +1144,16 @@ tls_rx_rec_wait(struct sock *sk, bool nonblock, bool released, bool has_copied)
+>  		 * sk_err here so a connection abort surfaces as the
+>  		 * actual error rather than a clean EOF.
+>  		 */
+> -		if (sk->sk_err) {
+> -			if (has_copied)
+> -				return -READ_ONCE(sk->sk_err);
+> -			return sock_error(sk);
+> +		if (has_copied) {
+> +			int err = READ_ONCE(sk->sk_err);
+> +
+> +			if (err)
+> +				return -err;
+> +		} else {
+> +			int err = sock_error(sk);
+> +
+> +			if (err)
+> +				return err;
+>  		}
+>  		if (sk->sk_shutdown & RCV_SHUTDOWN)
+>  			return 0;
+
+[Severity: Low]
+The commit message describes a fix that users can see:
+
+    On the no-data path that check-then-sock_error() window can return 0
+    after another thread consumes the error.
+
+All three callers of tls_rx_rec_wait() end the read on a 0 return. In
+tls_sw_recvmsg(), for example:
+
+	err = tls_rx_rec_wait(sk, flags & MSG_DONTWAIT,
+			      released, !!(decrypted + copied));
+	if (err <= 0)
+		goto recv_end;
+
+tls_sw_splice_read() and tls_sw_read_sock() do the same. So before this
+patch, with nothing copied, userspace could see a spurious EOF while
+RCV_SHUTDOWN was not set. One example is when sk_err came from
+tls_err_abort().
+
+Should this patch carry Fixes: tags so the fix reaches stable? The recheck
+before the RCV_SHUTDOWN test was added by:
+
+Fixes: edcf32b8a48f ("tls: Flush backlog before waiting for a new record")
+
+That commit's stated goal was to report the error "rather than a clean
+EOF". The top-of-loop check was last restructured by:
+
+f508262ae9f2 ("tls: Preserve sk_err across recvmsg() when data has been copied")
+
+although its check-then-sock_error() shape is older than that commit.
+
+Also, the commit message says "the outer if (sk_err) is an unmarked load"
+in the singular, but the patch rewrites both such blocks in
+tls_rx_rec_wait(). Could the message mention both sites?
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261010-tls-fix-sk-kcsan-err-v3-0-e28aadeb31ad%40proton.me
