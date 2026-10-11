@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7CD3644C4;
-	Sun, 11 Oct 2026 17:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45075361963;
+	Sun, 11 Oct 2026 17:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791738051; cv=none; b=hYRcdtLxjpej/nGHlY2JSRWkGO+hvroNsG/0SkxSTgTRGFdwuDc43KK49bikZcn5KYpLaR1UCsRwqdCfNPUQUOJazh/hHwkDwt/BuWPwNOz/7e2deVswARQITPNK7jZq+tCUj1MSOIJmQI58U8rkgX1qgSC9UOio5dN3+DTHA5s=
+	t=1791738052; cv=none; b=D+13HTEsSg+q1T4gSHhEU3RJdpKLTiC4mv+bcM8kWlO8p9nOhIMOgcg1KTSMJPs+PBRAeZfJ0fn6K6GwpKcAFRzZ6TCq218xKT9o71rILQJ43PN5cQRdnFOwlGXixKQap62AVLkBaqYzrrbC9gaueCO8ZtCPC9eOs2BEScsFP3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791738051; c=relaxed/simple;
-	bh=Ulc8WFFdhXnbNRQHtoUH6mhsvkE5+lbsQ+zyeiwMAQ4=;
+	s=arc-20240116; t=1791738052; c=relaxed/simple;
+	bh=ImLOz9s6aPcO5ICd0qC8x0X97R96hCywpKIMCMBGl+8=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FjXgPPlq0if8T2lBuuA4vgHSN/WNLYiVQtKEUxMyr+OjmhhkqssEM+1akFGjaaKeA0m/hXjhRvgxZw12bctArnAk71bG8gs8XjYM0R9RZuftItmXijvbuLgBVvnEaDMDxGp1MPTFUaPuCfe6TSsGOmzLJUL4z8LFH+F7Fe3s1Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0Yldqp7; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=YEvlZnfSolWBYpo004/xj2PYXcA9hbkvWBY5uBwQRpaTGsHoKdE0ohQz2eBQN3RHacrIvlGXlu7YCw0XbhdZ8i+bJqhqozrkPOEZozctbpuXSvZD8ChUROWgsSaI3zuv1uXVdtvBgYk9G8sl+3j07tFqT0h9Nd89bNaHeWaggjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HJVqC0jb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0Yldqp7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 386771F0089C;
-	Sun, 11 Oct 2026 17:00:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HJVqC0jb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476B81F0089B;
+	Sun, 11 Oct 2026 17:00:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791738047;
-	bh=KUE1/HKL2xsUcJ0Z2e13IaEat+osxMwOiXWI3pHZInI=;
+	s=k20260515; t=1791738048;
+	bh=QkNHOjj59IxqcLHlee+z9QlPqlzlq9GC9FGxHjQeNrw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=h0Yldqp7cPfxOOwY4ixefQKKMzdwU9JkAlfUkM4CtfiByR52PCftweI2QmHXE8Mey
-	 K+nHfPvTfKXaq0VeZp3rIJjuaV3n3KkAcUosQNXfMUvRNliuCqu+y5z5sU3IaGrGTZ
-	 qVZgqCQJb0w4WG0pQotiZkKnM3FNBq9LdjI/1bgr1rdhaeQ9nQNyJl13V58hnI0KuO
-	 eK9NkR3KIvS0XFNyeK3D0PMPSlRtu8XcGey4GbcdRyvuoueHdBXmEw4iFnzWvgkXUn
-	 qLuLJGfek11oHZ73vn9BcVaEJ/RQdlmhMFUr8C0WgehZkYQJuIA1jtqHb1BpLrJksq
-	 xczSwi2VNLO6g==
-Subject: Re: [PATCH net-next v2 4/8] net: skbuff: don't BUG() on leftover
- length in skb_checksum() and friends
+	b=HJVqC0jbEpIks0BPsOUV0GXq1BbeHx+RfARqrZqDSzr/5qCHuZHQOfrxo4X7CjHq9
+	 Rns0qCPbiCmnQkr123iXkQgyWGatD3kEJT9illJL5BC2xXqWiKuhpe0WkQt7mgRAGL
+	 PO5sbyXXVnyCYXFPMb3KkSepjVbqBvJt28xi182z+3v7ufhhZZBxlfeqhJVgGyJ2ib
+	 KqNdgk5ffCBgZ7QD1Gvqt9lVMFZPsFn/qkGMAUv4TFmQOp8Cm4Dd3nvpqus0SCwpHL
+	 ZmkEhasbSdgMLJ3y/5c03fxRp+jvCpFdShwUErc3HpAV+myJbOQq+ai0kIbkZrbcJK
+	 1Lg62VABZlf2g==
+Subject: Re: [PATCH net-next v2 5/8] net: skbuff: don't BUG() on a bad
+ csum_start in skb_copy_and_csum_dev()
 From: netdev-bot+sashiko@kernel.org
 To: josef@toxicpanda.com
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Sun, 11 Oct 2026 17:00:46 +0000
-Message-ID: <179173804681.434549.10094920844751005897@kernel.org>
-In-Reply-To: <20261007-b4-skbuff-bug-on-v2-4-b9a5f732895b@toxicpanda.com>
-References: <20261007-b4-skbuff-bug-on-v2-4-b9a5f732895b@toxicpanda.com>
-X-sashiko-severity: Medium
+Date: Sun, 11 Oct 2026 17:00:47 +0000
+Message-ID: <179173804783.434549.11451844008896039021@kernel.org>
+In-Reply-To: <20261007-b4-skbuff-bug-on-v2-5-b9a5f732895b@toxicpanda.com>
+References: <20261007-b4-skbuff-bug-on-v2-5-b9a5f732895b@toxicpanda.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -47,159 +47,100 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] skb_checksum() and skb_crc32c() now return 0 when they run out
-  of skb before @len.
-- [Low] The fix is incomplete for one sibling walker in another file.
-- [Low] The kernel-doc for skb_to_sgvec() still says it returns "either
-  the number of scatterlist items used, or -EMSGSIZE if the contents…
+- [Low] The commit message gives the wrong reason for the new csum_offset
+  bound in skb_copy_and_csum_dev() (net/core/skbuff.c).
+- [Low] The concern says the 'don't BUG()' subject and framing hide that
+  skb_copy_and_csum_dev() closes silent memory-corruption paths: a…
 
 --
 
-net: skbuff: don't BUG() on leftover length in skb_checksum() and friends
+net: skbuff: don't BUG() on a bad csum_start in skb_copy_and_csum_dev()
 
-This patch replaces the trailing BUG_ON(len) in skb_checksum(),
-skb_crc32c() and __skb_to_sgvec() with DEBUG_NET_WARN_ON_ONCE(). In
-that case skb_checksum() and skb_crc32c() now return 0, and
-__skb_to_sgvec() returns -EINVAL.
+This patch replaces the BUG_ON() in skb_copy_and_csum_dev() with a check
+on both ends of csum_start and on whether the checksum field fits in the
+frame. When the check fails, the whole frame is copied with
+skb_copy_bits() and the checksum is not filled in. If that copy also
+fails, the buffer is zeroed.
+
+> It also trusts
+> csum_offset when it stores the folded checksum.  So far
+> skb_copy_and_csum_bits() BUG()ing on a short skb has covered for that,
+> but once it returns instead, a bad csum_offset would write past the end
+> of the caller's buffer.
+
+[Severity: Low]
+
+Is this description accurate? skb_copy_and_csum_dev() asks
+skb_copy_and_csum_bits() for exactly the bytes left in the skb:
+
+    csum = skb_copy_and_csum_bits(skb, csstart, to + csstart,
+                                  skb->len - csstart);
+
+The BUG_ON(len) at the end of skb_copy_and_csum_bits() only fires when the
+head, frags and frag_list add up to less than skb->len. csum_offset plays
+no part in that check.
+
+For a well-formed skb with a bad csum_offset, the pre-patch code would not
+BUG and would go on to:
+
+    long csstuff = csstart + skb->csum_offset;
+    *((__sum16 *)(to + csstuff)) = csum_fold(csum);
+
+csum_offset is a __u16. Couldn't this store land up to ~64KB past
+to + skb->len and overflow the driver's bounce buffer (for example
+tx_buf[entry] in 8139too) today?
+
+The follow-up patch that replaces BUG_ON(len) in skb_copy_and_csum_bits()
+with a memset and return doesn't change this. A short skb with a valid
+csum_offset still writes inside [0, skb->len), and a well-formed skb with
+a bad csum_offset overflows with or without that patch.
+
+It isn't clear which producer could create such a csum_offset, since entry
+points like skb_partial_csum_set() validate it. Still, could the commit
+message say that the new csum_offset check closes an existing
+out-of-bounds store, rather than one that only shows up after the next
+patch? The code change itself looks correct.
 
 > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index ffc78b1a8ab85..32d7f5ed25eb4 100644
+> index 32d7f5ed25eb4..c896770203f71 100644
 > --- a/net/core/skbuff.c
 > +++ b/net/core/skbuff.c
-> @@ -3619,7 +3619,10 @@ __wsum skb_checksum(const struct sk_buff *skb, int offset, int len, __wsum csum)
->  		}
->  		start = end;
->  	}
-> -	BUG_ON(len);
-> +	if (unlikely(len)) {
-> +		DEBUG_NET_WARN_ON_ONCE(1);
-> +		return 0;
-> +	}
+> @@ -3977,7 +3977,18 @@ void skb_copy_and_csum_dev(const struct sk_buff *skb, u8 *to)
+>  	else
+>  		csstart = skb_headlen(skb);
+>  
+> -	BUG_ON(csstart > skb_headlen(skb));
+> +	if (unlikely(csstart < 0 || csstart > skb_headlen(skb) ||
 
-[Severity: Medium]
-Is 0 a safe value to return here? 0 is also a valid checksum. Returning
-it drops the caller's seed and the partial sum, so callers can't tell a
-failed walk from a real result.
+[Severity: Low]
 
-The commit message says:
+The commit message says a negative offset "gets past the check and
+becomes a ~4GB copy". Is that only the case on 64-bit?
 
-  The resulting checksum is wrong, so the packet fails verification on
-  receive or goes out with a bad checksum on transmit
+csstart is a long and skb_headlen() returns unsigned int. On 64-bit the
+comparison is signed. A negative csstart gets past the old BUG_ON() and
+becomes a huge unsigned int length in skb_copy_from_linear_data().
 
-However, __skb_checksum_complete() adds the pseudo-header in skb->csum
-after the call:
+On 32-bit the comparison is unsigned, so the old BUG_ON() would have
+caught it.
 
-net/core/skbuff.c:__skb_checksum_complete() {
-	csum = skb_checksum(skb, 0, skb->len, 0);
+The patch closes a silent memory-corruption path on 64-bit, plus the
+csum_offset store described above. Should it have a Fixes: tag or a
+Cc: stable? The trailers only have Assisted-by: and Signed-off-by:. No
+producer is named that would show whether this is reachable, and that may
+affect whether a stable backport is needed.
 
-	sum = csum_fold(csum_add(skb->csum, csum));
-    ...
-	if (!skb_shared(skb)) {
-		/* Save full packet checksum */
-		skb->csum = csum;
-		skb->ip_summed = CHECKSUM_COMPLETE;
-		skb->csum_complete_sw = 1;
-		skb->csum_valid = !sum;
-	}
-
-	return sum;
-}
-
-When csum is 0, sum becomes csum_fold(skb->csum). That is 0 whenever the
-pseudo-header sum, which depends only on saddr, daddr, len and proto,
-folds to 0xffff.
-
-In that case, would tcp_checksum_complete() and the UDP checksum paths
-accept a packet whose payload was never fully checksummed? The skb would
-also have csum_valid set and a wrong CHECKSUM_COMPLETE value in
-skb->csum.
-
-skb_crc32c() has a similar problem through sctp_compute_cksum():
-
-include/net/sctp/checksum.h:sctp_compute_cksum() {
-    ...
-	new = ~skb_crc32c(skb, offset, skb->len - offset, ~0);
-    ...
-}
-
-A 0 return becomes 0xffffffff whatever the packet contains. So
-sctp_rcv_checksum() would accept the packet whenever the checksum on the
-wire equals that value.
-
-Callers that pass their seed into skb_checksum(), such as
-__skb_checksum_complete_head(), do fail as described, because
-csum_fold(0) is 0xffff.
-
-Hitting this still needs an skb whose skb->len is larger than the data
-in head, frags and frag_list. Before this patch, the same case hit the
-BUG().
+> +		     (skb->ip_summed == CHECKSUM_PARTIAL &&
+> +		      csstart + skb->csum_offset + sizeof(__sum16) >
+> +		      skb->len))) {
 
 [ ... ]
-
-> @@ -5339,7 +5345,10 @@ __skb_to_sgvec(struct sk_buff *skb, struct scatterlist *sg, int offset, int len,
->  		}
->  		start = end;
->  	}
-> -	BUG_ON(len);
-> +	if (unlikely(len)) {
-> +		DEBUG_NET_WARN_ON_ONCE(1);
-> +		return -EINVAL;
-> +	}
->  	return elt;
->  }
-
-[Severity: Low]
-Should __skb_nsg() in net/tls/tls_sw.c get the same change? It copies
-this head/frags/frag_list walk, and it still ends with:
-
-net/tls/tls_sw.c:__skb_nsg() {
-    ...
-        BUG_ON(len);
-        return elt;
-}
-
-tls_decrypt_sg() calls skb_nsg() on the same range that it later passes
-to skb_to_sgvec():
-
-	n_sgin = skb_nsg(skb, rxm->offset + prot->prepend_size,
-			 rxm->full_len - prot->prepend_size);
-    ...
-	err = skb_to_sgvec(skb, &sgin[1],
-			   rxm->offset + prot->prepend_size,
-			   rxm->full_len - prot->prepend_size);
-	if (err < 0)
-		goto exit_free;
-
-If that range ever ran past the end of the skb, the path
-tls_decrypt_sg()->skb_nsg()->__skb_nsg() would still BUG(). That happens
-before the new -EINVAL path in __skb_to_sgvec() is reached. The commit
-message doesn't mention __skb_nsg().
-
-A later commit in the series, "net: skbuff: don't BUG() on leftover
-length in skb_copy_and_csum_bits()", covers the skb_copy_and_csum_bits()
-case. After that, the TLS copy seems to be the only one left.
-
-[Severity: Low]
-This isn't a bug, but the kernel-doc for skb_to_sgvec() still says:
-
- *	region of the buffer space attached to a socket buffer. Returns either
- *	the number of scatterlist items used, or -EMSGSIZE if the contents
- *	could not fit.
-
-skb_to_sgvec() and skb_to_sgvec_nomark() return this new -EINVAL to
-their callers unchanged. Could the comment mention it as well? Nothing
-later in the series updates it.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b%40toxicpanda.com
