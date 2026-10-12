@@ -1,79 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A044244F549;
-	Mon, 12 Oct 2026 10:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496D12FE042;
+	Mon, 12 Oct 2026 10:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791801018; cv=none; b=iW7E+4xWd2ZYIUGaRc/MCLkYfJFpF43Rg4c4o/Be6z1OF3s/1SJ/KkaLIbHkFH8ktWosLd3DSXIQ9veB6XaeRoYJQOJljYLdyLMTpEtpoq1W97zZEqvcA3jap1gXhHDQoB2N4jikqFzzOcimWefyeFczwiQOETA/NTGtpzUofno=
+	t=1791801539; cv=none; b=Dg8bMhEqIMunnHY9+cC6S+PNlV+h2bSq16qfhpKKFEzm5Z0UBs7a+N0CdO9XALDaf1Sc/DCef7bRTagJ8KFted7z7yj8p/4MJ0BlejslRQxX7JS+KhHJ6wKBn0av3Yy8vKbxwrZ8/Ss9ZY3nSzCxMOwnSHJmRe+5edr5D++eXi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791801018; c=relaxed/simple;
-	bh=7HvmZ7z+FHzKUsgiySg15xR765kRqCbAiT/35Wu3I2U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cO2yANBgXwch+eAqugfrO4+wbp07uqpZQfYufuwudGV/hec375V8nD313swN7tnUo9O4Rws6S00enou4OtOZABUaVzLKwYD3wXtMJLfcwjeMYvHpGtr2eKTPbJCTFxVPTgGv83MML8hbFlar7bP19PeqqsyygY4oaXI3NWqPfJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EDcTx8pQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791801539; c=relaxed/simple;
+	bh=EQd+3dczeUe3H+Ot+Ypu0mX1arO0FEiWvLmZLukZDdQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=O7m6w+cvkxBlx5RuJbSxZuHDVETGT3yujQ7Ld6nbGAmyBZQOmENrWHZO/601btseoK3cstwY1fiTRS3+nwV6wDElKSB/1sDJAk9G7IE4FiD4oTLgho0GHedMZfGP7ml7JBemiZVEDoQnlm0VVGawpMddaKfOcEEFD9/O5m8W9gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfrXc6gR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EDcTx8pQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D131F0089E;
-	Mon, 12 Oct 2026 10:30:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfrXc6gR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A314A1F0089B;
+	Mon, 12 Oct 2026 10:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791801006;
-	bh=CQm+l37PhvY4sn7GzDvhkIVLaZRnc8rXgqLaKi2lNS4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=EDcTx8pQf6FBbBicRtkHB94PH/CcsAFVpfUzXEF654Q5n138OEzGQRt8ulFmDzK6O
-	 tsFNL8ULHR21TBRlEuY4qxgx2VCgWwJy85bQtxjUGscogyLQlfkwSvhDhLY/ltRNOE
-	 WMzfOLpXhvqiF10HT2yCfmNZBa5soI7INHQgZPxydE11oPXVoGyLeywl3b17a4tUv2
-	 MpNu5bGPeWq8vvtz3b9f3jqAIDc1ZLEKMNkew0tnobRrKmR5aN9Usvd4rLqYmnykg9
-	 DVC1PuAudZ+OlHRidin8/phaWXlTSPIFhTA2M8E4J+t+d0hIfRW4K/7mhgda+8nynC
-	 io32n9jfn4L8Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A63E3811A63;
-	Mon, 12 Oct 2026 10:30:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1791801538;
+	bh=w4CH1veM7IQFs/FktA7SpJrlFII10QujZ+yrLExaIqI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=HfrXc6gRUF+pkWejsUoWAgc/NWJk5AZvEQJ3R5fb/piRDvekD7j4fXnaEBKrUFWiu
+	 yo2nKHd3T0KJm2jOpUXdv/mEFxQKq7QZHYDDPRj4khSGJH+0hVtdWPut1fw1TAFVgz
+	 wVIKZqXZzVPxnCWEETgvxSo/EP4BCrKUrOFJTic0ULf8/23H+Uv9f/UEDADD+X9oID
+	 b/4lvtH8jYhY6OHPcwf8VPsjitNOU/o2S0JUTNJBs2shuS23Q9Z22REZE26gmo5FEg
+	 tOGXrhH1g00dRg2oPXsxNL9+3YSlMhrqQM2y5PtAR4TjTHkn11tf70BaORRQEzBzTn
+	 w8W5+ezo31/ow==
+From: Christian Brauner <brauner@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+ Mikulas Patocka <mpatocka@redhat.com>, 
+ Benjamin Marzinski <bmarzins@redhat.com>, 
+ David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+ "Serge E. Hallyn" <serge@hallyn.com>, Eric Biggers <ebiggers@kernel.org>, 
+ "Theodore Y. Ts'o" <tytso@mit.edu>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Andrew Halaney <andrew@amutable.com>
+Cc: dm-devel@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ bpf@vger.kernel.org, fsverity@lists.linux.dev, linux-doc@vger.kernel.org
+In-Reply-To: <20261008-ajhalaney-dmverity-key-identifier-v2-0-008456d189cb@amutable.com>
+References: <20261008-ajhalaney-dmverity-key-identifier-v2-0-008456d189cb@amutable.com>
+Subject: Re: [PATCH bpf-next v2 0/3] keys: Add well known IDs for
+ fs-verity/dm-verity keys
+Message-Id: <20261012-broschen-inanspruchnahme-gebilde-d72cf2b99cda@brauner>
+Date: Mon, 12 Oct 2026 12:38:50 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpftool: Fix out-of-bounds read in kprobe_multi link info
- dump
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179180100503.3336084.3203597964728952228.git-patchwork-notify@kernel.org>
-Date: Mon, 12 Oct 2026 10:30:05 +0000
-References: <20261010074435.1415234-1-chenyuan_fl@163.com>
-In-Reply-To: <20261010074435.1415234-1-chenyuan_fl@163.com>
-To: chenyuan <chenyuan_fl@163.com>
-Cc: bpf@vger.kernel.org, qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, laoar.shao@gmail.com,
- linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev-3d1b8
 
-Hello:
+On Thu, 08 Oct 2026 15:57:34 -0500, Andrew Halaney wrote:
+> This more or less follows the bpf keyring approach, allowing userspace
+> to easily find the keys instead of having to parse /proc/keys.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Applied to the vfs-7.4.keyring branch of the vfs/vfs.git tree.
+Patches in the vfs-7.4.keyring branch should appear in linux-next soon.
 
-On Sat, 10 Oct 2026 15:44:35 +0800 you wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
-> 
-> show_kprobe_multi_{plain,json}() walk the sorted kallsyms array against
-> the sorted addr/cookie array with j as a cursor into the latter. The
-> loop terminating condition is checked after the cursor has already been
-> used to access the array:
-> 
-> [...]
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Here is the summary with links:
-  - bpftool: Fix out-of-bounds read in kprobe_multi link info dump
-    https://git.kernel.org/bpf/bpf-next/c/0d5e3fc78a6f
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.4.keyring
+
+[1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+      https://git.kernel.org/vfs/vfs/c/d3b8a0988385
+[2/3] keys: add KEY_SPEC_FS_VERITY_KEYRING
+      https://git.kernel.org/vfs/vfs/c/8439e5c46c33
+[3/3] Documentation: keys: document IDs added since KEY_SPEC_REQKEY_AUTH_KEY
+      https://git.kernel.org/vfs/vfs/c/b553f7d131ed
 
