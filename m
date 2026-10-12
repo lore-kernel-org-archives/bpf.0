@@ -1,237 +1,127 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FA4363C5F
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 03:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5EC3932DA;
+	Mon, 12 Oct 2026 03:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791775456; cv=none; b=k+NPaT7yepo4TkdYBCAue94rU3ZJUyNKsJAFrE+xfMTzOVecs6bflrUvq6qS8q3OYBdoFNmYdgfw14Z7qJ32mJ39RnZb37SABJkgnZleUAfLFJHH7wx+/HpUVydjJoxY+xFMRFiDfXbQ3zuzJgqjW2sbMC1W5XOUmmjE6/tBLM0=
+	t=1791775916; cv=none; b=kEykwxJgPZ1CdP5US9cvmpWDLhMISylKi1WrmQriJdDB9eyeDmbnfDP4/BholFImQpWJlvTAYMggubnjInYZ3xGdpFVrMvweuQ/GzQmMApOkfsRCpeesWuiiAOitXcm28FWisjvAeYCxmkDAudpSaVqL01cL9VXlSBnLUNJx1B0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791775456; c=relaxed/simple;
-	bh=qKzCG78rXnwbR2+DEJMz0+GB77CFK4ee24UAPrFGHww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VNzEvsIYDqo1INXsP2+nDIBVL+bQhc55Vgo73OQQdCDQjYG1nkIxa/S5CEAOoR1Rp1il0GXITkLHkLwjbBIaU+M55BwqCbOLCOuPjr4Z6Wlrk6cI6NmyufJhGQ/uprJGRjxbpN4wShP8eL17Ypuu8N+N7pymsGjtJmYxXG2llrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kjQlrCyR; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1791775916; c=relaxed/simple;
+	bh=pUx/u+ewmePs6CGYnzFZ4UMZHVfgyQmJNQj3BtH+42E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bj3nxzU9VrCUToyHNnV/nC0vC0kx14A9cBQrtLcCVGWwuixwqTyxXD7aro1boiLIPpLIoSWmL0pP67qHUpmzMjcaTLVwiDel3WEXfNB3143woeGXoumfLxFU68FpL5GZ5+yz+WCiVffl6GdDGWoWyKL0BNpBTZASq7WEDaRU2vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=F0sfyZSx; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kjQlrCyR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=UWkMdGPK/3JbVoiUkSrII657crlwkc5MW0aVWbkT+QQ=;
-	b=kjQlrCyRU3G3z9JMSb92Abh/3zX4wM8Ixxl2ZDzwQvtQ7hGwKjI/GAwWgl/pHc
-	nQN8vraJ1kGWfGusLKqCE+GzWS8X6DLYcf7d/YvMYmyE8b2tArOLRGW2NDfY9mBG
-	57IjHJ1wOLoViM+pjmk2+fBSn+w8ObOeCx+0weAyJbFDE=
-Message-ID: <7c72acfa-888e-4674-bf3a-acfd01ac49bf@163.com>
-Date: Mon, 12 Oct 2026 11:23:18 +0800
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="F0sfyZSx"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69C2EfNr3017674;
+	Mon, 12 Oct 2026 03:31:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ytjfGa
+	FasxKFRVRaAiMZ4nRRUtTJ4xxx7wJVG+cpLYU=; b=F0sfyZSxlPxPwLgn7WMYmo
+	VSkD232GjPh7UVOyfhtkYKGLA2/OB6zo3pWu1boCtKW1+RG7qWT/3ZpXu6ZakNfF
+	3d7gwJ3tWi+wu4evrYYJR/f8GTDLl3QBtgTw4KaYKY8G0eG/OIG+qMtLYDw4+fO+
+	hsrfdYESfW1ERidTvIHtriJDf1YCqmDAP1KhANqYQ9x4ADrtd7BDl5ZB/WRRPEuK
+	Hw2H2N9WpXShL8foHBFvjOyYoKMddikj8pAcA/PdbHcrTZIm6YBIb/XJD57YfmkA
+	8L7B1JByQLC43DuIhP5IPsUVJrwPQz4qAj0KDbe/mgVS/1DzhCtoesxsuREAnfqQ
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4h7dv370bu-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 12 Oct 2026 03:31:36 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 69C252cT563558;
+	Mon, 12 Oct 2026 03:31:35 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4h802vknrm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Oct 2026 03:31:34 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 69C3VVlj49086938
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 12 Oct 2026 03:31:31 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0A1272004E;
+	Mon, 12 Oct 2026 03:31:31 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 42C1020040;
+	Mon, 12 Oct 2026 03:31:28 +0000 (GMT)
+Received: from Linuxdev.bl1-in.ibm.com (unknown [9.123.8.83])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 12 Oct 2026 03:31:28 +0000 (GMT)
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Cc: hbathini@linux.ibm.com, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        venkat88@linux.ibm.com, yeswanth@linux.ibm.com
+Subject: Re: [PATCH v14 0/5] powerpc/bpf: address missing verifier selftest coverage
+Date: Mon, 12 Oct 2026 09:01:27 +0530
+Message-ID: <179177344604.763259.17482742440271847221.b4-ty@linux.ibm.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <cover.1789982239.git.skb99@linux.ibm.com>
+References: <cover.1789982239.git.skb99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 4/4] selftests/bpf: Add task work BUSY window
- test
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev
-Cc: yatsenko@meta.com, bpf@vger.kernel.org, martin.lau@kernel.org,
- mason@kernel.org
-References: <20261010042132.137430-5-luyun_611@163.com>
- <9e1a4144b2d8dd516b343bd0e58bbae6cc6a8b5f29fbe057b95a2b5e0eb9d4d3@mail.kernel.org>
-Content-Language: en-US
-From: luyun <luyun_611@163.com>
-In-Reply-To: <9e1a4144b2d8dd516b343bd0e58bbae6cc6a8b5f29fbe057b95a2b5e0eb9d4d3@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3vyamUsxqLJfVEA--.55483S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr17KrWDAw1fAFyUKw4kZwb_yoW3GFy5pa
-	yft345G398JF1UKF47Xa1DuFyFkwnYyas8Crs3Xry7A3Z0qFn3AryxKFyYq34DurWqyF43
-	Za1DZFZ3Cw4DXrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi9qXAUUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCwwiMW2rMUqiYzQAA3V
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OXpZ8aF7X_uM02GK6JY6Y7mnegw4Ghv6
+X-Proofpoint-ORIG-GUID: OXpZ8aF7X_uM02GK6JY6Y7mnegw4Ghv6
+X-Authority-Analysis: v=2.4 cv=aqInmiZV c=1 sm=1 tr=0 ts=6acc5498 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
+ a=ydiBeFUZ71z4b7spNMUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfXy+fWT1PX/84q
+ AJ0tuj9knUr0rK9R9fXqIRxxiGdcwUDYrB/mRedMkHyK8FTfg0j/1i1yaX0XLcjfNpa0LBHWzZO
+ 55L6tf/9G32ypXka4Y6EtG4LQ3N3XYE=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfXzhvhtCbnDfY1
+ OMUR0RkXX86s6bZ/xgptStJ7Dhuh6Zf1ijVpExyks2Byv6DzaL2dfZP1JJwhEqvqn3eVVAtpplU
+ m4Nm4xvF51nudz8M4VyBLAVoSsUeE8ZB5CEGQhwOxKDbNl9EbB0tQsFm41KK7DvDwyG4Wjf0DxJ
+ L0LXqVqu8diX1KGSNQsWHKy+VN+96trhpMHej5QX4QXySraAccgrZahF0JvpbF4FHm4O8JqzoQD
+ pC59AOlyBVlvJPamWGIdu+W5Od9rEbLTlffg2aRudrNstusp72gvcypk2PhiyeSCv2U4YnHZeh+
+ biCWfgRbGPhruhx4Tn+xFmpifiaFpFGz8DmSeS7DaD/UYv2S5a/6T/MBjOFUZifHg2xlE+EQzrO
+ o6mqH09k5zZ0fA+WlI42foyg2a+ZlmmbFzIN8FHgCxfiFHW/yE7N5uoiCT3/IbHknltde2FpiLD
+ BrKWBjjZAQF6PjVypbA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-12_01,2026-10-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 clxscore=1011 spamscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610080000
+ definitions=main-2610120012
 
-在 2026/10/10 13:20, bot+bpf-ci@kernel.org 写道:
->> selftests/bpf: Add task work BUSY window test
-> TL;DR: Test issues only, no kernel bug: the /sys/kernel/realtime PREEMPT_RT
-> check looks dead (kconfig could skip earlier); helpers duplicate the race
-> test; unused counters; redundant fprintf()s.
+On Mon, 28 Sep 2026 10:43:49 +0530, Saket Kumar Bhaskar wrote:
+> The verifier selftest validates JITed instructions by matching expected
+> disassembly output. The first two patches fix issues in powerpc instruction
+> disassembly that were causing test flow failures. The fix is common for
+> 64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
+> architecture tag in the third patch, enabling proper test filtering in
+> verifier test files. Introduce verifier testcases for tailcalls on powerpc64.
+> 
+> [...]
 
-Thanks for the review! All the points look reasonable.
+Applied to powerpc/next.
 
-For v7 I'll:
-- use the CONFIG_PREEMPT_RT kconfig extern via skel->kconfig to skip
-   before attaching, instead of the /sys/kernel/realtime probe;
-- share the status accessors, polling helper/bounds and the value
-   layout with the cancellation race test;
-- drop the unused ACK_SEEN/TIMEOUT counters (and the stats map with
-   them) and the redundant fprintf()s.
+[1/5] powerpc64/bpf: fix compare instruction emitted for tailcall
+      https://git.kernel.org/powerpc/c/3ebf4ae6d8afac11fe6732418dd378e031f8f4ed
+[2/5] powerpc64/bpf: fix percpu private stack leak on JIT failure
+      https://git.kernel.org/powerpc/c/24affb84d98e6b37b276aa57e5dd25ad93458cea
+[3/5] powerpc/bpf: fix buffer overflow in JIT for large BPF programs
+      https://git.kernel.org/powerpc/c/78ce55b7913a78e1687306668e078b86bc6508ee
+[4/5] powerpc/bpf: fix alignment of long branch trampoline address
+      https://git.kernel.org/powerpc/c/04001e8ddb979f463f1c3ca8ac4d6ac59fb48921
+[5/5] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+      https://git.kernel.org/powerpc/c/6652b9941a6c9b6814ca6d2eb153dbf162b89a02
 
-I will send v7 shortly.
-
----
-
-Thanks
-
-Yun Lu
-
-
->
->> diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
->> index f9fd9adddfe6..eb0fe51617c5 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-> [ ... ]
->
->> @@ -436,3 +438,563 @@ void serial_test_task_work_race(void)
-> [ ... ]
->
->> +/*
->> + * Positive confirmation of PREEMPT_RT only: not every RT kernel provides
->> + * this file, and its absence proves nothing.  The definitive check for
->> + * such kernels is the irq_work thread observation inside the BPF program.
->> + */
->> +static bool task_work_busy_rt_confirmed(void)
->> +{
->> +	char buf[2] = {};
->> +	int fd, n;
->> +
->> +	fd = open("/sys/kernel/realtime", O_RDONLY | O_CLOEXEC);
->> +	if (fd < 0)
->> +		return false;
->> +	n = read(fd, buf, sizeof(buf) - 1);
->> +	close(fd);
->> +	return n > 0 && buf[0] == '1';
->> +}
-> A subsystem pattern flags this as potentially concerning: the selftests
-> guidance is to reuse existing shared test helpers instead of hand-rolling
-> file I/O for something that is already provided.
->
-> Does any in-tree code provide /sys/kernel/realtime?  Nothing under kernel/
-> or init/ in this tree defines it, so task_work_busy_rt_confirmed() would seem
-> to always return false, and the early skip in serial_test_task_work_busy()
-> would never fire.  The comment above the
-> function says "not every RT kernel provides this file", and the commit
-> message says the flag is used "when present".
->
-> On a PREEMPT_RT kernel the test would then only skip after
-> task_work_busy_wait_window() has polled for TASK_WORK_BUSY_POLL_ITERS *
-> TASK_WORK_BUSY_POLL_US (more than 2s) and task_work_busy_run_attempt() has
-> returned TWB_RT.  The end result is still a skip, so this looks like a dead
-> check plus a delay rather than a wrong result.
->
-> bpf_experimental.h already declares:
->
->      extern bool CONFIG_PREEMPT_RT __kconfig __weak;
->
-> and other prog_tests read kconfig externs through the skeleton, for example
-> stacktrace_ips.c:
->
->      if (!skel->kconfig->CONFIG_UNWINDER_ORC) {
->
-> Would a kconfig extern in progs/task_work_busy.c, checked through
-> skel->kconfig after task_work_busy__open_and_load(), let the test skip up
-> front instead?
->
->> +static int task_work_busy_status(struct task_work_busy *skel, int idx,
->> +				 __s64 *value)
->> +{
->> +	return bpf_map_lookup_elem(bpf_map__fd(skel->maps.status), &idx,
->> +				   value);
->> +}
->> +
->> +static int task_work_busy_set_status(struct task_work_busy *skel, int idx,
->> +				     __s64 value)
->> +{
->> +	return bpf_map_update_elem(bpf_map__fd(skel->maps.status), &idx,
->> +				   &value, BPF_ANY);
->> +}
-> this isn't a bug, but task_work_busy_status() and
-> task_work_busy_set_status() look identical to task_work_race_status() and
-> task_work_race_set_status() earlier in this file, apart from the skeleton
-> type.
->
-> The same applies to other pieces: struct task_work_busy_value has the same
-> layout as struct task_work_race_value, TASK_WORK_BUSY_POLL_US,
-> TASK_WORK_BUSY_POLL_ITERS and TASK_WORK_BUSY_START_POLL_ITERS have the same
-> values (100/20000/50000) as the TASK_WORK_RACE_* macros, and
-> task_work_busy_wait_seq() repeats the polling logic of
-> task_work_race_check_done().
->
-> Both skeletons expose a status map with the same key and value types.  Could
-> both tests share helpers that take the status map (or its fd) and a shared
-> set of poll constants instead?
->
-> [ ... ]
->
->> +	if (!ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_WINDOW, &stat_window),
->> +		       "window stat") ||
->> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_TOTAL, &stat_total),
->> +		       "total stat") ||
->> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_FILTERED, &stat_filtered),
->> +		       "filtered stat") ||
->> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_G1_RETRY, &stat_g1r),
->> +		       "gen1 retry stat") ||
->> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_G2_RETRY, &stat_g2r),
->> +		       "gen2 retry stat"))
->> +		goto cleanup;
-> this isn't a bug, but are BUSY_STAT_ACK_SEEN and BUSY_STAT_TIMEOUT meant to
-> be read here?
->
-> The fexit program in progs/task_work_busy.c bumps both counters for every
-> closed window, and enum task_work_busy_stat mirrors them, but this function
-> reads and prints only WINDOW, TOTAL, FILTERED, G1_RETRY and G2_RETRY.  A
-> grep of tools/testing/selftests/bpf finds no userspace reader for ACK_SEEN
-> or TIMEOUT.
->
-> Could ACK_SEEN be checked against valid and TIMEOUT against missed (or both
-> added to the summary line below), or can they be dropped from both enums and
-> the BPF program?
->
->> +	fprintf(stderr,
->> +		"task_work_busy: %d/%d valid, %d missed, %d attempts, max_wait %lld ns, windows %llu, adds %llu, filtered %llu, g1_retries %llu, g2_retries %llu\n",
->> +		valid, TASK_WORK_BUSY_ROUNDS, missed, attempts_started,
->> +		(long long)max_wait_ns, (unsigned long long)stat_window,
->> +		(unsigned long long)stat_total,
->> +		(unsigned long long)stat_filtered,
->> +		(unsigned long long)stat_g1r, (unsigned long long)stat_g2r);
-> [ ... ]
->
->> +	if (!hard_fail) {
->> +		if (!ASSERT_EQ(stat_window, (__u64)(valid + missed),
->> +			       "window accounting"))
->> +			fprintf(stderr,
->> +				"windows entered %llu, valid %d, missed %d\n",
->> +				(unsigned long long)stat_window, valid, missed);
->> +		if (!ASSERT_GE(stat_total, (__u64)(2 * valid),
->> +			       "task_work_add calls seen"))
->> +			fprintf(stderr,
->> +				"only %llu task_work_add calls for %d valid rounds\n",
->> +				(unsigned long long)stat_total, valid);
->> +		if (valid != TASK_WORK_BUSY_ROUNDS)
->> +			fprintf(stderr,
->> +				"busy coverage: %d/%d valid, %d missed in %d attempts\n",
->> +				valid, TASK_WORK_BUSY_ROUNDS, missed,
->> +				attempts_started);
->> +		if (!ASSERT_EQ(valid, TASK_WORK_BUSY_ROUNDS,
->> +			       "valid busy windows"))
->> +			goto cleanup;
->> +	}
-> this isn't a bug, but could the three conditional fprintf() calls in the
-> !hard_fail block be dropped?
->
-> The summary fprintf() just above already reports valid,
-> TASK_WORK_BUSY_ROUNDS, missed, attempts_started, stat_window and stat_total,
-> and ASSERT_EQ() and ASSERT_GE() print the actual and expected values on
-> failure.  The "busy coverage" message also re-tests the same condition as the
-> ASSERT_EQ() that follows it.
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38024809478
-
+cheers
