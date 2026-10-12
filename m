@@ -1,115 +1,83 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEBC372EC0;
-	Mon, 12 Oct 2026 15:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136514A0923;
+	Mon, 12 Oct 2026 15:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791819025; cv=none; b=VJXDB8ziFxDYOYMTcq9hVjc/Qt3cIMeKKc1sKHraML78Qrm9JuQ/KVxZLFOQGKemEL9Gt/iY3P4/b0dNTdNEodSz0zg92hkj802qHLIeu+CK+KsoBYtGH69RoEKw9eJayZyo9uxjEMT6jhcSkubuYoaPlKJRXTdXY+hk//tC0XE=
+	t=1791819050; cv=none; b=smyz5DeeMPetOodv/0deeLCAjOdDGIKfCx55RaYz/UPqV4EFxfmUkH3Hl2WJ3Aes2p8cIf74h4YO70fdrCPy1y8EHAnLjzMQ7PLrbUecYBdKV7lGLdFORVnJADgCfNInrfHpx8o/rHSKnRq0wVH0z7wLVkkDVEI1qkvhG5aBvL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791819025; c=relaxed/simple;
-	bh=dNylLoKi8RBSUwXF/JjHMpiUkq5fTCS1c9Ln8jRG7+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Epd7y4NcJImumThX19AUV+kGhzpvYxxgqfi3SmzNdhiiRyVMRrWgf3cQCo6AcCyTSHwGxp0WUANXrnYlM0p/JszYOyJi5jKRAU5IhggkmL9RSdkjfN9P+22zYknORJFmhYZgcBEx5xXFwzG72/bqV877C0B2oPDmeBR07C8Y8yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HTcLs3Sd; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1791819050; c=relaxed/simple;
+	bh=DxOA3K04TdGKgV9RBzwq7NMB042SfZvdvrNpiga7nYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pYf74UyxkKl2ZTahWjpGuDaRNJZbh2QcOmeKfWXTxUi9dXOFNtafq8tAdDbOVYg+gjFS7SUa2fF1K5nONSO+UIaK7N16p2CUc3DBJ9fm8wRlyo9N4kRhyKnMp8xztujicj0loZ24aZZweVGxm+Q6J62RnZ7byGrKgDaAYR14PCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKkW2znF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HTcLs3Sd"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=e7vnY38Ok46IN7dLJiR4A9dOlKWJTcpeT6vTfLbFeYA=; b=HTcLs3Sda32VW2HZSIi79a9j4u
-	wEkDHaykiaIIGma0cUValLNCOTaqZLu2Fc1MVgu47Q5fmH61ii2VHTWTHGn0w7Iu4yHefb91M6R00
-	GILYCg/nZzsRt+54DceKPHW+NKOghSrDZPYfG+TI76Yk8OFxW0YfZbCcZuyHMyMcAOCHmpUuJSp16
-	5EmvhF9BeOomBlA1HIJJZSjOsI0KU9tTpxdRaHibVVrg1GowIqwMz6neMo/gkgdZXxCoDPPuDdykb
-	TaS2GE8YPtCQnDFAvbNkhb2XpLTvkWD7Rn5adSKgMUXjOtG80S/gU2ZA/geHQD768YlxIkbpMw+NZ
-	Jbw69p3Q==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xGHyh-0000000Ea1I-13Cb;
-	Mon, 12 Oct 2026 15:30:15 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1B9CF30045A; Mon, 12 Oct 2026 17:30:14 +0200 (CEST)
-Date: Mon, 12 Oct 2026 17:30:14 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sandipan Das <sandipan.das@amd.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Ananth Narayan <ananth.narayan@amd.com>
-Subject: Re: [PATCH] perf/x86/amd/lbr: Limit branch snapshots to valid entries
-Message-ID: <20261012153014.GU4121339@noisy.programming.kicks-ass.net>
-References: <20261007181002.4005262-1-sandipan.das@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKkW2znF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41501F0089C;
+	Mon, 12 Oct 2026 15:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791819048;
+	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=hKkW2znF0TQvi5ugzZKk3qwCJSKhgDn4ZbnNdIwbIibdCq/pKY99M/ZLYeb8txmQM
+	 GNGFiFMtmBC43gCUqrptLkqvs5u3CyTnRk5huMQq7q0iP9e6oLxiCyrxpdNqtTE1WD
+	 PQMXUU6UP3Iv54/gGqCM22HbgQ9Bm4Pxd90ix+6wRvtJuXCBzDEGt7P/5dlRtxvUfJ
+	 YNEIAPB4bcpNdgVP4Mj5o7YsVadjXVyGY7yrjSl5ifvumoCaFWJKX+vT0ZIFnbmfMJ
+	 k/7H6CzeFz8HxCfvW/NtEtwNjwphmiYvsfHq+/MYs+tNV5h8ViAnxnG/x2mz6z1US1
+	 Hl6itQDYej2rw==
+From: netdev-bot+sinfo@kernel.org
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2] stmmac: some XDP fixes in XDP_TX path
+Date: Mon, 12 Oct 2026 15:30:47 +0000
+Message-ID: <179181904740.2527009.16307700795539761723@kernel.org>
+In-Reply-To: 
+ <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
+References: 
+ <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
+Auto-Submitted: auto-generated
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261007181002.4005262-1-sandipan.das@amd.com>
 
-On Wed, Oct 07, 2026 at 11:40:02PM +0530, Sandipan Das wrote:
-> The branch snapshot callback used by bpf_get_branch_snapshot() copies
-> up to x86_pmu.lbr_nr entries from cpuc->lbr_entries[], even when the
-> last LBR read kept fewer branches. The entries past lbr_stack.nr are
-> invalid, but they end up reaching BPF programs.
-> 
-> Limit copying to lbr_stack.nr entries and also reset lbr_stack.nr when
-> amd_pmu_lbr_read() skips reading the registers, so that a stale count
-> is never reused.
-> 
-> Fixes: a4d18112e531 ("perf/x86/amd: Support capturing LBR from software events")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/all/sashiko-outbox-163130@kernel.org/
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> ---
->  arch/x86/events/amd/core.c | 2 +-
->  arch/x86/events/amd/lbr.c  | 4 +++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index 49b6b8fce566..bf631f60757c 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -944,7 +944,7 @@ static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, u
->  	cpuc = this_cpu_ptr(&cpu_hw_events);
->  
->  	amd_pmu_lbr_read();
-> -	cnt = min(cnt, x86_pmu.lbr_nr);
-> +	cnt = min(cnt, cpuc->lbr_stack.nr);
->  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
->  
->  	amd_pmu_v2_enable_all(0);
-> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> index 1e1b2f08cb51..a00d3850c4a8 100644
-> --- a/arch/x86/events/amd/lbr.c
-> +++ b/arch/x86/events/amd/lbr.c
-> @@ -165,8 +165,10 @@ void amd_pmu_lbr_read(void)
->  	struct branch_entry entry;
->  	int out = 0, idx, i;
->  
-> -	if (!cpuc->lbr_users)
-> +	if (!cpuc->lbr_users) {
-> +		cpuc->lbr_stack.nr = 0;
->  		return;
-> +	}
->  
->  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
->  		entry.from.full	= amd_pmu_lbr_get_from(i);
+Hi!
 
-You now seem to deviate from what the Intel code does. Please clarify.
+This is an automated message. This series looks like a fix, but its
+commit messages seem to be missing some information:
+
+ - How the issue was discovered, e.g. hit in production, hit during
+   development, syzbot report, manual code inspection, LLM or static
+   analysis tool scan.
+
+ - Whether the issue was actually triggered, or is only theoretical
+   (e.g. found by code inspection). If it was triggered please include
+   the symptoms, like the stack trace or error messages.
+
+ - What hardware the change was tested on. For driver fixes please
+   mention the device (and if relevant firmware version) used for
+   testing, or say that the change was not tested on real hardware.
+
+Please do not repost the series just to address the above. Instead,
+reply to this email with the missing information, so that reviewers
+can take it into account. If the series needs another revision for
+other reasons, please include the information in the commit messages
+then.
+
+The evaluation is done by an LLM so it may be wrong, if you think
+that is the case please reply and explain.
