@@ -1,110 +1,237 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6151A3A80;
-	Mon, 12 Oct 2026 03:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FA4363C5F
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 03:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791775263; cv=none; b=GGpDu2qYnAwMk4impvhhNhQvIxNMILTosqs+qkjVBZf5fqXRkM9Dpo4PMt9Eb3Ru9JY5ZigQJSsKkNJ13SoqwjCW2XNVwrRaZx2s9XqFLQkTcftUQm5bBdVTn1EV7E1SAHUL2V9u4s67QR6O4s9OF9s7Yw0tWUrlte+0Nm1Mtx4=
+	t=1791775456; cv=none; b=k+NPaT7yepo4TkdYBCAue94rU3ZJUyNKsJAFrE+xfMTzOVecs6bflrUvq6qS8q3OYBdoFNmYdgfw14Z7qJ32mJ39RnZb37SABJkgnZleUAfLFJHH7wx+/HpUVydjJoxY+xFMRFiDfXbQ3zuzJgqjW2sbMC1W5XOUmmjE6/tBLM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791775263; c=relaxed/simple;
-	bh=KwpgVnpGdC5F/8qIEPC9K0OWtLHsuEgjTSiknpzoVik=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pe6wT0qdVvZPXgSwpumBcknp71/QWqMCMjkH8eI48OmZm2viSOWQ2MrA8S1EF/t43hWg0zOKONFxv0hsC6Qh11tRmAd9Jb1dpSkcvK/9uXuWbTbZkmTV2KgJyoQyzF8BkM/C3K0uXDJjH3tyw5z/s0PWVCvEKvq7s0YLX+3JqM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=dWkw1gu1; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1791775456; c=relaxed/simple;
+	bh=qKzCG78rXnwbR2+DEJMz0+GB77CFK4ee24UAPrFGHww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VNzEvsIYDqo1INXsP2+nDIBVL+bQhc55Vgo73OQQdCDQjYG1nkIxa/S5CEAOoR1Rp1il0GXITkLHkLwjbBIaU+M55BwqCbOLCOuPjr4Z6Wlrk6cI6NmyufJhGQ/uprJGRjxbpN4wShP8eL17Ypuu8N+N7pymsGjtJmYxXG2llrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kjQlrCyR; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="dWkw1gu1"
-Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69C1mXM31577111;
-	Sun, 11 Oct 2026 20:20:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=9
-	krnAw2hTJAN3iKwESbkRnnmpNs0d5MA3n9lfMTX5p0=; b=dWkw1gu1eRmR0i++t
-	LMkNTE0C0TcGzd8sGlclgYubf2WUjGRXeSliRkI49LXJdV9mcA3BtHH6BNiCX3si
-	ou5lQ6hCuK3qjmLT9ZUoxhN6LF+Xb4nfaCxyv3xUBVOe8yjCh74ekKmbjE0XnjFf
-	lqKiSa3X8nF8dWb9rbnvbO3MbVVkXQGBfX17fffTl4Ob5aQ2Nm1FAXGL3gham3iA
-	AQAPN6kTJI6wybqyk5yAEBO4T8bitUUIsoNnRTVCL3Yke6/3i3eWfQjLPsKqAQft
-	2TMGZYG0Rm/ISVKt+C8HW6brwOsSvZ/2aIPIWM1qxWZwrPPERQzsF81ONe8Vykeb
-	mKX/w==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4h8647t7gk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 11 Oct 2026 20:20:22 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Sun, 11 Oct 2026 20:20:21 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Sun, 11 Oct 2026 20:20:21 -0700
-Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with ESMTP id 0C9253F7061;
-	Sun, 11 Oct 2026 20:20:16 -0700 (PDT)
-Date: Mon, 12 Oct 2026 08:50:10 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@kernel.org>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <sdf@fomichev.me>, <sgoutham@marvell.com>
-Subject: Re: [PATCH v19 net-next 1/2] octeontx2: use atomic bitops for PF/VF
- and rep flags
-Message-ID: <asxR6rpmf9b2by4O@rkannoth-OptiPlex-7090>
-References: <20261006094357.840823-2-rkannoth@marvell.com>
- <179162646892.434549.7222119532595039059@kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kjQlrCyR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=UWkMdGPK/3JbVoiUkSrII657crlwkc5MW0aVWbkT+QQ=;
+	b=kjQlrCyRU3G3z9JMSb92Abh/3zX4wM8Ixxl2ZDzwQvtQ7hGwKjI/GAwWgl/pHc
+	nQN8vraJ1kGWfGusLKqCE+GzWS8X6DLYcf7d/YvMYmyE8b2tArOLRGW2NDfY9mBG
+	57IjHJ1wOLoViM+pjmk2+fBSn+w8ObOeCx+0weAyJbFDE=
+Message-ID: <7c72acfa-888e-4674-bf3a-acfd01ac49bf@163.com>
+Date: Mon, 12 Oct 2026 11:23:18 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 4/4] selftests/bpf: Add task work BUSY window
+ test
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev
+Cc: yatsenko@meta.com, bpf@vger.kernel.org, martin.lau@kernel.org,
+ mason@kernel.org
+References: <20261010042132.137430-5-luyun_611@163.com>
+ <9e1a4144b2d8dd516b343bd0e58bbae6cc6a8b5f29fbe057b95a2b5e0eb9d4d3@mail.kernel.org>
+Content-Language: en-US
+From: luyun <luyun_611@163.com>
+In-Reply-To: <9e1a4144b2d8dd516b343bd0e58bbae6cc6a8b5f29fbe057b95a2b5e0eb9d4d3@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <179162646892.434549.7222119532595039059@kernel.org>
-X-Proofpoint-GUID: V7F2jhYx1d0ZJ7g4ziOzwkZnydgJGosz
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfX4rkP4xI3ndF1
- 1/2joZ61ZK/HNmSmxT5rB9sT1krayzoSQHSS77xeLSC+IUjPsGZ49AA38McVZmqNzbFWERP9Jw8
- qEvXWiez+O+Qt0ba8TfiKAnrEt4u1x93aCn3lMpnF20Jf+Ji4O6dFVTS4gG+YXm9bVxDBBAcJt8
- XmrH5flXRI+NDHEWLUDGKnZk74YU9xjDe4mq/Fs0Vwx0CXCV/W/TchdR2R1C6ggkn6TNpnJk6gi
- OCY8GPzEIN0RxJll9GXz52SyLo6ks+ETsSTjw0kULtGmZNAknep7lGDqcQxRKVdJTLBQVtytq7I
- dNHj0ZlczsLOU1qzoKqQ4sByA/XHLQAYemVUIZdMkkbSf3zZ2qwY9O6LOokVmzF5ghETUQSmJ2Z
- YYIwxLd2hC8DIx/rviCS7ktrTH18PfSAGquSdatj6fTtuNZRnXzAulyHSR72IfZzNf+AXaynrsf
- D4mpGhVS5vECgqAq9vw==
-X-Authority-Analysis: v=2.4 cv=MOD1C8Zl c=1 sm=1 tr=0 ts=6acc51f6 cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
- a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=l0iWHRpgs5sLHlkKQ1IR:22 a=qit2iCtTFQkLgVSMPQTB:22 a=VwQbUJbxAAAA:8
- a=EAnwtCU2dz7jGvP1txAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=lhd_8Stf4_Oa5sg58ivl:22
-X-Proofpoint-ORIG-GUID: V7F2jhYx1d0ZJ7g4ziOzwkZnydgJGosz
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfX9GWuTHGqzdM0
- 6xJQp68679jgJhyP6Fxdt8ek/VSoMDzVJAmWGh6dZ7fvJabIutBXR7pXr2xigjHtuzFHQB9mixt
- I2QCpWlp+xKmrF/UmiaYUmZaNYCkbPY=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-12_01,2026-10-09_01,2025-10-01_01
+X-CM-TRANSID:_____wD3vyamUsxqLJfVEA--.55483S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr17KrWDAw1fAFyUKw4kZwb_yoW3GFy5pa
+	yft345G398JF1UKF47Xa1DuFyFkwnYyas8Crs3Xry7A3Z0qFn3AryxKFyYq34DurWqyF43
+	Za1DZFZ3Cw4DXrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi9qXAUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCwwiMW2rMUqiYzQAA3V
 
-On 2026-10-10 at 15:31:08, netdev-bot+sashiko@kernel.org (netdev-bot+sashiko@kernel.org) wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
->
-> Critical: 0 · High: 1 (3) · Medium: 1 (5) · Low: 0 (1)
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
->
-> - [High] otx2_sync_flags_from_rep() (otx2_common.h:625-634) updates the
->   shared priv->flags word with a plain read-modify-write:…
-Pre-exisisting issues.
+在 2026/10/10 13:20, bot+bpf-ci@kernel.org 写道:
+>> selftests/bpf: Add task work BUSY window test
+> TL;DR: Test issues only, no kernel bug: the /sys/kernel/realtime PREEMPT_RT
+> check looks dead (kconfig could skip earlier); helpers duplicate the race
+> test; unused counters; redundant fprintf()s.
 
-> - [Medium] The commit message presents this as a cleanup to atomic
->   bitops, but the patch also fixes a user-visible representor bug and…
-This is side effect of the fix, not intended one.
+Thanks for the review! All the points look reasonable.
+
+For v7 I'll:
+- use the CONFIG_PREEMPT_RT kconfig extern via skel->kconfig to skip
+   before attaching, instead of the /sys/kernel/realtime probe;
+- share the status accessors, polling helper/bounds and the value
+   layout with the cancellation race test;
+- drop the unused ACK_SEEN/TIMEOUT counters (and the stats map with
+   them) and the redundant fprintf()s.
+
+I will send v7 shortly.
+
+---
+
+Thanks
+
+Yun Lu
+
+
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+>> index f9fd9adddfe6..eb0fe51617c5 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+> [ ... ]
+>
+>> @@ -436,3 +438,563 @@ void serial_test_task_work_race(void)
+> [ ... ]
+>
+>> +/*
+>> + * Positive confirmation of PREEMPT_RT only: not every RT kernel provides
+>> + * this file, and its absence proves nothing.  The definitive check for
+>> + * such kernels is the irq_work thread observation inside the BPF program.
+>> + */
+>> +static bool task_work_busy_rt_confirmed(void)
+>> +{
+>> +	char buf[2] = {};
+>> +	int fd, n;
+>> +
+>> +	fd = open("/sys/kernel/realtime", O_RDONLY | O_CLOEXEC);
+>> +	if (fd < 0)
+>> +		return false;
+>> +	n = read(fd, buf, sizeof(buf) - 1);
+>> +	close(fd);
+>> +	return n > 0 && buf[0] == '1';
+>> +}
+> A subsystem pattern flags this as potentially concerning: the selftests
+> guidance is to reuse existing shared test helpers instead of hand-rolling
+> file I/O for something that is already provided.
+>
+> Does any in-tree code provide /sys/kernel/realtime?  Nothing under kernel/
+> or init/ in this tree defines it, so task_work_busy_rt_confirmed() would seem
+> to always return false, and the early skip in serial_test_task_work_busy()
+> would never fire.  The comment above the
+> function says "not every RT kernel provides this file", and the commit
+> message says the flag is used "when present".
+>
+> On a PREEMPT_RT kernel the test would then only skip after
+> task_work_busy_wait_window() has polled for TASK_WORK_BUSY_POLL_ITERS *
+> TASK_WORK_BUSY_POLL_US (more than 2s) and task_work_busy_run_attempt() has
+> returned TWB_RT.  The end result is still a skip, so this looks like a dead
+> check plus a delay rather than a wrong result.
+>
+> bpf_experimental.h already declares:
+>
+>      extern bool CONFIG_PREEMPT_RT __kconfig __weak;
+>
+> and other prog_tests read kconfig externs through the skeleton, for example
+> stacktrace_ips.c:
+>
+>      if (!skel->kconfig->CONFIG_UNWINDER_ORC) {
+>
+> Would a kconfig extern in progs/task_work_busy.c, checked through
+> skel->kconfig after task_work_busy__open_and_load(), let the test skip up
+> front instead?
+>
+>> +static int task_work_busy_status(struct task_work_busy *skel, int idx,
+>> +				 __s64 *value)
+>> +{
+>> +	return bpf_map_lookup_elem(bpf_map__fd(skel->maps.status), &idx,
+>> +				   value);
+>> +}
+>> +
+>> +static int task_work_busy_set_status(struct task_work_busy *skel, int idx,
+>> +				     __s64 value)
+>> +{
+>> +	return bpf_map_update_elem(bpf_map__fd(skel->maps.status), &idx,
+>> +				   &value, BPF_ANY);
+>> +}
+> this isn't a bug, but task_work_busy_status() and
+> task_work_busy_set_status() look identical to task_work_race_status() and
+> task_work_race_set_status() earlier in this file, apart from the skeleton
+> type.
+>
+> The same applies to other pieces: struct task_work_busy_value has the same
+> layout as struct task_work_race_value, TASK_WORK_BUSY_POLL_US,
+> TASK_WORK_BUSY_POLL_ITERS and TASK_WORK_BUSY_START_POLL_ITERS have the same
+> values (100/20000/50000) as the TASK_WORK_RACE_* macros, and
+> task_work_busy_wait_seq() repeats the polling logic of
+> task_work_race_check_done().
+>
+> Both skeletons expose a status map with the same key and value types.  Could
+> both tests share helpers that take the status map (or its fd) and a shared
+> set of poll constants instead?
+>
+> [ ... ]
+>
+>> +	if (!ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_WINDOW, &stat_window),
+>> +		       "window stat") ||
+>> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_TOTAL, &stat_total),
+>> +		       "total stat") ||
+>> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_FILTERED, &stat_filtered),
+>> +		       "filtered stat") ||
+>> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_G1_RETRY, &stat_g1r),
+>> +		       "gen1 retry stat") ||
+>> +	    !ASSERT_OK(task_work_busy_stat(skel, BUSY_STAT_G2_RETRY, &stat_g2r),
+>> +		       "gen2 retry stat"))
+>> +		goto cleanup;
+> this isn't a bug, but are BUSY_STAT_ACK_SEEN and BUSY_STAT_TIMEOUT meant to
+> be read here?
+>
+> The fexit program in progs/task_work_busy.c bumps both counters for every
+> closed window, and enum task_work_busy_stat mirrors them, but this function
+> reads and prints only WINDOW, TOTAL, FILTERED, G1_RETRY and G2_RETRY.  A
+> grep of tools/testing/selftests/bpf finds no userspace reader for ACK_SEEN
+> or TIMEOUT.
+>
+> Could ACK_SEEN be checked against valid and TIMEOUT against missed (or both
+> added to the summary line below), or can they be dropped from both enums and
+> the BPF program?
+>
+>> +	fprintf(stderr,
+>> +		"task_work_busy: %d/%d valid, %d missed, %d attempts, max_wait %lld ns, windows %llu, adds %llu, filtered %llu, g1_retries %llu, g2_retries %llu\n",
+>> +		valid, TASK_WORK_BUSY_ROUNDS, missed, attempts_started,
+>> +		(long long)max_wait_ns, (unsigned long long)stat_window,
+>> +		(unsigned long long)stat_total,
+>> +		(unsigned long long)stat_filtered,
+>> +		(unsigned long long)stat_g1r, (unsigned long long)stat_g2r);
+> [ ... ]
+>
+>> +	if (!hard_fail) {
+>> +		if (!ASSERT_EQ(stat_window, (__u64)(valid + missed),
+>> +			       "window accounting"))
+>> +			fprintf(stderr,
+>> +				"windows entered %llu, valid %d, missed %d\n",
+>> +				(unsigned long long)stat_window, valid, missed);
+>> +		if (!ASSERT_GE(stat_total, (__u64)(2 * valid),
+>> +			       "task_work_add calls seen"))
+>> +			fprintf(stderr,
+>> +				"only %llu task_work_add calls for %d valid rounds\n",
+>> +				(unsigned long long)stat_total, valid);
+>> +		if (valid != TASK_WORK_BUSY_ROUNDS)
+>> +			fprintf(stderr,
+>> +				"busy coverage: %d/%d valid, %d missed in %d attempts\n",
+>> +				valid, TASK_WORK_BUSY_ROUNDS, missed,
+>> +				attempts_started);
+>> +		if (!ASSERT_EQ(valid, TASK_WORK_BUSY_ROUNDS,
+>> +			       "valid busy windows"))
+>> +			goto cleanup;
+>> +	}
+> this isn't a bug, but could the three conditional fprintf() calls in the
+> !hard_fail block be dropped?
+>
+> The summary fprintf() just above already reports valid,
+> TASK_WORK_BUSY_ROUNDS, missed, attempts_started, stat_window and stat_total,
+> and ASSERT_EQ() and ASSERT_GE() print the actual and expected values on
+> failure.  The "busy coverage" message also re-tests the same condition as the
+> ASSERT_EQ() that follows it.
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38024809478
+
