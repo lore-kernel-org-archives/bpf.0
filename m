@@ -1,157 +1,110 @@
-Received: from mta1.migadu.com (out-59.mta1.migadu.com [95.215.58.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED24238B12B
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 01:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6151A3A80;
+	Mon, 12 Oct 2026 03:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791770379; cv=none; b=DEDyjtdgAQYSVi5Qc9eK8Q6kYEh36b56fsHBEcybOCYAryGumvR5oBjg/tobK3PgCKq1+t+5uiR3SfOddMRfxeA4beSFnUgoOc2fmsJ8hommND/6XIpL1wbot3Fm70ZjxkMtpDXE3arlRUnOJNdf3LFZQwnrF0qnqb9lSAkJJZg=
+	t=1791775263; cv=none; b=GGpDu2qYnAwMk4impvhhNhQvIxNMILTosqs+qkjVBZf5fqXRkM9Dpo4PMt9Eb3Ru9JY5ZigQJSsKkNJ13SoqwjCW2XNVwrRaZx2s9XqFLQkTcftUQm5bBdVTn1EV7E1SAHUL2V9u4s67QR6O4s9OF9s7Yw0tWUrlte+0Nm1Mtx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791770379; c=relaxed/simple;
-	bh=moBHlWf8jgOs/rYSsRmHzU2nJBmQG8lbqQxc+Xan938=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AgCdTkDlB1paBxx/r2zPjFBo/Piahh2ueNSnkk9tGbcNec5LLTDM1fmp7/7zWK0YCDIkEDY84p2i+bG2j+0ClqZuvC0793WEDg3lIOgjvJDHJuGH4c//g2VMV98ZWojmR3L2Scfu5r30WjsGPFnkpTX0IZkBlG6D739CcQOZQAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D4tnk9S6; arc=none smtp.client-ip=95.215.58.59
+	s=arc-20240116; t=1791775263; c=relaxed/simple;
+	bh=KwpgVnpGdC5F/8qIEPC9K0OWtLHsuEgjTSiknpzoVik=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pe6wT0qdVvZPXgSwpumBcknp71/QWqMCMjkH8eI48OmZm2viSOWQ2MrA8S1EF/t43hWg0zOKONFxv0hsC6Qh11tRmAd9Jb1dpSkcvK/9uXuWbTbZkmTV2KgJyoQyzF8BkM/C3K0uXDJjH3tyw5z/s0PWVCvEKvq7s0YLX+3JqM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=dWkw1gu1; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D4tnk9S6"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=moBHlWf8jgOs/rYSsRmHzU2nJBmQG8lbqQxc+Xan938=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791770375; v=1; x=1792375175;
- b=D4tnk9S6wtHb6mDP/quLnO0cCahq120jKBiAAaR0yD/g5GVM2DejYzLPz0delcFFnUnXp8Zh
- dcKtqCzsJ76ozUA5xawJ+be8Wo3NGNSSkVMd8Wxear9pDleXsokAf3LWVieSBK34ypsIE09I+W1
- WyH++gLMseLHFJ8luyCF+1SU=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 967f2161ab6b936c;
-	Mon, 12 Oct 2026 01:59:34 +0000
-X-Mizu-Trace-ID: 967f2161ab6b936c
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <06f54345-4ca6-455f-9519-138e0b6db24b@linux.dev>
-Date: Mon, 12 Oct 2026 09:59:22 +0800
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="dWkw1gu1"
+Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69C1mXM31577111;
+	Sun, 11 Oct 2026 20:20:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=9
+	krnAw2hTJAN3iKwESbkRnnmpNs0d5MA3n9lfMTX5p0=; b=dWkw1gu1eRmR0i++t
+	LMkNTE0C0TcGzd8sGlclgYubf2WUjGRXeSliRkI49LXJdV9mcA3BtHH6BNiCX3si
+	ou5lQ6hCuK3qjmLT9ZUoxhN6LF+Xb4nfaCxyv3xUBVOe8yjCh74ekKmbjE0XnjFf
+	lqKiSa3X8nF8dWb9rbnvbO3MbVVkXQGBfX17fffTl4Ob5aQ2Nm1FAXGL3gham3iA
+	AQAPN6kTJI6wybqyk5yAEBO4T8bitUUIsoNnRTVCL3Yke6/3i3eWfQjLPsKqAQft
+	2TMGZYG0Rm/ISVKt+C8HW6brwOsSvZ/2aIPIWM1qxWZwrPPERQzsF81ONe8Vykeb
+	mKX/w==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4h8647t7gk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 11 Oct 2026 20:20:22 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Sun, 11 Oct 2026 20:20:21 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Sun, 11 Oct 2026 20:20:21 -0700
+Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with ESMTP id 0C9253F7061;
+	Sun, 11 Oct 2026 20:20:16 -0700 (PDT)
+Date: Mon, 12 Oct 2026 08:50:10 +0530
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@kernel.org>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <sdf@fomichev.me>, <sgoutham@marvell.com>
+Subject: Re: [PATCH v19 net-next 1/2] octeontx2: use atomic bitops for PF/VF
+ and rep flags
+Message-ID: <asxR6rpmf9b2by4O@rkannoth-OptiPlex-7090>
+References: <20261006094357.840823-2-rkannoth@marvell.com>
+ <179162646892.434549.7222119532595039059@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix UAF when map user reference is
- revived
-To: Jan-Gerd Tenberge <janten@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- jakub@cloudflare.com, edumazet@kernel.org, kuniyu@google.com,
- pabeni@redhat.com, willemb@google.com, davem@davemloft.net, kuba@kernel.org,
- horms@kernel.org, yonghong.song@linux.dev, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20261008095656.92793-1-janten@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261008095656.92793-1-janten@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179162646892.434549.7222119532595039059@kernel.org>
+X-Proofpoint-GUID: V7F2jhYx1d0ZJ7g4ziOzwkZnydgJGosz
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfX4rkP4xI3ndF1
+ 1/2joZ61ZK/HNmSmxT5rB9sT1krayzoSQHSS77xeLSC+IUjPsGZ49AA38McVZmqNzbFWERP9Jw8
+ qEvXWiez+O+Qt0ba8TfiKAnrEt4u1x93aCn3lMpnF20Jf+Ji4O6dFVTS4gG+YXm9bVxDBBAcJt8
+ XmrH5flXRI+NDHEWLUDGKnZk74YU9xjDe4mq/Fs0Vwx0CXCV/W/TchdR2R1C6ggkn6TNpnJk6gi
+ OCY8GPzEIN0RxJll9GXz52SyLo6ks+ETsSTjw0kULtGmZNAknep7lGDqcQxRKVdJTLBQVtytq7I
+ dNHj0ZlczsLOU1qzoKqQ4sByA/XHLQAYemVUIZdMkkbSf3zZ2qwY9O6LOokVmzF5ghETUQSmJ2Z
+ YYIwxLd2hC8DIx/rviCS7ktrTH18PfSAGquSdatj6fTtuNZRnXzAulyHSR72IfZzNf+AXaynrsf
+ D4mpGhVS5vECgqAq9vw==
+X-Authority-Analysis: v=2.4 cv=MOD1C8Zl c=1 sm=1 tr=0 ts=6acc51f6 cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=l0iWHRpgs5sLHlkKQ1IR:22 a=qit2iCtTFQkLgVSMPQTB:22 a=VwQbUJbxAAAA:8
+ a=EAnwtCU2dz7jGvP1txAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=lhd_8Stf4_Oa5sg58ivl:22
+X-Proofpoint-ORIG-GUID: V7F2jhYx1d0ZJ7g4ziOzwkZnydgJGosz
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfX9GWuTHGqzdM0
+ 6xJQp68679jgJhyP6Fxdt8ek/VSoMDzVJAmWGh6dZ7fvJabIutBXR7pXr2xigjHtuzFHQB9mixt
+ I2QCpWlp+xKmrF/UmiaYUmZaNYCkbPY=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-12_01,2026-10-09_01,2025-10-01_01
 
+On 2026-10-10 at 15:31:08, netdev-bot+sashiko@kernel.org (netdev-bot+sashiko@kernel.org) wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider.
+>
+> Critical: 0 · High: 1 (3) · Medium: 1 (5) · Low: 0 (1)
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+>
+> - [High] otx2_sync_flags_from_rep() (otx2_common.h:625-634) updates the
+>   shared priv->flags word with a plain read-modify-write:…
+Pre-exisisting issues.
 
-On 10/8/26 5:56 PM, Jan-Gerd Tenberge wrote:
-> bpf_map_put_uref() invokes map_release_uref after usercnt reaches zero,
-> before bpf_map_put() drops the map reference. BPF_MAP_GET_FD_BY_ID can
-> find the map during that callback and raise usercnt again.
->
-> The sockmap and sockhash release callbacks unconditionally drop programs
-> without taking sockmap_mutex. A concurrent attach through the revived fd
-> can therefore publish a new program before the stale callback drops it.
->
-> For a bpf_link attachment, this leaves plink set while pprog is NULL, so
-> link release warns and leaves the attachment slot unusable. The callback
-> can also drop the program between sock_map_prog_update() and the later
-> bpf_prog_inc(). If the program fd is closed concurrently, this removes
-> the last reference and schedules an RCU free. The subsequent increment
-> then resurrects a zero reference and leaves link->prog pointing to memory
-> that will be freed. A KASAN reproducer triggers a slab-use-after-free when
-> reading information from that link.
->
-> Triggering the race requires CAP_SYS_ADMIN in the initial user namespace,
-> because reviving the map uses BPF_MAP_GET_FD_BY_ID. A deterministic KASAN
-> reproducer is available privately on request. It was used to verify the
-> UAF before this change and its absence afterwards.
->
-> Serialize the release callbacks with program updates using sockmap_mutex
-> and recheck usercnt under the mutex. If the map was revived, leave its
-> programs intact. Move the map user-reference put in link release outside
-> the mutex to avoid recursively taking sockmap_mutex when it drops the last
-> user reference.
->
-> Fixes: 699c23f02c65 ("bpf: Add bpf_link support for sk_msg and sk_skb progs")
-> Assisted-by: LLM
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jan-Gerd Tenberge <janten@gmail.com>
-
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-
-> ---
->   net/core/sock_map.c | 18 ++++++++++++++----
->   1 file changed, 14 insertions(+), 4 deletions(-)
->
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 38df84284328..32ccf4ca3c76 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -26,7 +26,8 @@ struct bpf_stab {
->   
->   /* This mutex is used to
->    *  - protect race between prog/link attach/detach and link prog update, and
-> - *  - protect race between releasing and accessing map in bpf_link.
-> + *  - protect race between releasing and accessing map in bpf_link, and
-> + *  - protect race between map user-reference release and prog/link updates.
->    * A single global mutex lock is used since it is expected contention is low.
->    */
->   static DEFINE_MUTEX(sockmap_mutex);
-> @@ -372,7 +373,10 @@ static void sock_map_free(struct bpf_map *map)
->   
->   static void sock_map_release_progs(struct bpf_map *map)
->   {
-> -	psock_progs_drop(&container_of(map, struct bpf_stab, map)->progs);
-> +	mutex_lock(&sockmap_mutex);
-> +	if (!atomic64_read(&map->usercnt))
-> +		psock_progs_drop(&container_of(map, struct bpf_stab, map)->progs);
-> +	mutex_unlock(&sockmap_mutex);
->   }
->   
->   static struct sock *__sock_map_lookup_elem(struct bpf_map *map, u32 key)
-> @@ -1226,7 +1230,10 @@ static void *sock_hash_lookup(struct bpf_map *map, void *key)
->   
->   static void sock_hash_release_progs(struct bpf_map *map)
->   {
-> -	psock_progs_drop(&container_of(map, struct bpf_shtab, map)->progs);
-> +	mutex_lock(&sockmap_mutex);
-> +	if (!atomic64_read(&map->usercnt))
-> +		psock_progs_drop(&container_of(map, struct bpf_shtab, map)->progs);
-> +	mutex_unlock(&sockmap_mutex);
->   }
->   
->   BPF_CALL_4(bpf_sock_hash_update, struct bpf_sock_ops_kern *, sops,
-> @@ -1743,6 +1750,7 @@ struct sockmap_link {
->   static void sock_map_link_release(struct bpf_link *link)
->   {
->   	struct sockmap_link *sockmap_link = container_of(link, struct sockmap_link, link);
-> +	struct bpf_map *map = NULL;
->   
->   	mutex_lock(&sockmap_mutex);
->   	if (!sockmap_link->map)
-> @@ -1751,10 +1759,12 @@ static void sock_map_link_release(struct bpf_link *link)
->   	WARN_ON_ONCE(sock_map_prog_update(sockmap_link->map, NULL, link->prog, link,
->   					  link->attach_type));
->   
-> -	bpf_map_put_with_uref(sockmap_link->map);
-> +	map = sockmap_link->map;
->   	sockmap_link->map = NULL;
->   out:
->   	mutex_unlock(&sockmap_mutex);
-> +	if (map)
-> +		bpf_map_put_with_uref(map);
->   }
->   
->   static int sock_map_link_detach(struct bpf_link *link)
->
-> base-commit: ff47652a4b66c067c765a7ad464d930b5a9367cc
+> - [Medium] The commit message presents this as a cleanup to atomic
+>   bitops, but the patch also fixes a user-visible representor bug and…
+This is side effect of the fix, not intended one.
