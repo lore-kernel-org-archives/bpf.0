@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-34.mta1.migadu.com [95.215.58.34])
+Received: from mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842094A3F3A
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0576B4A4993
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791819894; cv=none; b=C6YM9nVZ5dOu80ytDVDf0XY5dF2ZbNgmuDo/d14qBC4+FXK0HbA66/+wPaW1nEKNp8ecRxMv857Ps1KopQIiK1w5t+XAKbFK0J9OGjZavYXltrTNc+2vMSAsEdNxdMJn/unzbb+ep0qawEsRdYzRgY3O/QDzl2DjQG2LsIXKfds=
+	t=1791819902; cv=none; b=O5SPB7aHRIfrcmZhXw7M5IVJvX83BTqRf1gcLWx36gF65CYfs9aCbfPoPcXgQKvLzCHSExYwO6sTNPNeHqjSuP/esGVTA8ZurUenxNDqtzeHh3CmeFMfMNAQikxMfZ39wSOm9G98a1w8bc6xt/5EfhWiuu5MiE4d9xgNrG3u+S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791819894; c=relaxed/simple;
-	bh=x+tHv/JfxB67Xj0ZN2pC8aXjPVSjxniDbcnePWR5xGE=;
+	s=arc-20240116; t=1791819902; c=relaxed/simple;
+	bh=GF2y3cZLLKo3Rw4Rb6OFmd7jVWJ7z6UGsLgzVq2UMpQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bxQor7a4GrJFqb9DVFR0vJs0u8KGu1OsyKQsSzgorAhxoK7s7jnkX/z1qt5X+z1JaVRGlkKRoCy2AypjTsoiIgb+V016awyAiRTTtBdZIb4kyHlJJiLQi41aBb9OtbTc5gnB6tiduwbT5JbWG3sXHVdB2IVCa6jYGP8rsdmslCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FaYwAf/z; arc=none smtp.client-ip=95.215.58.34
+	 MIME-Version; b=npftb19nxrvN9gyyK1BrlDnYpTxNE4jqg7D34UQrytvuRBDXuXKWF7Pc/Iz7dLER8rnku1cbnmIS7Qd3oYcSYT6Xc8mKmCjQAv91WjSFaSa7qjjRz4vMR1BJsg+s0Gw2Q9OMhJe9ekTeQ59K4UKuvlFpuAo+ttWioqCSpsbpTgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=K7gQgv7L; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FaYwAf/z"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="K7gQgv7L"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=x+tHv/JfxB67Xj0ZN2pC8aXjPVSjxniDbcnePWR5xGE=;
+DKIM-Signature: a=rsa-sha256; bh=GF2y3cZLLKo3Rw4Rb6OFmd7jVWJ7z6UGsLgzVq2UMpQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791819890; v=1; x=1792424690;
- b=FaYwAf/zvGPj9qjT+BWNU+h28H9VFUizLm1Dvc3I7wdZ2c6yrByX61dSKO8yEttxbmBha1aQ
- HF4G8otlbJC08wBLiJ4RpdmdEJJSqmzQCCf0EVCmxYy7v6fUKliIYMs/gGf1I9+Mc+TAeU6hwkd
- 646dW/Qd5DPFi9WIuZLV430k=
+ t=1791819898; v=1; x=1792424698;
+ b=K7gQgv7LDul7LjYnZ6KujhDcgA910dZs5bKa2i1LYyjey97RTCLY/rhMAW3nbcPn6uU4dQ7L
+ VWimG1mcTLRzeyY67/9/4+ect1vUVWne9TnYT/ruyDs6R4M95sUyDtSHN6XZTx331xz45dnyqyQ
+ nw2Dgq3NuZbhpJSJLukjsd0s=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4d116a5b8422ca6e;
-	Mon, 12 Oct 2026 15:44:50 +0000
-X-Mizu-Trace-ID: 4d116a5b8422ca6e
+Received: by smtp.migadu.com with ESMTPS id 56d1af081940df69;
+	Mon, 12 Oct 2026 15:44:58 +0000
+X-Mizu-Trace-ID: 56d1af081940df69
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -59,9 +59,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 16/21] selftests/bpf: Add tracing_multi bpf prog attach failure tests
-Date: Mon, 12 Oct 2026 23:40:18 +0800
-Message-ID: <20261012154024.29423-17-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 17/21] selftests/bpf: Add tracing_multi bpf prog cookie test
+Date: Mon, 12 Oct 2026 23:40:19 +0800
+Message-ID: <20261012154024.29423-18-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261012154024.29423-1-leon.hwang@linux.dev>
 References: <20261012154024.29423-1-leon.hwang@linux.dev>
@@ -73,159 +73,128 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Tests against two libbpf failures and two kernel failures:
-
-* libbpf: 'ids' + 'fds'.
-* libbpf: 'pattern' + 'fds'.
-* kernel: 'fds' + invalid 'ids'.
-* kernel: duplicate targets via different fd for the same bpf prog + func.
+Verify that the cookie also works for bpf prog targets of tracing_multi
+link.
 
 Assisted-by: Codex:gpt-5.5
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/libbpf.c                        |   2 +-
- tools/lib/bpf/libbpf_internal.h               |   1 +
- .../selftests/bpf/prog_tests/tracing_multi.c  | 100 ++++++++++++++++++
- 3 files changed, 102 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/tracing_multi.c  | 21 +++++++++++++++++--
+ .../selftests/bpf/progs/tracing_multi_bpf.c   | 13 ++++++++++--
+ 2 files changed, 30 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index edc5e8e813f3..72e2459e9339 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11604,7 +11604,7 @@ int libbpf_find_vmlinux_btf_id(const char *name,
- 	return libbpf_err(err);
- }
- 
--static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd, int token_fd)
-+int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd, int token_fd)
- {
- 	struct bpf_prog_info info;
- 	__u32 info_len = sizeof(info);
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 4e45dfacb548..d4e899181bdd 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -439,6 +439,7 @@ int btf_load_into_kernel(struct btf *btf,
- 			 char *log_buf, size_t log_sz, __u32 log_level,
- 			 int token_fd);
- struct btf *btf_load_from_kernel(__u32 id, struct btf *base_btf, int token_fd);
-+int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd, int token_fd);
- 
- struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf);
- void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
 diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index 801136ca63f0..d428b5e2600c 100644
+index d428b5e2600c..bcf933760bc5 100644
 --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
 +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -1195,8 +1195,108 @@ static void test_link_api_bpf_prog(void)
- 	tracing_multi_bpf__destroy(skel);
+@@ -1143,9 +1143,12 @@ static int run_bpf_target(struct bpf_program *prog, __u32 retval, const char *na
+ 	return 0;
  }
  
-+static void test_attach_api_bpf_prog_fails(void)
-+{
-+	static const char * const kfuncs[] = {
-+		"bpf_fentry_test1",
-+	};
-+	const char *bpf_funcs[] = { "target_1" };
-+	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-+	LIBBPF_OPTS(bpf_link_create_opts, lopts);
-+	struct tracing_multi_bpf *skel = NULL;
-+	int fd, target_id, token_fd;
-+	int fds[2], dup_fd = -1;
-+	struct bpf_link *link;
-+	__u32 target_ids[2];
-+	__u32 *ids = NULL;
-+	long err;
+-static void test_link_api_bpf_prog(void)
++static void test_link_api_bpf_prog(bool test_cookies)
+ {
+ 	const char *funcs[] = { "target_1", "target_2" };
++	__u64 fentry_cookies[] = { 0xfeed01, 0xfeed02 };
++	__u64 fexit_cookies[] = { 0xfeed11, 0xfeed12 };
++	__u64 fsession_cookies[] = { 0xfeed21, 0xfeed22 };
+ 	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+ 	struct tracing_multi_bpf *skel = NULL;
+ 	int fds[ARRAY_SIZE(funcs)];
+@@ -1158,27 +1161,39 @@ static void test_link_api_bpf_prog(void)
+ 	fds[0] = bpf_program__fd(skel->progs.target_1);
+ 	fds[1] = bpf_program__fd(skel->progs.target_2);
+ 
++	skel->bss->test_cookies = test_cookies;
 +
-+	skel = tracing_multi_bpf__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_multi_bpf__open_and_load"))
-+		return;
+ 	opts.fds = fds;
+ 	opts.funcs = funcs;
+ 	opts.cnt = ARRAY_SIZE(fds);
+ 
++	opts.cookies = test_cookies ? fentry_cookies : NULL;
+ 	link = bpf_program__attach_tracing_multi(skel->progs.test_fentry, NULL, &opts);
+ 	if (!ASSERT_OK_PTR(link, "attach_fentry"))
+ 		goto cleanup;
+ 	skel->links.test_fentry = link;
+ 
++	opts.cookies = test_cookies ? fexit_cookies : NULL;
+ 	link = bpf_program__attach_tracing_multi(skel->progs.test_fexit, NULL, &opts);
+ 	if (!ASSERT_OK_PTR(link, "attach_fexit"))
+ 		goto cleanup;
+ 	skel->links.test_fexit = link;
+ 
++	opts.cookies = test_cookies ? fsession_cookies : NULL;
+ 	link = bpf_program__attach_tracing_multi(skel->progs.test_fsession, NULL, &opts);
+ 	if (!ASSERT_OK_PTR(link, "attach_fsession"))
+ 		goto cleanup;
+ 	skel->links.test_fsession = link;
+ 
++	skel->bss->fentry_cookie = fentry_cookies[0];
++	skel->bss->fexit_cookie = fexit_cookies[0];
++	skel->bss->fsession_cookie = fsession_cookies[0];
+ 	if (run_bpf_target(skel->progs.target_1, 1, "target_1"))
+ 		goto cleanup;
 +
-+	ids = get_ids(kfuncs, ARRAY_SIZE(kfuncs), NULL);
-+	if (!ASSERT_OK_PTR(ids, "get_ids"))
-+		goto cleanup;
-+
-+	fds[0] = bpf_program__fd(skel->progs.target_1);
-+
-+	/* fail#1 (libbpf) kernel ids and BPF prog fds */
-+	LIBBPF_OPTS_RESET(opts,
-+		.ids = ids,
-+		.fds = fds,
-+		.funcs = bpf_funcs,
-+		.cnt = ARRAY_SIZE(bpf_funcs),
-+	);
-+
-+	link = bpf_program__attach_tracing_multi(skel->progs.test_fentry, NULL, &opts);
-+	err = libbpf_get_error(link);
-+	if (!ASSERT_EQ(err, -EINVAL, "libbpf_ids_fds")) {
-+		if (!err)
-+			bpf_link__destroy(link);
-+		goto cleanup;
-+	}
-+
-+	/* fail#2 (libbpf) kernel pattern and BPF prog fds */
-+	LIBBPF_OPTS_RESET(opts,
-+		.fds = fds,
-+		.funcs = bpf_funcs,
-+		.cnt = ARRAY_SIZE(bpf_funcs),
-+	);
-+
-+	link = bpf_program__attach_tracing_multi(skel->progs.test_fentry,
-+						"bpf_fentry_test*", &opts);
-+	err = libbpf_get_error(link);
-+	if (!ASSERT_EQ(err, -EINVAL, "libbpf_pattern_fds")) {
-+		if (!err)
-+			bpf_link__destroy(link);
-+		goto cleanup;
-+	}
-+
-+	/* fail#3 (kernel) kernel id with BPF prog fd */
-+	lopts.tracing_multi.ids = ids;
-+	lopts.tracing_multi.fds = fds;
-+	lopts.tracing_multi.cnt = ARRAY_SIZE(bpf_funcs);
-+	fd = bpf_link_create(bpf_program__fd(skel->progs.test_fentry), 0,
-+			     BPF_TRACE_FENTRY_MULTI, &lopts);
-+	ASSERT_EQ(fd, -EINVAL, "kernel_id_bpf_fd");
-+	if (fd >= 0)
-+		close(fd);
-+
-+	/* fail#4 (kernel) duplicate target through different fds */
-+	token_fd = bpf_object__token_fd(skel->obj);
-+	token_fd = token_fd < 0 ? 0 : token_fd;
-+	target_id = libbpf_find_prog_btf_id("target_1", fds[0], token_fd);
-+	if (!ASSERT_GT(target_id, 0, "target_1_btf_id"))
-+		goto cleanup;
-+
-+	dup_fd = dup(fds[0]);
-+	if (!ASSERT_GE(dup_fd, 0, "dup_target_fd"))
-+		goto cleanup;
-+
-+	fds[1] = dup_fd;
-+	target_ids[0] = target_id;
-+	target_ids[1] = target_id;
-+	lopts.tracing_multi.ids = target_ids;
-+	lopts.tracing_multi.fds = fds;
-+	lopts.tracing_multi.cnt = ARRAY_SIZE(fds);
-+	fd = bpf_link_create(bpf_program__fd(skel->progs.test_fentry), 0,
-+			     BPF_TRACE_FENTRY_MULTI, &lopts);
-+	ASSERT_EQ(fd, -EINVAL, "duplicate_bpf_target");
-+	if (fd >= 0)
-+		close(fd);
-+
-+cleanup:
-+	if (dup_fd >= 0)
-+		close(dup_fd);
-+	tracing_multi_bpf__destroy(skel);
-+	free(ids);
-+}
-+
++	skel->bss->fentry_cookie = fentry_cookies[1];
++	skel->bss->fexit_cookie = fexit_cookies[1];
++	skel->bss->fsession_cookie = fsession_cookies[1];
+ 	if (run_bpf_target(skel->progs.target_2, 2, "target_2"))
+ 		goto cleanup;
+ 
+@@ -1296,7 +1311,9 @@ static void test_attach_api_bpf_prog_fails(void)
  void test_tracing_multi_prog_test(void)
  {
  	if (test__start_subtest("link_api"))
- 		test_link_api_bpf_prog();
-+	if (test__start_subtest("attach_api_fails"))
-+		test_attach_api_bpf_prog_fails();
+-		test_link_api_bpf_prog();
++		test_link_api_bpf_prog(false);
+ 	if (test__start_subtest("attach_api_fails"))
+ 		test_attach_api_bpf_prog_fails();
++	if (test__start_subtest("cookies"))
++		test_link_api_bpf_prog(true);
  }
+diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_bpf.c b/tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
+index 3e02602558ad..651b5d86203f 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
++++ b/tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
+@@ -5,6 +5,10 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++bool test_cookies;
++__u64 fentry_cookie;
++__u64 fexit_cookie;
++__u64 fsession_cookie;
+ __u64 test_result_fentry;
+ __u64 test_result_fexit;
+ __u64 test_result_fsession_entry;
+@@ -29,20 +33,25 @@ int target_2(void *ctx)
+ SEC("fentry.multi")
+ int BPF_PROG(test_fentry)
+ {
+-	test_result_fentry++;
++	if (!test_cookies || bpf_get_attach_cookie(ctx) == fentry_cookie)
++		test_result_fentry++;
+ 	return 0;
+ }
+ 
+ SEC("fexit.multi")
+ int BPF_PROG(test_fexit)
+ {
+-	test_result_fexit++;
++	if (!test_cookies || bpf_get_attach_cookie(ctx) == fexit_cookie)
++		test_result_fexit++;
+ 	return 0;
+ }
+ 
+ SEC("fsession.multi")
+ int BPF_PROG(test_fsession)
+ {
++	if (test_cookies && bpf_get_attach_cookie(ctx) != fsession_cookie)
++		return 0;
++
+ 	if (bpf_session_is_return(ctx))
+ 		test_result_fsession_exit++;
+ 	else
 -- 
 2.55.0
 
