@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAD541CB5E;
-	Mon, 12 Oct 2026 08:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9868146EC70;
+	Mon, 12 Oct 2026 08:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795032; cv=none; b=rdLla16/7ZmDGD6HNH+sSXG7sLvEEetfLz1FXQxMRTe0FzSll4JIY86CcawE28ayOIQcl11X/hh/zwI5aeBE4mH942MfGWjaoRWPW9Nhxn6l5IhlSxUf/e/DQfxHksl+zmx/x+oUl1QhlbgsG0eSTvbQoeeT4HPjZljLHqrFbsA=
+	t=1791795032; cv=none; b=vAfxqR77oDfInlvXMT8lS5XHtRJ9EKRCcoL9fNN3hTdg8tKwySySJYLWvAJarqZ54uvQY1Y0CyW1XhJ+ZnVYziYMqTPjNSLbwhUnkAwCoTG7uo3rPfryJdQe/hbdroG49VkniZjT4oT7EJjWvHGNcIUflm27pbifayQlxrGZL10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791795032; c=relaxed/simple;
-	bh=yNy4mOgrNXt2OyPJ7L544fb2iUezscWWPV+5/+Lfgj0=;
+	bh=L5MHKKgmTdbkr954/SCJFPKuLl3SxXeOxVP2Hy+eylA=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cp4HnbQTZZLpAyQ+fS2lPUtdYr8JF48M0pWRMObYJN9a4DkLdWqjCLfRra7qpsknvad2eCLUMh3HOcF1ZYpw19gwt4906SwheXn/Tmb5KcK0FfzmvtSN0pT2jHIKvVdVR3RNeaNd5O8UBZgeMK2JXcTcGsaXD4GmValaX5NNmI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xa3JIpS7; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=CzaDIvRYPd0mcqzybwHFplF0l8zOfGOb8cLWlZ2n5pq1405ENpg/qy5U0Se0jhapGl/K+/ZyClpNtLVDW0Voo8bWEKaKiDV3PwfUmn5KQ0lb4GdV/i7eujNixRAH+00DAbjXDW/RKVWlj8A2hez2IZh81pzzrL++u8BERo/1QOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W9qInJuL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xa3JIpS7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB7D51F0089B;
-	Mon, 12 Oct 2026 08:50:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W9qInJuL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F20381F0089D;
+	Mon, 12 Oct 2026 08:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791795029;
-	bh=4PL++02OuB075LAl16+ZQe8NJ5v9WzXC+18PpJOnm9s=;
+	s=k20260515; t=1791795031;
+	bh=ktDUI42geMzy8DIpwoJvhqfNcy6U/NkHXExoElXrZcc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Xa3JIpS7kV65qBNslByF6JMhan5IcolFMbULFxDxXlZgCKY50JXf2y0fGn4oGiuqH
-	 n7mV2ZiES98+xH5cy54/sDQYsP0q+nsQWvNLFy8RnHFIJBOBKVU0a0Jc7U4lJLOqe9
-	 AWD9VUzTJnP2MS2Za25Qh5111rfU3tWNQyGcJT0IHGYBF01GUFGRGhlkFzBQBfE5Wi
-	 NOxjK6LZpY0/dCJTf0+VfETe8d9mNp7tXF3T9f5B4I3Kal9cTlzCxL2GDXgT62vCE4
-	 wUWANq9vhxFnUyjZEvMN53GLYeTVTFDIqp83cG9m3KOcoztSv414+9WllewyUdCVA+
-	 7SgQ5Gjv12YnA==
-Subject: Re: [PATCH v2 net-next 11/14] selftests: xsk: pass non-test traffic
- to the stack in hardware mode
+	b=W9qInJuLFB84qmbZ0EZ/tbkYTj/egVcnQZdlmcxP5cgl1YM1+VAYkovGvkmO4fXkG
+	 xG6SordmSJ36kslgBtKKcZCdXcIKWIA/ctPQtjr3IL7RpAex+CiZxNTkcF0wl+MU8Q
+	 xKINTFD6bLUiaYVgtoWvjnAh14St252ZgDy1glGPcS/eakuYYpr8CgmoS0k2SiOTIJ
+	 giNd7yz+EVWTf75LDoTmrgxrV4ABo+jIQdwnKGLyOwSNIx63iru1458j9UXnN+PxiH
+	 B0bwuVvm0AqeBX3/IOMNUdPyWynkwF3GTUQIav+5vhcJWfvUVeTk/GS55DrQ62HCbm
+	 rwH3IojAl6yyA==
+Subject: Re: [PATCH v2 net-next 14/14] selftests: xsk: document generic and
+ hardware endpoint runs
 From: netdev-bot+sashiko@kernel.org
 To: maciej.fijalkowski@intel.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
  stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
  tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Mon, 12 Oct 2026 08:50:28 +0000
-Message-ID: <179179502823.434549.9700326245084721655@kernel.org>
-In-Reply-To: <20261008114909.734364-12-maciej.fijalkowski@intel.com>
-References: <20261008114909.734364-12-maciej.fijalkowski@intel.com>
+Date: Mon, 12 Oct 2026 08:50:30 +0000
+Message-ID: <179179503054.434549.3586703041532575389@kernel.org>
+In-Reply-To: <20261008114909.734364-15-maciej.fijalkowski@intel.com>
+References: <20261008114909.734364-15-maciej.fijalkowski@intel.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,195 +53,151 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The comment this patch adds in xsk_load_xdp_programs() ("The
-  shadow's copy too, swapped directions attach its programs.") is…
-- [Low] In hardware (UDP) mode, xsk_xdp_adjust_tail() in
-  xsk_xdp_progs.bpf.c writes the wrong sequence number at the end of a…
-- [Low] is_test_packet() in xsk_xdp_progs.bpf.c does not check
-  ip->frag_off before reading the bytes after the IPv4 header as a…
-
-Pre-existing issues:
-- [Medium] is_adjust_tail_supported() in
-  tools/testing/selftests/net/lib/xsk/test_xsk.c overflows a stack…
+- [Low] The new README describes XSK_REMOTE_DEPLOY and XSK_REMOTE_BIN as
+  if each works on its own, but xsk.py does not handle them that way.
+- [Low] The 'Generic veth test' section of the new README.rst ends with
+  "The generic frame format is unchanged." That is a changelog note, not…
+- [Low] The README says "The XDP programs redirect only the test flow and
+  pass all other traffic to the stack, so the tested link does not have…
+- [Low] The README says "The remote listens on all addresses for
+  control." In test_xsk()…
 
 --
 
-selftests: xsk: pass non-test traffic to the stack in hardware mode
+selftests: xsk: document generic and hardware endpoint runs
 
-In hardware mode, this commit makes the xskxceiver XDP programs redirect
-only UDP/IPv4 packets sent to the test port (--udp-port). Everything else
-is passed to the stack. A new hw_port .bss variable is set from
-xsk_load_xdp_programs(), and an is_test_packet() helper gates each
-program. When hw_port is 0, every packet is still redirected.
+This adds a README.rst under net/lib/xsk. It describes the per-case veth
+launcher in test_xsk.sh and the two-host hardware setup driven by
+drivers/net/hw/xsk.py, where the DUT uses AF_XDP zero-copy and the remote
+xskxceiver uses SKB mode. It also points to the new document from
+drivers/net/README.rst and xskxceiver.c.
 
-> diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testing/selftests/net/lib/xsk/test_xsk.c
-> index 542c0579062a4..1033a5430697a 100644
-> --- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
-> +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
-> @@ -2454,6 +2454,8 @@ int xsk_load_xdp_programs(struct ifobject *ifobj)
->  	if (libbpf_get_error(ifobj->xdp_progs))
->  		return libbpf_get_error(ifobj->xdp_progs);
->  
-> +	/* The shadow's copy too, swapped directions attach its programs. */
-> +	ifobj->xdp_progs->bss->hw_port = udp_port;
-
-[Severity: Low]
-This comment looks right, but it contradicts the comment in setup_peer()
-in xskxceiver.c, which was added earlier in this series:
-
-tools/testing/selftests/net/lib/xsk/xskxceiver.c:setup_peer() {
-	/* Unattached skeleton copy; the engine only attaches the local side. */
-	if (xsk_load_xdp_programs(shadow))
-		return TEST_FAILURE;
-    ...
-}
-
-test_spec_reset() binds test->xdp_prog_tx and test->xskmap_tx to
-ifobj_tx->xdp_progs. That is the shadow when the local endpoint is RX.
-
-swap_directions() only swaps the ifobject pointers. After the swap,
-xsk_attach_xdp_progs() does:
-
-	if (xdp_prog_changed_tx(test))
-		err = xsk_reattach_xdp(ifobj_tx, test->xdp_prog_tx, test->xskmap_tx, test->mode);
-
-This attaches the shadow's program and XSKMAP to the real NIC, for
-example in testapp_bidirectional().
-
-Should the setup_peer() comment be updated too? A reader who trusts it
-could drop the hw_port write for the shadow. That would bring back the
-redirect-everything behaviour after a direction swap.
-
->  	return 0;
->  }
->  
-> diff --git a/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c b/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c
-> index 023d8befd4cab..716360d023a77 100644
-> --- a/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c
-> +++ b/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c
+> diff --git a/tools/testing/selftests/net/lib/xsk/README.rst b/tools/testing/selftests/net/lib/xsk/README.rst
+> new file mode 100644
+> index 0000000000000..d0a0a902ed783
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/lib/xsk/README.rst
+> @@ -0,0 +1,138 @@
 
 [ ... ]
 
-> @@ -18,9 +22,34 @@ struct {
->  static unsigned int idx;
->  int adjust_value = 0;
->  int count = 0;
-> +/* UDP port of the hardware test flow, 0 redirects every packet */
-> +__u16 hw_port;
-
-[Severity: Medium]
-This is a pre-existing issue, but adding hw_port to .bss makes it
-somewhat worse. is_adjust_tail_supported() in test_xsk.c reads the whole
-.bss map value into a 4-byte local:
-
-tools/testing/selftests/net/lib/xsk/test_xsk.c:is_adjust_tail_supported() {
-	int adjust_value = 0;
-	...
-	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
-	...
-}
-
-bpf_map_lookup_elem() copies value_size bytes, which here is the full
-.bss section. Before this patch, .bss already held idx, adjust_value,
-count and drop_idx, so about 16 bytes were written into a 4-byte int.
-With hw_port added, it is now about 18-20 bytes.
-
-Can this overwrite other stack variables, or trip the stack protector?
-This happens when testapp_validate_rx_endpoint() calls
-is_adjust_tail_supported() after an adjust_tail test fails.
-
-This patch already sets hw_port through the skeleton. Could
-is_adjust_tail_supported() read skel_rx->bss->adjust_value the same way?
-
-> +
-> +static __always_inline bool is_test_packet(struct xdp_md *xdp)
-> +{
-> +	void *data_end = (void *)(long)xdp->data_end;
-> +	void *data = (void *)(long)xdp->data;
-> +	struct ethhdr *eth = data;
-> +	struct udphdr *udp;
-> +	struct iphdr *ip;
-> +
-> +	if (!hw_port)
-> +		return true;
-> +	if ((void *)(eth + 1) > data_end ||
-> +	    eth->h_proto != bpf_htons(ETH_P_IP))
-> +		return false;
-> +	ip = (void *)(eth + 1);
-> +	if ((void *)(ip + 1) > data_end || ip->ihl != 5 ||
-> +	    ip->protocol != IPPROTO_UDP)
-> +		return false;
-> +	udp = (void *)(ip + 1);
-> +	return (void *)(udp + 1) <= data_end && udp->dest == bpf_htons(hw_port);
-> +}
+> +The shell wrapper creates the veth pair. ``-m skb|drv`` selects a mode,
+> +``-t`` selects a test by the name or number shown by ``xskxceiver -l``,
+> +and ``-p N`` selects a fixed control port instead of the default random
+> +port. The generic frame format is unchanged.
 
 [Severity: Low]
-Should is_test_packet() also check ip->frag_off? A non-initial IPv4
-fragment has no UDP header after the IP header. If it has ihl == 5 and
-protocol == IPPROTO_UDP, its payload bytes 2-3 are read here as
-udp->dest.
+This isn't a bug, but "The generic frame format is unchanged" reads like a
+changelog note. Once the series is merged, someone reading this file on
+its own has nothing to compare it against.
 
-If those bytes happen to equal htons(hw_port), is_test_packet() returns
-true. xsk_def_prog() and the other programs then redirect, drop or
-modify an unrelated fragment instead of returning XDP_PASS.
-
-That datagram can then not be reassembled. The test socket may also
-receive a frame that fails validation.
-
-The commit message says only UDP/IPv4 packets sent to the test port are
-redirected. Other parsers in the tree, such as xdp_flowtable.c and
-xdp_synproxy_kern.c, reject fragments by checking
-frag_off & bpf_htons(IP_MF | IP_OFFSET).
+Could this sentence either describe the frame format, or move to the
+commit message or cover letter?
 
 [ ... ]
 
-> @@ -80,6 +116,9 @@ SEC("xdp.frags") int xsk_xdp_adjust_tail(struct xdp_md *xdp)
->  	__u32 buff_len, curr_buff_len;
->  	int ret;
->  
-> +	if (!is_test_packet(xdp))
-> +		return XDP_PASS;
-> +
->  	buff_len = bpf_xdp_get_buff_len(xdp);
->  	if (buff_len == 0)
->  		return XDP_DROP;
+> +Both XSK endpoints generate and validate raw IPv4/UDP frames with one fixed
+> +UDP port, so ntuple rules can steer the test flow. They do not use AF_INET
+> +sockets. On DUT RX cases ``xsk.py`` reserves the last RX queue outside RSS
+> +and steers test traffic to it. On DUT TX cases it steers traffic to queue 0
+> +on the remote receiver. The XDP programs redirect only the test flow and
+> +pass all other traffic to the stack, so the tested link does not have to
+> +be otherwise idle.
 
 [Severity: Low]
-This patch gates xsk_xdp_adjust_tail() for hardware mode. Does its grow
-path still write the wrong end sequence number for UDP frames?
+Does "does not have to be otherwise idle" hold for DUT TX cases with
+REMOTE_TYPE=ssh?
 
-tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c:xsk_xdp_adjust_tail() {
-	...
-	if (curr_buff_len > buff_len) {
-		...
-		len = curr_buff_len - PKT_HDR_ALIGN;
-		words_to_end = len / sizeof(*pkt_data) - 1;
-		...
-}
+In _setup_case() in drivers/net/hw/xsk.py, the TX branch reserves a queue
+only for a netns remote:
 
-PKT_HDR_ALIGN is sizeof(struct ethhdr) + 2, which is 16. In hardware
-mode, xsk_set_udp_packet_format() sets pkt_hdr_size to UDP_PKT_HDR_SIZE
-(44), and is_frag_valid() uses that value:
+    queue = _reserve_queue(cfg) if _netns_remote(cfg) else 0
 
-	pkt_data += pkt_hdr_size / sizeof(*pkt_data);
+With an SSH remote, the DUT zero-copy socket binds to queue 0, and queue 0
+stays in the RSS indirection table. A later paragraph of this README notes
+that the DUT TX socket fills no RX buffers, so its zero-copy queue drops
+what it receives.
 
-Take a 132-byte grown frame. The program stores (132 - 16) / 4 - 1 = 28,
-but is_frag_valid() expects (132 - 44) / 4 - 1 = 21. The check then
-prints "expected seqnum at end [21], got seqnum [28]". The multi-buffer
-variant is off by the same 7 words.
+If unrelated traffic on the tested link hashes to DUT queue 0, wouldn't it
+be dropped before XDP_PASS can hand it to the stack? That includes non-IP
+frames such as ARP or LLDP, which many NICs put on queue 0.
 
-testapp_adjust_tail_grow() and testapp_adjust_tail_grow_mb() only skip
-TEST_MODE_SKB. testapp_xdp_shared_umem(), by contrast, returns TEST_SKIP
-under hw_test.
+The test still passes, because _control_addr() sends the SSH control
+channel over the management link. Even so, this guarantee only seems to
+hold for netns remotes.
 
-xsk.py does not schedule these cases on hardware, because their hardware
-directions are 0 in test_xsk_case_defs.h. Running xskxceiver --hw
-directly with these cases would fail rather than skip.
+[ ... ]
 
-The mismatch comes from the earlier patch "selftests: xsk: add a hardware
-mode to xskxceiver", and this patch leaves it in place. Should these
-cases skip under hw_test, or should the program use the UDP header size
-in hardware mode?
+> +Configure the usual driver test variables in
+> +``tools/testing/selftests/drivers/net/hw/net.config`` or the environment::
+> +
+> +  NETIF=eth0
+> +  LOCAL_V4=192.0.2.1
+> +  REMOTE_V4=192.0.2.2
+> +  REMOTE_TYPE=ssh
+> +  REMOTE_ARGS=user@remote.example.com
+> +  XSK_REMOTE_BIN=/path/to/remote/xskxceiver
+> +  XSK_REMOTE_SUDO=1
+
+[ ... ]
+
+> +The remote host needs AF_XDP in SKB mode and BPF. ``xsk.py`` copies the
+> +DUT's ``xskxceiver`` binary to the remote, so both hosts must have
+> +compatible architectures and libraries. ``XSK_REMOTE_BIN`` chooses a fixed
+> +destination path for that copy. Set ``XSK_REMOTE_DEPLOY=0`` to use a binary
+> +built on the remote from the same test case definitions instead.
+
+[Severity: Low]
+Does this match how xsk.py handles these two variables?
+
+In _remote_binary() in drivers/net/hw/xsk.py, XSK_REMOTE_DEPLOY is only
+checked once XSK_REMOTE_BIN is set:
+
+    binary = cfg.env.get("XSK_REMOTE_BIN")
+    if not binary:
+        return cfg.remote.deploy(local_binary)
+    if cfg.env.get("REMOTE_TYPE") != "ssh":
+        raise KsftSkipEx("XSK_REMOTE_BIN requires the SSH remote backend")
+    if cfg.env.get("XSK_REMOTE_DEPLOY", "1") == "0":
+
+If only XSK_REMOTE_DEPLOY=0 is set, as this paragraph suggests, wouldn't
+the DUT binary still be copied to the remote without any warning?
+
+Also, XSK_REMOTE_BIN causes a skip for any remote that isn't SSH, and the
+example config above sets it. The netns paragraph doesn't say to unset it.
+If someone copies the example and switches REMOTE_TYPE to netns, wouldn't
+every case be skipped with "XSK_REMOTE_BIN requires the SSH remote
+backend"?
+
+Could the README say that XSK_REMOTE_DEPLOY=0 needs XSK_REMOTE_BIN, and
+that XSK_REMOTE_BIN only works with REMOTE_TYPE=ssh?
+
+[ ... ]
+
+> +With SSH, the DUT uses the SSH host name to connect to the remote control
+> +listener.
+> +``XSK_UDP_PORT`` changes the fixed test UDP port (default 42567). The remote
+> +listens on all addresses for control.
+
+[Severity: Low]
+Is "listens on all addresses" accurate? test_xsk() in drivers/net/hw/xsk.py
+starts the remote listener with:
+
+    "-p", "0.0.0.0", "-P", str(control_port), *udp_args,
+
+peer_open_tcp() in net/lib/xsk/xsk_peer.c resolves this through
+getaddrinfo() with AF_UNSPEC. For "0.0.0.0" that returns only an AF_INET
+wildcard, so the listener binds to IPv4 only.
+
+With an SSH remote, _control_addr() makes the DUT connect to the host part
+of REMOTE_ARGS. If REMOTE_ARGS names an IPv6 literal or a host with only
+AAAA records, can the DUT reach the listener?
+
+The remote still prints its listening line, so the case would time out or
+fail rather than skip.
+
+Should the README say the listener is IPv4 only, or should the listener
+also bind an IPv6 wildcard?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261008114909.734364-1-maciej.fijalkowski%40intel.com
