@@ -1,159 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-14.mta0.migadu.com [91.218.175.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA79468C23
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 14:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D81A353ED9
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 14:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791813617; cv=none; b=IL2X8IUKqH9WM3mY53j+0ScjiBfk3Vlx2tVFaS5fS6Q9FmcDaj0ywAwJI1Gm1j59KWT7dwWV5vjOHHHb1fMhNR/LljWOR7O3AUWJf5JzFgrqMddZRkXKiJOllBa0NX1eV5Bk2CWEcajQjUPQsAodKeUV1IPjg9F4U4spbcqpMjY=
+	t=1791813752; cv=none; b=lTl88X7sB0AAuArypGb8rjHLir0kTj5bWEmPdTFC8BjnIWRN4l2HPvXPNGRnLB2iquhC1lriEmlg53BEmHdfzPyQnyv2Jj1UdDz+nv8EajSgu3L64XXPTo392PGGsi7W8uxTYXxa5ZzW5uqiGsGk7FvaHfyGlUbJQX0GivfohOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791813617; c=relaxed/simple;
-	bh=sh+xsokUyBzH/TX2AbOgAxfShFnn3lF58U0EW21Prp8=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=BLaEkneczWvaU05Wg48bPXpRzY78eGRRwPlYk7NIv1yv7ByjAHolmeWKqndZefmKYVQnJtAGKpc9yDfUuzhFr3wHVH6PJF1YDvZU5rxO/05bszJ9aUAA8sCmnLnvifon9tDKiUphOUuyGft5AxNx2r6+vHepdDj8bGGzbkt14Pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpXzfYR5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791813752; c=relaxed/simple;
+	bh=T1KEXbx4Yz9GAO6E3Pv8Mav6Z4XB2c8W/TEdwAmBmpQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=tfqatDQ4NI7gCHIdI4I2antAoJTpPpbYO6FRzLIC1IVpTPJiZZhzGyd2RZtfBfD8/vnYKjf7kVlcnO4b9UuBj//TC3NZnr3D+x+3D8T8TkN7zfRi63IZk6tgzap+Z6R7q6dLIcjdeHxbKGefAuDdqE8Rs7u774aylvLgJSeMwSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qMyNuDw+; arc=none smtp.client-ip=91.218.175.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpXzfYR5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F351F0089B;
-	Mon, 12 Oct 2026 14:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791813615;
-	bh=wULXwR8cgvbDRmpgNP3BD1rmA4GNG0Aexm+xfEPZ3mU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PpXzfYR5MYmiNyw89W921d/pvYMReFwnlW0wgSOpbEeoaIvIHtz8E8tfbpcPLzHXV
-	 vdh/ah2PQEnekE4TR2URaX7GhoKSeEQ7jR4hcKlQBxv4vh2nOjAJtobZH/7tox/1Gj
-	 7hY+FTFvZNsD/tNjwd1svcBzXvvfKif+KSENFVyYSP3QF0jHTdVNXyD5+bDk12166g
-	 sFNipVgT+QSAp4EPxCKxz8vZwlrEZLdBYdHAkvjl4sWzVA7i8zp347edTip4DfCkZd
-	 8Hch84pwGws/FOvw+VPrZKTQz0BWqgSyM1rUj10/uUrPSvg3hheP7Pwd+QxEgtIloM
-	 9bO3dVtTE4smA==
-Message-ID: <sashiko-outbox-168226@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 03/10] bpf: Turn loads of __arena pointer
- members into arena pointers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261012133711.4030594-4-memxor@gmail.com>
-References: <20261012133711.4030594-1-memxor@gmail.com>
- <20261012133711.4030594-4-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 12 Oct 2026 14:00:15 +0000
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qMyNuDw+"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=T1KEXbx4Yz9GAO6E3Pv8Mav6Z4XB2c8W/TEdwAmBmpQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791813749; v=1; x=1792418549;
+ b=qMyNuDw+5gtSX+sjlV4fSBuZZnZ64xQYkjEsG1efjaTm9/FGPTkUfCPcRtj0o4jBfyhfF5i8
+ fUXee7COQq82ZFN0x/5HcuZCPXpSkbYN6KDxTyTXvCdvA1+klxmz6ZDa/7SW1e1621UCp93DTEq
+ ClJoMfYaMwgQfYz13BqmF4uM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id e984e808a0ba7d6d;
+	Mon, 12 Oct 2026 14:02:29 +0000
+X-Mizu-Trace-ID: e984e808a0ba7d6d
+X-Migadu-Flow: FLOW_OUT
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	KaFai Wan <kafai.wan@linux.dev>,
+	Mykola Lysenko <mykolal@fb.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/3] selftests/bpf: Fix prog_tests framework self-tests
+Date: Mon, 12 Oct 2026 22:01:58 +0800
+Message-ID: <20261012140202.2754552-1-kafai.wan@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: arena_member fixup corrupts PTR_TO_MEM scalar loads
---
+Three prog_tests framework self-tests fail depending on how test_progs
+is invoked:
 
-commit 5458ef081d9f29cc60192d4b6fde6d8fd3989b75
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+- ./test_progs -t prog_tests_framework/test_fail -v
+  test_prog_tests_framework:FAIL:skip_cnt_check
+  unexpected skip_cnt_check: actual 0 != expected 2
 
-bpf: Turn loads of __arena pointer members into arena pointers
+- ./test_progs -t prog_tests_framework_expected_msgs -v
+  Caught signal #11!
+  Stack trace:
+  ./test_progs(crash_handler+0x38)[0x55620006fbb0]
 
-This commit translates loads of __arena pointer members in kernel structs
-into arena pointers in the verifier. It appends a fixup to subtract the
-kernel's virtual memory start address from the loaded value, and adds logic
-to ensure paths disagreeing on member types are rejected.
+- ./test_progs -t prog_tests_framework_compare_text -v
+  test_prog_tests_framework_compare_text:PASS:mismatch_rc 0 nsec
+  Caught signal #11!
+  Stack trace:
+  ./test_progs(crash_handler+0x38)[0x564ddbfcfbb0]
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index b2fa7e8bedf3a..bbb653df6b6f0 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-[ ... ]
-> @@ -870,6 +870,36 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_ver=
-ifier_env *env,
->   *     struct __sk_buff    -> struct sk_buff
->   *     struct bpf_sock_ops -> struct sock
->   */
-> +/*
-> + * A load through an __arena pointer member of a kernel struct reads the=
- kernel
-> + * address of arena memory. Append the conversion to the arena pointer f=
-orm,
-> + * (u32)(kaddr - kern_vm_start), that the struct_ops trampoline applies =
-to
-> + * __arena arguments. A __nullable member keeps NULL as NULL, tested on =
-the
-> + * full kernel address. Returns the number of insns in @buf, 0 when the =
-insn
-> + * loads no such member, or an error when it does so on some paths only.
-> + */
-> +static int arena_member_fixup(struct bpf_verifier_env *env, int idx, str=
-uct bpf_insn *insn,
-> +			      struct bpf_insn *buf)
-> +{
-> +	struct bpf_insn_aux_data *aux =3D &env->insn_aux_data[idx];
-> +	int cnt =3D 0;
-> +	u32 base;
-> +
-> +	if (!aux->arena_member)
-> +		return 0;
-> +	if (aux->non_arena_member) {
-> +		verbose(env, "an insn loads an arena pointer member on one path and a =
-different member on another\n");
-> +		return -EINVAL;
-> +	}
+Patch #1 counts the subtests that actually ran, so the skip and error
+count checks no longer fail when -t or -n filters out some subtests.
 
-[Severity: High]
-Because non_arena_member might not be set by the PTR_TO_MEM path (as noted=
-=20
-below), could this check fail to reject the mismatch?
+Patches #2 and #3 skip the subtests that inspect the log buffer when the
+output is not captured, such as with -v in non-parallel mode, instead of
+crashing on a NULL log_buf.
 
-If it fails to reject, arena_member_fixup() blindly appends a
-SUB kern_vm_start instruction to the shared load. At runtime, if the
-PTR_TO_MEM path executes, its scalar load would be corrupted by the
-subtraction, potentially leading to out-of-bounds access or data corruption
-if the result is used as an index or offset.
+---
+KaFai Wan (3):
+  selftests/bpf: Fix prog_tests framework subtest count checks
+  selftests/bpf: Skip expected_msgs subtests when stdout is not saved
+  selftests/bpf: Skip compare_text subtest when stdout is not saved
 
-> +
-> +	base =3D bpf_arena_get_kern_vm_start(env->prog->aux->arena);
-> +	buf[cnt++] =3D *insn;
-> +	if (aux->arena_member_nullable)
-> +		buf[cnt++] =3D BPF_JMP_IMM(BPF_JEQ, insn->dst_reg, 0, 1);
-> +	buf[cnt++] =3D BPF_ALU32_IMM(BPF_SUB, insn->dst_reg, (s32)base);
-> +	return cnt;
-> +}
-[ ... ]
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 70fd44a6e1c56..a24a2bab802b3 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -6661,6 +6697,11 @@ static int check_ptr_to_btf_access(struct bpf_veri=
-fier_env *env,
->  	if (ret < 0)
->  		return ret;
-> =20
-> +	if (ret =3D=3D PTR_TO_ARENA)
-> +		return check_arena_member_load(env, regs, value_regno, flag, tname, fi=
-eld_name);
-> +	if (atype =3D=3D BPF_READ && value_regno >=3D 0)
-> +		env->insn_aux_data[env->insn_idx].non_arena_member =3D true;
+ .../bpf/prog_tests/prog_tests_framework.c     | 34 ++++++++++++++-----
+ 1 file changed, 25 insertions(+), 9 deletions(-)
 
-[Severity: High]
-Does this code miss setting the conflict flag for non-BTF pointers?=20
-
-The verifier's save_aux_ptr_type() permits sharing an instruction across=20
-branches where one path uses PTR_TO_BTF_ID and the other uses PTR_TO_MEM
-(by merging them via allow_trust_mismatch).=20
-
-If the PTR_TO_BTF_ID path reads an __arena member, check_ptr_to_btf_access(=
-)=20
-sets aux->arena_member =3D true. However, when the PTR_TO_MEM path is
-evaluated, check_mem_access() does not set aux->non_arena_member =3D true f=
-or=20
-memory pointers.
-
-> +
->  	if (ret !=3D PTR_TO_BTF_ID) {
->  		/* just mark; */
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012133711.4030=
-594-1-memxor@gmail.com?part=3D3
+-- 
+2.43.0
