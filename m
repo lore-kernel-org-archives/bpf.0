@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D4F3FCB37;
-	Mon, 12 Oct 2026 14:14:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9326939B94A;
+	Mon, 12 Oct 2026 14:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791814482; cv=none; b=tJXttjoOihqm1gU/bfWexunr5h0zqI+oy60CTXV9w55gMP4KTfIrXsv13oFDDzQMFiMn3x9MBCASUG1Yib0qYQlA+7QNUgfSL2Bkq2LFN9BLb3YdEWF68nubaWII3CMCD9k1Qf0VPIVE7Vcde0oQdNdCBDzxcC9WhIsbARYrJzM=
+	t=1791814581; cv=none; b=doBnQ3GQy3aPMT4IMG/on0WOPKR63aTHjiN2l4VrEU45PBsUvpQvx4HLG9MINRG/WDc1qUb7QAJ4ASahWE82MYWq4Sw6dGDbTUgZwIgAeUvhuTuUkGCSFZ/epOoxxwxzT+c6J5QNDnuq6Lx/1wBVwF3aiwL6QXcnCDwxpBKCc84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791814482; c=relaxed/simple;
-	bh=ceC3DkinQnzgssYWjBSY7LZAGR+ChCV47GSthL2BjG4=;
+	s=arc-20240116; t=1791814581; c=relaxed/simple;
+	bh=obtm2pJQXpPvJeHZ5dJoSxxASOKS7F3tPagSNJHyvoM=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=c3KisFWV8aap/7wg0mjVrhhpM9zgdo0hIKyn5F3GnNt8nzXNtJJte4SNkvaq8O+04axQ8Ad3Pt/RkWEyLFM8WqMgt/Txnp6RjfNRHUXEpLbh44aQb6l0O7aHEDhLVHGGyWSRnuQRSi5IvNeXfy7o6wD8EysrmiQ2xDKucxD8hAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQdujEd3; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=OgdBJlYSQLhBfmFdoQ0NBKJdqbejVy1oMgswbWpsBLvDfc7YUfIDn82ZJXEFjQTnXYqNgR3fAEt4x7HFUQxCct9oEpGze93XBZKa/Q9+Va+Y/fLNITK+0bCPiy5OGMGwIGzD0G/M7kG2LCHVGWuq5nLWsSDxBBGGgZHAu5XO/bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eigxJMr7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZQdujEd3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC581F0089B;
-	Mon, 12 Oct 2026 14:14:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eigxJMr7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B88F1F0089B;
+	Mon, 12 Oct 2026 14:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791814481;
-	bh=FZMSNEWN8c3eC1CstWJpWeqj8Hq9WO/jQ/IPK7z+a6w=;
+	s=k20260515; t=1791814580;
+	bh=wkfKRTjp6/s95orK5T+FwDlOCT9z7CXe0scB7cxcwpo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=ZQdujEd3nm1ANerj4OM7BrYF5ruevPlY3cvROcQpaFWKqZSSbmDWIvzkKBgiiSjKM
-	 xukpSQ+VALmHPW0Ut0jCTjDxuuWiIChU75JOYBFbQtm34yQowbkZaigYiiF+6vTDGQ
-	 +3+7DBmNJkzJyngfDUxfqoMDW5aXF5y6KghBOnZILPbNDL89aRxTGAoq5NtxE6eCwg
-	 BJ19SOKDFmEoRal8sQwR20K0UED/WX/sk8di2bWh8J/qGo3+7ZYZxzW3ae5dTuYB0+
-	 N67e35NAaDIndJZh9SCO+swDJAkcvZC3nKDnv1u0LQ0qN9jMmnfBs6zL+fK6hM+F8J
-	 Rx5HVQwSkrt7w==
+	b=eigxJMr7QbJhMg4Wylwlyh3XTs3rt3CeVegIl9N7mWd0t2NVjNqQMHXMNVr4M9dNo
+	 FYh/nL+lX9/Mu49s24BMu5NoXFAGjJn6hde6bqsqxm0J11fvhp2553Psy+/l/Bu6J0
+	 XM6HUM6tTJWKg+d9Xwu5oezB7FdJ4G1fSHuIvXHbweyICjOw5MUVZpIAPFK8ZaPM51
+	 5iJNEgoJ+Dgp+Ge3Ni0ajp640O4dHlCEb6pqj7F60g/RrlRUJvCa9V/s2eRm2Qumpn
+	 sWc1BBRtRArvs4ceqwiafnTb/jJSVrfnh94Bi1txF4zgV+ie0QJ5vPSt4vEnbtTK4Z
+	 DNYbSkyynM+/A==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Stanislav Fomichev <sdf.kernel@gmail.com>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
@@ -51,13 +51,13 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Mina Almasry
  <almasrymina@google.com>
-Subject: Re: [RFC net-next 09/15] xsk: Add a page-pool memory provider for UMEM
-In-Reply-To: <asPfprbzjNAgKabP@devvm7509.cco0.facebook.com>
+Subject: Re: [RFC net-next 13/15] eth: fbnic: Support AF_XDP zero-copy receive
+In-Reply-To: <asPhAnm830qFxGMv@devvm7509.cco0.facebook.com>
 References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-10-bjorn@kernel.org>
- <asPfprbzjNAgKabP@devvm7509.cco0.facebook.com>
-Date: Mon, 12 Oct 2026 16:14:38 +0200
-Message-ID: <87y0c3atv5.fsf@all.your.base.are.belong.to.us>
+ <20261002190018.696925-14-bjorn@kernel.org>
+ <asPhAnm830qFxGMv@devvm7509.cco0.facebook.com>
+Date: Mon, 12 Oct 2026 16:16:17 +0200
+Message-ID: <87tsmratse.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,401 +70,245 @@ Content-Transfer-Encoding: quoted-printable
 Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
 > On 10/02, Bj=C3=B6rn T=C3=B6pel wrote:
->> AF_XDP zero-copy drivers get RX buffers from an xsk_buff_pool. A
->> driver built on page_pool would need a second RX allocator for that.
->> Instead, let an XSK buffer pool act as a page-pool memory provider.
->> It hands out UMEM chunks as NET_IOV_XSK net_iovs, and the driver
->> uses the normal page_pool API.
+>> fbnic gets RX buffers from page_pool. Use the XSK buffer pool as the
+>> RX queue's page-pool memory provider, so allocation, DMA sync,
+>> recycling and refill stay in page_pool. Only aligned 4 KiB UMEM
+>> chunks are supported.
 >>=20
->> A driver calls xsk_pool_setup_page_pool() for XDP_SETUP_XSK_POOL.
->> For now only 4 KiB pages and aligned UMEM with 4 KiB chunks work;
->> other setups get -EOPNOTSUPP. A bind without XDP_ZEROCOPY then falls
->> back to copy mode, as before. The exception is a failed setup that
->> leaves an old page pool being destroyed. That page pool still uses
->> the DMA mapping, so the bind fails.
+>> Each UMEM frame on the header queue must hold one packet. Raise the
+>> header-split threshold to at least 3072 bytes, more than half of a
+>> 4 KiB page, so the device finishes the frame after one header. Cap
+>> it to the space left in the frame after the headroom. An MTU above
+>> the threshold needs a socket with XDP_USE_SG and an XDP program with
+>> frags support. With XDP_USE_SG, the payload queue also uses UMEM
+>> frames, and the device uses each frame for one descriptor only.
+>> Without it, the payload queue uses a normal page pool. If the device
+>> does not finish a provider frame after one descriptor, drop the
+>> packet.
 >>=20
->> The provider reads the FILL ring in batches of the page-pool cache
->> refill size, and it handles RX need-wakeup. Each allocation reads at
->> most one batch, which limits the work spent on bad descriptors in
->> NAPI. Addresses outside the UMEM, and addresses that are already in
->> use, count as invalid descriptors and are dropped. refill_done keeps
->> NAPI scheduled while the FILL ring has entries. When the ring is
->> empty, it sets NEED_WAKEUP and then checks the ring once more.
+>> The BDQ refill loop now alternates header and payload buffers on all
+>> queues, so two rings that share one finite provider stay balanced.
+>> It keeps NAPI scheduled while the provider still has buffers.
 >>=20
->> The provider asks for page-sized buffers with the UMEM headroom plus
->> XDP_PACKET_HEADROOM. It refuses a page pool whose DMA sync range
->> goes past the chunk.
+>> Provider frames are never split, so they get no fragment bias. A
+>> redirected frame can be recycled before its old BDQ slot is cleaned,
+>> and a stale bias would corrupt the new allocation.
 >>=20
->> During a queue restart, two page pools can use one provider at the
->> same time. A provider lock protects the FILL ring, the reuse stack
->> and need-wakeup. Allocation takes it once per page-pool cache refill
->> of up to 64 buffers. A packet that is copied into a socket with a
->> provider takes it once per packet, because the copy also reads the
->> FILL ring.
+>> The headroom comes from the queue configuration. It must be at least
+>> XDP_PACKET_HEADROOM, a multiple of 128 bytes, and fit the hardware
+>> field; otherwise queue validation fails. MTU, ring parameter and XDP
+>> program changes that do not fit an active provider are rejected.
 >>=20
->> A buffer has one owner at a time, as a normal page-pool page does.
->> Allocation claims a buffer by setting its page pool under the
->> provider lock. Release clears the link, so destroying the provider
->> does not need to scan the UMEM.
->>=20
->> Generic XDP and synthetic RX queues, such as CPUMAP, would write to
->> the socket RX ring outside the queue's NAPI. While the provider is
->> installed, generic XDP drops such packets and counts them in
->> rx_dropped, and synthetic queues get -EINVAL. Classic zero-copy
->> sockets do not change.
->>=20
->> A failed queue restart can leave the old page pool draining. Keep
->> the UMEM, the DMA mapping and the netdev until the provider's last
->> page pool is destroyed. Charge the provider arrays, whose size grows
->> with the UMEM, to the memory cgroup of the socket owner.
->> XDP_SOCKETS now selects PAGE_POOL.
+>> fbnic did not support XDP_REDIRECT. Add it, with xdp_do_flush(), and
+>> advertise it. This also enables copy-mode AF_XDP and the other
+>> redirect targets on fbnic. Do not advertise AF_XDP zero copy until
+>> TX support is added.
 >>=20
 >> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 >> ---
->>  include/net/xdp_sock_drv.h  |  12 +
->>  include/net/xsk_buff_pool.h |   6 +-
->>  net/core/page_pool.c        |   4 +-
->>  net/xdp/Kconfig             |   1 +
->>  net/xdp/xsk.c               |  50 ++-
->>  net/xdp/xsk.h               |  58 ++++
->>  net/xdp/xsk_buff_pool.c     | 654 +++++++++++++++++++++++++++++++++++-
->>  7 files changed, 756 insertions(+), 29 deletions(-)
+>>  .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |   5 +
+>>  .../net/ethernet/meta/fbnic/fbnic_netdev.c    | 140 ++++++-
+>>  .../net/ethernet/meta/fbnic/fbnic_netdev.h    |   4 +
+>>  drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 350 +++++++++++++-----
+>>  drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |   6 +
+>>  5 files changed, 402 insertions(+), 103 deletions(-)
 >>=20
->> diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
->> index d94aeb506379..b9288f5dd48b 100644
->> --- a/include/net/xdp_sock_drv.h
->> +++ b/include/net/xdp_sock_drv.h
->> @@ -9,6 +9,8 @@
->>  #include <net/xdp_sock.h>
->>  #include <net/xsk_buff_pool.h>
+>> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c b/drivers/n=
+et/ethernet/meta/fbnic/fbnic_ethtool.c
+>> index e774740fcb5d..188abe0ead14 100644
+>> --- a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
+>> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
+>> @@ -385,6 +385,11 @@ fbnic_set_ringparam(struct net_device *netdev, stru=
+ct ethtool_ringparam *ring,
+>>  		return -EINVAL;
+>>  	}
 >>=20=20
->> +struct netlink_ext_ack;
->> +
->>  #define XDP_UMEM_MIN_CHUNK_SHIFT 11
->>  #define XDP_UMEM_MIN_CHUNK_SIZE (1 << XDP_UMEM_MIN_CHUNK_SHIFT)
->>=20=20
->> @@ -28,6 +30,8 @@ void xsk_tx_completed(struct xsk_buff_pool *pool, u32 =
-nb_entries);
->>  bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc=
-);
->>  u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max);
->>  void xsk_tx_release(struct xsk_buff_pool *pool);
->> +int xsk_pool_setup_page_pool(struct net_device *dev, struct xsk_buff_po=
-ol *pool,
->> +			     u16 queue_id, struct netlink_ext_ack *extack);
->>  struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
->>  					    u16 queue_id);
->>  void xsk_set_rx_need_wakeup(struct xsk_buff_pool *pool);
->> @@ -370,6 +374,14 @@ static inline void xsk_tx_release(struct xsk_buff_p=
-ool *pool)
->>  {
->>  }
->>=20=20
->> +static inline int xsk_pool_setup_page_pool(struct net_device *dev,
->> +					   struct xsk_buff_pool *pool,
->> +					   u16 queue_id,
->> +					   struct netlink_ext_ack *extack)
->> +{
->> +	return -EOPNOTSUPP;
->> +}
->> +
->>  static inline struct xsk_buff_pool *
->>  xsk_get_pool_from_qid(struct net_device *dev, u16 queue_id)
->>  {
->> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
->> index 77264c4902c0..9eed8796a356 100644
->> --- a/include/net/xsk_buff_pool.h
->> +++ b/include/net/xsk_buff_pool.h
->> @@ -11,6 +11,7 @@
->>  #include <net/xdp.h>
->>=20=20
->>  struct xsk_buff_pool;
->> +struct xsk_pp;
->>  struct xdp_rxq_info;
->>  struct xsk_cb_desc;
->>  struct xsk_queue;
->> @@ -52,7 +53,8 @@ struct xsk_buff_pool {
->>  	spinlock_t xsk_tx_list_lock;
->>  	refcount_t users;
->>  	struct xdp_umem *umem;
->> -	struct work_struct work;
->> +	struct xsk_pp *pp;
->> +	struct delayed_work work;
->>  	/* Protects generic receive in shared and non-shared umem mode. */
->>  	spinlock_t rx_lock;
->>  	struct list_head free_list;
->> @@ -117,10 +119,8 @@ int xp_alloc_tx_descs(struct xsk_buff_pool *pool, s=
-truct xdp_sock *xs,
->>  void xp_destroy(struct xsk_buff_pool *pool);
->>  void xp_get_pool(struct xsk_buff_pool *pool);
->>  bool xp_put_pool(struct xsk_buff_pool *pool);
->> -void xp_clear_dev(struct xsk_buff_pool *pool);
->>  void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
->>  void xp_del_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
->> -
->>  /* AF_XDP, and XDP core. */
->>  void xp_free(struct xdp_buff_xsk *xskb);
->>=20=20
->> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
->> index e36ae6123adf..1f446e9a10d7 100644
->> --- a/net/core/page_pool.c
->> +++ b/net/core/page_pool.c
->> @@ -1397,8 +1397,8 @@ void net_mp_release_page_pool_bulk(struct page_poo=
-l *pool,
->>  		atomic_add(count, release_cnt);
->>  }
->>=20=20
->> -/* Disassociate a niov from a page pool. Should only be used in the
->> - * ->release_netmem() path.
->> +/* Disassociate a niov from a page pool. Memory providers may do this e=
-ither
->> + * from ->release_netmem() or from ->destroy() after all objects were r=
-eleased.
->>   */
->>  void net_mp_niov_clear_page_pool(struct net_iov *niov)
->>  {
->> diff --git a/net/xdp/Kconfig b/net/xdp/Kconfig
->> index 71af2febe72a..c9c68d3b3712 100644
->> --- a/net/xdp/Kconfig
->> +++ b/net/xdp/Kconfig
->> @@ -2,6 +2,7 @@
->>  config XDP_SOCKETS
->>  	bool "XDP sockets"
->>  	depends on BPF_SYSCALL
->> +	select PAGE_POOL
->>  	default n
->>  	help
->>  	  XDP sockets allows a channel between XDP programs and
->> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
->> index b68dda9c37d1..90c98b42a18a 100644
->> --- a/net/xdp/xsk.c
->> +++ b/net/xdp/xsk.c
->> @@ -464,7 +464,9 @@ static int xsk_rcv_check(struct xdp_sock *xs, struct=
- xdp_buff *xdp, u32 len)
->>  static void xsk_flush(struct xdp_sock *xs)
->>  {
->>  	xskq_prod_submit(xs->rx);
->> -	__xskq_cons_release(xs->pool->fq);
->> +	/* Provider pools publish FILL consumption under the provider lock. */
->> +	if (!READ_ONCE(xs->pool->pp))
->> +		__xskq_cons_release(xs->pool->fq);
->>  	sock_def_readable(&xs->sk);
->>  }
->>=20=20
->> @@ -474,16 +476,40 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xd=
-p_buff *xdp)
->>  	int err;
->>=20=20
->>  	err =3D xsk_rcv_check(xs, xdp, len);
->> -	if (!err) {
->> -		spin_lock_bh(&xs->pool->rx_lock);
->> -		err =3D __xsk_rcv(xs, xdp, len);
->> -		xsk_flush(xs);
+>> +	err =3D fbnic_xsk_validate(fbn, fbn->xdp_prog, netdev->mtu,
+>> +				 kernel_ring->hds_thresh, extack);
 >> +	if (err)
 >> +		return err;
->> +	spin_lock_bh(&xs->pool->rx_lock);
->> +	if (unlikely(READ_ONCE(xs->pool->pp))) {
->> +		xs->rx_dropped++;
->>  		spin_unlock_bh(&xs->pool->rx_lock);
->> +		return -EOPNOTSUPP;
->>  	}
->> +	err =3D __xsk_rcv(xs, xdp, len);
->> +	xsk_flush(xs);
->> +	spin_unlock_bh(&xs->pool->rx_lock);
+>> +
+>>  	if (!netif_running(netdev)) {
+>>  		fbnic_set_rings(fbn, ring, kernel_ring);
+>>  		return 0;
+>> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/ne=
+t/ethernet/meta/fbnic/fbnic_netdev.c
+>> index 8a6703afca38..038e91ef14e4 100644
+>> --- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+>> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+>> @@ -5,6 +5,8 @@
+>>  #include <linux/ipv6.h>
+>>  #include <linux/types.h>
+>>  #include <net/netdev_queues.h>
+>> +#include <net/netdev_rx_queue.h>
+>> +#include <net/xdp_sock_drv.h>
 >>=20=20
->>  	return err;
+>>  #include "fbnic.h"
+>>  #include "fbnic_netdev.h"
+>> @@ -276,6 +278,8 @@ static int fbnic_set_mac(struct net_device *netdev, =
+void *p)
+>>  static int fbnic_change_mtu(struct net_device *dev, int new_mtu)
+>>  {
+>>  	struct fbnic_net *fbn =3D netdev_priv(dev);
+>> +	struct netlink_ext_ack extack =3D {};
+>> +	int err;
+>>=20=20
+>>  	if (fbnic_check_split_frames(fbn->xdp_prog, new_mtu, fbn->hds_thresh))=
+ {
+>>  		dev_err(&dev->dev,
+>> @@ -285,6 +289,15 @@ static int fbnic_change_mtu(struct net_device *dev,=
+ int new_mtu)
+>>  		return -EINVAL;
+>>  	}
+>>=20=20
+>> +	err =3D fbnic_xsk_validate(fbn, fbn->xdp_prog, new_mtu,
+>> +				 fbn->hds_thresh, &extack);
+>> +	if (err) {
+>> +		if (extack._msg)
+>> +			netdev_err(dev, "%s\n", extack._msg);
+>> +
+>> +		return err;
+>> +	}
+>> +
+>>  	WRITE_ONCE(dev->mtu, new_mtu);
+>>=20=20
+>>  	return 0;
+>> @@ -534,26 +547,123 @@ bool fbnic_check_split_frames(struct bpf_prog *pr=
+og, unsigned int mtu,
+>>  	return mtu + ETH_HLEN > hds_thresh;
 >>  }
 >>=20=20
->> +/* Copy into the socket's UMEM. A provider-backed pool shares its FILL =
-ring
->> + * with provider allocation, which can run for another page pool of the=
- queue
->> + * while the queue is replaced.
->> + */
->> +static int xsk_rcv_copy(struct xdp_sock *xs, struct xdp_buff *xdp, u32 =
-len)
+>> +u32 fbnic_xsk_hds_thresh(u32 headroom, u32 hds_thresh)
 >> +{
->> +	struct xsk_pp *provider =3D READ_ONCE(xs->pool->pp);
+>> +	u32 max_hds;
+>> +
+>> +	/* Reserve more than half a device page for each header so the device
+>> +	 * retires the provider frame after one descriptor.
+>> +	 */
+>> +	static_assert(2 * FBNIC_XSK_HDS_THRESH > FBNIC_BD_PAGE_SIZE);
+>> +
+>> +	max_hds =3D FBNIC_BD_PAGE_SIZE - headroom - FBNIC_RX_TROOM -
+>> +		  FBNIC_RX_PAD;
+>> +
+>> +	return min(max_t(u32, hds_thresh, FBNIC_XSK_HDS_THRESH), max_hds);
+>> +}
+>> +
+>> +static int fbnic_xsk_validate_frames(struct xsk_buff_pool *pool,
+>> +				     struct bpf_prog *prog,
+>> +				     unsigned int mtu, u32 hds_thresh,
+>> +				     struct netlink_ext_ack *extack)
+>> +{
+>> +	u32 xsk_hds_thresh;
+>> +
+>> +	xsk_hds_thresh =3D fbnic_xsk_hds_thresh(xsk_pool_get_headroom(pool),
+>> +					      hds_thresh);
+>> +
+>> +	if (mtu + ETH_HLEN <=3D xsk_hds_thresh)
+>> +		return 0;
+>> +
+>> +	if (!xsk_pool_uses_sg(pool)) {
+>> +		NL_SET_ERR_MSG_MOD(extack,
+>> +				   "AF_XDP zero-copy socket requires XDP_USE_SG");
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	if (fbnic_check_split_frames(prog, mtu, xsk_hds_thresh)) {
+>> +		NL_SET_ERR_MSG_MOD(extack,
+>> +				   "AF_XDP zero-copy socket requires XDP frags");
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +int fbnic_xsk_validate(struct fbnic_net *fbn, struct bpf_prog *prog,
+>> +		       unsigned int mtu, u32 hds_thresh,
+>> +		       struct netlink_ext_ack *extack)
+>> +{
+>> +	struct net_device *netdev =3D fbn->netdev;
+>> +	struct xsk_buff_pool *pool;
+>> +	unsigned int qid;
 >> +	int err;
 >> +
->> +	if (likely(!provider))
->> +		return __xsk_rcv(xs, xdp, len);
+>> +	for (qid =3D 0; qid < fbn->num_rx_queues; qid++) {
+>> +		pool =3D xsk_get_pool_from_rxq(netdev, qid);
+>> +		if (!pool)
+>> +			continue;
 >> +
->> +	spin_lock_bh(&provider->lock);
->> +	err =3D __xsk_rcv(xs, xdp, len);
->> +	__xskq_cons_release(xs->pool->fq);
->> +	spin_unlock_bh(&provider->lock);
->> +	return err;
+>> +		err =3D fbnic_xsk_validate_frames(pool, prog, mtu, hds_thresh,
+>> +						extack);
+>> +		if (err)
+>> +			return err;
+>> +	}
+>> +
+>> +	return 0;
 >> +}
 >> +
->>  static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
->>  {
->>  	u32 len =3D xdp_get_buff_len(xdp);
->> @@ -498,7 +524,15 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_=
-buff *xdp)
->>  		return xsk_rcv_zc(xs, xdp, len);
->>  	}
->>=20=20
->> -	err =3D __xsk_rcv(xs, xdp, len);
->> +	/* The socket RX ring has a single producer, the queue's poll context.
->> +	 * Reject synthetic RX queues before their remote context produces
->> +	 * into a provider-backed socket.
->> +	 */
->> +	if (unlikely(READ_ONCE(xs->pool->pp) &&
->> +		     !xdp_rxq_info_is_reg(xdp->rxq)))
+>> +static int fbnic_xsk_setup_pool(struct net_device *netdev,
+>> +				struct xsk_buff_pool *pool, u16 queue_id,
+>> +				struct netlink_ext_ack *extack)
+>> +{
+>> +	struct fbnic_net *fbn =3D netdev_priv(netdev);
+>> +	int err;
+>> +
+>> +	if (queue_id >=3D fbn->num_rx_queues)
 >> +		return -EINVAL;
 >> +
->> +	err =3D xsk_rcv_copy(xs, xdp, len);
->>  	if (!err)
->>  		xdp_return_buff(xdp);
->>  	return err;
->> @@ -2149,8 +2183,8 @@ static int xsk_notifier(struct notifier_block *thi=
-s,
->>=20=20
->>  				xsk_unbind_dev(xs);
->>=20=20
->> -				/* Clear device references. */
->> -				xp_clear_dev(xs->pool);
->> +				/* Unregister cannot hold a device reference. */
->> +				xp_clear_dev(xs->pool, XSK_POOL_CLEAR_FORCE);
->>  			}
->>  			mutex_unlock(&xs->mutex);
->>  		}
->> diff --git a/net/xdp/xsk.h b/net/xdp/xsk.h
->> index 7c811b5cce76..8770778cd322 100644
->> --- a/net/xdp/xsk.h
->> +++ b/net/xdp/xsk.h
->> @@ -4,6 +4,64 @@
->>  #ifndef XSK_H_
->>  #define XSK_H_
->>=20=20
->> +#include <net/netmem.h>
+>> +	if (!pool)
+>> +		return xsk_pool_setup_page_pool(netdev, NULL, queue_id, extack);
 >> +
->> +struct xsk_buff_pool;
+>> +	err =3D fbnic_xsk_validate_frames(pool, fbn->xdp_prog, netdev->mtu,
+>> +					fbn->hds_thresh, extack);
+>> +	if (err)
+>> +		return err;
 >> +
->> +enum xsk_pool_clear_mode {
->> +	XSK_POOL_CLEAR_NORMAL,
->> +	XSK_POOL_CLEAR_FORCE,
->> +};
->> +
->> +struct xsk_pp_info {
->> +	struct net_iov_area area;
->> +	struct xsk_buff_pool *pool;
->> +	u32 chunk_shift;
->> +};
->> +
->> +/* Keep page_pool descriptors independent from direct-driver XSK buffer=
-s.
->> + * Queue replacement creates the new page_pool before it stops the old =
-queue
->> + * and destroys the old page_pool after the new queue started, so two
->> + * page_pools can use one provider. @lock serializes the state they sha=
-re.
->> + * Generic XDP cannot deliver to a provider-backed socket.
->> + */
->> +struct xsk_pp {
->> +	struct xsk_pp_info info;
->> +	struct xsk_queue __rcu *fq;
->> +	/* FILL consumers, @reuse and RX need_wakeup state */
->> +	spinlock_t lock;
->> +	u32 reuse_cnt;
->> +	u32 nr_pools;
->> +	u64 chunk_mask;
->> +	u64 addrs_cnt;
->> +	u8 release_retries;
->> +	bool dma_need_sync;
->> +	bool detached;
->> +	u32 reuse[];
->> +};
->> +
->> +void xp_clear_dev(struct xsk_buff_pool *pool, enum xsk_pool_clear_mode =
-mode);
->> +
->> +static inline bool xp_netmem_is_xsk(netmem_ref netmem)
->> +{
->> +	return netmem_is_net_iov(netmem) &&
->> +	       netmem_to_net_iov(netmem)->type =3D=3D NET_IOV_XSK;
+>> +	return xsk_pool_setup_page_pool(netdev, pool, queue_id, extack);
 >> +}
 >> +
->> +static inline struct xsk_pp_info *xp_netmem_to_pp(netmem_ref netmem)
->> +{
->> +	struct net_iov *niov =3D netmem_to_net_iov(netmem);
->> +
->> +	return container_of(net_iov_owner(niov), struct xsk_pp_info, area);
->> +}
->> +
->> +static inline bool xp_netmem_is_from_pool(netmem_ref netmem,
->> +					  const struct xsk_buff_pool *pool)
->> +{
->> +	return xp_netmem_is_xsk(netmem) &&
->> +	       xp_netmem_to_pp(netmem)->pool =3D=3D pool;
->> +}
->> +
->>  struct xdp_ring_offset_v1 {
->>  	__u64 producer;
->>  	__u64 consumer;
->> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
->> index 244776a72961..e25347f8c208 100644
->> --- a/net/xdp/xsk_buff_pool.c
->> +++ b/net/xdp/xsk_buff_pool.c
->> @@ -1,7 +1,11 @@
->>  // SPDX-License-Identifier: GPL-2.0
->>=20=20
->>  #include <linux/netdevice.h>
->> +#include <linux/sizes.h>
->>  #include <net/netdev_lock.h>
->> +#include <net/netdev_queues.h>
->> +#include <net/netdev_rx_queue.h>
->> +#include <net/page_pool/helpers.h>
->>  #include <net/page_pool/memory_provider.h>
->>  #include <net/xsk_buff_pool.h>
->>  #include <net/xdp_sock.h>
->> @@ -12,6 +16,20 @@
->>  #include "xsk.h"
->>=20=20
->>  #define ETH_PAD_LEN (ETH_HLEN + 2 * VLAN_HLEN  + ETH_FCS_LEN)
->> +#define XSK_PAGE_POOL_DMA_ATTR	(DMA_ATTR_WEAK_ORDERING | \
->> +				 DMA_ATTR_SKIP_CPU_SYNC)
->> +#define XSK_POOL_RELEASE_RETRY_MAX	(60 * HZ)
->> +
->> +static bool xp_pp_teardown(struct xsk_buff_pool *pool);
->> +static void xp_pp_retry_release(struct xsk_buff_pool *pool);
->> +static void xp_destroy_unbound_deferred(struct work_struct *work);
->> +
->> +static void __xp_destroy(struct xsk_buff_pool *pool)
->> +{
->> +	kvfree(pool->tx_descs);
->> +	kvfree(pool->heads);
->> +	kvfree(pool);
->> +}
->>=20=20
->>  void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs)
+>>  static int fbnic_bpf(struct net_device *netdev, struct netdev_bpf *bpf)
 >>  {
->> @@ -38,9 +56,22 @@ void xp_destroy(struct xsk_buff_pool *pool)
->>  	if (!pool)
->>  		return;
+>>  	struct bpf_prog *prog =3D bpf->prog, *prev_prog;
+>>  	struct fbnic_net *fbn =3D netdev_priv(netdev);
+>> +	int err;
 >>=20=20
->> -	kvfree(pool->tx_descs);
->> -	kvfree(pool->heads);
->> -	kvfree(pool);
->> +	/* A failed queue replacement can leave a page_pool waiting for an
->> +	 * in-flight buffer.  Keep the UMEM and pool alive until its provider
->> +	 * destroy callback has run.
->> +	 */
+>> -	if (bpf->command !=3D XDP_SETUP_PROG)
+>> +	switch (bpf->command) {
+>> +	case XDP_SETUP_PROG:
+>> +		if (fbnic_check_split_frames(prog, netdev->mtu,
+>> +					     fbn->hds_thresh)) {
+>> +			NL_SET_ERR_MSG_MOD(bpf->extack,
+>> +					   "MTU too high, or HDS threshold is too low for single buffer XD=
+P");
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +
+>> +		err =3D fbnic_xsk_validate(fbn, prog, netdev->mtu,
+>> +					 fbn->hds_thresh, bpf->extack);
+>> +		if (err)
+>> +			return err;
+>> +
+>> +		prev_prog =3D xchg(&fbn->xdp_prog, prog);
+>> +		if (prev_prog)
+>> +			bpf_prog_put(prev_prog);
+>> +		return 0;
 >
 > [..]
 >
->> +	if (pool->pp) {
+>> +	case XDP_SETUP_XSK_POOL:
+>> +		return fbnic_xsk_setup_pool(netdev, bpf->xsk.pool,
+>> +					    bpf->xsk.queue_id, bpf->extack);
 >
->
-> Would be nice to do a cleanup in xsk_buff_pool: separate it into
-> common/generic parts and pp vs non-pp parts. And maybe pp vs non-pp can
-> be a union? With the addition of pp, it's gonna be hard to understand
-> what is new/shiny vs old/deprecated. I'm assuming, at some point, when
-> every driver is backed by pp umem, we can drop the non-umem path?
+> Is there a good reason to ask drivers to call us back with
+> xsk_pool_setup_page_pool? For the PP mode, maybe we should add new
+> XSK_VALIDATE_POOL or something? So most of that fbnic_xsk_setup_pool stays
+> in core?
 
-Yep. I'll try to split the shared and allocator-specific state. Need to
-check fallback and teardown before using a union.
+Makes sense. I'll try core-owned setup with driver opt-in and
+validation. Existing direct drivers can keep their setup.
 
-Both paths use UMEM, so the direct allocator can go only after (if ever)
-its users migrate.
+> I guess I'm mentally trying to have a clear separation between
+> pp vs non-pp modes. Even that whole xsk_buff_pool might be legacy non-pp
+> artifact? New drivers shouldn't bother with it? Or is it too much?
+
+Hmm. New RX code shouldn't need allocator internals, but rings, DMA and
+TX state are still shared. I need to noodle a bit on it...
