@@ -1,211 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15A5488DAE
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 12:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DBB30D406;
+	Mon, 12 Oct 2026 13:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791807954; cv=none; b=WUI7utLGRllTxojALnCyf69HOzXGPGVkyJ29+bG72N+IoF7XR2jUYDkkPWKLe7h1V84qAslMcj7pYLxoGR+OAPEabQlufAQXIqtx/0slRs00AR/1QyVmbR34BA7LHXlAAsfZjNSPoN5hWUX0uWi0uMr8l2cVbZejabMdKd4LwlA=
+	t=1791810784; cv=none; b=YycgwS7yLFFdqp+x++6FziUVfH8BY4hi9p/jG2ilDR6vox0DV9g2sVperbhvzpKN02RrpgkRjA8usiO6OVwjlcsrLNmSowTZIhV4ADFnDMnHUOlLoK6egYfWX5dmqMit2XbjsyRTA5K79WpMQ1LWcN9zKBGCPVc5JWusuODwp2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791807954; c=relaxed/simple;
-	bh=ZLZjg65FO0HQBKhWAU8NXqwOZK0rt+cjwvFZc5Z7Gng=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=pD1nrQnEYk8L/ZJneuZD0KDi/XX5YJnBSsdUF7rRw4mlcxZS90e9nAIZsbB0rm/tsPV+6PC52Jmex8en2QxarnTJ5cOuqSOWs3g5lG2VVfWqDPWBzKaQYp6YKF1Kij2hxwpEvK6zVddaoN7U3Bye0Y3nA+GaUGooaREuO7VbTmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/0xHvEZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791810784; c=relaxed/simple;
+	bh=P454wXS9DdByiiPHUTNVgjn5IjNWcOJRLu+jD4eg/Pc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SaZB67FFtnOccWeiE8SGdaYjGF927nWfvHEiEXHSUdjtQKIYJpINvWYlW1cQ7yXzS2qUCqSF9pX8MmUu/McZt92qpq07Ql+L7u1QhNM+mFLct0cQBC15CYek6XZeV7CpdfuU8JQW75PKHDXtkRUGW/h3jFnOnJH5/MXiA1YR1ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDpfWVnL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/0xHvEZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463731F0089C;
-	Mon, 12 Oct 2026 12:25:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDpfWVnL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B66A21F0089C;
+	Mon, 12 Oct 2026 13:12:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791807953;
-	bh=aKwYOqJiVFK5HQy11YEvS0/Qk7F2US2c8yGpFHu6yGM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=g/0xHvEZSe1H84GCyCJK2s4arOu4nkPrJEF5/fsK+jT7bnU8lrIRr4nw97ZBbRWDo
-	 jEqe76Dq3o2qbeGZ3CCqE7L8Zd5ktz/HhV1NUdsgY2Awr0J7XglYYja5xLg22RtHxV
-	 SOho8+R9QP2GQ+LWBGzta35r4ONM6I+/99NED5vpqtfUeFp2JXkbL8klPSOKIRYNY/
-	 GTRX/ZjrVb9tWHmpoNvUlIj0rstotj9Oa/F4Mk+34BA2t/7FW9tFXuOIQq9YCQO4ql
-	 BeG151AsMrbbGfXxu/KDBKSHY/4Mi+EklPFbOcEIiGTgvODhZShV9fpvNPA4cJsLZg
-	 bVXMYcpr3eByw==
-Message-ID: <sashiko-outbox-168093@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v2 2/3] sched: add per-cgroup NUMA balancing mode
- selection via BPF
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yafang Shao" <laoar.shao@gmail.com>
-Cc: tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org, bpf@vger.kernel.org
-In-Reply-To: <20261012120438.52849-3-laoar.shao@gmail.com>
-References: <20261012120438.52849-1-laoar.shao@gmail.com>
- <20261012120438.52849-3-laoar.shao@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 12 Oct 2026 12:25:52 +0000
+	s=k20260515; t=1791810782;
+	bh=4I5B7wBeXWUXzc9QUIb5L0wjsowp8PcPTfJjf0v/5MY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KDpfWVnLq9UsVjiuPGdSN9B+cXar5q+l6DBPzhmkDs+Ueb+r/Z8+7AbiaQcbXCLc9
+	 VNOnSmW8xS6bS/TAcyQ0f/pSevPXUEVgqfdbxP3WlBTOMB/gY12NSlqp3+whay9o8u
+	 SfYjiqBSX2o4k3933OLtpyYsadTur2naFzobQrigUJwNpGTMCuSa4cotQ63NgKCJiU
+	 Si3VBhD4g2S5Nx4OULNzEaPPu0qIdUIZ8JnRW+28Kb7x0GLpy8BBhN8su+PDY+YWum
+	 JGXgi0p0A69k2YrSGKqWSjLUZW1fpovIgDPH9GwXKDR+IKcL1JCaw4IqS7rJkndVkz
+	 3pDHjpNGHf+kA==
+Date: Mon, 12 Oct 2026 15:12:53 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Manuel Huber <manuelh@nvidia.com>
+Cc: Andrew Halaney <andrew@amutable.com>, 
+	"bot+bpf-ci@kernel.org" <bot+bpf-ci@kernel.org>, "ast@kernel.org" <ast@kernel.org>, 
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>, 
+	"agk@redhat.com" <agk@redhat.com>, "snitzer@kernel.org" <snitzer@kernel.org>, 
+	"mpatocka@redhat.com" <mpatocka@redhat.com>, "bmarzins@redhat.com" <bmarzins@redhat.com>, 
+	"dhowells@redhat.com" <dhowells@redhat.com>, "jarkko@kernel.org" <jarkko@kernel.org>, 
+	"paul@paul-moore.com" <paul@paul-moore.com>, "jmorris@namei.org" <jmorris@namei.org>, 
+	"serge@hallyn.com" <serge@hallyn.com>, "ebiggers@kernel.org" <ebiggers@kernel.org>, 
+	"tytso@mit.edu" <tytso@mit.edu>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "rdunlap@infradead.org" <rdunlap@infradead.org>, 
+	"dm-devel@lists.linux.dev" <dm-devel@lists.linux.dev>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"fsverity@lists.linux.dev" <fsverity@lists.linux.dev>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"martin.lau@kernel.org" <martin.lau@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "mason@kernel.org" <mason@kernel.org>, 
+	"ihor.solodrai@linux.dev" <ihor.solodrai@linux.dev>, Fan Wu <wufan@kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+Message-ID: <20261012-wusste-werfen-loben-94aac9fd9cbe@brauner>
+References: <20261008-ajhalaney-dmverity-key-identifier-v2-1-008456d189cb@amutable.com>
+ <910460850fd4163dadb804fbdf6c17f6a9dfec060f4d865a17df87336ea3e165@mail.kernel.org>
+ <asgQxTE-6YtEgvYZ@toolbx>
+ <DM4PR12MB61364B4F81AE7A8D1FB71E1BDE902@DM4PR12MB6136.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DM4PR12MB61364B4F81AE7A8D1FB71E1BDE902@DM4PR12MB6136.namprd12.prod.outlook.com>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] mm: folio_can_map_prot_numa() disables NORMAL NUMA balancing on to=
-p-tier nodes when TIERING is active
-- [High] sched: AB-BA deadlock in bpf_numab_mode (rq->lock -> pi_lock)
-- [High] bpf: missing __nullable annotation in bpf_numab_ops leads to kerne=
-l panic
-- [Medium] sched: BPF NUMA balancing opt-in ignored by LLC scheduling
---
+On Sun, Oct 11, 2026 at 09:35:43AM +0000, Manuel Huber wrote:
+> On Thu, Oct 08, 2026 at 02:57:00PM -0700, Andrew Halaney wrote:
+> > With the BPF keyring ID already being merged here in bpf-next, plus
+> > Jarkko's feedback/RB, I continued following the current pattern instead
+> > of walking back the BPF keyring ID, and dealing with the
+> > builtin/module/rodata differences I alluded to that would make that
+> > approach a little more annoying (at least with how I thought it thru).
+> 
+> Another data point for this design choice: after initial discussions
+> with Fan Wu, I am about to propose a dedicated .ipe keyring for IPE
+> policy-signature verification. The keyring would be exposed to
+> userspace so that a trusted entity can provision keys, modeled after
+> the .dm-verity keyring.
+> 
+> I do not want to introduce churn to this discussion. I am happy to
+> establish the reserved ID range and generic registration interface
+> upon proposing my changeset, to establish this separately, or to
+> follow any other suggestions. Getting guidance for this subject ahead
+> of time for the case where 'yet another keyring' is introduced would be
+> highly appreciated.
 
-commit 3975a69bbe7653d443a34c5ce6984dadc110d558
-Author: Yafang Shao <laoar.shao@gmail.com>
-
-sched: add per-cgroup NUMA balancing mode selection via BPF
-
-Global NUMA balancing is all-or-nothing: kernel.numa_balancing and
-kernel.numa_balancing_mode pick the mode for every workload. A
-latency-sensitive service wants the scheduler's NUMA statistics but
-not tiering's promotion machinery. This patch adds a bpf_numab_ops
-struct_ops to allow policies attached to a cgroup to pick a mode.
-
-> diff --git a/include/linux/bpf_numab.h b/include/linux/bpf_numab.h
-> --- /dev/null
-> +++ b/include/linux/bpf_numab.h
-[ ... ]
-> +struct bpf_numab_ops {
-> +	/**
-> +	 * numab_mode - request a NUMA balancing mode
-> +	 * @p: task the NUMA balancing machinery is about to act on, or NULL
-> +	 * @folio: folio whose NUMA balancing semantics are being decided,
-> +	 *	   or NULL
-> +	 *
-> +	 * Exactly one of @p and @folio is set. The kernel passes @p when
-[ ... ]
-> +	 * Return: bits from enum bpf_numab_mode.  Other bits are dropped.
-> +	 */
-> +	u32 (*numab_mode)(struct task_struct *p, struct folio *folio);
-
-[Severity: High]
-Could the lack of a __nullable annotation here lead to a NULL pointer
-dereference in user BPF programs?=20
-
-The BPF verifier relies on the __nullable suffix on struct_ops stub
-arguments to mark them as PTR_MAYBE_NULL. Without it, the verifier assumes
-they are strictly non-NULL and optimizes away any user-provided NULL checks.
-When the kernel passes a NULL argument (as designed, since only one of p or
-folio is set), the executing BPF program will crash the system.
-
-> +};
-[ ... ]
-> diff --git a/include/linux/sched/numa_balancing.h b/include/linux/sched/n=
-uma_balancing.h
-> --- a/include/linux/sched/numa_balancing.h
-> +++ b/include/linux/sched/numa_balancing.h
-[ ... ]
->  static inline bool task_numab_enabled(struct task_struct *p)
->  {
-> +	u32 state =3D bpf_numab_mode(p, NULL);
-> +
-> +	/* A policy can always opt out, regardless of the global state. */
-> +	if (state & BPF_NUMAB_DISABLED)
-> +		return false;
-> +	if (state & (BPF_NUMAB_NORMAL | BPF_NUMAB_TIERING))
-> +		return true;
->  	return static_branch_unlikely(&sched_numa_balancing);
->  }
-
-[Severity: Medium]
-Is this BPF opt-in overlooked by the LLC scheduling logic?
-
-This new helper allows workloads to opt into NUMA balancing even when global
-NUMA balancing is disabled. However, functions like get_pref_llc() and
-get_scan_cpumasks() still check the global static key sched_numa_balancing
-directly instead of using task_numab_enabled(p). For a workload that
-explicitly opts in via BPF, its numa_preferred_nid and CPU scan masks will
-be skipped.
-
-[ ... ]
-> diff --git a/kernel/sched/bpf_numab.c b/kernel/sched/bpf_numab.c
-> --- /dev/null
-> +++ b/kernel/sched/bpf_numab.c
-[ ... ]
-> +static u32 numab_mode_stub(struct task_struct *p, struct folio *folio)
-> +{
-> +	return BPF_NUMAB_GLOBAL;
-> +}
-
-[Severity: High]
-Should this stub function also include the __nullable suffix on its
-arguments?
-
-As mentioned in include/linux/bpf_numab.h, omitting the __nullable suffix
-(e.g., p__nullable) prevents the verifier from recognizing the arguments as
-optional. This leads to dead-code elimination of user NULL checks and a
-subsequent system crash.
-
-[ ... ]
-> +u32 bpf_numab_mode(struct task_struct *p, struct folio *folio)
-> +{
-[ ... ]
-> +	bpf_cgroup_struct_ops_foreach(ops, item, cgrp, CGROUP_NUMAB_OPS) {
-> +		if (ops->numab_mode)
-> +			acc |=3D ops->numab_mode(p, folio) & BPF_NUMAB_VALID_MASK;
-> +	}
-> +
-> +	cgroup_bpf_put(cgrp);
-
-[Severity: High]
-Could dropping the cgroup BPF reference here trigger an AB-BA deadlock?
-
-The scheduler path calls task_tick_fair() under rq->lock, which invokes
-bpf_numab_mode(). Dropping the cgroup BPF reference here via
-cgroup_bpf_put() can trigger queue_work() if this is the final reference
-while the cgroup is being offlined.=20
-
-queue_work() acquires pool->lock and wakes up a worker by acquiring its
-pi_lock. Because standard wakeup paths acquire pi_lock before rq->lock, this
-inverted rq->lock -> pool->lock -> pi_lock sequence leads to a deadlock.
-
-Since this code is already protected by rcu_read_lock(), is the reference
-counting strictly necessary here?
-
-> +out:
-> +	rcu_read_unlock();
-> +	return acc;
-> +}
-[ ... ]
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -884,11 +884,10 @@ bool folio_can_map_prot_numa(struct folio *folio, s=
-truct vm_area_struct *vma,
->  		return false;
-> =20
->  	/*
-> -	 * Skip scanning top tier node if normal numa
-> -	 * balancing is disabled
-> +	 * Skip scanning top tier memory whose owner participates in
-> +	 * tiering: hinting faults on it would buy nothing.
->  	 */
-> -	if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
-> -	    node_is_toptier(nid))
-> +	if (folio_numab_mode_tiering(folio) && node_is_toptier(nid))
->  		return false;
-
-[Severity: High]
-Does this unconditionally disable NORMAL NUMA balancing on top-tier nodes
-when TIERING is active?
-
-Previously, this skipped hinting faults on top-tier nodes only if
-NUMA_BALANCING_NORMAL was explicitly disabled. The new logic skips top-tier
-scanning entirely if tiering is enabled.
-
-When the global sysctl_numa_balancing_mode is 3 (both NORMAL and TIERING
-enabled), folio_numab_mode_tiering() returns true. This breaks standard NUMA
-page placement optimization for fast memory on tiered systems by dropping
-all top-tier scanning.
-
-> =20
->  	if (folio_use_access_time(folio))
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012120438.5284=
-9-1-laoar.shao@gmail.com?part=3D2
+I think another keyring for just .ipe is fine if they want that. I
+wonder what you use ipe for. I've implemented ipe via a simple bpf lsm
+in userspace (well, for dm-verity. We don't use IMA or fsverity.). It's
+available in systemd itself. 
