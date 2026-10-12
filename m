@@ -1,64 +1,64 @@
-Received: from mail-oo2-f6.google.com (mail-oo2-f6.google.com [74.125.231.134])
+Received: from mail-oo2-f7.google.com (mail-oo2-f7.google.com [74.125.231.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C6B32A3D7
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 13:37:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01234341660
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 13:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791812249; cv=none; b=irfp9RF6actZ8jqVS7fx+nsVd+nmQUVVLj/usb5vIavVHvZRP4eYXfdAjM028L9QV9nhwF0pXIj7HJ8FhP11wfkrOUiOVqNCn5nbNk8YqhaNUUH0YOpYkymNbEkKJnjE56uniXXmkbkfB/rxlsO4wSSk5/vYfs33WCDMs8IMZfs=
+	t=1791812254; cv=none; b=cYfQ5dbD5brlurPqsaxxxBqiBf3f5P8wnnvv/WGYLYOvQixv5WPcHmCVsxpyek4BSnN9BIM/7hpATQxAlLfhplnl8vZ3ucQEf0uNo2cyt/pfRTPcPj9TPtsxvNCzsvkguuxeF0qsMuFEg+Tc7OiL/EU1t9qgBDKnpRfpsbv5p2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791812249; c=relaxed/simple;
-	bh=I0jkMOMquZY0M5vGY8G1HRzpJL2Yir5EazVFzf8krMI=;
+	s=arc-20240116; t=1791812254; c=relaxed/simple;
+	bh=NA0vvm1I0UBnht6GYHZO7WvbhLE4uQLKWCXCLGY72Mc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J0Lmq+b5Udvb8sY0y0EkKi3vo3gkIdG2Cfro1wobNkx1jLWrjlPy0f7+G7/SQ+fTJZHGyRHmNa6MLVXAVr3kyi2gfPTk8R8wIaCB8M3G0D4JAWBzP908F9gO/fw1MOQUl1Fhqz9ZRQCduvNs+WTZxQvs+4GadFQZDT6CLcIXdpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rzkv4mKv; arc=none smtp.client-ip=74.125.231.134
+	 MIME-Version; b=QUFu2mh/VFNypS79967pP6iH7VmAesJWRnE1+UaMbFLTlxeng+Lx0J/Evng8AxPJp17KBlx53D/iArRhZKxoMlNYGpXtDUgWys88m6Ggg1WA80PbCsbNsWJIbhVT7aLtlDC9hDY8G89F0TcARfT/4/mnxScH3c9mDUEMxCTOWfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jIHr7XTC; arc=none smtp.client-ip=74.125.231.135
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rzkv4mKv"
-Received: by mail-oo2-f6.google.com with SMTP id 46e09a7af769-8217177c5daso368321a34.0
-        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 06:37:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jIHr7XTC"
+Received: by mail-oo2-f7.google.com with SMTP id 46e09a7af769-8210db80578so761287a34.0
+        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 06:37:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791812247; x=1792417047; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791812251; x=1792417051; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2UwhCsphk0kqjirW11zH1Su+0cvHiQR3NOj/4/YWs2k=;
-        b=Rzkv4mKvaS1/30C9D+faeSDAgIYomsRhwffhw4z8SsIKS/k1r52xkDi/m4lOTKCO85
-         XWMLkR7JglKOPxY0+yttpd+s0dRxURQw0i1266jS05rzO8JP492QrsObMn1ZmwRym3DX
-         OKmpSC/ABQPojdNIl52FKryk12wtUttC4fpX0nV+J1jeM17A2RvH927HAMjJ6QjR7b/R
-         ojn/5Qp3vSarhyFf+uu35wRiKY4Xuu6Dw59sw4Q2P7HJbxlAPqcr/3qWA9EMf7RaDJ22
-         hmLioOjVTjENMRkKOBMVFhAyCFxTY1iozdc66YruBDt7BcsajKjlkobrV7NcTVj4l4S7
-         6Glg==
+        bh=BD6Lx/GJm8UCws1aN7MZnuHlJQr+7evP6sC4Kx9yk/I=;
+        b=jIHr7XTC88Uuuls2G6QggTnLmTD3lOP9+sB74g5AMmYE4Fh1Q/ZYkMlSdir+Gs08In
+         UkHZEAPWAaEspypLGYEG6i1LYoavcz/UXW9pXjeAkGo2l/bw81iY6HUPyIVIdoFJuUqB
+         /vIoym0vHmD1oe6sTcQls5ehaK6v6C1Gl50Kx1/6LtzKwLX+7JYhTSH1y+H3LkOyQ8pD
+         AkyrCeFdEL16ZMPuPqoGf9aZyxOemC/uSxOHYCeZZZgQR+T6DiJ2qCklvM9QDzR+SHrk
+         q+f4EiHbnv2L20ub8Ovkc+DcFIbmQXgSF2UercaEs6aFql/kpjW+5az27GT1QkSS7QzB
+         1yXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791812247; x=1792417047;
+        d=1e100.net; s=20260707; t=1791812251; x=1792417051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2UwhCsphk0kqjirW11zH1Su+0cvHiQR3NOj/4/YWs2k=;
-        b=jpylutHUoqGcY+XLHsottQyvY3ww+9vYFX98jwmdk1HloAnPvPIpGPTWxTBZ2Ap7WI
-         4jA0/Ipn2tpi/a3Vm4e5HGPUcGGksrISldMFLPMSLwK2bc0mkhNxQX8NeIyeGZhGTNzm
-         u7E1aa4MWVb2GDsJ3lIuAtXdEocVw7LV8AnroaiifYsZeKqsTudVi2rjX9okXawWhC7S
-         VnxF8gYccxJugxGHM6UPKZaswXuuw07MNwv6QjeEiZVmCGIBjWY8oQGZVgEkgkfHCkWU
-         dWCFyau2vtLTcwid+0XjNUhFRzzJJ6ln9Ls3NBNlys35CNT3YPKRTeOo8hLKwxT5B9KI
-         fx2w==
-X-Gm-Message-State: AFq9FYKK+1pq07FcEW7gcNZRd1PLFUkvpcnWZFZURUBUKjvaIsUvH0PM
-	5Rw0P0IzvxG1eTolbScIvd/lPfOlZA8zLuq99RSQ0DE73bDgtk2XeOa154r26Je+d2k=
-X-Gm-Gg: AYBFou1HKIyOdL0tk9RFSJ8LrhbPmTdTolm1fMGLV6+OUpeJIm3lmFY+tGns/Yb+lsF
-	e0XGR96l5ONwzi8uL9+S7an6/yjVguAfc3J+fgsxC8peq2VOO3mgPcORjcFZLHSUd4J9tpH4lgF
-	5KOiPdDZAgeFH8sKb0hhslwSyIrOJyZKJXfFyLaZNoHROjWT34a/KFfiUzjyt0HV5stvcH10Jac
-	9DVpRpkecEDz3/cxAf2pgI4mpyY9VCwFB7dssiQKa/mFO4kaysjko6lui7xXesgp/gxtWA2UwA9
-	PVAEmOYtNpR8eFRktAek05OiIr1xy49dnDgCSqEpN45VukIOL9yZttdFlPud8JlHn/dapMww4tX
-	LDbdA6h0JCrJoNcIDxWKC5QqWHDdDq1jS8wegrpp8+LzoRML1l1e7XIUyfQyeWpuIKAHj7wIoBw
-	91QKYuiZtb2sLCHswK7aWheBMKP7MiWvgKMQIwzEd3CKLW9j4bFt6D/dCeao1htfm77jOhntlYx
-	u14bSeUzjPpUaIFCxQJ+YeJGFVzEBMV0CLdnpn0rDiB6pWNNvaj723odgsc4IsRPnWAZeoYNVpa
-	pmxPLA==
-X-Received: by 2002:a05:6808:1a1a:b0:4f8:65de:7293 with SMTP id 5614622812f47-50c4ed420bdmr9398766b6e.15.1791812246995;
-        Mon, 12 Oct 2026 06:37:26 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:44::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-50c1c120686sm11513919b6e.16.2026.10.12.06.37.24
+        bh=BD6Lx/GJm8UCws1aN7MZnuHlJQr+7evP6sC4Kx9yk/I=;
+        b=yRVD/349CIXqo1Gjq9blMAV1TbrCQx0zxCGRXn4pF4nLkNGz6nF8Rj1i4XQLZig/DY
+         JKlL87HLFq2HZazbv6XL1R63DgV13JFMHov6pUCs/mQ55KLPxsbJTjWIU7C0OF3PO+pA
+         seuF6L6yCkGUD2GRKHiLZHcgxtQTYGSGQT1HfVXIKrtgvX47YBXgCcRqgG8lgWcek3fA
+         Dm4JgJtuMaXPpdnuj0vdz9F8ee+3GTpO2uLxwId+YcG8GbxUN6bdYJMjf/Tc6qYXe+fq
+         qIZMgXIMBzpRxlxQamQvKvlMW98c4k3MSFB9EQaQrpYcOXfll8qsMNok5m98nJtMgzwD
+         6d5A==
+X-Gm-Message-State: AFq9FYI+Mw2W/5vTtwyeZxwbo7qV3jEzo4IfBv9mkqOAp9wGmC1TfzlF
+	EECS5VQekUf08F3UEj28haKjHXzKPUgabuXWQ3+30Gym6tcC79sKvrfcWIH2IjvDo0Y=
+X-Gm-Gg: AYBFou0F76bx1ayTwYHMnAKB8HJ4WXU37rlJ7anuXSF8wmmAdqEg+ACmpXm7TBt+3Aa
+	WtvUpM9FBo17xXoIy2u44eBYhFF3INX14MkO9z4HA497JEO5uJ8uyTdpxp2JsTfgCeXE78XFeAP
+	t9Cyio2eU8Kh+GX2bvLLRwa9+FBBZXgJorFwf6l7GOTLBqIaMlnxH4AHYGZrr/rjCNiJqA7Ydgt
+	b3MlqrxUcVaFsl4psUZeXmvWdhfj0jgAbIlaoiBggx0Uu5XKltFLvP/m34tdEIAYFeEciScpX9m
+	PqekVbrMFiwfxXxuhdNxmpXX8VLzo/pQasmO/sozM1M0v3NVtwLnFjU1Fds8vs/Jpy5bqTBLrFC
+	g7fcLOmX3JLrd/JF5Imun4UPChCtgrkcNoDdP6BCbJbDd4G0sG15C9aWke8FqBLDxbn1MYrVNwL
+	lI/quS2yN5hyYmdJ9ldGTouJbea61AsBGcmvLmYJ6AuIUKBCgv6FeyNsSp83apy6NDC1JM0vsiX
+	48MC5PA8GM9HFdQIIGpVUxmOye8n14oAq6CabWzgy7L7mHrfsVnAD0U+8iVaN1L97RZ4IcseJZ7
+	bSZcRbxTiKKZn0o=
+X-Received: by 2002:a05:6830:700f:b0:82a:db0e:9a1d with SMTP id 46e09a7af769-83097e59647mr10020440a34.28.1791812250875;
+        Mon, 12 Oct 2026 06:37:30 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:8::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8303a60c458sm10824658a34.26.2026.10.12.06.37.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2026 06:37:25 -0700 (PDT)
+        Mon, 12 Oct 2026 06:37:28 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 03/10] bpf: Turn loads of __arena pointer members into arena pointers
-Date: Mon, 12 Oct 2026 15:37:00 +0200
-Message-ID: <20261012133711.4030594-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 04/10] selftests/bpf: Test __nullable pointer members
+Date: Mon, 12 Oct 2026 15:37:01 +0200
+Message-ID: <20261012133711.4030594-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261012133711.4030594-1-memxor@gmail.com>
 References: <20261012133711.4030594-1-memxor@gmail.com>
@@ -82,254 +82,277 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9409; h=from:subject; bh=I0jkMOMquZY0M5vGY8G1HRzpJL2Yir5EazVFzf8krMI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIevMwzU74zild8psNz2ZIFMn/UzwdsM5I3nubLWVy5Zr7quf d3ZvRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZS/oiRYVkvj2zs1iN5mq4iybuuem zTO3JvyU+VkDTeIg6rFc1rNjIyrFt8/bmHs4WDqYlZVdemLfUrkv8t8zxbtHjlsVjD/b/tWQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10084; h=from:subject; bh=NA0vvm1I0UBnht6GYHZO7WvbhLE4uQLKWCXCLGY72Mc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIevMw7XHGcPOZCUdbFl23X7ClOOXHgqJqXxur3ksPPM6t/Mt j1l9HaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZjIuwCG/4Fn9d3CzvQxvNVhfjutIs N5s+KyvK2vTidNyLnvWL2rrYfhf+S5a29UTNgFrL6XbYxtcZW8Zjq77MO9E0zsxgIH+1V9OAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A kernel struct shared with BPF programs may want to point at arena
-memory, e.g. a sched_ext argument struct that the kernel builds in the
-scheduler's arena and that refers to another arena object. A pointer
-member reaches the program typed as a kernel pointer, so sched_ext
-publishes a plain u64 holding a pre-translated arena address that the
-program casts before use.
+Add a struct_ops member to bpf_testmod whose argument struct carries two
+task pointers, one plain and one __nullable, both made trusted through a
+__safe_trusted alias of the struct in the module BTF, and a kfunc that
+calls the member once with the nullable pointer unset and once set.
 
-Translate in the verifier instead. When a load through a kernel struct
-pointer lands on a member tagged __arena, btf_struct_walk() reports it
-and the destination register becomes PTR_TO_ARENA. The member holds the
-kernel address of the arena memory; the fixup pass appends the
-conversion to the arena pointer form that the struct_ops trampoline
-applies to __arena arguments:
-
-  r1 = *(u64 *)(r2 + off)
-  if r1 == 0 goto +1         // __arena __nullable members only
-  w1 -= lo32(kern_vm_start)
-
-Stores to kernel structs are rejected as before, and so are atomic
-loads of such a member, which the fixup pass does not rewrite. A member
-inside a multi-member union is rejected too: an offset into a union
-resolves to its first member, so a program reading another member there
-would receive an arena pointer it did not ask for. Loads through
-program-allocated objects and program BTF are unaffected, there the tag
-is what the compiler emits for the arena address space.
-
-The rewrite is per insn while verification is per path, so the aux data
-records what an insn loaded on any path: an insn that loaded an arena
-pointer member on one path and a different member on another is
-rejected by the fixup pass, while paths disagreeing only on __nullable
-keep the NULL test, which a never-NULL member can afford. As for
-__arena arguments, the program needs an associated arena, which also
-supplies the base to subtract.
+The callback acquires the plain pointer as is and the nullable one only
+after a check, driven through the kfunc from a syscall program. The
+failure case passes the nullable pointer to bpf_task_acquire() unchecked
+and is rejected as possibly NULL.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  8 ++++++
- kernel/bpf/btf.c             | 30 ++++++++++++++++++++++
- kernel/bpf/fixups.c          | 50 +++++++++++++++++++++++++++++++++---
- kernel/bpf/verifier.c        | 41 +++++++++++++++++++++++++++++
- 4 files changed, 125 insertions(+), 4 deletions(-)
+ .../bpf/prog_tests/test_struct_ops_nullable.c | 43 ++++++++++++++++++
+ .../selftests/bpf/progs/struct_ops_nullable.c | 45 +++++++++++++++++++
+ .../bpf/progs/struct_ops_nullable_fail.c      | 28 ++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 33 ++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.h    | 15 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
+ 6 files changed, 165 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_nullable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_fail.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 54cb6d3d0653..fb949b58c231 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -791,6 +791,14 @@ struct bpf_insn_aux_data {
- 	 */
- 	u8 fastcall_spills_num:3;
- 	u8 arg_prog:4;
-+	/*
-+	 * What a load through a kernel struct pointer found, on any path: an
-+	 * __arena pointer member, which arena_member_fixup() rewrites, one
-+	 * that is __nullable as well, or any other member.
-+	 */
-+	u8 arena_member:1;
-+	u8 arena_member_nullable:1;
-+	u8 non_arena_member:1;
- 
- 	/* below fields are initialized once */
- 	unsigned int orig_idx; /* original instruction index */
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index bcbd49c7ca0b..b992027b60b0 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7695,6 +7695,7 @@ enum bpf_struct_walk_result {
- 	WALK_SCALAR = 0,
- 	WALK_PTR,
- 	WALK_PTR_UNTRUSTED,
-+	WALK_PTR_ARENA,
- 	WALK_STRUCT,
- };
- 
-@@ -7975,6 +7976,30 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 			if (btf_ptr_has_type_tag(btf, mtype, "nullable"))
- 				tmp_flag |= PTR_MAYBE_NULL;
- 
-+			/*
-+			 * An __arena member of a kernel struct holds the kernel
-+			 * address of arena memory, which the verifier turns into
-+			 * an arena pointer on load. Program BTF is not affected:
-+			 * there the tag is what the compiler emits for the arena
-+			 * address space. An offset into a union resolves to its
-+			 * first member, so a program reading another member there
-+			 * would get an arena pointer it did not ask for; the walk
-+			 * marked such a union untrusted.
-+			 */
-+			if (btf_is_kernel(btf) && btf_type_is_arena_ptr(btf, mtype)) {
-+				if (*flag & PTR_UNTRUSTED) {
-+					bpf_log(log,
-+						"arena pointer member %s of %s is inside a union\n",
-+						mname, tname);
-+					return -EACCES;
-+				}
-+				*next_btf_id = id;
-+				*flag |= tmp_flag & PTR_MAYBE_NULL;
-+				if (field_name)
-+					*field_name = mname;
-+				return WALK_PTR_ARENA;
-+			}
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_nullable.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_nullable.c
+new file mode 100644
+index 000000000000..fc52870782b7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_nullable.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
 +
- 			if (btf_type_is_struct(stype)) {
- 				*next_btf_id = id;
- 				*flag |= tmp_flag;
-@@ -8077,6 +8102,11 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			*flag = MEM_RDONLY | PTR_UNTRUSTED;
- 			ret = PTR_TO_MEM;
- 			goto check_variable_offset;
-+		case WALK_PTR_ARENA:
-+			*next_btf_id = id;
-+			*flag = tmp_flag;
-+			ret = PTR_TO_ARENA;
-+			goto check_variable_offset;
- 		case WALK_SCALAR:
- 			ret = SCALAR_VALUE;
- 			goto check_variable_offset;
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index b2fa7e8bedf3..bbb653df6b6f 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -870,6 +870,36 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
-  *     struct __sk_buff    -> struct sk_buff
-  *     struct bpf_sock_ops -> struct sock
-  */
++#include "struct_ops_nullable.skel.h"
++#include "struct_ops_nullable_fail.skel.h"
++
 +/*
-+ * A load through an __arena pointer member of a kernel struct reads the kernel
-+ * address of arena memory. Append the conversion to the arena pointer form,
-+ * (u32)(kaddr - kern_vm_start), that the struct_ops trampoline applies to
-+ * __arena arguments. A __nullable member keeps NULL as NULL, tested on the
-+ * full kernel address. Returns the number of insns in @buf, 0 when the insn
-+ * loads no such member, or an error when it does so on some paths only.
++ * Attach a callback that gets a trusted and a trusted __nullable task pointer
++ * through its argument struct and drive it through the
++ * bpf_testmod_ops3_call_test_nullable() kfunc.
 + */
-+static int arena_member_fixup(struct bpf_verifier_env *env, int idx, struct bpf_insn *insn,
-+			      struct bpf_insn *buf)
++static void nullable_member(void)
 +{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
-+	int cnt = 0;
-+	u32 base;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	struct struct_ops_nullable *skel;
++	struct bpf_link *link;
++	int err;
 +
-+	if (!aux->arena_member)
-+		return 0;
-+	if (aux->non_arena_member) {
-+		verbose(env, "an insn loads an arena pointer member on one path and a different member on another\n");
-+		return -EINVAL;
-+	}
++	skel = struct_ops_nullable__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "struct_ops_nullable__open_and_load"))
++		return;
 +
-+	base = bpf_arena_get_kern_vm_start(env->prog->aux->arena);
-+	buf[cnt++] = *insn;
-+	if (aux->arena_member_nullable)
-+		buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, insn->dst_reg, 0, 1);
-+	buf[cnt++] = BPF_ALU32_IMM(BPF_SUB, insn->dst_reg, (s32)base);
-+	return cnt;
++	link = bpf_map__attach_struct_ops(skel->maps.testmod_nullable);
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.trigger), &topts);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(topts.retval, 0, "trigger_retval");
++
++	bpf_link__destroy(link);
++out:
++	struct_ops_nullable__destroy(skel);
 +}
 +
- int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *subprogs = env->subprog_info;
-@@ -1093,11 +1123,23 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 					insn->code = BPF_LDX | BPF_PROBE_MEMSX |
- 						     BPF_SIZE(insn->code);
- 				env->prog->aux->num_exentries++;
--				continue;
--			}
--			if (verifier_bug_if(bpf_may_fault_on_deref(ptr_type), env,
--					    "access to a fault prone pointer is not rewritten as a probed one"))
-+			} else if (verifier_bug_if(bpf_may_fault_on_deref(ptr_type), env,
-+						   "access to a fault prone pointer is not rewritten as a probed one")) {
- 				return -EFAULT;
-+			}
-+
-+			cnt = arena_member_fixup(env, i + delta, insn, insn_buf);
-+			if (cnt < 0)
-+				return cnt;
-+			if (!cnt)
-+				continue;
-+			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta    += cnt - 1;
-+			env->prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
- 			continue;
- 		}
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 70fd44a6e1c5..a24a2bab802b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6552,6 +6552,42 @@ static bool type_is_trusted_or_null(struct bpf_verifier_env *env,
- 					  "__safe_trusted_or_null");
- }
- 
-+/*
-+ * The member holds the kernel address of arena memory, which the rewritten
-+ * load turns into an arena pointer, see arena_member_fixup(). NULL needs no
-+ * tracking, PTR_TO_ARENA covers it.
-+ */
-+static int check_arena_member_load(struct bpf_verifier_env *env, struct bpf_reg_state *regs,
-+				   int value_regno, enum bpf_type_flag flag, const char *tname,
-+				   const char *field_name)
++/* Serialized because it attaches the singleton bpf_testmod_ops3. */
++void serial_test_struct_ops_nullable(void)
 +{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[env->insn_idx];
++	if (test__start_subtest("nullable_member"))
++		nullable_member();
++	RUN_TESTS(struct_ops_nullable_fail);
++}
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_nullable.c b/tools/testing/selftests/bpf/progs/struct_ops_nullable.c
+new file mode 100644
+index 000000000000..387792924c09
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/struct_ops_nullable.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+	/* a helper reading the member as bytes needs no rewrite */
-+	if (value_regno < 0)
-+		return 0;
-+	if (!env->prog->aux->arena) {
-+		verbose(env,
-+			"arena pointer member %s of struct %s requires a program with an associated arena\n",
-+			field_name, tname);
-+		return -EINVAL;
-+	}
-+	/* only a plain load is rewritten */
-+	if (BPF_CLASS(env->prog->insnsi[env->insn_idx].code) != BPF_LDX) {
-+		verbose(env,
-+			"arena pointer member %s of struct %s can only be read with a plain load\n",
-+			field_name, tname);
-+		return -EACCES;
-+	}
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "../test_kmods/bpf_testmod.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
 +
-+	aux->arena_member = true;
-+	if (flag & PTR_MAYBE_NULL)
-+		aux->arena_member_nullable = true;
-+	mark_reg_unknown(env, regs, value_regno);
-+	regs[value_regno].type = PTR_TO_ARENA;
++char _license[] SEC("license") = "GPL";
++
++SEC("struct_ops/test_nullable")
++int BPF_PROG(test_nullable_cb, struct bpf_testmod_nullable_args *args)
++{
++	struct task_struct *t;
++	int ret = 0;
++
++	/* trusted, so good for a kfunc as is */
++	t = bpf_task_acquire(args->task);
++	if (!t)
++		return -1;
++	bpf_task_release(t);
++
++	/* trusted but __nullable, so a check has to come first */
++	if (args->task_or_null) {
++		t = bpf_task_acquire(args->task_or_null);
++		if (!t)
++			return -1;
++		bpf_task_release(t);
++		ret = 1;
++	}
++	return ret;
++}
++
++SEC(".struct_ops.link")
++struct bpf_testmod_ops3 testmod_nullable = {
++	.test_nullable = (void *)test_nullable_cb,
++};
++
++SEC("syscall")
++int trigger(void *ctx)
++{
++	/* one call without task_or_null, one with */
++	return bpf_testmod_ops3_call_test_nullable() != 2;
++}
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_nullable_fail.c b/tools/testing/selftests/bpf/progs/struct_ops_nullable_fail.c
+new file mode 100644
+index 000000000000..c15b3a8c8d39
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/struct_ops_nullable_fail.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++#include "../test_kmods/bpf_testmod.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* The member is trusted, but __nullable, so it needs a check before the kfunc. */
++SEC("struct_ops/test_nullable")
++__failure __msg("Possibly NULL pointer passed to trusted")
++int BPF_PROG(unchecked_nullable, struct bpf_testmod_nullable_args *args)
++{
++	struct task_struct *t;
++
++	t = bpf_task_acquire(args->task_or_null);
++	if (t)
++		bpf_task_release(t);
 +	return 0;
 +}
 +
- static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *regs, struct bpf_reg_state *reg,
- 				   argno_t argno, int off, int size,
-@@ -6661,6 +6697,11 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	if (ret < 0)
- 		return ret;
++SEC(".struct_ops.link")
++struct bpf_testmod_ops3 testmod_nullable_fail = {
++	.test_nullable = (void *)unchecked_nullable,
++};
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index b4f0af2aeca4..0c0152885da3 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -460,6 +460,11 @@ static int bpf_testmod_ops3__test_arena_multislot(struct bpf_testmod_arena_pair
+ 	return 0;
+ }
  
-+	if (ret == PTR_TO_ARENA)
-+		return check_arena_member_load(env, regs, value_regno, flag, tname, field_name);
-+	if (atype == BPF_READ && value_regno >= 0)
-+		env->insn_aux_data[env->insn_idx].non_arena_member = true;
++static int bpf_testmod_ops3__test_nullable(struct bpf_testmod_nullable_args *args)
++{
++	return 0;
++}
 +
- 	if (ret != PTR_TO_BTF_ID) {
- 		/* just mark; */
+ static struct bpf_testmod_ops3 __bpf_testmod_ops3 = {
+ 	.test_1 = bpf_testmod_test_3,
+ 	.test_2 = bpf_testmod_test_4,
+@@ -467,6 +472,7 @@ static struct bpf_testmod_ops3 __bpf_testmod_ops3 = {
+ 	.test_arena_nullable = bpf_testmod_ops3__test_arena_nullable,
+ 	.test_arena_stack = bpf_testmod_ops3__test_arena_stack,
+ 	.test_arena_multislot = bpf_testmod_ops3__test_arena_multislot,
++	.test_nullable = bpf_testmod_ops3__test_nullable,
+ };
  
+ static void bpf_testmod_test_struct_ops3(void)
+@@ -507,6 +513,32 @@ __bpf_kfunc int bpf_testmod_ops3_call_test_arena_multislot(u64 *ptr__arena)
+ 	return st_ops3->test_arena_multislot(p, ptr__arena);
+ }
+ 
++/*
++ * The members of struct bpf_testmod_nullable_args are trusted the way the
++ * verifier's BTF_TYPE_SAFE_TRUSTED() lists vmlinux members: through a struct
++ * of the same name with the __safe_trusted suffix in the BTF of the module.
++ */
++struct bpf_testmod_nullable_args__safe_trusted {
++	struct task_struct *task;
++	struct task_struct *task_or_null;
++};
++
++/*
++ * Call test_nullable() with @task_or_null unset, then set. The callback
++ * returns 1 when it found a task there, so the expected result is 2.
++ */
++__bpf_kfunc int bpf_testmod_ops3_call_test_nullable(void)
++{
++	struct bpf_testmod_nullable_args args = { .task = current };
++	int ret;
++
++	BTF_TYPE_EMIT(struct bpf_testmod_nullable_args__safe_trusted);
++
++	ret = st_ops3->test_nullable(&args);
++	args.task_or_null = current;
++	return ret | st_ops3->test_nullable(&args) << 1;
++}
++
+ struct bpf_testmod_btf_type_tag_1 {
+ 	int a;
+ };
+@@ -926,6 +958,7 @@ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena)
+ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_nullable)
+ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_stack)
+ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_multislot)
++BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_nullable)
+ BTF_ID_FLAGS(func, bpf_kfunc_get_default_trusted_ptr_test);
+ BTF_ID_FLAGS(func, bpf_kfunc_put_default_trusted_ptr_test);
+ BTF_ID_FLAGS(func, bpf_kfunc_kasan_poison)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
+index 2b12f81bf748..b905c35490eb 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
+@@ -114,6 +114,19 @@ struct bpf_testmod_arena_pair {
+ 	u64 b;
+ };
+ 
++/* The kernel defines the BPF pointer qualifiers, user space and BPF programs need them empty. */
++#ifndef __nullable
++#define __nullable
++#endif
++
++/* Arguments of test_nullable(), trusted through the __safe_trusted alias in the module */
++struct bpf_testmod_nullable_args {
++	/* never NULL */
++	struct task_struct *task;
++	/* NULL on the first call, set on the second */
++	struct task_struct __nullable *task_or_null;
++};
++
+ struct bpf_testmod_ops3 {
+ 	int (*test_1)(void);
+ 	int (*test_2)(void);
+@@ -125,6 +138,8 @@ struct bpf_testmod_ops3 {
+ 				u64 g, u64 h, u64 *ptr);
+ 	/* a multi-slot leading arg, so @ptr is not at the slot its arg index suggests */
+ 	int (*test_arena_multislot)(struct bpf_testmod_arena_pair p, u64 *ptr);
++	/* Used to test __nullable pointer members. */
++	int (*test_nullable)(struct bpf_testmod_nullable_args *args);
+ };
+ 
+ struct st_ops_args {
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 67c02a421d13..d88c99109c31 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -218,6 +218,7 @@ int bpf_testmod_ops3_call_test_arena(__u64 *ptr__arena) __ksym;
+ int bpf_testmod_ops3_call_test_arena_nullable(__u64 *ptr__arena__nullable) __ksym;
+ int bpf_testmod_ops3_call_test_arena_stack(__u64 *ptr__arena) __ksym;
+ int bpf_testmod_ops3_call_test_arena_multislot(__u64 *ptr__arena) __ksym;
++int bpf_testmod_ops3_call_test_nullable(void) __ksym;
+ 
+ __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
+ 				__u32 c, __u64 d) __ksym;
 -- 
 2.53.0-Meta
 
