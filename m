@@ -1,62 +1,64 @@
-Received: from mail-oo2-f11.google.com (mail-oo2-f11.google.com [74.125.231.139])
+Received: from mail-oo2-f9.google.com (mail-oo2-f9.google.com [74.125.231.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C85348C5C
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 13:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB19E3750D5
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 13:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791812238; cv=none; b=UUCiNFg4w1Rz5LvYk1DNoWAoJu0GVecp5kmsA/h2XXsWYmWldv8aN4ta2nPZV1u4Ilz5mrt9WU2GsgiJMZJw8PLtuGWugAewzFCuUlJ4m9zYO/cuLFtTSkCCau9BzeAk2NQiMwLKA7PzIhXi8sS34xEagKKUOyeyqgCkYU2umrY=
+	t=1791812241; cv=none; b=o6PvptWTCu3h3BqA2KT/ARvlTAtu5F5NdtIHVLxsPjM5ovz4RRLpfCTHBM3u90QAZoa4J5mppKG8eA2/3r1iaSleZX1iHecCgrkcv5or7Vw6ub3mH2ciZaxw7/O4fegty7v2UsapeasbouVBcbpYjysDeNr87/mfJWysD4wsSXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791812238; c=relaxed/simple;
-	bh=MtcC8H6gnKP/qVrRV+9wL+F8R12huHHrB42oFo+PegY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pIxs+o/Owk03W8Rxj12krkN9iBehygpIsFMsG4sJ/OzqjYRZsnWN1QuGtptydHq/yjpYgGh1Dix105tcDR6wRrEqxZ/gB7qWpm4I+ykiBB7RM1DjNWcuyI2zmnzP78LCVodhyOb3FnfVGAKvhfFIdIAYAZJDwcsGLK5TjIXyo44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jgS5xP9q; arc=none smtp.client-ip=74.125.231.139
+	s=arc-20240116; t=1791812241; c=relaxed/simple;
+	bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YrMsIsso08xftiPytTCNRFmw0khfudZHG3XkJvhq6V794but2MGuWEaS1VMEj5Av0Fv7IuNPIow/lHVIEbphTaZqH9pIutX5P4KSqScVrBB/2ZKORnVsVfo81ujBCSgMIOOPlWIaj+2ZfWiNdxXAJn9q3Mqc2R4tY01iOFqPKxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rqCcfbgA; arc=none smtp.client-ip=74.125.231.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jgS5xP9q"
-Received: by mail-oo2-f11.google.com with SMTP id 46e09a7af769-826f17cdc9cso1056596a34.1
-        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 06:37:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rqCcfbgA"
+Received: by mail-oo2-f9.google.com with SMTP id 46e09a7af769-821a4a69647so929566a34.0
+        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 06:37:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791812235; x=1792417035; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=x/JqU+X3FqNaWPnxOdRPjaoxxw8LKlvTpzlOnvrZj20=;
-        b=jgS5xP9q2JfpzEZAXF2cAmmZXLwZ40V+Okcvc4P37JTmHmTK/Le/E0BGUvBenNlh4c
-         awWdIRvwCM8bBcfS47tz2xZoPSN8uKW7VPXd7Qzz/6rIpA/SPxU6gyx0EyNaiK7imqDI
-         SXfPjklQQFNYL/ms3OizxHvT1jRPiPnt2hc8xDlYt75x6fhOa8wlTu8ptcL7ZcqUyp86
-         4WrvPTTuHaN0Wg5MePyXGgB1GRohiqzxr921pxDTbqX3R93e4gKUtySFhrn6bTAK/MG6
-         0BLu+OLCQ6ESxZWvy8Flpxf/juebb7Xb/2jGoCsDvThho4LFwfMUj1QZgM0cTpxNHixM
-         dvDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791812235; x=1792417035;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1791812239; x=1792417039; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=x/JqU+X3FqNaWPnxOdRPjaoxxw8LKlvTpzlOnvrZj20=;
-        b=pgWlQJYwzSI4EYb2uqHS8VDFao5erMUVnt9WtXffrzBBXXaT+39tjzXcExcsnS+Ljg
-         zPapj9oi+Qs4LOdubJfyEs2zJsA7ct9nt7+uGXvAr3p1PdBHcVXrHPbD5nbMCHPrbmtX
-         uuiZwVuh+yjoeA79d5J2Kso3UEoY4Xko5DGvNQMbt0Lvz0U7HRJdwWiu1UIiVO+h4b2X
-         FJ5nqekdCP67PTyZ1lUQkwN6LfAQaghbpIKlTl1NOZJWOrHyMf8SjljefEEzL/KcxRnn
-         ZIl0XVOeeGPd/kOs0dxS5P7b6JGrEBxUEJ1uDELfgxPk9Y1YMPVRyGvK6p62t2hVzHZZ
-         vMEA==
-X-Gm-Message-State: AFq9FYJmWEUDs2J7IE91lDWENiL9YV/CR3AzIh4RWRD6kaqcBTthbNJw
-	shuMhr1MaxDSXwdb6fDXRR7mWP91lkdYthwodCo+h2guzEYbnvqv3ShbPnzTxRF6h2U=
-X-Gm-Gg: AYBFou2n+LTwbOBJx++UbaKlqJgrq57xV07wsnM+ZqfyCO7NVXvwoxrqksVHa9NMZ0m
-	VlCH/8VuNmLZDJdaE5U6miZFu/ndXpJnxY1AA239kzYyWHy6/f+qpSxKltdjskJLScV7Hv1c0HN
-	zvkeWoHjdjkihGb2zpop++BJ+UNb3PkZ5Xj40GqsZXwA5pTMZJtpNg5eQew7A8/ND17S+X2E20E
-	ExoY/2PfvLq/NN2HIGhGl5z0vd49xaA/3mONKKW1OFYXBZzrbP+uiRTuvA7EieB0ytugtehQqM5
-	arRFpCimDlKq+Fx+oL3q4/suSxbvYqB6KuhA7X5230ADWLzeoKGT7X9BargXMg7B5K4YU3643dH
-	rMyr9uPVuEa37Zr0JyYHgvFl0/WoobzVM+pALtGP2t0qgwt/zinRXPoe0FauyJ8i76qwNG6Nnf5
-	qq9SPf6ocbAoLevvgumCGSunFxQWMctvhBfnTAPUpBFyUxqpegYlyiAJHow0oVYRVPo8QAqRy0E
-	c6YXRkMN7lZg0gr6BI+q6sLlj5o+FX5+PlN4MEEh99w80oUxdQEBtzMz7HAOA7t8X/veP8Sqdb2
-	CwC+DQ==
-X-Received: by 2002:a05:6820:a07:b0:6f8:fcce:a410 with SMTP id 006d021491bc7-6f8fccec5e7mr41285eaf.55.1791812235576;
-        Mon, 12 Oct 2026 06:37:15 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:56::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6eef6e22b46sm9338859eaf.0.2026.10.12.06.37.11
+        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
+        b=rqCcfbgAWaP/ZYS1In5YS/52ei4hvUZU4lvS12v9RSxaA+UgjDuZUzd7iU4dtA+ig0
+         P0s+Zax/4NGp+YI2mi+B/wqGM4okdBCiWO182gmWwWQlkFiu4+9iLAoxhEqUOX9B88he
+         ZwA9g5VlLl4jZZ5CECkZNAw2/yf9E3WinfBzcbMhzeL0ATipgzKnx4K9wbUKDEXlVI3a
+         9OFzFZTtqq7lcj1JCI8TsUwjSgJdSTPbcR2pIUGXM5gFNQer9igbIsV13SitRczXKnT6
+         lN2jBWfDtSe7cf/+7WjQrM6Uw3wDh6IyU4SuFEIu7Zw6L3KFs5zR872O17c0QyETwJnV
+         W+yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791812239; x=1792417039;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
+        b=XYShQrSjXOQh4Q6EytnTFsBpBhhaP6cQdlKIp1VGmhf8mAIOeKPH4x5o1ubrmTR2V9
+         GwTgwIId1x4gNMNkIZp/63maP3KrzNjvKpawkeaGYhP+0zrg2lwiSX+hHyLdKJ1w7GyF
+         TwubAwcxRG0kpso57PrjiRjxj+gRsL8ReB+7YheGr/lg9Y1yCFjBjWYWMBA6FelrJMoq
+         27h58QzJDbSD61BVE8Ejl3GVpNwI86QaYJ5tGTvVGgV4VSVcW6FVrENQ3ivWlXPIEVAK
+         RNmLzAurse/F8DPAYkn3NKAs/cbe0dqo9R1TiqxBX40ri2au5hi8IFyI9U+96thOTcRw
+         z5nA==
+X-Gm-Message-State: AFq9FYIxzcx7+ITgzP+4aEvBB7eyThvgC4xZl4CRb63c92W2qAjRTYmJ
+	8ZAr1mDErwquL3XNNeoqK8aPCFz891B9ROo1xc9qTKuczSLuaXg83a3JFbC2LeqjfPo=
+X-Gm-Gg: AYBFou3Cc2kfb1xQr1b2/4Ktsh5KIcfvRU/pBX9sEBlilkwLlIwu02zfSpjqwU/ZikK
+	3E0GCGGSSMB5UAmZKZd/KFJZdCvAR7pLxFNEk2tvMRFI/fS6nOSIa0mofvzyjUlpnjWeWDZuFVe
+	nXVd8kJ7gBOzsKZV9j4uMc94KwvoEPqtnmu3dzp7lde1iQyG/Op17Kh51hpIPXzk3+/twoYDvr3
+	TTXevclVi1eQDMMND7mrXeE4LxvgG8PDjYRue8ESeEgSQcH6uZmeDOhCiKaJrr1Abezn6+mwjJi
+	VRcooizpmVkeaGon4kVkEgpHvSB0TyyRrDuZ3X3HH1wAbCPRdq/Vi+JD2fIRbcmdWciQdFNSWpJ
+	qtDZQuP0+WVoeO58rZvt4GlQxzF35dxiqnl/uVtYrdNu44SrOB7LWehIonNLI2WCyNGmQNLGTsk
+	6P/TlQKrEDalh6ACN2y9Cf00T2k2CfKUEymGcw4jxkhk7OF4gIG/OvhUXheyQ88IJOD9yQBWqfm
+	isetpg74yY62evPtNWJSOikWPaGhmZQo79OlM5n+qRnLWUGiSuRbVvjj9MMDjafjZ4FACrj2NHg
+	DKzd0g==
+X-Received: by 2002:a05:6820:198a:b0:6ca:3ce1:ed36 with SMTP id 006d021491bc7-6ef100968e7mr6899650eaf.47.1791812239495;
+        Mon, 12 Oct 2026 06:37:19 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:50::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6ef01dba775sm9541283eaf.9.2026.10.12.06.37.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2026 06:37:13 -0700 (PDT)
+        Mon, 12 Oct 2026 06:37:17 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,118 +70,68 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 00/10] Fix some arena paper cuts
-Date: Mon, 12 Oct 2026 15:36:57 +0200
-Message-ID: <20261012133711.4030594-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 01/10] compiler_types: Add __arena and __nullable BTF type tag qualifiers
+Date: Mon, 12 Oct 2026 15:36:58 +0200
+Message-ID: <20261012133711.4030594-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261012133711.4030594-1-memxor@gmail.com>
+References: <20261012133711.4030594-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5933; h=from:subject; bh=MtcC8H6gnKP/qVrRV+9wL+F8R12huHHrB42oFo+PegY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIevMwzX+i295t3ebz9QrvrMoSONFaxjTpHnPbd+2bXu3S7Em ZXVzRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACai48vwV2TydvX4lptqB+VXLtXXl5 3YMfvG5lPpm0QlJ/LHhuTLijD89/d0NOgoKhBw+dqUrOOx7v9Xr4wjR6xlr7QeZ5TRSn3JAAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2184; h=from:subject; bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIevMwzVnf1a/7q+zTNTm1ntvGSPmlDopfurR/rCKlMQlN2+t my/XUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIn8lmH4p7AsUZT353qD5g/XzRhWvN nhIfH5wxF3vp5E7llBx6JV3jIy3LVM5XB9cf7i3qeSDwMM1wZu2P0t4pvS2/Luq7P2zU2r4wYA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Kernel code that shares arena memory with BPF programs runs into two
-paper cuts, both visible in sched_ext's cid-form schedulers today.
+Kernel structures increasingly want to publish pointers into a BPF arena
+to the BPF programs they are shared with, and some pointer members that
+reach programs as trusted are legitimately NULL at times. Neither can be
+expressed today: a pointer member reaches the program as an ordinary
+kernel pointer, and sched_ext resorts to a plain u64 holding a
+pre-translated arena address that programs cast before use.
 
-A kernel struct cannot publish an arena pointer: a pointer member reaches
-the program typed as a kernel pointer, so sched_ext hands out a plain u64
-holding a pre-translated arena address and every program casts it before
-use. __arena and __nullable become BTF type tags like __user and __rcu.
-A load through an __arena member of a kernel struct yields PTR_TO_ARENA:
-the member holds the kernel address and the fixup pass appends the
-conversion to the arena pointer form that the struct_ops trampoline
-applies to __arena arguments, with a NULL test for __nullable members.
-A __nullable member on its own keeps PTR_MAYBE_NULL on trusted and RCU
-pointers, where NULL would otherwise be assumed away. libbpf renders the
-arena tag with its address space, so the member arrives in a program
-built against vmlinux.h ready to use, without a cast.
+Define __arena and __nullable as BTF type tags, the way __user, __rcu
+and __percpu already are, so that tagged members survive into vmlinux
+and module BTF and the verifier can act on them. To kernel code and to
+sparse the qualifiers are empty: the pointers are ordinary kernel
+pointers. The verifier side follows in the next patches.
 
-A program only has an arena when one of its insns refers to the arena
-map, yet the kernel hands programs arena pointers through struct_ops
-arguments, tagged members and kfunc return values, and a struct_ops
-callback that touches nothing but its arguments fails verification until
-it refers to the arena artificially. libbpf binds the arena of an object
-to every program loaded from it, through a continuous fd_array. So that
-programs which never touch the arena pay nothing for it, the verifier
-records which functions have insns that work with the arena base and the
-JITs set it up only for those.
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/compiler_types.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Tested with sched_ext for-next as well: a typed cmask member next to the
-existing cmask_arena_addr in struct scx_enable_args passes the
-enable_cmask selftest read straight from the member, without a cast and
-without the asm volatile arena reference.
-
-See commit logs for details.
-
-Kumar Kartikeya Dwivedi (10):
-  compiler_types: Add __arena and __nullable BTF type tag qualifiers
-  bpf: Recognize __nullable on pointer members of kernel structs
-  bpf: Turn loads of __arena pointer members into arena pointers
-  selftests/bpf: Test __nullable pointer members
-  selftests/bpf: Test __arena pointer members
-  libbpf: Bind the arena of an object to every program in it
-  selftests/bpf: Test arena binding by libbpf
-  bpf: Set up the arena base only in functions that use it
-  libbpf: Render the arena type tag with its address space
-  selftests/bpf: Test the address space rendering of the arena type tag
-
- arch/arm64/net/bpf_jit_comp.c                 |   6 +-
- arch/loongarch/net/bpf_jit.c                  |   6 +-
- arch/powerpc/net/bpf_jit_comp.c               |   6 +-
- arch/riscv/net/bpf_jit_core.c                 |   6 +-
- arch/s390/net/bpf_jit_comp.c                  |   7 +-
- arch/x86/net/bpf_jit_comp.c                   |  14 ++-
- include/linux/bpf.h                           |   2 +
- include/linux/bpf_verifier.h                  |  10 ++
- include/linux/compiler_types.h                |  10 ++
- include/linux/filter.h                        |  11 ++
- kernel/bpf/btf.c                              |  48 +++++++-
- kernel/bpf/fixups.c                           |  51 +++++++-
- kernel/bpf/verifier.c                         |  67 +++++++++++
- tools/lib/bpf/btf_dump.c                      |   3 +
- tools/lib/bpf/features.c                      |  40 +++++++
- tools/lib/bpf/libbpf.c                        |  37 ++++++
- tools/lib/bpf/libbpf_internal.h               |   2 +
- .../selftests/bpf/prog_tests/btf_dump.c       |  16 ++-
- .../bpf/prog_tests/test_struct_ops_arena.c    | 111 ++++++++++++++++++
- .../bpf/prog_tests/test_struct_ops_nullable.c |  43 +++++++
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../testing/selftests/bpf/progs/arena_kfunc.c |  10 --
- .../selftests/bpf/progs/arena_noarena.c       |  39 ++++++
- .../bpf/progs/struct_ops_arena_autobind.c     |  64 ++++++++++
- .../bpf/progs/struct_ops_arena_member.c       |  92 +++++++++++++++
- .../struct_ops_arena_member_fail__load_acq.c  |  38 ++++++
- .../struct_ops_arena_member_fail__mismatch.c  |  45 +++++++
- .../struct_ops_arena_member_fail__no_arena.c  |  23 ++++
- .../struct_ops_arena_member_fail__union.c     |  34 ++++++
- .../struct_ops_arena_member_fail__write.c     |  32 +++++
- .../progs/struct_ops_arena_member_render.c    |  82 +++++++++++++
- .../selftests/bpf/progs/struct_ops_nullable.c |  45 +++++++
- .../bpf/progs/struct_ops_nullable_fail.c      |  28 +++++
- .../bpf/progs/verifier_arena_scalar.c         |  13 --
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  53 +++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |  46 ++++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   2 +
- 37 files changed, 1095 insertions(+), 49 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_nullable.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_noarena.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__load_acq.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__no_arena.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__union.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__write.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_fail.c
-
-
-base-commit: 0d5e3fc78a6f2522e6339743b8e5ecc02351a9dd
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index c5921f139007..e97ee2d4d1df 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -51,6 +51,8 @@
+ # define __iomem	__attribute__((noderef, address_space(__iomem)))
+ # define __percpu	__attribute__((noderef, address_space(__percpu)))
+ # define __rcu		__attribute__((noderef, address_space(__rcu)))
++# define __arena
++# define __nullable
+ static inline void __chk_user_ptr(const volatile void __user *ptr) { }
+ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ /* other */
+@@ -70,6 +72,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ # define __iomem
+ # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
+ # define __rcu		BTF_TYPE_TAG(rcu)
++/*
++ * Qualifiers for the BPF verifier rather than address spaces: __arena marks
++ * a pointer into a BPF arena, __nullable a pointer that may be NULL. They
++ * reach BPF programs as BTF type tags on kernel struct members; to kernel
++ * code the pointers are ordinary.
++ */
++# define __arena	BTF_TYPE_TAG(arena)
++# define __nullable	BTF_TYPE_TAG(nullable)
+ 
+ # define __chk_user_ptr(x)	(void)0
+ # define __chk_io_ptr(x)	(void)0
 -- 
 2.53.0-Meta
 
