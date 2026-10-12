@@ -1,129 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-m127173.xmail.ntesmail.com (mail-m127173.xmail.ntesmail.com [115.236.127.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C7F3164D8
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 06:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E07433E9D
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 06:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791786897; cv=none; b=EOUAORGpIzyIXmt2Tl/A1WH+UbTK+QiA+8TBrhEJWjzVbTi87d+g9TdN3S5NKaf75EKHAfz4eESb9keMBD2kRCN+vkFnVFup1qCUfpf1Gs9lB1cRiW927lAqy/Jh5qLJMqrfs/QnCwcXX2IChqumGLjDnWCFousNrwSl8xPvqlU=
+	t=1791787426; cv=none; b=Va1B3oL/XA/LBUAbNEQSMCvqH3gT06YyKWU0DUjSdBbsxgtWOB60t8nfJXuxV2nbDlNmdeual5T7J8zaTHY3qXnOPnwDdOQvPVE8AYM7U8mh8MsmC40ln6RH3CLjaJMTssV5B/1GC/H9iEkyfvKqTlRMclgWwmQQ4YXf/OIkzO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791786897; c=relaxed/simple;
-	bh=SOLnaibhFt+NPOFoZU2G4t4xoMwbc/ktmzn+/mQaTM8=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=jTuscnmno/SI2+ypf64lSP3A0xwvi30nbhjBkmuHm1c5N4U9GQwCDeYnZZufid9O1AULk6T05DFmgtx+0iV9AZq++8PTGmH9m3nFcNa0ehOjdcCJqGC01JphyRqXzu7ULcjdS93lO5HDzePuYQ4/bCYe8Hj27s5sGSnywz/Mgik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWxeiVK9; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWxeiVK9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2EE31F0089B;
-	Mon, 12 Oct 2026 06:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791786895;
-	bh=RTNS6wbNNvrbk/prn/Om3d8EmS8Lk8YEdQhB5wqlIH0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YWxeiVK9EKTJr6c3YyXoi2QEjSE0GbRlce0fsa7dnkOth93uXWznEPZXkCPB8SxYB
-	 qSaOwNHlHNkPV+n7npl27mUBdY0Wo60ttHazH0spJ6Knc8X+gI/qjg6KCPI2+jaEln
-	 cPOBm9o6lDEBdTl8E8ttO5SpqtCBCRogXMEJ001+xEcrtoxdvPRpAQJeHCC7zjHB69
-	 PvOEGnS2qFPtqQHnyaK604QlCjnTIznjtZ5bHezmeMEMerIBkJUKvigD/gx0OPmSVm
-	 fjv1Winn8B+/SHdx6P4RiEhUdgcW3gzUhkuyPBTUnC/9gbHWEBfoHWvDTAkCjYFTix
-	 uIU/PsWmK880w==
-Message-ID: <sashiko-outbox-167741@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 3/4] bpf: Prevent task work context reuse
- while irq_work is busy
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yun Lu" <luyun_611@163.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261012061915.231254-4-luyun_611@163.com>
-References: <20261012061915.231254-1-luyun_611@163.com>
- <20261012061915.231254-4-luyun_611@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 12 Oct 2026 06:34:55 +0000
+	s=arc-20240116; t=1791787426; c=relaxed/simple;
+	bh=8baN5WdT9Ns03lHdyP4B9CTLzhsBg4von6quIVr0HP4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EubbCZbPAqkNk+S4exFwkczrUDBS2LOEdTtNB6QnG2y/k/VITESsMqevIgsKOyJI3ESL353bgpegpWOelVpyQrx7BPiA9kOgUXTICjgWuOr/38KTzPM0hJ65RPMtd6C88Tua0z/be8xIt9FOktOXXgaiVwFRchaHFmx4iOF8I6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.127.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from [192.168.0.59] (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1ff4c61c7;
+	Mon, 12 Oct 2026 14:28:15 +0800 (GMT+08:00)
+Message-ID: <d1e7558a-c560-4413-9a48-374a70257d73@easystack.cn>
+Date: Mon, 12 Oct 2026 14:28:14 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] mm/page_owner: add bpf_iter target "page_owner"
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261009112308.240769-1-zhen.ni@easystack.cn>
+ <20261009112308.240769-3-zhen.ni@easystack.cn>
+ <sashiko-outbox-165432@kernel.org>
+From: "zhen.ni" <zhen.ni@easystack.cn>
+In-Reply-To: <sashiko-outbox-165432@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa12ecc2c9d0229kunmdcf911e458dbd6
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCH0pLVk4dS0lPQ0lLH0IfGFYVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVCQk
+	lOS1VKS0tVSkJLQlkG
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: UAF in task_work/timer callbacks due to async context re-init=
- on deleted map elements
---
 
-commit 580f53f590a0a7077f231292b13de90213f646c5
-Author: Yun Lu <luyun@kylinos.cn>
+在 2026/10/9 19:50, sashiko-bot@kernel.org 写道:
+> Thank you for your contribution! Sashiko AI review found 5 potential issue(s) to consider:
+> - [High] mm: vmemmap use-after-free in page_owner_next_eligible() during memory hot-remove
+> - [Medium] mm: bpf_iter page_owner skips pages when seq_file buffer fills
+> - [Medium] bpf: missing EOF notification for page_owner bpf_iter
+> - [Medium] bpf: page_owner_iter skips records during chunked seq_read
+> - [Medium] bpf: page_owner_iter lacks EOF notification and yields stale po_snap
+> --
+> 
+> commit fd543af9dd8ff743b641757854c444d98608421d
+> Author: Zhen Ni <zhen.ni@easystack.cn>
+> Subject: mm/page_owner: add bpf_iter target "page_owner"
+> 
+> This commit registers a bpf_iter target page_owner that walks the pages
+> eligible for page_owner output. The attached BPF program receives the pfn,
+> the page, and the page_owner record to filter and format the output.
+> 
+>> diff --git a/mm/page_owner.c b/mm/page_owner.c
+>> index bafe474f33602..eb420803a434a 100644
+>> --- a/mm/page_owner.c
+>> +++ b/mm/page_owner.c
+> [ ... ]
+>> @@ -741,7 +717,7 @@ void __dump_page_owner(const struct page *page)
+>>    * must advance scan->pfn past the hit before calling again to resume
+>>    * the scan.
+>>    */
+>> -static bool page_owner_next_eligible(struct page_owner_scan *scan)
+>> +bool page_owner_next_eligible(struct page_owner_scan *scan)
+> 
+> [Severity: High]
+> Does exposing this function to the BPF iterator API introduce a use-after-free
+> regression during memory hot-remove?
+> 
+> Inside page_owner_next_eligible(), pfn_valid() is used to verify memory
+> sections. However, since the iteration runs without holding memory hotplug
+> locks or a continuous rcu_read_lock(), the memory section can be
+> concurrently hot-removed by another CPU as soon as pfn_valid() returns.
+> 
+> If the vmemmap pages backing the page struct are unmapped and freed during
+> this race, the subsequent call will dereference the unmapped page struct:
+> 
+> 	page = pfn_to_page(pfn);
+> 	if (skip_buddy_pages(&pfn, page))
+> 		continue;
+> 
+> Can this cause a kernel page fault and panic?
+> 
+> While this logic already existed in the /sys/kernel/debug/page_owner read
+> path, this patch relies on it and exposes the buggy code path to the new
+> BPF iterator API.
+> 
 
-bpf: Prevent task work context reuse while irq_work is busy
+This race is pre-existing and not introduced here, so it might be better
+handled in a separate series rather than as part of this change.
 
-This commit fixes a race condition where a task work context could return to
-standby before its scheduling irq_work handler completes. It initializes the
-irq_work during context creation and checks for the BUSY state before reusi=
-ng
-it to prevent overlapping invocations.
+>> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
+>> new file mode 100644
+>> index 0000000000000..33dc9dcd59dec
+>> --- /dev/null
+>> +++ b/mm/page_owner_iter.c
+> [ ... ]
+>> +static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
+>> +{
+>> +	struct page_owner_scan *scan = seq->private;
+>> +
+>> +	if (*posp == 0)
+>> +		scan->pfn = min_low_pfn;
+>> +	else
+>> +		scan->pfn++;
+> 
+> [Severity: Medium]
+> Can this unconditionally skip elements during chunked reads?
+> 
+> During a seq_read iteration, if a formatted record overflows the output
+> buffer, the iterator discards the overflowed record, returns to userspace,
+> and later resumes by calling start() with *posp > 0.
+> 
+> Since next() already advanced scan->pfn to point to the overflowed record,
+> start() increments it again here. Does this mean userspace tools reading
+> the iterator output in chunks (like cat or bpftool iter) will silently
+> drop one valid page owner record at every buffer chunk boundary?
+> 
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 028fc6796b597..350269b8646e4 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -4553,6 +4553,7 @@ static struct bpf_task_work_ctx *bpf_task_work_fetc=
-h_ctx(struct bpf_task_work *t
->  	memset(ctx, 0, sizeof(*ctx));
->  	refcount_set(&ctx->refcnt, 1); /* map's own ref */
->  	ctx->state =3D BPF_TW_STANDBY;
-> +	init_irq_work(&ctx->irq_work, bpf_task_work_irq);
-> =20
->  	old_ctx =3D cmpxchg(&twk->ctx, NULL, ctx);
+Will remove the `else scan->pfn++` in page_owner_seq_start().
 
-[Severity: High]
-Can a newly allocated context be installed on a deleted map element here?
+>> +
+>> +	if (!page_owner_next_eligible(scan))
+>> +		return NULL;
+>> +	return scan->page;
+>> +}
+>> +
+> [ ... ]
+>> +static void page_owner_seq_stop(struct seq_file *seq, void *v)
+>> +{
+>> +}
+> 
+> [Severity: Medium]
+> Are we missing an EOF notification here?
+> 
+> Standard bpf_iter implementations invoke the BPF program with v == NULL
+> during seq_ops->stop() to notify the program of EOF, enabling summary
+> aggregate output. Because this function is empty, BPF programs attached to
+> the page_owner iterator cannot detect the end of iteration.
+> 
+> Does this mean any logic relying on the standard EOF signal to output
+> summary statistics or perform cleanup will never execute?
+> 
 
-If a concurrent map deletion calls bpf_task_work_cancel_and_free(), it
-synchronously clears the context:
+page_owner_seq_stop() didn't implement the EOF (v == NULL) run; I'll add
+it.
 
-bpf_task_work_cancel_and_free(struct bpf_task_work *tw) {
-    ...
-    ctx =3D xchg(&twk->ctx, NULL);
-    ...
-}
+>> +
+>> +static int page_owner_prog_seq_show(struct bpf_prog *prog,
+>> +				    struct bpf_iter_meta *meta, void *v)
+>> +{
+>> +	struct page_owner_scan *scan = meta->seq->private;
+>> +	struct bpf_iter__page_owner ctx;
+>> +
+>> +	/* @po: hit-time snapshot, no RCU window needed. */
+>> +	ctx.meta = meta;
+>> +	ctx.page = (struct page *)v;
+>> +	ctx.po = &scan->po_snap;
+> 
+> [Severity: Medium]
+> If EOF were properly signaled with v == NULL, would this unconditional
+> assignment provide stale data to the BPF program?
+> 
+> By unconditionally assigning ctx.po to the snapshot pointer, ctx.po is
+> never NULL, even when v (the page) is NULL. Does this mean BPF programs
+> cannot reliably use if (!ctx->po) to detect EOF, and might operate on stale
+> snapshot data from the last valid page?
+> 
 
-Since it doesn't leave a poison value, a concurrent BPF program running und=
-er
-RCU read lock that calls bpf_task_work_schedule() would see twk->ctx as NULL
-and successfully cmpxchg the newly allocated context into the deleted eleme=
-nt.
+That ctx.po issue only arises with the EOF run, so I'll fix both
+together.
 
-[ ... ]
 
-> @@ -4644,7 +4657,6 @@ static int bpf_task_work_schedule(struct task_struc=
-t *task, struct bpf_task_work
->  	ctx->map =3D map;
->  	ctx->map_val =3D (void *)tw - map->record->task_work_off;
->  	init_task_work(&ctx->work, bpf_task_work_callback);
-> -	init_irq_work(&ctx->irq_work, bpf_task_work_irq);
-> =20
->  	irq_work_queue(&ctx->irq_work);
->  	return 0;
-
-[Severity: High]
-Could this lead to a use-after-free if the element was concurrently deleted?
-
-If bpf_task_work_fetch_ctx() re-initializes a context on a deleted element =
-as
-described above, ctx->map_val captures a pointer to the element's memory:
-
-bpf_task_work_schedule(...) {
-    ...
-    ctx->map_val =3D (void *)tw - map->record->task_work_off;
-    ...
-    irq_work_queue(&ctx->irq_work);
-}
-
-Since the deleted map element will be freed after the RCU grace period, but
-the newly initialized asynchronous irq_work remains armed, could the later
-execution of this callback access the freed element memory through
-ctx->map_val?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012061915.2312=
-54-1-luyun_611@163.com?part=3D3
+Thanks,
+Zhen
