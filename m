@@ -1,142 +1,159 @@
-Received: from mta0.migadu.com (out-145.mta0.migadu.com [91.218.175.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE233033E6
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 13:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA79468C23
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 14:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791813448; cv=none; b=gVAAWDktwcg7SPbHFdOW3LyDTy3Q3xfu6yOk3P0jGUs28Z5rZvReK1pM51U/Ks+Rku9Auvt7tqRAtULz6Hn0wep12EFR38sf6rFxALQr+HL7zQzq8dcwYUJBMDldr/EAIy3Fo4nkS9usaxDRIubYGX3/TRmdiyz8qDid9iOfr8Y=
+	t=1791813617; cv=none; b=IL2X8IUKqH9WM3mY53j+0ScjiBfk3Vlx2tVFaS5fS6Q9FmcDaj0ywAwJI1Gm1j59KWT7dwWV5vjOHHHb1fMhNR/LljWOR7O3AUWJf5JzFgrqMddZRkXKiJOllBa0NX1eV5Bk2CWEcajQjUPQsAodKeUV1IPjg9F4U4spbcqpMjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791813448; c=relaxed/simple;
-	bh=x6wBnpNMUdYNXU0gqwEl8PQ7hY4EkntWRDU828VTuOY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fWze3Krw1bfLb5XXRv3M1pQYpjNNeYrIbNjUnJ6d70krYKlDpBLidO5m+ZiW9pmrDbccy3R0ljJeOQrj5MdAqbIVrp4f17QC8ROUs6BW1ME/KhfWcLUVvUliHJGYGvy6Hni1gbYeuGNMmTJP0BF/ufnMQTBi7lm+KkqujMup+WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vrxvn3+Q; arc=none smtp.client-ip=91.218.175.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791813617; c=relaxed/simple;
+	bh=sh+xsokUyBzH/TX2AbOgAxfShFnn3lF58U0EW21Prp8=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=BLaEkneczWvaU05Wg48bPXpRzY78eGRRwPlYk7NIv1yv7ByjAHolmeWKqndZefmKYVQnJtAGKpc9yDfUuzhFr3wHVH6PJF1YDvZU5rxO/05bszJ9aUAA8sCmnLnvifon9tDKiUphOUuyGft5AxNx2r6+vHepdDj8bGGzbkt14Pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpXzfYR5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vrxvn3+Q"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=x6wBnpNMUdYNXU0gqwEl8PQ7hY4EkntWRDU828VTuOY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791813443; v=1; x=1792418243;
- b=vrxvn3+Q+ds8vw3lPoTlz4TGkW2K6r5QQ68mgXDaRPV19sO6QMRSFumWsX60JHhnwUiv1rSR
- 9lixhWfWMj8fA2dIBHiDnXq5FLB9UGqul2WUxMdwVCR6WWC/E3g+Xjht3feMCN68ruUQw+necOM
- 90oRH+AdEABQsohw9hlQyPlg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 34a32a671e085a21;
-	Mon, 12 Oct 2026 13:57:23 +0000
-X-Mizu-Trace-ID: 34a32a671e085a21
-X-Migadu-Flow: FLOW_OUT
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: KaFai Wan <kafai.wan@linux.dev>
-Subject: [PATCH bpf-next 1/1] bpf: Determine freplace staticness from BTF linkage
-Date: Mon, 12 Oct 2026 21:56:24 +0800
-Message-ID: <20261012135624.2749743-1-kafai.wan@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpXzfYR5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F351F0089B;
+	Mon, 12 Oct 2026 14:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791813615;
+	bh=wULXwR8cgvbDRmpgNP3BD1rmA4GNG0Aexm+xfEPZ3mU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PpXzfYR5MYmiNyw89W921d/pvYMReFwnlW0wgSOpbEeoaIvIHtz8E8tfbpcPLzHXV
+	 vdh/ah2PQEnekE4TR2URaX7GhoKSeEQ7jR4hcKlQBxv4vh2nOjAJtobZH/7tox/1Gj
+	 7hY+FTFvZNsD/tNjwd1svcBzXvvfKif+KSENFVyYSP3QF0jHTdVNXyD5+bDk12166g
+	 sFNipVgT+QSAp4EPxCKxz8vZwlrEZLdBYdHAkvjl4sWzVA7i8zp347edTip4DfCkZd
+	 8Hch84pwGws/FOvw+VPrZKTQz0BWqgSyM1rUj10/uUrPSvg3hheP7Pwd+QxEgtIloM
+	 9bO3dVtTE4smA==
+Message-ID: <sashiko-outbox-168226@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 03/10] bpf: Turn loads of __arena pointer
+ members into arena pointers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261012133711.4030594-4-memxor@gmail.com>
+References: <20261012133711.4030594-1-memxor@gmail.com>
+ <20261012133711.4030594-4-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 12 Oct 2026 14:00:15 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bpf_check_attach_target() rejects a freplace whose target is a static
-function, using the subprog "unreliable" flag as a proxy for "static".
-That flag is raised whenever a subprogram's BTF prototype disagrees with
-the registers at its call site.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: arena_member fixup corrupts PTR_TO_MEM scalar loads
+--
 
-`147400e9c27c ("bpf: Compute parameters liveness in
-bpf_compute_live_registers()")` made that work for static callees: a
-static function with an unused argument no longer matches its BTF
-prototype at the call site and is marked unreliable.
+commit 5458ef081d9f29cc60192d4b6fde6d8fd3989b75
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Since LLVM commit `29b36a16f111 ("[BPF] Emit ABI-accurate BTF
-prototypes for DW_CC_nocall")` in 23.1.0 [1] that premise is gone:
-BTFDebug may now drop arguments removed by the optimizer, so for
+bpf: Turn loads of __arena pointer members into arena pointers
 
-	__noinline static int subprog(struct __sk_buff *ctx)
-	{
-		return bpf_ktime_get_ns();
-	}
+This commit translates loads of __arena pointer members in kernel structs
+into arena pointers in the verifier. It appends a fixup to subtract the
+kernel's virtual memory start address from the loaded value, and adds logic
+to ensure paths disagreeing on member types are rejected.
 
-compiled with clang 23 the BTF describes subprog() as
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index b2fa7e8bedf3a..bbb653df6b6f0 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+[ ... ]
+> @@ -870,6 +870,36 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_ver=
+ifier_env *env,
+>   *     struct __sk_buff    -> struct sk_buff
+>   *     struct bpf_sock_ops -> struct sock
+>   */
+> +/*
+> + * A load through an __arena pointer member of a kernel struct reads the=
+ kernel
+> + * address of arena memory. Append the conversion to the arena pointer f=
+orm,
+> + * (u32)(kaddr - kern_vm_start), that the struct_ops trampoline applies =
+to
+> + * __arena arguments. A __nullable member keeps NULL as NULL, tested on =
+the
+> + * full kernel address. Returns the number of insns in @buf, 0 when the =
+insn
+> + * loads no such member, or an error when it does so on some paths only.
+> + */
+> +static int arena_member_fixup(struct bpf_verifier_env *env, int idx, str=
+uct bpf_insn *insn,
+> +			      struct bpf_insn *buf)
+> +{
+> +	struct bpf_insn_aux_data *aux =3D &env->insn_aux_data[idx];
+> +	int cnt =3D 0;
+> +	u32 base;
+> +
+> +	if (!aux->arena_member)
+> +		return 0;
+> +	if (aux->non_arena_member) {
+> +		verbose(env, "an insn loads an arena pointer member on one path and a =
+different member on another\n");
+> +		return -EINVAL;
+> +	}
 
-	[75] FUNC_PROTO '(anon)' ret_type_id=2 vlen=0
-	[76] FUNC 'subprog' type_id=75 linkage=static
+[Severity: High]
+Because non_arena_member might not be set by the PTR_TO_MEM path (as noted=
+=20
+below), could this check fail to reject the mismatch?
 
-There is then no argument left to compare, the subprog stays reliable,
-and the check in bpf_check_attach_target() is skipped. The freplace is
-then rejected by the later linkage check instead, reporting "subprog()
-is not a global function", and the selftest "exceptions" fails.
+If it fails to reject, arena_member_fixup() blindly appends a
+SUB kern_vm_start instruction to the shared load. At runtime, if the
+PTR_TO_MEM path executes, its scalar load would be corrupted by the
+subtraction, potentially leading to out-of-bounds access or data corruption
+if the result is used as an index or offset.
 
-Determine staticness from the BTF linkage instead, and keep the
-unreliable check for global functions whose BTF does not match their
-call site.
+> +
+> +	base =3D bpf_arena_get_kern_vm_start(env->prog->aux->arena);
+> +	buf[cnt++] =3D *insn;
+> +	if (aux->arena_member_nullable)
+> +		buf[cnt++] =3D BPF_JMP_IMM(BPF_JEQ, insn->dst_reg, 0, 1);
+> +	buf[cnt++] =3D BPF_ALU32_IMM(BPF_SUB, insn->dst_reg, (s32)base);
+> +	return cnt;
+> +}
+[ ... ]
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 70fd44a6e1c56..a24a2bab802b3 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -6661,6 +6697,11 @@ static int check_ptr_to_btf_access(struct bpf_veri=
+fier_env *env,
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> +	if (ret =3D=3D PTR_TO_ARENA)
+> +		return check_arena_member_load(env, regs, value_regno, flag, tname, fi=
+eld_name);
+> +	if (atype =3D=3D BPF_READ && value_regno >=3D 0)
+> +		env->insn_aux_data[env->insn_idx].non_arena_member =3D true;
 
-There is no functional change: freplacing a static function was rejected
-before and is still rejected with the same -EINVAL. Selftest "exceptions"
-is updated to match.
+[Severity: High]
+Does this code miss setting the conflict flag for non-BTF pointers?=20
 
-[1] https://github.com/llvm/llvm-project/pull/198426
-Fixes: 147400e9c27c ("bpf: Compute parameters liveness in bpf_compute_live_registers()")
-Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
----
- kernel/bpf/verifier.c                               | 3 ++-
- tools/testing/selftests/bpf/prog_tests/exceptions.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+The verifier's save_aux_ptr_type() permits sharing an instruction across=20
+branches where one path uses PTR_TO_BTF_ID and the other uses PTR_TO_MEM
+(by merging them via allow_trust_mismatch).=20
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2f190abe3448..e9814e3ac370 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22079,7 +22079,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		}
- 		conservative = aux->func_info_aux[subprog].unreliable;
- 		if (prog_extension) {
--			if (conservative) {
-+			if (aux->func_info_aux[subprog].linkage != BTF_FUNC_GLOBAL ||
-+			    conservative) {
- 				bpf_log(log,
- 					"Cannot replace static functions\n");
- 				return -EINVAL;
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index cea01d638f6f..1bd15c4c125b 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -333,7 +333,7 @@ static void test_exceptions_success(void)
- 				       bpf_program__fd(skel->progs.exception_throw_subprog),
- 				       "throwing_subprog"), "set_attach_target"))
- 				goto done;
--		}), "throwing_subprog() is not a global function", 0);
-+		}), "Cannot replace static functions", 0);
- 
- 	if (test__start_subtest("non-throwing extension -> non-throwing subprog"))
- 		/* non-throwing extension -> non-throwing global subprog : OK */
--- 
-2.43.0
+If the PTR_TO_BTF_ID path reads an __arena member, check_ptr_to_btf_access(=
+)=20
+sets aux->arena_member =3D true. However, when the PTR_TO_MEM path is
+evaluated, check_mem_access() does not set aux->non_arena_member =3D true f=
+or=20
+memory pointers.
 
+> +
+>  	if (ret !=3D PTR_TO_BTF_ID) {
+>  		/* just mark; */
+>
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012133711.4030=
+594-1-memxor@gmail.com?part=3D3
