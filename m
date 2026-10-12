@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-23.mta0.migadu.com [91.218.175.23])
+Received: from mta1.migadu.com (out-151.mta1.migadu.com [95.215.58.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8514A68AA
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:42:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF054A64D4
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791819752; cv=none; b=P+YscYWD15LY4XhchHLl8pte8fomBpFJ1HOkYjb33ttJ+N6p7ZPlA9sU3b0hNSpj/bPSHkHbvJxxzYpclHf+Ml7zag9iLMWZ+ynIatJrZgl11/yqwZmQAubCUlzZSiTLx+NLAKbnkckGgM8E4s9/wd2fiz55oIoOAGK5F0sBlvo=
+	t=1791819768; cv=none; b=MxSOwbt+gE/z2X4zUJF9Qo9ZS4iwfipCSe+tLrskqPcrVzZEj+li6jq6wDpWENEtuPZ5HuKCtGOlZ911x5C3tyHUI/NmIToksJcJOpM6KGtQRnLWg5BfxC01co/A7hLIkM57DQelqu6U44jIesRSrQpfOm0+L+Ib9cW3HXAzTE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791819752; c=relaxed/simple;
-	bh=5DxR1s+LPijNQM6Qjyq68lt4V4WGoCE/dBj4zlO0PxY=;
+	s=arc-20240116; t=1791819768; c=relaxed/simple;
+	bh=TBFr013muSrjqmBXfU5VS9nJWYXKQcqCrP4RWXqPIVA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ugoMiC/Jv9XYUB0NZ98zensSSdd6vZiz9cV+zgB47d53lhrcRBXnH2kTlLYfJ2J3EmpXkxmuNRCLS+dtIcoHlJJt2TkXohebUtTG+OKYazxrrX30u6ZcIVg5QI/oGhXjf/Oog7+tUcq1gSrvUAGw9E9zkaI3GzgcdxeDAV6XIew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dMM9LXzT; arc=none smtp.client-ip=91.218.175.23
+	 MIME-Version; b=Pp4guytaGbkh5/ZML6/5e9WAmFP+l4OlkjBlB/979qqVslrhPYmREFCshMP00vDvOtuE60igknHr28bBiWkRJpC81U3KvZ2efq9sN/pAeR1Qx7oJdJncvsVX9fXKDeEcLbDAh66zym7dt2Nuq7PtiAl5FUZz6yLTpdy+pMw3/Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P7v/SAbm; arc=none smtp.client-ip=95.215.58.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dMM9LXzT"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P7v/SAbm"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5DxR1s+LPijNQM6Qjyq68lt4V4WGoCE/dBj4zlO0PxY=;
+DKIM-Signature: a=rsa-sha256; bh=TBFr013muSrjqmBXfU5VS9nJWYXKQcqCrP4RWXqPIVA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791819749; v=1; x=1792424549;
- b=dMM9LXzT6Z+x5xarOVoCYT6c40CydSjd6hBgMw7qEbl3QovK2ZHwXHvO3E/3cJ37EN0dhzXz
- olBTY265+E6xoXV+f6TPkWT3mcYTWCbBcZ+CLfWYOGd6+JW5z9iN9iNBI65AGS3vWeRdINbP5ow
- /a080y1BsC2XVWUtgQcPfSk0=
+ t=1791819765; v=1; x=1792424565;
+ b=P7v/SAbmi55gY7Odc6FAfweFYRmsjYVBB4aDYvVXh9/idvunfyHxfWrEFuPYK2OcCDneR3Ph
+ A78kvwNeNwjnyFEClAxQWsdMzqH+5tB3/xDLFoVunz11tM6wQDKvX+pCRXbhywjQB6EPPEZ91Dt
+ 7O0SF8QzindCurB2Fzs96iEM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 64c13862dd3b4313;
-	Mon, 12 Oct 2026 15:42:29 +0000
-X-Mizu-Trace-ID: 64c13862dd3b4313
+Received: by smtp.migadu.com with ESMTPS id 6ac1c4d5fb4ef64e;
+	Mon, 12 Oct 2026 15:42:45 +0000
+X-Mizu-Trace-ID: 6ac1c4d5fb4ef64e
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -59,9 +59,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 05/21] bpf, x86: Introduce bpf_arch_text_poke_batch() on x86_64
-Date: Mon, 12 Oct 2026 23:40:07 +0800
-Message-ID: <20261012154024.29423-6-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 06/21] bpf: Add bpf_text_poke_batch() helper in trampoline
+Date: Mon, 12 Oct 2026 23:40:08 +0800
+Message-ID: <20261012154024.29423-7-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261012154024.29423-1-leon.hwang@linux.dev>
 References: <20261012154024.29423-1-leon.hwang@linux.dev>
@@ -73,107 +73,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce bpf_arch_text_poke_batch() to patch multiple targets in batch,
-which utilizes smp_text_poke_batch_add/finish() on x86_64.
+Before calling bpf_arch_text_poke_batch(), check the duplicated target
+pokes by sorting the pokes.
 
-Thereafter, it will able to text-poke multiple bpf progs at once via
-bpf_arch_text_poke_batch().
+Sorting pokes is needed for smp_text_poke_batch_add() on x86_64 for better
+performance, see arch/x86/kernel/alternative.c::smp_text_poke_batch_add().
+
+If the arch does not implement bpf_arch_text_poke_batch(), fallback to
+text-poke each target via bpf_arch_text_poke().
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c | 41 +++++++++++++++++++++++++++++++++++++
- include/linux/bpf.h         |  9 ++++++++
- kernel/bpf/core.c           |  5 +++++
- 3 files changed, 55 insertions(+)
+ kernel/bpf/trampoline.c | 51 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index c80d3161d458..b2040ae09273 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -734,6 +734,47 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 	return __bpf_arch_text_poke(ip, old_t, new_t, old_addr, new_addr);
- }
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 21d460866dfe..a2fd0bd8c685 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -13,6 +13,7 @@
+ #include <linux/bpf_verifier.h>
+ #include <linux/bpf_lsm.h>
+ #include <linux/delay.h>
++#include <linux/sort.h>
  
-+int bpf_arch_text_poke_batch(struct bpf_text_poke **pokes, u32 cnt)
+ /* dummy _ops. The verifier will operate on target program's ops. */
+ const struct bpf_verifier_ops bpf_extension_verifier_ops = {
+@@ -1863,6 +1864,56 @@ void bpf_trampoline_multi_detach(struct bpf_prog *prog,
+ 	  CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS &&
+ 	  CONFIG_BPF_SYSCALL */
+ 
++static int bpf_text_poke_cmp(const void *a, const void *b)
 +{
-+	u8 old_insn[X86_PATCH_SIZE];
-+	u8 new_insn[X86_PATCH_SIZE];
-+	int err;
-+	u32 i;
++	const struct bpf_text_poke *pa = *(struct bpf_text_poke * const *)a;
++	const struct bpf_text_poke *pb = *(struct bpf_text_poke * const *)b;
++	unsigned long ipa = (unsigned long) pa->ip;
++	unsigned long ipb = (unsigned long) pb->ip;
++
++	return (ipa > ipb) - (ipa < ipb);
++}
++
++static int bpf_text_poke_batch(struct bpf_text_poke **pokes, u32 cnt)
++{
++	int i, err;
++
++	/*
++	 * Sort pokes for two purposes:
++	 * 1. Check duplicated poke target IPs.
++	 * 2. Sorted poke target IPs would be friendly for poking them on x86,
++	 *    see arch/x86/kernel/alternative.c::smp_text_poke_batch_add().
++	 */
++	sort_nonatomic(pokes, cnt, sizeof(*pokes), bpf_text_poke_cmp, NULL);
++
++	for (i = 1; i < cnt; i++)
++		if (pokes[i - 1]->ip == pokes[i]->ip)
++			return -EINVAL;
++
++	err = bpf_arch_text_poke_batch(pokes, cnt);
++	if (err != -EOPNOTSUPP)
++		return err;
 +
 +	for (i = 0; i < cnt; i++) {
-+		err = bpf_arch_text_poke_check_ip(&pokes[i]->ip);
++		struct bpf_text_poke *p = pokes[i];
++
++		err = bpf_arch_text_poke(p->ip, p->old_t, p->new_t, p->old_addr, p->new_addr);
 +		if (err)
-+			return err;
++			goto rollback;
 +	}
 +
-+	guard(mutex)(&text_mutex);
-+
-+	for (i = 0; i < cnt; i++) {
-+		struct bpf_text_poke *poke = pokes[i];
-+
-+		err = bpf_arch_text_poke_prepare_insns(poke->ip, poke->old_t, poke->new_t,
-+						       poke->old_addr, poke->new_addr, old_insn,
-+						       new_insn);
-+		if (err)
-+			return err;
-+		if (memcmp(poke->ip, old_insn, X86_PATCH_SIZE))
-+			return -EBUSY;
-+	}
-+
-+	for (i = 0; i < cnt; i++) {
-+		struct bpf_text_poke *poke = pokes[i];
-+
-+		bpf_arch_text_poke_prepare_insns(poke->ip, poke->old_t, poke->new_t,
-+						 poke->old_addr, poke->new_addr, old_insn,
-+						 new_insn);
-+		if (memcmp(poke->ip, new_insn, X86_PATCH_SIZE))
-+			smp_text_poke_batch_add(poke->ip, new_insn, X86_PATCH_SIZE, NULL);
-+	}
-+
-+	smp_text_poke_batch_finish();
 +	return 0;
++
++rollback:
++	for (i--; i >= 0; i--) {
++		struct bpf_text_poke *p = pokes[i];
++
++		WARN_ON_ONCE(bpf_arch_text_poke(p->ip, p->new_t, p->old_t, p->new_addr,
++						p->old_addr));
++	}
++	return err;
 +}
 +
- #define EMIT_LFENCE()	EMIT3(0x0F, 0xAE, 0xE8)
- 
- static void __emit_indirect_jump(u8 **pprog, int reg, bool ereg)
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 54144372281c..5b1a189e6e89 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -4231,6 +4231,15 @@ enum bpf_text_poke_type {
- 	BPF_MOD_JUMP,
- };
- 
-+struct bpf_text_poke {
-+	void *ip;
-+	void *old_addr;
-+	void *new_addr;
-+	enum bpf_text_poke_type old_t;
-+	enum bpf_text_poke_type new_t;
-+};
-+
-+int bpf_arch_text_poke_batch(struct bpf_text_poke **pokes, u32 cnt);
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 		       enum bpf_text_poke_type new_t, void *old_addr,
- 		       void *new_addr);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 05c89396119a..49b794878c11 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3484,6 +3484,11 @@ int __weak skb_copy_bits(const struct sk_buff *skb, int offset, void *to,
- 	return -EFAULT;
- }
- 
-+int __weak bpf_arch_text_poke_batch(struct bpf_text_poke **pokes, u32 cnt)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- int __weak bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 			      enum bpf_text_poke_type new_t, void *old_addr,
- 			      void *new_addr)
+ static int __init init_trampolines(void)
+ {
+ 	int i;
 -- 
 2.55.0
 
