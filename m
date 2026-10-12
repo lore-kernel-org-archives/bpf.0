@@ -1,85 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EBD4AB1C2;
-	Mon, 12 Oct 2026 16:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522504B0E28;
+	Mon, 12 Oct 2026 16:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791821521; cv=none; b=j1TC5R7P1hP3mcL8UymDdC98hAicp2w1Q9LnzQPWvf0YzJvxIeF+avXpiuunvHndS0RtP1MvMzynKEEt/LIr7fTvtSf9jOmX63gtV7qQq21Ew5bxXTPeWQ1bmEiVX6Hn5lggWEtJhyVOOd7wC7fBncuUOVn3xGyOToKM1/3whEU=
+	t=1791821768; cv=none; b=Rtdp71bt4kUs4E4uvPvcDW2JnsjmSO6ev7HQDp1gTUb7tERq4XeNgiqAG8P0GYlNM7W6P9BVtWJtRtuhFfIwR4zaXCkFuOfp5yUgIQ7NVeKBNiPydLp+9LYGOWD/qv6033XobL9R3YNL7Hnu0jMWCGTOi/fnXeYTai43G4cztgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791821521; c=relaxed/simple;
-	bh=w8q9iJyPWbtVtE2tleQnnZpd26qb3UTvq3ck14FcaoM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=r6IyU2ZEFPt1i+QhYQj46EC4Y6ZGfhFc3wnselY4KqY/zEc/WG0MPO75YkaGTS+s6ytEb8WRxBCg9eq/yZwgyBGO3P+imNaZjleOXSyBA8YPOCsGTMkhryfNNYsWGIT5sCiO+YV4dIs57jLOhp13CFET12BpiWORLQ7InODKhi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwnkiSKn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791821768; c=relaxed/simple;
+	bh=agePPaLdnXEN3kQN7noUxSbJN/HXkEr5bk7QxbY3JE8=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=XnRkEDI5t/pYTs1hUhVKhc/iaoqWucjMJYe+SSZeLU/V1PtWhq84dlnjbx1CLAkxUfjZHc+mmWy7T2PjD+rIyj3O9ledtIZTV5L5BKq8sKh8RdgiqV1Za67sIw9rvpyDRTq/EISii5OqUFz90DdEZa1dXs1wWyELzj30LLtirYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjSkCsDe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwnkiSKn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F611F0089B;
-	Mon, 12 Oct 2026 16:11:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjSkCsDe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A3D1F0089B;
+	Mon, 12 Oct 2026 16:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791821518;
-	bh=iHAQh7YtJAMZUxMTAyAXDIESpkS3iC6FqJPJReS+Cak=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mwnkiSKn19r2V0c+PKSNMx5nb9JW8M5LZt0fZEfhgyuFf84wLzb8NPxX6f3DVfkKN
-	 B//aLWUT/FrOg0XAApxYpyv/0RSh9BE8HxgLI/kTTXq6t7/1/rzYs1SpOpph7Tcajj
-	 jagW8h7+sasdAUn/dYWSvyw6ryGCwYgzi9iIO6zGAKvOv2gtmBJRaX6Z1Ow2CVNv7q
-	 9eX52uorYmdaKVb7TY1Tp1pIjpradtNV7ksoARp04nfvGg2wDfg/ZKDwG9zYm0q8Bx
-	 xHofgPwpraA9JD14VfWwceYQz7r/0jneqheDmf/e7ZCXVFmUkEoKcFzH1zkHQErLCV
-	 M46muitrh3LEg==
-Content-Type: multipart/mixed; boundary="===============2774668723812264744=="
+	s=k20260515; t=1791821766;
+	bh=T6fPcY6JlPrUhMMTreh6oVRaRWau+C8UmFCp9PcL7yo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LjSkCsDeHnTwclSTF8z3JLbD7hrZ/uWe9aWrGTkfsHwb0XnJqqjN4k/Ezy3L6bHti
+	 LGm2oXZL60KtlbbgDcV3SLSwf/fR91b+gzhiZl/KO6VGqpC3d5rKbAIjjyrp6vQyE3
+	 jnXdwfR+7r3x35RaImyTtsV9AXq5PGVlQrRpTqC/BYxjvqymO7Xl4X/wkaK981bZK8
+	 4lbFfD5Uehj2vcILvJDaY6BJyB6KASzHUcQYl0vzj0xzeO5UkLjt7f9t4eWGexrKlI
+	 FqP4Yo/I6PF80lEaycBq1/a66Ff3XGhwW/jFwaqLytEeXoclM4veXOwFVyDtOm55xC
+	 vJYAgECYKbOgg==
+Message-ID: <sashiko-outbox-168381@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 09/21] bpf: Add
+ bpf_trampoline_multi_prog_attach/detach()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+In-Reply-To: <20261012154024.29423-10-leon.hwang@linux.dev>
+References: <20261012154024.29423-1-leon.hwang@linux.dev>
+ <20261012154024.29423-10-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 12 Oct 2026 16:16:06 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <6ce8106423344022020501feecc7c257ecd3cb1cfe7004e72e202e97c3f6970d@mail.kernel.org>
-In-Reply-To: <20261012154024.29423-20-leon.hwang@linux.dev>
-References: <20261012154024.29423-20-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v2 19/21] selftests/bpf: Add tracing_multi bpf prog link info test
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,yatsenko@meta.com,avinash.duduskar@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,jordan@jrife.io,rongtao@cestc.cn,eyal.birger@gmail.com,pulehui@huawei.com,tanjingguo@huawei.com,malin89@huawei.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 12 Oct 2026 16:11:55 +0000 (UTC)
 
---===============2774668723812264744==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] bpf: Use-After-Free of trampoline images when text poke batch =
+fails in detach
+--
 
-> selftests/bpf: Add tracing_multi bpf prog link info test
+commit 357aa776c5f19ab7b39da8fb3843fb0141fc3b7f
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-TL;DR: Nit only: the new <linux/kallsyms.h> include in fill_link_info.c may be
-unnecessary, since trace_helpers.h already seems to provide the ksym helpers
-the test uses.
+bpf: Add bpf_trampoline_multi_prog_attach/detach()
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-> index 0918321c8e63..422e94f13409 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-> @@ -3,11 +3,13 @@
->
->  #include <string.h>
->  #include <linux/bpf.h>
-> +#include <linux/kallsyms.h>
->  #include <linux/limits.h>
->  #include <bpf/btf.h>
->  #include <test_progs.h>
->  #include "trace_helpers.h"
->  #include "test_fill_link_info.skel.h"
-> +#include "tracing_multi_bpf.skel.h"
->  #include "bpf/libbpf_internal.h"
+This commit introduces multi-attach and detach helpers for BPF trampolines.
+These helpers prepare target trampolines, apply text pokes in batch, and
+commit the staged trampoline images.
 
-this isn't a bug, but is <linux/kallsyms.h> needed for anything here?  The
-ksym helpers used by this test (ksym_search(), ksym_get_addr(), struct ksym)
-seem to come from trace_helpers.h, which is already included, and nothing in
-fill_link_info.c appears to use KSYM_NAME_LEN, kallsyms_lookup() or
-print_ip_sym() from the tools/include/linux/kallsyms.h shim.
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
 
+[ ... ]
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> +static void bpf_trampoline_multi_prog_rollback(struct bpf_trampoline *tr)
+> +{
+> +	if (tr->multi_attach.new_image)
+> +		bpf_tramp_image_put(tr->multi_attach.new_image);
+> +
+> +	tr->flags =3D tr->multi_attach.old_flags;
+> +	tr->multi_attach.old_image =3D NULL;
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38273555988
---===============2774668723812264744==--
+[Severity: Critical]
+If __bpf_trampoline_unlink_prog() fails and calls
+bpf_trampoline_multi_prog_rollback(), old_image is cleared for the node.
+
+Does this guarantee that a subsequent bpf_text_poke_batch() will fail
+due to a NOP expectation mismatch?
+
+> +	tr->multi_attach.new_image =3D NULL;
+> +	tr->multi_attach.old_flags =3D 0;
+> +}
+
+[ ... ]
+
+> +void bpf_trampoline_multi_prog_detach(struct bpf_tracing_multi_link *lin=
+k)
+> +{
+> +	struct bpf_tracing_multi_node *mnode;
+> +	int i, err;
+> +
+> +	trampoline_lock_all();
+> +
+> +	for_each_mnode(mnode, link) {
+> +		bpf_trampoline_multi_attach_init(mnode->trampoline);
+> +		err =3D __bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline, =
+NULL,
+> +						   &trampoline_multi_prog_ops, NULL);
+> +		if (WARN_ONCE(err, "__bpf_trampoline_unlink_prog failed: %d\n", err))
+> +			bpf_trampoline_multi_prog_rollback(mnode->trampoline);
+> +	}
+> +
+> +	for_each_mnode(mnode, link) {
+> +		link->pokes[i] =3D &mnode->poke;
+> +		bpf_text_poke_init(link->pokes[i], mnode->trampoline);
+> +	}
+> +
+> +	WARN_ON_ONCE(bpf_text_poke_batch(link->pokes, link->nodes_cnt));
+
+[Severity: Critical]
+If bpf_text_poke_batch() fails here (for example, due to a hardware or memo=
+ry
+error during patching, or a NOP mismatch from a prior unlink failure), the
+failure is wrapped in WARN_ON_ONCE but otherwise ignored.
+
+The code then proceeds to unconditionally call
+bpf_trampoline_multi_prog_commit() for all nodes, which frees old_image
+via bpf_tramp_image_put().
+
+Since the kernel text remains unmodified after a failed poke batch, it will
+continue to jump to the freed old_image. Can this lead to a use-after-free
+on traced paths?
+
+> +
+> +	for_each_mnode(mnode, link)
+> +		bpf_trampoline_multi_prog_commit(mnode->trampoline);
+> +
+> +	trampoline_unlock_all();
+> +
+> +	for_each_mnode(mnode, link)
+> +		bpf_trampoline_put(mnode->trampoline);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012154024.2942=
+3-1-leon.hwang@linux.dev?part=3D9
