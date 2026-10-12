@@ -1,182 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E08836B93C;
-	Mon, 12 Oct 2026 13:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE6F42046F
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 13:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791813189; cv=none; b=sYSl9tBj9/tFlGVGIf9Ddp3a7bGs5n58STUxKUOo+w0BFn+p7wZJMEdRvRzaje+b8s2c98fdsm0tVeh8raUD9+w0YoVMYSS3UDIzkXwawafZf9GiVfAxNwOxR7NJqmGJuZbgAi8DERNw5PBqLSOXmeh+txi3rDfGLbHtrID34eU=
+	t=1791813258; cv=none; b=kGX1yC28iGA5lXo3IVQsMMYSJZswM8lAYVXHF6RxpG1GuNfLQ/jPh4yuQGyfCw2Z/RVdmSj1jA7ql7GjfbpeF7E7WjGW4HkNz/hGWiBfM6ELp2gk6UAm7lYDB4a1Y7og+6OPQgTNAu10VrPmHIWr+qqe/kZ56YkiyDIJybKmZS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791813189; c=relaxed/simple;
-	bh=ty92T9DIYoaFJgqiIsGaVgwgaRXfKBk//M0JGEOokgE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=B2TGPfALLfF8cd5fC0lFhFgxL//Ctz1AYkhvrkB641wH8Oc6Ps3YbaoOQfULFZ1w9HnDWlpzYAFxJ8AARfXTvWcAcSkeyFmWXcpQywTwG7o9XaKzBQlVVN/NDp2vdOfVeHl1JDSY8MA7QrUvRWSw0qgUJ2UHvfiBbnJyWvKyO+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCTIHzqn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791813258; c=relaxed/simple;
+	bh=PbuQRqueOXyIOgh5Gh2Bp9FRqluW3xjNWK6nX38zeo4=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=SP1Buztb7oDA/RTiI0JrLbZOMTINoC6CjnsyEE1Tnw8nLb4/GbE366qjFbzob07y0xBS+IeVsN6Dck2VCAOwndS4s1um0pA1yjqwTWvCD6mVJQYia2hqOLaRpDjfve22GCVEav6M/mGOkZoFKWq9dscojfVgbq+BeVdeQTcQuko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZnaWF5d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCTIHzqn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1016A1F0089B;
-	Mon, 12 Oct 2026 13:53:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZnaWF5d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CBD1F0089B;
+	Mon, 12 Oct 2026 13:54:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791813187;
-	bh=GzKb4Ad7HkW8BrqEc5W4LYKOWUBVf/CLkGtUNjDmfbw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=YCTIHzqn72vjsJTW7DN54VLFkp+SEk1NrFctnxBpEBhPFVs1HjRsyb9z09WjCjrMh
-	 aIoy/knzExgia6fSnVS8REcAs7frk82ybWlSfWazq6e1yDWXN5jeUbuBn1OwfktQA7
-	 o6t4F1aYgYCLlP+onpjLne7b/QjTo1lwpS0M1myBXo/sE2AcXHT52K+21IRe9bFzzw
-	 0iopNBZLcIOSnmljYjCoVkScRrjYEZuAsYBE9/xzbNCluVoivBsZzaQ2ivuxSh/uVq
-	 zxuoNspDBYnkuswY5N9ZLp46OSPjz6wtLVmLY7UKlKMPBYXvDOhS+fTXRtvEv19TVP
-	 PeUOn3kF4SnVA==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
- Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
- "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
- <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
- Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Mina Almasry
- <almasrymina@google.com>
-Subject: Re: [RFC net-next 05/15] page_pool: Extend memory provider operations
-In-Reply-To: <asPUZ8DPllHd6Yu9@devvm7509.cco0.facebook.com>
-References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-6-bjorn@kernel.org>
- <asPUZ8DPllHd6Yu9@devvm7509.cco0.facebook.com>
-Date: Mon, 12 Oct 2026 15:53:05 +0200
-Message-ID: <877bjnc9fi.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1791813256;
+	bh=aBFgouB4uiJz/XXKd063nkM48xwcB+ShsDjKt67Hikw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lZnaWF5d3KLDBvOlPPGNkg+dsP9wxLXiHcYpi2PbpC5CKa7oYEtrxRAFVkKT2aMEY
+	 5C7b9KlUdnV5v3v8r9M2NYv9z/sF8m0ENOeHP5NATh0cKfijNxIIYocZYZtRO2Es3B
+	 79u40WwY+zYjkDpKscUBpqjT4IpqjFLAwzCfDbINhVvxTGauQR/0HUU65+oFaZhDpI
+	 8goqzGNCOpjrt0T+9bTvl1uDg/mtLmIr5uN1rVc9avx0Lh/RIIPz0xGohR7DBRyMUc
+	 8D/iNwZ1+UV1Kt/mn8sO4kdBP/mn8q9EAz7vuemz4oOyel92oP6e5iykCB4iOTa68a
+	 11OSBChWBzTCA==
+Message-ID: <sashiko-outbox-168221@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 02/10] bpf: Recognize __nullable on pointer
+ members of kernel structs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261012133711.4030594-3-memxor@gmail.com>
+References: <20261012133711.4030594-1-memxor@gmail.com>
+ <20261012133711.4030594-3-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 12 Oct 2026 13:54:16 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: MEM_RCU map pointers bypass PROBE_MEM and NULL checks
+--
 
-> On 10/02, Bj=C3=B6rn T=C3=B6pel wrote:
->> The current memory providers give memory that the CPU cannot read,
->> and they can always refill. An AF_XDP provider is different. The CPU
->> can read its memory, it has only the buffers that userspace puts in
->> the FILL ring, and its buffers go back to userspace instead of being
->> freed. It needs four things from page_pool:
->>=20
->> - A CPU address for each net_iov. A provider can set the address of
->>   the first net_iov in its net_iov_area and the size each net_iov
->>   covers. netmem_address() then computes the address without a call
->>   into the provider; drivers call it for every packet. A
->>   net_iov_area without an address stays unreadable.
->>   page_pool_is_unreadable() is false for a readable provider.
->>=20
->> - A way to say that the refill is not done. The new refill_done
->>   callback tells the driver whether it may stop refilling. A
->>   provider that still has buffers returns false, and the driver
->>   keeps NAPI scheduled.
->>=20
->> - A way to give up a buffer without freeing it. Add a batched call
->>   that ends page_pool ownership of buffers that leave through the
->>   provider, for example to userspace. It clears the page_pool link,
->>   so a later page pool can take the buffer. Add the matching batched
->>   call that sets the link, and a DMA sync helper for drivers that
->>   post a buffer again directly.
->>=20
->> - No buffer splitting, because a split buffer has several owners.
->>   Add MP_CAP_FRAG. page_pool refuses fragment allocation from a
->>   provider without it.
->>=20
->> devmem and io_uring set MP_CAP_FRAG and keep their fragment
->> behaviour. Their refill paths now use the batched call that sets the
->> link.
->>=20
->> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
->> ---
->>  include/net/netmem.h                    | 31 ++++++++++-
->>  include/net/page_pool/helpers.h         | 62 +++++++++++++++++++++-
->>  include/net/page_pool/memory_provider.h | 28 +++++-----
->>  io_uring/zcrx.c                         |  4 +-
->>  net/core/devmem.c                       |  7 ++-
->>  net/core/page_pool.c                    | 68 ++++++++++++++++++++-----
->>  6 files changed, 165 insertions(+), 35 deletions(-)
->>=20
->> diff --git a/include/net/netmem.h b/include/net/netmem.h
->> index cc97611632dc..e6dff0b01581 100644
->> --- a/include/net/netmem.h
->> +++ b/include/net/netmem.h
->> @@ -105,6 +105,12 @@ struct net_iov_area {
->>=20=20
->
-> [..]
->
->>  	/* Offset into the dma-buf where this chunk starts.  */
->>  	unsigned long base_virtual;
->
-> Will send a patch to drop this one, don't think we use it anymore..
+commit cd9a005edc33a27f4ea8950cfa7c36fe9d72a985
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Ok!
+bpf: Recognize __nullable on pointer members of kernel structs
 
->> +	/* CPU address of the first net_iov's memory, or NULL when the CPU
->> +	 * cannot read the area. Each net_iov covers 1 << @niov_shift bytes.
->> +	 */
->> +	void *vaddr;
->
-> Who is setting this? Somewhere in another patch? Can we keep it here?
+This patch teaches the BPF verifier to recognize the __nullable BTF type tag
+on pointer members of kernel structs, assigning them the PTR_MAYBE_NULL fla=
+g.
+The flag is kept on trusted and RCU pointers, forcing BPF programs to
+explicitly check them before use.
 
-xp_pp_create() sets vaddr in patch 9. I'll move that closer.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2f190abe34489..70fd44a6e1c56 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
->> +	u8 niov_shift;
->
-> If we need niov_shift at area level, let's move the one from binding here?
-> Then the existing callers can do binding->area.niov_shift.
+[ ... ]
 
-Good! I'll consolidate the binding's shift (and rebase on your
-base_virtual cleanup)
+> @@ -6785,6 +6792,8 @@ static int check_ptr_to_map_access(struct bpf_verif=
+ier_env *env,
+>  	ret =3D btf_struct_access(&env->log, &map_reg, off, size, atype, &btf_i=
+d, &flag, NULL);
+>  	if (ret < 0)
+>  		return ret;
+> +	/* Nothing walked from a map is trusted, a __nullable member changes no=
+thing. */
+> +	flag &=3D ~PTR_MAYBE_NULL;
+        ^^^^^^^^^^^^^^^^^^^^^^^^
 
->>  };
->>=20=20
->>  static inline struct net_iov_area *net_iov_owner(const struct net_iov *=
-niov)
->> @@ -117,6 +123,23 @@ static inline unsigned int net_iov_idx(const struct=
- net_iov *niov)
->>  	return niov - net_iov_owner(niov)->niovs;
->>  }
->>=20=20
->> +static inline bool net_iov_is_readable(const struct net_iov *niov)
->> +{
->> +	return net_iov_owner(niov)->vaddr;
->> +}
->> +
->> +static inline void *net_iov_address(const struct net_iov *niov)
->> +{
->> +	const struct net_iov_area *area =3D net_iov_owner(niov);
->> +	unsigned long off;
->> +
->> +	if (!area->vaddr)
->> +		return NULL;
->> +
->> +	off =3D (unsigned long)net_iov_idx(niov) << area->niov_shift;
->> +	return area->vaddr + off;
->
-> Or, alternatively, store dma_base in area and do:
->
-> return niov->dma_addr - area.dma_base + vadd ?
+[Severity: High]
+Does stripping PTR_MAYBE_NULL here allow MEM_RCU map pointers to bypass both
+PROBE_MEM and NULL checks?
 
-UMEM pages don't have to have contiguous DMA addresses, so I'd keep the
-index-based CPU offset.
+When a CAP_PERFMON BPF program reads an __rcu-tagged pointer field from a m=
+ap
+structure (e.g., trie->root in struct lpm_trie), btf_struct_access() evalua=
+tes
+the tag and returns MEM_RCU in flag.
 
+If we explicitly clear PTR_MAYBE_NULL here without clearing MEM_RCU or addi=
+ng
+PTR_UNTRUSTED, the verifier assigns PTR_TO_BTF_ID | MEM_RCU to the destinat=
+ion
+register.
 
-Bj=C3=B6rn
+Since bpf_may_fault_on_deref(PTR_TO_BTF_ID | MEM_RCU) evaluates to false (a=
+s it
+expects exactly PTR_TO_BTF_ID or the PTR_UNTRUSTED flag), the load is not
+rewritten to BPF_PROBE_MEM. Because PTR_MAYBE_NULL was stripped, the verifi=
+er
+will permit the dereference without a NULL check.
+
+At runtime, reading from a NULL pointer (like a NULL trie->root) would then
+perform a bare memory load and crash the kernel. Does this active stripping
+prevent the new __nullable tag from protecting these vulnerable pointers?
+
+> =20
+>  	if (value_regno >=3D 0) {
+>  		ret =3D mark_btf_ld_reg(env, regs, value_regno, ret, btf_vmlinux, btf_=
+id, flag);
+>  		if (ret < 0)
+>  			return ret;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012133711.4030=
+594-1-memxor@gmail.com?part=3D2
