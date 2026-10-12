@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1777D46D571;
-	Mon, 12 Oct 2026 08:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268B018DB1A;
+	Mon, 12 Oct 2026 08:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795029; cv=none; b=su5tpy2lcsuQvyzCrOIIVu/M00/DvnbBA//MORXpu3cC6sjuAGicX0Yiu/uUgDeR4Wc7Zb39rzjGz91+qE2DDhkmE0i1J1IynH6uGRaVhl5R0qDuM0kGBe8PLCcrA28SZDBXcZJl2tuj1X8bx7dGhtD7eqVElruYZ6PLk3wthfU=
+	t=1791795030; cv=none; b=uB7HPIChITh5m52zmOwrrvqkXUVU8eVpQTKYdPYtIWw9uPgTrXThGlreqwl9vC0YPnN7Jgt0BV8JGIU/q2myKULhY7Q2kgPlYMNjsUQmwnwXSDswivJy3ljU/li+SjEkyr6nUVFuI0Mw1QPwSRnFS/Q7sUzoOGLUsJIZF2Td88I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791795029; c=relaxed/simple;
-	bh=ENh+bEBXCb2wicXorSfQOfUQbP4dEARaMFlUcZKABU8=;
+	s=arc-20240116; t=1791795030; c=relaxed/simple;
+	bh=4f115j/XdIW3UUE0cCA6Dr939C3lcaSzLyxNKBpbtns=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TG09igM+rafwp7oEncRJlPMu3CpjMxofEQI2NL1ky7EJeMeQ2cLXmnRUNsfx5rhBhkKjU/B6B93GEAohxKOGAgNYMLojyu28lplKYRUop8v7iE3eJu/dB9BsaCnENEdzaD6zD0nUv+Xrwn64KSxKaGXePgoAbK1A34CH7rvWwa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2+zgDBM; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=U5nhbpfeka2SETVrCW9d85/HA/BU6JQYRbICfLZMqW68rh0O/cdIjgdu70MlMnnZHJFDPP+z3STq0JdYjA4H426VFWlN3n7txjSzPDf4TJUCkBgwuEYjAGfyWLfq9YaEzQFXyKa8SfcX3Dq5L8tx20UzzTEUny9JxEM2mBEV6qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEHwi1WF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2+zgDBM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3951D1F0089C;
-	Mon, 12 Oct 2026 08:50:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEHwi1WF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FC11F0089D;
+	Mon, 12 Oct 2026 08:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791795026;
-	bh=BpxoXkvv9yLg88Yg8+pdMemjkmyn1aMs3zlzpxIzz64=;
+	s=k20260515; t=1791795028;
+	bh=RLfpCfKqkY7oIlyBSdDkyGLTHLv+4pge7hMcr5ZY4nQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Q2+zgDBM58iwFf/sSPT0QJ4+cq4uuisiq/UU4DJOIZDAxcdhicXsI6nny+JtFW9OQ
-	 7wdtEDepMlcdUz1DPckt1bbIiwj6U9wmgi52aLNSFkayL/diyHhcTXhx+EEO5LL6oe
-	 LA2PHD/PUZL54WNz7eIdjXkzjhKfAFkEBRfU0owvxVtNBnwf2pLUq5cIanMWWuQ0i2
-	 GO72SCPPvONTl3lkoBSWUU9F/IRuwGkHeRX5RdS6rAHz8rKTJQi08EVnGy8FhkgdI6
-	 bp3I3WV9tvDFyaLgfk5yK4kHdMVCa1ioxvq3npcuLHWeAblG/FxMABW9h/B2FKtJB8
-	 Hq3oq01KuHSRw==
-Subject: Re: [PATCH v2 net-next 09/14] selftests: xsk: run the RX and TX
- endpoints in separate processes
+	b=ZEHwi1WFEtBtxnTjy9GpEO6a6D2VFeBYJxCkCEEo2v3tqp4eyvbRE9FuxzGRveFEG
+	 URij5IXHjAmawppQjW+bb0cIrSDBLOSBSHpPcxAdVT1Q5CBGALzJCyUiedWEppDKCe
+	 bV7uq793JqmEAbccnHJoskCnf8ziIW1EN1AE3wAlcDsG9f4teviCNu+ZIBwLjAQs6n
+	 jviVmFYs3JQsMK3pxcKU3yARtkis9w8FVTbBiEstJdZo5z+ULLReJpNh0O2YD0Q19e
+	 PWEn7/l1wq0K/qODuq671XT1gapyerMbVCdlEhmiq+nfrU8BDqE7mOIPTTqVKjBb0+
+	 NpmDtIp+qkbPw==
+Subject: Re: [PATCH v2 net-next 10/14] selftests: xsk: add a hardware mode to
+ xskxceiver
 From: netdev-bot+sashiko@kernel.org
 To: maciej.fijalkowski@intel.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
  stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
  tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Mon, 12 Oct 2026 08:50:25 +0000
-Message-ID: <179179502581.434549.6329350256667378198@kernel.org>
-In-Reply-To: <20261008114909.734364-10-maciej.fijalkowski@intel.com>
-References: <20261008114909.734364-10-maciej.fijalkowski@intel.com>
+Date: Mon, 12 Oct 2026 08:50:26 +0000
+Message-ID: <179179502693.434549.1644239970750622984@kernel.org>
+In-Reply-To: <20261008114909.734364-11-maciej.fijalkowski@intel.com>
+References: <20261008114909.734364-11-maciej.fijalkowski@intel.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -47,10 +47,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 11 potential
+Thank you for your contribution! Sashiko AI review found 9 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 5 · Low: 6
+Critical: 0 · High: 0 · Medium: 3 · Low: 6
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -58,472 +58,396 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] exec_xskxceiver() in
-  tools/testing/selftests/net/xsk_prereqs.sh merges the two endpoint…
-- [Medium] The new rendezvous helpers in xsk_prereqs.sh,
-  wait_port_listen() and random_port(), depend on iproute2's `ss` and…
-- [Medium] exec_xskxceiver() gives the background TX endpoint a fixed
-  budget of about 5 s (50 × `sleep 0.1` in wait_port_listen()) to reach…
-- [Medium] The launcher's rendezvous checks the port and then uses it
-  later, with nothing in between to hold it.
-- [Medium] The new TX/RX control channel is an unauthenticated TCP socket
-  on 127.0.0.1 in the root network namespace, and both ends run as root.
-- [Low] The commit message says the endpoints "no longer have to share a
-  process or a host".
-- [Low] xskxceiver's usage text documents `-P, --peer-port Control TCP
-  port (1-65535)`, but parse_command_line() stores optarg without…
-- [Low] test_xsk.sh `-d` is documented as leaving the veths up "so
-  xskxceiver can be launched in a debugger", and it now prints two…
-- [Low] exec_xskxceiver() now starts the TX endpoint as a background job
-  (`... > ${tx_log} 2>&1 &`) and creates a mktemp log.
-- [Low] In xsk_peer_rx_progress(), a peer_send() failure with -EPIPE or
-  -ECONNRESET sets peer->closed.
-- [Low] The concern: xsk_peer_tx_sync() returns the u32 peer->acked as an
-  int.
+- [Medium] In --hw mode, the code compares two different MTU units, so
+  the NIC MTU is changed on almost every case.
+- [Medium] The commit message says is_frag_valid() now rejects fragments
+  that are too short 'instead of reading past the end of the buffer'.
+- [Medium] When a hardware endpoint changes its MTU (on standard 1500-MTU
+  hosts that happens every case, see the MTU-unit finding), nothing…
+- [Low] The commit message says 'a hardware endpoint prints no KTAP
+  output of its own'.
+- [Low] The XDP_ADJUST_TAIL_GROW header-size mismatch is real in the
+  code: userspace uses pkt_hdr_size = 44 (eth + IPv4 + UDP + 2), while…
+- [Low] Mode-dependent test gating differs between the ZC DUT and the SKB
+  peer.
+- [Low] With --hw, detect_mode_caps() never sets XSK_CAP_DRV unless the
+  mode is ZC and ZC is advertised.
+- [Low] bind_iface() now loads the device's current MTU into ifobj->mtu
+  before detect_mode_caps() runs.
+- [Low] The new ip_checksum() reads a struct iphdr through a 'const u16
+  *'.
 
 --
 
-selftests: xsk: run the RX and TX endpoints in separate processes
+selftests: xsk: add a hardware mode to xskxceiver
 
-This splits xskxceiver so that each process drives one endpoint, selected
-with -e rx|tx. The two processes synchronize over a small TCP control
-channel using READY, PROGRESS and ABORT messages, and the remote side is
-represented by a shadow ifobject. test_xsk.sh starts TX in the background
-on a 127.0.0.1 control port and runs RX once TX is listening.
+This adds a --hw mode to xskxceiver. A later drivers/net/hw/xsk.py runner
+uses it to drive a zero-copy DUT and an SKB-mode remote endpoint over a
+physical link, sending UDP/IPv4 test packets between the real interface
+MACs. It also adds --queue, --listen and --max-frags, longer timeouts for
+hardware cases, MTU restore in cleanup_iface(), and length guards in
+is_frag_valid() for the variable header size.
 
-> Run the two endpoints of a test case in separate xskxceiver processes,
-> so that they no longer have to share a process or a host. A process
+> diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testing/selftests/net/lib/xsk/test_xsk.c
+> index 8d30c39c94c84..542c0579062a4 100644
+> --- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
+> +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
+
+[ ... ]
+
+> @@ -84,11 +97,70 @@ static void write_payload(void *dest, u32 pkt_nb, u32 start, u32 size)
+>  		ptr[i] = htonl(pkt_nb << 16 | (i + start));
+>  }
+>  
+> -static void gen_eth_hdr(struct xsk_socket_info *xsk, struct ethhdr *eth_hdr)
+> +int xsk_set_udp_packet_format(const char *src_ip, const char *dst_ip, u16 port)
+>  {
+> +	if (inet_pton(AF_INET, src_ip, &udp_src_ip) != 1 ||
+> +	    inet_pton(AF_INET, dst_ip, &udp_dst_ip) != 1 || !port)
+> +		return -EINVAL;
+> +	udp_packets = true;
+> +	udp_port = port;
+> +	pkt_hdr_size = UDP_PKT_HDR_SIZE;
 
 [Severity: Low]
-Is "or a host" accurate for this commit on its own? As far as I can tell,
-only the same-host veth setup works here.
+The xsk.py runner later in the series can't reach this, but should
+xsk_xdp_adjust_tail() in xsk_xdp_progs.bpf.c use this header size as well?
 
-test_xsk.sh hard-codes PEER_HOST=127.0.0.1, and the generic data path uses
-the synthetic g_mac. setup_peer() also assumes the remote side matches
-the local one:
+With --hw, userspace now uses a 44 byte header. The BPF side still computes
+the grown tail seqnum with the fixed 16 byte header:
 
-    shadow->caps = local->caps;
+    len = curr_buff_len - PKT_HDR_ALIGN;
 
-Later patches in the series add --hw, --peer-mac, --listen and
-drivers/net/hw/xsk.py to run the endpoints on separate hosts. Those
-patches are "selftests: xsk: add a hardware mode to xskxceiver" and
-"selftests: drv-net: test AF_XDP zero-copy with an SKB peer". Could the
-wording say that separate hosts arrive later in the series?
+test_xsk_case_defs.h gives XDP_ADJUST_TAIL_GROW and
+XDP_ADJUST_TAIL_GROW_MULTI_BUFF hardware direction 0, and the SKB peer skips
+these cases anyway. So this would only show up if someone started two --hw
+endpoints in ZC mode by hand.
 
-> diff --git a/tools/testing/selftests/net/lib/xsk/xsk_peer.c b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
-> new file mode 100644
-> index 0000000000000..faec74aae3794
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
-> @@ -0,0 +1,275 @@
-
-[ ... ]
-
-> +static int peer_drain(struct xsk_peer *peer)
-> +{
-> +	struct pollfd pfd = { .fd = peer->fd, .events = POLLIN };
-> +	int ret;
+> +	return 0;
+> +}
 > +
-> +	while (!peer->closed) {
-
-[ ... ]
-
-> +int xsk_peer_rx_progress(struct xsk_peer *peer, u32 pkts)
+> +void xsk_set_max_frags(u32 max_frags)
 > +{
-> +	int err;
+> +	max_frags_override = max_frags;
+> +}
 > +
-> +	if (pkts && !peer->closed) {
-> +		err = peer_send(peer, XSK_PEER_PROGRESS, pkts);
-> +		if (peer_gone(err))
-> +			peer->closed = true;
-> +		else if (err)
-> +			return err;
+> +static u16 ip_checksum(const void *buf, size_t len)
+> +{
+> +	const u16 *word = buf;
+> +	u32 sum = 0;
+> +
+> +	while (len > 1) {
+> +		sum += *word++;
+> +		len -= sizeof(*word);
 > +	}
-> +	return peer_drain(peer);
-> +}
 
 [Severity: Low]
-Can an ABORT from TX get lost here?
+This doesn't affect the test results as far as I can tell, but
+ip_checksum() reads the local struct iphdr through a const u16 pointer.
+That includes the __be32 saddr and daddr fields that gen_pkt_hdr() has just
+stored.
 
-Suppose TX fails, sends XSK_PEER_ABORT, and exits while unread PROGRESS
-messages are still in its receive queue. Its kernel then resets the
-connection.
+xskxceiver is now built from tools/testing/selftests/net/lib with -O2 and
+without -fno-strict-aliasing:
 
-If the RST arrives between the pacing_rx_progress(0) drain at the top of
-__receive_pkts() and the later pacing_rx_progress(pkts_sent), this
-peer_send() fails with -ECONNRESET or -EPIPE and sets peer->closed.
+    CFLAGS += -Wall -Wl,--no-as-needed -O2 -g
 
-peer_drain() then skips its loop because of while (!peer->closed). The
-ABORT already queued on the RX socket is never read, so -ECANCELED is
-never returned.
+Under strict aliasing, could the compiler move these u16 loads ahead of the
+u32 stores and produce a wrong IPv4 checksum? Copying the bytes with
+memcpy() or using a union would avoid the type punning.
 
-The RX side never checks xsk_peer_closed(), so receive_pkts() keeps going
-until THREAD_TMOUT and reports "Receive loop timed out". The result is
-still a failure, but it shows up late and points at the wrong cause.
-Could pending data be drained before the connection is treated as
-closed?
+> +	while (sum >> 16)
+> +		sum = (sum & 0xffff) + (sum >> 16);
+> +	return ~sum;
+> +}
 
 [ ... ]
 
-> +/* Return the packets RX reported consumed since the last call, or -errno. */
-> +int xsk_peer_tx_sync(struct xsk_peer *peer)
+> @@ -347,14 +430,25 @@ static void test_spec_set_xdp_prog(struct test_spec *test, struct bpf_program *x
+>  	test->xskmap_tx = xskmap_tx;
+>  }
+>  
+> -static int test_spec_set_mtu_ifobj(struct ifobject *ifobj, int mtu)
+> +/* An MTU change can reset a NIC. A hardware SKB-mode endpoint runs a case at
+> + * any larger MTU, as generic XDP does not limit it, so only raise its MTU.
+> + */
+> +static bool mtu_change_needed(struct ifobject *ifobj, enum test_mode mode, int mtu)
 > +{
-> +	int err = peer_drain(peer);
-> +	u32 acked = peer->acked;
-> +
-> +	if (err)
-> +		return err;
-> +	peer->acked = 0;
-> +	return acked;
-> +}
-
-[Severity: Low]
-This returns the u32 peer->acked as an int. A value of 2^31 or more would
-look like -errno to pacing_tx_sync(), which then calls strerror(-acked).
-Inflated counts would also push pkts_in_flight negative.
-
-With the in-tree peers, acked is reset at every READY and never exceeds
-the packets in one step (DEFAULT_PKT_CNT). This only matters if something
-other than the real RX endpoint is on the other end of the channel; see
-the accept_tmout() comment below. Is it worth bounding the value that
-peer_recv_one() adds to peer->acked?
-
-> +static int accept_tmout(int lfd)
-> +{
-> +	struct pollfd pfd = { .fd = lfd, .events = POLLIN };
-> +	int ret;
-> +
-> +	do {
-> +		ret = poll(&pfd, 1, XSK_PEER_ACCEPT_TMOUT_MS);
-> +	} while (ret < 0 && errno == EINTR);
-> +	if (!ret)
-> +		errno = ETIMEDOUT;
-> +	return ret > 0 ? accept(lfd, NULL, NULL) : -1;
+> +	if (hw_test && mode == TEST_MODE_SKB)
+> +		return ifobj->dev_mtu < mtu;
+> +	return ifobj->dev_mtu != mtu;
 > +}
 
 [Severity: Medium]
-Can an unprivileged local user take over this control channel?
+Are dev_mtu and the mtu argument in the same units here?
 
-Both endpoints run as root, but the channel is a plain TCP socket on
-127.0.0.1 in the root network namespace:
+bind_iface() fills dev_mtu and orig_mtu from SIOCGIFMTU, which is the L3
+MTU (normally 1500). The default test->mtu set in __test_spec_init() is a
+frame size:
 
-- accept_tmout() accepts the first connection from anyone.
-- peer_open_tcp() then closes the listener.
-- peer_recv_one() only checks the public XSK_PEER_MAGIC constant.
+    test->mtu = MAX_ETH_PKT_SIZE;
 
-random_port() picks PEER_PORT once, any user can see it with ss -ltn,
-and it is reused for every case. An unprivileged user can either:
+That 1518 value then reaches xsk_set_mtu() as IFLA_MTU.
 
-  - connect to the TX listener before the real RX does, or
-  - bind 127.0.0.1:PEER_PORT between cases, so that the next TX bind()
-    fails and wait_port_listen() treats the squatter as TX.
+On a host with the standard 1500 MTU, mtu_change_needed() returns true for
+the ZC DUT (1500 != 1518) and for the SKB peer (1500 < 1518). Every case
+then sets the NIC to 1518 first, and cleanup_iface() puts it back to 1500
+afterwards:
 
->From there, injected READY, PROGRESS and ABORT frames can abort cases or
-skew the pacing. They can also stall the root RX process indefinitely in
-xsk_peer_ready(), which reads with no timeout.
+    if (ifobj->dev_mtu != ifobj->orig_mtu) {
+        err = xsk_set_mtu(ifobj->ifindex, ifobj->orig_mtu);
 
-Would checking SO_PEERCRED after accept(), or passing a per-run token
-from the launcher, address this?
+That is two NIC reconfigurations per case on both hosts, which this comment
+and the commit message aim to avoid. On ixgbe, for example, ndo_change_mtu
+goes through ixgbe_reinit_locked(), and ixgbe_down() turns off the TX
+laser.
+
+A peer whose max_mtu is ETH_DATA_LEN would also reject 1518 in
+dev_validate_mtu(). __testapp_validate_traffic() would then fail every
+hardware case with "could not set mtu", even though the default cases only
+send 64 byte frames.
+
+> +
+> +static int test_spec_set_mtu_ifobj(struct ifobject *ifobj, enum test_mode mode, int mtu)
+>  {
+>  	int err;
+>  
+> -	if (ifobj_is_local(ifobj) && ifobj->mtu != mtu) {
+> +	if (ifobj_is_local(ifobj) && mtu_change_needed(ifobj, mode, mtu)) {
+>  		err = xsk_set_mtu(ifobj->ifindex, mtu);
+>  		if (err)
+>  			return err;
+> +		ifobj->dev_mtu = mtu;
+>  	}
+
+[Severity: Medium]
+After xsk_set_mtu() succeeds on a hardware endpoint, does anything wait for
+the physical link to come back before traffic starts?
+
+__testapp_validate_traffic() goes from test_spec_set_mtu() straight to
+xsk_attach_xdp_progs(), socket setup and the READY exchange. The READY
+exchange uses the separate control connection:
+
+    err = test_spec_set_mtu(test, test->mtu);
+    ...
+    err = xsk_attach_xdp_progs(test, ifobj1, ifobj2);
+
+On a driver like ixgbe, ixgbe_change_mtu() calls ixgbe_reinit_locked() and
+carrier drops on both ends. While carrier is down, generic AF_XDP TX on the
+SKB-mode peer goes through __dev_direct_xmit(), which drops and completes
+the frames.
+
+AF_XDP never retransmits. Can the RX endpoint then time out and report a
+false failure? The longer HW_THREAD_TMOUT would not bring back frames that
+were already dropped.
+
+Combined with the MTU unit question above, this would happen on every case
+on hosts with the standard 1500 MTU.
+
+>  
+>  	ifobj->mtu = mtu;
+
+[ ... ]
+
+> @@ -867,11 +974,15 @@ static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 exp
+>  
+>  	pkt_data = data;
+>  	if (!bytes_processed) {
+> -		pkt_data += PKT_HDR_SIZE / sizeof(*pkt_data);
+> -		len -= PKT_HDR_SIZE;
+> +		if (len < pkt_hdr_size + sizeof(*pkt_data))
+> +			return false;
+> +		pkt_data += pkt_hdr_size / sizeof(*pkt_data);
+> +		len -= pkt_hdr_size;
+>  	} else {
+> -		bytes_processed -= PKT_HDR_SIZE;
+> +		bytes_processed -= pkt_hdr_size;
+>  	}
+> +	if (len < sizeof(*pkt_data))
+> +		return false;
+
+[Severity: Medium]
+The commit message says these guards reject short fragments "instead of
+reading past the end of the buffer". Can the error path still read past
+the fragment through pkt_dump()?
+
+In UDP mode pkt_hdr_size is 44, so this guard accepts a 48 byte first
+fragment. If pkt_nb or seqnum then mismatches, is_frag_valid() reaches:
+
+    error:
+        pkt_dump(data, len, !bytes_processed);
+
+pkt_dump() then does:
+
+    data = pkt + pkt_hdr_size;
+    ...
+    pkt_print_data(data, PKT_DUMP_NB_TO_PRINT);
+
+That reads 16 words (64 bytes) starting at offset 44, so it reaches byte
+108 of a 48 byte fragment.
+
+is_pkt_valid() also calls pkt_dump() with the first fragment's address and
+the full packet length:
+
+    pkt_dump(xsk_umem__get_data(buffer, addr), len, true);
+
+So the tail dump at data + len / sizeof(u32) - PKT_DUMP_NB_TO_PRINT always
+ends pkt_hdr_size bytes past the packet (44 now, 16 before). For a
+multi-fragment packet it ends well past the first frame.
+
+If the first fragment is in one of the last UMEM frames, could this run past
+the mmap and crash the RX endpoint with SIGSEGV instead of reporting a
+failure? With --hw, the received lengths come from the physical link and
+the driver under test.
+
+>  
+>  	expected_seqnum = bytes_processed / sizeof(*pkt_data);
+>  	seqnum = ntohl(*pkt_data) & 0xffff;
+
+[ ... ]
+
+> @@ -2230,6 +2346,10 @@ int testapp_xdp_shared_umem(struct test_spec *test)
+>  	struct xsk_xdp_progs *skel_tx = test->ifobj_tx->xdp_progs;
+>  	int ret;
+>  
+> +	/* The XDP program picks the socket from the synthetic destination MAC. */
+> +	if (hw_test)
+> +		return TEST_SKIP;
+> +
+
+[Severity: Low]
+The runner added later in the series doesn't hit this, but several cases
+skip based on test->mode, and the two --hw endpoints run in different
+modes. STAT_RX_DROPPED and TX_QUEUE_CONSUMER skip in ZC mode. For example,
+testapp_stats_rx_dropped() has:
+
+    if (test->mode == TEST_MODE_ZC) {
+        ksft_print_msg("Can not run RX_DROPPED test for ZC mode\n");
+        return TEST_SKIP;
+
+ADJUST_TAIL_GROW and ADJUST_TAIL_GROW_MB skip in SKB mode instead. So one
+endpoint could skip while its peer runs the case.
+
+Later in the series, test_xsk_case_defs.h gives these cases hardware
+direction 0, and xsk.py's _case_result() treats a skip from either endpoint
+as a case skip. Only manual runs are affected. Would it make sense to
+handle these cases with hw_test, as done for XDP_SHARED_UMEM here, so both
+endpoints agree?
+
+>  	test->total_steps = 1;
+>  	test->nb_sockets = 2;
 
 [ ... ]
 
 > diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-> index b8a52846eaf86..e66625810a9d8 100644
+> index e66625810a9d8..8b94dc3709ea8 100644
 > --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
 > +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
 
 [ ... ]
 
-> @@ -177,16 +193,18 @@ static void print_usage(char **argv)
->  		"  -m, --mode           Run only mode skb, drv, or zc\n"
->  		"  -l, --list           List all available tests\n"
->  		"  -t, --test           Run a specific test. Enter number from -l option.\n"
-> +		"  -e, --endpoint       Role of this endpoint: rx or tx\n"
-> +		"  -p, --peer           Control host: IPv4/IPv6 address or hostname\n"
-> +		"  -P, --peer-port      Control TCP port (1-65535)\n"
->  		"  -h, --help           Display this help and exit\n";
-
-[ ... ]
-
-> @@ -261,17 +274,30 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
-
-[ ... ]
-
-> +		case 'P':
-> +			opt_peer_port = optarg;
-> +			break;
-
-[Severity: Low]
-The usage text gives the range 1-65535, but the value is stored without
-any check. peer_open_tcp() then passes it to getaddrinfo() without
-AI_NUMERICSERV, so service names like "ssh" and the value "0" are
-accepted.
-
-With "0", TX binds an ephemeral port, but the launcher's
-wait_port_listen 0 looks for sport = :0. A healthy run then fails with
-"TX endpoint did not listen on ...". test_xsk.sh -p also forwards the
-value without checking it.
-
-Should -P be parsed as a number in 1-65535, the way -t is checked here
-and --udp-port is checked with parse_u32() later in the series?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/test_xsk.sh b/tools/testing/selftests/net/test_xsk.sh
-> index e476556eb05bb..2ef9ce7e1b27d 100755
-> --- a/tools/testing/selftests/net/test_xsk.sh
-> +++ b/tools/testing/selftests/net/test_xsk.sh
-
-[ ... ]
-
-> @@ -181,6 +186,13 @@ if [ ${#CASES[@]} -eq 0 ]; then
->  	exit 1
->  fi
->  
-> +if [ -z "$PEER_PORT" ]; then
-> +	PEER_PORT=$(random_port) || {
-> +		echo "Could not find an unused TCP port" >&2
-> +		exit 1
+> @@ -220,6 +260,12 @@ static void bind_iface(struct ifobject *ifobj, const char *ifname, char **argv)
+>  		ksft_print_msg("Error: cannot initialize interface %s\n", ifobj->ifname);
+>  		ksft_exit_fail();
+>  	}
+> +	if (xsk_get_mtu(ifobj->ifname, &ifobj->mtu)) {
+> +		ksft_print_msg("Error: cannot read MTU of interface %s\n", ifobj->ifname);
+> +		ksft_exit_fail();
 > +	}
-> +fi
-> +
->  validate_root_exec
->  validate_veth_support ${VETH0}
->  validate_ip_utility
-
-[Severity: Medium]
-What happens on a system that has ip but no usable ss?
-
-random_port() and wait_port_listen() both depend on iproute2's ss and
-send its stderr to /dev/null. Only ip is checked, through
-validate_ip_utility(), and that check runs after random_port() here.
-
-If ss is missing, or too old to accept -H, random_port() treats every
-port as free. This test in wait_port_listen() then never succeeds:
-
-    if [ -n "$(ss -Hltn "sport = :$1" 2>/dev/null)" ]; then
-
-Every case would report FAIL with "TX endpoint did not listen on ..."
-instead of being skipped. Each case also waits out the 30s accept timeout
-in TX, because the background process is not killed.
-
-Should there be a check for ss next to validate_ip_utility()?
-
-> @@ -225,7 +237,8 @@ RUN_VARIANT=SOFTIRQ
->  
->  if [[ $debug -eq 1 ]]; then
->      ARGS="${BASE_ARGS} -m ${MODES[0]} -t ${CASES[0]}"
-> -    echo "./${XSKOBJ} -i ${VETH0} -i ${VETH1} ${ARGS}"
-> +    echo "./${XSKOBJ} -i ${VETH0} -e tx -p ${PEER_HOST} -P ${PEER_PORT} ${ARGS}"
-> +    echo "./${XSKOBJ} -i ${VETH1} -e rx -p ${PEER_HOST} -P ${PEER_PORT} ${ARGS}"
->      exit
->  fi
-
-[Severity: Low]
-Does the -d workflow still work when these two commands are run by hand,
-for example under a debugger?
-
-The control channel assumes the scripted launcher, as the comment above
-peer_open_tcp() says:
-
-/*
- * The launcher starts the listener and waits for its port before starting
- * the connector, so connect() needs no retry. accept() is bounded in case
- * the connector exits before it gets that far.
- */
-
-connect() is tried only once, so starting RX first fails at once with
-ECONNREFUSED. Starting RX more than XSK_PEER_ACCEPT_TMOUT_MS (30s) after
-TX reaches accept() makes TX fail with ETIMEDOUT.
-
-Should the printed commands mention the required order and time limit,
-or should connect() retry?
-
-> diff --git a/tools/testing/selftests/net/xsk_prereqs.sh b/tools/testing/selftests/net/xsk_prereqs.sh
-> index 30173db12c567..82cd7839d77d9 100755
-> --- a/tools/testing/selftests/net/xsk_prereqs.sh
-> +++ b/tools/testing/selftests/net/xsk_prereqs.sh
-> @@ -69,16 +69,63 @@ validate_ip_utility()
->  	[ ! $(type -P ip) ] && { echo "'ip' not found. Skipping tests."; test_exit $ksft_skip; }
+> +	ifobj->dev_mtu = ifobj->mtu;
+> +	ifobj->orig_mtu = ifobj->mtu;
 >  }
->  
-> +wait_port_listen()
-> +{
-> +	local i
-> +
-> +	for i in $(seq 50); do
-> +		if [ -n "$(ss -Hltn "sport = :$1" 2>/dev/null)" ]; then
-> +			return 0
-> +		fi
-> +		kill -0 $2 2>/dev/null || return 1
-> +		sleep 0.1
-> +	done
-> +	return 1
-> +}
-
-[Severity: Medium]
-Can this pick up a listener that is not the TX endpoint?
-
-wait_port_listen() returns success as soon as ss shows any listener on
-the port. It only looks at $2 (tx_pid) when nothing is listening.
-
-random_port() checks the port only once, before the veth setup. Nothing
-reserves it, and the same PEER_PORT is used for every case.
-
-If another process holds the port, or -p is given a busy port, TX's
-bind() fails with EADDRINUSE and TX exits. wait_port_listen() still
-succeeds, and RX connects to the foreign listener and ends up in:
-
-xsk_peer_ready()
-  peer_recv_one()
-    io_full()
-      read()      <- no timeout
-
-A listener that never sends anything hangs the case indefinitely. One
-that does send data makes RX fail with -EPROTO. Either way, the verdict
-comes from an unrelated process.
-
-> +
-> +random_port()
-> +{
-> +	local i port
-> +
-> +	for i in $(seq 50); do
-> +		port=$((32768 + RANDOM))
-> +		if [ -z "$(ss -Hltn "sport = :$port" 2>/dev/null)" ]; then
-> +			echo "$port"
-> +			return 0
-> +		fi
-> +	done
-> +	return 1
-> +}
-> +
-> +# The TX endpoint listens on the control port and runs in the background,
-> +# the RX endpoint connects to it and reports; both print the same verdicts.
->  exec_xskxceiver()
->  {
-> -	local run_args="${ARGS}"
-> +	local tx_log tx_pid tx_ret run_args="${ARGS}"
->  
->          if [[ $busy_poll -eq 1 ]]; then
->  		run_args+=" -b"
->  	fi
->  
-> -	./${XSKOBJ} -i ${VETH0} -i ${VETH1} ${run_args}
-> -	retval=$?
-> +	tx_log=$(mktemp)
-> +	./${XSKOBJ} -i ${VETH0} -e tx -p ${PEER_HOST} -P ${PEER_PORT} ${run_args} > ${tx_log} 2>&1 &
-> +	tx_pid=$!
 
 [Severity: Low]
-What happens to this background TX process and to tx_log on Ctrl-C?
+Does reading the device MTU into ifobj->mtu here change the zero-copy probe
+for runs without --hw?
 
-The only signal handler is ctrl_c() in test_xsk.sh:
+bind_iface() runs before detect_mode_caps(). ifobj_zc_avail() binds through
+xsk_configure_socket(), which does:
 
-trap ctrl_c INT
+    if (ifobject->mtu > MAX_ETH_PKT_SIZE)
+        cfg.bind_flags |= XDP_USE_SG;
 
-function ctrl_c() {
-        cleanup_exit ${VETH0} ${VETH1}
-	exit 1
-}
+Before this patch, ifobj->mtu was 0 when the probe ran, so the probe was
+always a single-buffer bind. xp_assign_dev() rejects an XDP_USE_SG bind
+with -EOPNOTSUPP when the driver's xdp_zc_max_segs is 1.
 
-In a non-interactive bash script, background jobs ignore SIGINT, so only
-the foreground RX is killed.
-
-The TX xskxceiver keeps running with its AF_XDP socket, UMEM and XDP
-program while the trap deletes the veths under it. It stops only when it
-sees EOF or hits its accept timeout.
-
-The mktemp file is also left behind, because rm -f ${tx_log} only runs
-on the normal path.
-
-> +
-> +	if wait_port_listen ${PEER_PORT} ${tx_pid}; then
-> +		./${XSKOBJ} -i ${VETH1} -e rx -p ${PEER_HOST} -P ${PEER_PORT} ${run_args}
-> +		retval=$?
-> +	else
-> +		echo "TX endpoint did not listen on ${PEER_HOST}:${PEER_PORT}"
-> +		retval=1
-> +	fi
-> +
-> +	wait ${tx_pid}
-> +	tx_ret=$?
-
-[Severity: Medium]
-Is about 5 seconds (50 x sleep 0.1) enough time for TX to reach
-listen()?
-
-In xskxceiver main(), listen() happens only in
-setup_peer()->xsk_peer_open(). Before that, TX runs:
-
-  bind_iface()             skeleton open_and_load, capability detection
-  detect_mode_caps()       is_xdp_supported() attach/detach, and
-                           ifobj_zc_avail() UMEM mmap plus XDP_ZEROCOPY bind
-  pkt_stream_generate()    twice, with DEFAULT_PKT_CNT
-  xsk_load_xdp_programs()  a second skeleton load for the shadow
-
-On a slow machine (KASAN, lockdep, nested virtualization) this could miss
-the window.
-
-If it does, retval is set to 1 and RX is never started. tx_pid is not
-killed, so wait ${tx_pid} blocks until accept_tmout() gives up after
-XSK_PEER_ACCEPT_TMOUT_MS (30s). A healthy pair is then reported as a
-failure after a stall of about 35 seconds.
-
-Should TX be killed in the else branch, and should the two timeouts be
-aligned?
-
-Separately, random_port() draws ports from 32768 + RANDOM, which overlaps
-the default ephemeral port range, and the port is reused for every case.
-Can a later ephemeral bind on 127.0.0.1 or the wildcard address make
-TX's bind() fail for all remaining cases?
-
-> +	if [[ $tx_ret -ne 0 || $verbose -eq 1 ]]; then
-> +		sed 's/^/tx| /' ${tx_log}
-> +	fi
-> +	rm -f ${tx_log}
-> +	[[ $retval -eq 0 ]] && retval=$tx_ret
-
-[Severity: Medium]
-Can a TX failure be hidden here?
-
-TX's status is used only when RX returned 0. As a result, RX SKIP (4)
-with TX FAIL (1) is recorded as SKIPPED, while TX SKIP with RX FAIL is
-recorded as FAIL.
-
-The comment above exec_xskxceiver() says "both print the same verdicts",
-but test_spec is no longer shared between the endpoints.
-
-For the XDP_ADJUST_TAIL* cases, testapp_adjust_tail() sets
-adjust_tail_support in both processes. Only the RX process can clear it,
-in testapp_validate_rx_endpoint():
-
-	if (is_adjust_tail_supported(ifobject->xdp_progs, &supported))
-		return TEST_FAILURE;
-	if (!supported) {
-		test->adjust_tail_support = false;
-		return TEST_PASS;
-	}
-
-testapp_adjust_tail() then picks its verdict from that per-process flag:
-
-	if (!test->adjust_tail_support) {
-		ksft_print_msg("%s %sResize pkt with bpf_xdp_adjust_tail() not supported\n",
-			       mode_string(test), busy_poll_string(test));
-		return TEST_SKIP;
-	}
-
-So when the helper is unsupported, TX prints PASS and RX prints SKIP.
-
-Now suppose TX also fails after packets have reached
-xsk_xdp_adjust_tail on the RX side. The RX error, including -ECANCELED
-from the ABORT, is turned into TEST_PASS above. testapp_adjust_tail()
-then returns TEST_SKIP, and the case is recorded as SKIPPED.
-
-Before this patch, the TX thread set test->fail and the same case was
-reported as FAIL.
+Take such a driver with a device MTU between 1519 and roughly 3814. Would
+XSK_CAP_ZC now stay unset, so a manual ZC run without --hw skips where it
+used to run? Larger MTUs already failed the probe before this patch.
 
 [ ... ]
+
+> @@ -363,7 +455,11 @@ static bool is_xdp_supported(int ifindex)
+>  
+>  static u32 detect_mode_caps(struct ifobject *ifobj)
+>  {
+> -	if (is_xdp_supported(ifobj->ifindex)) {
+> +	if (opt_hw && opt_mode == TEST_MODE_ZC &&
+> +	    ifobj_has_cap(ifobj, XSK_CAP_ZC_ADVERTISED)) {
+> +		/* Trust the advertised flag; an XDP_ZEROCOPY bind never falls back to copy. */
+> +		ifobj_set_cap(ifobj, XSK_CAP_DRV | XSK_CAP_ZC);
+> +	} else if (!opt_hw && is_xdp_supported(ifobj->ifindex)) {
+
+[Severity: Low]
+With --hw, is XSK_CAP_DRV ever set other than in the advertised ZC case?
+
+The is_xdp_supported() probe now only runs when !opt_hw. As a result,
+"xskxceiver --hw -m drv" always ends up in main() at:
+
+    ksft_print_msg("XDP_DRV mode not supported.\n");
+
+This happens even on NICs with native XDP. xsk.py only uses zc and skb, so
+only manual runs are affected. However, the skip reason is misleading, and
+the commit message only mentions the zero-copy detection change.
+
+>  		ifobj_set_cap(ifobj, XSK_CAP_DRV);
+>  		if (ifobj_zc_avail(ifobj))
+>  			ifobj_set_cap(ifobj, XSK_CAP_ZC);
+
+[ ... ]
+
+> @@ -501,27 +619,32 @@ int main(int argc, char **argv)
+>  	}
+>  
+>  	/* Line-buffer stdout so verdicts reach a capturing launcher live. */
+> -	ksft_print_header();
+> -	ksft_set_plan(1);
+> +	if (!opt_hw) {
+> +		ksft_print_header();
+> +		ksft_set_plan(1);
+> +	}
+
+[ ... ]
+
+> -	if (ret == TEST_SKIP && ksft_test_num()) {
+> +	if (ret == TEST_SKIP && !opt_hw && ksft_test_num()) {
+>  		ksft_print_cnts();
+>  		return KSFT_SKIP;
+>  	}
+>  	if (ret == TEST_SKIP)
+> -		ksft_exit_skip("mode not supported\n");
+> +		ksft_exit_skip("mode or test not supported\n");
+>  	if (ret)
+>  		ksft_exit_fail();
+>  	else
+
+[Severity: Low]
+The commit message says "a hardware endpoint prints no KTAP output of its
+own and reports through its exit code". Is that accurate?
+
+With --hw, ksft_print_header() and ksft_set_plan() are skipped. A skip
+still goes through ksft_exit_skip(), which prints the KTAP plan line when
+no plan was set:
+
+    1..0 # SKIP mode or test not supported
+
+ksft_exit_pass() and ksft_exit_fail() call ksft_print_cnts(), which prints
+the "# Totals: ..." line.
+
+xsk.py prefixes each forwarded line with "#" through ksft_pr(), so the
+runner's TAP stream is unaffected. Still, the commit message doesn't match
+what the code does.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261008114909.734364-1-maciej.fijalkowski%40intel.com
