@@ -1,24 +1,33 @@
-Received: from mail-m49230.qiye.163.com (mail-m49230.qiye.163.com [45.254.49.230])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB83533A6F1
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 09:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.230
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2972C4746A9;
+	Mon, 12 Oct 2026 10:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791797872; cv=none; b=mRDFgIGw2lKXFsMykb5HJmgCJ+b1XQOqSlD1Kzc5Y/iXpj9kCYE8s3++18g+Pt06ydv3yTnPmHdcbkiW3Yleo3nRGwpNJ6SB5LeFOGq7QdwqQf+zOqqqyW61O9YJmb5UPyWHX8p68j2fsohxdhcXb4QWPD5TXEYEQ31pWAhxaRY=
+	t=1791799707; cv=none; b=Q6qclkV3Yn23wdezYSTnmIg5UvMbfBE60grf/w4aKq2auYnQtdOXGh3AnFCFoFMKibCDwU79cA22E+qFo1i28dMwfcbDvlEq5hWbvYKa100iBFEkdDjKANCxn36Yzvm/AeqUr81++SuOE9/34rDvqiNR+jPvPTCpq29DOCGQ3gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791797872; c=relaxed/simple;
-	bh=Hvt7MnDQjjBWOU9NchLOcOp7tp7tOJ/DAFW+UpkAgks=;
+	s=arc-20240116; t=1791799707; c=relaxed/simple;
+	bh=EANPvdMPPdF9G7Wuza0FjvuLPse359NhvAJU1DgpR9s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uPge4euAQKZk6XUh/HsB2PKxu1fARkQNgvnyrlVLXEx99cSTkxpOWrZHFBTAxRVc6+6+63hngpIK87x+N7iS2G3phjsAVaMVPJKEQSnpLk2r50YaZK7k7spl1jcbVjj1eq7XtPDnZl4WMoi9HF4/Q5wij9BhTsXoRlG2iGba1VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=45.254.49.230
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from [192.168.0.59] (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1ff574f2d;
-	Mon, 12 Oct 2026 15:15:16 +0800 (GMT+08:00)
-Message-ID: <c0e2960e-29be-4e80-8843-f0d11bb68c16@easystack.cn>
-Date: Mon, 12 Oct 2026 15:15:15 +0800
+	 In-Reply-To:Content-Type; b=ZK2G1RWNOKmKMx8jg0RjYeA/3qn+t2F4PaY5PqrYEYDzQ1BCiul/KcjNe+O3Rmj/tqHZA3CSrVZ2nWAzeR42eqGHQzZmw1dgj6Cjf37iLB6Xtd8MrZwqOrJMFp2C1TqE9tAumNUiAytpTf9pXtNiRxCWuuXkVfneXNZByd1Y/Io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UPOsx+Ac; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UPOsx+Ac"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62BAF1F0089B;
+	Mon, 12 Oct 2026 10:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791799699;
+	bh=kBTDTmXMGVxkxkdqj7Gd6GlBQTYcDIFXPtq2QB1c/xA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=UPOsx+Ac0zqZCgm8ellgTD66XuK5zlqYYjB1l8hHGWi5f8U7jvGlXpeqkWRBCcBJa
+	 bGPW3Y41qQqfGqdPE3gN0LhlVQiCZHBpPx/mXgJvt0WRFcsjoHN2RSr4s+YK/dlr+m
+	 OZXNX0caCBrD/3QKMSAVB3bYFTF1OpmiTEMK+d4lalk7WncwPDtfpBOlMkSbLrMKX4
+	 bqwtcWxRxu+EZBV/y617jXW8QOsgXtrqf1P9Jb5y/sWfoI9fcf5VT9WBqOsM/QOleb
+	 co4dm0rbWZCX53LYSWbszfLq+TPMlPFnaXnwe2RU2BcMBtYI16vX8jMGiDgM3/YMWq
+	 L0N3m949R01cw==
+Message-ID: <a98bd4b9-932c-4b76-9c93-7ede4768c525@kernel.org>
+Date: Mon, 12 Oct 2026 11:08:16 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -26,97 +35,54 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] selftests/bpf: add tests for the page_owner bpf_iter
- target
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261009112308.240769-1-zhen.ni@easystack.cn>
- <20261009112308.240769-7-zhen.ni@easystack.cn>
- <sashiko-outbox-165565@kernel.org>
-From: "zhen.ni" <zhen.ni@easystack.cn>
-In-Reply-To: <sashiko-outbox-165565@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa12ef738160229kunm575c19f55919f4
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkZTk5NVh8YT0gfHk4aTRhNHVYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVCQk
-	lOS1VKS0tVSkJLQlkG
+Subject: Re: [PATCH] bpftool: Fix out-of-bounds read in kprobe_multi link info
+ dump
+To: chenyuan_fl@163.com, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, laoar.shao@gmail.com, linux-kernel@vger.kernel.org
+References: <20261010074435.1415234-1-chenyuan_fl@163.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261010074435.1415234-1-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+2026-10-10 15:44 UTC+0800 ~ chenyuan_fl@163.com
+> From: Yuan Chen <chenyuan@kylinos.cn>
+> 
+> show_kprobe_multi_{plain,json}() walk the sorted kallsyms array against
+> the sorted addr/cookie array with j as a cursor into the latter. The
+> loop terminating condition is checked after the cursor has already been
+> used to access the array:
+> 
+>     if (j++ == info->kprobe_multi.count)
+>             break;
+> 
+> After all count entries have been printed, j has been bumped to count,
+> but the loop keeps running and dereferences data[count] -- one element
+> past the end of the calloc(count, sizeof(*data)) allocation -- while
+> comparing every remaining kallsyms symbol. If the out-of-bounds value
+> happens to match a symbol address, a bogus entry with a garbage
+> addr/cookie pair is printed to boot.
+> 
+> Fix the off-by-one by advancing the cursor before the comparison, so the
+> loop terminates as soon as the last entry has been printed.
+> 
+> Verified with an ASAN build of bpftool against a live kprobe_multi link
+> of 3 symbols:
+> 
+>   before: ERROR: AddressSanitizer: heap-buffer-overflow READ of size 8
+>           at link.c:860 (show_kprobe_multi_plain) and link.c:352
+>           (show_kprobe_multi_json), 0 bytes after the 48-byte
+>           get_addr_cookie_array() allocation
+>   after:  clean output, no ASAN report
+> 
+> Fixes: edd7f49bb884 ("bpftool: Show kprobe_multi link info")
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 
 
+Acked-by: Quentin Monnet <qmo@kernel.org>
 
-在 2026/10/9 20:50, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf: missing __sz suffix in kfunc buffer size parameters bypasses verifier bounds check
-> --
-> 
-> commit 40eb734de063d435912cf0b8932fbb912e64be44
-> Author: Zhen Ni <zhen.ni@easystack.cn>
-> 
-> selftests/bpf: add tests for the page_owner bpf_iter target
-> 
-> This commit adds a sleepable BPF program and a userspace runner to test the
-> page_owner BPF iterator. It exercises the seq_file and open-coded iterator
-> paths and verifies the contracts of the get_nid, stack_snprint, and
-> get_memcg_info kfuncs.
-> 
->> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
->> new file mode 100644
->> index 0000000000000..fada6a314a157
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
-> 
-> [ ... ]
-> 
->> +extern int bpf_iter_page_owner_new(struct bpf_iter_page_owner *it) __ksym;
->> +extern struct page_owner_scan *
->> +bpf_iter_page_owner_next(struct bpf_iter_page_owner *it) __ksym;
->> +extern void bpf_iter_page_owner_destroy(struct bpf_iter_page_owner *it) __ksym;
->> +extern int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
->> +					char *buf, u32 buf_size) __ksym;
->> +extern int bpf_page_owner_get_nid(struct page_owner_scan *scan) __ksym;
->> +extern int bpf_page_owner_get_memcg_info(struct page_owner_scan *scan,
->> +					 struct memcg_info *info,
->> +					 char *buf, u32 size) __ksym;
-> 
-> [Severity: High]
-> Does the kfunc ABI exercised here bypass verifier memory bounds checking?
-> 
-> The BPF verifier requires size parameters for memory buffers in kfuncs to be
-> explicitly annotated with a __sz or __szk suffix (e.g., buf__sz). Without this
-> suffix, the verifier treats the size parameter as an independent scalar and
-> enforces no relationship between it and the buffer pointer.
-> 
-> In mm/page_owner_iter.c (which this newly added test relies upon), the kfuncs
-> bpf_page_owner_stack_snprint and bpf_page_owner_get_memcg_info define
-> buffer size arguments as u32 buf_size and u32 size, respectively, omitting
-> the required suffix:
-> 
-> mm/page_owner_iter.c:bpf_page_owner_stack_snprint()
->      __bpf_kfunc int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
->                                                   char *buf, u32 buf_size)
-> 
-> mm/page_owner_iter.c:bpf_page_owner_get_memcg_info()
->      __bpf_kfunc int bpf_page_owner_get_memcg_info(struct page_owner_scan *scan,
->                                                    struct memcg_info *info,
->                                                    char *buf, u32 size)
-> 
-> Consequently, the verifier only validates that buf points to a 1-byte valid
-> memory region (based on the char type) while allowing arbitrarily large scalar
-> values to be passed as the size.
-> 
-> A BPF program could exploit this by providing a small buffer alongside a large
-> size argument, causing the underlying kernel functions (stack_depot_snprint
-> and get_page_memcg_info) to write past the bounds of the provided buffer,
-> potentially leading to kernel memory corruption.
-> 
-> Could these kfunc size arguments in the kernel be renamed to include the __sz
-> suffix to ensure proper verifier bounds checking?
-> 
-
-This is the same __sz issue. Will fix it.
-
-
-Thanks,
-Zhen
+Thank you
