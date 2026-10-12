@@ -1,185 +1,113 @@
-Received: from mail-m127173.xmail.ntesmail.com (mail-m127173.xmail.ntesmail.com [115.236.127.173])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E07433E9D
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 06:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF88C21D00A;
+	Mon, 12 Oct 2026 06:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791787426; cv=none; b=Va1B3oL/XA/LBUAbNEQSMCvqH3gT06YyKWU0DUjSdBbsxgtWOB60t8nfJXuxV2nbDlNmdeual5T7J8zaTHY3qXnOPnwDdOQvPVE8AYM7U8mh8MsmC40ln6RH3CLjaJMTssV5B/1GC/H9iEkyfvKqTlRMclgWwmQQ4YXf/OIkzO0=
+	t=1791787985; cv=none; b=VX1m20N2XR/3qrJvYDvK2agOJ8eGVl1XiJvuQvF4UeFcxtyTSPtFkadvKDrUacGaWTOigjdKNWZx0spVMrXWHqWOlWK9sXtaLLNOp2fxzo5ewPmIZnjpO9cG4aVbZ10+1pZqBcsqJ91qCfgD9q6CxE1Jv+5SrXEeS3hKLs/d6P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791787426; c=relaxed/simple;
-	bh=8baN5WdT9Ns03lHdyP4B9CTLzhsBg4von6quIVr0HP4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EubbCZbPAqkNk+S4exFwkczrUDBS2LOEdTtNB6QnG2y/k/VITESsMqevIgsKOyJI3ESL353bgpegpWOelVpyQrx7BPiA9kOgUXTICjgWuOr/38KTzPM0hJ65RPMtd6C88Tua0z/be8xIt9FOktOXXgaiVwFRchaHFmx4iOF8I6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.127.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from [192.168.0.59] (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1ff4c61c7;
-	Mon, 12 Oct 2026 14:28:15 +0800 (GMT+08:00)
-Message-ID: <d1e7558a-c560-4413-9a48-374a70257d73@easystack.cn>
-Date: Mon, 12 Oct 2026 14:28:14 +0800
+	s=arc-20240116; t=1791787985; c=relaxed/simple;
+	bh=7RZyCjjqnrrE6A55BJPufD/QzIFgteSIBOnZ4RE4WfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uqr5I6RsQqsXFCyP4obL9azQ7M6G6ybRgOy5EM2lhVEaJGDUBujFsk628siQB9fGW2hjmt2bwDQxD09jcfPu/+j/CMfvEoHbWlvS6ezGONkdoxmt9fWykuXhDvTUDVrdD9BEVBKhzwc9UXzMuRPu53yyoJfk5gZER9+pWPrVJhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Mmal001f; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Mmal001f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=An
+	C8IT+4dyaxMPdiQgKfS8XtYt9lQbNk/TImwHhWU74=; b=Mmal001ftQhvKao90R
+	ZBBRTNFnUag3bs+DohXDKDg8J7lzH+2uhs3O0d4I1lvCHEpznEs5CouoiFzzFNFx
+	5d3Ikh8hniKLGhWUU/ZhohtRtDbJ+oFZMB+19TEGLLPMwGo0UXL5BZy4azbaNhyj
+	nSvwUkTiMOPgJ/H6tOOl5nT5c=
+Received: from localhost (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgCHVBVkg8xqDNsKDg--.48626S2;
+	Mon, 12 Oct 2026 14:51:17 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: tj@kernel.org
+Cc: void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	sh_def@163.com,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] sched_ext: idle: Honor SCX_PICK_IDLE_CORE in CPU selection shortcuts
+Date: Mon, 12 Oct 2026 15:51:13 +0900
+Message-ID: <20261012065114.3516902-2-sh_def@163.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261012065114.3516902-1-sh_def@163.com>
+References: <20261012065114.3516902-1-sh_def@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] mm/page_owner: add bpf_iter target "page_owner"
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261009112308.240769-1-zhen.ni@easystack.cn>
- <20261009112308.240769-3-zhen.ni@easystack.cn>
- <sashiko-outbox-165432@kernel.org>
-From: "zhen.ni" <zhen.ni@easystack.cn>
-In-Reply-To: <sashiko-outbox-165432@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa12ecc2c9d0229kunmdcf911e458dbd6
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCH0pLVk4dS0lPQ0lLH0IfGFYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVCQk
-	lOS1VKS0tVSkJLQlkG
+X-CM-TRANSID:PCgvCgCHVBVkg8xqDNsKDg--.48626S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw47Cw15JF1xCFWrur48WFg_yoW8Ww45pF
+	yYkaya9w4UJF1Fy3y7Jr48C343ur1kuw4agF4rGFsayrW5Kr4FqFyvq3W2qFW5GFn5Zr1f
+	uF1vqrnrKa1UJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi038rUUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbC6QXHJ2rMg2W2+gAA3A
 
+SCX_PICK_IDLE_CORE requires selecting a CPU whose SMT siblings are all
+idle. The restricted select_cpu kfunc path now derives its candidate from
+task state, but it does not check that condition before claiming the CPU.
 
-在 2026/10/9 19:50, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 5 potential issue(s) to consider:
-> - [High] mm: vmemmap use-after-free in page_owner_next_eligible() during memory hot-remove
-> - [Medium] mm: bpf_iter page_owner skips pages when seq_file buffer fills
-> - [Medium] bpf: missing EOF notification for page_owner bpf_iter
-> - [Medium] bpf: page_owner_iter skips records during chunked seq_read
-> - [Medium] bpf: page_owner_iter lacks EOF notification and yields stale po_snap
-> --
-> 
-> commit fd543af9dd8ff743b641757854c444d98608421d
-> Author: Zhen Ni <zhen.ni@easystack.cn>
-> Subject: mm/page_owner: add bpf_iter target "page_owner"
-> 
-> This commit registers a bpf_iter target page_owner that walks the pages
-> eligible for page_owner output. The attached BPF program receives the pfn,
-> the page, and the page_owner record to filter and format the output.
-> 
->> diff --git a/mm/page_owner.c b/mm/page_owner.c
->> index bafe474f33602..eb420803a434a 100644
->> --- a/mm/page_owner.c
->> +++ b/mm/page_owner.c
-> [ ... ]
->> @@ -741,7 +717,7 @@ void __dump_page_owner(const struct page *page)
->>    * must advance scan->pfn past the hit before calling again to resume
->>    * the scan.
->>    */
->> -static bool page_owner_next_eligible(struct page_owner_scan *scan)
->> +bool page_owner_next_eligible(struct page_owner_scan *scan)
-> 
-> [Severity: High]
-> Does exposing this function to the BPF iterator API introduce a use-after-free
-> regression during memory hot-remove?
-> 
-> Inside page_owner_next_eligible(), pfn_valid() is used to verify memory
-> sections. However, since the iteration runs without holding memory hotplug
-> locks or a continuous rcu_read_lock(), the memory section can be
-> concurrently hot-removed by another CPU as soon as pfn_valid() returns.
-> 
-> If the vmemmap pages backing the page struct are unmapped and freed during
-> this race, the subsequent call will dereference the unmapped page struct:
-> 
-> 	page = pfn_to_page(pfn);
-> 	if (skip_buddy_pages(&pfn, page))
-> 		continue;
-> 
-> Can this cause a kernel page fault and panic?
-> 
-> While this logic already existed in the /sys/kernel/debug/page_owner read
-> path, this patch relies on it and exposes the buggy code path to the new
-> BPF iterator API.
-> 
+The WAKE_SYNC shortcuts in scx_select_cpu_dfl() can bypass strict-core
+selection on SMT systems as well. Skip those shortcuts when
+SCX_PICK_IDLE_CORE is requested, and validate restricted candidates against
+their idle SMT mask before consuming the idle bit.
 
-This race is pre-existing and not introduced here, so it might be better
-handled in a separate series rather than as part of this change.
+Preserve individual-idle selection when the flag is not set and on
+non-SMT systems.
 
->> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
->> new file mode 100644
->> index 0000000000000..33dc9dcd59dec
->> --- /dev/null
->> +++ b/mm/page_owner_iter.c
-> [ ... ]
->> +static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
->> +{
->> +	struct page_owner_scan *scan = seq->private;
->> +
->> +	if (*posp == 0)
->> +		scan->pfn = min_low_pfn;
->> +	else
->> +		scan->pfn++;
-> 
-> [Severity: Medium]
-> Can this unconditionally skip elements during chunked reads?
-> 
-> During a seq_read iteration, if a formatted record overflows the output
-> buffer, the iterator discards the overflowed record, returns to userspace,
-> and later resumes by calling start() with *posp > 0.
-> 
-> Since next() already advanced scan->pfn to point to the overflowed record,
-> start() increments it again here. Does this mean userspace tools reading
-> the iterator output in chunks (like cat or bpftool iter) will silently
-> drop one valid page owner record at every buffer chunk boundary?
-> 
+Fixes: 683d2d0faba1 ("sched_ext: idle: Introduce scx_bpf_select_cpu_and()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Hui Su <sh_def@163.com>
+---
+ kernel/sched/ext/idle.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Will remove the `else scan->pfn++` in page_owner_seq_start().
+diff --git a/kernel/sched/ext/idle.c b/kernel/sched/ext/idle.c
+index 28ed9e327085..09e40928aef4 100644
+--- a/kernel/sched/ext/idle.c
++++ b/kernel/sched/ext/idle.c
+@@ -523,7 +523,7 @@ s32 scx_select_cpu_dfl(struct task_struct *p, s32 prev_cpu, u64 wake_flags,
+ 	/*
+ 	 * If WAKE_SYNC, try to migrate the wakee to the waker's CPU.
+ 	 */
+-	if (wake_flags & SCX_WAKE_SYNC) {
++	if ((wake_flags & SCX_WAKE_SYNC) && !(sched_smt_active() && (flags & SCX_PICK_IDLE_CORE))) {
+ 		int waker_node;
+ 
+ 		/*
+@@ -976,6 +976,10 @@ static s32 select_cpu_restricted(struct task_struct *p, s32 prev_cpu,
+ 			return -EBUSY;
+ 	}
+ 
++	if ((flags & SCX_PICK_IDLE_CORE) && sched_smt_active() &&
++	    !cpumask_test_cpu(cpu, idle_cpumask(scx_cpu_node_if_enabled(cpu))->smt))
++		return -EBUSY;
++
+ 	if (!scx_idle_test_and_clear_cpu(cpu))
+ 		return -EBUSY;
+ 
+-- 
+2.55.0
 
->> +
->> +	if (!page_owner_next_eligible(scan))
->> +		return NULL;
->> +	return scan->page;
->> +}
->> +
-> [ ... ]
->> +static void page_owner_seq_stop(struct seq_file *seq, void *v)
->> +{
->> +}
-> 
-> [Severity: Medium]
-> Are we missing an EOF notification here?
-> 
-> Standard bpf_iter implementations invoke the BPF program with v == NULL
-> during seq_ops->stop() to notify the program of EOF, enabling summary
-> aggregate output. Because this function is empty, BPF programs attached to
-> the page_owner iterator cannot detect the end of iteration.
-> 
-> Does this mean any logic relying on the standard EOF signal to output
-> summary statistics or perform cleanup will never execute?
-> 
-
-page_owner_seq_stop() didn't implement the EOF (v == NULL) run; I'll add
-it.
-
->> +
->> +static int page_owner_prog_seq_show(struct bpf_prog *prog,
->> +				    struct bpf_iter_meta *meta, void *v)
->> +{
->> +	struct page_owner_scan *scan = meta->seq->private;
->> +	struct bpf_iter__page_owner ctx;
->> +
->> +	/* @po: hit-time snapshot, no RCU window needed. */
->> +	ctx.meta = meta;
->> +	ctx.page = (struct page *)v;
->> +	ctx.po = &scan->po_snap;
-> 
-> [Severity: Medium]
-> If EOF were properly signaled with v == NULL, would this unconditional
-> assignment provide stale data to the BPF program?
-> 
-> By unconditionally assigning ctx.po to the snapshot pointer, ctx.po is
-> never NULL, even when v (the page) is NULL. Does this mean BPF programs
-> cannot reliably use if (!ctx->po) to detect EOF, and might operate on stale
-> snapshot data from the last valid page?
-> 
-
-That ctx.po issue only arises with the EOF run, so I'll fix both
-together.
-
-
-Thanks,
-Zhen
