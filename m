@@ -1,177 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905904D37B3;
-	Mon, 12 Oct 2026 19:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CC14CB8BC;
+	Mon, 12 Oct 2026 19:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791832324; cv=none; b=SmJ4/klyXVJvnXRNACJv51OPrSHbPxyo7xhvDCPIUcO2n+CJbw/hEWpgAGm2xzkk+UtFFVcEggOh+JfjVW0kxbFFi0ANADDJi4Hvu80Wht6C6fc2wqJD8cFJr4t8pHSJn5GPxZcd0h1jopEa/h7BHOhISv0PYM+vAW34dhFkk0s=
+	t=1791834204; cv=none; b=nnHy1ePUi4zMAG+OI3RUP0mpvBtM+MOsfsGg/8xN11sYe8q8JqM21WrEmCHrTNrbWtpqsrKHWRqrKYjkTEaqEjrKsDT094XITDxJca8Y8dUGB5ULyRThkOr0lN3L6rZYaHaGm54PcxhxOOXBCWL99AQsrseRDj40Rdk87R9ZmAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791832324; c=relaxed/simple;
-	bh=FdkP+D43EN+xQd/ndnjr780pUFvJoTrEDYoQqVAKW9Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0UQiJo/+lDQDa5CJ9dKoqj/m51mCTrh3Sx6jpn1CoJKCwTk1aBgCJTTPutRND9ZIt/o43Oc4InVsPyeofAztQJZD8ih39/qeGtvXFKngLN2FM19E10q0DeZ4N/KuJegboSEoC0SZnFkvlhTGVPQ7ZqQ19zsS8yKEjO5T9yEnv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEu0ArYB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791834204; c=relaxed/simple;
+	bh=46e1U6DavjbOemIRYpekVuACQIQhaJ1HQ/H/m0zwm8Y=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SwkvXEaTIpByS4EfbhJ7D8eKNbn2RvNgrJXXfaeaiEn7UF4bwODfW39ftH6tTBFHRJjgUVD0NkYYrshRBcF5cCOOI6dAPtpC9WSwng5pbMRkVF9EigTNwK4oCfPhCrhEaYHQCr70Sv3U1xikeasgRQA9WZJXlQKdzAT9QiOvxTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=S6YyxZoc; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEu0ArYB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B361F0089B;
-	Mon, 12 Oct 2026 19:11:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791832322;
-	bh=t5mO4SpyqVviWjSaaEv8n4NUJ8+LaAHDu09XG7kSbFs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BEu0ArYB5XZKL/22X+idpyNhILy00Ml5Fj2jTZ7Fk/4tKlvNrtbcuHyIbatS1i6+H
-	 EgraXbynE/kQHml4oxd8zg6gA+C0hu9dN4/bgco2QE++oQB5bH8DxThhNACrQfpLo5
-	 XjczelQ46llI8hh5qdyeZlOGyGOojXJ0MYtBFM6yqvzpX+4jdT2meUTVQWDtflbCXM
-	 6iF5pmWBFtkh91Se1FhzLeFVS17tfaVz+ddcjoVeEnKq4qW/b4a4Az4vnWO1vg7GEy
-	 PxJnHj6TKtLcX2c2xZZNIY6SbIQi0/ch6peXKK7YGg1Kjv6Q5wlicS2sXtSXi+SohG
-	 UEkXkdb5KImtQ==
-Date: Mon, 12 Oct 2026 20:11:27 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
-	Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Bert Karwatzki <spasswolf@web.de>, 
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: Re: [PATCH v5 13/38] bpf: arena: mark arena_map_mmap() mappings
- VM_MIXEDMAP
-Message-ID: <as0uGOcxjg74Xw7_@gremlin>
-References: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
- <20261009-b4-mmap-prepare-vma-flag-sanify-v5-13-923b70125b1e@kernel.org>
- <5b8ef0ce-7429-4d74-b4da-a0561c59b1e2@kernel.org>
- <as0Buhi_-VCC7xLZ@gremlin>
- <4124106e-c51e-4476-bd67-63e4641bf14a@kernel.org>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="S6YyxZoc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1791834203; x=1823370203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=46e1U6DavjbOemIRYpekVuACQIQhaJ1HQ/H/m0zwm8Y=;
+  b=S6YyxZocILMkVLT9tUsbO/MhBIK94Sq1l0fxgOXD/E+JmMRCUm3vaei3
+   EfdoWNOxgVDKHX/1rrred9bIKwwUTdYYfrVOtVK7V2SAoprEWNQRUkgqh
+   OehSKrSF1bRDPLkvSRqQLp+350tm4Q7Kr+h3KTidA0dmXOTulFrJP1u8X
+   COqk8ULn5hIXVGi8VpgcYX7Xvs1Xhfu1D3OliyFJ5pewSuzxBgm78W8K/
+   HQnuT0YDSFWwxquwoqTfcwY35G4LWvcIWvHEhw97JzQxTy0o0Di2T/erZ
+   XrFE2fc7rwQ6IJ6TGw7EyJCrXC2roPUJHUtba81NfguVKFo0EbR6OJJar
+   w==;
+X-CSE-ConnectionGUID: Z5px7yJ/SWqdbS/RQmR7RQ==
+X-CSE-MsgGUID: ri7xwyZNQO+xB8N1XTZv9A==
+X-IronPort-AV: E=Sophos;i="6.27,154,1787036400"; 
+   d="scan'208";a="75255144"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 12:43:22 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
+ chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.49; Mon, 12 Oct 2026 12:43:21 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 12 Oct 2026 12:43:18 -0700
+Date: Mon, 12 Oct 2026 21:43:17 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+CC: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre
+ Torgue <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Ong Boon Leong <boon.leong.ong@intel.com>,
+	<netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/2] net: stmmac: fix XDP TX DMA address for
+ compound RX pages
+Message-ID: <20261012194317.o642ym7ddsmny25x@DEN-DL-M70577.microsemi.net>
+References: <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
+ <20261012-stmmac-xdp-tx-pre-fixes-v1-1-05fd0c90f7e1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <4124106e-c51e-4476-bd67-63e4641bf14a@kernel.org>
+In-Reply-To: <20261012-stmmac-xdp-tx-pre-fixes-v1-1-05fd0c90f7e1@oss.qualcomm.com>
 
-On Mon, Oct 12, 2026 at 08:56:23PM +0200, David Hildenbrand (Arm) wrote:
-> On 10/12/26 17:55, Lorenzo Stoakes (ARM) wrote:
-> > On Mon, Oct 12, 2026 at 05:08:09PM +0200, David Hildenbrand (Arm) wrote:
-> >> On 10/9/26 20:04, Lorenzo Stoakes (ARM) wrote:
-> >
-> >>> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> >>> index 7b6847200b43..b69fe5e34339 100644
-> >>> --- a/kernel/bpf/arena.c
-> >>> +++ b/kernel/bpf/arena.c
-> >>> @@ -620,8 +620,9 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
-> >>>  	 * clears VM_MAYEXEC. Set VM_DONTEXPAND to avoid potential change
-> >>>  	 * of user_vm_start. Set VM_DONTCOPY to prevent arena VMA from
-> >>>  	 * being copied into the child process on fork.
-> >>> +	 * This is a kernel page so set VM_MIXEDMAP.
-> >>>  	 */
-> >>> -	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY);
-> >>> +	vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND | VM_DONTCOPY);
-> >>>  	vma->vm_ops = &arena_vm_ops;
-> >>>  	return 0;
-> >>>  }
-> >>>
-> >>
-> >> Historically, VM_MIXEDMAP really just means: can contain refcounted and
-> >> non-refcounted things. Everything with a struct page is refcounted.
-> >>
-> >> I think we are now changing the semantics to mean "maps kernel pages". I think
-> >
-> > Yes.
-> >
-> > It was sort of implicit before given insert_page() etc. but still really meaning
-> > that it _might_ be both.
->
-> Yeah, it's in the name. Mixed: pfn and/or ordinary.
+Hi Lorenzo,
 
-Well the name is confusing as a great many users never mix anything, and it's
-far from obvious you need to set one.
+> When RX buffers are compound pages (order > 0), only the head page
+> carries the DMA address programmed by the page pool
+> (page_pool_get_dma_addr()). stmmac_xdp_xmit_xdpf() computed the head
+> buffer's bus address from the page that happens to contain the data:
+> 
+> 	page = frag ? skb_frag_page(frag)
+> 		    : virt_to_page(xdpf->data);
+> 	dma_addr = page_pool_get_dma_addr(page);
+> 	...
+> 
+> RX pages become compound as soon as dma_buf_sz needs more than one page
+> (pp_params.order = order_base_2(num_pages) > 0), which happens from an
+> MTU around 3000 bytes once dma_buf_sz reaches 4096. If an XDP program
+> moves the data forward with bpf_xdp_adjust_head() by more than about a
+> page, xdpf->data points into a tail page whose struct page has no DMA
+> address: page_pool_get_dma_addr() then returns a bogus bus address, and
+> dma_sync_single_for_device() together with the TX descriptor transmit
+> from the wrong location.
 
-Anyway, one for later. Maybe a mask like VMA_NON_MM_MANAGED_MASK or something
-better than that...
+Looks to me like mtu > ETH_DATA_LAN is rejected when setting a prog, and also
+on mtu change when a prog is attached. So can this even happen today?
 
->
-> >
-> >> this is fine, but we really have to update the documentation (and possibly
-> >> rename this thing to something more expressive?)
-> >
-> > Yeah I completely agree.
-> >
-> > I will rename it, but I think that's best for 7.5 obviously! :)
->
-> Yes.
->
-> VM_PFNMAP / VM_MIXEDMAP - These contain kernel-mapped data which cannot be
-> 			  reasonably reconstructed on page fault.
->
-> the description is already pretty clear. just not that kernel-mapped pages
-> *must* use one of these.
+> 
+> Use virt_to_head_page() to read the DMA base of the buffer and keep the
+> offset relative to the head page (sizeof(*xdpf) + xdpf->headroom), which
+> is correct no matter which page the data ends up in.
 
-I think mixed map could do with a rename because it implies it _is_ mixed rather
-than could be.
+I think the fix looks correct.
 
-But again one for the future!
+> 
+> Fixes: be8b38a722e6 ("net: stmmac: Add support for XDP_TX action")
+> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index b8b4de4c5b1a..ca61ab449e32 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5301,7 +5301,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
+>  			struct page *page;
+>  
+>  			page = frag ? skb_frag_page(frag)
+> -				    : virt_to_page(xdpf->data);
+> +				    : virt_to_head_page(xdpf->data);
+>  			dma_addr = page_pool_get_dma_addr(page);
+>  			if (frag)
+>  				dma_addr += skb_frag_off(frag);
+> 
+> -- 
+> 2.56.0
+> 
 
->
-> (again, the ->fault thing returning allcoated kernel memory is nasty)
-
-Yeah added to my todo to fix that. Hateful.
-
---
-Cheers, Lorenzo
+/Daniel
