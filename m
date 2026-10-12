@@ -1,148 +1,337 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F3444C4FC
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 09:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A1446EF7C;
+	Mon, 12 Oct 2026 09:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795868; cv=none; b=BKyPTKthnz+y39W+UoZnMb+BOtU9QfRxoYbD/ygptpJiq3C8qqdUbZUfZSq8k/C9eL7OQuWGTzxy1Y7MPM+6Hzz4vZTRU1LhhkjXb28PQTEaMU/rBUv+DbgnJuQX4ob/EZQwgr9NzEhJ7Q+kFh5UDzKbrvPHJeBN+zkOewXgXF8=
+	t=1791796561; cv=none; b=B4HGvU4pw5LEJ9FbEyOcCzmOxYN0grfRq8/ID31pwTReCSS8nZx12LL0vt4nsqTLcsFLgbWsi3tLUPwTBKJTA+CVLB8VL6ltzJ7IXY/aePyJtCST8MXqdRAvUCWIUKQNfgeVezH8dI0rDK0DlSxmc/VkomQdiraEFUBukagM90o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791795868; c=relaxed/simple;
-	bh=Z9sdoXZiCAvXUksggZN7Bwbtvi9NyuLIEb/gHrd8Sbs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=V2We79/RVdIMmrukCD55hBbmKQM6tKhS3vLSkWBT/8bccmeQqBpGUbGacTFiQjMJAWRvxNXetvh9RQimTGb+H1a+c4sFRQBayr1hoFvWmCySzkSeycR5hgtfUPc2CB41tXj8duAWCth9ue0vxOfgeToDJqFJmGzA5o7F4ngooe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RqRZQvaW; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1791796561; c=relaxed/simple;
+	bh=KLBlgaeDuHabe1zhJimoUA0bpK31OVHOkP7Odbueqqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oe60CEOSN7ATLgs5h+gNQ+a49kfdPJFrJomKhmKhH7CC8RpTdi7RPZHZ3HvXxOPOR1QbJOn3IASChyUJ/drwsdqbSU1VArosS0E6ZbOmVKUr7LYa9RTcmq0hYaRKXpOm0XRCdxm21OATjTihzv0Eyg0V4nhnVvIjuzbHYaYAUK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EMB9HcnR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RqRZQvaW"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6acbdbc1725so1910026a12.3
-        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 02:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1791795866; x=1792400666; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=lSSxuYb41ZPYRHGZDzePbKtEh17LW+nxXJKra7Xv65k=;
-        b=RqRZQvaWT6xBe7H/A9rPcDR10OJ0lzcEhoftxyQHMqEMmm/Y+wBquD75iUQZdKrcHa
-         34xDMG9TegiVuEpiCu032EoQiF6Ph6lhXHwpw8HB97VqlIvvVH7IGdMFqJ9K2A1VVica
-         Dz+KfYa97gfH78yWoe9otJEtJ6KqAEc4UH2x8XqGiWZ87F0Ec9xJhG43cMTLl9Lh/3bq
-         uUlfw997l/EHUeElgLCrYljXqq0v+R623wuUHZ5lioDpenb5sdCEj+67/RpWEkZ90m4m
-         qUhgB0oDj8X8Vpwkg+NFzHkZ+qEDsKo+p2H1MO1n3xOUYch+lCuO5fxfDDm7sC06kkbM
-         eC1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791795866; x=1792400666;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=lSSxuYb41ZPYRHGZDzePbKtEh17LW+nxXJKra7Xv65k=;
-        b=2uS8twxB3MRj7ZqW5Ev9ut4nAjFPgAiBFHQ756rm9uW683fy6hBK46Xk9tctsA7O4L
-         51F8tylcvjP4ZdFaCjHDXWofjG3VC+wSVhiEoteQOEsfQhBZE+PG/ObjsepWEhLw8ppX
-         KAYVFs1QV2S1sTyM74aIIk+XMNHIKnJXv9ehasaRL4IV6eQwdawzHmKbw39Di0x60PEr
-         5N1hVaDWilzshr3YIEa+Lw+BHLB4qS4yENybOTv9qe0w8QHyPEfXpq8O6o6XRxTCKsHX
-         2kzdAgL7zHIn6CSOjUGxQlJmzFO9pfMIhpSCoG6OfxPs+TwGxmzCxz94/WvMnAbTVEjM
-         04cQ==
-X-Gm-Message-State: AFq9FYIcJRsSV/AP73dpsebM8+9PKsUVKvGkmR3UJnNOwExmu1Ui98c+
-	sjnnU1sciXFJWbqqUyUVwpsoyuA0ZJATSDa/Pcg29D6WzkGqBmypvhFYdFq3+1VNoZU=
-X-Gm-Gg: AYBFou1r/Wf/vA4aRRnZx/ymH564gj/uwwBKaTpDyHmOtZnejZnNMHtSyCEhECbInNE
-	C0/hNZ0mLQWZYuw6T2k5xJqU25uZQy3WfHkBsQwfq7VVSbflouAOjIZcPb+Ex9uALnuLef2ZOd9
-	cS+Dcf767iiHLQWXxydHgVYOC8lv/y/Ml1iaB5r9T3AQ3GxQcHp8CRNGlt0EuL8KBgzg/rMLKn/
-	q1YCKWlVte6JWZxih6SqbFYKqrHYRvSCXjEyFUSrer36yff++/PgWOwtc7aTb4d3jWRHeBvaUi9
-	v5rmxa13WFp1bTQ8Op90zw3FlW4snMCZqq5OuMrb6Dypr85e4tDsTJSC1px2FWWf3k1vsZ8t3sB
-	ROVUFiE2EbwRNHtLsay9YAQKE/Ff9daLRenwIphUVjiDhPyeMN953RuDdt9sknsgE+X+rEKQ+iW
-	k4tOrCupsaP8pCCDxiD8u9g6L1qpo2hbgb+YbXShuKg8c4tgvXTZXGPtRnlk0C18TXN+keMXQel
-	Mh3b8upp6LlVNw96k4hJSxTg1e7MAciagvvytEDu9IZ/+dn4DrYCr+KpzE+Lhk2vy5duPPk5C3m
-	NIbUxU9C2FzOEQ==
-X-Received: by 2002:a05:6402:321c:b0:6af:9bef:cf75 with SMTP id 4fb4d7f45d1cf-6b17c1e03e9mr7944049a12.4.1791795865570;
-        Mon, 12 Oct 2026 02:04:25 -0700 (PDT)
-Received: from cloudflare.com (2a01-110f-491b-1300-bcd0-2dc6-3ac4-45a2.aa.ipv6.supernova.orange.pl. [2a01:110f:491b:1300:bcd0:2dc6:3ac4:45a2])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b179e03428sm4548461a12.37.2026.10.12.02.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2026 02:04:25 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jan-Gerd Tenberge <janten@gmail.com>
-Cc: bpf@vger.kernel.org,  ast@kernel.org,  daniel@iogearbox.net,
-  john.fastabend@gmail.com,  jiayuan.chen@linux.dev,  edumazet@kernel.org,
-  kuniyu@google.com,  pabeni@redhat.com,  willemb@google.com,
-  davem@davemloft.net,  kuba@kernel.org,  horms@kernel.org,
-  yonghong.song@linux.dev,  netdev@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  stable@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix UAF when map user reference is
- revived
-In-Reply-To: <20261008095656.92793-1-janten@gmail.com> (Jan-Gerd Tenberge's
-	message of "Thu, 8 Oct 2026 11:56:56 +0200")
-References: <20261008095656.92793-1-janten@gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Mon, 12 Oct 2026 11:04:24 +0200
-Message-ID: <87v777jnmv.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMB9HcnR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 075251F0089B;
+	Mon, 12 Oct 2026 09:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791796560;
+	bh=I0HNRCS/h711M+WA/GHMYCEaRzzHTm0vVBiP9fZikGI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EMB9HcnR2Vy1CAnUk7OHOf5GsCaVPZ7a6Bro4eKk5SUaBIH94yOCIIzkHLk/dn29g
+	 kV8aB+iGe4QM9ZmQqytyp1noivDVB6UtVQb5bb2D2X08dewTXGvGNOyFzYt7aWPou9
+	 sUgXqAh09Pcup1sCOdYqDR+BacTYknTjLFf6XdQkB+ifvAqaXyOnlrtogEEhpZ8brj
+	 r7mW4WAB9D1fJ+rHQJcJhySpnlLAb1oYZJOVxiPuABLWHmaPPa61rJvRfygQG9hGJe
+	 iDkCjJKuTlNSHA3hlUKE9BPI/4vLJ63BW6D8A+VpIZfP9YwnHLUUu8rgBLrGz7Ioz5
+	 COyMaej6bm63A==
+Date: Mon, 12 Oct 2026 11:15:39 +0200
+From: Alejandro Colomar <alx+linux-hardening@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Alejandro Colomar <alx@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bill Wendling <morbo@google.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>, 
+	Shuvam Pandey <shuvampandey1@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Shivaprasad G Bhat <sbhat@linux.ibm.com>, 
+	Thorsten Blum <blum@kernel.org>, Alison Schofield <alison.schofield@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Guangshuo Li <lgs201920130244@gmail.com>, Ira Weiny <iweiny@kernel.org>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, Vishal Verma <vishal.l.verma@intel.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev, 
+	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
+Message-ID: <asyalCF06dhpVxPc@debian>
+References: <20261003035906.too.263-kees@kernel.org>
+ <20261003035921.1918874-5-kees@kernel.org>
+ <asEhEe0Urb5Wx7yi@ashevche-desk.local>
+ <202610040023.A3865A6@keescook>
+ <asIPlnb0noMd33rr@ashevche-desk.local>
+ <20261005112209.1e47fa-kees@kernel.org>
+ <asOKvhT01aNb5-Dg@debian>
+ <20261005155839.d5d200-kees@kernel.org>
+ <asPSYn7sLqiH39Fu@debian>
+ <20261012005620.466497-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="j57xlliim47wxj7u"
+Content-Disposition: inline
+In-Reply-To: <20261012005620.466497-kees@kernel.org>
 
-On Thu, Oct 08, 2026 at 11:56 AM +02, Jan-Gerd Tenberge wrote:
-> bpf_map_put_uref() invokes map_release_uref after usercnt reaches zero,
-> before bpf_map_put() drops the map reference. BPF_MAP_GET_FD_BY_ID can
-> find the map during that callback and raise usercnt again.
->
-> The sockmap and sockhash release callbacks unconditionally drop programs
-> without taking sockmap_mutex. A concurrent attach through the revived fd
-> can therefore publish a new program before the stale callback drops it.
->
-> For a bpf_link attachment, this leaves plink set while pprog is NULL, so
-> link release warns and leaves the attachment slot unusable. The callback
-> can also drop the program between sock_map_prog_update() and the later
-> bpf_prog_inc(). If the program fd is closed concurrently, this removes
-> the last reference and schedules an RCU free. The subsequent increment
-> then resurrects a zero reference and leaves link->prog pointing to memory
-> that will be freed. A KASAN reproducer triggers a slab-use-after-free when
-> reading information from that link.
->
-> Triggering the race requires CAP_SYS_ADMIN in the initial user namespace,
-> because reviving the map uses BPF_MAP_GET_FD_BY_ID. A deterministic KASAN
-> reproducer is available privately on request. It was used to verify the
-> UAF before this change and its absence afterwards.
->
-> Serialize the release callbacks with program updates using sockmap_mutex
-> and recheck usercnt under the mutex. If the map was revived, leave its
-> programs intact. Move the map user-reference put in link release outside
-> the mutex to avoid recursively taking sockmap_mutex when it drops the last
-> user reference.
->
-> Fixes: 699c23f02c65 ("bpf: Add bpf_link support for sk_msg and sk_skb progs")
-> Assisted-by: LLM
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jan-Gerd Tenberge <janten@gmail.com>
-> ---
 
-Please include KASAN report in the description.
-That helps others find that the issue they hit has been fixed.
+--j57xlliim47wxj7u
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+From: Alejandro Colomar <alx+linux-hardening@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Alejandro Colomar <alx@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bill Wendling <morbo@google.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>, 
+	Shuvam Pandey <shuvampandey1@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Shivaprasad G Bhat <sbhat@linux.ibm.com>, 
+	Thorsten Blum <blum@kernel.org>, Alison Schofield <alison.schofield@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Guangshuo Li <lgs201920130244@gmail.com>, Ira Weiny <iweiny@kernel.org>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, Vishal Verma <vishal.l.verma@intel.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev, 
+	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
+Message-ID: <asyalCF06dhpVxPc@debian>
+References: <20261003035906.too.263-kees@kernel.org>
+ <20261003035921.1918874-5-kees@kernel.org>
+ <asEhEe0Urb5Wx7yi@ashevche-desk.local>
+ <202610040023.A3865A6@keescook>
+ <asIPlnb0noMd33rr@ashevche-desk.local>
+ <20261005112209.1e47fa-kees@kernel.org>
+ <asOKvhT01aNb5-Dg@debian>
+ <20261005155839.d5d200-kees@kernel.org>
+ <asPSYn7sLqiH39Fu@debian>
+ <20261012005620.466497-kees@kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <20261012005620.466497-kees@kernel.org>
 
-[...]
+Hi Kees,
 
-> @@ -1743,6 +1750,7 @@ struct sockmap_link {
->  static void sock_map_link_release(struct bpf_link *link)
->  {
->  	struct sockmap_link *sockmap_link = container_of(link, struct sockmap_link, link);
-> +	struct bpf_map *map = NULL;
->  
->  	mutex_lock(&sockmap_mutex);
->  	if (!sockmap_link->map)
-> @@ -1751,10 +1759,12 @@ static void sock_map_link_release(struct bpf_link *link)
->  	WARN_ON_ONCE(sock_map_prog_update(sockmap_link->map, NULL, link->prog, link,
->  					  link->attach_type));
->  
-> -	bpf_map_put_with_uref(sockmap_link->map);
-> +	map = sockmap_link->map;
->  	sockmap_link->map = NULL;
->  out:
->  	mutex_unlock(&sockmap_mutex);
-> +	if (map)
-> +		bpf_map_put_with_uref(map);
->  }
+> Date: 2026-10-11 17:56:27-0700
+> From: Kees Cook <kees@kernel.org>
+>
+> On Mon, Oct 05, 2026 at 06:43:23PM +0200, Alejandro Colomar wrote:
+> > > Yes, though not often: the sched_ext debug dump builds a nested per-C=
+PU
+> > > seq_buf from seq_buf_get_buf(), which returns a size of 0 once the du=
+mp
+> > > buffer has overflowed, and it handles that case on purpose (see the
+> > > "$s may already have overflowed" comment in kernel/sched/ext/ext.c).
+> >
+> > Hmmmm, so IIUC, it is a sentinel value, and not really a buffer size?
+>=20
+> It's the real size of what's left. seq_buf_get_buf() hands out the
+> unused tail of the seq_buf. Once that has overflowed there is no tail,
+> so it returns NULL for the buffer and 0 for the size, and sched_ext
+> initializes the nested seq_buf with both. So that case does get the NULL;
+> the 0 is how much room it has.
+>=20
+> > Did you consider not holding the size of the buffer, but rather an end
+> > pointer?  It also allows you to find how much you can write to the
+> > buffer, but has slightly better semantics: the end doesn't change if you
+> > advance the position.  'end' can only change through reallocations
+> > (which I don't know if you do in the kernel).
+>=20
+> The size doesn't change either: it is set by seq_buf_init(), and writers
+> advance "len", an offset from the start of the buffer. seq_buf never
+> reallocates.
 
-In sock_map_link_release map->usercnt is now modifed without
-sockmap_mutex held. Is that a problem?
+The size changes here:
+
+	$ grepc -h -B8 seq_buf_get_buf include/
+	/**
+	 * seq_buf_get_buf - get buffer to write arbitrary data to
+	 * @s: the seq_buf handle
+	 * @bufp: the beginning of the buffer is stored here
+	 *
+	 * Returns: the number of bytes available in the buffer, or zero if
+	 * there's no space.
+	 */
+	static inline size_t seq_buf_get_buf(struct seq_buf *s, char **bufp)
+	{
+		WARN_ON(s->len > s->size + 1);
+
+		if (s->len < s->size) {
+			*bufp =3D s->buffer + s->len;
+			return s->size - s->len;
+		}
+
+		*bufp =3D NULL;
+		return 0;
+	}
+
+With an end pointer, that would be simplified to:
+
+	static inline size_t my_seq_buf_get_buf(struct seq_buf *s, char **bufp)
+	{
+		WARN_ON(s->p >=3D s->end);
+
+		*bufp =3D s->p;
+		if (s->p !=3D NULL)
+			return s->end - s->p;
+		return 0;
+	}
+
+Moreover, if we change the API of that function, we could entirely get
+rid of this function.  Here's an example where I see seq_buf_get_buf()
+used, where I've modified it to use pointers:
+
+diff --git i/kernel/sched/ext/ext.c w/kernel/sched/ext/ext.c
+index 3219f0da0fe4..82904e4456e3 100644
+--- i/kernel/sched/ext/ext.c
++++ w/kernel/sched/ext/ext.c
+@@ -6893,8 +6893,7 @@ static void scx_dump_cpu(struct scx_sched *sch, struc=
+t seq_buf *s,
+         * Use a nested seq_buf to generate the standard dump so that we
+         * can decide whether to commit later.
+         */
+-       avail =3D seq_buf_get_buf(s, &buf);
+-       seq_buf_init(&ns, buf, avail);
++       seq_buf_init(&ns, s->p, s->end);
+=20
+        dump_newline(&ns);
+        scx_dump_line(&ns, "CPU %-4d: nr_run=3D%u flags=3D0x%x cpu_rel=3D%d=
+ ops_qseq=3D%lu ksync=3D%lu",
+
+Considering the .p would replace the current .len, and would encode
+overflow as a NULL pointer, and .end would replace the current .size,
+and wouldn't ever change (not even on overflow, sice that info would be
+stored in .p).  Now you wouldn't need to test whether the remaining
+size can be 0, but would instead test whether ->p is NULL (you could do
+that internally if you want to avoid accessing internals).
+
+> An end pointer wouldn't remove the empty case: buffer =3D=3D end is the s=
+ame
+
+The thing is that you'd never reach buffer=3D=3Dend.  If that would have to
+happen, you'd instead store a NULL in buffer.  This has the nice
+property that if you try to read it as a string, it will crash (instead
+of giving you a pointer that is not a string, which could result in a
+buffer overrun).
+
+> condition as size =3D=3D 0, so the accessors would still need the check. =
+It
+> also makes overflow harder to record. seq_buf marks it with len =3D=3D si=
+ze +
+> 1, and the matching position pointer, end + 1, would be weird.
+
+Not really.  I'll show an example without the structure; just using
+plain string-copying functions, which shows it more obviously.  The
+structures are, after all, just an encapsulation of this logic.
+
+With sizes and lengths:
+
+	char    buf[42];
+	size_t  len, size;
+
+	len =3D 0;
+	for (int i =3D 0; i < 10; i++) {
+		x =3D strscpy(buf + len, "foo", size - len);
+		if (x < 0)
+			goto fail;
+		len +=3D x;
+	}
+vs
+	char  buf[42];
+	char  *p, *end;
+
+	p =3D buf;
+	e =3D ARRAY_END(buf);
+	for (int i =3D 0; i < 10; i++)
+		p =3D stpecpy(p, end, "foo");
+	if (p =3D=3D NULL)
+		goto fail;
+
+Let's say that each iteration of the loop is a step where we'd inherit
+an old buffer into a new one with the functions showed above.  With a
+length and a size, you need to update the size.  With a position pointer
+and an end pointer, you only need to update the position pointer, and it
+encodes the information about the overflow/truncation too.  Because
+truncation is encoded as an invalid position (NULL), we can never
+recover from that, and thus we don't need to have so many checks in each
+iteration.
+
+An important detail is that the functions that use such a position
+pointer should check whether the position is NULL, and do nothing.
+In this example, stpecpy() has such an early check:
+
+	char *
+	stpecpy(char *dst, const char *end, const char *restrict src)
+	{
+		ssize_t  dlen;
+
+		if (dst =3D=3D NULL)
+			return NULL;
+
+		dlen =3D strscpy(dst, src, end - dst);
+		if (dlen < 0)
+			return NULL;
+
+		return dst + dlen;
+	}
+
+As you can see, we can never reach a point where p=3D=3Dend, because once
+truncation happens, p becomes NULL and never recovers from that.  This
+simplifies greatly the handling of truncation.
+
+> Changing the representation would also means changes outside
+> lib/seq_buf.c, since tracing reads seq.len and seq.size directly
+> (trace_seq treats a zero size as "not yet initialized", for one). I'm
+> not saying that's a good thing to bypass the API, but rather that such
+> a change should be its own series.
+
+Agree.  I was just mentioning as an idea to keep for the long term.
+
+
+Have a lovely day!
+Alex
+
+>=20
+> -Kees
+>=20
+> --=20
+> Kees Cook
+
+--=20
+<https://www.alejandro-colomar.es>
+
+--j57xlliim47wxj7u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmrMpTUACgkQ64mZXMKQ
+wqmKKQ/+IUju4v7dG+hkUEBJrKJ5n4nq9IotpO+uHWDqtRhvFizqNIkQyTz4OEtR
+YgKwo2cKL6kofiJKTMGBBldjXFFiCg7b+7kUg6wAV9E+86Ot801bmAh/OV4B2rEN
+px81p+fJHLcVo3zqLs4M1PHaMP360L55Qv6YKJT7ZOpcheH/J0Z5AdDV0lxSamn+
+NIXLfOTeDyo/Xs3BKslEKlSj3mzn9/mWAeKhr77fwDeRMD5w63mw3GZp/ai6QQMY
+dwwo2ZOuFrfGZfnkqhbKxt0IyHPx2Vh5o6bxDWBFT9XYR0V/ENLJOxG9PvvtinZ5
+EOt+S2erq7A9ShZchVCDsrHrx+CskREubVno6D3cLh3sGfQp6dP+f8j7VG1pInsK
+D12+Fjibzz8JSNVNKlvkXTj9WufaoQX5Jqy5HU/ly1C64yFa0Cijq0jm2JlVyTB1
+/jyYXfCDECCcyzTMygd9rEFwoAm9f2wO4cN4KZNWflAOfJudJ+Qbkt7Q77YYaxfo
+d9+FUb5tqbWCzeuGTfTgL/ALDBbXJpremH0jWr3F18SEsYUWCbZYEgzl/KWG0NSD
+gcJhuZHt4/9ZrXBmSqmI5ud/iPJ/JQ8l3vqeLNt+XZgG3E5H3AN9N1aE4ATAZ5kI
+5bpoml/6Uim7ljbxOPFn7JLwYh+UPaCQ3zlZvA1wE/uBnkNr8Q0=
+=dcL8
+-----END PGP SIGNATURE-----
+
+--j57xlliim47wxj7u--
