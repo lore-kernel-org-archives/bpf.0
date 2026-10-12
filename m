@@ -1,150 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AEF4A8FC2;
-	Mon, 12 Oct 2026 15:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80DB49E5FE;
+	Mon, 12 Oct 2026 16:11:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791820579; cv=none; b=XMlr4rjASxVMPlaek7kHdUETpFPm2InPWAGJSDWZJjoCgannqLrAUO66dVllJOFOwBaG1NpqFLWhDYIxmF1+5aYdS4dGxkrGh1mZXXG5UdgaSqt//VDblKS4+6NhFfKU930RFiGo6Q6pntQmhI/jbl3uUfN3XKk+9DOjOgMXLsA=
+	t=1791821511; cv=none; b=J7YyCshfQBRCQfUcE90oMAvWXek+68r9h2YEp9INL4StK5y5RciyyLh6rUCwNl0HPI9dCS/s0cKgkBQ+Ka4d3nufYVqDMCWCPlXkP+bhVezaEsj/s1s/0+lE0BlpQdXH+Sj3ppNTfHYI+Nztl6ZP75k8xeKyyA1JvesY25tMNxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791820579; c=relaxed/simple;
-	bh=Msp9ikSwVnULK/6DWYXJFuVVmnxjiRI6tilrQPvf9sc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lEyy1SVc25ByWpuaeECuUF+HlptxiXy4lCjQl/1kVxqgv4MVTom9+kMwwetFq0UblXm3GmaH64oPn1kxosHdSyEMBMW8SoF1dybx8m3ePtqFTcqtDmjnfKODC/mC77Rm9d3qFpZmHtbwmIW0yWZe6dL6FDqhgwdZ+jcb77DB3rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lcCuIdrm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791821511; c=relaxed/simple;
+	bh=6FSgLmlRieYCPz+3j2mwBhdGAKy2QiwnJyeM5ucEzcM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=aDZvDuOo5vbAo8SgKQqte3ShNP9U47krzz2fq0ZlUf7LOz+p4vRIrRaVX6GCZHvjLOBLmMoARGMTfleIEmyhE0jsI5URrgw9kcvoorJCUdV+SWXM9hEuARC3qphXXXYAY2NeNExM9dG6fT61RtDTQLAQAyyQM1Up+Zl9d8lFpJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctUAn24i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lcCuIdrm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFCE21F0089B;
-	Mon, 12 Oct 2026 15:55:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ctUAn24i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789541F0089B;
+	Mon, 12 Oct 2026 16:11:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791820577;
-	bh=rFbms1O2vgiDwDr5XNy7hfOQCE1GiDGN4QD7DcgiMNU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lcCuIdrmMQTUiPwLl5e5Z+CrC201P9TaW7VntAlAQ0wuTIeWArybWpskzP1Cw5dV6
-	 ylJBpTsnaVkD11Tx3RuJLQfK/a8MthDkbqh/N2Qo+NL+mbeJ3F+l2nHLzRgl2fwWrH
-	 B2VMH6xZ4mSRm44O1aVrnpq4KXOYj1KBkqJhj4Zhsip2ZHKhYDPIEZ9S25S3KUpDrh
-	 0/izKAMAcRM9eWvuTZfpYIL58pwYVIybump371ArBjzbMrNsvpmDwuL9EdnDMlpqUp
-	 x6n3EvLO70LPCbwLxz+x7mIQrXQvvZz8TgmnlRpMjxmuB8UzGsynS78NvOMo7KMLyg
-	 CQyvIZ4fN7eXw==
-Date: Mon, 12 Oct 2026 16:55:44 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
-	Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Bert Karwatzki <spasswolf@web.de>, 
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: Re: [PATCH v5 13/38] bpf: arena: mark arena_map_mmap() mappings
- VM_MIXEDMAP
-Message-ID: <as0Buhi_-VCC7xLZ@gremlin>
-References: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
- <20261009-b4-mmap-prepare-vma-flag-sanify-v5-13-923b70125b1e@kernel.org>
- <5b8ef0ce-7429-4d74-b4da-a0561c59b1e2@kernel.org>
+	s=k20260515; t=1791821508;
+	bh=sjrJKhT2IROUQqK2omAaK4ws05KJ8UAbS6zJzFtHQUI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ctUAn24iI2rL/oR620R6zxqpq3Z8NEhkftAF+WHGMFv7Xkweg9/ZNUyUqdhR+pgG9
+	 2plUxunF6z8pqWkcboL/4rTWQ+KigPyVGV0azmutdBnt3zbiXx7LFKy+uwHSRnHIN5
+	 lv21xUxRp5lmsvFaHfI6lnCHaIEAbS5vvQb7u2FXHDWcmzvGDA8HW0Ei880BNPz9yc
+	 jmiIjyJip3DkGAVRLkay0gwEAFNwyxwnTmrc8sn4SEsEBN/KTUdJFoOHwJVt1cyrpC
+	 7le9wXmxgwzlNwkR17WdwGHuNBisSc+NsRscGnNEC+uzturoBHF725GrD7cjAZyl+D
+	 uNSsrgeFKKdFw==
+Content-Type: multipart/mixed; boundary="===============5565528010280399983=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b8ef0ce-7429-4d74-b4da-a0561c59b1e2@kernel.org>
+Message-Id: <99aeee9b4fb782792f6f20be06470233aad1b47aaaa00b4073cc431552f48cac@mail.kernel.org>
+In-Reply-To: <20261012154024.29423-7-leon.hwang@linux.dev>
+References: <20261012154024.29423-7-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v2 06/21] bpf: Add bpf_text_poke_batch() helper in trampoline
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,yatsenko@meta.com,avinash.duduskar@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,jordan@jrife.io,rongtao@cestc.cn,eyal.birger@gmail.com,pulehui@huawei.com,tanjingguo@huawei.com,malin89@huawei.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 12 Oct 2026 16:11:45 +0000 (UTC)
 
-On Mon, Oct 12, 2026 at 05:08:09PM +0200, David Hildenbrand (Arm) wrote:
-> On 10/9/26 20:04, Lorenzo Stoakes (ARM) wrote:
+--===============5565528010280399983==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> > diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> > index 7b6847200b43..b69fe5e34339 100644
-> > --- a/kernel/bpf/arena.c
-> > +++ b/kernel/bpf/arena.c
-> > @@ -620,8 +620,9 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
-> >  	 * clears VM_MAYEXEC. Set VM_DONTEXPAND to avoid potential change
-> >  	 * of user_vm_start. Set VM_DONTCOPY to prevent arena VMA from
-> >  	 * being copied into the child process on fork.
-> > +	 * This is a kernel page so set VM_MIXEDMAP.
-> >  	 */
-> > -	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY);
-> > +	vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND | VM_DONTCOPY);
-> >  	vma->vm_ops = &arena_vm_ops;
-> >  	return 0;
-> >  }
-> >
+> bpf: Add bpf_text_poke_batch() helper in trampoline
+
+TL;DR: The new static bpf_text_poke_batch() has no caller in this patch, so it
+may trigger -Wunused-function and, with CONFIG_WERROR=y, break the build and
+bisection; consider squashing it or marking __maybe_unused.
+
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 21d460866dfe..a2fd0bd8c685 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+
+[ ... ]
+
+> @@ -1863,6 +1864,56 @@ void bpf_trampoline_multi_detach(struct bpf_prog *prog,
+>  	  CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS &&
+>  	  CONFIG_BPF_SYSCALL */
 >
-> Historically, VM_MIXEDMAP really just means: can contain refcounted and
-> non-refcounted things. Everything with a struct page is refcounted.
->
-> I think we are now changing the semantics to mean "maps kernel pages". I think
+> +static int bpf_text_poke_cmp(const void *a, const void *b)
+> +{
 
-Yes.
+[ ... ]
 
-It was sort of implicit before given insert_page() etc. but still really meaning
-that it _might_ be both.
+> +static int bpf_text_poke_batch(struct bpf_text_poke **pokes, u32 cnt)
+> +{
 
-> this is fine, but we really have to update the documentation (and possibly
-> rename this thing to something more expressive?)
+bpf_text_poke_batch() is static and nothing calls it in this commit.  Will
+this trigger a -Wunused-function warning for any config that builds
+trampoline.o?
 
-Yeah I completely agree.
+  kernel/bpf/trampoline.c: warning: 'bpf_text_poke_batch' defined but not
+  used [-Wunused-function]
 
-I will rename it, but I think that's best for 7.5 obviously! :)
+With CONFIG_WERROR=y that becomes a build failure, which would break
+bisection at this point in the series.
 
->
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+The first callers, bpf_trampoline_multi_prog_attach() and
+bpf_trampoline_multi_prog_detach(), only arrive later in the series in
+59e80b53cc6b ("bpf: Add bpf_trampoline_multi_prog_attach/detach()").  That
+commit also wraps these helpers in #ifdef CONFIG_BPF_SYSCALL so they are not
+unused in !CONFIG_BPF_SYSCALL builds.
 
-Thanks!
+Could this helper be squashed into the commit that adds its first user?  If
+it stays separate, could it be marked __maybe_unused until that user arrives?
 
---
-Cheers, Lorenzo
+> +	int i, err;
+> +
+> +	/*
+> +	 * Sort pokes for two purposes:
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38273555988
+--===============5565528010280399983==--
