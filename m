@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
+Received: from mta1.migadu.com (out-19.mta1.migadu.com [95.215.58.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE834A6CF6
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84244AAC4F
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791819867; cv=none; b=aD7MxvEpL+QEB+XERL8ZX2tdi5BoJzzveMgRd8RsGzsj1SIWDFha1h0tcGKPwHK2fdiz3QgPC2hc1hhYyBA0EiKPGZkzKkvBWS83/YF5k4jIwf4g6nMaYQI8H/t69UZJ+RImgdQDPc6EPK/rqjZh8ht5t5ug/It7oXDsecBnbbs=
+	t=1791819886; cv=none; b=ghNYhhcYbqX7HHAuDSk9NcLL8MEuPBcYacvzuaC5CZw69U/GFodrf8BA/Dfv2ibelFzzNAOGdm6Yr+6cKuHARUAZGEhe4y38lAWsADtMejTApWZhlDgblAk3ojQVTKXEFeleiOcdoiQTLkPuSb5tWdohmpOSBNd02SmO983KWdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791819867; c=relaxed/simple;
-	bh=pCel36zqQQ5h5kB32+yCjitXi6Wul951Mg3KJZ5ltwk=;
+	s=arc-20240116; t=1791819886; c=relaxed/simple;
+	bh=RNUPxnQhct34be5Z0buM9fJf70aN/ExmaVf/Fojs7us=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gdt8rYGlFfJVi0P8tXnteAASCLoJpVFOiIDC3dvseMwY2cBuDhScgZjZX01Pf3MsnBSpCe/aLLzm/sTDLqomnd+AkqgzJAGfToBeQiIEWmRQkv7XJLsi3CZKSL9OxhGFYa7fJ+qTMKzsoOE47wz9NXamKaMQ3k4Pk9esjWdXgnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vgBIDT36; arc=none smtp.client-ip=95.215.58.1
+	 MIME-Version; b=r7HMfp8A9LxPLUKlkpU18bE5kknaTAu4wI41A0rNlSPC6qOYTI2HC7jAzukc3fjH1eN1XLE2VZwvGtPmOB6q6S/sYKMmJJJlMpkELzwZoc0QgaLJzTkvYCnZ2BzrSrFCq/fKPAJILIg4bmQPkBJCOUV5pzH3zqoKI8bknS6+H8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QD9MmqRh; arc=none smtp.client-ip=95.215.58.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vgBIDT36"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QD9MmqRh"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=pCel36zqQQ5h5kB32+yCjitXi6Wul951Mg3KJZ5ltwk=;
+DKIM-Signature: a=rsa-sha256; bh=RNUPxnQhct34be5Z0buM9fJf70aN/ExmaVf/Fojs7us=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791819863; v=1; x=1792424663;
- b=vgBIDT36/zGfTRpg8HTyjy+zjvlJWCekG6mN2LGlxaVPgmW+a0C6TsDsR/L6V/HtVG9tpKW2
- Jv9sagkmjbAmlwd0yW0DkvofOoJQzVbbuMH9jAl9OhwP1l19tudl8MEROngsDnSEashzjk+e53s
- kX2Ygvdv2Qugufqwtc6+RtKI=
+ t=1791819882; v=1; x=1792424682;
+ b=QD9MmqRhBN2dhFrUjvl6Y/iQO9l89V8X+BEieniv62Ux9Fiy94Fdw6G2wlSTQBVPrFRXXdwt
+ tgGThG5+iW8h5myrBvczXVkPFDOtRo/5LMNxelI0mC6VZCIQk0GiieRI0CRiFuFjyApZbBCN3kU
+ q10QcjIDKYlROhgLq8L+bNHU=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c9eccac7c8fcb3c4;
-	Mon, 12 Oct 2026 15:44:23 +0000
-X-Mizu-Trace-ID: c9eccac7c8fcb3c4
+Received: by smtp.migadu.com with ESMTPS id 035d91738ae5639f;
+	Mon, 12 Oct 2026 15:44:42 +0000
+X-Mizu-Trace-ID: 035d91738ae5639f
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -59,9 +59,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 14/21] bpf: Add tracing_multi link info support for bpf progs
-Date: Mon, 12 Oct 2026 23:40:16 +0800
-Message-ID: <20261012154024.29423-15-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 15/21] selftests/bpf: Add tracing_multi bpf prog attach test
+Date: Mon, 12 Oct 2026 23:40:17 +0800
+Message-ID: <20261012154024.29423-16-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261012154024.29423-1-leon.hwang@linux.dev>
 References: <20261012154024.29423-1-leon.hwang@linux.dev>
@@ -73,304 +73,164 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Show bpf prog info in the link info.
+Attach to two bpf progs with fentry.multi, fexit.multi, and fsession.multi
+progs.
 
-$ bpftool link
-9: tracing_multi  prog 25
-	attach_type trace_fsession_multi  btf_obj_id 1  count 2
-	prog_id          func_btf_id      addr             cookie           func [module]
-	21               4                ffffffffc080064c 16706819         target_1 [bpf]
-	22               5                ffffffffc08006d4 16706819         target_2 [bpf]
-	pids test_progs(98)
-
+Assisted-by: Codex:gpt-5.5
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- include/uapi/linux/bpf.h       |  7 +++-
- kernel/trace/bpf_trace.c       | 26 ++++++++++----
- tools/bpf/bpftool/link.c       | 63 +++++++++++++++++++++++++++-------
- tools/include/uapi/linux/bpf.h |  7 +++-
- 4 files changed, 82 insertions(+), 21 deletions(-)
+ .../selftests/bpf/prog_tests/tracing_multi.c  | 74 +++++++++++++++++++
+ .../selftests/bpf/progs/tracing_multi_bpf.c   | 52 +++++++++++++
+ 2 files changed, 126 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 94302a3b680c..df66206af3cf 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6891,6 +6891,10 @@ struct bpf_btf_info {
- 	__u32 kernel_btf;
- } __attribute__((aligned(8)));
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+index cc727011f3a2..801136ca63f0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+@@ -12,6 +12,7 @@
+ #include "tracing_multi_verifier.skel.h"
+ #include "tracing_multi_bench.skel.h"
+ #include "tracing_multi_rollback.skel.h"
++#include "tracing_multi_bpf.skel.h"
+ #include "trace_helpers.h"
  
-+enum {
-+	BPF_F_TRACING_MULTI_TGT_PROGS = (1U << 0),
-+};
-+
- struct bpf_link_info {
- 	__u32 type;
- 	__u32 id;
-@@ -6976,10 +6980,11 @@ struct bpf_link_info {
- 			__u32 attach_type;
- 			__u32 count; /* in/out: tracing_multi target count */
- 			__u32 btf_obj_id;
--			__u32 :32;
-+			__u32 flags;
- 			__aligned_u64 ids;
- 			__aligned_u64 addrs;
- 			__aligned_u64 cookies;
-+			__aligned_u64 func_btf_ids;
- 		} tracing_multi;
- 		struct {
- 			__u32 type; /* enum bpf_perf_event_type */
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 8b1a52350cfd..39c911917ae2 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -3709,15 +3709,16 @@ static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
- static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
- 						 struct bpf_link_info *info)
- {
-+	u32 __user *fids = u64_to_user_ptr(info->tracing_multi.func_btf_ids);
- 	u64 __user *ucookies = u64_to_user_ptr(info->tracing_multi.cookies);
- 	u64 __user *uaddrs = u64_to_user_ptr(info->tracing_multi.addrs);
- 	u32 __user *uids = u64_to_user_ptr(info->tracing_multi.ids);
- 	struct bpf_tracing_multi_link *tr_link;
- 	u32 ucount = info->tracing_multi.count;
--	bool has_cookies, show_addrs;
-+	bool has_cookies, show_addrs, has_progs;
- 	int err = 0;
- 
--	if ((uids || ucookies || uaddrs) && !ucount)
-+	if ((uids || ucookies || uaddrs || fids) && !ucount)
- 		return -EINVAL;
- 
- 	tr_link = container_of(link, struct bpf_tracing_multi_link, link);
-@@ -3725,9 +3726,13 @@ static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
- 	info->tracing_multi.attach_type = tr_link->link.attach_type;
- 	info->tracing_multi.count = tr_link->nodes_cnt;
- 	info->tracing_multi.btf_obj_id = btf_obj_id(tr_link->link.prog->aux->attach_btf);
-+	has_progs = !!tr_link->tgt_progs;
-+	info->tracing_multi.flags = has_progs ? BPF_F_TRACING_MULTI_TGT_PROGS : 0;
- 
--	if (!uids && !ucookies && !uaddrs)
-+	if (!uids && !ucookies && !uaddrs && !fids)
- 		return 0;
-+	if (has_progs != !!fids)
-+		return -EINVAL;
- 
- 	if (ucount < tr_link->nodes_cnt)
- 		err = -ENOSPC;
-@@ -3739,20 +3744,27 @@ static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
- 
- 	for (int i = 0; i < ucount; i++) {
- 		struct bpf_tracing_multi_node *mnode = &tr_link->nodes[i];
-+		u32 prog_id, btf_id;
- 		u64 addr, cookie;
--		u32 id;
- 
--		bpf_trampoline_unpack_key(mnode->trampoline->key, NULL, &id);
-+		bpf_trampoline_unpack_key(mnode->trampoline->key, &prog_id, &btf_id);
- 
--		addr = show_addrs ? mnode->trampoline->ip : 0;
-+		if (!show_addrs)
-+			addr = 0;
-+		else if (has_progs)
-+			addr = (u64) mnode->trampoline->func.addr;
-+		else
-+			addr = mnode->trampoline->ip;
- 		cookie = has_cookies ? tr_link->cookies[i] : 0;
- 
--		if (uids && put_user(id, uids + i))
-+		if (uids && put_user(has_progs ? prog_id : btf_id, uids + i))
- 			return -EFAULT;
- 		if (uaddrs && put_user(addr, uaddrs + i))
- 			return -EFAULT;
- 		if (ucookies && put_user(cookie, ucookies + i))
- 			return -EFAULT;
-+		if (has_progs && put_user((u32) mnode->trampoline->key, fids + i))
-+			return -EFAULT;
- 
- 		cond_resched();
- 	}
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 5cffa2d283b4..da7e430b14c8 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -422,12 +422,31 @@ show_uprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
- 	jsonw_end_array(json_wtr);
+ static __u64 bpf_fentry_test_cookies[] = {
+@@ -1126,3 +1127,76 @@ void test_tracing_multi_test(void)
+ 	if (test__start_subtest("fentry_after_multi"))
+ 		test_fentry_after_multi();
  }
- 
-+#define BPF_PROG_PREFIX		"bpf_prog_"
-+#define BPF_PROG_PREFIX_LEN	(sizeof(BPF_PROG_PREFIX) - 1)
 +
-+static const char *
-+sym_name_trim_prefix(struct kernel_sym *sym, bool is_prog)
++static int run_bpf_target(struct bpf_program *prog, __u32 retval, const char *name)
 +{
-+	int prefix_len;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err;
 +
-+	if (!is_prog)
-+		return sym->name;
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
++	if (!ASSERT_OK(err, name))
++		return err;
 +
-+	/* Ref kernel/bpf/core.c::bpf_prog_ksym_set_name() */
-+	prefix_len  = BPF_PROG_PREFIX_LEN;
-+	prefix_len += BPF_TAG_SIZE * 2;
-+	if (sym->name[prefix_len] != '\0')
-+		prefix_len += 1;		/* skip the '_' */
-+	return sym->name + prefix_len;
++	if (!ASSERT_EQ(topts.retval, retval, name))
++		return -EINVAL;
++
++	return 0;
 +}
 +
- static void
- show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
- {
--	bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol;
-+	bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol, tgt_progs;
- 	__u64 *addrs, *cookies;
--	__u32 i, *ids;
-+	__u32 i, *ids, *fids;
- 
- 	if (!dd.sym_count)
- 		kernel_syms_load(&dd);
-@@ -443,6 +462,8 @@ show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
- 	ids = u64_to_u32_arr(info->tracing_multi.ids);
- 	addrs = u64_to_arr(info->tracing_multi.addrs);
- 	cookies = u64_to_arr(info->tracing_multi.cookies);
-+	fids = u64_to_u32_arr(info->tracing_multi.func_btf_ids);
-+	tgt_progs = info->tracing_multi.flags & BPF_F_TRACING_MULTI_TGT_PROGS;
- 
- 	for (i = 0; i < info->tracing_multi.count; i++) {
- 		struct kernel_sym *sym;
-@@ -451,10 +472,12 @@ show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
- 		sym = show_symbol ? find_kernel_sym_by_addr(addr, is_ibt_enabled) : NULL;
- 
- 		jsonw_start_object(wtr);
--		jsonw_uint_field(wtr, "id", ids[i]);
-+		jsonw_uint_field(wtr, tgt_progs ? "prog_id" : "id", ids[i]);
-+		if (tgt_progs)
-+			jsonw_uint_field(wtr, "func_btf_id", fids[i]);
- 		jsonw_uint_field(wtr, "addr", addr);
- 		if (sym) {
--			jsonw_string_field(wtr, "func", sym->name);
-+			jsonw_string_field(wtr, "func", sym_name_trim_prefix(sym, tgt_progs));
- 			if (sym->module[0] == '\0') {
- 				jsonw_name(wtr, "module");
- 				jsonw_null(wtr);
-@@ -903,9 +926,9 @@ static void show_uprobe_multi_plain(struct bpf_link_info *info)
- 
- static void show_tracing_multi_plain(struct bpf_link_info *info)
- {
--	bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol;
-+	bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol, tgt_progs;
- 	__u64 *addrs, *cookies;
--	__u32 i, *ids;
-+	__u32 i, *ids, *fids;
- 
- 	if (!info->tracing_multi.count)
- 		return;
-@@ -919,12 +942,18 @@ static void show_tracing_multi_plain(struct bpf_link_info *info)
- 	printf("btf_obj_id %u  ", info->tracing_multi.btf_obj_id);
- 	printf("count %u  ", info->tracing_multi.count);
- 
--	printf("\n\t%-16s %-16s %-16s %s",
--	       "btf_id", "addr", "cookie", "func [module]");
-+	tgt_progs = info->tracing_multi.flags & BPF_F_TRACING_MULTI_TGT_PROGS;
-+	if (tgt_progs)
-+		printf("\n\t%-16s %-16s %-16s %-16s %s",
-+		       "prog_id", "func_btf_id", "addr", "cookie", "func [module]");
++static void test_link_api_bpf_prog(void)
++{
++	const char *funcs[] = { "target_1", "target_2" };
++	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
++	struct tracing_multi_bpf *skel = NULL;
++	int fds[ARRAY_SIZE(funcs)];
++	struct bpf_link *link;
++
++	skel = tracing_multi_bpf__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "tracing_multi_bpf__open_and_load"))
++		return;
++
++	fds[0] = bpf_program__fd(skel->progs.target_1);
++	fds[1] = bpf_program__fd(skel->progs.target_2);
++
++	opts.fds = fds;
++	opts.funcs = funcs;
++	opts.cnt = ARRAY_SIZE(fds);
++
++	link = bpf_program__attach_tracing_multi(skel->progs.test_fentry, NULL, &opts);
++	if (!ASSERT_OK_PTR(link, "attach_fentry"))
++		goto cleanup;
++	skel->links.test_fentry = link;
++
++	link = bpf_program__attach_tracing_multi(skel->progs.test_fexit, NULL, &opts);
++	if (!ASSERT_OK_PTR(link, "attach_fexit"))
++		goto cleanup;
++	skel->links.test_fexit = link;
++
++	link = bpf_program__attach_tracing_multi(skel->progs.test_fsession, NULL, &opts);
++	if (!ASSERT_OK_PTR(link, "attach_fsession"))
++		goto cleanup;
++	skel->links.test_fsession = link;
++
++	if (run_bpf_target(skel->progs.target_1, 1, "target_1"))
++		goto cleanup;
++	if (run_bpf_target(skel->progs.target_2, 2, "target_2"))
++		goto cleanup;
++
++	ASSERT_EQ(skel->bss->target_1_result, 1, "target_1_result");
++	ASSERT_EQ(skel->bss->target_2_result, 1, "target_2_result");
++	ASSERT_EQ(skel->bss->test_result_fentry, ARRAY_SIZE(funcs), "test_result_fentry");
++	ASSERT_EQ(skel->bss->test_result_fexit, ARRAY_SIZE(funcs), "test_result_fexit");
++	ASSERT_EQ(skel->bss->test_result_fsession_entry, ARRAY_SIZE(funcs),
++		  "test_result_fsession_entry");
++	ASSERT_EQ(skel->bss->test_result_fsession_exit, ARRAY_SIZE(funcs),
++		  "test_result_fsession_exit");
++
++cleanup:
++	tracing_multi_bpf__destroy(skel);
++}
++
++void test_tracing_multi_prog_test(void)
++{
++	if (test__start_subtest("link_api"))
++		test_link_api_bpf_prog();
++}
+diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_bpf.c b/tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
+new file mode 100644
+index 000000000000..3e02602558ad
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++__u64 test_result_fentry;
++__u64 test_result_fexit;
++__u64 test_result_fsession_entry;
++__u64 test_result_fsession_exit;
++__u64 target_1_result;
++__u64 target_2_result;
++
++SEC("syscall")
++int target_1(void *ctx)
++{
++	target_1_result++;
++	return 1;
++}
++
++SEC("syscall")
++int target_2(void *ctx)
++{
++	target_2_result++;
++	return 2;
++}
++
++SEC("fentry.multi")
++int BPF_PROG(test_fentry)
++{
++	test_result_fentry++;
++	return 0;
++}
++
++SEC("fexit.multi")
++int BPF_PROG(test_fexit)
++{
++	test_result_fexit++;
++	return 0;
++}
++
++SEC("fsession.multi")
++int BPF_PROG(test_fsession)
++{
++	if (bpf_session_is_return(ctx))
++		test_result_fsession_exit++;
 +	else
-+		printf("\n\t%-16s %-16s %-16s %s",
-+		       "btf_id", "addr", "cookie", "func [module]");
- 
- 	ids = u64_to_u32_arr(info->tracing_multi.ids);
- 	addrs = u64_to_arr(info->tracing_multi.addrs);
- 	cookies = u64_to_arr(info->tracing_multi.cookies);
-+	fids = u64_to_u32_arr(info->tracing_multi.func_btf_ids);
- 
- 	for (i = 0; i < info->tracing_multi.count; i++) {
- 		__u64 addr = addrs[i];
-@@ -932,9 +961,13 @@ static void show_tracing_multi_plain(struct bpf_link_info *info)
- 
- 		sym = show_symbol ? find_kernel_sym_by_addr(addr, is_ibt_enabled) : NULL;
- 
--		printf("\n\t%-16u %016llx %-16llu", ids[i], addr, cookies[i]);
-+		if (tgt_progs)
-+			printf("\n\t%-16u %-16u %016llx %-16llu",
-+			       ids[i], fids[i], addr, cookies[i]);
-+		else
-+			printf("\n\t%-16u %016llx %-16llu", ids[i], addr, cookies[i]);
- 		if (sym) {
--			printf(" %s", sym->name);
-+			printf(" %s", sym_name_trim_prefix(sym, tgt_progs));
- 			if (sym->module[0] != '\0')
- 				printf(" [%s]", sym->module);
- 		}
-@@ -1140,7 +1173,7 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
- static int do_show_link(int fd)
- {
- 	__u64 *ref_ctr_offsets = NULL, *offsets = NULL, *cookies = NULL;
--	__u32 *ids = NULL;
-+	__u32 *ids = NULL, *func_btf_ids = NULL;
- 	struct bpf_link_info info;
- 	__u32 len = sizeof(info);
- 	char path_buf[PATH_MAX];
-@@ -1229,12 +1262,16 @@ static int do_show_link(int fd)
- 	if (info.type == BPF_LINK_TYPE_TRACING_MULTI && !info.tracing_multi.ids) {
- 		count = info.tracing_multi.count;
- 		if (count) {
-+			bool tgt_progs = info.tracing_multi.flags & BPF_F_TRACING_MULTI_TGT_PROGS;
++		test_result_fsession_entry++;
 +
- 			ids = calloc(count, sizeof(__u32));
- 			addrs = calloc(count, sizeof(__u64));
- 			cookies = calloc(count, sizeof(__u64));
--			if (!ids || !addrs || !cookies) {
-+			func_btf_ids = tgt_progs ? calloc(count, sizeof(__u32)) : NULL;
-+			if (!ids || !addrs || !cookies || (tgt_progs && !func_btf_ids)) {
- 				p_err("mem alloc failed");
- 				close(fd);
-+				free(func_btf_ids);
- 				free(cookies);
- 				free(addrs);
- 				free(ids);
-@@ -1243,6 +1280,7 @@ static int do_show_link(int fd)
- 			info.tracing_multi.ids = ptr_to_u64(ids);
- 			info.tracing_multi.addrs = ptr_to_u64(addrs);
- 			info.tracing_multi.cookies = ptr_to_u64(cookies);
-+			info.tracing_multi.func_btf_ids = ptr_to_u64(func_btf_ids);
- 			goto again;
- 		}
- 	}
-@@ -1282,6 +1320,7 @@ static int do_show_link(int fd)
- 		show_link_close_plain(fd, &info);
- 
- 	free(ref_ctr_offsets);
-+	free(func_btf_ids);
- 	free(cookies);
- 	free(offsets);
- 	free(addrs);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 94302a3b680c..60998ea1381c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6817,6 +6817,10 @@ struct sk_reuseport_md {
- 
- #define BPF_TAG_SIZE	8
- 
-+enum {
-+	BPF_F_TRACING_MULTI_TGT_PROGS = (1U << 0),
-+};
-+
- struct bpf_prog_info {
- 	__u32 type;
- 	__u32 id;
-@@ -6976,10 +6980,11 @@ struct bpf_link_info {
- 			__u32 attach_type;
- 			__u32 count; /* in/out: tracing_multi target count */
- 			__u32 btf_obj_id;
--			__u32 :32;
-+			__u32 flags;
- 			__aligned_u64 ids;
- 			__aligned_u64 addrs;
- 			__aligned_u64 cookies;
-+			__aligned_u64 func_btf_ids;
- 		} tracing_multi;
- 		struct {
- 			__u32 type; /* enum bpf_perf_event_type */
++	return 0;
++}
 -- 
 2.55.0
 
