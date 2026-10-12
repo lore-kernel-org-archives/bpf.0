@@ -1,89 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DBB30D406;
-	Mon, 12 Oct 2026 13:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2D436C0D6;
+	Mon, 12 Oct 2026 13:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791810784; cv=none; b=YycgwS7yLFFdqp+x++6FziUVfH8BY4hi9p/jG2ilDR6vox0DV9g2sVperbhvzpKN02RrpgkRjA8usiO6OVwjlcsrLNmSowTZIhV4ADFnDMnHUOlLoK6egYfWX5dmqMit2XbjsyRTA5K79WpMQ1LWcN9zKBGCPVc5JWusuODwp2s=
+	t=1791812024; cv=none; b=vE+MW/10nxbmFAtj3kqvwmE7P9J3m0YR9oe9gDMm8puZ7WA92A+p1U4gtF0fTUphJMvpvAAzEyNabcbgqRPqiTfVRV8jBFcudTiC2+CUUVQdGuvpKwk0fmQbnXxbhM/A5ZQbdFQtXL52D7i+SGXioWywmMV2Av3FPldHW32a2WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791810784; c=relaxed/simple;
-	bh=P454wXS9DdByiiPHUTNVgjn5IjNWcOJRLu+jD4eg/Pc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SaZB67FFtnOccWeiE8SGdaYjGF927nWfvHEiEXHSUdjtQKIYJpINvWYlW1cQ7yXzS2qUCqSF9pX8MmUu/McZt92qpq07Ql+L7u1QhNM+mFLct0cQBC15CYek6XZeV7CpdfuU8JQW75PKHDXtkRUGW/h3jFnOnJH5/MXiA1YR1ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDpfWVnL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791812024; c=relaxed/simple;
+	bh=JqUgXWON+6+bntjWTf83yFZJzED4XjpGxZwD1jCOx+U=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=UNLor6SxC/esER8jcN3FgnVdZTtfRGtvdSbAP/gm/cA2tKFmm40tpEkUYtdHmr0YG2RcpR5QBJpu1anW0fnNgNzn1WyhmIVpRtI4POS14Mz5imwTa2GvrxMu9tLG9zwfLFMzDo31dhdnXNsRmn5dE+x5+6WmR3aCjx6DkTBKMo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/ehTtty; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDpfWVnL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B66A21F0089C;
-	Mon, 12 Oct 2026 13:12:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/ehTtty"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE9B1F0089B;
+	Mon, 12 Oct 2026 13:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791810782;
-	bh=4I5B7wBeXWUXzc9QUIb5L0wjsowp8PcPTfJjf0v/5MY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KDpfWVnLq9UsVjiuPGdSN9B+cXar5q+l6DBPzhmkDs+Ueb+r/Z8+7AbiaQcbXCLc9
-	 VNOnSmW8xS6bS/TAcyQ0f/pSevPXUEVgqfdbxP3WlBTOMB/gY12NSlqp3+whay9o8u
-	 SfYjiqBSX2o4k3933OLtpyYsadTur2naFzobQrigUJwNpGTMCuSa4cotQ63NgKCJiU
-	 Si3VBhD4g2S5Nx4OULNzEaPPu0qIdUIZ8JnRW+28Kb7x0GLpy8BBhN8su+PDY+YWum
-	 JGXgi0p0A69k2YrSGKqWSjLUZW1fpovIgDPH9GwXKDR+IKcL1JCaw4IqS7rJkndVkz
-	 3pDHjpNGHf+kA==
-Date: Mon, 12 Oct 2026 15:12:53 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Manuel Huber <manuelh@nvidia.com>
-Cc: Andrew Halaney <andrew@amutable.com>, 
-	"bot+bpf-ci@kernel.org" <bot+bpf-ci@kernel.org>, "ast@kernel.org" <ast@kernel.org>, 
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>, 
-	"agk@redhat.com" <agk@redhat.com>, "snitzer@kernel.org" <snitzer@kernel.org>, 
-	"mpatocka@redhat.com" <mpatocka@redhat.com>, "bmarzins@redhat.com" <bmarzins@redhat.com>, 
-	"dhowells@redhat.com" <dhowells@redhat.com>, "jarkko@kernel.org" <jarkko@kernel.org>, 
-	"paul@paul-moore.com" <paul@paul-moore.com>, "jmorris@namei.org" <jmorris@namei.org>, 
-	"serge@hallyn.com" <serge@hallyn.com>, "ebiggers@kernel.org" <ebiggers@kernel.org>, 
-	"tytso@mit.edu" <tytso@mit.edu>, "corbet@lwn.net" <corbet@lwn.net>, 
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "rdunlap@infradead.org" <rdunlap@infradead.org>, 
-	"dm-devel@lists.linux.dev" <dm-devel@lists.linux.dev>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"fsverity@lists.linux.dev" <fsverity@lists.linux.dev>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	"martin.lau@kernel.org" <martin.lau@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "mason@kernel.org" <mason@kernel.org>, 
-	"ihor.solodrai@linux.dev" <ihor.solodrai@linux.dev>, Fan Wu <wufan@kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
-Message-ID: <20261012-wusste-werfen-loben-94aac9fd9cbe@brauner>
-References: <20261008-ajhalaney-dmverity-key-identifier-v2-1-008456d189cb@amutable.com>
- <910460850fd4163dadb804fbdf6c17f6a9dfec060f4d865a17df87336ea3e165@mail.kernel.org>
- <asgQxTE-6YtEgvYZ@toolbx>
- <DM4PR12MB61364B4F81AE7A8D1FB71E1BDE902@DM4PR12MB6136.namprd12.prod.outlook.com>
+	s=k20260515; t=1791812022;
+	bh=D15LDEeqeI9N/bgW/pCjTxRVQlTpy79Ogy+0e1U5DQs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=g/ehTttyT/xX5YzNlw0hR75xfZ296OokJ17p6HZGYVva+IxMtOBBryXcVR35JQGzq
+	 ukhlN3dcIakuqW1/iHU0WhaBhjjwt9DgfFOHJGwZzkGnNHemNGVDpLagPhphzk8Qzs
+	 YM+TCt6U8ciiexwViMCbptULyD4/XeQEoHtTzC+DwGCrwgJ11z7Hwlh6lfH5r1iTUb
+	 4uISkb8NIEv997qQ2RZzFsgf3EN6GZrk9wen+j55InLlYDsmXoqyyRy+58s90Z2u0m
+	 ydqLy69eYQGkNWdPBMishiw5vcOiAN3vUG3sM3t1BkzA7iR5lgfVs/AYyIPGB8aF4V
+	 P3po6lYouMi+g==
+Message-ID: <sashiko-outbox-168187@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 2/2] net/mlx5e: Batch ICOSQ trigger RCU
+ synchronization
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tariq Toukan" <tariqt@nvidia.com>
+Cc: bpf@vger.kernel.org, linux-rdma@vger.kernel.org
+In-Reply-To: <20261011133212.807979-3-tariqt@nvidia.com>
+References: <20261011133212.807979-1-tariqt@nvidia.com>
+ <20261011133212.807979-3-tariqt@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 12 Oct 2026 13:33:41 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB61364B4F81AE7A8D1FB71E1BDE902@DM4PR12MB6136.namprd12.prod.outlook.com>
 
-On Sun, Oct 11, 2026 at 09:35:43AM +0000, Manuel Huber wrote:
-> On Thu, Oct 08, 2026 at 02:57:00PM -0700, Andrew Halaney wrote:
-> > With the BPF keyring ID already being merged here in bpf-next, plus
-> > Jarkko's feedback/RB, I continued following the current pattern instead
-> > of walking back the BPF keyring ID, and dealing with the
-> > builtin/module/rodata differences I alluded to that would make that
-> > approach a little more annoying (at least with how I thought it thru).
-> 
-> Another data point for this design choice: after initial discussions
-> with Fan Wu, I am about to propose a dedicated .ipe keyring for IPE
-> policy-signature verification. The keyring would be exposed to
-> userspace so that a trusted entity can provision keys, modeled after
-> the .dm-verity keyring.
-> 
-> I do not want to introduce churn to this discussion. I am happy to
-> establish the reserved ID range and generic registration interface
-> upon proposing my changeset, to establish this separately, or to
-> follow any other suggestions. Getting guidance for this subject ahead
-> of time for the case where 'yet another keyring' is introduced would be
-> highly appreciated.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] net/mlx5e: Lock bypass in mlx5e_trigger_napi_icosq due to prematur=
+e flag clear
+- [High] net/mlx5e: race condition in ICOSQ NAPI trigger due to unordered c=
+lear_bit
+--
 
-I think another keyring for just .ipe is fine if they want that. I
-wonder what you use ipe for. I've implemented ipe via a simple bpf lsm
-in userspace (well, for dm-verity. We don't use IMA or fsverity.). It's
-available in systemd itself. 
+commit dcc196ca7d5ea35aa83767536fe42c5734f5a395
+Author: Carolina Jubran <cjubran@nvidia.com>
+
+net/mlx5e: Batch ICOSQ trigger RCU synchronization
+
+This commit splits mlx5e_trigger_napi_icosq() to mark ICOSQs as requiring
+locking, waits for a single RCU grace period, and then triggers all of them
+during channel activation. It also retains the existing synchronization
+semantics for standalone callers.
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/=
+net/ethernet/mellanox/mlx5/core/en_main.c
+> index fe4e5d0b2e9a9..58e4874b664f1 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -2837,14 +2837,11 @@ static int mlx5e_channel_stats_alloc(struct mlx5e=
+_priv *priv, int ix, int cpu)
+[ ... ]
+> -void mlx5e_trigger_napi_icosq(struct mlx5e_channel *c)
+> +static void mlx5e_trigger_napi_icosq_post_sync(struct mlx5e_channel *c)
+>  {
+>  	struct mlx5e_icosq *sq =3D &c->icosq;
+>  	bool locked;
+> =20
+> -	set_bit(MLX5E_SQ_STATE_LOCK_NEEDED, &sq->state);
+> -	synchronize_net();
+> -
+>  	locked =3D mlx5e_icosq_sync_lock(sq);
+>  	mlx5e_trigger_irq(sq);
+>  	mlx5e_icosq_sync_unlock(sq, locked);
+> @@ -2852,6 +2849,13 @@ void mlx5e_trigger_napi_icosq(struct mlx5e_channel=
+ *c)
+>  	clear_bit(MLX5E_SQ_STATE_LOCK_NEEDED, &sq->state);
+
+[Severity: High]
+Can the unconditional clearing of this bit break the lock bypass mechanism
+for concurrent callers that have already waited for the RCU grace period?
+
+If concurrent devlink health recoveries for TX and RX reporters run on the
+same channel (e.g., mlx5e_tx_reporter_err_cqe_recover() and
+mlx5e_rx_reporter_err_rq_cqe_recover()), both will call
+mlx5e_trigger_napi_icosq() and set the MLX5E_SQ_STATE_LOCK_NEEDED bit
+before calling synchronize_net().
+
+If the first thread to wake up executes mlx5e_trigger_napi_icosq_post_sync(=
+),
+acquires the lock, and unconditionally clears the bit here, would the second
+thread then bypass the lock?
+
+When the second thread executes mlx5e_trigger_napi_icosq_post_sync(), it
+calls mlx5e_icosq_sync_lock(). Since the bit was cleared by the first
+thread, mlx5e_icosq_sync_lock() would see the bit cleared:
+
+drivers/net/ethernet/mellanox/mlx5/core/en.h:mlx5e_icosq_sync_lock() {
+    if (likely(!test_bit(MLX5E_SQ_STATE_LOCK_NEEDED, &sq->state)))
+        return false;
+    ...
+}
+
+Will this cause the second thread to call mlx5e_trigger_irq() without the
+lock, racing with NAPI softirq operations and leading to queue corruption?
+
+[Severity: High]
+Does this clear_bit() execution lack a memory barrier, allowing it to be
+reordered before the doorbell write in mlx5e_trigger_irq()?
+
+spin_unlock_bh() in mlx5e_icosq_sync_unlock() provides RELEASE semantics,
+which prevents preceding memory operations from being reordered after the
+release. However, it allows subsequent operations, like this clear_bit(),
+to be reordered before the release.
+
+If the CPU reorders the clear_bit() operation before the I/O doorbell write
+in mlx5e_trigger_irq(), and is delayed, could a concurrent NAPI poll write
+new WQEs and its own doorbell, followed by this CPU writing its older
+doorbell and corrupting the queue?
+
+>  }
+> =20
+> +void mlx5e_trigger_napi_icosq(struct mlx5e_channel *c)
+> +{
+> +	set_bit(MLX5E_SQ_STATE_LOCK_NEEDED, &c->icosq.state);
+> +	synchronize_net();
+> +	mlx5e_trigger_napi_icosq_post_sync(c);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261011133212.8079=
+79-1-tariqt@nvidia.com?part=3D2
