@@ -1,137 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D054AF679;
-	Mon, 12 Oct 2026 16:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E244A4983;
+	Mon, 12 Oct 2026 16:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791822821; cv=none; b=FHTCmJ6TvtyoMLmUyy2r8FniLQcC5RkYF/NQzT46TQrzdUXl02Fy4OY910y8pYs3DmqBS8b96zNWYgd1V6oQAZGPNZNpyNpYIkwyye/ldSS30NAbKCbeOFYAcQiglY1pDvdjzY0YJPqmosrRhUYbXNvIumy5p23X8upRqsNbizQ=
+	t=1791823008; cv=none; b=DDw40zbsmALrxA/yeHS6H6IpGVMXyf8M70M2unF3lTzpEBSa72LPFIJq0OxTzHNZN0Udur04SuTSG6/wlwkQqH3AvYmUAZ7zdL5zp5VzIxOUlDvmRxpW3pK9yzzvZ5udakdgW4L66qHBLIJzzLSdE8PomfDjN/5ynfHCEMjqpZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791822821; c=relaxed/simple;
-	bh=k/bLWMyo1MfdY38bfB6FeVYLTuUFGWf52fDcfjOarFI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=IDQHiX8ut65dztLYHTOUPAdaE2J11o6KQQNEf0lrOjncmXa65wpBYdnaGUUoDOuYSKGvJhub72jDyfT0I4Npn5IjfjzytwJUEuvKsz4ZtYSqoiadQFAnq98pFdeH7lSckCY+Qjlef3KzUoZ4tmQ4AlCEr/nE3Rx7umIfWvEQyEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVCnjLQf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791823008; c=relaxed/simple;
+	bh=lS65VTYOy71Tt0C/gecqcnSLKjaDdjm5KAh124Itp1U=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=a5DSK0QosXzMD4Y1ZmpI9UxcwWGWwagwrMe8S7+xvUfvW9XRF12OnEXG+ODrnRg2Aq+xgoM18Dg8mV3GjtRK+ROW6Lju7ZXXSSA18b/9kOl+xvgCDN0HzDg6xD24Vb54LmqqbgN8YEXXdZ77bJQbJg4zmXSJi0QG/jDrONWaqG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PCJa24Ij; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVCnjLQf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7ADE1F0089B;
-	Mon, 12 Oct 2026 16:33:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PCJa24Ij"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6971F1F0089B;
+	Mon, 12 Oct 2026 16:36:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791822819;
-	bh=2DrFPHb/Fo1ylluShOQcMbUKXa3rzjizd/SdjXA1biM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=VVCnjLQfpX31M9l8MjNB3Hdnkz0t0z58FwGToTrm36hA3X1ymN8cRvexjEpeIhv+9
-	 lkfcSM1leYwVByMdzD9IL1TDJewRKtPjNnq3AzOFpO/8vyeB9CcCf+a1ZsEbJvhVS2
-	 d8HQxJQGOBoy47YuZibor+cnGHYlcb+vozj5IkQ8n+mEUWoJgUM3s7B1QUZp+aXfto
-	 tAW1YAeTnVRFtg8q9BODeZPjsXxHU2XDBE35nnpKZSR8MldGQkWC6GY8OQNf+Up0J5
-	 Inozfx7NqGvbFE2QBa/11rNvl3WyjGD2otLUdTqh847VjP9tXGXraN43Iu3XVjh4T4
-	 HBJoB528dkWSQ==
-Content-Type: multipart/mixed; boundary="===============7230923938768893541=="
+	s=k20260515; t=1791823006;
+	bh=rs9xq6F89m82dVlmpRzPL7OWq5H23Mx4nxInBIHtSbs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PCJa24Ij2crw6NrWb5Dk6TeKhX40tgkOjuQoC5zbMe0GDEnwXTcuw18qfGFYiU+K7
+	 75px+iFe7ryMM2meOjuzCP4CBodEmiN/8JKdu006TU106tyMXtw2j/WONSzfk9ikr9
+	 oZZ5mG+8d44vZYpPtqr5uWhJF2melbXloS76ZH86IyT5vsnB7of6YXnBinV4FiHvih
+	 PIps6Eil4yzOe8SW+UlmelMeFJ0K6haUW4ocj7Gdn6KC5u4CgFPCNzzgMbVlwpu5Tu
+	 W6rZboQRklqMyRzVY+qX+FRCgp1E++7K0wXJfsOiE/bl/wH9RNdGpfCOqPECkjDCN6
+	 Q1p0eKijzDBDA==
+Message-ID: <sashiko-outbox-168400@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 14/21] bpf: Add tracing_multi link info
+ support for bpf progs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261012154024.29423-15-leon.hwang@linux.dev>
+References: <20261012154024.29423-1-leon.hwang@linux.dev>
+ <20261012154024.29423-15-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 12 Oct 2026 16:36:45 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <c25b0427c6767cbd93957b11c0b85088c4d0a8e7f5f303b3e69f24c092a93a09@mail.kernel.org>
-In-Reply-To: <20261012154024.29423-15-leon.hwang@linux.dev>
-References: <20261012154024.29423-15-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v2 14/21] bpf: Add tracing_multi link info support for bpf progs
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,yatsenko@meta.com,avinash.duduskar@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,jordan@jrife.io,rongtao@cestc.cn,eyal.birger@gmail.com,pulehui@huawei.com,tanjingguo@huawei.com,malin89@huawei.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 12 Oct 2026 16:33:36 +0000 (UTC)
 
---===============7230923938768893541==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] bpftool: buffer over-read of uninitialized heap memory in sym_na=
+me_trim_prefix()
+- [Medium] bpf: strict fids check in bpf_tracing_multi_link_fill_link_info(=
+) breaks UAPI
+--
 
-> bpf: Add tracing_multi link info support for bpf progs
+commit 69edd76aa1ef54260b1403707834fa758ec91952
+Author: Leon Hwang <leon.hwang@linux.dev>
+bpf: Add tracing_multi link info support for bpf progs
 
-TL;DR: The new -EINVAL in tracing_multi fill_link_info may break existing
-userspace, e.g. bpftool link show, when querying links with bpf prog targets
-without func_btf_ids; it may stop listing later links.
+This commit adds support for showing BPF program information in tracing_mul=
+ti=20
+links via bpftool.
 
 > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 8b1a52350cfd..39c911917ae2 100644
+> index 8b1a52350cfda..39c911917ae24 100644
 > --- a/kernel/trace/bpf_trace.c
 > +++ b/kernel/trace/bpf_trace.c
-
 [ ... ]
-
-> @@ -3725,9 +3726,13 @@ static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
->  	info->tracing_multi.attach_type = tr_link->link.attach_type;
->  	info->tracing_multi.count = tr_link->nodes_cnt;
->  	info->tracing_multi.btf_obj_id = btf_obj_id(tr_link->link.prog->aux->attach_btf);
-> +	has_progs = !!tr_link->tgt_progs;
-> +	info->tracing_multi.flags = has_progs ? BPF_F_TRACING_MULTI_TGT_PROGS : 0;
->  
+> @@ -3725,9 +3726,13 @@ static int bpf_tracing_multi_link_fill_link_info(c=
+onst struct bpf_link *link,
+>  	info->tracing_multi.attach_type =3D tr_link->link.attach_type;
+>  	info->tracing_multi.count =3D tr_link->nodes_cnt;
+>  	info->tracing_multi.btf_obj_id =3D btf_obj_id(tr_link->link.prog->aux->=
+attach_btf);
+> +	has_progs =3D !!tr_link->tgt_progs;
+> +	info->tracing_multi.flags =3D has_progs ? BPF_F_TRACING_MULTI_TGT_PROGS=
+ : 0;
+> =20
 > -	if (!uids && !ucookies && !uaddrs)
 > +	if (!uids && !ucookies && !uaddrs && !fids)
 >  		return 0;
-> +	if (has_progs != !!fids)
+> +	if (has_progs !=3D !!fids)
 > +		return -EINVAL;
->  
->  	if (ucount < tr_link->nodes_cnt)
->  		err = -ENOSPC;
 
-Does this new -EINVAL break existing userspace that queries a tracing_multi
-link with bpf prog targets?
+[Severity: Medium]
+Does this strict equality check break forward compatibility for generic=20
+userspace tools?
 
-A caller written before this change passes ids, addrs and cookies, but has no
-way to supply func_btf_ids.  For example, the bpftool already in the tree does
-a two-step query in do_show_link():
+If a tool unconditionally pre-allocates and provides a func_btf_ids array=20
+while querying an older, non-BPF-targeted tracing_multi link (where has_pro=
+gs=20
+is false), bpf_obj_get_info_by_fd() will fail with -EINVAL.
 
-    if (info.type == BPF_LINK_TYPE_TRACING_MULTI && !info.tracing_multi.ids) {
-        ...
-        info.tracing_multi.ids = ptr_to_u64(ids);
-        info.tracing_multi.addrs = ptr_to_u64(addrs);
-        info.tracing_multi.cookies = ptr_to_u64(cookies);
-        goto again;
+Would it be safer to gracefully ignore or zero-fill the fids buffer if the=
+=20
+target does not have programs, rather than rejecting the query entirely?
 
-On the second call, for a link with prog targets, has_progs is true and fids
-is NULL, so this check returns -EINVAL:
+> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+> index 5cffa2d283b47..da7e430b14c8a 100644
+> --- a/tools/bpf/bpftool/link.c
+> +++ b/tools/bpf/bpftool/link.c
+[ ... ]
+> @@ -422,12 +422,31 @@ show_uprobe_multi_json(struct bpf_link_info *info, =
+json_writer_t *wtr)
+>  	jsonw_end_array(json_wtr);
+>  }
+> =20
+> +#define BPF_PROG_PREFIX		"bpf_prog_"
+> +#define BPF_PROG_PREFIX_LEN	(sizeof(BPF_PROG_PREFIX) - 1)
+> +
+> +static const char *
+> +sym_name_trim_prefix(struct kernel_sym *sym, bool is_prog)
+> +{
+> +	int prefix_len;
+> +
+> +	if (!is_prog)
+> +		return sym->name;
+> +
+> +	/* Ref kernel/bpf/core.c::bpf_prog_ksym_set_name() */
+> +	prefix_len  =3D BPF_PROG_PREFIX_LEN;
+> +	prefix_len +=3D BPF_TAG_SIZE * 2;
+> +	if (sym->name[prefix_len] !=3D '\0')
 
-    if (has_progs != !!fids)
-        return -EINVAL;
+[Severity: Medium]
+Can this result in an out-of-bounds read if the kernel symbol name is short=
+er=20
+than the prefix length?
 
-bpf_link_get_info_by_fd() returns before copy_to_user() when fill_link_info()
-fails, so the caller also never sees the new flags value that would explain the
-failure.
+In bpftool, sym->name is allocated using libbpf_reallocarray() and populate=
+d=20
+via sscanf(), which null-terminates the string but leaves the remainder of=
+=20
+the buffer uninitialized.
 
-do_show_link() then prints "can't get link info: Invalid argument", and
-do_show() does:
+If a target address resolves to a short kernel symbol (for example, due to =
+a=20
+TOCTOU race where a BPF program is unloaded and its vmalloc address is=20
+reused), sym->name[prefix_len] evaluates uninitialized heap memory. If that=
+=20
+byte happens to be non-zero, it skips it and returns a pointer into the=20
+uninitialized region, potentially corrupting CLI or JSON output.
 
-    err = do_show_link(fd);
-    if (err)
-        break;
+Should we verify that strlen(sym->name) is sufficiently large before checki=
+ng=20
+the character at prefix_len?
 
-so "bpftool link show" stops at the first such link and does not list the
-links after it.  Any other tool that only wants addrs or cookies for this link
-type would hit the same error.
+> +		prefix_len +=3D 1;		/* skip the '_' */
+> +	return sym->name + prefix_len;
+> +}
 
-The reverse direction also fails: a link without prog targets and a non-NULL
-func_btf_ids now returns -EINVAL for a request that would have succeeded
-before.
-
-These queries worked before this commit.  The check looks like it is needed
-only because ids now changes meaning, and carries prog IDs when has_progs is
-set:
-
-    put_user(has_progs ? prog_id : btf_id, uids + i)
-
-Would it work to keep ids as BTF IDs and return the prog IDs in a separate new
-array, or to fill only the arrays the caller asked for, the way ids, addrs and
-cookies are already optional one by one?
-
-The commit message does not mention this behavior, and no later patch in the
-series changes it.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38273555988
---===============7230923938768893541==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012154024.2942=
+3-1-leon.hwang@linux.dev?part=3D14
