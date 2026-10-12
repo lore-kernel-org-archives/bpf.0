@@ -1,128 +1,148 @@
-Received: from mail-m19731102.qiye.163.com (mail-m19731102.qiye.163.com [220.197.31.102])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803B244C4FC
-	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 09:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F3444C4FC
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 09:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795827; cv=none; b=WL3jVdGj7d/KIevAiTNWIhW5dW+chQusrQPYDymUqt7pCOtkJXZf6Xf4lQWNCte788y3xLr+hJpia0Ws+LILTXfGOFsVJBJePVQ0W+O/sOHpc3SSkTgY43BHeBDxm7SbqiKsHhnG0rDZaRpFKjjnGxM8/c+oYS2jpY5ynbnOzUQ=
+	t=1791795868; cv=none; b=BKyPTKthnz+y39W+UoZnMb+BOtU9QfRxoYbD/ygptpJiq3C8qqdUbZUfZSq8k/C9eL7OQuWGTzxy1Y7MPM+6Hzz4vZTRU1LhhkjXb28PQTEaMU/rBUv+DbgnJuQX4ob/EZQwgr9NzEhJ7Q+kFh5UDzKbrvPHJeBN+zkOewXgXF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791795827; c=relaxed/simple;
-	bh=qq24gq8xOODGxEvRZIzQk13CKpmloXCbSVQeI82A8GY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N9kJ5Gi0ZEf6RQEmufzX2/yFI5JI9DjNsm8/8beRuPuPXz9iSfPVBKQKAgb16ktZq37uP4YU1q9L9wMxDAuihe+t8oEmDEbPN98dm/J/s97h7MpR/y0dI3MZ4r+0/vjx9ekNwxutmkIeUYpmnYYXoYllVjeS9z7cWFm6qMTR5zQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=220.197.31.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from [192.168.0.59] (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1ff4ec573;
-	Mon, 12 Oct 2026 14:41:15 +0800 (GMT+08:00)
-Message-ID: <d64b6ea9-20a6-47bf-b0ff-1f63d9c8ca20@easystack.cn>
-Date: Mon, 12 Oct 2026 14:41:14 +0800
+	s=arc-20240116; t=1791795868; c=relaxed/simple;
+	bh=Z9sdoXZiCAvXUksggZN7Bwbtvi9NyuLIEb/gHrd8Sbs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=V2We79/RVdIMmrukCD55hBbmKQM6tKhS3vLSkWBT/8bccmeQqBpGUbGacTFiQjMJAWRvxNXetvh9RQimTGb+H1a+c4sFRQBayr1hoFvWmCySzkSeycR5hgtfUPc2CB41tXj8duAWCth9ue0vxOfgeToDJqFJmGzA5o7F4ngooe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RqRZQvaW; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RqRZQvaW"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6acbdbc1725so1910026a12.3
+        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 02:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1791795866; x=1792400666; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=lSSxuYb41ZPYRHGZDzePbKtEh17LW+nxXJKra7Xv65k=;
+        b=RqRZQvaWT6xBe7H/A9rPcDR10OJ0lzcEhoftxyQHMqEMmm/Y+wBquD75iUQZdKrcHa
+         34xDMG9TegiVuEpiCu032EoQiF6Ph6lhXHwpw8HB97VqlIvvVH7IGdMFqJ9K2A1VVica
+         Dz+KfYa97gfH78yWoe9otJEtJ6KqAEc4UH2x8XqGiWZ87F0Ec9xJhG43cMTLl9Lh/3bq
+         uUlfw997l/EHUeElgLCrYljXqq0v+R623wuUHZ5lioDpenb5sdCEj+67/RpWEkZ90m4m
+         qUhgB0oDj8X8Vpwkg+NFzHkZ+qEDsKo+p2H1MO1n3xOUYch+lCuO5fxfDDm7sC06kkbM
+         eC1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791795866; x=1792400666;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=lSSxuYb41ZPYRHGZDzePbKtEh17LW+nxXJKra7Xv65k=;
+        b=2uS8twxB3MRj7ZqW5Ev9ut4nAjFPgAiBFHQ756rm9uW683fy6hBK46Xk9tctsA7O4L
+         51F8tylcvjP4ZdFaCjHDXWofjG3VC+wSVhiEoteQOEsfQhBZE+PG/ObjsepWEhLw8ppX
+         KAYVFs1QV2S1sTyM74aIIk+XMNHIKnJXv9ehasaRL4IV6eQwdawzHmKbw39Di0x60PEr
+         5N1hVaDWilzshr3YIEa+Lw+BHLB4qS4yENybOTv9qe0w8QHyPEfXpq8O6o6XRxTCKsHX
+         2kzdAgL7zHIn6CSOjUGxQlJmzFO9pfMIhpSCoG6OfxPs+TwGxmzCxz94/WvMnAbTVEjM
+         04cQ==
+X-Gm-Message-State: AFq9FYIcJRsSV/AP73dpsebM8+9PKsUVKvGkmR3UJnNOwExmu1Ui98c+
+	sjnnU1sciXFJWbqqUyUVwpsoyuA0ZJATSDa/Pcg29D6WzkGqBmypvhFYdFq3+1VNoZU=
+X-Gm-Gg: AYBFou1r/Wf/vA4aRRnZx/ymH564gj/uwwBKaTpDyHmOtZnejZnNMHtSyCEhECbInNE
+	C0/hNZ0mLQWZYuw6T2k5xJqU25uZQy3WfHkBsQwfq7VVSbflouAOjIZcPb+Ex9uALnuLef2ZOd9
+	cS+Dcf767iiHLQWXxydHgVYOC8lv/y/Ml1iaB5r9T3AQ3GxQcHp8CRNGlt0EuL8KBgzg/rMLKn/
+	q1YCKWlVte6JWZxih6SqbFYKqrHYRvSCXjEyFUSrer36yff++/PgWOwtc7aTb4d3jWRHeBvaUi9
+	v5rmxa13WFp1bTQ8Op90zw3FlW4snMCZqq5OuMrb6Dypr85e4tDsTJSC1px2FWWf3k1vsZ8t3sB
+	ROVUFiE2EbwRNHtLsay9YAQKE/Ff9daLRenwIphUVjiDhPyeMN953RuDdt9sknsgE+X+rEKQ+iW
+	k4tOrCupsaP8pCCDxiD8u9g6L1qpo2hbgb+YbXShuKg8c4tgvXTZXGPtRnlk0C18TXN+keMXQel
+	Mh3b8upp6LlVNw96k4hJSxTg1e7MAciagvvytEDu9IZ/+dn4DrYCr+KpzE+Lhk2vy5duPPk5C3m
+	NIbUxU9C2FzOEQ==
+X-Received: by 2002:a05:6402:321c:b0:6af:9bef:cf75 with SMTP id 4fb4d7f45d1cf-6b17c1e03e9mr7944049a12.4.1791795865570;
+        Mon, 12 Oct 2026 02:04:25 -0700 (PDT)
+Received: from cloudflare.com (2a01-110f-491b-1300-bcd0-2dc6-3ac4-45a2.aa.ipv6.supernova.orange.pl. [2a01:110f:491b:1300:bcd0:2dc6:3ac4:45a2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b179e03428sm4548461a12.37.2026.10.12.02.04.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 02:04:25 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jan-Gerd Tenberge <janten@gmail.com>
+Cc: bpf@vger.kernel.org,  ast@kernel.org,  daniel@iogearbox.net,
+  john.fastabend@gmail.com,  jiayuan.chen@linux.dev,  edumazet@kernel.org,
+  kuniyu@google.com,  pabeni@redhat.com,  willemb@google.com,
+  davem@davemloft.net,  kuba@kernel.org,  horms@kernel.org,
+  yonghong.song@linux.dev,  netdev@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  stable@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf, sockmap: Fix UAF when map user reference is
+ revived
+In-Reply-To: <20261008095656.92793-1-janten@gmail.com> (Jan-Gerd Tenberge's
+	message of "Thu, 8 Oct 2026 11:56:56 +0200")
+References: <20261008095656.92793-1-janten@gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Mon, 12 Oct 2026 11:04:24 +0200
+Message-ID: <87v777jnmv.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] mm/page_owner: add open-coded page_owner iterator
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261009112308.240769-1-zhen.ni@easystack.cn>
- <20261009112308.240769-4-zhen.ni@easystack.cn>
- <sashiko-outbox-165462@kernel.org>
-From: "zhen.ni" <zhen.ni@easystack.cn>
-In-Reply-To: <sashiko-outbox-165462@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa12ed8141e0229kunm8bb9177258ed1e
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDTh1CVk4fHUJIGRhMGUoZTlYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVCQk
-	lOS1VKS0tVSkJLQlkG
+Content-Type: text/plain
 
+On Thu, Oct 08, 2026 at 11:56 AM +02, Jan-Gerd Tenberge wrote:
+> bpf_map_put_uref() invokes map_release_uref after usercnt reaches zero,
+> before bpf_map_put() drops the map reference. BPF_MAP_GET_FD_BY_ID can
+> find the map during that callback and raise usercnt again.
+>
+> The sockmap and sockhash release callbacks unconditionally drop programs
+> without taking sockmap_mutex. A concurrent attach through the revived fd
+> can therefore publish a new program before the stale callback drops it.
+>
+> For a bpf_link attachment, this leaves plink set while pprog is NULL, so
+> link release warns and leaves the attachment slot unusable. The callback
+> can also drop the program between sock_map_prog_update() and the later
+> bpf_prog_inc(). If the program fd is closed concurrently, this removes
+> the last reference and schedules an RCU free. The subsequent increment
+> then resurrects a zero reference and leaves link->prog pointing to memory
+> that will be freed. A KASAN reproducer triggers a slab-use-after-free when
+> reading information from that link.
+>
+> Triggering the race requires CAP_SYS_ADMIN in the initial user namespace,
+> because reviving the map uses BPF_MAP_GET_FD_BY_ID. A deterministic KASAN
+> reproducer is available privately on request. It was used to verify the
+> UAF before this change and its absence afterwards.
+>
+> Serialize the release callbacks with program updates using sockmap_mutex
+> and recheck usercnt under the mutex. If the map was revived, leave its
+> programs intact. Move the map user-reference put in link release outside
+> the mutex to avoid recursively taking sockmap_mutex when it drops the last
+> user reference.
+>
+> Fixes: 699c23f02c65 ("bpf: Add bpf_link support for sk_msg and sk_skb progs")
+> Assisted-by: LLM
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jan-Gerd Tenberge <janten@gmail.com>
+> ---
 
-在 2026/10/9 20:00, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Critical] bpf: buffer overflow in bpf_page_owner_stack_snprint() due to missing __sz suffix
-> - [High] bpf: Panic DoS and OOB read via untrusted stack depot handle in bpf_page_owner_stack_snprint()
-> --
-> 
-> commit f5344767004d7fb48b115dd782835818e60504bc
-> Author: Zhen Ni <zhen.ni@easystack.cn>
-> 
-> mm/page_owner: add open-coded page_owner iterator
-> 
-> This commit adds an open-coded bpf_iter for pages eligible for page_owner
-> output. It also introduces a bpf_page_owner_stack_snprint() kfunc to render
-> the stack trace for a stack_depot handle into a caller-provided buffer.
-> 
->> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
->> index 33dc9dcd59dec..80693d4174077 100644
->> --- a/mm/page_owner_iter.c
->> +++ b/mm/page_owner_iter.c
-> [ ... ]
->> @@ -114,3 +115,54 @@ int page_owner_iter_register(void)
-> [ ... ]
->> +__bpf_kfunc int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
->> +					     char *buf, u32 buf_size)
->> +{
-> 
-> [Severity: Critical]
-> Does this kfunc bypass the verifier's bounds checking for the buffer?
-> 
-> Because the buffer size argument is named buf_size instead of using the
-> required __sz or __szk suffix (such as buf__sz), the BPF verifier treats it
-> as an independent integer scalar. It only validates that the buffer points to
-> a memory region of at least 1 byte.
-> 
-> If a BPF program passes a 1-byte valid buffer along with a maliciously large
-> buf_size, stack_depot_snprint() will blindly write past the end of the buffer,
-> which can corrupt adjacent stack, heap, or map memory.
-> 
+Please include KASAN report in the description.
+That helps others find that the issue they hit has been fixed.
 
-The size argument will be renamed to buf__sz.
+[...]
 
-> [Severity: High]
-> Is it safe to accept an untrusted depot_stack_handle_t directly from the
-> BPF program here?
-> 
-> Since the BPF verifier does not track scalar bounds for opaque handles, a
-> program could pass a forged handle. If depot_fetch_stack() receives an
-> invalid pool index, it unconditionally triggers a kernel warning:
-> 
-> lib/stackdepot.c:depot_fetch_stack() {
-> 	if (pool_index >= pools_num_cached) {
-> 		WARN(1, "pool index %d out of bounds (%d) for stack id %08x\n",
-> 		     pool_index, pools_num_cached, handle);
-> 		return NULL;
-> 	}
-> 	...
-> }
-> 
-> This can panic systems configured with panic_on_warn=1.
-> 
-> Even if the index is valid, a maximized offset could cause the stack pointer
-> to point near the end of the pool allocation. Accessing the stack size and
-> entries would then result in an out-of-bounds read past the allocated pool.
-> This can cause a hard page fault panic, or format arbitrary kernel pointers
-> into the BPF-provided buffer, which the program could then exfiltrate.
-> 
-> Would it be better to change this kfunc to accept a trusted
-> struct page_owner_scan *scan instead of a raw scalar?
-> 
->> +	return stack_depot_snprint(handle, buf, buf_size, 0);
->> +}
->> +
->> +__bpf_kfunc_end_defs();
-> 
+> @@ -1743,6 +1750,7 @@ struct sockmap_link {
+>  static void sock_map_link_release(struct bpf_link *link)
+>  {
+>  	struct sockmap_link *sockmap_link = container_of(link, struct sockmap_link, link);
+> +	struct bpf_map *map = NULL;
+>  
+>  	mutex_lock(&sockmap_mutex);
+>  	if (!sockmap_link->map)
+> @@ -1751,10 +1759,12 @@ static void sock_map_link_release(struct bpf_link *link)
+>  	WARN_ON_ONCE(sock_map_prog_update(sockmap_link->map, NULL, link->prog, link,
+>  					  link->attach_type));
+>  
+> -	bpf_map_put_with_uref(sockmap_link->map);
+> +	map = sockmap_link->map;
+>  	sockmap_link->map = NULL;
+>  out:
+>  	mutex_unlock(&sockmap_mutex);
+> +	if (map)
+> +		bpf_map_put_with_uref(map);
+>  }
 
-I will take the trusted struct page_owner_scan * returned by
-bpf_iter_page_owner_next() and use scan->po_snap.handle.
-
-
-
-Thanks,
-Zhen
+In sock_map_link_release map->usercnt is now modifed without
+sockmap_mutex held. Is that a problem?
