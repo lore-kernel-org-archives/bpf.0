@@ -1,337 +1,507 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A1446EF7C;
-	Mon, 12 Oct 2026 09:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114C81D416C;
+	Mon, 12 Oct 2026 09:37:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791796561; cv=none; b=B4HGvU4pw5LEJ9FbEyOcCzmOxYN0grfRq8/ID31pwTReCSS8nZx12LL0vt4nsqTLcsFLgbWsi3tLUPwTBKJTA+CVLB8VL6ltzJ7IXY/aePyJtCST8MXqdRAvUCWIUKQNfgeVezH8dI0rDK0DlSxmc/VkomQdiraEFUBukagM90o=
+	t=1791797855; cv=none; b=CnM5/Gn0IT+dgR6fuBBK0Hc5bzucG9JH/dvEUpgJHRy7kNXtMbawxhtEpzAYsQUQfteJwG4bOoMSKdvzoO+UA/sWkgtpl4PuokkFZFszNfciYqXlDczSldCFcRrTXSi+idtz/py0zUek47lj/jbaYPdQBhJuDQ0JIkxWY0J7/Ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791796561; c=relaxed/simple;
-	bh=KLBlgaeDuHabe1zhJimoUA0bpK31OVHOkP7Odbueqqw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oe60CEOSN7ATLgs5h+gNQ+a49kfdPJFrJomKhmKhH7CC8RpTdi7RPZHZ3HvXxOPOR1QbJOn3IASChyUJ/drwsdqbSU1VArosS0E6ZbOmVKUr7LYa9RTcmq0hYaRKXpOm0XRCdxm21OATjTihzv0Eyg0V4nhnVvIjuzbHYaYAUK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EMB9HcnR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791797855; c=relaxed/simple;
+	bh=kK0UvBidDgbE97m85kzhShE08Bxv4OAbrll2PPDnhXg=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PL4ITqjF5MHt2q899N0vjlMmNNmLtrxUItL2itqhRenTt/p2o/L9BaPv1LNEOnFQ7UQ1pJplLf+wAH5zSPxPD6u+DPp6eBd2XJsWSDUgmCtVYLu2kiXZB8U8m+n1HBuSqi3o/oPGQnaNK4Q+xj9115UaqUHUp5cUBBNQny2SnFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nPN2kjXO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMB9HcnR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 075251F0089B;
-	Mon, 12 Oct 2026 09:15:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nPN2kjXO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E71EC1F0089C;
+	Mon, 12 Oct 2026 09:37:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791796560;
-	bh=I0HNRCS/h711M+WA/GHMYCEaRzzHTm0vVBiP9fZikGI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=EMB9HcnR2Vy1CAnUk7OHOf5GsCaVPZ7a6Bro4eKk5SUaBIH94yOCIIzkHLk/dn29g
-	 kV8aB+iGe4QM9ZmQqytyp1noivDVB6UtVQb5bb2D2X08dewTXGvGNOyFzYt7aWPou9
-	 sUgXqAh09Pcup1sCOdYqDR+BacTYknTjLFf6XdQkB+ifvAqaXyOnlrtogEEhpZ8brj
-	 r7mW4WAB9D1fJ+rHQJcJhySpnlLAb1oYZJOVxiPuABLWHmaPPa61rJvRfygQG9hGJe
-	 iDkCjJKuTlNSHA3hlUKE9BPI/4vLJ63BW6D8A+VpIZfP9YwnHLUUu8rgBLrGz7Ioz5
-	 COyMaej6bm63A==
-Date: Mon, 12 Oct 2026 11:15:39 +0200
-From: Alejandro Colomar <alx+linux-hardening@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Alejandro Colomar <alx@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bill Wendling <morbo@google.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>, 
-	Shuvam Pandey <shuvampandey1@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Shivaprasad G Bhat <sbhat@linux.ibm.com>, 
-	Thorsten Blum <blum@kernel.org>, Alison Schofield <alison.schofield@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Guangshuo Li <lgs201920130244@gmail.com>, Ira Weiny <iweiny@kernel.org>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <asyalCF06dhpVxPc@debian>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
- <asEhEe0Urb5Wx7yi@ashevche-desk.local>
- <202610040023.A3865A6@keescook>
- <asIPlnb0noMd33rr@ashevche-desk.local>
- <20261005112209.1e47fa-kees@kernel.org>
- <asOKvhT01aNb5-Dg@debian>
- <20261005155839.d5d200-kees@kernel.org>
- <asPSYn7sLqiH39Fu@debian>
- <20261012005620.466497-kees@kernel.org>
+	s=k20260515; t=1791797853;
+	bh=6mITeelcV9vEWKJAq1KN2FstR0M0lotLs+MgL5oFgFg=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=nPN2kjXOCAZ+0nvBP6s/PcpvA/qYdFz0GmUaA1mrnu6vgx1dbIEF9Y6CUSCwWFkBQ
+	 ccZ5/2d9P7aob1pbwlL+dB8gRZ32W9enyw7vAXZDS3aEHXh/wZph5vYoz8Iwc8Qvmh
+	 Wky4BtzOc22kFIlden8ZadVhY2FgML/APySUoVYqOf/dVInlXioWf/sfc3RLU0J0Jz
+	 H15u8r4WlbSYPzQv8v2eSNlPSFkuOeM4tjFuOI52Nj/erdJWMuE6YFSJRq3lvF0itH
+	 9WURFjgFfNo4ZyWWOF6G9XHrGGa3vqGNlRzAvwkwN1N+HD+KyFmTnE2nUhpiFsBIS2
+	 ej1wwx6NBjQcQ==
+Subject:
+ Re: [PATCHv10 net-next] tcp: Add TCP ROCCET congestion control module.
+From: netdev-bot+sashiko@kernel.org
+To: t.fuechsel@gmx.de
+Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ncardwell@google.com,
+ kuniyu@google.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ fmancera@suse.de, ebiggers@kernel.org, bpf@vger.kernel.org,
+ lukas.prause@ikt.uni-hannover.de
+Date: Mon, 12 Oct 2026 09:37:32 +0000
+Message-ID: <179179785248.434549.16829837649351382748@kernel.org>
+In-Reply-To: <asdfdDIQb7Nhm692@volt-roccet-vm>
+References: <asdfdDIQb7Nhm692@volt-roccet-vm>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="j57xlliim47wxj7u"
-Content-Disposition: inline
-In-Reply-To: <20261012005620.466497-kees@kernel.org>
 
+Thank you for your contribution! Sashiko AI review found 11 potential
+issue(s) to consider.
 
---j57xlliim47wxj7u
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx+linux-hardening@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Alejandro Colomar <alx@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bill Wendling <morbo@google.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Gow <david@davidgow.net>, Petr Mladek <pmladek@suse.com>, 
-	Shuvam Pandey <shuvampandey1@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Shivaprasad G Bhat <sbhat@linux.ibm.com>, 
-	Thorsten Blum <blum@kernel.org>, Alison Schofield <alison.schofield@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Guangshuo Li <lgs201920130244@gmail.com>, Ira Weiny <iweiny@kernel.org>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] seq_buf: Add seq_buf_strlen()
-Message-ID: <asyalCF06dhpVxPc@debian>
-References: <20261003035906.too.263-kees@kernel.org>
- <20261003035921.1918874-5-kees@kernel.org>
- <asEhEe0Urb5Wx7yi@ashevche-desk.local>
- <202610040023.A3865A6@keescook>
- <asIPlnb0noMd33rr@ashevche-desk.local>
- <20261005112209.1e47fa-kees@kernel.org>
- <asOKvhT01aNb5-Dg@debian>
- <20261005155839.d5d200-kees@kernel.org>
- <asPSYn7sLqiH39Fu@debian>
- <20261012005620.466497-kees@kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20261012005620.466497-kees@kernel.org>
+Critical: 0 · High: 0 · Medium: 7 · Low: 4
 
-Hi Kees,
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-> Date: 2026-10-11 17:56:27-0700
-> From: Kees Cook <kees@kernel.org>
->
-> On Mon, Oct 05, 2026 at 06:43:23PM +0200, Alejandro Colomar wrote:
-> > > Yes, though not often: the sched_ext debug dump builds a nested per-C=
-PU
-> > > seq_buf from seq_buf_get_buf(), which returns a size of 0 once the du=
-mp
-> > > buffer has overflowed, and it handles that case on purpose (see the
-> > > "$s may already have overflowed" comment in kernel/sched/ext/ext.c).
-> >
-> > Hmmmm, so IIUC, it is a sentinel value, and not really a buffer size?
->=20
-> It's the real size of what's left. seq_buf_get_buf() hands out the
-> unused tail of the seq_buf. Once that has overflowed there is no tail,
-> so it returns NULL for the buffer and 0 for the size, and sched_ext
-> initializes the nested seq_buf with both. So that case does get the NULL;
-> the 0 is how much room it has.
->=20
-> > Did you consider not holding the size of the buffer, but rather an end
-> > pointer?  It also allows you to find how much you can write to the
-> > buffer, but has slightly better semantics: the end doesn't change if you
-> > advance the position.  'end' can only change through reallocations
-> > (which I don't know if you do in the kernel).
->=20
-> The size doesn't change either: it is set by seq_buf_init(), and writers
-> advance "len", an offset from the start of the buffer. seq_buf never
-> reallocates.
+- [Medium] roccet_acked() copies CUBIC's 'discard delay samples right
+  after fast recovery' test, `ca->epoch_start && (s32)(tcp_jiffies32 -…
+- [Medium] tcp_slow_start_after_idle_check() returns early when
+  ca_ops->cong_control is set, so roccet_cwnd_event_tx_start() is the…
+- [Medium] roccet_tcp pairs .undo_cwnd = tcp_reno_undo_cwnd with a
+  set_state(TCP_CA_Loss) handler whose effect undo cannot reverse.
+- [Medium] roccet_enter_min_rtt_probe() (line 537) stores tcp_jiffies32
+  in ca->next_min_rtt_probe, a field that otherwise holds a usec…
+- [Medium] roccet_cwnd_event_tx_start() treats the RTO retransmission
+  itself as an idle restart and overwrites the ssthresh that…
+- [Medium] roccet_enter_min_rtt_probe() computes probe_cwnd = max(cwnd/2
+  or cwnd/3, TCP_INIT_CWND) and sets cwnd = min(probe_cwnd, clamp), with…
+- [Medium] Example: in RTT_PROBE with cwnd_before_min_rtt_probe = 100 and
+  a live cwnd of 50, a fast-recovery event occurs.
+- [Low] beta_param_set() validates the string with kstrtoint(val, 10,
+  ...) and then stores it with param_set_int(val, kp).
+- [Low] In struct roccettcp, curr_rtt is documented as the 'last sample
+  rtt of current round' and last_rtt as the 'sample rtt of previous…
+- [Low] Because ROCCET has .cong_control, the core idle restart in
+  tcp_skb_entail() → tcp_slow_start_after_idle_check() is skipped.
+- [Low] roccet_cwnd_event_tx_start() writes tp->snd_ssthresh with a plain
+  store (`tp->snd_ssthresh = tcp_snd_cwnd(tp);`).
 
-The size changes here:
+--
 
-	$ grepc -h -B8 seq_buf_get_buf include/
-	/**
-	 * seq_buf_get_buf - get buffer to write arbitrary data to
-	 * @s: the seq_buf handle
-	 * @bufp: the beginning of the buffer is stored here
-	 *
-	 * Returns: the number of bytes available in the buffer, or zero if
-	 * there's no space.
-	 */
-	static inline size_t seq_buf_get_buf(struct seq_buf *s, char **bufp)
-	{
-		WARN_ON(s->len > s->size + 1);
+tcp: Add TCP ROCCET congestion control module.
 
-		if (s->len < s->size) {
-			*bufp =3D s->buffer + s->len;
-			return s->size - s->len;
-		}
+This patch adds TCP ROCCET, a congestion control module based on CUBIC.
+It detects bufferbloat in cellular networks from the relative RTT increase
+(srRTT) and the ACK arrival rate. It replaces slow start with its own
+LAUNCH phase, uses CUBIC growth in ORBITER, and periodically probes for a
+new minimum RTT.
 
-		*bufp =3D NULL;
-		return 0;
+> diff --git a/net/ipv4/tcp_roccet.c b/net/ipv4/tcp_roccet.c
+> new file mode 100644
+> index 0000000000000..04b9e52466126
+> --- /dev/null
+> +++ b/net/ipv4/tcp_roccet.c
+> @@ -0,0 +1,1408 @@
+
+[ ... ]
+
+> +struct roccettcp {
+
+[ ... ]
+
+> +	u32 curr_rtt;	/* last sample rtt of current round */
+
+[ ... ]
+
+> +	u32 last_rtt;	/* sample rtt of previous round.
+> +			 * Used for jitter calculation
+> +			 */
+
+[Severity: Low]
+This isn't a bug, but these comments describe per-round samples.
+roccet_acked() actually shifts curr_rtt into last_rtt on every accepted
+ACK sample. It does not look for round boundaries:
+
+	ca->last_rtt = ca->curr_rtt;
+	ca->curr_rtt = sample->rtt_us;
+
+So the jitter that roccet_orbiter_update() uses for roccet_xj is the
+difference between consecutive ACK samples, not between rounds.
+
+Should the comments be updated, or was a per-round sample intended?
+
+[ ... ]
+
+> +static int beta_param_set(const char *val, const struct kernel_param *kp)
+> +{
+> +	int beta_candidate;
+> +	int ret = kstrtoint(val, 10, &beta_candidate);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (beta_candidate <= 0 || beta_candidate >= BICTCP_BETA_SCALE) {
+> +		pr_err_once("TCP ROCCET: beta must be between 0 and %d\n",
+> +			    BICTCP_BETA_SCALE);
+> +
+> +		return -EINVAL;
+> +	}
+> +
+> +	return param_set_int(val, kp);
+> +}
+
+[Severity: Low]
+Do the two parses here agree? The candidate is checked with
+kstrtoint(val, 10, ...). param_set_int() comes from STANDARD_PARAM_DEF()
+in kernel/params.c and parses with base 0:
+
+	return strtolfn(val, 0, (type *)kp->arg);
+
+So beta=0717 passes the check as decimal 717 but is stored as octal 463.
+beta=0x2cd is rejected, even though param_set_int() would accept it.
+
+The stored value stays in range, but it can differ from the value that
+was checked. Could this store beta_candidate directly, or parse with the
+same base in both places?
+
+[ ... ]
+
+> +static void roccet_min_rtt_probe_ce(struct roccettcp *ca, u32 cwnd)
+> +{
+
+[ ... ]
+
+> +	if (ca->cwnd_before_min_rtt_probe == 0)
+> +		pr_warn_once("TCP ROCCET: cwnd_before_min_rtt_probe is 0 during RTT_PROBE. This should not happen.\n");
+> +	else
+> +		cwnd = ca->cwnd_before_min_rtt_probe;
+> +
+> +	ca->cwnd_before_min_rtt_probe =
+> +		max((cwnd * beta) / BICTCP_BETA_SCALE, 2U);
+> +}
+
+[Severity: Medium]
+Can a spurious recovery during RTT_PROBE leave a lasting reduction
+through this saved window?
+
+Take cwnd_before_min_rtt_probe = 100 and a live cwnd of 50 during the
+probe. Entering fast recovery then does:
+
+tcp_enter_recovery()
+    tcp_init_cwnd_reduction()
+        tp->prior_cwnd = 50
+        roccet_recalc_ssthresh()   <- uses cwnd_before_min_rtt_probe (100)
+    tcp_set_ca_state(sk, TCP_CA_Recovery)
+        roccet_state()
+            roccet_handle_recovery()
+                roccet_min_rtt_probe_ce()
+                    cwnd_before_min_rtt_probe = 100 * 717 / 1024 = 70
+
+Suppose DSACK later shows the recovery was spurious.
+tcp_undo_cwnd_reduction() calls tcp_reno_undo_cwnd(), which returns
+max(cwnd, prior_cwnd) = 50. It never touches cwnd_before_min_rtt_probe.
+
+When the probe ends, roccet_min_rtt_probe() installs the reduced value:
+
+	tcp_snd_cwnd_set(tp, min(ca->cwnd_before_min_rtt_probe,
+				 tp->snd_cwnd_clamp));
+
+So cwnd becomes 70 instead of 100. An undo after the probe ends can't
+get back to 100 either, because prior_cwnd holds 50.
+
+Should the undo path also restore the saved probe window?
+
+[ ... ]
+
+> +static void roccet_enter_min_rtt_probe(struct sock *sk, u32 now)
+> +{
+
+[ ... ]
+
+> +	/* Use field to store when we entered min RTT probing. Here we use
+> +	 * jiffies to stay consistent with the epoch_start format.
+> +	 */
+> +	ca->next_min_rtt_probe = tcp_jiffies32;
+
+[Severity: Medium]
+This stores a jiffies value in a field that otherwise holds a usec
+deadline. roccet_set_next_min_rtt_probe_ts() won't update it while the
+state is RTT_PROBE or RTT_PROBE_REFILL.
+
+roccet_handle_state_transitions() converts it back to a usec deadline in
+only two cases: RTT_PROBE or RTT_PROBE_REFILL to ORBITER, and
+RTT_PROBE_REFILL to DRAIN.
+
+What happens if the application is idle for longer than an RTO during
+the probe or refill window? roccet_cwnd_event_tx_start() then moves
+straight to LAUNCH:
+
+		ca->state = LAUNCH;
+
+Only the probe timers are cleared on that transition, so
+next_min_rtt_probe keeps the jiffies value.
+
+Later LAUNCH to ORBITER or DRAIN to ORBITER transitions don't take the
+prev_state == RTT_PROBE* branch. roccet_orbiter_update() then compares a
+usec now against a jiffies deadline:
+
+	if (!time_between32(now, ca->next_min_rtt_probe
+				 - 2 * ROCCET_NEXT_MIN_RTT_PROBE_MS
+				 * USEC_PER_MSEC, ca->next_min_rtt_probe) &&
+	    ca->curr_rtt != U32_MAX) {
+		ca->state = RTT_PROBE_ENTER;
+
+This is true for nearly every value of now. Wouldn't ROCCET then enter
+RTT_PROBE_ENTER right away and cut cwnd for at least 200 ms with no need
+to probe? The only way out seems to be update_min_rtt() finding a new
+minimum first.
+
+On the same RTT_PROBE to LAUNCH path, ssthresh is also set from the
+reduced probe cwnd, and cwnd_before_min_rtt_probe is never applied. Is
+that intended?
+
+[ ... ]
+
+> +	if (!tcp_is_cwnd_limited(sk))
+> +		probe_cwnd = max(tcp_snd_cwnd(tp) / 3, TCP_INIT_CWND);
+> +	else
+> +		probe_cwnd = max(tcp_snd_cwnd(tp) / 2, TCP_INIT_CWND);
+> +
+> +	ca->probe_min_rtt_until = now + interval;
+> +	ca->cwnd_before_min_rtt_probe = tcp_snd_cwnd(tp);
+> +
+> +	/* Reduce the cwnd to drain the buffer for probing. */
+> +	tcp_snd_cwnd_set(tp, min(probe_cwnd, tp->snd_cwnd_clamp));
+
+[Severity: Medium]
+Can this raise cwnd during the drain probe?
+
+In ORBITER, cwnd can be anywhere from 2 to 9 after
+roccet_congestion_event() or roccet_handle_recovery() reduce it to
+max(cwnd * beta / 1024, 2). probe_cwnd is not limited by the current
+cwnd, so it becomes TCP_INIT_CWND (10). The probe then sends more than
+before for at least 200 ms.
+
+curr_min_rtt has just been reset to U32_MAX, so the new minimum is
+measured with more data in flight than before the probe. That can
+inflate curr_min_rtt and lower srRTT for the following probe period.
+
+For 10 < cwnd < 20, the reduction is also smaller than the halving
+described in the commit message.
+
+[ ... ]
+
+> +static void roccet_cwnd_event_tx_start(struct sock *sk)
+> +{
+
+[ ... ]
+
+> +	/* After idle periods, go into LAUNCH with slow start */
+> +	if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_slow_start_after_idle) &&
+> +	    delta >= inet_csk(sk)->icsk_rto) {
+> +		tp->snd_ssthresh = tcp_snd_cwnd(tp);
+> +		tcp_snd_cwnd_set(tp, min(TCP_INIT_CWND, tp->snd_cwnd_clamp));
+> +		ca->state = LAUNCH;
+> +	}
+
+[Severity: Medium]
+ROCCET sets .cong_control, so tcp_slow_start_after_idle_check() returns
+early:
+
+	if (!READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_slow_start_after_idle) ||
+	    tp->packets_out || ca_ops->cong_control)
+		return;
+
+That makes this the only restart-after-idle logic that runs. Should it
+follow what tcp_cwnd_restart() does?
+
+	u32 restart_cwnd = tcp_init_cwnd(tp, __sk_dst_get(sk));
+	...
+	WRITE_ONCE(tp->snd_ssthresh, tcp_current_ssthresh(sk));
+	restart_cwnd = min(restart_cwnd, cwnd);
+
+Compared to that, this code differs in a few ways:
+
+There is no min() against the current cwnd. A cwnd of 2 to 9, which is
+common after the beta reductions, is raised to 10 after idle.
+
+The per-route initcwnd from tcp_init_cwnd() is ignored.
+
+ssthresh is set to the old cwnd instead of tcp_current_ssthresh().
+
+The trigger is delta >= icsk_rto, while the core uses delta > icsk_rto.
+
+The comment says this goes into LAUNCH with slow start. But if the old
+cwnd is at most 10, ssthresh ends up at or below the new cwnd. Then
+tcp_in_slow_start() is false, and roccet_launch_update() leaves LAUNCH
+right away through its !tcp_in_slow_start(tp) branch. Is that intended?
+
+[Severity: Medium]
+Can this also fire on the RTO retransmission itself, and not only after
+a real idle period?
+
+tcp_retransmit_timer()
+    tcp_enter_loss()
+        tcp_timeout_mark_lost()      <- in_flight drops to 0
+        ->ssthresh()
+        tcp_set_ca_state(sk, TCP_CA_Loss)
+            roccet_state()           <- cwnd = 10, ssthresh = max(ssthresh, 10)
+    tcp_retransmit_skb()
+        __tcp_transmit_skb()
+            tcp_event_data_sent()
+                tcp_ca_event(sk, CA_EVENT_TX_START)
+                    roccet_cwnd_event_tx_start()
+
+tcp_event_data_sent() fires CA_EVENT_TX_START before it updates
+lsndtime:
+
+	if (tcp_packets_in_flight(tp) == 0)
+		tcp_ca_event(sk, CA_EVENT_TX_START);
+
+	tp->lsndtime = now;
+
+At that point lsndtime is the previous send, for example the TLP probe
+or the previous retransmission. The RTO timer was armed for icsk_rto
+from about that time, so delta >= icsk_rto holds.
+
+With the default slow_start_after_idle=1, this replaces the ssthresh
+that roccet_state(TCP_CA_Loss) just kept with 10, and sets LAUNCH.
+
+On the next ACK, roccet_launch_update() sees cwnd == ssthresh == 10 and
+leaves LAUNCH at once. CUBIC then grows again from 10 with
+last_max_cwnd = 0 (cleared by roccet_reset()), instead of slow starting
+back toward the old ssthresh.
+
+The core tcp_slow_start_after_idle_check() avoids this case with its
+tp->packets_out test. Should this path also check packets_out or
+icsk_ca_state?
+
+[Severity: Low]
+Does the restart window apply too late for the first skb after idle?
+
+This runs from CA_EVENT_TX_START inside __tcp_transmit_skb(). By that
+point, tcp_write_xmit() has already sized the skb using the pre-idle
+cwnd:
+
+tcp_write_xmit()
+    cwnd_quota = tcp_cwnd_test(tp);
+    ...
+    limit = tcp_mss_split_point(sk, skb, mss_now, cwnd_quota, nonagle);
+    ...
+    tcp_transmit_skb(sk, skb, 1, gfp)
+        tcp_event_data_sent()
+            roccet_cwnd_event_tx_start()   <- cwnd cut to 10 here
+
+The core restart, tcp_skb_entail()->tcp_slow_start_after_idle_check(),
+runs before transmission, but it is skipped for cong_control modules.
+
+So the first GSO packet after idle can carry far more than 10 segments.
+It is bounded only by tcp_tso_autosize() at the old pacing rate and by
+gso_max_segs. The pacing rate is not updated until the next ACK either.
+
+[Severity: Low]
+Should the ssthresh store here be
+WRITE_ONCE(tp->snd_ssthresh, tcp_snd_cwnd(tp))?
+
+tcp_get_timestamping_opt_stats() reads the field without a lock:
+
+	nla_put_u32(stats, TCP_NLA_SND_SSTHRESH, READ_ONCE(tp->snd_ssthresh));
+
+Every other snd_ssthresh store in this module uses WRITE_ONCE(), and
+KCSAN would likely report this plain store.
+
+[ ... ]
+
+> +static void roccet_state(struct sock *sk, u8 new_state)
+> +{
+
+[ ... ]
+
+> +	if (new_state == TCP_CA_Loss) {
+> +		roccet_reset(sk, ca);
+> +		tcp_snd_cwnd_set(tp, min(TCP_INIT_CWND, tp->snd_cwnd_clamp));
+> +		WRITE_ONCE(tp->snd_ssthresh, max(tp->snd_ssthresh,
+> +						 tcp_snd_cwnd(tp)));
+
+[Severity: Medium]
+What happens to the ROCCET state if this RTO later turns out to be
+spurious?
+
+roccet_reset() clears the private state, including the last_max_cwnd
+that roccet_recalc_ssthresh() just computed, and forces state = LAUNCH.
+
+.undo_cwnd is tcp_reno_undo_cwnd. So after F-RTO or tcp_try_undo_loss(),
+tcp_undo_cwnd_reduction() restores only cwnd and ssthresh:
+
+	tcp_snd_cwnd_set(tp, icsk->icsk_ca_ops->undo_cwnd(sk));
+	if (tp->prior_ssthresh > tp->snd_ssthresh) {
+		WRITE_ONCE(tp->snd_ssthresh, tp->prior_ssthresh);
+
+The next set_state(TCP_CA_Open) matches none of the branches in
+roccet_state(), so ROCCET stays in LAUNCH.
+
+tcp_fastretrans_alert() runs before tcp_cong_control() in tcp_ack(). So
+on the same ACK, roccet_launch_update() sees cwnd >= ssthresh. For a flow
+that was in ORBITER, prior_ssthresh is max(ssthresh, 3/4 cwnd), which is
+at most cwnd. It then takes the !tcp_in_slow_start(tp) exit:
+
+		new_cwnd = tcp_snd_cwnd(tp) - (tcp_snd_cwnd(tp) / 3);
+
+Doesn't this cut cwnd by a third right after the core undid the
+reduction?
+
+[ ... ]
+
+> +static void roccet_acked(struct sock *sk, const struct ack_sample *sample)
+> +{
+
+[ ... ]
+
+> +	/* Check if we are right after fast recovery. */
+> +	after_fast_recovery = ca->epoch_start &&
+> +			      (s32)(tcp_jiffies32 - ca->epoch_start) < HZ;
+> +
+> +	/* If we are not after fast recovery or we are in RTT_PROBE however,
+> +	 * we want to record every new min-sample.
+> +	 */
+> +	if (!after_fast_recovery || ca->state == RTT_PROBE) {
+> +		/* Get valid sample for roccet */
+> +		if (sample->rtt_us > 0) {
+> +			ca->last_rtt = ca->curr_rtt;
+> +			ca->curr_rtt = sample->rtt_us;
+> +		}
+> +	}
+
+[Severity: Medium]
+Does this freeze curr_rtt and last_rtt for one second after every epoch
+start, not just after fast recovery?
+
+In cubictcp_acked(), the same test only gates delay_min and HyStart:
+
+	if (ca->epoch_start && (s32)(tcp_jiffies32 - ca->epoch_start) < HZ)
+		return;
+
+Here it also gates the curr_rtt and last_rtt updates. Only RTT_PROBE is
+exempt.
+
+epoch_start is set to 0 on every LAUNCH exit, ROCCET congestion event,
+CWR and Recovery. The next bictcp_update() in ORBITER then sets it to
+tcp_jiffies32. roccet_cwnd_event_tx_start() also clamps it to now after
+idle. Each of these starts a one second window with no new RTT samples.
+
+During that window, roccet_control() still runs the EWMA on every ACK
+using the same stale curr_rtt:
+
+	if (rs->acked_sacked > 0) {
+		update_min_rtt(ca);
+		update_srrtt(ca);
 	}
 
-With an end pointer, that would be simplified to:
+srRTT then converges toward the rRTT of a single stale sample, often the
+inflated RTT that caused the reduction. Jitter is frozen as well.
 
-	static inline size_t my_seq_buf_get_buf(struct seq_buf *s, char **bufp)
-	{
-		WARN_ON(s->p >=3D s->end);
+next_srrtt_check_ts is at most one second away. Wouldn't the next srRTT
+evaluation and roccet_xj in roccet_orbiter_update() be computed from this
+frozen data?
 
-		*bufp =3D s->p;
-		if (s->p !=3D NULL)
-			return s->end - s->p;
-		return 0;
-	}
+[ ... ]
 
-Moreover, if we change the API of that function, we could entirely get
-rid of this function.  Here's an example where I see seq_buf_get_buf()
-used, where I've modified it to use pointers:
-
-diff --git i/kernel/sched/ext/ext.c w/kernel/sched/ext/ext.c
-index 3219f0da0fe4..82904e4456e3 100644
---- i/kernel/sched/ext/ext.c
-+++ w/kernel/sched/ext/ext.c
-@@ -6893,8 +6893,7 @@ static void scx_dump_cpu(struct scx_sched *sch, struc=
-t seq_buf *s,
-         * Use a nested seq_buf to generate the standard dump so that we
-         * can decide whether to commit later.
-         */
--       avail =3D seq_buf_get_buf(s, &buf);
--       seq_buf_init(&ns, buf, avail);
-+       seq_buf_init(&ns, s->p, s->end);
-=20
-        dump_newline(&ns);
-        scx_dump_line(&ns, "CPU %-4d: nr_run=3D%u flags=3D0x%x cpu_rel=3D%d=
- ops_qseq=3D%lu ksync=3D%lu",
-
-Considering the .p would replace the current .len, and would encode
-overflow as a NULL pointer, and .end would replace the current .size,
-and wouldn't ever change (not even on overflow, sice that info would be
-stored in .p).  Now you wouldn't need to test whether the remaining
-size can be 0, but would instead test whether ->p is NULL (you could do
-that internally if you want to avoid accessing internals).
-
-> An end pointer wouldn't remove the empty case: buffer =3D=3D end is the s=
-ame
-
-The thing is that you'd never reach buffer=3D=3Dend.  If that would have to
-happen, you'd instead store a NULL in buffer.  This has the nice
-property that if you try to read it as a string, it will crash (instead
-of giving you a pointer that is not a string, which could result in a
-buffer overrun).
-
-> condition as size =3D=3D 0, so the accessors would still need the check. =
-It
-> also makes overflow harder to record. seq_buf marks it with len =3D=3D si=
-ze +
-> 1, and the matching position pointer, end + 1, would be weird.
-
-Not really.  I'll show an example without the structure; just using
-plain string-copying functions, which shows it more obviously.  The
-structures are, after all, just an encapsulation of this logic.
-
-With sizes and lengths:
-
-	char    buf[42];
-	size_t  len, size;
-
-	len =3D 0;
-	for (int i =3D 0; i < 10; i++) {
-		x =3D strscpy(buf + len, "foo", size - len);
-		if (x < 0)
-			goto fail;
-		len +=3D x;
-	}
-vs
-	char  buf[42];
-	char  *p, *end;
-
-	p =3D buf;
-	e =3D ARRAY_END(buf);
-	for (int i =3D 0; i < 10; i++)
-		p =3D stpecpy(p, end, "foo");
-	if (p =3D=3D NULL)
-		goto fail;
-
-Let's say that each iteration of the loop is a step where we'd inherit
-an old buffer into a new one with the functions showed above.  With a
-length and a size, you need to update the size.  With a position pointer
-and an end pointer, you only need to update the position pointer, and it
-encodes the information about the overflow/truncation too.  Because
-truncation is encoded as an invalid position (NULL), we can never
-recover from that, and thus we don't need to have so many checks in each
-iteration.
-
-An important detail is that the functions that use such a position
-pointer should check whether the position is NULL, and do nothing.
-In this example, stpecpy() has such an early check:
-
-	char *
-	stpecpy(char *dst, const char *end, const char *restrict src)
-	{
-		ssize_t  dlen;
-
-		if (dst =3D=3D NULL)
-			return NULL;
-
-		dlen =3D strscpy(dst, src, end - dst);
-		if (dlen < 0)
-			return NULL;
-
-		return dst + dlen;
-	}
-
-As you can see, we can never reach a point where p=3D=3Dend, because once
-truncation happens, p becomes NULL and never recovers from that.  This
-simplifies greatly the handling of truncation.
-
-> Changing the representation would also means changes outside
-> lib/seq_buf.c, since tracing reads seq.len and seq.size directly
-> (trace_seq treats a zero size as "not yet initialized", for one). I'm
-> not saying that's a good thing to bypass the API, but rather that such
-> a change should be its own series.
-
-Agree.  I was just mentioning as an idea to keep for the long term.
-
-
-Have a lovely day!
-Alex
-
->=20
-> -Kees
->=20
-> --=20
-> Kees Cook
-
---=20
-<https://www.alejandro-colomar.es>
-
---j57xlliim47wxj7u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmrMpTUACgkQ64mZXMKQ
-wqmKKQ/+IUju4v7dG+hkUEBJrKJ5n4nq9IotpO+uHWDqtRhvFizqNIkQyTz4OEtR
-YgKwo2cKL6kofiJKTMGBBldjXFFiCg7b+7kUg6wAV9E+86Ot801bmAh/OV4B2rEN
-px81p+fJHLcVo3zqLs4M1PHaMP360L55Qv6YKJT7ZOpcheH/J0Z5AdDV0lxSamn+
-NIXLfOTeDyo/Xs3BKslEKlSj3mzn9/mWAeKhr77fwDeRMD5w63mw3GZp/ai6QQMY
-dwwo2ZOuFrfGZfnkqhbKxt0IyHPx2Vh5o6bxDWBFT9XYR0V/ENLJOxG9PvvtinZ5
-EOt+S2erq7A9ShZchVCDsrHrx+CskREubVno6D3cLh3sGfQp6dP+f8j7VG1pInsK
-D12+Fjibzz8JSNVNKlvkXTj9WufaoQX5Jqy5HU/ly1C64yFa0Cijq0jm2JlVyTB1
-/jyYXfCDECCcyzTMygd9rEFwoAm9f2wO4cN4KZNWflAOfJudJ+Qbkt7Q77YYaxfo
-d9+FUb5tqbWCzeuGTfTgL/ALDBbXJpremH0jWr3F18SEsYUWCbZYEgzl/KWG0NSD
-gcJhuZHt4/9ZrXBmSqmI5ud/iPJ/JQ8l3vqeLNt+XZgG3E5H3AN9N1aE4ATAZ5kI
-5bpoml/6Uim7ljbxOPFn7JLwYh+UPaCQ3zlZvA1wE/uBnkNr8Q0=
-=dcL8
------END PGP SIGNATURE-----
-
---j57xlliim47wxj7u--
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/asdfdDIQb7Nhm692%40volt-roccet-vm
