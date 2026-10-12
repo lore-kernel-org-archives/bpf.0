@@ -1,238 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2426A352017;
-	Mon, 12 Oct 2026 15:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5324949D5BD
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791817726; cv=none; b=MSpWe/ZyL2t5wfgsqVkeIZo6oK8j/nvfjLLgzFPiFtkazOhoPFhRgC86IRKb84ehks7QUuY+vDyTF7ao104WxmUtl01PkUKzmxkVpfkmcG6AsXZBjtmUU7ldbAyYkCsB2/Of4a1dW2+CBNkX9WRRiSRM6VabL+Kk+B9yWAwwdxc=
+	t=1791818721; cv=none; b=vGlPCNwBWzRC2Chm2kYbs2WRLJj0NAfOanckyY/zsCjXTw7HnF4SK+2LiuQ8hxgChgwX6rGRYgDF0MEu/TD3iF9I4baFAE9YqQ388wk/008+x3wpG9x3fpW2wWrP43+MTvgnr9tVQe3FFx+3+BP2mmb/wQN0nwNjhUstZuQr5Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791817726; c=relaxed/simple;
-	bh=4NEtmThl+VFSWkjXTQVzrAKV7h5HVwcDaXAAeRhYzvw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RxZcQov6UrsVeDXk2vV5AlCL2SvmDuZi+ItJRhwrXXV9qDqPtRCTZlCR6pQ3MpRRsj0GwcWhsZt3YwY3KENPA1v+zr6mA64fiYu8lkCWl80Y+KPFsbC4mBr3+NI0XQYD9QeomdfYk/Xv+fJd6rcqHql3nAPHD0cKGTfzOw1Xkkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=moBBKhZ1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791818721; c=relaxed/simple;
+	bh=uLgwTTxiZpNInq7W7aL0wWG2WDX0Ic08HNd764X4JW8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dh5R1hugUTpgP9sdPWn5I0fflfkiHB+xtEINdBKxo+Kv/5HP1SRv329IV4gx2ktegK/Rsx1rMhB1i73rcOlA79HqIpM9vH4Fb/l7u9ofXO9vvqyDJwqG5yMUfB6duZmujNogDKaSBiGS4XtsnhSfwTigbRnZQBsYFK3bX7KxbBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=I1bG2YNx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Dzxtc+b1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="moBBKhZ1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 954511F0089B;
-	Mon, 12 Oct 2026 15:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791817724;
-	bh=5Lqz7Co/6WmIoZTvSUyXdeYqdXkwprOlXMUykscbViU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=moBBKhZ10bYCqL5QecW09xYvPbQHaZDR7WGJEDODITEshC7evVHvSpjAoH6glmxjB
-	 j5qq25frOQf1OQOUgMeuWBpPgH0xTZwNZhIl/cdfqON2DmOOhDyCWAnxv9HUxAb58G
-	 UBAe3u4J3Eg+8VQMPcD/kAaKX2xWIbQvxTSwSTSaw41wCpUZshy3Kz47BxbJeOuQQ/
-	 z7yDOIhsT6JrN+4uYpMlUxNCd9n9ubBCEvCaje5nabNyNDYdrRQ6UDAB6LOpwN6fdy
-	 Xwo+Ef8jUxCUhzu0fTriVqllspREkaMJXtHSPrTfLXJJ5VKOU2B/63imbqYcy1tbaW
-	 C6iTd0iiF0+vA==
-Message-ID: <5b8ef0ce-7429-4d74-b4da-a0561c59b1e2@kernel.org>
-Date: Mon, 12 Oct 2026 17:08:09 +0200
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="I1bG2YNx";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Dzxtc+b1"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69CC0Kwn3292500
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:25:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=g3lVCKwz3m+1Qgdbpu0enx
+	VKwE6OpVLIOQB3rCyKQnc=; b=I1bG2YNx5jnaa1O7dGKuJIoyEDR3xy4PkZQFyK
+	KwRDYeS7uxzflVZpXFChySjV6bHq/+W3tarnYnresBAvSEqlu97WjnSq9LUCoF6V
+	sINHBWy36I8l2GU014nOZPluVKuCi3SYzxBbo0Sn7FHwdtvM21Enp3xsrNC2Vbyy
+	ulJbQESBxrqkeIvXPQ43vuON5l658vhuXk8T5ZEzf4pPJT5PaALW7SRf+Hdlt5Ko
+	XR3BrYEtvSBYfpRsKi1BrRonCmECYEQ6dMcY7vy2OS4LSf3aEdDwgEJ4izVm4YOM
+	9lS37cXrpDck6JHZMMXkzBnuEHCBZzh3sNstK4gTbKKiAWpw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h8uh3j1qq-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 15:25:19 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93ce7a85f04so474484685a.0
+        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 08:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1791818719; x=1792423519; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=g3lVCKwz3m+1Qgdbpu0enxVKwE6OpVLIOQB3rCyKQnc=;
+        b=Dzxtc+b1XGXmSEGSKtU65gNfLYkzB2iqGpRCqfbcQq0FCC40DHMiH4Vxmz/ftLrfDJ
+         CDGaqOuKRazQdqaFTP+PHMaRaYZf/1pWavaCOLePANWxO2dqcJ7akNPbhrUP6DyXjVEo
+         IEiURKzOcM3gMU0N5VcHaijqSTD1fzc7qO5/tn/4+Na2FCjACQ58Y6UfEQvFyGjv1HyT
+         CJwIyQhWx4HoQhpyS/di+2i831TtUt5i8Mg/m9UL/Wyr77uT9suiwDu+l2BxjPJoU8Iy
+         m8FXoqSAb8ksgTQrzAKa+jKunqKGkXPB21FRDSZNkV5h4n9CsdPGRxQVN+av7YRlw3J5
+         +joQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791818719; x=1792423519;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=g3lVCKwz3m+1Qgdbpu0enxVKwE6OpVLIOQB3rCyKQnc=;
+        b=za+Hijjh12zJbSmpH5st5vSx1aN7PFLfCE1hVscoq+acOJVM7WQaKik75T4cdpu4FY
+         rQlnau48XRcoRP4WGlWVR8pPlPETUbQcXFR+a0/GW/sGg/EIFe0EJ5vS+aqplQK/wttY
+         LQHQzyD9px+4GxFK+kfL2dnKUMYILHKKFs4EVMaTtL/Isz+5RB1uPYlW74gOBvMG6+Uw
+         cRuS0cq/QlHS1F5ZDJ+c05XKQeTrHEoq2/HwLQaC+N3zCbVKpujh54E5uQQDx7xLrkJ1
+         pMah5X+WEN4Vmev0sdEyIlE++vkCndBG3XyeboS3cgNNh5B3uTldDOzsdVbIqDRveYfz
+         MfCA==
+X-Forwarded-Encrypted: i=1; AKwUvByMXAjjQ6bsX+MFJRJNVTOdNcvSxyYw7OgD+HG/t3kOwS3xWZGYb1fmoWQY3knXBkS/uoY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIkfc+kjWOvV9GIkCjhw2ak3TgKBzwPTu/m/8Pfr0Mvosae0B0Y
+	x7qguGvQtu1IbcKOydUbM5uosgbLdFWs6lJRuQEc/+qgAeHjkr1MrgJKfo+CPHGGqaLA2VDUOFS
+	kPvSiMchWWy7kle2tp0GBCNy3e4ZTM0vRRurc62ky6SnYiLLHXmAxA/c=
+X-Gm-Gg: AYBFou0vA2KsRsiTaf44KIPcu0M1FeUnY8NITiiKPY5tjjIAeitXavrb4Lipj9zdqCS
+	iIug1AAzWZ9YKxAmMINpfIXCuaJkxfIcMLuiiMfzPS3/eCGyl/GMa9aSczWa7whUNYvxriTU5Ou
+	BrAzPeoldAN3Pa9DlLzaRUckmCJcRMICxD2K0PpDczIkms/YbXmaCFZ7mW0zp98hNaVfCaWMXB5
+	gS6WEuwt/JTAVHeJ9ibtKb92lMpkK2lPkgFxd6vNzcqoeInJAX+HX2RaGSpctfZN7zBOvt98Elt
+	5d5bqtDhkiBdQees5ZvoXlOfO40oaU15zG/t3G0Y7hRh7zvuMyX+w1lwqhKYZErwXq1pOX3hGpa
+	ED9lbA3+Mwx5Quw==
+X-Received: by 2002:a05:620a:4552:b0:93c:6abf:c8ae with SMTP id af79cd13be357-93ebd231201mr1728165385a.50.1791818718433;
+        Mon, 12 Oct 2026 08:25:18 -0700 (PDT)
+X-Received: by 2002:a05:620a:4552:b0:93c:6abf:c8ae with SMTP id af79cd13be357-93ebd231201mr1728157785a.50.1791818717740;
+        Mon, 12 Oct 2026 08:25:17 -0700 (PDT)
+Received: from localhost ([188.216.77.92])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18e49792bsm475483735e9.4.2026.10.12.08.25.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 08:25:17 -0700 (PDT)
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Subject: [PATCH net-next 0/2] stmmac: some XDP fixes in XDP_TX path
+Date: Mon, 12 Oct 2026 17:24:38 +0200
+Message-Id: <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 13/38] bpf: arena: mark arena_map_mmap() mappings
- VM_MIXEDMAP
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Paul Moore <paul@paul-moore.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>,
- Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
- <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
- Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>,
- Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
- Xu Xin <xu.xin@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-rdma@vger.kernel.org, selinux@vger.kernel.org,
- linux-sound@vger.kernel.org, bpf@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- fuse-devel@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>,
- Bert Karwatzki <spasswolf@web.de>, Emil Tsalapatis <emil@etsalapatis.com>
-References: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-0-923b70125b1e@kernel.org>
- <20261009-b4-mmap-prepare-vma-flag-sanify-v5-13-923b70125b1e@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20261009-b4-mmap-prepare-vma-flag-sanify-v5-13-923b70125b1e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3LQQqEMAxA0atI1gbajqh4FXFR2ziThVWaIgXx7
+ hNcfh7/BqHMJDA1N2S6WPhIGrZtIPx8+hJy1AZnXG+NdShl333AGk8sFc9MuHElwc+wxW40Zh2
+ 6AHqrvKDzDIkKJqoFluf5A04NlRdzAAAA
+X-Change-ID: 20261012-stmmac-xdp-tx-pre-fixes-37fd4800b74c
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Ong Boon Leong <boon.leong.ong@intel.com>
+Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bpf@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEyMDA2MSBTYWx0ZWRfX53W91SzClux9
+ /0Do+FR4wN8gyNfP66Zphpr7E6od+QO4y8bFqGCmWagyrvwffxP+VmF+szB1J+YRFbTWrT6jlmk
+ MUQ3hMGx7rJI8YIJD6LDBysJ/w0w/8/KPlBRo4OjDIjeBDocGLM9DwIBf/f7z6Sbk0QhW0jkcb+
+ q8oVUSpH9UKcU2F96sESZVipPqtN7Fh1myFRAZr9JUKlmESbJUyFxFgCXJKfskMPNNk8BtZXrzi
+ P96H7efGRCftBT6l+8kleV+NF6RxIxCQWGudaEW4t7FemalVFC0xW05GBZKclG3vZMTpu25G3Kr
+ RfLfQnl33oVq9CIOtyMQFp6yX0m6JaXCl4eanbUBhBkDBGpoVLSA9YolGQEpaNDr2ycLbzjG/sW
+ WmHlQ6vsKAg4tIVtdXqD0TEUgVBzlXWzgbElo3r53SdxFBoo5/yGZaRZUiKpbQljW/lzIbNIAba
+ eUjX+p6nssmpEtyQe6Q==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEyMDA2MSBTYWx0ZWRfX2P8zRKoNtqon
+ 2H/2xusRxpX0QwiEe5Mm6YLNW789x9d3vmz3aovwFe9lNYmvLN2bjlLaLW6+p1UyzRvUztDsEZh
+ 59ksBrKBEcgoc9BHj2w7q2b302mRZTw=
+X-Authority-Analysis: v=2.4 cv=QO391QLL c=1 sm=1 tr=0 ts=6accfbdf cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22
+ a=EUspDBNiAAAA:8 a=e8Hy17V4MP4qKruQfKwA:9 a=QEXdDO2ut3YA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-ORIG-GUID: OH5ksyrOECoPdS8u8r-ltqFBn0mTV0Hg
+X-Proofpoint-GUID: OH5ksyrOECoPdS8u8r-ltqFBn0mTV0Hg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-12_04,2026-10-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 adultscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610120061
 
-On 10/9/26 20:04, Lorenzo Stoakes (ARM) wrote:
-> The bpf_map->ops->map_mmap callback invoked by bpf_map_mmap() can be set to
-> one of ringbuf_map_mmap_kern(), ringbuf_map_mmap_user(), array_map_mmap()
-> or arena_map_mmap().
-> 
-> It is convention in mm to mark mappings whose pages the kernel manages
-> itself with VM_MIXEDMAP, so core mm knows not to treat them as ordinary
-> page cache or anonymous memory.
-> 
-> The map_mmap callbacks ringbuf_map_mmap_kern() and ringbuf_map_mmap_user()
-> use remap_vmalloc_range(), which ultimately invokes vm_insert_page() and so
-> marks the ranges VM_MIXEDMAP, and array_map_mmap() sets VM_MIXEDMAP
-> explicitly.
-> 
-> However, the exception to this is arena_map_mmap(), which doesn't set the
-> flag.
-> 
-> This patch corrects this and updates the comment to reflect it.
-> 
-> The pages are refcounted and vm_normal_page() finds them regardless of the
-> flag, and VM_DONTEXPAND remains set (marking the memory as VM_SPECIAL and
-> thus unmergeable). The one effect is that NUMA balancing now skips these
-> VMAs, as it already does for the other bpf map mappings, which is the
-> reason array_map_mmap() gives for setting the flag.
-> 
-> The intent of this patch is to be able to establish the invariant that only
-> PFN-mapped or mixed map ranges may clear the VM_MAYWRITE flag, as is done
-> in bpf_map_mmap().
-> 
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  kernel/bpf/arena.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 7b6847200b43..b69fe5e34339 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -620,8 +620,9 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
->  	 * clears VM_MAYEXEC. Set VM_DONTEXPAND to avoid potential change
->  	 * of user_vm_start. Set VM_DONTCOPY to prevent arena VMA from
->  	 * being copied into the child process on fork.
-> +	 * This is a kernel page so set VM_MIXEDMAP.
->  	 */
-> -	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY);
-> +	vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND | VM_DONTCOPY);
->  	vma->vm_ops = &arena_vm_ops;
->  	return 0;
->  }
-> 
+- Fix page address lookup for compound pages in XDP_TX path.
+- Disable TX checksum offload for jumbo frames in XDP_TX path.
 
-Historically, VM_MIXEDMAP really just means: can contain refcounted and
-non-refcounted things. Everything with a struct page is refcounted.
+---
+Lorenzo Bianconi (2):
+      net: stmmac: fix XDP TX DMA address for compound RX pages
+      net: stmmac: disable TX checksum offload for jumbo frames on bugged cores
 
-I think we are now changing the semantics to mean "maps kernel pages". I think
-this is fine, but we really have to update the documentation (and possibly
-rename this thing to something more expressive?)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+---
+base-commit: 29f144016f03608abfddcd6ebaeabafd7aeaadd2
+change-id: 20261012-stmmac-xdp-tx-pre-fixes-37fd4800b74c
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
+Best regards,
 -- 
-Cheers,
+Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-David
