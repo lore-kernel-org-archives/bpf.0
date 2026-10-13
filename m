@@ -1,187 +1,191 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA957501299;
-	Tue, 13 Oct 2026 12:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A55D2E06E4;
+	Tue, 13 Oct 2026 12:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791895999; cv=none; b=Hnly0BchmUp8zc/3mR+3Bi6m7qzJftty4hTO3G2aKY/LKpCUy1e224RThf7QEwd+8/b/py5IYG3u+Mdnl+obdh7r6+hGEO6wJ9OUzQ+sEF3j2+MT+p7UdYRlpB1+p5h70nuIQXZ6fTj8FWbK1NJgEzYrGDeRypImUSC9GMXRQyA=
+	t=1791896137; cv=none; b=pLReeZU9f7ymOmeLvfpCZmN2hDFnGYbq9BPwDnnPJWsWWczU/4diqJD6ItoV7RIb39L98Pwf9Uy7slfSb1IsMZzigzgwqFaMXLNz9UxbUWRxgCPnawG0lUBw+zJkav0pLbDnmGoB3W25m0yT7vNkPNZL0Jok+d14EkuFjhH/yMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791895999; c=relaxed/simple;
-	bh=axOM5j3vOY7t9ZLps+wPbthA9ApS1l0Pw7wVAlogkDc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dri7Miz8Ojdf45I7lBjuQQi813p5/hRUTXnACRRD9UPxQDxi1czxEmIM3TaVTFZzlC2A/6aVXX3QAWTZ0ya/kDFxH805/gJ6dXJeZIH1bwML4aqnV+nkNMV98nhPQBZEmTv3LrNIk7eC0XNXCL5iw45CLnX+0PoaSLMxRZBaxXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KHGkjZku; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1791896137; c=relaxed/simple;
+	bh=4hOGlWDI5HWkZbDBQRET2Fxee0zSOGc4EjqmuF05r80=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AjjmhB0HMKJIwU+kUVLzhEV2RXOPMhgNg9D7g0/R7XVdDMzztSzqNVk3pGPohX+vEAhsB60XXeQ2cFAYSDNX5aOmRPEMe2Q42c5nks7wRx/adQV8RL62JOCaB06lKnZqSzG0SghvgluN2V5KXG1PBBMCrVnYleyil/3J2vvvQBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHxM7vfy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KHGkjZku"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791895998; x=1823431998;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=axOM5j3vOY7t9ZLps+wPbthA9ApS1l0Pw7wVAlogkDc=;
-  b=KHGkjZkuLRAYuiI/EhiyzJTJ7dptm1DvbYj9gScAffWtvU/nBsyxKq3R
-   /ihUq9NutsqIcXjBL2/fpy8/Bhel/KFfCKrHpoe6l9ry/TLlGPbIraZN0
-   tR0ia5gOJFmENT3mtfAfphyS0grcX6vc9avpIKERtn7iYYpPZ2hbNUGjX
-   M4MI2/E/0Ryy+0+saxe0KP8p+sHIq0HdSWR1NXRvsLkpTkvjnVHZnrorK
-   0b9azZDGfc9nXXWHxEIdewRYoO1m2Qm8+qyVGb98DwuCSrEUSe7skqVjm
-   6Rz5xDQ4AiNVWof7cosXx/dRohooSXHuoY8ytIa8u12I+3MOEzLqRotLI
-   A==;
-X-CSE-ConnectionGUID: IWaWJgvPSOeiINzu+RUoZA==
-X-CSE-MsgGUID: 3w53d/FMQQK2qu3+nATHIw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11933"; a="721127"
-X-IronPort-AV: E=Sophos;i="6.27,155,1787036400"; 
-   d="scan'208";a="721127"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2026 05:53:17 -0700
-X-CSE-ConnectionGUID: rkZEuAPGSFixoIRqexWFAQ==
-X-CSE-MsgGUID: jtkGNHzqTl20mhueRPt3oA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,155,1787036400"; 
-   d="scan'208";a="1229565"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.241.239]) ([10.124.241.239])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2026 05:53:11 -0700
-Message-ID: <becc5593-69ef-4800-bc2b-0fb217165910@linux.intel.com>
-Date: Tue, 13 Oct 2026 20:53:08 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHxM7vfy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E141F00893;
+	Tue, 13 Oct 2026 12:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791896136;
+	bh=bLACkm8QjLtvgdrWg5Cs24vdQLpzXUAMiAF017A7tcw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=NHxM7vfyD6/R1ywGsksQSG/bJzCAGOWLgbtqvSKmadsfTUEtZe4Crg/GNmPH+iUNj
+	 VLp73GOrkJxRQdcXX6/S1XEPj9Bef5YwlMUsjNSdGprCSD86NsGt/QK2i5wceleiux
+	 /5Lh/Uv5fTT3/CJLa4aIyEU4iJx65qHRfNKk9yYJQVywx/4UzW/vX4QGW0dVGgQ40k
+	 Z2IQefCqUXzd5iKvUt44E3/P4ecAhd6XadbwtD0cbl1LH2+/a2Ga2Lu8NjG7Qg8oca
+	 pobhum4nz6r25Rx4VC/G0auZl0stvLfef6rkIwV0wJdOqfFSO7/t/CnEqsPty+gUNv
+	 8zajDaEGesaVw==
+Content-Type: multipart/mixed; boundary="===============5214291219682700347=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] perf/x86/amd/lbr: Limit branch snapshots to valid entries
-To: Peter Zijlstra <peterz@infradead.org>, Sandipan Das <sandipan.das@amd.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Thomas Gleixner <tglx@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
- Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
- Ravi Bangoria <ravi.bangoria@amd.com>,
- Ananth Narayan <ananth.narayan@amd.com>
-References: <20261007181002.4005262-1-sandipan.das@amd.com>
- <20261012153014.GU4121339@noisy.programming.kicks-ass.net>
- <94d387f2-ff07-4895-a722-e8ded4203309@amd.com>
- <20261013074625.GC2009045@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20261013074625.GC2009045@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <ab9326a4770f9d1ac812e55feb39e34341d84951f3b5d276dee18d5471d8353e@mail.kernel.org>
+In-Reply-To: <20261013121005.626-3-yangtiezhu@loongson.cn>
+References: <20261013121005.626-3-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v2 2/2] LoongArch: BPF: Optimize 32-bit operations using native instructions
+From: bot+bpf-ci@kernel.org
+To: yangtiezhu@loongson.cn,chenhuacai@kernel.org,hengqi.chen@gmail.com
+Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 13 Oct 2026 12:55:35 +0000 (UTC)
 
+--===============5214291219682700347==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On 10/13/2026 3:46 PM, Peter Zijlstra wrote:
-> On Tue, Oct 13, 2026 at 12:14:58PM +0530, Sandipan Das wrote:
->> On 12-10-2026 21:00, Peter Zijlstra wrote:
->>> On Wed, Oct 07, 2026 at 11:40:02PM +0530, Sandipan Das wrote:
->>>> The branch snapshot callback used by bpf_get_branch_snapshot() copies
->>>> up to x86_pmu.lbr_nr entries from cpuc->lbr_entries[], even when the
->>>> last LBR read kept fewer branches. The entries past lbr_stack.nr are
->>>> invalid, but they end up reaching BPF programs.
->>>>
->>>> Limit copying to lbr_stack.nr entries and also reset lbr_stack.nr when
->>>> amd_pmu_lbr_read() skips reading the registers, so that a stale count
->>>> is never reused.
->>>>
->>>> Fixes: a4d18112e531 ("perf/x86/amd: Support capturing LBR from software events")
->>>> Reported-by: Sashiko <sashiko-bot@kernel.org>
->>>> Closes: https://lore.kernel.org/all/sashiko-outbox-163130@kernel.org/
->>>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
->>>> ---
->>>>  arch/x86/events/amd/core.c | 2 +-
->>>>  arch/x86/events/amd/lbr.c  | 4 +++-
->>>>  2 files changed, 4 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
->>>> index 49b6b8fce566..bf631f60757c 100644
->>>> --- a/arch/x86/events/amd/core.c
->>>> +++ b/arch/x86/events/amd/core.c
->>>> @@ -944,7 +944,7 @@ static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, u
->>>>  	cpuc = this_cpu_ptr(&cpu_hw_events);
->>>>  
->>>>  	amd_pmu_lbr_read();
->>>> -	cnt = min(cnt, x86_pmu.lbr_nr);
->>>> +	cnt = min(cnt, cpuc->lbr_stack.nr);
->>>>  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
->>>>  
->>>>  	amd_pmu_v2_enable_all(0);
->>>> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
->>>> index 1e1b2f08cb51..a00d3850c4a8 100644
->>>> --- a/arch/x86/events/amd/lbr.c
->>>> +++ b/arch/x86/events/amd/lbr.c
->>>> @@ -165,8 +165,10 @@ void amd_pmu_lbr_read(void)
->>>>  	struct branch_entry entry;
->>>>  	int out = 0, idx, i;
->>>>  
->>>> -	if (!cpuc->lbr_users)
->>>> +	if (!cpuc->lbr_users) {
->>>> +		cpuc->lbr_stack.nr = 0;
->>>>  		return;
->>>> +	}
->>>>  
->>>>  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
->>>>  		entry.from.full	= amd_pmu_lbr_get_from(i);
->>> You now seem to deviate from what the Intel code does. Please clarify.
->> Yes, it is a deviation. I thought of proposing the following but didn't
->> proceed because I was not sure about the if condition in the second hunk
->> which considers things other than cpuc->lbr_users for an early return.
-> Dapeng, can you look into this? I would really like to keep behaviour
-> consistent where possible.
+> LoongArch: BPF: Optimize 32-bit operations using native instructions
 
-Sure.
+TL;DR: LoongArch BPF JIT now feeds non-sign-extended operands to 32-bit
+div/mod; on cores without DIV32 (e.g. 3A5000) results may be wrong, possibly
+breaking verifier-proven bounds.
 
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
 
+[ ... ]
+
+> @@ -752,212 +741,232 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
 >
->> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
->> index 0a34d674df59..5dfb9e9156e8 100644
->> --- a/arch/x86/events/intel/core.c
->> +++ b/arch/x86/events/intel/core.c
->> @@ -2822,7 +2822,7 @@ __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
->>         struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
->>
->>         intel_pmu_lbr_read();
->> -       cnt = min_t(unsigned int, cnt, x86_pmu.lbr_nr);
->> +       cnt = min_t(unsigned int, cnt, cpuc->lbr_stack.nr);
->>
->>         memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
->>         intel_pmu_enable_all(0);
->> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->> index 0b446d8912e4..6b070490f461 100644
->> --- a/arch/x86/events/intel/lbr.c
->> +++ b/arch/x86/events/intel/lbr.c
->> @@ -1026,8 +1026,10 @@ void intel_pmu_lbr_read(void)
->>          * but this simple approach seems to work for now.
->>          */
->>         if (!cpuc->lbr_users || vlbr_exclude_host() ||
->> -           cpuc->lbr_users == cpuc->lbr_pebs_users)
->> +           cpuc->lbr_users == cpuc->lbr_pebs_users) {
->> +               cpuc->lbr_stack.nr = 0;
-I checked the code, and it looks safe to clear cpuc->lbr_stack.nr here. For
-PEBS events with the LBR group, the LBR stack is populated again for each
-PEBS record, so this should not affect the LBR trace for PEBS events.
+>  	/* dst = imm */
+>  	case BPF_ALU | BPF_MOV | BPF_K:
+> +		move_imm(ctx, dst, (u32)imm);
+> +		return 0;
 
-But I’m not fully sure if it's intentional for the
-bpf_get_branch_snapshot() helper. Clearing lbr_stack.nr to 0 prevents the
-BPF helper from reading LBR data from PEBS although the LBR data could be
-stale since it comes from the past PEBS record instead of the runtime
-hardware LBR state. That seems reasonable and correct, but the side effect
-is that the BPF helper can't read the LBR stack when all LBR events are
-PEBS events. Not sure if it's intentional and expected. 
+[ ... ]
 
-I’d like to run some tests for this change tomorrow to confirm the
-behavior. Thanks.
+>  	/* dst = dst / src */
+>  	case BPF_ALU | BPF_DIV | BPF_X:
+> +		if (!off)
+> +			emit_insn(ctx, divwu, dst, dst, src);
+> +		else
+> +			emit_insn(ctx, divw, dst, dst, src);
+> +		break;
+>  	case BPF_ALU64 | BPF_DIV | BPF_X:
+> -		if (!off) {
+> -			emit_zext_32(ctx, dst, is32);
+> -			move_reg(ctx, t1, src);
+> -			emit_zext_32(ctx, t1, is32);
+> -			emit_insn(ctx, divdu, dst, dst, t1);
+> -			emit_zext_32(ctx, dst, is32);
+> -		} else {
+> -			emit_sext_32(ctx, dst, is32);
+> -			move_reg(ctx, t1, src);
+> -			emit_sext_32(ctx, t1, is32);
+> -			emit_insn(ctx, divd, dst, dst, t1);
+> -			emit_zext_32(ctx, dst, is32);
+> -		}
+> +		if (!off)
+> +			emit_insn(ctx, divdu, dst, dst, src);
+> +		else
+> +			emit_insn(ctx, divd, dst, dst, src);
+>  		break;
+
+Can divw/divwu be used directly on dst and src here?
+
+The LoongArch ISA only defines the result of div.w, div.wu, mod.w and
+mod.wu on LA64 when both rj and rk hold sign-extended 32-bit values.  The
+exception is a core that reports CPUCFG2_DIV32 (BIT(26) in
+arch/loongarch/include/asm/loongarch.h), where the upper 32 bits of the
+inputs are ignored.  Cores without that bit, such as the LA464 in the
+3A5000, may return any value otherwise.  Nothing in the JIT checks for
+CPUCFG2_DIV32.
+
+The operands here are often not sign-extended.  Every ALU32 result is now
+zero-extended at the common exit of build_insn():
+
+> +	if (is32)
+> +		emit_insn(ctx, bstrpickd, dst, dst, 31, 0);
+> +
+>  	return 0;
+
+so any 32-bit value with bit 31 set is left in the register as
+0x00000000xxxxxxxx.  A BPF_LDX | BPF_W load (ldwu) is zero-extended in the
+same way, and src can hold arbitrary upper bits coming from ALU64 ops or
+pointers, since ALU32 only consumes the low 32 bits.
+
+For example, with w0 = -6 followed by w0 s/= 3, rj is 0x00000000fffffffa
+when divw executes, so the quotient is not guaranteed to be -2 on a core
+without DIV32.  Likewise, a ldwu of 0xffffffff followed by w1 %= 16 gives
+modwu a rj that is not a sign-extended value.
+
+The old code widened both operands (zext for unsigned, sext for signed)
+and then used the 64-bit divdu/divd/moddu/modd, which are well defined on
+every LA64 core.  The MIPS64 JIT, which has the same ISA restriction,
+still sign-extends the operands before its 32-bit div/mod.
+
+[ ... ]
+
+>  	/* dst = dst / imm */
+>  	case BPF_ALU | BPF_DIV | BPF_K:
+> +		move_imm(ctx, t1, (u32)imm);
+> +		if (!off)
+> +			emit_insn(ctx, divwu, dst, dst, t1);
+> +		else
+> +			emit_insn(ctx, divw, dst, dst, t1);
+> +		break;
+
+In the K forms the divisor is built with move_imm(ctx, t1, (u32)imm), so a
+negative signed divisor, or an unsigned divisor of 0x80000000 or above,
+also ends up in t1 as a zero-extended value rather than a sign-extended
+one.
+
+[ ... ]
+
+>  	/* dst = dst % src */
+>  	case BPF_ALU | BPF_MOD | BPF_X:
+> +		if (!off)
+> +			emit_insn(ctx, modwu, dst, dst, src);
+> +		else
+> +			emit_insn(ctx, modw, dst, dst, src);
+> +		break;
+
+[ ... ]
+
+>  	/* dst = dst % imm */
+>  	case BPF_ALU | BPF_MOD | BPF_K:
+> +		move_imm(ctx, t1, (u32)imm);
+> +		if (!off)
+> +			emit_insn(ctx, modwu, dst, dst, t1);
+> +		else
+> +			emit_insn(ctx, modw, dst, dst, t1);
+> +		break;
+
+The same question applies to the modwu/modw uses in these two cases.
+
+The verifier narrows 32-bit div/mod results, for example
+scalar32_min_max_umod() bounds the result of w1 %= 16 to [0, 15].  If the
+JITed code returns a different value on a core without DIV32, can the
+program end up with a value outside the range the verifier proved, for
+instance when it is used as a map value offset?
+
+The commit message reports test_bpf, test_verifier and test_progs passing,
+but does not say which CPU was used.  Would those results be reproducible
+on a core without CPUCFG2_DIV32?
+
+Would it be better to sign-extend both operands into temporaries (for
+example addw t, reg, $zero) before divw/divwu/modw/modwu, to gate the
+native 32-bit forms on CPUCFG2_DIV32, or to keep the previous 64-bit
+sequence for these four opcodes?
 
 
->>                 return;
->> +       }
->>
->>         x86_pmu.lbr_read(cpuc);
->>
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38397948534
+--===============5214291219682700347==--
