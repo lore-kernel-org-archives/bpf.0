@@ -1,66 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3174718EF;
-	Tue, 13 Oct 2026 18:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FAC4A2A61;
+	Tue, 13 Oct 2026 18:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791914556; cv=none; b=VYuGyQ3XxnLAwnrpMS5po8UHUeq29IDzsZ1nOiQ5WrixTbMoN/HjwHCif22omFFp/BwVTguBwMhsRSk5+27zc2f/a9nV1FqlmEhP8/vUew0KTzgJqaXWLwVtOl1cBGhgk1wAHScQh9mFNvYJI3PEmtJPpZgRoOdw65bPz96E4/U=
+	t=1791915596; cv=none; b=oyGN6dbJh5s36nwArrcdeyQbTrO/k3wpRueLCrPtx2U6HRlIlB203+KPoAYFCtD8uwZUkpVhyQ/0bZqgIvDRbWh8eTXnmRgwRSCqsldXBVpUkzLpE43WLatDhro+bD0oMUaJuqw66m85+1/UkAIXCvvV3jqul5hAU/3egW2US9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791914556; c=relaxed/simple;
-	bh=4mU1lwDPkzUgQW8b3yzTVOWvbnN10Uk/B5D2OZEUK7w=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=XZ1C8xIXyE6BalhFjFlebsUji7GlWCzKCnCjgb/hMyYiCg6izWbbKnHh3V+WAx9T9Nhf8TPZ95TgfK/ISnSiEXJIOlARadNoFSt2gNsaP/YmjGaFIU+2xzJKYVypKZhmmwXwVBQ90pcuRX185eULi49jSiUwpkyZzyVCntJiXxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WnBzFRZj; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WnBzFRZj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 713F01F000FF;
-	Tue, 13 Oct 2026 18:02:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791914554;
-	bh=MeeFNFJubG8PDj6YUUF1sN/pCxwclu2LdzrnSIGxX0o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=WnBzFRZjmsBC607KBUWP8qW7aDvZBspvMh7ObL66WWuQx55u3HcdvyIVhufA0ENcM
-	 qXSGowXhE1ZU6UrVCJdVJw1Wf4xLzxlJkbmcXXy3Z2+KxXHWZf//8lbdUeCsW6XQ8P
-	 Vin5m3r7v9fD0weSI26xXyQMXV60Nyu/ij0JN29ACHcxfg22Ogno5BzUhiqlUG3Tt1
-	 RAZQninW4PdXffL0MDnnB/A930Sz2EKLhJcSzjpI2ol/QPp47pR/IuPBTyEiEiLImr
-	 iYt8gMedUW4Te3yTHOtSUWzEt4Zh1neGo4N7ALNhMjjcQExZSIXagxyGILzXEFEZVl
-	 MTZYxFAm8ZgRg==
-Date: Tue, 13 Oct 2026 08:02:33 -1000
-Message-ID: <3eda489898ebf7c848ce61760af745d9@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, david@kernel.org, gourry@gourry.net, hannes@cmpxchg.org, mkoutny@suse.com, shakeel.butt@linux.dev, roman.gushchin@linux.dev, yu.c.chen@intel.com, zhao1.liu@intel.com, bpf@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/3] BPF-based per-cgroup NUMA balancing mode selection
-In-Reply-To: <CALOAHbBE_1ssK_26c-UY7N6WxhkVNpB6v9WACVGaOiWZ5zchCA@mail.gmail.com>
-References: <20261012120438.52849-1-laoar.shao@gmail.com> <d9a3367a1852158f60cc2e89677fb12f@kernel.org> <CALOAHbBE_1ssK_26c-UY7N6WxhkVNpB6v9WACVGaOiWZ5zchCA@mail.gmail.com>
+	s=arc-20240116; t=1791915596; c=relaxed/simple;
+	bh=qegGgAzW18JVJXUjtzPA+cHAIkYUYNlEhkizNdaRkZ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=euv8t+wwhU/SMkw/PaSqDPW4UvncD7dKSkq8Js+KRBBHHRu8ajZi7V3UFgchZlbxvE+UyYhs4ZbYBxLM9QHQc1QlBtWhchjAr/94ZngaRWVIIyxHmjDM33OTOhRVRO0en7zba/+l2N/0+ElrOdpqo85cMeBG6nFlPbLqyI74fbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4j42g91FhRzMlVG;
+	Tue, 13 Oct 2026 20:19:49 +0200 (CEST)
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of listout@listout.xyz designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=listout@listout.xyz
+From: listout@listout.xyz
+To: bpf@vger.kernel.org
+Cc: bdas@suse.de,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <jp.kobryn@linux.dev>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/2] selftests/bpf: Add tests for memcg kfuncs
+Date: Tue, 13 Oct 2026 23:49:30 +0530
+Message-ID: <20261013181932.1739238-1-listout@listout.xyz>
+X-Mailer: git-send-email 2.56.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4j42g91FhRzMlVG
 
-Hello,
+From: Brahmajit Das <bdas@suse.de>
 
-On Tue, Oct 13, 2026 at 10:16:32AM +0800, Yafang Shao wrote:
-> Part of the consults are keyed on struct folio rather than struct
-> task_struct: the folio surface answers from the folio's memcg, the
-> owner's request, not the touching task's.
+bpf_get_root_mem_cgroup(), bpf_mem_cgroup_usage(),
+bpf_mem_cgroup_memory_events() and bpf_proactive_reclaim() have no
+selftest coverage. Patch 2 adds a memcg_kfuncs test for them, plus
+verifier tests for their acquire/release, NULL and program type rules.
 
-Right, and I take the prctl() point too. It's stable uAPI and too rigid
-a bar for this.
+Patch 1 moves the alloc_pagecache() helper from arena_memcg to
+cgroup_helpers so the new test can share it instead of carrying a copy.
 
-My suggestion is to start smaller. The op doesn't compute anything
-from its inputs. It returns a fixed mode per cgroup, and you don't
-need struct_ops for that.
+Tested on bpf-next with vmtest.sh (x86_64): all memcg_kfuncs and
+memcg_kfuncs_failure subtests pass, and arena_memcg still passes.
+---
+v3 -> v4:
+- Move alloc_pagecache() to cgroup_helpers.c and share it with
+  arena_memcg instead of duplicating it (new patch 1). (CI review)
 
-A kfunc that takes a cgid and a value would do: -1 for the system
-setting, otherwise the existing NUMA_BALANCING_* bitmask stored per
-cgroup. Task callsites read it through the task's cgroup, folio
-callsites through folio_memcg(). Same capability for the use case in
-the cover letter, a per-cgroup field and minimal plumbing, and the
-kfunc can grow later if a real decision-time policy shows up.
+v2 -> v3:
+- Drop the upper bound on the bpf_proactive_reclaim() result; only the
+  request is clamped and reclaim may overshoot. Fix the commit message
+  accordingly. (CI review)
+- Print the reason before skipping. (CI review)
 
-Thanks.
+v1 -> v2:
+- Also check that negative indices are rejected by
+  bpf_mem_cgroup_memory_events() and bpf_mem_cgroup_vm_events() (Sashiko)
+
+v3: https://lore.kernel.org/bpf/20261013171211.1661726-1-listout@listout.xyz/
+v2: https://lore.kernel.org/bpf/20261013151621.1526699-1-listout@listout.xyz/
+v1: https://lore.kernel.org/bpf/20261013143853.1379307-1-listout@listout.xyz/
+
+Brahmajit Das (2):
+  selftests/bpf: Move alloc_pagecache() to cgroup_helpers
+  selftests/bpf: Add tests for memcg kfuncs
+
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  34 +++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   1 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    |  34 ---
+ .../selftests/bpf/prog_tests/memcg_kfuncs.c   | 273 ++++++++++++++++++
+ .../selftests/bpf/progs/memcg_kfuncs.c        | 106 +++++++
+ .../bpf/progs/memcg_kfuncs_failure.c          |  54 ++++
+ 6 files changed, 468 insertions(+), 34 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_kfuncs_failure.c
 
 -- 
-tejun
+2.56.0
+
