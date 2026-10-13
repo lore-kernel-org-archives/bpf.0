@@ -1,99 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21EB56261C;
-	Tue, 13 Oct 2026 22:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1F34E9C20;
+	Tue, 13 Oct 2026 23:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791930423; cv=none; b=X7e3VuVhiTT9CERJzyqKsdFkDOzCRyMjqZAVXUY/CFv4O5cIttHNbJhCLE/rfqXlZFX0pXFNsZ5mQ/7zXPhAjlv+MNxquwQzDSchax3UUfTbaNhYrbKyP4cgZUXH34FnRCh+L6JFsOdTabfFw2xMuvVLeMOQbdfNKuMVLFCLQO0=
+	t=1791935155; cv=none; b=JF/IyrvmwgyAf5vP7nSv8wQ30aj9TyoZv7ihiYhc7BCFzwVQ/E7Q0qm04yCBfOu4cTT/6yC7PoRx9Vz/Ic7GZkYJyJiKmLRNWUphsOgk+cVlHgsi6LD/mxSDof439FfJoDHZ3yWeNSoJiM7094UGqJo+g+Qq27VZIG8YERo97oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791930423; c=relaxed/simple;
-	bh=sEIrpFMFnOHxFLRCJUJoyFA3jIhqRGwbE58tvujmYic=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=XQkM1nk5rR0ZUXGks6tgan8pzhooODP+2Fp2/iuswOAgx1zPlaBcmSTXQ3f0iIDsz0glwFdyuJG7ERO/h0UEY1jADjHw0ydFM/qFFNuygYZDnLuCBXETcKnIIWSnVI5+H9mLyom9S3wqks9TIKHV2U6AwhRNtI3S6M8vpEOP3AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZmelaPd3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791935155; c=relaxed/simple;
+	bh=rAfCW47pfRLJ9FoVEdHAC1LOYNyZQKKqvkkxd+o83j4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=laZDgGWwC6Q/zCSj43jTLGYGJocvOGO2M/Cmr12ux5TgPxuWYT0AuFZiQs4QAJqzpyLvBOIdzZuEvsfuAs5CDMKAiKw8HOmewjwaUzef5REHIlgx/RCm6RMlJSo22419UWgQ/8EfT6VX5+MdWDHgSizl9IjKRKWrglYi93P7NWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=W55OzyOF; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZmelaPd3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F891F000FF;
-	Tue, 13 Oct 2026 22:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791930421;
-	bh=BWLHpNDhUoFqrvHhAvfyFqkwTeOW6MkdyXRqMWS1DtU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZmelaPd3dy2y9oKnYm85a/D3MIKUdNUBk6A1ZLQSm9yA+g7Ja4Yj4TUgkrH3VSezR
-	 y4+1B1jPZfmAVJ3T6deM97T3Oeo+Tdexcu2o0X619w99cEUHQfKwF2I+RdUIX9/S7a
-	 ximNZGuvhGnWVr/YlPcO1i90GuPKKkdX7eC5opm6HBZ28gOk0uYdz+Fo0IQzXfpTpM
-	 8ro4o9FnhCQoA98R8otL1bX0q+XSgYe4/+TJ/4A5BmRyQmNpjRRpyVYkPbtgNYETvA
-	 OTdbH/cvGPwfwRH4qTP350csAQuM+W1E9awnTukllfHk4n+01dr3lRRlIvBgDKDFn0
-	 qNo/buAvI7E4Q==
-Message-ID: <sashiko-outbox-170578@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 1/2] perf build: Support building BPF skeletons with
- bpf-gcc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261013221643.1815686-2-irogers@google.com>
-References: <20261013221643.1815686-1-irogers@google.com>
- <20261013221643.1815686-2-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 13 Oct 2026 22:27:01 +0000
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="W55OzyOF"
+Received: from omf16.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 6AB6F1201DD;
+	Tue, 13 Oct 2026 23:45:46 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id 748A02000E;
+	Tue, 13 Oct 2026 23:45:44 +0000 (UTC)
+Date: Tue, 13 Oct 2026 19:45:42 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: sashiko-reviews@lists.linux.dev, sashiko-bot@kernel.org, "Vineet Gupta"
+ <vineet.gupta@linux.dev>, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] tracing: fgraph: allocate shadow stacks inline
+ with GFP_NOWAIT
+Message-ID: <20261013194542.7e036b03@226.227.38.69.naturalwireless.com>
+In-Reply-To: <20261001203145.abaab4f85291cdec5e423184@kernel.org>
+References: <20261001102909.1152572-1-vineet.gupta@linux.dev>
+	<20261001102909.1152572-2-vineet.gupta@linux.dev>
+	<20261001103752.653961F000FF@smtp.kernel.org>
+	<20261001203145.abaab4f85291cdec5e423184@kernel.org>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout06
+X-Stat-Signature: 68qeuiecqng5119awtkpqey4dx6gf466
+X-Rspamd-Queue-Id: 748A02000E
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1890ClREjmUcD88SPjl8Xj4QHVZp8+XqKc=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=Jsa6IXuHcx3iN4ax3YwraOZR+Z1q1uImgnBPR9hpoxI=; b=W55OzyOFLiYC4jrQpdNVvXcbRbUET74J0tUyUu3DzwhEgohBAKWwj2h5M7hBW8Yvxo+RlKJX+KyEM46jbjwsvjpuBwThF76Gq4qJTfpS2xJv6aM7LeQWemTza94nJDMKXdI2/UDC0sd9AsWbJElWlPjWBQoa6Dj9zYl2SHg7MjI=
+X-HE-Tag: 1791935144-558392
+X-HE-Meta: U2FsdGVkX1+XC+jv00YjW02ZJ6ofmTqQ9/ocShgvC2K3u+wWvWYtXyHRTxOhvBvj3SB9m+rMS57+7BvqSRUT6S5uaqIKJPttn7gTwyU33abScF/zbd9/4Ws6WEzsEdculSSf2uEGM7MOVJDM1HBbzwJkQ6qXZdtmpbZhOC+OFQmSc/ez3myTOlUzGqtHUEgI8xsk2CCBSi1A/STQoGpPKSuHG4mPwC/sdmiNptDk0NVAFZ/6jjY6WxKighq+A02SzQMJ3V+RBw/YUsBG8bboxis4XUESHk/RzWWl9E95f49HbCSxnEusX+ijqALG25unOZrtnB7ZhG1B0ov+QKpi9oP9jhi/26Ok
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] perf build: bpf-gcc version check bypassed due to mutually exclu=
-sive GCC arguments
---
+On Thu, 1 Oct 2026 20:31:45 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-commit b2c0a31ec137ebce8b46644a6edfe507e7c3b298
-Author: Ian Rogers <irogers@google.com>
+> > [Severity: Low]
+> > Does this code mix goto-based error handling and scope-based cleanup in the
+> > same function?
+> > 
+> > The alloc_retstack_tasklist() function still contains a goto free error
+> > handling path earlier in its body, and a free: cleanup label at the end.
+> > Adding scoped_guard() here violates the kernel cleanup subsystem guidelines,
+> > which state that for a given routine, usage of goto and cleanup helpers
+> > should never be mixed.
+> > 
+> > Since returning directly from within the scoped_guard() skips the free: loop
+> > at the end of the function, it forces manual reasoning about whether that is
+> > safe. This is noted in the new comment about keeping the start == end check
+> > in step with the exhaustion logic.
+> > 
+> > Is it possible to convert the initial return stack array allocation to use
+> > scope-based cleanup as well, or revert to open-coded RCU read locks, to
+> > avoid mixing the two patterns?  
+> 
+> If this sends to stable kernel, I think it is better to keep using
+> goto in this patch, and send another cleanup later. It is allow us
+> to backport the patch easier.
 
-perf build: Support building BPF skeletons with bpf-gcc
+Agreed. Care to send a v4?
 
-This commit supports building perf BPF skeletons with bpf-gcc (>=3D 14.0.0)
-in addition to clang. It updates the build system to prefer bpf-gcc when
-building with GCC, and falls back to Clang if bpf-gcc is unavailable or
-too old.
-
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-[ ... ]
-> +    define check_bpf_gcc
-> +      ifneq ($$(call get-executable,$$(BPF_GCC)),)
-> +        BPF_GCC_VERSION :=3D $$(shell $$(BPF_GCC) -dumpfullversion -dump=
-version 2>/dev/null)
-
-[Severity: Medium]
-Does passing both -dumpfullversion and -dumpversion simultaneously cause
-GCC to fail with a fatal error?
-
-If GCC rejects these mutually exclusive arguments, the error output is
-suppressed by 2>/dev/null, resulting in BPF_GCC_VERSION evaluating to an
-empty string.
-
-> +        ifneq ($$(call version-lt3,$$(BPF_GCC_VERSION),14.0.0),1)
-> +          have_bpf_gcc :=3D 1
-> +        endif
-
-When version-lt3 is called with an empty string against 14.0.0, the
-underlying awk expression evaluates this as false (0). The outer check
-ifneq (0,1) then evaluates to true, unconditionally setting
-have_bpf_gcc :=3D 1.
-
-Can this regression result in the version check being completely bypassed,
-allowing older, unsupported versions of bpf-gcc to be incorrectly
-permitted to build BPF skeletons instead of properly falling back to Clang?
-
-> +      endif
-> +    endef
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013221643.1815=
-686-1-irogers@google.com?part=3D1
+-- Steve
